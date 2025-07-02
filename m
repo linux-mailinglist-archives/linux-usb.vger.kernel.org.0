@@ -1,96 +1,145 @@
-Return-Path: <linux-usb+bounces-25419-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25420-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32CC8AF6111
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 20:23:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CEF4AF613A
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 20:26:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 522AB1C40BD9
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 18:23:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB5D37A3DDD
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 18:24:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66F8131551E;
-	Wed,  2 Jul 2025 18:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B112E49A5;
+	Wed,  2 Jul 2025 18:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LjUhxg0h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nQuf8LIn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EBD19A;
-	Wed,  2 Jul 2025 18:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A76A19A
+	for <linux-usb@vger.kernel.org>; Wed,  2 Jul 2025 18:25:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751480569; cv=none; b=HoOuDVzR4Q/S0CsoX8ZGJdcZ9orfrfh5vWUT9yb4yJaLERelKHjzjjPoOrz9ixZtVjQLdY2fqTdDhdcpehPca6+s/ses9QOTjKM3ynA1p05ynA/JzldiF4x6M/Gu/Xlr1LU1mk1VrYeEa2hvm6M47Fr/BwskkFcL4COmEfLd3Qw=
+	t=1751480761; cv=none; b=vBDCjpFC6zDF8EqOuOMUyDdq27bVvH0WrTeK8xwE0rU586oiWXaMXABLXgZvxTaCnuaMWU6eciAnjS+T9ytQfRffLKYhgdsidaTOxEeY2jqvYlSo8J1haiyrdegKW9yBJYs3gR7fSoFtyyIgN4kTFRGo/mddU+63vvXXDTpCHTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751480569; c=relaxed/simple;
-	bh=VCsyREOaKbQLunCJwY7sWxTPIEdDiNp3Ki+c4YiDGXw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SpTK6yyKNDzIycvHew4OWTvQf1h2kv4llD4mOL/vPi+AksJ5g7YeJXlEa8178ZfoeuPX5gRZa2FLDJUs3ROawY76tJ0IbcEzbGAqHuwOAtcFQVVkcJ5zJNAKCr7lgbg3aeA7yUCP2aIe/QOLUBQtJQiIZYMoe/bxOyEIjHX9je8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LjUhxg0h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1091C4CEE7;
-	Wed,  2 Jul 2025 18:22:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751480569;
-	bh=VCsyREOaKbQLunCJwY7sWxTPIEdDiNp3Ki+c4YiDGXw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LjUhxg0hnWkoHhrrlqhuCd4NUMAADZ5xzyQZVs5iLL07NyTc7gtu0o0HnBEGwBAec
-	 /0UhsR/EMjx7i9liGvuB9RwtZzdgLOVHgIMU+Jh2C/FtXqOupMiUOHz0Xy4FmhHKfZ
-	 x0hkx1FaG41kgKA9jN7E/kINmbxJVCzFnSQ5Zmqh+VL2b351OouJrVTZkhCxxqezrJ
-	 Yco/yiSz5t/7iW4+TGiDbKsoBLm493981Qy0UW0Gj6KDE4NcWYbWPgJDv2I7dEZtoM
-	 TJfku8eYmLbiuoL8dqBU6lqqwxU/bYnIh9t7yVtw1VgBCSMQtwEK0v7ggHAEp8Niz2
-	 diBpsOLV0p2bQ==
-Date: Wed, 2 Jul 2025 11:22:47 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Paolo Abeni <pabeni@redhat.com>, "Peter GJ. Park"
- <gyujoon.park@samsung.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Ming Lei <ming.lei@canonical.com>, Ming Lei
- <ming.lei@redhat.com>
-Subject: Re: [PATCH] net: usb: usbnet: fix use-after-free in race on
- workqueue
-Message-ID: <20250702112247.79e0556f@kernel.org>
-In-Reply-To: <560fa48a-7e0b-4b50-bebb-b3600efaadd3@suse.com>
-References: <CGME20250625093354epcas1p1c9817df6e1d1599e8b4eb16c5715a6fd@epcas1p1.samsung.com>
-	<20250625-usbnet-uaf-fix-v1-1-421eb05ae6ea@samsung.com>
-	<87a7f8a6-71b1-4b90-abc7-0a680f2a99cf@redhat.com>
-	<ebd0bb9b-8e66-4119-b011-c1a737749fb2@suse.com>
-	<20250701182617.07d6e437@kernel.org>
-	<560fa48a-7e0b-4b50-bebb-b3600efaadd3@suse.com>
+	s=arc-20240116; t=1751480761; c=relaxed/simple;
+	bh=cP+0ATCRvpAvtFlU34IpenBbWEpHm0+eCpjenPlq48M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=clQerFxV/F1zLCze4dW2fLvcq0zygJamllGB02miiMeHwyiEqAznfjVLfGI4lLnPpioXJJYNpxfRfQkFdALvbY9VZ/GjFiUVvJyKMc535tZ5Tp3aOCMxm6CUZNW0tWn/PoxILHBOEXQR8JnqWpBmC82QZYfzpnbBByAQ9AKwYIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nQuf8LIn; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751480760; x=1783016760;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cP+0ATCRvpAvtFlU34IpenBbWEpHm0+eCpjenPlq48M=;
+  b=nQuf8LInCYrA64ybEICJXnQ71N5mHQGc1Q3F6KD/EcBHNz2pKG6QdYG3
+   CzLKk+RubpnIZ0ftW2VHXHm3PPkZ7XkBuIoSLW8DH3XcMmzaCYvxk6CaT
+   1qDSXpqghevt72s+qbwBEWJk0TyjODblXavElcf6ao6S10iCfqXNChn9Q
+   arXpR/T1Gwo32uPb0hNFyzUN15V5fctlHO+DxapqnhBVHUXXKktV9RnwD
+   i0trgwmj4OHuGcXOEWGxV/LCYai8NMKYd/a2rJRALw5tQj8Va7EdxwStn
+   0Vu/MrEaTeINnqmsTyc5ViU+2At8drfEYmqyziX43r9IlMRo+wDKBPeBu
+   A==;
+X-CSE-ConnectionGUID: ixJ3tDOqSzWw2kw5EiW0Xw==
+X-CSE-MsgGUID: neDMf0uzRoyNfIf8pFUTNw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11482"; a="53886842"
+X-IronPort-AV: E=Sophos;i="6.16,282,1744095600"; 
+   d="scan'208";a="53886842"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 11:26:00 -0700
+X-CSE-ConnectionGUID: sJzOKeJcTGWwOf3Tv05Hkg==
+X-CSE-MsgGUID: 7pw78VnAQYmuTakYUJMBkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,282,1744095600"; 
+   d="scan'208";a="158716382"
+Received: from linux.intel.com ([10.54.29.200])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 11:25:59 -0700
+Received: from [10.121.200.103] (unknown [10.121.200.103])
+	by linux.intel.com (Postfix) with ESMTP id 1F6DD20B5736;
+	Wed,  2 Jul 2025 11:25:59 -0700 (PDT)
+Message-ID: <5fb4b111-b823-4de4-86f2-41f934f8f660@linux.intel.com>
+Date: Wed, 2 Jul 2025 11:25:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: typec: ucsi: Add support for READ_POWER_LEVEL
+ command
+To: Greg KH <gregkh@linuxfoundation.org>,
+ Venkat Jayaraman <venkat.jayaraman@intel.com>
+Cc: linux-usb@vger.kernel.org, pse.type-c.linux@intel.com,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>
+References: <20250630001556.651826-1-venkat.jayaraman@intel.com>
+ <2025063018-stunt-hamstring-0331@gregkh>
+Content-Language: en-US
+From: "Jayaraman, Venkat" <venkat.jayaraman@linux.intel.com>
+In-Reply-To: <2025063018-stunt-hamstring-0331@gregkh>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Wed, 2 Jul 2025 12:54:23 +0200 Oliver Neukum wrote:
-> >> I am sorry to be a stickler here, but if that turns out to be true,
-> >> usbnet is not the only driver that has this bug.  
-> > 
-> > Shooting from the hip slightly, but its unusual for a driver to start
-> > link monitoring before open. After all there can be no packets on a
-> > device that's closed. Why not something like:  
-> 
-> It turns out that user space wants to know whether there is carrier
-> even before it uses an interface because it uses that information
-> to decide whether to use the link.
-> 
-> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=444043
+Hi Greg,
 
-Ah. We should totally move the carrier clear _prior_ to registering 
-the netdev!
+On Sun, Jun 29, 2025 10:04:14PM -0700 , Greg KH wrote:
+> On Sun, Jun 29, 2025 at 05:15:56PM -0700, Venkat Jayaraman wrote:
+>> @@ -89,6 +117,12 @@ void ucsi_debugfs_register(struct ucsi *ucsi)
+>>  	ucsi->debugfs->dentry = debugfs_create_dir(dev_name(ucsi->dev), ucsi_debugfs_root);
+>>  	debugfs_create_file("command", 0200, ucsi->debugfs->dentry, ucsi, &ucsi_cmd_fops);
+>>  	debugfs_create_file("response", 0400, ucsi->debugfs->dentry, ucsi, &ucsi_resp_fops);
+>> +	debugfs_create_file("peak_current", 0400,
+>> +			    ucsi->debugfs->dentry, ucsi, &ucsi_peak_curr_fops);
+>> +	debugfs_create_file("avg_current", 0400,
+>> +			    ucsi->debugfs->dentry, ucsi, &ucsi_avg_curr_fops);
+>> +	debugfs_create_file("vbus_voltage", 0400,
+>> +			    ucsi->debugfs->dentry, ucsi, &ucsi_vbus_volt_fops);
+> You can have these all on one line, but not a big deal :)
 
-> However, it looks to me like the issue is specifically
-> queuing work for kevent. That would call for reverting
-> 0162c55463057 ("usbnet: apply usbnet_link_change")
-> [taking author into CC]
 
-Hm, spying on git logs I think Ming Lei changed employers from
-Cannonical to RedHat in early 2017. Adding the @redhat address.
+I can change that in the next revision.
+
+
+> And what are the units of these files?
+>
+>> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+>> index 01ce858a1a2b..8e0f0289a11a 100644
+>> --- a/drivers/usb/typec/ucsi/ucsi.c
+>> +++ b/drivers/usb/typec/ucsi/ucsi.c
+>> @@ -1218,9 +1218,11 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>>  	struct ucsi_connector *con = container_of(work, struct ucsi_connector,
+>>  						  work);
+>>  	struct ucsi *ucsi = con->ucsi;
+>> +	u8  curr_scale, volt_scale;
+> Odd extra ' '
+
+
+Will fix this in the next version.
+
+
+>> +	if (UCSI_CONSTAT(con, PWR_READING_READY_V2_1)) {
+>> +		curr_scale = UCSI_CONSTAT(con, CURRENT_SCALE_V2_1);
+>> +		volt_scale = UCSI_CONSTAT(con, VOLTAGE_SCALE_V2_1);
+>> +
+>> +		val = UCSI_CONSTAT(con, PEAK_CURRENT_V2_1);
+>> +		con->peak_current = UCSI_CONSTAT_CURR_SCALE_MULT * curr_scale * val;
+>> +
+>> +		val = UCSI_CONSTAT(con, AVG_CURRENT_V2_1);
+>> +		con->avg_current = UCSI_CONSTAT_CURR_SCALE_MULT * curr_scale * val;
+>> +
+>> +		val = UCSI_CONSTAT(con, VBUS_VOLTAGE_V2_1);
+>> +		con->vbus_voltage = UCSI_CONSTAT_VOLT_SCALE_MULT * volt_scale * val;
+> These will never overflow, right?
+
+The values (val) are 16-bit max and there should be no overflow concern with u32 fields declared.
+
+>
+> thanks,
+>
+> greg k-h
+>
 
