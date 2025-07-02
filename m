@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-25415-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25416-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EAB4AF5FD0
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 19:21:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E46FFAF6029
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 19:39:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50A7F188A545
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 17:21:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19D1E17E604
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 17:39:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C289C30115C;
-	Wed,  2 Jul 2025 17:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691A22DCF5D;
+	Wed,  2 Jul 2025 17:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TujIKPls"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MmtUmOF1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4900630114C
-	for <linux-usb@vger.kernel.org>; Wed,  2 Jul 2025 17:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E528A2F5095
+	for <linux-usb@vger.kernel.org>; Wed,  2 Jul 2025 17:38:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751476843; cv=none; b=JOATi8r0bAV+iBK6Wg7fedGOnIUkKp5ZnIxjhw32meT3HYnYrlG811NBKzrF+PBU9CpsLQDRm/L9mMTsoMyhSR1bEh2w++Jm2JcOtoNbJiqrpY6B1/MUc2wx/zcSyvnRNxLQQ8xbF4N2clVrjz0svHXyNuPx1A5wZ91H26L573Q=
+	t=1751477940; cv=none; b=CHtq5rHi/ffH8MTSeI1X4dnYSO7H2A/BIY7X6KdQTM48/Ve9SmXzLdJMQXvZ1W1QTxAgYX+snLnE4qQQE1uqYYxMp9zVlelw6/suYsFu7A1ZOh8jxi1zFySWhgDgRrPSHUeNLIego8KbY58HXW5jbRSWon3eNxw6ym1MNrMqgdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751476843; c=relaxed/simple;
-	bh=hBRsTaZN3yhbrtxDCnm/9im/m52mRlSQjlRRRmBUWFE=;
+	s=arc-20240116; t=1751477940; c=relaxed/simple;
+	bh=wKf3uA2thkcQq/EsXLL9Q/2weUim5bcBA4RM4cnH02E=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=n2vNKRAc6q/ZpPdv8/26NsRzcmbc62nqFMDzpWJbLkiqyqU3qKs4qgEPNYvwj0msdCMN2P1OLR7BxR4hEB8lrYTg7whoCOqz5wdF1EH6aHT2fW2m0qRAehuOF5QlKdLrhYj+lZodwjkyIlOciW9d/VNgv21rRG0uRg0fdDKfNVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TujIKPls; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E6C5EC4CEEF
-	for <linux-usb@vger.kernel.org>; Wed,  2 Jul 2025 17:20:42 +0000 (UTC)
+	 Content-Type:MIME-Version; b=KD7I7+yUf7qpto+BB5WJL/lYTDc1UqhJIDG6zhSX/F6QL2GFovd5Q796VNxPziksqPzwCSPqqz7xGjHPuql30eRbaJIgRqASiP6cFT0qR5Ew93UHq/RL4Ha23hLZzZek3HKVMCNQ+qVYT29lOKfGku9a/SEjGLJSBPx4fv243PI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MmtUmOF1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6AC13C4CEEF
+	for <linux-usb@vger.kernel.org>; Wed,  2 Jul 2025 17:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751476842;
-	bh=hBRsTaZN3yhbrtxDCnm/9im/m52mRlSQjlRRRmBUWFE=;
+	s=k20201202; t=1751477939;
+	bh=wKf3uA2thkcQq/EsXLL9Q/2weUim5bcBA4RM4cnH02E=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=TujIKPlsvwbH7vYeLkjjY/CR7TVp4JXWmgKpe0X7x0Pqlq+O/jJgr2nzhpmFX48dp
-	 ln0mET9cj9WtqmLoAwJwZ0j0wu+MaVvBNWYi7tM2WRjOTn2Ber8i0LtvJgukLPnCvO
-	 7cfJIP4sksBTUHz1EfmhZgp1bX6ZkxsrVN40KOV9bvEEedeh25Wur2gemXMUUtMBa0
-	 YQbbmeZhiQN8v2FfkfeOEM0fiurM9Sra0I5BZDqgwzW9jdvOyHdIXodcufaZdqXUz7
-	 SysXHzK2pTLfHZvQKS+kkjDHpP6YYIOpwhNLeNA0gRMcMldJyoUgV+olLaq5Kut86T
-	 e91Z7t+dgk/vQ==
+	b=MmtUmOF1x5gj+spbSblN8DO5NaFyEuDKFzIGtDWT94Q+hIS0g3HVNKq8FCKTqoKkp
+	 EZuF1pZb5Lki5QyXHCo+xYRBDnL/7HGoAdb/Y7xWajNKLuCHJ4DmNcc3HcI1zt4CoT
+	 YNkoqBhC9rsjMtHkxmZVQvSoxOaL7WemUr1TLzTWdYZdi5TaxyqEkzPrLtlVZdESqP
+	 /X6HTUWZPTp8GFyQTr55I4i3dY26OAhgAZ0A3P/Ll4ScB4ZKL9RH/aDSrjpBX5Zwf0
+	 N/Im+o20N0z/12sxMAv0ByAFOOor+aycAFdkvoMJk9m15gEh2/cCZcbW7Q5nYr3Mwp
+	 dWELOGC697R+Q==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id DF572C3279F; Wed,  2 Jul 2025 17:20:42 +0000 (UTC)
+	id 5CABBC4160E; Wed,  2 Jul 2025 17:38:59 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220272] Latent race condition in USB code unveiled with
  optimized memset_64.S
-Date: Wed, 02 Jul 2025 17:20:42 +0000
+Date: Wed, 02 Jul 2025 17:38:59 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -56,14 +56,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: oliver@neukum.org
+X-Bugzilla-Who: stern@rowland.harvard.edu
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220272-208809-cgfXkOpydN@https.bugzilla.kernel.org/>
+Message-ID: <bug-220272-208809-NMaDwx6NcX@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220272-208809@https.bugzilla.kernel.org/>
 References: <bug-220272-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,29 +79,17 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220272
 
---- Comment #28 from Oliver Neukum (oliver@neukum.org) ---
-(In reply to Alan Stern from comment #27)
-> But if that's the explanation then why does the driver work properly some=
- of
-> the time?
+--- Comment #29 from Alan Stern (stern@rowland.harvard.edu) ---
+As far as I can tell, the buffer is not cleared each time the URB is submit=
+ted.
+ The hid_irq_in() routine in drivers/hid/usbhid/hid-core.c doesn't do anyth=
+ing
+to the buffer.
 
-Memory pressure on the cache. Sometimes cache lines will be invalidated.
-If you want to stay with the theory that this is a cache issue.
-
-Your diagnosis in #23 is correct. The driver is operating on a zeroed buffe=
-r.
-If we are also taking #25 then we'd have to assume that two different mice =
-fail
-in the same way, but inconsistently and only if a specific memset is used.
-Not really likely.
-
-My first suspicion was that we are looking at an issue with HCD with short
-transfers, specifically that te buffer is not really used and the IO done to
-the rings, but I see no way how this would correlate with a change in memse=
-t.
-
-Do we need to memset the buffers to 0x00? How about a diagnostic patch that
-uses another value?
+Marcus, you could try modifying that routine to have it store some test dat=
+a in
+urb->transfer_buffer immediately before the call to usb_submit_urb().  Maybe
+the test values will show up in the usbmon trace, but maybe not.
 
 --=20
 You may reply to this email to add a comment.
