@@ -1,125 +1,233 @@
-Return-Path: <linux-usb+bounces-25456-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25457-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF280AF8121
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 21:08:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 182BEAF816F
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 21:33:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B1773B3A2F
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 19:07:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7320C1C84179
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 19:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E55298990;
-	Thu,  3 Jul 2025 19:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1854B192580;
+	Thu,  3 Jul 2025 19:33:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="znr3S6uW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nGkREQcQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9431D5CE5;
-	Thu,  3 Jul 2025 19:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD4D298CC5
+	for <linux-usb@vger.kernel.org>; Thu,  3 Jul 2025 19:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751569692; cv=none; b=q/grgXdUtLn1xH2ldZzUFJPZ9Z9N+PmYP2CSlLjYtr/2cj5yn9e7WUYBsPNNGmeaVckGx5V78gTc3Id3JX3StMkNKye8AsPkHLR12jtwG0SYzwSjGJQF05KrpQVdmxiz0j1nz6rKqNFneG+0uBXaWQaP1MI4TWo1o66RDrrB42I=
+	t=1751571191; cv=none; b=hUeYrNeoiS+/xWp5oDno4kh6bE7EOEWDZ1e6MBnJgyJqouWpx6vupvf1cYs1BJrWo+GNakY28HPlsXRowBGq1v4n59WdYrKoy9CarjbaNrjp30oLOwfcZt/1K6h/zNi/1JrXU2wW+y5BeVFEZVagHNOrhGFJA8eYMebRlWktxWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751569692; c=relaxed/simple;
-	bh=OOHxmdACIVQQer+dO9X0b+FWtWrJwbSjdxM4TjscUmg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pT2YrW36FfrWLiD3ugdfw/nbY5TuzUc21PGH2FQAha6VWOcGnKMyNNz/sLpsOcVBV/wlfEKxwJvWMjJEh3nSUt8srK7pQmclY0pGW2R15zAz9qfEZrnqbnOHddp5cIPlSQ/uuliOUeZK1cUwuYRYkqyIBxFVr/LsQg4m5bHHYPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=znr3S6uW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1852C4CEE3;
-	Thu,  3 Jul 2025 19:08:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751569692;
-	bh=OOHxmdACIVQQer+dO9X0b+FWtWrJwbSjdxM4TjscUmg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=znr3S6uWelYY4CwMnYAiyqbGe9vwf9zfTQXk8ghEajRiLvJow1IRZ+EmecTAbKUXW
-	 Bs5FmHRuGa9/93xIs0FLUlsS0OFZvYb5AHQNJA8M85zwd56A/UEV5HjGf1BA32e0Ni
-	 TgvQf6C2LUPVQeoJCA2/C3DGuFKGAfFjMJF74ZYM=
-Date: Thu, 3 Jul 2025 21:08:08 +0200
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: Ryan Mann <rmann@ndigital.com>
-Cc: "johan@kernel.org" <johan@kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] NDI FTDI USB driver support
-Message-ID: <2025070338-snorkel-monastery-994d@gregkh>
-References: <YQXPR01MB498723CF19D915DD09C8C0B5DF43A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
+	s=arc-20240116; t=1751571191; c=relaxed/simple;
+	bh=HIpYUK0qdP2OgdxUAK6eoys4fd1UzTmDO5wZuuYPaG8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QrbQiXUh6HhXRRsm+pH4svt9aT//HAPUe0PmutUEOCywL881+x6LQqlBy13ovK/PLFt/WJeg0h1LHAYd2Np18NaaUNdUXY6Mkln882BHYQBI0OO46plTIB3Am38m447kLSdBbMPewJg0+Dzcz7ovF6pte0WaWoA+utFzrwC+0pE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nGkREQcQ; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751571190; x=1783107190;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HIpYUK0qdP2OgdxUAK6eoys4fd1UzTmDO5wZuuYPaG8=;
+  b=nGkREQcQhhNrv1IKHhRPxKkchXVvqW/UZvJ/ko6PYhsvQEJkdSYjEi+6
+   neoWXfyUZLa9C0/8wOJpysqa0rTpX2+GgcWevXNwpL5roe5jFmfAS56SP
+   dDQclNkxkGdc40zpF7FhnymKn8suwnMKUMCDgeRSoLd0pL+RKYZCqmkq9
+   +rHbEAH2tUupYzOO3t7I+hVZw+yLqOk4/qijsFQlbCewGOzkrRQhehSu6
+   vTVYukQ1tq1vJj7uieTXsry0ZzsaYy44CeGj2Awe6IJSEoI1y4SUeYN+e
+   EqzulBck6lV4Uye5cet7+tcP9+RqXd1mQYYLBZQ30xvquwI6gjC2oo3WH
+   g==;
+X-CSE-ConnectionGUID: kZWW6ih7Q/OProvXBxeyJA==
+X-CSE-MsgGUID: 7zQ/ZH+DTBiAmDXHND5eWw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="65257374"
+X-IronPort-AV: E=Sophos;i="6.16,285,1744095600"; 
+   d="scan'208";a="65257374"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 12:33:09 -0700
+X-CSE-ConnectionGUID: +WUmPlwTTYW6mUcWmrCQKQ==
+X-CSE-MsgGUID: Wo9Sc2yQR2m40jKVlMSTCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,285,1744095600"; 
+   d="scan'208";a="154825287"
+Received: from venkat-lin-vm.fm.intel.com ([10.80.128.171])
+  by fmviesa009.fm.intel.com with ESMTP; 03 Jul 2025 12:33:09 -0700
+From: Venkat Jayaraman <venkat.jayaraman@intel.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	venkat.jayaraman@intel.com,
+	pse.type-c.linux@intel.com
+Subject: [PATCH v2] usb: typec: ucsi: Add support for READ_POWER_LEVEL command
+Date: Thu,  3 Jul 2025 12:32:59 -0700
+Message-Id: <20250703193259.760717-1-venkat.jayaraman@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YQXPR01MB498723CF19D915DD09C8C0B5DF43A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 03, 2025 at 06:53:06PM +0000, Ryan Mann wrote:
-> Hi John and Greg,
-> Tag: ndi-usb-serial-ftdi-6.16-rc4
-> Public branch: https://github.com/rmann-ndi/linux-kernel/tree/ndi_usb_serial_ftdi
-> This represents changes to the FTDI USB serial device drivers to support a new NDI (Northern Digital Inc.) product called the EMGUIDE GEMINI. The EMGUIDE GEMINI will support 1.2Mbaud the same as other NDI FTDI virtual COM port devices. It was noticed in making this change that the NDI Aurora was included in this "quirk", but it does not support rates as high as 1.2Mbaud, so it was replaced by the EMGUIDE.
-> Previous FTDI devices produced by NDI all used the FTDI VID (0x0403) and a very limited set of PIDs that Future Technology Devices allowed NDI to use (0xda70 to 0xda74). Since then, NDI has reserved its own VID (0x23f2), and used two of the PIDs for two experimental, non-production products that didn't use the FTDI chip for USB connection.
-> This patch adds the new VID as "FTDI_NDI_VID" in the ftdi_sio_ids.h header file. It also reserves PID 0x0003 for the EMGUIDE GEMINI, as well as stubbing out PIDs 0x0004 through 0x0009 for "future" NDI devices. In the unlikely event that the NDI hardware team chooses to implement the USB functionality using something other than FTDI chips, those "future device" lines may need to get removed.
-> As the EMGUIDE GEMINI product development has not been completed and the step to write over the default VID and PID has not been completed, these code changes have not been tested with an EMGUIDE GEMINI. However, the code changes were compiled successfully using Ubuntu 24.04 locally and tested as a module using an NDI Aurora system.
-> Thanks,
-> -------------------------------------
-> Ryan Mann
-> Software Development Lead
-> 103 Randall Drive
-> Waterloo, ON, Canada N2V 1C5
-> www.ndigital.com
+Add support for UCSI READ_POWER_LEVEL command as per
+UCSI specification v2.1 and above to debugfs.
 
+Following power related fields will be exposed as files in debugfs:-
+peak_current (Peak current),
+avg_current (Average current) and
+vbus_voltage (VBUS voltage)
 
-Hi,
+These files will be updated either when a READ_POWER_LEVEL
+command is sent from OS or when a device is connected.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Signed-off-by: Venkat Jayaraman <venkat.jayaraman@intel.com>
+---
+Changelog v2:
+- Removed extra space in declaration
+- Made the call to debugfs_create_file single line for clarity
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+ drivers/usb/typec/ucsi/debugfs.c | 31 +++++++++++++++++++++++++++++++
+ drivers/usb/typec/ucsi/ucsi.c    | 16 ++++++++++++++++
+ drivers/usb/typec/ucsi/ucsi.h    | 13 +++++++++++++
+ 3 files changed, 60 insertions(+)
 
-- Your patch was attached, please place it inline so that it can be
-  applied directly from the email message itself.
+diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
+index 92ebf1a2defd..f73f2b54554e 100644
+--- a/drivers/usb/typec/ucsi/debugfs.c
++++ b/drivers/usb/typec/ucsi/debugfs.c
+@@ -35,6 +35,7 @@ static int ucsi_cmd(void *data, u64 val)
+ 	case UCSI_SET_SINK_PATH:
+ 	case UCSI_SET_NEW_CAM:
+ 	case UCSI_SET_USB:
++	case UCSI_READ_POWER_LEVEL:
+ 		ret = ucsi_send_command(ucsi, val, NULL, 0);
+ 		break;
+ 	case UCSI_GET_CAPABILITY:
+@@ -80,6 +81,33 @@ static int ucsi_resp_show(struct seq_file *s, void *not_used)
+ }
+ DEFINE_SHOW_ATTRIBUTE(ucsi_resp);
+ 
++static int ucsi_peak_curr_show(struct seq_file *m, void *v)
++{
++	struct ucsi *ucsi = m->private;
++
++	seq_printf(m, "%u mA\n", ucsi->connector->peak_current);
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(ucsi_peak_curr);
++
++static int ucsi_avg_curr_show(struct seq_file *m, void *v)
++{
++	struct ucsi *ucsi = m->private;
++
++	seq_printf(m, "%u mA\n", ucsi->connector->avg_current);
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(ucsi_avg_curr);
++
++static int ucsi_vbus_volt_show(struct seq_file *m, void *v)
++{
++	struct ucsi *ucsi = m->private;
++
++	seq_printf(m, "%u mV\n", ucsi->connector->vbus_voltage);
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(ucsi_vbus_volt);
++
+ void ucsi_debugfs_register(struct ucsi *ucsi)
+ {
+ 	ucsi->debugfs = kzalloc(sizeof(*ucsi->debugfs), GFP_KERNEL);
+@@ -89,6 +117,9 @@ void ucsi_debugfs_register(struct ucsi *ucsi)
+ 	ucsi->debugfs->dentry = debugfs_create_dir(dev_name(ucsi->dev), ucsi_debugfs_root);
+ 	debugfs_create_file("command", 0200, ucsi->debugfs->dentry, ucsi, &ucsi_cmd_fops);
+ 	debugfs_create_file("response", 0400, ucsi->debugfs->dentry, ucsi, &ucsi_resp_fops);
++	debugfs_create_file("peak_current", 0400, ucsi->debugfs->dentry, ucsi, &ucsi_peak_curr_fops);
++	debugfs_create_file("avg_current", 0400, ucsi->debugfs->dentry, ucsi, &ucsi_avg_curr_fops);
++	debugfs_create_file("vbus_voltage", 0400, ucsi->debugfs->dentry, ucsi, &ucsi_vbus_volt_fops);
+ }
+ 
+ void ucsi_debugfs_unregister(struct ucsi *ucsi)
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 01ce858a1a2b..89b3ddc3d9ea 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1218,9 +1218,11 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 	struct ucsi_connector *con = container_of(work, struct ucsi_connector,
+ 						  work);
+ 	struct ucsi *ucsi = con->ucsi;
++	u8 curr_scale, volt_scale;
+ 	enum typec_role role;
+ 	u16 change;
+ 	int ret;
++	u32 val;
+ 
+ 	mutex_lock(&con->lock);
+ 
+@@ -1291,6 +1293,20 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 	if (change & UCSI_CONSTAT_BC_CHANGE)
+ 		ucsi_port_psy_changed(con);
+ 
++	if (UCSI_CONSTAT(con, PWR_READING_READY_V2_1)) {
++		curr_scale = UCSI_CONSTAT(con, CURRENT_SCALE_V2_1);
++		volt_scale = UCSI_CONSTAT(con, VOLTAGE_SCALE_V2_1);
++
++		val = UCSI_CONSTAT(con, PEAK_CURRENT_V2_1);
++		con->peak_current = UCSI_CONSTAT_CURR_SCALE_MULT * curr_scale * val;
++
++		val = UCSI_CONSTAT(con, AVG_CURRENT_V2_1);
++		con->avg_current = UCSI_CONSTAT_CURR_SCALE_MULT * curr_scale * val;
++
++		val = UCSI_CONSTAT(con, VBUS_VOLTAGE_V2_1);
++		con->vbus_voltage = UCSI_CONSTAT_VOLT_SCALE_MULT * volt_scale * val;
++	}
++
+ out_unlock:
+ 	mutex_unlock(&con->lock);
+ }
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 5a8f947fcece..791f031ff276 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -129,6 +129,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
+ #define UCSI_GET_PD_MESSAGE			0x15
+ #define UCSI_GET_CAM_CS			0x18
+ #define UCSI_SET_SINK_PATH			0x1c
++#define UCSI_READ_POWER_LEVEL			0x1e
+ #define UCSI_SET_USB				0x21
+ #define UCSI_GET_LPM_PPM_INFO			0x22
+ 
+@@ -357,6 +358,14 @@ struct ucsi_cable_property {
+ #define   UCSI_CONSTAT_BC_SLOW_CHARGING		2
+ #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING	3
+ #define UCSI_CONSTAT_PD_VERSION_V1_2		UCSI_DECLARE_BITFIELD_V1_2(70, 16)
++#define UCSI_CONSTAT_PWR_READING_READY_V2_1	UCSI_DECLARE_BITFIELD_V2_1(89, 1)
++#define UCSI_CONSTAT_CURRENT_SCALE_V2_1		UCSI_DECLARE_BITFIELD_V2_1(90, 3)
++#define UCSI_CONSTAT_PEAK_CURRENT_V2_1		UCSI_DECLARE_BITFIELD_V2_1(93, 16)
++#define UCSI_CONSTAT_AVG_CURRENT_V2_1		UCSI_DECLARE_BITFIELD_V2_1(109, 16)
++#define UCSI_CONSTAT_VOLTAGE_SCALE_V2_1		UCSI_DECLARE_BITFIELD_V2_1(125, 4)
++#define UCSI_CONSTAT_VBUS_VOLTAGE_V2_1		UCSI_DECLARE_BITFIELD_V2_1(129, 16)
++#define UCSI_CONSTAT_CURR_SCALE_MULT		5
++#define UCSI_CONSTAT_VOLT_SCALE_MULT		5
+ 
+ /* Connector Status Change Bits.  */
+ #define UCSI_CONSTAT_EXT_SUPPLY_CHANGE		BIT(1)
+@@ -516,6 +525,10 @@ struct ucsi_connector {
+ 	u32 src_pdos[PDO_MAX_OBJECTS];
+ 	int num_pdos;
+ 
++	u32 peak_current;
++	u32 avg_current;
++	u32 vbus_voltage;
++
+ 	/* USB PD objects */
+ 	struct usb_power_delivery *pd;
+ 	struct usb_power_delivery_capabilities *port_source_caps;
+-- 
+2.34.1
 
-- Your patch does not have a Signed-off-by: line.  Please read the
-  kernel file, Documentation/process/submitting-patches.rst and resend
-  it after adding that line.  Note, the line needs to be in the body of
-  the email, before the patch, not at the bottom of the patch or in the
-  email signature.
-
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what is needed in
-  order to properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what a proper
-  Subject: line should look like.
-
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file,
-  Documentation/process/submitting-patches.rst for how to do this
-  correctly.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
