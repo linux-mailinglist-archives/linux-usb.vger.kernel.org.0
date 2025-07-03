@@ -1,147 +1,135 @@
-Return-Path: <linux-usb+bounces-25449-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25450-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AACFAF7554
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 15:20:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77DE8AF760D
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 15:47:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADA1A1885E99
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 13:21:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B6B01C27151
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 13:47:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E5CF13B7A3;
-	Thu,  3 Jul 2025 13:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70A42E7198;
+	Thu,  3 Jul 2025 13:47:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBplZHlT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QIFL5Arc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0951DDD1;
-	Thu,  3 Jul 2025 13:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D9912B17C;
+	Thu,  3 Jul 2025 13:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751548841; cv=none; b=B6mRx+Qg9Lj0OD2tlEbBZqxU2H97xhW3E8wShxEHYkt3cLn3W1HxC5FT3R19XpriSW1O8QSvwd3EL/UsmOp41XBGuXFTwd165inSe4boy2UzJnBfftjAYZzN9hf1RIzc1H+cqE9rrnC9oRxA5ZsQwt3AaXp/fX8V7xSyeC1n6L8=
+	t=1751550426; cv=none; b=H1HzxPkR3jT7V1MOGxycjVSXcOKDoHuld7czQ/gzGgTfFUQlZ9fzqDoNGusILUkXXXMxaaWrnUhGU4ARD9kFse7XuqGZnxrSx0jDJhUVI4SW53j/yxJ70Sr5BcQ3khj2qM2tvGYRVoSVDY8c5Rww9zAXkgeRpCJJ/+pOz7GNm3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751548841; c=relaxed/simple;
-	bh=dU8LWmDWZTXWT/eBobaJweK43xARH/rNd+sTP8jr5S0=;
+	s=arc-20240116; t=1751550426; c=relaxed/simple;
+	bh=S6uSAFxgMusmYk+i3vZCmcqElpNigeA5L151mpjtU+0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dP9Quu3vWNhiGYEnPrC8cHNxAo78TMEdF13EzFwiZeKqlqsehjf6v/xD4jHTtiUc6HI4/aw91uxYTN0GGgNIs9QLEX7BorhyHxGylLzD0hmOTQm+Lj4YzJgPIVYBI5oBHX7i5wcOhxygn2G1bmTbB+9QBR23+z4ZistIWHyExoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hBplZHlT; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4537deebb01so29817265e9.0;
-        Thu, 03 Jul 2025 06:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751548838; x=1752153638; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MqGlLiGt9QoJKvCwgT5f7sBNld7aejdtjuAgeDdmuJ4=;
-        b=hBplZHlTXlarfZTec12BTr3COSvRN/JmpBpCzCccfSWDD7VCsURoqehq1Qi7AyGhUI
-         DSzHnsedJlaogPUgZzimqExeMx7cCQuY32A00XT+mN1kdK7lfdL0IZLz54YqRWzkT7e1
-         vTzv5+InuJR/aCwrngRdI667+hHbzORQtKGEvP+jh0tuNpympElEvgrohswlr7KFZyLC
-         Ad36VmviuNa9X0xJwuh9QxzF5Lm+vb6oOxpKjNxPu86/n1RhtT/ogXi3OoF1kdRlRSZy
-         02uaz2kugENbnHqq+CMjgXQQI/fKn0GbEi5U2pttooGnwrQrHW5SJr14IS5s6kY/YNul
-         UXGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751548838; x=1752153638;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MqGlLiGt9QoJKvCwgT5f7sBNld7aejdtjuAgeDdmuJ4=;
-        b=BX88wbHDcXQo0yG6R6D6EfIwd7MZbRS+NAPzp2RB3KCwuqSarBHt/iSe6bu3Hfjyl+
-         3YoDg/tsL55Dr6QB0Jnzw4LVVFY6bzoY8S0AoYkCtYNDImVuOrwq9GPCAJKC70WWpZ3u
-         CnzGVT17xf5PTA1tKKVMjWM6lgZjBRdM9wcEzbGQcaRSPLsAaIMtem9aM7VywZ1URpN7
-         h303W6OhGzof3uRZk9bijbW57wqOmo/l7Ehhdan22zW0f4+utzJ5EJcYBKF6LD1YlH2I
-         0i1pMU8cK0yKPoS+jAB+3JudnqKDm7ejKi05JGs9CH4qfuVoXNrew2zpr6hvOryEW+kc
-         O7lw==
-X-Forwarded-Encrypted: i=1; AJvYcCUKbdd3rHD9pMqTidt8MHp4AYr0cpfL42hQ2Y6+yJ79GvRHnJbGZYikSxrNpwgvt1sSHsehwvyhD3RyGwU=@vger.kernel.org, AJvYcCUm04Pn67WE8CzODoG5nHS9rqihJ1FJkTM4hrogvXgq8TkGFlYvV4/qsZVAbZocfrnu+GQOCw40WsUz@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyb0DxJvLcV1cjxdn+8PsqHbbDu8V36Duzzadqu31U+UY3iwNI0
-	eHQhJUTB95gMFtsDGd7yMDcEBA8qqaGQeDYfnemZ9rIgWWAF2eXNeoyxxSYkbXz0Qz8=
-X-Gm-Gg: ASbGncshT2d/w/Zgkow7bU3a+gQ6VbvylZWCqsCiE9r5XAclP5Yu8Zx89R5KQa4pUeF
-	FWgNdOdsDVjIH8r/I22E7CO8q6bBI5Boc9VEbbN0Z3rlOj4JR+JVsCnrXoNgXLHbvDU3zZf1m/z
-	p6qcbVXYEiyHaoGWMBt1GdgVtIuL3tEsv6G8qTq2sn14aH+FxlhTKT0gWrLjUf29JB20b3+OX2W
-	H6J8+wGbS6A3ltTUvLbdxrfURkxMj6Q1ul5CJVRJhaafMZ0Y5C+wMJeB0BHlX5Ho3p12CrOywY/
-	Q1p09rq8um9s/oj5JUaRk7sRpfUoAuHHxLzQYxjyYv8rAYOQMTKkfW3WTH/wtCaatFsSMhWjbFO
-	9NztqQGbhrA==
-X-Google-Smtp-Source: AGHT+IGdbVBsdjaXGKnWJL6/Me2LFoH8Pz92HGIJbguP4AOhBwLes9ljeQqgXg8uDTeaavxwfW2MVA==
-X-Received: by 2002:a05:600c:3f0e:b0:43d:160:cd97 with SMTP id 5b1f17b1804b1-454a3728d1dmr63080385e9.25.1751548838184;
-        Thu, 03 Jul 2025 06:20:38 -0700 (PDT)
-Received: from ernest.hoecke-nb ([89.207.175.50])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454a9bcebf7sm27340905e9.21.2025.07.03.06.20.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jul 2025 06:20:37 -0700 (PDT)
-Date: Thu, 3 Jul 2025 15:20:33 +0200
-From: Ernest Van Hoecke <ernestvanhoecke@gmail.com>
-To: Alan Stern <stern@rowland.harvard.edu>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Roger Quadros <rogerq@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Vignesh Raghavendra <vigneshr@ti.com>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
-	Chance Yang <chance.yang@kneron.us>, Prashanth K <prashanth.k@oss.qualcomm.com>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: dwc3-am62/usb-conn-gpio: USB gadget not added when booting in
- host mode
-Message-ID: <jhlqcoxnvpw5tndmty322y64n4d2me7mkp45nikos6fzamcs3u@kwahmdbv2zgx>
-References: <taw2mvbj6a2lqwy5h3tuqeifqy2w4gt4pzh4uahxuw27yw64q2@koxg54wgp2a2>
+	 Content-Type:Content-Disposition:In-Reply-To; b=S9y+qxj/4ij5/ct+AO7YI9yaHA2NckqsuwdN0eTLYehYpcUEAILSNIR1iiiBiqaArrsrOLTI9VKiGf+Z9J+uHtHtYqCsAdSHbRSeEoljV1OqLp3wONKFZ8cmElwUFgTjPAWUx6SM2uQmAHSCbREn8TGzxJrVs1Fq+bHa7rppVZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QIFL5Arc; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751550425; x=1783086425;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S6uSAFxgMusmYk+i3vZCmcqElpNigeA5L151mpjtU+0=;
+  b=QIFL5ArcYIa3M1cHDDrpNQQ1upSyQ/L/XOJET+oM6og8Xoq2FdSeEcCk
+   s+uDK6zKCLu4cQKqiQuXFsE3zGDHLDA7om7FiUHehCTPdTFe1NXLrb6FO
+   RHfpQmoWqmiXTWX/GjuKMxO26iUmUBNb4MjDpKh8R1R5Tasf807VaBNlo
+   wRIcNkldhWNZRImW3ajo1eYhBD0P9+eI9vmA2BKiii6rnbKtJFeOJ5GZp
+   s8C/EvymP0podc+KNacza9w1jCtMMnaA5Ty+ZYSf8QG88snRyZwGUZPcd
+   eON0WIXHSSG+zKbTlYe7GRFAlsX4zZmtPInxGF2gZjVzLsU5xbYJfyV/k
+   Q==;
+X-CSE-ConnectionGUID: o3pJkc+YTi6Nr5g0IcMkeg==
+X-CSE-MsgGUID: q7gRQNzcR7OwEI7DS0kCXQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="79312723"
+X-IronPort-AV: E=Sophos;i="6.16,284,1744095600"; 
+   d="scan'208";a="79312723"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 06:47:04 -0700
+X-CSE-ConnectionGUID: gaDn8zDxSIapXB2tg+gNfg==
+X-CSE-MsgGUID: qw2BXUjFR1qJyb9Msal+7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,284,1744095600"; 
+   d="scan'208";a="154945203"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 06:47:00 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1uXKHB-0000000CDdl-1PxA;
+	Thu, 03 Jul 2025 16:46:57 +0300
+Date: Thu, 3 Jul 2025 16:46:57 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
+	laurent.pinchart@ideasonboard.com, hdegoede@redhat.com,
+	gregkh@linuxfoundation.org, mingo@kernel.org, tglx@linutronix.de,
+	viro@zeniv.linux.org.uk, thomas.weissschuh@linutronix.de,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v4 1/3] usb: core: add dma-noncoherent buffer alloc and
+ free API
+Message-ID: <aGaJ0fS25bDoLCfH@smile.fi.intel.com>
+References: <20250703103811.4048542-1-xu.yang_2@nxp.com>
+ <20250703103811.4048542-2-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <taw2mvbj6a2lqwy5h3tuqeifqy2w4gt4pzh4uahxuw27yw64q2@koxg54wgp2a2>
+In-Reply-To: <20250703103811.4048542-2-xu.yang_2@nxp.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Tue, Jun 24, 2025 at 05:08:32PM +0200, Ernest Van Hoecke wrote:
-> On the TI AM62 when using a USB OTG port, I found some unexpected
-> behaviour when booting with this port in host mode.
->
-> This happens, for example, when booting with a USB pen drive inserted
-> When the pen drive is later removed, the OTG port correctly switches
-> to "device" mode instead of "host" mode, but the related USB gadget
-> does not come up (in my case, a CDC NCM configuration).
->
-> This issue only occurs when CONFIG_USB_CONN_GPIO and
-> CONFIG_USB_DWC3_AM62 are set to m and not when these modules are
-> built-in.
->
+On Thu, Jul 03, 2025 at 06:38:09PM +0800, Xu Yang wrote:
+> This will add usb_alloc_noncoherent() and usb_free_noncoherent()
+> functions to support alloc and free buffer in a dma-noncoherent way.
+> 
+> To explicit manage the memory ownership for the kernel and device,
+> this will also add usb_dma_noncoherent_sync_for_cpu/device() functions
+> and call it at proper time.  The management requires the user save
+> sg_table returned by usb_alloc_noncoherent() to urb->sgt.
 
-Hi all,
+...
 
-This turned out not to be a kernel issue. For future reference and
-anyone else running into this I'll document what our problem was
-below.
+>  	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> -	if (urb->transfer_buffer_length != 0
+> -	    && !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP)) {
+> +	if (!(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP)) {
+> +		if (!urb->transfer_buffer_length)
+> +			return ret;
 
-The systemd target `usb-gadget.target` is triggered by udev when a UDC
-first comes up. It can happen that by the time gadget-start runs, this
-UDC has been removed from the system again.
+This return ret out of a sudden are quite fragile. Please, move to use return 0
+directly where it is supposed to be 0.
 
-For example, we saw such a situation using the DWC3 USB controller and
-usb-conn-gpio kernel modules as loadables. By the time of the DWC3 init,
-udev was active, and during init DWC3 started the USB OTG port in device
-mode. If a pen drive was plugged in at boot, it would quickly switch to
-host mode right after initialisation, emitting another udev event for
-the removal of the UDC. The systemd target was thus reached, but by the
-time gadget-start ran, the UDC was gone.
+...
 
-  dwc3 init       usb-conn-gpio role switch
-      │                       │
-      ▼                       ▼
-udev: add UDC─┐         udev: del UDC─────►/sys/class/udc empty
-              │                                         │
-              │                                         x
-              │                                         │
-              │                                         ▼
-              └────────────►usb-gadget.target─────►gadget-start
+> +	} else {
+> +		if (!urb->sgt)
+> +			return ret;
 
-For us the solution was to add a udev rule to bind the gadget every
-time the UDC comes up, so the situation can resolve itself.
+Ditto.
 
-Kind regards,
-Ernest
+> +		if (dir == DMA_TO_DEVICE)
+> +			flush_kernel_vmap_range(urb->transfer_buffer,
+> +						urb->transfer_buffer_length);
+> +		dma_sync_sgtable_for_device(hcd->self.sysdev, urb->sgt, dir);
+>  	}
+
+>  	return ret;
+
+Ditto?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
