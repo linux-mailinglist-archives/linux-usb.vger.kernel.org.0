@@ -1,187 +1,139 @@
-Return-Path: <linux-usb+bounces-25428-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25429-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B40DAF6813
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 04:32:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78E1DAF6824
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 04:40:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFE8B3BB80B
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 02:31:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C482C1C43825
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jul 2025 02:40:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C69218584;
-	Thu,  3 Jul 2025 02:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1BBB1F30AD;
+	Thu,  3 Jul 2025 02:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="GmaLsEb9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VHsQXu8j"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5271DED5F
-	for <linux-usb@vger.kernel.org>; Thu,  3 Jul 2025 02:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3F92DE6F9;
+	Thu,  3 Jul 2025 02:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751509796; cv=none; b=nFT4VWQfwq2lld4A9/YsvXKFlJ/Ar9+IJD+vAUXqVHoX2EIivO1T5VqSMIXsnqfTeaPcJu64oQb+SyxqWYPDkitwZiXdBaFbE2/tOEo7rFw8i+G9twZ7t5NpKZIk69rPfx0iSkD08hmTq/w9BxjucnZMWGfgZYXZ1RtdIRAZ51g=
+	t=1751510413; cv=none; b=flQrU3Lx1+Z0TxiedxxUZylGrNLFGarJZV70oyGrwes4FvsQsL6ZUJBVUiAjiaH9DIZA1CZDYMzkMepzu6BoLzfKiPVjqPfQUin16sW1LNafd3AEX8q62pmojV6RfsG2owv65e0NxrCTeONHTEr9NI2aKrH0LvXdJbxU7osHXGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751509796; c=relaxed/simple;
-	bh=tZfPKhgGB2j9eNbdHLBmjtYb/P4kAmGPCTMVYa6VqU0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tHXzxYaKixwywBUdyFTGOJrECISm1Fz9irqb4X41TKG3Vt4MSe/9KuUGL/4KRnNGe7x7eeyTnwSxMQo9O/rO6ADwce2I56ViwU4iUr60gacFelQJDRKeIJPf890RXVnmakubBJGcSzgFvkGNhk/Au3A+9c1gZOkG1lpNwH2ysgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=GmaLsEb9; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4a7f46f9bb6so68147661cf.3
-        for <linux-usb@vger.kernel.org>; Wed, 02 Jul 2025 19:29:53 -0700 (PDT)
+	s=arc-20240116; t=1751510413; c=relaxed/simple;
+	bh=vnQR0Tr+PpymeHZa8w9DI9rZ5j98BWtaiz9bufGuSc0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O55tPrOGvZKEJWQZi3WBd53wTXxY/ACnPOLTbay763GoYd+2Q+2zp0fozW3e5LsUuitsbykKYyFdICiw6hzqF66Qix2P3ttPlFChSo37oRnoNFsqFvc1AQMtq7b9f+ETxMrQd+4HIdJphvIC0ujdil4nEdQbHKuDMM41Ne/QvRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VHsQXu8j; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-713fba639f3so74305567b3.1;
+        Wed, 02 Jul 2025 19:40:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1751509793; x=1752114593; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8rh1JDHYagyiIPyBOK33Dd4va5HKceQEpdzxYICKvUs=;
-        b=GmaLsEb935m8MXCrDqm+XSPlbzR9SZmpLmtvsvvIOhfXdoquH06h68czB9KvrMKWoz
-         ZmXcxZY1q85AbQNyHdaXcK2DblCiyl5J+uAjOXWxDaLE0hM/iO+CIW8yfNtE91CHTK94
-         b89Xsig9RyUWrSE8ZlZLn2ZLqYvJ6nMMWrKcFGQRkhFu/b905Ia98fOyFCks8fLGt5QS
-         yFGXAXtEq80sYmU0NQiOtf5o2zvgSCKTbkGmPDWa+V8l4hUUxyN44RlbkbX5XCFbGZtT
-         qbNZi0jQ6KHNneoVjUDERL7dXGt09vJI+/yorVySyDMmCMM7VYXH64HeLUComShom9y9
-         +LJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751509793; x=1752114593;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1751510411; x=1752115211; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8rh1JDHYagyiIPyBOK33Dd4va5HKceQEpdzxYICKvUs=;
-        b=MR9glSNvVRUNioAn6M3LJqqCjca11h3Xyta09sjQN/H1lYi0gFy+/a1BShx/eU5itC
-         PLe3PnrPlQzcb8zXfRt38jWrzyLmo/QzokpFqHUVesmRqlqYF2vvB/PCSjIhOVQ97dJr
-         38+GJGh/E++33TPPpt2wpbPQ4uU2gPRv1qdJsy8E9jaS8OJiBiJ5PpjX6UObjuNZeCTr
-         ivRLb0gr5TmKAjURytqWWS45hiy781kiXnG8BbHeXzs3rDGftQDQYjnvtIBcjV1sAX1g
-         /VJolKnJRAqp92Fjp5NZQNNUwg3nh0BGoud5OulAT7j0v1K1KaRpqjletzk1VS/3oZz2
-         wywA==
-X-Forwarded-Encrypted: i=1; AJvYcCXGQRuM8vrgZC+y+pOariJTPcNJdkovdj309KIFuyD8khpfs0Nhbg48g6D75rf6qfKOliSVuAuNSAQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpBvDyvrPKI0UI/UbkLTehD1tyEwkC5rotlF3Ob5dQ2ClyGysG
-	5SocqhkMbxC36zSEOhPCly/JRIiotn/BLYCgzCMG53KFLB2kCFWtMLB35FLYoKNtFw==
-X-Gm-Gg: ASbGncvWx/iT3fQYNfzj6tnB5CFVuhDvKfYwunt6r49hOUEyi90wYZ9KEAaI1oGDzeW
-	UVSxQyuuHc4/eVn6z/eEQWkGO7xO0iW/wsF/zYtHIaqgs2ruYHaW9OglRJwaPYp5JRucKn0j/ix
-	MPGQFTmcnKpiCiU9gRXu3heX4yvt2d6ta2P1/CaOSZmNUGidw73ebiKZc/EP4tRZoXvBWF0VLAo
-	gd6wU5upr1qjVpUuJW31J4/+BpYTEuzI29DIryrHUTYb/f72UCqah96s3+tj3DC/yRCl3ZEYZZH
-	gKziW9YAXxIJnHH0Z8ilAUpgMZxr0QOIZ+1mVpMKJwlU17taqsEk1MxmW9pxZLE=
-X-Google-Smtp-Source: AGHT+IFgUtIfacM1/yKau1yKcyG4dbEm+p1dcMbN7bUAVPQ51hz2fKYw5S+OeAykLbIKxmJzZvxwUA==
-X-Received: by 2002:a05:622a:138f:b0:4a6:f6e7:7214 with SMTP id d75a77b69052e-4a9769b9da8mr73400481cf.40.1751509792827;
-        Wed, 02 Jul 2025 19:29:52 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::4179])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a7fc10620dsm100820671cf.7.2025.07.02.19.29.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 19:29:52 -0700 (PDT)
-Date: Wed, 2 Jul 2025 22:29:49 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: contact@arnaud-lcm.com
-Cc: manas18244@iiitd.ac.in, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Pete Zaitcev <zaitcev@redhat.com>,
-	Paolo Abeni <paolo.abeni@email.it>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Greg Kroah-Hartman <gregkh@suse.de>,
-	syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com
-Subject: Re: [PATCH] usbmon: Fix out-of-bounds read in mon_copy_to_buff
-Message-ID: <22cdd2ea-9240-45ed-8667-cc315eccf0e0@rowland.harvard.edu>
-References: <20250703-fix-oob-mon_copy_to_buff-v1-1-1aa7f5723d91@iiitd.ac.in>
- <32d213c565df4c2a4bdb15b8c5b7c1ba@arnaud-lcm.com>
+        bh=Za0Nw2qGXMtrH3M2cv6/kU8VGW5fkBA+DQjX7CKQXrM=;
+        b=VHsQXu8jfZVtWZ5yfob34AOLoKCHoFAzDueDNQFHc/4bdrQdQPB9Frgm2XkgQW3qB8
+         giQnS3TxVsqEcgfoYRZAQJBmzh03238orzIWRhLtzFRR8IXU7imxFxgfp9/OWmqxU38E
+         FxliagbkfMfuWT3WdYIs3ssMu4TyKiWMW9+uyjRIOP4JCLS15TtN2FhRys/aofoe/20c
+         VzV+Rux5Cikxdki2T+vmCfpDdawb98HAHbawhKQlY6oYpnobDj8sz+g5orH2iKVVGl8k
+         RuVc/FoCGTvm8+izSlgCGnhqJYu5EadPcfPzU6D1rjvf+rTzKNcD3JiloZrjE9Le/3T5
+         YSNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751510411; x=1752115211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Za0Nw2qGXMtrH3M2cv6/kU8VGW5fkBA+DQjX7CKQXrM=;
+        b=bZp+bgpKJlg+PeWXb+Qk2wF7OFY74umBXhEzOKTV4SICBllaQjYbTNVImp8H7phk4T
+         jkf4CfRj7bOKlkbfih7xVdXTjQfl5zTbNRYgRvT3ZDUZ5VUrKXLbfrDXorl7xa6nr3Hb
+         9kyZacNIK8S5dEYvymc2NKLeRwgfwxQWouMDNXLHGItqdVoINBqDHdPErnU9eLM822cC
+         DBu9FKJ7KzfV7ZdZz+suuuGm/9cWbsXByaCSkyvPSj9LxEVZNAWxv8AJxYs0lgBwqyOu
+         Wykjl/SGsBdRJ4AThyzXhmWtCW+0zeRS1OqnpXivWrte8MCQCJHMnoG7WMsF5I8hhhaw
+         W32w==
+X-Forwarded-Encrypted: i=1; AJvYcCUxI/G8AQSdzMfjBSgSxPDj2DDVu5JzXL/8hAW8gQTPOKMs04hqJJg7HXDvJC0BftkpZ5uQFN985DxKaA==@vger.kernel.org, AJvYcCV5ujWUGEM0dPD4bWXBnLBH0X7Hic0lyBRSiWh4YUcMQIMh3hUC/a+VAkJ+YAXo/mRUON9wIcMrU8T9+2VUr/k=@vger.kernel.org, AJvYcCVOGYIoocC1fJz6YIvPWf0Biwf4xQFF/brxrUPc9TpYRx9t7wtsYX32vUtnHSSK65R2ZYapcX21lLE=@vger.kernel.org, AJvYcCWPixUX0BVF9+enEliGjpIzx+ZoPkoCJ8HCn7DrOc9HZj+9Ypat5cnLeFo5OqvvlWkApFcQDNETSivZ@vger.kernel.org, AJvYcCWX8NwdANefk5JZ0G7yPQ53nUWUQCcjAnMXzVyAbApYzBVmfYFMlPXio8AGHyx4OiWBX4Q7aEognpRKjJXh@vger.kernel.org, AJvYcCXIIQQ6xGnlNayhtVfnrJLeoSFlvsc5KbwpS/DA6OSkmfrVqv519HIFS7Ol9/C6gzRfNLDK1KY2gurJ@vger.kernel.org, AJvYcCXKjEMol2J181IfkDxl0hHsa0Sh+IUlb1MXqNe2w3KqmRDW7kxGToHi44j3WWHFGVTbMZt3PIgk@vger.kernel.org, AJvYcCXQ1eeq9WXRL1uXG6ByZmU3JP21P9p62/hc9RSXPwjabWppsWiCdbZa2oAYzFJ+stAXhcDAn14hSzjS6g0=@vger.kernel.org, AJvYcCXgbEB1HmpHKQXOBMW8FT+G19WOtOKCWualFYzA75r8CzSD/pvXEvd7ftUXrZDaqRzWKRQfygMahRIW@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIBG7y9CSpNqtWxWOw7P21yOgfUyis6b4Yd/S6X1PclhZCIY3X
+	JgdjytHuVvDW8LfSsoHup6bCmu6AvvR5kKPWRnsVX5yJNDRb2MkVOd9zgAhSSN7N2MeupRU0aN4
+	6AYfuyz4WSFz6Byg93HwI+7K+1pYypPY=
+X-Gm-Gg: ASbGncsoz0PFyekoCTvL9TNiAyZgcciv6xZl7/xbnkO53F0OXu6xrS8jsNKapzG5zD0
+	upDs4p5yBQefEfmwc2AmO+VYqaZwv6uGwYFaFGLMawC2wVi3LtDEodTtcJd3cNAUeLKbITuKZ9h
+	MbPdSa/BCwC++aVRrxp7u2pImdnItNC3cqbYkn093Bh0B6om9DVD2M3zxib6dFO69HsUvMswoVt
+	Zs=
+X-Google-Smtp-Source: AGHT+IFInAJFwtSvbRbpfWkJeWkQyPFJ4uUnPZCJSkqyT+CMSBuNG5K9HrPW5jNVrCExkOcwDsaWwLcorYB4rVgpR90=
+X-Received: by 2002:a05:690c:48ca:b0:70e:7706:824e with SMTP id
+ 00721157ae682-7164d313418mr81180297b3.6.1751510410717; Wed, 02 Jul 2025
+ 19:40:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <32d213c565df4c2a4bdb15b8c5b7c1ba@arnaud-lcm.com>
+References: <20250627102730.71222-1-a0282524688@gmail.com> <20250627102730.71222-2-a0282524688@gmail.com>
+ <20250702161513.GX10134@google.com>
+In-Reply-To: <20250702161513.GX10134@google.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 3 Jul 2025 10:39:59 +0800
+X-Gm-Features: Ac12FXyfXTYeuK_eNNsj2MZDnEQB-Di_TdAXd7UH2wEmeYhkuTmXoczjV6dlS0E
+Message-ID: <CAOoeyxXWbjWvOgsSvXb9u2y6yFExq347ceZe96bm9w+GQAp2Rg@mail.gmail.com>
+Subject: Re: [PATCH v13 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Lee Jones <lee@kernel.org>
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 02, 2025 at 10:42:42PM +0100, contact@arnaud-lcm.com wrote:
-> Hi Manas, I just noticed your patch while I was working on it and we had the
-> same idea. I think you are not covering every cases of the issue.
-> I've done it this way:
+Dear Lee,
 
-Why do both of you guys think that mon_copy_to_buff() is trying to 
-transfer data from an empty source buffer?  Maybe the destination buffer 
-is the cause of the problem instead.
+Thanks for your feedback and review.
+Currently, the status of the sub-device drivers is as follows (A/R/T):
+    [v13,1/7] mfd: Add core driver for Nuvoton NCT6694 (- - -)
+    [v13,2/7] gpio: Add Nuvoton NCT6694 GPIO support (1 1 -)
+    [v13,3/7] i2c: Add Nuvoton NCT6694 I2C support (1 - -)
+    [v13,4/7] can: Add Nuvoton NCT6694 CANFD support (- 2 -)
+    [v13,5/7] watchdog: Add Nuvoton NCT6694 WDT support (1 - -)
+    [v13,6/7] hwmon: Add Nuvoton NCT6694 HWMON support (- 1 -)
+    [v13,7/7] rtc: Add Nuvoton NCT6694 RTC support (1 - -)
 
-> From 49f4d231a1c4407d52fee83e956b1d40b3221e37 Mon Sep 17 00:00:00 2001
-> From: Arnaud Lecomte <contact@arnaud-lcm.com>
-> Date: Wed, 2 Jul 2025 22:39:08 +0100
-> Subject: [PATCH] usb: mon: Add read length checking in mon_copy_to_buff
-> 
-> Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
-> ---
->  drivers/usb/mon/mon_bin.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
-> index c93b43f5bc46..e7b390439743 100644
-> --- a/drivers/usb/mon/mon_bin.c
-> +++ b/drivers/usb/mon/mon_bin.c
-> @@ -249,6 +249,8 @@ static unsigned int mon_copy_to_buff(const struct
-> mon_reader_bin *this,
->  		 * Copy data and advance pointers.
->  		 */
->  		buf = this->b_vec[off / CHUNK_SIZE].ptr + off % CHUNK_SIZE;
-> +		if(strlen(from) < step_len)
 
-strlen() is absolutely the wrong thing to use here for both of your 
-patches.  "from" is not a NUL-terminated string but rather a general 
-memory buffer.  The caller is supposed to guarantee that "from" contains 
-at least "length" bytes of data.  If something is going wrong here, it 
-is the caller's fault.
+Best regards,
+Ming
 
-Alan Stern
-
-> +			return -ENOMEM;
->  		memcpy(buf, from, step_len);
->  		if ((off += step_len) >= this->b_size) off = 0;
->  		from += step_len;
-> -- 
-> 2.43.0
-> 
-> 
-> On 2025-07-02 22:27, Manas Gupta via B4 Relay wrote:
-> > From: Manas Gupta <manas18244@iiitd.ac.in>
-> > 
-> > memcpy tries to copy buffer 'from' when it is empty. This leads to
-> > out-of-bounds crash.
-> > 
-> > This checks if the buffer is already empty and throws an appropriate
-> > error message before bailing out.
-> > 
-> > Fixes: 6f23ee1fefdc1 ("USB: add binary API to usbmon")
-> > Reported-by: syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com
-> > Closes: https://syzkaller.appspot.com/bug?extid=86b6d7c8bcc66747c505
-> > Signed-off-by: Manas Gupta <manas18244@iiitd.ac.in>
-> > ---
-> > I have used printk(KERN_ERR ... to keep things consistent in usbmon.
-> > dev_err and pr_err are not used anywhere else in usbmon.
-> > ---
-> >  drivers/usb/mon/mon_bin.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
-> > index c93b43f5bc4614ad75568b601c47a1ae51f01fa5..bd945052f6fb821ba814fab96eba5a82e5d161e2
-> > 100644
-> > --- a/drivers/usb/mon/mon_bin.c
-> > +++ b/drivers/usb/mon/mon_bin.c
-> > @@ -249,6 +249,11 @@ static unsigned int mon_copy_to_buff(const struct
-> > mon_reader_bin *this,
-> >  		 * Copy data and advance pointers.
-> >  		 */
-> >  		buf = this->b_vec[off / CHUNK_SIZE].ptr + off % CHUNK_SIZE;
-> > +		if (!strlen(from)) {
-> > +			printk(KERN_ERR TAG
-> > +			       ": src buffer is empty, cannot copy from it\n");
-> > +			return -ENOMEM;
-> > +		}
-> >  		memcpy(buf, from, step_len);
-> >  		if ((off += step_len) >= this->b_size) off = 0;
-> >  		from += step_len;
-> > 
-> > ---
-> > base-commit: d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af
-> > change-id: 20250703-fix-oob-mon_copy_to_buff-7cfe26e819b9
-> > 
-> > Best regards,
-> 
+Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B47=E6=9C=883=E6=97=A5 =E9=
+=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8812:15=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Fri, 27 Jun 2025, a0282524688@gmail.com wrote:
+>
+> > From: Ming Yu <a0282524688@gmail.com>
+> >
+> > The Nuvoton NCT6694 provides an USB interface to the host to
+> > access its features.
+> >
+> > Sub-devices can use the USB functions nct6694_read_msg() and
+> > nct6694_write_msg() to issue a command. They can also request
+> > interrupt that will be called when the USB device receives its
+> > interrupt pipe.
+> >
+> > Signed-off-by: Ming Yu <a0282524688@gmail.com>
+>
+> This looks okay now.
+>
+> Do you have all of the other Acks?  If not, please let me know when you d=
+o?
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
 
