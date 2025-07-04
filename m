@@ -1,271 +1,165 @@
-Return-Path: <linux-usb+bounces-25478-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25479-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45E71AF8D0D
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 11:00:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA2E0AF8E0D
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 11:17:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F2A6B471D9
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 08:34:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B27D1CA6D2D
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 09:16:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9356828BA89;
-	Fri,  4 Jul 2025 08:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25392F4A09;
+	Fri,  4 Jul 2025 09:11:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YWc6Gsye"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mSjVfTLx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016F52857FF;
-	Fri,  4 Jul 2025 08:24:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874682F4334;
+	Fri,  4 Jul 2025 09:11:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751617477; cv=none; b=q8V4MSYWHlHzJ9pzJl+gOkVJerR1zSdL3c/VPzc469WXaZFnh3KRDXc7KC+c4Cl+aEHYp2k7lPmF07i9eyAJS0HSlurKFABXC/NutBP6AzPel6yZIUFb8Hxn76qkKAJgxNvpBrIJjIpu6dkjEYJyV/jZwsRXiOZeIXXWXadoivI=
+	t=1751620292; cv=none; b=oxhqEm5uC950uOHSEO6OS1RFnD6+Q2JBKkE7Sn3VLLQb1VP6BaWDpycunW43WzQ0kpgeOVGrymxpe4nPJJWNe/s5OHgHgMa2j1Ka98pKvshVv80Xi4AyiUfRRsvkgTS2e6f3lsIZkhpalQwixL63gIrDxBU8bKk7urUVcsurv2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751617477; c=relaxed/simple;
-	bh=8bQ/kAWmKbMyR8G+zrxH66t6rKnWduiJy6CgnKtxMws=;
+	s=arc-20240116; t=1751620292; c=relaxed/simple;
+	bh=U/K6TYBPGbFygsv68xo28nwKyHeVOgVII1meYzdMuSk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PwFzLGjHUHVi0jhMnT40IjfAfmypmE7H2veafU7RdWnVfHSvxgcgN78xyTt1kxefj0W/j+/uOsoGhhv5CykkiqaJc2V5JSqyyRrAdZuLU5u12jjJguQlpnGElMkdsBdcdvvZXHE+StvFBIPxF01+DcQVFVMKFeS7ukxurAZqXBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YWc6Gsye; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D45D9C4CEE3;
-	Fri,  4 Jul 2025 08:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751617476;
-	bh=8bQ/kAWmKbMyR8G+zrxH66t6rKnWduiJy6CgnKtxMws=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YWc6Gsye+ceq3AZl6vz5vCYRgfvWD3+jAzpZp1Vi5asujwWdAYrLyVLGxbIlCW0jm
-	 cG2OyGRATW6+jpYColihmvT39vK/oRD9zPQ9qpgA3oUwTDDnLp2+skEk2sEyYE5d/s
-	 7+PVQhw+2NF0Z6JtvXHDSBOeAt4sTjP2pY/mFotE=
-Date: Fri, 4 Jul 2025 10:24:33 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jie Deng <dengjie03@kylinos.cn>
-Cc: stern@rowland.harvard.edu, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH v2] usb: storage: Ignore UAS driver for SanDisk Extreme
- Pro 55AF storage device
-Message-ID: <2025070422-punctured-opal-f51e@gregkh>
-References: <2025070329-rinse-engaged-e7af@gregkh>
- <20250704061116.1020646-1-dengjie03@kylinos.cn>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PFXpdx7fnllvxMadXgHJKHbV1gWWSI50kL5qS/LNs8QbePN+QzuuUEOcX22I5kEFhFFoWhxxUMJ7vZVMZtACOEYnvFikSRaOzEIUUeTU+CIFtBRyuoOEjTzDsEUdqu6+XCFyrViaJR/0vkXIZvYdtmWxmDReW0+//a8FtgEDTik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mSjVfTLx; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3a588da60dfso430462f8f.1;
+        Fri, 04 Jul 2025 02:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751620289; x=1752225089; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4BxPSNuI1K+0U+zGcMRGFuPmBq+1SIMVgn3s+fjE3jI=;
+        b=mSjVfTLxuo99cIYHIvwTU+Wjr6nOn12otsxhwMiLoBeGaB3QoVGvc+Et2V4F6qRmJs
+         thG8i9qmI2AKYZT0B+1fCRCjKpMdvcCwDHltVJr3z9pLEzgETEOVlc7eq5+XHuEpdPOU
+         WOUy4Zc0ziZ7ykaW6UXbcumTjIoEg248VGks9KMk1UiTJcCilzJttJtj11SoZ/ukUZ2s
+         CTstPf7nS4PnWRzDDUkTcN7I07WbYwamJLO7EUQXOF6ZW98JniTA1LXSgUoP2/2bcl+Z
+         KQrCKRiBNb+OYD5fKr78DyMrZiurXZhZJ/6LAWMzalLvZaH8QU3pgzpjvBCsINn7YRPQ
+         8r1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751620289; x=1752225089;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4BxPSNuI1K+0U+zGcMRGFuPmBq+1SIMVgn3s+fjE3jI=;
+        b=KutpM6rgsWV5xwIk8H0orXO38fem5PayURFW2Ce8Ziz5SY+lk0KwMEuLwD+UeLnNKs
+         9OFkaWZqt9/3APcOg6LWsW6IxuGi/x2hrXd9wyLQKmMLIdl2phOrWyySSPxWE0qCM6Ob
+         HVJ7IpI0VJh+J1wkPMweOLCfDXhYqKsZxBWDyw3ezlFSPw08AvGUURzkqFc4Mpu5GV4a
+         OFEVle4Rz9+DJrdYMjSAz28AEP6ApiFgk6W/q8uLHcNqrCz00Nv9jzcTWzVm1BibFkxO
+         21lbsgzXdiKmsyQRjPr/XpTXemzwVUW/pfiu+9xkGkzSPNJq7rVhOWvoFzLBBBbhne6O
+         vpcw==
+X-Forwarded-Encrypted: i=1; AJvYcCVTJqW+1svipFO7h8JjyoYSswsMETRnYMo4b3nbGYwsj+HPzt5KHxHlSSmqN5bi/GPyPvFJQLsmjE2p+Cw=@vger.kernel.org, AJvYcCWlxIH/RbtyQQ9HiVUvKXRpu+ONEwjoaoPj2J2885lcsWJ5QGe5JKla13et9bYX25Ppm6bZ6d1OYDS1Cw==@vger.kernel.org, AJvYcCX7Z3gPNPwgk6mRb/ya8AOJ0Z+jP5vGhl5uPyAAtSVuzx6edhoc8EchVaVvZh/zZvMThewANDO8xEGH@vger.kernel.org, AJvYcCXfCj1Q5g/0zCKpumS7Mb4Ywz/VxaDZAx110J5sLSmDSv2Yv63VadTlLotGC3zWrZa6GcuUivf/cilz55M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/3lqyoU/GbtrMkkyx9ENkFXYHIhrwm/VEFKk7LiC4QiKRiX25
+	QMKgdU0NOiNJKd9V3eiVpE5Nao49208QOunlFdepoVY0vhTeeOIhBwgh
+X-Gm-Gg: ASbGncuLYEMglQZora+bF5XK7E7c2yT+959Yl8iWIWhr1Pw/oRhZAQkrhchJlcR+eJ7
+	l8tUqMV7Qlm8MmEUjYsh7Iv96eGhW4BujSdGP/JJbzlSgnG59yG/N9J+Qj7rdFwcZbuFB5wAY/M
+	diCCViBURSZTZ2EHgyFHUPPYGbbyS+IqJRJuSu8FxKkR/fvtg6/Zr0RReZXgvJrn7URz9UU69u3
+	k+BbhAQbCu70r59va36tOrJE+S2CA6oxFe8ra1mt/685D4rL98Y9GtpxmzF6qYg1PUXpNRot6lX
+	k5h/QiTbf0i0J4g95iyVT17KZnUpYm5EhsGk86WkHFIQYZQ2QB95Bt53cgY8k16YWsAhQOkqLYO
+	8zY/vKPYLu3Gy4tGzinu68hXYqBVokOV9kVgjzg6iss62fR4N
+X-Google-Smtp-Source: AGHT+IEifZ9+Qoefw6C59P68ghxiOjv/mmB7vnLxOoNgNMQhGBq65x9dlLFXIorvyQQpoQF/016xrw==
+X-Received: by 2002:a05:6000:2f83:b0:3a5:8934:493a with SMTP id ffacd0b85a97d-3b4964e56c8mr1521328f8f.44.1751620288471;
+        Fri, 04 Jul 2025 02:11:28 -0700 (PDT)
+Received: from orome (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454a9bcececsm49889865e9.23.2025.07.04.02.11.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Jul 2025 02:11:27 -0700 (PDT)
+Date: Fri, 4 Jul 2025 11:11:25 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Peter Chen <peter.chen@kernel.org>, 
+	Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Michal Simek <michal.simek@amd.com>, Chunfeng Yun <chunfeng.yun@mediatek.com>, 
+	Mathias Nyman <mathias.nyman@intel.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Bastien Nocera <hadess@hadess.net>, Bin Liu <b-liu@ti.com>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCH 67/80] usb: Remove redundant pm_runtime_mark_last_busy()
+ calls
+Message-ID: <ycajp5zwm65aauacebivz5773qhe2tmhcn7wqhorjybarfs5qq@su6kxog6t66k>
+References: <20250704075225.3212486-1-sakari.ailus@linux.intel.com>
+ <20250704075453.3222311-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dd3rsrobpe5enhed"
 Content-Disposition: inline
-In-Reply-To: <20250704061116.1020646-1-dengjie03@kylinos.cn>
+In-Reply-To: <20250704075453.3222311-1-sakari.ailus@linux.intel.com>
 
-On Fri, Jul 04, 2025 at 02:11:16PM +0800, Jie Deng wrote:
-> The SanDisk Extreme Pro 55AF storage device(0781:55af) has poor compatibility with UAS drivers.
-> The logs:
-> [    1.359859][ 0] [  T163] usb 2-1: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
-> [    1.385708][ 0] [  T163] usb 2-1: New USB device found, idVendor=0781, idProduct=55af, bcdDevice=10.85
-> [    1.385709][ 0] [  T163] usb 2-1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
-> [    1.385710][ 0] [  T163] usb 2-1: Product: Extreme Pro 55AF
-> [    1.385711][ 0] [  T163] usb 2-1: Manufacturer: SanDisk
-> [    1.385711][ 0] [  T163] usb 2-1: SerialNumber: 323234323935343030343636
-> [    1.927603][ 0] [  T306] usbcore: registered new interface driver usb-storage
-> [    1.940511][ 0] [  T306] scsi host3: uas
-> [    1.940584][ 0] [  T306] usbcore: registered new interface driver uas
-> [    1.940843][ 0] [  T188] scsi 3:0:0:0: Direct-Access     SanDisk  Extreme Pro 55AF 1085 PQ: 0 ANSI: 6
-> [    1.941363][ 0] [  T188] scsi 3:0:0:1: Enclosure         SanDisk  SES Device       1085 PQ: 0 ANSI: 6
-> [    1.941697][ 0] [  T188] sd 3:0:0:0: Attached scsi generic sg0 type 0
-> [    1.941783][ 0] [  T188] scsi 3:0:0:1: Attached scsi generic sg1 type 13
-> [    1.942296][ 0] [  T189] sd 3:0:0:0: [sda] 1953459617 512-byte logical blocks: (1.00 TB/931 GiB)
-> [    1.942373][ 0] [  T189] sd 3:0:0:0: [sda] Write Protect is off
-> [    1.942374][ 0] [  T189] sd 3:0:0:0: [sda] Mode Sense: 37 00 10 00
-> [    1.942534][ 0] [  T189] sd 3:0:0:0: [sda] Write cache: enabled, read cache: enabled, supports DPO and FUA
-> [    1.943586][ 0] [  T189] sd 3:0:0:0: [sda] Optimal transfer size 2097152 bytes
-> [    1.976797][ 0] [  T189]  sda: sda1
-> [    1.977898][ 0] [  T189] sd 3:0:0:0: [sda] Attached SCSI disk
-> [    1.980406][ 0] [  T267] scsi 3:0:0:1: Failed to get diagnostic page 0x1
-> [    1.980408][ 0] [  T267] scsi 3:0:0:1: Failed to bind enclosure -19
-> [    1.980414][ 0] [  T267] ses 3:0:0:1: Attached Enclosure device
-> [    1.981068][ 0] [    C0] sd 3:0:0:0: [sda] tag#10 data cmplt err -75 uas-tag 1 inflight: CMD
-> [    1.981071][ 0] [    C0] sd 3:0:0:0: [sda] tag#10 CDB: Read(10) 28 00 74 6f 6d 00 00 00 08 00
-> [   33.819186][ 0] [  T188] sd 3:0:0:0: [sda] tag#10 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD
-> [   33.819188][ 0] [  T188] sd 3:0:0:0: [sda] tag#10 CDB: Read(10) 28 00 74 6f 6d 00 00 00 08 00
-> [   33.843186][ 0] [  T309] scsi host3: uas_eh_device_reset_handler start
-> 
-> Device decriptor is below:
-> Bus 002 Device 003: ID 0781:55af SanDisk Corp. Extreme Pro 55AF
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               3.20
->   bDeviceClass            0
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0         9
->   idVendor           0x0781 SanDisk Corp.
->   idProduct          0x55af
->   bcdDevice           10.85
->   iManufacturer           2 SanDisk
->   iProduct                3 Extreme Pro 55AF
->   iSerial                 1 323234323935343030343636
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x0079
->     bNumInterfaces          1
->     bConfigurationValue     1
->     iConfiguration          0
->     bmAttributes         0x80
->       (Bus Powered)
->     MaxPower              896mA
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass         8 Mass Storage
->       bInterfaceSubClass      6 SCSI
->       bInterfaceProtocol     80 Bulk-Only
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x81  EP 1 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst              15
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x02  EP 2 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst              15
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       1
->       bNumEndpoints           4
->       bInterfaceClass         8 Mass Storage
->       bInterfaceSubClass      6 SCSI
->       bInterfaceProtocol     98
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x81  EP 1 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst              15
->         MaxStreams             32
->         Data-in pipe (0x03)
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x02  EP 2 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst              15
->         MaxStreams             32
->         Data-out pipe (0x04)
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x83  EP 3 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst              15
->         MaxStreams             32
->         Status pipe (0x02)
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x04  EP 4 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst               0
->         Command pipe (0x01)
-> 
-> So ignore UAS driver for this device.
-> 
-> Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
-> ---
->  drivers/usb/storage/unusual_uas.h | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> index 1477e31d7763..6b1a08e2e724 100644
-> --- a/drivers/usb/storage/unusual_uas.h
-> +++ b/drivers/usb/storage/unusual_uas.h
-> @@ -52,6 +52,13 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
->  
-> +/* Reported-by: Jie Deng <dengjie03@kylinos.cn> */
-> +UNUSUAL_DEV(0x0781, 0x55af, 0x0000, 0x9999,
-> +		"SanDisk",
-> +		"Extreme Pro 55AF",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_IGNORE_UAS),
-> +
->  /* Reported-by: Zhihong Zhou <zhouzhihong@greatwall.com.cn> */
->  UNUSUAL_DEV(0x0781, 0x55e8, 0x0000, 0x9999,
->  		"SanDisk",
-> -- 
-> 2.25.1
-> 
-> 
 
-Hi,
+--dd3rsrobpe5enhed
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 67/80] usb: Remove redundant pm_runtime_mark_last_busy()
+ calls
+MIME-Version: 1.0
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+On Fri, Jul 04, 2025 at 10:54:53AM +0300, Sakari Ailus wrote:
+> pm_runtime_put_autosuspend(), pm_runtime_put_sync_autosuspend(),
+> pm_runtime_autosuspend() and pm_request_autosuspend() now include a call
+> to pm_runtime_mark_last_busy(). Remove the now-reduntant explicit call to
+> pm_runtime_mark_last_busy().
+>=20
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+[...]
+> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+> index 0c7af44d4dae..554b03e3ae92 100644
+> --- a/drivers/usb/host/xhci-tegra.c
+> +++ b/drivers/usb/host/xhci-tegra.c
+> @@ -1394,7 +1394,6 @@ static void tegra_xhci_id_work(struct work_struct *=
+work)
+>  		}
+> =20
+>  		tegra_xhci_set_port_power(tegra, true, true);
+> -		pm_runtime_mark_last_busy(tegra->dev);
+> =20
+>  	} else {
+>  		if (tegra->otg_usb3_port >=3D 0)
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+pm_runtime_mark_last_busy() was previously called conditionally only for
+host mode, but not for peripheral mode. That said, since that call was
+now moved into the pm_runtime_put_autosuspend(), any issues would
+already have been introduced by the series that this depends on, so
+we'll see if there's any fallout.
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+--dd3rsrobpe5enhed
+Content-Type: application/pgp-signature; name="signature.asc"
 
-thanks,
+-----BEGIN PGP SIGNATURE-----
 
-greg k-h's patch email bot
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmhnmr0ACgkQ3SOs138+
+s6FhWRAAmqKDqeofJQ11k5izwUxvfuUGMikCMaAXOhGyv2+Tokqg6xbVpQ/LTy3A
+jW7wNUyH5ZjWFprk7RPURsZpkc8ruTDl3bmWdSdp+DlV5VNfEYs1fqreyNsOF1k/
+a++KWAlrXA7VRbSlFdMj6W6SjudMMjWby6Pm2K7I8pDuJQdOwSuBf0bWgN95JEiu
+MEf7+WORXLjgJToa1eiPE9aPSMqS+vOMhkrhJLfrsCmwqoG5CUnIJXf6wnaN5hqq
+QGKPnHXbDocqwAaMFkzX1/nSahQOIl4A882n8JB885SajqJ81BnjWVaUFnS2RDfS
+aPDiHDlZ+xs/Ix8ISxgpY6MPoMalnKlf3pkQ3FWrgS/NyTNryLm9bBT/SbhJVddC
+kAShqX2e8jXSn1MbNhLryWBJYdQ7jWagl5HwL2/R1w6BzY69iwUKHK/1Pi3SHFY9
+ryW8wlQGR2/ukqPqFPZVfXMmcX00Zuu+JIaiSscFM/Q5I3n47JIYmsFSWsertbI6
+DTkF9fKh5n1npEGFeUCilrG9b1bsYM+BJIrwqZ+7qfpgKb1uxC6yjdIlDLwkOLjy
+gc0ZORc30ulN3X2p+KUzVnte27Q3llclgZoISLYfv0+wkWvQcNYuBCBSvpajeqMe
+dC9Twi/Dm657HYa4TfqcD3EMTgt//GUiOVxKCHqOlQhXpEvQMuM=
+=lUG1
+-----END PGP SIGNATURE-----
+
+--dd3rsrobpe5enhed--
 
