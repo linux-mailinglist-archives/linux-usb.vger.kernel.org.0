@@ -1,251 +1,115 @@
-Return-Path: <linux-usb+bounces-25470-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25471-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 057B5AF87BD
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 08:12:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEAB8AF89AD
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 09:39:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5541480C63
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 06:11:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58E203B9E91
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 07:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2B65223DFB;
-	Fri,  4 Jul 2025 06:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA57281510;
+	Fri,  4 Jul 2025 07:39:33 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829552222B4;
-	Fri,  4 Jul 2025 06:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A3A27A10A;
+	Fri,  4 Jul 2025 07:39:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751609503; cv=none; b=HCEDyVATV618cz6rhuZ2VOVCMwl0eqhGt99lde9kp8hNWomZ3MVlTYdDYbQJZzMFSZR1OSGe4A6ZRPmtUwOXPUwrmKUEsPSBb4PJfVgoVYY0Se2Ahmm5ULWvjyT0hhk1Mz6myOqab4BOCzlXbdqmtTXF5dTt+jPdQFxtk9PsXq4=
+	t=1751614773; cv=none; b=nKAdEa2PHx4vNe1Ki3laTq92SLiKuvXy8jj1JfB65DG672LWgRYJRg9Eke00CXtJJCNkMV2jT45gWInYhQXMCjIcyMghOqv10ZrAh44JmRIvsYBfwbVD3D4pd7+HHSipdv5wL360FQMoeHFIePA6aSZpmE9QjGj66Pi2mDsPDUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751609503; c=relaxed/simple;
-	bh=YivFj4A/L12wIJ8+d4tC3bRl92nN/hOxHGYOTlqREF0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QRDUFDahcHyUnt5XfQYFIlnCpEGrPhyN6d7q6rGGsYrtcTJLVLeNFreM98N1szFpYxiShpkohmI0FnYpiK/nkYqh8WIQROCJA+PXlei3uRpY8YeZudCd0YisB2wQNHcIPJIefhDlqIhty6lE7FFAPNpo3Ss9rs01QByKjlcockU=
+	s=arc-20240116; t=1751614773; c=relaxed/simple;
+	bh=zUyh97JqCK3KdJWYl2/MyQW39mdsTV459TPaykhk8Ac=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e1KT/Xd+98vTcTxCi5pgVqFBJsSpQ6C2QJ8yOXBi8NrcKFG9Q9bqeIkdlnBc3VTi0Rf7TB84jT2HaFdoUS6XxWw6DLiTcGH1t8fqWW04JoCR2ldgcoY5b7hh9emiAniTuv47Wivtw5X6HkKTdUTeGFZn1o2be7jHGMkm5XHX3sM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: bbbf90f2589d11f0b29709d653e92f7d-20250704
+X-UUID: 0002f30658aa11f0b29709d653e92f7d-20250704
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:2c33e3f4-d921-40dc-a38e-e5c5a7b7c501,IP:0,U
-	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:25
-X-CID-META: VersionHash:6493067,CLOUDID:8b718783b12c86f57a14e01588e4fb53,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:5,IP:n
-	il,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LE
-	S:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
+X-CID-O-INFO: VERSION:1.1.45,REQID:0563ff65-4080-4fdd-94b1-5dab8a616b77,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:2e1a03c2da9073700864a3e28dd55ca8,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 1,FCT|NGT
+X-CID-BAS: 1,FCT|NGT,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: bbbf90f2589d11f0b29709d653e92f7d-20250704
-X-User: dengjie03@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+X-UUID: 0002f30658aa11f0b29709d653e92f7d-20250704
+Received: from node4.com.cn [(10.44.16.170)] by mailgw.kylinos.cn
 	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 116345990; Fri, 04 Jul 2025 14:11:33 +0800
-From: Jie Deng <dengjie03@kylinos.cn>
-To: gregkh@linuxfoundation.org
-Cc: stern@rowland.harvard.edu,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	dengjie03@kylinos.cn
-Subject: [PATCH v2] usb: storage: Ignore UAS driver for SanDisk Extreme Pro 55AF storage device
-Date: Fri,  4 Jul 2025 14:11:16 +0800
-Message-Id: <20250704061116.1020646-1-dengjie03@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2025070329-rinse-engaged-e7af@gregkh>
-References: <2025070329-rinse-engaged-e7af@gregkh>
+	(Generic MTA)
+	with ESMTP id 1483698095; Fri, 04 Jul 2025 15:39:21 +0800
+Received: from node4.com.cn (localhost [127.0.0.1])
+	by node4.com.cn (NSMail) with SMTP id 701D716001A04;
+	Fri,  4 Jul 2025 15:39:21 +0800 (CST)
+X-ns-mid: postfix-68678529-2855072498
+Received: from [10.42.12.86] (unknown [10.42.12.86])
+	by node4.com.cn (NSMail) with ESMTPA id 6E97216001A01;
+	Fri,  4 Jul 2025 07:39:20 +0000 (UTC)
+Message-ID: <86b6de1e-9e72-448b-89c6-5b69e6c18c90@kylinos.cn>
+Date: Fri, 4 Jul 2025 15:39:19 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: storage: Ignore UAS driver for SanDisk Extreme Pro
+ 55AF storage device
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+ usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+References: <20250703092946.939936-1-dengjie03@kylinos.cn>
+ <2025070329-rinse-engaged-e7af@gregkh>
+From: Jie Deng <dengjie03@kylinos.cn>
+In-Reply-To: <2025070329-rinse-engaged-e7af@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-The SanDisk Extreme Pro 55AF storage device(0781:55af) has poor compatibility with UAS drivers.
-The logs:
-[    1.359859][ 0] [  T163] usb 2-1: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
-[    1.385708][ 0] [  T163] usb 2-1: New USB device found, idVendor=0781, idProduct=55af, bcdDevice=10.85
-[    1.385709][ 0] [  T163] usb 2-1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
-[    1.385710][ 0] [  T163] usb 2-1: Product: Extreme Pro 55AF
-[    1.385711][ 0] [  T163] usb 2-1: Manufacturer: SanDisk
-[    1.385711][ 0] [  T163] usb 2-1: SerialNumber: 323234323935343030343636
-[    1.927603][ 0] [  T306] usbcore: registered new interface driver usb-storage
-[    1.940511][ 0] [  T306] scsi host3: uas
-[    1.940584][ 0] [  T306] usbcore: registered new interface driver uas
-[    1.940843][ 0] [  T188] scsi 3:0:0:0: Direct-Access     SanDisk  Extreme Pro 55AF 1085 PQ: 0 ANSI: 6
-[    1.941363][ 0] [  T188] scsi 3:0:0:1: Enclosure         SanDisk  SES Device       1085 PQ: 0 ANSI: 6
-[    1.941697][ 0] [  T188] sd 3:0:0:0: Attached scsi generic sg0 type 0
-[    1.941783][ 0] [  T188] scsi 3:0:0:1: Attached scsi generic sg1 type 13
-[    1.942296][ 0] [  T189] sd 3:0:0:0: [sda] 1953459617 512-byte logical blocks: (1.00 TB/931 GiB)
-[    1.942373][ 0] [  T189] sd 3:0:0:0: [sda] Write Protect is off
-[    1.942374][ 0] [  T189] sd 3:0:0:0: [sda] Mode Sense: 37 00 10 00
-[    1.942534][ 0] [  T189] sd 3:0:0:0: [sda] Write cache: enabled, read cache: enabled, supports DPO and FUA
-[    1.943586][ 0] [  T189] sd 3:0:0:0: [sda] Optimal transfer size 2097152 bytes
-[    1.976797][ 0] [  T189]  sda: sda1
-[    1.977898][ 0] [  T189] sd 3:0:0:0: [sda] Attached SCSI disk
-[    1.980406][ 0] [  T267] scsi 3:0:0:1: Failed to get diagnostic page 0x1
-[    1.980408][ 0] [  T267] scsi 3:0:0:1: Failed to bind enclosure -19
-[    1.980414][ 0] [  T267] ses 3:0:0:1: Attached Enclosure device
-[    1.981068][ 0] [    C0] sd 3:0:0:0: [sda] tag#10 data cmplt err -75 uas-tag 1 inflight: CMD
-[    1.981071][ 0] [    C0] sd 3:0:0:0: [sda] tag#10 CDB: Read(10) 28 00 74 6f 6d 00 00 00 08 00
-[   33.819186][ 0] [  T188] sd 3:0:0:0: [sda] tag#10 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD
-[   33.819188][ 0] [  T188] sd 3:0:0:0: [sda] tag#10 CDB: Read(10) 28 00 74 6f 6d 00 00 00 08 00
-[   33.843186][ 0] [  T309] scsi host3: uas_eh_device_reset_handler start
 
-Device decriptor is below:
-Bus 002 Device 003: ID 0781:55af SanDisk Corp. Extreme Pro 55AF
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               3.20
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0         9
-  idVendor           0x0781 SanDisk Corp.
-  idProduct          0x55af
-  bcdDevice           10.85
-  iManufacturer           2 SanDisk
-  iProduct                3 Extreme Pro 55AF
-  iSerial                 1 323234323935343030343636
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0079
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0x80
-      (Bus Powered)
-    MaxPower              896mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass         8 Mass Storage
-      bInterfaceSubClass      6 SCSI
-      bInterfaceProtocol     80 Bulk-Only
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       1
-      bNumEndpoints           4
-      bInterfaceClass         8 Mass Storage
-      bInterfaceSubClass      6 SCSI
-      bInterfaceProtocol     98
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-        MaxStreams             32
-        Data-in pipe (0x03)
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-        MaxStreams             32
-        Data-out pipe (0x04)
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-        MaxStreams             32
-        Status pipe (0x02)
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x04  EP 4 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst               0
-        Command pipe (0x01)
+=E5=9C=A8 2025/7/3 18:01, Greg KH =E5=86=99=E9=81=93:
+> On Thu, Jul 03, 2025 at 05:29:46PM +0800, Jie Deng wrote:
+>> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/u=
+nusual_uas.h
+>> index 1477e31d7763..9f093a6af7f9 100644
+>> --- a/drivers/usb/storage/unusual_uas.h
+>> +++ b/drivers/usb/storage/unusual_uas.h
+>> @@ -199,3 +199,10 @@ UNUSUAL_DEV(0x4971, 0x8024, 0x0000, 0x9999,
+>>   		"External HDD",
+>>   		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>>   		US_FL_ALWAYS_SYNC),
+>> +
+>> +/* Reported-by: Jie Deng <dengjie03@kylinos.cn> */
+>> +UNUSUAL_DEV(0x0781, 0x55af, 0x0000, 0x9999,
+>> +		"SanDisk",
+>> +		"Extreme Pro 55AF",
+>> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>> +		US_FL_IGNORE_UAS),
+>> --=20
+>> 2.25.1
+>>
+>>
+> Please read the comment at the top of this file for where to put the
+> entry.
+>
+> thanks,
+>
+> greg k-h
 
-So ignore UAS driver for this device.
+I'm very sorry for not reading the file to be modified carefully.
 
-Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
----
- drivers/usb/storage/unusual_uas.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+The second version of the patch has been modified as required.
 
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 1477e31d7763..6b1a08e2e724 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -52,6 +52,13 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
- 
-+/* Reported-by: Jie Deng <dengjie03@kylinos.cn> */
-+UNUSUAL_DEV(0x0781, 0x55af, 0x0000, 0x9999,
-+		"SanDisk",
-+		"Extreme Pro 55AF",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- /* Reported-by: Zhihong Zhou <zhouzhihong@greatwall.com.cn> */
- UNUSUAL_DEV(0x0781, 0x55e8, 0x0000, 0x9999,
- 		"SanDisk",
--- 
-2.25.1
+Thanks
+
+jie deng
 
 
