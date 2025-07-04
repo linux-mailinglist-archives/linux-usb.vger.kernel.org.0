@@ -1,119 +1,140 @@
-Return-Path: <linux-usb+bounces-25461-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25462-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25E7DAF8517
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 03:15:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42265AF8524
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 03:20:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E9674E555B
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 01:15:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F276D484216
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jul 2025 01:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D00B72628;
-	Fri,  4 Jul 2025 01:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB15126F0A;
+	Fri,  4 Jul 2025 01:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="UdYjbfnu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TPLIGQUi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sonic308-21.consmr.mail.sg3.yahoo.com (sonic308-21.consmr.mail.sg3.yahoo.com [106.10.241.211])
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4029425776
-	for <linux-usb@vger.kernel.org>; Fri,  4 Jul 2025 01:15:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=106.10.241.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B825FEE6
+	for <linux-usb@vger.kernel.org>; Fri,  4 Jul 2025 01:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751591714; cv=none; b=mGlltLQq5lniKkaQ7AmWzRF9tUVXJJY/5ZMXRHpTJaitm4DK5UNeu5am8V9HH+lv4p7FyanvYxnFehlRHgLGX+MEMkrNXZw/wdoGHgz86P8Qyccgti5zEncCVVND3t4xN0w4AnwcY+l6k0CVN6OWIt1p50ZFccEpi/wpjJPETW4=
+	t=1751592019; cv=none; b=e5mS4oF8Ro5UQNEDg3HW6pfrdf1avRFkKI+WKvA6Ng/6XX3uOY+98eqFzx6lD7vj580szRvJIOW9Ik6Eu9YGlv+/0ChrEOxBbeCI+Jwa/KqyAOTZkjDZjcBLOuCz4GPMlDeOrcd3KO4h1Awh2+3/SIQmI+sfiWZNJRPJlGrK5cE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751591714; c=relaxed/simple;
-	bh=yzGghOxhB0583+8ozZ+VDnbXqzZsTaGkG9HUdPHP+d4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=cN240KIRbLs8QpxD6YO9ASxbGPO13jFTfhjbJmP1aph3xZ8jRyT0hW9cfcW5AJh2IuWmjFPRBgoDfe3rvgvrjfsUeqWztgtn7DzkS1sFEpwssZdZH9treOWAcN8LY512aTOr4wlRS8v/6gkOQYPOw9cSPqSA6t+Jn+59wG21swc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=UdYjbfnu; arc=none smtp.client-ip=106.10.241.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1751591709; bh=5EaQn1mqLXzxd0VU6TV21eh6I2qsxXBZOTsHhJbSFzI=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=UdYjbfnuUBmzzI+N+vNgA4hBlBgu4fC7cQ6VgGK3V2CUi0xHA1QlFeiGoED10twtnjDD8cySTOYnlZ4a8b84F6H4SbpymDW3awceV41Vfn7dwpJrOm4fgE5J7e/lLH91pHE73RkuKBw3eOpRnRS4/BQm0K4hGp2WxALJdTiIS2+XL8DFP/EOmVgh4U304iyZxEhCkVCg2MYrFuHbPSw1/5qApjjVCqAlS3NfvUXvpFrSmSa5Qw4AXoc5Mg1mFLHOyjcQZRY1USncH1rrwamxfAOTaWLokhbVbYxI6oqU2sawd5Kc0xD3JqCQo7nhzERoUK5PgZyYRSwsoQry5sd7Og==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1751591709; bh=3fh2w8P+dhc9yMBHoKjbJCScJr8b1ywTRbeeHtJJwJe=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=IRWM7NQtjUJEgb9hg/0bBUJyDbNfgbQAKoySjRXHKcqtXoOoYt96TWPio1oczRLtZ4h5BnltlcB/P/CYDNntcMGCONZk8N3bFUzdKEsd0Sw7znpx6+7a3BIc1ScqKtrEuPFTpwqN2lycWlaMYgI16m0jl1o+TEHomW7TZzkkSikD18fGbLo37uE6oo6QCsThT7YnRDiJ4opYK24btGaMFP6KtLYRXv36DnsjxXHAvJ9HjJvNhIgnzNWmlAIh+Jze4o6tBcRMOnWQO6ar5cy+W7gRbHu5YYQmZXbE5fEgGfmKn2CctJs9LJMrsMn/bDh71BfN0tdIKGChfWdaeJvGjQ==
-X-YMail-OSG: JRecbucVM1kO_WsrXFfN02qfoglyrWxeEBrrRObAYf4PUpB10MbvoLHHS9aom6c
- dxc4Zd8Nxqaj9Rmx422P0vtv4EIwTRD6VZ8zCM76zFQNzybV.uVvYo6JyKzxPGFNMI6J2_bhXdOo
- lShhwG8VVan8m8jhdglVoxMeUMhYCKJkQR5xRZRJNQnkYbzpRnY5NLJkmfgDCPhgf82XcVePLZHZ
- pzRoMKul4q0yb8XV0TM7pXqoJzAAd7zpAAvb09jojMCP1K544hR0CMsJo7JvaKVOpPPPLEQZCFk_
- bIyqC4c4hRGPJ_crK2dW2FHbRiS487VZbzAGmdqUUHerk_THK2wCvwhaQCSjKfEcjmfWjoGT.yRr
- 2entM1Z2ANceA41p0EoHyYMn31GGahexToLdWrjfgK8FcSaSM14h4HLC2xGLxLxEP9zqGsuFxI8c
- 9rHPp3WN.CFLdlTktIosW_qz7WbuHcyt3_Ab2xjwKIEW4oYT15a3CxEYnn4ffh_8oFI3IZksdWMG
- Qo70xHfat8HjkvjCMXTVCx8.2RRM.QrJRgGX7zfEY8lykInk09GUiEKtIK1vb5likHwINcG3vPSa
- pie_sNeb3zpkIYC4JeZyfNKImigCeC4S.EO2FHlDAycs0fcQSg8S0MDu4kvZxYz2iNIkGtHEnD83
- XTJkx.hT8pXiWYDdSnYkkFHGY9wLCQbP5tnDCyD_Swdb9TcXp9ApjpBeQp9Byr2QNGd..GFisrd8
- GuVhxwg1ZvNsZqodijUjPbEXqluMmE9PxRAkaqsBHo7j1PmSfrfjOGjlxSOGDN7.W5fRNgmIemKS
- 7OWxlykR9hM3Y6JxjbE34OxJrzWh_HEPurA2Yk1Evjk5UZgF4PK_e8Ow2SOFVV4xc4kHAeBsBJ2t
- X7lGXoUdnLdsWb0sprsnYJTcBk1UMH3Z8OIt.dCt7zayovi0L34c.M8bi_uXV8hCJHpWULdlL.__
- VzZXzkImZI__JxQmhUEd9JF0uohcysyAime5WivV7KMZLqHi2h58NHvmXKw35KhBagAFT1Vxv9JB
- AMp9EcSoViHTupz286dctepLRBG90BlL6w0tKhCVthhQEHAb6aTirhT_fDP42wQ_ApMdlvIi5JUS
- QUk6KRUVFPprS5MK6Yyj5APh.cWDt8YEJPZJiuZX7Rhe60ptKpvIwp3O88zxuq2PVocevVa96euO
- 4ucFudrRws.bkzrbLhRDO05Hcf717jVbxhCjWjihAe2JLT6Tjkf6J4E3EnhOHq7y_i.LboiR1AaH
- RLSTQBeFKrjpioBoYW.cECw7YVARawkHS8UTwZjrCJsJqf3xyqoe09U8XWJncbUuHX9MxnJ.CrNJ
- lKKIXmjxGtUVm6496xikzSlK5X5sp06B8lQ0QdLR051bOudsy8sY6ZY1o5Gkfd7e0WaaYw63xtp7
- UspLAqkvDn_4KAt0qMvPb7sH8zoX1HnJ37TrcLC2y0uGViFITrwJwn.jwts9YnNr42FBA198KCpk
- mf1sMctl0iXu7tp6Ne.GwyiMFPvi.NcdObivmh7TvXfEeXtydg4w.ZHg2ZlYPK2TYJXUgBizAFZc
- N4x2uQq1t7kneEEG2xclLSTC5HniiYIyjyTsuFmbO2wqIBDMNrVcabpoSCd2ESnd7MpbGWSQiZn9
- ntUeWExwqrk.sWk1Mb.qPLIsfFhhCXS9ArOiwCBuSlTje9KlxoGmTMBjqXwXbRS3IeY5QXt5qIuq
- _dG1PZMm.ZyTQaJNSEw.l9kE2_6ON2_Vc3rmiT8BiuHf.66pLuJT9f1bn2bX2Po6fGXpmmU2CWq4
- oe5MMvf2h3hzJr_Q7rQCgoBIkFMfWvKG36zmE9Hbdz.VJYHpjmlkzg8aIMHY4vs9CSvuvR_qGCuC
- Mz3jwYB0fQrYbN2MDDk.MxVBwYBuMZZoax6t6AwwaUlnWyRDUf2KoHn0qrb6LghAT4bzvxC7NcFN
- fxyoqVJf8fi3.FH2dY.C7nrg5LcB.uTKnKE6BLE6a3ZkBYhXZ.k15kR6N9tV26W6xwkjJAd4.NZr
- X.A7N.hG2YMc9Ocl0GIw13PNQWLaBoHp4LfXOMVDR3Ajjmw5WWM1_aVqcA2nFIDBfiuzM.H_bfuh
- MV_cmMu9EC.ZXgDYPTWVulaU1ZPtq3maf7pO_mrQheugMr7u7orrzsntgP1rVoLQBbgs5wNNii5u
- gRJsnudyEjnVB4EJFUdPXtrwRMlQWmh1sGn9KwU0WpkGyu4qlQt9U8zPI3kqXu.hOBy79.x8IBEE
- uMhofZ.eK3w3_jufckRCKgxE8Qem42zcr28K7qw0QLfoXOz_E6A3etQdvL63RAQ3u7OAslWoTDJk
- c3yDTdH8-
-X-Sonic-MF: <sumanth.gavini@yahoo.com>
-X-Sonic-ID: e9662cc1-4981-4682-9f44-5f578b568ef2
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.sg3.yahoo.com with HTTP; Fri, 4 Jul 2025 01:15:09 +0000
-Received: by hermes--production-ne1-9495dc4d7-jrxzs (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a2c63466e6f86b622e08ed8c074f7ec5;
-          Fri, 04 Jul 2025 00:34:32 +0000 (UTC)
-From: Sumanth Gavini <sumanth.gavini@yahoo.com>
-To: gregkh@linuxfoundation.org,
-	jkeeping@inmusicbrands.com,
-	kgroeneveld@lenbrook.com,
-	Chris.Wulff@biamp.com,
-	quic_prashk@quicinc.com,
-	linux-kernel@vger.kernel.org
-Cc: Sumanth Gavini <sumanth.gavini@yahoo.com>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] usb: gadget: f_uac2: replace scnprintf() with sysfs_emit()
-Date: Thu,  3 Jul 2025 19:34:22 -0500
-Message-ID: <20250704003425.467299-1-sumanth.gavini@yahoo.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1751592019; c=relaxed/simple;
+	bh=sn3kEcEnJGdq+CGH93mNVsRhQPGquWnTXTjgFVpFIlc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=SeEgRAZi4eY9JRx5Dr7dpVSp0qA5awJdh4TSGcO+KYvxnY2ZEHXqmUJDWhN3ppbSqI3o5oq3uJnURfo8OdBmQsQGlUXenV/2NDK6t2y8g+p3pXz77OQI5SZ31NwBKwl4lrxSF0UUDZTP7+9UF4seCIO2lEgIojScmaj+W+wz26k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TPLIGQUi; arc=none smtp.client-ip=209.85.161.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-610d86b3da9so154337eaf.0
+        for <linux-usb@vger.kernel.org>; Thu, 03 Jul 2025 18:20:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1751592016; x=1752196816; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DC/cBZO4f5h7yIL6Ec05XXIZpY7LlAOQumaUsmGIiWc=;
+        b=TPLIGQUi0mYxmcbN2hVndzuw/wULfXQtebU6/CJYNGL1+Pv2+DKwBKeguiPgkdDo38
+         o8aseif5IprBLUrxLcijxl7Qv6uCvH6w0QJi8KLbcXw6WBfyBwxbeYMfKSdIcmHCZ6Pt
+         5A3RRkIgHBd+6CYwHUhy+iIYKO5xJtht3l5lycgrCA15vDfZiyrdOMvXITH27U3c4SFm
+         kB/kw06scTNhmx0bacep+NhiaBpK92cpMYk6vaEt7e0iojLmFkmhLghw/3B82Ppx9Kcc
+         PFRR0BEkzEUuBy6R9Q5PSW1K46s4FjZ6jF5ALFjhI83OHd8fSS/ctExZAVIC7d5lGaxK
+         0Wnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751592016; x=1752196816;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DC/cBZO4f5h7yIL6Ec05XXIZpY7LlAOQumaUsmGIiWc=;
+        b=ACU7VwuRWA6B2VU4OxYcDwz6F0zs8SSZD6U73C69015W3NI1uMYOM/6brkFxm5es3V
+         0umUEjHXpb0aqW01XgG/XaiTqbbkbcGe/X9PGMRmOZ6JN04CNlN8jR+2789Z8lrTHeXl
+         bXoToK5ACvseWiaevBUxcquGnCvn6aW0qCIOM3FUkoHdxxUNoLOXRUeidrC4n9S9COEO
+         N4i9owZ9owSKlOkkasKuZE/HtFPaJ8fEG7dIDlZA9cZ1LwGfMyhV6rqJo3cAJJdkRw9U
+         lwqm0/gp37lbjWgj/z/k2R22ZZsI1i7ovac/N1+afYCZT5pOx5Sn+BYs1oteUfBVeiQn
+         qeFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVott5JFg7M/oRHU6MjDRbRigPeRZT3scTMt+Nu9ZxXMzwNZahkpHTUnRBmI1oIuSHxde9eCdSX2P8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg5i1iF6mcn+rF9+xt23otfOthk67MAZ6GcfcEtEQSB2Dkz7/8
+	WPDJTSzjgnAZt+Pq6w88XQGbteP5GbcEAY+0sot25hhLbLYTTgzOwwHyVdfhRZNsHwA=
+X-Gm-Gg: ASbGncvSv+S4SCf8Kst73pYgod+SkXGoYTLZstLblcQiZj6oziSQo1EZAxqEsKnTOGK
+	OBWJ+i3y45ohzVEjlYMqzGf1K10JKbtwoj1r4E6CEKLyZ5GCLrzLz+2gl3sb5PYvXiwieEQsuS/
+	1PNxJqGLjRMGUT58NqHmlwd89tmMxflNvta8qTJml2IY3r7OlL61QKH517xs9flJC+1VaIta01/
+	1uda69k5+x7oNH5MBlfe/Rh7RUyyAONJC2MGAiJHNTDeauz9biRZYC2QMyyIMTGEtxpey7gFZoa
+	JEojqddh8EAeoSLcMjDPnbARkhx0+waipCvqEHqtfgP1c3M+Nv3juodLDtyoa7ELHFVWRQ==
+X-Google-Smtp-Source: AGHT+IE2gfIyrgT2GmZQ15R5wrbiEzA2Rw3RJESsngVF1fw51ISYnu4DuG+UdMI6ohqlrXf2k5q/SA==
+X-Received: by 2002:a05:6820:2901:b0:610:fc12:cbb4 with SMTP id 006d021491bc7-6138ffbca71mr549586eaf.1.1751592015623;
+        Thu, 03 Jul 2025 18:20:15 -0700 (PDT)
+Received: from localhost ([2603:8080:b800:f700:1ed4:f8f7:2a8d:77d5])
+        by smtp.gmail.com with UTF8SMTPSA id 006d021491bc7-6138e4be31csm164217eaf.9.2025.07.03.18.20.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jul 2025 18:20:14 -0700 (PDT)
+Date: Thu, 3 Jul 2025 20:20:11 -0500
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Chester Lin <chester62515@gmail.com>
+Cc: Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	Fabio Estevam <festevam@gmail.com>,
+	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	imx@lists.linux.dev, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, Matthias Brugger <mbrugger@suse.com>,
+	NXP S32 Linux Team <s32@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Peter Chen <peter.chen@kernel.org>, Rob Herring <robh@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>, Xu Yang <xu.yang_2@nxp.com>,
+	linaro-s32@linaro.org, Larisa Grigore <larisa.grigore@nxp.com>,
+	Ionut Vicovan <Ionut.Vicovan@nxp.com>,
+	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+Subject: [PATCH v3 0/4] usb: chipidea: Add support for s32g2 and s32g3
+Message-ID: <5c3e57db-0642-4e8a-a194-f204da5fd2e0@sabinyo.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-References: <20250704003425.467299-1-sumanth.gavini.ref@yahoo.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Documentation/filesystems/sysfs.rst mentions that show() should only
-use sysfs_emit() or sysfs_emit_at() when formating the value to be
-returned to user space. So replace scnprintf() with sysfs_emit().
+This patchset adds support for the s32g2 and s32g3 chips.
 
-Signed-off-by: Sumanth Gavini <sumanth.gavini@yahoo.com>
----
- drivers/usb/gadget/function/f_uac2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes since v2:
+* Add the dts changes (patch 4)
+* Fix Signed-off-by lines
+* Fix the device tree spec
+* Provide the complete errata information in the commit message
+  and a link.
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 9b324821c93b..dd252ff2fb4e 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -2052,7 +2052,7 @@ static ssize_t f_uac2_opts_##name##_show(struct config_item *item,	\
- 	int result;							\
- 									\
- 	mutex_lock(&opts->lock);					\
--	result = scnprintf(page, sizeof(opts->name), "%s", opts->name);	\
-+	result = sysfs_emit(page, "%s", opts->name);	                \
- 	mutex_unlock(&opts->lock);					\
- 									\
- 	return result;							\
+Changes since v1:
+* Put the device tree lines in alphabetical order.
+* Add imx@lists.linux.dev to the CC list.
+* Use power_lost_check() instead of creating a new REINIT_DURING_RESUME
+  flag.
+* Change the Copyright date.
+* Leave the .compatible = "nxp,s32g3-usb" out of the ci_hdrc_imx.c
+  driver because people can just specify both in the devicetree
+  since they are compatible.
+
+Dan Carpenter (1):
+  arm64: dts: s32g: Add USB device tree information for s32g2/s32g3
+
+Ghennadi Procopciuc (3):
+  dt-bindings: usb: Add compatible strings for s32g2/s32g3
+  usb: chipidea: s32g: Add usb support for s32g2
+  usb: chipidea: s32g: Add usb support for s32g3
+
+ .../devicetree/bindings/usb/ci-hdrc-usb2.yaml |  5 ++
+ .../devicetree/bindings/usb/fsl,usbmisc.yaml  |  2 +
+ arch/arm64/boot/dts/freescale/s32g2.dtsi      | 23 +++++
+ arch/arm64/boot/dts/freescale/s32g3.dtsi      | 23 +++++
+ drivers/usb/chipidea/ci_hdrc_imx.c            |  6 ++
+ drivers/usb/chipidea/usbmisc_imx.c            | 88 +++++++++++++++++++
+ 6 files changed, 147 insertions(+)
+
 -- 
-2.43.0
+2.47.2
 
 
