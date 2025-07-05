@@ -1,210 +1,210 @@
-Return-Path: <linux-usb+bounces-25506-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25507-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29CFCAFA035
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 15:10:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C76B3AFA0F1
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 18:22:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E27F1896CA4
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 13:10:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40C083B2D3E
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 16:22:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B01A1256C71;
-	Sat,  5 Jul 2025 13:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gE760dQL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A2D61FECAD;
+	Sat,  5 Jul 2025 16:22:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F532E3706
-	for <linux-usb@vger.kernel.org>; Sat,  5 Jul 2025 13:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A72A19F421
+	for <linux-usb@vger.kernel.org>; Sat,  5 Jul 2025 16:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751721023; cv=none; b=m6LIrZO6Pm3Tryd7PyGdEGxAzTYSgMyEPSt0no/9Ku66kznMGx5eqJZee14cbV62/KUh+TvXJoAZL0tAzHpgHHzNlKCwqLm2aKH4FBaPZ18p7uMw7SXfhTCw+A99OXGCFACFUlBR7WpEIHHJusVZRD2IJsuBnz93UvKbAf2H3J8=
+	t=1751732551; cv=none; b=FdpJDoqAGjUuDVsJztQhkUseFTbTygocUzfBpnZ/G4T4AR0vt7wreURtsrzVArRmhWSQTz3UmhAkYPXaZ5J126A4ID3B/ijP31VPhmLy7pIr0rW22snUmplVYMf6HSc1GFoeAXSGSTUymY2LN1Anq4w0Oe+NpaqBTpt9MebQAc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751721023; c=relaxed/simple;
-	bh=3CMNxNiW3+FIc/BUcKb5WWD/6E4scgZ1RkowNRMoOTo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bPRWDfen4cqEa+Bm6Ab/htcr1/LG1iCCrLqt5R2DXMmRg+j5XyvFgKQFP5xfuQMOdhNfPsjzRRRdpTMyx/hEiig/HK8EZoB0X3X0fQgH5/CFloGrwgn+CbY7M3q8qJtickXzFvrMdfxCe8o2e30WfFfQRYtA9jgKiU1UW7k5L/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gE760dQL; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Sat, 5 Jul 2025 21:10:13 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1751721018;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4OGIJ7s7TRMTl0Xs4Ki+8/cZ1uyPe+zE5+yenLTGv2o=;
-	b=gE760dQLmmt4M1FpGuvtCjTMneBR22mOZWVOcIZ5eNf90hp4uPPBE6WmbuaR04iddZF/Ob
-	zd2bVNvkTghi3Ig+J/HMvdSiOP22aiX3dXE0voGSFTnxS/TelUvQ9PSKiPL8kzT+Mq/SFW
-	EJ8ClOjPIGy6WwA7d3x1nw9yd/fB+VM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ze Huang <huang.ze@linux.dev>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Ze Huang <huang.ze@linux.dev>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: dwc3: add support for SpacemiT
- K1
-Message-ID: <aGkkKEMyY1JG7Z80@monica.localdomain>
-References: <20250705-dwc3_generic-v5-0-9dbc53ea53d2@linux.dev>
- <20250705-dwc3_generic-v5-1-9dbc53ea53d2@linux.dev>
+	s=arc-20240116; t=1751732551; c=relaxed/simple;
+	bh=TBaeYJghPRtZM210AFyRotEdnlAPmhG1RYCRSzdrTSI=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=gEG79TolptRKw2ow0FkeU/6HojdNOQ42fK83X8I/G7nJZ/a0fhWBcRLUpkFxoSpZPAjc5TuzWOM5XjoA8B1NXmWua68fr2BosgLGX0Pt87/E/WZhB6Yus3pVA0v2Hm4/bjNQlrRzZJnLC4VC+QK6dMmX7nvPGJts9ga4jm2VNP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3df40226ab7so41519715ab.0
+        for <linux-usb@vger.kernel.org>; Sat, 05 Jul 2025 09:22:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751732549; x=1752337349;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TaSrsgy587/dWpvmV91Fh1n3eLDmBjtt6jIOaPibHns=;
+        b=JFEnLiRz7XTuLphGuV8EMkQ+gOXdERaGamJ/G9anwlK+F0Blran7WIE4bX2IIIhmsM
+         JnARPv0yGpRY5SRmY87HmCLZi9uaFnLsgNbOI7VGnGsX84VSICNYLL0X6pLawHmDKH/J
+         9POuNg8xuUY53FdSo4H3FzqaaekpRlTU2wtvE0LEY1QHgPdtagJ3K78iiWmjr+0ZWRzT
+         gPYBEoPtGLHDlmyyGFNLe5CpvfPYGpip4thWvnRjwwugCZ4sRU5cI0zOmsVXVSxbyt60
+         u/L3Y8JJOFJquhkqEM4jCyQjz91s1yyF4oF8saHM3WhpdeIYUoZVpaDq2r+xknGnTx3u
+         tang==
+X-Forwarded-Encrypted: i=1; AJvYcCUgH/yndhw//lQTjcaiAGdzDvmW4Bcme3kUyhxda3W2H14GCRN0Vvwxl1tJGjaLW5RvMKAg+LGfqYs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLqlQ/tdXH1VhxRz9QV7zzZWz4GnV37sKjg4BEQTDOeib7AOWz
+	HX8a/2thoJr1fg2zvqDOmcjYfzOrEaIZ0JtlwLWkXL+3IU3mOsT5f2klwytgZuLmAIjWhj/qsZo
+	qfGNIzcuxDwqWUgOnctjW6w9FGRWVLJydKjcgAyGurgTPdg7/3g6IQZVxjpk=
+X-Google-Smtp-Source: AGHT+IHXZDxlv6ve5JbC/c0nhJ2fWSDI648KJyOpBSRki8eFaqaOjhGIWDqSrsV2AitJyqIHlFNzznI8Ok0y/Bv1WefoLo/2wqAl
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250705-dwc3_generic-v5-1-9dbc53ea53d2@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+X-Received: by 2002:a05:6e02:b47:b0:3df:3464:ab86 with SMTP id
+ e9e14a558f8ab-3e13ee94da1mr24017735ab.9.1751732548747; Sat, 05 Jul 2025
+ 09:22:28 -0700 (PDT)
+Date: Sat, 05 Jul 2025 09:22:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68695144.a00a0220.c7b3.0045.GAE@google.com>
+Subject: [syzbot] [usb?] KMSAN: kernel-usb-infoleak-after-free in usb_start_wait_urb
+From: syzbot <syzbot+27fe438b6370f95de4a5@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Jul 05, 2025 at 09:01:25PM +0800, Ze Huang wrote:
-> Add support for the USB 3.0 Dual-Role Device (DRD) controller embedded
-> in the SpacemiT K1 SoC. The controller is based on the Synopsys
-> DesignWare Core USB 3 (DWC3) IP, supporting USB3.0 host mode and USB 2.0
-> DRD mode.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Ze Huang <huang.ze@linux.dev>
-> ---
+Hello,
 
-Hi Krzysztof,
+syzbot found the following issue on:
 
-I kept your Reviewed-by tag, as this version only includes minor updates:
-- Dropped the `interconnects` property
-- Updated the `resets` property to match the latest convention from Alex's patch
+HEAD commit:    66701750d556 Merge tag 'io_uring-6.16-20250630' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=134693d4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d5c61bcebaf295a
+dashboard link: https://syzkaller.appspot.com/bug?extid=27fe438b6370f95de4a5
+compiler:       Debian clang version 20.1.6 (++20250514063057+1e4d39e07757-1~exp1~20250514183223.118), Debian LLD 20.1.6
+userspace arch: i386
 
-Let me know if you have any concerns.
+Unfortunately, I don't have any reproducer for this issue yet.
 
->  .../devicetree/bindings/usb/spacemit,k1-dwc3.yaml  | 107 +++++++++++++++++++++
->  1 file changed, 107 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..c967ad6aae50199127a4f8a17d53fc34e8d9480b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
-> @@ -0,0 +1,107 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/spacemit,k1-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SpacemiT K1 SuperSpeed DWC3 USB SoC Controller
-> +
-> +maintainers:
-> +  - Ze Huang <huang.ze@linux.dev>
-> +
-> +description: |
-> +  The SpacemiT K1 embeds a DWC3 USB IP Core which supports Host functions
-> +  for USB 3.0 and DRD for USB 2.0.
-> +
-> +  Key features:
-> +  - USB3.0 SuperSpeed and USB2.0 High/Full/Low-Speed support
-> +  - Supports low-power modes (USB2.0 suspend, USB3.0 U1/U2/U3)
-> +  - Internal DMA controller and flexible endpoint FIFO sizing
-> +
-> +  Communication Interface:
-> +  - Use of PIPE3 (125MHz) interface for USB3.0 PHY
-> +  - Use of UTMI+ (30/60MHz) interface for USB2.0 PHY
-> +
-> +allOf:
-> +  - $ref: snps,dwc3-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: spacemit,k1-dwc3
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: usbdrd30
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  phys:
-> +    items:
-> +      - description: phandle to USB2/HS PHY
-> +      - description: phandle to USB3/SS PHY
-> +
-> +  phy-names:
-> +    items:
-> +      - const: usb2-phy
-> +      - const: usb3-phy
-> +
-> +  resets:
-> +    items:
-> +      - description: USB3.0 AHB reset line
-> +      - description: USB3.0 VCC reset line
-> +      - description: USB3.0 PHY reset line
-> +
-> +  vbus-supply:
-> +    description: A phandle to the regulator supplying the VBUS voltage.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - interrupts
-> +  - phys
-> +  - phy-names
-> +  - resets
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    usb@c0a00000 {
-> +        compatible = "spacemit,k1-dwc3";
-> +        reg = <0xc0a00000 0x10000>;
-> +        clocks = <&syscon_apmu 16>;
-> +        clock-names = "usbdrd30";
-> +        interrupts = <125>;
-> +        phys = <&usb2phy>, <&usb3phy>;
-> +        phy-names = "usb2-phy", "usb3-phy";
-> +        resets = <&syscon_apmu 8>,
-> +                 <&syscon_apmu 9>,
-> +                 <&syscon_apmu 10>;
-> +        vbus-supply = <&usb3_vbus>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        hub_2_0: hub@1 {
-> +            compatible = "usb2109,2817";
-> +            reg = <1>;
-> +            vdd-supply = <&usb3_vhub>;
-> +            peer-hub = <&hub_3_0>;
-> +            reset-gpios = <&gpio 3 28 1>;
-> +        };
-> +
-> +        hub_3_0: hub@2 {
-> +            compatible = "usb2109,817";
-> +            reg = <2>;
-> +            vdd-supply = <&usb3_vhub>;
-> +            peer-hub = <&hub_2_0>;
-> +            reset-gpios = <&gpio 3 28 1>;
-> +        };
-> +    };
-> 
-> -- 
-> 2.50.0
-> 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e203ce735cca/disk-66701750.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e4f6e611c287/vmlinux-66701750.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1b9c4100ce6f/bzImage-66701750.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+27fe438b6370f95de4a5@syzkaller.appspotmail.com
+
+usb 7-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 7-1: config 0 descriptor??
+microsoft 0003:045E:07DA.003F: unknown main item tag 0x0
+microsoft 0003:045E:07DA.003F: ignoring exceeding usage max
+=====================================================
+BUG: KMSAN: kernel-usb-infoleak-after-free in usb_submit_urb+0x5a1/0x2630 drivers/usb/core/urb.c:430
+ usb_submit_urb+0x5a1/0x2630 drivers/usb/core/urb.c:430
+ usb_start_wait_urb+0xc2/0x320 drivers/usb/core/message.c:59
+ usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+ usb_control_msg+0x27c/0x5b0 drivers/usb/core/message.c:154
+ usbhid_raw_request+0x4ab/0x690 drivers/hid/usbhid/hid-core.c:-1
+ __hid_request+0x2bd/0x500 drivers/hid/hid-core.c:1989
+ hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
+ hidinput_connect+0x3bf5/0x5cc0 drivers/hid/hid-input.c:2327
+ hid_connect+0x6b4/0x3440 drivers/hid/hid-core.c:2239
+ hid_hw_start+0xfc/0x1e0 drivers/hid/hid-core.c:2354
+ ms_probe+0x2e5/0x890 drivers/hid/hid-microsoft.c:391
+ __hid_device_probe drivers/hid/hid-core.c:2724 [inline]
+ hid_device_probe+0x536/0xab0 drivers/hid/hid-core.c:2761
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:657
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
+ bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3692
+ hid_add_device+0x5ed/0x7b0 drivers/hid/hid-core.c:2907
+ usbhid_probe+0x1fec/0x2660 drivers/hid/usbhid/hid-core.c:1435
+ usb_probe_interface+0xd01/0x1310 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:657
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
+ bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3692
+ usb_set_configuration+0x3493/0x3b70 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xfc/0x290 drivers/usb/core/generic.c:250
+ usb_probe_device+0x38d/0x690 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:657
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
+ bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3692
+ usb_new_device+0x104b/0x20c0 drivers/usb/core/hub.c:2663
+ hub_port_connect drivers/usb/core/hub.c:5535 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5675 [inline]
+ port_event drivers/usb/core/hub.c:5835 [inline]
+ hub_event+0x5588/0x7580 drivers/usb/core/hub.c:5917
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xb8e/0x1d80 kernel/workqueue.c:3321
+ worker_thread+0xedf/0x1590 kernel/workqueue.c:3402
+ kthread+0xd5c/0xf00 kernel/kthread.c:464
+ ret_from_fork+0x1e0/0x310 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+
+Uninit was created at:
+ slab_free_hook mm/slub.c:2307 [inline]
+ slab_free mm/slub.c:4643 [inline]
+ kfree+0x252/0xec0 mm/slub.c:4842
+ kfree_const+0x42/0x50 mm/util.c:45
+ kobject_cleanup lib/kobject.c:695 [inline]
+ kobject_release lib/kobject.c:720 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x344/0x3b0 lib/kobject.c:737
+ netdev_queue_update_kobjects+0x9b5/0xbf0 net/core/net-sysfs.c:2052
+ remove_queue_kobjects net/core/net-sysfs.c:2149 [inline]
+ netdev_unregister_kobject+0x176/0x530 net/core/net-sysfs.c:2304
+ unregister_netdevice_many_notify+0x3cfb/0x4950 net/core/dev.c:12112
+ unregister_netdevice_many+0x22/0x30 net/core/dev.c:12140
+ ops_exit_rtnl_list net/core/net_namespace.c:188 [inline]
+ ops_undo_list+0x5d8/0xb80 net/core/net_namespace.c:249
+ cleanup_net+0xb8f/0x14b0 net/core/net_namespace.c:686
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xb8e/0x1d80 kernel/workqueue.c:3321
+ worker_thread+0xedf/0x1590 kernel/workqueue.c:3402
+ kthread+0xd5c/0xf00 kernel/kthread.c:464
+ ret_from_fork+0x1e0/0x310 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+
+Bytes 36-38 of 65535 are uninitialized
+Memory access of size 65535 starts at ffff88808e6d5791
+
+CPU: 1 UID: 0 PID: 17692 Comm: kworker/1:4 Not tainted 6.16.0-rc4-syzkaller-00013-g66701750d556 #0 PREEMPT(undef) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+Workqueue: usb_hub_wq hub_event
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
