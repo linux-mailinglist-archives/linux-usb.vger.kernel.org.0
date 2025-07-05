@@ -1,302 +1,302 @@
-Return-Path: <linux-usb+bounces-25500-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25501-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19E0BAF9DFD
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 05:03:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B44CAF9E70
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 08:07:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72C4B4A3CEB
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 03:03:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05FAD58428F
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 06:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E416A26E71C;
-	Sat,  5 Jul 2025 03:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DD07277004;
+	Sat,  5 Jul 2025 06:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I6amdz0c"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FKZDQhtR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE72184;
-	Sat,  5 Jul 2025 03:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23D1275861
+	for <linux-usb@vger.kernel.org>; Sat,  5 Jul 2025 06:07:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751684597; cv=none; b=ckUcga/udPsaVT53w0Xucifoo6pL2wUFjEN28Mp7pIhrY4yvq2oCC3y2T+VBGQVTMSfwFJd/x9sF8zk1FGBoE7o+nQXo9e8yNBecmskmYZ8VB3/zs689K8RmOm0xKn8+XRF+/UZ59pSQfCkuPJMyWAmT62eLx4AlfkvB732AHB0=
+	t=1751695654; cv=none; b=PvAqdr25A19asg9CvrYAfNhLcPa3kRUA/0a5niJ6pGC9i+1qD0fCP5IxM3ZENILv95oiclUkVaU3b68mePyK8+5dTZ+WqtVK2n4hnVJjIol7sv5Z1W1sq7liIsKYjrWcsP55KvmdNlxvQuv/jleAhaSAFY2itQ3JdDHdSus9iJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751684597; c=relaxed/simple;
-	bh=x1vw/bUicgBqKarq+mK6KE99o3ix3eBXT4smVpz1wQ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oom2szfIf44mTwfnJcfHUfqIvFaWqMP2iaQIshhZR0cH91ak4r7qGSq3oEOl8A5ensyOgayDbeGgWJveroq93g5C9CM1H7iMVJ6ESvUlU3EmcjtbDrH0QLf2hPFhJateZjsnEH+ftdArqfnpjj1Q5CIkUm5SRe7G0bcu9HrXrNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I6amdz0c; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751684594; x=1783220594;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x1vw/bUicgBqKarq+mK6KE99o3ix3eBXT4smVpz1wQ4=;
-  b=I6amdz0cQarg2YOiYFlrFxrIBEuLIChdB2SnhaAVN+FKgxON79eBDGc/
-   9SwfcF29vgKXBGCVF0rPU4LyPCGgEJPJDGDAEK/aHjXmF835cGP6WrHtJ
-   lWlC+NLe7GDtHkTRO1BU8aIU77u69WrYkkkvCI8JD/aIbu4Gqbcvw1u+a
-   ZHbrnQF0wqc2OxSp7zPkgQ+zsZe8lQNHCD344moAuUAhqxd3BS3HegFvI
-   /XhGAX34g7VsJVCgSP7zEgbe+Ua0q+F8TjRR/ZF/cBSlZNgDUz2Z/QUdW
-   RcqDsmhW7vHOqb85VFgNmF4/butv6s07zOJCqb8G2o9s/RPXN2pnR70M3
-   Q==;
-X-CSE-ConnectionGUID: F0JA4t+rT2Owij1rZ+9iIw==
-X-CSE-MsgGUID: eCp6LtLRT5+Wona4Ono66Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="53720382"
-X-IronPort-AV: E=Sophos;i="6.16,289,1744095600"; 
-   d="scan'208";a="53720382"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 20:03:13 -0700
-X-CSE-ConnectionGUID: DeaI+HnpTh2wuTAPXYVxKA==
-X-CSE-MsgGUID: vTWWaUjNReiTx93Ylp8c3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,289,1744095600"; 
-   d="scan'208";a="159101588"
-Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 04 Jul 2025 20:03:10 -0700
-Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uXtBE-0004EV-0H;
-	Sat, 05 Jul 2025 03:03:08 +0000
-Date: Sat, 5 Jul 2025 11:02:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Srikanth Chary Chennoju <srikanth.chary-chennoju@amd.com>,
-	gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-	m.grzeschik@pengutronix.de, Chris.Wulff@biamp.com, tiwai@suse.de
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, punnaiah.choudary.kalluri@amd.com,
-	Srikanth Chary Chennoju <srikanth.chary-chennoju@amd.com>
-Subject: Re: [PATCH 3/3] usb: gadget: f_sourcesink: Addition of SSP endpoint
- companion for Isochronous transfers
-Message-ID: <202507051018.998T0Yqk-lkp@intel.com>
-References: <20250704114013.3396795-4-srikanth.chary-chennoju@amd.com>
+	s=arc-20240116; t=1751695654; c=relaxed/simple;
+	bh=NrT12kA5qjy5ZJ8dedsQeHk4B3Q8JNkXD5kOgaP4JoY=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=IP16ie5xxZn7J5vUe424QVBv8rfVH9NilDg66VNw/9f0+H5lbdQKsx2MZ0/m5rxtwSCvP2ArI8+eNaZe0xCTISPiuGFLZh0836H10AfdqxbykkXiNyhhl5hkZxZ1viGF/lgGDhD87C4fpO3MZzOcOgPKKtgsFspMeIfPswH+caY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FKZDQhtR; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250704114013.3396795-4-srikanth.chary-chennoju@amd.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1751695640;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OoyKvKGvOIY+YOUK48oOpXE0v1eQrruCiKGQYblUeLQ=;
+	b=FKZDQhtREfyH1f1X4BX8cCxxOnFSsRs1+D9N7Sb6JyptsT4zg410KhBXcOKR4fuaZHZ5Yz
+	PE3egEXoI9aayXiVC4cyXbKOYcUKKqvSXnVh5QGaprVycAHTQIUs4UbmG7FcpkOFl/FGiT
+	qpFoZWQW3p0mpwXyCbVFrsyHYgEMqGo=
+Date: Sat, 05 Jul 2025 06:07:18 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: qiang.zhang@linux.dev
+Message-ID: <74395e33b2175fdb2745211c4ca41e5b2358d80d@linux.dev>
+TLS-Required: No
+Subject: Re: [bug report] [PATCH v6] net: usb: Convert tasklet API to new
+ bottom half workqueue mechanism
+To: "Oleksij Rempel" <o.rempel@pengutronix.de>, "Jun Miao"
+ <jun.miao@intel.com>
+Cc: sbhatta@marvell.com, kuba@kernel.org, oneukum@suse.com,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+In-Reply-To: <aGgD_Lp0i-ZU2xkt@pengutronix.de>
+References: <20250618173923.950510-1-jun.miao@intel.com>
+ <aGgD_Lp0i-ZU2xkt@pengutronix.de>
+X-Migadu-Flow: FLOW_OUT
 
-Hi Srikanth,
+>=20
+>=20Hi Jun,
+>=20
+>=20On Wed, Jun 18, 2025 at 01:39:23PM -0400, Jun Miao wrote:
+>=20
+>=20>=20
+>=20> Migrate tasklet APIs to the new bottom half workqueue mechanism. It
+> >=20
+>=20>  replaces all occurrences of tasklet usage with the appropriate wor=
+kqueue
+> >=20
+>=20>  APIs throughout the usbnet driver. This transition ensures compati=
+bility
+> >=20
+>=20>  with the latest design and enhances performance.
+> >=20
+>=20
+> After applying this patch, the smsc95xx driver fails after one down/up
+>=20
+>=20cycle.
 
-kernel test robot noticed the following build warnings:
+Hello, Oleksij
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.16-rc4 next-20250704]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Please try follow patch base on Jun Miao's patchs:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Srikanth-Chary-Chennoju/usb-gadget-zero-support-for-super-speed-plus/20250704-194150
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20250704114013.3396795-4-srikanth.chary-chennoju%40amd.com
-patch subject: [PATCH 3/3] usb: gadget: f_sourcesink: Addition of SSP endpoint companion for Isochronous transfers
-config: i386-randconfig-063-20250705 (https://download.01.org/0day-ci/archive/20250705/202507051018.998T0Yqk-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250705/202507051018.998T0Yqk-lkp@intel.com/reproduce)
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 9564478a79cc..554f1a1cf247 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -953,6 +953,7 @@ int usbnet_open (struct net_device *net)
+        dev->pkt_cnt =3D 0;
+        dev->pkt_err =3D 0;
+        clear_bit(EVENT_RX_KILL, &dev->flags);
++       enable_work(&dev->bh_work);
+=20
+=20       // delay posting reads until we're fully open
+        queue_work(system_bh_wq, &dev->bh_work);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507051018.998T0Yqk-lkp@intel.com/
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/usb/gadget/function/f_sourcesink.c:382:43: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize @@     got unsigned int @@
-   drivers/usb/gadget/function/f_sourcesink.c:382:43: sparse:     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize
-   drivers/usb/gadget/function/f_sourcesink.c:382:43: sparse:     got unsigned int
-   drivers/usb/gadget/function/f_sourcesink.c:385:41: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize @@     got unsigned int @@
-   drivers/usb/gadget/function/f_sourcesink.c:385:41: sparse:     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize
-   drivers/usb/gadget/function/f_sourcesink.c:385:41: sparse:     got unsigned int
-   drivers/usb/gadget/function/f_sourcesink.c:421:43: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize @@     got unsigned int isoc_maxpacket @@
-   drivers/usb/gadget/function/f_sourcesink.c:421:43: sparse:     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize
-   drivers/usb/gadget/function/f_sourcesink.c:421:43: sparse:     got unsigned int isoc_maxpacket
-   drivers/usb/gadget/function/f_sourcesink.c:422:43: sparse: sparse: invalid assignment: |=
-   drivers/usb/gadget/function/f_sourcesink.c:422:43: sparse:    left side has type restricted __le16
-   drivers/usb/gadget/function/f_sourcesink.c:422:43: sparse:    right side has type unsigned int
-   drivers/usb/gadget/function/f_sourcesink.c:427:41: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize @@     got unsigned int isoc_maxpacket @@
-   drivers/usb/gadget/function/f_sourcesink.c:427:41: sparse:     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize
-   drivers/usb/gadget/function/f_sourcesink.c:427:41: sparse:     got unsigned int isoc_maxpacket
-   drivers/usb/gadget/function/f_sourcesink.c:428:41: sparse: sparse: invalid assignment: |=
-   drivers/usb/gadget/function/f_sourcesink.c:428:41: sparse:    left side has type restricted __le16
-   drivers/usb/gadget/function/f_sourcesink.c:428:41: sparse:    right side has type unsigned int
-   drivers/usb/gadget/function/f_sourcesink.c:443:43: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize @@     got unsigned int isoc_maxpacket @@
-   drivers/usb/gadget/function/f_sourcesink.c:443:43: sparse:     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize
-   drivers/usb/gadget/function/f_sourcesink.c:443:43: sparse:     got unsigned int isoc_maxpacket
-   drivers/usb/gadget/function/f_sourcesink.c:447:51: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 static [addressable] [assigned] [toplevel] [usertype] wBytesPerInterval @@     got unsigned int @@
-   drivers/usb/gadget/function/f_sourcesink.c:447:51: sparse:     expected restricted __le16 static [addressable] [assigned] [toplevel] [usertype] wBytesPerInterval
-   drivers/usb/gadget/function/f_sourcesink.c:447:51: sparse:     got unsigned int
-   drivers/usb/gadget/function/f_sourcesink.c:452:41: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize @@     got unsigned int isoc_maxpacket @@
-   drivers/usb/gadget/function/f_sourcesink.c:452:41: sparse:     expected restricted __le16 static [addressable] [toplevel] [usertype] wMaxPacketSize
-   drivers/usb/gadget/function/f_sourcesink.c:452:41: sparse:     got unsigned int isoc_maxpacket
-   drivers/usb/gadget/function/f_sourcesink.c:456:49: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 static [addressable] [assigned] [toplevel] [usertype] wBytesPerInterval @@     got unsigned int @@
-   drivers/usb/gadget/function/f_sourcesink.c:456:49: sparse:     expected restricted __le16 static [addressable] [assigned] [toplevel] [usertype] wBytesPerInterval
-   drivers/usb/gadget/function/f_sourcesink.c:456:49: sparse:     got unsigned int
->> drivers/usb/gadget/function/f_sourcesink.c:460:53: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 static [addressable] [toplevel] [usertype] dwBytesPerInterval @@     got unsigned int @@
-   drivers/usb/gadget/function/f_sourcesink.c:460:53: sparse:     expected restricted __le32 static [addressable] [toplevel] [usertype] dwBytesPerInterval
-   drivers/usb/gadget/function/f_sourcesink.c:460:53: sparse:     got unsigned int
-   drivers/usb/gadget/function/f_sourcesink.c:462:51: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 static [addressable] [toplevel] [usertype] dwBytesPerInterval @@     got unsigned int @@
-   drivers/usb/gadget/function/f_sourcesink.c:462:51: sparse:     expected restricted __le32 static [addressable] [toplevel] [usertype] dwBytesPerInterval
-   drivers/usb/gadget/function/f_sourcesink.c:462:51: sparse:     got unsigned int
+Thanks
+Zqiang
 
-vim +460 drivers/usb/gadget/function/f_sourcesink.c
 
-   330	
-   331	static int
-   332	sourcesink_bind(struct usb_configuration *c, struct usb_function *f)
-   333	{
-   334		struct usb_composite_dev *cdev = c->cdev;
-   335		struct f_sourcesink	*ss = func_to_ss(f);
-   336		int	id;
-   337		int ret;
-   338	
-   339		/* allocate interface ID(s) */
-   340		id = usb_interface_id(c, f);
-   341		if (id < 0)
-   342			return id;
-   343		source_sink_intf_alt0.bInterfaceNumber = id;
-   344		source_sink_intf_alt1.bInterfaceNumber = id;
-   345	
-   346		/* sanity check the bulk module parameters */
-   347		if (ss->bulk_maxburst > 15)
-   348			ss->bulk_maxburst = 15;
-   349	
-   350		/* allocate bulk endpoints */
-   351		ss->in_ep = usb_ep_autoconfig(cdev->gadget, &fs_source_desc);
-   352		if (!ss->in_ep) {
-   353	autoconf_fail:
-   354			ERROR(cdev, "%s: can't autoconfigure on %s\n",
-   355				f->name, cdev->gadget->name);
-   356			return -ENODEV;
-   357		}
-   358	
-   359		ss->out_ep = usb_ep_autoconfig(cdev->gadget, &fs_sink_desc);
-   360		if (!ss->out_ep)
-   361			goto autoconf_fail;
-   362	
-   363		/*
-   364		 * Fill in the SS bulk descriptors from the module parameters.
-   365		 * We assume that the user knows what they are doing and won't
-   366		 * give parameters that their UDC doesn't support.
-   367		 */
-   368		ss_source_comp_desc.bMaxBurst = ss->bulk_maxburst;
-   369		ss_sink_comp_desc.bMaxBurst = ss->bulk_maxburst;
-   370	
-   371		/* sanity check the isoc module parameters */
-   372		if (ss->isoc_interval < 1)
-   373			ss->isoc_interval = 1;
-   374		if (ss->isoc_interval > 16)
-   375			ss->isoc_interval = 16;
-   376		if (ss->isoc_mult > 2)
-   377			ss->isoc_mult = 2;
-   378		if (ss->isoc_maxburst > 15)
-   379			ss->isoc_maxburst = 15;
-   380	
-   381		/* fill in the FS isoc descriptors from the module parameters */
-   382		fs_iso_source_desc.wMaxPacketSize = ss->isoc_maxpacket > 1023 ?
-   383							1023 : ss->isoc_maxpacket;
-   384		fs_iso_source_desc.bInterval = ss->isoc_interval;
-   385		fs_iso_sink_desc.wMaxPacketSize = ss->isoc_maxpacket > 1023 ?
-   386							1023 : ss->isoc_maxpacket;
-   387		fs_iso_sink_desc.bInterval = ss->isoc_interval;
-   388	
-   389		/* allocate iso endpoints */
-   390		ss->iso_in_ep = usb_ep_autoconfig(cdev->gadget, &fs_iso_source_desc);
-   391		if (!ss->iso_in_ep)
-   392			goto no_iso;
-   393	
-   394		ss->iso_out_ep = usb_ep_autoconfig(cdev->gadget, &fs_iso_sink_desc);
-   395		if (!ss->iso_out_ep) {
-   396			usb_ep_autoconfig_release(ss->iso_in_ep);
-   397			ss->iso_in_ep = NULL;
-   398	no_iso:
-   399			/*
-   400			 * We still want to work even if the UDC doesn't have isoc
-   401			 * endpoints, so null out the alt interface that contains
-   402			 * them and continue.
-   403			 */
-   404			fs_source_sink_descs[FS_ALT_IFC_1_OFFSET] = NULL;
-   405			hs_source_sink_descs[HS_ALT_IFC_1_OFFSET] = NULL;
-   406			ss_source_sink_descs[SS_ALT_IFC_1_OFFSET] = NULL;
-   407		}
-   408	
-   409		if (ss->isoc_maxpacket > 1024)
-   410			ss->isoc_maxpacket = 1024;
-   411	
-   412		/* support high speed hardware */
-   413		hs_source_desc.bEndpointAddress = fs_source_desc.bEndpointAddress;
-   414		hs_sink_desc.bEndpointAddress = fs_sink_desc.bEndpointAddress;
-   415	
-   416		/*
-   417		 * Fill in the HS isoc descriptors from the module parameters.
-   418		 * We assume that the user knows what they are doing and won't
-   419		 * give parameters that their UDC doesn't support.
-   420		 */
-   421		hs_iso_source_desc.wMaxPacketSize = ss->isoc_maxpacket;
-   422		hs_iso_source_desc.wMaxPacketSize |= ss->isoc_mult << 11;
-   423		hs_iso_source_desc.bInterval = ss->isoc_interval;
-   424		hs_iso_source_desc.bEndpointAddress =
-   425			fs_iso_source_desc.bEndpointAddress;
-   426	
-   427		hs_iso_sink_desc.wMaxPacketSize = ss->isoc_maxpacket;
-   428		hs_iso_sink_desc.wMaxPacketSize |= ss->isoc_mult << 11;
-   429		hs_iso_sink_desc.bInterval = ss->isoc_interval;
-   430		hs_iso_sink_desc.bEndpointAddress = fs_iso_sink_desc.bEndpointAddress;
-   431	
-   432		/* support super speed hardware */
-   433		ss_source_desc.bEndpointAddress =
-   434			fs_source_desc.bEndpointAddress;
-   435		ss_sink_desc.bEndpointAddress =
-   436			fs_sink_desc.bEndpointAddress;
-   437	
-   438		/*
-   439		 * Fill in the SS isoc descriptors from the module parameters.
-   440		 * We assume that the user knows what they are doing and won't
-   441		 * give parameters that their UDC doesn't support.
-   442		 */
-   443		ss_iso_source_desc.wMaxPacketSize = ss->isoc_maxpacket;
-   444		ss_iso_source_desc.bInterval = ss->isoc_interval;
-   445		ss_iso_source_comp_desc.bmAttributes = 0x80 | ss->isoc_mult;
-   446		ss_iso_source_comp_desc.bMaxBurst = ss->isoc_maxburst;
-   447		ss_iso_source_comp_desc.wBytesPerInterval = ss->isoc_maxpacket *
-   448			(ss->isoc_mult + 1) * (ss->isoc_maxburst + 1);
-   449		ss_iso_source_desc.bEndpointAddress =
-   450			fs_iso_source_desc.bEndpointAddress;
-   451	
-   452		ss_iso_sink_desc.wMaxPacketSize = ss->isoc_maxpacket;
-   453		ss_iso_sink_desc.bInterval = ss->isoc_interval;
-   454		ss_iso_sink_comp_desc.bmAttributes = 0x80 | ss->isoc_mult;
-   455		ss_iso_sink_comp_desc.bMaxBurst = ss->isoc_maxburst;
-   456		ss_iso_sink_comp_desc.wBytesPerInterval = ss->isoc_maxpacket *
-   457			(ss->isoc_mult + 1) * (ss->isoc_maxburst + 1);
-   458		ss_iso_sink_desc.bEndpointAddress = fs_iso_sink_desc.bEndpointAddress;
-   459	
- > 460		ssp_iso_source_comp_desc.dwBytesPerInterval = ss->isoc_maxpacket *
-   461			(ss->isoc_mult + 1) * (ss->isoc_maxburst + 1) * 2;
-   462		ssp_iso_sink_comp_desc.dwBytesPerInterval = ss->isoc_maxpacket *
-   463			(ss->isoc_mult + 1) * (ss->isoc_maxburst + 1) * 2;
-   464	
-   465		ret = usb_assign_descriptors(f, fs_source_sink_descs,
-   466				hs_source_sink_descs, ss_source_sink_descs,
-   467				ss_source_sink_descs);
-   468		if (ret)
-   469			return ret;
-   470	
-   471		DBG(cdev, "%s: IN/%s, OUT/%s, ISO-IN/%s, ISO-OUT/%s\n",
-   472				f->name, ss->in_ep->name, ss->out_ep->name,
-   473				ss->iso_in_ep ? ss->iso_in_ep->name : "<none>",
-   474				ss->iso_out_ep ? ss->iso_out_ep->name : "<none>");
-   475		return 0;
-   476	}
-   477	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>=20
+>=20Here is how I can reproduce the issue:
+>=20
+>=20nmcli device set enu1u1 managed no
+>=20
+>=20ip a a 10.10.10.1/24 dev enu1u1
+>=20
+>=20ping -c 4 10.10.10.3
+>=20
+>=20ip l s dev enu1u1 down
+>=20
+>=20ip l s dev enu1u1 up
+>=20
+>=20ping -c 4 10.10.10.3
+>=20
+>=20The second ping does not reach the host. Networking also fails on oth=
+er
+>=20
+>=20interfaces.
+>=20
+>=20After some delay, the following trace appears:
+>=20
+>=20[ 846.838527] INFO: task kworker/u16:1:308 blocked for more than 120 =
+seconds.
+>=20
+>=20[ 846.838596] Not tainted 6.16.0-rc3-00963-g4fcedea9cdf2-dirty #32
+>=20
+>=20[ 846.838666] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disa=
+bles this message.
+>=20
+>=20[ 846.838697] task:kworker/u16:1 state:D stack:0 pid:308 tgid:308 ppi=
+d:2
+>=20
+>=20 task_flags:0x4208060 flags:0x00000010
+>=20
+>=20[ 846.838776] Workqueue: events_unbound linkwatch_event
+>=20
+>=20[ 846.838851] Call trace:
+>=20
+>=20[ 846.838880] __switch_to+0x1d0/0x330 (T)
+>=20
+>=20[ 846.838933] __schedule+0xa88/0x2a90
+>=20
+>=20[ 846.838980] schedule+0x114/0x428
+>=20
+>=20[ 846.839010] schedule_preempt_disabled+0x80/0x118
+>=20
+>=20[ 846.839036] __mutex_lock+0x764/0xba8
+>=20
+>=20[ 846.839060] mutex_lock_nested+0x28/0x38
+>=20
+>=20[ 846.839084] rtnl_lock+0x20/0x30
+>=20
+>=20[ 846.839115] linkwatch_event+0x18/0x70
+>=20
+>=20[ 846.839141] process_one_work+0x760/0x17b0
+>=20
+>=20[ 846.839175] worker_thread+0x768/0xce8
+>=20
+>=20[ 846.839208] kthread+0x3bc/0x690
+>=20
+>=20[ 846.839237] ret_from_fork+0x10/0x20
+>=20
+>=20[ 846.839359] INFO: task kworker/u16:1:308 is blocked on a mutex like=
+ly
+>=20
+>=20owned by task ip:899.
+>=20
+>=20[ 846.839381] task:ip state:D stack:0 pid:899
+>=20
+>=20tgid:899 ppid:1 task_flags:0x400100 flags:0x00000019
+>=20
+>=20[ 846.839419] Call trace:
+>=20
+>=20[ 846.839432] __switch_to+0x1d0/0x330 (T)
+>=20
+>=20[ 846.839466] __schedule+0xa88/0x2a90
+>=20
+>=20[ 846.839495] schedule+0x114/0x428
+>=20
+>=20[ 846.839524] schedule_timeout+0xec/0x220
+>=20
+>=20[ 846.839551] wait_skb_queue_empty+0xa0/0x168
+>=20
+>=20[ 846.839581] usbnet_terminate_urbs+0x150/0x2c8
+>=20
+>=20[ 846.839609] usbnet_stop+0x41c/0x608
+>=20
+>=20[ 846.839636] __dev_close_many+0x1fc/0x4b8
+>=20
+>=20[ 846.839668] __dev_change_flags+0x33c/0x500
+>=20
+>=20[ 846.839694] netif_change_flags+0x7c/0x158
+>=20
+>=20[ 846.839718] do_setlink.isra.0+0x2040/0x2eb8
+>=20
+>=20[ 846.839745] rtnl_newlink+0xd88/0x16c8
+>=20
+>=20[ 846.839770] rtnetlink_rcv_msg+0x654/0x8c8
+>=20
+>=20[ 846.839795] netlink_rcv_skb+0x19c/0x350
+>=20
+>=20[ 846.839823] rtnetlink_rcv+0x1c/0x30
+>=20
+>=20[ 846.839848] netlink_unicast+0x3c4/0x668
+>=20
+>=20[ 846.839873] netlink_sendmsg+0x620/0xa10
+>=20
+>=20[ 846.839899] ____sys_sendmsg+0x2f8/0x788
+>=20
+>=20[ 846.839924] ___sys_sendmsg+0xf0/0x178
+>=20
+>=20[ 846.839950] __sys_sendmsg+0x104/0x198
+>=20
+>=20[ 846.839975] __arm64_sys_sendmsg+0x74/0xa8
+>=20
+>=20[ 846.840000] el0_svc_common.constprop.0+0xe4/0x338
+>=20
+>=20[ 846.840033] do_el0_svc+0x44/0x60
+>=20
+>=20[ 846.840061] el0_svc+0x3c/0xb0
+>=20
+>=20[ 846.840089] el0t_64_sync_handler+0x104/0x130
+>=20
+>=20[ 846.840117] el0t_64_sync+0x154/0x158
+>=20
+>=20[ 846.840164]
+>=20
+>=20[ 846.840164] Showing all locks held in the system:
+>=20
+>=20[ 846.840199] 1 lock held by khungtaskd/41:
+>=20
+>=20[ 846.840216] #0: ffffffc08424ede0 (rcu_read_lock){....}-{1:3}, at: d=
+ebug_show_all_locks+0x14/0x1b0
+>=20
+>=20[ 846.840309] 3 locks held by kworker/u16:2/47:
+>=20
+>=20[ 846.840325] #0: ffffff800926a148 ((wq_completion)ipv6_addrconf){+.+=
+.}-{0:0}, at: process_one_work+0x698/0x17b0
+>=20
+>=20[ 846.840406] #1: ffffffc0860f7c00 ((work_completion)(&(&net->ipv6.ad=
+dr_chk_work)->work)){+.+.}-{0:0}, at: process_one_work+0x6bc/0x17b0
+>=20
+>=20[ 846.840484] #2: ffffffc084924408 (rtnl_mutex){+.+.}-{4:4}, at: rtnl=
+_lock+0x20/0x30
+>=20
+>=20[ 846.840568] 2 locks held by pr/ttymxc1/60:
+>=20
+>=20[ 846.840595] 5 locks held by sugov:0/84:
+>=20
+>=20[ 846.840618] 2 locks held by systemd-journal/124:
+>=20
+>=20[ 846.840639] 3 locks held by kworker/u16:1/308:
+>=20
+>=20[ 846.840655] #0: ffffff8005d00148 ((wq_completion)events_unbound){+.=
++.}-{0:0}, at: process_one_work+0x698/0x17b0
+>=20
+>=20[ 846.840733] #1: ffffffc087307c00 ((linkwatch_work).work){+.+.}-{0:0=
+}, at: process_one_work+0x6bc/0x17b0
+>=20
+>=20[ 846.840810] #2: ffffffc084924408 (rtnl_mutex){+.+.}-{4:4}, at: rtnl=
+_lock+0x20/0x30
+>=20
+>=20[ 846.840894] 1 lock held by ip/899:
+>=20
+>=20[ 846.840910] #0: ffffffc084924408 (rtnl_mutex){+.+.}-{4:4}, at: rtnl=
+_newlink+0x5e8/0x16c8
+>=20
+>=20[ 846.840982] 2 locks held by sshd/901:
+>=20
+>=20[ 846.840998] #0: ffffff800aee06b0 (nlk_cb_mutex-ROUTE){+.+.}-{4:4}, =
+at: __netlink_dump_start+0x100/0x800
+>=20
+>=20[ 846.841073] #1: ffffffc084924408 (rtnl_mutex){+.+.}-{4:4}, at: rtnl=
+_dumpit+0x128/0x1a8
+>=20
+>=20[ 846.841149] 2 locks held by sshd/903:
+>=20
+>=20[ 846.841165] #0: ffffff800b1c76b0 (nlk_cb_mutex-ROUTE){+.+.}-{4:4}, =
+at: __netlink_dump_start+0x100/0x800
+>=20
+>=20[ 846.841237] #1: ffffffc084924408 (rtnl_mutex){+.+.}-{4:4}, at: rtnl=
+_dumpit+0x128/0x1a8
+>=20
+>=20Reverting this patch recovers smsc95xx functionality.
+>=20
+>=20Best Regards,
+>=20
+>=20Oleksij
+>
 
