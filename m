@@ -1,210 +1,226 @@
-Return-Path: <linux-usb+bounces-25507-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25508-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C76B3AFA0F1
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 18:22:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2825AFA12A
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 20:28:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40C083B2D3E
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 16:22:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B59E16E4C5
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 18:28:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A2D61FECAD;
-	Sat,  5 Jul 2025 16:22:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27164215F6B;
+	Sat,  5 Jul 2025 18:28:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h9WbkbeU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A72A19F421
-	for <linux-usb@vger.kernel.org>; Sat,  5 Jul 2025 16:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCDA1DE3DB
+	for <linux-usb@vger.kernel.org>; Sat,  5 Jul 2025 18:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751732551; cv=none; b=FdpJDoqAGjUuDVsJztQhkUseFTbTygocUzfBpnZ/G4T4AR0vt7wreURtsrzVArRmhWSQTz3UmhAkYPXaZ5J126A4ID3B/ijP31VPhmLy7pIr0rW22snUmplVYMf6HSc1GFoeAXSGSTUymY2LN1Anq4w0Oe+NpaqBTpt9MebQAc0=
+	t=1751740109; cv=none; b=sV/INjgIrAWUJ+TQS9dvS+hGB8aUTCtcpRCziAdTJxGd+Nd+eDgAmTTit6Ix5ixJZVCLZWpuTy/SZrWbWAYTlLPGQhRfEGRLWa9Sr+NuuzNLL7RVFdVXmYjEIi2HxDGt6tlNWtJIyVZL8X8M5BYGutS6KWvC9KobhmOQMoupi+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751732551; c=relaxed/simple;
-	bh=TBaeYJghPRtZM210AFyRotEdnlAPmhG1RYCRSzdrTSI=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=gEG79TolptRKw2ow0FkeU/6HojdNOQ42fK83X8I/G7nJZ/a0fhWBcRLUpkFxoSpZPAjc5TuzWOM5XjoA8B1NXmWua68fr2BosgLGX0Pt87/E/WZhB6Yus3pVA0v2Hm4/bjNQlrRzZJnLC4VC+QK6dMmX7nvPGJts9ga4jm2VNP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3df40226ab7so41519715ab.0
-        for <linux-usb@vger.kernel.org>; Sat, 05 Jul 2025 09:22:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751732549; x=1752337349;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TaSrsgy587/dWpvmV91Fh1n3eLDmBjtt6jIOaPibHns=;
-        b=JFEnLiRz7XTuLphGuV8EMkQ+gOXdERaGamJ/G9anwlK+F0Blran7WIE4bX2IIIhmsM
-         JnARPv0yGpRY5SRmY87HmCLZi9uaFnLsgNbOI7VGnGsX84VSICNYLL0X6pLawHmDKH/J
-         9POuNg8xuUY53FdSo4H3FzqaaekpRlTU2wtvE0LEY1QHgPdtagJ3K78iiWmjr+0ZWRzT
-         gPYBEoPtGLHDlmyyGFNLe5CpvfPYGpip4thWvnRjwwugCZ4sRU5cI0zOmsVXVSxbyt60
-         u/L3Y8JJOFJquhkqEM4jCyQjz91s1yyF4oF8saHM3WhpdeIYUoZVpaDq2r+xknGnTx3u
-         tang==
-X-Forwarded-Encrypted: i=1; AJvYcCUgH/yndhw//lQTjcaiAGdzDvmW4Bcme3kUyhxda3W2H14GCRN0Vvwxl1tJGjaLW5RvMKAg+LGfqYs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLqlQ/tdXH1VhxRz9QV7zzZWz4GnV37sKjg4BEQTDOeib7AOWz
-	HX8a/2thoJr1fg2zvqDOmcjYfzOrEaIZ0JtlwLWkXL+3IU3mOsT5f2klwytgZuLmAIjWhj/qsZo
-	qfGNIzcuxDwqWUgOnctjW6w9FGRWVLJydKjcgAyGurgTPdg7/3g6IQZVxjpk=
-X-Google-Smtp-Source: AGHT+IHXZDxlv6ve5JbC/c0nhJ2fWSDI648KJyOpBSRki8eFaqaOjhGIWDqSrsV2AitJyqIHlFNzznI8Ok0y/Bv1WefoLo/2wqAl
+	s=arc-20240116; t=1751740109; c=relaxed/simple;
+	bh=b7gJbVYTEaX1KH3xRXmHevdSPN/zZQQa8mUigx77Wvc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=QCSUTQ1+qFXJp/9ANU6UQiggT0Oj+4AvAMqZPY2NmOrDbPB08oFgtpJaVvVLkhOtQxtDKChxomCEbRgZNI17mJOnBlD+1UPaw0FEOudmOvjLb6BVWbra0FrFs33t9irUUmGT1QAWd8LmbJIVJTK5/5ZYQ4Pbw/81LIZ8Rmhtv30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h9WbkbeU; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751740108; x=1783276108;
+  h=date:from:to:cc:subject:message-id;
+  bh=b7gJbVYTEaX1KH3xRXmHevdSPN/zZQQa8mUigx77Wvc=;
+  b=h9WbkbeUGG9+M0U+ZKKdC6nCWpLwWlPscjnugHYv2CgddfUmEbGlqTU3
+   pAMXL0ajEa8S7UTlP7+ATssZE1iQUee17OyN0AtxxChvZ9GpcMNKkN9/u
+   ybEnYLsp9REmi8xeAPvMLyaJCr7yeLiXftB0jOmnkzqjD5co0bRF8oale
+   TbUu5aVY2hNBWD/39VOhscAYWpBIEWIduYBn/N+nqizGYIVQwUdj9RA+6
+   AUO9SAGIhAL31sj5m9Z0FPtGGoHM4adQZpavD/XYYgRY17FbZqEDoW5uT
+   Vv9+AUU5YnunZvD0bcjq+EdOYrw0sRQB/L8eUX7RUBQ3OsqtuMWO3Qqyw
+   g==;
+X-CSE-ConnectionGUID: EybPXNvqSM2pp8o0sffNeQ==
+X-CSE-MsgGUID: s0NHLCpUQ6Gdjzq413UDJA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11485"; a="41645347"
+X-IronPort-AV: E=Sophos;i="6.16,290,1744095600"; 
+   d="scan'208";a="41645347"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2025 11:28:27 -0700
+X-CSE-ConnectionGUID: mhdqaFEyRgyEd2FtnjdxDg==
+X-CSE-MsgGUID: 1RxYpt6jS6OhJ3/1pWDg2Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,290,1744095600"; 
+   d="scan'208";a="159132310"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 05 Jul 2025 11:28:26 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uY7ce-0004fn-1R;
+	Sat, 05 Jul 2025 18:28:24 +0000
+Date: Sun, 06 Jul 2025 02:28:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 81c3b7256f9ec3c9f7659e4a2aec8d8ead0d4c3b
+Message-ID: <202507060205.dYGS7wNz-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b47:b0:3df:3464:ab86 with SMTP id
- e9e14a558f8ab-3e13ee94da1mr24017735ab.9.1751732548747; Sat, 05 Jul 2025
- 09:22:28 -0700 (PDT)
-Date: Sat, 05 Jul 2025 09:22:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68695144.a00a0220.c7b3.0045.GAE@google.com>
-Subject: [syzbot] [usb?] KMSAN: kernel-usb-infoleak-after-free in usb_start_wait_urb
-From: syzbot <syzbot+27fe438b6370f95de4a5@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 81c3b7256f9ec3c9f7659e4a2aec8d8ead0d4c3b  Merge merge point of tag 'usb-6.16-rc5' into usb-next
 
-syzbot found the following issue on:
+elapsed time: 721m
 
-HEAD commit:    66701750d556 Merge tag 'io_uring-6.16-20250630' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=134693d4580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d5c61bcebaf295a
-dashboard link: https://syzkaller.appspot.com/bug?extid=27fe438b6370f95de4a5
-compiler:       Debian clang version 20.1.6 (++20250514063057+1e4d39e07757-1~exp1~20250514183223.118), Debian LLD 20.1.6
-userspace arch: i386
+configs tested: 133
+configs skipped: 5
 
-Unfortunately, I don't have any reproducer for this issue yet.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e203ce735cca/disk-66701750.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e4f6e611c287/vmlinux-66701750.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1b9c4100ce6f/bzImage-66701750.xz
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    gcc-15.1.0
+arc                   randconfig-001-20250705    gcc-8.5.0
+arc                   randconfig-002-20250705    gcc-11.5.0
+arm                              allmodconfig    gcc-15.1.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    gcc-15.1.0
+arm                          gemini_defconfig    clang-20
+arm                         orion5x_defconfig    clang-21
+arm                          pxa168_defconfig    clang-19
+arm                   randconfig-001-20250705    gcc-12.4.0
+arm                   randconfig-002-20250705    clang-21
+arm                   randconfig-003-20250705    gcc-8.5.0
+arm                   randconfig-004-20250705    gcc-8.5.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-15.1.0
+arm64                 randconfig-001-20250705    gcc-10.5.0
+arm64                 randconfig-002-20250705    clang-17
+arm64                 randconfig-003-20250705    gcc-11.5.0
+arm64                 randconfig-004-20250705    clang-21
+csky                              allnoconfig    gcc-15.1.0
+csky                  randconfig-001-20250705    gcc-10.5.0
+csky                  randconfig-002-20250705    gcc-15.1.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250705    clang-19
+hexagon               randconfig-002-20250705    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250705    gcc-11
+i386        buildonly-randconfig-002-20250705    clang-20
+i386        buildonly-randconfig-003-20250705    gcc-12
+i386        buildonly-randconfig-004-20250705    gcc-12
+i386        buildonly-randconfig-005-20250705    gcc-12
+i386        buildonly-randconfig-006-20250705    clang-20
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-21
+loongarch             randconfig-001-20250705    gcc-15.1.0
+loongarch             randconfig-002-20250705    gcc-15.1.0
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+m68k                         amcore_defconfig    gcc-15.1.0
+m68k                            mac_defconfig    gcc-15.1.0
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                         rt305x_defconfig    clang-21
+nios2                             allnoconfig    gcc-14.2.0
+nios2                               defconfig    gcc-14.2.0
+nios2                 randconfig-001-20250705    gcc-8.5.0
+nios2                 randconfig-002-20250705    gcc-9.3.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250705    gcc-9.3.0
+parisc                randconfig-002-20250705    gcc-13.4.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    clang-21
+powerpc                       ebony_defconfig    clang-21
+powerpc                     ep8248e_defconfig    gcc-15.1.0
+powerpc                       ppc64_defconfig    clang-21
+powerpc               randconfig-001-20250705    gcc-11.5.0
+powerpc               randconfig-002-20250705    gcc-9.3.0
+powerpc               randconfig-003-20250705    gcc-12.4.0
+powerpc64             randconfig-001-20250705    clang-21
+powerpc64             randconfig-002-20250705    clang-21
+powerpc64             randconfig-003-20250705    clang-21
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-21
+riscv                 randconfig-001-20250705    clang-21
+riscv                 randconfig-002-20250705    gcc-14.3.0
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    clang-21
+s390                  randconfig-001-20250705    clang-21
+s390                  randconfig-002-20250705    clang-21
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-15.1.0
+sh                ecovec24-romimage_defconfig    gcc-15.1.0
+sh                          r7785rp_defconfig    gcc-15.1.0
+sh                    randconfig-001-20250705    gcc-15.1.0
+sh                    randconfig-002-20250705    gcc-15.1.0
+sh                  sh7785lcr_32bit_defconfig    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20250705    gcc-13.4.0
+sparc                 randconfig-002-20250705    gcc-8.5.0
+sparc64                             defconfig    clang-20
+sparc64               randconfig-001-20250705    gcc-8.5.0
+sparc64               randconfig-002-20250705    clang-20
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-21
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250705    gcc-12
+um                    randconfig-002-20250705    gcc-12
+um                           x86_64_defconfig    clang-21
+x86_64                           alldefconfig    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250705    gcc-12
+x86_64      buildonly-randconfig-002-20250705    gcc-12
+x86_64      buildonly-randconfig-003-20250705    clang-20
+x86_64      buildonly-randconfig-004-20250705    gcc-12
+x86_64      buildonly-randconfig-005-20250705    gcc-12
+x86_64      buildonly-randconfig-006-20250705    clang-20
+x86_64                              defconfig    gcc-11
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20250705    gcc-12.4.0
+xtensa                randconfig-002-20250705    gcc-12.4.0
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+27fe438b6370f95de4a5@syzkaller.appspotmail.com
-
-usb 7-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 7-1: config 0 descriptor??
-microsoft 0003:045E:07DA.003F: unknown main item tag 0x0
-microsoft 0003:045E:07DA.003F: ignoring exceeding usage max
-=====================================================
-BUG: KMSAN: kernel-usb-infoleak-after-free in usb_submit_urb+0x5a1/0x2630 drivers/usb/core/urb.c:430
- usb_submit_urb+0x5a1/0x2630 drivers/usb/core/urb.c:430
- usb_start_wait_urb+0xc2/0x320 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x27c/0x5b0 drivers/usb/core/message.c:154
- usbhid_raw_request+0x4ab/0x690 drivers/hid/usbhid/hid-core.c:-1
- __hid_request+0x2bd/0x500 drivers/hid/hid-core.c:1989
- hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
- hidinput_connect+0x3bf5/0x5cc0 drivers/hid/hid-input.c:2327
- hid_connect+0x6b4/0x3440 drivers/hid/hid-core.c:2239
- hid_hw_start+0xfc/0x1e0 drivers/hid/hid-core.c:2354
- ms_probe+0x2e5/0x890 drivers/hid/hid-microsoft.c:391
- __hid_device_probe drivers/hid/hid-core.c:2724 [inline]
- hid_device_probe+0x536/0xab0 drivers/hid/hid-core.c:2761
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x4d1/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
- driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
- __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
- bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
- __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
- device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
- device_add+0x12a9/0x1c10 drivers/base/core.c:3692
- hid_add_device+0x5ed/0x7b0 drivers/hid/hid-core.c:2907
- usbhid_probe+0x1fec/0x2660 drivers/hid/usbhid/hid-core.c:1435
- usb_probe_interface+0xd01/0x1310 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x4d1/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
- driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
- __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
- bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
- __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
- device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
- device_add+0x12a9/0x1c10 drivers/base/core.c:3692
- usb_set_configuration+0x3493/0x3b70 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xfc/0x290 drivers/usb/core/generic.c:250
- usb_probe_device+0x38d/0x690 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x4d1/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
- driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
- __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
- bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
- __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
- device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
- device_add+0x12a9/0x1c10 drivers/base/core.c:3692
- usb_new_device+0x104b/0x20c0 drivers/usb/core/hub.c:2663
- hub_port_connect drivers/usb/core/hub.c:5535 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5675 [inline]
- port_event drivers/usb/core/hub.c:5835 [inline]
- hub_event+0x5588/0x7580 drivers/usb/core/hub.c:5917
- process_one_work kernel/workqueue.c:3238 [inline]
- process_scheduled_works+0xb8e/0x1d80 kernel/workqueue.c:3321
- worker_thread+0xedf/0x1590 kernel/workqueue.c:3402
- kthread+0xd5c/0xf00 kernel/kthread.c:464
- ret_from_fork+0x1e0/0x310 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-
-Uninit was created at:
- slab_free_hook mm/slub.c:2307 [inline]
- slab_free mm/slub.c:4643 [inline]
- kfree+0x252/0xec0 mm/slub.c:4842
- kfree_const+0x42/0x50 mm/util.c:45
- kobject_cleanup lib/kobject.c:695 [inline]
- kobject_release lib/kobject.c:720 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x344/0x3b0 lib/kobject.c:737
- netdev_queue_update_kobjects+0x9b5/0xbf0 net/core/net-sysfs.c:2052
- remove_queue_kobjects net/core/net-sysfs.c:2149 [inline]
- netdev_unregister_kobject+0x176/0x530 net/core/net-sysfs.c:2304
- unregister_netdevice_many_notify+0x3cfb/0x4950 net/core/dev.c:12112
- unregister_netdevice_many+0x22/0x30 net/core/dev.c:12140
- ops_exit_rtnl_list net/core/net_namespace.c:188 [inline]
- ops_undo_list+0x5d8/0xb80 net/core/net_namespace.c:249
- cleanup_net+0xb8f/0x14b0 net/core/net_namespace.c:686
- process_one_work kernel/workqueue.c:3238 [inline]
- process_scheduled_works+0xb8e/0x1d80 kernel/workqueue.c:3321
- worker_thread+0xedf/0x1590 kernel/workqueue.c:3402
- kthread+0xd5c/0xf00 kernel/kthread.c:464
- ret_from_fork+0x1e0/0x310 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-
-Bytes 36-38 of 65535 are uninitialized
-Memory access of size 65535 starts at ffff88808e6d5791
-
-CPU: 1 UID: 0 PID: 17692 Comm: kworker/1:4 Not tainted 6.16.0-rc4-syzkaller-00013-g66701750d556 #0 PREEMPT(undef) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-Workqueue: usb_hub_wq hub_event
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
