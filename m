@@ -1,187 +1,190 @@
-Return-Path: <linux-usb+bounces-25509-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25510-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9812AAFA137
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 20:46:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9686AFA154
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 21:13:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A12FC3A9863
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 18:46:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A9825603AB
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 19:13:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA05820E313;
-	Sat,  5 Jul 2025 18:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RGjaE1SO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A88F21858A;
+	Sat,  5 Jul 2025 19:13:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4731EA73;
-	Sat,  5 Jul 2025 18:46:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480F020AF62
+	for <linux-usb@vger.kernel.org>; Sat,  5 Jul 2025 19:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751741193; cv=none; b=Ag0mrQPdIjI17wVTea+QxY6si3v/3XHzlJOxhbSXOi1VdizPJYLgDkpwYBco9t0MFHsdNSMX2snGP1zz0Hc3Agl/Q6r9QmWNdS+WmXADCQYZglwBfJANPid8ZCf/hDclIjeYMihR8CLKVoAEK0mjJ553uOPcLo8PNW7+j4dq4RU=
+	t=1751742814; cv=none; b=DOF5vNjkFWOaOJkcyv9LwkVj+8Kzlay42dGdHWdmAg6U/TSi2Ish2KxvT5fXxyfP7uKAYNM3rQddTX6A8Ur9fcc6j1yfMeqq+EwXHAp9SbschDJbVNk4Gi6IhV/yN0qSgVbOIbSPoWwamAO9IPUwBpSm67i/fo37HwqoJG2p3es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751741193; c=relaxed/simple;
-	bh=Z0yzV/VPkDfvyUx/xopWYC8B14lYUePBKBtLJOQOW6U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hbGWs3qp32xKiZANKtA66xcUK5B1jo63Vt/G91k3iL0zWC5qV76P4qDJMFuoe5KLuDxslMePXsV9kFo5sGJGaSO0/7uiHg/kgBCYVBqzKEX8yTTP44xv/CmtVpNMcE2yoWS8gkuLNhw+UrpfqnKxnPuHDIGy8Q1MiVkBIFpWImU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RGjaE1SO; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751741191; x=1783277191;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z0yzV/VPkDfvyUx/xopWYC8B14lYUePBKBtLJOQOW6U=;
-  b=RGjaE1SOpogHbX5ZMvtUtqyxUhHHwtaWEQY+i4i1iBEFZlyFLrZB6LNa
-   OUpKhv+9Uk+tBzCExdoAkTIqpOihQlGwijIhzPxMLGJEAHwmGOu3Iqg0U
-   86Nsp4iFb4ENa1WA9IOuEOwYZT/MBbseyizC78SGiXw/2FhL2XsNDOMKG
-   TQvlwgKnJoQ3l3i9Ec/M1St+HnXqp6TUfHc1jNmvlfSf5inaPuEAJDRnw
-   CBg96iRsBGYifpt1A4OU/RRPMzcw7wy6s1vFyjD3qI5yJDQwJrkcUngl1
-   484lGG6R0AtSUvgwM142LjaRIGe7D13Ce6G+koWemF3lklqNY9VeR60fT
-   g==;
-X-CSE-ConnectionGUID: EgGZNRROTg6Wm22dx8eExQ==
-X-CSE-MsgGUID: qERH2Zm4SiqMFDzNlZu5gg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11485"; a="65079090"
-X-IronPort-AV: E=Sophos;i="6.16,290,1744095600"; 
-   d="scan'208";a="65079090"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2025 11:46:31 -0700
-X-CSE-ConnectionGUID: YtCQ6xlMTd6QNYDFXdZszw==
-X-CSE-MsgGUID: hhfPyBMXRqeKWA/pf1pBJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,290,1744095600"; 
-   d="scan'208";a="154988400"
-Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 05 Jul 2025 11:46:27 -0700
-Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uY7u5-0004fv-0y;
-	Sat, 05 Jul 2025 18:46:25 +0000
-Date: Sun, 6 Jul 2025 02:46:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ze Huang <huang.ze@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Ze Huang <huang.ze@linux.dev>
-Subject: Re: [PATCH v5 2/2] usb: dwc3: add generic driver to support flattened
-Message-ID: <202507060206.iiBP6CQi-lkp@intel.com>
-References: <20250705-dwc3_generic-v5-2-9dbc53ea53d2@linux.dev>
+	s=arc-20240116; t=1751742814; c=relaxed/simple;
+	bh=sDs2FuQR9SAv9gueHnsljeOfKV0PFqXvuF6Js+kKAdM=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=H7it00bi7aSyLPVgS4oVZQdiC/AFErTDKd/XypR6FjDjLgSZuV7uaSZEq+EGC0wS1nNfsDooqqdKLk7eUi36DlLpqRI1H+KviSDFt+LPOxmivTg/rvSQ0jMIIoIvb70izlDUg0xgqo00Jij3EHkBI9wZeEh3pEDI9mSqkzzS+4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3ddbec809acso20599805ab.2
+        for <linux-usb@vger.kernel.org>; Sat, 05 Jul 2025 12:13:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751742812; x=1752347612;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gqRYkQJ4Gex/FmdSFSJ1VKHDBVaZ3K23NAVJRsP4Dqo=;
+        b=MJh62YP8ERtq0fmrRE+kkeb8lhdmkvVi9NFjz2h3VAEqM45tPM0VE9RRSpFwDtEB/M
+         urNeWimPhj0kY5xDzAGrjB97eawIHf9ELTaK7B2pw6x6d9kOeg0nBdm8pNCiqRo3ngb0
+         0qx6IVEIzXbC3tXXBgWqtxHhbI3R746+Nk3iHs8QjiuBUWuQogdQa5Elyf4YxNno7ktq
+         tVDvf6F5qR1OfD7hBhzNBZ506DAq+SqVwPnZgBG90AdgKVeQA7iZSQ7i1vgtyDk1ogVH
+         tgg33ClBtEdkpX3hp/FV9tOjrAc7MoUKrP91n2zN6MUErh+5GLhNz+JE7O8MtHrjIEqX
+         udwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUpXKzyk5Eq6q2v+nrFVSC0nhegL6i9rFXil6hnb5u9VmS6mzE9UqDJ6lWQzvi+Vl9wp1Ij54gHdVw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxU6LN097xztyoPLrK7uRZwjgun6m1E+Jw71UGPaWsufC1eBey3
+	npVMP/xTFVlAF14GSiCMVocGVz6LJ58Fc7czB3ngIMD9kdMOzNQkeeKdo5qMWTwEe/N3D94AwLy
+	wBLhOCHHxbpmc9w24wV/GvgMuThymNqkAP4AOctRkMidT1C0H2inlu1z/PTk=
+X-Google-Smtp-Source: AGHT+IE0GC55HxVfVfXZFZohjYGAnYJaxyWhKQlnKKthOT+fNFSIVWa/wK6D1/HezOQuA4M5jUQFIBUbrdXY5+SIXnCJg1WMTwY9
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250705-dwc3_generic-v5-2-9dbc53ea53d2@linux.dev>
+X-Received: by 2002:a05:6e02:2307:b0:3dd:d995:30ec with SMTP id
+ e9e14a558f8ab-3e13eefe279mr26598985ab.12.1751742812434; Sat, 05 Jul 2025
+ 12:13:32 -0700 (PDT)
+Date: Sat, 05 Jul 2025 12:13:32 -0700
+In-Reply-To: <68695144.a00a0220.c7b3.0045.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6869795c.a00a0220.c7b3.0048.GAE@google.com>
+Subject: Re: [syzbot] [usb?] KMSAN: kernel-usb-infoleak-after-free in usb_start_wait_urb
+From: syzbot <syzbot+27fe438b6370f95de4a5@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Ze,
+syzbot has found a reproducer for the following issue on:
 
-kernel test robot noticed the following build warnings:
+HEAD commit:    a79a588fc176 Merge tag 'pm-6.16-rc5' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16942f70580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aa9af7332485152e
+dashboard link: https://syzkaller.appspot.com/bug?extid=27fe438b6370f95de4a5
+compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11132582580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10709c8c580000
 
-[auto build test WARNING on d9946fe286439c2aeaa7953b8c316efe5b83d515]
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b7cf1187020f/disk-a79a588f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/47e08d61ef4b/vmlinux-a79a588f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/75d3bcd3c8e0/bzImage-a79a588f.xz
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ze-Huang/dt-bindings-usb-dwc3-add-support-for-SpacemiT-K1/20250705-210419
-base:   d9946fe286439c2aeaa7953b8c316efe5b83d515
-patch link:    https://lore.kernel.org/r/20250705-dwc3_generic-v5-2-9dbc53ea53d2%40linux.dev
-patch subject: [PATCH v5 2/2] usb: dwc3: add generic driver to support flattened
-config: arc-randconfig-001-20250706 (https://download.01.org/0day-ci/archive/20250706/202507060206.iiBP6CQi-lkp@intel.com/config)
-compiler: arc-linux-gcc (GCC) 8.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250706/202507060206.iiBP6CQi-lkp@intel.com/reproduce)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+27fe438b6370f95de4a5@syzkaller.appspotmail.com
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507060206.iiBP6CQi-lkp@intel.com/
+microsoft 0003:045E:07DA.0001: unknown main item tag 0x0
+microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
+=====================================================
+BUG: KMSAN: kernel-usb-infoleak-after-free in usb_submit_urb+0x5a1/0x2630 drivers/usb/core/urb.c:430
+ usb_submit_urb+0x5a1/0x2630 drivers/usb/core/urb.c:430
+ usb_start_wait_urb+0xc2/0x320 drivers/usb/core/message.c:59
+ usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+ usb_control_msg+0x27c/0x5b0 drivers/usb/core/message.c:154
+ usbhid_raw_request+0x4ab/0x690 drivers/hid/usbhid/hid-core.c:-1
+ __hid_request+0x2bd/0x500 drivers/hid/hid-core.c:1989
+ hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
+ hidinput_connect+0x3bf5/0x5cc0 drivers/hid/hid-input.c:2327
+ hid_connect+0x6b4/0x3440 drivers/hid/hid-core.c:2239
+ hid_hw_start+0xfc/0x1e0 drivers/hid/hid-core.c:2354
+ ms_probe+0x2e5/0x890 drivers/hid/hid-microsoft.c:391
+ __hid_device_probe drivers/hid/hid-core.c:2724 [inline]
+ hid_device_probe+0x536/0xab0 drivers/hid/hid-core.c:2761
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:657
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
+ bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3692
+ hid_add_device+0x5ed/0x7b0 drivers/hid/hid-core.c:2907
+ usbhid_probe+0x1fec/0x2660 drivers/hid/usbhid/hid-core.c:1435
+ usb_probe_interface+0xd04/0x1310 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:657
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
+ bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3692
+ usb_set_configuration+0x3493/0x3b70 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xfc/0x290 drivers/usb/core/generic.c:250
+ usb_probe_device+0x38a/0x690 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:657
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
+ bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3692
+ usb_new_device+0x104b/0x20c0 drivers/usb/core/hub.c:2694
+ hub_port_connect drivers/usb/core/hub.c:5566 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
+ port_event drivers/usb/core/hub.c:5866 [inline]
+ hub_event+0x5588/0x7580 drivers/usb/core/hub.c:5948
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xb8e/0x1d80 kernel/workqueue.c:3321
+ worker_thread+0xedf/0x1590 kernel/workqueue.c:3402
+ kthread+0xd5c/0xf00 kernel/kthread.c:464
+ ret_from_fork+0x1e0/0x310 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
 
-All warnings (new ones prefixed by >>):
+Uninit was created at:
+ free_pages_prepare mm/page_alloc.c:1173 [inline]
+ __free_frozen_pages+0x179/0x1560 mm/page_alloc.c:2706
+ free_frozen_pages+0x21/0x30 mm/page_alloc.c:2744
+ __folio_put+0x435/0x460 mm/swap.c:112
+ folio_put include/linux/mm.h:1356 [inline]
+ put_page include/linux/mm.h:1425 [inline]
+ anon_pipe_put_page+0x32e/0x620 fs/pipe.c:139
+ anon_pipe_buf_release+0x39/0x50 fs/pipe.c:147
+ pipe_buf_release include/linux/pipe_fs_i.h:282 [inline]
+ pipe_update_tail fs/pipe.c:242 [inline]
+ anon_pipe_read+0xaef/0x1e80 fs/pipe.c:361
+ new_sync_read fs/read_write.c:491 [inline]
+ vfs_read+0x857/0xf00 fs/read_write.c:572
+ ksys_read fs/read_write.c:715 [inline]
+ __do_sys_read fs/read_write.c:724 [inline]
+ __se_sys_read fs/read_write.c:722 [inline]
+ __x64_sys_read+0x1fb/0x4d0 fs/read_write.c:722
+ x64_sys_call+0x39db/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:1
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xd9/0x210 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
->> drivers/usb/dwc3/dwc3-generic-plat.c:151:12: warning: 'dwc3_generic_runtime_idle' defined but not used [-Wunused-function]
-    static int dwc3_generic_runtime_idle(struct device *dev)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/usb/dwc3/dwc3-generic-plat.c:144:12: warning: 'dwc3_generic_runtime_resume' defined but not used [-Wunused-function]
-    static int dwc3_generic_runtime_resume(struct device *dev)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/usb/dwc3/dwc3-generic-plat.c:137:12: warning: 'dwc3_generic_runtime_suspend' defined but not used [-Wunused-function]
-    static int dwc3_generic_runtime_suspend(struct device *dev)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/usb/dwc3/dwc3-generic-plat.c:121:12: warning: 'dwc3_generic_resume' defined but not used [-Wunused-function]
-    static int dwc3_generic_resume(struct device *dev)
-               ^~~~~~~~~~~~~~~~~~~
->> drivers/usb/dwc3/dwc3-generic-plat.c:107:12: warning: 'dwc3_generic_suspend' defined but not used [-Wunused-function]
-    static int dwc3_generic_suspend(struct device *dev)
-               ^~~~~~~~~~~~~~~~~~~~
+Bytes 2727-6822 of 65535 are uninitialized
+Memory access of size 65535 starts at ffff88811b772559
+
+CPU: 0 UID: 0 PID: 11 Comm: kworker/0:1 Not tainted 6.16.0-rc4-syzkaller-00308-ga79a588fc176 #0 PREEMPT(undef) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+Workqueue: usb_hub_wq hub_event
+=====================================================
 
 
-vim +/dwc3_generic_runtime_idle +151 drivers/usb/dwc3/dwc3-generic-plat.c
-
-   106	
- > 107	static int dwc3_generic_suspend(struct device *dev)
-   108	{
-   109		struct dwc3_generic *dwc3 = dev_get_drvdata(dev);
-   110		int ret;
-   111	
-   112		ret = dwc3_pm_suspend(&dwc3->dwc);
-   113		if (ret)
-   114			return ret;
-   115	
-   116		clk_bulk_disable_unprepare(dwc3->num_clocks, dwc3->clks);
-   117	
-   118		return 0;
-   119	}
-   120	
- > 121	static int dwc3_generic_resume(struct device *dev)
-   122	{
-   123		struct dwc3_generic *dwc3 = dev_get_drvdata(dev);
-   124		int ret;
-   125	
-   126		ret = clk_bulk_prepare_enable(dwc3->num_clocks, dwc3->clks);
-   127		if (ret)
-   128			return ret;
-   129	
-   130		ret = dwc3_pm_resume(&dwc3->dwc);
-   131		if (ret)
-   132			return ret;
-   133	
-   134		return 0;
-   135	}
-   136	
- > 137	static int dwc3_generic_runtime_suspend(struct device *dev)
-   138	{
-   139		struct dwc3_generic *dwc3 = dev_get_drvdata(dev);
-   140	
-   141		return dwc3_runtime_suspend(&dwc3->dwc);
-   142	}
-   143	
- > 144	static int dwc3_generic_runtime_resume(struct device *dev)
-   145	{
-   146		struct dwc3_generic *dwc3 = dev_get_drvdata(dev);
-   147	
-   148		return dwc3_runtime_resume(&dwc3->dwc);
-   149	}
-   150	
- > 151	static int dwc3_generic_runtime_idle(struct device *dev)
-   152	{
-   153		struct dwc3_generic *dwc3 = dev_get_drvdata(dev);
-   154	
-   155		return dwc3_runtime_idle(&dwc3->dwc);
-   156	}
-   157	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
