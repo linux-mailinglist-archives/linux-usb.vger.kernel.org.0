@@ -1,190 +1,170 @@
-Return-Path: <linux-usb+bounces-25510-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25511-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9686AFA154
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 21:13:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A645AFA390
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Jul 2025 09:55:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A9825603AB
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jul 2025 19:13:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTP id 1F7DD189FF95
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Jul 2025 07:55:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A88F21858A;
-	Sat,  5 Jul 2025 19:13:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4376C1E0DBA;
+	Sun,  6 Jul 2025 07:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OoLxtOQS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480F020AF62
-	for <linux-usb@vger.kernel.org>; Sat,  5 Jul 2025 19:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3141D86DC
+	for <linux-usb@vger.kernel.org>; Sun,  6 Jul 2025 07:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751742814; cv=none; b=DOF5vNjkFWOaOJkcyv9LwkVj+8Kzlay42dGdHWdmAg6U/TSi2Ish2KxvT5fXxyfP7uKAYNM3rQddTX6A8Ur9fcc6j1yfMeqq+EwXHAp9SbschDJbVNk4Gi6IhV/yN0qSgVbOIbSPoWwamAO9IPUwBpSm67i/fo37HwqoJG2p3es=
+	t=1751788461; cv=none; b=VgkmERIzbaNE7tg818YNI1/0HLrgymejFwwV/68Sou1bmTuK112MAc0No3Xxd8riRjaynLvPBYdQ8qTXQmTIxmtw9SGlEC9k6uUufwLQxWWlP4hQPICazQjKxiFpkmFOrUeTskKxD3nBDIAaTC2RXk4TZx5VEvzFjAL0/wCb+bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751742814; c=relaxed/simple;
-	bh=sDs2FuQR9SAv9gueHnsljeOfKV0PFqXvuF6Js+kKAdM=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=H7it00bi7aSyLPVgS4oVZQdiC/AFErTDKd/XypR6FjDjLgSZuV7uaSZEq+EGC0wS1nNfsDooqqdKLk7eUi36DlLpqRI1H+KviSDFt+LPOxmivTg/rvSQ0jMIIoIvb70izlDUg0xgqo00Jij3EHkBI9wZeEh3pEDI9mSqkzzS+4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3ddbec809acso20599805ab.2
-        for <linux-usb@vger.kernel.org>; Sat, 05 Jul 2025 12:13:33 -0700 (PDT)
+	s=arc-20240116; t=1751788461; c=relaxed/simple;
+	bh=i05MAW1HoIvDZNsvly8FS8JlN32892CPcR3zw7xVcb0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CtP3Rl3GB3OgUTvBTF88zRNTCDnh3RD4aWH/PerzbzMA03EsQdzkGO2HUnfdynpfsgJFRLtwFd2ZUN0VWn4Gh/k5RqlFj0NBr+0awR4YGv5NKgMHOwZul9rcBiXVNKbC0cTCpTqEBzX90LH4E/A0o9rc/8A3vv7d8EsqfKsAP9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OoLxtOQS; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-450ddb35583so2015495e9.1
+        for <linux-usb@vger.kernel.org>; Sun, 06 Jul 2025 00:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1751788455; x=1752393255; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=gY+1w/IpSjoLelrC9L08nmljWaMiTWqrIdpFXYu9vp8=;
+        b=OoLxtOQSVLt8I5j30AxoYSluJ8xKl8cJg3dZTTcyUkyTwOf9pM1ruWhMkE6fWaJn1B
+         Pa2s5CKai3TSsmuL+7vnbbofOHG90IL+FwuZe0Zr/DBzo6qCjiRcRubz3LEbbHOLIH00
+         5t7On5i2N8AIlM+7R+ZMhal04M6M41dX48BldpEElGGOymTtvQDk5u3g6gLFbEXAfZCc
+         EF+s4aSN24rSFHs2KmfOpcIkyX29iuFW+BAXFYWwxwKpcnDk2bzUUipfRv7e4XL3DSBO
+         nw00lldxyniU68AZqUFgXb6y7rJSw0L7dEwVeP8GujpQUVoK9m2MoJPTDa3M65kyCfF/
+         gAnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751742812; x=1752347612;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gqRYkQJ4Gex/FmdSFSJ1VKHDBVaZ3K23NAVJRsP4Dqo=;
-        b=MJh62YP8ERtq0fmrRE+kkeb8lhdmkvVi9NFjz2h3VAEqM45tPM0VE9RRSpFwDtEB/M
-         urNeWimPhj0kY5xDzAGrjB97eawIHf9ELTaK7B2pw6x6d9kOeg0nBdm8pNCiqRo3ngb0
-         0qx6IVEIzXbC3tXXBgWqtxHhbI3R746+Nk3iHs8QjiuBUWuQogdQa5Elyf4YxNno7ktq
-         tVDvf6F5qR1OfD7hBhzNBZ506DAq+SqVwPnZgBG90AdgKVeQA7iZSQ7i1vgtyDk1ogVH
-         tgg33ClBtEdkpX3hp/FV9tOjrAc7MoUKrP91n2zN6MUErh+5GLhNz+JE7O8MtHrjIEqX
-         udwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUpXKzyk5Eq6q2v+nrFVSC0nhegL6i9rFXil6hnb5u9VmS6mzE9UqDJ6lWQzvi+Vl9wp1Ij54gHdVw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxU6LN097xztyoPLrK7uRZwjgun6m1E+Jw71UGPaWsufC1eBey3
-	npVMP/xTFVlAF14GSiCMVocGVz6LJ58Fc7czB3ngIMD9kdMOzNQkeeKdo5qMWTwEe/N3D94AwLy
-	wBLhOCHHxbpmc9w24wV/GvgMuThymNqkAP4AOctRkMidT1C0H2inlu1z/PTk=
-X-Google-Smtp-Source: AGHT+IE0GC55HxVfVfXZFZohjYGAnYJaxyWhKQlnKKthOT+fNFSIVWa/wK6D1/HezOQuA4M5jUQFIBUbrdXY5+SIXnCJg1WMTwY9
+        d=1e100.net; s=20230601; t=1751788455; x=1752393255;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gY+1w/IpSjoLelrC9L08nmljWaMiTWqrIdpFXYu9vp8=;
+        b=jIlDK1YT7cLq9v7PIbVYjaHomF3fEYpIaNQGDr/k7x3P7/HAuGCuGzpcELYYlSro3+
+         Zm6mBYFPJzE5FAkkD3C1amk9PPtMbVzKvnRlSIPAL4SlZxWGhuI3pBVLQR1CkCoWHgDG
+         jeqZZS2tGJbLrKv7t1IzagxLR6vcJ0JUKR4eVYZAC4rohlcfzuhRVIxoiflebeJTAnkC
+         EI2vBN3xQnzsO8rU+9IGwY+7OnlgaqvJ4W/7wy9BalhvSVOOJhBW9Jci0mh1VELrAdq8
+         ZUw+xXWUJI3n8Qh44coArjLtQpZYaFwgxy1H3AthxpOFv5ivU/GbcBNtyFolcr1a210y
+         bHBw==
+X-Gm-Message-State: AOJu0YxXcs6hbfPRKespFSKJtsNDYQ+y8DBCD9+94w5Bq8WKqeU0AIuA
+	8M12aqdNdr+4iVD9ohsajWlAqw+FqHtOdIkRe10+7bltemNgLZCD/leNEzqjmt5unCA=
+X-Gm-Gg: ASbGnctuIETDC9T3loLAtIugF2sx/L+Y300IDSf+Umn7tfU8aS4FDDHIZSyHNFeS+xG
+	6kI9jRwqqR4BVFc2Q1f7Volg2/qB2H0wKBRj+rHIxMIoIlWl4i/xHf8JNFgApQtYNn2hODoYlBB
+	sQfFsZwaHRaTT1nIOuGCVKpeZ3CLZbfoi7ZXqobNOg5Aud00YokZZzrfvOFKGFM4+XritqN5K+q
+	JcBs4r47zWcq8MKpDFJ9lVu70CKrtZYp9UTY18JPA2Paei8BGmqQVyvM16pqx5XJ5tCRkBRFvK7
+	Rvs9HAN7ueM8KcHgVQk0Ms71altHQvqUhMNs17KRhjfBilmfYRnyzg3DYyb6wRyiO+ELeiqJNwH
+	BO0TpWg==
+X-Google-Smtp-Source: AGHT+IG4TA19oJA/4NLEDCAtZNYyk5/Fvf1KUNRsATQ8NH8vXDbyFQpNYkvW01WeN1E9t9+6gYU+yg==
+X-Received: by 2002:a05:600c:1552:b0:453:6332:a98c with SMTP id 5b1f17b1804b1-454b35ef640mr26770155e9.1.1751788455272;
+        Sun, 06 Jul 2025 00:54:15 -0700 (PDT)
+Received: from [192.168.1.110] ([178.197.222.89])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454a9bde35dsm103473235e9.30.2025.07.06.00.54.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Jul 2025 00:54:14 -0700 (PDT)
+Message-ID: <9320092b-548d-4870-8d5f-d007a3713a81@linaro.org>
+Date: Sun, 6 Jul 2025 09:54:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2307:b0:3dd:d995:30ec with SMTP id
- e9e14a558f8ab-3e13eefe279mr26598985ab.12.1751742812434; Sat, 05 Jul 2025
- 12:13:32 -0700 (PDT)
-Date: Sat, 05 Jul 2025 12:13:32 -0700
-In-Reply-To: <68695144.a00a0220.c7b3.0045.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6869795c.a00a0220.c7b3.0048.GAE@google.com>
-Subject: Re: [syzbot] [usb?] KMSAN: kernel-usb-infoleak-after-free in usb_start_wait_urb
-From: syzbot <syzbot+27fe438b6370f95de4a5@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/2] dt-bindings: usb: dwc3: add support for SpacemiT
+ K1
+To: Ze Huang <huang.ze@linux.dev>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20250705-dwc3_generic-v5-0-9dbc53ea53d2@linux.dev>
+ <20250705-dwc3_generic-v5-1-9dbc53ea53d2@linux.dev>
+ <aGkkKEMyY1JG7Z80@monica.localdomain>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ 2+47PN9NZAOyb771QoVr8A==
+In-Reply-To: <aGkkKEMyY1JG7Z80@monica.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-syzbot has found a reproducer for the following issue on:
+On 05/07/2025 15:10, Ze Huang wrote:
+> On Sat, Jul 05, 2025 at 09:01:25PM +0800, Ze Huang wrote:
+>> Add support for the USB 3.0 Dual-Role Device (DRD) controller embedded
+>> in the SpacemiT K1 SoC. The controller is based on the Synopsys
+>> DesignWare Core USB 3 (DWC3) IP, supporting USB3.0 host mode and USB 2.0
+>> DRD mode.
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Signed-off-by: Ze Huang <huang.ze@linux.dev>
+>> ---
+> 
+> Hi Krzysztof,
+> 
+> I kept your Reviewed-by tag, as this version only includes minor updates:
+> - Dropped the `interconnects` property
+> - Updated the `resets` property to match the latest convention from Alex's patch
+> 
+> Let me know if you have any concerns.
 
-HEAD commit:    a79a588fc176 Merge tag 'pm-6.16-rc5' of git://git.kernel.o..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16942f70580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aa9af7332485152e
-dashboard link: https://syzkaller.appspot.com/bug?extid=27fe438b6370f95de4a5
-compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11132582580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10709c8c580000
+It's fine, thanks.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b7cf1187020f/disk-a79a588f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/47e08d61ef4b/vmlinux-a79a588f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/75d3bcd3c8e0/bzImage-a79a588f.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+27fe438b6370f95de4a5@syzkaller.appspotmail.com
-
-microsoft 0003:045E:07DA.0001: unknown main item tag 0x0
-microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
-=====================================================
-BUG: KMSAN: kernel-usb-infoleak-after-free in usb_submit_urb+0x5a1/0x2630 drivers/usb/core/urb.c:430
- usb_submit_urb+0x5a1/0x2630 drivers/usb/core/urb.c:430
- usb_start_wait_urb+0xc2/0x320 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x27c/0x5b0 drivers/usb/core/message.c:154
- usbhid_raw_request+0x4ab/0x690 drivers/hid/usbhid/hid-core.c:-1
- __hid_request+0x2bd/0x500 drivers/hid/hid-core.c:1989
- hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
- hidinput_connect+0x3bf5/0x5cc0 drivers/hid/hid-input.c:2327
- hid_connect+0x6b4/0x3440 drivers/hid/hid-core.c:2239
- hid_hw_start+0xfc/0x1e0 drivers/hid/hid-core.c:2354
- ms_probe+0x2e5/0x890 drivers/hid/hid-microsoft.c:391
- __hid_device_probe drivers/hid/hid-core.c:2724 [inline]
- hid_device_probe+0x536/0xab0 drivers/hid/hid-core.c:2761
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x4d1/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
- driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
- __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
- bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
- __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
- device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
- device_add+0x12a9/0x1c10 drivers/base/core.c:3692
- hid_add_device+0x5ed/0x7b0 drivers/hid/hid-core.c:2907
- usbhid_probe+0x1fec/0x2660 drivers/hid/usbhid/hid-core.c:1435
- usb_probe_interface+0xd04/0x1310 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x4d1/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
- driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
- __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
- bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
- __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
- device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
- device_add+0x12a9/0x1c10 drivers/base/core.c:3692
- usb_set_configuration+0x3493/0x3b70 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xfc/0x290 drivers/usb/core/generic.c:250
- usb_probe_device+0x38a/0x690 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x4d1/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
- driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
- __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
- bus_for_each_drv+0x3e3/0x680 drivers/base/bus.c:462
- __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
- device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
- device_add+0x12a9/0x1c10 drivers/base/core.c:3692
- usb_new_device+0x104b/0x20c0 drivers/usb/core/hub.c:2694
- hub_port_connect drivers/usb/core/hub.c:5566 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
- port_event drivers/usb/core/hub.c:5866 [inline]
- hub_event+0x5588/0x7580 drivers/usb/core/hub.c:5948
- process_one_work kernel/workqueue.c:3238 [inline]
- process_scheduled_works+0xb8e/0x1d80 kernel/workqueue.c:3321
- worker_thread+0xedf/0x1590 kernel/workqueue.c:3402
- kthread+0xd5c/0xf00 kernel/kthread.c:464
- ret_from_fork+0x1e0/0x310 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-
-Uninit was created at:
- free_pages_prepare mm/page_alloc.c:1173 [inline]
- __free_frozen_pages+0x179/0x1560 mm/page_alloc.c:2706
- free_frozen_pages+0x21/0x30 mm/page_alloc.c:2744
- __folio_put+0x435/0x460 mm/swap.c:112
- folio_put include/linux/mm.h:1356 [inline]
- put_page include/linux/mm.h:1425 [inline]
- anon_pipe_put_page+0x32e/0x620 fs/pipe.c:139
- anon_pipe_buf_release+0x39/0x50 fs/pipe.c:147
- pipe_buf_release include/linux/pipe_fs_i.h:282 [inline]
- pipe_update_tail fs/pipe.c:242 [inline]
- anon_pipe_read+0xaef/0x1e80 fs/pipe.c:361
- new_sync_read fs/read_write.c:491 [inline]
- vfs_read+0x857/0xf00 fs/read_write.c:572
- ksys_read fs/read_write.c:715 [inline]
- __do_sys_read fs/read_write.c:724 [inline]
- __se_sys_read fs/read_write.c:722 [inline]
- __x64_sys_read+0x1fb/0x4d0 fs/read_write.c:722
- x64_sys_call+0x39db/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:1
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xd9/0x210 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Bytes 2727-6822 of 65535 are uninitialized
-Memory access of size 65535 starts at ffff88811b772559
-
-CPU: 0 UID: 0 PID: 11 Comm: kworker/0:1 Not tainted 6.16.0-rc4-syzkaller-00308-ga79a588fc176 #0 PREEMPT(undef) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-Workqueue: usb_hub_wq hub_event
-=====================================================
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Best regards,
+Krzysztof
 
