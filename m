@@ -1,157 +1,115 @@
-Return-Path: <linux-usb+bounces-25522-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25523-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AB5DAFAF05
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 10:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 727D1AFAF1A
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 11:01:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E20E3A4EE9
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 08:55:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FB123A231F
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 09:01:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 763B628B7E9;
-	Mon,  7 Jul 2025 08:56:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1E828A71D;
+	Mon,  7 Jul 2025 09:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UZKq+XPj"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Tb+NA/Cg"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E7D25B1CB;
-	Mon,  7 Jul 2025 08:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9F228541F;
+	Mon,  7 Jul 2025 09:01:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751878572; cv=none; b=r1n/c31BWfUdInzkzf2Wl9uAnNNyV478FjLLhx02LDZ5DOniAJiQUX+P3c16v3LlIimkoPrGZHCzDGiaGs7Wbe3VoB++tWe9yVDYMom0/eoi4KAEG6P5ezpcnqRKUzN9wfjAjzXyPxlsVK1srjP5FbXcOGQH+IrfGC7ZjOhnnos=
+	t=1751878880; cv=none; b=qO6etwVIqMQZCRj7bOx+mZTO8kzLY2U+BGwkoSAHy+ZZ3SWyvn1474wjZptZ9lXYOYAKrNl2FyQYnU5hXEod16I6pLNqxi6MyCEnu24qIagtx7cmf070CpnNbVb8rRVfUcwFg2Iwp4P4qHfHPh2UrnqUmVZu2T5gXnQa5ipxFuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751878572; c=relaxed/simple;
-	bh=SOeB2ivJPIC0WQ2vqmociMUqoGvzw0NEeF95O7atMHc=;
+	s=arc-20240116; t=1751878880; c=relaxed/simple;
+	bh=owQYen0A3np2AWFZAuOj7mXVLYDF5MLfrCckdRW4AhQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DGfsmMb0r+cA68SuYWQMSKFK6BIEja24Y6nR7toCZvf0EMeVpYADUXl99++80dn/Ty6tDM7NTLFqOCKOsirZI7+cyyYGNTdsc1EWTgt508Yzkx3skI24mA+4Gj6NFRlW4tNeOZir7lY4w2tfS0tX2JtEKVnUh+HSIlSuDXkl5mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UZKq+XPj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08088C4CEE3;
-	Mon,  7 Jul 2025 08:56:10 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=I56PY5/kmCjlCzlIZnMBIXTvCiH+shZnup840Pq5zCTnqMVjK9XL5UoDkc7+CWAM8Tmw4OwtWTHzMjT+bwzyC3sVuOXNVzzoSFkBcp/GAxhykPkkKJIdz6OMNFGUQJkqY5+P82VE4Ott3WXh7V02Vwg/Q2mSkJx0rp/7nPL+3OI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Tb+NA/Cg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A49C4CEE3;
+	Mon,  7 Jul 2025 09:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751878571;
-	bh=SOeB2ivJPIC0WQ2vqmociMUqoGvzw0NEeF95O7atMHc=;
+	s=korg; t=1751878878;
+	bh=owQYen0A3np2AWFZAuOj7mXVLYDF5MLfrCckdRW4AhQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UZKq+XPjT8amFLCEXmbZYfmM9UM2sFle0P7xwpvUSwHHJ+DX0FP1BukqKQkmh2w5u
-	 7itZidU1WuyV3FeCE3OFKFy+woszdvI0D5Mos/bv2BjvIJYYT5yf8+nbAUDq/SMcAN
-	 IfxcAfqLjsBVEUZf3mZES4BwSkdP5w/peaGdxdv0=
-Date: Mon, 7 Jul 2025 10:56:08 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Abinash Singh <abinashlalotra@gmail.com>
-Cc: abinashsinghlalotra@gmail.com, johan@kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	oneukum@suse.com
-Subject: Re: [PATCH v2] usb: serial: usb_wwan: Fix data races by protecting
- dtr/rts state with a mutex
-Message-ID: <2025070759-reach-facelift-f562@gregkh>
-References: <2025062815-uninsured-twentieth-c41c@gregkh>
- <20250701214543.981626-1-abinashsinghlalotra@gmail.com>
+	b=Tb+NA/CgtxMr9uv74ndmI5dKqRBCbAMAJ8mwusqjA27rfKwBFnY52//0VC2Mbh4bz
+	 QAfsvfP7ChRTRKqtaxXNbi7QoqJ7A/Ma1iQH8kQk73X+2QLw6sapCBQF68ZGme+sHf
+	 osAfzDZVqEjh74uIW4D0nwK43fGzvjkmRmGilO5E=
+Date: Mon, 7 Jul 2025 11:01:15 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc: John Youn <John.Youn@synopsys.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v 6] usb: dwc2: gadget: Fix enter to hibernation for
+ UTMI+ PHY
+Message-ID: <2025070736-concierge-tumble-c7d9@gregkh>
+References: <692110d3c3d9bb2a91cedf24528a7710adc55452.1751458314.git.Minas.Harutyunyan@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250701214543.981626-1-abinashsinghlalotra@gmail.com>
+In-Reply-To: <692110d3c3d9bb2a91cedf24528a7710adc55452.1751458314.git.Minas.Harutyunyan@synopsys.com>
 
-On Wed, Jul 02, 2025 at 03:15:32AM +0530, Abinash Singh wrote:
-> The rts_state and dtr_state fields in usb_wwan were updated without
-> any locking, which could lead to data races if accessed from multiple
-> threads.
+On Wed, Jul 02, 2025 at 12:21:22PM +0000, Minas Harutyunyan wrote:
+> For UTMI+ PHY, according to programming guide, first should be set
+> PMUACTV bit then STOPPCLK bit. Otherwise, when the device issues
+> Remote Wakeup, then host notices disconnect instead.
+> For ULPI PHY, above mentioned bits must be set in reversed order:
+> STOPPCLK then PMUACTV.
 > 
-> Fixes proper locking using guard(mutex) to ensure
-> safe access to these shared fields. To avoid holding the lock during
-> USB control message transmission, the values are passed explicitly
-> to usb_wwan_send_setup().
-> 
-> This resolves two previously marked FIXME comments and improves
-> the thread safety of modem control line handling.
-> 
-> Signed-off-by: Abinash Singh <abinashsinghlalotra@gmail.com>
+> Fixes: 4483ef3c1685 ("usb: dwc2: Add hibernation updates for ULPI PHY")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
 > ---
-> v2:
-> - I missed the "v2" tag in the subject line earlier — added now, sorry about that.
-> - Regarding the concern about locking while calling functions: I was unsure if
->   it’s safe to hold the lock across `usb_wwan_send_setup()`, since it may block.
->   To be safe, I’ve changed the function to take `rts_state` and `dtr_state` as
->   arguments, so it no longer accesses shared state directly.
-> - I’ve now used `guard(mutex)` so the lock will automatically release when
->   `portdata` goes out of scope.
-> 
->    Is this the correct way to use gaurd if we don't want the lock held during
->    usb_wwan_send_setup() ?
-> 
-> > How was this tested?
-> 
-> I haven’t been able to test this patch due to lack of hardware access. If you
-> have any suggestions on how to test this kind of change without actual hardware,
-> I’d appreciate your guidance.
-> 
-> Thanks for the feedback!
-> ---
->  drivers/usb/serial/usb-wwan.h |  1 +
->  drivers/usb/serial/usb_wwan.c | 29 ++++++++++++++++-------------
->  2 files changed, 17 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/usb-wwan.h b/drivers/usb/serial/usb-wwan.h
-> index 519101945769..5a990fc2e140 100644
-> --- a/drivers/usb/serial/usb-wwan.h
-> +++ b/drivers/usb/serial/usb-wwan.h
-> @@ -59,6 +59,7 @@ struct usb_wwan_port_private {
->  	int ri_state;
->  
->  	unsigned long tx_start_time[N_OUT_URB];
-> +	struct mutex lock;  /* protects rts_state and dtr_state */
->  };
->  
->  #endif /* __LINUX_USB_USB_WWAN */
-> diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
-> index 0017f6e969e1..042d63aa8ec6 100644
-> --- a/drivers/usb/serial/usb_wwan.c
-> +++ b/drivers/usb/serial/usb_wwan.c
-> @@ -38,19 +38,16 @@
->   * Generate DTR/RTS signals on the port using the SET_CONTROL_LINE_STATE request
->   * in CDC ACM.
->   */
-> -static int usb_wwan_send_setup(struct usb_serial_port *port)
-> +static int usb_wwan_send_setup(struct usb_serial_port *port, int rts_state, int dtr_state)
->  {
->  	struct usb_serial *serial = port->serial;
-> -	struct usb_wwan_port_private *portdata;
->  	int val = 0;
->  	int ifnum;
->  	int res;
->  
-> -	portdata = usb_get_serial_port_data(port);
-> -
-> -	if (portdata->dtr_state)
-> +	if (dtr_state)
->  		val |= USB_CDC_CTRL_DTR;
-> -	if (portdata->rts_state)
-> +	if (rts_state)
->  		val |= USB_CDC_CTRL_RTS;
->  
->  	ifnum = serial->interface->cur_altsetting->desc.bInterfaceNumber;
-> @@ -80,11 +77,12 @@ void usb_wwan_dtr_rts(struct usb_serial_port *port, int on)
->  		return;
->  
->  	portdata = usb_get_serial_port_data(port);
-> -	/* FIXME: locking */
-> +	{
-> +	guard(mutex)(&portdata->lock);
+> Changes in v6:
+>  - Rabased on usb-next branch over commit 7481a97c5f49
+> Changes in v5:
+>  - Rebased on top of Linux 6.16-rc2
+> Changes in v4:
+>  - Rebased on top of Linux 6.15-rc6
+> Changes in v3:
+>  - Rebased on top of Linux 6.15-rc4
+> Changes in v2:
+>  - Added Cc: stable@vger.kernel.org
 
-This use of a { } without indenting the code is not good, and should
-have given you a coding style error, right?
+This constant rebasing is just not working, as this _STILL_ does not
+apply to either of my branches.  Are you sure you are doing this
+properly?  No other changes in your tree?
 
-Also, if you don't have the hardware to test this with, I wouldn't
-recommend working on adding locking without being able to verify it
-works in some way.
+Ah, I see the issue:
+
+> 
+>  drivers/usb/dwc2/gadget.c | 38 ++++++++++++++++++++++++++------------
+>  1 file changed, 26 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> index d5b622f78cf3..0637bfbc054e 100644
+> --- a/drivers/usb/dwc2/gadget.c
+> +++ b/drivers/usb/dwc2/gadget.c
+> @@ -5389,20 +5389,34 @@ int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg)
+>         if (gusbcfg & GUSBCFG_ULPI_UTMI_SEL) {
+>                 /* ULPI interface */
+>                 gpwrdn |= GPWRDN_ULPI_LATCH_EN_DURING_HIB_ENTRY;
+> -       }
+> -       dwc2_writel(hsotg, gpwrdn, GPWRDN);
+> -       udelay(10);
+> +               dwc2_writel(hsotg, gpwrdn, GPWRDN);
+> +               udelay(10);
+
+Your email client ate all the tabs and spit out spaces, making this
+impossible to apply to any branch anywhere.  Please fix your email
+client to be able to send patches out properly.
+
+Try sending one to yourself, and seeing if that can apply properly
+afterward.  If so, then try sending it out to the world again.
 
 thanks,
 
