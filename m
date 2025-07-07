@@ -1,53 +1,55 @@
-Return-Path: <linux-usb+bounces-25523-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25524-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 727D1AFAF1A
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 11:01:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60A38AFAF30
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 11:04:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FB123A231F
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 09:01:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C7551AA0FE8
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 09:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1E828A71D;
-	Mon,  7 Jul 2025 09:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D764D28C2C3;
+	Mon,  7 Jul 2025 09:04:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Tb+NA/Cg"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ovq0g8OF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9F228541F;
-	Mon,  7 Jul 2025 09:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E99328B511
+	for <linux-usb@vger.kernel.org>; Mon,  7 Jul 2025 09:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751878880; cv=none; b=qO6etwVIqMQZCRj7bOx+mZTO8kzLY2U+BGwkoSAHy+ZZ3SWyvn1474wjZptZ9lXYOYAKrNl2FyQYnU5hXEod16I6pLNqxi6MyCEnu24qIagtx7cmf070CpnNbVb8rRVfUcwFg2Iwp4P4qHfHPh2UrnqUmVZu2T5gXnQa5ipxFuc=
+	t=1751879084; cv=none; b=OQABFb/60L3csmxVHxpAjOePtKx00tQ/8zlub5eQugkSIRG7yX2vTeNHBu+5qC+mvQfeF0OibCMwkqxSEUf+Sfi/lv6QOOBRM61bRkO2anQ1iVq0IbyVa28E1rNw8eHI5C4x8FlLrpdcuh8iWMENKPohhaqkTxrjhWI+weWnFqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751878880; c=relaxed/simple;
-	bh=owQYen0A3np2AWFZAuOj7mXVLYDF5MLfrCckdRW4AhQ=;
+	s=arc-20240116; t=1751879084; c=relaxed/simple;
+	bh=AAaNmij3zAy58pf+DYkYQO0IFFApvlvYY5fuK0Boxc0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I56PY5/kmCjlCzlIZnMBIXTvCiH+shZnup840Pq5zCTnqMVjK9XL5UoDkc7+CWAM8Tmw4OwtWTHzMjT+bwzyC3sVuOXNVzzoSFkBcp/GAxhykPkkKJIdz6OMNFGUQJkqY5+P82VE4Ott3WXh7V02Vwg/Q2mSkJx0rp/7nPL+3OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Tb+NA/Cg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A49C4CEE3;
-	Mon,  7 Jul 2025 09:01:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=SrqnWtotfr0eSB3hS8/dqQYJdJHr+4zn8pfJxO9eGaNLC+oi8NGOp719iMnDsv9B1ieQEmes9D+ZiWVivm6a1HOxYrd1dGw0PyWIVwTuIqEYBNFU/5iiNIoee+2cAstk5R4J7mhaw8khBsr24N98kWrtOb5EQAEbfM5vD5B8P1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Ovq0g8OF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D80C4CEE3;
+	Mon,  7 Jul 2025 09:04:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751878878;
-	bh=owQYen0A3np2AWFZAuOj7mXVLYDF5MLfrCckdRW4AhQ=;
+	s=korg; t=1751879082;
+	bh=AAaNmij3zAy58pf+DYkYQO0IFFApvlvYY5fuK0Boxc0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Tb+NA/CgtxMr9uv74ndmI5dKqRBCbAMAJ8mwusqjA27rfKwBFnY52//0VC2Mbh4bz
-	 QAfsvfP7ChRTRKqtaxXNbi7QoqJ7A/Ma1iQH8kQk73X+2QLw6sapCBQF68ZGme+sHf
-	 osAfzDZVqEjh74uIW4D0nwK43fGzvjkmRmGilO5E=
-Date: Mon, 7 Jul 2025 11:01:15 +0200
+	b=Ovq0g8OFPgxtPSi+VRoxD7lcHjZKL1QJCN4ryPm0AnvKM4T0e8IXq0K5ABMuP0ELu
+	 5383O7pECZuMuBpnKqzyv2xr4lQKOEq8prrMM7/IXyXRjEI56WCwomCba486d0RQsY
+	 Vo3HJhgutm/pnf4wFZJSlld4no0Qexvy7m2RzMfs=
+Date: Mon, 7 Jul 2025 11:04:40 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc: John Youn <John.Youn@synopsys.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v 6] usb: dwc2: gadget: Fix enter to hibernation for
- UTMI+ PHY
-Message-ID: <2025070736-concierge-tumble-c7d9@gregkh>
-References: <692110d3c3d9bb2a91cedf24528a7710adc55452.1751458314.git.Minas.Harutyunyan@synopsys.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB4/Thunderbolt changes for v6.17 merge window
+ (early)
+Message-ID: <2025070732-monetary-unselect-1669@gregkh>
+References: <20250626155811.GL2824380@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,62 +58,23 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <692110d3c3d9bb2a91cedf24528a7710adc55452.1751458314.git.Minas.Harutyunyan@synopsys.com>
+In-Reply-To: <20250626155811.GL2824380@black.fi.intel.com>
 
-On Wed, Jul 02, 2025 at 12:21:22PM +0000, Minas Harutyunyan wrote:
-> For UTMI+ PHY, according to programming guide, first should be set
-> PMUACTV bit then STOPPCLK bit. Otherwise, when the device issues
-> Remote Wakeup, then host notices disconnect instead.
-> For ULPI PHY, above mentioned bits must be set in reversed order:
-> STOPPCLK then PMUACTV.
+On Thu, Jun 26, 2025 at 06:58:11PM +0300, Mika Westerberg wrote:
+> Hi Greg,
 > 
-> Fixes: 4483ef3c1685 ("usb: dwc2: Add hibernation updates for ULPI PHY")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-> ---
-> Changes in v6:
->  - Rabased on usb-next branch over commit 7481a97c5f49
-> Changes in v5:
->  - Rebased on top of Linux 6.16-rc2
-> Changes in v4:
->  - Rebased on top of Linux 6.15-rc6
-> Changes in v3:
->  - Rebased on top of Linux 6.15-rc4
-> Changes in v2:
->  - Added Cc: stable@vger.kernel.org
-
-This constant rebasing is just not working, as this _STILL_ does not
-apply to either of my branches.  Are you sure you are doing this
-properly?  No other changes in your tree?
-
-Ah, I see the issue:
-
+> I'm sending this one early due to my vacation starting after tomorrow. Just
+> a single documentation fix. Thanks!
 > 
->  drivers/usb/dwc2/gadget.c | 38 ++++++++++++++++++++++++++------------
->  1 file changed, 26 insertions(+), 12 deletions(-)
+> The following changes since commit 86731a2a651e58953fc949573895f2fa6d456841:
 > 
-> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-> index d5b622f78cf3..0637bfbc054e 100644
-> --- a/drivers/usb/dwc2/gadget.c
-> +++ b/drivers/usb/dwc2/gadget.c
-> @@ -5389,20 +5389,34 @@ int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg)
->         if (gusbcfg & GUSBCFG_ULPI_UTMI_SEL) {
->                 /* ULPI interface */
->                 gpwrdn |= GPWRDN_ULPI_LATCH_EN_DURING_HIB_ENTRY;
-> -       }
-> -       dwc2_writel(hsotg, gpwrdn, GPWRDN);
-> -       udelay(10);
-> +               dwc2_writel(hsotg, gpwrdn, GPWRDN);
-> +               udelay(10);
+>   Linux 6.16-rc3 (2025-06-22 13:30:08 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.17-rc1
 
-Your email client ate all the tabs and spit out spaces, making this
-impossible to apply to any branch anywhere.  Please fix your email
-client to be able to send patches out properly.
-
-Try sending one to yourself, and seeing if that can apply properly
-afterward.  If so, then try sending it out to the world again.
-
-thanks,
+Pulled and pushed out, thanks.
 
 greg k-h
 
