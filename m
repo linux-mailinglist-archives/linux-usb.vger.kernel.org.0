@@ -1,90 +1,216 @@
-Return-Path: <linux-usb+bounces-25557-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25558-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1324DAFBBDE
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 21:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D234AFBCF5
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 22:55:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61D87166518
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 19:48:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 796571703A2
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 20:55:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96E9425A320;
-	Mon,  7 Jul 2025 19:48:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB6026B97E;
+	Mon,  7 Jul 2025 20:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="esdLHl1G"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71E31CBA02
-	for <linux-usb@vger.kernel.org>; Mon,  7 Jul 2025 19:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A03B26CE13;
+	Mon,  7 Jul 2025 20:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751917685; cv=none; b=UlDd/3O7Wv9XdM9UQnFCHmZHT05EsOgaNp4rDGzPiSAlciFO3i4hB//2dWvxq0HGngSt+5DjdnquPbzxvLUpvXdfRVLVNc3LuElA/l9HIsd11YjlQfhMMKvJEvxUw1x6eTvB6vF5aD7AjYBCd4hlkICcK4PnESKdW+yUFcYksoI=
+	t=1751921746; cv=none; b=teSboUG7zJxWNLmBrSxtjMRwGNd14M+szIJBnllYcPvhvESeFEjfcJmKqR84B5MwKGVKdUXekYx3BCQQajkl1xBkNVUviS5l2741WPXYHiDB+dNn16Aw3G3vI9u9bopm1nCnhDNuGMm/RT0zKDTrf0Smk6sYdOE7uNMu+yJKAxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751917685; c=relaxed/simple;
-	bh=TuWmJzXscKf3ZHtljDfhNIF0AVhdGCIkXNPZJPrGjeA=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=nHDrcHuNK7VpsGTp9H7dZcHr2Mtbn+03jfgZK8BduzVPs9kknCQrNLCMsEFMg/aSSj02qdaPeC8YyFAoLtOcY9tdQOxgbUFc1JxWaMtYW8QEvKCEwCLDAwmRssvNd/Qj7cxzC1Tk3o943xJwTOBwTSzUIYXaPrduexshI7wC5Dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-86f4e2434b6so406966939f.2
-        for <linux-usb@vger.kernel.org>; Mon, 07 Jul 2025 12:48:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751917683; x=1752522483;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1hoWMOP+KagcUR6OfQbc7kG/bxEdCmumdthhOD57rYs=;
-        b=FOcNPIKNTCogCyKdEYjVcWvwE8ad/jkA8vsAUrWtu0/oGpRE3G/PnAakUBKK+qwH9x
-         52rT/wd5NSGOa5w2AlwzN4IoKGUxJ/v414V098xN09vwfms9CUZn93IVYK8AaDG52tDY
-         1fRuVy9Ge9IUJnIJvig8JjJNVp/YoVZbXUg6aGRRsZNwH+4J6TI47sncqrOizR/JbB4m
-         BfAgzlgzdn6lZD99qNp9JV/l9XOmo9ayjF6C010FKRs0D52byBtFx2Tb+8J6hiZd110R
-         WIWsnvPJFj1wEefQIsHtdp0p3K47AOPAwLB/8HZN1nGmyNOh2NTOHTf8S5xIdFhVd/GS
-         JikQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUXO1+nz9W5AVEihgWYAprLU0DKXr8aioiCCxL6UTJuAO8b59TU/mAijD9tIPYBwWo29O8G1So0iQ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+if0y02J2sLMHh/pg7n/S4GqD1G92UlR3rMitf5GL3ZXBDNkG
-	T0eAgwSuHiV5wrp+1yVPCwDUrDm0t7QNT8i8VttZwokideoYUrYUMoHCgu5ZZ7wLwEucES3HRMo
-	TNUH4jXtdZzkFcqcpDgOJVRhbSyBIJ/1uGK6hCB48wbmjZHfDgIWnCQEKQOQ=
-X-Google-Smtp-Source: AGHT+IGnNDtAp7BDNfzZPfiGJkUe1l1lIbuZMFhDCSKX5R4/PBHEIi/mHZOlZcFOgVDRnHaFxUGrJR5H9tfnPb+bqxnsyiYSsjL/
+	s=arc-20240116; t=1751921746; c=relaxed/simple;
+	bh=N2m18nhNQA4hki2dztBKwI3mRty+hyjFtNl6bA4Wodc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JVQx/tbddcZ/e1ZBXgNVXjeKu3dO32azgJAyd+5vzEpYx35qUkk7xe4Tc9wWXJTmZ4WRHAKPl+jSAw9u+Wo0eOJRrrfjSpL8ZHsnS9tQxeK2zqXZCALC1aZGUdo0XtseY1g/4yUH/Ye87iS84qrNuNFlmwJ7PhFtpbV3+IhYZKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=esdLHl1G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C420C4CEEF;
+	Mon,  7 Jul 2025 20:55:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751921745;
+	bh=N2m18nhNQA4hki2dztBKwI3mRty+hyjFtNl6bA4Wodc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=esdLHl1GyBSlq6xK35kbDEc8PgESk9H+3LXSa1vfDzeEVNeLVF+3i5M5tdb8IEsIo
+	 dHMtzTRwXoSCEweSgVW6Er+h9WqRL9FihJS9K8YVJJOYHc3ccA9pB7gs6RLfzHskq7
+	 tFNGFyawXk8N/E6k1nZfxNGzNktFmTVupxSpVCfNgvZF/4qtYblt1IVzodAedmwZBn
+	 wQ9f/MFVIjS3YOKiG+E1jvwLCYTbgVtqM6sROV2awkS5F7XzZ53QrgX/yPyxhPO1Sv
+	 8G/qANBP8lh5b0LrhFh6SfxZakHCGS4ZhgoM4pcmd2L3y0ThzzBAPpnTk9YFBd0Heu
+	 uBhyoN+n5+AbQ==
+Message-ID: <5ae0db7f-6528-4eeb-8747-09be203e0089@kernel.org>
+Date: Mon, 7 Jul 2025 22:55:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:6d0f:b0:85b:538e:1fad with SMTP id
- ca18e2360f4ac-876e15ada4dmr1462372439f.6.1751917683076; Mon, 07 Jul 2025
- 12:48:03 -0700 (PDT)
-Date: Mon, 07 Jul 2025 12:48:03 -0700
-In-Reply-To: <72fea4f2-40d7-4f9f-a08d-b1ada781256e@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <686c2473.a00a0220.6237c.0003.GAE@google.com>
-Subject: Re: [syzbot] [usb?] KASAN: slab-out-of-bounds Read in mon_copy_to_buff
-From: syzbot <syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com>
-To: contact@arnaud-lcm.com, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	manas18244@iiitd.ac.in, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 3/5] media: uvcvideo: Introduce dev->meta_formats
+To: Ricardo Ribalda <ribalda@chromium.org>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250707-uvc-meta-v8-0-ed17f8b1218b@chromium.org>
+ <20250707-uvc-meta-v8-3-ed17f8b1218b@chromium.org>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <20250707-uvc-meta-v8-3-ed17f8b1218b@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello,
+Hi,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+On 7-Jul-25 8:34 PM, Ricardo Ribalda wrote:
+> Right now, there driver supports devices with one or two metadata
+> formats. Prepare it to support more than two metadata formats.
+> 
+> This is achieved with the introduction of a new field `meta_formats`,
+> that contains the array of metadata formats supported by the device, in
+> the order expected by userspace.
+> 
+> Suggested-by: Hans de Goede <hansg@kernel.org>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Reported-by: syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com
-Tested-by: syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com
+Thanks, patch looks good to me:
 
-Tested on:
+Reviewed-by: Hans de Goede <hansg@kernel.org>
 
-commit:         d7b8f8e2 Linux 6.16-rc5
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=1517428c580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f51185bd4f40ad44
-dashboard link: https://syzkaller.appspot.com/bug?extid=8258d5439c49d4c35f43
-compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=122e9582580000
+Regards,
 
-Note: testing is done by a robot and is best-effort only.
+Hans
+
+
+
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c   |  2 ++
+>  drivers/media/usb/uvc/uvc_metadata.c | 38 +++++++++++++++++++++++++++++-------
+>  drivers/media/usb/uvc/uvcvideo.h     |  6 ++++++
+>  3 files changed, 39 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 62eb45435d8bec5c955720ecb46fb8936871e6cc..56ea20eeb7b9d5d92f3d837c15bdf11d536e9f2d 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2315,6 +2315,8 @@ static int uvc_probe(struct usb_interface *intf,
+>  		goto error;
+>  	}
+>  
+> +	uvc_meta_init(dev);
+> +
+>  	if (dev->quirks & UVC_QUIRK_NO_RESET_RESUME)
+>  		udev->quirks &= ~USB_QUIRK_RESET_RESUME;
+>  
+> diff --git a/drivers/media/usb/uvc/uvc_metadata.c b/drivers/media/usb/uvc/uvc_metadata.c
+> index 82de7781f5b6b70c5ba16bcba9e0741231231904..4bcbc22f47e67c52baf6e133f240131ff3d32a03 100644
+> --- a/drivers/media/usb/uvc/uvc_metadata.c
+> +++ b/drivers/media/usb/uvc/uvc_metadata.c
+> @@ -64,14 +64,20 @@ static int uvc_meta_v4l2_try_format(struct file *file, void *fh,
+>  	struct uvc_device *dev = stream->dev;
+>  	struct v4l2_meta_format *fmt = &format->fmt.meta;
+>  	u32 fmeta = fmt->dataformat;
+> +	u32 i;
+>  
+>  	if (format->type != vfh->vdev->queue->type)
+>  		return -EINVAL;
+>  
+> +	for (i = 0; (fmeta != dev->meta_formats[i]) && dev->meta_formats[i];
+> +	     i++)
+> +		;
+> +	if (!dev->meta_formats[i])
+> +		fmeta = V4L2_META_FMT_UVC;
+> +
+>  	memset(fmt, 0, sizeof(*fmt));
+>  
+> -	fmt->dataformat = fmeta == dev->info->meta_format
+> -			? fmeta : V4L2_META_FMT_UVC;
+> +	fmt->dataformat = fmeta;
+>  	fmt->buffersize = UVC_METADATA_BUF_SIZE;
+>  
+>  	return 0;
+> @@ -112,17 +118,21 @@ static int uvc_meta_v4l2_enum_formats(struct file *file, void *fh,
+>  	struct v4l2_fh *vfh = file->private_data;
+>  	struct uvc_streaming *stream = video_get_drvdata(vfh->vdev);
+>  	struct uvc_device *dev = stream->dev;
+> -	u32 index = fdesc->index;
+> +	u32 i;
+> +
+> +	if (fdesc->type != vfh->vdev->queue->type)
+> +		return -EINVAL;
+>  
+> -	if (fdesc->type != vfh->vdev->queue->type ||
+> -	    index > 1U || (index && !dev->info->meta_format))
+> +	for (i = 0; (i < fdesc->index) && dev->meta_formats[i]; i++)
+> +		;
+> +	if (!dev->meta_formats[i])
+>  		return -EINVAL;
+>  
+>  	memset(fdesc, 0, sizeof(*fdesc));
+>  
+>  	fdesc->type = vfh->vdev->queue->type;
+> -	fdesc->index = index;
+> -	fdesc->pixelformat = index ? dev->info->meta_format : V4L2_META_FMT_UVC;
+> +	fdesc->index = i;
+> +	fdesc->pixelformat = dev->meta_formats[i];
+>  
+>  	return 0;
+>  }
+> @@ -174,3 +184,17 @@ int uvc_meta_register(struct uvc_streaming *stream)
+>  					 V4L2_BUF_TYPE_META_CAPTURE,
+>  					 &uvc_meta_fops, &uvc_meta_ioctl_ops);
+>  }
+> +
+> +void uvc_meta_init(struct uvc_device *dev)
+> +{
+> +	unsigned int i = 0;
+> +
+> +	dev->meta_formats[i++] = V4L2_META_FMT_UVC;
+> +
+> +	if (dev->info->meta_format &&
+> +	    !WARN_ON(dev->info->meta_format == V4L2_META_FMT_UVC))
+> +		dev->meta_formats[i++] = dev->info->meta_format;
+> +
+> +	 /* IMPORTANT: for new meta-formats update UVC_MAX_META_DATA_FORMATS. */
+> +	dev->meta_formats[i++] = 0;
+> +}
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index 11d6e3c2ebdfbabd7bbe5722f88ff85f406d9bb6..b3c094c6591e7a71fc00e1096bcf493a83f330ad 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -572,6 +572,8 @@ struct uvc_status {
+>  	};
+>  } __packed;
+>  
+> +#define UVC_MAX_META_DATA_FORMATS 3
+> +
+>  struct uvc_device {
+>  	struct usb_device *udev;
+>  	struct usb_interface *intf;
+> @@ -582,6 +584,9 @@ struct uvc_device {
+>  
+>  	const struct uvc_device_info *info;
+>  
+> +	/* Zero-ended list of meta formats */
+> +	u32 meta_formats[UVC_MAX_META_DATA_FORMATS + 1];
+> +
+>  	atomic_t nmappings;
+>  
+>  	/* Video control interface */
+> @@ -751,6 +756,7 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+>  void uvc_video_clock_update(struct uvc_streaming *stream,
+>  			    struct vb2_v4l2_buffer *vbuf,
+>  			    struct uvc_buffer *buf);
+> +void uvc_meta_init(struct uvc_device *dev);
+>  int uvc_meta_register(struct uvc_streaming *stream);
+>  
+>  int uvc_register_video_device(struct uvc_device *dev,
+> 
+
 
