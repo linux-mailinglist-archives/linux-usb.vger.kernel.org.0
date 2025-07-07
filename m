@@ -1,227 +1,311 @@
-Return-Path: <linux-usb+bounces-25546-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25547-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E996AFB580
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 16:01:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5529AFB6DE
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 17:07:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78BF73A481F
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 14:01:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53FB91AA72ED
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 15:06:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B879298275;
-	Mon,  7 Jul 2025 14:01:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2Xzcc9vU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C45902E266E;
+	Mon,  7 Jul 2025 15:05:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2079.outbound.protection.outlook.com [40.107.92.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E2737083C;
-	Mon,  7 Jul 2025 14:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.79
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751896893; cv=fail; b=uCvD/isSkaKnHji8x9jQEmt7Rh2BN6JP0RJfCdd7Dj4MtgKkxNESlKy/ffdHWhyl1u7wQWF1kp+JREWejAySujWYuEi1VsFkH5nO2GDb+Wr2AgJgnhBE13rm+Z2kjo9jRCzu0ckyzfqX0LSjyh+90x9CaoMWECaZvc+i4dCI33U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751896893; c=relaxed/simple;
-	bh=70MZ2S520J+GCyCStlhNhMHAf2dUwDdTejp3N6gibYc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=aY/Bjft50Jx5jDsTdhl6XOxcPR2DlM0XFc/2/M2uBP0gRCs6pgMpg9oSRb4931uXztETme8/vuKA3+NIYH9H1mO0LNHugeoZoaaDiRp8xebqq8ghxWVlBQ18jPFUZUBrFFhzOW4uV4jIQMDS5Z4N7MUP+lW05iMWemNF+Lzt+rA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2Xzcc9vU; arc=fail smtp.client-ip=40.107.92.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=T8a1oeIPKTHLiUKeWn/bkTcqzpYJD34tU0oPRP20r7I/L1gYwy1uQDEKjF0pMku0AhXopMkUTLwFtbdF0ghU+cTZG653YHh6jVmmcl6VJKJBDa7sb8Wd64VID7NcnHVtR4gE7wg4Pple00c6miplS6A8M4WwQcVb9d7tSwCWONqIVO4YjXUPfcOXfXygAsdfi8ISg414B9oBj/gMlar+ChweeKXJ9naI6Ev6Hz76X2v0oNSEtVjtHGceV/6tyfPxOm8wFApMQd4xZGIXzfEjRHLV06OhHDgmS0ZSkL1+bq4GbUMdOiiywI6nTnTUdmCouuNPd8aE+IrO86EsEJFv3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JAJm77H+jnV9Izq+qVZvcfF8Hv1z+wVniGrrkGaK624=;
- b=ktfkYjDQJvWcZJ4w1ghVG/gK18jQvgv9/9ObnTpicKySBOB/MvbNb89PQCpLm9/crZxd3hkPDmz82Ki1hRPC+51kBi/K9DktDiYWLDhONXhamx0ZxTnrlaWRz9gJx1I9PVjZVX2+QsEMh21YFvugFF2t/aIhFBcKBGJ4TFnCczkXFoPHCDH0tuLwofwlH2tOXassePbZPnjG9K7HolukxXA3LLU6Nr/PSqtVM/q2z68WIDrSXe2/rM0S5HOukCfZLRoSJETwvh8LkrB7ZzOhm9r2GKnHoIV09DzgOR0t7NPu7f891d3Fni/ZuK5QAHvYuUSbI3yjDaqwsMMaafOHFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JAJm77H+jnV9Izq+qVZvcfF8Hv1z+wVniGrrkGaK624=;
- b=2Xzcc9vUZdLRvSdrf7H0BVslCV89LMi2UqvXyKiHmkTaxzxsv4GuF9NTA88Kca+EgjHaSEijlhkW7cWQMyqtWc3BI+Ut7qrAcyFyMVwX9vhFXaOMNHeLu0Ve3vkiDRKM69XOXM4OUN+5keo2+2bVoNBAhSp3swpOfiMDV6fK4aM=
-Received: from CH3PR12MB8726.namprd12.prod.outlook.com (2603:10b6:610:17b::15)
- by CY1PR12MB9626.namprd12.prod.outlook.com (2603:10b6:930:106::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.21; Mon, 7 Jul
- 2025 14:01:21 +0000
-Received: from CH3PR12MB8726.namprd12.prod.outlook.com
- ([fe80::9532:640e:4b24:7dbe]) by CH3PR12MB8726.namprd12.prod.outlook.com
- ([fe80::9532:640e:4b24:7dbe%5]) with mapi id 15.20.8901.024; Mon, 7 Jul 2025
- 14:01:20 +0000
-From: "Chary Chennoju, Srikanth" <srikanth.chary-chennoju@amd.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"Thinh.Nguyen@synopsys.com" <Thinh.Nguyen@synopsys.com>,
-	"m.grzeschik@pengutronix.de" <m.grzeschik@pengutronix.de>,
-	"Chris.Wulff@biamp.com" <Chris.Wulff@biamp.com>, "tiwai@suse.de"
-	<tiwai@suse.de>, "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Kalluri,
- Punnaiah Choudary" <punnaiah.choudary.kalluri@amd.com>
-Subject: RE: [PATCH 2/3] usb: gadget: f_sourcesink support for maxburst for
- bulk transfers
-Thread-Topic: [PATCH 2/3] usb: gadget: f_sourcesink support for maxburst for
- bulk transfers
-Thread-Index: AQHb7NiJoa/s1NjXRUqSEvUDsPz1zrQh+q0AgASDaHCAADL2gIAAAz+w
-Date: Mon, 7 Jul 2025 14:01:20 +0000
-Message-ID:
- <CH3PR12MB8726F8F10AE2094B5E94861AB14FA@CH3PR12MB8726.namprd12.prod.outlook.com>
-References: <20250704114013.3396795-1-srikanth.chary-chennoju@amd.com>
- <20250704114013.3396795-3-srikanth.chary-chennoju@amd.com>
- <cf2940e3-5430-4e84-916b-608c33028a7c@rowland.harvard.edu>
- <CH3PR12MB872633800DDD386DCE8169B6B14FA@CH3PR12MB8726.namprd12.prod.outlook.com>
- <e5f4942f-4a0d-44a6-a2b2-7d567d4d0ddc@rowland.harvard.edu>
-In-Reply-To: <e5f4942f-4a0d-44a6-a2b2-7d567d4d0ddc@rowland.harvard.edu>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-07-07T13:56:52.0000000Z;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
- Internal Distribution
- Only;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH3PR12MB8726:EE_|CY1PR12MB9626:EE_
-x-ms-office365-filtering-correlation-id: bcb6e69d-6e03-4984-6452-08ddbd5ec031
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?reOaGzIiEz2YOQLJr4hkWQGg1IqBIlLTW1Do1sLfL/fctnRT6wBGNEKcs/+z?=
- =?us-ascii?Q?VUpqq/dRsnSJ1W2a0tuc/5AxoR38AtcB0GeisuLhLlbz13HTi7KprXttXyod?=
- =?us-ascii?Q?GK2x6mYifg7BElMpuWrQTg5nsHiwWggEOGfDMsnrwG+FQNpL9bk5U4ZVwvEF?=
- =?us-ascii?Q?kQgoADiL8Z1uilxzusdKoPpE7UmYGawd4I7x2h/sKA/udxek8YtDMYpsFUWG?=
- =?us-ascii?Q?ORLhW5di4cQ9Vwdg6+MiAVv1RoUThY/fVvm1NrOdnakbcPQPurbRu+N9bi+C?=
- =?us-ascii?Q?0ZL+Uwwc8i1Kxxq2sG2d0zcGW7t9PvGcyTj2iMPcPwsYxoIfV2L7JOvqkTfl?=
- =?us-ascii?Q?qlgfvNBuVSVusJR3j9QAkAJjA5VjfHPu+sXJUyHJpHJ9YX5Db4Z8P52c/D2N?=
- =?us-ascii?Q?++bxwBgkdOne6sRxDEQzqcZXotz6nPrF137+BojteDXGFJ4SzKL+twMRyCLb?=
- =?us-ascii?Q?dhvxUq2G27BLYU2X/XS7zQBTntk0pZAnLFxAM7dIxFg6V8KDTF544O7mkR0S?=
- =?us-ascii?Q?qS0MzhGXXa/Ce1v1xvIfHOuS6+u4iwWrFqiWrW1whgi0yX+Jy7EZ68dC5xDW?=
- =?us-ascii?Q?wYMYJmwawCmQyehz0I4iuksT2OWI1oww8ztrRAfC4Nq+IeCqhVRTJE3Dl/eG?=
- =?us-ascii?Q?wpyLT9hC1et0IiSg+u7VuJa0ruBvgdv4kkfuEqN3QXwKmKNzyBfUiamq2cw9?=
- =?us-ascii?Q?q/aefvQjQYj3cjRQCmUzfSD7YUP7PWMLpkjX+iRDTIew8jjhVcG4dRoTr1tt?=
- =?us-ascii?Q?gqPkfLMGQPShIUanE8OoAFVZexLzGdNwATHncb3/UlKLliP8G9LFdtpUolaQ?=
- =?us-ascii?Q?Qq6e4m+LP/8XxW4vZl8EazKzcVlxjpfJpu3bUcdmipvmCnQs3Efic8qq9sVH?=
- =?us-ascii?Q?IiyOYiGLRhDzJnfV9syAUMyuuELBmZWIFbuaOkFCpK1MUEpEj5+7x4yUw6hG?=
- =?us-ascii?Q?j8e1BAuRbaH9ScIthMqgBrnQqYHkKI1B06ZK6NPWtk2fMhedQZafxgg6MWil?=
- =?us-ascii?Q?R6b9orVI9sVQexrdjHxvWwvpIddw23/35pJRnQl7zp953JbwK0X24rjxE+Ik?=
- =?us-ascii?Q?uLCTstslv42GwYKHI3ZgF5YI13qnGVnlPtgJPK8RnCk+sZXxWM/ob066AxT7?=
- =?us-ascii?Q?uypXTxSWFVxNlZC2FV8nLJc2M1r1UiFDq7lfZrynYZVHCksSBdb+V3c48jIr?=
- =?us-ascii?Q?PrC6zTxDtefY/mLKSjk3XAX63lshJuU3Q9n/mFTlgOnNmiWsqGpb2horLup2?=
- =?us-ascii?Q?h3vpbchC7XfybXWWlHpGpUxZPYco+3OK3SEPpQEHXsZWPWGKCK6smu30uEyV?=
- =?us-ascii?Q?7U4RqzA1YKKCvQaoMEEov3c3HEprGp9TYEE0MrlXWuK0CaDitA0smz75nWP9?=
- =?us-ascii?Q?6Uu7llHobymz60GqJeBMYFdWzEUmC09VIaJ30GhmUGU5KVJu8kFJSsbD16Fy?=
- =?us-ascii?Q?j0/td5fi50/cz8JTQLjbFEfupAqHA+WCY6BMvJgvRaCyU7xjz1bPhs9HtfXb?=
- =?us-ascii?Q?YoDJcPM/I/kZV4w=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8726.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?Tzt/gu2SY6GRz6o5sicaoonZj4gjj66iWWZ4/ZqQjFfiisuAjgAKQEa++hHU?=
- =?us-ascii?Q?5k+BLKH9KqnG1bZCrjiPxWsLZqADTIDo5PfV+BCZxNkkLImFR5efJU18MYz7?=
- =?us-ascii?Q?KTDhBgZerfk7youbd45dcexmdpd3ATfZ3X/rt51SUyAtafqOP9Y5ccUQDfDG?=
- =?us-ascii?Q?S1iLj6aEqhiUxVzDT983iquCSH5aRenN5RhtUbCjpK7v2G43ftnChYR23kL7?=
- =?us-ascii?Q?C7/j+IqWVC+cAu2vNFA/wwurSSQhQFQM4XK/A4wYrDkMPtm4HAynMw3TCBwB?=
- =?us-ascii?Q?kvvlQlM720LM5jcHrS+wIdGkitiDf6tKAZjrYuxekF8tDUpFkpPCHw1pCXC+?=
- =?us-ascii?Q?5iQvmeH6zbOxAJepca++1EXf/nRxo1c0DduV8K3C3ZR6MxoRrt4CDf5F+eKf?=
- =?us-ascii?Q?YN8p6SIux8aDWlYHHMO8RmSvziG4IIUgQQ52VJr7belFz7qypul40U9UGKTy?=
- =?us-ascii?Q?9tHyrVHuKlPdxArRiEXeYMJZ3cwAtfiag4q4bP1A9uHTMihQMa6dptrkh+hA?=
- =?us-ascii?Q?T0LRwsUV4OEdKrEcUCv5TIuBnvX8o89rtDjcfMG8gU4lxZDxRN9etWcRPpTn?=
- =?us-ascii?Q?pjR6bZqzureAGU1KL+sGQnkyKFx3/Ak0TBZUOtTOo94Zn2Rs8gUmudWT6517?=
- =?us-ascii?Q?BtzfdSThVqeYEidRMY+/YLd4WDumZQj7QnPgjoEuiQgVyR6a2N5F49UhceyE?=
- =?us-ascii?Q?7gzmK3zMapfU+Xe016ZjdtWMTeAXjNxfuWKN0oHNOgC9z1OmPa6wKD/3Yb6V?=
- =?us-ascii?Q?DVWjeseRnU0lfgcqT1AwQRuFSWKQkqAoMBVnHh5zN6n47f8en56Nct6yAiSO?=
- =?us-ascii?Q?nFPm+L5QuQkcLDBhpIQDS3ZWnx8zpVhhF6nx6fuByvCEm1iTmhII4CLQQdfJ?=
- =?us-ascii?Q?S1KmhP8oWggrfeeBh63Q9mCIsUgSO0UOwktU7H+hqza+v97+vcarX9FbbL3F?=
- =?us-ascii?Q?Uy+ORoTm4SZ9A+qTduoQXu1aGEjGaTF4QYgDCUl9SIQDrMhCFTgyUMwKrZc9?=
- =?us-ascii?Q?T5H1uLJhnsxG/FJK/R9o40knUhF4fiHM7woHjlCYWYtAMP1V1Uql99GMPQnM?=
- =?us-ascii?Q?oEJoo3Hz5crrKGg+Yb4xI+cm47EMestMwl8hONdi36cdTqrJaNjp9jSZqIUV?=
- =?us-ascii?Q?UeQ0j9VKTXw53gd8ihju6WAgusQXerGUNsNf4Z5lclZ9IQ/A8ImqFUcP7aSg?=
- =?us-ascii?Q?NxUqpPkfjOQYauctCSRbHXWq3q2fQ7La5EmWfgUtKHM13ZxL7fORRyshigSo?=
- =?us-ascii?Q?7ThlodAfdPcuw3is69PhrW12M4Zq+4RJh9odWieWhWp9pfvD0wtzD5jlSP1o?=
- =?us-ascii?Q?sMX37a0K0MEyki9Anv7/ynTz95FmFd0dpTPP3xlxCXL3ZlCC5LdcIyJHBHMT?=
- =?us-ascii?Q?gDMgzIwMBMmyCaRZYKHZR62sTpyp8kXgXSjGbAYzjBK2fIko5111Cm2GHgQL?=
- =?us-ascii?Q?lyORbh1VZltndmeLV1FleyTwSUudX7AmWMbUgXh2C6ocvG1iUKFCaawL99wh?=
- =?us-ascii?Q?PWHH3RBMHW9nqtG2BbHw137nI4zvItikxSyLrhZKraO9y7VJfLqbe6v/ZH0T?=
- =?us-ascii?Q?6+l/vhtOjSQ6m438e3g=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953E22E1C4E
+	for <linux-usb@vger.kernel.org>; Mon,  7 Jul 2025 15:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751900730; cv=none; b=FPKPru5emDcsPkJPlewGktR4WPxEvNaRQ0oP8me8xY5Hc8S4taB42laDw0X9M/xzcm+SOyCqSqtiWDkalAwlJiIiSmKTexsRtzDJ7a2WvR8mU7G73YY2KpXDpcmOzJUlqCBznkeVSeGDBvwFVDtG7GryNaj4xwE5hAswDC7Xtn8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751900730; c=relaxed/simple;
+	bh=tLsEvmpTEPZ7Au+JKedPt8SHI/CTNLdgOImtudHZkNc=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=SkVHIQKOYeG7Pu97kSWty5BmWvRQt8J7T7SdlxXzuaXOwNnEqFLLa7Izq/Bbhbvr7buDcBcshYqYEZ/GgtQoqfZtc59DN4eWcLlhvxa2SIedjx2etPdEYFt+QPYh6cTmcAesRBoxj0sFarVqbfmW7KiCoLRHUi1BLeRO4i2nCnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-3df40226ab7so77583085ab.0
+        for <linux-usb@vger.kernel.org>; Mon, 07 Jul 2025 08:05:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751900728; x=1752505528;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UNK9KFPckXoa55Cd3vuOw1L+hneZ7XqFUJyiYXLlMo4=;
+        b=rKirV10fG5KEQwxBsfayDaUdyUaKY1FLP8QXYJ7/AsDzlPygw2mvG3BIXxZ4pSPT8g
+         QgXmMsmhSaura5RczEAunKACZhkDSMONQRM2pXLAuML5QrxRhmeBj0/qENzserY5vR+V
+         9awhQHRTLUhWAtRa7DpeZtgwzlsx6GiIX/oxM+/HVfVBTm+z0qDfmzSnXEzRwA8cgq6o
+         CRkvvo5DrDU/WdHwl4OUkKPrPQSdBFyev93fwPic/3NdNE45nWTk9kY7BRAzuI90lfuK
+         +2FJoaVBGtI7fLEk8yXzIwj6EYTuL6IqiDXt7Mrp7CXywIRujR/YzK4Q8iiMwM8rDZH3
+         LhyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWpv2BGBTip5XzrScGezn2xp/zUQKPp8GCjFI3+AyDsxJGE9iydKHymbSQ1TJ6TFSp4qj0aPxmUDqw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOlFHefd1ueTCWa5t/a8d8/l1CP5ePNgJEy3e9awy2QoRSRCLS
+	xOvcxdgX6tGhMwv9dstan+8cEbsDvZv20lRVBWLILtS43Pc8FXH0pbhNmWFw+wWWeYKQVXwRips
+	8f29IdmjbJF6cJD/uYeP89ihVIPu6cT6pd+DqQpbp76lJathRARGWTR6SA50=
+X-Google-Smtp-Source: AGHT+IFWPfN1QvdHixA3oOfUrmekFjgZBZ7s0/ZGhIqfW68BYn0kzzhRyjGj3aL+9Pl2Pa0raddeMGzPLxcsndHdS32vTxV+NhGN
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8726.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bcb6e69d-6e03-4984-6452-08ddbd5ec031
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2025 14:01:20.5156
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HSt2b08CwmeIYl8ZtQyoitMu61pJ2P8X5iVjblyj4FZBeS7jcmoO3V605qk3iIBh5UXtAK9EFC3FMGXVJ6b1mQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY1PR12MB9626
+X-Received: by 2002:a05:6e02:b47:b0:3df:3464:ab86 with SMTP id
+ e9e14a558f8ab-3e13ee94da1mr85042135ab.9.1751900727622; Mon, 07 Jul 2025
+ 08:05:27 -0700 (PDT)
+Date: Mon, 07 Jul 2025 08:05:27 -0700
+In-Reply-To: <686bb229.a00a0220.c7b3.0081.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <686be237.a70a0220.29fe6c.0b0c.GAE@google.com>
+Subject: Re: [syzbot] [usb?] KASAN: slab-out-of-bounds Read in mon_copy_to_buff
+From: syzbot <syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-[AMD Official Use Only - AMD Internal Distribution Only]
+syzbot has found a reproducer for the following issue on:
 
-Hi Stern,
+HEAD commit:    d7b8f8e20813 Linux 6.16-rc5
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17e89582580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f51185bd4f40ad44
+dashboard link: https://syzkaller.appspot.com/bug?extid=8258d5439c49d4c35f43
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b3cbd4580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11b19f70580000
 
-Agreed. I can remove the comment as I have added the check for the value ba=
-sed on user input.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f933e0e4a6c5/disk-d7b8f8e2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a82be954c91b/vmlinux-d7b8f8e2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/66dbc3de1264/bzImage-d7b8f8e2.xz
 
-Regards,
-Srikanth
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com
 
-> -----Original Message-----
-> From: Alan Stern <stern@rowland.harvard.edu>
-> Sent: Monday, July 7, 2025 7:15 PM
-> To: Chary Chennoju, Srikanth <srikanth.chary-chennoju@amd.com>
-> Cc: gregkh@linuxfoundation.org; Thinh.Nguyen@synopsys.com;
-> m.grzeschik@pengutronix.de; Chris.Wulff@biamp.com; tiwai@suse.de; linux-
-> usb@vger.kernel.org; linux-kernel@vger.kernel.org; Kalluri, Punnaiah
-> Choudary <punnaiah.choudary.kalluri@amd.com>
-> Subject: Re: [PATCH 2/3] usb: gadget: f_sourcesink support for maxburst f=
-or
-> bulk transfers
->
-> Caution: This message originated from an External Source. Use proper
-> caution when opening attachments, clicking links, or responding.
->
->
-> On Mon, Jul 07, 2025 at 10:49:26AM +0000, Chary Chennoju, Srikanth wrote:
-> > [AMD Official Use Only - AMD Internal Distribution Only]
-> >
-> > Hi Stern,
-> >
-> > Thanks for your comments. If you are mentioning to have a check for the
-> value which user is providing, then there is a check which is carried out=
-(#34
-> to #37 in the patch). It limits to max burst value if user exceeds the su=
-pported
-> value.
->
-> > > > +     /*
-> > > > +      * Fill in the SS bulk descriptors from the module parameters=
-.
-> > > > +      * We assume that the user knows what they are doing and won'=
-t
-> > > > +      * give parameters that their UDC doesn't support.
-> > > > +      */
->
-> In that case this comment is wrong, isn't it?  You don't assume that the =
-user
-> knows what they are doing; you do check and limit the value to maxburst i=
-f
-> the user's value is too big.
->
-> Alan Stern
+microsoft 0003:045E:07DA.0001: unknown main item tag 0x0
+microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
+==================================================================
+BUG: KASAN: slab-out-of-bounds in mon_copy_to_buff+0xc2/0x170 drivers/usb/mon/mon_bin.c:252
+Read of size 3904 at addr ffff8880216bc6e1 by task kworker/0:2/1204
+
+CPU: 0 UID: 0 PID: 1204 Comm: kworker/0:2 Not tainted 6.16.0-rc5-syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:408 [inline]
+ print_report+0xcd/0x680 mm/kasan/report.c:521
+ kasan_report+0xe0/0x110 mm/kasan/report.c:634
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x100/0x1b0 mm/kasan/generic.c:189
+ __asan_memcpy+0x23/0x60 mm/kasan/shadow.c:105
+ mon_copy_to_buff+0xc2/0x170 drivers/usb/mon/mon_bin.c:252
+ mon_bin_get_data drivers/usb/mon/mon_bin.c:420 [inline]
+ mon_bin_event+0x1071/0x2050 drivers/usb/mon/mon_bin.c:606
+ mon_bus_submit+0xcf/0x140 drivers/usb/mon/mon_main.c:89
+ usbmon_urb_submit include/linux/usb/hcd.h:724 [inline]
+ usb_hcd_submit_urb+0x12d/0x1c60 drivers/usb/core/hcd.c:1518
+ usb_submit_urb+0x87c/0x1790 drivers/usb/core/urb.c:581
+ usb_start_wait_urb+0x104/0x4b0 drivers/usb/core/message.c:59
+ usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+ usb_control_msg+0x326/0x4a0 drivers/usb/core/message.c:154
+ usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:928 [inline]
+ usbhid_raw_request+0x58f/0x700 drivers/hid/usbhid/hid-core.c:1299
+ __hid_request+0x296/0x3c0 drivers/hid/hid-core.c:1989
+ hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
+ hidinput_connect+0x1ada/0x2bd0 drivers/hid/hid-input.c:2327
+ hid_connect+0x13f3/0x1a60 drivers/hid/hid-core.c:2239
+ hid_hw_start drivers/hid/hid-core.c:2354 [inline]
+ hid_hw_start+0xaa/0x140 drivers/hid/hid-core.c:2345
+ ms_probe+0x195/0x500 drivers/hid/hid-microsoft.c:391
+ __hid_device_probe drivers/hid/hid-core.c:2724 [inline]
+ hid_device_probe+0x360/0x720 drivers/hid/hid-core.c:2761
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ hid_add_device+0x373/0xa60 drivers/hid/hid-core.c:2907
+ usbhid_probe+0xd38/0x13f0 drivers/hid/usbhid/hid-core.c:1435
+ usb_probe_interface+0x303/0x9c0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
+ usb_probe_device+0xef/0x3e0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ usb_new_device+0xd07/0x1a20 drivers/usb/core/hub.c:2694
+ hub_port_connect drivers/usb/core/hub.c:5566 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
+ port_event drivers/usb/core/hub.c:5866 [inline]
+ hub_event+0x2eb7/0x4fa0 drivers/usb/core/hub.c:5948
+ process_one_work+0x9cf/0x1b70 kernel/workqueue.c:3238
+ process_scheduled_works kernel/workqueue.c:3321 [inline]
+ worker_thread+0x6c8/0xf10 kernel/workqueue.c:3402
+ kthread+0x3c5/0x780 kernel/kthread.c:464
+ ret_from_fork+0x5d4/0x6f0 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+Allocated by task 1204:
+ kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
+ kasan_save_track+0x14/0x30 mm/kasan/common.c:68
+ poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
+ __kasan_kmalloc+0xaa/0xb0 mm/kasan/common.c:394
+ kasan_kmalloc include/linux/kasan.h:260 [inline]
+ __do_kmalloc_node mm/slub.c:4328 [inline]
+ __kmalloc_noprof+0x223/0x510 mm/slub.c:4340
+ __hid_request+0x2c/0x3c0 drivers/hid/hid-core.c:1980
+ hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
+ hidinput_connect+0x1ada/0x2bd0 drivers/hid/hid-input.c:2327
+ hid_connect+0x13f3/0x1a60 drivers/hid/hid-core.c:2239
+ hid_hw_start drivers/hid/hid-core.c:2354 [inline]
+ hid_hw_start+0xaa/0x140 drivers/hid/hid-core.c:2345
+ ms_probe+0x195/0x500 drivers/hid/hid-microsoft.c:391
+ __hid_device_probe drivers/hid/hid-core.c:2724 [inline]
+ hid_device_probe+0x360/0x720 drivers/hid/hid-core.c:2761
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ hid_add_device+0x373/0xa60 drivers/hid/hid-core.c:2907
+ usbhid_probe+0xd38/0x13f0 drivers/hid/usbhid/hid-core.c:1435
+ usb_probe_interface+0x303/0x9c0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
+ usb_probe_device+0xef/0x3e0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ usb_new_device+0xd07/0x1a20 drivers/usb/core/hub.c:2694
+ hub_port_connect drivers/usb/core/hub.c:5566 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
+ port_event drivers/usb/core/hub.c:5866 [inline]
+ hub_event+0x2eb7/0x4fa0 drivers/usb/core/hub.c:5948
+ process_one_work+0x9cf/0x1b70 kernel/workqueue.c:3238
+ process_scheduled_works kernel/workqueue.c:3321 [inline]
+ worker_thread+0x6c8/0xf10 kernel/workqueue.c:3402
+ kthread+0x3c5/0x780 kernel/kthread.c:464
+ ret_from_fork+0x5d4/0x6f0 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+
+The buggy address belongs to the object at ffff8880216bc6e0
+ which belongs to the cache kmalloc-8 of size 8
+The buggy address is located 1 bytes inside of
+ allocated 7-byte region [ffff8880216bc6e0, ffff8880216bc6e7)
+
+The buggy address belongs to the physical page:
+page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x216bc
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+page_type: f5(slab)
+raw: 00fff00000000000 ffff88801b841500 ffffea00009fbac0 dead000000000002
+raw: 0000000000000000 0000000080800080 00000000f5000000 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x52cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP), pid 1, tgid 1 (swapper/0), ts 2412854036, free_ts 2374376433
+ set_page_owner include/linux/page_owner.h:32 [inline]
+ post_alloc_hook+0x1c0/0x230 mm/page_alloc.c:1704
+ prep_new_page mm/page_alloc.c:1712 [inline]
+ get_page_from_freelist+0x1321/0x3890 mm/page_alloc.c:3669
+ __alloc_frozen_pages_noprof+0x261/0x23f0 mm/page_alloc.c:4959
+ alloc_pages_mpol+0x1fb/0x550 mm/mempolicy.c:2419
+ alloc_slab_page mm/slub.c:2451 [inline]
+ allocate_slab mm/slub.c:2619 [inline]
+ new_slab+0x23b/0x330 mm/slub.c:2673
+ ___slab_alloc+0xd9c/0x1940 mm/slub.c:3859
+ __slab_alloc.constprop.0+0x56/0xb0 mm/slub.c:3949
+ __slab_alloc_node mm/slub.c:4024 [inline]
+ slab_alloc_node mm/slub.c:4185 [inline]
+ __do_kmalloc_node mm/slub.c:4327 [inline]
+ __kmalloc_noprof+0x2f2/0x510 mm/slub.c:4340
+ kmalloc_noprof include/linux/slab.h:909 [inline]
+ kzalloc_noprof include/linux/slab.h:1039 [inline]
+ acpi_ns_internalize_name+0x144/0x220 drivers/acpi/acpica/nsutils.c:331
+ acpi_ns_get_node_unlocked+0x163/0x310 drivers/acpi/acpica/nsutils.c:666
+ acpi_ns_get_node+0x4c/0x70 drivers/acpi/acpica/nsutils.c:726
+ acpi_get_handle+0x105/0x270 drivers/acpi/acpica/nsxfname.c:98
+ acpi_has_method+0x7a/0xc0 drivers/acpi/utils.c:672
+ acpi_show_attr drivers/acpi/device_sysfs.c:560 [inline]
+ acpi_attr_is_visible+0x435/0x540 drivers/acpi/device_sysfs.c:588
+ create_files fs/sysfs/group.c:65 [inline]
+ internal_create_group+0x501/0xf30 fs/sysfs/group.c:183
+ internal_create_groups+0x9d/0x150 fs/sysfs/group.c:223
+page last free pid 1 tgid 1 stack trace:
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ free_pages_prepare mm/page_alloc.c:1248 [inline]
+ __free_frozen_pages+0x7fe/0x1180 mm/page_alloc.c:2706
+ __kmem_cache_do_shrink+0x30b/0x380 mm/slub.c:6137
+ acpi_os_purge_cache+0x15/0x20 drivers/acpi/osl.c:1605
+ acpi_purge_cached_objects+0x86/0x100 drivers/acpi/acpica/utxface.c:239
+ acpi_initialize_objects+0x47/0xa0 drivers/acpi/acpica/utxfinit.c:250
+ acpi_bus_init drivers/acpi/bus.c:1367 [inline]
+ acpi_init+0x168/0xb60 drivers/acpi/bus.c:1456
+ do_one_initcall+0x120/0x6e0 init/main.c:1274
+ do_initcall_level init/main.c:1336 [inline]
+ do_initcalls init/main.c:1352 [inline]
+ do_basic_setup init/main.c:1371 [inline]
+ kernel_init_freeable+0x5c2/0x900 init/main.c:1584
+ kernel_init+0x1c/0x2b0 init/main.c:1474
+ ret_from_fork+0x5d4/0x6f0 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+
+Memory state around the buggy address:
+ ffff8880216bc580: fa fc fc fc fa fc fc fc 00 fc fc fc fa fc fc fc
+ ffff8880216bc600: 00 fc fc fc 00 fc fc fc fa fc fc fc 00 fc fc fc
+>ffff8880216bc680: fa fc fc fc fa fc fc fc 00 fc fc fc 07 fc fc fc
+                                                       ^
+ ffff8880216bc700: 00 fc fc fc fa fc fc fc fa fc fc fc fa fc fc fc
+ ffff8880216bc780: fa fc fc fc fa fc fc fc fa fc fc fc fa fc fc fc
+==================================================================
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
