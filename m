@@ -1,48 +1,55 @@
-Return-Path: <linux-usb+bounces-25527-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25528-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11788AFB048
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 11:51:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 337C9AFB063
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 11:54:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EC613AC7D1
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 09:51:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E20C61897166
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 09:54:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A717A293C63;
-	Mon,  7 Jul 2025 09:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSep1Zqy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9FB0292B23;
+	Mon,  7 Jul 2025 09:53:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FE5291C1F;
-	Mon,  7 Jul 2025 09:50:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C022D27B4E5;
+	Mon,  7 Jul 2025 09:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751881807; cv=none; b=cm1BYnNA0VIpRd1BzxFaW0Jqxe1WElN8RZxbEbP/QR6GA3N29uk9l/eq0Lxweumi/I4hwp1IOyPhPhKInvUKRD76QGpHcyB+4+PWdeVgAMNk0KkQ/JYH6DDD+Hn6QeGWivynWOeGvJ+NRSvLVVEhSi0CkE5E8omtWLH/ehDQ3AE=
+	t=1751882001; cv=none; b=upsIznX73q2GwHFdEZKMemWcHVLhPUvxEIqfadST8p5rltHs36SunisN+q/HYtw4RDZdEdxC3EY8qYZmYGhl7wb2Dx9Fl3rgRblK24G762w4z2/bkg1EmBbiR+x99gH3j2jwMjHnWZcppBC76Snzfig9DiGrax6ieNWBKnAGzq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751881807; c=relaxed/simple;
-	bh=7KaMEj8xzP0ksk4G6oStKO53a2h7yxZ7Hc/eGxrDOXQ=;
+	s=arc-20240116; t=1751882001; c=relaxed/simple;
+	bh=8ikOpE89nvt2c13af32uAx4FAwR6RstV2FdUjQu/CSY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AJSL27xx+2gvFD1HnwrIKXLrsD7uoV2geNS3OvUO7b4NhHCXLiBoT1KX71fgzgWV5gr6949G3Uku6H+78qxXZZ6ljWumhIIVRZc0MbV4BRoECWJ8Zg7fGuMQ3BtCruj6TJVsdaW6Y2aTEd1WmmWTagYwskQx40Xqx8lO06nGrLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSep1Zqy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BDCFC4CEE3;
-	Mon,  7 Jul 2025 09:50:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751881806;
-	bh=7KaMEj8xzP0ksk4G6oStKO53a2h7yxZ7Hc/eGxrDOXQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lSep1Zqyp2fCZ2aHu/ClmOtBmegeHNX1KWMkwEJSwk1hm3x0Igup/b4yK6iYkOeaK
-	 BTv45DfgHNxl++y+8O9k3KhzSeoP0YJECwvbqvNyO2KwOPqWScF3JYnAuiVubwW9o2
-	 1VfHEu2GpUuCeBi+pfhyvVJUrO4BHYIX75qD0r0OIqvAD9ZZPhjcyf9RWsl9aaSQAn
-	 CmoDak9t7OhOWnRB9Z23mD6iDLzv4jA0OSO+nJCizbi5CJyrc3sg2W3EyA9ylppM3/
-	 9uo+ShwcOXcinxILcSHQPapGk5JQxJCaIzGQttT9eE+/qlEq6/rDcesj7BolOdutPh
-	 E60aO22ywZ0XQ==
-Message-ID: <a4380f08-bd39-42ea-a77d-7a6662ad8a34@kernel.org>
-Date: Mon, 7 Jul 2025 11:50:01 +0200
+	 In-Reply-To:Content-Type; b=NSZeF61X6JtXNazCwpPqbh5G8qPxuss78XlRFzZYrlekWpNvquk7/7YEPBGCLgRN91nYtKejF72OS2+CxRIKi9g9kYuWvejMm/8tmsTBeniiRIM2heaVRdHOvoparu8B1NwsEsnDyW2zy6HSBD8lq1DLY6aMn2eymmtuqAY+jQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 2e93fc545b1811f0b29709d653e92f7d-20250707
+X-CID-CACHE: Type:Local,Time:202507071739+08,HitQuantity:1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:2ab2d498-7f91-40bb-bdd8-b619344a3bb3,IP:0,U
+	RL:0,TC:10,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-META: VersionHash:6493067,CLOUDID:0e0ec62399c8d822338bf1a4d728e3dd,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:4,Content:0|52,EDM:-3
+	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
+	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 1,FCT|NGT
+X-CID-BAS: 1,FCT|NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 2e93fc545b1811f0b29709d653e92f7d-20250707
+X-User: dengjie03@kylinos.cn
+Received: from [10.42.12.86] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <dengjie03@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 428882174; Mon, 07 Jul 2025 17:53:06 +0800
+Message-ID: <2c4af4f8-5763-4ebf-8070-c7eabf43fe5e@kylinos.cn>
+Date: Mon, 7 Jul 2025 17:52:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,186 +57,68 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/3] media: uvcvideo: use
- usb_alloc_noncoherent/usb_free_noncoherent()
-To: Xu Yang <xu.yang_2@nxp.com>, ezequiel@vanguardiasur.com.ar,
- mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
- gregkh@linuxfoundation.org, mingo@kernel.org, tglx@linutronix.de,
- andriy.shevchenko@linux.intel.com, viro@zeniv.linux.org.uk,
- thomas.weissschuh@linutronix.de
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-References: <20250704095751.73765-1-xu.yang_2@nxp.com>
- <20250704095751.73765-3-xu.yang_2@nxp.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <20250704095751.73765-3-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-Hi,
-
-On 4-Jul-25 11:57, Xu Yang wrote:
-> This will use USB noncoherent API to alloc/free urb buffers, then
-> uvc driver needn't to do dma sync operations by itself.
-> 
-> Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hansg@kernel.org>
-
-Regards,
-
-Hans
+Subject: Re: [PATCH v2] usb: storage: Ignore UAS driver for SanDisk Extreme
+ Pro 55AF storage device
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: stern@rowland.harvard.edu, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+References: <2025070422-punctured-opal-f51e@gregkh>
+ <20250707062507.39531-1-dengjie03@kylinos.cn>
+ <2025070725-circle-recite-bc04@gregkh>
+From: Jie Deng <dengjie03@kylinos.cn>
+In-Reply-To: <2025070725-circle-recite-bc04@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-> ---
-> Changes in v5:
->  - add Rb tag
-> Changes in v4:
->  - remove uvc_stream_to_dmadev()
-> Changes in v3:
->  - no changes
-> ---
->  drivers/media/usb/uvc/uvc_video.c | 61 +++++++------------------------
->  1 file changed, 14 insertions(+), 47 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index e3567aeb0007..a75af314e46b 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -1275,20 +1275,6 @@ static inline enum dma_data_direction uvc_stream_dir(
->  		return DMA_TO_DEVICE;
->  }
->  
-> -static inline struct device *uvc_stream_to_dmadev(struct uvc_streaming *stream)
-> -{
-> -	return bus_to_hcd(stream->dev->udev->bus)->self.sysdev;
-> -}
-> -
-> -static int uvc_submit_urb(struct uvc_urb *uvc_urb, gfp_t mem_flags)
-> -{
-> -	/* Sync DMA. */
-> -	dma_sync_sgtable_for_device(uvc_stream_to_dmadev(uvc_urb->stream),
-> -				    uvc_urb->sgt,
-> -				    uvc_stream_dir(uvc_urb->stream));
-> -	return usb_submit_urb(uvc_urb->urb, mem_flags);
-> -}
-> -
->  /*
->   * uvc_video_decode_data_work: Asynchronous memcpy processing
->   *
-> @@ -1310,7 +1296,7 @@ static void uvc_video_copy_data_work(struct work_struct *work)
->  		uvc_queue_buffer_release(op->buf);
->  	}
->  
-> -	ret = uvc_submit_urb(uvc_urb, GFP_KERNEL);
-> +	ret = usb_submit_urb(uvc_urb->urb, GFP_KERNEL);
->  	if (ret < 0)
->  		dev_err(&uvc_urb->stream->intf->dev,
->  			"Failed to resubmit video URB (%d).\n", ret);
-> @@ -1736,12 +1722,6 @@ static void uvc_video_complete(struct urb *urb)
->  	/* Re-initialise the URB async work. */
->  	uvc_urb->async_operations = 0;
->  
-> -	/* Sync DMA and invalidate vmap range. */
-> -	dma_sync_sgtable_for_cpu(uvc_stream_to_dmadev(uvc_urb->stream),
-> -				 uvc_urb->sgt, uvc_stream_dir(stream));
-> -	invalidate_kernel_vmap_range(uvc_urb->buffer,
-> -				     uvc_urb->stream->urb_size);
-> -
->  	/*
->  	 * Process the URB headers, and optionally queue expensive memcpy tasks
->  	 * to be deferred to a work queue.
-> @@ -1750,7 +1730,7 @@ static void uvc_video_complete(struct urb *urb)
->  
->  	/* If no async work is needed, resubmit the URB immediately. */
->  	if (!uvc_urb->async_operations) {
-> -		ret = uvc_submit_urb(uvc_urb, GFP_ATOMIC);
-> +		ret = usb_submit_urb(uvc_urb->urb, GFP_ATOMIC);
->  		if (ret < 0)
->  			dev_err(&stream->intf->dev,
->  				"Failed to resubmit video URB (%d).\n", ret);
-> @@ -1765,17 +1745,15 @@ static void uvc_video_complete(struct urb *urb)
->   */
->  static void uvc_free_urb_buffers(struct uvc_streaming *stream)
->  {
-> -	struct device *dma_dev = uvc_stream_to_dmadev(stream);
-> +	struct usb_device *udev = stream->dev->udev;
->  	struct uvc_urb *uvc_urb;
->  
->  	for_each_uvc_urb(uvc_urb, stream) {
->  		if (!uvc_urb->buffer)
->  			continue;
->  
-> -		dma_vunmap_noncontiguous(dma_dev, uvc_urb->buffer);
-> -		dma_free_noncontiguous(dma_dev, stream->urb_size, uvc_urb->sgt,
-> -				       uvc_stream_dir(stream));
-> -
-> +		usb_free_noncoherent(udev, stream->urb_size, uvc_urb->buffer,
-> +				     uvc_stream_dir(stream), uvc_urb->sgt);
->  		uvc_urb->buffer = NULL;
->  		uvc_urb->sgt = NULL;
->  	}
-> @@ -1786,26 +1764,13 @@ static void uvc_free_urb_buffers(struct uvc_streaming *stream)
->  static bool uvc_alloc_urb_buffer(struct uvc_streaming *stream,
->  				 struct uvc_urb *uvc_urb, gfp_t gfp_flags)
->  {
-> -	struct device *dma_dev = uvc_stream_to_dmadev(stream);
-> -
-> -	uvc_urb->sgt = dma_alloc_noncontiguous(dma_dev, stream->urb_size,
-> -					       uvc_stream_dir(stream),
-> -					       gfp_flags, 0);
-> -	if (!uvc_urb->sgt)
-> -		return false;
-> -	uvc_urb->dma = uvc_urb->sgt->sgl->dma_address;
-> -
-> -	uvc_urb->buffer = dma_vmap_noncontiguous(dma_dev, stream->urb_size,
-> -						 uvc_urb->sgt);
-> -	if (!uvc_urb->buffer) {
-> -		dma_free_noncontiguous(dma_dev, stream->urb_size,
-> -				       uvc_urb->sgt,
-> -				       uvc_stream_dir(stream));
-> -		uvc_urb->sgt = NULL;
-> -		return false;
-> -	}
-> +	struct usb_device *udev = stream->dev->udev;
->  
-> -	return true;
-> +	uvc_urb->buffer = usb_alloc_noncoherent(udev, stream->urb_size,
-> +						gfp_flags, &uvc_urb->dma,
-> +						uvc_stream_dir(stream),
-> +						&uvc_urb->sgt);
-> +	return !!uvc_urb->buffer;
->  }
->  
->  /*
-> @@ -1953,6 +1918,7 @@ static int uvc_init_video_isoc(struct uvc_streaming *stream,
->  		urb->complete = uvc_video_complete;
->  		urb->number_of_packets = npackets;
->  		urb->transfer_buffer_length = size;
-> +		urb->sgt = uvc_urb->sgt;
->  
->  		for (i = 0; i < npackets; ++i) {
->  			urb->iso_frame_desc[i].offset = i * psize;
-> @@ -2009,6 +1975,7 @@ static int uvc_init_video_bulk(struct uvc_streaming *stream,
->  				  size, uvc_video_complete, uvc_urb);
->  		urb->transfer_flags = URB_NO_TRANSFER_DMA_MAP;
->  		urb->transfer_dma = uvc_urb->dma;
-> +		urb->sgt = uvc_urb->sgt;
->  
->  		uvc_urb->urb = urb;
->  	}
-> @@ -2120,7 +2087,7 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
->  
->  	/* Submit the URBs. */
->  	for_each_uvc_urb(uvc_urb, stream) {
-> -		ret = uvc_submit_urb(uvc_urb, gfp_flags);
-> +		ret = usb_submit_urb(uvc_urb->urb, gfp_flags);
->  		if (ret < 0) {
->  			dev_err(&stream->intf->dev,
->  				"Failed to submit URB %u (%d).\n",
-
+在 2025/7/7 16:47, Greg KH 写道:
+>   　> So ignore UAS driver for this device.
+> > 
+> > Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
+> > ---
+> > v2:
+> > 	* According to the file modification rules (sort by VendorID 
+> > 	  first, then by ProductID.) Add the newly added "UNUSUAL_DEV" 
+> > 	  in the correct position.
+> > v1:
+> > 	* The newly added "UNUSUAL_DEV" was directly added to the end 
+> > 	  without modifying the format according to the file.
+> > 
+> > ---
+> >  drivers/usb/storage/unusual_uas.h | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+> > index 1477e31d7763..6b1a08e2e724 100644
+> > --- a/drivers/usb/storage/unusual_uas.h
+> > +++ b/drivers/usb/storage/unusual_uas.h
+> > @@ -52,6 +52,13 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
+> >  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> >  		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
+> >  
+> > +/* Reported-by: Jie Deng <dengjie03@kylinos.cn> */
+> > +UNUSUAL_DEV(0x0781, 0x55af, 0x0000, 0x9999,
+> > +		"SanDisk",
+> > +		"Extreme Pro 55AF",
+> > +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> > +		US_FL_IGNORE_UAS),
+> > +
+> >  /* Reported-by: Zhihong Zhou <zhouzhihong@greatwall.com.cn> */
+> >  UNUSUAL_DEV(0x0781, 0x55e8, 0x0000, 0x9999,
+> >  		"SanDisk",
+> > -- 
+> > 2.25.1
+>
+> Why is there two "v2" patches sent here?  Shouldn't this be "v3"?
+>
+> confused,
+>
+> greg k-h 　 　 　 　 　 　 　 　 　 　　
+>
+The first sent V2 patch was missing the description of the
+differences between V1 and V2 patches. The V2 patch sent for
+the second time only adds a description of the differences
+from the V1 patch compared to the V2 patch sent for the first time.
+There is no modification to the code. So it is rashly believed
+that it does not need to be defined as a V3 patch.
 
