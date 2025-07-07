@@ -1,334 +1,347 @@
-Return-Path: <linux-usb+bounces-25542-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25543-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59B24AFB26E
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 13:40:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0CABAFB280
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 13:44:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 018041AA2D22
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 11:40:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F305C1AA138D
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 11:44:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63FD0299AAF;
-	Mon,  7 Jul 2025 11:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DC2D29A331;
+	Mon,  7 Jul 2025 11:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="C2IHLFPU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F4F29993D
-	for <linux-usb@vger.kernel.org>; Mon,  7 Jul 2025 11:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D1A2951BD
+	for <linux-usb@vger.kernel.org>; Mon,  7 Jul 2025 11:44:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751888428; cv=none; b=cMS+CPmUY2morM+ySPhKE4Z6kl7iOJU/XAxrBiOQVxai7hJBOD0yHxCxso+IpVaL+D9RiSORr5Cx7oPVtEUDVims16fRlxFCfPFkC0z8F5MhZa7fBIv3aKjL9EMmxtRkuMyoPSAXriCy3abXXJD9RKI+lZosaMfuP73DwD9tf5k=
+	t=1751888665; cv=none; b=p/mWTjLWvLh5xjNKsD5nCTw7ruw99sMJShAK60MVGTn90cetA+dXL8cxhA6WI5aJ4u/FNGmPegLSRW3NMQBib7cYWDi4Ryq4haJ3x/mp70n90RpJXeKkD8RXvTqyDcOVBue2EwbvPmdXuNjX8CtUchFyULLkvbsnHtqrrprDhb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751888428; c=relaxed/simple;
-	bh=idwr+HzZ3j1lbCILV2az0UxxCvI1mBazJerAH8T9kvQ=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=LoTdzidxnC+SgMPjyrxsDbFOHPRgQuExkNWPXLk0p2CE3dcQH6JYKk5HM1BykVQYhXBft6wZ8oQU3pqio0/VpcvA2peSkAvnqmTdJfdk1HBtVwd+mvmIYF/yRVt2CoJ/u4ddbL8BJ1EuSc7yJ7DeMzJvmwVu47SxGoRIuShnCPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3de3b5b7703so16242935ab.1
-        for <linux-usb@vger.kernel.org>; Mon, 07 Jul 2025 04:40:25 -0700 (PDT)
+	s=arc-20240116; t=1751888665; c=relaxed/simple;
+	bh=f8RJ+DitmfZ4xbh6kkh9v9uuyJ0l7Z2ubyGai5pB8TI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nB7bd90soR226pEdI2zjqTdKHBM95pYtGnOFHcdpLbnPOawNBzeRCNM9lM5h5a8J3QPbx+N7eDk6eoqdxDnJQl5VzkI00CLFlEymMFLl0bW1IsPSQWX8Qjo9E2QAywAaei07fLkvFiftX0qAerIpbKb9+NhyIsQrHsKB4+T3LeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=C2IHLFPU; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-553b3316160so3637609e87.2
+        for <linux-usb@vger.kernel.org>; Mon, 07 Jul 2025 04:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1751888662; x=1752493462; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EeLoSM7pzBdYskymtjqKlwv9zdVc21GR+UaEdj1iAvo=;
+        b=C2IHLFPULznDqlA3Wx9ThMUqKIyK1VXl4Vcu850IN2vILgDJM9bgJceqQyk81O1z7f
+         jefHk/hoFEEz8fNMpoUCQ7YHexyXMXb2yNYPaPdOVbaCjOUmta1Ykh/U63aHmO+I8/DM
+         9XCSA9x3IvDAOU6OJwjUmkTs5rqAj7fz/tUbc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751888425; x=1752493225;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k/ATQwYuI2IRVQHijpZHdpUXlZjbZtTlnyQfbopTOqM=;
-        b=kKCfplfZQFG4uvs/lWjPG3IAajhtxB2ZymmNCMRElq+O65mbWUXzvor9Xyh0wOHw+4
-         rRLkfCrlCmalhMYmRv3fR6cSHleqaqotqkGQxmrx5fSDMh0dKVMooM8K0/d35oNWR33V
-         rGZBilGG+BVjyR7cIZNIOA8FrA5anPVoW0fwue1KBHtjaP1KTOul+ZAItYqtR9h8Ksrk
-         1OWJZ+E/HzpYL+QcQnoRfKKgfTIaUiLhTQlwCADdiW05v59ZchfektoXVU5KgFjQRPqp
-         jdCegwfY3ne6d8rqRaGOGoyZsQL8x6Q6YN94PIOnUGRAmFjE1PlNGqi4FBTjE0PBPUZC
-         hrpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWYGSYTMysR7xU9PUHQIBliHHKxy93kX6iM8yfNdCNnMetRBj4mnZfHwx/xS1Pvc1pFdzLohe0xdAU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxks6jsCXNJ+4ipuZ2LyOdNW40i3ZbNFfmSOVFSMydqdzl/Tyav
-	UWzr3YOdw9RGqNDc1XOruY9h1RD1TZy6WEypEwM/N4VNnk/2/jPL/B8RYS12TZ0yaeeepSviJXR
-	eacsWziRxX/sQ1kwAqfmB9k/5HXQepprFA7V+NSgUL1fnQnO8aANknGkpBh8=
-X-Google-Smtp-Source: AGHT+IEJTawIgOmT5vnDNYxGMIIYmzXvMcmSp8NA50/+iG9Hmw24A9L3lGDiTpYEDpTDrPkpIaUhgTBX3vhHY5EAxw6+pKE2TAx4
+        d=1e100.net; s=20230601; t=1751888662; x=1752493462;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EeLoSM7pzBdYskymtjqKlwv9zdVc21GR+UaEdj1iAvo=;
+        b=fGNa/p5jcI+0sC4VfBu84thvml3JPotDKbsor59GzaXhmOfkY74LOBeIqy2H1erMzx
+         Wlqn7e6uHD9bpcUbl68xplVV5gF3Kkvv/xXnr4uVNAlGfTD20Jg91uPsTKGCrT2EW39S
+         ZorSlAKiDY//6wki2REsKsQn/6LypE7iDXTpbsorkceEMu5XA7Upw9GAcVxj71HKkYd/
+         XmPmf9cnvUZf8HNc4Ka9FBOESqIpgofP+Ue4KwnBcoDy91/FgWXEhUVnTYDX7VKmQNsp
+         CZBThBNH6uITuOnZpmMWHGgVSzmKRhWWIqMCZpZs0CGy0VsiFMUN3WtlsrZqx1xM+K79
+         F1ng==
+X-Forwarded-Encrypted: i=1; AJvYcCXYXx6f1luvbm9ikcjF2I9itwvl06m4qM8+flxAC1PUCp1lcnlmQfoE2M1mcj9sjxFyCz//6J7Itdk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyldgCQczdknJb9rz6ClwgS8ggLhxNzbYjUUG/w/UemODgB2z8e
+	P/dnh1s7arlTAB0w4NlX7NPcyIod9h2tBctMBCLz3nCRu6JdzLYDO9v1wtYHSOTxWTKhHZiA9Tv
+	43KE=
+X-Gm-Gg: ASbGnctUaban2wGVGv9thoMCj31Aop1PJUy/gzWaieTnNCyUuXpOAU7vFvtoibQLeSj
+	NGjQEj60vUFcO/hLbb3l0p+Kp3l9Ladi2iCzEtCYkV6i1+v4H/cD7WXesGFUaqoZR33sd0OGxt1
+	BPYXbVZUUNG+s/UD0hN9Pip0dHbee5qvn7miY4ouTFoy4cEAYL6xOQyL3x2uLa45sYObWSHfoqu
+	j71bOIIEsXtgt9JttG4VtqJ8eLMBLssphEIxyjwtouBLX3TgMuXKyKVj1cJOSRuTm20uGIrmJT7
+	eMMTH+MrPcJtq6qyxllMkk1mdtRbueJFru6Wao4adWGYZFqJn4drM06HzZ+BjUp8qazkFUU064d
+	PZNfgbXzu5TTFD0oInUHkOmsPag9r
+X-Google-Smtp-Source: AGHT+IGs9Y9nVatNsEB5IIfr9+46Nx9kFBUj/P2up/kLERgjysDwgTFvbFkARcoybPhEjc6W8M5h8g==
+X-Received: by 2002:a05:6512:6c4:b0:553:25f4:695c with SMTP id 2adb3069b0e04-557ab4e9f53mr3272998e87.50.1751888661491;
+        Mon, 07 Jul 2025 04:44:21 -0700 (PDT)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-556383bbaf4sm1296103e87.49.2025.07.07.04.44.19
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Jul 2025 04:44:20 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-32b5226e6beso27052361fa.2
+        for <linux-usb@vger.kernel.org>; Mon, 07 Jul 2025 04:44:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWdHS9YtHfwKiGGlesFNe8vzhNMSa2LRMensycJQZzXWTQy7Lm+sueBazDGoFlLpxFDlVMAZZqevEU=@vger.kernel.org
+X-Received: by 2002:a2e:8a9b:0:b0:32a:778d:be76 with SMTP id
+ 38308e7fff4ca-32f092c6cb8mr15725141fa.26.1751888659299; Mon, 07 Jul 2025
+ 04:44:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:378b:b0:3df:49b4:8cd6 with SMTP id
- e9e14a558f8ab-3e136f11795mr115103435ab.7.1751888425312; Mon, 07 Jul 2025
- 04:40:25 -0700 (PDT)
-Date: Mon, 07 Jul 2025 04:40:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <686bb229.a00a0220.c7b3.0081.GAE@google.com>
-Subject: [syzbot] [usb?] KASAN: slab-out-of-bounds Read in mon_copy_to_buff
-From: syzbot <syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20250617-uvc-meta-v7-0-9c50623e2286@chromium.org>
+ <20250617-uvc-meta-v7-4-9c50623e2286@chromium.org> <60643043-4543-4882-81fe-18a809d02b1c@kernel.org>
+In-Reply-To: <60643043-4543-4882-81fe-18a809d02b1c@kernel.org>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Mon, 7 Jul 2025 13:44:06 +0200
+X-Gmail-Original-Message-ID: <CANiDSCsqB6ktOXPg5S+He4bk8X_xA9y1r9AE9qc1AZ=edDYfrQ@mail.gmail.com>
+X-Gm-Features: Ac12FXyMgZJcDLsLBARWJcOJliOjvsCtrHA-WbCVwiSE3PPGiKY4lEVDW4cSxQA
+Message-ID: <CANiDSCsqB6ktOXPg5S+He4bk8X_xA9y1r9AE9qc1AZ=edDYfrQ@mail.gmail.com>
+Subject: Re: [PATCH v7 4/5] media: uvcvideo: Introduce V4L2_META_FMT_UVC_MSXU_1_5
+To: Hans de Goede <hansg@kernel.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+On Mon, 7 Jul 2025 at 13:34, Hans de Goede <hansg@kernel.org> wrote:
+>
+> Hi Ricardo,
+>
+> Thank you for the new version of this series.
+>
+> On 17-Jun-25 16:42, Ricardo Ribalda wrote:
+> > The UVC driver provides two metadata types V4L2_META_FMT_UVC, and
+> > V4L2_META_FMT_D4XX. The only difference between the two of them is that
+> > V4L2_META_FMT_UVC only copies PTS, SCR, size and flags, and
+> > V4L2_META_FMT_D4XX copies the whole metadata section.
+> >
+> > Now we only enable V4L2_META_FMT_D4XX for the Intel D4xx family of
+> > devices, but it is useful to have the whole metadata payload for any
+> > device where vendors include other metadata, such as the one described by
+> > Microsoft:
+> > https://learn.microsoft.com/en-us/windows-hardware/drivers/stream/mf-capture-metadata
+> >
+> > This patch introduces a new format V4L2_META_FMT_UVC_MSXU_1_5, that is
+> > identical to V4L2_META_FMT_D4XX.
+> >
+> > Let the user enable this format with a quirk for now. This way they can
+> > test if their devices provide useful metadata without rebuilding the
+> > kernel. They can later contribute patches to auto-quirk their devices.
+> > We will also work in methods to auto-detect devices compatible with this
+> > new metadata format.
+> >
+> > Suggested-by: Hans de Goede <hdegoede@redhat.com>
+> > Reviewed-by: Hans de Goede <hansg@kernel.org>
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+> >  .../userspace-api/media/v4l/meta-formats.rst       |  1 +
+> >  .../media/v4l/metafmt-uvc-msxu-1-5.rst             | 23 ++++++++++++++++++++++
+> >  MAINTAINERS                                        |  1 +
+> >  drivers/media/usb/uvc/uvc_metadata.c               | 20 +++++++++++++++++--
+> >  drivers/media/usb/uvc/uvcvideo.h                   |  1 +
+> >  drivers/media/v4l2-core/v4l2-ioctl.c               |  1 +
+> >  include/uapi/linux/videodev2.h                     |  1 +
+> >  7 files changed, 46 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
+> > index bb6876cfc271e1a0543eee4209d6251e1a6a73cc..0de80328c36bf148051a19abe9e5241234ddfe5c 100644
+> > --- a/Documentation/userspace-api/media/v4l/meta-formats.rst
+> > +++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
+> > @@ -20,6 +20,7 @@ These formats are used for the :ref:`metadata` interface only.
+> >      metafmt-pisp-fe
+> >      metafmt-rkisp1
+> >      metafmt-uvc
+> > +    metafmt-uvc-msxu-1-5
+> >      metafmt-vivid
+> >      metafmt-vsp1-hgo
+> >      metafmt-vsp1-hgt
+> > diff --git a/Documentation/userspace-api/media/v4l/metafmt-uvc-msxu-1-5.rst b/Documentation/userspace-api/media/v4l/metafmt-uvc-msxu-1-5.rst
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..dd1c3076df243d770a13e7f6d07c3296a269e16a
+> > --- /dev/null
+> > +++ b/Documentation/userspace-api/media/v4l/metafmt-uvc-msxu-1-5.rst
+> > @@ -0,0 +1,23 @@
+> > +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+> > +
+> > +.. _v4l2-meta-fmt-uvc-msxu-1-5:
+> > +
+> > +***********************************
+> > +V4L2_META_FMT_UVC_MSXU_1_5 ('UVCM')
+> > +***********************************
+> > +
+> > +Microsoft(R)'s UVC Payload Metadata.
+> > +
+> > +
+> > +Description
+> > +===========
+> > +
+> > +V4L2_META_FMT_UVC_MSXU_1_5 buffers follow the metadata buffer layout of
+> > +V4L2_META_FMT_UVC with the only difference that it includes all the UVC
+> > +metadata in the `buffer[]` field, not just the first 2-12 bytes.
+> > +
+> > +The metadata format follows the specification from Microsoft(R) [1].
+> > +
+> > +.. _1:
+> > +
+> > +[1] https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/uvc-extensions-1-5
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index e8f3dc93a56921924f57e7d5a03ea2fa182a4448..87101630e528297c57b22ffc2fe553e3864d25cc 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -25816,6 +25816,7 @@ S:    Maintained
+> >  W:   http://www.ideasonboard.org/uvc/
+> >  T:   git git://linuxtv.org/media.git
+> >  F:   Documentation/userspace-api/media/drivers/uvcvideo.rst
+> > +F:   Documentation/userspace-api/media/v4l/metafmt-uvc-msxu-1-5.rst
+> >  F:   Documentation/userspace-api/media/v4l/metafmt-uvc.rst
+> >  F:   drivers/media/common/uvc.c
+> >  F:   drivers/media/usb/uvc/
+> > diff --git a/drivers/media/usb/uvc/uvc_metadata.c b/drivers/media/usb/uvc/uvc_metadata.c
+> > index bc84e849174397f41d1e20bf890a876eeb5a9c67..b09f81d907d64f7d7a3b0dc52de319879b7e68be 100644
+> > --- a/drivers/media/usb/uvc/uvc_metadata.c
+> > +++ b/drivers/media/usb/uvc/uvc_metadata.c
+> > @@ -190,13 +190,29 @@ int uvc_meta_init(struct uvc_device *dev)
+> >       static const u32 uvch_only[] = {V4L2_META_FMT_UVC, 0};
+> >       static const u32 d4xx_format[] = {V4L2_META_FMT_UVC, V4L2_META_FMT_D4XX,
+> >                                         0};
+> > +     static const u32 all_formats[] = {V4L2_META_FMT_UVC, V4L2_META_FMT_D4XX,
+> > +                                       V4L2_META_FMT_UVC_MSXU_1_5, 0};
+> > +     static const u32 ms_format[] = {V4L2_META_FMT_UVC,
+> > +                                     V4L2_META_FMT_UVC_MSXU_1_5, 0};
+>
+> Hmm, this does not look great, I guess we are not expecting any
+> new metadata formats soon but just needing the 4 arrays here and
+> then ... (continued below).
 
-syzbot found the following issue on:
-
-HEAD commit:    b4911fb0b060 Merge tag 'mmc-v6.16-rc1' of git://git.kernel..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1681f982580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8b0724e6945b4773
-dashboard link: https://syzkaller.appspot.com/bug?extid=8258d5439c49d4c35f43
-compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4347c5e481b1/disk-b4911fb0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/94e212cacf21/vmlinux-b4911fb0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8e0269b32eb1/bzImage-b4911fb0.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com
-
-microsoft 0003:045E:07DA.000D: unknown main item tag 0x0
-microsoft 0003:045E:07DA.000D: unknown main item tag 0x0
-microsoft 0003:045E:07DA.000D: unknown main item tag 0x0
-microsoft 0003:045E:07DA.000D: unknown main item tag 0x0
-microsoft 0003:045E:07DA.000D: unknown main item tag 0x0
-microsoft 0003:045E:07DA.000D: unknown main item tag 0x0
-==================================================================
-BUG: KASAN: slab-out-of-bounds in mon_copy_to_buff+0xc2/0x170 drivers/usb/mon/mon_bin.c:252
-Read of size 4032 at addr ffff8880330e0801 by task kworker/0:6/5887
-
-CPU: 0 UID: 0 PID: 5887 Comm: kworker/0:6 Not tainted 6.16.0-rc4-syzkaller-00049-gb4911fb0b060 #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:408 [inline]
- print_report+0xcd/0x680 mm/kasan/report.c:521
- kasan_report+0xe0/0x110 mm/kasan/report.c:634
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x100/0x1b0 mm/kasan/generic.c:189
- __asan_memcpy+0x23/0x60 mm/kasan/shadow.c:105
- mon_copy_to_buff+0xc2/0x170 drivers/usb/mon/mon_bin.c:252
- mon_bin_get_data drivers/usb/mon/mon_bin.c:420 [inline]
- mon_bin_event+0x1071/0x2050 drivers/usb/mon/mon_bin.c:606
- mon_bus_submit+0xcf/0x140 drivers/usb/mon/mon_main.c:89
- usbmon_urb_submit include/linux/usb/hcd.h:724 [inline]
- usb_hcd_submit_urb+0x12d/0x1c60 drivers/usb/core/hcd.c:1518
- usb_submit_urb+0x87c/0x1790 drivers/usb/core/urb.c:581
- usb_start_wait_urb+0x104/0x4b0 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x326/0x4a0 drivers/usb/core/message.c:154
- usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:928 [inline]
- usbhid_raw_request+0x58f/0x700 drivers/hid/usbhid/hid-core.c:1299
- __hid_request+0x299/0x3c0 drivers/hid/hid-core.c:1989
- hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
- hidinput_connect+0x1ada/0x2bd0 drivers/hid/hid-input.c:2327
- hid_connect+0x13f3/0x1a60 drivers/hid/hid-core.c:2239
- hid_hw_start drivers/hid/hid-core.c:2354 [inline]
- hid_hw_start+0xaa/0x140 drivers/hid/hid-core.c:2345
- ms_probe+0x195/0x500 drivers/hid/hid-microsoft.c:391
- __hid_device_probe drivers/hid/hid-core.c:2724 [inline]
- hid_device_probe+0x363/0x720 drivers/hid/hid-core.c:2761
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x241/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1a70 drivers/base/core.c:3692
- hid_add_device+0x373/0xa60 drivers/hid/hid-core.c:2907
- usbhid_probe+0xd38/0x13f0 drivers/hid/usbhid/hid-core.c:1435
- usb_probe_interface+0x300/0x9c0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x241/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1a70 drivers/base/core.c:3692
- usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x241/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1a70 drivers/base/core.c:3692
- usb_new_device+0xd07/0x1a20 drivers/usb/core/hub.c:2663
- hub_port_connect drivers/usb/core/hub.c:5535 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5675 [inline]
- port_event drivers/usb/core/hub.c:5835 [inline]
- hub_event+0x2eb7/0x4fa0 drivers/usb/core/hub.c:5917
- process_one_work+0x9cf/0x1b70 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3321 [inline]
- worker_thread+0x6c8/0xf10 kernel/workqueue.c:3402
- kthread+0x3c2/0x780 kernel/kthread.c:464
- ret_from_fork+0x5d4/0x6f0 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-
-Allocated by task 5887:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
- __kasan_kmalloc+0xaa/0xb0 mm/kasan/common.c:394
- kasan_kmalloc include/linux/kasan.h:260 [inline]
- __do_kmalloc_node mm/slub.c:4328 [inline]
- __kmalloc_noprof+0x223/0x510 mm/slub.c:4340
- __hid_request+0x2c/0x3c0 drivers/hid/hid-core.c:1980
- hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
- hidinput_connect+0x1ada/0x2bd0 drivers/hid/hid-input.c:2327
- hid_connect+0x13f3/0x1a60 drivers/hid/hid-core.c:2239
- hid_hw_start drivers/hid/hid-core.c:2354 [inline]
- hid_hw_start+0xaa/0x140 drivers/hid/hid-core.c:2345
- ms_probe+0x195/0x500 drivers/hid/hid-microsoft.c:391
- __hid_device_probe drivers/hid/hid-core.c:2724 [inline]
- hid_device_probe+0x363/0x720 drivers/hid/hid-core.c:2761
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x241/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1a70 drivers/base/core.c:3692
- hid_add_device+0x373/0xa60 drivers/hid/hid-core.c:2907
- usbhid_probe+0xd38/0x13f0 drivers/hid/usbhid/hid-core.c:1435
- usb_probe_interface+0x300/0x9c0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x241/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1a70 drivers/base/core.c:3692
- usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x241/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1a70 drivers/base/core.c:3692
- usb_new_device+0xd07/0x1a20 drivers/usb/core/hub.c:2663
- hub_port_connect drivers/usb/core/hub.c:5535 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5675 [inline]
- port_event drivers/usb/core/hub.c:5835 [inline]
- hub_event+0x2eb7/0x4fa0 drivers/usb/core/hub.c:5917
- process_one_work+0x9cf/0x1b70 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3321 [inline]
- worker_thread+0x6c8/0xf10 kernel/workqueue.c:3402
- kthread+0x3c2/0x780 kernel/kthread.c:464
- ret_from_fork+0x5d4/0x6f0 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-
-The buggy address belongs to the object at ffff8880330e0800
- which belongs to the cache kmalloc-8 of size 8
-The buggy address is located 1 bytes inside of
- allocated 7-byte region [ffff8880330e0800, ffff8880330e0807)
-
-The buggy address belongs to the physical page:
-page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x330e0
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-page_type: f5(slab)
-raw: 00fff00000000000 ffff88801b841500 ffffea000085b700 dead000000000002
-raw: 0000000000000000 0000000080800080 00000000f5000000 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x52cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP), pid 1, tgid 1 (init), ts 15743776341, free_ts 15035826353
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x1c0/0x230 mm/page_alloc.c:1704
- prep_new_page mm/page_alloc.c:1712 [inline]
- get_page_from_freelist+0x1321/0x3890 mm/page_alloc.c:3669
- __alloc_frozen_pages_noprof+0x261/0x23f0 mm/page_alloc.c:4959
- alloc_pages_mpol+0x1fb/0x550 mm/mempolicy.c:2419
- alloc_slab_page mm/slub.c:2451 [inline]
- allocate_slab mm/slub.c:2619 [inline]
- new_slab+0x23b/0x330 mm/slub.c:2673
- ___slab_alloc+0xd9c/0x1940 mm/slub.c:3859
- __slab_alloc.constprop.0+0x56/0xb0 mm/slub.c:3949
- __slab_alloc_node mm/slub.c:4024 [inline]
- slab_alloc_node mm/slub.c:4185 [inline]
- __do_kmalloc_node mm/slub.c:4327 [inline]
- __kmalloc_noprof+0x2f2/0x510 mm/slub.c:4340
- kmalloc_noprof include/linux/slab.h:909 [inline]
- str_read+0x58/0x220 security/selinux/ss/policydb.c:1104
- genfs_read+0x688/0xe20 security/selinux/ss/policydb.c:2194
- policydb_read+0x28de/0x3220 security/selinux/ss/policydb.c:2707
- security_load_policy+0x15c/0x12c0 security/selinux/ss/services.c:2305
- sel_write_load+0x332/0x1bd0 security/selinux/selinuxfs.c:603
- vfs_write+0x29d/0x1150 fs/read_write.c:684
- ksys_write+0x12a/0x250 fs/read_write.c:738
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x4c0 arch/x86/entry/syscall_64.c:94
-page last free pid 1 tgid 1 stack trace:
- reset_page_owner include/linux/page_owner.h:25 [inline]
- free_pages_prepare mm/page_alloc.c:1248 [inline]
- __free_frozen_pages+0x7fe/0x1180 mm/page_alloc.c:2706
- kasan_depopulate_vmalloc_pte+0x5f/0x80 mm/kasan/shadow.c:472
- apply_to_pte_range mm/memory.c:3032 [inline]
- apply_to_pmd_range mm/memory.c:3076 [inline]
- apply_to_pud_range mm/memory.c:3112 [inline]
- apply_to_p4d_range mm/memory.c:3148 [inline]
- __apply_to_page_range+0xa92/0x1350 mm/memory.c:3184
- kasan_release_vmalloc+0xd1/0xe0 mm/kasan/shadow.c:593
- kasan_release_vmalloc_node mm/vmalloc.c:2241 [inline]
- purge_vmap_node+0x1c4/0xa30 mm/vmalloc.c:2258
- __purge_vmap_area_lazy+0xa06/0xc60 mm/vmalloc.c:2348
- _vm_unmap_aliases+0x43b/0x670 mm/vmalloc.c:2943
- change_page_attr_set_clr+0x252/0x4a0 arch/x86/mm/pat/set_memory.c:2088
- change_page_attr_set arch/x86/mm/pat/set_memory.c:2129 [inline]
- set_memory_nx+0xb5/0x110 arch/x86/mm/pat/set_memory.c:2318
- free_init_pages+0x79/0xd0 arch/x86/mm/init.c:933
- free_kernel_image_pages+0x24/0x50 arch/x86/mm/init.c:952
- kernel_init+0x30/0x2b0 init/main.c:1483
- ret_from_fork+0x5d4/0x6f0 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-
-Memory state around the buggy address:
- ffff8880330e0700: 00 fc fc fc 04 fc fc fc 06 fc fc fc 06 fc fc fc
- ffff8880330e0780: 05 fc fc fc 05 fc fc fc 05 fc fc fc 00 fc fc fc
->ffff8880330e0800: 07 fc fc fc fa fc fc fc 05 fc fc fc fa fc fc fc
-                   ^
- ffff8880330e0880: 06 fc fc fc 05 fc fc fc 05 fc fc fc fa fc fc fc
- ffff8880330e0900: fa fc fc fc fa fc fc fc fa fc fc fc 05 fc fc fc
-==================================================================
+Yeah, this looks better :)
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Will implement it as you describe. Just a couple of comments.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+>
+>
+> > +     bool support_msxu;
+> > +
+> > +     support_msxu = dev->quirks & UVC_QUIRK_MSXU_META;
+> >
+> >       switch (dev->info->meta_format) {
+> > +     case V4L2_META_FMT_UVC_MSXU_1_5:
+> > +             dev->meta_formats = ms_format;
+> > +             break;
+> >       case V4L2_META_FMT_D4XX:
+> > -             dev->meta_formats = d4xx_format;
+> > +             if (support_msxu)
+> > +                     dev->meta_formats = all_formats;
+> > +             else
+> > +                     dev->meta_formats = d4xx_format;
+> >               break;
+> >       case 0:
+> > -             dev->meta_formats = uvch_only;
+> > +             if (support_msxu)
+> > +                     dev->meta_formats = ms_format;
+> > +             else
+> > +                     dev->meta_formats = uvch_only;
+>
+> Also having these if else's here both don't look nice /
+> this does not feel clean.
+>
+> My suggestion would be to instead do the following:
+>
+> 1. Add a #define UVC_MAX_META_DATA_FORMATS 3 to uvcvideo.h
+> 2. In the struct uvc_device definition change meta_formats to:
+>
+>         u32 meta_formats[UVC_MAX_META_DATA_FORMATS + 1];
+>
+> 3. Change uvc_meta_init() to:
+>
+> void uvc_meta_init(struct uvc_device *dev)
+> {
+>         unsigned int i = 0;
+>
+>         dev->meta_formats[i++] = V4L2_META_FMT_UVC;
+>
+>         if (dev->info->meta_format)
+>                 dev->meta_formats[i++] = dev->info->meta_format;
+>
+>         if (dev->quirks & UVC_QUIRK_MSXU_META)
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+         if (dev->quirks & UVC_QUIRK_MSXU_META) &&
+dev->meta_formats[i-1] != V4L2_META_FMT_UVC_MSXU_1_5)
+>                 dev->meta_formats[i++] = V4L2_META_FMT_UVC_MSXU_1_5;
+>
+>         /* IMPORTANT for new meta-formats update UVC_MAX_META_DATA_FORMATS */
 
-If you want to undo deduplication, reply with:
-#syz undup
+Do we really need this comment? Even if we add more formats the total
+number of formats supported will never be more than 3.
+
+FMT_UVC, device_specific, msxu
+
+
+>
+>         dev->meta_formats[i++] = 0;
+> }
+>
+> Note uvc_meta_init() now also is void, so no more need to error check it.
+>
+> The only downside I can see is that if we ever actually start setting
+> dev->info->meta_format = V4L2_META_FMT_UVC_MSXU_1_5 and a user manually
+> enables the quirk we get V4L2_META_FMT_UVC_MSXU_1_5 listed twice, but
+> that should not cause any issues and normally that will never happen.
+>
+> IMHO this is better, then the switch-case + if-else code.
+>
+> Stating the obvious: some / most of these changes should be done in patch 3/5
+> already.
+>
+> Regards,
+>
+> Hans
+>
+>
+>
+>
+> >               break;
+> >       default:
+> >               dev_err(&dev->udev->dev, "Unknown metadata format 0x%x\n",
+> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > index 502f1d5608637cd28ce6f01aee31c4f5df160081..3578ce72fb6a1153ae79c244ec10093e8efdd739 100644
+> > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > @@ -77,6 +77,7 @@
+> >  #define UVC_QUIRK_DISABLE_AUTOSUSPEND        0x00008000
+> >  #define UVC_QUIRK_INVALID_DEVICE_SOF 0x00010000
+> >  #define UVC_QUIRK_MJPEG_NO_EOF               0x00020000
+> > +#define UVC_QUIRK_MSXU_META          0x00040000
+> >
+> >  /* Format flags */
+> >  #define UVC_FMT_FLAG_COMPRESSED              0x00000001
+> > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > index 650dc1956f73d2f1943b56c42140c7b8d757259f..ba508f7fb577021497009ab23a7be5add23fd08c 100644
+> > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > @@ -1459,6 +1459,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+> >       case V4L2_META_FMT_VSP1_HGO:    descr = "R-Car VSP1 1-D Histogram"; break;
+> >       case V4L2_META_FMT_VSP1_HGT:    descr = "R-Car VSP1 2-D Histogram"; break;
+> >       case V4L2_META_FMT_UVC:         descr = "UVC Payload Header Metadata"; break;
+> > +     case V4L2_META_FMT_UVC_MSXU_1_5:        descr = "UVC MSXU Metadata"; break;
+> >       case V4L2_META_FMT_D4XX:        descr = "Intel D4xx UVC Metadata"; break;
+> >       case V4L2_META_FMT_VIVID:       descr = "Vivid Metadata"; break;
+> >       case V4L2_META_FMT_RK_ISP1_PARAMS:      descr = "Rockchip ISP1 3A Parameters"; break;
+> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> > index 9e3b366d5fc79d8a04c6f0752858fc23363db65c..75f2096b2d4fed5e0235ea4732d35044ff77a98b 100644
+> > --- a/include/uapi/linux/videodev2.h
+> > +++ b/include/uapi/linux/videodev2.h
+> > @@ -861,6 +861,7 @@ struct v4l2_pix_format {
+> >  #define V4L2_META_FMT_VSP1_HGT    v4l2_fourcc('V', 'S', 'P', 'T') /* R-Car VSP1 2-D Histogram */
+> >  #define V4L2_META_FMT_UVC         v4l2_fourcc('U', 'V', 'C', 'H') /* UVC Payload Header metadata */
+> >  #define V4L2_META_FMT_D4XX        v4l2_fourcc('D', '4', 'X', 'X') /* D4XX Payload Header metadata */
+> > +#define V4L2_META_FMT_UVC_MSXU_1_5  v4l2_fourcc('U', 'V', 'C', 'M') /* UVC MSXU metadata */
+> >  #define V4L2_META_FMT_VIVID    v4l2_fourcc('V', 'I', 'V', 'D') /* Vivid Metadata */
+> >
+> >  /* Vendor specific - used for RK_ISP1 camera sub-system */
+> >
+>
+
+
+-- 
+Ricardo Ribalda
 
