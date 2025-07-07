@@ -1,78 +1,80 @@
-Return-Path: <linux-usb+bounces-25549-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25550-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43F2CAFBACE
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 20:38:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A52EAFBACB
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 20:38:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F4543A8E15
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 18:37:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 315381AA80C8
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 18:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67E9C2727E4;
-	Mon,  7 Jul 2025 18:34:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 971A3273806;
+	Mon,  7 Jul 2025 18:34:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="X1a4akaD"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ReLbL6Ef"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5141F2652A9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E18270EA5
 	for <linux-usb@vger.kernel.org>; Mon,  7 Jul 2025 18:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751913246; cv=none; b=G8rQrLJ0xPDIayBOsxpQFKQHKfgUau8U3PoTqo7mKT78VMBqSzuRRVF6jSTyZRqd2ft28q3bieXQqbAmLxywTh3EMcpBc8HWydC6BhJ7jIr9eRPeLC2tO3tpfA7J632iyoNKd+cyIkqIYLVB+X3cuznkKP1oYIam9vSIRaizpYg=
+	t=1751913247; cv=none; b=oeHulQgg/LU2Fz4oXIJxt7W2Wv845JCJWJdOu/ZP9WgN5uTYpjgo0I+kypt7fJbNosZa84VcmHM+R6LmYkR/DAd66YtSbifvfij21T2T5+xCin1O/FoCxzEErnIE0MyPDvq6f0ql1irbsEy6IuQxqTkXo3SnDHeV/hmuEKwxGWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751913246; c=relaxed/simple;
-	bh=8K+GjBl/FE9E58iFy0BSlb50AFIZ1lCSp8aNhG9rQUA=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Wvn/ME2j7OMUj/TIZtGK1kYDxvN/se6ygHdF3+pZuJLHR4poeSvxmcnPWkc6Y+AIhx0ObyYTDDF1O+YTPUr4Xno4mnhSrL3bCnZPIKYeQ85jNBmX8f03c4OE5K4rie8RYHeAbtCjMXB09bnLhvDWUhcq6uxkLMJUxiEqxzUYb1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=X1a4akaD; arc=none smtp.client-ip=209.85.167.42
+	s=arc-20240116; t=1751913247; c=relaxed/simple;
+	bh=RVxAqarkuhEy/QD/KmC40z7AIVmkZCTNthOhmweLPWE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=SG6FxGYaER4K2eWgbrKeKypt32flfixHdWborcmJGm4KbVFm2tG7icKozPTjMTLrx1k4mtdhbBf+fW+Fs+dNjRROmlHKIalx/qVWRtboA/g0mcO7gVyrLLkMNSoLoGq1b303tnygECFrFfxjGB1YKw2IYCVPXC/IweBipMUQSTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ReLbL6Ef; arc=none smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-555024588a8so3389812e87.0
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-553b5165cf5so4244313e87.0
         for <linux-usb@vger.kernel.org>; Mon, 07 Jul 2025 11:34:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1751913242; x=1752518042; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GI3mp7khiC3aiN54V1s1kSnePibHGblj0uNsT4N64ys=;
-        b=X1a4akaDudcpWGG6x3wdASzM2j0EkRw1PXvxGw8Y1XeoVH0rXperSPOG8bHV5J5uQh
-         cuoWkX7ZU1mPjcjP2HJCCWUMpKaqzdr0CSYO+fS3CvVBS7ECxz51e5s2y3DIzUILS4Y7
-         iIZa1W43MYuzEI2J0qEiPCD8lPYFh+/38HYEo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751913242; x=1752518042;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=chromium.org; s=google; t=1751913243; x=1752518043; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GI3mp7khiC3aiN54V1s1kSnePibHGblj0uNsT4N64ys=;
-        b=vJSVSBS41yA4d/ki+IiLBf9NAzHOkI3wp2BgUR8MiN87/MG1yiPsVxKUIh9/7D/hyj
-         GWx8LybQ9QwPtXpfvH7WCKwsX11Up99hG0c1UB2KOTRKyYYpcXvn6Io31YofbuxreuAv
-         Pyf2Yo9y4FyVVzmcPBHD4jeoTLHfmxsVThQtioErSnBcjFUJhEIJ0v1SsJKY7S5ywtN5
-         wqQtdGL2dRDS+LsmIlhh0pVOeza++861d9y6p9wO1RsV4BrkJSZCz+pfVvIVRmPoKpNe
-         lZ5k0RMrR5wucyNgOvnKaM1NV0qyskjpEqtjfhM5gZVMGGHBE51kh2u91mXic6wkTlCZ
-         iSPw==
-X-Forwarded-Encrypted: i=1; AJvYcCVnvCA46fgStFgqTuJyAnBppyB4j15JezocJ8fDqZPMjatgFD8kTndQ0dAijedbHZSz2lzt9O19N78=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyk9GOg2VAKrbZXErqLnGPldgEizSrL4AJ886WHWW1pjOzdYYtj
-	6dKgV64aIipFhMj3rJBIzDBl4se8KrwLH3ViYmBStKixyPdSumyXid0mgQBzr6UUVA==
-X-Gm-Gg: ASbGncuQrwnnsTohJWboI13k8LjFLIp88CQbLJvDfzJ+ihBICOKsGySNjiMhzXuhPES
-	tKJFD2LtHiLD8dTz68xaKy3aBJtc32ilVzso8swsev0lwSbCryO36nUlcGYClMRH+hErwrAJARJ
-	+x0lbIELSn30atgwyOrWPnLR6k1M1ZcBqTWxJ84DfKLRt9TniOXyJIA9aiQ74v5f/CN3h5M02Su
-	OW0IhyuK1FWL2CLNK2/QI5RbrnM1RL1sFNKcWmlm7X6IyT9qLxq/HeOQQn4Hc0Sv4oeZkEnDFdl
-	FyYz0ZPA1pe24Kjw7Txv0WS7vy6G/Pkdq2RC1kJ+L7aeZl550DOzWLvcnri15+30o5eJKboAEIm
-	Rqyt+8giCrX6Emgpc7L8MV2peQNOhEJOHduvU+GAiEAtj93lSfRlT
-X-Google-Smtp-Source: AGHT+IEZCncGnL0Aldaey4MgBeMqfZh2uyJKivyRIHEvg5ihpDRPGtDR+uZRcmp1UvTuk7T00/T0hA==
-X-Received: by 2002:a05:6512:2c8f:b0:549:5866:6489 with SMTP id 2adb3069b0e04-557aad3a2ecmr3691237e87.47.1751913242430;
+        bh=NEhoouKujX/9FWBm8EBjOLs/wPi+sCT2bfLGhUx3n5Y=;
+        b=ReLbL6EfWBuUhA6aT/giSyaRRxVPOU+NwkQNz2WXqa+b0ldRYnDjtEz2ntC6s5O315
+         fDt2+rmZR/OqpyNW3K4IA3JbgBnJOJXek4WEzrFwewdtJ9OUFT+ZvJeGVpRWzeAos1Jb
+         oX5JhiKOlIv2I222P4u94m2/5ErN5h57U0skU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751913243; x=1752518043;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NEhoouKujX/9FWBm8EBjOLs/wPi+sCT2bfLGhUx3n5Y=;
+        b=nW8szJd+2vHSpbHamWtgOv0xn9a86TUr5fRgFEy0NkmFs7F85z3unErtITapLmyMZC
+         iXOmPSq8EU+9Bpuvux6m8uknM9KKrpQe0pBBrUczX3dXWRzzsaTnBqd0L6rhV3gnXy84
+         Bvi64RmK7Gd81DuzdhxrIsVPFmp3wlnSD6h+PKtWdu4KbPJmf2FCR+3DZGexlz+Th8vR
+         QSld1Mbw9mrKc6P75Hvd3EY7154FNOr4Re2a6Q4UEewVEN1prRZmeLzMs1rbdB9r6CD5
+         qZ3aHxXyu99io8Q7O+2Px+SKxJ+dswbpunDUUzeBAu3VPePc0E6welWPpSeGpwCZ/Axu
+         QRjg==
+X-Forwarded-Encrypted: i=1; AJvYcCWRJ44d95VKexumnEdGg8Jb5L7wo0ChwqeH4rEirvKUbSdwCYr4gvYonlD1Z2sRfAprZ0Vp3KtNOCY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwufFFxp4PiDpoUjEX7P0byAEYYz0+hqXGW0v3p8oP9Bi8Pk96D
+	ZGuMF3IhZSsou2tYKLDwiE1fJnazzAoLQL4I2ghOHkgia3nvDr2lRPK1MR12L0P1jaJm4Boe+JB
+	uBWI=
+X-Gm-Gg: ASbGnctFHHgzwVNpdBvgNzU79mzByD1ppxfvuV4S1hCzXY3VwEcF7FzSz/vrts4udEU
+	ui2Ed8nTuzau/cEMlfpjkeBTYPpQJ9ATCP3DhV8Chq51w15Lit7I1stVFb+RHHEiDIwvmgnt8j+
+	bbePMUMfe4PQFaubeAljC4yhthoRCDj3iNOYivjLjn//O8n4HWgtnQuJWbf2XuvvH6xhynQ/S2n
+	7nyQHzTgqkvPkvFBS6eHP60BuMv5RxLFmdgzQzqUCiBfCjCwdEr3hVkIveC+3tTdfojunLjqCiX
+	zAhfkR6K4mAWW1gA9Y11mrtjAivRJVGwd6pP5KPDpfeocXRU+pH3kuCiYHAGiJwdBZ3XF0h7mhY
+	LkraM2lN3hTSCKtOVfiK9ost7IWVYfOOiQRQAtAuuHg==
+X-Google-Smtp-Source: AGHT+IGKJuOX4Bg7R899m2AwcOsJNjoMYlKG41sbEd23b05icnKCcd071bRXekr5xYL9YnWZKX+jcw==
+X-Received: by 2002:a05:6512:3c94:b0:553:aa32:4106 with SMTP id 2adb3069b0e04-557e5556e89mr2272305e87.23.1751913242985;
         Mon, 07 Jul 2025 11:34:02 -0700 (PDT)
 Received: from ribalda.c.googlers.com (166.141.88.34.bc.googleusercontent.com. [34.88.141.166])
         by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-556383d31a6sm1417630e87.61.2025.07.07.11.34.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 07 Jul 2025 11:34:02 -0700 (PDT)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v8 0/5] media: uvcvideo: Introduce
- V4L2_META_FMT_UVC_MSXU_1_5 + other meta fixes
-Date: Mon, 07 Jul 2025 18:34:00 +0000
-Message-Id: <20250707-uvc-meta-v8-0-ed17f8b1218b@chromium.org>
+Date: Mon, 07 Jul 2025 18:34:01 +0000
+Subject: [PATCH v8 1/5] media: uvcvideo: Do not mark valid metadata as
+ invalid
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,11 +83,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABgTbGgC/23MQQ6CMBCF4auYrq0pQ9sBV97DuGjKAF0ApoVGQ
- 7i7hY1oWL7JfP/MAnlHgV1PM/MUXXBDn0ZxPjHbmr4h7qq0GQhQQoqcT9HyjkbDSSmNmFcZGGL
- p/empdq8tdX+k3bowDv69laNcrweRKLngBaIxWqIqUd1s64fOTd1l8A1bO1HtrdxZlWyNZYmyt
- lCBOLD6a/WP1cliJrNKFjYHsAcWdzbDncVkS5uukBNAof/ssiwfeRSDvFcBAAA=
-X-Change-ID: 20250403-uvc-meta-e556773d12ae
+Message-Id: <20250707-uvc-meta-v8-1-ed17f8b1218b@chromium.org>
+References: <20250707-uvc-meta-v8-0-ed17f8b1218b@chromium.org>
+In-Reply-To: <20250707-uvc-meta-v8-0-ed17f8b1218b@chromium.org>
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>, 
  Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>, 
@@ -96,78 +96,55 @@ Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
  stable@vger.kernel.org
 X-Mailer: b4 0.14.2
 
-This series introduces a new metadata format for UVC cameras and adds a
-couple of improvements to the UVC metadata handling.
+Currently, the driver performs a length check of the metadata buffer
+before the actual metadata size is known and before the metadata is
+decided to be copied. This results in valid metadata buffers being
+incorrectly marked as invalid.
 
-The new metadata format can be enabled in runtime with quirks.
+Move the length check to occur after the metadata size is determined and
+is decided to be copied.
 
+Cc: stable@vger.kernel.org
+Fixes: 088ead255245 ("media: uvcvideo: Add a metadata device node")
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Hans de Goede <hansg@kernel.org>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
-Changes in v8:
-- Dynamically fill dev->meta_formats instead of be const.
-- Link to v7: https://lore.kernel.org/r/20250617-uvc-meta-v7-0-9c50623e2286@chromium.org
+ drivers/media/usb/uvc/uvc_video.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Changes in v7:
-- Add patch: Introduce dev->meta_formats
-- Link to v6: https://lore.kernel.org/r/20250604-uvc-meta-v6-0-7141d48c322c@chromium.org
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index 11769a1832d2ba9b3f9a50bcb10b0c4cdff71f09..2e377e7b9e81599aca19b800a171cc16a09c1e8a 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1442,12 +1442,6 @@ static void uvc_video_decode_meta(struct uvc_streaming *stream,
+ 	if (!meta_buf || length == 2)
+ 		return;
+ 
+-	if (meta_buf->length - meta_buf->bytesused <
+-	    length + sizeof(meta->ns) + sizeof(meta->sof)) {
+-		meta_buf->error = 1;
+-		return;
+-	}
+-
+ 	has_pts = mem[1] & UVC_STREAM_PTS;
+ 	has_scr = mem[1] & UVC_STREAM_SCR;
+ 
+@@ -1468,6 +1462,12 @@ static void uvc_video_decode_meta(struct uvc_streaming *stream,
+ 				  !memcmp(scr, stream->clock.last_scr, 6)))
+ 		return;
+ 
++	if (meta_buf->length - meta_buf->bytesused <
++	    length + sizeof(meta->ns) + sizeof(meta->sof)) {
++		meta_buf->error = 1;
++		return;
++	}
++
+ 	meta = (struct uvc_meta_buf *)((u8 *)meta_buf->mem + meta_buf->bytesused);
+ 	local_irq_save(flags);
+ 	time = uvc_video_get_time();
 
-Changes in v6 (Thanks Laurent):
-- Fix typo in metafmt-uvc.rst
-- Improve metafmt-uvc-msxu-1-5.rst
-- uvc_meta_v4l2_try_format() block MSXU format unless the quirk is
-  active
-- Refactor uvc_enable_msxu
-- Document uvc_meta_detect_msxu
-- Rebase series
-- Add R-b
-- Link to v5: https://lore.kernel.org/r/20250404-uvc-meta-v5-0-f79974fc2d20@chromium.org
-
-Changes in v5:
-- Fix codestyle and kerneldoc warnings reported by media-ci
-- Link to v4: https://lore.kernel.org/r/20250403-uvc-meta-v4-0-877aa6475975@chromium.org
-
-Changes in v4:
-- Rename format to V4L2_META_FMT_UVC_MSXU_1_5 (Thanks Mauro)
-- Flag the new format with a quirk.
-- Autodetect MSXU devices.
-- Link to v3: https://lore.kernel.org/linux-media/20250313-uvc-metadata-v3-0-c467af869c60@chromium.org/
-
-Changes in v3:
-- Fix doc syntax errors.
-- Link to v2: https://lore.kernel.org/r/20250306-uvc-metadata-v2-0-7e939857cad5@chromium.org
-
-Changes in v2:
-- Add metadata invalid fix
-- Move doc note to a separate patch
-- Introduce V4L2_META_FMT_UVC_CUSTOM (thanks HdG!).
-- Link to v1: https://lore.kernel.org/r/20250226-uvc-metadata-v1-1-6cd6fe5ec2cb@chromium.org
-
----
-Ricardo Ribalda (5):
-      media: uvcvideo: Do not mark valid metadata as invalid
-      media: Documentation: Add note about UVCH length field
-      media: uvcvideo: Introduce dev->meta_formats
-      media: uvcvideo: Introduce V4L2_META_FMT_UVC_MSXU_1_5
-      media: uvcvideo: Auto-set UVC_QUIRK_MSXU_META
-
- .../userspace-api/media/v4l/meta-formats.rst       |   1 +
- .../media/v4l/metafmt-uvc-msxu-1-5.rst             |  23 +++++
- .../userspace-api/media/v4l/metafmt-uvc.rst        |   4 +-
- MAINTAINERS                                        |   1 +
- drivers/media/usb/uvc/uvc_driver.c                 |   7 ++
- drivers/media/usb/uvc/uvc_metadata.c               | 115 +++++++++++++++++++--
- drivers/media/usb/uvc/uvc_video.c                  |  12 +--
- drivers/media/usb/uvc/uvcvideo.h                   |   7 ++
- drivers/media/v4l2-core/v4l2-ioctl.c               |   1 +
- include/linux/usb/uvc.h                            |   3 +
- include/uapi/linux/videodev2.h                     |   1 +
- 11 files changed, 161 insertions(+), 14 deletions(-)
----
-base-commit: a8598c7de1bcd94461ca54c972efa9b4ea501fb9
-change-id: 20250403-uvc-meta-e556773d12ae
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.50.0.727.gbf7dc18ff4-goog
 
 
