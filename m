@@ -1,125 +1,157 @@
-Return-Path: <linux-usb+bounces-25517-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25518-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D5AFAFADCB
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 09:57:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0784EAFADE8
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 10:00:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 998383AAB6E
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 07:56:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17B171AA08CD
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 08:00:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8201928541F;
-	Mon,  7 Jul 2025 07:57:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1610628A414;
+	Mon,  7 Jul 2025 08:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1pWZxct4"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ztDuQq2X"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED0B1A0BF1;
-	Mon,  7 Jul 2025 07:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80DCA28A400;
+	Mon,  7 Jul 2025 08:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751875038; cv=none; b=bUbk1FC8IXCTfzq5/xyQI88RtNBJlHLr55ggz+U2dLZlDVg+88syp8KehrFtkDAfUzE1t9inL8Ua8+aWn8bRpSOEVkkfv++2ExrXaykZGR047QFDnL4ZGcwygnH+NMmMEtMLuFFm4wBJht1QV4mUq37CmzR2KwH6fMbwiQiANQA=
+	t=1751875221; cv=none; b=qvh1Yu9W8w/CA2ZYPRtMiUVBhOV0Zbim4FCoVpYxdOy2op2YjZM/smY3zT9naDSErVue8oJfzGrjp4Xp/0Edv0ZbJbYEvJiW0kPUus0IBINNwVQW5eeXjEP8X3WDbuhZGzxXW0cq/E+AIgBDULFyg2lbU4oyNGW8ZRpFHTm+2PY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751875038; c=relaxed/simple;
-	bh=clixo0WX7xiieK6BB2BUIJIDIXXL6gQ+H7kdA9xRXJ8=;
+	s=arc-20240116; t=1751875221; c=relaxed/simple;
+	bh=xEO1y9EPdTgRa5Npp1iaF7AikBTNGgoSSotsfdond1Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cVq2+wYTCST6HlJq+Qge5qd/FNZS64nTJhWQ1556KvLek/vU6qMEk2jESOXXHiCRmfjBnqrvDvdXPPz/1B3SZiOzJcE+P6MLwfIQdm+zcbbtpOrUlp3KxqkFJREwh1u3LYWqz02PurN8IqKaOwmlWW1sw8MFVeMdcU09IKt45zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1pWZxct4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB6DC4CEE3;
-	Mon,  7 Jul 2025 07:57:16 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qnez4OOREQVTXKHC31Vz7DVjt2Ycm97O6UFtFUQg6va0AmDl44Bwy608L8Ef+ZG+sQIjht/cBCTFZC26etwdu6rJQhdW6vEPo7ES6nO/DgrYy7Q2Pioai3SL1ddWUPA9StqyNmCs8ctvNI4ns47qZjyTdohb6vz8pSEIMG7RtMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ztDuQq2X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC02C4CEE3;
+	Mon,  7 Jul 2025 08:00:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751875037;
-	bh=clixo0WX7xiieK6BB2BUIJIDIXXL6gQ+H7kdA9xRXJ8=;
+	s=korg; t=1751875221;
+	bh=xEO1y9EPdTgRa5Npp1iaF7AikBTNGgoSSotsfdond1Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1pWZxct43kpoiYEX6qfUlU+4ZrJQntDmlyhs7OfKYvtMFuXRh5zesOQpq/9z3jNqm
-	 bxOd1moerKqEQ6zr6T5w1vOC3AUxMM4/IH5nXP075cXSxUFSDKCZvs5sBm6/Y+kLmQ
-	 3cyVHoO6k5NtdS5vfBFe4shpB1ru0qmOcBGtVnQM=
-Date: Mon, 7 Jul 2025 09:57:13 +0200
+	b=ztDuQq2XEFNoHhvXqDIKk31q2xDwii8QqeelNHy7lgW0KH+hx60ESdDa4fklofHDL
+	 gpk1UTe48U5zOFTFCJ7Y9JutTqvnD4V2DjrPmq9Kow5GzeLQ5kLwOHuGaEgqqFyqh2
+	 eK0VwDHuua/aTPPPa+AeUPXXrVfaTvKQmOlJ/eh8=
+Date: Mon, 7 Jul 2025 10:00:17 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: mario.limonciello@amd.com, andreas.noever@gmail.com,
-	michael.jamet@intel.com, westeri@kernel.org, YehezkelShB@gmail.com,
-	rajat.khandelwal@intel.com, mika.westerberg@linux.intel.com,
-	linux-usb@vger.kernel.org, kim.lindberger@gmail.com, linux@lunaa.ch,
-	Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
-	Alyssa Ross <hi@alyssa.is>, regressions@lists.linux.dev
-Subject: Re: [REGRESSION] thunderbolt: Fix a logic error in wake on connect
-Message-ID: <2025070737-charbroil-imply-7b5e@gregkh>
-References: <20250411151446.4121877-1-superm1@kernel.org>
- <cavyeum32dd7kxj65argtem6xh2575oq3gcv3svd3ubnvdc6cr@6nv7ieimfc5e>
- <87v7odo46s.fsf@alyssa.is>
- <51d5393c-d0e1-4f35-bed0-16c7ce40a8a8@kernel.org>
+To: Daniele Barcella <daniele.barcella@pm.me>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: modalias: Added a manufacturer string to usb
+ modalias sysfs output
+Message-ID: <2025070720-sediment-donor-fea1@gregkh>
+References: <20250706142720.8596-1-daniele.barcella@pm.me>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <51d5393c-d0e1-4f35-bed0-16c7ce40a8a8@kernel.org>
+In-Reply-To: <20250706142720.8596-1-daniele.barcella@pm.me>
 
-On Sun, Jul 06, 2025 at 10:46:53AM -0400, Mario Limonciello wrote:
-> On 6/30/25 07:32, Alyssa Ross wrote:
-> > Alyssa Ross <hi@alyssa.is> writes:
-> > 
-> > > On Fri, Apr 11, 2025 at 10:14:44AM -0500, Mario Limonciello wrote:
-> > > > From: Mario Limonciello <mario.limonciello@amd.com>
-> > > > 
-> > > > commit a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect
-> > > > on USB4 ports") introduced a sysfs file to control wake up policy
-> > > > for a given USB4 port that defaulted to disabled.
-> > > > 
-> > > > However when testing commit 4bfeea6ec1c02 ("thunderbolt: Use wake
-> > > > on connect and disconnect over suspend") I found that it was working
-> > > > even without making changes to the power/wakeup file (which defaults
-> > > > to disabled). This is because of a logic error doing a bitwise or
-> > > > of the wake-on-connect flag with device_may_wakeup() which should
-> > > > have been a logical AND.
-> > > > 
-> > > > Adjust the logic so that policy is only applied when wakeup is
-> > > > actually enabled.
-> > > > 
-> > > > Fixes: a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect on USB4 ports")
-> > > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > 
-> > > Hi! There have been a couple of reports of a Thunderbolt regression in
-> > > recent stable kernels, and one reporter has now bisected it to this
-> > > change:
-> > > 
-> > >   • https://bugzilla.kernel.org/show_bug.cgi?id=220284
-> > >   • https://github.com/NixOS/nixpkgs/issues/420730
-> > > 
-> > > Both reporters are CCed, and say it starts working after the module is
-> > > reloaded.
-> > > 
-> > > Link: https://lore.kernel.org/r/bug-220284-208809@https.bugzilla.kernel.org%2F/
-> > > (for regzbot)
-> > 
-> > Apparently[1] fixed by the first linked patch below, which is currently in
-> > the Thunderbolt tree waiting to be pulled into the USB tree.
-> > 
-> > #regzbot monitor: https://lore.kernel.org/linux-usb/20250619213840.2388646-1-superm1@kernel.org/
-> > #regzbot monitor: https://lore.kernel.org/linux-usb/20250626154009.GK2824380@black.fi.intel.com/
-> > 
-> > [1]: https://github.com/NixOS/nixpkgs/issues/420730#issuecomment-3018563631
+On Sun, Jul 06, 2025 at 02:27:26PM +0000, Daniele Barcella wrote:
+> The patch improves the usb modalias sysfs output by including the manufacturer string ath the end in the format 'mnf%s' after filtering the string, like how it is done for the dmi id device.
 > 
-> Hey Greg,
+> For example usb:v0483p5740d0100dcEFdsc02dp01ic02isc02ip00in00mnfFlipperDevicesInc.
 > 
-> Can you pick up the pull request from Mika from a week and a half ago with
-> this fix for the next 6.16-rc?
-> 
-> https://lore.kernel.org/linux-usb/20250626154009.GK2824380@black.fi.intel.com/
+> This change allows hwdb rules to target devices with the same vid+pid but different manufacturer.
+> For example, the STMicroelectronics Virtual COM Port (0483:5740) is widely used in both prototyping and production devices that don't have a unique vendor ID.
 
-Yes, I was waiting for this last round to go to Linus as the pull
-request was made against a newer version of Linus's tree than I
-currently had in my "for linus" branch.  I'll go get to that later
-today.
+Nit, please use 72 columns for your changelog.
+
+> 
+> For further context, refer to the related discussion on systemd's GitHub: https://github.com/systemd/systemd/pull/24869.
+
+As random links can disappear at any time, and the text in a kernel
+changelog will endure for forever, please put all relevant information
+in the changelog itself, don't require people to go look elesewhere and
+hope it is still relevant.
+
+> 
+> Signed-off-by: Daniele Barcella <daniele.barcella@pm.me>
+> ---
+>  drivers/usb/core/sysfs.c | 29 ++++++++++++++++++++++++++---
+>  1 file changed, 26 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+> index 23f3cb1989f4..dc191fa94372 100644
+> --- a/drivers/usb/core/sysfs.c
+> +++ b/drivers/usb/core/sysfs.c
+> @@ -1154,20 +1154,39 @@ static ssize_t interface_show(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(interface);
+>  
+> +static void ascii_filter(char *d, const char *s)
+> +{
+> +	/* Filter out characters we don't want to see in the modalias string */
+> +	for (; *s; s++)
+> +		if (*s > ' ' && *s < 127 && *s != ':')
+> +			*(d++) = *s;
+> +
+> +	*d = 0;
+> +}
+
+We don't have a common kernel function for this?
+
+
+> +
+>  static ssize_t modalias_show(struct device *dev, struct device_attribute *attr,
+>  			     char *buf)
+>  {
+>  	struct usb_interface *intf;
+>  	struct usb_device *udev;
+>  	struct usb_host_interface *alt;
+> +	char *manufacturer;
+> +	int emit;
+>  
+>  	intf = to_usb_interface(dev);
+>  	udev = interface_to_usbdev(intf);
+>  	alt = READ_ONCE(intf->cur_altsetting);
+>  
+> -	return sysfs_emit(buf,
+> +	if (udev->manufacturer) {
+> +		manufacturer = kmalloc(strlen(udev->manufacturer) + 1, GFP_KERNEL);
+> +		ascii_filter(manufacturer, udev->manufacturer);
+> +	} else {
+> +		manufacturer = kstrdup("", GFP_KERNEL);
+> +	}
+> +
+> +	emit = sysfs_emit(buf,
+>  			"usb:v%04Xp%04Xd%04Xdc%02Xdsc%02Xdp%02X"
+> -			"ic%02Xisc%02Xip%02Xin%02X\n",
+> +			"ic%02Xisc%02Xip%02Xin%02Xmnf%s\n",
+>  			le16_to_cpu(udev->descriptor.idVendor),
+>  			le16_to_cpu(udev->descriptor.idProduct),
+>  			le16_to_cpu(udev->descriptor.bcdDevice),
+> @@ -1177,7 +1196,11 @@ static ssize_t modalias_show(struct device *dev, struct device_attribute *attr,
+>  			alt->desc.bInterfaceClass,
+>  			alt->desc.bInterfaceSubClass,
+>  			alt->desc.bInterfaceProtocol,
+> -			alt->desc.bInterfaceNumber);
+> +			alt->desc.bInterfaceNumber,
+> +			manufacturer
+> +		);
+> +	kfree(manufacturer);
+> +	return emit;
+
+I really do not like this change, sorry.  Vendors are supposed to go and
+get their own product id if they are a vendor-specific device, they
+should NOT be attempting to trigger off of USB device strings as those
+are not guaranteed to relate to anything at all.
+
+This adds a new user/kernel api, just to work around a userspace tool
+that can be easily modified to handle this one specific broken device
+that is lying about its vendor/product id.  Please go fix this in
+userspace with a simple script that udev can run to determine what the
+device string contains, and don't require the kernel to do this work
+instead.
 
 thanks,
 
