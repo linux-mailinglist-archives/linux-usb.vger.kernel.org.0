@@ -1,151 +1,131 @@
-Return-Path: <linux-usb+bounces-25531-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25532-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EAC5AFB0A5
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 12:02:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E03BAFB0C2
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 12:08:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 11D9E7A7A78
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 10:01:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A21DC161B18
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 10:08:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83304291C12;
-	Mon,  7 Jul 2025 10:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gb7q9y2c"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C1B52957C1;
+	Mon,  7 Jul 2025 10:07:47 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AD021D00A;
-	Mon,  7 Jul 2025 10:02:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DC12957C2
+	for <linux-usb@vger.kernel.org>; Mon,  7 Jul 2025 10:07:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751882567; cv=none; b=ZT97D1xU67XXxyF5ZILI4IdtUyTedvEPAu3Mbb3TYhCf1Av8s62roQJbprhCz9bYlIMuaF3xpS17AeQhlYsHyCqRNYLIzmAn5gp43fZAznytXua2Qb/PwXTmeCp8omrmTW1QuLFNV7AJnryPv0sEixO2VjLg17jNzp/tMqOaBZM=
+	t=1751882867; cv=none; b=ZwvYpZfkjYceVBHgbub8m9CcjRi14SFlVMRGYuHiZKYNC40gDV+KgocSAGulB70wJ6znQ26q0A6EJNg5JIAflZPGnbiVAhE1hKgwZK4bKiXRLTcdXTTFXzC3G+Bqhf05bJ6kUhOiS957Zx8NYzhPAD3Rf4qnKnsLlG+nRpnufTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751882567; c=relaxed/simple;
-	bh=mEIOfUY2JXpet4vxLmM/SsHUpRzcFXQhLNeexbXH6J0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qmg7GK4qlar29sazG1cSvcpa1QuCJoYBz1KgjOZkojSX9hKrt2CR/SzLHCmXlWCmP7Vc75pttOiBpYDHdOjXWoU1/m4oCYfPJi6MXkwJg5E5iVTi74Z/ueg1+9l72vLwRKGa2hRNqWpHML2R5eJ3gj3qm3oo4FF/24f+Jxkw5CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gb7q9y2c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEAB1C4CEE3;
-	Mon,  7 Jul 2025 10:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751882566;
-	bh=mEIOfUY2JXpet4vxLmM/SsHUpRzcFXQhLNeexbXH6J0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Gb7q9y2cTRPJvEoQ/IL+VO9uBApPN9RNkIRh1LzZdLrMCjjdQdCHV9HYqp6C8fsTc
-	 DVEn1dpjwneSpw113egooLKHojkHEMFUx0+34VRTQIiaca8TUulrVJUAvIotpIVKG6
-	 2M+UFRXZCL7ksNCCc/KEXibyp+6zAL9hh6t2+gIH9Y5WpGRUQxWtDJLQE/T+io3l/m
-	 EN8LCsOaCGEbxOk1zMcPtF/u3QWaWsMV2jHV9mwNSPEFQAZkITIln16yjM67Vs/ZRn
-	 AmbY9iwi0Y0TdWW6vUFoMLr3/iJoLd4Iczu3Mwkg1h5u1f+NK1RzDCo0E7QOOWeBu5
-	 0SDI9lv3uA6jQ==
-Message-ID: <78b86f34-6477-436a-b59c-b0ae5371f581@kernel.org>
-Date: Mon, 7 Jul 2025 12:02:41 +0200
+	s=arc-20240116; t=1751882867; c=relaxed/simple;
+	bh=FtQESEScKEGm4ZZCj0RN7mGsIyE/eoEObXJoSKFHpWQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QkzV6ccWs2aV5grMhkyhycbnL/rkSF+qmpb+o3aEf6pnxKsY450UeBiwNoeAXHCHHoI8F9r3jGOE1E9pLLlOfM08Q4AzmcsXf6SzMI0bRjmPolGZo3Jq7J/4RmGjdiLmWCywbBuyNXoQh7N0AwdfQWmWXOb9gvvofzaHE54NjSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uYikg-00055p-AG; Mon, 07 Jul 2025 12:07:10 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uYikc-007EDt-2n;
+	Mon, 07 Jul 2025 12:07:06 +0200
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 6B531439509;
+	Mon, 07 Jul 2025 10:07:06 +0000 (UTC)
+Date: Mon, 7 Jul 2025 12:07:05 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Ming Yu <a0282524688@gmail.com>, Lee Jones <lee@kernel.org>, 
+	tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v13 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250707-new-psychedelic-termite-a309d3-mkl@pengutronix.de>
+References: <20250627102730.71222-1-a0282524688@gmail.com>
+ <20250627102730.71222-2-a0282524688@gmail.com>
+ <20250702161513.GX10134@google.com>
+ <CAOoeyxXWbjWvOgsSvXb9u2y6yFExq347ceZe96bm9w+GQAp2Rg@mail.gmail.com>
+ <0360d2e0-e071-4259-a7c7-23c31e52e563@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/3] add dma noncoherent API
-To: Xu Yang <xu.yang_2@nxp.com>, ezequiel@vanguardiasur.com.ar,
- mchehab@kernel.org, laurent.pinchart@ideasonboard.com, hdegoede@redhat.com,
- gregkh@linuxfoundation.org, mingo@kernel.org, tglx@linutronix.de,
- andriy.shevchenko@linux.intel.com, viro@zeniv.linux.org.uk,
- thomas.weissschuh@linutronix.de
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-References: <20250704095751.73765-1-xu.yang_2@nxp.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <20250704095751.73765-1-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-Hi all,
-
-On 4-Jul-25 11:57, Xu Yang wrote:
-> On architectures where there is no coherent caching such as ARM it's
-> proved that using dma_alloc_noncontiguous API and handling manually
-> the cache flushing will significantly improve performance.
-> 
-> Refer to:
-> commit 20e1dbf2bbe2 ("media: uvcvideo: Use dma_alloc_noncontiguous API")
-> commit 68d0c3311ec1 ("media: stk1160: use dma_alloc_noncontiguous API")
-> 
-> However, it's obvious that there is significant code duplication between
-> these two commits. Besides, a potential user USB Monitor may read outdated
-> data before the driver do DMA sync for CPU which will make the data
-> unreliable.
-> 
-> To reduce code duplication and avoid USB Monitor result unreliable, this
-> series will introduce DMA noncoherent API to USB core. And the USB core
-> layer will manage synchronization itself.
-> 
-> Then the last 2 patches have used the API.
-> 
-> I have tested uvcvideo driver. But I haven't tested stk1160 driver as I
-> don't have such boards. @Ezequiel Garcia, @Dafna Hirschfeld do you have
-> time to test it? Your support on this would be greatly appreciated.
-
-It seems that patches 1 + 2 are ready for merging now
-(for patch 3 we should probably wait for testing).
-
-I think that it would be best for both patches 1 + 2 to
-be merged through the USB tree. The changed code in the UVC
-driver is not touched that often so I do not expect any
-conflicts.
-
-Regards,
-
-Hans
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kr6nkexyn6izj5au"
+Content-Disposition: inline
+In-Reply-To: <0360d2e0-e071-4259-a7c7-23c31e52e563@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
 
+--kr6nkexyn6izj5au
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v13 1/7] mfd: Add core driver for Nuvoton NCT6694
+MIME-Version: 1.0
 
+On 03.07.2025 11:44:27, Vincent Mailhol wrote:
+> On 03/07/2025 =C3=A0 11:39, Ming Yu wrote:
+> > Dear Lee,
+> >=20
+> > Thanks for your feedback and review.
+> > Currently, the status of the sub-device drivers is as follows (A/R/T):
+> >     [v13,1/7] mfd: Add core driver for Nuvoton NCT6694 (- - -)
+> >     [v13,2/7] gpio: Add Nuvoton NCT6694 GPIO support (1 1 -)
+> >     [v13,3/7] i2c: Add Nuvoton NCT6694 I2C support (1 - -)
+> >     [v13,4/7] can: Add Nuvoton NCT6694 CANFD support (- 2 -)
+>=20
+> For the CAN driver, my Reviewed-by can be interpreted as an Acked-by :)
 
-> Changes in v5:
->  - improve if-else logic as suggested by Andy and Alan.
->  - add Reviewed-by tag
-> 
-> Changes in v4:
->  - https://lore.kernel.org/all/20250703103811.4048542-1-xu.yang_2@nxp.com/
->  - improve if-else logic
->  - remove uvc_stream_to_dmadev()
-> 
-> Changes in v3:
->  - https://lore.kernel.org/all/20250702110222.3926355-1-xu.yang_2@nxp.com/
->  - put Return section at the end of description
->  - correct some abbreviations
->  - remove usb_dma_noncoherent_sync_for_cpu() and
->    usb_dma_noncoherent_sync_for_device()
->  - do DMA sync in usb_hcd_map_urb_for_dma() and
->    usb_hcd_unmap_urb_for_dma()
->  - call flush_kernel_vmap_range() for OUT transfers
->    and invalidate_kernel_vmap_range() for IN transfers 
-> 
-> Changes in v2:
->  - https://lore.kernel.org/all/20250627101939.3649295-1-xu.yang_2@nxp.com/
->  - handle it in USB core
-> 
-> v1:
->  - https://lore.kernel.org/linux-usb/20250614132446.251218-1-xu.yang_2@nxp.com/
-> 
-> Xu Yang (3):
->   usb: core: add dma-noncoherent buffer alloc and free API
->   media: uvcvideo: use usb_alloc_noncoherent/usb_free_noncoherent()
->   media: stk1160: use usb_alloc_noncoherent/usb_free_noncoherent()
-> 
->  drivers/media/usb/stk1160/stk1160-v4l.c   |  4 --
->  drivers/media/usb/stk1160/stk1160-video.c | 43 ++++--------
->  drivers/media/usb/stk1160/stk1160.h       |  7 --
->  drivers/media/usb/uvc/uvc_video.c         | 61 ++++-------------
->  drivers/usb/core/hcd.c                    | 29 +++++---
->  drivers/usb/core/usb.c                    | 80 +++++++++++++++++++++++
->  include/linux/usb.h                       | 11 ++++
->  7 files changed, 137 insertions(+), 98 deletions(-)
-> 
+Feel free to interpret my my Reviewed-by as an Acked-by, too.
 
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--kr6nkexyn6izj5au
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmhrnEYACgkQDHRl3/mQ
+kZz+HAgAo6jP3UtNysl6cnqkkovHfol1pDeGThMia/s6eTksN4DY0u5zqdBI03dN
+dXpm+0P8HVf83Alft8JysqSicG3HxMbdHs8En1RAlkkWYlr/kkL8zfEM06mFYVdL
+6EqNun8pwyIg9PrvRFwslkSTu6zKfqhafW8ouC9+65btTk0MG/AgbUgCLX2fe14v
+5jBv/B8OS97ARLf8pGTDQDqO6vXO2imOkP3Td+Ik61oUgLiQhUxLQVR8RvDKbuEA
++iyqwWyWKsyoiF+0sU+mGLy0ejmuzh+PSvo19hzEE7ic08gZYvB4BA5pxljMiGAR
+1NJdMVxN2BILPjtt1d6e95y9ZqFOiA==
+=dD5C
+-----END PGP SIGNATURE-----
+
+--kr6nkexyn6izj5au--
 
