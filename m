@@ -1,62 +1,58 @@
-Return-Path: <linux-usb+bounces-25516-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25517-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 362AAAFACB6
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 09:10:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D5AFAFADCB
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 09:57:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A51713B6BA4
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 07:09:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 998383AAB6E
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jul 2025 07:56:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE75C2853E0;
-	Mon,  7 Jul 2025 07:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8201928541F;
+	Mon,  7 Jul 2025 07:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1pWZxct4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6F5262FCC
-	for <linux-usb@vger.kernel.org>; Mon,  7 Jul 2025 07:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED0B1A0BF1;
+	Mon,  7 Jul 2025 07:57:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751872190; cv=none; b=Lx7eWHdL40+Az2ICb1eyHHh7o7UUKyWUnIPOG4UMTFT+kHhhMVX9MRWG5ZcvTZs3XWjIVYZxjfgdB/qlEOLO0OlBsJgvby0vWIadJLbd7bKch3hENoLQjGqbJNqC9hT3/WSurnYAOgUN6lF0WCGVyxfIc3BK0et8sCerB5FIass=
+	t=1751875038; cv=none; b=bUbk1FC8IXCTfzq5/xyQI88RtNBJlHLr55ggz+U2dLZlDVg+88syp8KehrFtkDAfUzE1t9inL8Ua8+aWn8bRpSOEVkkfv++2ExrXaykZGR047QFDnL4ZGcwygnH+NMmMEtMLuFFm4wBJht1QV4mUq37CmzR2KwH6fMbwiQiANQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751872190; c=relaxed/simple;
-	bh=yyxiVpTfZw3Fe/y9AhHGBqO9dJPXCajS1YdbCe03G4g=;
+	s=arc-20240116; t=1751875038; c=relaxed/simple;
+	bh=clixo0WX7xiieK6BB2BUIJIDIXXL6gQ+H7kdA9xRXJ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L0sZZQjauQuGq0tSVPE87aLgGCNZNMkUoJyhTQmuAiE965N+9mrGqgKlgfmUyfHl6udnng8umnR+rVFtM/JeYw9289CKATcpIuLozyyfOF9QcWIc/nNAnH4BcPZS0AMtKGmEXuTA3wXxxiqxdM76KPdvxpgK4nGDHlixK2CRVJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uYfyR-0001vP-B3; Mon, 07 Jul 2025 09:09:11 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uYfyP-007D3A-0u;
-	Mon, 07 Jul 2025 09:09:09 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uYfyP-005oRo-0Z;
-	Mon, 07 Jul 2025 09:09:09 +0200
-Date: Mon, 7 Jul 2025 09:09:09 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: qiang.zhang@linux.dev
-Cc: Jun Miao <jun.miao@intel.com>, sbhatta@marvell.com, kuba@kernel.org,
-	oneukum@suse.com, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [bug report] [PATCH v6] net: usb: Convert tasklet API to new
- bottom half workqueue mechanism
-Message-ID: <aGtylalCTaWwqhQk@pengutronix.de>
-References: <20250618173923.950510-1-jun.miao@intel.com>
- <aGgD_Lp0i-ZU2xkt@pengutronix.de>
- <74395e33b2175fdb2745211c4ca41e5b2358d80d@linux.dev>
- <c2e597d2101b588d19a5028b8ae73a33c5240e32@linux.dev>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cVq2+wYTCST6HlJq+Qge5qd/FNZS64nTJhWQ1556KvLek/vU6qMEk2jESOXXHiCRmfjBnqrvDvdXPPz/1B3SZiOzJcE+P6MLwfIQdm+zcbbtpOrUlp3KxqkFJREwh1u3LYWqz02PurN8IqKaOwmlWW1sw8MFVeMdcU09IKt45zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1pWZxct4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB6DC4CEE3;
+	Mon,  7 Jul 2025 07:57:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1751875037;
+	bh=clixo0WX7xiieK6BB2BUIJIDIXXL6gQ+H7kdA9xRXJ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=1pWZxct43kpoiYEX6qfUlU+4ZrJQntDmlyhs7OfKYvtMFuXRh5zesOQpq/9z3jNqm
+	 bxOd1moerKqEQ6zr6T5w1vOC3AUxMM4/IH5nXP075cXSxUFSDKCZvs5sBm6/Y+kLmQ
+	 3cyVHoO6k5NtdS5vfBFe4shpB1ru0qmOcBGtVnQM=
+Date: Mon, 7 Jul 2025 09:57:13 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: mario.limonciello@amd.com, andreas.noever@gmail.com,
+	michael.jamet@intel.com, westeri@kernel.org, YehezkelShB@gmail.com,
+	rajat.khandelwal@intel.com, mika.westerberg@linux.intel.com,
+	linux-usb@vger.kernel.org, kim.lindberger@gmail.com, linux@lunaa.ch,
+	Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
+	Alyssa Ross <hi@alyssa.is>, regressions@lists.linux.dev
+Subject: Re: [REGRESSION] thunderbolt: Fix a logic error in wake on connect
+Message-ID: <2025070737-charbroil-imply-7b5e@gregkh>
+References: <20250411151446.4121877-1-superm1@kernel.org>
+ <cavyeum32dd7kxj65argtem6xh2575oq3gcv3svd3ubnvdc6cr@6nv7ieimfc5e>
+ <87v7odo46s.fsf@alyssa.is>
+ <51d5393c-d0e1-4f35-bed0-16c7ce40a8a8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,59 +61,67 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c2e597d2101b588d19a5028b8ae73a33c5240e32@linux.dev>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <51d5393c-d0e1-4f35-bed0-16c7ce40a8a8@kernel.org>
 
-Hello, Zqiang
-
-On Sat, Jul 05, 2025 at 06:41:20AM +0000, qiang.zhang@linux.dev wrote:
-> > Hello, Oleksij
+On Sun, Jul 06, 2025 at 10:46:53AM -0400, Mario Limonciello wrote:
+> On 6/30/25 07:32, Alyssa Ross wrote:
+> > Alyssa Ross <hi@alyssa.is> writes:
 > > 
-> > Please try follow patch base on Jun Miao's patchs:
+> > > On Fri, Apr 11, 2025 at 10:14:44AM -0500, Mario Limonciello wrote:
+> > > > From: Mario Limonciello <mario.limonciello@amd.com>
+> > > > 
+> > > > commit a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect
+> > > > on USB4 ports") introduced a sysfs file to control wake up policy
+> > > > for a given USB4 port that defaulted to disabled.
+> > > > 
+> > > > However when testing commit 4bfeea6ec1c02 ("thunderbolt: Use wake
+> > > > on connect and disconnect over suspend") I found that it was working
+> > > > even without making changes to the power/wakeup file (which defaults
+> > > > to disabled). This is because of a logic error doing a bitwise or
+> > > > of the wake-on-connect flag with device_may_wakeup() which should
+> > > > have been a logical AND.
+> > > > 
+> > > > Adjust the logic so that policy is only applied when wakeup is
+> > > > actually enabled.
+> > > > 
+> > > > Fixes: a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect on USB4 ports")
+> > > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > 
+> > > Hi! There have been a couple of reports of a Thunderbolt regression in
+> > > recent stable kernels, and one reporter has now bisected it to this
+> > > change:
+> > > 
+> > >   • https://bugzilla.kernel.org/show_bug.cgi?id=220284
+> > >   • https://github.com/NixOS/nixpkgs/issues/420730
+> > > 
+> > > Both reporters are CCed, and say it starts working after the module is
+> > > reloaded.
+> > > 
+> > > Link: https://lore.kernel.org/r/bug-220284-208809@https.bugzilla.kernel.org%2F/
+> > > (for regzbot)
 > > 
+> > Apparently[1] fixed by the first linked patch below, which is currently in
+> > the Thunderbolt tree waiting to be pulled into the USB tree.
+> > 
+> > #regzbot monitor: https://lore.kernel.org/linux-usb/20250619213840.2388646-1-superm1@kernel.org/
+> > #regzbot monitor: https://lore.kernel.org/linux-usb/20250626154009.GK2824380@black.fi.intel.com/
+> > 
+> > [1]: https://github.com/NixOS/nixpkgs/issues/420730#issuecomment-3018563631
 > 
-> Sorry, please ignore previous, try it:
+> Hey Greg,
 > 
-> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> index 9564478a79cc..6a3cca104af9 100644
-> --- a/drivers/net/usb/usbnet.c
-> +++ b/drivers/net/usb/usbnet.c
-> @@ -861,14 +861,14 @@ int usbnet_stop (struct net_device *net)
->         /* deferred work (timer, softirq, task) must also stop */
->         dev->flags = 0;
->         timer_delete_sync(&dev->delay);
-> -       disable_work_sync(&dev->bh_work);
-> +       cancel_work_sync(&dev->bh_work);
->         cancel_work_sync(&dev->kevent);
->  
->         /* We have cyclic dependencies. Those calls are needed
->          * to break a cycle. We cannot fall into the gaps because
->          * we have a flag
->          */
-> -       disable_work_sync(&dev->bh_work);
-> +       cancel_work_sync(&dev->bh_work);
->         timer_delete_sync(&dev->delay);
->         cancel_work_sync(&dev->kevent);
+> Can you pick up the pull request from Mika from a week and a half ago with
+> this fix for the next 6.16-rc?
+> 
+> https://lore.kernel.org/linux-usb/20250626154009.GK2824380@black.fi.intel.com/
 
-It seems to work now, thank you!
-Tested on LAN9512 and ASIX AX88772B.
+Yes, I was waiting for this last round to go to Linus as the pull
+request was made against a newer version of Linus's tree than I
+currently had in my "for linus" branch.  I'll go get to that later
+today.
 
-You can add my:
-Reported-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+thanks,
 
-Best Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+greg k-h
 
