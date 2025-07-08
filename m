@@ -1,219 +1,258 @@
-Return-Path: <linux-usb+bounces-25568-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25569-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6473CAFC18A
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 05:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E552AAFC24B
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 07:54:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1568B18936E5
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 03:42:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7F16189D790
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 05:54:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACFC923BD13;
-	Tue,  8 Jul 2025 03:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8426021C9FD;
+	Tue,  8 Jul 2025 05:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CyELKr+a"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="EU6Dt2Iw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB6C1548C
-	for <linux-usb@vger.kernel.org>; Tue,  8 Jul 2025 03:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB761FCFF1
+	for <linux-usb@vger.kernel.org>; Tue,  8 Jul 2025 05:54:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751946130; cv=none; b=kmot1t0ucU6tg5aJDhOhLEOZb/FKvw6DHWFg9MXk67yW03R6h2eMx3oqm+sLzaewFdnCrL9YqxMP01whjwLg6wC+OV8V07dvuirne7p5QN2LfOEWnyXBxeJlWgDExAWjC2RTnQFMHUxNhlJ71ST4CpVGoFMfVZAPf05UU5mjNRM=
+	t=1751954052; cv=none; b=cq/ZpM2HVjJoKJfmZMb2geD+njbRdALceM5ws9/07ZCfDnEPNNnU6mqLB+68EkoILqnc5RdQeFU9sk3feuHe67Mwmnz8vUszGw0mqLCzl2Fbbwt330fK0r14sr/kD6FS9couyMoJryXBUTVrcVpjjhdSCNiAYXx5CJeFx90rqE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751946130; c=relaxed/simple;
-	bh=rmAWP0hheaYMDMpqYbrnSFuDsAQYwnIA3Kb5Irbyv1s=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ri+MfQmoEGqQFBxIoULjNaWHDYSdxa34iiIqDxP8BcWDhOc+uBmx+kFcHa4SF1ZatMURX5x0bHor1DCZkEuxKvyk1ceJ2ZDF7SFFF19DUT7EDE03kUsldn1stUEWKJS+OO/lIK8yBT4/ya4+qLQSJTTAfBXcj4zJLcyOblUyxwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CyELKr+a; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751946128; x=1783482128;
-  h=date:from:to:cc:subject:message-id;
-  bh=rmAWP0hheaYMDMpqYbrnSFuDsAQYwnIA3Kb5Irbyv1s=;
-  b=CyELKr+asbK7wF02FxwssQ01GUe3pJ77GuZvWcXhFkCivySjX1eDO3l6
-   1WfoW8W7rYV8HWFklCPBlo3osU4QAAze79FYaQZF95oZXAOR/ketF7Wqo
-   PcBYRG5J7kV0mvZeanvk225Dz2WiOhh4IHaIF5e3/ZQ+c0MxxbwU+VCX2
-   WTAWT/IRjuMhDp2IF11WflNcbExVGMrtO95ql7a1DiMJp1w1u69cB4T+s
-   sfk4e/qB+oL7pqd8qn0qOljesd7ZnMv7+IrrrAMG8mcO5V2lP5hP6ZtpG
-   Li7UbNDtqYj+pH8hm0nGaOKKpUQT6vs3vlmNmv5u/wTCVF42Q7K0CBvM7
-   A==;
-X-CSE-ConnectionGUID: d7mDrNmjTX62isJTJPuaig==
-X-CSE-MsgGUID: 0EgXZWrKTHeTilVw6JlBdA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="54059305"
-X-IronPort-AV: E=Sophos;i="6.16,296,1744095600"; 
-   d="scan'208";a="54059305"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2025 20:42:07 -0700
-X-CSE-ConnectionGUID: YwWGrxmPSJaXyKMMNSHeNw==
-X-CSE-MsgGUID: ORH9gClFRDOU5hxbDcyyxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,296,1744095600"; 
-   d="scan'208";a="155966687"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 07 Jul 2025 20:42:05 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uYzDX-0000xf-34;
-	Tue, 08 Jul 2025 03:42:03 +0000
-Date: Tue, 08 Jul 2025 11:41:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- d1b07cc0868fe14f4540cbc48c1a7c1a8055e284
-Message-ID: <202507081153.k4o6zaey-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1751954052; c=relaxed/simple;
+	bh=Ts/erfI/1U95juCnNCnHSS+t4688tJmeinxH2Afpx9U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AdUvBfT4NlFo6JWdrHNrXR6IN5aZhwoYlajmTs/e6Kg0hCLYDkRTW9mCTAFmOTwZSAzwFpc2k7kro+NPZsIlZTk9iXWL66+cxfq91Ed5Uqx9TUXtkPyM1jfV50iwOzT0Pp8C2r5XSx+utNg3Bppj3MZGtEoPj+a/jMiRy8xz1jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=EU6Dt2Iw; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 567JWFje013480
+	for <linux-usb@vger.kernel.org>; Tue, 8 Jul 2025 05:54:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	+GmNWG+f9cfzqdcMMSlVKHfNJeTBBI9yl9OtdiG/Ptg=; b=EU6Dt2Iw39reaJ9o
+	JeBZHeaE+aHBIAWsOnsMtTCfrXUfBe6NnjyjDhcWPloxGShENUaXZicEalIbUgds
+	tn0OlKGBsV+eKnEyQOsbc7JPV2teRdPmhHEvGjEfj93WNNpzjqhldga88XrBg3se
+	jkq+rOyhjTwiXvICusrUK8awrfzYhy+j1aHIckrHafxgANGfUjOT7cyOsRiMeAHh
+	FvjxhidYG2NzzWcrcHp0q3dL31fHg3wPsvmTXq53BqMn7N8VC34H+xuoQnItYbfh
+	QT0WY0NDW/eV5s/SyS+yWhILu6RmcXAlXeEl43+4xcr9TcoxJ4Pi3setmFbcuCny
+	HKry8A==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47pucmub52-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 08 Jul 2025 05:54:09 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4a9783eabc0so82972591cf.0
+        for <linux-usb@vger.kernel.org>; Mon, 07 Jul 2025 22:54:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751954048; x=1752558848;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+GmNWG+f9cfzqdcMMSlVKHfNJeTBBI9yl9OtdiG/Ptg=;
+        b=CaD7Z3zBqNd8wfxIr2yr3k1uoZw0wDRdnMoGcKdMA+L/Dq/9B8jhGiwTNC6nkYuw8E
+         2VTw9NQ0kRUQyyLFbJ3q1YJqlxSVfFYHXgg4O4hr61ygDCze5Ed1A+XXzhqTa2UF3BAP
+         QWslj8rWhlvon/GFsz4yyao4Jg6xNkzvgxNL35gTtOe47Km/hSr91lVlNHvloVrlD8HX
+         BExisgtPoOoz33dIteiQNO0dopIDHvD4CTWMr25yr6j64BiknKJAOpxwHXGfAv8ikytY
+         R1NFv1AS3uPpS19zc7dyrZs+KzDYH+uqDmhJQnJDw6Y+u1Ifn58bFNcUGeyWfUhS7rhT
+         cbhw==
+X-Forwarded-Encrypted: i=1; AJvYcCWWR9+68/lTitEiWKH8ZLEIRHoCjRni/pyzVrENK8CaS6+zZIo8YhkNb/hXY9OWbjbG3aln5y/xudg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw0IT57YQTYpYv2WVlX+0Ry1Msva6rJAupPl4ev7vUmGe01Reh
+	toISqRfenD/bwEKalzdBewor2+FkEMZBoFaNFX9Lh1cLPiyBXHdOyw6TgfHPpaY1umQnu+xkOhs
+	UEOVdY4FrO8Lf2gATokhScJmp9ameyg0/WpqAsKorw226eQ9o/UsnLDb6O8SrET/b1JPnb7JbJc
+	n95odyUSEJwrcqaQdjVerAocLPEhyFQJ4GWysC3w==
+X-Gm-Gg: ASbGnctbZpwuP33AVBLAJwQTvFb1xRc6f6oLLexllDzNh8B69RLE0H3ec8Qti+OTTej
+	SGQSOusU4qOZds14mqcRF6609iymh3TrMrFgEn6kw//DS5qAk7iMR10toQWjPEmC7jxil6VLM3g
+	qQVD3h2A==
+X-Received: by 2002:a05:622a:11d3:b0:4a9:a8fd:e9b6 with SMTP id d75a77b69052e-4a9ccde0c6dmr28981721cf.43.1751954048030;
+        Mon, 07 Jul 2025 22:54:08 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGkG1/PSmURffRz+0DyrY9TkdVduj7SqUgcOww7V+BMUeR9MlSOMnFuQ7oVlpqf/7eAZK6d7px/g5X1y38kNsY=
+X-Received: by 2002:a05:622a:11d3:b0:4a9:a8fd:e9b6 with SMTP id
+ d75a77b69052e-4a9ccde0c6dmr28981421cf.43.1751954047335; Mon, 07 Jul 2025
+ 22:54:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20250627125131.27606-1-komal.bajaj@oss.qualcomm.com> <2025062812-passive-untracked-1231@gregkh>
+In-Reply-To: <2025062812-passive-untracked-1231@gregkh>
+From: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+Date: Tue, 8 Jul 2025 11:23:56 +0530
+X-Gm-Features: Ac12FXwC05pfIP0vuicV5_xxuQYsfA7JDBPhIFqXwHeQhoKpkWFA1t07QrroD6g
+Message-ID: <CAPHGfUOUR=m2rq-rFbUbWjF93qwY5ikHc+M0_KuHOut86z+Mqg@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
+ secure calls
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Authority-Analysis: v=2.4 cv=GdQXnRXL c=1 sm=1 tr=0 ts=686cb281 cx=c_pps
+ a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10
+ a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=ag1SF4gXAAAA:8 a=EUspDBNiAAAA:8
+ a=3Jk0H8i_qCR-h2oskiIA:9 a=QEXdDO2ut3YA:10 a=a_PwQJl-kcHnX1M80qC6:22
+ a=TjNXssC_j7lpFel5tvFf:22 a=Yupwre4RP9_Eg_Bd0iYG:22
+X-Proofpoint-GUID: DyTBGgeFp6i6ST92kkQ6qCX6VsmAmnnu
+X-Proofpoint-ORIG-GUID: DyTBGgeFp6i6ST92kkQ6qCX6VsmAmnnu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzA4MDA0NSBTYWx0ZWRfX6WRnMHsciTEi
+ 2GZ66r7+9X9I+6r2tsA5h0vi9OVOSvKpxg6gGQFOwSf1WZwmEyTQ4J13jgQN0MXtNQ8Vmrg9Jr4
+ 8Hh4Swe5fVcQ4NsTV0L1Cq123iy4pwHYXPi+Rs3+cAKwWDczLsMsPD15a+D6IRpHYFNMSIT6Lk/
+ XIwxDRmKDAGb12qn+ZnB18fAlJwq0aGEMEEfm0wTgFhvRqPFCNQbBRMgEIEHw7tFh+2JIHeiNdu
+ UZtYFDhtNVlskQIroo9oGFrEps3igpZRibpt+1++AS9SMVtP41YPu5zWWy3IsS4Gd++fkclDfJs
+ mm2IzjqBdnixd8uWB+00QN3iNuHyGo+I00AvlPFSyoVgl3kPcN3XoT07ctHEmS3i1c1bkr13Lbb
+ lJ8u33oDvFb9CQ0x6R58B8GhQShkQJ/p5e8wg+wsiEm/1mavCIy3uY6aCgVErud3oTrwsyLB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-08_01,2025-07-07_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 clxscore=1015
+ spamscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
+ malwarescore=0 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507080045
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: d1b07cc0868fe14f4540cbc48c1a7c1a8055e284  arm64: dts: s32g: Add USB device tree information for s32g2/s32g3
+On Sat, Jun 28, 2025 at 8:06=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Jun 27, 2025 at 06:21:31PM +0530, Komal Bajaj wrote:
+> > EUD_MODE_MANAGER2 register is mapped to a memory region that is marked
+> > as read-only for HLOS, enforcing access restrictions that prohibit
+> > direct memory-mapped writes via writel().
+> >
+> > Attempts to write to this region from HLOS can result in silent failure=
+s
+> > or memory access violations, particularly when toggling EUD (Embedded
+> > USB Debugger) state. To ensure secure register access, modify the drive=
+r
+> > to use qcom_scm_io_writel(), which routes the write operation to Qualco=
+mm
+> > Secure Channel Monitor (SCM). SCM has the necessary permissions to acce=
+ss
+> > protected memory regions, enabling reliable control over EUD state.
+> >
+> > SC7280, the only user of EUD is also affected, indicating that this cou=
+ld
+> > never have worked on a properly fused device.
+> >
+> > Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded U=
+SB Debugger(EUD)")
+> > Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> > Signed-off-by: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> > ---
+> > Changes in v2:
+> > * Drop separate compatible to be added for secure eud
+> > * Use secure call to access EUD mode manager register
+> > * Link to v1: https://lore.kernel.org/all/20240807183205.803847-1-quic_=
+molvera@quicinc.com/
+> >
+> >  drivers/usb/misc/qcom_eud.c | 20 ++++++++++++++------
+> >  1 file changed, 14 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> > index 83079c414b4f..30c999c49eb0 100644
+> > --- a/drivers/usb/misc/qcom_eud.c
+> > +++ b/drivers/usb/misc/qcom_eud.c
+> > @@ -16,6 +16,8 @@
+> >  #include <linux/sysfs.h>
+> >  #include <linux/usb/role.h>
+> >
+> > +#include <linux/firmware/qcom/qcom_scm.h>
+>
+> Why the blank line before this #include line?
 
-elapsed time: 1067m
+The qcom_scm.h header has been placed in a distinct paragraph to clearly
+differentiate it from generic subsystem headers, with a blank line included
+for visual distinction
 
-configs tested: 126
-configs skipped: 4
+>
+> > +
+> >  #define EUD_REG_INT1_EN_MASK 0x0024
+> >  #define EUD_REG_INT_STATUS_1 0x0044
+> >  #define EUD_REG_CTL_OUT_1    0x0074
+> > @@ -34,7 +36,7 @@ struct eud_chip {
+> >       struct device                   *dev;
+> >       struct usb_role_switch          *role_sw;
+> >       void __iomem                    *base;
+> > -     void __iomem                    *mode_mgr;
+> > +     phys_addr_t                     mode_mgr;
+> >       unsigned int                    int_status;
+> >       int                             irq;
+> >       bool                            enabled;
+> > @@ -43,10 +45,14 @@ struct eud_chip {
+> >
+> >  static int enable_eud(struct eud_chip *priv)
+> >  {
+> > +     int ret;
+> > +
+> >       writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
+> >       writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
+> >                       priv->base + EUD_REG_INT1_EN_MASK);
+> > -     writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
+> > +     ret =3D qcom_scm_io_writel(priv->mode_mgr + EUD_REG_EUD_EN2, 1);
+> > +     if (ret)
+> > +             return ret;
+>
+> So the previous writes are ok, but this one could fail?  And if it does
+> fail, what did the previous writes cause to happen to the chip / system?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks for pointing that out. I will move the SCM write before the direct
+register writes to avoid any inconsistent state if the SCM call fails
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                   randconfig-001-20250707    gcc-15.1.0
-arc                   randconfig-002-20250707    gcc-8.5.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    gcc-15.1.0
-arm                     am200epdkit_defconfig    gcc-15.1.0
-arm                        mvebu_v7_defconfig    clang-21
-arm                   randconfig-001-20250707    gcc-10.5.0
-arm                   randconfig-002-20250707    gcc-11.5.0
-arm                   randconfig-003-20250707    clang-21
-arm                   randconfig-004-20250707    clang-21
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250707    gcc-8.5.0
-arm64                 randconfig-002-20250707    gcc-11.5.0
-arm64                 randconfig-003-20250707    gcc-12.3.0
-arm64                 randconfig-004-20250707    gcc-14.3.0
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20250707    gcc-15.1.0
-csky                  randconfig-002-20250707    gcc-12.4.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250707    clang-21
-hexagon               randconfig-002-20250707    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250707    gcc-12
-i386        buildonly-randconfig-002-20250707    clang-20
-i386        buildonly-randconfig-003-20250707    gcc-12
-i386        buildonly-randconfig-004-20250707    gcc-12
-i386        buildonly-randconfig-005-20250707    gcc-12
-i386        buildonly-randconfig-006-20250707    gcc-12
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-21
-loongarch             randconfig-001-20250707    clang-21
-loongarch             randconfig-002-20250707    gcc-15.1.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                               defconfig    gcc-14.2.0
-nios2                 randconfig-001-20250707    gcc-10.5.0
-nios2                 randconfig-002-20250707    gcc-12.4.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-openrisc                    or1ksim_defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250707    gcc-8.5.0
-parisc                randconfig-002-20250707    gcc-15.1.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-21
-powerpc                     mpc512x_defconfig    clang-21
-powerpc               randconfig-001-20250707    gcc-8.5.0
-powerpc               randconfig-002-20250707    clang-21
-powerpc               randconfig-003-20250707    gcc-8.5.0
-powerpc64             randconfig-001-20250707    gcc-8.5.0
-powerpc64             randconfig-002-20250707    gcc-10.5.0
-powerpc64             randconfig-003-20250707    clang-21
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-21
-riscv                 randconfig-001-20250707    clang-21
-riscv                 randconfig-002-20250707    clang-21
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-21
-s390                  randconfig-001-20250707    clang-21
-s390                  randconfig-002-20250707    gcc-11.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                    randconfig-001-20250707    gcc-15.1.0
-sh                    randconfig-002-20250707    gcc-15.1.0
-sh                           se7712_defconfig    gcc-15.1.0
-sh                           se7721_defconfig    gcc-15.1.0
-sh                           se7724_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250707    gcc-12.4.0
-sparc                 randconfig-002-20250707    gcc-8.5.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20250707    clang-20
-sparc64               randconfig-002-20250707    gcc-15.1.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-21
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250707    gcc-12
-um                    randconfig-002-20250707    gcc-12
-um                           x86_64_defconfig    clang-21
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250707    gcc-12
-x86_64      buildonly-randconfig-002-20250707    gcc-12
-x86_64      buildonly-randconfig-003-20250707    gcc-12
-x86_64      buildonly-randconfig-004-20250707    clang-20
-x86_64      buildonly-randconfig-005-20250707    gcc-12
-x86_64      buildonly-randconfig-006-20250707    clang-20
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250707    gcc-12.4.0
-xtensa                randconfig-002-20250707    gcc-8.5.0
+>
+> >       return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
+> >  }
+> > @@ -54,7 +60,7 @@ static int enable_eud(struct eud_chip *priv)
+> >  static void disable_eud(struct eud_chip *priv)
+> >  {
+> >       writel(0, priv->base + EUD_REG_CSR_EUD_EN);
+> > -     writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
+> > +     qcom_scm_io_writel(priv->mode_mgr + EUD_REG_EUD_EN2, 0);
+>
+> No error checking needed?
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ACK
+
+>
+>
+> >  }
+> >
+> >  static ssize_t enable_show(struct device *dev,
+> > @@ -178,6 +184,7 @@ static void eud_role_switch_release(void *data)
+> >  static int eud_probe(struct platform_device *pdev)
+> >  {
+> >       struct eud_chip *chip;
+> > +     struct resource *res;
+> >       int ret;
+> >
+> >       chip =3D devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+> > @@ -200,9 +207,10 @@ static int eud_probe(struct platform_device *pdev)
+> >       if (IS_ERR(chip->base))
+> >               return PTR_ERR(chip->base);
+> >
+> > -     chip->mode_mgr =3D devm_platform_ioremap_resource(pdev, 1);
+> > -     if (IS_ERR(chip->mode_mgr))
+> > -             return PTR_ERR(chip->mode_mgr);
+> > +     res =3D platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> > +     if (!res)
+> > +             return -ENODEV;
+>
+> -ENOMEM perhaps?
+
+ACK
+
+>
+> thanks,
+>
+> greg k-h
 
