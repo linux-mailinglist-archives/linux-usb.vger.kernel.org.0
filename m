@@ -1,173 +1,404 @@
-Return-Path: <linux-usb+bounces-25594-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25595-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD8F9AFD5BB
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 19:51:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DECAAFD643
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 20:17:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A7854A80DE
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 17:51:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C0AE3B67E7
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 18:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D4672E718D;
-	Tue,  8 Jul 2025 17:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72B3E21ADAE;
+	Tue,  8 Jul 2025 18:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="An5mrefw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0512E613A
-	for <linux-usb@vger.kernel.org>; Tue,  8 Jul 2025 17:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91999202F7B
+	for <linux-usb@vger.kernel.org>; Tue,  8 Jul 2025 18:16:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751997090; cv=none; b=derzeNNnAoj0kkfmcV+13Dx9gPdiwQ5fs8u1kmCf2nIiux8mYeLXhj4wqISlRLmsag90PGniIRiWJm+J0uXqPX9hIFM/Wcg11A3lfn2z+CzKBKkyGdSk3UaoLj0WZDSV7rNLQRAFTYsKtwvXjDdTO+BXluSlRfTMMo4CmLAy0r4=
+	t=1751998614; cv=none; b=bnuNomUHXjW7GcVthFvWTD5JkDeOsXEYgS1VltIEduNLdY+N9ZTmG/LlPHQlvrbYpgcdzC2z6BJ3G5ni+GfBHkrfxLEUZoKy8mdavJnE+mOwIfzpvfbwittFT82tmOWUDgRfBMQaawU3x0lrrwHDKBN2zjkf97mU4v3iScvxJ7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751997090; c=relaxed/simple;
-	bh=j8S9vY8YEpgAZ+9EOTe6TqmituCFgPwLRcCdXTJ/ClI=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=o00SWdFNM7PEjjjgJUr80ShakThZ6RvepzkDD2idqtkbkonhg76YmUHpgfzHgIr34GSdkxWMkoEZRBk4edUkTdikmbE94uHxkP8kNkoTWZB5MkDnxLBBn+IMA7BCrSVoDnTkzCCMBxYdnIcQIwkHlJiQhUyD4/PsCsB2wSNubZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3df2cc5104bso93478255ab.2
-        for <linux-usb@vger.kernel.org>; Tue, 08 Jul 2025 10:51:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751997087; x=1752601887;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+	s=arc-20240116; t=1751998614; c=relaxed/simple;
+	bh=j2g5+Is/hApnidHglP5yM9mLknqV0ultVfEaIH/wJ8Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U5GhJnZKwfrbob4XxYZxuxJIwo/lSNsMYssWuTzAFt0PG5guDDn5OxqFDiSdPiJsb06oVKB3Vmh+CF8Hbp1hVw8flHr6G/3QSxdfSKw09l+BymvgYzWM8XnlRMmDRen0R1h6VXanl14tibxaz+2ukrU1foQd8Rw0+ZWdYe0wmg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=An5mrefw; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3df4bdadca5so18188805ab.1
+        for <linux-usb@vger.kernel.org>; Tue, 08 Jul 2025 11:16:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1751998610; x=1752603410; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+TeThu1b9aE+CPbvKACRdaDEcTafO62ZyIapw7YKedY=;
-        b=qw1xVMuHcDD8Wn61e+u/fhhVnSf6Ul0R/HCMpHAx+TfYu22LvbWg+q/q2XknhPIabS
-         24pwmRo11H9+Y0JdAp0vVunjZqnELms2VpM5xqjPET4ytXLBihUc9rGYWj/e0lgqV19q
-         kCh5sLQr3uR1xR8/BQF1MY2bux6ZV/clwCSo/xSF/dtHKsY+VfcBeQpsa7g2AIalO8u5
-         CzUkmsoMX2PaIU935+rIB+4+Uf9r+Ye6hr8avI7l34Vb/jKN0MGZZxuyAlzpU9+ZEoGw
-         bQsmgSbI3OICWuIg+6x9Pne5ZhTqdoDlHJiB+DN/8r21IfhTFOeX41ktan1u/dI5TB9s
-         oSJA==
-X-Forwarded-Encrypted: i=1; AJvYcCXBx+d617+1TePAhu1cGXZqVBoCuZZn8VoQlFF8hfC8YA3AJPuloxV0ePEVlE+FwI81NZJDk0Bb3cA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWFbb/vvSVo6XCsNShFM6wowEZCfnqQ+cFGi5pEQIDD4xtF0VO
-	zvR6xZ8UCO6iUPS5ryJv2zQ6g1H3zEPD/5/jVvNl4Qx7TXA5IZINPv28tPjHAB1hAG6HFK69WWQ
-	jTAmWugmMdr0UbxdNSaW0R0CP+4Ches4ht1uceBcW0mXLBQfukripwU/VayM=
-X-Google-Smtp-Source: AGHT+IHcCjqcbO63Nl0JY0A3bU593vUxVeXcAZKB6aOep3GpMpLNYi4983VKkyY8HO25v6N/RwGdaEJkUpU2NpS2Y/pqUD8Fpyqc
+        bh=C7jo4rHGV68En57t/lie16xVqPLtbUOSRY9RxAWU0Dk=;
+        b=An5mrefwiL8aNZB9GJ1zJ87Dij5zBjhjhYknTa1ck3tBxhdzGtP1W5Qm/jEAlFhHiS
+         LGM2yb7b5XqaWcuR+INFXycquk+pjqNOANaJotP8VA2hbdtRrxvQorQt9iUAKYe2UFbg
+         x4Zvqa1rcEv9snsB0RV4+siPd8wNhaBjOfP6E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751998610; x=1752603410;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C7jo4rHGV68En57t/lie16xVqPLtbUOSRY9RxAWU0Dk=;
+        b=j8ypDb7jnov1LjHk3YJLWL2RBV/t7kzH/liEIt6jTNxrWqet7cYTUOS7w5bum53CmK
+         YciXUQ0HyKm2CczfD9LehaF40rAcfY32ZW5fI4Wb3VC6m7mbbp5F7tHytn85UsLPUsVj
+         73KNw1tV6+KvzyCGDugVKjARBQkDR9+W1Jc9lu/MsrDqwWYnJnZ93LKsvKivaIgr+r2q
+         8tznxL24sVeZW4y3b67dn66S30YMeLaHMUEqkJJBElVBrNlY1w2NgZU1rvibpA6uDdNT
+         n6F3Yo0jkKgHH5J9lCL9rPTbfjqwhHII2FG+GUzflxOXFS+jE7B+cBU/Q9cdKrLeQHaN
+         7JoA==
+X-Forwarded-Encrypted: i=1; AJvYcCXoEkpB6DLMSW/bA3tKAjVSuxuMeyRFMLW/QwRNW4Dv5IZBMhN90fCQCgGaWXGdrxDu5ZV1uVJl+lI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwcV7jt4I7MEjq+U5hjGSpVXxs0uFOsYD6/V++2womawhQR8w2
+	04/A3p4UKWM4TTrS3lcg9iWlo236HMlqKHSvwbolQW7jnwemlT668SP8EB4kbFCkz6o=
+X-Gm-Gg: ASbGncsRRrHyjJJlJLmGMGyQX4VFHSCpWVDDbXdWMv2LdscVoUChnAbAD7/JIcJqXw0
+	U4EXT7YxsuHGTQPkt7CJo5XIMxcvSiGp1OEmOeesHDmYxC04hBY3fX/yu9AAxI/vNJBVaeBprkc
+	MoCs3TjYwFiJnhO6E3n90ZVsIIB9kgpzUIXIqP8g96/PiW/dcGpKJfxMyg2NoD0h/KsluI7VSGO
+	17qF5BFxD+t6G+xq6ZTVyKrtwrykhljlCTziDR69LfcVEow8F2y9K+PLyirJE7mJD9dJ3YZHGIT
+	mQdhpY0xyC75ocdDNQNyITnMCUe1jRn758FjJqFdTPr2iftRAZm+O61sc88GcHhBD36ekOIaIQ=
+	=
+X-Google-Smtp-Source: AGHT+IHGrAuuZogaOqKoDaYMbOfBAJ6945Z6uLUhTaT77JDUVgSGXD/OFcwY5bIrrh4qPYT0vOL8dw==
+X-Received: by 2002:a05:6e02:3191:b0:3df:43ac:af5a with SMTP id e9e14a558f8ab-3e1637ebf77mr10609085ab.2.1751998610029;
+        Tue, 08 Jul 2025 11:16:50 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-503b5a29eb4sm2332522173.57.2025.07.08.11.16.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jul 2025 11:16:49 -0700 (PDT)
+Message-ID: <2a901b8a-9052-41d9-a70d-76508ebd819b@linuxfoundation.org>
+Date: Tue, 8 Jul 2025 12:16:48 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1527:b0:3e0:4f66:310a with SMTP id
- e9e14a558f8ab-3e1355a8e41mr169148195ab.16.1751997087610; Tue, 08 Jul 2025
- 10:51:27 -0700 (PDT)
-Date: Tue, 08 Jul 2025 10:51:27 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <686d5a9f.050a0220.1ffab7.0017.GAE@google.com>
-Subject: [syzbot] [usb?] WARNING in usbnet_status_start
-From: syzbot <syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com>
-To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	netdev@vger.kernel.org, oneukum@suse.com, pabeni@redhat.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usbip: convert to use faux_device
+To: Zongmin Zhou <min_halo@163.com>, Greg KH <gregkh@linuxfoundation.org>
+Cc: shuah@kernel.org, valentina.manea.m@gmail.com, i@zenithal.me,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ zhouzongmin@kylinos.cn, Shuah Khan <skhan@linuxfoundation.org>
+References: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
+ <20250604065410.76069-1-min_halo@163.com>
+ <2025061926-paycheck-footnote-a2b8@gregkh>
+ <c7a2cc26-794e-49e1-bf8c-35617bb8060f@163.com>
+ <2025062010-hardiness-flashily-cb0f@gregkh>
+ <9d95bb75-586c-48dc-9e34-432cc13fd99f@163.com>
+ <2025062004-navy-emboss-4743@gregkh>
+ <2e0bbc5a-e74a-4fb5-884c-686dbaf99caf@linuxfoundation.org>
+ <48ab511e-2847-4daa-98de-a234b8584b78@163.com>
+ <fac026d8-12c8-4c1f-96a7-264ced8391f1@linuxfoundation.org>
+ <a29703bd-08b7-489b-8fb0-15838a1245ab@163.com>
+ <1a13cf53-ffed-4521-917e-9c2856a5e348@linuxfoundation.org>
+ <4fc877f0-b55b-4fa3-8df4-2de4ba1ac51b@163.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <4fc877f0-b55b-4fa3-8df4-2de4ba1ac51b@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello,
+On 7/3/25 00:04, Zongmin Zhou wrote:
+> 
+> On 2025/7/3 07:54, Shuah Khan wrote:
+>> On 7/1/25 20:12, Zongmin Zhou wrote:
+>>>
+>>> On 2025/7/2 06:56, Shuah Khan wrote:
+>>>> On 6/23/25 21:21, Zongmin Zhou wrote:
+>>>>>
+>>>>> On 2025/6/21 01:26, Shuah Khan wrote:
+>>>>>> On 6/20/25 03:27, Greg KH wrote:
+>>>>>>> On Fri, Jun 20, 2025 at 05:19:33PM +0800, Zongmin Zhou wrote:
+>>>>>>>>
+>>>>>>>> On 2025/6/20 12:29, Greg KH wrote:
+>>>>>>>>> On Fri, Jun 20, 2025 at 10:16:16AM +0800, Zongmin Zhou wrote:
+>>>>>>>>>> On 2025/6/19 19:01, Greg KH wrote:
+>>>>>>>>>>> On Wed, Jun 04, 2025 at 02:54:10PM +0800, Zongmin Zhou wrote:
+>>>>>>>>>>>> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
+>>>>>>>>>>>>
+>>>>>>>>>>>> The vhci driver does not need to create a platform device,
+>>>>>>>>>>>> it only did so because it was simple to do that in order to
+>>>>>>>>>>>> get a place in sysfs to hang some device-specific attributes.
+>>>>>>>>>>>> Now the faux device interface is more appropriate,change it
+>>>>>>>>>>>> over to use the faux bus instead.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>> Changes in v2:
+>>>>>>>>>>>> - don't change faux create api,just call probe on vhci_hcd_init.
+>>>>>>>>>>>>
+>>>>>>>>>>>>     drivers/usb/usbip/vhci.h             |  4 +-
+>>>>>>>>>>>>     drivers/usb/usbip/vhci_hcd.c         | 86 +++++++++++-----------------
+>>>>>>>>>>>>     drivers/usb/usbip/vhci_sysfs.c       | 68 +++++++++++-----------
+>>>>>>>>>>>>     tools/usb/usbip/libsrc/vhci_driver.h |  2 +-
+>>>>>>>>>>>>     4 files changed, 72 insertions(+), 88 deletions(-)
+>>>>>>>>>>> I get the following build errors from this patch:
+>>>>>>>>>>>
+>>>>>>>>>>> drivers/usb/usbip/vhci_hcd.c:1462:12: error: ‘vhci_hcd_resume’ defined but not used [-Werror=unused-function]
+>>>>>>>>>>>     1462 | static int vhci_hcd_resume(struct faux_device *fdev)
+>>>>>>>>>>>          |            ^~~~~~~~~~~~~~~
+>>>>>>>>>>> drivers/usb/usbip/vhci_hcd.c:1418:12: error: ‘vhci_hcd_suspend’ defined but not used [-Werror=unused-function]
+>>>>>>>>>>>     1418 | static int vhci_hcd_suspend(struct faux_device *fdev, pm_message_t state)
+>>>>>>>>>>>          |            ^~~~~~~~~~~~~~~~
+>>>>>>>>>>> cc1: all warnings being treated as errors
+>>>>>>>>>>>
+>>>>>>>>>>> Are you sure you tested this?
+>>>>>>>>>> I apologize for not enabling -Werror, which resulted in missing this error
+>>>>>>>>>> warning.
+>>>>>>>>>> I have tested usbip feature use the new patch,but not test system
+>>>>>>>>>> suspend/resume.
+>>>>>>>>>> The faux bus type don't add pm function,and vhci-hcd driver can't register
+>>>>>>>>>> it.
+>>>>>>>>>> Maybe have to add suspend/resume for it.like below:
+>>>>>>>>>> static const struct bus_type faux_bus_type = {
+>>>>>>>>>>       .name        = "faux",
+>>>>>>>>>>       .match        = faux_match,
+>>>>>>>>>>       .probe        = faux_probe,
+>>>>>>>>>>       .remove        = faux_remove,
+>>>>>>>>>>       .resume     = faux_resume,
+>>>>>>>>>>       .suspend    = faux_suspend,
+>>>>>>>>>> };
+>>>>>>>>>>
+>>>>>>>>>> Is that right?
+>>>>>>>>>> Your expertise would be greatly valued.
+>>>>>>>>> As this is not real hardware, why do you need the suspend/resume
+>>>>>>>>> callbacks at all?  What is happening here that requires them?
+>>>>>>>> @greg,
+>>>>>>>> The vhci_hcd_suspend/vhci_hcd_resume interfaces are not designed for this
+>>>>>>>> faux device, but rather to
+>>>>>>>> manipulate the HCD_FLAG_HW_ACCESSIBLE bit in the hcd flags associated with
+>>>>>>>> the faux device.
+>>>>>>>> For example:
+>>>>>>>> During system standby: clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags)
+>>>>>>>> During system wakeup: set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags)
+>>>>>>>>
+>>>>>>>> Previously, these two functions were registered through platform_driver,
+>>>>>>>> but faux bus does not have the relevant interface, so they were not called,
+>>>>>>>> resulting in this compilation warning error.
+>>>>>>>>
+>>>>>>>> This raises the question: Should the faux bus implement PM-related
+>>>>>>>> interface?
+>>>>>>>> I'm uncertain whether these functions are essential for the vhci-hcd driver
+>>>>>>>> or if they can be safely removed.
+>>>>>>>>
+>>>>>>>> However, during system standby/wakeup tests with remote USB devices bound to
+>>>>>>>> the vhci-hcd driver,
+>>>>>>>> I observed consistent failure scenarios across both the original platform
+>>>>>>>> bus and faux bus patch implementations.
+>>>>>>
+>>>>>> suspend and resume hooks have been in the code from beginning
+>>>>>> in the CONFIG_PM path. The original authors are skeptical about
+>>>>>> what should happen during suspend"
+>>>>>>
+>>>>>> /* what should happen for USB/IP under suspend/resume? */
+>>>>>> suspend hook checks for active connections and sends EBBUSY
+>>>>>> back to pm core.
+>>>>>>
+>>>>>> Active connection means any of the ports are in USB_PORT_STAT_CONNECTION
+>>>>>> state. So as long as there are active connections between vhci client
+>>>>>> and the host, suspend won't work. So we really don't know what happens
+>>>>>> to the active connections if there are no suspend/resume hooks.
+>>>>>>
+>>>>>> If there are no active connections, then it will clear the HCD_FLAG_HW_ACCESSIBLE
+>>>>>> bit and returns to pm core to continue with suspend.
+>>>>>>
+>>>>>> resume sets the HCD_FLAG_HW_ACCESSIBLE flag to indicate hardware is accessible
+>>>>>> and initiates port status poll.
+>>>>>>
+>>>>>> - suspend hook prevents suspend
+>>>>>>
+>>>>>> With faux device since there is no suspend and resume hook, I would expect
+>>>>>> these hooks are not a factor in suspend and resume.
+>>>>>>
+>>>>>> vhci_hcd is a special case virtual driver as it is a proxy for controlling
+>>>>>> hardware on the host.
+>>>>>>
+>>>>>> Zongmin,
+>>>>>>
+>>>>>> Do suspend/resume work when vhci_hcd is not loaded?
+>>>>>> What happens when when system suspends and resumes with faux device?
+>>>>>> Can you send me dmesg logs and pm logs?
+>>>>>>
+>>>>> Hi Greg,shuah
+>>>>>
+>>>>> Yes, system with vhci_hcd unload or just load vhci_hcd driver
+>>>>> without usbip devices bound to vhci_hcd,system suspend/resume worked well.
+>>>>> Some logs for you.
+>>>>
+>>>> Sorry for the delay. I was at a conference last week.
+>>>> Thank you for sending these logs.
+>>>>
+>>>>> 1.system with vhci_hcd driver load,but don't bound any usbip devices to vhci_hcd,suspend/resume worked well.
+>>>>> see dmesg-faux bus-load.log
+>>>>
+>>>>
+>>>>>
+>>>>> 2.usbip device bound to vhci_hcd,and do system suspend action,suspend/resume worked failed.
+>>>>> I observed two distinct failure scenario:
+>>>>> Scenario 1: System failed to enter suspend state,and will auto resume;
+>>>>
+>>>>
+>>>>> the log for use platform bus:
+>>>>> dmesg-platform bus-device bound-auto resume.log
+>>>>
+>>>> This is clear from the suspend hook in the vhci_hcd.
+>>>> When it returns EBUSY, suspend will fail and move to
+>>>> auto resume.
+>>>>
+>>>>> the log for use faux bus:
+>>>>> dmesg-faux bus-device bound-auto resume.log
+>>>>
+>>>> It is good that the behavior is same with faux bus even though
+>>>> suspend hook isn't called. I will take a look at the log.
+>>>>
+>>>>>
+>>>>> Scenario 2: System resume failed with black screen freeze,a forced restart of the machine is require.
+>>>>> the log for use platform bus:
+>>>>> dmesg-platform bus-device bound-black screen.log
+>>>>> the log for use faux bus:
+>>>>> dmesg-faux bus-device bound-black screen.log
+>>>>
+>>>> That is bad. When does this happen? Is there a difference in
+>>>> configuration?
+>>>>
+>>> No, there's no difference. The same code is used for two different failure scenarios.
+>>> I just tested many times. These two different situations occur probabilistically.
+>>> But they both happened only when the USBIP device is bound to the vhci_hcd driver.
+>>>> The behavior same for platform bus and faux bus. Sounds like
+>>>> an existing problem that needs to be debugged separately.
+>>>>
+>>>> I will take a look at all these logs and get back to you in
+>>>> a day or two.
+>>>>
+>>
+>> I looked at the logs and here is what I found:
+>>
+>> Scenario 1:
+>>   dmesg-faux bus-device bound-auto resume.log
+>>   dmesg-platform bus-device bound-auto resume.log
+>>
+>> In this case suspend bailed out way before driver suspend
+>> when vhci_hcd is using platform and faux bus.
+>>
+>> Freezing remaining freezable tasks failed after 20.006 seconds (0 tasks refusing to freeze, wq_busy=1)
+>> Restarting kernel threads ... done
+>> OOM killer enabled.
+>> Restarting tasks ... done.
+>> random: crng reseeded on system resumption
+>> PM: suspend exit
+>>
+>> Auto-resume of the user-space worked. Scenario 1 isn't really
+>> interesting.
+>>
+>> Scenario 2:
+>>   dmesg-faux bus-device bound-black screen.log
+>>   dmesg-platform bus-device bound-black screen.log
+>>
+>> Even though the result is the same in seeing blank screen, how
+>> we get there is different.
+>>
+>> =================
+>> faux-bus device:
+>> =================
+>> - suspend worked - looks like
+>>   usb 4-1: PM: calling usb_dev_suspend @ 6054, parent: usb4
+>>   usb 4-1: PM: usb_dev_suspend returned 0 after 13675 usecs
+>>   usb usb4: PM: calling usb_dev_suspend @ 6055, parent: vhci_hcd.0
+>>   usb usb4: PM: usb_dev_suspend returned 0 after 9 usecs
+>>
+>> vhci_hcd suspend isn't in play here. usb_dev_suspend() returns.
+>> See below
+>>
+>> usb 4-1: PM: usb_dev_suspend returned message.
+>>
+>> -------------------------------------------------------------
+>>
+>> - resume started (assuming it has been initiated by user)
+>>
+>> [  650.027491][ T6056] pci 0000:00:01.0: PM: pci_pm_suspend_noirq returned 0 after 304 usecs
+>>
+>> See see timestamp difference between the last suspend message and the
+>> first resume message.
+>> [  674.000257][   T39] pci 0000:00:00.0: PM: calling pci_pm_resume_noirq @ 39, parent: pci0000:00
+>>
+>> usb 4-1 usb_dev_resume never returns.
+>>
+>> [  674.071125][ T6117] usb usb4: PM: usb_dev_resume returned 0 after 21110 usecs
+>> [  674.113991][ T6126] usb 4-1: PM: calling usb_dev_resume @ 6126, parent: usb4
+>>
+>> -------------------------------------------------------------
+>>
+>> =====================
+>> platform bus device
+>> =====================
+>>
+>> - suspend was aborted because vhci_hcd suspend routine returned error
+>>
+>> [  297.854621][ T9402] usb 4-1: PM: calling usb_dev_suspend @ 9402, parent: usb4
+>> [  297.868524][ T9402] usb 4-1: PM: usb_dev_suspend returned 0 after 13214 usecs
+>> [  297.869994][ T9403] usb usb4: PM: calling usb_dev_suspend @ 9403, parent: vhci_hcd.0
+>> [  297.871959][ T9403] usb usb4: PM: usb_dev_suspend returned 0 after 30 usecs
+>> [  297.873644][ T9394] vhci_hcd vhci_hcd.0: PM: calling platform_pm_suspend @ 9394, parent: platform
+>> [  297.874738][ T9394] vhci_hcd vhci_hcd.0: We have 1 active connection. Do not suspend.
+>> [  297.875369][ T9394] vhci_hcd vhci_hcd.0: PM: dpm_run_callback(): platform_pm_suspend returns -16
+>> [  297.876078][ T9394] vhci_hcd vhci_hcd.0: PM: platform_pm_suspend returned -16 after 1341 usecs
+>> [  297.876774][ T9394] vhci_hcd vhci_hcd.0: PM: failed to suspend: error -16
+>>
+>> - the following triggers resume
+>> [  297.877321][ T9394] PM: Some devices failed to suspend, or early wake event detected
+>>
+>> [  297.881065][ T9403] usb usb3: PM: usb_dev_resume returned 0 after 19 usecs
+>> [  297.904551][ T9408] usb usb4: PM: usb_dev_resume returned 0 after 22911 usecs
+>> [  297.905148][ T9418] usb 4-1: PM: calling usb_dev_resume @ 9418, parent: usb4
+>>
+>> usb 4-1 usb_dev_resume never returns.
+>>
+>> Note - In both cases, usb_dev_resume doesn't return. When it is called is the
+>> difference.
+>>
+>> I don't think suspend/resume works when devices are bound. Suspend exits and
+>> starts resume which seems to fail because it doesn't handle the virtual usb
+>> device resume. There is a missing piece here.
+>>
+>> When vhci_hcd imports a device and acts as a proxy between the virtual mass
+>> storage device (e.g in this case) - it appears suspend and resume are
+>> handled as if it is a usb device. Maybe this is incorrect?
+>>
+>> usb_dev_suspend() works and usb_dev_resume() on these virtual usb devices?
+>> Do we need to handle this in usb_dev_resume()?
+>>
+>> Talking out loud - I have to do some looking into.
+>>
+> Re:
+> Yes, your analysis is completely correct.
+> 
+> In fact, I've experimented with adding PM hooks to the faux bus,
+> and found that faux bus devices then behave identically to platform bus devices during suspend/resume.
+> See the attachment.
+> 
 
-syzbot found the following issue on:
+Thanks for checking this scenario. No surprises here.
 
-HEAD commit:    d1b07cc0868f arm64: dts: s32g: Add USB device tree informa..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1554d582580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=28729dff5d03ad1
-dashboard link: https://syzkaller.appspot.com/bug?extid=3f89ec3d1d0842e95d50
-compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11680a8c580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14c9abd4580000
+> This is likely a historical legacy issue.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3eab0cb43ae2/disk-d1b07cc0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/934d59614ed5/vmlinux-d1b07cc0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4b24078bc227/bzImage-d1b07cc0.xz
+It is an existing problem in the way vhci_hcd and the bound devices
+handle suspend/resume. vhci_hcd suspend assumes once it returns
+"don't suspend" the rest works. However suspend for the bound device
+runs first and a subsequent resume on it fails.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com
+This problem needs fixing - I don't know yet how to.
 
-sierra_net 4-1:0.11 wwan0: register 'sierra_net' at usb-dummy_hcd.3-1, Sierra Wireless USB-to-WWAN Modem, 00:00:00:00:01:0b
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 37 at drivers/net/usb/usbnet.c:266 usbnet_status_start+0x189/0x1e0 drivers/net/usb/usbnet.c:266
-Modules linked in:
-CPU: 1 UID: 0 PID: 37 Comm: kworker/1:1 Not tainted 6.16.0-rc4-syzkaller-00311-gd1b07cc0868f #0 PREEMPT(voluntary) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:usbnet_status_start+0x189/0x1e0 drivers/net/usb/usbnet.c:266
-Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 75 4e 48 8b bb 70 03 00 00 89 ee e8 25 95 0c 00 41 89 c5 e9 36 ff ff ff e8 a8 3f ec fc 90 <0f> 0b 90 45 31 ed e9 39 ff ff ff 4c 89 ff e8 d4 41 49 fd e9 e9 fe
-RSP: 0018:ffffc90000277098 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888100f80d00 RCX: ffffffff84930727
-RDX: ffff888105693a00 RSI: ffffffff84919188 RDI: ffff888100f80d00
-RBP: 0000000000000cc0 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffff888100f81070
-R13: ffffffff89be8f70 R14: ffff88811da1f028 R15: ffff88811da1f024
-FS:  0000000000000000(0000) GS:ffff888269262000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffd6ab63358 CR3: 0000000116716000 CR4: 00000000003506f0
-Call Trace:
- <TASK>
- sierra_net_probe drivers/net/usb/sierra_net.c:929 [inline]
- sierra_net_probe+0x70/0xb0 drivers/net/usb/sierra_net.c:921
- usb_probe_interface+0x303/0x9c0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1a70 drivers/base/core.c:3692
- usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
- usb_probe_device+0xef/0x3e0 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1a70 drivers/base/core.c:3692
- usb_new_device+0xd07/0x1a20 drivers/usb/core/hub.c:2694
- hub_port_connect drivers/usb/core/hub.c:5566 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
- port_event drivers/usb/core/hub.c:5866 [inline]
- hub_event+0x2f85/0x5030 drivers/usb/core/hub.c:5948
- process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3321 [inline]
- worker_thread+0x6c8/0xf10 kernel/workqueue.c:3402
- kthread+0x3c2/0x780 kernel/kthread.c:464
- ret_from_fork+0x5b3/0x6c0 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
+> Regarding this matter, is there anything else you'd like me to assist with?
+> 
 
+One thing I am curious about is the status of the bound devices after
+"forced restart of the machine" when you see blank screen or hang?
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+thanks,
+-- Shuah
 
