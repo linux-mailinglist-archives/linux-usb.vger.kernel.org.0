@@ -1,93 +1,119 @@
-Return-Path: <linux-usb+bounces-25574-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25575-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 832E5AFC421
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 09:33:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22C68AFC4ED
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 10:01:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12C40179F86
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 07:33:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BFB71892BD4
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 08:01:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ADE12989BC;
-	Tue,  8 Jul 2025 07:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F21A29B8E6;
+	Tue,  8 Jul 2025 08:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="x1UKY1my"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Wst4Hy1/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B98220F38;
-	Tue,  8 Jul 2025 07:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C91910A1F;
+	Tue,  8 Jul 2025 08:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751960002; cv=none; b=NbjHe5d4UA8GLc7kb9Jo1rlbJwH2XhKTYTZoby4wwadso4/VbM9YPOOMV8/MIYZEABSPfQY1nbdbxmEipFgphGxgPwrcGUfuD4uw5qfUNE4E6q2PLKuthXWjteyRx00HdSNqObYdq+t/fOBsAQ8g4bruAjkckxyOJX9/Kn7Ww5A=
+	t=1751961689; cv=none; b=NQ7mgraxZFR8L/QJMigQ4+j6M12ncUlTENedA6rx9ohdIMwannj+zXMln2cVpu8YjkrrcdhVAuobg0KnSCb5XS66AO9E+jSL2A2AzFzvN8Cy7XRwtQVy3iAMFk5W1/3JV77Uchq0MJSy/WrzqN/jyjT6QJS8QpJe1sfcO1UpHWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751960002; c=relaxed/simple;
-	bh=aKRhOcZ8Qjp0Em2Ph5UFHo25AahL0FqSJQPHHtZj0g4=;
+	s=arc-20240116; t=1751961689; c=relaxed/simple;
+	bh=1IcQdHGZAxNprOzffGTwM8MUgD1tKayzq0CNL3/5vEk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DIM2q416SeRnVIE/Utln7X6MGZhKHdUOcHzdGR6tZchTzer8QapULmn303+cwXxDDYhB1QhtNAB6YFsIRskSjwRxaHnM0GQ9eNz3Q5lWDBej+adUL3/cZr0xJOxeVRlVfB0b73dHluiQF1Ua5uTe0ItTsLx6QjrrTWc1zup9ASM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=x1UKY1my; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADF4C4CEF1;
-	Tue,  8 Jul 2025 07:33:20 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=cpp+c+Lc2rmgLcZwDSA9wKroK7mwNT9BYdo9DxO0g7iAY1GMsv1KXwzLpn4BdTyf6EXT6hpkqSZ23XZHX9oYWT7BAn3Dk/WP7HgOh+pL6FR8U2uDbevc6UyYeIItca/PUchVM88W+UWWWs+V62k7W5HEvv+Wk14ti6pqvioykUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Wst4Hy1/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C70C4CEED;
+	Tue,  8 Jul 2025 08:01:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751960001;
-	bh=aKRhOcZ8Qjp0Em2Ph5UFHo25AahL0FqSJQPHHtZj0g4=;
+	s=korg; t=1751961689;
+	bh=1IcQdHGZAxNprOzffGTwM8MUgD1tKayzq0CNL3/5vEk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=x1UKY1myZUr+KAU6chYYab3h3jg6fIL2z8tX/L2pCGMOTnEyMP0gt27vi+vueZnoh
-	 1T3Ok8kB6kvtxvFdo8kVt6m49zuWbdIfgwP66GhChNO1zgpu6RP6v1UYeL2fLqLXtw
-	 IO2YIOK0zi4xN5KHoiGu8ck8YqslapQKnuEri3Rk=
-Date: Tue, 8 Jul 2025 09:33:18 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jie Deng <dengjie03@kylinos.cn>
-Cc: stern@rowland.harvard.edu, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH v2] usb: storage: Ignore UAS driver for SanDisk Extreme
- Pro 55AF storage device
-Message-ID: <2025070810-nintendo-congenial-95d4@gregkh>
-References: <2025070422-punctured-opal-f51e@gregkh>
- <20250707062507.39531-1-dengjie03@kylinos.cn>
- <2025070702-unsigned-runny-62c6@gregkh>
- <4bac2d53-0e5b-437e-92bc-12921a8efd8d@kylinos.cn>
+	b=Wst4Hy1/iqao1N+kkvodH0dHZDkEjAOZhUL27lcYPvSBApGWx8jNcIpjtA9BfS5/M
+	 Fpn2eoP1RtKxUEGM989UxLBOv53epAVSRSrCAOFg38bNSfQa2V7OdjqGfH86wfEV7m
+	 rt1n69DDZOpjm6A5f+wb8tRVFbL3vS+bJxKdB1Zk=
+Date: Tue, 8 Jul 2025 10:01:26 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v2] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
+ secure calls
+Message-ID: <2025070843-strangely-unplanted-3ef5@gregkh>
+References: <20250627125131.27606-1-komal.bajaj@oss.qualcomm.com>
+ <2025062812-passive-untracked-1231@gregkh>
+ <CAPHGfUOUR=m2rq-rFbUbWjF93qwY5ikHc+M0_KuHOut86z+Mqg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4bac2d53-0e5b-437e-92bc-12921a8efd8d@kylinos.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPHGfUOUR=m2rq-rFbUbWjF93qwY5ikHc+M0_KuHOut86z+Mqg@mail.gmail.com>
 
-On Tue, Jul 08, 2025 at 01:55:47PM +0800, Jie Deng wrote:
-> 2. Regarding your question, before submitting the patch,
-> I conducted the following tests:
-> 1) linux + x86: The SanDisk Extreme Pro 55AF device can be recognized
-> normally when using the uas driver. USB controller model (VendorID:
-> 1D94, DeviceID: 145F,Chengdu Haiguang IC Design Co., Ltd.USB 3.0 Host
-> controller)
+On Tue, Jul 08, 2025 at 11:23:56AM +0530, Komal Bajaj wrote:
+> On Sat, Jun 28, 2025 at 8:06 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Jun 27, 2025 at 06:21:31PM +0530, Komal Bajaj wrote:
+> > > EUD_MODE_MANAGER2 register is mapped to a memory region that is marked
+> > > as read-only for HLOS, enforcing access restrictions that prohibit
+> > > direct memory-mapped writes via writel().
+> > >
+> > > Attempts to write to this region from HLOS can result in silent failures
+> > > or memory access violations, particularly when toggling EUD (Embedded
+> > > USB Debugger) state. To ensure secure register access, modify the driver
+> > > to use qcom_scm_io_writel(), which routes the write operation to Qualcomm
+> > > Secure Channel Monitor (SCM). SCM has the necessary permissions to access
+> > > protected memory regions, enabling reliable control over EUD state.
+> > >
+> > > SC7280, the only user of EUD is also affected, indicating that this could
+> > > never have worked on a properly fused device.
+> > >
+> > > Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded USB Debugger(EUD)")
+> > > Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> > > Signed-off-by: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+> > > Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> > > ---
+> > > Changes in v2:
+> > > * Drop separate compatible to be added for secure eud
+> > > * Use secure call to access EUD mode manager register
+> > > * Link to v1: https://lore.kernel.org/all/20240807183205.803847-1-quic_molvera@quicinc.com/
+> > >
+> > >  drivers/usb/misc/qcom_eud.c | 20 ++++++++++++++------
+> > >  1 file changed, 14 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> > > index 83079c414b4f..30c999c49eb0 100644
+> > > --- a/drivers/usb/misc/qcom_eud.c
+> > > +++ b/drivers/usb/misc/qcom_eud.c
+> > > @@ -16,6 +16,8 @@
+> > >  #include <linux/sysfs.h>
+> > >  #include <linux/usb/role.h>
+> > >
+> > > +#include <linux/firmware/qcom/qcom_scm.h>
+> >
+> > Why the blank line before this #include line?
+> 
+> The qcom_scm.h header has been placed in a distinct paragraph to clearly
+> differentiate it from generic subsystem headers, with a blank line included
+> for visual distinction
 
-So it all works, great!
+No need for this, it's pretty obvious this is the case when all in one
+long list.
 
-> 2) linux + arm64: The SanDisk Extreme Pro 55AF device will report an error
-> when
-> using the uas driver and the driver cannot be loaded. USB Controller model
-> (Vendor ID: 1912, Device ID: 0014,uPD720201 USB 3.0 Host Controller).
-
-Ok, that sounds like an arm64 issue we should resolve.  Why can the
-driver not be loaded at all?  What happens?
-
-> 3) linux + arm64: Add the parameter "USB-storage.quirks =0781:55af:u" in
-> grub.
-> The SanDisk Extreme Pro 55AF device runs the usb storage driver without any
-> error
-> and can be recognized normally.
-
-Let's track down and fix the arm64 issue here please, and not paper over
-it by saying that this whole device will not work well on all arches.
-
-thakns,
+thanks,
 
 greg k-h
 
