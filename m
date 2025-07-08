@@ -1,248 +1,173 @@
-Return-Path: <linux-usb+bounces-25593-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25594-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58A1FAFD54C
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 19:25:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD8F9AFD5BB
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 19:51:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E5E0188BBB9
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 17:26:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A7854A80DE
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 17:51:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 824222E6D38;
-	Tue,  8 Jul 2025 17:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="J+GbFMso"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D4672E718D;
+	Tue,  8 Jul 2025 17:51:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531452E6D3A
-	for <linux-usb@vger.kernel.org>; Tue,  8 Jul 2025 17:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0512E613A
+	for <linux-usb@vger.kernel.org>; Tue,  8 Jul 2025 17:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751995523; cv=none; b=e8oJvmvHcfEYWH6X2it+Vdx4vaCk3HnkASboyRJImUp2nTFImIZkRqRycnwkjBQ2q5oXRLckc7NJzoqws2FppusX7+6cS0/kk2Uy4boZm1Hj3yDEZ4VqErzgzFc+IvmXdadxVR80PZZ3Gq7vbYQk/63VcR4X55a+1YyMkXDrYU4=
+	t=1751997090; cv=none; b=derzeNNnAoj0kkfmcV+13Dx9gPdiwQ5fs8u1kmCf2nIiux8mYeLXhj4wqISlRLmsag90PGniIRiWJm+J0uXqPX9hIFM/Wcg11A3lfn2z+CzKBKkyGdSk3UaoLj0WZDSV7rNLQRAFTYsKtwvXjDdTO+BXluSlRfTMMo4CmLAy0r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751995523; c=relaxed/simple;
-	bh=lYcinFsC3EAgBwLK9aXi8M5trFJ985aUKU/gocwLX/o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WwHTlZvY4Ncb6I/6iNghUunRw8SQUZ8CtxffLS2iUDeBd8CkuXV5rjA0qKQccDesZeNePsWi75WFOlnKCQhG18OcbCI1Nryalpn546qXOq/ce04fUePIIQY4ySewHkH6eM9zTYx+hltmKrkCPgW/uUVZ19cxHD7qfcaVPeI2dJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=J+GbFMso; arc=none smtp.client-ip=209.85.166.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-3da73df6c4eso42084725ab.0
-        for <linux-usb@vger.kernel.org>; Tue, 08 Jul 2025 10:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1751995520; x=1752600320; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cst6VKXal21kcvQoj/qTt4BoEK49CJUqqKIE5tWnBGg=;
-        b=J+GbFMsoPYQhWLqTjlzGwpxC4fIh+1FxFZ6CvZP3q+7uOj8mrHLH03qhG8ZFbYs27c
-         2XtuGjd9EkLB0YocqhkpWCBmKuEbIJsn1WBxZNYjHO0iV86GV/oTYBK5y+PsspIm+dHW
-         IlXKWzqJgJwRHuQqHe5QNmX96eXrtPdS1fZMOv+cISZBJzchrKQHYCfhBbzDzp5VHT+H
-         gtL6lR9GmrKZgoPnrLuPsZQLCbtWPDLptRTWu55uvRiGeGEXQfRSa1CqV2MYEX+E8BEf
-         eZ1ctPvDEgWTuOkHyC7hZo054s8EBT5ruMwYQBWlsbVrQ8cn5oIwvasF2t3PjeXOSg2I
-         hGkA==
+	s=arc-20240116; t=1751997090; c=relaxed/simple;
+	bh=j8S9vY8YEpgAZ+9EOTe6TqmituCFgPwLRcCdXTJ/ClI=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=o00SWdFNM7PEjjjgJUr80ShakThZ6RvepzkDD2idqtkbkonhg76YmUHpgfzHgIr34GSdkxWMkoEZRBk4edUkTdikmbE94uHxkP8kNkoTWZB5MkDnxLBBn+IMA7BCrSVoDnTkzCCMBxYdnIcQIwkHlJiQhUyD4/PsCsB2wSNubZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3df2cc5104bso93478255ab.2
+        for <linux-usb@vger.kernel.org>; Tue, 08 Jul 2025 10:51:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751995520; x=1752600320;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cst6VKXal21kcvQoj/qTt4BoEK49CJUqqKIE5tWnBGg=;
-        b=eb0R2q697z+09AvLbURfRMxX4fq7+x8uti2Y6lqdvWxNcV21JrmkiI2g7ILU2heMhR
-         sTRPKQx4O6MYniLrC7f2758oXkroO2+cHzqawl222hI9iVs8tQlUAQrmUmRbwWB1iRgI
-         4yQ7FL4NnThnt4FAbeCWyYJP7lu+UVla1KfHhyXkvKoOTVBUosAWrH0PVlM0JYnUwQzr
-         dY8MM1UyXIAP0zyCieqfr1ofNTdn/E/rKDWc1RISVuamK2t5IIf4LBYGz5ZVnRw0R6Xd
-         qYUtt5p3fYjk6OcGukAFZtoN77lxEHmCHl3DYvNe/RXrVUDoS22iDA5t24AYl079COGG
-         MFlw==
-X-Forwarded-Encrypted: i=1; AJvYcCXecAk1TkdD3XahE/sXdRZpHGHRoq79Cm9rdaCxRcz9w/Eay7shmPOBbcfTXyFL3VoYAinldvDFvl0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxz2BcVKLm6cmW4R2JEzs2p9scCBPHOkKWkaUghLOM+HMtQM68M
-	8nLRy16Z34mr0SGb0Nq7tKL5mUwIoKaRxqpFZ6vGR5RvmA9Y5fggTDT6l4I3ZPOyMQ==
-X-Gm-Gg: ASbGncusj2pS9Sa4fmvpYAAgFP9D45qh/jMC+EATQNZaKYick+Nfw4OiFunn8X4y2XT
-	0UTJ+KtqDVmmUiesSr967FkOPXv0D3Y34kybtHkD3B//IvPfxPfo4L2QMrUhnROe31cKKaWqr9c
-	bKej49VdUXH3UqSmBwPiVX9OF5hQwJBgSaqXRjUBRKfsPcW/+Jw2Cf8bh3lc3tGwzDA6XEU0SBP
-	u/MRNMza8DWX00X5lLjOar9qlCUwDeyGY9N2EMD9E/zyLSvpiBQ5LZZHJNMXQMfMqx/ENELD4e+
-	dS4FZlGdhI1EvTwOsaVEgMcSK9VCGudjsLQlKQeUXRx9cJQvkP5nPbxGY5edmXR///+OoXMHWUo
-	rz1TZjolHtdokGngt8irLAARbrKXunItcDFzFnWJyv69xTBC0LfNaSPA=
-X-Google-Smtp-Source: AGHT+IGuN7RVSjqRXZ0Ho5hQMC8xexikALmsvJJ5UBECJiC9PzVW4b58qr8VA3o+IcRiaa182GItEg==
-X-Received: by 2002:a05:6e02:3702:b0:3df:3d1a:2e76 with SMTP id e9e14a558f8ab-3e154dbd6d6mr48369075ab.1.1751995520179;
-        Tue, 08 Jul 2025 10:25:20 -0700 (PDT)
-Received: from rowland.harvard.edu (nat-65-112-8-52.harvard-secure.wrls.harvard.edu. [65.112.8.52])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3e1004ceb0bsm33298025ab.66.2025.07.08.10.25.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jul 2025 10:25:19 -0700 (PDT)
-Date: Tue, 8 Jul 2025 13:25:16 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-	USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: Serious bug in HID core
-Message-ID: <e3a58c95-9501-4ec8-902e-2a73402d1fe3@rowland.harvard.edu>
-References: <c75433e0-9b47-4072-bbe8-b1d14ea97b13@rowland.harvard.edu>
- <drcvdlw2kpuvsbact2gy4hvqp2i3au3shv5ozp3qms7qdfvi7t@7jofrodxeimb>
+        d=1e100.net; s=20230601; t=1751997087; x=1752601887;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+TeThu1b9aE+CPbvKACRdaDEcTafO62ZyIapw7YKedY=;
+        b=qw1xVMuHcDD8Wn61e+u/fhhVnSf6Ul0R/HCMpHAx+TfYu22LvbWg+q/q2XknhPIabS
+         24pwmRo11H9+Y0JdAp0vVunjZqnELms2VpM5xqjPET4ytXLBihUc9rGYWj/e0lgqV19q
+         kCh5sLQr3uR1xR8/BQF1MY2bux6ZV/clwCSo/xSF/dtHKsY+VfcBeQpsa7g2AIalO8u5
+         CzUkmsoMX2PaIU935+rIB+4+Uf9r+Ye6hr8avI7l34Vb/jKN0MGZZxuyAlzpU9+ZEoGw
+         bQsmgSbI3OICWuIg+6x9Pne5ZhTqdoDlHJiB+DN/8r21IfhTFOeX41ktan1u/dI5TB9s
+         oSJA==
+X-Forwarded-Encrypted: i=1; AJvYcCXBx+d617+1TePAhu1cGXZqVBoCuZZn8VoQlFF8hfC8YA3AJPuloxV0ePEVlE+FwI81NZJDk0Bb3cA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWFbb/vvSVo6XCsNShFM6wowEZCfnqQ+cFGi5pEQIDD4xtF0VO
+	zvR6xZ8UCO6iUPS5ryJv2zQ6g1H3zEPD/5/jVvNl4Qx7TXA5IZINPv28tPjHAB1hAG6HFK69WWQ
+	jTAmWugmMdr0UbxdNSaW0R0CP+4Ches4ht1uceBcW0mXLBQfukripwU/VayM=
+X-Google-Smtp-Source: AGHT+IHcCjqcbO63Nl0JY0A3bU593vUxVeXcAZKB6aOep3GpMpLNYi4983VKkyY8HO25v6N/RwGdaEJkUpU2NpS2Y/pqUD8Fpyqc
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <drcvdlw2kpuvsbact2gy4hvqp2i3au3shv5ozp3qms7qdfvi7t@7jofrodxeimb>
+X-Received: by 2002:a05:6e02:1527:b0:3e0:4f66:310a with SMTP id
+ e9e14a558f8ab-3e1355a8e41mr169148195ab.16.1751997087610; Tue, 08 Jul 2025
+ 10:51:27 -0700 (PDT)
+Date: Tue, 08 Jul 2025 10:51:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <686d5a9f.050a0220.1ffab7.0017.GAE@google.com>
+Subject: [syzbot] [usb?] WARNING in usbnet_status_start
+From: syzbot <syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com>
+To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	netdev@vger.kernel.org, oneukum@suse.com, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jul 08, 2025 at 05:51:08PM +0200, Benjamin Tissoires wrote:
-> Hi Alan,
-> 
-> On Jul 08 2025, Alan Stern wrote:
-> > Jiri and Benjamin:
-> > 
-> > Investigating a recent bug report from syzbot 
-> > (https://lore.kernel.org/linux-usb/686be237.a70a0220.29fe6c.0b0c.GAE@google.com/)
-> > led me to a rather serious error in the HID core.  It could affect a 
-> > lot of drivers, and I don't know enough about them or the HID subsystem 
-> > to fix it right away.
-> > 
-> > In short, does the value returned by hid_report_len() count the byte 
-> > reserved for the report ID number?
-> 
-> It depends :)
-> 
-> See your analysis below...
-> 
-> > 
-> > Some drivers seem to assume that it does and some seem to assume that it 
-> > doesn't.  Here's what the actual code from include/linux/hid.h does:
-> > 
-> > /**
-> >  * hid_report_len - calculate the report length
-> >  *
-> >  * @report: the report we want to know the length
-> >  */
-> > static inline u32 hid_report_len(struct hid_report *report)
-> > {
-> > 	return DIV_ROUND_UP(report->size, 8) + (report->id > 0);
-> > }
-> > 
-> > It's somewhere in between -- it includes the ID byte in the count if and 
-> > only if the ID is nonzero!  And of course, this behavior isn't mentioned 
-> > in the (ungrammatical) kerneldoc.
-> 
-> Yeah, the docs are bad. But your analysis is correct: for a given
-> report, its size might include or not the report ID.
-> 
-> This is because the report ID is optional in the HID spec, and some
-> devices don't make use of it. Those devices are only exporting one
-> report type, and can not have another report type in the same HID
-> device. If a device needs to have more than one, it then needs to export
-> the report ID in all of its reports, and then report_len count that
-> extra byte.
-> 
-> To give you an example, old mice (or inexpensive ones), would export a
-> report with:
-> - X, Y, Wheel, B0, B1, B2
-> 
-> When a more advanced one might export:
-> - REPORT ID 0, X, Y, Wheel, B0, B1, B2, ... B9
-> - REPORT ID 1, SOME_VERY_COMPLEX_CONFIGURATION, ANOTHER ONE, ETC...
-> 
-> However, a HID device making use of the non report ID version can never
-> make use of a report ID (or it's custom proprietary protocol).
+Hello,
 
-So you're saying that while the kerneldoc for hid_report_len() could be 
-improved, the code itself is correct.  Fine.  But this merely means that 
-the real problem lies elsewhere (and _not_ in syzbot's test scenario!).  
-See below.
+syzbot found the following issue on:
 
-Also, are you sure that all the other HID drivers realize that 
-hid_report_len() behaves this way?  It's an easy thing to get wrong.
+HEAD commit:    d1b07cc0868f arm64: dts: s32g: Add USB device tree informa..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1554d582580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=28729dff5d03ad1
+dashboard link: https://syzkaller.appspot.com/bug?extid=3f89ec3d1d0842e95d50
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11680a8c580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14c9abd4580000
 
-> > The particular scenario causing the bug found by syzbot was this: 
-> > report->size was 0, report->id was 0, and the lower-level driver (usbhid 
-> > in this case) assumed that the length argument (which was 0) did include 
-> > the ID byte.  Since the ID was 0, the driver skipped over the first byte 
-> > of the buffer and decremented the length, causing the length to 
-> > underflow and leading to an invalid memory access.  In a more realistic 
-> > setting, this would merely result in data loss and leakage.
-> 
-> That scenario is bogus (like most of syzbots in the HID space). There
-> should be no way the HID subsystem allows a report->size of 0 to be used
-> in a set_report or a get_report. So that's where the bug lies: HID
-> trusts too much the device, and can lead to that kind of issues.
-> 
-> > 
-> > How should this be fixed?
-> 
-> We have 2 problems here:
-> - and __hid_request or __hid_raw_request should reject a null size
-> 	report, and in the __hid_request case, a report of size 1 if there is
-> 	a report ID.
-> - Why is hidinput_change_resolution_multipliers() even considfering this
-> 	report of size 0 when it should at least ensure that there is one
-> 	field within the report
-> 
-> The first one should be easy to fix: add a bunch of checks.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3eab0cb43ae2/disk-d1b07cc0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/934d59614ed5/vmlinux-d1b07cc0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/4b24078bc227/bzImage-d1b07cc0.xz
 
-I would normally expect this to checked when the report descriptors are 
-read and parsed during probing.  A report of length zero could be 
-rejected then (perhaps with an error message in the kernel log).
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com
 
-However, that wouldn't fully fix the problem.  And besides, length-0 
-reports are (or should be) harmless.
+sierra_net 4-1:0.11 wwan0: register 'sierra_net' at usb-dummy_hcd.3-1, Sierra Wireless USB-to-WWAN Modem, 00:00:00:00:01:0b
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 37 at drivers/net/usb/usbnet.c:266 usbnet_status_start+0x189/0x1e0 drivers/net/usb/usbnet.c:266
+Modules linked in:
+CPU: 1 UID: 0 PID: 37 Comm: kworker/1:1 Not tainted 6.16.0-rc4-syzkaller-00311-gd1b07cc0868f #0 PREEMPT(voluntary) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usbnet_status_start+0x189/0x1e0 drivers/net/usb/usbnet.c:266
+Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 75 4e 48 8b bb 70 03 00 00 89 ee e8 25 95 0c 00 41 89 c5 e9 36 ff ff ff e8 a8 3f ec fc 90 <0f> 0b 90 45 31 ed e9 39 ff ff ff 4c 89 ff e8 d4 41 49 fd e9 e9 fe
+RSP: 0018:ffffc90000277098 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888100f80d00 RCX: ffffffff84930727
+RDX: ffff888105693a00 RSI: ffffffff84919188 RDI: ffff888100f80d00
+RBP: 0000000000000cc0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff888100f81070
+R13: ffffffff89be8f70 R14: ffff88811da1f028 R15: ffff88811da1f024
+FS:  0000000000000000(0000) GS:ffff888269262000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffd6ab63358 CR3: 0000000116716000 CR4: 00000000003506f0
+Call Trace:
+ <TASK>
+ sierra_net_probe drivers/net/usb/sierra_net.c:929 [inline]
+ sierra_net_probe+0x70/0xb0 drivers/net/usb/sierra_net.c:921
+ usb_probe_interface+0x303/0x9c0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
+ usb_probe_device+0xef/0x3e0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ usb_new_device+0xd07/0x1a20 drivers/usb/core/hub.c:2694
+ hub_port_connect drivers/usb/core/hub.c:5566 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
+ port_event drivers/usb/core/hub.c:5866 [inline]
+ hub_event+0x2f85/0x5030 drivers/usb/core/hub.c:5948
+ process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
+ process_scheduled_works kernel/workqueue.c:3321 [inline]
+ worker_thread+0x6c8/0xf10 kernel/workqueue.c:3402
+ kthread+0x3c2/0x780 kernel/kthread.c:464
+ ret_from_fork+0x5b3/0x6c0 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
 
-> __hid_hw_raw_request() seems to not expose the problem actually.
-> 
-> The second one would need a little bit more understanding of the fake
-> report descriptor provided by syzbot.
 
-I suppose we can get the information from syzbot if it's really 
-necessary.  But it seems to be a minor point.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> > Related issue: When the lower-level driver's raw_request() routine is 
-> > called, can it assume that the first byte of the output buffer always 
-> > contains the report ID number, set by the HID core?  If not, should it 
-> > assume that the first byte is always reserved for the ID, or that the 
-> > first byte is reserved only when the ID is nonzero?
-> 
-> The first byte should always be reserved to the report ID, and is
-> populated by 0 by hid-core when the report ID is not in use.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Then why does hid_output_report() do this:
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-	if (report->id > 0)
-		*data++ = report->id;
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-?  The first byte is not reserved for the ID when the ID is 0.  
-According to what you said, the assignment should be unconditional.  
-Isn't that a genuine bug?
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-And shouldn't the length computed by hid_alloc_report_buf() be one 
-larger than it is when the ID is 0?
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-> So the usbhid driver is doing the right thing. In case there is no
-> report ID, it ignores the first byte when making a request to the
-> device, because in my example above, the device would not expect the
-> first byte to be 0.
-
-When usbhid skips the first byte, it also decrements the length.  Since 
-__hid_request() calls it with a length given by hid_report_len(), the 
-length has _already_ been decremented (or rather, not incremented -- it 
-doesn't account for the ID byte), and consequently the USB transfer will 
-leave out the final byte of the report.  This is the data loss I 
-mentioned earlier.  It's another bug.
-
-So which is doing the wrong thing: usbhid or __hid_request()?
-
-> > Do __hid_request() and __hid_hw_raw_request() behave the same way in 
-> > this regard?
-> 
-> __hid_hw_raw_request() ensures that there is a minimum length of one, so
-> we should be fine. __hid_request apparently is the only one giving too
-> much trust in the report.
-
-In principle there's nothing wrong with a zero-length report.  It would 
-be pretty useless, but nevertheless we should be able to handle one 
-without crashing the kernel.
-
-Alan Stern
+If you want to undo deduplication, reply with:
+#syz undup
 
