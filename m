@@ -1,261 +1,194 @@
-Return-Path: <linux-usb+bounces-25596-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25597-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB7FDAFD8F2
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 22:55:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E440AFDBF5
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 01:47:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70ABD1AA2272
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 20:55:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5EF03B6D9B
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 23:46:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 313C8242935;
-	Tue,  8 Jul 2025 20:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DA523ABA1;
+	Tue,  8 Jul 2025 23:46:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zTiNDGFk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ePNnI1Rk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D38241103
-	for <linux-usb@vger.kernel.org>; Tue,  8 Jul 2025 20:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B9818E3F;
+	Tue,  8 Jul 2025 23:46:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752008105; cv=none; b=eDPvavQm3t2zwH4Qh8wL/AuYa2mqMCQGUK13+3ew+GIYRO1fW4DXEtA5ON+y79FhI5rF8kCfbZVrNDQv1Z4f1UrE3RodgWNmtpfitwm37RJxUWTO0qTduaIK4/aEMuU3/NEpT1WMeuVlxEUWLIif+XWwvSAec+BmS6TtFVWIef4=
+	t=1752018410; cv=none; b=imX2ALCHwkJNxbmopHhOmcc0UO6knc+B6wSla3znsV3/xkLgG4qAAfavoAQmfcQrFNhLcc1YJOcnXbKKSGYi6hTVneJU2ME+U5W2DQsGHPIHJGBsipzhwocyaBJTpiaZ0jbAZEP7OkLRs+8OyS+BWGax8ViGp1liy9hUsqWKHqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752008105; c=relaxed/simple;
-	bh=kjuzGXug/D4R5GG9GyQa4tvl1oIFOIPy3Hbjs+Knt7I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iIxFLQi+yq6TEsQQWCSRlx4Ha0ypJ4MGELMYWqmLvcran+sPjQxaQu1YCBY1wAMRiGXQv85Tp0mIw0MojSDKzdq9pCKQH14e/fgfitV3qPbMdlUJdwiv9ATPCffdJbV3HoY6iDdoD97yuGVi7QvcI6nSRQ4FZvZ8mtEdzz+i0uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zTiNDGFk; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3137c20213cso4723298a91.3
-        for <linux-usb@vger.kernel.org>; Tue, 08 Jul 2025 13:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1752008103; x=1752612903; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gxJ02DChvr+wqzcbfqYcBr0RaqPB3ADatLZsLUUfYAs=;
-        b=zTiNDGFk3NmyURAanRQscpPtOx40uLlEEzpJENOpDqR2cCJQtXzZUYl7VNlVtg47fM
-         b1bHFS16IhpCXLI5GiHAfg+UN6hMPbM2CR9m/0KAEmAw/jui5s70a0x2+yEM9Y1iMMCV
-         n/JuSyXee8eKqo4ayaOFGbgg2PlbFtsplwDmvc5fBKz9BkaEvFjkC/k/CQ9dcHfgjI2z
-         NF3rYmDiHyZkWXBJfk2mohKyKiASR3n2EZXvUpyLLP5ivb9NcoRJUc0KKbF1Pd7dfOW5
-         2sJ6koju4tK0GPehyFTWZgNOwBNYNtoP6O1t1c1K1mADN/Ld/V32NxvXiddRNp1ZISQL
-         a0Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752008103; x=1752612903;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gxJ02DChvr+wqzcbfqYcBr0RaqPB3ADatLZsLUUfYAs=;
-        b=lkLlM5+UAtIgm4kJugbmbez3BpPgE7YwQkK2OvcpI3nRDBSGWoN+Nl2IxoczBdcxrV
-         cY+F0oRVuB4YZK+fXPJKLHXF6Q4/aH51jaMwgX8mdTedW3jzxQAILSiSpIZEpmQWM25m
-         Nt0b14YvXRuC3qDqFqW14RqjonDiNytxjGgmYnAFAO5tf3K/z661ZBf55pvxogn3V88K
-         fL0wCKC/g/yoFRyM+wLDB5LNpmSZumevpZr7CRSaF6iOW9zjgavbqUvBrxLaouRND/z3
-         rDJCZ2N1Acuo56ogF07R/z7qxeN94fYEuMLmqTxRp4MNuNo70a/n5eaDissbsMsCu5KR
-         rr5g==
-X-Forwarded-Encrypted: i=1; AJvYcCXhl88Ry2NntL+iRNr0GQczYJFr7r/FLsigHpcjMFkoSVC//KUl7hXwfaFfaHzbnxdWFqDx8HOCxrM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzuSe/dKxTOQ03R8OliNGH2JGSzUKkByjbMV2qRRxXmAXWhMnY
-	XpQMvJJKVzD1WAODqwtGm5sj4e7WBZtqtWg0IqocHxPY+DPdjiw2T/6O+M4+ILc9sg==
-X-Gm-Gg: ASbGnctv6PTiGAQ+A9Zv4/oJJGPspoopFGYhtWQCBnZXuxeklXxuN6pnvnQbug9tAGO
-	ujid/pnJVYwOPEyBPctkY7c17Pdu8PPcb9Q8/AzImk+oJh+AdiLuWxE80eXyETYuNR1MWpSEf9e
-	RBdbsXk3ihrHynZKAOcXdXQiXUaar4EvEh50ioUE/aPsb9Ew/WkaKQ/F6Y72CU3nSsjBvzrKR2x
-	sMTNH60ClxCp6RO2V2s+iYzt/qkFgiwqIk0gZxB5NJktwEyD2cSJKZkCaeGIYkcaY6jt8sV55kr
-	VlM+PEX/IdiVf4bIrJNt7n2ZngxeoOAMptj8hjrb+btpZo/BPWWAaUii4VmlYv8pgVmTb/O0nXH
-	RZXlzzpS0aDJNAJpNdKQW4DI1nYSHW/00iJF/5ZNYeHi+pQMV8wc3ZR9QhA==
-X-Google-Smtp-Source: AGHT+IENn9KRBXLlUDYf/W80abgdynUrbIykjoaWTtbpQkehSN3ONHZRp3PyECxAzPSapU8TzEg2eA==
-X-Received: by 2002:a17:90b:3ec3:b0:311:e5b2:356b with SMTP id 98e67ed59e1d1-31c2fce1e72mr66728a91.11.1752008102930;
-        Tue, 08 Jul 2025 13:55:02 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e14:7:f0a:1e62:5952:b993? ([2a00:79e0:2e14:7:f0a:1e62:5952:b993])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c21edab71sm3042106a91.43.2025.07.08.13.55.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jul 2025 13:55:02 -0700 (PDT)
-Message-ID: <ab6c4132-a0c5-4143-b265-a9979a171646@google.com>
-Date: Tue, 8 Jul 2025 13:55:00 -0700
+	s=arc-20240116; t=1752018410; c=relaxed/simple;
+	bh=MlpSgduVRBJdk395iMJ6yLimjvXQpIqGCCEMgZlsg6M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YirD9FG8efdxxGgfRop/ua55RsH0NLfUeRiERaiB4zn4GOQRC0ZSoW0RSTZOJD/ClrBorbpM1Hy1lVNfodRGjeQHKNnR9Xty1tXU+hvsXI2nxxzJd4T9r76Ql2GOw8WoNmjzIF8ycMeAj5jWJ2ONRPUaOmyw4Bgg01meFrfP5Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ePNnI1Rk; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752018408; x=1783554408;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=MlpSgduVRBJdk395iMJ6yLimjvXQpIqGCCEMgZlsg6M=;
+  b=ePNnI1Rklo/1c2CII06FDMTNPFxv5YffmQbqisch/9WWMn35i+LhjeB0
+   JaxFqVmki9COX8GuMa5qaIta9S3tGP18/v4L6PcdfIHXwS2yqhA+28BP1
+   F2T84YjhWXKsh+ydKTWNK5VF0aUiBGosWL/H6liiHAoZhCb9mm6c5yZCE
+   yNnRyexqtIqGVX91SlABMJbPGLXyUDjLifoRaO88jHw3xafxH8fLk5N5O
+   81iFyste7mneSFlAgw1FdZkkR6908EV7sWpB7xu5c1G6kPWckSDY/QPwX
+   LcjU9Zicw1R4GWSFkWG4IIGM4sEYUW3kCNV+VWSwUgFolloVkpn9OGATB
+   A==;
+X-CSE-ConnectionGUID: 28bilIjgSmSguQIamSAKww==
+X-CSE-MsgGUID: yNVnkYAaSVqHo/4g1PqZUw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="54412895"
+X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
+   d="scan'208";a="54412895"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2025 16:46:47 -0700
+X-CSE-ConnectionGUID: q7oi4U30RgSdrHZGPh6ycA==
+X-CSE-MsgGUID: 7IJhBtTFS2G52EautX/oBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
+   d="scan'208";a="179305651"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.102])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2025 16:46:43 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 5D9BD11F8A6;
+	Wed,  9 Jul 2025 02:46:41 +0300 (EEST)
+Date: Tue, 8 Jul 2025 23:46:41 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 05/12] media: ipu-bridge: Use v4l2_fwnode for unknown
+ rotations
+Message-ID: <aG2t4cxwXKJ9MSQX@kekkonen.localdomain>
+References: <20250605-uvc-orientation-v2-0-5710f9d030aa@chromium.org>
+ <20250605-uvc-orientation-v2-5-5710f9d030aa@chromium.org>
+ <aGw_1T_Edm8--gXW@kekkonen.localdomain>
+ <CANiDSCup2iRx+0RcaijSmbn04nBY4Ui9=esCPFsQzOKe=up9Gg@mail.gmail.com>
+ <aGzjTRSco39mKJcf@kekkonen.localdomain>
+ <CANiDSCsqEHTnbvzLMoe_yxi8JRzp+2PQe3ksXhD=Y3+AqC_9hw@mail.gmail.com>
+ <aG0NI2V0Tfh2HZ6O@kekkonen.localdomain>
+ <CANiDSCu=wU_Oi7CLPcYTC3Xf_pGbDroaVitPAiAj7ND5pXy-6g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] dt-bindings: connector: extend ports property to
- model power connections
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, Kyle Tso <kyletso@google.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
- <20250507-batt_ops-v2-1-8d06130bffe6@google.com>
- <20250514194249.GA2881453-robh@kernel.org>
- <b4a22161-8cab-4d76-a4b0-4bfd0d79cdc1@google.com>
- <z2wrzts6cgunxs5tc764izvrfi4i2d637zpt6tj5f4piry6j66@cke2yxhih6dg>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <z2wrzts6cgunxs5tc764izvrfi4i2d637zpt6tj5f4piry6j66@cke2yxhih6dg>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiDSCu=wU_Oi7CLPcYTC3Xf_pGbDroaVitPAiAj7ND5pXy-6g@mail.gmail.com>
 
-Hi Sebastian,
+On Tue, Jul 08, 2025 at 04:58:25PM +0200, Ricardo Ribalda wrote:
+> On Tue, 8 Jul 2025 at 14:21, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+> >
+> > Hi Ricardo,
+> >
+> > On Tue, Jul 08, 2025 at 02:09:28PM +0200, Ricardo Ribalda wrote:
+> > > On Tue, 8 Jul 2025 at 11:22, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+> > > >
+> > > > Hi Ricardo,
+> > > >
+> > > > On Tue, Jul 08, 2025 at 11:16:25AM +0200, Ricardo Ribalda wrote:
+> > > > > Hi Sakari
+> > > > >
+> > > > > Thanks for your review
+> > > > >
+> > > > > On Mon, 7 Jul 2025 at 23:45, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+> > > > > >
+> > > > > > Hi Ricardo,
+> > > > > >
+> > > > > > On Thu, Jun 05, 2025 at 05:52:58PM +0000, Ricardo Ribalda wrote:
+> > > > > > > The v4l2_fwnode_device_properties contains information about the
+> > > > > > > rotation. Use it if the ssdb data is inconclusive.
+> > > > > >
+> > > > > > As SSDB and _PLD provide the same information, are they always aligned? Do
+> > > > > > you have any experience on how is this actually in firmware?
+> > > > >
+> > > > > Not really, in ChromeOS we are pretty lucky to control the firmware.
+> > > > >
+> > > > > @HdG Do you have some experience/opinion here?
+> > > > >
+> > > > > >
+> > > > > > _PLD is standardised so it would seem reasonable to stick to that -- if it
+> > > > > > exists. Another approach could be to pick the one that doesn't translate to
+> > > > > > a sane default (0°).
+> > > > >
+> > > > > I'd rather stick to the current prioritization unless there is a
+> > > > > strong argument against it. Otherwise there is a chance that we will
+> > > > > have regressions (outside CrOS)
+> > > >
+> > > > My point was rather there are no such rules currently for rotation: only
+> > > > SSDB was being used by the IPU bridge to obtain the rotation value,
+> > > > similarly only _PLD is consulted when it comes to orientation.
+> > >
+> > > So something like this:?
+> > >
+> > > static u32 ipu_bridge_parse_rotation(struct acpi_device *adev,
+> > >                                      struct ipu_sensor_ssdb *ssdb,
+> > >                                      struct
+> > > v4l2_fwnode_device_properties *props)
+> > > {
+> > >         if (props->rotation != V4L2_FWNODE_PROPERTY_UNSET)
+> > >                 return props->rotation;
+> > >
+> > >         switch (ssdb->degree) {
+> > >         case IPU_SENSOR_ROTATION_NORMAL:
+> > >                 return 0;
+> > >         case IPU_SENSOR_ROTATION_INVERTED:
+> > >                 return 180;
+> > >         }
+> > >
+> > >         dev_warn(ADEV_DEV(adev),
+> > >                  "Unknown rotation %d. Assume 0 degree rotation\n",
+> > >                  ssdb->degree);
+> >
+> > Maybe:
+> >
+> >         acpi_handle_warn(acpi_device_handle(adev), ...);
+> >
+> > ?
+> >
+> > >         return 0;
+> > > }
+> >
+> > Looks good to me. Maybe something similar for orientation?
+> 
+> Do you mean using ssdb also for orientation or using acpi_handle_warn?
+> 
+> 
+> I cannot find anything related to orientation for SSDB
+> https://github.com/coreboot/coreboot/blob/main/src/drivers/intel/mipi_camera/chip.h#L150
+> 
+> Am I looking in the right place?
 
-On 6/23/25 3:08 PM, Sebastian Reichel wrote:
-> Hi,
->
-> On Tue, May 20, 2025 at 01:10:25PM -0700, Amit Sunil Dhamne wrote:
->> Hi Rob,
->>
->> Thanks for your response!
->>
->> On 5/14/25 12:42 PM, Rob Herring wrote:
->>> On Wed, May 07, 2025 at 06:00:22PM -0700, Amit Sunil Dhamne wrote:
->>>> Extend ports property to model power lines going between connector to
->>>> charger or battery/batteries. As an example, connector VBUS can supply
->>>> power in & out of the battery for a DRP.
->>>>
->>>> Additionally, add ports property to maxim,max33359 controller example.
->>>>
->>>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->>>> ---
->>>>   .../bindings/connector/usb-connector.yaml          | 20 +++++++++++------
->>>>   .../devicetree/bindings/usb/maxim,max33359.yaml    | 25 ++++++++++++++++++++++
->>>>   2 files changed, 38 insertions(+), 7 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>>> index 11e40d225b9f3a0d0aeea7bf764f1c00a719d615..706094f890026d324e6ece8b0c1e831d04d51eb7 100644
->>>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>>> @@ -181,16 +181,16 @@ properties:
->>>>   
->>>>     port:
->>>>       $ref: /schemas/graph.yaml#/properties/port
->>>> -    description: OF graph bindings modeling a data bus to the connector, e.g.
->>>> -      there is a single High Speed (HS) port present in this connector. If there
->>>> -      is more than one bus (several port, with 'reg' property), they can be grouped
->>>> -      under 'ports'.
->>>> +    description: OF graph binding to model a logical connection between a device
->>>> +      and connector. This connection may represent a data bus or power line. For
->>>> +      e.g. a High Speed (HS) data port present in this connector or VBUS line.
->>>> +      If there is more than one connection (several port, with 'reg' property),
->>>> +      they can be grouped under 'ports'.
->>> 'port' and 'port@0' are equivalent. So you can't be changing its
->>> definition.
->> Noted!
->>
->>
->>> I'm not sure showing a power connection with the graph is the right
->>> approach.
->> I want to provide some more context and rationale behind using this design.
->>
->>  From a hardware perspective:
->>
->> The max77759/max33359 IC has Type-C port controller, charger, fuel gauge
->> (FG) ICs. The Vbus from the connector goes to/from the TCPC and connects
->> with the charger IP via circuitry & from there on to the battery. The FG
->> is connected to the battery in parallel. As it can be seen that while
->> these IPs are interconnected, there's no direct connection of the fuel
->> gauge & the connector.
->>
->> For this feature, I am interested in getting the reference to the FG. As
->> per graph description: "...These common bindings do not contain any
->> information about the direction or type of the connections, they just
->> map their existence." This works for my case because I just want the
->> connector to be aware of the Fuel gauge device without imposing a
->> specific directionality in terms of power supplier/supplied. This is
->> also the reason why I didn't use
->> "/schemas/power/supply/power-supply.yaml#power-supplies" binding.
->>
->>> We have a binding for that already with the regulator binding.
->> I haven't explored the option of using regulator bindings. But in my
->> case I am interested in fuel gauge and unfortunately, they're modeled as
->> power_supply devices.
->  From hardware point of view there is no direct connection at all
-> between the fuel gauge and the connector. The usual hardware
-> connection is
->
-> connector -> charger -> battery
->
-> With the charger potentially supporting reverse operation to provide
-> energy from the battery to the connector (with "battery" I assume
-> a "smart" battery, so the raw cells and some kind of fuel gauge).
->
-> Thus the following example should properly document the hardware
-> connections:
->
-> ---------------------------------------
-> typec-connector {
->      /* ... */
-> };
->
-> charger {
->      /* ... */
->      power-supplies = <&connector>;
-> };
->
-> fuel-gauge {
->      /* ... */
->      power-supplies = <&charger>;
-> };
-> ---------------------------------------
+Ah, maybe SSDB has only rotation? At least it's less duplicated information
+in different format, so that's a good thing. So this just applies to
+rotation, it seems.
 
-The hardware description is unambiguous for single power role Type-C 
-devices such as Sink only & Source only device (demonstrated by 
-inverting the relationship given in the above example).
-
-For DRP power role, the above relationship feels semantically incorrect 
-because the illustrated relationship would not hold if the Type-C device 
-is Source for a given Type-C connection lifecycle.
-
-I'll add a note somewhere mentioning that for DRP, the relationship can 
-be demonstrated either like a sink or source to make it less ambiguous.
-
-
-> It means instead of the direct graph lookup for the fuel gauge,
-> you would need a function walking through the graph build by the
-> power-supplies phandles. But it also means that the DT properly
-> describes the hardware instead of adding random graph connections.
-
-Okay, will follow this approach.
-
-Thanks,
-
-Amit
-
-
->
-> Greetings,
->
-> -- Sebastian
->
->>> Perhaps the connector needs to be a supply. It's already using that
->>> binding in the supplying power to the connector case.
->> Want to clarify, in this case you mean
->> /schemas/regulator/regulator.yaml#*-supply$ right?
->>
->> Adding to my response above, the reason I don't want to impose a
->> directionality in terms of supplier/supplied is that in case of USB Dual
->> Role Port they're dynamic i.e., when USB is source, the power is
->> supplied out of the battery (battery/FG will be supplier) and in case
->> USB is sink, battery is supplied power. Whether the connector port is in
->> source or sink role is determined on a connection to connection basis.
->> Also, the knowledge of the supply direction is of no consequence for
->> this feature.
->>
->>
->> Please let me know what you think.
->>
->> Thanks,
->>
->> Amit
->>
->>
->>> Rob
+-- 
+Sakari Ailus
 
