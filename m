@@ -1,77 +1,80 @@
-Return-Path: <linux-usb+bounces-25595-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25596-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DECAAFD643
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 20:17:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB7FDAFD8F2
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 22:55:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C0AE3B67E7
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 18:16:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70ABD1AA2272
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 20:55:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72B3E21ADAE;
-	Tue,  8 Jul 2025 18:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 313C8242935;
+	Tue,  8 Jul 2025 20:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="An5mrefw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zTiNDGFk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91999202F7B
-	for <linux-usb@vger.kernel.org>; Tue,  8 Jul 2025 18:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D38241103
+	for <linux-usb@vger.kernel.org>; Tue,  8 Jul 2025 20:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751998614; cv=none; b=bnuNomUHXjW7GcVthFvWTD5JkDeOsXEYgS1VltIEduNLdY+N9ZTmG/LlPHQlvrbYpgcdzC2z6BJ3G5ni+GfBHkrfxLEUZoKy8mdavJnE+mOwIfzpvfbwittFT82tmOWUDgRfBMQaawU3x0lrrwHDKBN2zjkf97mU4v3iScvxJ7w=
+	t=1752008105; cv=none; b=eDPvavQm3t2zwH4Qh8wL/AuYa2mqMCQGUK13+3ew+GIYRO1fW4DXEtA5ON+y79FhI5rF8kCfbZVrNDQv1Z4f1UrE3RodgWNmtpfitwm37RJxUWTO0qTduaIK4/aEMuU3/NEpT1WMeuVlxEUWLIif+XWwvSAec+BmS6TtFVWIef4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751998614; c=relaxed/simple;
-	bh=j2g5+Is/hApnidHglP5yM9mLknqV0ultVfEaIH/wJ8Y=;
+	s=arc-20240116; t=1752008105; c=relaxed/simple;
+	bh=kjuzGXug/D4R5GG9GyQa4tvl1oIFOIPy3Hbjs+Knt7I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U5GhJnZKwfrbob4XxYZxuxJIwo/lSNsMYssWuTzAFt0PG5guDDn5OxqFDiSdPiJsb06oVKB3Vmh+CF8Hbp1hVw8flHr6G/3QSxdfSKw09l+BymvgYzWM8XnlRMmDRen0R1h6VXanl14tibxaz+2ukrU1foQd8Rw0+ZWdYe0wmg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=An5mrefw; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3df4bdadca5so18188805ab.1
-        for <linux-usb@vger.kernel.org>; Tue, 08 Jul 2025 11:16:50 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=iIxFLQi+yq6TEsQQWCSRlx4Ha0ypJ4MGELMYWqmLvcran+sPjQxaQu1YCBY1wAMRiGXQv85Tp0mIw0MojSDKzdq9pCKQH14e/fgfitV3qPbMdlUJdwiv9ATPCffdJbV3HoY6iDdoD97yuGVi7QvcI6nSRQ4FZvZ8mtEdzz+i0uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zTiNDGFk; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3137c20213cso4723298a91.3
+        for <linux-usb@vger.kernel.org>; Tue, 08 Jul 2025 13:55:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1751998610; x=1752603410; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1752008103; x=1752612903; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=C7jo4rHGV68En57t/lie16xVqPLtbUOSRY9RxAWU0Dk=;
-        b=An5mrefwiL8aNZB9GJ1zJ87Dij5zBjhjhYknTa1ck3tBxhdzGtP1W5Qm/jEAlFhHiS
-         LGM2yb7b5XqaWcuR+INFXycquk+pjqNOANaJotP8VA2hbdtRrxvQorQt9iUAKYe2UFbg
-         x4Zvqa1rcEv9snsB0RV4+siPd8wNhaBjOfP6E=
+        bh=gxJ02DChvr+wqzcbfqYcBr0RaqPB3ADatLZsLUUfYAs=;
+        b=zTiNDGFk3NmyURAanRQscpPtOx40uLlEEzpJENOpDqR2cCJQtXzZUYl7VNlVtg47fM
+         b1bHFS16IhpCXLI5GiHAfg+UN6hMPbM2CR9m/0KAEmAw/jui5s70a0x2+yEM9Y1iMMCV
+         n/JuSyXee8eKqo4ayaOFGbgg2PlbFtsplwDmvc5fBKz9BkaEvFjkC/k/CQ9dcHfgjI2z
+         NF3rYmDiHyZkWXBJfk2mohKyKiASR3n2EZXvUpyLLP5ivb9NcoRJUc0KKbF1Pd7dfOW5
+         2sJ6koju4tK0GPehyFTWZgNOwBNYNtoP6O1t1c1K1mADN/Ld/V32NxvXiddRNp1ZISQL
+         a0Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751998610; x=1752603410;
+        d=1e100.net; s=20230601; t=1752008103; x=1752612903;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C7jo4rHGV68En57t/lie16xVqPLtbUOSRY9RxAWU0Dk=;
-        b=j8ypDb7jnov1LjHk3YJLWL2RBV/t7kzH/liEIt6jTNxrWqet7cYTUOS7w5bum53CmK
-         YciXUQ0HyKm2CczfD9LehaF40rAcfY32ZW5fI4Wb3VC6m7mbbp5F7tHytn85UsLPUsVj
-         73KNw1tV6+KvzyCGDugVKjARBQkDR9+W1Jc9lu/MsrDqwWYnJnZ93LKsvKivaIgr+r2q
-         8tznxL24sVeZW4y3b67dn66S30YMeLaHMUEqkJJBElVBrNlY1w2NgZU1rvibpA6uDdNT
-         n6F3Yo0jkKgHH5J9lCL9rPTbfjqwhHII2FG+GUzflxOXFS+jE7B+cBU/Q9cdKrLeQHaN
-         7JoA==
-X-Forwarded-Encrypted: i=1; AJvYcCXoEkpB6DLMSW/bA3tKAjVSuxuMeyRFMLW/QwRNW4Dv5IZBMhN90fCQCgGaWXGdrxDu5ZV1uVJl+lI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwcV7jt4I7MEjq+U5hjGSpVXxs0uFOsYD6/V++2womawhQR8w2
-	04/A3p4UKWM4TTrS3lcg9iWlo236HMlqKHSvwbolQW7jnwemlT668SP8EB4kbFCkz6o=
-X-Gm-Gg: ASbGncsRRrHyjJJlJLmGMGyQX4VFHSCpWVDDbXdWMv2LdscVoUChnAbAD7/JIcJqXw0
-	U4EXT7YxsuHGTQPkt7CJo5XIMxcvSiGp1OEmOeesHDmYxC04hBY3fX/yu9AAxI/vNJBVaeBprkc
-	MoCs3TjYwFiJnhO6E3n90ZVsIIB9kgpzUIXIqP8g96/PiW/dcGpKJfxMyg2NoD0h/KsluI7VSGO
-	17qF5BFxD+t6G+xq6ZTVyKrtwrykhljlCTziDR69LfcVEow8F2y9K+PLyirJE7mJD9dJ3YZHGIT
-	mQdhpY0xyC75ocdDNQNyITnMCUe1jRn758FjJqFdTPr2iftRAZm+O61sc88GcHhBD36ekOIaIQ=
-	=
-X-Google-Smtp-Source: AGHT+IHGrAuuZogaOqKoDaYMbOfBAJ6945Z6uLUhTaT77JDUVgSGXD/OFcwY5bIrrh4qPYT0vOL8dw==
-X-Received: by 2002:a05:6e02:3191:b0:3df:43ac:af5a with SMTP id e9e14a558f8ab-3e1637ebf77mr10609085ab.2.1751998610029;
-        Tue, 08 Jul 2025 11:16:50 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-503b5a29eb4sm2332522173.57.2025.07.08.11.16.49
+        bh=gxJ02DChvr+wqzcbfqYcBr0RaqPB3ADatLZsLUUfYAs=;
+        b=lkLlM5+UAtIgm4kJugbmbez3BpPgE7YwQkK2OvcpI3nRDBSGWoN+Nl2IxoczBdcxrV
+         cY+F0oRVuB4YZK+fXPJKLHXF6Q4/aH51jaMwgX8mdTedW3jzxQAILSiSpIZEpmQWM25m
+         Nt0b14YvXRuC3qDqFqW14RqjonDiNytxjGgmYnAFAO5tf3K/z661ZBf55pvxogn3V88K
+         fL0wCKC/g/yoFRyM+wLDB5LNpmSZumevpZr7CRSaF6iOW9zjgavbqUvBrxLaouRND/z3
+         rDJCZ2N1Acuo56ogF07R/z7qxeN94fYEuMLmqTxRp4MNuNo70a/n5eaDissbsMsCu5KR
+         rr5g==
+X-Forwarded-Encrypted: i=1; AJvYcCXhl88Ry2NntL+iRNr0GQczYJFr7r/FLsigHpcjMFkoSVC//KUl7hXwfaFfaHzbnxdWFqDx8HOCxrM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzuSe/dKxTOQ03R8OliNGH2JGSzUKkByjbMV2qRRxXmAXWhMnY
+	XpQMvJJKVzD1WAODqwtGm5sj4e7WBZtqtWg0IqocHxPY+DPdjiw2T/6O+M4+ILc9sg==
+X-Gm-Gg: ASbGnctv6PTiGAQ+A9Zv4/oJJGPspoopFGYhtWQCBnZXuxeklXxuN6pnvnQbug9tAGO
+	ujid/pnJVYwOPEyBPctkY7c17Pdu8PPcb9Q8/AzImk+oJh+AdiLuWxE80eXyETYuNR1MWpSEf9e
+	RBdbsXk3ihrHynZKAOcXdXQiXUaar4EvEh50ioUE/aPsb9Ew/WkaKQ/F6Y72CU3nSsjBvzrKR2x
+	sMTNH60ClxCp6RO2V2s+iYzt/qkFgiwqIk0gZxB5NJktwEyD2cSJKZkCaeGIYkcaY6jt8sV55kr
+	VlM+PEX/IdiVf4bIrJNt7n2ZngxeoOAMptj8hjrb+btpZo/BPWWAaUii4VmlYv8pgVmTb/O0nXH
+	RZXlzzpS0aDJNAJpNdKQW4DI1nYSHW/00iJF/5ZNYeHi+pQMV8wc3ZR9QhA==
+X-Google-Smtp-Source: AGHT+IENn9KRBXLlUDYf/W80abgdynUrbIykjoaWTtbpQkehSN3ONHZRp3PyECxAzPSapU8TzEg2eA==
+X-Received: by 2002:a17:90b:3ec3:b0:311:e5b2:356b with SMTP id 98e67ed59e1d1-31c2fce1e72mr66728a91.11.1752008102930;
+        Tue, 08 Jul 2025 13:55:02 -0700 (PDT)
+Received: from ?IPV6:2a00:79e0:2e14:7:f0a:1e62:5952:b993? ([2a00:79e0:2e14:7:f0a:1e62:5952:b993])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c21edab71sm3042106a91.43.2025.07.08.13.55.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jul 2025 11:16:49 -0700 (PDT)
-Message-ID: <2a901b8a-9052-41d9-a70d-76508ebd819b@linuxfoundation.org>
-Date: Tue, 8 Jul 2025 12:16:48 -0600
+        Tue, 08 Jul 2025 13:55:02 -0700 (PDT)
+Message-ID: <ab6c4132-a0c5-4143-b265-a9979a171646@google.com>
+Date: Tue, 8 Jul 2025 13:55:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,326 +82,180 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usbip: convert to use faux_device
-To: Zongmin Zhou <min_halo@163.com>, Greg KH <gregkh@linuxfoundation.org>
-Cc: shuah@kernel.org, valentina.manea.m@gmail.com, i@zenithal.me,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- zhouzongmin@kylinos.cn, Shuah Khan <skhan@linuxfoundation.org>
-References: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
- <20250604065410.76069-1-min_halo@163.com>
- <2025061926-paycheck-footnote-a2b8@gregkh>
- <c7a2cc26-794e-49e1-bf8c-35617bb8060f@163.com>
- <2025062010-hardiness-flashily-cb0f@gregkh>
- <9d95bb75-586c-48dc-9e34-432cc13fd99f@163.com>
- <2025062004-navy-emboss-4743@gregkh>
- <2e0bbc5a-e74a-4fb5-884c-686dbaf99caf@linuxfoundation.org>
- <48ab511e-2847-4daa-98de-a234b8584b78@163.com>
- <fac026d8-12c8-4c1f-96a7-264ced8391f1@linuxfoundation.org>
- <a29703bd-08b7-489b-8fb0-15838a1245ab@163.com>
- <1a13cf53-ffed-4521-917e-9c2856a5e348@linuxfoundation.org>
- <4fc877f0-b55b-4fa3-8df4-2de4ba1ac51b@163.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: connector: extend ports property to
+ model power connections
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@kernel.org>, Kyle Tso <kyletso@google.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
+ <20250507-batt_ops-v2-1-8d06130bffe6@google.com>
+ <20250514194249.GA2881453-robh@kernel.org>
+ <b4a22161-8cab-4d76-a4b0-4bfd0d79cdc1@google.com>
+ <z2wrzts6cgunxs5tc764izvrfi4i2d637zpt6tj5f4piry6j66@cke2yxhih6dg>
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <4fc877f0-b55b-4fa3-8df4-2de4ba1ac51b@163.com>
+From: Amit Sunil Dhamne <amitsd@google.com>
+In-Reply-To: <z2wrzts6cgunxs5tc764izvrfi4i2d637zpt6tj5f4piry6j66@cke2yxhih6dg>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7/3/25 00:04, Zongmin Zhou wrote:
-> 
-> On 2025/7/3 07:54, Shuah Khan wrote:
->> On 7/1/25 20:12, Zongmin Zhou wrote:
->>>
->>> On 2025/7/2 06:56, Shuah Khan wrote:
->>>> On 6/23/25 21:21, Zongmin Zhou wrote:
->>>>>
->>>>> On 2025/6/21 01:26, Shuah Khan wrote:
->>>>>> On 6/20/25 03:27, Greg KH wrote:
->>>>>>> On Fri, Jun 20, 2025 at 05:19:33PM +0800, Zongmin Zhou wrote:
->>>>>>>>
->>>>>>>> On 2025/6/20 12:29, Greg KH wrote:
->>>>>>>>> On Fri, Jun 20, 2025 at 10:16:16AM +0800, Zongmin Zhou wrote:
->>>>>>>>>> On 2025/6/19 19:01, Greg KH wrote:
->>>>>>>>>>> On Wed, Jun 04, 2025 at 02:54:10PM +0800, Zongmin Zhou wrote:
->>>>>>>>>>>> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
->>>>>>>>>>>>
->>>>>>>>>>>> The vhci driver does not need to create a platform device,
->>>>>>>>>>>> it only did so because it was simple to do that in order to
->>>>>>>>>>>> get a place in sysfs to hang some device-specific attributes.
->>>>>>>>>>>> Now the faux device interface is more appropriate,change it
->>>>>>>>>>>> over to use the faux bus instead.
->>>>>>>>>>>>
->>>>>>>>>>>> Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
->>>>>>>>>>>> ---
->>>>>>>>>>>> Changes in v2:
->>>>>>>>>>>> - don't change faux create api,just call probe on vhci_hcd_init.
->>>>>>>>>>>>
->>>>>>>>>>>>     drivers/usb/usbip/vhci.h             |  4 +-
->>>>>>>>>>>>     drivers/usb/usbip/vhci_hcd.c         | 86 +++++++++++-----------------
->>>>>>>>>>>>     drivers/usb/usbip/vhci_sysfs.c       | 68 +++++++++++-----------
->>>>>>>>>>>>     tools/usb/usbip/libsrc/vhci_driver.h |  2 +-
->>>>>>>>>>>>     4 files changed, 72 insertions(+), 88 deletions(-)
->>>>>>>>>>> I get the following build errors from this patch:
->>>>>>>>>>>
->>>>>>>>>>> drivers/usb/usbip/vhci_hcd.c:1462:12: error: ‘vhci_hcd_resume’ defined but not used [-Werror=unused-function]
->>>>>>>>>>>     1462 | static int vhci_hcd_resume(struct faux_device *fdev)
->>>>>>>>>>>          |            ^~~~~~~~~~~~~~~
->>>>>>>>>>> drivers/usb/usbip/vhci_hcd.c:1418:12: error: ‘vhci_hcd_suspend’ defined but not used [-Werror=unused-function]
->>>>>>>>>>>     1418 | static int vhci_hcd_suspend(struct faux_device *fdev, pm_message_t state)
->>>>>>>>>>>          |            ^~~~~~~~~~~~~~~~
->>>>>>>>>>> cc1: all warnings being treated as errors
->>>>>>>>>>>
->>>>>>>>>>> Are you sure you tested this?
->>>>>>>>>> I apologize for not enabling -Werror, which resulted in missing this error
->>>>>>>>>> warning.
->>>>>>>>>> I have tested usbip feature use the new patch,but not test system
->>>>>>>>>> suspend/resume.
->>>>>>>>>> The faux bus type don't add pm function,and vhci-hcd driver can't register
->>>>>>>>>> it.
->>>>>>>>>> Maybe have to add suspend/resume for it.like below:
->>>>>>>>>> static const struct bus_type faux_bus_type = {
->>>>>>>>>>       .name        = "faux",
->>>>>>>>>>       .match        = faux_match,
->>>>>>>>>>       .probe        = faux_probe,
->>>>>>>>>>       .remove        = faux_remove,
->>>>>>>>>>       .resume     = faux_resume,
->>>>>>>>>>       .suspend    = faux_suspend,
->>>>>>>>>> };
->>>>>>>>>>
->>>>>>>>>> Is that right?
->>>>>>>>>> Your expertise would be greatly valued.
->>>>>>>>> As this is not real hardware, why do you need the suspend/resume
->>>>>>>>> callbacks at all?  What is happening here that requires them?
->>>>>>>> @greg,
->>>>>>>> The vhci_hcd_suspend/vhci_hcd_resume interfaces are not designed for this
->>>>>>>> faux device, but rather to
->>>>>>>> manipulate the HCD_FLAG_HW_ACCESSIBLE bit in the hcd flags associated with
->>>>>>>> the faux device.
->>>>>>>> For example:
->>>>>>>> During system standby: clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags)
->>>>>>>> During system wakeup: set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags)
->>>>>>>>
->>>>>>>> Previously, these two functions were registered through platform_driver,
->>>>>>>> but faux bus does not have the relevant interface, so they were not called,
->>>>>>>> resulting in this compilation warning error.
->>>>>>>>
->>>>>>>> This raises the question: Should the faux bus implement PM-related
->>>>>>>> interface?
->>>>>>>> I'm uncertain whether these functions are essential for the vhci-hcd driver
->>>>>>>> or if they can be safely removed.
->>>>>>>>
->>>>>>>> However, during system standby/wakeup tests with remote USB devices bound to
->>>>>>>> the vhci-hcd driver,
->>>>>>>> I observed consistent failure scenarios across both the original platform
->>>>>>>> bus and faux bus patch implementations.
->>>>>>
->>>>>> suspend and resume hooks have been in the code from beginning
->>>>>> in the CONFIG_PM path. The original authors are skeptical about
->>>>>> what should happen during suspend"
->>>>>>
->>>>>> /* what should happen for USB/IP under suspend/resume? */
->>>>>> suspend hook checks for active connections and sends EBBUSY
->>>>>> back to pm core.
->>>>>>
->>>>>> Active connection means any of the ports are in USB_PORT_STAT_CONNECTION
->>>>>> state. So as long as there are active connections between vhci client
->>>>>> and the host, suspend won't work. So we really don't know what happens
->>>>>> to the active connections if there are no suspend/resume hooks.
->>>>>>
->>>>>> If there are no active connections, then it will clear the HCD_FLAG_HW_ACCESSIBLE
->>>>>> bit and returns to pm core to continue with suspend.
->>>>>>
->>>>>> resume sets the HCD_FLAG_HW_ACCESSIBLE flag to indicate hardware is accessible
->>>>>> and initiates port status poll.
->>>>>>
->>>>>> - suspend hook prevents suspend
->>>>>>
->>>>>> With faux device since there is no suspend and resume hook, I would expect
->>>>>> these hooks are not a factor in suspend and resume.
->>>>>>
->>>>>> vhci_hcd is a special case virtual driver as it is a proxy for controlling
->>>>>> hardware on the host.
->>>>>>
->>>>>> Zongmin,
->>>>>>
->>>>>> Do suspend/resume work when vhci_hcd is not loaded?
->>>>>> What happens when when system suspends and resumes with faux device?
->>>>>> Can you send me dmesg logs and pm logs?
->>>>>>
->>>>> Hi Greg,shuah
->>>>>
->>>>> Yes, system with vhci_hcd unload or just load vhci_hcd driver
->>>>> without usbip devices bound to vhci_hcd,system suspend/resume worked well.
->>>>> Some logs for you.
->>>>
->>>> Sorry for the delay. I was at a conference last week.
->>>> Thank you for sending these logs.
->>>>
->>>>> 1.system with vhci_hcd driver load,but don't bound any usbip devices to vhci_hcd,suspend/resume worked well.
->>>>> see dmesg-faux bus-load.log
->>>>
->>>>
->>>>>
->>>>> 2.usbip device bound to vhci_hcd,and do system suspend action,suspend/resume worked failed.
->>>>> I observed two distinct failure scenario:
->>>>> Scenario 1: System failed to enter suspend state,and will auto resume;
->>>>
->>>>
->>>>> the log for use platform bus:
->>>>> dmesg-platform bus-device bound-auto resume.log
->>>>
->>>> This is clear from the suspend hook in the vhci_hcd.
->>>> When it returns EBUSY, suspend will fail and move to
->>>> auto resume.
->>>>
->>>>> the log for use faux bus:
->>>>> dmesg-faux bus-device bound-auto resume.log
->>>>
->>>> It is good that the behavior is same with faux bus even though
->>>> suspend hook isn't called. I will take a look at the log.
->>>>
->>>>>
->>>>> Scenario 2: System resume failed with black screen freeze,a forced restart of the machine is require.
->>>>> the log for use platform bus:
->>>>> dmesg-platform bus-device bound-black screen.log
->>>>> the log for use faux bus:
->>>>> dmesg-faux bus-device bound-black screen.log
->>>>
->>>> That is bad. When does this happen? Is there a difference in
->>>> configuration?
->>>>
->>> No, there's no difference. The same code is used for two different failure scenarios.
->>> I just tested many times. These two different situations occur probabilistically.
->>> But they both happened only when the USBIP device is bound to the vhci_hcd driver.
->>>> The behavior same for platform bus and faux bus. Sounds like
->>>> an existing problem that needs to be debugged separately.
->>>>
->>>> I will take a look at all these logs and get back to you in
->>>> a day or two.
->>>>
->>
->> I looked at the logs and here is what I found:
->>
->> Scenario 1:
->>   dmesg-faux bus-device bound-auto resume.log
->>   dmesg-platform bus-device bound-auto resume.log
->>
->> In this case suspend bailed out way before driver suspend
->> when vhci_hcd is using platform and faux bus.
->>
->> Freezing remaining freezable tasks failed after 20.006 seconds (0 tasks refusing to freeze, wq_busy=1)
->> Restarting kernel threads ... done
->> OOM killer enabled.
->> Restarting tasks ... done.
->> random: crng reseeded on system resumption
->> PM: suspend exit
->>
->> Auto-resume of the user-space worked. Scenario 1 isn't really
->> interesting.
->>
->> Scenario 2:
->>   dmesg-faux bus-device bound-black screen.log
->>   dmesg-platform bus-device bound-black screen.log
->>
->> Even though the result is the same in seeing blank screen, how
->> we get there is different.
->>
->> =================
->> faux-bus device:
->> =================
->> - suspend worked - looks like
->>   usb 4-1: PM: calling usb_dev_suspend @ 6054, parent: usb4
->>   usb 4-1: PM: usb_dev_suspend returned 0 after 13675 usecs
->>   usb usb4: PM: calling usb_dev_suspend @ 6055, parent: vhci_hcd.0
->>   usb usb4: PM: usb_dev_suspend returned 0 after 9 usecs
->>
->> vhci_hcd suspend isn't in play here. usb_dev_suspend() returns.
->> See below
->>
->> usb 4-1: PM: usb_dev_suspend returned message.
->>
->> -------------------------------------------------------------
->>
->> - resume started (assuming it has been initiated by user)
->>
->> [  650.027491][ T6056] pci 0000:00:01.0: PM: pci_pm_suspend_noirq returned 0 after 304 usecs
->>
->> See see timestamp difference between the last suspend message and the
->> first resume message.
->> [  674.000257][   T39] pci 0000:00:00.0: PM: calling pci_pm_resume_noirq @ 39, parent: pci0000:00
->>
->> usb 4-1 usb_dev_resume never returns.
->>
->> [  674.071125][ T6117] usb usb4: PM: usb_dev_resume returned 0 after 21110 usecs
->> [  674.113991][ T6126] usb 4-1: PM: calling usb_dev_resume @ 6126, parent: usb4
->>
->> -------------------------------------------------------------
->>
->> =====================
->> platform bus device
->> =====================
->>
->> - suspend was aborted because vhci_hcd suspend routine returned error
->>
->> [  297.854621][ T9402] usb 4-1: PM: calling usb_dev_suspend @ 9402, parent: usb4
->> [  297.868524][ T9402] usb 4-1: PM: usb_dev_suspend returned 0 after 13214 usecs
->> [  297.869994][ T9403] usb usb4: PM: calling usb_dev_suspend @ 9403, parent: vhci_hcd.0
->> [  297.871959][ T9403] usb usb4: PM: usb_dev_suspend returned 0 after 30 usecs
->> [  297.873644][ T9394] vhci_hcd vhci_hcd.0: PM: calling platform_pm_suspend @ 9394, parent: platform
->> [  297.874738][ T9394] vhci_hcd vhci_hcd.0: We have 1 active connection. Do not suspend.
->> [  297.875369][ T9394] vhci_hcd vhci_hcd.0: PM: dpm_run_callback(): platform_pm_suspend returns -16
->> [  297.876078][ T9394] vhci_hcd vhci_hcd.0: PM: platform_pm_suspend returned -16 after 1341 usecs
->> [  297.876774][ T9394] vhci_hcd vhci_hcd.0: PM: failed to suspend: error -16
->>
->> - the following triggers resume
->> [  297.877321][ T9394] PM: Some devices failed to suspend, or early wake event detected
->>
->> [  297.881065][ T9403] usb usb3: PM: usb_dev_resume returned 0 after 19 usecs
->> [  297.904551][ T9408] usb usb4: PM: usb_dev_resume returned 0 after 22911 usecs
->> [  297.905148][ T9418] usb 4-1: PM: calling usb_dev_resume @ 9418, parent: usb4
->>
->> usb 4-1 usb_dev_resume never returns.
->>
->> Note - In both cases, usb_dev_resume doesn't return. When it is called is the
->> difference.
->>
->> I don't think suspend/resume works when devices are bound. Suspend exits and
->> starts resume which seems to fail because it doesn't handle the virtual usb
->> device resume. There is a missing piece here.
->>
->> When vhci_hcd imports a device and acts as a proxy between the virtual mass
->> storage device (e.g in this case) - it appears suspend and resume are
->> handled as if it is a usb device. Maybe this is incorrect?
->>
->> usb_dev_suspend() works and usb_dev_resume() on these virtual usb devices?
->> Do we need to handle this in usb_dev_resume()?
->>
->> Talking out loud - I have to do some looking into.
->>
-> Re:
-> Yes, your analysis is completely correct.
-> 
-> In fact, I've experimented with adding PM hooks to the faux bus,
-> and found that faux bus devices then behave identically to platform bus devices during suspend/resume.
-> See the attachment.
-> 
+Hi Sebastian,
 
-Thanks for checking this scenario. No surprises here.
+On 6/23/25 3:08 PM, Sebastian Reichel wrote:
+> Hi,
+>
+> On Tue, May 20, 2025 at 01:10:25PM -0700, Amit Sunil Dhamne wrote:
+>> Hi Rob,
+>>
+>> Thanks for your response!
+>>
+>> On 5/14/25 12:42 PM, Rob Herring wrote:
+>>> On Wed, May 07, 2025 at 06:00:22PM -0700, Amit Sunil Dhamne wrote:
+>>>> Extend ports property to model power lines going between connector to
+>>>> charger or battery/batteries. As an example, connector VBUS can supply
+>>>> power in & out of the battery for a DRP.
+>>>>
+>>>> Additionally, add ports property to maxim,max33359 controller example.
+>>>>
+>>>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>>>> ---
+>>>>   .../bindings/connector/usb-connector.yaml          | 20 +++++++++++------
+>>>>   .../devicetree/bindings/usb/maxim,max33359.yaml    | 25 ++++++++++++++++++++++
+>>>>   2 files changed, 38 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>>>> index 11e40d225b9f3a0d0aeea7bf764f1c00a719d615..706094f890026d324e6ece8b0c1e831d04d51eb7 100644
+>>>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>>>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>>>> @@ -181,16 +181,16 @@ properties:
+>>>>   
+>>>>     port:
+>>>>       $ref: /schemas/graph.yaml#/properties/port
+>>>> -    description: OF graph bindings modeling a data bus to the connector, e.g.
+>>>> -      there is a single High Speed (HS) port present in this connector. If there
+>>>> -      is more than one bus (several port, with 'reg' property), they can be grouped
+>>>> -      under 'ports'.
+>>>> +    description: OF graph binding to model a logical connection between a device
+>>>> +      and connector. This connection may represent a data bus or power line. For
+>>>> +      e.g. a High Speed (HS) data port present in this connector or VBUS line.
+>>>> +      If there is more than one connection (several port, with 'reg' property),
+>>>> +      they can be grouped under 'ports'.
+>>> 'port' and 'port@0' are equivalent. So you can't be changing its
+>>> definition.
+>> Noted!
+>>
+>>
+>>> I'm not sure showing a power connection with the graph is the right
+>>> approach.
+>> I want to provide some more context and rationale behind using this design.
+>>
+>>  From a hardware perspective:
+>>
+>> The max77759/max33359 IC has Type-C port controller, charger, fuel gauge
+>> (FG) ICs. The Vbus from the connector goes to/from the TCPC and connects
+>> with the charger IP via circuitry & from there on to the battery. The FG
+>> is connected to the battery in parallel. As it can be seen that while
+>> these IPs are interconnected, there's no direct connection of the fuel
+>> gauge & the connector.
+>>
+>> For this feature, I am interested in getting the reference to the FG. As
+>> per graph description: "...These common bindings do not contain any
+>> information about the direction or type of the connections, they just
+>> map their existence." This works for my case because I just want the
+>> connector to be aware of the Fuel gauge device without imposing a
+>> specific directionality in terms of power supplier/supplied. This is
+>> also the reason why I didn't use
+>> "/schemas/power/supply/power-supply.yaml#power-supplies" binding.
+>>
+>>> We have a binding for that already with the regulator binding.
+>> I haven't explored the option of using regulator bindings. But in my
+>> case I am interested in fuel gauge and unfortunately, they're modeled as
+>> power_supply devices.
+>  From hardware point of view there is no direct connection at all
+> between the fuel gauge and the connector. The usual hardware
+> connection is
+>
+> connector -> charger -> battery
+>
+> With the charger potentially supporting reverse operation to provide
+> energy from the battery to the connector (with "battery" I assume
+> a "smart" battery, so the raw cells and some kind of fuel gauge).
+>
+> Thus the following example should properly document the hardware
+> connections:
+>
+> ---------------------------------------
+> typec-connector {
+>      /* ... */
+> };
+>
+> charger {
+>      /* ... */
+>      power-supplies = <&connector>;
+> };
+>
+> fuel-gauge {
+>      /* ... */
+>      power-supplies = <&charger>;
+> };
+> ---------------------------------------
 
-> This is likely a historical legacy issue.
+The hardware description is unambiguous for single power role Type-C 
+devices such as Sink only & Source only device (demonstrated by 
+inverting the relationship given in the above example).
 
-It is an existing problem in the way vhci_hcd and the bound devices
-handle suspend/resume. vhci_hcd suspend assumes once it returns
-"don't suspend" the rest works. However suspend for the bound device
-runs first and a subsequent resume on it fails.
+For DRP power role, the above relationship feels semantically incorrect 
+because the illustrated relationship would not hold if the Type-C device 
+is Source for a given Type-C connection lifecycle.
 
-This problem needs fixing - I don't know yet how to.
+I'll add a note somewhere mentioning that for DRP, the relationship can 
+be demonstrated either like a sink or source to make it less ambiguous.
 
-> Regarding this matter, is there anything else you'd like me to assist with?
-> 
 
-One thing I am curious about is the status of the bound devices after
-"forced restart of the machine" when you see blank screen or hang?
+> It means instead of the direct graph lookup for the fuel gauge,
+> you would need a function walking through the graph build by the
+> power-supplies phandles. But it also means that the DT properly
+> describes the hardware instead of adding random graph connections.
 
-thanks,
--- Shuah
+Okay, will follow this approach.
+
+Thanks,
+
+Amit
+
+
+>
+> Greetings,
+>
+> -- Sebastian
+>
+>>> Perhaps the connector needs to be a supply. It's already using that
+>>> binding in the supplying power to the connector case.
+>> Want to clarify, in this case you mean
+>> /schemas/regulator/regulator.yaml#*-supply$ right?
+>>
+>> Adding to my response above, the reason I don't want to impose a
+>> directionality in terms of supplier/supplied is that in case of USB Dual
+>> Role Port they're dynamic i.e., when USB is source, the power is
+>> supplied out of the battery (battery/FG will be supplier) and in case
+>> USB is sink, battery is supplied power. Whether the connector port is in
+>> source or sink role is determined on a connection to connection basis.
+>> Also, the knowledge of the supply direction is of no consequence for
+>> this feature.
+>>
+>>
+>> Please let me know what you think.
+>>
+>> Thanks,
+>>
+>> Amit
+>>
+>>
+>>> Rob
 
