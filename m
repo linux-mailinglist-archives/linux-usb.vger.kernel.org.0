@@ -1,119 +1,129 @@
-Return-Path: <linux-usb+bounces-25575-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25576-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22C68AFC4ED
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 10:01:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BB79AFC531
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 10:15:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BFB71892BD4
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 08:01:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4BDF16DFEE
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 08:15:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F21A29B8E6;
-	Tue,  8 Jul 2025 08:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE53329E101;
+	Tue,  8 Jul 2025 08:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Wst4Hy1/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QcsvsQnN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C91910A1F;
-	Tue,  8 Jul 2025 08:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E79184540;
+	Tue,  8 Jul 2025 08:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751961689; cv=none; b=NQ7mgraxZFR8L/QJMigQ4+j6M12ncUlTENedA6rx9ohdIMwannj+zXMln2cVpu8YjkrrcdhVAuobg0KnSCb5XS66AO9E+jSL2A2AzFzvN8Cy7XRwtQVy3iAMFk5W1/3JV77Uchq0MJSy/WrzqN/jyjT6QJS8QpJe1sfcO1UpHWA=
+	t=1751962533; cv=none; b=Hv5KmJEej2x7r8l24CFpm0SJ9+A6zlUCW93se89/KcMNeZNbUu61rHJ2Eq9dLlL8RCXBvqDw3+09wgJFPANJlVmMwSX0RXHLvjXtto4qCq0Jtx3CVcuvr3f5bEWYikttr0ErWZ6GvpUpiDyPcPyUIlWGrVLxxnrV1xA0GG5plF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751961689; c=relaxed/simple;
-	bh=1IcQdHGZAxNprOzffGTwM8MUgD1tKayzq0CNL3/5vEk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cpp+c+Lc2rmgLcZwDSA9wKroK7mwNT9BYdo9DxO0g7iAY1GMsv1KXwzLpn4BdTyf6EXT6hpkqSZ23XZHX9oYWT7BAn3Dk/WP7HgOh+pL6FR8U2uDbevc6UyYeIItca/PUchVM88W+UWWWs+V62k7W5HEvv+Wk14ti6pqvioykUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Wst4Hy1/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C70C4CEED;
-	Tue,  8 Jul 2025 08:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751961689;
-	bh=1IcQdHGZAxNprOzffGTwM8MUgD1tKayzq0CNL3/5vEk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wst4Hy1/iqao1N+kkvodH0dHZDkEjAOZhUL27lcYPvSBApGWx8jNcIpjtA9BfS5/M
-	 Fpn2eoP1RtKxUEGM989UxLBOv53epAVSRSrCAOFg38bNSfQa2V7OdjqGfH86wfEV7m
-	 rt1n69DDZOpjm6A5f+wb8tRVFbL3vS+bJxKdB1Zk=
-Date: Tue, 8 Jul 2025 10:01:26 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v2] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
- secure calls
-Message-ID: <2025070843-strangely-unplanted-3ef5@gregkh>
-References: <20250627125131.27606-1-komal.bajaj@oss.qualcomm.com>
- <2025062812-passive-untracked-1231@gregkh>
- <CAPHGfUOUR=m2rq-rFbUbWjF93qwY5ikHc+M0_KuHOut86z+Mqg@mail.gmail.com>
+	s=arc-20240116; t=1751962533; c=relaxed/simple;
+	bh=rYlFHlvjj1QePapukAiI/tzY5PooIzqMJ0D/NC0iFMI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=t5netZntwyWdSfwyqtEr1Pg1+uoCHKHwVLEcjqGwHxMHj2ObIK5Ywlnk46BuaTOlywB8y44rd+SJoltjTtRlbAzJcggJ8H2tSEfrp9zIVZewX9Zfy7loYF9dAbFygSSgEDS7zzq5ig8PlmFSPh0LEXTz0LQBlTUQjJDyBxU+ou8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QcsvsQnN; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751962532; x=1783498532;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rYlFHlvjj1QePapukAiI/tzY5PooIzqMJ0D/NC0iFMI=;
+  b=QcsvsQnNf2BGJ8TgQURxzXaQfvtYosUeOA9ONdWHw1gQxhCDjOnzC3N6
+   wEnjU9G3k4xQYnOxKyqtRhTWQuO0OdkBZ0s+fjOP8eK9d9Fj5Zv/KSRnq
+   uIDBhFKCFJ+jTcH1376Ux7AhO1fAM9Pg2aZnq1xKam7bV+uQGu1IIC8/e
+   62fuCI/tK3Ums1riVOnwEj8ULQ2LukWkD4liOs47G10NDiJ7aHGzIoiuH
+   n0ewgfMPnrjgqG7pW3VmyUim3KNek5sw+KxZm1IwNRutBmXcuKHZYjjQ1
+   mxSD3Hcs7g7wrDUICeT17mbULMXwcTklarCS28b7OzjGb94qkWWtW0ChO
+   A==;
+X-CSE-ConnectionGUID: xWLD/eb7TNeh8qr2dSYUGw==
+X-CSE-MsgGUID: UJv/0a2PT726jDOW2FrdzQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="64440584"
+X-IronPort-AV: E=Sophos;i="6.16,296,1744095600"; 
+   d="scan'208";a="64440584"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2025 01:15:32 -0700
+X-CSE-ConnectionGUID: VVE8yAZxRRiXIaLhf4YU3A==
+X-CSE-MsgGUID: NygHuXbBR32HQw2wSj3eeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,296,1744095600"; 
+   d="scan'208";a="179106015"
+Received: from ubuntu.bj.intel.com ([10.238.156.109])
+  by fmviesa002.fm.intel.com with ESMTP; 08 Jul 2025 01:15:29 -0700
+From: Jun Miao <jun.miao@intel.com>
+To: o.rempel@pengutronix.de,
+	kuba@kernel.org,
+	oneukum@suse.com,
+	qiang.zhang@linux.dev
+Cc: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] net: usb: enable the work after stop usbnet by ip down/up
+Date: Tue,  8 Jul 2025 16:16:53 +0800
+Message-Id: <20250708081653.307815-1-jun.miao@intel.com>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPHGfUOUR=m2rq-rFbUbWjF93qwY5ikHc+M0_KuHOut86z+Mqg@mail.gmail.com>
 
-On Tue, Jul 08, 2025 at 11:23:56AM +0530, Komal Bajaj wrote:
-> On Sat, Jun 28, 2025 at 8:06 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Jun 27, 2025 at 06:21:31PM +0530, Komal Bajaj wrote:
-> > > EUD_MODE_MANAGER2 register is mapped to a memory region that is marked
-> > > as read-only for HLOS, enforcing access restrictions that prohibit
-> > > direct memory-mapped writes via writel().
-> > >
-> > > Attempts to write to this region from HLOS can result in silent failures
-> > > or memory access violations, particularly when toggling EUD (Embedded
-> > > USB Debugger) state. To ensure secure register access, modify the driver
-> > > to use qcom_scm_io_writel(), which routes the write operation to Qualcomm
-> > > Secure Channel Monitor (SCM). SCM has the necessary permissions to access
-> > > protected memory regions, enabling reliable control over EUD state.
-> > >
-> > > SC7280, the only user of EUD is also affected, indicating that this could
-> > > never have worked on a properly fused device.
-> > >
-> > > Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded USB Debugger(EUD)")
-> > > Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> > > Signed-off-by: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
-> > > Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> > > ---
-> > > Changes in v2:
-> > > * Drop separate compatible to be added for secure eud
-> > > * Use secure call to access EUD mode manager register
-> > > * Link to v1: https://lore.kernel.org/all/20240807183205.803847-1-quic_molvera@quicinc.com/
-> > >
-> > >  drivers/usb/misc/qcom_eud.c | 20 ++++++++++++++------
-> > >  1 file changed, 14 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> > > index 83079c414b4f..30c999c49eb0 100644
-> > > --- a/drivers/usb/misc/qcom_eud.c
-> > > +++ b/drivers/usb/misc/qcom_eud.c
-> > > @@ -16,6 +16,8 @@
-> > >  #include <linux/sysfs.h>
-> > >  #include <linux/usb/role.h>
-> > >
-> > > +#include <linux/firmware/qcom/qcom_scm.h>
-> >
-> > Why the blank line before this #include line?
-> 
-> The qcom_scm.h header has been placed in a distinct paragraph to clearly
-> differentiate it from generic subsystem headers, with a blank line included
-> for visual distinction
+From: Zqiang <qiang.zhang@linux.dev>
 
-No need for this, it's pretty obvious this is the case when all in one
-long list.
+Oleksij reported that:
+The smsc95xx driver fails after one down/up cycle, like this:
+ $ nmcli device set enu1u1 managed no
+ $ p a a 10.10.10.1/24 dev enu1u1
+ $ ping -c 4 10.10.10.3
+ $ ip l s dev enu1u1 down
+ $ ip l s dev enu1u1 up
+ $ ping -c 4 10.10.10.3
+The second ping does not reach the host. Networking also fails on other interfaces.
 
-thanks,
+Enable the work by replacing the disable_work_sync() with cancel_work_sync().
 
-greg k-h
+[Jun Miao: completely write the commit changelog]
+
+Fixes: 2c04d279e857 ("net: usb: Convert tasklet API to new bottom half workqueue mechanism")
+Reported-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Zqiang <qiang.zhang@linux.dev>
+Signed-off-by: Jun Miao <jun.miao@intel.com>
+---
+ drivers/net/usb/usbnet.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 9564478a79cc..6a3cca104af9 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -861,14 +861,14 @@ int usbnet_stop (struct net_device *net)
+ 	/* deferred work (timer, softirq, task) must also stop */
+ 	dev->flags = 0;
+ 	timer_delete_sync(&dev->delay);
+-	disable_work_sync(&dev->bh_work);
++	cancel_work_sync(&dev->bh_work);
+ 	cancel_work_sync(&dev->kevent);
+ 
+ 	/* We have cyclic dependencies. Those calls are needed
+ 	 * to break a cycle. We cannot fall into the gaps because
+ 	 * we have a flag
+ 	 */
+-	disable_work_sync(&dev->bh_work);
++	cancel_work_sync(&dev->bh_work);
+ 	timer_delete_sync(&dev->delay);
+ 	cancel_work_sync(&dev->kevent);
+ 
+-- 
+2.32.0
+
 
