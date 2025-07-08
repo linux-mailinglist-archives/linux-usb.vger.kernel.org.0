@@ -1,217 +1,178 @@
-Return-Path: <linux-usb+bounces-25591-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25592-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F2B1AFCE5F
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 16:59:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D170BAFCFBD
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 17:51:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DAE6426A6F
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 14:58:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5FC1178315
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jul 2025 15:51:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A992E0B49;
-	Tue,  8 Jul 2025 14:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 597FD2E1C6B;
+	Tue,  8 Jul 2025 15:51:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="T+q0A+tc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OX8MaRQ3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248542DC35C
-	for <linux-usb@vger.kernel.org>; Tue,  8 Jul 2025 14:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04481E9B08;
+	Tue,  8 Jul 2025 15:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751986723; cv=none; b=J1nlNZnbEDIW90M9C+hmps+nsg+2a5BXO+9/3tZBXhQYoPuTRngUFS93bZd3Ko6oCUvZI2LsabcV4MrFYmwMltwWJRKoNdarfO3o4NZ/2sEx7UykUL42XaIoicbQD/M0MQ9MJCToa9yHeWEZtmvvzFzOPfCjRSP3XgY+JKDtZP4=
+	t=1751989872; cv=none; b=tuVlIFhyk80EmriY5vs83dJ6ddotu7XAeSbn6++GHfjWz3lFu6uFmGOAp/AnzvmjsuoSPLbxLxhmDesp6T4tY7XcJ107oFOauhLHRmkcccge/JrVFS8VxWoNj6sV1dMOK6QELqN0LdL6wEHbOVWc8HHIZvwTfsn6qHf8GDSsd7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751986723; c=relaxed/simple;
-	bh=HGTpVxEEJn+4Z8F/2vfMSUr1vMJyUPWvL7WDo/xrVN0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nbvbmE4px4f3hu/XgaPqmw6sb/iKGNpz8FWoMRVdQpyXhuvuVRTQHEA8XNpVY7nC19kiuqabVDYk7+L73FLqS/2f+/OU6JmBzAOXKn4R8D6lR0YJaTq6UEu1N9uA8npGE+oDs5gOgXk6jnzdeFHxtshu1w2fi8Hh2MU4E25T5fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=T+q0A+tc; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-55502821bd2so4852661e87.2
-        for <linux-usb@vger.kernel.org>; Tue, 08 Jul 2025 07:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1751986719; x=1752591519; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lsjEc9LmeMOTlM1N3xvojXwrwvOBpBec3I1iTp5IlDk=;
-        b=T+q0A+tcLVdKzFU+yOQ0k6BaEoc5AWhk6k1MsMu1cITFtwXThAqJb3RmygaNIGf31N
-         /szqbHwyxB3ZDe52XXbLvE7d0L4NhKQeysd22oYr2EbvjSnkNB7jbV82mixUCasB11aC
-         TXWBvIuoqia2FREsX6TsRxkhQefcmr9IWrw38=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751986719; x=1752591519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lsjEc9LmeMOTlM1N3xvojXwrwvOBpBec3I1iTp5IlDk=;
-        b=KbGZCIgwlTrvT7Thc31DssQTiyWiKRhNE3VglaTtZZ/TBwRk2oQlRHjN94EVXAhLQZ
-         bQVqaE860RwVbR7nE7Cv7rYIjMr+1Reje2RKncHeDrgWxwI461AyoqdHysBd7n3qNZll
-         MpOXIWW372TNzXYOnX3GoFlqOTCvkCtWgUDDLtNrsE0xRuzTGYMU2Xyp2Yc5eS9g9b0x
-         qgDyCa9Bot+FcRzs4ELfJonYSSaihKfzUbY65jtB3fNcwPJEdKnjYZrqmfd7Lb46V271
-         u8WMSJzqB/P8tC6HhGzzaAwf2r9zAmBIHfpnOvBmLB2WJ/RnNIYpUQK31QWpRKWad440
-         DCoA==
-X-Forwarded-Encrypted: i=1; AJvYcCWxWW5Tk6gncmBWgKS2NLZrao4RPPkc4bvOhia9cGwCfXFWVljdKt3b02NievL/3a5FGUKMJxvIMGY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZTM28ydme0LRLg3j6jWpsHFmkzsoRyoRrui+IVwl0pIxDTTFy
-	rQ3BxJHm/9kOHx3aRWdaZ9doxvEt3OI80PTBqj3afnDOOCKap++w5hRKAmv6I6IDtpVTXu++PDG
-	XeBtAw2sz
-X-Gm-Gg: ASbGnctzoRqPJxJZjK5Szgg83W/Py4seCH1FIPUOjG0TASihBOOUl+dIpcsbLJaQSqB
-	NqtRKrrm8DmOWiFOccFIzzRT9fDhnE4qoltTYdYGLdZIIhEsJUV4wa13r7qsVuAlHL4ss3mBvv2
-	7dG74ZYmFvYLXOdVA2vTtBjdhJIZkybeTMGmfGp+uueJp6IyhVKwSgVpSnCJarmDe/cbIiMW+A4
-	eNOMcaYt5UyDcgSjManl0tAysdpD+t3MpMgTeL0a9bOFVy1zgjOh3fvF49ZT8M16G/ZhDoC9tDc
-	IWvW1lyI2LTDnBWsSWtCpU/SBVU9fp9zx6Gm4LE3VJSGsbrKFUiV8reuS8b8NTnL1NpbkBpcuH+
-	JuGBfePfDWZUnblBTLtNdCmZsA3gVzUgsfY0=
-X-Google-Smtp-Source: AGHT+IFJSvL9NAORAgvczJFPv0Lk/erFxoK+lJzkhLx57nkIDnMYHbnvg4vT83weLEIAe0P0ApKF0w==
-X-Received: by 2002:a05:6512:2344:b0:553:2868:6361 with SMTP id 2adb3069b0e04-556dbe8d00bmr5144371e87.18.1751986719083;
-        Tue, 08 Jul 2025 07:58:39 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55638494ec3sm1670920e87.119.2025.07.08.07.58.38
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jul 2025 07:58:39 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-553b6a349ccso5464627e87.0
-        for <linux-usb@vger.kernel.org>; Tue, 08 Jul 2025 07:58:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUvFjwjmhYjacF+KRC48rAsCN1weRHv9XaKUoGJyYBvA+KFjQyG/o2TWAgGoDW5WEVEKFnDZpXAIAw=@vger.kernel.org
-X-Received: by 2002:a05:6512:ac8:b0:553:3028:75ae with SMTP id
- 2adb3069b0e04-556de076273mr5727105e87.46.1751986718368; Tue, 08 Jul 2025
- 07:58:38 -0700 (PDT)
+	s=arc-20240116; t=1751989872; c=relaxed/simple;
+	bh=7NdUOErojvHNX9gChvdW4eAZDmPSYHoXjnk1sVkHlg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K/ntbUu4IHS7bnl2kgAAfKNNp9eGNhmDEgRlnNcRvCbShyn135Ni0P39t+vzV4SdbHPBu7yUfq/or62rwQYLfjUJC/R2iiYkwV+INciqgezPAtS4dixc4XDczj9fNhEmL0cdqUkxq/Do5anjxMQcrWJWDrz9Y4b+Hx3b1EmZs10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OX8MaRQ3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45ACFC4CEED;
+	Tue,  8 Jul 2025 15:51:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751989872;
+	bh=7NdUOErojvHNX9gChvdW4eAZDmPSYHoXjnk1sVkHlg0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OX8MaRQ3noSf0G6QiWBWSEdlj18E+WpLD28IJ/pp9NPDgA1HYekxxQIEVFSb9slrT
+	 LVHmh6bI12LQXSiPci7TKlIIcqV5Fi9Mlq18r70UGc0FWWhDHmZejMkUuSXKqPPAhb
+	 i2yVpdiCJUENb0h219WMWg9FDa7jX4i81pWSl3ZC2vA1Ptk+cfjsnW1q3qYoX890+Z
+	 zNYFGfsZProo3O3o9sMeEOP01KXxfckx0ugY9LQnTg157eO85uxadog414HPC6DlME
+	 jPCkd4VjO/T3ijeBkLfX1k8BCQLzIDMIWFe95cvfi+igQOoIN43v5X7j6i9b46HgaD
+	 G1p0fzpU6CLVw==
+Date: Tue, 8 Jul 2025 17:51:08 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org, 
+	USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Serious bug in HID core
+Message-ID: <drcvdlw2kpuvsbact2gy4hvqp2i3au3shv5ozp3qms7qdfvi7t@7jofrodxeimb>
+References: <c75433e0-9b47-4072-bbe8-b1d14ea97b13@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250605-uvc-orientation-v2-0-5710f9d030aa@chromium.org>
- <20250605-uvc-orientation-v2-5-5710f9d030aa@chromium.org> <aGw_1T_Edm8--gXW@kekkonen.localdomain>
- <CANiDSCup2iRx+0RcaijSmbn04nBY4Ui9=esCPFsQzOKe=up9Gg@mail.gmail.com>
- <aGzjTRSco39mKJcf@kekkonen.localdomain> <CANiDSCsqEHTnbvzLMoe_yxi8JRzp+2PQe3ksXhD=Y3+AqC_9hw@mail.gmail.com>
- <aG0NI2V0Tfh2HZ6O@kekkonen.localdomain>
-In-Reply-To: <aG0NI2V0Tfh2HZ6O@kekkonen.localdomain>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Tue, 8 Jul 2025 16:58:25 +0200
-X-Gmail-Original-Message-ID: <CANiDSCu=wU_Oi7CLPcYTC3Xf_pGbDroaVitPAiAj7ND5pXy-6g@mail.gmail.com>
-X-Gm-Features: Ac12FXx3zIz7eqEIVhgOFhdr-yyA-k97hK_sQ1bucetsK4DfnOnoX-8awEd9Sp8
-Message-ID: <CANiDSCu=wU_Oi7CLPcYTC3Xf_pGbDroaVitPAiAj7ND5pXy-6g@mail.gmail.com>
-Subject: Re: [PATCH v2 05/12] media: ipu-bridge: Use v4l2_fwnode for unknown rotations
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Hans de Goede <hdegoede@redhat.com>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c75433e0-9b47-4072-bbe8-b1d14ea97b13@rowland.harvard.edu>
 
-On Tue, 8 Jul 2025 at 14:21, Sakari Ailus <sakari.ailus@linux.intel.com> wr=
-ote:
->
-> Hi Ricardo,
->
-> On Tue, Jul 08, 2025 at 02:09:28PM +0200, Ricardo Ribalda wrote:
-> > On Tue, 8 Jul 2025 at 11:22, Sakari Ailus <sakari.ailus@linux.intel.com=
-> wrote:
-> > >
-> > > Hi Ricardo,
-> > >
-> > > On Tue, Jul 08, 2025 at 11:16:25AM +0200, Ricardo Ribalda wrote:
-> > > > Hi Sakari
-> > > >
-> > > > Thanks for your review
-> > > >
-> > > > On Mon, 7 Jul 2025 at 23:45, Sakari Ailus <sakari.ailus@linux.intel=
-.com> wrote:
-> > > > >
-> > > > > Hi Ricardo,
-> > > > >
-> > > > > On Thu, Jun 05, 2025 at 05:52:58PM +0000, Ricardo Ribalda wrote:
-> > > > > > The v4l2_fwnode_device_properties contains information about th=
-e
-> > > > > > rotation. Use it if the ssdb data is inconclusive.
-> > > > >
-> > > > > As SSDB and _PLD provide the same information, are they always al=
-igned? Do
-> > > > > you have any experience on how is this actually in firmware?
-> > > >
-> > > > Not really, in ChromeOS we are pretty lucky to control the firmware=
-.
-> > > >
-> > > > @HdG Do you have some experience/opinion here?
-> > > >
-> > > > >
-> > > > > _PLD is standardised so it would seem reasonable to stick to that=
- -- if it
-> > > > > exists. Another approach could be to pick the one that doesn't tr=
-anslate to
-> > > > > a sane default (0=C2=B0).
-> > > >
-> > > > I'd rather stick to the current prioritization unless there is a
-> > > > strong argument against it. Otherwise there is a chance that we wil=
-l
-> > > > have regressions (outside CrOS)
-> > >
-> > > My point was rather there are no such rules currently for rotation: o=
-nly
-> > > SSDB was being used by the IPU bridge to obtain the rotation value,
-> > > similarly only _PLD is consulted when it comes to orientation.
-> >
-> > So something like this:?
-> >
-> > static u32 ipu_bridge_parse_rotation(struct acpi_device *adev,
-> >                                      struct ipu_sensor_ssdb *ssdb,
-> >                                      struct
-> > v4l2_fwnode_device_properties *props)
-> > {
-> >         if (props->rotation !=3D V4L2_FWNODE_PROPERTY_UNSET)
-> >                 return props->rotation;
-> >
-> >         switch (ssdb->degree) {
-> >         case IPU_SENSOR_ROTATION_NORMAL:
-> >                 return 0;
-> >         case IPU_SENSOR_ROTATION_INVERTED:
-> >                 return 180;
-> >         }
-> >
-> >         dev_warn(ADEV_DEV(adev),
-> >                  "Unknown rotation %d. Assume 0 degree rotation\n",
-> >                  ssdb->degree);
->
-> Maybe:
->
->         acpi_handle_warn(acpi_device_handle(adev), ...);
->
-> ?
->
-> >         return 0;
-> > }
->
-> Looks good to me. Maybe something similar for orientation?
+Hi Alan,
 
-Do you mean using ssdb also for orientation or using acpi_handle_warn?
+On Jul 08 2025, Alan Stern wrote:
+> Jiri and Benjamin:
+> 
+> Investigating a recent bug report from syzbot 
+> (https://lore.kernel.org/linux-usb/686be237.a70a0220.29fe6c.0b0c.GAE@google.com/)
+> led me to a rather serious error in the HID core.  It could affect a 
+> lot of drivers, and I don't know enough about them or the HID subsystem 
+> to fix it right away.
+> 
+> In short, does the value returned by hid_report_len() count the byte 
+> reserved for the report ID number?
 
+It depends :)
 
-I cannot find anything related to orientation for SSDB
-https://github.com/coreboot/coreboot/blob/main/src/drivers/intel/mipi_camer=
-a/chip.h#L150
+See your analysis below...
 
-Am I looking in the right place?
+> 
+> Some drivers seem to assume that it does and some seem to assume that it 
+> doesn't.  Here's what the actual code from include/linux/hid.h does:
+> 
+> /**
+>  * hid_report_len - calculate the report length
+>  *
+>  * @report: the report we want to know the length
+>  */
+> static inline u32 hid_report_len(struct hid_report *report)
+> {
+> 	return DIV_ROUND_UP(report->size, 8) + (report->id > 0);
+> }
+> 
+> It's somewhere in between -- it includes the ID byte in the count if and 
+> only if the ID is nonzero!  And of course, this behavior isn't mentioned 
+> in the (ungrammatical) kerneldoc.
 
-Regards!
->
-> --
-> Regards,
->
-> Sakari Ailus
+Yeah, the docs are bad. But your analysis is correct: for a given
+report, its size might include or not the report ID.
 
+This is because the report ID is optional in the HID spec, and some
+devices don't make use of it. Those devices are only exporting one
+report type, and can not have another report type in the same HID
+device. If a device needs to have more than one, it then needs to export
+the report ID in all of its reports, and then report_len count that
+extra byte.
 
+To give you an example, old mice (or inexpensive ones), would export a
+report with:
+- X, Y, Wheel, B0, B1, B2
 
---=20
-Ricardo Ribalda
+When a more advanced one might export:
+- REPORT ID 0, X, Y, Wheel, B0, B1, B2, ... B9
+- REPORT ID 1, SOME_VERY_COMPLEX_CONFIGURATION, ANOTHER ONE, ETC...
+
+However, a HID device making use of the non report ID version can never
+make use of a report ID (or it's custom proprietary protocol).
+
+> 
+> The particular scenario causing the bug found by syzbot was this: 
+> report->size was 0, report->id was 0, and the lower-level driver (usbhid 
+> in this case) assumed that the length argument (which was 0) did include 
+> the ID byte.  Since the ID was 0, the driver skipped over the first byte 
+> of the buffer and decremented the length, causing the length to 
+> underflow and leading to an invalid memory access.  In a more realistic 
+> setting, this would merely result in data loss and leakage.
+
+That scenario is bogus (like most of syzbots in the HID space). There
+should be no way the HID subsystem allows a report->size of 0 to be used
+in a set_report or a get_report. So that's where the bug lies: HID
+trusts too much the device, and can lead to that kind of issues.
+
+> 
+> How should this be fixed?
+
+We have 2 problems here:
+- and __hid_request or __hid_raw_request should reject a null size
+	report, and in the __hid_request case, a report of size 1 if there is
+	a report ID.
+- Why is hidinput_change_resolution_multipliers() even considfering this
+	report of size 0 when it should at least ensure that there is one
+	field within the report
+
+The first one should be easy to fix: add a bunch of checks.
+__hid_hw_raw_request() seems to not expose the problem actually.
+
+The second one would need a little bit more understanding of the fake
+report descriptor provided by syzbot.
+
+> 
+> Related issue: When the lower-level driver's raw_request() routine is 
+> called, can it assume that the first byte of the output buffer always 
+> contains the report ID number, set by the HID core?  If not, should it 
+> assume that the first byte is always reserved for the ID, or that the 
+> first byte is reserved only when the ID is nonzero?
+
+The first byte should always be reserved to the report ID, and is
+populated by 0 by hid-core when the report ID is not in use.
+
+So the usbhid driver is doing the right thing. In case there is no
+report ID, it ignores the first byte when making a request to the
+device, because in my example above, the device would not expect the
+first byte to be 0.
+
+> 
+> Do __hid_request() and __hid_hw_raw_request() behave the same way in 
+> this regard?
+
+__hid_hw_raw_request() ensures that there is a minimum length of one, so
+we should be fine. __hid_request apparently is the only one giving too
+much trust in the report.
+
+Cheers,
+Benjamin
+
+> 
+> Alan Stern
 
