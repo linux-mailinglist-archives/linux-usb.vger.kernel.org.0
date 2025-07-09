@@ -1,87 +1,87 @@
-Return-Path: <linux-usb+bounces-25651-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25652-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58B71AFF4FD
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 00:52:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20666AFF538
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 01:07:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25D1C1C830CA
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 22:52:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7182E581427
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 23:07:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64AEA229B18;
-	Wed,  9 Jul 2025 22:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F7125C6F3;
+	Wed,  9 Jul 2025 23:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VDGu/qpf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="om4bCVBk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63FA3801
-	for <linux-usb@vger.kernel.org>; Wed,  9 Jul 2025 22:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1388B2561D9
+	for <linux-usb@vger.kernel.org>; Wed,  9 Jul 2025 23:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752101552; cv=none; b=a2bkrOYTFdNsb5so+/ogjtsK75LGjMeg84rJ5vC4xSY1qjtjrz4W7OfDCKvE1MZfP8wZxC+Ka/OAa25bey1Ix3Wk4uAc9JUJhMHOngZWi9mfRnphVsZdXuuX3K89l8Sg5rpNG+4nosSAg6DSR/ZguMkZoV7cflczEke0JAhpdM4=
+	t=1752102433; cv=none; b=ShLPEOUFN5RXItF+BgNrmh9ReJe0wC/EsRtyMD0p4mLEKBD31uz60E9zO+BRFR6tX0IGxff7QhdmeU+Wa5gLbLLheE9NwKV6bA2wHqIbwEm7KVML6PB1FjbXkUDlxlfzNqOZLMgll0uKYdBBK+nswr0Pygdm6+AMMiUtoAocA+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752101552; c=relaxed/simple;
-	bh=u1Fj+kkUjVSJsYaXWgjdpqZKkvw6JkpafoVrzmBXZQE=;
+	s=arc-20240116; t=1752102433; c=relaxed/simple;
+	bh=6BL3YCHKxPEwNXzudd0iH5KS9kHvqUFhPvkOrtMJqms=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=loQIgW27j9RIIJ19g8MJflRivfhBPwWHXm/x+gubQWZuJ/3owsnZA4FLOamwjV/66Ryu77HZaNror7zt8URcy/8E8O3pNOPf+HO3xupcphcik/wat6QDzCOg6cZw7rsK1D92GJCBseBv931buwLR599NwXwH3xIyIW8k+2EauaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VDGu/qpf; arc=none smtp.client-ip=209.85.160.50
+	 To:Cc:Content-Type; b=ZRsQG0LVTYnUy78YDeVA7D/4G5Z+M5mTR1uA+TAGndp6s1BrJxN9C2BdkdBdl/0fGBYRA7+EWpbnDQCP8Z1DZfuQ4P7IFsjUDWCAQ4HUilB8Cw8uxz2t3iacHVRu9a+W/nUK2eXkReMVmEmM3kCSyTJByiQZi4KaY2np6xztZts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=om4bCVBk; arc=none smtp.client-ip=209.85.161.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2ea65f5a0easo313273fac.1
-        for <linux-usb@vger.kernel.org>; Wed, 09 Jul 2025 15:52:31 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-61208b548e8so117766eaf.3
+        for <linux-usb@vger.kernel.org>; Wed, 09 Jul 2025 16:07:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1752101550; x=1752706350; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1752102431; x=1752707231; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xZ/jO6E9mFWmSJKCA/T8EW+3CyqgJCpMb+i+FDIme34=;
-        b=VDGu/qpfST39YGT6Id67iJXvAhlFWnYLHAiVCxMzBNMY5Zg0iq2WnXL1ugzzYpzpdS
-         8BV5y2qGclzxRSGhGV131n9eeF+GK+JPw/3ZztTpFpk5Aa523jms7L2MekFUiBGJWeGR
-         McAA76SQJ7+QIYIuqsWU3zCjp3a6L8jL1rYD71TRChQFuNpekFLoKThHpX358DPNiwiK
-         H+FUkLr9jqo81XU1p6/QZkLDl1aICExT/6l7XeMJ69qWsvjmIuYCcUA2v0oVpDJk91wk
-         3+sCFcGYvhQxapElAKUqD4XcekqHv9IBwrCg2TeA88e9mSNyn3qdnPqHGtAnG14QeGH3
-         p62g==
+        bh=GmFek06lu2aHr2XTMjqjv1GEsw6/KtybX5PY6tsbIes=;
+        b=om4bCVBk1j5ZG89hBizoN2zifsJrXZaAXrCKS8GlQQBam0s9gI7Wj924h7rkd8jo3U
+         WsesSQrVnyNTop4MPGnfcHwrkBcQe/DSNXuuKt1ohbLOdLL/ie0Yki39B+LfgvBLADJs
+         aBFEqbEWS5mMSe4W4iQWcugqedVdaUw5Zo5yo8zFvj8QoJCcWbS/oPFDZjkMKUHyudS8
+         kugiZHSrLfhsytyu6IZh4EtlTNTu/zjxLgRP42XPZGvF9z/pxscaVGn+fqzKsj3Pk4rS
+         xMzGxnVpiP/3xvWoBUbjhVy5vFri65tVtRsM+lVp4iCoPsRSYK/nCu+eVVfqOnAiBz+C
+         /8SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752101550; x=1752706350;
+        d=1e100.net; s=20230601; t=1752102431; x=1752707231;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xZ/jO6E9mFWmSJKCA/T8EW+3CyqgJCpMb+i+FDIme34=;
-        b=n32yg0l6v+8dTXVJa3HAIdC/xyNKhiDjRLPk23npHDkd/0hamqyRECda7/0oliq/YV
-         XKNVbaZR1o2OgusC5n772LVOKW/M3qGPqwqhOad/mUmXlXWVO0cPqSINynsSVoHQfg5B
-         XnHPfI6uKvJ2gdXs0aCH/x8dbOUbkIQtSZv634jOIE85mbGVrFPUcNSa26q9OAnS0aoH
-         VMogFlg8qqkvhFJ4vQcOWbMWRXj/DIpcyQXefYvtBsDgKK/K5KHC+J57xgT2yaVgIRL2
-         ruFgCBcnBhJiVtFN9W835ItPIZRWQ9ZBhDEMPG7iCxxz1btxic2lt3IhTnexjDAK8zpI
-         21Gg==
-X-Forwarded-Encrypted: i=1; AJvYcCU8GeK+lZ3SdRVke3k4pasdHHtPSJJHn7dZ4NWXKWGdxDBsuzt6oMJQfcXGYRtjvSdO6EJIa+TFO2E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzyz+P0QegDAg2abcvbru3j7yXUYv0ZmFyh+H7PukuNEJCsxgDO
-	UoXktofeH7idu3g6S/AvZTuw+3AwNWaytAmZH8XsQtDgizac1rxbDkVgudzOgnYvWGZKSdXqN9A
-	U9Ss6d0tCsu+4/6Z7gmogyGQShL7TW0vQlm8ifd5U
-X-Gm-Gg: ASbGnctfMzY5f8aE4GMhMmhAiJxdLnLM4UY4wdkpHWKBPrECoPzK0KHTVGXAMYtJW+V
-	gHenxZsrJuST7rv9R9T7lD2MFiI/H3/hMu9EGWsv7HTQXvu9m3zrniD7816VOEcaAwhVF+gd47G
-	YoG88RosORR0yZ/SUUJJYeIJHTIoFtTQisip24RpRabq1U9KC6WfwP80JvExJSIwjQ525jggbPu
+        bh=GmFek06lu2aHr2XTMjqjv1GEsw6/KtybX5PY6tsbIes=;
+        b=GeeHokRuFfRM3LFDemmzWtTv1+NPD3kEyjULCRLY3caU1n4UV23uFfXZ4itRWOTVKN
+         OpIuUxzz6D5aQA48DDrVDmi/+mQDVhQqxV/txP4RsjYO++VGAGzjKGf3lYA0TzCvjuPa
+         oP1cjkt6a7wVk1V6GFh51EL60qB/F0hxQk2uxYw/yUkYTyvaWcP0nVbHkSCCReP/LgKG
+         7IgiIA0XSKgtuJbj/CypcZo+WUpRvb72RWSHDCSY1k8Cu7fevQZMz9ufM6qe1YoLkgVr
+         5+btPcXlmRyYTgbmjHlr3ZMAphIZG9iTq4uojOvb4wIZIMCS7rhWeGCaTuQouhHKl1Eo
+         BMDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUuYT6x/CInOXEvL/3g1wFycMu+MIaa4/qSAqfd0XTZobH2Os+qmlccwziNd2SXsCfVaxOOZCha0eI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzviB6fjdgz4f0cJl12YZO7UJ1KDoM30kqKLe/RIQsl1n+NJopz
+	qJoVPHNEUwT2tdBn5BBmI+Q/ZL++++36vVnsM3DzVWlhdyx6UvW0ffs32i7i+Dy9IajwOM+wa56
+	IAeK1w+ZGRA0T32DPmYkfPST1zGvQYNthwMWG8qptOClblZHVQMZr1Pn25+G5cg==
+X-Gm-Gg: ASbGncsjPfypB7oEzCQZfnjhX84uJY5kurZQUfsI6rhj2tJFTsRAkujp2OeI49k1DGq
+	ExRk5Wv26yl5WxrXhdC4hDqHPD4ibx9goDdrQWQWoKkD+YEgy0h/rRFqSQF049QcFtKJXqi+oz0
+	EsIRxcvAfB8HpDwxjeSohkyDbaK8kKsqT+b7swyWPSapWv0sXMD2NDYUHMbRZEnnjyfSX5xcz4k
 	A==
-X-Google-Smtp-Source: AGHT+IHIV/3z6PdLLPSDIyl3VRl88VX2aPY1onB8eflF+EcitN+UIHC9L9hxZeVemwR3ytTx4eUIzfgYk8t9xXNN99w=
-X-Received: by 2002:a05:6870:a508:b0:2b8:b76f:1196 with SMTP id
- 586e51a60fabf-2ff0c8629ecmr956460fac.19.1752101550160; Wed, 09 Jul 2025
- 15:52:30 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE0PdZTip+FQjkl2tPhpvJ1e+5PFyrKnvi01tUOztaB4Db18JYV7O6ehbksLdAwI7wT2NdhbRq+KF7/0PWYdpk=
+X-Received: by 2002:a05:6820:4c0d:b0:611:af6f:ee77 with SMTP id
+ 006d021491bc7-613d70c4d49mr1148867eaf.8.1752102430837; Wed, 09 Jul 2025
+ 16:07:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250707-max77759-irq-wake-v1-0-d367f633e4bc@linaro.org> <20250707-max77759-irq-wake-v1-1-d367f633e4bc@linaro.org>
-In-Reply-To: <20250707-max77759-irq-wake-v1-1-d367f633e4bc@linaro.org>
+References: <20250707-max77759-irq-wake-v1-0-d367f633e4bc@linaro.org> <20250707-max77759-irq-wake-v1-2-d367f633e4bc@linaro.org>
+In-Reply-To: <20250707-max77759-irq-wake-v1-2-d367f633e4bc@linaro.org>
 From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Wed, 9 Jul 2025 15:51:54 -0700
-X-Gm-Features: Ac12FXwBCWPW8EZwuDpf54UTDanwxs202yidYGWWROmZV5BpUoEW98OitzLt1EQ
-Message-ID: <CAPTae5KKK4pYo_BdK90=9u+5C0TeRHXnWKrHM3qzMpZ2yzWK5Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] usb: typec: tcpm/tcpci_maxim: fix irq wake usage
+Date: Wed, 9 Jul 2025 16:06:34 -0700
+X-Gm-Features: Ac12FXyCl0EowxA-HbECTpogGzFamMYXZkfqoZMibraZJ6rz_xp3OUEaj7qMGnA
+Message-ID: <CAPTae5Kk+nw-thVDEy_ASge9H3MWQU7spDvZ1tx_1DAtdZe+rA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] usb: typec: tcpm/tcpci_maxim: drop CONFIG_OF
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Amit Sunil Dhamne <amitsd@google.com>, 
@@ -94,116 +94,46 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Jul 7, 2025 at 3:50=E2=80=AFAM Andr=C3=A9 Draszik <andre.draszik@li=
 naro.org> wrote:
 >
-> This driver calls enable_irq_wake() during probe() unconditionally, and
-> never issues the required corresponding disable_irq_wake() to disable
-> hardware interrupt wakeup signals.
+> The general recommendation is to not use of_match_ptr() or CONFIG_OF
+> ifdef.
 >
-> Additionally, whether or not a device should wake-up the system is
-> meant to be a policy decision based on sysfs (.../power/wakeup) in the
-> first place.
->
-> Update the driver to use the standard approach to enable/disable IRQ
-> wake during the suspend/resume callbacks. This solves both issues
-> described above.
+> Drop them.
 >
 > Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
 
 Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 
 > ---
->  drivers/usb/typec/tcpm/tcpci_maxim_core.c | 46 ++++++++++++++++++++-----=
-------
->  1 file changed, 30 insertions(+), 16 deletions(-)
+>  drivers/usb/typec/tcpm/tcpci_maxim_core.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 >
 > diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/type=
 c/tcpm/tcpci_maxim_core.c
-> index b5a5ed40faea9cfcceef5550263968148646eb44..ff3604be79da73ca5acff7b5b=
-2434c116ed12ef8 100644
+> index ff3604be79da73ca5acff7b5b2434c116ed12ef8..43b0ec2d12ba6d4c1cfccbfd3=
+55af3e5d9ce1385 100644
 > --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
 > +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> @@ -421,21 +421,6 @@ static irqreturn_t max_tcpci_isr(int irq, void *dev_=
-id)
->         return IRQ_WAKE_THREAD;
->  }
+> @@ -563,18 +563,16 @@ static const struct i2c_device_id max_tcpci_id[] =
+=3D {
+>  };
+>  MODULE_DEVICE_TABLE(i2c, max_tcpci_id);
 >
-> -static int max_tcpci_init_alert(struct max_tcpci_chip *chip, struct i2c_=
-client *client)
-> -{
-> -       int ret;
-> -
-> -       ret =3D devm_request_threaded_irq(chip->dev, client->irq, max_tcp=
-ci_isr, max_tcpci_irq,
-> -                                       (IRQF_TRIGGER_LOW | IRQF_ONESHOT)=
-, dev_name(chip->dev),
-> -                                       chip);
-> -
-> -       if (ret < 0)
-> -               return ret;
-> -
-> -       enable_irq_wake(client->irq);
-> -       return 0;
-> -}
-> -
->  static int max_tcpci_start_toggling(struct tcpci *tcpci, struct tcpci_da=
-ta *tdata,
->                                     enum typec_cc_status cc)
->  {
-> @@ -532,7 +517,9 @@ static int max_tcpci_probe(struct i2c_client *client)
+> -#ifdef CONFIG_OF
+>  static const struct of_device_id max_tcpci_of_match[] =3D {
+>         { .compatible =3D "maxim,max33359", },
+>         {},
+>  };
+>  MODULE_DEVICE_TABLE(of, max_tcpci_of_match);
+> -#endif
 >
->         chip->port =3D tcpci_get_tcpm_port(chip->tcpci);
->
-> -       ret =3D max_tcpci_init_alert(chip, client);
-> +       ret =3D devm_request_threaded_irq(&client->dev, client->irq, max_=
-tcpci_isr, max_tcpci_irq,
-> +                                       (IRQF_TRIGGER_LOW | IRQF_ONESHOT)=
-, dev_name(chip->dev),
-> +                                       chip);
->         if (ret < 0)
->                 return dev_err_probe(&client->dev, ret,
->                                      "IRQ initialization failed\n");
-> @@ -544,6 +531,32 @@ static int max_tcpci_probe(struct i2c_client *client=
-)
->         return 0;
->  }
->
-> +#ifdef CONFIG_PM_SLEEP
-> +static int max_tcpci_resume(struct device *dev)
-> +{
-> +       struct i2c_client *client =3D to_i2c_client(dev);
-> +       int ret =3D 0;
-> +
-> +       if (client->irq && device_may_wakeup(dev))
-> +               ret =3D disable_irq_wake(client->irq);
-> +
-> +       return ret;
-> +}
-> +
-> +static int max_tcpci_suspend(struct device *dev)
-> +{
-> +       struct i2c_client *client =3D to_i2c_client(dev);
-> +       int ret =3D 0;
-> +
-> +       if (client->irq && device_may_wakeup(dev))
-> +               ret =3D enable_irq_wake(client->irq);
-> +
-> +       return ret;
-> +}
-> +#endif /* CONFIG_PM_SLEEP */
-> +
-> +static SIMPLE_DEV_PM_OPS(max_tcpci_pm_ops, max_tcpci_suspend, max_tcpci_=
-resume);
-> +
->  static const struct i2c_device_id max_tcpci_id[] =3D {
->         { "maxtcpc" },
->         { }
-> @@ -562,6 +575,7 @@ static struct i2c_driver max_tcpci_i2c_driver =3D {
+>  static struct i2c_driver max_tcpci_i2c_driver =3D {
 >         .driver =3D {
 >                 .name =3D "maxtcpc",
->                 .of_match_table =3D of_match_ptr(max_tcpci_of_match),
-> +               .pm =3D &max_tcpci_pm_ops,
+> -               .of_match_table =3D of_match_ptr(max_tcpci_of_match),
+> +               .of_match_table =3D max_tcpci_of_match,
+>                 .pm =3D &max_tcpci_pm_ops,
 >         },
 >         .probe =3D max_tcpci_probe,
->         .id_table =3D max_tcpci_id,
 >
 > --
 > 2.50.0.727.gbf7dc18ff4-goog
