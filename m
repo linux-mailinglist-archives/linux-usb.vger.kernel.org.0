@@ -1,158 +1,102 @@
-Return-Path: <linux-usb+bounces-25637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25638-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B1D0AFEDC0
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 17:29:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47576AFEDD1
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 17:33:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D2525A5B62
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 15:28:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 377D3189E420
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 15:34:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B5022E8DEE;
-	Wed,  9 Jul 2025 15:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="QkH9vf+5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CAD12E7653;
+	Wed,  9 Jul 2025 15:33:41 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F7D2E7BBF
-	for <linux-usb@vger.kernel.org>; Wed,  9 Jul 2025 15:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A370B17578;
+	Wed,  9 Jul 2025 15:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752074898; cv=none; b=TK3WoX2PNMf4udsfLec/3+xTNBON30qRlUOQLqpHovUuay53+okozLbWUuQW7Wf6P27DOMA3k9hhq4tALZ+7XkMk73TRjxyVB0I/yj/AmStQhgNwaNS6OSc1aOIzmHfhcOqDvJjCWxwlZWfUBphQoNDxmn7vmVQLLaX4BCBhJ/A=
+	t=1752075221; cv=none; b=eV0PmC7DXBQOV81JRPAl6F4AkaWkNijw69am+GAlwdUb/I3GqqSuf+q5d/vpAaZxw0JIlGt2lV2fHxXxhbUVSmCvGiVPeItSPOH/Mlp1ECZsgTvmKLSGnfSIhwff0NosudtV4veoC+Kk8prMhbfGzkEP5uZ4gRg8+XY4wddQF9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752074898; c=relaxed/simple;
-	bh=GcZ28gAnpCwWyj9Z1Aa2tA615DhzFzhtYW1BhESPJWQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gAf3gaN8NsxM3rIqqrepB0F6O8PfjCadRj/aQtUDwyLYiBWgFs9i/OP3aK/9Hsw9KbWJO62uQrkN1Fq5kzyI88HEsh4oq5Mg6gkbZvdNsLcgMxmit2M+tuprnOX8Ojx7xVCwdCulC30q69fTlZKAP8agN66xOi9n0byFymHbu5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=QkH9vf+5; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6faf66905baso247046d6.2
-        for <linux-usb@vger.kernel.org>; Wed, 09 Jul 2025 08:28:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1752074896; x=1752679696; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wj2WD7wEx17j4YeiMtaoaMm0CGv0tCDxMgy3ho+uEW8=;
-        b=QkH9vf+55L7INPEO1opmWNaj7tcVCw34jrCObkk12VstauOXxDxrI36GPryyBCK9aq
-         Z0nuz/4758IsZwSyuZayyKUM/B4Or51PHhWKvNdzAlMAd6n4CqtpgOvosZ7DwyrL1Fa1
-         cdXmaf6F5zi70q6Iq5kcWX3TseeVyYdsVs89dE2PAW2Pk6WWUymbPHVWBzvM7nw/60UT
-         6fp3TUqMWgDocPaJeTooOGumo6V/r4PLMfUPGVyNltvakkNma0L/mSaN75ViC3s31Icj
-         gpo/0xY7P5TOb2JxdVLdqai6AR97R8lAv6Tu7+0zNx/6vRvo4gkO2bORTBDmCeC6DqE2
-         sTwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752074896; x=1752679696;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wj2WD7wEx17j4YeiMtaoaMm0CGv0tCDxMgy3ho+uEW8=;
-        b=CMWjPbKVjvVKDocE0k5U44T8UPv8fhzNz5R+0W/1hM9+/um9XphdcSug1ZSkBJiVmQ
-         dDdqtP+GzbrCcf0H6DPwrt/J1XUnH66TCGawOI4tDX8yrWXsyDvwrt/+vOjCethKYzto
-         XQ1TCecsFNlsobaW/wUx7C/6h7flN0t4cGKCxmManpggy36DRr2riNB8j2IBztQxwU12
-         EJ+mCnYmHO97kabIOWSqK6HWGEpZbI3iDp0nQNBv3dCNrVrpo2E3ibS4GtrJZfPUKvzA
-         1lLWFgNowxG8M+bfQ6O+J7uhj6zKZvX/qq3cOImBZgoTCa5UjspKvxLjb7uLxIr1zr8T
-         SAZA==
-X-Forwarded-Encrypted: i=1; AJvYcCVF6QhtVgS5hFUmA3iS/nXctTpB4p5EzqGDsRzs/Tl3jpJq3XcixAWvYEiy7FoEx2aM0xoA+bS3uuY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBY+xD3HKB4DysY7LKr7SUTtY+y9rDnMNbTWgRg01LLH/Of1jX
-	riJ/CTE+5q5tKIyzf5HxbFKNqUHpGVCSHFHXNPdTuLXwRv/FabglkVA8BhCebBp6wA==
-X-Gm-Gg: ASbGnctIA5WE9dtKdNhz5MzJOLFrFrU8cOWtu/QjBx/HuZyBfQhhXHoMsNLCdWJvQoD
-	fad98E+Xi9KIxtlQ32Ide3JZznI2IHn4bgDZR4u1L1j6ffdHawK+ccdYxzihCbkIAUR95DxJSL1
-	8OS/t+VGIg0h29Bz9lK8JJrrbboRTHnbWF11JDwhZpSd431i3lqty066MMg9r+ShGtz2CVLtqzf
-	c/NRMzo8b4jxxvkEBl28qmQeXRD5FWWUyCogmy6jwbA22wQWHJdYwdHu/knObTG2dC7o9PfH94+
-	jC/ilv3qTMfR6cgo1sLLEKCNsHINbMzkRTq2osxM4w7VBV3HupzIhnNVtbMkGC1LQYxdURE4cxu
-	CUH76
-X-Google-Smtp-Source: AGHT+IFN+tN8BWann1ct7Od+YPRK2S5cl81IkL4UL283JRTfnUO9ypZv9OBjSCqdxq0z2cHZp8MCBg==
-X-Received: by 2002:ad4:5dec:0:b0:702:d6e2:5bbe with SMTP id 6a1803df08f44-7048b9438b0mr38902606d6.4.1752074895587;
-        Wed, 09 Jul 2025 08:28:15 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-702c4cc771esm92910336d6.6.2025.07.09.08.28.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 08:28:15 -0700 (PDT)
-Date: Wed, 9 Jul 2025 11:28:13 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] KASAN: slab-out-of-bounds Read in
- mon_copy_to_buff
-Message-ID: <5644bdbc-8449-407c-8e0c-e725e10a40f1@rowland.harvard.edu>
-References: <5de04492-01d3-4b2c-b3f4-8c2237dfed6a@rowland.harvard.edu>
- <686c14c0.a00a0220.6237c.0000.GAE@google.com>
- <72fea4f2-40d7-4f9f-a08d-b1ada781256e@rowland.harvard.edu>
+	s=arc-20240116; t=1752075221; c=relaxed/simple;
+	bh=gQPhTpdl+CKVNNZyGf/LjflYEbCr0MV5RVav6zgi9B8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HfiVhPjQisFghZcaPkMi6UZNTm8Q0y1y+rqu0h30eT5aRMASNYBYl4i+T/xVlRou+ELdYbcINqRzo5Q8YlnvVAR87Cnf5+h4XEDByXQfdXr0b8u7aALBEiHL29oNk/1zspU5AqI4LueAbB9/5rmwbfXasv0ib+iapskSFfP4XLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 569FX4eq082756;
+	Thu, 10 Jul 2025 00:33:04 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 569FX433082753
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Thu, 10 Jul 2025 00:33:04 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <43189e93-2cad-429a-a604-15bf5cc95e43@I-love.SAKURA.ne.jp>
+Date: Thu, 10 Jul 2025 00:33:00 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <72fea4f2-40d7-4f9f-a08d-b1ada781256e@rowland.harvard.edu>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [kernel?] INFO: task hung in uevent_show (2)
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: syzbot <syzbot+592e2ab8775dbe0bf09a@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        USB list <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <686e7698.050a0220.c28f5.0006.GAE@google.com>
+ <79f634db-c149-4220-b8d4-0fff2c6b6a01@I-love.SAKURA.ne.jp>
+ <e064a3e4-ae70-4a24-ba5e-1bb8c7971f23@rowland.harvard.edu>
+ <39f312fa-d461-4377-b809-50c8a7188f6b@I-love.SAKURA.ne.jp>
+ <dd932df4-2a13-4a5c-a531-376065f87391@rowland.harvard.edu>
+Content-Language: en-US
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <dd932df4-2a13-4a5c-a531-376065f87391@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Virus-Status: clean
+X-Anti-Virus-Server: fsav401.rs.sakura.ne.jp
 
-Here's Benjamin Tissoires's patch.  Let's see if it really fixes the 
-problem.
+On 2025/07/10 0:19, Alan Stern wrote:
+> On Wed, Jul 09, 2025 at 11:44:46PM +0900, Tetsuo Handa wrote:
+>> On 2025/07/09 23:27, Alan Stern wrote:
+>>> Which of these three BUG_ON's did you hit, and where did you hit it?
+>>
+>> kernel BUG at ./include/linux/usb.h:1990!
+>>
+>> matches the BUG_ON(endpoint > 0xF) line. The location is shown below.
+>>
+>> Call Trace:
+>>  <TASK>
+>>  hub_configure drivers/usb/core/hub.c:1717 [inline]
+>>  hub_probe+0x2300/0x3840 drivers/usb/core/hub.c:2005
+> 
+> Those line numbers are completely different from the code I have.  For 
+> example, line 2005 in hub.c is part of the hub_ioctl() function, not 
+> hub_probe().
+> 
+> Exactly what version of the kernel source are you using for your test?
 
-Alan Stern
+It is current linux.git tree.
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ d7b8f8e20813
+  https://elixir.bootlin.com/linux/v6.16-rc5/source/drivers/usb/core/hub.c#L1717
+  https://elixir.bootlin.com/linux/v6.16-rc5/source/drivers/usb/core/hub.c#L2005
 
-The low level transport driver expects the first byte to be the report
-ID, even when the report ID is not use (in which case they just shift
-the buffer).
+commit:         73392339 Merge tag 'pwm/for-6.16-rc6-fixes' of git://g..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f481202e4ff2d138
+dashboard link: https://syzkaller.appspot.com/bug?extid=592e2ab8775dbe0bf09a
+compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13f27f70580000
 
-However, __hid_request() whas not offsetting the buffer it used by one
-in this case, meaning that the raw_request() callback emitted by the
-transport driver would be stripped of the first byte.
-
-Reported-by: Alan Stern <stern@rowland.harvard.edu>
-Closes: https://lore.kernel.org/linux-input/c75433e0-9b47-4072-bbe8-b1d14ea97b13@rowland.harvard.edu/
-Reported-by: syzbot+8258d5439c49d4c35f43@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=8258d5439c49d4c35f43
-Fixes: 4fa5a7f76cc7 ("HID: core: implement generic .request()")
-Cc: stable@vger.kernel.org
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- drivers/hid/hid-core.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 1a231dd9e4bc83202f2cbcd8b3a21e8c82b9deec..320887c365f7a36f7376556ffd19f99e52b7d732 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -1976,7 +1976,7 @@ static struct hid_report *hid_get_report(struct hid_report_enum *report_enum,
- int __hid_request(struct hid_device *hid, struct hid_report *report,
- 		enum hid_class_request reqtype)
- {
--	char *buf;
-+	char *buf, *data_buf;
- 	int ret;
- 	u32 len;
- 
-@@ -1984,10 +1984,17 @@ int __hid_request(struct hid_device *hid, struct hid_report *report,
- 	if (!buf)
- 		return -ENOMEM;
- 
-+	data_buf = buf;
- 	len = hid_report_len(report);
- 
-+	if (report->id == 0) {
-+		/* reserve the first byte for the report ID */
-+		data_buf++;
-+		len++;
-+	}
-+
- 	if (reqtype == HID_REQ_SET_REPORT)
--		hid_output_report(report, buf);
-+		hid_output_report(report, data_buf);
- 
- 	ret = hid->ll_driver->raw_request(hid, report->id, buf, len,
- 					  report->type, reqtype);
-
--- 
-2.49.0
 
