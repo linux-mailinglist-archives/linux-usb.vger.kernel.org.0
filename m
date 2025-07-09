@@ -1,96 +1,129 @@
-Return-Path: <linux-usb+bounces-25646-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25647-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A708AFF173
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 21:07:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CCB2AFF1BE
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 21:24:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F35681C84EB4
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 19:07:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A40B58573C
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 19:24:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FC4123CEFF;
-	Wed,  9 Jul 2025 19:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7796D2417FB;
+	Wed,  9 Jul 2025 19:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="epB1bncC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9556233158;
-	Wed,  9 Jul 2025 19:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDF62405E8
+	for <linux-usb@vger.kernel.org>; Wed,  9 Jul 2025 19:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752088038; cv=none; b=oAfl7tmlzKlcs9/GSGjFKlLkT2G3JVtKpZdIA3c5AmK22xJNKVfNmch2HF5DiDlq90Zryv5IDC3OB8tPNVcywvcTcr/0/adDqcEpMUK+HDnwKS0wwbvnTfwhns3wv+7oONPMDxcBQcIiPtfKcYyqL9okc+ANfIwqmYca25Lrj0o=
+	t=1752088922; cv=none; b=d5S0PKb7W3P8Fm/qAkvn/khxh6A9/VtOSZMNRBw7L7V+I8flkSw/ojv/i+JHKsLrJwdc9bbaoXUWEd8WlAWje77TxjVePDZvmpIIsBu39UHDBp+O5DQ4hGRZHzFGCFytqhQq/yFs4OsgiZtJjuwzd6asp18iJ/xfF0j/qYKxuQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752088038; c=relaxed/simple;
-	bh=xqkVLHRdxE9lNVpmAKGwBrjctmuxSuIOxgVeit0QvzI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AHvyvblEOQ9bK5QRfjNIEYMAFBeXcXJ0kEInA9Ia9943XP0MxsIkdhqOHJVkJKSuJ6HsvQ3cOk+mLkfxO/C0nI0+VFgzwoB8COyIDTYSfwejrq/bEc9bSWiT93bqQrXL+6dI7W6sXoIhR4Y/Lng8DQeAocMSot9hrmKCxmiXIUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38B93C4CEEF;
-	Wed,  9 Jul 2025 19:07:14 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc: linux-usb@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] usb: gadget: udc: renesas_usb3: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
-Date: Wed,  9 Jul 2025 21:07:08 +0200
-Message-ID: <424d6c7843c5bfd47c0e1d8d02aa030581530bb1.1752087999.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1752088922; c=relaxed/simple;
+	bh=nABOqvLvbuNcHutPLrwVGSq1wuzT9ghLqCr6KnZkr2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YJgkkvuFtHG3LmC/dB8TxOSPQAyBnc3WfvsfWQEgOMSCZ/vQA+hjQYQz2RJV+RpawhqpjKVFpoAjNvRvkNAFH+mfqbnNPisO/UGrJOkeTA34Uk/9lo0NVCnT6zTrqW2uksz26ZnCYOGQlzjExmoYJZ2T+ANI2GlgNzeFBKNQYBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=epB1bncC; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7d0976776dcso25455085a.2
+        for <linux-usb@vger.kernel.org>; Wed, 09 Jul 2025 12:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1752088919; x=1752693719; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BjoFCuTSE1ktjsRKop+omQe5NJ/uDGXfke16S6/nYp8=;
+        b=epB1bncCbTU5KjKnwFCcFNZRMLfaJiPZ7x9yfc3jyQvN0ThwTqq3hDqZ2R+T3aiFjj
+         U1MSMGBPlRI0gcBgWMyLgIc9wXSnYIye1SlhDIahayG3dSroqyts2DQDjbosxi6rzRRr
+         /iMwbpV74cRnzDKJJUScjd9eQWOum3ahnSR2SX2P7Iq7q8XDW8Mw52h5pbiLZqlZbH9d
+         ho4a2+IWmnpjTG8o7Tp/S/5A665KsLWcbGsfhV7Uq7xbAxhNP4MPMhIkL3LLLfiZrwP6
+         DA6sZHsvbddjqarLacEcoggUKLXBdq06uXwNAv0k0Dg73eeeMCG4SEMj8A6uJNi5Gz5K
+         yrFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752088919; x=1752693719;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BjoFCuTSE1ktjsRKop+omQe5NJ/uDGXfke16S6/nYp8=;
+        b=l60fwD99oTndwwYdrMeSvOo0STVm/RuDmCqdnX61c95gBYlWS50ubNBcJRz7zBySMc
+         CmylabjZE9Onf92So4WBBlug8bnADbZavBANYRNpMEkOZBhkf2RI0tFGBIDTs495jx6a
+         7isc6E72KElkonhEb5mblIatDtVQJIFOgRcZBoVKHxeYVPFfJ4UEo+EP3uJYWRBMlZ7P
+         9lDIISzWkDtK8zAoUt0WZPzbihH8oxPeyWfX5UpNEs6OVlHXjem9y/BDPf4M7Fo288po
+         2BultNaxZUjyaGH3d5X4DigppqPixagNRB/K/FbmZuEldnabA0M/NpbLQyKlhlzV4L4l
+         UFJA==
+X-Forwarded-Encrypted: i=1; AJvYcCViV8qeSXh6pzSkMOlOO7tWmGMaaIx+ofVYqdDwL4ypPqs+uhpdB+Hm0VLY9Cwkrvn53I/f7JfeqlQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxibbfpqvldyExFmW2yO+WpU3FRGz5goTGYxz2Gw8LHj26EfmUi
+	ELU0mVHyq+jmWc03fRh7knzBJJFpPInyEdwx8WZqKSTs9PnIaCx6vKnPUGODRrXRoA==
+X-Gm-Gg: ASbGncvuPBKD1iXpVrHSiQ7Fb0uSlRXjbk1F2jRdzLamUT1GKEeFHlxAW/F+NqdfMN3
+	FiMbSeN/jZQrJ2DcrxN4ws5CB3/ePTnXsy6AiV7lS8LmmOtQ8fZrTla69dcrbIVBTSl/nOOLNwM
+	amQlAMazPF4I6OBdL2ZRYyqiSlPL2zBcJjNBnZXJ40/FANtMLNJaICMvoCK43Xgvy4LPcx7SPO1
+	gMxq8z86v/eZaxye63KD0WuLdODf0OWHZ/oUaKU922IHusm9F387XioYJdJrw/ni6oqFg4uKnv2
+	Z4Uxaj4/BZd6Jy5korwY9Q5rJHUL2j8phPWfnkGrwMfFsQatrZpZxSN8EerKZ/8OWPWAcIRoBgY
+	D4AAcqEtuboO6KYOAI+Sihv6CA9CDKO1BpO3R7Yr65n7X9bqAw9aDGgk=
+X-Google-Smtp-Source: AGHT+IFOSD/52CkUfN120+NVeyHEaWqXR7CigCUbMAZ+zmGqjrg6MuFpCoY5xBIy1kbi8H2tMGIAkQ==
+X-Received: by 2002:a05:620a:488f:b0:7d4:5854:32a8 with SMTP id af79cd13be357-7db7e4456aamr559755885a.31.1752088919355;
+        Wed, 09 Jul 2025 12:21:59 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-52.harvard-secure.wrls.harvard.edu. [65.112.8.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d5dbe90a8esm989876585a.78.2025.07.09.12.21.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jul 2025 12:21:58 -0700 (PDT)
+Date: Wed, 9 Jul 2025 15:21:55 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
+	USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Serious bug in HID core
+Message-ID: <25b196f4-7362-4136-b5b9-bd53d1cc1c48@rowland.harvard.edu>
+References: <c75433e0-9b47-4072-bbe8-b1d14ea97b13@rowland.harvard.edu>
+ <drcvdlw2kpuvsbact2gy4hvqp2i3au3shv5ozp3qms7qdfvi7t@7jofrodxeimb>
+ <e3a58c95-9501-4ec8-902e-2a73402d1fe3@rowland.harvard.edu>
+ <5rkp3gbrqvsdgia57eyw65jnu4wmpx6sbk47kmv4akmz2q7nzz@clqgtjfk2qxk>
+ <b18af9f1-e3d8-429a-b313-38cc279e0f87@rowland.harvard.edu>
+ <rwo5cqptiqarvl7qhgapao2uld3aqs27llhtqm5crop3v3rx64@j7h64nqsv6rv>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <rwo5cqptiqarvl7qhgapao2uld3aqs27llhtqm5crop3v3rx64@j7h64nqsv6rv>
 
-Convert the Renesas USB3.0 Peripheral controller driver from
-SIMPLE_DEV_PM_OPS() to DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr().
-This lets us drop the check for CONFIG_PM_SLEEP, and reduces kernel size
-in case CONFIG_PM or CONFIG_PM_SLEEP is disabled, while increasing build
-coverage.
+On Wed, Jul 09, 2025 at 05:35:41PM +0200, Benjamin Tissoires wrote:
+> On Jul 09 2025, Alan Stern wrote:
+> > On Wed, Jul 09, 2025 at 10:44:35AM +0200, Benjamin Tissoires wrote:
+> > > On Jul 08 2025, Alan Stern wrote:
+> > > > On Tue, Jul 08, 2025 at 05:51:08PM +0200, Benjamin Tissoires wrote:
+> > > > > The second one would need a little bit more understanding of the fake
+> > > > > report descriptor provided by syzbot.
+> > > > 
+> > > > I suppose we can get the information from syzbot if it's really 
+> > > > necessary.  But it seems to be a minor point.
+> > > 
+> > > Well, to me it's important because I can get an easier reproducer and
+> > > add this corner case in the HID test suite :) Not to mention the
+> > > understanding on how we can get to this corner case.
+> > 
+> > I can get it for you if you really want to see it.  It's just a question 
+> > of asking syzbot to run the reproducer with a patch that prints all the 
+> > report descriptors.
+> 
+> I would very much appreciate that :)
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/usb/gadget/udc/renesas_usb3.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+Here's the output from syzbot, with all the extra fluff removed:
 
-diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
-index 3e4d5645759791e4..d1b72c15799f65f4 100644
---- a/drivers/usb/gadget/udc/renesas_usb3.c
-+++ b/drivers/usb/gadget/udc/renesas_usb3.c
-@@ -2973,7 +2973,6 @@ static int renesas_usb3_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int renesas_usb3_suspend(struct device *dev)
- {
- 	struct renesas_usb3 *usb3 = dev_get_drvdata(dev);
-@@ -3004,17 +3003,16 @@ static int renesas_usb3_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif
- 
--static SIMPLE_DEV_PM_OPS(renesas_usb3_pm_ops, renesas_usb3_suspend,
--			renesas_usb3_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(renesas_usb3_pm_ops, renesas_usb3_suspend,
-+				renesas_usb3_resume);
- 
- static struct platform_driver renesas_usb3_driver = {
- 	.probe		= renesas_usb3_probe,
- 	.remove		= renesas_usb3_remove,
- 	.driver		= {
- 		.name =	udc_name,
--		.pm		= &renesas_usb3_pm_ops,
-+		.pm		= pm_sleep_ptr(&renesas_usb3_pm_ops),
- 		.of_match_table = usb3_of_match,
- 	},
- };
--- 
-2.43.0
+	96 01 00 06 01 00 03 00 00 00 00 2a 90 a0 27 00
+	00 00 00 b3 81 3e 25 03 1b dd e8 40 50 3b 5d 8c
+	3d da
 
+This is the full USB report descriptor contents.  Hopefully you have a 
+tool that can translate these byte values.
+
+Alan Stern
 
