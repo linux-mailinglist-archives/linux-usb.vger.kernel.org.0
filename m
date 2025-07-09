@@ -1,132 +1,119 @@
-Return-Path: <linux-usb+bounces-25600-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25601-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8E9AAFDE00
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 05:13:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1767AFDEA6
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 06:00:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D9274A7CF6
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 03:13:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFADD3B0EDD
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 04:00:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E613E1F4C8D;
-	Wed,  9 Jul 2025 03:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81AFD25FA05;
+	Wed,  9 Jul 2025 04:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="XLoNoxa1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from out203-205-221-191.mail.qq.com (out203-205-221-191.mail.qq.com [203.205.221.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A9E41760;
-	Wed,  9 Jul 2025 03:13:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3651313D2B2;
+	Wed,  9 Jul 2025 04:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752030818; cv=none; b=gFKASmITTiro0FvmWa8dGKD3Rv39XRJ1SXay5f4fzIUOc8uD5JuPAeb1HwEwBn8Cpv5YpJJN+7n7MGMmN3hCRJAyaPfXHdJXoqmDKftvG30JEN1d48W5Mi1yOAwDg4wlgM++tuMakqFJGJtLksPpDGwuKAAh3FOwtsQzq70hAfg=
+	t=1752033650; cv=none; b=HnnA+Am8kfrhp9ITV2Qoh+PFaTayGPx0Yj8WYbXllNjTTyw6BpLgfsG1o0ShvoLwHvO7UQnJSVuXIRP7v4aepD8QvfJUVf2vfJ4Tn7CUARjYUZmcYCXdv60gNMZ0up0b81NeG4jMLqBDzXTDLnwAyV2onTP9Puk9QLFM9a+79jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752030818; c=relaxed/simple;
-	bh=hfM59/eh6N8wBYkqESiGLBYZjlk4OaX55Ho5jXZKwaU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y0QrudLLiKh59lQhd/nJOecUx7u0rOZcqYVUzb6KLC5LeERgBqjp8D9DRxR2jAgKImTW4+Uz3+cBf9og9qSQLmWGc6i/Vt5UJMR6ZVGDuG3M9hbhiTPqlkyriAJk8kAErFeag4olgohwqVbKo/F/s8oviyJAcSPY+A4847JaXiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: aad77c725c7211f0b29709d653e92f7d-20250709
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:df9bab53-0e06-44d2-be73-66e28e5212c9,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:cf1e7a028788195e57e165485a11aef1,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 1,FCT|NGT
-X-CID-BAS: 1,FCT|NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: aad77c725c7211f0b29709d653e92f7d-20250709
-X-User: dengjie03@kylinos.cn
-Received: from [10.42.12.86] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 96761095; Wed, 09 Jul 2025 11:13:21 +0800
-Message-ID: <d19ad4df-8c68-4682-9580-76f9ac6a3ed2@kylinos.cn>
-Date: Wed, 9 Jul 2025 11:13:17 +0800
+	s=arc-20240116; t=1752033650; c=relaxed/simple;
+	bh=dSmH3YdSMwNCOvQhUp1z3YXco7w2Pd/mH6NlzP23Rn0=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=uLijOFMDftUtNpFZy34/F7BeD7AQ6ytw2CCl9qBKhkzaEGbl5p8juemxR1Gv60qL7XJ9GJU6sJ5JSAbkS3fIfA7I19gvujUjYQ/01fj5Wz88z7twZTVj0R0miTkHF5qhMaPVo7M4zr/bb3CNCjzmJm3DcREx2A9FpAqQLBgDgeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=XLoNoxa1; arc=none smtp.client-ip=203.205.221.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1752033337; bh=J//NFXkKWW4mxlFccCxfnS5IzGCIuTinEyv6FNfY3yE=;
+	h=From:To:Cc:Subject:Date;
+	b=XLoNoxa1dW4JxXyHpeT0I7sUHaAjeCr7Mahr+vc2BvNhHJoY/ijergWVN8ysITDJS
+	 MnKrnwVs247ROtwYt92oW0dn+TV94WvBtpEpX3p2Bo9sdvqfk1wVUl42T3JOwQGR4R
+	 KfBFkMUTZpq3X3L57vJ9N16w6rHctW+ZRyM8ySG4=
+Received: from KATIEELIU-MC3.tencent.com ([113.108.77.50])
+	by newxmesmtplogicsvrszb20-0.qq.com (NewEsmtp) with SMTP
+	id DE382630; Wed, 09 Jul 2025 11:55:35 +0800
+X-QQ-mid: xmsmtpt1752033335tx462qqc8
+Message-ID: <tencent_B1C9481688D0E95E7362AB2E999DE8048207@qq.com>
+X-QQ-XMAILINFO: NOHu7IGFswkwv04j6qiELNyEiK/LV2P6eLX/DSo667V8836AtJL9lvnDkm2XOB
+	 Jn+4YN4E4bALMyf8oaPYdM7D3X2svjWDtzglyqSNtsfEzXcD3OWWA5xTYFYrV7hBG1+PTkY1HTMl
+	 uJSoTxesRKj9Rv6my4I0npJd/rc+vc5p7GIPtguoMccwFXuvO1Lop2OsqsofRGwRQKzqixdMESIn
+	 DuPJE5S6KIpyivebv5Bq39Y5ybT7XXZaZbLg0qqSByj/vL/W6d8VCrjsOH26tpacJNXXe0h9LLsY
+	 Ke8eu7q5X97wF+BVKex6rrwh1nyCKmIo+FLmb0/oRGqY17fGlesjWlzqUO/e6jRF1MsTd+9GEw3e
+	 k8/Q9WceYirFlP3Hb9K/E6yBPX/oHz1elIovnFOk0JVQsVS7EfSupMxNvHFldH5KzSbLiRRwGDwJ
+	 0PXQld1ziHpBDmg1lq/P0/wuBRKRlIuxVS3J+wu9RyNWU3GdSIG1NsnsamdtmgKDgJ9sYgi2ea2Y
+	 ASJrcA9A4gY1Kvk7SObb7BUB0M6YW4LsYXXiZRhTOle26yn1Y5+wYI51LyqhFthbylXY9iAGskBs
+	 6Su+/x+OyUaAfRHlSFEi7TyHe/PVG+Ynz9yJ9KWTUurSBI09J3TFdRbFrXD5lopb5MKt3YaGjTs5
+	 LBUizMi5xoIrYMDMgOaziv8gwRoApI92giuarhr3Gh7UGX5R6Knkl7b4sVdwLXqwJMmRHRarCYf7
+	 8ogSCMzisd/kldDWPmfIE0hgt4oYtoGd7J2IZ5NhAK5H6OUIw7tsIiGsJUquPat9zRaBfXMBBNek
+	 QumCdir5SG67jJCVnzE6GG/4J7g7z+120MDBLlWP+LNVX/dvzcfEbLrZDjUUX8rZ7b3Vz58C6sN3
+	 v0b/7ZUcRpPIUWHLlaT75NMqH68XDy7eXIPizQMqb9YCaFXHguv3uc5vPCXbwOzOYrt9wc1Jsizo
+	 45aSl6j6HpcZFSywuyuoCYPCTo3G1cWWR06bSaCLfGWI6PlSY7/wVXHkgfl0DZAFO1VCEN4Ze0Ur
+	 XJN3YbFo355m37xQSyd3FtV21utIGlYIjeP8jMNBQgcX9JPURr+S+wevr1pGk=
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+From: Xinyu Liu <1171169449@qq.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	katieeliu@tencent.com,
+	security@tencent.com,
+	Xinyu Liu <1171169449@qq.com>
+Subject: [PATCH] usb: gadget: configfs: Fix OOB read on empty string write
+Date: Wed,  9 Jul 2025 11:55:33 +0800
+X-OQ-MSGID: <20250709035533.75050-1-1171169449@qq.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: storage: Ignore UAS driver for SanDisk Extreme
- Pro 55AF storage device
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: stern@rowland.harvard.edu, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-References: <2025070422-punctured-opal-f51e@gregkh>
- <20250707062507.39531-1-dengjie03@kylinos.cn>
- <2025070725-circle-recite-bc04@gregkh>
- <2c4af4f8-5763-4ebf-8070-c7eabf43fe5e@kylinos.cn>
- <2025070830-edge-deprive-ce6b@gregkh>
-From: Jie Deng <dengjie03@kylinos.cn>
-In-Reply-To: <2025070830-edge-deprive-ce6b@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+When writing an empty string to either 'qw_sign' or 'landingPage'
+sysfs attributes, the store functions attempt to access page[l - 1]
+before validating that the length 'l' is greater than zero.
 
-在 2025/7/8 15:32, Greg KH 写道:
-> On Mon, Jul 07, 2025 at 05:52:31PM +0800, Jie Deng wrote:
->> 在 2025/7/7 16:47, Greg KH 写道:
->>>    　> So ignore UAS driver for this device.
->>>>> Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
->>>> ---
->>>> v2:
->>>> 	* According to the file modification rules (sort by VendorID > 	
->>> first, then by ProductID.) Add the newly added "UNUSUAL_DEV" > 	  in the
->>> correct position.
->>>> v1:
->>>> 	* The newly added "UNUSUAL_DEV" was directly added to the end > 	
->>> without modifying the format according to the file.
->>>>> ---
->>>>   drivers/usb/storage/unusual_uas.h | 7 +++++++
->>>>   1 file changed, 7 insertions(+)
->>>>> diff --git a/drivers/usb/storage/unusual_uas.h
->>> b/drivers/usb/storage/unusual_uas.h
->>>> index 1477e31d7763..6b1a08e2e724 100644
->>>> --- a/drivers/usb/storage/unusual_uas.h
->>>> +++ b/drivers/usb/storage/unusual_uas.h
->>>> @@ -52,6 +52,13 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
->>>>   		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->>>>   		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
->>>>   > +/* Reported-by: Jie Deng <dengjie03@kylinos.cn> */
->>>> +UNUSUAL_DEV(0x0781, 0x55af, 0x0000, 0x9999,
->>>> +		"SanDisk",
->>>> +		"Extreme Pro 55AF",
->>>> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->>>> +		US_FL_IGNORE_UAS),
->>>> +
->>>>   /* Reported-by: Zhihong Zhou <zhouzhihong@greatwall.com.cn> */
->>>>   UNUSUAL_DEV(0x0781, 0x55e8, 0x0000, 0x9999,
->>>>   		"SanDisk",
->>>> -- > 2.25.1
->>> Why is there two "v2" patches sent here?  Shouldn't this be "v3"?
->>>
->>> confused,
->>>
->>> greg k-h 　 　 　 　 　 　 　 　 　 　　
->>>
->> The first sent V2 patch was missing the description of the
->> differences between V1 and V2 patches. The V2 patch sent for
->> the second time only adds a description of the differences
->> from the V1 patch compared to the V2 patch sent for the first time.
->> There is no modification to the code. So it is rashly believed
->> that it does not need to be defined as a V3 patch.
->>
-> Think about what you would do if you got sent 2 "v2" patches?  :)
->
-> Remember, some of us get hundreds/thousands of emails to handle a day,
-> please make it very obvious what to do here.
->
-> thanks,
->
-> greg k-h
-I'm very sorry. I'll pay attention when submitting patches later
+This patch fixes the vulnerability by adding a check at the beginning
+of os_desc_qw_sign_store() and webusb_landingPage_store() to handle
+the zero-length input case gracefully by returning immediately.
+
+Signed-off-by: Xinyu Liu <katieeliu@tencent.com>
+---
+ drivers/usb/gadget/configfs.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index fba2a56dae97..1bb32d6be9b3 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -1064,7 +1064,8 @@ static ssize_t webusb_landingPage_store(struct config_item *item, const char *pa
+ 	struct gadget_info *gi = webusb_item_to_gadget_info(item);
+ 	unsigned int bytes_to_strip = 0;
+ 	int l = len;
+-
++	if (!len)
++		return len;
+ 	if (page[l - 1] == '\n') {
+ 		--l;
+ 		++bytes_to_strip;
+@@ -1187,7 +1188,8 @@ static ssize_t os_desc_qw_sign_store(struct config_item *item, const char *page,
+ {
+ 	struct gadget_info *gi = os_desc_item_to_gadget_info(item);
+ 	int res, l;
+-
++	if (!len)
++		return len;
+ 	l = min_t(int, len, OS_STRING_QW_SIGN_LEN >> 1);
+ 	if (page[l - 1] == '\n')
+ 		--l;
+-- 
+2.39.5 (Apple Git-154)
+
 
