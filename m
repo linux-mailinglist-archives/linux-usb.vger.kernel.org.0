@@ -1,119 +1,150 @@
-Return-Path: <linux-usb+bounces-25601-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25602-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1767AFDEA6
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 06:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A5830AFDEDB
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 06:42:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFADD3B0EDD
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 04:00:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DD1B4E6B16
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 04:42:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81AFD25FA05;
-	Wed,  9 Jul 2025 04:00:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="XLoNoxa1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8B58269CE6;
+	Wed,  9 Jul 2025 04:42:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out203-205-221-191.mail.qq.com (out203-205-221-191.mail.qq.com [203.205.221.191])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3651313D2B2;
-	Wed,  9 Jul 2025 04:00:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D1713A3F2
+	for <linux-usb@vger.kernel.org>; Wed,  9 Jul 2025 04:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752033650; cv=none; b=HnnA+Am8kfrhp9ITV2Qoh+PFaTayGPx0Yj8WYbXllNjTTyw6BpLgfsG1o0ShvoLwHvO7UQnJSVuXIRP7v4aepD8QvfJUVf2vfJ4Tn7CUARjYUZmcYCXdv60gNMZ0up0b81NeG4jMLqBDzXTDLnwAyV2onTP9Puk9QLFM9a+79jI=
+	t=1752036148; cv=none; b=LJkQQcpa2LyzlY0PeW0u3uYwV2ioV/76ilfaFl0jlgW0N7ClNrJlMEsQzRvbVhMAI6c0XjnVgUHOKAZ0a/sR69TPtVl7h8BXuRvu4lLfFywgU9ByfjVl7iJNkdNjkIM3r0xk8XdPA3w0ji0L6vBGEdmjxVYIgm6sxafj07FtWc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752033650; c=relaxed/simple;
-	bh=dSmH3YdSMwNCOvQhUp1z3YXco7w2Pd/mH6NlzP23Rn0=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=uLijOFMDftUtNpFZy34/F7BeD7AQ6ytw2CCl9qBKhkzaEGbl5p8juemxR1Gv60qL7XJ9GJU6sJ5JSAbkS3fIfA7I19gvujUjYQ/01fj5Wz88z7twZTVj0R0miTkHF5qhMaPVo7M4zr/bb3CNCjzmJm3DcREx2A9FpAqQLBgDgeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=XLoNoxa1; arc=none smtp.client-ip=203.205.221.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1752033337; bh=J//NFXkKWW4mxlFccCxfnS5IzGCIuTinEyv6FNfY3yE=;
-	h=From:To:Cc:Subject:Date;
-	b=XLoNoxa1dW4JxXyHpeT0I7sUHaAjeCr7Mahr+vc2BvNhHJoY/ijergWVN8ysITDJS
-	 MnKrnwVs247ROtwYt92oW0dn+TV94WvBtpEpX3p2Bo9sdvqfk1wVUl42T3JOwQGR4R
-	 KfBFkMUTZpq3X3L57vJ9N16w6rHctW+ZRyM8ySG4=
-Received: from KATIEELIU-MC3.tencent.com ([113.108.77.50])
-	by newxmesmtplogicsvrszb20-0.qq.com (NewEsmtp) with SMTP
-	id DE382630; Wed, 09 Jul 2025 11:55:35 +0800
-X-QQ-mid: xmsmtpt1752033335tx462qqc8
-Message-ID: <tencent_B1C9481688D0E95E7362AB2E999DE8048207@qq.com>
-X-QQ-XMAILINFO: NOHu7IGFswkwv04j6qiELNyEiK/LV2P6eLX/DSo667V8836AtJL9lvnDkm2XOB
-	 Jn+4YN4E4bALMyf8oaPYdM7D3X2svjWDtzglyqSNtsfEzXcD3OWWA5xTYFYrV7hBG1+PTkY1HTMl
-	 uJSoTxesRKj9Rv6my4I0npJd/rc+vc5p7GIPtguoMccwFXuvO1Lop2OsqsofRGwRQKzqixdMESIn
-	 DuPJE5S6KIpyivebv5Bq39Y5ybT7XXZaZbLg0qqSByj/vL/W6d8VCrjsOH26tpacJNXXe0h9LLsY
-	 Ke8eu7q5X97wF+BVKex6rrwh1nyCKmIo+FLmb0/oRGqY17fGlesjWlzqUO/e6jRF1MsTd+9GEw3e
-	 k8/Q9WceYirFlP3Hb9K/E6yBPX/oHz1elIovnFOk0JVQsVS7EfSupMxNvHFldH5KzSbLiRRwGDwJ
-	 0PXQld1ziHpBDmg1lq/P0/wuBRKRlIuxVS3J+wu9RyNWU3GdSIG1NsnsamdtmgKDgJ9sYgi2ea2Y
-	 ASJrcA9A4gY1Kvk7SObb7BUB0M6YW4LsYXXiZRhTOle26yn1Y5+wYI51LyqhFthbylXY9iAGskBs
-	 6Su+/x+OyUaAfRHlSFEi7TyHe/PVG+Ynz9yJ9KWTUurSBI09J3TFdRbFrXD5lopb5MKt3YaGjTs5
-	 LBUizMi5xoIrYMDMgOaziv8gwRoApI92giuarhr3Gh7UGX5R6Knkl7b4sVdwLXqwJMmRHRarCYf7
-	 8ogSCMzisd/kldDWPmfIE0hgt4oYtoGd7J2IZ5NhAK5H6OUIw7tsIiGsJUquPat9zRaBfXMBBNek
-	 QumCdir5SG67jJCVnzE6GG/4J7g7z+120MDBLlWP+LNVX/dvzcfEbLrZDjUUX8rZ7b3Vz58C6sN3
-	 v0b/7ZUcRpPIUWHLlaT75NMqH68XDy7eXIPizQMqb9YCaFXHguv3uc5vPCXbwOzOYrt9wc1Jsizo
-	 45aSl6j6HpcZFSywuyuoCYPCTo3G1cWWR06bSaCLfGWI6PlSY7/wVXHkgfl0DZAFO1VCEN4Ze0Ur
-	 XJN3YbFo355m37xQSyd3FtV21utIGlYIjeP8jMNBQgcX9JPURr+S+wevr1pGk=
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-From: Xinyu Liu <1171169449@qq.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	katieeliu@tencent.com,
-	security@tencent.com,
-	Xinyu Liu <1171169449@qq.com>
-Subject: [PATCH] usb: gadget: configfs: Fix OOB read on empty string write
-Date: Wed,  9 Jul 2025 11:55:33 +0800
-X-OQ-MSGID: <20250709035533.75050-1-1171169449@qq.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	s=arc-20240116; t=1752036148; c=relaxed/simple;
+	bh=sWTCjw7yV66pBVAAsh/JHklRYDUJqSx7zwbyy/gm3qg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aNS2nd4k5/bcfLhLWBgzGug8jLnuQuR6H7MBczqaE03WArn3sieJa2qxNBhZjOxMXJvLHvzFwdE/5MYx196tzQPLLJSuoCn7Mcb7kjSV2eL18esftbNGjT3qTD7dgnXQQdhGlGn8jLGHgYRaK1wvTf6wOt6vY8uZHlXwv8goJ14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uZMdH-0004mH-4L; Wed, 09 Jul 2025 06:42:11 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uZMdF-007WaS-0X;
+	Wed, 09 Jul 2025 06:42:09 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uZMdF-009pDy-03;
+	Wed, 09 Jul 2025 06:42:09 +0200
+Date: Wed, 9 Jul 2025 06:42:08 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Jun Miao <jun.miao@intel.com>
+Cc: kuba@kernel.org, oneukum@suse.com, qiang.zhang@linux.dev,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: enable the work after stop usbnet by ip down/up
+Message-ID: <aG3zIMg_z2CpnG70@pengutronix.de>
+References: <20250708081653.307815-1-jun.miao@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250708081653.307815-1-jun.miao@intel.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-When writing an empty string to either 'qw_sign' or 'landingPage'
-sysfs attributes, the store functions attempt to access page[l - 1]
-before validating that the length 'l' is greater than zero.
+Hi Jun,
 
-This patch fixes the vulnerability by adding a check at the beginning
-of os_desc_qw_sign_store() and webusb_landingPage_store() to handle
-the zero-length input case gracefully by returning immediately.
+please resend this patch with the name [PATCH net-next] and add all related
+people suggested by scripts/get_maintainer.pl.
 
-Signed-off-by: Xinyu Liu <katieeliu@tencent.com>
----
- drivers/usb/gadget/configfs.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+./scripts/get_maintainer.pl drivers/net/usb/usbnet.c 
+Oliver Neukum <oneukum@suse.com> (maintainer:USB "USBNET" DRIVER FRAMEWORK)
+Andrew Lunn <andrew+netdev@lunn.ch> (maintainer:NETWORKING DRIVERS)
+"David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS)
+Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
+Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS)
+Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
+netdev@vger.kernel.org (open list:USB "USBNET" DRIVER FRAMEWORK)
+linux-usb@vger.kernel.org (open list:USB NETWORKING DRIVERS)
+linux-kernel@vger.kernel.org (open list)
 
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index fba2a56dae97..1bb32d6be9b3 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -1064,7 +1064,8 @@ static ssize_t webusb_landingPage_store(struct config_item *item, const char *pa
- 	struct gadget_info *gi = webusb_item_to_gadget_info(item);
- 	unsigned int bytes_to_strip = 0;
- 	int l = len;
--
-+	if (!len)
-+		return len;
- 	if (page[l - 1] == '\n') {
- 		--l;
- 		++bytes_to_strip;
-@@ -1187,7 +1188,8 @@ static ssize_t os_desc_qw_sign_store(struct config_item *item, const char *page,
- {
- 	struct gadget_info *gi = os_desc_item_to_gadget_info(item);
- 	int res, l;
--
-+	if (!len)
-+		return len;
- 	l = min_t(int, len, OS_STRING_QW_SIGN_LEN >> 1);
- 	if (page[l - 1] == '\n')
- 		--l;
+Best Regards,
+Oleksij
+
+On Tue, Jul 08, 2025 at 04:16:53PM +0800, Jun Miao wrote:
+> From: Zqiang <qiang.zhang@linux.dev>
+> 
+> Oleksij reported that:
+> The smsc95xx driver fails after one down/up cycle, like this:
+>  $ nmcli device set enu1u1 managed no
+>  $ p a a 10.10.10.1/24 dev enu1u1
+>  $ ping -c 4 10.10.10.3
+>  $ ip l s dev enu1u1 down
+>  $ ip l s dev enu1u1 up
+>  $ ping -c 4 10.10.10.3
+> The second ping does not reach the host. Networking also fails on other interfaces.
+> 
+> Enable the work by replacing the disable_work_sync() with cancel_work_sync().
+> 
+> [Jun Miao: completely write the commit changelog]
+> 
+> Fixes: 2c04d279e857 ("net: usb: Convert tasklet API to new bottom half workqueue mechanism")
+> Reported-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Signed-off-by: Zqiang <qiang.zhang@linux.dev>
+> Signed-off-by: Jun Miao <jun.miao@intel.com>
+> ---
+>  drivers/net/usb/usbnet.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> index 9564478a79cc..6a3cca104af9 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -861,14 +861,14 @@ int usbnet_stop (struct net_device *net)
+>  	/* deferred work (timer, softirq, task) must also stop */
+>  	dev->flags = 0;
+>  	timer_delete_sync(&dev->delay);
+> -	disable_work_sync(&dev->bh_work);
+> +	cancel_work_sync(&dev->bh_work);
+>  	cancel_work_sync(&dev->kevent);
+>  
+>  	/* We have cyclic dependencies. Those calls are needed
+>  	 * to break a cycle. We cannot fall into the gaps because
+>  	 * we have a flag
+>  	 */
+> -	disable_work_sync(&dev->bh_work);
+> +	cancel_work_sync(&dev->bh_work);
+>  	timer_delete_sync(&dev->delay);
+>  	cancel_work_sync(&dev->kevent);
+>  
+> -- 
+> 2.32.0
+> 
+> 
+
 -- 
-2.39.5 (Apple Git-154)
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
