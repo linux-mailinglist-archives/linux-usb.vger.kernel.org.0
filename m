@@ -1,126 +1,193 @@
-Return-Path: <linux-usb+bounces-25634-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25635-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47C04AFEC74
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 16:46:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7020AFED6E
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 17:17:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46D894E0D50
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 14:44:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09FDD647318
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 15:16:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2073D2E54D9;
-	Wed,  9 Jul 2025 14:45:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F6A12E6D2F;
+	Wed,  9 Jul 2025 15:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ccvAqtQd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497C52DF3FB;
-	Wed,  9 Jul 2025 14:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5BDD28135D
+	for <linux-usb@vger.kernel.org>; Wed,  9 Jul 2025 15:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752072303; cv=none; b=OuAhP4v+ulTyfXo4+wUnoUkfhZhHfl5nYM2AONLHF9S8QmmHwBCTXpOj88kKHvPcxWIZJTIyKfiQ4SdE/fObc+u1APOIefXQwRy83o6qrB35YmjRkAYYiIFFudqnUUvFB+9Cd6dEOmEzTjyyL2EAPabwbiRXHYqZXV6hPJkZ0Sk=
+	t=1752074179; cv=none; b=C0vZxzyti55BWPdW0DI+jNd4v8oxkKoNiOM6r6o/Xs7kGaiOhputXEfbx6Hd+PDzitL8OApjoc0cgwnx501xCzJ7pGYZUZ2WB4uT4AXzZn+7yUnoXIsOeHCOcF287TBPL6hUUWecHmgVlFjlfQfE3Z1LDIsyK/85NqlpbDxKvK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752072303; c=relaxed/simple;
-	bh=YHka2Nd7nyCr1LB/Jm4DIH6wxerrlY5O2lslqHt1pok=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q6NPf3QFa3/TPxamb9tocOKYUe78SEcz3VazkwYOj2RQzAFSXj697c50H9zXPga1tDBIoMcsBnYB/doN+izjb8CEZ3Le/LSW3Qhez+su5yUADWXaNKRKblVpXmlMeC1zXl3O+e3+O0rASxgoTnqiCxCxHlBpp3A3At6gBhnpHvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 569Eim8x071199;
-	Wed, 9 Jul 2025 23:44:48 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 569Eimtq071192
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Wed, 9 Jul 2025 23:44:48 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <39f312fa-d461-4377-b809-50c8a7188f6b@I-love.SAKURA.ne.jp>
-Date: Wed, 9 Jul 2025 23:44:46 +0900
+	s=arc-20240116; t=1752074179; c=relaxed/simple;
+	bh=M/PkNLdrJfoEMHKFRc7KNT/Eas8/BG1qL2VpbXSMSYU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SED+vbxrNIaTipMmD+Ii0eLAcdaU/NnihfmPefk4NLyXpbnfnZSRqeQo4uynHcY4aDGdRYC6mMFypmUZEkX06ikCptrOk5QYKItOBF2vhfVCvJfCR7aL2/Oqp3b3F7lQovjb4KfPw/aXFkU4sqXotfPEba0toO67eciVOfPHggE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ccvAqtQd; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6facf4d8ea8so242326d6.0
+        for <linux-usb@vger.kernel.org>; Wed, 09 Jul 2025 08:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1752074177; x=1752678977; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WsdbYMtsoP5IHaj/P7/gA1hMWGSlzJbOloShXNDUswc=;
+        b=ccvAqtQdZsMbjbONmdfB4tz60ORnniKZLZDsRvwzz+5c28kQtiADVHxPaz0hYMvFNk
+         sENlofz5YQvqhcuAIL3RRPX2T5s8NicbUu6ohir7PRZRhvteiHiTOO7rX8urgROlGmmM
+         DzSJl6ZcodY8FyWtb8lTvEjQqIkgNpRr1HwW1jiCMO54JLJKOqURCg/uoSEWY1XbCC0/
+         SlQg3SaOWCzGgBa98kdhG87LvFDepqQWjM+p9v6t2pQX2MOo6GAsWUJnnlewcPYmlLts
+         HT0fVyLDxgEdb3M9NxgBkI38yZzKL93GEd6m3KZ77kqEr0TLSsEtUepashwiVeOUIuZY
+         hkiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752074177; x=1752678977;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WsdbYMtsoP5IHaj/P7/gA1hMWGSlzJbOloShXNDUswc=;
+        b=bJwx6TGbsJtlUWxHEpsvTn7JTG5rNP3nmchtxkxlpDFuxc2M0CERGbuIJbDXSFiuD7
+         g4IEdM4D5NfgZVQTDRJ78pWaGKsbXFoMMdccDQWccki32EyQgD4MjnG7Ni7zVZUUla1a
+         kmypCdgvvbPxDHbuO9AXRdy5xu1b0hAzGTiSQMCz5Gc5m0x8ce8+WqE2iBzgnGDWyyfa
+         WlCR5wmiNn/DknHl3jIpwlZb14PeWcYe87dMloR/cTE3QRPaXIrdgXLFagRD71PkrLPj
+         SLUtvagQUylWS+jP6KWhRufdy0RQbvu3jOwiTzfFo/d+fe/kZ7nPNLDZiVrwJz0Syt9Q
+         4BUw==
+X-Forwarded-Encrypted: i=1; AJvYcCVRR/42aybkKe9qoa9WyCMBdAufmYWHiDoKqw/ZQ3mX5/34FktI+CzNwaarORIQURwjn8wutjpwRUc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS8dSsAdA0fz+PYTn9O9DEqknMzlCgSce5UwcB69NfioA4Rl8M
+	Q96C6M0dfBKvVL0tYR34EMiMHzh5M+8uM9IvtwyfnVyhewYA2AfZ4IATcNhTzY+R1IcMTbhVFPl
+	6yQQ=
+X-Gm-Gg: ASbGncuu5iZyQxs/lm4G4errwqXMLCkjgLw7zvMfx3THQDORHPMyWYdUNj86hxzfOKl
+	cfReUC7cU0MSJQDcEbu8zYN/gO6O43Xc6/B11d53yc3fY9xO5ipDge2hM0rcqGFEr32Av7Sd21F
+	6TtkQy2SR9Dd2m+DahzkvM+qkG83WyYD27t2AYDVxxTNVRZmi0dfpqaGHSUBs12xzstTnLHZEQx
+	DKqKoSMD/Ko6gEWelOdQAw+OmJbJ82j0EMzb07bq0Ya6b5pq9J5ki9vUL9Jg50hRGLVSUFZUuBG
+	GUzyj/tLzfTqCcY0DdS7lr5+ze1WuQ1BdyWdZnKrtgXGpd2RUxUsZIM2VjovbqtFpfOv8vSLqjz
+	Q8tvQdECQm/nuQnE=
+X-Google-Smtp-Source: AGHT+IFq/SMjQ8dE1aCLNMU2QhHo/z3MoLApUn/DvXQi38UdxBF+ToGFDbulcQ4Suod/amuFPLUcvA==
+X-Received: by 2002:a05:6214:3d11:b0:6fa:a4ed:cce5 with SMTP id 6a1803df08f44-7048b9da2e3mr38991956d6.44.1752074176556;
+        Wed, 09 Jul 2025 08:16:16 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-702c4ccd715sm93276016d6.47.2025.07.09.08.16.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jul 2025 08:16:15 -0700 (PDT)
+Date: Wed, 9 Jul 2025 11:16:13 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
+	USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Serious bug in HID core
+Message-ID: <b18af9f1-e3d8-429a-b313-38cc279e0f87@rowland.harvard.edu>
+References: <c75433e0-9b47-4072-bbe8-b1d14ea97b13@rowland.harvard.edu>
+ <drcvdlw2kpuvsbact2gy4hvqp2i3au3shv5ozp3qms7qdfvi7t@7jofrodxeimb>
+ <e3a58c95-9501-4ec8-902e-2a73402d1fe3@rowland.harvard.edu>
+ <5rkp3gbrqvsdgia57eyw65jnu4wmpx6sbk47kmv4akmz2q7nzz@clqgtjfk2qxk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [kernel?] INFO: task hung in uevent_show (2)
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: syzbot <syzbot+592e2ab8775dbe0bf09a@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        USB list <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <686e7698.050a0220.c28f5.0006.GAE@google.com>
- <79f634db-c149-4220-b8d4-0fff2c6b6a01@I-love.SAKURA.ne.jp>
- <e064a3e4-ae70-4a24-ba5e-1bb8c7971f23@rowland.harvard.edu>
-Content-Language: en-US
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <e064a3e4-ae70-4a24-ba5e-1bb8c7971f23@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Anti-Virus-Server: fsav403.rs.sakura.ne.jp
-X-Virus-Status: clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5rkp3gbrqvsdgia57eyw65jnu4wmpx6sbk47kmv4akmz2q7nzz@clqgtjfk2qxk>
 
-On 2025/07/09 23:27, Alan Stern wrote:
-> Which of these three BUG_ON's did you hit, and where did you hit it?
+On Wed, Jul 09, 2025 at 10:44:35AM +0200, Benjamin Tissoires wrote:
+> On Jul 08 2025, Alan Stern wrote:
+> > On Tue, Jul 08, 2025 at 05:51:08PM +0200, Benjamin Tissoires wrote:
+> > > The second one would need a little bit more understanding of the fake
+> > > report descriptor provided by syzbot.
+> > 
+> > I suppose we can get the information from syzbot if it's really 
+> > necessary.  But it seems to be a minor point.
+> 
+> Well, to me it's important because I can get an easier reproducer and
+> add this corner case in the HID test suite :) Not to mention the
+> understanding on how we can get to this corner case.
 
-kernel BUG at ./include/linux/usb.h:1990!
+I can get it for you if you really want to see it.  It's just a question 
+of asking syzbot to run the reproducer with a patch that prints all the 
+report descriptors.
 
-matches the BUG_ON(endpoint > 0xF) line. The location is shown below.
+Presumably this is just an ordinary output report descriptor containing 
+no fields (or usages, or whatever they're called).  Even if it isn't, I 
+would expect any such output report to trigger the bug.
 
-Call Trace:
- <TASK>
- hub_configure drivers/usb/core/hub.c:1717 [inline]
- hub_probe+0x2300/0x3840 drivers/usb/core/hub.c:2005
- usb_probe_interface+0x644/0xbc0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x26a/0x9a0 drivers/base/dd.c:657
- __driver_probe_device+0x18c/0x2f0 drivers/base/dd.c:799
- driver_probe_device+0x4f/0x430 drivers/base/dd.c:829
- __device_attach_driver+0x2ce/0x530 drivers/base/dd.c:957
- bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:462
- __device_attach+0x2b8/0x400 drivers/base/dd.c:1029
- bus_probe_device+0x185/0x260 drivers/base/bus.c:537
- device_add+0x7b6/0xb50 drivers/base/core.c:3692
- usb_set_configuration+0x1ab9/0x2120 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0x8d/0x150 drivers/usb/core/generic.c:250
- usb_probe_device+0x1c1/0x390 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x26a/0x9a0 drivers/base/dd.c:657
- __driver_probe_device+0x18c/0x2f0 drivers/base/dd.c:799
- driver_probe_device+0x4f/0x430 drivers/base/dd.c:829
- __device_attach_driver+0x2ce/0x530 drivers/base/dd.c:957
- bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:462
- __device_attach+0x2b8/0x400 drivers/base/dd.c:1029
- bus_probe_device+0x185/0x260 drivers/base/bus.c:537
- device_add+0x7b6/0xb50 drivers/base/core.c:3692
- usb_new_device+0x9fd/0x1610 drivers/usb/core/hub.c:2694
- register_root_hub+0x275/0x590 drivers/usb/core/hcd.c:994
- usb_add_hcd+0xba1/0x1050 drivers/usb/core/hcd.c:2976
- dummy_hcd_probe+0x134/0x270 drivers/usb/gadget/udc/dummy_hcd.c:2694
- platform_probe+0x148/0x1d0 drivers/base/platform.c:1404
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x26a/0x9a0 drivers/base/dd.c:657
- __driver_probe_device+0x18c/0x2f0 drivers/base/dd.c:799
- driver_probe_device+0x4f/0x430 drivers/base/dd.c:829
- __device_attach_driver+0x2ce/0x530 drivers/base/dd.c:957
- bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:462
- __device_attach+0x2b8/0x400 drivers/base/dd.c:1029
- bus_probe_device+0x185/0x260 drivers/base/bus.c:537
- device_add+0x7b6/0xb50 drivers/base/core.c:3692
- platform_device_add+0x4b4/0x820 drivers/base/platform.c:716
- dummy_hcd_init+0x293/0x1070 drivers/usb/gadget/udc/dummy_hcd.c:2845
- do_one_initcall+0x233/0x820 init/main.c:1274
- do_initcall_level+0x137/0x1f0 init/main.c:1336
- do_initcalls+0x69/0xd0 init/main.c:1352
- kernel_init_freeable+0x3d9/0x570 init/main.c:1584
- kernel_init+0x1d/0x1d0 init/main.c:1474
- ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
+> > > The first byte should always be reserved to the report ID, and is
+> > > populated by 0 by hid-core when the report ID is not in use.
+> > 
+> > Then why does hid_output_report() do this:
+> > 
+> > 	if (report->id > 0)
+> > 		*data++ = report->id;
+> > 
+> > ?  The first byte is not reserved for the ID when the ID is 0.  
+> > According to what you said, the assignment should be unconditional.  
+> > Isn't that a genuine bug?
+> 
+> In my mind, hid_output_report() is doing the correct thing: it fills the
+> provided buffer with the data the device is expected to receive.
+> 
+> However, the HID subsystem convention is that when accessing the low
+> level driver, the first byte is always reserved to the report ID, even
+> if it's null and should be ignored by the device.
+> 
+> So I think one of the problems is that __hid_request() should actually
+> shifts it's buffer by one in case the report ID is 0, to reserve the
+> first byte for the report ID. Likewise, if the report ID is 0, the len
+> variable should be incremented.
 
+In other words, in __hid_request() we should change:
+
+	if (reqtype == HID_REQ_SET_REPORT)
+		hid_output_report(report, buf);
+
+to:
+
+	if (reqtype == HID_REQ_SET_REPORT) {
+		/*
+		 * If report->id is 0, the report ID byte is not counted by
+		 * hid_report_len() and not reserved by hid_output_report(),
+		 * so we have to do those things here.
+		 */
+		if (report->id == 0) {
+			++len;
+			buf[0] = 0;
+			hid_output_report(report, buf + 1);
+		} else {
+			hid_output_report(report, buf);
+		}
+	}
+
+Right?
+
+> > And shouldn't the length computed by hid_alloc_report_buf() be one 
+> > larger than it is when the ID is 0?
+> 
+> Yes, that seems to be correct, but I believe we never had the issue
+> because this function already allocates 7 extra bytes for implement() to
+> be working (see drivers/hid/hid-steam.c comment in steam_recv_report()
+> for a similar conclusion).
+
+Hmmm.  The comment in hid_alloc_report_buf() says that implement() 
+operates on 8-byte chunks.  Do those chunks start at the beginning of 
+the buffer or at the beginning of the report data (i.e., the second byte 
+of the buffer)?  In the latter case the function should allocate an 
+extra 8 bytes, not 7.
+
+> I can try to provide a series today for fixing all of this mess. But I
+> must confess that I'm currently swamped for the next 2 weeks. Yay for me
+> then :(
+> 
+> [side note: I took the c reproducer, compiled it locally but this did
+> not triggered the bug... Given that many of the individual patches from
+> the series will potentially fix the bug (multiple layers of fixing),
+> it's a little bit sad I can not reproduce locally.]
+
+I can send a patch that does the change shown above, if syzbot's testing 
+shows that it fixes the bug.  That ought to help lighten your load.
+
+Alan Stern
 
