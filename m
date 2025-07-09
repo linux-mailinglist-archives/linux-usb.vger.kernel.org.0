@@ -1,58 +1,59 @@
-Return-Path: <linux-usb+bounces-25619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25620-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AB48AFE40E
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 11:28:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FF3AAFE49D
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 11:54:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 189AE1C43ECD
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 09:28:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4933A4A309F
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 09:54:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6167E28469D;
-	Wed,  9 Jul 2025 09:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E26BB2882D0;
+	Wed,  9 Jul 2025 09:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lJVkVogT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3qeLASa"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D710628466F;
-	Wed,  9 Jul 2025 09:28:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B832877E2;
+	Wed,  9 Jul 2025 09:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752053297; cv=none; b=M7FqFmrlcb0qSjHWh6NvVk0LSXCS4QTVrG7OM9/o/D0VYqK7FeZvKH9G+P+dcbfkROat3Gz6zwIG34o/lz0+vt4YVQ0Eynmh/4AVFRI9Pil52OfBANsaUsohwtwahLUhllXVUJiDR4Bkpy9oHju0037qUPApspp8tcm3qYHPf14=
+	t=1752054853; cv=none; b=t7/c0QuCWK1qnB5Gv7xATDIgsvjLVdUcBopN6dsLzm47Kqgp1ZzWchJmYYFeqhsjtAkc3+YjHmIQZZ8OGdqzIrLDB6wvwVdJXaNEO+wl8hDh/YoviZTiElzFmC0RemFMHj5yvRg2ypyBDXCrkccpblO4v23uAAshU4EMic/nmsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752053297; c=relaxed/simple;
-	bh=YGLRzooRqwe/wzG87DcNhxwHzkAJwO4orqDPY2gzF5Y=;
+	s=arc-20240116; t=1752054853; c=relaxed/simple;
+	bh=Cm2c3J7Uf/hL7IW4HuPxLzbo6FU8AzX/Hvb15wde1f0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gq0bimfksodyeMU4ifUGOSV06VHXFz7lKTtj4isiN3EKLBcA0TUvR/OmrenuIeFoQHn/OhZ8J3UBuKVfjM2O9YmKwBPp/t51khfaLV5WUw4uOSZlzh7Buc0C3lXFvpqv8ncXRGBmPTUlvcOdJYav4Idxv5f7mt94pFypyGUgIfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lJVkVogT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77DFCC4CEEF;
-	Wed,  9 Jul 2025 09:28:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MWUklDMR0JszaRnPoF65NpU7orYF4jjJRFDwTdiFOnq10fGD43228HFE2Q/XR72PxFBLMfG1qCNv3gD6tlD5/P4BBaeEV3KuzT/asl4LF/EPTaxGWRNTN7iz5kRK3cUVd6Pa7yi3ns7Y4g+MHmM9WVACi1OfWnvO0IlnQR04eM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3qeLASa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEEA0C4CEEF;
+	Wed,  9 Jul 2025 09:54:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752053297;
-	bh=YGLRzooRqwe/wzG87DcNhxwHzkAJwO4orqDPY2gzF5Y=;
+	s=k20201202; t=1752054852;
+	bh=Cm2c3J7Uf/hL7IW4HuPxLzbo6FU8AzX/Hvb15wde1f0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lJVkVogT9CEbbbC8a5k8BBzytvvu+Sp1BHmIXBq/rNVWhk0YnOAbJYWWE5P/uxNp/
-	 Yf/d8sexxpOS5B74Whuhck18GHh8HaJyEErlGzZ6VSz83eSICEPIDwkSIjlfYoPZG+
-	 xRm3nDWhzOxGdcBpRYcnTRtODeSsR0IBi5YifppdJEaGC1RpMIlOxdBzM/qfHDCCi1
-	 80kpz8cqUW/BejoMUxUwbvuISL43dE5/5C7+c6vDn9S+2b17POgUQSsfkT3t24MrNC
-	 GX3FSkCL13mK83nwIks3DEtxWEPiQ9iMaAGTx7sArSJ1esukFTNQyrV73pXYBh3IWr
-	 lD1KZju4Z8DSA==
+	b=C3qeLASaWgKzb9eA/weQrvoYIms/5ntLE/hQRJ0JVMEHsOORUUrNg34yLQhKGYvCe
+	 5VzjSl/77TLe/4FIE4ttPXLXxsvqde11mijUlMtyu7WvXc1EesSGCtRb5zKDxL4RyY
+	 Ti35JHP3ZBcrQhPlxkjo0+wT749IjiKtbh+UPBjDA85mC9EjD9Ieh3PeoTHvrDyGfI
+	 VRTqL1YrC8/Ws0Nto2Y7emJsCe/+oBKrxLf/7IP5PF/AIjKx7ANtxb1lhZ2oWZHePP
+	 0D22dmah/sEAt+1U7AXItRY0luTw20HxSAI1CroBT02cF0shfHZnElX+/1UyCk7gzC
+	 o38Ta5YmyJ+ZQ==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1uZR61-000000001ML-34yz;
-	Wed, 09 Jul 2025 11:28:10 +0200
-Date: Wed, 9 Jul 2025 11:28:09 +0200
+	id 1uZRV7-000000001mx-3Nrq;
+	Wed, 09 Jul 2025 11:54:05 +0200
+Date: Wed, 9 Jul 2025 11:54:05 +0200
 From: Johan Hovold <johan@kernel.org>
-To: Chukun Pan <amadeus@jmu.edu.cn>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] USB: serial: option: add GosunCn GM800 series
-Message-ID: <aG42KblIHdoCxddQ@hovoldconsulting.com>
-References: <20250701100002.798372-1-amadeus@jmu.edu.cn>
- <20250701100002.798372-2-amadeus@jmu.edu.cn>
+To: Ryan Mann <rmann@ndigital.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] NDI FTDI USB driver support
+Message-ID: <aG48PYdWZXwbrd5S@hovoldconsulting.com>
+References: <YQXPR01MB4987FF89C01297FA6F1B0C9FDF42A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,93 +62,91 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250701100002.798372-2-amadeus@jmu.edu.cn>
+In-Reply-To: <YQXPR01MB4987FF89C01297FA6F1B0C9FDF42A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
 
-On Tue, Jul 01, 2025 at 06:00:02PM +0800, Chukun Pan wrote:
-> Add support for GosunCn GM800 series which are based on Qualcomm
-> SDX55 chip. The ID of MBIM/ECM/RNDIS mode is the same as GM500.
+On Fri, Jul 04, 2025 at 05:25:43PM +0000, Ryan Mann wrote:
+> From: Ryan Mann (NDI) <rmann@ndigital.com>
 > 
-> Download mode:
-> 0x1402: DIAG + AT + MODEM
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=305a ProdID=1402 Rev= 4.14
-> S:  Manufacturer=GSW
-> S:  Product=GSW_GM800_123456
-> S:  SerialNumber=12345678
-> C:* #Ifs= 3 Cfg#= 1 Atr=80 MxPwr=500mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+> NDI (Northern Digital Inc.) is introducing a new product called the 
+> EMGUIDE GEMINI that will use an FTDI chip for USB serial communications.
 
-This line no longer reflects what the kernel binds to after you made the
-matching more specific in v2.
+> Remove the use of the baud rate mapping for NDI Aurora.
 
-But why not bind to the DIAG port here and in the other compositions?
+Your commit message should explain *why* a change is done.
 
-> RmNet mode (old):
+This bit also looks like an unrelated change that should go in it's own
+patch. It also no longer reflects what the patch does.
 
-What do you mean by "old" here?
+> Add the NDI VID definition as "FTDI_NDI_VID" into the ftdi_sio_ids.h.
+> Add the NDI EMGUIDE GEMINI PID definition into the ftdi_sio_ids.h.
 
-> 0x1403: DIAG + AT + MODEM + RMNET + ADB
+No need to be this specific, just say something about the adding the
+device id which uses a new vendor define unlike the older products.
 
-> RNDIS mode:
-> 0x1404: DIAG + AT + MODEM + RNDIS + ADB
-> T:  Bus=08 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-> P:  Vendor=305a ProdID=1404 Rev= 4.14
-> S:  Manufacturer=QCOM
-> S:  Product=SDXPRAIRIE-MTP _SN:12345678
-> S:  SerialNumber=12345678
-> C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=ef(misc ) Sub=04 Prot=01
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
-> E:  Ad=81(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-> E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-> E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> Add the NDI VID/EMGUIDE GEMINI PID combination to the USB_DEVICE list.
 
-This is one of the PIDs shared with GM500 and which, since your v2, will
-no longer bind to the ff/ff/ff interface that it has.
+Not needed.
 
-Is that intentional or a bug in v2? Either way, this needs to be
-addressed in some way (e.g. explained in the commit message).
+> Signed-off-by: Ryan Mann <rmann@ndigital.com>
+> ---
+> V1 -> V2: Email-to issues fixed
+> V2 -> V3: Email formatting issues fixed
+> V3 -> V4: Email formatting issues fixed
 
-> @@ -2382,9 +2382,13 @@ static const struct usb_device_id option_ids[] = {
->  	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x40) },	/* MeiG Smart SRM825L */
->  	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x60) },	/* MeiG Smart SRM825L */
->  	{ USB_DEVICE_INTERFACE_CLASS(0x2df3, 0x9d03, 0xff) },			/* LongSung M5710 */
-> -	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
-> -	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
-> -	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1402, 0xff, 0, 0) },		/* GosunCn GM800 (Download) */
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1403, 0xff, 0, 0) },		/* GosunCn GM800 (RMNET, old) */
+You clearly left out some changes here since your initial submission
+also added ids for "future" devices.
 
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1404, 0xff, 0, 0) },		/* GosunCn GM500/GM800 RNDIS */
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1405, 0xff, 0, 0) },		/* GosunCn GM500/GM800 MBIM */
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1406, 0xff, 0, 0) },		/* GosunCn GM500/GM800 ECM */
+There was also some changes related to the two NID quirks.
 
-According to commit 08d4ef5cc920 ("USB: serial: option: add GosunCn
-GM500 series") all of these have an ff/ff/ff interface on GM500 which
-will no longer be bound after this change.
+>  drivers/usb/serial/ftdi_sio.c     | 4 ++--
+>  drivers/usb/serial/ftdi_sio_ids.h | 2 ++
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+> index 6ac7a0a5cf07..e5d7cce83a72 100644
+> --- a/drivers/usb/serial/ftdi_sio.c
+> +++ b/drivers/usb/serial/ftdi_sio.c
+> @@ -801,8 +801,8 @@ static const struct usb_device_id id_table_combined[] = {
+>                 .driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
+>         { USB_DEVICE(FTDI_VID, FTDI_NDI_FUTURE_3_PID),
+>                 .driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
+> -       { USB_DEVICE(FTDI_VID, FTDI_NDI_AURORA_SCU_PID),
+> -               .driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
 
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1421, 0xff, 0, 0) },		/* GosunCn GM800 (RMNET) */
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1422, 0xff, 0, 0) },		/* GosunCn GM800 (EAP) */
->  	{ USB_DEVICE(0x33f8, 0x0104),						/* Rolling RW101-GL (laptop RMNET) */
->  	  .driver_info = RSVD(4) | RSVD(5) },
->  	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x01a2, 0xff) },			/* Rolling RW101-GL (laptop MBIM) */
+Why are you removing the old product from the id table which will
+prevent the driver from binding to it?
+
+> +       { USB_DEVICE(NDI_VID, FTDI_NDI_EMGUIDE_GEMINI_PID),
+> +         .driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
+
+Your patch is also white space damaged (e.g. tabs replaced with spaces,
+which prevents it from being applied.
+
+Try sending the patch to yourself first and make sure you can apply it
+with git am.
+
+>         { USB_DEVICE(TELLDUS_VID, TELLDUS_TELLSTICK_PID) },
+>         { USB_DEVICE(NOVITUS_VID, NOVITUS_BONO_E_PID) },
+>         { USB_DEVICE(FTDI_VID, RTSYSTEMS_USB_VX8_PID) },
+> diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
+> index 9acb6f837327..0cb33d257973 100644
+> --- a/drivers/usb/serial/ftdi_sio_ids.h
+> +++ b/drivers/usb/serial/ftdi_sio_ids.h
+> @@ -203,6 +203,8 @@
+>  #define FTDI_NDI_FUTURE_2_PID          0xDA72  /* NDI future device #2 */
+>  #define FTDI_NDI_FUTURE_3_PID          0xDA73  /* NDI future device #3 */
+>  #define FTDI_NDI_AURORA_SCU_PID                0xDA74  /* NDI Aurora SCU */
+
+Please include a newline here to separate the two sections.
+
+> +#define FTDI_NDI_VID                   0x23F2  /* NDI Vendor ID */
+
+And drop the comment here.
+
+> +#define FTDI_NDI_EMGUIDE_GEMINI_PID    0x0003  /* NDI Emguide Gemini */
+> 
+>  /*
+>   * ChamSys Limited (www.chamsys.co.uk) USB wing/interface product IDs
 
 Johan
 
