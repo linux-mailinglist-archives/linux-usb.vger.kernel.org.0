@@ -1,44 +1,44 @@
-Return-Path: <linux-usb+bounces-25608-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25609-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2B3BAFE2EC
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 10:40:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2597BAFE305
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 10:44:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 135784E1AE2
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 08:40:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A40117C663
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 08:44:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D789B27E1C0;
-	Wed,  9 Jul 2025 08:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB85E27E077;
+	Wed,  9 Jul 2025 08:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UGyntLRJ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0meTvm5F"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C3E270575;
-	Wed,  9 Jul 2025 08:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4276727AC37;
+	Wed,  9 Jul 2025 08:44:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752050422; cv=none; b=nc6Ij8TDNwZBRtmkN6oKgfi3VDGj4ku+E042rVR3BqML9KNf8xktpXVnKbdVmjqZuutGswj6sZmS0pMQRmoSuWX+eKgM9f9bcRBPWntBwB3NllMIDaBRd63gJ/VQmd2DgfmMqnMrogiTfHSDpT9iRFMcXQ+5j++pG02IYVUomfc=
+	t=1752050674; cv=none; b=ul6tRQ5qFdaPnoaY6oWPa3BrJOOGnaYTTlYjIsO0Iaa7GyW5u55oHZsM69lDQzNmx6wfYo81Eb9ryUD9jRQFypE+tqt1e/xICdcO29igayCePUiV5N3wmuRiOwTsftZOSNGtEIiffNkFw4Zi/YCEK74FufEBQXD2YXpbzrxt+A4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752050422; c=relaxed/simple;
-	bh=rJjvFom5kGiJovMaDBO1GA+keaiaEhwhXvL8IYaiUbc=;
+	s=arc-20240116; t=1752050674; c=relaxed/simple;
+	bh=lwQ2KKKmVP54nbs4jel6XWDPyKiP+QppmSbUcd856N0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dGL/xgrTQT4guZmIamVMU9WDvufOlwytTluYUBfe8akt7RKMylaxUOkZjCEM+PE5+vT8wN4W/1b5KwarF5lnogzR87QEzS3rLhmHxPSffrMNwl31KYyXwdRsxhP/ijGlZllqOpDvsXNeKFMmt7grdRp6shTfRM/23cS6WH4keUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UGyntLRJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E896C4CEEF;
-	Wed,  9 Jul 2025 08:40:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MygE7F7wjJB2YWgKPYot/dhJtNsLNIAC5gHyQmNLERdgWw9REfO5QYDRtAYcX1WiQcnp+zJc+Poi/KtOnBn5gWvYa0LdIhbw88Tg1/zwa7ph/iaOiv+6ZDoTrlgzj7a7XqhvnCvJ1/91iT0aqDb3WOWXXiJtiSau/v9DYgzOzjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0meTvm5F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C78BC4CEEF;
+	Wed,  9 Jul 2025 08:44:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752050421;
-	bh=rJjvFom5kGiJovMaDBO1GA+keaiaEhwhXvL8IYaiUbc=;
+	s=korg; t=1752050673;
+	bh=lwQ2KKKmVP54nbs4jel6XWDPyKiP+QppmSbUcd856N0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UGyntLRJ72vNQ7mcHJApcv5FnCj24vgzsvCY88BiXV7MOwa2Sbv/d7u/AJpL67tZf
-	 bMGfs7mhqK7zwcgkUX2SE9Lg2hWaKBKlhB/cCeyrVmjg3KgPVm089bXXbQFCvY871v
-	 6znt4cNM9uZZZY9MgQMzqgaNBzuhJAGQJD6sD+fA=
-Date: Wed, 9 Jul 2025 10:40:18 +0200
+	b=0meTvm5Fs8Qz7iZrXUC7Pg2gSzJmhZapvoDupt+zSqtOMzeBBZiuzq4gK4NpMlZy2
+	 PT20Y4k9viWa4D6d/Bys4SM6I6X/AGjbplivRy8Xr+QTg+/5JeHz5G28GYFJ+of2KF
+	 gh5GTlXCy8LC3R2oojoXOyvA5S6dveG79vBipnxU=
+Date: Wed, 9 Jul 2025 10:44:29 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
 Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
@@ -47,7 +47,7 @@ Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
 	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Subject: Re: [PATCH v4] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
  secure calls
-Message-ID: <2025070909-enlighten-skilled-2c71@gregkh>
+Message-ID: <2025070924-wilt-dreamt-fb25@gregkh>
 References: <20250709065533.25724-1-komal.bajaj@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -109,6 +109,13 @@ On Wed, Jul 09, 2025 at 12:25:14PM +0530, Komal Bajaj wrote:
 >  	depends on ARCH_QCOM || COMPILE_TEST
 >  	select USB_ROLE_SWITCH
 > +	select QCOM_SCM
+
+How is this select going to work if COMPILE_TEST is enabled on
+non-ARCH_QCOM configs?
+
+Please don't use select if at all possible, use "depends" properly.
+
+
 >  	help
 >  	  This module enables support for Qualcomm Technologies, Inc.
 >  	  Embedded USB Debugger (EUD). The EUD is a control peripheral
@@ -144,6 +151,12 @@ On Wed, Jul 09, 2025 at 12:25:14PM +0530, Komal Bajaj wrote:
 > +		return ret;
 > +
 >  	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
+
+Nit, why is your local writel() function in backwards order of
+parameters from qcom_scm_io_writel()?  That's going to be a major pain
+to maintain over time, don't you think?
+
+
 >  	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
 >  			priv->base + EUD_REG_INT1_EN_MASK);
 > -	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
@@ -185,41 +198,10 @@ On Wed, Jul 09, 2025 at 12:25:14PM +0530, Komal Bajaj wrote:
 > +	if (!res)
 > +		return -ENODEV;
 > +	chip->mode_mgr = res->start;
->  
->  	chip->irq = platform_get_irq(pdev, 0);
->  	if (chip->irq < 0)
-> -- 
-> 2.48.1
-> 
-> 
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+No ioremap() call needed anymore?   Why not?
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
 
