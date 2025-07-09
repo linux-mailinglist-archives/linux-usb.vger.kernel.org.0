@@ -1,58 +1,92 @@
-Return-Path: <linux-usb+bounces-25639-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25640-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D187AAFEDDA
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 17:35:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42508AFEDED
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 17:41:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26A30176EE2
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 15:35:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 090507AADF3
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jul 2025 15:40:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 333D32E7F04;
-	Wed,  9 Jul 2025 15:35:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97AC12E8E19;
+	Wed,  9 Jul 2025 15:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AIr9mZl1"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="hOgMkyJ8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91143EEA8;
-	Wed,  9 Jul 2025 15:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC04A2D3EF4
+	for <linux-usb@vger.kernel.org>; Wed,  9 Jul 2025 15:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752075345; cv=none; b=EpI76XunO+tn0v1FAKhih5dGV911A+RyWn1Rxhvgvmh+sP+O+jEMzL2zTZjztTxT/WT8NWSSMe91u3D/61otUMIADULEu2GTpU6T+g9BISJacYtU2RQ6T0kF/rjmLllgahiANMlz24pPgprsL190Yd5/B9vT6GOKFRvvNYQHSEk=
+	t=1752075693; cv=none; b=smT8Yd8iJQ9j7LzNSeskYi6vT+4L+9/sOEgLl5bZLfWXhwsXXo98lmFl/wrkR3s6a4vmMFJV+yAUmelpZPjA8JURQFAYoFOlpMExDmWqDJWAOzStHD+yAjx8Wybuf35q5/31BYe85QgtGMYfP8+FtjdftBwiB2KLv+y3Qt5P4Mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752075345; c=relaxed/simple;
-	bh=4dZbLIHY8xb9heYI9d9GC4UZr096PDL6SmX3/sJuo9Y=;
+	s=arc-20240116; t=1752075693; c=relaxed/simple;
+	bh=l1IMqQamnOSUMauOz72BUd8fZaqfC+kM2xLZw+/ZgnI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GEI15mGyH6J6Qs+bmdf+lhoHKsD6Io+bJYnzcy/wWFh/9q2PcdzxtwDC1/5DM0zFMxxnWtAURSt5VHWfPPjr35i7spcI51aD2DI1ydzE0kL31wlbm4zBsgDALYBUJAKY5l7YEptjhX4C/FW3F2KiO9FkGMN2XHMkqRDq67TCaJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AIr9mZl1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEC9C4CEEF;
-	Wed,  9 Jul 2025 15:35:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752075345;
-	bh=4dZbLIHY8xb9heYI9d9GC4UZr096PDL6SmX3/sJuo9Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AIr9mZl11H36uOeryBS1Sgt42UPSTw3HaGRXvpJhFXrzAOXkgT8lUFXOAJt2Z1Ncj
-	 rXzfAiACf+2ULw8FVKgQmUJXZBNWEpxYTkbVA+hXQJvuSlH3PfZi9P8eaKRrL6KCn/
-	 GqewDMPXm+oZTJokQazepNZwAN0rP3ClyiGJC+fAu2f8W3n9v0y1GvSTmUidgrC97V
-	 beYxo7GIg0PqRMQm5SEVuef6Jw2YooH9QFFEFZ8g3Aj6YpSEd/k5QXfaQShGD4QlZk
-	 GbQ3QEraBd8VP3ei5172Ul6XcD4kT4pm6c+dAjBVzLNBbcso+SSxoBgnu+iGFiHGQW
-	 YnchECjmVFuNw==
-Date: Wed, 9 Jul 2025 17:35:41 +0200
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org, 
-	USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: Serious bug in HID core
-Message-ID: <rwo5cqptiqarvl7qhgapao2uld3aqs27llhtqm5crop3v3rx64@j7h64nqsv6rv>
-References: <c75433e0-9b47-4072-bbe8-b1d14ea97b13@rowland.harvard.edu>
- <drcvdlw2kpuvsbact2gy4hvqp2i3au3shv5ozp3qms7qdfvi7t@7jofrodxeimb>
- <e3a58c95-9501-4ec8-902e-2a73402d1fe3@rowland.harvard.edu>
- <5rkp3gbrqvsdgia57eyw65jnu4wmpx6sbk47kmv4akmz2q7nzz@clqgtjfk2qxk>
- <b18af9f1-e3d8-429a-b313-38cc279e0f87@rowland.harvard.edu>
+	 Content-Type:Content-Disposition:In-Reply-To; b=sPbTAJVXW4FmmIoYbQFw+yPRIprP6MWXSZyKxww39NhrWDxVmPW2CFiKhsM7cvJRj1fwd5iY3r6zGErZxnzdyJ/x6nfiEuT3/Hhjg93K95w41rh/fMY1+qX2IX3958tlQoAyIUqbNab/299v2jtBdqmpc3sqGqQpk6zYOKgre3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=hOgMkyJ8; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6f8aa9e6ffdso384746d6.3
+        for <linux-usb@vger.kernel.org>; Wed, 09 Jul 2025 08:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1752075689; x=1752680489; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7+8lINShdvup+8jB4CEo5zDF19kEcona9FuXtnWhTyA=;
+        b=hOgMkyJ8ZDRxXFyR1Al8/ogDzxRuxjEYlso9jmZIX7W7SLF+5gY+8Oef25Ah1cnYuG
+         ja6MumEPbmN5MRGfhz4GKAlRKn8zpCrG7EYxEvxzOQ/AUwycRdAN2N3XzEokCBDap+7e
+         w+LiX7zOb2+j0gqxNjMDLDf/FuKcrT8BQOoOdypjcPbwp6GSgfTZFQkqz7icgg0h09iF
+         fUkT/idtzpx5e4HS2sRyAvRxa8peJ+yAO7dY/u6n2RQP4bHqI5CyBfkw8fP5ZAo0/Lgi
+         tn9U+nHcuWOoh0vb7dkrcyqqf7qsObOd7HRshbGXaWLjj1bvf/h1rcW5SWul8RnFUDjf
+         TxKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752075689; x=1752680489;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7+8lINShdvup+8jB4CEo5zDF19kEcona9FuXtnWhTyA=;
+        b=ASlscwPDPVKiYE2MCRa6+nYDRt8HFWvj/p0amSHSvfoiji3E9vPbopUyN/YVzOKhQz
+         H7HsqW+e3AYidqzg38BhmJol240G1ItXiXd9yk/BDJoZYTK5tPzt56mXLJ+46irwkJzO
+         d01j6UkSCnipAUG8vMPtxz0ncOrB261nRFh8/a0YuD3f2wy1yAWCI/EgzV01K1xi+AmU
+         TqM4DDQOAHKwWs4FeHZh99w82cqv3kMNdkPNlapUAwfv3lJF8jpIe89r1IPvAK2erc+p
+         FmHwAqVCoYN+6NIxyRPKpM4RVUAA481KVXqMbycMxsKmRd2ZmkFtGxSfYZqZAFZ+7JSq
+         bYiw==
+X-Forwarded-Encrypted: i=1; AJvYcCWvsIz0pFZAuHYeDG+1iym+ioJT6znM3TBpjxs1svI/2CZF1A1Ro5ONq25Ftm73g+1/wMKkmkKl2tI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyENy2jDX+Z0mtZNQx8YR1qQoxL2ta/B203RPd9isp9HD677YLc
+	bAZhRsf1+Wc5xey+l8Kwcwas+kCjeWcDW3x4F7N1zqbUWCFYTcWacJY6CptuUsCXiQ==
+X-Gm-Gg: ASbGncv2qjOYTU1cfSf6XoJxw5TnevR7uVzVO8VzhYdGWXWjXwFFtqyaw6dwiNyuEGZ
+	BYL9Da8SSGnFSkTxsKT8seA2FiSA5dZVJ39OISHKKgNu5kWOerOzC/Of4jbmJxlPYiAVVoSwKGq
+	Obn62XLpGl0o1psWB2hFFQIqAgr8faEF9E1bS13+yyYjTe2XqhRavNdx6/lm99db+Speioko8Yo
+	E4MG4QxsvA18oO8B1BDmXOkgxY7FgZtf1Ee0Retb5Na2ehBUZ+aO9PTDWzj8m2H7D8nhLcMsO2S
+	UrnN7pVXJco1BO9eG8ahuDI03JsGnv8FP6XY1ymALfHxfc0px7MI8PJmIgyB3HimCeFHSQtyVBq
+	9WpN+teZAjdoKMKw=
+X-Google-Smtp-Source: AGHT+IFQ8reysvGiDHB9SlFWV74GS4KL17/ACFp3PeDv69dK0w4A50NNV0ufOCxkqgR1vs+8lKQAmg==
+X-Received: by 2002:a05:6214:3d01:b0:702:c150:46c2 with SMTP id 6a1803df08f44-7048b8d8da6mr44190726d6.10.1752075689343;
+        Wed, 09 Jul 2025 08:41:29 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-704831532b6sm23936286d6.101.2025.07.09.08.41.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jul 2025 08:41:28 -0700 (PDT)
+Date: Wed, 9 Jul 2025 11:41:26 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: syzbot <syzbot+592e2ab8775dbe0bf09a@syzkaller.appspotmail.com>,
+	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	USB list <linux-usb@vger.kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [syzbot] [kernel?] INFO: task hung in uevent_show (2)
+Message-ID: <1d471e25-6671-4cb2-a2c9-af96c2b4e13d@rowland.harvard.edu>
+References: <686e7698.050a0220.c28f5.0006.GAE@google.com>
+ <79f634db-c149-4220-b8d4-0fff2c6b6a01@I-love.SAKURA.ne.jp>
+ <e064a3e4-ae70-4a24-ba5e-1bb8c7971f23@rowland.harvard.edu>
+ <39f312fa-d461-4377-b809-50c8a7188f6b@I-love.SAKURA.ne.jp>
+ <dd932df4-2a13-4a5c-a531-376065f87391@rowland.harvard.edu>
+ <43189e93-2cad-429a-a604-15bf5cc95e43@I-love.SAKURA.ne.jp>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,126 +95,43 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b18af9f1-e3d8-429a-b313-38cc279e0f87@rowland.harvard.edu>
+In-Reply-To: <43189e93-2cad-429a-a604-15bf5cc95e43@I-love.SAKURA.ne.jp>
 
-On Jul 09 2025, Alan Stern wrote:
-> On Wed, Jul 09, 2025 at 10:44:35AM +0200, Benjamin Tissoires wrote:
-> > On Jul 08 2025, Alan Stern wrote:
-> > > On Tue, Jul 08, 2025 at 05:51:08PM +0200, Benjamin Tissoires wrote:
-> > > > The second one would need a little bit more understanding of the fake
-> > > > report descriptor provided by syzbot.
-> > > 
-> > > I suppose we can get the information from syzbot if it's really 
-> > > necessary.  But it seems to be a minor point.
+On Thu, Jul 10, 2025 at 12:33:00AM +0900, Tetsuo Handa wrote:
+> On 2025/07/10 0:19, Alan Stern wrote:
+> > On Wed, Jul 09, 2025 at 11:44:46PM +0900, Tetsuo Handa wrote:
+> >> On 2025/07/09 23:27, Alan Stern wrote:
+> >>> Which of these three BUG_ON's did you hit, and where did you hit it?
+> >>
+> >> kernel BUG at ./include/linux/usb.h:1990!
+> >>
+> >> matches the BUG_ON(endpoint > 0xF) line. The location is shown below.
+> >>
+> >> Call Trace:
+> >>  <TASK>
+> >>  hub_configure drivers/usb/core/hub.c:1717 [inline]
+> >>  hub_probe+0x2300/0x3840 drivers/usb/core/hub.c:2005
 > > 
-> > Well, to me it's important because I can get an easier reproducer and
-> > add this corner case in the HID test suite :) Not to mention the
-> > understanding on how we can get to this corner case.
-> 
-> I can get it for you if you really want to see it.  It's just a question 
-> of asking syzbot to run the reproducer with a patch that prints all the 
-> report descriptors.
-
-I would very much appreciate that :)
-
-> 
-> Presumably this is just an ordinary output report descriptor containing 
-> no fields (or usages, or whatever they're called).  Even if it isn't, I 
-> would expect any such output report to trigger the bug.
-
-That's where things are weird. If the report would have been empty, the
-code that changes the wheel resolution should never be run, because that
-code relies on a specific usage to be set on a feature report.
-
-But if a usage is set, then the report size should be greater than 0...
-
-> 
-> > > > The first byte should always be reserved to the report ID, and is
-> > > > populated by 0 by hid-core when the report ID is not in use.
-> > > 
-> > > Then why does hid_output_report() do this:
-> > > 
-> > > 	if (report->id > 0)
-> > > 		*data++ = report->id;
-> > > 
-> > > ?  The first byte is not reserved for the ID when the ID is 0.  
-> > > According to what you said, the assignment should be unconditional.  
-> > > Isn't that a genuine bug?
+> > Those line numbers are completely different from the code I have.  For 
+> > example, line 2005 in hub.c is part of the hub_ioctl() function, not 
+> > hub_probe().
 > > 
-> > In my mind, hid_output_report() is doing the correct thing: it fills the
-> > provided buffer with the data the device is expected to receive.
-> > 
-> > However, the HID subsystem convention is that when accessing the low
-> > level driver, the first byte is always reserved to the report ID, even
-> > if it's null and should be ignored by the device.
-> > 
-> > So I think one of the problems is that __hid_request() should actually
-> > shifts it's buffer by one in case the report ID is 0, to reserve the
-> > first byte for the report ID. Likewise, if the report ID is 0, the len
-> > variable should be incremented.
+> > Exactly what version of the kernel source are you using for your test?
 > 
-> In other words, in __hid_request() we should change:
+> It is current linux.git tree.
 > 
-> 	if (reqtype == HID_REQ_SET_REPORT)
-> 		hid_output_report(report, buf);
-> 
-> to:
-> 
-> 	if (reqtype == HID_REQ_SET_REPORT) {
-> 		/*
-> 		 * If report->id is 0, the report ID byte is not counted by
-> 		 * hid_report_len() and not reserved by hid_output_report(),
-> 		 * so we have to do those things here.
-> 		 */
-> 		if (report->id == 0) {
-> 			++len;
-> 			buf[0] = 0;
-> 			hid_output_report(report, buf + 1);
-> 		} else {
-> 			hid_output_report(report, buf);
-> 		}
-> 	}
-> 
-> Right?
+>   https://elixir.bootlin.com/linux/v6.16-rc5/source/drivers/usb/core/hub.c#L1717
+>   https://elixir.bootlin.com/linux/v6.16-rc5/source/drivers/usb/core/hub.c#L2005
 
-yeah, that's roughly what I did in 2/3. If you prefer this approach
-because more explicit, I can take your patch instead.
+Okay, I see what your problem is.
 
-> 
-> > > And shouldn't the length computed by hid_alloc_report_buf() be one 
-> > > larger than it is when the ID is 0?
-> > 
-> > Yes, that seems to be correct, but I believe we never had the issue
-> > because this function already allocates 7 extra bytes for implement() to
-> > be working (see drivers/hid/hid-steam.c comment in steam_recv_report()
-> > for a similar conclusion).
-> 
-> Hmmm.  The comment in hid_alloc_report_buf() says that implement() 
-> operates on 8-byte chunks.  Do those chunks start at the beginning of 
-> the buffer or at the beginning of the report data (i.e., the second byte 
-> of the buffer)?  In the latter case the function should allocate an 
-> extra 8 bytes, not 7.
+The bEndpointAddress field of the endpoint descriptor is not just the 
+endpoint's number.  It also includes the endpoint's direction in bit 7 
+(0 for OUT, 1 for IN).
 
-implement() are per field. So we need 7 extra bytes after the latest
-field in the report. If we shift the report by one, we then need 8 extra
-bytes, not 7. This should be fixed in patch 1/3.
+__create_pipe() doesn't bother to mask out the direction bit because bit 
+22 of the pipe value (where the direction bit ends up after it has been  
+shifted left by 15) isn't used for anything.
 
-> 
-> > I can try to provide a series today for fixing all of this mess. But I
-> > must confess that I'm currently swamped for the next 2 weeks. Yay for me
-> > then :(
-> > 
-> > [side note: I took the c reproducer, compiled it locally but this did
-> > not triggered the bug... Given that many of the individual patches from
-> > the series will potentially fix the bug (multiple layers of fixing),
-> > it's a little bit sad I can not reproduce locally.]
-> 
-> I can send a patch that does the change shown above, if syzbot's testing 
-> shows that it fixes the bug.  That ought to help lighten your load.
-
-Thanks. But as you noticed I've already send one partial series, at
-least to fix the buffer underflow.
-
-Cheers,
-Benjamin
+Alan Stern
 
