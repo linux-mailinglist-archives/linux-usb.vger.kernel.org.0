@@ -1,1099 +1,230 @@
-Return-Path: <linux-usb+bounces-25685-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25686-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A36E0B00553
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 16:34:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F115B0062D
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 17:15:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B3FE7ADD6D
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 14:33:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DC4064375E
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 15:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B41272800;
-	Thu, 10 Jul 2025 14:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322102749F2;
+	Thu, 10 Jul 2025 15:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RWfwBCId"
+	dkim=pass (2048-bit key) header.d=ndigital.com header.i=@ndigital.com header.b="ReOGKDmg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from CAN01-YT3-obe.outbound.protection.outlook.com (mail-yt3can01on2096.outbound.protection.outlook.com [40.107.115.96])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AD4155389;
-	Thu, 10 Jul 2025 14:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752158065; cv=none; b=vCyXcArc+IMaOLM8mXZtNI/BaF+nRjwp9VJkzoSOtddJk6rknvFUXBYwtMhnsStgNxXLTJCd52vsl3cv3bjxUY8fnF/WnckgdJWaP/p9K0+QhpDBh9Y2qL2vOd5eFixBD7ANEnXuajlb6GsTJIJGZYNFx6XmkVVBGh1tE6YdRmI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752158065; c=relaxed/simple;
-	bh=vvNLuWF2Ptxi81KiN0PijNALLfVHPhVkStgPCPMPw+M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VgBJzZs2h/WlyS4zOr4DRys2Vhp9oBsdSlb0CQ8tynYGwO9PHCRk/tXrJCIibDldPLWRn/oSiB+BCAP+baukDP//T+lT7By2eW3fJ/hZTtwjynWfdKESO8upgNeN5HHls55893zSpjGMtoM0Kc7V0/9z7FgrF2U2Fk0UPkVrUV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RWfwBCId; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752158062; x=1783694062;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vvNLuWF2Ptxi81KiN0PijNALLfVHPhVkStgPCPMPw+M=;
-  b=RWfwBCIdcENQGRT3mi6aryinSFoVghzD5q48nTI8LX5+H/0MT287uG6/
-   2eQzXgEb1IeImVPz4+ypNTJF6mmCHD+pBr2ORoqb+G4y2mq/NTGlB1rdt
-   3rDyHTX0eo6Lom/riUSwc/fzwPZ0rsa0NF0xEVFqv3or/C5ux509xjyAO
-   /l0TEcKiJAoTsOAvG7hOr8u33tXG3dgp+4KbzxZ5WR0Y5S1WOkbC6rwOT
-   naCTs4B1OR82ImnNKzTQEGSnJQ2a53ro2aT47pMJDFTcv9qhEmvpPSZip
-   NmNO6moi9iemmsIyJZML123kxggrpjO/4QyJ6AukYMNc4EI2SIihZ06ih
-   w==;
-X-CSE-ConnectionGUID: 2bdCgwY5S5u+Pn3g7rXX1A==
-X-CSE-MsgGUID: E45tt5PoSWei1F4U8JJrHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11490"; a="65503113"
-X-IronPort-AV: E=Sophos;i="6.16,300,1744095600"; 
-   d="scan'208";a="65503113"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 07:34:21 -0700
-X-CSE-ConnectionGUID: 1KMbaTfqTT26KXbfUs8aFQ==
-X-CSE-MsgGUID: Qd+cE2qhRDm2DK4NDlRpkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,300,1744095600"; 
-   d="scan'208";a="156824670"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 10 Jul 2025 07:34:19 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uZsLo-00058R-2Y;
-	Thu, 10 Jul 2025 14:34:16 +0000
-Date: Thu, 10 Jul 2025 22:33:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ryan Mann <rmann@ndigital.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"johan@kernel.org" <johan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8514274670;
+	Thu, 10 Jul 2025 15:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.115.96
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752160340; cv=fail; b=Fbff5LDg2n0hhQkcYqA2VBM7idmJnplXmbEPdzmWfJ27+YbQLlp533Y6VZV8Rn+6X/DY3dGBoZPVCP/yoz3qoT2Bfbxekm4nurjvU7j5M5J3nqvw1pN1d+D/CTvWGzGyUh2Pk76nD9SuxEyKQIsnGt6V39GzRRVTtrwfpsgZMbA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752160340; c=relaxed/simple;
+	bh=5DidqyAfCefXktjpPuWWC2L8FoE8i8x1RGTMngiq4fU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=KlXzJxoK4i8KNxOe7j3Rum6jAcl5WN8eWSWFoCkujIeqpI6KTrGwzYfe9BW0i8LXKFsxtEWum1RzzXCR/Gm7roswPoITL1wCibsOvwk5voFZAUPAy8Xmtj3JQuenfeUlNCF8GhAMRr0TnqowpvFLB7O7tVf724juqtZ0n2I1YRs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ndigital.com; spf=pass smtp.mailfrom=ndigital.com; dkim=pass (2048-bit key) header.d=ndigital.com header.i=@ndigital.com header.b=ReOGKDmg; arc=fail smtp.client-ip=40.107.115.96
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ndigital.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndigital.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Fg05A+ehHT1czLt5quMemOHtjEfKqoN+Ge/gU/ASJl0/N1pgqSDriTUbVcXOujOn2kABnqn1OPuoxmN1TDTrAqvWDffJ2pvFKNi4BE5gsyXyYXUuTArmMxQE091v8dDK/sOR4bSxb1/XH+m2w5q7oCpkAlKnVOR2brt8HKnjTRm73A7OGw19D+h9tF90bPBr2A77DVmtnZYlV4eZIUoI2YAqbePUBW8AXtMgQRLmbYtPMacUt6fzVaBDDuejBy8RQVoVswasPXGL6GT1GQDq0wepJ4xRd9BnubykpZ+vJJgELXxjrz3N9MN1mM+kxqgeEFsyqBM+UO1VsDkHMf7X7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+Gbjmk56525fJbSU+vhO0FnHAKSemeY430GD+7OeQ+4=;
+ b=vLhenHEogSkT/9mvbt6Lbnsax5FW5v768bpTxwfpg1kpvNk0TshmENgE4IiLGhWFkzVdpv+ZlHU6/qPTp+sQsiIkJ+kvuPH6dgzZcgckCHbwcDMbLO6JQSWduDtOxmXXINRWzp/O1HA8sYXgA54S+8kXzJZt+8ubR0caIljPTxtGNnpzZFQaMY009Sqh/u1LmpPHHB6fBfEk/o1c7VZ5wXddd1BJewmTYJLkZWKM15qQqz/sAoa1G0gwfqyKnd2PW8zxXRnBAD16JCVTcg4V9hu3XX3sYv7cvftvDhyE2R5oEjPz01WAdooc/cyi81G9DQ0OSPcMSt2fLA2cOnE1PQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=ndigital.com; dmarc=pass action=none header.from=ndigital.com;
+ dkim=pass header.d=ndigital.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ndigital.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+Gbjmk56525fJbSU+vhO0FnHAKSemeY430GD+7OeQ+4=;
+ b=ReOGKDmgET3wAwA73d9rZTy8NmoSU2BXk3GdJJWVsrFaTqJkI64wcoRJ6q+NxI5tD/HeHqBjfp2Cn3l+xThkpFzw8aTJLJSqu+B5ykbKz1AL7jKl7K1RdTGD45m9UquFeEzfShL4e5bhCywVSCxrrVyCujHsSaUAdPd787M7uvAaZqoBhqRsNdjEkjcHkXW9msI8K3RWN7omCTFOJYJgs+HZiuyuBikmmUldAmOU9PJt/ivANHzIs5N1hIQs3l7EuF31quENOy3K5AdtgEKKnqmoW59v1ojbFJy6bOoOgS2y+s7oL5v22CF8svP0M/Tjwr2GEIBPnjGfXO1qBiCQfw==
+Received: from YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:27::5)
+ by YT4PR01MB10550.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:107::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.30; Thu, 10 Jul
+ 2025 15:12:16 +0000
+Received: from YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::206e:a5af:7f5f:76a3]) by YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::206e:a5af:7f5f:76a3%4]) with mapi id 15.20.8901.028; Thu, 10 Jul 2025
+ 15:12:15 +0000
+From: Ryan Mann <rmann@ndigital.com>
+To: kernel test robot <lkp@intel.com>, "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>, "johan@kernel.org" <johan@kernel.org>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
 	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5] NDI FTDI USB driver support
-Message-ID: <202507102257.nmqBkGkG-lkp@intel.com>
-References: <YQXPR01MB498735732651163477C995B9DF49A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
+Subject: RE: [PATCH v5] NDI FTDI USB driver support
+Thread-Topic: [PATCH v5] NDI FTDI USB driver support
+Thread-Index: Advw2GRSB9Yv2CEkQnuozIy7DI7+4gAzy7yAAAEwwKA=
+Date: Thu, 10 Jul 2025 15:12:15 +0000
+Message-ID:
+ <YQXPR01MB498771A8FA494019650FDBBFDF48A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
+References:
+ <YQXPR01MB498735732651163477C995B9DF49A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
+ <202507102257.nmqBkGkG-lkp@intel.com>
+In-Reply-To: <202507102257.nmqBkGkG-lkp@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=ndigital.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: YQXPR01MB4987:EE_|YT4PR01MB10550:EE_
+x-ms-office365-filtering-correlation-id: 06aaa721-56d2-4b11-2c9b-08ddbfc4279c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|376014|38070700018|7053199007;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?q5BNKC+oHT+pX6bFzGNTwFjq1L7oZIxCHNtDiN9CsA9bDmmlekeJXFc4XxdJ?=
+ =?us-ascii?Q?AkEsVIryDskexmxpma1vM1l40XRQHRFeaoqgypitYeR5fQw6/b3UVIB6YqUK?=
+ =?us-ascii?Q?JcORG6dyxf/ZBBsMnb2VYR6effW7oQPj4Gq8d6PywxRJ5LPkIZTXb5P4X256?=
+ =?us-ascii?Q?YSxSHIW2sbORNPT0hBuuZyDvBt38VdqGholUqEeAOZaWDR9B/9KwqF36sXb4?=
+ =?us-ascii?Q?o8iugRnhgduEJPWH1H1qQlvLUBKwO3Ah/uVYnCXHW/MtoiefAZ3HfApJe+bj?=
+ =?us-ascii?Q?Alv9ryGmST/v/D/b7n1/sR5OEYxMcd9lkOaEGoaZkxN9hVVbBiYvysPFHvJO?=
+ =?us-ascii?Q?mAg0qaEVtCyJOz7CDxPkLIWPNzNny9/4B5teNixFke0gQH1bdWfjSXUBeJQ/?=
+ =?us-ascii?Q?bIvPT/Btr7txtoL0hyADTuZa0QEsJIfdcuZcTUW2/pKy8lkGW6v1y+/WQdYI?=
+ =?us-ascii?Q?S+LshLNjIS5W9DtyuiiBUTrinldo0bFlKq1djY5qktQWD6jxijG9TgmINuWk?=
+ =?us-ascii?Q?RVM8vj8j20Y1i8WX/ydmnE5OVmhvfTKRz2rZZPKvIelBkDXFEhuleQ4av7mF?=
+ =?us-ascii?Q?sf0lx9Ucmzpw/P8iyELZuZePFoq5aL2K+wk0M5+yZv/VB1yjgKuto64RpX7L?=
+ =?us-ascii?Q?KdmX3FWS5FGPVALXQsmtgIw/QcPQiYJNDsRi+kXF1nCBiHIjKwOLX/UMsyG0?=
+ =?us-ascii?Q?Vibfi9ZHkwRu8zJ6z+Xh9NshE0R+47GK7CNQBG9bcAgFBgGQSa82EP3shIAt?=
+ =?us-ascii?Q?jZFCgU5QR0cQVTZTvDlq0EjS1CfKlVpLI5VXhYDm6dR2P5EL41qzFc+2nWd0?=
+ =?us-ascii?Q?kqBpwrlNGTUeSKPOt8kZC7VbE1lFpIAFrqNLmnIomZ61Qyk1XwEXw6fNF2FQ?=
+ =?us-ascii?Q?d68uZSgY86GZtWdFHwY6O2h1jDvzZKytsXhapF5bTGqh0Cq1NH6D/MsvTHkY?=
+ =?us-ascii?Q?o1UiIWDU2ojlbQFf370fYgUr7Et4oeIjYKYqZ2vinVMLq4ukoKkKzMXA8Ssr?=
+ =?us-ascii?Q?CxVWY/4kd9QyhuNwtvST+zcyrL1vVhuZsoC3Z9UhDzveuLFR38WHIY+Jn7fk?=
+ =?us-ascii?Q?+xNlNSGq0xDboJt/C3onxnxBRBUkiUDonzlWbB3VMy3QE0MaftBSVnAPkVlb?=
+ =?us-ascii?Q?bY9LajTSY87j/mBHDzzA/NCJiWOBnpPBjyxFjLAObgK0oHV4YAE4MKjcxeSj?=
+ =?us-ascii?Q?bEVAHFkEp9FkagHhIlnEP0RwfM02jgxxzU+1hXi3yAp2weiwdEeISMInKDlr?=
+ =?us-ascii?Q?+6Q/d37vGX8tDqcNHYpdDO+rzOCSwt2xB6WfiQzNn4a5a8l70yHEEOAtv6R7?=
+ =?us-ascii?Q?Ef0DP9Vm3T+ruRvRZc4thWlZt1EQ1Qb57MIqpnBy4eJlxeR6TeoXqAheIRQI?=
+ =?us-ascii?Q?08zYREzNl/LN60Dij6V34CkM/BNykaFQjHCFkiw8t+xUpSV1CPQSNpuAuLgH?=
+ =?us-ascii?Q?3QI7EI8AUZA=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018)(7053199007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?nQhUNIDUXTcBBZHKGg15aubAC91JBYFiJJapgVBL0P2JHY6csO1GPMLHv9+E?=
+ =?us-ascii?Q?qOkfxjJLkl2mRQxRI43G0CvUyLzZAuDCZNxsWb/93hRJBvTGpY0h2vE1QCwo?=
+ =?us-ascii?Q?pcrIS5GEIT7eOEcJ2XuHGifwRT4pjRzLai3PY0oVWHgdNmhivWq8BVIGgM9d?=
+ =?us-ascii?Q?IMCwzuGjCKjmMJ9y9W/kVaYInhaz2+Hp/1p5ovPHxVEVbKjV2oXF5DQIIi1A?=
+ =?us-ascii?Q?bol9xDBkrwBEWC2hPMtvQk6F3SORD3KiYCUM9ehkLXF5IT01INq3CR9nbPIV?=
+ =?us-ascii?Q?sjw8OTXmQ+YUrhF70qtwRLnRIC3PkyXOlkt7GfGdA7e8A0x4NJWipua6CbwZ?=
+ =?us-ascii?Q?JojnU8qzNqi3gKDpctx0cJn/RBC/zZBSvwy0i+lyTpuYFAzyah/ED2LQQRFe?=
+ =?us-ascii?Q?wQ6b+SBMTu65LJQ3LTZz/e9DTeokv6ttdbrHoXXNQEc5I7MAxuU/jE9VyEGZ?=
+ =?us-ascii?Q?r4apVX84gSCHgy9ksc25BPA6LmBCVD0ufROMnqb2zuvxov9To9hfROUHzS9S?=
+ =?us-ascii?Q?TMVhc2tf+cRQDLjEKTGC6ul7IcbMBVLSyN1ppu8fzh7MIJ7gNOee7Fgvf9zo?=
+ =?us-ascii?Q?BIMAcfhhK3eRTfUbQLrQX+YScnj37ztO2a719IyzSaPJ/uAIykatJK1FKKeD?=
+ =?us-ascii?Q?yo2s/Je/gqtEvW+DRW3hOVJQMd6DocwMU5FWKVu9Dw3Gp4V1n4t4ZkFWQR6D?=
+ =?us-ascii?Q?8FV1Qak46GbrUCFQJQl8xRvXj71mKUSGVRyPc/0mk4iI8PaC1HaeIo4i3C94?=
+ =?us-ascii?Q?ozZiDF+qooUXHLu6lL9b+HxC1K2/2QFIn6KHh/fuXDqCsaCub43RWxBBEQyb?=
+ =?us-ascii?Q?fYtpwRoFIQT0wl0jU1Yci0+UtMcto7sxWrpLnlI3djvo2AVSRaYsLhjrDsqt?=
+ =?us-ascii?Q?oD9EG1mfFOoSELIn60KU7ut0PHHL2odnoswkAQebDbBunqdKc8mDey8MwP9J?=
+ =?us-ascii?Q?It7vo3YM7glrUf3c7uZCzOlFHoaVELBylWfYyEBVo2kgsVzkLzeayfN2so49?=
+ =?us-ascii?Q?vDDwohT+5n3C49AXaDZvDvwFRFiY06V3jg5LwlfCWBI63MyA4SvlbTtt22/F?=
+ =?us-ascii?Q?dKfqXUfWPgDhMUMlvdy8/40ooZkECyBW3XTLrFEhnom/WOsOSy480xox3sXc?=
+ =?us-ascii?Q?ai92T6esaCirtII4BhU5LMghurnK0CT5VwklnbKCb0Y1cLYZmpnIfZ30ksLz?=
+ =?us-ascii?Q?EBzhSk94oQy/3wgdbBtJhsS9e1vQ9yEwwT6ZB6Oi1szuwU+lG4MEv4LS8HSC?=
+ =?us-ascii?Q?JG9YHaUdvwDnTTi53ZINNUOzvzWYKtitfwzhPkEaTRpm0uYKk+uH6QBGtrr0?=
+ =?us-ascii?Q?LtptyAYLoFPeR98nEQZsQBHjdm8Sv/SxDKtnPyZgqwT0tzVLXOk2jSBeigIt?=
+ =?us-ascii?Q?eXNBlWLKJ+mT+Wy2AkQiGw0YnMSUC9xcvC/iD+htajzKDCoMGROw7LZ08cD7?=
+ =?us-ascii?Q?Ulkpdh8WcZOsM37fFQR/4W9Tf9Ot5R/RCy+bwqqHbVJQBpi8QMH+RbhoaorH?=
+ =?us-ascii?Q?gHpgAn4US3X2xhEGSsPvLGFcso3VLIFkQ+sNeItwbd3daI28wPo483TP7Ld9?=
+ =?us-ascii?Q?32bn9rOZ8wKdcG9kumxVNjNX2PNHEoJ7iUsHez3n?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YQXPR01MB498735732651163477C995B9DF49A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
+X-OriginatorOrg: ndigital.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06aaa721-56d2-4b11-2c9b-08ddbfc4279c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2025 15:12:15.5147
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: fd6f7980-6d04-4a6f-86bf-8f6d0297dd2f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G7hFD/74DdmzttRlWSHBYORLWsrhiJz9YtH17aKq/X4LNfHIDkoZOaFU/cEoTG8UFJ5i3yMPJdoVOM6fHIOw+Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT4PR01MB10550
 
-Hi Ryan,
+> From: kernel test robot <lkp@intel.com>=20
+> Sent: Thursday, July 10, 2025 10:33 AM
+> To: Ryan Mann <rmann@ndigital.com>; gregkh@linuxfoundation.org; johan@ker=
+nel.org
+> Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev; linux-usb@vger.k=
+ernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v5] NDI FTDI USB driver support
+>=20
+> Hi Ryan,
+>=20
+> kernel test robot noticed the following build errors:
+>=20
+> [auto build test ERROR on johan-usb-serial/usb-next]
+> [also build test ERROR on linus/master v6.16-rc5 next-20250710]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>=20
+> url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Mann/NDI-FTDI=
+-USB-driver-support/20250709-215335
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.=
+git usb-next
+> patch link:    https://lore.kernel.org/r/YQXPR01MB498735732651163477C995B=
+9DF49A%40YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM
+> patch subject: [PATCH v5] NDI FTDI USB driver support
+> config: um-randconfig-002-20250710 (https://download.01.org/0day-ci/archi=
+ve/20250710/202507102257.nmqBkGkG-lkp@intel.com/config)
+> compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf=
+1a2591520c2491aa35339f227775f4d3adf6)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20250710/202507102257.nmqBkGkG-lkp@intel.com/reproduce)
+>=20
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202507102257.nmqBkGkG-lkp=
+@intel.com/
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+>    In file included from drivers/usb/serial/ftdi_sio.c:40:
+>    In file included from include/linux/usb.h:16:
+>    In file included from include/linux/interrupt.h:11:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from arch/um/include/asm/hardirq.h:5:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:12:
+>    In file included from arch/um/include/asm/io.h:24:
+>    include/asm-generic/io.h:1175:55: warning: performing pointer arithmet=
+ic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+>                                                      ~~~~~~~~~~ ^
+> >> drivers/usb/serial/ftdi_sio.c:806:15: error: use of undeclared identif=
+ier 'NDI_VID'
+>            { USB_DEVICE(NDI_VID, FTDI_NDI_EMGUIDE_GEMINI_PID),
+>                         ^
+>    1 warning and 1 error generated.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on johan-usb-serial/usb-next]
-[also build test ERROR on linus/master v6.16-rc5 next-20250710]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Mann/NDI-FTDI-USB-driver-support/20250709-215335
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
-patch link:    https://lore.kernel.org/r/YQXPR01MB498735732651163477C995B9DF49A%40YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM
-patch subject: [PATCH v5] NDI FTDI USB driver support
-config: um-randconfig-002-20250710 (https://download.01.org/0day-ci/archive/20250710/202507102257.nmqBkGkG-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250710/202507102257.nmqBkGkG-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507102257.nmqBkGkG-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/usb/serial/ftdi_sio.c:40:
-   In file included from include/linux/usb.h:16:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/usb/serial/ftdi_sio.c:806:15: error: use of undeclared identifier 'NDI_VID'
-           { USB_DEVICE(NDI_VID, FTDI_NDI_EMGUIDE_GEMINI_PID),
-                        ^
-   1 warning and 1 error generated.
-
-
-vim +/NDI_VID +806 drivers/usb/serial/ftdi_sio.c
-
-   139	
-   140	/*
-   141	 * The 8U232AM has the same API as the sio except for:
-   142	 * - it can support MUCH higher baudrates; up to:
-   143	 *   o 921600 for RS232 and 2000000 for RS422/485 at 48MHz
-   144	 *   o 230400 at 12MHz
-   145	 *   so .. 8U232AM's baudrate setting codes are different
-   146	 * - it has a two byte status code.
-   147	 * - it returns characters every 16ms (the FTDI does it every 40ms)
-   148	 *
-   149	 * the bcdDevice value is used to differentiate FT232BM and FT245BM from
-   150	 * the earlier FT8U232AM and FT8U232BM.  For now, include all known VID/PID
-   151	 * combinations in both tables.
-   152	 * FIXME: perhaps bcdDevice can also identify 12MHz FT8U232AM devices,
-   153	 * but I don't know if those ever went into mass production. [Ian Abbott]
-   154	 */
-   155	
-   156	
-   157	
-   158	/*
-   159	 * Device ID not listed? Test it using
-   160	 * /sys/bus/usb-serial/drivers/ftdi_sio/new_id and send a patch or report.
-   161	 */
-   162	static const struct usb_device_id id_table_combined[] = {
-   163		{ USB_DEVICE(FTDI_VID, FTDI_BRICK_PID) },
-   164		{ USB_DEVICE(FTDI_VID, FTDI_ZEITCONTROL_TAGTRACE_MIFARE_PID) },
-   165		{ USB_DEVICE(FTDI_VID, FTDI_CTI_MINI_PID) },
-   166		{ USB_DEVICE(FTDI_VID, FTDI_CTI_NANO_PID) },
-   167		{ USB_DEVICE(FTDI_VID, FTDI_AMC232_PID) },
-   168		{ USB_DEVICE(FTDI_VID, FTDI_CANUSB_PID) },
-   169		{ USB_DEVICE(FTDI_VID, FTDI_CANDAPTER_PID) },
-   170		{ USB_DEVICE(FTDI_VID, FTDI_BM_ATOM_NANO_PID) },
-   171		{ USB_DEVICE(FTDI_VID, FTDI_NXTCAM_PID) },
-   172		{ USB_DEVICE(FTDI_VID, FTDI_EV3CON_PID) },
-   173		{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_0_PID) },
-   174		{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_1_PID) },
-   175		{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_2_PID) },
-   176		{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_3_PID) },
-   177		{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_4_PID) },
-   178		{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_5_PID) },
-   179		{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_6_PID) },
-   180		{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_7_PID) },
-   181		{ USB_DEVICE(FTDI_VID, FTDI_USINT_CAT_PID) },
-   182		{ USB_DEVICE(FTDI_VID, FTDI_USINT_WKEY_PID) },
-   183		{ USB_DEVICE(FTDI_VID, FTDI_USINT_RS232_PID) },
-   184		{ USB_DEVICE(FTDI_VID, FTDI_ACTZWAVE_PID) },
-   185		{ USB_DEVICE(FTDI_VID, FTDI_IRTRANS_PID) },
-   186		{ USB_DEVICE(FTDI_VID, FTDI_IPLUS_PID) },
-   187		{ USB_DEVICE(FTDI_VID, FTDI_IPLUS2_PID) },
-   188		{ USB_DEVICE(FTDI_VID, FTDI_DMX4ALL) },
-   189		{ USB_DEVICE(FTDI_VID, FTDI_SIO_PID) },
-   190		{ USB_DEVICE(FTDI_VID, FTDI_8U232AM_PID) },
-   191		{ USB_DEVICE(FTDI_VID, FTDI_8U232AM_ALT_PID) },
-   192		{ USB_DEVICE(FTDI_VID, FTDI_232RL_PID) },
-   193		{ USB_DEVICE(FTDI_VID, FTDI_8U2232C_PID) ,
-   194			.driver_info = (kernel_ulong_t)&ftdi_8u2232c_quirk },
-   195		{ USB_DEVICE(FTDI_VID, FTDI_4232H_PID) },
-   196		{ USB_DEVICE(FTDI_VID, FTDI_232H_PID) },
-   197		{ USB_DEVICE(FTDI_VID, FTDI_FTX_PID) },
-   198		{ USB_DEVICE(FTDI_VID, FTDI_FT2233HP_PID) },
-   199		{ USB_DEVICE(FTDI_VID, FTDI_FT4233HP_PID) },
-   200		{ USB_DEVICE(FTDI_VID, FTDI_FT2232HP_PID) },
-   201		{ USB_DEVICE(FTDI_VID, FTDI_FT4232HP_PID) },
-   202		{ USB_DEVICE(FTDI_VID, FTDI_FT233HP_PID) },
-   203		{ USB_DEVICE(FTDI_VID, FTDI_FT232HP_PID) },
-   204		{ USB_DEVICE(FTDI_VID, FTDI_FT4232HA_PID) },
-   205		{ USB_DEVICE(FTDI_VID, FTDI_MICRO_CHAMELEON_PID) },
-   206		{ USB_DEVICE(FTDI_VID, FTDI_RELAIS_PID) },
-   207		{ USB_DEVICE(FTDI_VID, FTDI_OPENDCC_PID) },
-   208		{ USB_DEVICE(FTDI_VID, FTDI_OPENDCC_SNIFFER_PID) },
-   209		{ USB_DEVICE(FTDI_VID, FTDI_OPENDCC_THROTTLE_PID) },
-   210		{ USB_DEVICE(FTDI_VID, FTDI_OPENDCC_GATEWAY_PID) },
-   211		{ USB_DEVICE(FTDI_VID, FTDI_OPENDCC_GBM_PID) },
-   212		{ USB_DEVICE(FTDI_VID, FTDI_OPENDCC_GBM_BOOST_PID) },
-   213		{ USB_DEVICE(NEWPORT_VID, NEWPORT_AGILIS_PID) },
-   214		{ USB_DEVICE(NEWPORT_VID, NEWPORT_CONEX_CC_PID) },
-   215		{ USB_DEVICE(NEWPORT_VID, NEWPORT_CONEX_AGP_PID) },
-   216		{ USB_DEVICE(INTERBIOMETRICS_VID, INTERBIOMETRICS_IOBOARD_PID) },
-   217		{ USB_DEVICE(INTERBIOMETRICS_VID, INTERBIOMETRICS_MINI_IOBOARD_PID) },
-   218		{ USB_DEVICE(FTDI_VID, FTDI_SPROG_II) },
-   219		{ USB_DEVICE(FTDI_VID, FTDI_TAGSYS_LP101_PID) },
-   220		{ USB_DEVICE(FTDI_VID, FTDI_TAGSYS_P200X_PID) },
-   221		{ USB_DEVICE(FTDI_VID, FTDI_LENZ_LIUSB_PID) },
-   222		{ USB_DEVICE(FTDI_VID, FTDI_XF_632_PID) },
-   223		{ USB_DEVICE(FTDI_VID, FTDI_XF_634_PID) },
-   224		{ USB_DEVICE(FTDI_VID, FTDI_XF_547_PID) },
-   225		{ USB_DEVICE(FTDI_VID, FTDI_XF_633_PID) },
-   226		{ USB_DEVICE(FTDI_VID, FTDI_XF_631_PID) },
-   227		{ USB_DEVICE(FTDI_VID, FTDI_XF_635_PID) },
-   228		{ USB_DEVICE(FTDI_VID, FTDI_XF_640_PID) },
-   229		{ USB_DEVICE(FTDI_VID, FTDI_XF_642_PID) },
-   230		{ USB_DEVICE(FTDI_VID, FTDI_DSS20_PID) },
-   231		{ USB_DEVICE(FTDI_VID, FTDI_URBAN_0_PID) },
-   232		{ USB_DEVICE(FTDI_VID, FTDI_URBAN_1_PID) },
-   233		{ USB_DEVICE(FTDI_NF_RIC_VID, FTDI_NF_RIC_PID) },
-   234		{ USB_DEVICE(FTDI_VID, FTDI_VNHCPCUSB_D_PID) },
-   235		{ USB_DEVICE(FTDI_VID, FTDI_MTXORB_0_PID) },
-   236		{ USB_DEVICE(FTDI_VID, FTDI_MTXORB_1_PID) },
-   237		{ USB_DEVICE(FTDI_VID, FTDI_MTXORB_2_PID) },
-   238		{ USB_DEVICE(FTDI_VID, FTDI_MTXORB_3_PID) },
-   239		{ USB_DEVICE(FTDI_VID, FTDI_MTXORB_4_PID) },
-   240		{ USB_DEVICE(FTDI_VID, FTDI_MTXORB_5_PID) },
-   241		{ USB_DEVICE(FTDI_VID, FTDI_MTXORB_6_PID) },
-   242		{ USB_DEVICE(FTDI_VID, FTDI_R2000KU_TRUE_RNG) },
-   243		{ USB_DEVICE(FTDI_VID, FTDI_VARDAAN_PID) },
-   244		{ USB_DEVICE(FTDI_VID, FTDI_AUTO_M3_OP_COM_V2_PID) },
-   245		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0100_PID) },
-   246		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0101_PID) },
-   247		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0102_PID) },
-   248		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0103_PID) },
-   249		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0104_PID) },
-   250		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0105_PID) },
-   251		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0106_PID) },
-   252		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0107_PID) },
-   253		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0108_PID) },
-   254		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0109_PID) },
-   255		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_010A_PID) },
-   256		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_010B_PID) },
-   257		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_010C_PID) },
-   258		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_010D_PID) },
-   259		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_010E_PID) },
-   260		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_010F_PID) },
-   261		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0110_PID) },
-   262		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0111_PID) },
-   263		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0112_PID) },
-   264		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0113_PID) },
-   265		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0114_PID) },
-   266		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0115_PID) },
-   267		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0116_PID) },
-   268		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0117_PID) },
-   269		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0118_PID) },
-   270		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0119_PID) },
-   271		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_011A_PID) },
-   272		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_011B_PID) },
-   273		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_011C_PID) },
-   274		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_011D_PID) },
-   275		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_011E_PID) },
-   276		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_011F_PID) },
-   277		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0120_PID) },
-   278		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0121_PID) },
-   279		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0122_PID) },
-   280		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0123_PID) },
-   281		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0124_PID) },
-   282		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0125_PID) },
-   283		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0126_PID) },
-   284		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0127_PID) },
-   285		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0128_PID) },
-   286		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0129_PID) },
-   287		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_012A_PID) },
-   288		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_012B_PID) },
-   289		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_012C_PID) },
-   290		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_012D_PID) },
-   291		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_012E_PID) },
-   292		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_012F_PID) },
-   293		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0130_PID) },
-   294		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0131_PID) },
-   295		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0132_PID) },
-   296		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0133_PID) },
-   297		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0134_PID) },
-   298		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0135_PID) },
-   299		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0136_PID) },
-   300		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0137_PID) },
-   301		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0138_PID) },
-   302		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0139_PID) },
-   303		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_013A_PID) },
-   304		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_013B_PID) },
-   305		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_013C_PID) },
-   306		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_013D_PID) },
-   307		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_013E_PID) },
-   308		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_013F_PID) },
-   309		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0140_PID) },
-   310		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0141_PID) },
-   311		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0142_PID) },
-   312		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0143_PID) },
-   313		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0144_PID) },
-   314		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0145_PID) },
-   315		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0146_PID) },
-   316		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0147_PID) },
-   317		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0148_PID) },
-   318		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0149_PID) },
-   319		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_014A_PID) },
-   320		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_014B_PID) },
-   321		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_014C_PID) },
-   322		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_014D_PID) },
-   323		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_014E_PID) },
-   324		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_014F_PID) },
-   325		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0150_PID) },
-   326		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0151_PID) },
-   327		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0152_PID) },
-   328		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0153_PID) },
-   329		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0154_PID) },
-   330		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0155_PID) },
-   331		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0156_PID) },
-   332		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0157_PID) },
-   333		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0158_PID) },
-   334		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0159_PID) },
-   335		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_015A_PID) },
-   336		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_015B_PID) },
-   337		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_015C_PID) },
-   338		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_015D_PID) },
-   339		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_015E_PID) },
-   340		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_015F_PID) },
-   341		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0160_PID) },
-   342		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0161_PID) },
-   343		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0162_PID) },
-   344		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0163_PID) },
-   345		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0164_PID) },
-   346		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0165_PID) },
-   347		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0166_PID) },
-   348		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0167_PID) },
-   349		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0168_PID) },
-   350		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0169_PID) },
-   351		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_016A_PID) },
-   352		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_016B_PID) },
-   353		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_016C_PID) },
-   354		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_016D_PID) },
-   355		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_016E_PID) },
-   356		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_016F_PID) },
-   357		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0170_PID) },
-   358		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0171_PID) },
-   359		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0172_PID) },
-   360		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0173_PID) },
-   361		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0174_PID) },
-   362		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0175_PID) },
-   363		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0176_PID) },
-   364		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0177_PID) },
-   365		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0178_PID) },
-   366		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0179_PID) },
-   367		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_017A_PID) },
-   368		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_017B_PID) },
-   369		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_017C_PID) },
-   370		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_017D_PID) },
-   371		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_017E_PID) },
-   372		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_017F_PID) },
-   373		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0180_PID) },
-   374		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0181_PID) },
-   375		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0182_PID) },
-   376		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0183_PID) },
-   377		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0184_PID) },
-   378		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0185_PID) },
-   379		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0186_PID) },
-   380		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0187_PID) },
-   381		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0188_PID) },
-   382		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0189_PID) },
-   383		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_018A_PID) },
-   384		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_018B_PID) },
-   385		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_018C_PID) },
-   386		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_018D_PID) },
-   387		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_018E_PID) },
-   388		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_018F_PID) },
-   389		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0190_PID) },
-   390		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0191_PID) },
-   391		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0192_PID) },
-   392		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0193_PID) },
-   393		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0194_PID) },
-   394		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0195_PID) },
-   395		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0196_PID) },
-   396		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0197_PID) },
-   397		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0198_PID) },
-   398		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0199_PID) },
-   399		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_019A_PID) },
-   400		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_019B_PID) },
-   401		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_019C_PID) },
-   402		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_019D_PID) },
-   403		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_019E_PID) },
-   404		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_019F_PID) },
-   405		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01A0_PID) },
-   406		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01A1_PID) },
-   407		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01A2_PID) },
-   408		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01A3_PID) },
-   409		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01A4_PID) },
-   410		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01A5_PID) },
-   411		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01A6_PID) },
-   412		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01A7_PID) },
-   413		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01A8_PID) },
-   414		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01A9_PID) },
-   415		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01AA_PID) },
-   416		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01AB_PID) },
-   417		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01AC_PID) },
-   418		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01AD_PID) },
-   419		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01AE_PID) },
-   420		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01AF_PID) },
-   421		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01B0_PID) },
-   422		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01B1_PID) },
-   423		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01B2_PID) },
-   424		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01B3_PID) },
-   425		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01B4_PID) },
-   426		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01B5_PID) },
-   427		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01B6_PID) },
-   428		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01B7_PID) },
-   429		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01B8_PID) },
-   430		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01B9_PID) },
-   431		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01BA_PID) },
-   432		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01BB_PID) },
-   433		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01BC_PID) },
-   434		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01BD_PID) },
-   435		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01BE_PID) },
-   436		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01BF_PID) },
-   437		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01C0_PID) },
-   438		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01C1_PID) },
-   439		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01C2_PID) },
-   440		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01C3_PID) },
-   441		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01C4_PID) },
-   442		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01C5_PID) },
-   443		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01C6_PID) },
-   444		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01C7_PID) },
-   445		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01C8_PID) },
-   446		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01C9_PID) },
-   447		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01CA_PID) },
-   448		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01CB_PID) },
-   449		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01CC_PID) },
-   450		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01CD_PID) },
-   451		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01CE_PID) },
-   452		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01CF_PID) },
-   453		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01D0_PID) },
-   454		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01D1_PID) },
-   455		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01D2_PID) },
-   456		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01D3_PID) },
-   457		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01D4_PID) },
-   458		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01D5_PID) },
-   459		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01D6_PID) },
-   460		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01D7_PID) },
-   461		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01D8_PID) },
-   462		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01D9_PID) },
-   463		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01DA_PID) },
-   464		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01DB_PID) },
-   465		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01DC_PID) },
-   466		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01DD_PID) },
-   467		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01DE_PID) },
-   468		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01DF_PID) },
-   469		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01E0_PID) },
-   470		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01E1_PID) },
-   471		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01E2_PID) },
-   472		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01E3_PID) },
-   473		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01E4_PID) },
-   474		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01E5_PID) },
-   475		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01E6_PID) },
-   476		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01E7_PID) },
-   477		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01E8_PID) },
-   478		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01E9_PID) },
-   479		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01EA_PID) },
-   480		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01EB_PID) },
-   481		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01EC_PID) },
-   482		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01ED_PID) },
-   483		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01EE_PID) },
-   484		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01EF_PID) },
-   485		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01F0_PID) },
-   486		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01F1_PID) },
-   487		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01F2_PID) },
-   488		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01F3_PID) },
-   489		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01F4_PID) },
-   490		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01F5_PID) },
-   491		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01F6_PID) },
-   492		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01F7_PID) },
-   493		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01F8_PID) },
-   494		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01F9_PID) },
-   495		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01FA_PID) },
-   496		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01FB_PID) },
-   497		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01FC_PID) },
-   498		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01FD_PID) },
-   499		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01FE_PID) },
-   500		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_01FF_PID) },
-   501		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_4701_PID) },
-   502		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9300_PID) },
-   503		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9301_PID) },
-   504		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9302_PID) },
-   505		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9303_PID) },
-   506		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9304_PID) },
-   507		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9305_PID) },
-   508		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9306_PID) },
-   509		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9307_PID) },
-   510		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9308_PID) },
-   511		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9309_PID) },
-   512		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_930A_PID) },
-   513		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_930B_PID) },
-   514		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_930C_PID) },
-   515		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_930D_PID) },
-   516		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_930E_PID) },
-   517		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_930F_PID) },
-   518		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9310_PID) },
-   519		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9311_PID) },
-   520		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9312_PID) },
-   521		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9313_PID) },
-   522		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9314_PID) },
-   523		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9315_PID) },
-   524		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9316_PID) },
-   525		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9317_PID) },
-   526		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9318_PID) },
-   527		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_9319_PID) },
-   528		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_931A_PID) },
-   529		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_931B_PID) },
-   530		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_931C_PID) },
-   531		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_931D_PID) },
-   532		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_931E_PID) },
-   533		{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_931F_PID) },
-   534		{ USB_DEVICE(FTDI_VID, FTDI_PERLE_ULTRAPORT_PID) },
-   535		{ USB_DEVICE(FTDI_VID, FTDI_PIEGROUP_PID) },
-   536		{ USB_DEVICE(FTDI_VID, FTDI_TNC_X_PID) },
-   537		{ USB_DEVICE(FTDI_VID, FTDI_USBX_707_PID) },
-   538		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2101_PID) },
-   539		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2102_PID) },
-   540		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2103_PID) },
-   541		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2104_PID) },
-   542		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2106_PID) },
-   543		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2201_1_PID) },
-   544		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2201_2_PID) },
-   545		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2202_1_PID) },
-   546		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2202_2_PID) },
-   547		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2203_1_PID) },
-   548		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2203_2_PID) },
-   549		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2401_1_PID) },
-   550		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2401_2_PID) },
-   551		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2401_3_PID) },
-   552		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2401_4_PID) },
-   553		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2402_1_PID) },
-   554		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2402_2_PID) },
-   555		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2402_3_PID) },
-   556		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2402_4_PID) },
-   557		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2403_1_PID) },
-   558		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2403_2_PID) },
-   559		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2403_3_PID) },
-   560		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2403_4_PID) },
-   561		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2801_1_PID) },
-   562		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2801_2_PID) },
-   563		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2801_3_PID) },
-   564		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2801_4_PID) },
-   565		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2801_5_PID) },
-   566		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2801_6_PID) },
-   567		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2801_7_PID) },
-   568		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2801_8_PID) },
-   569		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2802_1_PID) },
-   570		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2802_2_PID) },
-   571		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2802_3_PID) },
-   572		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2802_4_PID) },
-   573		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2802_5_PID) },
-   574		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2802_6_PID) },
-   575		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2802_7_PID) },
-   576		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2802_8_PID) },
-   577		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803_1_PID) },
-   578		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803_2_PID) },
-   579		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803_3_PID) },
-   580		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803_4_PID) },
-   581		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803_5_PID) },
-   582		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803_6_PID) },
-   583		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803_7_PID) },
-   584		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803_8_PID) },
-   585		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803R_1_PID) },
-   586		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803R_2_PID) },
-   587		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803R_3_PID) },
-   588		{ USB_DEVICE(SEALEVEL_VID, SEALEVEL_2803R_4_PID) },
-   589		{ USB_DEVICE(IDTECH_VID, IDTECH_IDT1221U_PID) },
-   590		{ USB_DEVICE(OCT_VID, OCT_US101_PID) },
-   591		{ USB_DEVICE(OCT_VID, OCT_DK201_PID) },
-   592		{ USB_DEVICE(FTDI_VID, FTDI_HE_TIRA1_PID),
-   593			.driver_info = (kernel_ulong_t)&ftdi_HE_TIRA1_quirk },
-   594		{ USB_DEVICE(FTDI_VID, FTDI_USB_UIRT_PID),
-   595			.driver_info = (kernel_ulong_t)&ftdi_USB_UIRT_quirk },
-   596		{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_1) },
-   597		{ USB_DEVICE(FTDI_VID, PROTEGO_R2X0) },
-   598		{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_3) },
-   599		{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_4) },
-   600		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E808_PID) },
-   601		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E809_PID) },
-   602		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E80A_PID) },
-   603		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E80B_PID) },
-   604		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E80C_PID) },
-   605		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E80D_PID) },
-   606		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E80E_PID) },
-   607		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E80F_PID) },
-   608		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E888_PID) },
-   609		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E889_PID) },
-   610		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E88A_PID) },
-   611		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E88B_PID) },
-   612		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E88C_PID) },
-   613		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E88D_PID) },
-   614		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E88E_PID) },
-   615		{ USB_DEVICE(FTDI_VID, FTDI_GUDEADS_E88F_PID) },
-   616		{ USB_DEVICE(FTDI_VID, FTDI_ELV_UO100_PID) },
-   617		{ USB_DEVICE(FTDI_VID, FTDI_ELV_UM100_PID) },
-   618		{ USB_DEVICE(FTDI_VID, FTDI_ELV_UR100_PID) },
-   619		{ USB_DEVICE(FTDI_VID, FTDI_ELV_ALC8500_PID) },
-   620		{ USB_DEVICE(FTDI_VID, FTDI_PYRAMID_PID) },
-   621		{ USB_DEVICE(FTDI_VID, FTDI_ELV_FHZ1000PC_PID) },
-   622		{ USB_DEVICE(FTDI_VID, FTDI_IBS_US485_PID) },
-   623		{ USB_DEVICE(FTDI_VID, FTDI_IBS_PICPRO_PID) },
-   624		{ USB_DEVICE(FTDI_VID, FTDI_IBS_PCMCIA_PID) },
-   625		{ USB_DEVICE(FTDI_VID, FTDI_IBS_PK1_PID) },
-   626		{ USB_DEVICE(FTDI_VID, FTDI_IBS_RS232MON_PID) },
-   627		{ USB_DEVICE(FTDI_VID, FTDI_IBS_APP70_PID) },
-   628		{ USB_DEVICE(FTDI_VID, FTDI_IBS_PEDO_PID) },
-   629		{ USB_DEVICE(FTDI_VID, FTDI_IBS_PROD_PID) },
-   630		{ USB_DEVICE(FTDI_VID, FTDI_TAVIR_STK500_PID) },
-   631		{ USB_DEVICE(FTDI_VID, FTDI_TIAO_UMPA_PID),
-   632			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   633		{ USB_DEVICE(FTDI_VID, FTDI_NT_ORIONLXM_PID),
-   634			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   635		{ USB_DEVICE(FTDI_VID, FTDI_NT_ORIONLX_PLUS_PID) },
-   636		{ USB_DEVICE(FTDI_VID, FTDI_NT_ORION_IO_PID) },
-   637		{ USB_DEVICE(FTDI_VID, FTDI_NT_ORIONMX_PID) },
-   638		{ USB_DEVICE(FTDI_VID, FTDI_SYNAPSE_SS200_PID) },
-   639		{ USB_DEVICE(FTDI_VID, FTDI_CUSTOMWARE_MINIPLEX_PID) },
-   640		{ USB_DEVICE(FTDI_VID, FTDI_CUSTOMWARE_MINIPLEX2_PID) },
-   641		{ USB_DEVICE(FTDI_VID, FTDI_CUSTOMWARE_MINIPLEX2WI_PID) },
-   642		{ USB_DEVICE(FTDI_VID, FTDI_CUSTOMWARE_MINIPLEX3_PID) },
-   643		/*
-   644		 * ELV devices:
-   645		 */
-   646		{ USB_DEVICE(FTDI_ELV_VID, FTDI_ELV_WS300_PID) },
-   647		{ USB_DEVICE(FTDI_VID, FTDI_ELV_USR_PID) },
-   648		{ USB_DEVICE(FTDI_VID, FTDI_ELV_MSM1_PID) },
-   649		{ USB_DEVICE(FTDI_VID, FTDI_ELV_KL100_PID) },
-   650		{ USB_DEVICE(FTDI_VID, FTDI_ELV_WS550_PID) },
-   651		{ USB_DEVICE(FTDI_VID, FTDI_ELV_EC3000_PID) },
-   652		{ USB_DEVICE(FTDI_VID, FTDI_ELV_WS888_PID) },
-   653		{ USB_DEVICE(FTDI_VID, FTDI_ELV_TWS550_PID) },
-   654		{ USB_DEVICE(FTDI_VID, FTDI_ELV_FEM_PID) },
-   655		{ USB_DEVICE(FTDI_VID, FTDI_ELV_CLI7000_PID) },
-   656		{ USB_DEVICE(FTDI_VID, FTDI_ELV_PPS7330_PID) },
-   657		{ USB_DEVICE(FTDI_VID, FTDI_ELV_TFM100_PID) },
-   658		{ USB_DEVICE(FTDI_VID, FTDI_ELV_UDF77_PID) },
-   659		{ USB_DEVICE(FTDI_VID, FTDI_ELV_UIO88_PID) },
-   660		{ USB_DEVICE(FTDI_VID, FTDI_ELV_UAD8_PID) },
-   661		{ USB_DEVICE(FTDI_VID, FTDI_ELV_UDA7_PID) },
-   662		{ USB_DEVICE(FTDI_VID, FTDI_ELV_USI2_PID) },
-   663		{ USB_DEVICE(FTDI_VID, FTDI_ELV_T1100_PID) },
-   664		{ USB_DEVICE(FTDI_VID, FTDI_ELV_PCD200_PID) },
-   665		{ USB_DEVICE(FTDI_VID, FTDI_ELV_ULA200_PID) },
-   666		{ USB_DEVICE(FTDI_VID, FTDI_ELV_CSI8_PID) },
-   667		{ USB_DEVICE(FTDI_VID, FTDI_ELV_EM1000DL_PID) },
-   668		{ USB_DEVICE(FTDI_VID, FTDI_ELV_PCK100_PID) },
-   669		{ USB_DEVICE(FTDI_VID, FTDI_ELV_RFP500_PID) },
-   670		{ USB_DEVICE(FTDI_VID, FTDI_ELV_FS20SIG_PID) },
-   671		{ USB_DEVICE(FTDI_VID, FTDI_ELV_UTP8_PID) },
-   672		{ USB_DEVICE(FTDI_VID, FTDI_ELV_WS300PC_PID) },
-   673		{ USB_DEVICE(FTDI_VID, FTDI_ELV_WS444PC_PID) },
-   674		{ USB_DEVICE(FTDI_VID, FTDI_ELV_FHZ1300PC_PID) },
-   675		{ USB_DEVICE(FTDI_VID, FTDI_ELV_EM1010PC_PID) },
-   676		{ USB_DEVICE(FTDI_VID, FTDI_ELV_WS500_PID) },
-   677		{ USB_DEVICE(FTDI_VID, FTDI_ELV_HS485_PID) },
-   678		{ USB_DEVICE(FTDI_VID, FTDI_ELV_UMS100_PID) },
-   679		{ USB_DEVICE(FTDI_VID, FTDI_ELV_TFD128_PID) },
-   680		{ USB_DEVICE(FTDI_VID, FTDI_ELV_FM3RX_PID) },
-   681		{ USB_DEVICE(FTDI_VID, FTDI_ELV_WS777_PID) },
-   682		{ USB_DEVICE(FTDI_VID, FTDI_PALMSENS_PID) },
-   683		{ USB_DEVICE(FTDI_VID, FTDI_IVIUM_XSTAT_PID) },
-   684		{ USB_DEVICE(FTDI_VID, LINX_SDMUSBQSS_PID) },
-   685		{ USB_DEVICE(FTDI_VID, LINX_MASTERDEVEL2_PID) },
-   686		{ USB_DEVICE(FTDI_VID, LINX_FUTURE_0_PID) },
-   687		{ USB_DEVICE(FTDI_VID, LINX_FUTURE_1_PID) },
-   688		{ USB_DEVICE(FTDI_VID, LINX_FUTURE_2_PID) },
-   689		{ USB_DEVICE(FTDI_VID, FTDI_CCSICDU20_0_PID) },
-   690		{ USB_DEVICE(FTDI_VID, FTDI_CCSICDU40_1_PID) },
-   691		{ USB_DEVICE(FTDI_VID, FTDI_CCSMACHX_2_PID) },
-   692		{ USB_DEVICE(FTDI_VID, FTDI_CCSLOAD_N_GO_3_PID) },
-   693		{ USB_DEVICE(FTDI_VID, FTDI_CCSICDU64_4_PID) },
-   694		{ USB_DEVICE(FTDI_VID, FTDI_CCSPRIME8_5_PID) },
-   695		{ USB_DEVICE(FTDI_VID, INSIDE_ACCESSO) },
-   696		{ USB_DEVICE(INTREPID_VID, INTREPID_VALUECAN_PID) },
-   697		{ USB_DEVICE(INTREPID_VID, INTREPID_NEOVI_PID) },
-   698		{ USB_DEVICE(FALCOM_VID, FALCOM_TWIST_PID) },
-   699		{ USB_DEVICE(FALCOM_VID, FALCOM_SAMBA_PID) },
-   700		{ USB_DEVICE(FTDI_VID, FTDI_SUUNTO_SPORTS_PID) },
-   701		{ USB_DEVICE(FTDI_VID, FTDI_OCEANIC_PID) },
-   702		{ USB_DEVICE(TTI_VID, TTI_QL355P_PID) },
-   703		{ USB_DEVICE(FTDI_VID, FTDI_RM_CANVIEW_PID) },
-   704		{ USB_DEVICE(ACTON_VID, ACTON_SPECTRAPRO_PID) },
-   705		{ USB_DEVICE(CONTEC_VID, CONTEC_COM1USBH_PID) },
-   706		{ USB_DEVICE(MITSUBISHI_VID, MITSUBISHI_FXUSB_PID) },
-   707		{ USB_DEVICE(BANDB_VID, BANDB_USOTL4_PID) },
-   708		{ USB_DEVICE(BANDB_VID, BANDB_USTL4_PID) },
-   709		{ USB_DEVICE(BANDB_VID, BANDB_USO9ML2_PID) },
-   710		{ USB_DEVICE(BANDB_VID, BANDB_USOPTL4_PID) },
-   711		{ USB_DEVICE(BANDB_VID, BANDB_USPTL4_PID) },
-   712		{ USB_DEVICE(BANDB_VID, BANDB_USO9ML2DR_2_PID) },
-   713		{ USB_DEVICE(BANDB_VID, BANDB_USO9ML2DR_PID) },
-   714		{ USB_DEVICE(BANDB_VID, BANDB_USOPTL4DR2_PID) },
-   715		{ USB_DEVICE(BANDB_VID, BANDB_USOPTL4DR_PID) },
-   716		{ USB_DEVICE(BANDB_VID, BANDB_485USB9F_2W_PID) },
-   717		{ USB_DEVICE(BANDB_VID, BANDB_485USB9F_4W_PID) },
-   718		{ USB_DEVICE(BANDB_VID, BANDB_232USB9M_PID) },
-   719		{ USB_DEVICE(BANDB_VID, BANDB_485USBTB_2W_PID) },
-   720		{ USB_DEVICE(BANDB_VID, BANDB_485USBTB_4W_PID) },
-   721		{ USB_DEVICE(BANDB_VID, BANDB_TTL5USB9M_PID) },
-   722		{ USB_DEVICE(BANDB_VID, BANDB_TTL3USB9M_PID) },
-   723		{ USB_DEVICE(BANDB_VID, BANDB_ZZ_PROG1_USB_PID) },
-   724		{ USB_DEVICE(FTDI_VID, EVER_ECO_PRO_CDS) },
-   725		{ USB_DEVICE(FTDI_VID, FTDI_4N_GALAXY_DE_1_PID) },
-   726		{ USB_DEVICE(FTDI_VID, FTDI_4N_GALAXY_DE_2_PID) },
-   727		{ USB_DEVICE(FTDI_VID, FTDI_4N_GALAXY_DE_3_PID) },
-   728		{ USB_DEVICE(FTDI_VID, XSENS_CONVERTER_0_PID) },
-   729		{ USB_DEVICE(FTDI_VID, XSENS_CONVERTER_1_PID) },
-   730		{ USB_DEVICE(FTDI_VID, XSENS_CONVERTER_2_PID) },
-   731		{ USB_DEVICE(FTDI_VID, XSENS_CONVERTER_3_PID) },
-   732		{ USB_DEVICE(FTDI_VID, XSENS_CONVERTER_4_PID) },
-   733		{ USB_DEVICE(FTDI_VID, XSENS_CONVERTER_5_PID) },
-   734		{ USB_DEVICE(FTDI_VID, XSENS_CONVERTER_6_PID) },
-   735		{ USB_DEVICE(FTDI_VID, XSENS_CONVERTER_7_PID) },
-   736		{ USB_DEVICE(XSENS_VID, XSENS_AWINDA_DONGLE_PID) },
-   737		{ USB_DEVICE(XSENS_VID, XSENS_AWINDA_STATION_PID) },
-   738		{ USB_DEVICE(XSENS_VID, XSENS_CONVERTER_PID) },
-   739		{ USB_DEVICE(XSENS_VID, XSENS_MTDEVBOARD_PID) },
-   740		{ USB_DEVICE(XSENS_VID, XSENS_MTIUSBCONVERTER_PID) },
-   741		{ USB_DEVICE(XSENS_VID, XSENS_MTW_PID) },
-   742		{ USB_DEVICE(FTDI_VID, FTDI_OMNI1509) },
-   743		{ USB_DEVICE(MOBILITY_VID, MOBILITY_USB_SERIAL_PID) },
-   744		{ USB_DEVICE(FTDI_VID, FTDI_ACTIVE_ROBOTS_PID) },
-   745		{ USB_DEVICE(FTDI_VID, FTDI_MHAM_KW_PID) },
-   746		{ USB_DEVICE(FTDI_VID, FTDI_MHAM_YS_PID) },
-   747		{ USB_DEVICE(FTDI_VID, FTDI_MHAM_Y6_PID) },
-   748		{ USB_DEVICE(FTDI_VID, FTDI_MHAM_Y8_PID) },
-   749		{ USB_DEVICE(FTDI_VID, FTDI_MHAM_IC_PID) },
-   750		{ USB_DEVICE(FTDI_VID, FTDI_MHAM_DB9_PID) },
-   751		{ USB_DEVICE(FTDI_VID, FTDI_MHAM_RS232_PID) },
-   752		{ USB_DEVICE(FTDI_VID, FTDI_MHAM_Y9_PID) },
-   753		{ USB_DEVICE(FTDI_VID, FTDI_TERATRONIK_VCP_PID) },
-   754		{ USB_DEVICE(FTDI_VID, FTDI_TERATRONIK_D2XX_PID) },
-   755		{ USB_DEVICE(EVOLUTION_VID, EVOLUTION_ER1_PID) },
-   756		{ USB_DEVICE(EVOLUTION_VID, EVO_HYBRID_PID) },
-   757		{ USB_DEVICE(EVOLUTION_VID, EVO_RCM4_PID) },
-   758		{ USB_DEVICE(FTDI_VID, FTDI_ARTEMIS_PID) },
-   759		{ USB_DEVICE(FTDI_VID, FTDI_ATIK_ATK16_PID) },
-   760		{ USB_DEVICE(FTDI_VID, FTDI_ATIK_ATK16C_PID) },
-   761		{ USB_DEVICE(FTDI_VID, FTDI_ATIK_ATK16HR_PID) },
-   762		{ USB_DEVICE(FTDI_VID, FTDI_ATIK_ATK16HRC_PID) },
-   763		{ USB_DEVICE(FTDI_VID, FTDI_ATIK_ATK16IC_PID) },
-   764		{ USB_DEVICE(KOBIL_VID, KOBIL_CONV_B1_PID) },
-   765		{ USB_DEVICE(KOBIL_VID, KOBIL_CONV_KAAN_PID) },
-   766		{ USB_DEVICE(POSIFLEX_VID, POSIFLEX_PP7000_PID) },
-   767		{ USB_DEVICE(FTDI_VID, FTDI_TTUSB_PID) },
-   768		{ USB_DEVICE(FTDI_VID, FTDI_ECLO_COM_1WIRE_PID) },
-   769		{ USB_DEVICE(FTDI_VID, FTDI_WESTREX_MODEL_777_PID) },
-   770		{ USB_DEVICE(FTDI_VID, FTDI_WESTREX_MODEL_8900F_PID) },
-   771		{ USB_DEVICE(FTDI_VID, FTDI_PCDJ_DAC2_PID) },
-   772		{ USB_DEVICE(FTDI_VID, FTDI_RRCIRKITS_LOCOBUFFER_PID) },
-   773		{ USB_DEVICE(FTDI_VID, FTDI_ASK_RDR400_PID) },
-   774		{ USB_DEVICE(FTDI_VID, FTDI_NZR_SEM_USB_PID) },
-   775		{ USB_DEVICE(ICOM_VID, ICOM_ID_1_PID) },
-   776		{ USB_DEVICE(ICOM_VID, ICOM_OPC_U_UC_PID) },
-   777		{ USB_DEVICE(ICOM_VID, ICOM_ID_RP2C1_PID) },
-   778		{ USB_DEVICE(ICOM_VID, ICOM_ID_RP2C2_PID) },
-   779		{ USB_DEVICE(ICOM_VID, ICOM_ID_RP2D_PID) },
-   780		{ USB_DEVICE(ICOM_VID, ICOM_ID_RP2VT_PID) },
-   781		{ USB_DEVICE(ICOM_VID, ICOM_ID_RP2VR_PID) },
-   782		{ USB_DEVICE(ICOM_VID, ICOM_ID_RP4KVT_PID) },
-   783		{ USB_DEVICE(ICOM_VID, ICOM_ID_RP4KVR_PID) },
-   784		{ USB_DEVICE(ICOM_VID, ICOM_ID_RP2KVT_PID) },
-   785		{ USB_DEVICE(ICOM_VID, ICOM_ID_RP2KVR_PID) },
-   786		{ USB_DEVICE(FTDI_VID, FTDI_ACG_HFDUAL_PID) },
-   787		{ USB_DEVICE(FTDI_VID, FTDI_YEI_SERVOCENTER31_PID) },
-   788		{ USB_DEVICE(FTDI_VID, FTDI_THORLABS_PID) },
-   789		{ USB_DEVICE(TESTO_VID, TESTO_1_PID) },
-   790		{ USB_DEVICE(TESTO_VID, TESTO_3_PID) },
-   791		{ USB_DEVICE(FTDI_VID, FTDI_GAMMA_SCOUT_PID) },
-   792		{ USB_DEVICE(FTDI_VID, FTDI_TACTRIX_OPENPORT_13M_PID) },
-   793		{ USB_DEVICE(FTDI_VID, FTDI_TACTRIX_OPENPORT_13S_PID) },
-   794		{ USB_DEVICE(FTDI_VID, FTDI_TACTRIX_OPENPORT_13U_PID) },
-   795		{ USB_DEVICE(ELEKTOR_VID, ELEKTOR_FT323R_PID) },
-   796		{ USB_DEVICE(FTDI_VID, FTDI_NDI_HUC_PID),
-   797			.driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
-   798		{ USB_DEVICE(FTDI_VID, FTDI_NDI_SPECTRA_SCU_PID),
-   799			.driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
-   800		{ USB_DEVICE(FTDI_VID, FTDI_NDI_FUTURE_2_PID),
-   801			.driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
-   802		{ USB_DEVICE(FTDI_VID, FTDI_NDI_FUTURE_3_PID),
-   803			.driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
-   804		{ USB_DEVICE(FTDI_VID, FTDI_NDI_AURORA_SCU_PID),
-   805			.driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
- > 806		{ USB_DEVICE(NDI_VID, FTDI_NDI_EMGUIDE_GEMINI_PID),
-   807			.driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
-   808		{ USB_DEVICE(TELLDUS_VID, TELLDUS_TELLSTICK_PID) },
-   809		{ USB_DEVICE(NOVITUS_VID, NOVITUS_BONO_E_PID) },
-   810		{ USB_DEVICE(FTDI_VID, RTSYSTEMS_USB_VX8_PID) },
-   811		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_S03_PID) },
-   812		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_59_PID) },
-   813		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_57A_PID) },
-   814		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_57B_PID) },
-   815		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_29A_PID) },
-   816		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_29B_PID) },
-   817		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_29F_PID) },
-   818		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_62B_PID) },
-   819		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_S01_PID) },
-   820		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_63_PID) },
-   821		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_29C_PID) },
-   822		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_81B_PID) },
-   823		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_82B_PID) },
-   824		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_K5D_PID) },
-   825		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_K4Y_PID) },
-   826		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_K5G_PID) },
-   827		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_S05_PID) },
-   828		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_60_PID) },
-   829		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_61_PID) },
-   830		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_62_PID) },
-   831		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_63B_PID) },
-   832		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_64_PID) },
-   833		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_65_PID) },
-   834		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_92_PID) },
-   835		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_92D_PID) },
-   836		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_W5R_PID) },
-   837		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_A5R_PID) },
-   838		{ USB_DEVICE(RTSYSTEMS_VID, RTSYSTEMS_USB_PW1_PID) },
-   839		{ USB_DEVICE(FTDI_VID, FTDI_MAXSTREAM_PID) },
-   840		{ USB_DEVICE(FTDI_VID, FTDI_PHI_FISCO_PID) },
-   841		{ USB_DEVICE(TML_VID, TML_USB_SERIAL_PID) },
-   842		{ USB_DEVICE(FTDI_VID, FTDI_ELSTER_UNICOM_PID) },
-   843		{ USB_DEVICE(FTDI_VID, FTDI_PROPOX_JTAGCABLEII_PID) },
-   844		{ USB_DEVICE(FTDI_VID, FTDI_PROPOX_ISPCABLEIII_PID) },
-   845		{ USB_DEVICE(FTDI_VID, CYBER_CORTEX_AV_PID),
-   846			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   847		{ USB_DEVICE_INTERFACE_NUMBER(OLIMEX_VID, OLIMEX_ARM_USB_OCD_PID, 1) },
-   848		{ USB_DEVICE_INTERFACE_NUMBER(OLIMEX_VID, OLIMEX_ARM_USB_OCD_H_PID, 1) },
-   849		{ USB_DEVICE_INTERFACE_NUMBER(OLIMEX_VID, OLIMEX_ARM_USB_TINY_PID, 1) },
-   850		{ USB_DEVICE_INTERFACE_NUMBER(OLIMEX_VID, OLIMEX_ARM_USB_TINY_H_PID, 1) },
-   851		{ USB_DEVICE(FIC_VID, FIC_NEO1973_DEBUG_PID),
-   852			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   853		{ USB_DEVICE(FTDI_VID, FTDI_OOCDLINK_PID),
-   854			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   855		{ USB_DEVICE(FTDI_VID, LMI_LM3S_DEVEL_BOARD_PID),
-   856			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   857		{ USB_DEVICE(FTDI_VID, LMI_LM3S_EVAL_BOARD_PID),
-   858			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   859		{ USB_DEVICE(FTDI_VID, LMI_LM3S_ICDI_BOARD_PID),
-   860			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   861		{ USB_DEVICE(FTDI_VID, FTDI_TURTELIZER_PID),
-   862			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   863		{ USB_DEVICE(RATOC_VENDOR_ID, RATOC_PRODUCT_ID_USB60F) },
-   864		{ USB_DEVICE(RATOC_VENDOR_ID, RATOC_PRODUCT_ID_SCU18) },
-   865		{ USB_DEVICE(FTDI_VID, FTDI_REU_TINY_PID) },
-   866	
-   867		/* Papouch devices based on FTDI chip */
-   868		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_SB485_PID) },
-   869		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_AP485_PID) },
-   870		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_SB422_PID) },
-   871		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_SB485_2_PID) },
-   872		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_AP485_2_PID) },
-   873		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_SB422_2_PID) },
-   874		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_SB485S_PID) },
-   875		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_SB485C_PID) },
-   876		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_LEC_PID) },
-   877		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_SB232_PID) },
-   878		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_TMU_PID) },
-   879		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_IRAMP_PID) },
-   880		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_DRAK5_PID) },
-   881		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_QUIDO8x8_PID) },
-   882		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_QUIDO4x4_PID) },
-   883		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_QUIDO2x2_PID) },
-   884		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_QUIDO10x1_PID) },
-   885		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_QUIDO30x3_PID) },
-   886		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_QUIDO60x3_PID) },
-   887		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_QUIDO2x16_PID) },
-   888		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_QUIDO3x32_PID) },
-   889		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_DRAK6_PID) },
-   890		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_UPSUSB_PID) },
-   891		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_MU_PID) },
-   892		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_SIMUKEY_PID) },
-   893		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_AD4USB_PID) },
-   894		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_GMUX_PID) },
-   895		{ USB_DEVICE(PAPOUCH_VID, PAPOUCH_GMSR_PID) },
-   896	
-   897		{ USB_DEVICE(FTDI_VID, FTDI_DOMINTELL_DGQG_PID) },
-   898		{ USB_DEVICE(FTDI_VID, FTDI_DOMINTELL_DUSB_PID) },
-   899		{ USB_DEVICE(ALTI2_VID, ALTI2_N3_PID) },
-   900		{ USB_DEVICE(FTDI_VID, DIEBOLD_BCS_SE923_PID) },
-   901		{ USB_DEVICE(ATMEL_VID, STK541_PID) },
-   902		{ USB_DEVICE(DE_VID, STB_PID) },
-   903		{ USB_DEVICE(DE_VID, WHT_PID) },
-   904		{ USB_DEVICE(ADI_VID, ADI_GNICE_PID),
-   905			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   906		{ USB_DEVICE(ADI_VID, ADI_GNICEPLUS_PID),
-   907			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   908		{ USB_DEVICE_AND_INTERFACE_INFO(MICROCHIP_VID, MICROCHIP_USB_BOARD_PID,
-   909						USB_CLASS_VENDOR_SPEC,
-   910						USB_SUBCLASS_VENDOR_SPEC, 0x00) },
-   911		{ USB_DEVICE_INTERFACE_NUMBER(ACTEL_VID, MICROSEMI_ARROW_SF2PLUS_BOARD_PID, 2) },
-   912		{ USB_DEVICE(JETI_VID, JETI_SPC1201_PID) },
-   913		{ USB_DEVICE(MARVELL_VID, MARVELL_SHEEVAPLUG_PID),
-   914			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   915		{ USB_DEVICE(LARSENBRUSGAARD_VID, LB_ALTITRACK_PID) },
-   916		{ USB_DEVICE(GN_OTOMETRICS_VID, AURICAL_USB_PID) },
-   917		{ USB_DEVICE(FTDI_VID, PI_C865_PID) },
-   918		{ USB_DEVICE(FTDI_VID, PI_C857_PID) },
-   919		{ USB_DEVICE(PI_VID, PI_C866_PID) },
-   920		{ USB_DEVICE(PI_VID, PI_C663_PID) },
-   921		{ USB_DEVICE(PI_VID, PI_C725_PID) },
-   922		{ USB_DEVICE(PI_VID, PI_E517_PID) },
-   923		{ USB_DEVICE(PI_VID, PI_C863_PID) },
-   924		{ USB_DEVICE(PI_VID, PI_E861_PID) },
-   925		{ USB_DEVICE(PI_VID, PI_C867_PID) },
-   926		{ USB_DEVICE(PI_VID, PI_E609_PID) },
-   927		{ USB_DEVICE(PI_VID, PI_E709_PID) },
-   928		{ USB_DEVICE(PI_VID, PI_100F_PID) },
-   929		{ USB_DEVICE(PI_VID, PI_1011_PID) },
-   930		{ USB_DEVICE(PI_VID, PI_1012_PID) },
-   931		{ USB_DEVICE(PI_VID, PI_1013_PID) },
-   932		{ USB_DEVICE(PI_VID, PI_1014_PID) },
-   933		{ USB_DEVICE(PI_VID, PI_1015_PID) },
-   934		{ USB_DEVICE(PI_VID, PI_1016_PID) },
-   935		{ USB_DEVICE(KONDO_VID, KONDO_USB_SERIAL_PID) },
-   936		{ USB_DEVICE(BAYER_VID, BAYER_CONTOUR_CABLE_PID) },
-   937		{ USB_DEVICE(FTDI_VID, MARVELL_OPENRD_PID),
-   938			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   939		{ USB_DEVICE(FTDI_VID, TI_XDS100V2_PID),
-   940			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   941		{ USB_DEVICE(FTDI_VID, HAMEG_HO820_PID) },
-   942		{ USB_DEVICE(FTDI_VID, HAMEG_HO720_PID) },
-   943		{ USB_DEVICE(FTDI_VID, HAMEG_HO730_PID) },
-   944		{ USB_DEVICE(FTDI_VID, HAMEG_HO870_PID) },
-   945		{ USB_DEVICE(FTDI_VID, MJSG_GENERIC_PID) },
-   946		{ USB_DEVICE(FTDI_VID, MJSG_SR_RADIO_PID) },
-   947		{ USB_DEVICE(FTDI_VID, MJSG_HD_RADIO_PID) },
-   948		{ USB_DEVICE(FTDI_VID, MJSG_XM_RADIO_PID) },
-   949		{ USB_DEVICE(FTDI_VID, XVERVE_SIGNALYZER_ST_PID),
-   950			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   951		{ USB_DEVICE(FTDI_VID, XVERVE_SIGNALYZER_SLITE_PID),
-   952			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   953		{ USB_DEVICE(FTDI_VID, XVERVE_SIGNALYZER_SH2_PID),
-   954			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   955		{ USB_DEVICE(FTDI_VID, XVERVE_SIGNALYZER_SH4_PID),
-   956			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   957		{ USB_DEVICE(FTDI_VID, SEGWAY_RMP200_PID) },
-   958		{ USB_DEVICE(FTDI_VID, ACCESIO_COM4SM_PID) },
-   959		{ USB_DEVICE(IONICS_VID, IONICS_PLUGCOMPUTER_PID),
-   960			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   961		{ USB_DEVICE(FTDI_VID, FTDI_CHAMSYS_24_MASTER_WING_PID) },
-   962		{ USB_DEVICE(FTDI_VID, FTDI_CHAMSYS_PC_WING_PID) },
-   963		{ USB_DEVICE(FTDI_VID, FTDI_CHAMSYS_USB_DMX_PID) },
-   964		{ USB_DEVICE(FTDI_VID, FTDI_CHAMSYS_MIDI_TIMECODE_PID) },
-   965		{ USB_DEVICE(FTDI_VID, FTDI_CHAMSYS_MINI_WING_PID) },
-   966		{ USB_DEVICE(FTDI_VID, FTDI_CHAMSYS_MAXI_WING_PID) },
-   967		{ USB_DEVICE(FTDI_VID, FTDI_CHAMSYS_MEDIA_WING_PID) },
-   968		{ USB_DEVICE(FTDI_VID, FTDI_CHAMSYS_WING_PID) },
-   969		{ USB_DEVICE(FTDI_VID, FTDI_SCIENCESCOPE_LOGBOOKML_PID) },
-   970		{ USB_DEVICE(FTDI_VID, FTDI_SCIENCESCOPE_LS_LOGBOOK_PID) },
-   971		{ USB_DEVICE(FTDI_VID, FTDI_SCIENCESCOPE_HS_LOGBOOK_PID) },
-   972		{ USB_DEVICE(FTDI_VID, FTDI_CINTERION_MC55I_PID) },
-   973		{ USB_DEVICE(FTDI_VID, FTDI_FHE_PID) },
-   974		{ USB_DEVICE(FTDI_VID, FTDI_DOTEC_PID) },
-   975		{ USB_DEVICE(QIHARDWARE_VID, MILKYMISTONE_JTAGSERIAL_PID),
-   976			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   977		{ USB_DEVICE(ST_VID, ST_STMCLT_2232_PID),
-   978			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   979		{ USB_DEVICE(ST_VID, ST_STMCLT_4232_PID),
-   980			.driver_info = (kernel_ulong_t)&ftdi_stmclite_quirk },
-   981		{ USB_DEVICE(FTDI_VID, FTDI_RF_R106) },
-   982		{ USB_DEVICE(FTDI_VID, FTDI_DISTORTEC_JTAG_LOCK_PICK_PID),
-   983			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-   984		{ USB_DEVICE(FTDI_VID, FTDI_LUMEL_PD12_PID) },
-   985		/* Crucible Devices */
-   986		{ USB_DEVICE(FTDI_VID, FTDI_CT_COMET_PID) },
-   987		{ USB_DEVICE(FTDI_VID, FTDI_Z3X_PID) },
-   988		/* Cressi Devices */
-   989		{ USB_DEVICE(FTDI_VID, FTDI_CRESSI_PID) },
-   990		/* Brainboxes Devices */
-   991		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_VX_001_PID) },
-   992		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_VX_012_PID) },
-   993		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_VX_023_PID) },
-   994		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_VX_034_PID) },
-   995		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_101_PID) },
-   996		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_159_PID) },
-   997		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_1_PID) },
-   998		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_2_PID) },
-   999		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_3_PID) },
-  1000		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_4_PID) },
-  1001		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_5_PID) },
-  1002		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_6_PID) },
-  1003		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_7_PID) },
-  1004		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_8_PID) },
-  1005		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_235_PID) },
-  1006		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_257_PID) },
-  1007		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_1_PID) },
-  1008		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_2_PID) },
-  1009		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_3_PID) },
-  1010		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_4_PID) },
-  1011		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_313_PID) },
-  1012		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_320_PID) },
-  1013		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_324_PID) },
-  1014		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_346_1_PID) },
-  1015		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_346_2_PID) },
-  1016		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_357_PID) },
-  1017		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_606_1_PID) },
-  1018		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_606_2_PID) },
-  1019		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_606_3_PID) },
-  1020		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_701_1_PID) },
-  1021		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_701_2_PID) },
-  1022		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_842_1_PID) },
-  1023		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_842_2_PID) },
-  1024		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_842_3_PID) },
-  1025		{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_842_4_PID) },
-  1026		/* ekey Devices */
-  1027		{ USB_DEVICE(FTDI_VID, FTDI_EKEY_CONV_USB_PID) },
-  1028		/* Infineon Devices */
-  1029		{ USB_DEVICE_INTERFACE_NUMBER(INFINEON_VID, INFINEON_TRIBOARD_TC1798_PID, 1) },
-  1030		{ USB_DEVICE_INTERFACE_NUMBER(INFINEON_VID, INFINEON_TRIBOARD_TC2X7_PID, 1) },
-  1031		/* GE Healthcare devices */
-  1032		{ USB_DEVICE(GE_HEALTHCARE_VID, GE_HEALTHCARE_NEMO_TRACKER_PID) },
-  1033		/* Active Research (Actisense) devices */
-  1034		{ USB_DEVICE(FTDI_VID, ACTISENSE_NDC_PID) },
-  1035		{ USB_DEVICE(FTDI_VID, ACTISENSE_USG_PID) },
-  1036		{ USB_DEVICE(FTDI_VID, ACTISENSE_NGT_PID) },
-  1037		{ USB_DEVICE(FTDI_VID, ACTISENSE_NGW_PID) },
-  1038		{ USB_DEVICE(FTDI_VID, ACTISENSE_UID_PID) },
-  1039		{ USB_DEVICE(FTDI_VID, ACTISENSE_USA_PID) },
-  1040		{ USB_DEVICE(FTDI_VID, ACTISENSE_NGX_PID) },
-  1041		{ USB_DEVICE(FTDI_VID, ACTISENSE_D9AF_PID) },
-  1042		{ USB_DEVICE(FTDI_VID, CHETCO_SEAGAUGE_PID) },
-  1043		{ USB_DEVICE(FTDI_VID, CHETCO_SEASWITCH_PID) },
-  1044		{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_NMEA2000_PID) },
-  1045		{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_ETHERNET_PID) },
-  1046		{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_WIFI_PID) },
-  1047		{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_DISPLAY_PID) },
-  1048		{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_LITE_PID) },
-  1049		{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_ANALOG_PID) },
-  1050		/* Belimo Automation devices */
-  1051		{ USB_DEVICE(FTDI_VID, BELIMO_ZTH_PID) },
-  1052		{ USB_DEVICE(FTDI_VID, BELIMO_ZIP_PID) },
-  1053		/* ICP DAS I-756xU devices */
-  1054		{ USB_DEVICE(ICPDAS_VID, ICPDAS_I7560U_PID) },
-  1055		{ USB_DEVICE(ICPDAS_VID, ICPDAS_I7561U_PID) },
-  1056		{ USB_DEVICE(ICPDAS_VID, ICPDAS_I7563U_PID) },
-  1057		{ USB_DEVICE(WICED_VID, WICED_USB20706V2_PID) },
-  1058		{ USB_DEVICE(TI_VID, TI_CC3200_LAUNCHPAD_PID),
-  1059			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-  1060		{ USB_DEVICE(CYPRESS_VID, CYPRESS_WICED_BT_USB_PID) },
-  1061		{ USB_DEVICE(CYPRESS_VID, CYPRESS_WICED_WL_USB_PID) },
-  1062		{ USB_DEVICE(AIRBUS_DS_VID, AIRBUS_DS_P8GR) },
-  1063		/* EZPrototypes devices */
-  1064		{ USB_DEVICE(EZPROTOTYPES_VID, HJELMSLUND_USB485_ISO_PID) },
-  1065		{ USB_DEVICE_INTERFACE_NUMBER(UNJO_VID, UNJO_ISODEBUG_V1_PID, 1) },
-  1066		/* Sienna devices */
-  1067		{ USB_DEVICE(FTDI_VID, FTDI_SIENNA_PID) },
-  1068		{ USB_DEVICE(ECHELON_VID, ECHELON_U20_PID) },
-  1069		/* IDS GmbH devices */
-  1070		{ USB_DEVICE(IDS_VID, IDS_SI31A_PID) },
-  1071		{ USB_DEVICE(IDS_VID, IDS_CM31A_PID) },
-  1072		/* Omron devices */
-  1073		{ USB_DEVICE(OMRON_VID, OMRON_CS1W_CIF31_PID) },
-  1074		/* U-Blox devices */
-  1075		{ USB_DEVICE(UBLOX_VID, UBLOX_C099F9P_ZED_PID) },
-  1076		{ USB_DEVICE(UBLOX_VID, UBLOX_C099F9P_ODIN_PID) },
-  1077		/* FreeCalypso USB adapters */
-  1078		{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_JTAG_BUF_PID),
-  1079			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-  1080		{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_JTAG_UNBUF_PID),
-  1081			.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-  1082		/* GMC devices */
-  1083		{ USB_DEVICE(GMC_VID, GMC_Z216C_PID) },
-  1084		/* Altera USB Blaster 3 */
-  1085		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6022_PID, 1) },
-  1086		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6025_PID, 2) },
-  1087		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6026_PID, 2) },
-  1088		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6026_PID, 3) },
-  1089		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6029_PID, 2) },
-  1090		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602A_PID, 2) },
-  1091		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602A_PID, 3) },
-  1092		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602C_PID, 1) },
-  1093		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602D_PID, 1) },
-  1094		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602D_PID, 2) },
-  1095		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 1) },
-  1096		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 2) },
-  1097		{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 3) },
-  1098		/* Abacus Electrics */
-  1099		{ USB_DEVICE(FTDI_VID, ABACUS_OPTICAL_PROBE_PID) },
-  1100		{ }					/* Terminating entry */
-  1101	};
-  1102	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+This typo was in version 5 of the patch. NDI_VID was replaced by FTDI_NDI_V=
+ID in [PATCH v6] of usb:serial: ftdi_sio: add support for NDI EMGUIDE GEMIN=
+I device
+Thanks,
+Ryan
 
