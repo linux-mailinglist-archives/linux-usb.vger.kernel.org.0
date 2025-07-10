@@ -1,209 +1,149 @@
-Return-Path: <linux-usb+bounces-25678-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25679-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90C19B002E4
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 15:08:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F99CB004C2
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 16:10:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B346216543D
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 13:08:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9401169D8F
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 14:06:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE971271464;
-	Thu, 10 Jul 2025 13:08:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D47E270EB2;
+	Thu, 10 Jul 2025 14:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndigital.com header.i=@ndigital.com header.b="Ig9nBOVk"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="b/7wNaxc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from CAN01-YT3-obe.outbound.protection.outlook.com (mail-yt3can01on2106.outbound.protection.outlook.com [40.107.115.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74AB525D21A;
-	Thu, 10 Jul 2025 13:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.115.106
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752152887; cv=fail; b=NwYYdYwh8YwFIhUVcyigHL/SgwMz6+P7yauX6D3SE6EuzVKoPq/uz4dkvm78jRwed8y3z337jEtyuEIQZH3iDAvge2eA/+Fet2Hqvrk0ThntSx8Osjj5567J6JrWOu+9+pdNKZytnUhVl/XxORuA2tlF9gtN1YA7imhbhEm9xls=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752152887; c=relaxed/simple;
-	bh=WkyF3mf2GrgZ6VW9r+P9nf0i22nKsSiPjfOZeghqg4I=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=LnAznl3fX09alhp3BWkCLMLZD2fTWj6/hiLwI1Ty5Rn/MSZlGk3u4+MUtER6iUg2p7ZthJcT791OUuwMlgBSwxSWC3x7DyC9vsqwoUsNrV1g6vrZ1tfMI3xhlAHuImkNDO6I7+I6QofPlOv4+HmUZqrsyDGUD/Ksw9wphn9/HOE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ndigital.com; spf=pass smtp.mailfrom=ndigital.com; dkim=pass (2048-bit key) header.d=ndigital.com header.i=@ndigital.com header.b=Ig9nBOVk; arc=fail smtp.client-ip=40.107.115.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ndigital.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndigital.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ff/Z1csx6Cw5f7wqKud7TPu1LWAQ8SeN8nBdp/kNXB3rOdmTKkLd/1pJdrwyCvX1Wf3n/sa1usa06Fkd6Lr6JjXfy8bCshF8Sz1WyvtD/m+jIKseM5V1AZFQxE5P0yo5Q2MflrN2JW0M6cU4TaNKJG0iLs/vnioX+zgGxXBIODYqjFKs8wCaY2hSQpCJVYHK92CWqGaJvHlinmS6D4pFHNzTIWUP7Topt62H4pB7Z10P9EtyeptrAXHuWKTJCDUl+UZgYTwIXsCTX7UEGo8lU8pQdb3Cb+wvDTQtasOdrYaSZaRP7ppszGnQZ5gtRGXWxxz+ldAuMgAgt6hFNb1PBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ddg+qXZCPN0XSThMSRfb67T71lGIa/TFwtyu4x1Zt9s=;
- b=cQSPKeaYq/RvhH/zwvojIwXbrA4lpdq9v89K4rTn+MGrmWVOsuC9DNRanDHXEUnMDG62P4Wy8YDcRBzZ0tAkd3ENOQHE/F8iiWDB0bA797Fqv76Xefz0wlRYsQGa/0aCM+O0Z4JVxFyJb2MsmRZ/TmEbfxK7dXz8B+BmPGPPxATKft1igtSIlLKd2/4id4zQrHm8wZ5nvSeNNiSNFMsd9s6yAJe15F79/SlTCwaRE7bHuUfPKt5gvMeZ73JscgKe5+OuuJkwTgePwlr5T8fYfTuHN/2QboV3A59Ga0y6b27QQ0o+ntQU5ijT9HiluekYCWA21FqZ0Y57NSqGvDVBhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ndigital.com; dmarc=pass action=none header.from=ndigital.com;
- dkim=pass header.d=ndigital.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ndigital.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ddg+qXZCPN0XSThMSRfb67T71lGIa/TFwtyu4x1Zt9s=;
- b=Ig9nBOVk3PeEw7SgwBhkwudlLxi9pQLG+hSN865gPTDfHctD0pc1rB582VkIqHEXogiNyxrnehcFx5f6dy9YpJFp1kUnk5k7WYy7qBOwJw9BH/i8mq1QYGnzCbYbpSxveLbsPNykgDajINZd67ANOxPDqyKHMHOY1BtB5fc1j+cueOXyZEQeeEVyKCSO5ZNQJLigTYcnTot0ePfxjw6lw5CmmA75fU2NpQbo6uARJPA/6BTH57F8AKKaT72ZI+eVEXveMZOHhIAfJ3UuFr82b8bpgEzH4uK4xIf1oWTHChceSyNEL50YdtRyJIyyYm5NsuH8Emi7tkWUUrjRrVUMwA==
-Received: from YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:27::5)
- by YT3PR01MB8675.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:7a::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.28; Thu, 10 Jul
- 2025 13:08:01 +0000
-Received: from YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::206e:a5af:7f5f:76a3]) by YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::206e:a5af:7f5f:76a3%4]) with mapi id 15.20.8901.028; Thu, 10 Jul 2025
- 13:08:01 +0000
-From: Ryan Mann <rmann@ndigital.com>
-To: "johan@kernel.org" <johan@kernel.org>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>
-CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6] usb: serial: ftdi_sio: add support for NDI EMGUIDE GEMINI
- device
-Thread-Topic: [PATCH v6] usb: serial: ftdi_sio: add support for NDI EMGUIDE
- GEMINI device
-Thread-Index: Advxm6C8PV0uy1zLSqSOYBBJETwAcg==
-Date: Thu, 10 Jul 2025 13:08:00 +0000
-Message-ID:
- <YQXPR01MB4987F1E0DA41E689779E6958DF48A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=ndigital.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: YQXPR01MB4987:EE_|YT3PR01MB8675:EE_
-x-ms-office365-filtering-correlation-id: e2e43a38-25f0-4ad1-9199-08ddbfb2cc5a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?3mLsWUd702rJyfPsbamupRfQDV6l5eImlLU6Tu4+Ro+nlL9OvGJTuMHXij7S?=
- =?us-ascii?Q?8gjUsXw6CvXCkWKyGjcDZ2vGoi8jsCcHV7xlAyOuBO9Noem9E/g0hLtxYIXc?=
- =?us-ascii?Q?zU6e6e2dRUxfy9t/VyCJvx8tbD3zcUzNdURK4nK1a6dcsWdcxeAXzV+e2s+T?=
- =?us-ascii?Q?rofH3MHNk+VP88GIIWtjnVAI1LNFI2AaPM+Tt7iPgmU4WEaroT7Izrf4PQXf?=
- =?us-ascii?Q?i8hu70s4kywRkQ43Yho2i6g+I4JMnCkyrLg8BRCI/Me/AZNq2ZcV7jO1yQuV?=
- =?us-ascii?Q?pXPLrLK2FNMcQVOyunV+hEr8tw/gGI3XyG8pNRWIvk5lWf3QLUf/iPiCfEMB?=
- =?us-ascii?Q?kj4adEC/ZdXF6HZJuewnY3G6irJo+Aqd0GPKlgYs9RQ/OrOgflK2i72bFlSi?=
- =?us-ascii?Q?kEnXAN4oQ837+giHcmHdB0YdthaXZyeLelrlM9unBUo4QvKqLaaX7Kn8boaZ?=
- =?us-ascii?Q?gslVLGNkwN4RZCSgePP1pHC/GSDFNTED1PvT/g6juXwxgQwbFzRhQQq26TM9?=
- =?us-ascii?Q?juYtSBT4Wr4FIFmSkZUN+GyFsZN4p39FWpx6PzPtQ1xO4phQnqpDVGQ2hBEl?=
- =?us-ascii?Q?sE/eOhQS6EQjxMsfLk6MsxWjF5KA9qZ9LpmfVhT5IAYJfww4cAh9WBruYcR5?=
- =?us-ascii?Q?lz9QBA2XKGgbG6uYDgO5BhhqVqX6ey84HWen4kHOTQXgFlEu2GAf1LY3bT8p?=
- =?us-ascii?Q?h/v3NUlgVXqZBjYVPVhhRVKBwzWZtIWTp7B2ur07kL1jMXNLNTvorxwnlgVu?=
- =?us-ascii?Q?9SUa7cwpXeFcJ5mkfi3PRe9xG/abAptzHuPseBcL0GIp0/ucOTBs45cjfeik?=
- =?us-ascii?Q?EMDOI5L56nK8r7sqnCk+kV+B2owexhjAP35kAtY7VNyoiyhgamgQMdrkN6qk?=
- =?us-ascii?Q?eOq5VXNurOrZ3HxKYcPV8N5OV9lZuUjAGzDkGJ1mACb0CQ3Whpv8rwW01KHI?=
- =?us-ascii?Q?YIKZQKyROjYrslSFNm4UWG3M/Ye7YLX+BJ1THIkXXFAtKYWV69hsk2NAxayc?=
- =?us-ascii?Q?77yA81szDLEHp5NTMOwn/f8OmHe1Bi8cJu119ECDN9X0Qq2bNd2V8b169e5g?=
- =?us-ascii?Q?0tTVfPuHTC0+bwbmnb9y1AIorBCpXbA/KAFEfuGa+Fkp0f7YL/U57IMLiQL1?=
- =?us-ascii?Q?WzU4QxVc30mV8HZa/AVBNlwTJ4WZItyK35TBHorCoINm45hAFu5MPv1sJIXC?=
- =?us-ascii?Q?h3Jt18M7zm7DTuc3x0nzDr/VVxApr9pk1QLcPUmrl9uPb6D0Yhggcjf7FK+i?=
- =?us-ascii?Q?vn662wQfakcls/q2KE+LCiJTd1i3ARK7NFZHa2sxcC2cXhsdP8u8qj0Sb4zG?=
- =?us-ascii?Q?EHSXMCOKCBo2gvwfii17liKcFV0el28/OPZejwyIZulME1KkcaceR9CQsy+J?=
- =?us-ascii?Q?8BqnQRh/so5d6LYmIFnfKG02f60imClmAihHWAHmFKhYxWS1MvZD+lLyJwTy?=
- =?us-ascii?Q?Vc/zsvuMXu4=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?Q6zhVOJQiJCa/pZM/9Y/qkNMqf0KTYCp60IUkO0jL2lsgbQx3MN2Yokhrnhk?=
- =?us-ascii?Q?UQEO/DoojclTiSj8v26/41QphSvgKKOadeEtWXx/TWJgBaZToEwDU0LF647t?=
- =?us-ascii?Q?T59KqBwEgmH6jNcNGrkExxmhahSfNmCEx6/QByrGyU8P5bsF0F676+MnxPfR?=
- =?us-ascii?Q?B2W6+qGrT8Si6cvtfVc+gWFadfPgZ4suZeCnOkdBwcGzhDCCBUa1dByexR0q?=
- =?us-ascii?Q?g86q7mf+WeDloWG9crTNwkdwU1ttn5hjsdb+tFl7Skxgj0TjH+Th0qtD8u7Z?=
- =?us-ascii?Q?hXlBDwXWCfeV+YwfaiHnR+Q6QbjaP0+nW/vBFM8qDP3IVKErjwtQQtJjoWVW?=
- =?us-ascii?Q?w2Gp4G9Oo5iUGXIaq644VHmZrXbRBarjuABgkOG436zaZlack2+2Y26t4p2M?=
- =?us-ascii?Q?3wPchH4K0W7X3FSsIKEiGP4bkejhG6JGu5PRbNnDCSP4y+iZrBYl2BDC+Dmz?=
- =?us-ascii?Q?yVkNKHbucB0hMQQhTsxEbM4nIVODW4YrUm3qqxHs1oMq2HCdYqQcujrMcRoN?=
- =?us-ascii?Q?Bi+AHk85R3tZ73pDbeEymDDhDXoxz3sWWkKyI2XqPFFhiUU3tGx3x8pq2DUe?=
- =?us-ascii?Q?UYCF1LkvpFIOvyQ4UtQ6lldzxDac7vAMmd00mQOOWtaKMI7ORMMYf7UFipkz?=
- =?us-ascii?Q?1NVI04Q+dtGTTrkkdIoQsN8f/aIRcg0JL4tb5H+lO5tiaybatnZz3Km07CYp?=
- =?us-ascii?Q?xj4vUS2PsE4WaTE6Jr68OBy5zKF5Jzn3hIru5lvieYW5KeJUJrfe6YHuYvwS?=
- =?us-ascii?Q?Igw1RTLEnTcUZL4nwY/Lq5Co77Q/hVM+vDqcw8KxHydZw9rT1T7tvEBe+/fh?=
- =?us-ascii?Q?FEzyfR4eXM7V0tkeTT3wcDk+3oqDYQOFfM4qN+0B2rpA/6E76pwTSNFvBLnW?=
- =?us-ascii?Q?qhNFu/sRqO1RspQ5nwlm9bp84/BX+H9d2ihc5sbJtVlOzEmybb3TozUPwl4P?=
- =?us-ascii?Q?jg8tCPA62ZT3BpWFl3gO+uiTbSpqQqCvA/1EA2eyviLmz7j3Jjyry3pkiNbL?=
- =?us-ascii?Q?Q4eCtD+bf5XSOdP0T5FbWL0OoeLte3yDeCIAOMwyjxe4MmbFeFLiy2/N430T?=
- =?us-ascii?Q?Kx5+ONJQ2s1lWXnKMdETJl7Eo/VcJ/8SahUVAVC+m6mT7vaO6nvmwBbReCKY?=
- =?us-ascii?Q?gzVQpcRb6OHZr/giT3Dd/qqAPDhXAtqsPobb7y1LzlXXWokveeQ05pUJACLD?=
- =?us-ascii?Q?mbloEYEgXPNgo+E+k5oLQnFhjxDZPwp/ViM0ToOA3unyyK9VyUJoEnwHqiI3?=
- =?us-ascii?Q?MRThBD6RdpLt0WUPDk297LSOBiYRWixpND9fOUdp7ARqOmhxrFEQJXfkaggY?=
- =?us-ascii?Q?B6b4vH7LlYewfZd4EtzMuuNcTypq+lPaq5Iivc4gEs/CjULHQWYJnz7S1U6g?=
- =?us-ascii?Q?6SSgDf6cOX5b6xb24krtgvuPSd1t2ZvtIZS1BL0N4cutpzN6eDv18nN4yjYK?=
- =?us-ascii?Q?8R9Ob+AVKFOS5kZHeJH66jyEZm2ADykw1B6HWCkrg7C3VlPbSZj9DUN1rIo3?=
- =?us-ascii?Q?fQJ6kRx6n41MJluua57m0Gdhdd+Mv+b5gFql5/jRxFgPfg+5+Hc5Xm7YZOwo?=
- =?us-ascii?Q?U8fLaKXmnGc6ZDp95UlzbhX7QDS7laS3gzElJX6a?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B6C258CD7
+	for <linux-usb@vger.kernel.org>; Thu, 10 Jul 2025 14:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752156370; cv=none; b=nQBg7hciitsys3BvlPKfz2yvbKSElEw596rceCDIB7x35Ww/k0QK0VbPAH+tExVrEIeaydev1rbmPcPip0TR3cUa+BrvInICRP141NImxIWw3XmS3Yfqy/x/qiruzM2Rv9I8JqvlwOOXjWViRq+Q3HMs5B/mIO6pQyCl2tqJn7Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752156370; c=relaxed/simple;
+	bh=0lB7ayVfjS/ebQsXGCV7KD9ZOZmkw+YXG9IthbK3mqs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FQ5MwXpAsmeOHrQqy3hoLhxZdvVaR1fvxHHKim01+lQSNlN0DHfdHFvYhuDFXiAUlL+N+VzTpsbCYEWmwKHCGj971TNCnZj3QVc1iLFWhC8E9uo9P2xbGv3gi+Ixr7fnJolp6kDsLSc+f0iMzEv2zbVYBvVZ3p2+BcZe39ffm4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=b/7wNaxc; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6face367320so9026366d6.3
+        for <linux-usb@vger.kernel.org>; Thu, 10 Jul 2025 07:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1752156367; x=1752761167; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/mUhG6nQixPiwkNwnGkxTsDVIWYYy2y/ruQ2RkH6WpE=;
+        b=b/7wNaxcPyNhd4Kto49bsbLScLz2Y1kGizYE+B4OeDwFnaQV4akl2bXPb/ne38U6ma
+         BKB+451TaBrijk5xXJuU8qhlSSyUpbjEWtXY7X+NS75bF9V/y40z00OTiZkePI1KMN6J
+         tR0segQbORWk+3KuzQoIdw6bF3c18nOadVJ+ALeNRwgdxOpF1TioeRac75AqXH6KV0WC
+         jVDdY61uKEvpubkRjXIXjuWMmm+f4MAttCfSmWcZyZ24XMcOp6tT41ZZyULzwILyLAj3
+         go3CAE28i3brAOfwcX7KqHfq260FZqLzXWJs5reVA0KyI06nSqYokwuGfoSX2Jyh/VPc
+         lMdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752156367; x=1752761167;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/mUhG6nQixPiwkNwnGkxTsDVIWYYy2y/ruQ2RkH6WpE=;
+        b=wDorQfHX4n9W9h9OYU1NtWzTnugWdMxX1pLPQ1h9y/RkW4pnoEcID2vpFF2dkZ/e0v
+         7gFWmJWddi0RMet5I4m4jqIVMF0LDcRyCZDxPAdHgHOflL6IPanO3Wx4vhEnAVUUVXZY
+         6vbINyGsghtmCXpU7p/9MBKPe5+6nDdqh2Tz1YKILBOOSfQv0MZzanpS99Yk5SRauvdb
+         OXr7C3fjOof/Voy9XSzJ7U6WOlWRuOCw49jqMFCU1GBu5hu1V/AgbjczKcVkhk916QIK
+         qEwdS1iggE3yjKfp6lzvGX37kx+y4Ly11793MLMkr3ohcjH1kU8+GfU44ptgaJt/tu4R
+         uh9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUyCp8TMb2MvUj6nA7q9nAsmp/eKZBuj2ApIxB8CfTrJ+IZDJEELsxL6IFps6LchhZzdZgZZyVPQY8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIGNTHXzi9mMPkVobo1a18ZoOmYI3aElrG6KOH1y3ecZnN/9uO
+	z6pCWnr2AeYzUj/KbLYG6h2LO5zsczZ5m6HwfmKPuWz4vRelVyrJ2IFK2UuLxyHcDQ==
+X-Gm-Gg: ASbGncs8XWedeuT20RIkhymWosvoADR9HUC3bv+kaaFazieNTz6XZriXY+CG1QGnsQO
+	ST8PhXeQiFyWCm9rF2OstFPzIycpsiYFKrMAboAP7T7AZL3iEQNqY+kHEZl49NdEioNg90TIHhB
+	SczV0GitMmtdlujawBKE2tBCXm3CU+3zUR1+nuU92jhjJ4fECkOvREobziogEMA7Xmbi01hbyoi
+	nwmQs4jBv+AufpLP51wR7iUXsOIgQLo8MDi0Ut6vST/y5XGTiSKEOyVurxNdGdO5msX7ErdRUsB
+	dliSgqulbk67cnDPjtMNJvt6XCd+KmxCgzcsOOLqgTqqHIY0J1671SbseGc/zSYWRkLfnIqWtgS
+	IdNv9
+X-Google-Smtp-Source: AGHT+IHreITphoTLIChq2Z0zBSWyvB3a6PbQi/LJFxUQeY1LJUPn8RY17VoZ6RePs2Nhxk86mKEzFw==
+X-Received: by 2002:a05:6214:246f:b0:702:d6e7:18bf with SMTP id 6a1803df08f44-70494ee3ed9mr67061016d6.3.1752156367018;
+        Thu, 10 Jul 2025 07:06:07 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7049799e3f1sm8614036d6.14.2025.07.10.07.06.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Jul 2025 07:06:06 -0700 (PDT)
+Date: Thu, 10 Jul 2025 10:06:03 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Greg KH <gregkh@linuxfoundation.org>, Zongmin Zhou <min_halo@163.com>,
+	shuah@kernel.org, valentina.manea.m@gmail.com, i@zenithal.me,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	zhouzongmin@kylinos.cn
+Subject: Re: [PATCH v2] usbip: convert to use faux_device
+Message-ID: <a735f877-e13b-498f-9eee-53ebefa8ebc9@rowland.harvard.edu>
+References: <fac026d8-12c8-4c1f-96a7-264ced8391f1@linuxfoundation.org>
+ <a29703bd-08b7-489b-8fb0-15838a1245ab@163.com>
+ <1a13cf53-ffed-4521-917e-9c2856a5e348@linuxfoundation.org>
+ <4fc877f0-b55b-4fa3-8df4-2de4ba1ac51b@163.com>
+ <2a901b8a-9052-41d9-a70d-76508ebd819b@linuxfoundation.org>
+ <4759911b-8c35-4ca9-bc34-09dd41b14582@163.com>
+ <2025070949-activist-mammal-b806@gregkh>
+ <dd3659dd-7e45-479d-ab65-9f5c1bab26a0@rowland.harvard.edu>
+ <ce96291b-c0b2-41cf-a71c-c13bd8d0f139@linuxfoundation.org>
+ <4478924b-fbd7-4a5a-ad0d-4fe0569b4971@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: ndigital.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2e43a38-25f0-4ad1-9199-08ddbfb2cc5a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2025 13:08:00.9464
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: fd6f7980-6d04-4a6f-86bf-8f6d0297dd2f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: b3YoYSvCA4cvVsXRoiqCV8kWtqeii0g8cVChjRTaS7TEWCiXEXkTn+Rq0oaTPWHiLh5MBmJ0z5fFY6slDslvXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB8675
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4478924b-fbd7-4a5a-ad0d-4fe0569b4971@linuxfoundation.org>
 
-From: Ryan Mann (NDI) <rmann@ndigital.com>
+On Wed, Jul 09, 2025 at 03:57:35PM -0600, Shuah Khan wrote:
+> On 7/9/25 15:49, Shuah Khan wrote:
+> > Right. We have a few too many moving pieces here:
+> > 
+> > usbipd (user-space)
+> > vhci_hcd and the usb devices it creates
+> > 
+> > usbip_host, stub driver that proxies between the device
+> > on the server and vhci_client.
+> > 
+> > PM can be complex and it has to do lot more than it currently
+> > does on both server and client end to support seamlessly.
+> > 
+> > The current suspend took the approach of refusing suspend
+> > which doesn't work since usb devices underneath hang in
+> > usb_dev_resume(). Looks like this usb device is treated like
+> > a real device bu usb core. Is there a way to have usb core
+> > PM (suspend and resume) handle them as virtual? Would it
+> > help to use "supports_autosuspend" to disable suspend and
+> > resume?
+> 
+> Would it work if usb_disable_autosuspend() on the devices
+> that hang off its vitual bus?
 
-NDI (Northern Digital Inc.) is introducing a new product called the=20
-EMGUIDE GEMINI that will use an FTDI chip for USB serial communications.
-Add the NDI EMGUIDE GEMINI product ID that uses the NDI Vendor ID
-rather than the FTDI Vendor ID, unlike older products.
+You have to consider PM on both the host and client.  And you have to 
+consider both runtime PM and system PM (that is, suspend to RAM, 
+hibernate, etc.).
 
-Signed-off-by: Ryan Mann <rmann@ndigital.com>
----
-V1 -> V2: Email-to issues fixed
-V2 -> V3: Email formatting issues fixed, removed future devices
-V3 -> V4: Email formatting issues fixed, removed extra comments
-V4 -> V5:	Diff whitespace issues fixed,
-			Restored the Aurora SCU device mapping that was removed
-V5 -> V6: Fixed typo in the VID caught by compiler
+On the server, any sort of suspend will interrupt the connection.  
+usb_disable_autosuspend() will prevent runtime suspends, but you 
+shouldn't try to prevent system suspends.  Instead, the usbip driver on 
+the server should have its suspend routine close the connection to the 
+client (rather as if the server's user had unplugged the device).
 
- drivers/usb/serial/ftdi_sio.c     | 2 ++
- drivers/usb/serial/ftdi_sio_ids.h | 3 +++
- 2 files changed, 5 insertions(+)
+On the client, you've got a choice for how to handle runtime PM.  You 
+can leave it enabled, and when the client decides to suspend the device, 
+tell the server's driver.  The server driver can then attempt to do a 
+runtime suspend on the physical device.  (You might need to add a new 
+type of message to the USBIP protocol to accomplish this; I don't know 
+the details.)  Alternatively, you can forbid runtime suspend on the 
+client entirely, although it would be nice if you could avoid this.
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 6ac7a0a5cf07..68f425e39da9 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -803,6 +803,8 @@ static const struct usb_device_id id_table_combined[] =
-=3D {
- 		.driver_info =3D (kernel_ulong_t)&ftdi_NDI_device_quirk },
- 	{ USB_DEVICE(FTDI_VID, FTDI_NDI_AURORA_SCU_PID),
- 		.driver_info =3D (kernel_ulong_t)&ftdi_NDI_device_quirk },
-+	{ USB_DEVICE(FTDI_NDI_VID, FTDI_NDI_EMGUIDE_GEMINI_PID),
-+		.driver_info =3D (kernel_ulong_t)&ftdi_NDI_device_quirk },
- 	{ USB_DEVICE(TELLDUS_VID, TELLDUS_TELLSTICK_PID) },
- 	{ USB_DEVICE(NOVITUS_VID, NOVITUS_BONO_E_PID) },
- 	{ USB_DEVICE(FTDI_VID, RTSYSTEMS_USB_VX8_PID) },
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_si=
-o_ids.h
-index 9acb6f837327..4cc1fae8acb9 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -204,6 +204,9 @@
- #define FTDI_NDI_FUTURE_3_PID		0xDA73	/* NDI future device #3 */
- #define FTDI_NDI_AURORA_SCU_PID		0xDA74	/* NDI Aurora SCU */
-=20
-+#define FTDI_NDI_VID			0x23F2
-+#define FTDI_NDI_EMGUIDE_GEMINI_PID	0x0003	/* NDI Emguide Gemini */
-+
- /*
-  * ChamSys Limited (www.chamsys.co.uk) USB wing/interface product IDs
-  */
---
+System PM on the client can be handled more less the same as runtime PM.
+
+Alan Stern
 
