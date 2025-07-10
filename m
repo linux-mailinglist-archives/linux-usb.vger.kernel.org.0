@@ -1,60 +1,62 @@
-Return-Path: <linux-usb+bounces-25683-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25684-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95B71B004EC
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 16:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 451C1B0053C
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 16:28:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D293D1738B8
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 14:15:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A80F65C21F4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 14:27:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7FEA27281E;
-	Thu, 10 Jul 2025 14:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F982737E1;
+	Thu, 10 Jul 2025 14:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYlLOM/P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sUFAYUfs"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADD71442E8;
-	Thu, 10 Jul 2025 14:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467AA272E44;
+	Thu, 10 Jul 2025 14:27:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752156922; cv=none; b=ZVzI0u6boMkGbpfYdeA/mzil8nFFxTiC6xqai/VbchITKE8pcq3vsryUDeJiuPqaIwLVd6+GxQnGVw+q0Sol4lHc15EpJQjhMOqBaRVpPZTHLRdISvttJM1jj9oHue4Wjf4hJ+bV5PswiUoY27hSmo8SnXeMSLDNyUDuu0QVWh8=
+	t=1752157623; cv=none; b=lmyTzZTgADXlNHEH3e56C57EOn4I0qMBVL5kqQI/Xad0ABjb2brWiEM3d2QxQSKC1TgbyUaZy0IF3oeVzqpI2Qs3jy7HOHiW6d2eGclOJemm2zWhR1pFP9v3gMfi3JCZJ7jnl+8joZuWZG5RwBlCRzdwWqXmiFVVkIjAL+nM6WU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752156922; c=relaxed/simple;
-	bh=4zfxTFyV/TN0ivVrKUj+cVKgP4/5alPqCqzx7/Atvrk=;
+	s=arc-20240116; t=1752157623; c=relaxed/simple;
+	bh=Lp0YKCDEbOTykxsN9b7ISwn3sIb0ktutrPOjgADtWTo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nah5tpvbmXcc92X3WoLupnw7prvjx1TDfq9b6lMuYm5rOd+4tJf+bd6VjsTKp5tqFD2pn8FVxgjpebCN8XPaMmMg3iMtlk85y06jKiNXnGZDDvn0bBWGrXM+mbXTwolOK3qvcSI8L+FcIYe6SNKX9aouFZLHebY6I2/p+Zpe7q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYlLOM/P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E31C4CEF5;
-	Thu, 10 Jul 2025 14:15:22 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=mY4QL8YoWrSxKxe4jIAuzRpmokqrOZ4GflKeFffEvJ8uIHyjbeG9tvwzclrC/Yd8GbYR24GwgsIJ8VGE3rIcfjhFpqkcGc6PVVAJiY1602isAvAz8FehkFG9S3fQ2COMfEx3q891tgfj5WPj8f9R+4DuIhCYO/FNgkIakemFGBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sUFAYUfs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE687C4CEE3;
+	Thu, 10 Jul 2025 14:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752156922;
-	bh=4zfxTFyV/TN0ivVrKUj+cVKgP4/5alPqCqzx7/Atvrk=;
+	s=k20201202; t=1752157622;
+	bh=Lp0YKCDEbOTykxsN9b7ISwn3sIb0ktutrPOjgADtWTo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iYlLOM/PU7zbwRj1NHMVtATCsOdF0WkYlS+M30bqNfbPVVgqXHCTswwJ92npqwTvu
-	 xnF2Xa6jfPZ1qLuR9QhSYdKUd90BJRSHDUMud1zVDP/huKkUUXlqfOWsC4BcbcHAJu
-	 FxpsAhzAoC9FqQG0mRsxZB4vIJY3EjBN3GCDbd1ikTY1ecyFmAYp+riTZnNaxMp6qe
-	 H+fgLpHDp7Q03lUcKkL4rsImllpYqEqe9v8u0Vm4e3Yqzmn8H2DKb5u30QsQ0TN5wJ
-	 gDzC10J0JTm5pHnBNuOFFqwJWr/v20lqkvEjL0gHyP9Hg+YfS70Qa9tbaqBkPpoKy8
-	 866YKfRy1en4Q==
+	b=sUFAYUfs+dQsYzEFb4sR6gIxcqKZVzRQ/A0iSgpF4lSWWIhnM9cREvEsr4Mt8C8Jd
+	 YFhgYhAGdxo5WyS/33r3fYg1ZXqSnrEw+ZKGTw5DA93cGRmTuifePdfIWiShqsT51E
+	 WTvbkOiGJWR53vS9fcFX+Dx60WACbt2noQxtmEZ/l2TJCQoSCLEMc4p+48kCdtGguj
+	 BWYyvhMiBimhWkBWB5dvY5WglYBDCudet8N2FIO/MTOwAx3eoKhp52kw7XVwKk06K1
+	 ZHTYbhjow1GgDk2Sz+TIur3ilq7tGw626x6MKDLmyMv2pRIqz14Uxj/fLG85N5FkkN
+	 T7hchzHvKTMdg==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1uZs3P-0000000050N-2Cft;
-	Thu, 10 Jul 2025 16:15:15 +0200
-Date: Thu, 10 Jul 2025 16:15:15 +0200
+	id 1uZsEi-000000005Bb-2yia;
+	Thu, 10 Jul 2025 16:26:56 +0200
+Date: Thu, 10 Jul 2025 16:26:56 +0200
 From: Johan Hovold <johan@kernel.org>
 To: Fabio Porcedda <fabio.porcedda@gmail.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
 	stable@vger.kernel.org
-Subject: Re: [PATCH v3] USB: serial: option: add Telit Cinterion FE910C04
- (ECM) composition
-Message-ID: <aG_K85kECOF0hx34@hovoldconsulting.com>
-References: <20250710121638.121574-1-fabio.porcedda@gmail.com>
+Subject: Re: [PATCH] USB: serial: option: add Telit Cinterion FE910C04 (ECM)
+ composition
+Message-ID: <aG_NsFLI5UsVvYkt@hovoldconsulting.com>
+References: <20250708120004.100254-1-fabio.porcedda@gmail.com>
+ <aG4_jEQmeD9a_oWo@hovoldconsulting.com>
+ <CAHkwnC9tb=SZXsP7t8oeNPJ24pij4Y1ayFVRk6tqLhzc5zbsqQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,26 +65,43 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250710121638.121574-1-fabio.porcedda@gmail.com>
+In-Reply-To: <CAHkwnC9tb=SZXsP7t8oeNPJ24pij4Y1ayFVRk6tqLhzc5zbsqQ@mail.gmail.com>
 
-On Thu, Jul 10, 2025 at 02:16:38PM +0200, Fabio Porcedda wrote:
-> Add Telit Cinterion FE910C04 (ECM) composition:
-> 0x10c7: ECM + tty (AT) + tty (AT) + tty (diag)
+On Wed, Jul 09, 2025 at 12:50:27PM +0200, Fabio Porcedda wrote:
+> Il giorno mer 9 lug 2025 alle ore 12:08 Johan Hovold
+> <johan@kernel.org> ha scritto:
+> >
+> > On Tue, Jul 08, 2025 at 02:00:04PM +0200, Fabio Porcedda wrote:
+> > > Add Telit Cinterion FE910C04 (ECM) composition:
+> > > 0x10c7: ECM + tty (AT) + tty (AT) + tty (diag)
 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
-> v3:
-> * Add missing change history
+> > >  /* Interface does not support modem-control requests */
+> > >  #define NCTRL(ifnum) ((BIT(ifnum) & 0xff) << 8)
+> > > +#define NCTRL_ALL    (0xff << 8)
+
+> > > +     { USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10c7, 0xff, 0xff, 0x30),     /* Telit FE910C04 (ECM) */
+> > > +       .driver_info = NCTRL_ALL },
+> >
+> > Please just use NCTRL(4) here. (And remember to mention additions like
+> > this in the commit message in the future.)
 > 
-> v2:
-> * https://lore.kernel.org/linux-usb/20250710115952.120835-1-fabio.porcedda@gmail.com/
-> * NCTRL_ALL -> NCTRL(4)
+> Ok, I will send a v2.
 > 
-> v1:
-> * https://lore.kernel.org/linux-usb/20250708120004.100254-1-fabio.porcedda@gmail.com/
+> > Or do you have reasons to believe the interface numbering may change? Or
+> > is it just to avoid matching on both number and protocol?
+> 
+> The interface number should not change, it's just to have a more
+> generic definition that matches also other pids for the same soc. I
+> think it's easier to write and less error prone because the interface
+> number changes based on the PID.
 
-Applied, thanks.
+Yeah, I can see it having some merit. Maybe I reacted to the naming as
+I at first incorrectly read it as no interface supporting the control
+request (perhaps naming it "NCTRL_ANY" would have avoided this).
+
+But for consistency I think we can continue using the interface numbers
+until we have some better abstraction for these that can be used to
+avoid also the explicit per protocol entries.
 
 Johan
 
