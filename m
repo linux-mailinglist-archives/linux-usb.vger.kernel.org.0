@@ -1,124 +1,104 @@
-Return-Path: <linux-usb+bounces-25660-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25661-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64A41AFFD9D
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 11:11:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FDD0AFFDB0
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 11:17:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90980B428AF
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 09:09:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E09595A70FC
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 09:17:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6A9628DF02;
-	Thu, 10 Jul 2025 09:11:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C37A291C16;
+	Thu, 10 Jul 2025 09:16:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QQ8KLjY2"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oQ3iGFVX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5281C861B
-	for <linux-usb@vger.kernel.org>; Thu, 10 Jul 2025 09:11:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E5C22330F;
+	Thu, 10 Jul 2025 09:16:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752138674; cv=none; b=ZKodwgKHVVZjoOpCxrDtpREhIXTKmq00MS60so73UkNAI3cP6SUrsAx1FAA+V8BMZ0FEUPEP93YJiLfe1m86ZhDjIH/4dveplgjJr84JSRQcUimZtFxiXh732oiOvfl9cg4uyF0ubxaQ2+wOY9DRPZhybjXweejCkY179HU/uWA=
+	t=1752139005; cv=none; b=El23tOK//xOWNoihDSt0X3JxebJYAe5tM2y2CVrt+6uebuS5UNBjNW2bqaXLnXMROZkEuEU3uKbQmzU2ugW2cD5FT3wYKSeGzhbqKgeVbBtE1W+KBNBmPHgT7iLDMcnYLwqeRiQeCxQIbv06UPhV45p0psu7B+Rr+y0K5D16Slg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752138674; c=relaxed/simple;
-	bh=bU3G3NQXTbBsUsFWHm0A7cxZQOxzkDZNyLdo/G03m4I=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=TJZHAKh0Ie550W71/2eHtp1HdKfSLwL185z9nrq0tI7rJueSEwrVTzCBSmG3h8Ns5E9rG4GYkTk86LF9lMTOZduY+QLRS+jqLeK8mwYfVionaVqqoEaZU1fyP6XhCXGCRtNiOaMi9FsTcUr2DRFschw8fbJ52MV41IR+z1zSjJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QQ8KLjY2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C7B4C4CEE3
-	for <linux-usb@vger.kernel.org>; Thu, 10 Jul 2025 09:11:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752138674;
-	bh=bU3G3NQXTbBsUsFWHm0A7cxZQOxzkDZNyLdo/G03m4I=;
-	h=From:To:Subject:Date:From;
-	b=QQ8KLjY28ERV2nSQWcB7ySApsWbgXkVFy2kP8KALfi+iX1BqYOtIwqX/5XNATwKW2
-	 7AYpqwSLLFhBkf0o6pGAhxDxhnqEIwbydsx2WJsZ2itZYVIpJXr6K8lRDUK7NlmVzq
-	 YzlC4dlXE8LR0NAuuWIO2bjXPGl//hUILhiOP2Zo4wBSX/bbrVxDWEA3UBGaerZzli
-	 vceyeo3PoHGnNFr5PgsQyiWSr8GnwXXC91nikl5ZGx46VZoKQXX82ib0mLXWumPsxi
-	 vrx+/yOVTK8x+Gqdp1/wLM9KnaBJGTriCMdjswNkGvrEQ7fcMqYGKq495ePz9Bdc6b
-	 nwWMyLd56BRXQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 3C5B7C433E1; Thu, 10 Jul 2025 09:11:14 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220331] New: FTDI serial IO - unknown device type: 0x8312
-Date: Thu, 10 Jul 2025 09:11:14 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: tomas.hanslik@septim.cz
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-220331-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1752139005; c=relaxed/simple;
+	bh=Q6xoz6BRpXmau0JSY+OTKhGgoAKtAtx8upIvPbVWZ44=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jt/L+Z6AYMsL9ncH4wTriWgf1ywPEJly6Uzw0XMn1/7hNJwl1BuH7zSfCukrPq6U+jNVNyClYsSOTLa+Imrg2fiAeSk3ccozr3YD6LMKwQ4F54xdTApR3Xfl/+/H14MTriyFq6wnZhERCibzOV36eujN2VWZo5zy4CPn9SXqm5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oQ3iGFVX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15AABC4CEE3;
+	Thu, 10 Jul 2025 09:16:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1752139004;
+	bh=Q6xoz6BRpXmau0JSY+OTKhGgoAKtAtx8upIvPbVWZ44=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oQ3iGFVXa8tRICFQuHy8lOHHRwkYf7mKWU/kaiCWK9y0HRkO2oIYXTgU77ewxRYE7
+	 O0AH9NwsGfPD9lmqyScmFQWsIHfcuvgsAra+BTdv0MQAiDy2HlLKE5qZFRBekUuKPT
+	 fNIy5x9seU60pUNoizmFWkfsvprPWqq3kCzfjfNU=
+Date: Thu, 10 Jul 2025 11:16:41 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: jackysliu <1972843537@qq.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v2] usb: gadget: functioni: Fix a oob problem in rndis
+Message-ID: <2025071045-irritable-unsure-4543@gregkh>
+References: <2025071026-fanciness-size-1d5d@gregkh>
+ <tencent_21B82DB792FE0049B6EF5ECD81285669C908@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <tencent_21B82DB792FE0049B6EF5ECD81285669C908@qq.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220331
+On Thu, Jul 10, 2025 at 04:49:22PM +0800, jackysliu wrote:
+> From: Siyang Liu <1972843537@qq.com>
+> 
+> An out-of-bounds memory access vulnerability exists in the RNDIS
+> (Remote Network Driver Interface Specification) implementation.
+> The vulnerability stems from insufficient boundary validation when
+> processing SET requests with user-controlled InformationBufferOffset
+> and InformationBufferLength parameters.
+> 
+> Fix on commit id:
+> commit 5f60d5f6bbc1 ("move asm/unaligned.h to linux/unaligned.h")
+> 
+> The vulnerability can be fixed by adding addtional boundary checks
+> 
+> Signed-off-by: Siyang Liu <1972843537@qq.com>
+> ---
+>  drivers/usb/gadget/function/rndis.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
+> index afd75d72412c..cc522fb4c06c 100644
+> --- a/drivers/usb/gadget/function/rndis.c
+> +++ b/drivers/usb/gadget/function/rndis.c
+> @@ -641,7 +641,8 @@ static int rndis_set_response(struct rndis_params *params,
+>  	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
+>  	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
+>  	    (BufOffset > RNDIS_MAX_TOTAL_SIZE) ||
+> -	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
+> +	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE) ||
+> +		(BufOffset + BufLength+8 > RNDIS_MAX_TOTAL_SIZE))
 
-            Bug ID: 220331
-           Summary: FTDI serial IO - unknown device type: 0x8312
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: tomas.hanslik@septim.cz
-        Regression: No
+Odd, this should be "BufLength + 8" as checkpatch says:
 
-Issue with a newer hardware with USB DisplayLink adapter, syslog throws
-following error about unrecognized device type 0x8312:
+CHECK: spaces preferred around that '+' (ctx:VxV)
+#121: FILE: drivers/usb/gadget/function/rndis.c:645:
++		(BufOffset + BufLength+8 > RNDIS_MAX_TOTAL_SIZE))
+ 		                     ^
 
+I'll go fix this up by hand, but be more careful in the future...
 
-> [    4.447826] usb 1-8.2.1: New USB device found, idVendor=3D17e9,
-> idProduct=3Dff00, bbcdDevice=3D83.12
-> [    4.447833] usb 1-8.2.1: New USB device strings: Mfr=3D1, Product=3D2,
-> SerialNumber
-> =3D3
-> [    4.447835] usb 1-8.2.1: Product: PM1000
-> [    4.447836] usb 1-8.2.1: Manufacturer: DisplayLink
-> [    4.447837] usb 1-8.2.1: SerialNumber: 9638293100007141
-> [    4.479297] usbcore: registered new interface driver ftdi_sio
-> [    4.479363] usbserial: USB Serial support registered for FTDI USB Seri=
-al
-> Device
-> [    4.480786] ftdi_sio 1-8.2.1:1.0: FTDI USB Serial Device converter
-> detected
-> [    4.480848] ftdi_sio ttyUSB0: unknown device type: 0x8312
-> [    4.480923] ftdi_sio 1-8.2.1:1.1: FTDI USB Serial Device converter
-> detected
-> [    4.480957] ftdi_sio ttyUSB1: unknown device type: 0x8312
-> [    4.486014] ftdi_sio ttyUSB0: unknown device type: 0x8312
-> [    4.486049] ftdi_sio ttyUSB1: unknown device type: 0x8312
+thanks,
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+greg k-h
 
