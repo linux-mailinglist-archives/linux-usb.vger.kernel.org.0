@@ -1,108 +1,89 @@
-Return-Path: <linux-usb+bounces-25664-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25665-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BB31AFFE38
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 11:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD752AFFF11
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 12:17:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F7A717F610
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 09:34:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 395414A6577
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 10:17:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B26ED2D3EE9;
-	Thu, 10 Jul 2025 09:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DlMPoIpF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97C22980B9;
+	Thu, 10 Jul 2025 10:17:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367F82D3EEA;
-	Thu, 10 Jul 2025 09:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A690D2AEF1;
+	Thu, 10 Jul 2025 10:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752140051; cv=none; b=eeVlz+GRERBVJy4EJjbVIfwve5N7Mvx/3sqN6HCfEj+7mLVLMSubTkB9OJoOlvFGgDg7xiV6k1q8jj2uYDhrsKGODDrh9uXxfqCBTtpArvlh71RmXIoCpn6zAkDs1xEqS+2TfGkQ1RuFopJX0+6n9NFo3gaXS1exhJy8ZcdBiM8=
+	t=1752142660; cv=none; b=qevfmPOuyIaMPCb6cqWfLfCVzfIV4SGcq98xslfNAqLMKWJCe+vl/cB2dUQFYe+EkgI2TDE1OqTPtDwvBLpet4qjKUzBMMsMa4WZ826NGQBCNrCGUejbu2xAMDy80FzK5doNQ99eDigt+52V0w9+15pp1O7PdptrnqH4Z3D4bbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752140051; c=relaxed/simple;
-	bh=J8ctrFqZgDiGHdrykLxWJ219WPvtey1VIFrRBr7QWCM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jAwXnxNSchdTtyyC+G20WNLd2CtGnbuH+S8H2Smx8zyYQtWMAgj5ITqAUa1MCI/Ql/dEMsPlynME/rsXLi0fJIcmfmHCVlIsEvR4R2rwijuI/qeaL2D9+DXzTwm/VUFvGU/j4aiw3trlsxph5PWl3WPAfjT5fN6GxB7t2qYPcvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DlMPoIpF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D905C4CEF1;
-	Thu, 10 Jul 2025 09:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752140050;
-	bh=J8ctrFqZgDiGHdrykLxWJ219WPvtey1VIFrRBr7QWCM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DlMPoIpFxB1NfmdUrgtaGxbtwh847EQo/h82OMpeURWqXi5j0CrkNZGMehPOeiBZ9
-	 foEp5t/CamBcdSGCvQC4aYu+vmeDkPAbb2EiyXT8xVDOeLtEOf1b3EwVft0tylCNqa
-	 hfzBPBI1bVQ69rvyxaaKw1zUwlfRI1EYzVDFtszU=
-Date: Thu, 10 Jul 2025 11:34:08 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: jackysliu <1972843537@qq.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v2] usb: gadget: functioni: Fix a oob problem in rndis
-Message-ID: <2025071025-distaste-runny-0963@gregkh>
-References: <2025071026-fanciness-size-1d5d@gregkh>
- <tencent_21B82DB792FE0049B6EF5ECD81285669C908@qq.com>
- <2025071045-irritable-unsure-4543@gregkh>
+	s=arc-20240116; t=1752142660; c=relaxed/simple;
+	bh=0kuM5VXy8y+tTqVrYFr4WFguC9X1xGj+r/Gma6OEsrY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oilKZd00Q1M0iPdAG3dzvJduJDwyDIcsvWvhNRptye9taIpu3TU7FHEjV5fXAvtslUevLjtWTyzqTX+q8bPM2QPZN4NvL9HuS8w7CuF6Beib1GooajWYj3P8Ka8dP/E1VSgFE4VpRc2b6TmrCWueWXZi1GJKLzH9lAqtwInR22E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 56AAHIZf025376;
+	Thu, 10 Jul 2025 19:17:18 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 56AAHI2e025372
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Thu, 10 Jul 2025 19:17:18 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <a8bed564-3eec-472d-8e57-aaf5274c13b1@I-love.SAKURA.ne.jp>
+Date: Thu, 10 Jul 2025 19:17:19 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2025071045-irritable-unsure-4543@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [kernel?] INFO: task hung in uevent_show (2)
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: syzbot <syzbot+592e2ab8775dbe0bf09a@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        USB list <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <686e7698.050a0220.c28f5.0006.GAE@google.com>
+ <79f634db-c149-4220-b8d4-0fff2c6b6a01@I-love.SAKURA.ne.jp>
+ <e064a3e4-ae70-4a24-ba5e-1bb8c7971f23@rowland.harvard.edu>
+ <39f312fa-d461-4377-b809-50c8a7188f6b@I-love.SAKURA.ne.jp>
+ <dd932df4-2a13-4a5c-a531-376065f87391@rowland.harvard.edu>
+ <43189e93-2cad-429a-a604-15bf5cc95e43@I-love.SAKURA.ne.jp>
+ <1d471e25-6671-4cb2-a2c9-af96c2b4e13d@rowland.harvard.edu>
+Content-Language: en-US
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <1d471e25-6671-4cb2-a2c9-af96c2b4e13d@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Anti-Virus-Server: fsav201.rs.sakura.ne.jp
+X-Virus-Status: clean
 
-On Thu, Jul 10, 2025 at 11:16:41AM +0200, Greg KH wrote:
-> On Thu, Jul 10, 2025 at 04:49:22PM +0800, jackysliu wrote:
-> > From: Siyang Liu <1972843537@qq.com>
-> > 
-> > An out-of-bounds memory access vulnerability exists in the RNDIS
-> > (Remote Network Driver Interface Specification) implementation.
-> > The vulnerability stems from insufficient boundary validation when
-> > processing SET requests with user-controlled InformationBufferOffset
-> > and InformationBufferLength parameters.
-> > 
-> > Fix on commit id:
-> > commit 5f60d5f6bbc1 ("move asm/unaligned.h to linux/unaligned.h")
-> > 
-> > The vulnerability can be fixed by adding addtional boundary checks
-> > 
-> > Signed-off-by: Siyang Liu <1972843537@qq.com>
-> > ---
-> >  drivers/usb/gadget/function/rndis.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
-> > index afd75d72412c..cc522fb4c06c 100644
-> > --- a/drivers/usb/gadget/function/rndis.c
-> > +++ b/drivers/usb/gadget/function/rndis.c
-> > @@ -641,7 +641,8 @@ static int rndis_set_response(struct rndis_params *params,
-> >  	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
-> >  	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
-> >  	    (BufOffset > RNDIS_MAX_TOTAL_SIZE) ||
-> > -	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
-> > +	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE) ||
-> > +		(BufOffset + BufLength+8 > RNDIS_MAX_TOTAL_SIZE))
+On 2025/07/10 0:41, Alan Stern wrote:
+> Okay, I see what your problem is.
 > 
-> Odd, this should be "BufLength + 8" as checkpatch says:
-> 
-> CHECK: spaces preferred around that '+' (ctx:VxV)
-> #121: FILE: drivers/usb/gadget/function/rndis.c:645:
-> +		(BufOffset + BufLength+8 > RNDIS_MAX_TOTAL_SIZE))
->  		                     ^
+> The bEndpointAddress field of the endpoint descriptor is not just the 
+> endpoint's number.  It also includes the endpoint's direction in bit 7 
+> (0 for OUT, 1 for IN).
 
-And the indentation needs to be fixed up too.  I'll do that...
+I see, but I couldn't figure out whether BUG_ON(endpoint > 0xF) is bad.
 
-How was this tested?
+I came up to try these BUG_ON() lines in case some of hung task reports (e.g.
+https://lkml.kernel.org/r/686e8032.050a0220.385921.0006.GAE@google.com ) are
+caused by use of unintended pipes created by out-of-range values being passed
+to __create_pipe().
 
-thanks,
+Should I give up BUG_ON(endpoint > 0xF) line?
+Or should I try to update callers which trigger BUG_ON(endpoint > 0xF) line?
 
-greg k-h
 
