@@ -1,89 +1,96 @@
-Return-Path: <linux-usb+bounces-25665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25666-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD752AFFF11
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 12:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 27508AFFF5D
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 12:34:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 395414A6577
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 10:17:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77BEB5621A8
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 10:34:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97C22980B9;
-	Thu, 10 Jul 2025 10:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BF4F2D5414;
+	Thu, 10 Jul 2025 10:34:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HJnlh27k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A690D2AEF1;
-	Thu, 10 Jul 2025 10:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50B219CC28;
+	Thu, 10 Jul 2025 10:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752142660; cv=none; b=qevfmPOuyIaMPCb6cqWfLfCVzfIV4SGcq98xslfNAqLMKWJCe+vl/cB2dUQFYe+EkgI2TDE1OqTPtDwvBLpet4qjKUzBMMsMa4WZ826NGQBCNrCGUejbu2xAMDy80FzK5doNQ99eDigt+52V0w9+15pp1O7PdptrnqH4Z3D4bbA=
+	t=1752143680; cv=none; b=hSIwnsw5t3mFG2rzosHN6GJ2tGG/TYUki6vfaGpPSPEE667BhtZDGN4fUFsM5h2xMNlePNCkIficsoSpAO8RRgVeJrgzDV8yR6RgnE29SMmNMc6I2HZGD0lzu9gIpygaKRq+uJWhdm4KLpqlwGW9GbuFszO4W2B+54r9Tp6TUec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752142660; c=relaxed/simple;
-	bh=0kuM5VXy8y+tTqVrYFr4WFguC9X1xGj+r/Gma6OEsrY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oilKZd00Q1M0iPdAG3dzvJduJDwyDIcsvWvhNRptye9taIpu3TU7FHEjV5fXAvtslUevLjtWTyzqTX+q8bPM2QPZN4NvL9HuS8w7CuF6Beib1GooajWYj3P8Ka8dP/E1VSgFE4VpRc2b6TmrCWueWXZi1GJKLzH9lAqtwInR22E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 56AAHIZf025376;
-	Thu, 10 Jul 2025 19:17:18 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 56AAHI2e025372
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Thu, 10 Jul 2025 19:17:18 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a8bed564-3eec-472d-8e57-aaf5274c13b1@I-love.SAKURA.ne.jp>
-Date: Thu, 10 Jul 2025 19:17:19 +0900
+	s=arc-20240116; t=1752143680; c=relaxed/simple;
+	bh=qDuxNYZrcLuS5OsHxaF8sdrwSmQbHr+wqAD9aSemGkI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M5ySQ3TB88fWG7IFkpaIpti+XhBRC/8GXD4EWG51xTvCM1GuwO+jq2W65DjgR3XC716Cl0efA6prZ1BFr/N0WdXIeZXSyi5OoXtOSo06NXRZH1GiuS7fQ+o0TGi/xOunIa6PSqu58leB48Aa0LA6zCd/bqzLrkINi3RfR5TraZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HJnlh27k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40A06C4CEF1;
+	Thu, 10 Jul 2025 10:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752143680;
+	bh=qDuxNYZrcLuS5OsHxaF8sdrwSmQbHr+wqAD9aSemGkI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HJnlh27ke1OuipZoJTDs9vRnN4ZbcF0sZFYk74llWBunHsBKu43rjc8vshla6rLtN
+	 TkpE6xo3BEFwt5Gmmi5Qkyt8iL0mYE2ixuVaRMZlCT3DRveUbdwV84FLULwxBhO5BV
+	 JObNPiuwc5pZxteU4SpOCjenOcyPJsnY1vWEnHOZI/xrm+5qKkrG1MYuAasqI2Ieaf
+	 DSdNA8fclilLohdqPhqMdCcYSNAjwJQPZNFhe731SbEEpu5ps6lZ9yRwxyZMqKcV4a
+	 mJTvituubiSCyhVqOPfmSGHRSWsK5dqT1pDIvCxmMHUOTPj0e/sGBiMZZKposfbqRG
+	 6KUpk4iCjkAYA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1uZobp-000000008C2-08Dx;
+	Thu, 10 Jul 2025 12:34:33 +0200
+Date: Thu, 10 Jul 2025 12:34:33 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Ryan Mann <rmann@ndigital.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5] NDI FTDI USB driver support
+Message-ID: <aG-XOXPcT3kFxKQg@hovoldconsulting.com>
+References: <YQXPR01MB498735732651163477C995B9DF49A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [kernel?] INFO: task hung in uevent_show (2)
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: syzbot <syzbot+592e2ab8775dbe0bf09a@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        USB list <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <686e7698.050a0220.c28f5.0006.GAE@google.com>
- <79f634db-c149-4220-b8d4-0fff2c6b6a01@I-love.SAKURA.ne.jp>
- <e064a3e4-ae70-4a24-ba5e-1bb8c7971f23@rowland.harvard.edu>
- <39f312fa-d461-4377-b809-50c8a7188f6b@I-love.SAKURA.ne.jp>
- <dd932df4-2a13-4a5c-a531-376065f87391@rowland.harvard.edu>
- <43189e93-2cad-429a-a604-15bf5cc95e43@I-love.SAKURA.ne.jp>
- <1d471e25-6671-4cb2-a2c9-af96c2b4e13d@rowland.harvard.edu>
-Content-Language: en-US
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <1d471e25-6671-4cb2-a2c9-af96c2b4e13d@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Anti-Virus-Server: fsav201.rs.sakura.ne.jp
-X-Virus-Status: clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YQXPR01MB498735732651163477C995B9DF49A@YQXPR01MB4987.CANPRD01.PROD.OUTLOOK.COM>
 
-On 2025/07/10 0:41, Alan Stern wrote:
-> Okay, I see what your problem is.
+On Wed, Jul 09, 2025 at 01:50:15PM +0000, Ryan Mann wrote:
+> From: Ryan Mann (NDI) <rmann@ndigital.com>
 > 
-> The bEndpointAddress field of the endpoint descriptor is not just the 
-> endpoint's number.  It also includes the endpoint's direction in bit 7 
-> (0 for OUT, 1 for IN).
+> NDI (Northern Digital Inc.) is introducing a new product called the 
+> EMGUIDE GEMINI that will use an FTDI chip for USB serial communications.
+> Add the NDI EMGUIDE GEMINI product ID that uses the NDI Vendor ID
+> rather than the FTDI Vendor ID, unlike older products.
+> 
+> Signed-off-by: Ryan Mann <rmann@ndigital.com>
+> ---
+> V1 -> V2: Email-to issues fixed
+> V2 -> V3: Email formatting issues fixed, removed future devices
+> V3 -> V4: Email formatting issues fixed, removed extra comments
+> V4 -> V5:	Diff whitespace issues fixed,
+> 			Restored the Aurora SCU device mapping that was removed
 
-I see, but I couldn't figure out whether BUG_ON(endpoint > 0xF) is bad.
+> +	{ USB_DEVICE(NDI_VID, FTDI_NDI_EMGUIDE_GEMINI_PID),
+> +		.driver_info = (kernel_ulong_t)&ftdi_NDI_device_quirk },
 
-I came up to try these BUG_ON() lines in case some of hung task reports (e.g.
-https://lkml.kernel.org/r/686e8032.050a0220.385921.0006.GAE@google.com ) are
-caused by use of unintended pipes created by out-of-range values being passed
-to __create_pipe().
+I was going to apply this, but turns out it does not even compile.
 
-Should I give up BUG_ON(endpoint > 0xF) line?
-Or should I try to update callers which trigger BUG_ON(endpoint > 0xF) line?
+Sending completely untested patches like this is really not acceptable.
 
+> +#define FTDI_NDI_VID			0x23F2
+
+Also change your Subject to use the common prefix ("USB: serial:
+ftdi_sio: ..." when respinning.
+
+Johan
 
