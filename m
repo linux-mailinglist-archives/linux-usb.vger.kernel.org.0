@@ -1,104 +1,128 @@
-Return-Path: <linux-usb+bounces-25661-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25662-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FDD0AFFDB0
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 11:17:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C11DEAFFE35
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 11:33:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E09595A70FC
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 09:17:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EDBC5604D4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 09:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C37A291C16;
-	Thu, 10 Jul 2025 09:16:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F6E92D3ED1;
+	Thu, 10 Jul 2025 09:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oQ3iGFVX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sWnJidI3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E5C22330F;
-	Thu, 10 Jul 2025 09:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D939B2877F6;
+	Thu, 10 Jul 2025 09:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752139005; cv=none; b=El23tOK//xOWNoihDSt0X3JxebJYAe5tM2y2CVrt+6uebuS5UNBjNW2bqaXLnXMROZkEuEU3uKbQmzU2ugW2cD5FT3wYKSeGzhbqKgeVbBtE1W+KBNBmPHgT7iLDMcnYLwqeRiQeCxQIbv06UPhV45p0psu7B+Rr+y0K5D16Slg=
+	t=1752140018; cv=none; b=Af/IHCTG85zyE4LeWRv3TW2vYRHPPpvD3RzUZBiwxWwdbxfEtLCW09X2a/pnjCJjwRo6vVkeI3h20t++DqKWCt0DEU25ANuqfvymEXUufZ9/dpsZZRFevklVw1uKDr2Plmj5Yb1VEvQmZypUxawqAvsoyS77mUsNoghfB2DuNt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752139005; c=relaxed/simple;
-	bh=Q6xoz6BRpXmau0JSY+OTKhGgoAKtAtx8upIvPbVWZ44=;
+	s=arc-20240116; t=1752140018; c=relaxed/simple;
+	bh=KmhZOyeonoSnCCdCip7QzoSfZQKgNdgYKLLYy5aEzc0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jt/L+Z6AYMsL9ncH4wTriWgf1ywPEJly6Uzw0XMn1/7hNJwl1BuH7zSfCukrPq6U+jNVNyClYsSOTLa+Imrg2fiAeSk3ccozr3YD6LMKwQ4F54xdTApR3Xfl/+/H14MTriyFq6wnZhERCibzOV36eujN2VWZo5zy4CPn9SXqm5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oQ3iGFVX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15AABC4CEE3;
-	Thu, 10 Jul 2025 09:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752139004;
-	bh=Q6xoz6BRpXmau0JSY+OTKhGgoAKtAtx8upIvPbVWZ44=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=DeL7gveyl2e0UnRM7o9qSMIQOhs3zW7Bc/IXSzz2IyngnWX7TKO34fL7DaYVr3z0jkqr3oUSbRFtP/mizU98G4fiqwRflOzCjjgzGzQ0FZGve6tFaN/fmublXmxJViLXb3SyTDm34Jwn8dp1+s7IIHNyDzO1dTRot/eSFiVecXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sWnJidI3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8DA3C4CEE3;
+	Thu, 10 Jul 2025 09:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752140018;
+	bh=KmhZOyeonoSnCCdCip7QzoSfZQKgNdgYKLLYy5aEzc0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oQ3iGFVXa8tRICFQuHy8lOHHRwkYf7mKWU/kaiCWK9y0HRkO2oIYXTgU77ewxRYE7
-	 O0AH9NwsGfPD9lmqyScmFQWsIHfcuvgsAra+BTdv0MQAiDy2HlLKE5qZFRBekUuKPT
-	 fNIy5x9seU60pUNoizmFWkfsvprPWqq3kCzfjfNU=
-Date: Thu, 10 Jul 2025 11:16:41 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: jackysliu <1972843537@qq.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v2] usb: gadget: functioni: Fix a oob problem in rndis
-Message-ID: <2025071045-irritable-unsure-4543@gregkh>
-References: <2025071026-fanciness-size-1d5d@gregkh>
- <tencent_21B82DB792FE0049B6EF5ECD81285669C908@qq.com>
+	b=sWnJidI3a3m7WypSxwiLLjCaxAJYYx+DIOg4QhJShmOHhFwean3VchVze2Q36MgQ1
+	 i1xlXLMZWwopijU0LYYUuG6QZRXk4a/EXehid1SWo3Zo+5Wc6pmD6PHkhz4jDymBmz
+	 vVsjlmdhSd9ccAlDfuTWPjV76ZrZYLjruQkQwjCUb8sBNqQDBowFPE1522F8QBbY2U
+	 dcAn5ZYyQ5dZwG1bi0irnf3vmAYl9cQ7SWRkc4XyCq3UsnRRM7tRiDUyV7uDdxf/EU
+	 uNS6X9FWikT88AH8XIqGwy6gfktaYIzpJY4VUYbHBym7GQ0Dp5lhut1CfkCCNwk030
+	 s8IZwF31+3dsQ==
+Date: Thu, 10 Jul 2025 11:33:34 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org, 
+	USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Serious bug in HID core
+Message-ID: <kznazb2qsnraamfi2xuaztryg6yw77ko5wnrezl6yzjwu7vdpl@l4u67yhov327>
+References: <c75433e0-9b47-4072-bbe8-b1d14ea97b13@rowland.harvard.edu>
+ <drcvdlw2kpuvsbact2gy4hvqp2i3au3shv5ozp3qms7qdfvi7t@7jofrodxeimb>
+ <e3a58c95-9501-4ec8-902e-2a73402d1fe3@rowland.harvard.edu>
+ <5rkp3gbrqvsdgia57eyw65jnu4wmpx6sbk47kmv4akmz2q7nzz@clqgtjfk2qxk>
+ <b18af9f1-e3d8-429a-b313-38cc279e0f87@rowland.harvard.edu>
+ <rwo5cqptiqarvl7qhgapao2uld3aqs27llhtqm5crop3v3rx64@j7h64nqsv6rv>
+ <25b196f4-7362-4136-b5b9-bd53d1cc1c48@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <tencent_21B82DB792FE0049B6EF5ECD81285669C908@qq.com>
+In-Reply-To: <25b196f4-7362-4136-b5b9-bd53d1cc1c48@rowland.harvard.edu>
 
-On Thu, Jul 10, 2025 at 04:49:22PM +0800, jackysliu wrote:
-> From: Siyang Liu <1972843537@qq.com>
+On Jul 09 2025, Alan Stern wrote:
+> On Wed, Jul 09, 2025 at 05:35:41PM +0200, Benjamin Tissoires wrote:
+> > On Jul 09 2025, Alan Stern wrote:
+> > > On Wed, Jul 09, 2025 at 10:44:35AM +0200, Benjamin Tissoires wrote:
+> > > > On Jul 08 2025, Alan Stern wrote:
+> > > > > On Tue, Jul 08, 2025 at 05:51:08PM +0200, Benjamin Tissoires wrote:
+> > > > > > The second one would need a little bit more understanding of the fake
+> > > > > > report descriptor provided by syzbot.
+> > > > > 
+> > > > > I suppose we can get the information from syzbot if it's really 
+> > > > > necessary.  But it seems to be a minor point.
+> > > > 
+> > > > Well, to me it's important because I can get an easier reproducer and
+> > > > add this corner case in the HID test suite :) Not to mention the
+> > > > understanding on how we can get to this corner case.
+> > > 
+> > > I can get it for you if you really want to see it.  It's just a question 
+> > > of asking syzbot to run the reproducer with a patch that prints all the 
+> > > report descriptors.
+> > 
+> > I would very much appreciate that :)
 > 
-> An out-of-bounds memory access vulnerability exists in the RNDIS
-> (Remote Network Driver Interface Specification) implementation.
-> The vulnerability stems from insufficient boundary validation when
-> processing SET requests with user-controlled InformationBufferOffset
-> and InformationBufferLength parameters.
+> Here's the output from syzbot, with all the extra fluff removed:
 > 
-> Fix on commit id:
-> commit 5f60d5f6bbc1 ("move asm/unaligned.h to linux/unaligned.h")
+> 	96 01 00 06 01 00 03 00 00 00 00 2a 90 a0 27 00
+> 	00 00 00 b3 81 3e 25 03 1b dd e8 40 50 3b 5d 8c
+> 	3d da
 > 
-> The vulnerability can be fixed by adding addtional boundary checks
+> This is the full USB report descriptor contents.  Hopefully you have a 
+> tool that can translate these byte values.
 > 
-> Signed-off-by: Siyang Liu <1972843537@qq.com>
-> ---
->  drivers/usb/gadget/function/rndis.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
-> index afd75d72412c..cc522fb4c06c 100644
-> --- a/drivers/usb/gadget/function/rndis.c
-> +++ b/drivers/usb/gadget/function/rndis.c
-> @@ -641,7 +641,8 @@ static int rndis_set_response(struct rndis_params *params,
->  	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
->  	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
->  	    (BufOffset > RNDIS_MAX_TOTAL_SIZE) ||
-> -	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
-> +	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE) ||
-> +		(BufOffset + BufLength+8 > RNDIS_MAX_TOTAL_SIZE))
 
-Odd, this should be "BufLength + 8" as checkpatch says:
+Thanks a lot. After a little bit of trial/errors, I managed to reproduce
+locally.
 
-CHECK: spaces preferred around that '+' (ctx:VxV)
-#121: FILE: drivers/usb/gadget/function/rndis.c:645:
-+		(BufOffset + BufLength+8 > RNDIS_MAX_TOTAL_SIZE))
- 		                     ^
+The parsed report descriptor is the following:
 
-I'll go fix this up by hand, but be more careful in the future...
+        0x96, 0x01, 0x00,              # Report Count (1)                    0
+        0x06, 0x01, 0x00,              # Usage Page (Generic Desktop)        3
+        # 0x03, 0x00, 0x00, 0x00, 0x00,  # Ignored by the kernel somehow
+        0x2a, 0x90, 0xa0,              # Usage Maximum (41104)               6
+        0x27, 0x00, 0x00, 0x00, 0x00,  # Logical Maximum (0)                 9
+        0xb3, 0x81, 0x3e, 0x25, 0x03,  # Feature (Cnst,Arr,Abs,Vol)          14
+        0x1b, 0xdd, 0xe8, 0x40, 0x50,  # Usage Minimum (1346431197)          19
+        0x3b, 0x5d, 0x8c, 0x3d, 0xda,  # Designator Index                    24
 
-thanks,
+(as expected, full of garbage, and just one Feature report, no Input
+report).
 
-greg k-h
+And to trigger the bug, I need to actually set the VID/PID to the one
+from the syzbot report (0x045e, 0x07da).
+
+With that, I have now:
+[    2.425586] __hidinput_change_resolution_multipliers report->size: 0 drivers/hid/hid-input.c:1912
+
+Which means I can play around with this now.
+
+Cheers,
+Benjamin
+
 
