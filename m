@@ -1,214 +1,229 @@
-Return-Path: <linux-usb+bounces-25689-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25690-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1E2EB00696
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 17:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F019CB00A06
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 19:39:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 529921CA31F3
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 15:25:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C3411889F5E
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jul 2025 17:39:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A465F2749FE;
-	Thu, 10 Jul 2025 15:23:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C6672F0C6D;
+	Thu, 10 Jul 2025 17:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="Xg7uVNUE"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="I5MKr1+6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2136.outbound.protection.outlook.com [40.107.237.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 637CB27587F;
-	Thu, 10 Jul 2025 15:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.136
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752160998; cv=fail; b=NR1WQl3YjR5i46CcVYpUWhjAzpABgvUccRU/AM8sUOa6tCtc/a3E15yOb0k26auGskc5I8PmQ9oCEFEpnVGOQF/4Sp/v5ZVWpe99aXdA9v9wfFZPalqWBiDnTgk90PCO66uAihz/mzdi9y1+FCP8A9kZ8E002Me9Tpa6uOuXvYk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752160998; c=relaxed/simple;
-	bh=6SDlrw698N7XUsheRp5bRi8E8HuP0Z/y9sPpc0j9DdQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nYZbri38jUJR2Rp0zVxt8ESC586dT0a2Y6ddAkd8qLV5IJENVP5jnmmhjtAQPwifSF8bNDqyp+gncvSuwlh0PlKSmbIbFpeIZ6vn1lTWK1B4UeWNmhbXGVAKTwliyNkYRCeQ0IMslSXQP/wa043yZywu9UgUdpmeWI3ApUaqMq0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=Xg7uVNUE; arc=fail smtp.client-ip=40.107.237.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inmusicbrands.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KiWrWHW2IfA01lzGsoRWKKP502xc7mZu29oDYAz8hc6c8PWUYMA0QCpJkkqe+D13Gb2YNXdbMM0WqQ/gJ/tfO3emaAExI7BikGOWXCL/4TItLoBrg3pt7rdz2ofb5+01N9L2L+IkxNFJgVlnQS3zDiJTC9YQ2nj6E+JISt5aK6eO97wQjKzhjqo2ZUUlOXmaQRIoyGW75thz9pi9ZAm6kzwMquPChKixQiXkpJNTttK0NvRJtDw/TklQhSp+satzJg0BA55NOusBx3BVhwAxWa1M5394o2UJRnexdPns8a7/KdFlHykxAE07lKUkh9GzZ4c/c2zHOjUeaiAjI/3vRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sFgfYgelPFWu10+orQ/pP3pc8XDCsaez4z9Zz3a1F6c=;
- b=OiJZRnA/jaIgJTHV0LCj9oyF1Yhd0lYmS9qpg8Tz1UqjutYY4wUlTBQhgHJpcFCl5ntmIJdtRrTjBKRDKdlDaSawvreI4eeFEqCE8Q+1aoaCQZRrPTwxsZByZ7p2p4pODb+tYGVAYaSzdcaaeWkRJjC9RxiBszhsoQB2te54nD+MLkUJOZdtJsIMiLhDcMkzv+2O/vXqSbPzz8GofylFtRJG42WMn5NCcU5xVLS4USHYtibUgCf0Wifg73O+YcI9nsKzo4ba7W3wnUyIYxrFwo8spMR9NZF0R30D4GrcmyDag+Fn2H9uYaTfwKRcmhS3lptfnCiRZoRWQt15Py7jEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=inmusicbrands.com; dmarc=pass action=none
- header.from=inmusicbrands.com; dkim=pass header.d=inmusicbrands.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inmusicbrands.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sFgfYgelPFWu10+orQ/pP3pc8XDCsaez4z9Zz3a1F6c=;
- b=Xg7uVNUEgIRz0VvpoZj6V60iOF1WYTL67M9rlFMouOjlsoXWTRH7xy5YqXddVlC90U8jBnzCXybhE162IK7wxaW1YNuv8O2H2lrJkXaO4pqPYc8M2WLgloSFZW48H2aavBj9mMKqRR+zcABS9mTEpWV0httzyPawL2RHnYo9h2o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=inmusicbrands.com;
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com (2603:10b6:303:1bd::18)
- by PH8PR08MB8487.namprd08.prod.outlook.com (2603:10b6:510:25a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.29; Thu, 10 Jul
- 2025 15:23:12 +0000
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401]) by MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401%7]) with mapi id 15.20.8901.024; Thu, 10 Jul 2025
- 15:23:12 +0000
-From: John Keeping <jkeeping@inmusicbrands.com>
-To: linux-rockchip@lists.infradead.org
-Cc: John Keeping <jkeeping@inmusicbrands.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-usb@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC/PATCH 2/2] phy: rockchip: usbdp: implement .set_mode
-Date: Thu, 10 Jul 2025 16:22:50 +0100
-Message-ID: <20250710152252.2532020-3-jkeeping@inmusicbrands.com>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250710152252.2532020-1-jkeeping@inmusicbrands.com>
-References: <20250710152252.2532020-1-jkeeping@inmusicbrands.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0621.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:294::21) To MW4PR08MB8282.namprd08.prod.outlook.com
- (2603:10b6:303:1bd::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076F6273D91
+	for <linux-usb@vger.kernel.org>; Thu, 10 Jul 2025 17:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752169138; cv=none; b=lDQgO0veDB2XeQI4m1xKdUFjMzFWNZA26MfiwViE3zmCC45nsCbRMDhWCxo6fRc53hJT+af1DwbAVts8tjdRTgZX8+0H5QeN9mrkBZVP4Y560A3t19bHxUCDOujsUIN7aWw3aqFiZmf0LE4Q+HLQdvYdVgMA6mZuu1klCJtowI4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752169138; c=relaxed/simple;
+	bh=up7NF+qg2LjW7zSeDc2sVY7H3Evwc2L65+Rz3KIir3E=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:References:
+	 From:In-Reply-To; b=kSbfgUIHuCy0/evDP/qPmwnlD21wYNCjoEIJsO08ws/Uz9Fhe2TgeCoyB73HPQiD8VE9DoWUM1TZ9+7/hiioDhqcbnerri7Vm2zkafgzJIMtua28Kkh5zbHERvYHvdNdvShjU7BsA5rB6semerGa1a/e4E0TLi7JDGFUtZkWlUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=I5MKr1+6; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a52874d593so1101944f8f.0
+        for <linux-usb@vger.kernel.org>; Thu, 10 Jul 2025 10:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1752169133; x=1752773933; darn=vger.kernel.org;
+        h=in-reply-to:from:content-language:references:to:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X8olT3jIxXo9GDZvffvU2cJpwCqE12Xm18w/fSCB43I=;
+        b=I5MKr1+6QoKSNZu8snwvssA/2lhGKY1JC3lLrkG0+dXr4mjKvEkyXPJKmeu9WPA5zh
+         EmZsTMnulEZs1T+Dx9jF4z2SE0bVCSVMmkk9GO+d6SyYq0TbaqEf/tWliYZ7gWnB9D58
+         pFd+nXK7V96as1MWJGS9/53O56W9tDrLDlX+8XS/eJZ9akBXm0wguYCUjRHaMLsjZAco
+         +siL5oqHxJ1YN1zxqW3H3QjOv4snDxHjVWV3+C8NNw77WTQvh469Mss6vNcqhDCILGb5
+         t79czZUmqHUiMkOckAGcGcIaQifDWGRy3ZvxKxiFJsb/rvqvscEz5ZPulepwmZ3gLGAU
+         ZHrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752169133; x=1752773933;
+        h=in-reply-to:from:content-language:references:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=X8olT3jIxXo9GDZvffvU2cJpwCqE12Xm18w/fSCB43I=;
+        b=l/udzmWnimqrlTGFY1YM7KW3dcr8lxQWPzxbHiABYQ0d2RrFRIbG9Nc5dLV5SfT9OM
+         BOkVY1iMa/nHjfgoCIFfrK8ShqO9RaCAPi2/IWvvVJWp1bDRdKqtqpqz1+JJFQl6r8JE
+         6CNqHESTQDIKjgbg3DIiC1oFQ7x5PMDtnLIAI0yxZgLkjMIZr4QPUlNt9WsAucZWDaP5
+         AhmODubwgQmxsgeLWDiKDpsXtgBU9OeplgCKINSKvhpb+9e7E+MGg81r7NBEPrdLCBmR
+         akd9V9HK80fiMJCj+QViNXKXN1gwnKB9DLKDwrSxdSAglZCzY9CZBV2+4Ggq1y80/qNB
+         Nhsw==
+X-Forwarded-Encrypted: i=1; AJvYcCV30ornFTjhWOoJSSk3EkiK3xSLWcFdMA1aZ2Gg374Ik0ft+UYTNAWQSXRr516UwflAecC0yeP2LPs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyX4NanDhgWNA1TNmFGOqytAt6gccmMK6LtA3rJsQvHUANIgJw/
+	YZb603vpWRrPnVr8xaoaQKXgu0U27LfixMpFMpqI9+TcY2TpHvlFHkmdLgdLzyY+T8CidhL0KRp
+	n1w4N
+X-Gm-Gg: ASbGnctFH4DmG/AXNkYKpGK6/7l1OOcnfmy30JtbexSBW9WyanHeAk2MN2OqbRNbmQv
+	dbzuzwLqv6+FlPlCsEwwXa+i5RzIRjp6YZQzFAuFY8gZjVK6fqKKPdTDGC5amQ52epxKrWSf2je
+	tG3WDePPaa8/3X1tWHZxUN0ritTbpAZRW740fOmswVkeKFIcDNJiRzlH/Fh0EoVbtrlUaxw+uMs
+	z/QuDINT2FcP8N1kUzohSSJcIAZKx+P30p47o8ZKrwv3sy8wyfVamIkqyxk9cErFc9QEJY8bou/
+	fONdG+rsToxg2/kjVmSfZ3r0HsbC/xm11K4BI/XXwsDSB+6qkRkco8lUImocvjsj3EJLnW3M8Tt
+	0i+LHfjgmvHd/Zw3VckHXQOEuL+rNwzGbYmNw08VW
+X-Google-Smtp-Source: AGHT+IHtjvE5FAA4thxmURUcNTJoyyPTzbj77/L86O60CO4xhxxXBpYFNOuPAHW1QyImtf+mR3ISzA==
+X-Received: by 2002:adf:b601:0:b0:3a5:1240:6802 with SMTP id ffacd0b85a97d-3b5f18fbaf2mr308438f8f.57.1752169133101;
+        Thu, 10 Jul 2025 10:38:53 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1310:c801:2bae:e301:b9d4:9d20? ([2001:a61:1310:c801:2bae:e301:b9d4:9d20])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e2710bsm2387780f8f.99.2025.07.10.10.38.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Jul 2025 10:38:52 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------NMHI7eV2XxDr6VI3emVtvQ6a"
+Message-ID: <4687a61d-e4e7-4a1f-bbf6-59d3decd6fcc@suse.com>
+Date: Thu, 10 Jul 2025 19:38:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|PH8PR08MB8487:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1c55ccdc-78c4-4719-4d4e-08ddbfc5af07
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|7416014|376014|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?k6vjpUasFN1qWzI8br+G4SVg9y1qJSWZtqxAK2ilL/3hpZ9xETdGsjSVd78b?=
- =?us-ascii?Q?73fuEyADGluVnuFlo/CVWZ6HVGDEgEn2IJnf7300T8OKYHoYi/3TY/yNuqnt?=
- =?us-ascii?Q?++3YYMkPEN0FV8WH+xj+akoSFSYfM7GTCA7fST99jOiaNn4kDDqMJMRmNRqh?=
- =?us-ascii?Q?7qt2sgZntkhlmY9b55KIt+EIvTynv1qenu4LxScZhQuhgNO2ff31r78pUcpp?=
- =?us-ascii?Q?CkFIzGGkKyqVQzqw7QrSXIz/bNjFaoZi9nQpCtK/G1B+tW0iqc9T1zwzsjVP?=
- =?us-ascii?Q?AEh0QlyEwg/6qx0XxnJUE2g2LLmKgXBed6QvC+29Z3m+KaJX9MSh5EUsAuVy?=
- =?us-ascii?Q?lBXDzxoKAcDoHmNTSJOX9UJUjeDREN1PmapO2Jx9ohPPIzRq7tuqQP5tW2XK?=
- =?us-ascii?Q?u92gmxIRCLnMDZdaASc1Z9Nf+tRV/ShzlSy8TpShpZIbkXIHzCJDkYKJ2Uzo?=
- =?us-ascii?Q?CfYu/w29UV3pnvwvUqBLPXyXF7xMEv3S40a8ME/TfBuy/btphU5dve4azhRe?=
- =?us-ascii?Q?Ht275RUeM4byZq/GQhLWgAKWRlj5rm0XKjxgdEl4Mc7KUuQcQIHLdlfXcr9U?=
- =?us-ascii?Q?J6pfdoj/OlzjHJIJMuGEebHfUzyYdUKjJVlio6yCvP4tDLY7U1+aprhnWbZb?=
- =?us-ascii?Q?P84BSXupaDJZcVHr5xYprU5f5ORIcsjxep+RdWi4qggoUeGREjLFmwoFjc71?=
- =?us-ascii?Q?uVubQy9cy+MCy3css4cURkio+cNqgOVfmZObfhZQyZ1smgXZoCrgUmTE3uTn?=
- =?us-ascii?Q?nxposXdmMfc3z8qrg+9VfwOEC1VVVR/L/8myeZEBjnec31XC5PobvuDQkiCC?=
- =?us-ascii?Q?tmE+4UD7BE7tuBrC1VPkW5QbAiPhVyaGzQQBVphTNZ5n94rkGrC8XENLfYZs?=
- =?us-ascii?Q?tA7HFJm51BoDhLfY8zoBLU3/a+JQM1m7B9OATKhbl2ygPGCKBGWjSBaCOCOD?=
- =?us-ascii?Q?dgMSHEQDehd2ZJbe4e5JMZeBG+GDke+MS/Dw6yNRdzaL6tkpjqD/KBCPh4nt?=
- =?us-ascii?Q?MYKZas3sTsX/buXwzU9UDV6exuvRxkDkdsF964vvAGwykQqjv4PW8FTle86r?=
- =?us-ascii?Q?t+MSDoA6QGqVQdy2tuy4uYERDxxm+2VqNGs1dt4fmtNMkvm/0eJdAb7pCCsC?=
- =?us-ascii?Q?edGmLudMRx1SKH7xyckF3ZAAQjtuj5QOtpP9bTv4+JNcBuIerihFxyRJ6YLg?=
- =?us-ascii?Q?dDJhoR9OCpsf0E12dTCu2wUtQ2yN/DYRfYqnMyTKzmJacP+R6pcbxxa6TL2x?=
- =?us-ascii?Q?Hfekf0lBodPF3ROb5Cof7H6F0n/JXwj5wbHdAiUtwA31Ap1YRAObHzA6hRLs?=
- =?us-ascii?Q?e8MrMaHzYnjWRx62NC3K1VyDQ1uv4hbn/tt9xjU1du29vQTCCZO6eMopss3S?=
- =?us-ascii?Q?nJCLGbTYleK8ZUSwxqTeKOVCzoTmwN5+vQ2Agmx2oqpzw0qibbtQ2yM0WwxK?=
- =?us-ascii?Q?AI9PgeQKYwsgHHLtPlKzymbhCp0+ZiiYgvf114RdVDz96AuPfuRrsQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(7416014)(376014)(366016)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?LmCiaT8iTyzEf6ooSf5R9yRhud4KDh9Ur4LW/3fghEhvCeJGBie9eYKESFUi?=
- =?us-ascii?Q?eFWCEMo4Qg7AThKzk22A4CaEOBT2yw1xyId6ZBrtkwrcdv3O7jFrSEYNB/Es?=
- =?us-ascii?Q?vgpM4S3s8ay/rKGUrqMZtYfyO54v43WyLq8DL36SaNIFJ0Xu2JrUYVtCA/zR?=
- =?us-ascii?Q?EyQaW1Dw/r5Iy5yRTYFMO1t7EHZQxppl6yqHDD48goiLiacpWl3kNPK0adFE?=
- =?us-ascii?Q?RDHceI/Bc6dXTJSoW+v5CvC1e56IytSNcwktAL+YutecwDnlciBqvB2GIODs?=
- =?us-ascii?Q?7yKP3CNGUH0IaD1ELLtiVvSwch9d3Z7gBK5lS5tibQ9tVDdrJy2E4akMGV4O?=
- =?us-ascii?Q?PcupqziYq4XUwJETJa7xKDqP8aPp1PLqIzX+ig7dcu+9mCEnQw18sbq2YpLm?=
- =?us-ascii?Q?b0pByT3XjDViFN0cVWVfjNB9TA96mHLOgL+rfFn9VFHeJ6jLRqS0ArgnXrSm?=
- =?us-ascii?Q?9b9DmjYaxZfStIfSzYqvs+whWiK3wrAZhg+koPQi4dVjKgQx0bIVuvT/pIuC?=
- =?us-ascii?Q?EK0Q4EbEiZAWBh7o4/DkYbyyzILkTLRTASK+ZGctpEK8MNXDuJeOCauFnrO8?=
- =?us-ascii?Q?jrPXHT9BfAEjxOGjVrs371viKdzb2BhbCWxwDF8sQOiVrJ4jZWsmcju6TPhM?=
- =?us-ascii?Q?NkmKOEsk8Ke43jgMro86Dm3bOfRP96HsuIlqPVoUNVrmgThlcgPnS/jjYxSu?=
- =?us-ascii?Q?pNClBUjZ0/4gbnQWZhu01ynoLfPq/y+3XBI9Btf0Bzke5iB1n3NGmFOARwO9?=
- =?us-ascii?Q?buqbxSu83pdLRV08TT1DLfFJSK1h7kGszva4U1GfD/6k2ytdaMhGK/mepZ3u?=
- =?us-ascii?Q?ad861Rq5+Ash5aLeVw7O4oQNU478ucYuKKoW6UrEBlF/WfkTBGWJr/9u+b8A?=
- =?us-ascii?Q?cNPYzFzyMKpbP5D6oqzFfgeRchGDtku2lPfQxgM03Dx4Au5He4W5NGv7p5Pm?=
- =?us-ascii?Q?ujYO33ejvF7cpnPkc+X686oRNkjD2HPlC3MqTg9SneHvbaH8QSGwwkzfcyJk?=
- =?us-ascii?Q?sW3ZwnTxo8lwrIpA+vQcWy4zbCJZUVUMGuplylglWEKrwFAcDFXvBapNv63K?=
- =?us-ascii?Q?l50Oj+T8bX5nrC2RpK2w5B8NkLJI7pSWQsaISzfB7Iwcvn5pZHt75BgUqkEz?=
- =?us-ascii?Q?pd6qrmCp1UA5mGOM2xx8xmC1xLrP+X68y0jlM2rctLzD/W6TMnS+caR8VR3g?=
- =?us-ascii?Q?XQi58K97ct/eyWmI5aCYxPZSjjQSktMTHERaT0uArajWwTU2yTjCKm4q6DBf?=
- =?us-ascii?Q?FWPGZ2UY8e0lG1vRtaSMqDrnRZ4Lbl2fjoGjqfc+IrAnqQvM5BgWZZudmtt0?=
- =?us-ascii?Q?upto7ZsLOcKQl23loSY6YqmzUBwhJvnGrlciy870lhfQsuO1Gwdzm7DfpHQU?=
- =?us-ascii?Q?1qPS8od4IKak4Q5CBZ7jjAfjZoL+g30MTKdYurwI+ruYIOL61+W2U3fCT6hc?=
- =?us-ascii?Q?D0hNd8A1+Ku4kVbkmZw1Y8JIK6XXpWBLOQCwf3BN9wjXcDLIUvVBUMVCCRwY?=
- =?us-ascii?Q?26OFwIJDXEMdga+PSJqBZm3vTAJyWEy6lGBZMUSGsrp+4wtnpVRKIDkfvi49?=
- =?us-ascii?Q?MCOftOTF2vzB+afMS8X0uXlpWknCBZLsMKhF0JxN01TlZahaFxw8S+ToHoKc?=
- =?us-ascii?Q?mg=3D=3D?=
-X-OriginatorOrg: inmusicbrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c55ccdc-78c4-4719-4d4e-08ddbfc5af07
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR08MB8282.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2025 15:23:12.3877
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 24507e43-fb7c-4b60-ab03-f78fafaf0a65
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7Fb9n8FZwHBpRwDDRLwjBQMrSVLrJvjvWsrQvFMwCJk/OZRiqso2Wtj5CQQgKaUTGQwgQicM/0Z0RWSKjw/aXZunJzN+3/OSWA5QSVPZXKg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR08MB8487
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [usb?] WARNING in usbnet_status_start
+To: syzbot <syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com>,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, oneukum@suse.com, pabeni@redhat.com,
+ syzkaller-bugs@googlegroups.com
+References: <686d5a9f.050a0220.1ffab7.0017.GAE@google.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <686d5a9f.050a0220.1ffab7.0017.GAE@google.com>
 
-When the orientation of a type C cable changes, usbdp set the new
-configuration in its internal state but does not write this to the
-hardware.
+This is a multi-part message in MIME format.
+--------------NMHI7eV2XxDr6VI3emVtvQ6a
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Make use of phy_ops::set_mode to write this new state.  This should be
-called by the USB controller when it is notified of a role change
-(assuming it is acting as the role switch) and will be called at a point
-when the controller does not expect the phy to be operating normally.
 
-Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
----
- drivers/phy/rockchip/phy-rockchip-usbdp.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/phy/rockchip/phy-rockchip-usbdp.c b/drivers/phy/rockchip/phy-rockchip-usbdp.c
-index c066cc0a7b4f1..00368fb09307a 100644
---- a/drivers/phy/rockchip/phy-rockchip-usbdp.c
-+++ b/drivers/phy/rockchip/phy-rockchip-usbdp.c
-@@ -1335,9 +1335,23 @@ static int rk_udphy_usb3_phy_exit(struct phy *phy)
- 	return 0;
- }
- 
-+static int rk_udphy_usb3_phy_set_mode(struct phy *phy, enum phy_mode mode, int submode)
-+{
-+	struct rk_udphy *udphy = phy_get_drvdata(phy);
-+	int ret = 0;
-+
-+	mutex_lock(&udphy->mutex);
-+	if (udphy->mode != UDPHY_MODE_NONE)
-+		ret = rk_udphy_init(udphy);
-+	mutex_unlock(&udphy->mutex);
-+
-+	return ret;
-+}
-+
- static const struct phy_ops rk_udphy_usb3_phy_ops = {
- 	.init		= rk_udphy_usb3_phy_init,
- 	.exit		= rk_udphy_usb3_phy_exit,
-+	.set_mode	= rk_udphy_usb3_phy_set_mode,
- 	.owner		= THIS_MODULE,
- };
- 
--- 
-2.50.0
+On 08.07.25 19:51, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    d1b07cc0868f arm64: dts: s32g: Add USB device tree informa..
+> git tree:https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output:https://syzkaller.appspot.com/x/log.txt?x=1554d582580000
+> kernel config:https://syzkaller.appspot.com/x/.config?x=28729dff5d03ad1
+> dashboard link:https://syzkaller.appspot.com/bug?extid=3f89ec3d1d0842e95d50
+> compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+> syz repro:https://syzkaller.appspot.com/x/repro.syz?x=11680a8c580000
+> C reproducer:https://syzkaller.appspot.com/x/repro.c?x=14c9abd4580000
+> 
+> Downloadable assets:
+> disk image:https://storage.googleapis.com/syzbot-assets/3eab0cb43ae2/disk-d1b07cc0.raw.xz
+> vmlinux:https://storage.googleapis.com/syzbot-assets/934d59614ed5/vmlinux-d1b07cc0.xz
+> kernel image:https://storage.googleapis.com/syzbot-assets/4b24078bc227/bzImage-d1b07cc0.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by:syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com
+> 
+> sierra_net 4-1:0.11 wwan0: register 'sierra_net' at usb-dummy_hcd.3-1, Sierra Wireless USB-to-WWAN Modem, 00:00:00:00:01:0b
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 37 at drivers/net/usb/usbnet.c:266 usbnet_status_start+0x189/0x1e0 drivers/net/usb/usbnet.c:266
+> Modules linked in:
+> CPU: 1 UID: 0 PID: 37 Comm: kworker/1:1 Not tainted 6.16.0-rc4-syzkaller-00311-gd1b07cc0868f #0 PREEMPT(voluntary)
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:usbnet_status_start+0x189/0x1e0 drivers/net/usb/usbnet.c:266
+> Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 75 4e 48 8b bb 70 03 00 00 89 ee e8 25 95 0c 00 41 89 c5 e9 36 ff ff ff e8 a8 3f ec fc 90 <0f> 0b 90 45 31 ed e9 39 ff ff ff 4c 89 ff e8 d4 41 49 fd e9 e9 fe
+> RSP: 0018:ffffc90000277098 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: ffff888100f80d00 RCX: ffffffff84930727
+> RDX: ffff888105693a00 RSI: ffffffff84919188 RDI: ffff888100f80d00
+> RBP: 0000000000000cc0 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000001 R12: ffff888100f81070
+> R13: ffffffff89be8f70 R14: ffff88811da1f028 R15: ffff88811da1f024
+> FS:  0000000000000000(0000) GS:ffff888269262000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffd6ab63358 CR3: 0000000116716000 CR4: 00000000003506f0
+> Call Trace:
+>   <TASK>
+>   sierra_net_probe drivers/net/usb/sierra_net.c:929 [inline]
+>   sierra_net_probe+0x70/0xb0 drivers/net/usb/sierra_net.c:921
+>   usb_probe_interface+0x303/0x9c0 drivers/usb/core/driver.c:396
+>   call_driver_probe drivers/base/dd.c:579 [inline]
+>   really_probe+0x23e/0xa90 drivers/base/dd.c:657
+>   __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+>   driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+>   __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+>   bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+>   __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+>   bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+>   device_add+0x1148/0x1a70 drivers/base/core.c:3692
+>   usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
+>   usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
+>   usb_probe_device+0xef/0x3e0 drivers/usb/core/driver.c:291
+>   call_driver_probe drivers/base/dd.c:579 [inline]
+>   really_probe+0x23e/0xa90 drivers/base/dd.c:657
+>   __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+>   driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+>   __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+>   bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+>   __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+>   bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+>   device_add+0x1148/0x1a70 drivers/base/core.c:3692
+>   usb_new_device+0xd07/0x1a20 drivers/usb/core/hub.c:2694
+>   hub_port_connect drivers/usb/core/hub.c:5566 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
+>   port_event drivers/usb/core/hub.c:5866 [inline]
+>   hub_event+0x2f85/0x5030 drivers/usb/core/hub.c:5948
+>   process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
+>   process_scheduled_works kernel/workqueue.c:3321 [inline]
+>   worker_thread+0x6c8/0xf10 kernel/workqueue.c:3402
+>   kthread+0x3c2/0x780 kernel/kthread.c:464
+>   ret_from_fork+0x5b3/0x6c0 arch/x86/kernel/process.c:148
+>   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+>   </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> Seehttps://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached atsyzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
+> If the report is already addressed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+> 
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git d1b07cc0868f
 
+
+--------------NMHI7eV2XxDr6VI3emVtvQ6a
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-usb-net-sierra-check-for-no-status-endpoint.patch"
+Content-Disposition: attachment;
+ filename="0001-usb-net-sierra-check-for-no-status-endpoint.patch"
+Content-Transfer-Encoding: base64
+
+RnJvbSBhYWQxNzY1ZmM2ZDRkODAzNmZjNWE5OTc4ZjE5MzE0N2IxODAwNGRkIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
+PgpEYXRlOiBUaHUsIDEwIEp1bCAyMDI1IDE5OjMwOjM1ICswMjAwClN1YmplY3Q6IFtQQVRD
+SF0gdXNiOiBuZXQ6IHNpZXJyYTogY2hlY2sgZm9yIG5vIHN0YXR1cyBlbmRwb2ludAoKVGhl
+IGRyaXZlciBjaGVja3MgZm9yIGhhdmluZyB0aHJlZSBlbmRwb2ludHMgYW5kCmhhdmluZyBi
+dWxrIGluIGFuZCBvdXQgZW5kcG9pbnRzLCBidXQgbm90IHRoYXQKdGhlIHRoaXJkIGVuZHBv
+aW50IGlzIGludGVycnVwdCBpbnB1dC4KUmVjdGlmeSB0aGUgb21pc3Npb24uCgpTaWduZWQt
+b2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgotLS0KIGRyaXZlcnMv
+bmV0L3VzYi9zaWVycmFfbmV0LmMgfCA0ICsrKysKIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2Vy
+dGlvbnMoKykKCmRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC91c2Ivc2llcnJhX25ldC5jIGIv
+ZHJpdmVycy9uZXQvdXNiL3NpZXJyYV9uZXQuYwppbmRleCBjMzBjYTQxNWQxZDMuLjM2Yzcz
+ZGI0NGY3NyAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvdXNiL3NpZXJyYV9uZXQuYworKysg
+Yi9kcml2ZXJzL25ldC91c2Ivc2llcnJhX25ldC5jCkBAIC02ODksNiArNjg5LDEwIEBAIHN0
+YXRpYyBpbnQgc2llcnJhX25ldF9iaW5kKHN0cnVjdCB1c2JuZXQgKmRldiwgc3RydWN0IHVz
+Yl9pbnRlcmZhY2UgKmludGYpCiAJCQlzdGF0dXMpOwogCQlyZXR1cm4gLUVOT0RFVjsKIAl9
+CisJaWYgKCFkZXYtPnN0YXR1cykgeworCQlkZXZfZXJyKCZkZXYtPnVkZXYtPmRldiwgIk5v
+IHN0YXR1cyBlbmRwb2ludCBmb3VuZCIpOworCQlyZXR1cm4gLUVOT0RFVjsKKwl9CiAJLyog
+SW5pdGlhbGl6ZSBzaWVycmEgcHJpdmF0ZSBkYXRhICovCiAJcHJpdiA9IGt6YWxsb2Moc2l6
+ZW9mICpwcml2LCBHRlBfS0VSTkVMKTsKIAlpZiAoIXByaXYpCi0tIAoyLjUwLjAKCg==
+
+--------------NMHI7eV2XxDr6VI3emVtvQ6a--
 
