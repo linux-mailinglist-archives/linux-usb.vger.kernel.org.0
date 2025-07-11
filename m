@@ -1,100 +1,119 @@
-Return-Path: <linux-usb+bounces-25694-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25695-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7C25B01083
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Jul 2025 02:59:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40935B011B9
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Jul 2025 05:47:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 991AA765F8E
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Jul 2025 00:59:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A6CD5A6292
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Jul 2025 03:47:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7C663E47B;
-	Fri, 11 Jul 2025 00:59:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0605F19E81F;
+	Fri, 11 Jul 2025 03:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FU/vnpdK"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="uXYmJqft"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0E7111BF;
-	Fri, 11 Jul 2025 00:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464DC72624;
+	Fri, 11 Jul 2025 03:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752195565; cv=none; b=Xy6Aur91oocNIcnRSq6xAB5W3xPRIbRbxzGw9ETuDOqSN5PmcGoxwzWXY/Q0J9lEQq+NLUE4iDMvh+XxxoX9gvXsfFa27nGMBd36lHW7SHlbq0S+0IA8savAGi39qTpCZnSy9NG8v/qeuhEQk/0qBZAy9lLLxPCBDIRe5bJGGDs=
+	t=1752205640; cv=none; b=M48SovoT+Qn1b/3tql8zccwKTVnEdr1UW3d1xo0LLqi4APbfbzcmMGoGvbJWzPxjoj+va3wVcHBzQkNw9W1YhLyWPJeaFbYqmeiOmqrhB9stHizMzcfzqzX7UHAxctu+QlRgsYqt5W6QlUyn9BHaN87XGmrbH3b4M7L8WYw9U0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752195565; c=relaxed/simple;
-	bh=6kbqF4KKi/QRVp8bBz3dPkp4zvRQekHMP/AMbhz2TdY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MwGf4incipByLvmgQR5iW9oub3Y9gii5s4mvDtcwnEW1DTRZUWhZhwBZuyHFc508NN0k6B9KbGDoPr9RwYKvp20qFGG7oXhf2/zUGpkCaiuMouXHdzsgQA0DztH9DpUIc8P8N6A33SRRRCKQEry1ginD/KIZYAFQdYemC3HeZ1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FU/vnpdK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF62C4CEE3;
-	Fri, 11 Jul 2025 00:59:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752195564;
-	bh=6kbqF4KKi/QRVp8bBz3dPkp4zvRQekHMP/AMbhz2TdY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=FU/vnpdKKG+wfwPSK/pWWOc856lEG5byID/Rp/rjLj+iTzjeO6JmK+emujGYts7dc
-	 vtBX6OhAqS/oZj9zgI3dkDQlf6upgRoZkbLLD+qfXuYycOxmLijDcvLi81k0ZLC24M
-	 qx2xCxxUozPG1Om0pYTRdG62JFcOADlX/HnKHewpUNNLjy9uemVXSgci+2N1FthHhe
-	 fAspijyuf4YHYsaiqkNWxsj7rto8tNNbM7INcq+oRfRfAMxYxFdyru9Ymek67laAW8
-	 TRW7GJ1NORp8CvoGkabhqUYWTHYEIgBnsD3CAC96RiLH6AV7FGMAGzKfXuo0NALqj8
-	 HFVQBCVcOvMaQ==
-Date: Thu, 10 Jul 2025 17:59:21 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Qianfeng Rong <rongqianfeng@vivo.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Potnuri Bharat Teja <bharat@chelsio.com>,
- Veerasenareddy Burru <vburru@marvell.com>, Sathesh Edara
- <sedara@marvell.com>, Louis Peens <louis.peens@corigine.com>, Shahed Shaikh
- <shshaikh@marvell.com>, Manish Chopra <manishc@marvell.com>,
- GR-Linux-NIC-Dev@marvell.com (maintainer:QLOGIC QLCNIC (1/10)Gb ETHERNET
- DRIVER), Jiri Slaby <jirislaby@kernel.org>, Nick Kossifidis
- <mickflemm@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>, Toke
- =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@toke.dk>, Arend van Spriel
- <arend.vanspriel@broadcom.com>, Brian Norris <briannorris@chromium.org>,
- Francesco Dolcini <francesco@dolcini.it>, Ajay Singh
- <ajay.kathat@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Ping-Ke Shih <pkshih@realtek.com>, Kees Cook <kees@kernel.org>, "Gustavo A.
- R. Silva" <gustavoars@kernel.org>, Kory Maincent
- <kory.maincent@bootlin.com>, Aleksander Jan Bajkowski <olek2@wp.pl>, Lucas
- Sanchez Sagrado <lucsansag@gmail.com>, Philipp Hahn <phahn-oss@avm.de>,
- Eric Biggers <ebiggers@google.com>, Hayes Wang <hayeswang@realtek.com>,
- Wentao Liang <vulab@iscas.ac.cn>, Johannes Berg <johannes.berg@intel.com>,
- Sai Krishna <saikrishnag@marvell.com>, Jacobe Zang
- <jacobe.zang@wesion.com>, Dmitry Antipov <dmantipov@yandex.ru>, Kalle Valo
- <kvalo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, David Lin
- <yu-hao.lin@nxp.com>, Aditya Kumar Singh <quic_adisi@quicinc.com>, Roopni
- Devanathan <quic_rdevanat@quicinc.com>, Dan Carpenter
- <dan.carpenter@linaro.org>, Marek Vasut <marex@denx.de>, Alexis
- =?UTF-8?B?TG90aG9yw6k=?= <alexis.lothore@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>, netdev@vger.kernel.org (open list:CAVIUM LIQUIDIO NETWORK
- DRIVER), linux-kernel@vger.kernel.org (open list), oss-drivers@corigine.com
- (open list:NETRONOME ETHERNET DRIVERS), linux-usb@vger.kernel.org (open
- list:USB NETWORKING DRIVERS), linux-wireless@vger.kernel.org (open
- list:ATHEROS ATH5K WIRELESS DRIVER), brcm80211@lists.linux.dev (open
- list:BROADCOM BRCM80211 IEEE802.11 WIRELESS DRIVERS),
- brcm80211-dev-list.pdl@broadcom.com (open list:BROADCOM BRCM80211
- IEEE802.11 WIRELESS DRIVERS)
-Subject: Re: [PATCH 00/12] net: Use min()/max() to improve code
-Message-ID: <20250710175921.09212fab@kernel.org>
-In-Reply-To: <20250709022210.304030-1-rongqianfeng@vivo.com>
-References: <20250709022210.304030-1-rongqianfeng@vivo.com>
+	s=arc-20240116; t=1752205640; c=relaxed/simple;
+	bh=Y6oFKZoPOQ2bGJApnJ1Bap8JVv1ttDvRZ05OZN8hiNY=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=YVCAEo20i7WGePJbcI/enV4NvxgjxuWLfT0SM1i6b9xHbbuidXb7iaiP02qEKE2puYfMsIAAEn/57f8m1RBEEhYIPdxU/A4gNc319Y1gpIeGi+pZ44jQvfeIyOGnwAUd4M6WbD4dkmzTWAdhBiTkQuVrtf8hp/euL1Up2uB3vhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=uXYmJqft; arc=none smtp.client-ip=162.62.58.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1752205602; bh=s7Dbt4pfsqy/SPhJnAXDCha4RAALW+oIC1PJfdRhBTU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=uXYmJqftJyFQz/ng4hRNayfjhXCzQsOSIn8TKo/cqhQfgFR3ucfXEXCXonBWDwW8O
+	 dOg4p8hoYnKecVxpa7yHTrytJzkB6i+Be0fzAn6CZppBI2P0PsAeBRL0H/kUZT2hC7
+	 QOTN4Y/PpDE3SlL0IajtpujZNYmM8PUK2Qt+GDY8=
+Received: from VM-222-126-tencentos.localdomain ([14.116.239.37])
+	by newxmesmtplogicsvrszc13-1.qq.com (NewEsmtp) with SMTP
+	id BA904E56; Fri, 11 Jul 2025 11:46:41 +0800
+X-QQ-mid: xmsmtpt1752205601tl8mdbuzy
+Message-ID: <tencent_19AE390D05232D1C97E336C05F35A9F1BD05@qq.com>
+X-QQ-XMAILINFO: MR/iVh5QLeieMtsBwB1FhwpuHNLvSLjowgQUiVdZ9Vh2W5UefhDYqW5zGpKXbq
+	 XmJp4h6FNzkAP+VmWah61YM444QVeGt0b+Vb+2MLZS/V4Bdl5Pz95lNM7k9rIZ+0fjkDCmy6ff79
+	 sKMQGGvj9HdAzUbSHp+YWEZmvwlZioRfVIafJ0vN6dElzWksXH0Swy9EmarSGysGW4vQor7gx+dr
+	 SoM1kcHFsJr3NtI5cC5XnzVVeatJEW3CtjSwNTEOtsAJLdZ0e8mf6ikPe8S7e/m3TIdeMWG9y4QZ
+	 /LTrANDaH/eTzNp4fIDlS7RtxsQUCEzwJ0b8HMTU2SqQEMfOb4pfX/pRhF2SI12HNWPK3W0AqAjF
+	 l5u6jPSs4UZTjnp2wkWgF5ma6ItuR3H8ARKvGUKfFdqvztV74PJ0EnBAyd60SVEP/rn4yh9umf0T
+	 ba6PhktJzeshLTgDo4QcrX7+bXIEQLDEQB5Uw6V8xrd1l/7hExyKo4IP9eDAhTjuR7PprqwbMlb9
+	 YxVx7HPfG6zVAHHLyhihxhKlTm7xmuB1Kd07LNN6JQMLd3oL3tafcM1joJFlK4qkCBwDr9LaQesi
+	 AKPmHVwXNSuLb6NDhx2MBqIwuEJXXq2hvbW7ERkmJxXNMf1iX77DRJBvW3Xm2FnLqAlcq7pxWhMA
+	 lo1nV/02houjy0d+E0USlo5hSaRZtAW+1KrspBlRZfnMafnWVJnGpRvkJa2VSq0VTgrg9jrJ55zG
+	 0K3BJnUxUUKmYx00xR5DM2Cz6PrX8/Q+ZIXbcGxI07jvOVTO+21T7GRgoL600MgAWH5xmpUcEksi
+	 7vQC6ngmEzx0fuuMPt9xZm1OxQmEbp7/7j4ykbQdyfdHYYaGToAymMa86oxxqcgRXPHcUMtOmSFj
+	 f3lBR/0pQGB2ihKlWl1RxfmqZeoH8aPPxW/LPpaf7MYGsaoEqVAFr3XvSIuV1OBZP2fhtHnjqua/
+	 5WK+ix4njdJnC46MuNtaY5g6vuj8X2j87ai28PhcxDBaCrjps2dGaCi2zIDGUtPTG6vFf8g8/+J8
+	 LtP/3ojJm4JOq50R3E1c0+3+nU+mT4HAWw6a+nwE6k/xaK44kTLXjm/6+4pFw=
+X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
+From: jackysliu <1972843537@qq.com>
+To: gregkh@linuxfoundation.org
+Cc: 1972843537@qq.com,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v2] usb: gadget: functioni: Fix a oob problem in rndis
+Date: Fri, 11 Jul 2025 11:46:35 +0800
+X-OQ-MSGID: <20250711034635.3097961-1-1972843537@qq.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <2025071010-outlet-stencil-663d@gregkh>
+References: <2025071010-outlet-stencil-663d@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed,  9 Jul 2025 10:21:28 +0800 Qianfeng Rong wrote:
-> Use min() to reduce the code and improve its readability.
-> 
-> No functional changes.
+On Thu, 10 Jul 2025 14:19:47 +0200, greg k-h wrote
 
-For net/ethernet/ this is not worth the churn, sorry.
+>In digging in this further, I don't see how this actually changes
+>anything.  BufLength is used for nothing that I can determine, except in
+>some debugging code that is always compiled out (i.e. you can NOT enable
+>it unless you modify the kernel source.)
+>
+>So what exactly is this check checking?
+>
+>I can see that we really should be checking if the buffer is too small,
+>but that's not what you are doing here at all.
+>
+>And all this buffer is used for is to read a 32bit value out of, so
+>verifying that the buffer really is big enough to hold that value SHOULD
+>be what we do here, not check to see if the buffer is too big.
+>
+>Also, you can't trust that BufLength is even correct as it comes from
+>the other side, right?  Because of that, we should just be ignoring it
+>entirely and verifying that the message size really is as big as the
+>structure is supposed to be.  But that means passing down the message
+>size to the lower layers here, which gets into the issues that I have
+>raised before many years ago about this protocol, and this
+>implementation of this protocol.  I.e, it is COMPLETELY INSECURE and
+>should ONLY be used on systems where you trust both sides of the wire.
+>
+>Again, how was this change tested?  And what exactly does it fix?  I'm
+>missing how this change is going to actually catch anything, can you
+>spell it out in detail for me?
+
+BufOffset + BufLength can exceed buffer size even if each is < RNDIS_MAX_TOTAL_SIZE
+oob is triggered by a function call to gen_ndis_set_resp.
+I supposed to add an additional boundry check to avoid this issue.But That 
+doesn't seem to be enough to fix the bug.I'll try to figure it out.
+
+Thanks
+
+Siyang Liu
+
 
