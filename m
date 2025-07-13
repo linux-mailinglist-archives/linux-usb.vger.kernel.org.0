@@ -1,212 +1,369 @@
-Return-Path: <linux-usb+bounces-25732-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25733-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8884B030F4
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Jul 2025 14:09:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7452BB031BA
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Jul 2025 17:25:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FFE83A5388
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Jul 2025 12:09:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF8F017B8FB
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Jul 2025 15:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4479B278143;
-	Sun, 13 Jul 2025 12:09:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 969C1255F2B;
+	Sun, 13 Jul 2025 15:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IiIks53h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 471094A1D
-	for <linux-usb@vger.kernel.org>; Sun, 13 Jul 2025 12:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F3FA920;
+	Sun, 13 Jul 2025 15:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752408576; cv=none; b=KaJ5+id1Y5qWxBe58Vu1zWVXdhIOG8EUMHPvJQE1FxVxJVmYlUth1Mcj3ScBV1H0NFXB598XPiqnKcMF+OHeyk+uB/NFKAzwoFqF/rFCNFw9LwXIyExWjfZseT7RpfYAfMbcQfZ2SkzyEMhVumMRjMTCV6GXv1fataD0lXlEvy4=
+	t=1752420306; cv=none; b=m88Xck6JwCbrB683Qc+momGeFFBj1Dk2DQ4jmatXBYrSVfbe1sFm1ie0pt/U95YYlfOeGM47LIufSPpWOmvwQpuYpyaBdoi+0VHzCS2mRlHGFDUqmcqG3ZnMXQRV4d2eBhgL2NI4yQWJDwrevwVMwHzS82bBrpOdPxQ0tmajilw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752408576; c=relaxed/simple;
-	bh=56fmDJvgEZg/VnGGAehxYWlx4ljr7Z0Cp+2fK+iyhl0=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=ONiRe9eBhdfn7ienccGo+dQDDzVIYST2C9zOh4ZedDUELA6/YfdCH0IupTtJURtQtrTM35XaXEoBiwkgcJqci7IHte+DAvTXO+OlIPL/OQXMktdD1OF9LgbRJTaXPHI+C2ue4K9ftmjW14XBtrxLmKEV8knevooJGgqpRpcSSeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3df4d2a8b5eso35558755ab.3
-        for <linux-usb@vger.kernel.org>; Sun, 13 Jul 2025 05:09:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752408573; x=1753013373;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b3cwTQLC5R4SLbD+9XHrah08xKAi2BGFgVZj4N+ZVFg=;
-        b=LIq2YJQUuNGuuPCxATOYVWStYj/RsFAdhPribp3uXgT7qM1ksnYxRnze4PdiaAEJNo
-         148mAcfjmQaMyMxZFtrLehJ/Hb7CTbpEh1xyH3pdNMpHIDNxKy2BEO52gjhf1ebgiPpS
-         +VX/vECNvDIfe6wWWlYC9r3YmdSFH4w2AzQfHlUE6tKKONodQrLM0+Xa0dsX5loDBAjt
-         eKeHvApRfRdklHDY4Md990CIgj7EjUzZmt4J1xS972+0ovAxHZa2BJhFeEiVIEfU5EUH
-         0DE7LqM6tKPvNhx4C0XiaO7VdI1HOAXV/hEqE6PMxNmVIIGtQ3Jo5ZfhIDB/sP/kkw+F
-         KE1w==
-X-Forwarded-Encrypted: i=1; AJvYcCW/EjaSvdIJxRWPjIIe30HdBcOa1YyRoWxLbLjbqfK7BmUuOjjMZz1XLItXh+o8SJNaNAObYhnGVMo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4jBRwc8Piqt9Zv9FXz1lapjxAUZFy9HkrloeeCz8HZd10ZMnP
-	FHY677LryQlcHNpweHh+cWjJAE0NT4fKozZHzGe1G5YMVHSMtZW8r0DhBnHEs3FInOA2ihfrXWI
-	NGCRnkvf+Ib8RZFgssXKPOHMootQTNVomBvKCOt9F8v6xvpAA2Uogl7FP3CE=
-X-Google-Smtp-Source: AGHT+IF/sdmuFG+aLsMPa+lyr4HadJAMo/dT4p1mYz5njEbg21DG+GDooDVJjcrOb8/5pK0UoLIxqXELQ9fVtZoouLMyEjGtz0wA
+	s=arc-20240116; t=1752420306; c=relaxed/simple;
+	bh=dZdGr2CCAlJGjWO+7HGSxJpH1MKc/Qn0R92NUy8pYKA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sxWTlpF3G1mh5Mj14cnLgb5V67zIJcwqerKUrrPJkFDauqycWbDI9ODUGF2qoeahiCeiFJ8A84aFt+YdCmOkkWzJUnwv707jS9g4+Mdl0HdgCyT5ZTKQQGgqhV22xBKZTZa/Jv3IQDeep0w9JrxxDTQ42GfX6Vj5rhpMYASlQxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IiIks53h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1515AC4CEE3;
+	Sun, 13 Jul 2025 15:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1752420305;
+	bh=dZdGr2CCAlJGjWO+7HGSxJpH1MKc/Qn0R92NUy8pYKA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IiIks53hY96sEnf709yDZnsl1VcME1FuRcrn0DfONtL3QAP58EQe1wiDRotza7XW0
+	 r/sXxRDH/1KjG/RsM06Uw3afWnMeNsECDHy6/UtJgt/pI9nvOO5GoLLfuqIe6iOuhF
+	 NL/+aTWNhIEB2sbS3dqtNQ6GJUezpI04RFi0kDaI=
+Date: Sun, 13 Jul 2025 17:25:03 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: nicolas.bouchinet@oss.cyber.gouv.fr
+Cc: Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Kannappan R <r.kannappan@intel.com>,
+	Sabyrzhan Tasbolatov <snovitoll@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Pawel Laszczak <pawell@cadence.com>, Ma Ke <make_ruc2021@163.com>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Luc Bonnafoux <luc.bonnafoux@oss.cyber.gouv.fr>,
+	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH v2 0/4] Support for usb authentication
+Message-ID: <2025071344-possible-fabric-bbbf@gregkh>
+References: <20250711-usb_authentication-v2-0-2878690e6b6d@ssi.gouv.fr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:cda8:0:b0:3df:2cd5:80c1 with SMTP id
- e9e14a558f8ab-3e2541dc704mr83576395ab.4.1752408573397; Sun, 13 Jul 2025
- 05:09:33 -0700 (PDT)
-Date: Sun, 13 Jul 2025 05:09:33 -0700
-In-Reply-To: <68653bfd.a00a0220.270cb1.0000.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6873a1fd.a70a0220.3b380f.002f.GAE@google.com>
-Subject: Re: [syzbot] [usb?] KMSAN: kernel-usb-infoleak in usbhid_raw_request
-From: syzbot <syzbot+fbe9fff1374eefadffb9@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250711-usb_authentication-v2-0-2878690e6b6d@ssi.gouv.fr>
 
-syzbot has found a reproducer for the following issue on:
+On Fri, Jul 11, 2025 at 10:41:21AM +0200, nicolas.bouchinet@oss.cyber.gouv.fr wrote:
+> We have been working on the implementation of the USB authentication
+> protocol in the kernel.
+> 
+> You can find our work here https://github.com/ANSSI-FR/usb_authentication.
+> 
+> It is still work in progress but we would like to start discussions
+> about the implementation design and its possible integration to the
+> Linux kernel.
+> 
+> Best regards,
+> 
+> Nicolas and Luc
+> 
+> ---
+> USB peripheral authentication
+> =============================
+> 
+> USB peripherals are an important attack vector in personal computers and
+> pose a risk to the cyber security of companies and organizations.
+> 
+> The USB foundation has published a standard to allow the authentication
+> of USB peripherals ([1] and [2]). It defines a mechanism for the host to
+> request credentials and issue an authentication challenge to USB-2 or
+> USB-3 peripherals, either upon connection or later during the use of the
+> peripheral.
+> 
+> We currently envision the following use cases for USB authentication:
+> 
+> - company networks where computers and peripherals can be privately
+>   controlled and administered;
+> - USB cleaning or decontamination stations;
+> - individuals who want to prevent unauthorized device plug-in into their
+>   machine.
+> 
+> The implementation of this feature will obviously necessitate efforts
+> from both the kernel community and peripherals vendors. We believe that
+> providing an implementation of the host side of the protocol in the
+> Linux kernel will encourage constructors to include this feature in
+> their devices. On the other hand, we are working on implementing
+> reference code for embedded devices, notably for Zephyr OS.
+> 
+> Design
+> ======
+> 
+> The USB authentication protocol is based on a simple signature
+> challenge. Devices hold between 1 and 8 pairs of private signing key and
+> x509 certificate. Hosts must possess a store of root Certificate
+> Authority certificates provided by device vendors.
 
-HEAD commit:    3f31a806a62e Merge tag 'mm-hotfixes-stable-2025-07-11-16-1..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14725d82580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=76c2fb9aa0954fb8
-dashboard link: https://syzkaller.appspot.com/bug?extid=fbe9fff1374eefadffb9
-compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=118f50f0580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12725d82580000
+Who is going to distribute these host keys?  Who is going to be
+responsible for revocations and the like?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/33ae17bacfc2/disk-3f31a806.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f476e6d9400a/vmlinux-3f31a806.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9ae9e3684ea3/bzImage-3f31a806.xz
+> The protocol exchange is driven by the host and can be decomposed into
+> three, mostly independent, phases:
+> 
+> - The Host can request a digest of each certificate owned by the
+>   peripheral.
+> - If the Host does not recognize the peripheral from one of its digests,
+>   it can read one or more certificates from the device until a valid one
+>   is found.
+> - The Host can issue an authentication challenge to the peripheral.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fbe9fff1374eefadffb9@syzkaller.appspotmail.com
+Is this the same type of protocol that PCI has implemented for its use
+of "trusted devices"?  If so, why not emulate what the kernel patches
+for PCI do here as well to keep one common kernel/userspace api?  If
+not, what are the major differences?
 
-microsoft 0003:045E:07DA.0001: unknown main item tag 0x0
-microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
-=====================================================
-BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x5a1/0x2630 drivers/usb/core/urb.c:430
- usb_submit_urb+0x5a1/0x2630 drivers/usb/core/urb.c:430
- usb_start_wait_urb+0xc2/0x320 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x27c/0x5b0 drivers/usb/core/message.c:154
- usbhid_raw_request+0x4ab/0x690 drivers/hid/usbhid/hid-core.c:-1
- __hid_request+0x2bd/0x500 drivers/hid/hid-core.c:1989
- hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
- hidinput_connect+0x3bf5/0x5cc0 drivers/hid/hid-input.c:2327
- hid_connect+0x6b4/0x3440 drivers/hid/hid-core.c:2239
- hid_hw_start+0xfc/0x1e0 drivers/hid/hid-core.c:2354
- ms_probe+0x2e5/0x890 drivers/hid/hid-microsoft.c:391
- __hid_device_probe drivers/hid/hid-core.c:2724 [inline]
- hid_device_probe+0x536/0xab0 drivers/hid/hid-core.c:2761
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x4d1/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
- driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
- __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
- bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
- __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
- device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
- device_add+0x12a9/0x1c10 drivers/base/core.c:3692
- hid_add_device+0x5ed/0x7b0 drivers/hid/hid-core.c:2907
- usbhid_probe+0x1fec/0x2660 drivers/hid/usbhid/hid-core.c:1435
- usb_probe_interface+0xd01/0x1310 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x4d1/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
- driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
- __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
- bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
- __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
- device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
- device_add+0x12a9/0x1c10 drivers/base/core.c:3692
- usb_set_configuration+0x3493/0x3b70 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xfc/0x290 drivers/usb/core/generic.c:250
- usb_probe_device+0x38d/0x690 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x4d1/0xd90 drivers/base/dd.c:657
- __driver_probe_device+0x268/0x380 drivers/base/dd.c:799
- driver_probe_device+0x70/0x8b0 drivers/base/dd.c:829
- __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:957
- bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
- __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1029
- device_initial_probe+0x33/0x40 drivers/base/dd.c:1078
- bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
- device_add+0x12a9/0x1c10 drivers/base/core.c:3692
- usb_new_device+0x104b/0x20c0 drivers/usb/core/hub.c:2694
- hub_port_connect drivers/usb/core/hub.c:5566 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
- port_event drivers/usb/core/hub.c:5866 [inline]
- hub_event+0x5588/0x7580 drivers/usb/core/hub.c:5948
- process_one_work kernel/workqueue.c:3238 [inline]
- process_scheduled_works+0xb91/0x1d80 kernel/workqueue.c:3321
- worker_thread+0xedf/0x1590 kernel/workqueue.c:3402
- kthread+0xd59/0xf00 kernel/kthread.c:464
- ret_from_fork+0x1e0/0x310 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+> On the host side, this requires the following functions:
+> 
+> - handling the protocol exchange with the peripheral;
+> - X509 certificates validation and administration (root CA loading,
+>   certificate revocation…);
 
-Uninit was created at:
- slab_post_alloc_hook mm/slub.c:4154 [inline]
- slab_alloc_node mm/slub.c:4197 [inline]
- __do_kmalloc_node mm/slub.c:4327 [inline]
- __kmalloc_node_track_caller_noprof+0x96d/0x12f0 mm/slub.c:4347
- __kmemdup_nul mm/util.c:63 [inline]
- kstrdup+0x8a/0x2a0 mm/util.c:83
- kstrdup_const+0x5e/0x90 mm/util.c:103
- __kernfs_new_node+0x6e/0xa70 fs/kernfs/dir.c:633
- kernfs_new_node+0x1f0/0x370 fs/kernfs/dir.c:713
- kernfs_create_dir_ns+0x9a/0x2b0 fs/kernfs/dir.c:1083
- sysfs_create_dir_ns+0x19c/0x540 fs/sysfs/dir.c:59
- create_dir lib/kobject.c:73 [inline]
- kobject_add_internal+0xeed/0x1840 lib/kobject.c:240
- kobject_add_varg lib/kobject.c:374 [inline]
- kobject_init_and_add+0x371/0x4e0 lib/kobject.c:457
- netdev_queue_add_kobject net/core/net-sysfs.c:1976 [inline]
- netdev_queue_update_kobjects+0x358/0xbf0 net/core/net-sysfs.c:2035
- register_queue_kobjects net/core/net-sysfs.c:2098 [inline]
- netdev_register_kobject+0x3be/0x4f0 net/core/net-sysfs.c:2340
- register_netdevice+0x1b41/0x25d0 net/core/dev.c:11105
- cfg80211_register_netdevice+0x1a3/0x410 net/wireless/core.c:1490
- ieee80211_if_add+0x1ebc/0x2a60 net/mac80211/iface.c:2271
- ieee80211_register_hw+0x5548/0x5920 net/mac80211/main.c:1606
- mac80211_hwsim_new_radio+0x50ee/0x7a70 drivers/net/wireless/virtual/mac80211_hwsim.c:5565
- hwsim_new_radio_nl+0x16f9/0x2fd0 drivers/net/wireless/virtual/mac80211_hwsim.c:6249
- genl_family_rcv_msg_doit+0x335/0x3f0 net/netlink/genetlink.c:1115
- genl_family_rcv_msg net/netlink/genetlink.c:1195 [inline]
- genl_rcv_msg+0xacf/0xc10 net/netlink/genetlink.c:1210
- netlink_rcv_skb+0x54a/0x680 net/netlink/af_netlink.c:2552
- genl_rcv+0x41/0x60 net/netlink/genetlink.c:1219
- netlink_unicast_kernel net/netlink/af_netlink.c:1320 [inline]
- netlink_unicast+0xee2/0x1290 net/netlink/af_netlink.c:1346
- netlink_sendmsg+0x10b3/0x1250 net/netlink/af_netlink.c:1896
- sock_sendmsg_nosec net/socket.c:712 [inline]
- __sock_sendmsg+0x333/0x3d0 net/socket.c:727
- __sys_sendto+0x593/0x720 net/socket.c:2180
- __do_sys_sendto net/socket.c:2187 [inline]
- __se_sys_sendto net/socket.c:2183 [inline]
- __x64_sys_sendto+0x130/0x200 net/socket.c:2183
- x64_sys_call+0x3c0b/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:45
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xd9/0x210 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
+Is the validation going to be done by the kernel?  Userspace?  And how?
+Is a chain-of-trust defined somewhere?
 
-Bytes 12-14 of 65535 are uninitialized
-Memory access of size 65535 starts at ffff8880527e8be1
+> - cryptographic functions for the challenge (random number generation
+>   and ECDSA with the NIST P256 -secp256r1- curve);
+> - security policy management;
+> - authorization decision enforcement.
+> 
+> We chose to implement the authentication protocol exchange directly in
+> the kernel USB stack during the device enumeration. This is done by
+> first requesting the device BOS to detect its capacity at handling
+> authentication, then if supported starting the authentication sequence
+> with a digest request.
+> 
+> The implementation of the other functions is open to several design
+> alternatives, mainly based on their distribution between kernel and user
+> space. In this first implementation, we chose to implement most (all) of
+> the cryptographic functions, certificate management and security policy
+> management in user space in order to limit impact on the kernel side.
+> This allows for more personalization later on. The communication between
+> the kernel USB stack authentication function and user space is done via
+> a generic netlink socket.
 
-CPU: 1 UID: 0 PID: 42 Comm: kworker/1:1 Not tainted 6.16.0-rc5-syzkaller-00266-g3f31a806a62e #0 PREEMPT(none) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-Workqueue: usb_hub_wq hub_event
-=====================================================
+Again, is this what PCI has decided to do?  Surely they didn't implement
+a different way of authenticating devices, did they?  (I can dream...)
 
+> Once a device has been authenticated, a per-device authenticated field
+> is update with the result of the authentication. The authenticated field
+> can be used to track the result of the authentication process in
+> userspace thanks to a sysfs exposed file.
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+This is _VERY_ close to what the old wireless USB protocol required,
+right?  And I think you've tied into much the same places we did for
+that protocol, but you might want to look into the past history for when
+we removed that to be sure.
+
+> The device enforcement point is done in the usb_probe_interface()
+> function. This allows for more complex security policy in userspace: the
+> user could manually authorize a device that failed the authentication or
+> manually deauthorize a device that was previously authenticated.
+> 
+> +----------+------------+-------------+
+> |          | authorized | !authorized |
+> +----------+------------+-------------+
+> | authent  |     OK     |     NOK     |
+> +----------+------------+-------------+
+> | !authent |     OK     |     NOK     |
+> +----------+------------+-------------+
+
+What is "NOK"?  And what are the two axis?  The sysfs file values?  Or
+an internal variable?
+
+> If set to true, the authentication decision is enforced, the following
+> decision is made:
+
+If what is "set to true"?
+
+> +----------+------------+-------------+
+> |          | authorized | !authorized |
+> +----------+------------+-------------+
+> | authent  |     OK     |     NOK     |
+> +----------+------------+-------------+
+> | !authent |    NOK     |     NOK     |
+> +----------+------------+-------------+
+> 
+> Note that combined with the CONFIG_USB_DEFAULT_AUTHORIZATION_MODE=2:
+
+What does "2" mean?
+
+>  - internal devices should be authorized and !authenticated => OK
+>  - external qemu dev-auth is !authorized and authenticated  => NOK at
+>    first but then authorization can be granted via sysfs.
+>  - external qemu non auth dev is !authorized and !authenticated => NOK
+>    and authorization can be granted via sysfs
+
+Wait, what does qemu have to do with anything here?
+
+And this is getting to be a complex set of interactions, testing the
+combinations is going to be rough without regression tests...
+
+> The default enforcement decision can be configured thanks to the new
+> USB_AUTHENTICATION_ENFORCE configuration option and can be overridden
+> using the usbcore.enforce_authentication command line or module
+> parameter.
+> 
+> Limitations
+> ===========
+> 
+> The USB authentication protocol come with some inherent limitations, [3]
+
+That's a 2018 reference!  Are you saying that the newly designed
+protocol was already discussed in 2018 and found lacking?
+
+> does a good job at describing most of them. During the implementation,
+> we also found that the value encoding of the Validity field in the x509
+> certificate differs from the RFC5280 [4].
+
+Can this be fixed?
+
+> This has prevented us from
+> using the x509 parser included in the Linux kernel or OpenSSL, we chose
+> to use the mbedtls library instead [5].
+
+Ugh, why?  Why not fix up the kernel parser to work with this broken
+implementation instead?  How is any other operating system handling this
+if the implementation is broken?  How was it ever tested?
+
+> This obviously does not prevent
+> others to replace it with their preferred implementation. It will also
+> open discussions on the protocol enhancement.
+
+Have you done this with the usb-if?
+
+Note, Linux was explicitly kicked out of particapating in usb-if
+discussions in the past by some of the core members a decade or so ago
+because they did not want us to implement specifications before other
+operating systems had the chance to.  So, given that this is a new spec,
+has Windows added support for this yet to prove it actually can work?
+
+What's the odds that usb-if is willing to talk to us again?  :)
+
+> The architectural choice to place most of the cryptographic and security
+> management functions in user space comes with its own limitations.
+> 
+> First it introduces a dependency on the user space program availability.
+> It will probably be necessary to introduce a fail-safe mechanism if the
+> authentication can not be completed. Also, during early boot stages the
+> user space service will be needed in one form or another in the
+> initramfs.
+
+Ugh, that's going to get messy fast, so putting this in the kernel might
+be the simplest way if at all possible.  At least for "boot devices", or
+just punt and don't care about USB devices at boot time?
+
+> The second limitation is that the device initialization process is
+> paused multiple times. Each time, the hub lock is released in order not
+> to block the rest of the stack; and then reacquired when a response has
+> been received from user space. The resuming of the operation on the
+> device must be done with great care.
+
+USB probe sequences are slow based on the slow devices, so I doubt this
+is going to even be noticable.  Have you seen any real slow-down in your
+testing?
+
+> Last, we do not yet interface properly with the rest of the usb stack
+> and thus do not enforce a strict control of the two authenticated and
+> authorized fields. Other sections of the kernel or userspace are able to
+> overwrite those fields using the sysfs exposed files for example.
+
+Why would the kernel be writing these values?  And if userspace isn't
+supposed to be writing to these anymore, just change the permissions on
+the sysfs files, OR just fail the write with the logic in the kernel
+itself.
+
+> Status
+> ======
+> 
+> The current kernel implementation of the USB authentication protocol is
+> experimental and has the following limitations:
+> 
+> - It does not yet handle all possible protocol errors.
+> - It has been tested with a QEMU mock device, but tests with real
+>   hardware are still in progress. As such, the over-the-wire protocol
+>   has not yet been fully validated.
+
+Are there any real devices out there?  Is there a test-device from
+usb-if that we can use?  Surely usb-if published some example code to
+prove that the specification works before ratification happened, right?
+
+> - The kernel/user space communication has not yet been completely
+>   validated, including the interruption of the worker thread and its
+>   resuming.
+
+What worker thread?  The hub?
+
+> - Device authorization and deauthorization has not been completely
+>   implemented.
+> - It lacks an overall documentation and test suite.
+
+testing is going to be key here :)
+
+> Upstreaming plans
+> =================
+> 
+> Our current kernel patch is obviously a work-in-progress and not yet
+> ready for merging. We feel it is best to start a discussion on the
+> architectural choices and gather early comments that could be used to
+> improve the design.
+> 
+> Concerning the user space functions, they are currently implemented in a
+> small independent executable as a proof-of-concept. In the future,
+> integrating it in existing larger projects, like USBGuard [6], would
+> allow presenting a homogeneous USB administration interface to the user.
+
+Yes, usbguard interaction would be good as that's what Linux userspace
+has standardized on.  Have you looked into that yet?
+
+> Reviewing this RFC
+> ==================
+> 
+> We would like to get comments on the proposed architectural choices
+> regarding the repartition of functions between kernel and user space and
+> on the implementation in the USB stack, mostly concerning the releasing
+> and reacquiring the hub lock multiple times during the authentication
+> process.
+> 
+> Testing this RFC
+> ================
+> 
+> You can find in the following repository [7] the necessary code for
+> creating a test environment:
+> 
+> - the Linux kernel patches;
+> - a python utility to generate a small PKI for device enrollment;
+> - a C minimalist service to implement the USB policy engine;
+> - patches for QEMU to implement a mock USB device with the
+>   authentication capability;
+> - a testbed to compile and test the project.
+
+As mentioned before, a usb gadget patch might be simpler than dealing
+with qemu, right?
+
+thanks,
+
+greg k-h
 
