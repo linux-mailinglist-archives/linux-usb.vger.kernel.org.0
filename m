@@ -1,154 +1,112 @@
-Return-Path: <linux-usb+bounces-25755-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25756-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74C5DB03D10
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 13:14:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E482EB03F25
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 15:01:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F4D13B41C1
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 11:13:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42B8D3BC7DC
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 13:00:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D089246BA5;
-	Mon, 14 Jul 2025 11:13:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4498E24E4D4;
+	Mon, 14 Jul 2025 13:00:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="SGWclml9";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="SGWclml9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VNdgVl1D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140F424678B
-	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 11:13:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9988424DCEF;
+	Mon, 14 Jul 2025 13:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752491615; cv=none; b=UooLcgUBJGnQtaFXBCePV3EALX4N5+1dwJ6pwBVFWBTcTc6FAEc16Uz70LL5ra9+rVzfCJQtsDMUNjNUOz1KGylWw+yexxAzk+RkPsRHdWhRSQu5RlkLQskVj4Nf4iytcHMBmNfCirqWJVbsJP4fA7iBM3OgeIpgWgste4XaEDk=
+	t=1752498056; cv=none; b=s5xWL64R2TrAiNCm3gobj2mr3yBckUOX2jjH7vyTzlkgqbiany0k2aq2ly7VvCUgC9ZAS8r9ufXERG07wdbrbKOlIAwdIwCqx9uQxRUGRkexWMzQmBxhIn6XqtvfTdv7w4omeubsf2EsR8+ySnzPx16BE3OcG4lL0YgL1YGMW24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752491615; c=relaxed/simple;
-	bh=7USVDM8kQAjUZfvUm9YvSO+W60rTXx1vHR9TIKPX0dc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KqL/bjy054OENjjNGe5IxyPjDUNKH8DK+nM/pPTzlIEh0mzM6nqJLQcEgv5tN9p7ol3xLs6/cDUOowzG4kgRnByhXTkGMqZnfh+RYTrR0CBUsqjduvqwQVl3OCyPrB1f8RCWsqPw3ij80qIT/qSzEfmmIZJ4EemF9lxpMyREKC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=SGWclml9; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=SGWclml9; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 020C9211FC;
-	Mon, 14 Jul 2025 11:13:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1752491611; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=xncQ4JZyfBu8qDa2hhTZYFb9vsPFqn8rnyGClhhvb80=;
-	b=SGWclml98AaoTkiRq3UNmlkki7FJdYV+LPhRSGeZKqqoMjk+KlJAgRAMN9fyaptaZhIcr7
-	uacX/xjf4gwnVREs1UlgRvq5z+LaTewLs89iSzrPAldDQVPOFO6/DX2blIe8oW8a3WoXzK
-	W1I7HRCny2csvQkEPAYbfn664v4UmBE=
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=SGWclml9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1752491611; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=xncQ4JZyfBu8qDa2hhTZYFb9vsPFqn8rnyGClhhvb80=;
-	b=SGWclml98AaoTkiRq3UNmlkki7FJdYV+LPhRSGeZKqqoMjk+KlJAgRAMN9fyaptaZhIcr7
-	uacX/xjf4gwnVREs1UlgRvq5z+LaTewLs89iSzrPAldDQVPOFO6/DX2blIe8oW8a3WoXzK
-	W1I7HRCny2csvQkEPAYbfn664v4UmBE=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AC266138A1;
-	Mon, 14 Jul 2025 11:13:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id FvbSKFrmdGguYgAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Mon, 14 Jul 2025 11:13:30 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>,
-	syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com
-Subject: [PATCH net] usb: net: sierra: check for no status endpoint
-Date: Mon, 14 Jul 2025 13:12:56 +0200
-Message-ID: <20250714111326.258378-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.50.0
+	s=arc-20240116; t=1752498056; c=relaxed/simple;
+	bh=3fFhHtDAfgbxPP8AUkNDxHi1qI9xVRX1525H3vua2/w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V/Ov1OuRyL0L2z/8k2XVYaDCGNoPFMZP4nqVROLpmarFDkCBg0uv2DG3L6PgOCPjLzrNLbwypy6Md0x+Ph7oYYC/XBxiDFFTd1f0l/KKC+GHBagMF22aPV2Q9uPlRnXQWk9q1XQuRxmxBfuQWIZHpzdQyif+Cg2GuVNYdYDdgek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VNdgVl1D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C9FBC4CEED;
+	Mon, 14 Jul 2025 13:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752498055;
+	bh=3fFhHtDAfgbxPP8AUkNDxHi1qI9xVRX1525H3vua2/w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=VNdgVl1DAstjWQEzWPvoLL79v/Z1u7vah+UeNYRAcqfB9d+nuxOwDelMwgRkLqFdw
+	 lvQN4Iyjr6Z+JMM/vhHONsIcslzWpr/xTvkxeLAYHJHK73eaOP5fwT+oeE4IwvFiuj
+	 xoBhfNUzgoh028SGZFb4fX1powEPvcCRavNvf4ZEuoa1x1wBOb7fZyakWWdsfjDhI7
+	 1Y3MR6hVMREgnFrfEJd7lnhYy5WY+R+fGg7OrCjGg5Jw1MDCatPz3MQsaJmTUcmdUZ
+	 PO0lJ3CSX3HKroDOomdMT5GDq0dUcz2F+M+sIcS4sjRvs5gXoiKe/du2rOKE2DM2Ww
+	 z5eUshw1SeKXg==
+Message-ID: <6459daf0-ed7f-476f-8503-aaa3a8fb309a@kernel.org>
+Date: Mon, 14 Jul 2025 15:00:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 020C9211FC
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	DWL_DNSWL_MED(-2.00)[suse.com:dkim];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TAGGED_RCPT(0.00)[netdev,3f89ec3d1d0842e95d50];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.com:dkim,suse.com:mid,suse.com:email]
-X-Spam-Score: -3.51
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/12] media: uvcvideo: Always set default_value
+To: Ricardo Ribalda <ribalda@chromium.org>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil
+ <hverkuil@xs4all.nl>, Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Linus Walleij
+ <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org
+References: <20250605-uvc-orientation-v2-0-5710f9d030aa@chromium.org>
+ <20250605-uvc-orientation-v2-1-5710f9d030aa@chromium.org>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <20250605-uvc-orientation-v2-1-5710f9d030aa@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The driver checks for having three endpoints and
-having bulk in and out endpoints, but not that
-the third endpoint is interrupt input.
-Rectify the omission.
+Hi,
 
-Reported-by: syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/linux-usb/686d5a9f.050a0220.1ffab7.0017.GAE@google.com/
-Tested-by: syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com
-Fixes: eb4fd8cd355c8 ("net/usb: add sierra_net.c driver")
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/net/usb/sierra_net.c | 4 ++++
- 1 file changed, 4 insertions(+)
+On 5-Jun-25 19:52, Ricardo Ribalda wrote:
+> If the control does not support GET_DEF, the field default_value will be
+> left uninitialized during queryctrl.
+> 
+> Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-diff --git a/drivers/net/usb/sierra_net.c b/drivers/net/usb/sierra_net.c
-index c30ca415d1d3..36c73db44f77 100644
---- a/drivers/net/usb/sierra_net.c
-+++ b/drivers/net/usb/sierra_net.c
-@@ -689,6 +689,10 @@ static int sierra_net_bind(struct usbnet *dev, struct usb_interface *intf)
- 			status);
- 		return -ENODEV;
- 	}
-+	if (!dev->status) {
-+		dev_err(&dev->udev->dev, "No status endpoint found");
-+		return -ENODEV;
-+	}
- 	/* Initialize sierra private data */
- 	priv = kzalloc(sizeof *priv, GFP_KERNEL);
- 	if (!priv)
--- 
-2.50.0
+Thanks, patch looks good to me,
+
+Reviewed-by: Hans de Goede <hansg@kernel.org>
+
+with Laurent's remarks addressed.
+
+Regards,
+
+Hans
+
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index 44b6513c526421943bb9841fb53dc5f8e9f93f02..47e8ccc39234d1769384b55539a21df07f3d57c7 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -1497,6 +1497,8 @@ static int __uvc_queryctrl_boundaries(struct uvc_video_chain *chain,
+>  	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_DEF) {
+>  		v4l2_ctrl->default_value = uvc_mapping_get_s32(mapping,
+>  				UVC_GET_DEF, uvc_ctrl_data(ctrl, UVC_CTRL_DATA_DEF));
+> +	} else {
+> +		v4l2_ctrl->default_value = 0;
+>  	}
+>  
+>  	switch (mapping->v4l2_type) {
+> 
 
 
