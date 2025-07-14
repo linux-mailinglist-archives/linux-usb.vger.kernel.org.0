@@ -1,297 +1,160 @@
-Return-Path: <linux-usb+bounces-25752-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25753-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 811B3B0399F
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 10:34:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E756AB03A20
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 10:56:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2ECA172B5D
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 08:34:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BEF4179F93
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 08:56:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8664423B63C;
-	Mon, 14 Jul 2025 08:34:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C452C23E320;
+	Mon, 14 Jul 2025 08:56:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="sMC7xDym"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="pVKSxzIQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542FF72600;
-	Mon, 14 Jul 2025 08:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A999B23D2AC
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 08:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752482089; cv=none; b=WkyuHqsKaijVM7Vh5DtnSwDQra/MxOlAA0RuWGSc9DOxBcxpXXCCl3DqhF8RzIoj4XKJ79PhwmC/lDbu6OK2CZsOc6PmfEQ3L3WPowPPV49pRkVAIWYEOYVcin5sABJ6o5cJIJn9CLrWajvDh8RTAoi8G73+IR0JryTub3sdbvU=
+	t=1752483370; cv=none; b=b49hUWdKi/3iinud0M/ufHWJfOnyL4UE7o/zaCbWbBUN/hDg987N9tuDGrHjUO/VVR5FZBIzZxgidAJZJQPy3s+eUx9ppXcPmv+AMD22hsojZJczfdst6v2NsnxOOCMnRQaLpldEaiK8kXP8vXsKMVG11izXzvkM4SAQDdKz+KY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752482089; c=relaxed/simple;
-	bh=bNqtFKKhIxtAE+9B1scbgn/0YjscZsM8E76sZWd1D54=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MhR3ZQyeN/UOFpJy6OZkLLMm3hKIsSOU51frBGtmCy6eEvMMePkj5EQXAqyaRTYqzlpDQVTMw30FkcmxRJsE42W36lFY67bA1+9rFYMHXH991HKlvy5Onp0OMEeKPHTyPYNVfrxp3C0bsvv/ROrHhIljGDMorlo/sVnTOZrF9Fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=sMC7xDym; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 625B61B24;
-	Mon, 14 Jul 2025 10:34:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1752482053;
-	bh=bNqtFKKhIxtAE+9B1scbgn/0YjscZsM8E76sZWd1D54=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sMC7xDymjfhpAP2CvItrJQBBC3UMPLX4+nrTXtbXY6G50QB0q98VOGxUNKUK+EE2h
-	 NzwoXyc66kfDINrwoW8yZGXnL28SS3w4Jv3XznJbmuJ0TJNmoWxFDlRWXo+kLWiyRK
-	 MIYxoUHh6xsa4jIbNzk/Xk3iKtdUN8dQjV3OrQRM=
-Date: Mon, 14 Jul 2025 11:34:14 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans de Goede <hansg@kernel.org>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 5/5] media: uvcvideo: Auto-set UVC_QUIRK_MSXU_META
-Message-ID: <20250714083414.GA8243@pendragon.ideasonboard.com>
-References: <20250707-uvc-meta-v8-0-ed17f8b1218b@chromium.org>
- <20250707-uvc-meta-v8-5-ed17f8b1218b@chromium.org>
- <20250711195815.GH27674@pendragon.ideasonboard.com>
- <CANiDSCsWE-5smL-H7CD_mi6AhJL2LAwf07bFpxJyN+0CnsLPfQ@mail.gmail.com>
- <20250714080608.GB10401@pendragon.ideasonboard.com>
- <CANiDSCvkTQeTsFwRiJF=9s8jHsRtWjb46=JcwLWPPK0VLqkbEA@mail.gmail.com>
+	s=arc-20240116; t=1752483370; c=relaxed/simple;
+	bh=X4I+rX7MASVYPmxglye1FOXudOJ3WWjuc7xvNa75H00=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rjFEkd6kppSXvygggcDokpx9NnxFFmQyrC5/GAEGvn8iy2xsap/4yVY2NOYdzLg5l0c7N80VCy/3NxGVc+3DFOyXKT1+T6jA3KO0ESdiCSQfLIeIAo6RfP8zQpnrJ1AtXMl1fBnm3SvgXxn7O6XRkgrbiMF/P2YFtK4jvcV1cwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=pVKSxzIQ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56DNA3Tk032297
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 08:56:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	5jY0WGc6ztQzUZ3gymsyEgC3n2Bv8t4dcCvQb5/DBr8=; b=pVKSxzIQrhKpDbPi
+	r5coC3MplEo48xRgsX5iu1wil4cZlcdLj/qXYycNo0fQI/0YVH92iMmb3cVCZB/u
+	i+QJ9/3lADJmAl99qFOuwIOsW03gGT4Of8kGu4ZcvNb/FvPkZ+Z7L4VEF2/Esfqh
+	pvi0lzNiN4DrvK1DDX5emiJuufWiQ0xGqCJxnAsENLy4WCpDWXvJXW6JNC1GxOSM
+	BJmmjbkQ/t98PISBMf9oI26tbu0Xx/rg1yHLs6FAr3Gix3IEK3KFs0je0/Wms8rI
+	nlkqjX+9KLU1qF8cv0g+yVQzz1p1h4mpnmsh9fpHsKX5M0icSpxvGFbRmRhGR/c/
+	Vk1BZg==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ufvbbvjb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 08:56:07 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4ab3bd0f8d5so806591cf.1
+        for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 01:56:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752483367; x=1753088167;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5jY0WGc6ztQzUZ3gymsyEgC3n2Bv8t4dcCvQb5/DBr8=;
+        b=ROFQaB87mTLL5UaaSkIKoNBjnFbUqE1EJYgj32LzpmgadDzbtPB+7vCLsuv4BuQZ5b
+         YJLlRRicQH4D2AnJWyfsoAXxK3a8vk1k5NjheU2teGAl/jZt6b6JSikmERxg8Y/ulAWW
+         TGeDjRs82GISJbd5tkJGfzPtS9uY62qXgLF1ROuY99TfrYiBRLMyqdDzklIO1AivsIWp
+         UkcTfDIyYHxpEhzJmHLP5I+1D/rrWOHNaaRm5AKd9UKw2ZgywiNfwbK2LYT2/0NYy4L3
+         t9Vj7soLNq6akOacPfCZkfgd2SaapK28CjY1Mk/uuZETf8JWJq86NZPkn2M2zV5vHYur
+         YmDw==
+X-Forwarded-Encrypted: i=1; AJvYcCUUq7lDBpNzGkLwFtVCnUrxOwC1emdgGHb8/kc2vT6DbDUU/eZt1CogdtubAn8JrH/8OrRIZBBG4GQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSX7YWmE+osuUrzdhbHfweOvy6S87wUMf6TC4Yf47T5H1c+R/z
+	FLIr/nOmj6Tu2FQfyjgzy9T8ZfUnfG4jJ6vYY6CerkNk2MDX0YJ6/S/Ak6jpcDGF1WMihFheoKl
+	QOoUMCcR66oK3UCjXO/VCEHb1uBEdDzF8SX7nN9uVnq/j3jsl+LMyWMJWAHEBIpo=
+X-Gm-Gg: ASbGncvuvSQZUtbLlLQIztYmmunod1RbW83cqEgdvPrSyvUMeHME22pf1+Y7hwZLTDn
+	Q4xlHoA3wWTm/VCTTCcpLdkt6TFQbE/p6MeKMQfotAs5b+qSl0SgCHx/PNYEgtWQ7+vsegusoXa
+	gbv8fXYDcTspgq1ThN9OamQ2siVc/SUuDRWtnnv5/CX3+JPYdYP3HOYrvMovdK+qKJw0W7ZYUNV
+	aF2w3wQcGGQLZfxXTOHpbzFYe2v1FV5MjvCOY30Vxbf3WwqCdYTvuGKpQgeaSxVXld2/A84gPqk
+	hvmxMEWE573N0ST4aNxWGDUIV2+AGkhBxvn3wB/3eJxLWhjWZdaTZ1o0EbREcy8x0IVu/3WZ9WE
+	lhqNfma/lCzc4bDF/pwk+
+X-Received: by 2002:a05:620a:472b:b0:7d3:b0a3:6aa7 with SMTP id af79cd13be357-7dde9953e8amr657113685a.3.1752483366619;
+        Mon, 14 Jul 2025 01:56:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGNHAGDmj1FNKm7Td/jrJizwNYUh9v+mDxMjEP9OpPhXFzcce8+hBlEif0l1OBFKxoCqJ1Zqw==
+X-Received: by 2002:a05:620a:472b:b0:7d3:b0a3:6aa7 with SMTP id af79cd13be357-7dde9953e8amr657112785a.3.1752483366190;
+        Mon, 14 Jul 2025 01:56:06 -0700 (PDT)
+Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e7e910ddsm792022066b.18.2025.07.14.01.56.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Jul 2025 01:56:05 -0700 (PDT)
+Message-ID: <7095596c-58b6-4581-9823-0f924b4ca005@oss.qualcomm.com>
+Date: Mon, 14 Jul 2025 10:56:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiDSCvkTQeTsFwRiJF=9s8jHsRtWjb46=JcwLWPPK0VLqkbEA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: dwc3: qcom: Remove extcon functionality from glue
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20250714044703.2091075-1-krishna.kurapati@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250714044703.2091075-1-krishna.kurapati@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE0MDA1MiBTYWx0ZWRfX/BZ7470aITVt
+ hxaIY9b7UmBUJ7ORmGlz7sKufMlPxj0ZsobySqljAduMjh3fNPDd7VCbA23VblUN68sQdDRonP3
+ l4e6Mi1XZfG5HHvGEZo2EDX9ItpAsOx3pWlbjNgMcOkPS8MtTN1t6BhaVyc9aGFtRR54bIZD3nH
+ 7z+J32NrNO7A3IgaXfFGcwo+AMnCZ/ENfL64/ETkf/B4IVjU9uYDENuDk+XmrnOf4l82SRJMS16
+ xQ74JyjbE0Vb7C1vx8V5qkhcz2u4qaqdH9XGOZpzzP8Dc5QxzTcvR0yvzO7aXvk9/KnD3jR3lXk
+ FUduuaQoqerFbutOp5quTLOtj18GGopPpvOs5/9estQc43tTSbtqZJMWx3GIjFgXOK2PpL40LMu
+ uXjNCeQIUZkftyj9MLfMFcM/n7+y/mMVruq9hxhZ+Go4evBTcZmjAy4uDFrEeVS1XyE49ko0
+X-Proofpoint-GUID: YJWkmWR2xw95bjLaUZoGqb46GFEzlD0u
+X-Authority-Analysis: v=2.4 cv=RPSzH5i+ c=1 sm=1 tr=0 ts=6874c627 cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=gYDs5GclryXmtiFo2a0A:9
+ a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
+X-Proofpoint-ORIG-GUID: YJWkmWR2xw95bjLaUZoGqb46GFEzlD0u
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-14_01,2025-07-09_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=819 spamscore=0
+ clxscore=1015 suspectscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507140052
 
-On Mon, Jul 14, 2025 at 10:21:20AM +0200, Ricardo Ribalda wrote:
-> On Mon, 14 Jul 2025 at 10:06, Laurent Pinchart wrote:
-> > On Mon, Jul 14, 2025 at 09:46:45AM +0200, Ricardo Ribalda wrote:
-> > > On Fri, 11 Jul 2025 at 21:58, Laurent Pinchart wrote:
-> > > > On Mon, Jul 07, 2025 at 06:34:05PM +0000, Ricardo Ribalda wrote:
-> > > > > If the camera supports the MSXU_CONTROL_METADATA control, auto set the
-> > > > > MSXU_META quirk.
-> > > > >
-> > > > > Reviewed-by: Hans de Goede <hansg@kernel.org>
-> > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > > ---
-> > > > >  drivers/media/usb/uvc/uvc_driver.c   |  7 +++-
-> > > > >  drivers/media/usb/uvc/uvc_metadata.c | 75 +++++++++++++++++++++++++++++++++++-
-> > > > >  drivers/media/usb/uvc/uvcvideo.h     |  2 +-
-> > > > >  include/linux/usb/uvc.h              |  3 ++
-> > > > >  4 files changed, 84 insertions(+), 3 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > > > > index 56ea20eeb7b9d5d92f3d837c15bdf11d536e9f2d..9de5abb43e19d9e876cddc5d7124592953db89ac 100644
-> > > > > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > > > > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > > > > @@ -2315,7 +2315,12 @@ static int uvc_probe(struct usb_interface *intf,
-> > > > >               goto error;
-> > > > >       }
-> > > > >
-> > > > > -     uvc_meta_init(dev);
-> > > > > +     ret = uvc_meta_init(dev);
-> > > > > +     if (ret < 0) {
-> > > > > +             dev_err(&dev->udev->dev,
-> > > > > +                     "Error initializing the metadata formats (%d)\n", ret);
-> > > > > +             goto error;
-> > > > > +     }
-> > > > >
-> > > > >       if (dev->quirks & UVC_QUIRK_NO_RESET_RESUME)
-> > > > >               udev->quirks &= ~USB_QUIRK_RESET_RESUME;
-> > > > > diff --git a/drivers/media/usb/uvc/uvc_metadata.c b/drivers/media/usb/uvc/uvc_metadata.c
-> > > > > index 77e03273d3cf6b00cac6ebb9b29b941f1cbfd9f7..59bb133baf9a73ef6a30fa8ead85aa90653d60f4 100644
-> > > > > --- a/drivers/media/usb/uvc/uvc_metadata.c
-> > > > > +++ b/drivers/media/usb/uvc/uvc_metadata.c
-> > > > > @@ -10,6 +10,7 @@
-> > > > >  #include <linux/list.h>
-> > > > >  #include <linux/module.h>
-> > > > >  #include <linux/usb.h>
-> > > > > +#include <linux/usb/uvc.h>
-> > > > >  #include <linux/videodev2.h>
-> > > > >
-> > > > >  #include <media/v4l2-ioctl.h>
-> > > > > @@ -166,6 +167,71 @@ static const struct v4l2_file_operations uvc_meta_fops = {
-> > > > >       .mmap = vb2_fop_mmap,
-> > > > >  };
-> > > > >
-> > > > > +static struct uvc_entity *uvc_meta_find_msxu(struct uvc_device *dev)
-> > > > > +{
-> > > > > +     static const u8 uvc_msxu_guid[16] = UVC_GUID_MSXU_1_5;
-> > > > > +     struct uvc_entity *entity;
-> > > > > +
-> > > > > +     list_for_each_entry(entity, &dev->entities, list) {
-> > > > > +             if (!memcmp(entity->guid, uvc_msxu_guid, sizeof(entity->guid)))
-> > > > > +                     return entity;
-> > > > > +     }
-> > > > > +
-> > > > > +     return NULL;
-> > > > > +}
-> > > > > +
-> > > > > +#define MSXU_CONTROL_METADATA 0x9
-> > > > > +static int uvc_meta_detect_msxu(struct uvc_device *dev)
-> > > > > +{
-> > > > > +     u32 *data __free(kfree) = NULL;
-> > > > > +     struct uvc_entity *entity;
-> > > > > +     int ret;
-> > > > > +
-> > > > > +     entity = uvc_meta_find_msxu(dev);
-> > > > > +     if (!entity)
-> > > > > +             return 0;
-> > > > > +
-> > > > > +     /*
-> > > > > +      * USB requires buffers aligned in a special way, simplest way is to
-> > > > > +      * make sure that query_ctrl will work is to kmalloc() them.
-> > > > > +      */
-> > > > > +     data = kmalloc(sizeof(*data), GFP_KERNEL);
-> > > > > +     if (!data)
-> > > > > +             return -ENOMEM;
-> > > > > +
-> > > > > +     /* Check if the metadata is already enabled. */
-> > > > > +     ret = uvc_query_ctrl(dev, UVC_GET_CUR, entity->id, dev->intfnum,
-> > > > > +                          MSXU_CONTROL_METADATA, data, sizeof(*data));
-> > > > > +     if (ret)
-> > > > > +             return 0;
-> > > > > +
-> > > > > +     if (*data) {
-> > > > > +             dev->quirks |= UVC_QUIRK_MSXU_META;
-> > > > > +             return 0;
-> > > > > +     }
-> > > > > +
-> > > > > +     /*
-> > > > > +      * We have seen devices that require 1 to enable the metadata, others
-> > > > > +      * requiring a value != 1 and others requiring a value >1. Luckily for
-> > > >
-> > > > I'm confused here. If those are three different behaviours, then value
-> > > > != 1 would be value == 0 (as the third behaviour is value > 1). You test
-> > > > for !*data below, so 0 is not accepted as a valid value for this
-> > > > purpose. What am I missing ?
-> > >
-> > > There is a typo in the comment.
-> > >
-> > > Some devices require 1, some devices any value !=0, and other value=MAX.
-> > > I will fix it in a follow-up patch.
-> >
-> > The documentation of the control states that MSXU_CONTROL_METADATA
-> > reports the maximum size of the MS metadata generated by the device in
-> > kB, and the control should be set to the value reported by GET_MAX to
-> > enable metadata generation. That's what you're doing in this patch, so
-> > you can update the comment to document there.
+On 7/14/25 6:47 AM, Krishna Kurapati wrote:
+> Deprecate usage of extcon functionality from the glue driver. Now
+> that the glue driver is a flattened implementation, all existing
+> DTs would eventually move to new bindings. While doing so let them
+> make use of role-switch/ typec frameworks to provide role data
+> rather than using extcon.
 > 
-> Some vendors assumed the kB was a typo in MS spec and used bytes instead :)
-> In this favor I must say that kB here sounds like a mistake, I haven't
-> seen more than 300 bytes of metadata.
-
-It doesn't seem to be a typo, as the documentation states
-
-  The camera can produce metadata and the total size of such metadata
-  can't exceed the dwValue - as reported by GET_MAX request – times 1024
-  bytes less the size of a UsbVideoHeader metadata payload, for any
-  frame.
-
-It looks like a design mistake though.
-
-> Will send a patch with the updated documentation.
+> On upstream, summary of targets/platforms using extcon is as follows:
 > 
-> > Some devices also don't support SET_CUR, in which case they should
-> > report GET_MIN == GET_DEF == GET_MAX. I assume GET_CUR should then also
-> > report the same value. Please also update the previous comment to
-> > explain this, the GET_CUR value check above is more about handling
-> > devices that always produce metadata than devices for which a driver has
-> > enabled metadata production.
-> >
-> > This leads to another question: should we enable metadata generation
-> > only when the metadata capture device is streaming ?
+> 1. MSM8916 and MSM8939 use Chipidea controller, hence the changes have no
+> effect on them.
 > 
-> This will lead to a lot of issues with very little benefit.
+> 2. Of the other extcon users, most of them use "linux,extcon-usb-gpio"
+> driver which relies on id/vbus gpios to inform role changes. This can be
+> transitioned to role switch based driver (usb-conn-gpio) while flattening
+> those platforms to move away from extcon and rely on role
+> switching.
 > 
-> We have no control over the order that the user will enable streamon
-> in the metadata and "normal" video devices. And the device will not
-> like that MSXU_CONTROL_METADATA changes during streamon.
+> 3. The one target that uses dwc3 controller and extcon and is not based
+> on reading gpios is "arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi".
+> This platform uses TI chip to provide extcon. If usb on this platform is
+> being flattneed, then effort should be put in to define a usb-c-connector
+> device in DT and make use of role switch functionality in TUSB320L driver.
 > 
-> I have not seen any performance penalty by the 300 new bytes
-> transferred when the metadata is on.
-> 
-> > > > > +      * us, the value from GET_MAX seems to work all the time.
-> > > > > +      */
-> > > > > +     ret = uvc_query_ctrl(dev, UVC_GET_MAX, entity->id, dev->intfnum,
-> > > > > +                          MSXU_CONTROL_METADATA, data, sizeof(*data));
-> > > > > +     if (ret || !*data)
-> > > > > +             return 0;
-> > > > > +
-> > > > > +     /*
-> > > > > +      * If we can set MSXU_CONTROL_METADATA, the device will report
-> > > > > +      * metadata.
-> > > > > +      */
-> > > > > +     ret = uvc_query_ctrl(dev, UVC_SET_CUR, entity->id, dev->intfnum,
-> > > > > +                          MSXU_CONTROL_METADATA, data, sizeof(*data));
-> > > > > +     if (!ret)
-> > > > > +             dev->quirks |= UVC_QUIRK_MSXU_META;
-> > > > > +
-> > > > > +     return 0;
-> > > > > +}
-> > > > > +
-> > > > >  int uvc_meta_register(struct uvc_streaming *stream)
-> > > > >  {
-> > > > >       struct uvc_device *dev = stream->dev;
-> > > > > @@ -185,9 +251,14 @@ int uvc_meta_register(struct uvc_streaming *stream)
-> > > > >                                        &uvc_meta_fops, &uvc_meta_ioctl_ops);
-> > > > >  }
-> > > > >
-> > > > > -void uvc_meta_init(struct uvc_device *dev)
-> > > > > +int uvc_meta_init(struct uvc_device *dev)
-> > > > >  {
-> > > > >       unsigned int i = 0;
-> > > > > +     int ret;
-> > > > > +
-> > > > > +     ret = uvc_meta_detect_msxu(dev);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > >
-> > > > >       dev->meta_formats[i++] = V4L2_META_FMT_UVC;
-> > > > >
-> > > > > @@ -201,4 +272,6 @@ void uvc_meta_init(struct uvc_device *dev)
-> > > > >
-> > > > >        /* IMPORTANT: for new meta-formats update UVC_MAX_META_DATA_FORMATS. */
-> > > > >       dev->meta_formats[i++] = 0;
-> > > > > +
-> > > > > +     return 0;
-> > > > >  }
-> > > > > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > > > > index 616adc417c62a58686beccbc440a5dfac0a2d588..a4c064c5e046f2a4adba742c8777a10619569606 100644
-> > > > > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > > > > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > > > > @@ -757,7 +757,7 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
-> > > > >  void uvc_video_clock_update(struct uvc_streaming *stream,
-> > > > >                           struct vb2_v4l2_buffer *vbuf,
-> > > > >                           struct uvc_buffer *buf);
-> > > > > -void uvc_meta_init(struct uvc_device *dev);
-> > > > > +int uvc_meta_init(struct uvc_device *dev);
-> > > > >  int uvc_meta_register(struct uvc_streaming *stream);
-> > > > >
-> > > > >  int uvc_register_video_device(struct uvc_device *dev,
-> > > > > diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
-> > > > > index bce95153e5a65613a710d7316fc17cf5462b5bce..ee19e9f915b8370c333c426dc1ee4202c7b75c5b 100644
-> > > > > --- a/include/linux/usb/uvc.h
-> > > > > +++ b/include/linux/usb/uvc.h
-> > > > > @@ -29,6 +29,9 @@
-> > > > >  #define UVC_GUID_EXT_GPIO_CONTROLLER \
-> > > > >       {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-> > > > >        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
-> > > > > +#define UVC_GUID_MSXU_1_5 \
-> > > > > +     {0xdc, 0x95, 0x3f, 0x0f, 0x32, 0x26, 0x4e, 0x4c, \
-> > > > > +      0x92, 0xc9, 0xa0, 0x47, 0x82, 0xf4, 0x3b, 0xc8}
-> > > > >
-> > > > >  #define UVC_GUID_FORMAT_MJPEG \
-> > > > >       { 'M',  'J',  'P',  'G', 0x00, 0x00, 0x10, 0x00, \
-> > > > >
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> ---
 
--- 
-Regards,
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Laurent Pinchart
+Konrad
 
