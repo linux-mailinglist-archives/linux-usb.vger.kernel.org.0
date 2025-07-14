@@ -1,133 +1,129 @@
-Return-Path: <linux-usb+bounces-25753-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25754-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E756AB03A20
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 10:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 21F7DB03AB7
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 11:24:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BEF4179F93
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 08:56:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 511F017531E
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 09:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C452C23E320;
-	Mon, 14 Jul 2025 08:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED64D24113C;
+	Mon, 14 Jul 2025 09:24:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="pVKSxzIQ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="G7u3PGTt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A999B23D2AC
-	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 08:56:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873FA23A9BF
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 09:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752483370; cv=none; b=b49hUWdKi/3iinud0M/ufHWJfOnyL4UE7o/zaCbWbBUN/hDg987N9tuDGrHjUO/VVR5FZBIzZxgidAJZJQPy3s+eUx9ppXcPmv+AMD22hsojZJczfdst6v2NsnxOOCMnRQaLpldEaiK8kXP8vXsKMVG11izXzvkM4SAQDdKz+KY=
+	t=1752485053; cv=none; b=mjI2ZupzrznTL799cKrFScSaO08evqUbrVvTlvgkj7Mx3n4hwFlMShTyg8b2o9L4T07NM8CxWD8y6NXkDlcUnXXkl/gtQcgLiip3JiJYMpjAgRaLlMkJGVkYV+VVtaHUdKyGSGXqU9kZv1w87MJW8MfTg2WvVcRvIof20mWu2WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752483370; c=relaxed/simple;
-	bh=X4I+rX7MASVYPmxglye1FOXudOJ3WWjuc7xvNa75H00=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rjFEkd6kppSXvygggcDokpx9NnxFFmQyrC5/GAEGvn8iy2xsap/4yVY2NOYdzLg5l0c7N80VCy/3NxGVc+3DFOyXKT1+T6jA3KO0ESdiCSQfLIeIAo6RfP8zQpnrJ1AtXMl1fBnm3SvgXxn7O6XRkgrbiMF/P2YFtK4jvcV1cwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=pVKSxzIQ; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1752485053; c=relaxed/simple;
+	bh=vW7zFUT4uisZkBflxFOgTOHHFIpYy4naUQy1oVtrAik=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HsXv+8K6/Z3H3kM3nlax3aJoqa9lCkL+nRUYnhioVtk65Pxle8Yl4v2UzPPSTslkQqx4Azjnz61+JtOWnwKNeNj3WQ0r5gpdLL88nKAM08/1yhdZNYW0BVtG2UJ2mgHqQVMY7eCMgp9lJUFnyId1ZM8dOGvTi19YIn1iBGN/8dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=G7u3PGTt; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56DNA3Tk032297
-	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 08:56:07 GMT
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56DLq3mL009866
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 09:24:10 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	5jY0WGc6ztQzUZ3gymsyEgC3n2Bv8t4dcCvQb5/DBr8=; b=pVKSxzIQrhKpDbPi
-	r5coC3MplEo48xRgsX5iu1wil4cZlcdLj/qXYycNo0fQI/0YVH92iMmb3cVCZB/u
-	i+QJ9/3lADJmAl99qFOuwIOsW03gGT4Of8kGu4ZcvNb/FvPkZ+Z7L4VEF2/Esfqh
-	pvi0lzNiN4DrvK1DDX5emiJuufWiQ0xGqCJxnAsENLy4WCpDWXvJXW6JNC1GxOSM
-	BJmmjbkQ/t98PISBMf9oI26tbu0Xx/rg1yHLs6FAr3Gix3IEK3KFs0je0/Wms8rI
-	nlkqjX+9KLU1qF8cv0g+yVQzz1p1h4mpnmsh9fpHsKX5M0icSpxvGFbRmRhGR/c/
-	Vk1BZg==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ufvbbvjb-1
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=V8ZlHczfnDZoIkoxuSHgxwOK
+	2zomSWcRzbFFVNS1tiY=; b=G7u3PGTtAgMTWUTC2phFDAM9W4kHdlSFLbGj21e8
+	eFoFKPkD02amzzF7jpZgMh4/Fzm1oB02pdEmutBZfAxq6uf0Hnfdodh9Xnb5j8b8
+	OnK81eQ+1zTObpkgicZjAyqPsIk1aE5ZiXXLk0Wlbp2u7JmV/r7tvvyA3YLwK39p
+	Ycd9l6hdpm78O9r5ZFF567tNbgHiR2gkkw9h2L7JfhBufY053ydUofK3rYhHFkYf
+	Qj4AecpCWR8DAleNFd+zlRnveBcXTDR/vzKJUG53AIbsfcng8+dqnuls0kndZ9b8
+	ScshWuwxU0w9rXHDW+vRw6NEKBdSjl1Ab6BuF6Vk3itA8w==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47v56a2jg1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 08:56:07 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4ab3bd0f8d5so806591cf.1
-        for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 01:56:07 -0700 (PDT)
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 09:24:10 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6face45b58dso64732776d6.3
+        for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 02:24:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752483367; x=1753088167;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5jY0WGc6ztQzUZ3gymsyEgC3n2Bv8t4dcCvQb5/DBr8=;
-        b=ROFQaB87mTLL5UaaSkIKoNBjnFbUqE1EJYgj32LzpmgadDzbtPB+7vCLsuv4BuQZ5b
-         YJLlRRicQH4D2AnJWyfsoAXxK3a8vk1k5NjheU2teGAl/jZt6b6JSikmERxg8Y/ulAWW
-         TGeDjRs82GISJbd5tkJGfzPtS9uY62qXgLF1ROuY99TfrYiBRLMyqdDzklIO1AivsIWp
-         UkcTfDIyYHxpEhzJmHLP5I+1D/rrWOHNaaRm5AKd9UKw2ZgywiNfwbK2LYT2/0NYy4L3
-         t9Vj7soLNq6akOacPfCZkfgd2SaapK28CjY1Mk/uuZETf8JWJq86NZPkn2M2zV5vHYur
-         YmDw==
-X-Forwarded-Encrypted: i=1; AJvYcCUUq7lDBpNzGkLwFtVCnUrxOwC1emdgGHb8/kc2vT6DbDUU/eZt1CogdtubAn8JrH/8OrRIZBBG4GQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSX7YWmE+osuUrzdhbHfweOvy6S87wUMf6TC4Yf47T5H1c+R/z
-	FLIr/nOmj6Tu2FQfyjgzy9T8ZfUnfG4jJ6vYY6CerkNk2MDX0YJ6/S/Ak6jpcDGF1WMihFheoKl
-	QOoUMCcR66oK3UCjXO/VCEHb1uBEdDzF8SX7nN9uVnq/j3jsl+LMyWMJWAHEBIpo=
-X-Gm-Gg: ASbGncvuvSQZUtbLlLQIztYmmunod1RbW83cqEgdvPrSyvUMeHME22pf1+Y7hwZLTDn
-	Q4xlHoA3wWTm/VCTTCcpLdkt6TFQbE/p6MeKMQfotAs5b+qSl0SgCHx/PNYEgtWQ7+vsegusoXa
-	gbv8fXYDcTspgq1ThN9OamQ2siVc/SUuDRWtnnv5/CX3+JPYdYP3HOYrvMovdK+qKJw0W7ZYUNV
-	aF2w3wQcGGQLZfxXTOHpbzFYe2v1FV5MjvCOY30Vxbf3WwqCdYTvuGKpQgeaSxVXld2/A84gPqk
-	hvmxMEWE573N0ST4aNxWGDUIV2+AGkhBxvn3wB/3eJxLWhjWZdaTZ1o0EbREcy8x0IVu/3WZ9WE
-	lhqNfma/lCzc4bDF/pwk+
-X-Received: by 2002:a05:620a:472b:b0:7d3:b0a3:6aa7 with SMTP id af79cd13be357-7dde9953e8amr657113685a.3.1752483366619;
-        Mon, 14 Jul 2025 01:56:06 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGNHAGDmj1FNKm7Td/jrJizwNYUh9v+mDxMjEP9OpPhXFzcce8+hBlEif0l1OBFKxoCqJ1Zqw==
-X-Received: by 2002:a05:620a:472b:b0:7d3:b0a3:6aa7 with SMTP id af79cd13be357-7dde9953e8amr657112785a.3.1752483366190;
-        Mon, 14 Jul 2025 01:56:06 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e7e910ddsm792022066b.18.2025.07.14.01.56.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Jul 2025 01:56:05 -0700 (PDT)
-Message-ID: <7095596c-58b6-4581-9823-0f924b4ca005@oss.qualcomm.com>
-Date: Mon, 14 Jul 2025 10:56:04 +0200
+        d=1e100.net; s=20230601; t=1752485049; x=1753089849;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V8ZlHczfnDZoIkoxuSHgxwOK2zomSWcRzbFFVNS1tiY=;
+        b=LvUp08gsL2hxLOUCFag+HCZK6ti+StY76RfO6ih4S51baGNkYsKtr1fxbl4E/veSLB
+         Ly1xfT5IeClS/DSYBncrzVdbsntypUzshf1VJFWn9iJXymjAxG0HxM3H6zU/lyyDVCSE
+         qXjEv/Uz75LGqVe5tGGrskxWbTHOZSeQRbiiBfGguFT3NgN5PK5R0CAQ06pDX1e/0hdl
+         RV9ruYszcCTuClRA8oOHH8RRADqXQem6+/KP5rbMcLY0WfFqZajSnXyMw4dS5djL3W2w
+         Doy/vXGJTxNSsCNKb5JcFqDXETr9t2ng59HkUPu+PE+fFkYA3gEKjz0EMJZH7h11VTnz
+         Ukvg==
+X-Forwarded-Encrypted: i=1; AJvYcCURvqHrO3G0qcq/3s94m7Lvw6LbRMGfLJN34xy/PyfduDmxZWbc3sy1hIupL4M0M7NLa9nacjvVx+4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQ44UC/CDs9t4iqwdKGegPph0VLGm8MuVTzGB2y24NwY2FhqfN
+	ikxwKgFgQUFWGPyCmFZTOwKxqPh+sGenvELeAJTxD/rK9ZiH+hP4CHITAukZYWLRwC0R4LICD4G
+	ZRoJzYOSM7vOLZn/V/UT5iHMDvG3T8NJpaZk1qqrri/gTRaVpfhLrAAbDR4VTKBI=
+X-Gm-Gg: ASbGncuWYSBTPxGU81CxLcz7LE3KVB8zdpH+btK/CEwPZuuiKEl3RaofKJg+UK0drGH
+	jWQtGMWSLk7QaDLgw0mjMbANzZNo9ZU6kSM3rD84dAXXH7MSNlbs8GMQRCBA7xoSTUMRt4FUfAw
+	DEHrLAqmCa/wT0G1tLZII6v0XifmdFqDiw1LtXmJGHYBqp1oOJCfux4VAGq3fZXCe1o/0XCOdtq
+	eXCR6h6b5uSbnlF50fipTPh7egc1zESBI1CDB7s/0SU/5dz0D6o28ihv1RfbP0ND2Rv0kkhxrR+
+	tqxXQGx9rC0z4BwhVQpgm/jcPE/lDVKHbr4fiZj6QX972qJRgU0yuk3my0n/NXvkeosyWXmgp7U
+	1i8DkG8Np2/mZ2kMLcm+TnUrKJec7txJixz2Leww0fkPIerpQ1v2w
+X-Received: by 2002:a05:6214:5017:b0:704:95ce:17da with SMTP id 6a1803df08f44-704a40c8425mr184203506d6.11.1752485049056;
+        Mon, 14 Jul 2025 02:24:09 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGIT36I3m4hHfAONrGfjJUxqWcUbn30oEyBIYCebfEJkEpfuMOuhby4qawcjOVW/7vsoAXGEw==
+X-Received: by 2002:a05:6214:5017:b0:704:95ce:17da with SMTP id 6a1803df08f44-704a40c8425mr184203246d6.11.1752485048417;
+        Mon, 14 Jul 2025 02:24:08 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-32fab91a480sm14418941fa.112.2025.07.14.02.24.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jul 2025 02:24:07 -0700 (PDT)
+Date: Mon, 14 Jul 2025 12:24:05 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: dwc3: qcom: Remove extcon functionality from glue
+Message-ID: <h4gvc73zp5csthn6fk3upj45xbtlijove67gigfgrvzi6gwu3k@y6v4lggyqf2u>
+References: <20250714044703.2091075-1-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: dwc3: qcom: Remove extcon functionality from glue
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20250714044703.2091075-1-krishna.kurapati@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20250714044703.2091075-1-krishna.kurapati@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE0MDA1MiBTYWx0ZWRfX/BZ7470aITVt
- hxaIY9b7UmBUJ7ORmGlz7sKufMlPxj0ZsobySqljAduMjh3fNPDd7VCbA23VblUN68sQdDRonP3
- l4e6Mi1XZfG5HHvGEZo2EDX9ItpAsOx3pWlbjNgMcOkPS8MtTN1t6BhaVyc9aGFtRR54bIZD3nH
- 7z+J32NrNO7A3IgaXfFGcwo+AMnCZ/ENfL64/ETkf/B4IVjU9uYDENuDk+XmrnOf4l82SRJMS16
- xQ74JyjbE0Vb7C1vx8V5qkhcz2u4qaqdH9XGOZpzzP8Dc5QxzTcvR0yvzO7aXvk9/KnD3jR3lXk
- FUduuaQoqerFbutOp5quTLOtj18GGopPpvOs5/9estQc43tTSbtqZJMWx3GIjFgXOK2PpL40LMu
- uXjNCeQIUZkftyj9MLfMFcM/n7+y/mMVruq9hxhZ+Go4evBTcZmjAy4uDFrEeVS1XyE49ko0
-X-Proofpoint-GUID: YJWkmWR2xw95bjLaUZoGqb46GFEzlD0u
-X-Authority-Analysis: v=2.4 cv=RPSzH5i+ c=1 sm=1 tr=0 ts=6874c627 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=gYDs5GclryXmtiFo2a0A:9
- a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-ORIG-GUID: YJWkmWR2xw95bjLaUZoGqb46GFEzlD0u
+X-Proofpoint-ORIG-GUID: lIrrGdrEnd6E6jMiYYqgiRVRfqBp6vyY
+X-Authority-Analysis: v=2.4 cv=X7BSKHTe c=1 sm=1 tr=0 ts=6874ccba cx=c_pps
+ a=wEM5vcRIz55oU/E2lInRtA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=gYDs5GclryXmtiFo2a0A:9
+ a=CjuIK1q_8ugA:10 a=OIgjcC2v60KrkQgK7BGD:22
+X-Proofpoint-GUID: lIrrGdrEnd6E6jMiYYqgiRVRfqBp6vyY
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE0MDA1NCBTYWx0ZWRfXysxzDzhl9otk
+ +FkIesMa7Yg6vZwPvwRcB/7YELW3j4UtAdsGlYNUnWH2EwVWTj8UAwU7lww4T+fI+aT8GpmRtK7
+ PBsUiW2NtAjvCwk7go0gDZJ4HtrpYRaIZ2RJuTCK7tNV3NGccgu/b9RfshNIFjjKpjd+FybSTBy
+ 7Wk+pyNPcVddeX6/VAO+CU0wDsrxLdEVC/cnKlHnUfFGOLetofCxO4sKoiILp1DCme3mmlIdvmO
+ SWQZNigOEbkV/fCWx9jawgaQ1Qh0zrpgkJyh4W+C1O3Ur7TIAGwJGHuy8Y6+BvfGTEbmI0PnVEI
+ TtGVzYG/K2s7S+Iqtvxr6UDw5LCViymM5CghQTYnLUnv8W88QuonIKHVl24lUs5X+Ly1m7IGhDn
+ nXaqRPeKfjmrJL5v1f8JbAFU/F0lY5wir2kaXLI2mXTik0AKYFIPYSpTPgPrWjh3AHzfVZSS
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
  definitions=2025-07-14_01,2025-07-09_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=819 spamscore=0
- clxscore=1015 suspectscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ bulkscore=0 adultscore=0 mlxlogscore=881 suspectscore=0 phishscore=0
+ impostorscore=0 clxscore=1015 malwarescore=0 mlxscore=0 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507140052
+ definitions=main-2507140054
 
-On 7/14/25 6:47 AM, Krishna Kurapati wrote:
+On Mon, Jul 14, 2025 at 10:17:02AM +0530, Krishna Kurapati wrote:
 > Deprecate usage of extcon functionality from the glue driver. Now
 > that the glue driver is a flattened implementation, all existing
 > DTs would eventually move to new bindings. While doing so let them
@@ -153,8 +149,22 @@ On 7/14/25 6:47 AM, Krishna Kurapati wrote:
 > 
 > Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
 > ---
+> Changes in v3:
+> This change was 4rth patch in [1]. It was suggested to make this as the
+> first patch of the series. Since this is independent of role switch
+> patches, sending this out separately. Removed RB Tag of Dmitry since the
+> patch has been changed.
+> 
+> [1]: https://lore.kernel.org/all/20250610091357.2983085-1-krishna.kurapati@oss.qualcomm.com/
+> 
+>  drivers/usb/dwc3/dwc3-qcom.c | 90 +-----------------------------------
+>  1 file changed, 1 insertion(+), 89 deletions(-)
+> 
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-Konrad
+
+-- 
+With best wishes
+Dmitry
 
