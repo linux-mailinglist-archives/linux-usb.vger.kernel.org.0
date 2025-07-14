@@ -1,89 +1,149 @@
-Return-Path: <linux-usb+bounces-25743-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25744-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4F64B03577
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 07:08:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F412B035C2
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 07:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FD331702B9
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 05:08:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5783D7AB393
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 05:30:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ABC51FDA97;
-	Mon, 14 Jul 2025 05:08:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AAD31FA15E;
+	Mon, 14 Jul 2025 05:31:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ijC3E3Sc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D971F0994
-	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 05:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA7C2E371B;
+	Mon, 14 Jul 2025 05:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752469686; cv=none; b=F9qwmxQUsNQkdh4qDFPnPrSCo0cnawt1x+s3WnklLcmKeXocBqvJs/Vw5X1Nrzga7ADtU7FrhIiWYEsgs3KxI8T0vNlcEJnVdXY6iBRPLx3D8EzPn/C0GH4xf4XXzU9T/hOHsciEyvaEAsJjDmFGfQMx/jzAB5y/6b4Tex3RIjQ=
+	t=1752471115; cv=none; b=MXLnP2QRrdITAezlln7PWdR+nqaaoJkzxQ0c6pXX6bsYRVJhAy9yUoSpimavOQ76Q454gtl79Bt+w0tV0SD2Qh4mRNjK/WRnYq9ctioYCD+FmMY9kp8Sgx3uSGgRBtbRz5qcc8GIbFKABnI4eHFFh3kOYfjaed78H6bMzLoxyrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752469686; c=relaxed/simple;
-	bh=WlPI/wFJPEXMGS0nmls4LXyAqoJRNQ80VI40A1RMeP8=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=oMxAJStwsuChZzUP0V3o/tNLMhtTCfoTJd6sbdMbVAHCYNYRH9RAHZ+Abhk9Gm0qMcIi28I2+yq6FMqn7JW21lbhl5lXbuAmCFvaGF+Dtu4J6xdS5gF1dcxaf+5oNlTZszeUC6AwpIeNtsbyzwoUYL3dTqHtdYZHKJf2fSi3Tfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-8730ca8143eso456544739f.0
-        for <linux-usb@vger.kernel.org>; Sun, 13 Jul 2025 22:08:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752469683; x=1753074483;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gIsNucXB6Px03mWQ5TC1KHiSeVFF2WgYavWzXtnawWw=;
-        b=l/6Wp8atiIhDBWviaxUi+eJ/IuneqUCPaSByy+20kvym+CcsKApFMpxokGHxI08zmj
-         VVZd97BhLEJ7Gw6RvZUEJu98A7oDlQXO16/S+pkXPdO8DsjokBAGMM8dHld59HScbkrF
-         i18rVjrrJAOYbTSfm/oRQLKAr1ZuzBmqPP/SfsS3H4NPmS/5n9T80ImaPZ3f0vBZFn6j
-         W4ZOj5SB8uLgXmQN10ont4t9C6ZCBCwFhp99bUYjEQdcL3+GD522UDeeZXzkDxTQPPdy
-         qdC5fS4m0LT0/ti6KI5SoElJx1hSp50g01i7KaSQtTwUKkuRviiur/KuK5lbR4bthZot
-         d/9w==
-X-Forwarded-Encrypted: i=1; AJvYcCV3XkHrmsaZweYLupS0tQ4CyY8icssWRe7+tunPYuBav7H2HqwdjiWTv75UblyW+uG2EbXDOxA/m4U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIdadmyvs1nkJAxT9ab+0PdwCY33LyBqWz27j3MKxxXou9AJ1T
-	9FWi2cHSuil33AJ+ANccvdJZcEi02A5PJ4FHvegv57owinVqbNIkKf/8F2EOrQpbDJkRX1ociYb
-	cL1XDWrmXrVbT9Fj+KgwHndmSt5ZOEsxa+rlVba/sLNLa87VGuC/e1v6MlV8=
-X-Google-Smtp-Source: AGHT+IEpB5Rn6xJgA/DDklQnbk0r4Z3QBxG23xYQiRZo41BEGItwFGYXO0J4JcTEAhZ+4QpfV6TqHI2SbFxXzzrd/5fDbrDmHwWh
+	s=arc-20240116; t=1752471115; c=relaxed/simple;
+	bh=RKD94B+QWXQNYVOHOTUGGlC4g3407ZsCdyyOMxsAU6g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ATON8cViIGcJcN6yUVG/6XkWxReaz2KJxS9PLrkAAtMEojhKKFuO1hHLPBzEOuNR3GsWzJjadmVTPe3WHIFlQv6rmkTc1KUd/dKVW9xs5SW6vZChmfdczWz+4fOvaYWu0+79e74/YYDdyWZG9wrGvpH7iykA2QjSDNnJsbteEgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ijC3E3Sc; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=7sVqofoybSXxVgyLZdz7/MBMprR3UjCEaizhghRGTBE=;
+	b=ijC3E3ScaQJZVVcSTkG/NWEDB/nLQQZRQMOmEr1JIQIdlGv8zM5milQrrTBDuO
+	mDosgFINIUrbezyfw1s4luSO7QWfcDBjjGZHkKIdWx/KECvI38SzBQYUlbpnbmnn
+	hX3jQI8exSeWrClNpCWZkJnEMfs6+pDXvPX4S/BXXyR9k=
+Received: from [10.42.12.155] (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgBniD8mlnRoPjo_AA--.8357S2;
+	Mon, 14 Jul 2025 13:31:19 +0800 (CST)
+Message-ID: <847b7ea4-07c6-4e9c-b20e-c1c2be4dceb6@163.com>
+Date: Mon, 14 Jul 2025 13:31:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:6d8e:b0:876:e10b:9763 with SMTP id
- ca18e2360f4ac-87978296516mr1051400039f.5.1752469683020; Sun, 13 Jul 2025
- 22:08:03 -0700 (PDT)
-Date: Sun, 13 Jul 2025 22:08:03 -0700
-In-Reply-To: <20250714024903.3965-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <687490b3.a70a0220.3b380f.0048.GAE@google.com>
-Subject: Re: [syzbot] [usb?] KMSAN: kernel-usb-infoleak in usbhid_raw_request
-From: syzbot <syzbot+fbe9fff1374eefadffb9@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, hdanton@sina.com, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usbip: convert to use faux_device
+To: Shuah Khan <skhan@linuxfoundation.org>,
+ Alan Stern <stern@rowland.harvard.edu>, Greg KH <gregkh@linuxfoundation.org>
+Cc: shuah@kernel.org, valentina.manea.m@gmail.com, i@zenithal.me,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ zhouzongmin@kylinos.cn
+References: <fac026d8-12c8-4c1f-96a7-264ced8391f1@linuxfoundation.org>
+ <a29703bd-08b7-489b-8fb0-15838a1245ab@163.com>
+ <1a13cf53-ffed-4521-917e-9c2856a5e348@linuxfoundation.org>
+ <4fc877f0-b55b-4fa3-8df4-2de4ba1ac51b@163.com>
+ <2a901b8a-9052-41d9-a70d-76508ebd819b@linuxfoundation.org>
+ <4759911b-8c35-4ca9-bc34-09dd41b14582@163.com>
+ <2025070949-activist-mammal-b806@gregkh>
+ <dd3659dd-7e45-479d-ab65-9f5c1bab26a0@rowland.harvard.edu>
+ <ce96291b-c0b2-41cf-a71c-c13bd8d0f139@linuxfoundation.org>
+ <4478924b-fbd7-4a5a-ad0d-4fe0569b4971@linuxfoundation.org>
+ <a735f877-e13b-498f-9eee-53ebefa8ebc9@rowland.harvard.edu>
+ <9be8b1dc-9af2-4135-9a0f-db2eb7d10f06@linuxfoundation.org>
+Content-Language: en-US
+From: Zongmin Zhou <min_halo@163.com>
+In-Reply-To: <9be8b1dc-9af2-4135-9a0f-db2eb7d10f06@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgBniD8mlnRoPjo_AA--.8357S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAF1fAr1rWF4kKr17tr43ZFb_yoW5Xw1rpF
+	WYqFWjga1kGanFva1vvrn5Xw1Fy3yFk3y5Xr98Jr15uwsIvr1rKF1Dtr4Y9F1qyr1furnF
+	vr1jqay3u34UAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U1pBhUUUUU=
+X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbixxeJq2hz8WPuYQABs1
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+On 2025/7/11 04:33, Shuah Khan wrote:
+> On 7/10/25 08:06, Alan Stern wrote:
+>> On Wed, Jul 09, 2025 at 03:57:35PM -0600, Shuah Khan wrote:
+>>> On 7/9/25 15:49, Shuah Khan wrote:
+>>>> Right. We have a few too many moving pieces here:
+>>>>
+>>>> usbipd (user-space)
+>>>> vhci_hcd and the usb devices it creates
+>>>>
+>>>> usbip_host, stub driver that proxies between the device
+>>>> on the server and vhci_client.
+>>>>
+>>>> PM can be complex and it has to do lot more than it currently
+>>>> does on both server and client end to support seamlessly.
+>>>>
+>>>> The current suspend took the approach of refusing suspend
+>>>> which doesn't work since usb devices underneath hang in
+>>>> usb_dev_resume(). Looks like this usb device is treated like
+>>>> a real device bu usb core. Is there a way to have usb core
+>>>> PM (suspend and resume) handle them as virtual? Would it
+>>>> help to use "supports_autosuspend" to disable suspend and
+>>>> resume?
+>>>
+>>> Would it work if usb_disable_autosuspend() on the devices
+>>> that hang off its vitual bus?
+>>
+>> You have to consider PM on both the host and client.  And you have to
+>> consider both runtime PM and system PM (that is, suspend to RAM,
+>> hibernate, etc.).
+>
+> This would be as a fix for the existing suspend hang issue.
+>
+>>
+>> On the server, any sort of suspend will interrupt the connection.
+>> usb_disable_autosuspend() will prevent runtime suspends, but you
+>> shouldn't try to prevent system suspends.  Instead, the usbip driver on
+>> the server should have its suspend routine close the connection to the
+>> client (rather as if the server's user had unplugged the device).
+>>
+>> On the client, you've got a choice for how to handle runtime PM.  You
+>> can leave it enabled, and when the client decides to suspend the device,
+>> tell the server's driver.  The server driver can then attempt to do a
+>> runtime suspend on the physical device.  (You might need to add a new
+>> type of message to the USBIP protocol to accomplish this; I don't know
+>> the details.)  Alternatively, you can forbid runtime suspend on the
+>> client entirely, although it would be nice if you could avoid this.
+>>
+>> System PM on the client can be handled more less the same as runtime PM.
+>
+> Correct. This has to be a complete solution that syncs up server and 
+> client
+> side. I am going to look into implementing this - it might be possible to
+> do this in user-space. Either way this will require changes to the 
+> protocol
+> very likely.
+>
+> Greg, Zongmin Zhou, let's hold off on this conversion yo faux bus for 
+> now.
+> I will spend time looking at if we can find PM solution that works end 
+> to end
+> for server and client.
+Sorry for the late reply.
+Ok,I got it. it is necessary to tackle the
+PM standby issue first before considering next steps.
+>
+> thanks,
+> -- Shuah
 
-Reported-by: syzbot+fbe9fff1374eefadffb9@syzkaller.appspotmail.com
-Tested-by: syzbot+fbe9fff1374eefadffb9@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         c2ca42f1 HID: core: do not bypass hid_hw_raw_request
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=138330f0580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7367e34c3d60253b
-dashboard link: https://syzkaller.appspot.com/bug?extid=fbe9fff1374eefadffb9
-compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
 
