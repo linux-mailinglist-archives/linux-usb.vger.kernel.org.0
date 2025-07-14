@@ -1,129 +1,109 @@
-Return-Path: <linux-usb+bounces-25761-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25762-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 684D2B04002
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 15:33:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6688CB0402C
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 15:38:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C4B516E3DB
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 13:31:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80CD41A65687
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 13:34:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2442D246BC7;
-	Mon, 14 Jul 2025 13:31:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C65E02571BD;
+	Mon, 14 Jul 2025 13:32:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BqTALYUi"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Nxns75rw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5432E36E5;
-	Mon, 14 Jul 2025 13:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18702522A1
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 13:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752499870; cv=none; b=Lf4myGrF10XM3zdv7ezv43MnBlrlmu8s7+TDjX6OebyXCD+Jm1XMOrLx/CMJh+VHWaI1FvqjRAiYTVJOfuiFGsGWNn6Yu5AflUAAcWIILMLBcWH0nHyQFr7aw0dkoqnYbZuj77+97qc296ml2QOQeFkW4YrczmH3EtPNW4M4YBE=
+	t=1752499929; cv=none; b=Xq4ktgipF527ZgJqem3CLOHlmguxPnW7wJJ/6Oj7CrwnuwrFuXSoo5JzG/rRqpdfdN5k/Cq69q/xjgO5IRvkrCXaVSoppqnepTW3e4pOSmQ7U7Eyn/Ll6bw7G8plpt0w6c34v8Bt8On0aiBsgAJSnTg6hTsE+8PyeJC37DzEw2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752499870; c=relaxed/simple;
-	bh=YkRnsX/tnvbZ3o3AEuquJmvgf1eoPe1aSLUVprvpuh0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZuX5C5ziwx4yXovXtj0yvx0vwGoCs8czuVab6kP7RRgO/Ynu9Ri2Bcb5J8mdIJCQrUp46r9hmRGWcMZe1PK5iPJOgttCTunBKLDzuY6xuOrNhrVIZGysNwidyR49xiOwPzXKck/YAyQLQg6nnqXhkID/FkCBWK5KVWlKl0K0tTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BqTALYUi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3133DC4CEED;
-	Mon, 14 Jul 2025 13:31:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752499870;
-	bh=YkRnsX/tnvbZ3o3AEuquJmvgf1eoPe1aSLUVprvpuh0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BqTALYUi1bmxjRdcMoInbUbbODAaFAcMAMF05bc9xSg2bnN2DunFcAqP2YaITGlwQ
-	 zuFqauoz8khrkj/sknJLqETl7VCJH0Lvrss29Sxaj2hTWZm2uubO2gFlR7QdEy79Id
-	 7648ZvprDr6QEULxGzR28yCeoqOsRZir5pPgFvRlce4pyHmod5dGM07py1UDkiqZdV
-	 3Ws/JIQPhW6eQHGz2s4tnea00/0Y5aj6RNDMKdmN+cVPmIJN5lddgtMD/EK9EGpQMM
-	 Xw7A1bSyNcf95OhLMDXPjiY3oX5JP+ejOW35uCdfMikc74mnJC39AX6664vndNUFHb
-	 u2V2WQeCdg1Qw==
-Message-ID: <e9c2bec9-4320-480c-89c1-514c995cf387@kernel.org>
-Date: Mon, 14 Jul 2025 15:31:04 +0200
+	s=arc-20240116; t=1752499929; c=relaxed/simple;
+	bh=o6gSA4iRI17tVBKBvXibBGdjFo1+iPIqRviexnz/ZOY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KQR52Ozpui930qjVaJtPsZ9ZExVpcnZLYQX75m6O65kyNdAdXLg2KIF4N+z4dUA1Ro1BscLCn1kqLjhEJmrPDFG7zAKKicoClbsYYG3TRjYg7O1SI7BGSJMm5tz724eIN82v34wexnyXf2ItnW74OgkkZVAG7sIwf7115WAyxFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Nxns75rw; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6fada2dd785so48917836d6.2
+        for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 06:32:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1752499926; x=1753104726; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6xBkPh8bpRDbDE/rpTA1xUCWQKllGijDoGG0L7obvbI=;
+        b=Nxns75rwscfW0S3/9Op6Vv/x8D7p6l3jJ1KqrpadOQB6E248W/JsKFOnIal2CMAGz/
+         QLl2yEdVqyf7ysXBaXWRBo6QLo3zb8/7eLWDXMl7HHZgvjiushOUDAiMcxcT5Gsv2yNp
+         zVQFZ+Kk5KGikOMnH68u9chbAPNueHconi9LAEvgSll7iXHFGpA8OSxZRc1S0jyy6pfE
+         JyKFHupn0/5b8ngeJVAbbHhj+qPSJMbKLOAYPfxHA6hUNIY4+GN6culNc+re9+OXXN2A
+         b61wYZaQWg4Ok/HHpy9FdKG3hCkD14x76btNf+9qdObz7EgyarwbsjH82fFfTgj8B8jM
+         QmGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752499926; x=1753104726;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6xBkPh8bpRDbDE/rpTA1xUCWQKllGijDoGG0L7obvbI=;
+        b=H7yrXWZPcD3NfBM0GOPQFzvqzgpYf86WhXXqdNDTvO4L/0eBBqZctLE/Wnpu6uU2s7
+         e5hDFMrWU4nasVjQJ+OetTPxCSr9LSF/rki0oipK4UdkzlS9Jk8bgoWuZw0Oy8tNihl7
+         4cUa+8AhhCiJtdRHJGOl0WXMfHEUvQTfEUwMwXHvgKvdsrCTwzPUucIf9qgcvaJshd+o
+         nHUQjUEqCcOkXMUkIY6nEwHyv6J9ueBcPMuZZvtCRDIKjvmj7KKKiadshMS62E0JpFoY
+         IpPvprY5Q6Hqy77ncpc3/rsMbbDwjYkJqz+3/u0NhfdA9+xFiH1lsPyvPZIqgiGS7iIy
+         oDlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXa5aG2SKYnzYIdW79XCzRBu1CxZ8kzB0/CRecTALTH/jjQdQjQ+1wiGgNsyOJyxEtt9Hs0bFPmCO8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUbZWiLD3iJqO9iH4aXPDnFMpJwZNQx3GmWA3fX89PjfA6yvyh
+	eBkKZxLUqvt/g41tREG46vBbXHWKHwUU32cVPeQqrvBacNG/8EDFyjuvSgPHbCFZKw==
+X-Gm-Gg: ASbGncvRLMAAPV85BIZAhT8zWzQQWUPK7N5jYqnTXrtDyE9rdUkMsfRMJWXEE2aVawF
+	dgc29MtmG5hDqBsW84veEpFP0q4NgX1i14No7JkyGuJO/CX/tPZB6ZjPDGCsMkN2fliSjkXdzzf
+	j2l4uhNq8E7Tub7b8uoRX8Vuk0NKRV/SLSLPMqD28O4IXwMA5W3MM4LvGlZRVpJF0ZNtJmp+/Ib
+	kPXnww1mqB1P2zeGrQxkLhozT8wweAJ4uhb7Rm1g9N1RvoUC0QLckDFrvJw5oogwVHe625DPkQK
+	s/eNr1xTg51xowbNcABMfySwUlHJdY2cG0g9lXGPwysgjeZ6w6+UnvG7fcYdcJmJ7Cs4NIvIO7i
+	51Xx5tuKG0agkq8LfW8YFdao=
+X-Google-Smtp-Source: AGHT+IHcDlRJdgLbWczO/0oWQhJ09a+Chve/NcLaTIVCSDBaS66RcroV2AomQZA/4l33Q7BCJCQN+w==
+X-Received: by 2002:ad4:4eaa:0:b0:704:89de:f2c3 with SMTP id 6a1803df08f44-704a3a86501mr196941696d6.39.1752499926309;
+        Mon, 14 Jul 2025 06:32:06 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::401d])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70497dd4a06sm46959806d6.123.2025.07.14.06.32.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jul 2025 06:32:05 -0700 (PDT)
+Date: Mon, 14 Jul 2025 09:32:03 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Hillf Danton <hdanton@sina.com>
+Cc: syzbot <syzbot+fbe9fff1374eefadffb9@syzkaller.appspotmail.com>,
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] KMSAN: kernel-usb-infoleak in usbhid_raw_request
+Message-ID: <a8129780-de7c-47bf-a491-0d71afd60c21@rowland.harvard.edu>
+References: <e8fe21fa-9a2f-4def-b659-063d55a40f3d@rowland.harvard.edu>
+ <20250714024903.3965-1-hdanton@sina.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/12] media: uvcvideo: Make uvc_alloc_entity non
- static
-To: Ricardo Ribalda <ribalda@chromium.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil
- <hverkuil@xs4all.nl>, Sakari Ailus <sakari.ailus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <20250605-uvc-orientation-v2-0-5710f9d030aa@chromium.org>
- <20250605-uvc-orientation-v2-7-5710f9d030aa@chromium.org>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <20250605-uvc-orientation-v2-7-5710f9d030aa@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250714024903.3965-1-hdanton@sina.com>
 
-Hi,
+On Mon, Jul 14, 2025 at 10:49:00AM +0800, Hillf Danton wrote:
+> On Sun, 13 Jul 2025 15:19:34 -0400 Alan Stern wrote:
+> > 
+> > Try again, but with Benjamin Tissoires's recent patches.
+> > 
+> > #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/hid c2ca42f190b6
+> >
+> #syz test:   git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git  c2ca42f190b6
 
-On 5-Jun-25 19:53, Ricardo Ribalda wrote:
-> The function is useful for other compilation units.
-> 
-> This is just a refactor patch, no new functionality is added.
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Thanks, Hillf!
 
-Thanks, patch looks good to me:
+Syzbot is a great tool, but it still has a few rough edges.
 
-Reviewed-by: Hans de Goede <hansg@kernel.org>
-
-Regards,
-
-Hans
-
-
-
-> ---
->  drivers/media/usb/uvc/uvc_driver.c | 4 ++--
->  drivers/media/usb/uvc/uvcvideo.h   | 2 ++
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index da24a655ab68cc0957762f2b67387677c22224d1..bcc97f71fa1703aea1119469fb32659c17d9409a 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -792,8 +792,8 @@ static const u8 uvc_media_transport_input_guid[16] =
->  	UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
->  static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
->  
-> -static struct uvc_entity *uvc_alloc_entity(u16 type, u16 id,
-> -		unsigned int num_pads, unsigned int extra_size)
-> +struct uvc_entity *uvc_alloc_entity(u16 type, u16 id, unsigned int num_pads,
-> +				    unsigned int extra_size)
->  {
->  	struct uvc_entity *entity;
->  	unsigned int num_inputs;
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index b9f8eb62ba1d82ea7788cf6c10cc838a429dbc9e..dc23d8a97340dc4615d4182232d395106e6d9ed5 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -684,6 +684,8 @@ do {									\
->   */
->  
->  struct uvc_entity *uvc_entity_by_id(struct uvc_device *dev, int id);
-> +struct uvc_entity *uvc_alloc_entity(u16 type, u16 id, unsigned int num_pads,
-> +				    unsigned int extra_size);
->  
->  /* Video buffers queue management. */
->  int uvc_queue_init(struct uvc_video_queue *queue, enum v4l2_buf_type type);
-> 
-
+Alan Stern
 
