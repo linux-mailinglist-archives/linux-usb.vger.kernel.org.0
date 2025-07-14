@@ -1,259 +1,192 @@
-Return-Path: <linux-usb+bounces-25785-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25786-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB7DDB0461D
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 19:08:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D66CBB04635
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 19:11:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E783B189BFE5
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 17:08:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AEED1A644B4
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 17:11:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F9E25A2B3;
-	Mon, 14 Jul 2025 17:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="pD4CIn60"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D63925D8E8;
+	Mon, 14 Jul 2025 17:10:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1373FD4;
-	Mon, 14 Jul 2025 17:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453BE25E814
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 17:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752512895; cv=none; b=fenAcJ9h3+SXzQOkFTIdTE5ZylFTak+yayD3r9zvFOIx1rbZxAollodOma5aPO2ZThXpg7CAb9egtc17EmaxU7yPvwOWNuQ1Cxo8aQAAKdHIzjZ7yleapZTxnda9rKTemSxVnLEq9i/4fqqxytrA1e0IduMr5TZnbkBVx5It7X4=
+	t=1752513034; cv=none; b=IGUpOT+oWY14n+M/ufVsE1hDpR1IXbFNlV5bPTclmiAgKsaPHysqccSAIbIqVPTkn4YbM1cB/Vxn2AhdNV79MTnQ8zQyWkykzOAiIaRRkKoXoIH0Nae/gIFG9Hmbmkri9k6r5AczZhzNhdVQlqGQZu5nQBcrdbzFytPr4uLLhdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752512895; c=relaxed/simple;
-	bh=9k/+fL/6ozQpVW7PA+MTn0NMNv3pLc8FRDELsEyuLrI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GRMxDoNRwdOSGaJvD5OX0AybXzSnRpR8c4O4hEMbqriwLLrHY8M+tjHjZDcDjGs4gusmUbRSIKhBBuStVJqy9Tv7K922VZoNf+/iKq0T4LigQEyRGGzqu5x1I4qUt1C4GAcaYQEQNo1rZR8uRZWAGCYjqhjLugqywVS/d7W+riw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=pD4CIn60; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 42E3C289;
-	Mon, 14 Jul 2025 19:07:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1752512860;
-	bh=9k/+fL/6ozQpVW7PA+MTn0NMNv3pLc8FRDELsEyuLrI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pD4CIn60PU1001RvQbsBRLkBWUWuzoOe8xfHYS6RZfZWn0tEAIAZO7v+k/8xg8aIi
-	 Kj2x4SNpuMCERKdJszF2x6HUPnZHj4y1Me2txLkFgY0YXDAaAhWnQ8ZstNj5GqUfzf
-	 yfkfmf/xiiJt835BW2PJ1SrLmCJtB09zrnLHDGek=
-Date: Mon, 14 Jul 2025 20:07:40 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans de Goede <hansg@kernel.org>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/5] media: uvcvideo: Introduce
- V4L2_META_FMT_UVC_MSXU_1_5
-Message-ID: <20250714170740.GC20231@pendragon.ideasonboard.com>
-References: <20250707-uvc-meta-v8-0-ed17f8b1218b@chromium.org>
- <20250707-uvc-meta-v8-4-ed17f8b1218b@chromium.org>
- <20250714145935.GL8243@pendragon.ideasonboard.com>
- <CANiDSCt=cS9_BsEvo8fEpRDfud9nob2nzgDR6CvmcFczZurG2w@mail.gmail.com>
- <20250714162700.GA20231@pendragon.ideasonboard.com>
- <CANiDSCstp18Ee6JXtuOEgyZyg9=NsMPvbrkHHrN0KydLXqAO3A@mail.gmail.com>
+	s=arc-20240116; t=1752513034; c=relaxed/simple;
+	bh=0lKaue4Q/CodZJ43BE+2ERHP0tt8CkDwoKR/aeIu+bY=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=DP31GPKCygz/glAsXZIsS2Elcm1z2LWuMPjaztkeabVEiLa/pEO+ai31Z6LNQOPRtOYgAhGmYLnke6CAMlGpffBVAbxfNnzqhYFO0jk+NoCt0CD7PZm3tZcQ47tgRB+yydER3XqRMthYO4KKn9qC3SSPUo8JKrLQVpMx4pgwhhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-869e9667f58so1046997339f.3
+        for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 10:10:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752513032; x=1753117832;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yEqYN+Sq66jPT1atBJx2sN18zNV7H4Qomhnbx5nCbYY=;
+        b=Bj9GLMnEE/wcBorCdqh/I5UVt2vH8H3Y1+K5kyIGlXIQLmG2a1gkB8M58xdIU3mthq
+         Sc8c9eWB1UxbHDnZQJZZoRRM8AXXMkwVnOHkZ4IfjE5z2JweSvCQ3VmkwxYMFaL/qx6x
+         nX1QtxZ4wnGbn0dvnOaNBJPKZ8e0nIR3BFYnGWwOnSqEN1eESjYorYa4A+Agw+BpSQrA
+         wVLhTNTKph9TSaUzN5plHK5abRjHUixO3wOu7wWgsWVZ3GyIdFuuZcKILaEFFWF1+hD2
+         Z0/FiW3PNyAzPVJ0z+qC3BKf4rRlzYdqNhdznXvXz8o3rA4iOcQNVQ9aTctXwqdx0npP
+         Kp6w==
+X-Forwarded-Encrypted: i=1; AJvYcCXAvsQcXLqnFoc94Kcr2UzbhR//hAMaCp4qC3PeQJzAoQKzz1SoW9pP4TiFCPeZbuxLvx+WYhRvPvc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznqNHQVjl+0Qf4QWUYtvFVeIX6fajVQS6gmSD/LG2D82nx129Z
+	zWZBRN/HnKkZjOfDeHnJjDDnhQUVzbqrLcIwGNuxfNxsSHa/P0KMLS99t5ux9YjvaHvSGyoBUmP
+	BN/sQNg+7UDy8cgiZcKQlz2vgETHJEbtZOKQ56NZFNjiYPSVzlO6mbTZm+aE=
+X-Google-Smtp-Source: AGHT+IH/WRScfN7dW3JFoDVyXS3WSTkXzALNIo+J1byjOIvna/aSlspqHWDQ2OrSbTux9AVCHS9jqEqoAyd6gOYCAes20kXbW0Td
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANiDSCstp18Ee6JXtuOEgyZyg9=NsMPvbrkHHrN0KydLXqAO3A@mail.gmail.com>
+X-Received: by 2002:a05:6602:15c9:b0:86c:f9f4:6aa6 with SMTP id
+ ca18e2360f4ac-879787d8f28mr1526841439f.7.1752513032251; Mon, 14 Jul 2025
+ 10:10:32 -0700 (PDT)
+Date: Mon, 14 Jul 2025 10:10:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68753a08.050a0220.33d347.0008.GAE@google.com>
+Subject: [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds in s32ton (2)
+From: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jul 14, 2025 at 06:42:14PM +0200, Ricardo Ribalda wrote:
-> On Mon, 14 Jul 2025 at 18:27, Laurent Pinchart wrote:
-> > On Mon, Jul 14, 2025 at 06:21:05PM +0200, Ricardo Ribalda wrote:
-> > > On Mon, 14 Jul 2025 at 17:00, Laurent Pinchart wrote:
-> > > >
-> > > > Hi Ricardo,
-> > > >
-> > > > A bit of a stupid question, or rather a question that I wonder why I
-> > > > didn't think of before.
-> > >
-> > > I believe we discussed this in the very beginning, when I just enabled
-> > > V4L2_META_FMT_D4XX for all the devices.
-> >
-> > Sorry if that was the case, it was a while ago.
-> >
-> > > We thought that it could break applications. Imagine an APP that can
-> > > work with D4XX but not with other formats: if it tries to parse MSXU
-> > > format it might crash.
-> >
-> > How so, if V4L2_META_FMT_D4XX and V4L2_META_FMT_UVC_MSXU_1_5 identify
-> > the same format ?
-> 
-> D4XX uses vendor IDs from MSXU (0x80000000-2) [1]. There is no
-> guarantee that other vendors will collide with that ID.
+Hello,
 
-I assume you mean "will not collide" ? There's also no guarantee that
-different vendors implementing the MSXU won't use vendor-specific
-metadata with colliding IDs, is there ?
+syzbot found the following issue on:
 
-> Also, we do not know how apps will behave with IDs that they do not
-> know or with sizes that they have not been tested with.
+HEAD commit:    b4b4dbfa96de media: stk1160: use usb_alloc_noncoherent/usb..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=15a830f0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=28729dff5d03ad1
+dashboard link: https://syzkaller.appspot.com/bug?extid=b63d677d63bcac06cf90
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1614418c580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1257dd82580000
 
-The change won't cause any regression for those apps when using Intel
-D4xx devices.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7301552ad828/disk-b4b4dbfa.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c559b38fa1b6/vmlinux-b4b4dbfa.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9c1da8b2a83f/bzImage-b4b4dbfa.xz
 
-> [1] https://www.kernel.org/doc/html/v5.8/userspace-api/media/v4l/pixfmt-meta-d4xx.html#id8
->
-> > > > On Mon, Jul 07, 2025 at 06:34:04PM +0000, Ricardo Ribalda wrote:
-> > > > > The UVC driver provides two metadata types V4L2_META_FMT_UVC, and
-> > > > > V4L2_META_FMT_D4XX. The only difference between the two of them is that
-> > > > > V4L2_META_FMT_UVC only copies PTS, SCR, size and flags, and
-> > > > > V4L2_META_FMT_D4XX copies the whole metadata section.
-> > > > >
-> > > > > Now we only enable V4L2_META_FMT_D4XX for the Intel D4xx family of
-> > > > > devices, but it is useful to have the whole metadata payload for any
-> > > > > device where vendors include other metadata, such as the one described by
-> > > > > Microsoft:
-> > > > > https://learn.microsoft.com/en-us/windows-hardware/drivers/stream/mf-capture-metadata
-> > > > >
-> > > > > This patch introduces a new format V4L2_META_FMT_UVC_MSXU_1_5, that is
-> > > > > identical to V4L2_META_FMT_D4XX.
-> > > >
-> > > > Wouldn't it be simpler for everybody to just
-> > > >
-> > > > #define V4L2_META_FMT_UVC_MSXU_1_5  v4l2_fourcc('D', '4', 'X', 'X') /* UVC MSXU metadata */
-> > > > #define V4L2_META_FMT_D4XX      V4L2_META_FMT_UVC_MSXU_1_5 /* For backward compatibility */
-> > > >
-> > > > ? I'm a bit uncomfortable with committing to a UABI with two different
-> > > > 4CCs for the exact same format.
-> > > >
-> > > > > Let the user enable this format with a quirk for now. This way they can
-> > > > > test if their devices provide useful metadata without rebuilding the
-> > > > > kernel. They can later contribute patches to auto-quirk their devices.
-> > > > > We will also work in methods to auto-detect devices compatible with this
-> > > > > new metadata format.
-> > > > >
-> > > > > Suggested-by: Hans de Goede <hdegoede@redhat.com>
-> > > > > Reviewed-by: Hans de Goede <hansg@kernel.org>
-> > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > > ---
-> > > > >  .../userspace-api/media/v4l/meta-formats.rst       |  1 +
-> > > > >  .../media/v4l/metafmt-uvc-msxu-1-5.rst             | 23 ++++++++++++++++++++++
-> > > > >  MAINTAINERS                                        |  1 +
-> > > > >  drivers/media/usb/uvc/uvc_metadata.c               |  4 ++++
-> > > > >  drivers/media/usb/uvc/uvcvideo.h                   |  1 +
-> > > > >  drivers/media/v4l2-core/v4l2-ioctl.c               |  1 +
-> > > > >  include/uapi/linux/videodev2.h                     |  1 +
-> > > > >  7 files changed, 32 insertions(+)
-> > > > >
-> > > > > diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
-> > > > > index bb6876cfc271e1a0543eee4209d6251e1a6a73cc..0de80328c36bf148051a19abe9e5241234ddfe5c 100644
-> > > > > --- a/Documentation/userspace-api/media/v4l/meta-formats.rst
-> > > > > +++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
-> > > > > @@ -20,6 +20,7 @@ These formats are used for the :ref:`metadata` interface only.
-> > > > >      metafmt-pisp-fe
-> > > > >      metafmt-rkisp1
-> > > > >      metafmt-uvc
-> > > > > +    metafmt-uvc-msxu-1-5
-> > > > >      metafmt-vivid
-> > > > >      metafmt-vsp1-hgo
-> > > > >      metafmt-vsp1-hgt
-> > > > > diff --git a/Documentation/userspace-api/media/v4l/metafmt-uvc-msxu-1-5.rst b/Documentation/userspace-api/media/v4l/metafmt-uvc-msxu-1-5.rst
-> > > > > new file mode 100644
-> > > > > index 0000000000000000000000000000000000000000..dd1c3076df243d770a13e7f6d07c3296a269e16a
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/userspace-api/media/v4l/metafmt-uvc-msxu-1-5.rst
-> > > > > @@ -0,0 +1,23 @@
-> > > > > +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-> > > > > +
-> > > > > +.. _v4l2-meta-fmt-uvc-msxu-1-5:
-> > > > > +
-> > > > > +***********************************
-> > > > > +V4L2_META_FMT_UVC_MSXU_1_5 ('UVCM')
-> > > > > +***********************************
-> > > > > +
-> > > > > +Microsoft(R)'s UVC Payload Metadata.
-> > > > > +
-> > > > > +
-> > > > > +Description
-> > > > > +===========
-> > > > > +
-> > > > > +V4L2_META_FMT_UVC_MSXU_1_5 buffers follow the metadata buffer layout of
-> > > > > +V4L2_META_FMT_UVC with the only difference that it includes all the UVC
-> > > > > +metadata in the `buffer[]` field, not just the first 2-12 bytes.
-> > > > > +
-> > > > > +The metadata format follows the specification from Microsoft(R) [1].
-> > > > > +
-> > > > > +.. _1:
-> > > > > +
-> > > > > +[1] https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/uvc-extensions-1-5
-> > > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > > index 658543062bba3b7e600699d7271ffc89250ba7e5..fdde1d37ed2ef9058e3ea3417bec25afe454dfc0 100644
-> > > > > --- a/MAINTAINERS
-> > > > > +++ b/MAINTAINERS
-> > > > > @@ -25827,6 +25827,7 @@ S:    Maintained
-> > > > >  W:   http://www.ideasonboard.org/uvc/
-> > > > >  T:   git git://linuxtv.org/media.git
-> > > > >  F:   Documentation/userspace-api/media/drivers/uvcvideo.rst
-> > > > > +F:   Documentation/userspace-api/media/v4l/metafmt-uvc-msxu-1-5.rst
-> > > > >  F:   Documentation/userspace-api/media/v4l/metafmt-uvc.rst
-> > > > >  F:   drivers/media/common/uvc.c
-> > > > >  F:   drivers/media/usb/uvc/
-> > > > > diff --git a/drivers/media/usb/uvc/uvc_metadata.c b/drivers/media/usb/uvc/uvc_metadata.c
-> > > > > index 4bcbc22f47e67c52baf6e133f240131ff3d32a03..77e03273d3cf6b00cac6ebb9b29b941f1cbfd9f7 100644
-> > > > > --- a/drivers/media/usb/uvc/uvc_metadata.c
-> > > > > +++ b/drivers/media/usb/uvc/uvc_metadata.c
-> > > > > @@ -195,6 +195,10 @@ void uvc_meta_init(struct uvc_device *dev)
-> > > > >           !WARN_ON(dev->info->meta_format == V4L2_META_FMT_UVC))
-> > > > >               dev->meta_formats[i++] = dev->info->meta_format;
-> > > > >
-> > > > > +     if (dev->quirks & UVC_QUIRK_MSXU_META &&
-> > > > > +         !WARN_ON(dev->info->meta_format == V4L2_META_FMT_UVC_MSXU_1_5))
-> > > > > +             dev->meta_formats[i++] = V4L2_META_FMT_UVC_MSXU_1_5;
-> > > > > +
-> > > > >        /* IMPORTANT: for new meta-formats update UVC_MAX_META_DATA_FORMATS. */
-> > > > >       dev->meta_formats[i++] = 0;
-> > > > >  }
-> > > > > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > > > > index b3c094c6591e7a71fc00e1096bcf493a83f330ad..616adc417c62a58686beccbc440a5dfac0a2d588 100644
-> > > > > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > > > > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > > > > @@ -77,6 +77,7 @@
-> > > > >  #define UVC_QUIRK_DISABLE_AUTOSUSPEND        0x00008000
-> > > > >  #define UVC_QUIRK_INVALID_DEVICE_SOF 0x00010000
-> > > > >  #define UVC_QUIRK_MJPEG_NO_EOF               0x00020000
-> > > > > +#define UVC_QUIRK_MSXU_META          0x00040000
-> > > > >
-> > > > >  /* Format flags */
-> > > > >  #define UVC_FMT_FLAG_COMPRESSED              0x00000001
-> > > > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > > > index be94a79b976e3de4eb957f5d2584ec6d4230469e..993b36417b4655456ce545cb42a41b55b98e4d6c 100644
-> > > > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > > > @@ -1463,6 +1463,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
-> > > > >       case V4L2_META_FMT_VSP1_HGO:    descr = "R-Car VSP1 1-D Histogram"; break;
-> > > > >       case V4L2_META_FMT_VSP1_HGT:    descr = "R-Car VSP1 2-D Histogram"; break;
-> > > > >       case V4L2_META_FMT_UVC:         descr = "UVC Payload Header Metadata"; break;
-> > > > > +     case V4L2_META_FMT_UVC_MSXU_1_5:        descr = "UVC MSXU Metadata"; break;
-> > > > >       case V4L2_META_FMT_D4XX:        descr = "Intel D4xx UVC Metadata"; break;
-> > > > >       case V4L2_META_FMT_VIVID:       descr = "Vivid Metadata"; break;
-> > > > >       case V4L2_META_FMT_RK_ISP1_PARAMS:      descr = "Rockchip ISP1 3A Parameters"; break;
-> > > > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> > > > > index 6f7bd38dd5aa4b1b2084685512512a380d76a5e4..863bc5b7dec32303e852d7e9c3891011ce5a3d71 100644
-> > > > > --- a/include/uapi/linux/videodev2.h
-> > > > > +++ b/include/uapi/linux/videodev2.h
-> > > > > @@ -867,6 +867,7 @@ struct v4l2_pix_format {
-> > > > >  #define V4L2_META_FMT_VSP1_HGT    v4l2_fourcc('V', 'S', 'P', 'T') /* R-Car VSP1 2-D Histogram */
-> > > > >  #define V4L2_META_FMT_UVC         v4l2_fourcc('U', 'V', 'C', 'H') /* UVC Payload Header metadata */
-> > > > >  #define V4L2_META_FMT_D4XX        v4l2_fourcc('D', '4', 'X', 'X') /* D4XX Payload Header metadata */
-> > > > > +#define V4L2_META_FMT_UVC_MSXU_1_5  v4l2_fourcc('U', 'V', 'C', 'M') /* UVC MSXU metadata */
-> > > > >  #define V4L2_META_FMT_VIVID    v4l2_fourcc('V', 'I', 'V', 'D') /* Vivid Metadata */
-> > > > >
-> > > > >  /* Vendor specific - used for RK_ISP1 camera sub-system */
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
 
--- 
-Regards,
+usb 4-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor, different from the interface descriptor's value: 9
+usb 4-1: New USB device found, idVendor=045e, idProduct=07da, bcdDevice= 0.00
+usb 4-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 4-1: config 0 descriptor??
+microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
+microsoft 0003:045E:07DA.0001: unsupported Resolution Multiplier 0
+------------[ cut here ]------------
+UBSAN: shift-out-of-bounds in drivers/hid/hid-core.c:69:16
+shift exponent 4294967295 is too large for 32-bit type 'int'
+CPU: 0 UID: 0 PID: 10 Comm: kworker/0:1 Not tainted 6.16.0-rc4-syzkaller-00314-gb4b4dbfa96de #0 PREEMPT(voluntary) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x16c/0x1f0 lib/dump_stack.c:120
+ ubsan_epilogue lib/ubsan.c:233 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x27f/0x420 lib/ubsan.c:494
+ s32ton.cold+0x37/0x9c drivers/hid/hid-core.c:69
+ hid_output_field drivers/hid/hid-core.c:1841 [inline]
+ hid_output_report+0x36f/0x4a0 drivers/hid/hid-core.c:1874
+ __hid_request+0x1e0/0x3c0 drivers/hid/hid-core.c:1987
+ hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
+ hidinput_connect+0x1ada/0x2bd0 drivers/hid/hid-input.c:2327
+ hid_connect+0x13f3/0x1a60 drivers/hid/hid-core.c:2239
+ hid_hw_start drivers/hid/hid-core.c:2354 [inline]
+ hid_hw_start+0xaa/0x140 drivers/hid/hid-core.c:2345
+ ms_probe+0x195/0x500 drivers/hid/hid-microsoft.c:391
+ __hid_device_probe drivers/hid/hid-core.c:2724 [inline]
+ hid_device_probe+0x363/0x720 drivers/hid/hid-core.c:2761
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ hid_add_device+0x373/0xa60 drivers/hid/hid-core.c:2907
+ usbhid_probe+0xd38/0x13f0 drivers/hid/usbhid/hid-core.c:1435
+ usb_probe_interface+0x303/0x9c0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
+ usb_probe_device+0xef/0x3e0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:657
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3692
+ usb_new_device+0xd07/0x1a20 drivers/usb/core/hub.c:2694
+ hub_port_connect drivers/usb/core/hub.c:5566 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
+ port_event drivers/usb/core/hub.c:5866 [inline]
+ hub_event+0x2f85/0x5030 drivers/usb/core/hub.c:5948
+ process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
+ process_scheduled_works kernel/workqueue.c:3321 [inline]
+ worker_thread+0x6c8/0xf10 kernel/workqueue.c:3402
+ kthread+0x3c2/0x780 kernel/kthread.c:464
+ ret_from_fork+0x5b3/0x6c0 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+---[ end trace ]---
 
-Laurent Pinchart
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
