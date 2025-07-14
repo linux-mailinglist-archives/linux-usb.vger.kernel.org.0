@@ -1,149 +1,112 @@
-Return-Path: <linux-usb+bounces-25744-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25745-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F412B035C2
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 07:32:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78A1AB03822
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 09:37:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5783D7AB393
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 05:30:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7820917A546
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 07:37:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AAD31FA15E;
-	Mon, 14 Jul 2025 05:31:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A27712367A2;
+	Mon, 14 Jul 2025 07:37:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ijC3E3Sc"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="YJjIaf8e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA7C2E371B;
-	Mon, 14 Jul 2025 05:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B918227B8E
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 07:37:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752471115; cv=none; b=MXLnP2QRrdITAezlln7PWdR+nqaaoJkzxQ0c6pXX6bsYRVJhAy9yUoSpimavOQ76Q454gtl79Bt+w0tV0SD2Qh4mRNjK/WRnYq9ctioYCD+FmMY9kp8Sgx3uSGgRBtbRz5qcc8GIbFKABnI4eHFFh3kOYfjaed78H6bMzLoxyrs=
+	t=1752478658; cv=none; b=JTRi792u+981fNn8oX8Wd5Ag/eNPe7EhMIo+WaatVyybRlEdowF1SGLwbXlhkrGmDc34XUqST4T40c5Tn+Sv5r+3lyDvfMEOTbnixq8IwkYxaLTrx7g9GhMb/7G3cwFkdyh5MPtEx+iGcT5zZvr1O/QPosUqh1SgKXwk0yM8KyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752471115; c=relaxed/simple;
-	bh=RKD94B+QWXQNYVOHOTUGGlC4g3407ZsCdyyOMxsAU6g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ATON8cViIGcJcN6yUVG/6XkWxReaz2KJxS9PLrkAAtMEojhKKFuO1hHLPBzEOuNR3GsWzJjadmVTPe3WHIFlQv6rmkTc1KUd/dKVW9xs5SW6vZChmfdczWz+4fOvaYWu0+79e74/YYDdyWZG9wrGvpH7iykA2QjSDNnJsbteEgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ijC3E3Sc; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=7sVqofoybSXxVgyLZdz7/MBMprR3UjCEaizhghRGTBE=;
-	b=ijC3E3ScaQJZVVcSTkG/NWEDB/nLQQZRQMOmEr1JIQIdlGv8zM5milQrrTBDuO
-	mDosgFINIUrbezyfw1s4luSO7QWfcDBjjGZHkKIdWx/KECvI38SzBQYUlbpnbmnn
-	hX3jQI8exSeWrClNpCWZkJnEMfs6+pDXvPX4S/BXXyR9k=
-Received: from [10.42.12.155] (unknown [])
-	by gzsmtp1 (Coremail) with SMTP id PCgvCgBniD8mlnRoPjo_AA--.8357S2;
-	Mon, 14 Jul 2025 13:31:19 +0800 (CST)
-Message-ID: <847b7ea4-07c6-4e9c-b20e-c1c2be4dceb6@163.com>
-Date: Mon, 14 Jul 2025 13:31:18 +0800
+	s=arc-20240116; t=1752478658; c=relaxed/simple;
+	bh=3hFbJlqW8cbG988BMDFJ2adocaVdbFf7Ph5WXToeAAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M0Rd6gE/eHT204kEjKr0lW6N2sZEENHULR29163Zte5iTote8M77hfK9Kx8j3r4EOly/XSgJ/icXJ9nla5iGMaXNGUqtwzGOFUrjyozfW97z8XnwVXpr0qyxzzW18XLH9cNa85nEsb4ppHR/zJY4J1z7XDIgeNJABKpaK8YAo9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=YJjIaf8e; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=yy7j
+	unz34iyIyATJXxlEYv9buWS6GzjYVGKjzQjYSQE=; b=YJjIaf8e77CJ+2z2Qguy
+	gZk2oafCVm5xJ7jgQvBWaCA5lVI1fyQat4Me+xivfgdsxA6BoPf4zCInQrECvwDt
+	4nWcpOC6qxOdhkmnreERxxQI2LjTnmA6kXzNUaAuP7eSWdXpYq7cdI7fCVBItzcs
+	U7j/K7xb1eFbBWVG9c5FVCh3pgJm6X1PLL6WzPAWY6k8R4z73kxHUu4pFaAFEh06
+	aDmRdAi0bMAFOxjFAmaXFm7U3AC0oA5l+2OCh+BipEtcgzo3u5IEQcauGHWKiBqE
+	L/o/JbiVFP7FpNvJ9+TYbEab2STkae15wl844IWxjCIvcZlRTuHAXIymxClVaNtY
+	SQ==
+Received: (qmail 2369254 invoked from network); 14 Jul 2025 09:37:33 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2025 09:37:33 +0200
+X-UD-Smtp-Session: l3s3148p1@WW6Tu945AuIgAwDPXxNjAMIr4MhSGEU6
+Date: Mon, 14 Jul 2025 09:37:32 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v13 3/7] i2c: Add Nuvoton NCT6694 I2C support
+Message-ID: <aHSzvBYwYUpQTAQr@shikoro>
+References: <20250627102730.71222-1-a0282524688@gmail.com>
+ <20250627102730.71222-4-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usbip: convert to use faux_device
-To: Shuah Khan <skhan@linuxfoundation.org>,
- Alan Stern <stern@rowland.harvard.edu>, Greg KH <gregkh@linuxfoundation.org>
-Cc: shuah@kernel.org, valentina.manea.m@gmail.com, i@zenithal.me,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- zhouzongmin@kylinos.cn
-References: <fac026d8-12c8-4c1f-96a7-264ced8391f1@linuxfoundation.org>
- <a29703bd-08b7-489b-8fb0-15838a1245ab@163.com>
- <1a13cf53-ffed-4521-917e-9c2856a5e348@linuxfoundation.org>
- <4fc877f0-b55b-4fa3-8df4-2de4ba1ac51b@163.com>
- <2a901b8a-9052-41d9-a70d-76508ebd819b@linuxfoundation.org>
- <4759911b-8c35-4ca9-bc34-09dd41b14582@163.com>
- <2025070949-activist-mammal-b806@gregkh>
- <dd3659dd-7e45-479d-ab65-9f5c1bab26a0@rowland.harvard.edu>
- <ce96291b-c0b2-41cf-a71c-c13bd8d0f139@linuxfoundation.org>
- <4478924b-fbd7-4a5a-ad0d-4fe0569b4971@linuxfoundation.org>
- <a735f877-e13b-498f-9eee-53ebefa8ebc9@rowland.harvard.edu>
- <9be8b1dc-9af2-4135-9a0f-db2eb7d10f06@linuxfoundation.org>
-Content-Language: en-US
-From: Zongmin Zhou <min_halo@163.com>
-In-Reply-To: <9be8b1dc-9af2-4135-9a0f-db2eb7d10f06@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PCgvCgBniD8mlnRoPjo_AA--.8357S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAF1fAr1rWF4kKr17tr43ZFb_yoW5Xw1rpF
-	WYqFWjga1kGanFva1vvrn5Xw1Fy3yFk3y5Xr98Jr15uwsIvr1rKF1Dtr4Y9F1qyr1furnF
-	vr1jqay3u34UAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U1pBhUUUUU=
-X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbixxeJq2hz8WPuYQABs1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="LKuB8htEp3EqNPw/"
+Content-Disposition: inline
+In-Reply-To: <20250627102730.71222-4-a0282524688@gmail.com>
 
 
-On 2025/7/11 04:33, Shuah Khan wrote:
-> On 7/10/25 08:06, Alan Stern wrote:
->> On Wed, Jul 09, 2025 at 03:57:35PM -0600, Shuah Khan wrote:
->>> On 7/9/25 15:49, Shuah Khan wrote:
->>>> Right. We have a few too many moving pieces here:
->>>>
->>>> usbipd (user-space)
->>>> vhci_hcd and the usb devices it creates
->>>>
->>>> usbip_host, stub driver that proxies between the device
->>>> on the server and vhci_client.
->>>>
->>>> PM can be complex and it has to do lot more than it currently
->>>> does on both server and client end to support seamlessly.
->>>>
->>>> The current suspend took the approach of refusing suspend
->>>> which doesn't work since usb devices underneath hang in
->>>> usb_dev_resume(). Looks like this usb device is treated like
->>>> a real device bu usb core. Is there a way to have usb core
->>>> PM (suspend and resume) handle them as virtual? Would it
->>>> help to use "supports_autosuspend" to disable suspend and
->>>> resume?
->>>
->>> Would it work if usb_disable_autosuspend() on the devices
->>> that hang off its vitual bus?
->>
->> You have to consider PM on both the host and client.  And you have to
->> consider both runtime PM and system PM (that is, suspend to RAM,
->> hibernate, etc.).
->
-> This would be as a fix for the existing suspend hang issue.
->
->>
->> On the server, any sort of suspend will interrupt the connection.
->> usb_disable_autosuspend() will prevent runtime suspends, but you
->> shouldn't try to prevent system suspends.  Instead, the usbip driver on
->> the server should have its suspend routine close the connection to the
->> client (rather as if the server's user had unplugged the device).
->>
->> On the client, you've got a choice for how to handle runtime PM.  You
->> can leave it enabled, and when the client decides to suspend the device,
->> tell the server's driver.  The server driver can then attempt to do a
->> runtime suspend on the physical device.  (You might need to add a new
->> type of message to the USBIP protocol to accomplish this; I don't know
->> the details.)  Alternatively, you can forbid runtime suspend on the
->> client entirely, although it would be nice if you could avoid this.
->>
->> System PM on the client can be handled more less the same as runtime PM.
->
-> Correct. This has to be a complete solution that syncs up server and 
-> client
-> side. I am going to look into implementing this - it might be possible to
-> do this in user-space. Either way this will require changes to the 
-> protocol
-> very likely.
->
-> Greg, Zongmin Zhou, let's hold off on this conversion yo faux bus for 
-> now.
-> I will spend time looking at if we can find PM solution that works end 
-> to end
-> for server and client.
-Sorry for the late reply.
-Ok,I got it. it is necessary to tackle the
-PM standby issue first before considering next steps.
->
-> thanks,
-> -- Shuah
+--LKuB8htEp3EqNPw/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+
+> +		if (msg_temp->len > 64)
+> +			return -EPROTO;
+
+Please populate and use 'struct i2c_adapter_quirks' so the I2C core can
+handle the checks for you. At least max_read_len and max_write_len. But
+please also do check the other flags. Usually, USB adapters have way
+more limitations than the buffer size.
+
+
+--LKuB8htEp3EqNPw/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmh0s7gACgkQFA3kzBSg
+KbYL/Q//cSewXdBWuo/manXc2oHKH9hQ3DDPQc3spFbfrEbppJuDbMFBquG+aGME
+2VZlV1UjVY4osYpqOY1KkMxysZHuhUcXlHio7eGrq2ROwiwIZc6paaekwv/X83Jz
+cu43ELVOaN+qBFJHqSFFJwD78scsApEXVr2UlMQkVsxfmG+tf7J2RgiP5CNkzZc5
+dp9K8l1qyrpZckzRrWizXlC6R5AatyeJTpJOVCqjYdxXNVH+/wYoBZqm7NF/5WdY
+4LEnr65WhOdcopUiZy89/njHRHtnrcmkddEaiPUiLiDhbPVVC+nU0OtenC41uTx6
+LTLz/pNLHtXFBQOo3Cs/YkVR+dLAbywSeTlgLhaY6/WW17Hkr61m3c3dukh84+Av
+3SIuC/d33D3rVtP5wdEQvGbeJXuAvdVOxsVdiWj8a8TU8+hXQU+v3B2+wRSkFKxS
+JLj8oAcQd2yXcq8FWxmHzQmuVxRyXXTgemm7/WCpoMVVZKWWtaqkb2znCWvJdIaG
+Yi/5EHXgYDjDEwd/ToxFK6vd6sDiPB7jEmFkIOhYADJw4Jak+m4tniHQe2A0zMDE
+zqN9Iw+qhBecQ0GTjDQ/x9l/AwtZlIy+IkfGYlmpw8qcqnoUPGjzri7OXw6DZjra
+QSx2vgqOWESv1vv39NqtIXv2BawdPjuAGqIb0gV4MCacNQTSpK0=
+=vtvN
+-----END PGP SIGNATURE-----
+
+--LKuB8htEp3EqNPw/--
 
