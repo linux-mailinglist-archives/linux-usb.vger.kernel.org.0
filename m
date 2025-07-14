@@ -1,247 +1,316 @@
-Return-Path: <linux-usb+bounces-25774-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25775-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22F81B04367
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 17:19:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E6BFB04442
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 17:41:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9118416A12B
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 15:17:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 676D51888F5D
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jul 2025 15:37:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1CC81B7F4;
-	Mon, 14 Jul 2025 15:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8EE72690F1;
+	Mon, 14 Jul 2025 15:29:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="G6egAU5o"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="UTpC8asi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11020112.outbound.protection.outlook.com [52.101.56.112])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820A36BB5B;
-	Mon, 14 Jul 2025 15:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752506155; cv=fail; b=lN47zDsOqPipfINJFyK2Hwb4T8hGBOihELiylD+/DZaVZLpBIvPjym2rdlyytgfLfj8rJ4LDPQ7e+0iqqajLvLnuM6lMjxIAofbcnu2T5c63IV0IZpDPzNXAYqfYtZPI1WMZBpdO0OAdEdJnuWzRu3dGEcti+TcTxeDw1iGuJTI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752506155; c=relaxed/simple;
-	bh=A56Psng3IOBuQ+hR1mqZFhtcijrUlbwsKHNIWOaQrW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=KYWvs9uVVS1ZRuKB1ZLQAK4Yi2txQqPvqE6oMMtDe+jqQdIGsLlKJcB9cXr99pHTOHjzPrv5+Kllpvdla0tsXTQqfKy94OxzPysGz2pyNnj9jjL9McLtVQ8ryfdT6hZGt7Mc2Zf7DhXk3rRR4Zcl4qmzIPPRA7fRCajDgb7VO3k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=G6egAU5o; arc=fail smtp.client-ip=52.101.56.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inmusicbrands.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jk2IqVgMNJ9O1tLnhnQqoagsZw178bQ3iNEdlEwTrh4h7gHdhl4uKGVPPAHiEbfjyChmTX8oTR9xmb8Ss1mXVyi41RHkmGhfwr0bFRBzd2UJJ2aU2lIDfC1g0tXNi+KF1mb1iCK2o+pLXhrScfIEy4NfppEmwAOdo2auAzTbjKTBXs0RpJRnqxc0McQzaumf4YMCpyw7KtRSASE6ZF3pZ3vFFcPWneif/BlpL1BmsWuXl+kK5xzciYrVo+AdT85P9dI4eedGc7ghOYUG5GzVl+TH6HH0qyIFeI03VgVC7iCKIgHgoDhl8SSuxUiqjLHFjCnKuvlsKlcZXxJmyMN0WA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9ygSKGZL8Na83xJlW8HqlTS26a5PsVkiYYDDUARydCI=;
- b=KsPS3myTnyEIomHLSBL/+PvVLzJRSUAHmIhZ4wE6V3V6Ff/jbMiFvgAPPpNooAsNBIFKfb1JMcOSkZuW4gG+wFYpSLBXUn+CDKj5ehSkW1KEelBYNQ2rSm/S0GbsZvpBHAegFbdxeU/Ul8EbpW4KjaoX8aR83aViBAuct2CevG7BmneZn/IydD64vgo7VN02VJufG8vSL5uPY69pH1NaJ8HMHuqmRc/wXqpabxmcf2tpykdJcIzK2ZFGMp1JBRpb1wwNOh4z+k7tDLBqKX/fLs87WZwa8v8zp3qI+Iqo4zYtjsOYFamBLPmYKbso3Y9O61fSaq3cGh1RONdUzUMl3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=inmusicbrands.com; dmarc=pass action=none
- header.from=inmusicbrands.com; dkim=pass header.d=inmusicbrands.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inmusicbrands.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9ygSKGZL8Na83xJlW8HqlTS26a5PsVkiYYDDUARydCI=;
- b=G6egAU5oA4Knn2YdT69BP9TCGU3IWOiMtNYWXmWbylbXk4vXmhIUkBVAVJAR7Pvh3iAekhxtlGTRmiGNdsVRcTv3q0YNkRCjBQyHu7M4zxov4kLy8yKgmkfwA9mLy7p2VbXIt7IaglHJaLTiqkEY4+Wzeo5vgl1tL4TnLQiPW14=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=inmusicbrands.com;
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com (2603:10b6:303:1bd::18)
- by SA2PR08MB6716.namprd08.prod.outlook.com (2603:10b6:806:11c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8922.33; Mon, 14 Jul
- 2025 15:15:42 +0000
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401]) by MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401%7]) with mapi id 15.20.8922.023; Mon, 14 Jul 2025
- 15:15:40 +0000
-Date: Mon, 14 Jul 2025 16:15:32 +0100
-From: John Keeping <jkeeping@inmusicbrands.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "linux-rockchip@lists.infradead.org" <linux-rockchip@lists.infradead.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC/PATCH 1/2] usb: dwc3: disable for USB_ROLE_NONE
-Message-ID: <aHUfFGnGZP4z7UgK-jkeeping@inmusicbrands.com>
-References: <20250710152252.2532020-1-jkeeping@inmusicbrands.com>
- <20250710152252.2532020-2-jkeeping@inmusicbrands.com>
- <20250712001131.ax3rw24h3deekxfv@synopsys.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250712001131.ax3rw24h3deekxfv@synopsys.com>
-X-ClientProxiedBy: LO2P265CA0160.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:9::28) To MW4PR08MB8282.namprd08.prod.outlook.com
- (2603:10b6:303:1bd::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8780925A655
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 15:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752506989; cv=none; b=QoJAscGtVSV/F3xZRgvQYSnaiXJdOmH6l41QSweSjNC++3lepNNJyk2ZM+4qbtXIB7GNwSL5v+prHFNwVmWSvRsWMDxDuR2rkF30E1cnHpTNJeQQdi+g8teJLicn9A2Fj+ujNIIJRZvpCKuRln633A0I/27qtwnjGwMvg9OTveA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752506989; c=relaxed/simple;
+	bh=T1Mdsc4JM5JmPEJvdOVLsOzT/sLrlOvVRrsYyOrni7E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DmO3nHx7gPvoDwKrB7GyDIALmFHMja8uhnxLYEGUGUabopaFrfTIEMMlRi0i1IN6CzehLeD+O89EEyW3Q9DLvx5grOSCLCQxR1P3JXz2eOMiX/504/U7Fkz0Y30diRscxT1krc+JPcLEYlDZ4qEjhSb+ZcM8YDJoSgCKhtL+txw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=UTpC8asi; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56EA82wA007444
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 15:29:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Sc20yyLx6uwEm8iOhcdE1IlDb1WrP1gxUU+Y/eFAixM=; b=UTpC8asiIgxLFMet
+	+KDFAGYeTfn8cJfBibG4IAf+5V3smzKmnyVl4Jn3ZwBbBRQ/YRodNoigqAmm/mVb
+	BDhL7VIJCGP3SzSMxVpkqKKoQcajLrD1ADtYzEk33cZcKl7uju/wD6DY4EwojqJp
+	mwPZHMEZhcqQGqDccfE2h5Bv/+8xOGFJB1ogdRcNxMzSP2qYE7e/pTsZRWjJ5wIl
+	emCsXrKaa3dJmNA/UAJN/FbleWAYfVuGOYK9R3ezfksLQpBoKsfwwwzO1UySvPbf
+	uNhEFp+Pf4afqHQW+VICCZ0Z0yejGN/j2ivyfQe7RUqH2PWYFMmzxLeI50q4wXEA
+	S4aa7A==
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ufut50tf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 15:29:46 +0000 (GMT)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b31f112c90aso3068104a12.0
+        for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 08:29:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752506985; x=1753111785;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sc20yyLx6uwEm8iOhcdE1IlDb1WrP1gxUU+Y/eFAixM=;
+        b=ouqR+aLwkxmanjObsXGrS6rlZcIylIbg7o2tOoOwSEv1ObqSkpHIpj/2HNFlkbJuJV
+         alJjg2vH5j8OTcCs8nD+Lq+7smuo18Hy6zf8AvBpc5F/FWpko0EycNIUqCkIjUw4RgPW
+         VrvJeOJkqSPv3rDGDYvCrOTTd+thqpkruZ4qpKnlU9KUFvUGkT3sxjJ3hhGch9a6HDg6
+         s2WRiCNgm0yY/uw90nYoxK32OGUHDjVAhtIpoj8tSvU13a+6822hzs26RfwFSnUqNgvl
+         8LrAE0fG3X/+euyxBpHWcmE5Sxs+HlDHwxfPmMpSS9HzUv6u78adZmuCyY84TAvtsARR
+         mPyg==
+X-Forwarded-Encrypted: i=1; AJvYcCWIxnIGK9/FwYHP4qLGi4LHF1VFEoCs3INGrncH0q1E7izc48x0Nb2dFuxkoFF3IUEvRdE3VJcXtIk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8DfJLhecU0mnt54BGyjBscF66J0qCaSJrutR7+IW6bn/UAqEu
+	kuRbtOSvcnryoSvFlGRIwa1pM/AQ+ZzMV7Te1V8h2XbrD4sjYYZ2BhJljti//+9eVCJ2TCh6pbC
+	3kpkJVG2MuQgyi509I5mQmoBwaCkeSPX7qIvcuX0m8UChXJ4wGc+RmC2IbWKBKLo=
+X-Gm-Gg: ASbGncuyTw4EMD3Kxgs1XXBZbwLBpNpmezKj6xkBSmoK9UZ+nOtZhI1EcNGjtkDFjH1
+	Ps3udNLxNLfoahOBjoAV7uwTELNBwNezxapOvTi3V8c7XdUIGFDeqC8ZDiR3M25sohRYspvSOru
+	ExfhhgyGDZgHCAl02hhyNXyg4LnGKS5qEYscXZsPCF98FHLz10IzPJ0Gsp70bam9+vbBJtR7v/U
+	/qgeHSINEStlnYTvW8Hmswl4/Y8i9DMkUzT0ihcbKSFpYrqBB0VuozzJoVRaMwbNqdLuxhS3r+C
+	CzNuQpaF+JA8CIjOjbPGOnoPbQcFHuaTMStDUtPGwe/o2JZAZRNernZfXDTnEwr/FrNwD6s=
+X-Received: by 2002:a17:903:7c7:b0:231:9817:6ec1 with SMTP id d9443c01a7336-23e1a47c514mr62815ad.17.1752506984839;
+        Mon, 14 Jul 2025 08:29:44 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGES5Y2dRxhfcCMM+wJvXYd9ZZrcxo8M21VCbQ4zrhDX3UO9/CvLZWBR+xQ8CwxnG8n1ulaaA==
+X-Received: by 2002:a17:903:7c7:b0:231:9817:6ec1 with SMTP id d9443c01a7336-23e1a47c514mr62395ad.17.1752506984223;
+        Mon, 14 Jul 2025 08:29:44 -0700 (PDT)
+Received: from [192.168.1.36] ([202.164.130.249])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de435bbc1sm94750925ad.228.2025.07.14.08.29.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Jul 2025 08:29:43 -0700 (PDT)
+Message-ID: <b3767f6b-9793-47bc-9b09-70fc931ce8f3@oss.qualcomm.com>
+Date: Mon, 14 Jul 2025 20:59:38 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|SA2PR08MB6716:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb44d944-6b74-4f7b-8379-08ddc2e94b59
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?0muWFhu+jsXp1WDpSsQ6WpMKg+FRXzQY9xpCbmPQN4s0uDwxgrUgfO6RcWnn?=
- =?us-ascii?Q?yW1X+DTxU/Do1ZADAqnvvHS6X9td6uAGr3XaaOitWrq7vsrKKVSgtadtKxex?=
- =?us-ascii?Q?9LlNLCepIxDW3tBGKABFKrNBUWt3uQQP5meYQkEu99dgGuRJu5pSB8cjtiys?=
- =?us-ascii?Q?cnRVxTZln7n+82BIkTTCSmWnXGspPWxoOSS9jdDn5SlyNXmexL5rol/tinFi?=
- =?us-ascii?Q?j1lO2oAax6oAIC2H5L+0gSXAiPLn1PdvAmZNUMr5FDVloo41wKFm3SEHE3Z5?=
- =?us-ascii?Q?HD4t7h4ARSxSbh5tl8I8TWL1l2cp2BNexiq7lflFrCRBvZuYOa6RhL8cqPfL?=
- =?us-ascii?Q?Itmluq4EUh7nGpOQSnNWJwdXpg/69KLjQISv/+c71GxO+zP3rCaY16O0JA1B?=
- =?us-ascii?Q?EwxmJkG/nf4VWVpESBvAyJgRj/Wr5dMF0T4g7tHxlSbbc2m56PUdJP4yUvH2?=
- =?us-ascii?Q?pTuYfleZz3+TS17YpqK/rGOviaUg9cVslRV2nIflBl5EB9aDuhA0ircsNu6x?=
- =?us-ascii?Q?3EYC3/2fdqbfQj3rdTredUJt6y74+Orts6e6R/KatcvoGPhIliXrr0pdgJdG?=
- =?us-ascii?Q?u2ps0Mw8JjP7A1aLtyT6Y6w5vn+2/jOe8iqD9kyyUfs/hZozjaoosVkUXsG+?=
- =?us-ascii?Q?CnzW0wuO0H6iOF1lQVDNd+Cmtg11uMpJ55J5QdoYZmDxAu2TTbWcwyd4Rz7x?=
- =?us-ascii?Q?CeAPcvM88kiMfe8tu6WY2NGYQsD+UAqUIWl3BERaSY3uVSZA7nz+TPth0Yl5?=
- =?us-ascii?Q?JhBdgptiRhpNU+aQ90pOuWy8AOj3OHm6Z9zsgYlUuakSAxHwDJLPkp1G7t1F?=
- =?us-ascii?Q?um6QyriwKsqpTS9aKlt6mYE/36yjrx/SUNZ8rVSZbjfPcsYgkPXcTaFO38SI?=
- =?us-ascii?Q?Jeg6gHBC4F4by9JRq8NCEroffjIG+JwtnRrAgRwMi0jOqnq17/UXYBO2385W?=
- =?us-ascii?Q?oOghl35JC6YHf0JEsydWXAE39v7p19K0SABj/a0tSj565MfpU2Du/Mei1i90?=
- =?us-ascii?Q?wMN/pdAYet6OKuHVbLQY98XE8Vc8tzvssZm2eGBWwf9VGfKG0VuJiYGlKBI1?=
- =?us-ascii?Q?CpBkyvjFcw6rMlTxTrQ8grGMGS6KEMM1yNoZX8mCR6CWTPPtwGl/kf5k9tEI?=
- =?us-ascii?Q?g3V88Wj274pisSNux9/bl4cTQvnon0teFZnhyiQBLyKhcdrKtnsSVAjGZ16d?=
- =?us-ascii?Q?zCz3pTdCDzxqMV5TYw7PVU8XkGdduon1TXqnxCKxVqMAw6k/UZn965HkaGMY?=
- =?us-ascii?Q?+nVnZGhI58eSIcywlMxdHDhX8rkHYAdg98X/MSyyCa3Cp1ldb5qxsuCIHKs8?=
- =?us-ascii?Q?S+eXpr79PU/fvlM6++tuSauHSazKIfJd2i8u/PrvY3p+gvFIWw3yToQvC8Pa?=
- =?us-ascii?Q?vX7imMeuSNK4I1MxDEsZ6WXPtuZcmFzvWUfqK1m8BOusIlR+ZopOnCfwWGGe?=
- =?us-ascii?Q?Prwy837iAS1EIudlFOhiUzIneOUqyPQHmWXV8Ic3X8B/mIzz6RwkfQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(52116014)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?wzAEQy2pRTc+RXH+nSa5S5ZLviB9wpHnDeSVTxO3pPR//T9UTUZ2YtSSSkm3?=
- =?us-ascii?Q?HMgCBFF+L6oLS5nexHNmYn2SOUOi0RwDmrv1cEM0LAQzpJcgl2qi+MgLi8H7?=
- =?us-ascii?Q?KM3UgK9OaCAJ9sZHGQGh0j5hNPMbTGSHXgXA5T+heRUG2K15o+NJBd+QRZ8u?=
- =?us-ascii?Q?jUB819xmdN59x6DzqsKQF6S6A7NgKf2Z8bikXSrEqQ7rv1DrqmfF9bOZ7cu7?=
- =?us-ascii?Q?c1ZAyJgf3wC9Gdni5bv9dDnu8xDoAe+JdE8KLk5WzYNHU4PY4lYsgHBc0qWP?=
- =?us-ascii?Q?XAJ8tqC+36M8SOJFU3RgRPx3RW5aX59ZFP7Mh4DkLT7qns7DVEHPf88XTCG1?=
- =?us-ascii?Q?rwYDvyhIO54l93AlzRYF28KirwhsKL72kh7qC+2pz4mD3+uUY3Op6YqzIMKA?=
- =?us-ascii?Q?/vOKAeTegvKtPMEVG1qEuTtYaxEGItyudU9LlBzebDB18zV6NJLrJPY7kwu1?=
- =?us-ascii?Q?tA3iX8kAqPd6YxymUrXVegqAQBQ/VrFT/GOB6lmkCMkWOOwczfLugrRQqCcW?=
- =?us-ascii?Q?36j4EOU5KqgkXuIYusZfzzC4+R6XlRY6UK0HsFUq0rMG5+7DBRZLykJELiyk?=
- =?us-ascii?Q?NaI8WvkI7Qtp0T+C9lMRRqBm3rP7w+zGAoTaMtmTg+hUmmsV4M6ShitCK8kp?=
- =?us-ascii?Q?hT/7+d8XjWMZ8PKmforg7cxgIO7WBMLoW/xJrg62FZS2tUk09JoEwLI9IWEP?=
- =?us-ascii?Q?8ZcaHysyqmWPZ+zbb2h1vnlKESE8bA7Fw5h2KeuQy4DdGNjUoxr4IXq/ZowB?=
- =?us-ascii?Q?madkeep/To4MOZJVjcaEva3qfIhHKE61C0YPjz9LYWaEvMFEG9MLhAyf8rPv?=
- =?us-ascii?Q?MXJLNL8vJkBhXNHbDEOP5vQq3dUBsmnRh+CApsXZ+C0k5HydmapMLJEqr/7c?=
- =?us-ascii?Q?CjLH1kKmBeeRhPhaQojHkdXw9/VoGG63Tkavw0xT/hGDUv5yaFN3/lh859jq?=
- =?us-ascii?Q?VuSeF6uXoqiPJxFBuOtKX1TxKTnOTp9hnRSeKvFMBXz0WkupCl810AZB9HYe?=
- =?us-ascii?Q?gFAPHAqAgLBiUTeCSvXO6QyBlbxPW1et8Wqfm8kwzVMU+9THPyl0HvFu1Y92?=
- =?us-ascii?Q?cq+LZO98PZSqb1Wxh5rOREZvzRoLCD9XTBvgeV4VNJ+XlKZcFjaEW7wEMHEP?=
- =?us-ascii?Q?web9HcIy3pjSVSNF62tOZGTnSXI38babhGtURMEYlp1aHjtZbpnDxNVB8rgZ?=
- =?us-ascii?Q?pZNtWhsLeCI3jeJL60Wh+YIT3aAnjLgfCfv4Dh8CbjI2AQaVFnLzM9pjS5xB?=
- =?us-ascii?Q?uYwiHfxzQVm70MY0gs5zz4DaO9PTx2ap9G+ViYaB2iTyRcFfoPUz/17I+PYC?=
- =?us-ascii?Q?tsB3wlfWK5Gh2CqgpjhB6faJpb8ww36ogq8tjjlyCBANmqsQxNo6WVvD6zYI?=
- =?us-ascii?Q?wXFX9GutdNV/x09mgAe+z7WkMpRdYlVBOaHO6xft81gxWDKq/MAgkrwaIFoY?=
- =?us-ascii?Q?wmANAFWY3alOh7a/LQjILrZmedsDfdUjelZIka5oon9zCJMoPAJDopapiM1X?=
- =?us-ascii?Q?Ue5Wb0T58GwOl082jdUYGiS0i8eDXI7AHeigOjxA0Z9iwgTq13HBcRffSl7/?=
- =?us-ascii?Q?7qDJ/DyR+QADp0uGGMTgUPjmYpbk0TtfZ9DjoGeGsXYZTZfSQE8rBpH/9R8D?=
- =?us-ascii?Q?0w=3D=3D?=
-X-OriginatorOrg: inmusicbrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb44d944-6b74-4f7b-8379-08ddc2e94b59
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR08MB8282.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2025 15:15:40.6539
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 24507e43-fb7c-4b60-ab03-f78fafaf0a65
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BIRFrvxbTCO5LNAgtmpW08oNvGwPaCGcjmcYnGRSQc8NuBGat/I+QBZUOLcFS+ceCWzoyMc/v9nbdZJQLqfGkfzijnH6lOwAex7K7/aMqZI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR08MB6716
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: dwc3: qcom: Remove extcon functionality from glue
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20250714044703.2091075-1-krishna.kurapati@oss.qualcomm.com>
+Content-Language: en-US
+From: Prashanth K <prashanth.k@oss.qualcomm.com>
+In-Reply-To: <20250714044703.2091075-1-krishna.kurapati@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=e7gGSbp/ c=1 sm=1 tr=0 ts=6875226a cx=c_pps
+ a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=5MqDkbE+qPoSl7Gb0QG4vw==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=2Tj7kaNsuKJ3Ycti4bYA:9 a=QEXdDO2ut3YA:10 a=x9snwWr2DeNwDh03kgHS:22
+X-Proofpoint-GUID: 4KHN7ztumx-eujotCZnndwkdZs-yn5xl
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE0MDA5MiBTYWx0ZWRfX73eclZmjuRL1
+ oOfh0r1IEajFzVmREEpCLoQKrTi0RfMCv3MhLEuGUw/y3ZYUQKxcqNWTxggUaEfRxfKMT6TS9RK
+ sOX7+sUBFFAkIaJCvTCt99oXMNc8gnLobJanMQoj7GK8AdhOlO1Mp4/jo2HlcKWwdTxD/gbyv9g
+ 62coAcWSiNs82fmZ5oT1V6gpK4v2qLgoOf5BoFdRi6VmHzJL1R+EyMNWqOU9Mx2eSXq9J1Yorpp
+ 0EYQETpaX7ddo+ATSpMK8i9BD8GqMV5t5NOvQJ2YeoiMy9okURNyPtDsf6ywR//R9CIjoq5H8iH
+ xK7NmHa8o07r4gIgpyBx00POyx0c9agB/Z0VAb/CCxSaKcKX77shH6ir0VPxglIAh+PJXhGQj7H
+ gEHZ4gwaExxa4lmr5vioACIbxS3lU6wlx0Sms58Bs1Wx60iLLNwn25spjSwrGCIDbv3f3tNE
+X-Proofpoint-ORIG-GUID: 4KHN7ztumx-eujotCZnndwkdZs-yn5xl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-14_01,2025-07-14_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 priorityscore=1501 mlxscore=0 spamscore=0 suspectscore=0
+ phishscore=0 bulkscore=0 impostorscore=0 clxscore=1015 adultscore=0
+ malwarescore=0 mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507140092
 
-On Sat, Jul 12, 2025 at 12:11:38AM +0000, Thinh Nguyen wrote:
-> On Thu, Jul 10, 2025, John Keeping wrote:
-> > When the phy is acting as a Type C mux, it may need to reset when the
-> > cable direction changes.  But this should not happen while DWC3 is
-> > trying to use the USB connection.
-> > 
-> > In this case, there must be a connection manager to notify the phy of
-> > the orientation change and tcpm_mux_set() ensures this happens before
-> > DWC3's role switch is informed of a change.
-> > 
-> > It should not be possible to go directly from device->device or
-> > host->host with a change in orientation without transitioning through
-> > the "none" role as the cable is unplugged.  So ensuring that DWC3 always
+
+
+On 7/14/2025 10:17 AM, Krishna Kurapati wrote:
+> Deprecate usage of extcon functionality from the glue driver. Now
+> that the glue driver is a flattened implementation, all existing
+> DTs would eventually move to new bindings. While doing so let them
+> make use of role-switch/ typec frameworks to provide role data
+> rather than using extcon.
 > 
-> The controller is either host or device mode. It's odd to use "none" to
-> indicate connection.
-
-There is no connection in this state.  When the type C controller
-indicates that the role is "none" then there cannot be a USB connection.
-
-> > informs the phy of the new mode whenever a plug is detected should be
-> > sufficient for the phy to safely reset itself at a time that is safe for
-> > DWC3.
+> On upstream, summary of targets/platforms using extcon is as follows:
 > 
-> Couldn't the phy do this as it detects connection/disconnection.
+> 1. MSM8916 and MSM8939 use Chipidea controller, hence the changes have no
+> effect on them.
+> 
+> 2. Of the other extcon users, most of them use "linux,extcon-usb-gpio"
+> driver which relies on id/vbus gpios to inform role changes. This can be
+> transitioned to role switch based driver (usb-conn-gpio) while flattening
+> those platforms to move away from extcon and rely on role
+> switching.
+> 
+> 3. The one target that uses dwc3 controller and extcon and is not based
+> on reading gpios is "arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi".
+> This platform uses TI chip to provide extcon. If usb on this platform is
+> being flattneed, then effort should be put in to define a usb-c-connector
+> device in DT and make use of role switch functionality in TUSB320L driver.
+> 
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> ---
+> Changes in v3:
+> This change was 4rth patch in [1]. It was suggested to make this as the
+> first patch of the series. Since this is independent of role switch
+> patches, sending this out separately. Removed RB Tag of Dmitry since the
+> patch has been changed.
+> 
+> [1]: https://lore.kernel.org/all/20250610091357.2983085-1-krishna.kurapati@oss.qualcomm.com/
+> 
+>  drivers/usb/dwc3/dwc3-qcom.c | 90 +-----------------------------------
+>  1 file changed, 1 insertion(+), 89 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index ca7e1c02773a..a7eaefaeec4d 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -11,7 +11,6 @@
+>  #include <linux/of_clk.h>
+>  #include <linux/module.h>
+>  #include <linux/kernel.h>
+> -#include <linux/extcon.h>
+>  #include <linux/interconnect.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/phy/phy.h>
+> @@ -79,11 +78,6 @@ struct dwc3_qcom {
+>  	struct dwc3_qcom_port	ports[DWC3_QCOM_MAX_PORTS];
+>  	u8			num_ports;
+>  
+> -	struct extcon_dev	*edev;
+> -	struct extcon_dev	*host_edev;
+> -	struct notifier_block	vbus_nb;
+> -	struct notifier_block	host_nb;
+> -
+>  	enum usb_dr_mode	mode;
+>  	bool			is_suspended;
+>  	bool			pm_suspended;
+> @@ -119,8 +113,7 @@ static inline void dwc3_qcom_clrbits(void __iomem *base, u32 offset, u32 val)
+>  
+>  /*
+>   * TODO: Make the in-core role switching code invoke dwc3_qcom_vbus_override_enable(),
+> - * validate that the in-core extcon support is functional, and drop extcon
+> - * handling from the glue
+> + * validate that the in-core extcon support is functional
+>   */
+>  static void dwc3_qcom_vbus_override_enable(struct dwc3_qcom *qcom, bool enable)
+>  {
+> @@ -137,80 +130,6 @@ static void dwc3_qcom_vbus_override_enable(struct dwc3_qcom *qcom, bool enable)
+>  	}
+>  }
+>  
+> -static int dwc3_qcom_vbus_notifier(struct notifier_block *nb,
+> -				   unsigned long event, void *ptr)
+> -{
+> -	struct dwc3_qcom *qcom = container_of(nb, struct dwc3_qcom, vbus_nb);
+> -
+> -	/* enable vbus override for device mode */
+> -	dwc3_qcom_vbus_override_enable(qcom, event);
+> -	qcom->mode = event ? USB_DR_MODE_PERIPHERAL : USB_DR_MODE_HOST;
+> -
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static int dwc3_qcom_host_notifier(struct notifier_block *nb,
+> -				   unsigned long event, void *ptr)
+> -{
+> -	struct dwc3_qcom *qcom = container_of(nb, struct dwc3_qcom, host_nb);
+> -
+> -	/* disable vbus override in host mode */
+> -	dwc3_qcom_vbus_override_enable(qcom, !event);
+> -	qcom->mode = event ? USB_DR_MODE_HOST : USB_DR_MODE_PERIPHERAL;
+> -
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static int dwc3_qcom_register_extcon(struct dwc3_qcom *qcom)
+> -{
+> -	struct device		*dev = qcom->dev;
+> -	struct extcon_dev	*host_edev;
+> -	int			ret;
+> -
+> -	if (!of_property_present(dev->of_node, "extcon"))
+> -		return 0;
+> -
+> -	qcom->edev = extcon_get_edev_by_phandle(dev, 0);
+> -	if (IS_ERR(qcom->edev))
+> -		return dev_err_probe(dev, PTR_ERR(qcom->edev),
+> -				     "Failed to get extcon\n");
+> -
+> -	qcom->vbus_nb.notifier_call = dwc3_qcom_vbus_notifier;
+> -
+> -	qcom->host_edev = extcon_get_edev_by_phandle(dev, 1);
+> -	if (IS_ERR(qcom->host_edev))
+> -		qcom->host_edev = NULL;
+> -
+> -	ret = devm_extcon_register_notifier(dev, qcom->edev, EXTCON_USB,
+> -					    &qcom->vbus_nb);
+> -	if (ret < 0) {
+> -		dev_err(dev, "VBUS notifier register failed\n");
+> -		return ret;
+> -	}
+> -
+> -	if (qcom->host_edev)
+> -		host_edev = qcom->host_edev;
+> -	else
+> -		host_edev = qcom->edev;
+> -
+> -	qcom->host_nb.notifier_call = dwc3_qcom_host_notifier;
+> -	ret = devm_extcon_register_notifier(dev, host_edev, EXTCON_USB_HOST,
+> -					    &qcom->host_nb);
+> -	if (ret < 0) {
+> -		dev_err(dev, "Host notifier register failed\n");
+> -		return ret;
+> -	}
+> -
+> -	/* Update initial VBUS override based on extcon state */
+> -	if (extcon_get_state(qcom->edev, EXTCON_USB) ||
+> -	    !extcon_get_state(host_edev, EXTCON_USB_HOST))
+> -		dwc3_qcom_vbus_notifier(&qcom->vbus_nb, true, qcom->edev);
+> -	else
+> -		dwc3_qcom_vbus_notifier(&qcom->vbus_nb, false, qcom->edev);
+> -
+> -	return 0;
+> -}
+> -
+>  static int dwc3_qcom_interconnect_enable(struct dwc3_qcom *qcom)
+>  {
+>  	int ret;
+> @@ -737,11 +656,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	if (qcom->mode != USB_DR_MODE_HOST)
+>  		dwc3_qcom_vbus_override_enable(qcom, true);
+>  
+> -	/* register extcon to override sw_vbus on Vbus change later */
+> -	ret = dwc3_qcom_register_extcon(qcom);
+> -	if (ret)
+> -		goto interconnect_exit;
+> -
+>  	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
+>  	device_init_wakeup(&pdev->dev, wakeup_source);
+>  
+> @@ -749,8 +663,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  
+>  	return 0;
+>  
+> -interconnect_exit:
+> -	dwc3_qcom_interconnect_exit(qcom);
+>  remove_core:
+>  	dwc3_core_remove(&qcom->dwc);
+>  clk_disable:
 
-I don't think the phy can detect a connection.  If it is configured for
-the wrong orientation then it will not monitor the correct data lines.
-The phy hardware does not signal any interrupts to the CPU for the
-driver to react to.
+Shouldn't we cleanup the Kconfig also? Anyways it's not critical, so it
+can be handled in a follow-up patch if preferred.
 
-> It seems what you need is a full controller initialization upon new
-> connection on orientation change, and you're using role_switch selecting
-> "none" to do so.
-
-I'm not sure whether a complete initialization is necessary, but what I
-want to avoid is the phy resetting while the controller is part-way
-through device enumeration or setting up a gadget configuration.
-
-It may be that simply avoiding resetting the phy if the orientation is
-unchanged is enough to avoid some of this problem, but I suspect there
-are still problems if the clocks from the phy to the controller are
-stopped unexpectedly.  However, I have run some tests of this change and
-it looks promising.
-
-> I'm not sure if role-switch has the right interface to do so. Perhaps we
-> can introduce one? I don't think we should change the behavior of the
-> current flow and apply that to all other platforms.
-
-I don't think it's unreasonable for the controller to be idle when there
-is an external type C controller notifying the connection state.
-
-The hardware setup looks like this, with the Linux type C code notifying
-the phy driver of the orientation change and the DWC3 driver of the role
-change:
-
-                      +------+          
-                      | DWC3 |<----+    
-                      +--^---+     |    
-                         |         |    
-                      +--v--+      |    
-                +---->| PHY |      |Role
-                |     +--^--+      |    
-    Orientation |        |         |    
-                |   +----v----+    |    
-                +---+ FUSB302 +----+    
-                    +---------+
-
-The advantage of using the role hook is that we are guaranteed that it
-is called after the phy has been notified of the orientation change.
-
-Do you have an idea of a new interface?  Or do you think it is safe to
-reset the phy underneath the controller when that will halt the clocks
-from the phy to the controller for some period of time?
-
+config USB_DWC3_QCOM
+		tristate "Qualcomm Platform"
+		depends on ARCH_QCOM || COMPILE_TEST
+-		depends on EXTCON || !EXTCON
+		depends on OF
 
 Regards,
-John
+Prashanth K
 
