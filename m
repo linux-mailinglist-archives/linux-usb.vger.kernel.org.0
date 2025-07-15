@@ -1,195 +1,279 @@
-Return-Path: <linux-usb+bounces-25838-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25839-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 103D4B059CC
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 14:18:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E953B05A52
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 14:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C31C41686B4
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 12:18:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 138EB3A8F0E
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 12:33:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA612E040A;
-	Tue, 15 Jul 2025 12:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EADB2E03FC;
+	Tue, 15 Jul 2025 12:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="DDbnvt3q"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lfWhxNdR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012050.outbound.protection.outlook.com [40.107.75.50])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196AE230BC8;
-	Tue, 15 Jul 2025 12:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752581869; cv=fail; b=H/BXYBz6zTlEXrgIoXlSBXh40K0byMtNYfPjfrPgDDz3itagpsZpvfCJHmeIwlphDJGo+m0lV87AWxROAPwuoW6qdk7HWx+iklBuRAdvcgn10PFdgPEI2AesIOWUwY/6uDy67O513Wx5+yAQ/kqk06oEiELDZHYns9zQkNvfjjA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752581869; c=relaxed/simple;
-	bh=uWCYp00kqkPIL2OhSzrl1x+MQmWQLv3amJ7F/i16mSU=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RlzMCntibXuuj6huyLg7lrMbiM1mG90i1YJeXB87UOnNDbwCKs97nzAx0I6HlRR7Wt4yVDEivmIOLl0dggwOnsXw+wiw959xEiQMH4cZVY2HqY9WWjUcF1wYUWhMOiR3Y6kA/FpN3mBmiXLT1PCWplHCN0smLa3NjfMG+ED/TC8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=DDbnvt3q; arc=fail smtp.client-ip=40.107.75.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WzwOTnl0aoV2+hoJ6t7GqUpHQ0UMnbeNc6d7+LYxJjYZ8YXhjja/AOfE39YTM+hZQEZ4DoXxh3g1JJhbbJLu4ZL07ufdDMsZcWmIrilD5fb1u7cUeZthVU9C8Bp46VQMVu3lAbkrVde5pWhZsWsErdJSYdXDeSdiITAesHwsE5Rkjcj+eIVeiJFBpqKQfG2Cc034qFyeRKfvsIgdeOPd2zQGjNCRDXX2Q4++4zbT5wRO3Raw/5iQHC9dI7u3kLwVOsk3aFuhT0gojn8cluQyIbxsmVVmJF87ewBLpQdHiY6qsx+NGP49ESKEcacqEjd+u9EBd47L7kvHBtrrazkq1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=75/ZZI17eCJmeascglv2wdbld7FMsi05h5Fi3PdpV90=;
- b=n76roQUVcpOBncbvLOUXNjI+wJSroqBQrxOSxgW9Hg5GKwSyygMKITydwse70jC9GLz8LwOGyRN+pf6+sFVz/qupjosvx6KjdWbFVxfWnCrmr34iKoT5UD1a0+aFNbh6pzEM71SMIpdjOtOpkl9+LXMJtLpmPVEvSpLZ01ph6u6X8HBV43QjYQ6ledS8t3tPPNDwHZaK1p8p+3yBSCZOgruXXhwxegTRbjVYoGu+RZp9dip0PvMs2EXnfW94m8Gz+aZj1dXFj69xOcNdQyszEvup/9PTRBo8q7Axd7gZhUV0MV6HZr99ZRRk++V7Uc7CF5CvMq5l/EkBp1l3eWTjbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=75/ZZI17eCJmeascglv2wdbld7FMsi05h5Fi3PdpV90=;
- b=DDbnvt3qpgW2hQDAjFihRVqA+UsOOYuY7pVBmTo2w3Ogw7hBB2j3sivzXYtbVeVcD5NfIaEjR67oElGD495t+5bzkTDUJmFYAO1l9iH73APzA4T4c+uJTaoSk/TTVs1L/kWuQ9l9ZH2NEwR4zUO9ESVhxUYCzByVP0M+EpLml2ap8ki8V6H+rpUKGtsRu30QCy28x4cBJMi1YUmUatcgnyQHNMQAZEYSvZE2ZJSmikaXnzjen9R4xfoxEAvF5SDwPkmX47z8UpE+5EbxSnIWo+FrZ4mcQQMt4ZaQ9arTRdXQuf49KDo+sX8gdr1linbDW09isGPRLfNv6d8bZ8CREQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) by
- TY0PR06MB5428.apcprd06.prod.outlook.com (2603:1096:400:219::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8922.32; Tue, 15 Jul 2025 12:17:45 +0000
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666]) by SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666%4]) with mapi id 15.20.8880.024; Tue, 15 Jul 2025
- 12:17:45 +0000
-From: Qianfeng Rong <rongqianfeng@vivo.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Lucas Sanchez Sagrado <lucsansag@gmail.com>,
-	Qianfeng Rong <rongqianfeng@vivo.com>,
-	Aleksander Jan Bajkowski <olek2@wp.pl>,
-	Hayes Wang <hayeswang@realtek.com>,
-	Eric Biggers <ebiggers@google.com>,
-	Philipp Hahn <phahn-oss@avm.de>,
-	linux-usb@vger.kernel.org (open list:USB NETWORKING DRIVERS),
-	netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 1/7] net: usb: Use min() to improve code
-Date: Tue, 15 Jul 2025 20:16:47 +0800
-Message-Id: <20250715121721.266713-2-rongqianfeng@vivo.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250715121721.266713-1-rongqianfeng@vivo.com>
-References: <20250715121721.266713-1-rongqianfeng@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0013.APCP153.PROD.OUTLOOK.COM (2603:1096::23) To
- SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D0F1EDA09
+	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 12:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752582825; cv=none; b=JLBjMzJXEMHDRzXdM3z/n03TIo2+h6wwu49Km8LWTt27YX5oyoU6BOZFLri6DFbtD8elCOCu3SU5QhNCReMYgbxrRS/1k0klrgLep3BASXexXMiPZ0shlme9VIz+/dD4LyWreJtUt0abw40JtObJX/zj14tkPFbTAgG41ANGOIc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752582825; c=relaxed/simple;
+	bh=SvRdOLMkLs4cCw3bsFKXQquDkb80tWBaQifsKF93g5M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xg1lqdqVpdYIdbasTJRCwvSI25qOrxYL/BQ3CuKHKqHE/lutSFFq+uSvhQ6HVSi2auGp3lRHnwZBX87D99NgNOIHcMy8BemWFyqpghX5ewx5BCHE+lNCRoDnWXjVHhq/qXqBMyY0uZ+9Dda+1Z2ODObDWuvI84ZOSEr+1bC2n+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lfWhxNdR; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56F64sTc021925
+	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 12:33:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	r0hBQb6sciCG3DtHt2ZpMDIA5njCpBLIV/1/jQJdBF4=; b=lfWhxNdRycvp8qll
+	22KIf6toh/bL4ieF42SiP6abKv/+NBakS30300eihFhKc/Gwnuu7mqBfTXykPwXn
+	lwR9S4ixtTTuGvqM29rxBt41JJHu+pvQJDjDzQaUVmyN+4/dlRVX/pEoOmFQxHNz
+	+UblHVA22/z1atOJVqCbQD2rxHEvB0GVkkVem+mQ5iOPPBWctBbfDwLzMVlUyIl+
+	5S652g0RzCxD/aMbrUaThN4uYQBzBRpLAn5fTyR8As3EAiceMmS0g4jzk3xHn0iB
+	uualz/aZ8prVTKmPnnoiX1x1skAYYtRYQY/hTOpELnxuisD9F9JDtP3t53WMRZSJ
+	g7dLrA==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47w5dpb1cc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 12:33:43 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7e2e8a90a90so310404385a.1
+        for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 05:33:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752582822; x=1753187622;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r0hBQb6sciCG3DtHt2ZpMDIA5njCpBLIV/1/jQJdBF4=;
+        b=wT/s4LgZF3w8v2AAErWlhJxECaQR/jdMJL52C7KunHWG4vZBoXI3o4cFiQbYmSfBZq
+         W8nJ00Hj/+zNlOjgmci70k3KjFoG5cyUdoy3Bxq9GW7PspgXDrnJl6rTys6TBGT7Wbkr
+         CJkyh7dTlSgCIL0d78n54DMQ6Xdx+pKvXa0+umjLDDDHf0nZhxIxF+ORiNR8Ge9SlzFE
+         HaxriBVewFE1uhPo5zTf9TFXhaOEOXl2dJ9Z8nBXG7ej72C4m4h9AIH24oINQy2jELhF
+         hGb8K5xqMLi3/AqLu8ovCBnUDEE1Phkybqsy0nFVqDU4k48DRoOJHjJO0GoZ2Za9gmwv
+         gefQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVIVq1TaHflYKn8edyNtRKOnleFeFaMBDUz0f2ff0kE7amAPgKezyJOCQW5Hx+tIM9ELZ6CUc/c/G0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl0VJKLW4ceim3p3UNKoQF9/8nH5R5tAiQwN9fzA5OhxGhlcN9
+	d/gPdfIuozoXDXH5G54Hdx+x5JkiK34mXKmEMba6oHZenHv9jk4xNsVgKsO60g9dmPRsvFp15l9
+	E9ATE5MrJhO+/979RHxXWJwQNdKVpNbIbFjF9pmjXBL9mvXTSX/uECzO4Vp2B6QE=
+X-Gm-Gg: ASbGncuo1eX1K38+bGcUCfq5DaPs1AjfnR93hPVOpz5IW50yPibVpHnJ/QNYPQxT5YE
+	aHJImWwNOiWo0VxnovAxTo9QkcchFQWL7ShwhB9yFcirQvF1nlAOd1pdiWvpinADHdHXaigCvh1
+	ZpRcL1bJlisipKAjpRukaPvnj3aGPQ7D3PkxqIV9EX036nMGdQbxvQaxyqaEsQdwv6Sx7aGEatj
+	kZJr3TxgSxIfOvgDAxAIO8dLUexFSuheR3WwSC9uGCVOtb60w7zk+r7Kj7aWHghGPoKUr7A19sT
+	TiZFy5vdlwe9xGMpSZJ9v16WXNcbssSRSdtlDa/5bWJNKXXQ8ANfvVOEphn7EpyeBKIa8Qvx6Cu
+	R9J4IQi0un2hx7F8nMd4gqSRcyLXgB0B5B3F61qu7q7yTwLwb4N9i
+X-Received: by 2002:a05:620a:448b:b0:7e0:bd35:fd23 with SMTP id af79cd13be357-7e0bd36022emr1552317885a.46.1752582821772;
+        Tue, 15 Jul 2025 05:33:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE+tmilO4Nd+RqSKmMZKxcxySJ8P1UmvMw9HGlsUGtDsxYECoRYArl2O/7yGvRFIAamtSOK+Q==
+X-Received: by 2002:a05:620a:448b:b0:7e0:bd35:fd23 with SMTP id af79cd13be357-7e0bd36022emr1552313685a.46.1752582821106;
+        Tue, 15 Jul 2025 05:33:41 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55943b73ab3sm2280779e87.214.2025.07.15.05.33.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jul 2025 05:33:40 -0700 (PDT)
+Date: Tue, 15 Jul 2025 15:33:38 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v5] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
+ secure calls
+Message-ID: <ntlgplc5pvps65c3szss5ozbnfgvq4rnk74yfeoxurinx6udho@z6crcjxmv7nh>
+References: <20250715-eud_mode_manager_secure_access-v5-1-e769be308d4a@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR06MB5140:EE_|TY0PR06MB5428:EE_
-X-MS-Office365-Filtering-Correlation-Id: b9b17428-b040-4fd6-559b-08ddc3999aef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|52116014|7416014|376014|1800799024|921020|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?NNUB8PAqkQgpLzMHSyktX63IjwD7wAmqksd+ppLXocybwdtTZP+pxwx6ELeB?=
- =?us-ascii?Q?kHTjU8I+5hDE/jYpmTpO55mfe0qMyM/zzG8GkXMFFfZAK4AzBPpcaNWfT5dl?=
- =?us-ascii?Q?9YPMuO1ui7o2JxO/2ALTSMGqMClO36AD+l5Rbw6MVfG+Pj6dGAwdY2lBBqxo?=
- =?us-ascii?Q?Pg0NV3slwvrMHQGEE8Bfa3qyazraIDJ+Cwb0LYNVPMlF4ZROSSLTW029xdtc?=
- =?us-ascii?Q?AZBHOcc7E2/EgUZSMw5kK93Q63sm97/JZcy16ob9Gv2Q54I/Oe58OmzCaNTq?=
- =?us-ascii?Q?FU8GZa0Mn85rbYZrqTxI3DJVDCeEjekNKmTA1o42HTXYkI2QcPx0Wi1Ee8pp?=
- =?us-ascii?Q?hPBbY2B+3JpWWlyuQVxUaffogbXKme99VpNXkd6BL5rvj+NDMWGth0s6go5R?=
- =?us-ascii?Q?/aJtRtaoB0ZfSh/Iy+oRBGGqAsFAxvMr1pP48HtpD5po9pFIBn8rJoUJLpP3?=
- =?us-ascii?Q?pkAQQQi3t0FAAcXlD0L3oVeCiM2TgD6OP/A7WHimw38f2LM2XVB6iPtKODRL?=
- =?us-ascii?Q?s3gw7KSD1KojsFXjLb+QricpAz0sq08yk+55B8yewZE9/lLmecyQM7P/VhAd?=
- =?us-ascii?Q?Z1g/BJAAIthWw6uzDxWBeuA6rCDI11DHvWg4kYl+wFmxqpd6o5B7UhvmaUAb?=
- =?us-ascii?Q?QgexsJk+oZ0FL8Q8P2XLuG247Qt1rjDxd8Th995C4NUflLsDteP3lgHpnJOm?=
- =?us-ascii?Q?uzXVeJ6UzTKSNRoAIBrWcpJQ5BaBt+UOC3wbTh4rxBRQefdO6JWXTP1DNmlr?=
- =?us-ascii?Q?GG1B3eXkab663Cmu9u4I/FMp5GcAx62M7Z+jveTyQwZPMMHQaF9H2lNSBiCc?=
- =?us-ascii?Q?1AEKzIRBmQvDmZQTPOP87VjwUDNJCuzkToN1GqH54VCtuXMQF3qa6dlX6mWK?=
- =?us-ascii?Q?wkoTxsfZTY+z7wXgULclaLKbOqYDJY/vkGa0PMivRBPQmFHWLLVMivCESH5J?=
- =?us-ascii?Q?+OfcE/CCyd5QCpn02xngLAijCo5EgelumhtQKbd5Qe4vmCS+vtZkd0aFGOzH?=
- =?us-ascii?Q?RxdWhI0FfX1qkCMUIZ3noHfv5EIkD21qrd0iFwmk2ojDyYgNGVxdLdRhU+F0?=
- =?us-ascii?Q?Bh05eRnw2JsNC28RgCSRGDC+Ky9UCX2BXBPi9vcAF4Dkhu0HVQMXBAC977x5?=
- =?us-ascii?Q?n4ozoGaoq783mZtodlsj3mS57RtzMXHcQvNVXf+6PnQHelCEIE1XVdAU4Q75?=
- =?us-ascii?Q?ZYItPnUH8HsI+CiOljWNM0M8IJN4i7R/CfoDcexqMxT+Mnpr4mnswdp4jI0A?=
- =?us-ascii?Q?5l7ZjJXQ0r2q2SvRFlxxEkdsWtrmhgrOPaSgCKP7j3THdZTaVx4Ht+nQJhc6?=
- =?us-ascii?Q?3P8JV13gEHjnAeaFw/xo5BmGKW04BYoNb2k91vUZnCyAkmZz70m3n66M2F8E?=
- =?us-ascii?Q?H62hGUiJfTrjmHBBZfxJGOr+e+sMZWZbz3xPzYEHola1N1nXemM+9vBXHWY0?=
- =?us-ascii?Q?h6KdyesI1da9d/spZcKZPmFoI9PLdV56cZNFGhfv9RHlBRRmYMl8pz0MjSwJ?=
- =?us-ascii?Q?l4mC+AcBw3t9dt8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB5140.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(7416014)(376014)(1800799024)(921020)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?6CQ2yE0caDBWiDdCQOsGeTvIhRAwcbsUni9DI09c3ONTQvIZKxRezmhVfwoN?=
- =?us-ascii?Q?8eZM6DRP1iXewzhjO9B6rNjmr21tk8jNBu9j/D/4Jg15d2GTw6bUrc0y8FZS?=
- =?us-ascii?Q?SJzS+oUvW+Q1X3f+hu0u7FH/CgjB18wBQMfY8PE5g9C3wFwozWSAgkO7Yu0k?=
- =?us-ascii?Q?R/xtAIX68eznF6gLXPVZTc1CRxtUBu1MDcrpMJLIsGeQznG15W0/U0TIAQX/?=
- =?us-ascii?Q?0Xpq7jGu0r07zWAGDdAe3eRFo2LfvixJSopqc159FXqQykGEs8V+nIcsbsRp?=
- =?us-ascii?Q?y+4h8uY2hD2XgMKUm2gHCcAWB0EjfiwXsE+1LdsgYYLriVLeScijmD8O6BLJ?=
- =?us-ascii?Q?7cb5Fxl9lpeuExafG5u1pfdjZ/WmlId0hBu5iJQ4Qql98c+tx1nUOi8gmpLg?=
- =?us-ascii?Q?I2yUPbMDtuVy9R+i1v7YgIOqJ0TPazxJbuWmdzK0TFi7kdssOkfDagE8uDi0?=
- =?us-ascii?Q?11/PcXuwVrabK9/aXIJd8gJP/Wij1FUmndJ2bzauOIypIN7qT0raN9/P8cEj?=
- =?us-ascii?Q?f3q9KrHRObObxCHAsg8VYt8E+VIHb8nwatxEbgG8RARba7OiK+DtvLgzdmq5?=
- =?us-ascii?Q?R0/VP6CTi5/FWt1aja6iHhJ3qOgAT5SmwVTdItznO4dc2d8Wz/nLyHVmPEpM?=
- =?us-ascii?Q?FYj+gwggcW9bMQzRqk6a+12idF0C5PkN7u1k+1JSh4YfNmCDqqapLBOi0xhy?=
- =?us-ascii?Q?hkwGI2lIH9Mn4wT0uyHMycNRCiAQKu4DBjz25rdbfxDFnf7qGIgoaG4iLl87?=
- =?us-ascii?Q?Z8W+6wPAHfzYl8VD8EJags4ZHXKufO//1DLYoGk5WahEUj3q8sdfyaSTcDNF?=
- =?us-ascii?Q?EUNuVTY5UdRsKZH2aiI9JmnmNWcYURqD8JHjPqGov3vIJNA87vALUzGg1ra6?=
- =?us-ascii?Q?jihVuOxH7p4un/t7A4oP0ETR6LFaaLN9nU7wXZTh+abC5ifGv/0yL3BXkjaO?=
- =?us-ascii?Q?8h6kI72s5/bzND5eU3d0U0jZ8MjUBbsh0C2XHhXiSN02uKWkwZ2fhGb+wXZO?=
- =?us-ascii?Q?qbD4j3FQclSCT6SPxDF3LDupmP3trUYVY5RuDBbtL/3r/VvfYpY/BkfKIeCV?=
- =?us-ascii?Q?M7T700HqgAHFUAlbQZKUvq8/d0rXz1iOpbW5nLiqrbNowIwzCwpfuVMG1/27?=
- =?us-ascii?Q?ISL53RPutZqFfrANRV9WJ1BINWxtnEWxNlPDG6KP96IafulTgpTFuxzMTu7T?=
- =?us-ascii?Q?WQPFIqLuc89TvDutLJbKasmHMgP6YgqKoEI3TU7K/Vmxbwq98IquXMezIsy8?=
- =?us-ascii?Q?anAPh5MJIi0o7F3aR2JcIXULSzRt68GUVUhObW5QsYrUIS+D67zOGTQs1s4e?=
- =?us-ascii?Q?f+qcXZFhI+cLQTzVQo4uFLMWVSnMBnYMyzx6ZDM77KLevWMderdY5ykZSF8n?=
- =?us-ascii?Q?Oz0OJO9is5NXelvGo2mcuobhL8/X2EHlXfvoPK14InpD//yFLh2rHcq6Mr10?=
- =?us-ascii?Q?TQs4BIma1UPSVIY0Scm3kZFmHGqeIAipnrlKGq5M+ibfyqtxF1qJ+D9w1Mow?=
- =?us-ascii?Q?ZFJwhDOW2jyQp8AqjnxDH6YbYxMb7AJqIDESN67DLjNX7IuUTDpEkRh/Kuhj?=
- =?us-ascii?Q?LGisdbi1oYL5h8zoYkDaP61mS3MNdG3i1el1gaL8?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9b17428-b040-4fd6-559b-08ddc3999aef
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB5140.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2025 12:17:45.5668
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: isPSQ1ALla05F1vVOhOFjdvdX4EBNlDVmA5zNKS/h/56HnpVVw6MpvKr4wJstoxrOCeRcrWbIz2QKN2ieKB1Rw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5428
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250715-eud_mode_manager_secure_access-v5-1-e769be308d4a@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE1MDExNCBTYWx0ZWRfXxYAnbM4JGPqL
+ CojpeCg7wD17gIrZWUQsNGX8h306+txSagnj+wlRreZFdwIsA6ooDzP/HUQJ14/MZKR3p4b4Y09
+ /tTRKCJtknr1RgGCbHSvP4dfdu2SXfOWle3dN4PaZKZYYQIgAUaFaXASBwCpk0kV7lJU/7Bdc2j
+ SWEeeVEcdm/nkDBLEGiXcsj97r7DUa6KoyqwGp8DSBFUwVUnMzZRWNpuO9a5eOH17fyZwoeB8mF
+ snt4lfLbC/KZ+qmsQ/NNLADdz+5fIEUJZ05am7rD8zMoxVGoROrt/I2PobyfU38OafeZpxj/vQg
+ r7jrETOEunhm5x1qYTGnegodMnay4JDTYy8P1ExLHfwVFaYDwNcA/CgbMk7CXD5gtEfOgyd2fb2
+ 0J5M/iEjqhNSRVhHqFmUmX2sU8yLjctCH1iOVYuYUCd9tOGVlimlb5nTFXDQI5E9+K/+jET0
+X-Proofpoint-GUID: SJvVNlqI7_VF8j063cUK9FeyfTtoV7TC
+X-Proofpoint-ORIG-GUID: SJvVNlqI7_VF8j063cUK9FeyfTtoV7TC
+X-Authority-Analysis: v=2.4 cv=Y+r4sgeN c=1 sm=1 tr=0 ts=68764aa7 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
+ a=RmLs6JBGabPHpirJ8U4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=PEH46H7Ffwr30OY-TuGO:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-15_03,2025-07-15_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 mlxlogscore=999 phishscore=0 malwarescore=0 priorityscore=1501
+ adultscore=0 impostorscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0
+ bulkscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507150114
 
-Use min() to reduce the code and improve its readability.
+On Tue, Jul 15, 2025 at 05:15:27PM +0530, Komal Bajaj wrote:
+> EUD_MODE_MANAGER2 register is mapped to a memory region that is marked
+> as read-only for HLOS, enforcing access restrictions that prohibit
+> direct memory-mapped writes via writel().
+> 
+> Attempts to write to this region from HLOS can result in silent failures
+> or memory access violations, particularly when toggling EUD (Embedded
+> USB Debugger) state. To ensure secure register access, modify the driver
+> to use qcom_scm_io_writel(), which routes the write operation to Qualcomm
+> Secure Channel Monitor (SCM). SCM has the necessary permissions to access
+> protected memory regions, enabling reliable control over EUD state.
+> 
+> SC7280, the only user of EUD is also affected, indicating that this could
+> never have worked on a properly fused device.
+> 
+> Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded USB Debugger(EUD)")
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> Signed-off-by: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> ---
+> Changes in v5:
+> * Changed select QCOM_SCM to depends on QCOM_SCM in Kconfig per Greg's review
+> * Link to v4: https://lore.kernel.org/all/20250709065533.25724-1-komal.bajaj@oss.qualcomm.com/
+> 
+> Changes in v4:
+> * Added error logging in disable_eud() for SCM write failures, per Konrad’s suggestion
+> * Link to v3: https://lore.kernel.org/all/20250708085208.19089-1-komal.bajaj@oss.qualcomm.com/
+> 
+> Changes in v3:
+> * Moved secure write before normal writes
+> * Added error checking in disable_eud()
+> * Use ENOMEM error code if platform_get_resource() fails
+> * Select QCOM_SCM driver if USB_QCOM_EUD is enabled
+> * Link to v2: https://lore.kernel.org/all/20250627125131.27606-1-komal.bajaj@oss.qualcomm.com/
+> 
+> Changes in v2:
+> * Drop separate compatible to be added for secure eud
+> * Use secure call to access EUD mode manager register
+> * Link to v1: https://lore.kernel.org/all/20240807183205.803847-1-quic_molvera@quicinc.com/
+> ---
+>  drivers/usb/misc/Kconfig    |  1 +
+>  drivers/usb/misc/qcom_eud.c | 27 +++++++++++++++++++++------
+>  2 files changed, 22 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> index 6497c4e81e951a14201ad965dadc29f9888f8254..73ebd3257625e4567f33636cdfd756344b9ed4e7 100644
+> --- a/drivers/usb/misc/Kconfig
+> +++ b/drivers/usb/misc/Kconfig
+> @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
+>  config USB_QCOM_EUD
+>  	tristate "QCOM Embedded USB Debugger(EUD) Driver"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> +	depends on QCOM_SCM
+>  	select USB_ROLE_SWITCH
+>  	help
+>  	  This module enables support for Qualcomm Technologies, Inc.
+> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> index 83079c414b4f281b2136d0d1eb39418c7f94ff8c..a58081f53db32935f09c685e4599985285133891 100644
+> --- a/drivers/usb/misc/qcom_eud.c
+> +++ b/drivers/usb/misc/qcom_eud.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/usb/role.h>
+> +#include <linux/firmware/qcom/qcom_scm.h>
+>  
+>  #define EUD_REG_INT1_EN_MASK	0x0024
+>  #define EUD_REG_INT_STATUS_1	0x0044
+> @@ -34,7 +35,7 @@ struct eud_chip {
+>  	struct device			*dev;
+>  	struct usb_role_switch		*role_sw;
+>  	void __iomem			*base;
+> -	void __iomem			*mode_mgr;
+> +	phys_addr_t			mode_mgr;
+>  	unsigned int			int_status;
+>  	int				irq;
+>  	bool				enabled;
+> @@ -43,18 +44,30 @@ struct eud_chip {
+>  
+>  static int enable_eud(struct eud_chip *priv)
+>  {
+> +	int ret;
+> +
+> +	ret = qcom_scm_io_writel(priv->mode_mgr + EUD_REG_EUD_EN2, 1);
+> +	if (ret)
+> +		return ret;
+> +
+>  	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
+>  	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
+>  			priv->base + EUD_REG_INT1_EN_MASK);
+> -	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
+>  
+>  	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
+>  }
+>  
+>  static void disable_eud(struct eud_chip *priv)
+>  {
+> +	int ret;
+> +
+> +	ret = qcom_scm_io_writel(priv->mode_mgr + EUD_REG_EUD_EN2, 0);
+> +	if (ret) {
+> +		dev_err(priv->dev, "failed to disable eud\n");
+> +		return;
 
-Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
----
- drivers/net/usb/r8152.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Change this (and enable_store()) to propagate the error code.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 44cba7acfe7d..c81a43da914a 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -4949,10 +4949,7 @@ static void rtl_ram_code_speed_up(struct r8152 *tp, struct fw_phy_speed_up *phy,
- 		u32 ocp_data, size;
- 		int i;
- 
--		if (len < 2048)
--			size = len;
--		else
--			size = 2048;
-+		size = min(len, 2048);
- 
- 		ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_GPHY_CTRL);
- 		ocp_data |= GPHY_PATCH_DONE | BACKUP_RESTRORE;
+> +	}
+> +
+>  	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
+> -	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
+>  }
+>  
+>  static ssize_t enable_show(struct device *dev,
+> @@ -178,6 +191,7 @@ static void eud_role_switch_release(void *data)
+>  static int eud_probe(struct platform_device *pdev)
+>  {
+>  	struct eud_chip *chip;
+> +	struct resource *res;
+>  	int ret;
+>  
+>  	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+> @@ -200,9 +214,10 @@ static int eud_probe(struct platform_device *pdev)
+>  	if (IS_ERR(chip->base))
+>  		return PTR_ERR(chip->base);
+>  
+> -	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
+> -	if (IS_ERR(chip->mode_mgr))
+> -		return PTR_ERR(chip->mode_mgr);
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +	if (!res)
+> +		return -ENODEV;
+> +	chip->mode_mgr = res->start;
+>  
+>  	chip->irq = platform_get_irq(pdev, 0);
+>  	if (chip->irq < 0)
+> 
+> ---
+> base-commit: 347e9f5043c89695b01e66b3ed111755afcf1911
+> change-id: 20250715-eud_mode_manager_secure_access-6e57e3c71ec2
+> 
+> Best regards,
+> -- 
+> Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+> 
+
 -- 
-2.34.1
-
+With best wishes
+Dmitry
 
