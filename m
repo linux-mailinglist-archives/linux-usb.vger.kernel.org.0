@@ -1,279 +1,542 @@
-Return-Path: <linux-usb+bounces-25839-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25840-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E953B05A52
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 14:33:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0371CB05C5C
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 15:30:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 138EB3A8F0E
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 12:33:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AF96162E43
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 13:29:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EADB2E03FC;
-	Tue, 15 Jul 2025 12:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF2E2E62D3;
+	Tue, 15 Jul 2025 13:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lfWhxNdR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wnnfzGB4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D0F1EDA09
-	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 12:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E256D2701B8;
+	Tue, 15 Jul 2025 13:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752582825; cv=none; b=JLBjMzJXEMHDRzXdM3z/n03TIo2+h6wwu49Km8LWTt27YX5oyoU6BOZFLri6DFbtD8elCOCu3SU5QhNCReMYgbxrRS/1k0klrgLep3BASXexXMiPZ0shlme9VIz+/dD4LyWreJtUt0abw40JtObJX/zj14tkPFbTAgG41ANGOIc=
+	t=1752585978; cv=none; b=DoH1b0odRYMxAd4cncE7Qr+Bd9fMd1BZ45Y0Vm+lpzJWW7cK+xUuzHB9VB3FiNrAGm4oamLShCJWzX2K2SwNn/qApvxGk5fw8p2ywXTP6ikZrCaohijGSPxRLUdKke7m53PY7Q0FR+0awohZVMfOWmtZQLXm3tlGYHRDmM2II6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752582825; c=relaxed/simple;
-	bh=SvRdOLMkLs4cCw3bsFKXQquDkb80tWBaQifsKF93g5M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xg1lqdqVpdYIdbasTJRCwvSI25qOrxYL/BQ3CuKHKqHE/lutSFFq+uSvhQ6HVSi2auGp3lRHnwZBX87D99NgNOIHcMy8BemWFyqpghX5ewx5BCHE+lNCRoDnWXjVHhq/qXqBMyY0uZ+9Dda+1Z2ODObDWuvI84ZOSEr+1bC2n+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lfWhxNdR; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56F64sTc021925
-	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 12:33:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	r0hBQb6sciCG3DtHt2ZpMDIA5njCpBLIV/1/jQJdBF4=; b=lfWhxNdRycvp8qll
-	22KIf6toh/bL4ieF42SiP6abKv/+NBakS30300eihFhKc/Gwnuu7mqBfTXykPwXn
-	lwR9S4ixtTTuGvqM29rxBt41JJHu+pvQJDjDzQaUVmyN+4/dlRVX/pEoOmFQxHNz
-	+UblHVA22/z1atOJVqCbQD2rxHEvB0GVkkVem+mQ5iOPPBWctBbfDwLzMVlUyIl+
-	5S652g0RzCxD/aMbrUaThN4uYQBzBRpLAn5fTyR8As3EAiceMmS0g4jzk3xHn0iB
-	uualz/aZ8prVTKmPnnoiX1x1skAYYtRYQY/hTOpELnxuisD9F9JDtP3t53WMRZSJ
-	g7dLrA==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47w5dpb1cc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 12:33:43 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7e2e8a90a90so310404385a.1
-        for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 05:33:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752582822; x=1753187622;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r0hBQb6sciCG3DtHt2ZpMDIA5njCpBLIV/1/jQJdBF4=;
-        b=wT/s4LgZF3w8v2AAErWlhJxECaQR/jdMJL52C7KunHWG4vZBoXI3o4cFiQbYmSfBZq
-         W8nJ00Hj/+zNlOjgmci70k3KjFoG5cyUdoy3Bxq9GW7PspgXDrnJl6rTys6TBGT7Wbkr
-         CJkyh7dTlSgCIL0d78n54DMQ6Xdx+pKvXa0+umjLDDDHf0nZhxIxF+ORiNR8Ge9SlzFE
-         HaxriBVewFE1uhPo5zTf9TFXhaOEOXl2dJ9Z8nBXG7ej72C4m4h9AIH24oINQy2jELhF
-         hGb8K5xqMLi3/AqLu8ovCBnUDEE1Phkybqsy0nFVqDU4k48DRoOJHjJO0GoZ2Za9gmwv
-         gefQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIVq1TaHflYKn8edyNtRKOnleFeFaMBDUz0f2ff0kE7amAPgKezyJOCQW5Hx+tIM9ELZ6CUc/c/G0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl0VJKLW4ceim3p3UNKoQF9/8nH5R5tAiQwN9fzA5OhxGhlcN9
-	d/gPdfIuozoXDXH5G54Hdx+x5JkiK34mXKmEMba6oHZenHv9jk4xNsVgKsO60g9dmPRsvFp15l9
-	E9ATE5MrJhO+/979RHxXWJwQNdKVpNbIbFjF9pmjXBL9mvXTSX/uECzO4Vp2B6QE=
-X-Gm-Gg: ASbGncuo1eX1K38+bGcUCfq5DaPs1AjfnR93hPVOpz5IW50yPibVpHnJ/QNYPQxT5YE
-	aHJImWwNOiWo0VxnovAxTo9QkcchFQWL7ShwhB9yFcirQvF1nlAOd1pdiWvpinADHdHXaigCvh1
-	ZpRcL1bJlisipKAjpRukaPvnj3aGPQ7D3PkxqIV9EX036nMGdQbxvQaxyqaEsQdwv6Sx7aGEatj
-	kZJr3TxgSxIfOvgDAxAIO8dLUexFSuheR3WwSC9uGCVOtb60w7zk+r7Kj7aWHghGPoKUr7A19sT
-	TiZFy5vdlwe9xGMpSZJ9v16WXNcbssSRSdtlDa/5bWJNKXXQ8ANfvVOEphn7EpyeBKIa8Qvx6Cu
-	R9J4IQi0un2hx7F8nMd4gqSRcyLXgB0B5B3F61qu7q7yTwLwb4N9i
-X-Received: by 2002:a05:620a:448b:b0:7e0:bd35:fd23 with SMTP id af79cd13be357-7e0bd36022emr1552317885a.46.1752582821772;
-        Tue, 15 Jul 2025 05:33:41 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE+tmilO4Nd+RqSKmMZKxcxySJ8P1UmvMw9HGlsUGtDsxYECoRYArl2O/7yGvRFIAamtSOK+Q==
-X-Received: by 2002:a05:620a:448b:b0:7e0:bd35:fd23 with SMTP id af79cd13be357-7e0bd36022emr1552313685a.46.1752582821106;
-        Tue, 15 Jul 2025 05:33:41 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55943b73ab3sm2280779e87.214.2025.07.15.05.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jul 2025 05:33:40 -0700 (PDT)
-Date: Tue, 15 Jul 2025 15:33:38 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+	s=arc-20240116; t=1752585978; c=relaxed/simple;
+	bh=Ax0nPS8osqvl5V+EoD7EfcrOr+/eNIqOddqIbFMPrzA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YGtoO/NPIhof1D29aFivICZXiui6YJhNurvHrlI4xC94jGPUjJF2YgPEfBPnwvK/RW79y0g5BiBKpPcPgnrZ3/eN0CfIXOzdIUBuLInel1a6dJWg20/DPq1ObqnbAAxvTTdAubKMJC9Im3D2nyDC6HmnCUmwJg/X+GB9CD422iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wnnfzGB4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C4DC4CEE3;
+	Tue, 15 Jul 2025 13:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1752585977;
+	bh=Ax0nPS8osqvl5V+EoD7EfcrOr+/eNIqOddqIbFMPrzA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=wnnfzGB4RGohfcAe4j4gnZXl+k9L+7eNJqYpjSjldp0FPphOkbMF8Rrb9Xd6aUo91
+	 UweBS6aNmFpIpBEAFUUm4hvsIQe2AfD4a3TlArFZXfGFF1ZoqxBj+jvadC7Nak/usi
+	 +uTbgbD7p3a0gEW5UY0rsrXecEwDCrDeeg5nYnP0=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v5] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
- secure calls
-Message-ID: <ntlgplc5pvps65c3szss5ozbnfgvq4rnk74yfeoxurinx6udho@z6crcjxmv7nh>
-References: <20250715-eud_mode_manager_secure_access-v5-1-e769be308d4a@oss.qualcomm.com>
+	patches@lists.linux.dev,
+	Pawel Laszczak <pawell@cadence.com>,
+	linux-usb@vger.kernel.org,
+	Lee Jones <lee@kernel.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.6 072/109] usb: cdnsp: Replace snprintf() with the safer scnprintf() variant
+Date: Tue, 15 Jul 2025 15:13:28 +0200
+Message-ID: <20250715130801.765468056@linuxfoundation.org>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250715130758.864940641@linuxfoundation.org>
+References: <20250715130758.864940641@linuxfoundation.org>
+User-Agent: quilt/0.68
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250715-eud_mode_manager_secure_access-v5-1-e769be308d4a@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE1MDExNCBTYWx0ZWRfXxYAnbM4JGPqL
- CojpeCg7wD17gIrZWUQsNGX8h306+txSagnj+wlRreZFdwIsA6ooDzP/HUQJ14/MZKR3p4b4Y09
- /tTRKCJtknr1RgGCbHSvP4dfdu2SXfOWle3dN4PaZKZYYQIgAUaFaXASBwCpk0kV7lJU/7Bdc2j
- SWEeeVEcdm/nkDBLEGiXcsj97r7DUa6KoyqwGp8DSBFUwVUnMzZRWNpuO9a5eOH17fyZwoeB8mF
- snt4lfLbC/KZ+qmsQ/NNLADdz+5fIEUJZ05am7rD8zMoxVGoROrt/I2PobyfU38OafeZpxj/vQg
- r7jrETOEunhm5x1qYTGnegodMnay4JDTYy8P1ExLHfwVFaYDwNcA/CgbMk7CXD5gtEfOgyd2fb2
- 0J5M/iEjqhNSRVhHqFmUmX2sU8yLjctCH1iOVYuYUCd9tOGVlimlb5nTFXDQI5E9+K/+jET0
-X-Proofpoint-GUID: SJvVNlqI7_VF8j063cUK9FeyfTtoV7TC
-X-Proofpoint-ORIG-GUID: SJvVNlqI7_VF8j063cUK9FeyfTtoV7TC
-X-Authority-Analysis: v=2.4 cv=Y+r4sgeN c=1 sm=1 tr=0 ts=68764aa7 cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
- a=RmLs6JBGabPHpirJ8U4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=PEH46H7Ffwr30OY-TuGO:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-15_03,2025-07-15_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 mlxlogscore=999 phishscore=0 malwarescore=0 priorityscore=1501
- adultscore=0 impostorscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0
- bulkscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507150114
 
-On Tue, Jul 15, 2025 at 05:15:27PM +0530, Komal Bajaj wrote:
-> EUD_MODE_MANAGER2 register is mapped to a memory region that is marked
-> as read-only for HLOS, enforcing access restrictions that prohibit
-> direct memory-mapped writes via writel().
-> 
-> Attempts to write to this region from HLOS can result in silent failures
-> or memory access violations, particularly when toggling EUD (Embedded
-> USB Debugger) state. To ensure secure register access, modify the driver
-> to use qcom_scm_io_writel(), which routes the write operation to Qualcomm
-> Secure Channel Monitor (SCM). SCM has the necessary permissions to access
-> protected memory regions, enabling reliable control over EUD state.
-> 
-> SC7280, the only user of EUD is also affected, indicating that this could
-> never have worked on a properly fused device.
-> 
-> Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded USB Debugger(EUD)")
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> Signed-off-by: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> ---
-> Changes in v5:
-> * Changed select QCOM_SCM to depends on QCOM_SCM in Kconfig per Greg's review
-> * Link to v4: https://lore.kernel.org/all/20250709065533.25724-1-komal.bajaj@oss.qualcomm.com/
-> 
-> Changes in v4:
-> * Added error logging in disable_eud() for SCM write failures, per Konrad’s suggestion
-> * Link to v3: https://lore.kernel.org/all/20250708085208.19089-1-komal.bajaj@oss.qualcomm.com/
-> 
-> Changes in v3:
-> * Moved secure write before normal writes
-> * Added error checking in disable_eud()
-> * Use ENOMEM error code if platform_get_resource() fails
-> * Select QCOM_SCM driver if USB_QCOM_EUD is enabled
-> * Link to v2: https://lore.kernel.org/all/20250627125131.27606-1-komal.bajaj@oss.qualcomm.com/
-> 
-> Changes in v2:
-> * Drop separate compatible to be added for secure eud
-> * Use secure call to access EUD mode manager register
-> * Link to v1: https://lore.kernel.org/all/20240807183205.803847-1-quic_molvera@quicinc.com/
-> ---
->  drivers/usb/misc/Kconfig    |  1 +
->  drivers/usb/misc/qcom_eud.c | 27 +++++++++++++++++++++------
->  2 files changed, 22 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> index 6497c4e81e951a14201ad965dadc29f9888f8254..73ebd3257625e4567f33636cdfd756344b9ed4e7 100644
-> --- a/drivers/usb/misc/Kconfig
-> +++ b/drivers/usb/misc/Kconfig
-> @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
->  config USB_QCOM_EUD
->  	tristate "QCOM Embedded USB Debugger(EUD) Driver"
->  	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on QCOM_SCM
->  	select USB_ROLE_SWITCH
->  	help
->  	  This module enables support for Qualcomm Technologies, Inc.
-> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> index 83079c414b4f281b2136d0d1eb39418c7f94ff8c..a58081f53db32935f09c685e4599985285133891 100644
-> --- a/drivers/usb/misc/qcom_eud.c
-> +++ b/drivers/usb/misc/qcom_eud.c
-> @@ -15,6 +15,7 @@
->  #include <linux/slab.h>
->  #include <linux/sysfs.h>
->  #include <linux/usb/role.h>
-> +#include <linux/firmware/qcom/qcom_scm.h>
->  
->  #define EUD_REG_INT1_EN_MASK	0x0024
->  #define EUD_REG_INT_STATUS_1	0x0044
-> @@ -34,7 +35,7 @@ struct eud_chip {
->  	struct device			*dev;
->  	struct usb_role_switch		*role_sw;
->  	void __iomem			*base;
-> -	void __iomem			*mode_mgr;
-> +	phys_addr_t			mode_mgr;
->  	unsigned int			int_status;
->  	int				irq;
->  	bool				enabled;
-> @@ -43,18 +44,30 @@ struct eud_chip {
->  
->  static int enable_eud(struct eud_chip *priv)
->  {
-> +	int ret;
-> +
-> +	ret = qcom_scm_io_writel(priv->mode_mgr + EUD_REG_EUD_EN2, 1);
-> +	if (ret)
-> +		return ret;
-> +
->  	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
->  	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
->  			priv->base + EUD_REG_INT1_EN_MASK);
-> -	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
->  
->  	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
->  }
->  
->  static void disable_eud(struct eud_chip *priv)
->  {
-> +	int ret;
-> +
-> +	ret = qcom_scm_io_writel(priv->mode_mgr + EUD_REG_EUD_EN2, 0);
-> +	if (ret) {
-> +		dev_err(priv->dev, "failed to disable eud\n");
-> +		return;
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
-Change this (and enable_store()) to propagate the error code.
+------------------
 
-> +	}
-> +
->  	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
-> -	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
->  }
->  
->  static ssize_t enable_show(struct device *dev,
-> @@ -178,6 +191,7 @@ static void eud_role_switch_release(void *data)
->  static int eud_probe(struct platform_device *pdev)
->  {
->  	struct eud_chip *chip;
-> +	struct resource *res;
->  	int ret;
->  
->  	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> @@ -200,9 +214,10 @@ static int eud_probe(struct platform_device *pdev)
->  	if (IS_ERR(chip->base))
->  		return PTR_ERR(chip->base);
->  
-> -	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> -	if (IS_ERR(chip->mode_mgr))
-> -		return PTR_ERR(chip->mode_mgr);
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> +	if (!res)
-> +		return -ENODEV;
-> +	chip->mode_mgr = res->start;
->  
->  	chip->irq = platform_get_irq(pdev, 0);
->  	if (chip->irq < 0)
-> 
-> ---
-> base-commit: 347e9f5043c89695b01e66b3ed111755afcf1911
-> change-id: 20250715-eud_mode_manager_secure_access-6e57e3c71ec2
-> 
-> Best regards,
-> -- 
-> Komal Bajaj <komal.bajaj@oss.qualcomm.com>
-> 
+From: Lee Jones <lee@kernel.org>
 
+[ Upstream commit b385ef088c7aab20a2c0dc20d390d69a6620f0f3 ]
+
+There is a general misunderstanding amongst engineers that {v}snprintf()
+returns the length of the data *actually* encoded into the destination
+array.  However, as per the C99 standard {v}snprintf() really returns
+the length of the data that *would have been* written if there were
+enough space for it.  This misunderstanding has led to buffer-overruns
+in the past.  It's generally considered safer to use the {v}scnprintf()
+variants in their place (or even sprintf() in simple cases).  So let's
+do that.
+
+The uses in this file all seem to assume that data *has been* written!
+
+Link: https://lwn.net/Articles/69419/
+Link: https://github.com/KSPP/linux/issues/105
+Cc: Pawel Laszczak <pawell@cadence.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Lee Jones <lee@kernel.org>
+Link: https://lore.kernel.org/r/20231130105459.3208986-3-lee@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Stable-dep-of: 2831a81077f5 ("usb: cdnsp: Fix issue with CV Bad Descriptor test")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/cdns3/cdnsp-debug.h | 354 ++++++++++++++++----------------
+ 1 file changed, 177 insertions(+), 177 deletions(-)
+
+diff --git a/drivers/usb/cdns3/cdnsp-debug.h b/drivers/usb/cdns3/cdnsp-debug.h
+index ad617b7455b9c..cd138acdcce16 100644
+--- a/drivers/usb/cdns3/cdnsp-debug.h
++++ b/drivers/usb/cdns3/cdnsp-debug.h
+@@ -187,202 +187,202 @@ static inline const char *cdnsp_decode_trb(char *str, size_t size, u32 field0,
+ 
+ 	switch (type) {
+ 	case TRB_LINK:
+-		ret = snprintf(str, size,
+-			       "LINK %08x%08x intr %ld type '%s' flags %c:%c:%c:%c",
+-			       field1, field0, GET_INTR_TARGET(field2),
+-			       cdnsp_trb_type_string(type),
+-			       field3 & TRB_IOC ? 'I' : 'i',
+-			       field3 & TRB_CHAIN ? 'C' : 'c',
+-			       field3 & TRB_TC ? 'T' : 't',
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"LINK %08x%08x intr %ld type '%s' flags %c:%c:%c:%c",
++				field1, field0, GET_INTR_TARGET(field2),
++				cdnsp_trb_type_string(type),
++				field3 & TRB_IOC ? 'I' : 'i',
++				field3 & TRB_CHAIN ? 'C' : 'c',
++				field3 & TRB_TC ? 'T' : 't',
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_TRANSFER:
+ 	case TRB_COMPLETION:
+ 	case TRB_PORT_STATUS:
+ 	case TRB_HC_EVENT:
+-		ret = snprintf(str, size,
+-			       "ep%d%s(%d) type '%s' TRB %08x%08x status '%s'"
+-			       " len %ld slot %ld flags %c:%c",
+-			       ep_num, ep_id % 2 ? "out" : "in",
+-			       TRB_TO_EP_INDEX(field3),
+-			       cdnsp_trb_type_string(type), field1, field0,
+-			       cdnsp_trb_comp_code_string(GET_COMP_CODE(field2)),
+-			       EVENT_TRB_LEN(field2), TRB_TO_SLOT_ID(field3),
+-			       field3 & EVENT_DATA ? 'E' : 'e',
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"ep%d%s(%d) type '%s' TRB %08x%08x status '%s'"
++				" len %ld slot %ld flags %c:%c",
++				ep_num, ep_id % 2 ? "out" : "in",
++				TRB_TO_EP_INDEX(field3),
++				cdnsp_trb_type_string(type), field1, field0,
++				cdnsp_trb_comp_code_string(GET_COMP_CODE(field2)),
++				EVENT_TRB_LEN(field2), TRB_TO_SLOT_ID(field3),
++				field3 & EVENT_DATA ? 'E' : 'e',
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_MFINDEX_WRAP:
+-		ret = snprintf(str, size, "%s: flags %c",
+-			       cdnsp_trb_type_string(type),
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size, "%s: flags %c",
++				cdnsp_trb_type_string(type),
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_SETUP:
+-		ret = snprintf(str, size,
+-			       "type '%s' bRequestType %02x bRequest %02x "
+-			       "wValue %02x%02x wIndex %02x%02x wLength %d "
+-			       "length %ld TD size %ld intr %ld Setup ID %ld "
+-			       "flags %c:%c:%c",
+-			       cdnsp_trb_type_string(type),
+-			       field0 & 0xff,
+-			       (field0 & 0xff00) >> 8,
+-			       (field0 & 0xff000000) >> 24,
+-			       (field0 & 0xff0000) >> 16,
+-			       (field1 & 0xff00) >> 8,
+-			       field1 & 0xff,
+-			       (field1 & 0xff000000) >> 16 |
+-			       (field1 & 0xff0000) >> 16,
+-			       TRB_LEN(field2), GET_TD_SIZE(field2),
+-			       GET_INTR_TARGET(field2),
+-			       TRB_SETUPID_TO_TYPE(field3),
+-			       field3 & TRB_IDT ? 'D' : 'd',
+-			       field3 & TRB_IOC ? 'I' : 'i',
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"type '%s' bRequestType %02x bRequest %02x "
++				"wValue %02x%02x wIndex %02x%02x wLength %d "
++				"length %ld TD size %ld intr %ld Setup ID %ld "
++				"flags %c:%c:%c",
++				cdnsp_trb_type_string(type),
++				field0 & 0xff,
++				(field0 & 0xff00) >> 8,
++				(field0 & 0xff000000) >> 24,
++				(field0 & 0xff0000) >> 16,
++				(field1 & 0xff00) >> 8,
++				field1 & 0xff,
++				(field1 & 0xff000000) >> 16 |
++				(field1 & 0xff0000) >> 16,
++				TRB_LEN(field2), GET_TD_SIZE(field2),
++				GET_INTR_TARGET(field2),
++				TRB_SETUPID_TO_TYPE(field3),
++				field3 & TRB_IDT ? 'D' : 'd',
++				field3 & TRB_IOC ? 'I' : 'i',
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_DATA:
+-		ret = snprintf(str, size,
+-			       "type '%s' Buffer %08x%08x length %ld TD size %ld "
+-			       "intr %ld flags %c:%c:%c:%c:%c:%c:%c",
+-			       cdnsp_trb_type_string(type),
+-			       field1, field0, TRB_LEN(field2),
+-			       GET_TD_SIZE(field2),
+-			       GET_INTR_TARGET(field2),
+-			       field3 & TRB_IDT ? 'D' : 'i',
+-			       field3 & TRB_IOC ? 'I' : 'i',
+-			       field3 & TRB_CHAIN ? 'C' : 'c',
+-			       field3 & TRB_NO_SNOOP ? 'S' : 's',
+-			       field3 & TRB_ISP ? 'I' : 'i',
+-			       field3 & TRB_ENT ? 'E' : 'e',
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"type '%s' Buffer %08x%08x length %ld TD size %ld "
++				"intr %ld flags %c:%c:%c:%c:%c:%c:%c",
++				cdnsp_trb_type_string(type),
++				field1, field0, TRB_LEN(field2),
++				GET_TD_SIZE(field2),
++				GET_INTR_TARGET(field2),
++				field3 & TRB_IDT ? 'D' : 'i',
++				field3 & TRB_IOC ? 'I' : 'i',
++				field3 & TRB_CHAIN ? 'C' : 'c',
++				field3 & TRB_NO_SNOOP ? 'S' : 's',
++				field3 & TRB_ISP ? 'I' : 'i',
++				field3 & TRB_ENT ? 'E' : 'e',
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_STATUS:
+-		ret = snprintf(str, size,
+-			       "Buffer %08x%08x length %ld TD size %ld intr"
+-			       "%ld type '%s' flags %c:%c:%c:%c",
+-			       field1, field0, TRB_LEN(field2),
+-			       GET_TD_SIZE(field2),
+-			       GET_INTR_TARGET(field2),
+-			       cdnsp_trb_type_string(type),
+-			       field3 & TRB_IOC ? 'I' : 'i',
+-			       field3 & TRB_CHAIN ? 'C' : 'c',
+-			       field3 & TRB_ENT ? 'E' : 'e',
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"Buffer %08x%08x length %ld TD size %ld intr"
++				"%ld type '%s' flags %c:%c:%c:%c",
++				field1, field0, TRB_LEN(field2),
++				GET_TD_SIZE(field2),
++				GET_INTR_TARGET(field2),
++				cdnsp_trb_type_string(type),
++				field3 & TRB_IOC ? 'I' : 'i',
++				field3 & TRB_CHAIN ? 'C' : 'c',
++				field3 & TRB_ENT ? 'E' : 'e',
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_NORMAL:
+ 	case TRB_ISOC:
+ 	case TRB_EVENT_DATA:
+ 	case TRB_TR_NOOP:
+-		ret = snprintf(str, size,
+-			       "type '%s' Buffer %08x%08x length %ld "
+-			       "TD size %ld intr %ld "
+-			       "flags %c:%c:%c:%c:%c:%c:%c:%c:%c",
+-			       cdnsp_trb_type_string(type),
+-			       field1, field0, TRB_LEN(field2),
+-			       GET_TD_SIZE(field2),
+-			       GET_INTR_TARGET(field2),
+-			       field3 & TRB_BEI ? 'B' : 'b',
+-			       field3 & TRB_IDT ? 'T' : 't',
+-			       field3 & TRB_IOC ? 'I' : 'i',
+-			       field3 & TRB_CHAIN ? 'C' : 'c',
+-			       field3 & TRB_NO_SNOOP ? 'S' : 's',
+-			       field3 & TRB_ISP ? 'I' : 'i',
+-			       field3 & TRB_ENT ? 'E' : 'e',
+-			       field3 & TRB_CYCLE ? 'C' : 'c',
+-			       !(field3 & TRB_EVENT_INVALIDATE) ? 'V' : 'v');
++		ret = scnprintf(str, size,
++				"type '%s' Buffer %08x%08x length %ld "
++				"TD size %ld intr %ld "
++				"flags %c:%c:%c:%c:%c:%c:%c:%c:%c",
++				cdnsp_trb_type_string(type),
++				field1, field0, TRB_LEN(field2),
++				GET_TD_SIZE(field2),
++				GET_INTR_TARGET(field2),
++				field3 & TRB_BEI ? 'B' : 'b',
++				field3 & TRB_IDT ? 'T' : 't',
++				field3 & TRB_IOC ? 'I' : 'i',
++				field3 & TRB_CHAIN ? 'C' : 'c',
++				field3 & TRB_NO_SNOOP ? 'S' : 's',
++				field3 & TRB_ISP ? 'I' : 'i',
++				field3 & TRB_ENT ? 'E' : 'e',
++				field3 & TRB_CYCLE ? 'C' : 'c',
++				!(field3 & TRB_EVENT_INVALIDATE) ? 'V' : 'v');
+ 		break;
+ 	case TRB_CMD_NOOP:
+ 	case TRB_ENABLE_SLOT:
+-		ret = snprintf(str, size, "%s: flags %c",
+-			       cdnsp_trb_type_string(type),
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size, "%s: flags %c",
++				cdnsp_trb_type_string(type),
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_DISABLE_SLOT:
+-		ret = snprintf(str, size, "%s: slot %ld flags %c",
+-			       cdnsp_trb_type_string(type),
+-			       TRB_TO_SLOT_ID(field3),
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size, "%s: slot %ld flags %c",
++				cdnsp_trb_type_string(type),
++				TRB_TO_SLOT_ID(field3),
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_ADDR_DEV:
+-		ret = snprintf(str, size,
+-			       "%s: ctx %08x%08x slot %ld flags %c:%c",
+-			       cdnsp_trb_type_string(type), field1, field0,
+-			       TRB_TO_SLOT_ID(field3),
+-			       field3 & TRB_BSR ? 'B' : 'b',
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"%s: ctx %08x%08x slot %ld flags %c:%c",
++				cdnsp_trb_type_string(type), field1, field0,
++				TRB_TO_SLOT_ID(field3),
++				field3 & TRB_BSR ? 'B' : 'b',
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_CONFIG_EP:
+-		ret = snprintf(str, size,
+-			       "%s: ctx %08x%08x slot %ld flags %c:%c",
+-			       cdnsp_trb_type_string(type), field1, field0,
+-			       TRB_TO_SLOT_ID(field3),
+-			       field3 & TRB_DC ? 'D' : 'd',
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"%s: ctx %08x%08x slot %ld flags %c:%c",
++				cdnsp_trb_type_string(type), field1, field0,
++				TRB_TO_SLOT_ID(field3),
++				field3 & TRB_DC ? 'D' : 'd',
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_EVAL_CONTEXT:
+-		ret = snprintf(str, size,
+-			       "%s: ctx %08x%08x slot %ld flags %c",
+-			       cdnsp_trb_type_string(type), field1, field0,
+-			       TRB_TO_SLOT_ID(field3),
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"%s: ctx %08x%08x slot %ld flags %c",
++				cdnsp_trb_type_string(type), field1, field0,
++				TRB_TO_SLOT_ID(field3),
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_RESET_EP:
+ 	case TRB_HALT_ENDPOINT:
+-		ret = snprintf(str, size,
+-			       "%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c",
+-			       cdnsp_trb_type_string(type),
+-			       ep_num, ep_id % 2 ? "out" : "in",
+-			       TRB_TO_EP_INDEX(field3), field1, field0,
+-			       TRB_TO_SLOT_ID(field3),
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c",
++				cdnsp_trb_type_string(type),
++				ep_num, ep_id % 2 ? "out" : "in",
++				TRB_TO_EP_INDEX(field3), field1, field0,
++				TRB_TO_SLOT_ID(field3),
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_STOP_RING:
+-		ret = snprintf(str, size,
+-			       "%s: ep%d%s(%d) slot %ld sp %d flags %c",
+-			       cdnsp_trb_type_string(type),
+-			       ep_num, ep_id % 2 ? "out" : "in",
+-			       TRB_TO_EP_INDEX(field3),
+-			       TRB_TO_SLOT_ID(field3),
+-			       TRB_TO_SUSPEND_PORT(field3),
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"%s: ep%d%s(%d) slot %ld sp %d flags %c",
++				cdnsp_trb_type_string(type),
++				ep_num, ep_id % 2 ? "out" : "in",
++				TRB_TO_EP_INDEX(field3),
++				TRB_TO_SLOT_ID(field3),
++				TRB_TO_SUSPEND_PORT(field3),
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_SET_DEQ:
+-		ret = snprintf(str, size,
+-			       "%s: ep%d%s(%d) deq %08x%08x stream %ld slot %ld  flags %c",
+-			       cdnsp_trb_type_string(type),
+-			       ep_num, ep_id % 2 ? "out" : "in",
+-			       TRB_TO_EP_INDEX(field3), field1, field0,
+-			       TRB_TO_STREAM_ID(field2),
+-			       TRB_TO_SLOT_ID(field3),
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"%s: ep%d%s(%d) deq %08x%08x stream %ld slot %ld  flags %c",
++				cdnsp_trb_type_string(type),
++				ep_num, ep_id % 2 ? "out" : "in",
++				TRB_TO_EP_INDEX(field3), field1, field0,
++				TRB_TO_STREAM_ID(field2),
++				TRB_TO_SLOT_ID(field3),
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_RESET_DEV:
+-		ret = snprintf(str, size, "%s: slot %ld flags %c",
+-			       cdnsp_trb_type_string(type),
+-			       TRB_TO_SLOT_ID(field3),
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size, "%s: slot %ld flags %c",
++				cdnsp_trb_type_string(type),
++				TRB_TO_SLOT_ID(field3),
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	case TRB_ENDPOINT_NRDY:
+ 		temp = TRB_TO_HOST_STREAM(field2);
+ 
+-		ret = snprintf(str, size,
+-			       "%s: ep%d%s(%d) H_SID %x%s%s D_SID %lx flags %c:%c",
+-			       cdnsp_trb_type_string(type),
+-			       ep_num, ep_id % 2 ? "out" : "in",
+-			       TRB_TO_EP_INDEX(field3), temp,
+-			       temp == STREAM_PRIME_ACK ? "(PRIME)" : "",
+-			       temp == STREAM_REJECTED ? "(REJECTED)" : "",
+-			       TRB_TO_DEV_STREAM(field0),
+-			       field3 & TRB_STAT ? 'S' : 's',
+-			       field3 & TRB_CYCLE ? 'C' : 'c');
++		ret = scnprintf(str, size,
++				"%s: ep%d%s(%d) H_SID %x%s%s D_SID %lx flags %c:%c",
++				cdnsp_trb_type_string(type),
++				ep_num, ep_id % 2 ? "out" : "in",
++				TRB_TO_EP_INDEX(field3), temp,
++				temp == STREAM_PRIME_ACK ? "(PRIME)" : "",
++				temp == STREAM_REJECTED ? "(REJECTED)" : "",
++				TRB_TO_DEV_STREAM(field0),
++				field3 & TRB_STAT ? 'S' : 's',
++				field3 & TRB_CYCLE ? 'C' : 'c');
+ 		break;
+ 	default:
+-		ret = snprintf(str, size,
+-			       "type '%s' -> raw %08x %08x %08x %08x",
+-			       cdnsp_trb_type_string(type),
+-			       field0, field1, field2, field3);
++		ret = scnprintf(str, size,
++				"type '%s' -> raw %08x %08x %08x %08x",
++				cdnsp_trb_type_string(type),
++				field0, field1, field2, field3);
+ 	}
+ 
+-	if (ret >= size)
+-		pr_info("CDNSP: buffer overflowed.\n");
++	if (ret == size - 1)
++		pr_info("CDNSP: buffer may be truncated.\n");
+ 
+ 	return str;
+ }
+@@ -465,32 +465,32 @@ static inline const char *cdnsp_decode_portsc(char *str, size_t size,
+ {
+ 	int ret;
+ 
+-	ret = snprintf(str, size, "%s %s %s Link:%s PortSpeed:%d ",
+-		       portsc & PORT_POWER ? "Powered" : "Powered-off",
+-		       portsc & PORT_CONNECT ? "Connected" : "Not-connected",
+-		       portsc & PORT_PED ? "Enabled" : "Disabled",
+-		       cdnsp_portsc_link_state_string(portsc),
+-		       DEV_PORT_SPEED(portsc));
++	ret = scnprintf(str, size, "%s %s %s Link:%s PortSpeed:%d ",
++			portsc & PORT_POWER ? "Powered" : "Powered-off",
++			portsc & PORT_CONNECT ? "Connected" : "Not-connected",
++			portsc & PORT_PED ? "Enabled" : "Disabled",
++			cdnsp_portsc_link_state_string(portsc),
++			DEV_PORT_SPEED(portsc));
+ 
+ 	if (portsc & PORT_RESET)
+-		ret += snprintf(str + ret, size - ret, "In-Reset ");
++		ret += scnprintf(str + ret, size - ret, "In-Reset ");
+ 
+-	ret += snprintf(str + ret, size - ret, "Change: ");
++	ret += scnprintf(str + ret, size - ret, "Change: ");
+ 	if (portsc & PORT_CSC)
+-		ret += snprintf(str + ret, size - ret, "CSC ");
++		ret += scnprintf(str + ret, size - ret, "CSC ");
+ 	if (portsc & PORT_WRC)
+-		ret += snprintf(str + ret, size - ret, "WRC ");
++		ret += scnprintf(str + ret, size - ret, "WRC ");
+ 	if (portsc & PORT_RC)
+-		ret += snprintf(str + ret, size - ret, "PRC ");
++		ret += scnprintf(str + ret, size - ret, "PRC ");
+ 	if (portsc & PORT_PLC)
+-		ret += snprintf(str + ret, size - ret, "PLC ");
++		ret += scnprintf(str + ret, size - ret, "PLC ");
+ 	if (portsc & PORT_CEC)
+-		ret += snprintf(str + ret, size - ret, "CEC ");
+-	ret += snprintf(str + ret, size - ret, "Wake: ");
++		ret += scnprintf(str + ret, size - ret, "CEC ");
++	ret += scnprintf(str + ret, size - ret, "Wake: ");
+ 	if (portsc & PORT_WKCONN_E)
+-		ret += snprintf(str + ret, size - ret, "WCE ");
++		ret += scnprintf(str + ret, size - ret, "WCE ");
+ 	if (portsc & PORT_WKDISC_E)
+-		ret += snprintf(str + ret, size - ret, "WDE ");
++		ret += scnprintf(str + ret, size - ret, "WDE ");
+ 
+ 	return str;
+ }
+@@ -562,20 +562,20 @@ static inline const char *cdnsp_decode_ep_context(char *str, size_t size,
+ 
+ 	avg = EP_AVG_TRB_LENGTH(tx_info);
+ 
+-	ret = snprintf(str, size, "State %s mult %d max P. Streams %d %s",
+-		       cdnsp_ep_state_string(ep_state), mult,
+-		       max_pstr, lsa ? "LSA " : "");
++	ret = scnprintf(str, size, "State %s mult %d max P. Streams %d %s",
++			cdnsp_ep_state_string(ep_state), mult,
++			max_pstr, lsa ? "LSA " : "");
+ 
+-	ret += snprintf(str + ret, size - ret,
+-			"interval %d us max ESIT payload %d CErr %d ",
+-			(1 << interval) * 125, esit, cerr);
++	ret += scnprintf(str + ret, size - ret,
++			 "interval %d us max ESIT payload %d CErr %d ",
++			 (1 << interval) * 125, esit, cerr);
+ 
+-	ret += snprintf(str + ret, size - ret,
+-			"Type %s %sburst %d maxp %d deq %016llx ",
+-			cdnsp_ep_type_string(ep_type), hid ? "HID" : "",
+-			burst, maxp, deq);
++	ret += scnprintf(str + ret, size - ret,
++			 "Type %s %sburst %d maxp %d deq %016llx ",
++			 cdnsp_ep_type_string(ep_type), hid ? "HID" : "",
++			 burst, maxp, deq);
+ 
+-	ret += snprintf(str + ret, size - ret, "avg trb len %d", avg);
++	ret += scnprintf(str + ret, size - ret, "avg trb len %d", avg);
+ 
+ 	return str;
+ }
 -- 
-With best wishes
-Dmitry
+2.39.5
+
+
+
 
