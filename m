@@ -1,85 +1,196 @@
-Return-Path: <linux-usb+bounces-25857-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25858-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F999B0683A
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 23:00:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22491B06870
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 23:20:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 926697A76A2
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 20:59:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A68E3AD999
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 21:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA80E265288;
-	Tue, 15 Jul 2025 21:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D56E2C08AD;
+	Tue, 15 Jul 2025 21:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Ekin6gO+"
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="S3Vq++lM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AF626FD91;
-	Tue, 15 Jul 2025 21:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495F81E501C;
+	Tue, 15 Jul 2025 21:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752613224; cv=none; b=uIHjTgKhiDu4RDpRUVrfLJ2aPMWidJAbzpCYzNT59AFWXVwBCBwHzCUcjpzVPeBDIK8TbJSZubwUVAfnZfwaqwWjAzQvNglk7pFH75CXYRD0BxPcgLlsOXHddS6N3QI3WJ8M3M9i5ieC5MgT4c6iPlD2VS1NI2J+7tS4SpIXLcQ=
+	t=1752614446; cv=none; b=VfRBXC3ufkv7WibPm1yqdJOTHtHBDdagCdhrTGR9xjg5n1/bay7ZcYjS21Gb2jWBZjABbKri5rlas7sZ5mn4ZBjdytZjhB/hCdNJ21Aq4u67RuMnF8FkSZEHSzNws8gdy6tkBmVfxSlPzhvG5AlRjj1KCiIbZHD4DcWNlaZ+yqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752613224; c=relaxed/simple;
-	bh=NdQnNA3fF02ohjHshOAcpzNoezt4dBDZURm8yQYNoFE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=lPDJhtuPCol6aTJ2tf1Dzud5zz2dmqH+Toj+2AlPrFhG2YMQAPSRsNIpLTswCZKGmeIYphhGtWAWQBMjDsBfG0HUSMVW9z2IL0zZIktLfj1+b5e4z3W+5Y5W9Nn3HeL5dDxwt23e80w21trwrRo8cpCp1gW3mt1T9GHrM8MgOCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Ekin6gO+; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [IPV6:2601:646:8081:9482:6556:8629:7dba:d48c] ([IPv6:2601:646:8081:9482:6556:8629:7dba:d48c])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56FL0F0w1148310
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 15 Jul 2025 14:00:15 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56FL0F0w1148310
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025062101; t=1752613215;
-	bh=nFH2JFEH395RyzNce7lxw11nURFzbDl8EM5cGZUF/V0=;
-	h=Date:To:Cc:From:Subject:From;
-	b=Ekin6gO+YziYS5cDuQvphQsNWdfBy3QrYYhZzKvZW6oHYxRbtVXGmm19Q5TqGl1mQ
-	 MhGgcWT8H7WlPSJJCVTnkCFEz91vIs7DxrlIrTA5vIH+vRDql4VPmj59LI29qmD9GR
-	 b/MJiRmmqRoy3iZfzzCXJkbovIru2HMJlp5wcUFBkjBds/KOUknARB70c+E4wcfVRs
-	 iwtV5W2qpaIx8/be/XzWNmtWcu2xeWpg0vFWWr+FMl3xs8E4bTlLX745s4gWgbtWm/
-	 rlmZLQMEPTrCygHUh9HcUYtz8J1cgX1kXAhr4+Lh2choq2VOEWUqH4oKRnjL/MnXMN
-	 qbeWaz4mm9vqg==
-Message-ID: <ce54ae11-72bb-4ac7-980b-c1cbc798a209@zytor.com>
-Date: Tue, 15 Jul 2025 14:00:10 -0700
+	s=arc-20240116; t=1752614446; c=relaxed/simple;
+	bh=a7JexUOfP1RzuGB/hlvExynfeLaFztOYQ1Ix59QcC9k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QWw2Ya713hw+xO3V6zSOWOKIC3z9dZUm/xFVpvc/nIasCumNIFs9V4zZz62bn8XpMaBu3fI4LPla9jKGw7CEIBjk8axpv1l5e5EjvoHZ5bbCtzd5To5inOwGPAqwuGRClu4CbVrV8jGFcz6Cv64cQqMYlVUQ3p5VTctz7rxMbqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=S3Vq++lM; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-23508d30142so62932875ad.0;
+        Tue, 15 Jul 2025 14:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1752614444; x=1753219244; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pceszCzoaqzDgo0HTGrseccItyjoYnZ8vPFKXVSiedc=;
+        b=S3Vq++lMy9LSo43q0gLeMdjlhZ8/TAGKfxULTq/poV0CBaRaq718OGZWs6FlZoYVzn
+         9AdHJpIBVPC31e5HocmmYWIiOJ8JJxIG/FhvVdsZaMYZEs+1SASQmVuDB3z0Tgo4F0dr
+         ffZ6g9X6ZKKNDwPjvE82JEIyroIxqq3c1uxlsqL1SKUHlZSmCi7xsOUPgNNznHwOdCrI
+         b9HidV4HNB+e4CWSZd9IGSyn1fj1dwS23ItuHi7IWs6H7lxs03SM47TSNcnUi7KxIFrH
+         fdeUWOHtW0NYYt9P4+kOrap2fPnQq34h9rWpUFIyXYfEMEubaDwpgZ9Ta3n0guTeyH+q
+         Zj4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752614444; x=1753219244;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pceszCzoaqzDgo0HTGrseccItyjoYnZ8vPFKXVSiedc=;
+        b=Af2gK+GLWyEvxdsZtbkd1XTVPc0v5IKgKALn6V56VcmXF6g6AU6a08Ve7BjmOIqXw8
+         L85njo589WIzyGolbR55Y8vShctR2TMu60+K0l+zuwkUodOWSKg44ntUF6uBAsrHaIkf
+         EDyGRNh1vfWo0UJvyy+ijUjxnQGg4tgGst4Y/UaAc/pO6SLHlUCaekLm0L8GUWRcNu8Z
+         2QEN80eYBMAU3piya4CrJiGXND/yX1W4Y0RheVtcOeW4Nik83zqZ6KRvtlkwf9orDHwu
+         NqAARF/pgKLv9raxqobnvt0ispJATygDSjQvNSZcvD14gFDzNOCRrDfC+3zcPi5rSuO2
+         pWOA==
+X-Forwarded-Encrypted: i=1; AJvYcCVNQi5MAMLbUjC6mclFhtSxZeG7WW/gkKHAks1xDGydGJlun5mfbb91Ck6+w2lDoFGVALk0jxMg33q0@vger.kernel.org, AJvYcCWul5IRxTacukTOY0cF+r1LHFTzBn7BpSPjC/ugVc7Fv3HgIeNWynFPP3mXK4ZZpcpw2BTR8tpv4F8vCJo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbjQLSHWJaUFLlauD2/asGQlOb39PWQnrSjFW9FOMcvPofPyxf
+	MMhmNkliWr+iom9OpRFegWAw4x+qH16Djc0aKFXfLoL2jp3SR5SJzsPFjuwB9fXMz/R4IX4zfqH
+	cwk6zGpbZYU6u9aEL1pES0ZvCd7PBg3s=
+X-Gm-Gg: ASbGncvlXfdx3iHUggy+NYlRsga1I5+I5S9ylrS0GkC68cnlsRt/VSOsFvUDfvAt0hb
+	542/+UPrIHjg2OfuswuR1TLapoqbKqKJCjxsGZetbhTMZZUexStjrkb3mFn5M80hMQs3bCQal8D
+	DXIPKIHsz4jQ4tTkVMOX/JH8aJelf/OnjNt0SK4W9wi8MjSLsUYKPKV0yRL0RNgkKFQ88kt9Nes
+	XP9YeVMv/P3fQrfpnk3qo0FJCnkuWTEiqP+BE8N
+X-Google-Smtp-Source: AGHT+IH/YTnCMy5/1xcQEG/PPen51iAjqri4GZsVIo/c6xPgKsCuSDARMJtZfsK1QGRfnoBalJ7yPcbOVl0Jqd7s2M0=
+X-Received: by 2002:a17:903:187:b0:21f:1202:f2f5 with SMTP id
+ d9443c01a7336-23e2566aebdmr4036275ad.8.1752614444383; Tue, 15 Jul 2025
+ 14:20:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Oliver Neukum <oneukum@suse.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org
-From: "H. Peter Anvin" <hpa@zytor.com>
-Subject: USB cdc-acm driver: break and command
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250204135842.3703751-1-clabbe@baylibre.com> <20250204135842.3703751-2-clabbe@baylibre.com>
+ <aCHHfY2FkVW2j0ML@hovoldconsulting.com>
+In-Reply-To: <aCHHfY2FkVW2j0ML@hovoldconsulting.com>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date: Tue, 15 Jul 2025 23:20:33 +0200
+X-Gm-Features: Ac12FXypXxX9YJ4bMlrkYXgqByIon5aSB93Zws8b9eZJEe6n_d-LEWX9xQ3cKKs
+Message-ID: <CAFBinCAUNNfOp4qvn2p8AETossePv2aL7jBkFxVZV_XzzULgVg@mail.gmail.com>
+Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
+To: Johan Hovold <johan@kernel.org>
+Cc: Corentin Labbe <clabbe@baylibre.com>, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, david@ixit.cz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Johan,
 
-I noticed looking at the CDC-ACM driver that it uses the assert/local 
-delay/deassert method of sending BREAK.  Given that the CDC model has a 
-delay specifier in the command packet, is there any reason not to set 
-TTY_DRIVER_HARDWARE_BREAK and sending only one packet?
+I'm excluding comments that are clear to me in this reply.
 
-I'm also wondering if it would make sense to support the 
-SEND_ENCAPSULATED_COMMAND and GET_ENCAPSULATED_RESPONSE commands, 
-presumably via an ioctl().  I'm not 100% sure because I'm not sure there 
-aren't potential security issues.
+On Mon, May 12, 2025 at 12:03=E2=80=AFPM Johan Hovold <johan@kernel.org> wr=
+ote:
+[...]
+> > +     if (ret) {
+> > +             dev_err(&port->serial->dev->dev,
+> > +                     "Failed to configure UART_MCR, err=3D%d\n", ret);
+> > +             return ret;
+> > +     }
+>
+> The read urbs should be submitted at first open and stopped at last
+> close to avoid wasting resources when no one is using the device.
+>
+> I know we have a few drivers that do not do this currently, but it
+> shouldn't be that hard to get this right from the start.
+If you're aware of an easy approach or you can recommend an existing
+driver that implements the desired behavior then please let me know.
 
-I'm guessing both of these could be of some use to embedded devices that 
-emulate a ttyACM serial port.
+The speciality about ch348 is that all ports share the RX/TX URBs.
+My current idea is to implement this using a ref count (for the number
+of open ports) and mutex for locking.
 
-	-hpa
+[...]
+> > +                     /*
+> > +                      * Writing larger buffers can take longer than th=
+e
+> > +                      * hardware allows before discarding the write bu=
+ffer.
+> > +                      * Limit the transfer size in such cases.
+> > +                      * These values have been found by empirical test=
+ing.
+> > +                      */
+> > +                     max_bytes =3D 128;
+>
+> This is a potential buffer overflow if a (malicious) device has
+> endpoints smaller than this (use min()).
+For endpoints smaller than CH348_TX_HDRSIZE we'll also be in trouble.
+Validating against CH348_TX_HDRSIZE size here doesn't make much sense
+to me (as we'd never be able to progress). I think I should validate
+it in ch348_attach() instead - what do you think?
 
+> > +             else
+> > +                     /*
+> > +                      * Only ingest as many bytes as we can transfer w=
+ith
+> > +                      * one URB at a time keeping the TX header in min=
+d.
+> > +                      */
+> > +                     max_bytes =3D hw_tx_port->bulk_out_size - CH348_T=
+X_HDRSIZE;
+> > +
+> > +             count =3D kfifo_out_locked(&port->write_fifo, rxt->data,
+> > +                                      max_bytes, &port->lock);
+> > +             if (count)
+> > +                     break;
+> > +     }
+>
+> With this implementation writing data continuously to one port will
+> starve the others.
+>
+> The vendor implementation appears to write to more than one port in
+> parallel and track THRE per port which would avoid the starvation issue
+> and should also be much more efficient.
+>
+> Just track THRE per port and only submit the write urb when it the
+> transmitter is empty or when it becomes empty.
+I'm trying as you suggest:
+- submit the URB synchronously for port N
+- submit the URB synchronously for port N + 1
+- ...
+
+This seems to work (using usb_bulk_msg). What doesn't work is
+submitting URBs in parallel (this is what the vendor driver prevents
+as well).
+
+[...]
+> > +     if (!wait_for_completion_timeout(&ch348->txbuf_completion,
+> > +                                      msecs_to_jiffies(CH348_CMD_TIMEO=
+UT)))
+> > +             dev_err_console(port,
+> > +                             "Failed to wait for TX buffer to be fully=
+ written out\n");
+>
+> This would also avoid blocking for extended periods of time on the
+> system work queue.
+I'm moving this to a timer instead.
+
+If you have any comments on the (new) TX logic then please let me know.
+
+[...]
+> You should implement dtr_rts() as well.
+This will be the first time we need the "package type" information as
+CH348Q only supports CTS/RTS on the first four ports, for the last
+four the signals aren't routed outside the package.
+I need to see if I have other hardware with CTS/RTS pins to test this.
+If not: can we omit hardware flow control in the first upstream
+version?
+
+
+Best regards,
+Martin
 
