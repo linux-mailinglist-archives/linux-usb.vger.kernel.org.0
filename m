@@ -1,196 +1,143 @@
-Return-Path: <linux-usb+bounces-25858-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25859-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22491B06870
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 23:20:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9417B06912
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 00:08:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A68E3AD999
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 21:20:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 348A37B34C3
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 22:06:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D56E2C08AD;
-	Tue, 15 Jul 2025 21:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1AF02C15B2;
+	Tue, 15 Jul 2025 22:07:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="S3Vq++lM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hJxL1QV+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495F81E501C;
-	Tue, 15 Jul 2025 21:20:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA962AF1D;
+	Tue, 15 Jul 2025 22:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752614446; cv=none; b=VfRBXC3ufkv7WibPm1yqdJOTHtHBDdagCdhrTGR9xjg5n1/bay7ZcYjS21Gb2jWBZjABbKri5rlas7sZ5mn4ZBjdytZjhB/hCdNJ21Aq4u67RuMnF8FkSZEHSzNws8gdy6tkBmVfxSlPzhvG5AlRjj1KCiIbZHD4DcWNlaZ+yqY=
+	t=1752617276; cv=none; b=BmM0BYU6pkRP4zB5iervSOH2dbor1KW5VZflGXnvxDPgDxCtS0YO8ChDpiSjDf2fW3QhkhiZQA1A1SAtA5dJZPykqLbJKWNQEnBVOdimzE88WvGcUJMv8HyDQBEUg6D7cuCws7SHF+GaN5cEXi/G6zLiIFa989qMR3pSOCB98AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752614446; c=relaxed/simple;
-	bh=a7JexUOfP1RzuGB/hlvExynfeLaFztOYQ1Ix59QcC9k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QWw2Ya713hw+xO3V6zSOWOKIC3z9dZUm/xFVpvc/nIasCumNIFs9V4zZz62bn8XpMaBu3fI4LPla9jKGw7CEIBjk8axpv1l5e5EjvoHZ5bbCtzd5To5inOwGPAqwuGRClu4CbVrV8jGFcz6Cv64cQqMYlVUQ3p5VTctz7rxMbqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=S3Vq++lM; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-23508d30142so62932875ad.0;
-        Tue, 15 Jul 2025 14:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1752614444; x=1753219244; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pceszCzoaqzDgo0HTGrseccItyjoYnZ8vPFKXVSiedc=;
-        b=S3Vq++lMy9LSo43q0gLeMdjlhZ8/TAGKfxULTq/poV0CBaRaq718OGZWs6FlZoYVzn
-         9AdHJpIBVPC31e5HocmmYWIiOJ8JJxIG/FhvVdsZaMYZEs+1SASQmVuDB3z0Tgo4F0dr
-         ffZ6g9X6ZKKNDwPjvE82JEIyroIxqq3c1uxlsqL1SKUHlZSmCi7xsOUPgNNznHwOdCrI
-         b9HidV4HNB+e4CWSZd9IGSyn1fj1dwS23ItuHi7IWs6H7lxs03SM47TSNcnUi7KxIFrH
-         fdeUWOHtW0NYYt9P4+kOrap2fPnQq34h9rWpUFIyXYfEMEubaDwpgZ9Ta3n0guTeyH+q
-         Zj4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752614444; x=1753219244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pceszCzoaqzDgo0HTGrseccItyjoYnZ8vPFKXVSiedc=;
-        b=Af2gK+GLWyEvxdsZtbkd1XTVPc0v5IKgKALn6V56VcmXF6g6AU6a08Ve7BjmOIqXw8
-         L85njo589WIzyGolbR55Y8vShctR2TMu60+K0l+zuwkUodOWSKg44ntUF6uBAsrHaIkf
-         EDyGRNh1vfWo0UJvyy+ijUjxnQGg4tgGst4Y/UaAc/pO6SLHlUCaekLm0L8GUWRcNu8Z
-         2QEN80eYBMAU3piya4CrJiGXND/yX1W4Y0RheVtcOeW4Nik83zqZ6KRvtlkwf9orDHwu
-         NqAARF/pgKLv9raxqobnvt0ispJATygDSjQvNSZcvD14gFDzNOCRrDfC+3zcPi5rSuO2
-         pWOA==
-X-Forwarded-Encrypted: i=1; AJvYcCVNQi5MAMLbUjC6mclFhtSxZeG7WW/gkKHAks1xDGydGJlun5mfbb91Ck6+w2lDoFGVALk0jxMg33q0@vger.kernel.org, AJvYcCWul5IRxTacukTOY0cF+r1LHFTzBn7BpSPjC/ugVc7Fv3HgIeNWynFPP3mXK4ZZpcpw2BTR8tpv4F8vCJo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbjQLSHWJaUFLlauD2/asGQlOb39PWQnrSjFW9FOMcvPofPyxf
-	MMhmNkliWr+iom9OpRFegWAw4x+qH16Djc0aKFXfLoL2jp3SR5SJzsPFjuwB9fXMz/R4IX4zfqH
-	cwk6zGpbZYU6u9aEL1pES0ZvCd7PBg3s=
-X-Gm-Gg: ASbGncvlXfdx3iHUggy+NYlRsga1I5+I5S9ylrS0GkC68cnlsRt/VSOsFvUDfvAt0hb
-	542/+UPrIHjg2OfuswuR1TLapoqbKqKJCjxsGZetbhTMZZUexStjrkb3mFn5M80hMQs3bCQal8D
-	DXIPKIHsz4jQ4tTkVMOX/JH8aJelf/OnjNt0SK4W9wi8MjSLsUYKPKV0yRL0RNgkKFQ88kt9Nes
-	XP9YeVMv/P3fQrfpnk3qo0FJCnkuWTEiqP+BE8N
-X-Google-Smtp-Source: AGHT+IH/YTnCMy5/1xcQEG/PPen51iAjqri4GZsVIo/c6xPgKsCuSDARMJtZfsK1QGRfnoBalJ7yPcbOVl0Jqd7s2M0=
-X-Received: by 2002:a17:903:187:b0:21f:1202:f2f5 with SMTP id
- d9443c01a7336-23e2566aebdmr4036275ad.8.1752614444383; Tue, 15 Jul 2025
- 14:20:44 -0700 (PDT)
+	s=arc-20240116; t=1752617276; c=relaxed/simple;
+	bh=Zd8zXCwF0hQTiVzyVbw1IEp0HkYJGefGxnsNS4GWNqE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WrmOSRhUMOxGKcCAnRif5y2mWVHpHGpbADDv1nCJbhsSPBvkNBYx/CQfY3UHgAbogQXBmxFe1/+y3lKdg80Buf/kitb95fJiFwP5QS6gN1QNiquAtYkrM8Z2nUL8QRTvAq1uJAcIDdemlXsH1Z3aF5Ugh/vDAHUL8sjjceYqZQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hJxL1QV+; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752617274; x=1784153274;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Zd8zXCwF0hQTiVzyVbw1IEp0HkYJGefGxnsNS4GWNqE=;
+  b=hJxL1QV+HcyChGetheMDP19YQ896IpEDKkHe+4L8kFBRdlQeQcyzdich
+   83n0FbvgHmfhEysMc7Ul731rOpFJ3UNTcYnLIFLKIsAIw+U8UzEVU7jSM
+   qGF0DoNoQolL7zbLUERuU3HaPNg9ivUKbcOUHoZdMD/6CsBafxfc0Sz16
+   YepXMYWeFKgmPGkLLUOspe5du070JBRdUdk9y2+OTAtJijKMkAabyVVgE
+   yM7Ppz8pUPjZs9cL7JrqywlOUWUjUDx88Pp6o9JP2F95vdBR0PVS7H86q
+   z0r+SOTNTYpy7FbBr+eBwj2JloZy6Kzv4BvRtj2od64MmLPZ/wGM5TUqv
+   Q==;
+X-CSE-ConnectionGUID: MzafmcvlTAysCsZ5nClFOw==
+X-CSE-MsgGUID: cOoaIl/SQQ6A0VW7X9QqFw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="54826714"
+X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
+   d="scan'208";a="54826714"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 15:07:53 -0700
+X-CSE-ConnectionGUID: 2/CTSCq4QzqxTY/7962AOA==
+X-CSE-MsgGUID: h6UmUrYARBK8MvLyxd9OmQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
+   d="scan'208";a="156731421"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 15 Jul 2025 15:07:47 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ubnoO-000BaZ-1F;
+	Tue, 15 Jul 2025 22:07:44 +0000
+Date: Wed, 16 Jul 2025 06:06:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aaron Kling <webgeek1234@gmail.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nagarjuna Kristam <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Peter De Schrijver <pdeschrijver@nvidia.com>,
+	Prashant Gaikwad <pgaikwad@nvidia.com>
+Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+	Aaron Kling <webgeek1234@gmail.com>
+Subject: Re: [PATCH 13/17] thermal: tegra: Add Tegra210B01 Support
+Message-ID: <202507160557.t7TfWvFP-lkp@intel.com>
+References: <20250714-t210b01-v1-13-e3f5f7de5dce@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204135842.3703751-1-clabbe@baylibre.com> <20250204135842.3703751-2-clabbe@baylibre.com>
- <aCHHfY2FkVW2j0ML@hovoldconsulting.com>
-In-Reply-To: <aCHHfY2FkVW2j0ML@hovoldconsulting.com>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Tue, 15 Jul 2025 23:20:33 +0200
-X-Gm-Features: Ac12FXypXxX9YJ4bMlrkYXgqByIon5aSB93Zws8b9eZJEe6n_d-LEWX9xQ3cKKs
-Message-ID: <CAFBinCAUNNfOp4qvn2p8AETossePv2aL7jBkFxVZV_XzzULgVg@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
-To: Johan Hovold <johan@kernel.org>
-Cc: Corentin Labbe <clabbe@baylibre.com>, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, david@ixit.cz
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250714-t210b01-v1-13-e3f5f7de5dce@gmail.com>
 
-Hi Johan,
+Hi Aaron,
 
-I'm excluding comments that are clear to me in this reply.
+kernel test robot noticed the following build warnings:
 
-On Mon, May 12, 2025 at 12:03=E2=80=AFPM Johan Hovold <johan@kernel.org> wr=
-ote:
-[...]
-> > +     if (ret) {
-> > +             dev_err(&port->serial->dev->dev,
-> > +                     "Failed to configure UART_MCR, err=3D%d\n", ret);
-> > +             return ret;
-> > +     }
->
-> The read urbs should be submitted at first open and stopped at last
-> close to avoid wasting resources when no one is using the device.
->
-> I know we have a few drivers that do not do this currently, but it
-> shouldn't be that hard to get this right from the start.
-If you're aware of an easy approach or you can recommend an existing
-driver that implements the desired behavior then please let me know.
+[auto build test WARNING on 347e9f5043c89695b01e66b3ed111755afcf1911]
 
-The speciality about ch348 is that all ports share the RX/TX URBs.
-My current idea is to implement this using a ref count (for the number
-of open ports) and mutex for locking.
+url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Kling/dt-bindings-arm-tegra-pmc-Document-Tegra210B01/20250715-160630
+base:   347e9f5043c89695b01e66b3ed111755afcf1911
+patch link:    https://lore.kernel.org/r/20250714-t210b01-v1-13-e3f5f7de5dce%40gmail.com
+patch subject: [PATCH 13/17] thermal: tegra: Add Tegra210B01 Support
+config: arm64-randconfig-003-20250716 (https://download.01.org/0day-ci/archive/20250716/202507160557.t7TfWvFP-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160557.t7TfWvFP-lkp@intel.com/reproduce)
 
-[...]
-> > +                     /*
-> > +                      * Writing larger buffers can take longer than th=
-e
-> > +                      * hardware allows before discarding the write bu=
-ffer.
-> > +                      * Limit the transfer size in such cases.
-> > +                      * These values have been found by empirical test=
-ing.
-> > +                      */
-> > +                     max_bytes =3D 128;
->
-> This is a potential buffer overflow if a (malicious) device has
-> endpoints smaller than this (use min()).
-For endpoints smaller than CH348_TX_HDRSIZE we'll also be in trouble.
-Validating against CH348_TX_HDRSIZE size here doesn't make much sense
-to me (as we'd never be able to progress). I think I should validate
-it in ch348_attach() instead - what do you think?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507160557.t7TfWvFP-lkp@intel.com/
 
-> > +             else
-> > +                     /*
-> > +                      * Only ingest as many bytes as we can transfer w=
-ith
-> > +                      * one URB at a time keeping the TX header in min=
-d.
-> > +                      */
-> > +                     max_bytes =3D hw_tx_port->bulk_out_size - CH348_T=
-X_HDRSIZE;
-> > +
-> > +             count =3D kfifo_out_locked(&port->write_fifo, rxt->data,
-> > +                                      max_bytes, &port->lock);
-> > +             if (count)
-> > +                     break;
-> > +     }
->
-> With this implementation writing data continuously to one port will
-> starve the others.
->
-> The vendor implementation appears to write to more than one port in
-> parallel and track THRE per port which would avoid the starvation issue
-> and should also be much more efficient.
->
-> Just track THRE per port and only submit the write urb when it the
-> transmitter is empty or when it becomes empty.
-I'm trying as you suggest:
-- submit the URB synchronously for port N
-- submit the URB synchronously for port N + 1
-- ...
+All warnings (new ones prefixed by >>):
 
-This seems to work (using usb_bulk_msg). What doesn't work is
-submitting URBs in parallel (this is what the vendor driver prevents
-as well).
-
-[...]
-> > +     if (!wait_for_completion_timeout(&ch348->txbuf_completion,
-> > +                                      msecs_to_jiffies(CH348_CMD_TIMEO=
-UT)))
-> > +             dev_err_console(port,
-> > +                             "Failed to wait for TX buffer to be fully=
- written out\n");
->
-> This would also avoid blocking for extended periods of time on the
-> system work queue.
-I'm moving this to a timer instead.
-
-If you have any comments on the (new) TX logic then please let me know.
-
-[...]
-> You should implement dtr_rts() as well.
-This will be the first time we need the "package type" information as
-CH348Q only supports CTS/RTS on the first four ports, for the last
-four the signals aren't routed outside the package.
-I need to see if I have other hardware with CTS/RTS pins to test this.
-If not: can we omit hardware flow control in the first upstream
-version?
+>> drivers/thermal/tegra/tegra210-soctherm.c:47:49: warning: 'tegra210b01_tsensor_config' defined but not used [-Wunused-const-variable=]
+    static const struct tegra_tsensor_configuration tegra210b01_tsensor_config = {
+                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Best regards,
-Martin
+vim +/tegra210b01_tsensor_config +47 drivers/thermal/tegra/tegra210-soctherm.c
+
+    46	
+  > 47	static const struct tegra_tsensor_configuration tegra210b01_tsensor_config = {
+    48		.tall = 16300,
+    49		.tiddq_en = 1,
+    50		.ten_count = 1,
+    51		.tsample = 240,
+    52		.tsample_ate = 480,
+    53	};
+    54	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
