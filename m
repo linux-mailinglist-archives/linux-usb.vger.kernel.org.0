@@ -1,143 +1,96 @@
-Return-Path: <linux-usb+bounces-25859-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25860-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9417B06912
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 00:08:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00089B069BF
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 01:09:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 348A37B34C3
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 22:06:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45E7C567DC1
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 23:10:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1AF02C15B2;
-	Tue, 15 Jul 2025 22:07:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5098E2D5439;
+	Tue, 15 Jul 2025 23:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hJxL1QV+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GJA48c6A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA962AF1D;
-	Tue, 15 Jul 2025 22:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA14D2D3A98;
+	Tue, 15 Jul 2025 23:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752617276; cv=none; b=BmM0BYU6pkRP4zB5iervSOH2dbor1KW5VZflGXnvxDPgDxCtS0YO8ChDpiSjDf2fW3QhkhiZQA1A1SAtA5dJZPykqLbJKWNQEnBVOdimzE88WvGcUJMv8HyDQBEUg6D7cuCws7SHF+GaN5cEXi/G6zLiIFa989qMR3pSOCB98AE=
+	t=1752620988; cv=none; b=KWKVnvhpV/MwGcPd8UoykAivOnrr1iD6RB5k/KMGYVdH2dhue1Wu/s+zp2isvM9rY2XOflMl900jJpp/lubQffMel9wxfr1OYfnSI+pJgXRCBbGnCtS9RGgfYAKCocSr8i2M1oUqvy7gVZvbOy/orsnjTFYFdafixz8BmonEaFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752617276; c=relaxed/simple;
-	bh=Zd8zXCwF0hQTiVzyVbw1IEp0HkYJGefGxnsNS4GWNqE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WrmOSRhUMOxGKcCAnRif5y2mWVHpHGpbADDv1nCJbhsSPBvkNBYx/CQfY3UHgAbogQXBmxFe1/+y3lKdg80Buf/kitb95fJiFwP5QS6gN1QNiquAtYkrM8Z2nUL8QRTvAq1uJAcIDdemlXsH1Z3aF5Ugh/vDAHUL8sjjceYqZQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hJxL1QV+; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752617274; x=1784153274;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zd8zXCwF0hQTiVzyVbw1IEp0HkYJGefGxnsNS4GWNqE=;
-  b=hJxL1QV+HcyChGetheMDP19YQ896IpEDKkHe+4L8kFBRdlQeQcyzdich
-   83n0FbvgHmfhEysMc7Ul731rOpFJ3UNTcYnLIFLKIsAIw+U8UzEVU7jSM
-   qGF0DoNoQolL7zbLUERuU3HaPNg9ivUKbcOUHoZdMD/6CsBafxfc0Sz16
-   YepXMYWeFKgmPGkLLUOspe5du070JBRdUdk9y2+OTAtJijKMkAabyVVgE
-   yM7Ppz8pUPjZs9cL7JrqywlOUWUjUDx88Pp6o9JP2F95vdBR0PVS7H86q
-   z0r+SOTNTYpy7FbBr+eBwj2JloZy6Kzv4BvRtj2od64MmLPZ/wGM5TUqv
-   Q==;
-X-CSE-ConnectionGUID: MzafmcvlTAysCsZ5nClFOw==
-X-CSE-MsgGUID: cOoaIl/SQQ6A0VW7X9QqFw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="54826714"
-X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
-   d="scan'208";a="54826714"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 15:07:53 -0700
-X-CSE-ConnectionGUID: 2/CTSCq4QzqxTY/7962AOA==
-X-CSE-MsgGUID: h6UmUrYARBK8MvLyxd9OmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
-   d="scan'208";a="156731421"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 15 Jul 2025 15:07:47 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubnoO-000BaZ-1F;
-	Tue, 15 Jul 2025 22:07:44 +0000
-Date: Wed, 16 Jul 2025 06:06:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aaron Kling <webgeek1234@gmail.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nagarjuna Kristam <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Peter De Schrijver <pdeschrijver@nvidia.com>,
-	Prashant Gaikwad <pgaikwad@nvidia.com>
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-	Aaron Kling <webgeek1234@gmail.com>
-Subject: Re: [PATCH 13/17] thermal: tegra: Add Tegra210B01 Support
-Message-ID: <202507160557.t7TfWvFP-lkp@intel.com>
-References: <20250714-t210b01-v1-13-e3f5f7de5dce@gmail.com>
+	s=arc-20240116; t=1752620988; c=relaxed/simple;
+	bh=YOmnXgvM5vzlC1lpAL+tZsqNx97efp40hWXPIu9CvcU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ruHZvxocOe0PGe3d6L5yqvxLbai1VSLvgn6KOlkvxQRPMWqIlY/r3JSOgGOetqv9V3rkBHC9RlW8YNcwYGbpSf0Xy6Bo1Ww//RGsQPmc50Qw/R4RAFxqrSlRtHONPngKWjRgrHLeQjBk02J71HN6bM+bTZcyXjpULlyGSFM2/po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GJA48c6A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B0F0C4CEF7;
+	Tue, 15 Jul 2025 23:09:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752620988;
+	bh=YOmnXgvM5vzlC1lpAL+tZsqNx97efp40hWXPIu9CvcU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=GJA48c6A0td2OYMqxzln6V5/ObGmg0pk4PTEMKOcV4vyWHifqpHwk9wCgJv1ayT+k
+	 VKJWtv/h01OgBXr5Th9sGbITc2F1q8OoCCOl+TLSGy1dpxpVQGM8mG5Do0Tqp/8HGy
+	 vG2GsN/CEnWuvP4rxGpuvAMRjqESOAbt136t9Xf7GwGoRDjz2wCbvOKNaN7xCw1AwL
+	 0SLklElIRb2042CB2p3FNVlARkthr1uP0/Mk8UNUtJ2drg7IWfRhKoxA8HIJc1ukzl
+	 INFWwW5ThLq3SXlnakIMMjV8t30dKGYsVX/tBT2TfjL4kYpc0Z4loHXxahJ9zoY82c
+	 AwbHsFVz+v5NA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1FCC8383BA30;
+	Tue, 15 Jul 2025 23:10:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250714-t210b01-v1-13-e3f5f7de5dce@gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] usb: net: sierra: check for no status endpoint
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175262100900.609531.18066112974576940495.git-patchwork-notify@kernel.org>
+Date: Tue, 15 Jul 2025 23:10:09 +0000
+References: <20250714111326.258378-1-oneukum@suse.com>
+In-Reply-To: <20250714111326.258378-1-oneukum@suse.com>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com
 
-Hi Aaron,
+Hello:
 
-kernel test robot noticed the following build warnings:
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test WARNING on 347e9f5043c89695b01e66b3ed111755afcf1911]
+On Mon, 14 Jul 2025 13:12:56 +0200 you wrote:
+> The driver checks for having three endpoints and
+> having bulk in and out endpoints, but not that
+> the third endpoint is interrupt input.
+> Rectify the omission.
+> 
+> Reported-by: syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/linux-usb/686d5a9f.050a0220.1ffab7.0017.GAE@google.com/
+> Tested-by: syzbot+3f89ec3d1d0842e95d50@syzkaller.appspotmail.com
+> Fixes: eb4fd8cd355c8 ("net/usb: add sierra_net.c driver")
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Kling/dt-bindings-arm-tegra-pmc-Document-Tegra210B01/20250715-160630
-base:   347e9f5043c89695b01e66b3ed111755afcf1911
-patch link:    https://lore.kernel.org/r/20250714-t210b01-v1-13-e3f5f7de5dce%40gmail.com
-patch subject: [PATCH 13/17] thermal: tegra: Add Tegra210B01 Support
-config: arm64-randconfig-003-20250716 (https://download.01.org/0day-ci/archive/20250716/202507160557.t7TfWvFP-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 8.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160557.t7TfWvFP-lkp@intel.com/reproduce)
+Here is the summary with links:
+  - [net] usb: net: sierra: check for no status endpoint
+    https://git.kernel.org/netdev/net/c/4c4ca3c46167
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507160557.t7TfWvFP-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/tegra/tegra210-soctherm.c:47:49: warning: 'tegra210b01_tsensor_config' defined but not used [-Wunused-const-variable=]
-    static const struct tegra_tsensor_configuration tegra210b01_tsensor_config = {
-                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/tegra210b01_tsensor_config +47 drivers/thermal/tegra/tegra210-soctherm.c
-
-    46	
-  > 47	static const struct tegra_tsensor_configuration tegra210b01_tsensor_config = {
-    48		.tall = 16300,
-    49		.tiddq_en = 1,
-    50		.ten_count = 1,
-    51		.tsample = 240,
-    52		.tsample_ate = 480,
-    53	};
-    54	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
