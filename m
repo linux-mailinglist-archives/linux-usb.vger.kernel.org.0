@@ -1,43 +1,43 @@
-Return-Path: <linux-usb+bounces-25840-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25841-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0371CB05C5C
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 15:30:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41392B05D17
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 15:41:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AF96162E43
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 13:29:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87E714A0115
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 13:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF2E2E62D3;
-	Tue, 15 Jul 2025 13:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465082EBB85;
+	Tue, 15 Jul 2025 13:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wnnfzGB4"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JU9WtwX4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E256D2701B8;
-	Tue, 15 Jul 2025 13:26:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1622E6D24;
+	Tue, 15 Jul 2025 13:29:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752585978; cv=none; b=DoH1b0odRYMxAd4cncE7Qr+Bd9fMd1BZ45Y0Vm+lpzJWW7cK+xUuzHB9VB3FiNrAGm4oamLShCJWzX2K2SwNn/qApvxGk5fw8p2ywXTP6ikZrCaohijGSPxRLUdKke7m53PY7Q0FR+0awohZVMfOWmtZQLXm3tlGYHRDmM2II6s=
+	t=1752586181; cv=none; b=R838Wf6tX2Aa7flpI+lRgsz67A86dDRWk0bpHrqHJvtJg9LIHfRgqUnlGf/gKac6Wv6qrWzBHkBe/itZeYQ9o+oujK02Vub+JpoWS3WdUKDWF6hqWiW1gtCNsQjX4j3FQxgKZJm7ib7xWl+53hv05kf9ew6/oylvS49G5T3xHYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752585978; c=relaxed/simple;
-	bh=Ax0nPS8osqvl5V+EoD7EfcrOr+/eNIqOddqIbFMPrzA=;
+	s=arc-20240116; t=1752586181; c=relaxed/simple;
+	bh=OKJMXrAbFegNni1hHNkDyK1Xeb4eDVLvFb274mxkvf4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YGtoO/NPIhof1D29aFivICZXiui6YJhNurvHrlI4xC94jGPUjJF2YgPEfBPnwvK/RW79y0g5BiBKpPcPgnrZ3/eN0CfIXOzdIUBuLInel1a6dJWg20/DPq1ObqnbAAxvTTdAubKMJC9Im3D2nyDC6HmnCUmwJg/X+GB9CD422iY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wnnfzGB4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C4DC4CEE3;
-	Tue, 15 Jul 2025 13:26:17 +0000 (UTC)
+	 MIME-Version; b=htKUBcIUYwPZxQusXr32TRBfWvJN7JcUXXP21cd4TTK2gppbnXCCFqjIZn0kaZxUAIWrmG/hEeGoaUoAUJp85XrBGec9RQzvtGP0/InlVcaRdNm26wwBOPxVIZDOV+TiGk+rdyeXVwCBcMoCgvqTWmHTklT1O3K4RzDLdY0e8+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JU9WtwX4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52D75C4CEE3;
+	Tue, 15 Jul 2025 13:29:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752585977;
-	bh=Ax0nPS8osqvl5V+EoD7EfcrOr+/eNIqOddqIbFMPrzA=;
+	s=korg; t=1752586181;
+	bh=OKJMXrAbFegNni1hHNkDyK1Xeb4eDVLvFb274mxkvf4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=wnnfzGB4RGohfcAe4j4gnZXl+k9L+7eNJqYpjSjldp0FPphOkbMF8Rrb9Xd6aUo91
-	 UweBS6aNmFpIpBEAFUUm4hvsIQe2AfD4a3TlArFZXfGFF1ZoqxBj+jvadC7Nak/usi
-	 +uTbgbD7p3a0gEW5UY0rsrXecEwDCrDeeg5nYnP0=
+	b=JU9WtwX4d6FPL7UK0v3j1ooCuu8MSa/hZ4qjjcpkbhGq+LLJtO6pVVXwGSNpE4eo1
+	 BU8fT8iWYbC/4gtenjNoCb2ZHo8h4HNCO4sL7QKVxyvrdamlsC+SEBo6Ek1HsyUw/D
+	 m29Fo+rdvkGX6fnFX+aatI+tbgb0l1twpH4ZZVCo=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -46,12 +46,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org,
 	Lee Jones <lee@kernel.org>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.6 072/109] usb: cdnsp: Replace snprintf() with the safer scnprintf() variant
-Date: Tue, 15 Jul 2025 15:13:28 +0200
-Message-ID: <20250715130801.765468056@linuxfoundation.org>
+Subject: [PATCH 5.15 47/77] usb: cdnsp: Replace snprintf() with the safer scnprintf() variant
+Date: Tue, 15 Jul 2025 15:13:46 +0200
+Message-ID: <20250715130753.602000789@linuxfoundation.org>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250715130758.864940641@linuxfoundation.org>
-References: <20250715130758.864940641@linuxfoundation.org>
+In-Reply-To: <20250715130751.668489382@linuxfoundation.org>
+References: <20250715130751.668489382@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+5.15-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
