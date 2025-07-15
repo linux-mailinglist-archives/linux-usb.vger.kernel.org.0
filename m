@@ -1,218 +1,183 @@
-Return-Path: <linux-usb+bounces-25816-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25819-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F024B05010
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 06:06:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D9EFB05030
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 06:18:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C28DC3AFF24
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 04:06:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A20B3B289D
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 04:18:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216372DCF41;
-	Tue, 15 Jul 2025 04:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23EC25A2C0;
+	Tue, 15 Jul 2025 04:18:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="row2DinS"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="p1DPvF40"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476CE2D5C7A;
-	Tue, 15 Jul 2025 04:03:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C56255F24
+	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 04:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752552232; cv=none; b=JkB6M4zl5uSYzzQwnmRSNRRLeLHP0sDol5CqnJxb5wKmgZXEZ1zGKH+WXMKvk8RQDe0CYyXeXza6gRMA55Tq15hq1P7JNv1ZsYq56nL+h/biueAv8FBh8n5rsUOqwOGylqQ3eNNHPA+7/GSR5TCCxVCMduIci3fM2f/RuansFlk=
+	t=1752553102; cv=none; b=fPsnnyOoHIIHtomFZka+rGT4xHmIHvBjfP26kvf8fgG6XmcbFDYAXnyP7b2iUmLBBkzUY4dR591G4vm4CCwUFM/dbNrOSb16YckgbrtVUorQzp8JYzNrJvWJd3SRIjDGQy+UaSELjKYZXKueg0H04Gqelj7bdyGHCWJtZX4VIbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752552232; c=relaxed/simple;
-	bh=H/IT/1M/DiNxHWny8vVMHXjFpdjemZq+meeHnPHoPCY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NnVf7T8a5XnKPB8IK4Ouh9BD8bAoIvBIq/NC67xUZarS0F2UacbnJ5/4KEzixQ6bagMZSJZZo1bfw978z4Byw2Hs0rfdLh4POiBj2zSvXkvL36tnaWGdWRjgSCjY+nvaJQ9iBA9oMukG6vQey1VS7RmXxjYZPeoQhSxefXYGD5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=row2DinS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D6C9CC4CEE3;
-	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752552231;
-	bh=H/IT/1M/DiNxHWny8vVMHXjFpdjemZq+meeHnPHoPCY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=row2DinS5tIgzMkxJTzm2ly3kUuFBUuhRFI+0pC7OFNHyG9xIbfzpXuPGl1a81QDe
-	 2QKNwK3Qf/JO4dYSB6hh4BQqcZz/906+AM6eYXCmdsDcCw3mjc+gVambeDz5ZMuVfL
-	 fBjoKfbIy2tewSLvMiuI092l7eYbuvtd1woOZw3zMSg/CWZwphB9CzM/eQ3/S9mWGI
-	 1Zd3/lHdzFpy+e5EH7fAJq0crBfuBHMaPMH+K2rM/YBsVgF+OHGF/QWU9nxyMFUsXZ
-	 LRq0PnZLUXbw18MLWveqN8g3ELQSjHLX/+TQFqBvDioOUkmDjZXsVYbGBXosoJy4S6
-	 CKd+DFo9cLHrg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD9FEC83F2F;
-	Tue, 15 Jul 2025 04:03:51 +0000 (UTC)
-From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Mon, 14 Jul 2025 23:03:00 -0500
-Subject: [PATCH 17/17] arm64: tegra: Add support for NVIDIA Shield TV Pro
- 2019
+	s=arc-20240116; t=1752553102; c=relaxed/simple;
+	bh=dFKWHIQddjxHUPkRV2M3jjcwPHCaNzGHYMUWZuz27pA=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=fn5KcgtofuKubObGGXs7qbWw6BVQ/fuZKu+kOlcGifivIOcp3eSu+ZhqKCIu5ox6KN6bFF2xEt8UKSnjXffq3EBHkwHRRwOKiLBb7UbPAcoBWpQEZct1FdbFKHazjGDfxliZQesrCrWWpP4/bv4Z5RkdKpNsQHsLGMEZJS9bjhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=p1DPvF40; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56EGRLSn026564
+	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 04:18:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	uzm3o8XukJIfDxG+gIGMGpjKkmpbr4jLR61YoqCEI4M=; b=p1DPvF40/MI+Vnm4
+	PfsCtjTRYXnwPO1N1Krud9tSW6geE5N2pGlrnKKxq+Ie6oY5Y1+gsLz5HCKoya+L
+	jRbkj+WVEgFNU7QPPBxEfvIwKT6vCXNKv8WE30Om8CmV7pTL3dwAXmAm8Ght0EiX
+	Tnb4kNytKs+hATELaSSnVDBTbcky7LITH+ptZ1QtPdPtGWflbOAgbFqUGSAZ3+fE
+	PGGAWZX0G4cyq1wblm1aVXWN2HpAoItAZRoRv5zZ+T8rA81gv3eqge9Ew7ChwVYo
+	Kq456fnOa5wVAd1hsSFD73c49gC2l0g37ZummJivcJ879Z1j3UMhnDBxAFwGma4m
+	+5urAQ==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47w5drhh85-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 04:18:19 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-234fedd3e51so48633245ad.1
+        for <linux-usb@vger.kernel.org>; Mon, 14 Jul 2025 21:18:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752553099; x=1753157899;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzm3o8XukJIfDxG+gIGMGpjKkmpbr4jLR61YoqCEI4M=;
+        b=uu/54FT/PSsAQGObUKgbPdnrUBgGrPnA3JAksx/oCZHDKbM0Vl3jtjiiqN7+bHT0uV
+         wn+jhjrCtBUUKuxAI6gX4BdfEiOj3WfJpwBNS+mPYkxNKG01qD/9Q7pzcvTIhQeVEzxM
+         rYjl7VKMdWhYmLmIzcyfKNYcgt4s5oYiCPokJKE8VfwxPQuXecnNVxrdMMFCGNrq9omG
+         CU+AncgbnW2QK0v//NHtfSeXQOzPsWS9qekUOeDq0NCoZBacv7xcaX4ZxfpkctXuMQmT
+         8NqnWx5ocB5r7/UbA9+uQGRNSorax4d7rBxHU5wG8q+GeEfu13NLImVD7hK7EaBSPwLy
+         gFYg==
+X-Forwarded-Encrypted: i=1; AJvYcCUt4WhxW7lGCLaCRkyhYCzCgQnn5VeC8ZttzYQsIdgQKygFc3Ne1FLIooZ3pIO3dIDirEue7sQxZN0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywj/TmEbwUEOqMiH0BFF3cjpa4uxRD+Nhh5lK2uyYSOmttMsNr+
+	6IeNQ6izwJ4h/DDfzd9D6WnceFYSGMLDC9MFPH/3pa9K+AH+iO5Hh3Wr24JhbmCs0bxigxgFRJh
+	8VQg0ChCPZGX2/bqtWEa4Q+r09q1zdpbj0UsDRQMUcBkrW6+a+ajm2emrr0LQ8Js=
+X-Gm-Gg: ASbGncttW/ApK0aSCcP9svTBJz/eWtPhWC05vTbOCL6HHIaVNQ3/gu8XCu0qj7DBF0B
+	rqFnPTeueqQRB6G/GZJROAmA9mj8hfmW5f8kJdxhcdmGgNa8XZ0msvvXBDN1rblgYZtuqpS6lCp
+	NZkJLq5mhI0goTy1CFWmd8cisP5XgWuqaUYBrA0kv9H1N8Lyh3aaAzvvhew7pYGDi0dW4XA2Fav
+	KZa4E9u2hz2lhRXAUzbt6nLzGzuVEDqeVyOY5oAi17ACdOQFJcfWDedyhgT6KlVY2rcfEKGNMLZ
+	p7GBic6+XCJp2/RKcJ4yJ0Rtwauf2XcQelNdggm43rUtFOyEcvqGlhV/lYj0CaJoZnse
+X-Received: by 2002:a17:903:2381:b0:235:1171:6d1d with SMTP id d9443c01a7336-23dede2efd2mr201885485ad.9.1752553099060;
+        Mon, 14 Jul 2025 21:18:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHlSR1JCrm29sPlBvrgSPyyxQnSbvHwk6Kiv95T3q3tvlO3uU7qin2TLupU+hhFPMssDqsfqg==
+X-Received: by 2002:a17:903:2381:b0:235:1171:6d1d with SMTP id d9443c01a7336-23dede2efd2mr201885145ad.9.1752553098603;
+        Mon, 14 Jul 2025 21:18:18 -0700 (PDT)
+Received: from [192.168.1.36] ([116.68.96.149])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de4359b6fsm99909735ad.212.2025.07.14.21.18.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Jul 2025 21:18:17 -0700 (PDT)
+Message-ID: <0d1e5ac2-9bf1-4fe5-b832-2e438e51d7db@oss.qualcomm.com>
+Date: Tue, 15 Jul 2025 09:48:13 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: dwc3: qcom: Remove extcon functionality from glue
+From: Prashanth K <prashanth.k@oss.qualcomm.com>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20250714044703.2091075-1-krishna.kurapati@oss.qualcomm.com>
+ <b3767f6b-9793-47bc-9b09-70fc931ce8f3@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <b3767f6b-9793-47bc-9b09-70fc931ce8f3@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250714-t210b01-v1-17-e3f5f7de5dce@gmail.com>
-References: <20250714-t210b01-v1-0-e3f5f7de5dce@gmail.com>
-In-Reply-To: <20250714-t210b01-v1-0-e3f5f7de5dce@gmail.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Nagarjuna Kristam <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>, 
- Peter De Schrijver <pdeschrijver@nvidia.com>, 
- Prashant Gaikwad <pgaikwad@nvidia.com>
-Cc: devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
- linux-usb@vger.kernel.org, Thierry Reding <treding@nvidia.com>, 
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
- Aaron Kling <webgeek1234@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752552229; l=3522;
- i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=EdWmD7c7kf19WARtvl7KhoiByIIwFTP6OAORo97ZbDc=;
- b=hU4JQpTVPlnql0F2O6v680Z46sPUs+HCYeJ0AlSADGcA2h4/FbpIN2ljlyhqzxraQ2zKbtjpd
- 2MoYW37DS0gCrNbP4Nv+kn92hDb6nmaT85cEEWUPVxsKAyy/rkKMyEq
-X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
- pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
-X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
- auth_id=342
-X-Original-From: Aaron Kling <webgeek1234@gmail.com>
-Reply-To: webgeek1234@gmail.com
-
-From: Aaron Kling <webgeek1234@gmail.com>
-
-Add initial device-tree support for NVIDIA Shield TV Pro 2019 (a.k.a
-MDarcy) based up the Tegra210B01 SoC with 3 GiB of LPDDR4 RAM.
-
-This is very basic, intended for checking initial Tegra210B01 support.
-More complete support for the device will be added later.
-
-Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
----
- arch/arm64/boot/dts/nvidia/Makefile                |  1 +
- .../boot/dts/nvidia/tegra210b01-p2894-0050-a08.dts | 10 ++++
- arch/arm64/boot/dts/nvidia/tegra210b01-p2894.dtsi  | 70 ++++++++++++++++++++++
- 3 files changed, 81 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/nvidia/Makefile b/arch/arm64/boot/dts/nvidia/Makefile
-index 0fbb8a494dba5089d9b7243e766bd6028b7f3744..bc6f3e268020b6fdbc90b2fb2ec1daf30c80af0e 100644
---- a/arch/arm64/boot/dts/nvidia/Makefile
-+++ b/arch/arm64/boot/dts/nvidia/Makefile
-@@ -20,6 +20,7 @@ dtb-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210-p2571.dtb
- dtb-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210-p3450-0000.dtb
- dtb-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210-smaug.dtb
- dtb-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210-p2894-0050-a08.dtb
-+dtb-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210b01-p2894-0050-a08.dtb
- dtb-$(CONFIG_ARCH_TEGRA_186_SOC) += tegra186-p2771-0000.dtb
- dtb-$(CONFIG_ARCH_TEGRA_186_SOC) += tegra186-p3509-0000+p3636-0001.dtb
- dtb-$(CONFIG_ARCH_TEGRA_194_SOC) += tegra194-p2972-0000.dtb
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210b01-p2894-0050-a08.dts b/arch/arm64/boot/dts/nvidia/tegra210b01-p2894-0050-a08.dts
-new file mode 100644
-index 0000000000000000000000000000000000000000..f18266b3d8ae341feaef5a1a911752f6a5ce2d0f
---- /dev/null
-+++ b/arch/arm64/boot/dts/nvidia/tegra210b01-p2894-0050-a08.dts
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+
-+#include "tegra210b01-p2894.dtsi"
-+
-+/ {
-+	model = "NVIDIA Shield TV Pro 2019";
-+	compatible = "nvidia,p2894-0050-a08", "nvidia,darcy", "nvidia,tegra210b01",
-+		"nvidia,tegra210";
-+};
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210b01-p2894.dtsi b/arch/arm64/boot/dts/nvidia/tegra210b01-p2894.dtsi
-new file mode 100644
-index 0000000000000000000000000000000000000000..97c9bd8f293539e76d57b6cfee49c60fb482d6ab
---- /dev/null
-+++ b/arch/arm64/boot/dts/nvidia/tegra210b01-p2894.dtsi
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "tegra210b01.dtsi"
-+
-+/ {
-+	aliases {
-+		serial0 = &uarta;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x0 0x80000000 0x0 0xc0000000>;
-+	};
-+
-+	serial@70006000 {
-+		/delete-property/ dmas;
-+		/delete-property/ dma-names;
-+		status = "okay";
-+	};
-+
-+	pmc@7000e400 {
-+		nvidia,invert-interrupt;
-+		nvidia,suspend-mode = <0>;
-+		nvidia,cpu-pwr-good-time = <0>;
-+		nvidia,cpu-pwr-off-time = <0>;
-+		nvidia,core-pwr-good-time = <4587 3876>;
-+		nvidia,core-pwr-off-time = <39065>;
-+		nvidia,core-power-req-active-high;
-+		nvidia,sys-clock-req-active-high;
-+		status = "okay";
-+	};
-+
-+	mmc@700b0600 {
-+		bus-width = <8>;
-+		non-removable;
-+		status = "okay";
-+	};
-+
-+	clk32k_in: clock-32k {
-+		compatible = "fixed-clock";
-+		clock-frequency = <32768>;
-+		#clock-cells = <0>;
-+	};
-+
-+	cpus {
-+		cpu@0 {
-+			enable-method = "psci";
-+		};
-+
-+		cpu@1 {
-+			enable-method = "psci";
-+		};
-+
-+		cpu@2 {
-+			enable-method = "psci";
-+		};
-+
-+		cpu@3 {
-+			enable-method = "psci";
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
-+	};
-+};
-
--- 
-2.50.0
+X-Proofpoint-ORIG-GUID: jpm9NvfRoOZeFqvAsVFTWlwkOMho3bhl
+X-Authority-Analysis: v=2.4 cv=D4xHKuRj c=1 sm=1 tr=0 ts=6875d68c cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=eHFrewLOQS0FNmfAC0rGFw==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=427AQKXnQCN1OQ7kLHEA:9 a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
+X-Proofpoint-GUID: jpm9NvfRoOZeFqvAsVFTWlwkOMho3bhl
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE1MDAzNiBTYWx0ZWRfX+AeFFR51r5tl
+ s0Tv2XGhBuVBU0cz136Omcva/ZGeP0vZgv6OMmPHyEGWrQPybzvjA/8fz3v0byfuY1pjZVhCNH7
+ 8/JriV6n/gpHyJkXSh8E6ej76ynBqzIECoHSNbE+eTuwQrvsTr6YEYohpryS6GHr28i4z3aG0jw
+ skRQHWCuEAsDbsNvkMv6elJk+/AU2gIDj/HAJhn4hLbiRBoVHg7vP48npSFGZk/pOHOI8ta4JUg
+ v0pQEb/qnO5/a+/NBsGbJwDvySw9v+EEwLqOuC37hTzYByepikzI5QCOOKZe2vSL4Ey6bt/6mL6
+ +DYsh1RSR/xVlGhhvmhjet7TpkIv5aLDazGYDh1F9hUg7V6mD5UUJAAyhL0WWfX5r2gFk1/3xVy
+ 7iKYaFPEBrEcQOkVwZKs9s/rQlqjbjcIYm0JY4Qo84YKLgSQkvtmWfBryT22Se50N/onRTzF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-14_03,2025-07-14_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 mlxlogscore=779 impostorscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 phishscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507150036
 
 
+
+On 7/14/2025 8:59 PM, Prashanth K wrote:
+> 
+> 
+> On 7/14/2025 10:17 AM, Krishna Kurapati wrote:
+>> Deprecate usage of extcon functionality from the glue driver. Now
+>> that the glue driver is a flattened implementation, all existing
+>> DTs would eventually move to new bindings. While doing so let them
+>> make use of role-switch/ typec frameworks to provide role data
+>> rather than using extcon.
+>>
+>> On upstream, summary of targets/platforms using extcon is as follows:
+>>
+>> 1. MSM8916 and MSM8939 use Chipidea controller, hence the changes have no
+>> effect on them.
+>>
+>> 2. Of the other extcon users, most of them use "linux,extcon-usb-gpio"
+>> driver which relies on id/vbus gpios to inform role changes. This can be
+>> transitioned to role switch based driver (usb-conn-gpio) while flattening
+>> those platforms to move away from extcon and rely on role
+>> switching.
+>>
+>> 3. The one target that uses dwc3 controller and extcon and is not based
+>> on reading gpios is "arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi".
+>> This platform uses TI chip to provide extcon. If usb on this platform is
+>> being flattneed, then effort should be put in to define a usb-c-connector
+>> device in DT and make use of role switch functionality in TUSB320L driver.
+>>
+>> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+>> ---
+>> Changes in v3:
+>> This change was 4rth patch in [1]. It was suggested to make this as the
+>> first patch of the series. Since this is independent of role switch
+>> patches, sending this out separately. Removed RB Tag of Dmitry since the
+>> patch has been changed.
+>>
+>> [1]: https://lore.kernel.org/all/20250610091357.2983085-1-krishna.kurapati@oss.qualcomm.com/
+>>
+[...]
+> 
+> Shouldn't we cleanup the Kconfig also? Anyways it's not critical, so it
+> can be handled in a follow-up patch if preferred.
+> 
+> config USB_DWC3_QCOM
+> 		tristate "Qualcomm Platform"
+> 		depends on ARCH_QCOM || COMPILE_TEST
+> -		depends on EXTCON || !EXTCON
+> 		depends on OF
+> 
+
+Ignore the above comment, both dwc3-qcom and dwc3-qcom-legacy uses same
+config. Sorry for the spam!
 
