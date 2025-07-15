@@ -1,136 +1,93 @@
-Return-Path: <linux-usb+bounces-25826-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25827-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E63DB0533B
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 09:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D4668B053EB
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 10:00:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D8AB179C2D
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 07:31:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A0995628EB
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 08:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D851A274B29;
-	Tue, 15 Jul 2025 07:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C23D7273D63;
+	Tue, 15 Jul 2025 08:00:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="wsRWK4/h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="laY4PYTe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CBB62D46CE
-	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 07:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260564A00;
+	Tue, 15 Jul 2025 08:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752564597; cv=none; b=Cn3+3LKWXEE3mEJXqfUE2h/yhGEewORf1t1AGn8Ys7jYorRoTZ5WUrDWKwLUruHLweU4H24kpEBzXwsVKQYfdyKPb9urRWay5WXFGuFu9KGv8BV0Ah3ZkcLeF28/3hs6J66VBeIP+uB9ZHMW+QTME584saMVO8ksYGT5LVO3JI8=
+	t=1752566418; cv=none; b=K6dImEAXJR36VR5LNNlDrKNsBFE3ACsfofhQFhiHMJCxqU4LW/jQDOSIOSoaLZ9VnIjWWmu+guGTHKjcQWARBOY/lL/jQVTgH4nC9jlyemdWfpvttnOcVtxM89T00E9X9sSD1zBn5I8GQGtve7+O2n7jNa3BCxmb9LdK94+bPYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752564597; c=relaxed/simple;
-	bh=dKRIX2zCBDl46th6tpWYKQ8ftUYUz3Ovibvr6genGas=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EshUq/as/mfkqN0cLm9Ykwh/qK39g+PXWq+QkEyZ1LFQBzl9aE9OkKlEQRjA5TNnKQNREPl6W29cUr8RVECACwAQBUufntLe6oTqy7kD+igdYfzQNM0pNdjUwSpEzIFcMAZd4tDVnrpynApdDF7dQCG6WqHfDtWwcT+PIKc0S/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=wsRWK4/h; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-455fddfa2c3so28379235e9.2
-        for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 00:29:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1752564594; x=1753169394; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cKX26aKnBjtUzQOYUax+zZK1e97PUjbyxNSQ0DpaCR0=;
-        b=wsRWK4/h1zUsrJY9ho6+o2s0Fvg3gpAO2qmwJMLSCzcnFUVF6r0hOFsFoc7YkApRz8
-         mln6LeDJXhX/tSE6oY7EiyYEBvg28+Kta32lCatnNGCcIgvTrlMYeu09UggzPC9Bs0Xm
-         DmTqvJX+4XOjUpM2YABYqwnbY6r0yvVgHmpNok1+8/C7E9ExXjhlUG+FQ8lM9UuWh3X4
-         9qz1QzWvDVcqlRuqD7Rz+FwFVVt66vnUenDevfU/ezR+N2M2w1zHwv4n9a9YBLjV9xNF
-         Ha8K0qCD80pO3xC3xQXucrwYQMHu9pdN+W7JKj9IVtLKkFRVppAgiv6mTp9owvyColh8
-         Enug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752564594; x=1753169394;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cKX26aKnBjtUzQOYUax+zZK1e97PUjbyxNSQ0DpaCR0=;
-        b=XuFTW0NRXjuNs4bfSWH+z0MNPf/6lDioo/AUqYLXSYgi7K9UONdbV3n8LXeOPFWJHX
-         jJ29elRMCEtXdtHAMIpNFaVW9zJNhj3LNrUBGFR8VCET3n8NhE9i+XZ4lnh7j+pyLZ1z
-         s5S5HgxHHwgkBpQxdhtymY8WXjA3+ocmGWaGrMUxF+DufTbUyZS5gQOOF2KHk/wwiwqt
-         nnYkpeA3QH4h02e7xAqNyOFzERK9BzaKLrPeoe9LPzYaFSvv0kC5w90reoL4Ebzm5IfU
-         6FQWCMjw51LpL60Sk4TjiQZqnroQO0IVoC2LGojFym2qKJdo4kTyCjiSkDyGDeth/SqX
-         Apag==
-X-Forwarded-Encrypted: i=1; AJvYcCVGzeWUHv6kccHA36ty6lS+C6LZ8lMsklLnSk3/kfEvDeYQW9X/h9Fc/jwylUOk5+Sn2XkNwlyPG18=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA8VCHxoZqpaH8gjPa46S6KV+qpJD2TxV93wT2AMk4tmYaRG9b
-	J7GoIeVO3eKzaqqY3aJrXNh+O48R1TdaFf2m68gUfGRK9eIE/9O5lpx2/yEQS6pZFLM=
-X-Gm-Gg: ASbGncuIqbBYUmoEt6G1QM3Zv873NEbAwMhb6G5cD9LqKbd6pAdxjXRwj3OST1/HeWd
-	nYLDEG05pzW4HzFBYRn9+eYpY01BWp3QezUwD570F3TmRKATJMdKju8RZRRfxbuD5B5oovS3KNi
-	0Ut0SIDj2a6PitTmhEgdNAqH4IUapuc3tLzMtplluJ6nJ0/6IohQ4EUKor8x/PDOPPZNt/7bRsn
-	ooA/zIu5nGoIQJvF+4+SPqXXLmum+ta2JRVyorjHyIfEs+AJoHPenXLjdq1TGySiqLXS4KZQMIj
-	qK2po0raiuxbYmAt2tgk/0yUPHA8SBBLV5uGoJ68yiEp1yiWK63bkq+ul2kUZolcVFa7BlIguN6
-	xJINvvAGS9XB4KagIfeog6+2jXTfgLf/z6+XlgOnjnGKk3prNSuMrSvXqiGHYr7zblh4=
-X-Google-Smtp-Source: AGHT+IH/721YD0d2nZC/ZtDRok89aWdqeORozs5yHiHN61ozNTDLlak1hxt58SbOisTPzHt9mdONKg==
-X-Received: by 2002:a05:600c:1f11:b0:454:ccd6:327 with SMTP id 5b1f17b1804b1-456272d233fmr13038635e9.1.1752564593644;
-        Tue, 15 Jul 2025 00:29:53 -0700 (PDT)
-Received: from otso.local (212095005088.public.telering.at. [212.95.5.88])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-455f8fc5a01sm106703395e9.32.2025.07.15.00.29.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jul 2025 00:29:53 -0700 (PDT)
-From: Luca Weiss <luca.weiss@fairphone.com>
-Date: Tue, 15 Jul 2025 09:29:37 +0200
-Subject: [PATCH v3 4/4] phy: qcom: phy-qcom-snps-eusb2: Update init
- sequence per HPG 1.0.2
+	s=arc-20240116; t=1752566418; c=relaxed/simple;
+	bh=RLjur4skiASgwOb2qC0SaNvYhSIRjuqnLKJWZPuBP8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=HDBL0zUXLC/eMIRNvYsb79I6Rs5llxi9VbwdLrAHbZGZDKTR0Cj7hFBBkyIic43AGujYMsiZl36OiYNS2QxyFMLxmlzcunag1NB7CwOiF8owCsVUKuf7bo5rBlsUMJmdgSDxKlIPH97UFOPEHy8CgzrEzrg+lUSW4i8ZQPKMXJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=laY4PYTe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C960C4CEF5;
+	Tue, 15 Jul 2025 08:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752566417;
+	bh=RLjur4skiASgwOb2qC0SaNvYhSIRjuqnLKJWZPuBP8M=;
+	h=Date:From:To:Cc:Subject:From;
+	b=laY4PYTeYnq4MbnqKmLC/9lfXA7zQcJT+PptBGLtNlpp3riRSTgG+rWdRVasAfHjl
+	 KRZzc4RGRor4RWvaG7xrD0lOZF9T6ORv4xremde+wtRhHKpcRouBqAGs3cQdytbwHE
+	 WPXd8Vl0/nDeAN+cmwVvxl8dLOyfPTxVzxYcTj2zMXkUHTDIXW+C2z0NeJmUWj3zpF
+	 o1YGD0+/iUP8V+dcfj0ieeXG9zYAYc8FpiC7SH8ZwOTbm6c/CiE88HMazxTai89Zc6
+	 B3p/oZupA0zIwFHrS7T7NSZHUgb6v9tXLTHgtXDrhziHBL1RAultl5QYURKkNrmOvv
+	 0VvCWlcujmUMA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1ubaaD-000000003i1-1Jx3;
+	Tue, 15 Jul 2025 10:00:13 +0200
+Date: Tue, 15 Jul 2025 10:00:13 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB serial device ids for 6.16-rc7
+Message-ID: <aHYKjbdJJiTLzHSu@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250715-sm7635-eusb-phy-v3-4-6c3224085eb6@fairphone.com>
-References: <20250715-sm7635-eusb-phy-v3-0-6c3224085eb6@fairphone.com>
-In-Reply-To: <20250715-sm7635-eusb-phy-v3-0-6c3224085eb6@fairphone.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
- Abel Vesa <abel.vesa@linaro.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-phy@lists.infradead.org, Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752564584; l=1041;
- i=luca.weiss@fairphone.com; s=20250611; h=from:subject:message-id;
- bh=dKRIX2zCBDl46th6tpWYKQ8ftUYUz3Ovibvr6genGas=;
- b=jg+3EAQfrVGVvex10SEG9/YqZt9ntRuWJlCNcEabPPuV1ZNP043tJEYI08EeUFSbw7GXST/WE
- y1W/CWHqrcmCs+Q8gklChp3SDKzDopYBRGsktodY6QduCnNEF9NHpeO
-X-Developer-Key: i=luca.weiss@fairphone.com; a=ed25519;
- pk=O1aw+AAust5lEmgrNJ1Bs7PTY0fEsJm+mdkjExA69q8=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The eUSB2 HPG version 1.0.2 asks to clear bits [7:1] on all targets.
-Implement that change in the driver to follow.
+The following changes since commit 08f49cdb71f3759368fded4dbc9dde35a404ec2b:
 
-See also https://lore.kernel.org/linux-arm-msm/7d073433-f254-4d75-a68b-d184f900294a@oss.qualcomm.com/
+  USB: serial: option: add Foxconn T99W640 (2025-06-24 10:45:43 +0200)
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- drivers/phy/phy-snps-eusb2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+are available in the Git repository at:
 
-diff --git a/drivers/phy/phy-snps-eusb2.c b/drivers/phy/phy-snps-eusb2.c
-index e232b8b4d29100b8fee9e913e2124788af09f2aa..90b3da79900467dccbbec226db1cc83297ce8834 100644
---- a/drivers/phy/phy-snps-eusb2.c
-+++ b/drivers/phy/phy-snps-eusb2.c
-@@ -392,7 +392,7 @@ static int qcom_snps_eusb2_hsphy_init(struct phy *p)
- 
- 	snps_eusb2_hsphy_write_mask(phy->base, QCOM_USB_PHY_CFG_CTRL_1,
- 				    PHY_CFG_PLL_CPBIAS_CNTRL_MASK,
--				    FIELD_PREP(PHY_CFG_PLL_CPBIAS_CNTRL_MASK, 0x1));
-+				    FIELD_PREP(PHY_CFG_PLL_CPBIAS_CNTRL_MASK, 0x0));
- 
- 	snps_eusb2_hsphy_write_mask(phy->base, QCOM_USB_PHY_CFG_CTRL_4,
- 				    PHY_CFG_PLL_INT_CNTRL_MASK,
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.16-rc7
 
--- 
-2.50.1
+for you to fetch changes up to 252f4ac08cd2f16ecd20e4c5e41ac2a17dd86942:
 
+  USB: serial: option: add Telit Cinterion FE910C04 (ECM) composition (2025-07-10 16:13:51 +0200)
+
+----------------------------------------------------------------
+USB serial device ids for 6.16-rc7
+
+Here are some more device ids for 6.16-rc7.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Fabio Porcedda (1):
+      USB: serial: option: add Telit Cinterion FE910C04 (ECM) composition
+
+Ryan Mann (NDI) (1):
+      USB: serial: ftdi_sio: add support for NDI EMGUIDE GEMINI
+
+ drivers/usb/serial/ftdi_sio.c     | 2 ++
+ drivers/usb/serial/ftdi_sio_ids.h | 3 +++
+ drivers/usb/serial/option.c       | 3 +++
+ 3 files changed, 8 insertions(+)
 
