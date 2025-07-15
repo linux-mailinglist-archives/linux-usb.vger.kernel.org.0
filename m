@@ -1,186 +1,159 @@
-Return-Path: <linux-usb+bounces-25853-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25854-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65859B066FD
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 21:35:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98663B06742
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 21:50:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D0CB1AA25EC
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 19:35:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC3B817F98C
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 19:50:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CF92BEC59;
-	Tue, 15 Jul 2025 19:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="SKxes7U7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1D026FA4E;
+	Tue, 15 Jul 2025 19:50:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05ACB1F0E24;
-	Tue, 15 Jul 2025 19:35:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5864026E6E6
+	for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 19:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752608112; cv=none; b=UNWcL9bOzG0HzKIHQPvfBsjjSANWHub2j4GGydRM5SVP0OF3UOWnkb4hquW2DwdwptW5J/IojEoZWF1394VCwFWscfIRJbRz6m/96kORAMdBkWSYulCgw0EMxlYC41BuaCFDB24aoS0UTgISPbPU3Bh6sdY3hq92fyL72DK1b6k=
+	t=1752609006; cv=none; b=FTUThSpEKy/jmh1tsE6fmtynJkt2vElsczQWbco9XQXSMfQDLIjubc9LxlylsAkUqD5NrNFRcq38b74hIrZwWZC08xnbSiQ2GlXeoVT2ZzDSAoYyy+uat2kTQSk1TpOclKXhm7tmBtS7P2I+GQrgKIhvHQV0H0YG5IwBu8gwvqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752608112; c=relaxed/simple;
-	bh=syjYAypKJMAfH+Su+2T3GSj4ruMImpHxERZO6eZ48rw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pvgewc6SNuCsEGZRW8Q/EdZfcrAWVpx2kObv8+cBdOPsXVQBb9TvPZCnGZds6CAENmhu/+WhfsCt7TzgF6p/Ljx9uH63GSV2rYWUaCHhERzt0pKm81qqQPQu4jYqrusF18k2gBMvPpeI5VxV/s+akIp+ZrpVSCAkekabICidAi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=SKxes7U7; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 0A77A250;
-	Tue, 15 Jul 2025 21:34:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1752608075;
-	bh=syjYAypKJMAfH+Su+2T3GSj4ruMImpHxERZO6eZ48rw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SKxes7U71igt0rK5FIMwl5osjx/RiELHQ6/EeINvEbvKuI3myMX5XyD1toBJm0UGU
-	 Hyex0GNKQC2KPdIwoEte9III59EP4pzLH7zD9FsriquCShb9+lXs+TXbBmsLW2sf1X
-	 jnN8sdH5/5jtGYEDCmD2kBGnsFBrCAYfUTCXivt8=
-Date: Tue, 15 Jul 2025 22:35:05 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 10/12] media: uvcvideo: Add get_* functions to
- uvc_entity
-Message-ID: <20250715193505.GB19299@pendragon.ideasonboard.com>
-References: <20250605-uvc-orientation-v2-0-5710f9d030aa@chromium.org>
- <20250605-uvc-orientation-v2-10-5710f9d030aa@chromium.org>
- <20250629181246.GE6260@pendragon.ideasonboard.com>
- <CANiDSCsu0RT4dcGyBJRutP=9HTe+niUoohxTZE=qJ8O_9ez=+A@mail.gmail.com>
- <20250714142926.GI8243@pendragon.ideasonboard.com>
- <CANiDSCvFe23xmrJ0-qbWWa6+vKGb+QdDFV8VSLkmWdAnfsFtzw@mail.gmail.com>
+	s=arc-20240116; t=1752609006; c=relaxed/simple;
+	bh=+uEuU7AB6TR+kdqzjELhd9Bdue8Bb7TZZ9tF9e8LmEk=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=kK1GLoi43jSuLyj4N5R4XZ6VWp3tWXRFNTNly28wA1w0lH+9Kbn8D1BMvooQ1K4LsM9qDKzNN6HekXUPQPYQjurRrdz8oCURjd2r3TZsupu9/palZAkYBlaz5YV3ujA+jFzXvkhnk+V7PCtAqZSmG4tBbcPhUTmxp06aiiQjFoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-869e9667f58so1311069439f.3
+        for <linux-usb@vger.kernel.org>; Tue, 15 Jul 2025 12:50:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752609004; x=1753213804;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vQ3D5M5JxcaGWNBRgjpMcegMV7DZqvWfaA/890sSWL0=;
+        b=XBs3vB4M6k8uMRsYpDyPia9bmguRkUSittfGaUmiNdfmSIGFdVmMMSUacX3oFBv1oy
+         EJ6M//PUBRByu92i7DAo/GFUMbDVr46T6NkqGdfLIWWsSnIT8UUMr/FbFalXoHjsmP2l
+         hzEsc2T4TvQk+TphDpeuPBGTSQ5W7VEWrZNbOgOisLIj+93OakrJ1oGWqS99/lnGKwll
+         oBG3FtgbX6U8Ptj8DpSI3Sy+OoURlIexkhUzoX6tWzuY9vhedtbTB/TPds1vkYIwRD45
+         w9wdUEMil+kDf8DLiSauswT+EQMD7BR8/RTcik0+06Q0XVMA7mXf0BelT2vPvl83U69F
+         9wJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW+k0hI9ni/fUUnqlBlaHdm3K8dwsC8nx6Fnqq0N5s7YWJJvXPaCmGHj4zYwz4ldZhHP3pce+2ODUU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRNy+fWFUAM3g5bk6zzMRh+MTHLBrNVe9iH6fVXklSknkyzsgK
+	pCPbWyrvf2i7cvCMAZy3Ltyhg3rMz08K7zVihK5ysWLQ4+WLrk84jFlMFRwVFWzAK26YTN5rRqO
+	zqHV0b1f7qJeiOzJ+iQeksGy9ugfnw/QeKsYg0kcldmd5HnyI5+RGE7Ci3yw=
+X-Google-Smtp-Source: AGHT+IEWiMhv4z+y4mOvwDxT8I8T07EbqKF1ZqN7fiGc7selz2EIw9tnvYUA+QJJmi/9xI+xfSvs2LLDvozk+Gmwa6K0RH0fPVX5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANiDSCvFe23xmrJ0-qbWWa6+vKGb+QdDFV8VSLkmWdAnfsFtzw@mail.gmail.com>
+X-Received: by 2002:a05:6602:6a8e:b0:85b:3f06:1fd4 with SMTP id
+ ca18e2360f4ac-879c08aa6d9mr89064939f.9.1752609004301; Tue, 15 Jul 2025
+ 12:50:04 -0700 (PDT)
+Date: Tue, 15 Jul 2025 12:50:04 -0700
+In-Reply-To: <8bec1698-5008-428f-8e71-ec002def0c54@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6876b0ec.a70a0220.693ce.0019.GAE@google.com>
+Subject: Re: [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds in s32ton (2)
+From: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jul 14, 2025 at 05:46:40PM +0200, Ricardo Ribalda wrote:
-> On Mon, 14 Jul 2025 at 16:30, Laurent Pinchart wrote:
-> > On Tue, Jul 01, 2025 at 01:13:10PM +0200, Ricardo Ribalda wrote:
-> > > On Sun, 29 Jun 2025 at 20:13, Laurent Pinchart wrote:
-> > > > On Thu, Jun 05, 2025 at 05:53:03PM +0000, Ricardo Ribalda wrote:
-> > > > > Virtual entities need to provide more values than get_cur and get_cur
-> > > >
-> > > > I think you meant "get_info and get_cur".
-> > > >
-> > > > > for their controls. Add support for get_def, get_min, get_max and
-> > > > > get_res.
-> > > >
-> > > > Do they ? The UVC specification defines controls that don't list
-> > > > GET_DEF, GET_MIN, GET_MAX and GET_RES as mandatory requests. Can't we do
-> > > > the same for the software controls ? This patch is meant to support the
-> > > > UVC_SWENTITY_ORIENTATION and UVC_SWENTITY_ROTATION control in the next
-> > > > patch, and those are read-only controls. Aren't GET_INFO and GET_CUR
-> > > > enough ?
-> > >
-> > > V4L2_CID_CAMERA_ROTATION has the type UVC_CTRL_DATA_TYPE_UNSIGNED,
-> > > that time requires get_min and get_max.
-> >
-> > Where does that requirement come from ? Is it because how the
-> > corresponding V4L2 type (V4L2_CTRL_TYPE_INTEGER) is handled in
-> > uvc_ctrl_clamp() ? uvc_ctrl_clamp() is only called when setting a
-> > control, from uvc_ctrl_set(), and V4L2_CID_CAMERA_ROTATION should be
-> > read-only.
-> 
-> It its for VIDIOC_QUERY_EXT_CTRL
-> 
-> uvc_query_v4l2_ctrl -> __uvc_query_v4l2_ctrl -> __uvc_queryctrl_boundaries
-> 
-> We need to list the min, max, def and step for every control. They are
-> fetched with uvc_ctrl_populate_cache()
+Hello,
 
-Ah, I see, thanks.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+UBSAN: shift-out-of-bounds in s32ton
 
-For GET_RES, I think we can leave it unimplemented.
-__uvc_queryctrl_boundaries() will set v4l2_ctrl->step = 0 which seems to
-be the right behaviour for a read-only control whose value never
-changes.
+microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
+microsoft 0003:045E:07DA.0001: unsupported Resolution Multiplier 0
+hid: s32ton: n 0 val 0 size 0x0
+------------[ cut here ]------------
+UBSAN: shift-out-of-bounds in drivers/hid/hid-core.c:69:16
+shift exponent 4294967295 is too large for 32-bit type '__s32' (aka 'int')
+CPU: 0 UID: 0 PID: 5987 Comm: kworker/0:4 Not tainted 6.15.0-syzkaller-11339-gc2ca42f190b6-dirty #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ ubsan_epilogue+0xa/0x40 lib/ubsan.c:233
+ __ubsan_handle_shift_out_of_bounds+0x386/0x410 lib/ubsan.c:494
+ s32ton+0xde/0x140 drivers/hid/hid-core.c:69
+ hid_output_field drivers/hid/hid-core.c:1845 [inline]
+ hid_output_report+0x3a2/0x5c0 drivers/hid/hid-core.c:1877
+ __hid_request+0x14a/0x420 drivers/hid/hid-core.c:2000
+ hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
+ hidinput_connect+0x218a/0x3030 drivers/hid/hid-input.c:2327
+ hid_connect+0x499/0x1980 drivers/hid/hid-core.c:2251
+ hid_hw_start+0xa8/0x120 drivers/hid/hid-core.c:2366
+ ms_probe+0x180/0x430 drivers/hid/hid-microsoft.c:391
+ __hid_device_probe drivers/hid/hid-core.c:2736 [inline]
+ hid_device_probe+0x3a0/0x710 drivers/hid/hid-core.c:2773
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26a/0x9a0 drivers/base/dd.c:657
+ __driver_probe_device+0x18c/0x2f0 drivers/base/dd.c:799
+ driver_probe_device+0x4f/0x430 drivers/base/dd.c:829
+ __device_attach_driver+0x2ce/0x530 drivers/base/dd.c:957
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:462
+ __device_attach+0x2b8/0x400 drivers/base/dd.c:1029
+ bus_probe_device+0x185/0x260 drivers/base/bus.c:537
+ device_add+0x7b6/0xb50 drivers/base/core.c:3692
+ hid_add_device+0x398/0x540 drivers/hid/hid-core.c:2919
+ usbhid_probe+0xe13/0x12a0 drivers/hid/usbhid/hid-core.c:1435
+ usb_probe_interface+0x644/0xbc0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26a/0x9a0 drivers/base/dd.c:657
+ __driver_probe_device+0x18c/0x2f0 drivers/base/dd.c:799
+ driver_probe_device+0x4f/0x430 drivers/base/dd.c:829
+ __device_attach_driver+0x2ce/0x530 drivers/base/dd.c:957
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:462
+ __device_attach+0x2b8/0x400 drivers/base/dd.c:1029
+ bus_probe_device+0x185/0x260 drivers/base/bus.c:537
+ device_add+0x7b6/0xb50 drivers/base/core.c:3692
+ usb_set_configuration+0x1a87/0x20e0 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0x8d/0x150 drivers/usb/core/generic.c:250
+ usb_probe_device+0x1c4/0x390 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26a/0x9a0 drivers/base/dd.c:657
+ __driver_probe_device+0x18c/0x2f0 drivers/base/dd.c:799
+ driver_probe_device+0x4f/0x430 drivers/base/dd.c:829
+ __device_attach_driver+0x2ce/0x530 drivers/base/dd.c:957
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:462
+ __device_attach+0x2b8/0x400 drivers/base/dd.c:1029
+ bus_probe_device+0x185/0x260 drivers/base/bus.c:537
+ device_add+0x7b6/0xb50 drivers/base/core.c:3692
+ usb_new_device+0xa39/0x16c0 drivers/usb/core/hub.c:2663
+ hub_port_connect drivers/usb/core/hub.c:5531 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
+ port_event drivers/usb/core/hub.c:5831 [inline]
+ hub_event+0x2941/0x4a00 drivers/usb/core/hub.c:5913
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xade/0x17b0 kernel/workqueue.c:3321
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3402
+ kthread+0x70e/0x8a0 kernel/kthread.c:464
+ ret_from_fork+0x3f9/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+---[ end trace ]---
 
-As for the minimum and maximum, they are currently set to 0 if the
-corresponding operations are not supported. I wonder if we should set
-them to the current value instead for read-only controls (as in controls
-whose flags report support for GET_CUR only)..
 
-> > > We can create a new type UVC_CTRL_DATA_TYPE_UNSIGNED_READ_ONLY that
-> > > fakes min, max and res, but I think that it is cleaner this approach.
-> > >
-> > > > > This is a preparation patch.
-> > > > >
-> > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > > ---
-> > > > >  drivers/media/usb/uvc/uvc_ctrl.c | 12 ++++++++++++
-> > > > >  drivers/media/usb/uvc/uvcvideo.h |  8 ++++++++
-> > > > >  2 files changed, 20 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> > > > > index 21ec7b978bc7aca21db7cb8fd5d135d876f3330c..59be62ae24a4219fa9d7aacf2ae7382c95362178 100644
-> > > > > --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> > > > > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> > > > > @@ -596,6 +596,18 @@ static int uvc_ctrl_query_entity(struct uvc_device *dev,
-> > > > >       if (query == UVC_GET_CUR && ctrl->entity->get_cur)
-> > > > >               return ctrl->entity->get_cur(dev, ctrl->entity,
-> > > > >                                            ctrl->info.selector, data, len);
-> > > > > +     if (query == UVC_GET_DEF && ctrl->entity->get_def)
-> > > > > +             return ctrl->entity->get_def(dev, ctrl->entity,
-> > > > > +                                          ctrl->info.selector, data, len);
-> > > > > +     if (query == UVC_GET_MIN && ctrl->entity->get_min)
-> > > > > +             return ctrl->entity->get_min(dev, ctrl->entity,
-> > > > > +                                          ctrl->info.selector, data, len);
-> > > > > +     if (query == UVC_GET_MAX && ctrl->entity->get_max)
-> > > > > +             return ctrl->entity->get_max(dev, ctrl->entity,
-> > > > > +                                          ctrl->info.selector, data, len);
-> > > > > +     if (query == UVC_GET_RES && ctrl->entity->get_res)
-> > > > > +             return ctrl->entity->get_res(dev, ctrl->entity,
-> > > > > +                                          ctrl->info.selector, data, len);
-> > > > >       if (query == UVC_GET_INFO && ctrl->entity->get_info)
-> > > > >               return ctrl->entity->get_info(dev, ctrl->entity,
-> > > > >                                             ctrl->info.selector, data);
-> > > > > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > > > > index a931750bdea25b9062dcc7644bf5f2ed89c1cb4c..d6da8ed3ad4cf3377df49923e051fe04d83d2e38 100644
-> > > > > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > > > > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > > > > @@ -261,6 +261,14 @@ struct uvc_entity {
-> > > > >                       u8 cs, u8 *caps);
-> > > > >       int (*get_cur)(struct uvc_device *dev, struct uvc_entity *entity,
-> > > > >                      u8 cs, void *data, u16 size);
-> > > > > +     int (*get_def)(struct uvc_device *dev, struct uvc_entity *entity,
-> > > > > +                    u8 cs, void *data, u16 size);
-> > > > > +     int (*get_min)(struct uvc_device *dev, struct uvc_entity *entity,
-> > > > > +                    u8 cs, void *data, u16 size);
-> > > > > +     int (*get_max)(struct uvc_device *dev, struct uvc_entity *entity,
-> > > > > +                    u8 cs, void *data, u16 size);
-> > > > > +     int (*get_res)(struct uvc_device *dev, struct uvc_entity *entity,
-> > > > > +                    u8 cs, void *data, u16 size);
-> > > > >
-> > > > >       unsigned int ncontrols;
-> > > > >       struct uvc_control *controls;
+Tested on:
 
--- 
-Regards,
+commit:         c2ca42f1 HID: core: do not bypass hid_hw_raw_request
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=152e098c580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ec692dfd475747ff
+dashboard link: https://syzkaller.appspot.com/bug?extid=b63d677d63bcac06cf90
+compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13b6098c580000
 
-Laurent Pinchart
 
