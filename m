@@ -1,89 +1,93 @@
-Return-Path: <linux-usb+bounces-25830-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25831-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01EDCB054FE
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 10:34:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6564B05548
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 10:48:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C9313B2C4B
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 08:33:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1643218922F4
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jul 2025 08:48:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2C028A73E;
-	Tue, 15 Jul 2025 08:32:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A19825A2C0;
+	Tue, 15 Jul 2025 08:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BrG9tgjD"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Ef+jRMVR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E0D2741D4;
-	Tue, 15 Jul 2025 08:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF54D2FB;
+	Tue, 15 Jul 2025 08:48:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752568351; cv=none; b=qSSlDaSSFNGNnz6lPmmFj1HtzmUmAt4LP/DRvVBkoO8AV44Fb/nDgd9/3SSilcVgqaSbl/Hi30A9xvBe+kJ4keZae1ULQVt1JLkCKUuxw7wU/rWzkGh3+qpLuxpSghc/B/eSopg1fiBjMU+gG0dLxR5YUOCCzgdIYG45tlY/wvc=
+	t=1752569286; cv=none; b=tUB9mELlUgLHLJfiIBldeyqQsVnCvPt2B8H74L3Cx5v+CjyTmq4RHNpK99jLneJm7qeQBl+voD0HXKxbkLgW/fIajP4k2oWsbFlavcYpN1zxSHgZ163PXfIYuWyzDgdvClO7tHE7Ad9zR2qRDnkJ67K9e0CFknL3q6yq4ULczrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752568351; c=relaxed/simple;
-	bh=hO/kvJB40HVuEpcvrVIJ3+ckdcVlzTneCpqjB8KXFZE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nzPhhSLcUNyWdiv90Uxtqx6BuktfiZGHJJvy06oRIYEoMB3pOWP4aDWVeJa5RuEdtOWUs6HcrStWCse9k50GEDLDULqRYb98Fhco64ShtjcQcqOWqXya4R7V226FRckufeWyL7HlDIWXFOZpLZkUec588FnIYDBrsoeyY5c7v3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BrG9tgjD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B299C4CEE3;
-	Tue, 15 Jul 2025 08:32:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752568350;
-	bh=hO/kvJB40HVuEpcvrVIJ3+ckdcVlzTneCpqjB8KXFZE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BrG9tgjDB9kme4m4fV/4V2wAUXaQolUMfekjKfUb1uQ2hPhvSj6BEbsCf/ANrDLFs
-	 bwtr6x8/UAOqonFBPSI/+fT5SOPcGxXDBINYXn//3pKmy4bC6hGEc8OiWO0OODB7n9
-	 D3lJ04wydX1jgR3SsdDOKpFoLLwhlMaVwpolDKFw=
-Date: Tue, 15 Jul 2025 10:32:28 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: jackysliu <1972843537@qq.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1752569286; c=relaxed/simple;
+	bh=Sxhj5g8gVZGC1952hSXVSZSvox7q3kGrjDdEklg0tJA=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=SiAokxBFvNxdi1xnABBBNUnBz7xYpnR5+cwUHCMptK2drL8koPVZp6fx3rZ13WhGSc30+Q6NCThTgaDNskha7haiCA3BV39lXuF62nmEHAIAuhJLYyTIE/1WXRYSyndU96AhDoNR+Sx7ItOvJ7kcS/ogkvV7uH7FLxMOjT9dIN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Ef+jRMVR; arc=none smtp.client-ip=43.163.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1752569262; bh=TAWwiMg/tBAq8p0IBBI0q3j7v7MD3F9Kcpzix5eTnY8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Ef+jRMVRwm60WqnFXvApDGruIlqOLc+cdHi8VMYHkTEqCheVIfr6OIH0GmkXeWFeo
+	 89ICvihHXjJplumn/zGgV3lHAApOP5b7k191eQpLoeWIG2ILcIK9c+XVjGteF42WTl
+	 2z0rTJCKlrossMvCorPLVKrh+sqGmyCI9s5z63Mw=
+Received: from VM-222-126-tencentos.localdomain ([14.22.11.163])
+	by newxmesmtplogicsvrszb16-1.qq.com (NewEsmtp) with SMTP
+	id BE9AB4AB; Tue, 15 Jul 2025 16:47:41 +0800
+X-QQ-mid: xmsmtpt1752569261tcppgu9pj
+Message-ID: <tencent_15EB27E9BF5F35D7A364A591E102DCC6F90A@qq.com>
+X-QQ-XMAILINFO: NCJFlKxSknUZs4JoxYmIyZcNwZslULh/SUHFSNi9TP+3saUIm7a0iwhXs8/NwL
+	 1W8Y3Er26cC1JPj417k0wgMcmGkW7scc6WIdymYoXK+euP+nitQDTZ2nBx2B6K79VgncAnIHoAf4
+	 3Mau4NgDC90Y5s+x07ChYAi5CoROn+wpKJttuzUYjqlece0nTMCauV4ObV72YByMZ5exF+SC+Unr
+	 AvBpPYb5ksPNnvk83vv+emhZ6FyU5yknlYIT6cZJcXr89wGUjYiUHskyp/4HKXt0MOwQCQyHSIZg
+	 WwUHB6NRg58nsN7joUjOJ3jTaUHz6rerIWJckfGACgNbgaGLXsjr/OBMy87lML2WmYtZq4j96m4I
+	 GEo5TC7vFPt4mpR3aeOlNZypjZ32dnZ9iAMXAAJumhB359XpKUY6N9Ag5WgPZzZ+vrvlIrzA9vrD
+	 srHtj12mccoFhDDX++cvbgaDY8gWJQ34gngBN67mqaj5j6Mx4zWudcSRWmCq211QdXplF+XIdL26
+	 U9kSYj6f4aSe8wWSntB3sPb2/3PTUvXNXcZwqfeqxONnmslZKiiZRJaceK9GLLJ2JxY9NuQzg11O
+	 Xq33BlqSmFHGW62QAeXAiythUYoAdUfGwji5huCcmy3mbBgRwHn7ok4VtJJd6ENJ5nfne5zqqD5Y
+	 QHjhfsNs/xB1Wo4AlMi2y4p2NeuRd0wRHW7/OELYGPnfxqaIvV72NsTjSbXxHVz3kyapQLdLkc2G
+	 lOmTLD7KDM75RPk8uVRm5+ggX9kerpUtQj99V8i4Y/tjrOfNoZnSBLnP309ugWOzCtXPmygh10Tg
+	 Uxoi3N/pnsL0R8gQw1q30ry1/ml9CA4ir1uA3kKeA9wBvCmI74flcwYpvIoTzk7FbCwlC0zbdigr
+	 tav44xdKBvXCo8hezEhuCmd1tNzARk2i5RhvIWVjVktqxjGcOoh2bOtWFkv4CXADYsvQuVdJhN93
+	 ZjMFd4r+2MIsuWkH7/K+LfMpdSOC4yyFX3lTJvvHYYPTPdwExYpreUoE+4SBVso/LE+OD7jmZ8VJ
+	 05HPoriUMUrl2OguoXzonsrm0p3rWLm/fR9w25N4I4OL+4m0u7
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+From: jackysliu <1972843537@qq.com>
+To: gregkh@linuxfoundation.org
+Cc: 1972843537@qq.com,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
 	viro@zeniv.linux.org.uk
 Subject: Re: [PATCH v2] usb: gadget: functioni: Fix a oob problem in rndis
-Message-ID: <2025071539-tattoo-knickers-a775@gregkh>
-References: <2025071116-landline-antelope-5c9f@gregkh>
- <tencent_AC052534ED0C97ED96CDBF2269E71DAE5905@qq.com>
+Date: Tue, 15 Jul 2025 16:47:36 +0800
+X-OQ-MSGID: <20250715084736.3157098-1-1972843537@qq.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <2025071539-tattoo-knickers-a775@gregkh>
+References: <2025071539-tattoo-knickers-a775@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_AC052534ED0C97ED96CDBF2269E71DAE5905@qq.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 15, 2025 at 04:20:09PM +0800, jackysliu wrote:
-> On Fri, Jul 11 2025 08:51:30 +0200, greg k-h wrote:
-> 
-> >Yes, and then look to see what buf_len (not buflen) in
-> >gen_ndis_set_resp() is used for.  I'll wait... :)
-> Oh,my bad.It seem that buf_len will only be used for some debugging code..
-> 
-> >What tool generated this static analysis?  You always have to mention
-> >that as per our development rules.
-> The vulnerability is found by  is found by Wukong-Agent, a code security AI agent,
->  through static code analysis.But It seems that this is a false positive..
+On Tue, Jul 15 2025 10:32:28 +0200, greg k-h wrote:
 
-As per our documentation, you have to always disclose what tools you use
-to find stuff.  Please always do that, otherwise your reports are going
-to be ignored.
+>As per our documentation, you have to always disclose what tools you use
+>to find stuff.  Please always do that, otherwise your reports are going
+>to be ignored.
+>
+>And then also properly TEST your change to verify that it works before
+>submitting it, that didn't happen here.
+OK , I'll mind that later.Thanks for your kind reply.
 
-And then also properly TEST your change to verify that it works before
-submitting it, that didn't happen here.
+Siyang Liu
 
-> >And what qemu setup did you use to test this?  That would be helpful to
-> >know so that I can verify it on my end.
-> 
-> I've add some web-usb device to test this model.But seems that I went into a wrong way.
-
-What is a "web-usb" device?  How does rndis work with that?
-
-thanks,
-
-greg k-h
 
