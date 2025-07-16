@@ -1,159 +1,274 @@
-Return-Path: <linux-usb+bounces-25887-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25888-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 100B0B07B49
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 18:35:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1198DB07C03
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 19:29:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60F5F584F7F
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 16:35:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD9607B70A6
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 17:27:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85FB42F5331;
-	Wed, 16 Jul 2025 16:35:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD3E2F5C54;
+	Wed, 16 Jul 2025 17:29:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mOwfSEmE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dI/JKJXC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092F2433AC;
-	Wed, 16 Jul 2025 16:35:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA201B394F;
+	Wed, 16 Jul 2025 17:29:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752683729; cv=none; b=USTbhUsh8buy8y05nnrbaWu+6dW1NGuWwnKgC8DbuZFMRAn64UmcRanKD29AhqFyOyVt/HqskQYs3nm2PhaFWZjgPPffSeAoYITt3ygvoGppOWw/qfHYnhkcNsGKXK+7JfobXOIE3oY+IbA5/kXuHQWlIjefu61dpY9OapbUEXk=
+	t=1752686949; cv=none; b=tsZmQa+amtscHp+2I1qlzZdbfoZ/duwgG5jf123M8pBtAhck19vQY2596OdGgtxhJYrl6jBB3HKVBSEtr/fXPpfU3CqELCbqit1aNEt81yYExGJfbatCGFtjJ1fXvj3yzNzQFHs/pnt/TUwmI50x9SseiZ8UbAqFrm73KsPa8iE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752683729; c=relaxed/simple;
-	bh=wKYXNfNFlYSsEzFHoBVVKENlvhX4Yr8nQs3M3eAprjg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rkh6ZrTy1PL3tA89xpvfUyKUZb+N1AkIPRekDnUhyjo66RlsXWuEzUVXUtzVDhb2GK4abytOsBX2jw5lJCykcaO1KxTMRkndbICxcJ/HzEVepoIt8J7jAJI4YkDIzjxCD4m+0HRjw7RZr3vmekUKP4qZ0O3ei/kAnCW3FkniKQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mOwfSEmE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF49C4CEE7;
-	Wed, 16 Jul 2025 16:35:26 +0000 (UTC)
+	s=arc-20240116; t=1752686949; c=relaxed/simple;
+	bh=KHDb6zLjjtYFaNSljcLcDdVYJjrz/+7K9CdTKJIJZCs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=khoWAioU2vW3UFxyf4fVtNTsVcpHVofu4FloCHpEISn9yZ5x8q7I9ptJeY9x8ls/x3jyS3gfX95FI8QaJwlEDpyaNeVfkqsyl0GlROwsDMhvBGPQlV3hlVEm5QnchaGsYy8ChEIGIgTbHG0gld3HDPTCUuJBZwZJCuGGZaVIgF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dI/JKJXC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45ED8C4CEF0;
+	Wed, 16 Jul 2025 17:29:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752683728;
-	bh=wKYXNfNFlYSsEzFHoBVVKENlvhX4Yr8nQs3M3eAprjg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mOwfSEmE+QyO0CawO9Xlv9HhI5z8QB+FytojLywkbojaVWxY3hH7QennW72W/XhAd
-	 MZbLUZ6IAU1rtjGpDCoMoTo4vSyfXS1L3FQi6brWvxHyumT6WHbQrmxq4MjLnEzfOD
-	 GLYKpfk92HRj0Nnn2WR4OzLoaliBWDfOgcyOgPThbt72LtK3X4/h3VqGBq4gflKQgR
-	 p9hGF0/gYc1m+Kmc+0erN00ihsrNFJp6Wk994whIPm2KIF9UngEXgp3cdXpYr3tj4D
-	 1KObhZS3BPOP3QVMgQuY/wS+aHAPfaFjb/CP3coavsas5OGaxzECfjGrcnu0LNSsil
-	 8XdwMqwPVPgKA==
-Message-ID: <f8502b45-967d-4377-88a3-bbfb3decad95@kernel.org>
-Date: Wed, 16 Jul 2025 18:35:24 +0200
+	s=k20201202; t=1752686948;
+	bh=KHDb6zLjjtYFaNSljcLcDdVYJjrz/+7K9CdTKJIJZCs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dI/JKJXCmO+Pyr3Elw7DSpoQlcTCYMnr0rc3yH6THY6UyLB+XrdW65rTqw7eu20Go
+	 gKlTqw8J7X19DhS/mm7N1aplLiXHN9SWDAKsV+PelUtfIf9Og1ixB/m5wXLZ/Tozpz
+	 Tyn9m0vrIIZbvBDAFtUBz3pOYxIMSFMzkiBHA4l7NVNl3H6TDvheKKDR4cuZiwOios
+	 /2E5LqD6DUaON2CDVPaArWh8GdFp63FYkFVEn1u5nx7xLsosjbnicB3BdpWWWvg8/E
+	 7yqOxc/RGbg+Q7t1U3CgqVzaffddzzFVDIbUq1PLdCEoDl4MLMfLgGB1LM/rJLcEzw
+	 rvTfSIANukWug==
+Date: Wed, 16 Jul 2025 11:29:03 -0600
+From: Nathan Chancellor <nathan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: accessrunner-general@lists.sourceforge.net, linux-usb@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: atm: cxacru: Zero initialize bp in
+ cxacru_heavy_init()
+Message-ID: <20250716172903.GA4010969@ax162>
+References: <20250715-usb-cxacru-fix-clang-21-uninit-warning-v1-1-de6c652c3079@kernel.org>
+ <2025071618-jester-outing-7fed@gregkh>
+ <20250716052450.GA1892301@ax162>
+ <2025071616-flap-mundane-7627@gregkh>
+ <20250716154304.GA2740255@ax162>
+ <2025071648-punch-carrousel-2046@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] USB: Add a function to obtain USB version
- independent maximum bpi value
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
- gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
- Thinh.Nguyen@synopsys.com, Amardeep Rai <amardeep.rai@intel.com>,
- Kannappan R <r.kannappan@intel.com>,
- Mathias Nyman <mathias.nyman@linux.intel.com>
-References: <20250711083413.1552423-1-sakari.ailus@linux.intel.com>
- <20250711083413.1552423-4-sakari.ailus@linux.intel.com>
- <4ae4a0cf-8b63-4999-941d-011f00cdb5fb@kernel.org>
- <aHYNpTKsnzBwhl3w@kekkonen.localdomain>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <aHYNpTKsnzBwhl3w@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2025071648-punch-carrousel-2046@gregkh>
 
-Hi Sakari,
+On Wed, Jul 16, 2025 at 06:08:47PM +0200, Greg Kroah-Hartman wrote:
+> I have no idea what Android uses for their compiler.  Usually when they
+> run into issues like this, for their 'allmodconfig' builds, they just
+> apply a "CONFIG_BROKEN" patch to disable the old/unneeded driver
+> entirely.
 
-On 15-Jul-25 10:13 AM, Sakari Ailus wrote:
-> Hi Hans,
+Well I can say for certain that they do use clang but if that's their
+preferred solution to situations such as this, so be it.
+
+> I'm really loath to take it, sorry.  I'd prefer that if the compiler
+> can't figure it out, we should rewrite it to make it more "obvious" as
+> to what is going on here so that both people, and the compiler, can
+> understand it easier.
 > 
-> Thank you for the review.
-> 
-> On Fri, Jul 11, 2025 at 03:44:21PM +0200, Hans de Goede wrote:
->> Hi Sarari,
->>
->> On 11-Jul-25 10:34 AM, Sakari Ailus wrote:
->>> From: "Rai, Amardeep" <amardeep.rai@intel.com>
->>>
->>> Add usb_endpoint_max_isoc_bpi() to obtain maximum bytes per interval for
->>> isochronous endpoints in a USB version independent way.
->>
->> Nice, thank you for adding a generic helper for this.
->>
->>> Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
->>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>> Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->>> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->>> ---
->>>  include/linux/usb.h | 22 ++++++++++++++++++++++
->>>  1 file changed, 22 insertions(+)
->>>
->>> diff --git a/include/linux/usb.h b/include/linux/usb.h
->>> index 68166718ab30..bd70bd5ca82d 100644
->>> --- a/include/linux/usb.h
->>> +++ b/include/linux/usb.h
->>> @@ -2038,6 +2038,28 @@ static inline int usb_translate_errors(int error_code)
->>>  	}
->>>  }
->>>  
->>> +static inline u32 usb_endpoint_max_isoc_bpi(struct usb_device *dev,
->>> +					    const struct usb_host_endpoint *ep)
->>> +{
->>> +	if (usb_endpoint_type(&ep->desc) != USB_ENDPOINT_XFER_ISOC)
->>> +		return 0;
->>> +
->>> +	switch (dev->speed) {
->>> +	case USB_SPEED_SUPER_PLUS:
->>> +		if (USB_SS_SSP_ISOC_COMP(ep->ss_ep_comp.bmAttributes))
->>> +			return le32_to_cpu(ep->ssp_isoc_ep_comp.dwBytesPerInterval);
->>> +		fallthrough;
->>> +	case USB_SPEED_SUPER:
->>> +		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
->>> +	case USB_SPEED_HIGH:
->>> +		if (!usb_endpoint_maxp(&ep->desc) && le16_to_cpu(dev->descriptor.bcdUSB) == 0x220)
->>> +			return le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval);
->>
->> Shouldn't there be a check here that ep->eusb2_isoc_ep_comp is filled?
->>
->> Like how the USB_SPEED_SUPER_PLU code above checks
->> USB_SS_SSP_ISOC_COMP(ep->ss_ep_comp.bmAttributes)?
->>
->> I know you check the bcdUSB, but in my experience that field sometimes
->> contains made up numbers, so I was wondering if there is an extra check
->> we can do here ?
-> 
-> In the case of eUSB2, there's no such flag as for the SuperSpeedPlus
-> Isochronous Endpoint Companion. The eUSB2 Isochronous Endpoint Companion
-> Descriptor is simply expected to be present on eUSB2 (bcdUSB check)
-> isochronous IN endpoints that support more than 3KB per microframe.
-> 
-> Also what the USB_SS_SSP_ISOC_COMP() macro returns actually dependens on
-> the device telling there's such a descriptor but it's still different from
-> the device actually providing one. But what would you do if the device
-> indicates it provides no SSP_ISOC_COMP descriptor but still does provide
-> one?
-> 
-> How about adding a flag (or maybe a bit field?) to tell which endpoint
-> descriptors have been actually filled in struct usb_host_endpoint? I might
-> do that as a separate patch on top...
+> Just setting the variable to NULL does neither of those things, except
+> to shut up a false-positive, not making it more obvious to the compiler
+> as to what really is going on.
 
-Adding a bit-field with which endpoint descriptors have actually
-been filled sounds like a good idea.
+Alright. We could just manually inline cxacru_upload_firmware() into
+cxacru_heavy_init() since that is the only place where it is called so
+that clang can see via the control flow graph that bp is only
+initialized and used under the same condition. This resolves the warning
+for me as well.
 
-I also agree with doing that as a follow-up patch and moving forward with
-this patch as is, so:
-
-Reviewed-by: Hans de Goede <hansg@kernel.org>
-
-Regards,
-
-Hans
-
-
+diff --git a/drivers/usb/atm/cxacru.c b/drivers/usb/atm/cxacru.c
+index a12ab90b3db7..68a8e9de8b4f 100644
+--- a/drivers/usb/atm/cxacru.c
++++ b/drivers/usb/atm/cxacru.c
+@@ -980,25 +980,60 @@ static int cxacru_fw(struct usb_device *usb_dev, enum cxacru_fw_request fw,
+ 	return ret;
+ }
+ 
+-static void cxacru_upload_firmware(struct cxacru_data *instance,
+-				   const struct firmware *fw,
+-				   const struct firmware *bp)
++
++static int cxacru_find_firmware(struct cxacru_data *instance,
++				char *phase, const struct firmware **fw_p)
+ {
+-	int ret;
++	struct usbatm_data *usbatm = instance->usbatm;
++	struct device *dev = &usbatm->usb_intf->dev;
++	char buf[16];
++
++	sprintf(buf, "cxacru-%s.bin", phase);
++	usb_dbg(usbatm, "cxacru_find_firmware: looking for %s\n", buf);
++
++	if (request_firmware(fw_p, buf, dev)) {
++		usb_dbg(usbatm, "no stage %s firmware found\n", phase);
++		return -ENOENT;
++	}
++
++	usb_info(usbatm, "found firmware %s\n", buf);
++
++	return 0;
++}
++
++static int cxacru_heavy_init(struct usbatm_data *usbatm_instance,
++			     struct usb_interface *usb_intf)
++{
++	const struct firmware *fw, *bp;
++	struct cxacru_data *instance = usbatm_instance->driver_data;
+ 	struct usbatm_data *usbatm = instance->usbatm;
+ 	struct usb_device *usb_dev = usbatm->usb_dev;
+ 	__le16 signature[] = { usb_dev->descriptor.idVendor,
+ 			       usb_dev->descriptor.idProduct };
+ 	__le32 val;
++	int ret;
+ 
+-	usb_dbg(usbatm, "%s\n", __func__);
++	ret = cxacru_find_firmware(instance, "fw", &fw);
++	if (ret) {
++		usb_warn(usbatm_instance, "firmware (cxacru-fw.bin) unavailable (system misconfigured?)\n");
++		return ret;
++	}
++
++	if (instance->modem_type->boot_rom_patch) {
++		ret = cxacru_find_firmware(instance, "bp", &bp);
++		if (ret) {
++			usb_warn(usbatm_instance, "boot ROM patch (cxacru-bp.bin) unavailable (system misconfigured?)\n");
++			release_firmware(fw);
++			return ret;
++		}
++	}
+ 
+ 	/* FirmwarePllFClkValue */
+ 	val = cpu_to_le32(instance->modem_type->pll_f_clk);
+ 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, PLLFCLK_ADDR, (u8 *) &val, 4);
+ 	if (ret) {
+ 		usb_err(usbatm, "FirmwarePllFClkValue failed: %d\n", ret);
+-		return;
++		goto done;
+ 	}
+ 
+ 	/* FirmwarePllBClkValue */
+@@ -1006,7 +1041,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
+ 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, PLLBCLK_ADDR, (u8 *) &val, 4);
+ 	if (ret) {
+ 		usb_err(usbatm, "FirmwarePllBClkValue failed: %d\n", ret);
+-		return;
++		goto done;
+ 	}
+ 
+ 	/* Enable SDRAM */
+@@ -1014,7 +1049,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
+ 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, SDRAMEN_ADDR, (u8 *) &val, 4);
+ 	if (ret) {
+ 		usb_err(usbatm, "Enable SDRAM failed: %d\n", ret);
+-		return;
++		goto done;
+ 	}
+ 
+ 	/* Firmware */
+@@ -1022,7 +1057,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
+ 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, FW_ADDR, fw->data, fw->size);
+ 	if (ret) {
+ 		usb_err(usbatm, "Firmware upload failed: %d\n", ret);
+-		return;
++		goto done;
+ 	}
+ 
+ 	/* Boot ROM patch */
+@@ -1031,7 +1066,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
+ 		ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, BR_ADDR, bp->data, bp->size);
+ 		if (ret) {
+ 			usb_err(usbatm, "Boot ROM patching failed: %d\n", ret);
+-			return;
++			goto done;
+ 		}
+ 	}
+ 
+@@ -1039,7 +1074,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
+ 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, SIG_ADDR, (u8 *) signature, 4);
+ 	if (ret) {
+ 		usb_err(usbatm, "Signature storing failed: %d\n", ret);
+-		return;
++		goto done;
+ 	}
+ 
+ 	usb_info(usbatm, "starting device\n");
+@@ -1051,7 +1086,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
+ 	}
+ 	if (ret) {
+ 		usb_err(usbatm, "Passing control to firmware failed: %d\n", ret);
+-		return;
++		goto done;
+ 	}
+ 
+ 	/* Delay to allow firmware to start up. */
+@@ -1065,53 +1100,10 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
+ 	ret = cxacru_cm(instance, CM_REQUEST_CARD_GET_STATUS, NULL, 0, NULL, 0);
+ 	if (ret < 0) {
+ 		usb_err(usbatm, "modem failed to initialize: %d\n", ret);
+-		return;
+-	}
+-}
+-
+-static int cxacru_find_firmware(struct cxacru_data *instance,
+-				char *phase, const struct firmware **fw_p)
+-{
+-	struct usbatm_data *usbatm = instance->usbatm;
+-	struct device *dev = &usbatm->usb_intf->dev;
+-	char buf[16];
+-
+-	sprintf(buf, "cxacru-%s.bin", phase);
+-	usb_dbg(usbatm, "cxacru_find_firmware: looking for %s\n", buf);
+-
+-	if (request_firmware(fw_p, buf, dev)) {
+-		usb_dbg(usbatm, "no stage %s firmware found\n", phase);
+-		return -ENOENT;
+-	}
+-
+-	usb_info(usbatm, "found firmware %s\n", buf);
+-
+-	return 0;
+-}
+-
+-static int cxacru_heavy_init(struct usbatm_data *usbatm_instance,
+-			     struct usb_interface *usb_intf)
+-{
+-	const struct firmware *fw, *bp;
+-	struct cxacru_data *instance = usbatm_instance->driver_data;
+-	int ret = cxacru_find_firmware(instance, "fw", &fw);
+-
+-	if (ret) {
+-		usb_warn(usbatm_instance, "firmware (cxacru-fw.bin) unavailable (system misconfigured?)\n");
+-		return ret;
++		goto done;
+ 	}
+ 
+-	if (instance->modem_type->boot_rom_patch) {
+-		ret = cxacru_find_firmware(instance, "bp", &bp);
+-		if (ret) {
+-			usb_warn(usbatm_instance, "boot ROM patch (cxacru-bp.bin) unavailable (system misconfigured?)\n");
+-			release_firmware(fw);
+-			return ret;
+-		}
+-	}
+-
+-	cxacru_upload_firmware(instance, fw, bp);
+-
++done:
+ 	if (instance->modem_type->boot_rom_patch)
+ 		release_firmware(bp);
+ 	release_firmware(fw);
 
