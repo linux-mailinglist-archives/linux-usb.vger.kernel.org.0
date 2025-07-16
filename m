@@ -1,54 +1,53 @@
-Return-Path: <linux-usb+bounces-25862-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25863-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64C1CB06CEF
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 07:06:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91B0FB06CF1
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 07:07:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85DB27ABF49
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 05:04:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A0EE3A7AE2
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 05:06:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492ED25E834;
-	Wed, 16 Jul 2025 05:06:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E408925E834;
+	Wed, 16 Jul 2025 05:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="x1jONwPB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="O3hqsNTA"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC31811CA9;
-	Wed, 16 Jul 2025 05:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5389A1C3C1F;
+	Wed, 16 Jul 2025 05:06:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752642375; cv=none; b=hsjk3WrQO4JmzQHYA+nmCuAQ14twbBAA7G1oAn6UPq1G+UzQ1QfMEVsqAwsyzUHD0WteUwE4pUbvBKTYgrHCXPt6Cfd3vTRBmCwt8G/VH52582BHw3ArUlBsGUIpaeKgsgMzs/UeCFkd+E4QgEBZW0LenGHmuxvLit6nST39/5c=
+	t=1752642415; cv=none; b=aCkZaOsFhmG+pcefa89hjD6iTaXeiAawNjH9ZG9d5eAG70pFHS6qul9gei4HFIpgR0JT3pVdbMhdncywbG0l1riGewi7YivJt26bmx78iRw6tu/EXgVk2KI2fE6tETjvLY4Z33TScARcP1n95FPO+pKqbhxJ57MQ92RnEbGiEqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752642375; c=relaxed/simple;
-	bh=CTmVn5puh9AqZ7nUWiS0Yw0f6SqZbMRAbF3CgIDV0kU=;
+	s=arc-20240116; t=1752642415; c=relaxed/simple;
+	bh=Ea4L8w4MaFN+VhyUzWP/6yVlPGnAInuffksIbykGIDE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ucPJld0vWwiL5/gvJmLq3+9y2UW39BtjuqX2FqQ/vO00oFY3IoCHcBR8TA1Q9TULPviJIXdr1a+JoQos7WvV0uviI06nKLGBXSDvpw4DPR0xZCpz7c3u7rhBdt+2KKhtPOaGKkGHO3reAIrNI58g/GJq4/WJrJTzn+S6Y8LBGTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=x1jONwPB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92A5C4CEF0;
-	Wed, 16 Jul 2025 05:06:14 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=mAO19dWsKPu5NNpRB5oYWjNzH5ABmN+GlnpneH35VwaYifsw1pDb3oMKDtSwGuWrCQpdMl8UjcgdzhsT5UnZAkSyXMX3s15yZNC3FZdIjDzJwMkKuwr8JOSeCbHCnPAKYgFmpC6SR4eu9RMCDPvHK8zFdagIXL9/KG89BIT2ifs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=O3hqsNTA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62C4CC4CEF0;
+	Wed, 16 Jul 2025 05:06:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752642375;
-	bh=CTmVn5puh9AqZ7nUWiS0Yw0f6SqZbMRAbF3CgIDV0kU=;
+	s=korg; t=1752642414;
+	bh=Ea4L8w4MaFN+VhyUzWP/6yVlPGnAInuffksIbykGIDE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=x1jONwPBZhQwilY1jRcBQiyRmTCDiyA0/KxwkXGj7W2mXKcSoQx675bwn4DcmhLrN
-	 NryIN7p09VCCNplqQvKvK358qFGi9HqcECQg272qZVvZJgSvQBS3PgGpDOBDgzal0Q
-	 XqAWPhlwHp3HcFu1T7RG0Ny5p5DX0P5ed6dSkxwY=
-Date: Wed, 16 Jul 2025 07:06:11 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-Cc: heikki.krogerus@linux.intel.com, lumag@kernel.org,
-	neil.armstrong@linaro.org, johan+linaro@kernel.org,
-	quic_bjorande@quicinc.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: ucsi: ucsi_glink: Increase buffer size to
- support UCSI v2
-Message-ID: <2025071600-configure-ambush-c139@gregkh>
-References: <20250716005224.312155-1-anjelique.melendez@oss.qualcomm.com>
+	b=O3hqsNTATelcoA/OgL6YuTFrudWBTmaiw+rsocPLPK+TWSB2JFiRLE0NpaSPoIk1D
+	 ShZO4Qc14RieIN3LT65ctqLYdZqSoG/+mgj9h16w4y+q7/7PfpWK3CPxRbIByI/xco
+	 unO2QcWKc6tjGQYJ21/KPkqU2VzCCfP4kw5O2kzA=
+Date: Wed, 16 Jul 2025 07:06:50 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: accessrunner-general@lists.sourceforge.net, linux-usb@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: atm: cxacru: Zero initialize bp in
+ cxacru_heavy_init()
+Message-ID: <2025071618-jester-outing-7fed@gregkh>
+References: <20250715-usb-cxacru-fix-clang-21-uninit-warning-v1-1-de6c652c3079@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,164 +56,35 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250716005224.312155-1-anjelique.melendez@oss.qualcomm.com>
+In-Reply-To: <20250715-usb-cxacru-fix-clang-21-uninit-warning-v1-1-de6c652c3079@kernel.org>
 
-On Tue, Jul 15, 2025 at 05:52:24PM -0700, Anjelique Melendez wrote:
-> UCSI v2 specification has increased the MSG_IN and MSG_OUT size from
-> 16 bytes to 256 bytes each for the message exchange between OPM and PPM
-> This makes the total buffer size increase from 48 bytes to 528 bytes.
-> Update the buffer size to support this increase.
+On Tue, Jul 15, 2025 at 01:33:32PM -0700, Nathan Chancellor wrote:
+> After a recent change in clang to expose uninitialized warnings from
+> const variables [1], there is a warning in cxacru_heavy_init():
 > 
-> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-> ---
-> Changes since v1:
->  - Defined buf size in terms of other UCSI defines
->  - Removed UCSI_BUF_SIZE and used the explicit v1 or v2 buffer size macros
->  - Removed Qualcomm copyright
->  - link: https://lore.kernel.org/all/20250624222922.2010820-1-anjelique.melendez@oss.qualcomm.com/
-> ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 58 ++++++++++++++++++++++++-----
->  1 file changed, 48 insertions(+), 10 deletions(-)
+>   drivers/usb/atm/cxacru.c:1104:6: error: variable 'bp' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>    1104 |         if (instance->modem_type->boot_rom_patch) {
+>         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/usb/atm/cxacru.c:1113:39: note: uninitialized use occurs here
+>    1113 |         cxacru_upload_firmware(instance, fw, bp);
+>         |                                              ^~
+>   drivers/usb/atm/cxacru.c:1104:2: note: remove the 'if' if its condition is always true
+>    1104 |         if (instance->modem_type->boot_rom_patch) {
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/usb/atm/cxacru.c:1095:32: note: initialize the variable 'bp' to silence this warning
+>    1095 |         const struct firmware *fw, *bp;
+>         |                                       ^
+>         |                                        = NULL
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index 8af79101a2fc..2918c88e54d2 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -16,10 +16,10 @@
->  
->  #define PMIC_GLINK_MAX_PORTS		3
->  
-> -#define UCSI_BUF_SIZE                   48
-> +#define UCSI_BUF_V1_SIZE               (UCSI_MESSAGE_OUT + (UCSI_MESSAGE_OUT - UCSI_MESSAGE_IN))
-> +#define UCSI_BUF_V2_SIZE               (UCSIv2_MESSAGE_OUT + (UCSIv2_MESSAGE_OUT - UCSI_MESSAGE_IN))
->  
->  #define MSG_TYPE_REQ_RESP               1
-> -#define UCSI_BUF_SIZE                   48
->  
->  #define UC_NOTIFY_RECEIVER_UCSI         0x0
->  #define UC_UCSI_READ_BUF_REQ            0x11
-> @@ -32,13 +32,25 @@ struct ucsi_read_buf_req_msg {
->  
->  struct ucsi_read_buf_resp_msg {
->  	struct pmic_glink_hdr   hdr;
-> -	u8                      buf[UCSI_BUF_SIZE];
-> +	u8                      buf[UCSI_BUF_V1_SIZE];
-> +	u32                     ret_code;
+> This warning occurs in clang's frontend before inlining occurs, so it
+> cannot notice that bp is only used within cxacru_upload_firmware() under
+> the same condition that initializes it in cxacru_heavy_init(). Just
+> initialize bp to NULL to silence the warning without functionally
+> changing the code, which is what happens with modern compilers when they
+> support '-ftrivial-auto-var-init=zero' (CONFIG_INIT_STACK_ALL_ZERO=y).
 
-What is the endian-ness of ret_code as it comes from the device?
-
-> +};
-> +
-> +struct ucsi_v2_read_buf_resp_msg {
-> +	struct pmic_glink_hdr   hdr;
-> +	u8                      buf[UCSI_BUF_V2_SIZE];
->  	u32                     ret_code;
->  };
->  
->  struct ucsi_write_buf_req_msg {
->  	struct pmic_glink_hdr   hdr;
-> -	u8                      buf[UCSI_BUF_SIZE];
-> +	u8                      buf[UCSI_BUF_V1_SIZE];
-> +	u32                     reserved;
-
-What is "reserved" for?  What is it set to?  Where is it tested to
-ensure it is set properly?
-
-> +};
-> +
-> +struct ucsi_v2_write_buf_req_msg {
-> +	struct pmic_glink_hdr   hdr;
-> +	u8                      buf[UCSI_BUF_V2_SIZE];
->  	u32                     reserved;
->  };
-
-And for all of these structures, are you sure there are not "holes" in
-them?  As you are using sizeof(), don't they need to be packed?
-
->  
-> @@ -72,7 +84,7 @@ struct pmic_glink_ucsi {
->  	bool ucsi_registered;
->  	bool pd_running;
->  
-> -	u8 read_buf[UCSI_BUF_SIZE];
-> +	u8 read_buf[UCSI_BUF_V2_SIZE];
-
-Why is this one just v2 and not also v1?
-
->  };
->  
->  static int pmic_glink_ucsi_read(struct ucsi *__ucsi, unsigned int offset,
-> @@ -131,8 +143,9 @@ static int pmic_glink_ucsi_read_message_in(struct ucsi *ucsi, void *val, size_t
->  static int pmic_glink_ucsi_locked_write(struct pmic_glink_ucsi *ucsi, unsigned int offset,
->  					const void *val, size_t val_len)
->  {
-> -	struct ucsi_write_buf_req_msg req = {};
-> +	struct ucsi_v2_write_buf_req_msg req = {};
->  	unsigned long left;
-> +	size_t len;
->  	int ret;
->  
->  	req.hdr.owner = PMIC_GLINK_OWNER_USBC;
-> @@ -142,7 +155,18 @@ static int pmic_glink_ucsi_locked_write(struct pmic_glink_ucsi *ucsi, unsigned i
->  
->  	reinit_completion(&ucsi->write_ack);
->  
-> -	ret = pmic_glink_send(ucsi->client, &req, sizeof(req));
-> +	if (!ucsi->ucsi->version || ucsi->ucsi->version >= UCSI_VERSION_2_1) {
-> +		/* If UCSI version is unknown, use the maximum buffer size */
-> +		len = sizeof(req);
-> +	} else {
-> +		/*
-> +		 * If UCSI V1, buffer size should be UCSI_BUF_V1_SIZE so update
-> +		 * len accordingly
-> +		 */
-> +		len = sizeof(struct ucsi_write_buf_req_msg);
-> +	}
-> +
-> +	ret = pmic_glink_send(ucsi->client, &req, len);
->  	if (ret < 0) {
->  		dev_err(ucsi->dev, "failed to send UCSI write request: %d\n", ret);
->  		return ret;
-> @@ -216,12 +240,26 @@ static const struct ucsi_operations pmic_glink_ucsi_ops = {
->  
->  static void pmic_glink_ucsi_read_ack(struct pmic_glink_ucsi *ucsi, const void *data, int len)
->  {
-> -	const struct ucsi_read_buf_resp_msg *resp = data;
-> +	const struct ucsi_v2_read_buf_resp_msg *resp = data;
-> +	u32 ret_code, buffer_len;
-> +
-> +	if (!ucsi->ucsi->version || ucsi->ucsi->version >= UCSI_VERSION_2_1) {
-> +		/* If UCSI version is unknown, use the maximum buffer size */
-> +		ret_code = resp->ret_code;
-
-No endian change?
-
-> +		buffer_len = UCSI_BUF_V2_SIZE;
-
-Shouldn't you warn about this?  Doesn't the version have to be set?
-
-
-> +	} else {
-> +		/*
-> +		 * If UCSI V1, use UCSI_BUF_V1_SIZE buffer size and
-> +		 * update ret_code offset accordingly
-> +		 */
-> +		ret_code = ((struct ucsi_read_buf_resp_msg *)data)->ret_code;
-
-Are you sure the buffer was that big?  Where was that checked?
-
-> +		buffer_len = UCSI_BUF_V1_SIZE;
-> +	}
->  
-> -	if (resp->ret_code)
-> +	if (ret_code)
->  		return;
->  
-> -	memcpy(ucsi->read_buf, resp->buf, UCSI_BUF_SIZE);
-> +	memcpy(ucsi->read_buf, resp->buf, buffer_len);
-
-Where is the length checked against the "real" length of the buffer
-passed in here?  What happens if the device lies?
+We generally do not want to paper over compiler bugs, when our code is
+correct, so why should we do that here?  Why not fix clang instead?
 
 thanks,
 
