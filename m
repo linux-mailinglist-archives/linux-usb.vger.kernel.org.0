@@ -1,138 +1,152 @@
-Return-Path: <linux-usb+bounces-25878-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25879-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34784B074A1
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 13:24:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12ECAB07812
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 16:30:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2402B1C25EFA
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 11:24:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFF00173201
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 14:29:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E7DF2F365C;
-	Wed, 16 Jul 2025 11:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C2F9258CF2;
+	Wed, 16 Jul 2025 14:29:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Nkz+J3Of"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="pjtQlq8I"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC112F1FF2;
-	Wed, 16 Jul 2025 11:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1C4190472
+	for <linux-usb@vger.kernel.org>; Wed, 16 Jul 2025 14:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752665067; cv=none; b=PlTbWCTAfFjBDeY3yFWNABQYk16HqKrXYUbHgqoGarN8aRL+qUoMyr8MfL2Fgbu8BYjnm4hHiWSdf0jQyh/mg+yC3xHb53JJWKStFsfY2QN+n438Lo9VE8afcwRIWt781okRoTpa+HzLezbdJ8f2k01luGsISsCaR2XKoFfTZ9M=
+	t=1752676185; cv=none; b=DlFZlomXIHjeG3dQfpvKHPAfcQbduIq5SvkC0vX/kruvnjECTqjqeVh0Gaq5dDlqyEgjbLu+kTzMwvsW9Nj0kAsrSCgfyH2USfcZyL7GFZrMEPzoc1XotrtMdtp27nn1uez17Uo89PaJ424EdDq86z3En+9QFq0VqU5FKu9htEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752665067; c=relaxed/simple;
-	bh=f4AIqi/Fw9DY2N7mZbmHndvTW9t43xWntHr65s/N59w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h8F3r6CjrZAx4/NthmjCsQzeUEdroiH55/deevEDEFRzDworuT0qZA4AiZHKXB4lnTNk4HBwizaO1RsUtsaxt2Fdt/iHyRe8Eke3ktx4JX44T91In5q7F/GLsMhLBzXTrZUH9G27f8DIhCTSNSMbkSEodvW8zf2jQJEGH580FR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=Nkz+J3Of; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-23636167b30so58372585ad.1;
-        Wed, 16 Jul 2025 04:24:26 -0700 (PDT)
+	s=arc-20240116; t=1752676185; c=relaxed/simple;
+	bh=eKUmlpIGboQT6S5Ovz6KOSqf2T5cj+mftR73RhnZT+s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JJhjTp86DT6JfdA7mDNpFcjiATgBuWp4rOxPWSsDpdHmiPREU+U+RnTshSdLtPVbP9xXOCaJd3FWWsYvYKaCRdDiAFopq1xpnifQisr6fenDU/CS2v9GwaUTprbDnr78TFCvF56aQ2gEbIUFTFoP+Z6hgqeiVxids38Gihu+8To=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=pjtQlq8I; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7d3f192a64eso647460485a.2
+        for <linux-usb@vger.kernel.org>; Wed, 16 Jul 2025 07:29:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1752665065; x=1753269865; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dotDuLYLN/iXt+U/0felTJMwvc4r74ynMy/X01T15SI=;
-        b=Nkz+J3OfcOCeWr2hwNdfHF4nAP2c5lZOdyW5KoUfgVdFTv4N8ALtqriJDB8x/iWJ27
-         0pt2nn6DtO8sysW5aXcJywgCYK6VgIU/vxGw/onsb8wggYbK/iWD3K97E8dD+cqk4sTR
-         OW+M6XB6NoT6MdZWvRvohru3aNxgkzcAy+IyeQgOIhYGySRBQYJHuVJkORg2iV7zLwNC
-         gMto69tPCHcZVRFEzo9qUQpDnPhJMEyqb49Q8w5wOc0wnjQ+U+ZVc8Wz1Yr6AxkMFzns
-         mxyvMe2kCiiKkV4unmOdyvSdB4Cg5egzgTHm8jY0No9IOteNJTXd0RoKa5k7iHliLy/x
-         qgKw==
+        d=rowland.harvard.edu; s=google; t=1752676181; x=1753280981; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qt9z7TyyvFxzc9Zi5QX61Y9RbsiY23u8uaORF/jvc7k=;
+        b=pjtQlq8IX8EaOxjjDRdPRgI92utzhFKWca+2epJjYzCqL0ml1OceuruNYv4YPrvlwj
+         nr3BlrXUyZFovuHUUIKtEGWsfI0RF9Wm98suBLvLCYZ5X8UrVoemUel8DjqfVdl7GgUS
+         qNN3mslKO70h9htLfkMcY+XP9lm4eJbtWoxPyjUPUzILHZF2Q42vRavSxYglC5pilLz/
+         TYZgkAE2JqMee654L65PhAebhTI4+aNW1pw/stRveuurM3+JKc860CZ5wYxaegQfyvE1
+         tcQkZDC0EgBxFGdcKGnZCLYEIXfSF1XDpsq+JBcGAX9jp1X/DtTAUTVGS9FOLjLGliN6
+         Q2CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752665065; x=1753269865;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dotDuLYLN/iXt+U/0felTJMwvc4r74ynMy/X01T15SI=;
-        b=cOP2e/OHGlZgRwPkLles9QY02/TLvAfV7JDBXcO0vyhD7K1TsFXod5qyBMApyf6drJ
-         f+aBdMu2rvIb7PufumY5MmbpHkhRbMe/rBGUd2jQcRc7YAr6h2Oa81kZIzAOLd+ex85D
-         zAXnDvkdYdLRDJ+6IO9HMesNaMEUXvnY1Gu5f2ozHFDvfesNKyAlcJdjbNtRLyxmpsyF
-         2zguxqm6xzXskQJHWA7I3Fxzbfmn2ldUEAiavxr+D8WFjdAWjp2yDLmEn2Yiogx8QmJX
-         zaiw8+FChqeTCuMlbKSlG599LtT5HuGAfjXORITNOcRyCaiLyCA5OqCKlejfq64HOJTO
-         D2UA==
-X-Forwarded-Encrypted: i=1; AJvYcCVCcF4UIxkucUxnCDSuyP5a7Ncj/6vg2bzOnXdzGcuygjAI5gCfh4cwzk1X+CGA8lr/vUoBnLlg+EeF@vger.kernel.org, AJvYcCWexTBjF4XnfERssrM+u6ymY2qZCNRVa/Z/HOVCsYzKvThuQ0sGk/Wyo5UqQDgDSQ5CVbCjWrtnxhXHNDE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPhjiRYpNk1oHWQAFWKBy6SRMZDWK4Vfs9EudfQgy7j3dlCgWe
-	dxjxnbsyWMpEFyfYOIQ7v8M1fUU90g3jI24gkCsDky+plFdzdiuoRYRjLVtHPsV64eT14+HJlkY
-	I23EbwWrNrMuKL99zzDFiq5272KCwH94=
-X-Gm-Gg: ASbGncvaMM48AsBR0Wsrb2CWTGKmlsz2xh0dR6xicIaadaFFcNVZtNXoNSHjxSngSUf
-	53ax0EQ+F7qwd48D5bT8o3/txEELSgOtMs9hQpLOaJxvKhkTwVq52zYjjuq2zpI8VfBsKmnW8i6
-	z4tGbFPDuPcPeJhJqiHNTQ6a7x38256alFdHEO0jR2ojwkRcmPwneOVAON/lmHfLuqzuCd81X33
-	1Sy6TWg+3zdX3b7vzDy8q+RJ+1ZwI6RMLsAgSez
-X-Google-Smtp-Source: AGHT+IFnVNzGcIE0bNOY91eQmo8Ch4/qdMkQf/sYVo0NGryBs/0yxEncXjaWCxRIEZpcy+IAEitVlIpwJyjafSJ1RSA=
-X-Received: by 2002:a17:903:1b25:b0:234:a139:120d with SMTP id
- d9443c01a7336-23e25685241mr29266375ad.7.1752665065587; Wed, 16 Jul 2025
- 04:24:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752676181; x=1753280981;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qt9z7TyyvFxzc9Zi5QX61Y9RbsiY23u8uaORF/jvc7k=;
+        b=TptS159rGznODOE3CK92K9TX5z8DTM8EEr+ffTemxyNIJzmzxy22DUCdD9pcu/qOjO
+         Y4yUNkDp8umg471OAHorquMuKMziRkYCjKLr8e7MGDQv6RtrIxjVKmfTZ+01te7SGAL3
+         pVdnICEnBTVp2LQ8O+vH4Fc61076v1t/qY2ig/F21GHZpLjfVrYghhN+m0+ZLdTax6G1
+         QNrgjlhVNrAZGQMswfX2A9fL8t5aOp3+LQbhSvXhza1YNLhW5FKbvnHHO/E+kwss+AJQ
+         DRH/HMb4ezpajONLrOklN0rnXOBcEhHh+WeOw613O23tytb+R9CFMY1CEe8Zs00AGfmX
+         dYyA==
+X-Forwarded-Encrypted: i=1; AJvYcCWMS1Co5zJUj/OAh+Wis3ZOdOh+JXCrF8eHo1FWoaYO/fibR1v/4G/r1e/G+JX3gq44Nc1XQGm0m2w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YypfEVJpfxmoDjFqNCVYJX/vAJeR6s9DT5CdGW25pYybdE83yBH
+	KRsVFf1jae+R6s63zFX0h0B57A0/7r2Tx5eEVU3TswPNtNv0UR7jC15v1tRAkDP/jg==
+X-Gm-Gg: ASbGncvtIm9dQw8nGke3LDFqkOuiF2OT6+gVYDY27T4bQnCgZbPrPpNRwjYIsztMGQy
+	0WCWbhBuL3nw2zrNudQBU3DKo6qpHqo+2fMxQq2hmOGJkZs7IVN46BmLmKe5AXim8R4TpvX+QE4
+	fFBuy2skoxmIh729P2EjDpzpkDZOEbmsRLFmg6bSjAcRvJGXdZvLnbBfZYBVzJQXPKETgoYInuY
+	VWn+FSmDByRlr2/6Wq6L0BTy24LoxokLymEXmlQ/bPA1/01KiG4T3L5dI8GpOf2bOXKjGMt36qL
+	D1/fdfNdqovPtStr5rYK97JElZ1Fhkmc61aAXqiWWHVbFJbwXBlFuVmpJtd95HaQ9dBAQWfdXsx
+	1q3gb4X/2qEhjesYOl4NIFOweZP4hHPt8+ER0mGet
+X-Google-Smtp-Source: AGHT+IF3xlSqjICIE4by+UPGer4acYrJ4z0g+fjVRC6/rj7+8rf0BJhYUp+VmTOPflFKpHho7TjrBQ==
+X-Received: by 2002:ad4:5cec:0:b0:704:7dbd:d991 with SMTP id 6a1803df08f44-704f4a9a406mr57966406d6.31.1752676180409;
+        Wed, 16 Jul 2025 07:29:40 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70497d39c9dsm70452096d6.66.2025.07.16.07.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Jul 2025 07:29:39 -0700 (PDT)
+Date: Wed, 16 Jul 2025 10:29:38 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>
+Cc: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds in s32ton (2)
+Message-ID: <78c3fb66-c30f-4c64-a499-61c1665186a8@rowland.harvard.edu>
+References: <8bec1698-5008-428f-8e71-ec002def0c54@rowland.harvard.edu>
+ <6876b0ec.a70a0220.693ce.0019.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204135842.3703751-1-clabbe@baylibre.com> <20250204135842.3703751-2-clabbe@baylibre.com>
- <aCHHfY2FkVW2j0ML@hovoldconsulting.com> <CAFBinCAUNNfOp4qvn2p8AETossePv2aL7jBkFxVZV_XzzULgVg@mail.gmail.com>
- <2025071631-thesaurus-blissful-58f3@gregkh> <CAFBinCAMGR2f4M1ARKytOwG1z9ORcD-OMNLH2FqZHb+tOm0tEQ@mail.gmail.com>
- <2025071613-ethics-component-e56d@gregkh> <CAFBinCA8cMP3o483c40RjHkMAEt4RCmL6uCTTk5DPmrNVN6_NQ@mail.gmail.com>
- <2025071639-annotate-huddle-0e11@gregkh>
-In-Reply-To: <2025071639-annotate-huddle-0e11@gregkh>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Wed, 16 Jul 2025 13:24:14 +0200
-X-Gm-Features: Ac12FXwmH9CLx-aQN6hja2jmj2fX6eE0YjQjoBg8-DbyCeVF_pa0Ya9zUbGjW4g
-Message-ID: <CAFBinCCxdZfEngHuPJPM162bQRc-SZu91kFHEik50Yrk3DYcVQ@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Johan Hovold <johan@kernel.org>, Corentin Labbe <clabbe@baylibre.com>, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, david@ixit.cz
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6876b0ec.a70a0220.693ce.0019.GAE@google.com>
 
-[...]
-> > >From what I've seen during my tests:
-> > - we fire the URB with TX data
-> > - the device receives it and puts the data into a per-port TX buffer
-> > - it indicates that it's done processing the URB
-> > - the TX buffer is then written out (the host can move on do something else)
-> > - the device signals to the host (via the STATUS endpoint) that it has
-> > written out all data from the TX buffer
-> >
-> > With that timeout logic my understanding is that they're trying to
-> > catch cases where the last step (STATUS signal) did not work (for
-> > whatever reason) so that the host can continue sending more data.
->
-> Why can't the host just keep sending data?  Only "stall" if you don't
-> have an active urb to send?  Or just keep creating new urbs for every
-> send transaction and then destroying them when finished?  That way the
-> data gets queued up in the kernel (have a max able to be allocated so
-> you don't create a DoS accidentally), and you should be ok.  I think
-> some of the other drivers do this, or used to in the past.
-The usb-serial framework queues up data in a kfifo (with max size = PAGE_SIZE).
-After step 3 (CH348 indicates to the host that it has ingested the
-URB) we can continue sending data for another port - that's what I'm
-working on for v9.
+On Tue, Jul 15, 2025 at 12:50:04PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> UBSAN: shift-out-of-bounds in s32ton
+> 
+> microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
+> microsoft 0003:045E:07DA.0001: unsupported Resolution Multiplier 0
+> hid: s32ton: n 0 val 0 size 0x0
+> ------------[ cut here ]------------
+> UBSAN: shift-out-of-bounds in drivers/hid/hid-core.c:69:16
+> shift exponent 4294967295 is too large for 32-bit type '__s32' (aka 'int')
 
-> > > > If you have any suggestions: please tell me - I'm happy to try them out!
-> > >
-> > > Try keeping it simple first, the vendor driver looks like it was written
-> > > by someone who was paid per line of code :)
-> > The original approach when upstreaming the ch348 driver was just to
-> > submit TX URBs (without any custom code, just letting usb-serial core
-> > handle it).
->
-> Ah, and what happened with that version?  Did it not work?
-TX data was truncated/corrupted. There's a recent-ish commit in the
-vendor driver [0] which suggests that parallel (they're calling it
-"independent upload on multiple serial ports") is possible starting
-with chip revision 0x8a but I cannot test this (since my test board
-has a CH348Q revision 0x86).
+Benjamin:
 
+Clearly there's going to be trouble when you try to convert a signed 
+32-bit value to a 0-bit number!
 
-Best regards,
-Martin
+My impression is that hid_parser_global() should reject Report Size or 
+Report Count items with a value of 0.  Such fields would be meaningless 
+in any case.  The routine checks for values that are too large, but not 
+for values that are too small.
 
+Does this look like the right approach?
 
-[0] https://github.com/WCHSoftGroup/ch9344ser_linux/commit/875d57b8c6a7dd3f4359eb9adfe3779e2bbb0ac1
+Alan Stern
+
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git c2ca42f1
+
+ drivers/hid/hid-core.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+Index: usb-devel/drivers/hid/hid-core.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-core.c
++++ usb-devel/drivers/hid/hid-core.c
+@@ -464,7 +464,8 @@ static int hid_parser_global(struct hid_
+ 
+ 	case HID_GLOBAL_ITEM_TAG_REPORT_SIZE:
+ 		parser->global.report_size = item_udata(item);
+-		if (parser->global.report_size > 256) {
++		if (parser->global.report_size > 256 ||
++				parser->global.report_size == 0) {
+ 			hid_err(parser->device, "invalid report_size %d\n",
+ 					parser->global.report_size);
+ 			return -1;
+@@ -473,7 +474,8 @@ static int hid_parser_global(struct hid_
+ 
+ 	case HID_GLOBAL_ITEM_TAG_REPORT_COUNT:
+ 		parser->global.report_count = item_udata(item);
+-		if (parser->global.report_count > HID_MAX_USAGES) {
++		if (parser->global.report_count > HID_MAX_USAGES ||
++				parser->global.report_count == 0) {
+ 			hid_err(parser->device, "invalid report_count %d\n",
+ 					parser->global.report_count);
+ 			return -1;
+
 
