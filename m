@@ -1,208 +1,116 @@
-Return-Path: <linux-usb+bounces-25871-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25872-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 784BDB07086
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 10:28:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (unknown [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 072E2B0708F
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 10:30:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A007C4A4296
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 08:28:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55A5B504293
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 08:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B56512EAB9E;
-	Wed, 16 Jul 2025 08:28:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE2242EBDD0;
+	Wed, 16 Jul 2025 08:29:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Vtu2jxUF"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TJ+DqaZf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3F92EA470;
-	Wed, 16 Jul 2025 08:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C7FA2EBBA1
+	for <linux-usb@vger.kernel.org>; Wed, 16 Jul 2025 08:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752654516; cv=none; b=emFsXacWlYbPXpzWFC87RRwWS/zdBmw0HRvECPkuP19xD9PnfdzDw5jFbGslb6JwkY/qD9ehUsGNVMSbUkOkzoO9sOqbg02jxb+s5EfktgJh7oOeS/PNA59+BzRcmsTPOpjYyg/5wlQp7Y1fhSi3gvLXrnXb6D2Yx5E9KNopWsk=
+	t=1752654572; cv=none; b=VDqWZ54DpSWsr+DoVFUoCbCXpsQ590yRXDA7Z0Gb6N1atsd9o2HkHx8168qR049YxrFdCnYVYhHGbsP9/lbwnCTqC4EcBzadUFiKIk84GRxsU2U1j6fnd8/gmtn71rhkgWdPeRHJrBP+GfXxzAFdtiyWoKzuSKRATejhXEHxtF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752654516; c=relaxed/simple;
-	bh=RNftaCGYd13yFx540oBssjX8Jc8xFPzXzRNlIMRb0tQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C6Al2Oi4ClJEAB4GHiu/lbk8INfyh12ViqZrySYlVey3zIsNjfhhHGm9TtC55Fxp18VEjkX+kjvc30cuzrI4IPuQvXovko4k6EnXti3UhtMWAlfGJxWbxIiaVQCUOhBuIz5Nz3vO77RntWS0JnYkKbFipLMRXm4DnYT+GO26Gws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=Vtu2jxUF; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-74b52bf417cso4027010b3a.0;
-        Wed, 16 Jul 2025 01:28:34 -0700 (PDT)
+	s=arc-20240116; t=1752654572; c=relaxed/simple;
+	bh=/dVOnKYB8CD/wyyHbMWcCAYLrsRBtnjmn40w6cFnUfA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZaPWa6x9LhpD+W9jSUKyYugxIpxs9y7qcIkNCNvtXxi5MFOuMtABToDQZF95btdyJpwmQ4DR2097OeiI4jb0JkRtJxHbG9w/dgqHY5wU4NspFUYtIEqmuDV4inbNNyts7Mw11ivArYKM9bz8pyGcz/aZC5zrpbiqLIbLAytqris=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TJ+DqaZf; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3a528243636so3546903f8f.3
+        for <linux-usb@vger.kernel.org>; Wed, 16 Jul 2025 01:29:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1752654514; x=1753259314; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fVivwlquhc/xyQSlolPcTCMefY5MmFW6ZwXvG0y8FSI=;
-        b=Vtu2jxUFNsNjIWpGRZjo0nwOoQHRbYGmrJwbwhP1TOXuj+GlJ9xb6xriqtJc3Nc3Sj
-         qVIX6P7Mdp2G6TA7kDBHX9LCZhjA5jmwGZhcCWHXPXAeU5b7+jLk5DL5zWLAxm6EXxzf
-         PajwPTFJQJ9JnAnTbN9nePc2oy7xVB1ZFdCfO1R53ogI0ursUdqJsuTzyM90maqFeIw+
-         VGRat2BJiX/ccf09OR6Qtpk8X0em0AcDRo+GKA+XNFKNggM+ujRK6lyL5mR7SkRSjSxu
-         mVdBWvjU1eWIOOXCC7qbWbMZ3op3EJshZg/dtmNKU7bT0Yo/vWiYbC+3MQmqrHhm+anG
-         NG8Q==
+        d=suse.com; s=google; t=1752654568; x=1753259368; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kTS987hZr2/BPWLmY8oveEZ2X67lASpu1Bb54ts50jo=;
+        b=TJ+DqaZfl0zIkqswkSGb6b5pGV9HjXtR9W602M0rVQSG5DF65rjluDPe+4ILj9b0xD
+         dQdGk+32aL1h6rxwo/lmrOc4pUZ/8LUMZ9u/noYWD8KZMRM/qJS6PorYHnu35IVMgeyS
+         9tmAiw9zyY+Y4or08t2QxQm3vpQiZKYyy4yfMlJ8QqYvxbXa1q5KVodNevEzG0lpvLWf
+         zVyAR/H006nurUAGEEZx0AmFMCLmEPeXsYjPfhOW9OASpo3W5S1WX5WSgE1/ZhwYWtlo
+         EDtoSWGFOyIDh2xOD0LCgtbPQhm3fDnEMIg9faXtbQICCpUH3uJflijVdayK9HDzQGbj
+         ZyNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752654514; x=1753259314;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fVivwlquhc/xyQSlolPcTCMefY5MmFW6ZwXvG0y8FSI=;
-        b=L5NFqoXTjS0WwBAhm2nNkNNyzDVUaWMklFkUYK8NPCTmLtSmHJi9VA38by3B8qvPAv
-         iLUn1LgDU+w2Mnt3+Ha+Y37jgL9Oin+Gh9LlKBD3N9+fE5xzJbO+H8EHpNsA92Ou6TQY
-         3YqT534/7Iytwvh833kdcJXqVh6SVDKH2cTfXJwGTQgAzby3W1jZWJ5FQ9Gzk4fCJT1P
-         K+0jaQc/VIrXqUt+mdJXMAgLWZ7IWYpXkLAt6R8CNS8myXiHbatkhUfLFI9pAyt7rPTU
-         jNL4uts8N7mHIfTel9P7EvB6Llbi8x2+vxouXfimp0FeSKusQPnWw47CViC4Rxwf9HUo
-         FTlw==
-X-Forwarded-Encrypted: i=1; AJvYcCWOLHPo+23GD9TponIPiprYqBTPTrXuFmYrpUoCcWWRhoADrz2LtvsB7IW8p8PuRxu7sRCECX1D5QDmt6E=@vger.kernel.org, AJvYcCXvWKBoK3NqyxN7bMpEPJPKI6pxh5XieorHq7ueW1ynkKNmOVq2rSlmfFCTx5m5leR6yj5hYDjyEjaG@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/nxreqL7zqDaXzTmO20GcieBRHJxDzs3mlt2oGwqwHrMG9gn/
-	tdSZ7Z/FxddZX6XJFwICK1gmh+haX0snFPkWcQXvAY/i6I7MZu1Uz3V2U39eI0dnFHB+k5b0Alz
-	Fm7BWWvF24QzH0DY/QzwMiwV3hRCSYCv/Ri5j
-X-Gm-Gg: ASbGncuwKEgK7RsgRA/oF3ePCJRrdzROgrOV/Z4XSKsf0zqDwI+X3nhEKUgwjU0Pu4p
-	fZlepTlhW9cBmHrIWRyASABXiGOxUsISxHXEy+lj6/8Dabdf2kwRBRB0FeM2Biv6sXS1xJv18DR
-	YKIG2jv9f1mhi/OVMDNi+2ej/V0jTV/ObPjkDz7O0/E3KBQi7HwYzG7KzFdCGCyf1IihzKc3vrl
-	GyyGYlYDwy1OZM1x/VQqrySm0GL/aEbzyfsPLZudlgdE34jES8=
-X-Google-Smtp-Source: AGHT+IHeGlTTxR0kqDnhS2FvvtUVIfj50IUbTGbzan635qZ0kDyA8KmbB70izucfKYP8rB5gL0UFvnSyeeo/qafPSak=
-X-Received: by 2002:a17:902:ef44:b0:234:d7b2:2ab4 with SMTP id
- d9443c01a7336-23e256b442dmr29637355ad.17.1752654513843; Wed, 16 Jul 2025
- 01:28:33 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752654568; x=1753259368;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kTS987hZr2/BPWLmY8oveEZ2X67lASpu1Bb54ts50jo=;
+        b=tXO8gYQKQdyS6R+Sg8uR3DviUHOxmEX4RNUEI7OVRiT2ERZ20GlHdRkTsxNYF78rMP
+         atc83rC7bpMRxounyyt7awGXggaSK2BdEIdsau9BknJSYyzJVve8wi8SfZ1boXXcQlki
+         e1WHWL/h8NzSZEkLbey6TszQvfno2MqnnMVyhh6mnei/Z4ArPYz9P4MoSGGtWhPkU1AV
+         tPHs0SiKsPKWs6DswA+jaW8vH4gCE5HRyc190Oru21uSuv0AjxPPbd3+dUfGHdRZs4Dr
+         2wHPNaWsf/6I7Vrq5ib4QqRc6KdJvLpmz/l7SEu84+9P+iM0UNNny+I/gGjov+yZUvmV
+         Ba8Q==
+X-Gm-Message-State: AOJu0YzyCkyVxG/tNuna2kvAK/Otnw33uGGvBpT/I1M5DG0IgpoVq+mE
+	ZNvyZWGO6Og/ILcwe7EU8nY5R347Gv9sxuHv6OAIRlLzwuIHOBQ9owXpwafynwr4+1w=
+X-Gm-Gg: ASbGncswIJ22ZfwUBqEEvmsgqU8c1WE1NIrHpwWrnyWICs+hdw0mlnLHpD/rv2lwuSb
+	F86CBKU/z5VWkO2lybLjEgjM1Lz2SUaQNOcGjXy9jd26ki0qRlf3g/F/JG2uOD5LUqJGiAS3Qc4
+	bNEjAvuZO1/N7AaF809jXaGsSC1I+TIwnfV3Xto1BzzOZbJc9ixO+Aop45c6kkV7Shy2rligT2o
+	D9uksJZODyOMrhiwA8mEbyBZDASVZg1jgs1j8zqkY86HCASpDTBrbJuQn++s14GyDzK2JGJofUE
+	xjPtuVP81emJCKB1vECLVObBdMF10iyBdo4OyPhdcGGMS/4HKhHXxAieA4utGvcZlbhJpUOtlbI
+	wei/hFai+wskJuXz9HYLrTHjirc+Qltr3AEbvdabFBp5C+rzOaDx1W5TVGB15Hvyluw==
+X-Google-Smtp-Source: AGHT+IFSZH4omeTXZAl7Lh2gjNFC0tMnhjbsZXaH62GbzEcddv2hbbklP4Avf1fLgsmVBRMpxR52/g==
+X-Received: by 2002:adf:9ccb:0:b0:3a5:39d7:3f17 with SMTP id ffacd0b85a97d-3b60dd898c7mr1162606f8f.47.1752654568473;
+        Wed, 16 Jul 2025 01:29:28 -0700 (PDT)
+Received: from ?IPV6:2001:a61:133f:9e01:b1a5:79c8:d196:e761? ([2001:a61:133f:9e01:b1a5:79c8:d196:e761])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e1e332sm17275063f8f.79.2025.07.16.01.29.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Jul 2025 01:29:28 -0700 (PDT)
+Message-ID: <fa20ab91-5ebf-427d-b938-31ea6fb945cf@suse.com>
+Date: Wed, 16 Jul 2025 10:29:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204135842.3703751-1-clabbe@baylibre.com> <20250204135842.3703751-2-clabbe@baylibre.com>
- <aCHHfY2FkVW2j0ML@hovoldconsulting.com> <CAFBinCAUNNfOp4qvn2p8AETossePv2aL7jBkFxVZV_XzzULgVg@mail.gmail.com>
- <2025071631-thesaurus-blissful-58f3@gregkh>
-In-Reply-To: <2025071631-thesaurus-blissful-58f3@gregkh>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Wed, 16 Jul 2025 10:28:22 +0200
-X-Gm-Features: Ac12FXzZ-IsMLLWh_4YKVYAdEdGILKB-IGO51SXas0OzPziA9My0dT2eSUfiSDs
-Message-ID: <CAFBinCAMGR2f4M1ARKytOwG1z9ORcD-OMNLH2FqZHb+tOm0tEQ@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Johan Hovold <johan@kernel.org>, Corentin Labbe <clabbe@baylibre.com>, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, david@ixit.cz
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: USB cdc-acm driver: break and command
+To: "H. Peter Anvin" <hpa@zytor.com>, Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ gregkh@linuxfoundation.org, Jiri Slaby <jirislaby@kernel.org>,
+ linux-serial@vger.kernel.org
+References: <ce54ae11-72bb-4ac7-980b-c1cbc798a209@zytor.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <ce54ae11-72bb-4ac7-980b-c1cbc798a209@zytor.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 16, 2025 at 9:44=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Tue, Jul 15, 2025 at 11:20:33PM +0200, Martin Blumenstingl wrote:
-> > Hi Johan,
-> >
-> > I'm excluding comments that are clear to me in this reply.
-> >
-> > On Mon, May 12, 2025 at 12:03=E2=80=AFPM Johan Hovold <johan@kernel.org=
-> wrote:
-> > [...]
-> > > > +     if (ret) {
-> > > > +             dev_err(&port->serial->dev->dev,
-> > > > +                     "Failed to configure UART_MCR, err=3D%d\n", r=
-et);
-> > > > +             return ret;
-> > > > +     }
-> > >
-> > > The read urbs should be submitted at first open and stopped at last
-> > > close to avoid wasting resources when no one is using the device.
-> > >
-> > > I know we have a few drivers that do not do this currently, but it
-> > > shouldn't be that hard to get this right from the start.
-> > If you're aware of an easy approach or you can recommend an existing
-> > driver that implements the desired behavior then please let me know.
-> >
-> > The speciality about ch348 is that all ports share the RX/TX URBs.
-> > My current idea is to implement this using a ref count (for the number
-> > of open ports) and mutex for locking.
->
-> How do you know if a port is "open" or not and keep track of them all?
-> Trying to manage that is a pain and a refcount shouldn't need locking if
-> you use the proper refcount_t type in a sane way.
->
-> Try to keep it simple please.
-I'm currently refcounting from usb_serial_driver.{open,close}
-The additional challenge is that I need to open two URBs at the right
-time to "avoid wasting resources". At least in my head I can't make it
-work without an additional lock.
+On 15.07.25 23:00, H. Peter Anvin wrote:
+> Hi,
+> 
+> I noticed looking at the CDC-ACM driver that it uses the assert/local delay/deassert method of sending BREAK.  Given that the CDC model has a delay specifier in the command packet, is there any reason not to set TTY_DRIVER_HARDWARE_BREAK and sending only one packet?
 
-The following is a simplified/pseudo-code version of what I have at
-the moment (which is called from my ch348_open):
-static int ch348_submit_urbs(struct usb_serial *serial)
-{
-  int ret =3D 0;
+1. The existing code is tested and usually works.
+2. The locking goes away. I have no idea what happens if you are
+sending a second break while a break is still going on.
 
-  mutex_lock(&ch348->manage_urbs_lock);
+> I'm also wondering if it would make sense to support the SEND_ENCAPSULATED_COMMAND and GET_ENCAPSULATED_RESPONSE commands, presumably via an ioctl().  I'm not 100% sure because I'm not sure there aren't potential security issues.
 
-  if (refcount_read(&ch348->num_open_ports))
-    goto out_increment_refcount;
+Well, one of the purposes of the CDC-ACM driver is to hide that
+you are talking to a USB device.
+In theory we could do that. I don't quite see the value.
+Sending arbitrary data from user space to a control endpoint
+does not make me happy.
 
-  ret =3D usb_serial_generic_open(NULL, serial_rx);
-  if (ret)
-    goto out_unlock;
-
-  ret =3D usb_serial_generic_open(NULL, status);
-  if (ret) {
-    usb_serial_generic_close(serial_rx); /* undo the first
-usb_serial_generic_open */
-    goto out_unlock;
-  }
-
-out_increment_refcount:
-  refcount_inc(&ch348->num_open_ports);
-
-out_unlock:
-  mutex_unlock(&ch348->manage_urbs_lock);
-
-  return ret;
-}
-
-My understanding is that usb-serial core does not provide any locking
-around .open/.close.
-
-> > > With this implementation writing data continuously to one port will
-> > > starve the others.
-> > >
-> > > The vendor implementation appears to write to more than one port in
-> > > parallel and track THRE per port which would avoid the starvation iss=
-ue
-> > > and should also be much more efficient.
-> > >
-> > > Just track THRE per port and only submit the write urb when it the
-> > > transmitter is empty or when it becomes empty.
-> > I'm trying as you suggest:
-> > - submit the URB synchronously for port N
-> > - submit the URB synchronously for port N + 1
-> > - ...
-> >
-> > This seems to work (using usb_bulk_msg). What doesn't work is
-> > submitting URBs in parallel (this is what the vendor driver prevents
-> > as well).
->
-> Why would submitting urbs in parallel not work?  Is the device somehow
-> broken and can't accept multiple requests at the same time?
-I don't know the reason behind this.
-These are requests to the same bulk out endpoint. When submitting
-multiple serial TX requests at the same time then some of the data is
-lost / corrupted.
-
-The vendor driver basically does this in their write function (very
-much simplified, see [0] for their original code):
-  spin_lock_irqsave(&ch9344->write_lock, flags);
-  usb_submit_urb(wb->urb, GFP_ATOMIC); /* part of ch9344_start_wb */
-  spin_unlock_irqrestore(&ch9344->write_lock, flags);
-
-If you have any suggestions: please tell me - I'm happy to try them out!
-
-
-Best regards,
-Martin
-
-
-[0] https://github.com/WCHSoftGroup/ch9344ser_linux/blob/e0a38c4f4f9d4c1f5e=
-2e3a352b7b1010b33aa322/driver/ch9344.c#L1330-L1404
+	HTH
+		Oliver
+  
 
