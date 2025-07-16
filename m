@@ -1,79 +1,48 @@
-Return-Path: <linux-usb+bounces-25886-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25887-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCCA1B07AE7
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 18:17:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 100B0B07B49
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 18:35:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69BB27A51A8
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 16:16:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60F5F584F7F
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 16:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD1782F546C;
-	Wed, 16 Jul 2025 16:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85FB42F5331;
+	Wed, 16 Jul 2025 16:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RSSbQdYM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mOwfSEmE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DED2F5330
-	for <linux-usb@vger.kernel.org>; Wed, 16 Jul 2025 16:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092F2433AC;
+	Wed, 16 Jul 2025 16:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752682645; cv=none; b=oPtyIQFIlej1IxWPJ7JRcc6AZ+3BhlMllG9xRV/POFDEF/2C8j6sH1PJ9YUrbi7aJrPfij/OwynyXLsH8kJlonPT3MvXhIljrrQNVrSlccoIhC8Sf1Hsif+IBOPz2ZBmMvAlfzTbdq14LpgULg8eIbkhQjHPh3y8i8s1m+8Xl9I=
+	t=1752683729; cv=none; b=USTbhUsh8buy8y05nnrbaWu+6dW1NGuWwnKgC8DbuZFMRAn64UmcRanKD29AhqFyOyVt/HqskQYs3nm2PhaFWZjgPPffSeAoYITt3ygvoGppOWw/qfHYnhkcNsGKXK+7JfobXOIE3oY+IbA5/kXuHQWlIjefu61dpY9OapbUEXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752682645; c=relaxed/simple;
-	bh=2S29ztdoZu+lSUgDZARUDIlqmdD/4e2XN6yo3Ko0Ql0=;
+	s=arc-20240116; t=1752683729; c=relaxed/simple;
+	bh=wKYXNfNFlYSsEzFHoBVVKENlvhX4Yr8nQs3M3eAprjg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f9kXfx6eDzzVkJeU4JhU6bny5PtF/lG2j90cK3fLgUXW7LY+13hY0JtDUKI2aOhC/MtY919p8xEn6vh2+WhEVxPSXmW8jpHa8bJyRVxpW93Kzds0WcUO0hJEOZwbWrBGTgI96SFmWsl4sPby7kivD77DZKYw/oe3NHorYyRTdTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RSSbQdYM; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-606b58241c9so11375793a12.3
-        for <linux-usb@vger.kernel.org>; Wed, 16 Jul 2025 09:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1752682642; x=1753287442; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QjOQCdqS8qm4/VhAwfJZCG868dIz30V0TAdtgEhaExw=;
-        b=RSSbQdYMO/iI6veaXAFcYRmlv8/RkBru6JY25ZHVxGVRhffTsPhMYQJwyjOSIb2+pV
-         NZHz/T6J4zgS/Xfa/jqIUH3Rtr+vHS2rfhOOxqmC4Xza2Y2X52s+2ljRrrY2gUuVTxv8
-         VjQs74SX4kdnZxdnIN/0tJPghctpGHHIhY10+4WG3/h/DwJsZDG7N1GzeJEx+xyNER8W
-         96+RsuqpS9pJlZA+qWEaD/PCWuhrZjjXwsNI6ZL2RvGaKPfplpnUGsgEsqOzkcfmQPv9
-         /7lNecwafYQnQyBhPm+Sz4mWTIUVshZtqftNyLujcYOaWMdoNskc+/QGp5zPerMcSQGf
-         JWIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752682642; x=1753287442;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QjOQCdqS8qm4/VhAwfJZCG868dIz30V0TAdtgEhaExw=;
-        b=E8lnc/YXNej8VIlTixeYxrHl1xpzuiDNnxtb7FdV0PM5fp9HvQJauZMJi2cVBBXCRy
-         uKfC1iq8Ym+IspWwYdaxDZTWqokQkfllQLwqePaIQxX0M83EzfunZdfMMUVqVi2zCVyK
-         DMC1kTGkF99Me2/HRD997HtK1GAYnRtKWR7CgzYBSyIaS4Wqe7E6GDVoSxOJPwwyz0bH
-         FtCfUNthViYHg9BpWsTejF+zSKys1gXPHRMKdD4nzR9KNnQELQDanTq4QcL/hvnYTB+9
-         IO41QOwkwnfkUsHJRRCdwneXJv1Pv/XL2eqSBC9WNNdLx/2UVNDIXgbVg+nGA2Q+9kGF
-         busQ==
-X-Gm-Message-State: AOJu0YxbHi0vOjPYL73zUnwDE+rCTLndBzXgYukoCGCyJnOheB3Y04Kg
-	1JuaFUhUaNCbAT2EnWOKSRuHpoDFt/q7f9AGJYLx7xLQnmqvh9G/jtb3d6AjMOROMhw=
-X-Gm-Gg: ASbGncuTCuBIQLVJaX8i0FZL4kYhPPzzryLThW8gtM2rwB68oZhxk2vlxqrJ6mOkt3U
-	NOTg5aVG1WGIesObsXfFIaxQR7jP3fB8gVy9aZDVBKJMFhLTp9gw+5rGN1MFakv5qCbv67PEE4e
-	is1/EUnrPVaraVP/JcmzCvJWuhOjgaQtko6jzJC4SxnvoUk+NZiSHPXivJMopnxI9OUfQRR+eI7
-	pW1Jm3an48Po8XjcqRucbj1NqQ7BQGbenrUef6qqsbStEtbPS5Wi2vgD9LSAbtGS829qmHYlwbh
-	jGmA7PP+tHwdR9Mvn6aMx4ELXrrpeBbloVr6uKHO766iMiZQMi+l/rnwa8gowg9s1x5jQuGO8D8
-	4Kc/nRrZE5kxwKphx2DcuAdF6apicYuIQVKdAeX2D/jqmwFPv+ps+sSM23z3O4hNGItM=
-X-Google-Smtp-Source: AGHT+IF5iXIUmrdCM8FhNB0jGX3DsNw6jrLVe+lQO/cwacf3GaTVn0cynfyX1i5HLYqqcIiwQr7RfA==
-X-Received: by 2002:a17:906:f114:b0:ae0:da16:f550 with SMTP id a640c23a62f3a-ae9ce167b10mr288616566b.49.1752682641624;
-        Wed, 16 Jul 2025 09:17:21 -0700 (PDT)
-Received: from ?IPV6:2001:a61:133f:9e01:3f5f:8464:37ea:5571? ([2001:a61:133f:9e01:3f5f:8464:37ea:5571])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e7e91c81sm1224581066b.37.2025.07.16.09.17.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jul 2025 09:17:21 -0700 (PDT)
-Message-ID: <2c807a7e-d55d-4670-9a86-e3fcaa3e52ba@suse.com>
-Date: Wed, 16 Jul 2025 18:17:19 +0200
+	 In-Reply-To:Content-Type; b=Rkh6ZrTy1PL3tA89xpvfUyKUZb+N1AkIPRekDnUhyjo66RlsXWuEzUVXUtzVDhb2GK4abytOsBX2jw5lJCykcaO1KxTMRkndbICxcJ/HzEVepoIt8J7jAJI4YkDIzjxCD4m+0HRjw7RZr3vmekUKP4qZ0O3ei/kAnCW3FkniKQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mOwfSEmE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF49C4CEE7;
+	Wed, 16 Jul 2025 16:35:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752683728;
+	bh=wKYXNfNFlYSsEzFHoBVVKENlvhX4Yr8nQs3M3eAprjg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mOwfSEmE+QyO0CawO9Xlv9HhI5z8QB+FytojLywkbojaVWxY3hH7QennW72W/XhAd
+	 MZbLUZ6IAU1rtjGpDCoMoTo4vSyfXS1L3FQi6brWvxHyumT6WHbQrmxq4MjLnEzfOD
+	 GLYKpfk92HRj0Nnn2WR4OzLoaliBWDfOgcyOgPThbt72LtK3X4/h3VqGBq4gflKQgR
+	 p9hGF0/gYc1m+Kmc+0erN00ihsrNFJp6Wk994whIPm2KIF9UngEXgp3cdXpYr3tj4D
+	 1KObhZS3BPOP3QVMgQuY/wS+aHAPfaFjb/CP3coavsas5OGaxzECfjGrcnu0LNSsil
+	 8XdwMqwPVPgKA==
+Message-ID: <f8502b45-967d-4377-88a3-bbfb3decad95@kernel.org>
+Date: Wed, 16 Jul 2025 18:35:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,44 +50,110 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: USB cdc-acm driver: break and command
-To: "H. Peter Anvin" <hpa@zytor.com>, Oliver Neukum <oneukum@suse.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- gregkh@linuxfoundation.org, Jiri Slaby <jirislaby@kernel.org>,
- linux-serial@vger.kernel.org
-References: <ce54ae11-72bb-4ac7-980b-c1cbc798a209@zytor.com>
- <fa20ab91-5ebf-427d-b938-31ea6fb945cf@suse.com>
- <83B89F79-D28B-4F2C-87EA-F5078BD7ED17@zytor.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <83B89F79-D28B-4F2C-87EA-F5078BD7ED17@zytor.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 3/4] USB: Add a function to obtain USB version
+ independent maximum bpi value
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+ gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
+ Thinh.Nguyen@synopsys.com, Amardeep Rai <amardeep.rai@intel.com>,
+ Kannappan R <r.kannappan@intel.com>,
+ Mathias Nyman <mathias.nyman@linux.intel.com>
+References: <20250711083413.1552423-1-sakari.ailus@linux.intel.com>
+ <20250711083413.1552423-4-sakari.ailus@linux.intel.com>
+ <4ae4a0cf-8b63-4999-941d-011f00cdb5fb@kernel.org>
+ <aHYNpTKsnzBwhl3w@kekkonen.localdomain>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <aHYNpTKsnzBwhl3w@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 16.07.25 17:06, H. Peter Anvin wrote:
+Hi Sakari,
 
-> SEND_ENCAPSULATED_COMMAND at least takes a command string – it was intended, I believe, to be able to send AT commands to a modem while online without using the +++ escape code and all the potential race conditions (and security issues, since it is trivial for a user to generate) associated with that.
+On 15-Jul-25 10:13 AM, Sakari Ailus wrote:
+> Hi Hans,
+> 
+> Thank you for the review.
+> 
+> On Fri, Jul 11, 2025 at 03:44:21PM +0200, Hans de Goede wrote:
+>> Hi Sarari,
+>>
+>> On 11-Jul-25 10:34 AM, Sakari Ailus wrote:
+>>> From: "Rai, Amardeep" <amardeep.rai@intel.com>
+>>>
+>>> Add usb_endpoint_max_isoc_bpi() to obtain maximum bytes per interval for
+>>> isochronous endpoints in a USB version independent way.
+>>
+>> Nice, thank you for adding a generic helper for this.
+>>
+>>> Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
+>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>> Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+>>> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+>>> ---
+>>>  include/linux/usb.h | 22 ++++++++++++++++++++++
+>>>  1 file changed, 22 insertions(+)
+>>>
+>>> diff --git a/include/linux/usb.h b/include/linux/usb.h
+>>> index 68166718ab30..bd70bd5ca82d 100644
+>>> --- a/include/linux/usb.h
+>>> +++ b/include/linux/usb.h
+>>> @@ -2038,6 +2038,28 @@ static inline int usb_translate_errors(int error_code)
+>>>  	}
+>>>  }
+>>>  
+>>> +static inline u32 usb_endpoint_max_isoc_bpi(struct usb_device *dev,
+>>> +					    const struct usb_host_endpoint *ep)
+>>> +{
+>>> +	if (usb_endpoint_type(&ep->desc) != USB_ENDPOINT_XFER_ISOC)
+>>> +		return 0;
+>>> +
+>>> +	switch (dev->speed) {
+>>> +	case USB_SPEED_SUPER_PLUS:
+>>> +		if (USB_SS_SSP_ISOC_COMP(ep->ss_ep_comp.bmAttributes))
+>>> +			return le32_to_cpu(ep->ssp_isoc_ep_comp.dwBytesPerInterval);
+>>> +		fallthrough;
+>>> +	case USB_SPEED_SUPER:
+>>> +		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
+>>> +	case USB_SPEED_HIGH:
+>>> +		if (!usb_endpoint_maxp(&ep->desc) && le16_to_cpu(dev->descriptor.bcdUSB) == 0x220)
+>>> +			return le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval);
+>>
+>> Shouldn't there be a check here that ep->eusb2_isoc_ep_comp is filled?
+>>
+>> Like how the USB_SPEED_SUPER_PLU code above checks
+>> USB_SS_SSP_ISOC_COMP(ep->ss_ep_comp.bmAttributes)?
+>>
+>> I know you check the bcdUSB, but in my experience that field sometimes
+>> contains made up numbers, so I was wondering if there is an extra check
+>> we can do here ?
+> 
+> In the case of eUSB2, there's no such flag as for the SuperSpeedPlus
+> Isochronous Endpoint Companion. The eUSB2 Isochronous Endpoint Companion
+> Descriptor is simply expected to be present on eUSB2 (bcdUSB check)
+> isochronous IN endpoints that support more than 3KB per microframe.
+> 
+> Also what the USB_SS_SSP_ISOC_COMP() macro returns actually dependens on
+> the device telling there's such a descriptor but it's still different from
+> the device actually providing one. But what would you do if the device
+> indicates it provides no SSP_ISOC_COMP descriptor but still does provide
+> one?
+> 
+> How about adding a flag (or maybe a bit field?) to tell which endpoint
+> descriptors have been actually filled in struct usb_host_endpoint? I might
+> do that as a separate patch on top...
 
-Understood. It still seems dirty to me. If you want to send strings to a device
-the proper way is to use a device node and write().
-  
-> As far as BREAK is concerned, there is also the option of locking out a second BREAK for the delay time; however, this probably should belong in the tty core.  What do other drivers supporting TTY_DRIVER_HARDWARE_BREAK do?
+Adding a bit-field with which endpoint descriptors have actually
+been filled sounds like a good idea.
 
-I know of no driver but n_gsm which uses it. That driver needs to use it,
-because it cannot switch off a break.
+I also agree with doing that as a follow-up patch and moving forward with
+this patch as is, so:
 
-If you really wanted to use that API as it is right now, you'd
-have breaks racing with each other and, worse, with open()
-and close().
-Are you sure POSIX says nothing about how to handle such cases?
+Reviewed-by: Hans de Goede <hansg@kernel.org>
 
-You'd probably have to start a timer in the driver in send_break().
-That timer would need to be properly handled in disconnect(),
-pre/post_reset() and suspend()
-That API is really not nice to use.
+Regards,
 
-	Regards
-		Oliver
+Hans
 
 
 
