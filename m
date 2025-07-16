@@ -1,153 +1,208 @@
-Return-Path: <linux-usb+bounces-25870-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25871-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0746CB06FC7
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 10:00:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 784BDB07086
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 10:28:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC52A17514D
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 08:00:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A007C4A4296
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 08:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42FA28FFC6;
-	Wed, 16 Jul 2025 08:00:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B56512EAB9E;
+	Wed, 16 Jul 2025 08:28:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WNiKB5aT"
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Vtu2jxUF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E050628D8CD;
-	Wed, 16 Jul 2025 08:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3F92EA470;
+	Wed, 16 Jul 2025 08:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752652813; cv=none; b=PYM+TFhMmXrATlDX9LQLO8AA1F7ukZIb1XFdVr1FUBCk2IC6l5ftPNg0Tm+UKqzpHw0jJTmm2NyepR+Y7BGRN9sf0B4ZP3O+o/1IpYm4zoN1C4ZhaPC9i6DhqIY6v6/QthXlMg/PU5GIuHYjpfHpN868vbxxzc4e2yiuPh1roOU=
+	t=1752654516; cv=none; b=emFsXacWlYbPXpzWFC87RRwWS/zdBmw0HRvECPkuP19xD9PnfdzDw5jFbGslb6JwkY/qD9ehUsGNVMSbUkOkzoO9sOqbg02jxb+s5EfktgJh7oOeS/PNA59+BzRcmsTPOpjYyg/5wlQp7Y1fhSi3gvLXrnXb6D2Yx5E9KNopWsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752652813; c=relaxed/simple;
-	bh=8ezUyebd/+zk1M3qi3OCn5hHE2PAlIsXeL4mPMikVcg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e3c26XL4QZJjpAqXSKP3p9VK8CH6+tkgtdxdzlsvZpdpAzWQxPlI7RE25MJegDN9HAkbSdK5w8kV+StKCbqDBNaSeoQ2nVjNwjwHBf3ldjEaPkn/7KkdT7wstRFluOGdBQ1rtzAKFOWQYAcdML0wq8ecxSVbK61jE1D9A2NZTGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WNiKB5aT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1996FC4CEF0;
-	Wed, 16 Jul 2025 08:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752652812;
-	bh=8ezUyebd/+zk1M3qi3OCn5hHE2PAlIsXeL4mPMikVcg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WNiKB5aTgXzKdw+PMKZx1ARZ3GAbmFhcS5FaAxL/Z06vrDiQ+qS+RQ3Y1BFq43gNe
-	 4KedC8w12Kk/qoZmcnB3yUqCOgR8rRz4GG9ZkU9hvBUZd/NTzm1EZLSRGzVhqc19I1
-	 eujLaQCZizKkEi/h/0UTApnet6WALWb9FwmNVDgk=
-Date: Wed, 16 Jul 2025 10:00:10 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: accessrunner-general@lists.sourceforge.net, linux-usb@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] usb: atm: cxacru: Zero initialize bp in
- cxacru_heavy_init()
-Message-ID: <2025071616-flap-mundane-7627@gregkh>
-References: <20250715-usb-cxacru-fix-clang-21-uninit-warning-v1-1-de6c652c3079@kernel.org>
- <2025071618-jester-outing-7fed@gregkh>
- <20250716052450.GA1892301@ax162>
+	s=arc-20240116; t=1752654516; c=relaxed/simple;
+	bh=RNftaCGYd13yFx540oBssjX8Jc8xFPzXzRNlIMRb0tQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C6Al2Oi4ClJEAB4GHiu/lbk8INfyh12ViqZrySYlVey3zIsNjfhhHGm9TtC55Fxp18VEjkX+kjvc30cuzrI4IPuQvXovko4k6EnXti3UhtMWAlfGJxWbxIiaVQCUOhBuIz5Nz3vO77RntWS0JnYkKbFipLMRXm4DnYT+GO26Gws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=Vtu2jxUF; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-74b52bf417cso4027010b3a.0;
+        Wed, 16 Jul 2025 01:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1752654514; x=1753259314; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fVivwlquhc/xyQSlolPcTCMefY5MmFW6ZwXvG0y8FSI=;
+        b=Vtu2jxUFNsNjIWpGRZjo0nwOoQHRbYGmrJwbwhP1TOXuj+GlJ9xb6xriqtJc3Nc3Sj
+         qVIX6P7Mdp2G6TA7kDBHX9LCZhjA5jmwGZhcCWHXPXAeU5b7+jLk5DL5zWLAxm6EXxzf
+         PajwPTFJQJ9JnAnTbN9nePc2oy7xVB1ZFdCfO1R53ogI0ursUdqJsuTzyM90maqFeIw+
+         VGRat2BJiX/ccf09OR6Qtpk8X0em0AcDRo+GKA+XNFKNggM+ujRK6lyL5mR7SkRSjSxu
+         mVdBWvjU1eWIOOXCC7qbWbMZ3op3EJshZg/dtmNKU7bT0Yo/vWiYbC+3MQmqrHhm+anG
+         NG8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752654514; x=1753259314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fVivwlquhc/xyQSlolPcTCMefY5MmFW6ZwXvG0y8FSI=;
+        b=L5NFqoXTjS0WwBAhm2nNkNNyzDVUaWMklFkUYK8NPCTmLtSmHJi9VA38by3B8qvPAv
+         iLUn1LgDU+w2Mnt3+Ha+Y37jgL9Oin+Gh9LlKBD3N9+fE5xzJbO+H8EHpNsA92Ou6TQY
+         3YqT534/7Iytwvh833kdcJXqVh6SVDKH2cTfXJwGTQgAzby3W1jZWJ5FQ9Gzk4fCJT1P
+         K+0jaQc/VIrXqUt+mdJXMAgLWZ7IWYpXkLAt6R8CNS8myXiHbatkhUfLFI9pAyt7rPTU
+         jNL4uts8N7mHIfTel9P7EvB6Llbi8x2+vxouXfimp0FeSKusQPnWw47CViC4Rxwf9HUo
+         FTlw==
+X-Forwarded-Encrypted: i=1; AJvYcCWOLHPo+23GD9TponIPiprYqBTPTrXuFmYrpUoCcWWRhoADrz2LtvsB7IW8p8PuRxu7sRCECX1D5QDmt6E=@vger.kernel.org, AJvYcCXvWKBoK3NqyxN7bMpEPJPKI6pxh5XieorHq7ueW1ynkKNmOVq2rSlmfFCTx5m5leR6yj5hYDjyEjaG@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/nxreqL7zqDaXzTmO20GcieBRHJxDzs3mlt2oGwqwHrMG9gn/
+	tdSZ7Z/FxddZX6XJFwICK1gmh+haX0snFPkWcQXvAY/i6I7MZu1Uz3V2U39eI0dnFHB+k5b0Alz
+	Fm7BWWvF24QzH0DY/QzwMiwV3hRCSYCv/Ri5j
+X-Gm-Gg: ASbGncuwKEgK7RsgRA/oF3ePCJRrdzROgrOV/Z4XSKsf0zqDwI+X3nhEKUgwjU0Pu4p
+	fZlepTlhW9cBmHrIWRyASABXiGOxUsISxHXEy+lj6/8Dabdf2kwRBRB0FeM2Biv6sXS1xJv18DR
+	YKIG2jv9f1mhi/OVMDNi+2ej/V0jTV/ObPjkDz7O0/E3KBQi7HwYzG7KzFdCGCyf1IihzKc3vrl
+	GyyGYlYDwy1OZM1x/VQqrySm0GL/aEbzyfsPLZudlgdE34jES8=
+X-Google-Smtp-Source: AGHT+IHeGlTTxR0kqDnhS2FvvtUVIfj50IUbTGbzan635qZ0kDyA8KmbB70izucfKYP8rB5gL0UFvnSyeeo/qafPSak=
+X-Received: by 2002:a17:902:ef44:b0:234:d7b2:2ab4 with SMTP id
+ d9443c01a7336-23e256b442dmr29637355ad.17.1752654513843; Wed, 16 Jul 2025
+ 01:28:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250716052450.GA1892301@ax162>
+References: <20250204135842.3703751-1-clabbe@baylibre.com> <20250204135842.3703751-2-clabbe@baylibre.com>
+ <aCHHfY2FkVW2j0ML@hovoldconsulting.com> <CAFBinCAUNNfOp4qvn2p8AETossePv2aL7jBkFxVZV_XzzULgVg@mail.gmail.com>
+ <2025071631-thesaurus-blissful-58f3@gregkh>
+In-Reply-To: <2025071631-thesaurus-blissful-58f3@gregkh>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date: Wed, 16 Jul 2025 10:28:22 +0200
+X-Gm-Features: Ac12FXzZ-IsMLLWh_4YKVYAdEdGILKB-IGO51SXas0OzPziA9My0dT2eSUfiSDs
+Message-ID: <CAFBinCAMGR2f4M1ARKytOwG1z9ORcD-OMNLH2FqZHb+tOm0tEQ@mail.gmail.com>
+Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Johan Hovold <johan@kernel.org>, Corentin Labbe <clabbe@baylibre.com>, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, david@ixit.cz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 15, 2025 at 10:24:50PM -0700, Nathan Chancellor wrote:
-> On Wed, Jul 16, 2025 at 07:06:50AM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Jul 15, 2025 at 01:33:32PM -0700, Nathan Chancellor wrote:
-> > > After a recent change in clang to expose uninitialized warnings from
-> > > const variables [1], there is a warning in cxacru_heavy_init():
-> > > 
-> > >   drivers/usb/atm/cxacru.c:1104:6: error: variable 'bp' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-> > >    1104 |         if (instance->modem_type->boot_rom_patch) {
-> > >         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   drivers/usb/atm/cxacru.c:1113:39: note: uninitialized use occurs here
-> > >    1113 |         cxacru_upload_firmware(instance, fw, bp);
-> > >         |                                              ^~
-> > >   drivers/usb/atm/cxacru.c:1104:2: note: remove the 'if' if its condition is always true
-> > >    1104 |         if (instance->modem_type->boot_rom_patch) {
-> > >         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   drivers/usb/atm/cxacru.c:1095:32: note: initialize the variable 'bp' to silence this warning
-> > >    1095 |         const struct firmware *fw, *bp;
-> > >         |                                       ^
-> > >         |                                        = NULL
-> > > 
-> > > This warning occurs in clang's frontend before inlining occurs, so it
-> > > cannot notice that bp is only used within cxacru_upload_firmware() under
-> > > the same condition that initializes it in cxacru_heavy_init(). Just
-> > > initialize bp to NULL to silence the warning without functionally
-> > > changing the code, which is what happens with modern compilers when they
-> > > support '-ftrivial-auto-var-init=zero' (CONFIG_INIT_STACK_ALL_ZERO=y).
-> > 
-> > We generally do not want to paper over compiler bugs, when our code is
-> > correct, so why should we do that here?  Why not fix clang instead?
-> 
-> I would not really call this a compiler bug. It IS passed uninitialized
-> to this function and while the uninitialized value is not actually used,
-> clang has no way of knowing that at this point in its pipeline, so I
-> don't think warning in this case is unreasonable.
+On Wed, Jul 16, 2025 at 9:44=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Tue, Jul 15, 2025 at 11:20:33PM +0200, Martin Blumenstingl wrote:
+> > Hi Johan,
+> >
+> > I'm excluding comments that are clear to me in this reply.
+> >
+> > On Mon, May 12, 2025 at 12:03=E2=80=AFPM Johan Hovold <johan@kernel.org=
+> wrote:
+> > [...]
+> > > > +     if (ret) {
+> > > > +             dev_err(&port->serial->dev->dev,
+> > > > +                     "Failed to configure UART_MCR, err=3D%d\n", r=
+et);
+> > > > +             return ret;
+> > > > +     }
+> > >
+> > > The read urbs should be submitted at first open and stopped at last
+> > > close to avoid wasting resources when no one is using the device.
+> > >
+> > > I know we have a few drivers that do not do this currently, but it
+> > > shouldn't be that hard to get this right from the start.
+> > If you're aware of an easy approach or you can recommend an existing
+> > driver that implements the desired behavior then please let me know.
+> >
+> > The speciality about ch348 is that all ports share the RX/TX URBs.
+> > My current idea is to implement this using a ref count (for the number
+> > of open ports) and mutex for locking.
+>
+> How do you know if a port is "open" or not and keep track of them all?
+> Trying to manage that is a pain and a refcount shouldn't need locking if
+> you use the proper refcount_t type in a sane way.
+>
+> Try to keep it simple please.
+I'm currently refcounting from usb_serial_driver.{open,close}
+The additional challenge is that I need to open two URBs at the right
+time to "avoid wasting resources". At least in my head I can't make it
+work without an additional lock.
 
-No, I take it back, it is unreasonable :)
+The following is a simplified/pseudo-code version of what I have at
+the moment (which is called from my ch348_open):
+static int ch348_submit_urbs(struct usb_serial *serial)
+{
+  int ret =3D 0;
 
-At runtime, there never is a uninitialized use of this pointer, the
-first time it is used, it is intended to be filled in if this is a "boot
-rom patch":
-	ret = cxacru_find_firmware(instance, "bp", &bp);
+  mutex_lock(&ch348->manage_urbs_lock);
 
-Then if that call fails, the function exits, great.
+  if (refcount_read(&ch348->num_open_ports))
+    goto out_increment_refcount;
 
-Then later on, this is called:
-	cxacru_upload_firmware(instance, fw, bp);
-so either bp IS valid, or it's still uninitialized, fair enough.
+  ret =3D usb_serial_generic_open(NULL, serial_rx);
+  if (ret)
+    goto out_unlock;
 
-But then cxacru_upload_firmware() does the same check for "is this a
-boot rom patch" and only then does it reference the variable.
+  ret =3D usb_serial_generic_open(NULL, status);
+  if (ret) {
+    usb_serial_generic_close(serial_rx); /* undo the first
+usb_serial_generic_open */
+    goto out_unlock;
+  }
 
-And when it references it, it does NOT check if it is valid or not, so
-even if you do pre-initialize this to NULL, surely some other static
-checker is going to come along and say "Hey, you just dereferenced a
-NULL pointer, this needs to be fixed!" when that too is just not true at
-all.
+out_increment_refcount:
+  refcount_inc(&ch348->num_open_ports);
 
-So the logic here is all "safe" for now, and if you set this to NULL,
-you are just papering over the fact that it is right, AND setting us up
-to get another patch that actually does nothing, while feeling like the
-submitter just fixed a security bug, demanding a CVE for an impossible
-code path :)
+out_unlock:
+  mutex_unlock(&ch348->manage_urbs_lock);
 
-So let's leave this for now because:
+  return ret;
+}
 
-> This type of warning
-> is off for GCC because of how unreliable it was when it is done in the
-> middle end with optimizations. Furthermore, it is my understanding based
-> on [1] that just the passing of an uninitialized variable in this manner
-> is UB.
-> 
-> [1]: https://lore.kernel.org/20220614214039.GA25951@gate.crashing.org/
+My understanding is that usb-serial core does not provide any locking
+around .open/.close.
 
-As gcc can't handle this either, it seems that clang also can't handle
-it.  So turning this on for the kernel surely is going to trip it up in
-other places than just this one driver.
+> > > With this implementation writing data continuously to one port will
+> > > starve the others.
+> > >
+> > > The vendor implementation appears to write to more than one port in
+> > > parallel and track THRE per port which would avoid the starvation iss=
+ue
+> > > and should also be much more efficient.
+> > >
+> > > Just track THRE per port and only submit the write urb when it the
+> > > transmitter is empty or when it becomes empty.
+> > I'm trying as you suggest:
+> > - submit the URB synchronously for port N
+> > - submit the URB synchronously for port N + 1
+> > - ...
+> >
+> > This seems to work (using usb_bulk_msg). What doesn't work is
+> > submitting URBs in parallel (this is what the vendor driver prevents
+> > as well).
+>
+> Why would submitting urbs in parallel not work?  Is the device somehow
+> broken and can't accept multiple requests at the same time?
+I don't know the reason behind this.
+These are requests to the same bulk out endpoint. When submitting
+multiple serial TX requests at the same time then some of the data is
+lost / corrupted.
 
-If you _really_ want to fix this, refactor the code to be more sane and
-obvious from a C parsing standpoint, but really, it isn't that complex
-for a human to read and understand, and I see why it was written this
-way.
+The vendor driver basically does this in their write function (very
+much simplified, see [0] for their original code):
+  spin_lock_irqsave(&ch9344->write_lock, flags);
+  usb_submit_urb(wb->urb, GFP_ATOMIC); /* part of ch9344_start_wb */
+  spin_unlock_irqrestore(&ch9344->write_lock, flags);
 
-As for the UB argument, bah, I don't care, sane compilers will do the
-right thing, i.e. pass in the uninitialized value, or if we turned on
-the 0-fill stack option, will be NULL anyway, otherwise why do we have
-that option if not to "solve" the UB issue?).
+If you have any suggestions: please tell me - I'm happy to try them out!
 
-thanks,
 
-greg k-h
+Best regards,
+Martin
+
+
+[0] https://github.com/WCHSoftGroup/ch9344ser_linux/blob/e0a38c4f4f9d4c1f5e=
+2e3a352b7b1010b33aa322/driver/ch9344.c#L1330-L1404
 
