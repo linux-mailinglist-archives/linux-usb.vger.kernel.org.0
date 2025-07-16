@@ -1,57 +1,52 @@
-Return-Path: <linux-usb+bounces-25864-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25865-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44CA1B06D2A
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 07:25:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47208B06E57
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 08:58:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D2F23AC3D6
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 05:24:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EF3C1A61618
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 06:58:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 883F629B8CE;
-	Wed, 16 Jul 2025 05:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ADC7288C96;
+	Wed, 16 Jul 2025 06:58:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C7arrX9v"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lhsbAi6r"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0126F264F99;
-	Wed, 16 Jul 2025 05:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DBC17B50A;
+	Wed, 16 Jul 2025 06:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752643495; cv=none; b=ak4YyBT5Wv9yFQvP/XYJ2E2y+EK+e0Jui/+VFSEGq5nFfmP9pWBdYENNgSBhWVkQEh9ceI249K8Xmx8RRThVvI6NjFwsgUBRpnkp0T9XlsljNMP2gCXfV7g1jLkJZhEWNf6mLQHTHl98WQ+/ZN9HcXVRhwazyKhQSmJUibiJVCg=
+	t=1752649093; cv=none; b=r5tWjHaCA08P3TSnir6X38UZjiMWnIJ1QS65dYLr6AwCmRacDY+raXdBjOk+AiN7wZkiDkcPwFOTEdYxK8oh6JVvUHJANQbxsPSCZU40eEOaaAVq8A6C4bx688TzgKo+JOd+VBtCsalce+wJW6Aient4PhDCIv8mPosU5pWMBtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752643495; c=relaxed/simple;
-	bh=NTc0dXa+1iv/hfoLA998fSRkxZiw3F2b1EA1EIKmOm8=;
+	s=arc-20240116; t=1752649093; c=relaxed/simple;
+	bh=dprRUhqdgfAk9X4hFRnI4ZYwibR+dNU2S1xSkcPS0SY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Af/8HMczcOaRee6E8lZJPiUCmjH7pcoLwpPPI9pjCm+aHaneemYnur6ZHGukBrYImEbE23KVcOonhrWAj4VrCkilgzM6mGmKTu/LYYWxv3442RQedE678lcms8CIPMAg+jlm3N6riKMXwDhc/mZqcjSF9wFjqLZ6BUUUR4HB31U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C7arrX9v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70F4BC4CEF0;
-	Wed, 16 Jul 2025 05:24:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752643494;
-	bh=NTc0dXa+1iv/hfoLA998fSRkxZiw3F2b1EA1EIKmOm8=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=dnYqAwIL/VlFFkqKzPpyJLKS7fw47n3OHPKMjl/L/DqcXLUB/48fLXQI1y8EQ8+LSJYoLffmwtaakMuJn1sxLKK05XzJmMNCeTCw5F8EJCN9rPkXA4BxVFTGpztTdYZHfZ2T2oatfo7TpPdqNXxAFLmyg3Y5eNRgSjZL8YX+gBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lhsbAi6r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF68C4CEF0;
+	Wed, 16 Jul 2025 06:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1752649093;
+	bh=dprRUhqdgfAk9X4hFRnI4ZYwibR+dNU2S1xSkcPS0SY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C7arrX9vLDxpFqsweVgoKYk9ktWCFkxn1Gvs/3jX2RQG+2o/KvOtAeIYS8zvQtP3x
-	 lAOj7WL6TOoaZko7OEEwCPmH99FH+o6ND5C7sFjozkITxb1h+NT2UexqRW7rcEr2Vb
-	 lzGPpRTL/faZZjG0CGA0fGysaQFLVbKmpZRkKXB4Wi7n/X6Se9KhHA+nQYna6RF16d
-	 WfPztJIpphKgZ9kFKjs2Beoahg/DvZ8L/aL+H2G0DqoDkHjvfasph+GGJinRS2hiUB
-	 wFsOzWY4W6TXa8GOJRyvjTLDyx60Ulxq+DjuMqr6KNvljo8sAxB5gRAujKgPTdwWD8
-	 AD6+kvTdZmZfw==
-Date: Tue, 15 Jul 2025 22:24:50 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: accessrunner-general@lists.sourceforge.net, linux-usb@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] usb: atm: cxacru: Zero initialize bp in
- cxacru_heavy_init()
-Message-ID: <20250716052450.GA1892301@ax162>
-References: <20250715-usb-cxacru-fix-clang-21-uninit-warning-v1-1-de6c652c3079@kernel.org>
- <2025071618-jester-outing-7fed@gregkh>
+	b=lhsbAi6rdu9+wyhHrTOmLTo3NA+aBHDo9JhVPhBiNLItVg/MY9fxrRrkmqJWrCEIw
+	 15Xfl77zoD/JyAow3UlLS7a9tzZcRB6RwVT1NxESF6Hfqp2q8Sgz1qQJn6YLTcshv8
+	 ug2eURrKZ8U73b7I9gyok0AmUldZDgzBv6ZQroU4=
+Date: Wed, 16 Jul 2025 08:58:10 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+	linux-serial@vger.kernel.org
+Subject: Re: USB cdc-acm driver: break and command
+Message-ID: <2025071652-afar-cornhusk-0830@gregkh>
+References: <ce54ae11-72bb-4ac7-980b-c1cbc798a209@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,48 +55,28 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2025071618-jester-outing-7fed@gregkh>
+In-Reply-To: <ce54ae11-72bb-4ac7-980b-c1cbc798a209@zytor.com>
 
-On Wed, Jul 16, 2025 at 07:06:50AM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Jul 15, 2025 at 01:33:32PM -0700, Nathan Chancellor wrote:
-> > After a recent change in clang to expose uninitialized warnings from
-> > const variables [1], there is a warning in cxacru_heavy_init():
-> > 
-> >   drivers/usb/atm/cxacru.c:1104:6: error: variable 'bp' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-> >    1104 |         if (instance->modem_type->boot_rom_patch) {
-> >         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >   drivers/usb/atm/cxacru.c:1113:39: note: uninitialized use occurs here
-> >    1113 |         cxacru_upload_firmware(instance, fw, bp);
-> >         |                                              ^~
-> >   drivers/usb/atm/cxacru.c:1104:2: note: remove the 'if' if its condition is always true
-> >    1104 |         if (instance->modem_type->boot_rom_patch) {
-> >         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >   drivers/usb/atm/cxacru.c:1095:32: note: initialize the variable 'bp' to silence this warning
-> >    1095 |         const struct firmware *fw, *bp;
-> >         |                                       ^
-> >         |                                        = NULL
-> > 
-> > This warning occurs in clang's frontend before inlining occurs, so it
-> > cannot notice that bp is only used within cxacru_upload_firmware() under
-> > the same condition that initializes it in cxacru_heavy_init(). Just
-> > initialize bp to NULL to silence the warning without functionally
-> > changing the code, which is what happens with modern compilers when they
-> > support '-ftrivial-auto-var-init=zero' (CONFIG_INIT_STACK_ALL_ZERO=y).
+On Tue, Jul 15, 2025 at 02:00:10PM -0700, H. Peter Anvin wrote:
+> Hi,
 > 
-> We generally do not want to paper over compiler bugs, when our code is
-> correct, so why should we do that here?  Why not fix clang instead?
+> I noticed looking at the CDC-ACM driver that it uses the assert/local
+> delay/deassert method of sending BREAK.  Given that the CDC model has a
+> delay specifier in the command packet, is there any reason not to set
+> TTY_DRIVER_HARDWARE_BREAK and sending only one packet?
+> 
+> I'm also wondering if it would make sense to support the
+> SEND_ENCAPSULATED_COMMAND and GET_ENCAPSULATED_RESPONSE commands, presumably
+> via an ioctl().  I'm not 100% sure because I'm not sure there aren't
+> potential security issues.
+> 
+> I'm guessing both of these could be of some use to embedded devices that
+> emulate a ttyACM serial port.
 
-I would not really call this a compiler bug. It IS passed uninitialized
-to this function and while the uninitialized value is not actually used,
-clang has no way of knowing that at this point in its pipeline, so I
-don't think warning in this case is unreasonable. This type of warning
-is off for GCC because of how unreliable it was when it is done in the
-middle end with optimizations. Furthermore, it is my understanding based
-on [1] that just the passing of an uninitialized variable in this manner
-is UB.
+No idea why this is that way, sorry.  Try making the change and see if
+it actually works?
 
-[1]: https://lore.kernel.org/20220614214039.GA25951@gate.crashing.org/
+thanks,
 
-Cheers,
-Nathan
+greg k-h
 
