@@ -1,274 +1,152 @@
-Return-Path: <linux-usb+bounces-25888-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25889-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1198DB07C03
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 19:29:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF966B07C0A
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 19:30:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD9607B70A6
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 17:27:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46CAA1C41684
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 17:31:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD3E2F5C54;
-	Wed, 16 Jul 2025 17:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 785C126E16E;
+	Wed, 16 Jul 2025 17:30:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dI/JKJXC"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Gy2t0WPv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA201B394F;
-	Wed, 16 Jul 2025 17:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE3F1114;
+	Wed, 16 Jul 2025 17:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752686949; cv=none; b=tsZmQa+amtscHp+2I1qlzZdbfoZ/duwgG5jf123M8pBtAhck19vQY2596OdGgtxhJYrl6jBB3HKVBSEtr/fXPpfU3CqELCbqit1aNEt81yYExGJfbatCGFtjJ1fXvj3yzNzQFHs/pnt/TUwmI50x9SseiZ8UbAqFrm73KsPa8iE=
+	t=1752687044; cv=none; b=ASEgRjmJNkTql8JyMnSpU0fzWNnL74//O4oUfp9zn+++4uhNA6Uzyh/Mpgwa4cVONFbvAaPyTY+y9QGnO7VPf2WBvF+vFKzvzT297uMF0jOXdv0XdThNyjAjiD1THWjr/6l/mVKT6kM8vqXXYvEShwiWKnkE53EmIXJe69vh8NQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752686949; c=relaxed/simple;
-	bh=KHDb6zLjjtYFaNSljcLcDdVYJjrz/+7K9CdTKJIJZCs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=khoWAioU2vW3UFxyf4fVtNTsVcpHVofu4FloCHpEISn9yZ5x8q7I9ptJeY9x8ls/x3jyS3gfX95FI8QaJwlEDpyaNeVfkqsyl0GlROwsDMhvBGPQlV3hlVEm5QnchaGsYy8ChEIGIgTbHG0gld3HDPTCUuJBZwZJCuGGZaVIgF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dI/JKJXC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45ED8C4CEF0;
-	Wed, 16 Jul 2025 17:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752686948;
-	bh=KHDb6zLjjtYFaNSljcLcDdVYJjrz/+7K9CdTKJIJZCs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dI/JKJXCmO+Pyr3Elw7DSpoQlcTCYMnr0rc3yH6THY6UyLB+XrdW65rTqw7eu20Go
-	 gKlTqw8J7X19DhS/mm7N1aplLiXHN9SWDAKsV+PelUtfIf9Og1ixB/m5wXLZ/Tozpz
-	 Tyn9m0vrIIZbvBDAFtUBz3pOYxIMSFMzkiBHA4l7NVNl3H6TDvheKKDR4cuZiwOios
-	 /2E5LqD6DUaON2CDVPaArWh8GdFp63FYkFVEn1u5nx7xLsosjbnicB3BdpWWWvg8/E
-	 7yqOxc/RGbg+Q7t1U3CgqVzaffddzzFVDIbUq1PLdCEoDl4MLMfLgGB1LM/rJLcEzw
-	 rvTfSIANukWug==
-Date: Wed, 16 Jul 2025 11:29:03 -0600
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: accessrunner-general@lists.sourceforge.net, linux-usb@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] usb: atm: cxacru: Zero initialize bp in
- cxacru_heavy_init()
-Message-ID: <20250716172903.GA4010969@ax162>
-References: <20250715-usb-cxacru-fix-clang-21-uninit-warning-v1-1-de6c652c3079@kernel.org>
- <2025071618-jester-outing-7fed@gregkh>
- <20250716052450.GA1892301@ax162>
- <2025071616-flap-mundane-7627@gregkh>
- <20250716154304.GA2740255@ax162>
- <2025071648-punch-carrousel-2046@gregkh>
+	s=arc-20240116; t=1752687044; c=relaxed/simple;
+	bh=r2DRgij26xF5m6ZdI1q8r2pxawboAB2+pBWnHW4lsNo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hTNgENsJP4+c0/KRZszTrNm7ddlDShcw7Jf3xxpJ5cLo0GeSRzA5y6WhrVTxlKNp0knerfpCqC6p1p3/CdgLZZoHX5kq8rIxAGNLHCCQZDlUkQQcJmOntMv0WNPhB7C6GyAlUcoz6oEaPooLL+ojzHCdBwb4HCZxoA6OzOtOQzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Gy2t0WPv; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [IPV6:2601:646:8081:9482:6dc:b955:47cb:dcbb] ([IPv6:2601:646:8081:9482:6dc:b955:47cb:dcbb])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56GHUYEe1625675
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 16 Jul 2025 10:30:34 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56GHUYEe1625675
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025062101; t=1752687035;
+	bh=0trOfPgTp1BfkTElS9aX20q6MRULueSy68TJTaUES2U=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Gy2t0WPvdz+He897EQMoQcH0JfPQeIHBqi7z44XsIN5Nrj6G4/vvwFJYYRm27clDo
+	 wettSG+p998Gz9erjq+lCC4bX7EDQCaZC2J6tccHwtKXmMJlAYAkggSHjdwQafbtwB
+	 YMf8KY3V0t4TStJrxg6GbjwY4G96l6b41D1Go02EWCvHFbOZWvIzmKWaIucPeSKZrg
+	 d+TpGHKh7CSjGdMeD7btX/B6WkA/u6RhXn5RhGNTc1c/1ghMNxh71cMozKMrk8UiKO
+	 88hdbru2v4FgWDxViL+nQ9hYQlK1xwJBW65aWDlrsUiSsXBlEYrXfHzn+se/6UWkcg
+	 E7ByWA8+U735A==
+Message-ID: <927f2d40-1004-4738-a1bc-0000d4d3e179@zytor.com>
+Date: Wed, 16 Jul 2025 10:30:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025071648-punch-carrousel-2046@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: USB cdc-acm driver: break and command
+To: Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org
+References: <ce54ae11-72bb-4ac7-980b-c1cbc798a209@zytor.com>
+ <fa20ab91-5ebf-427d-b938-31ea6fb945cf@suse.com>
+ <83B89F79-D28B-4F2C-87EA-F5078BD7ED17@zytor.com>
+ <2c807a7e-d55d-4670-9a86-e3fcaa3e52ba@suse.com>
+Content-Language: en-US
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <2c807a7e-d55d-4670-9a86-e3fcaa3e52ba@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 16, 2025 at 06:08:47PM +0200, Greg Kroah-Hartman wrote:
-> I have no idea what Android uses for their compiler.  Usually when they
-> run into issues like this, for their 'allmodconfig' builds, they just
-> apply a "CONFIG_BROKEN" patch to disable the old/unneeded driver
-> entirely.
-
-Well I can say for certain that they do use clang but if that's their
-preferred solution to situations such as this, so be it.
-
-> I'm really loath to take it, sorry.  I'd prefer that if the compiler
-> can't figure it out, we should rewrite it to make it more "obvious" as
-> to what is going on here so that both people, and the compiler, can
-> understand it easier.
+On 2025-07-16 09:17, Oliver Neukum wrote:
 > 
-> Just setting the variable to NULL does neither of those things, except
-> to shut up a false-positive, not making it more obvious to the compiler
-> as to what really is going on.
+> If you really wanted to use that API as it is right now, you'd
+> have breaks racing with each other and, worse, with open()
+> and close().
+> Are you sure POSIX says nothing about how to handle such cases?
+> 
 
-Alright. We could just manually inline cxacru_upload_firmware() into
-cxacru_heavy_init() since that is the only place where it is called so
-that clang can see via the control flow graph that bp is only
-initialized and used under the same condition. This resolves the warning
-for me as well.
+This is the POSIX definition for tcsendbreak():
 
-diff --git a/drivers/usb/atm/cxacru.c b/drivers/usb/atm/cxacru.c
-index a12ab90b3db7..68a8e9de8b4f 100644
---- a/drivers/usb/atm/cxacru.c
-+++ b/drivers/usb/atm/cxacru.c
-@@ -980,25 +980,60 @@ static int cxacru_fw(struct usb_device *usb_dev, enum cxacru_fw_request fw,
- 	return ret;
- }
- 
--static void cxacru_upload_firmware(struct cxacru_data *instance,
--				   const struct firmware *fw,
--				   const struct firmware *bp)
-+
-+static int cxacru_find_firmware(struct cxacru_data *instance,
-+				char *phase, const struct firmware **fw_p)
- {
--	int ret;
-+	struct usbatm_data *usbatm = instance->usbatm;
-+	struct device *dev = &usbatm->usb_intf->dev;
-+	char buf[16];
-+
-+	sprintf(buf, "cxacru-%s.bin", phase);
-+	usb_dbg(usbatm, "cxacru_find_firmware: looking for %s\n", buf);
-+
-+	if (request_firmware(fw_p, buf, dev)) {
-+		usb_dbg(usbatm, "no stage %s firmware found\n", phase);
-+		return -ENOENT;
-+	}
-+
-+	usb_info(usbatm, "found firmware %s\n", buf);
-+
-+	return 0;
-+}
-+
-+static int cxacru_heavy_init(struct usbatm_data *usbatm_instance,
-+			     struct usb_interface *usb_intf)
-+{
-+	const struct firmware *fw, *bp;
-+	struct cxacru_data *instance = usbatm_instance->driver_data;
- 	struct usbatm_data *usbatm = instance->usbatm;
- 	struct usb_device *usb_dev = usbatm->usb_dev;
- 	__le16 signature[] = { usb_dev->descriptor.idVendor,
- 			       usb_dev->descriptor.idProduct };
- 	__le32 val;
-+	int ret;
- 
--	usb_dbg(usbatm, "%s\n", __func__);
-+	ret = cxacru_find_firmware(instance, "fw", &fw);
-+	if (ret) {
-+		usb_warn(usbatm_instance, "firmware (cxacru-fw.bin) unavailable (system misconfigured?)\n");
-+		return ret;
-+	}
-+
-+	if (instance->modem_type->boot_rom_patch) {
-+		ret = cxacru_find_firmware(instance, "bp", &bp);
-+		if (ret) {
-+			usb_warn(usbatm_instance, "boot ROM patch (cxacru-bp.bin) unavailable (system misconfigured?)\n");
-+			release_firmware(fw);
-+			return ret;
-+		}
-+	}
- 
- 	/* FirmwarePllFClkValue */
- 	val = cpu_to_le32(instance->modem_type->pll_f_clk);
- 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, PLLFCLK_ADDR, (u8 *) &val, 4);
- 	if (ret) {
- 		usb_err(usbatm, "FirmwarePllFClkValue failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	/* FirmwarePllBClkValue */
-@@ -1006,7 +1041,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, PLLBCLK_ADDR, (u8 *) &val, 4);
- 	if (ret) {
- 		usb_err(usbatm, "FirmwarePllBClkValue failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	/* Enable SDRAM */
-@@ -1014,7 +1049,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, SDRAMEN_ADDR, (u8 *) &val, 4);
- 	if (ret) {
- 		usb_err(usbatm, "Enable SDRAM failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	/* Firmware */
-@@ -1022,7 +1057,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, FW_ADDR, fw->data, fw->size);
- 	if (ret) {
- 		usb_err(usbatm, "Firmware upload failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	/* Boot ROM patch */
-@@ -1031,7 +1066,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 		ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, BR_ADDR, bp->data, bp->size);
- 		if (ret) {
- 			usb_err(usbatm, "Boot ROM patching failed: %d\n", ret);
--			return;
-+			goto done;
- 		}
- 	}
- 
-@@ -1039,7 +1074,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, SIG_ADDR, (u8 *) signature, 4);
- 	if (ret) {
- 		usb_err(usbatm, "Signature storing failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	usb_info(usbatm, "starting device\n");
-@@ -1051,7 +1086,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	}
- 	if (ret) {
- 		usb_err(usbatm, "Passing control to firmware failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	/* Delay to allow firmware to start up. */
-@@ -1065,53 +1100,10 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	ret = cxacru_cm(instance, CM_REQUEST_CARD_GET_STATUS, NULL, 0, NULL, 0);
- 	if (ret < 0) {
- 		usb_err(usbatm, "modem failed to initialize: %d\n", ret);
--		return;
--	}
--}
--
--static int cxacru_find_firmware(struct cxacru_data *instance,
--				char *phase, const struct firmware **fw_p)
--{
--	struct usbatm_data *usbatm = instance->usbatm;
--	struct device *dev = &usbatm->usb_intf->dev;
--	char buf[16];
--
--	sprintf(buf, "cxacru-%s.bin", phase);
--	usb_dbg(usbatm, "cxacru_find_firmware: looking for %s\n", buf);
--
--	if (request_firmware(fw_p, buf, dev)) {
--		usb_dbg(usbatm, "no stage %s firmware found\n", phase);
--		return -ENOENT;
--	}
--
--	usb_info(usbatm, "found firmware %s\n", buf);
--
--	return 0;
--}
--
--static int cxacru_heavy_init(struct usbatm_data *usbatm_instance,
--			     struct usb_interface *usb_intf)
--{
--	const struct firmware *fw, *bp;
--	struct cxacru_data *instance = usbatm_instance->driver_data;
--	int ret = cxacru_find_firmware(instance, "fw", &fw);
--
--	if (ret) {
--		usb_warn(usbatm_instance, "firmware (cxacru-fw.bin) unavailable (system misconfigured?)\n");
--		return ret;
-+		goto done;
- 	}
- 
--	if (instance->modem_type->boot_rom_patch) {
--		ret = cxacru_find_firmware(instance, "bp", &bp);
--		if (ret) {
--			usb_warn(usbatm_instance, "boot ROM patch (cxacru-bp.bin) unavailable (system misconfigured?)\n");
--			release_firmware(fw);
--			return ret;
--		}
--	}
--
--	cxacru_upload_firmware(instance, fw, bp);
--
-+done:
- 	if (instance->modem_type->boot_rom_patch)
- 		release_firmware(bp);
- 	release_firmware(fw);
+NAME
+
+    tcsendbreak — send a break for a specific duration
+
+SYNOPSIS
+
+    #include <termios.h>
+
+    int tcsendbreak(int fildes, int duration);
+
+DESCRIPTION
+
+    If the terminal is using asynchronous serial data transmission,
+tcsendbreak() shall cause transmission of a continuous stream of
+zero-valued bits for a specific duration. If duration is 0, it shall
+cause transmission of zero-valued bits for at least 0.25 seconds, and
+not more than 0.5 seconds. If duration is not 0, it shall send
+zero-valued bits for an implementation-defined period of time.
+
+    The fildes argument is an open file descriptor associated with a
+terminal.
+
+    If the terminal is not using asynchronous serial data transmission,
+it is implementation-defined whether tcsendbreak() sends data to
+generate a break condition or returns without taking any action.
+
+    Attempts to use tcsendbreak() from a process which is a member of a
+background process group on a fildes associated with its controlling
+terminal shall cause the process group to be sent a SIGTTOU signal. If
+the calling thread is blocking SIGTTOU signals or the process is
+ignoring SIGTTOU signals, the process shall be allowed to perform the
+operation, and no signal is sent.
+
+RETURN VALUE
+
+    Upon successful completion, 0 shall be returned. Otherwise, -1 shall
+be returned and errno set to indicate the error.
+
+ERRORS
+
+    The tcsendbreak() function shall fail if:
+
+    [EBADF]
+        The fildes argument is not a valid file descriptor.
+    [EIO]
+        The process group of the writing process is orphaned, the
+calling thread is not blocking SIGTTOU, and the process is not ignoring
+SIGTTOU.
+    [ENOTTY]
+        The file associated with fildes is not a terminal.
+
+--- ---
+
+The only other mentions of BREAK I can find are the BRKINT and IGNBRK
+flags, respectively.
+
+>
+> You'd probably have to start a timer in the driver in send_break().
+> That timer would need to be properly handled in disconnect(),
+> pre/post_reset() and suspend()
+> That API is really not nice to use.
+> 
+
+That's why I said if that is what is needed, it really belongs in the
+tty core.  That's where the current internal delay is, after all.
+
+	-hpa
+
 
