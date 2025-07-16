@@ -1,126 +1,118 @@
-Return-Path: <linux-usb+bounces-25893-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25894-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69218B07FBD
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 23:40:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0287B0809F
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 00:46:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3357189B495
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 21:40:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC6303B4B9C
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 22:46:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C24E2ECD28;
-	Wed, 16 Jul 2025 21:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FCD82EE612;
+	Wed, 16 Jul 2025 22:46:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nM7HPF5f"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U1lJ6bFD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C07FBF0;
-	Wed, 16 Jul 2025 21:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7646D28BA8B
+	for <linux-usb@vger.kernel.org>; Wed, 16 Jul 2025 22:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752702002; cv=none; b=lP5GwM1j+HImoziRzgXxE6PlUhA7aHYZN8jw+8cZy4bm1uVBjEu8fsXf0dqufjy+ZdTQSzaYIfZIFKJY3CqvLg+RGnH30GX2juq16ZX/lHSK5uNB1L5pdXSGufp+z9YIWiyIuu4WIkToYr/y2PQOirOqxxqc2o05uQRRREzjXmY=
+	t=1752705983; cv=none; b=mTiIFLSHPCECedJe7aW+Q1bB1kiypxoSD3+vjvBoAT7NPOsJgHvE/fwAMw7QBNpRDvIG8LAPvUUje+ZmaI6ooxqNi+efYjkquuDiy2w0SY12euNteoPlNh+kbPaNyc5gXYRGwRIK9AJRmWmAQyoRyEIm2YgB9DD3TBfQKGf6z8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752702002; c=relaxed/simple;
-	bh=jGPLM5UMm6HRhpvpB1axC22mIwzUp6GFM1ylnmPR7AY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bRv1fUkujHSmLGCmOBJ6Emtl1Q47Jk7lHayFSuCTAMXE9zX9BxtgzQMefrRklApUe8NFfpfYS4bPMBAIfDpE29I9SDn7YvSI32ffQmJPZribbGRTKN5pF1reFV0vExwlCMiIbj+fjEnQLtyqYouBv80QoOG6aeRuAIj1TQTqAFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nM7HPF5f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC97C4CEE7;
-	Wed, 16 Jul 2025 21:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752702000;
-	bh=jGPLM5UMm6HRhpvpB1axC22mIwzUp6GFM1ylnmPR7AY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=nM7HPF5fEeW74Nmis2g5+7UXb/oK5Oh90W0ThPw8GTm2naHeiWOLm4oQW0xoD/Y2w
-	 ioVjUnhovsxIFi9bs5qk5whbu+GBt+SpW09yEQJLOYmY0rEJRrkgaQk4LzDDa+Qp9a
-	 mxuoDhGY9k7cJ+3+gkGBCGLROuFjdqmlyyUgkoNLqtBDr/fffeV4pQ/I5VpjL8u0+M
-	 ++oeT6EfGq9NQuaYWKekSRYeKrBsuRGw2OLbUMeRjauSZCPaPnrx1gZLqKP2wwbYNB
-	 8eecrCdtElgJSgRGoQfU0moX0V9C1ltzX3cbBML+nMixF4eusjOkMb503aebI2kf9K
-	 bZqsx6CG5JenA==
-Date: Wed, 16 Jul 2025 14:39:59 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: John Ernberg <john.ernberg@actia.se>
-Cc: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Ming Lei
- <ming.lei@canonical.com>, "netdev@vger.kernel.org"
- <netdev@vger.kernel.org>, "linux-usb@vger.kernel.org"
- <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "stable@vger.kernel.org"
- <stable@vger.kernel.org>
-Subject: Re: [PATCH] net: usbnet: Avoid potential RCU stall on LINK_CHANGE
- event
-Message-ID: <20250716143959.683df283@kernel.org>
-In-Reply-To: <fbd03180-cca0-4a0f-8fd9-4daf5ff28ff5@actia.se>
-References: <20250710085028.1070922-1-john.ernberg@actia.se>
-	<20250714163505.44876e62@kernel.org>
-	<74a87648-bc02-4edb-9e6a-102cb6621547@actia.se>
-	<20250715065403.641e4bd7@kernel.org>
-	<fbd03180-cca0-4a0f-8fd9-4daf5ff28ff5@actia.se>
+	s=arc-20240116; t=1752705983; c=relaxed/simple;
+	bh=egIk+/LQ4iaDf+RLDIDJAcGByEdkupEuWlBMyV1IjQc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uoxFLpTAe33h35tbFOxc+wew1bhPvj48/Z/a+u19PewcWOpapS3mJd1VXUxeCylCmVkLG8y0NG/Zg91gNl1538gwY0pxx9cqIqvCtD02UcbQi5nKc/p80XEdW1Aptl84TgOSCaOXnvIVcpUqkihFiDEqp7noFVP6UGyhxYNiFGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U1lJ6bFD; arc=none smtp.client-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-2e95ab2704fso272718fac.3
+        for <linux-usb@vger.kernel.org>; Wed, 16 Jul 2025 15:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1752705980; x=1753310780; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pgJcNNaIcB7VF2rGgBtMbF7MjrWDu7+HbpybgI/inbs=;
+        b=U1lJ6bFDIKcQf23veWIV9+bvDsFMOsD2ySRdq+QdwVQnsuoRz1zQxTwPRqlrsHLVtS
+         WfNdYvnqrIn+3/eag9jeuw1lo5kLKqrdSgHuHPhoAH7OxtQ/KWR1mxSvHGxvlWcrmfY0
+         FVGmBLFf2xCVn56Jb+dMVP6rxf+EmvAHi2MNVRaoXBvXG6tvgtG+JCVK/8JnIWI/z8NG
+         wHIsu0kfyJ7WM5ehTTxKpl8WxCJ3i1U3yhci7+g7K3QjmWnpjjzIM2q2ovVG2Ms2shY0
+         MqfXMzaletrEnui2/ebUdfHDZo/BUjtBj+5oGYz9f6tUCUGG14xt3cdo+qxN5iaq20WU
+         B9wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752705980; x=1753310780;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pgJcNNaIcB7VF2rGgBtMbF7MjrWDu7+HbpybgI/inbs=;
+        b=ETGYthpUZwSCMASI6Sp5cskByhNz2Nyow8rjQ6KLdoh9LEcfJZ85YkrThx6ecERZRW
+         aE6f4yI5Fj6iTxtKeB/Jz44kcwy16LQq/TFfecVVxCDiJ8xzX6gbSdgkn0q0cBb0FDjO
+         7HG2+JZfrucgbhNY8tnJDz3E83HRQi1nQgyM7W7dX0EW5uphoy6LvJflkYz0wQK6PCkr
+         EXs1ru+veiF1qHFvINMjhEg73LidIVtIUlN4IZ7QVvqEBd2w/bK9XuQpUmT+9p1CY5l2
+         srGn8amjQmQKourWD/Q3rG0qoBvxF/B5/LjK7p8oW4q/M0ByVCxJiutFime3ZJK1ESI0
+         +M9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWn9lgq76K+md12/ZDeAQSAgxfrDaDCRCdqNGhuNh5xfLfywoTgy9QOr6edgZMDUsfFzOMubwOLgwY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlicBGBAEWIvKiOMB9PtIZOuNDySP9rLRznl9j38cFOdeBi2T/
+	6rslOFproVd/IRugQVP3Aq2jsdTYcv/XiuJnfIpTYkH9YN/4kMg0fd29UJgSpuWICDo=
+X-Gm-Gg: ASbGncv/Utpp7OfSG/VThmNUrYmtgBo7GXIfsh6XTCJ0ay2d6z3v4+Nk7KhB/BcvUO1
+	zA2vcT/YgfdrBoIvJXugHx4J1DOmrRFfAVSwh55af37ONELgUCaHwfCZALbnkk+iix0RbmTQW4K
+	LYb822dkEs1gh946dVPaJBvdq3LEcSg6TkfIyJ5IZACLdQ0uMBMDrC7/Wb+LFDSYhVMFa4StQkB
+	yBBIjteg2DHxtZfmNMsp4iq7VIwFPHn0W9olTamyoqoBqufrwz/tI9CRaNtf9aEc68IXeNDmBRu
+	b3P8s47V9kQALE6Y3Z6WEXuHOVwvW1jySp5HAN6xPZhcptrFax9uhaYHNIOcSWiBWKfCPGuL4d7
+	EoSgOIOBQqCoMnz+ON3sU5JkNj7cUHQ==
+X-Google-Smtp-Source: AGHT+IHhOFmUmhBidSkZlxAn7V6wq2jgbTir2wDMQeNvWS4TRSC8XLkdd89dV6UDIvXMlv0ZdC5Okw==
+X-Received: by 2002:a05:6870:5b9e:b0:2e9:9e9:d94b with SMTP id 586e51a60fabf-2ffb257d356mr3201213fac.39.1752705980494;
+        Wed, 16 Jul 2025 15:46:20 -0700 (PDT)
+Received: from localhost ([2603:8080:b800:f700:3f28:4161:2162:7ea2])
+        by smtp.gmail.com with UTF8SMTPSA id 586e51a60fabf-2ff116dd664sm3898775fac.42.2025.07.16.15.46.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Jul 2025 15:46:19 -0700 (PDT)
+Date: Wed, 16 Jul 2025 17:46:17 -0500
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Peter Chen <peter.chen@kernel.org>,
+	Chester Lin <chester62515@gmail.com>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	Fabio Estevam <festevam@gmail.com>,
+	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	imx@lists.linux.dev, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, Matthias Brugger <mbrugger@suse.com>,
+	NXP S32 Linux Team <s32@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Rob Herring <robh@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 0/3] usb: chipidea: imx: Fix style issues
+Message-ID: <a5f4c53e-98a2-4eb0-9f30-55313be27f86@sabinyo.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 16 Jul 2025 14:54:46 +0000 John Ernberg wrote:
-> I ended up with the following log:
-> 
-> [   23.823289] cdc_ether 1-1.1:1.8 wwan0: network connection 0
-> [   23.830874] cdc_ether 1-1.1:1.8 wwan0: unlink urb start: 5 devflags=1880
-> [   23.840148] cdc_ether 1-1.1:1.8 wwan0: unlink urb counted 5
-> [   25.356741] cdc_ether 1-1.1:1.8 wwan0: network connection 1
-> [   25.364745] cdc_ether 1-1.1:1.8 wwan0: network connection 0
-> [   25.371106] cdc_ether 1-1.1:1.8 wwan0: unlink urb start: 5 devflags=880
-> [   25.378710] cdc_ether 1-1.1:1.8 wwan0: network connection 1
-> [   51.422757] rcu: INFO: rcu_sched self-detected stall on CPU
-> [   51.429081] rcu:     0-....: (6499 ticks this GP) 
-> idle=da7c/1/0x4000000000000000 softirq=2067/2067 fqs=2668
-> [   51.439717] rcu:              hardirqs   softirqs   csw/system
-> [   51.445897] rcu:      number:    62096      59017            0
-> [   51.452107] rcu:     cputime:        0      11397         1470   ==> 
-> 12996(ms)
-> [   51.459852] rcu:     (t=6500 jiffies g=2397 q=663 ncpus=2)
-> 
->  From a USB capture where the stall didn't happen I can see:
-> * A bunch of CDC_NETWORK_CONNECTION events with Disconnected state (0).
-> * Then a CDC_NETWORK_CONNECTION event with Connected state (1) once the 
-> WWAN interface is turned on by the modem.
-> * Followed by a Disconnected in the next USB INTR poll.
-> * Followed by a Connected in the next USB INTR poll.
-> (I'm not sure if I can achieve a different timing with enough captures 
-> or a faster system)
-> 
-> Which makes the off and on LINK_CHANGE events race on our system (ARM64 
-> based, iMX8QXP) as they cannot be handled fast enough. Nothing stops 
-> usbnet_link_change() from being called while the deferred work is running.
-> 
-> As Oliver points out usbnet_resume_rx() causes scheduling which seems 
-> unnecessary or maybe even inappropriate for all cases except when the 
-> carrier was turned on during the race.
-> 
-> I gave the ZTE modem quirk a go anyway, despite the comment explaining a 
-> different situation than what I am seeing, and it has no observable 
-> effect on this RCU stall.
-> 
-> Currently drawing a blank on what the correct fix would be.
+Xu Yang pointed these style issues.  Sorry for the delay on this.  I was
+out of office last week.
 
-Thanks for the analysis, I think I may have misread the code.
-What I was saying is that we are restoring the carrier while
-we are still processing the previous carrier off event in
-the workqueue. My thinking was that if we deferred the
-netif_carrier_on() to the workqueue this race couldn't happen.
+Dan Carpenter (3):
+  usb: chipidea: imx: Add a missing blank line
+  arm64: dts: s32g3: Fix whitespace issue in device tree
+  arm64: dts: s32g2: Re-order usbmisc device tree section
 
-usbnet_bh() already checks netif_carrier_ok() - we're kinda duplicating
-the carrier state with this RX_PAUSED workaround.
+ arch/arm64/boot/dts/freescale/s32g2.dtsi |  2 +-
+ arch/arm64/boot/dts/freescale/s32g3.dtsi | 32 ++++++++++++------------
+ drivers/usb/chipidea/usbmisc_imx.c       |  1 +
+ 3 files changed, 18 insertions(+), 17 deletions(-)
 
-I don't feel strongly about this, but deferring the carrier_on()
-the the workqueue would be a cleaner solution IMO.
+-- 
+2.47.2
+
 
