@@ -1,172 +1,120 @@
-Return-Path: <linux-usb+bounces-25881-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25882-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC9F6B078B7
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 16:56:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5C3AB07941
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 17:13:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D6F64A2EC7
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 14:56:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7F36189EF7A
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 15:06:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E78532F4A00;
-	Wed, 16 Jul 2025 14:54:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE05C28CF5E;
+	Wed, 16 Jul 2025 15:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="mxAk9pFd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.actia.se (mail.actia.se [212.181.117.226])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE012F3C24;
-	Wed, 16 Jul 2025 14:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.181.117.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1CA2727E5;
+	Wed, 16 Jul 2025 15:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752677699; cv=none; b=ME62gy0Grg/b8RpTRnIpNq4mE7Hm9KrL0fM0VdmXxazwvsIcR+DzGx8msFSQkKO87S7Dr0ePqI2Dhslx6D4WpMx0QjFMUMSDdfKFBR16LE8ovWHCa8fZJWs6aSrZt7LQI8+30BRZGFXSffQTT6Z6D1rpxHFevNeofDftEBESpl4=
+	t=1752678382; cv=none; b=o2KaxPEaxleeRfnkZ6H8ZUAVbcAgqGBAJQQBML0roDYS2EqlHuoXDcPL45v7Gq55RW0OEgVAgVigbFEN4ZIR7a0rAB0zFt+yhe90nBWU9NwGBN99Mf1YjiU8XpmXB6pCRI1LR2KKysdkv0t7ovdhOwyXm2yhTpUZ9PmY11P8GmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752677699; c=relaxed/simple;
-	bh=ORnEHyRZsDYRcnUpIwlMqf96ifwWSypaWlHgAPLbpsE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=bzhS6iomsk5wmu2aXmXAdE88qXtt+7sH7t2IRA8cEysxIdXXuhjkPEg38BlYbiPTdIMUPMX5ankaT3rSLcEB/GoH0Dgfx8D4S8BCt+tf+wp+myejMS8MYSbRvwZaEpI2rJ5OoXIxGcM3NA4oaq2ozJqRqQR/dkJ6XpnBPFiBOw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=actia.se; spf=pass smtp.mailfrom=actia.se; arc=none smtp.client-ip=212.181.117.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=actia.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=actia.se
-Received: from S036ANL.actianordic.se (10.12.31.117) by S036ANL.actianordic.se
- (10.12.31.117) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.57; Wed, 16 Jul
- 2025 16:54:46 +0200
-Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
- S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%6]) with mapi id
- 15.01.2507.057; Wed, 16 Jul 2025 16:54:46 +0200
-From: John Ernberg <john.ernberg@actia.se>
-To: Jakub Kicinski <kuba@kernel.org>, Oliver Neukum <oneukum@suse.com>
-CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
-	<pabeni@redhat.com>, Ming Lei <ming.lei@canonical.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] net: usbnet: Avoid potential RCU stall on LINK_CHANGE
- event
-Thread-Topic: [PATCH] net: usbnet: Avoid potential RCU stall on LINK_CHANGE
- event
-Thread-Index: AQHb8Xe2qza52xx55UmGbnkg6Pc/lrQyK2OAgACAvYCAAG9BgIABo0uA
-Date: Wed, 16 Jul 2025 14:54:46 +0000
-Message-ID: <fbd03180-cca0-4a0f-8fd9-4daf5ff28ff5@actia.se>
-References: <20250710085028.1070922-1-john.ernberg@actia.se>
- <20250714163505.44876e62@kernel.org>
- <74a87648-bc02-4edb-9e6a-102cb6621547@actia.se>
- <20250715065403.641e4bd7@kernel.org>
-In-Reply-To: <20250715065403.641e4bd7@kernel.org>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-esetresult: clean, is OK
-x-esetid: 37303A2955B14450647760
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3918D908739098438C8DED784602E8B2@actia.se>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1752678382; c=relaxed/simple;
+	bh=Kx6KvPlh1ofSdmFCjKixoOudnflMFht2fe6t0IectFU=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=iF2ZixsSLcBbTOERYkCErFhZeU0T4afwzFTyD1yKLicFcp9nEDz8NZhUA6rfaJV2WAcqixh4uIt5MfhRwr4PNbyfMFSYIWzlkCtCY9S2R9gHKJdRtvUpJHB6FN0xEBAEuGlavnEk1pAqf7buWMpsdbB4zzy4Hmigj0WnUkwSWOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=mxAk9pFd; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [127.0.0.1] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56GF6DEX1555693
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 16 Jul 2025 08:06:13 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56GF6DEX1555693
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025062101; t=1752678374;
+	bh=Zn6hFpgIn1dP/feaC10D15o+3qV/K6KyEB/+fOIAQ+w=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=mxAk9pFdBMT1RdVKgKdMbK2PJnJ2tsIfengVTi8GPItYSrojC02I9vaPV/ccSH4yD
+	 tnP91FzZieWZK9FHLiQqUaMAbsC7ZIq8DCf2R9AakNCk8hcznWHL/VxAKIKo+b1rQS
+	 iaFy+9JWPIQy8LZlDnlIf/HkXp+P7cdIUvJktrAH1Dw5ntzYbZbObHSRY1ewTmoCXu
+	 j2I5m/CrKt5LFCANYEHlRIpRIY38WjLOJBe+BVnuaDDsLyJl9lQemGPcYhFxckouB3
+	 odOd2GyAOJBRF0cYIkq6u8SNXYk+pVO6FRTi5kaHp/YATgqvzm2ZHA8JMapzfVJh3h
+	 qE1DKk7qhmZVw==
+Date: Wed, 16 Jul 2025 08:06:11 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Oliver Neukum <oneukum@suse.com>
+CC: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org
+Subject: Re: USB cdc-acm driver: break and command
+User-Agent: K-9 Mail for Android
+In-Reply-To: <fa20ab91-5ebf-427d-b938-31ea6fb945cf@suse.com>
+References: <ce54ae11-72bb-4ac7-980b-c1cbc798a209@zytor.com> <fa20ab91-5ebf-427d-b938-31ea6fb945cf@suse.com>
+Message-ID: <83B89F79-D28B-4F2C-87EA-F5078BD7ED17@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-SGkgSmFrdWIsIE9saXZlciwNCg0KT24gNy8xNS8yNSAzOjU0IFBNLCBKYWt1YiBLaWNpbnNraSB3
-cm90ZToNCj4gT24gVHVlLCAxNSBKdWwgMjAyNSAwNzoxNTo1MSArMDAwMCBKb2huIEVybmJlcmcg
-d3JvdGU6DQo+Pj4gSSdtIHdvcnJpZWQgdGhhdCB0aGlzIGlzIHN0aWxsIHJhY3kuDQo+Pj4gU2lu
-Y2UgdXNibmV0X2JoIGNoZWNrcyBpZiBjYXJyaWVyIGlzIG9rIGFuZCBfX2hhbmRsZV9saW5rX2No
-YW5nZSgpDQo+Pj4gY2hlY2tzIHRoZSBvcHBvc2l0ZSBzb21ldGhpbmcgbXVzdCBiZSBvdXQgb2Yg
-c3luYyBpZiBib3RoIHJ1bi4NCj4+PiBNb3N0IGxpa2VseSBzb21ldGhpbmcgcmVzdG9yZWQgdGhl
-IGNhcnJpZXIgd2hpbGUgd2UncmUgc3RpbGwgaGFuZGxpbmcNCj4+PiB0aGUgcHJldmlvdXMgY2Fy
-cmllciBsb3NzLg0KPj4NCj4+IFRoZXJlIGNvdWxkIGRlZmluaXRlbHkgYmUgb3RoZXIgZmFjdG9y
-cywgSSdsbCB0cnkgdG8gZGlnIHNvbWUgaW4NCj4+IGNkY19ldGhlciBhbmQgc2VlIGlmIHNvbWV0
-aGluZyB0aGVyZSBjb3VsZCBiZSBjYXVzaW5nIHByb2JsZW1zIGZvciB0aGUNCj4+IHVzYm5ldCBj
-b3JlLg0KPj4gSSBob25lc3RseSBraW5kYSBzdG9wcGVkIGRpZ2dpbmcgd2hlbiBJIGZvdW5kIHVu
-bGlua191cmJzKCkgYmVpbmcNCj4+IHdyYXBwZWQgd2l0aCBhIHBhdXNlL3VucGF1c2UgYXQgYW5v
-dGhlciBwbGFjZSB0aWVkIHRvIGEgY29tbWl0IHNlZWluZyBhDQo+PiBzaW1pbGFyIGlzc3VlLg0K
-PiANCj4gTG9va2luZyBhdCBjZGNfZXRoZXI6DQo+IA0KPiBzdGF0aWMgdm9pZCB1c2JuZXRfY2Rj
-X3p0ZV9zdGF0dXMoc3RydWN0IHVzYm5ldCAqZGV2LCBzdHJ1Y3QgdXJiICp1cmIpDQo+IFsuLi5d
-DQo+ICAgICAgICAgIGlmIChldmVudC0+d1ZhbHVlICYmDQo+ICAgICAgICAgICAgICBuZXRpZl9j
-YXJyaWVyX29rKGRldi0+bmV0KSkNCj4gICAgICAgICAgICAgICAgICBuZXRpZl9jYXJyaWVyX29m
-ZihkZXYtPm5ldCk7DQo+IA0KPiBUaGlzIGxvb2tzIHN1cy4gSXMgdGhlIEdlbWFsdG8gQ2ludGVy
-aW9uIFBMUzgzLVcgWlRFIGJhc2VkPw0KPiANCg0KVGhlIG1vZGVtIGlzbid0IFpURS1iYXNlZCwg
-YnV0IEkgZGlkIHNwb3QgdGhhdCBmdW5jdGlvbiBhcyB3ZWxsIHdoZW4gDQpjaGVja2luZyBjZGNf
-ZXRoZXIuDQoNClRoZSBtb2RlbSBpcyBhZHZlcnRpc2luZyBVU0IgSGlnaCBTcGVlZCB3aXRoIGEg
-YkludGVydmFsIG9mIDUsIHdoaWNoIGluIA0KdXNibmV0IGdldHMgYnVtcGVkIHRvIDcgdG8gYXZv
-aWQgdG9vIGFnZ3Jlc3NpdmUgcG9sbGluZywgaWYgSSByZWFkIHRoYXQgDQpjb2RlIHJpZ2h0Lg0K
-DQpUaHJvdWdoIHNvbWUgcnVkaW1lbnRhcnkgbG9nZ2luZyB3aXRoIHRoZSBpbmxpbmVkIHBhdGNo
-IG9uIDYuMTIuMjAgKG1haWwgDQpjbGllbnQgbWFuZ2xlZCk6DQoNCi0tLS0tLS0tLS0tLS0tLS0t
-ODwtLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC91c2Iv
-Y2RjX2V0aGVyLmMgYi9kcml2ZXJzL25ldC91c2IvY2RjX2V0aGVyLmMNCmluZGV4IGE2NDY5MjM1
-ZDkwNC4uN2I0ODI3ZDJjNzk3IDEwMDY0NA0KLS0tIGEvZHJpdmVycy9uZXQvdXNiL2NkY19ldGhl
-ci5jDQorKysgYi9kcml2ZXJzL25ldC91c2IvY2RjX2V0aGVyLmMNCkBAIC00MTgsOCArNDE4LDEw
-IEBAIHZvaWQgdXNibmV0X2NkY19zdGF0dXMoc3RydWN0IHVzYm5ldCAqZGV2LCBzdHJ1Y3QgDQp1
-cmIgKnVyYikNCiAgICAgICAgIGNhc2UgVVNCX0NEQ19OT1RJRllfTkVUV09SS19DT05ORUNUSU9O
-Og0KICAgICAgICAgICAgICAgICBuZXRpZl9kYmcoZGV2LCB0aW1lciwgZGV2LT5uZXQsICJDREM6
-IGNhcnJpZXIgJXNcbiIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICBldmVudC0+d1ZhbHVl
-ID8gIm9uIiA6ICJvZmYiKTsNCi0gICAgICAgICAgICAgICBpZiAobmV0aWZfY2Fycmllcl9vayhk
-ZXYtPm5ldCkgIT0gISFldmVudC0+d1ZhbHVlKQ0KKyAgICAgICAgICAgICAgIGlmIChuZXRpZl9j
-YXJyaWVyX29rKGRldi0+bmV0KSAhPSAhIWV2ZW50LT53VmFsdWUpIHsNCisgICAgICAgICAgICAg
-ICAgICAgICAgIG5ldGRldl9lcnIoZGV2LT5uZXQsICJuZXR3b3JrIGNvbm5lY3Rpb24gJWRcbiIs
-IA0KKGludClldmVudC0+d1ZhbHVlKTsNCiAgICAgICAgICAgICAgICAgICAgICAgICB1c2JuZXRf
-bGlua19jaGFuZ2UoZGV2LCAhIWV2ZW50LT53VmFsdWUsIDApOw0KKyAgICAgICAgICAgICAgIH0N
-CiAgICAgICAgICAgICAgICAgYnJlYWs7DQogICAgICAgICBjYXNlIFVTQl9DRENfTk9USUZZX1NQ
-RUVEX0NIQU5HRTogICAgICAgLyogdHgvcnggcmF0ZXMgKi8NCiAgICAgICAgICAgICAgICAgbmV0
-aWZfZGJnKGRldiwgdGltZXIsIGRldi0+bmV0LCAiQ0RDOiBzcGVlZCBjaGFuZ2UgKGxlbiANCiVk
-KVxuIiwNCmRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC91c2IvdXNibmV0LmMgYi9kcml2ZXJzL25l
-dC91c2IvdXNibmV0LmMNCmluZGV4IDFlOTlhNmVmNDk0NS4uZGMzZTNkODdiNGY3IDEwMDY0NA0K
-LS0tIGEvZHJpdmVycy9uZXQvdXNiL3VzYm5ldC5jDQorKysgYi9kcml2ZXJzL25ldC91c2IvdXNi
-bmV0LmMNCkBAIC03MjEsNiArNzIxLDcgQEAgc3RhdGljIGludCB1bmxpbmtfdXJicyAoc3RydWN0
-IHVzYm5ldCAqZGV2LCBzdHJ1Y3QgDQpza19idWZmX2hlYWQgKnEpDQogICAgICAgICBzdHJ1Y3Qg
-c2tfYnVmZiAgICAgICAgICAqc2tiOw0KICAgICAgICAgaW50ICAgICAgICAgICAgICAgICAgICAg
-Y291bnQgPSAwOw0KDQorICAgICAgIG5ldGRldl9lcnIoZGV2LT5uZXQsICJ1bmxpbmsgdXJiIHN0
-YXJ0OiAlZCBkZXZmbGFncz0lbHhcbiIsIA0Kc2tiX3F1ZXVlX2xlbl9sb2NrbGVzcyhxKSwgZGV2
-LT5mbGFncyk7DQogICAgICAgICBzcGluX2xvY2tfaXJxc2F2ZSAoJnEtPmxvY2ssIGZsYWdzKTsN
-CiAgICAgICAgIHdoaWxlICghc2tiX3F1ZXVlX2VtcHR5KHEpKSB7DQogICAgICAgICAgICAgICAg
-IHN0cnVjdCBza2JfZGF0YSAgICAgICAgICplbnRyeTsNCkBAIC03NTcsNiArNzU4LDcgQEAgc3Rh
-dGljIGludCB1bmxpbmtfdXJicyAoc3RydWN0IHVzYm5ldCAqZGV2LCBzdHJ1Y3QgDQpza19idWZm
-X2hlYWQgKnEpDQogICAgICAgICAgICAgICAgIHNwaW5fbG9ja19pcnFzYXZlKCZxLT5sb2NrLCBm
-bGFncyk7DQogICAgICAgICB9DQogICAgICAgICBzcGluX3VubG9ja19pcnFyZXN0b3JlICgmcS0+
-bG9jaywgZmxhZ3MpOw0KKyAgICAgICBuZXRkZXZfZXJyKGRldi0+bmV0LCAidW5saW5rIHVyYiBj
-b3VudGVkICVkXG4iLCBjb3VudCk7DQogICAgICAgICByZXR1cm4gY291bnQ7DQogIH0NCg0KLS0t
-LS0tLS0tLS0tLS0tLS04PC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCg0KSSBlbmRlZCB1cCB3aXRo
-IHRoZSBmb2xsb3dpbmcgbG9nOg0KDQpbICAgMjMuODIzMjg5XSBjZGNfZXRoZXIgMS0xLjE6MS44
-IHd3YW4wOiBuZXR3b3JrIGNvbm5lY3Rpb24gMA0KWyAgIDIzLjgzMDg3NF0gY2RjX2V0aGVyIDEt
-MS4xOjEuOCB3d2FuMDogdW5saW5rIHVyYiBzdGFydDogNSBkZXZmbGFncz0xODgwDQpbICAgMjMu
-ODQwMTQ4XSBjZGNfZXRoZXIgMS0xLjE6MS44IHd3YW4wOiB1bmxpbmsgdXJiIGNvdW50ZWQgNQ0K
-WyAgIDI1LjM1Njc0MV0gY2RjX2V0aGVyIDEtMS4xOjEuOCB3d2FuMDogbmV0d29yayBjb25uZWN0
-aW9uIDENClsgICAyNS4zNjQ3NDVdIGNkY19ldGhlciAxLTEuMToxLjggd3dhbjA6IG5ldHdvcmsg
-Y29ubmVjdGlvbiAwDQpbICAgMjUuMzcxMTA2XSBjZGNfZXRoZXIgMS0xLjE6MS44IHd3YW4wOiB1
-bmxpbmsgdXJiIHN0YXJ0OiA1IGRldmZsYWdzPTg4MA0KWyAgIDI1LjM3ODcxMF0gY2RjX2V0aGVy
-IDEtMS4xOjEuOCB3d2FuMDogbmV0d29yayBjb25uZWN0aW9uIDENClsgICA1MS40MjI3NTddIHJj
-dTogSU5GTzogcmN1X3NjaGVkIHNlbGYtZGV0ZWN0ZWQgc3RhbGwgb24gQ1BVDQpbICAgNTEuNDI5
-MDgxXSByY3U6ICAgICAwLS4uLi46ICg2NDk5IHRpY2tzIHRoaXMgR1ApIA0KaWRsZT1kYTdjLzEv
-MHg0MDAwMDAwMDAwMDAwMDAwIHNvZnRpcnE9MjA2Ny8yMDY3IGZxcz0yNjY4DQpbICAgNTEuNDM5
-NzE3XSByY3U6ICAgICAgICAgICAgICBoYXJkaXJxcyAgIHNvZnRpcnFzICAgY3N3L3N5c3RlbQ0K
-WyAgIDUxLjQ0NTg5N10gcmN1OiAgICAgIG51bWJlcjogICAgNjIwOTYgICAgICA1OTAxNyAgICAg
-ICAgICAgIDANClsgICA1MS40NTIxMDddIHJjdTogICAgIGNwdXRpbWU6ICAgICAgICAwICAgICAg
-MTEzOTcgICAgICAgICAxNDcwICAgPT0+IA0KMTI5OTYobXMpDQpbICAgNTEuNDU5ODUyXSByY3U6
-ICAgICAodD02NTAwIGppZmZpZXMgZz0yMzk3IHE9NjYzIG5jcHVzPTIpDQoNCiBGcm9tIGEgVVNC
-IGNhcHR1cmUgd2hlcmUgdGhlIHN0YWxsIGRpZG4ndCBoYXBwZW4gSSBjYW4gc2VlOg0KKiBBIGJ1
-bmNoIG9mIENEQ19ORVRXT1JLX0NPTk5FQ1RJT04gZXZlbnRzIHdpdGggRGlzY29ubmVjdGVkIHN0
-YXRlICgwKS4NCiogVGhlbiBhIENEQ19ORVRXT1JLX0NPTk5FQ1RJT04gZXZlbnQgd2l0aCBDb25u
-ZWN0ZWQgc3RhdGUgKDEpIG9uY2UgdGhlIA0KV1dBTiBpbnRlcmZhY2UgaXMgdHVybmVkIG9uIGJ5
-IHRoZSBtb2RlbS4NCiogRm9sbG93ZWQgYnkgYSBEaXNjb25uZWN0ZWQgaW4gdGhlIG5leHQgVVNC
-IElOVFIgcG9sbC4NCiogRm9sbG93ZWQgYnkgYSBDb25uZWN0ZWQgaW4gdGhlIG5leHQgVVNCIElO
-VFIgcG9sbC4NCihJJ20gbm90IHN1cmUgaWYgSSBjYW4gYWNoaWV2ZSBhIGRpZmZlcmVudCB0aW1p
-bmcgd2l0aCBlbm91Z2ggY2FwdHVyZXMgDQpvciBhIGZhc3RlciBzeXN0ZW0pDQoNCldoaWNoIG1h
-a2VzIHRoZSBvZmYgYW5kIG9uIExJTktfQ0hBTkdFIGV2ZW50cyByYWNlIG9uIG91ciBzeXN0ZW0g
-KEFSTTY0IA0KYmFzZWQsIGlNWDhRWFApIGFzIHRoZXkgY2Fubm90IGJlIGhhbmRsZWQgZmFzdCBl
-bm91Z2guIE5vdGhpbmcgc3RvcHMgDQp1c2JuZXRfbGlua19jaGFuZ2UoKSBmcm9tIGJlaW5nIGNh
-bGxlZCB3aGlsZSB0aGUgZGVmZXJyZWQgd29yayBpcyBydW5uaW5nLg0KDQpBcyBPbGl2ZXIgcG9p
-bnRzIG91dCB1c2JuZXRfcmVzdW1lX3J4KCkgY2F1c2VzIHNjaGVkdWxpbmcgd2hpY2ggc2VlbXMg
-DQp1bm5lY2Vzc2FyeSBvciBtYXliZSBldmVuIGluYXBwcm9wcmlhdGUgZm9yIGFsbCBjYXNlcyBl
-eGNlcHQgd2hlbiB0aGUgDQpjYXJyaWVyIHdhcyB0dXJuZWQgb24gZHVyaW5nIHRoZSByYWNlLg0K
-DQpJIGdhdmUgdGhlIFpURSBtb2RlbSBxdWlyayBhIGdvIGFueXdheSwgZGVzcGl0ZSB0aGUgY29t
-bWVudCBleHBsYWluaW5nIGEgDQpkaWZmZXJlbnQgc2l0dWF0aW9uIHRoYW4gd2hhdCBJIGFtIHNl
-ZWluZywgYW5kIGl0IGhhcyBubyBvYnNlcnZhYmxlIA0KZWZmZWN0IG9uIHRoaXMgUkNVIHN0YWxs
-Lg0KDQpDdXJyZW50bHkgZHJhd2luZyBhIGJsYW5rIG9uIHdoYXQgdGhlIGNvcnJlY3QgZml4IHdv
-dWxkIGJlLg0KDQpCZXN0IHJlZ2FyZHMgLy8gSm9obiBFcm5iZXJn
+On July 16, 2025 1:29:27 AM PDT, Oliver Neukum <oneukum@suse=2Ecom> wrote:
+>On 15=2E07=2E25 23:00, H=2E Peter Anvin wrote:
+>> Hi,
+>>=20
+>> I noticed looking at the CDC-ACM driver that it uses the assert/local d=
+elay/deassert method of sending BREAK=2E=C2=A0 Given that the CDC model has=
+ a delay specifier in the command packet, is there any reason not to set TT=
+Y_DRIVER_HARDWARE_BREAK and sending only one packet?
+>
+>1=2E The existing code is tested and usually works=2E
+>2=2E The locking goes away=2E I have no idea what happens if you are
+>sending a second break while a break is still going on=2E
+>
+>> I'm also wondering if it would make sense to support the SEND_ENCAPSULA=
+TED_COMMAND and GET_ENCAPSULATED_RESPONSE commands, presumably via an ioctl=
+()=2E=C2=A0 I'm not 100% sure because I'm not sure there aren't potential s=
+ecurity issues=2E
+>
+>Well, one of the purposes of the CDC-ACM driver is to hide that
+>you are talking to a USB device=2E
+>In theory we could do that=2E I don't quite see the value=2E
+>Sending arbitrary data from user space to a control endpoint
+>does not make me happy=2E
+>
+>	HTH
+>		Oliver
+>=20
+However, the flipside is that ACM devices are very often used because it i=
+s one of the few ways you can avoid requiring device drivers on Windows=2E
+
+This is why some devices do absolutely insane crap like Arduino which trig=
+ger a board reset if you set the speed to 1200 baud=2E
+
+SEND_ENCAPSULATED_COMMAND at least takes a command string =E2=80=93 it was=
+ intended, I believe, to be able to send AT commands to a modem while onlin=
+e without using the +++ escape code and all the potential race conditions (=
+and security issues, since it is trivial for a user to generate) associated=
+ with that=2E
+
+I am not suggesting that we ought to allow sending *arbitrary USB commands=
+*; if that is what's needed then use the USB device interface, which of cou=
+rse has its own permission flags=2E The main problem with that is exactly t=
+hat it is all-or-nothing (it is also a bit of a pain to find the underlying=
+ USB device corresponding to an ACM or USB tty, but that's another matter e=
+ntirely; it is at least doable=2E)
+
+As far as BREAK is concerned, there is also the option of locking out a se=
+cond BREAK for the delay time; however, this probably should belong in the =
+tty core=2E  What do other drivers supporting TTY_DRIVER_HARDWARE_BREAK do?
 
