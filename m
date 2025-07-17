@@ -1,60 +1,77 @@
-Return-Path: <linux-usb+bounces-25910-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25911-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4593EB08E40
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 15:30:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F0F0B08EE6
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 16:13:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D75517317A
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 13:30:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA6C01C25B71
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 14:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 230CF2E4995;
-	Thu, 17 Jul 2025 13:30:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06AF72F6FBB;
+	Thu, 17 Jul 2025 14:13:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dPjHjKvS"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="FeOagNFI";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="FeOagNFI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BED62B2D7;
-	Thu, 17 Jul 2025 13:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B232A27A448
+	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 14:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752759050; cv=none; b=OXZbkLrn9JZEI8SkK7QKr6kbyNB88Zq6VUQjiQYVYCr8fAYvHPHwMd5j5EiBwm4ShXL23+sgjS+jUWDxr3TPKSCIP9FYL1BaoKf3mGn5vMn7V6/PtMxIwHgDozwHrtLHZXwTDphHMcNQUXIaLK5va76yWo0Tna0nqdmasVsAm5c=
+	t=1752761586; cv=none; b=a67lDdbAN+u4OorCU1JWCwNyBfmvEER4yHSoopqqwHWh3Z0ZlE2/4juOVp5UShimCehgiQybYkYxkgZM9kgZHVT4J4yQi5TFQxQt3wSV5D4d0et5w6Pqj6Yg9PJ3cvm0uZEwlDVHCWbigoRD9Z1qJ49bwOgMMJWDBV4hANTIiHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752759050; c=relaxed/simple;
-	bh=skd8Hwq5hJyWeNiDY4xNdLu7o7yA+AoV/CyygsK8K/0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Txg+7chxPrUyeHdmN2PqM31fI0RK4LbZ+lQbcp63BdcTNmHq5x6kKYykXXTaO0xiRpafbp8R9driUaSFj/bSbJ/VeUlm7XEwrbsgWnJ93ivhD6zUFkOep0kUuieHLoys+sLOM2rAOhjTEZImsYWuzJZxV5WSPe4OpfSyL/+Etxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dPjHjKvS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B515C4CEE3;
-	Thu, 17 Jul 2025 13:30:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752759050;
-	bh=skd8Hwq5hJyWeNiDY4xNdLu7o7yA+AoV/CyygsK8K/0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=dPjHjKvSiFMkKb7REQFSsDUUPBfGp1JCV5UZwjNWHcsJRDUMeBeoxjsgTZpmR6zyT
-	 KqqMp5GA3u5Oyw1zJicrVjMxlRPDHLfn3Qh1z0YYMu/gyIZhCZ/Dtqnp4JsiEd1eC/
-	 UV7WfxEbtkEKIbAFaWMUlREkp1TXOxMXaYMhvbxlzCFQT+YFhfgNsN0RVCYdk1Zixy
-	 t8zhiDNYIqS41BxSZV44ViFa6sA5Oj71ZezOBwU7h0bDvA4LOQJFZAzCdTKVI2DYVU
-	 kwtXCUAWzoeTWHm0G0Dy8lZ07m2ZvxHUuJQ7f5T4N1Dfk2+GmPqlNgNxzJjRnKcGC0
-	 1Ewf9qkayFkag==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Pavan Holla <pholla@chromium.org>,
-	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>,
-	Yue Haibing <yuehaibing@huawei.com>,
-	Pengyu Luo <mitltlatltl@gmail.com>,
+	s=arc-20240116; t=1752761586; c=relaxed/simple;
+	bh=rN99tKa8OXJ2Dh+kbFOwKbAB9dFuqJJoacIWy0uyqw4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qu8I9cdSOkC6VI7E/rzNJYGLzCNZiuKLerxCVkWKXkmGRb5orDABWIcgECHj2qwV1t0osh48pNpiQ4gcKOF+LawleAskG3Dy1ssz3klAQrTgF4CYmXTHxD0cHB35GaxrSdOXIQ7YF/MphsTIunMdtR43zqPogL7eRx8iuQh0+uY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=FeOagNFI; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=FeOagNFI; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id A78591FB85;
+	Thu, 17 Jul 2025 14:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1752761581; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=okJ80G5AgtEaNhJJl0LXtk8E75/5rCUKj1GlMcKNjds=;
+	b=FeOagNFIXCAkTIhSoEF/plAgyT4AolfIc/6bpD8WKy/wUJbdlXPnWHH4g741Yxk+lWULuh
+	nd2DGs8QmfG0qvw11A65UAiTjg2n9xP2yxyqmldte6p/94dNC0In2svzeJDB5LsauGz6yr
+	IALNfQmNJbyYV29+W3+PZ8WHn3NuSe0=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=FeOagNFI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1752761581; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=okJ80G5AgtEaNhJJl0LXtk8E75/5rCUKj1GlMcKNjds=;
+	b=FeOagNFIXCAkTIhSoEF/plAgyT4AolfIc/6bpD8WKy/wUJbdlXPnWHH4g741Yxk+lWULuh
+	nd2DGs8QmfG0qvw11A65UAiTjg2n9xP2yxyqmldte6p/94dNC0In2svzeJDB5LsauGz6yr
+	IALNfQmNJbyYV29+W3+PZ8WHn3NuSe0=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 82DE013A6C;
+	Thu, 17 Jul 2025 14:13:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id qfbAHu0EeWgMLgAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Thu, 17 Jul 2025 14:13:01 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: gregkh@linuxfoundation.org,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: ucsi: yoga-c630: add DRM dependency
-Date: Thu, 17 Jul 2025 15:30:41 +0200
-Message-Id: <20250717133045.991254-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] cdc-acm: fix race between initial clearing halt and open
+Date: Thu, 17 Jul 2025 16:12:50 +0200
+Message-ID: <20250717141259.2345605-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,43 +79,78 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_TLS_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:dkim,suse.com:email];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Rspamd-Queue-Id: A78591FB85
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.01
 
-From: Arnd Bergmann <arnd@arndb.de>
+On the devices that need their endpoints to get an
+initial clear_halt, this needs to be done before
+the devices can be opened. That means it needs to be
+before the devices are registered.
 
-Selecting DRM_AUX_HPD_BRIDGE is not possible from a built-in driver when
-CONFIG_DRM=m:
-
-WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
-  Depends on [m]: HAS_IOMEM [=y] && DRM [=m] && DRM_BRIDGE [=y] && OF [=y]
-  Selected by [y]:
-  - UCSI_LENOVO_YOGA_C630 [=y] && USB_SUPPORT [=y] && TYPEC [=y] && TYPEC_UCSI [=y] && EC_LENOVO_YOGA_C630 [=y] && DRM_BRIDGE [=y] && OF [=y]
-arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/aux-hpd-bridge.o: in function `drm_aux_hpd_bridge_notify':
-aux-hpd-bridge.c:(.text.drm_aux_hpd_bridge_notify+0x28): undefined reference to `drm_bridge_hpd_notify'
-arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/aux-hpd-bridge.o: in function `drm_aux_hpd_bridge_probe':
-aux-hpd-bridge.c:(.text.drm_aux_hpd_bridge_probe+0x20): undefined reference to `__devm_drm_bridge_alloc'
-
-Add a dependency to force UCSI_LENOVO_YOGA_C630 to be a loadable module as
-well in this configuration.
-
-Fixes: eb90d36bfa06 ("usb: typec: ucsi: yoga-c630: register DRM HPD bridge")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 15bf722e6f6c0 ("cdc-acm: Add support of ATOL FPrint fiscal printers")
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- drivers/usb/typec/ucsi/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/class/cdc-acm.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-index 52b53bb6dfed..7fcb1e1de5d6 100644
---- a/drivers/usb/typec/ucsi/Kconfig
-+++ b/drivers/usb/typec/ucsi/Kconfig
-@@ -85,6 +85,7 @@ config CROS_EC_UCSI
- config UCSI_LENOVO_YOGA_C630
- 	tristate "UCSI Interface Driver for Lenovo Yoga C630"
- 	depends on EC_LENOVO_YOGA_C630
-+	depends on DRM || !DRM
- 	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
- 	help
- 	  This driver enables UCSI support on the Lenovo Yoga C630 laptop.
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index c2ecfa3c8349..5a334e370f4d 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1520,6 +1520,12 @@ static int acm_probe(struct usb_interface *intf,
+ 			goto err_remove_files;
+ 	}
+ 
++	if (quirks & CLEAR_HALT_CONDITIONS) {
++		/* errors intentionally ignored */
++		usb_clear_halt(usb_dev, acm->in);
++		usb_clear_halt(usb_dev, acm->out);
++	}
++
+ 	tty_dev = tty_port_register_device(&acm->port, acm_tty_driver, minor,
+ 			&control_interface->dev);
+ 	if (IS_ERR(tty_dev)) {
+@@ -1527,11 +1533,6 @@ static int acm_probe(struct usb_interface *intf,
+ 		goto err_release_data_interface;
+ 	}
+ 
+-	if (quirks & CLEAR_HALT_CONDITIONS) {
+-		usb_clear_halt(usb_dev, acm->in);
+-		usb_clear_halt(usb_dev, acm->out);
+-	}
+-
+ 	dev_info(&intf->dev, "ttyACM%d: USB ACM device\n", minor);
+ 
+ 	return 0;
 -- 
-2.39.5
+2.50.1
 
 
