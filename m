@@ -1,123 +1,108 @@
-Return-Path: <linux-usb+bounces-25895-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25896-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BF9AB080A1
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 00:46:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D01AB08163
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 02:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE3EE18957E4
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jul 2025 22:46:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D7AF1C241E4
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 00:27:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BBB52EE616;
-	Wed, 16 Jul 2025 22:46:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CEA72CCC8;
+	Thu, 17 Jul 2025 00:27:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GT6jRbL4"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="CJnvI4bP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from sonic303-22.consmr.mail.sg3.yahoo.com (sonic303-22.consmr.mail.sg3.yahoo.com [106.10.242.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27BF228640D
-	for <linux-usb@vger.kernel.org>; Wed, 16 Jul 2025 22:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D640B1799F
+	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 00:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=106.10.242.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752705990; cv=none; b=rWaH/c81RNAPOtDzPuqTUZq++iHqzKxSIr367VoqFNuUUt6qCBw6YyTCF0pC3aRHM9e+zF/0YpI+2t8EBJvP3je7tjCvlIa2V3eyc3n9CuCCgFBmuQIIhqg9e0789LWCcU3N5PPcac63NzhlA8NaQxwdbvP6KE0RCFQNSLbiHBY=
+	t=1752712048; cv=none; b=EbNpi4GgSfLcUG+SbR1w3PojYdCGxTerqhL5z32N4p6Bb73/gOEvedz0WeHmtqdbvvvy/5OomNVsJ4V+CRUyrynLwe1sDIpqqT88T7GP9SMkLLvNkXforYQnhvALcL00R5h3HhobQhi/inp7vlAb1DV+w/9/cmo39SJXcjrfLUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752705990; c=relaxed/simple;
-	bh=R+Lhq1vCYha2kVC/gKYBwgMh0PCi0r6MdFv+dfqI1y4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aYVGk+iu9QJ7E+U/xSLe3h5AijGmdz1iX3j9P9GBZpokI7Oa97EjjOF0KNl8+dbLt3aOMMCw++hd3nK4vZzbiMFCpzi9KKFozA1gMSnLczOrarqcLq3V7GqxpsaDBZdKF0ZBnuoYbDuQihrr9+k09cZIJa4mVVbP8KA2AClCsRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GT6jRbL4; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-73cddf31d10so213986a34.0
-        for <linux-usb@vger.kernel.org>; Wed, 16 Jul 2025 15:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752705988; x=1753310788; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LiiyQhkDqEe/y4fMk89A/2LpiKkeCtnb83PrX3E9ODQ=;
-        b=GT6jRbL4qOiV6P/ILHAW1NRvvZiBl9f87g9/hpGBhOPkOAN0ulLlSot1toIyw+j3x2
-         sWDkcFjgvndDWTdBLSlWLHH5bQKNdvlbnRqagAd5o5PCR3Ay+wp3aItfPtLxQ+K5gj4G
-         zlS3U9jv8fpFr1UqCGBw03Gnu8ZRGSZSYXBzCoUgF2PSTc/hd5hO6S5/z1Zh6HeVSIWl
-         PtWPFfQ28bonR7oRDAu5jWaZXlOLPpQsV44EbNUKiBU66uWxxs8AQj4pq87X+DHqa16x
-         Pqc0hR97vGRplkmbuChXpgYAE0DR36Dc0+sLijkfIrwGsa3SUd42/7Cil2lp7kljkP0A
-         YFRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752705988; x=1753310788;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LiiyQhkDqEe/y4fMk89A/2LpiKkeCtnb83PrX3E9ODQ=;
-        b=ZdP1moIDAGJMPSxM+GmSiqqPxn+d4RXmUELm6ku6Z7DGkdEjXTHvxDPPUT9tqTkCAQ
-         MWUFTAmJqoQqN8W2UtvOKlG85Tc84Lhd43qz8ee7s+lddSj1YAB38MtiXh1NiHj4Uhwi
-         zbWfmGk/LcNib8RXtZBDT1V07YjUHhx4psAzTvCt2o2TWHKuHMtYZLNJbmDS5EdMSo4z
-         DlMd1AkiMVzM0kQ9v5C49M9doSde+nzclLqu/0NQ7UhR98M/FrbfVKPL1R2VFjHFzpff
-         Mu5oPw5mu16NUi4Frz18YlECMBXDNGK2W3yumEefmxsb0Nkr+N2kD0/Pji3xGsJhhXhY
-         FvCg==
-X-Forwarded-Encrypted: i=1; AJvYcCWnUDjfBp5FKmC+VFb1+SNV/1VneyO2arcH5HpHgzRLgg4TJJbahJ/asnmbAac5Xwb4Ah1z03YK8P8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBeDOna/+qYU7tf9KcLl1EnBcrFuMuiA88um23OGyTb5Y8eskz
-	i2t2xQKRp3Jrb1z5eITjHbPwaul7UCxE4HcZbk3CpVrREqN5RwopCZMhSrsODLzTh4w=
-X-Gm-Gg: ASbGnctyg69/oYDgRe2mCKfMvl4zyB1LLaTMjGhTACzXUes2WAcvgpFLyiyYhd9in7c
-	jB0Y3DB0BlCHFJKDwuysnxcOzd+ptsTe4idy5tMiDpELAX8uTobNZE5zOF5FQoEKHkhTSV/FrO9
-	17onTD49rvfhPcYNqoVth08og/AUvh3d0NzlGn6d347Y0Vg2coyoFKGe9Unh/wuBHaVWLsP7AvS
-	NmfLrmvRO/AAX5BxTCffavnySmGRZv1fZzom61QZg16C896IumGGz1r9pJmuBOnELCIidLUsuOG
-	PxFFo1C06zdcmp6+dnmWTLMpJ47VTcRdR/hGjXqaD1GQ5LDz73fSKgp2qMkQXr8S7d+5AkdRDOh
-	wrQnW2Hsh9cCttZONt7pHZc4+QdMKaA==
-X-Google-Smtp-Source: AGHT+IFOGaMrw9AqIgbXe/jwkCHgKj22Wqht7XROv3FQmVROEgsFQIi2GM+MArU/0+grsGQkVTtJVQ==
-X-Received: by 2002:a05:6870:e412:b0:2ff:a860:3402 with SMTP id 586e51a60fabf-2ffb229c2b2mr3886783fac.12.1752705988172;
-        Wed, 16 Jul 2025 15:46:28 -0700 (PDT)
-Received: from localhost ([2603:8080:b800:f700:3f28:4161:2162:7ea2])
-        by smtp.gmail.com with UTF8SMTPSA id 586e51a60fabf-2ff11681bcdsm3928163fac.32.2025.07.16.15.46.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jul 2025 15:46:27 -0700 (PDT)
-Date: Wed, 16 Jul 2025 17:46:26 -0500
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Peter Chen <peter.chen@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-usb@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] usb: chipidea: imx: Add a missing blank line
-Message-ID: <36d1c961-319e-4457-bdc1-69f8b6bed33e@sabinyo.mountain>
-References: <cover.1752703107.git.dan.carpenter@linaro.org>
+	s=arc-20240116; t=1752712048; c=relaxed/simple;
+	bh=pAQ/IIhDfswg2fJKemCk+fJim9r6NrRhB5fn1uiOCGE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Sb/rxgyZii3vpjt7W9S06X7aSpsQ5f472eTeF+IaDbLe4AOVbyLj/Foay3mKMNpcI1EG0evIJQwsYr6iPKExWjCHb5JUutuFVwhk2LQqzCUUSlm+rAJGunRXZqyIHVV11qQDBn7Ex23VCZ1NatvXD4fvyciKjDasJLBUTtlVSOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=CJnvI4bP; arc=none smtp.client-ip=106.10.242.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1752712044; bh=pAQ/IIhDfswg2fJKemCk+fJim9r6NrRhB5fn1uiOCGE=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=CJnvI4bPBpJMcg193/feudP2Xpf8soPGgW6b3LbeoCojDjMtvMksjQ5sbc4l/4TNhCxB3iB7cY3w1VV+sXrHVAF8OV+4tP+SgTXoF11nmmSjt7GRjuc+P0OLYoBA8OS9egxuHAgYvYio9ygIuyIstf/6c3ik+OPSkqpHBLkGt5NxphohFKO8s0rST2/SwxZGsKxCdZeT6RWgRFV8OtYZOwIcr0vcvnIOpHhM/gTLs+sxvL0kV3a6Ys0V6T+waah/+depoZj6+aS1ryvSi0Oc2+ffGrvnUa5VfZAY8a6qDS8ZmYf8B6SzMI3/X9/iGa96n/rMQkHctEbtsD7aHlQXQA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1752712044; bh=Vsa5i9IyMt/9C8bLMIFJKtFMp6Enrsh83IbPUx3iY7d=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=hL2t+Ngnr47kOsdR2vY+04j0iS0vRjIxqXGGJ2G0SI1zoyr2VQ9A+OYEdurBfAyO5Sa/ljiFt40E4s6SKtC2pC1Zll7KDRiq/r1zQY84ZpQOCTJW/AyUIDaLCYrgicZQgE0rN3vHJxe/8kibKfndb/JWw7zQBEMdEOsQqjWoUTsoUW88QC1ATrtke1ZNgyA0DF7Ee9Za6MuywNe9HxKJK5w//m5iS04x0sitwecQX3DxjaFyRo7sRwcvdWtAvR7Y5cb5gtDlXdeGN5jz7Sn1ihITWr4ThZZtBKS38y2k+SuyIgzFdKHDr7n91ZN/IzslW7tBJdpek11tECjRLq/aDg==
+X-YMail-OSG: Hhip8G4VM1mQsubJ37_3YVw0rKEcYtxZetwEoQnmEZrkRwQrHi04wINY_9zSVMO
+ 3cQJnAhlZe3TH8T5nsldrxA_.Achq7TNF2XvY5Ou8DJj0xoIVxv68wJDD8lIjjJ2nP60S8kruydH
+ x7_jAh9JOXj1mjIbAVKULiFj8zkFnSJvE94s9vlNf5eubDLPwwsbgKvZLC.wBMXm.eX1QA_nShJJ
+ K4_Ds83UgkKwPLyq5wcO7TXS_.TkBRdoF3h8Ouv9p3QFOzmZAkfvYkkblpPCtfqKVFieEaRD8yLq
+ Il21zvxmQUGcjRWxFXQoGaGi4uvyuKdUJWUDTJ1z.BZ6Ebd0LP4_PoiY0EMbdmXBWrQtKuJmR7iM
+ MRElajNZac6.tOmH7E2N5WipJU0z.X46pDc_8BHqhUWoPARyugr_iSaEsq9GtMfPyD3XGMrolCDR
+ nT3fBKf4x1aCggjALxEFovfmuyo.Cm2lp4ZRYUdXGcL.R5HZzkro4rPdLNWvNmlO1yMuUUON3khr
+ yc6EJ_bDfrOKUWTn2QJKl59eniyGBID2fSdjjg0Ut7lslpD1Gla8kGY3HW6TXllUABcYXmwyo2xG
+ 1ue13_toy8LWzzpgRLMN71hfMmzB17bHgddjjDDMWiO8zr2Ax9j1p_NWnJrB1JmT1Ep4zNz5Gmyv
+ LFag5wISytnU9lU8yHIFtdQl8.rS6sjz4LRZ3njAGYQKfAk2ZwHR0EiqDGGRFcuYdV0ntIJnf8HY
+ 6Ene973eocCEBeduYlSD6bXh4lkZDb_GB_lnw0OjeB62M6EBa0zxUMLx16PC_eMMt7voTAXlsRzp
+ eLxytKqYqPRUDEMrO7N.kjFecXify5Q9BSQRfZYGfZWJvdVPVTJiB5a5CAsoC24pUtG1uz7hVEA9
+ y2oQtc2TAY5i2ScTXQxLiSVl_s8Iy6.eM9Tg03u9.UeoiVBJCRVfKEUUZWqGJcRHbYeFTYtFv2d0
+ dv3xp4dQjPj6zuR0Qa2U11bf4p1GRclEV5L3KXZlRIylod44PmBwxzonU0iZG.Agc3ec73_YDUtQ
+ xq2mQqLUce4jpK85..TsensMifSTG.j78IaDvHyzY5PSIAKvtmKJbuEFO6tjei7LXT.BOikIfs5A
+ EFnUmLO.PytuoqYe1AbHYAeTF22JERtXoqoIhywra3zUZuuFgNvaqcr3DaermpmGhzlP4lAw9Al.
+ 3.yxUz4TMwEMeXG1iaTGcX7Fcm5fG2gZtxs.tPsbSmWXr3Vf1IO0WlQXynsFIsf16UCJ0vQlXRkl
+ C04MyAqCw2IBjdh6IZQhC6y6ugXH0QDScozWjtrJkk_N1nTK1Kds2_PPbSQUjXr91ua34IkpKgp9
+ zyIgC6Twz87LGVambezX5fIO1_ptPbqSNQwaBYHWWR4Mv1uiTAPuH.TOW.qAH6XQTsoesFKDE0xq
+ oveCFuDeov0PHGroKEzDZiTeF.nApaxgf.QdxqtUWDqC8dxh6NR_VNPIa9NGARq_L6fsklCIoAJz
+ wQ9Su696kTPaB6yHfsKho4I2hv1wLOdMb7kUXOUO8e2scS24sbLqEe9gVeZ59P3EgVc0ZoopcbCE
+ UKe9mjNZnAm0_ZnMC3LfosVYE6nb98QSzTorKBr.5q4AQgC9_GZxZIjrugPWRW4eYGc.4Jf1zc9Z
+ KcuJQ8qS2as.yJjqenT78orYh7VMFXiHvGzFxyNYkzqjq_v_OPIfHaL8d77DgTk89NzY4ZFO05c4
+ H0uMCcDBwAvggIPNcxftr8PMoTr8UnSOn1GlM9g0DIZ2k2b_7HLs3eyWhXLnEjlDKfE1kUzv0b0k
+ 1J7.9kmV.ylvcfNk1gHCz6AO3PZhbPFO9XmW14dNu8k6sKLSDf0PRRiZ.qHAWYaHJMrTvIdOqTMx
+ J5g5t11C3icnvLnZ1RWdbu_.RaE4Tl.GB.q8dnkX0Phv4quIAhtm2sbwsN_.5tPg8OzCOlNgC2lq
+ VsylC3Mv.Vbx.NLgR__DJB.w_KDL5Oxh4Qs9sS5SM5TZLq3r4Q870Lue12On0pWvWr8AMMJ202fd
+ ZMUxcaulWffQYdzkkgI60J9obBl9MxMhbnjUiDdg.nUOwXgk_fzrxQqY.cqWlIuLqbVoGkfMsun9
+ fUoGH9gh2mxyMSKC0T4_UyjcavmgUqTWDNqPa2dXU.2qf.7HenedJL8LHpBmyfmDq2qTr9n4pbQG
+ n0MvQbMiplDb3U.IIKhJraBMXvD0m1ReG7v5MsbDqn8j7_XyrWCbMAr5kfRBGT8jt8DhP8OarIPO
+ C9Tw3AKSiAzxwN3BMu_BU_GS58v.KxAqVCnky3tgfX_CuLZ5wINezT1NTZ6FkV33ZhMC_a6qRyEC
+ XRFW3W_XkBA--
+X-Sonic-MF: <sumanth.gavini@yahoo.com>
+X-Sonic-ID: c5be0f29-6388-4676-a4a7-9050df7cf1fd
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.sg3.yahoo.com with HTTP; Thu, 17 Jul 2025 00:27:24 +0000
+Received: by hermes--production-ne1-9495dc4d7-clxb5 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0212c9e6b7505a9b54117a53d36bc6a7;
+          Thu, 17 Jul 2025 00:17:10 +0000 (UTC)
+From: Sumanth Gavini <sumanth.gavini@yahoo.com>
+To: sumanth.gavini@yahoo.com
+Cc: Chris.Wulff@biamp.com,
+	gregkh@linuxfoundation.org,
+	jkeeping@inmusicbrands.com,
+	kgroeneveld@lenbrook.com,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	quic_prashk@quicinc.com
+Subject: [PATCH] usb: gadget: f_uac2: replace scnprintf() with sysfs_emit()
+Date: Wed, 16 Jul 2025 19:17:07 -0500
+Message-ID: <20250717001707.186867-1-sumanth.gavini@yahoo.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250704003425.467299-1-sumanth.gavini@yahoo.com>
+References: <20250704003425.467299-1-sumanth.gavini@yahoo.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1752703107.git.dan.carpenter@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-Fix a checkpatch warning:
-CHECK: Please use a blank line after function/struct/union/enum declarations
+Hi All,
 
-Reported-by: Xu Yang <xu.yang_2@nxp.com>
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/usb/chipidea/usbmisc_imx.c | 1 +
- 1 file changed, 1 insertion(+)
+Just following up on my patch submitted with subject "[PATCH] usb: gadget: f_uac2: replace scnprintf() with sysfs_emit()".
 
-diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
-index 0b8b980409bc..3d20c5e76c6a 100644
---- a/drivers/usb/chipidea/usbmisc_imx.c
-+++ b/drivers/usb/chipidea/usbmisc_imx.c
-@@ -1118,6 +1118,7 @@ static int usbmisc_imx6sx_power_lost_check(struct imx_usbmisc_data *data)
- 	else
- 		return 0;
- }
-+
- static int usbmisc_s32g_power_lost_check(struct imx_usbmisc_data *data)
- {
- 	return 1;
--- 
-2.47.2
+Original message: https://lore.kernel.org/all/20250704003425.467299-1-sumanth.gavini@yahoo.com/
 
+Would you have any feedback on this change? I'd be happy to address any comments or concerns.
+
+Thank you for your time and consideration.
+
+Regards,
+Sumanth Gavini
 
