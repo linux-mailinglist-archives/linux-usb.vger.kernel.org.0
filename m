@@ -1,109 +1,77 @@
-Return-Path: <linux-usb+bounces-25897-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25898-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB90BB083F9
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 06:34:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 625D9B08431
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 07:06:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 555CF561EBB
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 04:34:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D64A21C234ED
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 05:07:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D704221265;
-	Thu, 17 Jul 2025 04:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8CA1E8331;
+	Thu, 17 Jul 2025 05:06:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="avoZKtDB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Mbxl0NUN"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4CE0202F70;
-	Thu, 17 Jul 2025 04:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF2EBA27;
+	Thu, 17 Jul 2025 05:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752726694; cv=none; b=aye/Ig2eNkozpnYLvctitxJHwr/zIAQ03iK/6jZbupm2kdLjgM1VwT0SPDbywjvf+MZEaTup7mYbhmsNkCGivgGnm6fp0k+t4ZgItGr08AMlP1mov98r+jcisXtH1lokj0HtQANda03pgLwYglsJu1/qWcCoAQYnVLjrVlIUbtc=
+	t=1752728803; cv=none; b=o4oqiha7tR8is9AiGOjH3wchOpjoBkYwYQ+NBBfMuxW53ZxZ8/+tA4yYxrzQB3KPxc6Hkt6Q7I2HEUiFH/iji1czUQ0Xn5MOSx5Va9NN58FfK0I+noZ8bi5XTdZ89ZxIIjq7mg0Vuh7XJJbjcad/EvTvd4Qm9ZX4cyJndsV7pRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752726694; c=relaxed/simple;
-	bh=pIYH0KO1l0XN0H//I8Ogw8n4JPiT1JUXM0jP0Wxrr5g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TnXsOtQl0ayJuRaMuA4Mq/QQRFlkf4gaOH50TZFG3EwvsWZLmb0x+xG1+j87ZMKEUyatw7TuQpfIVUgsk/QqnFp9M57DEsqnpQA8lExflH8LKiSdcfzHbDS/8sTv/CkyO+EgDin3B1KH71SVBY9Gn53wNoiCurK9i9k8Cmgu69k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=avoZKtDB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA93FC4CEE3;
-	Thu, 17 Jul 2025 04:31:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752726694;
-	bh=pIYH0KO1l0XN0H//I8Ogw8n4JPiT1JUXM0jP0Wxrr5g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=avoZKtDBTTOQPkLgZP+ACnVzLFKdHPB26tlizxGveUmmSAtp3Nu+vk4mA1sTIdT7S
-	 EpO3oXpfL4Pu5vBJj5L+Uzjee/0WZW49PYAaPOA5ufPYbXo7cYCsCcVCU7Y24Xu9X0
-	 i/7ds+rsLSBi7pY6FdIKjSDwHEGzhhG4z9b2/mu5bqNydJ/BAahVBnqiRk7lg1Etxm
-	 fZmdnSeK7IYG0qS3ctWWBB69M0G0VvQwieHBL4zj1XPffm3/ikVikR6XooxP67lrwi
-	 i4Vch7qkju6ZmpUzggQusnsBfBEXdFh5GPTkw0n7pS45Wc48DBYFKyHQQo5gEvA3R3
-	 XC1pZMUP3VLqg==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	Luca Weiss <luca.weiss@fairphone.com>
-Cc: ~postmarketos/upstreaming@lists.sr.ht,
-	phone-devel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH v2 0/5] Enable USB audio offloading on Fairphone 4 smartphone
-Date: Wed, 16 Jul 2025 23:31:06 -0500
-Message-ID: <175272667125.130869.1491563405757140609.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250501-fp4-usb-audio-offload-v2-0-30f4596281cd@fairphone.com>
-References: <20250501-fp4-usb-audio-offload-v2-0-30f4596281cd@fairphone.com>
+	s=arc-20240116; t=1752728803; c=relaxed/simple;
+	bh=TCmukVCLk9A0CHEQFSflMKaNKQN5BiKV1BG1ALEt6x4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mf0S0zr9kVw37AQ7w2806N/kdlvfZSm32qgEsT3AG4GX1LC+0xWftNlwQskLNI0vkY+kWNBNJCblANraBg/SEICkmPFOpcw673md3ufbp5JL2x/DXUV8pdCB7tX6Ui3mYx1R1rDLBWzdTWsdU4/3JboccphGOxE6OH+HZeDmV7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Mbxl0NUN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA41EC4CEE3;
+	Thu, 17 Jul 2025 05:06:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1752728803;
+	bh=TCmukVCLk9A0CHEQFSflMKaNKQN5BiKV1BG1ALEt6x4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Mbxl0NUNl7N7mM3s2rsJeN4X8tyBTxHY04KrQb8daGiTikAO5Te/wd/d7JtP/CbGZ
+	 mL4qh5khG+mhtyRzXheRSy1JH/Yb5KqA5TpMaV4hazN2KFl1S1fuoNy0FwK0yU7+1Y
+	 MxRclAnUk/zM/4E7M1qTVtFz+8tvCe/E5zlgLcko=
+Date: Thu, 17 Jul 2025 07:06:39 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Sumanth Gavini <sumanth.gavini@yahoo.com>
+Cc: Chris.Wulff@biamp.com, jkeeping@inmusicbrands.com,
+	kgroeneveld@lenbrook.com, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, quic_prashk@quicinc.com
+Subject: Re: [PATCH] usb: gadget: f_uac2: replace scnprintf() with
+ sysfs_emit()
+Message-ID: <2025071713-jubilance-mouse-0e88@gregkh>
+References: <20250704003425.467299-1-sumanth.gavini@yahoo.com>
+ <20250717001707.186867-1-sumanth.gavini@yahoo.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250717001707.186867-1-sumanth.gavini@yahoo.com>
 
-
-On Thu, 01 May 2025 08:48:46 +0200, Luca Weiss wrote:
-> Since the series for the USB sound offloading driver was finally merged,
-> we can add the sm6350 dts and enable it on Fairphone 4.
+On Wed, Jul 16, 2025 at 07:17:07PM -0500, Sumanth Gavini wrote:
+> Hi All,
 > 
-> A few devicetree binding bits have also been missing in that series, so
-> there's some extra patches for the basics in this series.
+> Just following up on my patch submitted with subject "[PATCH] usb: gadget: f_uac2: replace scnprintf() with sysfs_emit()".
 > 
-> Depends on:
-> - For qcom,sm8250.yaml & sm8250.c:
->   https://lore.kernel.org/linux-arm-msm/20250425-fp5-dp-sound-v3-0-7cb45180091b@fairphone.com/T/
-> - For dts:
->   https://lore.kernel.org/linux-arm-msm/20250321-sm6350-apr-v1-1-7805ce7b4dcf@fairphone.com/
+> Original message: https://lore.kernel.org/all/20250704003425.467299-1-sumanth.gavini@yahoo.com/
 > 
-> [...]
+> Would you have any feedback on this change? I'd be happy to address any comments or concerns.
 
-Applied, thanks!
+It was merged into my tree 10 days ago, you should have gotten an email
+about it already, right?  Look in linux-next, it's there.
 
-[4/5] arm64: dts: qcom: sm6350: Add q6usbdai node
-      commit: 30237c2bfda59e3abd7f7e92879e75bc730edfd8
-[5/5] arm64: dts: qcom: sm7225-fairphone-fp4: Enable USB audio offload support
-      commit: ddcc0ad9a9b8488d3ee0b4ca6fd9b092c462491f
+confused,
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+greg k-h
 
