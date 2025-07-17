@@ -1,79 +1,79 @@
-Return-Path: <linux-usb+bounces-25904-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25905-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ADE4B08BB7
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 13:28:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FA08B08BC7
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 13:32:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC8A24E5063
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 11:27:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAB6817E8F4
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 11:32:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D203C29AB11;
-	Thu, 17 Jul 2025 11:28:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BE8A299A9C;
+	Thu, 17 Jul 2025 11:32:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ugzp4CCh"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MStfA7yq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A66F28D8F8
-	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 11:28:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD6C263F28
+	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 11:32:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752751695; cv=none; b=tXO7YHK9gS4KX5Sg2fKfuj7quqrJg9UOzI/3eWxe6ATrFo+nEx5wxbmrJnS+HgDNYLc/BjOm/SyExeZCn/AXdqXY27ctep+3d8kq9R4iw3OOJIdTwHpM776TRIZoAfFuK9ZlLFQVlZ862nKxlubXPAL/+Ma7zE3nNzyUKdqcp+A=
+	t=1752751927; cv=none; b=X8lBLt6EyvRMNhINtZMyZYxCZLtCaNRHF/s/xsyj6HP6xknV9OU/AJsYEQa+CcolzQlMeZkNDOLGFkA5qtidFTWrTpVxHX7pQh6LqEh2gsNaNQkyheDMQUOMxWeiOv7yBeLbydi+JGjs4Zb/hff7D/02QXBPXE3zjNouifUj3sQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752751695; c=relaxed/simple;
-	bh=vPsus7n+ZehouuNJIhJaopxKH86tOGKiwPcKPd0ygOU=;
+	s=arc-20240116; t=1752751927; c=relaxed/simple;
+	bh=NnqdSjL+Rs0PFPzmqEJ8dyDUymEj23QKvWFQ0LII9cE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GDmhCwOa1iGG/0nmVEKtd9M6SYi6HyysEBJjjNcvgaq6M3Jaoz50YM8xPo2bF3y1pnCyiIdeEcJ9ECor3zpf0jjX/n7K9tXdp3Rb4QSbOp3p/mU8SAnUq2MatdFBLUwXSd3kzVWisPSpaKaHziY3i9/6a8VAxKRXerHmoPFX51k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ugzp4CCh; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:Content-Type; b=Ghg3sqKV4SuZX34lvVG+pWzE2FPMOahjwEphIREs8Y/+liZun8SZoxW6TEvCNF2dyKEU0dc2jIRuY0tmWTg5NJmbOqQuonFQ7vN9l7eiGL9L/DeItXrTPX3xUPo1WoTol/5jvdifUIaSl/ClyE4pNmeX9+4nl0M+bIpP8cS8BYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MStfA7yq; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4561607166aso6329335e9.2
-        for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 04:28:13 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-605b9488c28so1416492a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 04:32:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1752751692; x=1753356492; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1752751923; x=1753356723; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=l4EyBkCfQk118hwy23YpMyJEobctr2YH/JMj7abcP1o=;
-        b=Ugzp4CChlld0bsXq1K3L0t8+UdgvAUk/ojf7/B0Hl2xQOcOcL5uAOZZGuhwPxyHn1E
-         vZVPC8jhdpVZm2mIW/vlGEglM+wi6cczcxFFTfPVPsB7ihsN7wSFk4xw0ndVRi33/vO+
-         loXpFEsNOGNHxgIXOfhSZlTAnFpD5gvwcugw+huxGlzKIfqIR2Q2CZSzGY1slmNdsMxj
-         z0keptv8RvVcuJE1trKnJ9UMTv1fjWXuFc2Cym3WaO1o4Bx1BRm216gMNWlVli1QXb9v
-         cfQB9lffuWMFfoYBxc4qAEm16iBh1jFIOardQVq15oejckLMQkXDGQtBxJNoGBVb46G2
-         R+1Q==
+        bh=1nbfA/BUePz5jg5ZXDN13NPJjAM7aHo+l8+nJUpAVbk=;
+        b=MStfA7yqjyUiy6FWorOWCGMnWviIL61MbYLr9+S9d2cEU42jgE+c+ZTMbOdh65TyVK
+         Lc2NRilJf3B/KlkaN9eZoKtq+AKdH/gei6xAICwkqWaqcE5+1eSnU85ITN4rNfw2qt3F
+         Cg80tcjDVhQS+k3XPQGpRpPYseaYHuvmIG77VAUUqKZS8oYa/1QQmQcruoths6xaWwO/
+         ArzBSosIfztsxjVaIanBegJRKz7GcqwE5FuGEqQ1k2+M07PURDnAh6kZhiFr7msDjTHp
+         cJSxtayH7fYwi3krzmYDI2Skl5+0yJj1sFWfKJCHWcZCjFThZA/+U2Q51z1BhMxBuVzP
+         T1qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752751692; x=1753356492;
+        d=1e100.net; s=20230601; t=1752751923; x=1753356723;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l4EyBkCfQk118hwy23YpMyJEobctr2YH/JMj7abcP1o=;
-        b=EhE5V/62zycixpHA5BmPgUAXGPfMBSgs+uxxqxv90YhGW4uYnPkXxEV2sO7seZjFMA
-         VkDph2BPNdfSytPF3/Gd04YL5DXb1HmvVg/umTnW7OYloIudzf8OAjLNs4hOXBcfPsKF
-         miJVVWRNq4YWrIlvpPXJdX3ayROj9bZtapM68Or73MBj07yUu+mwfxjY44pXJ/cYZu30
-         xtmpamfmuHmAouk+mBbBCRM6OCanj7+BLUIV/eBznoIt9NUv4vygqy/21AOnz4/Ll2ae
-         njK+D+x5o2EJIm03tMEdUQHMhmh1/Oq6piJ1Wm7X8xvME2ujqRv7NahizGl5uy1YiBj4
-         FdLw==
-X-Gm-Message-State: AOJu0YxQwy1bMvHH+bvOPzffCrFrDsInH6wgRkk/TbFRFEV8hsoK7c/Y
-	jH69p+/w4+Lt6Y7xSWkc3oMgCncbeOLuAh0yAOttxhaSjzxiSWj1JUtK78mh5bDp9pM=
-X-Gm-Gg: ASbGncvCKPbUPNq7kOn8Aob5GuSNsh/4ZrhBzVmsqTwIFhYsWqCQf/kYJUX191Fpdv+
-	su4K68zi37PNFghg/ka14ksrWYFAFeg6cCjR0JVONfSFngtPy5may9+8FTPYPUvaAbW6wtEDbAS
-	SCVY6yVBAfKFpKWJmaXQ7nKnt2PAQp7qfrL/o72rUBDsRFzUOp0TOgZRYjS/hxbKS9PEk8O0Cpu
-	FteS3uF02Jw/hfkturrXZPiL4eCVhQ2CfPmJQtYWxASfkc+h7K9TBuHSn3fZLTwgeyva7e50RHd
-	QoMX62EbZzsioL8k/j6w0T3eAIMLMowi6eAhsVuUjR9t9SId9fUTd4ZfDfuHyibrWjg5q1nERmg
-	Qlg6wJ0NsO3I0QY6+uPMiRv9BtIllN5INkhnTLZyadcrNpe5QSo0vEzH1opUav8wLnw==
-X-Google-Smtp-Source: AGHT+IEEj/81mVMNXoPOUWUO7P/YkTI7YWJCQoKZ+jwcD015HAkVi+WItslIOuhDgRa9wqEhexgbsA==
-X-Received: by 2002:a05:600c:3545:b0:456:1a69:94fa with SMTP id 5b1f17b1804b1-4562e03e75cmr63822605e9.13.1752751691688;
-        Thu, 17 Jul 2025 04:28:11 -0700 (PDT)
+        bh=1nbfA/BUePz5jg5ZXDN13NPJjAM7aHo+l8+nJUpAVbk=;
+        b=OmlT/vJzt0BavSZeoe9nV6HKqIXiM9DlntmtZ77dkn70cdZkheLfYtjHOtF0TcqhS/
+         XfUWTW+SFLufvTT8s3rEA5WnH1aDlnDQErxcVWfyivi+2nEltBfICkQOh+TtR1nQrIHr
+         dyEgC1d7zg5LL9e5acvVTfac+4OoPWE1u/iOTMbzGVksuNXuFR6xMGxU4SCtp4mZokuF
+         1eNTnOQj18NivR2vesTQZS+ozpyWlST0nNJxCuw27LDnUJT4Zkai2szdkg9a0O7mNUWG
+         /EW3vNi/0T3b/8AAnpwD3g2ODe+ymL7ouwG6kWyNHUJx4YZmfcK18qJ+lqDFiowLM/DB
+         w+Zw==
+X-Gm-Message-State: AOJu0Yw+Whm3XrhxjBnyOFpZpHe21ydn2vnKXpydL695m4wejWPk2nL7
+	6WovdbAP7BuSnajAZLoZh5/eoef6annvjtbpx1gAc2QUmxpBD9KjZY+hsfrkvI6KivU=
+X-Gm-Gg: ASbGnctr+tKzZz5Kq4Rzc8YAKO0Ncx5gnZahIAHF1JO2TGPQWuwo7j3l85DUeREeMnv
+	nnHKg2Y5QstchN6C2tx4DiFrI+3o/H9dZLKdeR83E9zo1Harf8hCDqkUBMZD6mo4XpWhpxKta2e
+	zcjCEIWGmg82qKLkudY+C9X0FnPDAbuy+ESILfBwH9uTo+oMyaYf5Ulba5qPQ3hPDQWyMob2tOp
+	KfgEx3AQvtkgA5pEWkjRcoJm7d9D8kmPBbYLMZ1ZLlHTOO1s6cweOsZrkLm5O4ll/tfZEg5Cqbm
+	l6Q/+4mweYdzqxMf67/eC4KCQ4ER0THU5UDvGL21GwJq6PkPSg5OZ6m/GmAv51GOvi+uZpGemeV
+	K/1WTHQ0UF5K/ABnIRKv7OBtt+qaaR+H9/wOIvmt/SqpC0A0kkdHPR90hh5xrxuUBHw==
+X-Google-Smtp-Source: AGHT+IHPpC07daK6TZIz+cLHthKtlpaXonfdOizJqTxBI8T6DYPMH3DS44MzKOLbMzR4Y0XLAVj+sg==
+X-Received: by 2002:a17:907:e2cb:b0:ae0:7db8:4189 with SMTP id a640c23a62f3a-ae9cde02ca4mr620673166b.18.1752751923449;
+        Thu, 17 Jul 2025 04:32:03 -0700 (PDT)
 Received: from ?IPV6:2001:a61:1347:1201:4432:54ab:26c1:9ebc? ([2001:a61:1347:1201:4432:54ab:26c1:9ebc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45634f82f29sm19552955e9.23.2025.07.17.04.28.10
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e7ee26b4sm1337874566b.45.2025.07.17.04.32.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jul 2025 04:28:11 -0700 (PDT)
-Message-ID: <c9d07302-37f0-4f0d-8669-094aa6fc2450@suse.com>
-Date: Thu, 17 Jul 2025 13:28:05 +0200
+        Thu, 17 Jul 2025 04:32:02 -0700 (PDT)
+Message-ID: <f63f2b91-a217-41fb-bbbb-1810d98838fd@suse.com>
+Date: Thu, 17 Jul 2025 13:32:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -90,33 +90,37 @@ References: <ce54ae11-72bb-4ac7-980b-c1cbc798a209@zytor.com>
  <fa20ab91-5ebf-427d-b938-31ea6fb945cf@suse.com>
  <83B89F79-D28B-4F2C-87EA-F5078BD7ED17@zytor.com>
  <2c807a7e-d55d-4670-9a86-e3fcaa3e52ba@suse.com>
- <f979468c-434a-43e9-8c50-8e92188abc11@zytor.com>
+ <927f2d40-1004-4738-a1bc-0000d4d3e179@zytor.com>
 Content-Language: en-US
 From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <f979468c-434a-43e9-8c50-8e92188abc11@zytor.com>
+In-Reply-To: <927f2d40-1004-4738-a1bc-0000d4d3e179@zytor.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 16.07.25 19:49, H. Peter Anvin wrote:
-> On 2025-07-16 09:17, Oliver Neukum wrote:
-
->> Understood. It still seems dirty to me. If you want to send strings to a
->> device
->> the proper way is to use a device node and write().
->>   
+On 16.07.25 19:30, H. Peter Anvin wrote:
+  
+> ERRORS
 > 
-> There is definitely something to be said for that; or at least a file
-> descriptor.  We do have cases in the kernel -- notably opening the pts
-> corresponding to a ptmx file descriptor -- that do that sort of
-> "auxiliary open" kind of thing.
+>      The tcsendbreak() function shall fail if:
 > 
-> The big question is how that interacts with the rest of the ACM driver,
-> as well as all the lifetime issues you mentioned elsewhere.
+>      [EBADF]
+>          The fildes argument is not a valid file descriptor.
+>      [EIO]
+>          The process group of the writing process is orphaned, the
+> calling thread is not blocking SIGTTOU, and the process is not ignoring
+> SIGTTOU.
+>      [ENOTTY]
+>          The file associated with fildes is not a terminal.
 
-It would seem to me that CDC already has something very similar in form
-of CDC-WDM. If acm_probe() can call tty_port_register_device(), it can also
-register a secondary character device. Or are you worried about how to tell
-user space which devices belong together?
+I would take this as meaning that we cannot just return -EBUSY or -EWOULDBLOCK.
+Hence the generic layer would need to implement some sort of waiting
+logic.
+
+> That's why I said if that is what is needed, it really belongs in the
+> tty core.  That's where the current internal delay is, after all.
+
+Good. Don't get me wrong. I'd love to do this more efficiently,
+but the current API is less than optimal.
 
 	Regards
 		Oliver
