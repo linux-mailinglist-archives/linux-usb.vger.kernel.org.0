@@ -1,156 +1,93 @@
-Return-Path: <linux-usb+bounces-25911-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25912-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F0F0B08EE6
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 16:13:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95A7CB08FA0
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 16:37:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA6C01C25B71
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 14:13:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EF5A1680DA
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 14:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06AF72F6FBB;
-	Thu, 17 Jul 2025 14:13:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29AD32F7CF5;
+	Thu, 17 Jul 2025 14:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="FeOagNFI";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="FeOagNFI"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="boOvl/mX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B232A27A448
-	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 14:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13812F5C5E;
+	Thu, 17 Jul 2025 14:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752761586; cv=none; b=a67lDdbAN+u4OorCU1JWCwNyBfmvEER4yHSoopqqwHWh3Z0ZlE2/4juOVp5UShimCehgiQybYkYxkgZM9kgZHVT4J4yQi5TFQxQt3wSV5D4d0et5w6Pqj6Yg9PJ3cvm0uZEwlDVHCWbigoRD9Z1qJ49bwOgMMJWDBV4hANTIiHo=
+	t=1752763067; cv=none; b=neaovG4tR5aW5wSv/L9N5zL+mvEabcx3WbadUhYvaR2vF3R+d1bgcxf4/G/MDfcb8sJrGdMXF1l0MSER5cSWSCD1rC4n56gsawKjbUBVLqc8eMU3v5OL1NRay95UjGqt1xi8UDnzcBV8DvD9Omdtano6kB3eZb3U1/aMcmTGZ9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752761586; c=relaxed/simple;
-	bh=rN99tKa8OXJ2Dh+kbFOwKbAB9dFuqJJoacIWy0uyqw4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qu8I9cdSOkC6VI7E/rzNJYGLzCNZiuKLerxCVkWKXkmGRb5orDABWIcgECHj2qwV1t0osh48pNpiQ4gcKOF+LawleAskG3Dy1ssz3klAQrTgF4CYmXTHxD0cHB35GaxrSdOXIQ7YF/MphsTIunMdtR43zqPogL7eRx8iuQh0+uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=FeOagNFI; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=FeOagNFI; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id A78591FB85;
-	Thu, 17 Jul 2025 14:13:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1752761581; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=okJ80G5AgtEaNhJJl0LXtk8E75/5rCUKj1GlMcKNjds=;
-	b=FeOagNFIXCAkTIhSoEF/plAgyT4AolfIc/6bpD8WKy/wUJbdlXPnWHH4g741Yxk+lWULuh
-	nd2DGs8QmfG0qvw11A65UAiTjg2n9xP2yxyqmldte6p/94dNC0In2svzeJDB5LsauGz6yr
-	IALNfQmNJbyYV29+W3+PZ8WHn3NuSe0=
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=FeOagNFI
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1752761581; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=okJ80G5AgtEaNhJJl0LXtk8E75/5rCUKj1GlMcKNjds=;
-	b=FeOagNFIXCAkTIhSoEF/plAgyT4AolfIc/6bpD8WKy/wUJbdlXPnWHH4g741Yxk+lWULuh
-	nd2DGs8QmfG0qvw11A65UAiTjg2n9xP2yxyqmldte6p/94dNC0In2svzeJDB5LsauGz6yr
-	IALNfQmNJbyYV29+W3+PZ8WHn3NuSe0=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 82DE013A6C;
-	Thu, 17 Jul 2025 14:13:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id qfbAHu0EeWgMLgAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Thu, 17 Jul 2025 14:13:01 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] cdc-acm: fix race between initial clearing halt and open
-Date: Thu, 17 Jul 2025 16:12:50 +0200
-Message-ID: <20250717141259.2345605-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1752763067; c=relaxed/simple;
+	bh=qJxnjdYTIWbk7vIyn6SbpFcW6x3VlSKPaEAXEeiaS3U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TdOO9cLxpgTLXU8M6V2p5TtxsEKbl+RpR9NtySuQixN0EyPvun967kF3o/TxhG48iVsPqrXeLFcb3P4JEoQ0EaQP20lsIom+zIPMSK2LtdjD6hHqlgcTbFZIu5GQk8XkE80o4DU7QtaEH3jAvWd1qTFFYA6yxAIfloRZgqEV1nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=boOvl/mX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D892C4CEE3;
+	Thu, 17 Jul 2025 14:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1752763067;
+	bh=qJxnjdYTIWbk7vIyn6SbpFcW6x3VlSKPaEAXEeiaS3U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=boOvl/mXiA7Ku2q2T47AsOoxuAgnWEBIRqC6j+XyUF97Wtj4QzgrymPczfycV+q0R
+	 lakw8nji61P9/gApmQPwM78TPtM/UWn1ViWSD14DxLT6mXONWUH5yMiWWVo5p/v63j
+	 SSXtRr2nCXcdmLriG44CjIIVnwnKhMJMvt/zAYwk=
+Date: Thu, 17 Jul 2025 16:37:39 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: cen zhang <zzzccc427@gmail.com>
+Cc: mathias.nyman@intel.com, linux-kernel@vger.kernel.org,
+	baijiaju1990@gmail.com, zhenghaoran154@gmail.com, r33s3n6@gmail.com,
+	linux-usb@vger.kernel.org, gality365@gmail.com
+Subject: Re: [BUG] KASAN: slab-use-after-free Read in xhci_hub_control
+Message-ID: <2025071748-unlovely-citadel-3dc8@gregkh>
+References: <CAFRLqsUZTDm0KAfX_qziTrn6E3+sRksF5ormxhHConqTKWvHBQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_TLS_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:dkim,suse.com:email];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Rspamd-Queue-Id: A78591FB85
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFRLqsUZTDm0KAfX_qziTrn6E3+sRksF5ormxhHConqTKWvHBQ@mail.gmail.com>
 
-On the devices that need their endpoints to get an
-initial clear_halt, this needs to be done before
-the devices can be opened. That means it needs to be
-before the devices are registered.
+On Thu, Jul 17, 2025 at 08:24:17PM +0800, cen zhang wrote:
+> Hi maintainers,
+> 
+> I've encountered a kernel crash in the xhci driver, which was found by
+> Syzkaller on kernel version 6.16.0-rc6 (commit 155a3c003e55).
+> 
+> The KASAN report points to a slab-use-after-free read within
+> xhci_hub_control. What we find puzzling is that the free operation
+> occurred in a completely different module, as indicated by the free
+> stack trace.
+> 
+> We suspect this might not be a false positive, but rather a complex
+> bug whose root cause is not a simple UAF within the same driver. We've
+> tried to trace how this could happen but are struggling to understand
+> the connection.
+> 
+> Could you possibly offer your expertise and help us understand if this
+> is a known issue or a new bug? Any insight you could provide would be
+> immensely helpful.
+> 
+> The full crash log and a C reproducer are attached. Please let me know
+> if any further information is needed.
+> 
+> The full KASAN crash report is attached. Below is the C reproducer.
 
-Fixes: 15bf722e6f6c0 ("cdc-acm: Add support of ATOL FPrint fiscal printers")
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/class/cdc-acm.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+You are talking to a specific USB hub in your system, I guess a xhci
+root hub?  Or one that is external?  Can you clean up your reproducer to
+be readable so we can try to run it locally with any USB hub as the
+option?
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index c2ecfa3c8349..5a334e370f4d 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1520,6 +1520,12 @@ static int acm_probe(struct usb_interface *intf,
- 			goto err_remove_files;
- 	}
- 
-+	if (quirks & CLEAR_HALT_CONDITIONS) {
-+		/* errors intentionally ignored */
-+		usb_clear_halt(usb_dev, acm->in);
-+		usb_clear_halt(usb_dev, acm->out);
-+	}
-+
- 	tty_dev = tty_port_register_device(&acm->port, acm_tty_driver, minor,
- 			&control_interface->dev);
- 	if (IS_ERR(tty_dev)) {
-@@ -1527,11 +1533,6 @@ static int acm_probe(struct usb_interface *intf,
- 		goto err_release_data_interface;
- 	}
- 
--	if (quirks & CLEAR_HALT_CONDITIONS) {
--		usb_clear_halt(usb_dev, acm->in);
--		usb_clear_halt(usb_dev, acm->out);
--	}
--
- 	dev_info(&intf->dev, "ttyACM%d: USB ACM device\n", minor);
- 
- 	return 0;
--- 
-2.50.1
+thanks,
 
+greg k-h
 
