@@ -1,89 +1,122 @@
-Return-Path: <linux-usb+bounces-25915-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25916-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34F27B090E4
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 17:49:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 903F4B090FF
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 17:55:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24CDF7BD6DB
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 15:47:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3ED71C42297
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 15:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22412F9493;
-	Thu, 17 Jul 2025 15:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1154F2F94B7;
+	Thu, 17 Jul 2025 15:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="MPkR+6pp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0402F8C4B
-	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 15:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9832F8C3E;
+	Thu, 17 Jul 2025 15:55:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752767345; cv=none; b=YOfK9vhE/V2oOozNxOkiFkKYfuX89QsDQaRRhdmAxLuXSBxWUTVDMk7mqnxXcB0rEZTgkZW9buEtEYlm4d9YcTsQ+xlWIHHQfp1OOs+W0rWqJNquOiPIuF5xKyjDsoVCr3GdHU/UmJ7EvcV0PYDOHjYAsMMLCLj0X9T5tQILWmE=
+	t=1752767728; cv=none; b=Kk/Y83SxCvJCwimqsO5PZ45axcpZrREUBUNP3Z/Q0ijq4THXX8lgkBnlGqFBUNbBb+zjsEfw8y+ORctdZgIj1wKAuUob0dgxjII52ICL7lPpJPPcXAXOMwj/zzylBt+GOc6jyu0sSW1yQftbLoMWgsnbI3m6vN4PjNDChZS1YUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752767345; c=relaxed/simple;
-	bh=uwUycdhfPj6CaQoQpADVkvyXsmH6Btz4yJ0id2qySG0=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=lSG6qIZpkKs1XWtCM8kf/J235YFd19I8as40qp9oSKmBKS7yd1u0Z//y8b9HJWlI2xMxF9HkBX6eMtM86zXUnx0HGXHCNanFHD8OW24J619XbyEty9sXeJfQil1b3E9CXh3ZK1hnxHTAkb2QGYACM5BNMShUIAHPs6ggEC9QIrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-86cf9bad8e9so114119939f.2
-        for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 08:49:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752767343; x=1753372143;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8DkcvYYZYbeS9YyBNkSiQOuihRa5i8q/41A08t0STM0=;
-        b=makv4us/JkTJ44SOBWuffaTx6BFGuhghjlkKE9KU0SLGqcz0LVL4H2xSfK2XAcQSCi
-         IDYCSVfzPegCADQ8N3lwqaDJICObDtlkXwMF+4vjIkt2LFK8AkDYswSIJ2XUTo5Bee1F
-         A2sqPFQeWgCuYnr3tPLOfkDbENYAhJA4hm8iJCfdLASaajZ5762zFOuSRFum42CbFeie
-         ka1GXetkkdqWMqiK2XrP2hKrm4oLVHBETD/fCS4n2aviWcsRitlDGwne73whMOzZF0Uc
-         vasC5qicsJKMnGw2Lsvicgbdiljc9+QIDzgtRGuIKIEcU/LE0irUdEZR6rtQxHJxOpNm
-         XQYA==
-X-Forwarded-Encrypted: i=1; AJvYcCUPWRkVJ+/Jj59h/nVkb8f7G33ElmOxUXo+1zGPL1HNFnjfKF97ezZodwWozfIjIbHwH8wfulAztWo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YysuQ8KMwIYlaXDyMSmVMc7/bXiBY3kg5B2dBN6cNYQtaXVjOKh
-	BoUIlt5xZ2csBqS9pQ2x9POvXBlkULE9uQ+J+vuVBfER3HSZXVG1uqu4P+8isv4d9a1wbb5jCey
-	QBgqMk++oIzjsomj664lnVDBKSxt6iPqO9S1MK4wPkgUuwvHfH/+yUlEoRaY=
-X-Google-Smtp-Source: AGHT+IEf4fyoxXity4Kr6+dzWapHEvcoVCaE3mpTKdMN7UYWTnoIPlTPex69DChCvZAIqhHVq3jwH0inF1qmM/cRIz94nhSUN0lN
+	s=arc-20240116; t=1752767728; c=relaxed/simple;
+	bh=tp5Gg8behGF+WptAeTwttToqto+o2D/32qb6Ch0ydj4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ucFK1EqmxSUKuhymlboSxER8v/+6InRKTd9Fr6rTBxc0AxLE7ewgvn3BD40hO5QCrbtaAzKd4ctP/N6tDBUi1CsGlnLF5x9kTv2Md6M9tXbHItfM9hb6mqLRc7OzhgAPZFBO1dXkWHC5YfgugIgtukK0hSgwPHQN2GiC1RlBBAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=MPkR+6pp; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1752767724;
+	bh=tp5Gg8behGF+WptAeTwttToqto+o2D/32qb6Ch0ydj4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=MPkR+6ppa7r1OYxNVfHHvwIfeIIgyt2gr8tzuEf4dE3caHiVc+0mrUWbxiVY11+vM
+	 /7CcwBJwBs75PuU3pXghwg5WmiB18A/yI/nh4+6M487fKkaYPFoZMNY5TEEDbtOpP4
+	 MR2NtS49WghYocNxX9h29D5FjE60gPEnRl3scfx+YklhSbtC5PRcQKPsy7EKJTlIeD
+	 YPiuQ2+Xx7o6t6j6ySQcdXt5z4FNEydq4AFv/iMhMUKlf+wzAkhGtYQ4TFGUXJyXfb
+	 bjDQ+xRw1E9tJh9h/+mVm/E1W667eLywIlJClwExGfzmkSLA025xTKtNSLcGCzGUDh
+	 qi55GMDhzecng==
+Received: from localhost (unknown [82.79.138.60])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: cristicc)
+	by bali.collaboradmins.com (Postfix) with UTF8SMTPSA id 72F0117E0657;
+	Thu, 17 Jul 2025 17:55:24 +0200 (CEST)
+From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Subject: [PATCH 0/9] USB/IP VHCI suspend fix and driver cleanup
+Date: Thu, 17 Jul 2025 18:54:49 +0300
+Message-Id: <20250717-vhci-hcd-suspend-fix-v1-0-2b000cd05952@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8801:0:b0:875:ba1e:4d7e with SMTP id
- ca18e2360f4ac-879c28a63bfmr745475839f.6.1752767343310; Thu, 17 Jul 2025
- 08:49:03 -0700 (PDT)
-Date: Thu, 17 Jul 2025 08:49:03 -0700
-In-Reply-To: <15723551-960b-4257-bfbd-073e136deaa2@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68791b6f.a70a0220.693ce.004b.GAE@google.com>
-Subject: Re: [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds in s32ton (2)
-From: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>
-To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMkceWgC/x2MQQqAMAzAviI9W5jDIfoV8aBtdb1MWVEE8e8Oj
+ wkkD5hkFYOheiDLpaZ7KtDUFVCc0yaoXBi888F1TYtXJMVIjHbaIYlx1Rs7XgL5QMH1DCU9shT
+ 9b8fpfT/onvsbZgAAAA==
+X-Change-ID: 20250714-vhci-hcd-suspend-fix-7db5c25c509d
+To: Valentina Manea <valentina.manea.m@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Brian G. Merrell" <bgmerrell@novell.com>
+Cc: kernel@collabora.com, Greg Kroah-Hartman <gregkh@suse.de>, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.14.2
 
-Hello,
+The USB/IP Virtual Host Controller (VHCI) platform driver is expected to
+prevent entering system suspend when at least one remote device is
+attached to the virtual USB root hub.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+However, in some cases, the detection logic for active USB/IP
+connections doesn't seem to work reliably, e.g. when all devices
+attached to the virtual hub have been already suspended.  This will
+normally lead to a broken suspend state, with unrecoverable resume.
 
-Reported-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
-Tested-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
+The first patch of the series provides a workaround to ensure the
+attached devices do not enter suspend.
 
-Tested on:
+Additionally, during the investigation I noticed and fixed a bunch of
+coding style issues, hence the subsequent patches contain all the
+changes needed to make checkpatch happy for the entire driver.
 
-commit:         c2ca42f1 HID: core: do not bypass hid_hw_raw_request
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=148b258c580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ec692dfd475747ff
-dashboard link: https://syzkaller.appspot.com/bug?extid=b63d677d63bcac06cf90
-compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14dd1382580000
+WARNING:
 
-Note: testing is done by a robot and is best-effort only.
+Please note commit aa7a9275ab81 ("PM: sleep: Suspend async parents after
+suspending children") from v6.16-rc1 introduced a regression which
+breaks the suspend cancellation and hangs the system.
+
+A fix [1] has been already provided, which is expected to land in
+v6.16-rc7.  The patch is currently available in next-20250717, which
+this series is also based on, as commit ebd6884167ea ("PM: sleep: Update
+power.completion for all devices on errors").
+
+[1] https://lore.kernel.org/all/6191258.lOV4Wx5bFT@rjwysocki.net/
+
+Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+---
+Cristian Ciocaltea (9):
+      usb: vhci-hcd: Prevent suspending virtually attached devices
+      usb: vhci-hcd: Fix space, brace, alignment and line length issues
+      usb: vhci-hcd: Simplify NULL comparison
+      usb: vhci-hcd: Simplify kzalloc usage
+      usb: vhci-hcd: Do not split quoted strings
+      usb: vhci-hcd: Fix block comments
+      usb: vhci-hcd: Use the paranthesized form of sizeof
+      usb: vhci-hcd: Consistently use __func__
+      usb: vhci-hcd: Remove ftrace-like logging
+
+ drivers/usb/usbip/vhci_hcd.c | 184 +++++++++++++++++++++----------------------
+ 1 file changed, 89 insertions(+), 95 deletions(-)
+---
+base-commit: 024e09e444bd2b06aee9d1f3fe7b313c7a2df1bb
+change-id: 20250714-vhci-hcd-suspend-fix-7db5c25c509d
+
 
