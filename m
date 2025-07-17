@@ -1,77 +1,104 @@
-Return-Path: <linux-usb+bounces-25898-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25899-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 625D9B08431
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 07:06:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63E51B086BD
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 09:32:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D64A21C234ED
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 05:07:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5842516E970
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 07:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8CA1E8331;
-	Thu, 17 Jul 2025 05:06:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12EE3262815;
+	Thu, 17 Jul 2025 07:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Mbxl0NUN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D5nE6Kbo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF2EBA27;
-	Thu, 17 Jul 2025 05:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE7520A5DD
+	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 07:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752728803; cv=none; b=o4oqiha7tR8is9AiGOjH3wchOpjoBkYwYQ+NBBfMuxW53ZxZ8/+tA4yYxrzQB3KPxc6Hkt6Q7I2HEUiFH/iji1czUQ0Xn5MOSx5Va9NN58FfK0I+noZ8bi5XTdZ89ZxIIjq7mg0Vuh7XJJbjcad/EvTvd4Qm9ZX4cyJndsV7pRk=
+	t=1752737484; cv=none; b=oc6xdVvOVv/eXKO/GeJr2Od94LCEiD8L4pp9+Jqd6KrT1hWoc5cFf77JJq11vNSU0J6f7cYImPKsrBWvUrLYr8q6G2DqJtInm85UD/Xbo9F7Y+MgafCwZBDtkKPcUF3KrlgMYvLQFxm0mbK7Fo13bd1vUku23MCFX3mmZx0D6SM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752728803; c=relaxed/simple;
-	bh=TCmukVCLk9A0CHEQFSflMKaNKQN5BiKV1BG1ALEt6x4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mf0S0zr9kVw37AQ7w2806N/kdlvfZSm32qgEsT3AG4GX1LC+0xWftNlwQskLNI0vkY+kWNBNJCblANraBg/SEICkmPFOpcw673md3ufbp5JL2x/DXUV8pdCB7tX6Ui3mYx1R1rDLBWzdTWsdU4/3JboccphGOxE6OH+HZeDmV7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Mbxl0NUN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA41EC4CEE3;
-	Thu, 17 Jul 2025 05:06:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752728803;
-	bh=TCmukVCLk9A0CHEQFSflMKaNKQN5BiKV1BG1ALEt6x4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Mbxl0NUNl7N7mM3s2rsJeN4X8tyBTxHY04KrQb8daGiTikAO5Te/wd/d7JtP/CbGZ
-	 mL4qh5khG+mhtyRzXheRSy1JH/Yb5KqA5TpMaV4hazN2KFl1S1fuoNy0FwK0yU7+1Y
-	 MxRclAnUk/zM/4E7M1qTVtFz+8tvCe/E5zlgLcko=
-Date: Thu, 17 Jul 2025 07:06:39 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Sumanth Gavini <sumanth.gavini@yahoo.com>
-Cc: Chris.Wulff@biamp.com, jkeeping@inmusicbrands.com,
-	kgroeneveld@lenbrook.com, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, quic_prashk@quicinc.com
-Subject: Re: [PATCH] usb: gadget: f_uac2: replace scnprintf() with
- sysfs_emit()
-Message-ID: <2025071713-jubilance-mouse-0e88@gregkh>
-References: <20250704003425.467299-1-sumanth.gavini@yahoo.com>
- <20250717001707.186867-1-sumanth.gavini@yahoo.com>
+	s=arc-20240116; t=1752737484; c=relaxed/simple;
+	bh=Zv4J4zwTH6HKNsqS2lrEzPnZcuvHK4GpfzvPPl21BRs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BZJVSe5dAdJqkPQm7CJF7jbax4OYcoL496llZ8wrjz26Vk3GxPkeiXr7sxbbgvymT/aDseInfo26WSsd7d8ipMtZEzyy+MsuC29Jb64R5bDPkpdRWmpcqLheMFYpgjmNuEP8CWidraHk5B5RtbWIdHgKy4sWtBdMEvFWtJ5sFKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D5nE6Kbo; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752737483; x=1784273483;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Zv4J4zwTH6HKNsqS2lrEzPnZcuvHK4GpfzvPPl21BRs=;
+  b=D5nE6Kbo8RMqpWWVv1jsOv/Y5pQjqrTHnzRCzThKQlKu/PlysRrZIe99
+   evfHhxQIlFqATYzzbRid0l5R86Z7cUVHhPFmLQcil5msdO3cnwNKiQI8v
+   vls3XyYisVWorcTuoi+sLK/tchpbNKHlU0SfSuF0N5e2wtrvET4OkQxMN
+   1tmQJGZ1+3soPu3vtCuwkyARsHhFW312JqqjJzEYbeZfrXyxzfP8LXe/V
+   nRE3oz6K+UNM7VaZJIFSumN+DLs3UBKLcw6lL/QrMG2B/GVx+ZA9cJWod
+   qgpvUEI5WCUBih8taYeUfp2KM0ER0wmof9yEyhdZbaQep5cZGyh9qbQPe
+   w==;
+X-CSE-ConnectionGUID: /AgjcK1ISvSOKFbEnXTnrg==
+X-CSE-MsgGUID: 4SFC8BiDTP6ybqSMy/F9PA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="80449318"
+X-IronPort-AV: E=Sophos;i="6.16,318,1744095600"; 
+   d="scan'208";a="80449318"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2025 00:31:20 -0700
+X-CSE-ConnectionGUID: 3aThhtiYQhaWIrY5GSJ04Q==
+X-CSE-MsgGUID: FU3V6bFjT1yVSkNKdP7eYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,318,1744095600"; 
+   d="scan'208";a="188721571"
+Received: from ettammin-desk.ger.corp.intel.com (HELO mnyman-desk.home) ([10.245.244.50])
+  by fmviesa001.fm.intel.com with ESMTP; 17 Jul 2025 00:31:19 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/3] xhci features for usb-next
+Date: Thu, 17 Jul 2025 10:31:04 +0300
+Message-ID: <20250717073107.488599-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250717001707.186867-1-sumanth.gavini@yahoo.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 16, 2025 at 07:17:07PM -0500, Sumanth Gavini wrote:
-> Hi All,
-> 
-> Just following up on my patch submitted with subject "[PATCH] usb: gadget: f_uac2: replace scnprintf() with sysfs_emit()".
-> 
-> Original message: https://lore.kernel.org/all/20250704003425.467299-1-sumanth.gavini@yahoo.com/
-> 
-> Would you have any feedback on this change? I'd be happy to address any comments or concerns.
+Hi Greg
 
-It was merged into my tree 10 days ago, you should have gotten an email
-about it already, right?  Look in linux-next, it's there.
+A few small xhci changes for usb-next that have been sitting in the list.
 
-confused,
+The "avg_trb_len = 8" patch is not marked for stable as it only helps a
+company with their custom virtual xHC hardware development.
+They have a stricter interpretation of an ambiguous part of the xHCI spec.
+I don't object to their interpretation, but other existing xHC hardware seem
+to work with either way, so skipping the stable flag for now.
 
-greg k-h
+Thanks
+Mathias
+
+Jay Chen (1):
+  usb: xhci: Set avg_trb_len = 8 for EP0 during Address Device Command
+
+Mario Limonciello (2):
+  usb: xhci: Avoid showing errors during surprise removal
+  usb: xhci: Avoid showing warnings for dying controller
+
+ drivers/usb/host/xhci-mem.c  | 2 ++
+ drivers/usb/host/xhci-ring.c | 7 +++++--
+ drivers/usb/host/xhci.c      | 6 ++++--
+ 3 files changed, 11 insertions(+), 4 deletions(-)
+
+-- 
+2.43.0
+
 
