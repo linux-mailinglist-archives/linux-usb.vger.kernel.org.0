@@ -1,161 +1,146 @@
-Return-Path: <linux-usb+bounces-25906-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25908-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92256B08BF2
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 13:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 495C3B08CA0
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 14:14:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DAB01A6138C
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 11:49:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0ED71A66F7B
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 12:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066D029ACE5;
-	Thu, 17 Jul 2025 11:48:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EC6429DB92;
+	Thu, 17 Jul 2025 12:14:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DEQRPLwg"
+	dkim=pass (2048-bit key) header.d=bigon.be header.i=@bigon.be header.b="NhZI0pp3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DB1288CAC;
-	Thu, 17 Jul 2025 11:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D87329994E
+	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 12:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752752926; cv=none; b=J/9IcoOX8HYmvAZ7ej3TyQI57W1TjJB4+liDteqvX6Hc7GdbYqZnUksawaz2tJnC4lcS5Ysq7M3E3mKmnJCcAh6C4L00LXLkbfuAS6ZIAjSftyhqrjafN1eSskKDZIVUgy1WlYcYigvWOHPk+Wa9k4xCX1yOJCDBKReyvR1Cr64=
+	t=1752754481; cv=none; b=mqeTRlLVwjR5y85NUuMVG9A1Dusz3Z5Lz0rAee/x87Bv7NaJOGw5kZ3TtxGKrc7tIMA0exAxrOGTOK88yuabYcLjvagI0r+u+0zgdzz87vzvDdZKZDbeCbLtaNe8IOOUPAzwgPiDVVroX4YUU1SIGdiCa56u6KH8PWIf6E9bM0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752752926; c=relaxed/simple;
-	bh=GvQYWzAsi6ZMuordr5tQl/DqtBCsrBqMy6+E+fPs6GQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cSxxW9WcGFuwFKd/dHHY9J34CozCNTfAamb6A4+NWwpokGaaPXgBsN8Dv6BwUw/E91sDHUQy9c8KqgtBuCQbeWmNgly1VeUCd4OtWYwp8QoU3hhSz0mR/xsIQVGFOnfOMpwG+JwKoS89qdqMG4VNv0kMr2cQxxm4QITleKruCy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DEQRPLwg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A2E6C4CEE3;
-	Thu, 17 Jul 2025 11:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752752925;
-	bh=GvQYWzAsi6ZMuordr5tQl/DqtBCsrBqMy6+E+fPs6GQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DEQRPLwglx4FVLnL5WHZK51JhexHrE9jVAmZ68SGr2ehkbeT2pAYf3RQQX+Xn5utU
-	 KMmZeR67/xkjUcfkBLZM5RQQX3fsOoue4RYiORcoXCT6Mo4AwWyYTKyIdMC2sWGtfz
-	 ZOd0VJmIfoS3jCik06GyLmgG9+q8VFLXqlxU5FOjrhXFmPgBP6qDVrVbVK7o75RE/Z
-	 oSGhizmCMlNs9deJsk9k7GBnx7lAemDBfbJfez5Ek7pA45RHQnATIB+wCBQLLDNmc1
-	 5bCndVrfklRZAmCQWE9brlQt8yEBUeqebHOV6yeuT590Zv8oJ6dFaVyI3u6+L+rIhX
-	 8NSe+Cnxg2S9Q==
-Date: Thu, 17 Jul 2025 13:48:41 +0200
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>, 
-	jikos@kernel.org, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds in s32ton (2)
-Message-ID: <zakga5qqql6zyat6wbnntm6tvcmhlhmjt5ecz6nm5hpc7z2iw7@mcpmrg7r4qlt>
-References: <8bec1698-5008-428f-8e71-ec002def0c54@rowland.harvard.edu>
- <6876b0ec.a70a0220.693ce.0019.GAE@google.com>
- <78c3fb66-c30f-4c64-a499-61c1665186a8@rowland.harvard.edu>
- <d21dcce3-88ba-416c-9d18-ea47855c48fc@rowland.harvard.edu>
+	s=arc-20240116; t=1752754481; c=relaxed/simple;
+	bh=Gty/qkW8aKWdaf0hXFX7qUJ6xLD2l1Cg08Abwfn4hbQ=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=Yt+8tcJ2K4uraxcW1r4yG0/9/4qIQArOVi19Ul+7NMYyOHkkB7lSseY6FqRzAPtYafhlhrCOxaPo+tDSbngIt6H9NwAYr61/3RTPer4CDIGW0KfaczUBibBfuCnEup4/2YsJ19q//3zPZR5h5n2pJqZGSenz5LUUd6jbIpBDI8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bigon.be; spf=pass smtp.mailfrom=bigon.be; dkim=pass (2048-bit key) header.d=bigon.be header.i=@bigon.be header.b=NhZI0pp3; arc=none smtp.client-ip=80.241.56.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bigon.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bigon.be
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4bjWqB5kT6z9sq0
+	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 14:06:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bigon.be; s=MBO0001;
+	t=1752753974;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:autocrypt:autocrypt;
+	bh=Yn7HXo110I+jWiBYx/7rDGdjgwHHp5vN3+lWcfMPBS4=;
+	b=NhZI0pp3G9v1XvFHlKMi9ZIIJUW/aXluhCZs1G3zWwqnZRJqjqxtpuQxZnA5ihHqLlGLHw
+	UEoBfQgQsaPShKtgNY6EJV5f7cOUz2i0sfCLoqaaC3qgmpQYydF5UtXi71oX+dS1ituunM
+	CqC8oWD0Ydd5DEOSLZIlV0YCZ5Ss0byYZFnL1X7N1GAbk+Kx7i2RYQPq+tixgx0IZH468K
+	ODY0BP8tENOGJagfrY87AQQB7Gbw1ZZ0Jjn2zk1GfJDed9mZZf7x36nBFKEFcEDve/ue8L
+	Iw5Kx7srpHXwoMk7DyDsKnfUWNUplYUNGDSuCphEBcLwTfTeWbCHPyiDrDtv4A==
+Message-ID: <c05a76cc-ac27-4f64-a4a7-5a1e0fd349d9@bigon.be>
+Date: Thu, 17 Jul 2025 14:06:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d21dcce3-88ba-416c-9d18-ea47855c48fc@rowland.harvard.edu>
+Content-Language: en-US, fr-BE, fr
+To: linux-usb@vger.kernel.org
+From: Laurent Bigonville <bigon@bigon.be>
+Subject: Hikmicro Mini2 V2: unable to enumerate USB device
+Autocrypt: addr=bigon@bigon.be; keydata=
+ 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
+ Gub8y8YgCrSTibbvx1KRJA==
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Alan,
+Hello,
 
-On Jul 16 2025, Alan Stern wrote:
-> Benjamin:
-> 
-> On Wed, Jul 16, 2025 at 10:29:38AM -0400, Alan Stern wrote:
-> > On Tue, Jul 15, 2025 at 12:50:04PM -0700, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> > > UBSAN: shift-out-of-bounds in s32ton
-> > > 
-> > > microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
-> > > microsoft 0003:045E:07DA.0001: unsupported Resolution Multiplier 0
-> > > hid: s32ton: n 0 val 0 size 0x0
-> > > ------------[ cut here ]------------
-> > > UBSAN: shift-out-of-bounds in drivers/hid/hid-core.c:69:16
-> > > shift exponent 4294967295 is too large for 32-bit type '__s32' (aka 'int')
-> > 
-> > Benjamin:
-> > 
-> > Clearly there's going to be trouble when you try to convert a signed 
-> > 32-bit value to a 0-bit number!
-> > 
-> > My impression is that hid_parser_global() should reject Report Size or 
-> > Report Count items with a value of 0.  Such fields would be meaningless 
-> > in any case.  The routine checks for values that are too large, but not 
-> > for values that are too small.
-> > 
-> > Does this look like the right approach?
-> > 
-> > Alan Stern
-> > 
-> > #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git c2ca42f1
-> > 
-> >  drivers/hid/hid-core.c |    6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > Index: usb-devel/drivers/hid/hid-core.c
-> > ===================================================================
-> > --- usb-devel.orig/drivers/hid/hid-core.c
-> > +++ usb-devel/drivers/hid/hid-core.c
-> > @@ -464,7 +464,8 @@ static int hid_parser_global(struct hid_
-> >  
-> >  	case HID_GLOBAL_ITEM_TAG_REPORT_SIZE:
-> >  		parser->global.report_size = item_udata(item);
-> > -		if (parser->global.report_size > 256) {
-> > +		if (parser->global.report_size > 256 ||
-> > +				parser->global.report_size == 0) {
-> >  			hid_err(parser->device, "invalid report_size %d\n",
-> >  					parser->global.report_size);
-> >  			return -1;
-> > @@ -473,7 +474,8 @@ static int hid_parser_global(struct hid_
-> >  
-> >  	case HID_GLOBAL_ITEM_TAG_REPORT_COUNT:
-> >  		parser->global.report_count = item_udata(item);
-> > -		if (parser->global.report_count > HID_MAX_USAGES) {
-> > +		if (parser->global.report_count > HID_MAX_USAGES ||
-> > +				parser->global.report_count == 0) {
-> >  			hid_err(parser->device, "invalid report_count %d\n",
-> >  					parser->global.report_count);
-> >  			return -1;
-> 
-> This patch didn't work; the error message never showed up in the kernel 
-> log.  Nevertheless, hidinput_change_resolution_multipliers() tried to 
-> create an output report with a field having size 0.
-> 
-> How can this to happen without hid_scan_report() or hid_open_report() 
-> running?  It shouldn't be possible to use a report before it has been 
-> checked for validity.
+I just bought an Hikmicro Mini2 V2 USB thermal camera and the device is 
+not recognized
 
-It's just that the provided report descriptor was never setting a report
-size or a report count. This way, we are stuck with the default value
-from kzalloc: 0.
+[   64.039667] usb 3-2: new high-speed USB device number 11 using xhci_hcd
+[   64.245840] usb 3-2: New USB device found, idVendor=2bdf, 
+idProduct=0106, bcdDevice= 4.09
+[   64.245857] usb 3-2: New USB device strings: Mfr=1, Product=2, 
+SerialNumber=3
+[   64.245862] usb 3-2: Product: Thermal Imager
+[   64.245865] usb 3-2: Manufacturer: Hikmicro
+[   64.245868] usb 3-2: SerialNumber: XXXXXXXX
+[   65.817499] usb 3-2: USB disconnect, device number 11
+[   66.162197] usb 3-2: new high-speed USB device number 12 using xhci_hcd
+[   66.344529] usb 3-2: device descriptor read/64, error -71
+[   66.629395] usb 3-2: device descriptor read/64, error -71
+[   66.922427] usb 3-2: new high-speed USB device number 13 using xhci_hcd
+[   67.104880] usb 3-2: device descriptor read/64, error -71
+[   67.390254] usb 3-2: device descriptor read/64, error -71
+[   67.493238] usb usb3-port2: attempt power cycle
+[   68.151973] usb 3-2: new high-speed USB device number 14 using xhci_hcd
+[   68.152150] usb 3-2: Device not responding to setup address.
+[   68.354479] usb 3-2: Device not responding to setup address.
+[   68.560631] usb 3-2: device not accepting address 14, error -71
+[   68.747321] usb 3-2: new high-speed USB device number 15 using xhci_hcd
+[   68.747422] usb 3-2: Device not responding to setup address.
+[   68.950227] usb 3-2: Device not responding to setup address.
+[   69.152505] usb 3-2: device not accepting address 15, error -71
+[   69.152593] usb usb3-port2: unable to enumerate USB device
 
-Basically, if your report descriptor is as simple as:
-Usage Page (Generic Desktop)
-Usage (X)
-Usage (Y)
-Report Count (2)
-Input (Data,Var,Rel)
+The device is not listed in lsusb after this
 
-Then we would trigger this bug: "report Size" is never set and is thus 0.
+It's not clear whether the camera is a UVC one, but the device should 
+still appear, right?
 
-Your patch is good though, as it is probably a good thing to prevent a
-report size/count to be 0. But it's not addressing the issue here
-because the only time we can check for those values is when we receive
-an Input/Feature/Output value (or ranges), so in hid_add_field().
+An idea what to do?
 
-Cheers,
-Benjamin
+Kind regards,
 
+Laurent Bigonville
 
-> 
-> Alan Stern
 
