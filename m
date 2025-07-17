@@ -1,149 +1,194 @@
-Return-Path: <linux-usb+bounces-25936-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25937-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F30CB0949C
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 21:11:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3E2CB09540
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 21:55:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 765D37AA644
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 19:09:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC331A6189B
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 19:54:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7552FE31C;
-	Thu, 17 Jul 2025 19:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8669D21C16B;
+	Thu, 17 Jul 2025 19:55:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lX4LSuxQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hBn+VloK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80442153FB;
-	Thu, 17 Jul 2025 19:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78301799F
+	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 19:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752779461; cv=none; b=beDmHXhCLOiyBxSAmUcL8DmvPe1vMFddd/h0NSzJYdOg/ri8HQ+DkmYdSvQ2zpTsJcblnJSIjLqvoFxQUwYvX1Cr7ctazI2ire24VwbyL/UCCssX0sP7sRTnDJgyvDZpnHveXE7U/GOABAjp4oakPv5Oq4XnxKouea3f0Qm5pv4=
+	t=1752782118; cv=none; b=Q8Frq4hHd9HeFmIZFtT//3NglQsYkG+lZLlOsjxwCY4F83h/LOuIOKGVF1atiLQJMgNoDLgtH0fPUWc987Y4p1ZIs8/oYQ5V+UP0po2KPwdZVy7bkBdcA+W0DiF2mEM1LKjFmmiiKfioMlXkQkqtrK0DcGmujoPn68/N/QP4gFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752779461; c=relaxed/simple;
-	bh=X2QTX7soCtQoFbN1OcRPWW6+MAHVqg1KHTXwB1p8eZ4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eAlnmRZPzkBBez6unuPLFBmsGlwj6wFL6y0wF64IjzIeIvT2bcU+knXTrdG4Hblx4McrPo49B9GQy5ost7pnVCoHLw/I2PxDEXS04zA0QaEVyQ9wz56mISVD2ZFWhCFoQPC93zymRn3ZEe4dvd4YMdzFeo+bXaO6JeZKkfU/Xys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lX4LSuxQ; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b3f2f8469b7so7470a12.3;
-        Thu, 17 Jul 2025 12:10:59 -0700 (PDT)
+	s=arc-20240116; t=1752782118; c=relaxed/simple;
+	bh=+Q9RKHTHvCAIkCwob0N05RgnvskVzJ6/1kxlNGU0ULw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZsvDpR+e0ciAh4Kvs0xN2uvoy6gsNp4bjA++UjodbnYkbPvThXjzoj5926kmRUQnHCyRieHdiFqPcatjCs3/vjhuD/n5BECS5qMq4NV3m0pxomIkv89wuMk+rovRHC6qZwmnkTKOZeYHH2vwjZ1lfj/dXyBNa3M16caeKWhNXWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hBn+VloK; arc=none smtp.client-ip=209.85.166.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3e293a3b426so4850985ab.1
+        for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 12:55:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752779459; x=1753384259; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=whHHXq9ZKdXTAW705B1rQtAiW8MTVvGsjlJTeXv7yyA=;
-        b=lX4LSuxQC8DuWRsrH78UyuLiD1jAAHFGQB62AnI6Yc3WFMFMQfCqyECxB2Zp1wx/yM
-         VvJf+I0w4/4K/iPF6Js2xlfZzTulg3T1eAB/J4KmXtBNfw6ynn9x5Q9hB6FVoBHBKgIx
-         1l/hELRj41cFGxgRZyVXvbyjc+1d5SJej2kDll/5XtweBiI7Wq8gXypz7Ju3NbowDMqF
-         jJG2Wo2483v0eUHggpXMCrwS/fgqK7YnyyyALHW8CFZ45vu5+h27UWhNW4YKvF1+mkQh
-         kUZH0owDHpoxjnKFMRvNrZ/JzxMCJsTAvfy+8YUjlduD1/Yzc3R9JsaTsHg/tkGHp0G0
-         pRRA==
+        d=linuxfoundation.org; s=google; t=1752782116; x=1753386916; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lnGpwrpCqI1VlGpJfKbQwgcrq4rzy8zYYAzVgnVuWmE=;
+        b=hBn+VloKOXCXkhCAfNOYIfCW4KtIquD+TYWdMEwuz84qotlVLB2PkIKFQ8FZuSuzbi
+         dfmyE5xCDcYuEBE0rHc6ZcY3LECqhGhYRpCnF8bqoRCdIaBG+jLWTtA7Q4FMNzkpo2i3
+         gErw3/8Cm20/kQ7/1TZJo/DHTYgJHYYrial20=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752779459; x=1753384259;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=whHHXq9ZKdXTAW705B1rQtAiW8MTVvGsjlJTeXv7yyA=;
-        b=lfBvqebaYVuQ55eDJPRzuR5NyehIirhCN41qP7ULw29tx1XFhrDFWjw05iOdVaNeYc
-         sqnIXzxNU7HHUTiIoc8bi3vIBYQlUf2kUhrtDeoei11200V1Gque1eyCNvh4kBgwDMgy
-         uTBjdzK1Px31RVQqL4EVP4I4qJ6XA1SUWl2HzGT/Rg1vq/cOctHd6eTMEgmDWvMEVs6/
-         zPYsl+hYKZxigfOr4syIepOyjMhK95xUJBtpMCDBdtBb03TsJgcBzh+bqdL1kirT5zNz
-         qNK35sSe0qBnp4DcIwQyYK0Ruq1oNX5wYFi/iQYu/KFRoYW9DgR7dQQdI2/Ml1VXQdS0
-         60iw==
-X-Forwarded-Encrypted: i=1; AJvYcCUYilkWA9eqX2mmbKZtinNIuoB542NWtdgBvMpxUy7FntFiFuf6SzXDFEP/r7DQvZoTfVfj4jLEgymEyGU=@vger.kernel.org, AJvYcCVJ8X+9IiOkQGvyODqqLV4lv7TmDYt/YuPGieK8DsD8CDNOJyTKo/VfrOFg4thNw4gwgMLX3ux6WPVmcA==@vger.kernel.org, AJvYcCVKCTaUUdIVvffOEcWgc8oOdhlpSKDXBTdjrmcXn0IjQXcOR6NdI97z+LQMu2HSwuYTIbrfYN6VcvI=@vger.kernel.org, AJvYcCWELDfFQR8oz8bDaJfAuBgA7qzELVY5ZxBlzg2vyqa7t8y/mr5FsZEM4BOBa52gE893psVuLkivT/pq@vger.kernel.org, AJvYcCX/BGB+fG3WnWiR4PR/WU7UrvKHsa2ZQC/55fScU4iUro1uJbUW1P/x1hZ3g3bgbsKQmWTYXb1R8uCW@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWt+qFvgIuA9oku95+0dvJvX2ccrhi77mx3v+nOdXoGuIJNesJ
-	4XlNu6VR+zZCk21hQAIVE2zGySsSaYEDRV+VqHC/G24KQdYR1Z/SeLupae9Mu2oI5zIxoSxf1lD
-	tX6+Iu0ATXmop9JyOPTm7e7Dd66Fhg7o=
-X-Gm-Gg: ASbGncvgMKyHvxnChnZJgC4Axv1aYEVKS71TS/knoJiWo1RbK0RQINR0acu05kxDV+8
-	MhZlMYLLmo4OlOQ0pVnwUWxFltakaTPWJtT5rpnubi9SZ4E9k2p03LTjQIC0BD9uwQ5OX5HnYrX
-	S65mkLXp/NN174CAwEcB9JJ2MAZ9oxZ1KGEiGr9NGOSVUbxVQs7ZUmY57rc8Qg74gUWnOZbupxh
-	aTbqXBViOe2tRVd3dY=
-X-Google-Smtp-Source: AGHT+IFcDXeIo6uU4fndJVvGmN/jTY47SR5imHxzk90iAiBRzhNnnJo2QL9GoDY6Xm/D5hnz57/gEipwcAYqKUg8zQw=
-X-Received: by 2002:a17:90b:1cc3:b0:311:c5d9:2c8b with SMTP id
- 98e67ed59e1d1-31c9e7767fbmr4619712a91.5.1752779459096; Thu, 17 Jul 2025
- 12:10:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752782116; x=1753386916;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lnGpwrpCqI1VlGpJfKbQwgcrq4rzy8zYYAzVgnVuWmE=;
+        b=uLqNyMcnAABhNa9gwRvMaD8xSlNTb+v2gGMkl8uMwP14BewH7pX56DYT7jZeFnEoMA
+         +9d01VEMRHdNS5+Hvb07CWb+Mz7+KdZWBjjah5EloMgfER9KFYsutnBdMO7ed+F2goCt
+         ae8GyE0AzsANBaDECHuvd1+TEWECk2CoVh1I3hfrgmoK1QKQ206gZtVkUuxI1doH6maF
+         Xxra5QWkzDPkf0Lbsogde4g+a0IO37pjNUkU37UR5k3zIaSZZpuI2T0J1gN6B+p68PbJ
+         zVZ6q1snO2qjlKwkEm3UnverSxN3t8J7vnFh7Geu6f6YXkPvf7ZLf/PKSa7O3BkbZlvq
+         Po6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUzjASjVXZcld2dHvgh1jbVVr6RPRU9f0Eyqfk5BgPpy/SND0S98Ij97RW6lQ5mpc3Y/lPUy2vgQL4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzk3tPpuc+AbY5VAix9D7w7gOCdyOWWbphJGJJ3h0wexL6yjF6v
+	Gs5I8ybhaVJvvAh86KiZAmBvYyB8MRdv2GzeUC+xaZyjvaO1xa5tCGA1gvHoh9B/ulw=
+X-Gm-Gg: ASbGncsjzpR8REowJmDKYQZVEchg5skjJZgqkOsL/6IYnh2PYx+Cqm3tDxtdlqncGEO
+	7n65OfQoxr6i1QZ0Ev0ReC70Fzy0Hv4tTOcHEF9YNXZ+eAZ0Vx0bv05kpsRPbMR9ZTW4+76u/d8
+	ONqJGde0XPiWSMq6v581VYaR15+NPV1FiJ4jo/8zkOarP21kbqZ2mjI+GvpdR0kTpPSsw0FNbH7
+	Kv5u4Uw9GdAkRY3BTMqk14/0jaDpZw8xE2AS5FdKVbR05kELoia696NkGWSbaw26oZnVBXy7MAN
+	kuGrhKkX7wS3ilD225twAuWilMuJi5d28ixveoT9ABkw5K5N82SyP24KyvrphcWFOUm10VNqvpg
+	xIaC9pyuJMeR1fEJigNmO1Fdf8v/CcKbVOg==
+X-Google-Smtp-Source: AGHT+IGptDM8XPxxprOyVs4kILAhbRPCYCZSt2H7kbObkiEmZYSJLbKxHFVOcoaLqqZdbUSAThJFAA==
+X-Received: by 2002:a05:6e02:1a66:b0:3df:3bdc:2e49 with SMTP id e9e14a558f8ab-3e2824ca25amr98433675ab.12.1752782115824;
+        Thu, 17 Jul 2025 12:55:15 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-505565324e2sm3596031173.25.2025.07.17.12.55.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jul 2025 12:55:15 -0700 (PDT)
+Message-ID: <2a87101f-6bee-4bd1-816a-1dfbe7b4a578@linuxfoundation.org>
+Date: Thu, 17 Jul 2025 13:55:14 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250616175019.3471583-1-superm1@kernel.org> <20250616175019.3471583-4-superm1@kernel.org>
-In-Reply-To: <20250616175019.3471583-4-superm1@kernel.org>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Thu, 17 Jul 2025 15:10:47 -0400
-X-Gm-Features: Ac12FXzm6w4bvt8xXNl05VHu2uQA28FvAWVfU6YAJzv7lZsIpjWGCcVY04Bnf2I
-Message-ID: <CADnq5_Pn=0nCD-CyoeJxSAn=Gtn=evkaCBUH2pr_O-=7vpw+bw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] drm/amd: Avoid evicting resources at S5
-To: Mario Limonciello <superm1@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Alex Deucher <alexander.deucher@amd.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, 
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, 
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>, 
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>, 
-	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>, 
-	AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng <kaihengf@nvidia.com>, 
-	Mark Pearson <mpearson-lenovo@squebb.ca>, Denis Benato <benato.denis96@gmail.com>, 
-	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/9] usb: vhci-hcd: Prevent suspending virtually attached
+ devices
+To: Alan Stern <stern@rowland.harvard.edu>,
+ Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc: Valentina Manea <valentina.manea.m@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Brian G. Merrell" <bgmerrell@novell.com>, kernel@collabora.com,
+ Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250717-vhci-hcd-suspend-fix-v1-0-2b000cd05952@collabora.com>
+ <20250717-vhci-hcd-suspend-fix-v1-1-2b000cd05952@collabora.com>
+ <42bcf1e1-1bb2-4b63-9790-61393f780202@rowland.harvard.edu>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <42bcf1e1-1bb2-4b63-9790-61393f780202@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jun 16, 2025 at 1:50=E2=80=AFPM Mario Limonciello <superm1@kernel.o=
-rg> wrote:
->
-> From: Mario Limonciello <mario.limonciello@amd.com>
->
-> Normally resources are evicted on dGPUs at suspend or hibernate and
-> on APUs at hibernate.  These steps are unnecessary when using the S4
-> callbacks to put the system into S5.
->
-> Cc: AceLan Kao <acelan.kao@canonical.com>
-> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
-> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
-> Cc: Denis Benato <benato.denis96@gmail.com>
-> Cc: Merthan Karaka=C5=9F <m3rthn.k@gmail.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+On 7/17/25 12:26, Alan Stern wrote:
+> On Thu, Jul 17, 2025 at 06:54:50PM +0300, Cristian Ciocaltea wrote:
+>> The VHCI platform driver aims to forbid entering system suspend when at
+>> least one of the virtual USB ports are bound to an active USB/IP
+>> connection.
+>>
+>> However, in some cases, the detection logic doesn't work reliably, i.e.
+>> when all devices attached to the virtual root hub have been already
+>> suspended, leading to a broken suspend state, with unrecoverable resume.
+>>
+>> Ensure the attached devices do not enter suspend by setting the syscore
+>> PM flag.
+>>
+>> Fixes: 04679b3489e0 ("Staging: USB/IP: add client driver")
+>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+>> ---
+>>   drivers/usb/usbip/vhci_hcd.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+>> index e70fba9f55d6a0edf3c5fde56a614dd3799406a1..762b60e10a9415e58147cde2f615045da5804a0e 100644
+>> --- a/drivers/usb/usbip/vhci_hcd.c
+>> +++ b/drivers/usb/usbip/vhci_hcd.c
+>> @@ -765,6 +765,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+>>   				 ctrlreq->wValue, vdev->rhport);
+>>   
+>>   			vdev->udev = usb_get_dev(urb->dev);
+>> +			dev_pm_syscore_device(&vdev->udev->dev, true);
+>>   			usb_put_dev(old);
+>>   
+>>   			spin_lock(&vdev->ud.lock);
+>> @@ -785,6 +786,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+>>   					"Not yet?:Get_Descriptor to device 0 (get max pipe size)\n");
+>>   
+>>   			vdev->udev = usb_get_dev(urb->dev);
+>> +			dev_pm_syscore_device(&vdev->udev->dev, true);
+>>   			usb_put_dev(old);
+>>   			goto out;
+> 
+> This looks very strange indeed.
+> 
+> First, why is vhci_urb_enqueue() the right place to do this?  I should
+> think you would want to do this just once per device, at the time it is
+> attached.  Not every time a new URB is enqueued.
 
-Acked-by: Alex Deucher <alexander.deucher@amd.com>
+Correct. This isn't the right place to do this even if we want to go with
+the option to prevent suspend. The possible place to do this would be
+from rh_port_connect() in which case you will have access to usb_hcd device.
 
-> ---
-> v3: https://lore.kernel.org/linux-pm/20250609024619.407257-1-superm1@kern=
-el.org/T/#me6db0fb946e3d604a8f3d455128844ed802c82bb
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm=
-/amd/amdgpu/amdgpu_device.c
-> index 8edd88328749b..c5d8f6d551238 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> @@ -4966,6 +4966,10 @@ static int amdgpu_device_evict_resources(struct am=
-dgpu_device *adev)
->         if (!adev->in_s4 && (adev->flags & AMD_IS_APU))
->                 return 0;
->
-> +       /* No need to evict when going to S5 through S4 callbacks */
-> +       if (system_state =3D=3D SYSTEM_HALT || system_state =3D=3D SYSTEM=
-_POWER_OFF)
-> +               return 0;
-> +
->         ret =3D amdgpu_ttm_evict_resources(adev, TTM_PL_VRAM);
->         if (ret)
->                 DRM_WARN("evicting device resources failed\n");
-> --
-> 2.43.0
->
+This has to be undone from rh_port_disconnect(). Also how does this impact
+the usbip_host - we still need to handle usbip_host suspend.
+
+> 
+> Second, how do these devices ever go back to being regular non-syscore
+> things?
+> 
+> Third, if this change isn't merely a temporary placeholder, it certainly
+> needs to have a comment in the code to explain what it does and why.
+> 
+> Fourth, does calling dev_pm_syscore_device() really prevent the device
+> from going into suspend?  What about runtime suspend?  And what good
+> does it to do prevent the device from being suspended if the entire
+> server gets suspended?
+> 
+> Fifth, the patch description says the purpose is to prevent the server
+> from going into system suspend.  How does marking some devices with
+> dev_pm_syscore_device() accomplish this?
+> 
+
+We have been discussing suspend/resume and reboot behavior in another thread
+that proposed converting vhci_hcd to use faux bus.
+
+In addition to what Alan is asking, To handle suspend/resume cleanly, the
+following has to happen at a higher level:
+
+- Let the usbip hots host know client is suspending the connection.
+   The physical device isn't suspended on the host.
+- suspend the virtual devices and vhci_hcd
+
+Do the reverse to resume.
+
+I would say:
+
+- We don't want vhci_hcd and usbip_host preventing suspend
+- It might be cleaner and safer to detach the devices during
+   suspend on both ends. This is similar to what happens now when
+   usbip host and vhci_hcd are removed.
+- Note that usbip_host and vhci_hcd don't fully support suspend and
+   resume at the moment.
+
+thanks,
+-- Shuah
+
 
