@@ -1,194 +1,148 @@
-Return-Path: <linux-usb+bounces-25937-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25938-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3E2CB09540
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 21:55:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C354B09573
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 22:08:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC331A6189B
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 19:54:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A82721AA5298
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 20:08:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8669D21C16B;
-	Thu, 17 Jul 2025 19:55:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 803E82248B0;
+	Thu, 17 Jul 2025 20:08:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hBn+VloK"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bP58NdRU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78301799F
-	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 19:55:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD2B1DE4E1
+	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 20:08:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752782118; cv=none; b=Q8Frq4hHd9HeFmIZFtT//3NglQsYkG+lZLlOsjxwCY4F83h/LOuIOKGVF1atiLQJMgNoDLgtH0fPUWc987Y4p1ZIs8/oYQ5V+UP0po2KPwdZVy7bkBdcA+W0DiF2mEM1LKjFmmiiKfioMlXkQkqtrK0DcGmujoPn68/N/QP4gFw=
+	t=1752782909; cv=none; b=K/U421/KFZzAfwEnXb9ajraqUR4sU/N3dVlJhDAWD2O/Xwua/f1uOMm5v/27l4R/Oo0pMQNg24Cvi8yOoshFW1bNu3S+1P7EmRX4Aa6IUfxBlssEBWzOhOHjjjo7556KV4w+ZyiaMdx71+5BrEeUczKf3iKMn0kd14r8imY+dLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752782118; c=relaxed/simple;
-	bh=+Q9RKHTHvCAIkCwob0N05RgnvskVzJ6/1kxlNGU0ULw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZsvDpR+e0ciAh4Kvs0xN2uvoy6gsNp4bjA++UjodbnYkbPvThXjzoj5926kmRUQnHCyRieHdiFqPcatjCs3/vjhuD/n5BECS5qMq4NV3m0pxomIkv89wuMk+rovRHC6qZwmnkTKOZeYHH2vwjZ1lfj/dXyBNa3M16caeKWhNXWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hBn+VloK; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3e293a3b426so4850985ab.1
-        for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 12:55:16 -0700 (PDT)
+	s=arc-20240116; t=1752782909; c=relaxed/simple;
+	bh=abRUT4VIbFoxvso62PscTwQkzbe7cjWiYeJMRzWSc9k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pSVaVaf36/a46ZdUKaYn0kYYPon6cQGH8oTkVE7SXR82SNXRLu/gJWpO3tl3wpWrqFAIZi6+D/Xh8FqKMZBJATchNw4EYKactn10OzoahvoHouadHnWRDzMCza5Dsghxq5B8jjJBj9fhRLj5+4dwMapHI9ETXuM3dYueWfRBULw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bP58NdRU; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7425bd5a83aso1350759b3a.0
+        for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 13:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1752782116; x=1753386916; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lnGpwrpCqI1VlGpJfKbQwgcrq4rzy8zYYAzVgnVuWmE=;
-        b=hBn+VloKOXCXkhCAfNOYIfCW4KtIquD+TYWdMEwuz84qotlVLB2PkIKFQ8FZuSuzbi
-         dfmyE5xCDcYuEBE0rHc6ZcY3LECqhGhYRpCnF8bqoRCdIaBG+jLWTtA7Q4FMNzkpo2i3
-         gErw3/8Cm20/kQ7/1TZJo/DHTYgJHYYrial20=
+        d=chromium.org; s=google; t=1752782907; x=1753387707; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oLi/2kK2OpzvR6kQ99RKZMJhDu4imyXic6NZCN8mCPw=;
+        b=bP58NdRUw943/d316eoyI+vNLBd4nXFi0tqscjJ/cYvKyf201UvQlsQlhwBqDTpHym
+         7JqsbcX3SL2t9B814yMtOsyheJL2LGNVuwCYHYPD9jCAIfywhaItZA5HH4KtwFwIRIeX
+         GPlAg70vzbMkhXRMsO3EavdCdzN1ghE0mNAmE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752782116; x=1753386916;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lnGpwrpCqI1VlGpJfKbQwgcrq4rzy8zYYAzVgnVuWmE=;
-        b=uLqNyMcnAABhNa9gwRvMaD8xSlNTb+v2gGMkl8uMwP14BewH7pX56DYT7jZeFnEoMA
-         +9d01VEMRHdNS5+Hvb07CWb+Mz7+KdZWBjjah5EloMgfER9KFYsutnBdMO7ed+F2goCt
-         ae8GyE0AzsANBaDECHuvd1+TEWECk2CoVh1I3hfrgmoK1QKQ206gZtVkUuxI1doH6maF
-         Xxra5QWkzDPkf0Lbsogde4g+a0IO37pjNUkU37UR5k3zIaSZZpuI2T0J1gN6B+p68PbJ
-         zVZ6q1snO2qjlKwkEm3UnverSxN3t8J7vnFh7Geu6f6YXkPvf7ZLf/PKSa7O3BkbZlvq
-         Po6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUzjASjVXZcld2dHvgh1jbVVr6RPRU9f0Eyqfk5BgPpy/SND0S98Ij97RW6lQ5mpc3Y/lPUy2vgQL4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzk3tPpuc+AbY5VAix9D7w7gOCdyOWWbphJGJJ3h0wexL6yjF6v
-	Gs5I8ybhaVJvvAh86KiZAmBvYyB8MRdv2GzeUC+xaZyjvaO1xa5tCGA1gvHoh9B/ulw=
-X-Gm-Gg: ASbGncsjzpR8REowJmDKYQZVEchg5skjJZgqkOsL/6IYnh2PYx+Cqm3tDxtdlqncGEO
-	7n65OfQoxr6i1QZ0Ev0ReC70Fzy0Hv4tTOcHEF9YNXZ+eAZ0Vx0bv05kpsRPbMR9ZTW4+76u/d8
-	ONqJGde0XPiWSMq6v581VYaR15+NPV1FiJ4jo/8zkOarP21kbqZ2mjI+GvpdR0kTpPSsw0FNbH7
-	Kv5u4Uw9GdAkRY3BTMqk14/0jaDpZw8xE2AS5FdKVbR05kELoia696NkGWSbaw26oZnVBXy7MAN
-	kuGrhKkX7wS3ilD225twAuWilMuJi5d28ixveoT9ABkw5K5N82SyP24KyvrphcWFOUm10VNqvpg
-	xIaC9pyuJMeR1fEJigNmO1Fdf8v/CcKbVOg==
-X-Google-Smtp-Source: AGHT+IGptDM8XPxxprOyVs4kILAhbRPCYCZSt2H7kbObkiEmZYSJLbKxHFVOcoaLqqZdbUSAThJFAA==
-X-Received: by 2002:a05:6e02:1a66:b0:3df:3bdc:2e49 with SMTP id e9e14a558f8ab-3e2824ca25amr98433675ab.12.1752782115824;
-        Thu, 17 Jul 2025 12:55:15 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-505565324e2sm3596031173.25.2025.07.17.12.55.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jul 2025 12:55:15 -0700 (PDT)
-Message-ID: <2a87101f-6bee-4bd1-816a-1dfbe7b4a578@linuxfoundation.org>
-Date: Thu, 17 Jul 2025 13:55:14 -0600
+        d=1e100.net; s=20230601; t=1752782907; x=1753387707;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oLi/2kK2OpzvR6kQ99RKZMJhDu4imyXic6NZCN8mCPw=;
+        b=cBNJ4zlyFIskvpETkv2WKngQ9Tsv5McopCxgTmKsBjAUBoJGhMIiDeAXdrJt/zDPGE
+         fUZMBbsf9pX4sW9qgieHLt16CEsAzOsSO0820e2dJOUGQ6eIXe4JX8j/vL7XokyCursS
+         LOCqn2lBed9DcpY8gWMoJX6TsDCXGyoCAwZs9HnuLu5DsNJQ+MgCgpYpFWUuPZur3srA
+         s5PEzBOA3I+aFiG565dCapZ3qXx4uK9qdlXI61ZjhlvXvPxrGp5uYEMw14x8RJnlpF1t
+         fmAqYtktd7Lk3hkyXNn8MtYtwnT+BQj+JXzOmdLVYA2ZxyJepL8T0Ea6LyT7DZqun5G2
+         buVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXrybXJFojC5RKS83hIH+P3bf/7zDSqHccXgPHm3CSYwqgBcfb5BiFkVaaYdcgwWaduIwbXyY3AakQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyT5N7h87DwzIT1QEwsxaIdYdlO3eWm3ERpHQ1wm9OZeet8UWQJ
+	ep5G+WXhvYGBlXzH2r0/SYlUdBLdNnW5PWsd8WdPBOQ6RINz0gu67j3jaKksqnyWBQ==
+X-Gm-Gg: ASbGncuZxlX2Aq2hsWBdS0dx3kuih5fvcoad3A5i4soxw6KYxUOAIVoah5TLYSiesba
+	xEZiVfHY7AAyApMSIr0CU4d4NTroegkWkyDyur0lTDEXfSvh38d3XOtDo1J+yJfiMT1JKq7Yzrc
+	hyJI6IJiJXv7afl475KseO+9jhwEf4KFFvj/mploLaG7u/2DReTDxfS8locZjjm7GDnRp4aDXfz
+	tBaMsb3mxE76/N0pNGvWQwaeK+ki7LWGzYQpraDDMPsaKgOi5PHYipyggVfBKPqcbsrQEdBNsAG
+	Kl59xiwbROXDNDSeYyj2c32Lg5s7GBaWWQivq0E7sbaXxckfcXRMoHsVNWxRWuZW3JQJ2iLNj4f
+	b0kPBm4+7OWUmkmS9FeF96pVT0SfIH9o3ICLJpOLqocsH22P3WOwj39g+8rfQxPMsiu3luTgQFg
+	S6JmySH0sdd6KdEem6
+X-Google-Smtp-Source: AGHT+IG7JZ+cgjz5MqKSp68wtq2cJNg234+8XTpqvhRJWsE4682BdNtl16OfvKygzFQBJ0C5v3EoxQ==
+X-Received: by 2002:a05:6a21:998b:b0:237:d013:8a78 with SMTP id adf61e73a8af0-2381484403bmr12782253637.37.1752782906902;
+        Thu, 17 Jul 2025 13:08:26 -0700 (PDT)
+Received: from bleungmegatop.c.googlers.com.com (236.219.125.34.bc.googleusercontent.com. [34.125.219.236])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3f2ff61f6csm39467a12.45.2025.07.17.13.08.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Jul 2025 13:08:26 -0700 (PDT)
+From: Benson Leung <bleung@chromium.org>
+To: heikki.krogerus@linux.intel.com,
+	jthies@google.com,
+	gregkh@linuxfoundation.org,
+	hansg@kernel.org,
+	sebastian.reichel@collabora.com,
+	dmitry.baryshkov@oss.qualcomm.com,
+	madhu.m@intel.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: bleung@google.com,
+	Benson Leung <bleung@chromium.org>
+Subject: [PATCH] usb: typec: ucsi: psy: Set current max to 100mA for BC 1.2 and Default
+Date: Thu, 17 Jul 2025 20:08:05 +0000
+Message-ID: <20250717200805.3710473-1-bleung@chromium.org>
+X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/9] usb: vhci-hcd: Prevent suspending virtually attached
- devices
-To: Alan Stern <stern@rowland.harvard.edu>,
- Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc: Valentina Manea <valentina.manea.m@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Brian G. Merrell" <bgmerrell@novell.com>, kernel@collabora.com,
- Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250717-vhci-hcd-suspend-fix-v1-0-2b000cd05952@collabora.com>
- <20250717-vhci-hcd-suspend-fix-v1-1-2b000cd05952@collabora.com>
- <42bcf1e1-1bb2-4b63-9790-61393f780202@rowland.harvard.edu>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <42bcf1e1-1bb2-4b63-9790-61393f780202@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/17/25 12:26, Alan Stern wrote:
-> On Thu, Jul 17, 2025 at 06:54:50PM +0300, Cristian Ciocaltea wrote:
->> The VHCI platform driver aims to forbid entering system suspend when at
->> least one of the virtual USB ports are bound to an active USB/IP
->> connection.
->>
->> However, in some cases, the detection logic doesn't work reliably, i.e.
->> when all devices attached to the virtual root hub have been already
->> suspended, leading to a broken suspend state, with unrecoverable resume.
->>
->> Ensure the attached devices do not enter suspend by setting the syscore
->> PM flag.
->>
->> Fixes: 04679b3489e0 ("Staging: USB/IP: add client driver")
->> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->> ---
->>   drivers/usb/usbip/vhci_hcd.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
->> index e70fba9f55d6a0edf3c5fde56a614dd3799406a1..762b60e10a9415e58147cde2f615045da5804a0e 100644
->> --- a/drivers/usb/usbip/vhci_hcd.c
->> +++ b/drivers/usb/usbip/vhci_hcd.c
->> @@ -765,6 +765,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
->>   				 ctrlreq->wValue, vdev->rhport);
->>   
->>   			vdev->udev = usb_get_dev(urb->dev);
->> +			dev_pm_syscore_device(&vdev->udev->dev, true);
->>   			usb_put_dev(old);
->>   
->>   			spin_lock(&vdev->ud.lock);
->> @@ -785,6 +786,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
->>   					"Not yet?:Get_Descriptor to device 0 (get max pipe size)\n");
->>   
->>   			vdev->udev = usb_get_dev(urb->dev);
->> +			dev_pm_syscore_device(&vdev->udev->dev, true);
->>   			usb_put_dev(old);
->>   			goto out;
-> 
-> This looks very strange indeed.
-> 
-> First, why is vhci_urb_enqueue() the right place to do this?  I should
-> think you would want to do this just once per device, at the time it is
-> attached.  Not every time a new URB is enqueued.
+ucsi_psy_get_current_max would return 0mA as the maximum current if
+UCSI detected a BC or a Default USB Power sporce.
 
-Correct. This isn't the right place to do this even if we want to go with
-the option to prevent suspend. The possible place to do this would be
-from rh_port_connect() in which case you will have access to usb_hcd device.
+The comment in this function is true that we can't tell the difference
+between DCP/CDP or SDP chargers, but we can guarantee that at least 1-unit
+of USB 1.1/2.0 power is available, which is 100mA, which is a better
+fallback value than 0, which causes some userspaces, including the ChromeOS
+power manager, to regard this as a power source that is not providing
+any power.
 
-This has to be undone from rh_port_disconnect(). Also how does this impact
-the usbip_host - we still need to handle usbip_host suspend.
+In reality, 100mA is guaranteed from all sources in these classes.
 
-> 
-> Second, how do these devices ever go back to being regular non-syscore
-> things?
-> 
-> Third, if this change isn't merely a temporary placeholder, it certainly
-> needs to have a comment in the code to explain what it does and why.
-> 
-> Fourth, does calling dev_pm_syscore_device() really prevent the device
-> from going into suspend?  What about runtime suspend?  And what good
-> does it to do prevent the device from being suspended if the entire
-> server gets suspended?
-> 
-> Fifth, the patch description says the purpose is to prevent the server
-> from going into system suspend.  How does marking some devices with
-> dev_pm_syscore_device() accomplish this?
-> 
+Signed-off-by: Benson Leung <bleung@chromium.org>
+---
+ drivers/usb/typec/ucsi/psy.c  | 2 +-
+ drivers/usb/typec/ucsi/ucsi.h | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-We have been discussing suspend/resume and reboot behavior in another thread
-that proposed converting vhci_hcd to use faux bus.
-
-In addition to what Alan is asking, To handle suspend/resume cleanly, the
-following has to happen at a higher level:
-
-- Let the usbip hots host know client is suspending the connection.
-   The physical device isn't suspended on the host.
-- suspend the virtual devices and vhci_hcd
-
-Do the reverse to resume.
-
-I would say:
-
-- We don't want vhci_hcd and usbip_host preventing suspend
-- It might be cleaner and safer to detach the devices during
-   suspend on both ends. This is similar to what happens now when
-   usbip host and vhci_hcd are removed.
-- Note that usbip_host and vhci_hcd don't fully support suspend and
-   resume at the moment.
-
-thanks,
--- Shuah
+diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+index 62ac69730405..62a9d68bb66d 100644
+--- a/drivers/usb/typec/ucsi/psy.c
++++ b/drivers/usb/typec/ucsi/psy.c
+@@ -164,7 +164,7 @@ static int ucsi_psy_get_current_max(struct ucsi_connector *con,
+ 	case UCSI_CONSTAT_PWR_OPMODE_DEFAULT:
+ 	/* UCSI can't tell b/w DCP/CDP or USB2/3x1/3x2 SDP chargers */
+ 	default:
+-		val->intval = 0;
++		val->intval = UCSI_TYPEC_DEFAULT_CURRENT * 1000;
+ 		break;
+ 	}
+ 	return 0;
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index b711e1ecc378..ebd7c27c2cc7 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -483,9 +483,10 @@ struct ucsi {
+ #define UCSI_MAX_SVID		5
+ #define UCSI_MAX_ALTMODES	(UCSI_MAX_SVID * 6)
+ 
+-#define UCSI_TYPEC_VSAFE5V	5000
+-#define UCSI_TYPEC_1_5_CURRENT	1500
+-#define UCSI_TYPEC_3_0_CURRENT	3000
++#define UCSI_TYPEC_VSAFE5V		5000
++#define UCSI_TYPEC_DEFAULT_CURRENT	 100
++#define UCSI_TYPEC_1_5_CURRENT		1500
++#define UCSI_TYPEC_3_0_CURRENT		3000
+ 
+ struct ucsi_connector {
+ 	int num;
+-- 
+2.50.0.727.gbf7dc18ff4-goog
 
 
