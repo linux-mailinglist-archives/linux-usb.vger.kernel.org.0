@@ -1,160 +1,149 @@
-Return-Path: <linux-usb+bounces-25935-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25936-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07827B093E3
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 20:26:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F30CB0949C
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 21:11:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 389B65A2FFF
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 18:26:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 765D37AA644
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 19:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF2032FE391;
-	Thu, 17 Jul 2025 18:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7552FE31C;
+	Thu, 17 Jul 2025 19:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="wR0OaNql"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lX4LSuxQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF1C2D1F7E
-	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 18:26:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80442153FB;
+	Thu, 17 Jul 2025 19:10:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752776779; cv=none; b=jpA3SEtCeHvsgeQzd937JlS/CfWhi6wj1BTBxRqlNPUFry4XrVigh8iA6uhj5qh5ewMWXrXpyFdtAeP12+njnRH3XUCIjvZ+SJ8BEqMWrgM1X7aSvxwOHjOoJE7Lnb6jbrnm5CSsV6ZWOdJInaBBolyolz5JYZ88TKcBqLhuGCg=
+	t=1752779461; cv=none; b=beDmHXhCLOiyBxSAmUcL8DmvPe1vMFddd/h0NSzJYdOg/ri8HQ+DkmYdSvQ2zpTsJcblnJSIjLqvoFxQUwYvX1Cr7ctazI2ire24VwbyL/UCCssX0sP7sRTnDJgyvDZpnHveXE7U/GOABAjp4oakPv5Oq4XnxKouea3f0Qm5pv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752776779; c=relaxed/simple;
-	bh=ppzKDV147GTmitogPpx6ny6wCxKqzhgdhfRqK1S48s8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r0/wFOyPX6Y/UZIJmmdhhOOKr/lu27TEVXZ101FSLK/PCSn0WW4SuZi4ukm2zxLjmoe/JBPlJNX8M6MzV0NFN0+19l8VO1KsNesOD4M1atc5lLM5KV/0adD8xLY35SV/eQIpHa4meF58lSfggSaQgHZcrGUjtJIMK4ERbJVXfwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=wR0OaNql; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-700fee04941so13232066d6.1
-        for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 11:26:17 -0700 (PDT)
+	s=arc-20240116; t=1752779461; c=relaxed/simple;
+	bh=X2QTX7soCtQoFbN1OcRPWW6+MAHVqg1KHTXwB1p8eZ4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eAlnmRZPzkBBez6unuPLFBmsGlwj6wFL6y0wF64IjzIeIvT2bcU+knXTrdG4Hblx4McrPo49B9GQy5ost7pnVCoHLw/I2PxDEXS04zA0QaEVyQ9wz56mISVD2ZFWhCFoQPC93zymRn3ZEe4dvd4YMdzFeo+bXaO6JeZKkfU/Xys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lX4LSuxQ; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b3f2f8469b7so7470a12.3;
+        Thu, 17 Jul 2025 12:10:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1752776776; x=1753381576; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=asMzSG8uBnib1bvPL+c/CNdPTsqgEKsf5HJcW5YgS2I=;
-        b=wR0OaNqlwS6ogIaAOMRAQRhXTm35bkb1734C3uqxgTOXnrWB4vENvxZBhTb+0BG8R3
-         AQv60aIhZW9cZMQdZDB0AHtwSpoulQftLHjAc/8iq9PV9xHBfafym4+kA47/foLCY7Wt
-         2ES2x6Hx6s/uUVqFUxKYziORi/7qzzrvJx8u6NGwZCuiq76CzPFZBMlh77UrChue0AFU
-         J5dzLSHlWAkSYFJf7Y2PRZ+b7kSUgv/OyepmrZ6nXO4dd4NA9LbMbs30/z526p9YLRWe
-         kwydkkjuFZMFJ1dEFliTpPoYfy233VAKjrc6RfjDz5yxNUc2qw6Ca/+h8cqXy5JmwHpf
-         J3Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752776776; x=1753381576;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1752779459; x=1753384259; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=asMzSG8uBnib1bvPL+c/CNdPTsqgEKsf5HJcW5YgS2I=;
-        b=IAFYI3b2D0i7S0IC18Wa/mrDa0vJW9MIXW6e4xvCZPww5vGxtFoAD79XbCG9EMvMOO
-         Uco1gjujXw1t+Z6j+MoRpXMDCACoMLdLx/Lt9V/ZDtU3pHukll4kFXmQcZG93gbMsSvi
-         3sDigHsHDEdklUNYbbSLFO8q/mBDpSw4Mxlf9XNuMFpuj/RdzKRCAmO8P9bFZcgb9wHt
-         2Srf5Gf1gLNwfrF0wiROrWvbvUNZGn42vy7xEvfORk+EBFowTVgFnqBl1DWWsCd6dvG8
-         /2wqQP3f+y4jn1hMhrCQ2v/5HjYmmDkC4KL/tmUZyAtgl7JogQHwvzkQ3P6N/MWUDDWp
-         mqVg==
-X-Forwarded-Encrypted: i=1; AJvYcCW8onzRj/E1IiUtgPN8do7TrrQM+oUcD5ro0WvcbQkF4AtPNQr7a1crQM2KdO1WJzZ5jXi4mJrIK2g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/Uev2rtV+k7gCVH7GleRddF/hg01K+OFZFqdjjvpgzMDy8dy0
-	vKMVOejDc938/pAWuYwI5vpT83J+1rrtgIfcPd54C42RRhbySokrggjow9VNMZswhQ==
-X-Gm-Gg: ASbGncsRFW+gXF67E2j+icwHcSe3GexVRoRHbVsH5Ed6xANx1A08RsvPF8vgVqqWW94
-	hay5UAxLZWLFkBM58ExUscTnlnhkqC0vnTZr+Wf1Xa0KLYRyNXUaH59Psgd8zyUf9LN02iGT6QV
-	g6+BnYeFHddpEj5MoFPm64QfbajND2oQTxuxaUiBzaRhvlKgjFVoK6T/ox8tMtku3h0Wy7M4TTv
-	s5UY/jQcn+xC3la/OEKGkMaq4/np3oqgbUmOCmeYi7wBKHzVTVBkE7cmdIxMl9Qw8gmebZm/6IG
-	6cGl/9vNBaHLVLbWlvmPwK9aDK/6czuOTpAOSx7fHe/cFshP/QHqAgvPS4FrnR5yqOUlLWRSRje
-	tocfvi6APhVz2zGGfW3+kp2h7ERV5x6Yxd1TimY0KgErsfOJ+hmFbuNfjVFAp4MlyUrEvkWQjWU
-	z7DqFfHAmwVRUnxfYKXoz0eNJsMg==
-X-Google-Smtp-Source: AGHT+IFT29oCaTJdFJsadG73kHFw/opg93WH+GFJQnpC7OyrxX9paIy8wYX3Ql9L/lBbT3xd+BtMqQ==
-X-Received: by 2002:a05:6214:5c44:b0:704:7dbd:d991 with SMTP id 6a1803df08f44-705073a31b4mr64028466d6.31.1752776776244;
-        Thu, 17 Jul 2025 11:26:16 -0700 (PDT)
-Received: from rowland.harvard.edu (nat-65-112-8-52.harvard-secure.wrls.harvard.edu. [65.112.8.52])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ab5b1617a2sm60760761cf.22.2025.07.17.11.26.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jul 2025 11:26:15 -0700 (PDT)
-Date: Thu, 17 Jul 2025 14:26:13 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc: Valentina Manea <valentina.manea.m@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Brian G. Merrell" <bgmerrell@novell.com>, kernel@collabora.com,
-	Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/9] usb: vhci-hcd: Prevent suspending virtually attached
- devices
-Message-ID: <42bcf1e1-1bb2-4b63-9790-61393f780202@rowland.harvard.edu>
-References: <20250717-vhci-hcd-suspend-fix-v1-0-2b000cd05952@collabora.com>
- <20250717-vhci-hcd-suspend-fix-v1-1-2b000cd05952@collabora.com>
+        bh=whHHXq9ZKdXTAW705B1rQtAiW8MTVvGsjlJTeXv7yyA=;
+        b=lX4LSuxQC8DuWRsrH78UyuLiD1jAAHFGQB62AnI6Yc3WFMFMQfCqyECxB2Zp1wx/yM
+         VvJf+I0w4/4K/iPF6Js2xlfZzTulg3T1eAB/J4KmXtBNfw6ynn9x5Q9hB6FVoBHBKgIx
+         1l/hELRj41cFGxgRZyVXvbyjc+1d5SJej2kDll/5XtweBiI7Wq8gXypz7Ju3NbowDMqF
+         jJG2Wo2483v0eUHggpXMCrwS/fgqK7YnyyyALHW8CFZ45vu5+h27UWhNW4YKvF1+mkQh
+         kUZH0owDHpoxjnKFMRvNrZ/JzxMCJsTAvfy+8YUjlduD1/Yzc3R9JsaTsHg/tkGHp0G0
+         pRRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752779459; x=1753384259;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=whHHXq9ZKdXTAW705B1rQtAiW8MTVvGsjlJTeXv7yyA=;
+        b=lfBvqebaYVuQ55eDJPRzuR5NyehIirhCN41qP7ULw29tx1XFhrDFWjw05iOdVaNeYc
+         sqnIXzxNU7HHUTiIoc8bi3vIBYQlUf2kUhrtDeoei11200V1Gque1eyCNvh4kBgwDMgy
+         uTBjdzK1Px31RVQqL4EVP4I4qJ6XA1SUWl2HzGT/Rg1vq/cOctHd6eTMEgmDWvMEVs6/
+         zPYsl+hYKZxigfOr4syIepOyjMhK95xUJBtpMCDBdtBb03TsJgcBzh+bqdL1kirT5zNz
+         qNK35sSe0qBnp4DcIwQyYK0Ruq1oNX5wYFi/iQYu/KFRoYW9DgR7dQQdI2/Ml1VXQdS0
+         60iw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYilkWA9eqX2mmbKZtinNIuoB542NWtdgBvMpxUy7FntFiFuf6SzXDFEP/r7DQvZoTfVfj4jLEgymEyGU=@vger.kernel.org, AJvYcCVJ8X+9IiOkQGvyODqqLV4lv7TmDYt/YuPGieK8DsD8CDNOJyTKo/VfrOFg4thNw4gwgMLX3ux6WPVmcA==@vger.kernel.org, AJvYcCVKCTaUUdIVvffOEcWgc8oOdhlpSKDXBTdjrmcXn0IjQXcOR6NdI97z+LQMu2HSwuYTIbrfYN6VcvI=@vger.kernel.org, AJvYcCWELDfFQR8oz8bDaJfAuBgA7qzELVY5ZxBlzg2vyqa7t8y/mr5FsZEM4BOBa52gE893psVuLkivT/pq@vger.kernel.org, AJvYcCX/BGB+fG3WnWiR4PR/WU7UrvKHsa2ZQC/55fScU4iUro1uJbUW1P/x1hZ3g3bgbsKQmWTYXb1R8uCW@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWt+qFvgIuA9oku95+0dvJvX2ccrhi77mx3v+nOdXoGuIJNesJ
+	4XlNu6VR+zZCk21hQAIVE2zGySsSaYEDRV+VqHC/G24KQdYR1Z/SeLupae9Mu2oI5zIxoSxf1lD
+	tX6+Iu0ATXmop9JyOPTm7e7Dd66Fhg7o=
+X-Gm-Gg: ASbGncvgMKyHvxnChnZJgC4Axv1aYEVKS71TS/knoJiWo1RbK0RQINR0acu05kxDV+8
+	MhZlMYLLmo4OlOQ0pVnwUWxFltakaTPWJtT5rpnubi9SZ4E9k2p03LTjQIC0BD9uwQ5OX5HnYrX
+	S65mkLXp/NN174CAwEcB9JJ2MAZ9oxZ1KGEiGr9NGOSVUbxVQs7ZUmY57rc8Qg74gUWnOZbupxh
+	aTbqXBViOe2tRVd3dY=
+X-Google-Smtp-Source: AGHT+IFcDXeIo6uU4fndJVvGmN/jTY47SR5imHxzk90iAiBRzhNnnJo2QL9GoDY6Xm/D5hnz57/gEipwcAYqKUg8zQw=
+X-Received: by 2002:a17:90b:1cc3:b0:311:c5d9:2c8b with SMTP id
+ 98e67ed59e1d1-31c9e7767fbmr4619712a91.5.1752779459096; Thu, 17 Jul 2025
+ 12:10:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250717-vhci-hcd-suspend-fix-v1-1-2b000cd05952@collabora.com>
+References: <20250616175019.3471583-1-superm1@kernel.org> <20250616175019.3471583-4-superm1@kernel.org>
+In-Reply-To: <20250616175019.3471583-4-superm1@kernel.org>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Thu, 17 Jul 2025 15:10:47 -0400
+X-Gm-Features: Ac12FXzm6w4bvt8xXNl05VHu2uQA28FvAWVfU6YAJzv7lZsIpjWGCcVY04Bnf2I
+Message-ID: <CADnq5_Pn=0nCD-CyoeJxSAn=Gtn=evkaCBUH2pr_O-=7vpw+bw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] drm/amd: Avoid evicting resources at S5
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Alex Deucher <alexander.deucher@amd.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, 
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, 
+	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K . Petersen" <martin.petersen@oracle.com>, 
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>, 
+	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>, 
+	AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng <kaihengf@nvidia.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, Denis Benato <benato.denis96@gmail.com>, 
+	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 17, 2025 at 06:54:50PM +0300, Cristian Ciocaltea wrote:
-> The VHCI platform driver aims to forbid entering system suspend when at
-> least one of the virtual USB ports are bound to an active USB/IP
-> connection.
-> 
-> However, in some cases, the detection logic doesn't work reliably, i.e.
-> when all devices attached to the virtual root hub have been already
-> suspended, leading to a broken suspend state, with unrecoverable resume.
-> 
-> Ensure the attached devices do not enter suspend by setting the syscore
-> PM flag.
-> 
-> Fixes: 04679b3489e0 ("Staging: USB/IP: add client driver")
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+On Mon, Jun 16, 2025 at 1:50=E2=80=AFPM Mario Limonciello <superm1@kernel.o=
+rg> wrote:
+>
+> From: Mario Limonciello <mario.limonciello@amd.com>
+>
+> Normally resources are evicted on dGPUs at suspend or hibernate and
+> on APUs at hibernate.  These steps are unnecessary when using the S4
+> callbacks to put the system into S5.
+>
+> Cc: AceLan Kao <acelan.kao@canonical.com>
+> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
+> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
+> Cc: Denis Benato <benato.denis96@gmail.com>
+> Cc: Merthan Karaka=C5=9F <m3rthn.k@gmail.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+
+Acked-by: Alex Deucher <alexander.deucher@amd.com>
+
 > ---
->  drivers/usb/usbip/vhci_hcd.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> index e70fba9f55d6a0edf3c5fde56a614dd3799406a1..762b60e10a9415e58147cde2f615045da5804a0e 100644
-> --- a/drivers/usb/usbip/vhci_hcd.c
-> +++ b/drivers/usb/usbip/vhci_hcd.c
-> @@ -765,6 +765,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
->  				 ctrlreq->wValue, vdev->rhport);
->  
->  			vdev->udev = usb_get_dev(urb->dev);
-> +			dev_pm_syscore_device(&vdev->udev->dev, true);
->  			usb_put_dev(old);
->  
->  			spin_lock(&vdev->ud.lock);
-> @@ -785,6 +786,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
->  					"Not yet?:Get_Descriptor to device 0 (get max pipe size)\n");
->  
->  			vdev->udev = usb_get_dev(urb->dev);
-> +			dev_pm_syscore_device(&vdev->udev->dev, true);
->  			usb_put_dev(old);
->  			goto out;
-
-This looks very strange indeed.
-
-First, why is vhci_urb_enqueue() the right place to do this?  I should 
-think you would want to do this just once per device, at the time it is 
-attached.  Not every time a new URB is enqueued.
-
-Second, how do these devices ever go back to being regular non-syscore 
-things?
-
-Third, if this change isn't merely a temporary placeholder, it certainly 
-needs to have a comment in the code to explain what it does and why.
-
-Fourth, does calling dev_pm_syscore_device() really prevent the device 
-from going into suspend?  What about runtime suspend?  And what good 
-does it to do prevent the device from being suspended if the entire 
-server gets suspended?
-
-Fifth, the patch description says the purpose is to prevent the server 
-from going into system suspend.  How does marking some devices with 
-dev_pm_syscore_device() accomplish this?
-
-Alan Stern
+> v3: https://lore.kernel.org/linux-pm/20250609024619.407257-1-superm1@kern=
+el.org/T/#me6db0fb946e3d604a8f3d455128844ed802c82bb
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm=
+/amd/amdgpu/amdgpu_device.c
+> index 8edd88328749b..c5d8f6d551238 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -4966,6 +4966,10 @@ static int amdgpu_device_evict_resources(struct am=
+dgpu_device *adev)
+>         if (!adev->in_s4 && (adev->flags & AMD_IS_APU))
+>                 return 0;
+>
+> +       /* No need to evict when going to S5 through S4 callbacks */
+> +       if (system_state =3D=3D SYSTEM_HALT || system_state =3D=3D SYSTEM=
+_POWER_OFF)
+> +               return 0;
+> +
+>         ret =3D amdgpu_ttm_evict_resources(adev, TTM_PL_VRAM);
+>         if (ret)
+>                 DRM_WARN("evicting device resources failed\n");
+> --
+> 2.43.0
+>
 
