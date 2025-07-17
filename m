@@ -1,91 +1,103 @@
-Return-Path: <linux-usb+bounces-25912-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25913-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95A7CB08FA0
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 16:37:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FE05B08FA6
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 16:38:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EF5A1680DA
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 14:37:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3019DA62E82
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jul 2025 14:38:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29AD32F7CF5;
-	Thu, 17 Jul 2025 14:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBBAC2F7CE6;
+	Thu, 17 Jul 2025 14:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="boOvl/mX"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IO16J8TI"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13812F5C5E;
-	Thu, 17 Jul 2025 14:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A9C18FC86
+	for <linux-usb@vger.kernel.org>; Thu, 17 Jul 2025 14:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752763067; cv=none; b=neaovG4tR5aW5wSv/L9N5zL+mvEabcx3WbadUhYvaR2vF3R+d1bgcxf4/G/MDfcb8sJrGdMXF1l0MSER5cSWSCD1rC4n56gsawKjbUBVLqc8eMU3v5OL1NRay95UjGqt1xi8UDnzcBV8DvD9Omdtano6kB3eZb3U1/aMcmTGZ9c=
+	t=1752763117; cv=none; b=EtGNeYTZI29LKfSXiLY4f5M8dHJjxzLlPadfdzlcz2/2NtlASLvXXysGr5KroQVNJnD+qAUIP25Bu1mJkcY4jik55+yk/Ogyx0yBtA3rG15Ck9T2MT84IWXcyoNY5fYH6kx2UsHkcaOJQrYpp0ZA4rO+80Uhkfhgxb8YDQ95qkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752763067; c=relaxed/simple;
-	bh=qJxnjdYTIWbk7vIyn6SbpFcW6x3VlSKPaEAXEeiaS3U=;
+	s=arc-20240116; t=1752763117; c=relaxed/simple;
+	bh=Xa2l5QsJ4dBERvdF3QSrlpupHapOyejG5leQMJu5pgo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TdOO9cLxpgTLXU8M6V2p5TtxsEKbl+RpR9NtySuQixN0EyPvun967kF3o/TxhG48iVsPqrXeLFcb3P4JEoQ0EaQP20lsIom+zIPMSK2LtdjD6hHqlgcTbFZIu5GQk8XkE80o4DU7QtaEH3jAvWd1qTFFYA6yxAIfloRZgqEV1nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=boOvl/mX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D892C4CEE3;
-	Thu, 17 Jul 2025 14:37:46 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=XlluEH4ib1gl0ULJg+D+/0mZH4/M6FdAXMXyeBE9JcF4r8Y5rQPMjkGC+alsw/uQp9f7sX91WEQ+Ue1OmjXjLrCi1GwiGEz2Zx9Qp7vCFR1euXJbQ+7bF9c/bagVBHRIFtdspwtDYASxmEv9R6w5fnl4Z2EftRPfaBzrPx1F82I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IO16J8TI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57CF6C4CEE3;
+	Thu, 17 Jul 2025 14:38:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752763067;
-	bh=qJxnjdYTIWbk7vIyn6SbpFcW6x3VlSKPaEAXEeiaS3U=;
+	s=korg; t=1752763116;
+	bh=Xa2l5QsJ4dBERvdF3QSrlpupHapOyejG5leQMJu5pgo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=boOvl/mXiA7Ku2q2T47AsOoxuAgnWEBIRqC6j+XyUF97Wtj4QzgrymPczfycV+q0R
-	 lakw8nji61P9/gApmQPwM78TPtM/UWn1ViWSD14DxLT6mXONWUH5yMiWWVo5p/v63j
-	 SSXtRr2nCXcdmLriG44CjIIVnwnKhMJMvt/zAYwk=
-Date: Thu, 17 Jul 2025 16:37:39 +0200
+	b=IO16J8TIFmZoBsFBHxz5+F3/JIe5Gbg+0+UvZpDyiXetLOaxmuX48H1dP20Ce5tI1
+	 4zCgqPXOJTFQ5kzU4ahmGMJdBvY0Z+X3mhBZJBMb2zdSPQO+tRHE8S+W6FLHgq5RT9
+	 kXXFfe7pFPktCq0EW8OISI2BHBPJOyvZp+l4CiNo=
+Date: Thu, 17 Jul 2025 16:38:30 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: cen zhang <zzzccc427@gmail.com>
-Cc: mathias.nyman@intel.com, linux-kernel@vger.kernel.org,
-	baijiaju1990@gmail.com, zhenghaoran154@gmail.com, r33s3n6@gmail.com,
-	linux-usb@vger.kernel.org, gality365@gmail.com
-Subject: Re: [BUG] KASAN: slab-use-after-free Read in xhci_hub_control
-Message-ID: <2025071748-unlovely-citadel-3dc8@gregkh>
-References: <CAFRLqsUZTDm0KAfX_qziTrn6E3+sRksF5ormxhHConqTKWvHBQ@mail.gmail.com>
+To: Laurent Bigonville <bigon@bigon.be>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: Hikmicro Mini2 V2: unable to enumerate USB device
+Message-ID: <2025071756-improve-compactor-207f@gregkh>
+References: <c05a76cc-ac27-4f64-a4a7-5a1e0fd349d9@bigon.be>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAFRLqsUZTDm0KAfX_qziTrn6E3+sRksF5ormxhHConqTKWvHBQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c05a76cc-ac27-4f64-a4a7-5a1e0fd349d9@bigon.be>
 
-On Thu, Jul 17, 2025 at 08:24:17PM +0800, cen zhang wrote:
-> Hi maintainers,
+On Thu, Jul 17, 2025 at 02:06:13PM +0200, Laurent Bigonville wrote:
+> Hello,
 > 
-> I've encountered a kernel crash in the xhci driver, which was found by
-> Syzkaller on kernel version 6.16.0-rc6 (commit 155a3c003e55).
+> I just bought an Hikmicro Mini2 V2 USB thermal camera and the device is not
+> recognized
 > 
-> The KASAN report points to a slab-use-after-free read within
-> xhci_hub_control. What we find puzzling is that the free operation
-> occurred in a completely different module, as indicated by the free
-> stack trace.
+> [   64.039667] usb 3-2: new high-speed USB device number 11 using xhci_hcd
+> [   64.245840] usb 3-2: New USB device found, idVendor=2bdf, idProduct=0106,
+> bcdDevice= 4.09
+> [   64.245857] usb 3-2: New USB device strings: Mfr=1, Product=2,
+> SerialNumber=3
+> [   64.245862] usb 3-2: Product: Thermal Imager
+> [   64.245865] usb 3-2: Manufacturer: Hikmicro
+> [   64.245868] usb 3-2: SerialNumber: XXXXXXXX
+> [   65.817499] usb 3-2: USB disconnect, device number 11
+> [   66.162197] usb 3-2: new high-speed USB device number 12 using xhci_hcd
+> [   66.344529] usb 3-2: device descriptor read/64, error -71
+> [   66.629395] usb 3-2: device descriptor read/64, error -71
+> [   66.922427] usb 3-2: new high-speed USB device number 13 using xhci_hcd
+> [   67.104880] usb 3-2: device descriptor read/64, error -71
+> [   67.390254] usb 3-2: device descriptor read/64, error -71
+> [   67.493238] usb usb3-port2: attempt power cycle
+> [   68.151973] usb 3-2: new high-speed USB device number 14 using xhci_hcd
+> [   68.152150] usb 3-2: Device not responding to setup address.
+> [   68.354479] usb 3-2: Device not responding to setup address.
+> [   68.560631] usb 3-2: device not accepting address 14, error -71
+> [   68.747321] usb 3-2: new high-speed USB device number 15 using xhci_hcd
+> [   68.747422] usb 3-2: Device not responding to setup address.
+> [   68.950227] usb 3-2: Device not responding to setup address.
+> [   69.152505] usb 3-2: device not accepting address 15, error -71
+> [   69.152593] usb usb3-port2: unable to enumerate USB device
 > 
-> We suspect this might not be a false positive, but rather a complex
-> bug whose root cause is not a simple UAF within the same driver. We've
-> tried to trace how this could happen but are struggling to understand
-> the connection.
+> The device is not listed in lsusb after this
 > 
-> Could you possibly offer your expertise and help us understand if this
-> is a known issue or a new bug? Any insight you could provide would be
-> immensely helpful.
+> It's not clear whether the camera is a UVC one, but the device should still
+> appear, right?
 > 
-> The full crash log and a C reproducer are attached. Please let me know
-> if any further information is needed.
-> 
-> The full KASAN crash report is attached. Below is the C reproducer.
+> An idea what to do?
 
-You are talking to a specific USB hub in your system, I guess a xhci
-root hub?  Or one that is external?  Can you clean up your reproducer to
-be readable so we can try to run it locally with any USB hub as the
-option?
+What kernel version is this?  The device really doesn't like to be read
+from, does it work in any other machine?  Plugged into a different
+port/hub?
 
 thanks,
 
