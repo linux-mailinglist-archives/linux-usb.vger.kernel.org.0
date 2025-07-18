@@ -1,79 +1,61 @@
-Return-Path: <linux-usb+bounces-25963-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25964-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FFC3B0A7A1
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 17:38:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8A4FB0A81E
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 18:08:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA8BD7BDDAB
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 15:34:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 831D05873EF
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 16:08:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B6572E11C0;
-	Fri, 18 Jul 2025 15:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC512E6128;
+	Fri, 18 Jul 2025 16:08:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dQEKioxu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nibvFDoz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA0D2E03FC
-	for <linux-usb@vger.kernel.org>; Fri, 18 Jul 2025 15:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389132E6113;
+	Fri, 18 Jul 2025 16:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752852559; cv=none; b=FOhMV+vmgYAsW3BWVLQnNYofyfq2fmsv5X/GirsGh29vhNSAeN/7KYTuu/f0s/xSgTVy6qf0fFa4p8bzPnxxMVdrDTBmO3yzvn1yhx8+SahvRawCEJbYXXJGQI2/PmvE6cNuu2yWiQRjTfLIGkt+xJHuJvZE7NjjHs36PjO1LM0=
+	t=1752854924; cv=none; b=cMTASgZW6DimwsrN4iEWqPyz4an8DBdR+qRJBIPdSVsFq0znJ7qt54gSLG6h+zfAHSqHC+NYbDBMLvWZVOFhU5mM6eGqWgRad8SkLT13p33xWBt8GfPB7mrchuGbVeANF8W3L6R4C6VBrhSHPE4JIY8atYi61tSImXRD1NDzxh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752852559; c=relaxed/simple;
-	bh=SILD7FqXDKzPN+v5mJfgmM2lCLPnFDjcKYYpG/ct3s0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=e2nLEK+pp1uXNCVsDGB+WALUJ65Vf+BHTo2CAH75qKaGy0SjHAhmaQO+qBDzjmFPadrK0SCDR25JClxasLidDlFVj+QZc/3LIBwAuf/bDUtYuLmvG57WZ66A0ULkb3eKPfjXk4B05WaTtXtBIqIXvvsHjqd85vg1zTXUl5Pqao8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dQEKioxu; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-553b584ac96so2356950e87.1
-        for <linux-usb@vger.kernel.org>; Fri, 18 Jul 2025 08:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1752852555; x=1753457355; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VW6jrFQzXbLcjEcOPYhLhert2s0KBo9YRnvAtQmafP0=;
-        b=dQEKioxuMUhEVjxMKVd1pE1pf6VdIUG+LptdSUJX2R9XvqQgtRoAk43/8eYaUsrzU/
-         0wYiBYvDQDPo0pI9Qy7xkEtH8Sthbqe3mUDcda040WmzjrSQ0jJ4jweJXJ6xJAQ8lzrP
-         qo4yYrfeBvnD82w5MK1xQQtqcR5vbPYe68Hj8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752852555; x=1753457355;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VW6jrFQzXbLcjEcOPYhLhert2s0KBo9YRnvAtQmafP0=;
-        b=g+Qxc38z3AL9kQW6dwOa/o3Ukc4iwxJYHBUvcwJ2k2HBl9k8suGm2EJexkf6M3uwyE
-         2WgzCUBo7eHu1bS/8K0+2KcEzB2HatiAbjtkme16lXF4+ePxZrRizo8afTPalL3bkgtx
-         o8H3l3We43TJy+Bbg/f0h/LZagTFhq25yo6npxysuAHTkNUxTB+AxqpXNJiX6PCsWJDN
-         vdx6dEH0kMs3lWR7+fsCYpJd7cVy1y6EIUmqSllHsDO5PorXkuIN+Uqsok13akhVwhcP
-         kw6fIaesi/nOgF8Ww0tUvKuNg1SHPrM4JZ+AGsHwhoouhq3kgm8sRZiPnRzjwY2XK526
-         usBw==
-X-Forwarded-Encrypted: i=1; AJvYcCWin7B8e0NEvKnXeIgpXVXHmQ7rcb62SNQ2rUpeaJUY1HGqxZxNpNJ4YnMFlcdQ7AIG9ZcpiLF704E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8MTNmMDaqzGybCl9upzeqrMaPcLmexOv1fPmzksjkVUStt3k5
-	87WZzq5RVETzcRmX67nfttziNfBJ134fJuSxap+PZzK8dhoq94be1D3QPr6fCT84Wg==
-X-Gm-Gg: ASbGncsE1eKbunRi4d5sHD7hMdcrGGU47nzJda8nMv9OzJ4MBYhQERo2+yAS+M2Obe/
-	3WbiN0V4kHoODfG0zLOjm4dMq+13Z7em8qHG0qGAdHAlBtw8nLSMSbiaI+PQ9I/bntaVEe5bXOF
-	BptaiR7+Hfx+wzHAITNu8whbD/EAC4Wmx36BZM7+SjYYF6pkCgbFS0rns+19L4aeESF4qC6pKyr
-	3hzQX62ilgnrzzl+BYfp25dEvqX/WCYbMwz4nLMbE1BZd6kT8phafrT8JJAU9aKqKXUGCTEK1GQ
-	Sqa1aKUNQ0JDU2fEKqudMFUMFdglGMPdpH0Dz61DiGiDlmO2DShk6nQlqGB9YMFxDJ6KUhfZj4Q
-	u3oQwnlNM+0CXN3xx3F3K72xeHXhlHgQ46Uns9QnxMmF6mdm00S2bAR/I/OSzHVgBcHYbLy8iXS
-	eh8A==
-X-Google-Smtp-Source: AGHT+IFzEZudqyc1gvkTsADJ1J0J6zl9peQTdQgm9si/Z20OV6QzPGlTr3dUVncj75ikKEgrskz53A==
-X-Received: by 2002:a05:651c:2149:b0:32b:2fba:8b90 with SMTP id 38308e7fff4ca-3308e37166fmr22654361fa.14.1752852555208;
-        Fri, 18 Jul 2025 08:29:15 -0700 (PDT)
-Received: from ribalda.c.googlers.com (166.141.88.34.bc.googleusercontent.com. [34.88.141.166])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-330a91d9d6dsm2268601fa.83.2025.07.18.08.29.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Jul 2025 08:29:14 -0700 (PDT)
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Fri, 18 Jul 2025 15:29:14 +0000
-Subject: [PATCH v5 5/5] media: uvcvideo: Remove UVC_EXT_GPIO entity
+	s=arc-20240116; t=1752854924; c=relaxed/simple;
+	bh=VzTbS3dQMTYz9kMsYYUIVmpHH2bQ133Om2jE2nbXkwk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=lUPPIKadaG0jPhOipi2Bng7nYKOwnKVuSH5PIFSyYMPe7SygOadz7qt88RBDi6RhuxVdodWvAEjoHt7U6WXwjg/5SCHl1Hi2/kCrFHIr6MMCuAFZVSSi+H85ZUUzBQjWcI+cUT1yVnLh9cXqEXogNH/+3QgmI2r1DSSPfHkdXGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nibvFDoz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1214DC4CEEB;
+	Fri, 18 Jul 2025 16:08:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752854923;
+	bh=VzTbS3dQMTYz9kMsYYUIVmpHH2bQ133Om2jE2nbXkwk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=nibvFDoz3FoZ5A42k0SKWox6LXTEch7TfEM3LvNjNGi3vVBVp5G44/ZCm0HEvPKVP
+	 DH2MEd8LlmItCfWzTNjP8KmnksrkSkEFcNnxMpY7UQOsY6zyIeI8lirk8gFwByx61Q
+	 vypEE5V8B7Yr2mf2Ojw6oobzXYIuX9Ok96E+KMc4ApsjstylvbHoBtnSC0Yasg9PEo
+	 uGVMBaDzp+9LwFixBjEb9oZrWcCFK/VfDx4VRQWY0DNUHe/CrxlFtIa0m/jPfpe//x
+	 LuVjFW3bJu2m54pjySW/0tUELmxYFK9jH4B0S5eXjSWYMPEXJQTrsU3AWWhIOToFmk
+	 w5VKDr++bTYgg==
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>, 
+ Alan Stern <stern@rowland.harvard.edu>
+Cc: jikos@kernel.org, linux-input@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ syzkaller-bugs@googlegroups.com
+In-Reply-To: <8bec1698-5008-428f-8e71-ec002def0c54@rowland.harvard.edu>
+References: <68753a08.050a0220.33d347.0008.GAE@google.com>
+ <f6e67c38-8d63-4536-827c-09757a8d5609@rowland.harvard.edu>
+ <ea7f1f42-273b-4c07-8bf2-769992dd9ced@rowland.harvard.edu>
+ <8bec1698-5008-428f-8e71-ec002def0c54@rowland.harvard.edu>
+Subject: Re: (subset) [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds
+ in s32ton (2)
+Message-Id: <175285492024.272050.11219945704830043047.b4-ty@kernel.org>
+Date: Fri, 18 Jul 2025 18:08:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,135 +64,65 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250718-uvc-subdev-v5-5-a5869b071b0d@chromium.org>
-References: <20250718-uvc-subdev-v5-0-a5869b071b0d@chromium.org>
-In-Reply-To: <20250718-uvc-subdev-v5-0-a5869b071b0d@chromium.org>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Hans de Goede <hansg@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
- Yunke Cao <yunkec@chromium.org>, linux-gpio@vger.kernel.org, 
- linux-usb@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>, 
- Hans Verkuil <hverkuil@kernel.org>, Hans de Goede <hansg@kernel.org>
 X-Mailer: b4 0.14.2
 
-The only implementation of this entity was the external privacy gpio,
-which now does not require to emulate an entity.
-Remove all the dead code.
+On Tue, 15 Jul 2025 15:29:25 -0400, Alan Stern wrote:
+> On Mon, Jul 14, 2025 at 10:10:32AM -0700, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    b4b4dbfa96de media: stk1160: use usb_alloc_noncoherent/usb..
+> > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=15a830f0580000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=28729dff5d03ad1
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=b63d677d63bcac06cf90
+> > compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1614418c580000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1257dd82580000
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/7301552ad828/disk-b4b4dbfa.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/c559b38fa1b6/vmlinux-b4b4dbfa.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/9c1da8b2a83f/bzImage-b4b4dbfa.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
+> >
+> > usb 4-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor, different from the interface descriptor's value: 9
+> > usb 4-1: New USB device found, idVendor=045e, idProduct=07da, bcdDevice= 0.00
+> > usb 4-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> > usb 4-1: config 0 descriptor??
+> > microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
+> > microsoft 0003:045E:07DA.0001: unsupported Resolution Multiplier 0
+> > ------------[ cut here ]------------
+> > UBSAN: shift-out-of-bounds in drivers/hid/hid-core.c:69:16
+> > shift exponent 4294967295 is too large for 32-bit type 'int'
+> > CPU: 0 UID: 0 PID: 10 Comm: kworker/0:1 Not tainted 6.16.0-rc4-syzkaller-00314-gb4b4dbfa96de #0 PREEMPT(voluntary)
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+> > Workqueue: usb_hub_wq hub_event
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:94 [inline]
+> >  dump_stack_lvl+0x16c/0x1f0 lib/dump_stack.c:120
+> >  ubsan_epilogue lib/ubsan.c:233 [inline]
+> >  __ubsan_handle_shift_out_of_bounds+0x27f/0x420 lib/ubsan.c:494
+> >  s32ton.cold+0x37/0x9c drivers/hid/hid-core.c:69
+> >  hid_output_field drivers/hid/hid-core.c:1841 [inline]
+> >  hid_output_report+0x36f/0x4a0 drivers/hid/hid-core.c:1874
+> >  __hid_request+0x1e0/0x3c0 drivers/hid/hid-core.c:1987
+> >  hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
+> >  hidinput_connect+0x1ada/0x2bd0 drivers/hid/hid-input.c:2327
+> 
+> [...]
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_driver.c |  4 ----
- drivers/media/usb/uvc/uvc_entity.c |  1 -
- drivers/media/usb/uvc/uvcvideo.h   | 20 +++++++-------------
- include/linux/usb/uvc.h            |  3 ---
- 4 files changed, 7 insertions(+), 21 deletions(-)
+Applied to hid/hid.git (for-6.17/core), thanks!
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index b79d276732bc80ef175ffdbaa73b6395585ff07b..d19b5a200971654161267dc755aec2a06b5fdc9e 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -789,7 +789,6 @@ static int uvc_parse_streaming(struct uvc_device *dev,
- }
- 
- static const u8 uvc_camera_guid[16] = UVC_GUID_UVC_CAMERA;
--static const u8 uvc_gpio_guid[16] = UVC_GUID_EXT_GPIO_CONTROLLER;
- static const u8 uvc_media_transport_input_guid[16] =
- 	UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
- static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
-@@ -821,9 +820,6 @@ struct uvc_entity *uvc_alloc_entity(u16 type, u16 id, unsigned int num_pads,
- 	 * is initialized by the caller.
- 	 */
- 	switch (type) {
--	case UVC_EXT_GPIO_UNIT:
--		memcpy(entity->guid, uvc_gpio_guid, 16);
--		break;
- 	case UVC_ITT_CAMERA:
- 		memcpy(entity->guid, uvc_camera_guid, 16);
- 		break;
-diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-index cc68dd24eb42dce5b2846ca52a8dfa499c8aed96..94e0119746e4689a45960955a35be93a25bc16c4 100644
---- a/drivers/media/usb/uvc/uvc_entity.c
-+++ b/drivers/media/usb/uvc/uvc_entity.c
-@@ -105,7 +105,6 @@ static int uvc_mc_init_entity(struct uvc_video_chain *chain,
- 		case UVC_OTT_DISPLAY:
- 		case UVC_OTT_MEDIA_TRANSPORT_OUTPUT:
- 		case UVC_EXTERNAL_VENDOR_SPECIFIC:
--		case UVC_EXT_GPIO_UNIT:
- 		default:
- 			function = MEDIA_ENT_F_V4L2_SUBDEV_UNKNOWN;
- 			break;
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index c098f30b07797281576d7ff533cde25309be8b61..b4eaca187d61b2e9f8a4af6ac6ac071145b48df2 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -39,9 +39,6 @@
- 	(UVC_ENTITY_IS_TERM(entity) && \
- 	((entity)->type & 0x8000) == UVC_TERM_OUTPUT)
- 
--#define UVC_EXT_GPIO_UNIT		0x7ffe
--#define UVC_EXT_GPIO_UNIT_ID		0x100
--
- /* ------------------------------------------------------------------------
-  * Driver specific constants.
-  */
-@@ -189,8 +186,7 @@ struct uvc_entity {
- 
- 	/*
- 	 * Entities exposed by the UVC device use IDs 0-255, extra entities
--	 * implemented by the driver (such as the GPIO entity) use IDs 256 and
--	 * up.
-+	 * implemented by the driver use IDs 256 and up.
- 	 */
- 	u16 id;
- 	u16 type;
-@@ -239,13 +235,6 @@ struct uvc_entity {
- 			u8  *bmControls;
- 			u8  *bmControlsType;
- 		} extension;
--
--		struct uvc_gpio {
--			int irq;
--			bool initialized;
--			bool gpio_ready;
--			struct gpio_desc *gpio_privacy;
--		} gpio;
- 	};
- 
- 	u8 bNrInPins;
-@@ -628,7 +617,12 @@ struct uvc_device {
- 		const void *data;
- 	} async_ctrl;
- 
--	struct uvc_gpio gpio_unit;
-+	struct uvc_gpio {
-+		int irq;
-+		bool initialized;
-+		bool gpio_ready;
-+		struct gpio_desc *gpio_privacy;
-+	} gpio_unit;
- };
- 
- struct uvc_fh {
-diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
-index ee19e9f915b8370c333c426dc1ee4202c7b75c5b..6858675ce70dc0a872edd47531682bc415f83bd9 100644
---- a/include/linux/usb/uvc.h
-+++ b/include/linux/usb/uvc.h
-@@ -26,9 +26,6 @@
- #define UVC_GUID_UVC_SELECTOR \
- 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
- 	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02}
--#define UVC_GUID_EXT_GPIO_CONTROLLER \
--	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
--	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
- #define UVC_GUID_MSXU_1_5 \
- 	{0xdc, 0x95, 0x3f, 0x0f, 0x32, 0x26, 0x4e, 0x4c, \
- 	 0x92, 0xc9, 0xa0, 0x47, 0x82, 0xf4, 0x3b, 0xc8}
+[1/1] HID: core: Reject report fields with a size or count of 0
+      https://git.kernel.org/hid/hid/c/bcf266ca2779
 
+Cheers,
 -- 
-2.50.0.727.gbf7dc18ff4-goog
+Benjamin Tissoires <bentiss@kernel.org>
 
 
