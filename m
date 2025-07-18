@@ -1,118 +1,114 @@
-Return-Path: <linux-usb+bounces-25965-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25966-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAE1CB0A9D4
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 19:51:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3656B0AC82
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Jul 2025 01:18:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB7121C823BB
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 17:51:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEDBD5A168F
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 23:18:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1FD2E7BCE;
-	Fri, 18 Jul 2025 17:50:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77844226541;
+	Fri, 18 Jul 2025 23:18:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="tiRNBv1J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="elM+aYqs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sonic307-21.consmr.mail.sg3.yahoo.com (sonic307-21.consmr.mail.sg3.yahoo.com [106.10.241.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B2C2E7189
-	for <linux-usb@vger.kernel.org>; Fri, 18 Jul 2025 17:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=106.10.241.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE805A923;
+	Fri, 18 Jul 2025 23:18:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752861053; cv=none; b=dYmnJzS6ZXp0u31kwBrKh4eYJvS2E3BLmHOgD2w9aINqD0K1QnnMdPrOIk7VU6V7ci/254k28ZRlwSQaHgpHAQMZZf9ArcgP6JkV6Pt42Qs+N9A6gqxDjcf0S7jQhe3TlImCdQBHuRhMhjWyvWUgBPDL5yIZSawAHC0f/O9IWQ4=
+	t=1752880707; cv=none; b=ljwXV9OL95oHxWLFcbazlA1mKgjG3yu9vpO+GYR4AxeCE17oeBD36c9auohYUSE1r5UHKKx6+1Rdr1tyVImyfDN3lJolCgfXv0XFZupmcHvacaDCi8tisA5Bpm1GuEo/iMujS+pkNu8AYrZJEQuYpwcV94SyS1N0PHE6UBmglPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752861053; c=relaxed/simple;
-	bh=pWuTIEPknc1+PSVkaIsrd439yAS0Y7o7RNEQH+z8aB4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=TlFN3a88KOzxPVTpMS8nx8iH/1AOzgo1e0cGUCD+LbSajGaoC35UKvVudz+MA+73EX7b2HJH0QJytIZt1uthGz7hgQz5O2Ye1tYnP/WHrH4Qad2DsWAW+EOG32sBMfFzmjoF1oOUafkuD7dUPqEpz6wlsHX4votnVpo9cC0YOds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=tiRNBv1J; arc=none smtp.client-ip=106.10.241.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1752861044; bh=bg+Sbb0dtEq89GA86fQkxE2YnIn2nupjzJC6MN4vTJU=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=tiRNBv1JQF5IH9zSn95BOmt9WJnHuI4D6qf4Swt8RKSkw7FrQ89nPklcWl/OsK+nsLvRDtDUuc2WsN+ocsl8W6fKinChFJk49qarW+iVY4bwNXIdzPqP3IIJANVEmzRlykPD4jgFVwMH5o/4n7jHEyt7o0B/UYvov3W2618nuVGjaYFWXnmSzmOrY3aW9k8/N7r6foias2xV1j9F1uZlKwXqyqorFhkq+gj0ScewQJjxbcvY+V94G7casi9tSeOddN3oK4VpeDFrLNZlOhNIlKGRPlF3lW+q7Pxcexo2sZDoMGcFTP64DoFPkbDFLGhHLLdSe3YOVWtjA1+76Bu8Uw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1752861044; bh=2TocIBoAxbt1idmCdc3u+6HHXyOoiE6alKkgA66DrRp=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=iJKXGHF1/lOqfsdJCu+fEC9LI7WR8zKWqx68DkZwzJ35kXbcu8Yq/OJ/tnv+Wo1WvQj2gNJ/rM82/PqK0WvvkVRFqrkpil7N4lO4nE2DR4KlG5ozqe7abmF8tv6U1fxZgkXSIOK3V/3HJD3YALJazZBkkmeOSfjK6cCcUZsjmZ2rzQ2vwDLxpW7nO6ChV6fTE3yP1VUTMsbuvWjsk761p8u2lcJxIxp/W4mpYZmxB1liTdf/13w5wzgFsINgt0XpmM/TS/YAbEy1fYdY1JO+jlI41S+4mLMc9D6OLn/gTK1+g408bCKMyAx9v/slk6RxirqtY7cE8s98cs12gS32wQ==
-X-YMail-OSG: 0pmXQ8EVM1lBIoaMX7UT4kMtL4q475ExqYKHwURoZk8arhfayQqbdCLlvjmdWFf
- qmiYY.CN5OsJSZBsJcO1qeErBKjiKxyCukxti680N4uoD.MWB2sSrtig3dDU4TIytK5vjsSyNRsq
- Y5Qe4D2f4yTnK9.sZj92Z2y3d41kpfgCkgB_Had7KxBnF.fnh3MQp0R1Euw29ri_a0KgXgezpMib
- VpcQv.3MbfBm8fWMmih8DPLHQ5cSERw19HtZoKZ28IL0GU9guOurth27kKQa0oeRGGiGpf4CZjim
- I9EbH7cpTahSvtYj6lKhOhXDt8TniSOqst2qHtLrv.2sr4WHMy.TwAS0WbgtfOD_xboOQQAYhnfg
- aE6Ia4WbS8jHR.UMM3SQi4L.tQhg78tecemlsy6gA3EwOVVdtjWNllEvdQZaNfLT87JCImKYrVEM
- lN385RhE0sy_HAXB1V0eCbQcrVuV6pDAUCFWnAhdA53iueqF5VfFID_9R_87d2t7Uqa7t5vv0QTL
- w8en_n21yUlqSiTLShrsK_dqOJ5cWCgU.SojYAKPahiIEanRqW9ZsCmqhMcBiCkN.9Mm5rp77wma
- wq02H0hYLzZ11J8QgY4wYA1btzrVVvomytu46UPiHPVxF1usILiq9xOPehsNnPF8I8c7x3kS0IQd
- XRFyBp4_G713pgeHgr5QdqgsTHLOzu5Ru8C6YHKbVaZjKrXktZcK4JCbYiBX834hJ8j2QF1UdT_U
- 9hZvz2lqM8tWH.j2DIv0Wfbkc7SDEFZEaUAZ8dozLeF6g2ukeEjZgdVIVNORgQXFyszXLqouUrYY
- lZCc97yJ52TaPCNFz2lIGjvUwzSAbiURiRflIUtA8NEDx7feLxeY2bkLyVnYIrCIYWVYTaPqlfB1
- TFKpnE7npE9P2tesNBkcgGYIKqBB0_B8dY9Yzbt_svHzMRP0LTwTQPjzPMRHyDlxnZSPBDFxdy6A
- L9zxtWL7z7G98q2CjoNWWv8EBXs7KpfUMW7p43DxUIw0s9tEoAitkr4qdrWJakX6eOVDrS0dxX7H
- eXWTMkIWSnmgp.5lP5p8N8y9mJWLwKqFordWkxmN0U0sZIenLxQnB2_aak4pXaD.dl.SOl9Ro0qf
- qbM.62_9saN3KUlLjvdaIWQReMFEz1RVrshPVf6pGUWb5GSIhrihK4N527Qws5quqHKvZHZNZh9G
- A52ndlpt57aK5ckcwsjRK5MWIXHNmIAPOZ8XOwbSDsecoDc5XYsIKPvBaQZp38DSuZcTJx1wr_tx
- gboikRXUKdqbaJHE1ROrLMZlKu209z0aHJ0Ykx4g0QHMyypaNW8bs5nZHdqcH24D.DnPEZAD1v6m
- OLzs3X2Ijd_90nQtfzAfIOet5M7In3ZhT5J0K7VW7K8wl.r.HDDk2v6AXdYPKeeySD8OiWCoRmTQ
- heB1zYgmvUJ93RUK4v0CeDUmg4m64iijdkvcfR4s3LNgGoBarBfrOo4CHQV67r04bfvBZhNDCfS6
- ntX3TxwALTZ5C8beEKtPq06dvcwi2alv1YBAz_N1i_DbtuXcF98LR_20bS4YoQejTEPJWHcGzjmt
- tjs8xsRaZC8vFxhOsLjXF9jv2uHKoG64beJsptwm3Hv51ey2TraL0e4TPW5JoOmUAlSu6jbdXTTN
- okyZ5cnI8s7P3Qh39JI39u8rUxHLO9LDNCdRjUlD_q.mWHUgAE4JlA_92N78ypPpPoajZpxUt1Fs
- TH8KUfEqJ5chEnGrvmO4Mv523J.LpMfvIhE87wsVO3KXO3wdLknBUWG.giek5b_MOqqyJcFZMqfW
- kzHtwjvZUtlJcuSJYFDahF4NCwEQC8j6cqTmZ2mTwHDwk_gRJ0QWNbFDvIptTgBzaRp6VKCEvRZl
- 1ff841WGpQ.n78NQ8qgGS0HH.7bSUZFguu4rONvrxpaoOXstvHCPErSN4kR26TQhgaljsTewmQlP
- _Tw5fwjDYISnDcdLdykiBs7c0aJ7U69F4zGTSSWaBXoIJ64D4iwN3e7OoOootbpSiceNAUSgWfHJ
- wOsdH59h5lFtrj33Y580EAwzncEtesJu9HgfXCgf2.pPphzcUOcSN3okTBxaI4dthql4qDJGPozw
- l.5dqj1wBdo_EWV1pgGV9RnD4IajQ.gX0xc6nnZRMler60OWEy3AE3UpcTnmPKDM5Xw2ZacUuWbc
- EPa71wDmRPWLVcL.PRqVOG9klt7wa_KHu0yw7ZsKDO0Dh8cb8lPLSpCC1LsWZGl8vn4RI_2CxIr3
- IfK9VNPBx90xBrxtJen.456m2PeL7N_cP1a9XhE34XzDbLH2KGcncA3Pg62PW2ErViLyGaGmmKIi
- Xt_2Iee07zDqZp_HB1A--
-X-Sonic-MF: <sumanth.gavini@yahoo.com>
-X-Sonic-ID: c11bdc34-8446-4b38-9fdf-805d214b9985
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.sg3.yahoo.com with HTTP; Fri, 18 Jul 2025 17:50:44 +0000
-Received: by hermes--production-ne1-9495dc4d7-psbrp (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 70d73d121d4fbf7a2d2044420498d4fa;
-          Fri, 18 Jul 2025 17:50:41 +0000 (UTC)
-From: Sumanth Gavini <sumanth.gavini@yahoo.com>
-To: gregkh@linuxfoundation.org,
-	crwulff@gmail.com,
-	sumanth.gavini@yahoo.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	david.hunter.linux@gmail.com
-Subject: [PATCH] usb: gadget: f_uac1: replace scnprintf() with sysfs_emit()
-Date: Fri, 18 Jul 2025 12:50:35 -0500
-Message-ID: <20250718175037.299710-1-sumanth.gavini@yahoo.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1752880707; c=relaxed/simple;
+	bh=CZTZ9oUZTzhOy7CxW12Mv61GrBq1wGI/F8Msa4fG+HQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mZxlQr3Zuu6RRWF4Ww3WIGhQyDQhw+NRiH9ix9BNe9CXUpEaAkkp4eIBlGorfbFizPu2nqc8X/rF0i0AIwJL2/TVt6bYPcRN0lDDLB4UXDw8N3w2U/xKVdojiu6KW9cpXXudcjIEsJWOoEvzLpT5Tg90f3My4CzmnEGh1r6QRNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=elM+aYqs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1088CC4CEEB;
+	Fri, 18 Jul 2025 23:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752880706;
+	bh=CZTZ9oUZTzhOy7CxW12Mv61GrBq1wGI/F8Msa4fG+HQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=elM+aYqs9RSlCedFnBwaJyWquK+vFNZkIbVf2sd3KVRV+DKy3Huj9k4EQPP89AjRm
+	 1IUaSBELre8rOu8SpL3hD4Bq9Ja7pEqEkr+Oj9BfxWhy5RXLEKv3HuJg2Nz9F26JQj
+	 IgkW3x8BaM5uyBUPKiJ2HUHadjopPKat/cur32TIL5k0ipEteAGbTGp3jkqteBL+km
+	 eQ8fEjuEElCqWZdx9xS9GYhqS4hJk8AmtkGSDUe4xHfA550ya+URIMcPRiePeIA723
+	 uXXhwYB4OKLmtyCxzjOCgpsR760xHdhg/2REs0KNfozNSnrqfuuMmIJqn9ZKfUA3ZC
+	 ZgHFRmFh9oLmw==
+Date: Fri, 18 Jul 2025 16:18:25 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: John Ernberg <john.ernberg@actia.se>
+Cc: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Ming Lei
+ <ming.lei@canonical.com>, "netdev@vger.kernel.org"
+ <netdev@vger.kernel.org>, "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "stable@vger.kernel.org"
+ <stable@vger.kernel.org>
+Subject: Re: [PATCH] net: usbnet: Avoid potential RCU stall on LINK_CHANGE
+ event
+Message-ID: <20250718161825.65912e37@kernel.org>
+In-Reply-To: <55147f36-822b-4026-a091-33b909d1eea8@actia.se>
+References: <20250710085028.1070922-1-john.ernberg@actia.se>
+	<20250714163505.44876e62@kernel.org>
+	<74a87648-bc02-4edb-9e6a-102cb6621547@actia.se>
+	<20250715065403.641e4bd7@kernel.org>
+	<fbd03180-cca0-4a0f-8fd9-4daf5ff28ff5@actia.se>
+	<20250716143959.683df283@kernel.org>
+	<55147f36-822b-4026-a091-33b909d1eea8@actia.se>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-References: <20250718175037.299710-1-sumanth.gavini.ref@yahoo.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Documentation/filesystems/sysfs.rst mentions that show() should only
-use sysfs_emit() or sysfs_emit_at() when formating the value to be
-returned to user space. So replace scnprintf() with sysfs_emit().
+On Fri, 18 Jul 2025 09:07:26 +0000 John Ernberg wrote:
+> > Thanks for the analysis, I think I may have misread the code.
+> > What I was saying is that we are restoring the carrier while
+> > we are still processing the previous carrier off event in
+> > the workqueue. My thinking was that if we deferred the
+> > netif_carrier_on() to the workqueue this race couldn't happen.
+> > 
+> > usbnet_bh() already checks netif_carrier_ok() - we're kinda duplicating
+> > the carrier state with this RX_PAUSED workaround.
+> > 
+> > I don't feel strongly about this, but deferring the carrier_on()
+> > the the workqueue would be a cleaner solution IMO.
+> >   
+> 
+> I've been thinking about this idea, but I'm concerned for the opposite 
+> direction. I cannot think of a way to fully guarantee that the carrier 
+> isn't turned on again incorrectly if an off gets queued.
+> 
+> The most I came up with was adding an extra flag bit to set carrier on, 
+> and then test_and_clear_bit() it in the __handle_link_change() function.
+> And also clear_bit() in the usbnet_link_change() function if an off 
+> arrives. I cannot convince myself that there isn't a way for that to go 
+> sideways. But perhaps that would be robust enough?
 
-Signed-off-by: Sumanth Gavini <sumanth.gavini@yahoo.com>
----
- drivers/usb/gadget/function/f_uac1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I think it should be robust enough.. Unless my grep skills are failing
+me - no drivers which call usbnet_link_change() twiddle the link state
+directly.
 
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index c87e74afc881..9da9fb4e1239 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -1634,7 +1634,7 @@ static ssize_t f_uac1_opts_##name##_show(struct config_item *item,	\
- 	int result;							\
- 									\
- 	mutex_lock(&opts->lock);					\
--	result = scnprintf(page, sizeof(opts->name), "%s", opts->name);	\
-+	result = sysfs_emit(page, "%s", opts->name);        	        \
- 	mutex_unlock(&opts->lock);					\
- 									\
- 	return result;							\
--- 
-2.43.0
+Give it a go, if you think your initial patch is cleaner -- it's fine.
 
+> I've also considered the possibility of just not re-submitting the INTR 
+> poll URB until the last one was fully processed when handling a link 
+> change. But that might cause havoc with ASIX and Sierra devices as they 
+> are calling usbnet_link_change() in other ways than through the 
+> .status-callback. I don't have any of these devices so I cannot test 
+> them for regressions. So this path feels quite dangerous.
+> With a sub-driver property to enable this behavior it might work out?
+
+Yeah, that seems more involved.
 
