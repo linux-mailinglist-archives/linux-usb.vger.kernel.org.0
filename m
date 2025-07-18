@@ -1,187 +1,170 @@
-Return-Path: <linux-usb+bounces-25957-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25958-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8D8CB0A534
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 15:31:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ACF8B0A794
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 17:36:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBFFE1674DF
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 13:31:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D0EF7BE72A
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 15:33:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20D9642AA5;
-	Fri, 18 Jul 2025 13:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F35C2E03FD;
+	Fri, 18 Jul 2025 15:29:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="R6Wjrtq3"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eTPUcOZ3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1191AAC9
-	for <linux-usb@vger.kernel.org>; Fri, 18 Jul 2025 13:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21EA2DE6E7
+	for <linux-usb@vger.kernel.org>; Fri, 18 Jul 2025 15:29:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752845454; cv=none; b=BOrLeWP9YuY+MG/PtsvOUKqFTpqZeLBnyS/qwzfVnSEklOzwLpjz+OGDESmgUml5gM5iTAma4L4dbfxNWo43gfQ5cE5to1hrILIUw5DMW9qZHyAxaTZmdthdR39X3pa2fWN3RZRr/hnwwcCeon7kYsszQyD/9b/gbFFE8S96LoQ=
+	t=1752852556; cv=none; b=XraLSjx+IB2bzYnZCsMrEo6j5wTh7oJL1f7iBjKckOQ6vf4sSN5kKFm2hWYuJL3fUvQv408CYw7WqjQFwnoXzTPBrekCXtw6TU7AG0ijx3pFATAG9Sdh0+MlAGmaR/1wC503HwG6Qy/Vvr7kiesVzKdLwZrr61Zb8tUifB+HDiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752845454; c=relaxed/simple;
-	bh=6ZpX7X0rmfiU2fjYz8EZJN4uBHvnNI+sQ4nf1kqeno4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DrJALz+txUC0+CP/4seBjgmNCD/1aqullXPvz3cgDJXFesk94GOwTEgfl+9FOi+CJTJY6ASKcqddCM7RLjpdPa/Kfol2Z0jyQHYZeE+1AEi+x/YD2eMlui/CbKT2LURry+KRdOw6rLWDjFGVTO10195gOeq6JFfX1FYLdpbLdYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=R6Wjrtq3; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7e33fa45065so171310785a.1
-        for <linux-usb@vger.kernel.org>; Fri, 18 Jul 2025 06:30:52 -0700 (PDT)
+	s=arc-20240116; t=1752852556; c=relaxed/simple;
+	bh=uxVn8z5vNh8b0EqiZQiCnQQE1xnoXDxMYQl0MrMLYTg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=usfbTHe03HozXxdg+V+WyOqDlBCtyVLgsXPuWz7t4/tYniAx6IfHGe+a0iAR6sJYW3Ol7/XBlCCdIRViMfvbUD1VPg2h89xEiEDLluqQGzt11LCfJvAexivTXp6ntclNHfWLERV+y/NiRG4fOsNckxaaV6YmGOS1VFXZvI+CxuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=eTPUcOZ3; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-33097e1133fso20588691fa.1
+        for <linux-usb@vger.kernel.org>; Fri, 18 Jul 2025 08:29:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1752845452; x=1753450252; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1JXQOBPOpeniDtauUd87p3H/3Obm46YXyflLj8QMwrY=;
-        b=R6Wjrtq3172Qa0LQNR5CZ9UbfjgfB9OL8XBUtuLwiGn3TG+RvUszoBJ8F77k8WFZ1S
-         RLuo9DfeiGblfLN+Kb1oNwlZYzbnLiCC0exJsqBV4oWAUeAmgKMdP11uOZDv3yTW1Hx4
-         Rj3BVvIMhcQZcIKbuYmZB/MmtshqgRsYDFeWFB4OdrUVWL6j7d6sHOfThgU3nWNxQUu/
-         +NLdkCxtszTsItKf7wwAR6EbuWRQWGeWw4Jxq5vMXhEtNDnBPY8Loac9HWBod1S3bhol
-         OQ6BF62iv/xtj9Inrxb8YL4TiQoQyH88C7cZy3NnXqYi2g4KbxscXM7b17ryi1JQ6cZX
-         nisg==
+        d=chromium.org; s=google; t=1752852553; x=1753457353; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rpDHWMEfaZbT1j+vHvp6fYznBSkyjPMp+OhgKVI7GZI=;
+        b=eTPUcOZ3ciPt0mrZ413bHiuaJmr3ydTd+HzDitI1AKvXznxqPY06Lc0os1FlBofQzm
+         VqJrsipXemmiSDsKQP3xIZMlwIm7Q+p6kbKRFZ5+dNlCxAOX2Pi7AKT6IHhhSO13uAkL
+         Hl5aTUvzRQqwl7ib04IjVMZ1fWTbyS27RCO9w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752845452; x=1753450252;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1JXQOBPOpeniDtauUd87p3H/3Obm46YXyflLj8QMwrY=;
-        b=OLHhqEJb3gLG7jxyJj7MQVwzTTLuZQKBrW2L/V6q6X7ei/+uXnlvl1U45LDdlVMNUN
-         u7o6q72+LQmCWNM8gbmW5VfeP0hDTY1tHpnA2lsmw3NodqKWQESV3G/Yep1tWgWLqpLR
-         Va+PHW3A1PxahTHTn1lZNHiTyJaN1xdssmK+1FSVSATJVFWW99TPu7iSg7qE85uEgo1o
-         GEAeQa2Jn1WMZGvseObeaMPNsamAwZytm3Mso5YMre3t0lDg031p2o9bBmIFsiHVbD8p
-         kC4y4vC0hTeML9LcOYLErFX64e/zKgfeKvIz2QS4d59YUY7w9eWKpZH8FhM68Ez7DQl/
-         j2Dg==
-X-Forwarded-Encrypted: i=1; AJvYcCUOyuyuLNPjFgZZfbv0rTnp5b75G3xgsEwLF0AUG7hQYPesUQxmwy63zAaJMc6PpdmUShm7IsPnt8k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAciIzH/NcOWNJ7cBATflbLAMZ0fHftpT+8ZLF5kPZmvRNBQwQ
-	/8OSVn1MWBBLC1zggFJXwSZH0bMmjiTwWMlHIYoMXjW1LSf+wCc2O5q882WZ7gBFiw==
-X-Gm-Gg: ASbGncvq9p2jRCmj5qvPDB1rJdkTnKAmmYaLfzWgXCFENkyrMDBr8gHaEOgJqYuK91Y
-	r0UxDTkPs7BLDcud0ew3RcWYcf2PLbNp65CpWw5t9cULQmqg+oLjpK2dLYNFT0SE/vPprzg3KRg
-	dE2XL2EKx+66fCxYwPE9smS9egAY67R8JetBf9WLSbZg0rJH9g679JiV9PiEiaG1ohHC2TQz0EQ
-	6oBvuIXImaXj7SgExqjYFYlqLS4A13RqNM7FvvVnaqXwva15jjZcdy4VEt5nmCBHeefiehLGEGC
-	i/ByU8v/6mNdDUNYOyZCAw2Gy/w6XZ2+JI+tIkmOBt0V3GAgLTCcpJcMJTbFQdusxV9dYe0bpyO
-	AlmVwVxLCKl/2OewXoj6nhQ4=
-X-Google-Smtp-Source: AGHT+IG9DCGlow8RUyjnM26wOo8WpDpnVWbEe+qr/BLBrMXZTf0h337i7WKbNfa0BnE1tuot1ezvig==
-X-Received: by 2002:a05:620a:1a23:b0:7e3:3010:1fbe with SMTP id af79cd13be357-7e342a602acmr1393545385a.2.1752845451676;
-        Fri, 18 Jul 2025 06:30:51 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::317e])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e356b28eacsm84372285a.15.2025.07.18.06.30.50
+        d=1e100.net; s=20230601; t=1752852553; x=1753457353;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rpDHWMEfaZbT1j+vHvp6fYznBSkyjPMp+OhgKVI7GZI=;
+        b=tbkpKxM+5A/4WR4G2JiQmfRSYthYaSnS1nCej7E3vHi8YFYag+Anm8HtvDgKIVSwnD
+         HpWy1Ris60tJs/YWLQOnPWUDtmipyC6RoICsziYToxA4493MBN7/3a5PGATYZpabkenD
+         j3Y3IW9FReMNgw4haqj+/zlHzzQcxWQSs/8VN/q3vehqbpdiakKutn8f9APfm6Uzlpvw
+         Cl8Mgl4ACrkpxqxD1H5SNfCqffgcyEl94RNwQndclFAduGhZxyOxNIOUE2gLhyH4yE09
+         4Y7ywQHZ+G84YBpfO4Di1L7cOytWb0pK3U7cRoEfqfplir6icBsqgXlR3S5ZqUp5VMNF
+         NjUA==
+X-Forwarded-Encrypted: i=1; AJvYcCX3UEY06bvi7sg6w1CPAKDj/Cul0XmC0bj/AgyU8gySglF5u78d9/yDCgmQ4geIzTqZr6q3N3UoZsw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzSh5ffkuah+pXTgL57IWLibsiPapaBzHbWvse0JhMUcaWh3p5
+	ivFLnZgCnA2iU31CP13iD4WtiMmV6Qgf7zfyfdb3EpvUvnj54+P9DpzclubeKRW2Tg==
+X-Gm-Gg: ASbGncvLpiTZwl+FHCP/EWffm7ZY3HoKFcGCJG/MYxfaSZArenwNgpwzZh1r4EA7S79
+	s/3b0yvZ5/FfSEbee8ZjHTjvBa5SRdK5YfoGG6WqgT8w1hHZ55ckgYroUa9/OXWUUNIe4jLa4le
+	vQh0AHv3JIA5kOviiI5NW9O4xphAHnLWRKMCG2aI3jRKuqIxn0Bw6mRRHe5r6aPlK8qicLqzBZD
+	dM3Wzs/ukZjoSyo47xMLxNJVKj9jsftx5kc0eywoJE+Zj8OtvYUxu0mJhouSUUFPGb9Fs+E/PDZ
+	Q9+DVDqsEvrsZGgSb7A3hOvHl2cylrx80LDC5wF5IuOISkjziil8aS8hvZ2hSfmv/nI0cT/3n8O
+	IFVhO/7G0J4NjrAvm9EHasyC1ynhgbu88hFlOPtRv4S7+rPTaFj/vW6XRB81HsLhJWnEjQPNanw
+	+zbQ==
+X-Google-Smtp-Source: AGHT+IHCWWFRndQq5TQ10sqZoNxAVRRJdBRC8Iz2chXxrbesJiaBnj6t6V30lxJSk7p201wqjG9aTA==
+X-Received: by 2002:a2e:be12:0:b0:32a:c14b:7db9 with SMTP id 38308e7fff4ca-330a7ae47d7mr9316611fa.7.1752852552744;
+        Fri, 18 Jul 2025 08:29:12 -0700 (PDT)
+Received: from ribalda.c.googlers.com (166.141.88.34.bc.googleusercontent.com. [34.88.141.166])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-330a91d9d6dsm2268601fa.83.2025.07.18.08.29.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Jul 2025 06:30:51 -0700 (PDT)
-Date: Fri, 18 Jul 2025 09:30:47 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: cen zhang <zzzccc427@gmail.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
-	zhenghaoran154@gmail.com, r33s3n6@gmail.com,
-	linux-usb@vger.kernel.org, gality365@gmail.com
-Subject: Re: [BUG] KASAN: slab-use-after-free Read in xhci_hub_control
-Message-ID: <a78536aa-ca01-47e7-a1c5-6ac3113b0dd5@rowland.harvard.edu>
-References: <CAFRLqsUZTDm0KAfX_qziTrn6E3+sRksF5ormxhHConqTKWvHBQ@mail.gmail.com>
- <8033fcb7-e97d-4b6d-a3fb-a9a49f8b69f2@rowland.harvard.edu>
- <CAFRLqsXoECbj6ffSvO9FhB2NAPE73j88DH7ES_e4vQYv1j4HeQ@mail.gmail.com>
+        Fri, 18 Jul 2025 08:29:12 -0700 (PDT)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v5 0/5] media: uvcvideo: Implement the Privacy GPIO as a
+ evdev
+Date: Fri, 18 Jul 2025 15:29:09 +0000
+Message-Id: <20250718-uvc-subdev-v5-0-a5869b071b0d@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFRLqsXoECbj6ffSvO9FhB2NAPE73j88DH7ES_e4vQYv1j4HeQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEVoemgC/23MSw6CMBSF4a2Yjq25tw8ojtyHcVDpRTpQTCuNx
+ rB3C4kRDMNzku9/s0jBU2T7zZsFSj767paH3m5Y3drbhbh3eTMBQiFI4H2qeezPjhI3VaNUUVq
+ As2YZ3AM1/jnFjqe8Wx8fXXhN7YTj+83gPJOQA7eFkRJrcq4Uh7oN3dX3110XLmwsJfHTCGahR
+ dZGO2NBo5VOrmg50ygWWmYNZHUpnUKLZkWrmRZ6oVXWGgkU6Kpq0P7pYRg+AhwQAmEBAAA=
+X-Change-ID: 20241030-uvc-subdev-89f4467a00b5
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Hans de Goede <hansg@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ Yunke Cao <yunkec@chromium.org>, linux-gpio@vger.kernel.org, 
+ linux-usb@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>, 
+ Hans Verkuil <hverkuil@kernel.org>, Hans de Goede <hansg@kernel.org>
+X-Mailer: b4 0.14.2
 
-On Fri, Jul 18, 2025 at 10:40:47AM +0800, cen zhang wrote:
-> Hi Greg,
-> 
-> Thank you for your guidance.
-> 
-> I've collected more specific information about the test environment
-> and the reproducer's behavior, which I believe provides a clearer
-> picture of the issue.
-> 
-> The C reproducer is hardcoded to target /dev/bus/usb/002/001, which
-> corresponds to the XHCI root hub on the USB 3.0 (5000M) bus.
-> 
-> Below is the cleaned-up version of the C reproducer used to trigger the issue:
-> 
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <string.h>
-> #include <fcntl.h>
-> #include <unistd.h>
-> #include <dirent.h>
-> #include <errno.h>
-> #include <sys/ioctl.h>
-> #include <linux/usbdevice_fs.h>
-> #include <linux/usb/ch9.h>
-> 
-> 
-> int main(void)
-> {
->     int fd = open("/dev/bus/usb/002/001", O_RDWR);
->     if (fd < 0) {
->         fprintf(stderr, "Could not find or open any USB hub device.
-> Aborting.\n");
->         return EXIT_FAILURE;
->     }
->     printf("Successfully opened a hub device (fd=%d).\n", fd);
-> 
->     struct usb_ctrlrequest ctrl;
->     struct usbdevfs_urb urb;
-> 
->     memset(&ctrl, 0, sizeof(ctrl));
->     memset(&urb, 0, sizeof(urb));
-> 
->     ctrl.bRequestType = USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_OTHER; // 0xa3
->     ctrl.bRequest = 0;
->     ctrl.wValue = 0;
->     ctrl.wIndex = 0x8001; // This unusual value is preserved as it is
-> likely key to the bug
->     ctrl.wLength = 0;
-> 
->     urb.type = USBDEVFS_URB_TYPE_CONTROL; // Value is 2
->     urb.endpoint = 0; // Control requests are always on endpoint 0
->     urb.buffer = &ctrl; // Point the URB's data buffer to our control request
->     urb.buffer_length = sizeof(ctrl); // The size of the control request data
-> 
->     printf("Submitting control URB to the hub...\n");
-> 
->     // Submit the URB via ioctl. The magic number 0x8038550a is
-> USBDEVFS_SUBMITURB.
->     int ret = ioctl(fd, USBDEVFS_SUBMITURB, &urb);
->     if (ret < 0) {
->         perror("ioctl(USBDEVFS_SUBMITURB) failed");
->     } else {
->         printf("ioctl call succeeded.\n");
->     }
-> 
->     close(fd);
->     return 0;
-> }
+Some notebooks have a button to disable the camera (not to be mistaken
+with the mechanical cover). This is a standard GPIO linked to the
+camera via the ACPI table.
 
-That helps a lot.  It shows that there is indeed a bug in the xhci-hcd 
-driver.  And yes, the peculiar wIndex value is the key.  The patch below 
-ought to fix the bug.
+4 years ago we added support for this button in UVC via the Privacy control.
+This has three issues:
+- If the camera has its own privacy control, it will be masked.
+- We need to power-up the camera to read the privacy control gpio.
+- Other drivers have not followed this approach and have used evdev.
 
-Alan Stern
+We fixed the power-up isses with "granular power saving", but the other
+issues are still open.
 
+This patchset implements the Privacy GPIO as a evdev.
 
-Index: usb-devel/drivers/usb/host/xhci-hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/host/xhci-hub.c
-+++ usb-devel/drivers/usb/host/xhci-hub.c
-@@ -1259,7 +1259,7 @@ int xhci_hub_control(struct usb_hcd *hcd
- 		spin_unlock_irqrestore(&xhci->lock, flags);
- 		return retval;
- 	case GetPortStatus:
--		if (!portnum1 || portnum1 > max_ports)
-+		if (!wIndex || wIndex > max_ports)
- 			goto error;
- 
- 		wIndex--;
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Changes in v5:
+- Drop UVC_GUID_EXT_GPIO_CONTROLLER
+- Remove merged patches and patches that will conflict with uvc-rotation
+- Rebase
+- Link to v4: https://lore.kernel.org/r/20241125-uvc-subdev-v4-0-51e040599f1a@chromium.org
+
+Changes in v4:
+- Remove gpio entity, it is not needed.
+- Use unit->gpio.irq in free_irq to make smatch happy.
+- Link to v3: https://lore.kernel.org/r/20241112-uvc-subdev-v3-0-0ea573d41a18@chromium.org
+
+Changes in v3:
+- CodeStyle (Thanks Sakari)
+- Re-implement as input device
+- Make the code depend on UVC_INPUT_EVDEV
+- Link to v2: https://lore.kernel.org/r/20241108-uvc-subdev-v2-0-85d8a051a3d3@chromium.org
+
+Changes in v2:
+- Rebase on top of https://patchwork.linuxtv.org/project/linux-media/patch/20241106-uvc-crashrmmod-v6-1-fbf9781c6e83@chromium.org/
+- Create uvc_gpio_cleanup and uvc_gpio_deinit
+- Refactor quirk: do not disable irq
+- Change define number for MEDIA_ENT_F_GPIO
+- Link to v1: https://lore.kernel.org/r/20241031-uvc-subdev-v1-0-a68331cedd72@chromium.org
+
+---
+Ricardo Ribalda (5):
+      media: uvcvideo: Factor out gpio functions to its own file
+      media: uvcvideo: Re-implement privacy GPIO as an input device
+      media: uvcvideo: Introduce UVC_QUIRK_PRIVACY_DURING_STREAM
+      media: uvcvideo: Make gpio_unit entity-less
+      media: uvcvideo: Remove UVC_EXT_GPIO entity
+
+ drivers/media/usb/uvc/Kconfig      |   2 +-
+ drivers/media/usb/uvc/Makefile     |   3 +
+ drivers/media/usb/uvc/uvc_ctrl.c   |  20 ------
+ drivers/media/usb/uvc/uvc_driver.c | 135 ++---------------------------------
+ drivers/media/usb/uvc/uvc_entity.c |   1 -
+ drivers/media/usb/uvc/uvc_gpio.c   | 139 +++++++++++++++++++++++++++++++++++++
+ drivers/media/usb/uvc/uvc_status.c |  13 +++-
+ drivers/media/usb/uvc/uvc_video.c  |   4 ++
+ drivers/media/usb/uvc/uvcvideo.h   |  38 ++++++----
+ include/linux/usb/uvc.h            |   3 -
+ 10 files changed, 185 insertions(+), 173 deletions(-)
+---
+base-commit: d968e50b5c26642754492dea23cbd3592bde62d8
+change-id: 20241030-uvc-subdev-89f4467a00b5
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
 
 
