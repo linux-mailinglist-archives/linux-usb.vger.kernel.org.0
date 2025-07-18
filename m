@@ -1,140 +1,213 @@
-Return-Path: <linux-usb+bounces-25951-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25952-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72EB2B09BAC
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 08:48:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5681CB09DC5
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 10:22:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C179A651E1
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 06:47:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9002189DC05
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 08:23:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAAB1F3B97;
-	Fri, 18 Jul 2025 06:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C530220F34;
+	Fri, 18 Jul 2025 08:22:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="p+L6hJT/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="crPtd08b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23BC4689;
-	Fri, 18 Jul 2025 06:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF741CA84
+	for <linux-usb@vger.kernel.org>; Fri, 18 Jul 2025 08:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752821289; cv=none; b=S/8lXywhn4LOsqa7NjZRL+hKZHulYK+TFf82Uvf3brmtJ75ufP7dfAJcqw6ayIQ9LgDiIFHAPSh8kjsGAAnoA/8NcmOHmJK8T+EFASRbvlKRJvODxBN2CSNi5eprP/hmcr8Qv6YD85cEXGCi+wPepa/D+EXXQIL0KMAk32cAuk0=
+	t=1752826963; cv=none; b=H2SvNMzQzx+DvopvIjPJmenMdVQHS70lhXLisn//B3nx5xPDq2tHze5QZ9sJUeI4zh0Nj1B6Q0RL4Rfp8KRKpppo+uiMO53Jn4VmkSenb0QltBkQvEqnkD8fP9Y1S88avA/WtWYKtpwHYV6ZMCh7D53J1AqhYYQFoZrkR2FJMso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752821289; c=relaxed/simple;
-	bh=oGFDBkGGxu3hlekar5YeTUojSFRxuWUWJ1VkXJOSIV4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G0QyIYqTeMFVFVXSrsA4OERhodrWsCFJMMn0KBsW/6D4Ib0EXbvfvHKHnrtGkRuM7jT/F3S2zsX9J6qe5eaX43M4tgd5gH4KwXxNpfsmwSvskbe9iD3kjxUBN+0zAn5kK6sXmS1OLy7CbXumga362OCqWeJBlfux4ZvVlvHQLC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=p+L6hJT/; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1752821285;
-	bh=oGFDBkGGxu3hlekar5YeTUojSFRxuWUWJ1VkXJOSIV4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=p+L6hJT/tncrbRQYybZA6C6WADg7SSOM8hQbd/wx56epq6R82LEveanN2UnvuMTZb
-	 wbch8JREN27RZeypba46TFSQIWkacJjzrfE6eAwxxBJZ9GPA6dxd4mz+KVnBEdNXmN
-	 nfWlBrIv8fRk/nIYmjsIYk8Bcu/ae/mBwiXjcl4gR74JzcKzxYaqfk+odHczsEGiOL
-	 2hVT313cUnLYnuv+5m+YVV0DRqz0AtR3iPigc17RjK4zhNu+WtzCrLHyXg4YtflUOf
-	 Vth1AAewIwEFWfzr0HIl7JX0iqrnP1SQ8B+PRye6N9ddd7Zm3EsKZez8JmKLvfA9Zz
-	 zF8uIOXBURi/Q==
-Received: from [192.168.1.90] (unknown [82.79.138.60])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: cristicc)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 87D3917E1439;
-	Fri, 18 Jul 2025 08:48:05 +0200 (CEST)
-Message-ID: <044fd9e0-b506-4b79-a708-04e40fd23935@collabora.com>
-Date: Fri, 18 Jul 2025 09:48:05 +0300
+	s=arc-20240116; t=1752826963; c=relaxed/simple;
+	bh=EvMSNzajSi6O5WpCKkZyZCpUnUoeyMLx3daTKzl4MIw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=OuOHvUZXq9RSjUsJphrI10jp6CUx2DIs8D/xqSM1Y37a+yODTd7QSfpiGH9+wSFHf+/QhB/wr4T1WAfNPI6IISMoO1Q1Zq0gp6vbnojyVDGBStHrHbNlroHBHzByFvrrnpQqUG26PhBW4YSR1ErltZyXsAKmxKQyKo43cfxcaYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=crPtd08b; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752826961; x=1784362961;
+  h=date:from:to:cc:subject:message-id;
+  bh=EvMSNzajSi6O5WpCKkZyZCpUnUoeyMLx3daTKzl4MIw=;
+  b=crPtd08bBZojQjyw4brBwfT9DY3A334H6aC+ygJajblll7PnnlzX+U7v
+   sccd1Lf5reVtgmLX7CWvBwBxUcIYhyfCUp888c8UWmO5pVDXTxuFxgHCb
+   opzoUQzeirwL74fal1YtVa27PeGlOBm0XG41iyoiuM9nqej/f2uifKHbb
+   RHvTSeQCdYMYDtMY2OxI/yNvP2xCKYtZBMV77Nx896lKsciCebjfuyzYS
+   dfUULLxB/JYMbmH9BvPK67g7b3e7C8koyY3oZ5rwplGRr2As9CcqY3hLI
+   y1cw1QYF9sH2Nx85RM93r67E9RtRG5cOCqmdSTQYAJirdTy2w4bT0ch99
+   g==;
+X-CSE-ConnectionGUID: 84UuzjUORluCLDuMeTDUkA==
+X-CSE-MsgGUID: 7Afiz1C1QMCoB9tKxsec4g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11495"; a="58780372"
+X-IronPort-AV: E=Sophos;i="6.16,321,1744095600"; 
+   d="scan'208";a="58780372"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2025 01:22:38 -0700
+X-CSE-ConnectionGUID: h3jD88BsQ9uSujfMVaSrmw==
+X-CSE-MsgGUID: UsK6IzPgQ4qnThDb4CF8Dg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,321,1744095600"; 
+   d="scan'208";a="158082452"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 18 Jul 2025 01:22:38 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ucgMV-000ERH-2L;
+	Fri, 18 Jul 2025 08:22:35 +0000
+Date: Fri, 18 Jul 2025 16:21:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ f72b9aa821a2bfe4b6dfec4be19f264d0673b008
+Message-ID: <202507181646.W1qQzaNQ-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/9] usb: vhci-hcd: Fix space, brace, alignment and line
- length issues
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Valentina Manea <valentina.manea.m@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
- "Brian G. Merrell" <bgmerrell@novell.com>, kernel@collabora.com,
- Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250717-vhci-hcd-suspend-fix-v1-0-2b000cd05952@collabora.com>
- <20250717-vhci-hcd-suspend-fix-v1-2-2b000cd05952@collabora.com>
- <2025071706-overarch-flaky-035b@gregkh>
- <3a1c8ed6-c123-4a11-b2aa-405babfa2948@collabora.com>
- <2025071837-recoil-fifteen-a977@gregkh>
-Content-Language: en-US
-From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <2025071837-recoil-fifteen-a977@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 7/18/25 9:26 AM, Greg Kroah-Hartman wrote:
-> On Thu, Jul 17, 2025 at 08:26:54PM +0300, Cristian Ciocaltea wrote:
->> On 7/17/25 7:18 PM, Greg Kroah-Hartman wrote:
->>> On Thu, Jul 17, 2025 at 06:54:51PM +0300, Cristian Ciocaltea wrote:
->>>> Perform a first round of coding style cleanup:
->>>>
->>>> * Add new lines after several statement blocks
->>>> * Avoid line wrapping when 100-column width is not exceeded and it helps
->>>>   improve code readability
->>>> * Ensure lines do not end with '('
->>>> * Drop superfluous spaces or empty lines
->>>> * Add spaces where necessary, e.g. around operators
->>>> * Add braces for single if-statements when at least one branch of the
->>>>   conditional requires them
->>>>
->>>> This helps getting rid of the following checkpatch complaints:
->>>>
->>>>   CHECK: Lines should not end with a '('
->>>>   CHECK: braces {} should be used on all arms of this statement
->>>>   CHECK: Unbalanced braces around else statement
->>>>   CHECK: Blank lines aren't necessary before a close brace '}'
->>>>   CHECK: Unnecessary parentheses around
->>>>   CHECK: Alignment should match open parenthesis
->>>>   CHECK: No space is necessary after a cast
->>>>   CHECK: spaces preferred around that '-' (ctx:VxV)
->>>>   CHECK: spaces preferred around that '+' (ctx:VxV)
->>>>
->>>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->>>
->>> Coding style cleanups need to be "one patch per logical change", not
->>> "fix them all in one patch!" type of thing.
->>>
->>> Sorry, but can you break this out better?
->>
->> I could split this into something like:
->>
->> - Fix spaces & blank lines
->>   CHECK: Blank lines aren't necessary before a close brace '}'
->>   CHECK: No space is necessary after a cast
->>   CHECK: spaces preferred around that '-' (ctx:VxV)
->>   CHECK: spaces preferred around that '+' (ctx:VxV)
->>
->> - Fix braces
->>   CHECK: braces {} should be used on all arms of this statement
->>   CHECK: Unbalanced braces around else statement
->>
->> - Fix alignment & line length
->>   CHECK: Lines should not end with a '('
->>   CHECK: Alignment should match open parenthesis
->>   
->> - Misc?!
->>   CHECK: Unnecessary parentheses around
-> 
-> Why not one per CHECK: type?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: f72b9aa821a2bfe4b6dfec4be19f264d0673b008  usb: xhci: Set avg_trb_len = 8 for EP0 during Address Device Command
 
-I've been trying to squash all formatting changes which are kind of similar,
-but sure I can handle them separately.
+elapsed time: 1396m
 
-Thanks,
-Cristian
+configs tested: 120
+configs skipped: 3
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    gcc-15.1.0
+arc                   randconfig-001-20250717    gcc-8.5.0
+arc                   randconfig-002-20250717    gcc-15.1.0
+arc                    vdk_hs38_smp_defconfig    gcc-15.1.0
+arm                              allmodconfig    gcc-15.1.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    gcc-15.1.0
+arm                         lpc18xx_defconfig    clang-21
+arm                   randconfig-001-20250717    clang-21
+arm                   randconfig-002-20250717    gcc-8.5.0
+arm                   randconfig-003-20250717    gcc-8.5.0
+arm                   randconfig-004-20250717    clang-21
+arm                       spear13xx_defconfig    gcc-15.1.0
+arm                           sunxi_defconfig    gcc-15.1.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-15.1.0
+arm64                 randconfig-001-20250717    clang-18
+arm64                 randconfig-002-20250717    clang-18
+arm64                 randconfig-003-20250717    gcc-10.5.0
+arm64                 randconfig-004-20250717    clang-21
+csky                              allnoconfig    gcc-15.1.0
+csky                  randconfig-001-20250717    gcc-15.1.0
+csky                  randconfig-002-20250717    gcc-12.4.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250717    clang-20
+hexagon               randconfig-002-20250717    clang-19
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250717    gcc-12
+i386        buildonly-randconfig-002-20250717    gcc-12
+i386        buildonly-randconfig-003-20250717    clang-20
+i386        buildonly-randconfig-004-20250717    clang-20
+i386        buildonly-randconfig-005-20250717    clang-20
+i386        buildonly-randconfig-006-20250717    gcc-12
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-21
+loongarch             randconfig-001-20250717    gcc-15.1.0
+loongarch             randconfig-002-20250717    clang-21
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+m68k                            q40_defconfig    gcc-15.1.0
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                          eyeq6_defconfig    clang-21
+nios2                             allnoconfig    gcc-14.2.0
+nios2                               defconfig    gcc-14.2.0
+nios2                 randconfig-001-20250717    gcc-8.5.0
+nios2                 randconfig-002-20250717    gcc-9.3.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250717    gcc-9.3.0
+parisc                randconfig-002-20250717    gcc-9.3.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    clang-21
+powerpc               randconfig-001-20250717    clang-21
+powerpc               randconfig-002-20250717    gcc-13.4.0
+powerpc               randconfig-003-20250717    clang-21
+powerpc64             randconfig-001-20250717    clang-21
+powerpc64             randconfig-002-20250717    clang-18
+powerpc64             randconfig-003-20250717    clang-21
+riscv                            alldefconfig    gcc-15.1.0
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                 randconfig-001-20250717    gcc-14.3.0
+riscv                 randconfig-002-20250717    clang-21
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-15.1.0
+s390                          debug_defconfig    gcc-15.1.0
+s390                  randconfig-001-20250717    gcc-8.5.0
+s390                  randconfig-002-20250717    gcc-9.3.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                    randconfig-001-20250717    gcc-14.3.0
+sh                    randconfig-002-20250717    gcc-9.3.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20250717    gcc-14.3.0
+sparc                 randconfig-002-20250717    gcc-8.5.0
+sparc64               randconfig-001-20250717    gcc-12.4.0
+sparc64               randconfig-002-20250717    clang-21
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250717    gcc-12
+um                    randconfig-002-20250717    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250717    clang-20
+x86_64      buildonly-randconfig-002-20250717    clang-20
+x86_64      buildonly-randconfig-003-20250717    clang-20
+x86_64      buildonly-randconfig-004-20250717    gcc-12
+x86_64      buildonly-randconfig-005-20250717    gcc-12
+x86_64      buildonly-randconfig-006-20250717    clang-20
+x86_64                              defconfig    gcc-11
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20250717    gcc-13.4.0
+xtensa                randconfig-002-20250717    gcc-9.3.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
