@@ -1,55 +1,55 @@
-Return-Path: <linux-usb+bounces-25950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF842B09B98
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 08:42:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72EB2B09BAC
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 08:48:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B5181C43FF1
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 06:42:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C179A651E1
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 06:47:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E1CE20468C;
-	Fri, 18 Jul 2025 06:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAAB1F3B97;
+	Fri, 18 Jul 2025 06:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="kw+5hiIb"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="p+L6hJT/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9791EDA03;
-	Fri, 18 Jul 2025 06:41:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23BC4689;
+	Fri, 18 Jul 2025 06:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752820910; cv=none; b=A2nT4fxELXz9v3cqjcC2lahTDu583E3EwWqvaobhL/7SGxq50TFfiLvYSdMcIB34Bpsqz/BTWato8x3SNvYXPOgZJJV4qNCf7XfnYm/1VXud5FPtR4XYScP7aD8lZxdRRGmPN2ni0Vm0jhuM6AlmDfaPGJYKY4Y3B/NZxqnyJfE=
+	t=1752821289; cv=none; b=S/8lXywhn4LOsqa7NjZRL+hKZHulYK+TFf82Uvf3brmtJ75ufP7dfAJcqw6ayIQ9LgDiIFHAPSh8kjsGAAnoA/8NcmOHmJK8T+EFASRbvlKRJvODxBN2CSNi5eprP/hmcr8Qv6YD85cEXGCi+wPepa/D+EXXQIL0KMAk32cAuk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752820910; c=relaxed/simple;
-	bh=PMGqAXJ5To+NqTilXmxzsLswjifNQ4YAOdtsYVl21zA=;
+	s=arc-20240116; t=1752821289; c=relaxed/simple;
+	bh=oGFDBkGGxu3hlekar5YeTUojSFRxuWUWJ1VkXJOSIV4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k2MGMzVzbB/RbDd7EdisscLOWCUol0TqpjPrnJ+6qWX0MRgKqvgnI7Ie7I+KWW13M0tGfv9E0QXwF5CvG3eMTSNrH4OP04OVTOaBrPBhOlEZpkyKhHHYO1i9Ak7uXsnTHI2dz8P33v9+FJ+GVOFHDpsUNZpw9PxiwY9BLccC/V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=kw+5hiIb; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:Content-Type; b=G0QyIYqTeMFVFVXSrsA4OERhodrWsCFJMMn0KBsW/6D4Ib0EXbvfvHKHnrtGkRuM7jT/F3S2zsX9J6qe5eaX43M4tgd5gH4KwXxNpfsmwSvskbe9iD3kjxUBN+0zAn5kK6sXmS1OLy7CbXumga362OCqWeJBlfux4ZvVlvHQLC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=p+L6hJT/; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1752820905;
-	bh=PMGqAXJ5To+NqTilXmxzsLswjifNQ4YAOdtsYVl21zA=;
+	s=mail; t=1752821285;
+	bh=oGFDBkGGxu3hlekar5YeTUojSFRxuWUWJ1VkXJOSIV4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kw+5hiIbtUBw5eKiWDr6Xw2pi0gGWQ+WCDoshxN0rqHCAEN9TiQKGOaEUGol6RWCa
-	 NWv90cZsPN0o2uHVG0FKW3obxDYqx0elGbu/y6eapLWQfgD1GcVlGxrrT94zuvTzIB
-	 cMHLlD3c61xiOntUdZS5xi8nSknhd+J/zRs4Bp3hBiF5QWBEfLwtPVg3dWCTza6/pp
-	 FeO/2XnBOcTNtHrF1DmANAYdiaxUGPEdfAaBBN0iBm2avquRlpCF/uxyZqRQjOx1yj
-	 jZdK+A9WZn3STTDJ+afD8//0v/784k7nvyEzoCdX4huNsFjCNDjEbNqMZM/CZc2MJB
-	 mmMPnqHzH0gaQ==
+	b=p+L6hJT/tncrbRQYybZA6C6WADg7SSOM8hQbd/wx56epq6R82LEveanN2UnvuMTZb
+	 wbch8JREN27RZeypba46TFSQIWkacJjzrfE6eAwxxBJZ9GPA6dxd4mz+KVnBEdNXmN
+	 nfWlBrIv8fRk/nIYmjsIYk8Bcu/ae/mBwiXjcl4gR74JzcKzxYaqfk+odHczsEGiOL
+	 2hVT313cUnLYnuv+5m+YVV0DRqz0AtR3iPigc17RjK4zhNu+WtzCrLHyXg4YtflUOf
+	 Vth1AAewIwEFWfzr0HIl7JX0iqrnP1SQ8B+PRye6N9ddd7Zm3EsKZez8JmKLvfA9Zz
+	 zF8uIOXBURi/Q==
 Received: from [192.168.1.90] (unknown [82.79.138.60])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: cristicc)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id C686B17E1553;
-	Fri, 18 Jul 2025 08:41:44 +0200 (CEST)
-Message-ID: <e1bf85c8-930c-4f70-86ea-460e1db8e6c6@collabora.com>
-Date: Fri, 18 Jul 2025 09:41:44 +0300
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 87D3917E1439;
+	Fri, 18 Jul 2025 08:48:05 +0200 (CEST)
+Message-ID: <044fd9e0-b506-4b79-a708-04e40fd23935@collabora.com>
+Date: Fri, 18 Jul 2025 09:48:05 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,172 +57,84 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/9] usb: vhci-hcd: Prevent suspending virtually attached
- devices
-To: Shuah Khan <skhan@linuxfoundation.org>,
- Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH 2/9] usb: vhci-hcd: Fix space, brace, alignment and line
+ length issues
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Valentina Manea <valentina.manea.m@gmail.com>,
  Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  "Brian G. Merrell" <bgmerrell@novell.com>, kernel@collabora.com,
  Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250717-vhci-hcd-suspend-fix-v1-0-2b000cd05952@collabora.com>
- <20250717-vhci-hcd-suspend-fix-v1-1-2b000cd05952@collabora.com>
- <42bcf1e1-1bb2-4b63-9790-61393f780202@rowland.harvard.edu>
- <2a87101f-6bee-4bd1-816a-1dfbe7b4a578@linuxfoundation.org>
+ <20250717-vhci-hcd-suspend-fix-v1-2-2b000cd05952@collabora.com>
+ <2025071706-overarch-flaky-035b@gregkh>
+ <3a1c8ed6-c123-4a11-b2aa-405babfa2948@collabora.com>
+ <2025071837-recoil-fifteen-a977@gregkh>
 Content-Language: en-US
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <2a87101f-6bee-4bd1-816a-1dfbe7b4a578@linuxfoundation.org>
+In-Reply-To: <2025071837-recoil-fifteen-a977@gregkh>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Alan, Shuah,
-
-On 7/17/25 10:55 PM, Shuah Khan wrote:
-> On 7/17/25 12:26, Alan Stern wrote:
->> On Thu, Jul 17, 2025 at 06:54:50PM +0300, Cristian Ciocaltea wrote:
->>> The VHCI platform driver aims to forbid entering system suspend when at
->>> least one of the virtual USB ports are bound to an active USB/IP
->>> connection.
+On 7/18/25 9:26 AM, Greg Kroah-Hartman wrote:
+> On Thu, Jul 17, 2025 at 08:26:54PM +0300, Cristian Ciocaltea wrote:
+>> On 7/17/25 7:18 PM, Greg Kroah-Hartman wrote:
+>>> On Thu, Jul 17, 2025 at 06:54:51PM +0300, Cristian Ciocaltea wrote:
+>>>> Perform a first round of coding style cleanup:
+>>>>
+>>>> * Add new lines after several statement blocks
+>>>> * Avoid line wrapping when 100-column width is not exceeded and it helps
+>>>>   improve code readability
+>>>> * Ensure lines do not end with '('
+>>>> * Drop superfluous spaces or empty lines
+>>>> * Add spaces where necessary, e.g. around operators
+>>>> * Add braces for single if-statements when at least one branch of the
+>>>>   conditional requires them
+>>>>
+>>>> This helps getting rid of the following checkpatch complaints:
+>>>>
+>>>>   CHECK: Lines should not end with a '('
+>>>>   CHECK: braces {} should be used on all arms of this statement
+>>>>   CHECK: Unbalanced braces around else statement
+>>>>   CHECK: Blank lines aren't necessary before a close brace '}'
+>>>>   CHECK: Unnecessary parentheses around
+>>>>   CHECK: Alignment should match open parenthesis
+>>>>   CHECK: No space is necessary after a cast
+>>>>   CHECK: spaces preferred around that '-' (ctx:VxV)
+>>>>   CHECK: spaces preferred around that '+' (ctx:VxV)
+>>>>
+>>>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 >>>
->>> However, in some cases, the detection logic doesn't work reliably, i.e.
->>> when all devices attached to the virtual root hub have been already
->>> suspended, leading to a broken suspend state, with unrecoverable resume.
+>>> Coding style cleanups need to be "one patch per logical change", not
+>>> "fix them all in one patch!" type of thing.
 >>>
->>> Ensure the attached devices do not enter suspend by setting the syscore
->>> PM flag.
->>>
->>> Fixes: 04679b3489e0 ("Staging: USB/IP: add client driver")
->>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->>> ---
->>>   drivers/usb/usbip/vhci_hcd.c | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
->>> index e70fba9f55d6a0edf3c5fde56a614dd3799406a1..762b60e10a9415e58147cde2f615045da5804a0e 100644
->>> --- a/drivers/usb/usbip/vhci_hcd.c
->>> +++ b/drivers/usb/usbip/vhci_hcd.c
->>> @@ -765,6 +765,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
->>>                    ctrlreq->wValue, vdev->rhport);
->>>                 vdev->udev = usb_get_dev(urb->dev);
->>> +            dev_pm_syscore_device(&vdev->udev->dev, true);
->>>               usb_put_dev(old);
->>>                 spin_lock(&vdev->ud.lock);
->>> @@ -785,6 +786,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
->>>                       "Not yet?:Get_Descriptor to device 0 (get max pipe size)\n");
->>>                 vdev->udev = usb_get_dev(urb->dev);
->>> +            dev_pm_syscore_device(&vdev->udev->dev, true);
->>>               usb_put_dev(old);
->>>               goto out;
+>>> Sorry, but can you break this out better?
 >>
->> This looks very strange indeed.
+>> I could split this into something like:
 >>
->> First, why is vhci_urb_enqueue() the right place to do this?  I should
->> think you would want to do this just once per device, at the time it is
->> attached.  Not every time a new URB is enqueued.
-> 
-> Correct. This isn't the right place to do this even if we want to go with
-> the option to prevent suspend. The possible place to do this would be
-> from rh_port_connect() in which case you will have access to usb_hcd device.
-
-Oh, I chose to handle this in vhci_urb_enqueue() as it seemed to be the only
-place where vdev->udev gets assigned.  Now I wonder if that assignment
-should really be here, but probably I'm missing something obvious as I'm
-still in the process of getting familiar with the code base.
-
-> This has to be undone from rh_port_disconnect(). Also how does this impact
-> the usbip_host - we still need to handle usbip_host suspend.
-
-I've only addressed usbip_vhci suspend prevention at the moment, as that was
-supposed to work.
-
+>> - Fix spaces & blank lines
+>>   CHECK: Blank lines aren't necessary before a close brace '}'
+>>   CHECK: No space is necessary after a cast
+>>   CHECK: spaces preferred around that '-' (ctx:VxV)
+>>   CHECK: spaces preferred around that '+' (ctx:VxV)
 >>
->> Second, how do these devices ever go back to being regular non-syscore
->> things?
-
-This only handles the client side, i.e. the virtually attached devices,
-hence I didn't pay much attention to undo the syscore thing (wasn't
-straightforward to accomplish via the URB handling path anyway).  I'll
-definitely fix this up by moving to rh_port_[dis]connect(), as Shuah
-suggested.
-
->> Third, if this change isn't merely a temporary placeholder, it certainly
->> needs to have a comment in the code to explain what it does and why.
-
-Indeed, will document this.
-
->> Fourth, does calling dev_pm_syscore_device() really prevent the device
->> from going into suspend?  
-
-Yes, this is managed by core PM infra which basically skips processing of
-any PM callbacks when the flag is set - e.g. see how dev->power.syscore is
-handled in device_suspend():
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/power/main.c?h=v6.16-rc6#n1800
-
->> What about runtime suspend?  
-
-I think that's a slightly different topic - so far I've been only focused on
-system suspend.
-
-> And what good
->> does it to do prevent the device from being suspended if the entire
->> server gets suspended?
-
-As mentioned above, the target for now is to unbreak the system suspend
-prevention on the client side.  The server side doesn't seem to support it.
-
+>> - Fix braces
+>>   CHECK: braces {} should be used on all arms of this statement
+>>   CHECK: Unbalanced braces around else statement
 >>
->> Fifth, the patch description says the purpose is to prevent the server
->> from going into system suspend.  
-
-Hmm, I might need to improve the description in this case, as I only
-mentioned VHCI and the virtual hub/ports, hence I was referring to the
-client side only.
-
->> How does marking some devices with
->> dev_pm_syscore_device() accomplish this?
-
-Please check the link above.
-
+>> - Fix alignment & line length
+>>   CHECK: Lines should not end with a '('
+>>   CHECK: Alignment should match open parenthesis
+>>   
+>> - Misc?!
+>>   CHECK: Unnecessary parentheses around
 > 
-> We have been discussing suspend/resume and reboot behavior in another thread
-> that proposed converting vhci_hcd to use faux bus.
-> 
-> In addition to what Alan is asking, To handle suspend/resume cleanly, the
-> following has to happen at a higher level:
-> 
-> - Let the usbip hots host know client is suspending the connection.
->   The physical device isn't suspended on the host.
-> - suspend the virtual devices and vhci_hcd
-> 
-> Do the reverse to resume.
+> Why not one per CHECK: type?
 
-Right, I was actually looking into having a proper suspend/resume support
-rather than just preventing it on the client side (for now), but that's
-clearly not an easy task to accomplish, as it requires extending the USP/IP
-protocol and most probably also the user space tools.
+I've been trying to squash all formatting changes which are kind of similar,
+but sure I can handle them separately.
 
-> 
-> I would say:
-> 
-> - We don't want vhci_hcd and usbip_host preventing suspend
-
-That's understandable, but currently vhci_hcd is supposed to prevent
-suspend, which mostly works but it's unreliable, hence my initial goal was
-to provide a simple fix for it before attempting to experiment with more
-invasive changes.
-
-> - It might be cleaner and safer to detach the devices during
->   suspend on both ends. This is similar to what happens now when
->   usbip host and vhci_hcd are removed.
-> - Note that usbip_host and vhci_hcd don't fully support suspend and
->   resume at the moment.
-
-Thank you both for the initial feedback!
-
-Regards,
+Thanks,
 Cristian
 
 
