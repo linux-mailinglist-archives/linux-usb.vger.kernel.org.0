@@ -1,148 +1,280 @@
-Return-Path: <linux-usb+bounces-25955-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25956-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D263B09EAC
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 11:07:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4255EB09EB6
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 11:11:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DECDE3BE654
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 09:07:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D8FB1C44D2C
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 09:11:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 657E3295524;
-	Fri, 18 Jul 2025 09:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598FC29551E;
+	Fri, 18 Jul 2025 09:11:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.actia.se (mail.actia.se [212.181.117.226])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MA0PR01CU009.outbound.protection.outlook.com (mail-southindiaazon11020105.outbound.protection.outlook.com [52.101.227.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2948E20E71D;
-	Fri, 18 Jul 2025 09:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.181.117.226
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752829660; cv=none; b=QF4Dl9CD3E7DgoY4ijfQFTppstFhQcbl9gC+rDR2k1pBHTJaCYDy9GKqUTwFO4XIObf0m8DB67z3EbNz6y6AKpPrKWxQa2phKpxtFgi/PQrbfwyjrbltM85+beXTEvrG3V2Jf09TJXkSkSTdmr0s2miMW+014gnm5U/tYDmTEW8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752829660; c=relaxed/simple;
-	bh=YQLwoyyIeAKIJtTp3X9MJofesezWV6RQD6/ZBkdPkkc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=u9rH4BI4YKf01CxBdKKKefWcl3HhtSRob6eAOphBzRTQvCtWFZRcHs1zHgNy+6EnbxAotSmEO1Fq0lanovaM7YqhzIGdIvewljrzvaEVzRi3jiEp2Jfn2cP4j6aACOX/XsXNMlizcgCqP/l/5p+rxeuet9SzCQUS1RpgMuIbYLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=actia.se; spf=pass smtp.mailfrom=actia.se; arc=none smtp.client-ip=212.181.117.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=actia.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=actia.se
-Received: from S036ANL.actianordic.se (10.12.31.117) by S036ANL.actianordic.se
- (10.12.31.117) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.57; Fri, 18 Jul
- 2025 11:07:26 +0200
-Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
- S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%6]) with mapi id
- 15.01.2507.057; Fri, 18 Jul 2025 11:07:26 +0200
-From: John Ernberg <john.ernberg@actia.se>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>, Ming Lei <ming.lei@canonical.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] net: usbnet: Avoid potential RCU stall on LINK_CHANGE
- event
-Thread-Topic: [PATCH] net: usbnet: Avoid potential RCU stall on LINK_CHANGE
- event
-Thread-Index: AQHb8Xe2qza52xx55UmGbnkg6Pc/lrQyK2OAgACAvYCAAG9BgIABo0uAgABxOICAAlJmgA==
-Date: Fri, 18 Jul 2025 09:07:26 +0000
-Message-ID: <55147f36-822b-4026-a091-33b909d1eea8@actia.se>
-References: <20250710085028.1070922-1-john.ernberg@actia.se>
- <20250714163505.44876e62@kernel.org>
- <74a87648-bc02-4edb-9e6a-102cb6621547@actia.se>
- <20250715065403.641e4bd7@kernel.org>
- <fbd03180-cca0-4a0f-8fd9-4daf5ff28ff5@actia.se>
- <20250716143959.683df283@kernel.org>
-In-Reply-To: <20250716143959.683df283@kernel.org>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-esetresult: clean, is OK
-x-esetid: 37303A2955B14450647162
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EB2E981C6FEE5142B25F14FA1DDD663E@actia.se>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE28129552B;
+	Fri, 18 Jul 2025 09:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.227.105
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752829871; cv=fail; b=WQQLHVsPx8a0e/wKqQZzbR0KDzSX5OxzSQv/Ye7ZOnUautMY8FG4nOJtgMi+JCf+Rt7W4ybqv/FkRWOE3G7I8IBwQZs4ENeUSf3EuCGv4hWmOYAA4Jw8rEYeATMb35ZiZ7WW/wCuqQyJJhQHkdnn3GzQE7qOMIiL6APRbqBi47U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752829871; c=relaxed/simple;
+	bh=1r1brNaOKLuzFL1rT5DyHnX8neZ30SMN3Dyc4ZScVN0=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=apjAtvN9S5zoVgYwLkM0UeAC3KdYG/2a75aIm4igo4FkSdEqAmH7nrEDUQuX344LMVWyLaAoCPPBD2eq4P3N2504LkhVIu4Ixg7ANayJX+tEcGYqH6PDNyqSvG+PSh4rux8z1tOKuOsq/Yp8qz1ootaha7pmPuSymz5E2LM/4mk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siqol.com; spf=fail smtp.mailfrom=siqol.com; arc=fail smtp.client-ip=52.101.227.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siqol.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=siqol.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uYCQNFN8tcyJtugR2+ESKUklSZDckS9KRwqssk4lI498NW55Ei75C/Sa+et9fHZK5qkbADeWqcm6wyd/HXJ3gthLUUPbk/4ft2uMqji07Nini8UweQ/iTbZSb8cxU937NOE9+xv4uc/tKnosFE/8ZLmNnjP58+8RNXL6QN4NYzNM3pK3cimrnRIEhds/wpGQcZraoRllbsN05qYKRBxyW0RcWjy39ry6Ra2qr7txoj5UDys6DMzymYMWu0ucDZ8IVyf1pyTYahYBsxR+9+tc5wBlof4z6OqSVCJRmlQ0U/hHLGlVDwekT9DyUhADKy9G0yeN9f2bSc3Vlm/nyFydyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T96F5IEpeWbnQPqvknL9Drxpk90b6z94vkuHOseIJts=;
+ b=fPhjifkpeuJS20kdmMSoWG83rjbRKzEyrl2PrZR8kvM0AN6scBJ3lERjMX2c+tNifQ8zyvWLKGsqlzLS/YuuI3T/E8zQV7afR/6VfhTDzFXcNI4aw7jvZAQQxaz16rVTbOFS8L5bRv6twvtkpnBqKvITSfn6HU5nke5ZascSdUNSSII17357Ufyu8v5p74wLZnq/nFdoWT/xdXTr16qZvtRODC6RUZDjRqQ/ZO7TYxJ2AXGmlUwwegd6GF54Pfx+W4raV5a5BlbacMEPugIC3YFZqbkyTzsMg4GnCDDYRVLXtMMA6iOY8GAy0dDtkUjzHamMAjLxnBHX4Y+AzGFuSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siqol.com; dmarc=pass action=none header.from=siqol.com;
+ dkim=pass header.d=siqol.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siqol.com;
+Received: from PN2P287MB2370.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:1b2::11)
+ by PN4P287MB4249.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:2a4::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.25; Fri, 18 Jul
+ 2025 09:11:05 +0000
+Received: from PN2P287MB2370.INDP287.PROD.OUTLOOK.COM
+ ([fe80::ffd6:20f0:fb22:c7d4]) by PN2P287MB2370.INDP287.PROD.OUTLOOK.COM
+ ([fe80::ffd6:20f0:fb22:c7d4%4]) with mapi id 15.20.8943.024; Fri, 18 Jul 2025
+ 09:11:05 +0000
+From: Darshan Rathod <darshan.rathod@siqol.com>
+To: zaitcev@redhat.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	manish@siqol.com,
+	dishank@siqol.com,
+	Darshan Rathod <darshan.rathod@siqol.com>
+Subject: [PATCH] usb: usblp: clean up assignment inside if conditions
+Date: Fri, 18 Jul 2025 14:40:45 +0530
+Message-Id: <20250718091045.264129-1-darshan.rathod@siqol.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: PN4P287CA0071.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:c01:267::17) To PN2P287MB2370.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:c01:1b2::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PN2P287MB2370:EE_|PN4P287MB4249:EE_
+X-MS-Office365-Filtering-Correlation-Id: aebc8c3c-1fec-44eb-7a62-08ddc5db061f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|366016|1800799024|376014|52116014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?81qlo2zfxAAvHwMsXj8I+Am06i7UtDIyov+siER8UfTdSjVL6BrplwsO4ZfM?=
+ =?us-ascii?Q?E3kSvNEKiDoY9GsApTc+QcNXchqjuLY+nNFZUeT3lu6+shmH/J8dIiHH/0Lj?=
+ =?us-ascii?Q?6LCYtxJYcUsQ5bSb+gDPhpmuFMHYJUpnuJltbWtGUNOMSpNlC5xN9LCD7zqY?=
+ =?us-ascii?Q?2FAEML6dtnYS/fxkMW8kFCQUfm9SU0mDdT9ZVNdvCY5MZBU/NnvyOImglqp+?=
+ =?us-ascii?Q?29qLMp9tJ9JrwKg6p0lyGAHO8kxFlWTpqjfjg/OKrlDMguFUk1dn4cQu8QBU?=
+ =?us-ascii?Q?08pd9DPNKwFFfxhj7sk5P3UAA60VJLYA9+vHoDZ+a9u49+c5oDVm8qeabPqq?=
+ =?us-ascii?Q?wjsSy/7AJ7jDIsay9DEU8dfBpvYI8lS/1a1xtFDkHLT4ndgB2lYuH45ZyZ14?=
+ =?us-ascii?Q?NMzB1QqY72BuCK4bftFgip7FhzDAvSUN5/HLkj/7/c3OWfhB+dG5qjYQydU+?=
+ =?us-ascii?Q?kH/44yescWd3d4jJwr75xuwAgCVklws8R7yUIv2MkTjBkIBLgm6sPf5P3r+O?=
+ =?us-ascii?Q?6xSPEqw6Uvj/BnWZrfG2JoWLNQxyS4P9c623OONFcuH/lJByLC+V5sP1oHwC?=
+ =?us-ascii?Q?txK5M3KoU54pzEEkRO3GGDsQALKB26blZDk97yA81YmRhgEpU7A3baar3BgQ?=
+ =?us-ascii?Q?tjwCsgTI0joA56Pkk451r41q10gvyYpXopH0F5cIvAv9yhmXJO2cHpz4s4o/?=
+ =?us-ascii?Q?DSamzcFF8VSkgt9JEs75Yi6Bh3w24OsRSn1Yp7exZm0B4q48/AkjjmXoUd6a?=
+ =?us-ascii?Q?k8qtKlOMZmklFiIjSiz2ieoVdDqudyXMwJ+yv99nnz5t1py0u/YzNv/EJFWK?=
+ =?us-ascii?Q?alenQx8p3SV3xlJ3oi9o7t60YYka+bAoeEX0HxNnoR260AuOtvhCfsBz99BA?=
+ =?us-ascii?Q?1G9+rq1stwoZuGNOexVH0ounpwrDoQpUFmcAvbDpo4fyGvx5cZrwKiBBkSAb?=
+ =?us-ascii?Q?l/8IuHNekU9mgqlWeyiZr0fDW7+8Y2+02FVcjdCQNpPjbeWVBOh4f37qV+aN?=
+ =?us-ascii?Q?Hc7CT+N5OlXT6sFQpseK48tj/C4YHBfYJHi+2gFTo1VB2m7yu07t8ZE8AKBB?=
+ =?us-ascii?Q?dIBMt9tC8mims5MpCqC2Zge2mi1ICCX4qaJv4ckaXHH1CTkAD2Yn6GQMsfdI?=
+ =?us-ascii?Q?3JzZ1DmDHw5HFlsppk9TWzAPs9yyCHkKNgz1AEE+O1rlLqvwNMNePJtvLzqH?=
+ =?us-ascii?Q?GIvEsw3PP8kN6nh67NHqgnpTmWk2vs7AzKCfzQK1MEgA5bqC4pXeDC3Gyy77?=
+ =?us-ascii?Q?L8g/VsizTieFCMXT9n3EWSxQCNyFKIsCW4IPbFBbHWcFJJw3enWfBfrlqmVp?=
+ =?us-ascii?Q?LTep/L5eKZk48e6pUjF4uvJ2cUxUmoeWzD49pO5awziKgil3IskH37XKXCQe?=
+ =?us-ascii?Q?T13JDxpKJHnzAon1Nha1nxVSL72DY8L89TF8QnEmGdEPeoUHNGQ8Qs8fZAiT?=
+ =?us-ascii?Q?/CQ3pHlMYNk=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN2P287MB2370.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(1800799024)(376014)(52116014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?HyiiRtnm6r13G6rY8LreLaGJDe7rgDkG8wQyFXaG+BUZlzHNoaNTIx4iMw1k?=
+ =?us-ascii?Q?MEkSVqedRt559V71yKKk+jcKQ/uAcq1X2gLDvGT3efGll+bZWepAtRWEutE4?=
+ =?us-ascii?Q?YppUAaxuE1O3VTbc0lR5hLOOabQv1AxhB6gj0GrGJHUFySmHZcn5VBUIOSBe?=
+ =?us-ascii?Q?4u8Qy0BoO0q4MlHgytR8T55t3R3yBRktejzbqVD/XiuOekWwRVIRYx3JtKyB?=
+ =?us-ascii?Q?gulYY/uEbvg4nv21EErw58OHV0w2gov/1yINSr9ZJCUnJXck5oaWyW4FC6n+?=
+ =?us-ascii?Q?5yRlz2Jb18Ts9Nk6N+umSlZLn6ezXuM5V69I5G65hNEeFk4vI0CwtEu+DSFt?=
+ =?us-ascii?Q?tZowMxh2ffHyMzlKI0lAfy2o4SzR7E4MO8E5sdvfAfvokWNJ4uwFpgJjzvgJ?=
+ =?us-ascii?Q?etzkNXDE5UD8Uypcne3uYXg/i+UU8BtS76HRFD1zago793HPyL+BkPpGo32a?=
+ =?us-ascii?Q?NTPNXtG7X+iV7CgmzxaP0hBVzoW/2IOIaQrShZjHfSk0rN+u6FwsDlW/GzZh?=
+ =?us-ascii?Q?kYM/0Gw4u72xoljDbCf/nOVnaZGQ4dTSJbkfNs4IzT5ypIqIlsh58zHF368P?=
+ =?us-ascii?Q?8viEYf1oQdr1kFClIWUCCQqsfPdWeHxhCJWn9U82CMiTzpdqP/bno9bb+I6T?=
+ =?us-ascii?Q?ETupPL6AGIoDgVg825Vh+Ihi2MxHUvkfEQYuBcNZyAs4PPX6380err8J2Swl?=
+ =?us-ascii?Q?aSOC1EGNMytA2Ijkj7/lTRG093ozVbviL31jBTuNEi++P6qoWblT37I9e/wo?=
+ =?us-ascii?Q?OlCXwvexUR6p5fraFQwhwFJA6CeBisVZAoLXPDPpXTgs+zXT1MJWXS/D8VtU?=
+ =?us-ascii?Q?1wK+qW35zwq/wwcOaHJEC88l5B/bI/mprCAIIU258BAbMgRb/Th7SlmaS2sj?=
+ =?us-ascii?Q?mvCJAt26Nx6e/0DC6pSZeDPhnO045fRiIEYw494KAzm6tENr4fFrft1tfq3C?=
+ =?us-ascii?Q?+X5EkF/mRLp0fDwi6OU8k/bVUc2tVqiMVNYXvcv/BqWZ62f6cItfWyQKqE/X?=
+ =?us-ascii?Q?s9EhrUyDux1RiCzhuBduVKZE65gjYCncOBXiMkjLnwxZp3rbO5JDUqhBMciC?=
+ =?us-ascii?Q?oYCDgZ/KbR262jS3ZHhsMS8vYpqA31yqhtnrvxxt6IP5Cq3tEhpOaGE21Xl4?=
+ =?us-ascii?Q?Lqn59cOmn0W1wdIksOvW7X5pLypux9Pn7R0HuFgBZLza6UG8tfudJWm/8puq?=
+ =?us-ascii?Q?t++y28kFsdbFTLuIOSPGHPVAYjYlql1htv9hhQN7N2mY2G7Nhk7sIJd3RW3d?=
+ =?us-ascii?Q?01cf84J340A5Zi6yMcYMFuRyaRxSe8FwsBkGMBS0ddUknuWVa1LhTIDkU51i?=
+ =?us-ascii?Q?tmiGBJH6m7kAZ/des5R/829Yqx7axjur/acmvh9cz9QwEssycI0S+0YqFiNx?=
+ =?us-ascii?Q?cpfGtV4DzPXLA1dDngbJYzegRg7qYCUrrJ76T1naMbJrRW1xHhSm64OE0g0t?=
+ =?us-ascii?Q?rYQwrkjaLshnHYsWP61767fswbnGtkLEX1tnQXyMmyntEVsNoAb/EEL6xZ1S?=
+ =?us-ascii?Q?U+EnvBD0zQRiJjtFXgK4yox0UUM2FtjRl8V3el/ITIAEhius5wnVTP3HqLSC?=
+ =?us-ascii?Q?fGOlISh4akng3C5sruN7wNpodO24ALUAK0OFcG9FcIQmcIYwcevVXMZBxRBh?=
+ =?us-ascii?Q?dcj8qK9rzRWKMI0CR+3iERmti+NV//MTqeHtoS0wfBCP?=
+X-OriginatorOrg: siqol.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aebc8c3c-1fec-44eb-7a62-08ddc5db061f
+X-MS-Exchange-CrossTenant-AuthSource: PN2P287MB2370.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2025 09:11:04.9192
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e93cdbe6-5a59-4d5d-8570-7b6ea0400c3e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ti4ZIDvyRgQy/8Up9wVXX3j45nmkuFw4usL9JYHRRuyDfdj4XiDqbk3UEzdCybR02UYvBoNl//4tfSTzJwZJxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN4P287MB4249
 
-SGkgSmFrdWIsDQoNCk9uIDcvMTYvMjUgMTE6MzkgUE0sIEpha3ViIEtpY2luc2tpIHdyb3RlOg0K
-PiBPbiBXZWQsIDE2IEp1bCAyMDI1IDE0OjU0OjQ2ICswMDAwIEpvaG4gRXJuYmVyZyB3cm90ZToN
-Cj4+IEkgZW5kZWQgdXAgd2l0aCB0aGUgZm9sbG93aW5nIGxvZzoNCj4+DQo+PiBbICAgMjMuODIz
-Mjg5XSBjZGNfZXRoZXIgMS0xLjE6MS44IHd3YW4wOiBuZXR3b3JrIGNvbm5lY3Rpb24gMA0KPj4g
-WyAgIDIzLjgzMDg3NF0gY2RjX2V0aGVyIDEtMS4xOjEuOCB3d2FuMDogdW5saW5rIHVyYiBzdGFy
-dDogNSBkZXZmbGFncz0xODgwDQo+PiBbICAgMjMuODQwMTQ4XSBjZGNfZXRoZXIgMS0xLjE6MS44
-IHd3YW4wOiB1bmxpbmsgdXJiIGNvdW50ZWQgNQ0KPj4gWyAgIDI1LjM1Njc0MV0gY2RjX2V0aGVy
-IDEtMS4xOjEuOCB3d2FuMDogbmV0d29yayBjb25uZWN0aW9uIDENCj4+IFsgICAyNS4zNjQ3NDVd
-IGNkY19ldGhlciAxLTEuMToxLjggd3dhbjA6IG5ldHdvcmsgY29ubmVjdGlvbiAwDQo+PiBbICAg
-MjUuMzcxMTA2XSBjZGNfZXRoZXIgMS0xLjE6MS44IHd3YW4wOiB1bmxpbmsgdXJiIHN0YXJ0OiA1
-IGRldmZsYWdzPTg4MA0KPj4gWyAgIDI1LjM3ODcxMF0gY2RjX2V0aGVyIDEtMS4xOjEuOCB3d2Fu
-MDogbmV0d29yayBjb25uZWN0aW9uIDENCj4+IFsgICA1MS40MjI3NTddIHJjdTogSU5GTzogcmN1
-X3NjaGVkIHNlbGYtZGV0ZWN0ZWQgc3RhbGwgb24gQ1BVDQo+PiBbICAgNTEuNDI5MDgxXSByY3U6
-ICAgICAwLS4uLi46ICg2NDk5IHRpY2tzIHRoaXMgR1ApDQo+PiBpZGxlPWRhN2MvMS8weDQwMDAw
-MDAwMDAwMDAwMDAgc29mdGlycT0yMDY3LzIwNjcgZnFzPTI2NjgNCj4+IFsgICA1MS40Mzk3MTdd
-IHJjdTogICAgICAgICAgICAgIGhhcmRpcnFzICAgc29mdGlycXMgICBjc3cvc3lzdGVtDQo+PiBb
-ICAgNTEuNDQ1ODk3XSByY3U6ICAgICAgbnVtYmVyOiAgICA2MjA5NiAgICAgIDU5MDE3ICAgICAg
-ICAgICAgMA0KPj4gWyAgIDUxLjQ1MjEwN10gcmN1OiAgICAgY3B1dGltZTogICAgICAgIDAgICAg
-ICAxMTM5NyAgICAgICAgIDE0NzAgICA9PT4NCj4+IDEyOTk2KG1zKQ0KPj4gWyAgIDUxLjQ1OTg1
-Ml0gcmN1OiAgICAgKHQ9NjUwMCBqaWZmaWVzIGc9MjM5NyBxPTY2MyBuY3B1cz0yKQ0KPj4NCj4+
-ICAgRnJvbSBhIFVTQiBjYXB0dXJlIHdoZXJlIHRoZSBzdGFsbCBkaWRuJ3QgaGFwcGVuIEkgY2Fu
-IHNlZToNCj4+ICogQSBidW5jaCBvZiBDRENfTkVUV09SS19DT05ORUNUSU9OIGV2ZW50cyB3aXRo
-IERpc2Nvbm5lY3RlZCBzdGF0ZSAoMCkuDQo+PiAqIFRoZW4gYSBDRENfTkVUV09SS19DT05ORUNU
-SU9OIGV2ZW50IHdpdGggQ29ubmVjdGVkIHN0YXRlICgxKSBvbmNlIHRoZQ0KPj4gV1dBTiBpbnRl
-cmZhY2UgaXMgdHVybmVkIG9uIGJ5IHRoZSBtb2RlbS4NCj4+ICogRm9sbG93ZWQgYnkgYSBEaXNj
-b25uZWN0ZWQgaW4gdGhlIG5leHQgVVNCIElOVFIgcG9sbC4NCj4+ICogRm9sbG93ZWQgYnkgYSBD
-b25uZWN0ZWQgaW4gdGhlIG5leHQgVVNCIElOVFIgcG9sbC4NCj4+IChJJ20gbm90IHN1cmUgaWYg
-SSBjYW4gYWNoaWV2ZSBhIGRpZmZlcmVudCB0aW1pbmcgd2l0aCBlbm91Z2ggY2FwdHVyZXMNCj4+
-IG9yIGEgZmFzdGVyIHN5c3RlbSkNCj4+DQo+PiBXaGljaCBtYWtlcyB0aGUgb2ZmIGFuZCBvbiBM
-SU5LX0NIQU5HRSBldmVudHMgcmFjZSBvbiBvdXIgc3lzdGVtIChBUk02NA0KPj4gYmFzZWQsIGlN
-WDhRWFApIGFzIHRoZXkgY2Fubm90IGJlIGhhbmRsZWQgZmFzdCBlbm91Z2guIE5vdGhpbmcgc3Rv
-cHMNCj4+IHVzYm5ldF9saW5rX2NoYW5nZSgpIGZyb20gYmVpbmcgY2FsbGVkIHdoaWxlIHRoZSBk
-ZWZlcnJlZCB3b3JrIGlzIHJ1bm5pbmcuDQo+Pg0KPj4gQXMgT2xpdmVyIHBvaW50cyBvdXQgdXNi
-bmV0X3Jlc3VtZV9yeCgpIGNhdXNlcyBzY2hlZHVsaW5nIHdoaWNoIHNlZW1zDQo+PiB1bm5lY2Vz
-c2FyeSBvciBtYXliZSBldmVuIGluYXBwcm9wcmlhdGUgZm9yIGFsbCBjYXNlcyBleGNlcHQgd2hl
-biB0aGUNCj4+IGNhcnJpZXIgd2FzIHR1cm5lZCBvbiBkdXJpbmcgdGhlIHJhY2UuDQo+Pg0KPj4g
-SSBnYXZlIHRoZSBaVEUgbW9kZW0gcXVpcmsgYSBnbyBhbnl3YXksIGRlc3BpdGUgdGhlIGNvbW1l
-bnQgZXhwbGFpbmluZyBhDQo+PiBkaWZmZXJlbnQgc2l0dWF0aW9uIHRoYW4gd2hhdCBJIGFtIHNl
-ZWluZywgYW5kIGl0IGhhcyBubyBvYnNlcnZhYmxlDQo+PiBlZmZlY3Qgb24gdGhpcyBSQ1Ugc3Rh
-bGwuDQo+Pg0KPj4gQ3VycmVudGx5IGRyYXdpbmcgYSBibGFuayBvbiB3aGF0IHRoZSBjb3JyZWN0
-IGZpeCB3b3VsZCBiZS4NCj4gDQo+IFRoYW5rcyBmb3IgdGhlIGFuYWx5c2lzLCBJIHRoaW5rIEkg
-bWF5IGhhdmUgbWlzcmVhZCB0aGUgY29kZS4NCj4gV2hhdCBJIHdhcyBzYXlpbmcgaXMgdGhhdCB3
-ZSBhcmUgcmVzdG9yaW5nIHRoZSBjYXJyaWVyIHdoaWxlDQo+IHdlIGFyZSBzdGlsbCBwcm9jZXNz
-aW5nIHRoZSBwcmV2aW91cyBjYXJyaWVyIG9mZiBldmVudCBpbg0KPiB0aGUgd29ya3F1ZXVlLiBN
-eSB0aGlua2luZyB3YXMgdGhhdCBpZiB3ZSBkZWZlcnJlZCB0aGUNCj4gbmV0aWZfY2Fycmllcl9v
-bigpIHRvIHRoZSB3b3JrcXVldWUgdGhpcyByYWNlIGNvdWxkbid0IGhhcHBlbi4NCj4gDQo+IHVz
-Ym5ldF9iaCgpIGFscmVhZHkgY2hlY2tzIG5ldGlmX2NhcnJpZXJfb2soKSAtIHdlJ3JlIGtpbmRh
-IGR1cGxpY2F0aW5nDQo+IHRoZSBjYXJyaWVyIHN0YXRlIHdpdGggdGhpcyBSWF9QQVVTRUQgd29y
-a2Fyb3VuZC4NCj4gDQo+IEkgZG9uJ3QgZmVlbCBzdHJvbmdseSBhYm91dCB0aGlzLCBidXQgZGVm
-ZXJyaW5nIHRoZSBjYXJyaWVyX29uKCkNCj4gdGhlIHRoZSB3b3JrcXVldWUgd291bGQgYmUgYSBj
-bGVhbmVyIHNvbHV0aW9uIElNTy4NCj4gDQoNCkkndmUgYmVlbiB0aGlua2luZyBhYm91dCB0aGlz
-IGlkZWEsIGJ1dCBJJ20gY29uY2VybmVkIGZvciB0aGUgb3Bwb3NpdGUgDQpkaXJlY3Rpb24uIEkg
-Y2Fubm90IHRoaW5rIG9mIGEgd2F5IHRvIGZ1bGx5IGd1YXJhbnRlZSB0aGF0IHRoZSBjYXJyaWVy
-IA0KaXNuJ3QgdHVybmVkIG9uIGFnYWluIGluY29ycmVjdGx5IGlmIGFuIG9mZiBnZXRzIHF1ZXVl
-ZC4NCg0KVGhlIG1vc3QgSSBjYW1lIHVwIHdpdGggd2FzIGFkZGluZyBhbiBleHRyYSBmbGFnIGJp
-dCB0byBzZXQgY2FycmllciBvbiwgDQphbmQgdGhlbiB0ZXN0X2FuZF9jbGVhcl9iaXQoKSBpdCBp
-biB0aGUgX19oYW5kbGVfbGlua19jaGFuZ2UoKSBmdW5jdGlvbi4NCkFuZCBhbHNvIGNsZWFyX2Jp
-dCgpIGluIHRoZSB1c2JuZXRfbGlua19jaGFuZ2UoKSBmdW5jdGlvbiBpZiBhbiBvZmYgDQphcnJp
-dmVzLiBJIGNhbm5vdCBjb252aW5jZSBteXNlbGYgdGhhdCB0aGVyZSBpc24ndCBhIHdheSBmb3Ig
-dGhhdCB0byBnbyANCnNpZGV3YXlzLiBCdXQgcGVyaGFwcyB0aGF0IHdvdWxkIGJlIHJvYnVzdCBl
-bm91Z2g/DQoNCkkndmUgYWxzbyBjb25zaWRlcmVkIHRoZSBwb3NzaWJpbGl0eSBvZiBqdXN0IG5v
-dCByZS1zdWJtaXR0aW5nIHRoZSBJTlRSIA0KcG9sbCBVUkIgdW50aWwgdGhlIGxhc3Qgb25lIHdh
-cyBmdWxseSBwcm9jZXNzZWQgd2hlbiBoYW5kbGluZyBhIGxpbmsgDQpjaGFuZ2UuIEJ1dCB0aGF0
-IG1pZ2h0IGNhdXNlIGhhdm9jIHdpdGggQVNJWCBhbmQgU2llcnJhIGRldmljZXMgYXMgdGhleSAN
-CmFyZSBjYWxsaW5nIHVzYm5ldF9saW5rX2NoYW5nZSgpIGluIG90aGVyIHdheXMgdGhhbiB0aHJv
-dWdoIHRoZSANCi5zdGF0dXMtY2FsbGJhY2suIEkgZG9uJ3QgaGF2ZSBhbnkgb2YgdGhlc2UgZGV2
-aWNlcyBzbyBJIGNhbm5vdCB0ZXN0IA0KdGhlbSBmb3IgcmVncmVzc2lvbnMuIFNvIHRoaXMgcGF0
-aCBmZWVscyBxdWl0ZSBkYW5nZXJvdXMuDQpXaXRoIGEgc3ViLWRyaXZlciBwcm9wZXJ0eSB0byBl
-bmFibGUgdGhpcyBiZWhhdmlvciBpdCBtaWdodCB3b3JrIG91dD8NCg0KVGhhbmtzISAvLyBKb2hu
-IEVybmJlcmc=
+This patch cleans up a few cases where assignments were made
+inside of if conditions, like
+
+if ((rv = func()) < 0)
+
+into two lines, to improve readability and be more in-line with
+Linux kernel coding style. It also cleans up checkpatch warnings
+like:
+
+ERROR: do not use assignment in if condition
+
+No functional change, just a style and maintainability fix.
+
+Signed-off-by: Darshan Rathod <darshan.rathod@siqol.com>
+---
+ drivers/usb/class/usblp.c | 33 ++++++++++++++++++++++-----------
+ 1 file changed, 22 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
+index e2527faa6592..acbefccbdb2a 100644
+--- a/drivers/usb/class/usblp.c
++++ b/drivers/usb/class/usblp.c
+@@ -366,7 +366,8 @@ static int usblp_check_status(struct usblp *usblp, int err)
+ 	int error;
+ 
+ 	mutex_lock(&usblp->mut);
+-	if ((error = usblp_read_status(usblp, usblp->statusbuf)) < 0) {
++	error = usblp_read_status(usblp, usblp->statusbuf);
++	if (error < 0) {
+ 		mutex_unlock(&usblp->mut);
+ 		printk_ratelimited(KERN_ERR
+ 				"usblp%d: error %d reading printer status\n",
+@@ -751,14 +752,16 @@ static ssize_t usblp_write(struct file *file, const char __user *buffer, size_t
+ 		rv = -EINTR;
+ 		goto raise_biglock;
+ 	}
+-	if ((rv = usblp_wwait(usblp, !!(file->f_flags & O_NONBLOCK))) < 0)
++	rv = usblp_wwait(usblp, !!(file->f_flags & O_NONBLOCK));
++	if (rv < 0)
+ 		goto raise_wait;
+ 
+ 	while (writecount < count) {
+ 		/*
+ 		 * Step 1: Submit next block.
+ 		 */
+-		if ((transfer_length = count - writecount) > USBLP_BUF_SIZE)
++		transfer_length = count - writecount;
++		if (transfer_length > USBLP_BUF_SIZE)
+ 			transfer_length = USBLP_BUF_SIZE;
+ 
+ 		rv = -ENOMEM;
+@@ -776,7 +779,9 @@ static ssize_t usblp_write(struct file *file, const char __user *buffer, size_t
+ 		spin_lock_irq(&usblp->lock);
+ 		usblp->wcomplete = 0;
+ 		spin_unlock_irq(&usblp->lock);
+-		if ((rv = usb_submit_urb(writeurb, GFP_KERNEL)) < 0) {
++
++		rv = usb_submit_urb(writeurb, GFP_KERNEL);
++		if (rv < 0) {
+ 			usblp->wstatus = 0;
+ 			spin_lock_irq(&usblp->lock);
+ 			usblp->no_paper = 0;
+@@ -857,9 +862,10 @@ static ssize_t usblp_read(struct file *file, char __user *buffer, size_t len, lo
+ 		goto done;
+ 	}
+ 
+-	if ((avail = usblp->rstatus) < 0) {
++	avail = usblp->rstatus;
++	if (avail < 0) {
+ 		printk(KERN_ERR "usblp%d: error %d reading from printer\n",
+-		    usblp->minor, (int)avail);
++			usblp->minor, (int)avail);
+ 		usblp_submit_read(usblp);
+ 		count = -EIO;
+ 		goto done;
+@@ -872,7 +878,8 @@ static ssize_t usblp_read(struct file *file, char __user *buffer, size_t len, lo
+ 		goto done;
+ 	}
+ 
+-	if ((usblp->readcount += count) == avail) {
++	usblp->readcount += count;
++	if (usblp->readcount == avail) {
+ 		if (usblp_submit_read(usblp) < 0) {
+ 			/* We don't want to leak USB return codes into errno. */
+ 			if (count == 0)
+@@ -973,7 +980,8 @@ static int usblp_rwait_and_lock(struct usblp *usblp, int nonblock)
+ 			break;
+ 		}
+ 		set_current_state(TASK_INTERRUPTIBLE);
+-		if ((rc = usblp_rtest(usblp, nonblock)) < 0) {
++		rc = usblp_rtest(usblp, nonblock);
++		if (rc < 0) {
+ 			mutex_unlock(&usblp->mut);
+ 			break;
+ 		}
+@@ -1031,7 +1039,8 @@ static int usblp_submit_read(struct usblp *usblp)
+ 	usblp->readcount = 0; /* XXX Why here? */
+ 	usblp->rcomplete = 0;
+ 	spin_unlock_irqrestore(&usblp->lock, flags);
+-	if ((rc = usb_submit_urb(urb, GFP_KERNEL)) < 0) {
++	rc = usb_submit_urb(urb, GFP_KERNEL);
++	if (rc < 0) {
+ 		dev_dbg(&usblp->intf->dev, "error submitting urb (%d)\n", rc);
+ 		spin_lock_irqsave(&usblp->lock, flags);
+ 		usblp->rstatus = rc;
+@@ -1150,7 +1159,8 @@ static int usblp_probe(struct usb_interface *intf,
+ 	/* Malloc device ID string buffer to the largest expected length,
+ 	 * since we can re-query it on an ioctl and a dynamic string
+ 	 * could change in length. */
+-	if (!(usblp->device_id_string = kmalloc(USBLP_DEVICE_ID_SIZE, GFP_KERNEL))) {
++	usblp->device_id_string = kmalloc(USBLP_DEVICE_ID_SIZE, GFP_KERNEL);
++	if (!usblp->device_id_string) {
+ 		retval = -ENOMEM;
+ 		goto abort;
+ 	}
+@@ -1160,7 +1170,8 @@ static int usblp_probe(struct usb_interface *intf,
+ 	 * malloc both regardless of bidirectionality, because the
+ 	 * alternate setting can be changed later via an ioctl.
+ 	 */
+-	if (!(usblp->readbuf = kmalloc(USBLP_BUF_SIZE_IN, GFP_KERNEL))) {
++	usblp->readbuf = kmalloc(USBLP_BUF_SIZE_IN, GFP_KERNEL);
++	if (!usblp->readbuf) {
+ 		retval = -ENOMEM;
+ 		goto abort;
+ 	}
+-- 
+2.25.1
+
 
