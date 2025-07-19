@@ -1,114 +1,100 @@
-Return-Path: <linux-usb+bounces-25966-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25967-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3656B0AC82
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Jul 2025 01:18:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15D17B0AE0F
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Jul 2025 06:56:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEDBD5A168F
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jul 2025 23:18:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0B7F3A9451
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Jul 2025 04:55:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77844226541;
-	Fri, 18 Jul 2025 23:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="elM+aYqs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E3821D3C0;
+	Sat, 19 Jul 2025 04:56:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE805A923;
-	Fri, 18 Jul 2025 23:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFF51F3B89;
+	Sat, 19 Jul 2025 04:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752880707; cv=none; b=ljwXV9OL95oHxWLFcbazlA1mKgjG3yu9vpO+GYR4AxeCE17oeBD36c9auohYUSE1r5UHKKx6+1Rdr1tyVImyfDN3lJolCgfXv0XFZupmcHvacaDCi8tisA5Bpm1GuEo/iMujS+pkNu8AYrZJEQuYpwcV94SyS1N0PHE6UBmglPg=
+	t=1752900979; cv=none; b=UdG5d0rAfNOLzUt8UJrddDR0bdSLjgLgGsrYarRCZV7Wh1iUS4T+Yx15jMGS9yQnukeSVeaqPtEY66VkuESZi4L3nZQ12Wc8UftRS1lp+yIiltvUWgsBozJw7N2WYPZSvQHGxWm/Tzt7rXOiXiRxVu8CaYukEe7e1YS5+8mLf1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752880707; c=relaxed/simple;
-	bh=CZTZ9oUZTzhOy7CxW12Mv61GrBq1wGI/F8Msa4fG+HQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mZxlQr3Zuu6RRWF4Ww3WIGhQyDQhw+NRiH9ix9BNe9CXUpEaAkkp4eIBlGorfbFizPu2nqc8X/rF0i0AIwJL2/TVt6bYPcRN0lDDLB4UXDw8N3w2U/xKVdojiu6KW9cpXXudcjIEsJWOoEvzLpT5Tg90f3My4CzmnEGh1r6QRNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=elM+aYqs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1088CC4CEEB;
-	Fri, 18 Jul 2025 23:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752880706;
-	bh=CZTZ9oUZTzhOy7CxW12Mv61GrBq1wGI/F8Msa4fG+HQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=elM+aYqs9RSlCedFnBwaJyWquK+vFNZkIbVf2sd3KVRV+DKy3Huj9k4EQPP89AjRm
-	 1IUaSBELre8rOu8SpL3hD4Bq9Ja7pEqEkr+Oj9BfxWhy5RXLEKv3HuJg2Nz9F26JQj
-	 IgkW3x8BaM5uyBUPKiJ2HUHadjopPKat/cur32TIL5k0ipEteAGbTGp3jkqteBL+km
-	 eQ8fEjuEElCqWZdx9xS9GYhqS4hJk8AmtkGSDUe4xHfA550ya+URIMcPRiePeIA723
-	 uXXhwYB4OKLmtyCxzjOCgpsR760xHdhg/2REs0KNfozNSnrqfuuMmIJqn9ZKfUA3ZC
-	 ZgHFRmFh9oLmw==
-Date: Fri, 18 Jul 2025 16:18:25 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: John Ernberg <john.ernberg@actia.se>
-Cc: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Ming Lei
- <ming.lei@canonical.com>, "netdev@vger.kernel.org"
- <netdev@vger.kernel.org>, "linux-usb@vger.kernel.org"
- <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "stable@vger.kernel.org"
- <stable@vger.kernel.org>
-Subject: Re: [PATCH] net: usbnet: Avoid potential RCU stall on LINK_CHANGE
- event
-Message-ID: <20250718161825.65912e37@kernel.org>
-In-Reply-To: <55147f36-822b-4026-a091-33b909d1eea8@actia.se>
-References: <20250710085028.1070922-1-john.ernberg@actia.se>
-	<20250714163505.44876e62@kernel.org>
-	<74a87648-bc02-4edb-9e6a-102cb6621547@actia.se>
-	<20250715065403.641e4bd7@kernel.org>
-	<fbd03180-cca0-4a0f-8fd9-4daf5ff28ff5@actia.se>
-	<20250716143959.683df283@kernel.org>
-	<55147f36-822b-4026-a091-33b909d1eea8@actia.se>
+	s=arc-20240116; t=1752900979; c=relaxed/simple;
+	bh=1OlVkAKdGNnvMEPx92h5uqRH+WN5++SDwId91M9R8BI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Qxn6aFiFxwW6yNNGlFef7paG2bTZLIgHowaZhSwlGVhQUUfQ7fDM7ImXSfGwSI5j7ZSJ7yAXwo7N69m4w3Xvc5p9rptFVN4UbeIFT3PMu3pSTSGwX57fUNY1wWejce+33pxYc0OYY01QDtdBZKq31Mel+9JtFl3DyTHSrSAv0Po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4bkZ4Z0XcBz14LxM;
+	Sat, 19 Jul 2025 12:51:26 +0800 (CST)
+Received: from kwepemk100018.china.huawei.com (unknown [7.202.194.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1F44D14020C;
+	Sat, 19 Jul 2025 12:56:14 +0800 (CST)
+Received: from vm7-217-32-6.huawei.com (7.217.32.6) by
+ kwepemk100018.china.huawei.com (7.202.194.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sat, 19 Jul 2025 12:56:13 +0800
+From: Tao Xue <xuetao09@huawei.com>
+To: <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+	<prashanth.k@oss.qualcomm.com>, <m.grzeschik@pengutronix.de>,
+	<Chris.Wulff@biamp.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <caiyadong@huawei.com>, <suzhuangluan@hisilicon.com>,
+	<weiwenwen3@huawei.com>
+Subject: [PATCH] usb: gadget : fix use-after-free in composite_dev_cleanup()
+Date: Sat, 19 Jul 2025 12:56:12 +0800
+Message-ID: <20250719045612.10739-1-xuetao09@huawei.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemk100018.china.huawei.com (7.202.194.66)
 
-On Fri, 18 Jul 2025 09:07:26 +0000 John Ernberg wrote:
-> > Thanks for the analysis, I think I may have misread the code.
-> > What I was saying is that we are restoring the carrier while
-> > we are still processing the previous carrier off event in
-> > the workqueue. My thinking was that if we deferred the
-> > netif_carrier_on() to the workqueue this race couldn't happen.
-> > 
-> > usbnet_bh() already checks netif_carrier_ok() - we're kinda duplicating
-> > the carrier state with this RX_PAUSED workaround.
-> > 
-> > I don't feel strongly about this, but deferring the carrier_on()
-> > the the workqueue would be a cleaner solution IMO.
-> >   
-> 
-> I've been thinking about this idea, but I'm concerned for the opposite 
-> direction. I cannot think of a way to fully guarantee that the carrier 
-> isn't turned on again incorrectly if an off gets queued.
-> 
-> The most I came up with was adding an extra flag bit to set carrier on, 
-> and then test_and_clear_bit() it in the __handle_link_change() function.
-> And also clear_bit() in the usbnet_link_change() function if an off 
-> arrives. I cannot convince myself that there isn't a way for that to go 
-> sideways. But perhaps that would be robust enough?
+The pointer cdev->os_desc_req need to be set null when kmalloc failed in
+composite_os_desc_req_prepare(),otherwise the use-after-free issue will
+be encountered in composite_dev_cleanup()
 
-I think it should be robust enough.. Unless my grep skills are failing
-me - no drivers which call usbnet_link_change() twiddle the link state
-directly.
+BUG: KASAN: use-after-free in composite_dev_cleanup+0xf4/0x2c0
+Read of size 8 at addr 0000004827837a00 by task init/1
 
-Give it a go, if you think your initial patch is cleaner -- it's fine.
+CPU: 10 PID: 1 Comm: init Tainted: G           O      5.10.97-oh #1
+ kasan_report+0x188/0x1cc
+ __asan_load8+0xb4/0xbc
+ composite_dev_cleanup+0xf4/0x2c0
+ configfs_composite_bind+0x210/0x7ac
+ udc_bind_to_driver+0xb4/0x1ec
+ usb_gadget_probe_driver+0xec/0x21c
+ gadget_dev_desc_UDC_store+0x264/0x27c
 
-> I've also considered the possibility of just not re-submitting the INTR 
-> poll URB until the last one was fully processed when handling a link 
-> change. But that might cause havoc with ASIX and Sierra devices as they 
-> are calling usbnet_link_change() in other ways than through the 
-> .status-callback. I don't have any of these devices so I cannot test 
-> them for regressions. So this path feels quite dangerous.
-> With a sub-driver property to enable this behavior it might work out?
+Fixes: 37a3a533429e ("usb: gadget: OS Feature Descriptors support")
+Signed-off-by: Tao Xue <xuetao09@huawei.com>
+Signed-off-by: weiwenwen <weiwenwen3@huawei.com>
+---
+ drivers/usb/gadget/composite.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yeah, that seems more involved.
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 8dbc132a505e..385398a039ea 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -2489,6 +2489,7 @@ int composite_os_desc_req_prepare(struct usb_composite_dev *cdev,
+ 	if (!cdev->os_desc_req->buf) {
+ 		ret = -ENOMEM;
+ 		usb_ep_free_request(ep0, cdev->os_desc_req);
++		cdev->os_desc_req = NULL;
+ 		goto end;
+ 	}
+ 	cdev->os_desc_req->context = cdev;
+-- 
+2.17.1
+
 
