@@ -1,57 +1,99 @@
-Return-Path: <linux-usb+bounces-25970-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25971-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E649BB0AED8
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Jul 2025 10:41:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0966EB0AF1A
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Jul 2025 11:35:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DBBF1C23C14
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Jul 2025 08:41:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 800423A8726
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Jul 2025 09:35:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B64237163;
-	Sat, 19 Jul 2025 08:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C0E21884A;
+	Sat, 19 Jul 2025 09:35:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WmeuNlDE"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aYNd9kCJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D597C881E;
-	Sat, 19 Jul 2025 08:40:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C6821770A
+	for <linux-usb@vger.kernel.org>; Sat, 19 Jul 2025 09:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752914456; cv=none; b=EtMDFDWi7Awvm4CpYpltlD2RTt2J42GN58xtHOm50p5iniRzEcPrj9ALPhGMDlnGqRwBi+hT3CwoAkalAwmcugdbud23UZGMinfnzING9Ho1afo3tqMlzxy0hfiCgjGN77khdxg1K8zS6Yoeu0GKyXNnA4UwvTy5NWGO3ltkU0E=
+	t=1752917736; cv=none; b=Ea3b8I60RvY6WWYqBtVM5JK9QEIN4dhSr0RBNI09u1su+d6pmN4AkgR8M0EPas8v0CgWy0BePH/pSrKKcROjawMAWPmXekSZMlSr+TkYk6V7RNl6efK5x9VpWFzx/adTVwi7+oG1AEYCXL/IxFb19qdgRti+s9RXUXbiK3U+X1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752914456; c=relaxed/simple;
-	bh=4LiPHafqTK8MKYl8l+ASMTLJ7oaDQeMUGtyxkPsbkk8=;
+	s=arc-20240116; t=1752917736; c=relaxed/simple;
+	bh=hoSWN+5jhLJI9d8DpMrlNxb5YX+YAZkHose3puHowik=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iplFjOSs9OooLTEqMFjjauQGwqTFiBK7PS2UaCxEjjQVbtp+4tf23+WjNRhj0CyKtkA40jwxM+1/0Qw5EKzywG6gHgw3toqIzDlKLw3dv1pNzDRLFunoDtNVxNde6JLd70/NVrIDaOPwy3FXc1A83FMZYXNXpOtH3KXYXzShj78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WmeuNlDE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E82BBC4CEE3;
-	Sat, 19 Jul 2025 08:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752914455;
-	bh=4LiPHafqTK8MKYl8l+ASMTLJ7oaDQeMUGtyxkPsbkk8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WmeuNlDESf+E1oXdS4RuKIlTQbNrqaywHHDDrTwCZXX9idLXQRWy/dJ833TH7KxKQ
-	 44rt7v17s37POTGtRsM3+gZCKslSXlf2121z7Cw6ghjY0BQBUueVhDRpbTAYEbofIi
-	 S3QBhFffawEz79Rxgeq/XHoval/PMkJpOCFl+kT2F3NdKrTM7+2BUd3sRBC42Ht+3y
-	 zFwL8Qh3cm1DMY34lCjluL9LUS4u5nyJ0z5dvJofMU5VIu5n7IBipHSOvWMP8kDVdZ
-	 m7oO6w7F0FWMNbsviRlJ8YVR0OmufKxIXtZSBIYWHoismMloDQjZe7QvTZUyEcsK6m
-	 008ZcmWBKmyUA==
-Date: Sat, 19 Jul 2025 10:40:51 +0200
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>, 
-	jikos@kernel.org, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] HID: core: Reject report fields with a size or count of 0
-Message-ID: <mcigin2behhkoiq3dzgpjqjyqynskn4kgvuympi55wnlr3nud6@yuljmwr2zlfp>
-References: <68791b6f.a70a0220.693ce.004b.GAE@google.com>
- <8a4eb6b0-f640-4207-9f05-83e06080410b@rowland.harvard.edu>
- <lrhydvc7huuqck2kvqzobqt7hhwt36zwsa2i3fpegbpykt5q43@2md6gfitjlb3>
+	 Content-Type:Content-Disposition:In-Reply-To; b=u1Kvp8eoFEzzXgKF4DlIaHRi6Lkzm6cwZ7TGSr+NPPbsO3+tQppPJH27KueyaC64c8YbseZaAb6tSHhKHvOvFdktigzkwt/yjLgPGadUTTtQEX/OlXgtyJt6etm/gNjgZU3sE9SdeH+7Q7e4P+YkNaAFW318FND51eSt6HHy/vI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aYNd9kCJ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56J4LEjr027034
+	for <linux-usb@vger.kernel.org>; Sat, 19 Jul 2025 09:35:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=wSbh+xGKxOsPi/4J27pwmx2I
+	Cc9rg1Dj97VeqIVuWg8=; b=aYNd9kCJBpJD8plQqeqjz/IuZ6xQz243UkfZsZl2
+	xfMrkrgp61/ad0lwFhnxvzBZfBwaJwIXkXf+e4secVC/5Zb66PlHfH2bQ/AkEQ+S
+	UEJ/TE/6lu9GEH+F7mTu33dlaEhdBI/Yb4E672HHDkvbeePuQWNPnt5Ugt8xLvpW
+	2NOJV3h/UJxDWgd4VAhTCZnyDQVyPnZtJ518PNR2jrsKVTXIl0E2AXtcYmM4tdVC
+	mFYYA1Km/E9LwiHwpq3c/Kv9KhFnaLRe8lpUSbJevx37qrINemTr/FNDDjGvOUuO
+	6ZFE3SL0a8tE+FSiXq7eCzkMG4OfC1IjMDr/8usJHWdQ+A==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48048rre3k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Sat, 19 Jul 2025 09:35:33 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7e350915d2aso643079585a.1
+        for <linux-usb@vger.kernel.org>; Sat, 19 Jul 2025 02:35:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752917733; x=1753522533;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wSbh+xGKxOsPi/4J27pwmx2ICc9rg1Dj97VeqIVuWg8=;
+        b=AEempOwxXfAUj/fr/ozvLNF8Eneo7enrGdTxhd+CS6R0kKU5Gvf7QkXVibNgvRpp6p
+         BJ1FTvfHnbLktBKU1KTUQCAb2NHOZR5tojMis1VUfunXJV3CSzHBnOIFzl6he2hB8pNp
+         GUg3350OJE0jJQhfc3063Uw2dcfSNYJt0Wix8ai5vV/JpU8VUfSaAUe3vG1L0/TLDEyH
+         1Qq13AlCNLdkPC7ppTJkdhTn9JzjgXpDTyk/wlxbtRKL2BQqu3QjsJP5kZKl6hpUOCVA
+         R/R9WpRjEgsJLvfKyqnahNXEPuK1XGRaF9M9Dg8FpMpcPyNubGs6wfO0K0gdKh0q4Wrm
+         wCwA==
+X-Forwarded-Encrypted: i=1; AJvYcCVLXdqVoI4RHZvR6tVsfhYWG7n9q1B6ewKDAJTeS/2FOACEQx8jFPE2/acdBJbzLIGFIjHPZ7WEtSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9+XKTPoTjfc5iP4tc3t7MYWjYs6+Hu6eliJG6O87QDuWPmNgX
+	ZxTEU7MlpsrkzAX2B9Yn9l6Vxj36m72xltTl3hQVapF0xWFlKBjsRUm3IMGQSBqNXclmJ3cMHZ6
+	wAiRlnRWpvnes7WhCDaM1zwWuFPK3g5IyVpSSNSm8hqdvH4xRzkAlh+YPnO9mvb8=
+X-Gm-Gg: ASbGnctX7Xw8/LdeAV74Nz27ZoQjalH4k32/kfejP1BFBE+KkHpVCUHSEmHbkrem3cV
+	OYOWaiCZbUrjkc74V6hu158y5bBjX5ZHhQ1UejSXYWa7GN/tbgHokbUAxh8WF7d0ZaCBnW7AlIP
+	Gf4Dm47NW0XayRo9xCayKKO6mjFAjawnui/T2ZbxFfVMeMRzbRdafZF0zplocmaLrfjwaDz0iYo
+	TAPYOxC6EVGvIWsLVmR3o0iDpJYg/C/9sFnKcR41P0cHyunOfumgqZFQSqeOYlZybxXG4q6Dq1b
+	D/gG/XzNi8cBulPqA0dZYsdY9IAoPUv9Gba7Nsqcq0cfngenWup3ZwWl+0grebNSJmJofINIfSU
+	2oXBtH1BRyVwed0qQxzr7He5bA8T/7yezM8pJ4h8fxidbAC1Td9ia
+X-Received: by 2002:a05:620a:2699:b0:7d4:28d9:efbe with SMTP id af79cd13be357-7e356ae17fcmr791788785a.32.1752917733029;
+        Sat, 19 Jul 2025 02:35:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGM5wbUvtWyq03MOIlSlrD0IZhIz8P5EDs5+tTPDfigb89vA+4wYsZvArhwqxS6KlWMIpuEvg==
+X-Received: by 2002:a05:620a:2699:b0:7d4:28d9:efbe with SMTP id af79cd13be357-7e356ae17fcmr791785185a.32.1752917732539;
+        Sat, 19 Jul 2025 02:35:32 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55a31aba0f7sm648128e87.83.2025.07.19.02.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Jul 2025 02:35:30 -0700 (PDT)
+Date: Sat, 19 Jul 2025 12:35:27 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v2] usb: dwc3: qcom: Don't leave BCR asserted
+Message-ID: <iyvjr6fx3ec327mcbtemxdke32wzm6xy2zuwbdimy7ticsuvmq@rlbqiwdwi4x2>
+References: <20250709132900.3408752-1-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,98 +102,59 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <lrhydvc7huuqck2kvqzobqt7hhwt36zwsa2i3fpegbpykt5q43@2md6gfitjlb3>
+In-Reply-To: <20250709132900.3408752-1-krishna.kurapati@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE5MDA5NCBTYWx0ZWRfXxlwGsjXpUHLv
+ jb+aHXoND8P4DlwgN0hZhtpzxFLCneIv6FHk/oaRH1VHsfLBCKAS7PgpX+9pENgayDxVW6gD1Xp
+ Bx7xyawSLRuHBrl/vNW/zqbTgVt9mSp4iCR9kUKWUAMrC6DY2cmNICqzeU1bgn4qeddS9oy7qrR
+ UHLVmPCb2kohgp5R3p984i5Lf/xRFXNAmRFmRPlNUNWQcSld9nVkjaX+ng8zykEFBD/jzbdI6uy
+ XVR/4VIwe9rBhf/YWjtDdGF3A51pj2tFPB82SthHG1OdG1sab3gN2Tln6mJpWAG54ik3v+kMJN6
+ V4d1ejJ3O7/8Eoc5oC9GtFLfBTnOKP6OKuMiL6HrGUp7F+q0efrFcea50NFSYwcZ758+lkei+y3
+ m7o09kw1nK1Ufbhu1NvWqmxLQAcuPpBWl6CiNbeaObtj6c4wcCPiycGB53s2zbKe5FXZWn1+
+X-Proofpoint-ORIG-GUID: oLhVd5-27eh271wqznkQ63E8rQGJouwv
+X-Proofpoint-GUID: oLhVd5-27eh271wqznkQ63E8rQGJouwv
+X-Authority-Analysis: v=2.4 cv=OPUn3TaB c=1 sm=1 tr=0 ts=687b66e6 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=jIQo8A4GAAAA:8
+ a=eOX_9S80fVGYM9ega84A:9 a=CjuIK1q_8ugA:10 a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-19_01,2025-07-17_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 clxscore=1015 mlxlogscore=533 lowpriorityscore=0 suspectscore=0
+ spamscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 phishscore=0
+ malwarescore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507190094
 
-On Jul 19 2025, Benjamin Tissoires wrote:
-> On Jul 17 2025, Alan Stern wrote:
-> > Testing by the syzbot fuzzer showed that the HID core gets a
-> > shift-out-of-bounds exception when it tries to convert a 32-bit
-> > quantity to a 0-bit quantity.  This is hardly an unexpected result,
-> > but it means that we should not accept report fields that have a size
-> > of zero bits.  Similarly, there's no reason to accept report fields
-> > with a count of zero; either type of item is completely meaningless
-> > since no information can be conveyed in zero bits.
-> > 
-> > Reject fields with a size or count of zero, and reject reports
-> > containing such fields.
-> > 
-> > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > Reported-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
-> > Closes: https://lore.kernel.org/linux-usb/68753a08.050a0220.33d347.0008.GAE@google.com/
-> > Tested-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
-> > Fixes: dde5845a529f ("[PATCH] Generic HID layer - code split")
-> > Cc: stable@vger.kernel.org
-> > 
-> > ---
-> > 
-> > The commit listed in the Fixes tag is not really the right one.  But
-> > code motion made tracking it back any further more difficult than I
-> > wanted to deal with, so I stopped there.  That commit is from 2006,
-> > which is already far enough in the past.
-> > 
-> >  drivers/hid/hid-core.c |   15 ++++++++++++---
-> >  1 file changed, 12 insertions(+), 3 deletions(-)
-> > 
-> > Index: usb-devel/drivers/hid/hid-core.c
-> > ===================================================================
-> > --- usb-devel.orig/drivers/hid/hid-core.c
-> > +++ usb-devel/drivers/hid/hid-core.c
-> > @@ -313,7 +313,14 @@ static int hid_add_field(struct hid_pars
-> >  	}
-> >  
-> >  	offset = report->size;
-> > -	report->size += parser->global.report_size * parser->global.report_count;
-> > +	i = parser->global.report_size * parser->global.report_count;
-> > +	if (i == 0) {
-> > +		dbg_hid("invalid field size/count 0x%x 0x%x\n",
-> > +			parser->global.report_size,
-> > +			parser->global.report_count);
-> > +		return -1;
-> > +	}
-> > +	report->size += i;
-> >  
-> >  	if (parser->device->ll_driver->max_buffer_size)
-> >  		max_buffer_size = parser->device->ll_driver->max_buffer_size;
-> > @@ -464,7 +471,8 @@ static int hid_parser_global(struct hid_
-> >  
-> >  	case HID_GLOBAL_ITEM_TAG_REPORT_SIZE:
-> >  		parser->global.report_size = item_udata(item);
-> > -		if (parser->global.report_size > 256) {
-> > +		if (parser->global.report_size > 256 ||
-> > +				parser->global.report_size == 0) {
-> >  			hid_err(parser->device, "invalid report_size %d\n",
-> >  					parser->global.report_size);
-> >  			return -1;
+On Wed, Jul 09, 2025 at 06:59:00PM +0530, Krishna Kurapati wrote:
+> Leaving the USB BCR asserted prevents the associated GDSC to turn on. This
+> blocks any subsequent attempts of probing the device, e.g. after a probe
+> deferral, with the following showing in the log:
 > 
-> Sigh... I applied this one too quickly before going on holidays.
+> [    1.332226] usb30_prim_gdsc status stuck at 'off'
 > 
-> This breaks the hid testsuite:
-> https://gitlab.freedesktop.org/bentiss/hid/-/jobs/80805946
+> Leave the BCR deasserted when exiting the driver to avoid this issue.
 > 
-> (yes, I should have run it before applying).
+> Cc: stable@vger.kernel.org
+> Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> ---
+> Changes in v2:
+> Added Fixes tag and CC'd stable.
 > 
-> So basically, there are devices out there with a "broken" report size of
-> 0, and this patch now entirely disables them.
+> Link to v1:
+> https://lore.kernel.org/all/20250604060019.2174029-1-krishna.kurapati@oss.qualcomm.com/
 > 
-> That Saitek gamepad has the following (see tools/testing/selftests/hid/tests/test_gamepad.py):
->         0x95, 0x01,                    # ..Report Count (1)                  60
->         0x75, 0x00,                    # ..Report Size (0)                   62
->         0x81, 0x03,                    # ..Input (Cnst,Var,Abs)              64
-> 
-> So we'd need to disable the field, but not invalidate the entire report.
-> 
-> I'm glad I scheduled this one for the next cycle.
-> 
-> I'll try to get something next week.
+>  drivers/usb/dwc3/dwc3-qcom.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 > 
 
-In case you are interested in fixing this, a quick reproducer can be
-done through virtme-ng:
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-$> vng --verbose --kconfig --skip-module --config tools/testing/selftests/hid/config
-$> make -j8
-$> vng -v --user root --exec "mount bpffs -t bpf /sys/fs/bpf ; pytest ./tools/testing/selftests/hid/tests/test_gamepad.py -v -x --color=yes -k Saitek"
 
-Cheers,
-Benjamin
+-- 
+With best wishes
+Dmitry
 
