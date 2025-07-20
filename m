@@ -1,79 +1,135 @@
-Return-Path: <linux-usb+bounces-25980-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25981-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23B5EB0B6E9
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Jul 2025 18:31:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAABDB0B81A
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Jul 2025 22:01:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9A293BD9C5
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Jul 2025 16:31:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18873177E6B
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Jul 2025 20:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07DED22256B;
-	Sun, 20 Jul 2025 16:30:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLcEvjc8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41D711F3BBB;
+	Sun, 20 Jul 2025 20:01:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EF72206B1;
-	Sun, 20 Jul 2025 16:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C62D382;
+	Sun, 20 Jul 2025 20:01:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753029057; cv=none; b=SJ8BJIjouMbT2x7V5s9QTvccoRd+RJdgo0uJ5Y4NN1uYe/1x6OmJAAohUc5FBffMWlKH9GET92Si0ihGiuWSXXSM9QbLm4CgyIohLg+W9kR9XvgFzja7UI2l7HTCTSUTFeENMhHhAirezTDwXvKgPfFnKyfeXrGdWdimZQp+X5k=
+	t=1753041688; cv=none; b=pLl0VhZvOQlsCd7lc5YyFfLhEkFOMYJtUn9MP49LyXOUJaGk1VfHb4Qx9Anwr2tgLl+0RgMtQx6KtOL6vrO9SuqVIVLFVuccpYdJdaSYM6OrhniTSfZuAdld+GttbFqpZGrIUJioutiJT6rsRx6VtQBH6EdrgWWfK+kCU8xkKW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753029057; c=relaxed/simple;
-	bh=Nt424zWvn+E9abzmTkUPUSFrnUmnZ3CzEt9dvh/IA2I=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=FL1jzzTIigZquU/cZYqZaoGeB33JP+XhvIoevMj9jx21lznQtqRRoYp8ipk41/v5EI9vvSH/1KaC5iteYdnl5825sqqMCTYlzsTSZcXC6Q60u7MfTEAyqZhsz/WxOCgmWaiq5cxrnzxdDtV2tqFCr9UroPyk8XBbcfvcY8a4Pgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLcEvjc8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65ED7C4CEE7;
-	Sun, 20 Jul 2025 16:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753029057;
-	bh=Nt424zWvn+E9abzmTkUPUSFrnUmnZ3CzEt9dvh/IA2I=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=PLcEvjc8iutUvoHDqdN+HS78qNySYBIBevdNxIsBdWAZsJa/soHYPTg6r5gd7WPJy
-	 e9cfErVA8kpUsCMfGF4cJzo+5Tx7ut6HOGI691SQZ9ZqbdqI3cUL/ElfaZh6afySTi
-	 butCCI/KN+6pNXOY4WzDQQe7m5pQqxINZAF5xwIyHi/2Qm70bXsf3QGKRTcN8yYKG0
-	 gnXOuzIXjDefRxLqTz6Zu3hpIbRgb7O9HX5y3qjmtbhrNoRvHRC7fjijrfq9MCutwa
-	 1j/40eD++7UrH6GOnphj3r/1N0kvy6wU+MxothDWhdBAAw0DbXZyelwhY69yngQWR7
-	 Y3keqgzegkeVg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADCDF383BF51;
-	Sun, 20 Jul 2025 16:31:17 +0000 (UTC)
-Subject: Re: [GIT PULL] USB/Thunderbolt driver fixes for 6.16-rc6
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <aHzI4aFr-UNU6dZX@kroah.com>
-References: <aHzI4aFr-UNU6dZX@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <aHzI4aFr-UNU6dZX@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.16-rc6
-X-PR-Tracked-Commit-Id: 2521106fc732b0b75fd3555c689b1ed1d29d273c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4f066b189f91622f3a3a231736659f25eb6e30b0
-Message-Id: <175302907621.3241589.9356753648255668916.pr-tracker-bot@kernel.org>
-Date: Sun, 20 Jul 2025 16:31:16 +0000
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+	s=arc-20240116; t=1753041688; c=relaxed/simple;
+	bh=ko5XodbQbQ51da4c10eyXzC2IwBB+CP+8acn5vUuC4o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dx/5sCbkU8GZhQDa9Np9siW/8K0x50vOG20Tt8dB1rVetnfsKJjoil3MKw007dsW2KQuBiQ0kEB6S8QDO88RKcWGGysfYJNeY9nGyupW1FG5JQ29/o+3dp8/Gft/uUtN0Uq9cLNH8bmgtY2kCp4taGILZdC1+z4Rcr7vgf0mSks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
+Received: from arnaudlcm-X570-UD.. (unknown [IPv6:2a02:8084:255b:aa00:2685:4e7b:cbf0:7870])
+	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id C684840484;
+	Sun, 20 Jul 2025 20:01:22 +0000 (UTC)
+Authentication-Results: Plesk;
+	spf=pass (sender IP is 2a02:8084:255b:aa00:2685:4e7b:cbf0:7870) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=arnaudlcm-X570-UD..
+Received-SPF: pass (Plesk: connection is authenticated)
+From: Arnaud Lecomte <contact@arnaud-lcm.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	viro@zeniv.linux.org.uk,
+	snovitoll@gmail.com,
+	syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com,
+	contact@arnaud-lcm.com
+Subject: [PATCH] usb: mon: Fix slab-out-of-bounds in mon_bin_event due to
+ unsafe URB transfer_buffer access
+Date: Sun, 20 Jul 2025 21:00:57 +0100
+Message-ID: <20250720200057.19720-1-contact@arnaud-lcm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-PPP-Message-ID: <175304168340.17734.15413668970472850681@Plesk>
+X-PPP-Vhost: arnaud-lcm.com
 
-The pull request you sent on Sun, 20 Jul 2025 12:45:53 +0200:
+The syzkaller fuzzer uncovered a kernel slab-out-of-bounds
+ write in the USB monitoring subsystem (mon_bin) when handling
+ a malformed URB (USB Request Block) with the following properties:
+ - transfer_buffer_length = 0xffff
+ - actual_length = 0x0 (no data transferred)
+ - number_of_packets = 0x0 (non-isochronous transfer)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.16-rc6
+When reaching the mon_copy_to_buff function,
+ we will try to copy into the mon rp bin with the following parameters:
+off=0xcc0, from=0xffff8880246df5e1 "", length=0xf000
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4f066b189f91622f3a3a231736659f25eb6e30b0
+At the first iteration, the step_len is 0x340 and it is during the mem_cpy
+that the slab-out-of-bounds happens.
+As step_len < transfer_buffer_length, we can deduce that it is related
+ to an issue with the transfer_buffer being invalid.
+The patch proposes a safe access to the kernel
+ kernel buffer urb->transfer_buffer with `copy_from_kernel_nofault`.
 
-Thank you!
+Reported-by: syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com
+Fixes: 6f23ee1fefdc1 ("USB: add binary API to usbmon")
+Closes: https://syzkaller.appspot.com/bug?extid=86b6d7c8bcc66747c505
+Tested-by: syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com
+Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
+---
+ drivers/usb/mon/mon_bin.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+index c93b43f5bc46..d3bef2a37eb0 100644
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -249,7 +249,11 @@ static unsigned int mon_copy_to_buff(const struct mon_reader_bin *this,
+ 		 * Copy data and advance pointers.
+ 		 */
+ 		buf = this->b_vec[off / CHUNK_SIZE].ptr + off % CHUNK_SIZE;
+-		memcpy(buf, from, step_len);
++
++		if (copy_from_kernel_nofault(buf, from, step_len)) {
++			pr_warn("Failed to copy URB transfer buffer content into mon bin.");
++			return -EFAULT;
++		}
+ 		if ((off += step_len) >= this->b_size) off = 0;
+ 		from += step_len;
+ 		length -= step_len;
+@@ -413,11 +417,13 @@ static unsigned int mon_bin_get_data(const struct mon_reader_bin *rp,
+ 
+ 	*flag = 0;
+ 	if (urb->num_sgs == 0) {
+-		if (urb->transfer_buffer == NULL) {
++		if (
++			urb->transfer_buffer == NULL ||
++			mon_copy_to_buff(rp, offset, urb->transfer_buffer, length) < 0
++		) {
+ 			*flag = 'Z';
+ 			return length;
+ 		}
+-		mon_copy_to_buff(rp, offset, urb->transfer_buffer, length);
+ 		length = 0;
+ 
+ 	} else {
+@@ -434,6 +440,10 @@ static unsigned int mon_bin_get_data(const struct mon_reader_bin *rp,
+ 			this_len = min_t(unsigned int, sg->length, length);
+ 			offset = mon_copy_to_buff(rp, offset, sg_virt(sg),
+ 					this_len);
++			if (offset < 0) {
++				*flag = 'Z';
++				return length;
++			}
+ 			length -= this_len;
+ 		}
+ 		if (i == 0)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.43.0
+
 
