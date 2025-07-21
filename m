@@ -1,109 +1,91 @@
-Return-Path: <linux-usb+bounces-26026-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26027-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65DC7B0BEDA
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 10:27:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58A2EB0BF29
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 10:39:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5572C17D212
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 08:27:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4755818830DD
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 08:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75AAC289839;
-	Mon, 21 Jul 2025 08:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F63286D4B;
+	Mon, 21 Jul 2025 08:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JX8YNaEp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0501DEFDB;
-	Mon, 21 Jul 2025 08:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8C21D5ACE
+	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 08:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753086353; cv=none; b=FL1xMAqE0yemZhydUMYstqeU85DCvZKkohB39Yh5Gw+WZI+Dq314WVpNG8DoehgEORi6OgKYVS+S8E2z/7AgEm9ZnID5S2OvxuVTeBFi4vZECSL2qC2mXjB80DXSifANJ7C7gAAa80OAfhaqEpzUM/AYZVWI2OsIAfknhyhyClM=
+	t=1753087151; cv=none; b=GlHvSBMtRhZVqVMEfDRtRACiVWZCzg6Mt70d6WZ75e5GgmERH3nS9+GeuBHB0thtlmPVKrT6yqtVNz6f1+qT42JLKbVXRcCR1rY6T1kDha2xaB4hrau7Sm5zAr8Wh7C6CfIVPvFQid+ka/GB46OAT3AUXFNqCflNh/l0OTftzpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753086353; c=relaxed/simple;
-	bh=GKnYUcABafVSlPIjZjOOP0oBm2DtJK6Mf/yfl5Xu6qU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nKPc9x/IAt2uoIpfuuOHueyUc297y6bMmFMxaPGYeEOjFaMrYqdjsHbx2QIIhYNGoIRJUJ/BAzPWGpLobbUZS9rM7y/etZ5KB/HzMoFNZgJfaCOKWvPKPzaefn+nOukrkc/bUo3q4GQYrbv1/o+60eTUtQbYMvMhEcnDFulWL+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
-Received: from [10.48.132.14] (unknown [15.248.2.230])
-	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id 35F9040A1F;
-	Mon, 21 Jul 2025 08:25:48 +0000 (UTC)
-Authentication-Results: Plesk;
-        spf=pass (sender IP is 15.248.2.230) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=[10.48.132.14]
-Received-SPF: pass (Plesk: connection is authenticated)
-Message-ID: <e0f3b6da-eb4b-4270-9f20-f93b892a3a5c@arnaud-lcm.com>
-Date: Mon, 21 Jul 2025 09:25:47 +0100
+	s=arc-20240116; t=1753087151; c=relaxed/simple;
+	bh=23yn0rGxevxtj/m1dPHQgLOwS9SsYj5+q4eeyIEw8qc=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KVENR6zpOXcR5uyqFAlylsUPoPCFaf609E9Lc6NX4EZtd7PEcghstuMFmA07ElCVVtOYs0A0Nz1qigpfHLBCrQScKx3pzbx/PrAre3uNrCnaBGulRuP2qz6CguesGoJWnquzxHPRf3qWO2vobdsqBJa7MkbqWhq2fJuau9eb2uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JX8YNaEp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 49711C4CEF4
+	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 08:39:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753087151;
+	bh=23yn0rGxevxtj/m1dPHQgLOwS9SsYj5+q4eeyIEw8qc=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=JX8YNaEppE0OxZ57kJYxgvFg8dT0luVcmiqrFlI2kU7kY952YHQW6M56SYmxPLP4t
+	 Z9rIrQGnh4t6s4r700O+Uor0ktV0FKAoq1M2BzyxFNTIr6CLB64fArT+EXeJqAGTwZ
+	 +PgU/wBhA+80SOpuXPxg1ngExy77OJ4qiDrBD5BaSLdxFHjGlLb6Z6LdxzjV2b1Sjb
+	 KZzyY8vd505h303E7UNFBNSOTt1RTJrTME3Tpn5/gstCe0E/VjMcgLulrUkNtevo/D
+	 HUkmRJdodXLED0BYzhP9NxqCEYTdCySKkeWhT+CWAHw8MrUXGtFRXi7JcAHevAZ6A3
+	 lr25S+xUub5IA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 32077C41616; Mon, 21 Jul 2025 08:39:11 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220238] Blue Yeti microphone doesn't consistently work after
+ unplugging and plugging back in or reboot.
+Date: Mon, 21 Jul 2025 08:39:11 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: oliver@neukum.org
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: IMPLEMENTED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220238-208809-yE7FfDbg3X@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220238-208809@https.bugzilla.kernel.org/>
+References: <bug-220238-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: mon: Fix slab-out-of-bounds in mon_bin_event due to
- unsafe URB transfer_buffer access
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk, snovitoll@gmail.com,
- syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com,
- syzkaller-bugs@googlegroups.com
-References: <20250720200057.19720-1-contact@arnaud-lcm.com>
- <8bbc84ee-44c9-4a85-b5bf-3980b3c81e5c@rowland.harvard.edu>
-Content-Language: en-US
-From: "Lecomte, Arnaud" <contact@arnaud-lcm.com>
-In-Reply-To: <8bbc84ee-44c9-4a85-b5bf-3980b3c81e5c@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: <175308634876.8747.6921415578368422269@Plesk>
-X-PPP-Vhost: arnaud-lcm.com
 
-Hi Alan, thanks for your reply.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220238
 
-Your point raises an important question for me: Is there a specific 
-reason why we don’t have
-  a synchronization mechanism in place to protect the URB's transfer 
-buffer ?
+--- Comment #11 from Oliver Neukum (oliver@neukum.org) ---
+The bug is marked resolved. Do you still get the issue with the latest kern=
+el?
 
+--=20
+You may reply to this email to add a comment.
 
-Arnaud
-
-
-On 21/07/2025 02:29, Alan Stern wrote:
-> On Sun, Jul 20, 2025 at 09:00:57PM +0100, Arnaud Lecomte wrote:
->> The syzkaller fuzzer uncovered a kernel slab-out-of-bounds
->>   write in the USB monitoring subsystem (mon_bin) when handling
->>   a malformed URB (USB Request Block) with the following properties:
->>   - transfer_buffer_length = 0xffff
->>   - actual_length = 0x0 (no data transferred)
->>   - number_of_packets = 0x0 (non-isochronous transfer)
-> This kind of problem is fixed not by changing the way mon_bin reacts to
-> malformed URBs, but rather by correcting the code that creates the URBs
-> in the first place so that they won't be malformed.
->
->> When reaching the mon_copy_to_buff function,
->>   we will try to copy into the mon rp bin with the following parameters:
->> off=0xcc0, from=0xffff8880246df5e1 "", length=0xf000
->>
->> At the first iteration, the step_len is 0x340 and it is during the mem_cpy
->> that the slab-out-of-bounds happens.
->> As step_len < transfer_buffer_length, we can deduce that it is related
->>   to an issue with the transfer_buffer being invalid.
->> The patch proposes a safe access to the kernel
->>   kernel buffer urb->transfer_buffer with `copy_from_kernel_nofault`.
->>
->> Reported-by: syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com
->> Fixes: 6f23ee1fefdc1 ("USB: add binary API to usbmon")
->> Closes: https://syzkaller.appspot.com/bug?extid=86b6d7c8bcc66747c505
->> Tested-by: syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com
->> Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
->> ---
-> This is unnecessary.  The underlying cause of the problem was fixed by
-> commit 0d0777ccaa2d ("HID: core: ensure __hid_request reserves the
-> report ID as the first byte") in the HID tree.
->
-> Alan Stern
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
