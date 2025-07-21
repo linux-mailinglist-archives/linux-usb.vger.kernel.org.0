@@ -1,108 +1,161 @@
-Return-Path: <linux-usb+bounces-26038-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26039-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 322C2B0C367
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 13:42:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC5FBB0C3BF
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 13:58:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A68C542173
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 11:42:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22FCC3BE91C
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 11:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCCD22C08BA;
-	Mon, 21 Jul 2025 11:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54A12C159A;
+	Mon, 21 Jul 2025 11:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ICIN54ku"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p36aVARw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B74CD2BDC3F;
-	Mon, 21 Jul 2025 11:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F32B1F2B88
+	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 11:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753098011; cv=none; b=B0aJe+aEqs7P8G1bmXoIiEOrsAqlREmcz4vHM9R05dPbhpU3Zs9z2duyJbmxJpH2m7jXOo2sY9kNE561GaE1DeRIt6P7IQC3NEgakPBKyi2bv+LY06bAYGuW/opVzwsBzFiVW6CH/jd1lIHDcfzEaQh7/a6U9tZAenyISlKeI6Q=
+	t=1753099097; cv=none; b=iYafAIB7wWJm1asnQoDMNJ2jTDBVwnf5XR9R0FHjCJOzCP0gFS1FTvqd5Hk5GK2SU2tHNKyD6ii3nxoHcvXny11h1/mdH/tPai5pjlTuTva04UlqIPmbMHbZ1clD/0h4jsYlRG3Redbe0ixGsbDaK2yO2ov5ltywOTcCGcZLLtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753098011; c=relaxed/simple;
-	bh=6XGCN6S+1ArKPaLcQX+53Yuwp0acP87Qo4TRmYe6BLM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gOjg9LY/1UgQgSut8yOAE+Nxhc5X8DkVMo7Gy1LbrY8u4FaJ/Ux/L6iVBZsjyK1f24ND0s2ud5F5pSwFPK4NoF+f4wtgdfI8OnNQ0PSRbvCQJaQuGz3gYnBE78b86QoAAZDBOdwZdo1/nxHeaFWTNZeahz4VLfOur4squOe/KPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ICIN54ku; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Au
-	vjFB3nFeeLKyzHtgEk9AR+erzZgqabDf1jFFq3NcM=; b=ICIN54kuJl4BHa88VQ
-	nVNU94P0YvHD9KOw93eobcM6R7b+tQjkG4I01HZlIyLbEezXe4QPJKiZSuBWrTnU
-	mjoBgP+Ek5G8cu+F6YI5OPYUPQcaJf3m+R78ZD4s4dtL2+73/6NFR2G6ZQnn+lww
-	1iqpfYnBhf0GyQG2LjoKxp+0Q=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wC37AHvJn5obfSwGg--.15604S2;
-	Mon, 21 Jul 2025 19:39:28 +0800 (CST)
-From: Slark Xiao <slark_xiao@163.com>
-To: johan@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1753099097; c=relaxed/simple;
+	bh=FWnSi8E8XYIWk4QCaR4TwKiOWABo39dyPNERnvREGtw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FQ4iBMDucSxJ5RF9C/iytDOydfz3J/93fePJQY/22MpvpscHuTiYAdk+u+cZD9IrAQB9YKassiky0dyQmXe4btuciWuJOGyTnrnZVqFQEdaitVoKF94ZNMFmK6BHFqV2KIJGWobrXOTXUa1QgDUv09mAhh6PBrzgrtYB74I9rfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p36aVARw; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Mon, 21 Jul 2025 19:57:56 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1753099082;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bfrHdHadKeOGrxubHlclT+KsEtO7bFXUMTU/oDEY5dQ=;
+	b=p36aVARw7D43XfPT4ZZedi3YcLfN/KR5oUPoLSSqFTzIk6/rRnSzX8rESovL+8J02HVpqK
+	U992BQVKcaz3RmNJ5lrzf3drMvWTqoYIvY1gWUbhXWMl26WB00iJSqa3Ka9D1Z70ZXJrx7
+	02rJ8Oad5yjpUM8tTyLq8oiqLFz/Pgw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ze Huang <huang.ze@linux.dev>
+To: Philipp Zabel <p.zabel@pengutronix.de>, Ze Huang <huang.ze@linux.dev>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] USB: serial: option: add Foxconn T99W709
-Date: Mon, 21 Jul 2025 19:39:19 +0800
-Message-Id: <20250721113919.28577-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v6 1/2] dt-bindings: usb: dwc3: add support for SpacemiT
+ K1
+Message-ID: <aH4rRKPHzB0kd7Ek@monica.localdomain>
+References: <20250712-dwc3_generic-v6-0-cc87737cc936@linux.dev>
+ <20250712-dwc3_generic-v6-1-cc87737cc936@linux.dev>
+ <468961ac17fb5dd4365943a24206040575b0e982.camel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wC37AHvJn5obfSwGg--.15604S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WF1xtw47ZFyrtw4rJrWUArb_yoW8Zw4rpr
-	n0yr12vFWDXFWfXF97trn5ZrWrWws3Kry2g3ZrAw43WF1Iyrs7t34Iy34fXFn2krs5WrsF
-	vrs0krWUK3Z5JrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRhNVhUUUUU=
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiow2RZGh+Huan9AAAsm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <468961ac17fb5dd4365943a24206040575b0e982.camel@pengutronix.de>
+X-Migadu-Flow: FLOW_OUT
 
-T99W709 is designed based on MTK T300(5G redcap) chip. There are
-7 serial ports to be enumerated: AP_LOG, GNSS, AP_META, AT,
-MD_META, NPT, DBG. RSVD(5) for ADB port.
+On Mon, Jul 21, 2025 at 01:02:54PM +0200, Philipp Zabel wrote:
+> On Sa, 2025-07-12 at 15:49 +0800, Ze Huang wrote:
+> > Add support for the USB 3.0 Dual-Role Device (DRD) controller embedded
+> > in the SpacemiT K1 SoC. The controller is based on the Synopsys
+> > DesignWare Core USB 3 (DWC3) IP, supporting USB3.0 host mode and USB 2.0
+> > DRD mode.
+> > 
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Ze Huang <huang.ze@linux.dev>
+> > ---
+> >  .../devicetree/bindings/usb/spacemit,k1-dwc3.yaml  | 107 +++++++++++++++++++++
+> >  1 file changed, 107 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..c967ad6aae50199127a4f8a17d53fc34e8d9480b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> > @@ -0,0 +1,107 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/spacemit,k1-dwc3.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: SpacemiT K1 SuperSpeed DWC3 USB SoC Controller
+> > +
+> > +maintainers:
+> > +  - Ze Huang <huang.ze@linux.dev>
+> > +
+> > +description: |
+> > +  The SpacemiT K1 embeds a DWC3 USB IP Core which supports Host functions
+> > +  for USB 3.0 and DRD for USB 2.0.
+> > +
+> > +  Key features:
+> > +  - USB3.0 SuperSpeed and USB2.0 High/Full/Low-Speed support
+> > +  - Supports low-power modes (USB2.0 suspend, USB3.0 U1/U2/U3)
+> > +  - Internal DMA controller and flexible endpoint FIFO sizing
+> > +
+> > +  Communication Interface:
+> > +  - Use of PIPE3 (125MHz) interface for USB3.0 PHY
+> > +  - Use of UTMI+ (30/60MHz) interface for USB2.0 PHY
+> > +
+> > +allOf:
+> > +  - $ref: snps,dwc3-common.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: spacemit,k1-dwc3
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  clock-names:
+> > +    const: usbdrd30
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  phys:
+> > +    items:
+> > +      - description: phandle to USB2/HS PHY
+> > +      - description: phandle to USB3/SS PHY
+> > +
+> > +  phy-names:
+> > +    items:
+> > +      - const: usb2-phy
+> > +      - const: usb3-phy
+> > +
+> > +  resets:
+> > +    items:
+> > +      - description: USB3.0 AHB reset line
+> > +      - description: USB3.0 VCC reset line
+> > +      - description: USB3.0 PHY reset line
+> 
+> Are we sure all resets will only ever need to be triggered together?
+>
+> Otherwise it might be safer to add a reset-names property.
+>
 
-test evidence as below:
-T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  7 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=0489 ProdID=e15f Rev=00.01
-S:  Manufacturer=MediaTek Inc.
-S:  Product=USB DATA CARD
-S:  SerialNumber=355511220000399
-C:  #Ifs=10 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-I:  If#=0x6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+Yeah, that's helpful. Will add reset-names property in next version.
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 147ca50c94be..1fc7ee5fa91d 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2348,6 +2348,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(5) | RSVD(6) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x0489, 0xe167, 0xff),                     /* Foxconn T99W640 MBIM */
- 	  .driver_info = RSVD(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(0x0489, 0xe15f, 0xff),                     /* Foxconn T99W709 */
-+	  .driver_info = RSVD(5) },
- 	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
- 	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
- 	{ USB_DEVICE(0x1782, 0x4d10) },						/* Fibocom L610 (AT mode) */
--- 
-2.25.1
-
+> 
+> regards
+> Philipp
 
