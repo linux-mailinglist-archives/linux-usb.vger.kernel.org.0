@@ -1,112 +1,129 @@
-Return-Path: <linux-usb+bounces-26029-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26030-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8CA4B0C074
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 11:39:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B1FEB0C07A
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 11:43:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DCF017D596
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 09:39:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 799DB3B7B1D
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 09:42:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08FB628C85A;
-	Mon, 21 Jul 2025 09:39:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D3D728C84A;
+	Mon, 21 Jul 2025 09:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OmEYQWyH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C1728A71D;
-	Mon, 21 Jul 2025 09:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830E0285074;
+	Mon, 21 Jul 2025 09:43:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753090755; cv=none; b=QBqry4JrrsG4jilJy/y2Bo4P4HzdVO4l3WKvDcsZT/LjUeD2CTYv5lF0S0I0jfF+FzZEJE1OKJm4CIl7CHYrRoum8HOLIoHX2sLEZPTrHI1fTJRfCDTm4/pCbwtsClxOJ+N0yEwyRQ08YsZKI4hIOE5QjmckMRtUZ46kcDgMN3o=
+	t=1753090997; cv=none; b=BppfdXUvKEbW+VXz+fMXl3eDxJ4M3nvk5hebo9v2DMrIrzxrxpc2KaEV4+cxiX/YeXJpJSAPaj9g6v9Ss8Hk/494u3m3GKeoEb14h8edhIAtrJJolgDF9WF2XPh5hEKzd7td/nU55R4tsQO5CAkRWM3ZZRgYx5zYQcRi8hTiDvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753090755; c=relaxed/simple;
-	bh=9vXy3DkSbT7162/dj8Wu7WKK5w/m+Tisceq0XzFo6YA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aDSIYLA1Tg/gtNuA1IUAcVnI+1rosZM9bIxOjOMgjdj3cd7Mj4td2yIFWOuSzvRNLo5B/aOpnzbmkJwR10DWllyRcpLHikauzap70hsWx94A6fkMuT9/3tyHuy/C/J5r4CuFlYxx7QcyfnTuB3i8L3UIkumBVpJa5zMhNMkgnKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4blwGQ4CH8zSjcS;
-	Mon, 21 Jul 2025 17:34:38 +0800 (CST)
-Received: from kwepemk100018.china.huawei.com (unknown [7.202.194.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id BD2171400DC;
-	Mon, 21 Jul 2025 17:39:09 +0800 (CST)
-Received: from vm7-217-32-6.huawei.com (7.217.32.6) by
- kwepemk100018.china.huawei.com (7.202.194.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 21 Jul 2025 17:39:08 +0800
-From: Tao Xue <xuetao09@huawei.com>
-To: <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-	<prashanth.k@oss.qualcomm.com>, <m.grzeschik@pengutronix.de>,
-	<Chris.Wulff@biamp.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <caiyadong@huawei.com>, <suzhuangluan@hisilicon.com>,
-	<weiwenwen3@huawei.com>, <xuetao09@huawei.com>
-Subject: [PATCH v4] usb: gadget : fix use-after-free in composite_dev_cleanup()
-Date: Mon, 21 Jul 2025 17:39:08 +0800
-Message-ID: <20250721093908.14967-1-xuetao09@huawei.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1753090997; c=relaxed/simple;
+	bh=AWUhJfFtDs1Xp/8DjHKe4FrCLD+NnAwcchCeln8sQRg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rjbX8642JgNeNQTDHMdygVD5UEhg98osErwoYduAgNLIkz7M5fMeIcdaxNQVwl4N9nKezMQieUlHcrqXohdbpusoXFsvBTe1kKWgUdMsgud8/2W06QirE6gMSfcviCIEeKi6/saUYG3NEuJZV9+mc1jukogu2d/Bk5f8fx0/6D4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OmEYQWyH; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753090996; x=1784626996;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AWUhJfFtDs1Xp/8DjHKe4FrCLD+NnAwcchCeln8sQRg=;
+  b=OmEYQWyH6HvCfQOTwQi2/zFrVrhDysgoP7jxHXVkmoh7dGmM9mlHQwpM
+   UELnfhWc45NdOdiBmKjVM77ZCYKjDf56bjkyVZuqeKIMhrMGCI7eVDx5U
+   Z/IyqE8awVzRXjeqGIOXKh3aI9EvfjFKY+AdA4xQKz8+sHVGmWl47pa2s
+   0epQCOoFRrimc3rhqlPlAPuYlIwwELfzCpFZaTw+2wDb7Mchsf5uS3GGn
+   4uRcLCn605tEhDf/J6oLLgIeHAo8r6JzkrNtuMdYTdXpnYRSmn4loSyk4
+   8c12HhOUKau1/adC+Cfj2I1lSMJYVZdhHldAEfBEmwTwxdgZZIehbzLpE
+   g==;
+X-CSE-ConnectionGUID: wOFZvNGqT6SNtHRauEuUww==
+X-CSE-MsgGUID: iqxboJSIS36MViQr87IGNg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11498"; a="55258292"
+X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
+   d="scan'208";a="55258292"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 02:43:16 -0700
+X-CSE-ConnectionGUID: A6wiIx91Tm+wVN+NWuMXQw==
+X-CSE-MsgGUID: TjXFQEImSzGOO74gprIFnA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
+   d="scan'208";a="164270901"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa004.fm.intel.com with SMTP; 21 Jul 2025 02:43:11 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Jul 2025 12:43:10 +0300
+Date: Mon, 21 Jul 2025 12:43:10 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Pavan Holla <pholla@chromium.org>,
+	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
+	Yue Haibing <yuehaibing@huawei.com>,
+	Pengyu Luo <mitltlatltl@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: yoga-c630: add DRM dependency
+Message-ID: <aH4Lrl72BTAWfMdv@kuha.fi.intel.com>
+References: <20250717133045.991254-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemk100018.china.huawei.com (7.202.194.66)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250717133045.991254-1-arnd@kernel.org>
 
-1. In func configfs_composite_bind() -> composite_os_desc_req_prepare():
-if kmalloc fails, the pointer cdev->os_desc_req will be freed but not
-set to NULL. Then it will return a failure to the upper-level function.
-2. in func configfs_composite_bind() -> composite_dev_cleanup():
-it will checks whether cdev->os_desc_req is NULL. If it is not NULL, it
-will attempt to use it.This will lead to a use-after-free issue.
+On Thu, Jul 17, 2025 at 03:30:41PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Selecting DRM_AUX_HPD_BRIDGE is not possible from a built-in driver when
+> CONFIG_DRM=m:
+> 
+> WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
+>   Depends on [m]: HAS_IOMEM [=y] && DRM [=m] && DRM_BRIDGE [=y] && OF [=y]
+>   Selected by [y]:
+>   - UCSI_LENOVO_YOGA_C630 [=y] && USB_SUPPORT [=y] && TYPEC [=y] && TYPEC_UCSI [=y] && EC_LENOVO_YOGA_C630 [=y] && DRM_BRIDGE [=y] && OF [=y]
+> arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/aux-hpd-bridge.o: in function `drm_aux_hpd_bridge_notify':
+> aux-hpd-bridge.c:(.text.drm_aux_hpd_bridge_notify+0x28): undefined reference to `drm_bridge_hpd_notify'
+> arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/aux-hpd-bridge.o: in function `drm_aux_hpd_bridge_probe':
+> aux-hpd-bridge.c:(.text.drm_aux_hpd_bridge_probe+0x20): undefined reference to `__devm_drm_bridge_alloc'
+> 
+> Add a dependency to force UCSI_LENOVO_YOGA_C630 to be a loadable module as
+> well in this configuration.
+> 
+> Fixes: eb90d36bfa06 ("usb: typec: ucsi: yoga-c630: register DRM HPD bridge")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-BUG: KASAN: use-after-free in composite_dev_cleanup+0xf4/0x2c0
-Read of size 8 at addr 0000004827837a00 by task init/1
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-CPU: 10 PID: 1 Comm: init Tainted: G           O      5.10.97-oh #1
- kasan_report+0x188/0x1cc
- __asan_load8+0xb4/0xbc
- composite_dev_cleanup+0xf4/0x2c0
- configfs_composite_bind+0x210/0x7ac
- udc_bind_to_driver+0xb4/0x1ec
- usb_gadget_probe_driver+0xec/0x21c
- gadget_dev_desc_UDC_store+0x264/0x27c
+> ---
+>  drivers/usb/typec/ucsi/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+> index 52b53bb6dfed..7fcb1e1de5d6 100644
+> --- a/drivers/usb/typec/ucsi/Kconfig
+> +++ b/drivers/usb/typec/ucsi/Kconfig
+> @@ -85,6 +85,7 @@ config CROS_EC_UCSI
+>  config UCSI_LENOVO_YOGA_C630
+>  	tristate "UCSI Interface Driver for Lenovo Yoga C630"
+>  	depends on EC_LENOVO_YOGA_C630
+> +	depends on DRM || !DRM
+>  	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
+>  	help
+>  	  This driver enables UCSI support on the Lenovo Yoga C630 laptop.
+> -- 
+> 2.39.5
 
-Fixes: 37a3a533429e ("usb: gadget: OS Feature Descriptors support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Tao Xue <xuetao09@huawei.com>
----
-v4: add cc and modify comment
-v3: add comment in code
-v2: update Signed-off and commit message
-v1: initial submission
-
- drivers/usb/gadget/composite.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 8dbc132a505e..a893a29ebfac 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -2489,6 +2489,11 @@ int composite_os_desc_req_prepare(struct usb_composite_dev *cdev,
- 	if (!cdev->os_desc_req->buf) {
- 		ret = -ENOMEM;
- 		usb_ep_free_request(ep0, cdev->os_desc_req);
-+		/*
-+		 * Set os_desc_req to NULL so that composite_dev_cleanup()
-+		 * will not try to free it again.
-+		 */
-+		cdev->os_desc_req = NULL;
- 		goto end;
- 	}
- 	cdev->os_desc_req->context = cdev;
 -- 
-2.17.1
-
+heikki
 
