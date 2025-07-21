@@ -1,31 +1,31 @@
-Return-Path: <linux-usb+bounces-26035-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26036-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58C30B0C213
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 13:02:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89342B0C21A
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 13:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E69A188FAA6
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 11:02:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1FC616B00A
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 11:03:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF2D4290DB5;
-	Mon, 21 Jul 2025 11:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7CBF28FFE6;
+	Mon, 21 Jul 2025 11:03:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB4621421D
-	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 11:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D83228FFD0
+	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 11:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753095734; cv=none; b=EXeJfNnrTLruwo9475JHdrFgNN2FIYdt423ZHwXWrxBhqc/Q/T45KQR7OCOmPxtDw78WoCXA64Oy3j0pF2cfNNebLWpxvt1VnAszI6zFj6+4jfA9gA33C++vwXf+O0bCqiNTIOtPNOd2AMNQwfty6B5xUmD2IMS/khLH2lFJpYc=
+	t=1753095801; cv=none; b=mq9fZ7r9p6YB11FkbDG2mCHV4E6eJ4RokGz1p2HFGPlUarzVn9dWav9P4o/LNWlehjtbwpvQI/hkF0m9IlFYyepwhySt1Zpf3T1/2jnZU8jnQrjmi+R/AkoI7v0BrTBVVBiCs0hKPSRdbu8UBL5++PamAUE+u7vCSfDuv5UXdWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753095734; c=relaxed/simple;
-	bh=qKZvHgUpkiu4F1ESzD0V0+p+GSfrdPViVD4CQaHR5Qw=;
+	s=arc-20240116; t=1753095801; c=relaxed/simple;
+	bh=tP1pRW7y+RfdfgdYUK6Db/rhMYAb4jSsqxNDlIgclUc=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KpHII1VBpcMVolOiWPAOaq0XM/OAC+wbslwoe2D9d1VC+FkJqSZykf2VyLR4+bjELNk3rchxatyzfiFt9kr21npYoozE7rKuITyRajWC0E8S1vHjmKa9ixZLlxYpArxndaCfYp1W/gOxW3Hx65lVDlNbst56OZMp4rl5Ajx3gCA=
+	 Content-Type:MIME-Version; b=EX5W5LMHaVsT+p7PNZ8R2Ej0Hl9yJbljVOi+Xgg4PFQUfMnwOzgC7YyLg3w6OgxAMT+Ck1HMmooim4HNA5Yfzk1YCKpGCGhSUwF9UkzmquLR9EsixhAW2YsIpqfXGs5qNfNX2Lv5ooFeQR0PRkFtn4ncRfFRYRckD3MZknq/k0c=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,34 +33,33 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1udoH0-0006cV-Q3; Mon, 21 Jul 2025 13:01:34 +0200
+	id 1udoIJ-00073c-OP; Mon, 21 Jul 2025 13:02:55 +0200
 Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1udoGw-009Xfi-2H;
-	Mon, 21 Jul 2025 13:01:30 +0200
+	id 1udoII-009Xfy-35;
+	Mon, 21 Jul 2025 13:02:54 +0200
 Received: from pza by lupine with local (Exim 4.96)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1udoGw-000EXA-1x;
-	Mon, 21 Jul 2025 13:01:30 +0200
-Message-ID: <d178cfb17e726597e2b4d4c49de5040646b9e55e.camel@pengutronix.de>
-Subject: Re: [PATCH v6 2/2] usb: dwc3: add generic driver to support
- flattened
+	id 1udoII-000Ebv-2o;
+	Mon, 21 Jul 2025 13:02:54 +0200
+Message-ID: <468961ac17fb5dd4365943a24206040575b0e982.camel@pengutronix.de>
+Subject: Re: [PATCH v6 1/2] dt-bindings: usb: dwc3: add support for SpacemiT
+ K1
 From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Alex Elder <elder@ieee.org>, Ze Huang <huang.ze@linux.dev>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>, Thinh Nguyen
- <Thinh.Nguyen@synopsys.com>
+To: Ze Huang <huang.ze@linux.dev>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Yixun
+ Lan <dlan@gentoo.org>,  Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Date: Mon, 21 Jul 2025 13:01:30 +0200
-In-Reply-To: <d2e9a521-568e-433d-a59b-9b98138ace2b@ieee.org>
+	linux-kernel@vger.kernel.org, Krzysztof Kozlowski
+	 <krzysztof.kozlowski@linaro.org>
+Date: Mon, 21 Jul 2025 13:02:54 +0200
+In-Reply-To: <20250712-dwc3_generic-v6-1-cc87737cc936@linux.dev>
 References: <20250712-dwc3_generic-v6-0-cc87737cc936@linux.dev>
-	 <20250712-dwc3_generic-v6-2-cc87737cc936@linux.dev>
-	 <d2e9a521-568e-433d-a59b-9b98138ace2b@ieee.org>
+	 <20250712-dwc3_generic-v6-1-cc87737cc936@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.4-2 
@@ -75,61 +74,90 @@ X-SA-Exim-Mail-From: p.zabel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Di, 2025-07-15 at 15:50 -0500, Alex Elder wrote:
-> On 7/12/25 2:49 AM, Ze Huang wrote:
-[...]
-> > +static int dwc3_generic_probe(struct platform_device *pdev)
-> > +{
-> > +	struct dwc3_probe_data probe_data =3D {};
-> > +	struct device *dev =3D &pdev->dev;
-> > +	struct dwc3_generic *dwc3;
-> > +	struct resource *res;
-> > +	int ret;
-> > +
-> > +	dwc3 =3D devm_kzalloc(dev, sizeof(*dwc3), GFP_KERNEL);
-> > +	if (!dwc3)
-> > +		return -ENOMEM;
-> > +
-> > +	dwc3->dev =3D dev;
-> > +
-> > +	platform_set_drvdata(pdev, dwc3);
-> > +
-> > +	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +	if (!res) {
-> > +		dev_err(&pdev->dev, "missing memory resource\n");
-> > +		return -ENODEV;
-> > +	}
-> > +
-> > +	dwc3->resets =3D devm_reset_control_array_get_optional_exclusive(dev)=
-;
-> > +	if (IS_ERR(dwc3->resets))
-> > +		return dev_err_probe(dev, PTR_ERR(dwc3->resets), "failed to get rese=
-ts\n");
-> > +
+On Sa, 2025-07-12 at 15:49 +0800, Ze Huang wrote:
+> Add support for the USB 3.0 Dual-Role Device (DRD) controller embedded
+> in the SpacemiT K1 SoC. The controller is based on the Synopsys
+> DesignWare Core USB 3 (DWC3) IP, supporting USB3.0 host mode and USB 2.0
+> DRD mode.
 >=20
-> It isn't enforced on exclusive resets, but I'm pretty sure
-> resets are assumed to be asserted initially.
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Ze Huang <huang.ze@linux.dev>
+> ---
+>  .../devicetree/bindings/usb/spacemit,k1-dwc3.yaml  | 107 +++++++++++++++=
+++++++
+>  1 file changed, 107 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml =
+b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..c967ad6aae50199127a4f8a17=
+d53fc34e8d9480b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> @@ -0,0 +1,107 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/spacemit,k1-dwc3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: SpacemiT K1 SuperSpeed DWC3 USB SoC Controller
+> +
+> +maintainers:
+> +  - Ze Huang <huang.ze@linux.dev>
+> +
+> +description: |
+> +  The SpacemiT K1 embeds a DWC3 USB IP Core which supports Host function=
+s
+> +  for USB 3.0 and DRD for USB 2.0.
+> +
+> +  Key features:
+> +  - USB3.0 SuperSpeed and USB2.0 High/Full/Low-Speed support
+> +  - Supports low-power modes (USB2.0 suspend, USB3.0 U1/U2/U3)
+> +  - Internal DMA controller and flexible endpoint FIFO sizing
+> +
+> +  Communication Interface:
+> +  - Use of PIPE3 (125MHz) interface for USB3.0 PHY
+> +  - Use of UTMI+ (30/60MHz) interface for USB2.0 PHY
+> +
+> +allOf:
+> +  - $ref: snps,dwc3-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: spacemit,k1-dwc3
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: usbdrd30
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  phys:
+> +    items:
+> +      - description: phandle to USB2/HS PHY
+> +      - description: phandle to USB3/SS PHY
+> +
+> +  phy-names:
+> +    items:
+> +      - const: usb2-phy
+> +      - const: usb3-phy
+> +
+> +  resets:
+> +    items:
+> +      - description: USB3.0 AHB reset line
+> +      - description: USB3.0 VCC reset line
+> +      - description: USB3.0 PHY reset line
 
-The reset controller API doesn't guarantee this. Whether reset controls
-are initially asserted depends on the specific SoC/reset controller and
-also on what the bootloader did before.
-
-For example, there are self-deasserting reset controls that start out
-deasserted and can only ever be asserted for a short pulse [1]. Even
-the shared reset API only assumes that the reset line may have been
-asserted at some point before the first assert() [2].
-
-[1] https://docs.kernel.org/driver-api/reset.html#triggering
-[2] https://docs.kernel.org/driver-api/reset.html#assertion-and-deassertion
-
-Whether an explicit reset_control_assert() in the probe function is
-needed depends on which assumptions the driver can make on its own (on
-all platforms it is used on).
-For example, for some devices it may be enough to assume that the
-device has been reset at some point between power-on and probe.
-
+Are we sure all resets will only ever need to be triggered together?
+Otherwise it might be safer to add a reset-names property.
 
 regards
 Philipp
-
 
