@@ -1,163 +1,76 @@
-Return-Path: <linux-usb+bounces-26036-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26037-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89342B0C21A
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 13:03:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9E63B0C222
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 13:04:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1FC616B00A
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 11:03:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94254188CE87
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 11:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7CBF28FFE6;
-	Mon, 21 Jul 2025 11:03:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704092918C8;
+	Mon, 21 Jul 2025 11:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SUAyLweq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D83228FFD0
-	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 11:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29941D540;
+	Mon, 21 Jul 2025 11:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753095801; cv=none; b=mq9fZ7r9p6YB11FkbDG2mCHV4E6eJ4RokGz1p2HFGPlUarzVn9dWav9P4o/LNWlehjtbwpvQI/hkF0m9IlFYyepwhySt1Zpf3T1/2jnZU8jnQrjmi+R/AkoI7v0BrTBVVBiCs0hKPSRdbu8UBL5++PamAUE+u7vCSfDuv5UXdWo=
+	t=1753095853; cv=none; b=oQV+qKRtZ5U++pDRLNBgjgC+TPfkTnlhjlKQN4TEvIByh2lrpPKmcNy4PMCdpmjtuaz1j81wbvJFo8UTTV4+hPHuNtYXJgx+z7uYLvfXnWRLN6i6qz2WBRc4QoGXsPB/RRQsXkmXZQGCuk6NlAa10JqGF0pe3NyTph5nj3A4m6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753095801; c=relaxed/simple;
-	bh=tP1pRW7y+RfdfgdYUK6Db/rhMYAb4jSsqxNDlIgclUc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EX5W5LMHaVsT+p7PNZ8R2Ej0Hl9yJbljVOi+Xgg4PFQUfMnwOzgC7YyLg3w6OgxAMT+Ck1HMmooim4HNA5Yfzk1YCKpGCGhSUwF9UkzmquLR9EsixhAW2YsIpqfXGs5qNfNX2Lv5ooFeQR0PRkFtn4ncRfFRYRckD3MZknq/k0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1udoIJ-00073c-OP; Mon, 21 Jul 2025 13:02:55 +0200
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1udoII-009Xfy-35;
-	Mon, 21 Jul 2025 13:02:54 +0200
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1udoII-000Ebv-2o;
-	Mon, 21 Jul 2025 13:02:54 +0200
-Message-ID: <468961ac17fb5dd4365943a24206040575b0e982.camel@pengutronix.de>
-Subject: Re: [PATCH v6 1/2] dt-bindings: usb: dwc3: add support for SpacemiT
- K1
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Ze Huang <huang.ze@linux.dev>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Yixun
- Lan <dlan@gentoo.org>,  Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Krzysztof Kozlowski
-	 <krzysztof.kozlowski@linaro.org>
-Date: Mon, 21 Jul 2025 13:02:54 +0200
-In-Reply-To: <20250712-dwc3_generic-v6-1-cc87737cc936@linux.dev>
-References: <20250712-dwc3_generic-v6-0-cc87737cc936@linux.dev>
-	 <20250712-dwc3_generic-v6-1-cc87737cc936@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1753095853; c=relaxed/simple;
+	bh=FOl8B1w1BTmtkYtHJ9aUUMR1Sx99lJ8Y65IBMge6HNA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hfMRBv02qbzPBPSZgpcRcdxf3Vrcl5bT0JFQcgfvNSULzHQk8J9KifDNDJZ2FFVxtrn8NSFjD9LeZZR8ETxLvLvJANEBCbundH4kPcs0dAr5WfAw1x/fRDzTUIoHijfHOfmiCwd4bpgL+MimU6f4u/77e+RS9NUQKQLZoWvji2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SUAyLweq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7CF1C4CEED;
+	Mon, 21 Jul 2025 11:04:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1753095852;
+	bh=FOl8B1w1BTmtkYtHJ9aUUMR1Sx99lJ8Y65IBMge6HNA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SUAyLweqpIGhQZIudql067twi9TaYbc6LhEXkUSayi7DwqO5Wmzqr+cuIGdvwAgnU
+	 CDj/v+Itds6YJySP2wR46qf7cMTqVF4YrMeOBWzz/T70J3jhiDQ1C+Mn0SHpHglfZy
+	 AlgsLCfEuor/6uWKB0XQw9lNP0rQCZOIeinw+XDE=
+Date: Mon, 21 Jul 2025 13:04:09 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: sfr@canb.auug.org.au, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+	imx@lists.linux.dev
+Subject: Re: [PATCH] usb: core: add urb->sgt parameter description
+Message-ID: <2025072159-banjo-resisting-db29@gregkh>
+References: <20250721104417.3442530-1-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250721104417.3442530-1-xu.yang_2@nxp.com>
 
-On Sa, 2025-07-12 at 15:49 +0800, Ze Huang wrote:
-> Add support for the USB 3.0 Dual-Role Device (DRD) controller embedded
-> in the SpacemiT K1 SoC. The controller is based on the Synopsys
-> DesignWare Core USB 3 (DWC3) IP, supporting USB3.0 host mode and USB 2.0
-> DRD mode.
->=20
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Ze Huang <huang.ze@linux.dev>
+On Mon, Jul 21, 2025 at 06:44:17PM +0800, Xu Yang wrote:
+> The parameter description of urb->sgt is lost, this will add it for
+> completeness.
+> 
+> Reported-by: Stephen Rothwell<sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/all/20250711182803.1d548467@canb.auug.org.au/
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > ---
->  .../devicetree/bindings/usb/spacemit,k1-dwc3.yaml  | 107 +++++++++++++++=
-++++++
->  1 file changed, 107 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml =
-b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..c967ad6aae50199127a4f8a17=
-d53fc34e8d9480b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
-> @@ -0,0 +1,107 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/spacemit,k1-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SpacemiT K1 SuperSpeed DWC3 USB SoC Controller
-> +
-> +maintainers:
-> +  - Ze Huang <huang.ze@linux.dev>
-> +
-> +description: |
-> +  The SpacemiT K1 embeds a DWC3 USB IP Core which supports Host function=
-s
-> +  for USB 3.0 and DRD for USB 2.0.
-> +
-> +  Key features:
-> +  - USB3.0 SuperSpeed and USB2.0 High/Full/Low-Speed support
-> +  - Supports low-power modes (USB2.0 suspend, USB3.0 U1/U2/U3)
-> +  - Internal DMA controller and flexible endpoint FIFO sizing
-> +
-> +  Communication Interface:
-> +  - Use of PIPE3 (125MHz) interface for USB3.0 PHY
-> +  - Use of UTMI+ (30/60MHz) interface for USB2.0 PHY
-> +
-> +allOf:
-> +  - $ref: snps,dwc3-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: spacemit,k1-dwc3
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: usbdrd30
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  phys:
-> +    items:
-> +      - description: phandle to USB2/HS PHY
-> +      - description: phandle to USB3/SS PHY
-> +
-> +  phy-names:
-> +    items:
-> +      - const: usb2-phy
-> +      - const: usb3-phy
-> +
-> +  resets:
-> +    items:
-> +      - description: USB3.0 AHB reset line
-> +      - description: USB3.0 VCC reset line
-> +      - description: USB3.0 PHY reset line
+>  include/linux/usb.h | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Are we sure all resets will only ever need to be triggered together?
-Otherwise it might be safer to add a reset-names property.
+What commit id does this fix?
 
-regards
-Philipp
+thanks,
+
+greg k-h
 
