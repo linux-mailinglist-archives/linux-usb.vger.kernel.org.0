@@ -1,91 +1,103 @@
-Return-Path: <linux-usb+bounces-26027-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26028-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58A2EB0BF29
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 10:39:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AEA8B0BFAA
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 11:07:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4755818830DD
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 08:39:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D11CA3B3552
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 09:06:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F63286D4B;
-	Mon, 21 Jul 2025 08:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7F0288C8D;
+	Mon, 21 Jul 2025 09:07:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JX8YNaEp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UN1h/7cl"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8C21D5ACE
-	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 08:39:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5865221D5AA;
+	Mon, 21 Jul 2025 09:07:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753087151; cv=none; b=GlHvSBMtRhZVqVMEfDRtRACiVWZCzg6Mt70d6WZ75e5GgmERH3nS9+GeuBHB0thtlmPVKrT6yqtVNz6f1+qT42JLKbVXRcCR1rY6T1kDha2xaB4hrau7Sm5zAr8Wh7C6CfIVPvFQid+ka/GB46OAT3AUXFNqCflNh/l0OTftzpo=
+	t=1753088838; cv=none; b=Go3zX4IVPUqMY2Xhs3kW2c/SpuCQUQE07Px4Y/7gFbcG/eR7cH32xU9H0D5aCVAeBfxi4ppTX6/QdQOChwbaPD4c3c1qHS1hkGxOCzj5GIsXo7vhv/7yRbz5xP/lxHI4nDMVXnAMFFi7x4e9GuWQWpd4VOMzkOgAGDOeuigv/+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753087151; c=relaxed/simple;
-	bh=23yn0rGxevxtj/m1dPHQgLOwS9SsYj5+q4eeyIEw8qc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KVENR6zpOXcR5uyqFAlylsUPoPCFaf609E9Lc6NX4EZtd7PEcghstuMFmA07ElCVVtOYs0A0Nz1qigpfHLBCrQScKx3pzbx/PrAre3uNrCnaBGulRuP2qz6CguesGoJWnquzxHPRf3qWO2vobdsqBJa7MkbqWhq2fJuau9eb2uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JX8YNaEp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 49711C4CEF4
-	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 08:39:11 +0000 (UTC)
+	s=arc-20240116; t=1753088838; c=relaxed/simple;
+	bh=mWbYUZ8RpLg7sOJxNI1MKrXpqhPZ6q61NO8r6g1VBL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j0r/KkOl+OLmovvqvcciz5MhVRBWa7sCjW5EhXQ9Y5C6iEWsJoZhHQQD4Z6hIJyAVcyKvmN+gczzxtNf7DvTJpj+f0zHprzNpclaAhKKRbwAu9FHy0Wb5A/uQKH0Fi8K4VBuM6FNreRvwtxR5Z+/8voKwoSCxIr4Zz+tB8o91RU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UN1h/7cl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DBB4C4CEED;
+	Mon, 21 Jul 2025 09:07:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753087151;
-	bh=23yn0rGxevxtj/m1dPHQgLOwS9SsYj5+q4eeyIEw8qc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=JX8YNaEppE0OxZ57kJYxgvFg8dT0luVcmiqrFlI2kU7kY952YHQW6M56SYmxPLP4t
-	 Z9rIrQGnh4t6s4r700O+Uor0ktV0FKAoq1M2BzyxFNTIr6CLB64fArT+EXeJqAGTwZ
-	 +PgU/wBhA+80SOpuXPxg1ngExy77OJ4qiDrBD5BaSLdxFHjGlLb6Z6LdxzjV2b1Sjb
-	 KZzyY8vd505h303E7UNFBNSOTt1RTJrTME3Tpn5/gstCe0E/VjMcgLulrUkNtevo/D
-	 HUkmRJdodXLED0BYzhP9NxqCEYTdCySKkeWhT+CWAHw8MrUXGtFRXi7JcAHevAZ6A3
-	 lr25S+xUub5IA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 32077C41616; Mon, 21 Jul 2025 08:39:11 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220238] Blue Yeti microphone doesn't consistently work after
- unplugging and plugging back in or reboot.
-Date: Mon, 21 Jul 2025 08:39:11 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: oliver@neukum.org
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: IMPLEMENTED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220238-208809-yE7FfDbg3X@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220238-208809@https.bugzilla.kernel.org/>
-References: <bug-220238-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1753088836;
+	bh=mWbYUZ8RpLg7sOJxNI1MKrXpqhPZ6q61NO8r6g1VBL4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UN1h/7clLpuilJSIuDW6BgG2LU/Flp/JeMU1x1rxzWje9mT+WqDL3tq35C9NCu1+3
+	 J1WWmV1kj+/HeOfsdY7LOxE+f4sX5mA/RowNQ71AM8wE0SF541udqLwfvQGFO+So1z
+	 ueMPbao8XuTqLtD1JXIITALW3ZCzf9VfxMsMZIFoG4dyTLURNE8lMGc4P4CRHBfgrD
+	 krx70SFQzeY7gVh2pkg44a1G14sa8NB+CoXCwE9R8HIpHxDE1NO9zbpO2w01+WvzGd
+	 8kPcK1mGUXCJ+JA2y8fnDIg/BsyZPtQJbFnKC48KdC1HVGpRJW1OUH72brBOGCxJi7
+	 Dhn4x7kOQLs3Q==
+Date: Mon, 21 Jul 2025 11:07:14 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Aaron Kling <webgeek1234@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nagarjuna Kristam <nkristam@nvidia.com>, 
+	JC Kuo <jckuo@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>, 
+	Peter De Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
+	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org, Thierry Reding <treding@nvidia.com>, 
+	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 01/17] dt-bindings: soc: tegra: pmc: Document
+ Tegra210B01
+Message-ID: <20250721-logical-lorikeet-of-upgrade-6dce4f@kuoka>
+References: <20250720-t210b01-v2-0-9cb209f1edfc@gmail.com>
+ <20250720-t210b01-v2-1-9cb209f1edfc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250720-t210b01-v2-1-9cb209f1edfc@gmail.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220238
+On Sun, Jul 20, 2025 at 09:14:55PM -0500, Aaron Kling wrote:
+> Add the PMC driver compatible strings for Tegra210B01
 
---- Comment #11 from Oliver Neukum (oliver@neukum.org) ---
-The bug is marked resolved. Do you still get the issue with the latest kern=
-el?
+And what is Tegra210B01? Do not say what you are doing - it is obvious
+from the diff. In this case here say what you are ADDING, what hardware
+is this.
 
---=20
-You may reply to this email to add a comment.
+> 
+> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml b/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml
+> index 7140c312d8986b0b733c519b1e89e360d9602add..eddcafc2f9398ad6fb4d2d46b3181ab91c89a229 100644
+> --- a/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml
+> +++ b/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml
+> @@ -18,6 +18,7 @@ properties:
+>        - nvidia,tegra114-pmc
+>        - nvidia,tegra124-pmc
+>        - nvidia,tegra210-pmc
+> +      - nvidia,tegra210b01-pmc
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Why they are not compatible? Commit msg is also silent on that.
+
+Best regards,
+Krzysztof
+
 
