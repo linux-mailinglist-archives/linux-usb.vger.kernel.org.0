@@ -1,144 +1,109 @@
-Return-Path: <linux-usb+bounces-26025-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26026-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AD09B0BE04
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 09:47:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65DC7B0BEDA
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 10:27:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB11A3BCE42
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 07:46:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5572C17D212
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 08:27:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E34CF280CEA;
-	Mon, 21 Jul 2025 07:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gOXQWEUM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75AAC289839;
+	Mon, 21 Jul 2025 08:25:53 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616AFAD23;
-	Mon, 21 Jul 2025 07:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0501DEFDB;
+	Mon, 21 Jul 2025 08:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753084027; cv=none; b=WCiAkB6jNmrHhuWU6DBiAjjZhtP6svyp+jlPL9VZ0C90DFM5c82vqL6fjxKWBPZ1XYUFr2GMOD6JQbXT6/6nBY2vYq4mxIHF9ai5Flzl7ruWeeL7t7hOuW2q7gqagtKVas4W6YJNHLaFEgTcwpxFupJErFTtihbVtct50hkIjk4=
+	t=1753086353; cv=none; b=FL1xMAqE0yemZhydUMYstqeU85DCvZKkohB39Yh5Gw+WZI+Dq314WVpNG8DoehgEORi6OgKYVS+S8E2z/7AgEm9ZnID5S2OvxuVTeBFi4vZECSL2qC2mXjB80DXSifANJ7C7gAAa80OAfhaqEpzUM/AYZVWI2OsIAfknhyhyClM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753084027; c=relaxed/simple;
-	bh=vipiOsheUEUfVcZfe/f8Unsa2t3MPDU99scYVxF7E3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nNu/hnNQLdN1K1oKOrIfum0zbgPgfr3x8wTjEpMWSai9oxxDyFmBZZ6RnrhQy14ZxSZ15i/C1jV1+LLQKhRDdjJm/GYFhmO7K7ZovDBg5CqY4b6j+OfcabZrMDfIqnHQCp+PrmROHzjMLW3Iebc/K50GIDykIUYlcEUe5O/Zcxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gOXQWEUM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E27C4CEED;
-	Mon, 21 Jul 2025 07:47:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1753084026;
-	bh=vipiOsheUEUfVcZfe/f8Unsa2t3MPDU99scYVxF7E3U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gOXQWEUMI/lZGmlxZmdGE3lR+17oVtpTamAwF2jY8d1crSF9FqmgIrUsc2T8CTfIR
-	 S0QD8oNvXD5Cu9zcBojsxjmFZ06e46O2Eh9xcyHuyO61o66+aZMQstzJeMPizqxKcO
-	 Qm2FLb566zpMHf1cL6hsShDGZUKSMXV0vJDi1OvI=
-Date: Mon, 21 Jul 2025 09:47:03 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Tao Xue <xuetao09@huawei.com>
-Cc: Thinh.Nguyen@synopsys.com, prashanth.k@oss.qualcomm.com,
-	m.grzeschik@pengutronix.de, Chris.Wulff@biamp.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	caiyadong@huawei.com, suzhuangluan@hisilicon.com,
-	weiwenwen3@huawei.com
-Subject: Re: [PATCH v3] usb: gadget : fix use-after-free in
- composite_dev_cleanup()
-Message-ID: <2025072150-congenial-feisty-dde1@gregkh>
-References: <20250721072946.14638-1-xuetao09@huawei.com>
+	s=arc-20240116; t=1753086353; c=relaxed/simple;
+	bh=GKnYUcABafVSlPIjZjOOP0oBm2DtJK6Mf/yfl5Xu6qU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nKPc9x/IAt2uoIpfuuOHueyUc297y6bMmFMxaPGYeEOjFaMrYqdjsHbx2QIIhYNGoIRJUJ/BAzPWGpLobbUZS9rM7y/etZ5KB/HzMoFNZgJfaCOKWvPKPzaefn+nOukrkc/bUo3q4GQYrbv1/o+60eTUtQbYMvMhEcnDFulWL+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
+Received: from [10.48.132.14] (unknown [15.248.2.230])
+	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id 35F9040A1F;
+	Mon, 21 Jul 2025 08:25:48 +0000 (UTC)
+Authentication-Results: Plesk;
+        spf=pass (sender IP is 15.248.2.230) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=[10.48.132.14]
+Received-SPF: pass (Plesk: connection is authenticated)
+Message-ID: <e0f3b6da-eb4b-4270-9f20-f93b892a3a5c@arnaud-lcm.com>
+Date: Mon, 21 Jul 2025 09:25:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250721072946.14638-1-xuetao09@huawei.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: mon: Fix slab-out-of-bounds in mon_bin_event due to
+ unsafe URB transfer_buffer access
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk, snovitoll@gmail.com,
+ syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com,
+ syzkaller-bugs@googlegroups.com
+References: <20250720200057.19720-1-contact@arnaud-lcm.com>
+ <8bbc84ee-44c9-4a85-b5bf-3980b3c81e5c@rowland.harvard.edu>
+Content-Language: en-US
+From: "Lecomte, Arnaud" <contact@arnaud-lcm.com>
+In-Reply-To: <8bbc84ee-44c9-4a85-b5bf-3980b3c81e5c@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-PPP-Message-ID: <175308634876.8747.6921415578368422269@Plesk>
+X-PPP-Vhost: arnaud-lcm.com
 
-On Mon, Jul 21, 2025 at 03:29:46PM +0800, Tao Xue wrote:
-> 1. In func configfs_composite_bind() -> composite_os_desc_req_prepare():
-> if kmalloc fails, the pointer cdev->os_desc_req will be freed but not
-> set to NULL. Then it will return a failure to the upper-level function.
-> 2. in func configfs_composite_bind() -> composite_dev_cleanup():
-> it will checks whether cdev->os_desc_req is NULL. If it is not NULL, it
-> will attempt to use it.This will lead to a use-after-free issue.
-> 
-> BUG: KASAN: use-after-free in composite_dev_cleanup+0xf4/0x2c0
-> Read of size 8 at addr 0000004827837a00 by task init/1
-> 
-> CPU: 10 PID: 1 Comm: init Tainted: G           O      5.10.97-oh #1
->  kasan_report+0x188/0x1cc
->  __asan_load8+0xb4/0xbc
->  composite_dev_cleanup+0xf4/0x2c0
->  configfs_composite_bind+0x210/0x7ac
->  udc_bind_to_driver+0xb4/0x1ec
->  usb_gadget_probe_driver+0xec/0x21c
->  gadget_dev_desc_UDC_store+0x264/0x27c
-> 
-> Fixes: 37a3a533429e ("usb: gadget: OS Feature Descriptors support")
-> Signed-off-by: Tao Xue <xuetao09@huawei.com>
-> ---
-> v3: add comment in patch
-> v2: update Signed-off and commit message
-> v1: initial submission
-> 
->  drivers/usb/gadget/composite.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index 8dbc132a505e..adf0a79b3d3d 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -2489,6 +2489,11 @@ int composite_os_desc_req_prepare(struct usb_composite_dev *cdev,
->  	if (!cdev->os_desc_req->buf) {
->  		ret = -ENOMEM;
->  		usb_ep_free_request(ep0, cdev->os_desc_req);
-> +		/* composite_dev_cleanup() will check whether cdev->os_desc_req
-> +		 * is NULL and will use it when it is not NULL, so we need to set
-> +		 * NULL here.
-> +		 */
-> +		cdev->os_desc_req = NULL;
->  		goto end;
->  	}
->  	cdev->os_desc_req->context = cdev;
-> -- 
-> 2.17.1
-> 
-> 
+Hi Alan, thanks for your reply.
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
+Your point raises an important question for me: Is there a specific 
+reason why we don’t have
+  a synchronization mechanism in place to protect the URB's transfer 
+buffer ?
 
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+Arnaud
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
 
-thanks,
-
-greg k-h's patch email bot
+On 21/07/2025 02:29, Alan Stern wrote:
+> On Sun, Jul 20, 2025 at 09:00:57PM +0100, Arnaud Lecomte wrote:
+>> The syzkaller fuzzer uncovered a kernel slab-out-of-bounds
+>>   write in the USB monitoring subsystem (mon_bin) when handling
+>>   a malformed URB (USB Request Block) with the following properties:
+>>   - transfer_buffer_length = 0xffff
+>>   - actual_length = 0x0 (no data transferred)
+>>   - number_of_packets = 0x0 (non-isochronous transfer)
+> This kind of problem is fixed not by changing the way mon_bin reacts to
+> malformed URBs, but rather by correcting the code that creates the URBs
+> in the first place so that they won't be malformed.
+>
+>> When reaching the mon_copy_to_buff function,
+>>   we will try to copy into the mon rp bin with the following parameters:
+>> off=0xcc0, from=0xffff8880246df5e1 "", length=0xf000
+>>
+>> At the first iteration, the step_len is 0x340 and it is during the mem_cpy
+>> that the slab-out-of-bounds happens.
+>> As step_len < transfer_buffer_length, we can deduce that it is related
+>>   to an issue with the transfer_buffer being invalid.
+>> The patch proposes a safe access to the kernel
+>>   kernel buffer urb->transfer_buffer with `copy_from_kernel_nofault`.
+>>
+>> Reported-by: syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com
+>> Fixes: 6f23ee1fefdc1 ("USB: add binary API to usbmon")
+>> Closes: https://syzkaller.appspot.com/bug?extid=86b6d7c8bcc66747c505
+>> Tested-by: syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com
+>> Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
+>> ---
+> This is unnecessary.  The underlying cause of the problem was fixed by
+> commit 0d0777ccaa2d ("HID: core: ensure __hid_request reserves the
+> report ID as the first byte") in the HID tree.
+>
+> Alan Stern
 
