@@ -1,97 +1,89 @@
-Return-Path: <linux-usb+bounces-26052-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1CAFB0C710
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 16:58:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 757C9B0C774
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 17:23:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC5DB1883AF8
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 14:58:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C807B4E344B
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 15:22:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA602C327C;
-	Mon, 21 Jul 2025 14:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a7mVZwn2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5320E2DECB2;
+	Mon, 21 Jul 2025 15:23:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5D92E406
-	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 14:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9758328C2D3
+	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 15:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753109886; cv=none; b=ZutrP5rnS9V32GTQeUkIcEOrCw2mYxvE7Vfbn0Bu+rTcuPpk56eBtA0FRiULhMa4xZsTADeZLOXEPO+saWTwXPuAa30cwylvqZpubMXk7Cc3mvgT9QbWWjhUTaXPQPSGgdPxKaMT4mP6DPgPdELejP+BbndzoNaRMxrMjX+4dok=
+	t=1753111385; cv=none; b=Ui+EUYzZ2ebw3nw0fEij3MQleA1uuGv37C8LM4KP1CPbqrL0yESyknKPsRH1WMRgfSZfl+1IFdGAmQ1l02DfBI3OKPbELipzDaMzbX3/fj2kMJ5Sl1syOVxBZzq7nJ8sDBMHrh29LSkjMcbA265p+oqoYyh2ZnHbjmFdD6lCqAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753109886; c=relaxed/simple;
-	bh=wha40rYvdEdCzdiiXuLRpcxaRoij+Gp1NI62obIwXSI=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UR/h/yrwEb0C3N25wiYlbLSXHoaGXN0iCpwsbJ6bS6lI4GdtWae1UYfrJal49tZb07VYKmpSgyTXHiIiWDtVONZYdyEWUPREMk4M99aYKwa0Sn9BC4JeSsi/mhaO5usHQAuQxusM9WvFruZ6B+0Jb4CcDALchjtbnVLxSQIaqBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a7mVZwn2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C4A1C4CEED
-	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 14:58:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753109885;
-	bh=wha40rYvdEdCzdiiXuLRpcxaRoij+Gp1NI62obIwXSI=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=a7mVZwn2znjesb+qZqtQRnwFAOP45LUWQgRBDMGolHBUEwDBonDDqDmomCTeISV5M
-	 WVACtALQw6JmkWCSCvzpwjMFvGwWURpLefs9NxBUXKM/RqEjz/ItXg0jxBzoqPgaGG
-	 PdC1H6M1Rsu024u3LmNzIsUtX+5EIzmQa3VAkYmc6rMIWT7p+ZQUxLXNO2fpPgMvZP
-	 NQ2VMgvWSMgr4t3swq3asdLrSpDo07+Gtq8xEKpVkAL2O9inYf1S/RNCIYBAgSd7tJ
-	 pZefqraq/y5RU4epGaeMgyoLNLflxwSr+eOFtOvkhw/ploYhbj2Ieej6bWINyP++WI
-	 NIOGNTM05WfDg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 89F5CC41612; Mon, 21 Jul 2025 14:58:05 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220331] FTDI serial IO - unknown device type: 0x8312
-Date: Mon, 21 Jul 2025 14:58:05 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: tomas.hanslik@septim.cz
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-220331-208809-YidEqlYeGQ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220331-208809@https.bugzilla.kernel.org/>
-References: <bug-220331-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1753111385; c=relaxed/simple;
+	bh=vgfQRhOfNJrtc92tlhGLleVrfKnZFO6SQWjGR5M+Lqs=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=HaiZZrwVBQQ4LwK2JHFCvEbaaqhMEgaal+2BhxhUr2AFW99X/J3jQGPsVulCAkqFuHKq+soBiScS1TPQPW/mZGLsyVQBM6wuC9U53UuQBPGDd2Zz83r8ZYhO61cr7ho2LdvM4iHSIqKjHDNr1JosnaZRpFBstO1YYdaJ0q4145M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-87c1d1356f3so211328539f.0
+        for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 08:23:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753111383; x=1753716183;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JnnNzxl9T4wc5fvQhb3X2ZvzvD3sDYfo1Lw48SOD28s=;
+        b=hVM8e4a5IVwduWJek9iXyTgIf1WIRrh+sKPukY3mE4t2kRSZEGDRvsB2wH3rOQh++1
+         4SaIOvF306d8h3zin33M+iIE4JcXEXa6QtgVbqZKmWbuz9G0Mno7fttoDy6idbhWmUe6
+         CuP62Uf0iGeVpzxD4kcATFRodJeoZhvOXF/NblGmuEs9b8Ujd2PhUtAEyAGkAYyGNHVk
+         qZwy/8dD25aUBKFpn1n3TjyNuD3xGGF8cUbrHJeZQK5GhsANYYRIVkNJ27ZaPuUfB0/y
+         0OJDgFjVfq2dFeVC0OmYX2HPf4c/iferD9bzu2fWmr7REyguHEXwlY8uTtPBRRVlTaGi
+         LJtw==
+X-Forwarded-Encrypted: i=1; AJvYcCWi/MPT+NKmHFOGSgg1yLpMRmfsDyUs/HXgIcCr/BUv9N+75NamgvW1MLNjiOVs11MkrMry1hq/kK0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTNr5m80Q3vGxdmt6/2vmZ6jOXf5YWBWCLkv3cLZ4quZFuISZ4
+	jTUs021YJa2CiXRRBSjN5V3Mnf5SBv7Kw51qSIqHzvzTSQSyzrXvT76S0EI4LCPSs/skq3EtzdM
+	i7Z2GVUuDNbwGfmQRCFEL9GDErmXf5FEX/BpF2QBIKRZX2GClxz9Q26e5i5M=
+X-Google-Smtp-Source: AGHT+IEXJhlHzdW25N89aTvgF9cgYyQhljvPvgMzdWEjwvMjmJsRZj/gTeEpluzGFnZtI6hYi+7Bqbib6cRYF2V5JqkqAMLadrRR
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Received: by 2002:a05:6602:1490:b0:87c:1237:cef7 with SMTP id
+ ca18e2360f4ac-87c1237d278mr1777230639f.13.1753111382796; Mon, 21 Jul 2025
+ 08:23:02 -0700 (PDT)
+Date: Mon, 21 Jul 2025 08:23:02 -0700
+In-Reply-To: <cd6d1bff-7912-4c55-b2fc-ea2032658ca9@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <687e5b56.a70a0220.4e1c.002a.GAE@google.com>
+Subject: Re: [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds in s32ton (2)
+From: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220331
+Hello,
 
-tomh (tomas.hanslik@septim.cz) changed:
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|WILL_NOT_FIX                |---
+Reported-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
+Tested-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
 
---- Comment #2 from tomh (tomas.hanslik@septim.cz) ---
-ad 1. The device is not recognized even in latest kernel 6.15.7 .
-ad 2. Where should requests for a newer hadrware support be placed then?
+Tested on:
 
---=20
-You may reply to this email to add a comment.
+commit:         c2ca42f1 HID: core: do not bypass hid_hw_raw_request
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=16f4cf22580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ec692dfd475747ff
+dashboard link: https://syzkaller.appspot.com/bug?extid=b63d677d63bcac06cf90
+compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=142bef22580000
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Note: testing is done by a robot and is best-effort only.
 
