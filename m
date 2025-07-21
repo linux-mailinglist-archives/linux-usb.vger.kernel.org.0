@@ -1,106 +1,93 @@
-Return-Path: <linux-usb+bounces-26057-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26058-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DC26B0CA5A
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 20:13:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DAF5B0CB81
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 22:16:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B05A7168559
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 18:13:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D588D1C22128
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 20:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 071BE2E1746;
-	Mon, 21 Jul 2025 18:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF1C1199947;
+	Mon, 21 Jul 2025 20:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="yJc04kwr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hf03Mbgm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC33A155CB3;
-	Mon, 21 Jul 2025 18:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20EF62236FD;
+	Mon, 21 Jul 2025 20:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753121598; cv=none; b=pU70840kiMiSmbDcSZvEEJ5u+d68tJCmOXjg9Sj50AKay1yaEyawJuZA79JwfVL8+IFVmWvooP3OkJ7+e5RZHOmMGyhxsVlY84hfODA0cm3C3mOu4gMwqRHal/AIFbDSNawbTaWW/oaANJWd3VevvW2pEmAC+W8doJ1lmUx6tu8=
+	t=1753128944; cv=none; b=TtJfmjsfs3BAtCQL+t0P2TcTRmQN4o9WkMvYisLGq/fIXlSI/Ko6JruhawVypKJ0EeD+FMuYzDAudKNicXgtheZAXrfIPNIBrjK1biTxVlEHv5qgDjMrfeUt8AHtJNl9RW2koa/Meg4nf2cMysvFyS0MkXZ1qxBdAZdqxcw/4lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753121598; c=relaxed/simple;
-	bh=3PgcKhpIaXlMlRNGMqdPnU7Ne37vkZj31f11YeqXC84=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hGmPR8oDwA2XT4eG6mrBGda4YjAvxnj1CJbv2jXyI2lYgHQAlQi8VDs9CiyBi8rF0tfb8XxIOGWeJoPw9vDYe3EsdD0wVvO4taSEC/algKRp7AOXpRM/iB4V3DCCpTA3//8L7zMp3yIp0t2KPk6g6JH8qFZVyENMUqYchLmHwGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=yJc04kwr; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=YIa0kKk/C8c2jce3V3xpos3VNuh0qirWQs9kAO9t8uA=; b=yJc04kwrwI98p907tw5o2Eoh4T
-	PCpcXrFfWNSLl+AkJp2u1hKiiv2WKibHBk5+Cunxj1qd0qHCfY4qLn98HA8WSEfcEW9EES3Qjmde4
-	6Zkb/JSPxE+OLOfykeqHo78z2YF6OXf5LP1n+r+QRQyODnLo2C2x9CxX2cxNvLgkNCLzdgo51kPdo
-	ULZPepYd/7y5u6UvKTAE1KW+VK0kf7MkFYCH07mZkF+r+eAm8152gi1m0GJRkz85LzvY2HpVFjqEH
-	8Z+KQ6HfRMTih3QCXF88kvxg/CbSnjcoONfnl21mGP8h/jyWQ2M/rFSP/lOrZhknW2Ga/CCgFDvwi
-	z0LdxihA==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1udv0l-00000000P1i-20bR;
-	Mon, 21 Jul 2025 18:13:15 +0000
-Message-ID: <53b1a47d-2338-44f3-8d78-8c4b02e0fa81@infradead.org>
-Date: Mon, 21 Jul 2025 11:13:14 -0700
+	s=arc-20240116; t=1753128944; c=relaxed/simple;
+	bh=nkiA1xZGAUGjmHRJ4jMF5cNu7pJ2iZ4JK/ULWm22zkc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m4Abuj4D0zPsnCkotun39+dW5wYAVBbZnJzyyVRcKnMcy4eToWrjST1qPqnFvGv9+zNZFZLwOKDVsGtJ25xvFe6l6oX9G4lSt+yHW9FMkzxss20JrHvzChmtvYe1IGldfc28Zxr89KjsQnVYobzecOe+jS4Vaek4HoqLTXTDJ0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hf03Mbgm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C3BC4CEED;
+	Mon, 21 Jul 2025 20:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753128943;
+	bh=nkiA1xZGAUGjmHRJ4jMF5cNu7pJ2iZ4JK/ULWm22zkc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hf03Mbgmg8UXAaiSvZVsYNOpxI1lRgk/w+kb96/iEtNZKUdI3zi8yMVwwXluqmn2d
+	 l6oupsCI42Oj+s1HLGqgdr5P/1Gzt9zxAegC/2cKzvPeF7ZATTLqV2RfzjTmSvW5O8
+	 FgJTzDtUo84QX/jzlaYmo2owrMl1pS41LWPUJA4VK4prBr+8JR3Mo4XlW+NsdW5LAM
+	 gVoebTmOHJOode+RHExAM6EsQWKOWk3fj6B4KDbldu04+VpFUgdmLDdjFgtGbIm3Gz
+	 eM1GX0hcpBiGYw1hqCd4aRU6wmZ9ElqjEdUINq2dlAhcYDjTE6/YZuYKqVyZg6TIE2
+	 R7/Tfu/qzT1RQ==
+Date: Mon, 21 Jul 2025 15:15:42 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Aaron Kling <webgeek1234@gmail.com>
+Cc: JC Kuo <jckuo@nvidia.com>, Stephen Boyd <sboyd@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Prashant Gaikwad <pgaikwad@nvidia.com>, linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Peter De Schrijver <pdeschrijver@nvidia.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-clk@vger.kernel.org, Jonathan Hunter <jonathanh@nvidia.com>,
+	devicetree@vger.kernel.org,
+	Thierry Reding <thierry.reding@gmail.com>,
+	linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
+	Thierry Reding <treding@nvidia.com>,
+	Nagarjuna Kristam <nkristam@nvidia.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 08/17] dt-bindings: tegra: Document Shield TV 2019
+Message-ID: <175312894245.1247819.6745937548885403054.robh@kernel.org>
+References: <20250720-t210b01-v2-0-9cb209f1edfc@gmail.com>
+ <20250720-t210b01-v2-8-9cb209f1edfc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: core: add urb->sgt parameter description
-To: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org,
- sfr@canb.auug.org.au
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-next@vger.kernel.org, imx@lists.linux.dev
-References: <20250721104417.3442530-1-xu.yang_2@nxp.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250721104417.3442530-1-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250720-t210b01-v2-8-9cb209f1edfc@gmail.com>
 
 
-
-On 7/21/25 3:44 AM, Xu Yang wrote:
-> The parameter description of urb->sgt is lost, this will add it for
-> completeness.
+On Sun, 20 Jul 2025 21:15:02 -0500, Aaron Kling wrote:
+> Add the device tree binding documentation for NVIDIA Shield TV 2019
 > 
-> Reported-by: Stephen Rothwell<sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/all/20250711182803.1d548467@canb.auug.org.au/
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
+> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 > ---
->  include/linux/usb.h | 4 ++++
->  1 file changed, 4 insertions(+)
+>  Documentation/devicetree/bindings/arm/tegra.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index 535ac37198a1..9d662c6abb4d 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -1455,6 +1455,10 @@ typedef void (*usb_complete_t)(struct urb *);
->   * @sg: scatter gather buffer list, the buffer size of each element in
->   * 	the list (except the last) must be divisible by the endpoint's
->   * 	max packet size if no_sg_constraint isn't set in 'struct usb_bus'
-> + * @sgt: used to hold a scatter gather table returned by usb_alloc_noncoherent(),
-> + *      which describes the allocated non-coherent and possibly non-contiguous
-> + *      memory and is guaranteed to have 1 single DMA mapped segment. The
-> + *      allocated memory needs to be freed by usb_free_noncoherent().
->   * @num_mapped_sgs: (internal) number of mapped sg entries
->   * @num_sgs: number of entries in the sg list
->   * @transfer_buffer_length: How big is transfer_buffer.  The transfer may
 
--- 
-~Randy
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+
 
