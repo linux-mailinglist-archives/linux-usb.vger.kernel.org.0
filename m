@@ -1,257 +1,97 @@
-Return-Path: <linux-usb+bounces-26021-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26022-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7901AB0BD06
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 08:54:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1EB1B0BD3F
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 09:10:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A8D01895FC1
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 06:55:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5C6417973F
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 07:10:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A13DF27FD71;
-	Mon, 21 Jul 2025 06:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48B35281520;
+	Mon, 21 Jul 2025 07:10:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UToVY+Cf"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="AwS6st8W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E66219924D;
-	Mon, 21 Jul 2025 06:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB9B0A921;
+	Mon, 21 Jul 2025 07:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753080875; cv=none; b=B/6TVrWmzbURRKy8EjtlwNHA6Ji/ScH0naPfNQu0f2ofBxm04dK9EAmLpQfEkFHVnkBTnM6PhfshrT7x2U2poRO22SJFeaq4GXAVO++C3GAGBgTnU3O9PI6v37HB7oQqyZtAp7Z7zGT2PvlEiuJY/fNcKfcBXequGDOO7Af0VHI=
+	t=1753081851; cv=none; b=I8HYpg6o9lAQsuNg0VFoK7kAtVhogtiyRbg4SbyAo2uLujVhcx+ABC22OK0cNPS/KrDPwsGqjAllGVktpzWmrQwYwUSo6OA/Rd9tuQ6IcWZGoAhBqq8lOkDPPmcoEQ6D8El7GUvtnB7wV0AFkzpot8jaYC7marjspOV4VRaR1pU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753080875; c=relaxed/simple;
-	bh=loO9CY0pPRWxsZKpY7FRugQcMkLMn7XZ/qvHjonTF+0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UsvR8M8vUwb5hDCGyHjjuj0bWwDORPeOZFZDsBIR7gUtfIDEcf0L+mhVZv3JD1zv2evHHTFDxwnuA5PzTDU8T7AiuRD8xbRwRdHpyXdbAB7y8HKQ6PZyEvLP5T3tCOC0I+evl0HiGYixXYzrWc/240qQxZALnnRs5S7d9InvIyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UToVY+Cf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5341BC4CEF1;
-	Mon, 21 Jul 2025 06:54:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1753080874;
-	bh=loO9CY0pPRWxsZKpY7FRugQcMkLMn7XZ/qvHjonTF+0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UToVY+CfSHU/2B/nn4WjxnpTh9mCcznnPpB5FSIV9gGhbZAD1ukKXZj+dUOrJEF1y
-	 kj47GA10pVMDcrnxyc1RY4ibFPNqzaWJ7CJd8Vd6f8deepww+djtpmbniqJ9DcaTer
-	 p5qDLQ5uvRIm39iHk44+yS+QbOQu5MfeGffvZcNk=
-Date: Mon, 21 Jul 2025 08:54:31 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
-Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	Melody Olvera <quic_molvera@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v6] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
- secure calls
-Message-ID: <2025072119-constrict-wieldable-c4c3@gregkh>
-References: <20250721-eud_mode_manager_secure_access-v6-1-fe603325ac04@oss.qualcomm.com>
+	s=arc-20240116; t=1753081851; c=relaxed/simple;
+	bh=gP6NwIxfNawDZ8YvUCd4Y99rqdhvirRdXcA0+AAqAw8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bR/kH4tcqZVof+XkrvTqXRu7xCjZlaIQEN+KpvBF4bXD0tF0ygjNDNx/q00Nyq7bkjZT7wF5waOztUUBFLxxRAVhA/75wphlukMxAeGlDxVGIdC55+odL+5wJHlIoG2KkzAz/kWcdfPtgJO5Z/s9SzawMtxDTKeA1uasuj4s1nE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=AwS6st8W; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=tx
+	AeIAQ9oJAiwRFKcNeJRwzjvHrUdGEIHTuHoUzLu1Q=; b=AwS6st8W3QFPLTYQHn
+	6v6CkJ2rEyFvdqbM+cwHLfDJ44tnW935u3U8lAbk3g7bbjCiE/CKQYqprssjzNTO
+	OPcq8FgzFqPM1ga7A07xOJAne0G60jhHq9k33WA1jhdq431EtL7taCntwcdfeyWB
+	64ESvAySpzYSk2eBGk2eP5ZWI=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDnl8fh531obqbQGA--.7515S2;
+	Mon, 21 Jul 2025 15:10:26 +0800 (CST)
+From: yicongsrfy@163.com
+To: oneukum@suse.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Yi Cong <yicong@kylinos.cn>
+Subject: [PATCH] usbnet: Set duplex status to unknown in the absence of MII
+Date: Mon, 21 Jul 2025 15:10:22 +0800
+Message-Id: <20250721071022.1062495-1-yicongsrfy@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250721-eud_mode_manager_secure_access-v6-1-fe603325ac04@oss.qualcomm.com>
+X-CM-TRANSID:_____wDnl8fh531obqbQGA--.7515S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Wr4fXryfCrWrJw1DJr15CFg_yoWfWwb_Cw
+	4rWw47KFyFgrW5KFsI9rs0qr90k348Wa18WFnaq34rZa42va45Jw4FyFn7XFs7Gr4UZasx
+	Cw1Svryav3s7KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUeRwZ5UUUUU==
+X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/1tbiUBmR22h94sRrDwABsV
 
-On Mon, Jul 21, 2025 at 12:08:41PM +0530, Komal Bajaj wrote:
-> EUD_MODE_MANAGER2 register is mapped to a memory region that is marked
-> as read-only for HLOS, enforcing access restrictions that prohibit
-> direct memory-mapped writes via writel().
-> 
-> Attempts to write to this region from HLOS can result in silent failures
-> or memory access violations, particularly when toggling EUD (Embedded
-> USB Debugger) state. To ensure secure register access, modify the driver
-> to use qcom_scm_io_writel(), which routes the write operation to Qualcomm
-> Secure Channel Monitor (SCM). SCM has the necessary permissions to access
-> protected memory regions, enabling reliable control over EUD state.
-> 
-> SC7280, the only user of EUD is also affected, indicating that this could
-> never have worked on a properly fused device.
-> 
-> Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded USB Debugger(EUD)")
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> Signed-off-by: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> ---
-> Changes in v6:
-> - Propagating the error code from disable_eud(), per Dmitry's suggestion
-> - Link to v5: https://lore.kernel.org/r/20250715-eud_mode_manager_secure_access-v5-1-e769be308d4a@oss.qualcomm.com
-> 
-> usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through secure calls
-> 
-> Changes in v5:
-> * Changed select QCOM_SCM to depends on QCOM_SCM in Kconfig per Greg's review
-> * Link to v4: https://lore.kernel.org/all/20250709065533.25724-1-komal.bajaj@oss.qualcomm.com/
-> 
-> Changes in v4:
-> * Added error logging in disable_eud() for SCM write failures, per Konrad’s suggestion
-> * Link to v3: https://lore.kernel.org/all/20250708085208.19089-1-komal.bajaj@oss.qualcomm.com/
-> 
-> Changes in v3:
-> * Moved secure write before normal writes
-> * Added error checking in disable_eud()
-> * Use ENOMEM error code if platform_get_resource() fails
-> * Select QCOM_SCM driver if USB_QCOM_EUD is enabled
-> * Link to v2: https://lore.kernel.org/all/20250627125131.27606-1-komal.bajaj@oss.qualcomm.com/
-> 
-> Changes in v2:
-> * Drop separate compatible to be added for secure eud
-> * Use secure call to access EUD mode manager register
-> * Link to v1: https://lore.kernel.org/all/20240807183205.803847-1-quic_molvera@quicinc.com/
-> ---
->  drivers/usb/misc/Kconfig    |  1 +
->  drivers/usb/misc/qcom_eud.c | 33 ++++++++++++++++++++++++---------
->  2 files changed, 25 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> index 6497c4e81e951a14201ad965dadc29f9888f8254..73ebd3257625e4567f33636cdfd756344b9ed4e7 100644
-> --- a/drivers/usb/misc/Kconfig
-> +++ b/drivers/usb/misc/Kconfig
-> @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
->  config USB_QCOM_EUD
->  	tristate "QCOM Embedded USB Debugger(EUD) Driver"
->  	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on QCOM_SCM
->  	select USB_ROLE_SWITCH
->  	help
->  	  This module enables support for Qualcomm Technologies, Inc.
-> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> index 83079c414b4f281b2136d0d1eb39418c7f94ff8c..05c8bdc943a88dab6159a05c2d770484c084f7b7 100644
-> --- a/drivers/usb/misc/qcom_eud.c
-> +++ b/drivers/usb/misc/qcom_eud.c
-> @@ -15,6 +15,7 @@
->  #include <linux/slab.h>
->  #include <linux/sysfs.h>
->  #include <linux/usb/role.h>
-> +#include <linux/firmware/qcom/qcom_scm.h>
->  
->  #define EUD_REG_INT1_EN_MASK	0x0024
->  #define EUD_REG_INT_STATUS_1	0x0044
-> @@ -34,7 +35,7 @@ struct eud_chip {
->  	struct device			*dev;
->  	struct usb_role_switch		*role_sw;
->  	void __iomem			*base;
-> -	void __iomem			*mode_mgr;
-> +	phys_addr_t			mode_mgr;
->  	unsigned int			int_status;
->  	int				irq;
->  	bool				enabled;
-> @@ -43,18 +44,29 @@ struct eud_chip {
->  
->  static int enable_eud(struct eud_chip *priv)
->  {
-> +	int ret;
-> +
-> +	ret = qcom_scm_io_writel(priv->mode_mgr + EUD_REG_EUD_EN2, 1);
-> +	if (ret)
-> +		return ret;
-> +
->  	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
->  	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
->  			priv->base + EUD_REG_INT1_EN_MASK);
-> -	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
->  
->  	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
->  }
->  
-> -static void disable_eud(struct eud_chip *priv)
-> +static int disable_eud(struct eud_chip *priv)
->  {
-> +	int ret;
-> +
-> +	ret = qcom_scm_io_writel(priv->mode_mgr + EUD_REG_EUD_EN2, 0);
-> +	if (ret)
-> +		return ret;
-> +
->  	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
-> -	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +	return 0;
->  }
->  
->  static ssize_t enable_show(struct device *dev,
-> @@ -82,11 +94,12 @@ static ssize_t enable_store(struct device *dev,
->  			chip->enabled = enable;
->  		else
->  			disable_eud(chip);
-> +
->  	} else {
-> -		disable_eud(chip);
-> +		ret = disable_eud(chip);
->  	}
->  
-> -	return count;
-> +	return ret < 0 ? ret : count;
->  }
->  
->  static DEVICE_ATTR_RW(enable);
-> @@ -178,6 +191,7 @@ static void eud_role_switch_release(void *data)
->  static int eud_probe(struct platform_device *pdev)
->  {
->  	struct eud_chip *chip;
-> +	struct resource *res;
->  	int ret;
->  
->  	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> @@ -200,9 +214,10 @@ static int eud_probe(struct platform_device *pdev)
->  	if (IS_ERR(chip->base))
->  		return PTR_ERR(chip->base);
->  
-> -	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> -	if (IS_ERR(chip->mode_mgr))
-> -		return PTR_ERR(chip->mode_mgr);
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> +	if (!res)
-> +		return -ENODEV;
-> +	chip->mode_mgr = res->start;
->  
->  	chip->irq = platform_get_irq(pdev, 0);
->  	if (chip->irq < 0)
-> 
-> ---
-> base-commit: 347e9f5043c89695b01e66b3ed111755afcf1911
-> change-id: 20250715-eud_mode_manager_secure_access-6e57e3c71ec2
-> 
-> Best regards,
-> -- 
-> Komal Bajaj <komal.bajaj@oss.qualcomm.com>
-> 
-> 
+From: Yi Cong <yicong@kylinos.cn>
 
-Hi,
+CDC device don't use mdio to get link status, duplex is set
+half as default.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Now cdc_ncm can't get duplex, set it UNKNOWN instead of half
+which might actually be in an error state.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Signed-off-by: Yi Cong <yicong@kylinos.cn>
+---
+ drivers/net/usb/usbnet.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 6a3cca104af9..c612f8f606e5 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1013,6 +1013,11 @@ int usbnet_get_link_ksettings_internal(struct net_device *net,
+ 	else
+ 		cmd->base.speed = SPEED_UNKNOWN;
+ 
++	/* Now we can't get link duplex without MII,
++	 * set it DUPLEX_UNKNOWN instead of default DUPLEX_HALF
++	 */
++	cmd->base.duplex = DUPLEX_UNKNOWN;
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(usbnet_get_link_ksettings_internal);
+-- 
+2.25.1
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
