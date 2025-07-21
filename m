@@ -1,143 +1,125 @@
-Return-Path: <linux-usb+bounces-26040-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26041-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67F72B0C3D6
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 14:08:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B502B0C4DE
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 15:09:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1635B170E8B
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 12:08:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E1983BDF35
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jul 2025 13:08:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8480F2D1F45;
-	Mon, 21 Jul 2025 12:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CA762D9ED9;
+	Mon, 21 Jul 2025 13:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TaILfvtu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdYs+X4d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E4E29188C
-	for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 12:08:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80BEE2D879B;
+	Mon, 21 Jul 2025 13:06:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753099706; cv=none; b=aMLNuEZWC95NcM9ecUSniSAl4w0GB2m16XePhA+Qreyyk8bxtJUH2KgBWw237zaATu9v6QxrkT6ey08d1Oy0TWZRJZdggD28VnrA4l7otBA05l8Kbl65Zyg3eV9sXRCzGWVNM9TbSF6+28pV6A+km34CMMqBrXtHhn6O0Tti/+A=
+	t=1753103163; cv=none; b=j1IvgbFyUi/eovfw6+1x+p894fdynalnBab+Nmd9tJ5i80XuMxzhztBkLsd4WtZnCozQiiSt+5inh8eV8MXuZntm2xwvQi1GeiV/i1hS3GH9Q3WN8poHhqTN8Gc0l3osMleENq/DCdPYMdlkHc55mhaeGxTAGn+Coo15hScowuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753099706; c=relaxed/simple;
-	bh=PKt0mTjmvvvkepwsCUMzvM+RF3tsj0b4ozWzqNpeB3s=;
+	s=arc-20240116; t=1753103163; c=relaxed/simple;
+	bh=5y/SPIhcQ32xOxHCc8KPUo//JIEXorkBL/QAsLR++bs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Iha0nQf1debMJq9q+AVoK+0wX5jRr1fMttAcrC5h68G6l/dPcJWumKaHZY46zXp9bSA9e0Yzvb/1C0uESGehJhX5ViUJBQKpy0mPCF5z3bN6mNNQElB2PDdAXfsCPpe34q3x6Agpb3ilekgnj6ETAN/zRyJzFOTw821aLQsmnHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TaILfvtu; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Mon, 21 Jul 2025 20:08:06 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1753099692;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8CiyT1LW8S2cprjOA7fuHy478wU5+FE3KPTv6t/QXyg=;
-	b=TaILfvtul8thQUWdU4h/uwNOkqNqAJ/O9St/9Gyyvw2qOPqG6+/08lRNgo4p+1iEBqMIb1
-	jn0o+aou5/+r7/hOr3YnGuvvCGps0mC/HxKpt+TIfKVEPPKGNa9RNZn318dsUI+9JMtAiX
-	24dr4T43X39mGq5d4DvYRTxpoTHFBPM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ze Huang <huang.ze@linux.dev>
-To: Alex Elder <elder@ieee.org>, Ze Huang <huang.ze@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] usb: dwc3: add generic driver to support flattened
-Message-ID: <aH4tpgVPbf9DOzSe@monica.localdomain>
-References: <20250712-dwc3_generic-v6-0-cc87737cc936@linux.dev>
- <20250712-dwc3_generic-v6-2-cc87737cc936@linux.dev>
- <d2e9a521-568e-433d-a59b-9b98138ace2b@ieee.org>
- <aHyN3-uoHofF8Hg3@monica.localdomain>
+	 Content-Type:Content-Disposition:In-Reply-To; b=pqM3BzyCHVnurs4ramFAm2cyvX88K5Z0U2PS5zJuivuFQ1wsuv9p3i3sNhLLjHY4Nn0JwVOmUs3TlGy0lNjqL+xW3QhlsWmRUM9bxANAOxHO81rdw+YCaKwznZqKSDCQEF1Pq9bdKehUZ9njlzfqyf6tsZuSFaNhYi54B2eUKyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gdYs+X4d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D27C4CEED;
+	Mon, 21 Jul 2025 13:06:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753103163;
+	bh=5y/SPIhcQ32xOxHCc8KPUo//JIEXorkBL/QAsLR++bs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gdYs+X4dXN5P+VMm/RfQumMFIVWPFTHEgGmWVxAe/AvzcxcXNj/Qy+a2GFvaA2ARL
+	 WBgJx/tgdTdW78xOXrWEeSicW3/kjMNngNCq0x+fOBAs5SuSmJIJbg1NaI61hBi7LK
+	 GUebBd1XfWXY9d0P99mbK4Ph7pN9F5ek/FLTgf19Ww5PEHS6v72IZFdMhJONS+pbxr
+	 qOy33+MgpmwdZG2gN5jzYLmz1xZhxI8mr7j9IY8o8S83DIEkVIDQXSlAcGXDeMRLNT
+	 GB2Y0UHbxV3PBmaqfDsuP63FehSLZmXBLWt7qKnIp34M3o4+xuKddxP8C9THifOK3U
+	 aYRxeyCAwpYwQ==
+Date: Mon, 21 Jul 2025 15:05:58 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>, 
+	jikos@kernel.org, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] HID: core: Reject report fields with a size or count of 0
+Message-ID: <voiysrjm3okjtaz7axqupr2jk5yyvxsqgagbwrsey4z24g6rf4@xb75ss3bwol5>
+References: <68791b6f.a70a0220.693ce.004b.GAE@google.com>
+ <8a4eb6b0-f640-4207-9f05-83e06080410b@rowland.harvard.edu>
+ <lrhydvc7huuqck2kvqzobqt7hhwt36zwsa2i3fpegbpykt5q43@2md6gfitjlb3>
+ <a2c3537a-8ddc-467f-a9f4-b4d413914914@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aHyN3-uoHofF8Hg3@monica.localdomain>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <a2c3537a-8ddc-467f-a9f4-b4d413914914@rowland.harvard.edu>
 
-On Sun, Jul 20, 2025 at 02:34:07PM +0800, Ze Huang wrote:
-> On Tue, Jul 15, 2025 at 03:50:54PM -0500, Alex Elder wrote:
-> > On 7/12/25 2:49 AM, Ze Huang wrote:
-> > > To support flattened dwc3 dt model and drop the glue layer, introduce the
-> > > `dwc3-generic` driver. This enables direct binding of the DWC3 core driver
-> > > and offers an alternative to the existing glue driver `dwc3-of-simple`.
-> > 
-> > I'm not familiar with dwc-of-simple.c, and won't comment on
-> > how this differs from that (or does not).
-> > 
-> > Given you're implementing an alternative though, can you explain
-> > in a little more detail what's different between the two?  Why
-> > would someone choose to use this driver rather than the other one?
+On Jul 19 2025, Alan Stern wrote:
+> On Sat, Jul 19, 2025 at 10:36:01AM +0200, Benjamin Tissoires wrote:
+> > On Jul 17 2025, Alan Stern wrote:
+> > > Testing by the syzbot fuzzer showed that the HID core gets a
+> > > shift-out-of-bounds exception when it tries to convert a 32-bit
+> > > quantity to a 0-bit quantity.  This is hardly an unexpected result,
+> > > but it means that we should not accept report fields that have a size
+> > > of zero bits.  Similarly, there's no reason to accept report fields
+> > > with a count of zero; either type of item is completely meaningless
+> > > since no information can be conveyed in zero bits.
+> > > 
+> > > Reject fields with a size or count of zero, and reject reports
+> > > containing such fields.
+> > > 
+> > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> > > Reported-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
+> > > Closes: https://lore.kernel.org/linux-usb/68753a08.050a0220.33d347.0008.GAE@google.com/
+> > > Tested-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
+> > > Fixes: dde5845a529f ("[PATCH] Generic HID layer - code split")
+> > > Cc: stable@vger.kernel.org
 > 
-> They are basically the same.
-> 
-> dwc-generic use a plain dt node while dwc-of-simple will nest the dwc3
-> node as its child.
-> 
-> Both will use dwc3_core_probe() to finish the probe process. But now we
-> can simplify the process by just calling it, instead of calling
-> of_platform_populate() and create another snps,dwc3 device driver.
-
-[...]
-
-> > > +	ret = reset_control_assert(dwc3->resets);
-> > > +	if (ret)
-> > > +		return dev_err_probe(dev, ret, "failed to assert resets\n");
-> > > +
-> > > +	ret = devm_add_action_or_reset(dev, dwc3_generic_reset_control_assert, dwc3->resets);
-> > > +	if (ret)
-> > > +		return ret;
+> > Sigh... I applied this one too quickly before going on holidays.
 > > 
-> > The re-assert shouldn't be set up unless the deassert below
-> > succeeds.
+> > This breaks the hid testsuite:
+> > https://gitlab.freedesktop.org/bentiss/hid/-/jobs/80805946
 > > 
-> 
-> Will move behind the deassert.
-> 
-> > > +	usleep_range(10, 1000);
+> > (yes, I should have run it before applying).
 > > 
-> > This seems like a large range.  You could just do msleep(1);
-> > Also, can you add a comment explaining why a delay is needed,
-> > and why 1 millisecond is the right amount of time to sleep?
+> > So basically, there are devices out there with a "broken" report size of
+> > 0, and this patch now entirely disables them.
 > > 
+> > That Saitek gamepad has the following (see tools/testing/selftests/hid/tests/test_gamepad.py):
+> >         0x95, 0x01,                    # ..Report Count (1)                  60
+> >         0x75, 0x00,                    # ..Report Size (0)                   62
+> >         0x81, 0x03,                    # ..Input (Cnst,Var,Abs)              64
+> > 
+> > So we'd need to disable the field, but not invalidate the entire report.
+> > 
+> > I'm glad I scheduled this one for the next cycle.
+> > 
+> > I'll try to get something next week.
 > 
-> I will check the range with spacemit and reply soon.
+> So then would it be better to accept these report fields (perhaps with a 
+> warning) and instead, harden the core HID code so that it doesn't choke 
+> when it runs across one of them?
 > 
 
-the resets are asynchronous with no strict timing. But to be safe, each
-reset should stay active for at least 1 µs. I’ll switch to a udelay(2)
-and add comment accordingly.
+Yeah, that seems like the best plan forward.
 
-> > > +	ret = reset_control_deassert(dwc3->resets);
-> > > +	if (ret)
-> > > +		return dev_err_probe(dev, ret, "failed to deassert resets\n");
-> > > +
-> > > +	ret = devm_clk_bulk_get_all(dwc3->dev, &dwc3->clks);
-> > > +	if (ret < 0)
-> > > +		return dev_err_probe(dev, ret, "failed to get clocks\n");
-> > 
-> > Call devm_clk_bulk_get_all_enabled() instead of doing the two
-> > steps separately here.
-> > 
-> 
-> Will do, thanks.
-> 
-> > 					-Alex
+[sorry on reduced setup for the next 3 weeks, so I can't really debug
+the entire thing now.]
+
+Though, we should probably not annoy users unless we are trying to do
+something that won't be needed. I doubt that Saitek gamepad will ever
+call the faulty functions, so why putting an error in the logs when it's
+working fine?
+
+Cheers,
+Benjamin
 
