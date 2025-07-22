@@ -1,255 +1,166 @@
-Return-Path: <linux-usb+bounces-26095-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26096-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 836A0B0E600
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 00:00:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D728B0E61B
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 00:10:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43FB15819EB
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 22:00:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3A35540CEC
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 22:10:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A762877DB;
-	Tue, 22 Jul 2025 21:59:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033CE2877C5;
+	Tue, 22 Jul 2025 22:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H3GNjtSK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="egs341Sg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600E6280338;
-	Tue, 22 Jul 2025 21:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2022E371F;
+	Tue, 22 Jul 2025 22:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753221595; cv=none; b=BIRRmbgS4nU/iO2xdS2Ayd+K4ds0sMZfjfru9uCi4GWMFCQyCDBDJS/LspL7ZLON5hoCSSeu96/mBqPHp91YZKMbVm8qmmnPXCpO6nln+TiAflTjDbtGx4Oo7M0pgokMXitvoTYq/qT/R7YbcxpzCrP2PSNXh8/BlntZo2pxb/g=
+	t=1753222254; cv=none; b=Rsn54uXRXOjr5JyOqyK8PWuFAgbAPDkC4+3oBtFS+hFjLRr8tCXUk3tafWMEVdkNSpvtayGunCmfp1AJ0UxoId1x81alLC2l8zXnEJsQT2H3HJpKvonoiAUQ7MCZWXwAdVDZEYNdTItKk3lilhHSBUb1uOrVeJay3Q0lTXdJ+d8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753221595; c=relaxed/simple;
-	bh=KvXYd1CwJ7QTIbFtnYdMiYYKixJOHrpPwHoY7QT3uPs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G6FGpkdqP3IL+5u75rqQSiriIFsoVX7gyF7U9kZvFwcit3uIK+Ede+3CtMQgmUlQCY5h+THkYvv0O8zFiZNqEnZ+6VLH7QlFAy2okTQqgMN8gaeZoeRWu2exRlWU4TDo3qMHyW99TgnAanucj4ocHLzekW8UKip0Cc9Ks8Ip38A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H3GNjtSK; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ae401ebcbc4so1007172366b.1;
-        Tue, 22 Jul 2025 14:59:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753221592; x=1753826392; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=taA4UGn8qSCl0OPntQ8WtwZ5TDYoqD6jr4p1tjoaXu4=;
-        b=H3GNjtSKIsPuOpADYXUGAhjr8l0hPyewVHcgYYMh0V4J1/XTwYJiafj6lrhFPLFa4Q
-         7UBBntX1gmJeU68cQU+aUAL34bN04bAc1skzYzy+df1j2zaIKcdfpzr4F9R5Dg3F4zg+
-         HcYtAZV5F8TxEN2feIQ19VGQ+UYXvgGd6RdoC0Rjy5l09JLGsiqpLaktIj8kXvGIJFV+
-         UDwWXA/fzXiPF+/T28zhivjNabTSyrmwpOukCMqOcWUGqWmCwiJ78OkjGzmEzA20YKY7
-         HeL/IcJsL39uMpTnaled+zWBq5hD4z/vuRbXfHop1lz2Q5yM3QOl00YKRZZznNac95hA
-         ILBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753221592; x=1753826392;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=taA4UGn8qSCl0OPntQ8WtwZ5TDYoqD6jr4p1tjoaXu4=;
-        b=C/oqKbZRPInLQ2fx3SR5XtZcO57WhYanWOCmjrO0wGeR6mh3CCSmTTaoSPGfHbP351
-         kjmCjRIumIQ2QTF+yoMv2kPX/vFRPHCz4vNu3y8DE1szB3VWw6scqrrAJdA3pzPqnWFI
-         7f72P44QV+pcdNHu2LCzbpi6sO3zZFN90+u6BhAiB1uML9sjjWEQ4wHSE16aBuJ0P5jp
-         W0G1zUh76Ni4L7+H8gaf2t71d5x30diVN/mYowo/V4XqUBc2A5LSExlLpTiiiM5wD8R3
-         7DsTPbjZa4hRB06RfIL2xDpSrkdLBIvy2/+oSkxhV65u9529QmX0hyDWdf7TGXp6jQ/C
-         KU7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUsR0WTnW3zaxoy0+gRkg8Qt0jTfEWD+FRmj0OsM4hl/IUykaS20y/ScF/lnGNuEyDQyPqaCLvcVkBp@vger.kernel.org, AJvYcCXBI44PfdMgv/Kwlwco93lx4AZguneSCFkAUQ3EL4jNc+PYQyeVhK3oDRA1+xSSGQZqWZNFadL83k4Xl2g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeOwoLztv+i58BRgyM2p9cbIBoZLm6cDO1VW983uG0+H/WSTVY
-	mNADprFfMHCKGj1lbgcPNS1z9rpAxnKQymWpplLlJPIf7kf32s24qiuZLiS5gDUAN0dR15TJJxr
-	wp6GqL/FKmJPSMZVr+k0W/ybezga8ZnTQTrYp9QQ=
-X-Gm-Gg: ASbGncu6NVEzX2QdZcDe/qwQn3RmomHTFOSiuXDXLbdMfQeEpfgIAQritUpwaDCtCSQ
-	rJWRO8Ugmm6iPKr6nAIyMrj+IaidaQztzyApPjDlPn9wmep0IB0T7+pKctQSsD2iKo2AtkXSEFo
-	BUVNhZsshsJ/LVG9Hq9zCbLxVy2EkZOleIrliU9ncAWDAKnJnmXSLg2IHgoQrerYUEg03swxshL
-	2lX9QgJoxG9IwwGPA==
-X-Google-Smtp-Source: AGHT+IHi+1hksiPT9zFYrGDBMbCTT2dzY7L4GFC1VCmwtvqiIwEbAiL+J5ypVfUJ6i9xgIklCoCZBVzn3xiPTJhI1uM=
-X-Received: by 2002:a17:907:788:b0:af2:c9c7:7ee8 with SMTP id
- a640c23a62f3a-af2f928c5d2mr45925966b.55.1753221591450; Tue, 22 Jul 2025
- 14:59:51 -0700 (PDT)
+	s=arc-20240116; t=1753222254; c=relaxed/simple;
+	bh=C2FBRWKCIQGxWRG+faoXHvCKGguLUFl1fbUyeX1jHAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ol4hZIq5Vh+lrWf+BMc3S5PAgGt+NAa8av2+sgqd6iXo0HI3NYTxNn0mh+qyrLyq2QU8yAU7wusAbpJPsCozLSWwZ5NcWcOCDPLDZlNBxKYm3bYJ0k8dr3t/tGX4X0634frykJPSUpTvNE0Il1b9lQMRnvn6Qnt7Y0sb6X7v/N4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=egs341Sg; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753222252; x=1784758252;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C2FBRWKCIQGxWRG+faoXHvCKGguLUFl1fbUyeX1jHAo=;
+  b=egs341SgltMAx73mErYX8Xsd5slB9A+DqXXGRJt6fd630LPoERXfj6Uu
+   eRQljL2vWGqcvfv1klIjkqhl9K4LjFZdWyL40nK4+MUe5gB/D6L3pF/sP
+   Z/wwHWRWEQetozqffa/YNR2qx8mhv++2s+q1K+htCaFzjshzasKzpW1ml
+   Rj79ob9xIPm5dI+1iSpQHdSrvbjl2i0GZSWZDhjc/jdHHusG+hRsEIkF0
+   l+bzjqHQJ16wK94m+HSaCFERiUcBRG3DJMNA1PrPAYPPBe5BIHPTamQHT
+   Wk7jhskvkJ4ivjQs3j7V7N2VUuygY+Jyv3/wpsnpQCiN/9y2hdl13M67P
+   Q==;
+X-CSE-ConnectionGUID: AQZNFDy7QUuPECW1prmEAg==
+X-CSE-MsgGUID: soyZTpAkSrO8pFeLrH9jZQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="54706848"
+X-IronPort-AV: E=Sophos;i="6.16,332,1744095600"; 
+   d="scan'208";a="54706848"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 15:10:51 -0700
+X-CSE-ConnectionGUID: BXbq7hgsRPSplwyEI9nfKg==
+X-CSE-MsgGUID: GOe4/IchQK+wBiBY0MImcA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,332,1744095600"; 
+   d="scan'208";a="158563056"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 22 Jul 2025 15:10:48 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ueLCA-000IkR-1c;
+	Tue, 22 Jul 2025 22:10:46 +0000
+Date: Wed, 23 Jul 2025 06:10:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnaud Lecomte <contact@arnaud-lcm.com>, gregkh@linuxfoundation.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+	snovitoll@gmail.com,
+	syzbot+86b6d7c8bcc66747c505@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com, contact@arnaud-lcm.com
+Subject: Re: [PATCH] usb: mon: Fix slab-out-of-bounds in mon_bin_event due to
+ unsafe URB transfer_buffer access
+Message-ID: <202507230548.g6zwppI6-lkp@intel.com>
+References: <20250720200057.19720-1-contact@arnaud-lcm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250720210847.30998-1-mtormento80@gmail.com> <36a75fd9-71a4-4f53-9a35-560cd9cd5687@rowland.harvard.edu>
- <CACF_UwqpzNJWm0=zJh=1N_9p1Q6YjmU+DSofB_OOySkdWC_AxA@mail.gmail.com> <b7468de2-d186-4706-8db3-594285ba264b@rowland.harvard.edu>
-In-Reply-To: <b7468de2-d186-4706-8db3-594285ba264b@rowland.harvard.edu>
-From: Marco Tormento <mtormento80@gmail.com>
-Date: Tue, 22 Jul 2025 23:59:40 +0200
-X-Gm-Features: Ac12FXwOuXynWvjB4Nb6QEKLH9wqFavKtKG4sOmxJh5KikfBM6ww-qaLncZwxCU
-Message-ID: <CACF_Uwo2jZ2duXm_B6GdcLd3yPr0+CJ0sCBTDRqwkuX_KF81Ug@mail.gmail.com>
-Subject: Re: [PATCH] USB: hub: Move typec deattach before children
- disconnections in usb_disconnect()
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250720200057.19720-1-contact@arnaud-lcm.com>
 
-On Tue, 22 Jul 2025 at 05:05, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Tue, Jul 22, 2025 at 01:18:25AM +0200, Marco Tormento wrote:
-> > On Mon, 21 Jul 2025 at 03:21, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > I'm not a typec expert; in fact I know practically nothing about it.
-> > > Nevertheless, this sounds strange.  The recursive usb_disconnect() calls
-> > > should affect the connectors to the monitor's children and the monitor's
-> > > own ports, not the connector or port on the monitor's parent hub.
-> >
-> > What you wrote makes total sense, let me add some detail though.
-> > When I plug the monitor to the thunderbolt port, 3 usb hubs pop up, but only 2
-> > are backed by XHCI Host Controllers: usb3 and usb4.
->
-> I don't know what you mean when you say "backed by".  usb3 and usb4 are
-> the two root hubs of the xHCI host controller.  usb3-1 is an internal
-> hub (presumably built into the monitor) attached to the usb3 root hub.
+Hi Arnaud,
 
-Mine was a failed attempt at expressing what you wrote :-).
-My understanding is that usb3 and usb4 root hubs are somehow part of the
-thunderbolt controller, because they are not brought up if I plug the monitor
-into the other typec port.
+kernel test robot noticed the following build warnings:
 
-> > typec port0: bound usb3-port1 (ops connector_ops [usbcore])
-> > typec port0: bound usb4-port1 (ops connector_ops [usbcore])
-> > typec port1: bound usb3-port2 (ops connector_ops [usbcore])
-> > typec port1: bound usb4-port2 (ops connector_ops [usbcore])
->
-> Why are the usb3 port connectors getting bound at this point rather than
-> when usb3 was registered?
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.16-rc7 next-20250722]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Not sure, but maybe this is a consequence of the fact usb4 is on a shared hcd of
-usb3 pci device? See the stack traces below.
+url:    https://github.com/intel-lab-lkp/linux/commits/Arnaud-Lecomte/usb-mon-Fix-slab-out-of-bounds-in-mon_bin_event-due-to-unsafe-URB-transfer_buffer-access/20250721-040222
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250720200057.19720-1-contact%40arnaud-lcm.com
+patch subject: [PATCH] usb: mon: Fix slab-out-of-bounds in mon_bin_event due to unsafe URB transfer_buffer access
+config: m68k-randconfig-r073-20250723 (https://download.01.org/0day-ci/archive/20250723/202507230548.g6zwppI6-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 14.3.0
 
-> > When I unplug the monitor though, usb 3-1 is not processed as part of
-> > hub_disconnect_children() of usb3 hub, as I would expect.
->
-> Are you sure about this?  How did you reach that conclusion?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507230548.g6zwppI6-lkp@intel.com/
 
-I checked the stack traces of usb_disconnect().
+smatch warnings:
+drivers/usb/mon/mon_bin.c:422 mon_bin_get_data() warn: unsigned 'mon_copy_to_buff(rp, offset, urb->transfer_buffer, length)' is never less than zero.
+drivers/usb/mon/mon_bin.c:443 mon_bin_get_data() warn: unsigned 'offset' is never less than zero.
 
-usb 3-1 is triggered by hub_event():
+vim +422 drivers/usb/mon/mon_bin.c
 
-usb 3-1: [usb_disconnect] debugging()
-...cut...
-Workqueue: usb_hub_wq hub_event [usbcore]
-Call Trace:
- <TASK>
- dump_stack_lvl+0x5d/0x80
- usb_disconnect+0x38/0x2f4 [usbcore d46dddc5902949f0a284aff7ecf8d6e861774323]
- hub_event.cold+0x73e/0xc50 [usbcore d46dddc5902949f0a284aff7ecf8d6e861774323]
-...cut
+   409	
+   410	static unsigned int mon_bin_get_data(const struct mon_reader_bin *rp,
+   411	    unsigned int offset, struct urb *urb, unsigned int length,
+   412	    char *flag)
+   413	{
+   414		int i;
+   415		struct scatterlist *sg;
+   416		unsigned int this_len;
+   417	
+   418		*flag = 0;
+   419		if (urb->num_sgs == 0) {
+   420			if (
+   421				urb->transfer_buffer == NULL ||
+ > 422				mon_copy_to_buff(rp, offset, urb->transfer_buffer, length) < 0
+   423			) {
+   424				*flag = 'Z';
+   425				return length;
+   426			}
+   427			length = 0;
+   428	
+   429		} else {
+   430			/* If IOMMU coalescing occurred, we cannot trust sg_page */
+   431			if (urb->transfer_flags & URB_DMA_SG_COMBINED) {
+   432				*flag = 'D';
+   433				return length;
+   434			}
+   435	
+   436			/* Copy up to the first non-addressable segment */
+   437			for_each_sg(urb->sg, sg, urb->num_sgs, i) {
+   438				if (length == 0 || PageHighMem(sg_page(sg)))
+   439					break;
+   440				this_len = min_t(unsigned int, sg->length, length);
+   441				offset = mon_copy_to_buff(rp, offset, sg_virt(sg),
+   442						this_len);
+ > 443				if (offset < 0) {
+   444					*flag = 'Z';
+   445					return length;
+   446				}
+   447				length -= this_len;
+   448			}
+   449			if (i == 0)
+   450				*flag = 'D';
+   451		}
+   452	
+   453		return length;
+   454	}
+   455	
 
-usb4 is not:
-
-usb usb4: [usb_disconnect] debugging()
-...cut...
-Workqueue: kacpi_hotplug acpi_hotplug_work_fn
-Call Trace:
- <TASK>
- dump_stack_lvl+0x5d/0x80
- usb_disconnect+0x38/0x2f4 [usbcore d46dddc5902949f0a284aff7ecf8d6e861774323]
- usb_remove_hcd.cold+0xc6/0x1bb [usbcore
-d46dddc5902949f0a284aff7ecf8d6e861774323]
- xhci_pci_remove+0x6a/0xd0 [xhci_pci 89d1427fd34e7648221e69cd90b20ad6e1fd2fd6]
- pci_device_remove+0x47/0xc0
-...cut
-
-usb3 is a little bit different compared to usb4, it has a call to
-usb_hcd_pci_remove():
-
-usb usb3: [usb_disconnect] debugging()
-...cut...
-Workqueue: kacpi_hotplug acpi_hotplug_work_fn
-Call Trace:
- <TASK>
- dump_stack_lvl+0x5d/0x80
- usb_disconnect+0x38/0x2f4 [usbcore d46dddc5902949f0a284aff7ecf8d6e861774323]
- usb_remove_hcd.cold+0xc6/0x1bb [usbcore
-d46dddc5902949f0a284aff7ecf8d6e861774323]
- usb_hcd_pci_remove+0x7a/0x110 [usbcore
-d46dddc5902949f0a284aff7ecf8d6e861774323]
- xhci_pci_remove+0x89/0xd0 [xhci_pci 89d1427fd34e7648221e69cd90b20ad6e1fd2fd6]
- pci_device_remove+0x47/0xc0
-...cut
-
-There's a branch in xhci_pci_remove() on xhci->shared_hcd being valid.
-
-So it seems:
-- xhci_pci_remove() is called
-- xhci->shared_hcd is valid so usb_remove_hcd() is called which triggers usb4
-  usb_disconnect()
-- usb_hcd_pci_remove() is then called which does a lot of stuff + calls
-  usb_remove_hcd() which triggers usb3 usb_disconnect()
-
-No idea what this shared hcd implies, by the way.
-
-I also got this stack trace of the port unbinding, which happens
-in typec_aggregate_unbind() in the usb4 usb_disconnect() trace:
-
-usb usb4: [hub_disconnect] debugging
-usb usb4-port2: [usb_hub_remove_port_device] debugging: port 1
-...cut...
-Workqueue: kacpi_hotplug acpi_hotplug_work_fn
-Call Trace:
- <TASK>
- dump_stack_lvl+0x5d/0x80
- typec_aggregate_unbind+0x12/0x30 [typec
-6de6f75aa8c9f6a0a8c73a05ed9c668a2b7634cf]
- component_del+0xb8/0x150
- usb_hub_remove_port_device+0xf8/0x115 [usbcore
-d46dddc5902949f0a284aff7ecf8d6e861774323]
- hub_disconnect+0x95/0x160 [usbcore d46dddc5902949f0a284aff7ecf8d6e861774323]
- usb_unbind_interface+0xb6/0x1ef [usbcore
-d46dddc5902949f0a284aff7ecf8d6e861774323]
- ? kernfs_remove_by_name_ns+0xbe/0xe0
- device_release_driver_internal+0x19e/0x200
- bus_remove_device+0xc2/0x130
- device_del+0x160/0x3d0
- ? kobject_put+0xa2/0x200
- usb_disable_device+0xf4/0x220 [usbcore
-d46dddc5902949f0a284aff7ecf8d6e861774323]
- usb_disconnect+0x117/0x2f4 [usbcore d46dddc5902949f0a284aff7ecf8d6e861774323]
- usb_remove_hcd.cold+0xc6/0x1bb [usbcore
-d46dddc5902949f0a284aff7ecf8d6e861774323]
- xhci_pci_remove+0x6a/0xd0 [xhci_pci 89d1427fd34e7648221e69cd90b20ad6e1fd2fd6]
- pci_device_remove+0x47/0xc0
-...cut...
- </TASK>
-typec port1: [connector_unbind] unbinding connector from usb4-port2
-typec port1: [connector_unbind] unbinding connector from usb3-port2
-
-> > Maybe usb 3-1 should be disconnected as a child of usb3, but even in that case
-> > we would still end up in the same situation because it's usb4 disconnection that
-> > is doing the unbinding.
-> > Since there's no dependency between usb3 and usb4 they can be
-> > disconnected in any order and it's just a matter of luck as it is right now.
->
-> That last sentence is totally wrong.  usb3 and usb4 are closely
-> connected, since they represent logical components of the same xHCI
-> controller, and they will always be unregistered in the same order.
-> usb3 is the USB-2 root hub (the one connected to the physical wires
-> carrying the USB-2 low/full/high-speed signals), and usb4 is the USB-3
-> root hub (the one connected to the physical wires carrying the USB-3
-> SuperSpeed and SuperSpeedPlus signals).
-
-That makes a lot of sense.
-Unfortunately I realized this could be the order half an hour after having
-pressed "send"...
-Thank you for the explanation!
-
-> This still leaves the puzzle about why the typec things are handled this
-> way.  In particular, if connector_unbind undoes the binding of the typec
-> ports that happened when usb4 was registered, then what action is
-> typec_unregister_partner supposed to undo, and when was it supposed to
-> happen?  As a general rule, disconnection and unregistration actions
-> take place in the reverse order of the corresponding connection and
-> registration actions.
->
-> Questions like this are best directed at the maintainers of the
-> USB-4/Thunderbolt and typec subsystems.
-
-Should I just cc them here or should I open a new thread with them?
-
-Marco Tormento
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
