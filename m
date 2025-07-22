@@ -1,88 +1,99 @@
-Return-Path: <linux-usb+bounces-26068-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26069-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50216B0CFF6
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 05:06:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01A1EB0D15C
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 07:46:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 669317AC14E
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 03:04:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91F7A1AA365D
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 05:47:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F19B628BA84;
-	Tue, 22 Jul 2025 03:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FFC028C030;
+	Tue, 22 Jul 2025 05:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="txSruZ0b"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="Uu9YoWEN";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EMfwrdP0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA5728AB10
-	for <linux-usb@vger.kernel.org>; Tue, 22 Jul 2025 03:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C957B2AE8B;
+	Tue, 22 Jul 2025 05:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753153556; cv=none; b=Vfolx3DWJIgcrFtj/J11aIqHxiGh0BgIcTG0sCpN/hYDQggNgdLYpvQix3n5FX56TJKbSh+5WgqUjpYbvJjThOrwpbRT6/xEa8U19OOj984yZ15IJ+E9uMQKfiAbh/7JGjFJW4Fc7cfm7FADlBTQnd1A4BnJNdIJhsRUUegq53o=
+	t=1753163202; cv=none; b=T4kp2XFAmx6Lm0ln6MGpSLktjrQivH9/5M3xJ1Mifj3aA1M2Zyz970fX2oHOTXc/SPdkqOvL7DryctN2ZjLFruQE7M2iTRnM2Xk7YrNtd0DvEg4c3xAIUrIb5lxqct1zKMjfuBLTY66ZMuydLYGWQ6xLvHzAakG48evArMlVFT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753153556; c=relaxed/simple;
-	bh=tIlUbgyzaefMRsD/EiheqUpASZBDkZWFnRy+PUW10jw=;
+	s=arc-20240116; t=1753163202; c=relaxed/simple;
+	bh=7s/9THL+pva5ta7A1N4beUww8mQiHWpz9djvOtt5jY0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=edgtANvi6G/8Jmwcyhcj197sJNKInXM+g/aeN2MXgxBQhyr/P9bhnFle/jYHtzvi4GenOdL6Nr4oOxoMkY7p+D157c+zUAnk264v19vj5binPqv3G6hq72B5zMQ4t/V9/Im0OZ2m3Y8iq5XRViIBZF4ApoWX7CL3nXRO25fU4OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=txSruZ0b; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7e32c95775aso511872385a.3
-        for <linux-usb@vger.kernel.org>; Mon, 21 Jul 2025 20:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1753153553; x=1753758353; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pXQgbypeScnSKfXHhyJHhtDL8qN8gOL//v5/QEa2oRk=;
-        b=txSruZ0bCewyYCgIrL8F9zMvRil5dLkzETj7gn9Bf/n0Uc0Faa2qItI1UJaWzh7jXb
-         c4U7gX7Xt5+LWQudAAByuKgKYerHfO/k1PXCZgzV3w99xnj0KyHtvkV6lyFyiaU4Y0kz
-         03sLyQwwcKYL1JNqqxfcjT7k24Naa3RtPxCClNz94RN88k8c8DprSidk0WnFkt0hhRZf
-         F3z0fYpaDmAfeqDvCkRXX6QhLxGZ5CRC6eJdmdp8csNFUi8O431Oz5c9akmtISErZ9+g
-         wGB+Ertziim7TLxNzwmHAVNiVneoqWXNeEQ9R6/VqbiWcdYbhhcXrWounLlPwPdJnFXv
-         1Jng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753153553; x=1753758353;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pXQgbypeScnSKfXHhyJHhtDL8qN8gOL//v5/QEa2oRk=;
-        b=nVibGFE2TsGP13Fbr/ADtdiUojjL1dIqTJbWTflpwryG90Z4wg4QTN1KUo08jb8s30
-         w7Q757KfOthMCyQOZvo0uDgKo9DyvX47xeWGYpp7RSkD16QKNZwQXjoSBBVAv8Yv0gdD
-         68+1DEROdfYYzA3PlDM16SatuB9/bLJIORABr66w7cPu0Pebvrh7/W9l9Yge1K15CPcQ
-         kfapkL0fQrZSSSD7Fs5HM7KkhcS+FiUf5zQBXWzF0rW6NEwq5oSxMgO5axZuld7uk66X
-         Iu9tkUudIBUMJXnoYW4KsiNAuiUSzfd1nJuCidu7bKNizVMiZfmG8o2keoF0+AzgCSb7
-         /KGw==
-X-Forwarded-Encrypted: i=1; AJvYcCX/ZuQU0YO9LR4EholcM6XfE7fW10srZv0ikoDZLf9JyIsCQKXOqdp9Jmz9BSijAr4JweRtBWVBCXw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxE0XUh4BRIM25eEE05yb3x41I26XtqegzS1uH2uYjwYpJ8pfJP
-	xzujEk9Yi6+8gkaLdD+GESvtUvvyQiVwLuVP7wKQjusy6MuKh7VDjT5KhW9R11IRog==
-X-Gm-Gg: ASbGncuAwgYOE3Az1QOhdbUwmK0WbdGggK7VB1XTMfCbC8ftUdMxR9xZn6QImYKmHhq
-	4/XXMlEiItx6BNQ/LXly4ylVkhdwMTitZnNy01ItpOYC9timwn7npDlSoqOoLw/40oEpA6TLgjF
-	EtOMbOBgLF0Frfq4Kw7eklicac573ffp6PJQhQXcWQgUVwyuygL8/7bwIYCtI7j+znqh4PTffc4
-	yFhwxUWgeof5NN2CHesU9uiQXAYdQd9pZXsH539hRtm8om5VmHEBK0CHs6QujQUwpkdzdHsNG+K
-	kQFR/LNEijT5VsgvW0M4ZgPN74og5OwCyV0DdlaB+v9kZQzwUX0XCCj8sPYSrZLAGGJZTPyhkCR
-	Yqwn/T+7Jd9XHSdCsoTGt4SZXQiOKB0m1lg==
-X-Google-Smtp-Source: AGHT+IGM2G9zWGTMT+LcPqfNn9K7gUHalwUB3sMFPPDTNwpMJMSJ58HmIh9Ou4aGN66Olq7K3KkAJA==
-X-Received: by 2002:a05:620a:8198:b0:7e3:46ad:65f9 with SMTP id af79cd13be357-7e346ad678amr1919329385a.23.1753153553456;
-        Mon, 21 Jul 2025 20:05:53 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::401d])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e356c44d69sm479537785a.58.2025.07.21.20.05.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 20:05:52 -0700 (PDT)
-Date: Mon, 21 Jul 2025 23:05:50 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Marco Tormento <mtormento80@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: hub: Move typec deattach before children
- disconnections in usb_disconnect()
-Message-ID: <b7468de2-d186-4706-8db3-594285ba264b@rowland.harvard.edu>
-References: <20250720210847.30998-1-mtormento80@gmail.com>
- <36a75fd9-71a4-4f53-9a35-560cd9cd5687@rowland.harvard.edu>
- <CACF_UwqpzNJWm0=zJh=1N_9p1Q6YjmU+DSofB_OOySkdWC_AxA@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=WORiZunyF42GyV7jrgEIXPV5tEwgF3St5plSN9M5g1smRxPX8At+7f19tyvfeVeA2NwW2rNex+mpMc9ADCm4D6dXVvQHpgCOhsPZeQfYa5Rv0kR3984Qe602KNI9P8V4h97uJUtJKutsv1HspwBT9bC+LcLZ4U/DNDfiO6WoDc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=Uu9YoWEN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EMfwrdP0; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailfout.phl.internal (Postfix) with ESMTP id 9D52FEC022E;
+	Tue, 22 Jul 2025 01:46:37 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-06.internal (MEProxy); Tue, 22 Jul 2025 01:46:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1753163197; x=1753249597; bh=uR7w+rk1IP
+	LBNFKRvuJDo+Irx9SQicd4yP1XI2gUdEQ=; b=Uu9YoWENxMVR+YibCwsQQ3UjbJ
+	1e6c/m7U95AVvYqEGlrJo1J4GWHagd0ldVqMUXCC/swWxTl7Ffnbc6sA5iCtqOvN
+	+TUGJo/A5/TCK/dvAabXx965gGiKA8xVBW+OQdO9yRdfHBxO2OiL+DEmFMTJXhnP
+	kb4oGRZkbTbyCe905a3vSXT+ax8Ku17qKko9UoImb0uY0pnB3VgJ+XMhguPai74x
+	eCadtPDVvZnEljznfm/cfT3bimQ6bvzNwn0XOppZGHHqEp2Z8RVo9PHjY7CncWmo
+	1Sj3N6firLpKep5GFGxtTnKABpO+PLqmtUIQBjb3QojHJvo+6szI0LnlzSmQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1753163197; x=1753249597; bh=uR7w+rk1IPLBNFKRvuJDo+Irx9SQicd4yP1
+	XI2gUdEQ=; b=EMfwrdP0Xj1koZRUFnM1svCC+UvZnhsgRmV//i4d9jCUvLtnbyd
+	ExctFGoICY928wIenePyHxcFy/5g3bYEqksAxGoiE6auFCeMpWcVLHcjv46JdP52
+	XcVWvyJ3Aq78sAUCD1RFFvXqoFSVrnjPMeG6I9li+8eSXybS7m5PJ5SHNCj2qlCs
+	WGNdOF1S3ncPGrkbQ5hhX3F0MK+tRC9AY4focuebtr86qkSkO8BV3oLN/kWxrtES
+	ggpQyyH3n1FY0Rn73DIFl29O5W9sHOqj3X5UaOKUEV2TG48E6mD/U32lYP9VdpZC
+	5zRi/wp+cWx0eJHZ9L7oCgfqN/F9mVTKawQ==
+X-ME-Sender: <xms:vCV_aBgTOhncGcTEjmJr_CWZGSHeqGZbPhAQMgX73zcEUW3Os0b9lw>
+    <xme:vCV_aGJCvZd2318FohAYOqPsmLzt3YixHUHxCYFe-eicyKw9pUFIUWlGVN22gNT3r
+    amg7HmmgLyFcQ>
+X-ME-Received: <xmr:vCV_aIhkxloVCPMeI9g7jRERnDORDogKjpmAr2DjrrQGFjKWhxZhi5aNUxC4-vcY0EAFvKzTqp9ZJgPPXbL5ZXtACXSJN0FJ81ZNHw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejgeduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffj
+    uceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvvedvle
+    ejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtg
+    homhdpnhgspghrtghpthhtohepudegpdhmohguvgepshhmthhpohhuthdprhgtphhtthho
+    peihihgtohhnghhsrhhfhiesudeifedrtghomhdprhgtphhtthhopehonhgvuhhkuhhmse
+    hsuhhsvgdrtghomhdprhgtphhtthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdr
+    tghhpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtth
+    hopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhn
+    uhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephihitghonh
+    hgsehkhihlihhnohhsrdgtnh
+X-ME-Proxy: <xmx:vCV_aM2d8S4sGNmcr8vbTa4Ds4Ri55JU3wDkWuuOlg4zPoqsiXiJ5g>
+    <xmx:vCV_aGiCCWsE6n_LxY7JPsq1WjslZN474DXJG1CZ1D7m_HX83acxQA>
+    <xmx:vCV_aF_7QBp7K7OYM7KhR0fniCqrBGaAkl6qMejV-9UQiuCjVay_CQ>
+    <xmx:vCV_aKLUwOAoXU77gUI-8fPcJbG8EXLxzZu3Ce8Z2Oa6QWCteY3HUA>
+    <xmx:vSV_aEgptUDHF3WR-tAgdWLJSQra_oLkHT875FNkvIuoOqS08Ko7vnRE>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 22 Jul 2025 01:46:36 -0400 (EDT)
+Date: Tue, 22 Jul 2025 07:46:34 +0200
+From: Greg KH <greg@kroah.com>
+To: yicongsrfy@163.com
+Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	Yi Cong <yicong@kylinos.cn>
+Subject: Re: [PATCH] net: cdc_ncm: Fix spelling mistakes
+Message-ID: <2025072210-spherical-grating-a779@gregkh>
+References: <20250722023259.1228935-1-yicongsrfy@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,202 +102,51 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACF_UwqpzNJWm0=zJh=1N_9p1Q6YjmU+DSofB_OOySkdWC_AxA@mail.gmail.com>
+In-Reply-To: <20250722023259.1228935-1-yicongsrfy@163.com>
 
-On Tue, Jul 22, 2025 at 01:18:25AM +0200, Marco Tormento wrote:
-> On Mon, 21 Jul 2025 at 03:21, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > I'm not a typec expert; in fact I know practically nothing about it.
-> > Nevertheless, this sounds strange.  The recursive usb_disconnect() calls
-> > should affect the connectors to the monitor's children and the monitor's
-> > own ports, not the connector or port on the monitor's parent hub.
+On Tue, Jul 22, 2025 at 10:32:59AM +0800, yicongsrfy@163.com wrote:
+> From: Yi Cong <yicong@kylinos.cn>
 > 
-> What you wrote makes total sense, let me add some detail though.
-> When I plug the monitor to the thunderbolt port, 3 usb hubs pop up, but only 2
-> are backed by XHCI Host Controllers: usb3 and usb4.
-
-I don't know what you mean when you say "backed by".  usb3 and usb4 are 
-the two root hubs of the xHCI host controller.  usb3-1 is an internal 
-hub (presumably built into the monitor) attached to the usb3 root hub.
-
-> usb 3-1 instead is using usb3 and it has 3 devices connected to it: mouse,
-> keyboard and a mysterious billboard device:
+> According to the Universal Serial Bus Class Definitions for
+> Communications Devices v1.2, in chapter 6.3.3 table-21:
+> DLBitRate(downlink bit rate) seems like spelling error.
 > 
-> xhci_hcd 0000:3c:00.0: xHCI Host Controller
-> xhci_hcd 0000:3c:00.0: new USB bus registered, assigned bus number 3
-> xhci_hcd 0000:3c:00.0: hcc params 0x200077c1 hci version 0x110 quirks
-> 0x0000000200009810
-> xhci_hcd 0000:3c:00.0: xHCI Host Controller
-> xhci_hcd 0000:3c:00.0: new USB bus registered, assigned bus number 4
-> xhci_hcd 0000:3c:00.0: Host supports USB 3.1 Enhanced SuperSpeed
-> usb usb3: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.15
-> usb usb3: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-> usb usb3: Product: xHCI Host Controller
-> usb usb3: Manufacturer: Linux 6.15.7-arch1-1-mentor xhci-hcd
-> usb usb3: SerialNumber: 0000:3c:00.0
-> hub 3-0:1.0: USB hub found
-> hub 3-0:1.0: 2 ports detected
-> usb usb4: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 6.15
-> usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-> usb usb4: Product: xHCI Host Controller
-> usb usb4: Manufacturer: Linux 6.15.7-arch1-1-mentor xhci-hcd
-> usb usb4: SerialNumber: 0000:3c:00.0
-> hub 4-0:1.0: USB hub found
-> hub 4-0:1.0: 2 ports detected
-> typec port0: bound usb3-port1 (ops connector_ops [usbcore])
-> typec port0: bound usb4-port1 (ops connector_ops [usbcore])
-> typec port1: bound usb3-port2 (ops connector_ops [usbcore])
-> typec port1: bound usb4-port2 (ops connector_ops [usbcore])
-
-Why are the usb3 port connectors getting bound at this point rather than 
-when usb3 was registered?
-
-> usb 3-1: new high-speed USB device number 2 using xhci_hcd
-> usb 3-1: New USB device found, idVendor=0bda, idProduct=5411, bcdDevice= 1.36
-> usb 3-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> usb 3-1: Product: 4-Port USB 2.0 Hub
-> usb 3-1: Manufacturer: Generic
-> hub 3-1:1.0: USB hub found
-> hub 3-1:1.0: 3 ports detected
-> usb 3-1.3: new full-speed USB device number 3 using xhci_hcd
-> usb 3-1.3: not running at top speed; connect to a high speed hub
-
-I'm actually puzzled by this line.  Apparently the mysterious Realtek 
-BillBoard Device claims that it is capable of connecting at high speed, 
-but even though it was attached to a high-speed hub it only connected at 
-full speed.  Things like this have shown up in other users' reports but 
-I never bothered to point out the inconsistencies to anyone.
-
-Either the device is lying about its capabilities or else it is 
-malfunctioning.  Either way, I guess there isn't anything the kernel can 
-do about it.
-
-> usb 3-1.3: New USB device found, idVendor=0bda, idProduct=5400, bcdDevice= 1.07
-> usb 3-1.3: New USB device strings: Mfr=17, Product=18, SerialNumber=19
-> usb 3-1.3: Product: BillBoard Device
-> usb 3-1.3: Manufacturer: Realtek
-> usb 3-1.3: SerialNumber: 123456789ABCDEFGH
-> usb 3-1.2: new full-speed USB device number 4 using xhci_hcd
-> usb 3-1.2: New USB device found, idVendor=0951, idProduct=16e6, bcdDevice=21.08
-> usb 3-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> usb 3-1.2: Product: HyperX Alloy Origins Core
-> usb 3-1.2: Manufacturer: Kingston
-> usb 3-1.1: new full-speed USB device number 5 using xhci_hcd
-> usb 3-1.1: New USB device found, idVendor=1a7c, idProduct=0197, bcdDevice= 1.06
-> usb 3-1.1: New USB device strings: Mfr=1, Product=3, SerialNumber=0
-> usb 3-1.1: Product: Evoluent VerticalMouse D
-> usb 3-1.1: Manufacturer: Kingsis Peripherals
+> Signed-off-by: Yi Cong <yicong@kylinos.cn>
+> ---
+>  drivers/net/usb/cdc_ncm.c    | 2 +-
+>  include/uapi/linux/usb/cdc.h | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> When I unplug the monitor though, usb 3-1 is not processed as part of
-> hub_disconnect_children() of usb3 hub, as I would expect.
+> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> index 34e82f1e37d9..057ad1cf0820 100644
+> --- a/drivers/net/usb/cdc_ncm.c
+> +++ b/drivers/net/usb/cdc_ncm.c
+> @@ -1847,7 +1847,7 @@ cdc_ncm_speed_change(struct usbnet *dev,
+>  		     struct usb_cdc_speed_change *data)
+>  {
+>  	/* RTL8156 shipped before 2021 sends notification about every 32ms. */
+> -	dev->rx_speed = le32_to_cpu(data->DLBitRRate);
+> +	dev->rx_speed = le32_to_cpu(data->DLBitRate);
+>  	dev->tx_speed = le32_to_cpu(data->ULBitRate);
+>  }
+>  
+> diff --git a/include/uapi/linux/usb/cdc.h b/include/uapi/linux/usb/cdc.h
+> index 1924cf665448..f528c8e0a04e 100644
+> --- a/include/uapi/linux/usb/cdc.h
+> +++ b/include/uapi/linux/usb/cdc.h
+> @@ -316,7 +316,7 @@ struct usb_cdc_notification {
+>  #define USB_CDC_SERIAL_STATE_OVERRUN		(1 << 6)
+>  
+>  struct usb_cdc_speed_change {
+> -	__le32	DLBitRRate;	/* contains the downlink bit rate (IN pipe) */
+> +	__le32	DLBitRate;	/* contains the downlink bit rate (IN pipe) */
+>  	__le32	ULBitRate;	/* contains the uplink bit rate (OUT pipe) */
+>  } __attribute__ ((packed));
 
-Are you sure about this?  How did you reach that conclusion?
+You are changing a structure that userspace sees.  How did you verify
+that this is not going to break any existing code out there?
 
-> It is processed on its own (added some debugging log to some functions):
-> 
-> usb 3-1: [usb_disconnect] debugging
-> usb 3-1: [usb_disconnect] USB disconnect, device number 2
-> usb 3-1: [hub_disconnect_children] debugging hub_disconnect_children()
-> usb 3-1: [hub_disconnect_children] disconnecting child 0
-> usb 3-1.1: [usb_disconnect] debugging
-> usb 3-1.1: [usb_disconnect] USB disconnect, device number 5
-> usb 3-1.1: [hub_disconnect_children] debugging hub_disconnect_children()
-> usb 3-1.1: [usb_disconnect] unregistering device
-> usbhid 3-1.1:1.0: [usb_unbind_interface] debugging
-> usb 3-1.1: [usb_disconnect] parent found
-> usb 3-1.1: [usb_disconnect] removing port 3-1-port1 from hub 3-1:1.0: 0
-> usb 3-1.1: [usb_disconnect] done with the device
-> usb 3-1: [hub_disconnect_children] disconnecting child 1
-> usb 3-1.2: [usb_disconnect] debugging
-> usb 3-1.2: [usb_disconnect] USB disconnect, device number 4
-> usb 3-1.2: [hub_disconnect_children] debugging hub_disconnect_children()
-> usb 3-1.2: [usb_disconnect] unregistering device
-> usbhid 3-1.2:1.0: [usb_unbind_interface] debugging
-> xhci_hcd 0000:3c:00.0: remove, state 4
-> usb usb4: [usb_disconnect] debugging
-> usb usb4: [usb_disconnect] USB disconnect, device number 1
-> usb usb4: [hub_disconnect_children] debugging hub_disconnect_children()
-> usb usb4: [usb_disconnect] unregistering device
-> hub 4-0:1.0: [usb_unbind_interface] debugging
-> usb usb4: [hub_disconnect] debugging
-> usb usb4-port2: [usb_hub_remove_port_device] debugging: port 1
-> typec port1: [connector_unbind] unbinding connector from usb4-port2
-> typec port1: [connector_unbind] unbinding connector from usb3-port2
-> usb usb4-port1: [usb_hub_remove_port_device] debugging: port 0
-> typec port0: [connector_unbind] unbinding connector from usb4-port1
-> typec port0: [connector_unbind] unbinding connector from usb3-port1
-> usb usb4: [usb_disconnect] done with the device
-> xhci_hcd 0000:3c:00.0: USB bus 4 deregistered
-> xhci_hcd 0000:3c:00.0: xHCI host controller not responding, assume dead
-> xhci_hcd 0000:3c:00.0: remove, state 1
-> usb usb3: [usb_disconnect] debugging
-> usb usb3: [usb_disconnect] USB disconnect, device number 1
-> typec port1-partner: [typec_unregister_partner] debugging
-> typec port1-partner: [typec_unregister_partner] unregistering from port: port1
-> usbhid 3-1.2:1.1: [usb_unbind_interface] debugging
-> usbhid 3-1.2:1.2: [usb_unbind_interface] debugging
-> usb 3-1.2: [usb_disconnect] parent found
-> usb 3-1.2: [usb_disconnect] removing port 3-1-port2 from hub 3-1:1.0: 1
-> usb 3-1.2: [usb_disconnect] done with the device
-> usb 3-1: [hub_disconnect_children] disconnecting child 2
-> usb 3-1.3: [usb_disconnect] debugging
-> usb 3-1.3: [usb_disconnect] USB disconnect, device number 3
-> usb 3-1.3: [hub_disconnect_children] debugging hub_disconnect_children()
-> usb 3-1.3: [usb_disconnect] unregistering device
-> usb 3-1.3: [usb_disconnect] parent found
-> usb 3-1.3: [usb_disconnect] removing port 3-1-port3 from hub 3-1:1.0: 2
-> usb 3-1.3: [usb_disconnect] done with the device
-> usb 3-1: [usb_disconnect] unregistering device
-> hub 3-1:1.0: [usb_unbind_interface] debugging
-> usb 3-1: [hub_disconnect] debugging
-> usb 3-1-port3: [usb_hub_remove_port_device] debugging: port 2
-> usb 3-1-port2: [usb_hub_remove_port_device] debugging: port 1
-> usb 3-1-port1: [usb_hub_remove_port_device] debugging: port 0
-> usb 3-1: [usb_disconnect] parent found
-> usb 3-1: [usb_disconnect] removing port usb3-port1 from hub 3-0:1.0: 0
-> usb 3-1: [usb_disconnect] done with the device
-> usb usb3: [hub_disconnect_children] debugging hub_disconnect_children()
-> usb usb3: [usb_disconnect] unregistering device
-> hub 3-0:1.0: [usb_unbind_interface] debugging
-> usb usb3: [hub_disconnect] debugging
-> usb usb3-port2: [usb_hub_remove_port_device] debugging: port 1
-> usb usb3-port1: [usb_hub_remove_port_device] debugging: port 0
-> usb usb3: [usb_disconnect] done with the device
-> xhci_hcd 0000:3c:00.0: Host halt failed, -19
-> xhci_hcd 0000:3c:00.0: Host not accessible, reset failed.
-> xhci_hcd 0000:3c:00.0: USB bus 3 deregistered
-> 
-> As you can see typec port connectors are unbound during usb4 usb_disconnect(),
-> so when usb 3-1 tries to typec_deattach() after it disconnected all its children
-> the connector is not there anymore and type_partner_deattach() is not invoked.
-Yes.  I would guess this happens because of the way the port connectors 
-were registered in the first place (see my question above).
+thanks,
 
-> Maybe usb 3-1 should be disconnected as a child of usb3, but even in that case
-> we would still end up in the same situation because it's usb4 disconnection that
-> is doing the unbinding.
-> Since there's no dependency between usb3 and usb4 they can be
-> disconnected in any order and it's just a matter of luck as it is right now.
-
-That last sentence is totally wrong.  usb3 and usb4 are closely 
-connected, since they represent logical components of the same xHCI 
-controller, and they will always be unregistered in the same order.  
-usb3 is the USB-2 root hub (the one connected to the physical wires 
-carrying the USB-2 low/full/high-speed signals), and usb4 is the USB-3 
-root hub (the one connected to the physical wires carrying the USB-3 
-SuperSpeed and SuperSpeedPlus signals).
-
-> Hope things make a little bit more sense now.
-
-This still leaves the puzzle about why the typec things are handled this 
-way.  In particular, if connector_unbind undoes the binding of the typec 
-ports that happened when usb4 was registered, then what action is 
-typec_unregister_partner supposed to undo, and when was it supposed to 
-happen?  As a general rule, disconnection and unregistration actions 
-take place in the reverse order of the corresponding connection and 
-registration actions.
-
-Questions like this are best directed at the maintainers of the 
-USB-4/Thunderbolt and typec subsystems.
-
-Alan Stern
+greg k-h
 
