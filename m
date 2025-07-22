@@ -1,74 +1,93 @@
-Return-Path: <linux-usb+bounces-26081-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26082-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EF80B0D9F5
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 14:45:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A618B0DA80
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 15:06:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55BE216FA65
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 12:45:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E349E17DC70
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 13:06:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506302E9EAA;
-	Tue, 22 Jul 2025 12:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD052E9ECA;
+	Tue, 22 Jul 2025 13:06:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tGN9yf+g"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="YNaKA0Mr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C551D2E8E16;
-	Tue, 22 Jul 2025 12:44:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21AD1DE4DB;
+	Tue, 22 Jul 2025 13:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753188293; cv=none; b=D8N5cArxL3pYUURvCpla3y6D5tQEPShtBggebCBOCXcJ6+36NLS0/HeI9T7tNt2q1OFu67E8eHHAIlglMiW0RSTI5TUl0AdBRmn55Bn3cycc5DrkAqFkFKCelTpgcGDTm7+qxp1GFKqik3NBZdzAwPJ+8WYRavoI24xWZHh5Ph4=
+	t=1753189610; cv=none; b=fGWGBrQapeB2zLlA260/hMs432NgEiJDOegyh5qh1U8J7DnCF/Wvolsj3loDnmz3URtG7LOsQ689Br1nSjxIOY9KFUw5c9Xed6OvotDxUgpdBYjAhgMVq2Uhey0/50T+JEbGMRDnqMe9WcWuIo54YOSICCeZVBO5cox8vNLP+2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753188293; c=relaxed/simple;
-	bh=LTP+X29U8OinALdzWxmJt0BbYlJ8HxjqisnVaKRqWTA=;
+	s=arc-20240116; t=1753189610; c=relaxed/simple;
+	bh=R7VMc//EpgkxIP/3zpr1MLiNz7ojkTVdH/u36Efqrto=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fC2hntqSGHNmgHiYh3Y1bgalIo34bTCv69VVsWflEWCZwhx9J+ZxWeS8fTCFv+cMlTzgh1A6nZSx26aEnLyv//YxEjdlcsWLzWN4sfuJVourksYp1rf8TKYzWBUQmS+2g6vPsokeHGm27MDKO2W2AdJY+20o15t1SF8+lin1om0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tGN9yf+g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578A1C4CEEB;
-	Tue, 22 Jul 2025 12:44:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753188293;
-	bh=LTP+X29U8OinALdzWxmJt0BbYlJ8HxjqisnVaKRqWTA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tGN9yf+gymgu/emqmM87rloRm8ydzhoczpcBLdP2O2edbSppA6iWkbBl3soJzuXWp
-	 X38TS7ROSKR6KgWcQhRb9zTcIvZUEwZ0a91dCBela8lauPLSD4laxd00PIlGLcIFtu
-	 4zvmRigCemk21AmWQVXv01HwFrRxWE2BH2PYW4bFnxFVI6KZR3m7qA0w4vh26kM7c+
-	 NW4ZtgnHldOwzxcA+mMq75pUhppXDzNf+E8kv01z5NSpkhMx8vPQGXBPhPZbGOs6Sk
-	 /W811gx8/frgvngJyeBtjVrfdV3A97IFjr6BVOAJkhizR9WFNdnBfejRTWx+QoXNdz
-	 3JsNtm3SkkuYA==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1ueCMM-000000002YK-31Hj;
-	Tue, 22 Jul 2025 14:44:43 +0200
-Date: Tue, 22 Jul 2025 14:44:42 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Slark Xiao <slark_xiao@163.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Foxconn T99W709
-Message-ID: <aH-HuqRx4VJebW3W@hovoldconsulting.com>
-References: <20250721113919.28577-1-slark_xiao@163.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=EWt2QigkacdpGD9H9xN1VaUEAeAJtplIa31y7JZ/XShSCWcsPzMYJSchYrG8dRo3nzaBEf7zuBAG2QJZTRop7oxriZ0Ca6/8Se079CHt1m5gJNDgfdmw+MkZdWfDsJrMc44xGSs/fLz4DMdvfeC4YMJwSqpo75cox5TOGoiJRVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=YNaKA0Mr; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+	In-Reply-To:References; bh=zi4vSV2136IMrdONKtbsuO4SnihqiAzTpX/4sPu+TFU=; b=YN
+	aKA0MrT6r4FavC3nvjWKw/SsQ2Rk7T505e1bKa5IXW3cExRjojLHBXnxUjeMY+Az24+9SW5pDXEHO
+	expQbt3Bzly5Zv03N0o/QY4QKBzpxRxM+T0jkS9X63LBHMDXY2fvnVJ+BLGeayQtJy/PnRzM2K73n
+	D7QMMDhGYQsk094=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1ueChZ-002Sse-3z; Tue, 22 Jul 2025 15:06:37 +0200
+Date: Tue, 22 Jul 2025 15:06:37 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: yicongsrfy@163.com
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, oneukum@suse.com, yicong@kylinos.cn
+Subject: Re: [PATCH] usbnet: Set duplex status to unknown in the absence of
+ MII
+Message-ID: <1c65c240-514d-461f-b81e-6a799f6ea56f@lunn.ch>
+References: <496e1153-acac-468a-b39c-9ea138b2cf04@lunn.ch>
+ <20250722020933.1221663-1-yicongsrfy@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250721113919.28577-1-slark_xiao@163.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250722020933.1221663-1-yicongsrfy@163.com>
 
-On Mon, Jul 21, 2025 at 07:39:19PM +0800, Slark Xiao wrote:
-> T99W709 is designed based on MTK T300(5G redcap) chip. There are
-> 7 serial ports to be enumerated: AP_LOG, GNSS, AP_META, AT,
-> MD_META, NPT, DBG. RSVD(5) for ADB port.
+On Tue, Jul 22, 2025 at 10:09:33AM +0800, yicongsrfy@163.com wrote:
+> Thanks for your reply!
+> 
+> According to the "Universal Serial Bus Class Definitions for Communications Devices v1.2":
+> In Section 6.3, which describes notifications such as NetworkConnection and ConnectionSpeedChange,
+> there is no mention of duplex status.In particular, for ConnectionSpeedChange, its data payload
+> only contains two 32-bit unsigned integers, corresponding to the uplink and downlink speeds.
 
-Applied, thanks.
+Thanks for checking this.
 
-Johan
+Just one more question. This is kind of flipping the question on its
+head. Does the standard say devices are actually allowed to support
+1/2 duplex? Does it say they are not allowed to support 1/2 duplex?
+
+If duplex is not reported, maybe it is because 1/2 duplex is simply
+not allowed, so there is no need to report it.
+
+> Since CDC has no way to obtain the duplex status of the device, ethtool displays a default
+> value of "Half". I think it would be better to display "unknown" instead of potentially showing
+> incorrect information — for example, my device is actually operating at 1Gbps Full-duplex,
+> but ethtool shows 1Gbps Half-duplex.
+
+I agree that reporting 1/2 is probably wrong. But we have to decide
+between "unknown" and "full".
+
+	Andrew
 
