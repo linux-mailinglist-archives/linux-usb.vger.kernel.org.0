@@ -1,167 +1,137 @@
-Return-Path: <linux-usb+bounces-26077-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26078-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5994CB0D4DF
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 10:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D0A1B0D6D2
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 12:06:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1407545D3D
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 08:44:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4291D54844D
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 10:03:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9122DA77B;
-	Tue, 22 Jul 2025 08:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2783228B7FE;
+	Tue, 22 Jul 2025 10:00:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NUPWCHsY"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="AK7xyzVG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948B72D660B;
-	Tue, 22 Jul 2025 08:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F31E2DFF28
+	for <linux-usb@vger.kernel.org>; Tue, 22 Jul 2025 10:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753173846; cv=none; b=CJPLiDYHLCJ3ym6ATwktry1Ooqdv5ewLnjPc6lwCDO1tdjdZIHc554PZx9QHaZTKrAsjohv+sDr1/CyyPQlFYy6YLFvCtGauYT12G2zZFrYjojbXY/SAJkdn7CEZx/rpiLLs+9NBvi/P227WCy3zMug5Tc0EGACQ8HtC6D22zyY=
+	t=1753178426; cv=none; b=GuklnOuiJLxYFoYsJMxqF8wTUZC78uhFzDCXCEL6bNkDqSUTctXIImykhlnSl98UmA9bK9+2q6z0TxkW0+va4SKCYryydMa4ugjg0H11CQ9nvuldlyr6w0Tmlx1zKWGWuHdViEa87W77cufe52fVmuw8ffCHE6N4gtc6VQFOo4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753173846; c=relaxed/simple;
-	bh=w5pYDTDQsrlRxYtD/ZNpB9PKZQJrZAewxg8a183cb78=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sJiDbGvjKeTTqTmsAeY7CSKpyfVwSPbWyTRlZWs2a8bu5+xiuZldOncYW/cbwcni7PE8GT5wL3VwRlGW8OzQekS2131p0QjLZbDVO5c9jmRUWlk6r0w9A/WRbQ1KiUNHUTmSwLNCV7DNXnOjIx0u1nloMJQV1gekzsll9TpTGL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NUPWCHsY; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0CAD2431FC;
-	Tue, 22 Jul 2025 08:43:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1753173836;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lL0vBxv9N/cBdRGCto9TruzZjRh7DSP5woNWAvZPKD8=;
-	b=NUPWCHsYkURdekhDUMdZwqGKFREk6+4V2tal/89Cg+5EABkccB+EcustxKaIbxe6RRaK3T
-	81LsIvBcwO9uoSd+jS+5AwhkqkFrKVLYPnOVujqGc9w4Afl5EABBq2b3alD5dJvWTB2DA9
-	z/d9lL0TydRL+SVxzqF+RhkAmXqds4bJZXcYJ7FyrFCPDMOnUhkPAkLaf3KNH6RyRdGzH2
-	adVV/liPPzNq7ubSIZPsETYA6ScqpqS/+7DYLlBCNu5lpHHv/GD15tcnZ+RsxeGY2AMcZf
-	t9xI66f+YJ1n6/jd5p0Uf0ktCzTfBiIzn5yqqN8pgwD+8qOTBKthwb37A9E9xA==
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Tue, 22 Jul 2025 10:43:44 +0200
-Subject: [PATCH 2/2] phy: rockchip: inno-usb2: fix communication disruption
- in gadget mode
+	s=arc-20240116; t=1753178426; c=relaxed/simple;
+	bh=ZFUos+Yvil8dSKOPIWe/qIIyl/GJfQwWc76Kh9pE+Uc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nXd1Hw7xLw1/gYMo/numqjbD6ze3NYllidkAITMaAR7wygNt1QssLLWrtME8lpiXdKE1PQ+eWBno5onoSLb5554COD/yH+69JcZm2mvdSuvHsbfn76kh0I6V0aX4Y/b7/Fuchcd+XNW8mqTwVHr6yz9VUzrdgMRDFkb05/AHgjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=AK7xyzVG; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56M8Pwhh012733
+	for <linux-usb@vger.kernel.org>; Tue, 22 Jul 2025 10:00:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	ZFUos+Yvil8dSKOPIWe/qIIyl/GJfQwWc76Kh9pE+Uc=; b=AK7xyzVGs/M75xcM
+	7HScBwdSKjWDXCteKO3Qijnnm6X5oKWJGNH6gmYAzu/OHpaxpgs5UeuuMFCbEKux
+	dIAWqIdMH3rb6IOSjOr09BtaCZI6bxnoWDsO8ki9M6nTdxOPVUsiNzzBlqF9Dzss
+	LSQZNJijCVFtLfJa0ODUa6LMN6/DSU12JlhUsnKZBxpjYqdG/RNPOU+g5YsNN3G4
+	/s14+QMbGb/rhg3sMCviiq0rpBkm0jMcZ+6r0Db9zaM1az0c+2p/sdQRCaw119b3
+	JYuqY9/6xKkV3+Lpt4FktOqkxO7HfzBqzl3oR2FoAulf20zfsNGGtWHTCdttq66n
+	KlTKWA==
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 481qh6kac8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 22 Jul 2025 10:00:24 +0000 (GMT)
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6fe182a48acso106840856d6.1
+        for <linux-usb@vger.kernel.org>; Tue, 22 Jul 2025 03:00:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753178423; x=1753783223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZFUos+Yvil8dSKOPIWe/qIIyl/GJfQwWc76Kh9pE+Uc=;
+        b=o9HivQHt3FsgmaNQt+8vqy/W7idwKL9yRkAydqGZuyguMr7Nrhxv2XmJTYXjJogNUo
+         nssgPxsrybNnJOS3Zi1jhvuT6UquENSl6gdovHdLIY/175vLk7ZAB6Sld62VCPSa6qRd
+         F2qUo/GiDpN7GA6xfFqxXspRSyGNCJNsp8SvKRh1Hxoq2kjjFJWEotdo7R/UqNiIO7US
+         qXXuHcOBW/B4TxyoUFxbk2ydc9H2D7/yILTrqpo/V7noneSc5F7iQdysoWi0IV9I9vHv
+         TsZcv7pyYgizSVfZ4Bk8yNs2TW0D5obqFRlKjoA06Yn1LdJA9ayI02Uzk+dNUVIA331W
+         N/iw==
+X-Forwarded-Encrypted: i=1; AJvYcCVpldk5bUyxN48XralHlfP82LUq2KJ92vv5/f9L1id8qJPNxS1xBwVmXh88isCAu7JcGW7dMW+N6zs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYqfbpxU0hH4SRJ2w2W1ksW94qNAVJP3HAN3Kv+6q7V8qndZru
+	/lMX6zgQ9rihlRaJk+44CSbrE/YSY0Ie1Db88Blzp7Nim5bOXTmYdaFTA2ZvqZ7jERW0BS+iGDx
+	osypI/SpRsZpl794VLIHPSf6I48bI6mchlPlwJaQB/Q5t4VH+QKVc3OqdXm9rVoBSKSQYCzmFCS
+	RwXK2m5UD1gut1XrGUG09nzJzda3WP+4WAyvYy9lKPn+kz3+e/77M=
+X-Gm-Gg: ASbGncuDitFVUFqxxrq7erY/KDwppBjr0f3adnqflJnWXx/WlK79+MCIhnNoizjnb5M
+	KZbf8PdtBjjpcZl831QT68zBkwkMLVrKHCufekVdZNVm9WVuYtzyzmcdpjSnL1umiMiptEgcXmk
+	x5Cj8V9wLoJ6a32NsVwOIw7w==
+X-Received: by 2002:a05:6214:d8d:b0:704:f7d8:efe9 with SMTP id 6a1803df08f44-706eb97e401mr41624726d6.24.1753178422965;
+        Tue, 22 Jul 2025 03:00:22 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEnslX1INMW1ZcfY8C65651NT2OJbOZR/zoQ6vqkmc1Rh6IlkIlO7GZRBmqwzeh82/rHsXodp0l07CU5wDGjxc=
+X-Received: by 2002:a05:6214:d8d:b0:704:f7d8:efe9 with SMTP id
+ 6a1803df08f44-706eb97e401mr41624056d6.24.1753178422401; Tue, 22 Jul 2025
+ 03:00:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-2-239872f05f17@bootlin.com>
-References: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-0-239872f05f17@bootlin.com>
-In-Reply-To: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-0-239872f05f17@bootlin.com>
-To: Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Heiko Stuebner <heiko@sntech.de>, William Wu <wulf@rock-chips.com>
-Cc: Kever Yang <kever.yang@rock-chips.com>, 
- Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Louis Chauvet <louis.chauvet@bootlin.com>, 
- =?utf-8?q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-phy@lists.infradead.org, linux-rockchip@lists.infradead.org, 
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejgeeggecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepheejgfdugedvudekgeevtdfgudduhedtgfetfeevgfehkeejhedviefhtdffhfeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvpdhhvghloheplgduledvrdduieekrddujeekrdejhegnpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudeipdhrtghpthhtohepvhhkohhulheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgvvhgvrhdrhigrnhhgsehrohgtkhdqtghhihhpshdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgri
- iiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopefoihhnrghsrdfjrghruhhthihunhihrghnsehshihnohhpshihshdrtghomhdprhgtphhtthhopehhvghikhhosehsnhhtvggthhdruggvpdhrtghpthhtohepfihulhhfsehrohgtkhdqtghhihhpshdrtghomhdprhgtphhtthhopehkihhshhhonheskhgvrhhnvghlrdhorhhg
-X-GND-Sasl: luca.ceresoli@bootlin.com
+References: <20250721-eud_mode_manager_secure_access-v6-1-fe603325ac04@oss.qualcomm.com>
+ <2025072141-anointer-venus-d99f@gregkh>
+In-Reply-To: <2025072141-anointer-venus-d99f@gregkh>
+From: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+Date: Tue, 22 Jul 2025 15:30:11 +0530
+X-Gm-Features: Ac12FXyseMee9ZgXxpNxNQGaZuoVfGDn4Cm07lYWSuBy4v2nvFb9hxkyxtZvFQw
+Message-ID: <CAPHGfUOsk4BjhvGiN-b0UP-JZ48UvGeKFU=dhb=KOAvo8NCPZQ@mail.gmail.com>
+Subject: Re: [PATCH v6] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
+ secure calls
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Authority-Analysis: v=2.4 cv=CZ4I5Krl c=1 sm=1 tr=0 ts=687f6138 cx=c_pps
+ a=7E5Bxpl4vBhpaufnMqZlrw==:117 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10
+ a=ag1SF4gXAAAA:8 a=HSf_CmxJb-FKQ9LhJsQA:9 a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
+ a=pJ04lnu7RYOZP9TFuWaZ:22 a=Yupwre4RP9_Eg_Bd0iYG:22
+X-Proofpoint-ORIG-GUID: G_POlkvkGN2k7z6Z-W5VhiuD3D3sXAK2
+X-Proofpoint-GUID: G_POlkvkGN2k7z6Z-W5VhiuD3D3sXAK2
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIyMDA4MiBTYWx0ZWRfX77jNLVd+zU+H
+ VneMGI/j1GtILUiZgrDkBZ2N0V3E//9S290aXEFvGAga4lM3RYYLyBbVeXx6lsgWoEe4uL9CZHP
+ 2hPRjS4EWvkQnU3HVLKjp+VmSzQ31D13qKZd0c89p5eU/nP8/nt4J82qVGkrVVXQI+D+0D5gBaO
+ oY9ROicSI0goieKKY8RQxg4yclCjFyKU2QboSYHwOX5qSAD0DMo5HVv/kTELruOFaEMzln8LPcA
+ I0/Xw5ynBv9L/oXJGDAZu57aCVBuO4/QjLNv8J3ZQzjwddNqpo8hy5FmOvYvqbuA6+5fSUZ74Ee
+ vdb753rrsreMDvxy25lZnctBkRMwqe2tCuR4pOuUWfTmbsBEda6wnl3MsEC1Pztgic3KBpQ+7rH
+ +FhoqHuRjQm+9NKsYAmLiADrasTUzwnk8bBMfV1nY0w3oIBBrcHBG7j15rbgfPIPN1y/FuQ7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-22_01,2025-07-21_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 mlxlogscore=711 impostorscore=0
+ clxscore=1015 mlxscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ bulkscore=0 spamscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507220082
 
-When the OTG USB port is used to power to SoC, configured as peripheral and
-used in gadget mode, communication stops without notice about 6 seconds
-after the gadget is configured and enumerated.
+On Mon, Jul 21, 2025 at 12:23=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jul 21, 2025 at 12:08:41PM +0530, Komal Bajaj wrote:
+> > EUD_MODE_MANAGER2 register is mapped to a memory region that is marked
+> > as read-only for HLOS, enforcing access restrictions that prohibit
+> > direct memory-mapped writes via writel().
+>
+> What is "HLOS"?
+>
 
-The problem was observed on a Radxa Rock Pi S board, which can only be
-powered by the only USB-C connector. That connector is the only one usable
-in gadget mode. This implies the USB cable is connected from before boot
-and never disconnects while the kernel runs.
-
-The related code flow in the PHY driver code can be summarized as:
-
- * UDC start code (triggered via configfs at any time after boot)
-   -> phy_init
-       -> rockchip_usb2phy_init
-           -> schedule_delayed_work(otg_sm_work [A], 6 sec)
-   -> phy_power_on
-       -> rockchip_usb2phy_power_on
-           -> enable clock
-           -> rockchip_usb2phy_reset
-
- * Now the gadget interface is up and running.
-
- * 6 seconds later otg_sm_work starts [A]
-   -> rockchip_usb2phy_otg_sm_work():
-       if (B_IDLE state && VBUS present && ...):
-           schedule_delayed_work(&rport->chg_work [B], 0);
-
- * immediately the chg_detect_work starts [B]
-   -> rockchip_chg_detect_work():
-       if chg_state is UNDEFINED:
-            property_enable(base, &rphy->phy_cfg->chg_det.opmode, false); [Y]
-
- * rockchip_chg_detect_work() changes state and re-triggers itself a few
-   times until it reached the DETECTED state:
-   -> rockchip_chg_detect_work():
-       if chg_state is DETECTED:
-            property_enable(base, &rphy->phy_cfg->chg_det.opmode, true); [Z]
-
-At [Y] there is no disconnection and the USB device appears still present
-to userspace, but all existing communications stop. E.g. using a CDC serial
-gadget, the /dev/tty* devices are still present on both host and device,
-but no data is transferred anymore. The later call with a 'true' argument
-at [Z] does not restore it.
-
-Due to the lack of documentation, what chg_det.opmode does exactly is not
-clear, however by code inspection it seems reasonable that is disables
-something needed to keep the communication working, and testing proves that
-disabling these lines lefs gadget mode keep working. So prevent changes to
-chg_det.opmode when there is a cable connected (VBUS present).
-
-Fixes: 98898f3bc83c ("phy: rockchip-inno-usb2: support otg-port for rk3399")
-Closes: https://lore.kernel.org/lkml/20250414185458.7767aabc@booty/
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-index 0106d7b7ae24ead91d9c996daaa56671de02a39a..e5efae7b013590f5b0bf65654008cdc167f52e3f 100644
---- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-+++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-@@ -833,7 +833,8 @@ static void rockchip_chg_detect_work(struct work_struct *work)
- 		if (!rport->suspended && !vbus_attach)
- 			rockchip_usb2phy_power_off(rport->phy);
- 		/* put the controller in non-driving mode */
--		property_enable(base, &rphy->phy_cfg->chg_det.opmode, false);
-+		if (!vbus_attach)
-+			property_enable(base, &rphy->phy_cfg->chg_det.opmode, false);
- 		/* Start DCD processing stage 1 */
- 		rockchip_chg_enable_dcd(rphy, true);
- 		rphy->chg_state = USB_CHG_STATE_WAIT_FOR_DCD;
-@@ -896,7 +897,8 @@ static void rockchip_chg_detect_work(struct work_struct *work)
- 		fallthrough;
- 	case USB_CHG_STATE_DETECTED:
- 		/* put the controller in normal mode */
--		property_enable(base, &rphy->phy_cfg->chg_det.opmode, true);
-+		if (!vbus_attach)
-+			property_enable(base, &rphy->phy_cfg->chg_det.opmode, true);
- 		rockchip_usb2phy_otg_sm_work(&rport->otg_sm_work.work);
- 		dev_dbg(&rport->phy->dev, "charger = %s\n",
- 			 chg_to_string(rphy->chg_type));
-
--- 
-2.50.1
-
+By HLOS, I meant operating system running at EL1. Do you want me to
+change this in the patch?
 
