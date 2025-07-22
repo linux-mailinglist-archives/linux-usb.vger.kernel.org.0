@@ -1,126 +1,120 @@
-Return-Path: <linux-usb+bounces-26070-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26071-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C793B0D1D1
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 08:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A361B0D21C
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 08:52:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07FAD1AA686D
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 06:27:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71BAC1C22093
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 06:52:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161DB28AAE0;
-	Tue, 22 Jul 2025 06:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71F8E28B7ED;
+	Tue, 22 Jul 2025 06:52:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2f+2+lb"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KTob0Jx2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A681A29A
-	for <linux-usb@vger.kernel.org>; Tue, 22 Jul 2025 06:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A19228937F;
+	Tue, 22 Jul 2025 06:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753165641; cv=none; b=P70Iz9KtK9qKedAE8niLxnm0/Vmm23Q2JdIiMXt9++Z1F3sok5klIBXZEIZSwIuwe0e8nT9Wiv8TAjnqZP4QyU3A7TOA83/XGCkSpb05H8UvLAAcSeQpBan52WJm9GIhheafdLSFNhA9x1nUPyTAOFRCiVV4vPPSfPNK+7eolL8=
+	t=1753167134; cv=none; b=LamgCWHVx48Oha7XlA9mp44eczMq5/tOm9o4JFKOPjEFQJzeH5pPPeUwU8CEwDHl0TPPjteRa8SAL1R4gHQbAgx1JrSnIOIrLR67l1xPiKC3lPtrOC50mQHjYrkCq8krfmRP1Q/LNE4uoeQWA50GIlSQSKxES4n12dMESZTRyGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753165641; c=relaxed/simple;
-	bh=wJQShPAJuwJSYSjsi+QH53FcW6LbrGPDdcEeUdyo6nA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mI9xK729W1dOFGmLWdzIdhTlOzTn835YdPPthzgw5EnUXIgVIRszx7W5HAHxgEQoyyS+x4OmEOHmYfSY24EeOoPpiWfkcKWqlTvdtpBeFGAzADUqekdrVRdEG2vq6lqdNbWX9HPBsqx23nkP9cDAMgwEnAhXqqK60QD8pNoL+MM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j2f+2+lb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 140E3C4CEEB
-	for <linux-usb@vger.kernel.org>; Tue, 22 Jul 2025 06:27:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753165638;
-	bh=wJQShPAJuwJSYSjsi+QH53FcW6LbrGPDdcEeUdyo6nA=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=j2f+2+lbxhzXhs+8DTcUQaNmCyKyG3hBb9fYIfZSxsz5Yz9POxiOYLhH9aBu4UPW5
-	 YdblRnDuXTmNiQlJy6cuenyD7i4t35WH1wxpCAuYoLUw8sFBBYGwi4u1CwcRjAYYWB
-	 2+ZTBwLoX1pwaUFjl9JakUaF2ZfJcjBX5q8RLHxOXzuNs6Jq1mOE2UU8FN01FAvXcA
-	 wpzaGjKGsdFOxNwcFzb9rl0Cn0p7rFBJYZymv94PNGhFLhijNYqigFnRDGxuqI3UfR
-	 RHKp4U7GJfagXiDFMr0hUfZzBHMdc5w2qsD9idrwp1MhxmielzoOym52vfJOz6W9cF
-	 L6whzF73pHVcg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 01253C3279F; Tue, 22 Jul 2025 06:27:17 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220307] USB cannot submit urb disconnecting sound card
-Date: Tue, 22 Jul 2025 06:27:17 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: niklas.neronin@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220307-208809-akvCwuCfx7@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220307-208809@https.bugzilla.kernel.org/>
-References: <bug-220307-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1753167134; c=relaxed/simple;
+	bh=0IuwptWdpym6clpItyDXKXWMQcO684yPDmzDWcQI0cI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=eZJ2RoWHmJlCf/lIVYNgUbJQb//zoGJcM/WBAVwgPiSxAHHwJWwdPm9zazOOiZ9yC832HPYW12Q/Ej//nyNKuC0gB8YrKWLaDjnbLYKy1GrKrGAu7LvAGuZ/6dmTj6uNkkuw/FWoRPUjvnNIuwtx4u1PpMT4qnyl+gMTEC482JQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KTob0Jx2; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=0T
+	pDUQ830hMTN/h2gtHBh5uvsH0UJwbSz9gBHzv+if8=; b=KTob0Jx2rWa2PhTG+y
+	UzzOqC0GQO0YleaVQDOgHbRsvj264bCJPGOKlWysztPiKABia5hemYJiebrtGB3r
+	MMV+rMA7RROsXd3ia1UfZRYzVwQbACpaR/OtwOYMjgm15HEJOcHMD0e3rF/ep6pb
+	fmtWI8Y6d5UBTyOkQ6gt/9ncs=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3oJ__NH9oTxLlGQ--.37444S2;
+	Tue, 22 Jul 2025 14:51:44 +0800 (CST)
+From: yicongsrfy@163.com
+To: greg@kroah.com
+Cc: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	oneukum@suse.com,
+	yicong@kylinos.cn
+Subject: Re: [PATCH] net: cdc_ncm: Fix spelling mistakes
+Date: Tue, 22 Jul 2025 14:51:43 +0800
+Message-Id: <20250722065143.1272366-1-yicongsrfy@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <2025072210-spherical-grating-a779@gregkh>
+References: <2025072210-spherical-grating-a779@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3oJ__NH9oTxLlGQ--.37444S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFWDKr45Cw15ArW5AF15twb_yoW8uw18pF
+	WkCFW5CFnrJrWUuw40qw4I9ryYvas8GFW5GrW8Z3Z8ZFnIyFn7uF4jqrWSka4Sgr4UCry2
+	vF1jgrWfWw4DA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jso7tUUUUU=
+X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/1tbiUA2S22h-LnKvTQAAs9
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220307
+On Tue, 22 Jul 2025 07:46:34 +0200	[thread overview] Greg <greg@kroah.com> wrote:
+>
+> On Tue, Jul 22, 2025 at 10:32:59AM +0800, yicongsrfy@163.com wrote:
+> > From: Yi Cong <yicong@kylinos.cn>
+> >
+> > According to the Universal Serial Bus Class Definitions for
+> > Communications Devices v1.2, in chapter 6.3.3 table-21:
+> > DLBitRate(downlink bit rate) seems like spelling error.
+> >
+> > Signed-off-by: Yi Cong <yicong@kylinos.cn>
+> > ---
+> >  drivers/net/usb/cdc_ncm.c    | 2 +-
+> >  include/uapi/linux/usb/cdc.h | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> > index 34e82f1e37d9..057ad1cf0820 100644
+> > --- a/drivers/net/usb/cdc_ncm.c
+> > +++ b/drivers/net/usb/cdc_ncm.c
+> > @@ -1847,7 +1847,7 @@ cdc_ncm_speed_change(struct usbnet *dev,
+> >  		     struct usb_cdc_speed_change *data)
+> >  {
+> >  	/* RTL8156 shipped before 2021 sends notification about every 32ms. */
+> > -	dev->rx_speed = le32_to_cpu(data->DLBitRRate);
+> > +	dev->rx_speed = le32_to_cpu(data->DLBitRate);
+> >  	dev->tx_speed = le32_to_cpu(data->ULBitRate);
+> >  }
+> >
+> > diff --git a/include/uapi/linux/usb/cdc.h b/include/uapi/linux/usb/cdc.h
+> > index 1924cf665448..f528c8e0a04e 100644
+> > --- a/include/uapi/linux/usb/cdc.h
+> > +++ b/include/uapi/linux/usb/cdc.h
+> > @@ -316,7 +316,7 @@ struct usb_cdc_notification {
+> >  #define USB_CDC_SERIAL_STATE_OVERRUN		(1 << 6)
+> >
+> >  struct usb_cdc_speed_change {
+> > -	__le32	DLBitRRate;	/* contains the downlink bit rate (IN pipe) */
+> > +	__le32	DLBitRate;	/* contains the downlink bit rate (IN pipe) */
+> >  	__le32	ULBitRate;	/* contains the uplink bit rate (OUT pipe) */
+> >  } __attribute__ ((packed));
+>
+> You are changing a structure that userspace sees.  How did you verify
+> that this is not going to break any existing code out there?
 
-Niklas Neronin (niklas.neronin@gmail.com) changed:
+Your question is very valid. I can only guarantee that the devices
+in my possession do not involve references to the relevant structures,
+but I'm not sure the behavior of other vendors' implementations,
+which may vary.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |niklas.neronin@gmail.com
+So, perhaps it would be better to keep things as they are?
 
---- Comment #1 from Niklas Neronin (niklas.neronin@gmail.com) ---
-(In reply to Evgenii from comment #0)
-> Just got an error that looks like that in dmesg. Not sure what made it su=
-ch,
-> just using sound card with Pipewire on 192000 Hz, 53 samples quantization.
-> This leads to about 0,275 ms delay while preparation of node to play sound
-> takes about 0,250 ms when VLC starts playing a video. Pw-top reports about
-> 0,3 ms delay in Busy field if that matters. With 64 samples there was no
-> issues with preparing the node to start playing and had no conflict with
-> hardware using standard Arch kernel 6.15-4-arch2-1. So seems this is a USB
-> bug when sound card drops off and gets up stopping playback of sound while
-> video goes further.
->=20
-> [  321.031944] usb 1-9: USB disconnect, device number 4
-> [  321.032030] xhci_hcd 0000:00:14.0: Event dma 0x000000015a8ee570 for ep=
- 5
-> status 1 not part of TD at 000000015a8ee580 - 000000015a8ee580
-> [  321.032032] xhci_hcd 0000:00:14.0: Ring seg 0 dma 0x000000015a8ee000
-> [  321.032033] xhci_hcd 0000:00:14.0: Ring seg 1 dma 0x000000015a8ef000
-
-Looks like the we receive a Transfer Event with Transfer Event with a
-completion
-status of "Success," but its corresponding TD is no longer in the driver's
-internal list.
-
-> [  321.032037] usb 1-9: cannot submit urb (err =3D -19)
-
-USB-audio driver can still submit URBs while the device is being disconnect=
-ed,
-resulting in this harmless error message.
-
-It's hard to tell from this short log what may be causing this issue.
-The root cause probably occurred before this snippet.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
