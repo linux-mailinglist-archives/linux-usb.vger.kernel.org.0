@@ -1,168 +1,157 @@
-Return-Path: <linux-usb+bounces-26088-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26089-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1534BB0E103
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 17:56:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75FD7B0E329
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 19:59:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB4321C83E87
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 15:56:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 122927B9662
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 17:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F661279DDC;
-	Tue, 22 Jul 2025 15:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 003E427EFE2;
+	Tue, 22 Jul 2025 17:50:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="R2kR/Wp2"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="NWNWn/6M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2046.outbound.protection.outlook.com [40.107.93.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF8119E7F9
-	for <linux-usb@vger.kernel.org>; Tue, 22 Jul 2025 15:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753199755; cv=none; b=VEkmsd02fwcp+glmV7iw11P1m/2+nQHd5k7ypSmRP4PCBDIJjf9RtR50+2bipDzFbYHCLtDH/L0HIG8BvANnsfcmQg/+W18og3B/EdQiYYUtwBQ4zL6qcxxrK0Y7QJxlK2FMJk/IH8SNifc9vsbbUWDPLdi8MUBWMQuQEsj+eMQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753199755; c=relaxed/simple;
-	bh=R51j62/d3CRnomk9oqStk+xbuVTnaY01yvb81U2I9eI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SCqvEpR1O7MQJqg5Yg/WU6tXrcR+n9UMd7t73C7BKSsRqYpaXMr4nF0AsNRnj5R+zTezyYwDFbmOGkWmaU05s7nMx0nkN/5aoIv6ptNnTTroVcprmwcxRIQeZ0sAY8ukLr7C+95033X1BDtozYGwFRnmi0tNM6p22IyigZCmJ/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=R2kR/Wp2; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Tue, 22 Jul 2025 23:55:46 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1753199752;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8KY8tFgOhzhn8LNLMXuaA9xgGEARgCxSjBTz/EP1VVU=;
-	b=R2kR/Wp2Mi8qtrn439VWPFydY4QshjUyYiawYDYZeGH/x+EbV4oDOYKzqSVYo36mR8xw2r
-	vPOYdVTKNiLmmtAN0XeGDnyKuVc5H3jGinAYZScLSCcT2BuQfa8AMm6vCd5Brxvu9XXLgz
-	4BVvqd01NDmH8FlEpM+GoLB1VQ6zIOQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ze Huang <huang.ze@linux.dev>
-To: Yao Zi <ziyao@disroot.org>, Ze Huang <huang.ze@linux.dev>,
-	Alex Elder <elder@ieee.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] usb: dwc3: add generic driver to support flattened
-Message-ID: <aH-0d0OyLIo9tlkd@monica.localdomain>
-References: <20250712-dwc3_generic-v6-0-cc87737cc936@linux.dev>
- <20250712-dwc3_generic-v6-2-cc87737cc936@linux.dev>
- <d2e9a521-568e-433d-a59b-9b98138ace2b@ieee.org>
- <aHyN3-uoHofF8Hg3@monica.localdomain>
- <aH4tpgVPbf9DOzSe@monica.localdomain>
- <aH7cpr0faRPVnxXL@pie>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8213B29E;
+	Tue, 22 Jul 2025 17:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753206651; cv=fail; b=SAA2yfXj7YDx7yQgzcuz8GJ3GBLJjCcMN2dNMUCwU3Z0HA0Y4qSI9PXWzIAMxbTYU0IEyECD0f7XanmR2CQy7uetIRBvxJmzVOVWZRLti4rOPRklJC8G9mUpjpXOOpjj3xL+uC9FLapZeaZQ1c4HRLFWHQ2zeA81fmS6YtUQupk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753206651; c=relaxed/simple;
+	bh=wFScrugirTYEG11k0//VoDI/lMZSBJq2uBpP1RQAZuE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TCvHFJF/CpFfI/j9fuvvZ8DjfbCSe71tpJajm6OhasLJCD4oPx/cYpzLVEzF3PURv9SBFf0Nyda/atpAPK1QFIC6BY+EzG2zm+clpKePTWHmQSpLksz5rbLc1jrA5FOrvqns5zKCmPkHk4LCJXv45Kni+30j8LGM4ZCcu3X8pfk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=NWNWn/6M; arc=fail smtp.client-ip=40.107.93.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iVyJjw/HvWD0z/hao+1/sDEb+4AIeJat0hhDAmTxZZa6QuxjZ9qox541wjKbnTawKfGkyl7DxJ1a213pYTvB35lFT+2Rbe1ADCaiATEfCkQNCr+ZOlUYN4omJYpS62RqXG7FtVO3/FFvzrNJBYwLVvL2sbPsRyzjkNeRgBbeLSZL/rR2dD62c3x+erBKllP3M9VHxLk8F9GBclM70woOK65vx2m+y4mDNB0YhCNey+lUX9Wi0yc8bB2H//m87Hhl0SLna5VK5vLbLS+eSGdaXVL+QiDya3kKOapiwxRDQBwd51BBkbtVv5xVl9n/moyQaDcSX41eKYaDr0v3d8giXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YlVLUWdk7I67k1A4oGmxAnmzXpeaZH3Ipbt6N6qXdiU=;
+ b=qMxOaT8/RhHTsnPDWt5HKMrIurmHr4t5w6mIaYMTIkfEK6jC9D+D1/Zp7lrqydItksvvAVCJBS0DtVwcCLD4zpAMVVcw2iLsaeHXMZ3pEvdNRIr6lRTCyxdoqLmF9/u3lh+CJZy/wkKZ45gk1GD0vAkfJl0+GzPxubXYlz8ccMC2wd0zm+qconV1Q1j3G1feTMV6vshOnqfDhENP5N9OtvIcArDvKFhR40NUixSHQfjb68wQ+03SRPB3WeaxYgN0J/n7wkXrDoMloMAxy916aH2FILQMx8Eqy6P1Yd+ZYi+9GaHzsl59XxQ6RY+nMSd1fMutCXaoyw2fqnjGO5VXGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YlVLUWdk7I67k1A4oGmxAnmzXpeaZH3Ipbt6N6qXdiU=;
+ b=NWNWn/6MNVtgaMQt5pvDeGSXRjyO/IvExlsD/VmT1irL4WO0wVhhj7+EYadOAM9VrXzmB7d5e8pmRDcXhl6aVYHg24yQcmE1/9Cn+Og8tDEeBgLU2b/3i4TgKHQvQX7Y8hJYByFVvURLbMZpSKipVNI+4oeG4MXYIHHej2QOQis=
+Received: from BN9P222CA0020.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:10c::25)
+ by MW4PR12MB7237.namprd12.prod.outlook.com (2603:10b6:303:22a::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.25; Tue, 22 Jul
+ 2025 17:50:47 +0000
+Received: from BN1PEPF00004686.namprd03.prod.outlook.com
+ (2603:10b6:408:10c:cafe::b5) by BN9P222CA0020.outlook.office365.com
+ (2603:10b6:408:10c::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8943.23 via Frontend Transport; Tue,
+ 22 Jul 2025 17:50:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN1PEPF00004686.mail.protection.outlook.com (10.167.243.91) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8964.20 via Frontend Transport; Tue, 22 Jul 2025 17:50:46 +0000
+Received: from airavat.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 22 Jul
+ 2025 12:50:43 -0500
+From: Raju Rangoju <Raju.Rangoju@amd.com>
+To: <linux-usb@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <andreas.noever@gmail.com>, <michael.jamet@intel.com>,
+	<westeri@kernel.org>, <YehezkelShB@gmail.com>, <bhelgaas@google.com>,
+	<Sanath.S@amd.com>, Raju Rangoju <Raju.Rangoju@amd.com>
+Subject: [PATCH 0/3] thunderbolt: Update XDomain vendor properties dynamically
+Date: Tue, 22 Jul 2025 23:20:23 +0530
+Message-ID: <20250722175026.1994846-1-Raju.Rangoju@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aH7cpr0faRPVnxXL@pie>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004686:EE_|MW4PR12MB7237:EE_
+X-MS-Office365-Filtering-Correlation-Id: bc783a0d-42ec-4738-7017-08ddc9484997
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|82310400026|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?4tK60CvTLquTaBXuIotYszr05+9rojHjEXRT3n07k2bPDdQGdBLae1bQimbF?=
+ =?us-ascii?Q?yHpnhXt2CGNGkwdHzgq/8CgqhbxgwMiRvPWDdX3PTXsHEegRaXiJF2O8iRTA?=
+ =?us-ascii?Q?0PoKwE5P4b6UufI2vU/KLlUbP54lwQzYNjehhUDfYMmNHCZWX+iVLE6GDsyc?=
+ =?us-ascii?Q?TSai48iPPt7LfQFAkMb6T0MUZXht1s9GByHRh4Xvs5V6EbVfotsBaD1BEzj6?=
+ =?us-ascii?Q?0SYJFSeEiEioqmWNKrm2JWO9lsJuVnabelbspAiAyhRNxQmdoj8CDupJKJXB?=
+ =?us-ascii?Q?y27vOq8T6QQGXcu5fLura2Ql4d+9U1Z98XBAKfzyP5YKdlHvjNOiPrvkFRgf?=
+ =?us-ascii?Q?gG+Bz38Grlq1Oq2StUksIkO428vJMcaBzazT+JRZJbAC9UIxwfCKXa4bTvjE?=
+ =?us-ascii?Q?iHEypWWXarUcVdoTZ2gr9mwjnjcN4aLFxJfC3hpqc29ZulpKfKWgQLZY3qnb?=
+ =?us-ascii?Q?yW6yVECTsQSeyedguzB7IFV5Qb7VghkPkv1g7g4tg9yLCugP2y/uQMcAuNlf?=
+ =?us-ascii?Q?o2jnzPM3uFZ4yqGh+MKwNnFHrYMkBCjRDyD/L2hVSNcqk2ejdjNs8o0OwGd9?=
+ =?us-ascii?Q?pT2t15fOtPtBJEKbG2NjJLow9YtW3sA/SsPitxi3/58U0rZ0pgmgmcLmTVLX?=
+ =?us-ascii?Q?KablTvWflRrkzEgZJnyDceAAwg2cfd7xSZzjsJCANPotNSEkU0TwX/Rhv+pI?=
+ =?us-ascii?Q?hjnDR/v52KjS2sDmbH/ps3TC7wTzARYKF0O0YkUH+8BUwsVwSRvGOpZw1ena?=
+ =?us-ascii?Q?deKHKBS2MoeYaxQP5FMoFd9kFLb5/dW4+VoMh5MTtBOD5ecS80Y0gOc133Ib?=
+ =?us-ascii?Q?hpGtAOKHqNrl54Ht2MEO3nySfMP8aOHu7X+WMSqZLfk3sRy6lxJyPS7vXSsI?=
+ =?us-ascii?Q?aKsH7TJshFPvnCCNpmcdKY38pUa3/5hXbVK/zYEy4C4kYaQaA05mYP3wmBNu?=
+ =?us-ascii?Q?bf5oqqi/vWqWY0whexozvXEjvV3YaK/H3QvQvyrtUp0arvWpqWw+G4Pm4xDl?=
+ =?us-ascii?Q?MeT2z+hez4TqBtNkYiawyJ1xQwZqs6dArVLD77dJ5vWmbTftjOmj4j3LTDEq?=
+ =?us-ascii?Q?0H6cVN9wGjpyYMDRPlSCKAlZ3q6VmcrD2sM9mIFnaWb1KkL1GQ2SOKxgrD8k?=
+ =?us-ascii?Q?W/Np0DYdkbAL44AUQk9skUJWSQFqrZP3wMGSXOEL1sFMv0jmZXE3Oe5Rd+/I?=
+ =?us-ascii?Q?XufKAwMerrlS0XWNSZP/MshnlrO2vOz8y8NjrEz7hCnX2GjK3EnWCeTUtNE6?=
+ =?us-ascii?Q?XdkhljJ5XGZh91IUowq2fhcyBdu9HWv3mR4uCPloZvtOKZc9cjpV8Ap3Wvl3?=
+ =?us-ascii?Q?mR+rvlxnkWpHL1B1+N/K3zrGCeJm72HYbtyJWD/KoPlWCOo15Pj3Mf8R+DVi?=
+ =?us-ascii?Q?Chc7Wzg3wUr+l+3g4QbZa7yjBz5kFIOm+oktppmfNJ5BNn0DZu7bBBJTwJSN?=
+ =?us-ascii?Q?VnPLIBqhJIddaKmCMSOQKQAtGoMn63ngkZ4YD1g28GrWBDlypnipvbQmCLXj?=
+ =?us-ascii?Q?tmPUWLL2NhUSSVrngZteWhN1kOCEfwvoup4y?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2025 17:50:46.5540
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc783a0d-42ec-4738-7017-08ddc9484997
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004686.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7237
 
-On Tue, Jul 22, 2025 at 12:34:46AM +0000, Yao Zi wrote:
-> On Mon, Jul 21, 2025 at 08:08:06PM +0800, Ze Huang wrote:
-> > On Sun, Jul 20, 2025 at 02:34:07PM +0800, Ze Huang wrote:
-> > > On Tue, Jul 15, 2025 at 03:50:54PM -0500, Alex Elder wrote:
-> > > > On 7/12/25 2:49 AM, Ze Huang wrote:
-> > > > > To support flattened dwc3 dt model and drop the glue layer, introduce the
-> > > > > `dwc3-generic` driver. This enables direct binding of the DWC3 core driver
-> > > > > and offers an alternative to the existing glue driver `dwc3-of-simple`.
-> > > > 
-> > > > I'm not familiar with dwc-of-simple.c, and won't comment on
-> > > > how this differs from that (or does not).
-> > > > 
-> > > > Given you're implementing an alternative though, can you explain
-> > > > in a little more detail what's different between the two?  Why
-> > > > would someone choose to use this driver rather than the other one?
-> > > 
-> > > They are basically the same.
-> > > 
-> > > dwc-generic use a plain dt node while dwc-of-simple will nest the dwc3
-> > > node as its child.
-> > > 
-> > > Both will use dwc3_core_probe() to finish the probe process. But now we
-> > > can simplify the process by just calling it, instead of calling
-> > > of_platform_populate() and create another snps,dwc3 device driver.
-> > 
-> > [...]
-> > 
-> > > > > +	ret = reset_control_assert(dwc3->resets);
-> > > > > +	if (ret)
-> > > > > +		return dev_err_probe(dev, ret, "failed to assert resets\n");
-> > > > > +
-> > > > > +	ret = devm_add_action_or_reset(dev, dwc3_generic_reset_control_assert, dwc3->resets);
-> > > > > +	if (ret)
-> > > > > +		return ret;
-> > > > 
-> > > > The re-assert shouldn't be set up unless the deassert below
-> > > > succeeds.
-> > > > 
-> > > 
-> > > Will move behind the deassert.
-> > > 
-> > > > > +	usleep_range(10, 1000);
-> > > > 
-> > > > This seems like a large range.  You could just do msleep(1);
-> > > > Also, can you add a comment explaining why a delay is needed,
-> > > > and why 1 millisecond is the right amount of time to sleep?
-> > > > 
-> > > 
-> > > I will check the range with spacemit and reply soon.
-> > > 
-> > 
-> > the resets are asynchronous with no strict timing. But to be safe, each
-> > reset should stay active for at least 1 µs. I’ll switch to a udelay(2)
-> > and add comment accordingly.
-> 
-> This may be a little farsight: do you think it's better to make the
-> reset timing part of the of_match_data? This is more flexible and
-> reduces future burden when introducing a new platform that comes with a
-> different reset timing, which is a very likely case we'll face since
-> it's a "generic" driver.
-> 
+This patch series aims to update vendor properties for XDomain
+dynamically for vendors like AMD, Intel and ASMedia.
 
-Hi Zi Yao, thanks for the suggestion.
+Raju Rangoju (3):
+  thunderbolt: Dynamically populate vendor properties for XDomain
+  PCI: Add PCI vendor ID for ASMedia USB4 devices
+  thunderbolt: Add vendor ASMedia in update_property_block for XDomain
 
-The delay is only for safety. I think there will not be much device require
-this setting. I'd prefer to keep the logic simple and just cover the
-currently known compatible devices.
+ drivers/thunderbolt/nvm.c     |  2 +-
+ drivers/thunderbolt/xdomain.c | 32 +++++++++++++++++++++-----------
+ include/linux/pci_ids.h       |  1 +
+ 3 files changed, 23 insertions(+), 12 deletions(-)
 
-If we encounter future platforms that require different timing constraints,
-we can revisit this and introduce of_match_data as needed.
+-- 
+2.34.1
 
-> > > > > +	ret = reset_control_deassert(dwc3->resets);
-> > > > > +	if (ret)
-> > > > > +		return dev_err_probe(dev, ret, "failed to deassert resets\n");
-> > > > > +
-> > > > > +	ret = devm_clk_bulk_get_all(dwc3->dev, &dwc3->clks);
-> > > > > +	if (ret < 0)
-> > > > > +		return dev_err_probe(dev, ret, "failed to get clocks\n");
-> > > > 
-> > > > Call devm_clk_bulk_get_all_enabled() instead of doing the two
-> > > > steps separately here.
-> > > > 
-> > > 
-> > > Will do, thanks.
-> > > 
-> > > > 					-Alex
-> > 
-> 
-> Regards,
-> Yao Zi
 
