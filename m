@@ -1,159 +1,82 @@
-Return-Path: <linux-usb+bounces-26065-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26066-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 287DDB0CEC7
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 02:35:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3548AB0CF90
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 04:10:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 668DA3BCACF
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 00:34:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6637D5423C3
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 02:10:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2892548EE;
-	Tue, 22 Jul 2025 00:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D79C1DF25C;
+	Tue, 22 Jul 2025 02:09:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="kuqp7Svq"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="SkO6UoFh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD1D2E36EB;
-	Tue, 22 Jul 2025 00:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58E262F5B;
+	Tue, 22 Jul 2025 02:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753144519; cv=none; b=Us5lPnIH2ocbNUrUg8f2fy0kjP40Y9zivwYYiv46F1muWzUimemnHGyB/bIzEVm0rCVQJNP/6ig9uYLQydMOVlMNb1Ukxml3tUNEBxMVRcUmiGW4b9tL093fjIQGFgIw9mzX0qvDrx27zX2mY03+/bMFzmqQTrKAN5Oqq5d2t34=
+	t=1753150198; cv=none; b=r9WD65PWmm5IR7l3yOWM+HvRrejVZ2UQowLO8TQ1qExnzIUpGuz8/afkG41vy8UrSaIXhN0mArSuXi0PeUR7Ep+mmY1veXh6r+P2XwmDW0u1JIC2iyMv/EVrqnoyzmT9qtZTLG5RacYPeHo29Dy/V3NwF+NSIz3iOnTuSQlg0gY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753144519; c=relaxed/simple;
-	bh=NVJSthHoVBfvJ0DprsxJsTID3or77ayMtN3PtiGsObQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fVHD/rrwWpeRUgPginqCkBA2H0V7wAlMPkXSarB9HDUYVPjVpYFsWBRjajtjCbzjs0tybA51lkXRSJFhijlAAHQXY0B501g6gG7HW2mJsDGCyzLqLMEOmlHwSHmMRRUj7gMGf+GtfhVwZsfBHdL7yYjqRnhVKXwrpeKFeaQWzt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=kuqp7Svq; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 46DFF2082C;
-	Tue, 22 Jul 2025 02:35:14 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2AWGV58KjTtc; Tue, 22 Jul 2025 02:35:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1753144513; bh=NVJSthHoVBfvJ0DprsxJsTID3or77ayMtN3PtiGsObQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=kuqp7SvqE3+gsACQYmTXKrC6X6J/IBJVAvyya0mbiIsDkonQbEAg4tHtU90nE2fOO
-	 maPB8WmFiNZIQBVtbQ5nZ1VKVgu8ehAoh0wGLNES47exI9ghg7zuUL54J4gtoTdMz5
-	 tJYNXt4HOTIzqW9tNieEM2P/1o7t0VXzKJeO0orz4Bkz5+SPeuGo15x0CxAontFdWS
-	 I/D91B2ADLRNe+Bu1Ta0N7jG3yVEU8LxLvF6XW7tawKRh0QjJP2JNDny4uwpMZXphy
-	 uaoLs/SQ3vpfwD+kycJR2prgJzg5LDK+22uzpxHx+3Y2p1pbHW2o3yIcylVoF1fzU3
-	 34If+OcvH0l6w==
-Date: Tue, 22 Jul 2025 00:34:46 +0000
-From: Yao Zi <ziyao@disroot.org>
-To: Ze Huang <huang.ze@linux.dev>, Alex Elder <elder@ieee.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] usb: dwc3: add generic driver to support flattened
-Message-ID: <aH7cpr0faRPVnxXL@pie>
-References: <20250712-dwc3_generic-v6-0-cc87737cc936@linux.dev>
- <20250712-dwc3_generic-v6-2-cc87737cc936@linux.dev>
- <d2e9a521-568e-433d-a59b-9b98138ace2b@ieee.org>
- <aHyN3-uoHofF8Hg3@monica.localdomain>
- <aH4tpgVPbf9DOzSe@monica.localdomain>
+	s=arc-20240116; t=1753150198; c=relaxed/simple;
+	bh=XJ0YXRAaT/YlT9dd8vlyFihKQMyn4qZC4Pplx1s0Ncg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SRufbtdLLyS2fm6UUONLtezXNZ7rg+efXEapmIqmiCQHhzYM4GBJmxW5qaVsOVQO+tGWyOthzlbdCVp6d0ON++QcVDlCH3ieM/kqf+Qedyk/xALhxa8r7dPPXHwC4irfnrMDTZ9YE4MUeuKNeV51Uq5YzpW5fQtHJdUjc0PC178=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=SkO6UoFh; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
+	Content-Type; bh=XJ0YXRAaT/YlT9dd8vlyFihKQMyn4qZC4Pplx1s0Ncg=;
+	b=SkO6UoFhGGnyV3gqyDsiPdhuuSrW7WtVVbfULH1tH9Vdifl3xwMfpV8oq41LIB
+	lt/23mUeSodxJe/li4vBgS6RUAgrOsCJ3oHwHxJRpF3M3es/n7pLgaJyHygX68Yf
+	ovW4rwyVci/auosy8GlQC9pH1QSQE/m2NCOvEDhbXFkDY=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD3vRPd8n5o_XtJGw--.30823S2;
+	Tue, 22 Jul 2025 10:09:34 +0800 (CST)
+From: yicongsrfy@163.com
+To: andrew@lunn.ch
+Cc: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	oneukum@suse.com,
+	yicong@kylinos.cn
+Subject: Re: [PATCH] usbnet: Set duplex status to unknown in the absence of MII
+Date: Tue, 22 Jul 2025 10:09:33 +0800
+Message-Id: <20250722020933.1221663-1-yicongsrfy@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <496e1153-acac-468a-b39c-9ea138b2cf04@lunn.ch>
+References: <496e1153-acac-468a-b39c-9ea138b2cf04@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aH4tpgVPbf9DOzSe@monica.localdomain>
+X-CM-TRANSID:_____wD3vRPd8n5o_XtJGw--.30823S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XrW3uFy8uF1Uur17uw1Utrb_yoW3GFbE9a
+	1xJa1kA3W5Wr4xJr43KF1Fq39a9r4UZryUXw12grn2k3s5AanrArn5t3W0yw18Gr17ArZ0
+	9rs7GayS9an7ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnQtx3UUUUU==
+X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/1tbiUA2S22h+6qH6qwAAsY
 
-On Mon, Jul 21, 2025 at 08:08:06PM +0800, Ze Huang wrote:
-> On Sun, Jul 20, 2025 at 02:34:07PM +0800, Ze Huang wrote:
-> > On Tue, Jul 15, 2025 at 03:50:54PM -0500, Alex Elder wrote:
-> > > On 7/12/25 2:49 AM, Ze Huang wrote:
-> > > > To support flattened dwc3 dt model and drop the glue layer, introduce the
-> > > > `dwc3-generic` driver. This enables direct binding of the DWC3 core driver
-> > > > and offers an alternative to the existing glue driver `dwc3-of-simple`.
-> > > 
-> > > I'm not familiar with dwc-of-simple.c, and won't comment on
-> > > how this differs from that (or does not).
-> > > 
-> > > Given you're implementing an alternative though, can you explain
-> > > in a little more detail what's different between the two?  Why
-> > > would someone choose to use this driver rather than the other one?
-> > 
-> > They are basically the same.
-> > 
-> > dwc-generic use a plain dt node while dwc-of-simple will nest the dwc3
-> > node as its child.
-> > 
-> > Both will use dwc3_core_probe() to finish the probe process. But now we
-> > can simplify the process by just calling it, instead of calling
-> > of_platform_populate() and create another snps,dwc3 device driver.
-> 
-> [...]
-> 
-> > > > +	ret = reset_control_assert(dwc3->resets);
-> > > > +	if (ret)
-> > > > +		return dev_err_probe(dev, ret, "failed to assert resets\n");
-> > > > +
-> > > > +	ret = devm_add_action_or_reset(dev, dwc3_generic_reset_control_assert, dwc3->resets);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > 
-> > > The re-assert shouldn't be set up unless the deassert below
-> > > succeeds.
-> > > 
-> > 
-> > Will move behind the deassert.
-> > 
-> > > > +	usleep_range(10, 1000);
-> > > 
-> > > This seems like a large range.  You could just do msleep(1);
-> > > Also, can you add a comment explaining why a delay is needed,
-> > > and why 1 millisecond is the right amount of time to sleep?
-> > > 
-> > 
-> > I will check the range with spacemit and reply soon.
-> > 
-> 
-> the resets are asynchronous with no strict timing. But to be safe, each
-> reset should stay active for at least 1 µs. I’ll switch to a udelay(2)
-> and add comment accordingly.
+Thanks for your reply!
 
-This may be a little farsight: do you think it's better to make the
-reset timing part of the of_match_data? This is more flexible and
-reduces future burden when introducing a new platform that comes with a
-different reset timing, which is a very likely case we'll face since
-it's a "generic" driver.
+According to the "Universal Serial Bus Class Definitions for Communications Devices v1.2":
+In Section 6.3, which describes notifications such as NetworkConnection and ConnectionSpeedChange,
+there is no mention of duplex status.In particular, for ConnectionSpeedChange, its data payload
+only contains two 32-bit unsigned integers, corresponding to the uplink and downlink speeds.
 
-> > > > +	ret = reset_control_deassert(dwc3->resets);
-> > > > +	if (ret)
-> > > > +		return dev_err_probe(dev, ret, "failed to deassert resets\n");
-> > > > +
-> > > > +	ret = devm_clk_bulk_get_all(dwc3->dev, &dwc3->clks);
-> > > > +	if (ret < 0)
-> > > > +		return dev_err_probe(dev, ret, "failed to get clocks\n");
-> > > 
-> > > Call devm_clk_bulk_get_all_enabled() instead of doing the two
-> > > steps separately here.
-> > > 
-> > 
-> > Will do, thanks.
-> > 
-> > > 					-Alex
-> 
+Since CDC has no way to obtain the duplex status of the device, ethtool displays a default
+value of "Half". I think it would be better to display "unknown" instead of potentially showing
+incorrect information — for example, my device is actually operating at 1Gbps Full-duplex,
+but ethtool shows 1Gbps Half-duplex.
 
-Regards,
-Yao Zi
 
