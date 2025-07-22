@@ -1,94 +1,159 @@
-Return-Path: <linux-usb+bounces-26064-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26065-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D8B8B0CEBE
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 02:30:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 287DDB0CEC7
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 02:35:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14ACD189BF3C
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 00:30:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 668DA3BCACF
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jul 2025 00:34:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D06013D24D;
-	Tue, 22 Jul 2025 00:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2892548EE;
+	Tue, 22 Jul 2025 00:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EP6NuL+3"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="kuqp7Svq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A3030100;
-	Tue, 22 Jul 2025 00:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD1D2E36EB;
+	Tue, 22 Jul 2025 00:35:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753144206; cv=none; b=srTGdYEcP+xB6g64lReGZ5LOjbdjPVKg/25aMBgjLqmPbHllWjnqiMhV2ngsKl+TVhMjtWM1y9SbMar5h7uz8Sa3NEZlrBCP/bpscjB6hk9j7GCYtLOE7xsaENgSznQlrpV9dJcWnik1MvWZ1142OxIOwHsktkQb5yz1/bU6V50=
+	t=1753144519; cv=none; b=Us5lPnIH2ocbNUrUg8f2fy0kjP40Y9zivwYYiv46F1muWzUimemnHGyB/bIzEVm0rCVQJNP/6ig9uYLQydMOVlMNb1Ukxml3tUNEBxMVRcUmiGW4b9tL093fjIQGFgIw9mzX0qvDrx27zX2mY03+/bMFzmqQTrKAN5Oqq5d2t34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753144206; c=relaxed/simple;
-	bh=Lll+xb2CuKaezj+ykHPk3aO+vWOXMbcSPYMbwtv8OTc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WB2uwYDvJxxr6P9Vd4urcEC7JzNwrYmrB4pvAPRR9N3JfB1bqs09KHaz7rX/Ba0SL6pK7ieZaz6G/gNl2pvZWzA5iflAaafIXtXkg8h9s07mor+hWdYH1zYXwF6NzqXS65UvaLi5ar425jQdp7lB7P2Cf29FqrsDiEwQfmByLj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EP6NuL+3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829F1C4CEF5;
-	Tue, 22 Jul 2025 00:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753144206;
-	bh=Lll+xb2CuKaezj+ykHPk3aO+vWOXMbcSPYMbwtv8OTc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=EP6NuL+3jcVkjW9e1vWW/6YHKB30Iv3nqmIhap7wjtHiGm5cuR+j0OdNsRgEl4Tx5
-	 dgtShF38Glthx+a3V90FAxecSMcXsQ/TNJQN5eokwWjt44PhLL8c/DzcepTYgQXrtl
-	 QoBDtFyhNgkbPsvYSXEQVEOnbPSYBc4w/tifWpEPlwKnmuafV0zlUPobQi72LHG/mv
-	 3ZMOZq4KOHH8vz1iNAciSBGjsQfWnUnrtxR/KB48egPa4aX4fqsygSiYryWIfoSWKK
-	 6OZsHXq+L1lNY0aN4TyqHhYU5hJ+RtOhml/ohtVtS6dV1MNYNAiDScBrqVnmpxP0pM
-	 0Hpm61CC+hjqA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70BF2383B267;
-	Tue, 22 Jul 2025 00:30:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1753144519; c=relaxed/simple;
+	bh=NVJSthHoVBfvJ0DprsxJsTID3or77ayMtN3PtiGsObQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fVHD/rrwWpeRUgPginqCkBA2H0V7wAlMPkXSarB9HDUYVPjVpYFsWBRjajtjCbzjs0tybA51lkXRSJFhijlAAHQXY0B501g6gG7HW2mJsDGCyzLqLMEOmlHwSHmMRRUj7gMGf+GtfhVwZsfBHdL7yYjqRnhVKXwrpeKFeaQWzt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=kuqp7Svq; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 46DFF2082C;
+	Tue, 22 Jul 2025 02:35:14 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2AWGV58KjTtc; Tue, 22 Jul 2025 02:35:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1753144513; bh=NVJSthHoVBfvJ0DprsxJsTID3or77ayMtN3PtiGsObQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=kuqp7SvqE3+gsACQYmTXKrC6X6J/IBJVAvyya0mbiIsDkonQbEAg4tHtU90nE2fOO
+	 maPB8WmFiNZIQBVtbQ5nZ1VKVgu8ehAoh0wGLNES47exI9ghg7zuUL54J4gtoTdMz5
+	 tJYNXt4HOTIzqW9tNieEM2P/1o7t0VXzKJeO0orz4Bkz5+SPeuGo15x0CxAontFdWS
+	 I/D91B2ADLRNe+Bu1Ta0N7jG3yVEU8LxLvF6XW7tawKRh0QjJP2JNDny4uwpMZXphy
+	 uaoLs/SQ3vpfwD+kycJR2prgJzg5LDK+22uzpxHx+3Y2p1pbHW2o3yIcylVoF1fzU3
+	 34If+OcvH0l6w==
+Date: Tue, 22 Jul 2025 00:34:46 +0000
+From: Yao Zi <ziyao@disroot.org>
+To: Ze Huang <huang.ze@linux.dev>, Alex Elder <elder@ieee.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] usb: dwc3: add generic driver to support flattened
+Message-ID: <aH7cpr0faRPVnxXL@pie>
+References: <20250712-dwc3_generic-v6-0-cc87737cc936@linux.dev>
+ <20250712-dwc3_generic-v6-2-cc87737cc936@linux.dev>
+ <d2e9a521-568e-433d-a59b-9b98138ace2b@ieee.org>
+ <aHyN3-uoHofF8Hg3@monica.localdomain>
+ <aH4tpgVPbf9DOzSe@monica.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: usb: cdc-ncm: check for filtering
- capability
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175314422525.243210.8477234294491199351.git-patchwork-notify@kernel.org>
-Date: Tue, 22 Jul 2025 00:30:25 +0000
-References: <20250717120649.2090929-1-oneukum@suse.com>
-In-Reply-To: <20250717120649.2090929-1-oneukum@suse.com>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org
+In-Reply-To: <aH4tpgVPbf9DOzSe@monica.localdomain>
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 17 Jul 2025 14:06:17 +0200 you wrote:
-> If the decice does not support filtering, filtering
-> must not be used and all packets delivered for the
-> upper layers to sort.
+On Mon, Jul 21, 2025 at 08:08:06PM +0800, Ze Huang wrote:
+> On Sun, Jul 20, 2025 at 02:34:07PM +0800, Ze Huang wrote:
+> > On Tue, Jul 15, 2025 at 03:50:54PM -0500, Alex Elder wrote:
+> > > On 7/12/25 2:49 AM, Ze Huang wrote:
+> > > > To support flattened dwc3 dt model and drop the glue layer, introduce the
+> > > > `dwc3-generic` driver. This enables direct binding of the DWC3 core driver
+> > > > and offers an alternative to the existing glue driver `dwc3-of-simple`.
+> > > 
+> > > I'm not familiar with dwc-of-simple.c, and won't comment on
+> > > how this differs from that (or does not).
+> > > 
+> > > Given you're implementing an alternative though, can you explain
+> > > in a little more detail what's different between the two?  Why
+> > > would someone choose to use this driver rather than the other one?
+> > 
+> > They are basically the same.
+> > 
+> > dwc-generic use a plain dt node while dwc-of-simple will nest the dwc3
+> > node as its child.
+> > 
+> > Both will use dwc3_core_probe() to finish the probe process. But now we
+> > can simplify the process by just calling it, instead of calling
+> > of_platform_populate() and create another snps,dwc3 device driver.
 > 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->  drivers/net/usb/cdc_ncm.c   | 20 ++++++++++++++++----
->  include/linux/usb/cdc_ncm.h |  1 +
->  2 files changed, 17 insertions(+), 4 deletions(-)
+> [...]
+> 
+> > > > +	ret = reset_control_assert(dwc3->resets);
+> > > > +	if (ret)
+> > > > +		return dev_err_probe(dev, ret, "failed to assert resets\n");
+> > > > +
+> > > > +	ret = devm_add_action_or_reset(dev, dwc3_generic_reset_control_assert, dwc3->resets);
+> > > > +	if (ret)
+> > > > +		return ret;
+> > > 
+> > > The re-assert shouldn't be set up unless the deassert below
+> > > succeeds.
+> > > 
+> > 
+> > Will move behind the deassert.
+> > 
+> > > > +	usleep_range(10, 1000);
+> > > 
+> > > This seems like a large range.  You could just do msleep(1);
+> > > Also, can you add a comment explaining why a delay is needed,
+> > > and why 1 millisecond is the right amount of time to sleep?
+> > > 
+> > 
+> > I will check the range with spacemit and reply soon.
+> > 
+> 
+> the resets are asynchronous with no strict timing. But to be safe, each
+> reset should stay active for at least 1 µs. I’ll switch to a udelay(2)
+> and add comment accordingly.
 
-Here is the summary with links:
-  - [net-next] net: usb: cdc-ncm: check for filtering capability
-    https://git.kernel.org/netdev/net-next/c/61c3e8940f2d
+This may be a little farsight: do you think it's better to make the
+reset timing part of the of_match_data? This is more flexible and
+reduces future burden when introducing a new platform that comes with a
+different reset timing, which is a very likely case we'll face since
+it's a "generic" driver.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> > > > +	ret = reset_control_deassert(dwc3->resets);
+> > > > +	if (ret)
+> > > > +		return dev_err_probe(dev, ret, "failed to deassert resets\n");
+> > > > +
+> > > > +	ret = devm_clk_bulk_get_all(dwc3->dev, &dwc3->clks);
+> > > > +	if (ret < 0)
+> > > > +		return dev_err_probe(dev, ret, "failed to get clocks\n");
+> > > 
+> > > Call devm_clk_bulk_get_all_enabled() instead of doing the two
+> > > steps separately here.
+> > > 
+> > 
+> > Will do, thanks.
+> > 
+> > > 					-Alex
+> 
 
-
+Regards,
+Yao Zi
 
