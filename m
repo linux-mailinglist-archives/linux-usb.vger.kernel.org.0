@@ -1,468 +1,124 @@
-Return-Path: <linux-usb+bounces-26121-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26122-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35C2BB0F74F
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 17:43:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 874ABB0F865
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 18:49:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E9413BB833
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 15:43:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 742F15871C6
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 16:49:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569641FECDD;
-	Wed, 23 Jul 2025 15:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86DDB20E00B;
+	Wed, 23 Jul 2025 16:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DKRPkjjk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from newagemicro-plesk-3-1.smartt.com (newagemicro-plesk-3-1.smartt.com [69.31.177.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5980B1EB5DD;
-	Wed, 23 Jul 2025 15:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.31.177.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEBED17A2E8;
+	Wed, 23 Jul 2025 16:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753285408; cv=none; b=EBT4E15LAYBiYnnrQqVbX9uBmo2HOTEGH9y0vbIFYv8r8rnDH3ARDNiyUFgxEw3JY/sYbDNbMegtyq64eqgIPfBGJtf92lXgAxXtvb0DXBMC8+QOcppILHrDaAixf9Ri5nGBhuegt2aQkRn/AHYvUf5t2fDZayWDsKnPtNs4ng4=
+	t=1753289334; cv=none; b=rfCT7/Cm9eK47Zo9YW5n1NPljLVntIfV8jzZ9txW24x17ou5CJiw34CYaFNF1E6xFnJKxLDfTg7hwncU50DEKHaAZh2KdGvS9ybSucdl2CLhew3U+XHssooa85F+1Tgq8BORVc0Mi9LREScApxMK24m5ti1bRp+xe2/89GNkZHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753285408; c=relaxed/simple;
-	bh=HLBhb0LCd8+Yi56PywxWCtCAYIqK7E4jdeG5yM0dzLA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Me3mfHsfkiaNM043QAk20ntZ3B6IKI+n4qJI+38qgxy4ByUH52rmX9ukiXySTUFoDOTTbkQ2zyAsBsGGPasSCWBVcQgnGdFC1sbpI5wy+3Hv34ghip5yoDbum3Z/Q13bErRR31ajDsljNrN6Rpm/hvJW1m900d9ERiE+9lTN+k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=newagemicro.com; spf=pass smtp.mailfrom=newagemicro.com; arc=none smtp.client-ip=69.31.177.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=newagemicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=newagemicro.com
-Received: from newagemicro-plesk-3-1.smartt.com (localhost.localdomain [127.0.0.1])
-	by newagemicro-plesk-3-1.smartt.com (Postfix) with ESMTP id 65B2CE36CC;
-	Wed, 23 Jul 2025 08:36:01 -0700 (PDT)
-Authentication-Results: newagemicro-plesk-3-1.smartt.com;
-        spf=pass (sender IP is 127.0.0.1) smtp.mailfrom=msobchuk@newagemicro.com smtp.helo=newagemicro-plesk-3-1.smartt.com
-Received-SPF: pass (newagemicro-plesk-3-1.smartt.com: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=msobchuk@newagemicro.com; helo=newagemicro-plesk-3-1.smartt.com;
-X-Virus-Scanned: amavis at example.com
-X-Spam-Flag: NO
-X-Spam-Score: -2.9
-X-Spam-Level: 
-Received: from newagemicro-plesk-3-1.smartt.com ([127.0.0.1])
- by newagemicro-plesk-3-1.smartt.com (newagemicro-plesk-3-1.smartt.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id 0CToRNmg3XX1; Wed, 23 Jul 2025 08:36:00 -0700 (PDT)
-Received: from MIKE1 (unknown [50.205.63.162])
-	by newagemicro-plesk-3-1.smartt.com (Postfix) with ESMTPSA id 400DBB6262;
-	Wed, 23 Jul 2025 08:35:59 -0700 (PDT)
-Received-SPF: pass (newagemicro-plesk-3-1.smartt.com: connection is authenticated)
-From: <msobchuk@newagemicro.com>
-To: <linux-kernel@vger.kernel.org>,
-	<linux-usb@vger.kernel.org>
-Cc: "Dave Tyree" <dtyree@cybercogs.com>,
-	"Mike Sobchuk" <msobchuk@cybercogs.com>
-Subject: [Patch v1] driver/eth/usb/asix.ko: Support for 88772C in Rev-RMII
-Date: Wed, 23 Jul 2025 11:35:57 -0400
-Message-ID: <000201dbfbe7$7d4ac1b0$77e04510$@newagemicro.com>
+	s=arc-20240116; t=1753289334; c=relaxed/simple;
+	bh=Tv5MXYJWzsY90WmBLspDcy0thO2AOlGxw9qBnGijwJ8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=tbQpaxMmRaGjcUOqOAfiWayj9varu8JqAI531hUFCFRHw6/IJP3gViKhNasaPJJ9kuLzBDIm/q3rG0YFlsufRnc7jNBuMu1cqJALhKUMmmU8o9bNWJxtq4X0dY7y5OARlco9OK48taLKIjGDVhgSupB5Azz/U9V2DdOxNJc04gE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DKRPkjjk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBF6C4CEF4;
+	Wed, 23 Jul 2025 16:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753289333;
+	bh=Tv5MXYJWzsY90WmBLspDcy0thO2AOlGxw9qBnGijwJ8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=DKRPkjjkzFN7HHda4O+bD3mLMfc2IDdfyATq5ezaULle8jZ4S9pOqLCrBJDXiyaGc
+	 zO7ZJ41b5AMIAReuhjx5UP9XqTKluma2VBqUfTJDECXZSkvzx9mBt7QQxY/tuGYlW+
+	 BIaOqu62RkvWY+WWqjBHWgqmfBVV0cVgJ3Bq4pyqjc6DAn3++PG1c2clZA5HMFX0bt
+	 joBUmrDsugiYAyFNtOIfdeL4pzT6VbmKZz2+tFntKWHuJskFg4ljVoUnQ7sr7FjjVS
+	 Dn3PXCZx5SY++TtbLPbmwNQADo7WYLZSZfDuqi/Zx0FapncOLL/JcKUUfNjtr/VET6
+	 hJNqXNFPYD+Sw==
+From: Mark Brown <broonie@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
+ Srinivas Kandagatla <srini@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Wesley Cheng <quic_wcheng@quicinc.com>, 
+ Stephan Gerhold <stephan.gerhold@linaro.org>, 
+ Luca Weiss <luca.weiss@fairphone.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+In-Reply-To: <20250501-fp4-usb-audio-offload-v2-0-30f4596281cd@fairphone.com>
+References: <20250501-fp4-usb-audio-offload-v2-0-30f4596281cd@fairphone.com>
+Subject: Re: (subset) [PATCH v2 0/5] Enable USB audio offloading on
+ Fairphone 4 smartphone
+Message-Id: <175328932957.84720.16658134148834686492.b4-ty@kernel.org>
+Date: Wed, 23 Jul 2025 17:48:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0003_01DBFBC5.F65694C0"
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: Adv753S3jDDtaeIqQveCkX4C2/uJfg==
-Content-Language: en-us
-X-PPP-Message-ID: 
- <175328496025.3523951.4198707262386615334@newagemicro-plesk-3-1.smartt.com>
-X-PPP-Vhost: newagemicro.com
-
-This is a multipart message in MIME format.
-
-------=_NextPart_000_0003_01DBFBC5.F65694C0
-Content-Type: multipart/alternative;
-	boundary="----=_NextPart_001_0004_01DBFBC5.F65694C0"
-
-
-------=_NextPart_001_0004_01DBFBC5.F65694C0
-Content-Type: text/plain;
-	charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-cff91
 
-This Patch adds support to the asix.ko driver for the AX88772C in
-Reverse-RMII mode.
+On Thu, 01 May 2025 08:48:46 +0200, Luca Weiss wrote:
+> Since the series for the USB sound offloading driver was finally merged,
+> we can add the sm6350 dts and enable it on Fairphone 4.
+> 
+> A few devicetree binding bits have also been missing in that series, so
+> there's some extra patches for the basics in this series.
+> 
+> Depends on:
+> - For qcom,sm8250.yaml & sm8250.c:
+>   https://lore.kernel.org/linux-arm-msm/20250425-fp5-dp-sound-v3-0-7cb45180091b@fairphone.com/T/
+> - For dts:
+>   https://lore.kernel.org/linux-arm-msm/20250321-sm6350-apr-v1-1-7805ce7b4dcf@fairphone.com/
+> 
+> [...]
 
- 
+Applied to
 
-The 'asix.ko' driver is designed to support 88772A, B and C.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-The AX88772C supports running in Reverse-RMII mode to enable MAC to MAC
-communication.
+Thanks!
 
-The base 'asix.ko' driver does NOT currently support the AX88772C in
-Reverse-RMII mode.
+[1/5] ASoC: dt-bindings: qcom,q6afe: Document q6usb subnode
+      commit: b102c9d89fecd72be83eaab9b384285e2d0dc940
+[2/5] ASoC: dt-bindings: qcom,sm8250: Add Fairphone 4 sound card
+      commit: d664e75317e19bb79b6d207f7729e35eca504a6a
+[3/5] ASoC: qcom: sm8250: Add Fairphone 4 soundcard compatible
+      commit: c58c35ef6ae62e36927f506a5afc66610b7261d9
 
- 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-This is due to several reasons:
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-1.	The AX88772C PHY register "LINK STATUS" Link value never is set to
-1. 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-a.	This prevents the drivers from setting the interface 'UP'
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-2.	The AX88772C PHY-ID is hard coded to 0x10, this configures the chip
-to use the internal PHY not an external PHY.
-
-a.	To use the AX88772C in Reverse-RMII mode, the chip must be
-configured to use the external 'PHY'.
-
- 
-
-Asix provides a dedicated AX88772C driver which supports Reverse-RMII. This
-'C' driver was references to add Reverse-RMII support to the base asix.ko
-driver.
-
-To resolve the issue, the following changes were made:
-
-1.	MDIO_READ prior to configuring chip to determine what operational
-mode it is in (Internal, RMII, or Reverse-RMII)
-2.	If in Reverse-RMII mode, force chip to be configured as if it had an
-external PHY.
-3.	If in Reverse-RMII mode, set the interface status to UP regardless
-of the value of the 'LINK STATUS' bit.
-
-
-------=_NextPart_001_0004_01DBFBC5.F65694C0
-Content-Type: text/html;
-	charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" =
-xmlns:o=3D"urn:schemas-microsoft-com:office:office" =
-xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" =
-xmlns=3D"http://www.w3.org/TR/REC-html40"><head><meta =
-http-equiv=3DContent-Type content=3D"text/html; =
-charset=3Dus-ascii"><meta name=3DGenerator content=3D"Microsoft Word 15 =
-(filtered medium)"><style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	font-size:12.0pt;
-	font-family:"Calibri",sans-serif;
-	mso-ligatures:standardcontextual;}
-p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
-	{mso-style-priority:34;
-	margin-top:0in;
-	margin-right:0in;
-	margin-bottom:0in;
-	margin-left:.5in;
-	font-size:12.0pt;
-	font-family:"Calibri",sans-serif;
-	mso-ligatures:standardcontextual;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri",sans-serif;
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
-/* List Definitions */
-@list l0
-	{mso-list-id:1817454948;
-	mso-list-type:hybrid;
-	mso-list-template-ids:386157864 67698703 67698713 67698715 67698703 =
-67698713 67698715 67698703 67698713 67698715;}
-@list l0:level1
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level2
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level3
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-@list l0:level4
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level5
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level6
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-@list l0:level7
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level8
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level9
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-@list l1
-	{mso-list-id:2007515992;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1587734628 67698703 67698713 67698715 67698703 =
-67698713 67698715 67698703 67698713 67698715;}
-@list l1:level1
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l1:level2
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l1:level3
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-@list l1:level4
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l1:level5
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l1:level6
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-@list l1:level7
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l1:level8
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l1:level9
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-ol
-	{margin-bottom:0in;}
-ul
-	{margin-bottom:0in;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]--></head><body lang=3DEN-US =
-link=3D"#0563C1" vlink=3D"#954F72" style=3D'word-wrap:break-word'><div =
-class=3DWordSection1><p class=3DMsoNormal><span =
-style=3D'font-size:11.0pt'>This Patch adds support to the asix.ko driver =
-for the AX88772C in Reverse-RMII mode.<o:p></o:p></span></p><p =
-class=3DMsoNormal><span =
-style=3D'font-size:11.0pt'><o:p>&nbsp;</o:p></span></p><p =
-class=3DMsoNormal><span style=3D'font-size:11.0pt'>The =
-&#8216;asix.ko&#8217; driver is designed to support 88772A, B and =
-C.<o:p></o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:11.0pt'>The AX88772C supports running in Reverse-RMII =
-mode to enable MAC to MAC communication.<o:p></o:p></span></p><p =
-class=3DMsoNormal><span style=3D'font-size:11.0pt'>The base =
-&#8216;asix.ko&#8217; driver does NOT currently support the AX88772C in =
-Reverse-RMII mode.<o:p></o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:11.0pt'><o:p>&nbsp;</o:p></span></p><p =
-class=3DMsoNormal><span style=3D'font-size:11.0pt'>This is due to =
-several reasons:<o:p></o:p></span></p><ol style=3D'margin-top:0in' =
-start=3D1 type=3D1><li class=3DMsoListParagraph =
-style=3D'margin-left:0in;mso-list:l0 level1 lfo1'><span =
-style=3D'font-size:11.0pt'>The AX88772C PHY register &#8220;LINK =
-STATUS&#8221; Link value never is set to 1. <o:p></o:p></span></li><ol =
-style=3D'margin-top:0in' start=3D1 type=3Da><li class=3DMsoListParagraph =
-style=3D'margin-left:0in;mso-list:l0 level2 lfo1'><span =
-style=3D'font-size:11.0pt'>This prevents the drivers from setting the =
-interface &#8216;UP&#8217;<o:p></o:p></span></li></ol><li =
-class=3DMsoListParagraph style=3D'margin-left:0in;mso-list:l0 level1 =
-lfo1'><span style=3D'font-size:11.0pt'>The AX88772C PHY-ID is hard coded =
-to 0x10, this configures the chip to use the internal PHY not an =
-external PHY.<o:p></o:p></span></li><ol style=3D'margin-top:0in' =
-start=3D1 type=3Da><li class=3DMsoListParagraph =
-style=3D'margin-left:0in;mso-list:l0 level2 lfo1'><span =
-style=3D'font-size:11.0pt'>To use the AX88772C in Reverse-RMII mode, the =
-chip must be configured to use the external =
-&#8216;PHY&#8217;.<o:p></o:p></span></li></ol></ol><p =
-class=3DMsoNormal><span =
-style=3D'font-size:11.0pt'><o:p>&nbsp;</o:p></span></p><p =
-class=3DMsoNormal><span style=3D'font-size:11.0pt'>Asix provides a =
-dedicated AX88772C driver which supports Reverse-RMII. This =
-&#8216;C&#8217; driver was references to add Reverse-RMII support to the =
-base asix.ko driver.<o:p></o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:11.0pt'>To resolve the issue, the following changes =
-were made:<o:p></o:p></span></p><ol style=3D'margin-top:0in' start=3D1 =
-type=3D1><li class=3DMsoListParagraph =
-style=3D'margin-left:0in;mso-list:l1 level1 lfo2'><span =
-style=3D'font-size:11.0pt'>MDIO_READ prior to configuring chip to =
-determine what operational mode it is in (Internal, RMII, or =
-Reverse-RMII)<o:p></o:p></span></li><li class=3DMsoListParagraph =
-style=3D'margin-left:0in;mso-list:l1 level1 lfo2'><span =
-style=3D'font-size:11.0pt'>If in Reverse-RMII mode, force chip to be =
-configured as if it had an external PHY.<o:p></o:p></span></li><li =
-class=3DMsoListParagraph style=3D'margin-left:0in;mso-list:l1 level1 =
-lfo2'><span style=3D'font-size:11.0pt'>If in Reverse-RMII mode, set the =
-interface status to UP regardless of the value of the &#8216;LINK =
-STATUS&#8217; bit.<o:p></o:p></span></li></ol></div></body></html>
-------=_NextPart_001_0004_01DBFBC5.F65694C0--
-
-------=_NextPart_000_0003_01DBFBC5.F65694C0
-Content-Type: application/octet-stream;
-	name="0001-Subject-Patch-v1-driver-eth-usb-asix.ko-Support-for-.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="0001-Subject-Patch-v1-driver-eth-usb-asix.ko-Support-for-.patch"
-
-From fe97ec1812e6befc8bddc319fdf9cc913f45617f Mon Sep 17 00:00:00 2001=0A=
-From: Mike <msobchuk@newagemicro.com>=0A=
-Date: Tue, 22 Jul 2025 16:16:44 -0400=0A=
-Subject: [PATCH] Subject: [Patch v1] driver/eth/usb/asix.ko: Support for=0A=
- 88772C in Rev-RMII=0A=
-=0A=
-From: Mike Sobchuk <msobchuk@newagemicro.com>=0A=
-AX88772C in Reverse-RMII mode does not set LINK status to 1.=0A=
-Results in driver being unable to set interface up.=0A=
-PHY-ID forces driver to configure chip to use internal PHY not external.=0A=
-Patch provides support for AX88772C in Reverse-RMII with the following=0A=
-changes:=0A=
-mdio_read to determine operational mode (Internal, RMII, or REV-RMII).=0A=
-if in REV-RMII, configure mac to use external PHY (Same as RMII mode).=0A=
-if in REV-RMII, force LINK status to UP regardless of PHY 'LINK status'=0A=
-register value.=0A=
-=0A=
-Signed-off-by: Mike Sobchuk <msobchuk@newagemicro.com>=0A=
----=0A=
- drivers/net/usb/asix.h         | 12 +++++++++++-=0A=
- drivers/net/usb/asix_devices.c | 19 +++++++++++++++++++=0A=
- 2 files changed, 30 insertions(+), 1 deletion(-)=0A=
-=0A=
-diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h=0A=
-index 74162190bccc..70e63e278720 100644=0A=
---- a/drivers/net/usb/asix.h=0A=
-+++ b/drivers/net/usb/asix.h=0A=
-@@ -32,6 +32,7 @@=0A=
- #define DRIVER_VERSION "22-Dec-2011"=0A=
- #define DRIVER_NAME "asix"=0A=
- =0A=
-+=0A=
- /* ASIX AX8817X based USB 2.0 Ethernet Devices */=0A=
- =0A=
- #define AX_CMD_SET_SW_MII		0x06=0A=
-@@ -72,7 +73,12 @@=0A=
- #define AX_HOST_EN			0x01=0A=
- =0A=
- #define AX_PHYSEL_PSEL			0x01=0A=
--#define AX_PHYSEL_SSMII			0=0A=
-+#define AX_PHYSEL_SSMII			0x00=0A=
-+#define AX_PHYSEL_ASEL			0x02=0A=
-+#define AX_PHYSEL_MASK			0x0C=0A=
-+#define AX_PHYSEL_SSMII			0x00=0A=
-+#define AX_PHYSEL_SSRMII		0x04=0A=
-+#define AX_PHYSEL_SSRRMII		0x0C=0A=
- #define AX_PHYSEL_SSEN			0x10=0A=
- =0A=
- #define AX_PHY_SELECT_MASK		(BIT(3) | BIT(2))=0A=
-@@ -160,6 +166,9 @@=0A=
- =0A=
- #define AX_EMBD_PHY_ADDR	0x10=0A=
- =0A=
-+#define OPERATION_MAC_MODE	0=0A=
-+#define OPERATION_PHY_MODE 	1=0A=
-+=0A=
- /* This structure cannot exceed sizeof(unsigned long [5]) AKA 20 bytes =
-*/=0A=
- struct asix_data {=0A=
- 	u8 multi_filter[AX_MCAST_FILTER_SIZE];=0A=
-@@ -191,6 +200,7 @@ struct asix_common_private {=0A=
- 	u16 phy_addr;=0A=
- 	bool embd_phy;=0A=
- 	u8 chipcode;=0A=
-+	u8 OperationMode;=0A=
- };=0A=
- =0A=
- extern const struct driver_info ax88172a_info;=0A=
-diff --git a/drivers/net/usb/asix_devices.c =
-b/drivers/net/usb/asix_devices.c=0A=
-index f7cff58fe044..28223d13ef1e 100644=0A=
---- a/drivers/net/usb/asix_devices.c=0A=
-+++ b/drivers/net/usb/asix_devices.c=0A=
-@@ -42,11 +42,17 @@ struct ax88172_int_data {=0A=
- =0A=
- static void asix_status(struct usbnet *dev, struct urb *urb)=0A=
- {=0A=
-+	struct asix_common_private *priv =3D dev->driver_priv;=0A=
- 	struct ax88172_int_data *event;=0A=
- 	int link;=0A=
- =0A=
- 	if (urb->actual_length < 8)=0A=
- 		return;=0A=
-+        if (priv->OperationMode =3D=3D OPERATION_PHY_MODE){=0A=
-+                usbnet_link_change(dev, 1, 0);=0A=
-+                return;=0A=
-+        }=0A=
-+=0A=
- =0A=
- 	event =3D urb->transfer_buffer;=0A=
- 	link =3D event->link & 0x01;=0A=
-@@ -836,6 +842,15 @@ static int ax88772_bind(struct usbnet *dev, struct =
-usb_interface *intf)=0A=
- =0A=
- 	usbnet_get_endpoints(dev, intf);=0A=
- =0A=
-+        ret =3D asix_read_cmd(dev, AX_CMD_SW_PHY_STATUS, 0, 0, 1, buf, =
-0);=0A=
-+        *buf &=3D AX_PHYSEL_MASK;=0A=
-+=0A=
-+        if(*buf =3D=3D AX_PHYSEL_SSRRMII){=0A=
-+               priv->OperationMode =3D OPERATION_PHY_MODE;=0A=
-+               netdev_dbg(dev->net, "PHY MODE\n");=0A=
-+        }=0A=
-+=0A=
-+=0A=
- 	/* Maybe the boot loader passed the MAC address via device tree */=0A=
- 	if (!eth_platform_get_mac_address(&dev->udev->dev, buf)) {=0A=
- 		netif_dbg(dev, ifup, dev->net,=0A=
-@@ -876,6 +891,10 @@ static int ax88772_bind(struct usbnet *dev, struct =
-usb_interface *intf)=0A=
- 	priv->phy_addr =3D ret;=0A=
- 	priv->embd_phy =3D ((priv->phy_addr & 0x1f) =3D=3D AX_EMBD_PHY_ADDR);=0A=
- =0A=
-+	if(priv->OperationMode =3D=3D OPERATION_PHY_MODE) {=0A=
-+		priv->embd_phy =3D 0;=0A=
-+	}=0A=
-+=0A=
- 	ret =3D asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1,=0A=
- 			    &priv->chipcode, 0);=0A=
- 	if (ret < 0) {=0A=
--- =0A=
-2.43.0=0A=
-=0A=
-
-------=_NextPart_000_0003_01DBFBC5.F65694C0--
+Thanks,
+Mark
 
 
