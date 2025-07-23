@@ -1,129 +1,144 @@
-Return-Path: <linux-usb+bounces-26102-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26103-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E6D8B0EE91
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 11:36:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D899CB0EF09
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 11:59:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3586F172DF9
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 09:36:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6EE616B860
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 09:59:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC8E2868B8;
-	Wed, 23 Jul 2025 09:36:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D1028C01E;
+	Wed, 23 Jul 2025 09:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DypZetei"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sCsvzskT"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD9C19C54B;
-	Wed, 23 Jul 2025 09:36:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01BE280325;
+	Wed, 23 Jul 2025 09:59:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753263385; cv=none; b=ZR2CyPkryFqgan7yGm93O76lV31tXsqPBZmwXgsEwvjj6rl5mNRYkBCo3Sm7oMdDXEIEpFUnUCMg9o4B/Hsde4BtzpoODcAl4S6zB9mVS1Eza0Dz9QwMehJCll2jn7H/PhhzXmMTs5OC5dOYU0DOxdYbUDWSDVkV9HlQur1gUlE=
+	t=1753264744; cv=none; b=e8Li3cpxCznEs1TPapWtDvKkz176xCVJfmC34S9NG9+S9X1JS0Hyrr/TYn3qbhPkCfH2m/c7Vhs2HkjIm3lKkPZYf1pKR4qhde5Pjgr71FXLpUNXnulK0/0fPHn4bkZ4kbhaBQbR44jpL8aLbLH4/YdOchpAEWaW9V5hpGLvjho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753263385; c=relaxed/simple;
-	bh=pYy6ryWOqe7ctLxlpAUv0mJfc4zPW9hhl8qCJspUpzE=;
+	s=arc-20240116; t=1753264744; c=relaxed/simple;
+	bh=yzX7va2srxpQsEnQrCqzNSATBc4ZgUiYAKZ5VunBZIw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PnPQ+gtklZSnbt33E68YdQDg7GhIXCzADon8ArbJBbvNx6mZMUXSjQGv/TOALfIdenrGEJl27lKSRC/Md9djklOpsd2IIdFuksBhx/XIMRIskswMNAH+DLtx3ahc76GgEmZaB3cM1oel5hpFkwKzT+iS7j9gBd49w/CiXmKygoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DypZetei; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75A31C4CEE7;
-	Wed, 23 Jul 2025 09:36:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=nA3CmAEuu5Ibf9h1x67b7O/5WiYW7FiDCp9ELXP5Bep3zChqm/UtDJuyxgUTZ3RuGq/InxHo6F8/zEVIlClsn4dmVXExRO8XZBtPge5rjJf3oMA2EMhWoJ8DB1UZ3ApjdF/NAl/Y1aPGP9Asr7dVcAotB60o/hT18yMCxGqeudM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sCsvzskT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0008C4CEE7;
+	Wed, 23 Jul 2025 09:58:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753263385;
-	bh=pYy6ryWOqe7ctLxlpAUv0mJfc4zPW9hhl8qCJspUpzE=;
+	s=k20201202; t=1753264743;
+	bh=yzX7va2srxpQsEnQrCqzNSATBc4ZgUiYAKZ5VunBZIw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DypZeteiGQcFhgi/OJ7BrjWZzXpXabrWqcgpSk4gJNlJLJfFW+ITHz/AUht24S/RJ
-	 87eaqULYlOW8IjBJPMTZXH1cQsvvZq0GebzEEwLAICuka2j8NtpM9HVpVm6GlSsjzv
-	 9OWKEk0vR5bSNiSD0AyHByl4sK8xkhblKtczQnr+YOjKRUEb+thyO52lbGjrBYPAAZ
-	 eb8lijOdFns4HGkSHM5NrQxp0XE+ENjjocVuTHE/FZoGTvme9ftb4PhD+WqxcbbFyb
-	 PQMVWVzVSVGPjg4bi59emp6MAIorxxyUbmBZMcES2vePm5TtARHPUffq86/i4B4UlZ
-	 rYIJnGhfF8fOw==
-Date: Wed, 23 Jul 2025 11:36:20 +0200
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>, 
-	Alan Stern <stern@rowland.harvard.edu>
-Cc: jikos@kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: (subset) [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds in
- s32ton (2)
-Message-ID: <gdbdodhtc2ibzfzjtniawzamz7iqhcdhyiubviy27vypszfhc3@cypc7pfbib6z>
-References: <68753a08.050a0220.33d347.0008.GAE@google.com>
- <f6e67c38-8d63-4536-827c-09757a8d5609@rowland.harvard.edu>
- <ea7f1f42-273b-4c07-8bf2-769992dd9ced@rowland.harvard.edu>
- <8bec1698-5008-428f-8e71-ec002def0c54@rowland.harvard.edu>
- <175285492024.272050.11219945704830043047.b4-ty@kernel.org>
+	b=sCsvzskTIiUISMxcu3iQM4Mfm3ktUPUQqQFseLTYboda08WkEP3zRtfrg7joDVUka
+	 uvkd+F0St/5hNrzlG6oLHsGtTErA1r82vjNuu7cCbCYLabFfJjPJTPZfNijtXL7Y40
+	 9KWR90q5fYU9f6Z0Ajws0gD8n3urDLp4zn/r30AkGidlSE0aMtIdtgWcm7rjRfBGkl
+	 U37hX6bmqcHXcIbFp7lvRSOhPbFKHdQC4mzVsPecdfQer7drjEAEBtnmoV6+dNbuGh
+	 GYC689eGG45h6W8216ZdckWnBSlC0euXCL3NVZGIrqi6fyRHzICQjKp6RJgngvymvC
+	 ZhC3wk7Q5SAwg==
+Date: Wed, 23 Jul 2025 10:58:56 +0100
+From: Lee Jones <lee@kernel.org>
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v14 0/7] Add Nuvoton NCT6694 MFD drivers
+Message-ID: <20250723095856.GT11056@google.com>
+References: <20250715025626.968466-1-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <175285492024.272050.11219945704830043047.b4-ty@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250715025626.968466-1-a0282524688@gmail.com>
 
-On Jul 18 2025, Benjamin Tissoires wrote:
-> On Tue, 15 Jul 2025 15:29:25 -0400, Alan Stern wrote:
-> > On Mon, Jul 14, 2025 at 10:10:32AM -0700, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    b4b4dbfa96de media: stk1160: use usb_alloc_noncoherent/usb..
-> > > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=15a830f0580000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=28729dff5d03ad1
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=b63d677d63bcac06cf90
-> > > compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1614418c580000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1257dd82580000
-> > >
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/7301552ad828/disk-b4b4dbfa.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/c559b38fa1b6/vmlinux-b4b4dbfa.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/9c1da8b2a83f/bzImage-b4b4dbfa.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
-> > >
-> > > usb 4-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor, different from the interface descriptor's value: 9
-> > > usb 4-1: New USB device found, idVendor=045e, idProduct=07da, bcdDevice= 0.00
-> > > usb 4-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > > usb 4-1: config 0 descriptor??
-> > > microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
-> > > microsoft 0003:045E:07DA.0001: unsupported Resolution Multiplier 0
-> > > ------------[ cut here ]------------
-> > > UBSAN: shift-out-of-bounds in drivers/hid/hid-core.c:69:16
-> > > shift exponent 4294967295 is too large for 32-bit type 'int'
-> > > CPU: 0 UID: 0 PID: 10 Comm: kworker/0:1 Not tainted 6.16.0-rc4-syzkaller-00314-gb4b4dbfa96de #0 PREEMPT(voluntary)
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-> > > Workqueue: usb_hub_wq hub_event
-> > > Call Trace:
-> > >  <TASK>
-> > >  __dump_stack lib/dump_stack.c:94 [inline]
-> > >  dump_stack_lvl+0x16c/0x1f0 lib/dump_stack.c:120
-> > >  ubsan_epilogue lib/ubsan.c:233 [inline]
-> > >  __ubsan_handle_shift_out_of_bounds+0x27f/0x420 lib/ubsan.c:494
-> > >  s32ton.cold+0x37/0x9c drivers/hid/hid-core.c:69
-> > >  hid_output_field drivers/hid/hid-core.c:1841 [inline]
-> > >  hid_output_report+0x36f/0x4a0 drivers/hid/hid-core.c:1874
-> > >  __hid_request+0x1e0/0x3c0 drivers/hid/hid-core.c:1987
-> > >  hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
-> > >  hidinput_connect+0x1ada/0x2bd0 drivers/hid/hid-input.c:2327
-> > 
-> > [...]
+On Tue, 15 Jul 2025, a0282524688@gmail.com wrote:
+
+> From: Ming Yu <a0282524688@gmail.com>
 > 
-> Applied to hid/hid.git (for-6.17/core), thanks!
+> This patch series introduces support for Nuvoton NCT6694, a peripheral
+> expander based on USB interface. It models the chip as an MFD driver
+> (1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+> WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 > 
-> [1/1] HID: core: Reject report fields with a size or count of 0
->       https://git.kernel.org/hid/hid/c/bcf266ca2779
+> The MFD driver implements USB device functionality to issue
+> custom-define USB bulk pipe packets for NCT6694. Each child device can
+> use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+> a command. They can also request interrupt that will be called when the
+> USB device receives its interrupt pipe.
+> 
+> The following introduces the custom-define USB transactions:
+> 	nct6694_read_msg - Send bulk-out pipe to write request packet
+> 			   Receive bulk-in pipe to read response packet
+> 			   Receive bulk-in pipe to read data packet
+> 
+> 	nct6694_write_msg - Send bulk-out pipe to write request packet
+> 			    Send bulk-out pipe to write data packet
+> 			    Receive bulk-in pipe to read response packet
 
-FTR, the patch has been dropped from for-next, it broke existing
-devices. A better patch is being worked on.
+[...]
 
-Cheers,
-Benjamin
+> Ming Yu (7):
+>   mfd: Add core driver for Nuvoton NCT6694
+>   gpio: Add Nuvoton NCT6694 GPIO support
+>   i2c: Add Nuvoton NCT6694 I2C support
+>   can: Add Nuvoton NCT6694 CANFD support
+>   watchdog: Add Nuvoton NCT6694 WDT support
+>   hwmon: Add Nuvoton NCT6694 HWMON support
+>   rtc: Add Nuvoton NCT6694 RTC support
+> 
+>  MAINTAINERS                         |  12 +
+>  drivers/gpio/Kconfig                |  12 +
+>  drivers/gpio/Makefile               |   1 +
+>  drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++
+>  drivers/hwmon/Kconfig               |  10 +
+>  drivers/hwmon/Makefile              |   1 +
+>  drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
+>  drivers/i2c/busses/Kconfig          |  10 +
+>  drivers/i2c/busses/Makefile         |   1 +
+>  drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++
+>  drivers/mfd/Kconfig                 |  15 +
+>  drivers/mfd/Makefile                |   2 +
+>  drivers/mfd/nct6694.c               | 388 ++++++++++++
+>  drivers/net/can/usb/Kconfig         |  11 +
+>  drivers/net/can/usb/Makefile        |   1 +
+>  drivers/net/can/usb/nct6694_canfd.c | 832 ++++++++++++++++++++++++
+>  drivers/rtc/Kconfig                 |  10 +
+>  drivers/rtc/Makefile                |   1 +
+>  drivers/rtc/rtc-nct6694.c           | 297 +++++++++
+>  drivers/watchdog/Kconfig            |  11 +
+>  drivers/watchdog/Makefile           |   1 +
+>  drivers/watchdog/nct6694_wdt.c      | 307 +++++++++
+>  include/linux/mfd/nct6694.h         | 102 +++
+>  23 files changed, 3669 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-nct6694.c
+>  create mode 100644 drivers/hwmon/nct6694-hwmon.c
+>  create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+>  create mode 100644 drivers/mfd/nct6694.c
+>  create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+>  create mode 100644 drivers/rtc/rtc-nct6694.c
+>  create mode 100644 drivers/watchdog/nct6694_wdt.c
+>  create mode 100644 include/linux/mfd/nct6694.h
+
+I will apply this the other side of the pending merge-window.
+
+-- 
+Lee Jones [李琼斯]
 
