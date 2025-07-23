@@ -1,144 +1,154 @@
-Return-Path: <linux-usb+bounces-26103-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26104-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D899CB0EF09
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 11:59:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3DFBB0EF27
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 12:04:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6EE616B860
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 09:59:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CF8E1C8635D
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 10:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D1028C01E;
-	Wed, 23 Jul 2025 09:59:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7442628C5B0;
+	Wed, 23 Jul 2025 10:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sCsvzskT"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EktbJzhf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01BE280325;
-	Wed, 23 Jul 2025 09:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33ED286D4C
+	for <linux-usb@vger.kernel.org>; Wed, 23 Jul 2025 10:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753264744; cv=none; b=e8Li3cpxCznEs1TPapWtDvKkz176xCVJfmC34S9NG9+S9X1JS0Hyrr/TYn3qbhPkCfH2m/c7Vhs2HkjIm3lKkPZYf1pKR4qhde5Pjgr71FXLpUNXnulK0/0fPHn4bkZ4kbhaBQbR44jpL8aLbLH4/YdOchpAEWaW9V5hpGLvjho=
+	t=1753264992; cv=none; b=OlkKU6mwbX1/MsmV7dtq/UoX98N9nLBgPMP15E5TThjwibI0+6YuBNL/byz757wxx3RJwup+pnFFroeCZUJMlybi+wH5iGX/kHUML0uFQTclQyXQgJslRDGmiS+YHzItieBNBL+nBX60FQJIHEefYtDCdT+vzzO5bqUsMNogwS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753264744; c=relaxed/simple;
-	bh=yzX7va2srxpQsEnQrCqzNSATBc4ZgUiYAKZ5VunBZIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nA3CmAEuu5Ibf9h1x67b7O/5WiYW7FiDCp9ELXP5Bep3zChqm/UtDJuyxgUTZ3RuGq/InxHo6F8/zEVIlClsn4dmVXExRO8XZBtPge5rjJf3oMA2EMhWoJ8DB1UZ3ApjdF/NAl/Y1aPGP9Asr7dVcAotB60o/hT18yMCxGqeudM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sCsvzskT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0008C4CEE7;
-	Wed, 23 Jul 2025 09:58:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753264743;
-	bh=yzX7va2srxpQsEnQrCqzNSATBc4ZgUiYAKZ5VunBZIw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sCsvzskTIiUISMxcu3iQM4Mfm3ktUPUQqQFseLTYboda08WkEP3zRtfrg7joDVUka
-	 uvkd+F0St/5hNrzlG6oLHsGtTErA1r82vjNuu7cCbCYLabFfJjPJTPZfNijtXL7Y40
-	 9KWR90q5fYU9f6Z0Ajws0gD8n3urDLp4zn/r30AkGidlSE0aMtIdtgWcm7rjRfBGkl
-	 U37hX6bmqcHXcIbFp7lvRSOhPbFKHdQC4mzVsPecdfQer7drjEAEBtnmoV6+dNbuGh
-	 GYC689eGG45h6W8216ZdckWnBSlC0euXCL3NVZGIrqi6fyRHzICQjKp6RJgngvymvC
-	 ZhC3wk7Q5SAwg==
-Date: Wed, 23 Jul 2025 10:58:56 +0100
-From: Lee Jones <lee@kernel.org>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v14 0/7] Add Nuvoton NCT6694 MFD drivers
-Message-ID: <20250723095856.GT11056@google.com>
-References: <20250715025626.968466-1-a0282524688@gmail.com>
+	s=arc-20240116; t=1753264992; c=relaxed/simple;
+	bh=FRb1qiH3o0lBrK696PgM2GZRUTuGEcb/TysNiZWRTjs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GhX+phE+Q1BGtVQh7en6T2iptULaI7Ndo1UI5HEUbK+M1H4q0Xc8zQcgQwvVajVs/yttxVCOxWWCUoxjthb/6gHOISIqLlJAPRvdEfpav4n+wdbBjXg2IEIk/S68hivBpc9Bnmy/mYowrYOISqoXpsUhW8sSO38trzPv+fK6+Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EktbJzhf; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-ae6fa02d8feso942442566b.0
+        for <linux-usb@vger.kernel.org>; Wed, 23 Jul 2025 03:03:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1753264988; x=1753869788; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nM1jVIuamez5M+6HVwApfA2A4Uhe2e5VzTRsWi7W/gQ=;
+        b=EktbJzhfucvM0krtabXvgfc80xq9eDf8l/eN3xz/1Nzh0+5Zm+mU+B+oJrqnGPk8b2
+         tum54brUGd+VXs0PnXDQGNrw3mfZNWWmvWCCzSCHN0XJ4dRhy+D3roWwJUoKsuLdassn
+         hfzCtsYyngpOFOZf/6U7Nx0EBWcBBE/SiDX7RwRFzXgMB5RUVy7VZDpJlQTEGL7A2T6j
+         w1rzDYpR0IF9QqzUDkQB891E1giKEfPpw2gQJBCpTON5H5ZBTfW754ExipJo2gPX95Ys
+         T2O79TOC0/Pbci80qb+owp2EWPDj518BDWlndT8p3I0/1fISg7nxu+qRnKVl4CUybM0S
+         WUDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753264988; x=1753869788;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nM1jVIuamez5M+6HVwApfA2A4Uhe2e5VzTRsWi7W/gQ=;
+        b=GZEoQPu1n3NgcpSUhOs68n8kWo9N25Bxu4WEut9nx3MSEeDaBOYX0VFlBYMjeAf/9B
+         AYHcnnNP5oXR+fF9vIOVUvLkZC5SwHUOtEusdK8GjZVGL08S3aCS79grpTVYmbPfHUYk
+         6Lv8Xbd9rbUBmNY/jF/Kvachb+hNzaJaZg1S3ftFocWipbCMH1WChsBjtjwzAqxZrAcm
+         8i3Gw+TVPJwPpVbLS/egFRgZLbDTkDAYemZVgkZiFOpx/6KcEW0gBLVOXt6cTVkYNepp
+         VD4S0Uu6mN5g9gyG0co4+RUILIudeYmH/Ab8HUHAbkKj3fzYNg3ZOcLkJA5SM1t+f8px
+         b9pA==
+X-Forwarded-Encrypted: i=1; AJvYcCVXrpCbXhRsJWSWHDCHX/OUdxWYCVEjv2dYdMia5PCziS8/kM9oeQbgdsOHRyI/i4fLMchBYb0PZs4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhxMZiSoWslmtp9qda9nO3ovvclakYLOiJ0QtJe4/JpuSz6yVz
+	WPdejUaTlpnJNLdvdU06dsE0ROuqqOk8/78udPMUP6WOS1GYsm6FYJ58laMPlcT5LrE=
+X-Gm-Gg: ASbGncsvwpbq5pIhneyMRyTTrfle8PkoTxqUANylBlU5mW9x9uVINQOGzDNBV4+XIoB
+	srgzcweGy1k00oZMD+2ZJ7oH2NYebRbLzc68YR4ksWPpRxwu42GfQrC9uKqvXL1lZcVfPC66X22
+	IUwU32WkquOH2AabOR9kyvqHCv1zR+dbl5X7BxSucsT2pdH635H4CELQDPKlwQGcAUYIBmjP1Ti
+	mr9AfE4A+dC4RZTwWMeZgcV3oVhDqpPpcCKZ66WmQfObteQj5Jp/p3kv2SaKsi7PCLnXXXBtMHV
+	kFL4AB3/B1O7Mq7yuG4/RsP2g3FbI0SFgCoFMcIUqT6a25gM3B84W+xNBQs16GJ8+xQFG6FoahH
+	93/Wa1NN7Xp9CGYnT9oRF4sue0y5o4lAzugnMct5MGbhDKuRO6FakpvFoQUSbhs/E
+X-Google-Smtp-Source: AGHT+IHfkzSwbGur1NwDeKeURLOKGW+DVfaaRz59/h5ZYqfN8olyIRuFnqm0vC4m7ZjmRZpOt3tqYA==
+X-Received: by 2002:a17:907:2da8:b0:ae9:b800:2283 with SMTP id a640c23a62f3a-af2f6c0a946mr224628566b.15.1753264988234;
+        Wed, 23 Jul 2025 03:03:08 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1375:cb01:9949:2e73:6e1:36f7? ([2001:a61:1375:cb01:9949:2e73:6e1:36f7])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-612c9071069sm8158777a12.50.2025.07.23.03.03.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Jul 2025 03:03:07 -0700 (PDT)
+Message-ID: <77738f53-591f-4cfa-b65b-9789911ca4b3@suse.com>
+Date: Wed, 23 Jul 2025 12:03:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usbnet: Set duplex status to unknown in the absence of
+ MII
+To: yicongsrfy@163.com, oneukum@suse.com
+Cc: andrew+netdev@lunn.ch, andrew@lunn.ch, davem@davemloft.net,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org, yicong@kylinos.cn
+References: <6373678e-d827-4cf7-a98f-e66bda238315@suse.com>
+ <20250723084456.1507563-1-yicongsrfy@163.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250723084456.1507563-1-yicongsrfy@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250715025626.968466-1-a0282524688@gmail.com>
 
-On Tue, 15 Jul 2025, a0282524688@gmail.com wrote:
-
-> From: Ming Yu <a0282524688@gmail.com>
+On 23.07.25 10:44, yicongsrfy@163.com wrote:
+> On Wed, 23 Jul 2025 09:17:02 +0200 Oliver <oneukum@suse.com> wrote:
+>>
+>> On 23.07.25 03:29, yicongsrfy@163.com wrote:
+>>
+>>>   From these two tests, we can conclude that both full-duplex
+>>> and half-duplex modes are supported — the problem is simply
+>>> that the duplex status cannot be retrieved in the absence of
+>>> MII support.
+>>
+>> Sort of. You are asking a generic driver to apply a concept
+>> from ethernet. It cannot. Ethernet even if it is half-duplex
+>> is very much symmetrical in speed. Cable modems do not, just
+>> to give an example.
+>>
+>> I think we need to centralize the reaction to stuff that is not ethernet.
 > 
-> This patch series introduces support for Nuvoton NCT6694, a peripheral
-> expander based on USB interface. It models the chip as an MFD driver
-> (1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
-> WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
+> Thanks!
 > 
-> The MFD driver implements USB device functionality to issue
-> custom-define USB bulk pipe packets for NCT6694. Each child device can
-> use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
-> a command. They can also request interrupt that will be called when the
-> USB device receives its interrupt pipe.
-> 
-> The following introduces the custom-define USB transactions:
-> 	nct6694_read_msg - Send bulk-out pipe to write request packet
-> 			   Receive bulk-in pipe to read response packet
-> 			   Receive bulk-in pipe to read data packet
-> 
-> 	nct6694_write_msg - Send bulk-out pipe to write request packet
-> 			    Send bulk-out pipe to write data packet
-> 			    Receive bulk-in pipe to read response packet
+> I think I understand what you mean now.
+> You're suggesting to create a unified interface or
+> framework to retrieve the duplex status of all CDC
+> protocol-supported devices?
 
-[...]
+Well no. We have to understand that the difference in duplex
+status apply only to a subset of devices. In a way the network
+layer is deficient in only having an unknown status rather than
+an unknown and an inapplicable status.
 
-> Ming Yu (7):
->   mfd: Add core driver for Nuvoton NCT6694
->   gpio: Add Nuvoton NCT6694 GPIO support
->   i2c: Add Nuvoton NCT6694 I2C support
->   can: Add Nuvoton NCT6694 CANFD support
->   watchdog: Add Nuvoton NCT6694 WDT support
->   hwmon: Add Nuvoton NCT6694 HWMON support
->   rtc: Add Nuvoton NCT6694 RTC support
-> 
->  MAINTAINERS                         |  12 +
->  drivers/gpio/Kconfig                |  12 +
->  drivers/gpio/Makefile               |   1 +
->  drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++
->  drivers/hwmon/Kconfig               |  10 +
->  drivers/hwmon/Makefile              |   1 +
->  drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
->  drivers/i2c/busses/Kconfig          |  10 +
->  drivers/i2c/busses/Makefile         |   1 +
->  drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++
->  drivers/mfd/Kconfig                 |  15 +
->  drivers/mfd/Makefile                |   2 +
->  drivers/mfd/nct6694.c               | 388 ++++++++++++
->  drivers/net/can/usb/Kconfig         |  11 +
->  drivers/net/can/usb/Makefile        |   1 +
->  drivers/net/can/usb/nct6694_canfd.c | 832 ++++++++++++++++++++++++
->  drivers/rtc/Kconfig                 |  10 +
->  drivers/rtc/Makefile                |   1 +
->  drivers/rtc/rtc-nct6694.c           | 297 +++++++++
->  drivers/watchdog/Kconfig            |  11 +
->  drivers/watchdog/Makefile           |   1 +
->  drivers/watchdog/nct6694_wdt.c      | 307 +++++++++
->  include/linux/mfd/nct6694.h         | 102 +++
->  23 files changed, 3669 insertions(+)
->  create mode 100644 drivers/gpio/gpio-nct6694.c
->  create mode 100644 drivers/hwmon/nct6694-hwmon.c
->  create mode 100644 drivers/i2c/busses/i2c-nct6694.c
->  create mode 100644 drivers/mfd/nct6694.c
->  create mode 100644 drivers/net/can/usb/nct6694_canfd.c
->  create mode 100644 drivers/rtc/rtc-nct6694.c
->  create mode 100644 drivers/watchdog/nct6694_wdt.c
->  create mode 100644 include/linux/mfd/nct6694.h
+If we are to retain a single status for simplicity, then
+I'd say that the default being half duplex rather than
+unknown is wrong.
 
-I will apply this the other side of the pending merge-window.
+> This seems like a rather big undertaking, and one of the key
+> reasons is that the CDC protocol itself does not define anything
+> related to duplex status — unlike the 802.3 standard, which
+> clearly defines how to obtain this information via MDIO.
 
--- 
-Lee Jones [李琼斯]
+CDC is not a network protocol. CDC is a protocol for talking
+to network devices. CDC can define a way to transmit duplex
+information. If the protocol under CDC does not have the notion,
+this will be of no use.
+
+> Coming back to the issue described in this patch,
+> usbnet_get_link_ksettings_internal is currently only used in
+> cdc_ether.c and cdc_ncm.c as a callback for ethtool.
+> Can we assume that this part only concerns Ethernet devices
+> (and that, at least for now, none of the existing devices can
+> retrieve the duplex status through this interface)?
+
+Yes. It is not really that important. But strictly speaking the
+network layer is using the wrong default.
+
+	Regards
+		Oliver
+
 
