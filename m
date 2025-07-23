@@ -1,128 +1,100 @@
-Return-Path: <linux-usb+bounces-26100-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26101-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DAD9B0EE6E
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 11:29:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEB7BB0EE7C
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 11:32:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C6D6546DEA
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 09:29:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDF0A3AED27
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 09:31:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37DB6286D55;
-	Wed, 23 Jul 2025 09:29:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E235283FDE;
+	Wed, 23 Jul 2025 09:32:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZnufFwsv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.actia.se (mail.actia.se [212.181.117.226])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B9A3FB1B;
-	Wed, 23 Jul 2025 09:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.181.117.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECA51C84D0;
+	Wed, 23 Jul 2025 09:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753262956; cv=none; b=OWPSaBp7Inz8NBAflzU/k8fy7gXdQi2Y65xSF21AiJnTYf1QKZnjq5wzDDexPw4sCOJwWMB3tnf9Wa8PCX8FUTr5Uc4yJZmg0GPggwri1LVPTdE9IwvaUJqAzKY4WZsjmSrpN8O8/PUpc45DRgXQ/xO6s2cKqu3HZMUMdHt+eJ4=
+	t=1753263141; cv=none; b=BTbvWI3Do07t+vjX5rdMkgy4pm/DKgXcSc40vvs2BsCY3guOEvKuDPB2bWp8qK1D2AxFSQXP38to0pfkjBZCxLWxeF+YLdo3CCEtthk/+3FjU7YsajWT5tVbSC9D9z8WGtyEomrFUByUXcaUq9asZQ2vaIA2N/Tm7LcmELH34UE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753262956; c=relaxed/simple;
-	bh=grOY7rG/X+b9Vqa7udJpstXqVwojxMiy+5DRZZXGdFA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=jQyUq/xu6XTNTOyt5cQ2L7HdoC+ip9Vwd6bSJHwHyx7z4/w0oTqMgcU6qljswCzCB4QCtI6mhims2nF9ZH7eKST4zYOgtnicVFBqKd30NOdXojlny4CPqbXXIIyA8UKqg7qxM/XibKHb4WLSfVtibNsw+92WfcE+30hpHPhkQAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=actia.se; spf=pass smtp.mailfrom=actia.se; arc=none smtp.client-ip=212.181.117.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=actia.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=actia.se
-Received: from S036ANL.actianordic.se (10.12.31.117) by S036ANL.actianordic.se
- (10.12.31.117) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.57; Wed, 23 Jul
- 2025 11:29:03 +0200
-Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
- S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%6]) with mapi id
- 15.01.2507.057; Wed, 23 Jul 2025 11:29:03 +0200
-From: John Ernberg <john.ernberg@actia.se>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>, Ming Lei <ming.lei@canonical.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] net: usbnet: Avoid potential RCU stall on LINK_CHANGE
- event
-Thread-Topic: [PATCH] net: usbnet: Avoid potential RCU stall on LINK_CHANGE
- event
-Thread-Index: AQHb8Xe2qza52xx55UmGbnkg6Pc/lg==
-Date: Wed, 23 Jul 2025 09:29:03 +0000
-Message-ID: <aICrWl2TTTInbfT8@w447anl.localdomain>
-References: <20250710085028.1070922-1-john.ernberg@actia.se>
- <20250714163505.44876e62@kernel.org>
- <74a87648-bc02-4edb-9e6a-102cb6621547@actia.se>
- <20250715065403.641e4bd7@kernel.org>
- <fbd03180-cca0-4a0f-8fd9-4daf5ff28ff5@actia.se>
- <20250716143959.683df283@kernel.org>
- <55147f36-822b-4026-a091-33b909d1eea8@actia.se>
- <20250718161825.65912e37@kernel.org>
-In-Reply-To: <20250718161825.65912e37@kernel.org>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-esetresult: clean, is OK
-x-esetid: 37303A2955B14450647C67
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <95DD33E56AD5674EBC1A132FFD9750A6@actia.se>
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1753263141; c=relaxed/simple;
+	bh=VAILaPd6nBnwY1RmU2BFZxST8YPq75mfdT1tCy/Ki2g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hU6U5gfUVHPha7xQHCxRW5httMHvTlN2HAGR0PlCEa9ofdf1jCkD3Ur2UwB02ZiwJ1DwYL36YHA/BuASzea6bvPCVm9Ts6svsrGgRcqB0BPF5iWkNtNJBFRaecBpgmto/BhqTea+Kk3jfgRuudPNohMXAWQpNDAhD2avSSoeHZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZnufFwsv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37D9EC4CEF4;
+	Wed, 23 Jul 2025 09:32:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753263138;
+	bh=VAILaPd6nBnwY1RmU2BFZxST8YPq75mfdT1tCy/Ki2g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZnufFwsvby3EUHi8G66LPXd83iTs2bNT5ZtWBcECbEL1NFTQ4wPQVdWcgh6IgUJ1B
+	 vQ5Y+w3ExxNcIL0bV9wzz8132Fgx8JDJXHS0BdBqQmsHBaqygUJSinBbyr6YKcWOil
+	 puC6+qj9Go9yBAr8lTdHx7XuQ0OhfHg6l8Ojg1RxrGUs8ZHoWY0cn0FNvm2cAHtsH+
+	 GixdoOJWqxtfdzJ7AZSm7AF9sd6By96LAbXmym/noCJTGhkO0jeRPgnfWvBnSEXZBa
+	 MFD5BuEIU4QxKWqXz77iL7nH2kXVQuZ/HCR5pRzY5KPSmlQcWN1abfomoxC0F/lO5u
+	 QEM1r5vr+mkJA==
+Date: Wed, 23 Jul 2025 11:32:14 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>, 
+	jikos@kernel.org, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] HID: core: Reject report fields with a size or count of 0
+Message-ID: <34ks6futbrmunsq2tbz75jwqg64lpk4pg6udbbk3yo2exm657b@3fivbjjdcyl4>
+References: <68791b6f.a70a0220.693ce.004b.GAE@google.com>
+ <8a4eb6b0-f640-4207-9f05-83e06080410b@rowland.harvard.edu>
+ <lrhydvc7huuqck2kvqzobqt7hhwt36zwsa2i3fpegbpykt5q43@2md6gfitjlb3>
+ <a2c3537a-8ddc-467f-a9f4-b4d413914914@rowland.harvard.edu>
+ <voiysrjm3okjtaz7axqupr2jk5yyvxsqgagbwrsey4z24g6rf4@xb75ss3bwol5>
+ <bd033800-53f0-4d5a-a52b-b0e01ac48c12@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bd033800-53f0-4d5a-a52b-b0e01ac48c12@rowland.harvard.edu>
 
-Hi Jakub,
+On Jul 21 2025, Alan Stern wrote:
+> On Mon, Jul 21, 2025 at 03:05:58PM +0200, Benjamin Tissoires wrote:
+> > > So then would it be better to accept these report fields (perhaps with a 
+> > > warning) and instead, harden the core HID code so that it doesn't choke 
+> > > when it runs across one of them?
+> > > 
+> > 
+> > Yeah, that seems like the best plan forward.
+> > 
+> > [sorry on reduced setup for the next 3 weeks, so I can't really debug
+> > the entire thing now.]
+> > 
+> > Though, we should probably not annoy users unless we are trying to do
+> > something that won't be needed. I doubt that Saitek gamepad will ever
+> > call the faulty functions, so why putting an error in the logs when it's
+> > working fine?
+> 
+> All right.
+> 
+> Probably the best way to do this is simply to revert the commit that's 
+> already applied and then merge a new patch to harden the core.  Would 
+> you like me to post the reversion patch or do you prefer to do it 
+> yourself?
 
-On Fri, Jul 18, 2025 at 04:18:25PM -0700, Jakub Kicinski wrote:
-> On Fri, 18 Jul 2025 09:07:26 +0000 John Ernberg wrote:
-> > > Thanks for the analysis, I think I may have misread the code.
-> > > What I was saying is that we are restoring the carrier while
-> > > we are still processing the previous carrier off event in
-> > > the workqueue. My thinking was that if we deferred the
-> > > netif_carrier_on() to the workqueue this race couldn't happen.
-> > >=20
-> > > usbnet_bh() already checks netif_carrier_ok() - we're kinda duplicati=
-ng
-> > > the carrier state with this RX_PAUSED workaround.
-> > >=20
-> > > I don't feel strongly about this, but deferring the carrier_on()
-> > > the the workqueue would be a cleaner solution IMO.
-> > >  =20
-> >=20
-> > I've been thinking about this idea, but I'm concerned for the opposite=
-=20
-> > direction. I cannot think of a way to fully guarantee that the carrier=
-=20
-> > isn't turned on again incorrectly if an off gets queued.
-> >=20
-> > The most I came up with was adding an extra flag bit to set carrier on,=
-=20
-> > and then test_and_clear_bit() it in the __handle_link_change() function=
-.
-> > And also clear_bit() in the usbnet_link_change() function if an off=20
-> > arrives. I cannot convince myself that there isn't a way for that to go=
-=20
-> > sideways. But perhaps that would be robust enough?
->=20
-> I think it should be robust enough.. Unless my grep skills are failing
-> me - no drivers which call usbnet_link_change() twiddle the link state
-> directly.
->=20
-> Give it a go, if you think your initial patch is cleaner -- it's fine.
->=20
+Given that the faulty commit is on top of for-6.17/core, I can simply
+force push to the parent, and also force push the for-next branch. That
+should do the trick.
 
-Apologies for the delay, I was stuck in a higher priority issue.
+Can you post your s32ton fix on top of that then?
 
-I've tested this approach and it looks promising. Will send this approach
-as a v2 later today.
-
-Thank you for the guidance, very much appreciated.
-
-Best regards // John Ernberg=
+Cheers,
+Benjamin
 
