@@ -1,135 +1,123 @@
-Return-Path: <linux-usb+bounces-26113-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26114-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9302BB0F210
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 14:19:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B7C5B0F226
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 14:25:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7626F7B1B66
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 12:18:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E8CB968064
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 12:24:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42312E5B32;
-	Wed, 23 Jul 2025 12:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1082E7BAB;
+	Wed, 23 Jul 2025 12:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OR6+JZHd"
+	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="I7h3yt4G"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.forwardemail.net (smtp.forwardemail.net [121.127.44.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E60289E3D;
-	Wed, 23 Jul 2025 12:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1988D2E7657
+	for <linux-usb@vger.kernel.org>; Wed, 23 Jul 2025 12:24:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=121.127.44.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753273157; cv=none; b=g67mA9JMb+5G5o/L5VlfWhJ/cCufOEN+Gbuocd261CrORw6+g5BGAuqXb0o3fv+14QxJRPlabXiDDQxiDiTIbSgCoKbYkiWG2BoKHQ+FDg73euLZSj1N4NJzA4mvCcH4GQuQLmoFnhFY6CFJ7pQl9uGK8GhmoJg1rpitN6RQsw4=
+	t=1753273442; cv=none; b=gm8rzkfhPHK9/QLjc3dz+BEBcHQPKM/agU8/unyfb/pK2qFPdWzylNL0g01arA6USVZ/ylQ2qaVoaUdomEBSt2ZJzQrOCSwOBy97OJNPsf9ztv5FGJjqyZ2NuSczwg+VcJ12Wq88OSgZo/c0Yf6fECOP341mfKH0b9Eu/TCvm1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753273157; c=relaxed/simple;
-	bh=POuTDoQ9PpSydluEqziXn2gVwFFvN6mDSjaJOEBnvUY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TtBe2mNt67vWBRI5gqVJUMyc7kzuBpupaL2kBF9cj84UvSJBfbTYhwv6QQjalXrPqQxpdI2Oz2puEyQswTYC/kXbs9M2jn6meTzOq+xHBISsjJSclLwWR0l0w754Ql3r9iwHBhoGirBJLkDxTIAukVoHvGAjdO5srSh1Wg8/Zdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OR6+JZHd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DB4C4CEE7;
-	Wed, 23 Jul 2025 12:19:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753273155;
-	bh=POuTDoQ9PpSydluEqziXn2gVwFFvN6mDSjaJOEBnvUY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OR6+JZHdfGfBB+GjdRuPEkv2fUmvV3Ihf86Qs1cb/Z2FB/mmmnxMuw1YFMmB5a2h0
-	 2H6dDlD51Jglq3WSNPep/Ejjoyx6PxIdM8B0OFienVPR46GBB0MsV/9eN29M0Jw/vK
-	 fPAkga3FScth/T8fyiZLSl276bRhWpFYq/hoU9N4gmtqT6qqPTeMwlGhWV6O0e74Rl
-	 lh8312qzlCEJRCXLtKZrl+ywkQ74zVBuHKoXHD0/JG4DIaFZlHnR+c8NXNd066Z96d
-	 nCeyO0DkJPuxvZXtlkg1hhGz0+mYQYA0B1DTXSJyohf+bitKllSbVONZBpdY7FLy94
-	 BgaEPHKAfq2nA==
-Date: Wed, 23 Jul 2025 13:19:08 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	s=arc-20240116; t=1753273442; c=relaxed/simple;
+	bh=LWJ1M0vsHLaIqbyGqsKzDR+idrh+U3gQNGdPylTuhek=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CRbqwsT4z/A3TRfoCp6aR2L5mR2euxe7p9SnBEUVc1GKjCF7UuFxWbVIS8v8q7DUO9uw1M9yJfbUnizuUjcz1tB4gLzZZ2tJXniJZ/a79l8XWgS2mdqnI6KvkEZDsIdcz2xxvryttp4p5DId4dAgrFcaBMmZK5ULQ+ZkyVLpEV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=I7h3yt4G; arc=none smtp.client-ip=121.127.44.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
+ h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
+ Message-ID: Date: Subject: Cc: To: From; q=dns/txt; s=fe-e1b5cab7be;
+ t=1753273440; bh=TU8Jll/Gz9LNgDHoqWnxxdtmHuWsKcU+Qw3QQXvySMM=;
+ b=I7h3yt4GUgd9A8W5sLfn0h8ig/Gc/wwYpSthy3TWe88EFjK2HpmEj37+EavPQuF1Lz5VXxcUI
+ 8HzfiMhYhv9fmp6I0EIn4cwHxxnPP/oyP6bcCjS0CAnh9l0Z8K+jcT8lt7Hsw5ef83FzhbcV2Pt
+ Y4VbQ2jrlFH7qExJ+ALB3gJbgnGUW5ZuqvCrJMhE2DkSfJIT12Thy6r2vxUOwNhkcwKP2fDAZ9g
+ PCtroPo8WFmhjl+CZ/lMrLWTvBC4V0pxPSnDIZ+7KnA9FXeeCIFqCImM3VS7OV79e60FRmbN5pM
+ x8KuNR0lpSNVBSlZS4D2Duwaiv8/oCF0qwQmM93eoZIA==
+X-Forward-Email-ID: 6880d45ccb0ee86f9731a0e0
+X-Forward-Email-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
+ 121.127.44.73
+X-Forward-Email-Version: 1.1.6
+X-Forward-Email-Website: https://forwardemail.net
+X-Complaints-To: abuse@forwardemail.net
+X-Report-Abuse: abuse@forwardemail.net
+X-Report-Abuse-To: abuse@forwardemail.net
+From: Jonas Karlman <jonas@kwiboo.se>
+To: Heiko Stuebner <heiko@sntech.de>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Yao Zi <ziyao@disroot.org>,
+	Chukun Pan <amadeus@jmu.edu.cn>,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: [PATCH v2 0/5] Enable USB audio offloading on Fairphone 4
- smartphone
-Message-ID: <00c2ac7c-763f-467f-8199-76de9f5d71b0@sirena.org.uk>
-References: <20250501-fp4-usb-audio-offload-v2-0-30f4596281cd@fairphone.com>
- <DBDAPORDD5IM.1BHXPK225E2PP@fairphone.com>
- <DBHIM4SA3OIK.PXX6HMDE93B8@fairphone.com>
- <ac3f1eb2-5830-4bda-bc57-c4d29c22aba0@sirena.org.uk>
- <DBJDZBYHR94V.1QGVALCL60M1X@fairphone.com>
+	Jonas Karlman <jonas@kwiboo.se>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH 06/11] dt-bindings: usb: dwc3: Add compatible for RK3528
+Date: Wed, 23 Jul 2025 12:23:04 +0000
+Message-ID: <20250723122323.2344916-7-jonas@kwiboo.se>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250723122323.2344916-1-jonas@kwiboo.se>
+References: <20250723122323.2344916-1-jonas@kwiboo.se>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="s26ZamLLlGnPk0Qb"
-Content-Disposition: inline
-In-Reply-To: <DBJDZBYHR94V.1QGVALCL60M1X@fairphone.com>
-X-Cookie: List was current at time of printing.
+Content-Transfer-Encoding: 8bit
 
+The USB dwc3 core on Rockchip RK3528 is the same as the one already
+described by the generic snps,dwc3 schema.
 
---s26ZamLLlGnPk0Qb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add the compatible for the Rockchip RK3528 variant.
 
-On Wed, Jul 23, 2025 at 01:09:35PM +0200, Luca Weiss wrote:
-> On Wed Jul 23, 2025 at 12:57 PM CEST, Mark Brown wrote:
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+---
+ Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> > As previously discussed they won't apply until after the merge window.
+diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+index fd1b13c0ed6b..0554dbc4b854 100644
+--- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+@@ -26,6 +26,7 @@ select:
+       contains:
+         enum:
+           - rockchip,rk3328-dwc3
++          - rockchip,rk3528-dwc3
+           - rockchip,rk3562-dwc3
+           - rockchip,rk3568-dwc3
+           - rockchip,rk3576-dwc3
+@@ -38,6 +39,7 @@ properties:
+     items:
+       - enum:
+           - rockchip,rk3328-dwc3
++          - rockchip,rk3528-dwc3
+           - rockchip,rk3562-dwc3
+           - rockchip,rk3568-dwc3
+           - rockchip,rk3576-dwc3
+@@ -135,6 +137,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - rockchip,rk3528-dwc3
+               - rockchip,rk3568-dwc3
+               - rockchip,rk3576-dwc3
+     then:
+-- 
+2.50.1
 
-> Sorry about that, I thought the conflict was for the 6.16 merge window,
-> not 6.17?
-
-There is a conflict.  You could check this yourself...
-
-> So I'm not aware of another conflict, that's why I was asking in the
-> first place.
-
-You were sending a content free ping:
-
-> > Please don't send content free pings and please allow a reasonable time
-> > for review.  People get busy, go on holiday, attend conferences and so=
-=20
-> > on so unless there is some reason for urgency (like critical bug fixes)
-> > please allow at least a couple of weeks for review.  If there have been
-> > review comments then people may be waiting for those to be addressed.
-> >
-> > Sending content free pings adds to the mail volume (if they are seen at
-> > all) which is often the problem and since they can't be reviewed
-> > directly if something has gone wrong you'll have to resend the patches
-> > anyway, so sending again is generally a better approach though there are
-> > some other maintainers who like them - if in doubt look at how patches
-> > for the subsystem are normally handled.
-
---s26ZamLLlGnPk0Qb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiA0zsACgkQJNaLcl1U
-h9AH6wf9ELo4l0meQaRhE0Vx8YMY2nfByC9Ukip/Q3TFsZ5P/t2r7WBg6LpGuB6G
-eCQe8Ij3e4NeK/gM1DOpSm4hAq9psN/hQJJ4TuTeIpXnHYj9xHWI7f6BD7Shl8TL
-rUdsxAdhmqFtks04vjgVBFI9ZzCKVrVgCgllgkv3qJFv24jPU89FED508O4v923I
-sh/95oHEe1SIsylpxWabv/qiV85mGyjzAwua1880+N4cTQb4+qpfPOJ5sF4Y26uv
-HePGs4rN7eQcf2EtrQTqIYkN3yjJwZ1FWSdmflPEgVh7jAEgy2/TPKwGV0hCvadt
-q9LG+Te7yykwpR31TYO4CecQNXSFJw==
-=FMQf
------END PGP SIGNATURE-----
-
---s26ZamLLlGnPk0Qb--
 
