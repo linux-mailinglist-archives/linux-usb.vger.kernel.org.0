@@ -1,56 +1,50 @@
-Return-Path: <linux-usb+bounces-26146-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26147-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E7F0B1072F
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 11:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 967E3B107EB
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 12:40:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 511255A0CDB
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 09:59:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD19417E17E
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 10:40:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A580325A63D;
-	Thu, 24 Jul 2025 09:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 592E5268684;
+	Thu, 24 Jul 2025 10:40:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o8zjl6KE"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZN1duoBj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC6125A340;
-	Thu, 24 Jul 2025 09:59:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F95267B15;
+	Thu, 24 Jul 2025 10:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753351145; cv=none; b=f9WXRI2VttsuPPf4hIZjXnUXWROLxVXcmZOD1ny6dOoSH3TwTicIUxX3DMK18CMc7of1xTQxCAUam7AYLkaGGrjMgj7ItNVEDvgsK0RR1d7Gk6Mo8uUU8pNFpFxO/FPNcslhU8gc7Q3r7b+R+75sUxMbcStqfVEVJO1gNCOXiFM=
+	t=1753353639; cv=none; b=juMx4Ulf+g5HE++sMZ+uWayBAW0cAsCT/qf9LoeF4xYE9JC1uVrtjbIWeOA6h6ZpZdJqXKpmTbEiubuvUioEXt7qwzP2lH0co3TuKSZPyqKtzHRYncBm5WMwozNwHcuV42W4tb1RbpOf+XHPR7sfWzS2a94aaMMahm5v0YrxkTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753351145; c=relaxed/simple;
-	bh=7fFKQFGIrQlvsWOC6tbYSk6Z6H86XX2wrDEJxYDP+LQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=A+B/LguPYiIt/zrHTauWDhj57z47ajxi1L1HZJL2IjoX6WZk/FQQYAScbhFSZbAP+1wPRbkKH5AHFjbwLiRNrTkWa+5uz9lxzQNDqmrusURhOKx4EB7q5ChBMre3alDyAWHbs62lFUpP7nwan9kZqINky92nXPYGpVSM6XRcfCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o8zjl6KE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5356C4CEED;
-	Thu, 24 Jul 2025 09:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753351144;
-	bh=7fFKQFGIrQlvsWOC6tbYSk6Z6H86XX2wrDEJxYDP+LQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=o8zjl6KEl0JCh7Esqu59ekgAgshEfKAv907IdfQ8B8683NSLq5R9whL64ZaRZ9vy5
-	 TL8eX/deaBgQQMIDEHCa1KzyG73cTTfib3oQ1sgsv+YMr3vONyR3GheFNQXOgMBlAc
-	 sM4XcIkDa8lp6QxVrK7d+NVZfwEesez3njbccxpK5BrTu0skr0MrtuPofEoL8V0kRl
-	 VFii2MONvPNRPwviidA7ZrY3D3CcoWj0CxZYzEfRRUUg74fgEdr7Fk8Zm6WThW3XnY
-	 qW1/deusJccZphkglar1f7H05eMSYAUqbu/6CCniGAPP4wiQBBP9PCdUWbKe/mNDlT
-	 7yBn6nFT6LQ+A==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1uesj5-000000006oO-3bRc;
-	Thu, 24 Jul 2025 11:58:59 +0200
-Date: Thu, 24 Jul 2025 11:58:59 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	s=arc-20240116; t=1753353639; c=relaxed/simple;
+	bh=gJurIb1RIEAGkbaxSmKkmIKmJ2RmvhU6AMDoRAsfWZM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YkGGJWEuT7tgpNE+O7y0dwvvXblg8E0xDkucp/PBfRwKdxHVEs4aLRRdsXIXMWmzAwsIon3Fkf0d+vcEOiAdEpoDvmEWGv+cVNB9C1PJK7L9iRj3iwjZsXDNY312H+8QzWbnhJRhiauKfQBdDhD7TH0XUNtQnoF7FDVtc4mrfBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZN1duoBj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD985C4CEF4;
+	Thu, 24 Jul 2025 10:40:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1753353639;
+	bh=gJurIb1RIEAGkbaxSmKkmIKmJ2RmvhU6AMDoRAsfWZM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZN1duoBj1m3lKE5Sw5qm0xhIupBIg1kme8zJjOzDAhtVRNsBAzePss9r+7ng99VSc
+	 80jKNE7cV1cTupbYtqPXBZrgNnBOU1LwOqbJTXtR3BBeJ7c3qzdzhJkxX8Nfpzx0X8
+	 IWJir+Qs4iDb5QV7hEj9J68TRAEZUz8UgF66bEgg=
+Date: Thu, 24 Jul 2025 12:40:32 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Johan Hovold <johan@kernel.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB serial device id for 6.17-rc1
-Message-ID: <aIID41gVBb1_HmxH@hovoldconsulting.com>
+Subject: Re: [GIT PULL] USB serial device id for 6.17-rc1
+Message-ID: <2025072420-slick-atonable-bf08@gregkh>
+References: <aIID41gVBb1_HmxH@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,30 +53,19 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aIID41gVBb1_HmxH@hovoldconsulting.com>
 
-The following changes since commit 89be9a83ccf1f88522317ce02f854f30d6115c41:
+On Thu, Jul 24, 2025 at 11:58:59AM +0200, Johan Hovold wrote:
+> The following changes since commit 89be9a83ccf1f88522317ce02f854f30d6115c41:
+> 
+>   Linux 6.16-rc7 (2025-07-20 15:18:33 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.17-rc1-2
+> 
 
-  Linux 6.16-rc7 (2025-07-20 15:18:33 -0700)
+Pulled and pushed out, thanks.
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.17-rc1-2
-
-for you to fetch changes up to ad1244e1ce18f8c1a5ebad8074bfcf10eacb0311:
-
-  USB: serial: option: add Foxconn T99W709 (2025-07-22 16:42:22 +0200)
-
-----------------------------------------------------------------
-USB serial device id for 6.17-rc1
-
-Here's a new modem device id.
-
-This has been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Slark Xiao (1):
-      USB: serial: option: add Foxconn T99W709
-
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
+greg k-h
 
