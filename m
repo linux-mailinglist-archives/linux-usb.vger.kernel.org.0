@@ -1,85 +1,109 @@
-Return-Path: <linux-usb+bounces-26123-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26124-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9629EB0FCA2
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 00:22:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72FF5B0FE5A
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 03:32:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77BA44E0C8B
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jul 2025 22:21:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B05A0546B84
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 01:32:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5AE827281F;
-	Wed, 23 Jul 2025 22:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 067571547C9;
+	Thu, 24 Jul 2025 01:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IZIvS/82"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="pZBAooeN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5880F215F4B;
-	Wed, 23 Jul 2025 22:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0E628E0F;
+	Thu, 24 Jul 2025 01:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753309313; cv=none; b=BIbAz6vQbVzGi7ch1yrwJFvGM/2OND4UJeVvErXF86bNThksrm3Y7jKMW2UrDLMS/qUdRaIpa3HZrfEmrVYK2gJanj0SUfFbq2fUHdWTSDTG/bCyABIAxQ272oWE1jMq5T73FzM8JWqSEJG2p9ULLaugmkkfjSlBtzKI6p5N6RY=
+	t=1753320727; cv=none; b=mtIm9HofyFCBXraDfbA3enf8zrEREgM6o++wUGHdeCQ+PdwY1htKvbHuHBvIwp9ap6lca1EhMNnebGCC78BuI9iPhhUYsc9WEVqyjF9Y6oH/ktoEQhReuxgbmDtq4URms4lOmQ3KjdeqNY4owyVuOQHi1mXHjCwbDyj11rSVLMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753309313; c=relaxed/simple;
-	bh=8PVTetr6krJCl5NHxCBpcVdg4mQmrN6W/cxBYHIjJ4I=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q2kLen3IUl5FBnAbmzKhZnu7UR0MbicrmgiTP9mrSj2MQsj1OBiTlcBETBWYlZyP5asSYFn58GsekALkVDek89u3CpGRZSZxgluphzenbAZwvdCztmnIVkLbB2sdViqwWYI5ME8PXflBH2rUdflWj0JS3DechZysJWvyLWIjt1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IZIvS/82; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FDC9C4CEE7;
-	Wed, 23 Jul 2025 22:21:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753309312;
-	bh=8PVTetr6krJCl5NHxCBpcVdg4mQmrN6W/cxBYHIjJ4I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=IZIvS/82VzPmU6FCNpG9SyyBLyy6kdbb+itSmVciLY6C2X6rVe/E3E0wJ8JMx06R4
-	 ggQBvsmkb0+ST8NcyCST6kG73J5MdLUg230qEwQRWdmtKNx7DlgUGa89HpDCN4Jblc
-	 rqmvYyR2LmgKHS2WMqeaCEo4xH5Faa+koafuAUAT5JUneqczexdvmbgSRkkuyGMGre
-	 6susTZcUBSBTjqhQOPaDM4lUn3W4vCQbVgsTXTe/Ur9b3+XMBxraHKHVPYF+zJIosh
-	 zSWxM1NlZTYnMgKNkJ/jrlcSgBDxoFuYQKOp2PrfSUcqFr1gNg3mx96gQD+88KDarq
-	 reo57r7VpTjaw==
-Date: Wed, 23 Jul 2025 15:21:51 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: yicongsrfy@163.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org, oneukum@suse.com,
- yicong@kylinos.cn
-Subject: Re: [PATCH] usbnet: Set duplex status to unknown in the absence of
- MII
-Message-ID: <20250723152151.70a8034b@kernel.org>
-In-Reply-To: <d8852211-e3ba-4c9e-a9ab-798e1b8d802e@lunn.ch>
-References: <1c65c240-514d-461f-b81e-6a799f6ea56f@lunn.ch>
-	<20250723012926.1421513-1-yicongsrfy@163.com>
-	<d8852211-e3ba-4c9e-a9ab-798e1b8d802e@lunn.ch>
+	s=arc-20240116; t=1753320727; c=relaxed/simple;
+	bh=eMCaAMgToeHTEFdiJ3MiKleOXM/l+gUrFlLQgweUVOI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=rsJummtTuzgNJ4UPNZjYIU4ZvQZjeSe9BlH2siTfPNYP9IdJPf8htdyxxiBPcqLfnEw18tvWWfu419YQepui35eHMZEf4uTq2/Ij7meHxLvhZ3Bx2wAkjQcwAktKzMMkKU9sdB1YRRx95rgTN9/5+bGFYaPiC+bqpS7MUcQ3f3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=pZBAooeN; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=bI
+	GWBSCbr5xCslura3QUWceaRXrDNmQ1wuyKrSAX7bE=; b=pZBAooeNCloY9lpQsx
+	udlDCzremMw/Nfm/RFmWfuHNXobGme6sSl9UodHhhKtDtqJf0sZ8/VM5Owg16FzU
+	treDMbo8B655K7HX/cQPgNcKPbqS02t2mbJsDRUUhb9bQUL6C8PS0Mdmnw/a6x6Q
+	immJPxJ+eiZFvKpprNqRnAQfc=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgDnL5H3jIFoQZMcAQ--.40865S2;
+	Thu, 24 Jul 2025 09:31:36 +0800 (CST)
+From: yicongsrfy@163.com
+To: kuba@kernel.org,
+	andrew+netdev@lunn.ch,
+	andrew@lunn.ch,
+	oneukum@suse.com
+Cc: davem@davemloft.net,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	yicong@kylinos.cn
+Subject: [PATCH v2] usbnet: Set duplex status to unknown in the absence of MII
+Date: Thu, 24 Jul 2025 09:31:33 +0800
+Message-Id: <20250724013133.1645142-1-yicongsrfy@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250723152151.70a8034b@kernel.org>
+References: <20250723152151.70a8034b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgDnL5H3jIFoQZMcAQ--.40865S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tw1xZry8ZrWkuw1rCr1xKrg_yoW8Gr45pF
+	WDAr4kAw1j93y8Zw4xZay09a4Yg3Wvqry7WFy7u398WFZxA3ZIqr18Ka42k34kKrW8GFya
+	vF4qgryav3Z093DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jiZ2fUUUUU=
+X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/1tbiLByU22iBg-T7UgAAsI
 
-On Wed, 23 Jul 2025 15:05:27 +0200 Andrew Lunn wrote:
-> > > Thanks for checking this.
-> > >
-> > > Just one more question. This is kind of flipping the question on its
-> > > head. Does the standard say devices are actually allowed to support
-> > > 1/2 duplex? Does it say they are not allowed to support 1/2 duplex?
-> > >
-> > > If duplex is not reported, maybe it is because 1/2 duplex is simply
-> > > not allowed, so there is no need to report it.
-> > >  
-> > 
-> > No, the standard does not mention anything about duplex at all.  
-> 
-> O.K. So please set duplex to unknown.
+From: Yi Cong <yicong@kylinos.cn>
 
-.. and update the commit message and the code comment to reflect 
-the outcome of the discussion better.
+Currently, USB CDC devices that do not use MDIO to get link status have
+their duplex mode set to half-duplex by default. However, since the CDC
+specification does not define a duplex status, this can be misleading.
+
+This patch changes the default to DUPLEX_UNKNOWN in the absence of MII,
+which more accurately reflects the state of the link and avoids implying
+an incorrect or error state.
+
+v2: rewrote commmit messages and code comments
+
+Link: https://lore.kernel.org/all/20250723152151.70a8034b@kernel.org/
+Signed-off-by: Yi Cong <yicong@kylinos.cn>
+---
+ drivers/net/usb/usbnet.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 6a3cca104af9..b870e7c6d6a0 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1013,6 +1013,13 @@ int usbnet_get_link_ksettings_internal(struct net_device *net,
+ 	else
+ 		cmd->base.speed = SPEED_UNKNOWN;
+ 
++	/* The standard "Universal Serial Bus Class Definitions
++	 * for Communications Devices v1.2" does not specify
++	 * anything about duplex status.
++	 * So set it DUPLEX_UNKNOWN instead of default DUPLEX_HALF.
++	 */
++	cmd->base.duplex = DUPLEX_UNKNOWN;
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(usbnet_get_link_ksettings_internal);
 -- 
-pw-bot: cr
+2.25.1
+
 
