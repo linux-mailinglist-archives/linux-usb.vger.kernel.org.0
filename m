@@ -1,127 +1,127 @@
-Return-Path: <linux-usb+bounces-26130-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26132-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA3B4B1023E
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 09:50:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 773D8B103C2
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 10:39:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C848E5A050F
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 07:49:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE1A117244D
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 08:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509F926C3A6;
-	Thu, 24 Jul 2025 07:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 116F12750EA;
+	Thu, 24 Jul 2025 08:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PQIdcdgC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [61.152.208.219])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5076026C396
-	for <linux-usb@vger.kernel.org>; Thu, 24 Jul 2025 07:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=61.152.208.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F458274B4D
+	for <linux-usb@vger.kernel.org>; Thu, 24 Jul 2025 08:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753343357; cv=none; b=IzZg0IuLlsrOK0X/g519T453ZY9my9eg9DAnB1T8DeSlYVYNS9NSbyNqr01KpqHhYOU61dacrM0gG6zGT/2JULrPmpiluvA/ERtljneSvzxCsDhio1Mg+96gNeUjFbZQEtfXt2CuJf1upX6y810nVrykcKhj2Idk0vRMbvjAsoU=
+	t=1753346354; cv=none; b=Oo4OrT91NrAbnCCvlMEw4AKFZwlR0jkdXNx1nnGSRwWWVG8Xta5JNN7hnTdjisPpAbLHJNQeBTqrcfMHUHSmUM0TqiLOIKg9izAEY3Cj7WJPY6qYblepDdu9GkzUCaLXx7+5b0joPVr8uH9rqSdON+v4dKNeMaz+ytCLvPWLM0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753343357; c=relaxed/simple;
-	bh=jcjaQYTMTRrx+WghJX3jlueR/iLAJpHiv6lfByqp1NE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ezq3chUUw5NdUelDUh6nqHUKtptCPmW1L8xtmzYQjaFRPW9iKzeqUmPm6gunCAjgBM9WxV9ikEhpaFAz/l0Cgm8d0VL+ujviinqZLgJ3jVKtmzwB+8AzettiHvW78G3crHtr9/quyvQhdRNIyDhw2rmcURgyRMX9Ytgdm5W9XYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=61.152.208.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1753342245-1eb14e1c3a854d0001-YVMibp
-Received: from ZXBJMBX03.zhaoxin.com (ZXBJMBX03.zhaoxin.com [10.29.252.7]) by mx2.zhaoxin.com with ESMTP id CZNMqECXxPG4FN1y (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 24 Jul 2025 15:30:45 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
-Received: from ZXSHMBX1.zhaoxin.com (10.28.252.163) by ZXBJMBX03.zhaoxin.com
- (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.44; Thu, 24 Jul
- 2025 15:30:44 +0800
-Received: from ZXSHMBX1.zhaoxin.com ([fe80::cd37:5202:5b71:926f]) by
- ZXSHMBX1.zhaoxin.com ([fe80::cd37:5202:5b71:926f%7]) with mapi id
- 15.01.2507.044; Thu, 24 Jul 2025 15:30:44 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
-Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.44; Thu, 24 Jul
- 2025 15:30:06 +0800
-Message-ID: <67fdd776-4329-04d8-6b4f-b5f11ee2105f@zhaoxin.com>
-Date: Thu, 24 Jul 2025 23:30:05 +0800
+	s=arc-20240116; t=1753346354; c=relaxed/simple;
+	bh=DPnU95ZJtHDimTEnJ4WU3skY6t7lEUuN/QC7PlHSgdg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KR9Ionrs9UBTbVr+MCiZWUYYBEF510CHApE8GA9IPStIa/6+TvDiYBPK18JwsgKVJJFSPROVemd7V3xThInoCZTij2rFcsrzFpSNwPJglc3+oUkMX1LMQ+/qPYXuOT+04+TdQfME9D+v6UHRRA+qd/pdMnNR4YOTAB08UbZAPYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PQIdcdgC; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b321bd36a41so705968a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 24 Jul 2025 01:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1753346352; x=1753951152; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=X0HMsTBmbQ4+9APSf+6vM24W99brsJT2SqN+LugoyEE=;
+        b=PQIdcdgCHk4ie4jfyyVGcVF0PGD2IHxurDTf+t82dxpMJv7voPv76msuOhK0zu2P8K
+         REoCSJU92BMI6KgMs9UBAE/OEAMwC7SJGBi2n/axMgfDYtZQq8mYp/snWU4ajjQRTPX2
+         T9zBXfWeIWWEKgqlE+py0zwPPsJDRWccV/Hac=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753346352; x=1753951152;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X0HMsTBmbQ4+9APSf+6vM24W99brsJT2SqN+LugoyEE=;
+        b=rX6n5IV1uBFvhLAq8O3d/3Iy3+L88sgQKKCtwsOOZx/R1ml2/wv49An23W2lJA0AYY
+         w/K8edqZe8Y45ZxDGzHLzZs+pNq7Y6J0b9owXYXhKSCFR+dPgTlqBItwyHmhrIiJVBdD
+         X61Hi5t/2nrWOtbFwB0oNlH+/Iorl37ytOBZvulpSH6mdmYd1p3tKQ0JFJB38tFZJfQD
+         4JBdEtUNGPnjXCaGV3COxNKwENXAU1lAevwwPFm3Cge97WCvoQAUJESVPPOyK14lkkPL
+         6odn2OkgSr7+lWg+n9sJsj8m176TOEx3MSAtOx76q/CBsQ7HQJhJga2od4HuEnCaqDPt
+         7c0A==
+X-Forwarded-Encrypted: i=1; AJvYcCU5c37ONBvqe5q5ZXGnM3RYSsR+aFdZXxMfbCl7XBiKb28ZtvNgCrM80L5KHPoL6auQh5lMwXV/uG8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNSDA/7KeXDPhefU/qw3ejfaQ/2d0arVX4s4ojcxdHAdyf60jZ
+	6/kaAKePkJbEwf4PB5PfNDmLyXmFrZmEeFnidhxhuqkDOJdqAzSj7cs2FHkMNC8KqdJno2mNki6
+	1VRt8YSoYEZFPaHtj2X3WDSgVFLMl/PGU2nFuaqrs
+X-Gm-Gg: ASbGnct/yhPi71gPWPKcLh1pbRQ/l9pZ+Wm3lef9pqyQ4g3cdw+1lAKtxoDh+G5Ex6Y
+	SoEOxwnKMuI5yor9o0Dr/GwQzdI5kocGsKXIsc9PDt1NCLEcI09blxO0mjsBOboMcSHe6l1YVxa
+	sgGe+oh2eAuYfqkC1XYluvLLfKStIehaFdt5RcNxNiUZfjlqTDqv5IjH4uu0Rr0aEmN+GfDz133
+	8QyT0gCZ/zE7lSWPp3aNoKFG8TMByrkzQ==
+X-Google-Smtp-Source: AGHT+IF6GlHoPfQBE7VcJ/+n3gkrTpAcXrzNcm2cizHwNSOzKAmihYyhhHBa69uI0PTyutNd71gW6mxdz1twf+0MKAQ=
+X-Received: by 2002:a17:90b:6cb:b0:313:1a8c:c2d3 with SMTP id
+ 98e67ed59e1d1-31e508172ebmr7030678a91.22.1753346352248; Thu, 24 Jul 2025
+ 01:39:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] usb:xhci:Fix slot_id resource race conflict
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH] usb:xhci:Fix slot_id resource race conflict
-To: Greg KH <gregkh@linuxfoundation.org>
-CC: <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <WeitaoWang@zhaoxin.com>, <wwt8723@163.com>,
-	<CobeChen@zhaoxin.com>
-References: <20250724124012.296934-1-WeitaoWang-oc@zhaoxin.com>
- <2025072457-quaking-each-ea25@gregkh>
-From: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <2025072457-quaking-each-ea25@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Moderation-Data: 7/24/2025 3:30:42 PM
-X-Barracuda-Connect: ZXBJMBX03.zhaoxin.com[10.29.252.7]
-X-Barracuda-Start-Time: 1753342245
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1428
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.144739
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------------------------
-	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+References: <20250630141239.3174390-1-akuchynski@chromium.org>
+ <20250630141239.3174390-6-akuchynski@chromium.org> <2025070143-safeness-prewashed-6e9f@gregkh>
+ <CAMMMRMeKyi56Pha-X86BaQwcHGCx-xu5F67HCGZg=Yhxuk==OQ@mail.gmail.com>
+In-Reply-To: <CAMMMRMeKyi56Pha-X86BaQwcHGCx-xu5F67HCGZg=Yhxuk==OQ@mail.gmail.com>
+From: Andrei Kuchynski <akuchynski@chromium.org>
+Date: Thu, 24 Jul 2025 10:39:00 +0200
+X-Gm-Features: Ac12FXzobt46uNoTI8Mrqq6Cj9erlIAHq47itWaRXovYE0fFMCg2hJa92bbZ6uk
+Message-ID: <CAMMMRMf_qc342=azkU-ceg=f-db2Z9NiONOu1_oRk8tmRL4RGg@mail.gmail.com>
+Subject: Re: [PATCH v2 05/10] usb: typec: Implement automated mode selection
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
+	Jameson Thies <jthies@google.com>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
+	chrome-platform@lists.linux.dev, Guenter Roeck <groeck@chromium.org>, 
+	Dmitry Baryshkov <lumag@kernel.org>, "Christian A. Ehrhardt" <lk@c--e.de>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 2025/7/24 14:35, Greg KH wrote:
-> 
-> Hi,
-> 
-> This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-> a patch that has triggered this response.  He used to manually respond
-> to these common problems, but in order to save his sanity (he kept
-> writing the same thing over and over, yet to different people), I was
-> created.  Hopefully you will not take offence and will fix the problem
-> in your patch and resubmit it so that it can be accepted into the Linux
-> kernel tree.
-> 
-> You are receiving this message because of the following common error(s)
-> as indicated below:
-> 
-> - You have marked a patch with a "Fixes:" tag for a commit that is in an
->    older released kernel, yet you do not have a cc: stable line in the
->    signed-off-by area at all, which means that the patch will not be
->    applied to any older kernel releases.  To properly fix this, please
->    follow the documented rules in the
->    Documentation/process/stable-kernel-rules.rst file for how to resolve
->    this.
-> 
-> If you wish to discuss this problem further, or you have questions about
-> how to resolve this issue, please feel free to respond to this email and
-> Greg will reply once he has dug out from the pending patches received
-> from other developers. 
-OK, I'll cc to stable line on the next patch version.
+Proposed sysfs entries for V3:
 
-Best Regards,
-weitao
+- portN/portN.M/priority, RW.
+This attribute assigns a unique priority to each mode. If a user
+attempts to input a value that is already in use, the existing mode at
+that priority will have its priority incremented by one to accommodate
+the new input. Users cannot disable a mode via this entry; disabling
+is handled by `active` for altmodes and `usb_capability` for USB4 mode
 
-> thanks,
-> 
-> greg k-h's patch email bot
-> .
+- portN/mode_priorities, RO.
+Provides a prioritized list of all available modes for the port,
+formatted as a space-separated string (e.g., "USB4 TBT DP").
+
+- portN-partner/mode_selection, RW.
+Write: 1/0 to trigger or cancel mode selection.
+Read:  Provides a prioritized list of all available modes for the
+partner. Modes currently in progress are indicated by parentheses
+(e.g., "USB4 (TBT) DP"). Active modes are enclosed in brackets
+(e.g., "USB4 [TBT] DP").
+
+- portN-partner.M/entry_result, RO.
+Represents a mode state for this altmode, e.g. "none", "active",
+"in progress", "cable error", "timeout".
+
+- portN/usb4_priority, RW.
+- portN-partner/usb4_entry_result, RO.
+USB4 mode, not being part of `typec_altmode_group`, introduces
+additional attributes with the same meaning as alternate modes
+attributes.
+
+Please let me know if you have any questions, require further
+clarification on these proposed sysfs entries, or have objections to
+them.
+
+Thanks,
+Andrei
 
