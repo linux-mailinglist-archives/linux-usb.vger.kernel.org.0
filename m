@@ -1,115 +1,137 @@
-Return-Path: <linux-usb+bounces-26143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 188BFB106B1
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 11:43:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2694DB10694
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 11:41:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1259AE5334
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 09:39:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15C937B5F19
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 09:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 793D6248F42;
-	Thu, 24 Jul 2025 09:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472322566FC;
+	Thu, 24 Jul 2025 09:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cRpa85so"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ga0S4BPE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56A624677D;
-	Thu, 24 Jul 2025 09:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974E52561A7;
+	Thu, 24 Jul 2025 09:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753349635; cv=none; b=RVSRDCIf7PjDreE3hSMuxVwFu5ACtZGxW8krRZAdMxt3lDB4OQgfCP1nbQj4u1yl5ngunT6FAt/V9dziOn8gZjQgPaczZslAnfWA9diEmgi7d5sPAf6zf7MDITADo5UaOANOwvt0iyLL+ZVttyfhPj3d7Br2gP/T+H4of4mPXXM=
+	t=1753349784; cv=none; b=bEOWmxzJY75YZJQ9BQ6SgWfMLc8T8WicH5aDblkHqLd+7PUJJJkrneGkXXMsw1hVCJiPc5CTYz3vZUhsIko/Zi97n14MngFPQ56wALoJfBiepvtMtkufh4QKl5sBtXo1eLEKVsACG1PU+ThdL3s4xo4uqZ1oqIMvmwlTK/XRp9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753349635; c=relaxed/simple;
-	bh=SBONkVjsyY/VAVA5PVkqpHEDoKp8UhHde5k4WBO3d4o=;
+	s=arc-20240116; t=1753349784; c=relaxed/simple;
+	bh=XCziqESd+YYVhw/cl0OMsGz/+9Lqhbo2tR7bJ32WGSs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MRnH4XYj/BkCKA4ho7jAZ2qCcwnQ0gBX2wJQpfskCmknAw8YcZeIORrY0KpiuJNYsYhVVqeND4dAXndnyJ0xzoS5vpwtnVl7shHuNPH9ot4XkHmao+Tj2ozwykoJHw+UVyM/XxEIXvUiEVdybT9hiLUxPJjBY1wE+libqdqpDzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cRpa85so; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA2F2C4CEED;
-	Thu, 24 Jul 2025 09:33:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DvFvKiO539h9DAEg/N4ThnGE8BmItwRmILKMUS6UfumJc5G6lzgLTu6JQcjmuJ4c0yku1c54HlxJnhysHlDNjxjzUVAwi8wrxgC30V9utiDJOavCDYzq+uXdyC2I1sbDy4k3KCQIWm3oSV6Ov6l9B/AE7AlwnZWZ2xG13PqpSo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ga0S4BPE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F47C4CEF5;
+	Thu, 24 Jul 2025 09:36:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1753349634;
-	bh=SBONkVjsyY/VAVA5PVkqpHEDoKp8UhHde5k4WBO3d4o=;
+	s=korg; t=1753349784;
+	bh=XCziqESd+YYVhw/cl0OMsGz/+9Lqhbo2tR7bJ32WGSs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cRpa85soK6UIr0qZrSQOYwi8+zbeZr3Kou0/F3pEbAnoj5YwDSrAuYxx6ZkJXOSjR
-	 aDqZpVhXSZyQ8QYXQ7MIvCi7ASaCBgtI3i4Iazm9TiWyHYZBa6qydiizNJBqyAq8RT
-	 +TcfNUd9tN89gmKklaGYdLZeljPBe+JbZSchRbi0=
-Date: Thu, 24 Jul 2025 11:33:51 +0200
+	b=ga0S4BPERhpnLwJftdqgOrH6zMXuZzd+NyTRW/7olHY7XM2Z1ek79eiNId5bKRI+Y
+	 zKzllaJ97FdY6MnoPqVDJgOLt3dV4lN4oQbCBsGh143t/ggUoX3MZ7NsGLA44rfIpz
+	 i4hqwcM9J2hojJZwf0NqWbOO+blUMkzcV0JI8qr4=
+Date: Thu, 24 Jul 2025 11:36:15 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-usb@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: atm: cxacru: Merge cxacru_upload_firmware() into
- cxacru_heavy_init()
-Message-ID: <2025072433-professed-breeding-152a@gregkh>
-References: <20250722-usb-cxacru-fix-clang-21-uninit-warning-v2-1-6708a18decd2@kernel.org>
+To: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+Cc: Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	Melody Olvera <quic_molvera@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v7] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
+ secure calls
+Message-ID: <2025072446-ensnare-hardhead-12f5@gregkh>
+References: <20250722-eud_mode_manager_secure_access-v7-1-40e9a4569895@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250722-usb-cxacru-fix-clang-21-uninit-warning-v2-1-6708a18decd2@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250722-eud_mode_manager_secure_access-v7-1-40e9a4569895@oss.qualcomm.com>
 
-On Tue, Jul 22, 2025 at 12:11:18PM -0700, Nathan Chancellor wrote:
-> After a recent change in clang to expose uninitialized warnings from
-> const variables [1], there is a warning in cxacru_heavy_init():
+On Tue, Jul 22, 2025 at 05:01:53PM +0530, Komal Bajaj wrote:
+> EUD_MODE_MANAGER2 register is mapped to a memory region that is marked
+> as read-only for operating system running at EL1, enforcing access
+> restrictions that prohibit direct memory-mapped writes via writel().
 > 
->   drivers/usb/atm/cxacru.c:1104:6: error: variable 'bp' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->    1104 |         if (instance->modem_type->boot_rom_patch) {
->         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/usb/atm/cxacru.c:1113:39: note: uninitialized use occurs here
->    1113 |         cxacru_upload_firmware(instance, fw, bp);
->         |                                              ^~
->   drivers/usb/atm/cxacru.c:1104:2: note: remove the 'if' if its condition is always true
->    1104 |         if (instance->modem_type->boot_rom_patch) {
->         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/usb/atm/cxacru.c:1095:32: note: initialize the variable 'bp' to silence this warning
->    1095 |         const struct firmware *fw, *bp;
->         |                                       ^
->         |                                        = NULL
+> Attempts to write to this region from HLOS can result in silent failures
+> or memory access violations, particularly when toggling EUD (Embedded
+> USB Debugger) state. To ensure secure register access, modify the driver
+> to use qcom_scm_io_writel(), which routes the write operation to Qualcomm
+> Secure Channel Monitor (SCM). SCM has the necessary permissions to access
+> protected memory regions, enabling reliable control over EUD state.
 > 
-> While the warning is technically correct that bp is conditionally passed
-> uninitialized to cxacru_upload_firmware(), it is ultimately a false
-> positive warning on the uninitialized use of bp because the same
-> condition that initializes bp, instance->modem_type->boot_rom_patch, is
-> the same one that gates the use of bp within cxacru_upload_firmware().
-> As this warning occurs in clang's frontend before inlining occurs, it
-> cannot know that these conditions are indentical to avoid the warning.
+> SC7280, the only user of EUD is also affected, indicating that this could
+> never have worked on a properly fused device.
 > 
-> Manually inline cxacru_upload_firmware() into cxacru_heavy_init(), as
-> that is its only callsite, so that clang can see that bp is initialized
-> and used under the same condition, clearing up the warning without any
-> functional changes to the code (LLVM was already doing this inlining
-> later).
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 1b0e61465234 ("[PATCH] USB ATM: driver for the Conexant AccessRunner chipset cxacru")
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2102
-> Link: https://github.com/llvm/llvm-project/commit/2464313eef01c5b1edf0eccf57a32cdee01472c7 [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded USB Debugger(EUD)")
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> Signed-off-by: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > ---
+> Changes in v7:
+> - Updated the commit message as per Greg's comment
+> - Link to v6: https://lore.kernel.org/r/20250721-eud_mode_manager_secure_access-v6-1-fe603325ac04@oss.qualcomm.com
+> 
+> Changes in v6:
+> - Propagating the error code from disable_eud(), per Dmitry's suggestion
+> - Link to v5: https://lore.kernel.org/r/20250715-eud_mode_manager_secure_access-v5-1-e769be308d4a@oss.qualcomm.com
+> 
+> usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through secure calls
+> 
+> Changes in v5:
+> * Changed select QCOM_SCM to depends on QCOM_SCM in Kconfig per Greg's review
+> * Link to v4: https://lore.kernel.org/all/20250709065533.25724-1-komal.bajaj@oss.qualcomm.com/
+> 
+> Changes in v4:
+> * Added error logging in disable_eud() for SCM write failures, per Konrad’s suggestion
+> * Link to v3: https://lore.kernel.org/all/20250708085208.19089-1-komal.bajaj@oss.qualcomm.com/
+> 
+> Changes in v3:
+> * Moved secure write before normal writes
+> * Added error checking in disable_eud()
+> * Use ENOMEM error code if platform_get_resource() fails
+> * Select QCOM_SCM driver if USB_QCOM_EUD is enabled
+> * Link to v2: https://lore.kernel.org/all/20250627125131.27606-1-komal.bajaj@oss.qualcomm.com/
+> 
 > Changes in v2:
-> - Rather than initialize bp to NULL, manually inline
->   cxacru_upload_firmware() into cxacru_heavy_init() so that clang can
->   see the matching conditions for bp's initialization and use (based on
->   feedback from Greg).
-> - Drop accessrunner-general@lists.sourceforge.net, as I got bounces when
->   sending to it unsubscribed.
-> - Link to v1: https://lore.kernel.org/r/20250715-usb-cxacru-fix-clang-21-uninit-warning-v1-1-de6c652c3079@kernel.org
+> * Drop separate compatible to be added for secure eud
+> * Use secure call to access EUD mode manager register
+> * Link to v1: https://lore.kernel.org/all/20240807183205.803847-1-quic_molvera@quicinc.com/
 > ---
->  drivers/usb/atm/cxacru.c | 106 ++++++++++++++++++++++-------------------------
->  1 file changed, 49 insertions(+), 57 deletions(-)
+>  drivers/usb/misc/Kconfig    |  1 +
+>  drivers/usb/misc/qcom_eud.c | 33 ++++++++++++++++++++++++---------
+>  2 files changed, 25 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> index 6497c4e81e951a14201ad965dadc29f9888f8254..73ebd3257625e4567f33636cdfd756344b9ed4e7 100644
+> --- a/drivers/usb/misc/Kconfig
+> +++ b/drivers/usb/misc/Kconfig
+> @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
+>  config USB_QCOM_EUD
+>  	tristate "QCOM Embedded USB Debugger(EUD) Driver"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> +	depends on QCOM_SCM
 
-Sorry for the churn, but hey, it's less code now!
+You now are preventing this code from ever being able to be built in any
+testing systems, including mine, so I don't even know if this patch
+builds or not.
 
-Nice work :)
+You did not even document this in the changelog :(
+
+{sigh}
 
 greg k-h
 
