@@ -1,128 +1,99 @@
-Return-Path: <linux-usb+bounces-26172-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26173-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FE82B11DD8
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 13:46:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D1F5B11E02
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 13:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5658416AD63
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 11:46:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86FD01C2760C
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 12:00:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7387A24EF90;
-	Fri, 25 Jul 2025 11:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75BEB2E7653;
+	Fri, 25 Jul 2025 11:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hXBgw4aw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="c8CTo6e0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45C81F0E26;
-	Fri, 25 Jul 2025 11:46:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA061224225;
+	Fri, 25 Jul 2025 11:59:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753443970; cv=none; b=Zc3CZabQATA25xkYuO2Vv6U80BEOhgHzbICXhSogD8CZK5nNz15l/0ZGM6sofltH1gZSiLplbVCB+S7TK0B51E9HJeIwpU8m8e0/UUbqUkC/wgc75oBntaWpLrYFhMDtCubTGChU4j5VOpcF+gk9epXrUfQztkmiZOL7vhFN4dM=
+	t=1753444783; cv=none; b=E0mcCTTQgptvwPLjFvS/2MHkbRFtUkAw/rTyrYGiOSwfmhT5Q7pn1gQRciKeuv/+zxz/zPBRxd1GNNVQ7TGSO5KNtllpieKWUqHSZZvOJLZEJ1UjMDXx0cOOJcCu58eharN6WCQisR5sKcxRPP/aoarXyVUvUL4tifsDnXSGW8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753443970; c=relaxed/simple;
-	bh=+hjlXkN8Hsqus96/vV6XNPallvUIdcyL44bZhyX1yrs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=FNe5dY0YNdgC8Ct2P+zu2WgXo5NvQx8kVL97ChD2ZY7p1y6cVUjlMhAs3VRuaKfzNtN7vKzIjKBvooxriT3chsbyCj2E3O7pxNv8MnRrZGd2W2Aln2qBwBVTRiNLCrrIsOEB9Ghe/aVDSzW9t8MGrMIeoniOscsYfHIDCJ+k6oU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hXBgw4aw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC1FDC4CEEF;
-	Fri, 25 Jul 2025 11:46:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753443969;
-	bh=+hjlXkN8Hsqus96/vV6XNPallvUIdcyL44bZhyX1yrs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=hXBgw4awQRjzxpRm/KpZbaKQAahEUxyVBTro3Md7hxbVcn03XseqYiJD+8I63gGAV
-	 DeycYyqtmEMl/Dxmp7c5FvPMxpD+qSrA1E6MbeykWOCNBmWyVvxX3LmuunZ4eYlHTx
-	 XRn673r8cqtP9IjGhp8vfLfWqVv+c+2aZDOuuleGqgbxtfqbmLu2pxGLzo7cmQjYSW
-	 2GvjoI2p1PaJ+73RimnSvS8CCkezkXGpNjbzkyQxow3PR4AG9pEeDA74Vj/6ftDtzQ
-	 9BzwHGmiKwYw507c3zD5pcPMJYEqUmk7XViGa6MDziEOZrXqko4VPxJeZss2pYjBxi
-	 TmksfrgUaEXCw==
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: syzbot <syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com>, 
- Alan Stern <stern@rowland.harvard.edu>
-Cc: jikos@kernel.org, linux-input@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- syzkaller-bugs@googlegroups.com
-In-Reply-To: <8bec1698-5008-428f-8e71-ec002def0c54@rowland.harvard.edu>
-References: <68753a08.050a0220.33d347.0008.GAE@google.com>
- <f6e67c38-8d63-4536-827c-09757a8d5609@rowland.harvard.edu>
- <ea7f1f42-273b-4c07-8bf2-769992dd9ced@rowland.harvard.edu>
- <8bec1698-5008-428f-8e71-ec002def0c54@rowland.harvard.edu>
-Subject: Re: (subset) [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds
- in s32ton (2)
-Message-Id: <175344396758.1172314.17719320132217617249.b4-ty@kernel.org>
-Date: Fri, 25 Jul 2025 13:46:07 +0200
+	s=arc-20240116; t=1753444783; c=relaxed/simple;
+	bh=H5tg3SeJGrLCCrs8Qf0ae3+N8qspr5A+ip8m7pauS1E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jT6B28BWEEI2uFmo9q7fkEIwogislM5PL5JQOigmb0H93Mn1v8G1RHB5wr57+1TJR416X/QlK/df/ml1n7PGxiVNN1gPF5EhiAZBF1q0NhotEikkHHwKlpF6rko0+AktlSJ50RRJDuGYUgrerMtutRICE50zu+/3/0ixYlNxW/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=c8CTo6e0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA3CEC4CEE7;
+	Fri, 25 Jul 2025 11:59:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1753444783;
+	bh=H5tg3SeJGrLCCrs8Qf0ae3+N8qspr5A+ip8m7pauS1E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=c8CTo6e0PQlRkZp/cvin4nbHYq0oaSKYymC0ODHGx2n5DjwrKeSaQkqL5N7y5MqYY
+	 Mc/M9Y10Ilu5jjgXG4yZfYrY+NR+QqsNDhvS5BKWqjCmvm5NtgT+xgFBfw9b7Pn9am
+	 MN1Qt5nc2arGz/U9+rA172GUlp6uSlGvtOUxjASU=
+Date: Fri, 25 Jul 2025 13:59:39 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Prashanth K <prashanth.k@oss.qualcomm.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: qcom: Add shutdown handler
+Message-ID: <2025072512-hertz-dentist-67dc@gregkh>
+References: <20250725062158.2418961-1-prashanth.k@oss.qualcomm.com>
+ <2025072542-bleep-parting-3e7a@gregkh>
+ <852ff03d-84cf-42f1-a428-ec747bea835e@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <852ff03d-84cf-42f1-a428-ec747bea835e@oss.qualcomm.com>
 
-On Tue, 15 Jul 2025 15:29:25 -0400, Alan Stern wrote:
-> On Mon, Jul 14, 2025 at 10:10:32AM -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    b4b4dbfa96de media: stk1160: use usb_alloc_noncoherent/usb..
-> > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=15a830f0580000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=28729dff5d03ad1
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=b63d677d63bcac06cf90
-> > compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1614418c580000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1257dd82580000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/7301552ad828/disk-b4b4dbfa.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/c559b38fa1b6/vmlinux-b4b4dbfa.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/9c1da8b2a83f/bzImage-b4b4dbfa.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+b63d677d63bcac06cf90@syzkaller.appspotmail.com
-> >
-> > usb 4-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor, different from the interface descriptor's value: 9
-> > usb 4-1: New USB device found, idVendor=045e, idProduct=07da, bcdDevice= 0.00
-> > usb 4-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > usb 4-1: config 0 descriptor??
-> > microsoft 0003:045E:07DA.0001: ignoring exceeding usage max
-> > microsoft 0003:045E:07DA.0001: unsupported Resolution Multiplier 0
-> > ------------[ cut here ]------------
-> > UBSAN: shift-out-of-bounds in drivers/hid/hid-core.c:69:16
-> > shift exponent 4294967295 is too large for 32-bit type 'int'
-> > CPU: 0 UID: 0 PID: 10 Comm: kworker/0:1 Not tainted 6.16.0-rc4-syzkaller-00314-gb4b4dbfa96de #0 PREEMPT(voluntary)
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-> > Workqueue: usb_hub_wq hub_event
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:94 [inline]
-> >  dump_stack_lvl+0x16c/0x1f0 lib/dump_stack.c:120
-> >  ubsan_epilogue lib/ubsan.c:233 [inline]
-> >  __ubsan_handle_shift_out_of_bounds+0x27f/0x420 lib/ubsan.c:494
-> >  s32ton.cold+0x37/0x9c drivers/hid/hid-core.c:69
-> >  hid_output_field drivers/hid/hid-core.c:1841 [inline]
-> >  hid_output_report+0x36f/0x4a0 drivers/hid/hid-core.c:1874
-> >  __hid_request+0x1e0/0x3c0 drivers/hid/hid-core.c:1987
-> >  hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1950 [inline]
-> >  hidinput_connect+0x1ada/0x2bd0 drivers/hid/hid-input.c:2327
+On Fri, Jul 25, 2025 at 03:28:12PM +0530, Prashanth K wrote:
 > 
-> [...]
+> 
+> On 7/25/2025 2:18 PM, Greg Kroah-Hartman wrote:
+> > On Fri, Jul 25, 2025 at 11:51:58AM +0530, Prashanth K wrote:
+> >> Currently during system reboot, SMMU disables its translations
+> >> while devices like USB may still be actively using DMA buffers.
+> >> This can lead to NOC errors and system crashes due to invalid
+> >> memory access.
+> >>
+> >> Address this by adding a shutdown callback to dwc3-qcom, which
+> >> ensures proper teardown of UDC stack and prevents DWC3 controller
+> >> from accessing memory after SMMU translation is disabled. Reuse
+> >> the existing remove callback for this purpose.
+> >>
+> >> Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
+> >> ---
+> >>  drivers/usb/dwc3/dwc3-qcom.c | 8 ++++++--
+> >>  1 file changed, 6 insertions(+), 2 deletions(-)
+> > 
+> > What commit id does this fix?  Or is this just a new feature?
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> I didn't Fixes tag because a small dilemma. This patch is rebased on top
+> of the flattening series, specifically commit 1881a32fe14d ("usb: dwc3:
+> qcom: Transition to flattened model").
+> However, I don't think that this commit caused this issue.
+> 
+> Let me know if you want the Fixes tag.
 
-Applied to hid/hid.git (for-6.17/core), thanks!
-
-[1/1] HID: core: Harden s32ton() against conversion to 0 bits
-      https://git.kernel.org/hid/hid/c/a6b87bfc2ab5
-
-Cheers,
--- 
-Benjamin Tissoires <bentiss@kernel.org>
+If you don't need/want this backported to any stable tree, then leave it
+as-is.  Your choice.
 
 
