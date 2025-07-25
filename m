@@ -1,93 +1,568 @@
-Return-Path: <linux-usb+bounces-26177-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26178-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED80EB11FAF
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 15:58:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C2BAB120C7
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 17:26:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A66416EE25
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 13:58:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E175E3B1A8D
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 15:25:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3939D1C860F;
-	Fri, 25 Jul 2025 13:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7E602EE603;
+	Fri, 25 Jul 2025 15:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GJLnW1G+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3vYpa+pj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71052E36EC;
-	Fri, 25 Jul 2025 13:58:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3B12ED86A
+	for <linux-usb@vger.kernel.org>; Fri, 25 Jul 2025 15:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753451915; cv=none; b=YVY5lOmveEXXiPyZ+t2Xsa+QjJsZXt5rDVrukId8X/5FeMXS2C2yBs+HoKfW2jz2N9emffaAMCJ6H2i6IBg2xgGCHFuDqSI/beoXooLfDlnlb5OxumEUpYkV7BDI+751vgqTwTLiw5i3APmnItTJikbRiFxjhAQtyCrzHJlr8pg=
+	t=1753457170; cv=none; b=Bhh0zL6SNreTK3CWIzAI69nvgLZ5DNGRfZ5a4MZLiO35iUlrf5VOpTH5KW2HF1LjqXcw+iXsUo5Gm6iZKH1rl12X2flp9gidaIWuxP0U+ezux5kYTRsBvSEjAfUk8ZMcZMnShdbIbKpYB4OdLOQxys+C0NW2RkFFV6ATw74O/TI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753451915; c=relaxed/simple;
-	bh=WAmlAki6gh5YfjkDSiDmjXgGfoEzhH2hzgXc9JJIQOw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S2Fo2+O1rLXqbjFzOQK53elplFY9Y7e5DC16AMyyV7KbSZdcU7Sbi+cjmvTzC8pXgwTxi++WDRvPJloljFz1UNF8EdedriHsI9NAsZd0ZO1YdwIJ2HiGgnKG5aJqQHfbekB4K0dEQWO1Nz7ocBGVUgg61SQFze1TYi9iUU8ADNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GJLnW1G+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730EAC4CEEB;
-	Fri, 25 Jul 2025 13:58:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1753451914;
-	bh=WAmlAki6gh5YfjkDSiDmjXgGfoEzhH2hzgXc9JJIQOw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GJLnW1G+c0cny8HoHKeYVTCogD4GbIy9jlhktDby4jvP4JuWe7wKjDxpgBSlz4ogd
-	 0ddvENxQINP/a79QcY6PVbXvXR5pNw9AyEtLt0LMpNWHhvyPZp5ljq9RKNrcZuW0/v
-	 Seq+aZEgd35xnmOyfhTi3OfSRRn8RUPr2TBkKcY4=
-Date: Fri, 25 Jul 2025 15:58:31 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: "Darshan R." <rathod.darshan.0896@gmail.com>
-Cc: stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: storage: Checkpatch fix done and Clean up coding
- style
-Message-ID: <2025072526-guru-reacquire-408d@gregkh>
-References: <20250725135533.8410-1-rathod.darshan.0896@gmail.com>
+	s=arc-20240116; t=1753457170; c=relaxed/simple;
+	bh=vM0C4mrSdKSCuKDM/N9Vm/nrNAiR03fJag2FaScv0UE=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=gtmJrbNxJ4itJk40f38Zim88c5YcnXhmzpBym177rMkYqty3eQtaQqU05oPAMcWHrdDyLOd/BE66QtJL0SE7hildVhnmHlg02p/gc1n0vhJjxmILbv/U62vzWvk7z3cHnBmvj9w6CgM3TCxZDyFupWmFBx1AM5ScCriOZpQgVwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3vYpa+pj; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-32b553e33e6so18408951fa.2
+        for <linux-usb@vger.kernel.org>; Fri, 25 Jul 2025 08:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1753457166; x=1754061966; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Qk+SQUv4vt7SEdD0ugcPkN1kgWhWABpw3+zdwVt2mDM=;
+        b=3vYpa+pjzRJe3DW0KfRQLuJsqwuOf45Ld1MzgatlkuWuG+HIhGuPfIytaCscd8HWSw
+         +uJdQyH7ODmBImfB8Z6Lb60Mse3mqLATXe7Aw2qpSYpXQPHmKoAy7Jz9JjdFAqSPXsGH
+         IFIXLyQmav9u5GGqtoxu9Uh8riWn1vJr8eVUEeVSYN/cKla4UKtS/B9eo4FDR1XIc6LD
+         dow9zpwsAofm9FvLzjIVLpVs7eMhrHutXe8bxNIOpQLpGf1Q+bMEj4ftoTXFgbKyd32H
+         IIbjRhwWG1XThD5EBcNPDd7s60GE7ZRq1J4vnSo3P6EdOnPuYazmWBYfLHNS80yG8AkZ
+         c+fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753457166; x=1754061966;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Qk+SQUv4vt7SEdD0ugcPkN1kgWhWABpw3+zdwVt2mDM=;
+        b=dzzl1BjA2gA6OpkgGoNXwFw1h/3RWGnZICvBenrSzZoM3R+YmpU7a+as67/W8NEbW5
+         Myn4eHzaXlJomSxTOy0we25rsEBXUH/TGvNe5rfYrQo+AiJP/Tu3yMvPr7vUhnrrr5YB
+         8mqeV2yJ03FEvxeXiRHMKSEA5OSW+opXMyqHKPPtkgNArdXOsExzhAD2t0vk8lY9198F
+         9Ib1BYE7H+AzN0r4NWpPapHYwivYQQ9mAXbeGzlfqAt+frstYq4rcOlREw+Iu/9RQNuw
+         OFkoDXfENRhvZZP5GXXIgaXUwRGTDpMpSQHkBh5amcTO0fJh68iBhOYHoLKrhXczitfu
+         OU/g==
+X-Forwarded-Encrypted: i=1; AJvYcCVxlUycsMba35c1ESWpVi6NorD7YyV88ycVk1fT7wdBxM98zooZm/mhFKisCUB+7M8l/PhXkNrLUzk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgYhIeSviP1iH1ciq4eF8GFSs6Jt+r0T11yC0DqWHypf0MpO40
+	5qGn1rugGZY73rexlZUGVSV1n+Xegj8qreq6LY69y6orcXEWwFQh2d7ro34Fs4UqFi5RnShGtpN
+	WhBK7jYhwj0M675mzsRZVjo1oxhC8JMcg2ZRW3IDzJIqU92ld7mUbyrF/0iM=
+X-Gm-Gg: ASbGnctsTJmxIze0zUp+I05+c5GFRAHAMs55hase2gu7lR2cskMcxjIfClii3nAqwYw
+	bc6+EHCvyntNvXYt2/iQ3WyrEWoAA6/kScOzuxscNjYYzMEjvHvVCe01+zAk4ZPe/BagVgTXFkb
+	zNtkPtMmnUM0ySAxLg9swsBY2lEkuAz6x5Ksd2KbtHrPFSzHnyEk0kay7kk1563tDsTVLQpbE/q
+	dY2dskWNTHe3Aem8g==
+X-Google-Smtp-Source: AGHT+IHYo0a6ErIEg3q39JB1z0GrHw6FIqQfBKc0bTeo+ogFGydfAEhDJpEfQe5k0PHggKISx5sw49A7A8fn3ZA1wIU=
+X-Received: by 2002:a2e:a7ca:0:b0:32a:7e4c:e915 with SMTP id
+ 38308e7fff4ca-331ee7df220mr8469001fa.29.1753457165926; Fri, 25 Jul 2025
+ 08:26:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250725135533.8410-1-rathod.darshan.0896@gmail.com>
+From: Olivier Tuchon <tcn@google.com>
+Date: Fri, 25 Jul 2025 17:25:49 +0200
+X-Gm-Features: Ac12FXyQq1WaDR8e9bjbhVnghzwK5B8-5opiIBenNHTP2amsS2yr96atNWtsJK8
+Message-ID: <CALU+5Va_zeqS5YK7v3HNvDKkg8srqc87P5ZaQUK5tGFUMyNrkg@mail.gmail.com>
+Subject: [PATCH] usb: gadget: Add gadgetmon traffic monitor
+To: gregkh@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jul 25, 2025 at 01:55:33PM +0000, Darshan R. wrote:
-> The shuttle_usbat.c driver has several coding style inconsistencies that deviate from the Linux kernel standard.
-> This makes the code harder to read and maintain.
-> 
-> This patch is a pure cleanup effort to address these style issues.
-> The changes include:
-> 
-> - Adding proper spacing around operators (=, *, +, !=, etc.).
-> - Adjusting pointer declarations to the standard type *var style.
-> - Fixing spacing in pointer casts, e.g., (struct usbat_info *).
-> - Removing the redundant = 0 initializer for the static transferred
->   variable, as it's guaranteed to be zero-initialized.
-> - Tidying up miscellaneous whitespace and removing extra blank lines.
-> 
-> These changes were guided by checkpatch.pl.
-> No functional changes have been made.
-> 
-> Signed-off-by: Darshan R. <rathod.darshan.0896@gmail.com>
-> ---
->  drivers/usb/storage/shuttle_usbat.c | 252 +++++++++++++---------------
->  1 file changed, 120 insertions(+), 132 deletions(-)
+The Linux kernel lacks a tool equivalent to usbmon for the gadget side,
+making it difficult to debug the lifecycle and performance of usb_requests.
+This forces developers into using ad-hoc printk statements for
+introspection.
 
-Please do not run checkpatch.pl on existing subsystems and old kernel
-code and then send a huge patch to "fix them all!".  That's not going to
-work well for many kernel subsystems as they do not welcome the constant
-churn that would cause.
+This commit introduces "gadgetmon", a comprehensive framework for
+monitoring USB gadget traffic. It consists of two main parts: a new
+monitoring interface in the UDC core and a loadable module that
+implements this interface to provide data to userspace.
 
-If you are interested in doing this type of work, do so in the
-drivers/staging/ subsystem, which welcomes it.
+The UDC core is modified to add an optional monitoring interface defined
+by struct usb_gadget_mon_operations in <linux/usb/gadget.h>. An
+RCU-protected global pointer, gadget_mon_ops, is defined and exported
+to allow monitoring modules to register. Hooks are placed in
+usb_ep_queue() and usb_gadget_giveback_request() to call this interface,
+capturing request submission and completion events.
 
-thanks,
+The new gadgetmon driver is added under drivers/usb/gadget/gadgetmon/.
+It implements the monitor operations and creates a character device at
+/dev/gadgetmon0. A kfifo ring buffer is used to safely transfer event
+records from the fast-path USB callbacks to a userspace reader, minimizing
+performance impact and preventing data loss during traffic bursts.
 
-greg k-h
+This hook-based design is chosen over tracepoints to efficiently handle
+large, variable-length data payloads and to provide a viable debugging
+tool on platforms like Android where debugfs may be disabled.
+
+The entire feature is controlled by CONFIG_USB_GADGET_MON. The buffer
+size and maximum per-event data capture size are tunable via Kconfig to
+allow the feature to be adapted for different devices and debugging
+scenarios.
+
+Signed-off-by: Oliv <tcn@google.com>
+---
+ drivers/usb/gadget_mon/Kconfig          |  39 ++++
+ drivers/usb/gadget_mon/Makefile         |   8 +
+ drivers/usb/gadget_mon/gadget_mon.h     |  66 ++++++
+ drivers/usb/gadget_mon/gadgetmon_main.c | 298 ++++++++++++++++++++++++
+ 4 files changed, 411 insertions(+)
+ create mode 100644 drivers/usb/gadget_mon/Kconfig
+ create mode 100644 drivers/usb/gadget_mon/Makefile
+ create mode 100644 drivers/usb/gadget_mon/gadget_mon.h
+ create mode 100644 drivers/usb/gadget_mon/gadgetmon_main.c
+
+diff --git a/drivers/usb/gadget_mon/Kconfig b/drivers/usb/gadget_mon/Kconfig
+new file mode 100644
+index 000000000000..113423a2a96f
+--- /dev/null
++++ b/drivers/usb/gadget_mon/Kconfig
+@@ -0,0 +1,39 @@
++#SPDX - License - Identifier : GPL - 2.0
++#
++#USB Gadget monitoring configuration
++#
++
++config USB_GADGET_MON
++  tristate "Gadget-side USB monitor"
++  depends on USB_GADGET
++  help
++    This option enables a low-level monitor for the USB gadget
++    subsystem, similar to what usbmon provides for the host side.
++
++    It creates a character device (/dev/gadgetmon0) that outputs a
++    stream of all USB request submissions and completions, allowing
++    for detailed debugging and performance analysis of gadget drivers.
++
++    This is primarily a tool for developers. If you are not developing
++    or debugging a USB gadget function driver, say N.
++
++config GADGETMON_BUFFER_SIZE_MB
++ int "Buffer size for gadget monitor (in MiB)"
++ depends on USB_GADGET_MON
++ default 4
++ help
++   Sets the size of the ring buffer used to transfer event data
++   from the kernel to userspace. A larger buffer reduces the risk
++   of dropping events during high-speed traffic bursts but uses
++   more kernel memory. Value is in Megabytes (MiB).
++
++config GADGETMON_DATA_MAX_KB
++ int "Max data payload per event (in KiB)"
++ depends on USB_GADGET_MON
++ default 64
++ help
++   Sets the maximum amount of payload data captured for a single
++   event. A smaller value saves a significant amount of buffer
++   space, allowing more event headers to be stored. A larger
++   value is only needed if you must debug the contents of very
++   large USB transfers. Value is in Kilobytes (KiB).
+diff --git a/drivers/usb/gadget_mon/Makefile b/drivers/usb/gadget_mon/Makefile
+new file mode 100644
+index 000000000000..b9d7610c72a3
+--- /dev/null
++++ b/drivers/usb/gadget_mon/Makefile
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Makefile for the gadget monitoring driver
++#
++
++gadgetmon-y := gadgetmon_main.o
++
++obj-$(CONFIG_USB_GADGET_MON) += gadgetmon.o
+diff --git a/drivers/usb/gadget_mon/gadget_mon.h
+b/drivers/usb/gadget_mon/gadget_mon.h
+new file mode 100644
+index 000000000000..d87a891b8a93
+--- /dev/null
++++ b/drivers/usb/gadget_mon/gadget_mon.h
+@@ -0,0 +1,66 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __LINUX_USB_MON_GADGET_H
++#define __LINUX_USB_MON_GADGET_H
++
++#include <linux/kconfig.h>
++
++#include <linux/usb/ch9.h>
++#include <linux/usb/gadget.h>
++
++/* The device name for the monitor interface */
++#define GADGETMON_DEVICE_NAME "gadgetmon0"
++/* The device class name */
++#define GADGETMON_CLASS_NAME "gadgetmon"
++
++/* Size of the kernel-to-userspace ring buffer */
++#define GADGETMON_BUFFER_SIZE (CONFIG_GADGETMON_BUFFER_SIZE_MB * 1014 * 1024)
++/* Max data payload to capture per event */
++#define GADGETMON_DATA_MAX (CONFIG_GADGETMON_DATA_MAX_KB * 1024)
++
++/* Magic number, "mnof" as a little-endian u32 */
++#define GADGETMON_MAGIC 0x666f6e6d
++
++/**
++ * enum gadgetmon_event_type - Type of event captured by the monitor.
++ * @GADGETMON_EVENT_SUBMIT: A usb_request was submitted to an endpoint.
++ * @GADGETMON_EVENT_COMPLETE: A usb_request completed successfully.
++ * @GADGETMON_EVENT_ERROR: A usb_request completed with an error.
++ */
++enum gadgetmon_event_type {
++ GADGETMON_EVENT_SUBMIT = 'S',
++ GADGETMON_EVENT_COMPLETE = 'C',
++ GADGETMON_EVENT_ERROR = 'E',
++};
++
++/**
++ * struct gadgetmon_hdr - Event record header for gadget monitoring.
++ * @magic:      Magic number for synchronization ('mnof').
++ * @ts_usec:    Timestamp, microseconds part.
++ * @ts_sec:     Timestamp, seconds part (from ktime_get_real_ts64).
++ * @id:         A unique identifier for the life of a usb_request.
++ * @status:     For 'C'/'E', the request status. For 'S', the return
++ * code from usb_ep_queue().
++ * @req_len:    The original length of the request buffer.
++ * @actual_len: The actual length transferred on completion.
++ * @data_len:   The length of the data payload following this header.
++ * @type:       Event type, see enum gadgetmon_event_type.
++ * @xfer_type:  Transfer type (USB_ENDPOINT_XFER_*).
++ * @epnum:      Endpoint number.
++ * @dir:        Endpoint direction (USB_DIR_IN or USB_DIR_OUT).
++ */
++struct gadgetmon_hdr {
++ u32 magic;
++ s32 ts_usec;
++ s64 ts_sec;
++ u64 id;
++ int status;
++ u32 req_len;
++ u32 actual_len;
++ u32 data_len;
++ u8 type;
++ u8 xfer_type;
++ u8 epnum;
++ u8 dir;
++};
++
++#endif /* __LINUX_USB_MON_GADGET_H */
+diff --git a/drivers/usb/gadget_mon/gadgetmon_main.c
+b/drivers/usb/gadget_mon/gadgetmon_main.c
+new file mode 100644
+index 000000000000..9017f91808ae
+--- /dev/null
++++ b/drivers/usb/gadget_mon/gadgetmon_main.c
+@@ -0,0 +1,298 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * gadgetmon.c - USB Gadget Monitoring Driver
++ *
++ * This module hooks into the UDC core to capture USB request
++ * submissions and completions, providing a character device interface
++ * (/dev/gadgetmon0) for userspace tools to read the event stream.
++ */
++#include <linux/cdev.h>
++#include <linux/device.h>
++#include <linux/fs.h>
++#include <linux/kernel.h>
++#include <linux/kfifo.h>
++#include <linux/module.h>
++#include <linux/rcupdate.h>
++#include <linux/sched.h>
++#include <linux/slab.h>
++#include <linux/spinlock.h>
++#include <linux/time64.h>
++#include <linux/uaccess.h>
++#include <linux/wait.h>
++
++#include "gadget_mon.h"
++
++#include <linux/usb/gadget.h>
++
++/* character device and class infrastructure */
++static dev_t mon_dev_t;
++static struct cdev mon_cdev;
++static struct class *mon_class;
++
++/* the main ring buffer for passing events to userspace */
++struct kfifo mon_fifo;
++/* a spinlock to protect concurrent access to the kfifo */
++static spinlock_t mon_lock;
++/* a wait queue for blocking reads from userspace */
++static wait_queue_head_t mon_read_wait;
++
++/*
++ * gadgetmon_event - builds an event record and queue it to the FIFO
++ * @event_type: the type of event ('S', 'C', or 'E')
++ * @ep: the endpoint associated with the event
++ * @req: the USB request associated with the event
++ * @status: for 'S', the return from usb_ep_queue(); for 'C'/'E', req->status
++ */
++static void gadgetmon_event(enum gadgetmon_event_type event_type,
++     struct usb_ep *ep, const struct usb_request *req,
++     int status)
++{
++ unsigned long flags;
++ struct gadgetmon_hdr hdr;
++ u32 payload_len;
++ u32 total_len;
++ struct timespec64 ts;
++
++ if (!req || !ep)
++ return;
++
++ ktime_get_real_ts64(&ts);
++
++ /* prepare the header */
++ hdr.magic = GADGETMON_MAGIC;
++ hdr.ts_sec = ts.tv_sec;
++ hdr.ts_usec = ts.tv_nsec / NSEC_PER_USEC;
++ hdr.id = (u64)(uintptr_t)req;
++ hdr.type = event_type;
++ hdr.xfer_type = usb_endpoint_type(ep->desc);
++ hdr.epnum = usb_endpoint_num(ep->desc);
++ hdr.dir = usb_endpoint_dir_in(ep->desc) ? USB_DIR_IN : USB_DIR_OUT;
++ hdr.status = status;
++ hdr.req_len = req->length;
++ hdr.actual_len = (event_type == GADGETMON_EVENT_SUBMIT) ? 0 :
++   req->actual;
++
++ /* determine how much payload data to capture */
++ payload_len = (event_type == GADGETMON_EVENT_SUBMIT) ? req->length :
++        req->actual;
++ if (payload_len > GADGETMON_DATA_MAX)
++ payload_len = GADGETMON_DATA_MAX;
++ /*
++ * optimization: for an OUT submission (host-to-device), the data
++ * has not yet arrived from the host. The buffer is an empty
++ * placeholder, so its content is not captured to save space.
++ */
++ if (event_type == GADGETMON_EVENT_SUBMIT && hdr.dir == USB_DIR_OUT)
++ payload_len = 0;
++
++ hdr.data_len = payload_len;
++ total_len = sizeof(hdr) + payload_len;
++
++ /* lock and queue the event into the FIFO */
++ spin_lock_irqsave(&mon_lock, flags);
++
++ if (kfifo_avail(&mon_fifo) < total_len) {
++ /* not enough space, drop the event silently */
++ spin_unlock_irqrestore(&mon_lock, flags);
++ return;
++ }
++
++ kfifo_in(&mon_fifo, &hdr, sizeof(hdr));
++ if (payload_len > 0)
++ kfifo_in(&mon_fifo, req->buf, payload_len);
++
++ spin_unlock_irqrestore(&mon_lock, flags);
++
++ /* wake up any readers waiting for data */
++ wake_up_interruptible(&mon_read_wait);
++}
++
++/* called from usb_ep_queue() in the UDC core */
++static void gadgetmon_request_queue(struct usb_ep *ep,
++     const struct usb_request *req, int status)
++{
++ gadgetmon_event(GADGETMON_EVENT_SUBMIT, ep, req, status);
++}
++
++/* called from usb_gadget_giveback_request() in the UDC core */
++static void gadgetmon_request_giveback(struct usb_ep *ep,
++        const struct usb_request *req)
++{
++ enum gadgetmon_event_type type;
++
++ type = (req->status == 0) ? GADGETMON_EVENT_COMPLETE :
++     GADGETMON_EVENT_ERROR;
++ gadgetmon_event(type, ep, req, req->status);
++}
++
++/* the implementation of the monitor operations interface */
++static const struct usb_gadget_mon_operations gadget_mon_ops_impl = {
++ .request_queue = gadgetmon_request_queue,
++ .request_giveback = gadgetmon_request_giveback,
++};
++
++/*
++ * gadgetmon_open - called when the device file is opened.
++ */
++static int gadgetmon_open(struct inode *inode, struct file *file)
++{
++ return 0;
++}
++
++/**
++ * gadgetmon_release - called when the device file is closed.
++ */
++static int gadgetmon_release(struct inode *inode, struct file *file)
++{
++ return 0;
++}
++
++/*
++ * gadgetmon_read - reads monitoring data from the ring buffer
++ *
++ * Reads event records from the kfifo and copies them to userspace. The read
++ * is blocking by default, but respects the O_NONBLOCK file flag. A temporary
++ * buffer is used to copy data out of the fifo under the spinlock, allowing
++ * the subsequent copy_to_user() to sleep safely.
++ */
++static ssize_t gadgetmon_read(struct file *file, char __user *buf,
+size_t count,
++       loff_t *off)
++{
++ int ret = 0;
++ unsigned int copied;
++ char *tmp_buf;
++ size_t len_to_copy;
++
++ if ((file->f_flags & O_NONBLOCK) && kfifo_is_empty(&mon_fifo))
++ return -EAGAIN;
++
++ /* wait for data to become available */
++ ret = wait_event_interruptible(mon_read_wait,
++        !kfifo_is_empty(&mon_fifo));
++ if (ret)
++ return ret; /* -ERESTARTSYS if interrupted by a signal */
++
++ len_to_copy = min_t(size_t, count, GADGETMON_BUFFER_SIZE);
++ tmp_buf = kmalloc(len_to_copy, GFP_KERNEL);
++ if (!tmp_buf)
++ return -ENOMEM;
++
++ spin_lock_irq(&mon_lock);
++ copied = kfifo_out(&mon_fifo, tmp_buf, len_to_copy);
++ spin_unlock_irq(&mon_lock);
++
++ if (copied > 0) {
++ if (copy_to_user(buf, tmp_buf, copied))
++ /* data is lost - acceptable for a monitor */
++ ret = -EFAULT;
++ }
++
++ kfree(tmp_buf);
++
++ /* On success, return the number of bytes copied, else the error */
++ return (ret < 0) ? ret : copied;
++}
++
++/* The file operations structure for our character device */
++static const struct file_operations mon_fops = {
++ .owner = THIS_MODULE,
++ .open = gadgetmon_open,
++ .release = gadgetmon_release,
++ .read = gadgetmon_read,
++};
++
++/*
++ * gadgetmon_init - Module entry point.
++ *
++ * Allocates all necessary resources (kfifo, locks, char device) and
++ * registers the monitoring callbacks with the UDC core.
++ */
++static int __init gadgetmon_init(void)
++{
++ int ret;
++
++ pr_info("Gadget Monitoring driver loading\n");
++
++ ret = kfifo_alloc(&mon_fifo, GADGETMON_BUFFER_SIZE, GFP_KERNEL);
++ if (ret) {
++ pr_err("gadgetmon: Failed to allocate kfifo\n");
++ return -ENOMEM;
++ }
++
++ spin_lock_init(&mon_lock);
++ init_waitqueue_head(&mon_read_wait);
++
++ ret = alloc_chrdev_region(&mon_dev_t, 0, 1, GADGETMON_DEVICE_NAME);
++ if (ret < 0) {
++ pr_err("gadgetmon: Failed to allocate char device region\n");
++ goto err_free_fifo;
++ }
++
++ mon_class = class_create(GADGETMON_CLASS_NAME);
++ if (IS_ERR(mon_class)) {
++ pr_err("gadgetmon: Failed to create device class\n");
++ ret = PTR_ERR(mon_class);
++ goto err_unregister_chrdev;
++ }
++
++ cdev_init(&mon_cdev, &mon_fops);
++ mon_cdev.owner = THIS_MODULE;
++
++ ret = cdev_add(&mon_cdev, mon_dev_t, 1);
++ if (ret < 0) {
++ pr_err("gadgetmon: Failed to add char device\n");
++ goto err_destroy_class;
++ }
++
++ if (IS_ERR(device_create(mon_class, NULL, mon_dev_t, NULL,
++ GADGETMON_DEVICE_NAME))) {
++ pr_err("gadgetmon: Failed to create device file\n");
++ ret = -ENODEV;
++ goto err_del_cdev;
++ }
++
++ /* Atomically publish our monitoring functions to the UDC core */
++ rcu_assign_pointer(gadget_mon_ops, &gadget_mon_ops_impl);
++
++ pr_info("gadgetmon: Gadget Monitoring driver loaded\n");
++
++ return 0;
++
++err_del_cdev:
++ cdev_del(&mon_cdev);
++err_destroy_class:
++ class_destroy(mon_class);
++err_unregister_chrdev:
++ unregister_chrdev_region(mon_dev_t, 1);
++err_free_fifo:
++ kfifo_free(&mon_fifo);
++
++ return ret;
++}
++
++/**
++ * gadgetmon_exit - Module exit point.
++ *
++ * Unregisters the interface and frees all resources. Uses RCU synchronization
++ * to ensure no callbacks are in-flight when resources are freed.
++ */
++static void __exit gadgetmon_exit(void)
++{
++ rcu_assign_pointer(gadget_mon_ops, NULL);
++ synchronize_rcu();
++
++ device_destroy(mon_class, mon_dev_t);
++ cdev_del(&mon_cdev);
++ class_destroy(mon_class);
++ unregister_chrdev_region(mon_dev_t, 1);
++ kfifo_free(&mon_fifo);
++
++ pr_info("gadgetmon: Gadget Monitoring driver unloaded\n");
++}
++
++module_init(gadgetmon_init);
++module_exit(gadgetmon_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("USB Gadget Traffic Monitor");
++MODULE_AUTHOR("Olivier Tuchon");
+-- 
+2.50.1.487.gc89ff58d15-goog
 
