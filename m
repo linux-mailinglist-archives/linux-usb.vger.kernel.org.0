@@ -1,78 +1,83 @@
-Return-Path: <linux-usb+bounces-26152-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26153-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 629BBB1145E
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 01:11:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6E05B116DE
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 05:13:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92E76588533
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jul 2025 23:11:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDD771CC7AD4
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 03:13:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEF3A23C4F8;
-	Thu, 24 Jul 2025 23:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KZ8su6R2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86CBD2376F8;
+	Fri, 25 Jul 2025 03:13:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFA65D8F0;
-	Thu, 24 Jul 2025 23:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.nfschina.com (unknown [42.101.60.213])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 2AA55EEAB;
+	Fri, 25 Jul 2025 03:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753398703; cv=none; b=L2gPMDR2ovm2o+ElQdrSAvy5cqTx1jQV8Z1jDuP7YjiSGjQDPGU3SNBNf7+5DNA4XwKJf7QmGO8oeWZrhQPpLR6N6mF3VwRkpl+d2LgKTUTGrC0cvrU83S3BJgkSjNtKigmh1hUalZFDoI2CAGvjbDbGYZz+RJliKqR4BGXXbro=
+	t=1753413206; cv=none; b=seg7a6tRNjv7CJ0ZTrP2q+zOXxSJbRlXKd42WOK8imDx7NXNBlK1WJBeo2HFNPvwy8DlvMsLlmBG6fWjEbgjArInp7nYXGq6g5Orqnm7jger6f0uouo25lhFQnk8YcJF2KTTygERzBqOkes3ES6+jHLFN9Vns+f3T4hKEZScsfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753398703; c=relaxed/simple;
-	bh=d8TxaSu4kxZ/sIHDsC99YRNlTS6fUD2FC+qEt1/EWbQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jbz8B7+myUdrZUFr8aR3OMNUO9a5tFPOXYPtdxMJolL+/h1JFold9olJcR/VnyuceaVZZgJCgDeX11EcfbPfrHr54hL67d6cJgDy1kx1HiFZzOwT7AXgA1RQpp7b6b0nZdFJbrSWh1YbNmOasvwC2HEGol3iMoGXzIlMw8CMXQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KZ8su6R2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB2B9C4CEED;
-	Thu, 24 Jul 2025 23:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753398703;
-	bh=d8TxaSu4kxZ/sIHDsC99YRNlTS6fUD2FC+qEt1/EWbQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KZ8su6R2yWEsZ7Ud+LAtyl8cvvgx8UeUWv4PZVdX0nRWLEJCD8A0AB1Mqc8nl/kYD
-	 An4GbMOIbvuuVFRaQ38unWjHkJX69/krkz35dnljn8A/j3xya210r2+mmOKV6lTb8m
-	 KDzCYo8TmsuhI0AF2JED17xaesP0UjhAhqXf7DW1v4+YSHKQZ7s2AwvlKJ+RmcNgzo
-	 TWE37wrV3cUg486AVe6Fjl8KUsMw9PfuzGEpMECYuWBfvi4VxfIjRPYWfULBZZPRoR
-	 rhkNVjUMwPSw4RUmj7uzoZtcwLb9XjoNTJM1qopX+lSCWO0xVWzmdmzhTn5sXcFykk
-	 M4k3fH09ig9Qw==
-Date: Thu, 24 Jul 2025 16:11:39 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: atm: cxacru: Merge cxacru_upload_firmware() into
- cxacru_heavy_init()
-Message-ID: <20250724231139.GB3620641@ax162>
-References: <20250722-usb-cxacru-fix-clang-21-uninit-warning-v2-1-6708a18decd2@kernel.org>
- <2025072433-professed-breeding-152a@gregkh>
+	s=arc-20240116; t=1753413206; c=relaxed/simple;
+	bh=j2KdwwHHUr/380WtMp4FTDdN7eEHBRQzsk9LhD3LzdE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=geJAzJVrA4iBGoknVb3UD0HPeftAmUTevy6PnxesodnDpZnNxoAeJRPtyCDjoSxmu0YmsRd/Utf+zYN/oRd/rTaT/zQzMfp0/xBqMQ6Jqwwr4smZuPU3ly9s50DNPGf02r+WaoovhVc308IKqJ84V7/otl8cfoeE881upl9fXYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from longsh.shanghai.nfschina.local (unknown [180.167.10.98])
+	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id 8DE2060188238;
+	Fri, 25 Jul 2025 11:13:14 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: Su Hui <suhui@nfschina.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH] usb: xhci: print xhci->xhc_state when queue_command failed
+Date: Fri, 25 Jul 2025 11:13:09 +0800
+Message-Id: <20250725031308.1355371-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025072433-professed-breeding-152a@gregkh>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 24, 2025 at 11:33:51AM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Jul 22, 2025 at 12:11:18PM -0700, Nathan Chancellor wrote:
-...
-> >  drivers/usb/atm/cxacru.c | 106 ++++++++++++++++++++++-------------------------
-> >  1 file changed, 49 insertions(+), 57 deletions(-)
-> 
-> Sorry for the churn, but hey, it's less code now!
-> 
-> Nice work :)
+When encounters some errors like these:
+xhci_hcd 0000:4a:00.2: xHCI dying or halted, can't queue_command
+xhci_hcd 0000:4a:00.2: FIXME: allocate a command ring segment
+usb usb5-port6: couldn't allocate usb_device
 
-Agreed, thanks for forcing me to address it in a more robust way :)
+It's hard to know whether xhc_state is dying or halted. So it's better
+to print xhc_state's value which can help locate the resaon of the bug.
 
-Cheers,
-Nathan
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+ drivers/usb/host/xhci-ring.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 94c9c9271658..a1a628e849c0 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -4372,7 +4372,8 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
+ 
+ 	if ((xhci->xhc_state & XHCI_STATE_DYING) ||
+ 		(xhci->xhc_state & XHCI_STATE_HALTED)) {
+-		xhci_dbg(xhci, "xHCI dying or halted, can't queue_command\n");
++		xhci_dbg(xhci, "xHCI dying or halted, can't queue_command. state: %u\n",
++			 xhci->xhc_state);
+ 		return -ESHUTDOWN;
+ 	}
+ 
+-- 
+2.30.2
+
 
