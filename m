@@ -1,202 +1,120 @@
-Return-Path: <linux-usb+bounces-26183-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26184-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81B9AB1252F
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 22:16:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B26FAB125C5
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 22:45:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB0B1567B77
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 20:16:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74C213B10FF
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 20:45:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B7A259C87;
-	Fri, 25 Jul 2025 20:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0598225A620;
+	Fri, 25 Jul 2025 20:45:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H3lVmFoR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2432923FC42;
-	Fri, 25 Jul 2025 20:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABD31CEADB
+	for <linux-usb@vger.kernel.org>; Fri, 25 Jul 2025 20:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753474551; cv=none; b=d4u8EjPbCHmTGo3r8MMF1dXTqsthIubnNMcS6XOgIbkixmTo44nIaDPAgvYyA0DSPgAdphyf/oGZ1xj9F80d/zNu70Y+ez5E8cyxxceuBIPOej9y7lnJj+59WVT9lV6wg/sg84PtXBenpKW6vubspf3urrNLUypB5EgC2BWoxOc=
+	t=1753476349; cv=none; b=odWro3P2RzTrYfS21JajW5768e/V51CzvLU4H3h/q0wAWQ/M/OoV6n4Y5FhwjmW9mzniK1gfzZwSgFs6mKX4gYITgMvbDnxyHru7kkhHZA/E6i/lf0kC/rrIsA11WeRjHCtOKyMF96/KRTaLE75p28tYBcZmcs5/tfI8Ejmxqug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753474551; c=relaxed/simple;
-	bh=/F/JVr3SNg41VeueRzHG4AAT+V7CIIpptHyNH6dHFVU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IcUB28tLEinLSwWu7HCbfAA55whyFTwwfOu6Mfy24E1m/wOf5mSfxS4GCTxIXFBIGkNWH5+TeKpP7WNFHgrFhHsSkvpmAMtPOFmyEJ/YxAgqShL270rwebjy5XA5vN8LwasTJWFMo9gkzp+XoQis+4AGWtDpf8Ax/KOc+li1GxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-312a806f002so189977a91.3;
-        Fri, 25 Jul 2025 13:15:48 -0700 (PDT)
+	s=arc-20240116; t=1753476349; c=relaxed/simple;
+	bh=ML3wJzicutJ7pzzOS8eBw3LcVt5abqgOJBY1Oc5SJuo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XE+bfwg0/JqGxkHTWDuwCoDhru835DUIQaGWEDtxO6lBx3+yGE/bVU7JyTVdMu0+frm1WLvqfIm2PNpb963V39gVQtc6iTDKg9gLitdhJyGNNVsmgQOxwwd0p1wwX9ibybI7CA8aFO/OLmHIta64WZxDCbwN9PPznak/hPZ7KvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H3lVmFoR; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5551a770828so2611768e87.1
+        for <linux-usb@vger.kernel.org>; Fri, 25 Jul 2025 13:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1753476346; x=1754081146; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dkFV7hywCaEtlGf8Q7mOLQIOdrHzvmI6g+XiRXRO/yU=;
+        b=H3lVmFoRNQwYPfeO9iBYuLeITvT5MfGwDaTZSBL4vFsmPXyN4MmzuptVIqFGk/RsET
+         V/nHPKAft0ZeRN2EubE69vkH4mDwygKZHC1snpsD1wZ1XTeMAtllKdA5qBuZ4bjo3zox
+         lEtQEPDLGrheUbzzUcji3f0r6dzdxRBscfxo/xi8BI9/54iqIzuX0awLnvnyWcJgJmzq
+         xsseyVYJ2PVzIcU8ai65heX8iQGEgZDdr3ojx+ImVw1cdeWSwNCKWyogwVGmiog42dQE
+         z4gKNr5JPLRcAIwzscs5B+PMlvkYMDQ9+aytomfLp5js/YrucUtkBlpW8qt/W5ULTj39
+         fNyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753474548; x=1754079348;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1753476346; x=1754081146;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iDxcanwU1JbetZe9oiUEN/n+YFfsJR7sLnCsAScdPD4=;
-        b=GWzYuI81eY1X72eJgxyvXx2sQpAsSrzUQmSYdEpnc4DpDX0/0kldu9BwO+nKlsz7BN
-         dtsfCKGJtiVOaeRLhr3ZV4M1KLJweYOqRrgntJmyjOypQY/8JgM0+8kg66hANcr/e6rT
-         Id75/1qCRWsi44PUQlK+xKkGKihg42nhZhBtcSSCVT8fV9Ml4EL3A/2eAv+CxaxcUpoR
-         Qnxh29L6n8wx7ZjxdUQLY4OAjBKQUWTlV9eXH0zXhKG7LU/epBpCSMx44vZOvKuuxyBu
-         CXgMZuBGLQqnP4QNTv+iiVEsNISdlnE5gth/WYieCZtTeYfaP00ZsBHlozmUTWpZ5KCM
-         Tb1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUE9TNv9E1PdFB72RQ9PJfP8rmK1knEi5NpCN9lGrzfmFhlcwkKHuns99k6kd2twl0taiuPFx0hlALa@vger.kernel.org, AJvYcCVUWFCr8gxRzLkLql9Mn7MuLkOGDxoFVbzFq8hm6tjpj5y75QWHtxp4D78oBFov/m6bmgQ8y4yQRNGoFB4=@vger.kernel.org, AJvYcCXvhE5FElbLxh1xQL6uHKK4XclU36kK4A7bCCW51KqtgpaBWQa5ZorEI+CKNTu5unejExBkvpa4@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMmu+vHvTt8CTtIOsWSIAngtIbxGX725m3gUASpqPEfgpQxI37
-	eHJ6eh+m4XJhhWCq2e/DyTib2vQauVh+3HH9/0WNayO3WrVmuNgnhwcoUre87Kob
-X-Gm-Gg: ASbGncukmV4XUjeBfGC/c1T0lXEcLWclaouQChU2YlGUlkUuFeNzDmST7RE2ydeBRng
-	kKSBIY212oqBDORIL8Gp83LulYAR88rvgFmXNdfAiPD78PaKkxxKPZy+V3rgpprgcm6Vui0m22P
-	jWJmNBnpQZVkUePqjaWEheblwpv0/bcfkIYSDfGDefZ0UPmAxOjowIN4C122IV01mknnqJyB/mO
-	R67+0pdBVhid8wUavOX7IgjGPDQyKFHeJqLarEgCNdY8sXSkeeGxgs19/JDOhQ6R1DEfrUZsos1
-	/ectSayzMA3LMBCNSYMUysn6tv2YBS4su8SmVrEJVWV4gZmVw5znX5gciVVAP3UdSFkvLMlQR2U
-	14t4xEjBkEFg6
-X-Google-Smtp-Source: AGHT+IFWfq/YuZlLKXEbKR6CH+4VjCjJlJjC/Hbgbn/0EjkusqP9d4OK3YW1DW7j/4gOzB0opFCTOA==
-X-Received: by 2002:a17:90b:4ad2:b0:313:f9fc:7214 with SMTP id 98e67ed59e1d1-31e77873f60mr1854586a91.1.1753474548387;
-        Fri, 25 Jul 2025 13:15:48 -0700 (PDT)
-Received: from localhost ([218.152.98.97])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31e832fb798sm346993a91.8.2025.07.25.13.15.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Jul 2025 13:15:47 -0700 (PDT)
-From: Yunseong Kim <ysk@kzalloc.com>
-To: Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Byungchul Park <byungchul@sk.com>,
-	max.byungchul.park@gmail.com,
-	Yeoreum Yun <yeoreum.yun@arm.com>,
-	Michelle Jin <shjy180909@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	Yunseong Kim <ysk@kzalloc.com>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	stable@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	syzkaller@googlegroups.com,
-	linux-usb@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: [PATCH] kcov, usb: Fix invalid context sleep in softirq path on PREEMPT_RT
-Date: Fri, 25 Jul 2025 20:14:01 +0000
-Message-ID: <20250725201400.1078395-2-ysk@kzalloc.com>
-X-Mailer: git-send-email 2.50.0
+        bh=dkFV7hywCaEtlGf8Q7mOLQIOdrHzvmI6g+XiRXRO/yU=;
+        b=K/2+RpmcpKkQXHDsy3kiDeRDNNfVTYOMs7AxoExma2KqnS/+q69pOAORc4+eI35INa
+         v5qPV6gYGvsNUT/zdpoZDUR2mrM3J7EaqGFNPmGBELwVL9yZj22DZqdP6lULFGuQdwBz
+         Q2RLEWk1p5AZ0QToyFJygpfQYKmlQvQlPMhaXHBCOMy36z045CTA/KxXjvjwH4puKdlG
+         n+EIpxRw6bxVd9QvdKT2CUazz7C+4NIVSjXS0+kp7FM5xUQZ9bO5dB8vLSadrE5FIzwv
+         0ApLJLSRgxkV4oMnZWFTKr4SR2Cnb1E207DU5Bs3YvgWVR+sQQFyy9D8Ibpy+vWH2zF4
+         OqVg==
+X-Forwarded-Encrypted: i=1; AJvYcCVWeERRjDYA94zA7JA4G1xPUg4Bs64XAhkv0RO0kr1/dnZCVVOKUAfcl0lmiQ4lxC4FMwYWnUAX0TI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzdMAVO/4wLWFqNqc+j0tma+fk5UsRK2FdvbR80vGXcKBwJt4m
+	5fjLSxpXZRBH2RqeJPMh5DLH1qz7yWW8iCQisMyI9YX8p/+++xfIUCVnRoTujFGBfO5gpS4Bo1d
+	Dp7hUD5NKF48FOhyi/VpJsCSQrI7WgPxoFVZuHfhhEeHsDUBuTxl8ob1DWsg=
+X-Gm-Gg: ASbGncueHwonDtooP30ClMMbUH6ANqNuW4uftYp9zwoWD0sVYnRcaOvv8rGJ9z3/JM4
+	f4SNibjQc3d5Abrbb+pYmWOIFFe3+QKKF3pZRn6ceOgPi5LDZDuItkFvFAc5zFXf1Y6NNeaCI7c
+	o8QResksbU/7L277dZhohKB2xNoxtRAwdpt1wA7FUBkDE8QJsO15Jh8NMFNLXYaZIDXBXQvUinh
+	wAqO/2fJgV9h0RfmA==
+X-Google-Smtp-Source: AGHT+IHH48TMpDfzEN/GY0NLk20jn5GyvCErTtW6GyBV2cgMPoLiDuPLD9Pt+FDD3Nt+B3TDEvgLB3LL4Rp8lrPZ7CM=
+X-Received: by 2002:a05:6512:ac8:b0:553:cf7d:7283 with SMTP id
+ 2adb3069b0e04-55b5f4808cfmr1002884e87.33.1753476345590; Fri, 25 Jul 2025
+ 13:45:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CALU+5Va_zeqS5YK7v3HNvDKkg8srqc87P5ZaQUK5tGFUMyNrkg@mail.gmail.com>
+ <42f4753a-f7db-49a3-ba40-8743a78684b4@rowland.harvard.edu>
+In-Reply-To: <42f4753a-f7db-49a3-ba40-8743a78684b4@rowland.harvard.edu>
+From: Olivier Tuchon <tcn@google.com>
+Date: Fri, 25 Jul 2025 22:45:29 +0200
+X-Gm-Features: Ac12FXxD8K4ZtrkE9PBWaB_iYkwnoMBGmcB3aMxN41S6-C5rqYsj2xJeiUdU8XU
+Message-ID: <CALU+5VYnZfp2CqXqn7X14J5pGsXyHDOcC5mOCZx4nKA6tjzO2Q@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: Add gadgetmon traffic monitor
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-When fuzzing USB with syzkaller on a PREEMPT_RT enabled kernel, following
-bug is triggered in the ksoftirqd context.
+> > The UDC core is modified to add an optional monitoring interface defined
+> > by struct usb_gadget_mon_operations in <linux/usb/gadget.h>.
+>
+> This does not appear in the patch.  Was it left out by mistake?
 
-| BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
-| in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
-| preempt_count: 0, expected: 0
-| RCU nest depth: 2, expected: 2
-| CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-rc1-rt1 #11 PREEMPT_RT
-| Tainted: [W]=WARN
-| Hardware name: QEMU KVM Virtual Machine, BIOS 2025.02-8 05/13/2025
-| Call trace:
-|  show_stack+0x2c/0x3c (C)
-|  __dump_stack+0x30/0x40
-|  dump_stack_lvl+0x148/0x1d8
-|  dump_stack+0x1c/0x3c
-|  __might_resched+0x2e4/0x52c
-|  rt_spin_lock+0xa8/0x1bc
-|  kcov_remote_start+0xb0/0x490
-|  __usb_hcd_giveback_urb+0x2d0/0x5e8
-|  usb_giveback_urb_bh+0x234/0x3c4
-|  process_scheduled_works+0x678/0xd18
-|  bh_worker+0x2f0/0x59c
-|  workqueue_softirq_action+0x104/0x14c
-|  tasklet_action+0x18/0x8c
-|  handle_softirqs+0x208/0x63c
-|  run_ksoftirqd+0x64/0x264
-|  smpboot_thread_fn+0x4ac/0x908
-|  kthread+0x5e8/0x734
-|  ret_from_fork+0x10/0x20
+My bad, sorry for this silly mistake.
+Files will be included in the next patch.
 
-To reproduce on PREEMPT_RT kernel:
+> Do you expect that other gadget monitoring modules will be written?
+> If they are, assignment to the global pointer should be handled by a
+> routine in the gadget core, not in the monitoring module as done here.
 
- $ git remote add rt-devel git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
- $ git fetch rt-devel
- $ git checkout -b v6.16-rc1-rt1 v6.16-rc1-rt1
+I have no plan to write another one but designing the API to support it
+is a very interesting approach. I implemented it in the next patch.
 
-I have attached the syzlang and the C source code converted by syz-prog2c:
+> There should be a similar optimization for IN givebacks.  The data to
+> be transferred to the host was already recorded by the submission
+> hook, so you can save space by not copying it a second time during the
+> giveback.
 
-Link: https://gist.github.com/kzall0c/9455aaa246f4aa1135353a51753adbbe
+After a couple of tests, I found that the payload at the Submit ('S') stage
+is often meaningless (zero-filled) for both IN and OUT transfers or the
+payload size is already set to zero.
+I simplified the logic to drop the payload for ALL Submit events.
+Fixed in the next patch.
 
-Then, run with a PREEMPT_RT config.
+> Would it be better to keep the event but drop the tail end of the data?
+Thanks, excellent suggestion. I implemented it in the next patch.
 
-This issue was introduced by commit
-f85d39dd7ed8 ("kcov, usb: disable interrupts in kcov_remote_start_usb_softirq").
-
-However, this creates a conflict on PREEMPT_RT kernels. The local_irq_save()
-call establishes an atomic context where sleeping is forbidden. Inside this
-context, kcov_remote_start() is called, which on PREEMPT_RT uses sleeping
-locks (spinlock_t and local_lock_t are mapped to rt_mutex). This results in
-a sleeping function called from invalid context.
-
-On PREEMPT_RT, interrupt handlers are threaded, so the re-entrancy scenario
-is already safely handled by the existing local_lock_t and the global
-kcov_remote_lock within kcov_remote_start(). Therefore, the outer
-local_irq_save() is not necessary.
-
-This preserves the intended re-entrancy protection for non-RT kernels while
-resolving the locking violation on PREEMPT_RT kernels.
-
-After making this modification and testing it, syzkaller fuzzing the
-PREEMPT_RT kernel is now running without stopping on latest announced
-Real-time Linux.
-
-Link: https://lore.kernel.org/linux-rt-devel/20250610080307.LMm1hleC@linutronix.de/
-Fixes: f85d39dd7ed8 ("kcov, usb: disable interrupts in kcov_remote_start_usb_softirq")
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Byungchul Park <byungchul@sk.com>
-Cc: stable@vger.kernel.org
-Cc: kasan-dev@googlegroups.com
-Cc: syzkaller@googlegroups.com
-Cc: linux-usb@vger.kernel.org
-Cc: linux-rt-devel@lists.linux.dev
-Signed-off-by: Yunseong Kim <ysk@kzalloc.com>
----
- include/linux/kcov.h | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/include/linux/kcov.h b/include/linux/kcov.h
-index 75a2fb8b16c3..c5e1b2dd0bb7 100644
---- a/include/linux/kcov.h
-+++ b/include/linux/kcov.h
-@@ -85,7 +85,9 @@ static inline unsigned long kcov_remote_start_usb_softirq(u64 id)
- 	unsigned long flags = 0;
- 
- 	if (in_serving_softirq()) {
-+#ifndef CONFIG_PREEMPT_RT
- 		local_irq_save(flags);
-+#endif
- 		kcov_remote_start_usb(id);
- 	}
- 
-@@ -96,7 +98,9 @@ static inline void kcov_remote_stop_softirq(unsigned long flags)
- {
- 	if (in_serving_softirq()) {
- 		kcov_remote_stop();
-+#ifndef CONFIG_PREEMPT_RT
- 		local_irq_restore(flags);
-+#endif
- 	}
- }
- 
--- 
-2.50.0
-
+Thank you for your review, Alan.
 
