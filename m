@@ -1,62 +1,66 @@
-Return-Path: <linux-usb+bounces-26168-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26169-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06E9AB11BA6
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 12:07:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5242B11C1E
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 12:18:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F97BAA1EE5
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 10:07:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63847AA08F5
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 10:17:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 973CE2D8784;
-	Fri, 25 Jul 2025 10:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4D82D781F;
+	Fri, 25 Jul 2025 10:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Os4Euwvb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nSSHCdKZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB742D4B5A;
-	Fri, 25 Jul 2025 10:07:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F992D542F;
+	Fri, 25 Jul 2025 10:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753438033; cv=none; b=fHpK0Q1ggt8F8crlQDSwZDgy3Smfj9SuVIBC20pBw5bjFw4hN2xvNOcR/30XV++1fAqq2g7P9KUr2EysKEuJRjp2jsJ8OcO7DUzoLLdVPVpXWpHar2XZVj3aNAjWWe0xZr7j677XjkDZyNxAMhFMIi9m584D6JcsOBtwwYYCmns=
+	t=1753438501; cv=none; b=Q+srSK3I7+/ToDMLT5y0/XBnWUpSkHrE+2zFGhzxslnLCLFigFpejZ0E0yhFMxc/opO4R+QrR1zDHmngCSMAXgTw7op5uJ3jgyNOk1tuf6TLyu0KSYWGuTDnbkVZU9cEIZEW1LO4IBbHnHORHSe/8RlhKXovxAB3CMhbZkxMJuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753438033; c=relaxed/simple;
-	bh=eP1gdbNAW+XbHhtXIpa0ko94YEcBTTUzvALs0ZuViDw=;
+	s=arc-20240116; t=1753438501; c=relaxed/simple;
+	bh=S7ZVntnZrGCdRCCtCS5pk77UfxN8E3nyE5vIDTCWGL4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=buefVkrujid/2KfCp5Ybehfy1Ow2jZB/uXWDxynt75fmTU077V4d/ePl9UGkD6kozkxm3qiraczh/i4LmS9mU17OXxppLY6YJ5za44DFeshrxBM33d1IRE0XiNdRY6WrLAVG/jxcwTnDK6q4bblW1Voc7PBVGGXdgVmlCbtqjIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Os4Euwvb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B97BC4CEE7;
-	Fri, 25 Jul 2025 10:07:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=XdXAFdGoOYzIjqtSN4JBJackpO9DcSCipMrbfeasTDdzmBzK8mI4kYLXt2hlmPXKFhqA3e5+WcKPb3bAXL09hmoV0ocwRMDY20jlx3POOmAHaXjPAbW8KIqLDvfXB09ni9Eunmp3/xpHQVxl92nre+TwMEOI4hqeZ+XcO0uwurM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nSSHCdKZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E60C4CEE7;
+	Fri, 25 Jul 2025 10:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753438032;
-	bh=eP1gdbNAW+XbHhtXIpa0ko94YEcBTTUzvALs0ZuViDw=;
+	s=k20201202; t=1753438500;
+	bh=S7ZVntnZrGCdRCCtCS5pk77UfxN8E3nyE5vIDTCWGL4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Os4EuwvbUJIIA23sseJtncmirId3c+0LoyNb+VuPTYDihCv7jVfOuWmQRYIun4qow
-	 H5wqxYq7ztWwGol2hPHQbyeaFkrPmjuJqQ0FKkHd87914z6T9HxshcCdI9kk8NMnFK
-	 lg67Ww62tMRFgPgZRagfobjJjRYA2AJzkF5XNK02jsD68FYrf1WOmFzoj2C12aJPW/
-	 zwezz0q9QQAcEnirZhhMdC9ZMFUnDAO8Gtl1ML9i6qwukinWTUcsBQHGIcJFpW8ipT
-	 93CmsN0zvCKqA38eB5rVxNV0i3ky/eTLRkR2+rIvstf8yjoNfPBWQPfnj1X24uahtS
-	 qtX97z5zvfSwg==
+	b=nSSHCdKZpd9d8t0KLl/oeEvFk+QX97kwZtwmuvGgO4qbjpcsznMNtDxCIAXW9MyxV
+	 w92JUttLheCuMl1es+f2YE3tkiD6PuCvYzQFK3T2HaUJJP6nOcjICr+V5nPBAZDNFy
+	 TQzQHaeb5HA/yV9/SKDPRc8NYr7SY3ckX7BLO9i7UZiUUWJI4E6z6wDSf9+pJ7Jk/a
+	 97vQW0s0vIwYoqokd3kcCAo3XreMGUjW/DscGapKnQaXO79MA1H2GlcHNxahwo+Jr3
+	 1abCkjlN9xaqki7CIQCgB6u7W0utrXTJWh+zXi/KW5KV8X2kfC3Ram0VZ/I3jou+H5
+	 nR5jxrBwfaoHg==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1ufFKV-0000000057k-3rik;
-	Fri, 25 Jul 2025 12:07:08 +0200
-Date: Fri, 25 Jul 2025 12:07:07 +0200
+	id 1ufFS4-000000005GN-25LW;
+	Fri, 25 Jul 2025 12:14:57 +0200
+Date: Fri, 25 Jul 2025 12:14:56 +0200
 From: Johan Hovold <johan@kernel.org>
 To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: Corentin Labbe <clabbe@baylibre.com>, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	david@ixit.cz
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+	Corentin Labbe <clabbe@baylibre.com>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, david@ixit.cz
 Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
-Message-ID: <aINXS813fmWNJh3A@hovoldconsulting.com>
+Message-ID: <aINZIJTz5bxO66OW@hovoldconsulting.com>
 References: <20250204135842.3703751-1-clabbe@baylibre.com>
  <20250204135842.3703751-2-clabbe@baylibre.com>
  <aCHHfY2FkVW2j0ML@hovoldconsulting.com>
  <CAFBinCAUNNfOp4qvn2p8AETossePv2aL7jBkFxVZV_XzzULgVg@mail.gmail.com>
+ <2025071631-thesaurus-blissful-58f3@gregkh>
+ <CAFBinCAMGR2f4M1ARKytOwG1z9ORcD-OMNLH2FqZHb+tOm0tEQ@mail.gmail.com>
+ <2025071613-ethics-component-e56d@gregkh>
+ <CAFBinCA8cMP3o483c40RjHkMAEt4RCmL6uCTTk5DPmrNVN6_NQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,105 +70,37 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCAUNNfOp4qvn2p8AETossePv2aL7jBkFxVZV_XzzULgVg@mail.gmail.com>
+In-Reply-To: <CAFBinCA8cMP3o483c40RjHkMAEt4RCmL6uCTTk5DPmrNVN6_NQ@mail.gmail.com>
 
-On Tue, Jul 15, 2025 at 11:20:33PM +0200, Martin Blumenstingl wrote:
+On Wed, Jul 16, 2025 at 11:31:49AM +0200, Martin Blumenstingl wrote:
+> On Wed, Jul 16, 2025 at 10:57 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 
-> On Mon, May 12, 2025 at 12:03 PM Johan Hovold <johan@kernel.org> wrote:
+> > And are you trying to only have one set of urbs out for any port being
+> > opened (i.e. you only have one control, one read, and one write urb for
+> > the whole device, and the port info are multiplexed over these urbs?  Or
+> > do you have one endpoint per port?)
 
-> > The read urbs should be submitted at first open and stopped at last
-> > close to avoid wasting resources when no one is using the device.
-> >
-> > I know we have a few drivers that do not do this currently, but it
-> > shouldn't be that hard to get this right from the start.
-
-> If you're aware of an easy approach or you can recommend an existing
-> driver that implements the desired behavior then please let me know.
+> CH348 provides up to 8 serial ports using these four endpoints, so
+> multiplexing is going on:
+> - one bulk out for TX (see struct ch348_txbuf)
+> - one bulk in for RX (see struct ch348_rxbuf)
+> - one bulk out for CONFIG handling (see struct ch348_config_buf)
+> - one bulk in for STATUS handling (see struct ch348_status_entry)
 > 
-> The speciality about ch348 is that all ports share the RX/TX URBs.
-> My current idea is to implement this using a ref count (for the number
-> of open ports) and mutex for locking.
+> > If you are sharing endpoints, try looking at one of the other usb-serial
+> > drivers that do this today, like io_edgeport.c, that has had shared
+> > endpoints for 25 years, it's not a new thing :)
 
-Just use a mutex and integer (not refcount) to count the number of open
-ports. Submit the urbs on first open and stop them on last close.
+> My understanding is that io_edgeport is submits the URBs that are
+> shared across ports outside of .open/.close.
+> So this will be a question for Johan: am I still good with the
+> original approach - or can you convince Greg that a different approach
+> is better?
 
-Not doing so, and instead submitting at attach(), means that the host
-controller will be wasting power by polling the endpoints continuously
-as long as the device is plugged in.
+It's definitely better not to waste power when the device is plugged in
+but not in use. :)
 
-> [...]
-> > > +                     /*
-> > > +                      * Writing larger buffers can take longer than the
-> > > +                      * hardware allows before discarding the write buffer.
-> > > +                      * Limit the transfer size in such cases.
-> > > +                      * These values have been found by empirical testing.
-> > > +                      */
-> > > +                     max_bytes = 128;
-> >
-> > This is a potential buffer overflow if a (malicious) device has
-> > endpoints smaller than this (use min()).
-
-> For endpoints smaller than CH348_TX_HDRSIZE we'll also be in trouble.
-> Validating against CH348_TX_HDRSIZE size here doesn't make much sense
-> to me (as we'd never be able to progress). I think I should validate
-> it in ch348_attach() instead - what do you think?
-
-Sure you can do that.
-
-> > > +             else
-> > > +                     /*
-> > > +                      * Only ingest as many bytes as we can transfer with
-> > > +                      * one URB at a time keeping the TX header in mind.
-> > > +                      */
-> > > +                     max_bytes = hw_tx_port->bulk_out_size - CH348_TX_HDRSIZE;
-> > > +
-> > > +             count = kfifo_out_locked(&port->write_fifo, rxt->data,
-> > > +                                      max_bytes, &port->lock);
-> > > +             if (count)
-> > > +                     break;
-> > > +     }
-> >
-> > With this implementation writing data continuously to one port will
-> > starve the others.
-> >
-> > The vendor implementation appears to write to more than one port in
-> > parallel and track THRE per port which would avoid the starvation issue
-> > and should also be much more efficient.
-> >
-> > Just track THRE per port and only submit the write urb when it the
-> > transmitter is empty or when it becomes empty.
-
-> I'm trying as you suggest:
-> - submit the URB synchronously for port N
-> - submit the URB synchronously for port N + 1
-> - ...
-> 
-> This seems to work (using usb_bulk_msg). What doesn't work is
-> submitting URBs in parallel (this is what the vendor driver prevents
-> as well).
-
-No, the vendor driver tracks THRE per port
-(ttyport[portnum].write_empty) and allows writing to more than one port
-in parallel (e.g. releases the device write_lock while waiting for the
-transfer to complete).
-
-I thought the problem was that you could not submit another urb for the
-*same* port until the device buffer for that port had been emptied?
-
-This seems to be what the vendor driver is preventing.
-
-> > You should implement dtr_rts() as well.
-
-> This will be the first time we need the "package type" information as
-> CH348Q only supports CTS/RTS on the first four ports, for the last
-> four the signals aren't routed outside the package.
-> I need to see if I have other hardware with CTS/RTS pins to test this.
-
-Just connect a multimeter to the DTR and RTS pins and verify that they
-are asserted on open and deasserted on close after issuing those control
-requests (see ch9344_port_dtr_rts()).
-
-I didn't mean that you need to support hw flow control (CRTSCTS).
+Take a look at f81534 for an example of how this can be implemented.
 
 Johan
 
