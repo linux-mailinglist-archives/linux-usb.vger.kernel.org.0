@@ -1,106 +1,264 @@
-Return-Path: <linux-usb+bounces-26221-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26223-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F648B12D0C
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Jul 2025 01:17:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25BCBB132A6
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 02:31:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFD6C176528
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 23:17:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C32F18927C6
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 00:32:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FE5E2264BE;
-	Sat, 26 Jul 2025 23:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KXJ+Jocu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D94354279;
+	Mon, 28 Jul 2025 00:31:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CE7259C
-	for <linux-usb@vger.kernel.org>; Sat, 26 Jul 2025 23:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B68D13AF2
+	for <linux-usb@vger.kernel.org>; Mon, 28 Jul 2025 00:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753571860; cv=none; b=tm44VFKA3F7ybz22dXMH+NPuDkDNV4w4ih9jgyAieRLqJ6UWwt1Ilu/bSq2ymmzpUbNpHjn4qPVp3wkjcyvRFJJeiuYMQCvQN+K3+9kOMepTxu4xsqjjavz6QBw1WKv+kz8z69U2jYuX50oGKo0WKLqXg0jpW5Wtfpg5ta8oBAQ=
+	t=1753662702; cv=none; b=mjI+zPvdprAJ53LIbqMMo/GCCoTza0oqId1QxhJXsJAxjWQYZUpnIOSadGQeW0cltxgs8ye+Kto5CaWTeFTkMYw6Jdr9QjJMqJTwSNpwjFJJs8cU8i0VcdD+Go9o64xsYwP1QnU5aOjXsxqbSY2ukQwxNHb+h3J+nxqSFSK6tqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753571860; c=relaxed/simple;
-	bh=9LlZKehDUa2OkW1UGe88uwTdEOVf8tv983y6dCyfHi0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Pf9CvDStAfSh5N27S8h0at6hm+rYVO6N3mtp023m8cmbO4SidvMGDgrBh22BzeSGC0wQsntohfxYpKeWTWV7p7a8LViFngxQiJzH/eUePUzEcSKYLsIKFOkF1yIMB52XYjOMAA7sKPmOlDoiThJKKhSPgg4M5shk1nd4OmHftIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KXJ+Jocu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A38A8C4CEF4
-	for <linux-usb@vger.kernel.org>; Sat, 26 Jul 2025 23:17:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753571859;
-	bh=9LlZKehDUa2OkW1UGe88uwTdEOVf8tv983y6dCyfHi0=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=KXJ+JocuaxcwcYk9nRNiUjaYRaE5tmm28cii1UZySRnNihbvmxvaQrKRmbJ5uhkPF
-	 KNpxtoUx37vNxMM0vNMh0pZ8DeMAa0oOZEpumiWNAgEV8emZCEXHHQY3JGKJ+VqN9s
-	 r26VCFX/Xu4ACpRCexbrInSD6PBtWPtTDqN7gDc7+9mFq4f+4BXSXmwm4/6kGjsXqz
-	 swTGI+XJ0n41QhJBDuMO3EDnxyMCV38hMTIM6Wl5Tkhww2RpoZOpj1fNrDH3KeEyP0
-	 4iC7+RaeunGHMHB5R7rCh9VBykuIMPZgxtFPSJikwTV2gkq3c73ziKwRMmwtsR0DM1
-	 6GIrpVzlGSJ5Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 96377C41614; Sat, 26 Jul 2025 23:17:39 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220238] Blue Yeti microphone doesn't consistently work after
- unplugging and plugging back in or reboot.
-Date: Sat, 26 Jul 2025 23:17:39 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: fewspotty@protonmail.com
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220238-208809-10eHOUrDAV@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220238-208809@https.bugzilla.kernel.org/>
-References: <bug-220238-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1753662702; c=relaxed/simple;
+	bh=UvdjE5KBkNhzXE8qFDpqG0DxbwcDhvY/7FeD0ZxvPT4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tGUUPD341CWKQolglRU/odYlWwqb6StHV8il2jxp5XSDePAilzWGJwP//DFMTjPE96Th45ChC0YG8yi6nq79TAKejRYQpwMcYTjqafxZXDKPyiZlLyeKEIAu7qEkLWIrfwQsM/xx3h3nmsf6Z6gxanZqmYTEXgmCc9Y8/YlzRzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1753662687-086e23295742b60001-YVMibp
+Received: from ZXBJMBX02.zhaoxin.com (ZXBJMBX02.zhaoxin.com [10.29.252.6]) by mx1.zhaoxin.com with ESMTP id cb5qBJhZtgGw4G5t (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 28 Jul 2025 08:31:27 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.6
+Received: from ZXSHMBX1.zhaoxin.com (10.28.252.163) by ZXBJMBX02.zhaoxin.com
+ (10.29.252.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.44; Mon, 28 Jul
+ 2025 08:31:26 +0800
+Received: from ZXSHMBX1.zhaoxin.com ([fe80::cd37:5202:5b71:926f]) by
+ ZXSHMBX1.zhaoxin.com ([fe80::cd37:5202:5b71:926f%7]) with mapi id
+ 15.01.2507.044; Mon, 28 Jul 2025 08:31:26 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.6
+Received: from L440.Zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.44; Fri, 25 Jul
+ 2025 18:51:02 +0800
+From: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+To: <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <WeitaoWang@zhaoxin.com>, <wwt8723@163.com>, <CobeChen@zhaoxin.com>,
+	<stable@vger.kernel.org>
+Subject: [PATCH v2] usb:xhci:Fix slot_id resource race conflict
+Date: Sat, 26 Jul 2025 02:51:01 +0800
+X-ASG-Orig-Subj: [PATCH v2] usb:xhci:Fix slot_id resource race conflict
+Message-ID: <20250725185101.8375-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Moderation-Data: 7/28/2025 8:31:25 AM
+X-Barracuda-Connect: ZXBJMBX02.zhaoxin.com[10.29.252.6]
+X-Barracuda-Start-Time: 1753662687
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 5890
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.144919
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220238
+In such a scenario, device-A with slot_id equal to 1 is disconnecting
+while device-B is enumerating, device-B will fail to enumerate in the
+follow sequence.
 
---- Comment #13 from Ryan Walker (fewspotty@protonmail.com) ---
-Is the issue resolved in the release candidate? I still get the issue.
+1.[device-A] send disable slot command
+2.[device-B] send enable slot command
+3.[device-A] disable slot command completed and wakeup waiting thread
+4.[device-B] enable slot command completed with slot_id equal to 1 and
+wakeup waiting thread
+5.[device-B] driver check this slot_id was used by someone(device-A) in
+xhci_alloc_virt_device, this device fails to enumerate as this conflict
+6.[device-A] xhci->devs[slot_id] set to NULL in xhci_free_virt_device
 
-On Mon, Jul 21, 2025 at 3:39 AM, <[bugzilla-daemon@kernel.org](mailto:On Mo=
-n,
-Jul 21, 2025 at 3:39 AM,  <<a href=3D)> wrote:
+To fix driver's slot_id resources conflict, let the xhci_free_virt_device
+functionm call in the interrupt handler when disable slot command success.
 
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D220238
->
-> --- Comment #11 from Oliver Neukum (oliver@neukum.org) ---
-> The bug is marked resolved. Do you still get the issue with the latest
-> kernel?
->
-> --
-> You may reply to this email to add a comment.
->
-> You are receiving this mail because:
-> You reported the bug.
+Cc: stable@vger.kernel.org
+Fixes: 7faac1953ed1 ("xhci: avoid race between disable slot command and hos=
+t runtime suspend")
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+---
+v1->v2
+ - Adjust the lock position in the function xhci_free_dev.
 
+ drivers/usb/host/xhci-hub.c  |  5 +++--
+ drivers/usb/host/xhci-ring.c |  7 +++++--
+ drivers/usb/host/xhci.c      | 35 +++++++++++++++++++++++++----------
+ 3 files changed, 33 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index 92bb84f8132a..fd8a64aa5779 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -705,10 +705,11 @@ static int xhci_enter_test_mode(struct xhci_hcd *xhci=
+,
+ 			continue;
+=20
+ 		retval =3D xhci_disable_slot(xhci, i);
+-		xhci_free_virt_device(xhci, i);
+-		if (retval)
++		if (retval) {
+ 			xhci_err(xhci, "Failed to disable slot %d, %d. Enter test mode anyway\n=
+",
+ 				 i, retval);
++			xhci_free_virt_device(xhci, i);
++		}
+ 	}
+ 	spin_lock_irqsave(&xhci->lock, *flags);
+ 	/* Put all ports to the Disable state by clear PP */
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 94c9c9271658..93dc28399c3c 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1589,7 +1589,8 @@ static void xhci_handle_cmd_enable_slot(int slot_id, =
+struct xhci_command *comman
+ 		command->slot_id =3D 0;
+ }
+=20
+-static void xhci_handle_cmd_disable_slot(struct xhci_hcd *xhci, int slot_i=
+d)
++static void xhci_handle_cmd_disable_slot(struct xhci_hcd *xhci, int slot_i=
+d,
++					u32 cmd_comp_code)
+ {
+ 	struct xhci_virt_device *virt_dev;
+ 	struct xhci_slot_ctx *slot_ctx;
+@@ -1604,6 +1605,8 @@ static void xhci_handle_cmd_disable_slot(struct xhci_=
+hcd *xhci, int slot_id)
+ 	if (xhci->quirks & XHCI_EP_LIMIT_QUIRK)
+ 		/* Delete default control endpoint resources */
+ 		xhci_free_device_endpoint_resources(xhci, virt_dev, true);
++	if (cmd_comp_code =3D=3D COMP_SUCCESS)
++		xhci_free_virt_device(xhci, slot_id);
+ }
+=20
+ static void xhci_handle_cmd_config_ep(struct xhci_hcd *xhci, int slot_id)
+@@ -1853,7 +1856,7 @@ static void handle_cmd_completion(struct xhci_hcd *xh=
+ci,
+ 		xhci_handle_cmd_enable_slot(slot_id, cmd, cmd_comp_code);
+ 		break;
+ 	case TRB_DISABLE_SLOT:
+-		xhci_handle_cmd_disable_slot(xhci, slot_id);
++		xhci_handle_cmd_disable_slot(xhci, slot_id, cmd_comp_code);
+ 		break;
+ 	case TRB_CONFIG_EP:
+ 		if (!cmd->completion)
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 8a819e853288..6c6f6ebb8953 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3931,13 +3931,14 @@ static int xhci_discover_or_reset_device(struct usb=
+_hcd *hcd,
+ 		 * the USB device has been reset.
+ 		 */
+ 		ret =3D xhci_disable_slot(xhci, udev->slot_id);
+-		xhci_free_virt_device(xhci, udev->slot_id);
+ 		if (!ret) {
+ 			ret =3D xhci_alloc_dev(hcd, udev);
+ 			if (ret =3D=3D 1)
+ 				ret =3D 0;
+ 			else
+ 				ret =3D -EINVAL;
++		} else {
++			xhci_free_virt_device(xhci, udev->slot_id);
+ 		}
+ 		return ret;
+ 	}
+@@ -4085,11 +4086,12 @@ static void xhci_free_dev(struct usb_hcd *hcd, stru=
+ct usb_device *udev)
+ 	for (i =3D 0; i < 31; i++)
+ 		virt_dev->eps[i].ep_state &=3D ~EP_STOP_CMD_PENDING;
+ 	virt_dev->udev =3D NULL;
+-	xhci_disable_slot(xhci, udev->slot_id);
+-
+-	spin_lock_irqsave(&xhci->lock, flags);
+-	xhci_free_virt_device(xhci, udev->slot_id);
+-	spin_unlock_irqrestore(&xhci->lock, flags);
++	ret =3D xhci_disable_slot(xhci, udev->slot_id);
++	if (ret) {
++		spin_lock_irqsave(&xhci->lock, flags);
++		xhci_free_virt_device(xhci, udev->slot_id);
++		spin_unlock_irqrestore(&xhci->lock, flags);
++	}
+=20
+ }
+=20
+@@ -4128,9 +4130,20 @@ int xhci_disable_slot(struct xhci_hcd *xhci, u32 slo=
+t_id)
+=20
+ 	wait_for_completion(command->completion);
+=20
+-	if (command->status !=3D COMP_SUCCESS)
++	if (command->status !=3D COMP_SUCCESS) {
+ 		xhci_warn(xhci, "Unsuccessful disable slot %u command, status %d\n",
+ 			  slot_id, command->status);
++		switch (command->status) {
++		case COMP_COMMAND_ABORTED:
++		case COMP_COMMAND_RING_STOPPED:
++			xhci_warn(xhci, "Timeout while waiting for disable slot command\n");
++			ret =3D -ETIME;
++			break;
++		default:
++			ret =3D -EINVAL;
++			break;
++		}
++	}
+=20
+ 	xhci_free_command(xhci, command);
+=20
+@@ -4243,8 +4256,9 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_de=
+vice *udev)
+ 	return 1;
+=20
+ disable_slot:
+-	xhci_disable_slot(xhci, udev->slot_id);
+-	xhci_free_virt_device(xhci, udev->slot_id);
++	ret =3D xhci_disable_slot(xhci, udev->slot_id);
++	if (ret)
++		xhci_free_virt_device(xhci, udev->slot_id);
+=20
+ 	return 0;
+ }
+@@ -4381,10 +4395,11 @@ static int xhci_setup_device(struct usb_hcd *hcd, s=
+truct usb_device *udev,
+=20
+ 		mutex_unlock(&xhci->mutex);
+ 		ret =3D xhci_disable_slot(xhci, udev->slot_id);
+-		xhci_free_virt_device(xhci, udev->slot_id);
+ 		if (!ret) {
+ 			if (xhci_alloc_dev(hcd, udev) =3D=3D 1)
+ 				xhci_setup_addressable_virt_dev(xhci, udev);
++		} else {
++			xhci_free_virt_device(xhci, udev->slot_id);
+ 		}
+ 		kfree(command->completion);
+ 		kfree(command);
 --=20
-You may reply to this email to add a comment.
+2.32.0
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
