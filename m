@@ -1,116 +1,145 @@
-Return-Path: <linux-usb+bounces-26163-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26164-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3DD8B11A4A
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 10:54:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D75DB11A84
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 11:06:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3672D586A66
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 08:54:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A99F458765D
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 09:06:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B63B7242D6D;
-	Fri, 25 Jul 2025 08:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF0C427380A;
+	Fri, 25 Jul 2025 09:05:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HDR/DOqj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bljCoKx7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C732046A9;
-	Fri, 25 Jul 2025 08:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6AA272E5E;
+	Fri, 25 Jul 2025 09:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753433685; cv=none; b=AALRHwnca+kauX9cfKQaZYmZoOhyB/iwVAwHaF6UM8+3mGPyFLL77puodDFXdOmQstWOwLa+8qnWbqvnGZjHINWB76E7lNzTdsZVaWPbiMDfxFxRlmN90+c4QMDwSjuNfzXjr14L1sg+UH5bfIjxrmSHoLPwJrrT1mB8ZQCIoOk=
+	t=1753434352; cv=none; b=SgRBRtwFPCq/GMhrgmTd8T4SKnfEYhUEpCBd6bcWMUA4zeXV0jKy/gnz/uBrrapXeBGZTHsoiFZSbyJ5Bp5wCL3E2XCUNIzVAY+Mvpnn1oi7cKS7sXulvkf5bn1XB8mYfUgxvIabrzwjTfZBsWt8Sg1+MrXv9LK69enewlz85+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753433685; c=relaxed/simple;
-	bh=hjFINsVpC6FAHAXLNRPyDkHQkeG1X5fPEVv1tAmDq3E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nbYwtMusD94W0zKcsNSBSiMYfBD23YPox8yrdKr4D4ipN6qbJOyZCh+8oKUw65svq8woAVgzthoqMy09KioNDyijLg1+vqFYW5Z88+uXa9EM9fcP55QYNuk+Cq6Xv4Gph0/ZKnwziLRj+h8jC5PQp2qWq/twd4xSoD770JVZ5UA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HDR/DOqj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A44C4CEE7;
-	Fri, 25 Jul 2025 08:54:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1753433684;
-	bh=hjFINsVpC6FAHAXLNRPyDkHQkeG1X5fPEVv1tAmDq3E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HDR/DOqjdCaRRhBY0sA4QC/wRqKvjm+J8arwxALJwVShl/+cPjod0YfTY7OcN3KNN
-	 4xVH6UY+XTQyMK4V325iyuqO78dXxDGZjNsx7NLWqJYUZksoDFuCadNAipJpkTnhwN
-	 jW6bNXJrdRIPm2Gjw4pVdf/S0eujZusj/w7cQidA=
-Date: Fri, 25 Jul 2025 10:54:41 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>
-Cc: Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Kannappan R <r.kannappan@intel.com>,
-	Sabyrzhan Tasbolatov <snovitoll@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Pawel Laszczak <pawell@cadence.com>, Ma Ke <make_ruc2021@163.com>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Luc Bonnafoux <luc.bonnafoux@oss.cyber.gouv.fr>,
-	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Lukas Wunner <lukas@wunner.de>,
-	Alistair Francis <alistair@alistair23.me>,
-	Oliver Neukum <oneukum@suse.com>
-Subject: Re: [RFC PATCH v2 0/4] Support for usb authentication
-Message-ID: <2025072555-praying-shakiness-121f@gregkh>
-References: <20250711-usb_authentication-v2-0-2878690e6b6d@ssi.gouv.fr>
- <2025071344-possible-fabric-bbbf@gregkh>
- <d2ghp3qafwrxiwkrizzxqayzkhu36ke4dolxaloksmz4z5fzpn@paxcer43kru3>
+	s=arc-20240116; t=1753434352; c=relaxed/simple;
+	bh=9OPpFAVMQK1bN+gEue2HZ/CBVep0+K0ZTrMT8Lmv4ik=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z84cclRN9tzbE7b9f4gpy7869mPZSGb/bkkMtlpgK0wHg/c4JOncGjtCBYXzU78pV6FTkw1/B4BPKdX+4sn3wor4gSZnJgehjzXPju4L6TApki+2xVGAC18EeC8P6xllTLgSS6s5OZ9839933WhEbB3covk3izPJFSgPvw7Qhps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bljCoKx7; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3b7766698eeso34713f8f.3;
+        Fri, 25 Jul 2025 02:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753434349; x=1754039149; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CFZ6aBFoyBkiRDzNBM867EEPpKDX5bjHKu3Sm9kruSY=;
+        b=bljCoKx7RTZU+MxuCWDZIUC9NJblfIiVGiC40o/TexunOrIwCls0+KqsnbqQTstbx/
+         Wk/gxz3WPzYFg3ANVgbPQtr8HXH1z3L6JMOJLSf2DrhH719K+he4XrM0IScn+/nVQbSM
+         DlVu8kzfz9YrYxsabxHzYYhH3w16znhsTnlytilVXlVwHpZotQcabzikKuhCv6VX2CF2
+         kGiWQXpStH3ScXKw2lakENAl+ZI4r6+b7upT+sXqkVxYxxEDeC7pAS1tJvjeE+ComMZu
+         PWfSJ4wyowh3ZUaR8/iLMhHm7CmfYmOJHunKqKF19FAuOh/+SZiNe+o7y7hEdz4n4qfN
+         1Bmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753434349; x=1754039149;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CFZ6aBFoyBkiRDzNBM867EEPpKDX5bjHKu3Sm9kruSY=;
+        b=G2GqhQbbWfTnIXCmeezleBzp2y4BhxHsPlL8xM79OBdNIB18X3zHA/Pxh1lGYdPk60
+         Spmj4+oRvl5G7iBaOhYXEB9l74XrW1q/sblX/Wl63JZqr8EKVs92doP64H51Fmno1Ey6
+         RTriMut4P3oUtNI/g6YCDbPl6AAlhKQh3fudMWqK5as4wnkRc+BNGbs7r8vqb0XwiBn6
+         5NB0Jx2vc6IOYkc82Y6CPkR1Em+B6dpcyZe3twuPtPLutdTGelK6mKHKtmizH1JIZqAP
+         ajxelrSVIimCEqetUfq5o8UW6ghqjXPFc7k769CiPugOucToL47+TqZoOXMzUFiPt9Af
+         0xLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUyEJe+5yEn2aNviSRSgoyb9T4vy7aLCrB+jTtcd7f6SSesKX5kvrBhqCyIThOgiTrLvaEfryNfgVtb@vger.kernel.org, AJvYcCV/ycQBsyZvY9E/lEsWEQk0QqRK+zcOcboTGteH8M/Mq3ZloZMaw2adhfxpPglCTGuMKRQJPMYxwlHJY6Q=@vger.kernel.org, AJvYcCX+9pVUXzKCOWzFygmgDR9z0jaV5MZrib4QbH82l67yKYInfYZOcA11jpIpO3wJwIXnX9PQXe5LXpml7n4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycMeBGoccuBIEp86YhJct7JVFjUuVkZjo9z2gF5vGuvRUNbfe+
+	miIYbKO5h4ARiC1k3H/oWdtdzgrYqmFRnB4c864o94X7A+WB+UC8uwG6
+X-Gm-Gg: ASbGncus0QjXTjvwqRSKPPN4ZyQkE9NwmfB2f2no+PIlcVflQf9nljUuc/0jayMUlaO
+	jQ0+h850yQR1X7lWOF4diSSBiHGLE3M3zSozAqJ7I0Y24Kxj+Pendw5WzWV4eXt/RazcL7dGeii
+	BTEOyKNXWU2lVk3zy5W0vqnv3FblN9MJkd/K1ey3wecK79g+NpkKRBg89iuno2I+iZIwoZCqBNK
+	SAazpGs4H3tZjJ2kGTWNqaSeal85MyHsLRgGoHdsGpVhD71HR0LLpuu39xIiUjEtHlXDIQLShU6
+	Xnd/NhnmeuWrmnyl4m89pfZMgtvH5dQfjKQVmGJX8k6ydB0zyRizc4H0PiSQWYerdh8ZfuYfV6w
+	7mehNkGO2XT3tybZabqCVgDh95uCB/hJ0ExFwgkyuet7im80=
+X-Google-Smtp-Source: AGHT+IFwplxRDWetFtC9Z04tT8q6AgVjbsmRxl41gmfUmRsrZ5It5r7ruUEL+rrpm37jZ7qpDSC+rA==
+X-Received: by 2002:a05:6000:250a:b0:3a4:e740:cd6e with SMTP id ffacd0b85a97d-3b77673dcc3mr408463f8f.8.1753434348873;
+        Fri, 25 Jul 2025 02:05:48 -0700 (PDT)
+Received: from thomas-precision3591.. ([2a0d:e487:31ff:1e66:d79d:18fa:7b96:a238])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b77078b1absm4302974f8f.1.2025.07.25.02.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Jul 2025 02:05:48 -0700 (PDT)
+From: Thomas Fourier <fourier.thomas@gmail.com>
+To: 
+Cc: Thomas Fourier <fourier.thomas@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Wayne Chang <waynec@nvidia.com>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	Nagarjuna Kristam <nkristam@nvidia.com>,
+	linux-usb@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: Fix trb_virt_to_phys() error value
+Date: Fri, 25 Jul 2025 11:05:33 +0200
+Message-ID: <20250725090540.51958-1-fourier.thomas@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d2ghp3qafwrxiwkrizzxqayzkhu36ke4dolxaloksmz4z5fzpn@paxcer43kru3>
+Content-Transfer-Encoding: 8bit
 
-Hi,
+0 is a valid DMA address, so returning DMA_MAPPING_ERROR in
+trb_virt_to_phys().  Also, dma_mapping_error() wouldn't
+flag 0 as an error address.
+Checking the return value directly because the dma_addr
+does not come directly from dma_map().
 
-Let me focus right now on only one thing here:
+Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
+Signed-off-by: Thomas Fourier <fourier.thomas@gmail.com>
+---
+ drivers/usb/gadget/udc/tegra-xudc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Mon, Jul 21, 2025 at 04:51:52PM +0200, Nicolas Bouchinet wrote:
-> > > Limitations
-> > > ===========
-> > > 
-> > > The USB authentication protocol come with some inherent limitations, [3]
-> > 
-> > That's a 2018 reference!  Are you saying that the newly designed
-> > protocol was already discussed in 2018 and found lacking?
-> > 
-> As far as we are aware, the last version of the specification [1] is the
-> last is the last version that includes errata from 2019. [3] is a
-> research paper that explored the limitation of the protocol. We are not
-> aware of any evolution since. We saw that SPDM reuses some of the USB
-> specification fields but we are not entirely sure yet if can be used in
-> place of the USB specification and if it fixes the limitations.
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index 2957316fd3d0..5dd3452bddbc 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -900,7 +900,7 @@ static dma_addr_t trb_virt_to_phys(struct tegra_xudc_ep *ep,
+ 	index = trb - ep->transfer_ring;
+ 
+ 	if (WARN_ON(index >= XUDC_TRANSFER_RING_SIZE))
+-		return 0;
++		return DMA_MAPPING_ERROR;
+ 
+ 	return (ep->transfer_ring_phys + index * sizeof(*trb));
+ }
+@@ -1480,7 +1480,7 @@ __tegra_xudc_ep_dequeue(struct tegra_xudc_ep *ep,
+ 			deq_ptr = trb_virt_to_phys(ep,
+ 					&ep->transfer_ring[ep->enq_ptr]);
+ 
+-			if (dma_mapping_error(xudc->dev, deq_ptr)) {
++			if (deq_ptr == DMA_MAPPING_ERROR) {
+ 				ret = -EINVAL;
+ 			} else {
+ 				ep_ctx_write_deq_ptr(ep->context, deq_ptr);
+@@ -2836,7 +2836,7 @@ static void tegra_xudc_reset(struct tegra_xudc *xudc)
+ 
+ 	deq_ptr = trb_virt_to_phys(ep0, &ep0->transfer_ring[ep0->deq_ptr]);
+ 
+-	if (!dma_mapping_error(xudc->dev, deq_ptr)) {
++	if (deq_ptr != DMA_MAPPING_ERROR) {
+ 		ep_ctx_write_deq_ptr(ep0->context, deq_ptr);
+ 		ep_ctx_write_dcs(ep0->context, ep0->pcs);
+ 	}
+-- 
+2.43.0
 
-So, this spec has been out since 2019, and it's "broken", AND there are
-no actual devices using this?
-
-If there is no hardware out there, I really do not want to be adding new
-features to the kernel for this.  We ripped out wireless usb because the
-thing never actually shipped and was dropped by the vendors.  Let's not
-do that again here.
-
-So if there is no hardware, there's no need for this at all, right?
-Where are the vendors that wrote this spec, and why did they not
-actually add support for this to their devices already?
-
-And, most importantly, is Windows going to support this?  Because if it
-is not, then there is no need for us to support it either as no vendor
-is going to only be building a USB device just for Linux systems, right?
-
-So, where are the vendors?  Without that, this is not going to actually
-go very far at all, and just bit-rot in our tree :(
-
-thanks,
-
-greg k-h
 
