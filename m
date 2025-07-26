@@ -1,203 +1,107 @@
-Return-Path: <linux-usb+bounces-26208-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26209-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F25CAB128EC
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 06:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F4A4B1293B
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 08:36:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E63C71C26409
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 04:22:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 924CA1C275DD
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 06:37:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F451F03FB;
-	Sat, 26 Jul 2025 04:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780482063E7;
+	Sat, 26 Jul 2025 06:36:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PLdbQ488"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Z4FAtJ2R"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2535B199FB0
-	for <linux-usb@vger.kernel.org>; Sat, 26 Jul 2025 04:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE71D128819;
+	Sat, 26 Jul 2025 06:36:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753503701; cv=none; b=qfdG4M7xjBPmNthR1ScWjOaMNrzNOrgt2c+1q4M6URLbNl9a6o1A6S8q17MUQwkMoXG1Qbqq9Qlzp5UYLsibfS/geivM4aQJu9d/2r6S4oZuIlU0AbSrukTzRSTtTaupVudaVG24A9o2B82nG6ZC7u2oG+rxjODCVa67bxUQFWY=
+	t=1753511801; cv=none; b=kpRrTeZx0yLOqi+LajCYdDLsIDqPkb9uDGB5kJEkXQso5+CcODZXWGQahxGkePv+uWjXgNWf0oC5ulQCaaJH4usQN9NNoJFP6/yWXu2wemBbtO17FGQeYNoonZo6S3gF8x9H7PSe4Z869nRe+0fxABTX75HUJYhcnleyEnYLVIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753503701; c=relaxed/simple;
-	bh=VPv3zEOfr5CArlOaHfG3VFO+HPtc81TyZHtQ3DAY7K0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=CBCVru2EwxPoaNfNHeCDJ6iFbC0v/cBb71eEOJU0jOqm9iGoi154ayquiwEP1jQjPk1zMPdGQ6ibcpwgmartB5MB5uMRePenrnPFoNom/5H54bmpttXPJkUA7k7RnvwfhVDj+r3Y0itccOLNdDg5x8wpn6GwH/rpz0vAb2ABI1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PLdbQ488; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753503699; x=1785039699;
-  h=date:from:to:cc:subject:message-id;
-  bh=VPv3zEOfr5CArlOaHfG3VFO+HPtc81TyZHtQ3DAY7K0=;
-  b=PLdbQ4885q4wkwrhOtAtXJmk/eUwKxeXCD9g0FO3G/JCZDRMPiHDFkdo
-   JkuGUsjlGzdduvgzn6oK4evQn3lsFUD+/BTpaI9ImbqagGV4+k7ugeu3o
-   3u3GscwdlWY5zgajUtC3h7n/KaZXBVy7N+U63rUGIOn4xZJEgYR/AGEEV
-   CdcDHu/gdh8txPhzg9kQvxAsX0XDAvorF8rW/wNmZXoLPRc36yUMTHHin
-   u5NawnjVmR4L9/kDmac/tG8w/BxV2JExtw30/ueW8301IdfGQyR06qRut
-   X7JsdGuNxZRESfJDUNx0GvgKPNbqMAJfudSXgitLrlJahoPBP/W/DYacW
-   A==;
-X-CSE-ConnectionGUID: 2O/YNMfaT1qYeWfs7SE6wg==
-X-CSE-MsgGUID: rGyRn0P+Q8yD9eMScDgeJA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="55693370"
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="55693370"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2025 21:21:37 -0700
-X-CSE-ConnectionGUID: JBLThXudTyWSNeIIrCqDBQ==
-X-CSE-MsgGUID: RPvpxHNdQfu42pUYoWhOsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="161247449"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 25 Jul 2025 21:21:36 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ufWPe-000LiN-0g;
-	Sat, 26 Jul 2025 04:21:34 +0000
-Date: Sat, 26 Jul 2025 12:21:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 51d4b0a44c82e5eff056ef76acd2c3c605a8eb74
-Message-ID: <202507261214.6ZCYbDgz-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1753511801; c=relaxed/simple;
+	bh=5vwqn6VniSu+7gYJT+ma+sD+AePMl3SSq5Xjl7bcOCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lmIG4h1fIKzGP3r7GPV35+xjM2alQZybc2I7Fe8GqUaK4vZm6DGDLD+lnDM7r5KwanNdKABkF8AMWk2zqTjYBrt8huLqadWDvE6aeZhkdHitcpRX0aN5CZIuFCP70jSh9yxRAU9VL16VMOrJ2VHVQVFQ+Q3y3eOIjkG+IYUCHGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Z4FAtJ2R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7B37C4CEEF;
+	Sat, 26 Jul 2025 06:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1753511800;
+	bh=5vwqn6VniSu+7gYJT+ma+sD+AePMl3SSq5Xjl7bcOCU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z4FAtJ2RhA5fhEX0nzzCnRKaNYzpE2Y6tuFBTbs8p1u0vvJJu1fnggHciIAL8lqoa
+	 qi/5tg2w01WA025v9e+AZfLGyz/VJt58Af/gDj9CjUpI7qyN3xTvRq2VlgUp0bofXR
+	 Q8KtJ1rrtAIePcM0PSUlTZAZWRzv3kGKxkGPKouM=
+Date: Sat, 26 Jul 2025 08:36:37 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Yunseong Kim <ysk@kzalloc.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Byungchul Park <byungchul@sk.com>, max.byungchul.park@gmail.com,
+	Yeoreum Yun <yeoreum.yun@arm.com>,
+	Michelle Jin <shjy180909@gmail.com>, linux-kernel@vger.kernel.org,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	stable@vger.kernel.org, kasan-dev@googlegroups.com,
+	syzkaller@googlegroups.com, linux-usb@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH] kcov, usb: Fix invalid context sleep in softirq path on
+ PREEMPT_RT
+Message-ID: <2025072615-espresso-grandson-d510@gregkh>
+References: <20250725201400.1078395-2-ysk@kzalloc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250725201400.1078395-2-ysk@kzalloc.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 51d4b0a44c82e5eff056ef76acd2c3c605a8eb74  usb: musb: omap2430: clean up probe error handling
+On Fri, Jul 25, 2025 at 08:14:01PM +0000, Yunseong Kim wrote:
+> When fuzzing USB with syzkaller on a PREEMPT_RT enabled kernel, following
+> bug is triggered in the ksoftirqd context.
+> 
+> | BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+> | in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
+> | preempt_count: 0, expected: 0
+> | RCU nest depth: 2, expected: 2
+> | CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-rc1-rt1 #11 PREEMPT_RT
+> | Tainted: [W]=WARN
+> | Hardware name: QEMU KVM Virtual Machine, BIOS 2025.02-8 05/13/2025
+> | Call trace:
+> |  show_stack+0x2c/0x3c (C)
+> |  __dump_stack+0x30/0x40
+> |  dump_stack_lvl+0x148/0x1d8
+> |  dump_stack+0x1c/0x3c
+> |  __might_resched+0x2e4/0x52c
+> |  rt_spin_lock+0xa8/0x1bc
+> |  kcov_remote_start+0xb0/0x490
+> |  __usb_hcd_giveback_urb+0x2d0/0x5e8
+> |  usb_giveback_urb_bh+0x234/0x3c4
+> |  process_scheduled_works+0x678/0xd18
+> |  bh_worker+0x2f0/0x59c
+> |  workqueue_softirq_action+0x104/0x14c
+> |  tasklet_action+0x18/0x8c
+> |  handle_softirqs+0x208/0x63c
+> |  run_ksoftirqd+0x64/0x264
+> |  smpboot_thread_fn+0x4ac/0x908
+> |  kthread+0x5e8/0x734
+> |  ret_from_fork+0x10/0x20
 
-elapsed time: 1095m
+Why is this only a USB thing?  What is unique about it to trigger this
+issue?
 
-configs tested: 110
-configs skipped: 3
+thanks,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                   randconfig-001-20250725    gcc-13.4.0
-arc                   randconfig-002-20250725    gcc-11.5.0
-arm                              allmodconfig    gcc-15.1.0
-arm                              allyesconfig    gcc-15.1.0
-arm                            mmp2_defconfig    gcc-15.1.0
-arm                   randconfig-001-20250725    gcc-15.1.0
-arm                   randconfig-002-20250725    clang-22
-arm                   randconfig-003-20250725    clang-20
-arm                   randconfig-004-20250725    clang-22
-arm                         s3c6400_defconfig    gcc-15.1.0
-arm                           stm32_defconfig    gcc-15.1.0
-arm64                            allmodconfig    clang-19
-arm64                 randconfig-001-20250725    clang-22
-arm64                 randconfig-002-20250725    gcc-12.5.0
-arm64                 randconfig-003-20250725    gcc-14.3.0
-arm64                 randconfig-004-20250725    clang-22
-csky                  randconfig-001-20250725    gcc-11.5.0
-csky                  randconfig-002-20250725    gcc-10.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allyesconfig    clang-22
-hexagon               randconfig-001-20250725    clang-22
-hexagon               randconfig-002-20250725    clang-22
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250725    gcc-12
-i386        buildonly-randconfig-002-20250725    clang-20
-i386        buildonly-randconfig-003-20250725    clang-20
-i386        buildonly-randconfig-004-20250725    clang-20
-i386        buildonly-randconfig-005-20250725    clang-20
-i386        buildonly-randconfig-006-20250725    clang-20
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch             randconfig-001-20250725    gcc-15.1.0
-loongarch             randconfig-002-20250725    gcc-15.1.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                         3c120_defconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20250725    gcc-9.5.0
-nios2                 randconfig-002-20250725    gcc-8.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250725    gcc-15.1.0
-parisc                randconfig-002-20250725    gcc-8.5.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-22
-powerpc                  mpc885_ads_defconfig    clang-22
-powerpc               randconfig-001-20250725    gcc-8.5.0
-powerpc               randconfig-002-20250725    clang-22
-powerpc               randconfig-003-20250725    gcc-8.5.0
-powerpc64             randconfig-001-20250725    clang-22
-powerpc64             randconfig-002-20250725    gcc-8.5.0
-powerpc64             randconfig-003-20250725    gcc-10.5.0
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                 randconfig-001-20250725    gcc-10.5.0
-riscv                 randconfig-002-20250725    clang-22
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                  randconfig-001-20250725    gcc-8.5.0
-s390                  randconfig-002-20250725    clang-17
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                    randconfig-001-20250725    gcc-15.1.0
-sh                    randconfig-002-20250725    gcc-15.1.0
-sh                             shx3_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                 randconfig-001-20250725    gcc-8.5.0
-sparc                 randconfig-002-20250725    gcc-11.5.0
-sparc64               randconfig-001-20250725    gcc-8.5.0
-sparc64               randconfig-002-20250725    gcc-8.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250725    clang-22
-um                    randconfig-002-20250725    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250725    clang-20
-x86_64      buildonly-randconfig-002-20250725    clang-20
-x86_64      buildonly-randconfig-003-20250725    clang-20
-x86_64      buildonly-randconfig-004-20250725    clang-20
-x86_64      buildonly-randconfig-005-20250725    gcc-12
-x86_64      buildonly-randconfig-006-20250725    clang-20
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250725    gcc-13.4.0
-xtensa                randconfig-002-20250725    gcc-8.5.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+greg k-h
 
