@@ -1,52 +1,54 @@
-Return-Path: <linux-usb+bounces-26210-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26211-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56564B1293F
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 08:40:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C55AB12944
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 08:43:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D75EC3A8175
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 06:39:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B88D17B44E5
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 06:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC312066CF;
-	Sat, 26 Jul 2025 06:39:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4937820766C;
+	Sat, 26 Jul 2025 06:43:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yQGY0M+M"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ds2lYKMM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04B6202F87;
-	Sat, 26 Jul 2025 06:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DE3184E;
+	Sat, 26 Jul 2025 06:43:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753511994; cv=none; b=ibPi+21sFpV8M92SDEfZ+D+l1NwOQj4i0wgF4BcXBcpbR5LmOY4fJZaRAKfnJoI7yG6M2RZ3KgPGQ0xDtlGF+Wr0oizJUAiC8CIsFcXtxcwctAjlkThucRP0ifN4j9hfMuHZ2mAybUVM35Joha6dyDBlvi2iojzL4bBfWuh9k0Y=
+	t=1753512200; cv=none; b=PXocz/Gy1aU6tjTLetqNE0GN+O1NHXmrx+ZsYGg6wpq8tlhgPBgDgoZU5f/Fo8BAudFE22C81f9O5pH47/Sqvi3GXyHt9PcukmHJ3HGZnwbpa/SZKOpi5zN+DZUi9EHx7dvhTAmBHo9j7sfbYlvm5aAcg9YnrHUpilmQ4SJSrBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753511994; c=relaxed/simple;
-	bh=X14GJbue3JTd6xDO7+C47pi90kQh5Op1cdhyUhrppJg=;
+	s=arc-20240116; t=1753512200; c=relaxed/simple;
+	bh=3sMAVGLrptoKObKgXkaOBeVptyNkPArrNkwOO3zLKFk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J/8MMf8tesVC5AwVYiD3xfvJObPU4hu8eVyiz8Rrjp12fClRshtcNxOlkaB6Kxot7lkce9ZziWy2znR2gVIAZXxVvDL3UJ7UIkHC+R0ynEMZmlB9mTdOtAJMnKopNCWCnz7a+cif4G0WtAshqV5Ylwwysrz1LXguihSw2a80ltI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yQGY0M+M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB89AC4CEF4;
-	Sat, 26 Jul 2025 06:39:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QzY0jnvJv6sE2by5r1oImY7uhK5KV9oOOel4O7FN8FBJkgaOzTSKDy1VghpomNSec8icOA0Tl0t8uR41J0n35TMstW3jWNODgfCig+pI6ScsxvPf4buKt5GprUb/BYNfJFDb6BqmhhfR0TYZ8h8TT81GDpRJ3rKYFISUa3PTbzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Ds2lYKMM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7275C4CEED;
+	Sat, 26 Jul 2025 06:43:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1753511994;
-	bh=X14GJbue3JTd6xDO7+C47pi90kQh5Op1cdhyUhrppJg=;
+	s=korg; t=1753512199;
+	bh=3sMAVGLrptoKObKgXkaOBeVptyNkPArrNkwOO3zLKFk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yQGY0M+MrnP1xsP4BsBX9p4T7MMJAEBSunswoE4lCfKJHzwNuAP2KHU921RETnX0O
-	 Qa3rUltMr0zQjn/4I5EZWmQkNP2ndc3t0RfRM11hALcquu3SJZwq5s7pc0hw26fwWT
-	 E6gsbJXD1FJat4qvmuP8BCXR6hrpuS04owsvkl74=
-Date: Sat, 26 Jul 2025 08:39:51 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Olivier Tuchon <tcn@google.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+	b=Ds2lYKMMo4jlA1VmH2P2RugyknUME2VCaX7+UICoWB+N32hGs+aR5+9nolESnBCBD
+	 nqH87L/tgYY8mWsRgfMsTM/jv5HxXI6UPtiuvoA6FrJgs4FHkqe8FxT/LmZc7mh9S/
+	 qyPJCq2xZr5Pv0CWZ84ypYmRJmCf0QQ8F9EUo4vY=
+Date: Sat, 26 Jul 2025 08:43:16 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc: Valentina Manea <valentina.manea.m@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+	"Brian G. Merrell" <bgmerrell@novell.com>, kernel@collabora.com,
+	Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: Address review comments and include
- missing files
-Message-ID: <2025072652-chewable-stupor-9a4d@gregkh>
-References: <CALU+5Vb8kFrR_HMOrBDktxEEQE4d4qBTijVpSdSQz4d3qXsfJQ@mail.gmail.com>
+Subject: Re: [PATCH v2 00/18] USB/IP VHCI suspend fix and driver cleanup
+Message-ID: <2025072637-corny-careless-8523@gregkh>
+References: <20250726-vhci-hcd-suspend-fix-v2-0-189266dfdfaa@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,42 +57,32 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALU+5Vb8kFrR_HMOrBDktxEEQE4d4qBTijVpSdSQz4d3qXsfJQ@mail.gmail.com>
+In-Reply-To: <20250726-vhci-hcd-suspend-fix-v2-0-189266dfdfaa@collabora.com>
 
-On Fri, Jul 25, 2025 at 11:09:26PM +0200, Olivier Tuchon wrote:
-> This patch addresses feedback on v1 from greg k-h and Alan Stern. It
-> also includes files that were missing from the initial submission.
+On Sat, Jul 26, 2025 at 01:08:02AM +0300, Cristian Ciocaltea wrote:
+> The USB/IP Virtual Host Controller (VHCI) platform driver is expected to
+> prevent entering system suspend when at least one remote device is
+> attached to the virtual USB root hub.
 > 
-> The following changes have been made:
->   - correct initial coding style issue (spaces for tabs)
->   - add missing file required for the feature to build and run
->   - improve FIFO full handling by truncating event data instead of
->     dropping the event entirely
->   - avoid capturing redundant data for IN submissions
-
-This is not a proper way to write a subject line or comments at all.
-
-Look at patches on the list and in the tree, nothing starts with
-"address review comments", right?
-
-Please go back and start again...
-
-
+> However, in some cases, the detection logic for active USB/IP
+> connections doesn't seem to work reliably, e.g. when all devices
+> attached to the virtual hub have been already suspended.  This will
+> normally lead to a broken suspend state, with unrecoverable resume.
 > 
-> Signed-off-by: Olivier Tuchon <tcn@google.com>
-> ---
->  drivers/usb/Kconfig                     |  2 +
->  drivers/usb/Makefile                    |  1 +
->  drivers/usb/gadget/udc/core.c           | 78 +++++++++++++++++++++++++
->  drivers/usb/gadget_mon/Kconfig          | 20 +++----
->  drivers/usb/gadget_mon/gadgetmon_main.c | 41 ++++++++-----
->  include/linux/usb/gadget.h              | 23 ++++++++
->  6 files changed, 141 insertions(+), 24 deletions(-)
+> The first patch of the series provides a workaround to ensure the
+> virtually attached devices do not enter suspend.  Note this is currently
+> limited to the client side (vhci_hcd) only, since the server side
+> (usbip_host) doesn't implement system suspend prevention.
+> 
+> Additionally, during the investigation I noticed and fixed a bunch of
+> coding style issues, hence the subsequent patches contain all the
+> changes needed to make checkpatch happy for the entire driver.
 
-Please read the in-kernel documentation about how to submit a kernel
-patch, it should explain all of this, right?  If not, please work with
-someone in your group that knows how to create kernel patches, don't
-require the community to do that kind of basic review/training for you.
+You are doing two major things here, fixing suspend, and cleaning up
+checkpatch issues.  Please make that two different patch sets as those
+are not logical things to put together at all.  Work on the suspend
+issue first, and after that is all done and working, then consider
+checkpatch cleanups, those are not that important overall :)
 
 thanks,
 
