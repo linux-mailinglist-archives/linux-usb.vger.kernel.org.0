@@ -1,112 +1,134 @@
-Return-Path: <linux-usb+bounces-26216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26217-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BA55B129CE
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 11:11:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B840B12A55
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 14:00:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8C0A3B4D11
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 09:10:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 444011C261E4
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 12:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F42B2248B5;
-	Sat, 26 Jul 2025 09:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA50C244675;
+	Sat, 26 Jul 2025 11:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYnwZhGq"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cfXFPJlk";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qu5Vv5Bx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A282121A428;
-	Sat, 26 Jul 2025 09:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4576200132;
+	Sat, 26 Jul 2025 11:59:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753521070; cv=none; b=NXWehTAoUOX804VT254QL5GXEQkSQeNz58dS01jK5Nc30Weg3YTXSnem10QBf18xAS5MdLAQYfuvmsptD6gwT5UJg3SAiS6YFmKxc5D8Yjmw4V8ASzKinJCnS9DX9zjapfZQfbIascF+UxoObosp7Tkx+XCEC2ulTqy3aNlEOe4=
+	t=1753531196; cv=none; b=CI/d+PmhB5/J3QgH8KRihhjbfWG88SOAdzzKOkiDDDEo2jpWX8ONKSWprWNCxPqJkPlhCwn08qpVCxtD5BZMguMoVj3RFTQc9I9fGw0ZZyM4voFLXL7/qBzn8/Mtqnbl52H09sF282qUVe8ZdgJ/yUwqaC54eyJcl3HxnPt+h8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753521070; c=relaxed/simple;
-	bh=6GO1RWeSAL2AkF/OzEM5SCVC4XanY1WqHpcd7kPgYLg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jIleEcTM3sveRT2nuoD3/Khte9Bbqwkqb838cY4QQf8wVO3VItUWsTG+fMU0b1U5pRpn1Gbi6I5L7ObxfNbvoEV3r4RZ26/6Ff/PPUHmNpdPNzzfL3CT46CBOkcmevSgRv0tKeKx2zfV2AwjLQp2esZPoM20CKB+v7/10n5dyVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYnwZhGq; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6150be62be4so476848a12.0;
-        Sat, 26 Jul 2025 02:11:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753521067; x=1754125867; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6GO1RWeSAL2AkF/OzEM5SCVC4XanY1WqHpcd7kPgYLg=;
-        b=iYnwZhGqy/XUEAVkEHjS1u8FSlJXYQHFBSx9sFg9bXoA1nJbwOMi7YZAPgrcK7ONFt
-         q9n0MsKwPcxXJ3zwSfplwokPzQ3uYAjeShX5YV5D0tah/0JOlddMRY/d3JnlgSkioxkn
-         tGjx25pSDLeE+K83saCyRqbzXCuuQ5cCkpWLorpX2ftH3vgZFTMC6jsGS+TfvjQi0uTW
-         YczQS3/EVvFPSwWeniGjDWSqouGoERcM56eewe3UQYFw3dj7LzNZLtP0Lcb4YNw2o8SH
-         uHRZ2OZyzWHm80ezlIgNJJdhJsuhWnf74kBP2kcED3a5q9UyqnAZqEOdMigUQXY2tX2C
-         RIaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753521067; x=1754125867;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6GO1RWeSAL2AkF/OzEM5SCVC4XanY1WqHpcd7kPgYLg=;
-        b=f8MUgaXKJOCf1RKxNm/2q/2CJXqOBumk/L9/Ec7TtbmFV6piaVSR9rElFaXq7b8sfQ
-         GNAqpZuCueGoV20dTDgnYKt11f45Iz1yRdO3ijOD7L46bHaAa9XiVFHixZEYkZ+6y1PK
-         mIvAzk4smO19u6gPSOi8f0S6vgxBTZzLLNUakmvmi7t4yN2pGTlJ2amEZwLnm1mI8l8H
-         uJAheMQxCLRK6IyYRugch3g9mUgSttjx2d9L6dWyPK42uL6FFBQ/5Pm/Rbdkycm2/JK1
-         Fk2WtwgIF7VfDCp/KvtlnL5pf2Sh0tiHgY4neBRk+W0iL/7JMxvQzn0RgoOciR+fvSnY
-         dEGg==
-X-Forwarded-Encrypted: i=1; AJvYcCU62OWruFgsGzq365HN7AVtS8USFbqWvBXo2qkBHC2Ia7QcSoJRBhvbTpayAkJGQ2QBp8LPXu35peDB7h7j@vger.kernel.org, AJvYcCVa21YGs3h5ZA2+IOEir/K3RFJt+rYvPBaB8S/hed0JPVZEFvC3afvRZjui/vI6Vr6vkpDtHXcn+zrjXi1FygU=@vger.kernel.org, AJvYcCW1E7EdJuhAw+7aITiPJmcQa8WLBfvBVovEetYSFIZBMlwMFNpG47zeapSCBgHpaNAAFMZiaFkkqX9E@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWFToouKAN78JH6SyQJbBfOcUdvDDu4m8HO4U6mT9+ooYzt+rp
-	R/XF1aG6PvjeWgxoZjltGBn/MImEslqd8K94P7VR5hM7fCiYzVDLv1sp
-X-Gm-Gg: ASbGncv8ilTS219x9E8Txy5Hm+4uyWOCgr8u/amjeHlZdLbAr8ZGzYMrukmIAjuTBGC
-	GOFrFWn2l9OE/2CxTbeq5jX9uDbr6SeFtWtbHx8LDok2AkghSyW3iMAwJz2EIwZVTI2v9nunuGz
-	vGSrSCoDzqyV+t1Ig/LUIa0CT1jQ2klzF1s8HedNhzTdvpTvOZN+JY41De3UuYGVT15IjDq99XW
-	Y/oDQR07XK4XbIALkB+VqCR8fkwIUJa2DP/LV1jKxrcttIs35wazqUV1TlQno3zXaZg+s10g8Em
-	hcxcXe/SYhAZjIGwafFXSz5QNDGeEPmU2rLICqDYW63NybP86259gNl7I8r7c1xGCA66aDB9Ljh
-	pdGZ1L1gXELHnJgGyIGTRu7dgQOXzgXWH
-X-Google-Smtp-Source: AGHT+IGv2MIwdifVPt94hd01cMVCZ/nXPQZg5AldEwqF7PJ3XR8MYhxV2ZK0Wwfx500NxQf9kwVVOQ==
-X-Received: by 2002:a05:6402:3509:b0:612:bfb2:386 with SMTP id 4fb4d7f45d1cf-614f1f2afe0mr5102471a12.28.1753521066681;
-        Sat, 26 Jul 2025 02:11:06 -0700 (PDT)
-Received: from foxbook (bfh67.neoplus.adsl.tpnet.pl. [83.28.45.67])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61500a58aa6sm814588a12.27.2025.07.26.02.11.05
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sat, 26 Jul 2025 02:11:06 -0700 (PDT)
-Date: Sat, 26 Jul 2025 11:11:01 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Su Hui <suhui@nfschina.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2] usb: xhci: print xhci->xhc_state when queue_command
- failed
-Message-ID: <20250726111101.5928e289@foxbook>
-In-Reply-To: <09d18144-ab12-4bbc-8b61-e0b334ef13bc@nfschina.com>
-References: <20250725120329.2b6e3813@foxbook>
-	<09d18144-ab12-4bbc-8b61-e0b334ef13bc@nfschina.com>
+	s=arc-20240116; t=1753531196; c=relaxed/simple;
+	bh=e9ZHZi0F7JWdfqhdsjEBHsC+0Dy6+SkPdlpSOOJLwAA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=XHRIkrbeOiuL5KG0tkj1pttiM9eQDi9VsQcPzhaVkd3JnA4ehMmJk+FgPa4VHRLvsZkX9/B+Js1kshR2z5Um416RykbZ7ZhmZ2Ru8NIz7br621EuKuV/NKgMgrFEkGNNAbi85Fxk9XSTsv+Sot5NOrJ11arhc0K3e/qMUHTPm7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cfXFPJlk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qu5Vv5Bx; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1753531186;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6QLD/9vDRaxK7wnQrPT92N/0V2GDCn8DkNHpJH1+2ME=;
+	b=cfXFPJlk7jB/sMHf6ZzDQyfd2LIVeZJ8I39wANs0u8oRGHvKkhXz63gqfP5A9GLa9RYZAa
+	4fYMkwBOiGcsUXbJBP/pgEeDnytTcDNGF8h2suAm3yrWHKn4tdceaXafe63n2Syci7gMEX
+	ffGS7892X7j/53z/zCvrGplQs3bXIMdiSnHSIA1Vp1JK5l7D3ZfZ35t1wE3jpMnq6DJYPv
+	Kwv9Rjfl/39lN5SSh+JcxFIjWrjYURjpFQCZfrU5kEXB/91aWoNIrnvQPz0hzYUfVTSOrz
+	2LAw0ny6JKitQOHUZ0/NMQv+Eq8X2eql0qPc6RspX8DkyIBzDlh+szANN35KwQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1753531186;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6QLD/9vDRaxK7wnQrPT92N/0V2GDCn8DkNHpJH1+2ME=;
+	b=qu5Vv5Bxsuj0Aow+4si+jm72q35U4cUB5T/nEFzyJ41GvUFYqpf5F11Dqu+CwRuAtgKsyi
+	jWZkC7WdLCz3pCBg==
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Tetsuo Handa
+ <penguin-kernel@i-love.sakura.ne.jp>
+Cc: Yunseong Kim <ysk@kzalloc.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Byungchul Park
+ <byungchul@sk.com>, max.byungchul.park@gmail.com, Yeoreum Yun
+ <yeoreum.yun@arm.com>, Michelle Jin <shjy180909@gmail.com>,
+ linux-kernel@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, stable@vger.kernel.org,
+ kasan-dev@googlegroups.com, syzkaller@googlegroups.com,
+ linux-usb@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH] kcov, usb: Fix invalid context sleep in softirq path on
+ PREEMPT_RT
+In-Reply-To: <2025072614-molehill-sequel-3aff@gregkh>
+References: <20250725201400.1078395-2-ysk@kzalloc.com>
+ <2025072615-espresso-grandson-d510@gregkh>
+ <77c582ad-471e-49b1-98f8-0addf2ca2bbb@I-love.SAKURA.ne.jp>
+ <2025072614-molehill-sequel-3aff@gregkh>
+Date: Sat, 26 Jul 2025 13:59:45 +0200
+Message-ID: <87ldobp3gu.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Fri, 25 Jul 2025 19:32:37 +0800, Su Hui wrote:
-> On 2025/7/25 18:03, Micha=C5=82 Pecio wrote:
-> >> Hmm, any chance you came across bugs that upstream should know about? =
-=20
-> Actually, this bug is specific to the 5.4 version of the kernel and a=20
-> particular USB camera. I am working
-> to resolve this issue. When the xhci_hcd is initialized, the driver sets=
-=20
-> xhc_state to "halted", but before
-> the xhci_hcd calls xhci_start, the hub starts Initializing. Hub=20
-> initialization failed due to xhc_state being
-> halted. Perhaps this issue is caused by hardware...
+On Sat, Jul 26 2025 at 09:59, Greg Kroah-Hartman wrote:
+> On Sat, Jul 26, 2025 at 04:44:42PM +0900, Tetsuo Handa wrote:
+>> static void __usb_hcd_giveback_urb(struct urb *urb)
+>> {
+>>   (...snipped...)
+>>   kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum) {
+>>     if (in_serving_softirq()) {
+>>       local_irq_save(flags); // calling local_irq_save() is wrong if CONFIG_PREEMPT_RT=y
+>>       kcov_remote_start_usb(id) {
+>>         kcov_remote_start(id) {
+>>           kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_USB, id)) {
+>>             (...snipped...)
+>>             local_lock_irqsave(&kcov_percpu_data.lock, flags) {
+>>               __local_lock_irqsave(lock, flags) {
+>>                 #ifndef CONFIG_PREEMPT_RT
+>>                   https://elixir.bootlin.com/linux/v6.16-rc7/source/include/linux/local_lock_internal.h#L125
+>>                 #else
+>>                   https://elixir.bootlin.com/linux/v6.16-rc7/source/include/linux/local_lock_internal.h#L235 // not calling local_irq_save(flags)
+>>                 #endif
 
-Trying to queue commands before the chip is ready sounds like a SW bug.
-5.4 is ancient (and EOL soon), newer releases may have this bug fixed.
+Right, it does not invoke local_irq_save(flags), but it takes the
+underlying lock, which means it prevents reentrance.
+
+> Ok, but then how does the big comment section for
+> kcov_remote_start_usb_softirq() work, where it explicitly states:
+>
+>  * 2. Disables interrupts for the duration of the coverage collection section.
+>  *    This allows avoiding nested remote coverage collection sections in the
+>  *    softirq context (a softirq might occur during the execution of a work in
+>  *    the BH workqueue, which runs with in_serving_softirq() > 0).
+>  *    For example, usb_giveback_urb_bh() runs in the BH workqueue with
+>  *    interrupts enabled, so __usb_hcd_giveback_urb() might be interrupted in
+>  *    the middle of its remote coverage collection section, and the interrupt
+>  *    handler might invoke __usb_hcd_giveback_urb() again.
+>
+>
+> You are removing half of this function entirely, which feels very wrong
+> to me as any sort of solution, as you have just said that all of that
+> documentation entry is now not needed.
+
+I'm not so sure because kcov_percpu_data.lock is only held within
+kcov_remote_start() and kcov_remote_stop(), but the above comment
+suggests that the whole section needs to be serialized.
+
+Though I'm not a KCOV wizard and might be completely wrong here.
+
+If the whole section is required to be serialized, then this need
+another local lock in kcov_percpu_data to work correctly on RT.
+
+Thanks,
+
+        tglx
 
