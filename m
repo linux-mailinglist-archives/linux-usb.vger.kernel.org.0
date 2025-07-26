@@ -1,147 +1,112 @@
-Return-Path: <linux-usb+bounces-26215-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26216-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C28FBB129B0
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 09:59:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BA55B129CE
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 11:11:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7694A4E2011
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 07:59:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8C0A3B4D11
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 09:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E4F21A44C;
-	Sat, 26 Jul 2025 07:59:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F42B2248B5;
+	Sat, 26 Jul 2025 09:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fVrDNwtE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYnwZhGq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29E120297B;
-	Sat, 26 Jul 2025 07:59:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A282121A428;
+	Sat, 26 Jul 2025 09:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753516778; cv=none; b=VtcjY+cK0wWyIAN9dTyzrbXylX9bG5U+6a+QHeXYpjEOVuzgKPe3DMjQW8PLvqF6lLA31WqHvM4lN0PqREF61r5VnpwqyzjpNC/h+7qyFcCKV3iOiI/Zynqj71m4282ACrOYGkfHNo5SAuMucTervnKoSKHukyySppjKkRExNSw=
+	t=1753521070; cv=none; b=NXWehTAoUOX804VT254QL5GXEQkSQeNz58dS01jK5Nc30Weg3YTXSnem10QBf18xAS5MdLAQYfuvmsptD6gwT5UJg3SAiS6YFmKxc5D8Yjmw4V8ASzKinJCnS9DX9zjapfZQfbIascF+UxoObosp7Tkx+XCEC2ulTqy3aNlEOe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753516778; c=relaxed/simple;
-	bh=+7OwWL8HsXou9HcpeVyEaPMNSqLGr7byrMdBXyWRVmI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g5S+CFg9cHLo6ORZhP5sN4ZCtnSj1NZiOcZOI7gaK3pmUD0lmt6MEeC2yjdzA1zkz9uhxEfTBeuI+IEH1B8eJhhbWLlzO/MxKocQNO0Y/X/dVrdhZA4tC2bSxp1WVB7vsQSMh+RNn2TTlNAVcyMl6edKukxJPjwf/JUUOEinq8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fVrDNwtE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 950F5C4CEED;
-	Sat, 26 Jul 2025 07:59:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1753516778;
-	bh=+7OwWL8HsXou9HcpeVyEaPMNSqLGr7byrMdBXyWRVmI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fVrDNwtEpWOUgHeNDV+Xg2hA5El/kRUrHYLdGGzc7I5nJofIA7pzN76Ck9iwADQCH
-	 l/4GGwF2wahiVWxevK+E87qJLNRhdSBbmAOBOpat2+QDHD/+aD5ibm8mvyRONVDNTB
-	 5U3v+XRi4fpKsuCDkY/IbHsF7RT41HkxjgzG/JOg=
-Date: Sat, 26 Jul 2025 09:59:35 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: Yunseong Kim <ysk@kzalloc.com>, Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Byungchul Park <byungchul@sk.com>, max.byungchul.park@gmail.com,
-	Yeoreum Yun <yeoreum.yun@arm.com>,
-	Michelle Jin <shjy180909@gmail.com>, linux-kernel@vger.kernel.org,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	stable@vger.kernel.org, kasan-dev@googlegroups.com,
-	syzkaller@googlegroups.com, linux-usb@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH] kcov, usb: Fix invalid context sleep in softirq path on
- PREEMPT_RT
-Message-ID: <2025072614-molehill-sequel-3aff@gregkh>
-References: <20250725201400.1078395-2-ysk@kzalloc.com>
- <2025072615-espresso-grandson-d510@gregkh>
- <77c582ad-471e-49b1-98f8-0addf2ca2bbb@I-love.SAKURA.ne.jp>
+	s=arc-20240116; t=1753521070; c=relaxed/simple;
+	bh=6GO1RWeSAL2AkF/OzEM5SCVC4XanY1WqHpcd7kPgYLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jIleEcTM3sveRT2nuoD3/Khte9Bbqwkqb838cY4QQf8wVO3VItUWsTG+fMU0b1U5pRpn1Gbi6I5L7ObxfNbvoEV3r4RZ26/6Ff/PPUHmNpdPNzzfL3CT46CBOkcmevSgRv0tKeKx2zfV2AwjLQp2esZPoM20CKB+v7/10n5dyVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYnwZhGq; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6150be62be4so476848a12.0;
+        Sat, 26 Jul 2025 02:11:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753521067; x=1754125867; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6GO1RWeSAL2AkF/OzEM5SCVC4XanY1WqHpcd7kPgYLg=;
+        b=iYnwZhGqy/XUEAVkEHjS1u8FSlJXYQHFBSx9sFg9bXoA1nJbwOMi7YZAPgrcK7ONFt
+         q9n0MsKwPcxXJ3zwSfplwokPzQ3uYAjeShX5YV5D0tah/0JOlddMRY/d3JnlgSkioxkn
+         tGjx25pSDLeE+K83saCyRqbzXCuuQ5cCkpWLorpX2ftH3vgZFTMC6jsGS+TfvjQi0uTW
+         YczQS3/EVvFPSwWeniGjDWSqouGoERcM56eewe3UQYFw3dj7LzNZLtP0Lcb4YNw2o8SH
+         uHRZ2OZyzWHm80ezlIgNJJdhJsuhWnf74kBP2kcED3a5q9UyqnAZqEOdMigUQXY2tX2C
+         RIaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753521067; x=1754125867;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6GO1RWeSAL2AkF/OzEM5SCVC4XanY1WqHpcd7kPgYLg=;
+        b=f8MUgaXKJOCf1RKxNm/2q/2CJXqOBumk/L9/Ec7TtbmFV6piaVSR9rElFaXq7b8sfQ
+         GNAqpZuCueGoV20dTDgnYKt11f45Iz1yRdO3ijOD7L46bHaAa9XiVFHixZEYkZ+6y1PK
+         mIvAzk4smO19u6gPSOi8f0S6vgxBTZzLLNUakmvmi7t4yN2pGTlJ2amEZwLnm1mI8l8H
+         uJAheMQxCLRK6IyYRugch3g9mUgSttjx2d9L6dWyPK42uL6FFBQ/5Pm/Rbdkycm2/JK1
+         Fk2WtwgIF7VfDCp/KvtlnL5pf2Sh0tiHgY4neBRk+W0iL/7JMxvQzn0RgoOciR+fvSnY
+         dEGg==
+X-Forwarded-Encrypted: i=1; AJvYcCU62OWruFgsGzq365HN7AVtS8USFbqWvBXo2qkBHC2Ia7QcSoJRBhvbTpayAkJGQ2QBp8LPXu35peDB7h7j@vger.kernel.org, AJvYcCVa21YGs3h5ZA2+IOEir/K3RFJt+rYvPBaB8S/hed0JPVZEFvC3afvRZjui/vI6Vr6vkpDtHXcn+zrjXi1FygU=@vger.kernel.org, AJvYcCW1E7EdJuhAw+7aITiPJmcQa8WLBfvBVovEetYSFIZBMlwMFNpG47zeapSCBgHpaNAAFMZiaFkkqX9E@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWFToouKAN78JH6SyQJbBfOcUdvDDu4m8HO4U6mT9+ooYzt+rp
+	R/XF1aG6PvjeWgxoZjltGBn/MImEslqd8K94P7VR5hM7fCiYzVDLv1sp
+X-Gm-Gg: ASbGncv8ilTS219x9E8Txy5Hm+4uyWOCgr8u/amjeHlZdLbAr8ZGzYMrukmIAjuTBGC
+	GOFrFWn2l9OE/2CxTbeq5jX9uDbr6SeFtWtbHx8LDok2AkghSyW3iMAwJz2EIwZVTI2v9nunuGz
+	vGSrSCoDzqyV+t1Ig/LUIa0CT1jQ2klzF1s8HedNhzTdvpTvOZN+JY41De3UuYGVT15IjDq99XW
+	Y/oDQR07XK4XbIALkB+VqCR8fkwIUJa2DP/LV1jKxrcttIs35wazqUV1TlQno3zXaZg+s10g8Em
+	hcxcXe/SYhAZjIGwafFXSz5QNDGeEPmU2rLICqDYW63NybP86259gNl7I8r7c1xGCA66aDB9Ljh
+	pdGZ1L1gXELHnJgGyIGTRu7dgQOXzgXWH
+X-Google-Smtp-Source: AGHT+IGv2MIwdifVPt94hd01cMVCZ/nXPQZg5AldEwqF7PJ3XR8MYhxV2ZK0Wwfx500NxQf9kwVVOQ==
+X-Received: by 2002:a05:6402:3509:b0:612:bfb2:386 with SMTP id 4fb4d7f45d1cf-614f1f2afe0mr5102471a12.28.1753521066681;
+        Sat, 26 Jul 2025 02:11:06 -0700 (PDT)
+Received: from foxbook (bfh67.neoplus.adsl.tpnet.pl. [83.28.45.67])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61500a58aa6sm814588a12.27.2025.07.26.02.11.05
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 26 Jul 2025 02:11:06 -0700 (PDT)
+Date: Sat, 26 Jul 2025 11:11:01 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Su Hui <suhui@nfschina.com>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH v2] usb: xhci: print xhci->xhc_state when queue_command
+ failed
+Message-ID: <20250726111101.5928e289@foxbook>
+In-Reply-To: <09d18144-ab12-4bbc-8b61-e0b334ef13bc@nfschina.com>
+References: <20250725120329.2b6e3813@foxbook>
+	<09d18144-ab12-4bbc-8b61-e0b334ef13bc@nfschina.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77c582ad-471e-49b1-98f8-0addf2ca2bbb@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jul 26, 2025 at 04:44:42PM +0900, Tetsuo Handa wrote:
-> On 2025/07/26 15:36, Greg Kroah-Hartman wrote:
-> > Why is this only a USB thing?  What is unique about it to trigger this
-> > issue?
-> 
-> I couldn't catch your question. But the answer could be that
-> 
->   __usb_hcd_giveback_urb() is a function which is a USB thing
-> 
-> and
-> 
->   kcov_remote_start_usb_softirq() is calling local_irq_save() despite CONFIG_PREEMPT_RT=y
-> 
-> as shown below.
-> 
-> 
-> 
-> static void __usb_hcd_giveback_urb(struct urb *urb)
-> {
->   (...snipped...)
->   kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum) {
->     if (in_serving_softirq()) {
->       local_irq_save(flags); // calling local_irq_save() is wrong if CONFIG_PREEMPT_RT=y
->       kcov_remote_start_usb(id) {
->         kcov_remote_start(id) {
->           kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_USB, id)) {
->             (...snipped...)
->             local_lock_irqsave(&kcov_percpu_data.lock, flags) {
->               __local_lock_irqsave(lock, flags) {
->                 #ifndef CONFIG_PREEMPT_RT
->                   https://elixir.bootlin.com/linux/v6.16-rc7/source/include/linux/local_lock_internal.h#L125
->                 #else
->                   https://elixir.bootlin.com/linux/v6.16-rc7/source/include/linux/local_lock_internal.h#L235 // not calling local_irq_save(flags)
->                 #endif
->               }
->             }
->             (...snipped...)
->             spin_lock(&kcov_remote_lock) {
->               #ifndef CONFIG_PREEMPT_RT
->                 https://elixir.bootlin.com/linux/v6.16-rc7/source/include/linux/spinlock.h#L351
->               #else
->                 https://elixir.bootlin.com/linux/v6.16-rc7/source/include/linux/spinlock_rt.h#L42 // mapped to rt_mutex which might sleep
->               #endif
->             }
->             (...snipped...)
->           }
->         }
->       }
->     }
->   }
->   (...snipped...)
-> }
-> 
+On Fri, 25 Jul 2025 19:32:37 +0800, Su Hui wrote:
+> On 2025/7/25 18:03, Micha=C5=82 Pecio wrote:
+> >> Hmm, any chance you came across bugs that upstream should know about? =
+=20
+> Actually, this bug is specific to the 5.4 version of the kernel and a=20
+> particular USB camera. I am working
+> to resolve this issue. When the xhci_hcd is initialized, the driver sets=
+=20
+> xhc_state to "halted", but before
+> the xhci_hcd calls xhci_start, the hub starts Initializing. Hub=20
+> initialization failed due to xhc_state being
+> halted. Perhaps this issue is caused by hardware...
 
-Ok, but then how does the big comment section for
-kcov_remote_start_usb_softirq() work, where it explicitly states:
-
- * 2. Disables interrupts for the duration of the coverage collection section.
- *    This allows avoiding nested remote coverage collection sections in the
- *    softirq context (a softirq might occur during the execution of a work in
- *    the BH workqueue, which runs with in_serving_softirq() > 0).
- *    For example, usb_giveback_urb_bh() runs in the BH workqueue with
- *    interrupts enabled, so __usb_hcd_giveback_urb() might be interrupted in
- *    the middle of its remote coverage collection section, and the interrupt
- *    handler might invoke __usb_hcd_giveback_urb() again.
-
-
-You are removing half of this function entirely, which feels very wrong
-to me as any sort of solution, as you have just said that all of that
-documentation entry is now not needed.
-
-Are you sure this is ok?
-
-thanks,
-
-greg k-h
+Trying to queue commands before the chip is ready sounds like a SW bug.
+5.4 is ancient (and EOL soon), newer releases may have this bug fixed.
 
