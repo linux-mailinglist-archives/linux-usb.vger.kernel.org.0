@@ -1,63 +1,88 @@
-Return-Path: <linux-usb+bounces-26206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EA1BB12713
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 01:06:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31CD5B1288A
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 04:10:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 663E7583BC1
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jul 2025 23:06:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E42B1C26C3D
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jul 2025 02:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 873D325A630;
-	Fri, 25 Jul 2025 23:06:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 649541D90AD;
+	Sat, 26 Jul 2025 02:10:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="djIISh6Y"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="JAl16UCB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067B222F767;
-	Fri, 25 Jul 2025 23:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B404A11
+	for <linux-usb@vger.kernel.org>; Sat, 26 Jul 2025 02:10:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753484774; cv=none; b=fh0P5HsN8TTWsEoCe6xcosk86lVBIgN1HB6f+FoYLdYZ3MkNNRPjvWn3KhZa9N9R+LNiV/nMjmPnLEsHk8ku5lOEaqzEW7NYZRkPXFcOlhBptr+iTvUxuN7sQUuCWVNKRrzXPUZIvCT29P0HPr9wJfgyafup9WdCBloYo6dEDQM=
+	t=1753495816; cv=none; b=pvQjlAQKV3DVQPlzMRIp5FEmlWD6EVGj6UvrIUtEmp+LzREXmS+HdtM13UZrX9/7gmj0B64F9awkKxhF/MkA4HyWsoch0tGvX85fUZPvIcVTOUnucEgADKlZUG7Ds0SJ2U6c95UFcbiATsOSrozWbe2uIItbVdjr0ai07nRea3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753484774; c=relaxed/simple;
-	bh=8vnCCU3LPQGo53C05dFuO3MKjV+pOSMNfVK636KtS6E=;
+	s=arc-20240116; t=1753495816; c=relaxed/simple;
+	bh=PULKyoQPfoJBUREloodC53J6LvdB2Nf9AZX03v3VUNY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jOTA6jJuVL0yJ1sKOzWvUQRadAAiThVyW4qGxCAgdI3DQ2oauKzQaplOq17Hujc3nYa6DQ1w2A0S1+/rAby3dEmuYykAn3tRHWDR6gnjjlM/kx+/Ope7gdZuS0dU0QGyeY4tShv5zPYWc3NRDpNhcakOkpWvve00lL+H0T44moQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=djIISh6Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6392AC4CEE7;
-	Fri, 25 Jul 2025 23:06:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753484773;
-	bh=8vnCCU3LPQGo53C05dFuO3MKjV+pOSMNfVK636KtS6E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=djIISh6YSRnwbypyxmMrAcPIUUF5v68Wdiwz93/UgTP6WNGlSue6F0OcCzQrZG/Zu
-	 sxV/iPajbiXLYwfkki0R/DK9I/KVRQXo0WqgVHJjKoLhQxf3hQZxLs715FLHVQBuPm
-	 crPoWpACcui6Im2dZ5mc+qrKo1XDtXvUhg9ExD8DgK+RVldhB2w6d4xkZlr3GTEvPz
-	 zmeE5b71gF1tNqmZWVZY9GykFDPmPtcjhvZFveml/6vCq7nGZE7EYsShbqNBoEULL4
-	 LzAZkEB6gHsWfNWNJRBItw2Oj7UXsWz/+xvKkNl0N387AaMtBHlfN/qcz1nncI8DnS
-	 yKgoA+adJ0F+g==
-Date: Fri, 25 Jul 2025 18:06:12 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Jonas Karlman <jonas@kwiboo.se>
-Cc: linux-usb@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	devicetree@vger.kernel.org, Chukun Pan <amadeus@jmu.edu.cn>,
-	Yao Zi <ziyao@disroot.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 06/11] dt-bindings: usb: dwc3: Add compatible for RK3528
-Message-ID: <175348477194.2001313.779930445119740224.robh@kernel.org>
-References: <20250723122323.2344916-1-jonas@kwiboo.se>
- <20250723122323.2344916-7-jonas@kwiboo.se>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uohBEhl8GSDnsrCk34F7OoP4kj5JEAa8g/zh+UZgUlDS2COCnzsK11vsnI6EqhEJUANBcmPksCj92/LsFrzS54bQ0N+Gd7mdrazI/VkGxPeO1n+gNL4ibtSCbBTfB1zsTyy7u2VCnP2wKOCemeawMu7mNjWl1+KuvAYWVqczsOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=JAl16UCB; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6fb1be9ba89so18843706d6.2
+        for <linux-usb@vger.kernel.org>; Fri, 25 Jul 2025 19:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1753495814; x=1754100614; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQ7SXOragRTIX4LIzQZOTZXKs9RiWGmIsBpnIAlkZMg=;
+        b=JAl16UCBWi8OLPPf4pIRVwZigMoaiuk9N1jlQj49CCriK6Cnjk6LfLCypQq3se6/ES
+         Qw05f7fRlIr0DVEyr28WPtbUF1C7PiWnYEJCLbspVY+v0T4AVg1n6/sGCl4+I2aeLmMJ
+         gm9GYP50kVcq0ss89lNFlsQHGWE8QrXKKWAX5niu2zV0eiyIDGuZPnAyqcYyIRED/Nbx
+         hw7jQVPoL0cXUhISqW9GdzRThYQvXOBCDsc5xVOABSuzegSTdVaCBnZSDFQUmT+RcfF0
+         nn48b/ASYLEQvT6SJfV1awxPPyNTbIgv8nuk3lK1mI1uL5au+xluF6nscthAos6g7oWB
+         4qCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753495814; x=1754100614;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qQ7SXOragRTIX4LIzQZOTZXKs9RiWGmIsBpnIAlkZMg=;
+        b=Wb1sOmaBeDEELEzr8LEvb3sAua988fjPcgN0ru9Ncm6q3OGypWbbEEo+oIiXzOUPI8
+         96jUKP4+GP2qBse6zzRBBA2cNIRVF9BgSU5TGcSrRXa9u61oXW/n1UpJOTBjFBDhF/pI
+         T8hp8kL1oLnlpP3nM2lgEy0xZfuWmNKxLsWNN2STBrhT+ZnvbLYT3rUbNR/bapMeK6rh
+         kJdBuET0hvmtKP6XT64Gb8ssjdVgzKm/qQ7TzNksNTj9mDMQMWf/yWKnlFQz65rogI7e
+         mUEafbNpDTmq6ssABb7Xw5k/rlXsGWd3gXuc9an/qxTPfAIkGqbKtasTwMOdpnoto9D0
+         JHcg==
+X-Forwarded-Encrypted: i=1; AJvYcCVga5ILIcClfXQ9kfyM7hoAwZbWB/3LFwXWtA4yyFbu/DWMl6l8JBytBQ90qdQig8n4V0uYKh7UYSY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzccd+tbfXZZZc3hDjJVSXzruEahTEh22bS3Rf3vMFblmi80wMz
+	XKDOdesKRIUMaOBiBOONZuMYMCNTx3Ls8eEzLmEa4DcU6cMb8/OnHhY++2raPqzrzPKWCTpvZdi
+	Y0ns=
+X-Gm-Gg: ASbGncsHKZhv5Q6BdS8ZrviG30+T15kkuXXW8gE3cTVw1A1A4aXdqpYGmZs3PbUBilx
+	4wPPoq/vMN8POnVSIlr/9UVQX5C6x/OMQrTZnvqRHkelPvm32lX5roh5KxQvOT1uHvit9mkSVMy
+	gd6V9XaRLDFip2iSHqFJ7iOOP4HzFrII23DPDAO2job4m1g07UghpURwmgENFqWW/nmEAqP9oaN
+	GigU+LCtwgsRqz4HHX+31QHHqJb/+H0aKtwWd1s7QRXzwgLR/S6OBpT834F1nMOs6f0M6hMp8qO
+	qzbT+REe1g/4/X7u2wQu+Fum9JrTh/lLIxQyMLfNV4JQkrrYdaaUb//JKUwJovRWDfXHNJfOblq
+	6mfQcS6sfJRVwhat2yMjP0xc=
+X-Google-Smtp-Source: AGHT+IGzVgC7zSPm77RvN7HmL7AuYbfj2Q2hSHE5FaAmz4RBfNyLkVHyW8mGDSfY2XCDjy3dmKWnzw==
+X-Received: by 2002:a05:6214:1942:b0:707:2b04:b04c with SMTP id 6a1803df08f44-7072b04b19dmr24997336d6.30.1753495814078;
+        Fri, 25 Jul 2025 19:10:14 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::317e])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70729a63136sm6683706d6.24.2025.07.25.19.10.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Jul 2025 19:10:13 -0700 (PDT)
+Date: Fri, 25 Jul 2025 22:10:11 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Olivier Tuchon <tcn@google.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: Add gadgetmon traffic monitor
+Message-ID: <1e4a2aca-cde2-45ea-aebd-408fe9bf9672@rowland.harvard.edu>
+References: <CALU+5Va_zeqS5YK7v3HNvDKkg8srqc87P5ZaQUK5tGFUMyNrkg@mail.gmail.com>
+ <42f4753a-f7db-49a3-ba40-8743a78684b4@rowland.harvard.edu>
+ <CALU+5VYnZfp2CqXqn7X14J5pGsXyHDOcC5mOCZx4nKA6tjzO2Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,21 +91,37 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250723122323.2344916-7-jonas@kwiboo.se>
+In-Reply-To: <CALU+5VYnZfp2CqXqn7X14J5pGsXyHDOcC5mOCZx4nKA6tjzO2Q@mail.gmail.com>
 
-
-On Wed, 23 Jul 2025 12:23:04 +0000, Jonas Karlman wrote:
-> The USB dwc3 core on Rockchip RK3528 is the same as the one already
-> described by the generic snps,dwc3 schema.
+On Fri, Jul 25, 2025 at 10:45:29PM +0200, Olivier Tuchon wrote:
+> > There should be a similar optimization for IN givebacks.  The data to
+> > be transferred to the host was already recorded by the submission
+> > hook, so you can save space by not copying it a second time during the
+> > giveback.
 > 
-> Add the compatible for the Rockchip RK3528 variant.
-> 
-> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-> ---
->  Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+> After a couple of tests, I found that the payload at the Submit ('S') stage
+> is often meaningless (zero-filled) for both IN and OUT transfers or the
+> payload size is already set to zero.
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+That doesn't sound right at all.  Maybe your tests only covered 
+situations where no data was being sent?  Certainly the response to a 
+Get-Device-Descriptor or Get-Config-Descriptor IN request would not have 
+a meaningless, zero-filled, or zero-length payload.
 
+> I simplified the logic to drop the payload for ALL Submit events.
+> Fixed in the next patch.
+
+usbmon takes the opposite approach, omitting the payload for OUT 
+transfers during the giveback event rather than the submit event, and so 
+that's what I'm used to.  But I suppose you could reasonably do it 
+either way.
+
+Also, Greg will no doubt complain about some problems with the v2 patch 
+email.  The most notable one was that formatting was messed up again 
+(tab characters replaced by a single space) -- you should try mailing 
+the patch to yourself first and then verifying that you can apply it as 
+received.  In addition, it wasn't really a v2 patch because it applies 
+on top of the original patch, not as a replacement for the original.
+
+Alan Stern
 
