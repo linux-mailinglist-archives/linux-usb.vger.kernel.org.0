@@ -1,137 +1,124 @@
-Return-Path: <linux-usb+bounces-26229-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26231-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D094B13705
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 10:54:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EC52B13711
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 10:56:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E101E3B7092
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 08:53:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DED7F3B72EE
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 08:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FC63234963;
-	Mon, 28 Jul 2025 08:54:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b="gL/9WQ/q"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1E46231855;
+	Mon, 28 Jul 2025 08:56:33 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.ptr1337.dev (mail.ptr1337.dev [202.61.224.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134EF38F80;
-	Mon, 28 Jul 2025 08:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.61.224.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6554C6C;
+	Mon, 28 Jul 2025 08:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753692846; cv=none; b=oLVb76ssvwIWzv48PmCiJhVWPF4FeMXUUOLCB4Ko22GJw+T3vmJUfcCZYwN5PtGIUQwb3Lk2N4JTfcRIN2AV5qeTgLLlRrC49ILTvco1a31svC5rteHDs4NshKmWEdwkeDAZMuC6Fv6pz+WHZNOrTr8Ix7s/q6l1ruybOoDpL7o=
+	t=1753692993; cv=none; b=hKXVkAnr7KxQuUjS9mZCK3JiMtowEYZTZFyMYmCoyObYDl9lHVAsHwk+BLPGUzWe75lvh65xxuOQPPRp/8+DIf+FJL4BdkXi9CxEZPIoO3hSeUTBJ8rsIzk8uMFZYGugws9tbTqlX8L3OpFKA5NbY8LNJDjvazgG0KxBqe7IVms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753692846; c=relaxed/simple;
-	bh=B0IJjL98PhPeCgMKI5R+ISp5vmenYly7y+1rdHXxrI8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gMa6POZuqItSSWoDIS9tByhUJWoHNWPv/9y8C6p1cDK4yRdoMumT8AS9Iwxkju8mVPp9gJwu1zn31Dlh1BHGBffX0RiLweglkAutK4FJ6Asw+ubBaEHk9RGbKUIB68j+mwjLPAJA7s4Q+U/VaIIMt4wq7NgWo7bYnF34L1+J2VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org; spf=pass smtp.mailfrom=cachyos.org; dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b=gL/9WQ/q; arc=none smtp.client-ip=202.61.224.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cachyos.org
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5403F284303;
-	Mon, 28 Jul 2025 10:45:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
-	t=1753692331; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=hZAZQxcJny2MJlnbj6INcbeqX5pbA4FFdFvh2PmI64w=;
-	b=gL/9WQ/qCqbdu8zR86gU47Fb4JEBykEZI3fYcn9RWlJ1FkRil9jRegxpKVtlMVHiuCRkvD
-	eUN8qjcTZbRYiOkvX4mdgh/LxFAr5+8+kF7N59rXBpMN6Ij4pFM7K0toI9/17YaGKGKaib
-	TRUqRWvjhzvFhphSevh08vs5VWbN3+rSK8oTR33/pl3tDKExtUZjXzo2iLkcAc7fqbskIw
-	LuRqFnwnfmC9KGst5fDt6aVyRY9/lqAnz1lnsj7VqV6WWNJBP5H76boU0TjPx4UuuMwu9R
-	DCIWav85qzoBaQQMN29prltn9IdsIgfcfFXvyThIPqE17s2r92h8R/Qfq6plxQ==
-Message-ID: <d9a1ed6d-05bb-440d-afa9-cb30315bd02d@cachyos.org>
-Date: Mon, 28 Jul 2025 15:45:25 +0700
+	s=arc-20240116; t=1753692993; c=relaxed/simple;
+	bh=qN/u6PndEBo0zcprrAbjEabx1dNlsBZarLJkYS0zCDE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qbySThLLYtQItDk/bF1DOT28PPhI/zJhc4NXDyRRWiZBFeVSmTwpTHcDQPaJw7rYZ8C+yzREwcgCqiXsp3fFhEW+rplsJc4K7khxI6tOHYorAGg6WVeVj1ceP3inmWREDqNCQTkWmijyc3iDn3n09rxN1Lhghpak5/NmyMvCn8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4e8135adfccso1315521137.1;
+        Mon, 28 Jul 2025 01:56:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753692990; x=1754297790;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2OXkPqeczMASzZj9IrcbhthBG0cCCHz+IouD66QuiFU=;
+        b=j460hDjYLpuB52W8sWHFU9d8JBjurcM7ZNsj6jvZfaHA+VEmWI76QEa4/nQOu5qboi
+         1uURTcCAYI+b5Huodag2FG17npO627uAWGG15jLGspfyHfKohejKIMrMUg1mNDCqMwm3
+         xyPjGURnRVV0SZI4KWTg+o9tgIyXEuR5Py35AgKSfmdDQU+xhejnDMWE1tRYiRohLa9P
+         z3f32L6CfCnyS+sNAWKghvqvl1kkuHQ9AEuwuyGopPSqAmaVfj3PwwnbWsc+uFPd1BmN
+         Aey0T8I0XPt8T20Ub48rxbx83KynUOrWS5uNz/Eaao4Od26WiiZ64sBBaQfd237N0BaR
+         nEbw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCeKmzRJwjAVGKicCbj1y1Kci9pCvhD4ImZmDr/mQ5VqSgjGlhn/vnIz2xsRNE9sEv7QNBWGCHBbZQceld4ibZvxc=@vger.kernel.org, AJvYcCXpeQ9iz7bK3eeYX1GzwBq9OQgSHpmhMaJP2SoCkbra3lC6+rtPdkshN7tBrqAJ2zmu0eqnmT+c1Ix+gSw=@vger.kernel.org, AJvYcCXsr6hIMqsETq4+hUINPfczK+BmEbMeUp7TZXIZj5Kj/cjv4mtBNfvd7v0cM/BP1G/Z1rgcA4DbCvoW@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHdpIGYpbh3gVqqEgy32qFrXYP3bA8g2uBD5m48i7Hi6CQPn4m
+	uSXnXSEHC4qDWb2CUX7bnetryPls9U4L8EXwzLcoaDJP3Vc9wrwy4X7zFRwn5gx4
+X-Gm-Gg: ASbGncvNCVNn6utWz4w60RUXsoAxQ25QPBcw8JntJZNNx3e5n9G6tZN82s/Fu4J9gXG
+	rkqwPo/p+oTQCW5tQHg1RXDaMdrDJsaXd+kNf6K6X5k4BuAXV/JU/UFPtF/JYGcKripY8P27461
+	dYd4b6wVC8KsiCKKyQdm152WD7qQnp7aYJg5EbsIOgcYiMp53+AMNrJu8rhjU4tyaMotqqKmrOx
+	w63DcGnpAH8N+GLZ32vYz9MPDNqMQnO3D7RqmnPwCD+kFBdVgs+LHmV6Osq6LZH8SzPtLjj3jlt
+	OawpElJDJOALD54/Y452hbA0utZ0L/p/s/6NPdylDyyTP7t5dVU70g/Wy9OLqvI+0yyopk4UtlX
+	JgFiubNSDkZZmULwzft18ondoOv+Nx+4l4cgb6xkRiHHSo8hpqzs9ppytmUpj
+X-Google-Smtp-Source: AGHT+IEkHNv0DO5DfC6qk4oX32RAlUqGhCVlG/4DQTl0VoNKU+8hB2h9w9YdEVoL2/4nwvqOm/2bXQ==
+X-Received: by 2002:a05:6102:160e:b0:4de:d08f:6727 with SMTP id ada2fe7eead31-4fa3fc4c897mr3768174137.13.1753692989967;
+        Mon, 28 Jul 2025 01:56:29 -0700 (PDT)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-88b8dcf7645sm1241734241.20.2025.07.28.01.56.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Jul 2025 01:56:29 -0700 (PDT)
+Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-4e8135adfccso1315514137.1;
+        Mon, 28 Jul 2025 01:56:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVBurErtr4WfJb55cP6+POj2thSguEt/4Jz6giEcNI4aH8cMqEot+CJqgComti370JtwqVdU5hMpXCe@vger.kernel.org, AJvYcCWCi59m8ak2w7nMl3MctDz9UZEhenpJSoGnZmwypzAtKLMyU+0hSShvfelDnqc13eFBBdbI9eNwPxnsGB4=@vger.kernel.org, AJvYcCWHwqgfCeU+/6CGmmFDXA2WEkIHJIGszpk2IbXk/B1hePx54eMeX8HgKRiuDVclOy6yg+NO/6UjxBsVcw6RK//SaTc=@vger.kernel.org
+X-Received: by 2002:a05:6102:2b88:b0:4e2:c6e4:ab1e with SMTP id
+ ada2fe7eead31-4fa3fa713f6mr4025248137.7.1753692989166; Mon, 28 Jul 2025
+ 01:56:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/5] Improvements to S5 power consumption
-To: Mario Limonciello <superm1@kernel.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- Alex Deucher <alexander.deucher@amd.com>, Bjorn Helgaas <bhelgaas@google.com>
-Cc: "open list:RADEON and AMDGPU DRM DRIVERS"
- <amd-gfx@lists.freedesktop.org>,
- "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
- <linux-pm@vger.kernel.org>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Danilo Krummrich <dakr@kernel.org>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
- "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
- "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250616175019.3471583-1-superm1@kernel.org>
-Content-Language: en-US
-From: Eric Naim <dnaim@cachyos.org>
-In-Reply-To: <20250616175019.3471583-1-superm1@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20250724092006.21216-1-johan@kernel.org>
+In-Reply-To: <20250724092006.21216-1-johan@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 28 Jul 2025 10:56:18 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU0E_d3XMj6sDeJy8P_UL7ua-_6CnTYqvf2-TD-WXiR3Q@mail.gmail.com>
+X-Gm-Features: Ac12FXzigXzLEEByExo9veTydL_Yz5MWFF66kC_gKPBrr86D05FC6p_RGKNNTnU
+Message-ID: <CAMuHMdU0E_d3XMj6sDeJy8P_UL7ua-_6CnTYqvf2-TD-WXiR3Q@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: drop unused module alias
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 6/17/25 00:50, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> A variety of issues both in function and in power consumption have been
-> raised as a result of devices not being put into a low power state when
-> the system is powered off.
-> 
-> There have been some localized changes[1] to PCI core to help these issues,
-> but they have had various downsides.
-> 
-> This series instead tries to use the S4 flow when the system is being
-> powered off.  This lines up the behavior with what other operating systems
-> do as well.  If for some reason that fails or is not supported, unwind and
-> do the previous S5 flow that will wake all devices and run their shutdown()
-> callbacks.
-> 
+Hi Johan,
 
-Hi Mario,
+Thanks for your patch, which is now commit 7b4b5591d4551efe
+("usb: gadget: udc: renesas_usb3: drop unused module alias") in
+usb/usb-next.
 
-I've been running this series on CachyOS since 6.16-rc3 and have no issues.
+On Thu, 24 Jul 2025 at 11:21, Johan Hovold <johan@kernel.org> wrote:
+> Since commit f3323cd03e58 ("usb: gadget: udc: renesas_usb3: remove R-Car
+> H3 ES1.* handling") the driver only supports OF probe so drop the unused
+> platform module alias.
+>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 
-Feel free to add
+While I don't debate the actual change, I would like to comment on
+the patch description.  The driver only ever supported OF probe.
+The call to soc_device_match() was just used to override the match
+data for quirk handling.
 
-Tested-by: Eric Naim <dnaim@cachyos.org>
+> --- a/drivers/usb/gadget/udc/renesas_usb3.c
+> +++ b/drivers/usb/gadget/udc/renesas_usb3.c
+> @@ -3024,4 +3024,3 @@ module_platform_driver(renesas_usb3_driver);
+>  MODULE_DESCRIPTION("Renesas USB3.0 Peripheral driver");
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_AUTHOR("Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>");
+> -MODULE_ALIAS("platform:renesas_usb3");
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Regards,
-  Eric
-> v3->v4:
->  * Fix LKP robot failure
->  * Rebase on v6.16-rc2
-> 
-> Previous submissions [1]:
-> Link: https://lore.kernel.org/linux-pm/CAJZ5v0hrKEJa8Ad7iiAvQ3d_0ysVhzZcXSYc5kkL=6vtseF+bg@mail.gmail.com/T/#m91e4eae868a7405ae579e89b135085f4906225d2
-> Link: https://lore.kernel.org/linux-pci/20250506041934.1409302-1-superm1@kernel.org/
-> Link: https://lore.kernel.org/linux-pci/20231213182656.6165-1-mario.limonciello@amd.com/ (v1)
-> Link: https://lore.kernel.org/linux-pm/20250514193406.3998101-1-superm1@kernel.org/ (v2)
-> Link: https://lore.kernel.org/linux-pm/20250609024619.407257-1-superm1@kernel.org/ (v3)
-> 
-> Mario Limonciello (5):
->   PM: Use hibernate flows for system power off
->   PCI: Put PCIe ports with downstream devices into D3 at hibernate
->   drm/amd: Avoid evicting resources at S5
->   scsi: Add PM_EVENT_POWEROFF into suspend callbacks
->   usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
-> 
->  drivers/base/power/main.c                  |  7 ++
->  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 +
->  drivers/pci/pci-driver.c                   | 94 ++++++++++++++--------
->  drivers/scsi/mesh.c                        |  1 +
->  drivers/scsi/stex.c                        |  1 +
->  drivers/usb/host/sl811-hcd.c               |  1 +
->  include/linux/pm.h                         |  3 +
->  include/trace/events/power.h               |  3 +-
->  kernel/reboot.c                            |  6 ++
->  9 files changed, 86 insertions(+), 34 deletions(-)
-> 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
