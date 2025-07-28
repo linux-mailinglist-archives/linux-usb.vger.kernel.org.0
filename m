@@ -1,124 +1,112 @@
-Return-Path: <linux-usb+bounces-26231-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26232-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EC52B13711
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 10:56:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E032EB137CC
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 11:43:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DED7F3B72EE
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 08:56:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DBA93BC90B
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 09:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1E46231855;
-	Mon, 28 Jul 2025 08:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA1C25486A;
+	Mon, 28 Jul 2025 09:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="D11FtZdk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6554C6C;
-	Mon, 28 Jul 2025 08:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0CF25394B;
+	Mon, 28 Jul 2025 09:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753692993; cv=none; b=hKXVkAnr7KxQuUjS9mZCK3JiMtowEYZTZFyMYmCoyObYDl9lHVAsHwk+BLPGUzWe75lvh65xxuOQPPRp/8+DIf+FJL4BdkXi9CxEZPIoO3hSeUTBJ8rsIzk8uMFZYGugws9tbTqlX8L3OpFKA5NbY8LNJDjvazgG0KxBqe7IVms=
+	t=1753695716; cv=none; b=anhsG/7IC87Z3CGJN059hyCbkpCmmx9og3w6xd0ImQgB7ocqwQHAWoELGZLWaKq6w6tNjPz6ZM3owXEMXPwcNVopPanVhLz3lhDAD+zD/MMje2VmUt1NGo1FC73ssd5clPoC4qvFvnEwctz8o9TnqYC/fVXRIjUS7gZQE/AaUHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753692993; c=relaxed/simple;
-	bh=qN/u6PndEBo0zcprrAbjEabx1dNlsBZarLJkYS0zCDE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qbySThLLYtQItDk/bF1DOT28PPhI/zJhc4NXDyRRWiZBFeVSmTwpTHcDQPaJw7rYZ8C+yzREwcgCqiXsp3fFhEW+rplsJc4K7khxI6tOHYorAGg6WVeVj1ceP3inmWREDqNCQTkWmijyc3iDn3n09rxN1Lhghpak5/NmyMvCn8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4e8135adfccso1315521137.1;
-        Mon, 28 Jul 2025 01:56:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753692990; x=1754297790;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2OXkPqeczMASzZj9IrcbhthBG0cCCHz+IouD66QuiFU=;
-        b=j460hDjYLpuB52W8sWHFU9d8JBjurcM7ZNsj6jvZfaHA+VEmWI76QEa4/nQOu5qboi
-         1uURTcCAYI+b5Huodag2FG17npO627uAWGG15jLGspfyHfKohejKIMrMUg1mNDCqMwm3
-         xyPjGURnRVV0SZI4KWTg+o9tgIyXEuR5Py35AgKSfmdDQU+xhejnDMWE1tRYiRohLa9P
-         z3f32L6CfCnyS+sNAWKghvqvl1kkuHQ9AEuwuyGopPSqAmaVfj3PwwnbWsc+uFPd1BmN
-         Aey0T8I0XPt8T20Ub48rxbx83KynUOrWS5uNz/Eaao4Od26WiiZ64sBBaQfd237N0BaR
-         nEbw==
-X-Forwarded-Encrypted: i=1; AJvYcCVCeKmzRJwjAVGKicCbj1y1Kci9pCvhD4ImZmDr/mQ5VqSgjGlhn/vnIz2xsRNE9sEv7QNBWGCHBbZQceld4ibZvxc=@vger.kernel.org, AJvYcCXpeQ9iz7bK3eeYX1GzwBq9OQgSHpmhMaJP2SoCkbra3lC6+rtPdkshN7tBrqAJ2zmu0eqnmT+c1Ix+gSw=@vger.kernel.org, AJvYcCXsr6hIMqsETq4+hUINPfczK+BmEbMeUp7TZXIZj5Kj/cjv4mtBNfvd7v0cM/BP1G/Z1rgcA4DbCvoW@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHdpIGYpbh3gVqqEgy32qFrXYP3bA8g2uBD5m48i7Hi6CQPn4m
-	uSXnXSEHC4qDWb2CUX7bnetryPls9U4L8EXwzLcoaDJP3Vc9wrwy4X7zFRwn5gx4
-X-Gm-Gg: ASbGncvNCVNn6utWz4w60RUXsoAxQ25QPBcw8JntJZNNx3e5n9G6tZN82s/Fu4J9gXG
-	rkqwPo/p+oTQCW5tQHg1RXDaMdrDJsaXd+kNf6K6X5k4BuAXV/JU/UFPtF/JYGcKripY8P27461
-	dYd4b6wVC8KsiCKKyQdm152WD7qQnp7aYJg5EbsIOgcYiMp53+AMNrJu8rhjU4tyaMotqqKmrOx
-	w63DcGnpAH8N+GLZ32vYz9MPDNqMQnO3D7RqmnPwCD+kFBdVgs+LHmV6Osq6LZH8SzPtLjj3jlt
-	OawpElJDJOALD54/Y452hbA0utZ0L/p/s/6NPdylDyyTP7t5dVU70g/Wy9OLqvI+0yyopk4UtlX
-	JgFiubNSDkZZmULwzft18ondoOv+Nx+4l4cgb6xkRiHHSo8hpqzs9ppytmUpj
-X-Google-Smtp-Source: AGHT+IEkHNv0DO5DfC6qk4oX32RAlUqGhCVlG/4DQTl0VoNKU+8hB2h9w9YdEVoL2/4nwvqOm/2bXQ==
-X-Received: by 2002:a05:6102:160e:b0:4de:d08f:6727 with SMTP id ada2fe7eead31-4fa3fc4c897mr3768174137.13.1753692989967;
-        Mon, 28 Jul 2025 01:56:29 -0700 (PDT)
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-88b8dcf7645sm1241734241.20.2025.07.28.01.56.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Jul 2025 01:56:29 -0700 (PDT)
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-4e8135adfccso1315514137.1;
-        Mon, 28 Jul 2025 01:56:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVBurErtr4WfJb55cP6+POj2thSguEt/4Jz6giEcNI4aH8cMqEot+CJqgComti370JtwqVdU5hMpXCe@vger.kernel.org, AJvYcCWCi59m8ak2w7nMl3MctDz9UZEhenpJSoGnZmwypzAtKLMyU+0hSShvfelDnqc13eFBBdbI9eNwPxnsGB4=@vger.kernel.org, AJvYcCWHwqgfCeU+/6CGmmFDXA2WEkIHJIGszpk2IbXk/B1hePx54eMeX8HgKRiuDVclOy6yg+NO/6UjxBsVcw6RK//SaTc=@vger.kernel.org
-X-Received: by 2002:a05:6102:2b88:b0:4e2:c6e4:ab1e with SMTP id
- ada2fe7eead31-4fa3fa713f6mr4025248137.7.1753692989166; Mon, 28 Jul 2025
- 01:56:29 -0700 (PDT)
+	s=arc-20240116; t=1753695716; c=relaxed/simple;
+	bh=kVjfsOeGIEnpVEHNDcMm0oIx8Y7tWx5lY9l0s3c7wxU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p7BFEQyMrTDTnsV35s0+z1v+1TFgVYUWAx4YRoZ5o8kXTssPZVSb4tePGYWLLEt1WXxbRn+QxmPdRznD/TOsQqOyF9BeROIi+5u24A9b+y26F1Emgqg840i0kaxrfU0mqcVCMx3br7ome/LKHLywxNRxrdgANUrbTpDftvNjHhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=D11FtZdk; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1753695707;
+	bh=kVjfsOeGIEnpVEHNDcMm0oIx8Y7tWx5lY9l0s3c7wxU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=D11FtZdkNazlDTLv48S5AvYbi60kn6HWvS1xA4EF9nv0do74PYle+i4RLPk9jbM4y
+	 3Q38DwxxDgL90rw8Rm4VCtG8fdP5Br+weLPOLijpsia6vkIeUOpy0t9w6Rue+Y+M73
+	 bIOmodQUz9Ggx2ps8rIN6yVOCNr4bfSB6sQS+YHKhvfmXMAsw3QjO5pF+wkyicaJwy
+	 NfcZokWZT/OZzBZV3NC9ttSwYgszVdQUZBJ63zKd9Q/gcvO48OSYkfon+QFmLTx2R6
+	 i2S6RGUx3IR2gpQajfrtU0hJLKGVkREnZKy+Fs+rqWx5qn9oRs1HAyJl41aQcbhWuH
+	 Y9gJnwyDaCA1A==
+Received: from [192.168.1.90] (unknown [82.79.138.60])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: cristicc)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9D0EA17E1110;
+	Mon, 28 Jul 2025 11:41:46 +0200 (CEST)
+Message-ID: <3dd94c4f-0971-4744-91e1-3a5474e1576c@collabora.com>
+Date: Mon, 28 Jul 2025 12:41:46 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250724092006.21216-1-johan@kernel.org>
-In-Reply-To: <20250724092006.21216-1-johan@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 28 Jul 2025 10:56:18 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU0E_d3XMj6sDeJy8P_UL7ua-_6CnTYqvf2-TD-WXiR3Q@mail.gmail.com>
-X-Gm-Features: Ac12FXzigXzLEEByExo9veTydL_Yz5MWFF66kC_gKPBrr86D05FC6p_RGKNNTnU
-Message-ID: <CAMuHMdU0E_d3XMj6sDeJy8P_UL7ua-_6CnTYqvf2-TD-WXiR3Q@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: drop unused module alias
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/18] USB/IP VHCI suspend fix and driver cleanup
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Valentina Manea <valentina.manea.m@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+ "Brian G. Merrell" <bgmerrell@novell.com>, kernel@collabora.com,
+ Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250726-vhci-hcd-suspend-fix-v2-0-189266dfdfaa@collabora.com>
+ <2025072637-corny-careless-8523@gregkh>
+Content-Language: en-US
+From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <2025072637-corny-careless-8523@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Johan,
+Hi Greg,
 
-Thanks for your patch, which is now commit 7b4b5591d4551efe
-("usb: gadget: udc: renesas_usb3: drop unused module alias") in
-usb/usb-next.
+On 7/26/25 9:43 AM, Greg Kroah-Hartman wrote:
+> On Sat, Jul 26, 2025 at 01:08:02AM +0300, Cristian Ciocaltea wrote:
+>> The USB/IP Virtual Host Controller (VHCI) platform driver is expected to
+>> prevent entering system suspend when at least one remote device is
+>> attached to the virtual USB root hub.
+>>
+>> However, in some cases, the detection logic for active USB/IP
+>> connections doesn't seem to work reliably, e.g. when all devices
+>> attached to the virtual hub have been already suspended.  This will
+>> normally lead to a broken suspend state, with unrecoverable resume.
+>>
+>> The first patch of the series provides a workaround to ensure the
+>> virtually attached devices do not enter suspend.  Note this is currently
+>> limited to the client side (vhci_hcd) only, since the server side
+>> (usbip_host) doesn't implement system suspend prevention.
+>>
+>> Additionally, during the investigation I noticed and fixed a bunch of
+>> coding style issues, hence the subsequent patches contain all the
+>> changes needed to make checkpatch happy for the entire driver.
+> 
+> You are doing two major things here, fixing suspend, and cleaning up
+> checkpatch issues.  Please make that two different patch sets as those
+> are not logical things to put together at all.  Work on the suspend
+> issue first, and after that is all done and working, then consider
+> checkpatch cleanups, those are not that important overall :)
 
-On Thu, 24 Jul 2025 at 11:21, Johan Hovold <johan@kernel.org> wrote:
-> Since commit f3323cd03e58 ("usb: gadget: udc: renesas_usb3: remove R-Car
-> H3 ES1.* handling") the driver only supports OF probe so drop the unused
-> platform module alias.
->
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+Yeah, the cleanup part ended up larger than initially anticipated, but I
+don't really expect further changes on the fixup side.  I can handle the
+split if another revision would be still required, or would you like me to
+do this regardless?  I've just made a quick test moving the first patch to
+the end of the series and it didn't cause any conflicts, hence there won't 
+be any dependencies between the two patch sets.
 
-While I don't debate the actual change, I would like to comment on
-the patch description.  The driver only ever supported OF probe.
-The call to soc_device_match() was just used to override the match
-data for quirk handling.
-
-> --- a/drivers/usb/gadget/udc/renesas_usb3.c
-> +++ b/drivers/usb/gadget/udc/renesas_usb3.c
-> @@ -3024,4 +3024,3 @@ module_platform_driver(renesas_usb3_driver);
->  MODULE_DESCRIPTION("Renesas USB3.0 Peripheral driver");
->  MODULE_LICENSE("GPL v2");
->  MODULE_AUTHOR("Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>");
-> -MODULE_ALIAS("platform:renesas_usb3");
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Cristian
 
