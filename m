@@ -1,107 +1,137 @@
-Return-Path: <linux-usb+bounces-26228-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26230-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92769B1350F
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 08:47:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAF19B1370B
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 10:54:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B88C3AED67
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 06:47:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 364E6188EB4C
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 08:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26202222B6;
-	Mon, 28 Jul 2025 06:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6921238C20;
+	Mon, 28 Jul 2025 08:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="alEEZ1ZH"
+	dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b="gL/9WQ/q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mail.ptr1337.dev (mail.ptr1337.dev [202.61.224.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2981319DF4F;
-	Mon, 28 Jul 2025 06:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134C43398B;
+	Mon, 28 Jul 2025 08:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.61.224.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753685269; cv=none; b=sZALhzEffk9eBRUJgXHkbu4W0gFQZtcLIuKK4vSm6HBNfQyCVhv8KWpkTUMOeVhJKBex4dwPHI4/8UgYtwBz/5Rf7klXvpVWKHSTsfH3WO2N7LuA1OPubXEX4Thna6S0K0NAxqvHOHZvrWdP1igLAW/qlSrmO1dT36QcqmaxA/k=
+	t=1753692847; cv=none; b=ahXgubNIUyR3s9sJ0zKVKIbOdTgy9l7htXQ7smpAftQTBtcDiPYco5Ho8KjyBlzpX24B2J2D+Mxd4GL3zSphiycFBeiTa3Mv6ZYcRKL9GZssuOCqNQN6mgwWq2VRBJd33QOB5XknehIjmvY6czM2ZCz4vZGq+dONu/pdK1wj4RM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753685269; c=relaxed/simple;
-	bh=NtnAIodCAbS4lQs1QJHpfh7DPZrQSeYeJgR/jK4M5IE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SsGnzhJlPKm4IvRolNHwY30xHD+5fmPWcUfM40xZ7RcVyUpFNSGqkoeRymPGjTB3DLgTwnook5lj1qkiqL29CZ5ljdUkuuFIPxRnMaOJXBuW0B+sC8rmZ7TfVb1W7wvh7UwOutpg5tmI7tcgvA3FzRauJmHc0LoIIdkjgzs8Ndg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=alEEZ1ZH; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753685269; x=1785221269;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NtnAIodCAbS4lQs1QJHpfh7DPZrQSeYeJgR/jK4M5IE=;
-  b=alEEZ1ZHJbgRPwkgHN1hFzbV/pkvEjbt5xug9JqKOqgVWDgVpHasG1TK
-   pAz4Et/HqmCvbCZ3e4vTV1lFTDfK9eEwIH3AupayNJ4KiaPh2gzFeQc2j
-   Btdl+xp1LTYkex/RU0CJOAYOGFYX8v9nOZuyITaMtyODUZwFBFg06PqG5
-   1Q3AH8KCU4xSSfbq4Rtq+ujfeEtBTPgDGXDqGF6iZUs9TswWEWAp64ctN
-   FSS/epN8131Y6NUrcWoVDK8o6FYE3klB2/wMo71oNNHfxOBVL2TFKnnzP
-   5NXCC3WXsDzfRdcNaZD5Y/Q+cuoDG44bE0QsqSDgXgOUNp7etO/iOK7ys
-   g==;
-X-CSE-ConnectionGUID: JMrDWLqaTx6ydUuRnt1A7g==
-X-CSE-MsgGUID: Z3Rwr3+CS2CUvXJ/2iJQXg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="55807649"
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="55807649"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2025 23:47:48 -0700
-X-CSE-ConnectionGUID: BgUcHTbOR3OvHrRhDJMOzw==
-X-CSE-MsgGUID: 3aYCwf63S4urbzrr+hMDDQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="161620194"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa010.jf.intel.com with ESMTP; 27 Jul 2025 23:47:45 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 8308F15B; Mon, 28 Jul 2025 09:47:43 +0300 (EEST)
-Date: Mon, 28 Jul 2025 09:47:43 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Raju Rangoju <Raju.Rangoju@amd.com>
-Cc: linux-usb@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, andreas.noever@gmail.com,
-	michael.jamet@intel.com, westeri@kernel.org, YehezkelShB@gmail.com,
-	bhelgaas@google.com, Sanath.S@amd.com
-Subject: Re: [PATCH 0/3] thunderbolt: Update XDomain vendor properties
- dynamically
-Message-ID: <20250728064743.GS2824380@black.fi.intel.com>
-References: <20250722175026.1994846-1-Raju.Rangoju@amd.com>
+	s=arc-20240116; t=1753692847; c=relaxed/simple;
+	bh=B0IJjL98PhPeCgMKI5R+ISp5vmenYly7y+1rdHXxrI8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Pk8y9aZ1CbVQN6LzrCdhlTGeYz0/wqTtinZmYDq9KuJae5uvX8e2kYmloNfzYM+9EjAHOAcg6ZTl4xis4FOimj7DvRY2V3UDbPZhtTkwHh4gntDGotvL0di7teARakQcLOnzAAmc/3CxxDgtmuYOHLAKDHN/b9ecsUE1Ce9Ypk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org; spf=pass smtp.mailfrom=cachyos.org; dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b=gL/9WQ/q; arc=none smtp.client-ip=202.61.224.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cachyos.org
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 05FAE2842E3;
+	Mon, 28 Jul 2025 10:45:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
+	t=1753692331; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=hZAZQxcJny2MJlnbj6INcbeqX5pbA4FFdFvh2PmI64w=;
+	b=gL/9WQ/qCqbdu8zR86gU47Fb4JEBykEZI3fYcn9RWlJ1FkRil9jRegxpKVtlMVHiuCRkvD
+	eUN8qjcTZbRYiOkvX4mdgh/LxFAr5+8+kF7N59rXBpMN6Ij4pFM7K0toI9/17YaGKGKaib
+	TRUqRWvjhzvFhphSevh08vs5VWbN3+rSK8oTR33/pl3tDKExtUZjXzo2iLkcAc7fqbskIw
+	LuRqFnwnfmC9KGst5fDt6aVyRY9/lqAnz1lnsj7VqV6WWNJBP5H76boU0TjPx4UuuMwu9R
+	DCIWav85qzoBaQQMN29prltn9IdsIgfcfFXvyThIPqE17s2r92h8R/Qfq6plxQ==
+Message-ID: <d9a1ed6d-05bb-440d-afa9-cb30315bd02d@cachyos.org>
+Date: Mon, 28 Jul 2025 15:45:25 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250722175026.1994846-1-Raju.Rangoju@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/5] Improvements to S5 power consumption
+To: Mario Limonciello <superm1@kernel.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Alex Deucher <alexander.deucher@amd.com>, Bjorn Helgaas <bhelgaas@google.com>
+Cc: "open list:RADEON and AMDGPU DRM DRIVERS"
+ <amd-gfx@lists.freedesktop.org>,
+ "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
+ <linux-pm@vger.kernel.org>,
+ "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Danilo Krummrich <dakr@kernel.org>,
+ "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+ "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+ "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+References: <20250616175019.3471583-1-superm1@kernel.org>
+Content-Language: en-US
+From: Eric Naim <dnaim@cachyos.org>
+In-Reply-To: <20250616175019.3471583-1-superm1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi,
-
-On Tue, Jul 22, 2025 at 11:20:23PM +0530, Raju Rangoju wrote:
-> This patch series aims to update vendor properties for XDomain
-> dynamically for vendors like AMD, Intel and ASMedia.
-
-The XDomain properties pretty much describe "software" not the underlying
-hardware so I don't understand why this is needed? We could have some USB
-IF registered Linux specific ID there but I don't see why this matters at
-all.
-
-> Raju Rangoju (3):
->   thunderbolt: Dynamically populate vendor properties for XDomain
->   PCI: Add PCI vendor ID for ASMedia USB4 devices
->   thunderbolt: Add vendor ASMedia in update_property_block for XDomain
+On 6/17/25 00:50, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
 > 
->  drivers/thunderbolt/nvm.c     |  2 +-
->  drivers/thunderbolt/xdomain.c | 32 +++++++++++++++++++++-----------
->  include/linux/pci_ids.h       |  1 +
->  3 files changed, 23 insertions(+), 12 deletions(-)
+> A variety of issues both in function and in power consumption have been
+> raised as a result of devices not being put into a low power state when
+> the system is powered off.
 > 
-> -- 
-> 2.34.1
+> There have been some localized changes[1] to PCI core to help these issues,
+> but they have had various downsides.
+> 
+> This series instead tries to use the S4 flow when the system is being
+> powered off.  This lines up the behavior with what other operating systems
+> do as well.  If for some reason that fails or is not supported, unwind and
+> do the previous S5 flow that will wake all devices and run their shutdown()
+> callbacks.
+> 
+
+Hi Mario,
+
+I've been running this series on CachyOS since 6.16-rc3 and have no issues.
+
+Feel free to add
+
+Tested-by: Eric Naim <dnaim@cachyos.org>
+
+-- 
+Regards,
+  Eric
+> v3->v4:
+>  * Fix LKP robot failure
+>  * Rebase on v6.16-rc2
+> 
+> Previous submissions [1]:
+> Link: https://lore.kernel.org/linux-pm/CAJZ5v0hrKEJa8Ad7iiAvQ3d_0ysVhzZcXSYc5kkL=6vtseF+bg@mail.gmail.com/T/#m91e4eae868a7405ae579e89b135085f4906225d2
+> Link: https://lore.kernel.org/linux-pci/20250506041934.1409302-1-superm1@kernel.org/
+> Link: https://lore.kernel.org/linux-pci/20231213182656.6165-1-mario.limonciello@amd.com/ (v1)
+> Link: https://lore.kernel.org/linux-pm/20250514193406.3998101-1-superm1@kernel.org/ (v2)
+> Link: https://lore.kernel.org/linux-pm/20250609024619.407257-1-superm1@kernel.org/ (v3)
+> 
+> Mario Limonciello (5):
+>   PM: Use hibernate flows for system power off
+>   PCI: Put PCIe ports with downstream devices into D3 at hibernate
+>   drm/amd: Avoid evicting resources at S5
+>   scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+>   usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+> 
+>  drivers/base/power/main.c                  |  7 ++
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 +
+>  drivers/pci/pci-driver.c                   | 94 ++++++++++++++--------
+>  drivers/scsi/mesh.c                        |  1 +
+>  drivers/scsi/stex.c                        |  1 +
+>  drivers/usb/host/sl811-hcd.c               |  1 +
+>  include/linux/pm.h                         |  3 +
+>  include/trace/events/power.h               |  3 +-
+>  kernel/reboot.c                            |  6 ++
+>  9 files changed, 86 insertions(+), 34 deletions(-)
+> 
 
