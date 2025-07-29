@@ -1,198 +1,138 @@
-Return-Path: <linux-usb+bounces-26246-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26247-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B149B14817
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 08:18:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B8B0B148F9
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 09:12:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F39E17AC039
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 06:17:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53D473AB1A1
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 07:11:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6911C238C20;
-	Tue, 29 Jul 2025 06:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="udjLObq6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC89E26056E;
+	Tue, 29 Jul 2025 07:12:01 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6CF2AD2C
-	for <linux-usb@vger.kernel.org>; Tue, 29 Jul 2025 06:18:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00FD36124;
+	Tue, 29 Jul 2025 07:11:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753769901; cv=none; b=msOdgjY1fZOS8iUHrBTZiWz18h5X3GDWIIMb0/TlYsBfjXWp/ryJXdeGXAj1QZd9sY5xVKyW1xrEK9UrsX6QgjaOZV9VL++MU7mlRC1A8oiJuT7FDaJrpTn7uLG3Bq48gf99hEDDWBYHw1dvJdbsni/xleLQZNTkwvU/UPQAwJY=
+	t=1753773121; cv=none; b=sQmbeJNpyhImqtm2TxBg3KyoLKgrrdS1JE2BfFwXJPP0WDYeJtc5KDvgyh5TBgdy8bPaNslUEJt5cVQ9rRyesXS4l4x4iVOL5Ecwa0mzw/9kWWFsWlYzH3a1xGaB1PteTmgRLgT6IAR545plKul5eDFCIqff/K/QcTnkwjaTqog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753769901; c=relaxed/simple;
-	bh=LOcm7KXGaTSxaImwNEBErillVBK69tcwozRmCBFN7M8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NLhRUJBx9Mojntrq4mY2LJT+boAEI/zor+EIQcfQtXA3e7Rmk9vkhxzyV1YMTmm+9gVDcRg9MJPF9I5F+Tf4bw9ebKY3n6qu8gKN9ngSKFmOio2F8Tt0a0h0mboGM4En6b1moX6kXUIysQnMbaW2uqA/SR0incUU1MozBiyJsvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=udjLObq6; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3b788fdcc2dso45422f8f.1
-        for <linux-usb@vger.kernel.org>; Mon, 28 Jul 2025 23:18:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753769898; x=1754374698; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=iojwzruvvVhAQ7wvF6ZE60oEZ08ONaB5lYxNaGGz2NQ=;
-        b=udjLObq6aiuBAhzurvboWy8PmCC0N1X4MBP1vIAI9J+LK94YvLPmJ52JGYCPoqINE3
-         sCRVRA5OHlQt1ryd55gvlnw6zE3QKfA35YX9bD/IaOjel5ruFsDAcQigHf3JajUoUTfG
-         yui3HsMntva38yM0TZYmzWxBb2H08wwWotwhKZl/ZahN/aj38kYnyUAVTts0f9UsCnxY
-         gKrrkVzLH7dhYqnudWZaOsCjaFAKCmVmRG4UAyfoUfiEvAVMOJAcA5O80A2+bLiEY9D3
-         cjzvhfHZRK0RU24enjvZDRIyoc7uScYo+ao+ecqMnfTBI6VdxQ2vlf93IIpOETQehnR7
-         BcHA==
+	s=arc-20240116; t=1753773121; c=relaxed/simple;
+	bh=XiaUxDcQsjkqrm62MA9BpXABVe05uEqGTNkD8cUJlKY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V/7g3iuniAQxTGHW+XyueSNnvthka/HpweqTFMZ5hy3udQQUkQB2iXtInIJGWLe9XTRyN1LoaNizYZ1limYITE4F21CX/r3iJRlsqJnw+QKpJfSft38FbXQMktffas0IPQRLQhvjAcPcMVpRCtRZ+v1tG+BDxSeyFlabiVMxwVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-4e7eefcbf08so1646638137.2;
+        Tue, 29 Jul 2025 00:11:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753769898; x=1754374698;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1753773118; x=1754377918;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iojwzruvvVhAQ7wvF6ZE60oEZ08ONaB5lYxNaGGz2NQ=;
-        b=GumrXfFFfTIaEXZgFsDBrnFr//lEFumbFJAQex3czD6A0XY9R0XYvBDTyt4CLToKW2
-         lnfcxSgectSimTPUctjzkSzzLE3hMN4Q7D/Ttc5L8gEp+09bILCqwtJeYvLwjawoj+RL
-         FxVi+puy9bgAHn6fjJ/DdkjiafQLE6xR1OiRPBR3k3jzIuJGBpv1JUjWbmiS6vjA6LUD
-         JYbEUiUIwgIg3/ZpPtFVyjY943BCB8pZc6q26ncnVZ4hOwsG0buPeZnP7grxuw8WMlF7
-         XMdwsOLv5nB2ryGKP41VAWV26Cz3DDk+vzbeCEv8rAtxeejjLXM6LbKjxJNaab3hqs9O
-         AtdQ==
-X-Gm-Message-State: AOJu0YzZloX7Yozyl4gkjgvlAgyXL2HSY9Q7JXj3YtH/Awekn7xNaFhs
-	R90jdw40MojIlnW5NPnjF7MIjxs49PNfRLiTDUo5jiSuxaync5ej14yGBW9zaMmcJnY=
-X-Gm-Gg: ASbGnctTJ5729ngD7qS6g97bR4ZOrzshSxK/RUfqfAyWOLJZZMPyCZIHOLPjhtaTjhD
-	USgYS6ghSYjARvn3GiTlemudgRIQ84YV1zWzRZLe2tJ51jjKjl+09wg0ezt5i+brb4ra+//SaQ1
-	sAfrO93P/tLICBF8uCsfNWbuHrDwDN+MYUTiu9//nqoAo1BClBmdkrFvMyHNuMifeDmVSxHWVu0
-	rIG/T29x9wh9mHy8odwZpSaXmXmKmvhvS8Qa05EW/gvveAh7SEYlnuB5eIQ46WGHApnI2GzVcMs
-	3OgSiAU24NDK7OMKWmkYxPSO8VExLmLrdatd1Z31aaWaxevZeiNDan5zm4MjVWeLLoR7fCOCJqw
-	qA1cVZY6wV4Jcy1PrqfzmpYghadPyTHGEY/NWrodC3j8=
-X-Google-Smtp-Source: AGHT+IFKMbXWi0CwmnHyn3tgyLCZQgSOUQBMZIij8kI76/pdZpcK3Rh2CaXNNCukSuKoaxDWztBswQ==
-X-Received: by 2002:a05:6000:40cc:b0:3b7:8b43:ac7d with SMTP id ffacd0b85a97d-3b78b43add2mr1376216f8f.3.1753769897578;
-        Mon, 28 Jul 2025 23:18:17 -0700 (PDT)
-Received: from [192.168.1.29] ([178.197.218.223])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b778eba0e6sm11065009f8f.25.2025.07.28.23.18.15
+        bh=jwtZ91dpf+B7MEEcMgVcJwBLL73NG/P9b1e65DE6H/4=;
+        b=LqtuPQ/qMWKdchpFyxg6dV7LKzhLP+6xss8g2nU7LewBSQuBEBbkf4+ESkmai23Dwe
+         oejjcxZgf6Ia8JGYy9jZAL87Ngkraai/XVACdK8VdwWeXUUF2V9uGcBlmF8HucQRU2EF
+         6T/qZH462k+nglKoNtNV0JkLIenli1QoW91YlUsoCU11+SL4B5Jhauq3M843zu0446qZ
+         glOksNUkVeJdWDw6nTaeRJi0TYlc7vuUNoHPnqdaVUllVDBjtlpw/b0nEAV15PXraAue
+         omnFPmTqFGx0sk+S4s9bp66K4nZRuPvWa98SVqpSwF1BOePoEX9Cny0Tmua290KsEbMq
+         K65g==
+X-Forwarded-Encrypted: i=1; AJvYcCUrEcWgc7hpO37bS8zVCdfE6+rqxI0qUWlyvcPD/m0o7M2w5Sfg0nndv52gmjNHe6LjgSqCPwWI@vger.kernel.org, AJvYcCWLaqV1Yxgf70E1aHx9OY+PSwNDvcOoAztY0bCC80OkmFZh+JUrAqgMV3d474wnyhaB14mSrHwwVhIo@vger.kernel.org, AJvYcCXrAKyxpq2q2amC5SnuWjnXwpb3uGI0G6ImwnNWsRq+Sqz6QhoEARyv2MtPa3FjwEPNMq3IgFqabNYAXS6kQszh/g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/gOvHpXJ5R5eLQbjp8hBzAEVIbGD6vRbOhBW2p8gNZZLEDWUR
+	vjotbyl/+q1WAyAAFBuWeQqxEW4llq8g7WRgJapjCpiBNZoyZb7RhY91heHbmjk2
+X-Gm-Gg: ASbGncvS9DVO1tTjIvsCoR+eyw9p/FFU4Ch9ltatsjfbbVgqonDaOC0YQXQj/EEAg1I
+	QOhwIcckRmPraS4Fl0dYT5PTRoFgObDpWtK/XFhoFm+HTBBL+8H9ckIa1NdgOTg34NaVusLlnKk
+	pWT8Mi2fKp0SSRPjOWPBEd84j1l5T82m87FUJB/KwAFdf8rw7lGN3oSLluZzroRiRTFFpUWNQ8Y
+	QJi420O1WAfWG6u6L0qU3B+t6/v34N/nFJWtdD9QODAdCqWxqSjRqPGmjMJEr1QpUGs41248otL
+	uJYMLEQMFtlOFAeHblonabjxokWXvffjSk3OHi0cajfliUAQNgu+mp8iphsrnSEaLpIjpZtNEhn
+	uAckFESfgNaGkkK41+P86DnyMIUjcVsMXLoQNFtn3ZYm4vLEp16DOCKVyA5VY
+X-Google-Smtp-Source: AGHT+IGDA3pP6mGA49mNLxq9UAPmSfy57hmyRfEwFHYeSdMldLyHzjN+VJ9/WzJD/EjyiZIMkdMQjg==
+X-Received: by 2002:a05:6102:6c3:b0:4e6:d94f:c197 with SMTP id ada2fe7eead31-4fa3fed06bamr5302311137.23.1753773118543;
+        Tue, 29 Jul 2025 00:11:58 -0700 (PDT)
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-88b8dcd50cesm1671590241.15.2025.07.29.00.11.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Jul 2025 23:18:16 -0700 (PDT)
-Message-ID: <6479ef96-b7d3-40f6-aafc-a7a8a4177c41@linaro.org>
-Date: Tue, 29 Jul 2025 08:18:15 +0200
+        Tue, 29 Jul 2025 00:11:58 -0700 (PDT)
+Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-886b2fdba07so1592017241.1;
+        Tue, 29 Jul 2025 00:11:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX4Fsy4sY04K4IWoUtTAyHS3kkoCAxecloHEPo5jhm3PqRUgddbLIDsZNzxNTCb8cMW9FcaTsu0Vd2zlVjhyLXU4g==@vger.kernel.org, AJvYcCXrEz1XJjOOyZHuxDcMo+CcyaZDfjdStovPyS/blCNfaOUvr/+UB8G7TRpaKFzTboHKQmyE63Lo@vger.kernel.org, AJvYcCXyFoZyGWHzlW4CbiVsrhP1IWuMyEAj9hYLAjwC3Rin4orxCs5B+iOklGrIMYBgEJyGS6/D5LMrnFv3@vger.kernel.org
+X-Received: by 2002:a05:6102:3f53:b0:4e9:d847:edb8 with SMTP id
+ ada2fe7eead31-4fa3fa68bd3mr6449966137.7.1753773117534; Tue, 29 Jul 2025
+ 00:11:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/2] dt-bindings: usb: dwc3: add support for SpacemiT
- K1
-To: Ze Huang <huangze@whut.edu.cn>, Yao Zi <ziyao@disroot.org>,
- Ze Huang <huang.ze@linux.dev>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20250729-dwc3_generic-v7-0-5c791bba826f@linux.dev>
- <20250729-dwc3_generic-v7-1-5c791bba826f@linux.dev> <aIgmrQ7afSO5sjB_@pie>
- <aIhi9JKZvuYh2Rz_@cse-cd03-lnx.ap.qualcomm.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- 2+47PN9NZAOyb771QoVr8A==
-In-Reply-To: <aIhi9JKZvuYh2Rz_@cse-cd03-lnx.ap.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250727154516.11599-1-marek.vasut+renesas@mailbox.org>
+ <2025072828-suspect-work-12ca@gregkh> <b9c9ba83-6da2-4295-b058-a0520c9df806@mailbox.org>
+ <2025072931-bagful-jelly-ffa7@gregkh>
+In-Reply-To: <2025072931-bagful-jelly-ffa7@gregkh>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 29 Jul 2025 09:11:46 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWJQ2iUwNvH+APo0tFtbWfvoBvtFeH7Njej9sANMKtzZw@mail.gmail.com>
+X-Gm-Features: Ac12FXyXvWCK7x2sjmWynrmYsSYSUy4D_IU-4-FR6o9hoO4E8HEeJAWFQw0ofck
+Message-ID: <CAMuHMdWJQ2iUwNvH+APo0tFtbWfvoBvtFeH7Njej9sANMKtzZw@mail.gmail.com>
+Subject: Re: [PATCH] usb: renesas-xhci: Fix External ROM access timeouts
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Marek Vasut <marek.vasut@mailbox.org>, linux-usb@vger.kernel.org, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Mathias Nyman <mathias.nyman@intel.com>, 
+	Vinod Koul <vkoul@kernel.org>, stable@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 29/07/2025 07:58, Ze Huang wrote:
-> On Tue, Jul 29, 2025 at 01:41:01AM +0000, Yao Zi wrote:
->> On Tue, Jul 29, 2025 at 12:33:55AM +0800, Ze Huang wrote:
->>> Add support for the USB 3.0 Dual-Role Device (DRD) controller embedded
->>> in the SpacemiT K1 SoC. The controller is based on the Synopsys
->>> DesignWare Core USB 3 (DWC3) IP, supporting USB3.0 host mode and USB 2.0
->>> DRD mode.
->>>
->>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Signed-off-by: Ze Huang <huang.ze@linux.dev>
->>> ---
->>>  .../devicetree/bindings/usb/spacemit,k1-dwc3.yaml  | 124 +++++++++++++++++++++
->>>  1 file changed, 124 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
->>> new file mode 100644
->>> index 0000000000000000000000000000000000000000..7007e2bd42016ae0e50c4007e75d26bada34d983
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
->>> @@ -0,0 +1,124 @@
->>
->> ...
->>
->>> +  resets:
->>> +    items:
->>> +      - description: USB3.0 AHB reset
->>> +      - description: USB3.0 VCC reset
->>> +      - description: USB3.0 PHY reset
->>> +      - description: PCIE0 global reset (for combo phy)
->>
->> Why should the USB driver takes care of the PCIe stuff? This sounds
->> strange to me.
->>
-> 
-> On K1, PHY depends on the clocks and resets it shares with the controller,
-> and the controller driver is guarantees that any needed clocks are enabled,
-> and any resets that affect the PHY are de-asserted before using the PHY.
-> 
-> RESET_PCIE0_GLOBAL reset is necessary during, and only, the calibration stage
-> of combo phy.
+Hi Greg,
 
+On Tue, 29 Jul 2025 at 07:03, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Tue, Jul 29, 2025 at 05:09:55AM +0200, Marek Vasut wrote:
+> > On 7/28/25 6:18 AM, Greg Kroah-Hartman wrote:
+> >
+> > [...]
+> >
+> > > > Fixes: 2478be82de44 ("usb: renesas-xhci: Add ROM loader for uPD720201")
+> > > > Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+> > > > ---
+> > > > Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > Cc: Mathias Nyman <mathias.nyman@intel.com>
+> > > > Cc: Vinod Koul <vkoul@kernel.org>
+> > > > Cc: <stable@vger.kernel.org>
+> >
+> > [...]
+> >
+> > > - You have marked a patch with a "Fixes:" tag for a commit that is in an
+> > >    older released kernel, yet you do not have a cc: stable line in the
+> > >    signed-off-by area at all, which means that the patch will not be
+> > >    applied to any older kernel releases.  To properly fix this, please
+> > >    follow the documented rules in the
+> > >    Documentation/process/stable-kernel-rules.rst file for how to resolve
+> > >    this.
+> >
+> > Maybe the bot should take into consideration Cc: stable below the --- too ?
+> > Or is that considered invalid ?
+>
+> That is totally invalid, it gets cut off when the patch is applied and
+> then is lost :(
 
-But this is not PCI! Why would you call it "I need to reset PCI" while
-you describe the USB device?
+But the "Fix" keyword in the oneline-summary and the "Fixes" tag are
+not, so your stable minions will still take it ;-)
 
+Gr{oetje,eeting}s,
 
-Best regards,
-Krzysztof
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
