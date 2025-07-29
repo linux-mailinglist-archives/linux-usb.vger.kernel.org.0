@@ -1,83 +1,70 @@
-Return-Path: <linux-usb+bounces-26241-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26242-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5C52B1445B
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 00:22:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFACCB145EB
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 03:41:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BE1F17EFF3
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jul 2025 22:22:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 466784E21A1
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 01:41:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B967A224893;
-	Mon, 28 Jul 2025 22:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC031F8753;
+	Tue, 29 Jul 2025 01:41:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AtUdo9EC"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="B9KloKMh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA7A1E4AB;
-	Mon, 28 Jul 2025 22:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589F71F37C5;
+	Tue, 29 Jul 2025 01:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753741313; cv=none; b=bZJABLrZetYpjKNvvSGox8ryfnTf5A4ncG7tNkEO3RmTBP8Q6q2/9xxjagFPyBX7JO/8QIYOxhTizVlWqJPX6WdlPAZd6bzA10cOQziL/umN1v+O9GRhmXL866/SQG6EU5lBmljQR8PY4kzshdzImrnPH4Uyp7zUaAZw/S7wKGY=
+	t=1753753288; cv=none; b=aqqKhnVidR/V4eChmH8R2voTyQlSPzM30SmNddMm7r36+3bACgwQHqiEZquD4fjfkerqDaW6hhRPy96dVTYqdoCxv+V+es57Ax3p/fd09w5Q/L8GH7W4R2L4eYQcMidFnP5qsWmCDG6bjsZFmLcqClGA2hR/89nItZgz3ovJIu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753741313; c=relaxed/simple;
-	bh=FAvyqAwjVQrVisvFktnzBMxF4I8aeCcPbJFIZI3v1jY=;
+	s=arc-20240116; t=1753753288; c=relaxed/simple;
+	bh=7jL0NE4cF4xqYnGuVecwCuQthPBG5AwQZhJM7XTG5Ek=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FijLIKDzb5o87vvSDMfHPE2NzIMA7lh+rBdPoVuw+mUwS+fKsYnCZR4jv6W+07gAxL+R9XLz5bL8rwfPRvrqvTF6zEpf/oN9ve+eRyWhRTSIiUY+tzmBQ7aLsgNZu08SwwdBBAFbuaH8PBMo7V68nlOcTIN3KNNrC499dnXLqa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AtUdo9EC; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753741311; x=1785277311;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FAvyqAwjVQrVisvFktnzBMxF4I8aeCcPbJFIZI3v1jY=;
-  b=AtUdo9ECjq76MYnXRIOf/qo3t0pRNGxiSZMbkPXdz7MADPecbjXOAh03
-   qGbFMaCzFPmmJhUb5xKYFN28Pd8y9XqV3io7olFtpMIwWZG5Q6cx4KnfU
-   J6fX2QumCqX6URTuDf27xD57Ril0/DE82/s3i3dekfxuyXbtqes+Ef35V
-   BWkRSUPWx3/Q6DXKpOdZ3ENCW7sC6SJoPqodeTG+IqvycX33u7iUb2a9l
-   T2zHQclYyxUBxnfWJ3oVaNzln2jqpBcb0766Ojgx7Yy2xlnLWa6G15R0T
-   vk0atCbdIkMkJWm4eDJBDFhqPYYIzFIk4Do3T/Cz80cFSs1gcMTQrpV9c
-   Q==;
-X-CSE-ConnectionGUID: gPw37YKIQOGuy368i+qDdg==
-X-CSE-MsgGUID: mW4T8ZRPT1KMmLlzEj/y4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="66272034"
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="66272034"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2025 15:21:51 -0700
-X-CSE-ConnectionGUID: PZsbSpSiTimNRiA24MXe6Q==
-X-CSE-MsgGUID: zPAcBhK1RqKoO7B8y7QZ3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="199672228"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.78])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2025 15:21:49 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id C220911FC49;
-	Tue, 29 Jul 2025 01:21:45 +0300 (EEST)
-Date: Mon, 28 Jul 2025 22:21:45 +0000
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Hans de Goede <hansg@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
-	Thinh.Nguyen@synopsys.com, Amardeep Rai <amardeep.rai@intel.com>,
-	Kannappan R <r.kannappan@intel.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2 3/4] USB: Add a function to obtain USB version
- independent maximum bpi value
-Message-ID: <aIf3-W1d_-Cn2Yt-@kekkonen.localdomain>
-References: <20250711083413.1552423-1-sakari.ailus@linux.intel.com>
- <20250711083413.1552423-4-sakari.ailus@linux.intel.com>
- <4ae4a0cf-8b63-4999-941d-011f00cdb5fb@kernel.org>
- <aHYNpTKsnzBwhl3w@kekkonen.localdomain>
- <f8502b45-967d-4377-88a3-bbfb3decad95@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Prmy/GL+LEDh92MBcrcaCpJ63B4bx3JPc85AX8cu4LcKhBJe+q6q+ntvfiOrvuHnhC+ZVpuYXTjQMlckIbr6vJ8EsI1pk5iHxFui+kgFb5VECTL8z7rxlHjlrHB7y2WXXsNm/rc6H5Mi/ltnH2pOdG46mD6eB3oxkyrGGKCvR+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=B9KloKMh; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 4A82325D07;
+	Tue, 29 Jul 2025 03:41:23 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ckl6WRtZjqNd; Tue, 29 Jul 2025 03:41:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1753753282; bh=7jL0NE4cF4xqYnGuVecwCuQthPBG5AwQZhJM7XTG5Ek=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=B9KloKMhlJyyRh81m9m/G3F+TnYK+unb5HmSIcZYXv9skznThsPV7h/WJffNlxaJj
+	 GgelXZd6oZyPw3DHn2h5K07c7MdBLXmnkcXFhOCDK/lbxmgM2JtehkiPcayyUeZLPA
+	 CxOt4PLcDLpw7MfjzJ569Yu1jHgXTqSh42zh47HsACMyiVQg/6sJJZnjh1TTSjYhfZ
+	 AFWr+MskYiXsSrZT2kLjXuenqSzj67q532Gvy79Xvk/YwuvxoUDyTLwAXRg6ZCfZEk
+	 KOov8Z0BmgN26+ZXXUU1EY2M2Go+57hXmXtLODAkruVnsjzMIf4llmKPDmKGsCh0Pb
+	 Sn3Y0xyX8GMMw==
+Date: Tue, 29 Jul 2025 01:41:01 +0000
+From: Yao Zi <ziyao@disroot.org>
+To: Ze Huang <huang.ze@linux.dev>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v7 1/2] dt-bindings: usb: dwc3: add support for SpacemiT
+ K1
+Message-ID: <aIgmrQ7afSO5sjB_@pie>
+References: <20250729-dwc3_generic-v7-0-5c791bba826f@linux.dev>
+ <20250729-dwc3_generic-v7-1-5c791bba826f@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,102 +73,46 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f8502b45-967d-4377-88a3-bbfb3decad95@kernel.org>
+In-Reply-To: <20250729-dwc3_generic-v7-1-5c791bba826f@linux.dev>
 
-Hi Hans,
-
-On Wed, Jul 16, 2025 at 06:35:24PM +0200, Hans de Goede wrote:
-> Hi Sakari,
+On Tue, Jul 29, 2025 at 12:33:55AM +0800, Ze Huang wrote:
+> Add support for the USB 3.0 Dual-Role Device (DRD) controller embedded
+> in the SpacemiT K1 SoC. The controller is based on the Synopsys
+> DesignWare Core USB 3 (DWC3) IP, supporting USB3.0 host mode and USB 2.0
+> DRD mode.
 > 
-> On 15-Jul-25 10:13 AM, Sakari Ailus wrote:
-> > Hi Hans,
-> > 
-> > Thank you for the review.
-> > 
-> > On Fri, Jul 11, 2025 at 03:44:21PM +0200, Hans de Goede wrote:
-> >> Hi Sarari,
-> >>
-> >> On 11-Jul-25 10:34 AM, Sakari Ailus wrote:
-> >>> From: "Rai, Amardeep" <amardeep.rai@intel.com>
-> >>>
-> >>> Add usb_endpoint_max_isoc_bpi() to obtain maximum bytes per interval for
-> >>> isochronous endpoints in a USB version independent way.
-> >>
-> >> Nice, thank you for adding a generic helper for this.
-> >>
-> >>> Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
-> >>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> >>> Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> >>> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> >>> ---
-> >>>  include/linux/usb.h | 22 ++++++++++++++++++++++
-> >>>  1 file changed, 22 insertions(+)
-> >>>
-> >>> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> >>> index 68166718ab30..bd70bd5ca82d 100644
-> >>> --- a/include/linux/usb.h
-> >>> +++ b/include/linux/usb.h
-> >>> @@ -2038,6 +2038,28 @@ static inline int usb_translate_errors(int error_code)
-> >>>  	}
-> >>>  }
-> >>>  
-> >>> +static inline u32 usb_endpoint_max_isoc_bpi(struct usb_device *dev,
-> >>> +					    const struct usb_host_endpoint *ep)
-> >>> +{
-> >>> +	if (usb_endpoint_type(&ep->desc) != USB_ENDPOINT_XFER_ISOC)
-> >>> +		return 0;
-> >>> +
-> >>> +	switch (dev->speed) {
-> >>> +	case USB_SPEED_SUPER_PLUS:
-> >>> +		if (USB_SS_SSP_ISOC_COMP(ep->ss_ep_comp.bmAttributes))
-> >>> +			return le32_to_cpu(ep->ssp_isoc_ep_comp.dwBytesPerInterval);
-> >>> +		fallthrough;
-> >>> +	case USB_SPEED_SUPER:
-> >>> +		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
-> >>> +	case USB_SPEED_HIGH:
-> >>> +		if (!usb_endpoint_maxp(&ep->desc) && le16_to_cpu(dev->descriptor.bcdUSB) == 0x220)
-> >>> +			return le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval);
-> >>
-> >> Shouldn't there be a check here that ep->eusb2_isoc_ep_comp is filled?
-> >>
-> >> Like how the USB_SPEED_SUPER_PLU code above checks
-> >> USB_SS_SSP_ISOC_COMP(ep->ss_ep_comp.bmAttributes)?
-> >>
-> >> I know you check the bcdUSB, but in my experience that field sometimes
-> >> contains made up numbers, so I was wondering if there is an extra check
-> >> we can do here ?
-> > 
-> > In the case of eUSB2, there's no such flag as for the SuperSpeedPlus
-> > Isochronous Endpoint Companion. The eUSB2 Isochronous Endpoint Companion
-> > Descriptor is simply expected to be present on eUSB2 (bcdUSB check)
-> > isochronous IN endpoints that support more than 3KB per microframe.
-> > 
-> > Also what the USB_SS_SSP_ISOC_COMP() macro returns actually dependens on
-> > the device telling there's such a descriptor but it's still different from
-> > the device actually providing one. But what would you do if the device
-> > indicates it provides no SSP_ISOC_COMP descriptor but still does provide
-> > one?
-> > 
-> > How about adding a flag (or maybe a bit field?) to tell which endpoint
-> > descriptors have been actually filled in struct usb_host_endpoint? I might
-> > do that as a separate patch on top...
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Ze Huang <huang.ze@linux.dev>
+> ---
+>  .../devicetree/bindings/usb/spacemit,k1-dwc3.yaml  | 124 +++++++++++++++++++++
+>  1 file changed, 124 insertions(+)
 > 
-> Adding a bit-field with which endpoint descriptors have actually
-> been filled sounds like a good idea.
-> 
-> I also agree with doing that as a follow-up patch and moving forward with
-> this patch as is, so:
-> 
-> Reviewed-by: Hans de Goede <hansg@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..7007e2bd42016ae0e50c4007e75d26bada34d983
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> @@ -0,0 +1,124 @@
 
-Thanks.
+...
 
-The descriptors appear to already have bDescriptorType field which can tell
-the same -- it's non-zero for the valid ones. I think I'll use that instead
-of adding new ones.
+> +  resets:
+> +    items:
+> +      - description: USB3.0 AHB reset
+> +      - description: USB3.0 VCC reset
+> +      - description: USB3.0 PHY reset
+> +      - description: PCIE0 global reset (for combo phy)
 
--- 
-Regards,
+Why should the USB driver takes care of the PCIe stuff? This sounds
+strange to me.
 
-Sakari Ailus
+> +  reset-names:
+> +    items:
+> +      - const: ahb
+> +      - const: vcc
+> +      - const: phy
+> +      - const: pcie0
+
+Best regards,
+Yao Zi
 
