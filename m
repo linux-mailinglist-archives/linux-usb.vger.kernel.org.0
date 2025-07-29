@@ -1,55 +1,57 @@
-Return-Path: <linux-usb+bounces-26244-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26245-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82B7AB14763
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 07:04:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5D03B147F4
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 07:58:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6A141AA10E0
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 05:04:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8A3B3BB5CB
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 05:58:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB0DA22DA0C;
-	Tue, 29 Jul 2025 05:03:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="y74Fw1b3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1A12472B5;
+	Tue, 29 Jul 2025 05:58:24 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46487224892;
-	Tue, 29 Jul 2025 05:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACA31C84D6;
+	Tue, 29 Jul 2025 05:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753765437; cv=none; b=gWdsnu2iGj8qLaS4Uyu4ldBsRvRxRhfBxmFvw11zfrt4utadGjgvtD792TXdD39g+FXCU2DBS00+Itck4oX3ns24lWANdovTwSVyFAS0jk2MUhcgD1SQfouQF5FjG307YLQzRxiemAk4s/fCEjiEvvN5yN4wT9v2aHHYFPhpNi8=
+	t=1753768703; cv=none; b=My7OAwpGz0LJDHnE6kL9znxu136BvvA/COsGJr08R3GXtZJoyf6odTsrRy0YPEzMHORvlt0pQ7UASdOMS6+YFtSSfKe9NqcovqGhD8sd8drJNyDjfvNcs6FA8StJgtInEaSxSR7n4Wy00wL2xIl0NpsbRmZg2w2YZRd7aQUOuLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753765437; c=relaxed/simple;
-	bh=ldiOYfrEY1K2mlcferpJoI9SuVCOruzaKW6L6XY0VUU=;
+	s=arc-20240116; t=1753768703; c=relaxed/simple;
+	bh=UVtJkUYCbOCf3Xc1JFWl4zmDPnvOktYHaga7VdFr12A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rp/m2M5LlzLcgymH1dP5pSg6A7/0sk6SDHAzkxXH4T3Efw1wg7tU66lGsJgZglXxbt/rNzkoZMuCEzsPj4dEMM58KbywiN+rO5NyXUC/9GgZQaiC0TP2vHk6PbtvIOQJcvziEu5pmM5azaZuvUZlabn0Lj/J6nzHj+Ezm5nGb5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=y74Fw1b3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A06BC4CEF5;
-	Tue, 29 Jul 2025 05:03:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1753765436;
-	bh=ldiOYfrEY1K2mlcferpJoI9SuVCOruzaKW6L6XY0VUU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=y74Fw1b3q7xRilu/IGZrhux1jqVGHKZUOH5XXJeKRYp4Q3YosGmqO9/oyjGA66n0z
-	 bh1Ed8h/oafCJ7lDfkVg1SgTJ4C4d6zLjKVdn1R9/lmOydvSb6qeos6IEzmZ0Ep+xR
-	 Seu8Gd84o9xW3UgEhF5VVhc8l0Ctk/J/ROpCAmpY=
-Date: Tue, 29 Jul 2025 07:03:53 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Marek Vasut <marek.vasut@mailbox.org>
-Cc: linux-usb@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Vinod Koul <vkoul@kernel.org>, stable@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] usb: renesas-xhci: Fix External ROM access timeouts
-Message-ID: <2025072931-bagful-jelly-ffa7@gregkh>
-References: <20250727154516.11599-1-marek.vasut+renesas@mailbox.org>
- <2025072828-suspect-work-12ca@gregkh>
- <b9c9ba83-6da2-4295-b058-a0520c9df806@mailbox.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=n9OUPOHQtgI4C1cdX43VeCyZt3n/C/La/sOf67swWUWuuX2wydwaIVvOxLSoXztke+R3eDvssto5ym1NoXyVJXStitcA0QbD9ps78Ap7HRAsdjrJV77KAEEikXTaByzRkrxZ0rl9j4mrVjXSwWExFgLQKUP/dowgo9etsO8frWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn; spf=pass smtp.mailfrom=whut.edu.cn; arc=none smtp.client-ip=45.254.49.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=whut.edu.cn
+Received: from localhost (gy-adaptive-ssl-proxy-2-entmail-virt205.gy.ntes [114.94.8.21])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1d9200ef5;
+	Tue, 29 Jul 2025 13:58:13 +0800 (GMT+08:00)
+Date: Tue, 29 Jul 2025 13:58:12 +0800
+From: Ze Huang <huangze@whut.edu.cn>
+To: Yao Zi <ziyao@disroot.org>, Ze Huang <huang.ze@linux.dev>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Ze Huang <huangze@whut.edu.cn>
+Subject: Re: [PATCH v7 1/2] dt-bindings: usb: dwc3: add support for SpacemiT
+ K1
+Message-ID: <aIhi9JKZvuYh2Rz_@cse-cd03-lnx.ap.qualcomm.com>
+References: <20250729-dwc3_generic-v7-0-5c791bba826f@linux.dev>
+ <20250729-dwc3_generic-v7-1-5c791bba826f@linux.dev>
+ <aIgmrQ7afSO5sjB_@pie>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,35 +60,74 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b9c9ba83-6da2-4295-b058-a0520c9df806@mailbox.org>
+In-Reply-To: <aIgmrQ7afSO5sjB_@pie>
+X-HM-Tid: 0a9854c28f5e03a1kunm053f6d441bb8a9
+X-HM-MType: 10
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCTx4dVk9CGhgZS0xMGB4aSFYeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlKSk9VQk9VQ1VJSllXWRYaDxIVHRRZQVlPS0hVSktJQk1LSlVKS0tVS1kG
 
-On Tue, Jul 29, 2025 at 05:09:55AM +0200, Marek Vasut wrote:
-> On 7/28/25 6:18 AM, Greg Kroah-Hartman wrote:
+On Tue, Jul 29, 2025 at 01:41:01AM +0000, Yao Zi wrote:
+> On Tue, Jul 29, 2025 at 12:33:55AM +0800, Ze Huang wrote:
+> > Add support for the USB 3.0 Dual-Role Device (DRD) controller embedded
+> > in the SpacemiT K1 SoC. The controller is based on the Synopsys
+> > DesignWare Core USB 3 (DWC3) IP, supporting USB3.0 host mode and USB 2.0
+> > DRD mode.
+> > 
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Ze Huang <huang.ze@linux.dev>
+> > ---
+> >  .../devicetree/bindings/usb/spacemit,k1-dwc3.yaml  | 124 +++++++++++++++++++++
+> >  1 file changed, 124 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..7007e2bd42016ae0e50c4007e75d26bada34d983
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
+> > @@ -0,0 +1,124 @@
 > 
-> [...]
+> ...
 > 
-> > > Fixes: 2478be82de44 ("usb: renesas-xhci: Add ROM loader for uPD720201")
-> > > Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
-> > > ---
-> > > Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Mathias Nyman <mathias.nyman@intel.com>
-> > > Cc: Vinod Koul <vkoul@kernel.org>
-> > > Cc: <stable@vger.kernel.org>
+> > +  resets:
+> > +    items:
+> > +      - description: USB3.0 AHB reset
+> > +      - description: USB3.0 VCC reset
+> > +      - description: USB3.0 PHY reset
+> > +      - description: PCIE0 global reset (for combo phy)
 > 
-> [...]
+> Why should the USB driver takes care of the PCIe stuff? This sounds
+> strange to me.
 > 
-> > - You have marked a patch with a "Fixes:" tag for a commit that is in an
-> >    older released kernel, yet you do not have a cc: stable line in the
-> >    signed-off-by area at all, which means that the patch will not be
-> >    applied to any older kernel releases.  To properly fix this, please
-> >    follow the documented rules in the
-> >    Documentation/process/stable-kernel-rules.rst file for how to resolve
-> >    this.
-> 
-> Maybe the bot should take into consideration Cc: stable below the --- too ?
-> Or is that considered invalid ?
 
-That is totally invalid, it gets cut off when the patch is applied and
-then is lost :(
+On K1, PHY depends on the clocks and resets it shares with the controller,
+and the controller driver is guarantees that any needed clocks are enabled,
+and any resets that affect the PHY are de-asserted before using the PHY.
+
+RESET_PCIE0_GLOBAL reset is necessary during, and only, the calibration stage
+of combo phy.
+
+To simplify both the driver architecture and the device tree files,
+RESET_PCIE0_GLOBAL (and some other clk/reset) are now managed by the
+relevant controller driver (either USB3 or PCIe0) instead of PHY driver.
+
+Only one of USB3.0 SuperSpeed and PCIe-0 will be activated in a boot.
+PCIe-0 will not be affected when it's working.
+
+
+
+Hi Alex, please correct me if anything wrong
+
+> > +  reset-names:
+> > +    items:
+> > +      - const: ahb
+> > +      - const: vcc
+> > +      - const: phy
+> > +      - const: pcie0
+> 
+> Best regards,
+> Yao Zi
+> 
+> 
+> 
 
