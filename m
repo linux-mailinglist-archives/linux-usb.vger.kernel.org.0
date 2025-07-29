@@ -1,147 +1,390 @@
-Return-Path: <linux-usb+bounces-26257-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26255-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7742B1501D
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 17:21:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F03DB14C8A
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 12:51:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81B167A8B66
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 15:19:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48C6C16EAB1
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 10:51:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A4C292B52;
-	Tue, 29 Jul 2025 15:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XmRM8d1s"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 378AD28A737;
+	Tue, 29 Jul 2025 10:51:10 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [61.152.208.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA864292B3D;
-	Tue, 29 Jul 2025 15:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E5C22D79F
+	for <linux-usb@vger.kernel.org>; Tue, 29 Jul 2025 10:51:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=61.152.208.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753802466; cv=none; b=iXHTUNzssjmAV5iu4DOSK4HAXs3CaaLXHoKDRxG6g7lhcR7gaAFEmjeUmKhGUh2LwWU/sx1K1+J+9BxzDqV8vgSrBQBiotWb4rxKqXmJ8WL9waV7QYWFby/s2geTYYxKr5Wmm2uyfT/yHC0jbxIa0/WiOEA11UgUltP7mytj5WA=
+	t=1753786269; cv=none; b=qP7qgss3IUzcJZPNj3KUKKh7VNWlzQH7DOqwqqP7qJha4i7AjsQLeD6uZGlxNAL3E8/ixkV36IhV9cdtqQAt+qHJ5aypOIgYFvzDtFQMB2bM+qUbnhOPq7EjcQrmEi0G46UxhbGIN9OzQXUiTUhD0Pk/+ZUCoQhMC0sV9NqwI6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753802466; c=relaxed/simple;
-	bh=PJ605ARQguDhCFZo50hkDMxiA0Q8GgGg9/9dBOXj6aA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IuRl9bjVvdRlv/Yyk+cgcEAPgnkKxo+iF29HtEsr226HxBhqRhwf6XvUoX10z+dRmXvwUt+SPgq77XxeFh4gGNNT2Bx9a2kD82oj51S9TPZ8dwPWBSbGMkHNkRDTK4SDGWqF5ZcdTb8yumKxDMM2OxYk59YH+ManialC+ivlCpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XmRM8d1s; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753802464; x=1785338464;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PJ605ARQguDhCFZo50hkDMxiA0Q8GgGg9/9dBOXj6aA=;
-  b=XmRM8d1sLZghxkedtGlKhzwnVDlX7nYc1ZuEWA31vePS+i88zLt83hMR
-   5RFMZ92N1+OKWy6c1veWIlwskzDwbtnX++SFGdN/ZvK2SVhV0A6SoPD1i
-   8vU9Z3f6CAK/3kvkrmPkYvIck3qi6/moWjk/3IsYM0zYZ/eYa6hTwfg3z
-   VAavgZm9vRkGOQhDW9hjPd7SPI83hcPsNrmwqzgkpIQK4butiwtcajdFD
-   vjqnsqlh2W4CLvaYXhU4HfDL5wAy4eh8mQJKHF6LniC2CsI2klws+4Tjx
-   BIAJw97efhuwa46TDITCgbLS7LUO1QtnPzBUnN2EiRJ49ClP39eR2hRtX
-   Q==;
-X-CSE-ConnectionGUID: SjvUHwU/SS2LVhRqzhExPA==
-X-CSE-MsgGUID: i2nGsHjBS96zqOonN4YzhA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="59722810"
-X-IronPort-AV: E=Sophos;i="6.16,349,1744095600"; 
-   d="scan'208";a="59722810"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 08:21:04 -0700
-X-CSE-ConnectionGUID: qdbqXlTiRBKoHflU+LfHDg==
-X-CSE-MsgGUID: EVyiJOoQQsGLC5ddS2b97Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,349,1744095600"; 
-   d="scan'208";a="162308092"
-Received: from mnyman-desk.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa007.fm.intel.com with ESMTP; 29 Jul 2025 08:21:01 -0700
-Message-ID: <c47814bf-85f0-4bd1-bc33-63f06b44d9c9@linux.intel.com>
-Date: Tue, 29 Jul 2025 18:20:59 +0300
+	s=arc-20240116; t=1753786269; c=relaxed/simple;
+	bh=vafti5TpIetSDfHajnpON8YL7ZxwGais6YEkVkf5KO4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=DjPkLYVqaaFvHaUPhKzYA0k3bZS8+T2LRRqK4SJ6BDIzmGq0EmZI1jcdgemzA0e/opmPtrLfpaKp7fFLAebMJ6qeToiGPaiKehY+U7jNh0C/MEe+7YUbESPQKcn2AFgUGPFkks0GxG+aMSh/2LBaHRWBUO+5LWaA0S1RBqNlOG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=61.152.208.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1753786256-1eb14e1c389ccb0001-YVMibp
+Received: from zxbjmbx1.zhaoxin.com (zxbjmbx1.zhaoxin.com [10.29.252.163]) by mx2.zhaoxin.com with ESMTP id RPJgeZXeIcPXFp6F (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Tue, 29 Jul 2025 18:50:56 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+Received: from ZXSHMBX1.zhaoxin.com (10.28.252.163) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.44; Tue, 29 Jul
+ 2025 18:50:55 +0800
+Received: from ZXSHMBX1.zhaoxin.com ([fe80::cd37:5202:5b71:926f]) by
+ ZXSHMBX1.zhaoxin.com ([fe80::cd37:5202:5b71:926f%7]) with mapi id
+ 15.01.2507.044; Tue, 29 Jul 2025 18:50:55 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.44; Tue, 29 Jul
+ 2025 17:24:58 +0800
+Message-ID: <dec32556-c28e-aeed-8516-2e0bb56c3a58@zhaoxin.com>
+Date: Wed, 30 Jul 2025 01:25:00 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: renesas-xhci: Fix External ROM access timeouts
-To: Marek Vasut <marek.vasut+renesas@mailbox.org>, linux-usb@vger.kernel.org
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>, Vinod Koul <vkoul@kernel.org>,
- stable@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <20250727154516.11599-1-marek.vasut+renesas@mailbox.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] usb:xhci:Fix slot_id resource race conflict
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250727154516.11599-1-marek.vasut+renesas@mailbox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-ASG-Orig-Subj: Re: [PATCH v2] usb:xhci:Fix slot_id resource race conflict
+To: Mathias Nyman <mathias.nyman@linux.intel.com>,
+	<gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <WeitaoWang@zhaoxin.com>, <wwt8723@163.com>, <CobeChen@zhaoxin.com>,
+	<stable@vger.kernel.org>
+References: <20250725185101.8375-1-WeitaoWang-oc@zhaoxin.com>
+ <094f9822-9f12-4c67-b648-84a48c2e154b@linux.intel.com>
+From: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <094f9822-9f12-4c67-b648-84a48c2e154b@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Moderation-Data: 7/29/2025 6:50:48 PM
+X-Barracuda-Connect: zxbjmbx1.zhaoxin.com[10.29.252.163]
+X-Barracuda-Start-Time: 1753786256
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 10007
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.144986
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
 
-On 27.7.2025 18.44, Marek Vasut wrote:
-> Increase the External ROM access timeouts to prevent failures during
-> programming of External SPI EEPROM chips. The current timeouts are
-> too short for some SPI EEPROMs used with uPD720201 controllers.
-> 
-> The current timeout for Chip Erase in renesas_rom_erase() is 100 ms ,
-> the current timeout for Sector Erase issued by the controller before
-> Page Program in renesas_fw_download_image() is also 100 ms. Neither
-> timeout is sufficient for e.g. the Macronix MX25L5121E or MX25V5126F.
-> 
-> MX25L5121E reference manual [1] page 35 section "ERASE AND PROGRAMMING
-> PERFORMANCE" and page 23 section "Table 8. AC CHARACTERISTICS (Temperature
-> = 0°C to 70°C for Commercial grade, VCC = 2.7V ~ 3.6V)" row "tCE" indicate
-> that the maximum time required for Chip Erase opcode to complete is 2 s,
-> and for Sector Erase it is 300 ms .
-> 
-> MX25V5126F reference manual [2] page 47 section "13. ERASE AND PROGRAMMING
-> PERFORMANCE (2.3V - 3.6V)" and page 42 section "Table 8. AC CHARACTERISTICS
-> (Temperature = -40°C to 85°C for Industrial grade, VCC = 2.3V - 3.6V)" row
-> "tCE" indicate that the maximum time required for Chip Erase opcode to
-> complete is 3.2 s, and for Sector Erase it is 400 ms .
-> 
-> Update the timeouts such, that Chip Erase timeout is set to 5 seconds,
-> and Sector Erase timeout is set to 500 ms. Such lengthy timeouts ought
-> to be sufficient for majority of SPI EEPROM chips.
-> 
-> [1] https://www.macronix.com/Lists/Datasheet/Attachments/8634/MX25L5121E,%203V,%20512Kb,%20v1.3.pdf
-> [2] https://www.macronix.com/Lists/Datasheet/Attachments/8750/MX25V5126F,%202.5V,%20512Kb,%20v1.1.pdf
-> 
-> Fixes: 2478be82de44 ("usb: renesas-xhci: Add ROM loader for uPD720201")
-> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
-> ---
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mathias Nyman <mathias.nyman@intel.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: <stable@vger.kernel.org>
-> Cc: linux-renesas-soc@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> ---
->   drivers/usb/host/xhci-pci-renesas.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
-> index 620f8f0febb8..86df80399c9f 100644
-> --- a/drivers/usb/host/xhci-pci-renesas.c
-> +++ b/drivers/usb/host/xhci-pci-renesas.c
-> @@ -47,8 +47,9 @@
->   #define RENESAS_ROM_ERASE_MAGIC				0x5A65726F
->   #define RENESAS_ROM_WRITE_MAGIC				0x53524F4D
->   
-> -#define RENESAS_RETRY	10000
-> -#define RENESAS_DELAY	10
-> +#define RENESAS_RETRY			50000	/* 50000 * RENESAS_DELAY ~= 500ms */
-> +#define RENESAS_CHIP_ERASE_RETRY	500000	/* 500000 * RENESAS_DELAY ~= 5s */
-> +#define RENESAS_DELAY			10
+On 2025/7/28 21:16, Mathias Nyman wrote:
+>=20
+> On 25.7.2025 21.51, Weitao Wang wrote:
+>> In such a scenario, device-A with slot_id equal to 1 is disconnecting
+>> while device-B is enumerating, device-B will fail to enumerate in the
+>> follow sequence.
+>>
+>> 1.[device-A] send disable slot command
+>> 2.[device-B] send enable slot command
+>> 3.[device-A] disable slot command completed and wakeup waiting thread
+>> 4.[device-B] enable slot command completed with slot_id equal to 1 and
+>> wakeup waiting thread
+>> 5.[device-B] driver check this slot_id was used by someone(device-A) in
+>> xhci_alloc_virt_device, this device fails to enumerate as this conflict
+>> 6.[device-A] xhci->devs[slot_id] set to NULL in xhci_free_virt_device
+>>
+>> To fix driver's slot_id resources conflict, let the xhci_free_virt_devic=
+e
+>> functionm call in the interrupt handler when disable slot command succes=
+s.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 7faac1953ed1 ("xhci: avoid race between disable slot command and =
+host runtime=20
+>> suspend")
+>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>=20
+> Nice catch, good to get this fixed.
+>=20
+> This however has the downside of doing a lot in interrupt context.
+>=20
+> what if we only clear some strategic pointers in the interrupt context,
+> and then do all the actual unmapping and endpoint ring segments freeing,
+> contexts freeing ,etc later?
+>=20
+> Pseudocode:
+>=20
+> xhci_handle_cmd_disable_slot(xhci, slot_id, comp_code)
+> {
+>  =C2=A0=C2=A0=C2=A0 if (cmd_comp_code =3D=3D COMP_SUCCESS) {
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 xhci->dcbaa->dev_context_ptrs=
+[slot_id] =3D 0;
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 xhci->devs[slot_id] =3D NULL;
+>  =C2=A0=C2=A0=C2=A0 }
+> }
+>=20
+> xhci_disable_and_free_slot(xhci, slot_id)
+> {
+>  =C2=A0=C2=A0=C2=A0 struct xhci_virt_device *vdev =3D xhci->devs[slot_id]=
+;
+>=20
+>  =C2=A0=C2=A0=C2=A0 xhci_disable_slot(xhci, slot_id);
+>  =C2=A0=C2=A0=C2=A0 xhci_free_virt_device(xhci, vdev, slot_id);
+> }
+>=20
+> xhci_free_virt_device(xhci, vdev, slot_id)
+> {
+>  =C2=A0=C2=A0=C2=A0 if (xhci->dcbaa->dev_context_ptrs[slot_id] =3D=3D vde=
+v->out_ctx->dma)
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 xhci->dcbaa->dev_context_ptrs=
+[slot_id] =3D 0;
+>=20
+>  =C2=A0=C2=A0=C2=A0 // free and unmap things just like before
+>  =C2=A0=C2=A0=C2=A0 ...
+>=20
+>  =C2=A0=C2=A0=C2=A0 if (xhci->devs[slot_id] =3D=3D vdev)
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 xhci->devs[slot_id] =3D NULL;
+>=20
+>  =C2=A0=C2=A0=C2=A0 kfee(vdev);
+> }
 
-No objection, just making sure author is aware that RENESAS_RETRY is used in
-_seven_ for loops, and this change will increase the timeout five-fold for
-all of them.
+Hi Mathias,
 
-Thanks
-Mathias
+Yes, your suggestion is a better revision, I made some modifications
+to the patch which is listed below. Please help to review again.
+Thanks for your help.
 
+---
+  drivers/usb/host/xhci-hub.c  |  3 +--
+  drivers/usb/host/xhci-mem.c  | 21 ++++++++++-----------
+  drivers/usb/host/xhci-ring.c |  9 +++++++--
+  drivers/usb/host/xhci.c      | 23 ++++++++++++++++-------
+  drivers/usb/host/xhci.h      |  3 ++-
+  5 files changed, 36 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index 92bb84f8132a..b3a59ce1b3f4 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -704,8 +704,7 @@ static int xhci_enter_test_mode(struct xhci_hcd *xhci,
+  		if (!xhci->devs[i])
+  			continue;
+
+-		retval =3D xhci_disable_slot(xhci, i);
+-		xhci_free_virt_device(xhci, i);
++		retval =3D xhci_disable_and_free_slot(xhci, i);
+  		if (retval)
+  			xhci_err(xhci, "Failed to disable slot %d, %d. Enter test mode anyway\=
+n",
+  				 i, retval);
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 6680afa4f596..fc4aca2e65bc 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -865,21 +865,18 @@ int xhci_alloc_tt_info(struct xhci_hcd *xhci,
+   * will be manipulated by the configure endpoint, allocate device, or upd=
+ate
+   * hub functions while this function is removing the TT entries from the =
+list.
+   */
+-void xhci_free_virt_device(struct xhci_hcd *xhci, int slot_id)
++void xhci_free_virt_device(struct xhci_hcd *xhci, struct xhci_virt_device =
+*dev,
++		int slot_id)
+  {
+-	struct xhci_virt_device *dev;
+  	int i;
+  	int old_active_eps =3D 0;
+
+  	/* Slot ID 0 is reserved */
+-	if (slot_id =3D=3D 0 || !xhci->devs[slot_id])
++	if (slot_id =3D=3D 0 || !dev)
+  		return;
+
+-	dev =3D xhci->devs[slot_id];
+-
+-	xhci->dcbaa->dev_context_ptrs[slot_id] =3D 0;
+-	if (!dev)
+-		return;
++	if (xhci->dcbaa->dev_context_ptrs[slot_id] =3D=3D dev->out_ctx->dma)
++		xhci->dcbaa->dev_context_ptrs[slot_id] =3D 0;
+
+  	trace_xhci_free_virt_device(dev);
+
+@@ -920,8 +917,10 @@ void xhci_free_virt_device(struct xhci_hcd *xhci, int =
+slot_id)
+  		dev->udev->slot_id =3D 0;
+  	if (dev->rhub_port && dev->rhub_port->slot_id =3D=3D slot_id)
+  		dev->rhub_port->slot_id =3D 0;
+-	kfree(xhci->devs[slot_id]);
+-	xhci->devs[slot_id] =3D NULL;
++	if (xhci->devs[slot_id] =3D=3D dev)
++		xhci->devs[slot_id] =3D NULL;
++	kfree(dev);
+  }
+
+  /*
+@@ -962,7 +961,7 @@ static void xhci_free_virt_devices_depth_first(struct x=
+hci_hcd *xhci,=20
+int slot_i
+  out:
+  	/* we are now at a leaf device */
+  	xhci_debugfs_remove_slot(xhci, slot_id);
+-	xhci_free_virt_device(xhci, slot_id);
++	xhci_free_virt_device(xhci, vdev, slot_id);
+  }
+
+  int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id,
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 94c9c9271658..7a440ec52ff6 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1589,7 +1589,8 @@ static void xhci_handle_cmd_enable_slot(int slot_id, =
+struct=20
+xhci_command *comman
+  		command->slot_id =3D 0;
+  }
+
+-static void xhci_handle_cmd_disable_slot(struct xhci_hcd *xhci, int slot_i=
+d)
++static void xhci_handle_cmd_disable_slot(struct xhci_hcd *xhci, int slot_i=
+d,
++					u32 cmd_comp_code)
+  {
+  	struct xhci_virt_device *virt_dev;
+  	struct xhci_slot_ctx *slot_ctx;
+@@ -1604,6 +1605,10 @@ static void xhci_handle_cmd_disable_slot(struct xhci=
+_hcd *xhci, int=20
+slot_id)
+  	if (xhci->quirks & XHCI_EP_LIMIT_QUIRK)
+  		/* Delete default control endpoint resources */
+  		xhci_free_device_endpoint_resources(xhci, virt_dev, true);
++	if (cmd_comp_code =3D=3D COMP_SUCCESS) {
++		xhci->dcbaa->dev_context_ptrs[slot_id] =3D 0;
++		xhci->devs[slot_id] =3D NULL;
++	}
+  }
+
+  static void xhci_handle_cmd_config_ep(struct xhci_hcd *xhci, int slot_id)
+@@ -1853,7 +1858,7 @@ static void handle_cmd_completion(struct xhci_hcd *xh=
+ci,
+  		xhci_handle_cmd_enable_slot(slot_id, cmd, cmd_comp_code);
+  		break;
+  	case TRB_DISABLE_SLOT:
+-		xhci_handle_cmd_disable_slot(xhci, slot_id);
++		xhci_handle_cmd_disable_slot(xhci, slot_id, cmd_comp_code);
+  		break;
+  	case TRB_CONFIG_EP:
+  		if (!cmd->completion)
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 8a819e853288..b3b39b2498f6 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3930,8 +3930,7 @@ static int xhci_discover_or_reset_device(struct usb_h=
+cd *hcd,
+  		 * Obtaining a new device slot to inform the xHCI host that
+  		 * the USB device has been reset.
+  		 */
+-		ret =3D xhci_disable_slot(xhci, udev->slot_id);
+-		xhci_free_virt_device(xhci, udev->slot_id);
++		ret =3D xhci_disable_and_free_slot(xhci, udev->slot_id);
+  		if (!ret) {
+  			ret =3D xhci_alloc_dev(hcd, udev);
+  			if (ret =3D=3D 1)
+@@ -4088,7 +4087,7 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct=
+ usb_device *udev)
+  	xhci_disable_slot(xhci, udev->slot_id);
+
+  	spin_lock_irqsave(&xhci->lock, flags);
+-	xhci_free_virt_device(xhci, udev->slot_id);
++	xhci_free_virt_device(xhci, virt_dev, udev->slot_id);
+  	spin_unlock_irqrestore(&xhci->lock, flags);
+
+  }
+@@ -4137,6 +4136,18 @@ int xhci_disable_slot(struct xhci_hcd *xhci, u32 slo=
+t_id)
+  	return 0;
+  }
+
++int xhci_disable_and_free_slot(struct xhci_hcd *xhci, u32 slot_id)
++{
++	struct xhci_virt_device *vdev =3D xhci->devs[slot_id];
++	int ret;
++
++	ret =3D xhci_disable_slot(xhci, slot_id);
++	xhci_free_virt_device(xhci, vdev, slot_id);
++	return ret;
++}
++
+  /*
+   * Checks if we have enough host controller resources for the default con=
+trol
+   * endpoint.
+@@ -4243,8 +4254,7 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_de=
+vice *udev)
+  	return 1;
+
+  disable_slot:
+-	xhci_disable_slot(xhci, udev->slot_id);
+-	xhci_free_virt_device(xhci, udev->slot_id);
++	xhci_disable_and_free_slot(xhci, udev->slot_id);
+
+  	return 0;
+  }
+@@ -4380,8 +4390,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, str=
+uct usb_device=20
+*udev,
+  		dev_warn(&udev->dev, "Device not responding to setup %s.\n", act);
+
+  		mutex_unlock(&xhci->mutex);
+-		ret =3D xhci_disable_slot(xhci, udev->slot_id);
+-		xhci_free_virt_device(xhci, udev->slot_id);
++		ret =3D xhci_disable_and_free_slot(xhci, udev->slot_id);
+  		if (!ret) {
+  			if (xhci_alloc_dev(hcd, udev) =3D=3D 1)
+  				xhci_setup_addressable_virt_dev(xhci, udev);
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index a20f4e7cd43a..85d5b964bf1e 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1791,7 +1791,7 @@ void xhci_dbg_trace(struct xhci_hcd *xhci, void (*tra=
+ce)(struct=20
+va_format *),
+  /* xHCI memory management */
+  void xhci_mem_cleanup(struct xhci_hcd *xhci);
+  int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags);
+-void xhci_free_virt_device(struct xhci_hcd *xhci, int slot_id);
++void xhci_free_virt_device(struct xhci_hcd *xhci, struct xhci_virt_device =
+*dev, int slot_id);
+  int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id, struct usb=
+_device *udev,=20
+gfp_t flags);
+  int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_dev=
+ice *udev);
+  void xhci_copy_ep0_dequeue_into_input_ctx(struct xhci_hcd *xhci,
+@@ -1888,6 +1888,7 @@ void xhci_reset_bandwidth(struct usb_hcd *hcd, struct=
+ usb_device *udev);
+  int xhci_update_hub_device(struct usb_hcd *hcd, struct usb_device *hdev,
+  			   struct usb_tt *tt, gfp_t mem_flags);
+  int xhci_disable_slot(struct xhci_hcd *xhci, u32 slot_id);
++int xhci_disable_and_free_slot(struct xhci_hcd *xhci, u32 slot_id);
+  int xhci_ext_cap_init(struct xhci_hcd *xhci);
+
+  int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup);
+--=20
+
+Best Regards,
+weitao
 
