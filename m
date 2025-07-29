@@ -1,118 +1,104 @@
-Return-Path: <linux-usb+bounces-26242-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26243-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFACCB145EB
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 03:41:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11486B146A7
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 05:10:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 466784E21A1
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 01:41:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C40C3B720A
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jul 2025 03:09:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC031F8753;
-	Tue, 29 Jul 2025 01:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2491F21CA16;
+	Tue, 29 Jul 2025 03:10:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="B9KloKMh"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="oInzvGYU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589F71F37C5;
-	Tue, 29 Jul 2025 01:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9555741AAC;
+	Tue, 29 Jul 2025 03:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753753288; cv=none; b=aqqKhnVidR/V4eChmH8R2voTyQlSPzM30SmNddMm7r36+3bACgwQHqiEZquD4fjfkerqDaW6hhRPy96dVTYqdoCxv+V+es57Ax3p/fd09w5Q/L8GH7W4R2L4eYQcMidFnP5qsWmCDG6bjsZFmLcqClGA2hR/89nItZgz3ovJIu4=
+	t=1753758609; cv=none; b=LrvfXIUzQzE2vTFQVmTiECjpG7ExAvsR5YZtRxYfKRRMKK3fCGrBMx94aLEhf7cnivYeEuogGGnICTviI7DAmPcrbp+xERg8riNoCxqmnEiNZUdJ8Sal5KpBQJuGGLZUYXXxE3OuHdEOjpCgS4wmMVbFKi59LL9991fbdj7kWHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753753288; c=relaxed/simple;
-	bh=7jL0NE4cF4xqYnGuVecwCuQthPBG5AwQZhJM7XTG5Ek=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Prmy/GL+LEDh92MBcrcaCpJ63B4bx3JPc85AX8cu4LcKhBJe+q6q+ntvfiOrvuHnhC+ZVpuYXTjQMlckIbr6vJ8EsI1pk5iHxFui+kgFb5VECTL8z7rxlHjlrHB7y2WXXsNm/rc6H5Mi/ltnH2pOdG46mD6eB3oxkyrGGKCvR+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=B9KloKMh; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 4A82325D07;
-	Tue, 29 Jul 2025 03:41:23 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ckl6WRtZjqNd; Tue, 29 Jul 2025 03:41:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1753753282; bh=7jL0NE4cF4xqYnGuVecwCuQthPBG5AwQZhJM7XTG5Ek=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=B9KloKMhlJyyRh81m9m/G3F+TnYK+unb5HmSIcZYXv9skznThsPV7h/WJffNlxaJj
-	 GgelXZd6oZyPw3DHn2h5K07c7MdBLXmnkcXFhOCDK/lbxmgM2JtehkiPcayyUeZLPA
-	 CxOt4PLcDLpw7MfjzJ569Yu1jHgXTqSh42zh47HsACMyiVQg/6sJJZnjh1TTSjYhfZ
-	 AFWr+MskYiXsSrZT2kLjXuenqSzj67q532Gvy79Xvk/YwuvxoUDyTLwAXRg6ZCfZEk
-	 KOov8Z0BmgN26+ZXXUU1EY2M2Go+57hXmXtLODAkruVnsjzMIf4llmKPDmKGsCh0Pb
-	 Sn3Y0xyX8GMMw==
-Date: Tue, 29 Jul 2025 01:41:01 +0000
-From: Yao Zi <ziyao@disroot.org>
-To: Ze Huang <huang.ze@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v7 1/2] dt-bindings: usb: dwc3: add support for SpacemiT
- K1
-Message-ID: <aIgmrQ7afSO5sjB_@pie>
-References: <20250729-dwc3_generic-v7-0-5c791bba826f@linux.dev>
- <20250729-dwc3_generic-v7-1-5c791bba826f@linux.dev>
+	s=arc-20240116; t=1753758609; c=relaxed/simple;
+	bh=YfUwWmSie+JBdFUcHXB+/SwHAIlZ/odzzp9WpwB6jIw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jyzZeT8T5f8l8jXXJ/cqKnrCOHcWpIZ4worVil58q4WEQre4AaQNjaph82LN3kEoZti+v7PoRbJXbFZlAfDSpujMn1cTYoGs4yshBA6hIGGGXj+ISBmKQUUlajVWqjFk2KMxXX6KV1CqdThGi2TjYUesKGf6AgtJNHly6CbHKx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=oInzvGYU; arc=none smtp.client-ip=80.241.56.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4brgLt0pJRz9sr1;
+	Tue, 29 Jul 2025 05:09:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1753758598;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4RbrZ/Lc50No6eFKtJbvDodwX9CC0Ieuiq0+oZ1l2hA=;
+	b=oInzvGYU3UHwKxb25kLfLUckkJ0nuHV1eKsMqHugDEGSXzGBfknsXmt7FKyC0jCERiffl5
+	PPPAWRB0pOH/Krk8sOx3MY0O0mmqJJn5YAqWLvyQOwl6O3P6NX37EMQl1AzDKPcW4XtujJ
+	Pa+HyNyn6A/lwsGUiLewXdE/9/xNKWOwAIGGqozEl24r3X8rHsBZZQvFXrYk/ptHo5wyVh
+	+xXgrvAMIMQ5gJECKkfEFFk93f/AnSS6zIS3z9L8zz8BTfffsLzWcpM8FW8zYi9vQ709/b
+	2YYFcLCU0D85kQMGepiDsMmmD5UkNXtOaXFlyQE+QfhoSAzDAF/6zXQteQqEBg==
+Message-ID: <b9c9ba83-6da2-4295-b058-a0520c9df806@mailbox.org>
+Date: Tue, 29 Jul 2025 05:09:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250729-dwc3_generic-v7-1-5c791bba826f@linux.dev>
+Subject: Re: [PATCH] usb: renesas-xhci: Fix External ROM access timeouts
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
+ Mathias Nyman <mathias.nyman@intel.com>, Vinod Koul <vkoul@kernel.org>,
+ stable@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+References: <20250727154516.11599-1-marek.vasut+renesas@mailbox.org>
+ <2025072828-suspect-work-12ca@gregkh>
+Content-Language: en-US
+From: Marek Vasut <marek.vasut@mailbox.org>
+In-Reply-To: <2025072828-suspect-work-12ca@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-ID: 2895dcc8d9f35d888df
+X-MBO-RS-META: z4ewuoofthbnxkithag6fcpqd37pqwgz
 
-On Tue, Jul 29, 2025 at 12:33:55AM +0800, Ze Huang wrote:
-> Add support for the USB 3.0 Dual-Role Device (DRD) controller embedded
-> in the SpacemiT K1 SoC. The controller is based on the Synopsys
-> DesignWare Core USB 3 (DWC3) IP, supporting USB3.0 host mode and USB 2.0
-> DRD mode.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Ze Huang <huang.ze@linux.dev>
-> ---
->  .../devicetree/bindings/usb/spacemit,k1-dwc3.yaml  | 124 +++++++++++++++++++++
->  1 file changed, 124 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..7007e2bd42016ae0e50c4007e75d26bada34d983
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.yaml
-> @@ -0,0 +1,124 @@
+On 7/28/25 6:18 AM, Greg Kroah-Hartman wrote:
 
-...
+[...]
 
-> +  resets:
-> +    items:
-> +      - description: USB3.0 AHB reset
-> +      - description: USB3.0 VCC reset
-> +      - description: USB3.0 PHY reset
-> +      - description: PCIE0 global reset (for combo phy)
+>> Fixes: 2478be82de44 ("usb: renesas-xhci: Add ROM loader for uPD720201")
+>> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+>> ---
+>> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: Mathias Nyman <mathias.nyman@intel.com>
+>> Cc: Vinod Koul <vkoul@kernel.org>
+>> Cc: <stable@vger.kernel.org>
 
-Why should the USB driver takes care of the PCIe stuff? This sounds
-strange to me.
+[...]
 
-> +  reset-names:
-> +    items:
-> +      - const: ahb
-> +      - const: vcc
-> +      - const: phy
-> +      - const: pcie0
+> - You have marked a patch with a "Fixes:" tag for a commit that is in an
+>    older released kernel, yet you do not have a cc: stable line in the
+>    signed-off-by area at all, which means that the patch will not be
+>    applied to any older kernel releases.  To properly fix this, please
+>    follow the documented rules in the
+>    Documentation/process/stable-kernel-rules.rst file for how to resolve
+>    this.
 
+Maybe the bot should take into consideration Cc: stable below the --- 
+too ? Or is that considered invalid ?
+
+-- 
 Best regards,
-Yao Zi
+Marek Vasut
 
