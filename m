@@ -1,327 +1,174 @@
-Return-Path: <linux-usb+bounces-26273-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26277-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52D58B15E44
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 12:36:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62535B16785
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 22:19:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADB217A51AC
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 10:34:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F79F7B2A4C
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 20:18:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D62B9292B42;
-	Wed, 30 Jul 2025 10:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7915F204C3B;
+	Wed, 30 Jul 2025 20:19:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [61.152.208.219])
+Received: from verain.settrans.net (verain.settrans.net [93.93.131.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B27275867
-	for <linux-usb@vger.kernel.org>; Wed, 30 Jul 2025 10:35:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=61.152.208.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A43C1F12F4
+	for <linux-usb@vger.kernel.org>; Wed, 30 Jul 2025 20:19:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753871745; cv=none; b=GimBAoq41zTNZUWAb4D2lDVMpGS7wc7BDcdFruRTQ65MBU4k8Fu4Ub7OE4kNdjwFuRIggw2wIobUrUnuUX8NrGNfUYez1dqHO1/9dq2eQRhC5d5/6u1I5+nfuKH+IJhlQvAXzgwcsiT0DujpahHElvRPBuuhBzWITlMw+SisRH0=
+	t=1753906752; cv=none; b=eqK/bFemOG2282AV5mca4k1sDPyAk1jStOo5FY3RbudtogsRN1pnpbzn0SbVnSwuNL9leEv9ipdBaA4JEKGMSGoVSt9ZaRjGvXcKBBh/9YDoa3w1JiY6SIcSqSMReL4LxvlrU4XJBUZvzQ+BZCdNj16cIG7fgNiZ3HVdPv2HnO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753871745; c=relaxed/simple;
-	bh=yu2TyOsV1vhFDHgv7NXnrPlhu6GvkW75RQ0Y5mvpUvc=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ABH/EZ+Mroa61agxSXWmlNLUUC8DSAkoTVDIpW1o+Q6D5wVknpnRm4vbp/oF4lDmY8ApzaaTEb9716JsUq41a5beA9GHeDQEVF1dZCXftT63TnIIL/R/9H6IIl0dI1pTmCuAOhc11xJ1OItAbBsHs608iv0KpfsgQgbkJuT/EDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=61.152.208.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1753871736-1eb14e1c3ba0fd0001-YVMibp
-Received: from ZXBJMBX03.zhaoxin.com (ZXBJMBX03.zhaoxin.com [10.29.252.7]) by mx2.zhaoxin.com with ESMTP id hcPawu27CI98KdNK (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Wed, 30 Jul 2025 18:35:36 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
-Received: from ZXSHMBX1.zhaoxin.com (10.28.252.163) by ZXBJMBX03.zhaoxin.com
- (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.44; Wed, 30 Jul
- 2025 18:35:36 +0800
-Received: from ZXSHMBX1.zhaoxin.com ([fe80::cd37:5202:5b71:926f]) by
- ZXSHMBX1.zhaoxin.com ([fe80::cd37:5202:5b71:926f%7]) with mapi id
- 15.01.2507.044; Wed, 30 Jul 2025 18:35:36 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
-Received: from L440.Zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.44; Wed, 30 Jul
- 2025 15:27:27 +0800
-From: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-To: <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <WeitaoWang@zhaoxin.com>, <wwt8723@163.com>, <CobeChen@zhaoxin.com>,
-	<stable@vger.kernel.org>
-Subject: [PATCH v3] usb:xhci:Fix slot_id resource race conflict
-Date: Wed, 30 Jul 2025 23:27:12 +0800
-X-ASG-Orig-Subj: [PATCH v3] usb:xhci:Fix slot_id resource race conflict
-Message-ID: <20250730152715.8368-1-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
+	s=arc-20240116; t=1753906752; c=relaxed/simple;
+	bh=njPLGGOgZjABHaqH/I/SYN4YPYgmW+0xac/31jDft7I=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=e9b7Hexv2eGX/ZhflR7lK7zSOGvApdmZKHlV59wK9QStu8TaZ0VRKS6oQYLC+zb1kvAi9MRFo9/x3fByCYwG/hCHhdNT3OwRadGlbelxM8ANf1zcsjJ3WUwbayOMchmr9bKlbLaATip9MqTvqF//UxEeiFREUaoNmJydwVCQ4oQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=settrans.net; spf=pass smtp.mailfrom=settrans.net; arc=none smtp.client-ip=93.93.131.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=settrans.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=settrans.net
+Received: from [193.187.128.66] (helo=[172.24.1.6])
+	by verain.settrans.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.94)
+	(envelope-from <rah@settrans.net>)
+	id 1uhD0Q-0006b9-G0
+	for linux-usb@vger.kernel.org; Wed, 30 Jul 2025 21:02:30 +0100
+Message-ID: <ba0ebd17-dade-4a97-b696-5ad19ebfca1d@settrans.net>
+Date: Wed, 30 Jul 2025 21:02:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: linux-usb@vger.kernel.org
+From: Bob Ham <rah@settrans.net>
+Subject: Audio interface causing "xhci_hcd ... WARN: buffer overrun event"
+ messages
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------dwdQpLm1wuChFFAmFWttJFo5"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------dwdQpLm1wuChFFAmFWttJFo5
+Content-Type: multipart/mixed; boundary="------------ez86WmE0mbiPJ1Jl8a0qMyBB";
+ protected-headers="v1"
+From: Bob Ham <rah@settrans.net>
+To: linux-usb@vger.kernel.org
+Message-ID: <ba0ebd17-dade-4a97-b696-5ad19ebfca1d@settrans.net>
+Subject: Audio interface causing "xhci_hcd ... WARN: buffer overrun event"
+ messages
+
+--------------ez86WmE0mbiPJ1Jl8a0qMyBB
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Moderation-Data: 7/30/2025 6:35:35 PM
-X-Barracuda-Connect: ZXBJMBX03.zhaoxin.com[10.29.252.7]
-X-Barracuda-Start-Time: 1753871736
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 8727
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -1.60
-X-Barracuda-Spam-Status: No, SCORE=-1.60 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_03_06, DATE_IN_FUTURE_03_06_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.145034
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------------------------
-	0.01 DATE_IN_FUTURE_03_06   Date: is 3 to 6 hours after Received: date
-	0.42 DATE_IN_FUTURE_03_06_2 DATE_IN_FUTURE_03_06_2
 
-In such a scenario, device-A with slot_id equal to 1 is disconnecting
-while device-B is enumerating, device-B will fail to enumerate in the
-follow sequence.
+Hi there,
 
-1.[device-A] send disable slot command
-2.[device-B] send enable slot command
-3.[device-A] disable slot command completed and wakeup waiting thread
-4.[device-B] enable slot command completed with slot_id equal to 1 and
-wakeup waiting thread
-5.[device-B] driver check this slot_id was used by someone(device-A) in
-xhci_alloc_virt_device, this device fails to enumerate as this conflict
-6.[device-A] xhci->devs[slot_id] set to NULL in xhci_free_virt_device
+I'm trying to get an Arturia AudioFuse 16Rig audio interface working
+under Linux.  During loading of snd-usb-audio and when trying to play
+through the interface, the kernel spews a whole bunch of messages like so=
+:
 
-To fix driver's slot_id resources conflict, clear xhci->devs[slot_id] and
-xhci->dcbba->dev_context_ptrs[slot_id] pointers in the interrupt context
-when disable slot command completes successfully. Simultaneously, adjust
-function xhci_free_virt_device to accurately handle device release.
+[ 1667.208402] xhci_hcd 0000:00:14.0: WARN: buffer overrun event for
+slot 3 ep 2 on endpoint
+[ 1667.216585] xhci_hcd 0000:00:14.0: WARN: buffer overrun event for
+slot 3 ep 2 on endpoint
+[ 1667.224778] xhci_hcd 0000:00:14.0: WARN: buffer overrun event for
+slot 3 ep 2 on endpoint
 
-Cc: stable@vger.kernel.org
-Fixes: 7faac1953ed1 ("xhci: avoid race between disable slot command and hos=
-t runtime suspend")
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
-v2->v3
- - When disable slot command completes successfully, only clear some
-   strategic pointers instead of calling xhci_free_virt_device in the
-   interrupt context.
+When trying to play, there is nothing from the audio outputs on the
+interface and aplay reports:
 
- drivers/usb/host/xhci-hub.c  |  3 +--
- drivers/usb/host/xhci-mem.c  | 20 +++++++++-----------
- drivers/usb/host/xhci-ring.c |  9 +++++++--
- drivers/usb/host/xhci.c      | 21 ++++++++++++++-------
- drivers/usb/host/xhci.h      |  3 ++-
- 5 files changed, 33 insertions(+), 23 deletions(-)
+$ aplay -D hw:CARD=3DAudio,DEV=3D0 output.wav
+Playing WAVE 'output.wav' : Signed 32 bit Little Endian, Rate 48000 Hz,
+Channels 10
+aplay: pcm_write:2127: write error: Input/output error
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 92bb84f8132a..b3a59ce1b3f4 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -704,8 +704,7 @@ static int xhci_enter_test_mode(struct xhci_hcd *xhci,
- 		if (!xhci->devs[i])
- 			continue;
-=20
--		retval =3D xhci_disable_slot(xhci, i);
--		xhci_free_virt_device(xhci, i);
-+		retval =3D xhci_disable_and_free_slot(xhci, i);
- 		if (retval)
- 			xhci_err(xhci, "Failed to disable slot %d, %d. Enter test mode anyway\n=
-",
- 				 i, retval);
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 6680afa4f596..962b0c20b883 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -865,21 +865,18 @@ int xhci_alloc_tt_info(struct xhci_hcd *xhci,
-  * will be manipulated by the configure endpoint, allocate device, or upda=
-te
-  * hub functions while this function is removing the TT entries from the l=
-ist.
-  */
--void xhci_free_virt_device(struct xhci_hcd *xhci, int slot_id)
-+void xhci_free_virt_device(struct xhci_hcd *xhci, struct xhci_virt_device =
-*dev,
-+		int slot_id)
- {
--	struct xhci_virt_device *dev;
- 	int i;
- 	int old_active_eps =3D 0;
-=20
- 	/* Slot ID 0 is reserved */
--	if (slot_id =3D=3D 0 || !xhci->devs[slot_id])
-+	if (slot_id =3D=3D 0 || !dev)
- 		return;
-=20
--	dev =3D xhci->devs[slot_id];
--
--	xhci->dcbaa->dev_context_ptrs[slot_id] =3D 0;
--	if (!dev)
--		return;
-+	if (xhci->dcbaa->dev_context_ptrs[slot_id] =3D=3D cpu_to_le64(dev->out_ct=
-x->dma))
-+		xhci->dcbaa->dev_context_ptrs[slot_id] =3D 0;
-=20
- 	trace_xhci_free_virt_device(dev);
-=20
-@@ -920,8 +917,9 @@ void xhci_free_virt_device(struct xhci_hcd *xhci, int s=
-lot_id)
- 		dev->udev->slot_id =3D 0;
- 	if (dev->rhub_port && dev->rhub_port->slot_id =3D=3D slot_id)
- 		dev->rhub_port->slot_id =3D 0;
--	kfree(xhci->devs[slot_id]);
--	xhci->devs[slot_id] =3D NULL;
-+	if (xhci->devs[slot_id] =3D=3D dev)
-+		xhci->devs[slot_id] =3D NULL;
-+	kfree(dev);
- }
-=20
- /*
-@@ -962,7 +960,7 @@ static void xhci_free_virt_devices_depth_first(struct x=
-hci_hcd *xhci, int slot_i
- out:
- 	/* we are now at a leaf device */
- 	xhci_debugfs_remove_slot(xhci, slot_id);
--	xhci_free_virt_device(xhci, slot_id);
-+	xhci_free_virt_device(xhci, vdev, slot_id);
- }
-=20
- int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id,
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 94c9c9271658..7a440ec52ff6 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1589,7 +1589,8 @@ static void xhci_handle_cmd_enable_slot(int slot_id, =
-struct xhci_command *comman
- 		command->slot_id =3D 0;
- }
-=20
--static void xhci_handle_cmd_disable_slot(struct xhci_hcd *xhci, int slot_i=
-d)
-+static void xhci_handle_cmd_disable_slot(struct xhci_hcd *xhci, int slot_i=
-d,
-+					u32 cmd_comp_code)
- {
- 	struct xhci_virt_device *virt_dev;
- 	struct xhci_slot_ctx *slot_ctx;
-@@ -1604,6 +1605,10 @@ static void xhci_handle_cmd_disable_slot(struct xhci=
-_hcd *xhci, int slot_id)
- 	if (xhci->quirks & XHCI_EP_LIMIT_QUIRK)
- 		/* Delete default control endpoint resources */
- 		xhci_free_device_endpoint_resources(xhci, virt_dev, true);
-+	if (cmd_comp_code =3D=3D COMP_SUCCESS) {
-+		xhci->dcbaa->dev_context_ptrs[slot_id] =3D 0;
-+		xhci->devs[slot_id] =3D NULL;
-+	}
- }
-=20
- static void xhci_handle_cmd_config_ep(struct xhci_hcd *xhci, int slot_id)
-@@ -1853,7 +1858,7 @@ static void handle_cmd_completion(struct xhci_hcd *xh=
-ci,
- 		xhci_handle_cmd_enable_slot(slot_id, cmd, cmd_comp_code);
- 		break;
- 	case TRB_DISABLE_SLOT:
--		xhci_handle_cmd_disable_slot(xhci, slot_id);
-+		xhci_handle_cmd_disable_slot(xhci, slot_id, cmd_comp_code);
- 		break;
- 	case TRB_CONFIG_EP:
- 		if (!cmd->completion)
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 8a819e853288..b1419e3ec7f9 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3930,8 +3930,7 @@ static int xhci_discover_or_reset_device(struct usb_h=
-cd *hcd,
- 		 * Obtaining a new device slot to inform the xHCI host that
- 		 * the USB device has been reset.
- 		 */
--		ret =3D xhci_disable_slot(xhci, udev->slot_id);
--		xhci_free_virt_device(xhci, udev->slot_id);
-+		ret =3D xhci_disable_and_free_slot(xhci, udev->slot_id);
- 		if (!ret) {
- 			ret =3D xhci_alloc_dev(hcd, udev);
- 			if (ret =3D=3D 1)
-@@ -4088,7 +4087,7 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct=
- usb_device *udev)
- 	xhci_disable_slot(xhci, udev->slot_id);
-=20
- 	spin_lock_irqsave(&xhci->lock, flags);
--	xhci_free_virt_device(xhci, udev->slot_id);
-+	xhci_free_virt_device(xhci, virt_dev, udev->slot_id);
- 	spin_unlock_irqrestore(&xhci->lock, flags);
-=20
- }
-@@ -4137,6 +4136,16 @@ int xhci_disable_slot(struct xhci_hcd *xhci, u32 slo=
-t_id)
- 	return 0;
- }
-=20
-+int xhci_disable_and_free_slot(struct xhci_hcd *xhci, u32 slot_id)
-+{
-+	struct xhci_virt_device *vdev =3D xhci->devs[slot_id];
-+	int ret;
-+
-+	ret =3D xhci_disable_slot(xhci, slot_id);
-+	xhci_free_virt_device(xhci, vdev, slot_id);
-+	return ret;
-+}
-+
- /*
-  * Checks if we have enough host controller resources for the default cont=
-rol
-  * endpoint.
-@@ -4243,8 +4252,7 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_de=
-vice *udev)
- 	return 1;
-=20
- disable_slot:
--	xhci_disable_slot(xhci, udev->slot_id);
--	xhci_free_virt_device(xhci, udev->slot_id);
-+	xhci_disable_and_free_slot(xhci, udev->slot_id);
-=20
- 	return 0;
- }
-@@ -4380,8 +4388,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, str=
-uct usb_device *udev,
- 		dev_warn(&udev->dev, "Device not responding to setup %s.\n", act);
-=20
- 		mutex_unlock(&xhci->mutex);
--		ret =3D xhci_disable_slot(xhci, udev->slot_id);
--		xhci_free_virt_device(xhci, udev->slot_id);
-+		ret =3D xhci_disable_and_free_slot(xhci, udev->slot_id);
- 		if (!ret) {
- 			if (xhci_alloc_dev(hcd, udev) =3D=3D 1)
- 				xhci_setup_addressable_virt_dev(xhci, udev);
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index a20f4e7cd43a..85d5b964bf1e 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1791,7 +1791,7 @@ void xhci_dbg_trace(struct xhci_hcd *xhci, void (*tra=
-ce)(struct va_format *),
- /* xHCI memory management */
- void xhci_mem_cleanup(struct xhci_hcd *xhci);
- int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags);
--void xhci_free_virt_device(struct xhci_hcd *xhci, int slot_id);
-+void xhci_free_virt_device(struct xhci_hcd *xhci, struct xhci_virt_device =
-*dev, int slot_id);
- int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id, struct usb_=
-device *udev, gfp_t flags);
- int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_devi=
-ce *udev);
- void xhci_copy_ep0_dequeue_into_input_ctx(struct xhci_hcd *xhci,
-@@ -1888,6 +1888,7 @@ void xhci_reset_bandwidth(struct usb_hcd *hcd, struct=
- usb_device *udev);
- int xhci_update_hub_device(struct usb_hcd *hcd, struct usb_device *hdev,
- 			   struct usb_tt *tt, gfp_t mem_flags);
- int xhci_disable_slot(struct xhci_hcd *xhci, u32 slot_id);
-+int xhci_disable_and_free_slot(struct xhci_hcd *xhci, u32 slot_id);
- int xhci_ext_cap_init(struct xhci_hcd *xhci);
-=20
- int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup);
---=20
-2.32.0
+I don't really know anything about XHCI so I was wondering if someone
+could advise me on what might be causing the error messages?
 
+
+I followed some instructions from this list=E2=81=B0 on enabling logs and=
+ traces
+which might help shed some light.  Here is the kernel log (which
+includes some debugging statements I added):
+
+  https://settrans.net/~rah/misc/xhci-kernel-log.txt
+
+And here is the contents of /sys/kernel/debug/tracing/trace which
+unfortunately looks empty, I'm wondering if the instructions I followed
+are still valid?
+
+  https://settrans.net/~rah/misc/xhci-kernel-trace.txt
+
+
+Thanks,
+
+Bob Ham
+
+
+=E2=81=B0https://lore.kernel.org/linux-usb/?t=3D20190409143433
+
+
+--------------ez86WmE0mbiPJ1Jl8a0qMyBB--
+
+--------------dwdQpLm1wuChFFAmFWttJFo5
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+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
+=KmsG
+-----END PGP SIGNATURE-----
+
+--------------dwdQpLm1wuChFFAmFWttJFo5--
 
