@@ -1,147 +1,217 @@
-Return-Path: <linux-usb+bounces-26268-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26270-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AADAB159E9
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 09:46:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58934B15C02
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 11:37:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 614C216714C
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 07:46:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52A2B18C22D4
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 09:37:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBDEF290D83;
-	Wed, 30 Jul 2025 07:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E804295516;
+	Wed, 30 Jul 2025 09:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pREL4X8p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AV0TAGBr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A601624EA;
-	Wed, 30 Jul 2025 07:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F276277CAF;
+	Wed, 30 Jul 2025 09:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753861568; cv=none; b=qA6XqOZ896Qxk0On3V6Wvlu+Lb8o8dyEtl2Xaw//wgpAX58yF5CAMmPoueroju9ls8dnUG/wH7bg/6EQOb4aGlR1GAH4CNXh6PrqTyJnu8tbmW9ZKUe3q7jmKW4zelqQINfLOVNVVixuAaAGL0rlQlxGLU8YiKS0LFx9dK8JnpU=
+	t=1753868181; cv=none; b=e05oKIshzfzIjysMe2qDojdSwCsEfDO7IgHE1XrSGJ03r9hGoaCQ3pH7VM1TLLebHK6yYkE/CRpu7rYE/OxH7AuHvAT44foivoCnbV6lSK0UWn/SylruUvOtzrnBzZpanlttTsxmyLqV/33OzYsOFZxIZx3mpyDfdIgcABuX9ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753861568; c=relaxed/simple;
-	bh=BVtOA/eUcgP3MYfEiU5txQ6jA6Z6lfvS2jWAuyrBuK0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LoR/NGLlnMQsRvWATDa5U34SyVfBHGEGFEtUy6JGtHPminpJZ11vnV/a8G3j9xe2zsStdrkaDXgsujkZ+ckKzU/6N4ZziURjMFwNqGb873uV7CFgRx0zdn2f9Ugy+mBEyd1pT0TSFbBG+njb5OuAyzGXLJI6Lzx4Kbjeg/xzhgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pREL4X8p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D004FC4CEE7;
-	Wed, 30 Jul 2025 07:46:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753861568;
-	bh=BVtOA/eUcgP3MYfEiU5txQ6jA6Z6lfvS2jWAuyrBuK0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pREL4X8plS9cuCRCTKGapKHuVqUTn7KM2ytcEnlubuJOql8/dkM+gOv3fD9dzGzYu
-	 g6eNnK9eu6j3XoTqz/GbAYnz22yxitJ0oV+AILQxMwFmh9vdrJCIphegIhyoKhLXbL
-	 6gPLYQmDyFJrTzUWSg9+gHg5gKP1f7qzEcXso9cbVUKJYUD4AjWVFbgcMLIGnoOCkP
-	 P4ACUBrYfFRSMkgmiPKnb4GZavtQP7dqUqQL+3Wdf8BYgKepaKR+nuLuAvVPTtwrwI
-	 W5aGLtNNLMoOjakw5tXrnIkZgKasWipDruBj4wOHVTCiVtoMAKSPZJS9Bbjp+9gKH/
-	 PeyB1FyYft03g==
-Message-ID: <51648c0f-dd30-4a07-83c0-533a57c29e63@kernel.org>
-Date: Wed, 30 Jul 2025 09:46:02 +0200
+	s=arc-20240116; t=1753868181; c=relaxed/simple;
+	bh=c2GH0rNGWLSNkTpOjy4OMDbtOxD8avJx7PsDc1FiDT4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y974Iz/HdQJO8sxhK1Sq2U3Lf32y3hOXJqLKuvYizEbVX+dTfn2OqAMJybCV+48gNhe7QJpuOUNtK4K8uXPZrO+wm6tdXsqplQxIUCEv2pfoza4qEIZWpMH/uyOvXQ25zwbA+N9VMUDGuh3nE5XeA1JSwOCCw44k9kB7eEKvsKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AV0TAGBr; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-75001b1bd76so4199858b3a.2;
+        Wed, 30 Jul 2025 02:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753868177; x=1754472977; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ssDVlCsCS3jSCW7a4ghd6/R/IH3Ziy5fSjKUqHewJCs=;
+        b=AV0TAGBru96dqdj/sFz9LwG4DaO508QfYRpQ5/hSe23f7dRRaM6wTmgF96jfsvc4Qj
+         wxKW0EUcrXEIsjoCunlAISMTrNsKRQd7vRfLNU9Lq8XvoDXNOKm8GSazRC4cuzFqSilG
+         5S2eA/Elhe3GiDVe5g339rfIqJ4Zp7+U6wLO65dp6hOK1WdCyWQY+9gVTEyulTSuGFJF
+         93oLvo0422eF6J4psNrVYuzRVkbVTkfZ7fZnlL0nqSCFgXTGfDbq+bRHfNxNquKu2YYs
+         HFG0oX/25/gWbQ/e+wZrIqB4/iCL5jS/GU5P0SudrZNbDUxrZ8JlMy7XCtc6X1M+CDGW
+         WC0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753868177; x=1754472977;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ssDVlCsCS3jSCW7a4ghd6/R/IH3Ziy5fSjKUqHewJCs=;
+        b=iqwfHSIbdEw4B2j8pl9dyUCqU5Wn+m+wb9rhsDsn2me3egFj8PVxsasOkHfbpjftFa
+         NeSnmjz97DUn0f+hxs3qFmBfKtZ1XYgSF5V6rJnZSEanOnQSsCvOJ0llPphgSMGTBXwi
+         qGsRVdFS2ZyGbjINkXZZIN7PuzZiu7zw2K//dSCVUvcEfXKuV2sC5kBXpUZ9xO5b49SD
+         cgcEBcmmEynDg44K24IvcrzqP8W24527Qa5VbSuhyYAxlkl53RrI8mJ0IrQfNczSmQEV
+         S+nvt53jyesaVsGFVla8fADQrv2DLv55qEmMX/QLhLTdpzgoyGoobNhSW+8TtfNOmrNx
+         LS+g==
+X-Forwarded-Encrypted: i=1; AJvYcCVhLYyviGwoMfJg9jioruHVgIdvDjnmRtiQEKQMTk/KdAFvTGZJpfbvYwIcS0V7VJU4rP5A3ZUldT3DEUY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywi4Rx+fkJIKwW7ArCvDynT8f25+WEBlFD0rt/wTCfnIi8+Bvvs
+	6n3jXUrybQ15ac+tpWp8lUwVKlmvDSJNVcM4YgWNLGqWqgVhBZZOmAst
+X-Gm-Gg: ASbGncvWyjYx3rgkOaRqCA8mNhy+cKN9aQTyIIIbjllobxFX82c11Tpeih3QxX2Zext
+	Wnb+o7yrOgL1NeOP/dq/ki6FYBwhH81zKAxNx/NpbtCrJ1aNJBiA2/3Vn3ZO2HPXERCs0xG9TQh
+	TJ/CjiMaAv9pSK41fgM5z1UMI7EY6PngSn33zPUuArKZ5hAftfEMHMyDRPmfBRN0EFQfkSwiYYC
+	KIz5jpQpkPrr5eVAvILO6CQDPXhumakyZE7dVF1RjEnA2wSoPUSeAm3LRP30WaH4d4qyHxceO6n
+	GA8QNPd0FOVBJaOklc5OydM8pTVXQqOYgF8FyJX5RLItoFEuAf+kPQFQ4IUwur04rJ2uZ9UMhAX
+	R5AGE5L/wNh2G1rXvOloufkh/kBejYw5Iho6hUZvPmFococCQx2Jfxc1ZLuP5OQYdTsxYFqyhYw
+	==
+X-Google-Smtp-Source: AGHT+IEkegB4qW3NBL1Htv2lZAEOtQ654FZ/2szFdy4KcwXFd0xODhnxhuJYgNKiowD1gC09+N2zrg==
+X-Received: by 2002:a05:6a20:6a21:b0:220:90a9:a91b with SMTP id adf61e73a8af0-23dc0d321b7mr4050211637.9.1753868177439;
+        Wed, 30 Jul 2025 02:36:17 -0700 (PDT)
+Received: from SIQOL-WIN-0002-DARSHAN.localdomain ([49.36.70.111])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-240087fc42bsm75689305ad.153.2025.07.30.02.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Jul 2025 02:36:17 -0700 (PDT)
+From: Darshan Rathod <darshanrathod475@gmail.com>
+To: gregkh@linuxfoundation.org,
+	m.grzeschik@pengutronix.de
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Darshan Rathod <darshanrathod475@gmail.com>
+Subject: [PATCH] usb: gadget: uvc: clean up code style for checkpatch compliance
+Date: Wed, 30 Jul 2025 08:19:15 +0000
+Message-ID: <20250730081915.12878-1-darshanrathod475@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Eswin EIC7700 USB controller
-To: zhangsenchuan@eswincomputing.com, gregkh@linuxfoundation.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, Thinh.Nguyen@synopsys.com, p.zabel@pengutronix.de
-Cc: ningyu@eswincomputing.com, linmin@eswincomputing.com,
- yangwei1@eswincomputing.com, pinkesh.vaghela@einfochips.com
-References: <20250730073953.1623-1-zhangsenchuan@eswincomputing.com>
- <20250730074058.2004-1-zhangsenchuan@eswincomputing.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250730074058.2004-1-zhangsenchuan@eswincomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 30/07/2025 09:40, zhangsenchuan@eswincomputing.com wrote:
-> +
-> +examples:
-> +  - |
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
+This patch fixes a few coding style issues:
+- Avoids assignments in if conditions
+- Corrects parameter indentation and alignment
+- Trims inconsistent spacing
 
-This wasn't here. Drop.
+All updates conform to kernel coding standards and improve maintainability.
 
-> +
-> +        usb {
-> +            compatible = "eswin,eic7700-dwc3";
-> +            clocks = <&fixed_factor_u_clk_1m_div24>,
-> +                     <&gate_clk_hsp_aclk>,
-> +                     <&gate_clk_hsp_cfgclk>;
-> +            clock-names = "suspend","aclk", "cfg";
-> +            eswin,hsp-sp-csr = <&hsp_sp_csr 0x800 0x808 0x83c 0x840>;
-> +            resets = <&reset 84>;
-> +            reset-names = "vaux";
-> +            ranges;
+Signed-off-by: Darshan Rathod <darshanrathod475@gmail.com>
+---
+ drivers/usb/gadget/function/uvc_video.c | 26 +++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
-Same comment: follow DTS coding style. Where should ranges or reg be placed?
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index fb77b0b21790..fe176ba4ac6b 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -27,7 +27,7 @@
+ 
+ static int
+ uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
+-		u8 *data, int len)
++			u8 *data, int len)
+ {
+ 	struct uvc_device *uvc = container_of(video, struct uvc_device, video);
+ 	struct usb_composite_dev *cdev = uvc->func.config->cdev;
+@@ -57,7 +57,7 @@ uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
+ 
+ 		data[1] |= UVC_STREAM_SCR;
+ 		put_unaligned_le32(stc, &data[pos]);
+-		put_unaligned_le16(sof, &data[pos+4]);
++		put_unaligned_le16(sof, &data[pos + 4]);
+ 		pos += 6;
+ 	}
+ 
+@@ -71,7 +71,7 @@ uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
+ 
+ static int
+ uvc_video_encode_data(struct uvc_video *video, struct uvc_buffer *buf,
+-		u8 *data, int len)
++		      u8 *data, int len)
+ {
+ 	struct uvc_video_queue *queue = &video->queue;
+ 	unsigned int nbytes;
+@@ -89,7 +89,7 @@ uvc_video_encode_data(struct uvc_video *video, struct uvc_buffer *buf,
+ 
+ static void
+ uvc_video_encode_bulk(struct usb_request *req, struct uvc_video *video,
+-		struct uvc_buffer *buf)
++		      struct uvc_buffer *buf)
+ {
+ 	void *mem = req->buf;
+ 	struct uvc_request *ureq = req->context;
+@@ -132,7 +132,7 @@ uvc_video_encode_bulk(struct usb_request *req, struct uvc_video *video,
+ 
+ static void
+ uvc_video_encode_isoc_sg(struct usb_request *req, struct uvc_video *video,
+-		struct uvc_buffer *buf)
++			 struct uvc_buffer *buf)
+ {
+ 	unsigned int pending = buf->bytesused - video->queue.buf_used;
+ 	struct uvc_request *ureq = req->context;
+@@ -187,7 +187,7 @@ uvc_video_encode_isoc_sg(struct usb_request *req, struct uvc_video *video,
+ 	video->queue.buf_used += req->length - header_len;
+ 
+ 	if (buf->bytesused == video->queue.buf_used || !buf->sg ||
+-			video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE) {
++	    video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE) {
+ 		video->queue.buf_used = 0;
+ 		buf->state = UVC_BUF_STATE_DONE;
+ 		buf->offset = 0;
+@@ -199,7 +199,7 @@ uvc_video_encode_isoc_sg(struct usb_request *req, struct uvc_video *video,
+ 
+ static void
+ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
+-		struct uvc_buffer *buf)
++		      struct uvc_buffer *buf)
+ {
+ 	void *mem = req->buf;
+ 	struct uvc_request *ureq = req->context;
+@@ -218,7 +218,7 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
+ 	req->length = buf->req_payload_size - len;
+ 
+ 	if (buf->bytesused == video->queue.buf_used ||
+-			video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE) {
++	    video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE) {
+ 		video->queue.buf_used = 0;
+ 		buf->state = UVC_BUF_STATE_DONE;
+ 		list_del(&buf->queue);
+@@ -473,7 +473,6 @@ static void uvcg_video_hw_submit(struct kthread_work *work)
+ 			 * There is a new free request - wake up the pump.
+ 			 */
+ 			queue_work(video->async_wq, &video->pump);
+-
+ 		}
+ 
+ 		spin_unlock_irqrestore(&video->req_lock, flags);
+@@ -777,18 +776,21 @@ int uvcg_video_enable(struct uvc_video *video)
+ 	 */
+ 	video->is_enabled = true;
+ 
+-	if ((ret = uvcg_queue_enable(&video->queue, 1)) < 0)
++	ret = uvcg_queue_enable(&video->queue, 1);
++	if (ret < 0)
+ 		return ret;
+ 
+-	if ((ret = uvc_video_alloc_requests(video)) < 0)
++	ret = uvc_video_alloc_requests(video);
++	if (ret < 0)
+ 		return ret;
+ 
+ 	if (video->max_payload_size) {
+ 		video->encode = uvc_video_encode_bulk;
+ 		video->payload_size = 0;
+-	} else
++	} else {
+ 		video->encode = video->queue.use_sg ?
+ 			uvc_video_encode_isoc_sg : uvc_video_encode_isoc;
++	}
+ 
+ 	video->req_int_count = 0;
+ 
+-- 
+2.43.0
 
-> +            #address-cells = <2>;
-> +            #size-cells = <2>;
-> +
-> +            usb@50480000 {
-> +                compatible = "snps,dwc3";
-> +                reg = <0x0 0x50480000 0x0 0x10000>;
-
-Nothing improved and you did not respond to the feedback.
-
-
-Best regards,
-Krzysztof
 
