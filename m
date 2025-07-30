@@ -1,267 +1,426 @@
-Return-Path: <linux-usb+bounces-26263-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26264-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F703B1577A
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 04:16:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77C27B15986
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 09:24:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A15D23BC9AE
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 02:16:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8D6B18A3989
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jul 2025 07:24:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139D2194A60;
-	Wed, 30 Jul 2025 02:16:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5250D287508;
+	Wed, 30 Jul 2025 07:24:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="mCENK9tQ"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="MEaZX9fX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481DD1361
-	for <linux-usb@vger.kernel.org>; Wed, 30 Jul 2025 02:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8791F12F4
+	for <linux-usb@vger.kernel.org>; Wed, 30 Jul 2025 07:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753841783; cv=none; b=ooLi77dHnB+hbKG9IS0D00jrv5Ayp9/2OPiUCb/csQQGFsloe0NrxtVxfLKX+sPRPvWAh61g9l431yfn3JNuwiEwcnvplatqXwZ/jzQr3n1TLtiZawBGTSCEPygNeI9cCKeBgrjTeXTDTHP1EBEYDYw2nVN5nMi+KG5Yu/fiM2k=
+	t=1753860275; cv=none; b=Te5YmD7xlFjaWOipjiqMSQg8VoH8v7KkAFYokXljy0i44428useF5CuTTv8S7D00Fzmhf6lzMEp91VQGCVmmm//67TBFcfmnpcw3f6/zZ9GL2PAIzWyEGQquaq34SpWL31mnh1PY+a9moOIcWqhNepoHS5F9kMN7QqhLEv325ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753841783; c=relaxed/simple;
-	bh=CJZCuRO95DGEzJAxKSQWElsFmSBaP61PRgA378Xrtko=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s1XVLn4lEpQ67Gdev4cg0izz6+9wlSFjLfd7xalppH9JYHLETyBRWSdYLYBGPtdRVoZOQHZnIjoff0qbB98ftDomGGY/w5N1K2ahUBeY9dWmv0EWrMmfFT94SVu/8hGdIfXWa9uMEfra+F9p522UkdAJ4OCfIrb7CLO8lgxnpmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=mCENK9tQ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56THvRsm031269
-	for <linux-usb@vger.kernel.org>; Wed, 30 Jul 2025 02:16:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	3Guw6KRbo8aw7wW9K/eK+M2MEQNE/hhgEQefs8riuf0=; b=mCENK9tQ2qj5Chfp
-	8ZaACQ+YEqfRNtrBnc67vRrSqRp6DBfcckLxNXRiPEcR8N6KRkz2nrA7i5vPUIU5
-	f6d3Y/YLg9DTuM1y0j31bApdW/UZNNsfPyoCs6kpf8ndAvDiGVidDjIv4ujfJG0c
-	fCNTY9v80+LPMoWE63hJGh1RiweLsApiPM05BLIpV0uzv7K4XmZo0t9Z/ETEG0DK
-	QRx5HbAJj6mAH7iHfQBJNabyJ1uw/DfCMsIEruMEq3dtu+Pk6jpmNa6+ClZ03JNv
-	Mk/2tvHHHWXbK8nSvdi3Ds2xfrIjPrc47um7DfGSKGd969T7WSVH0tMpq/8zG34u
-	j5JlWA==
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 485v1xfhfy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 30 Jul 2025 02:16:20 +0000 (GMT)
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2400a0ad246so26046785ad.2
-        for <linux-usb@vger.kernel.org>; Tue, 29 Jul 2025 19:16:20 -0700 (PDT)
+	s=arc-20240116; t=1753860275; c=relaxed/simple;
+	bh=0NwI7bZbXaVlLeaGuvh2pCFRKxf58ZfgSv9OimktG3I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RPZx9sXH/bia5CENO9yHF3SMZUN7bSUgHwlA7TMJCPDatqp69Pr9/Q7dR/oTlSDRyTlHsuIhJtpRo8Zt7774H/jCxX44zLc12k2i7Y7Ck41a7P19eOzQFukvSRVouX1gAjV3TrsFyJsJouq5v05dCOp0zHfkSg/0FoaLzt/2ZNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=MEaZX9fX; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 28F0B3F2BA
+	for <linux-usb@vger.kernel.org>; Wed, 30 Jul 2025 07:24:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1753860269;
+	bh=BDzaw5o2rlmVICTm/0/BDIaraI6GjwEMPdeXLmYw9Qc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=MEaZX9fXvd8DLtwdS1jUE1V0eVZytSu5u0B8H+2T4fcSBADTVQtVcn/ieFVeaDgOH
+	 Hjv7rCzVfjZSjqXfrb9CDPyoXitvxIKr/NbmjnVLw+Lw624ncabBTQ3GixkhRjagPr
+	 2cQ7/F3S5hv0IWisKuxRM5biCjmPoBg73r6dk513BYWZ18eJpl1RuZjgmYl/ZWN5Pq
+	 AogXf8MNjkVsCYWNUjWGOBa1uiQ2+L8spVlW39m522lAD4MWOcyx5gzSXwrN/CBXD1
+	 7Zbq92sl1qWzHoyS5b4XGfyvhakMkXmo5F4KauF+IK+TsI6TLl/K6E8E5L6XEZIGOH
+	 NShEg2Lm0jG2A==
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45611579300so44693865e9.0
+        for <linux-usb@vger.kernel.org>; Wed, 30 Jul 2025 00:24:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753841779; x=1754446579;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Guw6KRbo8aw7wW9K/eK+M2MEQNE/hhgEQefs8riuf0=;
-        b=ob0IoBgQzT9KthQ4WvBPfI3YuYpyb9nJdlE6HwlW57aUhckO6JEPtRFiKK8R6DlFRr
-         XmV1PEFaRMeFrzYquGoVSxqEyz4m1wppNlCG8IpK6bDeaZAa0wtue+bkZae0POgYnD5Q
-         ZECUlChxfHWJ/OvOEErkdHnVxHylJNCAoHh8ZkmTcnwTEZqDX3i73N2daR1AF9pto1tA
-         ifsl8yO/HtNH3lZGbpxnExwGko3Iufq/i9q75AI9aLOOugw+Sj2vCII0KMLEeqBQuUdM
-         Rypkl/41G83rq2n1JXyLUP1t/tpq74YBDk473kEdXQpM2VwSeDKF2rgGhiEcUQq4XLuu
-         aNOg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoV5fZ5kvTBef6xA0OTZGgz0jlEARMF9vHd+qrSALEe+8rmyI/CszusA6Npvk3LCy9Wob3OK1xLnQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9Oh9Rk4zkYgh5Y0KfNT+buLaeM9ebOQBnSqj9qJrimyKGLk4Q
-	yNeXNpslyQYUCXHJNQK7R+kDzNpkj4CgJKD/zixWBFBRLuX0IeCnIA7uN+dOuR3qHNVcALabSlF
-	jkJAdDsQ3KaacoJuFlksd9fNRhegqUYfd1fjm1mutiUevwBbaVOgjUHygSdT9K2M=
-X-Gm-Gg: ASbGncuAuVn9nLto/0re5GKOb07F6KjP6LUvsPBIqrNGKIJ366RuECEkrN1eesTQRAU
-	E0poSzbk/ykxo2HgvMKn2bwAIT2lCWF7gAe1QBXTvlSNK/E7Ilp8wymje13Y9KvWNuATqk3N1AX
-	TRlen48HVcFXLJCGVvzqCh5h/sNiQEy2/ppjseWCx8MMKG2/gXR2c7sKyHTO6STMuNa1K7WMF2+
-	7y2sWkAJ6iXThSc3UBmeDn6xs2cNyvWq8MbszzBOlB/FrCUJTbcJDAs/16HWP1bblnwStBbwn+3
-	Q6Bz9CXcr1vyCB54y7RcgV754vTizQEtDAzPNfBfvC50H09a8KtF59/+EfE2cCVF43Yrlue4
-X-Received: by 2002:a17:903:198d:b0:23f:b112:2eaa with SMTP id d9443c01a7336-24096b23962mr21349195ad.41.1753841779419;
-        Tue, 29 Jul 2025 19:16:19 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFCO7PfvQBZIpKYCxswdWwjantW3V7M8AzHyUikb4G/e86wNuagzDSGsQz5a61YXXgBauozXA==
-X-Received: by 2002:a17:903:198d:b0:23f:b112:2eaa with SMTP id d9443c01a7336-24096b23962mr21348845ad.41.1753841778930;
-        Tue, 29 Jul 2025 19:16:18 -0700 (PDT)
-Received: from [192.168.1.4] ([122.183.154.151])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fcd8fb34asm84416435ad.33.2025.07.29.19.16.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Jul 2025 19:16:18 -0700 (PDT)
-Message-ID: <ac7212fe-5c22-46cf-ac3b-ac6b93cb1384@oss.qualcomm.com>
-Date: Wed, 30 Jul 2025 07:46:14 +0530
+        d=1e100.net; s=20230601; t=1753860269; x=1754465069;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BDzaw5o2rlmVICTm/0/BDIaraI6GjwEMPdeXLmYw9Qc=;
+        b=lzGUVFO92wCTGP3E6Qwcbw0lYMfcKcCQyW1uKJMUTMKgTPpQgEFtwZ80P5Pc2GUvpZ
+         z+b32PsDxczouziF39Q+FONDkVB5FIflUPXmd4xfDKFJDsORTQKGfX7zksRHy+P2j0WC
+         yHzlqM3ggzsMLJ0r6bSc7wGnaXvxnNUogeqKsy/T4GW+a1EOYi6fDaafVN6Qfx/z167G
+         MDxCkh6kHNxdwBi6NDQM8BtVQKZwhoPVcOlTI4TVXU1OXV8ao1JSCj2Hggwu6Byoq19W
+         GcgI5ec5ffLMpEk9XD3CWyEAX7KbSV5NHfri7LZmp5784StM4p+4EHvHym3I66GiXqk9
+         iNlg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3Lw0xzOGU87ApJqjK5LJTC994uJRGhFGN7a8Atpzs74wqIO9YSZmMhQEiENX1ZiFJd+v85CvGoLM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxB/N73n2pQHaP0g8GqXHXcj0TqcRYubdmcykazfyRCWt8zCJ5
+	Lthd4N2rHGqGmzjQ405qpSgZf/R68biR0/K+MveqjW0lcQWV+ocL+R1czSzgwAuQHcIDe4u52mT
+	Mbb4FtcPVf7oPShIOOuFrCaiXDV/DqSvkrJnX7WJY9O+TrIANzpM7MpAThflm657L1WbAotjIGa
+	547PPuGbpJXUfzn4eO5r9SFB9U/xwU7j75Eqjjwnpfk/01C+TtUY6k
+X-Gm-Gg: ASbGncue4SS7XxJ4va0H/u6MDBqQXRDLmETkrtNi+W3oBs1LrF/hCxO+1cso7V0rGJ9
+	mWBQi8vII/AIhlGg5iE/s5nJhYS7uCu4epJ3yvUWk4/W6bZ73ORTQ/2XKOK6PxkLWAHdxPnxbnr
+	hmgQhcp2rtEDJ5LQPF/Qot8Q==
+X-Received: by 2002:a05:600c:1da7:b0:456:1a69:94fb with SMTP id 5b1f17b1804b1-45892b9da8cmr21130705e9.13.1753860268475;
+        Wed, 30 Jul 2025 00:24:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGrS5WiW+XlD50gIf/RvsZIq3CYq9rYAkdx85q6FR0dg2f+TyOABh2EzEoqHAFh2lQgwSSu7KGhfP7wvcJ55cc=
+X-Received: by 2002:a05:600c:1da7:b0:456:1a69:94fb with SMTP id
+ 5b1f17b1804b1-45892b9da8cmr21130415e9.13.1753860267995; Wed, 30 Jul 2025
+ 00:24:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] usb: dwc3: qcom: Implement glue callbacks to
- facilitate runtime suspend
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20250610091357.2983085-1-krishna.kurapati@oss.qualcomm.com>
- <20250610091357.2983085-3-krishna.kurapati@oss.qualcomm.com>
- <20250623233211.aeehndz2nxqovepd@synopsys.com>
- <a46b9870-207b-45a1-b3e6-5c13e1857640@oss.qualcomm.com>
- <20250711232929.5oukafed5lnvsu2v@synopsys.com>
- <27ff2c46-9402-47e6-b5ea-8a1f783220b1@oss.qualcomm.com>
- <20250730012307.7rwh3lzz4ohd4mob@synopsys.com>
-Content-Language: en-US
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-In-Reply-To: <20250730012307.7rwh3lzz4ohd4mob@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzMwMDAxMyBTYWx0ZWRfX2ioKPHXWd41b
- ygFdInrsPROLbTt8v4CLeSZqsNlX7eKDcbFeYyam7IEOkdpfovF7ahChpq+6UYDGdR5U1SihVla
- 765iEzNRkH8ccBafgqdv+FZXVkgYxbReWrGiWXhaincoE8TbRhSE96tb3kmDB7T3PPzv1J9DdKa
- 6eq0ZzX0uQc8HJLI/nPNVyTz4HiwAwyMqpBD2Q/ISw6Z/QeGfWzY5tHMXap76KUi+e5jPy4ziyj
- bwY0QJZMPCxG/DlFKK2oGRIaLeB48BHwNavhQhuSPE1GcHwLRZlg8VWW70XkASkff/+nngP5wOq
- XQSOmZ3bvm246Zc8lrT1fMWLidil3TxqncC20ZIWJjYnDqDZtNlq1PuvPKV4Enqn+eONiCJR4eo
- 1iYk4CBePolyJqSyYrQ1hZ0ZFVoM2XLzzNXdQA6HE/MC/l5QxA736yZk5gRplvgrGsdI1gRq
-X-Authority-Analysis: v=2.4 cv=JKw7s9Kb c=1 sm=1 tr=0 ts=68898074 cx=c_pps
- a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=A1H60L6fWQAu95VAuYzdKw==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=4h9d9IEXO_emyrEtyuEA:9
- a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
-X-Proofpoint-ORIG-GUID: ItbKUIKztkrXIaZRcckSwCwRI3ufx6qy
-X-Proofpoint-GUID: ItbKUIKztkrXIaZRcckSwCwRI3ufx6qy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-30_01,2025-07-28_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 mlxscore=0 priorityscore=1501 spamscore=0 suspectscore=0
- phishscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1015
- mlxlogscore=791 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507300013
+References: <CAMqyJG2QceTyAONn_5m956zF_rpHLpognYYWnivm7J+w6Cw=RQ@mail.gmail.com>
+ <20250728063329.GR2824380@black.fi.intel.com>
+In-Reply-To: <20250728063329.GR2824380@black.fi.intel.com>
+From: En-Wei WU <en-wei.wu@canonical.com>
+Date: Wed, 30 Jul 2025 15:24:16 +0800
+X-Gm-Features: Ac12FXyzRyOGEKrJhc_JlrRnzfdBRNahf4D9UHkGFnJ4w-ell2Cv7W3Z_DKgz7Y
+Message-ID: <CAMqyJG31wOC2mj1A1MGVEN9wsChsApC_6imj_6fjdvq_OAaEFA@mail.gmail.com>
+Subject: Re: Thunderbolt call trace occurs on hot-plug
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: westeri@kernel.org, michael.jamet@intel.com, andreas.noever@gmail.com, 
+	YehezkelShB@gmail.com, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+> And can you confirm I understand the steps?
+>
+> 1. Boot the system up, nothing connected.
+> 2. Once booted up, connect Thunderbolt cable to Dell U2725QE monitor.
+> 3. Verify that the monitor works (+ run lspci/lsusb)
+> Expected output: The monitor and the integrated peripherals (PCIe, USB)
+> work fine.
+>
+> Actual output: There is error in the log and PCIe peripherals on the
+> monitor do not show up in lspci output.
 
+Yes, the laptop wasn't connected to anything at boot. Once booted up,
+we connected Thunderbolt cable to Dell U2725QE monitor.
+After hot-plugging the Thunderbolt cable, a call trace might happen
+with the possibility of 60%. However, the monitor works in either
+case.
 
-On 7/30/2025 6:53 AM, Thinh Nguyen wrote:
-> On Sun, Jul 13, 2025, Krishna Kurapati wrote:
->>
->>
->> On 7/12/2025 4:59 AM, Thinh Nguyen wrote:
->>> On Tue, Jun 24, 2025, Krishna Kurapati wrote:
->>>>
->>>>
->>>> On 6/24/2025 5:02 AM, Thinh Nguyen wrote:
->>>>> On Tue, Jun 10, 2025, Krishna Kurapati wrote:
->>>>>> On Qualcomm DWC3 dual-role controllers, the conndone/disconnect events in
->>>>>> device mode are generated by controller when software writes to QSCRATCH
->>>>>> registers in Qualcomm Glue layer rather than the vbus line being routed to
->>>>>> dwc3 core IP for it to recognize and generate these events.
->>>>>>
->>>>>> UTMI_OTG_VBUS_VALID  bit of QSCRATCH_HS_PHY_CTRL register needs to be set
->>>>>> to generate a connection done event and to be cleared for the controller to
->>>>>> generate a disconnect event during cable removal. When the disconnect is
->>>>>> not generated upon cable removal, the "connected" flag of dwc3 is left
->>>>>> marked as "true" and it blocks suspend routines and for that to happen upon
->>>>>> cable removal, the cable disconnect notification coming in via set_role
->>>>>> call need to be provided to the Qualcomm glue layer as well.
->>>>>>
->>>>>> Currently, the way DWC3 core and Qualcomm legacy glue driver are designed,
->>>>>> there is no mechanism through which the DWC3 core can notify the Qualcomm
->>>>>> glue layer of any role changes which it receives via role switch. To
->>>>>> register these glue callbacks at probe time, for enabling core to notify
->>>>>> glue layer, the legacy Qualcomm driver has no way to find out when the
->>>>>> child driver probe was successful since it does not check for the same
->>>>>> during of_platform_populate.
->>>>>>
->>>>>> Hence implement the following glue callbacks for flattened Qualcomm glue
->>>>>> driver:
->>>>>>
->>>>>> 1. set_role: To pass role switching information from drd layer to glue.
->>>>>> This information is needed to identify NONE/DEVICE mode switch and modify
->>>>>> QSCRATCH to generate connect-done event on device mode entry and disconnect
->>>>>> event on cable removal in device mode.
->>>>>>
->>>>>> 2. run_stop: When booting up in device mode, if autouspend is enabled and
->>>>>> userspace doesn't write UDC on boot, controller enters autosuspend. After
->>>>>> this, if the userspace writes to UDC in the future, run_stop notifier is
->>>>>> required to enable UTMI_OTG_VBUS_VALID of QSCRATCH so that connect done
->>>>>> event is generated after run_stop(1) is done to finish enumeration.
->>>>>>
->>>>>> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
->>>>>> ---
->>>>>>     drivers/usb/dwc3/dwc3-qcom.c | 82 ++++++++++++++++++++++++++++++++----
->>>>>>     1 file changed, 73 insertions(+), 9 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->>>>>> index ca7e1c02773a..d40b52e2ba01 100644
->>>>>> --- a/drivers/usb/dwc3/dwc3-qcom.c
->>>>>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->>>>>> @@ -89,6 +89,12 @@ struct dwc3_qcom {
->>>>>>     	bool			pm_suspended;
->>>>>>     	struct icc_path		*icc_path_ddr;
->>>>>>     	struct icc_path		*icc_path_apps;
->>>>>> +
->>>>>> +	/*
->>>>>> +	 * Current role changes via usb_role_switch_set_role callback protected
->>>>>> +	 * internally by mutex lock.
->>>>>> +	 */
->>>>>> +	enum usb_role		current_role;
->>>>>
->>>>> Can we just track the current role through dwc3 core instead of an
->>>>> addition field in the glue?
->>>>>
->>>>
->>>> Core caches only mode. We need ROLE NONE to identify cable connect. So
->>>> adding that in glue to keep track.
->>>>
->>>
->>> The controller is always either host or device, not somewhere in
->>> between. You're using ROLE_NONE to indicate connection, which is a
->>> separate state.
->>>
->>
->> Yes, but there is no flag that indicates that in dwc structure today. Also
->> since only dwc3-qcom needs it at the moment, I added that role info in glue
->> layer.
-> 
-> How are you using ROLE NONE? Do you send a role-switch call to "none" to
-> indicate disconnect? Let's not do that. Currently the dwc3 driver would
-> switch back to the default mode if "none" is selected, but this is not
-> well defined and implementation specific. It can be no-op and would not
-> violate the interface.
-> 
-> The role-switch interface should only be used for role-switching and not
-> connection/disconnection.
-> 
->>
->>> I feel this should be tracked separately for clarity. The dwc3 also
->>> tracks the connection state, can we use that?
->>>
->>
->> Are you referring to the "connected" flag in DWC structure ? I see that it
->> indicates connection status only in gadget mode.
->>
-> 
-> Yes, that flag is only for gadget.
-> 
-> Can you provide more info of the setup? Is there a type-c controller or
-> phy that can detect attach/deattach? Or it only propagates to the usb
-> controller?
+> Could you share the whole dmesg (that is not line wrapped)? With
+> "thunderbolt.dyndbg=+p" in the kernel command line.
 
-My response didn't show up on lore since the mail client I used before 
-sent the message in HTML format. So resending my response again.
+Please disregard the logs I sent before and find the newly captured
+logs here: https://gist.github.com/rickywu0421/316bede16ea7a91f6f67691845c47d57
 
-Hi Thinh,
+One should see five logs there:
+1.  dmesg-hot-plug-thunderbolt.log : the whole dmesg from boot. There
+are two pairs of hot-plug and unplug involved (one without call trace
+and the other with):
 
-  Yes this is for cases where role switching is present (either with a 
-Type-C controller, USB-conn-gpio, or a glink based role-switch).
+1.1. The first hot-plug, started from [ 84.817039] ======= Hotplug
+Thunderbolt Cable =======
+1.2. No call trace, until the first unplug [ 103.601869] =======
+Unplug Thunderbolt Cable =======
+1.3. The second hot-plug, started from  [ 113.907760] ======= Hotplug
+Thunderbolt Cable =======
+1.4. There are two call traces, until the second unplug [ 132.421579]
+======= Unplug Thunderbolt Cable =======
 
-  Actually the requirement is as follows:
-  1. When in device mode, if we receive a cable disconnect, we need to 
-clear OTG_VBUS_VALID bit of QSCRATCH register in glue address space.
-  2. When cable is connected in device mode, we need to set the 
-OTG_VBUS_VALID bit of QSCRATCH register in glue address space.
-  3. When the runstop is set back after a suspend rotuine, then we need 
-to set  OTG_VBUS_VALID bit of QSCRATCH register in glueaddress space.
+2. lspci-after-plugging.log (captured after a call trace happened)
+3. lspci-before-plugging.log
+4. lsusb-after-plugging.log (captured after a call trace happened)
+5. lsusb-before-plugging.log
 
-  To take care of all the 3 scenarios above, the set_role and run_stop 
-notifiers have been added.
+Best,
+En-Wei.
 
-  The role info propagates only from core to glue. It is not sent to the 
-phy.
-
-Regards,
-Krishna,
+On Mon, 28 Jul 2025 at 14:33, Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Fri, Jul 11, 2025 at 11:54:46AM +0800, En-Wei WU wrote:
+> > Hi,
+> >
+> > I'm seeing an issue on a Dell Pro Max 16 with Intel Arrow Lake CPU --
+> > Hot-plugging a thunderbolt 4 cable into a thunderbolt 4 port (backed
+> > by Intel iGPU) and connecting it to a Dell U2725QE monitor triggers
+> > the following call trace. The issue reproduces approximately 60% of
+> > the time.
+>
+> Could you share the whole dmesg (that is not line wrapped)? With
+> "thunderbolt.dyndbg=+p" in the kernel command line.
+>
+> And can you confirm I understand the steps?
+>
+> 1. Boot the system up, nothing connected.
+> 2. Once booted up, connect Thunderbolt cable to Dell U2725QE monitor.
+> 3. Verify that the monitor works (+ run lspci/lsusb)
+>
+> Expected output: The monitor and the integrated peripherals (PCIe, USB)
+> work fine.
+>
+> Actual output: There is error in the log and PCIe peripherals on the
+> monitor do not show up in lspci output.
+>
+> > kern :info : [ 370.181263] usb 5-11: New USB device found,
+> > idVendor=1d5c, idProduct=5801, bcdDevice= 1.01
+> > kern :info : [ 370.181265] usb 5-11: New USB device strings: Mfr=1,
+> > Product=2, SerialNumber=0
+> > kern :info : [ 370.181266] usb 5-11: Product: USB2.0 Hub
+> > kern :info : [ 370.181267] usb 5-11: Manufacturer: Fresco Logic, Inc.
+> > kern :info : [ 370.182473] hub 5-11:1.0: USB hub found
+> > kern :debug : [ 370.182958] i915 0000:00:02.0:
+> > [drm:intel_power_well_disable [i915]] disabling PW_2
+> > kern :info : [ 370.183853] hub 5-11:1.0: 6 ports detected
+> > kern :debug : [ 370.212505] [375]
+> > thunderbolt:tb_maximum_bandwidth:788: thunderbolt 0000:00:0d.2: 0:1:
+> > link maximum bandwidth 36000/36000 Mb/s
+> > kern :info : [ 370.215094] usb 5-11: USB disconnect, device number 29
+> > kern :debug : [ 370.218522] [165] thunderbolt:tb_cfg_ack_plug:842:
+> > thunderbolt 0000:00:0d.2: acking hot unplug event on 0:1
+> > kern :debug : [ 370.297820] i915 0000:00:02.0: [drm:intel_dpt_create
+> > [i915]] Allocating dpt from smem
+> > kern :debug : [ 370.298136] i915 0000:00:02.0:
+> > [drm:drm_mode_addfb2_ioctl] [FB:263]
+> > kern :debug : [ 370.320677] [375]
+> > thunderbolt:tb_maximum_bandwidth:788: thunderbolt 0000:00:0d.2: 1:1:
+> > link maximum bandwidth 36000/36000 Mb/s
+> > kern :debug : [ 370.320810] [375] thunderbolt:tb_tunnel_usb3:952:
+> > thunderbolt 0000:00:0d.2: 1:16: available bandwidth for new USB3
+> > tunnel 36000/36000 Mb/s
+> > kern :warn : [ 370.321640] thunderbolt 0000:00:0d.2: 1: USB3 tunnel
+> > creation failed
+> > kern :debug : [ 370.322322] [3599]
+> > thunderbolt:tb_tunnel_activate:2367: thunderbolt 0000:00:0d.2: 0:8 <->
+> > 1:9 (PCI): activating
+> > kern :debug : [ 370.322328] [3599] thunderbolt:tb_path_activate:512:
+> > thunderbolt 0000:00:0d.2: activating PCIe Down path from 0:8 to 1:9
+> > kern :debug : [ 370.322479] [3599] thunderbolt:tb_path_activate:573:
+> > thunderbolt 0000:00:0d.2: 1:1: Writing hop 1
+> > kern :debug : [ 370.322481] [3599] thunderbolt:tb_dump_hop:20:
+> > thunderbolt 0000:00:0d.2: 1:1: In HopID: 8 => Out port: 9 Out HopID: 8
+> > kern :debug : [ 370.322483] [3599] thunderbolt:tb_dump_hop:22:
+> > thunderbolt 0000:00:0d.2: 1:1: Weight: 1 Priority: 3 Credits: 32 Drop:
+> > 0 PM: 0
+> > kern :debug : [ 370.322486] [3599] thunderbolt:tb_dump_hop:25:
+> > thunderbolt 0000:00:0d.2: 1:1: Counter enabled: 0 Counter index: 2047
+> > kern :debug : [ 370.322488] [3599] thunderbolt:tb_dump_hop:27:
+> > thunderbolt 0000:00:0d.2: 1:1: Flow Control (In/Eg): 1/0 Shared Buffer
+> > (In/Eg): 0/0
+> > kern :debug : [ 370.322490] [3599] thunderbolt:tb_dump_hop:30:
+> > thunderbolt 0000:00:0d.2: 1:1: Unknown1: 0x0 Unknown2: 0x0 Unknown3:
+> > 0x0
+> > kern :warn : [ 370.322984] thunderbolt 0000:00:0d.2: 1:1: hop
+> > deactivation failed for hop 1, index 8
+> > kern :warn : [ 370.322986] ------------[ cut here ]------------
+> > kern :warn : [ 370.322987] thunderbolt 0000:00:0d.2: PCIe Down path
+> > activation failed
+> > kern :warn : [ 370.323072] WARNING: CPU: 4 PID: 3599 at
+> > drivers/thunderbolt/path.c:587 tb_path_activate+0x129/0x530
+> > [thunderbolt]
+> > kern :warn : [ 370.323247] CPU: 4 UID: 0 PID: 3599 Comm:
+> > pool-/usr/libex Not tainted 6.16.0-061600rc4drmtip20250702-generic
+> > #202507020208 PREEMPT(voluntary)
+> > kern :warn : [ 370.323250] Hardware name: Dell Inc. Dell Pro Max 16
+> > Plus MB16250/, BIOS 1.0.0 05/23/2025
+> > kern :warn : [ 370.323252] RIP: 0010:tb_path_activate+0x129/0x530 [thunderbolt]
+> > kern :warn : [ 370.323279] Code: 4d 85 e4 0f 84 ee 00 00 00 48 81 c7
+> > c8 00 00 00 e8 fc af d1 d3 4c 89 e9 4c 89 e2 48 c7 c7 78 3e 54 c0 48
+> > 89 c6 e8 57 e0 18 d3 <0f> 0b 48 8b 45 d0 65 48 2b 05 b1 4b d2 d5 0f 85
+> > e0 03 00 00 48 8d
+> > kern :warn : [ 370.323281] RSP: 0018:ffffce70a3c2f928 EFLAGS: 00010246
+> > kern :warn : [ 370.323284] RAX: 0000000000000000 RBX: 00000000ffffff95
+> > RCX: 0000000000000000
+> > kern :warn : [ 370.323286] RDX: 0000000000000000 RSI: 0000000000000000
+> > RDI: 0000000000000000
+> > kern :warn : [ 370.323287] RBP: ffffce70a3c2f968 R08: 0000000000000000
+> > R09: 0000000000000000
+> > kern :warn : [ 370.323289] R10: 0000000000000000 R11: 0000000000000000
+> > R12: ffff8bb8033b1380
+> > kern :warn : [ 370.323290] R13: ffffffffc05472fc R14: 0000000000000001
+> > R15: ffffce70a3c2f930
+> > kern :warn : [ 370.323291] FS: 0000747c76bfe6c0(0000)
+> > GS:ffff8bbfe0888000(0000) knlGS:0000000000000000
+> > kern :warn : [ 370.323293] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > kern :warn : [ 370.323295] CR2: 000000c000a35000 CR3: 0000000130f59003
+> > CR4: 0000000000f72ef0
+> > kern :warn : [ 370.323296] PKRU: 55555554
+> > kern :warn : [ 370.323298] Call Trace:
+> > kern :warn : [ 370.323299] <TASK>
+> > kern :warn : [ 370.323302] tb_tunnel_activate+0xba/0x2d0 [thunderbolt]
+> > kern :warn : [ 370.323329] ? tb_tunnel_alloc_pci+0xb2/0x110 [thunderbolt]
+> > kern :warn : [ 370.323354] tb_tunnel_pci+0xde/0x170 [thunderbolt]
+> > kern :warn : [ 370.323377] tb_domain_approve_switch+0x3b/0x70 [thunderbolt]
+> > kern :warn : [ 370.323402] authorized_store+0x282/0x2c0 [thunderbolt]
+> > kern :warn : [ 370.323423] dev_attr_store+0x14/0x40
+> > kern :warn : [ 370.323429] sysfs_kf_write+0x6f/0x90
+> > kern :warn : [ 370.323433] kernfs_fop_write_iter+0x151/0x200
+> > kern :warn : [ 370.323437] vfs_write+0x26b/0x490
+> > kern :warn : [ 370.323440] ksys_write+0x6f/0xf0
+> > kern :warn : [ 370.323441] __x64_sys_write+0x19/0x30
+> > kern :warn : [ 370.323443] x64_sys_call+0x29a/0x2320
+> > kern :warn : [ 370.323447] do_syscall_64+0x80/0xe80
+> > kern :warn : [ 370.323450] ? get_signal+0x6da/0x7e0
+> > kern :warn : [ 370.323454] ? vfs_write+0x26b/0x490
+> > kern :warn : [ 370.323456] ? arch_do_signal_or_restart+0x38/0x110
+> > kern :warn : [ 370.323461] ? exit_to_user_mode_loop+0x91/0x170
+> > kern :warn : [ 370.323465] ? arch_exit_to_user_mode_prepare.isra.0+0xd/0xc0
+> > kern :warn : [ 370.323468] ? do_syscall_64+0xb6/0xe80
+> > kern :warn : [ 370.323470] ? sysfs_kf_write+0x6f/0x90
+> > kern :warn : [ 370.323472] ? dequeue_signal+0x7e/0x190
+> > kern :warn : [ 370.323474] ? get_signal+0x6da/0x7e0
+> > kern :warn : [ 370.323476] ? vfs_write+0x26b/0x490
+> > kern :warn : [ 370.323478] ? arch_do_signal_or_restart+0x38/0x110
+> > kern :warn : [ 370.323481] ? exit_to_user_mode_loop+0x91/0x170
+> > kern :warn : [ 370.323484] ? arch_exit_to_user_mode_prepare.isra.0+0xd/0xc0
+> > kern :warn : [ 370.323487] ? do_syscall_64+0xb6/0xe80
+> > kern :warn : [ 370.323488] ? do_syscall_64+0xb6/0xe80
+> > kern :warn : [ 370.323490] entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> > kern :warn : [ 370.323492] RIP: 0033:0x747c7a51c5ad
+> > kern :warn : [ 370.323495] Code: e5 48 83 ec 20 48 89 55 e8 48 89 75
+> > f0 89 7d f8 e8 b8 bf f7 ff 48 8b 55 e8 48 8b 75 f0 41 89 c0 8b 7d f8
+> > b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 33 44 89 c7 48 89 45 f8 e8
+> > 0f c0 f7 ff 48 8b
+> > kern :warn : [ 370.323497] RSP: 002b:0000747c76bfdb70 EFLAGS: 00000293
+> > ORIG_RAX: 0000000000000001
+> > kern :warn : [ 370.323499] RAX: ffffffffffffffda RBX: 00006508223c9860
+> > RCX: 0000747c7a51c5ad
+> > kern :warn : [ 370.323500] RDX: 0000000000000001 RSI: 0000747c76bfdc20
+> > RDI: 000000000000000a
+> > kern :warn : [ 370.323502] RBP: 0000747c76bfdb90 R08: 0000000000000000
+> > R09: 0000747c76bfda80
+> > kern :warn : [ 370.323503] R10: 0000000000000000 R11: 0000000000000293
+> > R12: 0000747c76bfdc20
+> > kern :warn : [ 370.323504] R13: 000000000000000a R14: 0000747c76bfdc18
+> > R15: 0000747c6c00a830
+> > kern :warn : [ 370.323506] </TASK>
+> > kern :warn : [ 370.323507] ---[ end trace 0000000000000000 ]---
+> > kern :warn : [ 370.323509] thunderbolt 0000:00:0d.2: 0:8 <-> 1:9
+> > (PCI): activation failed
+> > kern :debug : [ 370.323512] [3599]
+> > thunderbolt:tb_tunnel_deactivate:2420: thunderbolt 0000:00:0d.2: 0:8
+> > <-> 1:9 (PCI): deactivating
+> > kern :info : [ 370.323831] thunderbolt 0000:00:0d.2: 1:9: PCIe tunnel
+> > activation failed, aborting
+> > kern :debug : [ 370.323843] [375] thunderbolt:tb_handle_hotplug:2496:
+> > thunderbolt 0000:00:0d.2: 0:2: got plug event for connected port,
+> > ignoring
+> > kern :debug : [ 370.323850] [375] thunderbolt:tb_handle_hotplug:2443:
+> > thunderbolt 0000:00:0d.2: hotplug event for upstream port 1:2 (unplug:
+> > 0)
+> > kern :debug : [ 370.323853] [375] thunderbolt:tb_handle_hotplug:2492:
+> > thunderbolt 0000:00:0d.2: 0:2: got unplug event for disconnected port,
+> > ignoring
+> > kern :debug : [ 370.323856] [375] thunderbolt:tb_handle_hotplug:2443:
+> > thunderbolt 0000:00:0d.2: hotplug event for upstream port 1:2 (unplug:
+> > 1)
+> > kern :info : [ 370.323859] thunderbolt 0-0:1.1: retimer disconnected
+> > kern :debug : [ 370.323948] [375] thunderbolt:tb_handle_hotplug:2454:
+> > thunderbolt 0000:00:0d.2: 0:1: switch unplugged
+> > kern :info : [ 370.324578] thunderbolt 0-1: device disconnected
+> > kern :debug : [ 370.324802] [375]
+> > thunderbolt:tb_recalc_estimated_bandwidth:1512: thunderbolt
+> > 0000:00:0d.2: bandwidth consumption changed, re-calculating estimated
+> > bandwidth
+> > kern :debug : [ 370.324804] [375]
+> > thunderbolt:tb_recalc_estimated_bandwidth:1521: thunderbolt
+> > 0000:00:0d.2: bandwidth re-calculation done
+> > kern :debug : [ 370.324807] [375] thunderbolt:tb_tunnel_dp:2069:
+> > thunderbolt 0000:00:0d.2: looking for DP IN <-> DP OUT pairs:
+> > kern :debug : [ 370.324982] [375] thunderbolt:tb_tunnel_dp:2083:
+> > thunderbolt 0000:00:0d.2: 0:5: DP IN available
+> > kern :debug : [ 370.324985] [375] thunderbolt:tb_tunnel_dp:2089:
+> > thunderbolt 0000:00:0d.2: 0:5: no suitable DP OUT adapter available,
+> > not tunneling
+> > kern :debug : [ 370.325145] [375] thunderbolt:tb_tunnel_dp:2083:
+> > thunderbolt 0000:00:0d.2: 0:6: DP IN available
+> > kern :debug : [ 370.325147] [375] thunderbolt:tb_tunnel_dp:2089:
+> > thunderbolt 0000:00:0d.2: 0:6: no suitable DP OUT adapter available,
+> > not tunneling
+> >
+> > I'm not a thunderbolt expert, but it looks like the thunderbolt
+> > controller on the host failed to establish USB3 tunneling with the
+> > screen's internal USB 3 hub, followed by the PCIe link activation
+> > failure.
+> >
+> > For more information:
+> > Linux version: vanilla 6.16.0-rc4-drm-tip (commit
+> > 4f74a027c8664ae79344bf711acfab9cd2f8edab)
+> >
+> > Machine: Dell Pro Max 16 Plus MB16250, BIOS 1.2.0 06/19/2025
+> >
+> > CPU model name: Intel(R) Core(TM) Ultra 7 265HX (Arrow Lake)
+> >
+> > Lspci-vt:
+> > -+-[0000:00]-+-00.0 Intel Corporation Device 7d2d
+> >   |                  +-01.0-[01]----00.0 Sandisk Corp Device 5049
+> >   |                  +-02.0 Intel Corporation Arrow Lake-U [Intel Graphics]
+> >   |                  +-04.0 Intel Corporation Device ad03
+> >   |                  +-06.0-[02]----00.0 Sandisk Corp Device 5049
+> >   |
+> > +-06.1-[03-2f]----00.0-[04-2f]--+-00.0-[05]----00.0 Intel Corporation
+> > Thunderbolt 80/120G NHI [Barlow Ridge Host 80G 2023]
+> >   |                  |
+> > +-01.0-[06-19]----00.0-[07-19]--+-00.0-[08]----00.0 Intel Corporation
+> > Thunderbolt 4 USB Controller [Goshen Ridge 2020]
+> >   |                  |                                               |
+> >
+> > +-01.0-[09-0e]----00.0-[0a-0b]----01.0-[0b]----00.0 Samsung
+> > Electronics Co Ltd NVMe SSD Controller 980 (DRAM-less)
+> >   |                  |                                               |
+> >                                                +-02.0-[0f-14]--
+> >   |                  |                                               |
+> >                                                +-03.0-[15-18]--
+> >   |                  |                                               |
+> >                                                 \-04.0-[19]--
+> >   |                  |
+> > +-02.0-[1a]----00.0 Intel Corporation Thunderbolt 80/120G USB
+> > Controller [Barlow Ridge Host 80G 2023]
+> >   |                  |
+> > \-03.0-[1b-2f]--
+> >   |                  +-06.3-[30]--+-00.0 NVIDIA Corporation Device 2f38
+> >  |                   |                    \-00.1 NVIDIA Corporation Device 2f80
+> >  |                   +-07.0-[31-45]--
+> >  |                   +-07.1-[46-5a]--
+> >  |                   +-08.0 Intel Corporation Device ae4c
+> >  |                   +-0a.0 Intel Corporation Device ad0d
+> >  |                   +-0b.0 Intel Corporation Arrow Lake NPU
+> >  |                   +-0d.0 Intel Corporation Meteor Lake-P
+> > Thunderbolt 4 USB Controller
+> >  |                   +-0d.2 Intel Corporation Meteor Lake-P Thunderbolt 4 NHI #0
+> >  |                   +-14.0 Intel Corporation Device ae7f
+> >  |                   +-1f.0 Intel Corporation Device ae10
+> >  |                    \-1f.5 Intel Corporation Device ae23
+> > \-[0000:80]-+-12.0 Intel Corporation Device 7f78
+> >                    +-14.0 Intel Corporation Device 7f6e
+> >                    +-14.5 Intel Corporation Device 7f2f
+> >                    +-15.0 Intel Corporation Device 7f4c
+> >                    +-15.1 Intel Corporation Device 7f4d
+> >                    +-15.3 Intel Corporation Device 7f4f
+> >                    +-16.0 Intel Corporation Device 7f68
+> >                   +-16.3 Intel Corporation Device 7f6b
+> >                   +-19.0 Intel Corporation Device 7f7a
+> >                   +-19.1 Intel Corporation Device 7f7b
+> >                   +-1c.0-[81]----00.0 Intel Corporation Wi-Fi
+> > 7(802.11be) AX1775*/AX1790*/BE20*/BE401/BE1750* 2x2
+> >                   +-1c.4-[82-83]----00.0 Realtek Semiconductor Co.,
+> > Ltd. Device 5264
+> >                   +-1d.0-[84]----00.0 Intel Corporation Ethernet
+> > Controller I226-LM
+> >                   +-1f.0 Intel Corporation Device 7f12
+> >                   +-1f.3 Intel Corporation Device 7f50
+> >                   +-1f.4 Intel Corporation Device 7f23
+> >                   \-1f.5 Intel Corporation Device 7f24
+> >
+> > Thank you for your time.
+> >
+> > Best regards,
+> > En-Wei.
 
