@@ -1,522 +1,163 @@
-Return-Path: <linux-usb+bounces-26290-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26291-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 829D9B170D1
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 13:58:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E25CFB1733C
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 16:26:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A86101795BA
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 11:58:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DBE47A9843
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 14:24:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFF792C08AD;
-	Thu, 31 Jul 2025 11:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02745153598;
+	Thu, 31 Jul 2025 14:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TNuA1Pbm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hvrZfjnw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22FF230BE0
-	for <linux-usb@vger.kernel.org>; Thu, 31 Jul 2025 11:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B762F24
+	for <linux-usb@vger.kernel.org>; Thu, 31 Jul 2025 14:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753963129; cv=none; b=Hdi78PjqJFPOAnX2re49rCx/mhyX2MkuixmAVVEKEKxIk2mol3h+vFeeMjch01lgTd3X/mx/6MlyOlY2ReKf+M6ZGcxy7q/FkosKvL7l95g3FcB+7OsAO6HYDcYQ2QwQh5U5UYYrhomaCEAwW6IcWPlFsUPW4wGGS89WTx+vsy8=
+	t=1753971975; cv=none; b=AGG3CaksKvWtMws2sejXO6bkT0Rs50ZwKuWNzjrLImj4KdCnc1uXVM968MHBxTEMmv2BRMXIOBUaXEoJf8chmAJPjxwHCkSIOWQJNYeQM8hGfChsNnrDq5nwM6Zs1gS8GsdgFa81IVLcVDCqiaF3gkDIzVvm0naRS8aFkIl6eFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753963129; c=relaxed/simple;
-	bh=tNoXWwvWQbqlFtYXzrT1UZX3GrjrrW8QenY36N0vl90=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OuNhKaQjLEg/Ql6k0Tt/u9/hBHCMNQVM8A2rMLyLYjlNe/YG+uQwGikElU608RRS0LUE38T2F7/06Vffwt2hzp6XpjvlM6iAVsRH7qfW+jn/hnAQXMlOUHDWH6TIHXqFMsyYK27Uz/A6uNjjvBnyM4vUyKsy0fHwU9rBEOiBpGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TNuA1Pbm; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753971975; c=relaxed/simple;
+	bh=fnBKf16cTtCbDO6zr5ouZQRqQxTpgYOksvAXgmcpfKo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pp0iASrCsqTFqBZhLpuehkrS/KNh3VyQQgts6BZ5roFqijZBGk+DGmKFZxKgQObu9NffdH7H9Bi3IueymWPjbl/usVjudH/BkDhzyn6gDXw7IKFBpz0ctdhrbbqCHFRKOnY7odKGyHidEtWpx8Dz9T2og+uGFZQYR/n0JF3vsYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hvrZfjnw; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753963125; x=1785499125;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tNoXWwvWQbqlFtYXzrT1UZX3GrjrrW8QenY36N0vl90=;
-  b=TNuA1Pbms9oDtTQ6QOB9k8IimZO2AqKnLecitQDBOjj+x7FUVN5c3Bmo
-   qSBYH9srufyue+ny2hn5/ZrVomftWXwwqn0oqcyMDgd0KNrQtA9iyCOv2
-   7gs3IhP5KFH/lZ57BsJx0lXeJf/cNlV3xcX7YTv+oge/LtjTGOR4OD/BB
-   9vd1GoXTTaqGM34MotiSeuriFlsJDe6/hfMjwc9YSPBYHLa+MevTZ0kvb
-   9wAN0ImQYdlSUlVPXuaVkpKkL+NsRk+NAhB6/CVgESqe06fc454B5eo11
-   wwxZChZrDofgiTdNQyclJ0HSyEre9rXmHzemELRodA9BPgBvDGAdz+g4v
+  t=1753971973; x=1785507973;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fnBKf16cTtCbDO6zr5ouZQRqQxTpgYOksvAXgmcpfKo=;
+  b=hvrZfjnwI5Wx8WDsQz+7D9yT2HIRNsfddo5EN/8ZG5yatjFf+uzHqB1Q
+   ks1c4VhaI+LGmeKO2oeC5KQ1kmcfjvjfzmzCmmig8ssSENZxfYKWZK9p0
+   eb7brCL76f7mgvoTcTJ91qeQe3gdAXr38L0mCNyM07mf/xTy6QvibsRvl
+   aIFaJgNxFFnvkBmV+yDnLTkIzturB0nplY8TtmXc/QnFONMAvyROytj3q
+   m3rlTdbFLISgaMb3CFwAwMx12QX1M+JyWePz+kp+bnptN97DDUie3vQu7
+   5nAiUoNnHHTODMJDWSN6cZK2Jx8swGO0fHzZ6758i8rHyf5YK2cNiGVCo
    A==;
-X-CSE-ConnectionGUID: LxAhPMn/QhKt+eiRjoTubQ==
-X-CSE-MsgGUID: BAGsvZngQVyRVvalkap1LA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56149539"
+X-CSE-ConnectionGUID: avP7kk0zS/q0brUxggZ9GQ==
+X-CSE-MsgGUID: dLyjKu09SOOnPsdid0b8/w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="55499329"
 X-IronPort-AV: E=Sophos;i="6.17,353,1747724400"; 
-   d="scan'208";a="56149539"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2025 04:58:45 -0700
-X-CSE-ConnectionGUID: h8B0eOTjSPiYILRaospTeQ==
-X-CSE-MsgGUID: u1o93U89S3mUPnFxhiwPyw==
+   d="scan'208";a="55499329"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2025 07:26:10 -0700
+X-CSE-ConnectionGUID: sDJmF2u0Tl+BZwQ33x7erA==
+X-CSE-MsgGUID: FSQcsCANRTyHt7vxtdLZXQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,353,1747724400"; 
-   d="scan'208";a="167492742"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 31 Jul 2025 04:58:43 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uhRvk-0003k4-12;
-	Thu, 31 Jul 2025 11:58:40 +0000
-Date: Thu, 31 Jul 2025 19:58:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Li Jun <lijun01@kylinos.cn>, gregkh@linuxfoundation.org,
-	mingo@kernel.org, tglx@linutronix.de, nathan@kernel.org,
-	n.zhandarovich@fintech.ru, linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] usb: atm: Fix kernel coding style
-Message-ID: <202507311928.0ny4leMQ-lkp@intel.com>
-References: <20250731014134.535119-1-lijun01@kylinos.cn>
+   d="scan'208";a="163643732"
+Received: from mnyman-desk.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa008.jf.intel.com with ESMTP; 31 Jul 2025 07:26:10 -0700
+Message-ID: <f277779a-34af-4db0-bef0-fa41aa538f97@linux.intel.com>
+Date: Thu, 31 Jul 2025 17:26:07 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250731014134.535119-1-lijun01@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Audio interface causing "xhci_hcd ... WARN: buffer overrun event"
+ messages
+To: Robert Ham <rah@settrans.net>, =?UTF-8?Q?Micha=C5=82_Pecio?=
+ <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org
+References: <ba0ebd17-dade-4a97-b696-5ad19ebfca1d@settrans.net>
+ <20250731101720.5d10a8f1@foxbook> <20250731102728.503cd612@foxbook>
+ <3bbb710c-351d-46ec-a2e4-9ee4d766a750@settrans.net>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <3bbb710c-351d-46ec-a2e4-9ee4d766a750@settrans.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Li,
+On 31.7.2025 13.11, Robert Ham wrote:
+> I managed to sort out the tracing and debug output. Updated kernel log
+> and trace:
+> 
+> https://settrans.net/~rah/misc/xhci-kernel-log-2.txt
+> 
+> https://settrans.net/~rah/misc/xhci-kernel-trace-2.txt
+> 
+> 
+> On 31/07/2025 09:27, Michał Pecio wrote:
+> 
+>> Can you post "lsusb -v" for this device?
+> 
 
-kernel test robot noticed the following build errors:
+Looks like The lengths and offsets in the URB, passed by audio driver does
+not match the transfer sizes the device reports it will send.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.16 next-20250731]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The audio device reports its isoc endpoint will send 1000 bytes
+every 125 microseconds:
+(from your lsusb)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Li-Jun/usb-atm-Fix-kernel-coding-style/20250731-094241
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20250731014134.535119-1-lijun01%40kylinos.cn
-patch subject: [PATCH] usb: atm: Fix kernel coding style
-config: i386-buildonly-randconfig-003-20250731 (https://download.01.org/0day-ci/archive/20250731/202507311928.0ny4leMQ-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250731/202507311928.0ny4leMQ-lkp@intel.com/reproduce)
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x81  EP 1 IN
+>          bmAttributes           37
+>            Transfer Type            Isochronous
+>            Synch Type               Asynchronous
+>            Usage Type               Implicit feedback Data
+>          wMaxPacketSize     0x03e8  1x 1000 bytes
+>          bInterval               1
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507311928.0ny4leMQ-lkp@intel.com/
+Trace shows xhci sets up the endpoint correctly,
+expecting 1000 bytes every 125 mictoseconds:
 
-All errors (new ones prefixed by >>):
+pulseaudio-1435    [000] .....    55.126749: xhci_ring_alloc: ISOC 00000000c42321b6: enq 0x00000002483a2000(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
+pulseaudio-1435    [000] .....    55.126750: xhci_add_endpoint: State disabled mult 1 max P. Streams 0 interval 125 us max ESIT payload 1000 CErr 0 Type Isoc IN burst 0 maxp 1000 deq 00000002483a2001 avg trb len 1000
 
->> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
-     539 | CXACRU_ALL_FILES(INIT);
-         | ^
-   drivers/usb/atm/cxacru.c:511:35: note: expanded from macro 'CXACRU_ALL_FILES'
-     511 | #define CXACRU_ALL_FILES(_action) \
-         |                                   ^
-   <scratch space>:27:1: note: expanded from here
-      27 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
-   drivers/usb/atm/cxacru.c:511:35: note: expanded from macro 'CXACRU_ALL_FILES'
-     511 | #define CXACRU_ALL_FILES(_action) \
-         |                                   ^
-   <scratch space>:27:1: note: expanded from here
-      27 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
-   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
-   drivers/usb/atm/cxacru.c:511:35: note: expanded from macro 'CXACRU_ALL_FILES'
-     511 | #define CXACRU_ALL_FILES(_action) \
-         |                                   ^
-   <scratch space>:27:1: note: expanded from here
-      27 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     198 | #define CXACRU__ATTR_INIT(_name) \
-         |                                  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
-     539 | CXACRU_ALL_FILES(INIT);
-         | ^
-   drivers/usb/atm/cxacru.c:512:80: note: expanded from macro 'CXACRU_ALL_FILES'
-     512 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_RATE,           u32,  downstream_rate); \
-         |                                                                                ^
-   <scratch space>:37:1: note: expanded from here
-      37 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
-   drivers/usb/atm/cxacru.c:512:80: note: expanded from macro 'CXACRU_ALL_FILES'
-     512 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_RATE,           u32,  downstream_rate); \
-         |                                                                                ^
-   <scratch space>:37:1: note: expanded from here
-      37 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
-   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
-   drivers/usb/atm/cxacru.c:512:80: note: expanded from macro 'CXACRU_ALL_FILES'
-     512 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_RATE,           u32,  downstream_rate); \
-         |                                                                                ^
-   <scratch space>:37:1: note: expanded from here
-      37 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     198 | #define CXACRU__ATTR_INIT(_name) \
-         |                                  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
-     539 | CXACRU_ALL_FILES(INIT);
-         | ^
-   drivers/usb/atm/cxacru.c:513:78: note: expanded from macro 'CXACRU_ALL_FILES'
-     513 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_RATE,             u32,  upstream_rate); \
-         |                                                                              ^
-   <scratch space>:47:1: note: expanded from here
-      47 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
-   drivers/usb/atm/cxacru.c:513:78: note: expanded from macro 'CXACRU_ALL_FILES'
-     513 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_RATE,             u32,  upstream_rate); \
-         |                                                                              ^
-   <scratch space>:47:1: note: expanded from here
-      47 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
-   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
-   drivers/usb/atm/cxacru.c:513:78: note: expanded from macro 'CXACRU_ALL_FILES'
-     513 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_RATE,             u32,  upstream_rate); \
-         |                                                                              ^
-   <scratch space>:47:1: note: expanded from here
-      47 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     198 | #define CXACRU__ATTR_INIT(_name) \
-         |                                  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
-     539 | CXACRU_ALL_FILES(INIT);
-         | ^
-   drivers/usb/atm/cxacru.c:514:76: note: expanded from macro 'CXACRU_ALL_FILES'
-     514 | CXACRU_ATTR_##_action(CXINF_LINK_STATUS,               LINK, link_status); \
-         |                                                                            ^
-   <scratch space>:57:1: note: expanded from here
-      57 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
-   drivers/usb/atm/cxacru.c:514:76: note: expanded from macro 'CXACRU_ALL_FILES'
-     514 | CXACRU_ATTR_##_action(CXINF_LINK_STATUS,               LINK, link_status); \
-         |                                                                            ^
-   <scratch space>:57:1: note: expanded from here
-      57 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
-   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
-   drivers/usb/atm/cxacru.c:514:76: note: expanded from macro 'CXACRU_ALL_FILES'
-     514 | CXACRU_ATTR_##_action(CXINF_LINK_STATUS,               LINK, link_status); \
-         |                                                                            ^
-   <scratch space>:57:1: note: expanded from here
-      57 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     198 | #define CXACRU__ATTR_INIT(_name) \
-         |                                  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
-     539 | CXACRU_ALL_FILES(INIT);
-         | ^
-   drivers/usb/atm/cxacru.c:515:76: note: expanded from macro 'CXACRU_ALL_FILES'
-     515 | CXACRU_ATTR_##_action(CXINF_LINE_STATUS,               LINE, line_status); \
-         |                                                                            ^
-   <scratch space>:67:1: note: expanded from here
-      67 | CXACRU__ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro 'CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
-   drivers/usb/atm/cxacru.c:515:76: note: expanded from macro 'CXACRU_ALL_FILES'
-     515 | CXACRU_ATTR_##_action(CXINF_LINE_STATUS,               LINE, line_status); \
-         |                                                                            ^
-   <scratch space>:67:1: note: expanded from here
-      67 | CXACRU__ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro 'CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
-   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
-   drivers/usb/atm/cxacru.c:515:76: note: expanded from macro 'CXACRU_ALL_FILES'
-     515 | CXACRU_ATTR_##_action(CXINF_LINE_STATUS,               LINE, line_status); \
-         |                                                                            ^
-   <scratch space>:67:1: note: expanded from here
-      67 | CXACRU__ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro 'CXACRU__ATTR_INIT'
-     198 | #define CXACRU__ATTR_INIT(_name) \
-         |                                  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
-     539 | CXACRU_ALL_FILES(INIT);
-         | ^
-   drivers/usb/atm/cxacru.c:516:38: note: expanded from macro 'CXACRU_ALL_FILES'
-     516 | CXACRU__ATTR_##_action(mac_address); \
-         |                                      ^
-   <scratch space>:71:1: note: expanded from here
-      71 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
-   drivers/usb/atm/cxacru.c:516:38: note: expanded from macro 'CXACRU_ALL_FILES'
-     516 | CXACRU__ATTR_##_action(mac_address); \
-         |                                      ^
-   <scratch space>:71:1: note: expanded from here
-      71 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
-   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
-   drivers/usb/atm/cxacru.c:516:38: note: expanded from macro 'CXACRU_ALL_FILES'
-     516 | CXACRU__ATTR_##_action(mac_address); \
-         |                                      ^
-   <scratch space>:71:1: note: expanded from here
-      71 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     198 | #define CXACRU__ATTR_INIT(_name) \
-         |                                  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
-     539 | CXACRU_ALL_FILES(INIT);
-         | ^
-   drivers/usb/atm/cxacru.c:517:84: note: expanded from macro 'CXACRU_ALL_FILES'
-     517 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_SNR_MARGIN,       dB,   upstream_snr_margin); \
-         |                                                                                    ^
-   <scratch space>:81:1: note: expanded from here
-      81 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
-   drivers/usb/atm/cxacru.c:517:84: note: expanded from macro 'CXACRU_ALL_FILES'
-     517 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_SNR_MARGIN,       dB,   upstream_snr_margin); \
-         |                                                                                    ^
-   <scratch space>:81:1: note: expanded from here
-      81 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
-   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
-   drivers/usb/atm/cxacru.c:517:84: note: expanded from macro 'CXACRU_ALL_FILES'
-     517 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_SNR_MARGIN,       dB,   upstream_snr_margin); \
-         |                                                                                    ^
-   <scratch space>:81:1: note: expanded from here
-      81 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     198 | #define CXACRU__ATTR_INIT(_name) \
-         |                                  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
-     539 | CXACRU_ALL_FILES(INIT);
-         | ^
-   drivers/usb/atm/cxacru.c:518:86: note: expanded from macro 'CXACRU_ALL_FILES'
-     518 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_SNR_MARGIN,     dB,   downstream_snr_margin); \
-         |                                                                                      ^
-   <scratch space>:91:1: note: expanded from here
-      91 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
-   drivers/usb/atm/cxacru.c:518:86: note: expanded from macro 'CXACRU_ALL_FILES'
-     518 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_SNR_MARGIN,     dB,   downstream_snr_margin); \
-         |                                                                                      ^
-   <scratch space>:91:1: note: expanded from here
-      91 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
-   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
-   drivers/usb/atm/cxacru.c:518:86: note: expanded from macro 'CXACRU_ALL_FILES'
-     518 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_SNR_MARGIN,     dB,   downstream_snr_margin); \
-         |                                                                                      ^
-   <scratch space>:91:1: note: expanded from here
-      91 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     198 | #define CXACRU__ATTR_INIT(_name) \
-         |                                  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
-     539 | CXACRU_ALL_FILES(INIT);
-         | ^
-   drivers/usb/atm/cxacru.c:519:85: note: expanded from macro 'CXACRU_ALL_FILES'
-     519 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_ATTENUATION,      dB,   upstream_attenuation); \
-         |                                                                                     ^
-   <scratch space>:101:1: note: expanded from here
-     101 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
-   drivers/usb/atm/cxacru.c:519:85: note: expanded from macro 'CXACRU_ALL_FILES'
-     519 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_ATTENUATION,      dB,   upstream_attenuation); \
-         |                                                                                     ^
-   <scratch space>:101:1: note: expanded from here
-     101 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
-   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
-   drivers/usb/atm/cxacru.c:519:85: note: expanded from macro 'CXACRU_ALL_FILES'
-     519 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_ATTENUATION,      dB,   upstream_attenuation); \
-         |                                                                                     ^
-   <scratch space>:101:1: note: expanded from here
-     101 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     198 | #define CXACRU__ATTR_INIT(_name) \
-         |                                  ^
->> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
-     539 | CXACRU_ALL_FILES(INIT);
-         | ^
-   drivers/usb/atm/cxacru.c:520:87: note: expanded from macro 'CXACRU_ALL_FILES'
-     520 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_ATTENUATION,    dB,   downstream_attenuation); \
-         |                                                                                       ^
-   <scratch space>:111:1: note: expanded from here
-     111 | CXACRU_ATTR_INIT
-         | ^
-   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
-     218 | } \
-         |   ^
-   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
-   CXACRU__ATTR_INIT'
-     199 | (static DEVICE_ATTR_RO(_name))
-         |  ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+but the URB queued from class driver to xhci doesn't match this.
+Looks like one URB contains 8 isoc transfers, (one filled every 125us) but URB expects
+only 2880 bytes in total, leading to only 360 bytes per isoc transfer.
 
+I'd take a closer look at the values filled by the audio driver to the
+struct usb_iso_packet_descriptor iso_frame_desc[] array, and number_of_packets
+in the URB
 
-vim +539 drivers/usb/atm/cxacru.c
+usbmon might show these, don't remember if it shows all isoc related fields
 
-fa70fe44aba95c Simon Arlott 2007-03-06  538  
-fa70fe44aba95c Simon Arlott 2007-03-06 @539  CXACRU_ALL_FILES(INIT);
-fa70fe44aba95c Simon Arlott 2007-03-06  540  
+Trace shoes the URB turned into Isoc TRBs of 360 bytes by xhci driver.
+Notice that the Buffer address also increases only by 360 bytes (0x168)
+  
+55.198885: xhci_urb_enqueue: 3-5.1 ep1in-isoc: urb 0000000052d17659 pipe 33920 slot 3 length 0/2880 sgs 0/0 stream 0 flags 00000204
+55.198892: xhci_queue_trb: ISOC: Buffer 0000000104735000 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:c
+55.198892: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2010(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
+55.198894: xhci_queue_trb: ISOC: Buffer 0000000104735168 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
+55.198894: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2020(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
+55.198895: xhci_queue_trb: ISOC: Buffer 00000001047352d0 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
+55.198896: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2030(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
+55.198897: xhci_queue_trb: ISOC: Buffer 0000000104735438 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
+55.198897: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2040(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
+55.198899: xhci_queue_trb: ISOC: Buffer 00000001047355a0 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
+55.198899: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2050(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
+55.198900: xhci_queue_trb: ISOC: Buffer 0000000104735708 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
+55.198900: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2060(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
+55.198901: xhci_queue_trb: ISOC: Buffer 0000000104735870 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
+55.198902: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2070(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
+55.198903: xhci_queue_trb: ISOC: Buffer 00000001047359d8 length 360 TD size 0 intr 0 type 'Isoch' flags b:i:I:c:s:I:e:C
+55.198903: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2080(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
+55.198903: xhci_ring_ep_doorbell: Ring doorbell for Slot 3 ep1in
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+The audio device probably sends the 1000 bytes per isoc tranfers as it stated, but
+xhci expects 360 bytes, which leads to  buffer overrun errors
+
+55.213952: xhci_handle_event: EVENT: TRB 00000002483a2000 status 'Isoch Buffer Overrun' len 360 slot 3 ep 3 type 'Transfer Event' flags e:C
+55.222154: xhci_handle_transfer: ISOC: Buffer 0000000104735000 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
+
+Thanks
+Mathias
+
 
