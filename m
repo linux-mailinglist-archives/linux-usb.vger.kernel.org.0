@@ -1,107 +1,133 @@
-Return-Path: <linux-usb+bounces-26282-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26283-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E9CFB16B8A
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 07:32:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 299AFB16BE9
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 08:11:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7ED5C3B719A
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 05:31:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 828C01AA5ECC
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 06:12:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E1424293F;
-	Thu, 31 Jul 2025 05:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DDE8245007;
+	Thu, 31 Jul 2025 06:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iKeb3qE/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sgoci-sdnproxy-4.icoremail.net (sgoci-sdnproxy-4.icoremail.net [129.150.39.64])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0DDA94A;
-	Thu, 31 Jul 2025 05:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.150.39.64
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04C33241691;
+	Thu, 31 Jul 2025 06:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753939934; cv=none; b=c5uJ9/EFzUHW/uK0WFCPrEu9iImTd0XEzecJ56NJCxZZrI2KIVZ9/VtfN+BqZIgJVwbuXQAJL4Nu2Vu2ShvoqV0Ph5usXQBUqLSmo5V4ZQkHm3+kN6p+kGyy+j/mgWhRYzurUadzfKYygna+3ytN8HLn5pk+wq4EuC7i94ZP8io=
+	t=1753942296; cv=none; b=YF5TPCC8x/catTplCl9dMwKpRPvAm1tY4P5zoWJT6wgAks00QnUXeAbIYUFUxaDN7+fjoiXYvjveFw1yLZtuPg/v5FhiDzlM17083eim5oFswF9ZUTkuh6pbik4GYKPmJbYgyQuxwfAbrarsh7M7dsnb4EcCygE8LtifWELBG9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753939934; c=relaxed/simple;
-	bh=S8fE8csNzXTLlrCW1M853t6niS2JJvEuUJQqdUqbuHs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=CzkWCw62ByAzCJ0FsugHqofbAPfQ1qFxrtC0vleEjGd6+CioEC2uc6YVFEmpg7sjsGzdmvz4XVIWEyl5fdyvhQ9PKLfB7WmyW/N8YVHteM6+DiSF/ta9URjcP8fbQ2faCYySntK35+sPWaNCZ8QP7yjcN4ycHlFkRh/B04Lb01c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=129.150.39.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from zhangsenchuan$eswincomputing.com ( [10.12.96.83] ) by
- ajax-webmail-app2 (Coremail) ; Thu, 31 Jul 2025 13:31:49 +0800 (GMT+08:00)
-Date: Thu, 31 Jul 2025 13:31:49 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: zhangsenchuan <zhangsenchuan@eswincomputing.com>
-To: "Krzysztof Kozlowski" <krzk@kernel.org>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Thinh.Nguyen@synopsys.com, p.zabel@pengutronix.de,
-	ningyu@eswincomputing.com, linmin@eswincomputing.com,
-	yangwei1@eswincomputing.com, pinkesh.vaghela@einfochips.com
-Subject: Re: Re: [PATCH v2 1/2] dt-bindings: usb: Add Eswin EIC7700 USB
- controller
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
- 20241203(6b039d88) Copyright (c) 2002-2025 www.mailtech.cn
- mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
-In-Reply-To: <51648c0f-dd30-4a07-83c0-533a57c29e63@kernel.org>
-References: <20250730073953.1623-1-zhangsenchuan@eswincomputing.com>
- <20250730074058.2004-1-zhangsenchuan@eswincomputing.com>
- <51648c0f-dd30-4a07-83c0-533a57c29e63@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1753942296; c=relaxed/simple;
+	bh=t4CO3DrNqAlxgKHhJ3MEDw+KhIrq7qagVN6YFpKyqV8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ui7djsKPXQt1ix/WG9tiFz2D2jkacInI4mDFLWhvbgIzp9WvS3C/sBcoBd+14TYUz+n/5z4XN7Y7AIzY5SpEtvjPhPnKZsq8ANKGboLV0WRmILvhaOm02XMEBfUWFzUQsP6n13wEj3OZ4HA3e+FeDzOIDzHD74abHqX4MZ2eqE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iKeb3qE/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66006C4CEEF;
+	Thu, 31 Jul 2025 06:11:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753942294;
+	bh=t4CO3DrNqAlxgKHhJ3MEDw+KhIrq7qagVN6YFpKyqV8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iKeb3qE/NGjrfXkvmSNpLj09Wbns7DNR/4TTUWTa7mOCm+osj6JBpYNbXJN8LeHDt
+	 zbyCbtYAhfUOAxOh0xU2mM0HKbGQMyCDqYPHoc6BeXn2y0x7tOio3ZBMSUROaUa72A
+	 h9+L06woyxrQ3sze9/BjfERiugzPz0BsCTmcMc/99Hd/v7w/qlOV4jzNsNmRoVbwJg
+	 r1tmJl3QkHLm5zXG0ftJkNKDhwiMZij+UI4SCzx32+bVUo/D0q2RTpfE7DNQP5q5Aq
+	 tYujtURnf0htTZ2pyX2AQ9hXTC0gLHdmp7QsqVwxpOVq5DKFDJLFia5jY3cbxDqaVH
+	 CCAZuRvHcV2Xw==
+Message-ID: <17f9763b-7ae5-4429-ab16-058eddf9c79c@kernel.org>
+Date: Thu, 31 Jul 2025 08:11:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <1f9a715d.3bb7.1985ef71b54.Coremail.zhangsenchuan@eswincomputing.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:TQJkCgDHZpXF_4poaze5AA--.20997W
-X-CM-SenderInfo: x2kd0wpvhquxxxdqqvxvzl0uprps33xlqjhudrp/1tbiAQEABmiKS
-	PEVfwAAs3
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Eswin EIC7700 USB controller
+To: zhangsenchuan <zhangsenchuan@eswincomputing.com>
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ Thinh.Nguyen@synopsys.com, p.zabel@pengutronix.de,
+ ningyu@eswincomputing.com, linmin@eswincomputing.com,
+ yangwei1@eswincomputing.com, pinkesh.vaghela@einfochips.com
+References: <20250730073953.1623-1-zhangsenchuan@eswincomputing.com>
+ <20250730074058.2004-1-zhangsenchuan@eswincomputing.com>
+ <51648c0f-dd30-4a07-83c0-533a57c29e63@kernel.org>
+ <1f9a715d.3bb7.1985ef71b54.Coremail.zhangsenchuan@eswincomputing.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <1f9a715d.3bb7.1985ef71b54.Coremail.zhangsenchuan@eswincomputing.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiS3J6eXN6dG9mIEtvemxv
-d3NraSIgPGtyemtAa2VybmVsLm9yZz4KPiDlj5HpgIHml7bpl7Q6MjAyNS0wNy0zMCAxNTo0Njow
-MiAo5pif5pyf5LiJKQo+IOaUtuS7tuS6ujogemhhbmdzZW5jaHVhbkBlc3dpbmNvbXB1dGluZy5j
-b20sIGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnLCByb2JoQGtlcm5lbC5vcmcsIGtyemsrZHRA
-a2VybmVsLm9yZywgY29ub3IrZHRAa2VybmVsLm9yZywgbGludXgtdXNiQHZnZXIua2VybmVsLm9y
-ZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZywgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5v
-cmcsIFRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20sIHAuemFiZWxAcGVuZ3V0cm9uaXguZGUKPiDm
-ioTpgIE6IG5pbmd5dUBlc3dpbmNvbXB1dGluZy5jb20sIGxpbm1pbkBlc3dpbmNvbXB1dGluZy5j
-b20sIHlhbmd3ZWkxQGVzd2luY29tcHV0aW5nLmNvbSwgcGlua2VzaC52YWdoZWxhQGVpbmZvY2hp
-cHMuY29tCj4g5Li76aKYOiBSZTogW1BBVENIIHYyIDEvMl0gZHQtYmluZGluZ3M6IHVzYjogQWRk
-IEVzd2luIEVJQzc3MDAgVVNCIGNvbnRyb2xsZXIKPiAKPiBPbiAzMC8wNy8yMDI1IDA5OjQwLCB6
-aGFuZ3NlbmNodWFuQGVzd2luY29tcHV0aW5nLmNvbSB3cm90ZToKPiA+ICsKPiA+ICtleGFtcGxl
-czoKPiA+ICsgIC0gfAo+ID4gKyAgICBzb2Mgewo+ID4gKyAgICAgICAgI2FkZHJlc3MtY2VsbHMg
-PSA8Mj47Cj4gPiArICAgICAgICAjc2l6ZS1jZWxscyA9IDwyPjsKPiAKPiBUaGlzIHdhc24ndCBo
-ZXJlLiBEcm9wLgo+IAo+ID4gKwo+ID4gKyAgICAgICAgdXNiIHsKPiA+ICsgICAgICAgICAgICBj
-b21wYXRpYmxlID0gImVzd2luLGVpYzc3MDAtZHdjMyI7Cj4gPiArICAgICAgICAgICAgY2xvY2tz
-ID0gPCZmaXhlZF9mYWN0b3JfdV9jbGtfMW1fZGl2MjQ+LAo+ID4gKyAgICAgICAgICAgICAgICAg
-ICAgIDwmZ2F0ZV9jbGtfaHNwX2FjbGs+LAo+ID4gKyAgICAgICAgICAgICAgICAgICAgIDwmZ2F0
-ZV9jbGtfaHNwX2NmZ2Nsaz47Cj4gPiArICAgICAgICAgICAgY2xvY2stbmFtZXMgPSAic3VzcGVu
-ZCIsImFjbGsiLCAiY2ZnIjsKPiA+ICsgICAgICAgICAgICBlc3dpbixoc3Atc3AtY3NyID0gPCZo
-c3Bfc3BfY3NyIDB4ODAwIDB4ODA4IDB4ODNjIDB4ODQwPjsKPiA+ICsgICAgICAgICAgICByZXNl
-dHMgPSA8JnJlc2V0IDg0PjsKPiA+ICsgICAgICAgICAgICByZXNldC1uYW1lcyA9ICJ2YXV4IjsK
-PiA+ICsgICAgICAgICAgICByYW5nZXM7Cj4gCj4gU2FtZSBjb21tZW50OiBmb2xsb3cgRFRTIGNv
-ZGluZyBzdHlsZS4gV2hlcmUgc2hvdWxkIHJhbmdlcyBvciByZWcgYmUgcGxhY2VkPwoKQWNjb3Jk
-aW5nIHRvIHRoZSAiZHRzLWNvZGluZy1zdHlsZS5odG1sIiwgdGhlIG9yZGVyIHNob3VsZCBiZSBs
-aWtlIGJlbG93LCBpcyB0aGlzIGNvcnJlY3Q/Cgpjb21wYXRpYmxlID0gImVzd2luLGVpYzc3MDAt
-ZHdjMyI7CnJhbmdlczsKI2FkZHJlc3MtY2VsbHMgPSA8MT47CiNzaXplLWNlbGxzID0gPDE+OwoK
-PiAKPiA+ICsgICAgICAgICAgICAjYWRkcmVzcy1jZWxscyA9IDwyPjsKPiA+ICsgICAgICAgICAg
-ICAjc2l6ZS1jZWxscyA9IDwyPjsKPiA+ICsKPiA+ICsgICAgICAgICAgICB1c2JANTA0ODAwMDAg
-ewo+ID4gKyAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gInNucHMsZHdjMyI7Cj4gPiArICAg
-ICAgICAgICAgICAgIHJlZyA9IDwweDAgMHg1MDQ4MDAwMCAweDAgMHgxMDAwMD47Cj4gCj4gTm90
-aGluZyBpbXByb3ZlZCBhbmQgeW91IGRpZCBub3QgcmVzcG9uZCB0byB0aGUgZmVlZGJhY2suCgpJ
-J20gdmVyeSBzb3JyeSB0aGF0IEkgaGF2ZW4ndCBnaXZlbiB5b3UgYW55IGZlZWRiYWNrIGhlcmUu
-IEknbSBub3QgcXVpdGUgY2xlYXIgYWJvdXQgd2hhdCB5b3UgbWVhbiBieSBmZWVkYmFjay4KSW4g
-djEgcGF0Y2gsIHlvdSBtZW50aW9uZWQgIkZvbGQgdGhlIGNoaWxkIG5vZGUgaW50byB0aGUgcGFy
-ZW50Iu+8jGNvdWxkIHlvdSBwbGVhc2UgdGVsbCBtZSB3aGF0J3MgdGhlIGV4YWN0Cm1lYW5pbmcg
-b2YgdGhpcyBjb21tZW50Pwo+IAo+IAo+IEJlc3QgcmVnYXJkcywKPiBTZW5jaHVhbiBaaGFuZw==
+On 31/07/2025 07:31, zhangsenchuan wrote:
+>>
+>>> +            #address-cells = <2>;
+>>> +            #size-cells = <2>;
+>>> +
+>>> +            usb@50480000 {
+>>> +                compatible = "snps,dwc3";
+>>> +                reg = <0x0 0x50480000 0x0 0x10000>;
+>>
+>> Nothing improved and you did not respond to the feedback.
+> 
+> I'm very sorry that I haven't given you any feedback here. I'm not quite clear about what you mean by feedback.
+> In v1 patch, you mentioned "Fold the child node into the parent"，could you please tell me what's the exact
+> meaning of this comment?
+It means you should not have separate child for dwc3, but only one node
+in total.
 
+Best regards,
+Krzysztof
 
