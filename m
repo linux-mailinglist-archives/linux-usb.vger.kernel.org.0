@@ -1,163 +1,140 @@
-Return-Path: <linux-usb+bounces-26291-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26292-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E25CFB1733C
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 16:26:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16016B174B8
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 18:09:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DBE47A9843
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 14:24:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 361C616193B
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 16:09:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02745153598;
-	Thu, 31 Jul 2025 14:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51862207E1D;
+	Thu, 31 Jul 2025 16:09:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hvrZfjnw"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dZegm/RM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B762F24
-	for <linux-usb@vger.kernel.org>; Thu, 31 Jul 2025 14:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA571E25F8
+	for <linux-usb@vger.kernel.org>; Thu, 31 Jul 2025 16:09:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753971975; cv=none; b=AGG3CaksKvWtMws2sejXO6bkT0Rs50ZwKuWNzjrLImj4KdCnc1uXVM968MHBxTEMmv2BRMXIOBUaXEoJf8chmAJPjxwHCkSIOWQJNYeQM8hGfChsNnrDq5nwM6Zs1gS8GsdgFa81IVLcVDCqiaF3gkDIzVvm0naRS8aFkIl6eFw=
+	t=1753978184; cv=none; b=SbOuyy/jNPRNaVMmts0ZW8To807p43lOqTo7nVKmYeyfD0X0Sw5JrrkjC+ACUV7J4S0Vn2rFInGnV6ZSMA0FsLECaXlx9+LiZi3WcSXpekYixzM6BZWrjjTDcXWHzzKIqgsbp36+V/6yZlb/CtWVaxMNnzN7yhuwezqll0XEqRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753971975; c=relaxed/simple;
-	bh=fnBKf16cTtCbDO6zr5ouZQRqQxTpgYOksvAXgmcpfKo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pp0iASrCsqTFqBZhLpuehkrS/KNh3VyQQgts6BZ5roFqijZBGk+DGmKFZxKgQObu9NffdH7H9Bi3IueymWPjbl/usVjudH/BkDhzyn6gDXw7IKFBpz0ctdhrbbqCHFRKOnY7odKGyHidEtWpx8Dz9T2og+uGFZQYR/n0JF3vsYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hvrZfjnw; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753971973; x=1785507973;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fnBKf16cTtCbDO6zr5ouZQRqQxTpgYOksvAXgmcpfKo=;
-  b=hvrZfjnwI5Wx8WDsQz+7D9yT2HIRNsfddo5EN/8ZG5yatjFf+uzHqB1Q
-   ks1c4VhaI+LGmeKO2oeC5KQ1kmcfjvjfzmzCmmig8ssSENZxfYKWZK9p0
-   eb7brCL76f7mgvoTcTJ91qeQe3gdAXr38L0mCNyM07mf/xTy6QvibsRvl
-   aIFaJgNxFFnvkBmV+yDnLTkIzturB0nplY8TtmXc/QnFONMAvyROytj3q
-   m3rlTdbFLISgaMb3CFwAwMx12QX1M+JyWePz+kp+bnptN97DDUie3vQu7
-   5nAiUoNnHHTODMJDWSN6cZK2Jx8swGO0fHzZ6758i8rHyf5YK2cNiGVCo
-   A==;
-X-CSE-ConnectionGUID: avP7kk0zS/q0brUxggZ9GQ==
-X-CSE-MsgGUID: dLyjKu09SOOnPsdid0b8/w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="55499329"
-X-IronPort-AV: E=Sophos;i="6.17,353,1747724400"; 
-   d="scan'208";a="55499329"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2025 07:26:10 -0700
-X-CSE-ConnectionGUID: sDJmF2u0Tl+BZwQ33x7erA==
-X-CSE-MsgGUID: FSQcsCANRTyHt7vxtdLZXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,353,1747724400"; 
-   d="scan'208";a="163643732"
-Received: from mnyman-desk.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa008.jf.intel.com with ESMTP; 31 Jul 2025 07:26:10 -0700
-Message-ID: <f277779a-34af-4db0-bef0-fa41aa538f97@linux.intel.com>
-Date: Thu, 31 Jul 2025 17:26:07 +0300
+	s=arc-20240116; t=1753978184; c=relaxed/simple;
+	bh=UUbVgaWG1FBSW2udf9aTCPmOnPAnABB3Ya1UbXyvUfU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jsJn23FJm92MazWPljJ9XJz88EFVPp05ZSNO6fO3KOOhJf/inO9NbvKWC3g8Y2qdWh7oo+jnAcVLXROkESVsVV/29T7T9zld3MGeigUgCTh6vI0537Yu6/j0tD0ZT8Y6JdEBu0wgUv87vlw+E6ICISaMRO5D6JfDrGzeSImDIgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dZegm/RM; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-31ecdf5faaeso639461a91.0
+        for <linux-usb@vger.kernel.org>; Thu, 31 Jul 2025 09:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1753978183; x=1754582983; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v8c1vs297OuDQhw1rF/WqVEVYzpa4jaap14+9/4mG/U=;
+        b=dZegm/RMZT4fpOJyAljY872rGRhIhTwh/Q1jO1MjTsBJ3CmLDgR9/53u1eWH+/xACa
+         bkTIi9Ionq3ckaH83QaMcKwzqLKy9+hWckxale2KwDRAlRFiCyU2ifioRHdjVVSMkZKd
+         z5WAX929e2LPu1thpxJ/l5+xarQu0RifzbbDA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753978183; x=1754582983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v8c1vs297OuDQhw1rF/WqVEVYzpa4jaap14+9/4mG/U=;
+        b=JW2TPhOhv015kLAI4L13VM7ASuhE9/uJ/vkFxBn9eAlAiJfNNQ7Ypcvj940JxWBPj4
+         CcCosVawOO8uZYnhj3YU5PbMDxMFrVtwxgwm3/nF6SLazXFE9hcGwEjpN/p2BDzC3Lj1
+         h6NG3zhQf97x7enKsXBoPbPxWEa6Dt8Qyp8ERyYaIMPv9jPg/nh+8W/++2iwhtdPiK/n
+         gj4Mlde+WryLXzByElb/TjCwym8faBYvwd5X92mBH5KIHfgLvwhndGquT585Q4LH9Mj7
+         0dN4fpi8PFoqQWn1O6U/QA+Tav1lCAOonQwaxiqlPtv5jpLso+O9LPo2IC41v32sCSni
+         lhLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUiPbgll0isjKatdsiayAnh+Tr585e5VOJkG8JcGekcLHQIN0P69I7XgdZiVTFI8h7D2Bz01q/WFwM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxyvv3Dbj2jCe9GyU2+T+g65nUrqzfNPb9ulOXt72sU1hr6AZOW
+	6KcYQeuIAl5HyeGFHM37PrfGzp2b9L6Tda3iN6DsbSGn1V3JPh4HKxPXrUnbZhrxK3jnIq53Bou
+	/0RWfxFn0KmSg1djbstTZV4p3YtgIiZtcd8gfDNYPEbRNIBerYrvGGQ==
+X-Gm-Gg: ASbGncsIaJawjqI/w3M3FovSutiewUwltFbr+5ow1xfe1gqvAPo4frHrZuLfJUf1JfT
+	fgyoVCT5mCB95bFJC5kN67GpVjlEtUGZaGSiwbJwtEOrz9J0QUOdkZS02OJnW8KX7mRAQK+Atsf
+	sk+Wbun7MPAQjEl46J7MlXkIdWImnrfOxTvpVGC2maeqwTMcMn5x6DYxNSy6AURVP7jh4WBzINC
+	xOu91A90LoXsxfZy+73uhEIuAYfz7a3kg==
+X-Google-Smtp-Source: AGHT+IH+w2hB9w50GxzxGlBRwTPS/DAt66aQNsJJcSJh0eSSExp3OpaWYiihvtaGYVhasRRauJvVuomLJpIbicNxMs8=
+X-Received: by 2002:a17:90b:3d07:b0:31f:1a3e:fe31 with SMTP id
+ 98e67ed59e1d1-31f5dde8755mr12579873a91.11.1753978182602; Thu, 31 Jul 2025
+ 09:09:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Audio interface causing "xhci_hcd ... WARN: buffer overrun event"
- messages
-To: Robert Ham <rah@settrans.net>, =?UTF-8?Q?Micha=C5=82_Pecio?=
- <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org
-References: <ba0ebd17-dade-4a97-b696-5ad19ebfca1d@settrans.net>
- <20250731101720.5d10a8f1@foxbook> <20250731102728.503cd612@foxbook>
- <3bbb710c-351d-46ec-a2e4-9ee4d766a750@settrans.net>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <3bbb710c-351d-46ec-a2e4-9ee4d766a750@settrans.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250630141239.3174390-1-akuchynski@chromium.org>
+ <20250630141239.3174390-6-akuchynski@chromium.org> <2025070143-safeness-prewashed-6e9f@gregkh>
+ <CAMMMRMeKyi56Pha-X86BaQwcHGCx-xu5F67HCGZg=Yhxuk==OQ@mail.gmail.com> <CAMMMRMf_qc342=azkU-ceg=f-db2Z9NiONOu1_oRk8tmRL4RGg@mail.gmail.com>
+In-Reply-To: <CAMMMRMf_qc342=azkU-ceg=f-db2Z9NiONOu1_oRk8tmRL4RGg@mail.gmail.com>
+From: Andrei Kuchynski <akuchynski@chromium.org>
+Date: Thu, 31 Jul 2025 18:09:30 +0200
+X-Gm-Features: Ac12FXx94P8Xkhok4AYIXJ8K2qdSo2AVg2OAPp7s8VPn2NpKyCMBWlD2bnynfvo
+Message-ID: <CAMMMRMeYG-bvYSiE7K8AutorvyoiXypHXv_1z62Rvh_JNazd9g@mail.gmail.com>
+Subject: Re: [PATCH v2 05/10] usb: typec: Implement automated mode selection
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
+	Jameson Thies <jthies@google.com>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
+	chrome-platform@lists.linux.dev, Guenter Roeck <groeck@chromium.org>, 
+	Dmitry Baryshkov <lumag@kernel.org>, "Christian A. Ehrhardt" <lk@c--e.de>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 31.7.2025 13.11, Robert Ham wrote:
-> I managed to sort out the tracing and debug output. Updated kernel log
-> and trace:
-> 
-> https://settrans.net/~rah/misc/xhci-kernel-log-2.txt
-> 
-> https://settrans.net/~rah/misc/xhci-kernel-trace-2.txt
-> 
-> 
-> On 31/07/2025 09:27, Michał Pecio wrote:
-> 
->> Can you post "lsusb -v" for this device?
-> 
+On Thu, Jul 24, 2025 at 10:39=E2=80=AFAM Andrei Kuchynski
+<akuchynski@chromium.org> wrote:
+>
+> Proposed sysfs entries for V3:
+>
+> - portN/portN.M/priority, RW.
+> This attribute assigns a unique priority to each mode. If a user
+> attempts to input a value that is already in use, the existing mode at
+> that priority will have its priority incremented by one to accommodate
+> the new input. Users cannot disable a mode via this entry; disabling
+> is handled by `active` for altmodes and `usb_capability` for USB4 mode
+>
+> - portN/mode_priorities, RO.
+> Provides a prioritized list of all available modes for the port,
+> formatted as a space-separated string (e.g., "USB4 TBT DP").
+>
+> - portN-partner/mode_selection, RW.
+> Write: 1/0 to trigger or cancel mode selection.
+> Read:  Provides a prioritized list of all available modes for the
+> partner. Modes currently in progress are indicated by parentheses
+> (e.g., "USB4 (TBT) DP"). Active modes are enclosed in brackets
+> (e.g., "USB4 [TBT] DP").
+>
+> - portN-partner.M/entry_result, RO.
+> Represents a mode state for this altmode, e.g. "none", "active",
+> "in progress", "cable error", "timeout".
+>
+> - portN/usb4_priority, RW.
+> - portN-partner/usb4_entry_result, RO.
+> USB4 mode, not being part of `typec_altmode_group`, introduces
+> additional attributes with the same meaning as alternate modes
+> attributes.
+>
+> Please let me know if you have any questions, require further
+> clarification on these proposed sysfs entries, or have objections to
+> them.
 
-Looks like The lengths and offsets in the URB, passed by audio driver does
-not match the transfer sizes the device reports it will send.
+Regarding the sysfs attributes, Heikki, do you have any suggestions or
+disagreements? Please let me know your thoughts.
 
-The audio device reports its isoc endpoint will send 1000 bytes
-every 125 microseconds:
-(from your lsusb)
+Additionally, for consistency, it would be beneficial to use names
+"DisplayPort" and "Thunderbolt3" since they are already recognized
+within the kernel. Using these full names rather than "DP" and "TBT"
+would be preferable
 
->        Endpoint Descriptor:
->          bLength                 7
->          bDescriptorType         5
->          bEndpointAddress     0x81  EP 1 IN
->          bmAttributes           37
->            Transfer Type            Isochronous
->            Synch Type               Asynchronous
->            Usage Type               Implicit feedback Data
->          wMaxPacketSize     0x03e8  1x 1000 bytes
->          bInterval               1
-
-Trace shows xhci sets up the endpoint correctly,
-expecting 1000 bytes every 125 mictoseconds:
-
-pulseaudio-1435    [000] .....    55.126749: xhci_ring_alloc: ISOC 00000000c42321b6: enq 0x00000002483a2000(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
-pulseaudio-1435    [000] .....    55.126750: xhci_add_endpoint: State disabled mult 1 max P. Streams 0 interval 125 us max ESIT payload 1000 CErr 0 Type Isoc IN burst 0 maxp 1000 deq 00000002483a2001 avg trb len 1000
-
-but the URB queued from class driver to xhci doesn't match this.
-Looks like one URB contains 8 isoc transfers, (one filled every 125us) but URB expects
-only 2880 bytes in total, leading to only 360 bytes per isoc transfer.
-
-I'd take a closer look at the values filled by the audio driver to the
-struct usb_iso_packet_descriptor iso_frame_desc[] array, and number_of_packets
-in the URB
-
-usbmon might show these, don't remember if it shows all isoc related fields
-
-Trace shoes the URB turned into Isoc TRBs of 360 bytes by xhci driver.
-Notice that the Buffer address also increases only by 360 bytes (0x168)
-  
-55.198885: xhci_urb_enqueue: 3-5.1 ep1in-isoc: urb 0000000052d17659 pipe 33920 slot 3 length 0/2880 sgs 0/0 stream 0 flags 00000204
-55.198892: xhci_queue_trb: ISOC: Buffer 0000000104735000 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:c
-55.198892: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2010(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
-55.198894: xhci_queue_trb: ISOC: Buffer 0000000104735168 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
-55.198894: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2020(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
-55.198895: xhci_queue_trb: ISOC: Buffer 00000001047352d0 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
-55.198896: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2030(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
-55.198897: xhci_queue_trb: ISOC: Buffer 0000000104735438 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
-55.198897: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2040(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
-55.198899: xhci_queue_trb: ISOC: Buffer 00000001047355a0 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
-55.198899: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2050(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
-55.198900: xhci_queue_trb: ISOC: Buffer 0000000104735708 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
-55.198900: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2060(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
-55.198901: xhci_queue_trb: ISOC: Buffer 0000000104735870 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
-55.198902: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2070(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
-55.198903: xhci_queue_trb: ISOC: Buffer 00000001047359d8 length 360 TD size 0 intr 0 type 'Isoch' flags b:i:I:c:s:I:e:C
-55.198903: xhci_inc_enq: ISOC 00000000c42321b6: enq 0x00000002483a2080(0x00000002483a2000) deq 0x00000002483a2000(0x00000002483a2000) segs 2 stream 0 bounce 1000 cycle 1
-55.198903: xhci_ring_ep_doorbell: Ring doorbell for Slot 3 ep1in
-
-The audio device probably sends the 1000 bytes per isoc tranfers as it stated, but
-xhci expects 360 bytes, which leads to  buffer overrun errors
-
-55.213952: xhci_handle_event: EVENT: TRB 00000002483a2000 status 'Isoch Buffer Overrun' len 360 slot 3 ep 3 type 'Transfer Event' flags e:C
-55.222154: xhci_handle_transfer: ISOC: Buffer 0000000104735000 length 360 TD size 0 intr 0 type 'Isoch' flags B:i:I:c:s:I:e:C
-
-Thanks
-Mathias
-
+Thanks,
+Andrei
 
