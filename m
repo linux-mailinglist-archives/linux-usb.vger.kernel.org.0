@@ -1,133 +1,133 @@
-Return-Path: <linux-usb+bounces-26283-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26284-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 299AFB16BE9
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 08:11:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80431B16D4E
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 10:17:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 828C01AA5ECC
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 06:12:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C9393B0BE9
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 08:17:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DDE8245007;
-	Thu, 31 Jul 2025 06:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDCFF1F1505;
+	Thu, 31 Jul 2025 08:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iKeb3qE/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B0TP1DaA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04C33241691;
-	Thu, 31 Jul 2025 06:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4BA82AE74
+	for <linux-usb@vger.kernel.org>; Thu, 31 Jul 2025 08:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753942296; cv=none; b=YF5TPCC8x/catTplCl9dMwKpRPvAm1tY4P5zoWJT6wgAks00QnUXeAbIYUFUxaDN7+fjoiXYvjveFw1yLZtuPg/v5FhiDzlM17083eim5oFswF9ZUTkuh6pbik4GYKPmJbYgyQuxwfAbrarsh7M7dsnb4EcCygE8LtifWELBG9c=
+	t=1753949848; cv=none; b=cpHvwZhXAJGqaVOEAoiOVJ81oLQb0fBz6Hmc6Qiuisjt9LL19rdKWRR3wy6YITbB8qbjYSUYeTujnEaG81e6Yijp1mGWopZQht3V6P+Pfoy0qr88AFNRr4d3Fx/5TK969AbhtwxXM2aZ6JSzX0CNQmjZhVw5Jfe/b/ScYNhozKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753942296; c=relaxed/simple;
-	bh=t4CO3DrNqAlxgKHhJ3MEDw+KhIrq7qagVN6YFpKyqV8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ui7djsKPXQt1ix/WG9tiFz2D2jkacInI4mDFLWhvbgIzp9WvS3C/sBcoBd+14TYUz+n/5z4XN7Y7AIzY5SpEtvjPhPnKZsq8ANKGboLV0WRmILvhaOm02XMEBfUWFzUQsP6n13wEj3OZ4HA3e+FeDzOIDzHD74abHqX4MZ2eqE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iKeb3qE/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66006C4CEEF;
-	Thu, 31 Jul 2025 06:11:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753942294;
-	bh=t4CO3DrNqAlxgKHhJ3MEDw+KhIrq7qagVN6YFpKyqV8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iKeb3qE/NGjrfXkvmSNpLj09Wbns7DNR/4TTUWTa7mOCm+osj6JBpYNbXJN8LeHDt
-	 zbyCbtYAhfUOAxOh0xU2mM0HKbGQMyCDqYPHoc6BeXn2y0x7tOio3ZBMSUROaUa72A
-	 h9+L06woyxrQ3sze9/BjfERiugzPz0BsCTmcMc/99Hd/v7w/qlOV4jzNsNmRoVbwJg
-	 r1tmJl3QkHLm5zXG0ftJkNKDhwiMZij+UI4SCzx32+bVUo/D0q2RTpfE7DNQP5q5Aq
-	 tYujtURnf0htTZ2pyX2AQ9hXTC0gLHdmp7QsqVwxpOVq5DKFDJLFia5jY3cbxDqaVH
-	 CCAZuRvHcV2Xw==
-Message-ID: <17f9763b-7ae5-4429-ab16-058eddf9c79c@kernel.org>
-Date: Thu, 31 Jul 2025 08:11:29 +0200
+	s=arc-20240116; t=1753949848; c=relaxed/simple;
+	bh=MlphjwG77RXL9WZytaR/6zWxmgDVa4lylltMB/4KFjE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FAs5lPomrHPkrb9bdQSYxct5Da1ILYzprKrmPBIx4EjkOzPa/JDojsEZoqYCBhbkl24+skyroPIWLC/eTF6Emo6ODFON2+Y0N+EjcRIfoRqTXqqoszKSNaSuBT90aSW/laT0zV2/t1nD/JK1UosBD1xDLAFGatkD2mODzN8zpiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B0TP1DaA; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6154d14d6b7so636171a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 31 Jul 2025 01:17:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753949845; x=1754554645; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=soyS07b6jqk3SyO6J6z0IHIOEdqOIHxHX/A0CTU5FxM=;
+        b=B0TP1DaA+u3JjlkbHIwk1t4KjMI5VcBDMbqpYz3mOi9e8E6nOClje0XLmItPg0VK2u
+         hhkkW89PXvtEd/jooxWBrYL1brdKd+zRBpbLTk8/U0Rb8yBHAtGKI3DWvuBOvOnlPqhy
+         RQB6zp3Mz0Z0OYUb5jubus4Bm4yKkP6HkjU3kbJ1K+FFn9/g0GB/f3bwUXCGYunMphOd
+         OYAAHMog2BVoRszWp1IKEimjzi+isrWY8Qr7F51PMphcoji+2VfChO/ddfQqRIjM+jP/
+         djXSCq97ZA0tsj3eaLrTnwGLPIdcjPM5kVANLnAphXFe5yAnVJsk2aoG+tbKGqCflfFw
+         zBeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753949845; x=1754554645;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=soyS07b6jqk3SyO6J6z0IHIOEdqOIHxHX/A0CTU5FxM=;
+        b=wQFdC8O2Qv0ATw25PexLYqgcRRkecLg8vp7cFxU6vC0RBIOUiD6bKftg+8DzJaHTNF
+         eOtpyAI3hWuoQV6H9IXlD1CMS3xY2VnujEI2bLhsZ6KInTtwH4cNGQvB9KBqyFy+9+/f
+         kJsPRojeCCZV7zXqgnAqhJKwOQLGli30qsWPmpwTblXK0Uo8/VS3BVFhhjLrDnVWOijw
+         jN+TbbL6xD9w6nLKoxwgCEZctidCsXSyzvxCDkP2gtjxVbsk53bdPw9MSgHgcH60OwP4
+         gR/LmrMHJu4Q5XIpeeoxx9FqqT4oX+7lrSb+QJ1ozWaRTHJ48I0wSmgOzqMulFkTcXQn
+         cHVg==
+X-Gm-Message-State: AOJu0YxUWTOLCNifiUgiTLR1UkPnSQNyjS/1jVCIhphNQiAqniBOPcJA
+	T7R47oTDyQ39O+W09Xg3umzd1qgVFJD3SgRR+JU2n5E1xnJNqAVp3Q/xgriTMw==
+X-Gm-Gg: ASbGnctbdPjSXq5/R87yR7udRuzD22CVMoZcyoFF11plHzKK5JA2qbO8/e331DsIa74
+	NKW3YpKO6N1SpU/7ecNuzX5mYNOPZkRp7COmEo+tTvxRQEpGz9CyErze4+iJ3bSgW/SIV3jZMc9
+	Iajqr2ciRn/0ZLXi6B97Ztu6h9BsDPwEQ/RvO82nkk9WI6vNHfOqSdYFASu+MXxYMC6xiO1yddO
+	LF9XCaLp3OWdjgQFqGiImVTXdhqfh/tEafnNDNHWJsv5Jj9zzzLRDd6InVYll6YEurnm2vgDk6T
+	ZGVy4YmpehjC15+ALcHeNfjoqKzB6lQv3/CRyzvEZf1NY3lOGCRZLAm6WebdZSeGeWD4+Mzo3OD
+	iq1NshYzLubdcCnbN1kiE8DBjyh118i0znWQ67QQTEAX0GJQfASD1dOqG
+X-Google-Smtp-Source: AGHT+IEGo1nEGSGyXWeOpnxXbgy7A36hTtpmmlhU6M47/ij+2hY+CMWEXpoUYso7GW5nJHdxXl3nwg==
+X-Received: by 2002:a17:906:9f86:b0:aec:5a33:1549 with SMTP id a640c23a62f3a-af8fd9c2024mr720949066b.40.1753949844922;
+        Thu, 31 Jul 2025 01:17:24 -0700 (PDT)
+Received: from foxbook (bfk202.neoplus.adsl.tpnet.pl. [83.28.48.202])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a219ef2sm70887866b.96.2025.07.31.01.17.23
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Thu, 31 Jul 2025 01:17:24 -0700 (PDT)
+Date: Thu, 31 Jul 2025 10:17:20 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Bob Ham <rah@settrans.net>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: Audio interface causing "xhci_hcd ... WARN: buffer overrun
+ event" messages
+Message-ID: <20250731101720.5d10a8f1@foxbook>
+In-Reply-To: <ba0ebd17-dade-4a97-b696-5ad19ebfca1d@settrans.net>
+References: <ba0ebd17-dade-4a97-b696-5ad19ebfca1d@settrans.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Eswin EIC7700 USB controller
-To: zhangsenchuan <zhangsenchuan@eswincomputing.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- Thinh.Nguyen@synopsys.com, p.zabel@pengutronix.de,
- ningyu@eswincomputing.com, linmin@eswincomputing.com,
- yangwei1@eswincomputing.com, pinkesh.vaghela@einfochips.com
-References: <20250730073953.1623-1-zhangsenchuan@eswincomputing.com>
- <20250730074058.2004-1-zhangsenchuan@eswincomputing.com>
- <51648c0f-dd30-4a07-83c0-533a57c29e63@kernel.org>
- <1f9a715d.3bb7.1985ef71b54.Coremail.zhangsenchuan@eswincomputing.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <1f9a715d.3bb7.1985ef71b54.Coremail.zhangsenchuan@eswincomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 31/07/2025 07:31, zhangsenchuan wrote:
->>
->>> +            #address-cells = <2>;
->>> +            #size-cells = <2>;
->>> +
->>> +            usb@50480000 {
->>> +                compatible = "snps,dwc3";
->>> +                reg = <0x0 0x50480000 0x0 0x10000>;
->>
->> Nothing improved and you did not respond to the feedback.
+Hi,
+
+The 6.12 kernel series is half year old, so this may be unique to your
+hardware. Can you try other (ideally similar) UAC devices in the same
+USB port, or this device with different xHCI (or EHCI) controllers?
+
+On Wed, 30 Jul 2025 21:02:24 +0100, Bob Ham wrote:
+> I'm trying to get an Arturia AudioFuse 16Rig audio interface working
+> under Linux.  During loading of snd-usb-audio and when trying to play
+> through the interface, the kernel spews a whole bunch of messages
+> like so:
 > 
-> I'm very sorry that I haven't given you any feedback here. I'm not quite clear about what you mean by feedback.
-> In v1 patch, you mentioned "Fold the child node into the parent"，could you please tell me what's the exact
-> meaning of this comment?
-It means you should not have separate child for dwc3, but only one node
-in total.
+> [ 1667.208402] xhci_hcd 0000:00:14.0: WARN: buffer overrun event for
+> slot 3 ep 2 on endpoint
+> [ 1667.216585] xhci_hcd 0000:00:14.0: WARN: buffer overrun event for
+> slot 3 ep 2 on endpoint
+> [ 1667.224778] xhci_hcd 0000:00:14.0: WARN: buffer overrun event for
+> slot 3 ep 2 on endpoint
 
-Best regards,
-Krzysztof
+"ep 2" means "ep index 2", which is USB endpoint 0x81 aka EP 1 IN.
+So this is caused by recording, or maybe by playback while recording,
+but not by playback alone.
+
+At face value, "buffer overrun" means that the device sends a packet
+which doesn't exceed the endpoint's limit (that would be babble), but
+exceeds the data buffer submitted by the UAC driver. In the snippet
+above, it seems to be happening regularly every 65 USB microframes.
+
+It could be a UAC issue, or it could still be an xHCI issue if buffer
+size is miscommunicated to the hardware or misunderstood by it.
+
+Can you mount debugfs and see if you can find the directory below? It
+would tell if there is anything unusual about those 1 in 65 buffers.
+
+/sys/kernel/debug/usb/xhci/0000:00:14.0/
+
+
+Regards,
+Michal
+
 
