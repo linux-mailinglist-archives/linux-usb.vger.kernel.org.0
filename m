@@ -1,728 +1,522 @@
-Return-Path: <linux-usb+bounces-26289-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26290-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87953B16F38
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 12:11:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 829D9B170D1
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 13:58:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A77171AA1099
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 10:12:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A86101795BA
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Jul 2025 11:58:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C153529DB80;
-	Thu, 31 Jul 2025 10:11:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFF792C08AD;
+	Thu, 31 Jul 2025 11:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TNuA1Pbm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from verain.settrans.net (verain.settrans.net [93.93.131.233])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26D129827E
-	for <linux-usb@vger.kernel.org>; Thu, 31 Jul 2025 10:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22FF230BE0
+	for <linux-usb@vger.kernel.org>; Thu, 31 Jul 2025 11:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753956704; cv=none; b=hIuYEdfjp+6KyDcjPEM4BCdpb307p1rDfL72dyeri61pfEpAHWVHjTuSLCN8JOW+ToUjrVLk/RTkxu07ZzSpYkgihAFmzWwP8RTlat7264ZCysKc3GVZMLcEHbi4OMU1NoTco1ASCPNC1qEPiPlIzHGTPT6DO5ZMlr/V1W45hcs=
+	t=1753963129; cv=none; b=Hdi78PjqJFPOAnX2re49rCx/mhyX2MkuixmAVVEKEKxIk2mol3h+vFeeMjch01lgTd3X/mx/6MlyOlY2ReKf+M6ZGcxy7q/FkosKvL7l95g3FcB+7OsAO6HYDcYQ2QwQh5U5UYYrhomaCEAwW6IcWPlFsUPW4wGGS89WTx+vsy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753956704; c=relaxed/simple;
-	bh=cBGo6ZJBaJVq1Vc87niac7TETjEoHPeYNncdMlaI5Mk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IoI16aiNst+teHsdUPCs3QnT/8hmqVNW6Mpwk9hzeRL1gIL+yu6nqg1dRs+3nbiUX4UT/DXPTKfXMkHfl+tzF1x7cj3TJYTr8mM55ZHj20Ew1K9xkIILjg0ossBXG9EcCJ0lQfq6W9OPBUTzAeGeklYvCvkvv/6YbtMv4G4AbWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=settrans.net; spf=pass smtp.mailfrom=settrans.net; arc=none smtp.client-ip=93.93.131.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=settrans.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=settrans.net
-Received: from [193.187.128.66] (helo=[172.24.1.6])
-	by verain.settrans.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.94)
-	(envelope-from <rah@settrans.net>)
-	id 1uhQGB-0005e1-Hk; Thu, 31 Jul 2025 11:11:39 +0100
-Message-ID: <3bbb710c-351d-46ec-a2e4-9ee4d766a750@settrans.net>
-Date: Thu, 31 Jul 2025 11:11:34 +0100
+	s=arc-20240116; t=1753963129; c=relaxed/simple;
+	bh=tNoXWwvWQbqlFtYXzrT1UZX3GrjrrW8QenY36N0vl90=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OuNhKaQjLEg/Ql6k0Tt/u9/hBHCMNQVM8A2rMLyLYjlNe/YG+uQwGikElU608RRS0LUE38T2F7/06Vffwt2hzp6XpjvlM6iAVsRH7qfW+jn/hnAQXMlOUHDWH6TIHXqFMsyYK27Uz/A6uNjjvBnyM4vUyKsy0fHwU9rBEOiBpGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TNuA1Pbm; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753963125; x=1785499125;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tNoXWwvWQbqlFtYXzrT1UZX3GrjrrW8QenY36N0vl90=;
+  b=TNuA1Pbms9oDtTQ6QOB9k8IimZO2AqKnLecitQDBOjj+x7FUVN5c3Bmo
+   qSBYH9srufyue+ny2hn5/ZrVomftWXwwqn0oqcyMDgd0KNrQtA9iyCOv2
+   7gs3IhP5KFH/lZ57BsJx0lXeJf/cNlV3xcX7YTv+oge/LtjTGOR4OD/BB
+   9vd1GoXTTaqGM34MotiSeuriFlsJDe6/hfMjwc9YSPBYHLa+MevTZ0kvb
+   9wAN0ImQYdlSUlVPXuaVkpKkL+NsRk+NAhB6/CVgESqe06fc454B5eo11
+   wwxZChZrDofgiTdNQyclJ0HSyEre9rXmHzemELRodA9BPgBvDGAdz+g4v
+   A==;
+X-CSE-ConnectionGUID: LxAhPMn/QhKt+eiRjoTubQ==
+X-CSE-MsgGUID: BAGsvZngQVyRVvalkap1LA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56149539"
+X-IronPort-AV: E=Sophos;i="6.17,353,1747724400"; 
+   d="scan'208";a="56149539"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2025 04:58:45 -0700
+X-CSE-ConnectionGUID: h8B0eOTjSPiYILRaospTeQ==
+X-CSE-MsgGUID: u1o93U89S3mUPnFxhiwPyw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,353,1747724400"; 
+   d="scan'208";a="167492742"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 31 Jul 2025 04:58:43 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uhRvk-0003k4-12;
+	Thu, 31 Jul 2025 11:58:40 +0000
+Date: Thu, 31 Jul 2025 19:58:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Li Jun <lijun01@kylinos.cn>, gregkh@linuxfoundation.org,
+	mingo@kernel.org, tglx@linutronix.de, nathan@kernel.org,
+	n.zhandarovich@fintech.ru, linux-usb@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] usb: atm: Fix kernel coding style
+Message-ID: <202507311928.0ny4leMQ-lkp@intel.com>
+References: <20250731014134.535119-1-lijun01@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Audio interface causing "xhci_hcd ... WARN: buffer overrun event"
- messages
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org
-References: <ba0ebd17-dade-4a97-b696-5ad19ebfca1d@settrans.net>
- <20250731101720.5d10a8f1@foxbook> <20250731102728.503cd612@foxbook>
-Content-Language: en-GB
-From: Robert Ham <rah@settrans.net>
-In-Reply-To: <20250731102728.503cd612@foxbook>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------wWwfTSW7CDgpfN6pR0lEYPWP"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250731014134.535119-1-lijun01@kylinos.cn>
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------wWwfTSW7CDgpfN6pR0lEYPWP
-Content-Type: multipart/mixed; boundary="------------ikVCtekKyBNqyoNuScXc93dX";
- protected-headers="v1"
-From: Robert Ham <rah@settrans.net>
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Message-ID: <3bbb710c-351d-46ec-a2e4-9ee4d766a750@settrans.net>
-Subject: Re: Audio interface causing "xhci_hcd ... WARN: buffer overrun event"
- messages
-References: <ba0ebd17-dade-4a97-b696-5ad19ebfca1d@settrans.net>
- <20250731101720.5d10a8f1@foxbook> <20250731102728.503cd612@foxbook>
-In-Reply-To: <20250731102728.503cd612@foxbook>
+Hi Li,
 
---------------ikVCtekKyBNqyoNuScXc93dX
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build errors:
 
-I managed to sort out the tracing and debug output. Updated kernel log
-and trace:
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.16 next-20250731]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-https://settrans.net/~rah/misc/xhci-kernel-log-2.txt
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Jun/usb-atm-Fix-kernel-coding-style/20250731-094241
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250731014134.535119-1-lijun01%40kylinos.cn
+patch subject: [PATCH] usb: atm: Fix kernel coding style
+config: i386-buildonly-randconfig-003-20250731 (https://download.01.org/0day-ci/archive/20250731/202507311928.0ny4leMQ-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250731/202507311928.0ny4leMQ-lkp@intel.com/reproduce)
 
-https://settrans.net/~rah/misc/xhci-kernel-trace-2.txt
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507311928.0ny4leMQ-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-On 31/07/2025 09:27, Micha=C5=82 Pecio wrote:
-
-> Can you post "lsusb -v" for this device?
-
-Bus 003 Device 004: ID 1c75:af20 Arturia AF16Rig Audio
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x1c75 Arturia
-  idProduct          0xaf20
-  bcdDevice            2.01
-  iManufacturer           1 ARTURIA
-  iProduct                3 AF16Rig Audio
-  iSerial                 2 8850400254010429
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x02e2
-    bNumInterfaces          4
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0xc0
-      Self Powered
-    MaxPower                0mA
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         0
-      bInterfaceCount         3
-      bFunctionClass          1 Audio
-      bFunctionSubClass       0
-      bFunctionProtocol      32
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      1 Control Device
-      bInterfaceProtocol     32
-      iInterface              3
-      AudioControl Interface Descriptor:
-        bLength                 9
-        bDescriptorType        36
-        bDescriptorSubtype      1 (HEADER)
-        bcdADC               2.00
-        bCategory               8
-        wTotalLength       0x0190
-        bmControls           0x00
-      AudioControl Interface Descriptor:
-        bLength                 8
-        bDescriptorType        36
-        bDescriptorSubtype     10 (CLOCK_SOURCE)
-        bClockID               41
-        bmAttributes            3 Internal programmable clock
-        bmControls           0x07
-          Clock Frequency Control (read/write)
-          Clock Validity Control (read-only)
-        bAssocTerminal          0
-        iClockSource            9
-      AudioControl Interface Descriptor:
-        bLength                 8
-        bDescriptorType        36
-        bDescriptorSubtype     10 (CLOCK_SOURCE)
-        bClockID               43
-        bmAttributes            0 External clock
-        bmControls           0x07
-          Clock Frequency Control (read/write)
-          Clock Validity Control (read-only)
-        bAssocTerminal          0
-        iClockSource           10
-      AudioControl Interface Descriptor:
-        bLength                 8
-        bDescriptorType        36
-        bDescriptorSubtype     10 (CLOCK_SOURCE)
-        bClockID               44
-        bmAttributes            0 External clock
-        bmControls           0x07
-          Clock Frequency Control (read/write)
-          Clock Validity Control (read-only)
-        bAssocTerminal          0
-        iClockSource           11
-      AudioControl Interface Descriptor:
-        bLength                10
-        bDescriptorType        36
-        bDescriptorSubtype     11 (CLOCK_SELECTOR)
-        bClockID               40
-        bNrInPins               3
-        baCSourceID(0)         41
-        baCSourceID(1)         43
-        baCSourceID(2)         44
-        bmControls           0x03
-          Clock Selector Control (read/write)
-        iClockSelector          8
-      AudioControl Interface Descriptor:
-        bLength                17
-        bDescriptorType        36
-        bDescriptorSubtype      2 (INPUT_TERMINAL)
-        bTerminalID             2
-        wTerminalType      0x0101 USB Streaming
-        bAssocTerminal          0
-        bCSourceID             40
-        bNrChannels            34
-        bmChannelConfig    0x00000000
-        iChannelNames          13
-        bmControls         0x0000
-        iTerminal               6
-      AudioControl Interface Descriptor:
-        bLength               146
-        bDescriptorType        36
-        bDescriptorSubtype      6 (FEATURE_UNIT)
-        bUnitID                12
-        bSourceID               2
-        bmaControls(0)    0x00000000
-        bmaControls(1)    0x00000000
-        bmaControls(2)    0x00000000
-        bmaControls(3)    0x00000000
-        bmaControls(4)    0x00000000
-        bmaControls(5)    0x00000000
-        bmaControls(6)    0x00000000
-        bmaControls(7)    0x00000000
-        bmaControls(8)    0x00000000
-        bmaControls(9)    0x00000000
-        bmaControls(10)    0x00000000
-        bmaControls(11)    0x00000000
-        bmaControls(12)    0x00000000
-        bmaControls(13)    0x00000000
-        bmaControls(14)    0x00000000
-        bmaControls(15)    0x00000000
-        bmaControls(16)    0x00000000
-        bmaControls(17)    0x00000000
-        bmaControls(18)    0x00000000
-        bmaControls(19)    0x00000000
-        bmaControls(20)    0x00000000
-        bmaControls(21)    0x00000000
-        bmaControls(22)    0x00000000
-        bmaControls(23)    0x00000000
-        bmaControls(24)    0x00000000
-        bmaControls(25)    0x00000000
-        bmaControls(26)    0x00000000
-        bmaControls(27)    0x00000000
-        bmaControls(28)    0x00000000
-        bmaControls(29)    0x00000000
-        bmaControls(30)    0x00000000
-        bmaControls(31)    0x00000000
-        bmaControls(32)    0x00000000
-        bmaControls(33)    0x00000000
-        bmaControls(34)    0x00000000
-        iFeature                0
-      AudioControl Interface Descriptor:
-        bLength                12
-        bDescriptorType        36
-        bDescriptorSubtype      3 (OUTPUT_TERMINAL)
-        bTerminalID            20
-        wTerminalType      0x0301 Speaker
-        bAssocTerminal          0
-        bSourceID              12
-        bCSourceID             40
-        bmControls         0x0000
-        iTerminal               0
-      AudioControl Interface Descriptor:
-        bLength                17
-        bDescriptorType        36
-        bDescriptorSubtype      2 (INPUT_TERMINAL)
-        bTerminalID             1
-        wTerminalType      0x0201 Microphone
-        bAssocTerminal          0
-        bCSourceID             40
-        bNrChannels            34
-        bmChannelConfig    0x00000000
-        iChannelNames          47
-        bmControls         0x0000
-        iTerminal               0
-      AudioControl Interface Descriptor:
-        bLength               146
-        bDescriptorType        36
-        bDescriptorSubtype      6 (FEATURE_UNIT)
-        bUnitID                11
-        bSourceID               1
-        bmaControls(0)    0x00000000
-        bmaControls(1)    0x00000000
-        bmaControls(2)    0x00000000
-        bmaControls(3)    0x00000000
-        bmaControls(4)    0x00000000
-        bmaControls(5)    0x00000000
-        bmaControls(6)    0x00000000
-        bmaControls(7)    0x00000000
-        bmaControls(8)    0x00000000
-        bmaControls(9)    0x00000000
-        bmaControls(10)    0x00000000
-        bmaControls(11)    0x00000000
-        bmaControls(12)    0x00000000
-        bmaControls(13)    0x00000000
-        bmaControls(14)    0x00000000
-        bmaControls(15)    0x00000000
-        bmaControls(16)    0x00000000
-        bmaControls(17)    0x00000000
-        bmaControls(18)    0x00000000
-        bmaControls(19)    0x00000000
-        bmaControls(20)    0x00000000
-        bmaControls(21)    0x00000000
-        bmaControls(22)    0x00000000
-        bmaControls(23)    0x00000000
-        bmaControls(24)    0x00000000
-        bmaControls(25)    0x00000000
-        bmaControls(26)    0x00000000
-        bmaControls(27)    0x00000000
-        bmaControls(28)    0x00000000
-        bmaControls(29)    0x00000000
-        bmaControls(30)    0x00000000
-        bmaControls(31)    0x00000000
-        bmaControls(32)    0x00000000
-        bmaControls(33)    0x00000000
-        bmaControls(34)    0x00000000
-        iFeature                0
-      AudioControl Interface Descriptor:
-        bLength                12
-        bDescriptorType        36
-        bDescriptorSubtype      3 (OUTPUT_TERMINAL)
-        bTerminalID            22
-        wTerminalType      0x0101 USB Streaming
-        bAssocTerminal          0
-        bSourceID              11
-        bCSourceID             40
-        bmControls         0x0000
-        iTerminal               7
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0006  1x 6 bytes
-        bInterval               8
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol     32
-      iInterface              4
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       1
-      bNumEndpoints           1
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol     32
-      iInterface              4
-      AudioStreaming Interface Descriptor:
-        bLength                16
-        bDescriptorType        36
-        bDescriptorSubtype      1 (AS_GENERAL)
-        bTerminalLink           2
-        bmControls           0x05
-          Active Alternate Setting Control (read-only)
-          Valid Alternate Setting Control (read-only)
-        bFormatType             1
-        bmFormats          0x00000001
-          PCM
-        bNrChannels            34
-        bmChannelConfig    0x00000000
-        iChannelNames          13
-      AudioStreaming Interface Descriptor:
-        bLength                 6
-        bDescriptorType        36
-        bDescriptorSubtype      2 (FORMAT_TYPE)
-        bFormatType             1 (FORMAT_TYPE_I)
-        bSubslotSize            4
-        bBitResolution         24
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            5
-          Transfer Type            Isochronous
-          Synch Type               Asynchronous
-          Usage Type               Data
-        wMaxPacketSize     0x03b8  1x 952 bytes
-        bInterval               1
-        AudioStreaming Endpoint Descriptor:
-          bLength                 8
-          bDescriptorType        37
-          bDescriptorSubtype      1 (EP_GENERAL)
-          bmAttributes         0x00
-          bmControls           0x00
-          bLockDelayUnits         1 Milliseconds
-          wLockDelay         0x0200
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       2
-      bNumEndpoints           1
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol     32
-      iInterface              4
-      AudioStreaming Interface Descriptor:
-        bLength                16
-        bDescriptorType        36
-        bDescriptorSubtype      1 (AS_GENERAL)
-        bTerminalLink           2
-        bmControls           0x05
-          Active Alternate Setting Control (read-only)
-          Valid Alternate Setting Control (read-only)
-        bFormatType             1
-        bmFormats          0x00000001
-          PCM
-        bNrChannels            18
-        bmChannelConfig    0x00000000
-        iChannelNames          13
-      AudioStreaming Interface Descriptor:
-        bLength                 6
-        bDescriptorType        36
-        bDescriptorSubtype      2 (FORMAT_TYPE)
-        bFormatType             1 (FORMAT_TYPE_I)
-        bSubslotSize            4
-        bBitResolution         24
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            5
-          Transfer Type            Isochronous
-          Synch Type               Asynchronous
-          Usage Type               Data
-        wMaxPacketSize     0x03a8  1x 936 bytes
-        bInterval               1
-        AudioStreaming Endpoint Descriptor:
-          bLength                 8
-          bDescriptorType        37
-          bDescriptorSubtype      1 (EP_GENERAL)
-          bmAttributes         0x00
-          bmControls           0x00
-          bLockDelayUnits         1 Milliseconds
-          wLockDelay         0x0200
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       3
-      bNumEndpoints           1
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol     32
-      iInterface              4
-      AudioStreaming Interface Descriptor:
-        bLength                16
-        bDescriptorType        36
-        bDescriptorSubtype      1 (AS_GENERAL)
-        bTerminalLink           2
-        bmControls           0x05
-          Active Alternate Setting Control (read-only)
-          Valid Alternate Setting Control (read-only)
-        bFormatType             1
-        bmFormats          0x00000001
-          PCM
-        bNrChannels            10
-        bmChannelConfig    0x00000000
-        iChannelNames          13
-      AudioStreaming Interface Descriptor:
-        bLength                 6
-        bDescriptorType        36
-        bDescriptorSubtype      2 (FORMAT_TYPE)
-        bFormatType             1 (FORMAT_TYPE_I)
-        bSubslotSize            4
-        bBitResolution         24
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            5
-          Transfer Type            Isochronous
-          Synch Type               Asynchronous
-          Usage Type               Data
-        wMaxPacketSize     0x03e8  1x 1000 bytes
-        bInterval               1
-        AudioStreaming Endpoint Descriptor:
-          bLength                 8
-          bDescriptorType        37
-          bDescriptorSubtype      1 (EP_GENERAL)
-          bmAttributes         0x00
-          bmControls           0x00
-          bLockDelayUnits         1 Milliseconds
-          wLockDelay         0x0200
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol     32
-      iInterface              5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       1
-      bNumEndpoints           1
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol     32
-      iInterface              5
-      AudioStreaming Interface Descriptor:
-        bLength                16
-        bDescriptorType        36
-        bDescriptorSubtype      1 (AS_GENERAL)
-        bTerminalLink          22
-        bmControls           0x05
-          Active Alternate Setting Control (read-only)
-          Valid Alternate Setting Control (read-only)
-        bFormatType             1
-        bmFormats          0x00000001
-          PCM
-        bNrChannels            34
-        bmChannelConfig    0x00000000
-        iChannelNames          47
-      AudioStreaming Interface Descriptor:
-        bLength                 6
-        bDescriptorType        36
-        bDescriptorSubtype      2 (FORMAT_TYPE)
-        bFormatType             1 (FORMAT_TYPE_I)
-        bSubslotSize            4
-        bBitResolution         24
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes           37
-          Transfer Type            Isochronous
-          Synch Type               Asynchronous
-          Usage Type               Implicit feedback Data
-        wMaxPacketSize     0x03b8  1x 952 bytes
-        bInterval               1
-        AudioStreaming Endpoint Descriptor:
-          bLength                 8
-          bDescriptorType        37
-          bDescriptorSubtype      1 (EP_GENERAL)
-          bmAttributes         0x00
-          bmControls           0x00
-          bLockDelayUnits         1 Milliseconds
-          wLockDelay         0x0200
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       2
-      bNumEndpoints           1
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol     32
-      iInterface              5
-      AudioStreaming Interface Descriptor:
-        bLength                16
-        bDescriptorType        36
-        bDescriptorSubtype      1 (AS_GENERAL)
-        bTerminalLink          22
-        bmControls           0x05
-          Active Alternate Setting Control (read-only)
-          Valid Alternate Setting Control (read-only)
-        bFormatType             1
-        bmFormats          0x00000001
-          PCM
-        bNrChannels            18
-        bmChannelConfig    0x00000000
-        iChannelNames          47
-      AudioStreaming Interface Descriptor:
-        bLength                 6
-        bDescriptorType        36
-        bDescriptorSubtype      2 (FORMAT_TYPE)
-        bFormatType             1 (FORMAT_TYPE_I)
-        bSubslotSize            4
-        bBitResolution         24
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes           37
-          Transfer Type            Isochronous
-          Synch Type               Asynchronous
-          Usage Type               Implicit feedback Data
-        wMaxPacketSize     0x03a8  1x 936 bytes
-        bInterval               1
-        AudioStreaming Endpoint Descriptor:
-          bLength                 8
-          bDescriptorType        37
-          bDescriptorSubtype      1 (EP_GENERAL)
-          bmAttributes         0x00
-          bmControls           0x00
-          bLockDelayUnits         1 Milliseconds
-          wLockDelay         0x0200
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       3
-      bNumEndpoints           1
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol     32
-      iInterface              5
-      AudioStreaming Interface Descriptor:
-        bLength                16
-        bDescriptorType        36
-        bDescriptorSubtype      1 (AS_GENERAL)
-        bTerminalLink          22
-        bmControls           0x05
-          Active Alternate Setting Control (read-only)
-          Valid Alternate Setting Control (read-only)
-        bFormatType             1
-        bmFormats          0x00000001
-          PCM
-        bNrChannels            10
-        bmChannelConfig    0x00000000
-        iChannelNames          47
-      AudioStreaming Interface Descriptor:
-        bLength                 6
-        bDescriptorType        36
-        bDescriptorSubtype      2 (FORMAT_TYPE)
-        bFormatType             1 (FORMAT_TYPE_I)
-        bSubslotSize            4
-        bBitResolution         24
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes           37
-          Transfer Type            Isochronous
-          Synch Type               Asynchronous
-          Usage Type               Implicit feedback Data
-        wMaxPacketSize     0x03e8  1x 1000 bytes
-        bInterval               1
-        AudioStreaming Endpoint Descriptor:
-          bLength                 8
-          bDescriptorType        37
-          bDescriptorSubtype      1 (EP_GENERAL)
-          bmAttributes         0x00
-          bmControls           0x00
-          bLockDelayUnits         1 Milliseconds
-          wLockDelay         0x0200
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass       254 Application Specific Interface
-      bInterfaceSubClass      1 Device Firmware Update
-      bInterfaceProtocol      1
-      iInterface             12
-      Device Firmware Upgrade Interface Descriptor:
-        bLength                             9
-        bDescriptorType                    33
-        bmAttributes                        7
-          Will Not Detach
-          Manifestation Tolerant
-          Upload Supported
-          Download Supported
-        wDetachTimeout                    250 milliseconds
-        wTransferSize                      64 bytes
-        bcdDFUVersion                   1.10
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:511:35: note: expanded from macro 'CXACRU_ALL_FILES'
+     511 | #define CXACRU_ALL_FILES(_action) \
+         |                                   ^
+   <scratch space>:27:1: note: expanded from here
+      27 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:511:35: note: expanded from macro 'CXACRU_ALL_FILES'
+     511 | #define CXACRU_ALL_FILES(_action) \
+         |                                   ^
+   <scratch space>:27:1: note: expanded from here
+      27 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:511:35: note: expanded from macro 'CXACRU_ALL_FILES'
+     511 | #define CXACRU_ALL_FILES(_action) \
+         |                                   ^
+   <scratch space>:27:1: note: expanded from here
+      27 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:512:80: note: expanded from macro 'CXACRU_ALL_FILES'
+     512 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_RATE,           u32,  downstream_rate); \
+         |                                                                                ^
+   <scratch space>:37:1: note: expanded from here
+      37 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:512:80: note: expanded from macro 'CXACRU_ALL_FILES'
+     512 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_RATE,           u32,  downstream_rate); \
+         |                                                                                ^
+   <scratch space>:37:1: note: expanded from here
+      37 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:512:80: note: expanded from macro 'CXACRU_ALL_FILES'
+     512 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_RATE,           u32,  downstream_rate); \
+         |                                                                                ^
+   <scratch space>:37:1: note: expanded from here
+      37 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:513:78: note: expanded from macro 'CXACRU_ALL_FILES'
+     513 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_RATE,             u32,  upstream_rate); \
+         |                                                                              ^
+   <scratch space>:47:1: note: expanded from here
+      47 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:513:78: note: expanded from macro 'CXACRU_ALL_FILES'
+     513 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_RATE,             u32,  upstream_rate); \
+         |                                                                              ^
+   <scratch space>:47:1: note: expanded from here
+      47 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:513:78: note: expanded from macro 'CXACRU_ALL_FILES'
+     513 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_RATE,             u32,  upstream_rate); \
+         |                                                                              ^
+   <scratch space>:47:1: note: expanded from here
+      47 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:514:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     514 | CXACRU_ATTR_##_action(CXINF_LINK_STATUS,               LINK, link_status); \
+         |                                                                            ^
+   <scratch space>:57:1: note: expanded from here
+      57 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:514:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     514 | CXACRU_ATTR_##_action(CXINF_LINK_STATUS,               LINK, link_status); \
+         |                                                                            ^
+   <scratch space>:57:1: note: expanded from here
+      57 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:514:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     514 | CXACRU_ATTR_##_action(CXINF_LINK_STATUS,               LINK, link_status); \
+         |                                                                            ^
+   <scratch space>:57:1: note: expanded from here
+      57 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:515:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     515 | CXACRU_ATTR_##_action(CXINF_LINE_STATUS,               LINE, line_status); \
+         |                                                                            ^
+   <scratch space>:67:1: note: expanded from here
+      67 | CXACRU__ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro 'CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:515:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     515 | CXACRU_ATTR_##_action(CXINF_LINE_STATUS,               LINE, line_status); \
+         |                                                                            ^
+   <scratch space>:67:1: note: expanded from here
+      67 | CXACRU__ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro 'CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:515:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     515 | CXACRU_ATTR_##_action(CXINF_LINE_STATUS,               LINE, line_status); \
+         |                                                                            ^
+   <scratch space>:67:1: note: expanded from here
+      67 | CXACRU__ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro 'CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:516:38: note: expanded from macro 'CXACRU_ALL_FILES'
+     516 | CXACRU__ATTR_##_action(mac_address); \
+         |                                      ^
+   <scratch space>:71:1: note: expanded from here
+      71 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:516:38: note: expanded from macro 'CXACRU_ALL_FILES'
+     516 | CXACRU__ATTR_##_action(mac_address); \
+         |                                      ^
+   <scratch space>:71:1: note: expanded from here
+      71 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:516:38: note: expanded from macro 'CXACRU_ALL_FILES'
+     516 | CXACRU__ATTR_##_action(mac_address); \
+         |                                      ^
+   <scratch space>:71:1: note: expanded from here
+      71 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:517:84: note: expanded from macro 'CXACRU_ALL_FILES'
+     517 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_SNR_MARGIN,       dB,   upstream_snr_margin); \
+         |                                                                                    ^
+   <scratch space>:81:1: note: expanded from here
+      81 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:517:84: note: expanded from macro 'CXACRU_ALL_FILES'
+     517 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_SNR_MARGIN,       dB,   upstream_snr_margin); \
+         |                                                                                    ^
+   <scratch space>:81:1: note: expanded from here
+      81 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:517:84: note: expanded from macro 'CXACRU_ALL_FILES'
+     517 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_SNR_MARGIN,       dB,   upstream_snr_margin); \
+         |                                                                                    ^
+   <scratch space>:81:1: note: expanded from here
+      81 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:518:86: note: expanded from macro 'CXACRU_ALL_FILES'
+     518 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_SNR_MARGIN,     dB,   downstream_snr_margin); \
+         |                                                                                      ^
+   <scratch space>:91:1: note: expanded from here
+      91 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:518:86: note: expanded from macro 'CXACRU_ALL_FILES'
+     518 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_SNR_MARGIN,     dB,   downstream_snr_margin); \
+         |                                                                                      ^
+   <scratch space>:91:1: note: expanded from here
+      91 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:518:86: note: expanded from macro 'CXACRU_ALL_FILES'
+     518 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_SNR_MARGIN,     dB,   downstream_snr_margin); \
+         |                                                                                      ^
+   <scratch space>:91:1: note: expanded from here
+      91 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:519:85: note: expanded from macro 'CXACRU_ALL_FILES'
+     519 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_ATTENUATION,      dB,   upstream_attenuation); \
+         |                                                                                     ^
+   <scratch space>:101:1: note: expanded from here
+     101 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:519:85: note: expanded from macro 'CXACRU_ALL_FILES'
+     519 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_ATTENUATION,      dB,   upstream_attenuation); \
+         |                                                                                     ^
+   <scratch space>:101:1: note: expanded from here
+     101 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:519:85: note: expanded from macro 'CXACRU_ALL_FILES'
+     519 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_ATTENUATION,      dB,   upstream_attenuation); \
+         |                                                                                     ^
+   <scratch space>:101:1: note: expanded from here
+     101 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:520:87: note: expanded from macro 'CXACRU_ALL_FILES'
+     520 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_ATTENUATION,    dB,   downstream_attenuation); \
+         |                                                                                       ^
+   <scratch space>:111:1: note: expanded from here
+     111 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-Cheers,
+vim +539 drivers/usb/atm/cxacru.c
 
-Bob
+fa70fe44aba95c Simon Arlott 2007-03-06  538  
+fa70fe44aba95c Simon Arlott 2007-03-06 @539  CXACRU_ALL_FILES(INIT);
+fa70fe44aba95c Simon Arlott 2007-03-06  540  
 
-
---------------ikVCtekKyBNqyoNuScXc93dX--
-
---------------wWwfTSW7CDgpfN6pR0lEYPWP
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-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
-=BiDr
------END PGP SIGNATURE-----
-
---------------wWwfTSW7CDgpfN6pR0lEYPWP--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
