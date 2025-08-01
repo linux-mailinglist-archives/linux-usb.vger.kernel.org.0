@@ -1,102 +1,109 @@
-Return-Path: <linux-usb+bounces-26315-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D39B6B181DD
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 14:34:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99206B18225
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 15:06:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E8165A02F9
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 12:34:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06564628055
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 13:06:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4C6B244687;
-	Fri,  1 Aug 2025 12:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0772248F5F;
+	Fri,  1 Aug 2025 13:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s4fceExI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MbsM8BNI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392BA248871;
-	Fri,  1 Aug 2025 12:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D28247284;
+	Fri,  1 Aug 2025 13:06:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754051676; cv=none; b=eVApgXf9D7oG+nwh/cv04Mk0yL19B2Jjfxygn1+58YkUHXQWNr/8CvI4qGwCmhu8EHisbEBiyVjmM7DJZ3UjvY4CujiOee7YpjSkliBdvORoICLAP5dVXhCsM9u4Ys7JIm98335TPdSHA3M+tXIjUMbqAt6C23jlJzLbtNja01M=
+	t=1754053593; cv=none; b=keYNY0NgeHfLXkJ+/efkYGr0nKNG55fXCLsvt1S0bT/L9zx+ZC8DOdIIPi6SkQlFMPbqAXOhf1JUXfWS9ae+Mkzy+ifzeErx01qWnJsGQoKqTxPvC3ZiZmAguYzlrMEg0ux+dZyRzpLGbkpX6PymD7Pc9tGYsxfBch591bIK8hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754051676; c=relaxed/simple;
-	bh=x1HBdkIt//cfiGJ1A7He9eBaYQy80mB4yhfQry3Svic=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GdkfqTHCBQgZqyB28HeDvjS30oLuMipbVOnUWdbnTT5W1SMAowDECCNBlThwYyeFh38w17HOcM0BvgwjuIwAXjpKBhU7sy2zSr8euV6R855QLnbkt0YTuwUKq/nzDkm+UAhzwFCf/Pf5mzUa+6WVhEj1EI0DQchIDYxP57ceLMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s4fceExI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD176C4CEE7;
-	Fri,  1 Aug 2025 12:34:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754051676;
-	bh=x1HBdkIt//cfiGJ1A7He9eBaYQy80mB4yhfQry3Svic=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s4fceExIP/Z68hGLqSPSHcHi4qyBaVr8TuDGaJEENPl1ZKbtJ+dq8ra5fc4iftNsl
-	 I1HpDS7cQcB7I3r0UfyQx1YnidzqCZJCzZ8sDIkL9N1WeA6x2G3F3QwHVzurexwyGV
-	 dziBMdI7kmktR+Amisf+fC0ayd7iEpJoGekXcMTIJUIYQOe6gpvFOuCfKUamudnqb2
-	 NDxdRqzJ0u2XtxrfEwYH/amRqnOvWdjcygZ2ADmi54EP8jK3DumbWHDokHsyHSVYSs
-	 pkus0Ji+Cc/hTJ4AJ/peiStyNrwcXmwgakNqXJMy2SvmLbVpk/i1ECzj6c7BogrDtU
-	 q7UbW/xj8BHcg==
-Date: Fri, 1 Aug 2025 08:34:33 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Christoph Freundl <Christoph.Freundl@ifm.com>
-Cc: Xu Yang <xu.yang_2@nxp.com>, Greg KH <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, peter.chen@kernel.org,
-	stable@vger.kernel.org, hui.pu@gehealthcare.com
-Subject: Re: [GIT PULL] USB chipidea patches for linux-5.15.y and linux-6.1.y
-Message-ID: <aIy0WQOoOCCzZK-X@lappy>
-References: <20240902092711.jwuf4kxbbmqsn7xk@hippo>
- <2024090235-baggage-iciness-b469@gregkh>
- <20240903021135.5lzfybyv7rzty33d@hippo>
- <36406dea-f876-b3e-5ad7-69fdae97366a@ifm.com>
+	s=arc-20240116; t=1754053593; c=relaxed/simple;
+	bh=sEw9KSgIPZRHJ1gVK4TjPXW0BX1S9WDtiHbYXd25qCw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J55j+53zPAo3VUIC/+nCLBscjzVMXMiosZi/7toAjogWCpv1ECnhi0vPAGg9K/Ugy0It3f+VFFyCEX8pHKhio1uaNmxIlFh1KkFrsy3WPg0cMe6fEKIWi1F6vq3WLDJA1XdqvBnRg0Q7KlZ3axU7jOLx/A99o01os+NAYHtBNKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MbsM8BNI; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754053591; x=1785589591;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sEw9KSgIPZRHJ1gVK4TjPXW0BX1S9WDtiHbYXd25qCw=;
+  b=MbsM8BNIQNqAAy8YGXToflpBEYcCVo4gVr+RQ+l74Yo2VR43PEF2BRLi
+   qceDqCrjztwFFTIdFiYrJjCR0iEnPpz+MCVXdC5WMKxZ7MCojeSg9krBF
+   SFyadHt+D9Hq6z4c9Psyb5/QLsYxBRg0J3nAK/PHgjJJaRQxILPOobnm8
+   kXWTmc+SeW44D23qrCGHHTx7oW/6/O6A17QdkbVs28RPqh9VW7EGqYnZI
+   g+Qk016AS/pTC8KE2OBoboca3HLYPXR6jBg0ApJWBd80YVwPr09l8xRiV
+   6yPIYTBD2sreGjBXpJhzm3u+lc66XCUh9Kqiyy3K2ggjkyk7EdrrNsfNl
+   g==;
+X-CSE-ConnectionGUID: QvXMwEMaTgiyx9Cx6G1zRA==
+X-CSE-MsgGUID: GJDISb8kROGbp62nyJg0NA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="56358984"
+X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
+   d="scan'208";a="56358984"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 06:06:30 -0700
+X-CSE-ConnectionGUID: a7YXSyRgQW2Z1sLrJLrlvg==
+X-CSE-MsgGUID: X3MyL08pSt6KoYfPN6KGrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
+   d="scan'208";a="194522052"
+Received: from mnyman-desk.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa002.jf.intel.com with ESMTP; 01 Aug 2025 06:06:28 -0700
+Message-ID: <42d12655-dca5-4465-a19d-17a2e4984d31@linux.intel.com>
+Date: Fri, 1 Aug 2025 16:06:26 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <36406dea-f876-b3e-5ad7-69fdae97366a@ifm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb:xhci:Fix slot_id resource race conflict
+To: Weitao Wang <WeitaoWang-oc@zhaoxin.com>, gregkh@linuxfoundation.org,
+ mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: WeitaoWang@zhaoxin.com, wwt8723@163.com, CobeChen@zhaoxin.com,
+ stable@vger.kernel.org
+References: <20250730152715.8368-1-WeitaoWang-oc@zhaoxin.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250730152715.8368-1-WeitaoWang-oc@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 01, 2025 at 02:06:28PM +0200, Christoph Freundl wrote:
->On Tue, 3 Sep 2024, Xu Yang wrote:
->> On Mon, Sep 02, 2024 at 02:14:04PM +0200, Greg KH wrote:
->> > On Mon, Sep 02, 2024 at 05:27:11PM +0800, Xu Yang wrote:
->> > > Hi Greg,
->> > >
->> > > The below two patches are needed on linux-5.15.y and linux-6.1.y, please
->> > > help to add them to the stable tree.
->> > >
->> > > b7a62611fab7 usb: chipidea: add USB PHY event
->> > > 87ed257acb09 usb: phy: mxs: disconnect line when USB charger is attached
->> > >
->> > > They are available in the Git repository at:
->> > >   git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git branch usb-testing
->> >
->> > We don't do 'git pull' for stable patches, please read the file:
->> >     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
->> > for how to do this properly.
->> >
->> > Just send them through email please.
->>
->> Okay. I'll follow the rules.
->
->I want to bump this topic as this is still an issue, not only on the
->mentioned branches but also on linux-5.10.y. For the affected devices (a
->custom i.MX6 board in our case) you have to either revert commits
->e70b17282a5c3c and cc2d5cdb19e3 or apply above commits in order to make
->the USB interface work properly.
+On 30.7.2025 18.27, Weitao Wang wrote:
+> In such a scenario, device-A with slot_id equal to 1 is disconnecting
+> while device-B is enumerating, device-B will fail to enumerate in the
+> follow sequence.
+> 
+> 1.[device-A] send disable slot command
+> 2.[device-B] send enable slot command
+> 3.[device-A] disable slot command completed and wakeup waiting thread
+> 4.[device-B] enable slot command completed with slot_id equal to 1 and
+> wakeup waiting thread
+> 5.[device-B] driver check this slot_id was used by someone(device-A) in
+> xhci_alloc_virt_device, this device fails to enumerate as this conflict
+> 6.[device-A] xhci->devs[slot_id] set to NULL in xhci_free_virt_device
+> 
+> To fix driver's slot_id resources conflict, clear xhci->devs[slot_id] and
+> xhci->dcbba->dev_context_ptrs[slot_id] pointers in the interrupt context
+> when disable slot command completes successfully. Simultaneously, adjust
+> function xhci_free_virt_device to accurately handle device release.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 7faac1953ed1 ("xhci: avoid race between disable slot command and host runtime suspend")
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 
-Ugh, sorry for this.
+Thanks, added to queue with some minor commit message tuning
 
-I'll go do it now.
-
--- 
-Thanks,
-Sasha
+-Mathias
 
