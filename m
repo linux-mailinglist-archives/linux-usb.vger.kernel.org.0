@@ -1,51 +1,51 @@
-Return-Path: <linux-usb+bounces-26322-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26323-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4676EB1874A
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 20:23:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CE00B1878E
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 21:03:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 021C5A8313E
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 18:23:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA6BA580556
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 19:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7BA628CF74;
-	Fri,  1 Aug 2025 18:22:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AFCC28D8D8;
+	Fri,  1 Aug 2025 19:03:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="eq7b4+be"
+	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="ElPJ10iS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from server-vie001.gnuweeb.org (server-vie001.gnuweeb.org [89.58.62.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80F6188CC9;
-	Fri,  1 Aug 2025 18:22:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8D913A3ED;
+	Fri,  1 Aug 2025 19:03:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.62.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754072574; cv=none; b=togK6UiV3MsRzAJmU+kyQwxZsaJQ52T+Qdnwt8S0YAHt46nnhCS/t2J6gTRdhysS0qhXVxB3ZUQjDWrEoKN/kt2HTu4vlXTccd+m7epfdD7J9j2A9TyacCfr3l/QOairf+qKscLuucOpRfa7Tgw3HrRKYyO7vVOvo7FUjY4Bxqs=
+	t=1754075018; cv=none; b=QZbi3Mcq0QmScBjNqqilP2TxEde8uEPWmkcGt3NeGPxyAHpZPqAgGum7A3HA+PE02LQqjL24ztvUPIx96ZUetmmZnT7AWELKzaAdJk63gOYqrKA816D2jxFsMNlVcGMCiTKOMJZxoqJd2kqwgY28RqFykcp1XTdfHHwnhn2zxw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754072574; c=relaxed/simple;
-	bh=WF0QhmeUbVgpA2hYHTvKf+I3icXtibEH9SWu6vSv6bk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IsB7iGSFTQFwelNjX57g7/uTX6GIFMLvV5SznlIoq0UB0ZQOuHS6FZOrpPwb+PT+SdgdaXCDcveLN2MPEAE0eEg0RtfLtgCouXlTdxz0KZSYPekIqZZV8+CLCDp3eYvbU4soRgTzcSjcsdwvqgvRePM/v4sb0qGqjCgOLnFv/s4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=eq7b4+be; arc=none smtp.client-ip=89.58.62.56
+	s=arc-20240116; t=1754075018; c=relaxed/simple;
+	bh=FaGTwrEKwK7M7Dbun3EZiMSSgUMwYY7IOVqXCmRjdBk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CM9Ziyh8P/kXED1vNaz8lQ3AS8krtagQdxvifowfIG4U/2F5gyIVmMR5SYqavHkcyuH/pjfhnoPSlXGWMSrLLhnLfeQhQ6g+htiJL27gcwxm55hlNxpXQz3/297Blz6hqBSOSsjb4WxjHl0cSi1rd6MsSL1sEZWeFhiNhNPwNfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=ElPJ10iS; arc=none smtp.client-ip=89.58.62.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=new2025; t=1754072570;
-	bh=WF0QhmeUbVgpA2hYHTvKf+I3icXtibEH9SWu6vSv6bk=;
+	s=new2025; t=1754075014;
+	bh=FaGTwrEKwK7M7Dbun3EZiMSSgUMwYY7IOVqXCmRjdBk=;
 	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
 	 Content-Transfer-Encoding:Message-ID:Date:From:Reply-To:Subject:To:
 	 Cc:In-Reply-To:References:Resent-Date:Resent-From:Resent-To:
 	 Resent-Cc:User-Agent:Content-Type:Content-Transfer-Encoding;
-	b=eq7b4+be3D8CGX1DnDUvCfReusRDKoHIATKVTrXS8tkld1HUqpgZ/YeqbGBqKZheZ
-	 1BfLYO7crUo3EikNDGwqcsLh5MbBKlqdQDF/9/+w9RxET1p2g2ElcBwvBzGAYiurSJ
-	 8vMtwmTgTwozSV3ZFL/3SH4RhytSAdRIjta+tTS/crPKZ3LpELuZWrCvVGGP1demjR
-	 hUu1FNI4056LLADoQfzlKrQXvqDG12xtMVKEEgY7pIWCvxW52MY+H6zCESWmmOXC3R
-	 sJ8//l4zdG+G1GgTHbtgi0MioKHrQO0u42o/WW+cfGqsqpovEcsRBKCPFrFEIcjXzg
-	 AiP7JRSMrMClA==
+	b=ElPJ10iSj97Mm8ptfHfOgnuRfC/eYEGLVJVMd6OtYmhBv3OooQar/4ZoBweiERzHS
+	 3TAiZpka87YfhMrUoYF105QxGXZNx4/1oTV29zRW8Bj7dfXT8JlKiLeU5GaL7XylR+
+	 oGrHRynOH1pBwW7oGHI7Kg9Bfxxko/r6tJ1dxxw3RxXs69jZ07AYz0BmcYOZSJNt0V
+	 mpRIcGgcV4TR0SvZLHGBwtXqKV/viucOknDlnwTCwoDuJddMiRFrkpmcImFSS2VZeR
+	 KJthfK8aUuMv5QAo4j4F+mMb97H8Rb9mm31itgX0I4VZWj9C2l6MKKxt1NfogrguLx
+	 N5yTD+wDicbNg==
 Received: from integral2.. (unknown [182.253.126.229])
-	by server-vie001.gnuweeb.org (Postfix) with ESMTPSA id 921273126FCE;
-	Fri,  1 Aug 2025 18:22:47 +0000 (UTC)
+	by server-vie001.gnuweeb.org (Postfix) with ESMTPSA id E01813126FD2;
+	Fri,  1 Aug 2025 19:03:30 +0000 (UTC)
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To: Oliver Neukum <oneukum@suse.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -54,7 +54,6 @@ To: Oliver Neukum <oneukum@suse.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>
 Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	John Ernberg <john.ernberg@actia.se>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Linux Netdev Mailing List <netdev@vger.kernel.org>,
 	Linux USB Mailing List <linux-usb@vger.kernel.org>,
@@ -62,10 +61,10 @@ Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
 	Armando Budianto <sprite@gnuweeb.org>,
 	gwml@vger.gnuweeb.org,
 	stable@vger.kernel.org
-Subject: [PATCH net v1] net: usbnet: Fix the wrong netif_carrier_on() call placement
+Subject: [PATCH net v2] net: usbnet: Fix the wrong netif_carrier_on() call placement
 X-Gw-Bpl: wU/cy49Bu1yAPm0bW2qiliFUIEVf+EkEatAboK6pk2H2LSy2bfWlPAiP3YIeQ5aElNkQEhTV9Q==
-Date: Sat,  2 Aug 2025 01:20:44 +0700
-Message-Id: <20250801182044.39420-1-ammarfaizi2@gnuweeb.org>
+Date: Sat,  2 Aug 2025 02:03:10 +0700
+Message-Id: <20250801190310.58443-1-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -88,14 +87,19 @@ Closes: https://lore.kernel.org/netdev/0752dee6-43d6-4e1f-81d2-4248142cccd2@gnuw
 Fixes: 0d9cfc9b8cb1 ("net: usbnet: Avoid potential RCU stall on LINK_CHANGE event")
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
+
+v2:
+  - Rebase on top of the latest netdev/net tree. The previous patch was
+    based on 0d9cfc9b8cb1. Line numbers have changed since then.
+
  drivers/net/usb/usbnet.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index bc1d8631ffe0..1eb98eeb64f9 100644
+index a38ffbf4b3f0..a1827684b92c 100644
 --- a/drivers/net/usb/usbnet.c
 +++ b/drivers/net/usb/usbnet.c
-@@ -1107,31 +1107,31 @@ static const struct ethtool_ops usbnet_ethtool_ops = {
+@@ -1114,31 +1114,31 @@ static const struct ethtool_ops usbnet_ethtool_ops = {
  };
  
  /*-------------------------------------------------------------------------*/
@@ -121,7 +125,7 @@ index bc1d8631ffe0..1eb98eeb64f9 100644
 -			netif_carrier_on(dev->net);
 -
  		/* submitting URBs for reading packets */
- 		tasklet_schedule(&dev->bh);
+ 		queue_work(system_bh_wq, &dev->bh_work);
  	}
  
  	/* hard_mtu or rx_urb_size may change during link change */
