@@ -1,139 +1,149 @@
-Return-Path: <linux-usb+bounces-26320-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26321-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB7E1B186D5
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 19:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70776B18730
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 20:10:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95CBEAA212C
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 17:41:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9C50AA098E
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 18:10:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE952797AF;
-	Fri,  1 Aug 2025 17:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AD3C28D844;
+	Fri,  1 Aug 2025 18:10:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="GNL1+IYy"
+	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="WeKAwAss"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from server-vie001.gnuweeb.org (server-vie001.gnuweeb.org [89.58.62.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C67264A83;
-	Fri,  1 Aug 2025 17:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69987188CC9;
+	Fri,  1 Aug 2025 18:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.62.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754070097; cv=none; b=PFwOHeMaVMbXt0E+NnkwqMUoop3R9r5xv5rBpZw/uVCln5FeTn5rNemKYVEJyusEt+BI76LntDuVWvbKqs73qpmcf0uW4cx263Z0J7frr+vww3Q4l1CknlEApq+8yiojlh10R5x19MwG8KZeKRwVij+qWmRfUh+wtaKlCafDnCo=
+	t=1754071813; cv=none; b=prWYViawkycYCzSD8jY/f/sTyotv/xZL7FbzsUDLUF9PPLBSVfsbMN7f3qZqaVvV3GdYgyPxBQg1wVS5KXOGulZzDwWeUUkOy4ZOk+fraEqxuqaI+bc43bfDnxIhFe8HoeA19w6rxXxegi3r2fRbTkD1/i+JaZ50BgrxqjHoNOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754070097; c=relaxed/simple;
-	bh=iof5uvS5Qt9ud+acUuSX7Xq1xUhIO7S324Ypng3zcTE=;
-	h=From:To:Cc:Subject:MIME-Version:Content-Disposition:Content-Type:
-	 Message-Id:Date; b=Xc2MQLM71eBjY4Vjb8hBCkEYAg6LWTYBa8G2BKcYqsF1TyDZ6gcYqvqreswcpox+wp3oguPfYMIAfWh5zk8/6cUaSgnR78ULUYnkzlPVtMqX8qgOuviEvBViQchQX3us2L1dXcR//gkPx5u3i1rVBkOoVQMBhM30lx6dmvonpBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=GNL1+IYy; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
-	:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-	Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=xTBb/AKF/oJGoi7LY6md+Zn5yzHGPw7lcCLN9w/FXzc=; b=GNL1+IYytfpMPR+RB6ID7kHh/x
-	Rr5VOlWkSWBJMyV1+xGq9Wz+uCXFX6XQnaRFviXXVR+3+hb6jIzSumGlRxvJ7f5fdhrQiaAWuHZ+K
-	rr2LYpNZU1ICR76PS7H1hlGW0R1+wBVaYFEf4JQ5o/s322ZJZMf0EPeBvmmCIHJNHDSRiKvAO/wy8
-	JptceiNRzFLa5R0nLiRSxfEkOwSZgr5+SI03mSYFZvkOHMZROx6Y87VcQVBD3nI3Ybfh1Jh3t64B0
-	RdFCPBPYWBBXfJzPVbBjw6S/qc83bXYBrXQ1GG3sDqN71SIyY1GU46O2hqvpHEr92OpQX3acUDWj3
-	UtlPSyCA==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:50548 helo=rmk-PC.armlinux.org.uk)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <rmk@armlinux.org.uk>)
-	id 1uhtkz-0006pD-0x;
-	Fri, 01 Aug 2025 18:41:25 +0100
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1uhtkH-007KDZ-JT; Fri, 01 Aug 2025 18:40:41 +0100
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-To: Jonathan Hunter <jonathanh@nvidia.com>,
-	Thierry Reding <thierry.reding@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-tegra@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] usb: gadget: tegra-xudc: fix PM use count underflow
+	s=arc-20240116; t=1754071813; c=relaxed/simple;
+	bh=2HAEMP5d+fgdtvDOZtHypn4YI4WVRLhNeheht+6R9wE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IKTxZhp6akbAbwbCjIrc65o+BG9An5q132cl5R2y9ZR/jMz1p0E4zJkpuujjiMv3JKKTn7G5udIeTzDbybuNX/S6AtW7wHtHys3/k8T4nbBC+JMLbnRrMadvhvejpqhAxaUrpkP3aLjRkBU0gm7UrnGjd9BK0RXBrBAwVWr9u94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=WeKAwAss; arc=none smtp.client-ip=89.58.62.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+	s=new2025; t=1754071802;
+	bh=2HAEMP5d+fgdtvDOZtHypn4YI4WVRLhNeheht+6R9wE=;
+	h=Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:Message-ID:Date:From:Reply-To:Subject:To:
+	 Cc:In-Reply-To:References:Resent-Date:Resent-From:Resent-To:
+	 Resent-Cc:User-Agent:Content-Type:Content-Transfer-Encoding;
+	b=WeKAwAss79UlIECZ8P/sZVtSjURtTlzTN+NEWcLH8YG9NetZL1T7Q6fRhSPbehe/U
+	 PHtWmPg0W2SSySDup12oLDwE92ccWucUETRc3MLWBP4/RAa6/NJ1bbQNGc6eBhBEyH
+	 Olz5gGBG7/2cF1H+TRWGCIEY5EceZB8cIrf0BSwAdeuc8q3jfCPcsWBWSAU/Wxrh+A
+	 XrcHxGmAV/1CtfV+2Nwzwt75DCdLAuOSRcxsI3Hq7TCPyzFXuPlNUUwl0U5o3RMn1Y
+	 vH2N65OcIGzM2NE5sJpTQSe21OsJyHCdhthtJFv7qtMte1zsf5jUR+MuwTKQTSD68W
+	 ru6MJpQueoKWw==
+Received: from [68.183.184.174] (unknown [68.183.184.174])
+	by server-vie001.gnuweeb.org (Postfix) with ESMTPSA id 35D263126FCD;
+	Fri,  1 Aug 2025 18:09:59 +0000 (UTC)
+Message-ID: <0752dee6-43d6-4e1f-81d2-4248142cccd2@gnuweeb.org>
+X-Gw-Bpl: wU/cy49Bu1yAPm0bW2qiliFUIEVf+EkEatAboK6pk2H2LSy2bfWlPAiP3YIeQ5aElNkQEhTV9Q==
+Date: Sat, 2 Aug 2025 01:09:56 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1uhtkH-007KDZ-JT@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Fri, 01 Aug 2025 18:40:41 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2] net: usbnet: Avoid potential RCU stall on
+ LINK_CHANGE event
+To: patchwork-bot+netdevbpf@kernel.org, John Ernberg <john.ernberg@actia.se>
+Cc: Armando Budianto <sprite@gnuweeb.org>, Oliver Neukum <oneukum@suse.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Linux Netdev Mailing List <netdev@vger.kernel.org>,
+ Linux USB Mailing List <linux-usb@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ stable@vger.kernel.org, GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+References: <20250723102526.1305339-1-john.ernberg@actia.se>
+ <175346701201.3223523.6273511358134710495.git-patchwork-notify@kernel.org>
+Content-Language: en-US
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Autocrypt: addr=ammarfaizi2@gnuweeb.org; keydata=
+ xsBNBGECqsMBCADy9cU6jMSaJECZXmbOE1Sox1zeJXEy51BRQNOEKbsR0dnRNUCl2tUR1rxd
+ M+8V9TQUInBxERJcOdbUKibS8PQRy1g8LKJO/yrrMN8SFqnxYyX8M3WDz1PWuJ7DZE4gECtj
+ RPuYN978y9w7Hi6micjraQeXbNp1S7MxEk5AxtlokO6u6Mrdm1WRNDytagkY61PP+5lJwiQS
+ XOqiSLyT/ydEbG/hdBiOTOEN4J8MxE+p2xwhHjSTvU4ehq1b6b6N62pIA0r6NMRtdqp0c+Qv
+ 3SVkTV8TVHcck60ZKaNtKQTsCObqUHKRurU1qmF6i2Zs+nfL/e+EtT0NVOVEipRZrkGXABEB
+ AAHNJUFtbWFyIEZhaXppIDxhbW1hcmZhaXppMkBnbnV3ZWViLm9yZz7CwI4EEwEKADgCGwMF
+ CwkIBwIGFQoJCAsCBBYCAwECHgECF4AWIQTok3JtyOTA3juiAQc2T7o0/xcKSwUCZ/1d1QAK
+ CRA2T7o0/xcKS6fgCADlWw9ZPvM8Qv9Zdhle6zyCnwTnoZsadBnabY3NGFAo0YVNnByUy5HN
+ inN92F1W71D06IrPJr/0rcCt1mJWM8TuQiU3LdEC+1Go99XA48x94grtxkZiBKKUmGU7HU4p
+ 5bdTj3Ki8HYCaaHz73VeLsPGvXc6uzMtHCHubErIvbf1VsXOuGo4xhxveT/RutKrJto81YWp
+ zlrvbU8DJOvRuzBbNk/N/SgpyceVT+g3hAnoySUV1nweeNdnOZZ8LsH5bjCyJ8oq0n1NfngY
+ u1BXSqCNKPh/QrVsXpvlWuvWog1k/GbtxQoIJ2lizJPrxA8kjUI/oQ/S9DDejiLD7yzXeUUw
+ zjgEZ/1bwhIKKwYBBAGXVQEFAQEHQELDQDfZ2b77GoJFe9RHDa2xOd3X4QZPuRcqvwu2h74j
+ AwEIB8LAfAQYAQoAJhYhBOiTcm3I5MDeO6IBBzZPujT/FwpLBQJn/VvCAhsMBQkI3sMOAAoJ
+ EDZPujT/FwpLC9UH/Am+C8AQsDFNpTUWzkqEwTMAcXBES9sRr9Hx3AbysOuEF28LwAGaHlx9
+ pn17tiusZcDQ3TnJnbp4pdUt6n1HYZqR04Nrkz7fbirFJQ214vHFov0lc8g26OdEVHWqHtKN
+ GGAryZaaT2c8aqRX3X8BraFyjj35cFLKeUJDnKBWDt4ztvQnnHPi9GH74h1O/mglcMyM3EnM
+ AOWKeYsHlJf98mt8gRamko7WOG473faeN1IO/iTZIdUEjzsTmzITehrqMm6FVFPFOUtmQG4M
+ 9X95XOk5hOL7VvJZpLc3lZdccyaWP2yJ14AX3QMBJjZuPpfDCJCVPb7PBa8fOWMghEO8hTo=
+In-Reply-To: <175346701201.3223523.6273511358134710495.git-patchwork-notify@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Upon resume from system suspend, the PM runtime core issues the
-following warning:
+On 7/26/25 1:10 AM, patchwork-bot+netdevbpf@kernel.org wrote:
+> Here is the summary with links:
+>    - [net,v2] net: usbnet: Avoid potential RCU stall on LINK_CHANGE event
+>      https://git.kernel.org/netdev/net/c/0d9cfc9b8cb1
 
-tegra-xudc 3550000.usb: Runtime PM usage count underflow!
 
-This is because tegra_xudc_resume() unconditionally calls
-schedule_work(&xudc->usb_role_sw_work) whether or not anything has
-changed, which causes tegra_xudc_device_mode_off() to be called
-even when we're already in that mode.
+I just got bitten by this commit after syncing with Linus' tree.
 
-Keep track of the current state of "device_mode", and only schedule
-this work if it has changed from the hardware state on resume.
+It breaks my laptop. RJ45 LAN cable cannot connect. After git bisect,
+it ends up with that commit.
 
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
- drivers/usb/gadget/udc/tegra-xudc.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ammarfaizi2@integral2:~/p/linux-block$ git bisect log
+git bisect start
+# bad: [ff82265b006e468df734a2d71f9110b73bd740f2] Merge branch 'master' into af/home (sync with mainline)
+git bisect bad ff82265b006e468df734a2d71f9110b73bd740f2
+# good: [b0896d43221f7858491d59383f56dfe38e7fff34] Merge tag 'kvm-x86-vmx-6.17' of https://github.com/kvm-x86/linux into af/home
+git bisect good b0896d43221f7858491d59383f56dfe38e7fff34
+# good: [5f5c9952b33cb4e8d25c70ef29f7a45cd26b6a9b] Merge tag 'powerpc-6.17-1' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux
+git bisect good 5f5c9952b33cb4e8d25c70ef29f7a45cd26b6a9b
+# bad: [8be4d31cb8aaeea27bde4b7ddb26e28a89062ebf] Merge tag 'net-next-6.17' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
+git bisect bad 8be4d31cb8aaeea27bde4b7ddb26e28a89062ebf
+# good: [c2b93d6beca8526fb38ccc834def1c987afe24fc] eth: fbnic: Create ring buffer for firmware logs
+git bisect good c2b93d6beca8526fb38ccc834def1c987afe24fc
+# good: [077f7153fd2582874b0dec8c8fcd687677d0f4cc] gve: merge xdp and xsk registration
+git bisect good 077f7153fd2582874b0dec8c8fcd687677d0f4cc
+# good: [126d85fb040559ba6654f51c0b587d280b041abb] Merge tag 'wireless-next-2025-07-24' of https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next
+git bisect good 126d85fb040559ba6654f51c0b587d280b041abb
+# good: [ecc383e5fe060f1aaad0e4e4ae36ad1c899e948d] Merge tag 'linux-can-next-for-6.17-20250725' of git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next
+git bisect good ecc383e5fe060f1aaad0e4e4ae36ad1c899e948d
+# bad: [c58c18be8850d58fd61b0480d2355df89ce7ee59] Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
+git bisect bad c58c18be8850d58fd61b0480d2355df89ce7ee59
+# good: [620e2392db235ba3b9e9619912aadb8cadee15e7] net: dsa: microchip: Disable PTP function of KSZ8463
+git bisect good 620e2392db235ba3b9e9619912aadb8cadee15e7
+# bad: [2764ab51d5f0e8c7d3b7043af426b1883e3bde1d] stmmac: xsk: fix negative overflow of budget in zerocopy mode
+git bisect bad 2764ab51d5f0e8c7d3b7043af426b1883e3bde1d
+# good: [4fc7885c3a98ec4450103aef874fb1d35920c7af] Merge branch 'mlx5e-misc-fixes-2025-07-23'
+git bisect good 4fc7885c3a98ec4450103aef874fb1d35920c7af
+# bad: [1bbb76a899486827394530916f01214d049931b3] neighbour: Fix null-ptr-deref in neigh_flush_dev().
+git bisect bad 1bbb76a899486827394530916f01214d049931b3
+# bad: [165a7f5db919ab68a45ae755cceb751e067273ef] net: dsa: microchip: Fix wrong rx drop MIB counter for KSZ8863
+git bisect bad 165a7f5db919ab68a45ae755cceb751e067273ef
+# bad: [0d9cfc9b8cb17dbc29a98792d36ec39a1cf1395f] net: usbnet: Avoid potential RCU stall on LINK_CHANGE event
+git bisect bad 0d9cfc9b8cb17dbc29a98792d36ec39a1cf1395f
+# first bad commit: [0d9cfc9b8cb17dbc29a98792d36ec39a1cf1395f] net: usbnet: Avoid potential RCU stall on LINK_CHANGE event
 
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index 2957316fd3d0..1d3085cc9d22 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -502,6 +502,7 @@ struct tegra_xudc {
- 	struct clk_bulk_data *clks;
- 
- 	bool device_mode;
-+	bool current_device_mode;
- 	struct work_struct usb_role_sw_work;
- 
- 	struct phy **usb3_phy;
-@@ -715,6 +716,8 @@ static void tegra_xudc_device_mode_on(struct tegra_xudc *xudc)
- 
- 	phy_set_mode_ext(xudc->curr_utmi_phy, PHY_MODE_USB_OTG,
- 			 USB_ROLE_DEVICE);
-+
-+	xudc->current_device_mode = true;
- }
- 
- static void tegra_xudc_device_mode_off(struct tegra_xudc *xudc)
-@@ -725,6 +728,8 @@ static void tegra_xudc_device_mode_off(struct tegra_xudc *xudc)
- 
- 	dev_dbg(xudc->dev, "device mode off\n");
- 
-+	xudc->current_device_mode = false;
-+
- 	connected = !!(xudc_readl(xudc, PORTSC) & PORTSC_CCS);
- 
- 	reinit_completion(&xudc->disconnect_complete);
-@@ -4044,10 +4049,10 @@ static int __maybe_unused tegra_xudc_resume(struct device *dev)
- 
- 	spin_lock_irqsave(&xudc->lock, flags);
- 	xudc->suspended = false;
-+	if (xudc->device_mode != xudc->current_device_mode)
-+		schedule_work(&xudc->usb_role_sw_work);
- 	spin_unlock_irqrestore(&xudc->lock, flags);
- 
--	schedule_work(&xudc->usb_role_sw_work);
--
- 	pm_runtime_enable(dev);
- 
- 	return 0;
 -- 
-2.30.2
+Ammar Faizi
 
 
