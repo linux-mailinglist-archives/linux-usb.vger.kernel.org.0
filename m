@@ -1,140 +1,105 @@
-Return-Path: <linux-usb+bounces-26323-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26324-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CE00B1878E
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 21:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D1C3DB187D2
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 21:35:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA6BA580556
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 19:03:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF869581890
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 19:35:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AFCC28D8D8;
-	Fri,  1 Aug 2025 19:03:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E4628DEE9;
+	Fri,  1 Aug 2025 19:35:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="ElPJ10iS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lt2ZvjEP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from server-vie001.gnuweeb.org (server-vie001.gnuweeb.org [89.58.62.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8D913A3ED;
-	Fri,  1 Aug 2025 19:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.62.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DAAC28CF70;
+	Fri,  1 Aug 2025 19:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754075018; cv=none; b=QZbi3Mcq0QmScBjNqqilP2TxEde8uEPWmkcGt3NeGPxyAHpZPqAgGum7A3HA+PE02LQqjL24ztvUPIx96ZUetmmZnT7AWELKzaAdJk63gOYqrKA816D2jxFsMNlVcGMCiTKOMJZxoqJd2kqwgY28RqFykcp1XTdfHHwnhn2zxw0=
+	t=1754076905; cv=none; b=YqHML+k3gUVqw+yOYiFGU1wqdX8U/Z4ZjCQrqMxZ8YFCX4DnjmQm/mwRMGCuBvIuGs9GTUVHHjiOI5CfVvlSfTocEyu6wxRE0GoJVN6oWZn0gpbbk/ApwTNPJBVf0k0ffCqX7hfInUeFAXpK2Hnpl41s6vNAcF6daTjeqdmy+d4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754075018; c=relaxed/simple;
-	bh=FaGTwrEKwK7M7Dbun3EZiMSSgUMwYY7IOVqXCmRjdBk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CM9Ziyh8P/kXED1vNaz8lQ3AS8krtagQdxvifowfIG4U/2F5gyIVmMR5SYqavHkcyuH/pjfhnoPSlXGWMSrLLhnLfeQhQ6g+htiJL27gcwxm55hlNxpXQz3/297Blz6hqBSOSsjb4WxjHl0cSi1rd6MsSL1sEZWeFhiNhNPwNfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=ElPJ10iS; arc=none smtp.client-ip=89.58.62.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=new2025; t=1754075014;
-	bh=FaGTwrEKwK7M7Dbun3EZiMSSgUMwYY7IOVqXCmRjdBk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
-	 Content-Transfer-Encoding:Message-ID:Date:From:Reply-To:Subject:To:
-	 Cc:In-Reply-To:References:Resent-Date:Resent-From:Resent-To:
-	 Resent-Cc:User-Agent:Content-Type:Content-Transfer-Encoding;
-	b=ElPJ10iSj97Mm8ptfHfOgnuRfC/eYEGLVJVMd6OtYmhBv3OooQar/4ZoBweiERzHS
-	 3TAiZpka87YfhMrUoYF105QxGXZNx4/1oTV29zRW8Bj7dfXT8JlKiLeU5GaL7XylR+
-	 oGrHRynOH1pBwW7oGHI7Kg9Bfxxko/r6tJ1dxxw3RxXs69jZ07AYz0BmcYOZSJNt0V
-	 mpRIcGgcV4TR0SvZLHGBwtXqKV/viucOknDlnwTCwoDuJddMiRFrkpmcImFSS2VZeR
-	 KJthfK8aUuMv5QAo4j4F+mMb97H8Rb9mm31itgX0I4VZWj9C2l6MKKxt1NfogrguLx
-	 N5yTD+wDicbNg==
-Received: from integral2.. (unknown [182.253.126.229])
-	by server-vie001.gnuweeb.org (Postfix) with ESMTPSA id E01813126FD2;
-	Fri,  1 Aug 2025 19:03:30 +0000 (UTC)
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To: Oliver Neukum <oneukum@suse.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linux Netdev Mailing List <netdev@vger.kernel.org>,
-	Linux USB Mailing List <linux-usb@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Armando Budianto <sprite@gnuweeb.org>,
-	gwml@vger.gnuweeb.org,
-	stable@vger.kernel.org
-Subject: [PATCH net v2] net: usbnet: Fix the wrong netif_carrier_on() call placement
-X-Gw-Bpl: wU/cy49Bu1yAPm0bW2qiliFUIEVf+EkEatAboK6pk2H2LSy2bfWlPAiP3YIeQ5aElNkQEhTV9Q==
-Date: Sat,  2 Aug 2025 02:03:10 +0700
-Message-Id: <20250801190310.58443-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1754076905; c=relaxed/simple;
+	bh=IJSAXcvh17DdROpZVcOX4dIvpsH4xqwZwXk4qGePwgE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ksJ8MelfchhxR7lXS2gKrd04/+rWty/5Asn/N6SZHglW9h0MeUIX+wJaquyp3R6TXRL87MEvSm1tlLyknCSm8xA+wWXfqi5eN0564IkONCGOE/fFYjT6VuCT35yFoSzZRophqHHULWss7UNP8hN0Fo0XsKo6LzWJe3dPM6BZd1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lt2ZvjEP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E5CC4CEE7;
+	Fri,  1 Aug 2025 19:35:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754076904;
+	bh=IJSAXcvh17DdROpZVcOX4dIvpsH4xqwZwXk4qGePwgE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Lt2ZvjEPl7yj2gTknYlTaX51NOHCsLy+g5fuSqVaMJJf/I+8ObC+lXdyBBTnVp3WY
+	 jEeGe0BKj9hwch/ZoRAanxaKbG7BUBwtZ/2foY6dAvSIxTGdrWAdIU25b6YzfLU3D2
+	 Tq0PuTs3xrrkw3htHeMvIgbgv2DDDjBijVz0Bx/vT8E3P5jJy9jJwcw4YeEl0Cb9U7
+	 oxcSiGhStLDepPLlfHue7sQ84ht/FEAJ2r+pRFeNIPzDwlMIdEO5HOpcYYvfkk3MIu
+	 +yiBOilisubeD+hOFNPBDI+tK3WltNO+rBljSX5fXYMgcodSK1Ij1HeSG/Ly4e+tLP
+	 W+G9w9yngdM1Q==
+Date: Fri, 1 Aug 2025 20:34:57 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Haotien Hsu <haotienh@nvidia.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Brad Griffis <bgriffis@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>,
+	Vedant Deshpande <vedantd@nvidia.com>,
+	Akhil R <akhilrajeev@nvidia.com>,
+	Jinjie Ruan <ruanjinjie@huawei.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Henry Lin <henryl@nvidia.com>,
+	Jui Chang Kuo <jckuo@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
+	WK Tsai <wtsai@nvidia.com>
+Subject: Re: [PATCH 1/4] dt-bindings: usb: Add wake-up support for Tegra234
+ XUSB host controller
+Message-ID: <20250801-blend-lyricist-e2b88ee1f7e5@spud>
+References: <20250801095748.385437-1-haotienh@nvidia.com>
+ <20250801095748.385437-2-haotienh@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="X8oP1zOql6xeq+n0"
+Content-Disposition: inline
+In-Reply-To: <20250801095748.385437-2-haotienh@nvidia.com>
 
-The commit in the Fixes tag breaks my laptop (found by git bisect).
-My home RJ45 LAN cable cannot connect after that commit.
 
-The call to netif_carrier_on() should be done when netif_carrier_ok()
-is false. Not when it's true. Because calling netif_carrier_on() when
-__LINK_STATE_NOCARRIER is not set actually does nothing.
+--X8oP1zOql6xeq+n0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Cc: Armando Budianto <sprite@gnuweeb.org>
-Cc: stable@vger.kernel.org
-Closes: https://lore.kernel.org/netdev/0752dee6-43d6-4e1f-81d2-4248142cccd2@gnuweeb.org
-Fixes: 0d9cfc9b8cb1 ("net: usbnet: Avoid potential RCU stall on LINK_CHANGE event")
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
+On Fri, Aug 01, 2025 at 05:57:45PM +0800, Haotien Hsu wrote:
+> Populate USB wake events for Tegra234 XUSB host controller.
+> These wake-up events are optional to maintain backward compatibility and
+> because the USB controller does not require them for normal operation.
+>=20
+> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
 
-v2:
-  - Rebase on top of the latest netdev/net tree. The previous patch was
-    based on 0d9cfc9b8cb1. Line numbers have changed since then.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
- drivers/net/usb/usbnet.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+--X8oP1zOql6xeq+n0
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index a38ffbf4b3f0..a1827684b92c 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1114,31 +1114,31 @@ static const struct ethtool_ops usbnet_ethtool_ops = {
- };
- 
- /*-------------------------------------------------------------------------*/
- 
- static void __handle_link_change(struct usbnet *dev)
- {
- 	if (!test_bit(EVENT_DEV_OPEN, &dev->flags))
- 		return;
- 
- 	if (!netif_carrier_ok(dev->net)) {
-+		if (test_and_clear_bit(EVENT_LINK_CARRIER_ON, &dev->flags))
-+			netif_carrier_on(dev->net);
-+
- 		/* kill URBs for reading packets to save bus bandwidth */
- 		unlink_urbs(dev, &dev->rxq);
- 
- 		/*
- 		 * tx_timeout will unlink URBs for sending packets and
- 		 * tx queue is stopped by netcore after link becomes off
- 		 */
- 	} else {
--		if (test_and_clear_bit(EVENT_LINK_CARRIER_ON, &dev->flags))
--			netif_carrier_on(dev->net);
--
- 		/* submitting URBs for reading packets */
- 		queue_work(system_bh_wq, &dev->bh_work);
- 	}
- 
- 	/* hard_mtu or rx_urb_size may change during link change */
- 	usbnet_update_max_qlen(dev);
- 
- 	clear_bit(EVENT_LINK_CHANGE, &dev->flags);
- }
- 
--- 
-Ammar Faizi
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaI0W4QAKCRB4tDGHoIJi
+0kltAQDiyFLBVNnXXpakSrzAUlPjFjlw68v7Rchf9l6RTNvK2AEA69U+MzqIyMOe
+s0VHAdcFO5kUImxsdN2tIk7bvWDoMwQ=
+=jXbq
+-----END PGP SIGNATURE-----
+
+--X8oP1zOql6xeq+n0--
 
