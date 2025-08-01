@@ -1,185 +1,164 @@
-Return-Path: <linux-usb+bounces-26318-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26319-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3F23B183CC
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 16:31:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C73CB18635
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 19:06:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF8401716BA
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 14:31:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C76AF3B22D1
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Aug 2025 17:05:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81F24263899;
-	Fri,  1 Aug 2025 14:31:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dtQCZsEM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AFFE1E2858;
+	Fri,  1 Aug 2025 17:05:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F117C2472BC
-	for <linux-usb@vger.kernel.org>; Fri,  1 Aug 2025 14:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510681DE3C8
+	for <linux-usb@vger.kernel.org>; Fri,  1 Aug 2025 17:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754058709; cv=none; b=DCbS6InwQThX0xPE9HPqMxFWTLZj7yM2zXbVrU1t/fbLxaxa9vqJe4S4oYn1aj0PF33R8Pe3b2QdHg/C7i5QeW7c+qV5rE/HGqN6gnD8gC/NFtOiCysGWvmxr124Ku3iiWe5siXdt2lEQpalcqo1mqSQjsFk/KlkRgI1RDwmH1Y=
+	t=1754067940; cv=none; b=dFoLT4GOziPQYdrr6J70seTzRNIyqwthwiI5JZJPqInHiNZEUpBM9x3VQ+O847OS7Ag+HSOp4ktxrVEK+pzENLILFObq57yZ+EAfEsz5H+wGrjlZUMLLrtT6Fvz2KpOq/sKpkzHr4ulWBSsZ2+2RWAHcliG/iU/6aj63HAIeVT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754058709; c=relaxed/simple;
-	bh=FK0vyelFnv1mUU8CyGh29LkgK4hFNqWbgWNw58bAiUY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=ndOQwlQeBcX3mnPN7w8KcUt5rghVGomNpc26RStdMCwFg8c3u9XYRIs9zG8IybOa8H+hOT7d+sZ+mKv//OfjhMlaGK8hOxwfCRW5PvMvNx+v7EbKg/pkxMFFQmwgxnrNY5zaq0QUxDoRv1Q7qpYWCr9JJmU9PmnaVypA9ZvCjZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dtQCZsEM; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-45610582d07so15332525e9.0
-        for <linux-usb@vger.kernel.org>; Fri, 01 Aug 2025 07:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754058705; x=1754663505; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AieFr6QqT2maFLAJIA2s1XsjLSFuKHyndgzoToJrS2E=;
-        b=dtQCZsEMuhRlkjx5T9VOTvCh4h0SUE4kxod9zZaf0kCaO3n7WWWOg6w4NSX5xR4SQa
-         Uy5UpSeCACfrnAAR7zm5ayvDHe5ilKqp21RFvTBG3pyHX9W57nPtEEN72iEwd6+gEvUY
-         IrL0ummdluyq+9DJ+UubhB9lNmpsyoiZK7Vvf0VTGc05+8FD7+zBw6xsB1UInGIggNiU
-         sGXN4BWZ2QPJ7ZEUH3ZECuOirLYL7SWXb/6Jv2bDDIRyLv+xUbWB7Cb5C2WMfvOTUFx/
-         lx6XXzUACOSWj8yvZWjm+dVA1vQEklb1mz5tWQudrY31JRb6j+7+2bVLdpru8qO/ytD+
-         LJ0g==
+	s=arc-20240116; t=1754067940; c=relaxed/simple;
+	bh=P/EWMU55Bbw22j9djSvCpDxyIpppaJ8q75soyuqUxP0=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Da8zT51eRvEI2OIjl9HjJIdV8SYnw9WGqvbtQ0vHrh6k2F6GZDGf9Le9nKvfP985AkItbM7nw9CFHMwOpACTdOM7CfQ9xDIcY0a4PGX/UKwJRpishwi1uj5YdSIUGH2FSxaUDbPxCoEs7jESyAfudjq63x9rla3zsqhxa9K7Rlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-8812640a640so124379339f.0
+        for <linux-usb@vger.kernel.org>; Fri, 01 Aug 2025 10:05:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754058705; x=1754663505;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AieFr6QqT2maFLAJIA2s1XsjLSFuKHyndgzoToJrS2E=;
-        b=S16dJhup51QWKYufWtJDMxSFSpx0j0WqRDGEJXRwkuF675yecjCUXc4MdNk67ew5Pa
-         rG1DSenH+eVEmeOaJuijFn1O6+rIzETpOxMXRfe0XJ2yIElk0X2i1Ed3dbdwuflgTfIh
-         JfgQy29tG7ZldX3+gHMa5eNIXAiAr2d42DWUHe0uEkWRlbZlqWPNrv+zxkmWYoZRFGHo
-         cElmAlp1fYr8RrO2/DMniGL6BkYa/VKPA/DHNuqWNcxvoaB7FRkwK2Xiw8cXELLDLW7k
-         EJHIfuy7P5B1ClxnvPF7c+b6lvEsRNRHNVVQIBQ0XLso1QMUv+nydryiGaqHkRkZfPzh
-         aFQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWI5RWqpyOxnCJ6wwBZkT5hXOz/mhNn0zwFE87scsLXPi9ZHOB1bguBmuwhC8fNnnsHr3GxHZ7Oark=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzf0hceyrArT9idsyE3P1LPusREFQfGvP/URXuGjMOpfhL6UeN5
-	DPCVbUNTPTje+XTEr+jznJm2S7CDgzRiLZibQzyrgvCBvi1lVfl7laOw3JC3ODCuubc=
-X-Gm-Gg: ASbGncsrW85CDrJz5ItXOpTOxm8vu1vMH+duHxdexqc/+X1Qg+tZlKmEfhofr6kBm18
-	ZbCKakNALR2oO3tvSjTrvaeY/GcFSTA8c2ymjC+JwtdKScNSVMrg22i/J6v+NtpMN5gE6AmxVHb
-	aF+VOpfGmHeD62uMJ3HqZPIioyVCXNrqLOTu8uw3SvWu/xbO0hs5qIPUXnCM7evfSQZ33suheUb
-	L8zNwlABC9NTp8f1n/HpYJhUd3PauI0fStyv695XeWnNVzFqRXa2x2/qDpqJ3ycfi16hUHyj0tC
-	9pbRbAd5jJFy9iHWtvaQzH/xst9O+Oj+t44ioKnq7xJ7LFQG2VhldomAU6VLAVdZotLUQ/z3gQ0
-	blVU7lCb6oTDjCgZJOj84rjL1vHmN7jABv2D4xA==
-X-Google-Smtp-Source: AGHT+IFsFT3WFtGw9qAky7zYLbRwPgM0Lo6AQ8+E1AcAZECTEtITCALi3O2SmSLsaNNNGaGdYR0uiQ==
-X-Received: by 2002:adf:e047:0:b0:3b7:9c28:f856 with SMTP id ffacd0b85a97d-3b79c28f954mr4079994f8f.48.1754058705140;
-        Fri, 01 Aug 2025 07:31:45 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c48a05bsm6129217f8f.69.2025.08.01.07.31.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Aug 2025 07:31:44 -0700 (PDT)
-Date: Fri, 1 Aug 2025 17:31:41 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-	gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, WeitaoWang@zhaoxin.com,
-	wwt8723@163.com, CobeChen@zhaoxin.com, stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb:xhci:Fix slot_id resource race conflict
-Message-ID: <b5ab0f46-0fde-420e-97a2-136d3074b59c@suswa.mountain>
+        d=1e100.net; s=20230601; t=1754067936; x=1754672736;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XKh/YQKlGzOI37lKmU7d8abAM5JFeACMI2cvGMEujOM=;
+        b=NzMtL1s0JmpPc+PCqQCK7OvIj+IHNnvi7pXVsFJYKlv+gS+f+cBQFvemhigxjIP1SC
+         WnbKBp0aBpXpgTCACEPposrtKgEdO3H6BLpY3v3axHqKOCedsTTjDk6QqWCniMWQrBN3
+         FDPuKJ9/Y5OfOSV4HUX6poptLBJVmaY1UX8tIy4c7Kr5BoxaVFXa7rBhv9dh/ve2HHwV
+         1dQt614locVUgbeGtJ65iepS53nai8FFg+vy4bmHJgHqwkYMrooKTozRBrtHolU677Bd
+         j/JmZ1x5nf+iEilgS4jKTOFeNVKOUk/dNr4OBIGHbBL///ffUlzq9D01TOYwo3z6G7wQ
+         unvA==
+X-Forwarded-Encrypted: i=1; AJvYcCX9r5e6/UQrBhmfblPjPGfQXxeZZXo0VO28q7p08ZGbDxv8X5ZXYtiI6BNEpyHuL+E2CuoyNZ+JvK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxK5PckaDG4jMLMSa85QB6kpTqhIyog+uClN1ePZbAr/IEWhSpL
+	fMohGlQGkOpqdXdIvksH/l9BzTUS8icymfs2Ddh5Am8ewTI5HTj2Bd0HPeWHjNVtLgLtZ/IUMxF
+	3HFyoLlPAfF5ZtKMlJefktRGMQyKdmVzEwWryWdWHcn3vBwNQXWxJiiJEPJk=
+X-Google-Smtp-Source: AGHT+IGFxU2go7qrm/g+T40B6IlNKxMC8MHoIdK5CXWem1W0UsFB6XeS8sCDoJsztarB2VEgrjLYn/T/zW4Os8ztImRXKZuZufWc
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250730152715.8368-1-WeitaoWang-oc@zhaoxin.com>
+X-Received: by 2002:a05:6602:1:b0:876:19b9:1aaa with SMTP id
+ ca18e2360f4ac-881683c9f9dmr29312639f.9.1754067936350; Fri, 01 Aug 2025
+ 10:05:36 -0700 (PDT)
+Date: Fri, 01 Aug 2025 10:05:36 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <688cf3e0.a00a0220.26d0e1.0074.GAE@google.com>
+Subject: [syzbot] [usb?] upstream test error: BUG: sleeping function called
+ from invalid context in kcov_remote_start
+From: syzbot <syzbot+95069c82577357ff89d8@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, llvm@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Weitao,
+Hello,
 
-kernel test robot noticed the following build warnings:
+syzbot found the following issue on:
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    89748acdf226 Merge tag 'drm-next-2025-08-01' of https://gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=164a9cf0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=caba3b7d5edc3bd1
+dashboard link: https://syzkaller.appspot.com/bug?extid=95069c82577357ff89d8
+compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Weitao-Wang/usb-xhci-Fix-slot_id-resource-race-conflict/20250730-183802
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20250730152715.8368-1-WeitaoWang-oc%40zhaoxin.com
-patch subject: [PATCH v3] usb:xhci:Fix slot_id resource race conflict
-config: x86_64-randconfig-161-20250801 (https://download.01.org/0day-ci/archive/20250801/202508010850.Bqd6wf47-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7d6418d10fb8/disk-89748acd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4608f748b818/vmlinux-89748acd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/92e2adcd74de/bzImage-89748acd.xz
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202508010850.Bqd6wf47-lkp@intel.com/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+95069c82577357ff89d8@syzkaller.appspotmail.com
 
-New smatch warnings:
-drivers/usb/host/xhci-mem.c:913 xhci_free_virt_device() warn: variable dereferenced before check 'dev->out_ctx' (see line 878)
+BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
+preempt_count: 0, expected: 0
+RCU nest depth: 2, expected: 2
+7 locks held by ksoftirqd/1/30:
+ #0: ffffffff8d64a6a0 (local_bh){.+.+}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: __local_bh_disable_ip+0x264/0x400 kernel/softirq.c:168
+ #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+ #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
+ #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: __rt_spin_lock kernel/locking/spinlock_rt.c:50 [inline]
+ #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rt_spin_lock+0x1bb/0x2c0 kernel/locking/spinlock_rt.c:57
+ #3: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #4: ffff88801989a138 ((wq_completion)events_bh){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3211 [inline]
+ #4: ffff88801989a138 ((wq_completion)events_bh){+...}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3319
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3212 [inline]
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3319
+ #6: ffff8880b8928b50 ((lock)#3){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #6: ffff8880b8928b50 ((lock)#3){+.+.}-{3:3}, at: kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+irq event stamp: 58091
+hardirqs last  enabled at (58090): [<ffffffff8af459c5>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (58090): [<ffffffff8af459c5>] _raw_spin_unlock_irqrestore+0x85/0x110 kernel/locking/spinlock.c:194
+hardirqs last disabled at (58091): [<ffffffff86a72b95>] kcov_remote_start_usb_softirq include/linux/kcov.h:88 [inline]
+hardirqs last disabled at (58091): [<ffffffff86a72b95>] __usb_hcd_giveback_urb+0x3f5/0x710 drivers/usb/core/hcd.c:1662
+softirqs last  enabled at (58074): [<ffffffff8184ff9e>] ksoftirqd_run_end kernel/softirq.c:282 [inline]
+softirqs last  enabled at (58074): [<ffffffff8184ff9e>] run_ksoftirqd+0xce/0x210 kernel/softirq.c:969
+softirqs last disabled at (58082): [<ffffffff818e7aff>] smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:160
+CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-syzkaller-10499-g89748acdf226 #0 PREEMPT_{RT,(full)} 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ __might_resched+0x44b/0x5d0 kernel/sched/core.c:8957
+ __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
+ rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
+ spin_lock include/linux/spinlock_rt.h:44 [inline]
+ kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+ kcov_remote_start_usb include/linux/kcov.h:55 [inline]
+ kcov_remote_start_usb_softirq include/linux/kcov.h:89 [inline]
+ __usb_hcd_giveback_urb+0x427/0x710 drivers/usb/core/hcd.c:1662
+ usb_giveback_urb_bh+0x296/0x420 drivers/usb/core/hcd.c:1697
+ process_one_work kernel/workqueue.c:3236 [inline]
+ process_scheduled_works+0xade/0x17b0 kernel/workqueue.c:3319
+ bh_worker+0x2b1/0x600 kernel/workqueue.c:3579
+ tasklet_action+0xc/0x70 kernel/softirq.c:854
+ handle_softirqs+0x22f/0x710 kernel/softirq.c:579
+ run_ksoftirqd+0xac/0x210 kernel/softirq.c:968
+ smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:160
+ kthread+0x70e/0x8a0 kernel/kthread.c:464
+ ret_from_fork+0x3f9/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
 
-vim +913 drivers/usb/host/xhci-mem.c
 
-0b5ed80150eb59 Weitao Wang    2025-07-30  868  void xhci_free_virt_device(struct xhci_hcd *xhci, struct xhci_virt_device *dev,
-0b5ed80150eb59 Weitao Wang    2025-07-30  869  		int slot_id)
-3ffbba9511b414 Sarah Sharp    2009-04-27  870  {
-3ffbba9511b414 Sarah Sharp    2009-04-27  871  	int i;
-2e27980e6eb781 Sarah Sharp    2011-09-02  872  	int old_active_eps = 0;
-3ffbba9511b414 Sarah Sharp    2009-04-27  873  
-3ffbba9511b414 Sarah Sharp    2009-04-27  874  	/* Slot ID 0 is reserved */
-0b5ed80150eb59 Weitao Wang    2025-07-30  875  	if (slot_id == 0 || !dev)
-3ffbba9511b414 Sarah Sharp    2009-04-27  876  		return;
-3ffbba9511b414 Sarah Sharp    2009-04-27  877  
-0b5ed80150eb59 Weitao Wang    2025-07-30 @878  	if (xhci->dcbaa->dev_context_ptrs[slot_id] == cpu_to_le64(dev->out_ctx->dma))
-                                                                                                          ^^^^^^^^^^^^
-dev->out_ctx dereferenced without checking for NULL
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-8e595a5d30a5ee Sarah Sharp    2009-07-27  879  		xhci->dcbaa->dev_context_ptrs[slot_id] = 0;
-3ffbba9511b414 Sarah Sharp    2009-04-27  880  
-d850c1658328e7 Zhengjun Xing  2018-06-21  881  	trace_xhci_free_virt_device(dev);
-d850c1658328e7 Zhengjun Xing  2018-06-21  882  
-2e27980e6eb781 Sarah Sharp    2011-09-02  883  	if (dev->tt_info)
-2e27980e6eb781 Sarah Sharp    2011-09-02  884  		old_active_eps = dev->tt_info->active_eps;
-2e27980e6eb781 Sarah Sharp    2011-09-02  885  
-98871e9470a50c Felipe Balbi   2017-01-23  886  	for (i = 0; i < 31; i++) {
-63a0d9abd18cdc Sarah Sharp    2009-09-04  887  		if (dev->eps[i].ring)
-63a0d9abd18cdc Sarah Sharp    2009-09-04  888  			xhci_ring_free(xhci, dev->eps[i].ring);
-8df75f42f8e67e Sarah Sharp    2010-04-02  889  		if (dev->eps[i].stream_info)
-8df75f42f8e67e Sarah Sharp    2010-04-02  890  			xhci_free_stream_info(xhci,
-8df75f42f8e67e Sarah Sharp    2010-04-02  891  					dev->eps[i].stream_info);
-5aed5b7c2430ce Mathias Nyman  2022-10-24  892  		/*
-5aed5b7c2430ce Mathias Nyman  2022-10-24  893  		 * Endpoints are normally deleted from the bandwidth list when
-5aed5b7c2430ce Mathias Nyman  2022-10-24  894  		 * endpoints are dropped, before device is freed.
-5aed5b7c2430ce Mathias Nyman  2022-10-24  895  		 * If host is dying or being removed then endpoints aren't
-5aed5b7c2430ce Mathias Nyman  2022-10-24  896  		 * dropped cleanly, so delete the endpoint from list here.
-5aed5b7c2430ce Mathias Nyman  2022-10-24  897  		 * Only applicable for hosts with software bandwidth checking.
-2e27980e6eb781 Sarah Sharp    2011-09-02  898  		 */
-5aed5b7c2430ce Mathias Nyman  2022-10-24  899  
-5aed5b7c2430ce Mathias Nyman  2022-10-24  900  		if (!list_empty(&dev->eps[i].bw_endpoint_list)) {
-5aed5b7c2430ce Mathias Nyman  2022-10-24  901  			list_del_init(&dev->eps[i].bw_endpoint_list);
-5aed5b7c2430ce Mathias Nyman  2022-10-24  902  			xhci_dbg(xhci, "Slot %u endpoint %u not removed from BW list!\n",
-2e27980e6eb781 Sarah Sharp    2011-09-02  903  				 slot_id, i);
-8df75f42f8e67e Sarah Sharp    2010-04-02  904  		}
-5aed5b7c2430ce Mathias Nyman  2022-10-24  905  	}
-839c817ce67178 Sarah Sharp    2011-09-02  906  	/* If this is a hub, free the TT(s) from the TT list */
-839c817ce67178 Sarah Sharp    2011-09-02  907  	xhci_free_tt_info(xhci, dev, slot_id);
-2e27980e6eb781 Sarah Sharp    2011-09-02  908  	/* If necessary, update the number of active TTs on this root port */
-2e27980e6eb781 Sarah Sharp    2011-09-02  909  	xhci_update_tt_active_eps(xhci, dev, old_active_eps);
-3ffbba9511b414 Sarah Sharp    2009-04-27  910  
-3ffbba9511b414 Sarah Sharp    2009-04-27  911  	if (dev->in_ctx)
-d115b04818e57b John Youn      2009-07-27  912  		xhci_free_container_ctx(xhci, dev->in_ctx);
-3ffbba9511b414 Sarah Sharp    2009-04-27 @913  	if (dev->out_ctx)
-                                                    ^^^^^^^^^^^^
-Can dev->out_ctx be NULL?
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-d115b04818e57b John Youn      2009-07-27  914  		xhci_free_container_ctx(xhci, dev->out_ctx);
-d115b04818e57b John Youn      2009-07-27  915  
-a400efe455f7b6 Mathias Nyman  2018-03-16  916  	if (dev->udev && dev->udev->slot_id)
-a400efe455f7b6 Mathias Nyman  2018-03-16  917  		dev->udev->slot_id = 0;
-74151b5349266b Niklas Neronin 2024-02-29  918  	if (dev->rhub_port && dev->rhub_port->slot_id == slot_id)
-74151b5349266b Niklas Neronin 2024-02-29  919  		dev->rhub_port->slot_id = 0;
-0b5ed80150eb59 Weitao Wang    2025-07-30  920  	if (xhci->devs[slot_id] == dev)
-326b4810cc9952 Randy Dunlap   2010-04-19  921  		xhci->devs[slot_id] = NULL;
-0b5ed80150eb59 Weitao Wang    2025-07-30  922  	kfree(dev);
-3ffbba9511b414 Sarah Sharp    2009-04-27  923  }
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
