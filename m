@@ -1,149 +1,166 @@
-Return-Path: <linux-usb+bounces-26328-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26329-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48354B18A85
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Aug 2025 04:59:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47C8AB18AC0
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Aug 2025 07:31:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A30F61AA459F
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Aug 2025 02:59:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69192564480
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Aug 2025 05:31:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE3518A6A5;
-	Sat,  2 Aug 2025 02:58:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C1F1D5ABA;
+	Sat,  2 Aug 2025 05:31:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=sina.com header.i=@sina.com header.b="lAR4jzeM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zl2DMW9D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from r3-25.sinamail.sina.com.cn (r3-25.sinamail.sina.com.cn [202.108.3.25])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E398F7D
-	for <linux-usb@vger.kernel.org>; Sat,  2 Aug 2025 02:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.108.3.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2C7367;
+	Sat,  2 Aug 2025 05:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754103537; cv=none; b=MS9SLFYZAb1uKOGPQfre5H8a6dDHFmGltCgO0tZ9oAYKhzmm46cHDbXdqhlAWn4ZALzbNQc5xlMfuVEIcFDsFqKcCbWDJA/y1WFKPicQLl1FJLNVEYqsKALbkuEFMc3NHa8ZWQpKwWs8GM6Aa21L6jNywP4Hi9UfFcoM39QdTik=
+	t=1754112699; cv=none; b=C7oWightZfJ9keLSRvLz0l0ynGc89atgujaCFb1LExrZKCONhcRyK+O6ps9xjOcOlr8Xn0pdfX4Gfh4GBSDDt879NsDEWX0eqsigzVJFwQa+48w4Hev69tvFkXxBtTUSIN0kBWDiePWJDLSLPG64nHVcgYSvlbY97RMO2uN4+hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754103537; c=relaxed/simple;
-	bh=hQFSNUG7Mlc1PyowN/WACGYbNwCnZJ8ZppesueYXL7Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jPsV53CIJHf1Oert42muAEOMSzF3UbxYmdH1bWQEz1TnMHNVQi6bvlXgW+4GB1kWrOfKLfFAERu9YgX92I1KHRTaPTtCAUJ000hypmni5sfcF58dandHGJHsRoE9e4v2VbfPw/OSbxH/8e32wPizJDyHSZDbO5BPdhIevNbT2tU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; dkim=pass (1024-bit key) header.d=sina.com header.i=@sina.com header.b=lAR4jzeM; arc=none smtp.client-ip=202.108.3.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sina.com; s=201208; t=1754103532;
-	bh=UBbbSHDxSNopaB6c8TsMYzhCmRPCZHeIoj2AWcaNomM=;
-	h=From:Subject:Date:Message-ID;
-	b=lAR4jzeMHNLsLzrJ8qmX0SE31UT3YSDJD1kuOmEXJ2bNArjhoo9hrf4VUYrmxo6Yj
-	 duek6lqSWcWLYTP2GrftXFj8McRtGE+hn2eGQcclaAIHIlH1LpwcqydK+2Fk34FB5/
-	 Bv35FTVJNj5o9WKWpBNONVfkjOMpzY61+ztOVHrw=
-X-SMAIL-HELO: localhost.localdomain
-Received: from unknown (HELO localhost.localdomain)([114.249.58.236])
-	by sina.com (10.54.253.31) with ESMTP
-	id 688D7EE1000007BD; Sat, 2 Aug 2025 10:58:43 +0800 (CST)
-X-Sender: hdanton@sina.com
-X-Auth-ID: hdanton@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=hdanton@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=hdanton@sina.com
-X-SMAIL-MID: 4157166816222
-X-SMAIL-UIID: D5674290A3F741FB8B2C2F109FB90ECC-20250802-105843-1
-From: Hillf Danton <hdanton@sina.com>
-To: syzbot <syzbot+95069c82577357ff89d8@syzkaller.appspotmail.com>
-Cc: Aleksandr Nogikh <nogikh@google.com>,
-	gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	llvm@lists.linux.dev,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] upstream test error: BUG: sleeping function called from invalid context in kcov_remote_start
-Date: Sat,  2 Aug 2025 10:58:30 +0800
-Message-ID: <20250802025832.3683-1-hdanton@sina.com>
-In-Reply-To: <688cf3e0.a00a0220.26d0e1.0074.GAE@google.com>
-References: 
+	s=arc-20240116; t=1754112699; c=relaxed/simple;
+	bh=ZRLdGwSqLnclEoXX/4J/rmkHU+mE/M/nSHHqiMZELEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BFTeWi0z2WBuc77kOGNXlGMoW+l8Tdr99xlC0Kss4Am0JV8c4xT5IWTRHJ6nXX1JIdDp4F/TqRiHQ1QoTD2AoxGU/dMoF1VhH1nW9td/YA5Cy59ExW0xRH2lD4RLmMMj5AiHFS4n66X3/KHOaTqM6Gaxpd5b3gDId1un8IY7/r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zl2DMW9D; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754112697; x=1785648697;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZRLdGwSqLnclEoXX/4J/rmkHU+mE/M/nSHHqiMZELEk=;
+  b=Zl2DMW9DjQ5JJehFSx3fv7ypqkKVirCjz3caxU2fuif5HUOJnvPmfBnx
+   kcT9NP91mXn1KSGh/wtGgIW1yldbCfACt2+gHw/FUIb9cIfR+Lz/ZDCLp
+   +hICCFlYzSkN5S6TvmvkoibuSKAh7ZDI9tEkjSp9yvsxqZNbQUzP5VWH0
+   SoQOWeFrxkOm3bmF6rbqkOJNJcY7Y8yk6/IW6DENRVzzun03JP85tseA1
+   oaz6sKDq0er2aaS0HSXZ8LT48+jGVbY/4Un0LiRcp8X17gTOWIPQMhnL8
+   sTyU64yNHJ0YM1hV75awY2cTjN9I7QHxgy6oz3chbRtgUYH3ggaTM/z32
+   g==;
+X-CSE-ConnectionGUID: /lh2stC1QlKYhsC47FwXxg==
+X-CSE-MsgGUID: VuokqIvySgmDl85PXRZsOQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="59077185"
+X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
+   d="scan'208";a="59077185"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 22:31:36 -0700
+X-CSE-ConnectionGUID: 9lV5Yxb2S8+W5MRccSjssQ==
+X-CSE-MsgGUID: j4cU7ZYqSbShgDAsFQAmQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
+   d="scan'208";a="169106513"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 01 Aug 2025 22:31:31 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ui4q9-0005C8-0k;
+	Sat, 02 Aug 2025 05:31:29 +0000
+Date: Sat, 2 Aug 2025 13:30:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Haotien Hsu <haotienh@nvidia.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Brad Griffis <bgriffis@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>,
+	Vedant Deshpande <vedantd@nvidia.com>,
+	Akhil R <akhilrajeev@nvidia.com>,
+	Jinjie Ruan <ruanjinjie@huawei.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Haotien Hsu <haotienh@nvidia.com>, Henry Lin <henryl@nvidia.com>,
+	Jui Chang Kuo <jckuo@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
+	WK Tsai <wtsai@nvidia.com>
+Subject: Re: [PATCH 4/4] usb: xhci: tegra: Support USB wakeup function for
+ Tegra234
+Message-ID: <202508021305.3ENY5oQC-lkp@intel.com>
+References: <20250801095748.385437-5-haotienh@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250801095748.385437-5-haotienh@nvidia.com>
 
-> Date: Fri, 01 Aug 2025 10:05:36 -0700	[thread overview]
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    89748acdf226 Merge tag 'drm-next-2025-08-01' of https://gi..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=164a9cf0580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=caba3b7d5edc3bd1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=95069c82577357ff89d8
-> compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/7d6418d10fb8/disk-89748acd.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/4608f748b818/vmlinux-89748acd.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/92e2adcd74de/bzImage-89748acd.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+95069c82577357ff89d8@syzkaller.appspotmail.com
-> 
-> BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
-> in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
-> preempt_count: 0, expected: 0
-> RCU nest depth: 2, expected: 2
-> 7 locks held by ksoftirqd/1/30:
->  #0: ffffffff8d64a6a0 (local_bh){.+.+}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
->  #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
->  #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: __local_bh_disable_ip+0x264/0x400 kernel/softirq.c:168
->  #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
->  #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
->  #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: __rt_spin_lock kernel/locking/spinlock_rt.c:50 [inline]
->  #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rt_spin_lock+0x1bb/0x2c0 kernel/locking/spinlock_rt.c:57
->  #3: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
->  #4: ffff88801989a138 ((wq_completion)events_bh){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3211 [inline]
->  #4: ffff88801989a138 ((wq_completion)events_bh){+...}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3319
->  #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3212 [inline]
->  #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3319
->  #6: ffff8880b8928b50 ((lock)#3){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
->  #6: ffff8880b8928b50 ((lock)#3){+.+.}-{3:3}, at: kcov_remote_start+0x92/0x460 kernel/kcov.c:865
-> irq event stamp: 58091
-> hardirqs last  enabled at (58090): [<ffffffff8af459c5>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-> hardirqs last  enabled at (58090): [<ffffffff8af459c5>] _raw_spin_unlock_irqrestore+0x85/0x110 kernel/locking/spinlock.c:194
-> hardirqs last disabled at (58091): [<ffffffff86a72b95>] kcov_remote_start_usb_softirq include/linux/kcov.h:88 [inline]
-> hardirqs last disabled at (58091): [<ffffffff86a72b95>] __usb_hcd_giveback_urb+0x3f5/0x710 drivers/usb/core/hcd.c:1662
-> softirqs last  enabled at (58074): [<ffffffff8184ff9e>] ksoftirqd_run_end kernel/softirq.c:282 [inline]
-> softirqs last  enabled at (58074): [<ffffffff8184ff9e>] run_ksoftirqd+0xce/0x210 kernel/softirq.c:969
-> softirqs last disabled at (58082): [<ffffffff818e7aff>] smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:160
-> CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-syzkaller-10499-g89748acdf226 #0 PREEMPT_{RT,(full)} 
+Hi Haotien,
 
-When was RT turned on in syzbot tests, and for what?
+kernel test robot noticed the following build warnings:
 
-> Tainted: [W]=WARN
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
->  __might_resched+0x44b/0x5d0 kernel/sched/core.c:8957
->  __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
->  rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
->  spin_lock include/linux/spinlock_rt.h:44 [inline]
->  kcov_remote_start+0x92/0x460 kernel/kcov.c:865
->  kcov_remote_start_usb include/linux/kcov.h:55 [inline]
->  kcov_remote_start_usb_softirq include/linux/kcov.h:89 [inline]
->  __usb_hcd_giveback_urb+0x427/0x710 drivers/usb/core/hcd.c:1662
->  usb_giveback_urb_bh+0x296/0x420 drivers/usb/core/hcd.c:1697
->  process_one_work kernel/workqueue.c:3236 [inline]
->  process_scheduled_works+0xade/0x17b0 kernel/workqueue.c:3319
->  bh_worker+0x2b1/0x600 kernel/workqueue.c:3579
->  tasklet_action+0xc/0x70 kernel/softirq.c:854
->  handle_softirqs+0x22f/0x710 kernel/softirq.c:579
->  run_ksoftirqd+0xac/0x210 kernel/softirq.c:968
->  smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:160
->  kthread+0x70e/0x8a0 kernel/kthread.c:464
->  ret_from_fork+0x3f9/0x770 arch/x86/kernel/process.c:148
->  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
->  </TASK>
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on usb/usb-testing usb/usb-next usb/usb-linus tegra/for-next linus/master v6.16 next-20250801]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Haotien-Hsu/dt-bindings-usb-Add-wake-up-support-for-Tegra234-XUSB-host-controller/20250801-180040
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250801095748.385437-5-haotienh%40nvidia.com
+patch subject: [PATCH 4/4] usb: xhci: tegra: Support USB wakeup function for Tegra234
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20250802/202508021305.3ENY5oQC-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 8f09b03aebb71c154f3bbe725c29e3f47d37c26e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250802/202508021305.3ENY5oQC-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508021305.3ENY5oQC-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/host/xhci-tegra.c:1997:15: warning: unused variable 'i' [-Wunused-variable]
+    1997 |         unsigned int i;
+         |                      ^
+   1 warning generated.
+
+
+vim +/i +1997 drivers/usb/host/xhci-tegra.c
+
+  1992	
+  1993	static void tegra_xusb_remove(struct platform_device *pdev)
+  1994	{
+  1995		struct tegra_xusb *tegra = platform_get_drvdata(pdev);
+  1996		struct xhci_hcd *xhci = hcd_to_xhci(tegra->hcd);
+> 1997		unsigned int i;
+  1998	
+  1999		tegra_xusb_deinit_usb_phy(tegra);
+  2000	
+  2001		pm_runtime_get_sync(&pdev->dev);
+  2002		usb_remove_hcd(xhci->shared_hcd);
+  2003		usb_put_hcd(xhci->shared_hcd);
+  2004		xhci->shared_hcd = NULL;
+  2005		usb_remove_hcd(tegra->hcd);
+  2006		usb_put_hcd(tegra->hcd);
+  2007	
+  2008		dma_free_coherent(&pdev->dev, tegra->fw.size, tegra->fw.virt,
+  2009				  tegra->fw.phys);
+  2010	
+  2011		if (tegra->padctl_irq)
+  2012			pm_runtime_disable(&pdev->dev);
+  2013	
+  2014		tegra_xusb_dispose_wake(tegra);
+  2015	
+  2016		pm_runtime_put(&pdev->dev);
+  2017	
+  2018		tegra_xusb_disable(tegra);
+  2019		tegra_xusb_padctl_put(tegra->padctl);
+  2020	}
+  2021	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
