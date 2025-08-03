@@ -1,261 +1,375 @@
-Return-Path: <linux-usb+bounces-26410-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26411-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 390E0B19300
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Aug 2025 09:23:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C10DEB19464
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Aug 2025 17:34:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8AEA3B0059
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Aug 2025 07:23:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB109172215
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Aug 2025 15:34:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852B928507D;
-	Sun,  3 Aug 2025 07:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B0919D8A3;
+	Sun,  3 Aug 2025 15:34:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32C5283153;
-	Sun,  3 Aug 2025 07:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1A6199935
+	for <linux-usb@vger.kernel.org>; Sun,  3 Aug 2025 15:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754205830; cv=none; b=MYQ3r+FQhdg0AV8FtnnrFFmRztJ2cAs+oQBInLRuaBxjDphK6Ps8hazqoTedOGc1I5URcXVgjwJXYO8C0oPUoNTml4p5vvxf5bFFBYxwv0UAPARMX1NxnS/Z+KXXTpkZH5kbJ0cVDArmtZlir4PaMh4HCCS0P8+3RvjVlrE0mqY=
+	t=1754235270; cv=none; b=m69SLbQzhlwmfUXyD6bx5bUE09tmHL/bW9Eay8T0UXP8D/GcWLHJTsl+7oXpWxPvmD1iBMUHENnUhThUh21cyi9K8gS5PdZUeDOi2oCt7YqbVWEpiUkMXGbuCZ9dfSvHJ1p1T+0hXwObzGH6FDQ5UtSM9qayM9MLLk0iVSSW/8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754205830; c=relaxed/simple;
-	bh=o7Sze8vSL1lmHX9XqvuAQ36eR8fWKDTdm/ltFp30Vv8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BM1hj4C9a1B2/2G3KGfQFSjcGzVkwmOKDC0+KMhLYlV6JxoJm+4jlfM7VVfA/3ZQ87HoKUul4fBNm/OKDIC+h0POXr8u/1aUARr/cgB7ahAwFXj+WQ6+a4t2WYhgjz1UbhE4So82eS8eOWEIdyhRc8JXa5LOA168hEwCGxzmgkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-31ec291f442so583749a91.1;
-        Sun, 03 Aug 2025 00:23:48 -0700 (PDT)
+	s=arc-20240116; t=1754235270; c=relaxed/simple;
+	bh=46N/pKDKAcHr9zqNDB6HReSl46lfJ3yKQBsNVjqW9SU=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=E38niQ4aR5zMiN+u6xraRQGXL+nWFd7DM7wHhRd5JpsA5jf839dykzrgq2Rv6K1NgWUZzVlxoYcoI+Ruqy9Jam1beYl+FO7fgeHaFVgThDuUa0+DFK7/Go5xTg9fRcK2YpEc75CteXPzhF91l3YN/KOE+XNyMVV4a7ObhLe1RqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3e401ca74fbso25553535ab.1
+        for <linux-usb@vger.kernel.org>; Sun, 03 Aug 2025 08:34:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754205828; x=1754810628;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7gFNaxZHXVjM+wPnIV705hxHarQ4JJ47HvINcfGklyo=;
-        b=nRc8Rh88aRlV5MvFaMk0Q1XFHNbSXiZ4bMTxgtYcEKux8n6C0C0P0+H0HUJ1m3bqAw
-         SOKLx3xn5pCvCgTEGR3VBnZIRc/kC64w+CIa1lBw62HWRApeUEviNjBGFgJtj8RSy2dE
-         qYL9B+3T0F6KaYJifo256DHimtxZL73ob+K+VSjajlT+SJra2s/FQLJeBUqGRqHAJvxt
-         p2e0rmdYwInJenHKvUhGbeFpWqhEwh53bvawEaANB5SIffr5/JYNC+5THNxfQOraiWzC
-         FzB3jVHNYlWTuSxe/D+s9qXXec8hv65T9KHcWHRXhICyJ/OWmuDtL/rZgmpuqJJ7Rgsz
-         88EA==
-X-Forwarded-Encrypted: i=1; AJvYcCVwiY9Ya+zsd5+rNls+6Z4CnJFAE1nktb+NxTZj5DpkFTvdBcYlIjJe+VsiY/Xq9VNbOyjuO2or@vger.kernel.org, AJvYcCXksUSXUcovFrcxDN2/BALwd5kLAOyJpklu+Azhu26r0ByaOamTcMBHn+6zLPUkW2KVy1be46jJcg36n2s=@vger.kernel.org, AJvYcCXwgl3GszLkxG6dEDFqiQ1wQzGjOlxFSoynj41fadol8Y5RCqOcYkNbEesW4zVfXSxkYty+ImAE/s3r@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfbkHL5pANP+SsHGb3jHrkeWykYEokBRXcUpKsvyAh4fZ8VGIJ
-	c/oQ6xhmlR9bNTCGR0GlzLEdSjYkitW+KSnwWUGJ9Ef8jXSowvJkkgpJ
-X-Gm-Gg: ASbGncvHC2T5LbCIm0K3wzmIR2dn6em17XDgpT4d4AQcE6gtPON5bvj3ZevCndhp80G
-	R9LSEgU8Bu4a4qYF5tc4YlYMWmCdfMpl1bOFM0RUzCC8lKYGod6x5SvB1mHfHGVdaPFke/Im/00
-	0DkINYBkmBK4xlzmwxOP54VhcWk3UQWAstIjlgedRunux+IIoOgeHhzzuKmn8Zwf1pz+4FqleKW
-	T83R5TELpeHx4Pj7e194QHrrrRn+efTnvr6WrFRiqCUEiKIvYRJIOE7r7bv+HQ+J8cksMVDXjxO
-	iGFs+n2xfZ2aA4UvHBtetDDS078+xgOf1g9C/Mb4lOm8CKrry4oTciaSrbc69klakYuZ2QA4VPS
-	JURO6Rc2zF2uM
-X-Google-Smtp-Source: AGHT+IHvGJIfC5VXqgphZ7FgmcKBMtlLf0lp9Zp058suCZRx8lnKA8DsXGVlqbqZPFKDrux4mS/HIg==
-X-Received: by 2002:a05:6a20:7287:b0:240:75c:6f53 with SMTP id adf61e73a8af0-240075c7fdfmr14637.7.1754205828126;
-        Sun, 03 Aug 2025 00:23:48 -0700 (PDT)
-Received: from localhost ([218.152.98.97])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b423d2f4fcesm4517004a12.33.2025.08.03.00.23.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Aug 2025 00:23:47 -0700 (PDT)
-From: Yunseong Kim <ysk@kzalloc.com>
-To: Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Byungchul Park <byungchul@sk.com>,
-	max.byungchul.park@gmail.com,
-	Yeoreum Yun <yeoreum.yun@arm.com>,
-	ppbuk5246@gmail.com,
-	linux-usb@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev,
-	syzkaller@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Yunseong Kim <ysk@kzalloc.com>
-Subject: [PATCH 4/4] kcov: move remote handle allocation outside raw spinlock
-Date: Sun,  3 Aug 2025 07:20:49 +0000
-Message-ID: <20250803072044.572733-10-ysk@kzalloc.com>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250803072044.572733-2-ysk@kzalloc.com>
-References: <20250803072044.572733-2-ysk@kzalloc.com>
+        d=1e100.net; s=20230601; t=1754235268; x=1754840068;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WTZ/RhsRyb20eaUIJ9RFTGO4E6tm+Hj8zMh5fORKd8A=;
+        b=K5WOszfURRpOic0X5yKRo/8d6an23Vmf7DYjhhLGGqXefwnP1u+BIVAKFi2HqW7q6l
+         7WVN7FkAYm7aF4d0tvfHDzWKhAK0/zyzFLOOJk3mVeFx2mcHHQtYUuWjJ0ziw6hj0Y56
+         gPVWaOJVWlUSptPVpxPffRIIuOgKj/fSrwI3DJZZghdJ1DgeNFpeJfnR6pqh9Bjk6gXX
+         VDzyEyRw1lmKXmXIgzXXTHKe3P3iYnHh9XwfGgbGefIpWe/R4/9f0fWhLfCFtPWjIv/j
+         Do5i64UTi7AIUBJYg3PJJ76EMoVSu05KNpUS0pNCrO2vJmVh3D8+Yl1+ooTvUeGwO3uF
+         eemA==
+X-Forwarded-Encrypted: i=1; AJvYcCUq6nU6s9PCgQWz05OwkPcXwROpV5TzanONa4nfr6+njeoR3mS2V4UysXvruqLUyb9F0y2q7KQ3vhU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIXCbo4icxQWd8+XROdQHXCWTnSxwUd4M4L0WVDFdH/nMHFYGE
+	CeDyzxP1jC4mTXdfIVCTI51QwaPoIzyzwHibWDIlszTS+JHaF5GzMy9R3Bn+cJXADaKs68EEKDO
+	gaih+GiZcJGVOC6KEH1MplXhgeQFuvJufJ2wbKH+noRid8/LABelkZuU0QHo=
+X-Google-Smtp-Source: AGHT+IG8WOPLQa07jShWGdMZdRh78T9Yxe2MKYVY2gCtPfM/KiGrbMzn2dmZWr6Ypm25tA7wwLR03axv8w8LkXP6kEYEdnbSd/Y8
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:c:b0:3e3:f81b:7a1e with SMTP id
+ e9e14a558f8ab-3e41611ba0bmr136444005ab.6.1754235267771; Sun, 03 Aug 2025
+ 08:34:27 -0700 (PDT)
+Date: Sun, 03 Aug 2025 08:34:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <688f8183.050a0220.13f73d.0002.GAE@google.com>
+Subject: [syzbot] [usb?] BUG: sleeping function called from invalid context in kcov_remote_start
+From: syzbot <syzbot+13149748d17d82b13f66@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-To comply with raw spinlock constraints, move allocation of kcov_remote
-structs out of the critical section in the KCOV_REMOTE_ENABLE path.
+Hello,
 
-Memory is now pre-allocated in kcov_ioctl() before taking any locks,
-and passed down to the locked section for insertion into the hash table.
-error handling is updated to release the memory on failure.
+syzbot found the following issue on:
 
-This aligns with the non-sleeping requirement of  raw spinlocks
-introduced earlier in the series.
+HEAD commit:    4b290aae788e Merge tag 'sysctl-6.17-rc1' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=177e0f82580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3d46544c44676816
+dashboard link: https://syzkaller.appspot.com/bug?extid=13149748d17d82b13f66
+compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
 
-Signed-off-by: Yunseong Kim <ysk@kzalloc.com>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a42db01cad91/disk-4b290aae.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/32f0fca549e2/vmlinux-4b290aae.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e4b9f4fa04d4/bzImage-4b290aae.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+13149748d17d82b13f66@syzkaller.appspotmail.com
+
+BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
+preempt_count: 0, expected: 0
+RCU nest depth: 2, expected: 2
+7 locks held by ksoftirqd/1/30:
+ #0: ffffffff8d64a580 (local_bh){.+.+}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: __local_bh_disable_ip+0x264/0x400 kernel/softirq.c:168
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: __rt_spin_lock kernel/locking/spinlock_rt.c:50 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rt_spin_lock+0x1bb/0x2c0 kernel/locking/spinlock_rt.c:57
+ #3: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #4: ffff888019899d38 ((wq_completion)events_bh){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3213 [inline]
+ #4: ffff888019899d38 ((wq_completion)events_bh){+...}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3321
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3214 [inline]
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3321
+ #6: ffff8880b8928b78 ((lock)#3){....}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #6: ffff8880b8928b78 ((lock)#3){....}-{3:3}, at: kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+irq event stamp: 3767
+hardirqs last  enabled at (3766): [<ffffffff8af19435>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (3766): [<ffffffff8af19435>] _raw_spin_unlock_irqrestore+0x85/0x110 kernel/locking/spinlock.c:194
+hardirqs last disabled at (3767): [<ffffffff86a3fdb5>] kcov_remote_start_usb_softirq include/linux/kcov.h:88 [inline]
+hardirqs last disabled at (3767): [<ffffffff86a3fdb5>] __usb_hcd_giveback_urb+0x3f5/0x710 drivers/usb/core/hcd.c:1662
+softirqs last  enabled at (3752): [<ffffffff81850eae>] ksoftirqd_run_end kernel/softirq.c:282 [inline]
+softirqs last  enabled at (3752): [<ffffffff81850eae>] run_ksoftirqd+0xce/0x210 kernel/softirq.c:969
+softirqs last disabled at (3758): [<ffffffff818e8d62>] smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Not tainted 6.16.0-syzkaller-04405-g4b290aae788e #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ __might_resched+0x44b/0x5d0 kernel/sched/core.c:8950
+ __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
+ rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
+ spin_lock include/linux/spinlock_rt.h:44 [inline]
+ kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+ kcov_remote_start_usb include/linux/kcov.h:55 [inline]
+ kcov_remote_start_usb_softirq include/linux/kcov.h:89 [inline]
+ __usb_hcd_giveback_urb+0x427/0x710 drivers/usb/core/hcd.c:1662
+ usb_giveback_urb_bh+0x296/0x420 drivers/usb/core/hcd.c:1697
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3321
+ bh_worker+0x2b1/0x600 kernel/workqueue.c:3581
+ tasklet_action+0xc/0x70 kernel/softirq.c:854
+ handle_softirqs+0x22c/0x710 kernel/softirq.c:579
+ run_ksoftirqd+0xac/0x210 kernel/softirq.c:968
+ smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+ kthread+0x711/0x8a0 kernel/kthread.c:464
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
+preempt_count: 0, expected: 0
+RCU nest depth: 2, expected: 2
+7 locks held by ksoftirqd/1/30:
+ #0: ffffffff8d64a580 (local_bh){.+.+}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: __local_bh_disable_ip+0x264/0x400 kernel/softirq.c:168
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: __rt_spin_lock kernel/locking/spinlock_rt.c:50 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rt_spin_lock+0x1bb/0x2c0 kernel/locking/spinlock_rt.c:57
+ #3: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #4: ffff888019899d38 ((wq_completion)events_bh){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3213 [inline]
+ #4: ffff888019899d38 ((wq_completion)events_bh){+...}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3321
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3214 [inline]
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3321
+ #6: ffff8880b8928b78 ((lock)#3){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #6: ffff8880b8928b78 ((lock)#3){+.+.}-{3:3}, at: kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+irq event stamp: 10365
+hardirqs last  enabled at (10364): [<ffffffff8af19435>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (10364): [<ffffffff8af19435>] _raw_spin_unlock_irqrestore+0x85/0x110 kernel/locking/spinlock.c:194
+hardirqs last disabled at (10365): [<ffffffff86a3fdb5>] kcov_remote_start_usb_softirq include/linux/kcov.h:88 [inline]
+hardirqs last disabled at (10365): [<ffffffff86a3fdb5>] __usb_hcd_giveback_urb+0x3f5/0x710 drivers/usb/core/hcd.c:1662
+softirqs last  enabled at (10350): [<ffffffff81850eae>] ksoftirqd_run_end kernel/softirq.c:282 [inline]
+softirqs last  enabled at (10350): [<ffffffff81850eae>] run_ksoftirqd+0xce/0x210 kernel/softirq.c:969
+softirqs last disabled at (10356): [<ffffffff818e8d62>] smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-syzkaller-04405-g4b290aae788e #0 PREEMPT_{RT,(full)} 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ __might_resched+0x44b/0x5d0 kernel/sched/core.c:8950
+ __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
+ rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
+ spin_lock include/linux/spinlock_rt.h:44 [inline]
+ kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+ kcov_remote_start_usb include/linux/kcov.h:55 [inline]
+ kcov_remote_start_usb_softirq include/linux/kcov.h:89 [inline]
+ __usb_hcd_giveback_urb+0x427/0x710 drivers/usb/core/hcd.c:1662
+ usb_giveback_urb_bh+0x296/0x420 drivers/usb/core/hcd.c:1697
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3321
+ bh_worker+0x2b1/0x600 kernel/workqueue.c:3581
+ tasklet_action+0xc/0x70 kernel/softirq.c:854
+ handle_softirqs+0x22c/0x710 kernel/softirq.c:579
+ run_ksoftirqd+0xac/0x210 kernel/softirq.c:968
+ smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+ kthread+0x711/0x8a0 kernel/kthread.c:464
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
+preempt_count: 0, expected: 0
+RCU nest depth: 2, expected: 2
+7 locks held by ksoftirqd/1/30:
+ #0: ffffffff8d64a580 (local_bh){.+.+}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: __local_bh_disable_ip+0x264/0x400 kernel/softirq.c:168
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: __rt_spin_lock kernel/locking/spinlock_rt.c:50 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rt_spin_lock+0x1bb/0x2c0 kernel/locking/spinlock_rt.c:57
+ #3: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #4: ffff888019899d38 ((wq_completion)events_bh){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3213 [inline]
+ #4: ffff888019899d38 ((wq_completion)events_bh){+...}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3321
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3214 [inline]
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3321
+ #6: ffff8880b8928b78 ((lock)#3){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #6: ffff8880b8928b78 ((lock)#3){+.+.}-{3:3}, at: kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+irq event stamp: 15439
+hardirqs last  enabled at (15438): [<ffffffff8af19435>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (15438): [<ffffffff8af19435>] _raw_spin_unlock_irqrestore+0x85/0x110 kernel/locking/spinlock.c:194
+hardirqs last disabled at (15439): [<ffffffff86a3fdb5>] kcov_remote_start_usb_softirq include/linux/kcov.h:88 [inline]
+hardirqs last disabled at (15439): [<ffffffff86a3fdb5>] __usb_hcd_giveback_urb+0x3f5/0x710 drivers/usb/core/hcd.c:1662
+softirqs last  enabled at (15424): [<ffffffff81850eae>] ksoftirqd_run_end kernel/softirq.c:282 [inline]
+softirqs last  enabled at (15424): [<ffffffff81850eae>] run_ksoftirqd+0xce/0x210 kernel/softirq.c:969
+softirqs last disabled at (15430): [<ffffffff818e8d62>] smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-syzkaller-04405-g4b290aae788e #0 PREEMPT_{RT,(full)} 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ __might_resched+0x44b/0x5d0 kernel/sched/core.c:8950
+ __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
+ rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
+ spin_lock include/linux/spinlock_rt.h:44 [inline]
+ kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+ kcov_remote_start_usb include/linux/kcov.h:55 [inline]
+ kcov_remote_start_usb_softirq include/linux/kcov.h:89 [inline]
+ __usb_hcd_giveback_urb+0x427/0x710 drivers/usb/core/hcd.c:1662
+ usb_giveback_urb_bh+0x296/0x420 drivers/usb/core/hcd.c:1697
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3321
+ bh_worker+0x2b1/0x600 kernel/workqueue.c:3581
+ tasklet_action+0xc/0x70 kernel/softirq.c:854
+ handle_softirqs+0x22c/0x710 kernel/softirq.c:579
+ run_ksoftirqd+0xac/0x210 kernel/softirq.c:968
+ smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+ kthread+0x711/0x8a0 kernel/kthread.c:464
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
+preempt_count: 0, expected: 0
+RCU nest depth: 2, expected: 2
+7 locks held by ksoftirqd/1/30:
+ #0: ffffffff8d64a580 (local_bh){.+.+}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: __local_bh_disable_ip+0x264/0x400 kernel/softirq.c:168
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: __rt_spin_lock kernel/locking/spinlock_rt.c:50 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rt_spin_lock+0x1bb/0x2c0 kernel/locking/spinlock_rt.c:57
+ #3: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #4: ffff888019899d38 ((wq_completion)events_bh){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3213 [inline]
+ #4: ffff888019899d38 ((wq_completion)events_bh){+...}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3321
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3214 [inline]
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3321
+ #6: ffff8880b8928b78 ((lock)#3){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #6: ffff8880b8928b78 ((lock)#3){+.+.}-{3:3}, at: kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+irq event stamp: 25001
+hardirqs last  enabled at (25000): [<ffffffff8af19435>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (25000): [<ffffffff8af19435>] _raw_spin_unlock_irqrestore+0x85/0x110 kernel/locking/spinlock.c:194
+hardirqs last disabled at (25001): [<ffffffff86a3fdb5>] kcov_remote_start_usb_softirq include/linux/kcov.h:88 [inline]
+hardirqs last disabled at (25001): [<ffffffff86a3fdb5>] __usb_hcd_giveback_urb+0x3f5/0x710 drivers/usb/core/hcd.c:1662
+softirqs last  enabled at (24986): [<ffffffff81850eae>] ksoftirqd_run_end kernel/softirq.c:282 [inline]
+softirqs last  enabled at (24986): [<ffffffff81850eae>] run_ksoftirqd+0xce/0x210 kernel/softirq.c:969
+softirqs last disabled at (24992): [<ffffffff818e8d62>] smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-syzkaller-04405-g4b290aae788e #0 PREEMPT_{RT,(full)} 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ __might_resched+0x44b/0x5d0 kernel/sched/core.c:8950
+ __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
+ rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
+ spin_lock include/linux/spinlock_rt.h:44 [inline]
+ kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+ kcov_remote_start_usb include/linux/kcov.h:55 [inline]
+ kcov_remote_start_usb_softirq include/linux/kcov.h:89 [inline]
+ __usb_hcd_giveback_urb+0x427/0x710 drivers/usb/core/hcd.c:1662
+ usb_giveback_urb_bh+0x296/0x420 drivers/usb/core/hcd.c:1697
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3321
+ bh_worker+0x2b1/0x600 kernel/workqueue.c:3581
+ tasklet_action+0xc/0x70 kernel/softirq.c:854
+ handle_softirqs+0x22c/0x710 kernel/softirq.c:579
+ run_ksoftirqd+0xac/0x210 kernel/softirq.c:968
+ smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+ kthread+0x711/0x8a0 kernel/kthread.c:464
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
+preempt_count: 0, expected: 0
+RCU nest depth: 2, expected: 2
+7 locks held by ksoftirqd/1/30:
+ #0: ffffffff8d64a580 (local_bh){.+.+}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: __local_bh_disable_ip+0x264/0x400 kernel/softirq.c:168
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: __rt_spin_lock kernel/locking/spinlock_rt.c:50 [inline]
+ #2: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: rt_spin_lock+0x1bb/0x2c0 kernel/locking/spinlock_rt.c:57
+ #3: ffffffff8d7aa040 (rcu_read_lock){....}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #4: ffff888019899d38 ((wq_completion)events_bh){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3213 [inline]
+ #4: ffff888019899d38 ((wq_completion)events_bh){+...}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3321
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3214 [inline]
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3321
+ #6: ffff8880b8928b78 ((lock)#3){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #6: ffff8880b8928b78 ((lock)#3){+.+.}-{3:3}, at: kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+irq event stamp: 34711
+hardirqs last  enabled at (34710): [<ffffffff8af19435>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (34710): [<ffffffff8af19435>] _raw_spin_unlock_irqrestore+0x85/0x110 kernel/locking/spinlock.c:194
+hardirqs last disabled at (34711): [<ffffffff86a3fdb5>] kcov_remote_start_usb_softirq include/linux/kcov.h:88 [inline]
+hardirqs last disabled at (34711): [<ffffffff86a3fdb5>] __usb_hcd_giveback_urb+0x3f5/0x710 drivers/usb/core/hcd.c:1662
+softirqs last  enabled at (34696): [<ffffffff81850eae>] ksoftirqd_run_end kernel/softirq.c:282 [inline]
+softirqs last  enabled at (34696): [<ffffffff81850eae>] run_ksoftirqd+0xce/0x210 kernel/softirq.c:969
+softirqs last disabled at (34702): [<ffffffff818e8d62>] smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-syzkaller-04405-g4b290aae788e #0 PREEMPT_{RT,(full)} 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ __might_resched+0x44b/0x5d0 kernel/sched/core.c:8950
+ __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
+ rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
+ spin_lock include/linux/spinlock_rt.h:44 [inline]
+ kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+ kcov_remote_start_usb include/linux/kcov.h:55 [inline]
+ kcov_remote_start_usb_softirq include/linux/kcov.h:89 [inline]
+ __usb_hcd_giveback_urb+0x427/0x710 drivers/usb/core/hcd.c:1662
+ usb_giveback_urb_bh+0x296/0x420 drivers/usb/core/hcd.c:1697
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3321
+ bh_worker+0x2b1/0x600 kernel/workqueue.c:3581
+ tasklet_action+0xc/0x70 kernel/softirq.c:854
+ handle_softirqs+0x22c/0x710 kernel/softirq.c:579
+ run_ksoftirqd+0xac/0x210 kernel/softirq.c:968
+ smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+ kthread+0x711/0x8a0 kernel/kthread.c:464
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+
 ---
- kernel/kcov.c | 81 +++++++++++++++++++++++++++++----------------------
- 1 file changed, 46 insertions(+), 35 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/kernel/kcov.c b/kernel/kcov.c
-index 1e7f08ddf0e8..46d36e0146cc 100644
---- a/kernel/kcov.c
-+++ b/kernel/kcov.c
-@@ -113,15 +113,9 @@ static struct kcov_remote *kcov_remote_find(u64 handle)
- }
- 
- /* Must be called with kcov_remote_lock locked. */
--static struct kcov_remote *kcov_remote_add(struct kcov *kcov, u64 handle)
-+static struct kcov_remote *kcov_remote_add(struct kcov *kcov, u64 handle,
-+					   struct kcov_remote *remote)
- {
--	struct kcov_remote *remote;
--
--	if (kcov_remote_find(handle))
--		return ERR_PTR(-EEXIST);
--	remote = kmalloc(sizeof(*remote), GFP_ATOMIC);
--	if (!remote)
--		return ERR_PTR(-ENOMEM);
- 	remote->handle = handle;
- 	remote->kcov = kcov;
- 	hash_add(kcov_remote_map, &remote->hnode, handle);
-@@ -580,13 +574,14 @@ static inline bool kcov_check_handle(u64 handle, bool common_valid,
- }
- 
- static int kcov_ioctl_locked_remote_enabled(struct kcov *kcov,
--			     unsigned int cmd, unsigned long arg)
-+			     unsigned int cmd, unsigned long arg,
-+			     struct kcov_remote *remote_handles,
-+			     struct kcov_remote *remote_common_handle)
- {
- 	struct task_struct *t;
- 	unsigned long flags;
--	int mode, i;
-+	int mode, i, ret;
- 	struct kcov_remote_arg *remote_arg;
--	struct kcov_remote *remote;
- 
- 	if (kcov->mode != KCOV_MODE_INIT || !kcov->area)
- 		return -EINVAL;
-@@ -610,41 +605,43 @@ static int kcov_ioctl_locked_remote_enabled(struct kcov *kcov,
- 	for (i = 0; i < remote_arg->num_handles; i++) {
- 		if (!kcov_check_handle(remote_arg->handles[i],
- 					false, true, false)) {
--			raw_spin_unlock_irqrestore(&kcov_remote_lock,
--						flags);
--			kcov_disable(t, kcov);
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto err;
- 		}
--		remote = kcov_remote_add(kcov, remote_arg->handles[i]);
--		if (IS_ERR(remote)) {
--			raw_spin_unlock_irqrestore(&kcov_remote_lock,
--						flags);
--			kcov_disable(t, kcov);
--			return PTR_ERR(remote);
-+		if (kcov_remote_find(remote_arg->handles[i])) {
-+			ret = -EEXIST;
-+			goto err;
- 		}
-+		kcov_remote_add(kcov, remote_arg->handles[i],
-+			&remote_handles[i]);
- 	}
- 	if (remote_arg->common_handle) {
- 		if (!kcov_check_handle(remote_arg->common_handle,
- 					true, false, false)) {
--			raw_spin_unlock_irqrestore(&kcov_remote_lock,
--						flags);
--			kcov_disable(t, kcov);
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto err;
- 		}
--		remote = kcov_remote_add(kcov,
--				remote_arg->common_handle);
--		if (IS_ERR(remote)) {
--			raw_spin_unlock_irqrestore(&kcov_remote_lock,
--						flags);
--			kcov_disable(t, kcov);
--			return PTR_ERR(remote);
-+		if (kcov_remote_find(remote_arg->common_handle)) {
-+			ret = -EEXIST;
-+			goto err;
- 		}
-+		kcov_remote_add(kcov,
-+			remote_arg->common_handle, remote_common_handle);
- 		t->kcov_handle = remote_arg->common_handle;
- 	}
- 	raw_spin_unlock_irqrestore(&kcov_remote_lock, flags);
-+
- 	/* Put either in kcov_task_exit() or in KCOV_DISABLE. */
- 	kcov_get(kcov);
- 	return 0;
-+
-+err:
-+	raw_spin_unlock_irqrestore(&kcov_remote_lock, flags);
-+	kcov_disable(t, kcov);
-+	kfree(remote_common_handle);
-+	kfree(remote_handles);
-+
-+	return ret;
- }
- 
- static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,
-@@ -702,6 +699,7 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 	struct kcov_remote_arg *remote_arg = NULL;
- 	unsigned int remote_num_handles;
- 	unsigned long remote_arg_size;
-+	struct kcov_remote *remote_handles, *remote_common_handle;
- 	unsigned long size, flags;
- 	void *area;
- 
-@@ -748,11 +746,22 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 			return -EINVAL;
- 		}
- 		arg = (unsigned long)remote_arg;
-+		remote_handles = kmalloc_array(remote_arg->num_handles,
-+					sizeof(struct kcov_remote), GFP_KERNEL);
-+		if (!remote_handles)
-+			return -ENOMEM;
-+		remote_common_handle = kmalloc(sizeof(struct kcov_remote), GFP_KERNEL);
-+		if (!remote_common_handle) {
-+			kfree(remote_handles);
-+			return -ENOMEM;
-+		}
-+
- 		raw_spin_lock_irqsave(&kcov->lock, flags);
--		res = kcov_ioctl_locked_remote_enabled(kcov, cmd, arg);
-+		res = kcov_ioctl_locked_remote_enabled(kcov, cmd, arg,
-+				remote_handles, remote_common_handle);
- 		raw_spin_unlock_irqrestore(&kcov->lock, flags);
- 		kfree(remote_arg);
--		return res;
-+		break;
- 	default:
- 		/*
- 		 * KCOV_ENABLE and KCOV_DISABLE commands can be normally executed under
-@@ -762,8 +771,10 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 		raw_spin_lock_irqsave(&kcov->lock, flags);
- 		res = kcov_ioctl_locked(kcov, cmd, arg);
- 		raw_spin_unlock_irqrestore(&kcov->lock, flags);
--		return res;
-+		break;
- 	}
-+
-+	return res;
- }
- 
- static const struct file_operations kcov_fops = {
--- 
-2.50.0
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
