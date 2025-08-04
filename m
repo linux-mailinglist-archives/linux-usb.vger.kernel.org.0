@@ -1,57 +1,61 @@
-Return-Path: <linux-usb+bounces-26418-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26419-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF0EAB1976D
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 02:28:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B8D0B1977C
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 02:28:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FBE67AA767
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 00:26:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D7BA18955AA
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 00:28:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB28129E6E;
-	Mon,  4 Aug 2025 00:27:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C85BE481DD;
+	Mon,  4 Aug 2025 00:28:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/kdenOG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kw2JmXvd"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94094FBF6;
-	Mon,  4 Aug 2025 00:27:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C168184540;
+	Mon,  4 Aug 2025 00:28:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267270; cv=none; b=UkAX7QnyYrHJArEZEcJGpdp7S+zEz6TKoggmCmrjE/q65epccWH27vacne5kYdtFc0LRCPo7A8zDoEav4c/XS/VE4PL9wYiHqIYeHKvhnzBCKO/DBnzT6+9JaCcECqjvJ0o5EXUb7oG+Aia7sqLiym5zs8qJxzBcAXHO0Id/vE8=
+	t=1754267302; cv=none; b=LIyGoD88gMT2zmQ1sR7Yzzp6cas98mrj3nWmL19yYyybnWL/GQcPu+Rsfxk7iiShBOHqesRwv/B5PYtpch7ch/It7F9xy+ZfC/DV+7kGfrlyVosq6QWKGyO4McYdFJNsivziZ4l5SSwiYyml+YI4OQ/0vwyjRnLNXB17Ar38hWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267270; c=relaxed/simple;
-	bh=+HCpAVEat2T3d65rIWOgNh1OBfxdsG0s2kPWd1t/rWA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GaPFV018FbMI8MBZh9dWpk1M5cTcC1Oo/4Nyd9geTOf039V7lq0YqYObt446tSzpsxD0dmPZJ3S3RxUpz2Bwej4n1+HUuVBYHHlgIhgxkwJhITK6jlD3JD2IZZ2Z9TactX/+jGa7rZxpJh7QcwgouD7tWhgFtssLnC3yWlw6jgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/kdenOG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C53DC4CEEB;
-	Mon,  4 Aug 2025 00:27:49 +0000 (UTC)
+	s=arc-20240116; t=1754267302; c=relaxed/simple;
+	bh=e0bY9tDub6dgtQDL9G50gjdkjFoU2/gTffVKZ32Sj0Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Ii9IYFRAxu8/soCTLXYupLyQnBdzP0MH3prUx7LxRwjobd95o2OotRpkNiZBw7w4LQAr7DleCJ4Yg4XEaIMZ1E/TKIchd3L1zHinoJH6jpskoqnXxS+wBMGfmmFsih6QMadknGwN524iIyxn00shRjyzhl751RlwCMAn2nZkyQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kw2JmXvd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC20C4CEF0;
+	Mon,  4 Aug 2025 00:28:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267270;
-	bh=+HCpAVEat2T3d65rIWOgNh1OBfxdsG0s2kPWd1t/rWA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=m/kdenOGdYGi4xFGAgR2oCbX54SvCJcij2uYmxm+STfXXqnvvtLcFt/tqKB7+Cqd6
-	 qbVT1ojZOBoRWn7EsWvrPTK3SdIq8dZ3xF559mNfsawgiwFyQvILARimPYqxuBaIAP
-	 TfiiwdVcHqPnK4rZSbvi1rBgkKYdg8SbxVwPGZSyARNKQ9WmjuOqyHQwxXNqsVRYTu
-	 2+UYI9CbWxcgGwOennYmPEGuFW/VL2IVK5gq70CYTi4RKKxHOtswonCZY2aZx6K9C0
-	 C/BRHInESLkBIkw56z4jJ5arjSY+VaPOlaa/xKBOPX5eF5Dpo6CFIr6oIbCx++bxsA
-	 uB1vUgHW0ZzrA==
+	s=k20201202; t=1754267302;
+	bh=e0bY9tDub6dgtQDL9G50gjdkjFoU2/gTffVKZ32Sj0Y=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Kw2JmXvdqyfEBwjde0EOraBuZKhHXGkaIy/6znUKxCIYjbYIz4nXq3hdGVwa5AcAe
+	 J3nMJdGTJ5cOeIYGIWPdYpktr0ovmgccr8yRRsBPpil3KZtO0NT/J3iCsqQgqhShiM
+	 LULLIf4zb7lgFDG4b3n4s1KKYkkxskXkLjc7uLkEO4qHgPr/JkSpP24BG3erjjxlK8
+	 EFcTzA0ItSPfV/yKSgt6Ptx3B08R179d3SCwL1D2c737TX1QQHi3tqQKnSDBuSSBks
+	 XGzemIQxdCYEVjd4dphqrAFAsIkZgGYoUogVCFJfKBHz+/ZEcbU7PQA5Ve40GRjrwb
+	 z9rYEJ/NOMqTQ==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Su Hui <suhui@nfschina.com>,
+Cc: Mario Limonciello <mario.limonciello@amd.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
 	mathias.nyman@intel.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.15 01/80] usb: xhci: print xhci->xhc_state when queue_command failed
-Date: Sun,  3 Aug 2025 20:26:28 -0400
-Message-Id: <20250804002747.3617039-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.15 10/80] usb: xhci: Avoid showing warnings for dying controller
+Date: Sun,  3 Aug 2025 20:26:37 -0400
+Message-Id: <20250804002747.3617039-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250804002747.3617039-1-sashal@kernel.org>
+References: <20250804002747.3617039-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,94 +67,102 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.15.9
 Content-Transfer-Encoding: 8bit
 
-From: Su Hui <suhui@nfschina.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit 7919407eca2ef562fa6c98c41cfdf6f6cdd69d92 ]
+[ Upstream commit 65fc0fc137b5da3ee1f4ca4f61050fcb203d7582 ]
 
-When encounters some errors like these:
-xhci_hcd 0000:4a:00.2: xHCI dying or halted, can't queue_command
-xhci_hcd 0000:4a:00.2: FIXME: allocate a command ring segment
-usb usb5-port6: couldn't allocate usb_device
+When a USB4 dock is unplugged from a system it won't respond to ring
+events. The PCI core handles the surprise removal event and notifies
+all PCI drivers. The XHCI PCI driver sets a flag that the device is
+being removed, and when the device stops responding a flag is also
+added to indicate it's dying.
 
-It's hard to know whether xhc_state is dying or halted. So it's better
-to print xhc_state's value which can help locate the resaon of the bug.
+When that flag is set don't bother to show warnings about a missing
+controller.
 
-Signed-off-by: Su Hui <suhui@nfschina.com>
-Link: https://lore.kernel.org/r/20250725060117.1773770-1-suhui@nfschina.com
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20250717073107.488599-3-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
+Based on my analysis of this commit, here is my assessment:
+
 **Backport Status: YES**
 
-This commit is suitable for backporting to stable kernel trees for the
+This commit should be backported to stable kernel trees for the
 following reasons:
 
-1. **Enhanced Debugging for Real-World Issues**: The commit improves
-   debugging of USB xHCI host controller failures by printing the actual
-   `xhc_state` value when `queue_command` fails. The commit message
-   shows real error messages users encounter ("xHCI dying or halted,
-   can't queue_command"), demonstrating this is a real-world debugging
-   problem.
+1. **Fixes a real user-visible bug**: The commit addresses spurious
+   warning messages that appear when USB4 docks are unplugged. When a
+   USB4 dock is removed, the controller becomes inaccessible (reads
+   return 0xffffffff), but the driver still attempts operations and logs
+   warnings that are misleading to users.
 
-2. **Minimal and Safe Change**: The change is extremely small and safe -
-   it only modifies a debug print statement from:
-  ```c
-  xhci_dbg(xhci, "xHCI dying or halted, can't queue_command\n");
-  ```
-  to:
-  ```c
-  xhci_dbg(xhci, "xHCI dying or halted, can't queue_command. state:
-  0x%x\n", xhci->xhc_state);
-  ```
+2. **Small and contained fix**: The changes are minimal - only adding
+   conditional checks before logging warnings in two functions
+   (`xhci_halt()` and `xhci_reset()`). The fix simply checks if the
+   `XHCI_STATE_DYING` flag is set before printing warnings.
 
-3. **No Functional Changes**: This is a pure diagnostic improvement. It
-   doesn't change any logic, control flow, or data structures. It only
-   adds the state value (0x%x format) to an existing debug message.
+3. **Low risk of regression**: The changes only affect warning messages,
+   not functional behavior. The actual error paths and return values
+   remain unchanged. This is a purely cosmetic fix that improves the
+   user experience by avoiding confusing warnings during expected
+   hardware removal scenarios.
 
-4. **Important for Troubleshooting**: The xHCI driver is critical for
-   USB functionality, and when it fails with "dying or halted" states,
-   knowing the exact state helps diagnose whether:
-   - `XHCI_STATE_DYING` (0x1) - controller is dying
-   - `XHCI_STATE_HALTED` (0x2) - controller is halted
-   - Both states (0x3) - controller has both flags set
+4. **Clear problem and solution**: The commit message clearly describes
+   the issue (USB4 dock removal causes warnings) and the solution
+   (suppress warnings when controller is dying). The code changes
+   directly implement this solution.
 
-   This distinction is valuable for debugging hardware issues, driver
-bugs, or system problems.
+5. **Affects common hardware scenarios**: USB4 docks are becoming
+   increasingly common, and surprise removal is a normal use case that
+   shouldn't generate alarming warnings in system logs.
 
-5. **Zero Risk of Regression**: Adding a parameter to a debug print
-   statement has no risk of introducing regressions. The worst case is
-   the debug message prints the state value.
+6. **Follows stable tree criteria**: This is a bug fix that improves
+   user experience without introducing new features or making
+   architectural changes. It's exactly the type of fix that stable trees
+   are meant to include.
 
-6. **Follows Stable Rules**: This meets stable kernel criteria as it:
-   - Fixes a real debugging limitation
-   - Is obviously correct
-   - Has been tested (signed-off and accepted by Greg KH)
-   - Is small (single line change)
-   - Doesn't add new features, just improves existing diagnostics
+The code changes show:
+- In `xhci_halt()`: Added check `if (!(xhci->xhc_state &
+  XHCI_STATE_DYING))` before `xhci_warn()`
+- In `xhci_reset()`: Added the same check before another `xhci_warn()`
 
-The commit helps system administrators and developers diagnose USB
-issues more effectively by providing the actual state value rather than
-just saying "dying or halted", making it a valuable debugging
-enhancement for stable kernels.
+Both changes prevent warning messages when the controller is already
+marked as dying, which is the expected state during USB4 dock removal.
+This is a classic example of a stable-worthy fix that improves system
+behavior without functional changes.
 
- drivers/usb/host/xhci-ring.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index b720e04ce7d8..8be033f1877d 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -4337,7 +4337,8 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index cb9f35acb1f9..cb29aa49ceba 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -120,7 +120,8 @@ int xhci_halt(struct xhci_hcd *xhci)
+ 	ret = xhci_handshake(&xhci->op_regs->status,
+ 			STS_HALT, STS_HALT, XHCI_MAX_HALT_USEC);
+ 	if (ret) {
+-		xhci_warn(xhci, "Host halt failed, %d\n", ret);
++		if (!(xhci->xhc_state & XHCI_STATE_DYING))
++			xhci_warn(xhci, "Host halt failed, %d\n", ret);
+ 		return ret;
+ 	}
  
- 	if ((xhci->xhc_state & XHCI_STATE_DYING) ||
- 		(xhci->xhc_state & XHCI_STATE_HALTED)) {
--		xhci_dbg(xhci, "xHCI dying or halted, can't queue_command\n");
-+		xhci_dbg(xhci, "xHCI dying or halted, can't queue_command. state: 0x%x\n",
-+			 xhci->xhc_state);
- 		return -ESHUTDOWN;
+@@ -179,7 +180,8 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
+ 	state = readl(&xhci->op_regs->status);
+ 
+ 	if (state == ~(u32)0) {
+-		xhci_warn(xhci, "Host not accessible, reset failed.\n");
++		if (!(xhci->xhc_state & XHCI_STATE_DYING))
++			xhci_warn(xhci, "Host not accessible, reset failed.\n");
+ 		return -ENODEV;
  	}
  
 -- 
