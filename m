@@ -1,227 +1,351 @@
-Return-Path: <linux-usb+bounces-26479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8E69B1AA65
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 23:35:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E242B1AAB5
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 00:00:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FE1A3B31FA
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 21:35:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8AAA621A87
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 22:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A3BC233156;
-	Mon,  4 Aug 2025 21:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="lUPoc7O6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30B5423BF91;
+	Mon,  4 Aug 2025 22:00:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from leonov.paulk.fr (leonov.paulk.fr [185.233.101.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6905319C556;
-	Mon,  4 Aug 2025 21:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B54C1552FA;
+	Mon,  4 Aug 2025 22:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.101.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754343349; cv=none; b=TdKcPCl75+f2YbNg6erL/0jN+ZNNG0IXVzyEtVxMpJU+uZCVXmbvomb46K6JJywHJTp38PZI+/jUpg0Vism/u12fauWmHahaFRrMTz14USXaWZ9APJAzCpRPJR1Xm/is7jpGLnOfKvPNQXUcp0sJ7UilPPQX1DjUct3l5xkEhV4=
+	t=1754344836; cv=none; b=uykE8BQPN8aephsshyXxgCuhbsToJextdpx/7tP5nSZdNmGoQQVtUTU0NQtQQacwxz1bne6LCbQO+tgKL0JlrtTnstRz05KunJmLSln2uIeYKyGy2awTI6611fwYCFv4BzIXQGauwzfSeB44PHLXp8/FLN1xAu3txvXatW2XBlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754343349; c=relaxed/simple;
-	bh=RD7w/8aIHn1ifCKTKAphGnkshouTa3cUYHBlHD2G2Dk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OXs14pDkP9jJFGsHMWNnthJwHUnOdycv4JFbkd63nBo2yyx7CNxxA6r7VCp9v9IgwuhhrHFF9EsbwALorbo94k14OP37yep0s3yP3lWajGKPjJ14zcl0yHwYpDa1Nlv/tfbsTc71vnmTo3S/fq1t5b2S9qpxVUPbbUvm8tBaBNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=lUPoc7O6; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2406fe901fcso36469295ad.3;
-        Mon, 04 Aug 2025 14:35:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1754343346; x=1754948146; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cvo6vUqcyrnegdoTW6jNdQzV/1E/0vD/BmUkrhOfOMY=;
-        b=lUPoc7O6t185UGMvwkkZ4KNmK6R+3uXh4rLrK/2D0bW5fD5F5UHfcBGA+oTrHOIsM5
-         lhgXvupFYsyhMRqD1UruuirOOQW14vfqH3J8pfuWAQOLrtKTp1nMwEQ03E1BpDBTmH6/
-         53tIo0bLwvMjHtCLaEDEnrG57QGZHapGHgY59V/keiJpHkk7Ov8L/SVVwWdCN+WvFzRq
-         Hcmtp6xhomEj/JAowKu8UGSN+rtfGXmBryrT3xRdUsQ3cE1N8iLvvv03KNTQIRyF8mdE
-         pRzzvayHulZukkFOXPSS2gBR07XvzRLrjHpKhm7oUTrdXiws24af4d9SIx03oz+7XPRZ
-         4d8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754343346; x=1754948146;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cvo6vUqcyrnegdoTW6jNdQzV/1E/0vD/BmUkrhOfOMY=;
-        b=XnAraSP/bp6frsFrbMU/RM8ZFUM+SLd49KQ2Wc5DouZjDGVV0aSkdYQCRQdFCH3Z6T
-         YCv4TDqVuFaDTh3rvau6ZKaKnQx4twS9vlIeTNI8/jW9Q9A0NeYVu4cb9d2/l1D/ZCrz
-         yUg8kKyw0yw3yxdwS8mDkdcbMfp9Lt5/lAp9a59y74CJtG+mcLNLZbrf66BGpwA3NoWf
-         rlBDSYhliZb/f0+cyFbKHlSDAvFwjvUNMGBeNUpaBfrlqaO/uBlFY3vtpSgspSX2+rwl
-         INShElffJ6HgAZqju4l6AroWXmLhjAjQSgjacEcR2MrmMyLtJ1Vn0JGDvtFQOski3dII
-         8cxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUiMIUWL2rOp5gG4g0cxTeramtA2bRuztXtKtsAa+p+jf5uVzo1Yixwi9dH9bHoNSWcgHAXTOPHfb/nXb0=@vger.kernel.org, AJvYcCVawe9V9ZtBAdgqCjV7jrQBGsCCaCXNASvHlbzyFXHtg1hbQhlHESbqzt9pAvKmF+oUxrq3espzf4n9@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6odaE+NcWwPOa+eF4DsqirwEfdE5zIZovdNQGDbymAmcvC1UW
-	Ro1hH0hbYnO9XxD43Bslky4c/FkKQCJmHLUj8HcDKTOsj6X9qx4Ds2xh2954QYzHivFVWFmUh9m
-	Lh+pLG7YNVXjxplw4k3KBkxiquxUE1HM=
-X-Gm-Gg: ASbGnct1kvzqekEOhjVbp+fHiqVQkEnH1XePcc4hF2cK1oAg7D22LxfNlaeJB0ciaiL
-	v7Tb1/+U1ulqj4RfngTNoOF98oX5zbXVIARpchuw1v0z//h4UrhyELOoqvGcuC/hunRn2cJOJL5
-	VkUdMSaanw+jxivF/JYkMZ7nJC2BCZ5EBnQVWSoPy+hKb9oR9AdSgYcca1tYeatHIqdZveXy5EW
-	+bNOAo1AJnWEzh+pAULSCGCWZtEHbwfWQVXntJm
-X-Google-Smtp-Source: AGHT+IGQ4h1PdEwAmwxxpRH/xuW+XGXcOYeRCGe5U8mroWOM6sMSqCmdibSpRsNPVa5PcWE9a6zJ66cC8PcfcArPagY=
-X-Received: by 2002:a17:902:f549:b0:234:d431:ec6e with SMTP id
- d9443c01a7336-24246f595dfmr140662145ad.3.1754343346482; Mon, 04 Aug 2025
- 14:35:46 -0700 (PDT)
+	s=arc-20240116; t=1754344836; c=relaxed/simple;
+	bh=OkqY7SFjrArg66oQlEL4f7x/72BougKos8SuncqmGO0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eMvDuUviYz8tB2i6hOasdGobIdIkoaQuLygNV8lrP1qI69GGHGpXHQFcyu3H/n/8z1lTYn2nE3Y1GS1wuIN3tiaK9XaD7rriRtxYN+frEYItve2l1+y/UenY0oz0oiqZDFdHNHUKDe+tPQzoFCu6Dk9thGoyd6w85woDuKo+vEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sys-base.io; spf=pass smtp.mailfrom=sys-base.io; arc=none smtp.client-ip=185.233.101.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sys-base.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sys-base.io
+Received: from laika.paulk.fr (12.234.24.109.rev.sfr.net [109.24.234.12])
+	by leonov.paulk.fr (Postfix) with ESMTPS id 496D91F00078;
+	Mon,  4 Aug 2025 21:59:48 +0000 (UTC)
+Received: by laika.paulk.fr (Postfix, from userid 65534)
+	id ACAE6B0118D; Mon,  4 Aug 2025 21:59:39 +0000 (UTC)
+X-Spam-Level: 
+Received: from shepard (unknown [192.168.1.1])
+	by laika.paulk.fr (Postfix) with ESMTPSA id 02B54B01170;
+	Mon,  4 Aug 2025 21:59:27 +0000 (UTC)
+Date: Mon, 4 Aug 2025 23:59:25 +0200
+From: Paul Kocialkowski <paulk@sys-base.io>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Devarsh Thakkar <devarsht@ti.com>, Benoit Parrot <bparrot@ti.com>,
+	Hans Verkuil <hverkuil@kernel.org>, Mike Isely <isely@pobox.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+	Christian Gromm <christian.gromm@microchip.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>,
+	Dongliang Mu <dzm91@hust.edu.cn>, Jonathan Corbet <corbet@lwn.net>,
+	Tomasz Figa <tfiga@chromium.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Andy Walls <awalls@md.metrocast.net>,
+	Michael Tretter <m.tretter@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Bin Liu <bin.liu@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Mirela Rabulea <mirela.rabulea@nxp.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Michal Simek <michal.simek@amd.com>, Ming Qian <ming.qian@nxp.com>,
+	Zhou Peng <eagle.zhou@nxp.com>,
+	Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Vikash Garodia <quic_vgarodia@quicinc.com>,
+	Dikshita Agarwal <quic_dikshita@quicinc.com>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Nas Chung <nas.chung@chipsnmedia.com>,
+	Jackson Lee <jackson.lee@chipsnmedia.com>,
+	Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+	Houlong Wei <houlong.wei@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Tiffany Lin <tiffany.lin@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
+	Jacob Chen <jacob-chen@iotwrt.com>,
+	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	=?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+	Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Fabien Dessenne <fabien.dessenne@foss.st.com>,
+	Hugues Fruchet <hugues.fruchet@foss.st.com>,
+	Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Steve Longerbeam <slongerbeam@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+	Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+	Corentin Labbe <clabbe@baylibre.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Tianshu Qiu <tian.shu.qiu@intel.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+	imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	mjpeg-users@lists.sourceforge.net
+Subject: Re: [PATCH 54/65] media: hantro: Access v4l2_fh from
+ file->private_data
+Message-ID: <aJEtPd_-IzQZVBfl@shepard>
+References: <20250802-media-private-data-v1-0-eb140ddd6a9d@ideasonboard.com>
+ <20250802-media-private-data-v1-54-eb140ddd6a9d@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204135842.3703751-1-clabbe@baylibre.com> <20250204135842.3703751-2-clabbe@baylibre.com>
- <aCHHfY2FkVW2j0ML@hovoldconsulting.com> <CAFBinCAUNNfOp4qvn2p8AETossePv2aL7jBkFxVZV_XzzULgVg@mail.gmail.com>
- <aINXS813fmWNJh3A@hovoldconsulting.com> <CAFBinCBMTOM-FMgENS-mrnV17HbKzhtPUd44_dDiwnD=+HVMWQ@mail.gmail.com>
- <aIiXyEuPmWU00hFf@hovoldconsulting.com> <CAFBinCBZhjs7DGEgxhz54Dg8aW3NX9_LdnoZeUZpm5ohaT_-oQ@mail.gmail.com>
- <aJCoRFe-RFW1MuDk@hovoldconsulting.com>
-In-Reply-To: <aJCoRFe-RFW1MuDk@hovoldconsulting.com>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Mon, 4 Aug 2025 23:35:35 +0200
-X-Gm-Features: Ac12FXxZAqA4cyvbrNHPrOIPUfKS-JVCCQbLvWMVrBSQIg1CsBV-T5pBhrunwJ8
-Message-ID: <CAFBinCCYsWHsNwi99kFqvLv+xOYtp9u3omhrPdV-hdH+5Cfyew@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
-To: Johan Hovold <johan@kernel.org>
-Cc: Corentin Labbe <clabbe@baylibre.com>, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, david@ixit.cz
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="/6X2y1A/1uo421sv"
+Content-Disposition: inline
+In-Reply-To: <20250802-media-private-data-v1-54-eb140ddd6a9d@ideasonboard.com>
+
+
+--/6X2y1A/1uo421sv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 4, 2025 at 2:32=E2=80=AFPM Johan Hovold <johan@kernel.org> wrot=
-e:
->
-> On Tue, Jul 29, 2025 at 10:45:20PM +0200, Martin Blumenstingl wrote:
-> > On Tue, Jul 29, 2025 at 11:43=E2=80=AFAM Johan Hovold <johan@kernel.org=
-> wrote:
-> > > On Sat, Jul 26, 2025 at 04:54:17PM +0200, Martin Blumenstingl wrote:
->
-> > > > I managed to get it to work now without any unnecessary waiting.
-> > > > When I switched to just waiting for per-port THRE I accidentally
-> > > > re-used the same URB (along with its buffer) for all ports. This of
-> > > > course "corrupts" data, but it's my fault instead of the chip/firmw=
-are
-> > > > causing it.
-> > > > That's why I was referring to data corruption earlier.
-> > > > Thanks for your persistence and for making me look at my code again
-> > > > with a fresh mind.
-> > >
-> > > Glad to hear you got it working. Did you confirm that you really need=
- to
-> > > wait for THRE before submitting the next URB too? I don't see why the
-> > > vendor driver would be doing this otherwise, but perhaps it only affe=
-cts
-> > > older, broken firmware, or something.
->
-> > I'm using Corentin's test script [0] for sending data and by
-> > connecting RX6 to TX7 and TX6 to RX7.
->
-> May be better to use a second different device (rather than loopback)
-> for testing so that you can separate any tx issues from rx issues.
-I'll double-check it using a second device. The RX path has largely
-been unmodified since the original submission, so it's likely that the
-issue is indeed with the TX path.
+Hi,
 
-> > For a 1024 byte buffer:
-> > [ 3029.068311] ch348 ttyUSB6: submitted 509 bytes for urb 0
-> > [ 3029.068827] ch348 ttyUSB6: submitted 509 bytes for urb 1
-> > [ 3029.069363] ch348 ttyUSB7: submitted 5 bytes for urb 0
-> > [ 3029.069902] ch348 ttyUSB7: UART_IIR_THRI - unknown byte: 0x00
-> > [ 3029.215272] ch348 ttyUSB6: UART_IIR_THRI - unknown byte: 0x00
-> > [ 3029.215908] ch348 ttyUSB6: submitted 6 bytes for urb 0
-> > [ 3029.233628] ch348 ttyUSB6: UART_IIR_THRI - unknown byte: 0x00
-> > -> data is received without corruption
-> >
-> > With a 2048 byte buffer the general flow seems fine:
-> > [ 3031.073101] ch348 ttyUSB6: submitted 509 bytes for urb 0
-> > [ 3031.073777] ch348 ttyUSB6: submitted 509 bytes for urb 1
-> > [ 3031.220068] ch348 ttyUSB6: UART_IIR_THRI - unknown byte: 0x00
-> > [ 3031.220697] ch348 ttyUSB6: submitted 509 bytes for urb 0
-> > [ 3031.221342] ch348 ttyUSB6: submitted 509 bytes for urb 1
-> > [ 3031.512113] ch348 ttyUSB6: UART_IIR_THRI - unknown byte: 0x00
-> > [ 3031.512795] ch348 ttyUSB6: submitted 12 bytes for urb 0
-> > [ 3031.513359] ch348 ttyUSB7: submitted 5 bytes for urb 0
-> > [ 3031.513859] ch348 ttyUSB7: UART_IIR_THRI - unknown byte: 0x00
-> > [ 3031.530476] ch348 ttyUSB6: UART_IIR_THRI - unknown byte: 0x00
-> > However, the receiving end sees different data (at around byte 513-518
-> > in my tests) than we wanted to send.
-> >
-> > My general flow is:
-> > - check if we have received THRE - if not: don't transmit more data on =
-this port
-> > - submit up to two URBs with up to 512 - 3 (CH348_TX_HDRSIZE) bytes to
-> > not exceed the HW TX FIFO size of 1024 bytes (page 1 in the datasheet)
-> > if the kfifo has enough data
->
-> If you're going to wait for the device fifo to clear completely you can
-> just use a single urb with larger (1k) buffer too.
-I set .bulk_out_size =3D 1024 in struct usb_serial_driver. Writing a 1k
-buffer immediately results in:
-   ch348 1-1:1.0: device disconnected
+Very nice cleanup, glad to see this abstracted away from drivers!
 
-I don't know if I need to set some kind of flag on the URB to have it
-split or whether the kernel / USB controller does that automatically
-(as you can tell: I'm not familiar with USB).
-If not: 512 byte transfers at a time it is.
+Reviewed-by: Paul Kocialkowski <paulk@sys-base.io>
 
-> > If you want me to test something else then please let me know and I'll =
-try it.
-> > Otherwise I'll not dig much deeper, given the fact that I don't know
-> > how the firmware works (e.g. in which order they send the status to
-> > the host and what kind of state they hold internally) and we can still
-> > optimize this later.
->
-> Yeah, as long as you are certain that the generic implementation does
-> not work and that you indeed need to track THRE per port.
-I'll give it one more round in the next few days. If I can't get the
-generic implementation to work then I'll call the current approach
-good.
+All the best,
 
-[...]
-> > > > On my test board the CFG pin is HIGH. From how I understand you, RT=
-S
-> > > > should at least change (even if DTR is in TNOW mode).
-> > > > No matter what I do: both pins are always LOW (right after modprobe=
-,
-> > > > after opening the console, closing the console again, ...).
-> > > > I even set up the vendor driver to test this: it's the same situati=
-on there.
-> > >
-> > > I don't think the console code will assert DTR/RTS, you need to open =
-the
-> > > port as a regular tty.
->
-> Yes, even if the device is configured in hardware for TNOW mode (instead
-> of DTR function) you should still be able to control RTS (at least as
-> long as the device is not configured for automatic hardware flow control)=
-.
-I think I made it work, sort of.
-It's a bit annoying because of code I don't understand. It seems that
-R_4 has the following settings:
-0x00 DTR off
-0x01 DTR on
-0x10 RTS off
-0x11 RTS on
-0x08 activate (used during port initialization)
-0x50 HW flow on
-0x51 no RTS / HW flow off
+Paul
 
-That said, poking 0x00, 0x01, 0x10 and 0x11 by themselves didn't do much.
-One also has to write 0x06 to the per-port VEN_R register.
-The vendor driver only does that in .set_termios, which I call
-questionable until someone calls me out on this and is willing to
-share a good reason why that's a good idea ;-)
+On Sat 02 Aug 25, 11:23, Jacopo Mondi wrote:
+> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>=20
+> To prepare for the introduction of video_device_state as second argument
+> of the v4l2_ioctl_ops handler, access the v4l2_fh from
+> file->private_data instead of using void *priv.
+>=20
+> The file->private_data is initialized to point to the v4l2_fh
+> by the usage of v4l2_fh_init() in the v4l2_file_operations.open()
+> handler.
+>=20
+> While at it remove the only left user of fh_to_ctx() and remove
+> the macro completely.
+>=20
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> ---
+>  drivers/media/platform/verisilicon/hantro.h      |  5 -----
+>  drivers/media/platform/verisilicon/hantro_v4l2.c | 22 +++++++++++-------=
+----
+>  2 files changed, 11 insertions(+), 16 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/=
+platform/verisilicon/hantro.h
+> index 0f10714f1953945472e11d8c8ad87f8ec009b39f..e0fdc4535b2d73c5260057b0a=
+89aee67a4732dd2 100644
+> --- a/drivers/media/platform/verisilicon/hantro.h
+> +++ b/drivers/media/platform/verisilicon/hantro.h
+> @@ -382,11 +382,6 @@ extern int hantro_debug;
+>  	pr_err("%s:%d: " fmt, __func__, __LINE__, ##args)
+> =20
+>  /* Structure access helpers. */
+> -static __always_inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
+> -{
+> -	return container_of(fh, struct hantro_ctx, fh);
+> -}
+> -
+>  static __always_inline struct hantro_ctx *file_to_ctx(struct file *filp)
+>  {
+>  	return container_of(file_to_v4l2_fh(filp), struct hantro_ctx, fh);
+> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/m=
+edia/platform/verisilicon/hantro_v4l2.c
+> index 7c3515cf7d64a090adfb8d8aff368f9a617f8c8a..6bcd892e7bb49c654aae58416=
+64d68c1692064bd 100644
+> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> @@ -185,7 +185,7 @@ static int vidioc_querycap(struct file *file, void *p=
+riv,
+>  static int vidioc_enum_framesizes(struct file *file, void *priv,
+>  				  struct v4l2_frmsizeenum *fsize)
+>  {
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+>  	const struct hantro_fmt *fmt;
+> =20
+>  	fmt =3D hantro_find_format(ctx, fsize->pixel_format);
+> @@ -217,7 +217,7 @@ static int vidioc_enum_fmt(struct file *file, void *p=
+riv,
+>  			   struct v4l2_fmtdesc *f, bool capture)
+> =20
+>  {
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+>  	const struct hantro_fmt *fmt, *formats;
+>  	unsigned int num_fmts, i, j =3D 0;
+>  	bool skip_mode_none, enum_all_formats;
+> @@ -297,7 +297,7 @@ static int vidioc_g_fmt_out_mplane(struct file *file,=
+ void *priv,
+>  				   struct v4l2_format *f)
+>  {
+>  	struct v4l2_pix_format_mplane *pix_mp =3D &f->fmt.pix_mp;
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+> =20
+>  	vpu_debug(4, "f->type =3D %d\n", f->type);
+> =20
+> @@ -310,7 +310,7 @@ static int vidioc_g_fmt_cap_mplane(struct file *file,=
+ void *priv,
+>  				   struct v4l2_format *f)
+>  {
+>  	struct v4l2_pix_format_mplane *pix_mp =3D &f->fmt.pix_mp;
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+> =20
+>  	vpu_debug(4, "f->type =3D %d\n", f->type);
+> =20
+> @@ -398,13 +398,13 @@ static int hantro_try_fmt(const struct hantro_ctx *=
+ctx,
+>  static int vidioc_try_fmt_cap_mplane(struct file *file, void *priv,
+>  				     struct v4l2_format *f)
+>  {
+> -	return hantro_try_fmt(fh_to_ctx(priv), &f->fmt.pix_mp, f->type);
+> +	return hantro_try_fmt(file_to_ctx(file), &f->fmt.pix_mp, f->type);
+>  }
+> =20
+>  static int vidioc_try_fmt_out_mplane(struct file *file, void *priv,
+>  				     struct v4l2_format *f)
+>  {
+> -	return hantro_try_fmt(fh_to_ctx(priv), &f->fmt.pix_mp, f->type);
+> +	return hantro_try_fmt(file_to_ctx(file), &f->fmt.pix_mp, f->type);
+>  }
+> =20
+>  static void
+> @@ -648,19 +648,19 @@ static int hantro_set_fmt_cap(struct hantro_ctx *ct=
+x,
+>  static int
+>  vidioc_s_fmt_out_mplane(struct file *file, void *priv, struct v4l2_forma=
+t *f)
+>  {
+> -	return hantro_set_fmt_out(fh_to_ctx(priv), &f->fmt.pix_mp, HANTRO_AUTO_=
+POSTPROC);
+> +	return hantro_set_fmt_out(file_to_ctx(file), &f->fmt.pix_mp, HANTRO_AUT=
+O_POSTPROC);
+>  }
+> =20
+>  static int
+>  vidioc_s_fmt_cap_mplane(struct file *file, void *priv, struct v4l2_forma=
+t *f)
+>  {
+> -	return hantro_set_fmt_cap(fh_to_ctx(priv), &f->fmt.pix_mp);
+> +	return hantro_set_fmt_cap(file_to_ctx(file), &f->fmt.pix_mp);
+>  }
+> =20
+>  static int vidioc_g_selection(struct file *file, void *priv,
+>  			      struct v4l2_selection *sel)
+>  {
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+> =20
+>  	/* Crop only supported on source. */
+>  	if (!ctx->is_encoder ||
+> @@ -691,7 +691,7 @@ static int vidioc_g_selection(struct file *file, void=
+ *priv,
+>  static int vidioc_s_selection(struct file *file, void *priv,
+>  			      struct v4l2_selection *sel)
+>  {
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+>  	struct v4l2_rect *rect =3D &sel->r;
+>  	struct vb2_queue *vq;
+> =20
+> @@ -738,7 +738,7 @@ static const struct v4l2_event hantro_eos_event =3D {
+>  static int vidioc_encoder_cmd(struct file *file, void *priv,
+>  			      struct v4l2_encoder_cmd *ec)
+>  {
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+>  	int ret;
+> =20
+>  	ret =3D v4l2_m2m_ioctl_try_encoder_cmd(file, priv, ec);
+>=20
+> --=20
+> 2.49.0
+>=20
 
-However, I'm unable to control the RTS line of port 1. It works for
-port 0, port 2 and 3 but not for port 1.
-Ports 4-7 don't have the TNOW/DTR and RTS lines routed outside the
-package, so I can't test these.
+--=20
+Paul Kocialkowski,
 
+Independent contractor - sys-base - https://www.sys-base.io/
+Free software developer - https://www.paulk.fr/
 
-Best regards,
-Martin
+Expert in multimedia, graphics and embedded hardware support with Linux.
+
+--/6X2y1A/1uo421sv
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEAbcMXZQMtj1fphLChP3B6o/ulQwFAmiRLT0ACgkQhP3B6o/u
+lQzrNQ//exzkeWe4akWNjtSBn1Bl653EfO7v/aMS3Y3CCAKwErQrOulake7C7uWp
+FWmge5iMC9U/bJjnJn6lW9WfRnVUXmp5akqOeWHMSQNTJOKjpKKu2vbmpqvYuw8/
+EZ2UXBGtg72QjRVuzMJ+SE6pK4JPFM8d4TgJxzk49W5ABja+ipgEbdccHOOiSC6+
+uFVnPmJI1kOcxLhh4CLeJsq2rbT56LiAWFj/BcsoRnz0+2o3/E8FL3f2KG5T4/Hj
+6hZjsZySX3X+bwDVFBhMXv1d/ecgXPjUrdhj2kM+v50DMAu1jbz9aNM1kFzxA01q
+9uh4AeSC65gQ8YnjC8mUo9BH/9JWzvf8SsGLTqLfDxkaHZcs5dIfqvNkmTs+sAM9
+syJ2hplhAYUk20Pn/AAda2drxoqYYnUjt6R+UOaVcaJMLIr2z8CS60rWr2+Uwhpd
+njA1mv/Zih/rq8uNN8l+j4DAQabNh8g/LPeroTO0/eF5WsPTvZM/BKtKrJgoy3Rv
+E+C0EwaEiCNxZH9vUSmqw/DkWRX2CBe6NoDzUGwjWGJeSAjSCgbklwdyUuhKaJq0
+MTDz/VZ2xLIMFm8RRFfYBjKohUK+RXA2OHHst4bQGq0rvjqtJo9yd3UzIFz+ww+L
+VpD0vh+lndjqAQHcpftyzMcgB6AVADDZydaRUFdLGm9OHaeZA5k=
+=4/Uq
+-----END PGP SIGNATURE-----
+
+--/6X2y1A/1uo421sv--
 
