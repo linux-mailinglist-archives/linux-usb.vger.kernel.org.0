@@ -1,58 +1,57 @@
-Return-Path: <linux-usb+bounces-26415-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26416-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CABA8B19709
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 02:24:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78C21B1975C
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 02:27:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AAF118923F9
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 00:24:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6EFF174B56
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 00:27:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61753184540;
-	Mon,  4 Aug 2025 00:24:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9A2C191F6A;
+	Mon,  4 Aug 2025 00:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WHxXKBOF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oIVrTFM3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD937B3E1;
-	Mon,  4 Aug 2025 00:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC9A481DD;
+	Mon,  4 Aug 2025 00:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267064; cv=none; b=HXmUM+hdUx+XgxI+oBe0+axIhjfQ2FuMYvNpVZq9RJuMEo0FtfFMOFF4iPBcmuzsoRk1trfCPPiTSnVkNF8wJfCw171u+3UuFxMEFrxHPdL442XR8gohtu/FiubK1UVexB3pHEHjGjPhHxn5S4+qrUb+QGJfd3m0mXB7naj+FHM=
+	t=1754267227; cv=none; b=dmNQAkZ9Fc9mSaS2mQ8dgSlQ56UhH5UAMkzy5mHfhaHjk34DkVER7gRrxZgQ+CXV1ri9Q3pqhWEVRyGdFN5YRNQRUoaBUdOYzQzmsD/6eMT8DoadKJWpyCft8fHTXW8tpOsFT+qXgFNXmysAjl70NgmQtAiB34SD0uWFPlnXAX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267064; c=relaxed/simple;
-	bh=HNca6AKlsUnzrAV1IY4uru7R43Mt2dr0GbXKW4JoTCg=;
+	s=arc-20240116; t=1754267227; c=relaxed/simple;
+	bh=uWoSJ0ayznK3vavSna0nwUWTtfe6z9oXqBN9k3VeYvc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OZVV3NB4c74p6oAHD/lY9+IXQto/tJLYWZKY0J7QEUB655V4aWJOL0t28iIaXdzGZipvYSdkUVuhampaJMLxed9QvypTPge6ZqC8ccsRRrF4TvnkjMbS9BG53yNgLqqmpSWT91hMNrg2bWfpbdQYYneDWbD3vtrz6O7jxoZ8k2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WHxXKBOF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67EACC4CEEB;
-	Mon,  4 Aug 2025 00:24:22 +0000 (UTC)
+	 MIME-Version:Content-Type; b=hu1WPpbpiFDWL5p59eRppncHccaiUFv0mJnrL5phzvJBAVDwmD1Nkd1HWBk4jiFPHpqU90o8pi7lwJnGbcBZGFVLQXKwdND44L4clmn/tCZWx8dr1Ci5aYkGrPYoIdf5741q6p3NuFcKkqT5DBveFpTgIJCgN9mv/veL8jZDl4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oIVrTFM3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 083AAC4CEF0;
+	Mon,  4 Aug 2025 00:27:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267063;
-	bh=HNca6AKlsUnzrAV1IY4uru7R43Mt2dr0GbXKW4JoTCg=;
+	s=k20201202; t=1754267227;
+	bh=uWoSJ0ayznK3vavSna0nwUWTtfe6z9oXqBN9k3VeYvc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WHxXKBOFxNILjUuZnVO5kKQt/HjoT7N6IJJY4SWmY1KOfKRk8OrZ4iXE2E4eZm9b9
-	 xRWRsZjxF9mte3JUa6Bl9bSPOB6candviQ9UpmMOFOOjUAsUzbuGQG2S8LZ9wEdSgh
-	 Ys01yDrf8RMuxPmd2zzoNh+AgSJ7qJqomDUFZohokjm6D847jKzCqumMDIe7wTCooB
-	 9sHbNONa8wzXGB6BoGPyYRCbvxAXVe8SzYGwGX0EgN/aW4hDXy5U6FV1Pvk75oGhes
-	 VaXcwRPgK6rGJdL2qDhs5DIvN5jBEoGGE7EHb9Tu5K1VclBIqKPq9DQKqEfccu8AH2
-	 LfYXGlQHxyfYA==
+	b=oIVrTFM3cvPp7agSZI3LwG8r33eMTOdRbhgzkkaNYho54dqTWPchgsKEyE6E2ohcR
+	 pKCMm8QOwargxRwP1WnQghP+RaMVjDs4IOKbNzU4dlAEqu/7ymaD8RFX7noFkcurZ9
+	 j/HLB4Spm/O8fGa9RTHj+jOxAau8OluNdkqV9eSdMd6fz/g4CRvvQvlxerjrRombHx
+	 mViYGa4jbvkwjUfwT/cqpR+Q2LDhZ8McrMegApYWoNK8NoA4je4sXRiRMlob0kls7X
+	 xkFUWzsBkgbcFlgYMwzashYoq76amAAfMu+CU30Zxbg5rZRf9hlPwt8tmoLCLkV/ZF
+	 cmpXnLpPV8gVA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
+Cc: Tomasz Michalec <tmichalec@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	mathias.nyman@intel.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.16 13/85] usb: xhci: Avoid showing errors during surprise removal
-Date: Sun,  3 Aug 2025 20:22:22 -0400
-Message-Id: <20250804002335.3613254-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.16 71/85] usb: typec: intel_pmc_mux: Defer probe if SCU IPC isn't present
+Date: Sun,  3 Aug 2025 20:23:20 -0400
+Message-Id: <20250804002335.3613254-71-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250804002335.3613254-1-sashal@kernel.org>
 References: <20250804002335.3613254-1-sashal@kernel.org>
@@ -68,102 +67,87 @@ X-stable-base: Linux 6.16
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Tomasz Michalec <tmichalec@google.com>
 
-[ Upstream commit 4b9c60e440525b729ac5f071e00bcee12e0a7e84 ]
+[ Upstream commit df9a825f330e76c72d1985bc9bdc4b8981e3d15f ]
 
-When a USB4 dock is unplugged from a system it won't respond to ring
-events. The PCI core handles the surprise removal event and notifies
-all PCI drivers. The XHCI PCI driver sets a flag that the device is
-being removed as well.
+If pmc_usb_probe is called before SCU IPC is registered, pmc_usb_probe
+will fail.
 
-When that flag is set don't show messages in the cleanup path for
-marking the controller dead.
+Return -EPROBE_DEFER when pmc_usb_probe doesn't get SCU IPC device, so
+the probe function can be called again after SCU IPC is initialized.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20250717073107.488599-2-mathias.nyman@linux.intel.com
+Signed-off-by: Tomasz Michalec <tmichalec@google.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20250610154058.1859812-1-tmichalec@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-Now let me analyze this commit properly:
+Based on my analysis of the commit and the kernel codebase, here's my
+assessment:
 
 **Backport Status: YES**
 
 This commit should be backported to stable kernel trees for the
 following reasons:
 
-1. **Fixes a user-visible issue**: The commit addresses spurious error
-   messages that appear when USB4 docks are unplugged. The original code
-   shows `xhci_err(xhci, "xHCI host controller not responding, assume
-   dead\n")` even during expected surprise removals, which can confuse
-   users and fill system logs unnecessarily.
+1. **Clear Bug Fix**: The commit fixes a real probe ordering issue where
+   `pmc_usb_probe` fails if called before the SCU IPC driver is
+   initialized. The current code returns `-ENODEV` which prevents the
+   driver from ever loading, while `-EPROBE_DEFER` allows the kernel to
+   retry probing later.
 
-2. **Small and contained fix**: The change is minimal - it only adds a
-   local `notify` variable and conditionalizes two operations based on
-   whether the device is being removed:
-   - The error message printing (line 1384 → lines 1379-1381)
-   - The `usb_hc_died()` notification (reusing the same condition)
+2. **Established Pattern**: Looking at the codebase, other Intel
+   platform drivers that depend on SCU IPC already use this pattern:
+   - `drivers/watchdog/intel-mid_wdt.c`: Returns `-EPROBE_DEFER` when
+     `devm_intel_scu_ipc_dev_get()` returns NULL
+   - `drivers/mfd/intel_soc_pmic_bxtwc.c`: Returns `-EPROBE_DEFER` in
+     the same scenario
+   - `drivers/platform/x86/intel/telemetry/pltdrv.c`: Also uses
+     `-EPROBE_DEFER`
 
-3. **No architectural changes**: This is a simple behavioral fix that
-   doesn't modify any data structures, APIs, or core functionality. It
-   merely suppresses error messages during an expected removal scenario.
+3. **Small and Contained Change**: The fix is a one-line change
+   (`-ENODEV` → `-EPROBE_DEFER`) that only affects the error handling
+   path during probe. It doesn't introduce new functionality or change
+   any existing behavior when SCU IPC is available.
 
-4. **Clear bug fix**: The commit clearly fixes an issue where error
-   messages are shown during normal USB4 dock removal operations. When
-   `XHCI_STATE_REMOVING` is set (indicating PCI removal is in progress),
-   the error message is now suppressed since it's an expected condition.
+4. **No Architecture Changes**: This is purely a bug fix that corrects
+   incorrect error handling. It doesn't introduce new features or make
+   architectural changes to the driver.
 
-5. **Low risk of regression**: The change only affects logging behavior
-   and maintains the same functional flow. The `usb_hc_died()` call was
-   already conditional on `!XHCI_STATE_REMOVING`, so this commit just
-   applies the same logic to the error message.
+5. **Minimal Risk**: The change is extremely low risk - it only affects
+   the error path when SCU IPC isn't yet available, and the deferred
+   probe mechanism is a well-established kernel pattern designed
+   specifically for handling driver dependencies.
 
-6. **Improves user experience**: USB4/Thunderbolt docks are increasingly
-   common, and users frequently unplug them. Avoiding spurious error
-   messages during normal operations is important for user experience
-   and log clarity.
+6. **Real-World Impact**: Without this fix, users could experience USB
+   Type-C functionality failures on Intel platforms if the drivers
+   happen to probe in the wrong order. This is particularly problematic
+   on systems where driver probe order is non-deterministic.
 
-The commit follows stable tree rules by being a minimal fix for a real
-issue that affects users, without introducing new features or making
-risky changes to core functionality.
+The commit follows the stable tree rules by fixing an important bug
+(probe failure due to ordering) with minimal risk and no new features.
+The fact that other Intel drivers already use this pattern confirms this
+is the correct approach for handling SCU IPC dependencies.
 
- drivers/usb/host/xhci-ring.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/usb/typec/mux/intel_pmc_mux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 131e7530ec4a..ecd757d482c5 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1376,12 +1376,15 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
-  */
- void xhci_hc_died(struct xhci_hcd *xhci)
- {
-+	bool notify;
- 	int i, j;
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 65dda9183e6f..1698428654ab 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -754,7 +754,7 @@ static int pmc_usb_probe(struct platform_device *pdev)
  
- 	if (xhci->xhc_state & XHCI_STATE_DYING)
- 		return;
+ 	pmc->ipc = devm_intel_scu_ipc_dev_get(&pdev->dev);
+ 	if (!pmc->ipc)
+-		return -ENODEV;
++		return -EPROBE_DEFER;
  
--	xhci_err(xhci, "xHCI host controller not responding, assume dead\n");
-+	notify = !(xhci->xhc_state & XHCI_STATE_REMOVING);
-+	if (notify)
-+		xhci_err(xhci, "xHCI host controller not responding, assume dead\n");
- 	xhci->xhc_state |= XHCI_STATE_DYING;
- 
- 	xhci_cleanup_command_queue(xhci);
-@@ -1395,7 +1398,7 @@ void xhci_hc_died(struct xhci_hcd *xhci)
- 	}
- 
- 	/* inform usb core hc died if PCI remove isn't already handling it */
--	if (!(xhci->xhc_state & XHCI_STATE_REMOVING))
-+	if (notify)
- 		usb_hc_died(xhci_to_hcd(xhci));
- }
+ 	pmc->dev = &pdev->dev;
  
 -- 
 2.39.5
