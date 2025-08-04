@@ -1,124 +1,218 @@
-Return-Path: <linux-usb+bounces-26469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26470-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5A91B1A2A8
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 15:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AE3AB1A4F6
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 16:32:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33C86188E694
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 13:03:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0BF018A204B
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 14:33:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1C326FD9A;
-	Mon,  4 Aug 2025 13:01:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 290F5270552;
+	Mon,  4 Aug 2025 14:32:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mYW1LsKa"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="AtSK/4Xh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D153226B75B;
-	Mon,  4 Aug 2025 13:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 380053FC2
+	for <linux-usb@vger.kernel.org>; Mon,  4 Aug 2025 14:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754312482; cv=none; b=ur/lj0af8n9+monrL1zjnZuh5h5Gfo+In7kpA4xtIb4I7brxiiFHc2ssVSStLGDm9keDxNf8OujEcDPx/9KdRBy6nykvz0zg+LO7mhFtfu5OpIiyHn5fExWS9ugv88yXq/HysPqsGTvT8wpz2xDpTNn4d9w5GTblOnASuy2A5uk=
+	t=1754317954; cv=none; b=PqofFMItG41YaDEEcYDWycNJdR2SEKcq3RBezDpv6WhPJTMMXx0IbuFfx3tV1bkd+sjxQkGHPDE27F/h5Vs7pBqKzZ3ty6Y578gXwTkue+2PzWIR/8gA1WkoHsccI1DCqvC5YYRtw7rwGujo1KbXBluMMEEYA75FX9bRVfrBJqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754312482; c=relaxed/simple;
-	bh=Hid3X110vD+PaqKN+lf+vdCxTrjDqH0gjrw2Ce/UfPE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=So6AnQqkE4+wdzupiMtVnE7VmkfS1jKYlws00dHCuyYyUuDCTupj/zxS4vXAQOyQVp7SOR/ugcYUUN9N1a5Uy02Zk1SB1RAsKrmRmE1maegDtnZWpJ0xHfnqyYidJJbmj5XZfEWJlc5ejVnXZS9iafm4e1+bjdwwURNdTyOtxcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mYW1LsKa; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754312479; x=1785848479;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Hid3X110vD+PaqKN+lf+vdCxTrjDqH0gjrw2Ce/UfPE=;
-  b=mYW1LsKaAu4H+/V8wW91YFPAR5KoAjVVWdf0Wjgydia+AIzOQQZ9G8v6
-   igVPMvy+5PzOTxjJWqWsgiQCPtK5POX2J1rZgeY0ubuGCoVf8eGv94L2f
-   tr8VNmg7ayTe8uAHZY6yxBud7s4KItJvqV5GGDYamadod8aB0xpUnQXm1
-   bJbfUwcHLOJll0B0FdDI8c5xiX6vEm09caeXEZ5bN2MHvntaLmrmFILEM
-   9ULqkNWWg3gipHftQIbUN9qngc9UeHuYg4M/2Xa4k/PDsoOBLXo96FQ+q
-   HoOwu42flBHn7e+sXMrwhtAMqjfQ8cAELpHb+D9Da5ZLb/7+3uO7M0S8C
-   g==;
-X-CSE-ConnectionGUID: 8NwCf4TDT66x0VnM9HT+cw==
-X-CSE-MsgGUID: hzPN+xwuQ6q2o83/Ymy3lg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11511"; a="59189544"
-X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
-   d="scan'208";a="59189544"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2025 06:01:18 -0700
-X-CSE-ConnectionGUID: G6BN1QhYTqaMOUKpjbHEFg==
-X-CSE-MsgGUID: ta1RXwa3SbWiPiRjpJ8YUw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
-   d="scan'208";a="164153964"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 04 Aug 2025 06:01:15 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uiuoS-000027-17;
-	Mon, 04 Aug 2025 13:01:12 +0000
-Date: Mon, 4 Aug 2025 21:00:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <groeck@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	linux-kernel@vger.kernel.org,
-	Andrei Kuchynski <akuchynski@chromium.org>
-Subject: Re: [PATCH v3 05/10] usb: typec: Implement automated mode selection
-Message-ID: <202508042044.JDdEBQcS-lkp@intel.com>
-References: <20250804090340.3062182-6-akuchynski@chromium.org>
+	s=arc-20240116; t=1754317954; c=relaxed/simple;
+	bh=SFofe2Xv/bnOocDqkJFJ3ql2ivs8XBYgiF2wMjcRYHY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=BS58N4g8jCViFiFHjPIhrG9NDG6rpKMRlHMic7itvh29ySCfS0nLqh2XZumzmIILMUk2lMNuEEuHpmzh8DW/JSOOjZo3BF71mGV+A+k7iXoy2lsmTK37ehGu7qgwk40b1NYIWCOZUsrkmqm+MBiJ3Ks6auwSjnnvv73YTBSCGFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=AtSK/4Xh; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250804142358epoutp0480580c88446b59405a920db0949a6f19~Ylmpv0xXJ1313713137epoutp04W
+	for <linux-usb@vger.kernel.org>; Mon,  4 Aug 2025 14:23:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250804142358epoutp0480580c88446b59405a920db0949a6f19~Ylmpv0xXJ1313713137epoutp04W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1754317438;
+	bh=nhQejfYSbWcLFtDmYYyds2rK7Uwbx0J3FeE7atKF+30=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=AtSK/4Xho0fm5IlEBZPq4qUYYT5OTRKtMXwbDlqgF+IiVnURqs4oI0qiU26wNdKUZ
+	 pKvfMrW5zQ+2+PBpuMUsPDhp4XXLxJeQU/E8v86A/ZIdjL79/IoCGILj6ykjFVlsAK
+	 Z8o9CC6+TjYvEud3FxbrhY9+TcHYCj31o3HZ5cOA=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20250804142358epcas5p3b6795af3e36bf318fc68515be2298bd0~YlmpQmJVV2902729027epcas5p3e;
+	Mon,  4 Aug 2025 14:23:58 +0000 (GMT)
+Received: from epcas5p3.samsung.com (unknown [182.195.38.88]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4bwf1n3l97z3hhT3; Mon,  4 Aug
+	2025 14:23:57 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20250804142356epcas5p3aa0566fb78e44a37467ac088aa387f5e~YlmnnQJ-w2902729027epcas5p3b;
+	Mon,  4 Aug 2025 14:23:56 +0000 (GMT)
+Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250804142354epsmtip1ed8617054c2b8e57fb2a39a0416d1865~YlmlW23w-1586315863epsmtip1E;
+	Mon,  4 Aug 2025 14:23:53 +0000 (GMT)
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+	m.grzeschik@pengutronix.de, balbi@ti.com, bigeasy@linutronix.de,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, akash.m5@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com, shijie.cai@samsung.com,
+	alim.akhtar@samsung.com, muhammed.ali@samsung.com, thiagu.r@samsung.com,
+	stable@vger.kernel.org, Selvarasu Ganesan <selvarasu.g@samsung.com>
+Subject: [PATCH] usb: dwc3: Remove WARN_ON for device endpoint command
+ timeouts
+Date: Mon,  4 Aug 2025 19:52:55 +0530
+Message-ID: <20250804142258.1577-1-selvarasu.g@samsung.com>
+X-Mailer: git-send-email 2.46.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250804090340.3062182-6-akuchynski@chromium.org>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250804142356epcas5p3aa0566fb78e44a37467ac088aa387f5e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250804142356epcas5p3aa0566fb78e44a37467ac088aa387f5e
+References: <CGME20250804142356epcas5p3aa0566fb78e44a37467ac088aa387f5e@epcas5p3.samsung.com>
 
-Hi Andrei,
+From: Akash M <akash.m5@samsung.com>
 
-kernel test robot noticed the following build warnings:
+This commit addresses a rarely observed endpoint command timeout
+which causes kernel panic due to warn when 'panic_on_warn' is enabled
+and unnecessary call trace prints when 'panic_on_warn' is disabled.
+It is seen during fast software-controlled connect/disconnect testcases.
+The following is one such endpoint command timeout that we observed:
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus chrome-platform/for-next chrome-platform/for-firmware-next linus/master v6.16 next-20250804]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+1. Connect
+   =======
+->dwc3_thread_interrupt
+ ->dwc3_ep0_interrupt
+  ->configfs_composite_setup
+   ->composite_setup
+    ->usb_ep_queue
+     ->dwc3_gadget_ep0_queue
+      ->__dwc3_gadget_ep0_queue
+       ->__dwc3_ep0_do_control_data
+        ->dwc3_send_gadget_ep_cmd
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrei-Kuchynski/usb-typec-Add-alt_mode_override-field-to-port-property/20250804-170745
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20250804090340.3062182-6-akuchynski%40chromium.org
-patch subject: [PATCH v3 05/10] usb: typec: Implement automated mode selection
-config: i386-buildonly-randconfig-002-20250804 (https://download.01.org/0day-ci/archive/20250804/202508042044.JDdEBQcS-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250804/202508042044.JDdEBQcS-lkp@intel.com/reproduce)
+2. Disconnect
+   ==========
+->dwc3_thread_interrupt
+ ->dwc3_gadget_disconnect_interrupt
+  ->dwc3_ep0_reset_state
+   ->dwc3_ep0_end_control_data
+    ->dwc3_send_gadget_ep_cmd
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508042044.JDdEBQcS-lkp@intel.com/
+In the issue scenario, in Exynos platforms, we observed that control
+transfers for the previous connect have not yet been completed and end
+transfer command sent as a part of the disconnect sequence and
+processing of USB_ENDPOINT_HALT feature request from the host timeout.
+This maybe an expected scenario since the controller is processing EP
+commands sent as a part of the previous connect. It maybe better to
+remove WARN_ON in all places where device endpoint commands are sent to
+avoid unnecessary kernel panic due to warn.
 
-All warnings (new ones prefixed by >>):
+Fixes: e192cc7b5239 ("usb: dwc3: gadget: move cmd_endtransfer to extra function")
+Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
+Fixes: c7fcdeb2627c ("usb: dwc3: ep0: simplify EP0 state machine")
+Fixes: f0f2b2a2db85 ("usb: dwc3: ep0: push ep0state into xfernotready processing")
+Fixes: 2e3db064855a ("usb: dwc3: ep0: drop XferNotReady(DATA) support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Akash M <akash.m5@samsung.com>
+Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
 
->> Warning: drivers/usb/typec/mode_selection.c:49 Enum value 'MS_STATE_MAX' not described in enum 'ms_state'
-
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 666ac432f52d..7b313836f62b 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -288,7 +288,9 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+ 	dwc3_ep0_prepare_one_trb(dep, dwc->ep0_trb_addr, 8,
+ 			DWC3_TRBCTL_CONTROL_SETUP, false);
+ 	ret = dwc3_ep0_start_trans(dep);
+-	WARN_ON(ret < 0);
++	if (ret < 0)
++		dev_warn(dwc->dev, "ep0 out start transfer failed: %d\n", ret);
++
+ 	for (i = 2; i < DWC3_ENDPOINTS_NUM; i++) {
+ 		struct dwc3_ep *dwc3_ep;
+ 
+@@ -1061,7 +1063,9 @@ static void __dwc3_ep0_do_control_data(struct dwc3 *dwc,
+ 		ret = dwc3_ep0_start_trans(dep);
+ 	}
+ 
+-	WARN_ON(ret < 0);
++	if (ret < 0)
++		dev_warn(dwc->dev, "ep0 data phase start transfer failed: %d\n",
++				ret);
+ }
+ 
+ static int dwc3_ep0_start_control_status(struct dwc3_ep *dep)
+@@ -1078,7 +1082,12 @@ static int dwc3_ep0_start_control_status(struct dwc3_ep *dep)
+ 
+ static void __dwc3_ep0_do_control_status(struct dwc3 *dwc, struct dwc3_ep *dep)
+ {
+-	WARN_ON(dwc3_ep0_start_control_status(dep));
++	int	ret;
++
++	ret = dwc3_ep0_start_control_status(dep);
++	if (ret)
++		dev_warn(dwc->dev,
++			"ep0 status phase start transfer failed: %d\n", ret);
+ }
+ 
+ static void dwc3_ep0_do_control_status(struct dwc3 *dwc,
+@@ -1121,7 +1130,10 @@ void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
+ 	cmd |= DWC3_DEPCMD_PARAM(dep->resource_index);
+ 	memset(&params, 0, sizeof(params));
+ 	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
+-	WARN_ON_ONCE(ret);
++	if (ret)
++		dev_warn_ratelimited(dwc->dev,
++			"ep0 data phase end transfer failed: %d\n", ret);
++
+ 	dep->resource_index = 0;
+ }
+ 
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 321361288935..50e4f667b2f2 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1774,7 +1774,11 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
+ 		dep->flags |= DWC3_EP_DELAY_STOP;
+ 		return 0;
+ 	}
+-	WARN_ON_ONCE(ret);
++
++	if (ret)
++		dev_warn_ratelimited(dep->dwc->dev,
++				"end transfer failed: ret = %d\n", ret);
++
+ 	dep->resource_index = 0;
+ 
+ 	if (!interrupt)
+@@ -4041,7 +4045,9 @@ static void dwc3_clear_stall_all_ep(struct dwc3 *dwc)
+ 		dep->flags &= ~DWC3_EP_STALL;
+ 
+ 		ret = dwc3_send_clear_stall_ep_cmd(dep);
+-		WARN_ON_ONCE(ret);
++		if (ret)
++			dev_warn_ratelimited(dwc->dev,
++				"failed to clear STALL on %s\n", dep->name);
+ 	}
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.17.1
+
 
