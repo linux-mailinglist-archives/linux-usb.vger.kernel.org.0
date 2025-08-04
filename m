@@ -1,135 +1,169 @@
-Return-Path: <linux-usb+bounces-26454-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26455-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A982B19D5A
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 10:08:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E2F5B19E2D
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 11:04:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BD77188FE8A
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 08:08:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F5B01797C9
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 09:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842F123ABA0;
-	Mon,  4 Aug 2025 08:08:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D31B242D99;
+	Mon,  4 Aug 2025 09:04:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="egdOofYm"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QWZVy0QX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f202.google.com (mail-lj1-f202.google.com [209.85.208.202])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B22B7DA6D
-	for <linux-usb@vger.kernel.org>; Mon,  4 Aug 2025 08:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1655F242D6F
+	for <linux-usb@vger.kernel.org>; Mon,  4 Aug 2025 09:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754294899; cv=none; b=ap8Y4OiTeBhlvU0ce9sZE4loMkRIzBqSsQ6Xmrj0FumsVAL49lGp/PoK9WU4DX+irjGvOVr7c2re1/I5HxzGmqFjtUvdQC5Lo5uT7+TnoK7DlaHDkkI0b+qlymbzhRkqY5SOmXRMaXY2OPb59+1a8TG2rAX3QkuZ8Q7BYwqXTgA=
+	t=1754298243; cv=none; b=VaXqAfvr/W67W+ogbHunWcOYvzBSU38e6mNSjagkYl1rA2v0TwUKX56pEOn29CPg2581Hi6BBWZXYRk51FyKTHuwDvOLxDFEV/bbz8kFbbcRoyfnkyShb+wfsKEBJfp2iDbdhMeeBPjM8cr0wkjl9dRVtOzBZy5unvmvDRHZfKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754294899; c=relaxed/simple;
-	bh=gcEc+FpO3LIYPbjLO7I3aUUbBabMwLEp5GRofBB8rac=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=bopbfTO5oRbgI3QvQHHW85kY1BVGMVc21vbq3Ia6gojgZLwgepOJUKkRXchbGvgVAV2teby09R667QtxFRjZ1sURhmS2qDzfXBFd4E0dW43NuPVaHQnNDHPADiwV5D04zkkJZZMIOdcrrnT9WGMgdCztR7mCrSlJ6c1vtUuOqLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=egdOofYm; arc=none smtp.client-ip=209.85.208.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-lj1-f202.google.com with SMTP id 38308e7fff4ca-33243810731so16417891fa.0
-        for <linux-usb@vger.kernel.org>; Mon, 04 Aug 2025 01:08:17 -0700 (PDT)
+	s=arc-20240116; t=1754298243; c=relaxed/simple;
+	bh=CdRSPzRZhrLXv9SkH2yFf0/+V2Tpe2TdwnPx5t3lia0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mqBFYDRUihsy8p+MUB0uV+oS9mLWI2ZW9B/FDVazGldhSzFwAM3woxTrgdA1bRVkHc0VSWFVC1JesVSBvs7M/F/Op+/CSs2p7FOvNdY4NMBJeHVUkg+BQnYaDqnfYERbYoqr6Nyf1LN2GzIYesjRS4W8CrFhLVmWRe6gfonKijU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QWZVy0QX; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-61589705b08so9041999a12.0
+        for <linux-usb@vger.kernel.org>; Mon, 04 Aug 2025 02:04:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754294895; x=1754899695; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zDpfVHh/I73JR0rh9yUDkpVjkFVk9LI6bMI7NvadtUA=;
-        b=egdOofYmIxkeAMBy68PPJuHrG8NUOu0Wtp4GZj9sb7Qpm5wLRyrPrz+xslMieE1SpX
-         Hn6LLelsYDLuX7OJx96tHX765e0pd4DOlEPYFJKx2wyogkPB2hwdR06k2azyrIyAc2jG
-         Pksc/sSHskoidp6a3j2Cp4t4qFYfMzjxtawcTJU0oxW/VVNCT2ca559CXtZ8HcgfMiq5
-         CyPZ4tiBtz/TZ6/6sSfCuE7MXmibymOKRscu5gCHA/VqXYUSyw7/vSTz8xfvFM6pyMi5
-         9lxHU92SMJLv4IhiCRFTDralzi+uomhOsPcjAvS+54NeDuze5oxqLkrAJXfXzf2l1e0a
-         iHsg==
+        d=chromium.org; s=google; t=1754298240; x=1754903040; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VgC/fq0UWX7rdpZAzk3F1oBkRyQKH7WIGoqghZqLQ0U=;
+        b=QWZVy0QXf1r+VWGu1uhuVo0G8RtoRz52NqonTThBjTkrmCYAWxTIj055AzCH73yuPY
+         pBpcQUgXT/XG4Dr9LzBIrP3TwnfM4LQBhDVTtrD9u/o/TVfvdv8ybUlJTlu5NaVTj0EG
+         4zybFr96K/h82g4QL+iaZv8VyPuTJd/f8F71c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754294895; x=1754899695;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zDpfVHh/I73JR0rh9yUDkpVjkFVk9LI6bMI7NvadtUA=;
-        b=uAm9OJOQqHSulnPcGWF1iXCttGHDF9Z1+SH1GrKbiZmz2/gGBbzUZW+t55CzdQc4Zs
-         5pxQzsWnO2o+1ik5cKKFKlDJlA6sPd3hwT5uREc20v+fVBUFO5Y8yAU/FgcCXMkSrVxh
-         TF+ir4HfyNHajn62s0KMrdd66HEMy6+9Kt2sFQVBF6xjN0FkKh7M06NGsftEndTpk0gE
-         iW/8WHJl/71qmKbRBDkqXuP2puUazWx75YdHu5481L5MO+ylq21C2/WxrV84M13FAuf+
-         LFhuaSl6HrEjAGLygXM5HluxQDZYtHI18Qzj9vrcJUCTaldqo60552M5a3f9GUWiJIg3
-         5tkw==
-X-Gm-Message-State: AOJu0YyFp4Q0E/mX3Wl4HPVhA80jBAvCsCl/sDo/TceuWsHKVQPDHmEe
-	bGbhls6ui5/Y8am+JI2cm9Hn108oW7uH/v8KGCW1RhKFlMWCqUukwr7S2rmDqHrjbq6GCRZTmsa
-	hVksjcg==
-X-Google-Smtp-Source: AGHT+IFI/+C03ECI+u2R1ZspoDxfTwxjzHt8Ag3z9DMpMi6xjyg97vO8zI4z85XpJM8zbEHAQDDflyTWYjk=
-X-Received: from ljbbj30.prod.google.com ([2002:a2e:aa9e:0:b0:32b:8259:7b2])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:651c:2126:b0:32a:8764:ecf1
- with SMTP id 38308e7fff4ca-332566a4766mr15538621fa.4.1754294895320; Mon, 04
- Aug 2025 01:08:15 -0700 (PDT)
-Date: Mon,  4 Aug 2025 16:08:05 +0800
+        d=1e100.net; s=20230601; t=1754298240; x=1754903040;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VgC/fq0UWX7rdpZAzk3F1oBkRyQKH7WIGoqghZqLQ0U=;
+        b=M3RLungm17FWRf1+K6p2chnoLQk6zYPWHhB9syxdHhSQ7OY0DBYxm/5MI3/REgiovW
+         vzGvv3LF0WI0tkj+MJH0k8C8HqYByPJ3amu/gUYKu593LeR+KWritgNl9M5Zxtqit2Fm
+         Gp3cj/EZ+cuDD0cV7d+m8ZN3wwaV2c6EorIASOAvxibDpM4mwD/t6oPvwOZTVmdeJWnh
+         hdC2PWUGIP1kB+LN21rIoFVN7ED0hZtb9jmXcAE0AoE396BPhX2yCMtCG18Ew1TAir42
+         9EY9SsJupIxuyRo1D2ZmM3fAZ/ofmb4BvUZ0hZCzoHQDtL5vBvxh/XkeaRXRaV693Vq5
+         5HFA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwojy8RbAVVgz9rSG2Fk0pEi+Zoa+8NKoUJVYjUlDXmJpmxdLo5IDHuOt0XxpbN4vpuB17Rl/yiMM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4/7rkG+oCVxZIMnstjx1zljmbNR7vQVzvHsXuIMyQVbi5LTJw
+	MzgJKGDW4Nocon5pcFQvAIZf/8K/ksWJ+raWyMRTPdqH1bai5LGkgZzkfCKk1oFJKg==
+X-Gm-Gg: ASbGncsoTiTGrV1wXLhpIQWvMjAsWhVnaTHU8AXF8azohRV4NWtDZfagZpiZRXl1QOc
+	OW3a/MN85y9X3F8P1MS6hHVN/5lh0POINVPVelnfAfsCLfUORl7BgKSEWQwQx8oSlvNFBHL9v1X
+	UPC3q+b9pBf14OVkW8JGaoWWU8xb3kPEx8V1YS3+7dX3MfGYad3gU7SAgfcyTYomGrZYiBfnJO1
+	DoDr9WlYRyRcVLiiByeMLM6ZoGfUW7f0bIeT/qvu29qGwCF/nkkvt+24JztWK5GGtBBjisgg6Jf
+	C6GviVDU9jKIxwhcpX5aRzcwhQQgg/6PEmnv9JVHpJTWBojvyabvov9vlgMA3L77KnsgbTXVatU
+	aBEYxcE6H0acLpxHyCGfGSM37oEdEmMS/XcN1cuzfds7zc9kRKBlia10KQEq6JGpvVbDB2QivdT
+	bkTQ7oNQsXnLmvR7UzYl/GZekIow==
+X-Google-Smtp-Source: AGHT+IEWZlH6viZQ6slELtEy7DIQ1R5yHsUK/PokBkKf2bvVo1I7/RrcEV59t0yajt4CFWb2bWNEBw==
+X-Received: by 2002:a05:6402:1ec8:b0:617:4a59:c5da with SMTP id 4fb4d7f45d1cf-6174a59c6bbmr3476589a12.23.1754298240446;
+        Mon, 04 Aug 2025 02:04:00 -0700 (PDT)
+Received: from akuchynski.c.googlers.com.com (150.230.32.34.bc.googleusercontent.com. [34.32.230.150])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a8fe7995sm6412790a12.36.2025.08.04.02.03.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Aug 2025 02:03:59 -0700 (PDT)
+From: Andrei Kuchynski <akuchynski@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Cc: Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	linux-kernel@vger.kernel.org,
+	Andrei Kuchynski <akuchynski@chromium.org>
+Subject: [PATCH v3 00/10] USB Type-C mode selection
+Date: Mon,  4 Aug 2025 09:03:29 +0000
+Message-ID: <20250804090340.3062182-1-akuchynski@chromium.org>
+X-Mailer: git-send-email 2.50.1.565.gc32cd1483b-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.50.1.565.gc32cd1483b-goog
-Message-ID: <20250804080809.1700691-1-khtsai@google.com>
-Subject: [RFC PATCH] usb: dwc3: Ignore late xferNotReady event to prevent halt timeout
-From: Kuen-Han Tsai <khtsai@google.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kuen-Han Tsai <khtsai@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-During a device-initiated disconnect, an xferNotReady event for an ISOC
-IN endpoint can be received after the End Transfer command has already
-completed.
+This patch series introduces a flexible mechanism for USB Type-C mode
+selection, enabling into USB4 mode, Thunderbolt alternate mode, or
+DisplayPort alternate mode.
 
-This late event incorrectly triggers a new Start Transfer, which
-prevents the controller from halting and results in a DSTS.DEVCTRLHLT
-bit polling timeout.
+New sysfs attributes are exposed to provide user control over mode
+selection:
+`priority`, `usb4_priority`: Allows users to define their preferred order
+for attempting mode entry.
+`mode_priorities`: Lists the modes supported by the port, ordered by
+priority.
+`mode_selection`: Lists modes supported by the partner and triggers an
+automatic mode negotiation.
+`entry_result`, `usb4_entry_result`: Reports the status of the last mode
+selection attempt.
 
-Ignore the late xferNotReady event if the controller is already in a
-disconnected state.
+The mode selection logic attempts to enter prioritized modes sequentially.
+A mode is considered successfully negotiated only when its alternate mode
+driver explicitly reports a positive status. Alternate mode drivers are
+required to report their mode entry status (either successful or failed).
+If the driver does not report its status within a defined timeout period,
+the system automatically proceeds to attempt entry into the next preferred
+mode.
 
-Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
----
-Tracing:
+This series was tested on a ChromeOS Brya device running kernel 6.6, and on
+an Android OS device with kernel 6.16.
 
-# Stop active transfers by sending End Transfer commands
- android.hardwar-913     [004] d..1.  6172.855517: dwc3_gadget_ep_cmd: ep1out: cmd 'End Transfer' [20d08] params 00000000 00000000 00000000 --> status: Successful
- android.hardwar-913     [004] dn.1.  6172.855734: dwc3_gadget_ep_cmd: ep1in: cmd 'End Transfer' [40d08] params 00000000 00000000 00000000 --> status: Successful
- ...
-# Recieve an xferNotReady event on an ISOC IN endpoint
-    irq/991-dwc3-29741   [000] D..1.  6172.856166: dwc3_event: event (35d010c6): ep1in: Transfer Not Ready [000035d0] (Not Active)
-    irq/991-dwc3-29741   [000] D..1.  6172.856190: dwc3_gadget_ep_cmd: ep1in: cmd 'Start Transfer' [35d60406] params 00000000 ffffb620 00000000 --> status: Successful
- android.hardwar-913     [004] dn.1.  6172.868130: dwc3_gadget_ep_cmd: ep2in: cmd 'End Transfer' [30d08] params 00000000 00000000 00000000 --> status: Timed Out
- ...
-# Start polling DSTS.DEVCTRLHLT
- android.hardwar-913     [000] .....  6172.869253: dwc3_gadget_run_stop: start polling DWC3_DSTS_DEVCTRLHLT
- ...
-# HALT timeout and show the endpoint status for debugging
- android.hardwar-913     [004] .....  6177.479946: dwc3_gadget_run_stop: finish polling DWC3_DSTS_DEVCTRLHLT, is_on=0, reg=0
- android.hardwar-913     [004] .....  6177.479957: dwc3_gadget_ep_status: ep1out: mps 1024/2765 streams 16 burst 5 ring 64/56 flags E:swbp:>
- android.hardwar-913     [004] .....  6177.479958: dwc3_gadget_ep_status: ep1in: mps 1024/1024 streams 16 burst 2 ring 21/64 flags E:swBp:<
- android.hardwar-913     [004] .....  6177.479959: dwc3_gadget_ep_status: ep2out: mps 1024/2765 streams 16 burst 5 ring 56/48 flags e:swbp:>
+Changes in v3:
+- The mode_priorities sysfs attribute has been made read-only.
+- The mode_selection attribute now exclusively lists partner-supported
+modes, with mode entry results reported via separate attributes.
+- The driver returns mode entry results instead of error codes.
+- Constant values are used in place of module parameters.
 
----
- drivers/usb/dwc3/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Andrei Kuchynski (10):
+  usb: typec: Add alt_mode_override field to port property
+  platform/chrome: cros_ec_typec: Set alt_mode_override flag
+  usb: typec: ucsi: Set alt_mode_override flag
+  usb: typec: Expose mode priorities via sysfs
+  usb: typec: Implement automated mode selection
+  usb: typec: Report altmode entry status via callback
+  usb: typec: ucsi: displayport: Propagate DP altmode entry result
+  platform/chrome: cros_ec_typec: Propagate altmode entry result
+  platform/chrome: cros_ec_typec: Report USB4 entry status via callback
+  platform/chrome: cros_ec_typec: Add default_usb_mode_set support
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 25db36c63951..506391699a10 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3896,7 +3896,8 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
- 		dwc3_gadget_endpoint_transfer_in_progress(dep, event);
- 		break;
- 	case DWC3_DEPEVT_XFERNOTREADY:
--		dwc3_gadget_endpoint_transfer_not_ready(dep, event);
-+		if (dwc->connected)
-+			dwc3_gadget_endpoint_transfer_not_ready(dep, event);
- 		break;
- 	case DWC3_DEPEVT_EPCMDCMPLT:
- 		dwc3_gadget_endpoint_command_complete(dep, event);
---
+ Documentation/ABI/testing/sysfs-class-typec  |  72 +++
+ drivers/platform/chrome/cros_ec_typec.c      |  17 +
+ drivers/platform/chrome/cros_typec_altmode.c |  32 +-
+ drivers/platform/chrome/cros_typec_altmode.h |   6 +
+ drivers/usb/typec/Makefile                   |   2 +-
+ drivers/usb/typec/altmodes/displayport.c     |  17 +-
+ drivers/usb/typec/altmodes/thunderbolt.c     |   8 +
+ drivers/usb/typec/class.c                    | 212 ++++++-
+ drivers/usb/typec/class.h                    |  15 +
+ drivers/usb/typec/mode_selection.c           | 575 +++++++++++++++++++
+ drivers/usb/typec/mode_selection.h           |  54 ++
+ drivers/usb/typec/ucsi/displayport.c         |  10 +-
+ drivers/usb/typec/ucsi/ucsi.c                |   2 +
+ include/linux/usb/pd_vdo.h                   |   2 +
+ include/linux/usb/typec.h                    |   1 +
+ include/linux/usb/typec_altmode.h            |  12 +
+ include/linux/usb/typec_dp.h                 |   2 +
+ include/linux/usb/typec_tbt.h                |   3 +
+ 18 files changed, 1024 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/usb/typec/mode_selection.c
+ create mode 100644 drivers/usb/typec/mode_selection.h
+
+-- 
 2.50.1.565.gc32cd1483b-goog
 
 
