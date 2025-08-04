@@ -1,62 +1,57 @@
-Return-Path: <linux-usb+bounces-26423-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26424-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E68BB197ED
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 02:32:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B447B197FF
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 02:32:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C7773B8F96
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 00:31:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41D4B3A3F19
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 00:31:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3F921DD0EF;
-	Mon,  4 Aug 2025 00:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3011C5D7B;
+	Mon,  4 Aug 2025 00:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sl93khdJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ujN2/9UF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C462C190;
-	Mon,  4 Aug 2025 00:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BD13A8F7;
+	Mon,  4 Aug 2025 00:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267448; cv=none; b=KN4JL5XwICxxXCMxKVoHLAasg6/XlEIkgOIV/GQQWVNeCl++Mx3g4k9GsbbQsTytXxBzwJ4NewPYrFvx5o8ce7AGtibY4fmXDYpebzJgD9Ew9olYVdbMTsFVEi7NsOs33mixp+sprni+rPWBDTEObicIphIZo56o1HdtCotO4MY=
+	t=1754267483; cv=none; b=cSXuYtSuALqfm4+C4lFnx+od52QfCfx8Rt2+4s03f9vDCPtcZic3f/pczDtYh7InT4oejsHxb/+SFopSzgn/3ts7HY6PSTpZfz9evfO77v/sgm0UwlRXWlYX1joIflnUGKDOZF03Vh9AzVwaYeA7p6zmbJ0uN7gJc2k7JGSfwro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267448; c=relaxed/simple;
-	bh=bfLHrI+KHBL420kB9LvWPzH5vg3kP5L2x0mod4WtyLQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jtOVV3vLGhtWRSg6xwicpn6eesFxWdxEBHEE8hAmO0GDAWohZLckX7pJkjLrNPH53RqKkmSYkiR9bZTCVuFfN3t4KOpWRVfyoMJ4mQZi9Lwz8JzDkgaB8mYGNsF2KUF1Wf1lJ9pVvBa5ImnxT4j1HmLb50YZo1vA6KNNgeYh1kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sl93khdJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CECE0C4CEEB;
-	Mon,  4 Aug 2025 00:30:46 +0000 (UTC)
+	s=arc-20240116; t=1754267483; c=relaxed/simple;
+	bh=fiPFPsUUViQOYh0lYiVrj4SgH/o89LMzRckw6SQSNAA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qy04sUdQkk7UXI6UiIxDbvfPa8uPMuDL1XlfGAQnXHkazDu8+2RU8gTbzHx05pvuZ/xuxJrTuLlWRbHY2tRO6zOUAPFh3lGevEIKnUloreE3ZLrOcMRMuyO5nXKHw7VTe+qMav8j10fG4JOC6ytG61+URQ+wS8JiE354IDfCyI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ujN2/9UF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB7E6C4CEEB;
+	Mon,  4 Aug 2025 00:31:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267448;
-	bh=bfLHrI+KHBL420kB9LvWPzH5vg3kP5L2x0mod4WtyLQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sl93khdJTo3Tchn0N73IuduQx7IFsH90c6N2LoSxWPAMLglJZ78rNMytJIntNhHm1
-	 qb5w20rVy7r7ntytmY17BDPNc8RzMwpExvX5xCrn50as9kDdR8oxi+VoYaxMLdkd5+
-	 wDceKIAUY+G3oVsr8V6Tnum6wa9xv0xd8w5XZx/AX1RkFTOdtuhV5oZc/8MvGoDsr8
-	 iKQYhi+7F7qwCankU7b9uPf9lvSFRVYmQfmXhPvsDIx3GAz0Ur+wlFvYokZRHnj44U
-	 fCnK/U4zltn84p5rsJoVuPAxmbh23DYREwlNNGfU+8f7c7P+H6dOWlaOAJ+JMJxUIu
-	 jUNmjY921eqBw==
+	s=k20201202; t=1754267483;
+	bh=fiPFPsUUViQOYh0lYiVrj4SgH/o89LMzRckw6SQSNAA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ujN2/9UFeKIOAdeKHSH15qivnkF82Aw1CQ9C4tMfjgzM5jJo6uUypqfiygX3gdblI
+	 yq1IiDSE1IJ/LnUjdmWjODRVaUE/0VKBC4sLv1KrcfVDBgRA5GJfSH/QGXUuVLJ1uF
+	 xEg5UKtsaOILHRCgB/aDCvfkFgdwLxyNdyEa4tV2m+BK08HkKqMEC970LYD3ui9VYw
+	 0bl/1q4Zyo1K5rya+DbiY2prR6pvcyl3uEm6WznR/QBrNq0DRBHD8SKoxAO6qumu8Z
+	 yXGzAcCkT1BkjPAFmaIAfM6XqOvMf/UI9lOUrPafXnqYFgrva2K+1tSdKWwAH1fhae
+	 80wyhyCwvDOlg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+Cc: Su Hui <suhui@nfschina.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	michal.simek@amd.com,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.15 69/80] usb: dwc3: xilinx: add shutdown callback
-Date: Sun,  3 Aug 2025 20:27:36 -0400
-Message-Id: <20250804002747.3617039-69-sashal@kernel.org>
+	mathias.nyman@intel.com,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 01/69] usb: xhci: print xhci->xhc_state when queue_command failed
+Date: Sun,  3 Aug 2025 20:30:11 -0400
+Message-Id: <20250804003119.3620476-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250804002747.3617039-1-sashal@kernel.org>
-References: <20250804002747.3617039-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,33 +60,23 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.15.9
+X-stable-base: Linux 6.12.41
 Content-Transfer-Encoding: 8bit
 
-From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+From: Su Hui <suhui@nfschina.com>
 
-[ Upstream commit 70627bf82e36e61c40c3315e1206e4ea4c02e668 ]
+[ Upstream commit 7919407eca2ef562fa6c98c41cfdf6f6cdd69d92 ]
 
-Adds a shutdown callback to ensure that the XHCI stack is properly
-shutdown in reboot/shutdown path.
+When encounters some errors like these:
+xhci_hcd 0000:4a:00.2: xHCI dying or halted, can't queue_command
+xhci_hcd 0000:4a:00.2: FIXME: allocate a command ring segment
+usb usb5-port6: couldn't allocate usb_device
 
-In kexec flow, kernel_restart_prepare() performs actions necessary
-to prepare the system for a restart and invokes device_shutdown. To
-ensure proper shutdown attach the dwc3 shutdown implementation which
-mirrors the remove method.
+It's hard to know whether xhc_state is dying or halted. So it's better
+to print xhc_state's value which can help locate the resaon of the bug.
 
-$ kexec -e
-
-<snip>
-xhci-hcd xhci-hcd.0.auto: remove, state 1
-usb usb1: USB disconnect, device number 1
-usb 1-1: USB disconnect, device number 6
-xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered
-kexec_core: Starting new kernel
-
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/1748977771-714153-1-git-send-email-radhey.shyam.pandey@amd.com
+Signed-off-by: Su Hui <suhui@nfschina.com>
+Link: https://lore.kernel.org/r/20250725060117.1773770-1-suhui@nfschina.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
@@ -100,80 +85,74 @@ LLM Generated explanations, may be completely bogus:
 
 **Backport Status: YES**
 
-This commit should be backported to stable kernel trees. Here's my
-detailed analysis:
+This commit is suitable for backporting to stable kernel trees for the
+following reasons:
 
-## Analysis of the Commit
+1. **Enhanced Debugging for Real-World Issues**: The commit improves
+   debugging of USB xHCI host controller failures by printing the actual
+   `xhc_state` value when `queue_command` fails. The commit message
+   shows real error messages users encounter ("xHCI dying or halted,
+   can't queue_command"), demonstrating this is a real-world debugging
+   problem.
 
-### 1. **Bug Fix Nature**
-This commit fixes a real bug where the USB XHCI stack is not properly
-shut down during kexec operations. The commit message explicitly shows
-the issue - when `kexec -e` is executed, the XHCI controller is removed
-but without a proper shutdown sequence, which can lead to:
-- Memory corruption if the controller continues DMA operations
-- System instability during kexec transitions
-- Potential crashes after kexec
+2. **Minimal and Safe Change**: The change is extremely small and safe -
+   it only modifies a debug print statement from:
+  ```c
+  xhci_dbg(xhci, "xHCI dying or halted, can't queue_command\n");
+  ```
+  to:
+  ```c
+  xhci_dbg(xhci, "xHCI dying or halted, can't queue_command. state:
+  0x%x\n", xhci->xhc_state);
+  ```
 
-### 2. **Simple and Contained Fix**
-The code change is minimal and low-risk:
-```diff
-+       .shutdown       = dwc3_xlnx_remove,
-```
-It simply reuses the existing `dwc3_xlnx_remove` function as the
-shutdown callback. This is a common pattern in kernel drivers.
+3. **No Functional Changes**: This is a pure diagnostic improvement. It
+   doesn't change any logic, control flow, or data structures. It only
+   adds the state value (0x%x format) to an existing debug message.
 
-### 3. **Follows Established Pattern**
-My analysis shows this follows an established pattern in the dwc3 driver
-family:
-- `dwc3-of-simple.c` uses its remove function for shutdown
-- `dwc3-rtk.c` has a dedicated shutdown function that calls similar
-  cleanup
-- The recent Tegra XUSB commit (3a3be3a1ebf0) added a shutdown callback
-  for similar reasons (preventing SMMU-related crashes)
+4. **Important for Troubleshooting**: The xHCI driver is critical for
+   USB functionality, and when it fails with "dying or halted" states,
+   knowing the exact state helps diagnose whether:
+   - `XHCI_STATE_DYING` (0x1) - controller is dying
+   - `XHCI_STATE_HALTED` (0x2) - controller is halted
+   - Both states (0x3) - controller has both flags set
 
-### 4. **Clear Side Effects**
-The `dwc3_xlnx_remove` function performs standard cleanup:
-- Depopulates child devices (`of_platform_depopulate`)
-- Disables and unprepares clocks
-- Manages runtime PM state
+   This distinction is valuable for debugging hardware issues, driver
+bugs, or system problems.
 
-These are all safe operations for shutdown context.
+5. **Zero Risk of Regression**: Adding a parameter to a debug print
+   statement has no risk of introducing regressions. The worst case is
+   the debug message prints the state value.
 
-### 5. **Meets Stable Criteria**
-- **Fixes a real bug**: Prevents potential system instability during
-  kexec
-- **Small change**: Single line addition
-- **Low risk**: Reuses existing, tested code path
-- **No new features**: Pure bug fix
-- **Clear benefit**: Improves system reliability during reboot/kexec
-  operations
+6. **Follows Stable Rules**: This meets stable kernel criteria as it:
+   - Fixes a real debugging limitation
+   - Is obviously correct
+   - Has been tested (signed-off and accepted by Greg KH)
+   - Is small (single line change)
+   - Doesn't add new features, just improves existing diagnostics
 
-### 6. **Similar Issues in Other Drivers**
-The pattern of missing shutdown callbacks causing issues during
-kexec/reboot is well-documented in the kernel, particularly for devices
-that perform DMA operations.
+The commit helps system administrators and developers diagnose USB
+issues more effectively by providing the actual state value rather than
+just saying "dying or halted", making it a valuable debugging
+enhancement for stable kernels.
 
-The fix ensures proper hardware shutdown sequence during system
-reboot/shutdown, preventing the USB controller from accessing memory
-after the system has started transitioning to a new kernel or shutting
-down. This is especially important for systems using kexec for fast
-reboots or crash dump collection.
+ drivers/usb/host/xhci-ring.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- drivers/usb/dwc3/dwc3-xilinx.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-index 4ca7f6240d07..09c3c5c226ab 100644
---- a/drivers/usb/dwc3/dwc3-xilinx.c
-+++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -422,6 +422,7 @@ static const struct dev_pm_ops dwc3_xlnx_dev_pm_ops = {
- static struct platform_driver dwc3_xlnx_driver = {
- 	.probe		= dwc3_xlnx_probe,
- 	.remove		= dwc3_xlnx_remove,
-+	.shutdown	= dwc3_xlnx_remove,
- 	.driver		= {
- 		.name		= "dwc3-xilinx",
- 		.of_match_table	= dwc3_xlnx_of_match,
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 2ff8787f753c..19978f02bb9e 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -4378,7 +4378,8 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
+ 
+ 	if ((xhci->xhc_state & XHCI_STATE_DYING) ||
+ 		(xhci->xhc_state & XHCI_STATE_HALTED)) {
+-		xhci_dbg(xhci, "xHCI dying or halted, can't queue_command\n");
++		xhci_dbg(xhci, "xHCI dying or halted, can't queue_command. state: 0x%x\n",
++			 xhci->xhc_state);
+ 		return -ESHUTDOWN;
+ 	}
+ 
 -- 
 2.39.5
 
