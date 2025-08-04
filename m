@@ -1,171 +1,91 @@
-Return-Path: <linux-usb+bounces-26452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26453-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7CB9B19984
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 02:43:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5C25B19C59
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 09:20:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58D77189885B
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 00:43:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 867E03A6B8A
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 07:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACA14594A;
-	Mon,  4 Aug 2025 00:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51722233D9E;
+	Mon,  4 Aug 2025 07:20:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uhmk+El5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="caWwhiOs"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CFF1519A0;
-	Mon,  4 Aug 2025 00:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14BA15539A;
+	Mon,  4 Aug 2025 07:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754268164; cv=none; b=jScDeS6q8FFeoJbPI4fY7mcY8RiI1bMd8Lsyn2CKeeMkrt1Jh64eRlf6IDMVntgBEU+HBEVhoiGoercfuEaZqff5+9FspznY7LNwOmlo9Sag9CRFxLGe1G2v8RWs/YSGx1pVpQJ1UsxYbKhB3RH1K/pyMOzfagUQOb/o4dK4O7k=
+	t=1754292027; cv=none; b=tUJ2tzo4DKViAntqbr493QRmllUsH/yb/PcddUabEv6AAQe9IJVCTpQdq3r/JIsvHYdHu1GXdRno+C0kEQA4wCArmNX2zITZWC6iDwOFCzQt8oq1joaKwmbetHlialsnAvAwp00HOt1fqz1tHlZXp/MNVG65MVlTghZmAJOQBW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754268164; c=relaxed/simple;
-	bh=wlvN4G6THNBJauj78AKnpFuRQ1tqa6N0fpjk14w/vKI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mqy2bglW0Zm5f3ckp1S3ja+qA0eJ/ADPFVXIVH3r5FVabEXrdHUU+U/A1rqpD0Vu50rcV+F5zX9LF+O3zb8VecgPFaktm0ovEqiXeKcr0+W17N1CM45Yq8lx59Zwjs6/SFasmwX5kbg2sxudTMaD/y4N3OXRgVy6J+N93scXIGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uhmk+El5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30216C4CEEB;
-	Mon,  4 Aug 2025 00:42:43 +0000 (UTC)
+	s=arc-20240116; t=1754292027; c=relaxed/simple;
+	bh=AeROgIG1PExcbVHzDZ8nSxZE+aY6x8DPdGfSLCWONB0=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=f7yD37AkswmiZbl13Rx8GIm2qbBud2pie9szVhMtvD2MeaZZwCrC7K2JPHvcPmslAI2k3lZcG+s8sRgnHz3HcZcDPj0GrlnzeZLdF82sA2xQxw3pGdHZ8qD+WCxDunyo2QVOqmhYkgQYn7GmE6cilELvNosl/6mOmeXcqz897N4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=caWwhiOs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E65E5C4CEE7;
+	Mon,  4 Aug 2025 07:20:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754268164;
-	bh=wlvN4G6THNBJauj78AKnpFuRQ1tqa6N0fpjk14w/vKI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uhmk+El5DR2wrp1NiFVUQkfNb0kJE24Vw1HlZKtk6iYdGtz20v69YmpzBZylrh/2u
-	 OzaPUZZG9oJsgxlzaXfTyR9lYOKiIBlbmvSm845vQZ+KGba4EDfeKbo7g05Nb2js1D
-	 spuZA/8pfZGc2rYlVD6Kj8sHzwcGy9yBN+fnBdEWg+57tiz6e1CKGrS1p77oVoggC1
-	 01Ev3Lxj14KL+Api179OBRAsV7H/vSVFeW3F0vu+L0aVcEGeepPLHQnnOMj3coAPeh
-	 JEgpV7BJuHk1fkPyyli7BF0YlFkGfvQBU6NAvvYS5DB22xpg2yjazRVj+JWNv4YKVi
-	 1aw+cCAhwedXQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	mathias.nyman@intel.com,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 07/28] usb: xhci: Avoid showing errors during surprise removal
-Date: Sun,  3 Aug 2025 20:42:06 -0400
-Message-Id: <20250804004227.3630243-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250804004227.3630243-1-sashal@kernel.org>
-References: <20250804004227.3630243-1-sashal@kernel.org>
+	s=k20201202; t=1754292027;
+	bh=AeROgIG1PExcbVHzDZ8nSxZE+aY6x8DPdGfSLCWONB0=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=caWwhiOsT8nXprGVu7UkYujDYO3awmKuFlrcmNw+Rh6XN14m2VVn92O28CnVF2nrU
+	 QbPra3xv3FXHXiQm2Q+7mS7cLHgyFZMztmtzhePVl9lZrtRBK0c/YXcgRJw2eGMPld
+	 EchLRwNX6p5TUhhno1ODWtCVUDSpKQAomtXAzaRTCyL6VwH3lmduwovC1dOpmqB/l7
+	 EPAPbGsQ+5O3BdvSo5JYtXf754O+KrDDvPsnwT+7oYQbLnZhfdsE0KU2J+dB33KEqd
+	 YqHXyZK5eWikvqamAtFLEK6pZojuFOnEP8AmIp9LwtUyqn4FS0IoF/k75mpnrhf5ON
+	 rBljuJYv8vO7A==
+Date: Mon, 4 Aug 2025 09:20:24 +0200 (CEST)
+From: Jiri Kosina <jikos@kernel.org>
+To: Andrey Smirnov <andrew.smirnov@gmail.com>
+cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+    linux-usb@vger.kernel.org, 
+    "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
+Subject: Re: dev->uniq is not unique for individual USB interfaces
+In-Reply-To: <CAHQ1cqErtqZjSakSUppxKEPvK3xJYfKydM02RJTcDO0RV77r3g@mail.gmail.com>
+Message-ID: <03s194q6-n6n7-2p42-5o48-99726p7qp0n0@xreary.bet>
+References: <CAHQ1cqErtqZjSakSUppxKEPvK3xJYfKydM02RJTcDO0RV77r3g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.296
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+On Mon, 21 Jul 2025, Andrey Smirnov wrote:
 
-[ Upstream commit 4b9c60e440525b729ac5f071e00bcee12e0a7e84 ]
+> Hey folks:
+> 
+> I'm working on a custom USB device that presents N battery powered HID
+> interfaces with each interface reporting its own battery life via
+> standard HID Power Device report. The problem I'm running into is that
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hid/hid-input.c?h=v6.16-rc7#n524
+> 
+> assumes that "uniq" field of a "struct hid_device" is always unique, but
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hid/usbhid/hid-core.c?h=v6.16-rc7#n1415
+> 
+> populates "uniq" with iSerialNumber which is only unique per USB
+> device, not per USB interface. At the first glance the right way to
+> fix this would be to change how uniq is generated by usbhid_probe()
+> but that probably would break some userspace assumptions? 
 
-When a USB4 dock is unplugged from a system it won't respond to ring
-events. The PCI core handles the surprise removal event and notifies
-all PCI drivers. The XHCI PCI driver sets a flag that the device is
-being removed as well.
+Hmm, actually, from top of my head I am not able to come up with any 
+userspace breakage this might cause. Do you have anything particular on 
+mind?
 
-When that flag is set don't show messages in the cleanup path for
-marking the controller dead.
+Thanks,
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20250717073107.488599-2-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-LLM Generated explanations, may be completely bogus:
-
-Now let me analyze this commit properly:
-
-**Backport Status: YES**
-
-This commit should be backported to stable kernel trees for the
-following reasons:
-
-1. **Fixes a user-visible issue**: The commit addresses spurious error
-   messages that appear when USB4 docks are unplugged. The original code
-   shows `xhci_err(xhci, "xHCI host controller not responding, assume
-   dead\n")` even during expected surprise removals, which can confuse
-   users and fill system logs unnecessarily.
-
-2. **Small and contained fix**: The change is minimal - it only adds a
-   local `notify` variable and conditionalizes two operations based on
-   whether the device is being removed:
-   - The error message printing (line 1384 → lines 1379-1381)
-   - The `usb_hc_died()` notification (reusing the same condition)
-
-3. **No architectural changes**: This is a simple behavioral fix that
-   doesn't modify any data structures, APIs, or core functionality. It
-   merely suppresses error messages during an expected removal scenario.
-
-4. **Clear bug fix**: The commit clearly fixes an issue where error
-   messages are shown during normal USB4 dock removal operations. When
-   `XHCI_STATE_REMOVING` is set (indicating PCI removal is in progress),
-   the error message is now suppressed since it's an expected condition.
-
-5. **Low risk of regression**: The change only affects logging behavior
-   and maintains the same functional flow. The `usb_hc_died()` call was
-   already conditional on `!XHCI_STATE_REMOVING`, so this commit just
-   applies the same logic to the error message.
-
-6. **Improves user experience**: USB4/Thunderbolt docks are increasingly
-   common, and users frequently unplug them. Avoiding spurious error
-   messages during normal operations is important for user experience
-   and log clarity.
-
-The commit follows stable tree rules by being a minimal fix for a real
-issue that affects users, without introducing new features or making
-risky changes to core functionality.
-
- drivers/usb/host/xhci-ring.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 71b17a00d3ed..47326fb8b1fc 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -973,12 +973,15 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
-  */
- void xhci_hc_died(struct xhci_hcd *xhci)
- {
-+	bool notify;
- 	int i, j;
- 
- 	if (xhci->xhc_state & XHCI_STATE_DYING)
- 		return;
- 
--	xhci_err(xhci, "xHCI host controller not responding, assume dead\n");
-+	notify = !(xhci->xhc_state & XHCI_STATE_REMOVING);
-+	if (notify)
-+		xhci_err(xhci, "xHCI host controller not responding, assume dead\n");
- 	xhci->xhc_state |= XHCI_STATE_DYING;
- 
- 	xhci_cleanup_command_queue(xhci);
-@@ -992,7 +995,7 @@ void xhci_hc_died(struct xhci_hcd *xhci)
- 	}
- 
- 	/* inform usb core hc died if PCI remove isn't already handling it */
--	if (!(xhci->xhc_state & XHCI_STATE_REMOVING))
-+	if (notify)
- 		usb_hc_died(xhci_to_hcd(xhci));
- }
- 
 -- 
-2.39.5
+Jiri Kosina
+SUSE Labs
 
 
