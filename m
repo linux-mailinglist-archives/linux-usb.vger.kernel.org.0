@@ -1,141 +1,138 @@
-Return-Path: <linux-usb+bounces-26465-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26466-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B5DDB19E46
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 11:07:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C417DB19F2C
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 12:01:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25B691655D7
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 09:06:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17DF4189C2C3
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Aug 2025 10:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A82C2459D7;
-	Mon,  4 Aug 2025 09:04:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5C89246798;
+	Mon,  4 Aug 2025 10:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Xg4tAtW7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WYRfldFn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13282254AF0
-	for <linux-usb@vger.kernel.org>; Mon,  4 Aug 2025 09:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CA723D2B1;
+	Mon,  4 Aug 2025 10:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754298290; cv=none; b=HDneaPSgHuj7SAeET/r5ocAHvxh02LGPg+jU8JEJIsm9br6/sxX+MIqyK0fsqTEIpz0Ts/SKLek9PCEmEIAAkweQc3Y7+HG495MDFz9RJ7AvTnDQDukBiF2MdSZUAax5wfHLpyuDKwexrEiLD1Zl8QIEwifDy7Yc19lbNXa6oV8=
+	t=1754301656; cv=none; b=gf2IrscvV6GCPxbv5bbRNCHV0cSkmrD9tEyDSRuWSMe1iHOR2z8lEBDii7GfpKff8jZ43V8wjQ4stNnqF0HX5zU28/nwzTpE5Kf4mvO2KlUh+7NstGaIPwW+uL1x7WZutc19IaZPDRxbs/n2Zz20VcLQVY++12aoqWpOZiDC+10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754298290; c=relaxed/simple;
-	bh=3x19bC4TEkjCbZhfuYqU5c/VjurC/2Z6kwyVqMzBqdE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j9AGYdyFchSrlokLdYMCLsp4hMf4o+864D3Vm2kWKkASr78rTq5sd+4oSmQrhfYbcrhw+8SyRlxDdXujTrZ5qGnFsKBmQjhW/mAInw+8tuuTxggUoXzc0e1oQVRx7fJp87/Am73w5PUKr1jm1P9sVxhOrjmFKPz0XGnX3hzJRwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Xg4tAtW7; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-61592ff5df8so5055236a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 04 Aug 2025 02:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1754298287; x=1754903087; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vnQpTwABThBxdUskT3LdV6JNdqJ4VQSfDvVtzabNNUU=;
-        b=Xg4tAtW7xI5NriBCXr/EdjYAbEtUfVMZ2+Qf9K+XZt8Iin1MVlmenKAaFiPkbbczgg
-         5nMpBLjUSxSvkgJF1tWRiwhQ4yIWmVG4sb5wU7nCWcRNeffEH8NQL4AK3RhVg73PdOXD
-         AZO778+w8MLZJ4+3SPDV2uLLWECf3YYeVOLK0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754298287; x=1754903087;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vnQpTwABThBxdUskT3LdV6JNdqJ4VQSfDvVtzabNNUU=;
-        b=lh+/Iu4J1eY4nMadM6zdDx+Gqmyn6B1JoVl9CFrUyRdtPQAwPrSviMw8+a5w/oZsnC
-         2PXGjLiuzUMhXoD6KqUZpDUT1UhVf3CM9zlD/J+yooe25BhryVbyKuOT+KpkLsWCc4BI
-         E1HzbXINLmcsZZs2mUSN7Gz9eoJO49aPNQVbpdvUfm10W00Vd413t+CfmpdXPHZZbqNn
-         nww3FatbbGjnvjW6eUuSrjCUfr9s4oVgFe8YKIPltAVr8dvjrCli4y+RzJJqOozjnE52
-         Vhxq/sf4bJ/PdS/lV2BMgx0HhFoCWr6CBLGhuIDHL2hhoUFUnSQ5QJHc28COaF/f9CMv
-         u/LQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUoHY0FJDpL1FE36wx/dDXbsDuSA2kEGeZbAJDnm1Aurreydy9nYvu1OH/kQcruE/ahDUq45/uSKVM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuZLquLnsXcX5by1pie7ZNrZmiQCA/VzBoFbWkxGhI+bzUJLok
-	JDepac6zAkr6w8O7x8T9YNf8bwL6Cdx4k4Y0q+UGi9csVkmlY5yzgTWLUUsm1dj1uw==
-X-Gm-Gg: ASbGncsop3XKroNih0nsXFUYIr7cmwjxS+vW9CwBFZ09GQ8Fqy0f2a0niTzQim0mlf3
-	hzz+LH8CectCrImkPoh8lxZJWsDRVqOISfWy1YB7MZZIADf75etCJ4lGgo94MTRJZHqbIR2dqcF
-	XXQeLXxUgMO1OJAy8hgcYw7+rd6BjfHRoaFea+Wdnr3FbgpxRpip9Uc5Xa2Pog0PiheVYINNdjb
-	acoN9vreyKOOrkv8roBk6zokeZFB7dbXM1mM61O2oB3Fo2D/kTUUYpqQjDK+vfPnhc7nN3v4F5N
-	z0Erwy7dVvp20OIdpyptkQO7wuPn8WdWCg6MW0Wf6raMd3mjTT4y0T9cm7dr3+Tk3n8mVNLZzfQ
-	PmPRPBXgpzq+UWhzvjUVvY0zO20ae6uzv9+pBlAVSz9Evtg6N63yvnUk2yf2Yo4Gl68qTMXU7Vz
-	BOsDUgDm/PGQyoX0ST/yGofmDVDQ==
-X-Google-Smtp-Source: AGHT+IHrHxXdeaPG9B8IlHKEHEVk1KBLXqnoXcB8NheI8LMoc58AFyO+W+Fv2Eq44g8cl/NgunqeAg==
-X-Received: by 2002:a05:6402:3788:b0:615:38e6:b739 with SMTP id 4fb4d7f45d1cf-615e6ed456fmr7575534a12.10.1754298287331;
-        Mon, 04 Aug 2025 02:04:47 -0700 (PDT)
-Received: from akuchynski.c.googlers.com.com (150.230.32.34.bc.googleusercontent.com. [34.32.230.150])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a8fe7995sm6412790a12.36.2025.08.04.02.04.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Aug 2025 02:04:46 -0700 (PDT)
-From: Andrei Kuchynski <akuchynski@chromium.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Cc: Guenter Roeck <groeck@chromium.org>,
+	s=arc-20240116; t=1754301656; c=relaxed/simple;
+	bh=C7mKQMp+GxD6RFGH57BJqOHlqmXj4BMLvSGcVzGnIiU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gAgR7G0Gidhdf1vw5KxyULCIlHblJCli7Vi7aRuzpCb5J32Hy2+taHSH4A2KABiAiGMyQAc4GD4Nd54lysYT7AhyAkwi8EfZ8KNJb+iPv91pMKkEXIXtp3t+L2+MVFmsYoyVlQXNcQf67zt+3bfECHL6dG+Ov+WFCdxXgOfA8L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WYRfldFn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3A4C4CEE7;
+	Mon,  4 Aug 2025 10:00:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754301655;
+	bh=C7mKQMp+GxD6RFGH57BJqOHlqmXj4BMLvSGcVzGnIiU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WYRfldFnCpEyxVWR6stxBNTdXR0Lp44/oxDX3k8AgGXC9whh0RIg/D0A4uIPzuiYZ
+	 gRQhwVZwyMXSKezqqTj2VpjXlJQZ7u/hxM7C0nwzg6LShAI1N1ppCHd7BmSHAC1qEy
+	 25unaysiin3XB2q+7t8y8dkiPthcCwdtequVbQu7pyKG8lFT9UuanidcOX7IjAeHQp
+	 c4DZ4DyDyvQo28BuOaCTjVyc019U+3zJ/7xMy01+I2foriMhkwk4EtliQWFqRG8Kri
+	 z68mVg72xHp8FZzQhHuqOPuUfwuSAI6sQf4XgxShRHl4tYpzL4FowjXU2usGjKOgEN
+	 JNZ9wJ3M9iMaA==
+Date: Mon, 4 Aug 2025 11:00:50 +0100
+From: Simon Horman <horms@kernel.org>
+To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	linux-kernel@vger.kernel.org,
-	Andrei Kuchynski <akuchynski@chromium.org>
-Subject: [PATCH v3 10/10] platform/chrome: cros_ec_typec: Add default_usb_mode_set support
-Date: Mon,  4 Aug 2025 09:03:39 +0000
-Message-ID: <20250804090340.3062182-11-akuchynski@chromium.org>
-X-Mailer: git-send-email 2.50.1.565.gc32cd1483b-goog
-In-Reply-To: <20250804090340.3062182-1-akuchynski@chromium.org>
-References: <20250804090340.3062182-1-akuchynski@chromium.org>
+	Linux Netdev Mailing List <netdev@vger.kernel.org>,
+	Linux USB Mailing List <linux-usb@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Armando Budianto <sprite@gnuweeb.org>, gwml@vger.gnuweeb.org,
+	stable@vger.kernel.org, John Ernberg <john.ernberg@actia.se>
+Subject: Re: [PATCH net v2] net: usbnet: Fix the wrong netif_carrier_on()
+ call placement
+Message-ID: <20250804100050.GQ8494@horms.kernel.org>
+References: <20250801190310.58443-1-ammarfaizi2@gnuweeb.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250801190310.58443-1-ammarfaizi2@gnuweeb.org>
 
-The `cros_ec_typec` driver currently doesn't directly consume a default
-USB mode value. This commit adds the `default_usb_mode_set` function,
-enabling the `usb_capability` sysfs attribute to be writable.
-This functionality allows users to dynamically activate or deactivate
-USB4 mode on a given port.
++ John Ernberg
 
-Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
----
- drivers/platform/chrome/cros_ec_typec.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 5a3d393c26ee..9bfe78e315fc 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -44,6 +44,11 @@ static void cros_typec_role_switch_quirk(struct fwnode_handle *fwnode)
- #endif
- }
- 
-+static int cros_typec_default_usb_mode_set(struct typec_port *port, enum usb_mode mode)
-+{
-+	return 0;
-+}
-+
- static int cros_typec_enter_usb_mode(struct typec_port *tc_port, enum usb_mode mode)
- {
- 	struct cros_typec_port *port = typec_get_drvdata(tc_port);
-@@ -140,6 +145,7 @@ static int cros_typec_pr_swap(struct typec_port *port, enum typec_role role)
- }
- 
- static const struct typec_operations cros_typec_usb_mode_ops = {
-+	.default_usb_mode_set = cros_typec_default_usb_mode_set,
- 	.enter_usb_mode = cros_typec_enter_usb_mode,
- 	.dr_set = cros_typec_dr_swap,
- 	.pr_set = cros_typec_pr_swap,
--- 
-2.50.1.565.gc32cd1483b-goog
-
+On Sat, Aug 02, 2025 at 02:03:10AM +0700, Ammar Faizi wrote:
+> The commit in the Fixes tag breaks my laptop (found by git bisect).
+> My home RJ45 LAN cable cannot connect after that commit.
+> 
+> The call to netif_carrier_on() should be done when netif_carrier_ok()
+> is false. Not when it's true. Because calling netif_carrier_on() when
+> __LINK_STATE_NOCARRIER is not set actually does nothing.
+> 
+> Cc: Armando Budianto <sprite@gnuweeb.org>
+> Cc: stable@vger.kernel.org
+> Closes: https://lore.kernel.org/netdev/0752dee6-43d6-4e1f-81d2-4248142cccd2@gnuweeb.org
+> Fixes: 0d9cfc9b8cb1 ("net: usbnet: Avoid potential RCU stall on LINK_CHANGE event")
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> ---
+> 
+> v2:
+>   - Rebase on top of the latest netdev/net tree. The previous patch was
+>     based on 0d9cfc9b8cb1. Line numbers have changed since then.
+> 
+>  drivers/net/usb/usbnet.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> index a38ffbf4b3f0..a1827684b92c 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -1114,31 +1114,31 @@ static const struct ethtool_ops usbnet_ethtool_ops = {
+>  };
+>  
+>  /*-------------------------------------------------------------------------*/
+>  
+>  static void __handle_link_change(struct usbnet *dev)
+>  {
+>  	if (!test_bit(EVENT_DEV_OPEN, &dev->flags))
+>  		return;
+>  
+>  	if (!netif_carrier_ok(dev->net)) {
+> +		if (test_and_clear_bit(EVENT_LINK_CARRIER_ON, &dev->flags))
+> +			netif_carrier_on(dev->net);
+> +
+>  		/* kill URBs for reading packets to save bus bandwidth */
+>  		unlink_urbs(dev, &dev->rxq);
+>  
+>  		/*
+>  		 * tx_timeout will unlink URBs for sending packets and
+>  		 * tx queue is stopped by netcore after link becomes off
+>  		 */
+>  	} else {
+> -		if (test_and_clear_bit(EVENT_LINK_CARRIER_ON, &dev->flags))
+> -			netif_carrier_on(dev->net);
+> -
+>  		/* submitting URBs for reading packets */
+>  		queue_work(system_bh_wq, &dev->bh_work);
+>  	}
+>  
+>  	/* hard_mtu or rx_urb_size may change during link change */
+>  	usbnet_update_max_qlen(dev);
+>  
+>  	clear_bit(EVENT_LINK_CHANGE, &dev->flags);
+>  }
+>  
+> -- 
+> Ammar Faizi
+> 
+> 
 
