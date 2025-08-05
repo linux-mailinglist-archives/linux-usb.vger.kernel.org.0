@@ -1,384 +1,230 @@
-Return-Path: <linux-usb+bounces-26488-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26490-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77394B1AF85
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 09:42:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99FC1B1B077
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 10:52:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BAEC3A9FCA
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 07:42:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BCA5189C2D6
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 08:52:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2D721ADCB;
-	Tue,  5 Aug 2025 07:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70432257AF4;
+	Tue,  5 Aug 2025 08:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="laNracnf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5EA23ABB2
-	for <linux-usb@vger.kernel.org>; Tue,  5 Aug 2025 07:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC691C84B8;
+	Tue,  5 Aug 2025 08:52:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754379742; cv=none; b=sBoFvt+D2rQsGeBsOJ69NvZG3lL32b73LC7tTepUSGT5zn2EhWdNLPjHY6U2IAIY9WJxOJuah3I2b1yw4TE8xiL11a+EKx3veHcNHTBEiKNZM3rzDzyEquez7HZb21hFWOJN6/KxhSN02UqbkqhJpmCsAsthaGRWRRNubO9zgDg=
+	t=1754383932; cv=none; b=AUmcALfF7nEB5LkJPSQIGuDTcr79rLYq0KFqojchCSW2JhI4RHEhgnvIoCcuyyOMhu3YnNT1FFcfVC2vlpCG+16c2j9hum7B2MAEvr0385JDG3LFfth3HkkUF6gkqfqR3UK/7PzM8M/QxOSDCeuKrnvCzs6qwSnLjTSI5lEXSNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754379742; c=relaxed/simple;
-	bh=1qW0jic5qgSouRAJ0K8gWbRDvMtLz1uULmdexDci+H4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cVDFsL9+AFo30ujUX/uDTD52k1T6wJLffZSUuarY5RM9ogs5Z61yGPwQYkdor4mAI03NcwAGSVlril6f60+Ae5scD5Sp3dElSsCeFwxiNUXamiSV/U7C4XnKtnGsXM+iRCV8MK55GNc70aTmez4J/8+EpKGhHVBAXKFsfsoAhxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mtr@pengutronix.de>)
-	id 1ujCHA-0005yv-K9; Tue, 05 Aug 2025 09:40:00 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mtr@pengutronix.de>)
-	id 1ujCGr-00C0Ka-13;
-	Tue, 05 Aug 2025 09:39:41 +0200
-Received: from mtr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mtr@pengutronix.de>)
-	id 1ujCGr-00A7fC-02;
-	Tue, 05 Aug 2025 09:39:41 +0200
-Date: Tue, 5 Aug 2025 09:39:40 +0200
-From: Michael Tretter <m.tretter@pengutronix.de>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Devarsh Thakkar <devarsht@ti.com>, Benoit Parrot <bparrot@ti.com>,
-	Hans Verkuil <hverkuil@kernel.org>, Mike Isely <isely@pobox.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Hans de Goede <hansg@kernel.org>,
-	Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
-	Christian Gromm <christian.gromm@microchip.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>,
-	Dongliang Mu <dzm91@hust.edu.cn>, Jonathan Corbet <corbet@lwn.net>,
-	Tomasz Figa <tfiga@chromium.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andy Walls <awalls@md.metrocast.net>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Bin Liu <bin.liu@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Mirela Rabulea <mirela.rabulea@nxp.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-	Michal Simek <michal.simek@amd.com>, Ming Qian <ming.qian@nxp.com>,
-	Zhou Peng <eagle.zhou@nxp.com>,
-	Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Nas Chung <nas.chung@chipsnmedia.com>,
-	Jackson Lee <jackson.lee@chipsnmedia.com>,
-	Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-	Houlong Wei <houlong.wei@mediatek.com>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-	Tiffany Lin <tiffany.lin@mediatek.com>,
-	Yunfei Dong <yunfei.dong@mediatek.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
-	Jacob Chen <jacob-chen@iotwrt.com>,
-	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	=?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-	Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Fabien Dessenne <fabien.dessenne@foss.st.com>,
-	Hugues Fruchet <hugues.fruchet@foss.st.com>,
-	Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Steve Longerbeam <slongerbeam@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Paul Kocialkowski <paulk@sys-base.io>,
-	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-	Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	Corentin Labbe <clabbe@baylibre.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bingbu Cao <bingbu.cao@intel.com>,
-	Tianshu Qiu <tian.shu.qiu@intel.com>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-	imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-amlogic@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	mjpeg-users@lists.sourceforge.net
-Subject: Re: [PATCH 29/65] media: allegro: Access v4l2_fh from file
-Message-ID: <aJG1PC0poVY-QZRb@pengutronix.de>
-Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Devarsh Thakkar <devarsht@ti.com>, Benoit Parrot <bparrot@ti.com>,
-	Hans Verkuil <hverkuil@kernel.org>, Mike Isely <isely@pobox.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Hans de Goede <hansg@kernel.org>,
-	Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
-	Christian Gromm <christian.gromm@microchip.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>,
-	Dongliang Mu <dzm91@hust.edu.cn>, Jonathan Corbet <corbet@lwn.net>,
-	Tomasz Figa <tfiga@chromium.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andy Walls <awalls@md.metrocast.net>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Bin Liu <bin.liu@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Mirela Rabulea <mirela.rabulea@nxp.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-	Michal Simek <michal.simek@amd.com>, Ming Qian <ming.qian@nxp.com>,
-	Zhou Peng <eagle.zhou@nxp.com>,
-	Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Nas Chung <nas.chung@chipsnmedia.com>,
-	Jackson Lee <jackson.lee@chipsnmedia.com>,
-	Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-	Houlong Wei <houlong.wei@mediatek.com>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-	Tiffany Lin <tiffany.lin@mediatek.com>,
-	Yunfei Dong <yunfei.dong@mediatek.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
-	Jacob Chen <jacob-chen@iotwrt.com>,
-	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	=?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-	Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Fabien Dessenne <fabien.dessenne@foss.st.com>,
-	Hugues Fruchet <hugues.fruchet@foss.st.com>,
-	Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Steve Longerbeam <slongerbeam@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Paul Kocialkowski <paulk@sys-base.io>,
-	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-	Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	Corentin Labbe <clabbe@baylibre.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bingbu Cao <bingbu.cao@intel.com>,
-	Tianshu Qiu <tian.shu.qiu@intel.com>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-	imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-amlogic@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	mjpeg-users@lists.sourceforge.net
-References: <20250802-media-private-data-v1-0-eb140ddd6a9d@ideasonboard.com>
- <20250802-media-private-data-v1-29-eb140ddd6a9d@ideasonboard.com>
+	s=arc-20240116; t=1754383932; c=relaxed/simple;
+	bh=7e3Jjh/eVa6OnJiKZ1mrQPktmlj6BCOmlcl99VnT8E4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qITGWU6QJjaI63dME8dlYOOROvEyCqYsyAxeBSOElDqnf9V7xnYfSyXS9527qPZZXaEuYSMllApu/1p71FkJ3L1ouv3kL1uYs/HZrzBNcMTbC68v1z71XtWMP1Q9beNE6x9OrwNrewP9N3fedEamVdWmD96ictQc3/QEM8lqhuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=laNracnf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F834C4CEF4;
+	Tue,  5 Aug 2025 08:52:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754383931;
+	bh=7e3Jjh/eVa6OnJiKZ1mrQPktmlj6BCOmlcl99VnT8E4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=laNracnfm/7Zip2BJzJ4u6qcQKaS/zVyy3natCLg0mFhJb3CSjNd634N3kVuQyRjq
+	 2Izo8R1x1rXEFo9Eu+VWPipj/w0gf+shh5v+zokLsDMwjDOUbfnPfwGyKNHkCwIoFC
+	 zbJzY/g5Nna0FyHdtBZcKkcNJKwvvQC1AxxU6KXgtHUal2wM87bmTbIRyiCq5q0UNG
+	 aDEU9l/Fef/kD97jol5y8eA0JclEa/1Zq8nJWuhvfCfJHWamdi7lNdiOLG0A39tiV1
+	 yc2JARokG0Zd79XTlhyltJIhWR/eVdNstqSdAeADvbAVHCnszNCd/Fdegf9WGioMQW
+	 MQz3VWFTrK5QA==
+Message-ID: <637240b1-7658-4549-aa17-4998ab72d6be@kernel.org>
+Date: Tue, 5 Aug 2025 10:52:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250802-media-private-data-v1-29-eb140ddd6a9d@ideasonboard.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mtr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: typec: fusb302: fix scheduling while atomic when
+ using virtio-gpio
+To: Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Yongbo Zhang <giraffesnn123@gmail.com>, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250526043433.673097-1-giraffesnn123@gmail.com>
+ <aDbkBZi1L442jd7i@kuha.fi.intel.com>
+ <m7n22g5fsfvpjz4s5d6zfcfddrzrj3ixgaqehrjkg7mcbufvjc@s4omshvxtkaf>
+From: Hans de Goede <hansg@kernel.org>
+Content-Language: en-US, nl
+In-Reply-To: <m7n22g5fsfvpjz4s5d6zfcfddrzrj3ixgaqehrjkg7mcbufvjc@s4omshvxtkaf>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Jacopo,
+Hi,
 
-On Sat, 02 Aug 2025 11:22:51 +0200, Jacopo Mondi wrote:
-> The v4l2_fh associated with an open file handle is now guaranteed
-> to be available in file->private_data, initialised by v4l2_fh_add().
+On 4-Aug-25 8:00 PM, Sebastian Reichel wrote:
+> +CC Hans de Goede
 > 
-> Access the v4l2_fh, and from there the driver-specific structure,
-> from the file * in all ioctl handlers.
+> Hi,
 > 
-> While at it remove the only left user of fh_to_channel() and remove
-> the macro completely.
+> On Wed, May 28, 2025 at 01:23:01PM +0300, Heikki Krogerus wrote:
+>> On Mon, May 26, 2025 at 12:34:33PM +0800, Yongbo Zhang wrote:
+>>> When the gpio irqchip connected to a slow bus(e.g., i2c bus or virtio
+>>> bus), calling disable_irq_nosync() in top-half ISR handler will trigger
+>>> the following kernel BUG:
+>>>
+>>> BUG: scheduling while atomic: RenderEngine/253/0x00010002
+>>> ...
+>>> Call trace:
+>>>  dump_backtrace+0x0/0x1c8
+>>>  show_stack+0x1c/0x2c
+>>>  dump_stack_lvl+0xdc/0x12c
+>>>  dump_stack+0x1c/0x64
+>>>  __schedule_bug+0x64/0x80
+>>>  schedule_debug+0x98/0x118
+>>>  __schedule+0x68/0x704
+>>>  schedule+0xa0/0xe8
+>>>  schedule_timeout+0x38/0x124
+>>>  wait_for_common+0xa4/0x134
+>>>  wait_for_completion+0x1c/0x2c
+>>>  _virtio_gpio_req+0xf8/0x198
+>>>  virtio_gpio_irq_bus_sync_unlock+0x94/0xf0
+>>>  __irq_put_desc_unlock+0x50/0x54
+>>>  disable_irq_nosync+0x64/0x94
+>>>  fusb302_irq_intn+0x24/0x84
+>>>  __handle_irq_event_percpu+0x84/0x278
+>>>  handle_irq_event+0x64/0x14c
+>>>  handle_level_irq+0x134/0x1d4
+>>>  generic_handle_domain_irq+0x40/0x68
+>>>  virtio_gpio_event_vq+0xb0/0x130
+>>>  vring_interrupt+0x7c/0x90
+>>>  vm_interrupt+0x88/0xd8
+>>>  __handle_irq_event_percpu+0x84/0x278
+>>>  handle_irq_event+0x64/0x14c
+>>>  handle_fasteoi_irq+0x110/0x210
+>>>  __handle_domain_irq+0x80/0xd0
+>>>  gic_handle_irq+0x78/0x154
+>>>  el0_irq_naked+0x60/0x6c
+>>>
+>>> This patch replaces request_irq() with devm_request_threaded_irq() to
+>>> avoid the use of disable_irq_nosync().
+>>>
+>>> Signed-off-by: Yongbo Zhang <giraffesnn123@gmail.com>
+>>
+>> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>>
+>>> ---
+> 
+> I'm currently investigating a potential "regression" (quotes,
+> because USB-C support is not yet enabled in the upstream board
+> devicetree) with the Radxa ROCK 5B USB-C support after rebasing
+> to latest master branch. I'm not yet sure, if this patch is at
+> fault or totally unrelated, but please be aware that it undoes
+> previous work from Hans de Goede to NOT use threaded IRQs:
+> 
+> 207338ec5a27 ("usb: typec: fusb302: Improve suspend/resume handling")
+> 
+> At the same time the fix from Yongbo Zhang misses cleaning up the
+> now useless fusb302_irq_work() split, which had been introduced by
+> Hans patch to have the hard IRQ as short as possible. With the
+> interrupt handler being a thread itself, the code can just be called
+> directly.
 
-Thanks for the cleanup!
+Yes the mentioned "usb: typec: fusb302: fix scheduling while atomic
+when using virtio-gpio" change looks broken to me.
 
-Minor suggestion below, but even without it
+Calling disable_irq_nosync() from an interrupt handler is
+perfectly fine and if the virtio GPIO controller cannot handle
+that, then that is a bug inside the virtio GPIO controller not
+in the the fusb302 driver.
+
+The patch switches to using threaded interrupt handling, but that
+does not fix the interrupt storm when level IRQs are used since
+all the now threaded interrupt handler does is queue the work
+which does the actual interrupt handling. So when the threaded
+interrupt handler is done the interrupt source is not yet
+cleared and the interrupt will immediately re-fire.
+
+So IMHO the "usb: typec: fusb302: fix scheduling while atomic when
+using virtio-gpio" change should be reverted.
+
+Please submit a revert and please Cc me on future changes to fusb302
+interrupt handling.
+
+Regards,
+
+Hans
+
+
+
+
+
+
+
+
 
 > 
-> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-
-Reviewed-by: Michael Tretter <m.tretter@pengutronix.de>
-
-> ---
->  drivers/media/platform/allegro-dvt/allegro-core.c | 18 ++++++++----------
->  1 file changed, 8 insertions(+), 10 deletions(-)
+> Greetings,
 > 
-> diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
-> index 5e3b1f5d7206d84b8ccb9ea3b3f3f1fe75becf99..81c6afcf2d06f9e39015e49d355346238c5033d8 100644
-> --- a/drivers/media/platform/allegro-dvt/allegro-core.c
-> +++ b/drivers/media/platform/allegro-dvt/allegro-core.c
-> @@ -197,8 +197,6 @@ static const struct regmap_config allegro_sram_config = {
->  	.cache_type = REGCACHE_NONE,
->  };
->  
-> -#define fh_to_channel(__fh) container_of(__fh, struct allegro_channel, fh)
-> -
->  struct allegro_channel {
->  	struct allegro_dev *dev;
->  	struct v4l2_fh fh;
-> @@ -3284,7 +3282,7 @@ static int allegro_enum_fmt_vid(struct file *file, void *fh,
->  static int allegro_g_fmt_vid_cap(struct file *file, void *fh,
->  				 struct v4l2_format *f)
->  {
-> -	struct allegro_channel *channel = fh_to_channel(fh);
-> +	struct allegro_channel *channel = file_to_channel(file);
->  
->  	f->fmt.pix.field = V4L2_FIELD_NONE;
->  	f->fmt.pix.width = channel->width;
-> @@ -3326,7 +3324,7 @@ static int allegro_try_fmt_vid_cap(struct file *file, void *fh,
->  static int allegro_s_fmt_vid_cap(struct file *file, void *fh,
->  				 struct v4l2_format *f)
->  {
-> -	struct allegro_channel *channel = fh_to_channel(fh);
-> +	struct allegro_channel *channel = file_to_channel(file);
->  	struct vb2_queue *vq;
->  	int err;
->  
-> @@ -3350,7 +3348,7 @@ static int allegro_s_fmt_vid_cap(struct file *file, void *fh,
->  static int allegro_g_fmt_vid_out(struct file *file, void *fh,
->  				 struct v4l2_format *f)
->  {
-> -	struct allegro_channel *channel = fh_to_channel(fh);
-> +	struct allegro_channel *channel = file_to_channel(file);
->  
->  	f->fmt.pix.field = V4L2_FIELD_NONE;
->  
-> @@ -3397,7 +3395,7 @@ static int allegro_try_fmt_vid_out(struct file *file, void *fh,
->  static int allegro_s_fmt_vid_out(struct file *file, void *fh,
->  				 struct v4l2_format *f)
->  {
-> -	struct allegro_channel *channel = fh_to_channel(fh);
-> +	struct allegro_channel *channel = file_to_channel(file);
->  	int err;
->  
->  	err = allegro_try_fmt_vid_out(file, fh, f);
-> @@ -3438,7 +3436,7 @@ static int allegro_channel_cmd_start(struct allegro_channel *channel)
->  static int allegro_encoder_cmd(struct file *file, void *fh,
->  			       struct v4l2_encoder_cmd *cmd)
->  {
-> -	struct allegro_channel *channel = fh_to_channel(fh);
-> +	struct allegro_channel *channel = file_to_channel(file);
->  	int err;
->  
->  	err = v4l2_m2m_ioctl_try_encoder_cmd(file, fh, cmd);
-> @@ -3488,7 +3486,7 @@ static int allegro_ioctl_streamon(struct file *file, void *priv,
->  				  enum v4l2_buf_type type)
->  {
->  	struct v4l2_fh *fh = file_to_v4l2_fh(file);
-> -	struct allegro_channel *channel = fh_to_channel(fh);
-> +	struct allegro_channel *channel = file_to_channel(file);
-
-You could remove the local fh entirely, if you change
-
-	return v4l2_m2m_streamon(file, fh->m2m_ctx, type);
-
-to
-
-	return v4l2_m2m_streamon(file, channel->fh.m2m_ctx, type);
-
-in the allegro_ioctl_streamon() function.
-
-Michael
-
->  	int err;
->  
->  	if (type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
-> @@ -3503,7 +3501,7 @@ static int allegro_ioctl_streamon(struct file *file, void *priv,
->  static int allegro_g_parm(struct file *file, void *fh,
->  			  struct v4l2_streamparm *a)
->  {
-> -	struct allegro_channel *channel = fh_to_channel(fh);
-> +	struct allegro_channel *channel = file_to_channel(file);
->  	struct v4l2_fract *timeperframe;
->  
->  	if (a->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
-> @@ -3520,7 +3518,7 @@ static int allegro_g_parm(struct file *file, void *fh,
->  static int allegro_s_parm(struct file *file, void *fh,
->  			  struct v4l2_streamparm *a)
->  {
-> -	struct allegro_channel *channel = fh_to_channel(fh);
-> +	struct allegro_channel *channel = file_to_channel(file);
->  	struct v4l2_fract *timeperframe;
->  	int div;
->  
+> -- Sebastian
 > 
-> -- 
-> 2.49.0
-> 
-> 
+>>>  drivers/usb/typec/tcpm/fusb302.c | 12 ++++--------
+>>>  1 file changed, 4 insertions(+), 8 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+>>> index f15c63d3a8f4..f2801279c4b5 100644
+>>> --- a/drivers/usb/typec/tcpm/fusb302.c
+>>> +++ b/drivers/usb/typec/tcpm/fusb302.c
+>>> @@ -1477,9 +1477,6 @@ static irqreturn_t fusb302_irq_intn(int irq, void *dev_id)
+>>>  	struct fusb302_chip *chip = dev_id;
+>>>  	unsigned long flags;
+>>>
+>>> -	/* Disable our level triggered IRQ until our irq_work has cleared it */
+>>> -	disable_irq_nosync(chip->gpio_int_n_irq);
+>>> -
+>>>  	spin_lock_irqsave(&chip->irq_lock, flags);
+>>>  	if (chip->irq_suspended)
+>>>  		chip->irq_while_suspended = true;
+>>> @@ -1622,7 +1619,6 @@ static void fusb302_irq_work(struct work_struct *work)
+>>>  	}
+>>>  done:
+>>>  	mutex_unlock(&chip->lock);
+>>> -	enable_irq(chip->gpio_int_n_irq);
+>>>  }
+>>>
+>>>  static int init_gpio(struct fusb302_chip *chip)
+>>> @@ -1747,9 +1743,10 @@ static int fusb302_probe(struct i2c_client *client)
+>>>  		goto destroy_workqueue;
+>>>  	}
+>>>
+>>> -	ret = request_irq(chip->gpio_int_n_irq, fusb302_irq_intn,
+>>> -			  IRQF_ONESHOT | IRQF_TRIGGER_LOW,
+>>> -			  "fsc_interrupt_int_n", chip);
+>>> +	ret = devm_request_threaded_irq(dev, chip->gpio_int_n_irq,
+>>> +					NULL, fusb302_irq_intn,
+>>> +					IRQF_ONESHOT | IRQF_TRIGGER_LOW,
+>>> +					"fsc_interrupt_int_n", chip);
+>>>  	if (ret < 0) {
+>>>  		dev_err(dev, "cannot request IRQ for GPIO Int_N, ret=%d", ret);
+>>>  		goto tcpm_unregister_port;
+>>> @@ -1774,7 +1771,6 @@ static void fusb302_remove(struct i2c_client *client)
+>>>  	struct fusb302_chip *chip = i2c_get_clientdata(client);
+>>>
+>>>  	disable_irq_wake(chip->gpio_int_n_irq);
+>>> -	free_irq(chip->gpio_int_n_irq, chip);
+>>>  	cancel_work_sync(&chip->irq_work);
+>>>  	cancel_delayed_work_sync(&chip->bc_lvl_handler);
+>>>  	tcpm_unregister_port(chip->tcpm_port);
+>>> --
+>>> 2.49.0
+>>
+>> -- 
+>> heikki
+>>
+
 
