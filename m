@@ -1,67 +1,67 @@
-Return-Path: <linux-usb+bounces-26498-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26499-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346DAB1B78A
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 17:33:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9924B1B7BA
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 17:41:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54143173FA3
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 15:33:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71D9E3A4119
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 15:41:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C88205E2F;
-	Tue,  5 Aug 2025 15:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCEC6279781;
+	Tue,  5 Aug 2025 15:41:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660B483CD1;
-	Tue,  5 Aug 2025 15:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1895819343B;
+	Tue,  5 Aug 2025 15:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754408002; cv=none; b=XFwVEOk5qb756Qo7CfEWDIuTikJlayFgsXiMcT+wfbNHhxNFsddVfHnbfq3x+gxSHKucv3lLCmFUzLiQkP4wed7xseJJ4G+nI5fwwoX0doJcFN1pNlcs+cBzTcs3879cBgtfXQksSKhbxKqzew3mRdaVH6XBKF+CfvDx9jnJsPM=
+	t=1754408505; cv=none; b=W1OeAh+YILqmAVJh/GvXIiutTsIL4wMjpWdzwy9XlUPxipAw48SajEyq/WclZzN+GnVpJoW42e6aXN94QzidgZ2B8YhgfJ/3MmfLUYIO/nbqV36XZvlQWjb6EYjGEEy451HlSPhXU0o4uEz6N8aqM3CuFg8rPgGjEU/1eP763us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754408002; c=relaxed/simple;
-	bh=eaNb6v/jyYYmzGGznooW2Go7ynSoEs7m74+LhzyQ2KM=;
+	s=arc-20240116; t=1754408505; c=relaxed/simple;
+	bh=/yt3tHivUm51dHtkqDd0wR7z1y68m/D477BZ2GLOUAc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lffa4zL8p+ATKdyf/5aVmUo55rkHFHAzFiEIBv6jtaj/Ol0ZHM3q9ObP5gfjzSlOgEOc4nOEGudDqRi9YArGVqG+7f/WTr/odjH9bRfzyZk42Bq9gm0lAcgXXk+jziXcpcMQZKBCDj1l1yUOKYPfz0YgXM4zjBGjIQKzYwushxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.170
+	 In-Reply-To:Content-Type; b=r/yFf7ryks1VyR+kvKgiMlS1r7OVecGnEUeP7lR95OEUoAPzTSBCDrqC++X4/PDbslPxWW9h35n00D9mpC7RULKr/AW92S9S87XnQbfieAC1Nfx+s+villZLMOPM6go4D+qc536+x9JBD7wdGUFZS4Q04O0TD+vM/sovTSUvlSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-76624ecc7efso535891b3a.0;
-        Tue, 05 Aug 2025 08:33:21 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-76b81161f45so378435b3a.3;
+        Tue, 05 Aug 2025 08:41:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754408001; x=1755012801;
+        d=1e100.net; s=20230601; t=1754408502; x=1755013302;
         h=content-transfer-encoding:in-reply-to:organization:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1yel2b+4RblLJvMRHPT+ucYyrlWej/tApR3MO/sdfls=;
-        b=UyDNsRViOEprQ5MxcsNB8mqV/tpl8+NHXg0LfZ6iHeYtggJIXP+elxV2/IPaT2AiVJ
-         P+acbYTHCx/c8RiwM6fj7QNcxx/mjK2ga5DYU6bCiFZGsXiL1AVFLxc5wqF0ZKowEzt3
-         jjyzQ2/kV1fxCAJI0B5agXquIRQGcSVgEfdG5JGYLN0VdPQGAuLQL9HnjgLM1EBlVh8g
-         1gIoXwB1k1QgvfCJGjZrZsU6Wzt/tcg9Tf6n6yra8V/VWZeX8acG58MMoCKsI1yrn3ZG
-         TbEbnQkWYN6A0omI0CX8d9tqLkLQRHnS8L8gEyssO98Z7UZrrn/M4+pvajc6TUynk5i5
-         a7SQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7VY5VaUovoIRbxvIo/q5lMMxcQmXfUiDd1cG7phtILoe2Mv/XcANSbv+/LOJ5TiGB1Yy+K6S4IIjh@vger.kernel.org, AJvYcCVmWlOWKO1SraZzogZiUkQxEjoitT+T8LgyVnocg6L05ciEgTR0JiLmGk/bfRM5aD9NxK7vAL4S@vger.kernel.org, AJvYcCXJ2u/I3jy2vKdtv9+ktwIbLlVihACTzNNwnrjHqRCZ64+GINpMirfS+tetYvwGf16bvLyubAmIsQxCqJ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8UC1f6LgE7LsLNodogp1Kn8XE1Dkr+6kn1H+8iV83hQ8sOfEJ
-	uJLb63B+LJIdA96K0D2Fa9oayEGCC7nT+i63vc5AFAMUvsfZYy9yDBvO
-X-Gm-Gg: ASbGncuxPNTVmGRDb09hCowHondFKuT7/yrdw7ewJfW9clPGqyV5mfs2nLD1xpqWfzu
-	zTIZQ3nOjLomiWrRirXanNsWQE2Sa0GOCMOcCEPckPvVgbOhRMtKrCjfcLCZ1IiNSal1HhJkSfX
-	rFldvDuIEuh8EybSCQ9pzeOTsAWmVmWE4bh9KaLV1kjRqkzUijLimxVMlUdKEHAwgDmQo9YhEx5
-	SqSRcJxGHFIZou3eItiloNZ6e2SLOumerkhIipyBHvyR0Wc0Vc6Ep5zhzshbYkgAItOcwDroHEM
-	0KLjS78tOZ3P6RyQwCwaWu72BzV8GGv9sbtkxC6nHieDxivCeM/OHEvMUGdYr1iufc0qJ+55euH
-	MC3mmHwmW8xX/jsIOLCK+PGisHXnWeR0m1H6HnHxv3RI=
-X-Google-Smtp-Source: AGHT+IHULNJQv9btYgDl6fxqXCuB+doWn0u6Jk2OHizCXQnUCeNbkYhIJotgEaqwCog6LsLyr7rQFA==
-X-Received: by 2002:a05:6a21:684:b0:232:b78b:cdc5 with SMTP id adf61e73a8af0-23df91ae1c8mr8645872637.7.1754408000588;
-        Tue, 05 Aug 2025 08:33:20 -0700 (PDT)
+        bh=7ZMGhYD5OE1ylPdIIJZi93rO6zltU7tB53w2SBZXO9s=;
+        b=dmOkeEvG2t9gGIPhTK6fzFv5m0DKpssw4PmpTXDGFfKs25yxCKb0yUC0f+/FpG2H8I
+         7ezfEmiOHSLPe7P2RKvRL6iAoiSMxVwId5qJ2cTdqZTh4xjwD90rw1R3NaKHV1/zxoMk
+         wmMEkDtRtXUeIkWs7EoH7HjaeBXq8rD5/Yd5ZyZ8rFIJUDcb/381wqbTC2lU/McOsMAX
+         hev1rm51rs/jTdupf3acRnohRfzq0+QCNtMZBhsP7HhRnwXtjEDjozKJ1Xg8XhJ8r7hM
+         HWi47+Y9IFZjux7MerZPC6uCBH955W94oYq+kp6u6A7W9TS6x2gQKB2cftixJAIJvgIJ
+         2ywQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5uVPpHqjHiiJrstuNfBj5xD9Vri/uWPBWx3037qSTSQYthSWLqJ0kZ11U3NRy0wYrNVgktK3V@vger.kernel.org, AJvYcCVHqss7j/RC/6nEYZzjUenYaMA98KnpbfxIDvtkIY1dh0F8iusXU/wfScd/cM0qW9S7XHCDabv6mjn5@vger.kernel.org, AJvYcCVlGLa/D04oR48Igv+B+lhEL3S9766TJy0VYQxb5wIoN2zF8SFcCImzzLzlH4IPjt+ZLZe1UYqeWaiSISg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz73MBumMGBkZo7zUt0meRok3b04YfKlG1sYr7XEbfvNS/++am6
+	Hc93SVNrVqgbQxK5vREIpbHRGOPIT0MG92gIydeSGgAi/D1E5eKqfsVi
+X-Gm-Gg: ASbGncsKMlkGZalXfLux9OOM3l/r2dz1LcncrtR5oAdoOkgjLSaTRmHvbJXFNhie2rf
+	2hlPM8N9GdscIR1kNQowY20F/67cLKXLRGgI6RvEMivoBWzVE9R6NuBEO7M8YoWmEC4avCFijuZ
+	20ET8hXbjq3l4wN/HBK2O+TRBLxA4NQoIGlGvmMuDKNOE+rZIrTKAXzjPJmXx73QdDHHJkvWWCp
+	+mOBT1gVM+btnjG1nRQO4SbMVbfXG8pWxcPz05DBzX/ix610aYVwcoOT5PWF6FRkEv3sFuDnjpy
+	NJ9WvJD8wxJ5YNJKNhPOd3fmPsNUc4uTsICUui9IGkwY2advzGUoDQMfhJq2t2PYrQ12D024C8f
+	jx4yRx6OJhB43z0CXgFv1EqqUg1Gt2FiP
+X-Google-Smtp-Source: AGHT+IFETrileTavzFogHlt3kpqW55YEJWqCTgysYCKWqbIjAeVGDBoRxanDjUE4RC0hSx+nzDcEEA==
+X-Received: by 2002:a17:903:28c6:b0:240:63bd:2701 with SMTP id d9443c01a7336-24246f64718mr63253245ad.6.1754408502230;
+        Tue, 05 Aug 2025 08:41:42 -0700 (PDT)
 Received: from [192.168.50.136] ([118.32.98.101])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bfcb26905sm6454802b3a.123.2025.08.05.08.33.15
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e89769fasm135540565ad.107.2025.08.05.08.41.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Aug 2025 08:33:19 -0700 (PDT)
-Message-ID: <d08de0fa-9dfd-4fc4-b9c0-ff181df8d459@kzalloc.com>
-Date: Wed, 6 Aug 2025 00:33:14 +0900
+        Tue, 05 Aug 2025 08:41:41 -0700 (PDT)
+Message-ID: <78384abd-7fae-492d-947e-c3311f952d87@kzalloc.com>
+Date: Wed, 6 Aug 2025 00:41:36 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,8 +69,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] kcov: Use raw_spinlock_t for kcov->lock and
- kcov_remote_lock
+Subject: Re: [PATCH 2/4] kcov: Replace per-CPU local_lock with
+ local_irq_save/restore
 To: Steven Rostedt <rostedt@goodmis.org>
 Cc: Dmitry Vyukov <dvyukov@google.com>,
  Andrey Konovalov <andreyknvl@gmail.com>,
@@ -84,95 +84,82 @@ Cc: Dmitry Vyukov <dvyukov@google.com>,
  syzkaller@googlegroups.com, linux-kernel@vger.kernel.org,
  stable@vger.kernel.org
 References: <20250803072044.572733-2-ysk@kzalloc.com>
- <20250803072044.572733-4-ysk@kzalloc.com>
- <20250804122758.620f934a@gandalf.local.home>
+ <20250803072044.572733-6-ysk@kzalloc.com>
+ <20250804123756.7678cb3d@gandalf.local.home>
 Content-Language: en-US
 From: Yunseong Kim <ysk@kzalloc.com>
 Organization: kzalloc
-In-Reply-To: <20250804122758.620f934a@gandalf.local.home>
+In-Reply-To: <20250804123756.7678cb3d@gandalf.local.home>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Hi Steve,
 
-Thanks for the review and the suggestion.
+Thanks for the detailed feedback and suggestions.
 
-On 8/5/25 1:27 오전, Steven Rostedt wrote:
-> On Sun,  3 Aug 2025 07:20:43 +0000
+On 8/5/25 1:37 오전, Steven Rostedt wrote:
+> On Sun,  3 Aug 2025 07:20:45 +0000
 > Yunseong Kim <ysk@kzalloc.com> wrote:
 > 
->> The locks kcov->lock and kcov_remote_lock can be acquired from
->> atomic contexts, such as instrumentation hooks invoked from interrupt
->> handlers.
+>> Commit f85d39dd7ed8 ("kcov, usb: disable interrupts in
+>> kcov_remote_start_usb_softirq") introduced a local_irq_save() in the
+>> kcov_remote_start_usb_softirq() wrapper, placing kcov_remote_start() in
+>> atomic context.
 >>
->> On PREEMPT_RT-enabled kernels, spinlock_t is typically implemented
+>> The previous patch addressed this by converting the global
 > 
-> On PREEMPT_RT is implemented as a sleeping lock. You don't need to say
-> "typically".
+> Don't ever use the phrase "The previous patch" in a change log. These get
+> added to git and it's very hard to find any order of one patch to another.
+> When doing a git blame 5 years from now, "The previous patch" will be
+> meaningless.
 
-You're right — the phrase "typically implemented as a sleeping lock" was
-inaccurate. On PREEMPT_RT, spinlock_t is implemented as a sleeping lock, and
-I'll make sure to correct that wording in the next version.
+I agree that using phrases like "The previous patch" in changelogs is not a
+good practice, especially considering future maintenance and git blame
+scenarios.
 
->> as a sleeping lock (e.g., mapped to an rt_mutex). Acquiring such a
->> lock in atomic context, where sleeping is not allowed, can lead to
->> system hangs or crashes.
->>
->> To avoid this, convert both locks to raw_spinlock_t, which always
->> provides non-sleeping spinlock semantics regardless of preemption model.
->>
->> Signed-off-by: Yunseong Kim <ysk@kzalloc.com>
->> ---
->>  kernel/kcov.c | 58 +++++++++++++++++++++++++--------------------------
->>  1 file changed, 29 insertions(+), 29 deletions(-)
->>
->> diff --git a/kernel/kcov.c b/kernel/kcov.c
->> index 187ba1b80bda..7d9b53385d81 100644
->> --- a/kernel/kcov.c
->> +++ b/kernel/kcov.c
->> @@ -54,7 +54,7 @@ struct kcov {
->>  	 */
->>  	refcount_t		refcount;
->>  	/* The lock protects mode, size, area and t. */
->> -	spinlock_t		lock;
->> +	raw_spinlock_t		lock;
->>  	enum kcov_mode		mode;
->>  	/* Size of arena (in long's). */
->>  	unsigned int		size;
->> @@ -84,7 +84,7 @@ struct kcov_remote {
->>  	struct hlist_node	hnode;
->>  };
->>  
->> -static DEFINE_SPINLOCK(kcov_remote_lock);
->> +static DEFINE_RAW_SPINLOCK(kcov_remote_lock);
->>  static DEFINE_HASHTABLE(kcov_remote_map, 4);
->>  static struct list_head kcov_remote_areas = LIST_HEAD_INIT(kcov_remote_areas);
->>  
->> @@ -406,7 +406,7 @@ static void kcov_remote_reset(struct kcov *kcov)
->>  	struct hlist_node *tmp;
->>  	unsigned long flags;
->>  
->> -	spin_lock_irqsave(&kcov_remote_lock, flags);
->> +	raw_spin_lock_irqsave(&kcov_remote_lock, flags);
+>> kcov_remote_lock to a non-sleeping raw_spinlock_t. However, per-CPU
+>> data in kcov_remote_start() and kcov_remote_stop() remains protected
+>> by kcov_percpu_data.lock, which is a local_lock_t.
 > 
-> Not related to these patches, but have you thought about converting some of
-> these locks over to the "guard()" infrastructure provided by cleanup.h?
-
-Also, I appreciate your note about the guard() infrastructure from cleanup.h.
-I'll look into whether it's applicable in this context, and plan to adopt it
-where appropriate in the next iteration of the series.
-
->>  	hash_for_each_safe(kcov_remote_map, bkt, tmp, remote, hnode) {
->>  		if (remote->kcov != kcov)
->>  			continue;
+> Instead, you should say something like:
 > 
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>   As kcov_remote_start() is now in atomic context, the kcov_remote lock was
+>   converted to a non-sleeping raw_spinlock. However, per-cpu ...
+
+I’ll revise the commit messages in the next iteration to explicitly
+describe the context.
+
+>> On PREEMPT_RT kernels, local_lock_t is implemented as a sleeping lock.
+>> Acquiring it from atomic context triggers warnings or crashes due to
+>> invalid sleeping behavior.
+>>
+>> The original use of local_lock_t assumed that kcov_remote_start() would
+>> never be called in atomic context. Now that this assumption no longer
+>> holds, replace it with local_irq_save() and local_irq_restore(), which are
+>> safe in all contexts and compatible with the use of raw_spinlock_t.
+> 
+> Hmm, if the local_lock_t() is called inside of the taking of the
+> raw_spinlock_t, then this patch should probably be first. Why introduce a
+> different bug when fixing another one?
+
+Regarding the patch ordering and the potential for introducing new bugs if the
+local_lock_t conversions come after the raw_spinlock conversion, that’s a very
+good point. I’ll review the patch sequence carefully to ensure the fixes apply
+cleanly without regressions.
+
+> Then the change log of this and the previous patch can both just mention
+> being called from atomic context.
+> 
+> This change log would probably then say, "in order to convert the kcov locks
+> to raw_spinlocks, the local_lock_irqsave()s need to be converted over to
+> local_irq_save()".
 > 
 > -- Steve
 
-Thanks again for the feedback and for the Reviewed-by tag!
+Also, I will update the changelog to clearly state.
+
+Thanks again for your thorough review and guidance!
 
 Best regards,
 Yunseong Kim
-
 
