@@ -1,242 +1,295 @@
-Return-Path: <linux-usb+bounces-26492-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26493-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E0AAB1B19D
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 11:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 02808B1B284
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 13:18:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C4E017FB5C
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 09:59:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 231C317C8FA
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 11:18:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A95F26D4EA;
-	Tue,  5 Aug 2025 09:59:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E53246BD9;
+	Tue,  5 Aug 2025 11:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="aPIOyP3C"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SYFe/pgg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FE91AA782;
-	Tue,  5 Aug 2025 09:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2345A244671
+	for <linux-usb@vger.kernel.org>; Tue,  5 Aug 2025 11:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754387967; cv=none; b=CVygMerksiiVdSBEET3ZMaMwL91zJUgH3cjeaNyihLFEp0GySe+onTBTDwolxR339oo6JklHi7GCacn5Q+tONuzKSHV1IWK5YgtAXv+D/7TP6G2vdSfMIKfoJ6zz+zAWuQK/2XP4u5uyOOk9C898mRGg/DUKGt+zGOHpew87Dd8=
+	t=1754392719; cv=none; b=CQ4Yb7aKVnjHoXkgHjrfcuer3K6xcWwkZ8rAhoeJUUp/lrO0RFOFUImTHFnO2OvBLJQ12wre+ZaQgwLF6J0CCxkRWG9rZCZfqhC/3APfyoIKBFm36p0tWhyMu4266uVgBKS2Hb+h9bF5czfycLLtj0FWrNLbXHseqotQtMeziIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754387967; c=relaxed/simple;
-	bh=RV+XSnddoBH4JRWHZZy+4T5rBIZcZFEquw455N0WQVA=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=jQRoKnVO0QBKMVxUGPiuOhhHj1DfF33Pbxh6LXGsqjMrtvGDzMTkbi8zplQ/TFllOhRHBTu0HO/FWLxJrISwWGPJ2DmxD9hw3MX/WwY1jaidJYUIjRfrcERag0jPtWniAw+rbIch6ssuLGHRm87yme15TEkiLKin3upanYUFORQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=aPIOyP3C; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D96F2AD0;
-	Tue,  5 Aug 2025 11:58:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1754387915;
-	bh=RV+XSnddoBH4JRWHZZy+4T5rBIZcZFEquw455N0WQVA=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=aPIOyP3CCN60ghQ95OYLB9emUWH/n0b6O3gtc9ZoA+uMAITK5524gPFOoFe3iPgrR
-	 PeGZgkGvvmEIfAIjVWqinSJN2vlhZuO+XIf+jbLxH1tzVI09y3TIRrSaAcZCkteW9d
-	 f9FcX+PdukMOKmU3dXioC96DYHeFg17Pwv6UxHrs=
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1754392719; c=relaxed/simple;
+	bh=hvEjaT5dcBfMjmESc+QEsUBDQcPRKYOGdN6kzoDe17w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mS8C0rmd1CGQ622zOSywbfWBkSQI3Egg9S4NAk30TblCtA9vDkXkuQBgHfDfvemA7r/wmHQdfbwYLk8LMt4NKxNTLJWDsVIRZHXfRGrf3cLCE3MQuV3tSDCOPKCaQ+i7Avq+v9gIVekPpHuK8gqFzUnbLzToWK9/5D1YOsC/V0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SYFe/pgg; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 575AIJdw015920
+	for <linux-usb@vger.kernel.org>; Tue, 5 Aug 2025 11:18:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	+UtkDtN+fyKayeHp5S67YUnWVczmNgfytTivDi9O4Bs=; b=SYFe/pggxZXEqNog
+	ztaw4eWkD3a/xeVkjA2bBgokWN1h6kbj02YMaX1gYhBKrRRlAkFE49vvjGL6a2iS
+	0GlLzFmSwoRdmvYzKmzvBW9z+VPueVXpjkgoa3C86w62njYm4mp/SL70hqF6eAhA
+	X0tBbiemqcn9aYcXr2Vl5MJSlRFB8ZGfc9J/FoA/efp7ovcWrz/+e/D9Bxs3TUmR
+	pfVm0x/yMeTgWEvI9IxzPw7A17WxcX6M9tt0wdsMxsXVdvNw1HBYtjQ7flK6ytDA
+	R8Djk4QX5vyYU4v6Jc+ulxEhdb5ixc8EiDQUQzlsTAD+o1gGs4F+Ua/o2IuoeKhg
+	ctPF8g==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48aqyv4gpy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 05 Aug 2025 11:18:36 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-76bcd829ff1so4373085b3a.1
+        for <linux-usb@vger.kernel.org>; Tue, 05 Aug 2025 04:18:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754392715; x=1754997515;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+UtkDtN+fyKayeHp5S67YUnWVczmNgfytTivDi9O4Bs=;
+        b=P17/yUUApa3dL+iJs0I6mtDVWTKwxNW+/pxDhSTYrs0Ux/rI0/9R5VXeTKGh3EyZmu
+         RqSv2pDvzKyLk7mzv1rIFrGWuZGdTNydgg8qcDgCY3B6zPkyJcBjECr289W3ox/LqXPM
+         L+j+f3+hZOQoDo5mMy6b7RV0R/j3EwKLCOaPmFkKs5UXvRvZVZkWV1qF6h+ydxyxLBZW
+         02BV7BDwNjlrttq+7nYpWM/v6EqrInUx0BWNBfxB4gwUShTnkfV6UGCXxeLmdI77y1Yn
+         aVtYVOWdIl8DYz/idayPFxiuVaJdgBgDDOLdlTdiiOZzPSXH6+Gtt87MFgtR8pS/cQEE
+         Nfqg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZRVm4TxflFZeaUIVEa/GNBEwJY8B1j1kajDLblvAMSCJIDSKop9rs56Vjrtru1wJSubi8YicKy18=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp5xT6/ABHr093NFdTr/ndwljbddDCEpwDdqbrE8K5kSxiV9dY
+	90rZZQccO2Ha/Gaf/t3j6oCvBDq47qYlRqdVLoyu6wA6l4W8z70OGPer/t6FNu3v2Kbgoj8Frwd
+	TPwv7UDsriZpJDjc78aLjTFJov5GObxr8mHLy8rUuIz0OqfQQaCIZLC/PThrMQ5cyQx2fbHs=
+X-Gm-Gg: ASbGncsJKGFjmIzJa55e550LYsvnBAOIKN/+abtXa2IYo/AGjHYS/xzFZbfa9fEwlEK
+	KaAnNg9JqmxXWGbgmwMSTDFnqFOVkE+5YQ9rcxKRWX7B9Lb/lGZiX8L+oZtFjhAP7Lbc8NeSDaE
+	mgekN6nMrLiuIK5D5UL6EOzBunivvBWBxZObc5Gcl3p1YwCSu91R/lOJmiCe/w1JrJ6RJk/L0yl
+	CNGF1pXbtLv0WhVFZBJpZeejvmnHzy2sTgBCm45/BiKUZsOCgT0zeSvtNe5tRb8Brle2OtIyf8t
+	H12rD7nRRTn7fez0JgnGyXD1ybDZQ+qP10jci/rXuut/pqVWWaJDhdq9hkWsyvZqYuJ+ZoI=
+X-Received: by 2002:a05:6a00:3910:b0:736:5f75:4a3b with SMTP id d2e1a72fcca58-76bec30c7ccmr17132059b3a.7.1754392715069;
+        Tue, 05 Aug 2025 04:18:35 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGFGhrp3TbB/m3fibwOh2GnRn00juuzRFHGqHiZWS4PO3XswlF6ml/+1CbWee3207HS6IZGtw==
+X-Received: by 2002:a05:6a00:3910:b0:736:5f75:4a3b with SMTP id d2e1a72fcca58-76bec30c7ccmr17132019b3a.7.1754392714532;
+        Tue, 05 Aug 2025 04:18:34 -0700 (PDT)
+Received: from [10.92.173.209] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bcce6f6eesm12759553b3a.22.2025.08.05.04.18.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Aug 2025 04:18:34 -0700 (PDT)
+Message-ID: <d28a61ff-e40a-438d-afd7-5a4bc5cb3625@oss.qualcomm.com>
+Date: Tue, 5 Aug 2025 16:48:30 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250802-media-private-data-v1-42-eb140ddd6a9d@ideasonboard.com>
-References: <20250802-media-private-data-v1-0-eb140ddd6a9d@ideasonboard.com> <20250802-media-private-data-v1-42-eb140ddd6a9d@ideasonboard.com>
-Subject: Re: [PATCH 42/65] media: renesas: Access v4l2_fh from file
-From: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev, linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org, imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, mjpeg-users@lists.sourceforge.net
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Date: Tue, 05 Aug 2025 10:59:19 +0100
-Message-ID: <175438795943.1641235.15440393062572657340@ping.linuxembedded.co.uk>
-User-Agent: alot/0.9.1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/4] usb: dwc3: qcom: Implement glue callbacks to
+ facilitate runtime suspend
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20250610091357.2983085-1-krishna.kurapati@oss.qualcomm.com>
+ <20250610091357.2983085-3-krishna.kurapati@oss.qualcomm.com>
+ <20250623233211.aeehndz2nxqovepd@synopsys.com>
+ <a46b9870-207b-45a1-b3e6-5c13e1857640@oss.qualcomm.com>
+ <20250711232929.5oukafed5lnvsu2v@synopsys.com>
+ <27ff2c46-9402-47e6-b5ea-8a1f783220b1@oss.qualcomm.com>
+ <20250730012307.7rwh3lzz4ohd4mob@synopsys.com>
+ <ac7212fe-5c22-46cf-ac3b-ac6b93cb1384@oss.qualcomm.com>
+ <20250801010119.tvhb6tjlf4fq7zhg@synopsys.com>
+Content-Language: en-US
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <20250801010119.tvhb6tjlf4fq7zhg@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: yYER2llV6-5aqKWfNswfaH4kKiAJ2ICP
+X-Authority-Analysis: v=2.4 cv=F/xXdrhN c=1 sm=1 tr=0 ts=6891e88c cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=SGoEfCKqnJIlJZnP-VQA:9
+ a=QEXdDO2ut3YA:10 a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-ORIG-GUID: yYER2llV6-5aqKWfNswfaH4kKiAJ2ICP
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA1MDA4MSBTYWx0ZWRfXzTjSmP1SfX3+
+ faYbCSpbTzWNodz+vVWySJy3lPj6/VjmacXBNpm20JWzD2nRDbz+v/1zY659NWzwevM9DJN8qzh
+ Om7RGYdRY4ieMwuFH/gcZWp2klI+0MfZOPIklTHdV01rv4GruijrK9f9ehR7GoSiK2q+JsPv+Jd
+ W+BiiKYPg1eZPmHNZfCSzNflB1N7GgLlIT8ePw9trJPr5ItP6jDQLh/Lx9SO+kCB+/j7VhZU87Z
+ j1yhL4RvlKgNmiCR3xJ//G6MKltRrzfDptCR7LdxBr/SlR1RzOCJEwQzu5tanzjAx298Yj9LsAf
+ BgQ/O92pSrPI9rLgLPVzo8qUXBO+iTQ40H9vigP3fv0Gd7pABjxIi4HVQ1w1qEo4O13e2V/sm/1
+ fzEiJc8abzMCNr0zQmnn0p23UMizZqc/9/LSX3qNHhhJkV9Ba+IXiB1agifPqk6hqerslky3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-05_03,2025-08-04_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 spamscore=0 mlxscore=0 phishscore=0 bulkscore=0 adultscore=0
+ clxscore=1015 mlxlogscore=847 priorityscore=1501 impostorscore=0
+ malwarescore=0 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2508050081
 
-Quoting Jacopo Mondi (2025-08-02 10:23:04)
-> The v4l2_fh associated with an open file handle is now guaranteed
-> to be available in file->private_data, initialised by v4l2_fh_add().
->=20
-> Access the v4l2_fh, and from there the driver-specific structure,
-> from the file * in all ioctl handlers.
->=20
-> While at it, remove the now unused fh_to_ctx() macro.
->=20
-> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-> ---
->  drivers/media/platform/renesas/rcar_fdp1.c | 11 +++--------
->  drivers/media/platform/renesas/rcar_jpu.c  | 21 ++++++++-------------
->  2 files changed, 11 insertions(+), 21 deletions(-)
->=20
-> diff --git a/drivers/media/platform/renesas/rcar_fdp1.c b/drivers/media/p=
-latform/renesas/rcar_fdp1.c
-> index e78d8fb104e9544d27c8ace38888995ca170483f..84c3901a2e5dc3e7ccfb3b440=
-62e839f8f19ee02 100644
-> --- a/drivers/media/platform/renesas/rcar_fdp1.c
-> +++ b/drivers/media/platform/renesas/rcar_fdp1.c
-> @@ -630,11 +630,6 @@ struct fdp1_ctx {
->         struct fdp1_field_buffer        *previous;
->  };
-> =20
-> -static inline struct fdp1_ctx *fh_to_ctx(struct v4l2_fh *fh)
-> -{
-> -       return container_of(fh, struct fdp1_ctx, fh);
-> -}
-> -
->  static inline struct fdp1_ctx *file_to_ctx(struct file *filp)
->  {
->         return container_of(file_to_v4l2_fh(filp), struct fdp1_ctx, fh);
-> @@ -1411,8 +1406,8 @@ static int fdp1_enum_fmt_vid_out(struct file *file,=
- void *priv,
-> =20
->  static int fdp1_g_fmt(struct file *file, void *priv, struct v4l2_format =
-*f)
->  {
-> +       struct fdp1_ctx *ctx =3D file_to_ctx(file);
->         struct fdp1_q_data *q_data;
-> -       struct fdp1_ctx *ctx =3D fh_to_ctx(priv);
-> =20
->         if (!v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type))
->                 return -EINVAL;
-> @@ -1589,7 +1584,7 @@ static void fdp1_try_fmt_capture(struct fdp1_ctx *c=
-tx,
-> =20
->  static int fdp1_try_fmt(struct file *file, void *priv, struct v4l2_forma=
-t *f)
->  {
-> -       struct fdp1_ctx *ctx =3D fh_to_ctx(priv);
-> +       struct fdp1_ctx *ctx =3D file_to_ctx(file);
-> =20
->         if (f->type =3D=3D V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
->                 fdp1_try_fmt_output(ctx, NULL, &f->fmt.pix_mp);
-> @@ -1660,7 +1655,7 @@ static void fdp1_set_format(struct fdp1_ctx *ctx,
-> =20
->  static int fdp1_s_fmt(struct file *file, void *priv, struct v4l2_format =
-*f)
->  {
-> -       struct fdp1_ctx *ctx =3D fh_to_ctx(priv);
-> +       struct fdp1_ctx *ctx =3D file_to_ctx(file);
->         struct v4l2_m2m_ctx *m2m_ctx =3D ctx->fh.m2m_ctx;
->         struct vb2_queue *vq =3D v4l2_m2m_get_vq(m2m_ctx, f->type);
-> =20
-> diff --git a/drivers/media/platform/renesas/rcar_jpu.c b/drivers/media/pl=
-atform/renesas/rcar_jpu.c
-> index 058fcfb967bd98440f33272db42f0d973299d572..9c70a74a2969fce6446b0f26e=
-0637a68eade3942 100644
-> --- a/drivers/media/platform/renesas/rcar_jpu.c
-> +++ b/drivers/media/platform/renesas/rcar_jpu.c
-> @@ -480,11 +480,6 @@ static struct jpu_ctx *ctrl_to_ctx(struct v4l2_ctrl =
-*c)
->         return container_of(c->handler, struct jpu_ctx, ctrl_handler);
->  }
-> =20
-> -static struct jpu_ctx *fh_to_ctx(struct v4l2_fh *fh)
-> -{
-> -       return container_of(fh, struct jpu_ctx, fh);
-> -}
-> -
->  static struct jpu_ctx *file_to_ctx(struct file *filp)
->  {
->         return container_of(file_to_v4l2_fh(filp), struct jpu_ctx, fh);
-> @@ -661,7 +656,7 @@ static u8 jpu_parse_hdr(void *buffer, unsigned long s=
-ize, unsigned int *width,
->  static int jpu_querycap(struct file *file, void *priv,
->                         struct v4l2_capability *cap)
->  {
-> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
-> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
-> =20
->         if (ctx->encoder)
->                 strscpy(cap->card, DRV_NAME " encoder", sizeof(cap->card)=
-);
-> @@ -719,7 +714,7 @@ static int jpu_enum_fmt(struct v4l2_fmtdesc *f, u32 t=
-ype)
->  static int jpu_enum_fmt_cap(struct file *file, void *priv,
->                             struct v4l2_fmtdesc *f)
->  {
-> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
-> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
-> =20
->         return jpu_enum_fmt(f, ctx->encoder ? JPU_ENC_CAPTURE :
->                             JPU_DEC_CAPTURE);
-> @@ -728,7 +723,7 @@ static int jpu_enum_fmt_cap(struct file *file, void *=
-priv,
->  static int jpu_enum_fmt_out(struct file *file, void *priv,
->                             struct v4l2_fmtdesc *f)
->  {
-> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
-> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
-> =20
->         return jpu_enum_fmt(f, ctx->encoder ? JPU_ENC_OUTPUT : JPU_DEC_OU=
-TPUT);
->  }
-> @@ -828,7 +823,7 @@ static int __jpu_try_fmt(struct jpu_ctx *ctx, struct =
-jpu_fmt **fmtinfo,
-> =20
->  static int jpu_try_fmt(struct file *file, void *priv, struct v4l2_format=
- *f)
->  {
-> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
-> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
-> =20
->         if (!v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type))
->                 return -EINVAL;
-> @@ -839,7 +834,7 @@ static int jpu_try_fmt(struct file *file, void *priv,=
- struct v4l2_format *f)
->  static int jpu_s_fmt(struct file *file, void *priv, struct v4l2_format *=
-f)
->  {
->         struct vb2_queue *vq;
-> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
-> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
->         struct v4l2_m2m_ctx *m2m_ctx =3D ctx->fh.m2m_ctx;
->         struct jpu_fmt *fmtinfo;
->         struct jpu_q_data *q_data;
-> @@ -868,8 +863,8 @@ static int jpu_s_fmt(struct file *file, void *priv, s=
-truct v4l2_format *f)
-> =20
->  static int jpu_g_fmt(struct file *file, void *priv, struct v4l2_format *=
-f)
->  {
-> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
->         struct jpu_q_data *q_data;
-> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
-> =20
->         if (!v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type))
->                 return -EINVAL;
-> @@ -902,8 +897,8 @@ static const struct v4l2_ctrl_ops jpu_ctrl_ops =3D {
-> =20
->  static int jpu_streamon(struct file *file, void *priv, enum v4l2_buf_typ=
-e type)
->  {
-> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
->         struct jpu_q_data *src_q_data, *dst_q_data, *orig, adj, *ref;
-> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
->         enum v4l2_buf_type adj_type;
-> =20
->         src_q_data =3D jpu_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPL=
-ANE);
-> @@ -1284,8 +1279,8 @@ static int jpu_open(struct file *file)
-> =20
->  static int jpu_release(struct file *file)
->  {
-> -       struct jpu *jpu =3D video_drvdata(file);
->         struct jpu_ctx *ctx =3D file_to_ctx(file);
-> +       struct jpu *jpu =3D video_drvdata(file);
-> =20
->         v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
->         v4l2_ctrl_handler_free(&ctx->ctrl_handler);
->=20
-> --=20
-> 2.49.0
->
+On 8/1/2025 6:31 AM, Thinh Nguyen wrote:
+> On Wed, Jul 30, 2025, Krishna Kurapati wrote:
+>>
+>>
+>> On 7/30/2025 6:53 AM, Thinh Nguyen wrote:
+>>> On Sun, Jul 13, 2025, Krishna Kurapati wrote:
+>>>>
+>>>>
+>>>> On 7/12/2025 4:59 AM, Thinh Nguyen wrote:
+>>>>> On Tue, Jun 24, 2025, Krishna Kurapati wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 6/24/2025 5:02 AM, Thinh Nguyen wrote:
+>>>>>>> On Tue, Jun 10, 2025, Krishna Kurapati wrote:
+>>>>>>>> On Qualcomm DWC3 dual-role controllers, the conndone/disconnect events in
+>>>>>>>> device mode are generated by controller when software writes to QSCRATCH
+>>>>>>>> registers in Qualcomm Glue layer rather than the vbus line being routed to
+>>>>>>>> dwc3 core IP for it to recognize and generate these events.
+>>>>>>>>
+>>>>>>>> UTMI_OTG_VBUS_VALID  bit of QSCRATCH_HS_PHY_CTRL register needs to be set
+>>>>>>>> to generate a connection done event and to be cleared for the controller to
+>>>>>>>> generate a disconnect event during cable removal. When the disconnect is
+>>>>>>>> not generated upon cable removal, the "connected" flag of dwc3 is left
+>>>>>>>> marked as "true" and it blocks suspend routines and for that to happen upon
+>>>>>>>> cable removal, the cable disconnect notification coming in via set_role
+>>>>>>>> call need to be provided to the Qualcomm glue layer as well.
+>>>>>>>>
+>>>>>>>> Currently, the way DWC3 core and Qualcomm legacy glue driver are designed,
+>>>>>>>> there is no mechanism through which the DWC3 core can notify the Qualcomm
+>>>>>>>> glue layer of any role changes which it receives via role switch. To
+>>>>>>>> register these glue callbacks at probe time, for enabling core to notify
+>>>>>>>> glue layer, the legacy Qualcomm driver has no way to find out when the
+>>>>>>>> child driver probe was successful since it does not check for the same
+>>>>>>>> during of_platform_populate.
+>>>>>>>>
+>>>>>>>> Hence implement the following glue callbacks for flattened Qualcomm glue
+>>>>>>>> driver:
+>>>>>>>>
+>>>>>>>> 1. set_role: To pass role switching information from drd layer to glue.
+>>>>>>>> This information is needed to identify NONE/DEVICE mode switch and modify
+>>>>>>>> QSCRATCH to generate connect-done event on device mode entry and disconnect
+>>>>>>>> event on cable removal in device mode.
+>>>>>>>>
+>>>>>>>> 2. run_stop: When booting up in device mode, if autouspend is enabled and
+>>>>>>>> userspace doesn't write UDC on boot, controller enters autosuspend. After
+>>>>>>>> this, if the userspace writes to UDC in the future, run_stop notifier is
+>>>>>>>> required to enable UTMI_OTG_VBUS_VALID of QSCRATCH so that connect done
+>>>>>>>> event is generated after run_stop(1) is done to finish enumeration.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+>>>>>>>> ---
+>>>>>>>>      drivers/usb/dwc3/dwc3-qcom.c | 82 ++++++++++++++++++++++++++++++++----
+>>>>>>>>      1 file changed, 73 insertions(+), 9 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>>>>>>>> index ca7e1c02773a..d40b52e2ba01 100644
+>>>>>>>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>>>>>>>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>>>>>>>> @@ -89,6 +89,12 @@ struct dwc3_qcom {
+>>>>>>>>      	bool			pm_suspended;
+>>>>>>>>      	struct icc_path		*icc_path_ddr;
+>>>>>>>>      	struct icc_path		*icc_path_apps;
+>>>>>>>> +
+>>>>>>>> +	/*
+>>>>>>>> +	 * Current role changes via usb_role_switch_set_role callback protected
+>>>>>>>> +	 * internally by mutex lock.
+>>>>>>>> +	 */
+>>>>>>>> +	enum usb_role		current_role;
+>>>>>>>
+>>>>>>> Can we just track the current role through dwc3 core instead of an
+>>>>>>> addition field in the glue?
+>>>>>>>
+>>>>>>
+>>>>>> Core caches only mode. We need ROLE NONE to identify cable connect. So
+>>>>>> adding that in glue to keep track.
+>>>>>>
+>>>>>
+>>>>> The controller is always either host or device, not somewhere in
+>>>>> between. You're using ROLE_NONE to indicate connection, which is a
+>>>>> separate state.
+>>>>>
+>>>>
+>>>> Yes, but there is no flag that indicates that in dwc structure today. Also
+>>>> since only dwc3-qcom needs it at the moment, I added that role info in glue
+>>>> layer.
+>>>
+>>> How are you using ROLE NONE? Do you send a role-switch call to "none" to
+>>> indicate disconnect? Let's not do that. Currently the dwc3 driver would
+>>> switch back to the default mode if "none" is selected, but this is not
+>>> well defined and implementation specific. It can be no-op and would not
+>>> violate the interface.
+>>>
+>>> The role-switch interface should only be used for role-switching and not
+>>> connection/disconnection.
+>>>
+>>>>
+>>>>> I feel this should be tracked separately for clarity. The dwc3 also
+>>>>> tracks the connection state, can we use that?
+>>>>>
+>>>>
+>>>> Are you referring to the "connected" flag in DWC structure ? I see that it
+>>>> indicates connection status only in gadget mode.
+>>>>
+>>>
+>>> Yes, that flag is only for gadget.
+>>>
+>>> Can you provide more info of the setup? Is there a type-c controller or
+>>> phy that can detect attach/deattach? Or it only propagates to the usb
+>>> controller?
+>>
+>> My response didn't show up on lore since the mail client I used before sent
+>> the message in HTML format. So resending my response again.
+>>
+>> Hi Thinh,
+>>
+>>   Yes this is for cases where role switching is present (either with a Type-C
+>> controller, USB-conn-gpio, or a glink based role-switch).
+>>
+>>   Actually the requirement is as follows:
+>>   1. When in device mode, if we receive a cable disconnect, we need to clear
+>> OTG_VBUS_VALID bit of QSCRATCH register in glue address space.
+>>   2. When cable is connected in device mode, we need to set the
+>> OTG_VBUS_VALID bit of QSCRATCH register in glue address space.
+>>   3. When the runstop is set back after a suspend rotuine, then we need to
+>> set  OTG_VBUS_VALID bit of QSCRATCH register in glueaddress space.
+>>
+>>   To take care of all the 3 scenarios above, the set_role and run_stop
+>> notifiers have been added.
+>>
+>>   The role info propagates only from core to glue. It is not sent to the phy.
+>>
+> 
+> When does ROLE NONE occur? Did you have the type-c driver set the role
+> switch to "none" indicate disconnect?
+> 
+> The vbus-valid is only for gadget, and you only care about the
+> OTG_VBUS_VALID right? Can we just use the dwc3->connected flag? Just
+> make sure that it's cleared on role-switch, which should be the case
+> because we always perform soft-disconnect on gadget unbind, and make
+> sure to set vbus-valid on pullup or gadget binding. Is there some
+> scenarios that dwc->connected does not cover?
+> 
+
+Hi Thinh,
+
+  In case of just a cable disconnect in device mode (and default dr mode 
+is peripheral only), there would be no role switch. In that scenario, 
+connected flag would stay "true" even after removing cable. In that 
+case, we can generate disconnect interrupt only by clearing this 
+VBUS_VALID bit and inturn the suspend will succeed. So wanted to use 
+notification from set_role which would cover all cases:
+1. cable disconnect/cable connect
+2. Role switch from host->device and device->host
+
+Regards,
+Krishna,
 
