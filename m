@@ -1,177 +1,242 @@
-Return-Path: <linux-usb+bounces-26491-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26492-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23C3BB1B139
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 11:36:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E0AAB1B19D
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 11:59:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAD11161CE9
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 09:36:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C4E017FB5C
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 09:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FCD627510C;
-	Tue,  5 Aug 2025 09:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A95F26D4EA;
+	Tue,  5 Aug 2025 09:59:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="UTozRZjo"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="aPIOyP3C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013005.outbound.protection.outlook.com [52.101.83.5])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394B72701AE;
-	Tue,  5 Aug 2025 09:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.5
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754386435; cv=fail; b=K4Sa0ed0qtjPG8QScAOofTtk6WJywJ/SFgzAfr8eJazMQmHQn3U8XhqR/oWxvUPR3Bx2huYJe28tLcSJV52Z6F3e50Gxc7rUZgN+CLKLBXB2f2iYK7lHLU2pqB0/8T/5HRH64xpZ7pUnjq/nKZYpM3gVkMI6Bk7xf7SBdxkAXOo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754386435; c=relaxed/simple;
-	bh=pXaSvlpIz96n9iNZcTH2shbPWD3C/Oh70aESvF8QrII=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kpwVJ16iskFdRkwwADRY8gmp9g1p069+ieLufFBzG/B+WFBmBDlUjz+ex6YRG1b88/YyghOJEKvTp+204XJ5fc3F+xroZbtc5qF8XvtszGDO9kZtU0afgRIhddtZaeMEOB9ZYTQkWB3/2XQ8ipDi8W7huJbCHmoWkdIitBY4czE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=UTozRZjo; arc=fail smtp.client-ip=52.101.83.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vfZVmBqh5NQv5GkV1Jn4hGun/qFgUOaoLNzfPh9tlLG/dk3ZmvHc0SHFan8bN+Y73MW1KwADJodWTxARr4FYC5vzmWI7U1r+U9Dgi7k2CF7ww+rdSzrvNhk+WGhRtzrdD/8ZNdONRVUQWx9PKpV8l3THT9wls65mGy5tBTjsYnJf4OkUcHOPiEp6s3ieceCP8EcS9qKLfz8U+t8outhgp6v0BlaWNrZ0ApwoKlMlGTrVjZAJrXoQmHsQK/+OkGuS7fUZ/tp+Kd6B8mqsQarsQMXYR6Mwj+Tg9AWiySXwh/HcRkwDhNdhPuW+7YamiJs4+HdU+xiJaaLzfkgSeptcxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UGMbirp89aazaot/xWsU4XJB9+6UAMCWC7XBBvH68qo=;
- b=uAKKnUEzGpQRZvGz23TSSo4lKvitQKnCcHr0fW/5V2OmBnFSAYuKNG6a2PpQWXcieBPRVRmjeagEm+lLrhcaMf5+FGDFDJ/YfTfjJGX2y5qgvNWJAERSj2IlTKiMPSeU17lxtJMsrpmeMA19m2aH1wR/pFAXzCWb8mTLDVwl2dFiLXH0qGEEYCswm9tHMyLT4RyTbzWbRGPQw12Uy5jxXOXmI3eRLQeTqoAbXMwxOjw2Dyo9ef08ZGcNoZIgRIal/9igQYj/NSpnUab9VrrKS6JSQHtG0k2dMbHbbJZK3SHhbv468dTpgIyoDX7CCZsIkaDKA62PJtF8ndf5BsvpxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UGMbirp89aazaot/xWsU4XJB9+6UAMCWC7XBBvH68qo=;
- b=UTozRZjopD0QjL9LlLrkbLmapJQZixpQl7OqGmz9Hhemi41hZRAQ27wfclL/xWpza/MNMIv1u4NrOOMxZ4BxJJ+Na1EtN5UUFB84ojMy4LeN8CPjBdUx2qlHzLpSydYQGIvWwNClyImlOtLVlwFmkMtojMMkd61CtPypeqL5KFQ=
-Received: from AS4PR09CA0013.eurprd09.prod.outlook.com (2603:10a6:20b:5e0::19)
- by AM7PR02MB6306.eurprd02.prod.outlook.com (2603:10a6:20b:1c1::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.21; Tue, 5 Aug
- 2025 09:33:50 +0000
-Received: from AM3PEPF0000A791.eurprd04.prod.outlook.com
- (2603:10a6:20b:5e0:cafe::3f) by AS4PR09CA0013.outlook.office365.com
- (2603:10a6:20b:5e0::19) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8989.21 via Frontend Transport; Tue,
- 5 Aug 2025 09:33:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
- smtp.mailfrom=axis.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=axis.com;
-Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
- 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=195.60.68.100; helo=mail.axis.com; pr=C
-Received: from mail.axis.com (195.60.68.100) by
- AM3PEPF0000A791.mail.protection.outlook.com (10.167.16.120) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9009.8 via Frontend Transport; Tue, 5 Aug 2025 09:33:50 +0000
-Received: from pc52311-2249 (10.4.0.13) by se-mail01w.axis.com (10.20.40.7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Tue, 5 Aug
- 2025 11:33:37 +0200
-From: Waqar Hameed <waqar.hameed@axis.com>
-To: Souradeep Chowdhury <quic_schowdhu@quicinc.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: <kernel@axis.com>, <linux-arm-msm@vger.kernel.org>,
-	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] usb: misc: eud: Remove error print for
- devm_add_action_or_reset()
-User-Agent: a.out
-Date: Tue, 5 Aug 2025 11:33:37 +0200
-Message-ID: <pndo6sukt8u.a.out@axis.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FE91AA782;
+	Tue,  5 Aug 2025 09:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754387967; cv=none; b=CVygMerksiiVdSBEET3ZMaMwL91zJUgH3cjeaNyihLFEp0GySe+onTBTDwolxR339oo6JklHi7GCacn5Q+tONuzKSHV1IWK5YgtAXv+D/7TP6G2vdSfMIKfoJ6zz+zAWuQK/2XP4u5uyOOk9C898mRGg/DUKGt+zGOHpew87Dd8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754387967; c=relaxed/simple;
+	bh=RV+XSnddoBH4JRWHZZy+4T5rBIZcZFEquw455N0WQVA=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=jQRoKnVO0QBKMVxUGPiuOhhHj1DfF33Pbxh6LXGsqjMrtvGDzMTkbi8zplQ/TFllOhRHBTu0HO/FWLxJrISwWGPJ2DmxD9hw3MX/WwY1jaidJYUIjRfrcERag0jPtWniAw+rbIch6ssuLGHRm87yme15TEkiLKin3upanYUFORQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=aPIOyP3C; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D96F2AD0;
+	Tue,  5 Aug 2025 11:58:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1754387915;
+	bh=RV+XSnddoBH4JRWHZZy+4T5rBIZcZFEquw455N0WQVA=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=aPIOyP3CCN60ghQ95OYLB9emUWH/n0b6O3gtc9ZoA+uMAITK5524gPFOoFe3iPgrR
+	 PeGZgkGvvmEIfAIjVWqinSJN2vlhZuO+XIf+jbLxH1tzVI09y3TIRrSaAcZCkteW9d
+	 f9FcX+PdukMOKmU3dXioC96DYHeFg17Pwv6UxHrs=
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: se-mail02w.axis.com (10.20.40.8) To se-mail01w.axis.com
- (10.20.40.7)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM3PEPF0000A791:EE_|AM7PR02MB6306:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8ca95757-a604-47cf-ad2e-08ddd4032f5e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?pdK9dDUg3moZ6kapeF848Rp9Z5U9D0Oormupmh3m3zwqqsTDwuPwF6WIj2Ka?=
- =?us-ascii?Q?mfOfWePwpu2Fgo5Wgqkf24crmMdlVdzUncSc2uQQj3rUqRlEnMicCdj6HW0u?=
- =?us-ascii?Q?FWAQXmiY4o3CfFWyt0QFFw2xQ5N0BqmRVlPsL95LSovJE8KLbCRDg/t+Hi5e?=
- =?us-ascii?Q?4c06OO/lsxyQyu8hyodTG5K0l4/a/nvr9DO9Df4bBeW66ixsD/32ZuRl9KiY?=
- =?us-ascii?Q?ECSGl9FZT0xwA/aFRp81saJyHJr8BvkYTE1jIL/jewLju1veM69UnBUj5DK1?=
- =?us-ascii?Q?gAaOMkD/SUR4s1XfhYIZTLF8IVEti9PD/WAWjM/P7N/lv805oeDzVl5a+iGg?=
- =?us-ascii?Q?sTcOP9XPGNZB4WNsEDlY0VvmSBG4W9jNdHYdQ85Fl77Jm3PSnxmGHBmy1yBc?=
- =?us-ascii?Q?FuEnKdSWS9atQXfu1N+6bSYAsywqH8F6HncpMoF9DiXAnHw0onVfXU7t/3T4?=
- =?us-ascii?Q?4uFZeFXiKOGWBxdtI7TSRzsVJ84BERiHVqx6N2mIlBTifJjGKTMTO/bQbl8b?=
- =?us-ascii?Q?/e3Ix+DLDtaT0VNZZVCjp6QPuB0yoW58KOAKcnJmpr50VjiY1nYPlvIOu20T?=
- =?us-ascii?Q?0tnqoQEuIuxH/h5i/ePwQB8xwiokBVPe6QJ6R5XgsEgn4/3n1HnsdKtwEf7m?=
- =?us-ascii?Q?GCuTXLDUFaorDynDnqUv8MYs9eeFuwp0+j8+zyS2+iMWAGDimmepZ4/W4RCX?=
- =?us-ascii?Q?dJ1trfjVVB5FF2hRT4TTE2IrBvajUBXHvtZTVatJbwJM1spIYzIGwJNxoKrn?=
- =?us-ascii?Q?kRyKuZYuDG0iOD0A71kObEmMPxHHVI3nzNikCj+CGoemQ/sBkSSje89xKBf8?=
- =?us-ascii?Q?Le7Zb2k66krAWqXbab4d9AV0KsgCTEh+JInu8lYHTfpFFst6a2D7ztZI2Poy?=
- =?us-ascii?Q?ufNqbkdL0shVST1hQ5dAU5JIQSq6ZrFWIVN5EbYrvywX+57ZUJmvouf4B59F?=
- =?us-ascii?Q?AkcSDodxBKz/xPd8R0OJc3uX2SEPi4pYbI9/d4+P0ExKc0d6uRMDMaXB3RM/?=
- =?us-ascii?Q?wk4dsWQ0BmZWKcLEmExfnxTruLAwy6fx5BgN6b20xD5e29MV6MICPLkL2T/x?=
- =?us-ascii?Q?hxYZS+DWr5qpqcssheNJECtgyF6PW8ZKoqNQ7JR8QMkawh41D5bpNB37GxYg?=
- =?us-ascii?Q?yLRBfFd5euMzP2IM/8BMuYrlB9/Duck6qwQ8c1Qy1GBq6JMMruFTrHH+Ra9R?=
- =?us-ascii?Q?hAvMjBQhxwi/XUckDnAI0lOUp/yTlUc5d9qbB1ODN/ZPgUwkQ2J/mppUjSwF?=
- =?us-ascii?Q?Fjteo217K5K6Txp+FgiC5g9Effl4bOF8TWMR3REMkLUEMBfcOm5Z4brNfYYz?=
- =?us-ascii?Q?fAyNwHeLkEjJcXxYrwOjQfQJqohx0JfmqgL/Ih72qM645vvf52PAWjiyYdQp?=
- =?us-ascii?Q?ymc8jHw6s8T0o8RpDyI3/ph4IrMSn+wozqrDvxRLht/9s2cyxsTfnIR9fmL9?=
- =?us-ascii?Q?rWDPggTPypGn2P7kohwvLmmult/qMa6MY3mbF+ItnFE+efhHt+pt+1aKMp13?=
- =?us-ascii?Q?R1jtq+VNoN3oT00RITtCINfDA+5BZwdDCXsl1ifOebKXNyNSRd22NIHDVg?=
- =?us-ascii?Q?=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2025 09:33:50.0780
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ca95757-a604-47cf-ad2e-08ddd4032f5e
-X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM3PEPF0000A791.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR02MB6306
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250802-media-private-data-v1-42-eb140ddd6a9d@ideasonboard.com>
+References: <20250802-media-private-data-v1-0-eb140ddd6a9d@ideasonboard.com> <20250802-media-private-data-v1-42-eb140ddd6a9d@ideasonboard.com>
+Subject: Re: [PATCH 42/65] media: renesas: Access v4l2_fh from file
+From: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev, linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org, imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, mjpeg-users@lists.sourceforge.net
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Date: Tue, 05 Aug 2025 10:59:19 +0100
+Message-ID: <175438795943.1641235.15440393062572657340@ping.linuxembedded.co.uk>
+User-Agent: alot/0.9.1
 
-When `devm_add_action_or_reset()` fails, it is due to a failed memory
-allocation and will thus return `-ENOMEM`. `dev_err_probe()` doesn't do
-anything when error is `-ENOMEM`. Therefore, remove the useless call to
-`dev_err_probe()` when `devm_add_action_or_reset()` fails, and just
-return the value instead.
+Quoting Jacopo Mondi (2025-08-02 10:23:04)
+> The v4l2_fh associated with an open file handle is now guaranteed
+> to be available in file->private_data, initialised by v4l2_fh_add().
+>=20
+> Access the v4l2_fh, and from there the driver-specific structure,
+> from the file * in all ioctl handlers.
+>=20
+> While at it, remove the now unused fh_to_ctx() macro.
+>=20
+> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 
-Signed-off-by: Waqar Hameed <waqar.hameed@axis.com>
----
-Changes in v2:
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-* Split the patch to one seperate patch for each sub-system.
-
-Link to v1: https://lore.kernel.org/all/pnd7c0s6ji2.fsf@axis.com/
-
- drivers/usb/misc/qcom_eud.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-index 83079c414b4f..67832790acad 100644
---- a/drivers/usb/misc/qcom_eud.c
-+++ b/drivers/usb/misc/qcom_eud.c
-@@ -193,8 +193,7 @@ static int eud_probe(struct platform_device *pdev)
- 
- 	ret = devm_add_action_or_reset(chip->dev, eud_role_switch_release, chip);
- 	if (ret)
--		return dev_err_probe(chip->dev, ret,
--				"failed to add role switch release action\n");
-+		return ret;
- 
- 	chip->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(chip->base))
-
-base-commit: 260f6f4fda93c8485c8037865c941b42b9cba5d2
--- 
-2.39.5
-
+> ---
+>  drivers/media/platform/renesas/rcar_fdp1.c | 11 +++--------
+>  drivers/media/platform/renesas/rcar_jpu.c  | 21 ++++++++-------------
+>  2 files changed, 11 insertions(+), 21 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/renesas/rcar_fdp1.c b/drivers/media/p=
+latform/renesas/rcar_fdp1.c
+> index e78d8fb104e9544d27c8ace38888995ca170483f..84c3901a2e5dc3e7ccfb3b440=
+62e839f8f19ee02 100644
+> --- a/drivers/media/platform/renesas/rcar_fdp1.c
+> +++ b/drivers/media/platform/renesas/rcar_fdp1.c
+> @@ -630,11 +630,6 @@ struct fdp1_ctx {
+>         struct fdp1_field_buffer        *previous;
+>  };
+> =20
+> -static inline struct fdp1_ctx *fh_to_ctx(struct v4l2_fh *fh)
+> -{
+> -       return container_of(fh, struct fdp1_ctx, fh);
+> -}
+> -
+>  static inline struct fdp1_ctx *file_to_ctx(struct file *filp)
+>  {
+>         return container_of(file_to_v4l2_fh(filp), struct fdp1_ctx, fh);
+> @@ -1411,8 +1406,8 @@ static int fdp1_enum_fmt_vid_out(struct file *file,=
+ void *priv,
+> =20
+>  static int fdp1_g_fmt(struct file *file, void *priv, struct v4l2_format =
+*f)
+>  {
+> +       struct fdp1_ctx *ctx =3D file_to_ctx(file);
+>         struct fdp1_q_data *q_data;
+> -       struct fdp1_ctx *ctx =3D fh_to_ctx(priv);
+> =20
+>         if (!v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type))
+>                 return -EINVAL;
+> @@ -1589,7 +1584,7 @@ static void fdp1_try_fmt_capture(struct fdp1_ctx *c=
+tx,
+> =20
+>  static int fdp1_try_fmt(struct file *file, void *priv, struct v4l2_forma=
+t *f)
+>  {
+> -       struct fdp1_ctx *ctx =3D fh_to_ctx(priv);
+> +       struct fdp1_ctx *ctx =3D file_to_ctx(file);
+> =20
+>         if (f->type =3D=3D V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
+>                 fdp1_try_fmt_output(ctx, NULL, &f->fmt.pix_mp);
+> @@ -1660,7 +1655,7 @@ static void fdp1_set_format(struct fdp1_ctx *ctx,
+> =20
+>  static int fdp1_s_fmt(struct file *file, void *priv, struct v4l2_format =
+*f)
+>  {
+> -       struct fdp1_ctx *ctx =3D fh_to_ctx(priv);
+> +       struct fdp1_ctx *ctx =3D file_to_ctx(file);
+>         struct v4l2_m2m_ctx *m2m_ctx =3D ctx->fh.m2m_ctx;
+>         struct vb2_queue *vq =3D v4l2_m2m_get_vq(m2m_ctx, f->type);
+> =20
+> diff --git a/drivers/media/platform/renesas/rcar_jpu.c b/drivers/media/pl=
+atform/renesas/rcar_jpu.c
+> index 058fcfb967bd98440f33272db42f0d973299d572..9c70a74a2969fce6446b0f26e=
+0637a68eade3942 100644
+> --- a/drivers/media/platform/renesas/rcar_jpu.c
+> +++ b/drivers/media/platform/renesas/rcar_jpu.c
+> @@ -480,11 +480,6 @@ static struct jpu_ctx *ctrl_to_ctx(struct v4l2_ctrl =
+*c)
+>         return container_of(c->handler, struct jpu_ctx, ctrl_handler);
+>  }
+> =20
+> -static struct jpu_ctx *fh_to_ctx(struct v4l2_fh *fh)
+> -{
+> -       return container_of(fh, struct jpu_ctx, fh);
+> -}
+> -
+>  static struct jpu_ctx *file_to_ctx(struct file *filp)
+>  {
+>         return container_of(file_to_v4l2_fh(filp), struct jpu_ctx, fh);
+> @@ -661,7 +656,7 @@ static u8 jpu_parse_hdr(void *buffer, unsigned long s=
+ize, unsigned int *width,
+>  static int jpu_querycap(struct file *file, void *priv,
+>                         struct v4l2_capability *cap)
+>  {
+> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
+> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
+> =20
+>         if (ctx->encoder)
+>                 strscpy(cap->card, DRV_NAME " encoder", sizeof(cap->card)=
+);
+> @@ -719,7 +714,7 @@ static int jpu_enum_fmt(struct v4l2_fmtdesc *f, u32 t=
+ype)
+>  static int jpu_enum_fmt_cap(struct file *file, void *priv,
+>                             struct v4l2_fmtdesc *f)
+>  {
+> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
+> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
+> =20
+>         return jpu_enum_fmt(f, ctx->encoder ? JPU_ENC_CAPTURE :
+>                             JPU_DEC_CAPTURE);
+> @@ -728,7 +723,7 @@ static int jpu_enum_fmt_cap(struct file *file, void *=
+priv,
+>  static int jpu_enum_fmt_out(struct file *file, void *priv,
+>                             struct v4l2_fmtdesc *f)
+>  {
+> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
+> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
+> =20
+>         return jpu_enum_fmt(f, ctx->encoder ? JPU_ENC_OUTPUT : JPU_DEC_OU=
+TPUT);
+>  }
+> @@ -828,7 +823,7 @@ static int __jpu_try_fmt(struct jpu_ctx *ctx, struct =
+jpu_fmt **fmtinfo,
+> =20
+>  static int jpu_try_fmt(struct file *file, void *priv, struct v4l2_format=
+ *f)
+>  {
+> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
+> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
+> =20
+>         if (!v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type))
+>                 return -EINVAL;
+> @@ -839,7 +834,7 @@ static int jpu_try_fmt(struct file *file, void *priv,=
+ struct v4l2_format *f)
+>  static int jpu_s_fmt(struct file *file, void *priv, struct v4l2_format *=
+f)
+>  {
+>         struct vb2_queue *vq;
+> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
+> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
+>         struct v4l2_m2m_ctx *m2m_ctx =3D ctx->fh.m2m_ctx;
+>         struct jpu_fmt *fmtinfo;
+>         struct jpu_q_data *q_data;
+> @@ -868,8 +863,8 @@ static int jpu_s_fmt(struct file *file, void *priv, s=
+truct v4l2_format *f)
+> =20
+>  static int jpu_g_fmt(struct file *file, void *priv, struct v4l2_format *=
+f)
+>  {
+> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
+>         struct jpu_q_data *q_data;
+> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
+> =20
+>         if (!v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type))
+>                 return -EINVAL;
+> @@ -902,8 +897,8 @@ static const struct v4l2_ctrl_ops jpu_ctrl_ops =3D {
+> =20
+>  static int jpu_streamon(struct file *file, void *priv, enum v4l2_buf_typ=
+e type)
+>  {
+> -       struct jpu_ctx *ctx =3D fh_to_ctx(priv);
+>         struct jpu_q_data *src_q_data, *dst_q_data, *orig, adj, *ref;
+> +       struct jpu_ctx *ctx =3D file_to_ctx(file);
+>         enum v4l2_buf_type adj_type;
+> =20
+>         src_q_data =3D jpu_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPL=
+ANE);
+> @@ -1284,8 +1279,8 @@ static int jpu_open(struct file *file)
+> =20
+>  static int jpu_release(struct file *file)
+>  {
+> -       struct jpu *jpu =3D video_drvdata(file);
+>         struct jpu_ctx *ctx =3D file_to_ctx(file);
+> +       struct jpu *jpu =3D video_drvdata(file);
+> =20
+>         v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
+>         v4l2_ctrl_handler_free(&ctx->ctrl_handler);
+>=20
+> --=20
+> 2.49.0
+>
 
