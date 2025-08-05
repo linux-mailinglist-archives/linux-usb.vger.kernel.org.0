@@ -1,112 +1,162 @@
-Return-Path: <linux-usb+bounces-26500-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26501-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBCC0B1B904
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 19:10:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42C17B1BB6C
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 22:29:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5D9216616C
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 17:10:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 983E17AF580
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 20:27:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA65292B45;
-	Tue,  5 Aug 2025 17:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5163244686;
+	Tue,  5 Aug 2025 20:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uhjCiUpa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TWTaRXwr"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1305B1DF258;
-	Tue,  5 Aug 2025 17:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD232288EE;
+	Tue,  5 Aug 2025 20:28:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754413848; cv=none; b=oNbExkeQGz3xXC8cnhZcUTUejz49YuCCPis+2h1CYpGMQsF4F4pjr5ggMbWH75dK4fcHdzfGfefhWUs2WsjyveeVS81nYldsmjxcsj5zpPTEOZZAG+6EbbXfUVW1sL+O6JVVQ9AJ7LjcZH4teAiGiC54eyuG2JDBVYMZcHEwcaE=
+	t=1754425734; cv=none; b=pKtClcoTpetuvTU1x7x5g+T1WcXA0VbFcLVmSaPkU/zkHzE/EPWYPFahypUC4D6orX1nxqqWvxTIG+wJ7rmrALpPi2wEvWOf2CQd7InNeMHnnag8kNlhLl6MlN6B/doAakf/2ayi7fKCDP8eU18gCcbqoh7z4BWUDR1D/sUfixs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754413848; c=relaxed/simple;
-	bh=1sf/JRZ3V8bfGDagRlSzmSgwhPtXnaKUvMYT5avoy1g=;
+	s=arc-20240116; t=1754425734; c=relaxed/simple;
+	bh=YUMbxHcRNoIfqwQxljcPeXk9kSyXJnB46QcCKO9sHAg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=slTRNQXo0PK6QOS8mRUGbsWi9xhk2wf5unTWOBmQeKMVNFemR1lnyF1aj1SY/Dvj1oeqxX+O1rDOuEg0+8zLnNXwMDyRuVUw2DdsQPNYXCTnH+LVL9HzoUC2uUwfvZHFgpUavra2nhMN3Orp4xOMeT6KyiO+mwHaFL2seAdLuB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uhjCiUpa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 757A6C4CEF0;
-	Tue,  5 Aug 2025 17:10:44 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=RfuOS4tsm/MNq0EKW5f/cHhvdUa1kBRy3TRpbttnvvyai4HoaVJVcrF5UVtl54Pdc4nZ6ygkwlr2P/AcoN9AXciT4cch0BTEnpkk+87frAmxd4ziJVV4nV8Kk6YyJabwHNTDRCePPH7O60s5DViJ8MD5+12NmN3JOVaWOnm65A0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TWTaRXwr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FD93C4CEF0;
+	Tue,  5 Aug 2025 20:28:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754413847;
-	bh=1sf/JRZ3V8bfGDagRlSzmSgwhPtXnaKUvMYT5avoy1g=;
+	s=k20201202; t=1754425733;
+	bh=YUMbxHcRNoIfqwQxljcPeXk9kSyXJnB46QcCKO9sHAg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uhjCiUpaVILTMXxH2XAUJ06SOWn80oWAFZ1WNJAOnkJGDt15wyAO9E8jGZWh+FBuS
-	 x5t2KkiS6vYTq4ezcAaxCLQgHp9bv5Y7lymAcjJubLYLxdDu6iySjOhcEp+ho4lJVq
-	 PQUkK2skWvNht/S+HQDSP4DfXK1Ij8+byC/0ndoE/F8fH78ddDIhmd/XE03vb75y70
-	 silc4AZ/Z/XfWKgOy9gwBjPpRNvjLmk1RszGSoruWsfC4Xi67k0IN9hPEJW4D/6uaH
-	 RvprrX83gXxoRkv80oZ6pO49EOLiJhIT0AVJL8ZkaOyyB+gP6YFzZAqf5bTPiw9H/F
-	 usDqIGAgwPFEw==
-Date: Tue, 5 Aug 2025 18:10:42 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: renesas,usbhs: Add RZ/T2H and
- RZ/N2H support
-Message-ID: <20250805-lent-tiptop-23a687d0cf78@spud>
-References: <20250805114730.2491238-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250805114730.2491238-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	b=TWTaRXwrgo9ImyO1w340UuQ8einL4MAGC7EV2ZcHyQBxZ2HnR+HsXX0TiZfbaP5rl
+	 iCpBBu3ybnBIxJBmUHpLy06tLPPwTrzomFLD847y+P2+hdQn4xwlapy44r5KOpF+J/
+	 JdPf6EpAcSN5AF2UvhKi3xlyrxirAF7BPJf6kRHpmhI1XvWrXboss032P9Ug7KyHpS
+	 p9u3rn8j4p0xJtPCF4Y2sWAA+w6IJ0NGPtsD5kj9jf5tLJagv/2+vw0QtAaQzY9vH1
+	 N6jglhmyaXjAfECeNhz0NQRB+exQwBA5BtQQXo58/fsl+At6eXnoRh0tR8PToqJ74P
+	 avX6r5bzQBIWg==
+Date: Tue, 5 Aug 2025 21:28:48 +0100
+From: Simon Horman <horms@kernel.org>
+To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linux Netdev Mailing List <netdev@vger.kernel.org>,
+	Linux USB Mailing List <linux-usb@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Armando Budianto <sprite@gnuweeb.org>, gwml@vger.gnuweeb.org,
+	stable@vger.kernel.org, John Ernberg <john.ernberg@actia.se>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH net v2] net: usbnet: Fix the wrong netif_carrier_on()
+ call placement
+Message-ID: <20250805202848.GC61519@horms.kernel.org>
+References: <20250801190310.58443-1-ammarfaizi2@gnuweeb.org>
+ <20250804100050.GQ8494@horms.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="qyKjxRWY/MsYfqbX"
-Content-Disposition: inline
-In-Reply-To: <20250805114730.2491238-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-
---qyKjxRWY/MsYfqbX
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250804100050.GQ8494@horms.kernel.org>
 
-On Tue, Aug 05, 2025 at 12:47:29PM +0100, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->=20
-> Document the USBHS controller for the Renesas RZ/T2H (r9a09g077) and
-> RZ/N2H (r9a09g087) SoCs. While the USBHS block is similar to the one found
-> on the RZ/G2L SoC, it differs slightly in terms of interrupt configuratio=
-n,
-> clock/reset requirements, and register bit definitions. Due to these
-> differences, a new compatible string `renesas,usbhs-r9a09g077` is
-> introduced for the RZ/T2H SoC.
->=20
-> The USBHS controller on the RZ/N2H (r9a09g087) SoC is identical to that on
-> the RZ/T2H, so it uses the `renesas,usbhs-r9a09g077` compatible string as
-> a fallback.
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
++ Linus
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+On Mon, Aug 04, 2025 at 11:00:50AM +0100, Simon Horman wrote:
+> + John Ernberg
+> 
+> On Sat, Aug 02, 2025 at 02:03:10AM +0700, Ammar Faizi wrote:
+> > The commit in the Fixes tag breaks my laptop (found by git bisect).
+> > My home RJ45 LAN cable cannot connect after that commit.
+> > 
+> > The call to netif_carrier_on() should be done when netif_carrier_ok()
+> > is false. Not when it's true. Because calling netif_carrier_on() when
+> > __LINK_STATE_NOCARRIER is not set actually does nothing.
+> > 
+> > Cc: Armando Budianto <sprite@gnuweeb.org>
+> > Cc: stable@vger.kernel.org
+> > Closes: https://lore.kernel.org/netdev/0752dee6-43d6-4e1f-81d2-4248142cccd2@gnuweeb.org
+> > Fixes: 0d9cfc9b8cb1 ("net: usbnet: Avoid potential RCU stall on LINK_CHANGE event")
+> > Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> > ---
+> > 
+> > v2:
+> >   - Rebase on top of the latest netdev/net tree. The previous patch was
+> >     based on 0d9cfc9b8cb1. Line numbers have changed since then.
+> > 
+> >  drivers/net/usb/usbnet.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
 
---qyKjxRWY/MsYfqbX
-Content-Type: application/pgp-signature; name="signature.asc"
+It seems this has escalated a bit as it broke things for Linus while
+he was travelling. He tested this patch and it resolved the problem.
+Which I think counts for something.
 
------BEGIN PGP SIGNATURE-----
+https://lore.kernel.org/netdev/CAHk-=wgkvNuGCDUMMs9bW9Mz5o=LcMhcDK_b2ThO6_T7cquoEQ@mail.gmail.com/
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaJI7EQAKCRB4tDGHoIJi
-0t0LAP9GcYU3aBgLHPyaSfxMX5QqrZr5peYTWml64R/ts8+rRwD9GYv1Z1Q4IzyT
-GGtL1Lix63V9jXAlvk2pLRmU9OzJDQg=
-=QN3z
------END PGP SIGNATURE-----
+I have looked over the patch and it appears to me that it addresses a
+straightforward logic error: a check was added to turn the carrier on only
+if it is already on. Which seems a bit nonsensical. And presumably the
+intention was to add the check for the opposite case.
 
---qyKjxRWY/MsYfqbX--
+This patch addresses that problem.
+
+So let me try and nudge this on a bit by providing a tag.
+
+Reviewed-by: Simon Horman <horms@kernel.org>
+
+> > 
+> > diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> > index a38ffbf4b3f0..a1827684b92c 100644
+> > --- a/drivers/net/usb/usbnet.c
+> > +++ b/drivers/net/usb/usbnet.c
+> > @@ -1114,31 +1114,31 @@ static const struct ethtool_ops usbnet_ethtool_ops = {
+> >  };
+> >  
+> >  /*-------------------------------------------------------------------------*/
+> >  
+> >  static void __handle_link_change(struct usbnet *dev)
+> >  {
+> >  	if (!test_bit(EVENT_DEV_OPEN, &dev->flags))
+> >  		return;
+> >  
+> >  	if (!netif_carrier_ok(dev->net)) {
+> > +		if (test_and_clear_bit(EVENT_LINK_CARRIER_ON, &dev->flags))
+> > +			netif_carrier_on(dev->net);
+> > +
+> >  		/* kill URBs for reading packets to save bus bandwidth */
+> >  		unlink_urbs(dev, &dev->rxq);
+> >  
+> >  		/*
+> >  		 * tx_timeout will unlink URBs for sending packets and
+> >  		 * tx queue is stopped by netcore after link becomes off
+> >  		 */
+> >  	} else {
+> > -		if (test_and_clear_bit(EVENT_LINK_CARRIER_ON, &dev->flags))
+> > -			netif_carrier_on(dev->net);
+> > -
+> >  		/* submitting URBs for reading packets */
+> >  		queue_work(system_bh_wq, &dev->bh_work);
+> >  	}
+> >  
+> >  	/* hard_mtu or rx_urb_size may change during link change */
+> >  	usbnet_update_max_qlen(dev);
+> >  
+> >  	clear_bit(EVENT_LINK_CHANGE, &dev->flags);
+> >  }
+> >  
+> > -- 
+> > Ammar Faizi
+> > 
+> > 
+> 
 
