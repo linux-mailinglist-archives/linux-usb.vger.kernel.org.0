@@ -1,127 +1,161 @@
-Return-Path: <linux-usb+bounces-26484-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26485-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2DB9B1ACAE
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 05:11:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56411B1AE65
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 08:32:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9832D18A3492
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 03:12:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10EEC3A6F5E
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Aug 2025 06:32:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F37F1E0B9C;
-	Tue,  5 Aug 2025 03:11:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 269FA222594;
+	Tue,  5 Aug 2025 06:31:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L4wy0gfJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wmr+uJwb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361FC1DF248;
-	Tue,  5 Aug 2025 03:11:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE81222562
+	for <linux-usb@vger.kernel.org>; Tue,  5 Aug 2025 06:31:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754363501; cv=none; b=T8AN2ADwBx3sqLXyp9c8vN2Ig684JsLYOR4vmUoeH4CJ+q+XpCQNkll03NEOwMboC4Ks5IZHth+hZilLbPmtNvR3Toio87R3KSYvq7BJRC7Ac2eqlKH+yEJ8L+2CEAylWpiEbGkIWCzcQbrU2qkFJFoNvLsvuBPnjK5Vd5tHGJQ=
+	t=1754375462; cv=none; b=DAwoDb9GZBQ8TbKj05JzYiiARb0rZixraBqYooF8KxIjMBfxE7DuviSXM2HjwT5jgID411UJcLf2EMrOxh67hJrF/emjhdfWsZrJQYp7BowxYwgpbqkIcy8+LH9kV7KZA+McYO4lQPbnuGXm8RWYUWnIKCD8mBBN6zhJf2/A1n4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754363501; c=relaxed/simple;
-	bh=bl5QHnK9V2D6VL8PhIbqiP//fzrQSDMVxQYIyXUbSDM=;
+	s=arc-20240116; t=1754375462; c=relaxed/simple;
+	bh=j4NGPp9VaFnGFUx9rXSZLw81UeQeNpRciHGBKHrhjSk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JcFXa9ahxN6Uj9piVJSoQ0VUhX0Abxi24ssiL9sWVDNgPah/2/Fkn02AlwZ2JQk0aO13cIqilhO0ZgPK1hFAn+lfl09vEF3UQxQMRXxcoDpbFRZQnhv6InUoahzi7yP8XSY4Qq+uBoMGwI+66TOHlLGiIQGJtsvaLMAdowhay3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L4wy0gfJ; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-71b71a8d561so38034167b3.0;
-        Mon, 04 Aug 2025 20:11:39 -0700 (PDT)
+	 To:Cc:Content-Type; b=EKKTRCX/cCg5mPAraiwMo/xr5F+dalTI6vakCzezmNjZA5rS+ApHrD7PhIh7C8Qza2Nkpu4IKbTC9+jyEBY9saSk5/rKRVK1ltmRLDq4eKm7X/kaQBNpzgddEo3TZj0gaRTc0IaemXhvp9kj0C9uyZpTJSV/2Dys81+7gAChe8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wmr+uJwb; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-55bae0b6b50so1335e87.0
+        for <linux-usb@vger.kernel.org>; Mon, 04 Aug 2025 23:31:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754363499; x=1754968299; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1754375459; x=1754980259; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bl5QHnK9V2D6VL8PhIbqiP//fzrQSDMVxQYIyXUbSDM=;
-        b=L4wy0gfJbymgrj8EMK1kEetPlaFBQnKRIeqXC8pt6sxDrqGUrpn0YUo+zvE1bZJ030
-         1tfzW/IFXUVBV3TN+5712dnkL4SqdWOlc+d7jKPcQqCcc4pWBG4aqHyWLXpO/qhiygYO
-         PtXZNQQJT7co6j44JAXjNT84RBraUmqaR6pIiiNO4YxpZG/1i2rUUw8i/nbHitXs5xpW
-         RcH4H2zRwYFS9fyGIsJTFm4sudiBiy7fl56h1Pyz8oKBgoVi7G+xmrW5SAlgwBIzFDGw
-         +ZA0jdvYvGzLfQdkoLDO4KY1MEvryQHMDoi2De2pDB98OYAxkeohY4EBv+hbg/3ZiZ+v
-         u0jg==
+        bh=Tjt9G2y2gclTjM4TF8PRpe+XCHgzqxVfWjoTVQCasd0=;
+        b=wmr+uJwbx+jdT2EhKn/TIENC6MAhBuSabB3/aGOtMcTmF+Gkt2s+R9ZUuOfs9dnGD+
+         9gW/WmkE5RTp3Iu8xIjjKB+eEHXl3wCL3RqNo+tF4m5jy4cYdCJoVQXg3IYPfc/41PaI
+         8ZhusWue1JImFA1SoNLmT+b94nYZJeR7b1GxAsFmQpHUQ6sxSs2Ay8BZgz8mrpiL/Y2T
+         Fx7YnCJGQqXqSu9wNVGAMPbZGcCR/i/PeuIz/pQZ2pP2+SgYs/jdUZ1NSqkOf2Gq7tBT
+         jw/C5qtl61JW1Q/ijMNDtne5/56JZH+6EyhFFswJ2f9kyAlPWu7dWX5yIxZ/N/sDWSqr
+         p3ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754363499; x=1754968299;
+        d=1e100.net; s=20230601; t=1754375459; x=1754980259;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bl5QHnK9V2D6VL8PhIbqiP//fzrQSDMVxQYIyXUbSDM=;
-        b=TwwpINxwnib+yzD24RcxE/yD8olsy/LefGA+H2B8g0MuisASJeB4hqs+i3hl4cqq9b
-         1kBJAcGlVp/S4ch5jRIv+VxeYopdFn14sKGIzqLXEDafjVvjfaM55cDtASRcLlXST+U6
-         L6niAqtlgcjasCjpdw6FzI9K3C9QOviwUd4HszkCa8RNdzH13Y2qMpNFUqt3leWsvm9D
-         0wfE64g930UhqxXH9MG+Nwied5ZFdO8VhMLwY6Cqj5ZLwWTEI3xHzgE+Zw/fPbx8Wi9R
-         iLTx48fUnxA3ycqI+JmBaby+Ft1HgIYHcpNXBbZQ/Lb0vlixqESx9+lu/pIs4fjtAdO6
-         uHVg==
-X-Forwarded-Encrypted: i=1; AJvYcCVK5MgVEIY8ml1B8XxeocQJTAtjU9j0VOHboCLbbiaUplYv/08/4D76hYs5sZ2us4KPhkezqLENGktE@vger.kernel.org, AJvYcCXXJ32QpjaXSoGjmQnRFW+WkJI6JYhziEvFvQ2mN6JYqStcfDknCiYrSKrkbKEFmwkhWtUvugaxtKzpnw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBv4yFHv2czWQ2cZMY14whdWrbL9qjENCc11KhTRp6HOuVqvPW
-	CpPdyQfcK9nWBRzJJdMuOn1UAu006ZC7nMrtZZvNCOhu7rN8P9WYhPf8ymao8fmB9ytpS3IT9nM
-	emvYQx9vQBpi7G0vyFpE/O4oZY/xOe94=
-X-Gm-Gg: ASbGncus6/IetyHP5XvMTwj7XSZjwruG/RT4tvwuowdip2w1PagUuldT2mEqguk4Jqs
-	XW4WxDT95LQSMDHW6cV2z7/bdAqxbmUOtZ988ftxK/5u60go5qkF831hPHY40471bFjPxWZ32P0
-	35/6jEA1BjIJkV13mUiffTBcR40oekKuBPCsLgjhdcrwBsj14pMaSEVshM7dY0fZpLOsbLOUmuN
-	KqKiBE=
-X-Google-Smtp-Source: AGHT+IGTv2A4SdvTPg/pr3OEHuClij56x00Z5edF222oJQu3UWXexuTeFDK3OtsIjwAgMoKNgz5I0WA6fUFDZjeAGP8=
-X-Received: by 2002:a05:690c:60c4:b0:712:ca60:c5fd with SMTP id
- 00721157ae682-71bb6cb6429mr27795507b3.1.1754363498970; Mon, 04 Aug 2025
- 20:11:38 -0700 (PDT)
+        bh=Tjt9G2y2gclTjM4TF8PRpe+XCHgzqxVfWjoTVQCasd0=;
+        b=M2WDWH8HQZoI8iiXgYurpok6jcgP2noVCZMndtl624AjrIetgL/ulIolcwOW/Pt8eM
+         UpqTM7hnojyqDqLmo04FhewHQhVyxN5lmR2OFS0aJa6wBnXfTbhQI3WZdX1Ui/vzC3EP
+         zJPOW0QwY0HQbHN8MyhtR+XzxCDnL/5LNKTCCccIAt8lk7jXnzgUxLIOhi20GEYKHG8n
+         5rBzLJPYTRgMybkZNmTaTO5VaTvnsAS/sbWykDogLO1EbfUPFxYROQiU4R2MomYdS2RR
+         z3m7/DX1bly6ADACLS/2sumlxgvWMZFWMjTuvfe99L10+43pWV89X/bgBOKfEPGt1HEV
+         Y2FA==
+X-Forwarded-Encrypted: i=1; AJvYcCWc1wk7fIZZ0shbx4f8HltsnfifIQPWURuVLuDdDxeKeXEpCYHoYvSnkF+V33rq2+EzNtHzhRwyKvw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/4rMCYe2w0K3/tXCJbmMtuwoGYht6OByf6JFSE7owU9mBgk0L
+	1MN4M0SuWNSKve/zXxhcGRwwzQgRh4CN3lyPZiDmmtQI6lcyfnR/Ez8QvUdAfr+Bim0/gAANttj
+	ZsCulX6Wre0W0laItzy0BJAvDR7+k7GI8fb9JspNpkBr//3ITExwCMbc4
+X-Gm-Gg: ASbGncvKb3acxT0oaPAEFQDeP5cucdpfhEEpP5TrIf6ttgCK5GKqaJha/UXGi663FcZ
+	qPRJOIA8raXaNs2Q8kaI4cTIAyH8DiqcHtHYdRtJjxaBbxAQgQH7bd4e8xmwD/KZ/9c9Sr+tf9b
+	Q+0nPObV/PX/Zk2uAtP1D302jRAgYnzYTs13kqYXwLlGKeCk9ioLd9bcYPxa+wNKzJrkG0AOt8E
+	ZpI8H5pqyJxRlZUkMBrTQQjR4cr0JtiiA==
+X-Google-Smtp-Source: AGHT+IH5w9MRUES9L0VP1bjNRzGoTswsTku6upjE74sws7QAjbnj9qsLbG1dbqddm9aI22Jn3ENEInyRXGoK7oSxiMQ=
+X-Received: by 2002:a05:6512:6410:b0:55b:af2d:393b with SMTP id
+ 2adb3069b0e04-55baf2d39a8mr24728e87.4.1754375458906; Mon, 04 Aug 2025
+ 23:30:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHQ1cqErtqZjSakSUppxKEPvK3xJYfKydM02RJTcDO0RV77r3g@mail.gmail.com>
- <03s194q6-n6n7-2p42-5o48-99726p7qp0n0@xreary.bet>
-In-Reply-To: <03s194q6-n6n7-2p42-5o48-99726p7qp0n0@xreary.bet>
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Mon, 4 Aug 2025 20:11:28 -0700
-X-Gm-Features: Ac12FXxcs2jX6IHCHFZr-1pKB7hGY01P719Uhd7Pbwitd52aQVaDEmBhdtT5xYQ
-Message-ID: <CAHQ1cqE_bmPWVwKm-AV2b4BfUqt1PjUPCdUuKvY-BEqTGTHZcQ@mail.gmail.com>
-Subject: Re: dev->uniq is not unique for individual USB interfaces
-To: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>, linux-usb@vger.kernel.org, 
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>
+References: <20250804080809.1700691-1-khtsai@google.com> <2025080456-grip-thwarting-2424@gregkh>
+In-Reply-To: <2025080456-grip-thwarting-2424@gregkh>
+From: Kuen-Han Tsai <khtsai@google.com>
+Date: Tue, 5 Aug 2025 14:30:32 +0800
+X-Gm-Features: Ac12FXxwyS6UTJdKetRrX_qEul9fl5YHif6lgaN570EvgDdKqy7j9PYbE530fBg
+Message-ID: <CAKzKK0p5Vkncudu3Bu=rM8x7b+nPe2PVDgdjP_Hp057NNcFGiQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] usb: dwc3: Ignore late xferNotReady event to prevent
+ halt timeout
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 4, 2025 at 12:20=E2=80=AFAM Jiri Kosina <jikos@kernel.org> wrot=
-e:
->
-> On Mon, 21 Jul 2025, Andrey Smirnov wrote:
->
-> > Hey folks:
-> >
-> > I'm working on a custom USB device that presents N battery powered HID
-> > interfaces with each interface reporting its own battery life via
-> > standard HID Power Device report. The problem I'm running into is that
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/hid/hid-input.c?h=3Dv6.16-rc7#n524
-> >
-> > assumes that "uniq" field of a "struct hid_device" is always unique, bu=
-t
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/hid/usbhid/hid-core.c?h=3Dv6.16-rc7#n1415
-> >
-> > populates "uniq" with iSerialNumber which is only unique per USB
-> > device, not per USB interface. At the first glance the right way to
-> > fix this would be to change how uniq is generated by usbhid_probe()
-> > but that probably would break some userspace assumptions?
->
-> Hmm, actually, from top of my head I am not able to come up with any
-> userspace breakage this might cause. Do you have anything particular on
-> mind?
+Hi Greg,
 
+On Tue, Aug 5, 2025 at 12:43=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Mon, Aug 04, 2025 at 04:08:05PM +0800, Kuen-Han Tsai wrote:
+> > During a device-initiated disconnect, an xferNotReady event for an ISOC
+> > IN endpoint can be received after the End Transfer command has already
+> > completed.
+> >
+> > This late event incorrectly triggers a new Start Transfer, which
+> > prevents the controller from halting and results in a DSTS.DEVCTRLHLT
+> > bit polling timeout.
+> >
+> > Ignore the late xferNotReady event if the controller is already in a
+> > disconnected state.
+> >
+> > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+> > ---
+> > Tracing:
+> >
+> > # Stop active transfers by sending End Transfer commands
+> >  android.hardwar-913     [004] d..1.  6172.855517: dwc3_gadget_ep_cmd: =
+ep1out: cmd 'End Transfer' [20d08] params 00000000 00000000 00000000 --> st=
+atus: Successful
+> >  android.hardwar-913     [004] dn.1.  6172.855734: dwc3_gadget_ep_cmd: =
+ep1in: cmd 'End Transfer' [40d08] params 00000000 00000000 00000000 --> sta=
+tus: Successful
+> >  ...
+> > # Recieve an xferNotReady event on an ISOC IN endpoint
+> >     irq/991-dwc3-29741   [000] D..1.  6172.856166: dwc3_event: event (3=
+5d010c6): ep1in: Transfer Not Ready [000035d0] (Not Active)
+> >     irq/991-dwc3-29741   [000] D..1.  6172.856190: dwc3_gadget_ep_cmd: =
+ep1in: cmd 'Start Transfer' [35d60406] params 00000000 ffffb620 00000000 --=
+> status: Successful
+> >  android.hardwar-913     [004] dn.1.  6172.868130: dwc3_gadget_ep_cmd: =
+ep2in: cmd 'End Transfer' [30d08] params 00000000 00000000 00000000 --> sta=
+tus: Timed Out
+> >  ...
+> > # Start polling DSTS.DEVCTRLHLT
+> >  android.hardwar-913     [000] .....  6172.869253: dwc3_gadget_run_stop=
+: start polling DWC3_DSTS_DEVCTRLHLT
+> >  ...
+> > # HALT timeout and show the endpoint status for debugging
+> >  android.hardwar-913     [004] .....  6177.479946: dwc3_gadget_run_stop=
+: finish polling DWC3_DSTS_DEVCTRLHLT, is_on=3D0, reg=3D0
+> >  android.hardwar-913     [004] .....  6177.479957: dwc3_gadget_ep_statu=
+s: ep1out: mps 1024/2765 streams 16 burst 5 ring 64/56 flags E:swbp:>
+> >  android.hardwar-913     [004] .....  6177.479958: dwc3_gadget_ep_statu=
+s: ep1in: mps 1024/1024 streams 16 burst 2 ring 21/64 flags E:swBp:<
+> >  android.hardwar-913     [004] .....  6177.479959: dwc3_gadget_ep_statu=
+s: ep2out: mps 1024/2765 streams 16 burst 5 ring 56/48 flags e:swbp:>
+> >
+> > ---
+> >  drivers/usb/dwc3/gadget.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> Why is this RFC?  What needs to happen to make it an actual submission
+> that you wish to have applied?
 
-No, not really. It sounds like we can try to fix this without gating
-the change by a quirk. I'll try to put together a path in the next
-couple of days, then.
+I'm not sure if this solution is acceptable since I couldn't find any
+guidance in the programming guide about ignoring xferNotReady events
+depending on the controller's status. I was thinking marking this as
+an RFC is more appropriate to solicit feedback on the solution.
 
-Thanks!
+I will send a new patch without the RFC tag soon.
+
+Regards,
+Kuen-Han
 
