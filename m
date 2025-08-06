@@ -1,259 +1,308 @@
-Return-Path: <linux-usb+bounces-26527-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26528-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAA6AB1C369
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 11:33:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D19C3B1C3BE
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 11:48:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59C0E18A5C44
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 09:34:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 889E8189A7E4
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 09:49:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96814289353;
-	Wed,  6 Aug 2025 09:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9994E28A725;
+	Wed,  6 Aug 2025 09:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Wofn30h0"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="BVgd+rZs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013048.outbound.protection.outlook.com [40.107.159.48])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C671C27470;
-	Wed,  6 Aug 2025 09:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754472819; cv=fail; b=qenzMWwjIuA53Sau6Awlt/Ga0C0GoiBHolUsD2QOJFHgMfM6jAeCo1WrQc400Px7MdAd3vfG7SqA1pg05rFrMb/T4gO4p0BehB8knyKILZ3V0H2vYGZYLqZxO/gj0M6aWfoLhxqP1xWzuKFM+wkE3mJEm0t1TJxCME37qzj396Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754472819; c=relaxed/simple;
-	bh=8X/oBDZ0+rX+r84GAyBgHaWHbErf3GKRyYB6/DhEVGk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=TXeiBOeDwYvAZoSLoGPA5Np8BjexQTf8ShKOfdgKWxsn3/yWu95t208wZdONYEOzsEKZt6sT7czAjL4squSVWnCdWBzW2o1XnlEsTCXN+z5yWirKJDLaSJzXzRChI7E5CARwhIR7flmNuoAFVlmJgPFe8dzHO+rYSfQ7iG/nMOs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Wofn30h0; arc=fail smtp.client-ip=40.107.159.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=J75CM5QXpG6ndko2MW176/NHnHaW308JZKNjfvmxexPvFEitFizQbj/Qpe1z6RmNuhDoBNiM04MT4XSrf3JE71OEg4jYASfr25pktmNoj5/iam6V6ujfBOeLg2kv3LmmPEMKkEfeR4zAtiu3IIZkzgnD1rSzk0nE/7042RUk9iFZ6rX2c+9IE5vzhvkW2d/2CW1BYm8JcUXQePbpsbDyvbo1YtQd1EwjOO+zZ5X7Izum2c4wVBv3OhEfWCO/GrtFuZc1px29neLbW8iCuYcdPazN/CTCwAMOeyzQZffHGivSCCRUwSFdhqGqk82nBdnxNu2gLDA7CK5fWxJYzOhB3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l2Wt9GQr/rxbLZPv3uiNfIyDvLjZmJLqsw7j0kAAjaQ=;
- b=yjNtJd/CvgHmznibKFZL+IAGYaEeGyTfKhHwl6Ji5xBQrMDmj+8i2NBXYX1vdHKFlORhjsPMewi3F99vBLKdpjmjeAvr5wTFU4odB+DwZbXU9+3W3lqAU60/30S1SfRYkOfHqPXP2MB/Om4u4MGqxu+TuELcHCJ4lS6yrV1xAxOlOo2913NOVT678g1d/9Q46cVtr7fzgXRIKfXTWmrI+yu/ci23B6Gsgq6TO5SKbeMzl4Ti8RQv2ViT0PHWG+1uY6Zs2CY3LKbW+loywl5zLyfqFHehA1cSYsDLfZfndWYlrcMh24txtVdPWcXp5tLvgyD8/YneazXAjl9w+fFEfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l2Wt9GQr/rxbLZPv3uiNfIyDvLjZmJLqsw7j0kAAjaQ=;
- b=Wofn30h0XNO9GsYVXdrPfG3v5PmBQfO8147h+197fb1xz6fR5XbZbFY9XMULhFsxNIzYsouZk3ABBzaGjGijfM/JfnTFvSGQkdoUsWWNgz8gbUSEuBkLSJDkUKfgQKswqRZ/iYjm3RHdytZHxhk21NkpXEWNE4qc+GEc+4vJ498crd6oxoEr728kmNWKm7fIxEPF7sN6Cvh8XM9LkXDM5IzjbshCfiFUMn9ymriUjg0eCC0zb2z/qcaU1uCAphC2i/ScK3q+6JU377i4mlB5IWpJquTq5n5St2pRHvgeNgESWfMXD0KMIzY1pbEU9LENcaxzDPi8Xhdos1skWcSg+A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by DU2PR04MB8726.eurprd04.prod.outlook.com (2603:10a6:10:2dd::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.21; Wed, 6 Aug
- 2025 09:33:34 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%4]) with mapi id 15.20.9009.013; Wed, 6 Aug 2025
- 09:33:34 +0000
-Date: Wed, 6 Aug 2025 17:28:08 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Peng Fan <peng.fan@nxp.com>, jun.li@nxp.com
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Peter Chen <peter.chen@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	imx@lists.linux.dev, arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/3] usb: chipidea: ci_hdrc_imx: Set out of band
- wakeup for i.MX95
-Message-ID: <zdzpddjjdj2ezkkfh5jjnnjvkvu4gb6vqmhkdlnnc2ioamvcuk@ftmezbyxrhfb>
-References: <20250801-pm-v2-0-97c8fb2a433c@nxp.com>
- <20250801-pm-v2-2-97c8fb2a433c@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250801-pm-v2-2-97c8fb2a433c@nxp.com>
-X-ClientProxiedBy: SG2PR02CA0102.apcprd02.prod.outlook.com
- (2603:1096:4:92::18) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355781FBE80;
+	Wed,  6 Aug 2025 09:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754473724; cv=none; b=s3lz4ELO/egHrc1IpPcRoVpnXILNW9o8ys3A7eWKRWUPy5CGcJNmTeMXrAcwLfYcv79gRTjAqVfvP4MLbCQXiYriVX2ZHmH8Ejrq5jWB+rr7wFu6DrfJTep0/gQwnVX6FYNWCzpkKPZFaqxKhYsYKASeykAqHUkpJNDuGg4i+GI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754473724; c=relaxed/simple;
+	bh=dBB2uil8xdYuqq7KSR4GUD8VnaNZFEk4RwnSQxJK8VA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bXxfF5fO+ywVUFyJ9npAQjlMi1axc/aUcVzBJ5zfHplN6TyXxZU54dpJncL4fqjoue2Gx0BX4DUaDWmg+FzeI4zGItryNy/BG5rcG4nhJ5xMoh4Hb1fu1ogry3JFmphoNWmRYbFipU6zO01xJR1lOWBFe7/Q1ymdTAJwMr/53aU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=BVgd+rZs; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (91-158-51-183.elisa-laajakaista.fi [91.158.51.183])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id AD44511EB;
+	Wed,  6 Aug 2025 11:47:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1754473669;
+	bh=dBB2uil8xdYuqq7KSR4GUD8VnaNZFEk4RwnSQxJK8VA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BVgd+rZsh/ZxoGPA94UhjQapWLxk+gRiwJX2O0VIWWSiN8SZXjLCSOE6MZ8Brh1lv
+	 8XpLo+euerZ1zpRgloZxPxWGh/ChUK6DJKXc9a9m4Y+VmYiVxNuicDSagQBdkuQpE4
+	 LSv8nzfk6MdHfJRD3zCZIOhReZsK2sp0LHv5o6aI=
+Date: Wed, 6 Aug 2025 12:48:22 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Hans Verkuil <hverkuil+cisco@kernel.org>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Devarsh Thakkar <devarsht@ti.com>, Benoit Parrot <bparrot@ti.com>,
+	Hans Verkuil <hverkuil@kernel.org>, Mike Isely <isely@pobox.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+	Christian Gromm <christian.gromm@microchip.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>,
+	Dongliang Mu <dzm91@hust.edu.cn>, Jonathan Corbet <corbet@lwn.net>,
+	Tomasz Figa <tfiga@chromium.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Andy Walls <awalls@md.metrocast.net>,
+	Michael Tretter <m.tretter@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Bin Liu <bin.liu@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Mirela Rabulea <mirela.rabulea@nxp.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Michal Simek <michal.simek@amd.com>, Ming Qian <ming.qian@nxp.com>,
+	Zhou Peng <eagle.zhou@nxp.com>,
+	Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Vikash Garodia <quic_vgarodia@quicinc.com>,
+	Dikshita Agarwal <quic_dikshita@quicinc.com>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Nas Chung <nas.chung@chipsnmedia.com>,
+	Jackson Lee <jackson.lee@chipsnmedia.com>,
+	Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+	Houlong Wei <houlong.wei@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Tiffany Lin <tiffany.lin@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
+	Jacob Chen <jacob-chen@iotwrt.com>,
+	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	=?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+	Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Fabien Dessenne <fabien.dessenne@foss.st.com>,
+	Hugues Fruchet <hugues.fruchet@foss.st.com>,
+	Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Steve Longerbeam <slongerbeam@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Paul Kocialkowski <paulk@sys-base.io>,
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+	Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+	Corentin Labbe <clabbe@baylibre.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Tianshu Qiu <tian.shu.qiu@intel.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+	imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	mjpeg-users@lists.sourceforge.net
+Subject: Re: [PATCH 11/65] media: Replace file->private_data access with
+ custom functions
+Message-ID: <20250806094822.GA24768@pendragon.ideasonboard.com>
+References: <20250802-media-private-data-v1-0-eb140ddd6a9d@ideasonboard.com>
+ <20250802-media-private-data-v1-11-eb140ddd6a9d@ideasonboard.com>
+ <49e753f4-f626-49ae-bf23-d2aecfcc6282@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DU2PR04MB8726:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0df92b39-0886-4768-5dd2-08ddd4cc5010
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|7416014|376014|19092799006|38350700014|27256017;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?D17XFT/UAgmfkzQW4RZHAbawmIUpU7kLQLmMvShcbNyPtsen8iOtuWSQb7cd?=
- =?us-ascii?Q?dyBhQAij/0rUODshWOZH7EEUGuBKJU7/u+k40QWX57XhIGuM9NdIuJCjBOFP?=
- =?us-ascii?Q?E7L0N5TYjMMzaxFnSAEp+LE20OGmQw1SOTcAF+DGNUjv90EK3bZL6ULGBr2w?=
- =?us-ascii?Q?kp0Teavq/mlS5TVwBESM+z31VI83DjBKV0nKG2xuUK1DttSSodJbM1tdw/J+?=
- =?us-ascii?Q?B4jvton4UB5s4EBQfr82A9ymhsKKC4fWmY5mc1ltYOAd2ZIQX6/JhejwlblJ?=
- =?us-ascii?Q?8fA2vGc9J63N5VokAzyPfFLLdybYW+9yGLzGfsqNQycZGC8PqZobQEAuyXMG?=
- =?us-ascii?Q?v1twg13h7L4kCBYRPuzIte+19oGAEQtOC6ou+KjH+qfRlXWAneWj8pbpKsj1?=
- =?us-ascii?Q?iIY+ZHwxHQs+l7YbfsN3bjycm/Ex2qYXeXTqLv3+kvGovWnd4hiq06mmI7ir?=
- =?us-ascii?Q?0aRUs5jt3wtAD80YjSyIQzmipzcaf/eavfykmC2xK9eyhdQ8V7Mph1isZjm9?=
- =?us-ascii?Q?X/dXL0w/ERdVP3bg50KsAKKeDrIKQuxnsp2ULhyxTRkAHuJ990+znFHIBV6D?=
- =?us-ascii?Q?F0hHbsZFRZI+KIOKatCLWu4ZY59qedmCFkthV18SBSwzUTl1/MgaGachjKRT?=
- =?us-ascii?Q?oViwHg/PPEKlfncOexzZP6vTzaw5vUo/YxG5PNdKojcimL3fl/WXTueARIu4?=
- =?us-ascii?Q?CQkdQAneQW+bUwohThM3yF2Es1PVOafzM90avK2UrDtOAvqJCY4UZenXtrQZ?=
- =?us-ascii?Q?CveIMV1Cv/GF5uXFVQ7D+HLq2+mtplyqGkm7z1pHjBuTO3DRyw752LRPs1k2?=
- =?us-ascii?Q?R/pQd42nQc3B0Mvn3/wvxR+DJ5mBIWT6dkq6Z8KH5X21nCImg658+fYYMpT8?=
- =?us-ascii?Q?46HJHzw3JlUIReN55hada8ZHl6CIbxJ+46gwqSEjArd9yt+O/sIu1e57MTq4?=
- =?us-ascii?Q?ULTjaRN/Yn76b7fw4KigeQzXtLYpcdN3icXP+Rsnux2UnDbbawz3l7qL5ZbN?=
- =?us-ascii?Q?En6DiK7W4iWRae6nAmOn/lk4hK+QKFMztPlGQIf6zDmJjtvKUqtCdYfR4pFf?=
- =?us-ascii?Q?Y5GvIEeoEbqnB65u70JFi3dhxt+B1PQ7enP9diw5Ae1DA9QLPSKrE6aBLyDQ?=
- =?us-ascii?Q?kVXBzyMw7xxlsEAzhQ3nqVmlSGRd7eCnFpgPoPiyU8yPmQypcGKC1OshG4wa?=
- =?us-ascii?Q?ex5oOUQKkG7T5AkqXOlAvKHJ/JXoFiJ6G0QeXhW3wbKpEl3wS3JB7q3jdavb?=
- =?us-ascii?Q?PPiRzvodR/+pNIOU2iebrGj+JO28ziO4ni9X4xYVhC/CK0ar98mqLQPTBICG?=
- =?us-ascii?Q?2mFiE7bN47BOKE9VIk+8vWGG69yJK6nKIaoAizH0hBjETcj8p731rhyFLmlz?=
- =?us-ascii?Q?nGcPUHQdnm9I0znvVQfPDBr5ldrFjwIoGkfzC5hxCH7O3l3c94VBSjgb9FWY?=
- =?us-ascii?Q?sPqi/YzXjKmPB49k7KXYUNhEHe6CN/67U7lxEH1sPpHkAZnX9XCrT6ElffRI?=
- =?us-ascii?Q?kLc0mlWSsSPIRYJXUbZVOtWJZWKAn8Ht5Zuz?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(7416014)(376014)(19092799006)(38350700014)(27256017);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?KJoDYC5IQIHElRT8BIMB9HUvfhsC2/gQ1eLq3iKRXPn28Nflv+7kKluL8iLt?=
- =?us-ascii?Q?1DNydHJIp32PXeCHrbJomGmM+lGdc34v7akhcUF8kZZyVf1R9wyQbEzo3VOu?=
- =?us-ascii?Q?8XOdaQTuJpK6VSwen4aBQviN9yh0N+S+82jhBt38S3pXQYsh9+uMq4cDRPQQ?=
- =?us-ascii?Q?3UCyJ7RK6aKkY9KF8Tjxma9xFYihAFnXvZ1n8s+3SHhYO4hs/gdVHffqscu5?=
- =?us-ascii?Q?Ek5HB1o8isla0hEa00+1p4wmQdiYDAMpnhcMLgn+7n7zYyZFrnxbrtK7bSRb?=
- =?us-ascii?Q?1QGXMU+Kk4cqjgWGMPBBSEaHM+YZ+Qb2vXWGQxOsijen34/1D/LRTT+ISSJt?=
- =?us-ascii?Q?J6vfRJ/3VJyJiJlabhJXg7ipwHexa4TDxSPORJmOhIuxLkdJqlI45V9E2By9?=
- =?us-ascii?Q?4S9N+Rq8frl0kcoBKTQwOUA0LUDMXjTLPGrKOiWF5CLifskojytS+TdZgCCE?=
- =?us-ascii?Q?D2dCNoLUTFWAzb2zUFIOkPsEn+BEWz5sFsLbAn7+c1XdS4sidKxpER+ALX/Q?=
- =?us-ascii?Q?1sAEtrrIKM22dbnvRe1oLoBOl6ep4ZhshhYZqF2uQdBVQYz8un42WNqT4eLp?=
- =?us-ascii?Q?ak7tGzmiEeJYCo8RSXCLvk7MzA5cMwSnT+z71ZntfN32C1d8UGPCHQPpXWri?=
- =?us-ascii?Q?bAxda560j4JKF3hVA5GXNEDHHF7IDriuQANCnp7EYEB0OSRCfMkyxGvpzkm1?=
- =?us-ascii?Q?n+qPHOoMm5a37iANWkQYGl+IaPt1EDHc1kSzn65ByfzlsSoljcDvNXcHDLtd?=
- =?us-ascii?Q?eBzk9crFzGznWHKX3/lb4dEIVjEpuU+w38i+Uhg5mOyU9tbIc1RRS1DIJYtq?=
- =?us-ascii?Q?UmIn+YXFneOwbtVcN4A3mKcusYLazUUvpYGlrHIxMKrGFIL2Ij1P8ypN7AP1?=
- =?us-ascii?Q?J25xvvpv2kcYkc4J8WkSFvhOUn9xI07blUvTdySAgLn2PY+TKJ5GlQxePIFF?=
- =?us-ascii?Q?J3M0avl+N0QbWD7XF+LxOO8JVpPnyA58bhZiZPLtHlGtuPfvoBwZ+7vYRExC?=
- =?us-ascii?Q?1jw8+kojPq5vlPs7tJ4Gag75uhRQKesq8hmwWTIHMk921qe2wGN+5GX3i6lL?=
- =?us-ascii?Q?QLeN3JQxE8zadvwZNXkg+Z7da76+Ni1QiUUe4/g/Z18g2uT+XohloIycUA3/?=
- =?us-ascii?Q?WCX58sBqJnhREhDlixEpWG4OZTeANHcum3oC3WXv1oynXuz+GGK7QL3IKnD1?=
- =?us-ascii?Q?nP/2iLW8GncKLpSDRhjrbfy3zRNo2L/DSDsPm0XY1NxbUJQrnJUHo2qfV23a?=
- =?us-ascii?Q?EIKCzsURdiX9yAd05FMfIOVQ5MZiLSnnTpBxZ/92MAZidbNnLUDNM9Mgos3d?=
- =?us-ascii?Q?ws6FxdS7csWfBipbW/hwGnSlrUUMwX3MKVmy0crdZsHa8fYwpDa+uxbDZ9SM?=
- =?us-ascii?Q?8Rb4Qe5CtEsWC+z43cTrrwv0p1W87DPOEJHSwqd/6fNRY1cjdGXTagu8orV5?=
- =?us-ascii?Q?IamXHtf90xHQ+0/gl2QqR1mj1YRACjDUSq4iRNuWxt3znlGSoNmKrqb+aZxC?=
- =?us-ascii?Q?Zck4q7WNT6rhYElPXubLz+ZMXmJWvixNKaJchiR2zdaZj6YABeSRWixq6vI3?=
- =?us-ascii?Q?2RNxTM0lLXwgtqpimfTdCRc3BWur2JjTLMQb8yGN?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0df92b39-0886-4768-5dd2-08ddd4cc5010
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2025 09:33:34.0316
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IxsbmvM71bDbpt1tQzgB4NmYWXNbq6wXRYz96GxHeMfP21jd4LzKqntqdt4qHjOWT0DQRBQ4/UP2c2iAV1rPBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8726
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <49e753f4-f626-49ae-bf23-d2aecfcc6282@kernel.org>
 
-Hi Peng,
+Hi Hans,
 
-On Fri, Aug 01, 2025 at 12:34:23PM +0800, Peng Fan wrote:
-> i.MX95 USB2 inside HSIOMIX could still wakeup Linux, even if HSIOMIX
-> power domain(Digital logic) is off. There is still always on logic
-> have the wakeup capability which is out band wakeup capbility.
+On Wed, Aug 06, 2025 at 10:16:37AM +0200, Hans Verkuil wrote:
+> On 02/08/2025 11:22, Jacopo Mondi wrote:
+> > From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > 
+> > Accessing file->private_data manually to retrieve the v4l2_fh pointer is
+> > error-prone, as the field is a void * and will happily cast implicitly
+> > to any pointer type.
+> > 
+> > Replace all remaining locations that read the v4l2_fh pointer directly
+> > from file->private_data and cast it to driver-specific file handle
+> > structures with driver-specific functions that use file_to_v4l2_fh() and
+> > perform the same cast.
+> > 
+> > No functional change is intended, this only paves the way to remove
+> > direct accesses to file->private_data and make V4L2 drivers safer.
+> > Other accesses to the field will be addressed separately.
+> > 
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> > ---
+> >  drivers/media/pci/ivtv/ivtv-driver.h               |  5 ++++
+> >  drivers/media/pci/ivtv/ivtv-fileops.c              | 10 +++----
+> >  drivers/media/pci/ivtv/ivtv-ioctl.c                |  8 +++---
+> >  drivers/media/platform/allegro-dvt/allegro-core.c  |  7 ++++-
+> >  drivers/media/platform/amlogic/meson-ge2d/ge2d.c   |  8 ++++--
+> >  .../media/platform/chips-media/coda/coda-common.c  |  7 ++++-
+> >  .../platform/chips-media/wave5/wave5-helper.c      |  2 +-
+> >  .../media/platform/chips-media/wave5/wave5-vpu.h   |  5 ++++
+> >  drivers/media/platform/m2m-deinterlace.c           |  7 ++++-
+> >  .../media/platform/mediatek/jpeg/mtk_jpeg_core.c   |  7 ++++-
+> >  drivers/media/platform/mediatek/mdp/mtk_mdp_m2m.c  |  7 ++++-
+> >  .../media/platform/mediatek/mdp3/mtk-mdp3-m2m.c    |  7 ++++-
+> >  .../mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c   |  2 +-
+> >  .../mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h   |  5 ++++
+> >  .../mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c   |  2 +-
+> >  .../mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h   |  5 ++++
+> >  drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c     |  7 ++++-
+> >  drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c |  7 ++++-
+> >  drivers/media/platform/nxp/mx2_emmaprp.c           |  7 ++++-
+> >  drivers/media/platform/renesas/rcar_fdp1.c         |  7 ++++-
+> >  drivers/media/platform/renesas/rcar_jpu.c          |  7 ++++-
+> >  drivers/media/platform/rockchip/rga/rga.c          |  3 +--
+> >  drivers/media/platform/rockchip/rga/rga.h          |  5 ++++
+> >  drivers/media/platform/rockchip/rkvdec/rkvdec.c    |  2 +-
+> >  drivers/media/platform/rockchip/rkvdec/rkvdec.h    |  5 ++++
+> >  .../media/platform/samsung/exynos-gsc/gsc-core.h   |  6 +++++
+> >  .../media/platform/samsung/exynos-gsc/gsc-m2m.c    |  6 ++---
+> >  .../media/platform/samsung/exynos4-is/fimc-core.h  |  5 ++++
+> >  .../media/platform/samsung/exynos4-is/fimc-m2m.c   |  2 +-
+> >  drivers/media/platform/samsung/s5p-g2d/g2d.c       |  7 +++--
+> >  .../media/platform/samsung/s5p-jpeg/jpeg-core.c    |  9 +++++--
+> >  drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c   |  6 ++---
+> >  .../platform/samsung/s5p-mfc/s5p_mfc_common.h      |  6 +++++
+> >  drivers/media/platform/st/sti/bdisp/bdisp-v4l2.c   |  7 ++++-
+> >  drivers/media/platform/st/sti/delta/delta-v4l2.c   | 26 +++++++++++-------
+> >  drivers/media/platform/st/sti/hva/hva-v4l2.c       | 31 ++++++++++++----------
+> >  drivers/media/platform/st/sti/hva/hva.h            |  2 --
+> >  drivers/media/platform/st/stm32/dma2d/dma2d.c      |  7 +++--
+> >  drivers/media/platform/sunxi/sun8i-di/sun8i-di.c   |  3 +--
+> >  .../platform/sunxi/sun8i-rotate/sun8i_rotate.c     |  3 +--
+> >  drivers/media/platform/ti/omap3isp/ispvideo.c      |  4 +--
+> >  drivers/media/platform/ti/omap3isp/ispvideo.h      |  6 +++++
+> >  drivers/media/platform/verisilicon/hantro.h        |  5 ++++
+> >  drivers/media/platform/verisilicon/hantro_drv.c    |  3 +--
+> >  drivers/staging/media/imx/imx-media-csc-scaler.c   |  7 ++++-
+> >  drivers/staging/media/meson/vdec/vdec.c            | 24 ++++++-----------
+> >  drivers/staging/media/meson/vdec/vdec.h            |  5 ++++
+> >  drivers/staging/media/sunxi/cedrus/cedrus.c        |  3 +--
+> >  drivers/staging/media/sunxi/cedrus/cedrus.h        |  5 ++++
+> >  drivers/staging/media/sunxi/cedrus/cedrus_video.c  |  5 ----
+> >  50 files changed, 237 insertions(+), 100 deletions(-)
+> > 
+> > diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
+> > index a6ffa99e16bc64a5b7d3e48c1ab32b49a7989242..cad548b28e360ecfe2bcb9fcb5d12cd8823c3727 100644
+> > --- a/drivers/media/pci/ivtv/ivtv-driver.h
+> > +++ b/drivers/media/pci/ivtv/ivtv-driver.h
+> > @@ -388,6 +388,11 @@ static inline struct ivtv_open_id *fh2id(struct v4l2_fh *fh)
+> >  	return container_of(fh, struct ivtv_open_id, fh);
+> >  }
+> >  
+> > +static inline struct ivtv_open_id *file2id(struct file *filp)
+> > +{
+> > +	return container_of(file_to_v4l2_fh(filp), struct ivtv_open_id, fh);
 > 
-> So use device_set_out_band_wakeup for i.MX95 to make sure usb2 could
-> wakeup system even if HSIOMIX power domain is in off state.
+> Why not write:
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/usb/chipidea/ci_hdrc_imx.c | 8 ++++++++
->  include/linux/usb/chipidea.h       | 1 +
->  2 files changed, 9 insertions(+)
+> 	return fh2id(file_to_v4l2_fh(filp));
 > 
-> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-> index e1ec9b38f5b9ba0568101b51fbf16b99461b6ee2..7a3360d8a0fd065394393de829108a12c27c85b9 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
-> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-> @@ -79,6 +79,10 @@ static const struct ci_hdrc_imx_platform_flag imx8ulp_usb_data = {
->  		CI_HDRC_HAS_PORTSC_PEC_MISSED,
->  };
->  
-> +static const struct ci_hdrc_imx_platform_flag imx95_usb_data = {
-> +	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM | CI_HDRC_OUT_BAND_WAKEUP,
-> +};
-> +
->  static const struct ci_hdrc_imx_platform_flag s32g_usb_data = {
->  	.flags = CI_HDRC_DISABLE_HOST_STREAMING,
->  };
-> @@ -94,6 +98,7 @@ static const struct of_device_id ci_hdrc_imx_dt_ids[] = {
->  	{ .compatible = "fsl,imx7d-usb", .data = &imx7d_usb_data},
->  	{ .compatible = "fsl,imx7ulp-usb", .data = &imx7ulp_usb_data},
->  	{ .compatible = "fsl,imx8ulp-usb", .data = &imx8ulp_usb_data},
-> +	{ .compatible = "fsl,imx95-usb", .data = &imx95_usb_data},
->  	{ .compatible = "nxp,s32g2-usb", .data = &s32g_usb_data},
->  	{ /* sentinel */ }
->  };
-> @@ -569,6 +574,9 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
->  
->  	device_set_wakeup_capable(dev, true);
->  
-> +	if (pdata.flags & CI_HDRC_OUT_BAND_WAKEUP)
-> +		device_set_out_band_wakeup(dev, true);
-> +
+> Same for all other drivers that do this. I prefer to have the contained_of()
+> in just one place.
 
-In current design, ci_hdrc_imx_probe() will create another platform
-device B which will be a child of current device A. Furthermore, device
-A and device B will attached to a same power domain. In this case, some
-conflict setting may happen. For example, if the user wants to enable
-wakeup for this USB port, they may echo "enabled" to wakeup file for
-both device A and device B as before. As a result, device A is out
-band wakeup so it doesn't depend on power domain on, but device B has
-also enabled wakeup so the power domain will keep on finally. Actually,
-the power domain needs to be off for imx95.
+Because fh2id gets removed in "[PATCH 57/65] media: ivtv: Access v4l2_fh
+from file". I can use it in this patch and drop it later, would you
+prefer that ?
 
-So I think only letting the parent device A itself attach to power domain
-should be enough. If it's the right way, then below change needs to be
-included to avoid potential misbehavior.
-
-diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-index 694b4a8e4e1d..c2ca81fe5e09 100644
---- a/drivers/usb/chipidea/core.c
-+++ b/drivers/usb/chipidea/core.c
-@@ -915,6 +915,8 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
-        if (ret)
-                goto err;
-
-+       dev_pm_domain_detach(&pdev->dev, false);
-+
-        return pdev;
-
-Thanks,
-Xu Yang
-
->  	return 0;
->  
->  disable_device:
-> diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
-> index e17ebeee24e3ecc4b1c2d153d9ea9b656b5a3d35..c6451191d2de68607a9380482701d11f949d0ff7 100644
-> --- a/include/linux/usb/chipidea.h
-> +++ b/include/linux/usb/chipidea.h
-> @@ -66,6 +66,7 @@ struct ci_hdrc_platform_data {
->  #define CI_HDRC_HAS_PORTSC_PEC_MISSED	BIT(17)
->  #define CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS	BIT(18)
->  #define	CI_HDRC_HAS_SHORT_PKT_LIMIT	BIT(19)
-> +#define	CI_HDRC_OUT_BAND_WAKEUP		BIT(20)
->  	enum usb_dr_mode	dr_mode;
->  #define CI_HDRC_CONTROLLER_RESET_EVENT		0
->  #define CI_HDRC_CONTROLLER_STOPPED_EVENT	1
+> > +}
+> > +
+> >  struct yuv_frame_info
+> >  {
+> >  	u32 update;
 > 
-> -- 
-> 2.37.1
+> <snip>
 > 
+> > diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
+> > index 1f134e08923a528cc676f825da68951c97ac2f25..74977f3ae4844022c04de877f31b4fc6aaac0749 100644
+> > --- a/drivers/media/platform/allegro-dvt/allegro-core.c
+> > +++ b/drivers/media/platform/allegro-dvt/allegro-core.c
+> > @@ -302,6 +302,11 @@ struct allegro_channel {
+> >  	unsigned int error;
+> >  };
+> >  
+> > +static inline struct allegro_channel *file_to_channel(struct file *filp)
+> > +{
+> > +	return container_of(file_to_v4l2_fh(filp), struct allegro_channel, fh);
+> > +}
+> > +
+> >  static inline int
+> >  allegro_channel_get_i_frame_qp(struct allegro_channel *channel)
+> >  {
+> > @@ -3229,7 +3234,7 @@ static int allegro_open(struct file *file)
+> >  
+> >  static int allegro_release(struct file *file)
+> >  {
+> > -	struct allegro_channel *channel = fh_to_channel(file->private_data);
+> > +	struct allegro_channel *channel = file_to_channel(file);
+> 
+> So a file_to_channel inline function was added, but it is used in just one
+> place.
+> 
+> I would prefer to just drop the inline function and instead write:
+> 
+> 	struct allegro_channel *channel = fh_to_channel(file_to_v4l2_fh(file));
+> 
+> If this is needed in two or more places, then the extra inline makes sense,
+> but it is a fairly common pattern that it is only needed in the release function.
+> 
+> Adding a new inline just for that seems overkill to me.
+
+file_to_channel() gets used in more places in "[PATCH 29/65] media:
+allegro: Access v4l2_fh from file", where fh_to_channel() is dropped.
+I'd rather keep it in this patch instead of having to modify the
+allegro_release() function in patch 29/65.
+
+> >  
+> >  	v4l2_m2m_ctx_release(channel->fh.m2m_ctx);
+> >  
+
+-- 
+Regards,
+
+Laurent Pinchart
 
