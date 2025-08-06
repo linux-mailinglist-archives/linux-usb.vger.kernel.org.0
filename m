@@ -1,203 +1,305 @@
-Return-Path: <linux-usb+bounces-26533-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26534-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7183B1C418
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 12:18:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 491B6B1C42F
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 12:24:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BC083BDECF
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 10:18:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 501557A14E7
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 10:22:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA1228A70C;
-	Wed,  6 Aug 2025 10:18:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA98228B3EF;
+	Wed,  6 Aug 2025 10:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OysWKLhf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JrWPG7JK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3B51E0DE3
-	for <linux-usb@vger.kernel.org>; Wed,  6 Aug 2025 10:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AD123FC4C;
+	Wed,  6 Aug 2025 10:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754475503; cv=none; b=ISaYH4tpAXfJmo6io0XCrNHOIyPTlV3ADZlU2+MRu2zZPUQ7YyCxs+awioTirWu0BGmWhD1yQOnxA/ROl0p/wMOPU7Xf2B86Hvzn+cWEHJhqsrjIgzDteWQEN8YMK7kWHkMk+j6S9JW8Nz8JiGmRno5ECqKHA6rGwQZt8iBA18g=
+	t=1754475847; cv=none; b=XkwRRFRgZt4HPki0UTArTS8dLh9L823eepoEvGYlVA15oIcIkg0LVa+QAX9jRKy94bdMD/HIQ+HGuQUi69WqaNYei0uuVEgFCHMABJUr7dS/wql/wPuOcPNsL2IbL4AyV5cw+IrYNNXFkmstFUdVrkoJZN+b+Bpih1Yr5ng903E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754475503; c=relaxed/simple;
-	bh=V+tx+6mM+JuNzDxjB+VYuHFYKY7ox6O/A5wpbBaVVkc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cioVSEGQWqf6BTz/uB2Fb9mapJ2wDB76AV0IE8i+ONgOFliXoyVXaxwJtuW+kVesUuCJo8YWf2pkoKhkuAQRqYksvL48Do7wZ79FNQHXkLN1QmzBkdysKKxDTAuDTqNu4HO+uthf3uMcy9FvdWAoIQ6h82JT6CGsFbaZ/22DxiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OysWKLhf; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-55b7bf0a8d5so4737e87.0
-        for <linux-usb@vger.kernel.org>; Wed, 06 Aug 2025 03:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1754475500; x=1755080300; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q7qQUS8+u2xO+u0F3mnuNBgSEsUV5KSCo/w8cVWRKao=;
-        b=OysWKLhfHvOK/fjO2AD53yI8EO40LchKB+Q5QFmhXA17M2nvNB4TVxcttpdzc4J6ZP
-         LQSjVgO/umbi1qp5K5U8YFbJDQG7AxIlVO74Iug5EZflhTcSNKJAr2+IUMtVKqs7g4X1
-         arIduR+mUWzD15DqQK5zIUkv3fmhkPet5AHD9DShC5w2jsosnCtJXhBolECvcdBR/7il
-         cyhk8BQnqIMRKLmGQf6ybIaiLcxGziRlG9DP3A7vVpwov4g/dxr47S8wQf3HU+H/Z9NJ
-         mO/YmtcWVM4lc0ITJmSsdLEEiESas8JVEh0aNDzLahFmccY6MONdYtXzCfr2/4PpA0QB
-         DUeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754475500; x=1755080300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q7qQUS8+u2xO+u0F3mnuNBgSEsUV5KSCo/w8cVWRKao=;
-        b=NgIXeTQCcMXHeTiRGVE5dWRPRTP4fb+y3L468pz/4uDYEqSBUkB2qP0mFsY1HhKaKv
-         NI5WKqRBGm1dCDSZIZ8C9aVcbf5gO3/UGAnNVfkw4OTKPWXySOOuRJOPGxSshTTjwT2y
-         u3iEyCfJYd1fE+TJt4hDEGLbrJ5EOZz1kEXrSEiw8lcs12msbVsVrcw4z8j3Vai7zFme
-         f7fWDmR6Jxh+YFcD9G+7RtKum5SISitgVIxahdpSyVbYlZa8ZJkDG+mM+3URQgBTxhqq
-         6oiNghAqV+v1a7HTRVcwAAoEabQ9PQweATQHzKuPPEY3ZSUpw4utQpEOUHwhsw8PpGHT
-         1PXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXfXs+2QLRStk5hgINV2wMz/Fv2M5xjBiVb/i1XM2rOs2uErDniSXVEqLqp3A3jbHV3OcqRPotmhTI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNKBcwXH6kulBW1RevF/ehSziRr1gFJI4gfrGjRMMGVwKNvVDY
-	h4cYM/543sOj1BiocmVOOpDsYTKYiZsfstQB7nM8rpyoCH2I7/Wp8nj9bWCVNrqxGH2rW06I5hL
-	ANLboVKJZnxrAqWvXhA/cjLmMewWjNu/KB1WTTlO2
-X-Gm-Gg: ASbGnctYnnRKEY7aFt35s+Qn62XmO+lEN7tG2ebHq57/fXRCqxSx2HAR4/nSDdnlHkr
-	gqepkPWlMWJwBNYEDH6LMcOhBnNxt8W0fC1s99oW6yQsqTdkMyyP/OP2W0EB0zw/PryWrQ69IRu
-	W8qjuY6CLFvPO+zY6PzOpfGTZlMNUor6Npk/28nQhi19Tgb2uD2FUQbr28krjnvPkOHCfWLqLIr
-	lXDyAa9FWtOwX1uibBRmLMq8oB5XhCU0/0=
-X-Google-Smtp-Source: AGHT+IGeMeQryjlZT6D1fsHjYZ3n8Bi3hG2qr3dC3XS/BHQDCrrn9M5S+zHCM6dJmQNO0SOq+LzTsHxoa80+mLwWXfQ=
-X-Received: by 2002:ac2:5f4d:0:b0:55a:2d72:de56 with SMTP id
- 2adb3069b0e04-55caf7edc53mr180825e87.5.1754475499394; Wed, 06 Aug 2025
- 03:18:19 -0700 (PDT)
+	s=arc-20240116; t=1754475847; c=relaxed/simple;
+	bh=l70ptxZLQqmas0XfEsGv6By1cn6ZG33TtWo6AIwUVzY=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=a5DNFNG4YvwatJvJI72jUJbrarB1GPvwARQt3KK6TrI4o+LkADy4RRLo19LMC25g9civvXukMVyIuqEZ7Q026i3hR2Icx2ZMa0Gf7pwIH4hmBE7GBkzaO2D4wRM3uQS2xQyb8c82pg9sr5dIfG85zK4uek/HamfdkZmZ1Pej/20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JrWPG7JK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554E6C4CEE7;
+	Wed,  6 Aug 2025 10:23:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754475846;
+	bh=l70ptxZLQqmas0XfEsGv6By1cn6ZG33TtWo6AIwUVzY=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=JrWPG7JKmLOWiqyPyPHBEwdNSOhBgbgwZKlr53ch1KYUqMW5NJhgqWGt37Bfpu5kz
+	 qlK/s7XBDhAWY0ePEoJGylQwPvPthAY1cgG03gzQ0xnpLyNfYH9Ltn6bRO9o6VKIgv
+	 8mL/VP5WkpU6/u8BHdtm+iCND03lhAl9fYMzEq00cNwYjcE4kn4g2K7GUjcU1SxcIh
+	 oRJMiMZbiPrzXULl22miQXDKokgCLeq9OBsipp+PpQccKHMl2ra3uH+9Je0d/Du/UB
+	 W2HdU2A3sG91p4NrtXbhl0f8Q5lRZPdIG4rgH0nDKYqpAltVKIDHkj/Whd+ALlZqaM
+	 XT3W88x3kCbog==
+Message-ID: <5840e9b2-4940-4343-9f55-58ad3dfb7075@kernel.org>
+Date: Wed, 6 Aug 2025 12:23:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250805063413.2934208-1-khtsai@google.com> <20250805232843.xka5z3edqatoyzqh@synopsys.com>
-In-Reply-To: <20250805232843.xka5z3edqatoyzqh@synopsys.com>
-From: Kuen-Han Tsai <khtsai@google.com>
-Date: Wed, 6 Aug 2025 18:17:52 +0800
-X-Gm-Features: Ac12FXxXwMZ5CiEiQhgKwbVYZvnkYpPiT10OV2Mv6NwRveoq6oFso5eku6xc5gY
-Message-ID: <CAKzKK0r7StRcA=dEZSzK2=yN-HdFyKDsDV=+yzTdE0_UJboORw@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: Ignore late xferNotReady event to prevent halt timeout
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, stable <stable@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [PATCH 11/65] media: Replace file->private_data access with
+ custom functions
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Devarsh Thakkar
+ <devarsht@ti.com>, Benoit Parrot <bparrot@ti.com>,
+ Hans Verkuil <hverkuil@kernel.org>, Mike Isely <isely@pobox.com>,
+ Hans de Goede <hansg@kernel.org>,
+ Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+ Christian Gromm <christian.gromm@microchip.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alex Shi
+ <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>,
+ Dongliang Mu <dzm91@hust.edu.cn>, Jonathan Corbet <corbet@lwn.net>,
+ Tomasz Figa <tfiga@chromium.org>, Marek Szyprowski
+ <m.szyprowski@samsung.com>, Andy Walls <awalls@md.metrocast.net>,
+ Michael Tretter <m.tretter@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Bin Liu <bin.liu@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Dmitry Osipenko <digetx@gmail.com>, Thierry Reding
+ <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+ Mirela Rabulea <mirela.rabulea@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+ Michal Simek <michal.simek@amd.com>, Ming Qian <ming.qian@nxp.com>,
+ Zhou Peng <eagle.zhou@nxp.com>, Xavier Roumegue
+ <xavier.roumegue@oss.nxp.com>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Dikshita Agarwal <quic_dikshita@quicinc.com>,
+ Abhinav Kumar <abhinav.kumar@linux.dev>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+ Samuel Holland <samuel@sholland.org>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Nas Chung <nas.chung@chipsnmedia.com>,
+ Jackson Lee <jackson.lee@chipsnmedia.com>,
+ Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+ Houlong Wei <houlong.wei@mediatek.com>,
+ Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+ Tiffany Lin <tiffany.lin@mediatek.com>,
+ Yunfei Dong <yunfei.dong@mediatek.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>,
+ Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
+ Jacob Chen <jacob-chen@iotwrt.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+ Heiko Stuebner <heiko@sntech.de>,
+ Detlev Casanova <detlev.casanova@collabora.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
+ <alim.akhtar@samsung.com>, Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+ Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+ Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Fabien Dessenne <fabien.dessenne@foss.st.com>,
+ Hugues Fruchet <hugues.fruchet@foss.st.com>,
+ Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+ Steve Longerbeam <slongerbeam@gmail.com>, Maxime Ripard
+ <mripard@kernel.org>, Paul Kocialkowski <paulk@sys-base.io>,
+ =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+ Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Corentin Labbe <clabbe@baylibre.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Bingbu Cao <bingbu.cao@intel.com>, Tianshu Qiu <tian.shu.qiu@intel.com>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-staging@lists.linux.dev, linux-doc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-tegra@vger.kernel.org, imx@lists.linux.dev,
+ linux-renesas-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+ linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
+ linux-rockchip@lists.infradead.org,
+ linux-stm32@st-md-mailman.stormreply.com, mjpeg-users@lists.sourceforge.net
+References: <20250802-media-private-data-v1-0-eb140ddd6a9d@ideasonboard.com>
+ <20250802-media-private-data-v1-11-eb140ddd6a9d@ideasonboard.com>
+ <49e753f4-f626-49ae-bf23-d2aecfcc6282@kernel.org>
+ <20250806094822.GA24768@pendragon.ideasonboard.com>
+Content-Language: en-US, nl
+In-Reply-To: <20250806094822.GA24768@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Thinh,
+On 06/08/2025 11:48, Laurent Pinchart wrote:
+> Hi Hans,
+> 
+> On Wed, Aug 06, 2025 at 10:16:37AM +0200, Hans Verkuil wrote:
+>> On 02/08/2025 11:22, Jacopo Mondi wrote:
+>>> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>>>
+>>> Accessing file->private_data manually to retrieve the v4l2_fh pointer is
+>>> error-prone, as the field is a void * and will happily cast implicitly
+>>> to any pointer type.
+>>>
+>>> Replace all remaining locations that read the v4l2_fh pointer directly
+>>> from file->private_data and cast it to driver-specific file handle
+>>> structures with driver-specific functions that use file_to_v4l2_fh() and
+>>> perform the same cast.
+>>>
+>>> No functional change is intended, this only paves the way to remove
+>>> direct accesses to file->private_data and make V4L2 drivers safer.
+>>> Other accesses to the field will be addressed separately.
+>>>
+>>> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>>> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+>>> ---
+>>>  drivers/media/pci/ivtv/ivtv-driver.h               |  5 ++++
+>>>  drivers/media/pci/ivtv/ivtv-fileops.c              | 10 +++----
+>>>  drivers/media/pci/ivtv/ivtv-ioctl.c                |  8 +++---
+>>>  drivers/media/platform/allegro-dvt/allegro-core.c  |  7 ++++-
+>>>  drivers/media/platform/amlogic/meson-ge2d/ge2d.c   |  8 ++++--
+>>>  .../media/platform/chips-media/coda/coda-common.c  |  7 ++++-
+>>>  .../platform/chips-media/wave5/wave5-helper.c      |  2 +-
+>>>  .../media/platform/chips-media/wave5/wave5-vpu.h   |  5 ++++
+>>>  drivers/media/platform/m2m-deinterlace.c           |  7 ++++-
+>>>  .../media/platform/mediatek/jpeg/mtk_jpeg_core.c   |  7 ++++-
+>>>  drivers/media/platform/mediatek/mdp/mtk_mdp_m2m.c  |  7 ++++-
+>>>  .../media/platform/mediatek/mdp3/mtk-mdp3-m2m.c    |  7 ++++-
+>>>  .../mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c   |  2 +-
+>>>  .../mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h   |  5 ++++
+>>>  .../mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c   |  2 +-
+>>>  .../mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h   |  5 ++++
+>>>  drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c     |  7 ++++-
+>>>  drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c |  7 ++++-
+>>>  drivers/media/platform/nxp/mx2_emmaprp.c           |  7 ++++-
+>>>  drivers/media/platform/renesas/rcar_fdp1.c         |  7 ++++-
+>>>  drivers/media/platform/renesas/rcar_jpu.c          |  7 ++++-
+>>>  drivers/media/platform/rockchip/rga/rga.c          |  3 +--
+>>>  drivers/media/platform/rockchip/rga/rga.h          |  5 ++++
+>>>  drivers/media/platform/rockchip/rkvdec/rkvdec.c    |  2 +-
+>>>  drivers/media/platform/rockchip/rkvdec/rkvdec.h    |  5 ++++
+>>>  .../media/platform/samsung/exynos-gsc/gsc-core.h   |  6 +++++
+>>>  .../media/platform/samsung/exynos-gsc/gsc-m2m.c    |  6 ++---
+>>>  .../media/platform/samsung/exynos4-is/fimc-core.h  |  5 ++++
+>>>  .../media/platform/samsung/exynos4-is/fimc-m2m.c   |  2 +-
+>>>  drivers/media/platform/samsung/s5p-g2d/g2d.c       |  7 +++--
+>>>  .../media/platform/samsung/s5p-jpeg/jpeg-core.c    |  9 +++++--
+>>>  drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c   |  6 ++---
+>>>  .../platform/samsung/s5p-mfc/s5p_mfc_common.h      |  6 +++++
+>>>  drivers/media/platform/st/sti/bdisp/bdisp-v4l2.c   |  7 ++++-
+>>>  drivers/media/platform/st/sti/delta/delta-v4l2.c   | 26 +++++++++++-------
+>>>  drivers/media/platform/st/sti/hva/hva-v4l2.c       | 31 ++++++++++++----------
+>>>  drivers/media/platform/st/sti/hva/hva.h            |  2 --
+>>>  drivers/media/platform/st/stm32/dma2d/dma2d.c      |  7 +++--
+>>>  drivers/media/platform/sunxi/sun8i-di/sun8i-di.c   |  3 +--
+>>>  .../platform/sunxi/sun8i-rotate/sun8i_rotate.c     |  3 +--
+>>>  drivers/media/platform/ti/omap3isp/ispvideo.c      |  4 +--
+>>>  drivers/media/platform/ti/omap3isp/ispvideo.h      |  6 +++++
+>>>  drivers/media/platform/verisilicon/hantro.h        |  5 ++++
+>>>  drivers/media/platform/verisilicon/hantro_drv.c    |  3 +--
+>>>  drivers/staging/media/imx/imx-media-csc-scaler.c   |  7 ++++-
+>>>  drivers/staging/media/meson/vdec/vdec.c            | 24 ++++++-----------
+>>>  drivers/staging/media/meson/vdec/vdec.h            |  5 ++++
+>>>  drivers/staging/media/sunxi/cedrus/cedrus.c        |  3 +--
+>>>  drivers/staging/media/sunxi/cedrus/cedrus.h        |  5 ++++
+>>>  drivers/staging/media/sunxi/cedrus/cedrus_video.c  |  5 ----
+>>>  50 files changed, 237 insertions(+), 100 deletions(-)
+>>>
+>>> diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
+>>> index a6ffa99e16bc64a5b7d3e48c1ab32b49a7989242..cad548b28e360ecfe2bcb9fcb5d12cd8823c3727 100644
+>>> --- a/drivers/media/pci/ivtv/ivtv-driver.h
+>>> +++ b/drivers/media/pci/ivtv/ivtv-driver.h
+>>> @@ -388,6 +388,11 @@ static inline struct ivtv_open_id *fh2id(struct v4l2_fh *fh)
+>>>  	return container_of(fh, struct ivtv_open_id, fh);
+>>>  }
+>>>  
+>>> +static inline struct ivtv_open_id *file2id(struct file *filp)
+>>> +{
+>>> +	return container_of(file_to_v4l2_fh(filp), struct ivtv_open_id, fh);
+>>
+>> Why not write:
+>>
+>> 	return fh2id(file_to_v4l2_fh(filp));
+>>
+>> Same for all other drivers that do this. I prefer to have the contained_of()
+>> in just one place.
+> 
+> Because fh2id gets removed in "[PATCH 57/65] media: ivtv: Access v4l2_fh
+> from file". I can use it in this patch and drop it later, would you
+> prefer that ?
 
-Thank you for your review.
-
-On Wed, Aug 6, 2025 at 7:28=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys.=
-com> wrote:
->
-> On Tue, Aug 05, 2025, Kuen-Han Tsai wrote:
-> > During a device-initiated disconnect, the End Transfer command resets
-> > the event filter, allowing a new xferNotReady event to be generated
-> > before the controller is fully halted. Processing this late event
-> > incorrectly triggers a Start Transfer, which prevents the controller
-> > from halting and results in a DSTS.DEVCTLHLT bit polling timeout.
-> >
-> > Ignore the late xferNotReady event if the controller is already in a
-> > disconnected state.
-> >
-> > Fixes: 8f608e8ab628 ("usb: dwc3: gadget: remove unnecessary 'dwc' param=
-eter")
->
-> The Fixes should target since the beginning of the driver:
-> 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
-
-Commit 72246da40f37 doesn't have the dwc->connected member. Should we
-change the Fixes tag to f09ddcfcb8c5 ("usb: dwc3: gadget: Prevent EP
-queuing while stopping transfers")?
-That's the commit where the "dwc->connected =3D false" logic was moved befo=
-re
-stopping active transfers within the pullup function.
-
->
-> > Cc: stable <stable@kernel.org>
-> > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
-> > ---
-> > Tracing:
-> >
-> > # Stop active transfers by sending End Transfer commands
-> > dwc3_gadget_ep_cmd: ep1out: cmd 'End Transfer' [20d08] params 00000000 =
-00000000 00000000 --> status: Successful
-> > dwc3_gadget_ep_cmd: ep1in: cmd 'End Transfer' [40d08] params 00000000 0=
-0000000 00000000 --> status: Successful
-> >  ...
-> > # Recieve an xferNotReady event on an ISOC IN endpoint
-> > dwc3_event: event (35d010c6): ep1in: Transfer Not Ready [000035d0] (Not=
- Active)
-> > dwc3_gadget_ep_cmd: ep1in: cmd 'Start Transfer' [35d60406] params 00000=
-000 ffffb620 00000000 --> status: Successful
-> > dwc3_gadget_ep_cmd: ep2in: cmd 'End Transfer' [30d08] params 00000000 0=
-0000000 00000000 --> status: Timed Out
-> >  ...
-> > # Start polling DSTS.DEVCTRLHLT
-> > dwc3_gadget_run_stop: start polling DWC3_DSTS_DEVCTRLHLT
-> >  ...
-> > # HALT timeout and print out the endpoint status for debugging
-> > dwc3_gadget_run_stop: finish polling DWC3_DSTS_DEVCTRLHLT, is_on=3D0, r=
-eg=3D0
-> > dwc3_gadget_ep_status: ep1out: mps 1024/2765 streams 16 burst 5 ring 64=
-/56 flags E:swbp:>
-> > dwc3_gadget_ep_status: ep1in: mps 1024/1024 streams 16 burst 2 ring 21/=
-64 flags E:swBp:<
-> > dwc3_gadget_ep_status: ep2out: mps 1024/2765 streams 16 burst 5 ring 56=
-/48 flags e:swbp:>
-> > ---
-> >  drivers/usb/dwc3/gadget.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> >
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 25db36c63951..ad89cbeea761 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -3777,6 +3777,15 @@ static void dwc3_gadget_endpoint_transfer_comple=
-te(struct dwc3_ep *dep,
-> >  static void dwc3_gadget_endpoint_transfer_not_ready(struct dwc3_ep *de=
-p,
-> >               const struct dwc3_event_depevt *event)
-> >  {
-> > +     /*
-> > +      * During a device-initiated disconnect, a late xferNotReady even=
-t can
-> > +      * be generated after the End Transfer command resets the event f=
-ilter,
-> > +      * but before the controller is halted. Ignore it to prevent a ne=
-w
-> > +      * transfer from starting.
-> > +      */
-> > +     if (dep->dwc->connected)
->
-> Did you test this? This is supposed to be if (!dep->dwc->connected)
-> right?
->
-
-You're absolutely right, I'll update your suggested change in the next
-patch. Sorry for the mistake.
-
-The code in my Android testing environment was correct and we've
-verified that it resolves the halt problem.
+Based on the irc discussion some drivers need both, so yes, I prefer that the
+file2foo inline calls the fh2foo inline.
 
 Regards,
-Kuen-Han
 
+	Hans
 
+> 
+>>> +}
+>>> +
+>>>  struct yuv_frame_info
+>>>  {
+>>>  	u32 update;
+>>
+>> <snip>
+>>
+>>> diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
+>>> index 1f134e08923a528cc676f825da68951c97ac2f25..74977f3ae4844022c04de877f31b4fc6aaac0749 100644
+>>> --- a/drivers/media/platform/allegro-dvt/allegro-core.c
+>>> +++ b/drivers/media/platform/allegro-dvt/allegro-core.c
+>>> @@ -302,6 +302,11 @@ struct allegro_channel {
+>>>  	unsigned int error;
+>>>  };
+>>>  
+>>> +static inline struct allegro_channel *file_to_channel(struct file *filp)
+>>> +{
+>>> +	return container_of(file_to_v4l2_fh(filp), struct allegro_channel, fh);
+>>> +}
+>>> +
+>>>  static inline int
+>>>  allegro_channel_get_i_frame_qp(struct allegro_channel *channel)
+>>>  {
+>>> @@ -3229,7 +3234,7 @@ static int allegro_open(struct file *file)
+>>>  
+>>>  static int allegro_release(struct file *file)
+>>>  {
+>>> -	struct allegro_channel *channel = fh_to_channel(file->private_data);
+>>> +	struct allegro_channel *channel = file_to_channel(file);
+>>
+>> So a file_to_channel inline function was added, but it is used in just one
+>> place.
+>>
+>> I would prefer to just drop the inline function and instead write:
+>>
+>> 	struct allegro_channel *channel = fh_to_channel(file_to_v4l2_fh(file));
+>>
+>> If this is needed in two or more places, then the extra inline makes sense,
+>> but it is a fairly common pattern that it is only needed in the release function.
+>>
+>> Adding a new inline just for that seems overkill to me.
+> 
+> file_to_channel() gets used in more places in "[PATCH 29/65] media:
+> allegro: Access v4l2_fh from file", where fh_to_channel() is dropped.
+> I'd rather keep it in this patch instead of having to modify the
+> allegro_release() function in patch 29/65.
+> 
+>>>  
+>>>  	v4l2_m2m_ctx_release(channel->fh.m2m_ctx);
+>>>  
+> 
 
-
-> > +             return;
-> > +
-> >       dwc3_gadget_endpoint_frame_from_event(dep, event);
-> >
-> >       /*
-> > --
-> > 2.50.1.565.gc32cd1483b-goog
-> >
 
