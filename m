@@ -1,110 +1,100 @@
-Return-Path: <linux-usb+bounces-26551-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26552-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6459BB1CC1F
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 20:46:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFABEB1CCA6
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 21:54:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2BB2723764
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 18:46:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 934DD7AC6E3
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 19:53:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B2029A303;
-	Wed,  6 Aug 2025 18:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF9E02BD03E;
+	Wed,  6 Aug 2025 19:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="h+EGrClJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uMMUAJZA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5DC2E36E7;
-	Wed,  6 Aug 2025 18:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.108.154.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B4421ABDD;
+	Wed,  6 Aug 2025 19:54:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754505959; cv=none; b=CqPiZ+4mwyqxQAIlORgt8J1CK6rf6USmRxLM9aPFa3i1V/1biFQjZvJwT6Gb3wd/wHeFrkKFczOon5QU5yc+27+iWqJp5Fjve3xLxpusm3sjrsOJziGYn6fS72fX/Pqm2mMHcjvf8x9Quqgmqm1WSXMVLEapxELszw2rtGcXHLU=
+	t=1754510073; cv=none; b=WjZI1MmxFbjutPeMVVk+G1gQJEJ8jqnU3wy5m9shVvmn0bWZQJd5R0UzN/Q/pF4b29SG0hol0/ep8h28ZNZwYMSs4O6C5RcHQoocwscB7224Xi5o3wSeDKRvd7LK4t4mTGiRDg1lWO0AJPHgYlGn88M3CTos8vBodPLIPBaYHk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754505959; c=relaxed/simple;
-	bh=sgX957es7+GVKONZFlhAEg1uefyAvzCkSJvyoqskeAQ=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=BauA/w3DZ9uTNOoIC0+8RfkGFPJfaOootJuiGMY9XJ8XHjHmVYfTh1WFo0mjZoxPG0a2ZbuOBel3ztsLpmrf/LbyFYO+Ai6CoyuSYbIHHMK4XqPT4FYtkTbGhLf5mGiyNbTAmJoSLI4/0q5qc6jhfBbODV/pT0yEhADPEAp8NIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mork.no; spf=pass smtp.mailfrom=miraculix.mork.no; dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b=h+EGrClJ; arc=none smtp.client-ip=65.108.154.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mork.no
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
-Authentication-Results: dilbert.mork.no;
-	dkim=pass (1024-bit key; secure) header.d=mork.no header.i=@mork.no header.a=rsa-sha256 header.s=b header.b=h+EGrClJ;
-	dkim-atps=neutral
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10de:2e00:0:0:0:1])
-	(authenticated bits=0)
-	by dilbert.mork.no (8.18.1/8.18.1) with ESMTPSA id 576IXWRG3356275
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Wed, 6 Aug 2025 19:33:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-	t=1754505212; bh=x5ZJSZGGUboOavAQ6X5at8DOZHYlPYdsBqMz8Z9etXE=;
-	h=From:To:Cc:Subject:References:Date:Message-ID:From;
-	b=h+EGrClJu4U/9bJcFT7RoC2qz+6bJRHrROy6N6qGil7JWVW6GQdGwDcj4mDBcF3FG
-	 IsxvPGbRGnlpEb/6qi8JmplXbrnM0zN6kLxOXLMiW5TgXoTIqnLaAtOwDkyVH5cH7j
-	 jkPeR/3NdMdEICWlM3NhiGN6jIpZ54oINGsbiaLI=
-Received: from miraculix.mork.no ([IPv6:2a01:799:10de:2e0a:149a:2079:3a3a:3457])
-	(authenticated bits=0)
-	by canardo.dyn.mork.no (8.18.1/8.18.1) with ESMTPSA id 576IXWCY960034
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Wed, 6 Aug 2025 20:33:32 +0200
-Received: (nullmailer pid 612794 invoked by uid 1000);
-	Wed, 06 Aug 2025 18:33:32 -0000
-From: =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] net: usb: qmi_wwan: add Telit Cinterion FN990A w/audio
- composition
-Organization: m
-References: <20250806121445.179532-1-fabio.porcedda@gmail.com>
-Date: Wed, 06 Aug 2025 20:33:32 +0200
-In-Reply-To: <20250806121445.179532-1-fabio.porcedda@gmail.com> (Fabio
-	Porcedda's message of "Wed, 6 Aug 2025 14:14:45 +0200")
-Message-ID: <875xf0i9kz.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1754510073; c=relaxed/simple;
+	bh=/cOp30dms8uItY/3xX0vKGu+W81HNkXMglBIQQK17j4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gCZrPF32SRJn4/ydLtd6gTPTAT8ZMptqJTvfIN2RweHx+fsIxkl/DSNpCYZFNIzKthb8PouhvJUIBX/ER5E0SO3jI/QhSKyJLKNm9TT8I2njL9AsZlR27sh8VQTdEgYrEPUhBEC7sNCGeEWJax6R3hP5mlYzlhNNEMs+nFSMo3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uMMUAJZA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC8DEC4CEE7;
+	Wed,  6 Aug 2025 19:54:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754510072;
+	bh=/cOp30dms8uItY/3xX0vKGu+W81HNkXMglBIQQK17j4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uMMUAJZADmwrEA56beYBmoyUXMpDChhSxqhSlFM6twGj4izMgh0FzfADAXb/EejWj
+	 ucE7JXNZHAEeguZYuQuYXc14NuDUZGVJv0Wq/jWsjdkmOPLuWhxIN5shWv4nV1gpEX
+	 g5pQdZUM5ir+geRLPdGXUOhye02ZuWwvzopO2onaT7EmGegHe6mLZ1TfYy3nj/zL1h
+	 mn5G6oE84t9YjHh92Fao+E/lvpaSaXqZmxXqvn9m9PLCvAw1Y4YQxv14syfwhT1bMu
+	 BaCemHORXhwMK54PQh42yZt3hjhRGfSOVFLwahvUg0YryJEpprCsh7YerrEwelZ84q
+	 g1/O48Nyqh/7Q==
+Date: Wed, 6 Aug 2025 20:54:27 +0100
+From: Simon Horman <horms@kernel.org>
+To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	John Ernberg <john.ernberg@actia.se>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linux Netdev Mailing List <netdev@vger.kernel.org>,
+	Linux USB Mailing List <linux-usb@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Armando Budianto <sprite@gnuweeb.org>, gwml@vger.gnuweeb.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH net v3] net: usbnet: Fix the wrong netif_carrier_on() call
+Message-ID: <20250806195427.GH61519@horms.kernel.org>
+References: <20250806003105.15172-1-ammarfaizi2@gnuweeb.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 1.0.7 at canardo.mork.no
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250806003105.15172-1-ammarfaizi2@gnuweeb.org>
 
-Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+On Wed, Aug 06, 2025 at 07:31:05AM +0700, Ammar Faizi wrote:
+> The commit referenced in the Fixes tag causes usbnet to malfunction
+> (identified via git bisect). Post-commit, my external RJ45 LAN cable
+> fails to connect. Linus also reported the same issue after pulling that
+> commit.
+> 
+> The code has a logic error: netif_carrier_on() is only called when the
+> link is already on. Fix this by moving the netif_carrier_on() call
+> outside the if-statement entirely. This ensures it is always called
+> when EVENT_LINK_CARRIER_ON is set and properly clears it regardless
+> of the link state.
+> 
+> Cc: stable@vger.kernel.org
+> Cc: Armando Budianto <sprite@gnuweeb.org>
+> Reviewed-by: Simon Horman <horms@kernel.org>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Link: https://lore.kernel.org/all/CAHk-=wjqL4uF0MG_c8+xHX1Vv8==sPYQrtzbdA3kzi96284nuQ@mail.gmail.com
+> Closes: https://lore.kernel.org/netdev/CAHk-=wjKh8X4PT_mU1kD4GQrbjivMfPn-_hXa6han_BTDcXddw@mail.gmail.com
+> Closes: https://lore.kernel.org/netdev/0752dee6-43d6-4e1f-81d2-4248142cccd2@gnuweeb.org
+> Fixes: 0d9cfc9b8cb1 ("net: usbnet: Avoid potential RCU stall on LINK_CHANGE event")
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> index f5647ee0adde..e56901bb6ebc 100644
-> --- a/drivers/net/usb/qmi_wwan.c
-> +++ b/drivers/net/usb/qmi_wwan.c
-> @@ -1361,6 +1361,7 @@ static const struct usb_device_id products[] =3D {
->  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1057, 2)},	/* Telit FN980 */
->  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
->  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1070, 2)},	/* Telit FN990A */
-> +	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1077, 2)},	/* Telit FN990A w/audio */
->  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1080, 2)}, /* Telit FE990A */
->  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a0, 0)}, /* Telit FN920C04 */
->  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a4, 0)}, /* Telit FN920C04 */
+FTR, this patch was applied directly by Linus:
 
-Looks good to me.
+- net: usbnet: Fix the wrong netif_carrier_on() call
+  https://git.kernel.org/torvalds/c/8466d393700f
 
-A note for the stable backport: You might want to cherry-pick these two
-commits changing only the comment text of the two adjacent lines to
-avoid unnecessary conflicts:
-
-
- ad1664fb6990 ("net: usb: qmi_wwan: fix Telit Cinterion FN990A name")
- 5728b289abbb ("net: usb: qmi_wwan: fix Telit Cinterion FE990A name")
-
-
-Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
 
