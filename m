@@ -1,157 +1,110 @@
-Return-Path: <linux-usb+bounces-26550-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26551-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B35B2B1CBD6
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 20:19:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6459BB1CC1F
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 20:46:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A60351884287
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 18:19:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2BB2723764
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 18:46:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 159502BD00C;
-	Wed,  6 Aug 2025 18:19:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B2029A303;
+	Wed,  6 Aug 2025 18:46:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="IgtVxSl1"
+	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="h+EGrClJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064B729E0F7
-	for <linux-usb@vger.kernel.org>; Wed,  6 Aug 2025 18:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5DC2E36E7;
+	Wed,  6 Aug 2025 18:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.108.154.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754504344; cv=none; b=Kl8WtV8zCl1j0hJEJ11PeeLeDHUrFAOrcIqqGw47jkwCgaCgJf0OrStFXVKSJqSar7oLUYkU07QMqloAkutuZiOUYYNA77ksikzDOTlNYIrRj8+vDZuCzvqwtVyeV4touCRBshMeDuPKKgae3Lq8MTEg17OpscaNiWp50Z4tNCM=
+	t=1754505959; cv=none; b=CqPiZ+4mwyqxQAIlORgt8J1CK6rf6USmRxLM9aPFa3i1V/1biFQjZvJwT6Gb3wd/wHeFrkKFczOon5QU5yc+27+iWqJp5Fjve3xLxpusm3sjrsOJziGYn6fS72fX/Pqm2mMHcjvf8x9Quqgmqm1WSXMVLEapxELszw2rtGcXHLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754504344; c=relaxed/simple;
-	bh=scM60JWooxHIxyZxbf7sRO869NtZo3fJXh2jgi2YgZY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S7UKpnhdHspzStYz3m8jIEK68SlGh77tUY4W9UxEyAG2XT9Ao/F4bDcKyQkW2Sfql0QxIlTke/S2fCUgC0Ru72ZFi7qmLvmcYbGGY6NY5baCVivmXZ9k+XcWdZpu+h52BmfDSKtlnin4FhJ2LCtTlnqvBfqxezLGbs+jyP+28Cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=IgtVxSl1; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4b0a13bb0b7so1102111cf.2
-        for <linux-usb@vger.kernel.org>; Wed, 06 Aug 2025 11:19:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1754504342; x=1755109142; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Athr79gwm1aP+FwxIvbTHKxraTrSIJP2WIrwbPHH0Zk=;
-        b=IgtVxSl1rQhV4wrAHzssWYBcLt3LXM1O713h3RrQGk2HuaPm84g11uPKCVHtZt4VUk
-         cYgfTQNgmDX4z4RZz26RvrZ+6AqfyP7Y+8R+yjs7T80m2IaC9u198JwGg06goneQOUeb
-         tj3XiXr1gaE8JtgXm/Zb9gA82NygLE/D97ZwSBv2BC8Dn6xZJuHEMo8TZ43wM1G29gVQ
-         2EUlnjWn2jKp8xIJECzG8/5tWV5LrKC47Qo4drfJmVvKAoEm/REfXNPqtT7lPHViyHWK
-         +QYYz90APimO0pGRhFBOGQcbUUq+Y6DPBdk8Z7tSdh5a4Gad8urLQr80ooltaLeaBsRf
-         5JjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754504342; x=1755109142;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Athr79gwm1aP+FwxIvbTHKxraTrSIJP2WIrwbPHH0Zk=;
-        b=Nj0N7gSwarZhuhOSX7QTTm5zBR0dFEZbfST+gjETr8CcQBZihe79151t2qruOgC67z
-         /zhChpyBRdMCArUv4rsCEkgU9aKSHirhysqDV3/4nNAkUcUySEH3mEAYc2/zHkqos8sJ
-         lr6uUIgLpTiZBgeUHtuH95Hm7ecF7dRLF4U3wAiqPCuXqpUv/5iilTZwJrG5SJpt+JHn
-         j1I6KjMhq3SHluqonu9nQa4ORrctuBVE1/+S6O99y3sTFJ1u4O0i9BpBobvlOutzXLjl
-         Ut64+Dd8c8gxBR0XXedF4f1RQx2BHbRCrQTpb66jkJEaC6IwtKcFDuQ44fIp05wDdDZj
-         U+rw==
-X-Gm-Message-State: AOJu0Yw3KU+Thpnd/mRDSl9nHkp+17HOg61qemhEFmPmFZxUoZvvwkCV
-	oi/dcb+yUIObmREE5kvKDGOGVEph1M1i8Ii7VdHi8USNTWrOGfH6LeEUKWlCuagO9w==
-X-Gm-Gg: ASbGnctWn0Yaw6gqFBFqG86AZkmDBSMgcqad95hUaiv6VruLsFLoyB0vkHdcYrnQc0T
-	Q6c9XJ3n5i2AyuObfQrSXdZMlDAUbEGNm4vlOT2sjVQeJD+CMeGCNByPTZGk0f5h988dYU285oY
-	hZF5AeMWmCCt4MFa7qMs+Yh4ofl9CGEb3rjy+0CJZZxSJW+wE1jxE7xIkXgwi9zbcD9wuzs4+eT
-	ZCwhrhvoF6P+ZGavGGqn97uk9BNu3S33D5v+p5Gxe4c64Ktf0kqWp6FuYCeEOAiKpzi1/hIn+jn
-	g2gnuit9gcYVEybKG2cBBtURBH8Hdvi/+yfnqPg98cdj9Tyr12ViujzHIStnZ7R1WqSlTxU3YtP
-	hpj/K8DnuK0dA2cXfHZv6DcXBdGT7CH9T6CYligavYfy3k2LPR6E9DcpRVNowV5YTAw==
-X-Google-Smtp-Source: AGHT+IEDVGW624rgb330dRrSe4xhRfBT1YoStwCBUlnpqA8nmtR8t/kEuU5e5BddGqZSoOepsdZNoA==
-X-Received: by 2002:a05:622a:2b49:b0:4b0:82d9:7cb5 with SMTP id d75a77b69052e-4b09145abbdmr57925671cf.26.1754504340318;
-        Wed, 06 Aug 2025 11:19:00 -0700 (PDT)
-Received: from rowland.harvard.edu ([2607:fb60:1011:2006:349c:f507:d5eb:5d9e])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e80b2f7a07sm287772785a.6.2025.08.06.11.18.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Aug 2025 11:18:59 -0700 (PDT)
-Date: Wed, 6 Aug 2025 14:18:57 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Mael GUERIN <mael.guerin@murena.io>
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 1/1] usb-storage: Add unusual-devs entry for Novatek
- NTK96550-based camera
-Message-ID: <28080ef2-a767-4444-b487-9a12fe0ba41c@rowland.harvard.edu>
-References: <20250806134722.32140-2-mael.guerin@murena.io>
- <20250806164406.43450-1-mael.guerin@murena.io>
+	s=arc-20240116; t=1754505959; c=relaxed/simple;
+	bh=sgX957es7+GVKONZFlhAEg1uefyAvzCkSJvyoqskeAQ=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=BauA/w3DZ9uTNOoIC0+8RfkGFPJfaOootJuiGMY9XJ8XHjHmVYfTh1WFo0mjZoxPG0a2ZbuOBel3ztsLpmrf/LbyFYO+Ai6CoyuSYbIHHMK4XqPT4FYtkTbGhLf5mGiyNbTAmJoSLI4/0q5qc6jhfBbODV/pT0yEhADPEAp8NIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mork.no; spf=pass smtp.mailfrom=miraculix.mork.no; dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b=h+EGrClJ; arc=none smtp.client-ip=65.108.154.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mork.no
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
+Authentication-Results: dilbert.mork.no;
+	dkim=pass (1024-bit key; secure) header.d=mork.no header.i=@mork.no header.a=rsa-sha256 header.s=b header.b=h+EGrClJ;
+	dkim-atps=neutral
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10de:2e00:0:0:0:1])
+	(authenticated bits=0)
+	by dilbert.mork.no (8.18.1/8.18.1) with ESMTPSA id 576IXWRG3356275
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Wed, 6 Aug 2025 19:33:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+	t=1754505212; bh=x5ZJSZGGUboOavAQ6X5at8DOZHYlPYdsBqMz8Z9etXE=;
+	h=From:To:Cc:Subject:References:Date:Message-ID:From;
+	b=h+EGrClJu4U/9bJcFT7RoC2qz+6bJRHrROy6N6qGil7JWVW6GQdGwDcj4mDBcF3FG
+	 IsxvPGbRGnlpEb/6qi8JmplXbrnM0zN6kLxOXLMiW5TgXoTIqnLaAtOwDkyVH5cH7j
+	 jkPeR/3NdMdEICWlM3NhiGN6jIpZ54oINGsbiaLI=
+Received: from miraculix.mork.no ([IPv6:2a01:799:10de:2e0a:149a:2079:3a3a:3457])
+	(authenticated bits=0)
+	by canardo.dyn.mork.no (8.18.1/8.18.1) with ESMTPSA id 576IXWCY960034
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Wed, 6 Aug 2025 20:33:32 +0200
+Received: (nullmailer pid 612794 invoked by uid 1000);
+	Wed, 06 Aug 2025 18:33:32 -0000
+From: =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] net: usb: qmi_wwan: add Telit Cinterion FN990A w/audio
+ composition
+Organization: m
+References: <20250806121445.179532-1-fabio.porcedda@gmail.com>
+Date: Wed, 06 Aug 2025 20:33:32 +0200
+In-Reply-To: <20250806121445.179532-1-fabio.porcedda@gmail.com> (Fabio
+	Porcedda's message of "Wed, 6 Aug 2025 14:14:45 +0200")
+Message-ID: <875xf0i9kz.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250806164406.43450-1-mael.guerin@murena.io>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 1.0.7 at canardo.mork.no
+X-Virus-Status: Clean
 
-The Subject line really ought to say "USB: storage: Add ..." but that's 
-a very minor matter; Greg can adjust it if he wants when the patch is 
-applied.
+Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-Apart from that...
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index f5647ee0adde..e56901bb6ebc 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -1361,6 +1361,7 @@ static const struct usb_device_id products[] =3D {
+>  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1057, 2)},	/* Telit FN980 */
+>  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
+>  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1070, 2)},	/* Telit FN990A */
+> +	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1077, 2)},	/* Telit FN990A w/audio */
+>  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1080, 2)}, /* Telit FE990A */
+>  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a0, 0)}, /* Telit FN920C04 */
+>  	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a4, 0)}, /* Telit FN920C04 */
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Looks good to me.
 
-Alan Stern
+A note for the stable backport: You might want to cherry-pick these two
+commits changing only the comment text of the two adjacent lines to
+avoid unnecessary conflicts:
 
-On Wed, Aug 06, 2025 at 06:44:03PM +0200, 'Mael GUERIN' via USB Mass Storage on Linux wrote:
-> Add the US_FL_BULK_IGNORE_TAG quirk for Novatek NTK96550-based camera
-> to fix USB resets after sending SCSI vendor commands due to CBW and
-> CSW tags difference, leading to undesired slowness while communicating
-> with the device.
-> 
-> Please find below the copy of /sys/kernel/debug/usb/devices with my
-> device plugged in (listed as TechSys USB mass storage here, the
-> underlying chipset being the Novatek NTK96550-based camera):
-> 
-> T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=0603 ProdID=8611 Rev= 0.01
-> S:  Manufacturer=TechSys
-> S:  Product=USB Mass Storage
-> S:  SerialNumber=966110000000100
-> C:* #Ifs= 1 Cfg#= 1 Atr=c0 MxPwr=100mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=usb-storage
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Signed-off-by: Mael GUERIN <mael.guerin@murena.io>
-> ---
-> Thanks for your review and your advice. Here's the updated version of the
-> patch with a correct description as well as the unusual_devs.h file sorted
-> correctly.
-> 
->  drivers/usb/storage/unusual_devs.h | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-> index 54f0b1c83..bee9f1e80 100644
-> --- a/drivers/usb/storage/unusual_devs.h
-> +++ b/drivers/usb/storage/unusual_devs.h
-> @@ -934,6 +934,13 @@ UNUSUAL_DEV(  0x05e3, 0x0723, 0x9451, 0x9451,
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_SANE_SENSE ),
->  
-> +/* Added by Maël GUERIN <mael.guerin@murena.io> */
-> +UNUSUAL_DEV(  0x0603, 0x8611, 0x0000, 0xffff,
-> +		"Novatek",
-> +		"NTK96550-based camera",
-> +		USB_SC_SCSI, USB_PR_BULK, NULL,
-> +		US_FL_BULK_IGNORE_TAG ),
-> +
->  /*
->   * Reported by Hanno Boeck <hanno@gmx.de>
->   * Taken from the Lycoris Kernel
-> -- 
-> 2.50.1
+
+ ad1664fb6990 ("net: usb: qmi_wwan: fix Telit Cinterion FN990A name")
+ 5728b289abbb ("net: usb: qmi_wwan: fix Telit Cinterion FE990A name")
+
+
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
 
