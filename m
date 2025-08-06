@@ -1,295 +1,157 @@
-Return-Path: <linux-usb+bounces-26549-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26550-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D708B1CA53
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 19:11:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B35B2B1CBD6
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 20:19:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B17E518C309A
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 17:11:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A60351884287
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 18:19:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A037929ACE6;
-	Wed,  6 Aug 2025 17:10:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 159502BD00C;
+	Wed,  6 Aug 2025 18:19:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="gzN4MJEJ"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="IgtVxSl1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2105.outbound.protection.outlook.com [40.107.94.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DDEE28B7ED;
-	Wed,  6 Aug 2025 17:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.105
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754500258; cv=fail; b=AUs6f279RoinqyoZbbK8FDancqanyzuJFJme237Xv6xhQqKmHpFTFyf7mMFkEVqm2S4z9D1uTM2golJHeeomFUKuympuT+KSgg5ai6T44mFsq2YiTsR9By5Omu8rlqK63l+embMCLOlE8SpY9fKN+yeeyfayYTXp3lSLmbPZO80=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754500258; c=relaxed/simple;
-	bh=oLhJTPptjmsCaz7VHRt2aO8I4nLHydK60gXoNweUcEk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=uj5e3fuRliGc+6NJMHH+TdnI/THKdM94RADIFJiIoiIUSJngBQ9olP80/8ZbSO4FzJzn9lFZHLLiP7wVZ0GzOlyI5pMNdmZFb5paNfgpSRmpNG89Jm/TBzn+TrsqGbl8r7E6ezBReqCaRLaKqOrktDFnxXTK8GTEEMnSwQ30NEY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=gzN4MJEJ; arc=fail smtp.client-ip=40.107.94.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inmusicbrands.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QTQjVlO/xorfGWmzTRQIEWaKi4qNC7e87+OQiDfNFPNJsRW+p/rACnc5LSpgCwHxcDDtDcokcDMIjc6HMoBl8K4xgZwhH/Mz8NYdlDn4foIXWXq0LdRygnkNAlIEjRafgg6k5hLw+mPTeHyIiOIEoxggnQE5UBabqNIf+5GeB5DmR3nD8aItd1YtCUv+RinwssJjJ5qJtsVI4VaxBZciAp+9yCUeSW2QqmaTP4WUTXO3JBJ4PJEGpYxoeJDbg6W1soT3NPwDPvcvcVVfHSgr0j3C90NoqvhczMVWOI+uJVAha5UPtV+zsyqEcJ7kM9uRN5py00Ed/oojRiRHtULDBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o5f8Ho4StLRZh8DkXn/CGGPfa+ygdg42nexttHsVcis=;
- b=dP7jn68URsqp1tIb1w5yOm5iFr+ECpT9gmGoQI8aCZiM/MKXA3gdpf1W8qfW6NWyR6undZKI1/UHFdzMIae5sHXAJ97bTFkjJVgcwkZ1DVPGW3yiOU14LqWebuakprWp+x1V5Pkm+6UEWi68RnhrGroyq1iXGrWgFB0hZYf6kLJ9w1KJ8T6KqXMi6XvL3TGgamkaz6iQoQnPo104rUcpeApanKBGF9CNYCY+vWDqqCMcTq0UEbeKBdG6kc1PlICV5vX8VMluoJ5F7UBa/nakoFhmC8/008tEaNmmMCvlTqVn3pb/Cx+oaAs1IuY+88gtesGaGsxARz3gcLVE8E8E6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=inmusicbrands.com; dmarc=pass action=none
- header.from=inmusicbrands.com; dkim=pass header.d=inmusicbrands.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inmusicbrands.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o5f8Ho4StLRZh8DkXn/CGGPfa+ygdg42nexttHsVcis=;
- b=gzN4MJEJdN65IXkhgWxXTpK6NFp4WODi0uhBM/tovbV3DyosnVUL5qdIemqG3zu16PGCsAF3KqMGe9Cn/inKRlfD480jqPpuDrOnGlE4SvFDJvJeYlC/LNeTT7Mecxmmzyvv/o7NWyzqRU32UYmvYl6vcF43MfqzZWwcD4U6Jxw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=inmusicbrands.com;
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com (2603:10b6:303:1bd::18)
- by BN0PR08MB7502.namprd08.prod.outlook.com (2603:10b6:408:159::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.20; Wed, 6 Aug
- 2025 17:10:51 +0000
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401]) by MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401%7]) with mapi id 15.20.9009.013; Wed, 6 Aug 2025
- 17:10:51 +0000
-Date: Wed, 6 Aug 2025 18:10:43 +0100
-From: John Keeping <jkeeping@inmusicbrands.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-rockchip@lists.infradead.org" <linux-rockchip@lists.infradead.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFC/PATCH 1/2] usb: dwc3: disable for USB_ROLE_NONE
-Message-ID: <aJOMk_PVasn-tvV6-jkeeping@inmusicbrands.com>
-References: <20250710152252.2532020-1-jkeeping@inmusicbrands.com>
- <20250710152252.2532020-2-jkeeping@inmusicbrands.com>
- <20250712001131.ax3rw24h3deekxfv@synopsys.com>
- <aHUfFGnGZP4z7UgK-jkeeping@inmusicbrands.com>
- <20250729221027.jvg3bpqhc3z5j7xn@synopsys.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250729221027.jvg3bpqhc3z5j7xn@synopsys.com>
-X-ClientProxiedBy: LO2P265CA0235.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:b::31) To MW4PR08MB8282.namprd08.prod.outlook.com
- (2603:10b6:303:1bd::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064B729E0F7
+	for <linux-usb@vger.kernel.org>; Wed,  6 Aug 2025 18:19:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754504344; cv=none; b=Kl8WtV8zCl1j0hJEJ11PeeLeDHUrFAOrcIqqGw47jkwCgaCgJf0OrStFXVKSJqSar7oLUYkU07QMqloAkutuZiOUYYNA77ksikzDOTlNYIrRj8+vDZuCzvqwtVyeV4touCRBshMeDuPKKgae3Lq8MTEg17OpscaNiWp50Z4tNCM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754504344; c=relaxed/simple;
+	bh=scM60JWooxHIxyZxbf7sRO869NtZo3fJXh2jgi2YgZY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S7UKpnhdHspzStYz3m8jIEK68SlGh77tUY4W9UxEyAG2XT9Ao/F4bDcKyQkW2Sfql0QxIlTke/S2fCUgC0Ru72ZFi7qmLvmcYbGGY6NY5baCVivmXZ9k+XcWdZpu+h52BmfDSKtlnin4FhJ2LCtTlnqvBfqxezLGbs+jyP+28Cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=IgtVxSl1; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4b0a13bb0b7so1102111cf.2
+        for <linux-usb@vger.kernel.org>; Wed, 06 Aug 2025 11:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1754504342; x=1755109142; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Athr79gwm1aP+FwxIvbTHKxraTrSIJP2WIrwbPHH0Zk=;
+        b=IgtVxSl1rQhV4wrAHzssWYBcLt3LXM1O713h3RrQGk2HuaPm84g11uPKCVHtZt4VUk
+         cYgfTQNgmDX4z4RZz26RvrZ+6AqfyP7Y+8R+yjs7T80m2IaC9u198JwGg06goneQOUeb
+         tj3XiXr1gaE8JtgXm/Zb9gA82NygLE/D97ZwSBv2BC8Dn6xZJuHEMo8TZ43wM1G29gVQ
+         2EUlnjWn2jKp8xIJECzG8/5tWV5LrKC47Qo4drfJmVvKAoEm/REfXNPqtT7lPHViyHWK
+         +QYYz90APimO0pGRhFBOGQcbUUq+Y6DPBdk8Z7tSdh5a4Gad8urLQr80ooltaLeaBsRf
+         5JjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754504342; x=1755109142;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Athr79gwm1aP+FwxIvbTHKxraTrSIJP2WIrwbPHH0Zk=;
+        b=Nj0N7gSwarZhuhOSX7QTTm5zBR0dFEZbfST+gjETr8CcQBZihe79151t2qruOgC67z
+         /zhChpyBRdMCArUv4rsCEkgU9aKSHirhysqDV3/4nNAkUcUySEH3mEAYc2/zHkqos8sJ
+         lr6uUIgLpTiZBgeUHtuH95Hm7ecF7dRLF4U3wAiqPCuXqpUv/5iilTZwJrG5SJpt+JHn
+         j1I6KjMhq3SHluqonu9nQa4ORrctuBVE1/+S6O99y3sTFJ1u4O0i9BpBobvlOutzXLjl
+         Ut64+Dd8c8gxBR0XXedF4f1RQx2BHbRCrQTpb66jkJEaC6IwtKcFDuQ44fIp05wDdDZj
+         U+rw==
+X-Gm-Message-State: AOJu0Yw3KU+Thpnd/mRDSl9nHkp+17HOg61qemhEFmPmFZxUoZvvwkCV
+	oi/dcb+yUIObmREE5kvKDGOGVEph1M1i8Ii7VdHi8USNTWrOGfH6LeEUKWlCuagO9w==
+X-Gm-Gg: ASbGnctWn0Yaw6gqFBFqG86AZkmDBSMgcqad95hUaiv6VruLsFLoyB0vkHdcYrnQc0T
+	Q6c9XJ3n5i2AyuObfQrSXdZMlDAUbEGNm4vlOT2sjVQeJD+CMeGCNByPTZGk0f5h988dYU285oY
+	hZF5AeMWmCCt4MFa7qMs+Yh4ofl9CGEb3rjy+0CJZZxSJW+wE1jxE7xIkXgwi9zbcD9wuzs4+eT
+	ZCwhrhvoF6P+ZGavGGqn97uk9BNu3S33D5v+p5Gxe4c64Ktf0kqWp6FuYCeEOAiKpzi1/hIn+jn
+	g2gnuit9gcYVEybKG2cBBtURBH8Hdvi/+yfnqPg98cdj9Tyr12ViujzHIStnZ7R1WqSlTxU3YtP
+	hpj/K8DnuK0dA2cXfHZv6DcXBdGT7CH9T6CYligavYfy3k2LPR6E9DcpRVNowV5YTAw==
+X-Google-Smtp-Source: AGHT+IEDVGW624rgb330dRrSe4xhRfBT1YoStwCBUlnpqA8nmtR8t/kEuU5e5BddGqZSoOepsdZNoA==
+X-Received: by 2002:a05:622a:2b49:b0:4b0:82d9:7cb5 with SMTP id d75a77b69052e-4b09145abbdmr57925671cf.26.1754504340318;
+        Wed, 06 Aug 2025 11:19:00 -0700 (PDT)
+Received: from rowland.harvard.edu ([2607:fb60:1011:2006:349c:f507:d5eb:5d9e])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e80b2f7a07sm287772785a.6.2025.08.06.11.18.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Aug 2025 11:18:59 -0700 (PDT)
+Date: Wed, 6 Aug 2025 14:18:57 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Mael GUERIN <mael.guerin@murena.io>
+Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 1/1] usb-storage: Add unusual-devs entry for Novatek
+ NTK96550-based camera
+Message-ID: <28080ef2-a767-4444-b487-9a12fe0ba41c@rowland.harvard.edu>
+References: <20250806134722.32140-2-mael.guerin@murena.io>
+ <20250806164406.43450-1-mael.guerin@murena.io>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|BN0PR08MB7502:EE_
-X-MS-Office365-Filtering-Correlation-Id: d921b688-daf5-4093-466d-08ddd50c31fd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ks2lJUWbLS+VT9+2FjkoMMHFs9m3Ny8hdqJH4pkqM9zyI83qij+Dp0abbpIj?=
- =?us-ascii?Q?ZUDjQ2YILSFSpiAlumDPbH85YGzx/t/ZYjUdQ96zApQc93+UE40iu+xDM2o4?=
- =?us-ascii?Q?hMqgyl90+svHqMbX0plSN8TnQ2I+w7ITKFPWGSV7DRHrKRKYPTL+/JzGgrsu?=
- =?us-ascii?Q?/4Ym38AA/8wYyvnXl3lGXXNCNQk5KyzF+aKxWhUFbjcjkfAg6qe5/MWKu6jm?=
- =?us-ascii?Q?zprgPeGK9TWYC4k5pPXbWLgtFO7KyfcVSW108CiTyicGjjLh54XBc5B3Fedw?=
- =?us-ascii?Q?PRSkpJXTTLAJ/SjAPGUXbeB9KpD+TvuqSCI01DeHSxgCoejQ93/9uX6sa9DM?=
- =?us-ascii?Q?aJPMNGPkvCbMDyyeFvXBhaeDCo0N8fx8hi3Cx26769CN3UY2sUN9yXQctvUl?=
- =?us-ascii?Q?YT2vj9GShIlEOt4NrDgjPKCtYmHalV2SW1VhdfSMQee2q72KD2p3wsAJ7IvJ?=
- =?us-ascii?Q?T7qTSqkQAtjXMyp7uMDi7FcT7VJoDrgbQQKqPiu4DnS2frDDOhVvjk/bpOGq?=
- =?us-ascii?Q?FnC9xVMlQYf1WZWsg3bJ8UQiU6u+HPXDXAN0Z0dtYNtP6qpmFoSpABOB+p0n?=
- =?us-ascii?Q?663rH5TCCWcMPjod/tI8rX89gnXGSqp8OaYfzvd196dRsLUMXkDkx8XgyplM?=
- =?us-ascii?Q?z/gQU9d2QjQFj9vlLWUqdgiidwrjQDE/cnVv+//paGUolNSyApZltOY7+VHQ?=
- =?us-ascii?Q?6FroT179Fbx9WXWMk3MNjWE7VgFFLacpP0cirAP5VGpi/Oo+qXgwXODl3dZk?=
- =?us-ascii?Q?QLShe9rJkc+iJrH+lYi8caXoLorI3ipbAxw32qlf2Z1hFcSD0/Q9Ai/vt/MZ?=
- =?us-ascii?Q?W3YcplEnm3DRczfcFkyYaQOz/T79zZnu62/1diDbbqGZ87WyG22w6MoY4KnJ?=
- =?us-ascii?Q?fbnv19erpc/BClrH4ifN554sCRIXCqjNTDTdag8Zwg2cnssGPrcxrjnEWxRZ?=
- =?us-ascii?Q?MOmQxefufihvF3JKVQ+4ShtUYYhbaCOdrWqWqWBsaAlgSNdQ996nZkfO/meN?=
- =?us-ascii?Q?U8QyWoJ6B7Q0YlJNYvcSFatDtZWK8TygubG2dgQoH7o2hEMUOrAEPqWO87hk?=
- =?us-ascii?Q?DyV3/c8b3mzQydbuhY9YMFVHslrGx93igCu+FXxegljCai60jwdKKa/LElNc?=
- =?us-ascii?Q?z3PREKik3XWAeKeDLamQn93mFduL77RGvIU2PWZODCEUw6y1HvDYNLxlJ/T0?=
- =?us-ascii?Q?TpccpFhiXzOW4ePkFhMGpH7fDJNuo/z9mAxy0rlV13dnE0BFdBzZ/gcCNmWL?=
- =?us-ascii?Q?kQ/ZEwU2iPAn7B6YnU6lEp1Omt6yX/0NOMezhWdCluhrUFOXutTYvw7byJMJ?=
- =?us-ascii?Q?y8hTl3wVQK59dFmOL0SY6KsfTR2P+Mhd6FByWyV6/4tx3R6NvMlhiVFHrDXn?=
- =?us-ascii?Q?XXtYaQG7i80WQxodh0S5rNB7MPiRBRNRX7Xg+x9svvNTpVEzYG+598BVXTYy?=
- =?us-ascii?Q?dSFsOChYbXyLKzFEs6xorYUeUq5G9Bz7N7i34+KocMC+onvqRlR8/w=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(52116014)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?hehQ9BgYnSXwzJqbFFEiS2By8Ar8xJj31i2fCpfq1g8DClrj8pkWwxcgx5/N?=
- =?us-ascii?Q?DZjtAMfB/C82ypQBycmShZXsQyJU+UViGhArxsbCvkYxf1puvCwWazyKTsOF?=
- =?us-ascii?Q?P+eNLxqvl0FobJRjEWwhMn4wFOxPlDAZNP5i2Fiy+wnLlvFUOG/zgqW5iXOQ?=
- =?us-ascii?Q?ChMgagYKGNW/d6rOuJWKkbh/aiCoorukmCVxaB3nKulqOACruwSLU0LQQXTy?=
- =?us-ascii?Q?+KL2GY2NZNOfAhRbqcCgvGBMhfmE3jqVZE8SJOVW3i63BxZST8iINSgtonHy?=
- =?us-ascii?Q?2TfUTpe3yu6Dc9UcDB80fHdxbn0vuqZMijuRzcthWcukja4TzQjf8wdtlRZ+?=
- =?us-ascii?Q?zBRdoRXhQ/cn8Ae3YFCRhanjAxxP6GT/IEZg3qad2HxGioJgeOdOudN+zbfT?=
- =?us-ascii?Q?4xn+u8ViODkyXPZmeT/NJweY6vhZ56zaqMDbdQk4uEzjldoXg3ow/XNW83lm?=
- =?us-ascii?Q?SNRMuD0aVzoKrdHGPVNPVhi5xOOreSGAxfwamA1fLZDBJ1tMJsHIqw1GFkyy?=
- =?us-ascii?Q?X9exyYDcMnOHXuWEg7YoEi1tURLMXxzB6NYpQXJH6EM9+pBXoWhGVgMaGqIQ?=
- =?us-ascii?Q?r7zgUa3le+wvQ+vk+fte+88Ws+shg3+tfSKGjwY2wKWapMUdgYdlCsAex6+G?=
- =?us-ascii?Q?RrRUw1xOtnw5bXwDAGt+BRC1HUN4nJ2wH3BCUqYhjCVv3QPwkiQske7Wx86y?=
- =?us-ascii?Q?XpN0ens5+tHi8BVdwj2Id4cDhLcAqzHlGH81TzxVB72XeXGgcevYymJw1sZB?=
- =?us-ascii?Q?uYeYJzoFRDopss2sCJVcMaFH9UPnPBTzuSOiGz8nsA3jf0wTdMgjOjr0aaS4?=
- =?us-ascii?Q?x8wjtkz7ZjWD4SVErGpFkJTBgxm5HFSNubVgf90egeqnvNGMHxPtmbXUGaNf?=
- =?us-ascii?Q?Xc9YfKgDt0FanGkmn5jlinstV8WEwiYCsJQZho2gCnYuex0WAqxzyxav1GTF?=
- =?us-ascii?Q?auPmxB/nXbghQ41/OJ6rShaJGbSfkialAZKn1lZJHPHJ45Qh1AHfkMU+ttk4?=
- =?us-ascii?Q?xjrb2pUtpt2+i7UKv2FO9XH88wKQ8aIRNry20GFBH6xSw3tOm4MZV37MhWl9?=
- =?us-ascii?Q?SVebYC43lJIZRfbNeoRsieM8MYQ+aVDLQxhyYamLu7VcshukREZvchCInf0O?=
- =?us-ascii?Q?boZEFq8DCbDS3SkEW5lSuVWYDinqRBu8O5SxszNYg3Y5M+eOI9joRmBJUf+r?=
- =?us-ascii?Q?POawtuFHwurxjWoHpEsWbth/zpzRstItrqop4fhQlxkjXYjjuTK+fQqfcRCA?=
- =?us-ascii?Q?WAwQ1kliWO+LNPXur5SXzFY2hJBdfCVQwvGgwlmhZZszR1lUw9frY6R4XcmE?=
- =?us-ascii?Q?m/Qd5kGe+/eMC0V0OJHlD0R2GqVndBEqTq/lqBe3vgfmBvjfU5LAWwobt3+i?=
- =?us-ascii?Q?j15LRweyCF9JXIOqX+9EUexJl0PcwQRUTJ3WQQBY8Wmz+52TyB57NzboNkJj?=
- =?us-ascii?Q?He94d0D2W+DUqDz1eW7o2vFewtKum2nhgbmSX1yez2V2LHW8w0yyUtQqZPBA?=
- =?us-ascii?Q?dcbK/w3/U87xKh5TK/BIBkAGjgvwPR++AKDv7/4bDEpGfdBCHPMLazf0tRSj?=
- =?us-ascii?Q?sllZ8TXEltjRPS32fNQIKuX0RIa5qpDZXBuDRS4kJPw0XNkVHOP3QuxvX00m?=
- =?us-ascii?Q?Uw=3D=3D?=
-X-OriginatorOrg: inmusicbrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d921b688-daf5-4093-466d-08ddd50c31fd
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR08MB8282.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2025 17:10:51.4180
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 24507e43-fb7c-4b60-ab03-f78fafaf0a65
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tA2/2TZBHkwUOUT+QOK2bUTfvV3osNHavN1Ti7RfhAK4WQ84pvnZjLRk9r+9uKs4iFZzWiCv/SSDGRJmuQHFo//xjriio1xQQnP+V5SZJmM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR08MB7502
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250806164406.43450-1-mael.guerin@murena.io>
 
-On Tue, Jul 29, 2025 at 10:10:35PM +0000, Thinh Nguyen wrote:
-> On Mon, Jul 14, 2025, John Keeping wrote:
-> > On Sat, Jul 12, 2025 at 12:11:38AM +0000, Thinh Nguyen wrote:
-> > > On Thu, Jul 10, 2025, John Keeping wrote:
-> > > > When the phy is acting as a Type C mux, it may need to reset when the
-> > > > cable direction changes.  But this should not happen while DWC3 is
-> > > > trying to use the USB connection.
-> > > > 
-> > > > In this case, there must be a connection manager to notify the phy of
-> > > > the orientation change and tcpm_mux_set() ensures this happens before
-> > > > DWC3's role switch is informed of a change.
-> > > > 
-> > > > It should not be possible to go directly from device->device or
-> > > > host->host with a change in orientation without transitioning through
-> > > > the "none" role as the cable is unplugged.  So ensuring that DWC3 always
-> > > 
-> > > The controller is either host or device mode. It's odd to use "none" to
-> > > indicate connection.
-> > 
-> > There is no connection in this state.  When the type C controller
-> > indicates that the role is "none" then there cannot be a USB connection.
-> > 
+The Subject line really ought to say "USB: storage: Add ..." but that's 
+a very minor matter; Greg can adjust it if he wants when the patch is 
+applied.
+
+Apart from that...
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+Alan Stern
+
+On Wed, Aug 06, 2025 at 06:44:03PM +0200, 'Mael GUERIN' via USB Mass Storage on Linux wrote:
+> Add the US_FL_BULK_IGNORE_TAG quirk for Novatek NTK96550-based camera
+> to fix USB resets after sending SCSI vendor commands due to CBW and
+> CSW tags difference, leading to undesired slowness while communicating
+> with the device.
 > 
-> It's not about connection. It's about the current mode of the USB
-> controller. The mode of the controller isn't "none" on disconnection
-> even if you try to role-switch to that via the typec switch.
+> Please find below the copy of /sys/kernel/debug/usb/devices with my
+> device plugged in (listed as TechSys USB mass storage here, the
+> underlying chipset being the Novatek NTK96550-based camera):
 > 
-> > > > informs the phy of the new mode whenever a plug is detected should be
-> > > > sufficient for the phy to safely reset itself at a time that is safe for
-> > > > DWC3.
-> > > 
-> > > Couldn't the phy do this as it detects connection/disconnection.
-> > 
-> > I don't think the phy can detect a connection.  If it is configured for
-> > the wrong orientation then it will not monitor the correct data lines.
-> > The phy hardware does not signal any interrupts to the CPU for the
-> > driver to react to.
+> T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=0603 ProdID=8611 Rev= 0.01
+> S:  Manufacturer=TechSys
+> S:  Product=USB Mass Storage
+> S:  SerialNumber=966110000000100
+> C:* #Ifs= 1 Cfg#= 1 Atr=c0 MxPwr=100mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=usb-storage
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 > 
-> Ok.
+> Signed-off-by: Mael GUERIN <mael.guerin@murena.io>
+> ---
+> Thanks for your review and your advice. Here's the updated version of the
+> patch with a correct description as well as the unusual_devs.h file sorted
+> correctly.
 > 
-> > 
-> > > It seems what you need is a full controller initialization upon new
-> > > connection on orientation change, and you're using role_switch selecting
-> > > "none" to do so.
-> > 
-> > I'm not sure whether a complete initialization is necessary, but what I
-> > want to avoid is the phy resetting while the controller is part-way
-> > through device enumeration or setting up a gadget configuration.
-> > 
-> > It may be that simply avoiding resetting the phy if the orientation is
-> > unchanged is enough to avoid some of this problem, but I suspect there
-> > are still problems if the clocks from the phy to the controller are
-> > stopped unexpectedly.  However, I have run some tests of this change and
-> > it looks promising.
+>  drivers/usb/storage/unusual_devs.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> That sounds like the the phy reset is done after asserting the vbus
-> valid line indicating connection to the controller. Can this be fixed in
-> the phy or type-c driver?
-
-I don't think so.  I've tried implementing this in the phy driver and it
-does not work reliably.
-
-> > > I'm not sure if role-switch has the right interface to do so. Perhaps we
-> > > can introduce one? I don't think we should change the behavior of the
-> > > current flow and apply that to all other platforms.
-> > 
-> > I don't think it's unreasonable for the controller to be idle when there
-> > is an external type C controller notifying the connection state.
-> > 
-> > The hardware setup looks like this, with the Linux type C code notifying
-> > the phy driver of the orientation change and the DWC3 driver of the role
-> > change:
-> > 
-> >                       +------+          
-> >                       | DWC3 |<----+    
-> >                       +--^---+     |    
-> >                          |         |    
-> >                       +--v--+      |    
-> >                 +---->| PHY |      |Role
-> >                 |     +--^--+      |    
-> >     Orientation |        |         |    
-> >                 |   +----v----+    |    
-> >                 +---+ FUSB302 +----+    
-> >                     +---------+
-> > 
-> > The advantage of using the role hook is that we are guaranteed that it
-> > is called after the phy has been notified of the orientation change.
-> > 
-> > Do you have an idea of a new interface?  Or do you think it is safe to
-> > reset the phy underneath the controller when that will halt the clocks
-> > from the phy to the controller for some period of time?
-> 
-> The proper fix should be in the phy where it should only assert vbus
-> valid after processing orientation and phy reset. I'm not familiar on
-> the communication between your PHY and FUSB302. There should be some
-> indication from the phy that it's ready before you can assert vbus-valid
-> (that can be from a callback, a status register etc).
-
-The FUSB302 is connected to the CPU via I2C, there is no direct
-communication between it and the phy, it all goes via the kernel's tcpm
-subsystem.
-
-The problem with re-initializing the phy is that this causes dwc3 gadget
-configuration to fail with "failed to enable ep0out", and this happens
-when VBUS valid is de-asserted.  This is 100% reproducible on boot for
-me where the init scripts are setting up a gadget via configfs.
-
-So it seems the timing of the phy setup needs to coordinate with the
-dwc3 controller.
-
-> What you've done is a teardown and reinit of the driver, triggering a
-> soft-reset. This can re-sync the phy. That probably takes long enough
-> that a phy-reset after orientation change will be completed before the
-> initialization complete.
-> 
-> If there's no way for you to know when the phy complete its reset, we
-> can add a quirk for your platform to always reinit on role-switch call.
-> 
-> Let me know if this is reasonable.
-
-I'm happy to test patches.
-
-
-Kind regards,
-John
+> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
+> index 54f0b1c83..bee9f1e80 100644
+> --- a/drivers/usb/storage/unusual_devs.h
+> +++ b/drivers/usb/storage/unusual_devs.h
+> @@ -934,6 +934,13 @@ UNUSUAL_DEV(  0x05e3, 0x0723, 0x9451, 0x9451,
+>  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>  		US_FL_SANE_SENSE ),
+>  
+> +/* Added by Maël GUERIN <mael.guerin@murena.io> */
+> +UNUSUAL_DEV(  0x0603, 0x8611, 0x0000, 0xffff,
+> +		"Novatek",
+> +		"NTK96550-based camera",
+> +		USB_SC_SCSI, USB_PR_BULK, NULL,
+> +		US_FL_BULK_IGNORE_TAG ),
+> +
+>  /*
+>   * Reported by Hanno Boeck <hanno@gmx.de>
+>   * Taken from the Lycoris Kernel
+> -- 
+> 2.50.1
 
