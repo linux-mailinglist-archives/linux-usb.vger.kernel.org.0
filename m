@@ -1,161 +1,347 @@
-Return-Path: <linux-usb+bounces-26537-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26538-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D0CBB1C5A5
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 14:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA015B1C637
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 14:45:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A06317E357
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 12:15:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 932FC5646D7
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 12:45:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C04E928A41E;
-	Wed,  6 Aug 2025 12:14:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C04E28C00E;
+	Wed,  6 Aug 2025 12:45:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GePPYCjm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="piY2QrqA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0F018DB01;
-	Wed,  6 Aug 2025 12:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C163522F767;
+	Wed,  6 Aug 2025 12:45:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754482491; cv=none; b=st7nmTk75xTBR35tqmwek8V0uV0G2o875k7Gda1JPASRhKxiWYx9NosdvH0QK+TIoDmv+zNoogEfkss/9RKu5+wM0Ln8CDQQQhQlW+PMsdw78mM4YCoQCNENZEK0UrJJo0oO6y3t0JrSRjYpcIz8/DzhqmFjJflFbjnQMPpmqBg=
+	t=1754484337; cv=none; b=mVw/oRqRCUx/osPnNHzSYfm+m+BiWXCsJKsBJh+dUeeIVK/pyfncyIF9aWa5L1yDrnUJPFR8WG5cmLOdhDlawiTuEUDrnRdNTpIKmfBECzh9QIkC+dV4hWBlG9n4cXZu+47QnjCOwVwGfm3n80Bi9ptgbOfSrG8arp2OykSQV08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754482491; c=relaxed/simple;
-	bh=2SHhmrLJhEaqqVr9125p95YXo98HuVuwhqj7qA3ejLw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LM93+7YS/eIvSVZS1fD8jTcBn3CqC6OgUfdK3Upd0LP0/4BeIRAopOHPrfjrwk4Kvkd4dHsKxfZIM4Ir6qM81VFjQN7mpbaQdb1cJe857qBhJLdHe8pf6Qd8vwoTEAqMJ3iwQipRpeTUEc928pw6A615lYQwveSkTWX7KJi1HdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GePPYCjm; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-459d62184c9so23436805e9.1;
-        Wed, 06 Aug 2025 05:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754482488; x=1755087288; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bVbeEujlJDiEncI61Afb6eEQ6w8x/k1Hu1Ve2S+nKIo=;
-        b=GePPYCjmTyiUr0EJzWJZFoZkJPck7ydYFvURoqg/h8BYYcDr6GaKjG8waR2mgcfByt
-         HX9HyIvgmVwflZT+UWwpdx5fnM6UMDbDSOsj4hbTCMEed+QlZszJ6VRxgdXhNexGC9hw
-         JEsE2bcoaJZKYYjuQdTsjXitLxc04iiQ/xqTFFajSq2wtkG+ggHdFJWJC8x+qBKthdmv
-         G5z/CSJE35eC6cDd+/WzWqwwsK2GiEI5kKYIUxD5ryhIGKBDI3hiu3COsPK6t89YSVmW
-         MWYj1ImJxXIGdbjtHoMrqucl95pYxiZyBnpyvoyX+yzioVFn/gliyAnWuA6XhUlPmme+
-         Ppug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754482488; x=1755087288;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bVbeEujlJDiEncI61Afb6eEQ6w8x/k1Hu1Ve2S+nKIo=;
-        b=Ul4xk8A/q+mtSTytOz9kFf0DjMjaL8twaCalMLLIeg5pytA5qQYwACBqWONYScgMnI
-         7KV/xBhrwWKVWayiOmcFxhtJMsE6gemXt9sol6RWwQeCFvDd6sGEOWgGjsX6uqC5CibK
-         xQFmKoV9b+JrjBmyCd9upq4+gZsASjJ09ewY4CCG+2PxYHidwSde0QHgeeK3imzcwke7
-         g+ZQupEUk1+jbcLYVs53jQf7qGOIt5Y8xKnEibjfRwy/skwH1tt3bEvTXN1vjrF4AiyE
-         ymnoqScrzLg1mTwdAv7t71v2P3TO10KjyA1eRU5/mClegBxOEpk3Dn2i9rLikU7Gx0my
-         BGrg==
-X-Forwarded-Encrypted: i=1; AJvYcCUhRe5vrvH00+/a1gVofup3QqLFAp/AyGtAZA5MkO9m3Y5xCqPCgTkn1sjLljcyABZnU38hNhg9@vger.kernel.org, AJvYcCWMz9dqKCfHYu20eg2ZOUSeVoe+iC864PY+TsYtkxPAcRaqQdSTuHnkWX0TXBBv4PkvoMcGFyCUNC4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxp9Qk73zqpVfrEGBLVSDfNCuvxleRxkMJfI06BOeyW+SziGRl1
-	zIVCl0nD/eVVHYd7aqLQH6VWi1ArUvkvZffkkGEqwz7soCoRwRDQg5l5
-X-Gm-Gg: ASbGncvd7GvYogxKbMSvo47YAjkhFGf5H/kIGcvmDnfG7uXZYe3tyEwA4Km+h9v5SkO
-	VHObabiggVV0bKw0f8/TXp4ZawFJxxwuYZwLe/FrmWwHfY578bIhyLuSy0SXqyLGouKgn/ahf6o
-	CQ7D1p5W3EI9LtKZl1Iw2kDqIAX+Oo1i4nwHRE/Sh3H3D7XSc/jLOe1db6uEwnMy7xxey6G+eqr
-	yNGmA+kMOHtjMsccTVBZz4yyLrkvVGUb6Ect/5JlDURwjG+eCyPZSmeX8APtK1KfeVTzdEK2z0Y
-	dN6/QvJ7xQ8BsNNj53w0EAnUgPllLevGHWuaIofR0OCoHmHio+BquyWjaUnNCWaNZQSE6a6OWwS
-	Neqz+ThkGSnVABkxYbkzmPEqVOtZ7nLc7K2Y6cCa7jHk3usCZC5vo5Q==
-X-Google-Smtp-Source: AGHT+IFs9jZIaeUglriML0shGDqWmBTnIYT1xOprRf7ZDwlMPY5StVsyncH3xVVHRIpYkmnDD2dHUw==
-X-Received: by 2002:a05:600c:1e89:b0:453:23fe:ca86 with SMTP id 5b1f17b1804b1-459e707975bmr24073315e9.4.1754482487776;
-        Wed, 06 Aug 2025 05:14:47 -0700 (PDT)
-Received: from labdl-itc-sw06.tmt.telital.com ([2a01:7d0:4800:a:8eec:4bff:febd:98b9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-458b501f22dsm120115075e9.0.2025.08.06.05.14.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Aug 2025 05:14:47 -0700 (PDT)
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Cc: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Daniele Palmas <dnlplm@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] net: usb: qmi_wwan: add Telit Cinterion FN990A w/audio composition
-Date: Wed,  6 Aug 2025 14:14:45 +0200
-Message-ID: <20250806121445.179532-1-fabio.porcedda@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1754484337; c=relaxed/simple;
+	bh=vrDmqWuCtRp3CsCvQLuDwTzU8RUf2CvrKumyU6zb3Ok=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=GQt9y32V/YIvM8Tsq38lXlG8gur83roUnDgRAtXyaTHmiP8nbeJ/CmfDkotjsK/UPWMqFhVWyCjVsd2b1oTA4EHudB8R/4MTJYliapOtRYOZWRhZoLQFuXZmK44kSVWRg6PXyBBsFvaXWCPlj+a3oxcG+GLOL1bEGt7SSvzpzrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=piY2QrqA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4AAC4CEE7;
+	Wed,  6 Aug 2025 12:45:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754484336;
+	bh=vrDmqWuCtRp3CsCvQLuDwTzU8RUf2CvrKumyU6zb3Ok=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=piY2QrqAz8Re20EZatq7znUbw5pHCiVHNr0AmhNRPE0MDM10HmfpdWd02d9i8tbdW
+	 E75PTNGi/w0FYgFIJnvX/BXnS/SvXPyQ9seXxkOyOZ7zJ0aOfRRVdb4s/IB6OlYGWX
+	 eGzXx+834KiDOoCU+8nK8fwVzqTKOTwSyOvq/we5j7dBgmFBvFnhVcaikg4QxsG3Ow
+	 eNHI0m7J7krY4D/AW4W0Ic/ki873otG6+qi8XZAxpJKL+nl6ve+/h5UhD3smasksSI
+	 31GfEPq8TJIP3QV/nzR3fqXJ0rFvGtrMjgIfsvva9ewHG8nil9RVHiEcnK1j0r7efu
+	 ou/p/iGbORZsA==
+Message-ID: <e9aaf929-5e0d-4379-996b-a564acd3e331@kernel.org>
+Date: Wed, 6 Aug 2025 14:45:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [PATCH 27/65] media: Reset file->private_data to NULL in
+ v4l2_fh_del()
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Devarsh Thakkar
+ <devarsht@ti.com>, Benoit Parrot <bparrot@ti.com>,
+ Hans Verkuil <hverkuil@kernel.org>, Mike Isely <isely@pobox.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Hans de Goede <hansg@kernel.org>,
+ Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+ Christian Gromm <christian.gromm@microchip.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alex Shi
+ <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>,
+ Dongliang Mu <dzm91@hust.edu.cn>, Jonathan Corbet <corbet@lwn.net>,
+ Tomasz Figa <tfiga@chromium.org>, Marek Szyprowski
+ <m.szyprowski@samsung.com>, Andy Walls <awalls@md.metrocast.net>,
+ Michael Tretter <m.tretter@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Bin Liu <bin.liu@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Dmitry Osipenko <digetx@gmail.com>, Thierry Reding
+ <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+ Mirela Rabulea <mirela.rabulea@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+ Michal Simek <michal.simek@amd.com>, Ming Qian <ming.qian@nxp.com>,
+ Zhou Peng <eagle.zhou@nxp.com>, Xavier Roumegue
+ <xavier.roumegue@oss.nxp.com>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Dikshita Agarwal <quic_dikshita@quicinc.com>,
+ Abhinav Kumar <abhinav.kumar@linux.dev>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+ Samuel Holland <samuel@sholland.org>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Nas Chung <nas.chung@chipsnmedia.com>,
+ Jackson Lee <jackson.lee@chipsnmedia.com>,
+ Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+ Houlong Wei <houlong.wei@mediatek.com>,
+ Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+ Tiffany Lin <tiffany.lin@mediatek.com>,
+ Yunfei Dong <yunfei.dong@mediatek.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>,
+ Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
+ Jacob Chen <jacob-chen@iotwrt.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+ Heiko Stuebner <heiko@sntech.de>,
+ Detlev Casanova <detlev.casanova@collabora.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
+ <alim.akhtar@samsung.com>, Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+ Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+ Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Fabien Dessenne <fabien.dessenne@foss.st.com>,
+ Hugues Fruchet <hugues.fruchet@foss.st.com>,
+ Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+ Steve Longerbeam <slongerbeam@gmail.com>, Maxime Ripard
+ <mripard@kernel.org>, Paul Kocialkowski <paulk@sys-base.io>,
+ =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+ Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Corentin Labbe <clabbe@baylibre.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Bingbu Cao <bingbu.cao@intel.com>, Tianshu Qiu <tian.shu.qiu@intel.com>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-staging@lists.linux.dev, linux-doc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-tegra@vger.kernel.org, imx@lists.linux.dev,
+ linux-renesas-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+ linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
+ linux-rockchip@lists.infradead.org,
+ linux-stm32@st-md-mailman.stormreply.com, mjpeg-users@lists.sourceforge.net
+References: <20250802-media-private-data-v1-0-eb140ddd6a9d@ideasonboard.com>
+ <20250802-media-private-data-v1-27-eb140ddd6a9d@ideasonboard.com>
+Content-Language: en-US, nl
+In-Reply-To: <20250802-media-private-data-v1-27-eb140ddd6a9d@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add the following Telit Cinterion FN990A w/audio composition:
+On 02/08/2025 11:22, Jacopo Mondi wrote:
+> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> Multiple drivers that use v4l2_fh and call v4l2_fh_del() manually reset
+> the file->private_data pointer to NULL in their video device .release()
+> file operation handler. Move the code to the v4l2_fh_del() function to
+> avoid direct access to file->private_data in drivers. This requires
+> adding a file pointer argument to the function.
+> 
+> Changes to drivers have been generated with the following coccinelle
+> semantic patch:
+> 
+> @@
+> expression fh;
+> identifier filp;
+> identifier release;
+> type ret;
+> @@
+> ret release(..., struct file *filp, ...)
+> {
+> 	<...
+> -	filp->private_data = NULL;
+> 	...
+> -	v4l2_fh_del(fh);
+> +	v4l2_fh_del(fh, filp);
+> 	...>
+> }
+> 
+> @@
+> expression fh;
+> identifier filp;
+> identifier release;
+> type ret;
+> @@
+> ret release(..., struct file *filp, ...)
+> {
+> 	<...
+> -	v4l2_fh_del(fh);
+> +	v4l2_fh_del(fh, filp);
+> 	...
+> -	filp->private_data = NULL;
+> 	...>
+> }
+> 
+> @@
+> expression fh;
+> identifier filp;
+> identifier release;
+> type ret;
+> @@
+> ret release(..., struct file *filp, ...)
+> {
+> 	<...
+> -	v4l2_fh_del(fh);
+> +	v4l2_fh_del(fh, filp);
+> 	...>
+> }
+> 
+> Manual changes have been applied to Documentation/ to update the usage
+> patterns, to drivers/media/v4l2-core/v4l2-fh.c to update the
+> v4l2_fh_del() prototype and reset file->private_data, and to
+> include/media/v4l2-fh.h to update the v4l2_fh_del() function prototype
+> and its documentation.
+> 
+> Additionally, white space issues have been fixed manually in
+> drivers/usb/gadget/function/uvc_v4l2.c
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> ---
+>  Documentation/driver-api/media/v4l2-fh.rst                         | 4 ++--
+>  Documentation/translations/zh_CN/video4linux/v4l2-framework.txt    | 4 ++--
+>  drivers/media/pci/cx18/cx18-fileops.c                              | 4 ++--
+>  drivers/media/pci/ivtv/ivtv-fileops.c                              | 4 ++--
+>  drivers/media/pci/saa7164/saa7164-encoder.c                        | 2 +-
+>  drivers/media/pci/saa7164/saa7164-vbi.c                            | 2 +-
+>  drivers/media/platform/allegro-dvt/allegro-core.c                  | 2 +-
+>  drivers/media/platform/amlogic/meson-ge2d/ge2d.c                   | 2 +-
+>  drivers/media/platform/amphion/vpu_v4l2.c                          | 4 ++--
+>  drivers/media/platform/chips-media/coda/coda-common.c              | 4 ++--
+>  drivers/media/platform/chips-media/wave5/wave5-helper.c            | 2 +-
+>  drivers/media/platform/imagination/e5010-jpeg-enc.c                | 4 ++--
+>  drivers/media/platform/m2m-deinterlace.c                           | 2 +-
+>  drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c               | 4 ++--
+>  drivers/media/platform/mediatek/mdp/mtk_mdp_m2m.c                  | 4 ++--
+>  drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c                | 4 ++--
+>  .../media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c    | 4 ++--
+>  .../media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c    | 4 ++--
+>  drivers/media/platform/nvidia/tegra-vde/v4l2.c                     | 2 +-
+>  drivers/media/platform/nxp/dw100/dw100.c                           | 2 +-
+>  drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c                     | 4 ++--
+>  drivers/media/platform/nxp/imx-pxp.c                               | 2 +-
+>  drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c                 | 2 +-
+>  drivers/media/platform/nxp/mx2_emmaprp.c                           | 2 +-
+>  drivers/media/platform/qcom/iris/iris_vidc.c                       | 3 +--
+>  drivers/media/platform/qcom/venus/core.c                           | 2 +-
+>  drivers/media/platform/renesas/rcar_fdp1.c                         | 2 +-
+>  drivers/media/platform/renesas/rcar_jpu.c                          | 4 ++--
+>  drivers/media/platform/renesas/vsp1/vsp1_video.c                   | 2 +-
+>  drivers/media/platform/rockchip/rga/rga.c                          | 2 +-
+>  drivers/media/platform/rockchip/rkvdec/rkvdec.c                    | 2 +-
+>  drivers/media/platform/samsung/exynos-gsc/gsc-m2m.c                | 4 ++--
+>  drivers/media/platform/samsung/exynos4-is/fimc-m2m.c               | 4 ++--
+>  drivers/media/platform/samsung/s5p-g2d/g2d.c                       | 2 +-
+>  drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c                | 4 ++--
+>  drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c                   | 4 ++--
+>  drivers/media/platform/st/sti/bdisp/bdisp-v4l2.c                   | 4 ++--
+>  drivers/media/platform/st/sti/delta/delta-v4l2.c                   | 4 ++--
+>  drivers/media/platform/st/sti/hva/hva-v4l2.c                       | 4 ++--
+>  drivers/media/platform/st/stm32/dma2d/dma2d.c                      | 2 +-
+>  drivers/media/platform/sunxi/sun8i-di/sun8i-di.c                   | 2 +-
+>  drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c           | 2 +-
+>  drivers/media/platform/ti/omap3isp/ispvideo.c                      | 5 ++---
+>  drivers/media/platform/ti/vpe/vpe.c                                | 2 +-
+>  drivers/media/platform/verisilicon/hantro_drv.c                    | 4 ++--
+>  drivers/media/test-drivers/vicodec/vicodec-core.c                  | 2 +-
+>  drivers/media/test-drivers/vim2m.c                                 | 2 +-
+>  drivers/media/test-drivers/visl/visl-core.c                        | 2 +-
+>  drivers/media/usb/pvrusb2/pvrusb2-v4l2.c                           | 3 +--
+>  drivers/media/v4l2-core/v4l2-fh.c                                  | 7 ++++---
+>  drivers/media/v4l2-core/v4l2-subdev.c                              | 5 ++---
+>  drivers/staging/media/imx/imx-media-csc-scaler.c                   | 4 ++--
+>  drivers/staging/media/meson/vdec/vdec.c                            | 2 +-
+>  drivers/staging/media/sunxi/cedrus/cedrus.c                        | 2 +-
+>  drivers/staging/most/video/video.c                                 | 4 ++--
+>  drivers/usb/gadget/function/uvc_v4l2.c                             | 3 +--
+>  include/media/v4l2-fh.h                                            | 5 ++++-
+>  57 files changed, 89 insertions(+), 90 deletions(-)
+> 
 
-0x1077: tty (diag) + adb + rmnet + audio + tty (AT/NMEA) + tty (AT) +
-tty (AT) + tty (AT)
-T:  Bus=01 Lev=01 Prnt=01 Port=09 Cnt=01 Dev#=  8 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=1077 Rev=05.04
-S:  Manufacturer=Telit Wireless Solutions
-S:  Product=FN990
-S:  SerialNumber=67e04c35
-C:  #Ifs=10 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 3 Alt= 0 #EPs= 0 Cls=01(audio) Sub=01 Prot=20 Driver=snd-usb-audio
-I:  If#= 4 Alt= 1 #EPs= 1 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
-E:  Ad=03(O) Atr=0d(Isoc) MxPS=  68 Ivl=1ms
-I:  If#= 5 Alt= 1 #EPs= 1 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
-E:  Ad=84(I) Atr=0d(Isoc) MxPS=  68 Ivl=1ms
-I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 8 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 9 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8c(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+<snip>
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+> diff --git a/drivers/media/v4l2-core/v4l2-fh.c b/drivers/media/v4l2-core/v4l2-fh.c
+> index b59b1084d8cdf1b62da12879e21dbe56c2109648..df3ba9d4674bd25626cfcddc2d0cb28c233e3cc3 100644
+> --- a/drivers/media/v4l2-core/v4l2-fh.c
+> +++ b/drivers/media/v4l2-core/v4l2-fh.c
+> @@ -67,7 +67,7 @@ int v4l2_fh_open(struct file *filp)
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_fh_open);
+>  
+> -void v4l2_fh_del(struct v4l2_fh *fh)
+> +void v4l2_fh_del(struct v4l2_fh *fh, struct file *filp)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index f5647ee0adde..e56901bb6ebc 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1361,6 +1361,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1057, 2)},	/* Telit FN980 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1070, 2)},	/* Telit FN990A */
-+	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1077, 2)},	/* Telit FN990A w/audio */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1080, 2)}, /* Telit FE990A */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a0, 0)}, /* Telit FN920C04 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a4, 0)}, /* Telit FN920C04 */
--- 
-2.50.1
+Instead of adding a second argument, perhaps it is better to
+just provide the filp pointer. After all, you can get the v4l2_fh
+from filp->private_data.
+
+It simplifies the code a bit.
+
+Regards,
+
+	Hans
+
+>  {
+>  	unsigned long flags;
+>  
+> @@ -75,6 +75,8 @@ void v4l2_fh_del(struct v4l2_fh *fh)
+>  	list_del_init(&fh->list);
+>  	spin_unlock_irqrestore(&fh->vdev->fh_lock, flags);
+>  	v4l2_prio_close(fh->vdev->prio, fh->prio);
+> +
+> +	filp->private_data = NULL;
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_fh_del);
+>  
+> @@ -94,10 +96,9 @@ int v4l2_fh_release(struct file *filp)
+>  	struct v4l2_fh *fh = file_to_v4l2_fh(filp);
+>  
+>  	if (fh) {
+> -		v4l2_fh_del(fh);
+> +		v4l2_fh_del(fh, filp);
+>  		v4l2_fh_exit(fh);
+>  		kfree(fh);
+> -		filp->private_data = NULL;
+>  	}
+>  	return 0;
+>  }
+
+<snip>
+
+> diff --git a/include/media/v4l2-fh.h b/include/media/v4l2-fh.h
+> index d8fcf49f10e09452b73499f4a9bd1285bc2835a5..5e4c761635120608e0b588e0b0daf63e69588d38 100644
+> --- a/include/media/v4l2-fh.h
+> +++ b/include/media/v4l2-fh.h
+> @@ -114,12 +114,15 @@ int v4l2_fh_open(struct file *filp);
+>   * v4l2_fh_del - Remove file handle from the list of file handles.
+>   *
+>   * @fh: pointer to &struct v4l2_fh
+> + * @filp: pointer to &struct file associated with @fh
+> + *
+> + * The function resets filp->private_data to NULL.
+>   *
+>   * .. note::
+>   *    Must be called in v4l2_file_operations->release\(\) handler if the driver
+>   *    uses &struct v4l2_fh.
+>   */
+> -void v4l2_fh_del(struct v4l2_fh *fh);
+> +void v4l2_fh_del(struct v4l2_fh *fh, struct file *filp);
+>  
+>  /**
+>   * v4l2_fh_exit - Release resources related to a file handle.
+> 
 
 
