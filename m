@@ -1,133 +1,104 @@
-Return-Path: <linux-usb+bounces-26545-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26546-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67D43B1C847
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 17:07:43 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27155B1C969
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 17:58:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92B9F7A7EC3
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 15:04:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 03B494E33F7
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 15:58:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741F6290BB0;
-	Wed,  6 Aug 2025 15:05:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954CF294A10;
+	Wed,  6 Aug 2025 15:58:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="snKiYyUs"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Xoo/8ruy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C3E28FABC;
-	Wed,  6 Aug 2025 15:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63DB43AC1C;
+	Wed,  6 Aug 2025 15:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754492714; cv=none; b=QajUAz1tZr0U4zQTu2LLcShMj8TZTGRTAzsvH8DRZPDFSMhq3VXNgLoxPLdVjjlTBuqZHbVw2JNpvPRTGNTzZzgKauQfPAp5pWUeQCX9f2NkMfR5K6+SWLLdrd/kQ9AOLCxGEPPr5U/u3vegPMEV211mST3WmjEvi+wPetefJSs=
+	t=1754495912; cv=none; b=Suq0TKMTE3FhDEX6wZ/kFQwxSBYyrrJzj5XjUG1DKZkYxXv4AgoA6SI5pGRIDMyTVv34nB16k7fOzYWzc01j5FwhlyLKDyfHheWHbuVeYmix+fSrTk5kZpj01Mtg3n0lnkd2i0t0zrd0easCflTidj5aSVnoOk1QUZ7wPzKICZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754492714; c=relaxed/simple;
-	bh=1ZKtCrUhtec/C92tnjeQ8tbmcV2y28wVwt/ue7CIIMA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Yjk1U2AOJGHFz8yShFMpJKmbTxaKYUB8HtMWjsTBoYUNeK0dRhMwnUQwLEx3RAUdA8iM/l8WygGug6P9KEm3UdKhiKJJDLwjhr/iYriRbYr3paZZ2NIYI76/g+cS/R8ggSQdfMQP8HbTdtGHAp/8ausbm/qmCI67ug0oWUTE4A8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=snKiYyUs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49675C4CEEB;
-	Wed,  6 Aug 2025 15:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754492713;
-	bh=1ZKtCrUhtec/C92tnjeQ8tbmcV2y28wVwt/ue7CIIMA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=snKiYyUs4cA8LFJGxboFiFjmpeexsx+j9FKhn37vMIzoi7z6mrCBRQSEpWcGYfOJ9
-	 bySWDCtkL0fk153JygBXjGfs1iTpXco/xGwKDkcj+h6DNoJVGue8DoDl9M5nf45Oc4
-	 FyczEtjKkc/6M1669MGwwAGb8iKK2gWJsAB/hqrfMlyNfAbYgtM/OBMxToyGa7xfY5
-	 cxurDhuNgDkJKQB8BSySArCoKNUtBQE5zkD3q1K+NKgjZbkKrZDiZfv/wp4CP43OTU
-	 hW2npn3RY3KOQ2UmvOBmGsf+5hnzdp+cpdDaFj6FuLBYx/6T29qd3PJcuJuMzeyanI
-	 8sGpeC0e/0BbA==
-Message-ID: <d079c31f-4785-4a41-8c88-cc56dceee7aa@kernel.org>
-Date: Wed, 6 Aug 2025 10:05:11 -0500
+	s=arc-20240116; t=1754495912; c=relaxed/simple;
+	bh=sSO/pt/U1+E8OY7Yuo/f4yv1RBvYu7aY/b9o6H2x12A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m/6NSs3xVH9GWdfR/4eVM0hjRhs0YI89HSD7bQUKQo21dBDJSsDdmLG2I9RVeqyVXW515wOWYWZDqH9YS1UAqjWOFC+dEojygVHLCctkHzeR+fc3vcHu1YPb+D52XueU31ba/jqLRROK/Abl9JyLKqgdaQLmsaJkoVO1L11XuUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Xoo/8ruy; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=qIUqhvFZG7Tf90KosIP1Pp2fKw9yMJdI0DLHExSEzSU=; b=Xoo/8ruy02QrcBv6xfNFqClU7E
+	VvEvYIeigEhL4G6r839FL1VZQz2j7odw1TKsKN3xjUdlCq2eiP7Ze+xVjE9HVp4pEoq80XH1moCuu
+	bHe7zrkgKJ6l5eZRTirIuA8jt08UeiFRTiFZyGtKryltz1v/QmSUpcF7o9f712AdE1vc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1ujgWw-003tgX-Px; Wed, 06 Aug 2025 17:58:18 +0200
+Date: Wed, 6 Aug 2025 17:58:18 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, max.schulze@online.de,
+	khalasa@piap.pl, o.rempel@pengutronix.de, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH] net: usb: asix: avoid to call phylink_stop() a second
+ time
+Message-ID: <a28f38d5-215b-49fb-aad7-66e0a30247b9@lunn.ch>
+References: <20250806083017.3289300-1-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] thunderbolt: Update XDomain vendor properties
- dynamically
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: "Rangoju, Raju" <raju.rangoju@amd.com>, linux-usb@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- andreas.noever@gmail.com, michael.jamet@intel.com, westeri@kernel.org,
- YehezkelShB@gmail.com, bhelgaas@google.com, Sanath.S@amd.com
-References: <20250722175026.1994846-1-Raju.Rangoju@amd.com>
- <20250728064743.GS2824380@black.fi.intel.com>
- <59cd3694-c6e5-42c4-a757-594b11b69525@amd.com>
- <20250806085118.GE476609@black.igk.intel.com>
- <9a757d21-a6e0-4022-b844-57c91323af5e@kernel.org>
- <20250806150024.GF476609@black.igk.intel.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <20250806150024.GF476609@black.igk.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250806083017.3289300-1-xu.yang_2@nxp.com>
 
-On 8/6/2025 10:00 AM, Mika Westerberg wrote:
-> On Wed, Aug 06, 2025 at 09:06:30AM -0500, Mario Limonciello wrote:
->> On 8/6/2025 3:51 AM, Mika Westerberg wrote:
->>> On Wed, Aug 06, 2025 at 11:46:04AM +0530, Rangoju, Raju wrote:
->>>>
->>>>
->>>> On 7/28/2025 12:17 PM, Mika Westerberg wrote:
->>>>> Hi,
->>>>>
->>>>> On Tue, Jul 22, 2025 at 11:20:23PM +0530, Raju Rangoju wrote:
->>>>>> This patch series aims to update vendor properties for XDomain
->>>>>> dynamically for vendors like AMD, Intel and ASMedia.
->>>>>
->>>>> The XDomain properties pretty much describe "software" not the underlying
->>>>> hardware so I don't understand why this is needed? We could have some USB
->>>>> IF registered Linux specific ID there but I don't see why this matters at
->>>>> all.
->>>>
->>>> Currently, it is showing up as "Intel" on AMD host controllers during
->>>> inter-domain connection. I suppose an alternative is to just call it "Linux"
->>>> or "Linux Connection Manager" to ensure we accurately represent the
->>>> connections across different systems.
->>>>
->>>> I appreciate your guidance on this and suggestions you might have.
->>>
->>> Yeah, something like that (I prefer "Linux"). The "ID" still is 0x8086
->>> though but I don't think that matters. AFAIK we have other "donated" IDs in
->>> use in Linux. Let me check on our side if that's okay.
->>
->> Having looked through this discussion I personally like "Linux" for this
->> string too.
->>
->> As for the vendor ID doesn't the LF have an ID assigned already of 0x1d6b?
->> Would it make sense to use that?
-> 
-> AFAIK that's PCI ID, right? It should be USB IF assigned ID and LF is not
-> here at least:
-> 
->    https://www.usb.org/members
-> 
-> If it really matters we can sure register one.
+On Wed, Aug 06, 2025 at 04:30:17PM +0800, Xu Yang wrote:
+> The kernel will have below dump when system resume if the USB net device
+> was already disconnected during system suspend.
 
-I see that it's used by drivers/usb/gadget/legacy.c for a few USB 
-devices too.
+By disconnected, you mean pulled out?
 
-So it's "already in the wild".
-
+> It's because usb_resume_interface() will be skipped if the USB core found
+> the USB device was already disconnected. In this case, asix_resume() will
+> not be called anymore. So asix_suspend/resume() can't be balanced. When
+> ax88772_stop() is called, the phy device was already stopped. To avoid
+> calling phylink_stop() a second time, check whether usb net device is
+> already in suspend state.
 > 
->> I was also thinking about the device ID, should we consider encoding the
->> VERSION, PATCHLEVEL, and SUBLEVEL into the ID?  The reason I'm thinking
->> about that is let's say there is some bug found in the CM on Linux and
->> another implementation decides to work around it.  We get wind of it and fix
->> the bug but in Linux but now what about the other end?  If we give them a
->> hint on the version by putting it in the device ID they can potentially key
->> off that to decide to tear out the workaround.
+> Fixes: e0bffe3e6894 ("net: asix: ax88772: migrate to phylink")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> ---
+>  drivers/net/usb/asix_devices.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> I'm not sure that's a good idea. Then we expose also all the known
-> vulnerabilities.
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index 9b0318fb50b5..ac28f5fe7ac2 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -932,7 +932,8 @@ static int ax88772_stop(struct usbnet *dev)
+>  {
+>  	struct asix_common_private *priv = dev->driver_priv;
+>  
+> -	phylink_stop(priv->phylink);
+> +	if (!dev->suspend_count)
+> +		phylink_stop(priv->phylink);
 
-Yeah I see your point.  This wasn't a strong feeling on my side, leaving 
-this as is is fine.
+Looking at ax88172a.c, lan78xx.c and smsc95xx.c, they don't have
+anything like this. Is asix special, or are all the others broken as
+well?
+
+	Andrew
 
