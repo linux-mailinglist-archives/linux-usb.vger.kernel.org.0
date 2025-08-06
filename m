@@ -1,308 +1,243 @@
-Return-Path: <linux-usb+bounces-26535-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26536-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88E89B1C451
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 12:32:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D98EEB1C596
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 14:09:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33F50189EE5B
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 10:32:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 495373AD983
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Aug 2025 12:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EC992749E8;
-	Wed,  6 Aug 2025 10:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B294C270548;
+	Wed,  6 Aug 2025 12:09:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Mtgld+LP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dcOVTG3P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED9D4A28
-	for <linux-usb@vger.kernel.org>; Wed,  6 Aug 2025 10:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB3A241686;
+	Wed,  6 Aug 2025 12:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754476337; cv=none; b=DHSjYEzenb23kTec8Cl2iNxhkYgNY3xNTHyIcRw/CIKxabcNiCcvegepESJh3yxNBejdqfvGtpQzBVTEgKV2mVqtXm1W+g+SyLk3HqxzAg6GejoWBloKBARxpe/BBqVb5wopkvnk7bT/QIESwZznBwT1LV81BG6s7/gLtnpzHG8=
+	t=1754482173; cv=none; b=QIdi6t02D9keGIu1mfh2sBg3TPSSS8crgCmsud8wDU4FPsrR2bQmI6nnabT/+VNR63+yGy34ZfHlYZTod161/tkQZjdNZxemkxapDW0oryY+YbeLeKI49pM5xMElKm/x/iRqdFNtYbsOABzeW7nu08JeQPTUWXHFihOnZPj0Zp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754476337; c=relaxed/simple;
-	bh=tUcprFfXd9oAcJwqCv/w3dOR39GaGztYnBkemd5iOnE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GlDDtBVXLG01Uk5AryfVU3lQYmZqKqUvhMrocGwjUlIYWk/+BiAopqLNZ0fUMvo26zwEOVIqSFjsIiqPQKTNoB7Rhixy1KrQG+9eslkvCxG+Tl+dMIcQ4oj+UitqLCB3SRiDe3sVDR4Ipjefq1bZ7zLlA/0PVhDHMQHdScDDF8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Mtgld+LP; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5766AjFj013856
-	for <linux-usb@vger.kernel.org>; Wed, 6 Aug 2025 10:32:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	HEk/ULY6gK45IEnurP2aWib60KOhIepG3boZzjJxTdA=; b=Mtgld+LP5Qstevok
-	W0BB0q2GJmeUj6hs63WvPcYhqla083K3Z32JldljfHTyaF4RAgYp3CSnlWg1kW4F
-	MYVUDzf/+xEriO6oqYKmXdhMpHINS3G9qNWYg0DB8m/3+Tswzm5+OTOCPpglRhB3
-	DAeLqBfY5CiBDUiO3Up4Pt6xfLQzCDa+Aq/lvUmPNko90vD4TuQRlVMCvdsZHUsX
-	KJhD6GSAVAhW5+oQTFBweRmhGcwImPI0md7v+qoVaY1wrIBvD4u44AMLHVA1PZeb
-	ipeGmZaAh7Tu+HmtD1t9Qd2yHDicJ2iuNbQrYFCt2BIUZERVQTnGjZVUyPPf8C+q
-	UGyRFQ==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48bpvvtc71-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 06 Aug 2025 10:32:13 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4b07ae72350so6970001cf.0
-        for <linux-usb@vger.kernel.org>; Wed, 06 Aug 2025 03:32:13 -0700 (PDT)
+	s=arc-20240116; t=1754482173; c=relaxed/simple;
+	bh=Op9LbOLKVbtPqmYL7m2V3UzzmYFcNgPQA8CroiBhgXA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L5vOA7eTBteu1pwDZT8RGjQQeTmiFsKG4LgOT99verRr1afOco0kl57Wfb7UiwHzg3b/dxUSD49HK91rhOk//mjuBd3dzxHq/NvANILlfwSFrsAKxEz9QwYMhLHPmpJJ6I3oaqaynf+DLi4mvzX2I+GJsaGWus45RBHTY2DXdQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dcOVTG3P; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-459d40d16bdso23639545e9.0;
+        Wed, 06 Aug 2025 05:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754482169; x=1755086969; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gj4cRs5IgB7NdFKvxqo2bYf9NaXPvZDKyYp8DsSdMXw=;
+        b=dcOVTG3PX14xi8Go7MXXw7LU0yyjWQR6nOzGRlgf8b2JssDocvMexS6O0ihnfgl3vf
+         q8ilJg3kicS6CABK8mKxidnKRl5MxTo8sZidsvP7GVVGFtwSnnGuANQjZCEVsvEB8y6a
+         ctlanMhIXBAFRaMNbsLYMGWas8OPNAh87PX+yJgVqkfjYl6J9Ex9fjaN0ifQx0UzmuC+
+         SLkDFaPSRYGgXJYj5ISuXnCaqeF/Yy0MVW0fCLTzO3Y9aF+K9MLBTntBs90edb2Sn3pa
+         cdMdYS9nGsgxXQBHTCrpsveiqghCNN+topKyLVawSKBooUK9wtMcVQWS24m8Y1km7VvZ
+         T1wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754476332; x=1755081132;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HEk/ULY6gK45IEnurP2aWib60KOhIepG3boZzjJxTdA=;
-        b=riou2qZuG5S+shz2uTJvIBSxQ3iFeEhS848xaVBioD6m9PHlv4XDaVbNqfKLhB0xbp
-         9jh5FC57CRJpcOH3KgbW5n2loEBMTL977NN8toH9UZWWg42N4VHIkvwxFhmXxizBBGQC
-         MCOHpHx6kmSOB6422vVMJxKWQ58hEnhYTjbq0RfsFYX/nH01ET2eSGrqqp48EgSgDrlW
-         pCBPYMUVBBTXo4X+efYaWIA0w5NlqxoptPFjNeN5B0f00MtOITVAcDSZQimaHltvUUaF
-         gTeAPXANn/9S0TOzCuJ5uk3pNzlqpLa6kj354RnGXDD8MRmiFyTgrR0+dd1HUdEyG8Tv
-         tpLA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGBFKYJTohz++a3sL9WA9KFRJCtq7UrzH/w6nr7gcQl6RQMcSK5KWI7ZQuFsYpWaZoLGvDP2ZBEUE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk9+4ufMNM1ZJvVKue83J9xjAZOynUnqDy7bGMMf1vwzoVMOiG
-	0TcPOZ4nzPhHYdzvwuJNR72L1D6pFHHTFm32+eKhsm4aa46uVWIGUma/2La+5lfykoPc9z+AU+O
-	zmMwIFNBogTC1MOphXK+LA6dBSWCwpQY9LpYL8RKVykTHTqMDHkEdzhfTTy1JIqs=
-X-Gm-Gg: ASbGncsZxEHti/yB+WBP1Zy+0znT5ttD3IfEzTcezw7UCbcAjKRApWW36mxYrkhZjwC
-	md3kq4C1NrGtzeubI+yJCKgLcTCYd5s2O/wLQvep+0I4FyPX68Ssqo66JbmHI5KpvDXMSWR4pk/
-	NdnZwlkERfrhWQ6OPdUp634YlEZ7YCEJW0RTEUgsediBIpHrO4lZbSk75BxXEpwFd2rHlet3Zzr
-	j9QPpa5PKa6v+YpXPbEx2rLzwa5f02UYIsIS8D1O2nOxrL1ofvS4sTbKY4HxCN6LEmBABEOemMQ
-	mq1mjtJfU0XEqnb99jwoJe+IYaLGGTMkGY5KL3sSlB7HtmYtxwlnB5Gr1jcsx0EX3C7Ctg/NnEq
-	l1gJAPsm4y6V6W94X2g==
-X-Received: by 2002:ac8:7d0c:0:b0:4a9:b181:cdd1 with SMTP id d75a77b69052e-4b09133d2camr15361631cf.1.1754476332233;
-        Wed, 06 Aug 2025 03:32:12 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF8617zK76RWr+ilfFqm3EQxEshxMceq8P5bYKx3Fh7J1HbMsxXFxOycWQ3N+WaatQ4jGVpow==
-X-Received: by 2002:ac8:7d0c:0:b0:4a9:b181:cdd1 with SMTP id d75a77b69052e-4b09133d2camr15361361cf.1.1754476331615;
-        Wed, 06 Aug 2025 03:32:11 -0700 (PDT)
-Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0a3b6csm1071709466b.48.2025.08.06.03.32.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Aug 2025 03:32:11 -0700 (PDT)
-Message-ID: <83c54b3e-8e31-4ca1-9ca6-31703211d507@oss.qualcomm.com>
-Date: Wed, 6 Aug 2025 12:32:09 +0200
+        d=1e100.net; s=20230601; t=1754482169; x=1755086969;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gj4cRs5IgB7NdFKvxqo2bYf9NaXPvZDKyYp8DsSdMXw=;
+        b=an8ed5CHJEiP3Z6GIMXcYL/mcaccEGz+NP2ar4kYa4kT2xrbotz7owpFncYigUk8di
+         r9OXBwCfRB7mrpHRYqwvWwmwTFyAi1bmQHdi1xLwozxbX7yiKYOAlCElq0LuPMGBP22y
+         yjl8dOPTOVv7b9CHpz2VsgAyS/jK3CiTupKzzbzvBwfO0vIUHVPWFjKssoekdgi9nKAy
+         BnKgWqUWn09tYTwa0dglVuzorJp6PeEJSNSUtwD9LR5W53R97YepoONAg3klEHM5GnUf
+         IaUmnys4xbFjQ3quEIw0GKEa9bUpMvjq4fOIo6Pj6+rJrfFfqrtH5KOul7jCulOFUwhV
+         Nj9A==
+X-Forwarded-Encrypted: i=1; AJvYcCVlOLOaAKpb3D2mbVNYHK8M4ehTCLmEmSwupU9E2RsXBEsnEWt8d4txsnutZC1dp7rnV30oiSq1RVQ=@vger.kernel.org, AJvYcCW+LcZbKJeMjBXt8aXCYVN7k9pdh6DXUCkJbmTbfNYX2Km4rdWvZ+Z2mxG2DH0rzvJeFRstAsDa@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJmZezbxHCDmtWXawf5X1Q+7dVtwYUkcaUTA5I5mvVwamtNqAT
+	SAgmxYZ3pILtvGYRPCS8hAm4Ro9YG3dEKCVwT0yx3zaAQD87KaazQjY3
+X-Gm-Gg: ASbGncsB8ZxsODELvkcAHBnSeLeGhKDgAswJHrKWH1xEANa92kYLgv9p7ZwVTwqUH2d
+	O4ySNC/Lnrb6Yc2Sb/3YMg33gao5Q3GtG1OQy5zMCsRVPa/L3wur6+0WcEaqYHMLMnDpZs98zPc
+	fbKFCfIf3jD4A/3b7vJDmRndNqHpMDlMRWUdn0Qkt3mpjgC62OAxXgrc98Hg2l1fRSwyuftRLQ2
+	gbj4Ryu+vOeow/Gmp3CoRDIPIaYQrJnCYz8w3CEMg5nIaLwB071IuUIiK/WVJpaDByrXmFEA3zK
+	2IUtfGZYg1fEWXTbh7XFvJN3XEtiJQCzSStyLqymnVnzQ6EwcdnTNI20vGeHvTxC/cFpn/AoCQ+
+	evpX+yxW97qQnDPeIjrLxwWDeYm1yzXKwHotLox3wu5+yM9nhylPwgQ==
+X-Google-Smtp-Source: AGHT+IH8ouqRvFfotPN8et/z+HBGCkGs1B83Oc8nEGT9AMN5+DJA7UmnjCcFUx1m3NjmSWPA2n8CZA==
+X-Received: by 2002:a05:600c:3503:b0:456:f9f:657 with SMTP id 5b1f17b1804b1-459e74720eemr19411115e9.27.1754482169112;
+        Wed, 06 Aug 2025 05:09:29 -0700 (PDT)
+Received: from labdl-itc-sw06.tmt.telital.com ([2a01:7d0:4800:a:8eec:4bff:febd:98b9])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-459dc2647f6sm59299185e9.2.2025.08.06.05.09.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Aug 2025 05:09:28 -0700 (PDT)
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	Daniele Palmas <dnlplm@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] USB: serial: option: add Telit Cinterion FN990A w/audio compositions
+Date: Wed,  6 Aug 2025 14:09:26 +0200
+Message-ID: <20250806120926.144800-1-fabio.porcedda@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] usb: dwc3: qcom: Implement glue callbacks to
- facilitate runtime suspend
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20250806095828.1582917-1-krishna.kurapati@oss.qualcomm.com>
- <20250806095828.1582917-3-krishna.kurapati@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250806095828.1582917-3-krishna.kurapati@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: aOOAxUKw5Z84SUGGC7UoZ7DBoGwX0d4C
-X-Authority-Analysis: v=2.4 cv=GttC+l1C c=1 sm=1 tr=0 ts=68932f2d cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=jpV4xLzjOhFdEjUPh5wA:9
- a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22
-X-Proofpoint-GUID: aOOAxUKw5Z84SUGGC7UoZ7DBoGwX0d4C
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA2MDAwOSBTYWx0ZWRfX6xfbzRR6Esr0
- t+rGcZg2fI30igtuSwoG4IdDqHm0RthzdcNZgM2ucYR2WPft7dbpp9FEsO0kc1xD8cOHDTTwYhm
- Ahcxg65Ak9VPXZBmG9fVGiPsHkz+HHfTVhxhCaTMwhHS4+wsUMa5aWmk6QcRCL3ommUdNiBsPJc
- Bpd9CpzE6tD4eSGVTyBQZyxXNx+PbfjXPFdjIE7qnQzzZj1uUwTcHspv6W5rqA8r7qNKJBGJ6kZ
- zYxnzOvYOJLjrQ0/jTTumjVye/ZkINFl7+r1pLIlHullpuuXGYy0kQ3LL5E0DasLDJIHaE79qe9
- rPRo5sdZnJdEiB+8rHCnZojVOeoDtzLgG3wCOBQp7JQi9hu9bcGFMbXQEhUCpNjVT0I1/eadHgZ
- gp7ckuNr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-06_02,2025-08-04_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 priorityscore=1501 phishscore=0 impostorscore=0 clxscore=1015
- spamscore=0 suspectscore=0 malwarescore=0 adultscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2508060009
+Content-Transfer-Encoding: 8bit
 
-On 8/6/25 11:58 AM, Krishna Kurapati wrote:
-> On Qualcomm DWC3 dual-role controllers, the conndone/disconnect events in
-> device mode are generated by controller when software writes to QSCRATCH
-> registers in Qualcomm Glue layer rather than the vbus line being routed to
-> dwc3 core IP for it to recognize and generate these events.
-> 
-> UTMI_OTG_VBUS_VALID  bit of QSCRATCH_HS_PHY_CTRL register needs to be set
-> to generate a connection done event and to be cleared for the controller to
-> generate a disconnect event during cable removal. When the disconnect is
-> not generated upon cable removal, the "connected" flag of dwc3 is left
-> marked as "true" and it blocks suspend routines and for that to happen upon
-> cable removal, the cable disconnect notification coming in via set_role
-> call need to be provided to the Qualcomm glue layer as well.
-> 
-> Currently, the way DWC3 core and Qualcomm legacy glue driver are designed,
-> there is no mechanism through which the DWC3 core can notify the Qualcomm
-> glue layer of any role changes which it receives via role switch. To
-> register these glue callbacks at probe time, for enabling core to notify
-> glue layer, the legacy Qualcomm driver has no way to find out when the
-> child driver probe was successful since it does not check for the same
-> during of_platform_populate.
-> 
-> Hence implement the following glue callbacks for flattened Qualcomm glue
-> driver:
-> 
-> 1. set_role: To pass role switching information from drd layer to glue.
-> This information is needed to identify NONE/DEVICE mode switch and modify
-> QSCRATCH to generate connect-done event on device mode entry and disconnect
-> event on cable removal in device mode.
-> 
-> 2. run_stop: When booting up in device mode, if autouspend is enabled and
-> userspace doesn't write UDC on boot, controller enters autosuspend. After
-> this, if the userspace writes to UDC in the future, run_stop notifier is
-> required to enable UTMI_OTG_VBUS_VALID of QSCRATCH so that connect done
-> event is generated after run_stop(1) is done to finish enumeration.
-> 
-> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 80 +++++++++++++++++++++++++++++++-----
->  1 file changed, 70 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index a7eaefaeec4d..5195267cd34d 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -83,6 +83,8 @@ struct dwc3_qcom {
->  	bool			pm_suspended;
->  	struct icc_path		*icc_path_ddr;
->  	struct icc_path		*icc_path_apps;
-> +
-> +	enum usb_role		current_role;
->  };
->  
->  #define to_dwc3_qcom(d) container_of((d), struct dwc3_qcom, dwc)
-> @@ -111,10 +113,6 @@ static inline void dwc3_qcom_clrbits(void __iomem *base, u32 offset, u32 val)
->  	readl(base + offset);
->  }
->  
-> -/*
-> - * TODO: Make the in-core role switching code invoke dwc3_qcom_vbus_override_enable(),
-> - * validate that the in-core extcon support is functional
-> - */
->  static void dwc3_qcom_vbus_override_enable(struct dwc3_qcom *qcom, bool enable)
->  {
->  	if (enable) {
-> @@ -560,6 +558,57 @@ static int dwc3_qcom_setup_irq(struct dwc3_qcom *qcom, struct platform_device *p
->  	return 0;
->  }
->  
-> +static void dwc3_qcom_set_role_notifier(struct dwc3 *dwc, enum usb_role next_role)
-> +{
-> +	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
-> +
-> +	if (qcom->current_role == next_role)
-> +		return;
-> +
-> +	if (pm_runtime_resume_and_get(qcom->dev) < 0) {
+Add the following Telit Cinterion FN990A w/audio compositions:
 
-no need for the "< 0":
+0x1077: tty (diag) + adb + rmnet + audio + tty (AT/NMEA) + tty (AT) +
+tty (AT) + tty (AT)
+T:  Bus=01 Lev=01 Prnt=01 Port=09 Cnt=01 Dev#=  8 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1077 Rev=05.04
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FN990
+S:  SerialNumber=67e04c35
+C:  #Ifs=10 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 0 Cls=01(audio) Sub=01 Prot=20 Driver=snd-usb-audio
+I:  If#= 4 Alt= 1 #EPs= 1 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
+E:  Ad=03(O) Atr=0d(Isoc) MxPS=  68 Ivl=1ms
+I:  If#= 5 Alt= 1 #EPs= 1 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
+E:  Ad=84(I) Atr=0d(Isoc) MxPS=  68 Ivl=1ms
+I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 8 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 9 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8c(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-"""
-Return 0 if the runtime PM usage counter of @dev has been
-incremented or a negative error code otherwise.
-"""
+0x1078: tty (diag) + adb + MBIM + audio + tty (AT/NMEA) + tty (AT) +
+tty (AT) + tty (AT)
+T:  Bus=01 Lev=01 Prnt=01 Port=09 Cnt=01 Dev#= 21 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1078 Rev=05.04
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FN990
+S:  SerialNumber=67e04c35
+C:  #Ifs=11 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#=10 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8c(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 0 Cls=01(audio) Sub=01 Prot=20 Driver=snd-usb-audio
+I:  If#= 5 Alt= 0 #EPs= 0 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
+I:  If#= 6 Alt= 1 #EPs= 1 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
+E:  Ad=84(I) Atr=0d(Isoc) MxPS=  68 Ivl=1ms
+I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 8 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 9 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-> +		dev_dbg(qcom->dev, "Failed to resume device\n");
+0x1079: RNDIS + tty (diag) + adb + audio + tty (AT/NMEA) + tty (AT) +
+tty (AT) + tty (AT)
+T:  Bus=01 Lev=01 Prnt=01 Port=09 Cnt=01 Dev#= 23 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1079 Rev=05.04
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FN990
+S:  SerialNumber=67e04c35
+C:  #Ifs=11 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
+E:  Ad=81(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#=10 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8c(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 0 Cls=01(audio) Sub=01 Prot=20 Driver=snd-usb-audio
+I:  If#= 5 Alt= 0 #EPs= 0 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
+I:  If#= 6 Alt= 1 #EPs= 1 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
+E:  Ad=84(I) Atr=0d(Isoc) MxPS=  68 Ivl=1ms
+I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 8 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 9 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-This probably belongs in the suspend/resume calls themselves
+Cc: stable@vger.kernel.org
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> +		return;
-> +	}
-> +
-> +	if (qcom->current_role == USB_ROLE_DEVICE &&
-> +	    next_role != USB_ROLE_DEVICE)
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index e5cd33093423..1f4da8120111 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1369,6 +1369,12 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1075, 0xff),	/* Telit FN990A (PCIe) */
+ 	  .driver_info = RSVD(0) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1077, 0xff),	/* Telit FN990A (rmnet + audio) */
++	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1078, 0xff),	/* Telit FN990A (MBIM + audio) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1079, 0xff),	/* Telit FN990A (RNDIS + audio) */
++	  .driver_info = NCTRL(2) | RSVD(3) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1080, 0xff),	/* Telit FE990A (rmnet) */
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1081, 0xff),	/* Telit FE990A (MBIM) */
+-- 
+2.50.1
 
-The second part is unnecessary because the first if-condition in this
-function ensures it
-> +		dwc3_qcom_vbus_override_enable(qcom, false);
-> +	else if ((qcom->current_role != USB_ROLE_DEVICE) &&
-> +		 (next_role == USB_ROLE_DEVICE))
-
-similarly here
-
-meaning this can become
-
-dwc3_qcom_vbus_override_enable(qcom, next_role == USB_ROLE_DEVICE)
-
-(I'm not sure if it's easier to read, up to you)
-
-> +		dwc3_qcom_vbus_override_enable(qcom, true);
-> +
-> +	pm_runtime_mark_last_busy(qcom->dev);
-> +	pm_runtime_put_sync(qcom->dev);
-> +
-> +	/*
-> +	 * Current role changes via usb_role_switch_set_role callback protected
-> +	 * internally by mutex lock.
-> +	 */
-> +	qcom->current_role = next_role;
-> +}
-> +
-> +static void dwc3_qcom_run_stop_notifier(struct dwc3 *dwc, bool is_on)
-> +{
-> +	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
-> +
-> +	/*
-> +	 * When autosuspend is enabled and controller goes to suspend
-> +	 * after removing UDC from userspace, the next UDC write needs
-> +	 * setting of QSCRATCH VBUS_VALID to "1" to generate a connect
-> +	 * done event.
-> +	 */
-> +	if (!is_on)
-> +		return;
-> +
-> +	dwc3_qcom_vbus_override_enable(qcom, is_on);
-
-this argument logically becomes true, always
-
-> +	pm_runtime_mark_last_busy(qcom->dev);
-> +}
-> +
-> +struct dwc3_glue_ops dwc3_qcom_glue_ops = {
-> +	.pre_set_role	= dwc3_qcom_set_role_notifier,
-> +	.pre_run_stop	= dwc3_qcom_run_stop_notifier,
-> +};
-> +
->  static int dwc3_qcom_probe(struct platform_device *pdev)
->  {
->  	struct dwc3_probe_data	probe_data = {};
-> @@ -636,6 +685,23 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	if (ignore_pipe_clk)
->  		dwc3_qcom_select_utmi_clk(qcom);
->  
-> +	qcom->mode = usb_get_dr_mode(dev);
-> +
-> +	if (qcom->mode == USB_DR_MODE_HOST) {
-> +		qcom->current_role = USB_ROLE_HOST;
-> +	} else if (qcom->mode == USB_DR_MODE_PERIPHERAL) {
-> +		qcom->current_role = USB_ROLE_DEVICE;
-> +		dwc3_qcom_vbus_override_enable(qcom, true);
-> +	} else {
-> +		if ((device_property_read_bool(dev, "usb-role-switch")) &&
-> +		    (usb_get_role_switch_default_mode(dev) == USB_DR_MODE_HOST))
-
-currently this will never be true on any qcom dt ("role-switch-default-mode" is
-not present anywhere)
-
-> +			qcom->current_role = USB_ROLE_HOST;
-> +		else
-> +			qcom->current_role = USB_ROLE_DEVICE;
-> +	}
-> +
-> +	qcom->dwc.glue_ops = &dwc3_qcom_glue_ops;
-> +
-
-Konrad
 
