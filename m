@@ -1,137 +1,101 @@
-Return-Path: <linux-usb+bounces-26595-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26596-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 454C6B1DC6F
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 19:28:01 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60A84B1DD10
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 20:32:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A8E818A1576
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 17:28:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 470494E1557
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 18:32:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9887F273806;
-	Thu,  7 Aug 2025 17:27:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26651D7E26;
+	Thu,  7 Aug 2025 18:32:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBODp8UC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rt1YelVj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D563B26FA5A;
-	Thu,  7 Aug 2025 17:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9E623DE
+	for <linux-usb@vger.kernel.org>; Thu,  7 Aug 2025 18:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754587674; cv=none; b=AIgPiPYiKWgNdRT0aABx+houUrIA6rx9dAtPnLdTWGxeiH7FwnCVLwfpfHVgpjtmN+ipEGGhlH48ezoPeQcvXpBS1YcFpxMD3Op9b1R8KFmalwR1qSZkoKIuFGycd4RA30/Ntj/svqS1PvdeIRAULKMD7T2+Plqyl9gGgP0Ci6Q=
+	t=1754591532; cv=none; b=ima4+P2ccp+ySKxHc8je6y1B2dUiw1M/51tUjS0wCkrsDm4pd8RfTTEWkgIZbXPHHgv8VpVCJwtVVVF/yaaAbTShHY24rjsdjUaxe7g7KNGVldowTxvEbRRL36W08BuUcNfASfAgMAImcka8qqRhOK7M1yH+Rn2yvGi+15/iJKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754587674; c=relaxed/simple;
-	bh=7Ti1jtrebaoU8atK+mJs/TbwUFs4rxqXlbWFzZoSDcU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GLXcDNOdVJ552z69fWnWJ22Mi0uBBXFxhKIldH1wpW48HvjTjavLxduCqOghhF3mGXly09dyc1kZEKFgH1p1bvXDxKDAaM0pA36aJsnOm3xQa9aOoHYWC13UXnPXd1B7ApYbw0lNulTN/vyjB1tmBnhETwISKzevtXc+frDpTYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBODp8UC; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-75383880278so110603b3a.2;
-        Thu, 07 Aug 2025 10:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754587672; x=1755192472; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Lax76jE2DJSyE5EIksf8PdxFyUdMGh0dYHkUiB9beWA=;
-        b=ZBODp8UCSDhhk+kRFpMCHf4iR8P/45WpygjkB1h4clfVX638++c67I7Fl9xNxzdG9e
-         QXxS5zAjDgZ15m6FNtXVJyRvPM41WZKITd2rTHC0lxh7edrW/AGAM8Ge3KxOsSOG/jOi
-         QSz0MyC931LCm+GzNU8NaOV1qKP/GrdGqXL4A9dgVgzLrPe7bmW7QeCYogPOwufQXt7j
-         JlZwoBsc1nieg/iUPpurOZ8lk0UfMKaa3s0WCMqKx4RL5ZmvLMVYLiLA+7K0b/6cdU2f
-         bmqmc3beidkPJRnLwCSP4kPmr9Qaig/4VsMk072Dx0rEzdsN6g9zcJSX9ZvAiqzR4zSK
-         CZhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754587672; x=1755192472;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lax76jE2DJSyE5EIksf8PdxFyUdMGh0dYHkUiB9beWA=;
-        b=FKx3mRDHBIKcZagoaSVwTsG0rqqjeqGUZVRjZVLUg2V8pJXT2f/0oFDP/wcEX61iFa
-         SJEKws3Z8qvaGf6dDo2XnGflYs5rMYDd//w8hp1R0bcwY5FMGNXS6RzdeVKCgbW18uV9
-         ygpi/47FowDAJVzdX9mhvWRmIg5Fwzfeu2CvrucXv0CpvXhtPI2hVtGedJiMA1uIwFRG
-         NtXs2OEacIGzVFR2eqWa7hXLiY8YuHNzXF2edHH5TZ/Ne//zfjNbWQ7J2BKWAE/xoM7i
-         V6h49INL0ZPax/qrtnLvgD6hyleu8kfajtL5XkXmxpcRMqohVhUBE9mdIQ8MNzu9oBnU
-         yOVw==
-X-Forwarded-Encrypted: i=1; AJvYcCUk9Yct5jrLQW56PMhfjFCXORLruDbx8KVYFprAfULC3R1ds2aatNw2WBVU4KimWcmeUTyoCRjsc/WOH3A=@vger.kernel.org, AJvYcCVT5jfrcjd1bIEmPhNGQA6TFh1As0g9aKYP1AYHwQm18GPNHOvxmKZLNGFL++7/tSILbeEeLwE37ZmW@vger.kernel.org
-X-Gm-Message-State: AOJu0YylmeY7MfU7LM5mV8IGDiFwZpcPekoIqQ12dmFLRGsmPGFdKTAG
-	4qIgxcdbi/RjLfkjn4EOuwMrARrMuruF7gTESRXDuRPSi1tjiRWmaAnf
-X-Gm-Gg: ASbGnct/TdqnGz1QZdz0kh/259/lOcR7SucfDfFQl+ZVnFSccasvR4sUJyBZwWzcaHc
-	yhwuMqnYBf8YoyJSLYCwvqpsgk3dvp0yFWGb7ET+Dhd+pPybprWogejuU6CwUv+MrxsydWqn9e7
-	cZAy2xJO5cIe+kZKqeS/CSenAHdRRV+xrrD5QLB3CTsI2tjf31L7ECKIa5ZiBEELMh57XPm3v0i
-	tMVh66poNzZmRXgzcNR25NTLzE0GThHCN2M0PBmw8dr3iqEta/ZBZNaYfCdskB8CbpnBGnNdRw3
-	R5kwmrAbbWFov8kKikYu+IEauC4FiWguYGdQe+m3o9v/bUZEyr/lvkUDk37N8LWU5x7jwEw7c70
-	S5RpRjQU3G9hZv+CQ0X7jsWKkT8MFmeRh
-X-Google-Smtp-Source: AGHT+IFxz0Rfqa1SaDwWPfGGPBjkcsiIcY+H7h4tgNPbpzlaHa7K9hsBDf8UpOeW2yyMjyIHfcqlwg==
-X-Received: by 2002:a05:6a00:2194:b0:76b:efa5:2ace with SMTP id d2e1a72fcca58-76c2a4da25bmr4203559b3a.5.1754587672013;
-        Thu, 07 Aug 2025 10:27:52 -0700 (PDT)
-Received: from [192.168.1.7] ([159.192.83.193])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-76bcce8fa10sm18452188b3a.52.2025.08.07.10.27.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Aug 2025 10:27:51 -0700 (PDT)
-Message-ID: <58ac9a75-6b0d-4b13-9be4-89a46b8e4136@gmail.com>
-Date: Fri, 8 Aug 2025 00:27:45 +0700
+	s=arc-20240116; t=1754591532; c=relaxed/simple;
+	bh=qeXtB97CZKpAFhNGldEs0K4lUEqmFTG1wppo3oD6AvU=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=llB/dm7koztInJkU+dkFVLxoudms7lh9s0RCK0gEstrJfu0tl6v1AstExmy04EC9bgOQ72Ijml5KMgCSwQISgsnw9SgZfCv4kIDjkyeMILk2HwWSba/wccpavo45SsOIm4csMr8Ig6Tv66OWLSJfR94BZCsEmV82e+cilBlRL/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rt1YelVj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DD1B3C4CEF6
+	for <linux-usb@vger.kernel.org>; Thu,  7 Aug 2025 18:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754591531;
+	bh=qeXtB97CZKpAFhNGldEs0K4lUEqmFTG1wppo3oD6AvU=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=rt1YelVjV4l3rSvbP6I3h+owUPi48lUHBL9xt/HgrIHIDdlACybebPqilsowRQm/7
+	 g5aMRYAuu9F3nw9g6pJm8gTkOrndpk/wOvCu7mzL/k9NGqsZur6fWIgesS7iu37ScG
+	 FNStvhMxy/nb7uXXXmmDZIvPcnlc2vMWvBg8eXo3dMCSic+EhLb64JiJqFlzkh2e9a
+	 bVhxF4tlCO1XN5UJSyikMUkDbBp/3oRSiAuSTZBIu7t4740raCexDEa7AODy3HLGet
+	 ZOUfwx+o5vDipksSJPD1I7pOK+cK4ZZZDRBePgjltOZR2CubYGDYIoPDIIuAG6eZZI
+	 7vJDHFCFkV1fA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id CAA57C433E1; Thu,  7 Aug 2025 18:32:11 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220422] USB: Misdecoded serial number from Dymo Twin Turbo
+ (0922:0018) breaks multi-device support in CUPS
+Date: Thu, 07 Aug 2025 18:32:11 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: steve@groesz.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220422-208809-Ouj6R9LtYQ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220422-208809@https.bugzilla.kernel.org/>
+References: <bug-220422-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: serial: option: add SIMCom 8230C compositions
-To: "xiaowei.li" <xiaowei.li@simcom.com>, Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250807075215.300961-1-xiaowei.li@simcom.com>
-Content-Language: en-US
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <20250807075215.300961-1-xiaowei.li@simcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 2025-08-07 14:52, xiaowei.li wrote:
-> Add the following SIMCom 8230C compositions:
-> 0x9071: tty (DM) + tty (NMEA) + tty (AT) + rmnet
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220422
 
-snip
+--- Comment #3 from steve@groesz.org ---
+The device in question is a Dymo Labelwriter printer. Unfortunately, it's an
+out of production model and I very much doubt the vendor will fix the devic=
+e,
+even if they could. It would likely need it's USB chip replaced and no vend=
+or
+would do that for an unsupported device.
 
-> ---
->   drivers/usb/serial/option.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index e5cd33093423..8c4d28dfd64e 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -2097,6 +2097,12 @@ static const struct usb_device_id option_ids[] = {
->   	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9003, 0xff) },	/* Simcom SIM7500/SIM7600 MBIM mode */
->   	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9011, 0xff),	/* Simcom SIM7500/SIM7600 RNDIS mode */
->   	  .driver_info = RSVD(7) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x907b, 0xff),
-> +	  .driver_info = RSVD(5) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9078, 0xff),
-> +	  .driver_info = RSVD(5) },
-> +	{ USB_DEVICE(0x1e0e, 0x9071),
-> +	  .driver_info = RSVD(3) | RSVD(4) },
->   	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9205, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT+ECM mode */
->   	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9206, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT-only mode */
->   	{ USB_DEVICE(ALCATEL_VENDOR_ID, ALCATEL_PRODUCT_X060S_X200),
+As for how it passed USB-IF, I don't know.
 
-Hi,
-you are blacklisting interfaces 4 and 5 which are not present in your 
-usb-devices listings and which are also not included in your interface 
-function description.
-You need to state the interface function which you can do as  .....tty 
-(AT) + rmnet + {ADB} and also explain why the interface is hidden in
-your usb-devices listings.
+This is why I believe a USB quirk patch would be most appropriate, to detect
+this device by it's VID:PID and slightly change how it decodes the unique
+device ID.
 
-thanks
-Lars
+--=20
+You may reply to this email to add a comment.
 
-
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
