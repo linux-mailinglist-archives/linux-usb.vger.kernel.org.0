@@ -1,148 +1,258 @@
-Return-Path: <linux-usb+bounces-26564-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26565-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12228B1D1E4
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 07:15:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A78E1B1D1EC
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 07:18:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1689D564FF3
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 05:15:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68572167EB3
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 05:18:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C311F7586;
-	Thu,  7 Aug 2025 05:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6007E1F63C1;
+	Thu,  7 Aug 2025 05:18:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ni8aT9GD"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="EhUOKP8z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0641C5F27;
-	Thu,  7 Aug 2025 05:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6224D1C5F27
+	for <linux-usb@vger.kernel.org>; Thu,  7 Aug 2025 05:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754543739; cv=none; b=XFqUxLJ3XD+t9MkPHzqM1ant7H6Eoa+WQIr+dZyUXvA4AJbVTqQ7ltQck6kdxJQNgvNb8Pf7wmiLSkJzzGdqgfP9vEJUKGHKVT4Xbblq8OWKxsluCCaHqjyWsbesKSYQamuea1TqTDIPwrrfV57eFeiG01dj4XrfxxTK3Cb913o=
+	t=1754543880; cv=none; b=og3Jp80tgbsHTSnfPpGwBqnJxK7Ev28BuRju/Yl8vCijBZF5HJkQ1FIVYVuzx27DeF19Y0iL7s0UscdTt368aQHNTwVdmazcc3vBdPkCk8IX6CZa1eZxn66gLoHEpCVT5KUZHKHAdF3tBSFDrU6kJtZwuIuzZNjwYAzXIZK6VgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754543739; c=relaxed/simple;
-	bh=OABG8QK27oVphx3KmqQS2k4HAfAU3yskGkRAX0znjrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M1rOphzRomV1Yqe+HU7BLMyd/4aArL++UjcV/x4n7a/qVHgR3cHvkLcs+/P0RA1mWzXgGed1jR3yt+LlutSzzZKa6mwv0Rr5TVKyfSKdrsyQBR80q1ccSWb1D/lTay3dKqLJ1SWeDihMZAmT+WBY9e4raQPKI0arj8PzKJWKWrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ni8aT9GD; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754543738; x=1786079738;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OABG8QK27oVphx3KmqQS2k4HAfAU3yskGkRAX0znjrU=;
-  b=ni8aT9GDVeagtkfiZZYn4LUHWggDwVURr2EHEfHgH/P3i9FxsrFO/pEF
-   zCXe0FuIzjmFgaCjY/iRrCdkYOVo9kGLm21c+fNiwe7ekV54n3V/2Ghxx
-   702nws8vOb+hag2HjFasfcshWjX6cX8jhpius487nOSIaTP6jvvac1JUv
-   ay8DJxsW1mMYoswRx6oHX7fb36Q4EEv2R28bQSNPrWnkX/bukD8LifeFx
-   kj1Tt7sIIjD0nKj/5isL2Swch8kzeao07dJf0uIpx0hBKh7fkIOUegZDl
-   kHJAx1KlXnBrGQm3JM9DSL/AL5IB6z7623J2FDqf/FLUIAtpeNnKcNJ6P
-   Q==;
-X-CSE-ConnectionGUID: i5G4oNfHQxiNhivXFNHirw==
-X-CSE-MsgGUID: J/8IHxFcQ2+KYXH+4OeVpg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="74329375"
-X-IronPort-AV: E=Sophos;i="6.17,271,1747724400"; 
-   d="scan'208";a="74329375"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 22:15:37 -0700
-X-CSE-ConnectionGUID: A+BIQ4/nTU2iPkTP4V9FmA==
-X-CSE-MsgGUID: 6nXx22+eRF2/SLMSaTn02Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,271,1747724400"; 
-   d="scan'208";a="165327763"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa009.fm.intel.com with ESMTP; 06 Aug 2025 22:15:34 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id B8DF793; Thu, 07 Aug 2025 07:15:33 +0200 (CEST)
-Date: Thu, 7 Aug 2025 07:15:33 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Mario Limonciello <superm1@kernel.org>,
-	"Rangoju, Raju" <raju.rangoju@amd.com>, linux-usb@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	andreas.noever@gmail.com, michael.jamet@intel.com,
-	westeri@kernel.org, YehezkelShB@gmail.com, bhelgaas@google.com,
-	Sanath.S@amd.com
-Subject: Re: [PATCH 0/3] thunderbolt: Update XDomain vendor properties
- dynamically
-Message-ID: <20250807051533.GG476609@black.igk.intel.com>
-References: <20250722175026.1994846-1-Raju.Rangoju@amd.com>
- <20250728064743.GS2824380@black.fi.intel.com>
- <59cd3694-c6e5-42c4-a757-594b11b69525@amd.com>
- <20250806085118.GE476609@black.igk.intel.com>
- <9a757d21-a6e0-4022-b844-57c91323af5e@kernel.org>
- <20250806150024.GF476609@black.igk.intel.com>
- <2025080628-viral-untruth-4811@gregkh>
+	s=arc-20240116; t=1754543880; c=relaxed/simple;
+	bh=yR8nPo7RSy9ugmPK/WjtObiXayyd1C4FDZVmWCnradU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fdFwNw+RdMqbMDA8x3juAfd1XBjzTQoqpsWnbtEo+oPNS1GjJvU5D9uC1/BO3wdn/jy+h2LVUUb9rZ4mVuXwhQINm0uux877NzUxgt0XhAPFlbHsJC2eVqyAc7fwZFrol4FKCl0RYN59QJifb5LKeCQ329dnbFxKU5fBCDfHM4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=EhUOKP8z; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5770uYo1025034
+	for <linux-usb@vger.kernel.org>; Thu, 7 Aug 2025 05:17:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/N41zxGY1+cas5ZIhVd71J8vDadK1hcCRra6b7f/VvU=; b=EhUOKP8zAXodSKEF
+	nhbU78sykofaz2Z0ihIrFuXJ5qS4Ky5byRoWDi8qwb5FDxjc9V1XqSIKd1A9VFde
+	SQ+31y/sdTlAIrxA3CfvwLM+AuVLnI1W57qB4dkNp6sZjnWtuu8m6mQqZn/wGKxP
+	t/nEIfJuqBUimpEuVYrLMwRHMFupuCDRYA2saMZe7vzr1yomLIPpU1EChFP5K/gY
+	ewccLfdDQqxr7+8mTivGvGLlhs6diHRM1/HDC/T8xRsrGE3Z6rb22vaWlKsuATqA
+	Sk88nPm1EG50wgFxEFDIfU4S6iiHerkehFGLyOBxDOjia//yeR5OPsfwZBMjKtW9
+	RxRAtg==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48bpvyw98v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Thu, 07 Aug 2025 05:17:58 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2400b28296fso9494455ad.1
+        for <linux-usb@vger.kernel.org>; Wed, 06 Aug 2025 22:17:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754543877; x=1755148677;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/N41zxGY1+cas5ZIhVd71J8vDadK1hcCRra6b7f/VvU=;
+        b=L6yI7sQUvGxUEjUwltun+GZTt9jw0RegzqRF7Or25FGYsrrnc0z8Nwk0WkdaYpIPGk
+         97CrtD97FZ4WXDhJbqAyDy05C70y9a1OFVbVY91+MzOnZvshXNAVeBTnRWi1MDvqzolA
+         QHL/93ewZbpSxvh+uWinV7TzKIGTjCu1aGre6m0zaziCnynsjoCbNyxgogkQ/gRJ2BSu
+         gugvnfDFaIYd4UHoD3Tzp/FJQLfwJ0wy2Kita25VhS3TRXVZU1rpAnjOUbnbQG7Fhd8Y
+         9uC8ZmVMMYbGW9GttQGFbyLYH/kJ3qXZzmmDLTsAc1bkbREyHXO0r3U9BkB07G9egb3K
+         PW/g==
+X-Forwarded-Encrypted: i=1; AJvYcCVQ/39TvWopNcDU1d+IyDyg5HCz8BUEcSqc+ZFuZexHEgPO5u1wnQ+5VDPMvKCeKCq8WLoxa4IW87M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkJNONAumaW1YGbVdfqjhpsXeqWXzrIaD5FAbmpXBIEjTnhIgw
+	JeJLxNAQV+Ff7/jn3aW/fIMdDMYUNsxmQHvdVU+2vlUx+gQnnTEjQ6A2lC606Jeb7LomJCQKlU7
+	Ty7agTLNlGs1cPJ86gbMHjOi8CfG1QdMLCVZtBe46ywVwXpMy3w/f3tjM7pMMIT8=
+X-Gm-Gg: ASbGncsWQ/24vmqiNjFERhe4Ige5OzIv1gAcMwhsyWSJSW1e1XMp6JBv5s/Y9hC2Xli
+	40ADm8qI0wKcCxC46nkIBs6vsZ4QREeStNbNKDGwmBaFPXOaqJa5qWkeWWLZyDkS8y8nyM5JLCa
+	6G/wrpRxENhJwpUT2PpR4+EZ/NWRzOIoqhRgnjV0Dw0MhhR+hr+ZcI8RBxe6x5PzC2JEXhwzEfS
+	x8o+//scOXMF2VqcDxx7dLanJgyZF2vmBoDYJRrO2deoNZ7wmQfK7oBZrrTDAsHVVoNE1nNP9T/
+	Y0cMWFeLaf5r2iPmDiYTrUeuPTuMTSAVz5l7IamgZYeqFYGi1qTnlcuFRvf2yw532h4z9EI=
+X-Received: by 2002:a17:902:d4d1:b0:240:70d4:85c3 with SMTP id d9443c01a7336-2429f2f51d6mr84744795ad.9.1754543877001;
+        Wed, 06 Aug 2025 22:17:57 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHyDbF9PoBrZHlRqp8MesiFzENicYPrJrcmGr8gsjTe0RO1TwTc/K/NDHivovGPgpVa/mGgng==
+X-Received: by 2002:a17:902:d4d1:b0:240:70d4:85c3 with SMTP id d9443c01a7336-2429f2f51d6mr84744525ad.9.1754543876602;
+        Wed, 06 Aug 2025 22:17:56 -0700 (PDT)
+Received: from [10.92.173.209] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e899b5bbsm172162015ad.128.2025.08.06.22.17.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Aug 2025 22:17:56 -0700 (PDT)
+Message-ID: <233c62be-c0fa-499e-9f8f-e90cf0b23aa3@oss.qualcomm.com>
+Date: Thu, 7 Aug 2025 10:47:52 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2025080628-viral-untruth-4811@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/3] usb: dwc3: qcom: Implement glue callbacks to
+ facilitate runtime suspend
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20250806095828.1582917-1-krishna.kurapati@oss.qualcomm.com>
+ <20250806095828.1582917-3-krishna.kurapati@oss.qualcomm.com>
+ <83c54b3e-8e31-4ca1-9ca6-31703211d507@oss.qualcomm.com>
+Content-Language: en-US
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <83c54b3e-8e31-4ca1-9ca6-31703211d507@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: n7Sg1ieDJhzAbRRVHNWJRkmO8inPzJI3
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA2MDAwOSBTYWx0ZWRfX1Km+0yzPPG+C
+ 2Bckv85Uyc+Xdy5dchMkMyqYqMSad7Qy7eqBqDyyGlwJly1Q7By/uiMiSNEab+ss1x14R/5/pq5
+ aj0w9yzXD5AAnuQnELS4IPKsg5IbQ9/5Ne+72e5pRROr1a+lymYE1Zse9T0VZfkubobNZQog47d
+ x159cM1Sp3tzqwVCgWpuJv/T1W1T1O2vvZSuQY7dnMBOSU0QxISsr4BJdffWAlr7pMUKong9TSZ
+ XNghQxmxxoG9fXQ/N0XvPyliE11M5kq/s7Cb9PR7glKO+XJeIqkF6Aj5oQ71vQzLgmhEg2fhBLq
+ TWbvXeZVWWgRVyWN5kM/tpial1epbEC0RA5WSNg5NFHbedNGMkTnRA5+ZiIgAY+mn12Oy/8tIWu
+ SPxEClM9
+X-Proofpoint-ORIG-GUID: n7Sg1ieDJhzAbRRVHNWJRkmO8inPzJI3
+X-Authority-Analysis: v=2.4 cv=NsLRc9dJ c=1 sm=1 tr=0 ts=68943706 cx=c_pps
+ a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=A0m8u_RplU-AeOqBTYgA:9
+ a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-06_05,2025-08-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
+ adultscore=0 malwarescore=0 spamscore=0 suspectscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508060009
 
-On Wed, Aug 06, 2025 at 05:58:26PM +0100, Greg KH wrote:
-> On Wed, Aug 06, 2025 at 05:00:24PM +0200, Mika Westerberg wrote:
-> > On Wed, Aug 06, 2025 at 09:06:30AM -0500, Mario Limonciello wrote:
-> > > On 8/6/2025 3:51 AM, Mika Westerberg wrote:
-> > > > On Wed, Aug 06, 2025 at 11:46:04AM +0530, Rangoju, Raju wrote:
-> > > > > 
-> > > > > 
-> > > > > On 7/28/2025 12:17 PM, Mika Westerberg wrote:
-> > > > > > Hi,
-> > > > > > 
-> > > > > > On Tue, Jul 22, 2025 at 11:20:23PM +0530, Raju Rangoju wrote:
-> > > > > > > This patch series aims to update vendor properties for XDomain
-> > > > > > > dynamically for vendors like AMD, Intel and ASMedia.
-> > > > > > 
-> > > > > > The XDomain properties pretty much describe "software" not the underlying
-> > > > > > hardware so I don't understand why this is needed? We could have some USB
-> > > > > > IF registered Linux specific ID there but I don't see why this matters at
-> > > > > > all.
-> > > > > 
-> > > > > Currently, it is showing up as "Intel" on AMD host controllers during
-> > > > > inter-domain connection. I suppose an alternative is to just call it "Linux"
-> > > > > or "Linux Connection Manager" to ensure we accurately represent the
-> > > > > connections across different systems.
-> > > > > 
-> > > > > I appreciate your guidance on this and suggestions you might have.
-> > > > 
-> > > > Yeah, something like that (I prefer "Linux"). The "ID" still is 0x8086
-> > > > though but I don't think that matters. AFAIK we have other "donated" IDs in
-> > > > use in Linux. Let me check on our side if that's okay.
-> > > 
-> > > Having looked through this discussion I personally like "Linux" for this
-> > > string too.
-> > > 
-> > > As for the vendor ID doesn't the LF have an ID assigned already of 0x1d6b?
-> > > Would it make sense to use that?
-> > 
-> > AFAIK that's PCI ID, right? It should be USB IF assigned ID and LF is not
-> > here at least:
-> > 
-> >   https://www.usb.org/members
-> > 
-> > If it really matters we can sure register one.
+
+
+On 8/6/2025 4:02 PM, Konrad Dybcio wrote:
+> On 8/6/25 11:58 AM, Krishna Kurapati wrote:
+
+[...]
+
+>> +static void dwc3_qcom_set_role_notifier(struct dwc3 *dwc, enum usb_role next_role)
+>> +{
+>> +	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
+>> +
+>> +	if (qcom->current_role == next_role)
+>> +		return;
+>> +
+>> +	if (pm_runtime_resume_and_get(qcom->dev) < 0) {
 > 
-> Linux has an official USB vendor id, we use it for when Linux is used as
-> a USB gadget device and in a few other places.  If you want to reserve a
-> product id from it, just let me know and I can dole it out (the list is
-> around here somewhere...)
+> no need for the "< 0":
+> 
+> """
+> Return 0 if the runtime PM usage counter of @dev has been
+> incremented or a negative error code otherwise.
+> """
+> 
 
-Yes please :) I think this is the right thing to do.
+ACK. Will remove the "<" condition here.
 
-> Note, the LF is NOT listed as a USB-IF member anymore, as the USB-IF
-> kicked us out at the request of one of their founding members many years
-> ago.  But we still got to keep the product id, they can't take that away
-> from us :)
+>> +		dev_dbg(qcom->dev, "Failed to resume device\n");
+> 
+> This probably belongs in the suspend/resume calls themselves
+> 
 
-Hehe, understood.
+I think today, resume fails only if "clk_bulk_prepare_enable" fails.
+Would like to keep this log here for now.
+
+>> +		return;
+>> +	}
+>> +
+>> +	if (qcom->current_role == USB_ROLE_DEVICE &&
+>> +	    next_role != USB_ROLE_DEVICE)
+> 
+> The second part is unnecessary because the first if-condition in this
+> function ensures it
+
+ACK.
+
+>> +		dwc3_qcom_vbus_override_enable(qcom, false);
+>> +	else if ((qcom->current_role != USB_ROLE_DEVICE) &&
+>> +		 (next_role == USB_ROLE_DEVICE))
+> 
+> similarly here
+> 
+> meaning this can become
+> 
+> dwc3_qcom_vbus_override_enable(qcom, next_role == USB_ROLE_DEVICE)
+> 
+> (I'm not sure if it's easier to read, up to you)
+> 
+
+Will keep the if-else check as is for now.
+
+>> +		dwc3_qcom_vbus_override_enable(qcom, true);
+>> +
+>> +	pm_runtime_mark_last_busy(qcom->dev);
+>> +	pm_runtime_put_sync(qcom->dev);
+>> +
+>> +	/*
+>> +	 * Current role changes via usb_role_switch_set_role callback protected
+>> +	 * internally by mutex lock.
+>> +	 */
+>> +	qcom->current_role = next_role;
+>> +}
+>> +
+>> +static void dwc3_qcom_run_stop_notifier(struct dwc3 *dwc, bool is_on)
+>> +{
+>> +	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
+>> +
+>> +	/*
+>> +	 * When autosuspend is enabled and controller goes to suspend
+>> +	 * after removing UDC from userspace, the next UDC write needs
+>> +	 * setting of QSCRATCH VBUS_VALID to "1" to generate a connect
+>> +	 * done event.
+>> +	 */
+>> +	if (!is_on)
+>> +		return;
+>> +
+>> +	dwc3_qcom_vbus_override_enable(qcom, is_on);
+> 
+> this argument logically becomes true, always
+
+ACK. Will just pass true here in v4.
+
+> 
+>> +	pm_runtime_mark_last_busy(qcom->dev);
+>> +}
+>> +
+>> +struct dwc3_glue_ops dwc3_qcom_glue_ops = {
+>> +	.pre_set_role	= dwc3_qcom_set_role_notifier,
+>> +	.pre_run_stop	= dwc3_qcom_run_stop_notifier,
+>> +};
+>> +
+>>   static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   {
+>>   	struct dwc3_probe_data	probe_data = {};
+>> @@ -636,6 +685,23 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   	if (ignore_pipe_clk)
+>>   		dwc3_qcom_select_utmi_clk(qcom);
+>>   
+>> +	qcom->mode = usb_get_dr_mode(dev);
+>> +
+>> +	if (qcom->mode == USB_DR_MODE_HOST) {
+>> +		qcom->current_role = USB_ROLE_HOST;
+>> +	} else if (qcom->mode == USB_DR_MODE_PERIPHERAL) {
+>> +		qcom->current_role = USB_ROLE_DEVICE;
+>> +		dwc3_qcom_vbus_override_enable(qcom, true);
+>> +	} else {
+>> +		if ((device_property_read_bool(dev, "usb-role-switch")) &&
+>> +		    (usb_get_role_switch_default_mode(dev) == USB_DR_MODE_HOST))
+> 
+> currently this will never be true on any qcom dt ("role-switch-default-mode" is
+> not present anywhere)
+
+Agree. But I wrote for the sake of covering all cases and just in case 
+anyone uses this property tomorrow.
+
+Regards,
+Krishna,
 
