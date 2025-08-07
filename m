@@ -1,258 +1,174 @@
-Return-Path: <linux-usb+bounces-26565-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26566-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A78E1B1D1EC
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 07:18:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AACE1B1D229
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 07:54:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68572167EB3
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 05:18:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 989F31AA12F4
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 05:54:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6007E1F63C1;
-	Thu,  7 Aug 2025 05:18:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A9352144C7;
+	Thu,  7 Aug 2025 05:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="EhUOKP8z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IIu1Vazf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6224D1C5F27
-	for <linux-usb@vger.kernel.org>; Thu,  7 Aug 2025 05:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BB533F3;
+	Thu,  7 Aug 2025 05:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754543880; cv=none; b=og3Jp80tgbsHTSnfPpGwBqnJxK7Ev28BuRju/Yl8vCijBZF5HJkQ1FIVYVuzx27DeF19Y0iL7s0UscdTt368aQHNTwVdmazcc3vBdPkCk8IX6CZa1eZxn66gLoHEpCVT5KUZHKHAdF3tBSFDrU6kJtZwuIuzZNjwYAzXIZK6VgU=
+	t=1754546043; cv=none; b=d6W8s/2a4GDObbesZoGZpeaO3ehT5kuOGSsy1qyJVsjEO8onJHGWZmkCKv1R0U3VUJMWggJkpj+KmD8rxU1+hE0IpKkOHeqABF2o5ur9kVSENVPWG5C2lQ9TjkKoUykwFv/5WzpqbjVe8JDH98eFVC1XXeQjYxQIKpzpz/pXwaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754543880; c=relaxed/simple;
-	bh=yR8nPo7RSy9ugmPK/WjtObiXayyd1C4FDZVmWCnradU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fdFwNw+RdMqbMDA8x3juAfd1XBjzTQoqpsWnbtEo+oPNS1GjJvU5D9uC1/BO3wdn/jy+h2LVUUb9rZ4mVuXwhQINm0uux877NzUxgt0XhAPFlbHsJC2eVqyAc7fwZFrol4FKCl0RYN59QJifb5LKeCQ329dnbFxKU5fBCDfHM4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=EhUOKP8z; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5770uYo1025034
-	for <linux-usb@vger.kernel.org>; Thu, 7 Aug 2025 05:17:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	/N41zxGY1+cas5ZIhVd71J8vDadK1hcCRra6b7f/VvU=; b=EhUOKP8zAXodSKEF
-	nhbU78sykofaz2Z0ihIrFuXJ5qS4Ky5byRoWDi8qwb5FDxjc9V1XqSIKd1A9VFde
-	SQ+31y/sdTlAIrxA3CfvwLM+AuVLnI1W57qB4dkNp6sZjnWtuu8m6mQqZn/wGKxP
-	t/nEIfJuqBUimpEuVYrLMwRHMFupuCDRYA2saMZe7vzr1yomLIPpU1EChFP5K/gY
-	ewccLfdDQqxr7+8mTivGvGLlhs6diHRM1/HDC/T8xRsrGE3Z6rb22vaWlKsuATqA
-	Sk88nPm1EG50wgFxEFDIfU4S6iiHerkehFGLyOBxDOjia//yeR5OPsfwZBMjKtW9
-	RxRAtg==
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48bpvyw98v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 07 Aug 2025 05:17:58 +0000 (GMT)
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2400b28296fso9494455ad.1
-        for <linux-usb@vger.kernel.org>; Wed, 06 Aug 2025 22:17:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754543877; x=1755148677;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/N41zxGY1+cas5ZIhVd71J8vDadK1hcCRra6b7f/VvU=;
-        b=L6yI7sQUvGxUEjUwltun+GZTt9jw0RegzqRF7Or25FGYsrrnc0z8Nwk0WkdaYpIPGk
-         97CrtD97FZ4WXDhJbqAyDy05C70y9a1OFVbVY91+MzOnZvshXNAVeBTnRWi1MDvqzolA
-         QHL/93ewZbpSxvh+uWinV7TzKIGTjCu1aGre6m0zaziCnynsjoCbNyxgogkQ/gRJ2BSu
-         gugvnfDFaIYd4UHoD3Tzp/FJQLfwJ0wy2Kita25VhS3TRXVZU1rpAnjOUbnbQG7Fhd8Y
-         9uC8ZmVMMYbGW9GttQGFbyLYH/kJ3qXZzmmDLTsAc1bkbREyHXO0r3U9BkB07G9egb3K
-         PW/g==
-X-Forwarded-Encrypted: i=1; AJvYcCVQ/39TvWopNcDU1d+IyDyg5HCz8BUEcSqc+ZFuZexHEgPO5u1wnQ+5VDPMvKCeKCq8WLoxa4IW87M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkJNONAumaW1YGbVdfqjhpsXeqWXzrIaD5FAbmpXBIEjTnhIgw
-	JeJLxNAQV+Ff7/jn3aW/fIMdDMYUNsxmQHvdVU+2vlUx+gQnnTEjQ6A2lC606Jeb7LomJCQKlU7
-	Ty7agTLNlGs1cPJ86gbMHjOi8CfG1QdMLCVZtBe46ywVwXpMy3w/f3tjM7pMMIT8=
-X-Gm-Gg: ASbGncsWQ/24vmqiNjFERhe4Ige5OzIv1gAcMwhsyWSJSW1e1XMp6JBv5s/Y9hC2Xli
-	40ADm8qI0wKcCxC46nkIBs6vsZ4QREeStNbNKDGwmBaFPXOaqJa5qWkeWWLZyDkS8y8nyM5JLCa
-	6G/wrpRxENhJwpUT2PpR4+EZ/NWRzOIoqhRgnjV0Dw0MhhR+hr+ZcI8RBxe6x5PzC2JEXhwzEfS
-	x8o+//scOXMF2VqcDxx7dLanJgyZF2vmBoDYJRrO2deoNZ7wmQfK7oBZrrTDAsHVVoNE1nNP9T/
-	Y0cMWFeLaf5r2iPmDiYTrUeuPTuMTSAVz5l7IamgZYeqFYGi1qTnlcuFRvf2yw532h4z9EI=
-X-Received: by 2002:a17:902:d4d1:b0:240:70d4:85c3 with SMTP id d9443c01a7336-2429f2f51d6mr84744795ad.9.1754543877001;
-        Wed, 06 Aug 2025 22:17:57 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHyDbF9PoBrZHlRqp8MesiFzENicYPrJrcmGr8gsjTe0RO1TwTc/K/NDHivovGPgpVa/mGgng==
-X-Received: by 2002:a17:902:d4d1:b0:240:70d4:85c3 with SMTP id d9443c01a7336-2429f2f51d6mr84744525ad.9.1754543876602;
-        Wed, 06 Aug 2025 22:17:56 -0700 (PDT)
-Received: from [10.92.173.209] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e899b5bbsm172162015ad.128.2025.08.06.22.17.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Aug 2025 22:17:56 -0700 (PDT)
-Message-ID: <233c62be-c0fa-499e-9f8f-e90cf0b23aa3@oss.qualcomm.com>
-Date: Thu, 7 Aug 2025 10:47:52 +0530
+	s=arc-20240116; t=1754546043; c=relaxed/simple;
+	bh=9vRDJpzi0FgQ87IUMfc7e15hXrGzZ1xK575lzX1D3eY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=K511euR05DXS1/mCNFrjHm29tr2gawbFAw5E022Nmut7Wp8ohrbt74AiplLPksYEgbAe/O29DW9gtdnqOA6eH9AcOmIzdELhIP5KHJfnRZA5DTEHfXK5bN4mqKPlTqK3o/1DzFa6h60yOEGt/V7SST6yhwN62pEMRBmNWLL37X0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IIu1Vazf; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754546041; x=1786082041;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9vRDJpzi0FgQ87IUMfc7e15hXrGzZ1xK575lzX1D3eY=;
+  b=IIu1VazfHJed1HSUdTwDJxZ9eQ+TMbS7Iumeqb5pb+FVYBeIug5DTz4X
+   mz3U4nXU5XZv/MiWFLA42DehbHDhUD1viyovSrPkERlpDkpu2Ru6PmZbH
+   tVODUhVoaRxDBieKm7BdhHkTWQQ9/4xnvZGmpVNZ/MabALhbpCee5jQR+
+   WLtfV4IcXk4mhIrCGgHRCzr7K376+mU4NnBkCOAXMusP8fR/uWprg1KUl
+   NMlneheu2MwOK+QSXyrr2LTj+t+QfOE0cKWXq9Sa4M8Z2xTGAsJaSdqs/
+   bCu4wnNsWWS/GSvq+xJ3yJezNourOvJZ5/Dz5Z5KlxY5S81WPvela/JTn
+   Q==;
+X-CSE-ConnectionGUID: /BOySTyXRE6hz0htQndytg==
+X-CSE-MsgGUID: BCwG2ru0ReuHCsTZ/UfgMw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="60501928"
+X-IronPort-AV: E=Sophos;i="6.17,271,1747724400"; 
+   d="scan'208";a="60501928"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 22:54:00 -0700
+X-CSE-ConnectionGUID: HVl1+M9QTcGIQlEzzjUbEQ==
+X-CSE-MsgGUID: TIi/4F/cQGqAqUxfJW2uHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,271,1747724400"; 
+   d="scan'208";a="202144604"
+Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.255])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 22:53:58 -0700
+Received: from punajuuri.localdomain (unknown [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 3484C11FC45;
+	Thu,  7 Aug 2025 08:53:55 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1ujtZc-005H0z-0W;
+	Thu, 07 Aug 2025 08:53:56 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: linux-media@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	laurent.pinchart@ideasonboard.com,
+	hdegoede@redhat.com,
+	Thinh.Nguyen@synopsys.com,
+	Amardeep Rai <amardeep.rai@intel.com>,
+	Kannappan R <r.kannappan@intel.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH v3 0/4] eUSB2 Double Isochronous IN Bandwidth support
+Date: Thu,  7 Aug 2025 08:53:51 +0300
+Message-Id: <20250807055355.1257029-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] usb: dwc3: qcom: Implement glue callbacks to
- facilitate runtime suspend
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20250806095828.1582917-1-krishna.kurapati@oss.qualcomm.com>
- <20250806095828.1582917-3-krishna.kurapati@oss.qualcomm.com>
- <83c54b3e-8e31-4ca1-9ca6-31703211d507@oss.qualcomm.com>
-Content-Language: en-US
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-In-Reply-To: <83c54b3e-8e31-4ca1-9ca6-31703211d507@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: n7Sg1ieDJhzAbRRVHNWJRkmO8inPzJI3
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA2MDAwOSBTYWx0ZWRfX1Km+0yzPPG+C
- 2Bckv85Uyc+Xdy5dchMkMyqYqMSad7Qy7eqBqDyyGlwJly1Q7By/uiMiSNEab+ss1x14R/5/pq5
- aj0w9yzXD5AAnuQnELS4IPKsg5IbQ9/5Ne+72e5pRROr1a+lymYE1Zse9T0VZfkubobNZQog47d
- x159cM1Sp3tzqwVCgWpuJv/T1W1T1O2vvZSuQY7dnMBOSU0QxISsr4BJdffWAlr7pMUKong9TSZ
- XNghQxmxxoG9fXQ/N0XvPyliE11M5kq/s7Cb9PR7glKO+XJeIqkF6Aj5oQ71vQzLgmhEg2fhBLq
- TWbvXeZVWWgRVyWN5kM/tpial1epbEC0RA5WSNg5NFHbedNGMkTnRA5+ZiIgAY+mn12Oy/8tIWu
- SPxEClM9
-X-Proofpoint-ORIG-GUID: n7Sg1ieDJhzAbRRVHNWJRkmO8inPzJI3
-X-Authority-Analysis: v=2.4 cv=NsLRc9dJ c=1 sm=1 tr=0 ts=68943706 cx=c_pps
- a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=A0m8u_RplU-AeOqBTYgA:9
- a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-06_05,2025-08-06_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
- adultscore=0 malwarescore=0 spamscore=0 suspectscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2508060009
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Hi all,
 
+This series enables support for eUSB2 Double Isochronous IN Bandwidth UVC
+devices specified in 'USB 2.0 Double Isochronous IN Bandwidth' ECN. In
+short, it adds support for new integrated USB2 webcams that can send twice
+the data compared to conventional USB2 webcams.
 
-On 8/6/2025 4:02 PM, Konrad Dybcio wrote:
-> On 8/6/25 11:58 AM, Krishna Kurapati wrote:
+These devices are identified by the device descriptor bcdUSB 0x0220 value.
+They have an additional eUSB2 Isochronous Endpoint Companion Descriptor,
+and a zero max packet size in regular isoc endpoint descriptor. Support
+for parsing that new descriptor was added in commit
 
-[...]
+c749f058b437 ("USB: core: Add eUSB2 descriptor and parsing in USB core")
 
->> +static void dwc3_qcom_set_role_notifier(struct dwc3 *dwc, enum usb_role next_role)
->> +{
->> +	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
->> +
->> +	if (qcom->current_role == next_role)
->> +		return;
->> +
->> +	if (pm_runtime_resume_and_get(qcom->dev) < 0) {
-> 
-> no need for the "< 0":
-> 
-> """
-> Return 0 if the runtime PM usage counter of @dev has been
-> incremented or a negative error code otherwise.
-> """
-> 
+This series adds support to UVC, USB core, and xHCI to identify eUSB2
+double isoc devices, and allow and set proper max packet, iso frame desc
+sizes, bytes per interval, and other values in URBs and xHCI endpoint
+contexts needed to support the double data rates for eUSB2 double isoc
+devices.
 
-ACK. Will remove the "<" condition here.
+v1 can be found here
+<URL:https://lore.kernel.org/linux-usb/20250616093730.2569328-2-mathias.nyman@linux.intel.com/>.
 
->> +		dev_dbg(qcom->dev, "Failed to resume device\n");
-> 
-> This probably belongs in the suspend/resume calls themselves
-> 
+v2 can be found here
+<URL:https://lore.kernel.org/linux-usb/20250711083413.1552423-1-sakari.ailus@linux.intel.com/>.
 
-I think today, resume fails only if "clk_bulk_prepare_enable" fails.
-Would like to keep this log here for now.
+since v2:
 
->> +		return;
->> +	}
->> +
->> +	if (qcom->current_role == USB_ROLE_DEVICE &&
->> +	    next_role != USB_ROLE_DEVICE)
-> 
-> The second part is unnecessary because the first if-condition in this
-> function ensures it
+- Use ep->eusb2_isoc_ep_comp.bDescriptorType to determined whether the
+  eUSB2 isochronous endpoint companion descriptor exists.
 
-ACK.
+- Clean up eUSB2 double isoc bw maxp calculation.
 
->> +		dwc3_qcom_vbus_override_enable(qcom, false);
->> +	else if ((qcom->current_role != USB_ROLE_DEVICE) &&
->> +		 (next_role == USB_ROLE_DEVICE))
-> 
-> similarly here
-> 
-> meaning this can become
-> 
-> dwc3_qcom_vbus_override_enable(qcom, next_role == USB_ROLE_DEVICE)
-> 
-> (I'm not sure if it's easier to read, up to you)
-> 
+- Drop le16_to_cpu(udev->descriptor.bcdUSB) == 0x220 check from
+  xhci_eusb2_is_isoc_bw_double() -- it's redundant as
+  ep->eusb2_isoc_ep_comp.dwBytesPerInterval will be zero otherwise.
 
-Will keep the if-else check as is for now.
+- Add kernel-doc documentation for usb_endpoint_max_isoc_bpi().
 
->> +		dwc3_qcom_vbus_override_enable(qcom, true);
->> +
->> +	pm_runtime_mark_last_busy(qcom->dev);
->> +	pm_runtime_put_sync(qcom->dev);
->> +
->> +	/*
->> +	 * Current role changes via usb_role_switch_set_role callback protected
->> +	 * internally by mutex lock.
->> +	 */
->> +	qcom->current_role = next_role;
->> +}
->> +
->> +static void dwc3_qcom_run_stop_notifier(struct dwc3 *dwc, bool is_on)
->> +{
->> +	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
->> +
->> +	/*
->> +	 * When autosuspend is enabled and controller goes to suspend
->> +	 * after removing UDC from userspace, the next UDC write needs
->> +	 * setting of QSCRATCH VBUS_VALID to "1" to generate a connect
->> +	 * done event.
->> +	 */
->> +	if (!is_on)
->> +		return;
->> +
->> +	dwc3_qcom_vbus_override_enable(qcom, is_on);
-> 
-> this argument logically becomes true, always
+- Check the endpoint has IN direction in usb_endpoint_max_isoc_bpi() and
+  usb_submit_urb() as a condition for eUSB2 isoc double bw.
 
-ACK. Will just pass true here in v4.
+since v1:
 
-> 
->> +	pm_runtime_mark_last_busy(qcom->dev);
->> +}
->> +
->> +struct dwc3_glue_ops dwc3_qcom_glue_ops = {
->> +	.pre_set_role	= dwc3_qcom_set_role_notifier,
->> +	.pre_run_stop	= dwc3_qcom_run_stop_notifier,
->> +};
->> +
->>   static int dwc3_qcom_probe(struct platform_device *pdev)
->>   {
->>   	struct dwc3_probe_data	probe_data = {};
->> @@ -636,6 +685,23 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->>   	if (ignore_pipe_clk)
->>   		dwc3_qcom_select_utmi_clk(qcom);
->>   
->> +	qcom->mode = usb_get_dr_mode(dev);
->> +
->> +	if (qcom->mode == USB_DR_MODE_HOST) {
->> +		qcom->current_role = USB_ROLE_HOST;
->> +	} else if (qcom->mode == USB_DR_MODE_PERIPHERAL) {
->> +		qcom->current_role = USB_ROLE_DEVICE;
->> +		dwc3_qcom_vbus_override_enable(qcom, true);
->> +	} else {
->> +		if ((device_property_read_bool(dev, "usb-role-switch")) &&
->> +		    (usb_get_role_switch_default_mode(dev) == USB_DR_MODE_HOST))
-> 
-> currently this will never be true on any qcom dt ("role-switch-default-mode" is
-> not present anywhere)
+- Introduce uvc_endpoint_max_isoc_bpi() to obtain maximum bytes per
+  interval value for an endpoint, in a new patch (3rd). This code has been
+  slightly reworked from the instance in the UVC driver, including support
+  for SuperSpeedPlus Isochronous Endpoint Companion.
 
-Agree. But I wrote for the sake of covering all cases and just in case 
-anyone uses this property tomorrow.
+- Use usb_endpoint_max_isoc_bpi() in the UVC driver instead of open-coding
+  eUSB2 support there, also drop now-redundant uvc_endpoint_max_bpi().
 
-Regards,
-Krishna,
+- Use u32 for maximum bpi and related information in the UVC driver -- the
+  value could be larger than a 16-bit type can hold.
+
+- Assume max in usb_submit_urb() is a natural number as
+  usb_endpoint_maxp() returns only natural numbers (2nd patch).
+
+Rai, Amardeep (3):
+  xhci: Add host support for eUSB2 double isochronous bandwidth devices
+  USB: core: support eUSB2 double bandwidth large isoc URB frames
+  USB: Add a function to obtain USB version independent maximum bpi
+    value
+
+Tao Q Tao (1):
+  media: uvcvideo: eUSB2 double isochronous bandwidth support
+
+ drivers/media/usb/uvc/uvc_driver.c |  4 +-
+ drivers/media/usb/uvc/uvc_video.c  | 24 ++----------
+ drivers/media/usb/uvc/uvcvideo.h   |  4 +-
+ drivers/usb/core/urb.c             | 17 +++++++--
+ drivers/usb/host/xhci-caps.h       |  2 +
+ drivers/usb/host/xhci-mem.c        | 60 ++++++++++++++++++++++++------
+ drivers/usb/host/xhci-ring.c       |  6 +--
+ drivers/usb/host/xhci.c            | 16 +++++++-
+ drivers/usb/host/xhci.h            | 19 ++++++++++
+ include/linux/usb.h                | 31 +++++++++++++++
+ 10 files changed, 137 insertions(+), 46 deletions(-)
+
+-- 
+2.39.5
+
 
