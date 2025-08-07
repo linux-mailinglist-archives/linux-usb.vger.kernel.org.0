@@ -1,90 +1,57 @@
-Return-Path: <linux-usb+bounces-26585-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26586-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F32EDB1DAB2
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 17:21:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BA1CB1DAB9
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 17:25:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9455618A4EF7
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 15:21:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51E8C58336E
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Aug 2025 15:25:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22C22265CC9;
-	Thu,  7 Aug 2025 15:21:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9EA26981C;
+	Thu,  7 Aug 2025 15:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="dF4lS6TQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rEKJFq56"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105381A0703
-	for <linux-usb@vger.kernel.org>; Thu,  7 Aug 2025 15:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BD1267B9B;
+	Thu,  7 Aug 2025 15:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754580065; cv=none; b=Z1T7h8EFM2qYSHcscar6awRnk0bZKVcAT3qo3g7CL0I+hzDj6GcKFQNx3+LntkqkXGYOQ/CPazXtpOxdZH1GsBVY7CdH6mz4WCs/9qS9EaKZGzZom6i9r+svL0lb59mcTUx2GpSplStfaXUMWXLf/nTb98Ol29QM1QEr1wYoliU=
+	t=1754580309; cv=none; b=tuymbyVqldkvO8YWxI7SBm3eDeVUdSwfqUh3wF8vrrQSGmhsUaBNLjK7DJpbfRU8BqGUzcDAo47rEOpsfgpDmXCc/qL2a/3EcR4pZhsR7t5xe9xIYpAT+cbYpjwZ+gTyIRl2auW0H96XU18zQjkuVBg0cVZ7uxgOSIYmCF941Qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754580065; c=relaxed/simple;
-	bh=Y1veVBdfttZ0n8O8/DFke4giERwe+Pqsn7D3fSR4KXY=;
+	s=arc-20240116; t=1754580309; c=relaxed/simple;
+	bh=m16anDcHzzBv8fTJ1SF4nX1vNGnGlpCIQqGs5C5MJSc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uSYymDhQ39HewatIIkhCKtOhq7sDvQ5dLTX481bnwqj0YPg6aQSZIkc5rG4UBhVx31uA8h7gwB0XlDTow7inSdz251CgD6dhPGIw+QmFgRvapQik8TRnefRLPm90M/wc1rJcHrxmKIX1Pk0QSABokKygsWnlTedhs+MH4/EKo9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=dF4lS6TQ; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4b070b3b7adso20019261cf.3
-        for <linux-usb@vger.kernel.org>; Thu, 07 Aug 2025 08:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1754580063; x=1755184863; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jZ47Gr8gkEiE1UAUhOYLFnuVTwG9WsgpCV3QwDVVHt0=;
-        b=dF4lS6TQlXGGqhDKm3FQA0rtkCwkAsVl31PM/dcWpsAO4yO6ppax1+RDA99gHJh0Q7
-         W+lxSfFTiyxbDZ1XzQnfdXdOzQMrV7Hyn6+LUn/rPYSvRIfUGXgf+Nue7zzDMgXFP+mK
-         +5ExGVhzrlNkx2YAKN1gYzcMyfrlR525UiDClAxiUBR7zWul0Et97EhUKhc4XMXQtxox
-         CCfQPukY1PxnV3Gqja9GtZBBxlBsO/WUoKAOtp8TCYSUKPGL/fMTPgZYA7bO8UOKHwtH
-         19aTqw4Ou8t84Xc1Fbbo73I6cNecDsBrNogTUvtNFFV5Hz3CAuNyMb6OTP2emcRWf/xp
-         7/Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754580063; x=1755184863;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jZ47Gr8gkEiE1UAUhOYLFnuVTwG9WsgpCV3QwDVVHt0=;
-        b=xVQstB8/d3YS/2PQNsyv8vi7zG3H4njHu4yHd+2+wxK62930SHOjSIyP9K3F7ltAYL
-         NEzHOVrqeF/Xk4+/ms14Vxgd5yzVEn40+G6jQYgN8+i0aGDaGW3X9DV/cGwjsdrK2JHY
-         3Hfwr1GNbQxnrMNEqLkIclKlcJ6900f3J4jUDP0GmEPN5FlbX4Uby32hLwGETW0e4EFk
-         Gf8UcaNJKV96kZ4DhlT81Zx6q60TxI1i+yaz0ZlmoQZfhU1jl1GBv6NRHvix+p8W2rM0
-         9PG6DjT4TKJjZgthHs4Oq6YJb+9VG1Q0MUrkZ7UZDNxSICzktoi2HHqzDmsTeNphG1nc
-         1qJQ==
-X-Gm-Message-State: AOJu0Yy1HJy5HZTnnR14iYdChpnMIiq5UAQmjygDoPgh4SyzW/7UEhem
-	TRynjphMrvVPbv/2oeomfZIJcj6apt2RZoe83AxADEQQ1Yz6K+WKOQG69ZvC4beRNw==
-X-Gm-Gg: ASbGncvKUpYCx3e9ebvgZzTU0duIWOdM8sKuUYygSOSbD65hGTQSA7T8p9laWJabZts
-	VBKlPC7d6PszCCGTrGvRg7y5ufr49uixZlaPLYHTWFr+JsmISBDizB4J4hoK9BFjADoQQxBWg5Z
-	JwVXaakH+4YVBuSFYyzsgBjouh2MpkaWQZg7jXstJVMG8NBReOzQXAD7nmmUXUwenwUWoMPzHxY
-	KG5+CYHQm3l5ZKaKc3xkAPjNGc0x1S4egYtLobhvpCSh95sefdovZOLrN/1Ui7KA1zKd/POIBuN
-	Tczn3JrzhdLLZKVw8CqtOUxl54Fgn4Kf5ipPoNGTQHJzCbsOW0hQ8+/VG8NqyUGrzSLjjgnjSis
-	3rXJjgffeqL3EYI9PKVakeHI=
-X-Google-Smtp-Source: AGHT+IHTHGt/s+i73eewgbmgPrmRvtfQE+p+rUr62KfvDejHSjzMR+pCi9prvIX7ii4QzRZGCt4mZQ==
-X-Received: by 2002:a05:622a:1ba6:b0:4b0:889b:bc60 with SMTP id d75a77b69052e-4b0912cb723mr97700351cf.10.1754580062647;
-        Thu, 07 Aug 2025 08:21:02 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::401d])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e67f595525sm970567085a.2.2025.08.07.08.21.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Aug 2025 08:21:02 -0700 (PDT)
-Date: Thu, 7 Aug 2025 11:20:59 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
+	 Content-Type:Content-Disposition:In-Reply-To; b=sTI9PjDvQlG4Ri6tgJZXa44VYPG8Zcemmp8nvvxEGEb+EFQXigvJ/lTrjbFyKwloxCvfUicH40uXX7D0cvre6Jgq6BxSrgTK5kLVtAwSztriDt2tyDvEgddlpjXCOmORsPEoMQKjuv8hB+f5iidjbaIIWc3KrR0crYOXauJ0CZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rEKJFq56; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D9AC4CEEB;
+	Thu,  7 Aug 2025 15:25:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1754580308;
+	bh=m16anDcHzzBv8fTJ1SF4nX1vNGnGlpCIQqGs5C5MJSc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rEKJFq56ICQjITfSuUs2nefp5H0fs8Okl0H6A6EacazjYmfHhgRwzpGNRd+xY63yz
+	 JLWwa0+v59yAwXAhlSQwcejLOjyeFUvE++GVo0sYqxS2Jxl+63n6IeTnpOL422LYzt
+	 miWVC2TU48xmrnP3EENp1Ks7rh0kTTjg6iKn6/4w=
+Date: Thu, 7 Aug 2025 16:25:05 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
-	hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
-	Amardeep Rai <amardeep.rai@intel.com>,
+	laurent.pinchart@ideasonboard.com, hdegoede@redhat.com,
+	Thinh.Nguyen@synopsys.com, Amardeep Rai <amardeep.rai@intel.com>,
 	Kannappan R <r.kannappan@intel.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v3 2/4] USB: core: support eUSB2 double bandwidth large
- isoc URB frames
-Message-ID: <428b0027-a9f6-40bd-8f3b-f148c1cc4912@rowland.harvard.edu>
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v3 1/4] xhci: Add host support for eUSB2 double
+ isochronous bandwidth devices
+Message-ID: <2025080747-stays-snuff-86cc@gregkh>
 References: <20250807055355.1257029-1-sakari.ailus@linux.intel.com>
- <20250807055355.1257029-3-sakari.ailus@linux.intel.com>
+ <20250807055355.1257029-2-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -93,75 +60,46 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250807055355.1257029-3-sakari.ailus@linux.intel.com>
+In-Reply-To: <20250807055355.1257029-2-sakari.ailus@linux.intel.com>
 
-On Thu, Aug 07, 2025 at 08:53:53AM +0300, Sakari Ailus wrote:
+On Thu, Aug 07, 2025 at 08:53:52AM +0300, Sakari Ailus wrote:
 > From: "Rai, Amardeep" <amardeep.rai@intel.com>
 > 
-> eUSB2 double isochronous in bandwidth devices support up to 6 transactions
-> per microframe, and thus doubles the total bytes possible to receive per
-> microframe.
+> Detect eUSB2 double isoc bw capable hosts and devices, and set the proper
+> xhci endpoint context values such as 'Mult', 'Max Burst Size', and 'Max
+> ESIT Payload' to enable the double isochronous bandwidth endpoints.
 > 
-> Support larger URB isoc frame sizes for eUSB2 double isoc in endpoints.
-> 
-> Also usb_endpoint_maxp() returns a natural number so there's no need to
-> assume it could be < 0.
+> Intel xHC uses the endpoint context 'Mult' field for eUSB2 isoc
+> endpoints even if hosts supporting Large ESIT Payload Capability should
+> normally ignore the mult field.
 > 
 > Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
+> Co-developed-by: Kannappan R <r.kannappan@intel.com>
+> Signed-off-by: Kannappan R <r.kannappan@intel.com>
 > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Co-developed-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > ---
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
->  drivers/usb/core/urb.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
+>  drivers/usb/host/xhci-caps.h |  2 ++
+>  drivers/usb/host/xhci-mem.c  | 60 ++++++++++++++++++++++++++++--------
+>  drivers/usb/host/xhci-ring.c |  6 ++--
+>  drivers/usb/host/xhci.c      | 16 +++++++++-
+>  drivers/usb/host/xhci.h      | 19 ++++++++++++
+>  5 files changed, 87 insertions(+), 16 deletions(-)
 > 
-> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-> index 7a76d5a62db1..6f8f3d751854 100644
-> --- a/drivers/usb/core/urb.c
-> +++ b/drivers/usb/core/urb.c
-> @@ -372,6 +372,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
->  	struct usb_host_endpoint	*ep;
->  	int				is_out;
->  	unsigned int			allowed;
-> +	bool				is_eusb2_isoch_double;
->  
->  	if (!urb || !urb->complete)
->  		return -EINVAL;
-> @@ -434,7 +435,11 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
->  		return -ENODEV;
->  
->  	max = usb_endpoint_maxp(&ep->desc);
-> -	if (max <= 0) {
-> +	is_eusb2_isoch_double = dev->speed == USB_SPEED_HIGH &&
-> +				usb_endpoint_is_isoc_in(&ep->desc) &&
-> +				ep->eusb2_isoc_ep_comp.bDescriptorType &&
-> +				le16_to_cpu(ep->desc.wMaxPacketSize) == 0;
-> +	if (!max && !is_eusb2_isoch_double) {
->  		dev_dbg(&dev->dev,
->  			"bogus endpoint ep%d%s in %s (bad maxpacket %d)\n",
->  			usb_endpoint_num(&ep->desc), is_out ? "out" : "in",
-> @@ -467,9 +472,13 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
->  			max = le32_to_cpu(isoc_ep_comp->dwBytesPerInterval);
->  		}
->  
-> -		/* "high bandwidth" mode, 1-3 packets/uframe? */
-> -		if (dev->speed == USB_SPEED_HIGH)
-> -			max *= usb_endpoint_maxp_mult(&ep->desc);
-> +		/* High speed, 1-3 packets/uframe, max 6 for eUSB2 double bw */
-> +		if (dev->speed == USB_SPEED_HIGH) {
-> +			if (is_eusb2_isoch_double)
-> +				max = le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval);
-> +			else
-> +				max *= usb_endpoint_maxp_mult(&ep->desc);
-> +		}
->  
->  		if (urb->number_of_packets <= 0)
->  			return -EINVAL;
-> -- 
-> 2.39.5
-> 
+> diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
+> index 4b8ff4815644..723a56052439 100644
+> --- a/drivers/usb/host/xhci-caps.h
+> +++ b/drivers/usb/host/xhci-caps.h
+> @@ -89,3 +89,5 @@
+>  #define HCC2_GSC(p)             ((p) & (1 << 8))
+>  /* true: HC support Virtualization Based Trusted I/O Capability */
+>  #define HCC2_VTC(p)             ((p) & (1 << 9))
+> +/* true: HC support Double BW on a eUSB2 HS ISOC EP */
+> +#define HCC2_EUSB2_DIC(p)	((p) & (1 << 11))
+
+Why tabs when the ones above it were not using tabs?
+
 
