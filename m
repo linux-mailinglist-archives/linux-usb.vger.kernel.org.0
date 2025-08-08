@@ -1,205 +1,132 @@
-Return-Path: <linux-usb+bounces-26622-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26623-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3110AB1E56C
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 11:13:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9D5DB1E68B
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 12:38:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0EE03A30CF
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 09:13:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C65E62556B
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 10:37:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0357726C3A0;
-	Fri,  8 Aug 2025 09:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DFC8274B27;
+	Fri,  8 Aug 2025 10:37:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b1KPXvWK"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="LeERSM+N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04922356C0;
-	Fri,  8 Aug 2025 09:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9AD2741B3
+	for <linux-usb@vger.kernel.org>; Fri,  8 Aug 2025 10:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754644399; cv=none; b=jCWvqMWY6eoGMPY2zYGmS+QPHXPi/OARfSnHmLW8suRArkpzG8n0kLQxqZ3L/BHHw2lthH08tBBmYccKaWBa74zmlwZbD1nitil/aei5IWsdHe8ZRm9ZPBLfBj+HmfjGfLlzKRK4Aj0c11x9LUdqLIxyqiWxr8wO2zusEQ+PlO8=
+	t=1754649462; cv=none; b=ei14pQJYzSdm9LJjLzMDYHxJb21l4ykKnfrWMXugUZL2izBiYjf9CJej3Fp3eENC6ZWvJJikkZLWBsNpySkynb+OWtOGxP99jH8K2f+BF8m/c95YkuQlsOB250LKfaCDsvln5nnwDNSw67F1zugF1UCjWlr+RESKDKklD0/nSm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754644399; c=relaxed/simple;
-	bh=jak3MZp79DWMyM3LRf+gkKinlpgNgSN9X5uunOJiQc8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l4qbN4VbBhj0k/dyjyKnOi7MpkOSkZKIz6yssF4RCBcl1PeN4qxf9JY34vQhK98ohMKrZCl+wgUPLeKwUjYnrGvzWRgq5Pmf3SIdfPrCUIFXi3vrOu1pdDqI/RH6pjkoJg8cmXc/Z20gLAe0T9qCBxSJVvAc9LFZG7KPmbs7ib0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b1KPXvWK; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754644398; x=1786180398;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jak3MZp79DWMyM3LRf+gkKinlpgNgSN9X5uunOJiQc8=;
-  b=b1KPXvWKWLHMK4nfZVqbK0HeBXq8D0x2YyW3XvbqmZJLHfZLoPsCk53O
-   TU0l7cIWuiEJTldYZ42T2/EWbACGqbIWSAf2+5F7NT+87PsBbBfyRORCe
-   uMScHgm69o+BqaEYaBI4jClUDKUpCgOC1cpLzBRPGaFIPOliyt20ui3F9
-   IANe7xnSynq3WhpduC2qV/Qfre09fWFxcjNXfmkseppeOLwEGnZEFyoRt
-   IojjF/NgqKiu3hxtY0ruiDHAeJJ0cK6YCpDgpEufhNUTR5ITozulH8K1Y
-   0tWxCeXzrfBA3xv5VEI/g2bBpx6vG/aG2j5Bzn15OnWHrFodaTS32ne1G
-   g==;
-X-CSE-ConnectionGUID: lVZt+DeMSuW8EvjCdNA9EQ==
-X-CSE-MsgGUID: z84Hts8oReGUOzL14CaoKw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="74443780"
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="74443780"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2025 02:13:17 -0700
-X-CSE-ConnectionGUID: 0m8LeReFSzieTb2Y6stPaQ==
-X-CSE-MsgGUID: CD1CwIOYQmGVCDGP9ZgWOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="196109753"
-Received: from unknown (HELO black.igk.intel.com) ([10.91.253.5])
-  by fmviesa001.fm.intel.com with ESMTP; 08 Aug 2025 02:13:14 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 5D8C793; Fri, 08 Aug 2025 11:13:13 +0200 (CEST)
-Date: Fri, 8 Aug 2025 11:13:13 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Mario Limonciello <superm1@kernel.org>,
-	"Rangoju, Raju" <raju.rangoju@amd.com>, linux-usb@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	andreas.noever@gmail.com, michael.jamet@intel.com,
-	westeri@kernel.org, YehezkelShB@gmail.com, bhelgaas@google.com,
-	Sanath.S@amd.com
-Subject: Re: [PATCH 0/3] thunderbolt: Update XDomain vendor properties
- dynamically
-Message-ID: <20250808091313.GN476609@black.igk.intel.com>
-References: <59cd3694-c6e5-42c4-a757-594b11b69525@amd.com>
- <20250806085118.GE476609@black.igk.intel.com>
- <9a757d21-a6e0-4022-b844-57c91323af5e@kernel.org>
- <20250806150024.GF476609@black.igk.intel.com>
- <2025080628-viral-untruth-4811@gregkh>
- <20250807051533.GG476609@black.igk.intel.com>
- <2025080758-supervise-craftily-9b7f@gregkh>
- <17ed42fe-9d8d-46da-8434-f508ec5932fa@kernel.org>
- <20250808044538.GK476609@black.igk.intel.com>
- <2025080822-cardboard-aloha-3c5d@gregkh>
+	s=arc-20240116; t=1754649462; c=relaxed/simple;
+	bh=DFbbcOY5/H6JQUuqXssqjAboCnz4I7riuC1BUqvx8I8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=ayJjRHU4ToAjJZrq7v52IHvZzorv/dvLvJ5YLttNrCcwTw14caU8lk2icYaoRcDUcn1GVBrZcVh67GfFq8WCokMhGhXAUdwffc6Dg6YvShm6QF0+YYkxbeitWZZr9IfRCE5BrXiDMRyZQukaBGbSeU4GqnFn+0IlNhBC1HLEOAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=LeERSM+N; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250808103732epoutp0279d4c4048e1d87cfdd252fcab7a676c2~ZxGFwjpbj2142121421epoutp02d
+	for <linux-usb@vger.kernel.org>; Fri,  8 Aug 2025 10:37:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250808103732epoutp0279d4c4048e1d87cfdd252fcab7a676c2~ZxGFwjpbj2142121421epoutp02d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1754649452;
+	bh=tLJrRsEUYFZQp0Y/N/m+w0KFJz0WpXhgSYsFbM+cppE=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=LeERSM+NFvK0LFy3CVkt5qlLAvxVClwd4M1B+gSKyvYgBM3K6IDoV9TgVfvAfX4Q6
+	 5ypuWvWqPbiH4VpUVyt4Hs2jp9zDfQLiP7PTmLzJbhxdPSR9UzQuPOuI/HnI77+R6M
+	 X1sAw1viKdEUo0hPeB30iR1MAEDo80MM+S4ln6lU=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20250808103731epcas5p3c595d52fb1122012d3c3fae458d7c41c~ZxGEv5IHN1782717827epcas5p3X;
+	Fri,  8 Aug 2025 10:37:31 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.88]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4bz0pf3qFnz6B9m9; Fri,  8 Aug
+	2025 10:37:30 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250808103729epcas5p1a2c83cd71d7e679a6143a3fbfada21a2~ZxGC4inVW0858808588epcas5p1w;
+	Fri,  8 Aug 2025 10:37:29 +0000 (GMT)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250808103727epsmtip152847a552a5351517eaba2de9014408b~ZxGAlndIJ2810828108epsmtip1F;
+	Fri,  8 Aug 2025 10:37:26 +0000 (GMT)
+Message-ID: <20c46529-b531-494a-9746-2084a968639e@samsung.com>
+Date: Fri, 8 Aug 2025 16:07:25 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2025080822-cardboard-aloha-3c5d@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: dwc3: Remove WARN_ON for device endpoint
+ command timeouts
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+	m.grzeschik@pengutronix.de, balbi@ti.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, akash.m5@samsung.com, hongpooh.kim@samsung.com,
+	eomji.oh@samsung.com, shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	muhammed.ali@samsung.com, thiagu.r@samsung.com, stable@vger.kernel.org
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <20250808090104.RL_xTSvh@linutronix.de>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250808103729epcas5p1a2c83cd71d7e679a6143a3fbfada21a2
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250807014905epcas5p13f7d4ae515619e1e4d7a998ab2096c32
+References: <CGME20250807014905epcas5p13f7d4ae515619e1e4d7a998ab2096c32@epcas5p1.samsung.com>
+	<20250807014639.1596-1-selvarasu.g@samsung.com>
+	<20250808090104.RL_xTSvh@linutronix.de>
 
-On Fri, Aug 08, 2025 at 10:02:08AM +0100, Greg KH wrote:
-> On Fri, Aug 08, 2025 at 06:45:38AM +0200, Mika Westerberg wrote:
-> > On Thu, Aug 07, 2025 at 11:07:39AM -0500, Mario Limonciello wrote:
-> > > On 8/7/25 11:02 AM, Greg KH wrote:
-> > > > On Thu, Aug 07, 2025 at 07:15:33AM +0200, Mika Westerberg wrote:
-> > > > > On Wed, Aug 06, 2025 at 05:58:26PM +0100, Greg KH wrote:
-> > > > > > On Wed, Aug 06, 2025 at 05:00:24PM +0200, Mika Westerberg wrote:
-> > > > > > > On Wed, Aug 06, 2025 at 09:06:30AM -0500, Mario Limonciello wrote:
-> > > > > > > > On 8/6/2025 3:51 AM, Mika Westerberg wrote:
-> > > > > > > > > On Wed, Aug 06, 2025 at 11:46:04AM +0530, Rangoju, Raju wrote:
-> > > > > > > > > > 
-> > > > > > > > > > 
-> > > > > > > > > > On 7/28/2025 12:17 PM, Mika Westerberg wrote:
-> > > > > > > > > > > Hi,
-> > > > > > > > > > > 
-> > > > > > > > > > > On Tue, Jul 22, 2025 at 11:20:23PM +0530, Raju Rangoju wrote:
-> > > > > > > > > > > > This patch series aims to update vendor properties for XDomain
-> > > > > > > > > > > > dynamically for vendors like AMD, Intel and ASMedia.
-> > > > > > > > > > > 
-> > > > > > > > > > > The XDomain properties pretty much describe "software" not the underlying
-> > > > > > > > > > > hardware so I don't understand why this is needed? We could have some USB
-> > > > > > > > > > > IF registered Linux specific ID there but I don't see why this matters at
-> > > > > > > > > > > all.
-> > > > > > > > > > 
-> > > > > > > > > > Currently, it is showing up as "Intel" on AMD host controllers during
-> > > > > > > > > > inter-domain connection. I suppose an alternative is to just call it "Linux"
-> > > > > > > > > > or "Linux Connection Manager" to ensure we accurately represent the
-> > > > > > > > > > connections across different systems.
-> > > > > > > > > > 
-> > > > > > > > > > I appreciate your guidance on this and suggestions you might have.
-> > > > > > > > > 
-> > > > > > > > > Yeah, something like that (I prefer "Linux"). The "ID" still is 0x8086
-> > > > > > > > > though but I don't think that matters. AFAIK we have other "donated" IDs in
-> > > > > > > > > use in Linux. Let me check on our side if that's okay.
-> > > > > > > > 
-> > > > > > > > Having looked through this discussion I personally like "Linux" for this
-> > > > > > > > string too.
-> > > > > > > > 
-> > > > > > > > As for the vendor ID doesn't the LF have an ID assigned already of 0x1d6b?
-> > > > > > > > Would it make sense to use that?
-> > > > > > > 
-> > > > > > > AFAIK that's PCI ID, right? It should be USB IF assigned ID and LF is not
-> > > > > > > here at least:
-> > > > > > > 
-> > > > > > >    https://www.usb.org/members
-> > > > > > > 
-> > > > > > > If it really matters we can sure register one.
-> > > > > > 
-> > > > > > Linux has an official USB vendor id, we use it for when Linux is used as
-> > > > > > a USB gadget device and in a few other places.  If you want to reserve a
-> > > > > > product id from it, just let me know and I can dole it out (the list is
-> > > > > > around here somewhere...)
-> > > > > 
-> > > > > Yes please :) I think this is the right thing to do.
-> > > > 
-> > > > Great, please let me know why you need it and what it will be for and
-> > > > why.  I totally can not figure that out from this thread...
-> > > > 
-> > > > thanks,
-> > > > 
-> > > > greg k-h
-> > > 
-> > > Actually it's a very similar reason for the gadget drivers.  When connected
-> > > to other machines and using the USB4 networking feature (like a host to host
-> > > communication) the Linux kernel will identify itself and the other side will
-> > > show that to a user.
-> > > 
-> > > So right now it's got some hardcoded values.  This thread was prompting to
-> > > change the strings, but it's brought about the realization that we should
-> > > also be using a Linux specific vendor (the one uses in gadget devices) and
-> > > then a Linux specific "device id" which you will allocate.
-> > > 
-> > > Hope that helps!
-> > 
-> > Thanks Mario, yes exactly that :)
-> > 
-> > "Linux USB4 Inter-domain discovery properties" in a nutshell.
-> 
-> Ok, sounds good.  Here's the currently assigned ids that we have so far:
-> 
-> # Linux Foundation USB id list.
-> 1d6b  Linux Foundation
->         0001  1.1 root hub
->         0002  2.0 root hub
->         0003  3.0 root hub
->         0010  USB Debug Target
->         0011  USB GDB Target
->         0100  PTP Gadget
->         0101  Audio Gadget
->         0102  EEM Gadget
->         0103  NCM (Ethernet) Gadget
->         0104  Multifunction Composite Gadget
->         0105  FunctionFS Gadget
->         0106  Composite Gadget: ACM + Mass Storage
->         0107  Embedded Hub Gadgetg
->         0200  Qemu Audio Device
->         0246  BlueZ Host Stack
->         0247  BlueZ for Android
-> 
-> Any specific number feel drawn toward using?  Would 0004 make sense as this is
-> "USB 4" or should we save that if we ever get a USB 4.0 root hub?
 
-0004 USB4
+On 8/8/2025 2:31 PM, Sebastian Andrzej Siewior wrote:
+> On 2025-08-07 07:16:31 [+0530], Selvarasu Ganesan wrote:
+>> This commit addresses a rarely observed endpoint command timeout
+> …
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Akash M <akash.m5@samsung.com>
+>> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+> The Author is Selvarasu Ganesan <selvarasu.g@samsung.com> while the
+> first sign-off is Akash M <akash.m5@samsung.com>. If Akash is the Author
+> and you are sending it then the patch body has to start with From: line
+> to credit this.
+>
+> Please see
+> https://origin.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+> and https://origin.kernel.org/doc/html/latest/process/submitting-patches.html#from-line
+>
+> Sebastian
 
-sounds good to me. In USB4 there is no "root hub". It's called host router
-(but we do have device routers that are called USB4 hubs for added
-confusion ;-).
 
-But I'm fine with other numbers too, does not matter if you want to save it
-for some future USB variant.
+Hi Sebastian,
+
+Thank you for pointing out the discrepancy. We will ensure that the 
+patch submission accurately reflects the authorship.
+
+Since I, "Selvarasu Ganesan" am the author, I will reorder the sign-offs 
+to reflect the correct authorship.
+
+Here is the corrected patch submission:
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Signed-off-by: Akash M <akash.m5@samsung.com>
+
+Regarding the next steps, I will post a new patchset with the reordered 
+sign-offs.
+
+Thanks,
+Selva
 
