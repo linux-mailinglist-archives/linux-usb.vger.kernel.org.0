@@ -1,170 +1,95 @@
-Return-Path: <linux-usb+bounces-26629-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26630-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03AE3B1E950
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 15:31:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E1B8B1E984
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 15:50:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AE6C1AA6D37
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 13:31:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56966584970
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 13:50:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9826B27E06D;
-	Fri,  8 Aug 2025 13:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBD7214B086;
+	Fri,  8 Aug 2025 13:50:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N2tH2CLN"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DcwFJFQg";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="AHJyut+X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6B827C84B;
-	Fri,  8 Aug 2025 13:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E182E62C;
+	Fri,  8 Aug 2025 13:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754659875; cv=none; b=QC5yhVGQUFqT37gPXV9KbOa5Zd3CTgqCyOxQsgY3yHyD2HZh6YqEMPmwf8c9m6CdUJxERFQU6UoPm09il6QdmNMobnUAzF2+zgV6+pKzguJ4gZ2xYViSbHEFlJerF8eT2pbHxireGP7/TkGMXE4vzj+/8G/2xFuwtVuhSaMUjwc=
+	t=1754661022; cv=none; b=jNvDPJ/RRHzvEoYvNZInZW77PzFpoUjAdrimN0eRGzCy6bSM6fAauZiDKskNgR6+6cVnY8xjSwJjtMuI0E94qqpW6H35rh1ASl32l068OJwVZMgD+DzWgmQE+OilB0sU32jmVix484rx3lATJTwHoeSwwXa/62uxdr+vZGYdlHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754659875; c=relaxed/simple;
-	bh=yhbAlk+bUXw3QlfndteOlJmEcqsQkv8FdfP4A42o/bo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QvwQ4KTmY37xr6vOhcRzB550OOpDlFYZvkoUAwoh9IDdryQ5KcC6ZEhAxcdK5IZbc8gFnE4Ffn4CCytmA6HRs3ty0vhaLvs2YF0YfucgLwjvB9I1yIVZdUAt3+7nQHkGNVQmQA+z2SG0Ils2l3aAfp8a0tXR9IjyezaxFHFFx8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N2tH2CLN; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-458baf449cbso20330395e9.0;
-        Fri, 08 Aug 2025 06:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754659872; x=1755264672; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lp7uMaLHngRmnBy7KRF1MYjSNQthIEfOIUeVdVc23oY=;
-        b=N2tH2CLN8HRFXaLRvF+bOlln48UkG4W4YIMsfO9D5nJ+zu/PZTc54JCmk66zGtMwbj
-         YX8F1qpzEm2V+aDeu1rEipQCuvG2cXELe1a2YxGZrNPYNj6pc5fb8hsIPkZZvNnCcD1W
-         LtSlrc3Qr1G1PdM+mNc6LZlQ4bvU1O/1sbFc+mUmWJOkNMmT4/i+o6hWA63r0a2gG0NV
-         lFf7imIdodpRnaTHsYKZbef6Exq70VUlkGtajHUY8wf+ExaZFq3ozfcmz86Z/1AeMK1P
-         PSnOG9z9yebxaZ8IEk236SIZ5Dk4h+xurQl58WeqO3/SzTbwikALFXjTv4/4caPmcAu7
-         rsTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754659872; x=1755264672;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lp7uMaLHngRmnBy7KRF1MYjSNQthIEfOIUeVdVc23oY=;
-        b=bqOlk8EitnzLyV9wN8FhikZZal/xX97ZBU5Uf94tTyNnFcwPrP6gwL4nqaluMzurcX
-         taJh4xSeZ9FkK9fc6HASA9tFO2AJgHDsVxkEecG7BSL4naJGLuKFJZE+dDkYXFRGtRRw
-         bM7RmyJFm7UK7MOQ7H3+XgsgJruPX/lKm7veA+LY0e22o2ev/vi+QgOWIZ6XuDC0lJBU
-         QAOFfLDWYmnzsmXUbu6ij1bfcnkhLt0fWtN2wqAndhwXlZSUyEY+NJ7chl6GN1kek+Dm
-         V7l3O2RsNuk6FzK0TqbgSqGwWTTL81OxIV1teCjZNPkL4ylcBoO53PcW1fz3C86veMMA
-         idpA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHyy1Mv7oeC/OKOZ6abDoPywmHa8eMzqj8P9moWDQVAjnqFayB+q2eU/0pRDDxyFWTs3K41HV/@vger.kernel.org, AJvYcCV70htT0xeCX2ZKNmNb2C6kXqcFNgG3oUacyYK6OKnbzS7mW6cSuj+upDyWry66LVMdymzcFo5FrgA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcubnAaRjWBacNEvRjfDECRBIy4L9jhXQcT/BzusFCzND6d3Nc
-	1h2VyHx+Be9m3Y12sSWkpXPoIsd+mg3zfBPGOmvsjYQZ6kCCbVNf4UnW
-X-Gm-Gg: ASbGncsNOHRC88OqHNHFdtFwIaSHpHedKwpWpJtY3XqpCTKRQPRVv37W3SggREVAfOZ
-	Phiq6AW6xMKByOybod8IV4dU/qsODdvw4QPJ2NSq1FUl/zPmsTB5/3KbFt2Cgcs9tRbkGnjazX3
-	FUFykoZb59nZG9jdM0+Rn/gT4IQDd3HhcFnjWtKslKBR4Bho5B+ji0D5dQiDWAuWgCzVPTUg96A
-	FcEglagm5D8PDUp5gk9o6VpgwOrNZU/UwgHWkPM2A4ec5TbdULqx4ZlPHAZGq62UI+jzWF/WmrW
-	KOfQ3u4njSPe43QjZSRp6OB1SX7csDz1OawKk/AYL+EUfytTWKhMRL/xEbRpHIwJA4i/bcXN7Ga
-	kfDYKeuxpP/ecF0VPjWKwSCf82VyV8nYCmQkONLQ5iKf8i1hVHnynyKyvrg27MUWh
-X-Google-Smtp-Source: AGHT+IGJpls5CYjYfpDD0nrfSMzKf6KXmMloUHe7S+4US4/txZoyNKAT7wIVE1eDUghDpeA/hequwA==
-X-Received: by 2002:a05:600c:4686:b0:459:dfde:3324 with SMTP id 5b1f17b1804b1-459f4faf99amr24275765e9.29.1754659871273;
-        Fri, 08 Aug 2025 06:31:11 -0700 (PDT)
-Received: from labdl-itc-sw06.tmt.telital.com ([2a01:7d0:4800:a:8eec:4bff:febd:98b9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-459e5e99e04sm133600065e9.11.2025.08.08.06.31.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Aug 2025 06:31:10 -0700 (PDT)
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Cc: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Daniele Palmas <dnlplm@gmail.com>,
+	s=arc-20240116; t=1754661022; c=relaxed/simple;
+	bh=gfk1YcUJLZRk1tM/elLznY8hRMaF9ZOT/cGJ68rVJ+8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e1ExMRwjX95/ageA+ahUrwBSPDHZtRDHarJB3ehRHZc78QrMXEZ7djPpVGBX8pp1B/T00WW/I75kEKknjMbySxIIq1CvLN+oPCZZNBZVMSGg3Iy4Bt1RJiPU7tvKcQENcN0q79ORHVm3K00IOxWqqpC7FkeEmjhgNKHCOqMmPuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DcwFJFQg; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=AHJyut+X; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Fri, 8 Aug 2025 15:50:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1754661015;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gfk1YcUJLZRk1tM/elLznY8hRMaF9ZOT/cGJ68rVJ+8=;
+	b=DcwFJFQgJF/DZyg3N82IkHk0LxFYBHub4MpmyawL2xxF3nSwHxcYjKZ4ZXQl4XSb2mYtHc
+	VyRyJEovkisBBneQjznjlMImd4ugYBNkmUWNyYA+XHFIk1C/ofb/ephQWwZY3zedrCrINd
+	+A2KBoHt/Vri2kEEuqnc0PkQgZmasaCbjHQot8E7/DSXeJxsj7RQADSXt1rG/6Xg/Cv7kD
+	Ql/MLnNn1/qT/OVnYaOgTyi588HoufrCn2MCPSG9vl5qZ0pvFsuPRmV3nvP01m6hS/LHIy
+	1nvAZD81C0yFE5k+9gHLv6wZ7uTB8WqVAF98L5XFtv9RvHR8DETKH1JLTZYNqQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1754661015;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gfk1YcUJLZRk1tM/elLznY8hRMaF9ZOT/cGJ68rVJ+8=;
+	b=AHJyut+XFzRFI5KROG1DW/xcKt6rFzTonQEj9v0csfL619G9r2SrBxMU29WIFFTi2Dnman
+	6bri30KQpRFJefDg==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+	m.grzeschik@pengutronix.de, balbi@ti.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, akash.m5@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com,
+	shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	muhammed.ali@samsung.com, thiagu.r@samsung.com,
 	stable@vger.kernel.org
-Subject: [PATCH v2] net: usb: qmi_wwan: add Telit Cinterion FN990A w/audio composition
-Date: Fri,  8 Aug 2025 15:31:08 +0200
-Message-ID: <20250808133108.580624-1-fabio.porcedda@gmail.com>
-X-Mailer: git-send-email 2.50.1
+Subject: Re: [PATCH v3] usb: dwc3: Remove WARN_ON for device endpoint command
+ timeouts
+Message-ID: <20250808135013.UMcO2oA1@linutronix.de>
+References: <CGME20250808125457epcas5p111426353bf9a15dacfa217a9abff6374@epcas5p1.samsung.com>
+ <20250808125315.1607-1-selvarasu.g@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250808125315.1607-1-selvarasu.g@samsung.com>
 
-Add the following Telit Cinterion FN990A w/audio composition:
+On 2025-08-08 18:23:05 [+0530], Selvarasu Ganesan wrote:
+> This commit addresses a rarely observed endpoint command timeout
+=E2=80=A6
+> Cc: stable@vger.kernel.org
+> Co-developed-by: Akash M <akash.m5@samsung.com>
+> Signed-off-by: Akash M <akash.m5@samsung.com>
+> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-0x1077: tty (diag) + adb + rmnet + audio + tty (AT/NMEA) + tty (AT) +
-tty (AT) + tty (AT)
-T:  Bus=01 Lev=01 Prnt=01 Port=09 Cnt=01 Dev#=  8 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=1077 Rev=05.04
-S:  Manufacturer=Telit Wireless Solutions
-S:  Product=FN990
-S:  SerialNumber=67e04c35
-C:  #Ifs=10 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 3 Alt= 0 #EPs= 0 Cls=01(audio) Sub=01 Prot=20 Driver=snd-usb-audio
-I:  If#= 4 Alt= 1 #EPs= 1 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
-E:  Ad=03(O) Atr=0d(Isoc) MxPS=  68 Ivl=1ms
-I:  If#= 5 Alt= 1 #EPs= 1 Cls=01(audio) Sub=02 Prot=20 Driver=snd-usb-audio
-E:  Ad=84(I) Atr=0d(Isoc) MxPS=  68 Ivl=1ms
-I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 8 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 9 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=8c(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-Cc: stable@vger.kernel.org
-Depends-on: ad1664fb6990 ("net: usb: qmi_wwan: fix Telit Cinterion FN990A name")
-Depends-on: 5728b289abbb ("net: usb: qmi_wwan: fix Telit Cinterion FE990A name")
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
----
-
-v2:
-- add Depends-on
-- add Acked-by Bjørn Mork <bjorn@mork.no>
-
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index f5647ee0adde..e56901bb6ebc 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1361,6 +1361,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1057, 2)},	/* Telit FN980 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1070, 2)},	/* Telit FN990A */
-+	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1077, 2)},	/* Telit FN990A w/audio */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1080, 2)}, /* Telit FE990A */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a0, 0)}, /* Telit FN920C04 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a4, 0)}, /* Telit FN920C04 */
--- 
-2.50.1
-
+Sebastian
 
