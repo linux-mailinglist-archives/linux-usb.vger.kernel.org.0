@@ -1,151 +1,75 @@
-Return-Path: <linux-usb+bounces-26608-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26609-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99004B1E250
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 08:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A03B1E268
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 08:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6432118A23D7
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 06:31:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 140F018C26CD
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Aug 2025 06:43:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C9DA225409;
-	Fri,  8 Aug 2025 06:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57770221294;
+	Fri,  8 Aug 2025 06:43:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="oumdgnpI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gWi3SVcp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E801F1306;
-	Fri,  8 Aug 2025 06:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E391BFE00
+	for <linux-usb@vger.kernel.org>; Fri,  8 Aug 2025 06:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754634634; cv=none; b=geodAv2WxrTvjSx5F+XDmoTy68puTiqH1EQZGu+XoiliyH8QgAtwSsHo1VCkfFVutyvbVi4QpFyIyZ4mNipJ/a9OT7VzVYzzYd6AVuVZnF7/Z9M/e5jr8j4O3A5gt7ZUYvVBZYZLTxAHp1dyi69/B00My0RJ0IYR1XePs0Dvzf8=
+	t=1754635398; cv=none; b=RRJIhBKGjbhpSiv6BpmfL1hrb6scWKbwsQOoGTY4czqGJufH0xDQCcJlzKlvOt8HZhjm/oYBCNtMVIEK+Fg9pAcQwJdQ5mLkR8St0furqorzgRMh7a4PPq2KpmjuE3SkY5rGVIRgwMh5/PKrFDWYxfEjCAfZdCERsGfezCko3So=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754634634; c=relaxed/simple;
-	bh=2sZclBUIchMgOI2BfV6AOvaczH7sNa7CyFdTx87lVcE=;
+	s=arc-20240116; t=1754635398; c=relaxed/simple;
+	bh=z8tLQjAUN3oGEDNfENoL+HUVuAWNPtTwyYCEL2vbr/c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WJsST49+5uog5kV2/lr94XjSVUpPOiviZ1BtMsrxc9O1FQHuOMbY9YkiqDxgbRyUDi79p6AUiDG/tsnP1EUqXTWNuBYyNzM19FN1bNNM+pOFKaLqdrjGOtEz5Kzbp/uqIsy/rXsiKC/xlWl5DxuhonkOhx8TnSoEuWpdTPKzqoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=oumdgnpI; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 5463C1648;
-	Fri,  8 Aug 2025 08:29:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1754634577;
-	bh=2sZclBUIchMgOI2BfV6AOvaczH7sNa7CyFdTx87lVcE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oumdgnpIcDsNg0djHYTq38XzQUF1TkgCzet42UojtjhitVip2QZCrbg2zqqcByvlX
-	 baY/CA6Dhgx81mz9UqbNHHcJrX7kQLHr2Qwr0A9FfGL8DNPlEjbIJ+qzZwZn4Bu7WR
-	 q6Pt/CjukSiWCSaMGBxXRzbtMbKI+d/wrxnUndSo=
-Date: Fri, 8 Aug 2025 09:30:11 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Hans Verkuil <hverkuil+cisco@kernel.org>
-Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Devarsh Thakkar <devarsht@ti.com>, Benoit Parrot <bparrot@ti.com>,
-	Hans Verkuil <hverkuil@kernel.org>, Mike Isely <isely@pobox.com>,
-	Hans de Goede <hansg@kernel.org>,
-	Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
-	Christian Gromm <christian.gromm@microchip.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>,
-	Dongliang Mu <dzm91@hust.edu.cn>, Jonathan Corbet <corbet@lwn.net>,
-	Tomasz Figa <tfiga@chromium.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andy Walls <awalls@md.metrocast.net>,
-	Michael Tretter <m.tretter@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Bin Liu <bin.liu@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Mirela Rabulea <mirela.rabulea@nxp.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-	Michal Simek <michal.simek@amd.com>, Ming Qian <ming.qian@nxp.com>,
-	Zhou Peng <eagle.zhou@nxp.com>,
-	Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Nas Chung <nas.chung@chipsnmedia.com>,
-	Jackson Lee <jackson.lee@chipsnmedia.com>,
-	Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-	Houlong Wei <houlong.wei@mediatek.com>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-	Tiffany Lin <tiffany.lin@mediatek.com>,
-	Yunfei Dong <yunfei.dong@mediatek.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
-	Jacob Chen <jacob-chen@iotwrt.com>,
-	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	=?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-	Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Fabien Dessenne <fabien.dessenne@foss.st.com>,
-	Hugues Fruchet <hugues.fruchet@foss.st.com>,
-	Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Steve Longerbeam <slongerbeam@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Paul Kocialkowski <paulk@sys-base.io>,
-	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-	Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	Corentin Labbe <clabbe@baylibre.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bingbu Cao <bingbu.cao@intel.com>,
-	Tianshu Qiu <tian.shu.qiu@intel.com>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-	imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-amlogic@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	mjpeg-users@lists.sourceforge.net
-Subject: Re: [PATCH 27/65] media: Reset file->private_data to NULL in
- v4l2_fh_del()
-Message-ID: <20250808063011.GJ11583@pendragon.ideasonboard.com>
-References: <20250802-media-private-data-v1-0-eb140ddd6a9d@ideasonboard.com>
- <20250802-media-private-data-v1-27-eb140ddd6a9d@ideasonboard.com>
- <e9aaf929-5e0d-4379-996b-a564acd3e331@kernel.org>
- <20250807085003.GE11583@pendragon.ideasonboard.com>
- <20250807170004.GG11583@pendragon.ideasonboard.com>
- <20250807202553.GB28610@pendragon.ideasonboard.com>
- <7605f778-6b20-47e4-bd65-7a0d85fff736@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=gFzCECuE37zp6miz9cd847yRSMyTuH8Tj8NdswJH0+c52KbbeezJPN4Mys1spaisbuK8Ldq5eLudvqzdYwCG3yA5Ufjpdx0n4RZELqGJ3NNGC8SNvCMuZ3pk5ST6EBYOZjTyY0ifeKBtdNhI36GWaLYikUvkC0JyAYkh67KjVNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gWi3SVcp; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754635398; x=1786171398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z8tLQjAUN3oGEDNfENoL+HUVuAWNPtTwyYCEL2vbr/c=;
+  b=gWi3SVcptX5JswZ2dnjIb6xQJ6KjWCvMZEaMWBizcZqRPc1R9OOQ+ubu
+   II5h9GpUj95StTqUpBZj2FnhM9pHwhZ18OW/QD2IEVFWjNO3u7adDnMEV
+   OXYbMBiteMpIDYRjGf2PdhbXDaqTjCpvo2db/ddiue7xHzwhn7xtwCw+r
+   M/7KL+aS2duViMG+tccC7mIgbm8//N3mco0VVY59/xdATTIQrWD9/tm63
+   yD6uL7L9qzOpqBEwZXdsI5EDWwmx9pRzoHpoVeqAKRuTGlp6tjsr4Dr67
+   AeXJyarHDYu4GlWQt8HD30XVVeGhS0Ht1/G05315zFBcTPqTD5b/QxY82
+   Q==;
+X-CSE-ConnectionGUID: V8iL8ltkSgy5apq8LJOexQ==
+X-CSE-MsgGUID: 8+CTEXIsR/e4BOXIvPonDg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="74434539"
+X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
+   d="scan'208";a="74434539"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2025 23:43:17 -0700
+X-CSE-ConnectionGUID: 7Eya5xWhS3y05bCUMVT/Sw==
+X-CSE-MsgGUID: Y60oZlgaRmGcSgGeKJnanw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
+   d="scan'208";a="166048283"
+Received: from unknown (HELO black.igk.intel.com) ([10.91.253.5])
+  by fmviesa010.fm.intel.com with ESMTP; 07 Aug 2025 23:43:15 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id E75B593; Fri, 08 Aug 2025 08:43:13 +0200 (CEST)
+Date: Fri, 8 Aug 2025 08:43:13 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: En-Wei WU <en-wei.wu@canonical.com>
+Cc: westeri@kernel.org, michael.jamet@intel.com, andreas.noever@gmail.com,
+	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
+Subject: Re: Thunderbolt call trace occurs on hot-plug
+Message-ID: <20250808064313.GM476609@black.igk.intel.com>
+References: <CAMqyJG2QceTyAONn_5m956zF_rpHLpognYYWnivm7J+w6Cw=RQ@mail.gmail.com>
+ <20250728063329.GR2824380@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -154,254 +78,68 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7605f778-6b20-47e4-bd65-7a0d85fff736@kernel.org>
+In-Reply-To: <20250728063329.GR2824380@black.fi.intel.com>
 
-On Thu, Aug 07, 2025 at 10:51:27PM +0200, Hans Verkuil wrote:
-> On 07/08/2025 22:25, Laurent Pinchart wrote:
-> > On Thu, Aug 07, 2025 at 08:00:06PM +0300, Laurent Pinchart wrote:
-> >> On Thu, Aug 07, 2025 at 11:50:07AM +0300, Laurent Pinchart wrote:
-> >>> On Wed, Aug 06, 2025 at 02:45:14PM +0200, Hans Verkuil wrote:
-> >>>> On 02/08/2025 11:22, Jacopo Mondi wrote:
-> >>>>> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >>>>>
-> >>>>> Multiple drivers that use v4l2_fh and call v4l2_fh_del() manually reset
-> >>>>> the file->private_data pointer to NULL in their video device .release()
-> >>>>> file operation handler. Move the code to the v4l2_fh_del() function to
-> >>>>> avoid direct access to file->private_data in drivers. This requires
-> >>>>> adding a file pointer argument to the function.
-> >>>>>
-> >>>>> Changes to drivers have been generated with the following coccinelle
-> >>>>> semantic patch:
-> >>>>>
-> >>>>> @@
-> >>>>> expression fh;
-> >>>>> identifier filp;
-> >>>>> identifier release;
-> >>>>> type ret;
-> >>>>> @@
-> >>>>> ret release(..., struct file *filp, ...)
-> >>>>> {
-> >>>>> 	<...
-> >>>>> -	filp->private_data = NULL;
-> >>>>> 	...
-> >>>>> -	v4l2_fh_del(fh);
-> >>>>> +	v4l2_fh_del(fh, filp);
-> >>>>> 	...>
-> >>>>> }
-> >>>>>
-> >>>>> @@
-> >>>>> expression fh;
-> >>>>> identifier filp;
-> >>>>> identifier release;
-> >>>>> type ret;
-> >>>>> @@
-> >>>>> ret release(..., struct file *filp, ...)
-> >>>>> {
-> >>>>> 	<...
-> >>>>> -	v4l2_fh_del(fh);
-> >>>>> +	v4l2_fh_del(fh, filp);
-> >>>>> 	...
-> >>>>> -	filp->private_data = NULL;
-> >>>>> 	...>
-> >>>>> }
-> >>>>>
-> >>>>> @@
-> >>>>> expression fh;
-> >>>>> identifier filp;
-> >>>>> identifier release;
-> >>>>> type ret;
-> >>>>> @@
-> >>>>> ret release(..., struct file *filp, ...)
-> >>>>> {
-> >>>>> 	<...
-> >>>>> -	v4l2_fh_del(fh);
-> >>>>> +	v4l2_fh_del(fh, filp);
-> >>>>> 	...>
-> >>>>> }
-> >>>>>
-> >>>>> Manual changes have been applied to Documentation/ to update the usage
-> >>>>> patterns, to drivers/media/v4l2-core/v4l2-fh.c to update the
-> >>>>> v4l2_fh_del() prototype and reset file->private_data, and to
-> >>>>> include/media/v4l2-fh.h to update the v4l2_fh_del() function prototype
-> >>>>> and its documentation.
-> >>>>>
-> >>>>> Additionally, white space issues have been fixed manually in
-> >>>>> drivers/usb/gadget/function/uvc_v4l2.c
-> >>>>>
-> >>>>> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >>>>> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> >>>>> ---
-> >>>>>  Documentation/driver-api/media/v4l2-fh.rst                         | 4 ++--
-> >>>>>  Documentation/translations/zh_CN/video4linux/v4l2-framework.txt    | 4 ++--
-> >>>>>  drivers/media/pci/cx18/cx18-fileops.c                              | 4 ++--
-> >>>>>  drivers/media/pci/ivtv/ivtv-fileops.c                              | 4 ++--
-> >>>>>  drivers/media/pci/saa7164/saa7164-encoder.c                        | 2 +-
-> >>>>>  drivers/media/pci/saa7164/saa7164-vbi.c                            | 2 +-
-> >>>>>  drivers/media/platform/allegro-dvt/allegro-core.c                  | 2 +-
-> >>>>>  drivers/media/platform/amlogic/meson-ge2d/ge2d.c                   | 2 +-
-> >>>>>  drivers/media/platform/amphion/vpu_v4l2.c                          | 4 ++--
-> >>>>>  drivers/media/platform/chips-media/coda/coda-common.c              | 4 ++--
-> >>>>>  drivers/media/platform/chips-media/wave5/wave5-helper.c            | 2 +-
-> >>>>>  drivers/media/platform/imagination/e5010-jpeg-enc.c                | 4 ++--
-> >>>>>  drivers/media/platform/m2m-deinterlace.c                           | 2 +-
-> >>>>>  drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c               | 4 ++--
-> >>>>>  drivers/media/platform/mediatek/mdp/mtk_mdp_m2m.c                  | 4 ++--
-> >>>>>  drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c                | 4 ++--
-> >>>>>  .../media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c    | 4 ++--
-> >>>>>  .../media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c    | 4 ++--
-> >>>>>  drivers/media/platform/nvidia/tegra-vde/v4l2.c                     | 2 +-
-> >>>>>  drivers/media/platform/nxp/dw100/dw100.c                           | 2 +-
-> >>>>>  drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c                     | 4 ++--
-> >>>>>  drivers/media/platform/nxp/imx-pxp.c                               | 2 +-
-> >>>>>  drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c                 | 2 +-
-> >>>>>  drivers/media/platform/nxp/mx2_emmaprp.c                           | 2 +-
-> >>>>>  drivers/media/platform/qcom/iris/iris_vidc.c                       | 3 +--
-> >>>>>  drivers/media/platform/qcom/venus/core.c                           | 2 +-
-> >>>>>  drivers/media/platform/renesas/rcar_fdp1.c                         | 2 +-
-> >>>>>  drivers/media/platform/renesas/rcar_jpu.c                          | 4 ++--
-> >>>>>  drivers/media/platform/renesas/vsp1/vsp1_video.c                   | 2 +-
-> >>>>>  drivers/media/platform/rockchip/rga/rga.c                          | 2 +-
-> >>>>>  drivers/media/platform/rockchip/rkvdec/rkvdec.c                    | 2 +-
-> >>>>>  drivers/media/platform/samsung/exynos-gsc/gsc-m2m.c                | 4 ++--
-> >>>>>  drivers/media/platform/samsung/exynos4-is/fimc-m2m.c               | 4 ++--
-> >>>>>  drivers/media/platform/samsung/s5p-g2d/g2d.c                       | 2 +-
-> >>>>>  drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c                | 4 ++--
-> >>>>>  drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c                   | 4 ++--
-> >>>>>  drivers/media/platform/st/sti/bdisp/bdisp-v4l2.c                   | 4 ++--
-> >>>>>  drivers/media/platform/st/sti/delta/delta-v4l2.c                   | 4 ++--
-> >>>>>  drivers/media/platform/st/sti/hva/hva-v4l2.c                       | 4 ++--
-> >>>>>  drivers/media/platform/st/stm32/dma2d/dma2d.c                      | 2 +-
-> >>>>>  drivers/media/platform/sunxi/sun8i-di/sun8i-di.c                   | 2 +-
-> >>>>>  drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c           | 2 +-
-> >>>>>  drivers/media/platform/ti/omap3isp/ispvideo.c                      | 5 ++---
-> >>>>>  drivers/media/platform/ti/vpe/vpe.c                                | 2 +-
-> >>>>>  drivers/media/platform/verisilicon/hantro_drv.c                    | 4 ++--
-> >>>>>  drivers/media/test-drivers/vicodec/vicodec-core.c                  | 2 +-
-> >>>>>  drivers/media/test-drivers/vim2m.c                                 | 2 +-
-> >>>>>  drivers/media/test-drivers/visl/visl-core.c                        | 2 +-
-> >>>>>  drivers/media/usb/pvrusb2/pvrusb2-v4l2.c                           | 3 +--
-> >>>>>  drivers/media/v4l2-core/v4l2-fh.c                                  | 7 ++++---
-> >>>>>  drivers/media/v4l2-core/v4l2-subdev.c                              | 5 ++---
-> >>>>>  drivers/staging/media/imx/imx-media-csc-scaler.c                   | 4 ++--
-> >>>>>  drivers/staging/media/meson/vdec/vdec.c                            | 2 +-
-> >>>>>  drivers/staging/media/sunxi/cedrus/cedrus.c                        | 2 +-
-> >>>>>  drivers/staging/most/video/video.c                                 | 4 ++--
-> >>>>>  drivers/usb/gadget/function/uvc_v4l2.c                             | 3 +--
-> >>>>>  include/media/v4l2-fh.h                                            | 5 ++++-
-> >>>>>  57 files changed, 89 insertions(+), 90 deletions(-)
-> >>>>>
-> >>>>
-> >>>> <snip>
-> >>>>
-> >>>>> diff --git a/drivers/media/v4l2-core/v4l2-fh.c b/drivers/media/v4l2-core/v4l2-fh.c
-> >>>>> index b59b1084d8cdf1b62da12879e21dbe56c2109648..df3ba9d4674bd25626cfcddc2d0cb28c233e3cc3 100644
-> >>>>> --- a/drivers/media/v4l2-core/v4l2-fh.c
-> >>>>> +++ b/drivers/media/v4l2-core/v4l2-fh.c
-> >>>>> @@ -67,7 +67,7 @@ int v4l2_fh_open(struct file *filp)
-> >>>>>  }
-> >>>>>  EXPORT_SYMBOL_GPL(v4l2_fh_open);
-> >>>>>  
-> >>>>> -void v4l2_fh_del(struct v4l2_fh *fh)
-> >>>>> +void v4l2_fh_del(struct v4l2_fh *fh, struct file *filp)
-> >>>>
-> >>>> Instead of adding a second argument, perhaps it is better to
-> >>>> just provide the filp pointer. After all, you can get the v4l2_fh
-> >>>> from filp->private_data.
-> >>>>
-> >>>> It simplifies the code a bit.
-> >>>
-> >>> That's an interesting idea. I'll give it a try.
-> >>
-> >> We end up with code like (e.g. in v4l2_fh_release(), with similar
-> >> constructs in lots of drivers)
-> >>
-> >> 	if (fh) {
-> >> 		v4l2_fh_del(filp);
-> >> 		v4l2_fh_exit(fh);
-> >> 		kfree(fh);
-> >> 	}
-> >>
-> >> compared to
-> >>
-> >> 	if (fh) {
-> >> 		v4l2_fh_del(fh, filp);
-> >> 		v4l2_fh_exit(fh);
-> >> 		kfree(fh);
-> >> 	}
-> >>
-> >> with the existing patch. I find the fact that v4l2_fh_del() takes a
-> >> different pointer than v4l2_fh_exit() a bit disturbing. If you think
-> >> it's better I'll drop the fh argument in v2.
+Hi,
+
+On Mon, Jul 28, 2025 at 09:33:29AM +0300, Mika Westerberg wrote:
+> Hi,
+> 
+> On Fri, Jul 11, 2025 at 11:54:46AM +0800, En-Wei WU wrote:
+> > Hi,
 > > 
-> > I gave it a try, and looking at the function prototype, its
-> > documentation, the imbalance with v4l2_fh_add(), and the code in the
-> > callers, I think keeping both arguments would look cleaner. Please tell
-> > me if you feel strongly about this, I can still submit a patch to drop
-> > the argument. It can very easily be scripted with coccinelle and doesn't
-> > conflict with the rest of the series, so it could also be done later.
+> > I'm seeing an issue on a Dell Pro Max 16 with Intel Arrow Lake CPU --
+> > Hot-plugging a thunderbolt 4 cable into a thunderbolt 4 port (backed
+> > by Intel iGPU) and connecting it to a Dell U2725QE monitor triggers
+> > the following call trace. The issue reproduces approximately 60% of
+> > the time.
 > 
-> Looking at all the drivers that call v4l2_fh_del/exit I always see v4l2_fh_del()
-> directly followed by v4l2_fh_exit(). I think it would make a lot of sense to just
-> combine the two as a single function: v4l2_fh_del_exit(filp).
+> Could you share the whole dmesg (that is not line wrapped)? With
+> "thunderbolt.dyndbg=+p" in the kernel command line.
 > 
-> That simplifies the code and solves the imbalance.
+> And can you confirm I understand the steps?
+> 
+> 1. Boot the system up, nothing connected.
+> 2. Once booted up, connect Thunderbolt cable to Dell U2725QE monitor.
+> 3. Verify that the monitor works (+ run lspci/lsusb)
+> 
+> Expected output: The monitor and the integrated peripherals (PCIe, USB)
+> work fine.
+> 
+> Actual output: There is error in the log and PCIe peripherals on the
+> monitor do not show up in lspci output.
 
-I'll try that as a separate patch on top of this one. Keeping the two
-separate will ease review (both patches will be simpler, and will be
-generated by coccinelle), and will also make it easier to drop the
-second patch if we decide it's not the way to go.
+For some reason I never got the reply from you although I can see it on
+lore.kernel.org. Thanks to Alan (Cc'd) who notified me about your reply :)
 
-> >>>>>  {
-> >>>>>  	unsigned long flags;
-> >>>>>  
-> >>>>> @@ -75,6 +75,8 @@ void v4l2_fh_del(struct v4l2_fh *fh)
-> >>>>>  	list_del_init(&fh->list);
-> >>>>>  	spin_unlock_irqrestore(&fh->vdev->fh_lock, flags);
-> >>>>>  	v4l2_prio_close(fh->vdev->prio, fh->prio);
-> >>>>> +
-> >>>>> +	filp->private_data = NULL;
-> >>>>>  }
-> >>>>>  EXPORT_SYMBOL_GPL(v4l2_fh_del);
-> >>>>>  
-> >>>>> @@ -94,10 +96,9 @@ int v4l2_fh_release(struct file *filp)
-> >>>>>  	struct v4l2_fh *fh = file_to_v4l2_fh(filp);
-> >>>>>  
-> >>>>>  	if (fh) {
-> >>>>> -		v4l2_fh_del(fh);
-> >>>>> +		v4l2_fh_del(fh, filp);
-> >>>>>  		v4l2_fh_exit(fh);
-> >>>>>  		kfree(fh);
-> >>>>> -		filp->private_data = NULL;
-> >>>>>  	}
-> >>>>>  	return 0;
-> >>>>>  }
-> >>>>
-> >>>> <snip>
-> >>>>
-> >>>>> diff --git a/include/media/v4l2-fh.h b/include/media/v4l2-fh.h
-> >>>>> index d8fcf49f10e09452b73499f4a9bd1285bc2835a5..5e4c761635120608e0b588e0b0daf63e69588d38 100644
-> >>>>> --- a/include/media/v4l2-fh.h
-> >>>>> +++ b/include/media/v4l2-fh.h
-> >>>>> @@ -114,12 +114,15 @@ int v4l2_fh_open(struct file *filp);
-> >>>>>   * v4l2_fh_del - Remove file handle from the list of file handles.
-> >>>>>   *
-> >>>>>   * @fh: pointer to &struct v4l2_fh
-> >>>>> + * @filp: pointer to &struct file associated with @fh
-> >>>>> + *
-> >>>>> + * The function resets filp->private_data to NULL.
-> >>>>>   *
-> >>>>>   * .. note::
-> >>>>>   *    Must be called in v4l2_file_operations->release\(\) handler if the driver
-> >>>>>   *    uses &struct v4l2_fh.
-> >>>>>   */
-> >>>>> -void v4l2_fh_del(struct v4l2_fh *fh);
-> >>>>> +void v4l2_fh_del(struct v4l2_fh *fh, struct file *filp);
-> >>>>>  
-> >>>>>  /**
-> >>>>>   * v4l2_fh_exit - Release resources related to a file handle.
+Anyways, I looked your first full dmesg and what stands out there is that:
 
--- 
-Regards,
+[  113.907760] ======= Hotplug Thunderbolt Cable =======
+[  116.091653] [504] thunderbolt:tb_cfg_ack_plug:842: thunderbolt 0000:00:0d.2: acking hot plug event on 0:1
+...
+[  116.134083] thunderbolt 0-1: new device found, vendor=0xd4 device=0xc050
+[  116.134092] thunderbolt 0-1: DELL U2725QE
+...
+[  116.862460] [185] thunderbolt:tb_dump_hop:20: thunderbolt 0000:00:0d.2: 1:1:  In HopID: 8 => Out port: 16 Out HopID: 8
+[  116.862463] [185] thunderbolt:tb_dump_hop:22: thunderbolt 0000:00:0d.2: 1:1:   Weight: 2 Priority: 3 Credits: 14 Drop: 0 PM: 0
+[  116.862466] [185] thunderbolt:tb_dump_hop:25: thunderbolt 0000:00:0d.2: 1:1:    Counter enabled: 0 Counter index: 2047
+[  116.862469] [185] thunderbolt:tb_dump_hop:27: thunderbolt 0000:00:0d.2: 1:1:   Flow Control (In/Eg): 1/0 Shared Buffer (In/Eg): 0/0
+[  116.862472] [185] thunderbolt:tb_dump_hop:30: thunderbolt 0000:00:0d.2: 1:1:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
+[  116.865613] [504] thunderbolt:tb_cfg_ack_plug:842: thunderbolt 0000:00:0d.2: acking hot unplug event on 0:1
 
-Laurent Pinchart
+This last one is unplug to the host router downstream port while we are
+just setting up a PCIe tunnel, so it is expected that we cannot configure
+the router (Dell device) from that point forward. That WARN() should be
+changed to dev_warn() or so as this is really expected if the user unplugs
+the device while we are configuring it (this is nature of USB4 as user can
+unplug devices at any time).
+
+In other words that calltrace is fine.
+
+However, why the link goes down is another thing. If you did not
+deliberately unplug the cable it suggest some sort of cable/PD issue to me.
+Sometimes I have seen the plug gets bit loose and that makes the cable to
+unplug itself quite easily. The other thing might be the cable itself may
+be bad (I wonder if you have another Thunderbolt 4 cable that you could
+try?).
 
