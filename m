@@ -1,145 +1,115 @@
-Return-Path: <linux-usb+bounces-26640-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26641-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1B6BB1F414
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Aug 2025 12:20:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E039B1F41B
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Aug 2025 12:23:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50631621746
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Aug 2025 10:20:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC5E416B8C6
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Aug 2025 10:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BF30258CC4;
-	Sat,  9 Aug 2025 10:20:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D633A262FC1;
+	Sat,  9 Aug 2025 10:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fTCvWF60"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O1I2bt4O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DBC482F2;
-	Sat,  9 Aug 2025 10:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 586BB227BB9;
+	Sat,  9 Aug 2025 10:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754734838; cv=none; b=Tpl18gcayPSCPC7CAGsX0nNtHh4qCKgMg6pxLLXlAOxxz52XbBgCj5HbDUxEPBX9Lf9AX5f7BsaEIY9hL3cNwujh5W+FoIa+2c5tdUy8X1Yfs/cNDmlXsbW3HCyrUja1t2aSM8bfrRJ6Rg+yDliOfAK6CSmKmhCj8n0ee/wclyk=
+	t=1754735019; cv=none; b=s3fvAritmD2gQwPr/yHW6jqIl7rc6aPVmazuO6Ox4UepjFO+BXc7e3A9N/0UEaviUuJC/6rCevYxlDCUXRcZesrELYcbRZnTJEiGkAjBqO5tFpVYXA0HdRThcx4gMnxpTyR82OAFqGvVFmB8y2EBpMD82BsbHaEaHV71T//Dp14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754734838; c=relaxed/simple;
-	bh=eHAWshYo5nna3AmUeod1PTFXIMn1ICMHmBB7kfmM/PA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HTeK2npXHscQipNe/0+Uey4Gu6MqGH1MDZpLrcmoZurai8ktKH2B2uA0iZF6fR1P7BX4V/iSAsIPhktBpb5hth1RBmaq4XiI9lcKfQcR7xs1uxw01HWw7PAwzFZ2YeOZcUKaaHTyRhHWAUzQqK0fzG4yU4fiwZfnRhBhbNVvwe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fTCvWF60; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754734837; x=1786270837;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eHAWshYo5nna3AmUeod1PTFXIMn1ICMHmBB7kfmM/PA=;
-  b=fTCvWF60PQR8bmB2TNxTUxpi+XTOpb9Dz3nfsdcot+6WUsMWnUwik4Ea
-   i6vUlIgsrV4EQKDsQ3FTvVaQ+xTIfE5ZaNMnZy/Ic8xl4L/7sP/BmQRVE
-   1T6mSqmNLWFC0wEcdOhfgAxXvMvVHrhtKuI/RXVfryKMLfHe/+CmFlYdZ
-   lAKK7sjb76rraeVrV4RdpQZ7DvpE3AbM5tncMFoVAZPcufZRV/f2UXKab
-   3NzS2coXYYDyevd24mix4mbDzXOVU75ybctsATLcT9K71Bv2eRq1Cz/8k
-   TXg5koHgT5IAYm0VxYME6R4yf0XSgba3xKJKPQG8ol3FykcyU/e0aSVA6
-   Q==;
-X-CSE-ConnectionGUID: 3fi40sUlQ+CG7RmWd4XCLA==
-X-CSE-MsgGUID: sNp+9BPCSta7QOPX52mNnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11515"; a="79630890"
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="79630890"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2025 03:16:05 -0700
-X-CSE-ConnectionGUID: 2h95dtyqRheD3pXdT0xt/g==
-X-CSE-MsgGUID: jijf491uSumE3YvesbUHRw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="196339261"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2025 03:16:01 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1ukgcH-00000004cnG-2CH4;
-	Sat, 09 Aug 2025 13:15:57 +0300
-Date: Sat, 9 Aug 2025 13:15:57 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-gpio@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>,
+	s=arc-20240116; t=1754735019; c=relaxed/simple;
+	bh=/Cza+XwEEYSu1v2kYcWi4arWgCVPqIJudOZevf/Kd2A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O2qq7ZiCIav590OUCUOq1J6BFyqgSN3Oqh30tdxCspiQwumt5FOiBNZlsz3s3HZUWCFKgmbTvGgdio2ZIK8Udm2LlwcHGT6WimpDa1G5g/OsC5ciVe2v+aJbuYPm8Gvq3pRZfTZDkq6TPXW7IXDqf1QkhunqXIsYO0KTST69Oig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O1I2bt4O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D1A7C4CEE7;
+	Sat,  9 Aug 2025 10:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754735016;
+	bh=/Cza+XwEEYSu1v2kYcWi4arWgCVPqIJudOZevf/Kd2A=;
+	h=From:To:Cc:Subject:Date:From;
+	b=O1I2bt4ObbabNQFxaet24m4YNNmjlmYkI1LSSXzQafp2VOEk3DVnUypctjswMfqmn
+	 LW9HBVoPW5/15nqhqD9XbPgo6R0Rgzc+y4XIFEQjW+3c63H3LojgxC2AWmaeqwGuwH
+	 37QA81pEDDYu41yslA9hPm6je02YCT4fRPInile3A8KdrcuYMH9Dg85nMCnaMtH4Qu
+	 REPlsCo8jXQ9PLmBZaKhFHZV5JNlLDGmsaohbGtUKfFTi749YuDPKbri2F+8Zer9RT
+	 LpSGI7b4NPL7qwVkeCdHpn5IMLfR6XRZxC36n4IyU+TUqZ0T6bWMkMxUyV9dIiQ5pR
+	 HcjI1dMfZpBOg==
+From: Hans de Goede <hansg@kernel.org>
+To: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 19/21] usb: udc: pxa: remove unused platform_data
-Message-ID: <aJcf3UzbRMx-hEab@smile.fi.intel.com>
-References: <20250808151822.536879-1-arnd@kernel.org>
- <20250808151822.536879-20-arnd@kernel.org>
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Richard Hughes <rhughes@redhat.com>,
+	linux-i2c@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Subject: [PATCH 0/3] usb/gpio/i2c: Add Intel USBIO USB IO-expander drivers
+Date: Sat,  9 Aug 2025 12:23:23 +0200
+Message-ID: <20250809102326.6032-1-hansg@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250808151822.536879-20-arnd@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 08, 2025 at 05:18:04PM +0200, Arnd Bergmann wrote:
-> 
-> None of the remaining boards put useful data into the platform_data
-> structures, so effectively this only works with DT based probing.
-> 
-> Remove all code that references this data, to stop using the legacy
-> gpiolib interfaces. The pxa27x version already supports gpio
-> descriptors, while the pxa25x version now does it the same way.
+Hi All,
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-See a comment below.
+This patch series adds support for the Intel USBIO USB IO-expander used by
+the MIPI cameras on various new (Meteor Lake and later) Intel laptops.
 
-...
+The first patch adds an USB bridge driver which registers auxbus children
+for the GPIO and I2C functions of the USBIO chip.
 
->  static int pxa_udc_probe(struct platform_device *pdev)
->  {
->  	struct pxa_udc *udc = &memory;
-> -	int retval = 0, gpio;
-> -	struct pxa2xx_udc_mach_info *mach = dev_get_platdata(&pdev->dev);
-> -
-> -	if (mach) {
-> -		gpio = mach->gpio_pullup;
-> -		if (gpio_is_valid(gpio)) {
-> -			retval = devm_gpio_request_one(&pdev->dev, gpio,
-> -						       GPIOF_OUT_INIT_LOW,
-> -						       "USB D+ pullup");
-> -			if (retval)
-> -				return retval;
-> -			udc->gpiod = gpio_to_desc(mach->gpio_pullup);
-> -
-> -			if (mach->gpio_pullup_inverted ^ gpiod_is_active_low(udc->gpiod))
-> -				gpiod_toggle_active_low(udc->gpiod);
-> -		}
-> -		udc->udc_command = mach->udc_command;
-> -	} else {
-> -		udc->gpiod = devm_gpiod_get(&pdev->dev, NULL, GPIOD_ASIS);
-> -	}
-> +	int retval = 0;
-> +
-> +	udc->gpiod = devm_gpiod_get(&pdev->dev, NULL, GPIOD_ASIS);
+The second and third patch add a GPIO resp. an I2C driver for the
+auxbus children using the IO functions exported by the USB bridge driver.
 
-Missed error check, in particular it will ignore deferred probe case.
+The second and third patch depend on the IO functions exported by
+the first patch. So to merge this we will need either an immutable tag on
+the USB tree, or all 3 patches can be merged through the USB tree with
+acks from the GPIO and I2C subsystem maintainers.
 
->  	udc->regs = devm_platform_ioremap_resource(pdev, 0);
+Regards,
+
+Hans
+
+
+Israel Cepeda (3):
+  usb: misc: Add Intel USBIO bridge driver
+  gpio: Add Intel USBIO GPIO driver
+  i2c: Add Intel USBIO I2C driver
+
+ MAINTAINERS                    |   9 +
+ drivers/gpio/Kconfig           |  11 +
+ drivers/gpio/Makefile          |   1 +
+ drivers/gpio/gpio-usbio.c      | 258 ++++++++++++
+ drivers/i2c/busses/Kconfig     |  11 +
+ drivers/i2c/busses/Makefile    |   1 +
+ drivers/i2c/busses/i2c-usbio.c | 344 ++++++++++++++++
+ drivers/usb/misc/Kconfig       |  14 +
+ drivers/usb/misc/Makefile      |   1 +
+ drivers/usb/misc/usbio.c       | 693 +++++++++++++++++++++++++++++++++
+ include/linux/usb/usbio.h      | 168 ++++++++
+ 11 files changed, 1511 insertions(+)
+ create mode 100644 drivers/gpio/gpio-usbio.c
+ create mode 100644 drivers/i2c/busses/i2c-usbio.c
+ create mode 100644 drivers/usb/misc/usbio.c
+ create mode 100644 include/linux/usb/usbio.h
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.49.0
 
 
