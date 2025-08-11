@@ -1,160 +1,82 @@
-Return-Path: <linux-usb+bounces-26704-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26705-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF4A6B2111D
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 18:10:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF7F0B21158
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 18:16:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0537500B87
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 15:59:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E944A504BFC
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 16:07:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B8822EAB6E;
-	Mon, 11 Aug 2025 15:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1192E5400;
+	Mon, 11 Aug 2025 15:59:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pPQTXHIn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528EB2EA755;
-	Mon, 11 Aug 2025 15:40:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CFFE2E3B08;
+	Mon, 11 Aug 2025 15:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754926847; cv=none; b=lR78RxZEKOiPj+Bt4MSA2MF+Zwp1ANqSSUvjOOgBNDL5wO5EspSag6iqXwiLOYhG75Jo4asa8H1wOvLTORR6bHI5EarPknJBaUM2PBZgiwyVHNy8qg+fulzZ1/1gqmhem69UdG+B3DPoAAij4y2djfCkHdeIN7tL/2InSl5cj2U=
+	t=1754927940; cv=none; b=SXniDhXsoJdS24wiyGnkcID05ZQ94JA0GDjqVMkRSN5Ns6strCmWSB15BZEtvqKTEbfvSakVQRa8daEX6cGKX7aRVyCAPcvw7FPw38FPeXSoxhItHxYHUugT+DqBEuZ0fhqBn+d9KZbncD9jy1EyLHISADd+TQG4OaNBHk/8/jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754926847; c=relaxed/simple;
-	bh=jVCVH2/BrjPYq9tmaVyl+u/aDZPlSuXVvt6G4jzNAA4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jVHyugiWvEE+P7M+GTjXN2YCuYS9eKLDYajSRC6ZkTZqcmAfXsCmQaXst5TQKZVNZG1s4mGSlZT6mODt6IDA+/9YjTiwvV0laMSSAK5w77WnMLy9hETCx2vfZtZHKgicdRWQbbhBN6RKSvyWb6mRq4ef+mMVJb3cDPNovOXsI3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b350c85cf4eso525241a12.1;
-        Mon, 11 Aug 2025 08:40:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754926844; x=1755531644;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D/lsGJuVcSxEulcmxPExLRcznuDdwmEmGFnSLxnfCJg=;
-        b=Jf6FFluKNcwILiOmiCXn3K3IXka8Vp3Lb6tN4Yp9G0j2iXMx3fyPu0CF4HwE+0sMo8
-         kc7sruQfMl9infyH2gDGb32G2abwFrsVKtx/SswOZ2RGOo7/B4y6WM/qbhJmRkaRv+mt
-         UpCMBvUoDJ2RBsyji7YYO80MP490hQ942Q3cJAWhd4okBO5r57fvr2oQ2D1Y6tef+0Ti
-         fjSWnJINFhzU60ytVeCQu/Gl7xB1aQJaOwX3oeeUzo3oj/sTp1VDeiSk/nIOt7sws1A2
-         fIJndXPSA8Ekl3w19IHOf3xPtAL0nTZZ3syPrXph68SYvVxVh9OfH+qyrH7ktkmZHZkj
-         Si+A==
-X-Forwarded-Encrypted: i=1; AJvYcCVbqGWTda1/kpaBOzRbZU21QI2zDN2woRPWgAzTKyYXaOuM6Zn+glSwpWgoXnKHKxIxjesCGzagHF7Kk0Y=@vger.kernel.org, AJvYcCVnt/qY50xl1AoilrUAekALcQxl1wQrW0VZ6UO5Iz4t9Zz/e1dAOR1yQlVBTbj0iz7QaSaIeyEtWKIG2fug2s8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyu8KsJ8M3X7u4foDjArmMubqyhKnIbJuy4+W5uTH5/gfZfrttQ
-	VEwnL8LRIytBN/D7a9QH513mzQ2GP+kZXBBoPyu9YlMm0q2wCe23XaUo
-X-Gm-Gg: ASbGncu1aAJpiZ+xBqklGOdv9PZX3Rrt59TA13YQrCBeU2aiN7P8y25/0MrU04D2Scq
-	xskI4qbJrSNdtrGiFjwIrn1ZuhSCa/jZOe5xysNFK1opavv2u/7WKjMaIlKv6SFXJHwNZgiiHN4
-	RKrlZcagGoHDzF/4VhnhSQ1bc14dxuCDDRFwCkeBSKkHmpMlsWITm+M0SdIVzQWo6CqO7y5x0b2
-	lVLcqqwq0DAXvuA6OuO5vQfB1DA3yZ7jguFIOTDe7k82PV+zQrLG0bT22dh5ZR4Zd/emLXAxfYA
-	QbkWaHl0QlJU0yv1zOsZ5GXKq/UctLp7j4lBJFTmg8biLBlQarBr9WS45J+3sUYUQeHHpOOKkML
-	OjPmNRdOlh/axwnkCmStqfXDCK4tIQsZu
-X-Google-Smtp-Source: AGHT+IGYEwS0QZ8ahZbXEAuTTmg5t2D9wKM98Dove8C64W5hDQ8B8uf6rb313Vha65Bikjrhb0orCA==
-X-Received: by 2002:a17:902:e546:b0:240:729c:a022 with SMTP id d9443c01a7336-242fc392176mr155965ad.11.1754926844439;
-        Mon, 11 Aug 2025 08:40:44 -0700 (PDT)
-Received: from [192.168.50.136] ([118.32.98.101])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e8976a48sm275791065ad.104.2025.08.11.08.40.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Aug 2025 08:40:43 -0700 (PDT)
-Message-ID: <a4e338f2-38dd-4c1e-b3c0-e6d18e7568fb@kzalloc.com>
-Date: Tue, 12 Aug 2025 00:40:38 +0900
+	s=arc-20240116; t=1754927940; c=relaxed/simple;
+	bh=Yd5o/HaZzslU91jtNAqdnydmq673lrDNfOKS5gO2IqU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u6GhwLCsKxhMFVkC6z8FUOJ+sg37VOxAuTbwUADT2f016l3k+3KCWmurAGwVgSGzIQYjEKTQFl6L06GkyuaXxKyAWZPwxpqYUK7KD3u0HMaJCmbudA7k8nHMo6E2nLqVy+WYFqxkRiDwMQmOtexUIxj2ZjiwJ/tvD3fJzwdjfAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pPQTXHIn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 927F1C4CEED;
+	Mon, 11 Aug 2025 15:58:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1754927940;
+	bh=Yd5o/HaZzslU91jtNAqdnydmq673lrDNfOKS5gO2IqU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pPQTXHInCS/CbPL9SX9tKp6yWhzyu5OcXvRlVna/t1xHJYjvMQWDdvOHX+19HrMX4
+	 7Ttq58hbj6L8AWFRC6dHsx0oVEDdr2gAAu6lRtS+UFzBKZHVPzlB/C3Q41WDcp5Je9
+	 piDKE8nga1wiQyyftqsJDb3Nld4NDjFIUHTRt8cs=
+Date: Mon, 11 Aug 2025 17:58:52 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: "Chary Chennoju, Srikanth" <srikanth.chary-chennoju@amd.com>
+Cc: "Thinh.Nguyen@synopsys.com" <Thinh.Nguyen@synopsys.com>,
+	"m.grzeschik@pengutronix.de" <m.grzeschik@pengutronix.de>,
+	"Chris.Wulff@biamp.com" <Chris.Wulff@biamp.com>,
+	"tiwai@suse.de" <tiwai@suse.de>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Kalluri, Punnaiah Choudary" <punnaiah.choudary.kalluri@amd.com>
+Subject: Re: [PATCH 1/3] usb:gadget:zero: support for super speed plus
+Message-ID: <2025081110-whisking-unworthy-6999@gregkh>
+References: <20250704114013.3396795-1-srikanth.chary-chennoju@amd.com>
+ <20250704114013.3396795-2-srikanth.chary-chennoju@amd.com>
+ <2025070407-walmart-mobile-c0f7@gregkh>
+ <CH3PR12MB8726ABAFBCBD1DD1DA3B1000B14FA@CH3PR12MB8726.namprd12.prod.outlook.com>
+ <CH3PR12MB8726EF467E63B31CCD4BB7C8B128A@CH3PR12MB8726.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] usb: sleepable spinlock used in USB bh_worker softirq on
- PREEMPT_RT
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: linux-usb@vger.kernel.org, linux-rt-users@vger.kernel.org,
- gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
- Thomas Gleixner <tglx@linutronix.de>, Clark Williams <clrkwllms@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
- syzkaller@googlegroups.com
-References: <1f8dd706-0eb0-4e09-a0fe-fc48fb24005e@kzalloc.com>
- <20250811091559.CXIs7FvU@linutronix.de>
-Content-Language: en-US
-From: Yunseong Kim <ysk@kzalloc.com>
-Organization: kzalloc
-In-Reply-To: <20250811091559.CXIs7FvU@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CH3PR12MB8726EF467E63B31CCD4BB7C8B128A@CH3PR12MB8726.namprd12.prod.outlook.com>
 
-Hi Sebastian,
-
-Thank you for your prompt reply and clarification.
-
-On 8/11/25 6:15 오후, Sebastian Andrzej Siewior wrote:
-> On 2025-08-11 00:05:49 [+0900], Yunseong Kim wrote:
->> While running a PREEMPT_RT-enabled kernel I observed a sleepable
->> spinlock (rt_spin_lock) being taken from a softirq context within
->> the USB core framework. On PREEMPT_RT, spin_lock() may sleep when
->> contended. This is unsafe in softirq context and can cause hangs or
->> deadlocks.
->>
-> …
->> I believe this requires a change in the USB core framework rather than
->> just in individual drivers.
->>
->> Kernel config, full logs, and reproduction steps can be provided on
->> request.
->>
->> This bug was uncovered during my work to fixing KCOV for PREEMPT_RT awareness.
->> Link: https://lore.kernel.org/all/ee26e7b2-80dd-49b1-bca2-61e460f73c2d@kzalloc.com/t/#u
+On Mon, Aug 11, 2025 at 03:35:38PM +0000, Chary Chennoju, Srikanth wrote:
+> [AMD Official Use Only - AMD Internal Distribution Only]
 > 
-> I'm confused. Is this new or this the same bug that was reported by you
-> in the thread you linked?
-> The kcov issue should be fixed by
-> 	https://lore.kernel.org/all/20250811082745.ycJqBXMs@linutronix.de/
-
-You are absolutely right.
-
-While PREEMPT_RT does shift most softirq handling to the ksoftirqd process
-context where sleeping locks are generally allowed, I overlooked the ironclad
-rule: DO NOT SLEEP if interrupts are disabled. Even in ksoftirqd, disabling
-interrupts creates an atomic context, and acquiring a sleeping lock while
-irqs_disabled() is true can be disastrous in real-time environments.
-
-The bug I reported, specifically the call stack observed where rt_spin_lock was
-taken from a softirq context within the USB core framework, was a direct
-consequence of this misunderstanding. This issue was uncovered during my work on
-fixing KCOV for PREEMPT_RT awareness and was consistently reproducible across my
-v1 through v3 patches. For reference, my v3 work can be found here:
- https://lore.kernel.org/lkml/ddd14f62-b6c9-4984-84be-6c999ea92e30@kzalloc.com/t/#u.
-
-I have applied your patch:
- https://lore.kernel.org/all/20250811082745.ycJqBXMs@linutronix.de/
-
--static inline unsigned long kcov_remote_start_usb_softirq(u64 id)
-+static inline void kcov_remote_start_usb_softirq(u64 id)
- {
--	unsigned long flags = 0;
--
--	if (in_serving_softirq()) {
--		local_irq_save(flags);
-+	if (in_serving_softirq() && !in_hardirq())
- 		kcov_remote_start_usb(id);
-
-!in_hardirq(), I can definitely confirm that the specific call stack and the bug
-I reported are no longer reproducible. Your fix has indeed addressed the
-underlying issue.
-
->> Best Regards,
->> Yunseong Kim
+> Hi Greg,
 > 
-> Sebastian
+> Please let me know if there are any comments for this patch.
 
+I have no context at all, sorry.  If it was not accepted, and you got
+comments, please fix it up and submit a new version.
 
-Thank you again for your guidance and for resolving this problem!
+Remember, some of us get 1000+ emails a day to review and process,
+patches from well over a month ago are long forgotten...
 
-Best Regards,
-Yunseong Kim
-
-
+greg k-h
 
