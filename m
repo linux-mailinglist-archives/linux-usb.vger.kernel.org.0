@@ -1,237 +1,113 @@
-Return-Path: <linux-usb+bounces-26665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26666-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCD63B1FE02
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 04:52:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89BF1B1FE68
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 06:53:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E25417A8855
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 02:51:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 441833B7E77
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 04:53:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 384CC1D5CD7;
-	Mon, 11 Aug 2025 02:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A48325D558;
+	Mon, 11 Aug 2025 04:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f/CGLgBu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D271367
-	for <linux-usb@vger.kernel.org>; Mon, 11 Aug 2025 02:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D0D2E3718;
+	Mon, 11 Aug 2025 04:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754880747; cv=none; b=Cf1yrSVgYwFpQUehbhTAed/PqvSnTQyZeAN1/45yOls60VX3xBusnltPv2YkRppysrEkFC4BgwFhlwl3VIC6nDhV3oehwBAToGyQxi7dJwOyUlvI07FSN9iQvmi88IaaGvISu3Lo3sIJM1IffVwDBL2Ka0+EBCQ2d9NXcEJMeuo=
+	t=1754887993; cv=none; b=ta8Sl6qSg5JMD0UAbCXNA3rTTYoj+yGoSgoraO1fe+u4/n+aHT0IIjoJyvnVcNR11+dVjbU+8rA+gKX2PD9G7nS/G/2Ef5U4PWSYeA+DIhinhzJnFvKZ3lj9J46Q9OlhgJGq2gpGHodPkw5VNt+rSa1A7cjCo9pT7kkXYO2SKYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754880747; c=relaxed/simple;
-	bh=ePVF13VnvcNmbBkuoXsRvHXUiFRbHxBV7a+tjb3RZQA=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=V5PZoMw8SajHCP1tcGFPU5WgnjEK9CvQwIZ+iFh9mDtKwDHgOneeJ6TeouhNR4HJzeRB70TQVhBAM8ohANHWmFOG41FEX/F9TaXBWULKkys46CiB3yxkY6nhAB34N6BoVhOTvqTe5kgKIcM9h2JePEV1vGB0JfPiigNDchWAP3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-88177d82b26so956986639f.1
-        for <linux-usb@vger.kernel.org>; Sun, 10 Aug 2025 19:52:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754880745; x=1755485545;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aLqHtODNg9yZAW29ftWwGBy+UqBt0e1Hwe2aS6qEPK4=;
-        b=P8vNYf7srk0gVRmPNlqz0sCKtDJwR+EMIXMhbI4jqzF+oj76k92p2G9mP/X1U+lzEe
-         81Q6SAtrN+fOsy4WlWVkSf9qFyrNPHDfxXCJGCw2zqgdYV9bH5vvuZslksDXVHPA2dEm
-         LUoWSHg9/HAxMB5u14gwb9mKPINJ/qUdorqfMTslB3eYkdNzxuPwhsh4/gqSN5nn8j2v
-         RqWQUhw+jsJuAGcTyDGyrFbWqPm6++q80ZjxipGGfGLHf7+cMM7NuGWeQKGVGSUf5P8i
-         021t5CmIduMexCuQoQNvIbCLIQBpzI9YiCV56N5wVM9vMbapY00eL4/5aS/cCVtcchzC
-         l3Ow==
-X-Forwarded-Encrypted: i=1; AJvYcCVd8JontDx8u9WfkZfcRY6j4IJkjsqzXG8pzLZsyZqvAHgZsVcWHl0qRHix3k89/c3bcFRu68BbZ2c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YweFqOPd0cHfPQzAnn76vh0A4MOJmDioyuIlAuUZ09HRiae533U
-	iJAIVdRu0fDN3onq8KZjFPfQIW8xZRCtR5B8cL76Z5RNUspNhyqOz8iL4FCkRguw/nD0CnndGS0
-	EbNMyPsejDPlt/3Z1wfAW+Eut4yuOqAezMiQTwyBeVKejlSD5rKoyaUfQjFo=
-X-Google-Smtp-Source: AGHT+IH2qpJz8/ZkW9szGOiYZKy9M2BG/Id14kXvLZkYa3aXWNfNAO0dcF+yZ2M23u3x5DFMRntHyKeOxNXMDo4HdJTB2rNi6MpR
+	s=arc-20240116; t=1754887993; c=relaxed/simple;
+	bh=HO0oNAMkfEi2kNTMoc0ydmEDe5SVeowcPK8qazv9hM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c4Qpd9XsO950eMZGa1syA3q0wMUubO1zy2uYYe/XDvtzbK3bgnPTPFo9V8FfSnLMwsO2umBsgl5IVPivHshbNqpzwrPI1Y3lgwGBGNgp0wgT4rRVxjkp4JAith/Luwoj2oyEsg6f3+oGKtkXwMCfCmadY4ptOHG6PSFXc2mj0Ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f/CGLgBu; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754887992; x=1786423992;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HO0oNAMkfEi2kNTMoc0ydmEDe5SVeowcPK8qazv9hM8=;
+  b=f/CGLgBupHMyO6JRYtqrVnfctN5vY0J9OqPQnYIZL3d9epCJoHXzMF6n
+   ZRn3okWJ5abEq/d1+r47mnkMoa/LVoHNnevBYl4AZWu21InQ3hgiKFIkd
+   c9v+3wmiMFqCOWOS3k9tKIVFGJTppi+I6qesQelGD8En1F5f8OVHY4Kpq
+   0aRng/QC6cBwZu8m4RatfwND9s2LPY92AlDfQ8S3mfs3lDh+wa2PeUk7/
+   5HIrdomQGebv5wCZqDhxUaXUplR0c8sgmDDaDqUzfFhlERucUOiVjgoJy
+   RaZfMXFkaHAeHYd4QXPS3vFsqmhOftBux/zGGnHmMQc8GSUXeGAbT9QKk
+   A==;
+X-CSE-ConnectionGUID: nkGbI+P9Te2B2Bu/FgYhPA==
+X-CSE-MsgGUID: 6nGj2TVDT/mvvPISQ5ctug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="68586914"
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="68586914"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2025 21:53:12 -0700
+X-CSE-ConnectionGUID: ltxTGHxpT+SFoXS5VwXS1Q==
+X-CSE-MsgGUID: Zv8SNUE4QySqgnhz+/RAMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="165810117"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa007.jf.intel.com with ESMTP; 10 Aug 2025 21:53:09 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id B6F0493; Mon, 11 Aug 2025 06:53:07 +0200 (CEST)
+Date: Mon, 11 Aug 2025 06:53:07 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Mario Limonciello <superm1@kernel.org>,
+	"Rangoju, Raju" <raju.rangoju@amd.com>, linux-usb@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	andreas.noever@gmail.com, michael.jamet@intel.com,
+	westeri@kernel.org, YehezkelShB@gmail.com, bhelgaas@google.com,
+	Sanath.S@amd.com
+Subject: Re: [PATCH 0/3] thunderbolt: Update XDomain vendor properties
+ dynamically
+Message-ID: <20250811045307.GP476609@black.igk.intel.com>
+References: <9a757d21-a6e0-4022-b844-57c91323af5e@kernel.org>
+ <20250806150024.GF476609@black.igk.intel.com>
+ <2025080628-viral-untruth-4811@gregkh>
+ <20250807051533.GG476609@black.igk.intel.com>
+ <2025080758-supervise-craftily-9b7f@gregkh>
+ <17ed42fe-9d8d-46da-8434-f508ec5932fa@kernel.org>
+ <20250808044538.GK476609@black.igk.intel.com>
+ <2025080822-cardboard-aloha-3c5d@gregkh>
+ <20250808091313.GN476609@black.igk.intel.com>
+ <2025080832-poker-rectal-0895@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2dcd:b0:881:7e0c:7a79 with SMTP id
- ca18e2360f4ac-883f11b58b4mr2271375139f.2.1754880745383; Sun, 10 Aug 2025
- 19:52:25 -0700 (PDT)
-Date: Sun, 10 Aug 2025 19:52:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68995ae9.050a0220.7f033.00e7.GAE@google.com>
-Subject: [syzbot] [usb?] INFO: task hung in dvb_usbv2_exit
-From: syzbot <syzbot+295c63688014c13a0a59@syzkaller.appspotmail.com>
-To: anna-maria@linutronix.de, frederic@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2025080832-poker-rectal-0895@gregkh>
 
-Hello,
+On Fri, Aug 08, 2025 at 04:13:28PM +0100, Greg KH wrote:
+> > 0004 USB4
+> > 
+> > sounds good to me. In USB4 there is no "root hub". It's called host router
+> > (but we do have device routers that are called USB4 hubs for added
+> > confusion ;-).
+> > 
+> > But I'm fine with other numbers too, does not matter if you want to save it
+> > for some future USB variant.
+> 
+> Ok, use 0004 for this.  But what should I use for the text string here
+> in the usb.ids file?
 
-syzbot found the following issue on:
+Thanks! I'll cook up a patch changing these.
 
-HEAD commit:    479058002c32 Merge tag 'ata-6.17-rc1-fixes' of git://git.k..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=10e34ea2580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a1bb6a60e53533c7
-dashboard link: https://syzkaller.appspot.com/bug?extid=295c63688014c13a0a59
-compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b81042580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14e34ea2580000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d0b41f31d6eb/disk-47905800.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/bf9aa4f62fd4/vmlinux-47905800.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a1c94d24385a/bzImage-47905800.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+295c63688014c13a0a59@syzkaller.appspotmail.com
-
-INFO: task kworker/0:1:10 blocked for more than 143 seconds.
-      Not tainted 6.16.0-syzkaller-11852-g479058002c32 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/0:1     state:D stack:22616 pid:10    tgid:10    ppid:2      task_flags:0x4208060 flags:0x00004000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5357 [inline]
- __schedule+0x1190/0x5de0 kernel/sched/core.c:6961
- __schedule_loop kernel/sched/core.c:7043 [inline]
- schedule+0xe7/0x3a0 kernel/sched/core.c:7058
- schedule_timeout+0x257/0x290 kernel/time/sleep_timeout.c:75
- do_wait_for_common kernel/sched/completion.c:100 [inline]
- __wait_for_common+0x2fc/0x4e0 kernel/sched/completion.c:121
- i2c_del_adapter+0x546/0x6f0 drivers/i2c/i2c-core-base.c:1817
- dvb_usbv2_i2c_exit drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:86 [inline]
- dvb_usbv2_exit.isra.0+0x45b/0x9f0 drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:844
- dvb_usbv2_probe+0x1f61/0x3e50 drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:993
- usb_probe_interface+0x303/0xa40 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:581 [inline]
- really_probe+0x241/0xa90 drivers/base/dd.c:659
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:801
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:831
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:959
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1031
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1aa0 drivers/base/core.c:3689
- usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:581 [inline]
- really_probe+0x241/0xa90 drivers/base/dd.c:659
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:801
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:831
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:959
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1031
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1aa0 drivers/base/core.c:3689
- usb_new_device+0xd07/0x1a60 drivers/usb/core/hub.c:2694
- hub_port_connect drivers/usb/core/hub.c:5566 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
- port_event drivers/usb/core/hub.c:5870 [inline]
- hub_event+0x2f34/0x4fe0 drivers/usb/core/hub.c:5952
- process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3236
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x6c8/0xf10 kernel/workqueue.c:3400
- kthread+0x3c5/0x780 kernel/kthread.c:463
- ret_from_fork+0x5d4/0x6f0 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-
-Showing all locks held in the system:
-5 locks held by kworker/0:1/10:
- #0: ffff8881442d3548 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x12a2/0x1b70 kernel/workqueue.c:3211
- #1: ffffc900000f7d10 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x929/0x1b70 kernel/workqueue.c:3212
- #2: ffff888029d20198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:911 [inline]
- #2: ffff888029d20198 (&dev->mutex){....}-{4:4}, at: hub_event+0x1c0/0x4fe0 drivers/usb/core/hub.c:5898
- #3: ffff8880252bc198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:911 [inline]
- #3: ffff8880252bc198 (&dev->mutex){....}-{4:4}, at: __device_attach+0x7e/0x4b0 drivers/base/dd.c:1006
- #4: ffff8880252bf160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:911 [inline]
- #4: ffff8880252bf160 (&dev->mutex){....}-{4:4}, at: __device_attach+0x7e/0x4b0 drivers/base/dd.c:1006
-1 lock held by khungtaskd/31:
- #0: ffffffff8e5c1160 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
- #0: ffffffff8e5c1160 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
- #0: ffffffff8e5c1160 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x36/0x1c0 kernel/locking/lockdep.c:6775
-2 locks held by getty/5608:
- #0: ffff88814dfe80a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x24/0x80 drivers/tty/tty_ldisc.c:243
- #1: ffffc9000332b2f0 (&ldata->atomic_read_lock){+.+.}-{4:4}, at: n_tty_read+0x41b/0x14f0 drivers/tty/n_tty.c:2222
-4 locks held by udevd/5873:
- #0: ffff888078ae8d58 (&p->lock){+.+.}-{4:4}, at: seq_read_iter+0xe1/0x12c0 fs/seq_file.c:182
- #1: ffff888023aa7888 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_seq_start+0x4d/0x240 fs/kernfs/file.c:154
- #2: ffff888034e142d8 (kn->active#29){.+.+}-{0:0}, at: kernfs_seq_start+0x71/0x240 fs/kernfs/file.c:155
- #3: ffff8880252bc198 (&dev->mutex){....}-{4:4}, at: device_lock_interruptible include/linux/device.h:916 [inline]
- #3: ffff8880252bc198 (&dev->mutex){....}-{4:4}, at: manufacturer_show+0x26/0xa0 drivers/usb/core/sysfs.c:142
-
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 UID: 0 PID: 31 Comm: khungtaskd Not tainted 6.16.0-syzkaller-11852-g479058002c32 #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- nmi_cpu_backtrace+0x27b/0x390 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x29c/0x300 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:160 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:328 [inline]
- watchdog+0xf0e/0x1260 kernel/hung_task.c:491
- kthread+0x3c5/0x780 kernel/kthread.c:463
- ret_from_fork+0x5d4/0x6f0 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted 6.16.0-syzkaller-11852-g479058002c32 #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
-RIP: 0010:pv_native_safe_halt+0xf/0x20 arch/x86/kernel/paravirt.c:82
-Code: 4c 63 02 c3 cc cc cc cc 0f 1f 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d f3 82 17 00 fb f4 <e9> 4c 0d 03 00 66 2e 0f 1f 84 00 00 00 00 00 66 90 90 90 90 90 90
-RSP: 0018:ffffc90000197df8 EFLAGS: 000002c2
-RAX: 000000000008bab9 RBX: 0000000000000001 RCX: ffffffff8b928c29
-RDX: 0000000000000000 RSI: ffffffff8de4d731 RDI: ffffffff8c161100
-RBP: ffffed1003c5d488 R08: 0000000000000001 R09: ffffed10170a6655
-R10: ffff8880b85332ab R11: 0000000000000000 R12: 0000000000000001
-R13: ffff88801e2ea440 R14: ffffffff90aaf390 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8881247c6000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000561297f2f660 CR3: 000000000e380000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- arch_safe_halt arch/x86/include/asm/paravirt.h:107 [inline]
- default_idle+0x13/0x20 arch/x86/kernel/process.c:757
- default_idle_call+0x6d/0xb0 kernel/sched/idle.c:122
- cpuidle_idle_call kernel/sched/idle.c:190 [inline]
- do_idle+0x391/0x510 kernel/sched/idle.c:330
- cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:428
- start_secondary+0x21d/0x2b0 arch/x86/kernel/smpboot.c:315
- common_startup_64+0x13e/0x148
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+I don't think it should be in usb.ids because it is not visible anywhere
+except over USB4 link (between hosts). You don't see this through USB 2.x
+or 3.x.
 
