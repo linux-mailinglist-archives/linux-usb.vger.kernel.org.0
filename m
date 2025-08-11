@@ -1,146 +1,264 @@
-Return-Path: <linux-usb+bounces-26722-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26723-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A98E3B21766
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 23:29:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8CA5B217FE
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 00:12:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADF7C464315
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 21:29:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6B0C4632A0
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 22:12:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DE62E543D;
-	Mon, 11 Aug 2025 21:28:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9D082E424B;
+	Mon, 11 Aug 2025 22:12:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TWeluUKP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M2QG2YWq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59F02E5431;
-	Mon, 11 Aug 2025 21:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDEF2E3398;
+	Mon, 11 Aug 2025 22:12:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754947707; cv=none; b=Z1qAl1ciPCoHum8ttvzddf0fWE06T9seqw0oSFFAz5eaqapHm3bq7qpaWQgZI61ddcOZsij5TGxPKk7BTPfGw2NUHROhe66YIbgexOdAlLksHoHo880lvBZ/jyuJCppKTas+q3KuEhTLTZbtv1wMVEJ7F0Y5y+F5eQj/E78ffXI=
+	t=1754950352; cv=none; b=A9pYowKrAVjVkYsPSOEiRrFvus3ks6bezHXof7QTcpPMPPjPV5/pCWA7aQNeCx20QfEtHp2b10QnLcuUGXxGKIYjs1j5ROn8HmaXGyot+v00arXDo1/v7uQYVl0WZjFF0TqnX47HLXNzRBCpNuB21OM4+RO5NpCXF1G/fArxImc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754947707; c=relaxed/simple;
-	bh=mpk27qrn0f9RHS7XKFScEMTU8qgUMeWZcJ6TqKsDXAA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LutXb2H6HDgDBv80LjSma8Rc/B/CwbVQqOyQ2oh3pfeJFbo55SMaH9N6M7OmZj8u9HCGnAVYZrp1bW7A6AgpFU+60v15qQYp8v9C9pUZe6pRUF+ZQ/6eihYl6SA0tl23eofPFm7Q8nYXQrrEMkKHCqgcGLvFgeBi/glaIMk534g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TWeluUKP; arc=none smtp.client-ip=209.85.167.48
+	s=arc-20240116; t=1754950352; c=relaxed/simple;
+	bh=0lFlTnmRdYlJuefLalXJ+MDNBg2V7j3tqehFPcGA5RU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BJPIHRcIvwx5NHRqcrt/D3epHoMuVRm0OrpyUlRWuAWmihMwm71IJHsmeCvn5dX+LPIkrJOhq2XrVHO/oW4241MFWoOV3bkPZ09U4bIc1gVYMVldc7ELi7luVgzT5D0Tx6C+2k9NcBqepG4k/mqv5UcYZJ6G/b+CSLwu9WCVZMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M2QG2YWq; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-55b8a0f36fcso5174453e87.1;
-        Mon, 11 Aug 2025 14:28:25 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-23ffa7b3b30so44924555ad.1;
+        Mon, 11 Aug 2025 15:12:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754947704; x=1755552504; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bpjIpzAPB0v7NxDZwwT0mjO9aLWv5i/E2Osu7tXQZqE=;
-        b=TWeluUKP8yku/5f0YcFA76/18p8aTYwxUceWYPjU8lG6GvcXOkb2CBnOSganU9hLLQ
-         wQsErbdXK/0tUeP9k6dLFvNShmqqcn7AZRy0NjsOhuEoIEazt7Lr8WnXg/pmompDNTQl
-         ZplfGKOhj/gJH4pijD3jZkwFnl0TmOjmQ2A+k/fChpImWIlDqLuLeScefr+2fDTduR3R
-         GFfzzmtBpaAroFB0DoU0UetJ1i3JoLaEFzBb80cbe8pHsOcbN2g+72JzUssQyUuwqOqA
-         j5AwkN3Gpw8VJjJ4DS3S1nVkeyhsHnU5edm+Yiy9JlRQy5KNUFYJ0DQYnADhVtp/56oH
-         OISg==
+        d=gmail.com; s=20230601; t=1754950350; x=1755555150; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RqJrUsfEO14skXwVHw60ZeSAxfYi13UplTdLpgZgptc=;
+        b=M2QG2YWq29Hq787SB2rUsbGYk8QMgPXxusvrLrnclHHWZqSLpgS5QITsge+M16OlCk
+         WQPUMxzhbXZPZGYmZr7xIEEez15K1QjK0TJ5tDuMz3E8jkb0V3baGn8xjvCkkCpWGfg0
+         MyXqYI2YTYMpCCuO6MlAOPSxAKhW32yY7JAMXHbVJC+qbpo3O5PwKMDiVUIjhJMmqqi2
+         MjIlJPg7if3pSr93GnU+/JdKiJdZsUn6hx+hfGbs5dddlC8f23OiSvEeKL1oJ/MXCagV
+         YxWnnlJkyluVL/0WOusS0cGcpFjdTF9pxLneSDPlsrhBciJtQ9ZcXY2wUNxZJKO5tJC7
+         7ZIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754947704; x=1755552504;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bpjIpzAPB0v7NxDZwwT0mjO9aLWv5i/E2Osu7tXQZqE=;
-        b=hSClbcTzjDcTL/Rp6BrbjFp7zM0x4jjtSwpewIys7bOm04ufBc4rwO2yl/o8Nph3VT
-         hg5dU7itcPVHZakfy4a1oKXGDQILCKSrmeA/FBWwUXeMTzu8Y01osK7a3DgKKlw2AHTR
-         APluOJKRB4QEZGJ4O3cJ2/pOpdxQVeLgFp92WzlTVXsWr/uSsODU42fWTaCq1o+6NCBF
-         Rac9GBitgO1EqzJOHrLj+L2FbtNbs4ClSLpIox92sHVKXbfUCO/b5Ui9q4YnvIZhcxN9
-         7tV7ZUcyR7LPvAgz3n10TC/tESBVsA1UTFEmFM5wVa/GU//qFqJNXA4e+7752GGxTsC8
-         ddzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUIkAIQakjZW4FtTZvF/W4FJvxGDCcxhDMl7vl6YupDZz0RiBvJXrqjA8WvYIUwcNhjSkFBAQcqD1w=@vger.kernel.org, AJvYcCWVwnfvTpztMlwdeLtT9oyVpePHZ9VOsm5vfBRKe1rjKoAokGO4Q0zunANTC6wHYYmKbvTwmgcB@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzn5RHZTeliJgE4Q7KABupiEuT2zJFnVOlepXMSQPyoqrrwvTmo
-	ln9d9ZnzVT3VfxfXToCgte1otyLwOuhHH+zM0WV5BvF76w5UH2Nu61lX
-X-Gm-Gg: ASbGncvl2vRR6TsydNORmMQVZ9ZzY1T+LaNQOwyA3MPXaTVHTm2nBp/zWcdgEPWL24G
-	l0S6Z4BG7nzSba/oLKWvbLSVNC/nL/ya5P0ijFG89nzZsr8Wzrh0Diqvg9SBDjT8dKCZHbAy8aG
-	79uRFBbRliqe2yTjdkOfhmNRcIt74XAortNf866tzIei0tSsuSW341p0GUYp4LKEym9FZ+4difA
-	/KzWzT/A6x4tAN8ahr9X6qJJf5rZWE53/Oxz6qtVZqeyEnXgVaj/YxxxZPRGFSV1haY/VDEMCkk
-	XmO6+ErTdJTrBbLhIZaKLuUNIGfW8PoEccZIpCO8LR8cZHjVdScNIJDHdn1fCjKEF5BJHQU+4De
-	94VmWs5qoAd0qqwPqiFfsGfXDOSGmU0QdcRc=
-X-Google-Smtp-Source: AGHT+IGk+VTPIrnjQuog4v7TbkCyB00WQoWvYsPlYTExmUr1HajhxEL9dzSdsIBYJf8YaraRPtuZYw==
-X-Received: by 2002:a05:6512:ea8:b0:55c:d617:a132 with SMTP id 2adb3069b0e04-55cd75b25f6mr383568e87.6.1754947703662;
-        Mon, 11 Aug 2025 14:28:23 -0700 (PDT)
-Received: from foxbook (bfd208.neoplus.adsl.tpnet.pl. [83.28.41.208])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cce15c650sm1083440e87.103.2025.08.11.14.28.21
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 11 Aug 2025 14:28:23 -0700 (PDT)
-Date: Mon, 11 Aug 2025 23:28:15 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Jiri Slaby <jirislaby@kernel.org>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- stern@rowland.harvard.edu, stable@vger.kernel.org, =?UTF-8?B?xYF1a2Fzeg==?=
- Bartosik <ukaszb@chromium.org>, Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH] usb: hub: Don't try to recover devices lost during warm
- reset.
-Message-ID: <20250811232815.393c7bb9@foxbook>
-In-Reply-To: <fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
-References: <20250623133947.3144608-1-mathias.nyman@linux.intel.com>
-	<fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
+        d=1e100.net; s=20230601; t=1754950350; x=1755555150;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RqJrUsfEO14skXwVHw60ZeSAxfYi13UplTdLpgZgptc=;
+        b=M57FKboOeHttsi/lhdgKws6yis2LFaZW/LihzWsdDPI5BkZMVgioKyKVoLG1fB4Urg
+         E6PKzHueiQhchjSfh1z06Z5LeRQqqPEyIFPIumHl4QoJmnk5kv+cCcDAKgRyugMWS21D
+         cTn2/MBawL+OQ9O2Uar6olZ1gv/w0TnVQx4ugxcx4Z12Kv/QP66Fkbz1J38k7HY3BabX
+         wQBg4ro7vxB/uHHcKLUeBEazu8bD+ywa157ZScz6HSXKtj4z9bSRnJeP1PcZJWgyaelY
+         Are2lNjwFECtbwXhCAC82G1W+a/94rSFqUU6Wl57UQ/Kg0BVZYTXFdi0dZwhjkrCr2Kl
+         hycw==
+X-Forwarded-Encrypted: i=1; AJvYcCUcuy7wr9Zed9zlNnhWejciENR0DcvsA7nGGwYZmDBKRKwX/tMlh9IFLRLq4/8snqZIPRPdk1xf00gz@vger.kernel.org, AJvYcCUfmYWDuVK2h8bGe407MTlvazwbwZ0IdedgCqSSFpOuSldGRugQxm5LbdTO6yiKH4M6Xk8KoF3NGitORrLb@vger.kernel.org, AJvYcCVoq0rGFD/DYICoj8ezECq2y2qYX/eDy53KTCpbjDgqfwi2Tmkb3pGJOX/seOP01sw+rP+OWe8omvue@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzx9IrCH6rOoJgXmckmC8VLSvsS2dZgczebV7YfTeCMgOl8SDI/
+	tC3urpvdpxKWBu9SfQF4m0Pa9NZw9upxCuwnrkGpOjtvtxI6bOp3kGEc
+X-Gm-Gg: ASbGncv5waYmkiaKVSrJqDk9gkMJG0MmuXL1SujBKfOfKfkj/aeUBFuKj+5CtGIBvK/
+	UfjDs6UfGKgsEqZ56Q07C9muBVzmOAk1RNzz7w93mxxgyIoTkR1FNHHgYYzT9X8hgzscQ0fVEPh
+	t8CTZFh+aFEfJSSFZge0mczVyEGDvaDlT3HMCNpnOt5j1Kl8JQaPBXlZhhNrwQTuKG6yxjayrE/
+	OZdNz/j5lF4D8LVd5/kXi/6/y7Betc6Ysg360QLA3z70TriLjoy+pjQRiHFRJDy1OJA3Depn9TL
+	s2W5xOiJW23AM937Eas2a6Sgp6huBkrswGSXQ+K3Ccldb0814Mk8gXW/Vjq4McsKXPdQUiI9bHB
+	D1MjOlMJp8f1q/jAN89kH6A4ZY+wEZWZU1Q==
+X-Google-Smtp-Source: AGHT+IHQ0wKiPFm7cQpdNNp8qTVDuZceywWB+nCRVoQFGfyGYnmGBMcF0PmiZ748OX9kCYU59/mZzg==
+X-Received: by 2002:a17:902:ea08:b0:240:1bdc:afc3 with SMTP id d9443c01a7336-242c225a785mr207173445ad.44.1754950349923;
+        Mon, 11 Aug 2025 15:12:29 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:7933:7499:67d8:279a])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e8976a1csm285249835ad.78.2025.08.11.15.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Aug 2025 15:12:29 -0700 (PDT)
+Date: Mon, 11 Aug 2025 15:12:27 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Linus Walleij <linus.walleij@linaro.org>, linux-gpio@vger.kernel.org, Daniel Mack <daniel@zonque.org>, 
+	Haojian Zhuang <haojian.zhuang@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, 
+	Russell King <linux@armlinux.org.uk>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 19/21] usb: udc: pxa: remove unused platform_data
+Message-ID: <jlhn73mol2g65mnbfya7w4ejtkddkkus4miii6js44x7rni2x4@54tm5dblenk4>
+References: <20250808151822.536879-1-arnd@kernel.org>
+ <20250808151822.536879-20-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250808151822.536879-20-arnd@kernel.org>
 
-On Mon, 11 Aug 2025 08:16:06 +0200, Jiri Slaby wrote:
-> This was reported to break the USB on one box:
-> > [Wed Aug  6 16:51:33 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
-> > [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
-> > [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
-> > [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
-> > [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
-> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
-> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
-> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: Device not responding to setup address.
-> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: Device not responding to setup address.
-> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: device not accepting address 12, error -71
-> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: WARN: invalid context state for evaluate context command.
-> > [Wed Aug  6 16:51:36 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
-> > [Wed Aug  6 16:51:36 2025] [     C10] xhci_hcd 0000:0e:00.0: ERROR unknown event type 2
-> > [Wed Aug  6 16:51:36 2025] [ T355745] usb 1-2: Device not responding to setup address.
-> > [Wed Aug  6 16:51:37 2025] [     C10] xhci_hcd 0000:0e:00.0: ERROR unknown event type 2
-> > [Wed Aug  6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: Abort failed to stop command ring: -110
-> > [Wed Aug  6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: xHCI host controller not responding, assume dead
-> > [Wed Aug  6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: HC died; cleaning up
-> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-1: USB disconnect, device number 13
-> > [Wed Aug  6 16:52:50 2025] [ T355745] xhci_hcd 0000:0e:00.0: Timeout while waiting for setup device command
-> > [Wed Aug  6 16:52:50 2025] [ T362645] usb 2-3: USB disconnect, device number 2
-> > [Wed Aug  6 16:52:50 2025] [ T362839] cdc_acm 1-5:1.5: acm_port_activate - usb_submit_urb(ctrl irq) failed
-> > [Wed Aug  6 16:52:50 2025] [ T355745] usb 1-2: device not accepting address 12, error -62
-> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-2: USB disconnect, device number 12
-> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-3: USB disconnect, device number 4
-> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-3.1: USB disconnect, device number 6
-> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-4: USB disconnect, device number 16
-> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-5: USB disconnect, device number 15
-> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-7: USB disconnect, device number 8  
+On Fri, Aug 08, 2025 at 05:18:04PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> None of the remaining boards put useful data into the platform_data
+> structures, so effectively this only works with DT based probing.
+> 
+> Remove all code that references this data, to stop using the legacy
+> gpiolib interfaces. The pxa27x version already supports gpio
+> descriptors, while the pxa25x version now does it the same way.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/mach-pxa/devices.c              |  7 ----
+>  arch/arm/mach-pxa/gumstix.c              |  1 -
+>  arch/arm/mach-pxa/udc.h                  |  8 -----
+>  drivers/usb/gadget/udc/pxa25x_udc.c      | 41 ++++++++----------------
+>  drivers/usb/gadget/udc/pxa25x_udc.h      |  2 +-
+>  drivers/usb/gadget/udc/pxa27x_udc.c      | 35 +++-----------------
+>  drivers/usb/gadget/udc/pxa27x_udc.h      |  2 --
+>  include/linux/platform_data/pxa2xx_udc.h | 15 ---------
+>  8 files changed, 19 insertions(+), 92 deletions(-)
+>  delete mode 100644 arch/arm/mach-pxa/udc.h
+> 
+> diff --git a/arch/arm/mach-pxa/devices.c b/arch/arm/mach-pxa/devices.c
+> index 7695cfce01a1..edad956a1483 100644
+> --- a/arch/arm/mach-pxa/devices.c
+> +++ b/arch/arm/mach-pxa/devices.c
+> @@ -11,7 +11,6 @@
+>  #include <linux/platform_data/i2c-pxa.h>
+>  #include <linux/soc/pxa/cpu.h>
+>  
+> -#include "udc.h"
+>  #include <linux/platform_data/video-pxafb.h>
+>  #include <linux/platform_data/mmc-pxamci.h>
+>  #include "irqs.h"
+> @@ -83,10 +82,6 @@ void __init pxa_set_mci_info(const struct pxamci_platform_data *info,
+>  		pr_err("Unable to create mci device: %d\n", err);
+>  }
+>  
+> -static struct pxa2xx_udc_mach_info pxa_udc_info = {
+> -	.gpio_pullup = -1,
+> -};
+> -
+>  static struct resource pxa2xx_udc_resources[] = {
+>  	[0] = {
+>  		.start	= 0x40600000,
+> @@ -108,7 +103,6 @@ struct platform_device pxa25x_device_udc = {
+>  	.resource	= pxa2xx_udc_resources,
+>  	.num_resources	= ARRAY_SIZE(pxa2xx_udc_resources),
+>  	.dev		=  {
+> -		.platform_data	= &pxa_udc_info,
+>  		.dma_mask	= &udc_dma_mask,
+>  	}
+>  };
+> @@ -119,7 +113,6 @@ struct platform_device pxa27x_device_udc = {
+>  	.resource	= pxa2xx_udc_resources,
+>  	.num_resources	= ARRAY_SIZE(pxa2xx_udc_resources),
+>  	.dev		=  {
+> -		.platform_data	= &pxa_udc_info,
+>  		.dma_mask	= &udc_dma_mask,
+>  	}
+>  };
+> diff --git a/arch/arm/mach-pxa/gumstix.c b/arch/arm/mach-pxa/gumstix.c
+> index 1713bdf3b71e..6074815a4bca 100644
+> --- a/arch/arm/mach-pxa/gumstix.c
+> +++ b/arch/arm/mach-pxa/gumstix.c
+> @@ -39,7 +39,6 @@
+>  
+>  #include "pxa25x.h"
+>  #include <linux/platform_data/mmc-pxamci.h>
+> -#include "udc.h"
+>  #include "gumstix.h"
+>  #include "devices.h"
+>  
+> diff --git a/arch/arm/mach-pxa/udc.h b/arch/arm/mach-pxa/udc.h
+> deleted file mode 100644
+> index 9a827e32db98..000000000000
+> --- a/arch/arm/mach-pxa/udc.h
+> +++ /dev/null
+> @@ -1,8 +0,0 @@
+> -/*
+> - * arch/arm/mach-pxa/include/mach/udc.h
+> - *
+> - */
+> -#include <linux/platform_data/pxa2xx_udc.h>
+> -
+> -extern void pxa_set_udc_info(struct pxa2xx_udc_mach_info *info);
+> -
+> diff --git a/drivers/usb/gadget/udc/pxa25x_udc.c b/drivers/usb/gadget/udc/pxa25x_udc.c
+> index b97fb7b0cb2c..bad151aedec1 100644
+> --- a/drivers/usb/gadget/udc/pxa25x_udc.c
+> +++ b/drivers/usb/gadget/udc/pxa25x_udc.c
+> @@ -12,7 +12,7 @@
+>  /* #define VERBOSE_DEBUG */
+>  
+>  #include <linux/device.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/module.h>
+>  #include <linux/kernel.h>
+>  #include <linux/ioport.h>
+> @@ -261,24 +261,12 @@ static void nuke (struct pxa25x_ep *, int status);
+>  /* one GPIO should control a D+ pullup, so host sees this device (or not) */
+>  static void pullup_off(void)
+>  {
+> -	struct pxa2xx_udc_mach_info		*mach = the_controller->mach;
+> -	int off_level = mach->gpio_pullup_inverted;
+> -
+> -	if (gpio_is_valid(mach->gpio_pullup))
+> -		gpio_set_value(mach->gpio_pullup, off_level);
+> -	else if (mach->udc_command)
+> -		mach->udc_command(PXA2XX_UDC_CMD_DISCONNECT);
+> +	gpiod_set_value(the_controller->pullup_gpio, 0);
+>  }
+>  
+>  static void pullup_on(void)
+>  {
+> -	struct pxa2xx_udc_mach_info		*mach = the_controller->mach;
+> -	int on_level = !mach->gpio_pullup_inverted;
+> -
+> -	if (gpio_is_valid(mach->gpio_pullup))
+> -		gpio_set_value(mach->gpio_pullup, on_level);
+> -	else if (mach->udc_command)
+> -		mach->udc_command(PXA2XX_UDC_CMD_CONNECT);
+> +	gpiod_set_value(the_controller->pullup_gpio, 1);
+>  }
+>  
+>  #if defined(CONFIG_CPU_BIG_ENDIAN)
+> @@ -1190,8 +1178,7 @@ static int pxa25x_udc_pullup(struct usb_gadget *_gadget, int is_active)
+>  
+>  	udc = container_of(_gadget, struct pxa25x_udc, gadget);
+>  
+> -	/* not all boards support pullup control */
+> -	if (!gpio_is_valid(udc->mach->gpio_pullup) && !udc->mach->udc_command)
+> +	if (!udc->pullup_gpio)
+>  		return -EOPNOTSUPP;
+>  
+>  	udc->pullup = (is_active != 0);
+> @@ -2343,19 +2330,17 @@ static int pxa25x_udc_probe(struct platform_device *pdev)
+>  
+>  	/* other non-static parts of init */
+>  	dev->dev = &pdev->dev;
+> -	dev->mach = dev_get_platdata(&pdev->dev);
+>  
+>  	dev->transceiver = devm_usb_get_phy(&pdev->dev, USB_PHY_TYPE_USB2);
+>  
+> -	if (gpio_is_valid(dev->mach->gpio_pullup)) {
+> -		retval = devm_gpio_request_one(&pdev->dev, dev->mach->gpio_pullup,
+> -					       GPIOF_OUT_INIT_LOW, "pca25x_udc GPIO PULLUP");
+> -		if (retval) {
+> -			dev_dbg(&pdev->dev,
+> -				"can't get pullup gpio %d, err: %d\n",
+> -				dev->mach->gpio_pullup, retval);
+> -			goto err;
+> -		}
+> +	dev->pullup_gpio = devm_gpiod_get_index_optional(&pdev->dev, "pullup", 0,
+> +						    GPIOD_OUT_LOW);
 
-Is the problem that this USB device fails to work, or that it takes
-down the whole bus while failing to work as usual?
+I think this should be GPIOD_OUT_HIGH: you want this to be active and
+GPIO is likely "active low".
 
-The latter issue looks like some ASMedia xHCI controller being unhappy
-about something. What does 'lspci' say about this 0e:00.0?
+Thanks.
 
-So far I failed to repro this on v6.16.0 with a few of my ASMedias and
-a dummy device which never responds to any packet.
-
-Can you mount debugfs and get these two files after the HC goes dead?
-
-/sys/kernel/debug/usb/xhci/0000:0e:00.0/command-ring/trbs 
-/sys/kernel/debug/usb/xhci/0000:0e:00.0/event-ring/trbs
-
-Regards,
-Michal
+-- 
+Dmitry
 
