@@ -1,108 +1,212 @@
-Return-Path: <linux-usb+bounces-26688-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26689-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9D4FB2030B
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 11:16:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB908B20338
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 11:24:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4400018C0402
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 09:16:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87A6B3A4F16
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 09:24:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69B6D2DCF70;
-	Mon, 11 Aug 2025 09:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E596B2DBF49;
+	Mon, 11 Aug 2025 09:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="k/obJeoS";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dT6uveYr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JK2eRQzK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84803594F;
-	Mon, 11 Aug 2025 09:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50648F49;
+	Mon, 11 Aug 2025 09:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754903766; cv=none; b=d+tnseF5jnOX7MboYLfAGhCbeJe8Mi4cT+MS58/MTJlxayRP+kgECG6Zy1g5wAQ2sroMZv59CkBgBVEB09+dTqWRzmy81pNP/Owy+ixM4F0ysCGK4Edz90YJ9Y7ab0ZHZ+4Vc2be83laLKmxEUfDEOyP0J089gu+AkCBEz+uAUI=
+	t=1754904229; cv=none; b=gG6qaYzZzQfe0LMh39SyNOkou9v9z+pfUP0cfhk+IphhYAS0d6Za5s8McQCOHQWTxNoXYSeiVS+h+UXb17z2/yjKCRuiOLfObFUxnp05PjS7o1hSFfF+n3NynnPHGqJ9e/56+nHrFVAccxntwdDxoHtBZA/UzOkQbYOydcf2mP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754903766; c=relaxed/simple;
-	bh=3gvCQOh6C5GJIsuPURtBiqN006xYmsfrt4uX4V1wT1U=;
+	s=arc-20240116; t=1754904229; c=relaxed/simple;
+	bh=U5JcW5uIfD1oDDbIt7gJa6eRbTfVOSRgRl1GVPrGKm0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AEvK5gRkV0maibQ9wDKwo3qlqUc9cr0m7v8I5fC6kHeYwz+vOcRuQz/Vc//NrmgJtMnzjy57bNYEhIFBgG2h1JlFdxhuGiufpnAiQocuYK+pujIMwWolpuNhhl+1h4zRGHtQoxbDwDvMSt0ufWEEgmQ9Hk8n4R+SLSBHdSHRJ2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=k/obJeoS; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dT6uveYr; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 11 Aug 2025 11:15:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754903760;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Xhk8ImetUzF8D0zaYt5H2LhPKkbfmmDl4qiWDQ3+Yns=;
-	b=k/obJeoSdTlreKOiO839gioCZpb79DC5QxDpfh52u1p/xuxIrl+bABA3xf2OuizloY/v/2
-	IdcFODJhgq8SnAn8VjkqAclaKNASSsIUFYym3gkVt/FiV2IkwduMQOIxQawTcpz9CqmVva
-	FnrZjDc1MdiAjzv589070n9Zx0ma3vNQZw7TQpksyTRp4X8w/NwjTC1qmanxXnlE9Ku/tP
-	S3kZWNsjSlsOFZrQhvnyYbN4FhLyX9zaMSVha8o5vqpDjoGzbjSjpmZh1EX6hmRdO0cxS0
-	77KjbhNX1o4f+lR7C4XA+qsLg6/ZHmRjaGm/va0aCle5ZpTV42WaL67uWf+9KQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754903760;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Xhk8ImetUzF8D0zaYt5H2LhPKkbfmmDl4qiWDQ3+Yns=;
-	b=dT6uveYr/y0FouDVq4hoDzonHMQ2drGBSiuSMB/5VKBKTzJ6ekocxWOGZI5fSYGfynbZ1O
-	xHx2EXNWKjxGuaDQ==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Yunseong Kim <ysk@kzalloc.com>
-Cc: linux-usb@vger.kernel.org, linux-rt-users@vger.kernel.org,
-	gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-	syzkaller@googlegroups.com
-Subject: Re: [BUG] usb: sleepable spinlock used in USB bh_worker softirq on
- PREEMPT_RT
-Message-ID: <20250811091559.CXIs7FvU@linutronix.de>
-References: <1f8dd706-0eb0-4e09-a0fe-fc48fb24005e@kzalloc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=O5YJndpnSc4LhHqJ42D/uBKWXJiC8uLKq+Jg0XKYMxW3h6GwtavJ44jgTD1qto5syCgrZhom4Hpud/5Ushh61DKWJFfvTrN0wsXs7CAjhaktw0Q35wSyyjGZ67y3CmjYDfa4lL1hrQR4NHrAng3zXsm/wMMlDdfDFekYHQAMtZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JK2eRQzK; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754904228; x=1786440228;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U5JcW5uIfD1oDDbIt7gJa6eRbTfVOSRgRl1GVPrGKm0=;
+  b=JK2eRQzKwrxqQGAMXdS+bp52/7EANA4rqAE2sNIshM7HKTst+6rjBHL+
+   k1JoyK2k+GJlPQ0f+coEeTNVi8rQoSU3sdXPOYgY3NJyzPlAkQKQ1gzPM
+   i0oD98o5sAqeI/bmiV3Yb9nn8EYnyk1O2MjcRObfxfBxOUxS1uaDmpPyK
+   SFGEiaCSsAH6QBrZp0XqYPB+YQcclX0BKvT3FqPz9tXnuCYLOv1Ck6MYs
+   IoxxVYyME90JNnZmhIaufBKARGn1QgcDbf2hOv77yziqDzr9v58hwbxxL
+   oW7DqdeYPoNE0DJD+H878YufGZsNePUo2XsmhwEIWTRTZSRjF9U7YtGb5
+   g==;
+X-CSE-ConnectionGUID: WEeWOkD8TxmybvMRbtPaog==
+X-CSE-MsgGUID: L8iw7tK7Q1SJpYK/JD+Kaw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="68521298"
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="68521298"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 02:23:47 -0700
+X-CSE-ConnectionGUID: LpN0/L4dQuSQoyLIOD0sYA==
+X-CSE-MsgGUID: Grsm//mGR6Sad77Bt4bBdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="165516184"
+Received: from sschumil-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.87])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 02:23:44 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 2939F11FC37;
+	Mon, 11 Aug 2025 12:23:41 +0300 (EEST)
+Date: Mon, 11 Aug 2025 09:23:41 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+	Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: misc: Add Intel USBIO bridge driver
+Message-ID: <aJm2naLnWChQOChH@kekkonen.localdomain>
+References: <20250809102326.6032-1-hansg@kernel.org>
+ <20250809102326.6032-2-hansg@kernel.org>
+ <aJmS15MlcHz__S0p@kekkonen.localdomain>
+ <2025081106-could-hazily-3e58@gregkh>
+ <aJmb4ZoUrnNTpM2W@kekkonen.localdomain>
+ <2025081128-ecard-ecosphere-8170@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1f8dd706-0eb0-4e09-a0fe-fc48fb24005e@kzalloc.com>
+In-Reply-To: <2025081128-ecard-ecosphere-8170@gregkh>
 
-On 2025-08-11 00:05:49 [+0900], Yunseong Kim wrote:
-> While running a PREEMPT_RT-enabled kernel I observed a sleepable
-> spinlock (rt_spin_lock) being taken from a softirq context within
-> the USB core framework. On PREEMPT_RT, spin_lock() may sleep when
-> contended. This is unsafe in softirq context and can cause hangs or
-> deadlocks.
->=20
-=E2=80=A6
-> I believe this requires a change in the USB core framework rather than
-> just in individual drivers.
->=20
-> Kernel config, full logs, and reproduction steps can be provided on
-> request.
->=20
-> This bug was uncovered during my work to fixing KCOV for PREEMPT_RT aware=
-ness.
-> Link: https://lore.kernel.org/all/ee26e7b2-80dd-49b1-bca2-61e460f73c2d@kz=
-alloc.com/t/#u
+Hi Greg,
 
-I'm confused. Is this new or this the same bug that was reported by you
-in the thread you linked?
-The kcov issue should be fixed by
-	https://lore.kernel.org/all/20250811082745.ycJqBXMs@linutronix.de/
+On Mon, Aug 11, 2025 at 10:31:22AM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Aug 11, 2025 at 07:29:37AM +0000, Sakari Ailus wrote:
+> > Hi Greg,
+> > 
+> > On Mon, Aug 11, 2025 at 09:12:36AM +0200, Greg Kroah-Hartman wrote:
+> > > On Mon, Aug 11, 2025 at 06:51:03AM +0000, Sakari Ailus wrote:
+> > > > > +/**
+> > > > > + * struct usbio_client - represents a usbio client
+> > > > > + *
+> > > > > + * @adev: auxiliary device object
+> > > > > + * @bridge: usbio bridge who service the client
+> > > > > + * @link: usbio bridge clients list member
+> > > > > + */
+> > > > > +struct usbio_client {
+> > > > > +	struct auxiliary_device adev;
+> > > > > +	struct usbio_device *bridge;
+> > > > > +	struct list_head link;
+> > > > > +};
+> > > > > +
+> > > > > +#define adev_to_client(adev) container_of(adev, struct usbio_client, adev)
+> > > > 
+> > > > Please use a different name than "adev" for the argument, which is also the
+> > > > struct field of interest.
+> > > 
+> > > Why?  That's a very common way of doing this.  My only complaint is that
+> > > it really should be "container_of_const()" instead of just
+> > > "container_of()"
+> > 
+> > Because the struct field has the same name. The macro isn't intended for
+> > obtaining the container struct based on any field in the struct, only the
+> > field called "adev".
+> 
+> And that's fine, the macro works like this, so all should be ok.
+> 
+> > I'll post a patch to add the container_of() check to checkpatch.pl.
+> 
+> Patch to add it to do what?
 
-> Best Regards,
-> Yunseong Kim
+You're cc'd. :-)
 
-Sebastian
+> 
+> > > > > +static int usbio_ctrl_msg(struct usbio_device *usbio, u8 type, u8 cmd,
+> > > > > +			  const void *obuf, u16 obuf_len, void *ibuf, u16 ibuf_len)
+> > > > > +{
+> > > > > +	u8 request = USB_TYPE_VENDOR | USB_RECIP_DEVICE;
+> > > > > +	struct usbio_ctrl_packet *cpkt;
+> > > > > +	unsigned int pipe;
+> > > > > +	u16 cpkt_len;
+> > > > > +	int ret;
+> > > > > +
+> > > > > +	lockdep_assert_held(&usbio->mutex);
+> > > > > +
+> > > > > +	if ((obuf_len > (usbio->ctrlbuf_len - sizeof(*cpkt))) ||
+> > > > > +	    (ibuf_len > (usbio->ctrlbuf_len - sizeof(*cpkt))))
+> > > > 
+> > > > You can (and should) remove all parentheses except the outer ones here.
+> > > 
+> > > No, don't do that.  If you do that you will have to manually go and try
+> > > to remember the order of operations every time you read this code.
+> > 
+> > I presume kernel developers in general do.
+> > 
+> > But if in doubt: <URL:https://users.ece.utexas.edu/~adnan/c-refcard.pdf>.
+> 
+> Don't force me to look it up all the time, use () to make it obvious
+> please.  That's the biggest thing I hate about that checkpatch "rule",
+> please do not follow it for any code that I am a maintainer for.
+> 
+> > > > > +static void usbio_disconnect(struct usb_interface *intf)
+> > > > > +{
+> > > > > +	struct usbio_device *usbio = usb_get_intfdata(intf);
+> > > > > +	struct usbio_client *client, *prev;
+> > > > > +
+> > > > > +	list_for_each_entry_safe_reverse(client, prev, &usbio->cli_list, link) {
+> > > > > +		auxiliary_device_delete(&client->adev);
+> > > > > +		list_del_init(&client->link);
+> > > > > +		auxiliary_device_uninit(&client->adev);
+> > > > > +	}
+> > > > > +
+> > > > > +	usb_kill_urb(usbio->urb);
+> > > > > +	usb_free_urb(usbio->urb);
+> > > > 
+> > > > What will happen on client drivers if they're working with the bridge while
+> > > > disconnect happens?
+> > > > 
+> > > > One easy solution to this could be to use an rw_semaphore where client
+> > > > acquire it for readingin conjunction (in a helper that also checks the
+> > > > interface status) and disconnect callback for writing.
+> > > 
+> > > How is that going to change anything?  And how can a disconnect happen?
+> > > Isn't this an onboard device?
+> > 
+> > It is, but the device firmware is known to crash occasionally.
+> 
+> Then fix the firmware :)
+
+In practice this depends on device vendor and we all know the quality of
+firmware from random sources. These are not Intel-implemented devices.
+
+> 
+> > The documantation says you can't access USB interfaces once disconnect has
+> > returned. I'm not sure if there are checks to safeguard against ongoing or
+> > additional accesses in the USB stack but on many other buses this may
+> > simply lead to a system crash.
+> 
+> How can you access the USB interface after disconnect has returned on
+> these codepaths?  The child devices should all be cleaned up properly
+> after disconnect happens so there should not be a pointer to even use
+> anymore.
+
+See functions exported by the main USBIO driver.
+
+-- 
+Regards,
+
+Sakari Ailus
 
