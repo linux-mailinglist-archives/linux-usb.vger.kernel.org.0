@@ -1,177 +1,215 @@
-Return-Path: <linux-usb+bounces-26683-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26684-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A7D8B2016B
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 10:10:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF401B201D2
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 10:27:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9D8E3A3A0D
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 08:10:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA54A7A4A42
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 08:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D3162DA77F;
-	Mon, 11 Aug 2025 08:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF4162DAFBB;
+	Mon, 11 Aug 2025 08:27:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="m/QH6VEp"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fx7k4uP6";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EyUshe6I"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A947213248
-	for <linux-usb@vger.kernel.org>; Mon, 11 Aug 2025 08:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55DC1E2307
+	for <linux-usb@vger.kernel.org>; Mon, 11 Aug 2025 08:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754899850; cv=none; b=F/hsg93lgqycjLLnZqO8sNqXIvwCTd4l9U/5O/pM0syK6cY+sR100KnDFyTSWbG8XF2FoB6T+igYESApBEpLwKgBGv90wC/PbpHjVGZs0skD0kZmuDi2w3KaOr0vYU+4jJYNr1TVIQPgyGxJ5xRa10zAtWcbpBS3vkQgPxMc0uE=
+	t=1754900870; cv=none; b=SfOkJ/TVoO/FgzfH5liYV4gACwwf5svDU+zljXLKpRMqwPTlnRbesKN6BHc3oFediNKtMCK1yQiuZ4KjfSOFpQZBny2HwEbrOLeI4pY7W33bZDsjBSHaWOsF/8dHn13uNAqjKzFuIBChthF/84P6976NqC+bdSMoRW+wM8uC9ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754899850; c=relaxed/simple;
-	bh=dNWdxPGZirc4wM1IzhjD3o10TFH0wJpTvexTaUIQRGk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i8T6zex4cRi8F7uTw9UMQ6bz8e1Ff7gUofl1ciWVxFXiRHs+1hPQ+dTrTVCn6YCksRI16X/ojU2z7n0fmuPOQkOv9QjrTjKUJ0r9/glmK3GH/EQFgrEaKBhg7GhpIt/DdtLXmymwIIxM4sdD+M7tOjmkMPyeDMibJ1sGsZu6nGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=m/QH6VEp; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D630C3F1CC
-	for <linux-usb@vger.kernel.org>; Mon, 11 Aug 2025 08:04:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1754899483;
-	bh=CFokBXtuO0wOpNwBiSXLopmERlgMmh8ZJZG+hXoD6/w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=m/QH6VEpuvMBfSPmEZwaGvhNZeX4Fz6hlbLZbtGGHBeCljL4ZZ9xSskvRxHjdOMRH
-	 2qlFnsqHrSThLXr2zuzvHiNkBrZy8Iz8d/wysjt+ZoDvgnM+0821IqeR6MkQtH7xBK
-	 W8Mz51Oq/NimiV/LOgr6LI1WhgWRboZQg/q8a86XZ4r6X5nZ4VT2nD5JhFvjFxqKL2
-	 e2RSQiXcYozSFiCnjt//zFxNeWF0EYyF4hcnEQTy5hgmmop5tXqqumbSJ0OzEFPOV6
-	 LCC7WiZfWjtbk4mBDUd7AV25VdkeVKZZUii2HRG2AAFfyGIrhIK6GeCeldxMZ1CMTr
-	 LJM7PfI/xJLOA==
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3b78aa2a113so1960386f8f.2
-        for <linux-usb@vger.kernel.org>; Mon, 11 Aug 2025 01:04:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754899481; x=1755504281;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CFokBXtuO0wOpNwBiSXLopmERlgMmh8ZJZG+hXoD6/w=;
-        b=WalZmq9wEFe+kXdKNF4dm8dfIfqIoERp3PXYCpq1jA4etML6YV0wgy7xBbyCK3/K9W
-         wUPcPYalSkrNaxmr3YkorIlaqHbQzwvneNxy3Z3tdhHN4VFx9nPRe2476loYZye0e2xC
-         BRDYkcsHQZHJlFhtSELe9ErU7VKbU1KphC6vOtR7GwXQuIkGu1iV9onIgnwjIlJTsQoy
-         4074EgBYburo7qcgBLomeELq8Esn+DZxO5qw47rG5O9zv8v+EjMn1Bux4j/SqprCnXKk
-         2F7aeXi73ko+dyY+AnviMTpBHDSgk5y1NYakJfPlCLJ28mtD0fGJz5cNEsVCRf+9kMAc
-         F4cw==
-X-Forwarded-Encrypted: i=1; AJvYcCV3N2+MzyizcxCxIDiBcSzW+WUHbD4FsRUjb+k47iUj+jx6PAgJHzlbLLUMGNaBWEuW2KBLujx8TZ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuCK2R172L4xb0I3tjthx6xRJMS6ZpOrNyrSSAf5qTuEaIIRIi
-	DcReTYqWkOQWWdn3fNT+nCy1s5fHKeWPj+5FHAM9U4RDO1tgDZfuzCjw3Oq21POGygwczm3WFZh
-	CtVSY9/KHRyJKCc0oH4JX2kCCKLHqqiSGvA5Oee7DwOFv6V+XKIIyDLysXEseTZmzdixK1Yj5ze
-	rN9ecOp7YTfv9SjItneGvf8BZ/OY1vOUgJSahkGjlejV09usR2rvGwOlE8Z9sHd1E=
-X-Gm-Gg: ASbGncuK0nSE8pgthnmXoTkQhn/o06nxuFRHr9T4yNVJatwOOYzufi/pYEfxTGBBrU0
-	J4FWWyfeNAX63QU/LQ7hkw2zFD2+JLR/t/I1KJImcnvYW+YtLhOI/LSl5vxvHaFERKZaWuWZx8u
-	8yppfbEayhrU2f6EOU9Y9TCtU=
-X-Received: by 2002:a05:6000:1a8e:b0:3b7:9233:ebb with SMTP id ffacd0b85a97d-3b90092fd21mr9529406f8f.6.1754899481104;
-        Mon, 11 Aug 2025 01:04:41 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF/678HroJsSn7ziuO5bLxZpQiVLlVdn9fvp5UXLgyMTLt9L9Cl2IiXKh9Xr+LeKJ3eqNC12oIm5K7pLUmLMxc=
-X-Received: by 2002:a05:6000:1a8e:b0:3b7:9233:ebb with SMTP id
- ffacd0b85a97d-3b90092fd21mr9529377f8f.6.1754899480621; Mon, 11 Aug 2025
- 01:04:40 -0700 (PDT)
+	s=arc-20240116; t=1754900870; c=relaxed/simple;
+	bh=VqywHCZetIrUjV5LZl6565DJel7kt6oZ5cshzBalFRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XbWqIdbap2pzzfKMlXVFs36aqua0PTzqZoxpXEnpALwlcH7GtDRfCsrZ42KXbxpSPXsDkuYXAToLrXxDhnxVwoZ7sEZGgnBQYXUYqbXb/7eYTx/pS4Ilgq3LuidEqhetCeo5jpTFrBw/VDZsbb0I+1E8TcnJx+Q4/Tw4/z8WNBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fx7k4uP6; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EyUshe6I; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Mon, 11 Aug 2025 10:27:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1754900866;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=XqR1vCaE0o2DPsF/1Op00CkgIcuAUqq6U2W5nEqoIsI=;
+	b=fx7k4uP6V6iqR68ubQ2kNeEOQMk4IfU/jn8Pl6W+qKrUdLmHsoC40zW1u2tI6R9/YSSZL3
+	PYj6my788joufXckL+UM4qaLz4BCH1nZHWb0U+1QDOQVyqlw1+uJAoPEKDIIn3IO3qCa2A
+	cls7M1a+Mp3Wi09YHmrvjxCa3pdpZ/PVKSZUchbVfX9ZNemFRLFk+CjBlG9iyJr59T8Xri
+	af8GNwIfJoPr8ix331r/aEy2QUdSD/gJyErOVZIzdsHyoNI8KP0BpxX2c7zLMFIPpiRPGw
+	d8wRVvJgGkX1Ugki9/tSD+GeHxYDAfkjgUgD58OBuGQa7T6GPQcNaq9rdM447g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1754900866;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=XqR1vCaE0o2DPsF/1Op00CkgIcuAUqq6U2W5nEqoIsI=;
+	b=EyUshe6Ite+9QM2eYviz2ZxPPUTxbo8+Sk5BSlfrEUvRug35ODZg7I6QBiEcqmajZ/ANoR
+	3qVoWRYjRwXYuJAw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Yunseong Kim <ysk@kzalloc.com>, linux-usb@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-rt-devel@lists.linux.dev
+Cc: Dmitry Vyukov <dvyukov@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Byungchul Park <byungchul@sk.com>, max.byungchul.park@gmail.com,
+	Yeoreum Yun <yeoreum.yun@arm.com>,
+	Michelle Jin <shjy180909@gmail.com>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>, syzkaller@googlegroups.com,
+	Austin Kim <austindh.kim@gmail.com>
+Subject: [PATCH] kcov, usb: Don't disable interrupts in
+ kcov_remote_start_usb_softirq()
+Message-ID: <20250811082745.ycJqBXMs@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMqyJG2QceTyAONn_5m956zF_rpHLpognYYWnivm7J+w6Cw=RQ@mail.gmail.com>
- <20250728063329.GR2824380@black.fi.intel.com> <20250808064313.GM476609@black.igk.intel.com>
-In-Reply-To: <20250808064313.GM476609@black.igk.intel.com>
-From: En-Wei WU <en-wei.wu@canonical.com>
-Date: Mon, 11 Aug 2025 16:04:28 +0800
-X-Gm-Features: Ac12FXw_PQ0sh_GuxgTuYrOYRyF2_QRojqh_W1NIQa_AvScgpg_Rzaxd5Gds79g
-Message-ID: <CAMqyJG3b5KsBjF=wW_+pB6MaSO0PQmq-iiAJ9aONZ6mZ1UtUNA@mail.gmail.com>
-Subject: Re: Thunderbolt call trace occurs on hot-plug
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: westeri@kernel.org, michael.jamet@intel.com, andreas.noever@gmail.com, 
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org, 
-	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Hi Mika,
+kcov_remote_start_usb_softirq() the begin of urb's completion callback.
+HCDs marked HCD_BH will invoke this function from the softirq and
+in_serving_softirq() will detect this properly.
+Root-HUB (RH) requests will not be delayed to softirq but complete
+immediately in IRQ context.
+This will confuse kcov because in_serving_softirq() will report true if
+the softirq is served after the hardirq and if the softirq got
+interrupted by the hardirq in which currently runs.
 
-Thanks for the update.
+This was addressed by simply disabling interrupts in
+kcov_remote_start_usb_softirq() which avoided the interruption by the RH
+while a regular completion callback was invoked.
+This not only changes the behaviour while kconv is enabled but also
+breaks PREEMPT_RT because now sleeping locks can no longer be acquired.
 
-I didn't deliberately unplug the cable while the "acking hot unplug
-event on 0:1" happened, suggesting that there might be an issue on our
-cable as you said.
+Revert the previous fix. Address the issue by invoking
+kcov_remote_start_usb() only if the context is just "serving softirqs"
+which is identified by checking in_serving_softirq() and in_hardirq()
+must be false.
 
-I'll perform other tests and get back to you.
+Fixes: f85d39dd7ed89 ("kcov, usb: disable interrupts in kcov_remote_start_usb_softirq")
+Reported-by: Yunseong Kim <ysk@kzalloc.com>
+Closes: https://lore.kernel.org/all/20250725201400.1078395-2-ysk@kzalloc.com/
+Tested-by: Yunseong Kim <ysk@kzalloc.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ drivers/usb/core/hcd.c | 12 +++++------
+ include/linux/kcov.h   | 47 ++++++++----------------------------------
+ 2 files changed, 14 insertions(+), 45 deletions(-)
 
-Thanks,
-En-Wei.
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 03771bbc6c01a..d765fa5ec6718 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1636,7 +1636,6 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 	struct usb_hcd *hcd = bus_to_hcd(urb->dev->bus);
+ 	struct usb_anchor *anchor = urb->anchor;
+ 	int status = urb->unlinked;
+-	unsigned long flags;
+ 
+ 	urb->hcpriv = NULL;
+ 	if (unlikely((urb->transfer_flags & URB_SHORT_NOT_OK) &&
+@@ -1654,14 +1653,13 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 	/* pass ownership to the completion handler */
+ 	urb->status = status;
+ 	/*
+-	 * Only collect coverage in the softirq context and disable interrupts
+-	 * to avoid scenarios with nested remote coverage collection sections
+-	 * that KCOV does not support.
+-	 * See the comment next to kcov_remote_start_usb_softirq() for details.
++	 * This function can be called in task context inside another remote
++	 * coverage collection section, but kcov doesn't support that kind of
++	 * recursion yet. Only collect coverage in softirq context for now.
+ 	 */
+-	flags = kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
++	kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
+ 	urb->complete(urb);
+-	kcov_remote_stop_softirq(flags);
++	kcov_remote_stop_softirq();
+ 
+ 	usb_anchor_resume_wakeups(anchor);
+ 	atomic_dec(&urb->use_count);
+diff --git a/include/linux/kcov.h b/include/linux/kcov.h
+index 75a2fb8b16c32..0143358874b07 100644
+--- a/include/linux/kcov.h
++++ b/include/linux/kcov.h
+@@ -57,47 +57,21 @@ static inline void kcov_remote_start_usb(u64 id)
+ 
+ /*
+  * The softirq flavor of kcov_remote_*() functions is introduced as a temporary
+- * workaround for KCOV's lack of nested remote coverage sections support.
+- *
+- * Adding support is tracked in https://bugzilla.kernel.org/show_bug.cgi?id=210337.
+- *
+- * kcov_remote_start_usb_softirq():
+- *
+- * 1. Only collects coverage when called in the softirq context. This allows
+- *    avoiding nested remote coverage collection sections in the task context.
+- *    For example, USB/IP calls usb_hcd_giveback_urb() in the task context
+- *    within an existing remote coverage collection section. Thus, KCOV should
+- *    not attempt to start collecting coverage within the coverage collection
+- *    section in __usb_hcd_giveback_urb() in this case.
+- *
+- * 2. Disables interrupts for the duration of the coverage collection section.
+- *    This allows avoiding nested remote coverage collection sections in the
+- *    softirq context (a softirq might occur during the execution of a work in
+- *    the BH workqueue, which runs with in_serving_softirq() > 0).
+- *    For example, usb_giveback_urb_bh() runs in the BH workqueue with
+- *    interrupts enabled, so __usb_hcd_giveback_urb() might be interrupted in
+- *    the middle of its remote coverage collection section, and the interrupt
+- *    handler might invoke __usb_hcd_giveback_urb() again.
++ * work around for kcov's lack of nested remote coverage sections support in
++ * task context. Adding support for nested sections is tracked in:
++ * https://bugzilla.kernel.org/show_bug.cgi?id=210337
+  */
+ 
+-static inline unsigned long kcov_remote_start_usb_softirq(u64 id)
++static inline void kcov_remote_start_usb_softirq(u64 id)
+ {
+-	unsigned long flags = 0;
+-
+-	if (in_serving_softirq()) {
+-		local_irq_save(flags);
++	if (in_serving_softirq() && !in_hardirq())
+ 		kcov_remote_start_usb(id);
+-	}
+-
+-	return flags;
+ }
+ 
+-static inline void kcov_remote_stop_softirq(unsigned long flags)
++static inline void kcov_remote_stop_softirq(void)
+ {
+-	if (in_serving_softirq()) {
++	if (in_serving_softirq() && !in_hardirq())
+ 		kcov_remote_stop();
+-		local_irq_restore(flags);
+-	}
+ }
+ 
+ #ifdef CONFIG_64BIT
+@@ -131,11 +105,8 @@ static inline u64 kcov_common_handle(void)
+ }
+ static inline void kcov_remote_start_common(u64 id) {}
+ static inline void kcov_remote_start_usb(u64 id) {}
+-static inline unsigned long kcov_remote_start_usb_softirq(u64 id)
+-{
+-	return 0;
+-}
+-static inline void kcov_remote_stop_softirq(unsigned long flags) {}
++static inline void kcov_remote_start_usb_softirq(u64 id) {}
++static inline void kcov_remote_stop_softirq(void) {}
+ 
+ #endif /* CONFIG_KCOV */
+ #endif /* _LINUX_KCOV_H */
+-- 
+2.50.1
 
-On Fri, 8 Aug 2025 at 14:43, Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi,
->
-> On Mon, Jul 28, 2025 at 09:33:29AM +0300, Mika Westerberg wrote:
-> > Hi,
-> >
-> > On Fri, Jul 11, 2025 at 11:54:46AM +0800, En-Wei WU wrote:
-> > > Hi,
-> > >
-> > > I'm seeing an issue on a Dell Pro Max 16 with Intel Arrow Lake CPU --
-> > > Hot-plugging a thunderbolt 4 cable into a thunderbolt 4 port (backed
-> > > by Intel iGPU) and connecting it to a Dell U2725QE monitor triggers
-> > > the following call trace. The issue reproduces approximately 60% of
-> > > the time.
-> >
-> > Could you share the whole dmesg (that is not line wrapped)? With
-> > "thunderbolt.dyndbg=+p" in the kernel command line.
-> >
-> > And can you confirm I understand the steps?
-> >
-> > 1. Boot the system up, nothing connected.
-> > 2. Once booted up, connect Thunderbolt cable to Dell U2725QE monitor.
-> > 3. Verify that the monitor works (+ run lspci/lsusb)
-> >
-> > Expected output: The monitor and the integrated peripherals (PCIe, USB)
-> > work fine.
-> >
-> > Actual output: There is error in the log and PCIe peripherals on the
-> > monitor do not show up in lspci output.
->
-> For some reason I never got the reply from you although I can see it on
-> lore.kernel.org. Thanks to Alan (Cc'd) who notified me about your reply :)
->
-> Anyways, I looked your first full dmesg and what stands out there is that:
->
-> [  113.907760] ======= Hotplug Thunderbolt Cable =======
-> [  116.091653] [504] thunderbolt:tb_cfg_ack_plug:842: thunderbolt 0000:00:0d.2: acking hot plug event on 0:1
-> ...
-> [  116.134083] thunderbolt 0-1: new device found, vendor=0xd4 device=0xc050
-> [  116.134092] thunderbolt 0-1: DELL U2725QE
-> ...
-> [  116.862460] [185] thunderbolt:tb_dump_hop:20: thunderbolt 0000:00:0d.2: 1:1:  In HopID: 8 => Out port: 16 Out HopID: 8
-> [  116.862463] [185] thunderbolt:tb_dump_hop:22: thunderbolt 0000:00:0d.2: 1:1:   Weight: 2 Priority: 3 Credits: 14 Drop: 0 PM: 0
-> [  116.862466] [185] thunderbolt:tb_dump_hop:25: thunderbolt 0000:00:0d.2: 1:1:    Counter enabled: 0 Counter index: 2047
-> [  116.862469] [185] thunderbolt:tb_dump_hop:27: thunderbolt 0000:00:0d.2: 1:1:   Flow Control (In/Eg): 1/0 Shared Buffer (In/Eg): 0/0
-> [  116.862472] [185] thunderbolt:tb_dump_hop:30: thunderbolt 0000:00:0d.2: 1:1:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-> [  116.865613] [504] thunderbolt:tb_cfg_ack_plug:842: thunderbolt 0000:00:0d.2: acking hot unplug event on 0:1
->
-> This last one is unplug to the host router downstream port while we are
-> just setting up a PCIe tunnel, so it is expected that we cannot configure
-> the router (Dell device) from that point forward. That WARN() should be
-> changed to dev_warn() or so as this is really expected if the user unplugs
-> the device while we are configuring it (this is nature of USB4 as user can
-> unplug devices at any time).
->
-> In other words that calltrace is fine.
->
-> However, why the link goes down is another thing. If you did not
-> deliberately unplug the cable it suggest some sort of cable/PD issue to me.
-> Sometimes I have seen the plug gets bit loose and that makes the cable to
-> unplug itself quite easily. The other thing might be the cable itself may
-> be bad (I wonder if you have another Thunderbolt 4 cable that you could
-> try?).
 
