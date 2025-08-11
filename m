@@ -1,157 +1,146 @@
-Return-Path: <linux-usb+bounces-26721-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26722-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AD6CB215CB
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 21:43:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A98E3B21766
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 23:29:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09C90463BA1
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 19:43:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADF7C464315
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 21:29:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5B9C149C51;
-	Mon, 11 Aug 2025 19:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DE62E543D;
+	Mon, 11 Aug 2025 21:28:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GMSXi/mf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TWeluUKP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3085B2D9ECA;
-	Mon, 11 Aug 2025 19:41:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59F02E5431;
+	Mon, 11 Aug 2025 21:28:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754941293; cv=none; b=lfnkLX0jHci8PpGiwz9zedmfjmoPIp4glbVY1SCNz4UGYnGifnJUu2pTTS6ms9MYxOX2/SgwS3Q6ScUL/GozhG3ELpcwoHxX6686RIPTYPrlvzCdZxnCRAyppxAYCJipL4XuAmgLHjq6D0bNrnj4cIkfH/gymN5RX55Q6WTxZIM=
+	t=1754947707; cv=none; b=Z1qAl1ciPCoHum8ttvzddf0fWE06T9seqw0oSFFAz5eaqapHm3bq7qpaWQgZI61ddcOZsij5TGxPKk7BTPfGw2NUHROhe66YIbgexOdAlLksHoHo880lvBZ/jyuJCppKTas+q3KuEhTLTZbtv1wMVEJ7F0Y5y+F5eQj/E78ffXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754941293; c=relaxed/simple;
-	bh=3S7JR1J0KLdyO8pzE3T0jrrcCJZbmsNBb/5yq5sNZ4o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eu98+OPiWdabN2V1jPPPOb95r/OfZRVPPB2umadkXV6CYKeDswgzf/LAGfkNWoOYzcgNrzjHgOu/HIphQ7x7f1HUQSqKjWnRTkkPmlgJysiq3nKK1K51uXJaHUdMur82gnHZvPzOVGyED2Ef9BPB9MJS9te4T0VMxBQPzHtAR8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GMSXi/mf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49EAC4CEF1;
-	Mon, 11 Aug 2025 19:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754941292;
-	bh=3S7JR1J0KLdyO8pzE3T0jrrcCJZbmsNBb/5yq5sNZ4o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GMSXi/mfXO9CULm95AGcxq1StyiIAEhXKxWqrjQpgVDdbBMjE7DIHk6hXNu1KG0UG
-	 AIBF8QgPqxTpfO4qMGtfD3I8/HLw+/N1zJD35KCfg8lg1AuL4sKQjtFzYHCPPiC4D3
-	 UMeLVNBgvlNksicJH9YKA0je3B9gZLcD0IvtOxOa+3tJF4Q1kG1SIJ8HcXjG2UHgPA
-	 zWqlLr8Q6kCpAOHRG5TgV+IiRFaA6AqyFQ282E1puyJGL/5V/od9WVffWXLKGAN1De
-	 jfC4YnZQhGNe8rOSvJemtW1qfKm8zoUwO2wVEvJQhDdbQ+vGGZ4jMUSRXGEI9MIdgq
-	 sgC0tFy9K3d/w==
-From: "Mario Limonciello (AMD)" <superm1@kernel.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>
-Cc: Pavel Machek <pavel@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
-	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-	linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
-	linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
-	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-	linux-trace-kernel@vger.kernel.org (open list:TRACING),
-	AceLan Kao <acelan.kao@canonical.com>,
-	Kai-Heng Feng <kaihengf@nvidia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	=?UTF-8?q?Merthan=20Karaka=C5=9F?= <m3rthn.k@gmail.com>,
-	Eric Naim <dnaim@cachyos.org>,
-	"Mario Limonciello (AMD)" <superm1@kernel.org>,
-	Denis Benato <benato.denis96@gmail.com>
-Subject: [PATCH v5 11/11] PM: Use hibernate flows for system power off
-Date: Mon, 11 Aug 2025 14:41:02 -0500
-Message-ID: <20250811194102.864225-12-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250811194102.864225-1-superm1@kernel.org>
-References: <20250811194102.864225-1-superm1@kernel.org>
+	s=arc-20240116; t=1754947707; c=relaxed/simple;
+	bh=mpk27qrn0f9RHS7XKFScEMTU8qgUMeWZcJ6TqKsDXAA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LutXb2H6HDgDBv80LjSma8Rc/B/CwbVQqOyQ2oh3pfeJFbo55SMaH9N6M7OmZj8u9HCGnAVYZrp1bW7A6AgpFU+60v15qQYp8v9C9pUZe6pRUF+ZQ/6eihYl6SA0tl23eofPFm7Q8nYXQrrEMkKHCqgcGLvFgeBi/glaIMk534g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TWeluUKP; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-55b8a0f36fcso5174453e87.1;
+        Mon, 11 Aug 2025 14:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754947704; x=1755552504; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bpjIpzAPB0v7NxDZwwT0mjO9aLWv5i/E2Osu7tXQZqE=;
+        b=TWeluUKP8yku/5f0YcFA76/18p8aTYwxUceWYPjU8lG6GvcXOkb2CBnOSganU9hLLQ
+         wQsErbdXK/0tUeP9k6dLFvNShmqqcn7AZRy0NjsOhuEoIEazt7Lr8WnXg/pmompDNTQl
+         ZplfGKOhj/gJH4pijD3jZkwFnl0TmOjmQ2A+k/fChpImWIlDqLuLeScefr+2fDTduR3R
+         GFfzzmtBpaAroFB0DoU0UetJ1i3JoLaEFzBb80cbe8pHsOcbN2g+72JzUssQyUuwqOqA
+         j5AwkN3Gpw8VJjJ4DS3S1nVkeyhsHnU5edm+Yiy9JlRQy5KNUFYJ0DQYnADhVtp/56oH
+         OISg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754947704; x=1755552504;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bpjIpzAPB0v7NxDZwwT0mjO9aLWv5i/E2Osu7tXQZqE=;
+        b=hSClbcTzjDcTL/Rp6BrbjFp7zM0x4jjtSwpewIys7bOm04ufBc4rwO2yl/o8Nph3VT
+         hg5dU7itcPVHZakfy4a1oKXGDQILCKSrmeA/FBWwUXeMTzu8Y01osK7a3DgKKlw2AHTR
+         APluOJKRB4QEZGJ4O3cJ2/pOpdxQVeLgFp92WzlTVXsWr/uSsODU42fWTaCq1o+6NCBF
+         Rac9GBitgO1EqzJOHrLj+L2FbtNbs4ClSLpIox92sHVKXbfUCO/b5Ui9q4YnvIZhcxN9
+         7tV7ZUcyR7LPvAgz3n10TC/tESBVsA1UTFEmFM5wVa/GU//qFqJNXA4e+7752GGxTsC8
+         ddzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUIkAIQakjZW4FtTZvF/W4FJvxGDCcxhDMl7vl6YupDZz0RiBvJXrqjA8WvYIUwcNhjSkFBAQcqD1w=@vger.kernel.org, AJvYcCWVwnfvTpztMlwdeLtT9oyVpePHZ9VOsm5vfBRKe1rjKoAokGO4Q0zunANTC6wHYYmKbvTwmgcB@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn5RHZTeliJgE4Q7KABupiEuT2zJFnVOlepXMSQPyoqrrwvTmo
+	ln9d9ZnzVT3VfxfXToCgte1otyLwOuhHH+zM0WV5BvF76w5UH2Nu61lX
+X-Gm-Gg: ASbGncvl2vRR6TsydNORmMQVZ9ZzY1T+LaNQOwyA3MPXaTVHTm2nBp/zWcdgEPWL24G
+	l0S6Z4BG7nzSba/oLKWvbLSVNC/nL/ya5P0ijFG89nzZsr8Wzrh0Diqvg9SBDjT8dKCZHbAy8aG
+	79uRFBbRliqe2yTjdkOfhmNRcIt74XAortNf866tzIei0tSsuSW341p0GUYp4LKEym9FZ+4difA
+	/KzWzT/A6x4tAN8ahr9X6qJJf5rZWE53/Oxz6qtVZqeyEnXgVaj/YxxxZPRGFSV1haY/VDEMCkk
+	XmO6+ErTdJTrBbLhIZaKLuUNIGfW8PoEccZIpCO8LR8cZHjVdScNIJDHdn1fCjKEF5BJHQU+4De
+	94VmWs5qoAd0qqwPqiFfsGfXDOSGmU0QdcRc=
+X-Google-Smtp-Source: AGHT+IGk+VTPIrnjQuog4v7TbkCyB00WQoWvYsPlYTExmUr1HajhxEL9dzSdsIBYJf8YaraRPtuZYw==
+X-Received: by 2002:a05:6512:ea8:b0:55c:d617:a132 with SMTP id 2adb3069b0e04-55cd75b25f6mr383568e87.6.1754947703662;
+        Mon, 11 Aug 2025 14:28:23 -0700 (PDT)
+Received: from foxbook (bfd208.neoplus.adsl.tpnet.pl. [83.28.41.208])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cce15c650sm1083440e87.103.2025.08.11.14.28.21
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 11 Aug 2025 14:28:23 -0700 (PDT)
+Date: Mon, 11 Aug 2025 23:28:15 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ stern@rowland.harvard.edu, stable@vger.kernel.org, =?UTF-8?B?xYF1a2Fzeg==?=
+ Bartosik <ukaszb@chromium.org>, Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH] usb: hub: Don't try to recover devices lost during warm
+ reset.
+Message-ID: <20250811232815.393c7bb9@foxbook>
+In-Reply-To: <fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
+References: <20250623133947.3144608-1-mathias.nyman@linux.intel.com>
+	<fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-When the system is powered off the kernel will call device_shutdown()
-which will issue callbacks into PCI core to wake up a device and call
-it's shutdown() callback.  This will leave devices in ACPI D0 which can
-cause some devices to misbehave with spurious wakeups and also leave some
-devices on which will consume power needlessly.
+On Mon, 11 Aug 2025 08:16:06 +0200, Jiri Slaby wrote:
+> This was reported to break the USB on one box:
+> > [Wed Aug  6 16:51:33 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
+> > [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
+> > [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
+> > [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
+> > [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
+> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
+> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
+> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: Device not responding to setup address.
+> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: Device not responding to setup address.
+> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: device not accepting address 12, error -71
+> > [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: WARN: invalid context state for evaluate context command.
+> > [Wed Aug  6 16:51:36 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
+> > [Wed Aug  6 16:51:36 2025] [     C10] xhci_hcd 0000:0e:00.0: ERROR unknown event type 2
+> > [Wed Aug  6 16:51:36 2025] [ T355745] usb 1-2: Device not responding to setup address.
+> > [Wed Aug  6 16:51:37 2025] [     C10] xhci_hcd 0000:0e:00.0: ERROR unknown event type 2
+> > [Wed Aug  6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: Abort failed to stop command ring: -110
+> > [Wed Aug  6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: xHCI host controller not responding, assume dead
+> > [Wed Aug  6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: HC died; cleaning up
+> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-1: USB disconnect, device number 13
+> > [Wed Aug  6 16:52:50 2025] [ T355745] xhci_hcd 0000:0e:00.0: Timeout while waiting for setup device command
+> > [Wed Aug  6 16:52:50 2025] [ T362645] usb 2-3: USB disconnect, device number 2
+> > [Wed Aug  6 16:52:50 2025] [ T362839] cdc_acm 1-5:1.5: acm_port_activate - usb_submit_urb(ctrl irq) failed
+> > [Wed Aug  6 16:52:50 2025] [ T355745] usb 1-2: device not accepting address 12, error -62
+> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-2: USB disconnect, device number 12
+> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-3: USB disconnect, device number 4
+> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-3.1: USB disconnect, device number 6
+> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-4: USB disconnect, device number 16
+> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-5: USB disconnect, device number 15
+> > [Wed Aug  6 16:52:50 2025] [ T359046] usb 1-7: USB disconnect, device number 8  
 
-The issue won't happen if the device is in D3 before system shutdown, so
-putting device to low power state before shutdown solves the issue.
+Is the problem that this USB device fails to work, or that it takes
+down the whole bus while failing to work as usual?
 
-ACPI Spec 6.5, "7.4.2.5 System \_S4 State" says "Devices states are
-compatible with the current Power Resource states. In other words, all
-devices are in the D3 state when the system state is S4."
+The latter issue looks like some ASMedia xHCI controller being unhappy
+about something. What does 'lspci' say about this 0e:00.0?
 
-The following "7.4.2.6 System \_S5 State (Soft Off)" states "The S5
-state is similar to the S4 state except that OSPM does not save any
-context." so it's safe to assume devices should be at D3 for S5.
+So far I failed to repro this on v6.16.0 with a few of my ASMedias and
+a dummy device which never responds to any packet.
 
-To accomplish this, use the PMSG_POWEROFF event to call all the device
-hibernate callbacks when the kernel is compiled with hibernate support.
-If compiled without hibernate support or hibernate fails fall back into
-the previous shutdown flow.
+Can you mount debugfs and get these two files after the HC goes dead?
 
-Cc: AceLan Kao <acelan.kao@canonical.com>
-Cc: Kai-Heng Feng <kaihengf@nvidia.com>
-Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc: Merthan Karakaş <m3rthn.k@gmail.com>
-Tested-by: Eric Naim <dnaim@cachyos.org>
-Tested-by: Denis Benato <benato.denis96@gmail.com>
-Link: https://lore.kernel.org/linux-pci/20231213182656.6165-1-mario.limonciello@amd.com/
-Link: https://lore.kernel.org/linux-pci/20250506041934.1409302-1-superm1@kernel.org/
-Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
----
-v5:
- * split to multiple commits, re-order
-v4:
- * https://lore.kernel.org/linux-pci/20250616175019.3471583-1-superm1@kernel.org/
-v3:
- * Add new PMSG_POWEROFF and PM_EVENT_POWEROFF which alias to poweroff
-   callbacks
- * Don't try to cleanup on dpm_suspend_start() or dpm_suspend_end() failures
-   Jump right into normal shutdown flow instead.
- * https://lore.kernel.org/linux-pm/20250609024619.407257-1-superm1@kernel.org/T/#me6db0fb946e3d604a8f3d455128844ed802c82bb
----
- kernel/reboot.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+/sys/kernel/debug/usb/xhci/0000:0e:00.0/command-ring/trbs 
+/sys/kernel/debug/usb/xhci/0000:0e:00.0/event-ring/trbs
 
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index ec087827c85cd..c8835f8e5f271 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -13,6 +13,7 @@
- #include <linux/kexec.h>
- #include <linux/kmod.h>
- #include <linux/kmsg_dump.h>
-+#include <linux/pm.h>
- #include <linux/reboot.h>
- #include <linux/suspend.h>
- #include <linux/syscalls.h>
-@@ -305,6 +306,11 @@ static void kernel_shutdown_prepare(enum system_states state)
- 		(state == SYSTEM_HALT) ? SYS_HALT : SYS_POWER_OFF, NULL);
- 	system_state = state;
- 	usermodehelper_disable();
-+#ifdef CONFIG_HIBERNATE_CALLBACKS
-+	if (!dpm_suspend_start(PMSG_POWEROFF) && !dpm_suspend_end(PMSG_POWEROFF))
-+		return;
-+	pr_emerg("Failed to power off devices, using shutdown instead.\n");
-+#endif
- 	device_shutdown();
- }
- /**
--- 
-2.43.0
-
+Regards,
+Michal
 
