@@ -1,215 +1,174 @@
-Return-Path: <linux-usb+bounces-26684-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26685-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF401B201D2
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 10:27:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDD96B201DD
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 10:31:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA54A7A4A42
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 08:26:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8326916C5E9
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Aug 2025 08:31:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF4162DAFBB;
-	Mon, 11 Aug 2025 08:27:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40E0D2D9EC7;
+	Mon, 11 Aug 2025 08:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fx7k4uP6";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EyUshe6I"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LCC2Dtly"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55DC1E2307
-	for <linux-usb@vger.kernel.org>; Mon, 11 Aug 2025 08:27:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43941684AC;
+	Mon, 11 Aug 2025 08:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754900870; cv=none; b=SfOkJ/TVoO/FgzfH5liYV4gACwwf5svDU+zljXLKpRMqwPTlnRbesKN6BHc3oFediNKtMCK1yQiuZ4KjfSOFpQZBny2HwEbrOLeI4pY7W33bZDsjBSHaWOsF/8dHn13uNAqjKzFuIBChthF/84P6976NqC+bdSMoRW+wM8uC9ow=
+	t=1754901086; cv=none; b=HJ7mWulCC+pow7h+rD+eqqjFE8d44uL6CYAskwz3dXN0f0WRNj4W3VXPS5Q5WFKF8w9q+rpg4TLgAoOkRiL0b9DEO5fsYqIGF52GOdv0vzIc71j/YEfeDeU3xuLSrmDTjJmNnUWZcBrezE93HC6NAIajaeH94Ec9TjXtAOJ1YoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754900870; c=relaxed/simple;
-	bh=VqywHCZetIrUjV5LZl6565DJel7kt6oZ5cshzBalFRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XbWqIdbap2pzzfKMlXVFs36aqua0PTzqZoxpXEnpALwlcH7GtDRfCsrZ42KXbxpSPXsDkuYXAToLrXxDhnxVwoZ7sEZGgnBQYXUYqbXb/7eYTx/pS4Ilgq3LuidEqhetCeo5jpTFrBw/VDZsbb0I+1E8TcnJx+Q4/Tw4/z8WNBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fx7k4uP6; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EyUshe6I; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 11 Aug 2025 10:27:45 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754900866;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=XqR1vCaE0o2DPsF/1Op00CkgIcuAUqq6U2W5nEqoIsI=;
-	b=fx7k4uP6V6iqR68ubQ2kNeEOQMk4IfU/jn8Pl6W+qKrUdLmHsoC40zW1u2tI6R9/YSSZL3
-	PYj6my788joufXckL+UM4qaLz4BCH1nZHWb0U+1QDOQVyqlw1+uJAoPEKDIIn3IO3qCa2A
-	cls7M1a+Mp3Wi09YHmrvjxCa3pdpZ/PVKSZUchbVfX9ZNemFRLFk+CjBlG9iyJr59T8Xri
-	af8GNwIfJoPr8ix331r/aEy2QUdSD/gJyErOVZIzdsHyoNI8KP0BpxX2c7zLMFIPpiRPGw
-	d8wRVvJgGkX1Ugki9/tSD+GeHxYDAfkjgUgD58OBuGQa7T6GPQcNaq9rdM447g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754900866;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=XqR1vCaE0o2DPsF/1Op00CkgIcuAUqq6U2W5nEqoIsI=;
-	b=EyUshe6Ite+9QM2eYviz2ZxPPUTxbo8+Sk5BSlfrEUvRug35ODZg7I6QBiEcqmajZ/ANoR
-	3qVoWRYjRwXYuJAw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Yunseong Kim <ysk@kzalloc.com>, linux-usb@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-rt-devel@lists.linux.dev
-Cc: Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Byungchul Park <byungchul@sk.com>, max.byungchul.park@gmail.com,
-	Yeoreum Yun <yeoreum.yun@arm.com>,
-	Michelle Jin <shjy180909@gmail.com>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>, syzkaller@googlegroups.com,
-	Austin Kim <austindh.kim@gmail.com>
-Subject: [PATCH] kcov, usb: Don't disable interrupts in
- kcov_remote_start_usb_softirq()
-Message-ID: <20250811082745.ycJqBXMs@linutronix.de>
+	s=arc-20240116; t=1754901086; c=relaxed/simple;
+	bh=PB4zZJ/YnS3AMxJMXuTo7WLuLuImZf5hC8F6sXCA0Wg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T4Npb8AAY9X0yJx/2RpsKem5l3e2f0OMoWie6hREwSv6LPDAo7J4zNiZD4HhsUkMrhxEZKLAe10EBr6YkRPFe9cF04+uubJ3kXCjB+zO2iYxLgaCCFatbT8OAx0yygPrwAwg2H6BW3y9h+7+4kuSjN6q6rZqdxu38AMN7miuAhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LCC2Dtly; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B45CFC4CEED;
+	Mon, 11 Aug 2025 08:31:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1754901086;
+	bh=PB4zZJ/YnS3AMxJMXuTo7WLuLuImZf5hC8F6sXCA0Wg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LCC2DtlyqjoIiouffiphm51uPRqqI1+SFn0yh+l4B2+um3AIwBLl7MNyYwanpfNs5
+	 oTAXoIUsQS2rIVDAPbLvPEn7zKqAOnD0FUD6LFkSWT9im8jCCNU75g/dHNjtdlqeQ3
+	 UBbBy0GuKfGNVM8Eew6attsTzWa0uHM8tutAO7YQ=
+Date: Mon, 11 Aug 2025 10:31:22 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+	Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: misc: Add Intel USBIO bridge driver
+Message-ID: <2025081128-ecard-ecosphere-8170@gregkh>
+References: <20250809102326.6032-1-hansg@kernel.org>
+ <20250809102326.6032-2-hansg@kernel.org>
+ <aJmS15MlcHz__S0p@kekkonen.localdomain>
+ <2025081106-could-hazily-3e58@gregkh>
+ <aJmb4ZoUrnNTpM2W@kekkonen.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aJmb4ZoUrnNTpM2W@kekkonen.localdomain>
 
-kcov_remote_start_usb_softirq() the begin of urb's completion callback.
-HCDs marked HCD_BH will invoke this function from the softirq and
-in_serving_softirq() will detect this properly.
-Root-HUB (RH) requests will not be delayed to softirq but complete
-immediately in IRQ context.
-This will confuse kcov because in_serving_softirq() will report true if
-the softirq is served after the hardirq and if the softirq got
-interrupted by the hardirq in which currently runs.
+On Mon, Aug 11, 2025 at 07:29:37AM +0000, Sakari Ailus wrote:
+> Hi Greg,
+> 
+> On Mon, Aug 11, 2025 at 09:12:36AM +0200, Greg Kroah-Hartman wrote:
+> > On Mon, Aug 11, 2025 at 06:51:03AM +0000, Sakari Ailus wrote:
+> > > > +/**
+> > > > + * struct usbio_client - represents a usbio client
+> > > > + *
+> > > > + * @adev: auxiliary device object
+> > > > + * @bridge: usbio bridge who service the client
+> > > > + * @link: usbio bridge clients list member
+> > > > + */
+> > > > +struct usbio_client {
+> > > > +	struct auxiliary_device adev;
+> > > > +	struct usbio_device *bridge;
+> > > > +	struct list_head link;
+> > > > +};
+> > > > +
+> > > > +#define adev_to_client(adev) container_of(adev, struct usbio_client, adev)
+> > > 
+> > > Please use a different name than "adev" for the argument, which is also the
+> > > struct field of interest.
+> > 
+> > Why?  That's a very common way of doing this.  My only complaint is that
+> > it really should be "container_of_const()" instead of just
+> > "container_of()"
+> 
+> Because the struct field has the same name. The macro isn't intended for
+> obtaining the container struct based on any field in the struct, only the
+> field called "adev".
 
-This was addressed by simply disabling interrupts in
-kcov_remote_start_usb_softirq() which avoided the interruption by the RH
-while a regular completion callback was invoked.
-This not only changes the behaviour while kconv is enabled but also
-breaks PREEMPT_RT because now sleeping locks can no longer be acquired.
+And that's fine, the macro works like this, so all should be ok.
 
-Revert the previous fix. Address the issue by invoking
-kcov_remote_start_usb() only if the context is just "serving softirqs"
-which is identified by checking in_serving_softirq() and in_hardirq()
-must be false.
+> I'll post a patch to add the container_of() check to checkpatch.pl.
 
-Fixes: f85d39dd7ed89 ("kcov, usb: disable interrupts in kcov_remote_start_usb_softirq")
-Reported-by: Yunseong Kim <ysk@kzalloc.com>
-Closes: https://lore.kernel.org/all/20250725201400.1078395-2-ysk@kzalloc.com/
-Tested-by: Yunseong Kim <ysk@kzalloc.com>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- drivers/usb/core/hcd.c | 12 +++++------
- include/linux/kcov.h   | 47 ++++++++----------------------------------
- 2 files changed, 14 insertions(+), 45 deletions(-)
+Patch to add it to do what?
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 03771bbc6c01a..d765fa5ec6718 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1636,7 +1636,6 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
- 	struct usb_hcd *hcd = bus_to_hcd(urb->dev->bus);
- 	struct usb_anchor *anchor = urb->anchor;
- 	int status = urb->unlinked;
--	unsigned long flags;
- 
- 	urb->hcpriv = NULL;
- 	if (unlikely((urb->transfer_flags & URB_SHORT_NOT_OK) &&
-@@ -1654,14 +1653,13 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
- 	/* pass ownership to the completion handler */
- 	urb->status = status;
- 	/*
--	 * Only collect coverage in the softirq context and disable interrupts
--	 * to avoid scenarios with nested remote coverage collection sections
--	 * that KCOV does not support.
--	 * See the comment next to kcov_remote_start_usb_softirq() for details.
-+	 * This function can be called in task context inside another remote
-+	 * coverage collection section, but kcov doesn't support that kind of
-+	 * recursion yet. Only collect coverage in softirq context for now.
- 	 */
--	flags = kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
-+	kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
- 	urb->complete(urb);
--	kcov_remote_stop_softirq(flags);
-+	kcov_remote_stop_softirq();
- 
- 	usb_anchor_resume_wakeups(anchor);
- 	atomic_dec(&urb->use_count);
-diff --git a/include/linux/kcov.h b/include/linux/kcov.h
-index 75a2fb8b16c32..0143358874b07 100644
---- a/include/linux/kcov.h
-+++ b/include/linux/kcov.h
-@@ -57,47 +57,21 @@ static inline void kcov_remote_start_usb(u64 id)
- 
- /*
-  * The softirq flavor of kcov_remote_*() functions is introduced as a temporary
-- * workaround for KCOV's lack of nested remote coverage sections support.
-- *
-- * Adding support is tracked in https://bugzilla.kernel.org/show_bug.cgi?id=210337.
-- *
-- * kcov_remote_start_usb_softirq():
-- *
-- * 1. Only collects coverage when called in the softirq context. This allows
-- *    avoiding nested remote coverage collection sections in the task context.
-- *    For example, USB/IP calls usb_hcd_giveback_urb() in the task context
-- *    within an existing remote coverage collection section. Thus, KCOV should
-- *    not attempt to start collecting coverage within the coverage collection
-- *    section in __usb_hcd_giveback_urb() in this case.
-- *
-- * 2. Disables interrupts for the duration of the coverage collection section.
-- *    This allows avoiding nested remote coverage collection sections in the
-- *    softirq context (a softirq might occur during the execution of a work in
-- *    the BH workqueue, which runs with in_serving_softirq() > 0).
-- *    For example, usb_giveback_urb_bh() runs in the BH workqueue with
-- *    interrupts enabled, so __usb_hcd_giveback_urb() might be interrupted in
-- *    the middle of its remote coverage collection section, and the interrupt
-- *    handler might invoke __usb_hcd_giveback_urb() again.
-+ * work around for kcov's lack of nested remote coverage sections support in
-+ * task context. Adding support for nested sections is tracked in:
-+ * https://bugzilla.kernel.org/show_bug.cgi?id=210337
-  */
- 
--static inline unsigned long kcov_remote_start_usb_softirq(u64 id)
-+static inline void kcov_remote_start_usb_softirq(u64 id)
- {
--	unsigned long flags = 0;
--
--	if (in_serving_softirq()) {
--		local_irq_save(flags);
-+	if (in_serving_softirq() && !in_hardirq())
- 		kcov_remote_start_usb(id);
--	}
--
--	return flags;
- }
- 
--static inline void kcov_remote_stop_softirq(unsigned long flags)
-+static inline void kcov_remote_stop_softirq(void)
- {
--	if (in_serving_softirq()) {
-+	if (in_serving_softirq() && !in_hardirq())
- 		kcov_remote_stop();
--		local_irq_restore(flags);
--	}
- }
- 
- #ifdef CONFIG_64BIT
-@@ -131,11 +105,8 @@ static inline u64 kcov_common_handle(void)
- }
- static inline void kcov_remote_start_common(u64 id) {}
- static inline void kcov_remote_start_usb(u64 id) {}
--static inline unsigned long kcov_remote_start_usb_softirq(u64 id)
--{
--	return 0;
--}
--static inline void kcov_remote_stop_softirq(unsigned long flags) {}
-+static inline void kcov_remote_start_usb_softirq(u64 id) {}
-+static inline void kcov_remote_stop_softirq(void) {}
- 
- #endif /* CONFIG_KCOV */
- #endif /* _LINUX_KCOV_H */
--- 
-2.50.1
+> > > > +static int usbio_ctrl_msg(struct usbio_device *usbio, u8 type, u8 cmd,
+> > > > +			  const void *obuf, u16 obuf_len, void *ibuf, u16 ibuf_len)
+> > > > +{
+> > > > +	u8 request = USB_TYPE_VENDOR | USB_RECIP_DEVICE;
+> > > > +	struct usbio_ctrl_packet *cpkt;
+> > > > +	unsigned int pipe;
+> > > > +	u16 cpkt_len;
+> > > > +	int ret;
+> > > > +
+> > > > +	lockdep_assert_held(&usbio->mutex);
+> > > > +
+> > > > +	if ((obuf_len > (usbio->ctrlbuf_len - sizeof(*cpkt))) ||
+> > > > +	    (ibuf_len > (usbio->ctrlbuf_len - sizeof(*cpkt))))
+> > > 
+> > > You can (and should) remove all parentheses except the outer ones here.
+> > 
+> > No, don't do that.  If you do that you will have to manually go and try
+> > to remember the order of operations every time you read this code.
+> 
+> I presume kernel developers in general do.
+> 
+> But if in doubt: <URL:https://users.ece.utexas.edu/~adnan/c-refcard.pdf>.
 
+Don't force me to look it up all the time, use () to make it obvious
+please.  That's the biggest thing I hate about that checkpatch "rule",
+please do not follow it for any code that I am a maintainer for.
+
+> > > > +static void usbio_disconnect(struct usb_interface *intf)
+> > > > +{
+> > > > +	struct usbio_device *usbio = usb_get_intfdata(intf);
+> > > > +	struct usbio_client *client, *prev;
+> > > > +
+> > > > +	list_for_each_entry_safe_reverse(client, prev, &usbio->cli_list, link) {
+> > > > +		auxiliary_device_delete(&client->adev);
+> > > > +		list_del_init(&client->link);
+> > > > +		auxiliary_device_uninit(&client->adev);
+> > > > +	}
+> > > > +
+> > > > +	usb_kill_urb(usbio->urb);
+> > > > +	usb_free_urb(usbio->urb);
+> > > 
+> > > What will happen on client drivers if they're working with the bridge while
+> > > disconnect happens?
+> > > 
+> > > One easy solution to this could be to use an rw_semaphore where client
+> > > acquire it for readingin conjunction (in a helper that also checks the
+> > > interface status) and disconnect callback for writing.
+> > 
+> > How is that going to change anything?  And how can a disconnect happen?
+> > Isn't this an onboard device?
+> 
+> It is, but the device firmware is known to crash occasionally.
+
+Then fix the firmware :)
+
+> The documantation says you can't access USB interfaces once disconnect has
+> returned. I'm not sure if there are checks to safeguard against ongoing or
+> additional accesses in the USB stack but on many other buses this may
+> simply lead to a system crash.
+
+How can you access the USB interface after disconnect has returned on
+these codepaths?  The child devices should all be cleaned up properly
+after disconnect happens so there should not be a pointer to even use
+anymore.
+
+thanks,
+
+greg k-h
 
