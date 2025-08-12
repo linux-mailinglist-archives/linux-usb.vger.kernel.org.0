@@ -1,254 +1,137 @@
-Return-Path: <linux-usb+bounces-26775-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26776-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF57FB23A16
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 22:35:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C40FB23A4C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 22:58:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4B102A1A5E
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 20:34:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C72A7A89E8
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 20:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79D752D46AB;
-	Tue, 12 Aug 2025 20:34:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E97CB2D6E4A;
+	Tue, 12 Aug 2025 20:58:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="c1b5xWn4"
+	dkim=pass (2048-bit key) header.d=j-ernberg-se.20230601.gappssmtp.com header.i=@j-ernberg-se.20230601.gappssmtp.com header.b="XmX097A4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFCB2D0630
-	for <linux-usb@vger.kernel.org>; Tue, 12 Aug 2025 20:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B402C21C4
+	for <linux-usb@vger.kernel.org>; Tue, 12 Aug 2025 20:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755030853; cv=none; b=bBqNL1lukyc0m6/wkkDlZZeD4AsFrRO125LL0Etp9/fKZ26cSaZTnGp0W3zV7Oh3NYniYubEd70u3x7KOgWs7Bw9/ytRjQGjJG3B4iz7HFqfhtOKQCSMXT5ogWxoNbBaSnwEaA20z3A0T6iJnSioXs63fj3Qe1oG3hD2Bmgf3BQ=
+	t=1755032290; cv=none; b=btZLI3Utp2kTvCllCcAmVfnYPvHaeBjp7PDSFGXU9D2sBmkOS6NMYKrFGVDjDwIgFy2M/q7hoaEaNfiQa3aYj4sQ02tRfA8GOGcrF1ALpSS6E7t4pWpcX1eNR6p9NqIL6WyFLnL79IjURV9hWd3XE9ngqaATUxk0/wRw+HhwsMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755030853; c=relaxed/simple;
-	bh=sc5Szj9DaKl32962dz6jW5WEWwuoiEYfcZH2OgxoK/4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ic9AD1t8vN41LK1ZyVnceHY/SsSN4R2w425GWtRD8p95ueJV9Q8skkWcQulQgIhlu5zejnTXJW2tvH+4H4nu9pQuTd2Jm/qqB1dT9XV4pGKoWoFZbHGUJSIUiEu2T1qLcgEs9ukc5Ttk9J2TFPe1FY9a0T2j8cS26+saNrsnIms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=c1b5xWn4; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-71bd9e38af7so55554867b3.1
-        for <linux-usb@vger.kernel.org>; Tue, 12 Aug 2025 13:34:11 -0700 (PDT)
+	s=arc-20240116; t=1755032290; c=relaxed/simple;
+	bh=6Q4Oq/xbYw0awazOURcsOPsRowz4FU6cz3+FWT4ucTE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SCIVzB3dy7jRjuImWBzrM4l/klMEc4/rkvTWmtq8RM99f5oDdionLccOYGBAsweGwRckrxSrDp3UIMMvpp6qZPC8KZReSUcruhd3sYo3ZIy5QvjjQ+HQETKybKB8NdKlDiWxvyDXG5B9EjSSMyhDg4GMX0S+ufYGTM9hqwooc8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=j-ernberg.se; spf=none smtp.mailfrom=j-ernberg.se; dkim=pass (2048-bit key) header.d=j-ernberg-se.20230601.gappssmtp.com header.i=@j-ernberg-se.20230601.gappssmtp.com header.b=XmX097A4; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=j-ernberg.se
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=j-ernberg.se
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-55b975b459aso5095193e87.3
+        for <linux-usb@vger.kernel.org>; Tue, 12 Aug 2025 13:57:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1755030850; x=1755635650; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CesmGPtKuDUWY4MQccWH2mnWQ8QDSsrtS7Gzevtd68w=;
-        b=c1b5xWn4aq1Kf+VgiLz+FkRPuQzE9TX/oheSON72XlP/t0DIUJZxGxeeqVJRrS+8fp
-         W8pkpvh/WAlwVf6tnlOC8bTa+BLipkBqjWcghoH/2vml2+eMrRsl+yJ8FZqCck5wpvJI
-         XCpU7poiYcsXILBUMiXD5G/aYpVBWk+a9oaiw=
+        d=j-ernberg-se.20230601.gappssmtp.com; s=20230601; t=1755032277; x=1755637077; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I1HYkWTm//0TzFaX3HirV9CEefr3/XfGLtwUTGZHPfw=;
+        b=XmX097A4d4aVc/Gm/pMW5w7QcjfhJBwgREdg5Ti/XzhesoiDcPOgUqMyo1c5m/21Mf
+         rP2g7nDZt1SaXpStcfjFV49zpLaBGIxXV4b3Ag6tueKayOSo/ye5ODThF8WWauv69MhY
+         FpdcZpLez17cagD3kwFo77yFfwBmHlSKRWduqXGf2QdguEVGZjZ2/ZJ0vFNrVsUmZN38
+         Cj04P64hya7wsM3VQHzetfGfumlQ9CvVvkqQJZJ4bsTC3kfcaxY1JzPrUYx1cfWPaFxW
+         1wM+PuLZEvV0pDsJnt+GX587fxcOtks42wqnE4JkM2zFQCEgM5kpZk/8BNzG06nsBLpY
+         Cb8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755030850; x=1755635650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CesmGPtKuDUWY4MQccWH2mnWQ8QDSsrtS7Gzevtd68w=;
-        b=oyF4zDdpZGHeXK8S/b3ZFru5xO+ahLasuYUwE+4wiTBEBeSbcAr/kL0EpHTjUwo1DN
-         hHdo9bYQWNE0AlXX0tIPnUijLtT/RdO75tgqFF5gWolQBA/7JLOAovo4aZeBplzT4T7O
-         2/4eiMqTgYOX/fOcyvwPUTYGuvVEv76XcpHmNTuwYVXMVwwIGvPexpg/U7myP7QaySjp
-         9y0vL/Rq9WY0+pB5kKc8bh7mMpbT4UMoEN4siZeing5lr8chJaFxM5IjOF99GkzSA9EW
-         TMu+YouYt/J8DLAZy+Qxc0PMp+grwVCOHXlcaNQUYvkLEZUxWfvHJ7PXePFtbeJM42N8
-         z5ew==
-X-Forwarded-Encrypted: i=1; AJvYcCU+Pom/vlMBBz6ZX7LGMum8KYvD/F+NnuESPlfECEURHOW3BPQSR0SG9Oh4BD4UDQXPuW3XKXpqqok=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWa9FfMgjbsQWVz9K8DIr73TzmpwaxajPr9LGTh5CdOucnhtso
-	HK5nYPRdJe0VP/BgDLInl3p4vwa5GdK8r6ffT+0L+MBj9cX8AVr41EsiO8RD7klAymUrkkjLCdq
-	++DpK1aTnKdCMckmLzPz/z1gj/06gDLvbB1WuHFIC
-X-Gm-Gg: ASbGnctsIR8Jquo3RH/M5WNU4qM+oASec9WYGOXmva2c0IkxuJaD234G9UOtBgCnV6X
-	oSa0Sd6NmiadVjYiSgrUyJIi+5gOxrlCA6soT5OADjXwpTFP6wzJU9YKOJgD9vuz5tGaAleqbLW
-	tdBoZIt+7gHd95cqKPxJtpBc9MUi9tXcRp5/Oc65unrhJfWsqQg53q9olKul8Zbd61R7QukUlN/
-	XtCWow=
-X-Google-Smtp-Source: AGHT+IEerpIXF67J3Ps9rtYB7F6lok4NcCvujccjf6KzzrBDAggAVaGU8Y6kayvIYrX4gW3PQuZjQojWFbC0ahif9Zo=
-X-Received: by 2002:a05:690c:688c:b0:71c:1d31:e693 with SMTP id
- 00721157ae682-71d4e52955cmr7726027b3.24.1755030850150; Tue, 12 Aug 2025
- 13:34:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755032277; x=1755637077;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I1HYkWTm//0TzFaX3HirV9CEefr3/XfGLtwUTGZHPfw=;
+        b=jVCJILsMveD0yMW3AUyGClqmvbGVNXgkuUYPeuAO7xnml8/0cEVMSJ3fUGemhsSz2N
+         /i6MVJMZ44FHkKzlevfU80eANKjXg0hc75H3c/qujnIJNmxT8o4rN4K8HHbzEafzjy6G
+         vxCm5oD3f+IHFqMbxxED4yesPp1CyQsfyhwgVssv6tnO+hMFj3bwzPCInlDr2ertxpCq
+         KTGvmSG2UnPtBpDkPQ0oytkEHfHfMvD9kMqCHw3F/CqZzVz9Tn9kwOZZ0lLssok+Pouu
+         gBh+eW5XOUg2JGoAIO/leCfNaoTEw4Z+4cSbm3pEAZZepjOC8YXI+LDiiA7TgQkbRtUf
+         S+RQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5KFI2X5SvEq7JuvPqTgXxzk0t9H20iSpxRnXeH+p0E0NhJwnI2HXNxXchSPQmj/duUXTyxokW0RQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEv77cYLnHwp19PMzycQgrDdbeDmFkiuwy14Q1d8/+cjgOQQ60
+	/7LWdiL+F+Z61Pl1ni7MDEwh3Jgp6jQCs/VsR9XRNZXiBKg8FdD7iN+ob13JLrg0ysE=
+X-Gm-Gg: ASbGncuB2qqwHJbXFP6t5V0onYGeeVcs/xp32YRdN2TNDRrDgFMrtm2JmzdWVx7nXyG
+	suzjqTynhMLTVCDTLHClPvfOFLJkDf87ajvsVgqZvzAmLYIkV9Jlq7ToNsUQ7D/arsquHW66kaM
+	EleE2qRJGkUTjIjNdNz+BkmaQeGdteSweCpOdZqlhkIaQcIvlySnK1g7jPILRDxKAw/gfOETDzc
+	+S5NwdyQiXZWwP4FUrG3jcBvdrxcQK4vynbKjJwJZnvv6ySChJGsGoT0+YADNXa5QzkY24aGQLL
+	eXvs8YqWtF9IDcbVDZBR9zrHhIvQL8StUKLAfaD927qQJMHlpMc9D+afyB/hrrkTkid7YgUGUkb
+	5GSYXn/vHvckg5v6f+qH9nLpHp3IyHBqUxy1UuUbBbp4kYlsl9Q==
+X-Google-Smtp-Source: AGHT+IGffUI/1EXOSK/t0KV6xGplfLMgAAk2k7PICLXaMIAixPTAVPj1NMw1SVef+Ih1sVF86CbZxw==
+X-Received: by 2002:a05:6512:b12:b0:55a:4f05:6e4c with SMTP id 2adb3069b0e04-55ce0404609mr162441e87.49.1755032276914;
+        Tue, 12 Aug 2025 13:57:56 -0700 (PDT)
+Received: from localhost (90-231-233-65-no2360.tbcn.telia.com. [90.231.233.65])
+        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-55b88c990f1sm4946123e87.82.2025.08.12.13.57.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Aug 2025 13:57:56 -0700 (PDT)
+Date: Tue, 12 Aug 2025 22:57:55 +0200
+From: John Ernberg <j@j-ernberg.se>
+To: Jakub Kicinski <kuba@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: Simon Horman <horms@kernel.org>, Oliver Neukum <oneukum@suse.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linux Netdev Mailing List <netdev@vger.kernel.org>,
+	Linux USB Mailing List <linux-usb@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Armando Budianto <sprite@gnuweeb.org>, gwml@vger.gnuweeb.org,
+	stable@vger.kernel.org, John Ernberg <john.ernberg@actia.se>
+Subject: Re: [PATCH net v2] net: usbnet: Fix the wrong netif_carrier_on()
+ call placement
+Message-ID: <aJuq00V5BD8OHGxF@nucleus>
+References: <20250801190310.58443-1-ammarfaizi2@gnuweeb.org>
+ <20250804100050.GQ8494@horms.kernel.org>
+ <20250805202848.GC61519@horms.kernel.org>
+ <CAHk-=wjqL4uF0MG_c8+xHX1Vv8==sPYQrtzbdA3kzi96284nuQ@mail.gmail.com>
+ <20250805164747.40e63f6d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250804090340.3062182-1-akuchynski@chromium.org>
- <20250804090340.3062182-5-akuchynski@chromium.org> <aJn9ZSy3w4zW4Xvq@kuha.fi.intel.com>
- <CANFp7mVUFZyF8z0dN-Mo7ntPOXh06ZD0RH5GyvJJymOXrhSD1g@mail.gmail.com> <aJsoS3EXgoLP-f-E@kuha.fi.intel.com>
-In-Reply-To: <aJsoS3EXgoLP-f-E@kuha.fi.intel.com>
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date: Tue, 12 Aug 2025 13:33:58 -0700
-X-Gm-Features: Ac12FXzX_w_wK4vvlBMCy61zeWwZCbfhZWbGwyjBDcHuxh7vMIEodeZCUXnKDwU
-Message-ID: <CANFp7mW92PgjSWyJq7Bz6ZLJ8ZgnsCRw2kAYAjKX3yymKW9hBA@mail.gmail.com>
-Subject: Re: [PATCH v3 04/10] usb: typec: Expose mode priorities via sysfs
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Andrei Kuchynski <akuchynski@chromium.org>, Benson Leung <bleung@chromium.org>, 
-	Jameson Thies <jthies@google.com>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, Guenter Roeck <groeck@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, "Christian A. Ehrhardt" <lk@c--e.de>, 
-	Venkat Jayaraman <venkat.jayaraman@intel.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250805164747.40e63f6d@kernel.org>
 
-On Tue, Aug 12, 2025 at 4:41=E2=80=AFAM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Abhishek,
->
-> On Mon, Aug 11, 2025 at 11:22:38AM -0700, Abhishek Pandit-Subedi wrote:
-> > On Mon, Aug 11, 2025 at 7:25=E2=80=AFAM Heikki Krogerus
-> > <heikki.krogerus@linux.intel.com> wrote:
-> > >
-> > > Hi Andrei,
-> > >
-> > > On Mon, Aug 04, 2025 at 09:03:33AM +0000, Andrei Kuchynski wrote:
-> > > > This patch introduces new sysfs attributes to allow users to config=
-ure
-> > > > and view Type-C mode priorities.
-> > > >
-> > > > `priority`, `usb4_priority` attributes allow users to assign a nume=
-ric
-> > > > priority to DisplayPort alt-mode, Thunderbolt alt-mode, and USB4 mo=
-de.
-> > > >
-> > > > `mode_priorities` - read-only attribute that displays an ordered li=
-st
-> > > > of all modes based on their configured priorities.
-> > > >
-> > > > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> > > > ---
-> > > >  Documentation/ABI/testing/sysfs-class-typec |  33 +++++
-> > > >  drivers/usb/typec/Makefile                  |   2 +-
-> > > >  drivers/usb/typec/class.c                   | 103 +++++++++++++++-
-> > > >  drivers/usb/typec/class.h                   |   1 +
-> > > >  drivers/usb/typec/mode_selection.c          | 130 ++++++++++++++++=
-++++
-> > > >  drivers/usb/typec/mode_selection.h          |  23 ++++
-> > > >  include/linux/usb/typec_altmode.h           |   7 ++
-> > > >  7 files changed, 295 insertions(+), 4 deletions(-)
-> > > >  create mode 100644 drivers/usb/typec/mode_selection.c
-> > > >  create mode 100644 drivers/usb/typec/mode_selection.h
-> > > >
-> > > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Document=
-ation/ABI/testing/sysfs-class-typec
-> > > > index 38e101c17a00..575dd94f33ab 100644
-> > > > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > > > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > > > @@ -162,6 +162,39 @@ Description:     Lists the supported USB Modes=
-. The default USB mode that is used
-> > > >               - usb3 (USB 3.2)
-> > > >               - usb4 (USB4)
-> > > >
-> > > > +             What:           /sys/class/typec/<port>/<alt-mode>/pr=
-iority
-> > > > +Date:                July 2025
-> > > > +Contact:     Andrei Kuchynski <akuchynski@chromium.org>
-> > > > +Description:
-> > > > +             Displays and allows setting the priority for a specif=
-ic alt-mode.
-> > > > +             When read, it shows the current integer priority valu=
-e. Lower numerical
-> > > > +             values indicate higher priority (0 is the highest pri=
-ority).
-> > > > +             If the new value is already in use by another mode, t=
-he priority of the
-> > > > +             conflicting mode and any subsequent modes will be inc=
-remented until they
-> > > > +             are all unique.
-> > > > +             This attribute is visible only if the kernel supports=
- mode selection.
-> > > > +
-> > > > +             What:           /sys/class/typec/<port>/usb4_priority
-> > > > +Date:                July 2025
-> > > > +Contact:     Andrei Kuchynski <akuchynski@chromium.org>
-> > > > +Description:
-> > > > +             Displays and allows setting the priority for USB4 mod=
-e. Its behavior and
-> > > > +             priority numbering scheme are identical to the genera=
-l alt-mode
-> > > > +             "priority" attributes.
-> > >
-> > > I'm not sure those above two file make any sense.
-> > >
-> > > > +What:                /sys/class/typec/<port>/mode_priorities
-> > > > +Date:                July 2025
-> > > > +Contact:     Andrei Kuchynski <akuchynski@chromium.org>
-> > > > +Description: This read-only file lists the modes supported by the =
-port,
-> > > > +             ordered by their activation priority. It reflects the=
- preferred sequence
-> > > > +             the kernel will attempt to activate modes (DisplayPor=
-t alt-mode,
-> > > > +             Thunderbolt alt-mode, USB4 mode).
-> > > > +             This attribute is visible only if the kernel supports=
- mode selection.
-> > > > +
-> > > > +             Example values:
-> > > > +             - "USB4 Thunderbolt3 DisplayPort"
-> > > > +             - "DisplayPort": the port only supports Displayport a=
-lt-mode
-> > >
-> > > Why not just use this one instead so that you write the highest
-> > > priority mode to it?
-> >
-> > Feedback from Greg on
-> > https://lore.kernel.org/linux-usb/2025070159-judgingly-baggage-042a@gre=
-gkh/:
-> >
-> > "quote":
-> > Multiple value sysfs files are generally frowned apon.  sysfs files tha=
-t
-> > also have to be manually parsed in the kernel are also frowned apon.
-> > Are you _SURE_ there is no other way that you could possibly do this?
-> >
-> > The reason we originally suggested a single "mode priorities" was
-> > because we weren't sure what to do about USB4. Otherwise, it makes
-> > sense to push a priority field to each alt_mode sysfs group and keep
-> > it internally ordered. This is where I really wish we just treated
-> > USB4 as an alternate mode :)
->
-> I'm probable forgetting something, but I'm pretty sure I already told
-> you guys that I agree, it should be an alt mode. So why not just
-> register a special alt mode for it?
+Hi Jakub, Linus, Ammar,
 
-We interpreted this a bit differently (as just rename it):
-https://patchwork.kernel.org/project/linux-usb/patch/20250616133147.1835939=
--5-akuchynski@chromium.org/#26431992
+(sorry for the delay, on vacation, wasn't paying attention to the internet)
 
-Thanks for the clarification here. In that case, we'll get rid of
-`usb_priorities` and `usb_results` and just add a new alternate mode
-for USB4. The vendor ids list on usb.org
-(https://www.usb.org/sites/default/files/vendor_ids072325_1.pdf) shows
-0xff00 for USB4 so that's what we'll use. So the attributes should be:
-.active (similar to other modes), .mode =3D 1 (unused really), .svid =3D
-0xff00, .vdo =3D <usb eudo> (if supported).
+On Tue, Aug 05, 2025 at 04:47:47PM -0700, Jakub Kicinski wrote:
+> On Wed, 6 Aug 2025 01:40:37 +0300 Linus Torvalds wrote:
+> > So my gut feel is that the
+> > 
+> >                 if (test_and_clear_bit(EVENT_LINK_CARRIER_ON, &dev->flags))
+> >                         netif_carrier_on(dev->net);
+> > 
+> > should actually be done outside that if-statement entirely, because it
+> > literally ends up changing the thing that if-statement is testing.
+> 
+> Right. I think it should be before the if (!netif_carrier_ok(dev->net))
+> 
+> Ammar, could you retest and repost that, since we haven't heard from
+> John?
 
->
-> Sorry if I missed something.
->
-> > As such, our current API recommendation looks like the following:
-> >
-> > * On each port, we lay out priorities for all supported alternate modes=
- + USB4.
->
-> This first part I understand.
->
-> > * We expose a file to trigger the mode selection task. Reading from it
-> > gives you the current status of mode selection (single value).
-> > * Detailed results from mode entry are pushed to the mode sysfs group
-> > (via entry_results). Converting these to UEVENT is fine but a more
-> > persistent value in debugfs would be useful for debugging.
->
-> This second part I would really like to handle separately, after we
-> have a solution for the first part.
+I can't verify the suggested change until sometime in September, after I
+return to office, but it feels correct.
 
-Ack. We'll reduce the series so it's easier to review for mode_priorities f=
-irst.
+However... I'm almost inclined to suggest a full revert of my patch as
+the testing was clearly royally botched. Booting it on the boards I
+have would have shown the failure immediately.
 
->
-> thanks,
->
-> --
-> heikki
+(I did see v3 of this patch being applied)
+
+Apologies for the mess // John Ernberg
 
