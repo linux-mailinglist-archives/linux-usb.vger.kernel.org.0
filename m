@@ -1,147 +1,146 @@
-Return-Path: <linux-usb+bounces-26773-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26774-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 201D9B2332C
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 20:26:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D70DB239B2
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 22:07:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECBBE3B6D2A
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 18:21:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FF74584CD9
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 20:07:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDCF32F90C8;
-	Tue, 12 Aug 2025 18:21:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035731DFCB;
+	Tue, 12 Aug 2025 20:06:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nordisch.org header.i=@nordisch.org header.b="Y5PT4Pq7";
-	dkim=permerror (0-bit key) header.d=nordisch.org header.i=@nordisch.org header.b="xCU+db1m"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ONN9quwT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from tengu.nordisch.org (tengu.nordisch.org [138.201.201.57])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40D12DFA3E;
-	Tue, 12 Aug 2025 18:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=138.201.201.57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF32D2F0664
+	for <linux-usb@vger.kernel.org>; Tue, 12 Aug 2025 20:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755022911; cv=none; b=EUmBAav43MrgGojJnvBTOzTuRMQwzWgerONGScUWADUzOps2GnEG11sLV6uDiol6FzhLB4ATIbEA5bED32PhH/yzWQkQQf7Mn7AA3bq0kxKjwoD9RlUGgBmXppxIoogc2ZMTQBI1JV3o7I+tiXziX8M1/XfwYw2PLe+BgrlnufI=
+	t=1755029201; cv=none; b=sNLuIuZ9UVSC8/CafjJPTses2MCY2lgwxvQwqjQL3vE2lG/KMkzEHvPvtjeiIR3LEejQt1lrNvdSLVhqjuqTDENEyf36XHwVE+PEZbNDx7q4fLN6oTyOCAjd9Ps1kZDJTdBiMtm0UDCMWOhVTkNHw2gmi/dD5ROwU5mXWHKcMt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755022911; c=relaxed/simple;
-	bh=Nm3nZAnFCwJNQ4VDBSZgNPO9vR8bsr/ulE20lACILKg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IxaRBziGUCRziOCFnfsk5E8fla9qTMRKx/KmLe5OuW5DCcQ/rbBwZoUcnGegHc9Hp8Zp3FfbvCjWYag6Yd75GK5HYxYQoJjey2vYd0/r6v6FaK6voYXfeSdwrtp0vsjB3p10q6TJKN8EFzbVqkkPCdK/JwfVldWrahDCj6jx/Zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nordisch.org; spf=pass smtp.mailfrom=nordisch.org; dkim=pass (1024-bit key) header.d=nordisch.org header.i=@nordisch.org header.b=Y5PT4Pq7; dkim=permerror (0-bit key) header.d=nordisch.org header.i=@nordisch.org header.b=xCU+db1m; arc=none smtp.client-ip=138.201.201.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nordisch.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nordisch.org
-Received: from [192.168.3.6] (fortress.wg.nordisch.org [192.168.3.6])
-	by tengu.nordisch.org (Postfix) with ESMTPSA id 99AC675AA93;
-	Tue, 12 Aug 2025 20:15:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nordisch.org;
-	s=tengu_rsa; t=1755022513;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FvzejOOAm8yKhKoXy3UatE5OCUk6/FfOEd6OdReBm8M=;
-	b=Y5PT4Pq7UBAe4mTFXLvkGL6Gq05n3Np9r96vTD0t1H0s7bzZVsM97bLQUexLBPcyD0bcuv
-	P5PP4Zuj+Vc3HQjhyjsusyOBn2AI1eEAXwtoSDzjcEji9MHtwUtDYoc4FlH0jfD6qcW5gr
-	zd6CSbJifXcW7p8m/gqqtdv1hcOsVjk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=nordisch.org;
-	s=tengu_ed25519; t=1755022513;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FvzejOOAm8yKhKoXy3UatE5OCUk6/FfOEd6OdReBm8M=;
-	b=xCU+db1moJJLw9ckcBB3oyUp59bnkjA1v8rhRfuW54eUuNDd6wBR2AC/EeM5n9F4HMCUFd
-	ear0bEvJGOc/woBA==
-Message-ID: <4fd2765f5454cbf57fbc3c2fe798999d1c4adccb.camel@nordisch.org>
-Subject: Re: [PATCH] usb: hub: Don't try to recover devices lost during warm
- reset.
-From: Marcus =?ISO-8859-1?Q?R=FCckert?= <kernel@nordisch.org>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, Jiri Slaby
-	 <jirislaby@kernel.org>, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
-	stable@vger.kernel.org, =?UTF-8?Q?=C5=81ukasz?= Bartosik
- <ukaszb@chromium.org>,  Oliver Neukum <oneukum@suse.com>,
- =?UTF-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
-Date: Tue, 12 Aug 2025 20:15:13 +0200
-In-Reply-To: <5b039333-fc97-43b0-9d7a-287a9b313c34@linux.intel.com>
-References: <20250623133947.3144608-1-mathias.nyman@linux.intel.com>
-	 <fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
-	 <5b039333-fc97-43b0-9d7a-287a9b313c34@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 
+	s=arc-20240116; t=1755029201; c=relaxed/simple;
+	bh=i8HY5u63XJP2plaosaDKuXc1itBLuDy+0U6FlcOWZ20=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qrZTeuFt94wZlhMNIL300nvlmcgxQE/b4QDgdB2lEhJRgnj7/UVhrZjvA5g8xUmAOBWIlOTAi8cHOj0fWULc5FChAsMWTlFXd+bUgX0SDs2d13qPwgKtP9E0qUxRk2wXbug16RD0t7Da46JoW9U2LQ3ahRuHQZM/ok/KBgAd7F0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ONN9quwT; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-709dc76b8a0so11031096d6.1
+        for <linux-usb@vger.kernel.org>; Tue, 12 Aug 2025 13:06:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1755029199; x=1755633999; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eqkiQnb+v+DV7bwshJvcuqOvg6eI6sY8lksQaVEmngk=;
+        b=ONN9quwT/wFuQ9Fihb4ymxfK5Qn+8rULdZmdvb12CWxefvol6wTSVidKp9x70Gaaqi
+         0C/a6pC12WK2TGCFTNq62g6HcpjuedYAMRso+yGxyab2UlKJaVgxkwBRIl0m1siSo93H
+         T70DKdE0qCimZ5GffpKDvKQze13IXoZfjYeMHDtJLa963v/6Pmjl1MwHuSXZCUj9IjNu
+         nLUAnVwbyndewRH7M693cA+Jsfwm/aJVQU9j768uB5YqloVeHA+NKqHznZ1V1VzXHd0Z
+         VWL79B0ipIYtTJLIJgwIUWWN/uUQaWpjeiRGwCYaHxnZwHuW3bLDQttYRKh9bHVMmr6p
+         KVvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755029199; x=1755633999;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eqkiQnb+v+DV7bwshJvcuqOvg6eI6sY8lksQaVEmngk=;
+        b=WgI3apRkylQh4ZRjVVGnfzKsiFOvEUy1qBcrGWnlkYqAhAub65eh0nxb2+ZI/HPB9U
+         ugacvwpVoYqZ9blogtOihzE2/HE98JVYqUgp8E7YqBGhZ2q+jwHzLo85gg6rMdI8QHLR
+         BrxSM0Ou5izvE9XvB4XXtiudJtBz7rUuAVcFAYG3ZTSG8LetfeMYdl/1rvT+oYHnO/Be
+         4SvYgCkAl1Lc6xJt6C/2J0FBP0PxBi9Y3IK98gw8IyWjjuA/ONteCYAXLKlYolyx/woi
+         4IIcSqEq77+ff4YP8zrXV3hHTE201AesPaWcXDyJxFVNrU5w1Jo0xVHgHdJvZ1rWEZk4
+         yerg==
+X-Forwarded-Encrypted: i=1; AJvYcCXs+8vovZZEclvUcgZJ+P6iIbUQ5yO0LZ6GK4C9o4tlYL1F3tpDvA/SQ1YRa0P2nokoMfqQXiNdaZ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbseO5w40J5LqAcG5LCCc05XywOdImV7uCHi7ZapdgkICpivyr
+	hHzLahVW4aYDle3HFCZbhZ2QhjJx7wkqDOhxprrnO7m71pz/8R1TSLxGmyw87ro01Q==
+X-Gm-Gg: ASbGncucWtfZ7lYdFooW7F6tul0to/FGEIhO1bSvwPWvZbJCxPKNYRlaHGD4PZKa3VU
+	NK2tPDL1677VoRuvxFYCvSeK3/pN2McRQTlElAoS8Oa4E9KQId2zDT+xt2BMB4cuMlLWEkOGZq1
+	UFgv5ar25YUi8lUhupHzqdPtVGWPWB3Y/NmtTMziBxQLi0lUHMHQO31aVss9dElVdaLv7UhwAJA
+	5J0VWHMAOktK3P6HtDHzDtcY+vvcidkenFlIjw9Gmeash8OU1Kjwp2qvbhoII30t2M92flQmbVc
+	wA6IOS0jZSSuaOaUvUBNw6Ujn845laDyNvGT6epxFXKXTykb4xgvEQQ35+ctvakycbUmRW1CppC
+	J/hsbKmnW+qkHCx7cI7aoyG0=
+X-Google-Smtp-Source: AGHT+IGGZlvv17fMp2WDnfMMFShmDsTlMM6IcnzKcbMc/Ggu/R7+9qwyKK0VohswEqNLATbAFPlTWg==
+X-Received: by 2002:a05:6214:29e6:b0:707:51a6:184f with SMTP id 6a1803df08f44-709e89fd871mr5029606d6.48.1755029198601;
+        Tue, 12 Aug 2025 13:06:38 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::e316])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7077ca363fesm179978606d6.31.2025.08.12.13.06.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Aug 2025 13:06:38 -0700 (PDT)
+Date: Tue, 12 Aug 2025 16:06:35 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: storage: realtek_cr: Simplify
+ rts51x_bulk_transport()
+Message-ID: <b11a19b6-9fb3-4fdc-b94e-33ff01a634b3@rowland.harvard.edu>
+References: <20250812144358.122154-1-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250812144358.122154-1-thorsten.blum@linux.dev>
 
-On Tue, 2025-08-12 at 13:48 +0300, Mathias Nyman wrote:
-> > > [Wed Aug=C2=A0 6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: xHC=
-I
-> > > host controller not responding, assume dead
-> > > [Wed Aug=C2=A0 6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: HC
-> > > died; cleaning up
->=20
-> Tear down xhci.
+On Tue, Aug 12, 2025 at 04:43:58PM +0200, Thorsten Blum wrote:
+> Change the function parameter 'buf_len' from 'int' to 'unsigned int' and
+> only update the local variable 'residue' if needed.
+> 
+> Update the rts51x_read_status() function signature accordingly.
 
-so usb is not dead completely. I can connect my keyboard to the
-charging cable of my mouse and it starts working again. but it seems
-all my devices hanging on that part of the usb tree are dead
-(DAC/keyboard)
+That last part isn't really necessary, is it?  It doesn't make the code 
+any clearer, less buggy, or quicker to execute.
 
-lspci is here=20
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> ---
+>  drivers/usb/storage/realtek_cr.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+> index 7dea28c2b8ee..8a4d7c0f2662 100644
+> --- a/drivers/usb/storage/realtek_cr.c
+> +++ b/drivers/usb/storage/realtek_cr.c
+> @@ -199,7 +199,8 @@ static const struct us_unusual_dev realtek_cr_unusual_dev_list[] = {
+>  #undef UNUSUAL_DEV
+>  
+>  static int rts51x_bulk_transport(struct us_data *us, u8 lun,
+> -				 u8 *cmd, int cmd_len, u8 *buf, int buf_len,
+> +				 u8 *cmd, int cmd_len, u8 *buf,
+> +				 unsigned int buf_len,
+>  				 enum dma_data_direction dir, int *act_len)
+>  {
+>  	struct bulk_cb_wrap *bcb = (struct bulk_cb_wrap *)us->iobuf;
+> @@ -260,8 +261,8 @@ static int rts51x_bulk_transport(struct us_data *us, u8 lun,
+>  	 * try to compute the actual residue, based on how much data
+>  	 * was really transferred and what the device tells us
+>  	 */
+> -	if (residue)
+> -		residue = residue < buf_len ? residue : buf_len;
+> +	if (residue > buf_len)
+> +		residue = buf_len;
 
-https://bugzilla.opensuse.org/show_bug.cgi?id=3D1247895#c3
+This really has nothing at all to do with whether buf_len is a signed 
+quantity -- it should never be negative.  (And I have no idea why the 
+original code includes that test for residue being nonzero.)
 
-Mainboard is a ASUS ProArt X870E-CREATOR WIFI
+Much more serious is something you didn't change: Just above these lines 
+it says:
 
-> >=20
-> > Any ideas? What would you need to debug this?
->=20
-> Could be that this patch reveals some underlying race in xhci re-
-> enumeration path.
+	residue = bcs->Residue;
 
-possible.
+It should say:
 
-> Could also be related to ep0 max packet size setting as this is a
-> full-speed device.
-> (max packet size is unknown until host reads first 8 bytes of
-> descriptor, then adjusts
-> it on the fly with an evaluate context command)
->=20
-> Appreciated if this could be reproduced with as few usb devices as
-> possible, and with
-> xhci tracing and dynamic debug enabled:
+	residue = le32_to_cpu(bcs->Residue);
 
-sadly this is not really reproducible on command. sometimes it happens
-after only a few hours. sometimes it happens after a day or 2.
-
-> mount -t debugfs none /sys/kernel/debug
-> echo 'module xhci_hcd =3Dp' >/sys/kernel/debug/dynamic_debug/control
-> echo 'module usbcore =3Dp' >/sys/kernel/debug/dynamic_debug/control
-> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-> echo 1 > /sys/kernel/debug/tracing/tracing_on
-
-Running with this now.=20
-
-> < Reproduce issue >
-> Send output of dmesg
-> Send content of /sys/kernel/debug/tracing/trace
-
-Will do once it happened again.
-
-   darix
-
---=20
-Always remember:
-  Never accept the world as it appears to be.
-    Dare to see it for what it could be.
-      The world can always use more heroes.
-
-
+Alan Stern
 
