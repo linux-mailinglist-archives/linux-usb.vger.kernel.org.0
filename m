@@ -1,153 +1,209 @@
-Return-Path: <linux-usb+bounces-26746-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26748-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFB5BB224EF
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 12:52:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFFE7B2260D
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 13:41:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4D0B188A6AC
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 10:50:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2519B3B645A
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 11:41:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEADC2ECE93;
-	Tue, 12 Aug 2025 10:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C9242EE5E9;
+	Tue, 12 Aug 2025 11:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ewdyFgKY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nIRVjaCw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95B52EBDE1;
-	Tue, 12 Aug 2025 10:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53BA2EE5F7;
+	Tue, 12 Aug 2025 11:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754995736; cv=none; b=R4yPJ0P1asGQIDuBsioi7/akX/UwfmriUAhwVUdCF8zyV5OZamBqBO0yYlzCYeu/gdsemonc51sYNqEcTYLzTulD2NeDFI3YcoQ9alom0L3BbgCBfk4VoSs482b/p8OspigiTYg9gqdAyhN/G+cQqcAWN1hHDOWHpWVpqL3k56I=
+	t=1754998869; cv=none; b=jf5jPjZzVdEWqGEoQ4yGOzAd8v7COvXjaAPx1HZG0lDWB9D6ReqLJeYdnToHy0e8rIdYiVL4mMfpArWMw340SLben+h1emOVsIAFnYvDbLMIjc9NnFNL+iBwmNZPpEQfZNQ1HKv2yIdZZkEKttcaQMA6bV603O6mPuYgXO6ABD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754995736; c=relaxed/simple;
-	bh=Esq8t7wbTlKL0Q3zZg56LpOHe5ZR3qmGQXipZBa5Ju8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XK8tWmqbI72oUM+45TJcRXQJiVfs1d2hUXkHG6RfkCO/WdQc2WLRfAETGpMXybZEvJ6N+1wWNXU0m7Ln9E4IkIityFXSRGtNCKqsULWaiEHbGhq5RqlWXjHTwCNEUeaQlzsR9/tlNJRooh9tbOZv+CXaeOMvoUdrAQXXkY1dnzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ewdyFgKY; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1754998869; c=relaxed/simple;
+	bh=8cHX/Sr/SKiYCY8L0anyseQRntP0r49oVVkND9FPyS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z54COoz+m1e3IdR9yWek/MqMNDDQaftVc0DFw8+uzaL6kAI3ZYTD7xlhdTSDIUDicCJ5vKRKpzPy5cLnIlDWRZmXl2ADwRyeimpZCqiUnh8WXHbXOOVWk8uLCqhQK9sB8am9EFphwZk0ZJDRandFykLABbmO/6ZhVmnbH0jHLVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nIRVjaCw; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754995734; x=1786531734;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Esq8t7wbTlKL0Q3zZg56LpOHe5ZR3qmGQXipZBa5Ju8=;
-  b=ewdyFgKYLHM3BrK9KMTKYO1RtKv8zFK3CYb02TsUSbnz6+vKndSKnCYw
-   xa9hWAwOPHqKCg43/a0zPCDMw7dL5rAKBVqwyWHySt3Z0c1jNJaPRngkp
-   EXSINqUTVfxi+2haZAlq3yruZ/+gcz6HHon/loLRBFnph4ewJL6TDNWIE
-   oArnSwHVQxuIi3H33oVBiEBYqtNJfigs0lqu7TGd1O/Q1w/oHg2XZH8hG
-   1Gn3IX//YCXWKt0dF/YzM/Gc3SoLEANuYr/yQDn7mK5ErifBHdNUz3iNz
-   CoKhDfEiuDfUZ3jv0PMAmjeO0x1pmVpEHbx/NiAQS6qvjdWnkqhgQNKYo
-   A==;
-X-CSE-ConnectionGUID: xEYJaoHFTaGQzTi42XboCw==
-X-CSE-MsgGUID: EVuOtToZR9CvsOdrhAteyw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="57330116"
+  t=1754998865; x=1786534865;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=8cHX/Sr/SKiYCY8L0anyseQRntP0r49oVVkND9FPyS4=;
+  b=nIRVjaCw0RfCV71PokxEHDGH6D4JrK5M4RzdRTSHHIxpkyHq9dG3ezlV
+   M0ucRlFu/W0pXglqjXrd/Fu7wWMSFEwv4JfAV6bTOBRujIM0JqYkPIKbV
+   bV25YzbgWvSFCetG1fPPyzvD02IAFZ7ppLY0r6g26rqNTyNvWDOBxwns0
+   oiTuOP5n1bUS114FD9IBoK9eUTg9NXrFyLML6BPJ+o0sSH897oz6kje7B
+   w9qv6pFBKMwBnuc5Iu4GjT4XCjPP0bwemRItl1bMW9LSjwgQNJFQBGuzO
+   HUJrSo7G90FMq2jZLB+qWubkcC43cwXy0BkVIZxyTSdVsylpdM1Ht0JGU
+   g==;
+X-CSE-ConnectionGUID: ES3VCS13TumPA2xyarEQYw==
+X-CSE-MsgGUID: z7A+TynvSb69zINgA5BQgQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="57417920"
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="57330116"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 03:48:54 -0700
-X-CSE-ConnectionGUID: hGELmE0YTJatBo18EmMKVQ==
-X-CSE-MsgGUID: wgXcgqpHQYm84PLQ74q6MA==
+   d="scan'208";a="57417920"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 04:41:05 -0700
+X-CSE-ConnectionGUID: 088z0gfNSJymyLmSnlB/lw==
+X-CSE-MsgGUID: y+O8W3nPTQynoLrDy6xRfw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="166960085"
-Received: from mnyman-desk.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa010.fm.intel.com with ESMTP; 12 Aug 2025 03:48:52 -0700
-Message-ID: <5b039333-fc97-43b0-9d7a-287a9b313c34@linux.intel.com>
-Date: Tue, 12 Aug 2025 13:48:50 +0300
+   d="scan'208";a="170377978"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa003.jf.intel.com with SMTP; 12 Aug 2025 04:41:01 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 Aug 2025 14:40:59 +0300
+Date: Tue, 12 Aug 2025 14:40:59 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc: Andrei Kuchynski <akuchynski@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 04/10] usb: typec: Expose mode priorities via sysfs
+Message-ID: <aJsoS3EXgoLP-f-E@kuha.fi.intel.com>
+References: <20250804090340.3062182-1-akuchynski@chromium.org>
+ <20250804090340.3062182-5-akuchynski@chromium.org>
+ <aJn9ZSy3w4zW4Xvq@kuha.fi.intel.com>
+ <CANFp7mVUFZyF8z0dN-Mo7ntPOXh06ZD0RH5GyvJJymOXrhSD1g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: hub: Don't try to recover devices lost during warm
- reset.
-To: Jiri Slaby <jirislaby@kernel.org>, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
- stable@vger.kernel.org, =?UTF-8?Q?=C5=81ukasz_Bartosik?=
- <ukaszb@chromium.org>, Oliver Neukum <oneukum@suse.com>
-References: <20250623133947.3144608-1-mathias.nyman@linux.intel.com>
- <fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANFp7mVUFZyF8z0dN-Mo7ntPOXh06ZD0RH5GyvJJymOXrhSD1g@mail.gmail.com>
 
-Hi
+Hi Abhishek,
 
+On Mon, Aug 11, 2025 at 11:22:38AM -0700, Abhishek Pandit-Subedi wrote:
+> On Mon, Aug 11, 2025 at 7:25 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > Hi Andrei,
+> >
+> > On Mon, Aug 04, 2025 at 09:03:33AM +0000, Andrei Kuchynski wrote:
+> > > This patch introduces new sysfs attributes to allow users to configure
+> > > and view Type-C mode priorities.
+> > >
+> > > `priority`, `usb4_priority` attributes allow users to assign a numeric
+> > > priority to DisplayPort alt-mode, Thunderbolt alt-mode, and USB4 mode.
+> > >
+> > > `mode_priorities` - read-only attribute that displays an ordered list
+> > > of all modes based on their configured priorities.
+> > >
+> > > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+> > > ---
+> > >  Documentation/ABI/testing/sysfs-class-typec |  33 +++++
+> > >  drivers/usb/typec/Makefile                  |   2 +-
+> > >  drivers/usb/typec/class.c                   | 103 +++++++++++++++-
+> > >  drivers/usb/typec/class.h                   |   1 +
+> > >  drivers/usb/typec/mode_selection.c          | 130 ++++++++++++++++++++
+> > >  drivers/usb/typec/mode_selection.h          |  23 ++++
+> > >  include/linux/usb/typec_altmode.h           |   7 ++
+> > >  7 files changed, 295 insertions(+), 4 deletions(-)
+> > >  create mode 100644 drivers/usb/typec/mode_selection.c
+> > >  create mode 100644 drivers/usb/typec/mode_selection.h
+> > >
+> > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> > > index 38e101c17a00..575dd94f33ab 100644
+> > > --- a/Documentation/ABI/testing/sysfs-class-typec
+> > > +++ b/Documentation/ABI/testing/sysfs-class-typec
+> > > @@ -162,6 +162,39 @@ Description:     Lists the supported USB Modes. The default USB mode that is used
+> > >               - usb3 (USB 3.2)
+> > >               - usb4 (USB4)
+> > >
+> > > +             What:           /sys/class/typec/<port>/<alt-mode>/priority
+> > > +Date:                July 2025
+> > > +Contact:     Andrei Kuchynski <akuchynski@chromium.org>
+> > > +Description:
+> > > +             Displays and allows setting the priority for a specific alt-mode.
+> > > +             When read, it shows the current integer priority value. Lower numerical
+> > > +             values indicate higher priority (0 is the highest priority).
+> > > +             If the new value is already in use by another mode, the priority of the
+> > > +             conflicting mode and any subsequent modes will be incremented until they
+> > > +             are all unique.
+> > > +             This attribute is visible only if the kernel supports mode selection.
+> > > +
+> > > +             What:           /sys/class/typec/<port>/usb4_priority
+> > > +Date:                July 2025
+> > > +Contact:     Andrei Kuchynski <akuchynski@chromium.org>
+> > > +Description:
+> > > +             Displays and allows setting the priority for USB4 mode. Its behavior and
+> > > +             priority numbering scheme are identical to the general alt-mode
+> > > +             "priority" attributes.
+> >
+> > I'm not sure those above two file make any sense.
+> >
+> > > +What:                /sys/class/typec/<port>/mode_priorities
+> > > +Date:                July 2025
+> > > +Contact:     Andrei Kuchynski <akuchynski@chromium.org>
+> > > +Description: This read-only file lists the modes supported by the port,
+> > > +             ordered by their activation priority. It reflects the preferred sequence
+> > > +             the kernel will attempt to activate modes (DisplayPort alt-mode,
+> > > +             Thunderbolt alt-mode, USB4 mode).
+> > > +             This attribute is visible only if the kernel supports mode selection.
+> > > +
+> > > +             Example values:
+> > > +             - "USB4 Thunderbolt3 DisplayPort"
+> > > +             - "DisplayPort": the port only supports Displayport alt-mode
+> >
+> > Why not just use this one instead so that you write the highest
+> > priority mode to it?
 > 
-> This was reported to break the USB on one box:
->> [Wed Aug  6 16:51:33 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
->> [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
->> [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
-
-Protocol error (EPROTO) reading 64 bytes of device descriptor
-
->> [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
->> [Wed Aug  6 16:51:34 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
->> [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: device descriptor read/64, error -71
->> [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
->> [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: Device not responding to setup address.
-
-The xhci "address device" command failed with a transaction error
-Slot does not reach "addressed" state
-
->> [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: Device not responding to setup address.
->> [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: device not accepting address 12, error -71
->> [Wed Aug  6 16:51:35 2025] [ T355745] usb 1-2: WARN: invalid context state for evaluate context command.
-
-xhci evaluate context command failed, probably due to slot not in addressed state
-
->> [Wed Aug  6 16:51:36 2025] [ T355745] usb 1-2: reset full-speed USB device number 12 using xhci_hcd
->> [Wed Aug  6 16:51:36 2025] [     C10] xhci_hcd 0000:0e:00.0: ERROR unknown event type 2
-
-This is odd,
-TRBs of type "2" should not exists on event rings, TRB type id 2 are supposed to be the
-setup TRB for control transfers, and only exist on transfer rings.
-
-
->> [Wed Aug  6 16:51:36 2025] [ T355745] usb 1-2: Device not responding to setup address.
->> [Wed Aug  6 16:51:37 2025] [     C10] xhci_hcd 0000:0e:00.0: ERROR unknown event type 2
->> [Wed Aug  6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: Abort failed to stop command ring: -110
-
-Aborting command due to driver not seeing command completions.
-The missing command completions are probably those mangled "unknown" events
-
->> [Wed Aug  6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: xHCI host controller not responding, assume dead
->> [Wed Aug  6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: HC died; cleaning up
-
-Tear down xhci.
-
+> Feedback from Greg on
+> https://lore.kernel.org/linux-usb/2025070159-judgingly-baggage-042a@gregkh/:
 > 
-> Any ideas? What would you need to debug this?
+> "quote":
+> Multiple value sysfs files are generally frowned apon.  sysfs files that
+> also have to be manually parsed in the kernel are also frowned apon.
+> Are you _SURE_ there is no other way that you could possibly do this?
+> 
+> The reason we originally suggested a single "mode priorities" was
+> because we weren't sure what to do about USB4. Otherwise, it makes
+> sense to push a priority field to each alt_mode sysfs group and keep
+> it internally ordered. This is where I really wish we just treated
+> USB4 as an alternate mode :)
 
-Could be that this patch reveals some underlying race in xhci re-enumeration path.
+I'm probable forgetting something, but I'm pretty sure I already told
+you guys that I agree, it should be an alt mode. So why not just
+register a special alt mode for it?
 
-Could also be related to ep0 max packet size setting as this is a full-speed device.
-(max packet size is unknown until host reads first 8 bytes of descriptor, then adjusts
-it on the fly with an evaluate context command)
+Sorry if I missed something.
 
-Appreciated if this could be reproduced with as few usb devices as possible, and with
-xhci tracing and dynamic debug enabled:
+> As such, our current API recommendation looks like the following:
+> 
+> * On each port, we lay out priorities for all supported alternate modes + USB4.
 
-mount -t debugfs none /sys/kernel/debug
-echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
-echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-echo 1 > /sys/kernel/debug/tracing/tracing_on
-< Reproduce issue >
-Send output of dmesg
-Send content of /sys/kernel/debug/tracing/trace
+This first part I understand.
 
-Thanks
-Mathias
+> * We expose a file to trigger the mode selection task. Reading from it
+> gives you the current status of mode selection (single value).
+> * Detailed results from mode entry are pushed to the mode sysfs group
+> (via entry_results). Converting these to UEVENT is fine but a more
+> persistent value in debugfs would be useful for debugging.
+
+This second part I would really like to handle separately, after we
+have a solution for the first part.
+
+thanks,
+
+-- 
+heikki
 
