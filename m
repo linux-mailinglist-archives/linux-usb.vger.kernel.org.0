@@ -1,124 +1,107 @@
-Return-Path: <linux-usb+bounces-26755-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26756-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50B7AB2281B
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 15:18:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8B61B22824
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 15:18:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0421158640F
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 13:11:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 961833A48F9
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 13:11:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A896727CCEE;
-	Tue, 12 Aug 2025 13:10:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77DE926FDB3;
+	Tue, 12 Aug 2025 13:11:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b="ooVfE/o/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kAZTj5qy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EE926AA91;
-	Tue, 12 Aug 2025 13:10:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51EC326AA88
+	for <linux-usb@vger.kernel.org>; Tue, 12 Aug 2025 13:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755004243; cv=none; b=TyRDW8kTQ2T43rexsXNH/nQOjDWQhINILT+WBCe0vwSkaxWL+B7vbBmAL9NpljfUkuHTRjHc9DbgIUqrtsNIyEWw7oITpfkrwbffdBpc54CTBbNP0+lwn4wzAdlmsWieEhsHordvUO0NHxsQ1OlcRjuvoXIUKPW8TWWXwhuoZZs=
+	t=1755004265; cv=none; b=HZzuuFgeZawk4ZJJsoUJp9MpOGGxe2v+1Fdj1caMxZ46Vb7HFwkr5HHpve1ARjPTaHFDC4Ukf/GIPH2GXO2gmdoYGXoSAJbJAmLCIYtdLlRTvs6/ksXOlBeU7m8Z4M0ATK6X3sLr5wouDEFjGtENUJTAG9O1SeeB/AdS5mIsAlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755004243; c=relaxed/simple;
-	bh=ZcHfVtKBh57sGSj1qHQY7LIWAmWunnqamgpCc/QHtCo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SqGzP9e1jWZKqavkdOTqOS36feEnCcnLXfTqVj8eL57+tHaCz9eankFkubkMozUGdHjX8+JXDaCTxzU5REb0lcaUMFvia6galFMFaj88xUAONx5PrwifxQac4NxEtVsl9ESD80/N4dHZoizvjmZ+EB5cwjmQXtyo7HDRHwCeu9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz; spf=pass smtp.mailfrom=oldschoolsolutions.biz; dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b=ooVfE/o/; arc=none smtp.client-ip=212.227.126.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oldschoolsolutions.biz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=oldschoolsolutions.biz; s=s1-ionos; t=1755004231; x=1755609031;
-	i=jens.glathe@oldschoolsolutions.biz;
-	bh=ZcHfVtKBh57sGSj1qHQY7LIWAmWunnqamgpCc/QHtCo=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=ooVfE/o/lZpYdYDmKG8ZHOysXk0DOA+2ZgIQ+FkSkxFpnaOzzgae69EaqJfJZsMR
-	 6GWdO8NKVwousorTYyW9eL2XC8oUVioURXsfuGY8Sd0XY9pAogRivlkIuIrVjv0R/
-	 WNDMsT59uytoPDvVajEjTPeSNF7SVU62sQenkIWjpHBp12SPLDAGKB8g6LZMmLCCQ
-	 GEJ/S9aM6IoZlUYSeq3Q0zE/4FXHxfJFU0ee999DWU3Ky853rq++NDIfYkGJ17kyF
-	 R5QzjRN/Y82jlK/kdSN8tHhvmQxyanAda53zPbIdRzxHdIDqA/vb9YT4J3XlAFLCQ
-	 KSAWcGTSyvvah/cngw==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from [192.168.0.107] ([91.64.235.193]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MlsWZ-1uKhQi1pn1-00cOH9; Tue, 12 Aug 2025 15:10:31 +0200
-Message-ID: <14a07b04-dd79-4418-b935-fddeb7249aec@oldschoolsolutions.biz>
-Date: Tue, 12 Aug 2025 15:10:30 +0200
+	s=arc-20240116; t=1755004265; c=relaxed/simple;
+	bh=f7TqFgRUB+ChNlZP3CImIIaBPI/Ap9f6aAGcbwitnzc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XDTw6vcdBAVmmPffBURuYR7E46egvyc0mfNJ8WL/bDPDoS8FpqYDY5OECepWBSgRCS1/LRhHXwruqizoUqBzTSwcGye4UcZpaAzzmksHVpCQmKOSFJezlyKb9eghFipwBiz/aerHwmoGA74vojPtoDq/pgdVhrm3LA1ppfQdoOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kAZTj5qy; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755004265; x=1786540265;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=f7TqFgRUB+ChNlZP3CImIIaBPI/Ap9f6aAGcbwitnzc=;
+  b=kAZTj5qyGu9iU4OWYYt9OaGuLcF5o8mzvq77s0luTxArpOrYiIgmwWVp
+   czxuWW6SzMTURtkdFFXK2bqNlL5lX4JTRLSXL03mmj0dXZQqy04YW0KGy
+   Vrl5AjJ0GoFcvbijNRLtfLdJlnVG+mExv0RBPftxJXXJOMLFN4JaJeAg7
+   ns/x/HiJUSakfQbqatm8oTJjVJuygeUWRPCAGY7pNOSLrJOfH3D45xs8/
+   1gvWznfDtdyw+x/RLGLD/appCA5t9iIH7zabS94XiO6XcRTTxLjYIYlfz
+   pNgxKQpJZ2YRouOB5Si+t+MLslmsfeRyXxxwbk0KFN1ABefDqw5qGrvfi
+   A==;
+X-CSE-ConnectionGUID: bTOtYtBJSXCsfZEHFeyJyw==
+X-CSE-MsgGUID: Ce17nQeFQ+iF36EvqpL12Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="67541453"
+X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
+   d="scan'208";a="67541453"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:11:04 -0700
+X-CSE-ConnectionGUID: lsH22pfOTn+kMbC3FcPEnA==
+X-CSE-MsgGUID: CslObdFQQrSfEYF13Pm6Kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
+   d="scan'208";a="170642197"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by orviesa004.jf.intel.com with ESMTP; 12 Aug 2025 06:11:02 -0700
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc3: pci: add support for the Intel Wildcat Lake
+Date: Tue, 12 Aug 2025 16:11:00 +0300
+Message-ID: <20250812131101.2930199-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 3/3] arm64: dts: qcom: Add Lenovo ThinkBook 16 G7 QOY
- device tree
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Kaehlcke <mka@chromium.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20250810-tb16-dt-v10-0-0bfed6d75c69@oldschoolsolutions.biz>
- <20250810-tb16-dt-v10-3-0bfed6d75c69@oldschoolsolutions.biz>
- <a6b063a2-2b99-4de4-a3b3-876f6b778bc6@kernel.org>
-Content-Language: en-US
-From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-In-Reply-To: <a6b063a2-2b99-4de4-a3b3-876f6b778bc6@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:kD2kBgaRNvvsdwEgMYxDcuye+iNl7L4/0VcUp2nn6LpVEui8OnX
- pzXKpISwPgmOY+Sp5K9RAnoasrbV8IiZAQBGkNDCLlO6D2oMrIe70p1VbcU+rdst4VRCxPP
- T37aP3kfoTCBGFKW1iH1K0AiIu7DXXfCBz0lnUZo5EtjDQKeHUEcGGgI7yqf/Awy3EC2rfV
- gVwJOTbn/WS0lpZhU49NA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:bJp7w6u/eak=;eulfY51ELcm64B9SLgiVFsNlzu6
- tdfKInwwj0adyAojuwwUx7Knv/Q7iScONWFdsTkpClheFmZ5qyb0acMfgV/RABOdqVvFQeyi3
- SnSrXm6i1XHW9PBKuIjXBECQgFR5LZQvZfczqO8OqI4oOTrj8QmOethkBHAbMWjvxoWBTXGPY
- OzrpIiw7Q8h9mNbCLeX0A7TwG8bm86pbQGjrAK6HKTv0Bsxb1nnSvSrDn/Gc8OwMfQ5eIvUpi
- ZGyatHudmPHfm8FkRmAxADCpmDYyZJ/omW7UaPRwIwkovsdFuZGvBFC3KagTt2LV7qTvs1aJ9
- mkB3yQw6ZdHebXg2cvYQXxM89g5KWfUrsxGDpgZmPHTMNz8xKLzFSY7rhX+HWz6AM8Jc+Kqxz
- zHsqvUTLIR8WUQf8p6WypHsi5lqLN7avPr3113piYeIwLDr8voo4cdBZB12WWQxIGI2Rrv5ah
- 5HVxlS/p6wbE+l/YPiMY+BJJdl9D51z1s9xtcvEDVbCeCJEl9UWHDMyBWhArRYnZokwFUWLG1
- tXXVT64u99rZaCpnnO23/OiLSc3bU/DZfng7kZ9/bZ2xp1r+2fu+kSCYl0WQnU+GRlC7ZbVRg
- WQoyn/NDNZzh6trzf2W5orwHXF56jrMZkj9ZZHPNF1whNPNTgdn056Iq1rt9OdhUym9k227fA
- WpjF4XAdm7yu2nty+KdrJ2+5bMzf7tAOK0B1AMjf8vQiSHmXq0WQe9JU2JunDyWTgIpmj2GjZ
- /6vpbtj2Xzdw98AhGB5jeqVdkcMOUrWbUq6KA6r7d0ZUVMwit1M3DtyLXbkd1bYA7lUW4rvhA
- Q3hCKDsFJCkFL2sgsvXY2rqlfcGJPdAeGb8oVs4IFMh0GU20CocqaCPlkkdHrhipdkptNUd8D
- Jeg7TY9IqdkXDCGx/R+SbxlhXB0Il/HtF5to610gZEZzX9SF0vT2bXgEgXre0RYAMJKEils8a
- 7NcouTHKW9sNgR1gPjZvucDvua3h0PdSy6ZSE0Pfdr5ra3H9DdKGFYFNq8oQTFPkXnSYYvVqt
- RLieVPviA8CxW6poEdRfeUiqz1XoKQZbLZn8l4m92x3OaY2DEUWmtztueH96JgZGeQ0Qig5Bi
- ofHLnMmD/S/6nMbA15w5CP7OxE4pvMg1vyqKcu8HjbYKahpfLG4JBYFREGr3NXOEW+FE/0ZUt
- /GeWOPldUgGT86s99+QDekUrFiAh7PK3hrpvblj2ZpeefSrj6VCDLCok6g3a/4Y6a/zRPmUEW
- YMZHjYlps20tK1lmMFK2Jn2senLTQ7LsckBo9lQfuwvqMnUcEnmaWjJAuPsSMWMpFr/cF2ukq
- enE1KQOLgkXhHlnA2w5ZlRNc7+LGKF34Mud7vX5XTioqivWkcYNIVw4guz82BQ65jmrraqs9i
- GTrPynGRVhE0nplQ6MnUAYGMM8fhn9RZIgLW1L4jGxqGGjUH81zJ/Lfx6UecJp9U9nd4bh0QQ
- o/iPxz7ouyq9xBnZwpPfjchmoaTuWerj6bLRT19WwORnBFm1a7q53kY07ZimpYGVw51XEpEO5
- 5bBaBmwyGDflgcoS9DoGVFDoLasMHN5WhA7H8GwLh4BtC0Rl2LTivUyQBrIprIpgeU0x21iOH
- lBZ7qoFAdI4x/ObsExGetbHsBgZs4UpCWezXvGODqJC9VjaNkpwWJ9vIT9rrYhpAYaHDvLp26
- qHbLxCCDwyIG2YqI78ZEkk
+Content-Transfer-Encoding: 8bit
 
-Hi Krzysztof,
+This patch adds the necessary PCI ID for Intel Wildcat Lake
+devices.
 
-On 12.08.25 14:20, Krzysztof Kozlowski wrote:
-> Incorrect SoB chain. Please look at submitting patches which describe
-> exactly that case.
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/dwc3/dwc3-pci.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-fixed in v11. Thank you for the hint.
-
-with best regards
-
-Jens
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 54a4ee2b90b7..39c72cb52ce7 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -41,6 +41,7 @@
+ #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
+ #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
+ #define PCI_DEVICE_ID_INTEL_JSP			0x4dee
++#define PCI_DEVICE_ID_INTEL_WCL			0x4d7e
+ #define PCI_DEVICE_ID_INTEL_ADL			0x460e
+ #define PCI_DEVICE_ID_INTEL_ADL_PCH		0x51ee
+ #define PCI_DEVICE_ID_INTEL_ADLN		0x465e
+@@ -431,6 +432,7 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, TGPLP, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, TGPH, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, JSP, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, WCL, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, ADL, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, ADL_PCH, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, ADLN, &dwc3_pci_intel_swnode) },
+-- 
+2.47.2
 
 
