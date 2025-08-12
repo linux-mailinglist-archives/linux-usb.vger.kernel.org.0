@@ -1,214 +1,108 @@
-Return-Path: <linux-usb+bounces-26760-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26763-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ADC0B22898
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 15:33:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66407B22973
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 16:00:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35CF9561CE6
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 13:25:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BA211BC4D1A
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 13:45:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C740280CC1;
-	Tue, 12 Aug 2025 13:25:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ydbc8y+k"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6ADF280CE5;
+	Tue, 12 Aug 2025 13:44:03 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6A327F170;
-	Tue, 12 Aug 2025 13:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A63127FD78;
+	Tue, 12 Aug 2025 13:43:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755005099; cv=none; b=gT7zWgf6QUhhAAODpwNTsdvc+1H2liClevn2JjDVOfxp++3rZRketvY0tNxPqbSzBZh5LtA5ANX+nQih/jV1p129XrTJvuE7Jjy17b6h+Vw12rEgFYHYGeTGbwuZhbpH4Tw/pexxGRZHeS+T/1lQIP4BP9IJwkV1VAqogihliqQ=
+	t=1755006243; cv=none; b=R/26pPhPLMlRMN6/rlS8H7fJLs3yzt5fHQ1ShuhgBxKMUfbobotuH3urnOEwKN8/GENnlG/Ty+1hvqpM78q93Uws69gtp7BMpzEggrGCcQItGx8i9pPzEmwcjgW+hWV9aGtnZxdQ18CC4fLphc/oSO2YXjZuTq4mvVBDVYP/PeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755005099; c=relaxed/simple;
-	bh=20r1HH5+BbHJNXfZpWKRdoLlv5HahszQqOdnjhOM0gA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AGXvgq2aWesBiTzrM8jhoe9hx4Vk1crHWCRirB2g4uHgw8xIruN1u6gzL4RbVZtxtMnsVf5J1KgWx5zbUZmmpCyS0nA2ouKVEn5W2qcnUWqv1uGbXVZ0EgjJPg+wFn6d0sqPGhVT8JWn2LefjsWyeoi9TDzOhpU2ms5l+juzM/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ydbc8y+k; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755005099; x=1786541099;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=20r1HH5+BbHJNXfZpWKRdoLlv5HahszQqOdnjhOM0gA=;
-  b=Ydbc8y+kkoCtkp9LcTOHVTY651H16/77SiC7sNJ1sN8jq+20+ntIWuAD
-   ewuqOYAX8+oIbHUvNiatntA0GwhIrq+71OcmCLGJ75T0UaE3IbPr/ztH7
-   CRiG2w/I5VzfWpw//I0jlqDMZul+n2GuXWSyYV+rSRRKTEu2mXc9/a5s0
-   h3Wq8eIu/qDHpNMHauaKqjrFjBQcW6QoKzEHceGApCS+nwl2bdJSkXgzG
-   cOmd4yoyFEexJmbkz7HrqRDWA08+ed8ypkPxh6l5t00vUk1Y+7nxC40zJ
-   gzCOu5H7FKM1EeT1IkD+maMiLkHyNsg1IOS43PCcGXt7QGsejEUCRlt8k
-   w==;
-X-CSE-ConnectionGUID: RcWFgwobR/GinwhwBH6FQg==
-X-CSE-MsgGUID: YkBjQhVXQLu1S0sGLm+3Yw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="68349688"
-X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="68349688"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:24:53 -0700
-X-CSE-ConnectionGUID: Sdy3DjNKSgmwJ8Gh5fJ1Xw==
-X-CSE-MsgGUID: ZuiUlvc1TcCGQmSdhRSxMQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="166987275"
-Received: from bergbenj-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.110])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:24:48 -0700
-Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 2FD3A11FC97;
-	Tue, 12 Aug 2025 16:24:46 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uloze-00DMZx-06;
-	Tue, 12 Aug 2025 16:24:46 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: linux-media@vger.kernel.org,
-	gregkh@linuxfoundation.org,
-	laurent.pinchart@ideasonboard.com,
-	hdegoede@redhat.com,
-	Thinh.Nguyen@synopsys.com,
-	Amardeep Rai <amardeep.rai@intel.com>,
-	Kannappan R <r.kannappan@intel.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v4 4/4] media: uvcvideo: eUSB2 double isochronous bandwidth support
-Date: Tue, 12 Aug 2025 16:24:45 +0300
-Message-Id: <20250812132445.3185026-5-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
-References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
+	s=arc-20240116; t=1755006243; c=relaxed/simple;
+	bh=QjHE0Hz1SkP5EcpMJwvmq6a+NsisCUNB7cXfhRrLTfA=;
+	h=Message-Id:From:Date:Subject:To:Cc; b=J+ImJbwUfGisPjQtMFFc0umgRgV2niEXG0FA9lKZq9zlP8A+k3LF5wtVtlRMy1NxI4qgE0LH2GN12/f5DTL4LGfqyP1iF4W/yQv06/qbIZrnqbTwucyXJf6TaBPvVQkEpwI4YOCXT+7PAIcw1+sNbgmvIfeaSKrlCCTy8FxSpwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=pass smtp.mailfrom=wunner.de; arc=none smtp.client-ip=83.223.95.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wunner.de
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 17B8D2C0667F;
+	Tue, 12 Aug 2025 15:43:51 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 030D84A155; Tue, 12 Aug 2025 15:43:50 +0200 (CEST)
+Message-Id: <5632086b8436bc2f9a43e3573acf7a090615b52f.1755005459.git.lukas@wunner.de>
+From: Lukas Wunner <lukas@wunner.de>
+Date: Tue, 12 Aug 2025 15:42:29 +0200
+Subject: [PATCH] thunderbolt: Use is_pciehp instead of is_hotplug_bridge
+To: Mika Westerberg <westeri@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
+Cc: Andreas Noever <andreas.noever@gmail.com>, Michael Jamet <michael.jamet@intel.com>, Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org, linux-pci@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-From: Tao Q Tao <tao.q.tao@intel.com>
+The thunderbolt driver sets up device link dependencies from hotplug ports
+to the Host Router (aka Native Host Interface, NHI).  When resuming from
+system sleep, this allows the Host Router to re-establish tunnels to
+attached Thunderbolt devices before the hotplug ports resume.
 
-Use usb_endpoint_max_isoc_bpi() from the USB framework to find the maximum
-bytes per interval for the endpoint. Consequently this adds eUSB2
-isochronous mode and SuperSpeedPlus Isochronous Endpoint Compaion support
-where larger bpi values are possible.
+To identify the hotplug ports, the driver utilizes the is_hotplug_bridge
+flag which also encompasses ACPI slots handled by the ACPI hotplug driver.
 
-Co-developed-by: Amardeep Rai <amardeep.rai@intel.com>
-Signed-off-by: Amardeep Rai <amardeep.rai@intel.com>
-Signed-off-by: Tao Q Tao <tao.q.tao@intel.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Thunderbolt hotplug ports are always Hot-Plug Capable PCIe ports, so it is
+more apt to identify them with the is_pciehp flag.
+
+Similarly, hotplug ports on older Thunderbolt controllers have broken MSI
+support and are quirked to use legacy INTx interrupts instead.  The quirk
+identifies them with is_hotplug_bridge, even though all affected ports are
+also matched by is_pciehp.  So use is_pciehp here as well.
+
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
 ---
- drivers/media/usb/uvc/uvc_driver.c |  4 ++--
- drivers/media/usb/uvc/uvc_video.c  | 24 +++---------------------
- drivers/media/usb/uvc/uvcvideo.h   |  4 +---
- 3 files changed, 6 insertions(+), 26 deletions(-)
+The is_pciehp flag was introduced by commit 6cff20ce3b92 ("PCI/ACPI: Fix
+runtime PM ref imbalance on Hot-Plug Capable ports"), which appeared in
+v6.17-rc1.  This patch is submitted separately because it is intended
+to be applied through thunderbolt.git instead of pci.git.  Thanks!
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index da24a655ab68..fde0bc95622c 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -536,7 +536,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
- 	unsigned int nformats = 0, nframes = 0, nintervals = 0;
- 	unsigned int size, i, n, p;
- 	u32 *interval;
--	u16 psize;
-+	u32 psize;
- 	int ret = -EINVAL;
- 
- 	if (intf->cur_altsetting->desc.bInterfaceSubClass
-@@ -772,7 +772,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
- 				streaming->header.bEndpointAddress);
- 		if (ep == NULL)
+ drivers/pci/quirks.c     | 2 +-
+ drivers/thunderbolt/tb.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index d97335a..17315a8 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -3829,7 +3829,7 @@ static void quirk_no_pm_reset(struct pci_dev *dev)
+  */
+ static void quirk_thunderbolt_hotplug_msi(struct pci_dev *pdev)
+ {
+-	if (pdev->is_hotplug_bridge &&
++	if (pdev->is_pciehp &&
+ 	    (pdev->device != PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C ||
+ 	     pdev->revision <= 1))
+ 		pdev->no_msi = 1;
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index c14ab1f..83a33fc 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -3336,7 +3336,7 @@ static bool tb_apple_add_links(struct tb_nhi *nhi)
+ 		if (!pci_is_pcie(pdev))
  			continue;
--		psize = uvc_endpoint_max_bpi(dev->udev, ep);
-+		psize = usb_endpoint_max_isoc_bpi(dev->udev, ep);
- 		if (psize > streaming->maxpsize)
- 			streaming->maxpsize = psize;
- 	}
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index a75af314e46b..335b1c4eff9b 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -1860,24 +1860,6 @@ static void uvc_video_stop_transfer(struct uvc_streaming *stream,
- 		uvc_free_urb_buffers(stream);
- }
+ 		if (pci_pcie_type(pdev) != PCI_EXP_TYPE_DOWNSTREAM ||
+-		    !pdev->is_hotplug_bridge)
++		    !pdev->is_pciehp)
+ 			continue;
  
--/*
-- * Compute the maximum number of bytes per interval for an endpoint.
-- */
--u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep)
--{
--	u16 psize;
--
--	switch (dev->speed) {
--	case USB_SPEED_SUPER:
--	case USB_SPEED_SUPER_PLUS:
--		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
--	default:
--		psize = usb_endpoint_maxp(&ep->desc);
--		psize *= usb_endpoint_maxp_mult(&ep->desc);
--		return psize;
--	}
--}
--
- /*
-  * Initialize isochronous URBs and allocate transfer buffers. The packet size
-  * is given by the endpoint.
-@@ -1888,10 +1870,10 @@ static int uvc_init_video_isoc(struct uvc_streaming *stream,
- 	struct urb *urb;
- 	struct uvc_urb *uvc_urb;
- 	unsigned int npackets, i;
--	u16 psize;
-+	u32 psize;
- 	u32 size;
- 
--	psize = uvc_endpoint_max_bpi(stream->dev->udev, ep);
-+	psize = usb_endpoint_max_isoc_bpi(stream->dev->udev, ep);
- 	size = stream->ctrl.dwMaxVideoFrameSize;
- 
- 	npackets = uvc_alloc_urb_buffers(stream, size, psize, gfp_flags);
-@@ -2034,7 +2016,7 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
- 				continue;
- 
- 			/* Check if the bandwidth is high enough. */
--			psize = uvc_endpoint_max_bpi(stream->dev->udev, ep);
-+			psize = usb_endpoint_max_isoc_bpi(stream->dev->udev, ep);
- 			if (psize >= bandwidth && psize < best_psize) {
- 				altsetting = alts->desc.bAlternateSetting;
- 				best_psize = psize;
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index b9f8eb62ba1d..a77ba76e033a 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -450,7 +450,7 @@ struct uvc_streaming {
- 
- 	struct usb_interface *intf;
- 	int intfnum;
--	u16 maxpsize;
-+	u32 maxpsize;
- 
- 	struct uvc_streaming_header header;
- 	enum v4l2_buf_type type;
-@@ -818,8 +818,6 @@ void uvc_ctrl_cleanup_fh(struct uvc_fh *handle);
- /* Utility functions */
- struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
- 					    u8 epaddr);
--u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep);
--
- /* Quirks support */
- void uvc_video_decode_isight(struct uvc_urb *uvc_urb,
- 			     struct uvc_buffer *buf,
+ 		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
 -- 
-2.39.5
+2.47.2
 
 
