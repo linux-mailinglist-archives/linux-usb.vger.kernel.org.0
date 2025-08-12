@@ -1,141 +1,147 @@
-Return-Path: <linux-usb+bounces-26771-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26773-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94A36B22D4F
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 18:24:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 201D9B2332C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 20:26:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1A007A328E
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 16:22:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECBBE3B6D2A
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Aug 2025 18:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394992F90D0;
-	Tue, 12 Aug 2025 16:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDCF32F90C8;
+	Tue, 12 Aug 2025 18:21:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TUc1N2T8"
+	dkim=pass (1024-bit key) header.d=nordisch.org header.i=@nordisch.org header.b="Y5PT4Pq7";
+	dkim=permerror (0-bit key) header.d=nordisch.org header.i=@nordisch.org header.b="xCU+db1m"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from tengu.nordisch.org (tengu.nordisch.org [138.201.201.57])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5790D2F6579;
-	Tue, 12 Aug 2025 16:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40D12DFA3E;
+	Tue, 12 Aug 2025 18:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=138.201.201.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755015838; cv=none; b=PFSAsZCzunVv8gxa4XEnMbp4b1XzoLBqLL/LabS+zdECBLqbQdr7NkCGymxOLXqexXnXZviu5gMJI2up8TfHG/RF9BA0ekc4T5CR8UHR0JEuZPMC7Tv/dzgH27UL1wmDoU3vtr2/oqMLcJ09ome62caGZQ4XNkEx6Ruu8p+CvgM=
+	t=1755022911; cv=none; b=EUmBAav43MrgGojJnvBTOzTuRMQwzWgerONGScUWADUzOps2GnEG11sLV6uDiol6FzhLB4ATIbEA5bED32PhH/yzWQkQQf7Mn7AA3bq0kxKjwoD9RlUGgBmXppxIoogc2ZMTQBI1JV3o7I+tiXziX8M1/XfwYw2PLe+BgrlnufI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755015838; c=relaxed/simple;
-	bh=DX/a/5+B4C5HgtQc829srmgZngPbuyntkKppc+GEAp4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=qoUE0X8/Zh2dyxXBZ/8TlB1SpBlKjievCEAZlK0Eqy29AoTcginN8L8QvP3Cm1uwnCNeDfPcK97+RT6phk8Sgjc+AzobKGGA/D12b+ehzOyALA0xmOVk8qjJ20XvWdSN0iI1xRPQ446wfAsFVai8AmgxLJt8aAUwtSRP50YGods=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TUc1N2T8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58270C4CEF6;
-	Tue, 12 Aug 2025 16:23:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755015838;
-	bh=DX/a/5+B4C5HgtQc829srmgZngPbuyntkKppc+GEAp4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=TUc1N2T8TbtzPU7YHakEEQGtQWIy/0cxkndUmUoUoYyBPJnec8Qeecaa3FYjGPqXU
-	 0hRy0dOCtkiN6geGXdcQu084ZA3CqeMRvV/ZNJA9/XBh5noIoAUAQ0DQWHzW5Wqp2a
-	 sL/nXMBTC6PtZ3Yp4MzWPzScAq5+GwmFF4F/KIAzFsPijQ9BmpGGaqglT12Om22K5l
-	 IukZHX0AMZOFvl/jAuwISbexWGd0F8HooIRbCFqdb4FDMlRmnBka+3HmX8MYbr2ScI
-	 5T00COSasqF4+8FBfCUz+YIveYu4rSNYVl+hzJO+2PkDwAkvJCdaZP6Pyrh0ljhIcl
-	 KR+rDDyLCWlMg==
-From: Mark Brown <broonie@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, 
- Linus Walleij <linus.walleij@linaro.org>, linux-gpio@vger.kernel.org, 
- Arnd Bergmann <arnd@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Andrew Lunn <andrew@lunn.ch>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Gregory Clement <gregory.clement@bootlin.com>, 
- Russell King <linux@armlinux.org.uk>, Daniel Mack <daniel@zonque.org>, 
- Haojian Zhuang <haojian.zhuang@gmail.com>, 
- Robert Jarzmik <robert.jarzmik@free.fr>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, 
- Geert Uytterhoeven <geert@linux-m68k.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Lee Jones <lee@kernel.org>, 
- Pavel Machek <pavel@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Matti Vaittinen <mazziesaccount@gmail.com>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Jeff Johnson <jjohnson@kernel.org>, Hans de Goede <hansg@kernel.org>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Liam Girdwood <lgirdwood@gmail.com>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- "Dr. David Alan Gilbert" <linux@treblig.org>, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-samsung-soc@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
- linux-mips@vger.kernel.org, linux-sh@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
- linux-media@vger.kernel.org, patches@opensource.cirrus.com, 
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
- ath10k@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-sound@vger.kernel.org
-In-Reply-To: <20250808151822.536879-1-arnd@kernel.org>
-References: <20250808151822.536879-1-arnd@kernel.org>
-Subject: Re: (subset) [PATCH 00/21] gpiolib: fence off legacy interfaces
-Message-Id: <175501582810.192378.6304989017593161369.b4-ty@kernel.org>
-Date: Tue, 12 Aug 2025 17:23:48 +0100
+	s=arc-20240116; t=1755022911; c=relaxed/simple;
+	bh=Nm3nZAnFCwJNQ4VDBSZgNPO9vR8bsr/ulE20lACILKg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=IxaRBziGUCRziOCFnfsk5E8fla9qTMRKx/KmLe5OuW5DCcQ/rbBwZoUcnGegHc9Hp8Zp3FfbvCjWYag6Yd75GK5HYxYQoJjey2vYd0/r6v6FaK6voYXfeSdwrtp0vsjB3p10q6TJKN8EFzbVqkkPCdK/JwfVldWrahDCj6jx/Zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nordisch.org; spf=pass smtp.mailfrom=nordisch.org; dkim=pass (1024-bit key) header.d=nordisch.org header.i=@nordisch.org header.b=Y5PT4Pq7; dkim=permerror (0-bit key) header.d=nordisch.org header.i=@nordisch.org header.b=xCU+db1m; arc=none smtp.client-ip=138.201.201.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nordisch.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nordisch.org
+Received: from [192.168.3.6] (fortress.wg.nordisch.org [192.168.3.6])
+	by tengu.nordisch.org (Postfix) with ESMTPSA id 99AC675AA93;
+	Tue, 12 Aug 2025 20:15:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nordisch.org;
+	s=tengu_rsa; t=1755022513;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FvzejOOAm8yKhKoXy3UatE5OCUk6/FfOEd6OdReBm8M=;
+	b=Y5PT4Pq7UBAe4mTFXLvkGL6Gq05n3Np9r96vTD0t1H0s7bzZVsM97bLQUexLBPcyD0bcuv
+	P5PP4Zuj+Vc3HQjhyjsusyOBn2AI1eEAXwtoSDzjcEji9MHtwUtDYoc4FlH0jfD6qcW5gr
+	zd6CSbJifXcW7p8m/gqqtdv1hcOsVjk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=nordisch.org;
+	s=tengu_ed25519; t=1755022513;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FvzejOOAm8yKhKoXy3UatE5OCUk6/FfOEd6OdReBm8M=;
+	b=xCU+db1moJJLw9ckcBB3oyUp59bnkjA1v8rhRfuW54eUuNDd6wBR2AC/EeM5n9F4HMCUFd
+	ear0bEvJGOc/woBA==
+Message-ID: <4fd2765f5454cbf57fbc3c2fe798999d1c4adccb.camel@nordisch.org>
+Subject: Re: [PATCH] usb: hub: Don't try to recover devices lost during warm
+ reset.
+From: Marcus =?ISO-8859-1?Q?R=FCckert?= <kernel@nordisch.org>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>, Jiri Slaby
+	 <jirislaby@kernel.org>, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
+	stable@vger.kernel.org, =?UTF-8?Q?=C5=81ukasz?= Bartosik
+ <ukaszb@chromium.org>,  Oliver Neukum <oneukum@suse.com>,
+ =?UTF-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Date: Tue, 12 Aug 2025 20:15:13 +0200
+In-Reply-To: <5b039333-fc97-43b0-9d7a-287a9b313c34@linux.intel.com>
+References: <20250623133947.3144608-1-mathias.nyman@linux.intel.com>
+	 <fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
+	 <5b039333-fc97-43b0-9d7a-287a9b313c34@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-cff91
 
-On Fri, 08 Aug 2025 17:17:44 +0200, Arnd Bergmann wrote:
-> Commit 678bae2eaa81 ("gpiolib: make legacy interfaces optional") was
-> merged for linux-6.17, so now it is possible to use the legacy interfaces
-> conditionally and eventually have the support left out of the kernel
-> whenever it is not needed.
-> 
-> I created six patches to force-enable CONFIG_GPIOLIB_LEGACY on the
-> few (mostly ancient) platforms that still require this, plus a set of
-> patches to either add the corresponding Kconfig dependencies that make
-> the device drivers conditional on that symbol, or change them to no
-> longer require it.
-> 
-> [...]
+On Tue, 2025-08-12 at 13:48 +0300, Mathias Nyman wrote:
+> > > [Wed Aug=C2=A0 6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: xHC=
+I
+> > > host controller not responding, assume dead
+> > > [Wed Aug=C2=A0 6 16:52:50 2025] [ T362645] xhci_hcd 0000:0e:00.0: HC
+> > > died; cleaning up
+>=20
+> Tear down xhci.
 
-Applied to
+so usb is not dead completely. I can connect my keyboard to the
+charging cable of my mouse and it starts working again. but it seems
+all my devices hanging on that part of the usb tree are dead
+(DAC/keyboard)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+lspci is here=20
 
-Thanks!
+https://bugzilla.opensuse.org/show_bug.cgi?id=3D1247895#c3
 
-[08/21] ASoC: add GPIOLIB_LEGACY dependency where needed
-        commit: 5383d67e2430822fa7bd20dcbbebbd8ae808e386
-[20/21] ASoC: pxa: add GPIOLIB_LEGACY dependency
-        commit: 2d86d2585ab929a143d1e6f8963da1499e33bf13
+Mainboard is a ASUS ProArt X870E-CREATOR WIFI
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> >=20
+> > Any ideas? What would you need to debug this?
+>=20
+> Could be that this patch reveals some underlying race in xhci re-
+> enumeration path.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+possible.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+> Could also be related to ep0 max packet size setting as this is a
+> full-speed device.
+> (max packet size is unknown until host reads first 8 bytes of
+> descriptor, then adjusts
+> it on the fly with an evaluate context command)
+>=20
+> Appreciated if this could be reproduced with as few usb devices as
+> possible, and with
+> xhci tracing and dynamic debug enabled:
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+sadly this is not really reproducible on command. sometimes it happens
+after only a few hours. sometimes it happens after a day or 2.
 
-Thanks,
-Mark
+> mount -t debugfs none /sys/kernel/debug
+> echo 'module xhci_hcd =3Dp' >/sys/kernel/debug/dynamic_debug/control
+> echo 'module usbcore =3Dp' >/sys/kernel/debug/dynamic_debug/control
+> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
+> echo 1 > /sys/kernel/debug/tracing/tracing_on
+
+Running with this now.=20
+
+> < Reproduce issue >
+> Send output of dmesg
+> Send content of /sys/kernel/debug/tracing/trace
+
+Will do once it happened again.
+
+   darix
+
+--=20
+Always remember:
+  Never accept the world as it appears to be.
+    Dare to see it for what it could be.
+      The world can always use more heroes.
+
 
 
