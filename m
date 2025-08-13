@@ -1,166 +1,146 @@
-Return-Path: <linux-usb+bounces-26790-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26791-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6748AB24510
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 11:14:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 373F8B24635
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 11:56:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B18601AA584A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 09:14:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C0CD884608
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 09:50:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0913A2F0681;
-	Wed, 13 Aug 2025 09:14:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977DF2F0C73;
+	Wed, 13 Aug 2025 09:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nordisch.org header.i=@nordisch.org header.b="ALYPG8CE";
-	dkim=permerror (0-bit key) header.d=nordisch.org header.i=@nordisch.org header.b="DsNCninU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UvbFgI2s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from tengu.nordisch.org (tengu.nordisch.org [138.201.201.57])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3ADE2BE03C;
-	Wed, 13 Aug 2025 09:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=138.201.201.57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EEF8156230;
+	Wed, 13 Aug 2025 09:48:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755076450; cv=none; b=gyV4HMEO39HoMovFC2o3/EgqR+2Yx/xXo4iDze9F9JlipCVFVCgRh/2GOTNiIqD/LQZDAFHZUeT7xxx/fYBKfwMUM3PJw2mjsLj3HC6MMVo+3zVVfUywU9jWE7nLkUoD+rL7GbCoLxkJXteuF/qPu2ylHqOC0zjDVKy8w4E00ns=
+	t=1755078537; cv=none; b=SfQHywOHhX6u421soe3gXeg3E4Tyfw+HImbL5OdbTq8v5eeX8h55rYnDba3tzCJs/LqPKkDmiPitUFa/urc6jCO6q5TZ6ycI4s2mkXd+0ICyKyZhcj5NGyHZT1/N6uXrKoc/SEf2IAzn59wDPAiwt4ErdsACkCdotaV5sd76+0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755076450; c=relaxed/simple;
-	bh=KjbjAVn3Gb9G9bz5c2OJqKKSt9TVDIEL6NRHOoZeZgs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AHT09Kzz/J/Ez87bCLYSBNBtSypBscH3Sht02b1Tq360PfJmvf/AGr7ySVFC868SZ5cjJ2S5Yg5NFTa67+reb1LWBqfuZs/d8Vi+DbkHd7Mo+jk9hrUExcBMj3pwfZtCrJY+/9VSwdmqeGOdlvuD8uxGyUtjRr5joLJWu4rVIRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nordisch.org; spf=pass smtp.mailfrom=nordisch.org; dkim=pass (1024-bit key) header.d=nordisch.org header.i=@nordisch.org header.b=ALYPG8CE; dkim=permerror (0-bit key) header.d=nordisch.org header.i=@nordisch.org header.b=DsNCninU; arc=none smtp.client-ip=138.201.201.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nordisch.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nordisch.org
-Received: from [192.168.3.6] (fortress.wg.nordisch.org [192.168.3.6])
-	by tengu.nordisch.org (Postfix) with ESMTPSA id 31ECA7B517E;
-	Wed, 13 Aug 2025 11:14:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nordisch.org;
-	s=tengu_rsa; t=1755076445;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9CaejoTVD43Ah3sy14LUZJseEZ4zHH3xUVzztahkh+Y=;
-	b=ALYPG8CE9xQsU+c9vyRvulNIcmOjfvnJxKBMf2yMQu973nXxozheaOCTj5HF3bN8AaNhql
-	mLXt1tKgLLsBOE4OLQF8pOMw0u+QiM/UUdANkg7eQCUFoAULX7OpIAIY3e/Jtt5//nBCFC
-	x0JV6D+S+itD95KEvL7mQJMtfXdhw/M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=nordisch.org;
-	s=tengu_ed25519; t=1755076445;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9CaejoTVD43Ah3sy14LUZJseEZ4zHH3xUVzztahkh+Y=;
-	b=DsNCninU1qPWBkEpb2x0JO0eq7mwdZFBmoek0J+juu4QzMJOKIFIbHaXKg6BZdITq+PSvi
-	aa3eGvfXbgdiBgBQ==
-Message-ID: <746fdb857648d048fd210fb9dc3b27067da71dff.camel@nordisch.org>
-Subject: Re: [PATCH] usb: hub: Don't try to recover devices lost during warm
- reset.
-From: Marcus =?ISO-8859-1?Q?R=FCckert?= <kernel@nordisch.org>
-To: =?UTF-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+	s=arc-20240116; t=1755078537; c=relaxed/simple;
+	bh=Q5dcK0CjHMvjXYurPdmUBdrbabL9m7N+1bo3WB63TvY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=evIVqkFI3kJXMgm5Gvu4oOOs+ORbmIvYljr/TOlHpunT7C5fmmjqoL8XeRV7aMYXBawZHDgwS4cY2+EiDY5xqaI2eXA8yQDLfx+OwR1hNgZFHHjHXx1bViGvuWwm0WGJAyrWxRXfCwm8b/BMVGaRMSMbNPjyFhOo5fBoXftSnY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UvbFgI2s; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55cd7d66b2bso1857429e87.0;
+        Wed, 13 Aug 2025 02:48:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755078533; x=1755683333; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q5dcK0CjHMvjXYurPdmUBdrbabL9m7N+1bo3WB63TvY=;
+        b=UvbFgI2sCHdlWWvIl2KzrZkHXuMd1Eo6kHikVZHSroXZ+xz9hvXQiHZVBArIaVkVB1
+         JlmxYuP7rfh4+yTqBPeCS1tr9aC8d/WbT4h9/LfKj1GOgGs12HQr0qtT2h7S9hl9T1zb
+         bJT2cjol7Q8OAJknQ1YWyScmGO3FwsQ4bsbAtUpDrzyjKkteTm/27vyyholdy1r5Tlo+
+         tbzIE7GFDXCAcKjM0/u77pJpgbJnsIOyPDeo6VoNqd+f2vDNexLsV2//4pZtQzTzQF+0
+         Q+r9CAXW2Nn89qn9iKhkBV0cEsx2GoKq/7wTLXqAj/jJP5S8Dy3DgfnyT8Wj1LsDJubR
+         WPEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755078533; x=1755683333;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q5dcK0CjHMvjXYurPdmUBdrbabL9m7N+1bo3WB63TvY=;
+        b=S5qfKUc3Idd5QSfCCDWvaXNWzT8HHfoUbWU3g6+1qPjp1IAkYjxmFkkwex66rEugIG
+         KNTuYQFTS+X5/eu1a3jRHjBHKXCGPCc92tOeLUV6un8OflahEONA6JJYIuyuRcHE5263
+         rdXklRATRfZIA40xF5dbNj1hiMfujYHjvKj4PG8EtWVmHIp2y/jC46mWHXwl4VDA+2Rd
+         RKAo61FokRtIbPwuu+U+LO+HRCTMZOR77564sdgMVFutvgzGYfeZ39mMH2ccorIK+HyC
+         q3UIUFsHc/7SOeIftAR+LyZWPsjhvaFenz9Oklbv7Md/xHjtcwNB9z03v5tfj6TL8QFz
+         zCHg==
+X-Forwarded-Encrypted: i=1; AJvYcCUnniiMaR5TZNRuoS0KVfELR+4WGOE2vrjxaGL9pKxU65ZJ5oEcq8AFmJoaYYfuCP3YepME+WnC@vger.kernel.org, AJvYcCW5dGfzmM+ddQU2zKN4Dt8BMchHkFoolccGnzenwQMlW/D6p2hFbvTBt7G+HyRDjX0tPr1VhNvYLFk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzA0cN8lvjOnxLBAmXJ9UdvLShZ8DCN7ftfQbjCMsvdz5vyBs9
+	gFDFCWeKoFa2S0akxoVejwFJsWlOADRaQoKle/suZO2kQeaLf1FT+GZU
+X-Gm-Gg: ASbGncsgDYq4u/xj1yOSwDX9h2ReZSfQDYGzJhmfAHVE//mcunBLOHMMxpHa21oxUZa
+	5n4NzbadXvzASQwR+mdGjdgRo06Tt5qK1qCIrQ5Ff06Uv14Y9pWg42roXh1ii1TsmwDfUyZuIes
+	26pqHggV4GjP5PRwRoXiUoerkUVUVlpMB6a4YWihXvxdW7QzHD+OtD16W4e7cyk3I3wwZ+h/tU6
+	uGPzHgUnBDlAcYUhCPCN9Gl4UTeNmPM3H4blMAFsv8Xdiv9dwkLGs5fooqxcRi4M/vdwOkv2BA4
+	r+Luy1EfUUej7tpxUl4vdrt4m7ZnC6j1vOVf8sB14+RzfVcwpRkV/oPVP84feUjqgKV1nLRLLYR
+	iqdK7V/ZtvcRq+Pkm83uZoo97pGvnVJAr9JA=
+X-Google-Smtp-Source: AGHT+IFIQwXVC6UUg5hivH6IV28yuGpDjLff3Eva5APWkdxAXHisZpw8Oc4IUYN519k6xnsEGmDcAQ==
+X-Received: by 2002:a05:6512:3ca6:b0:55b:96e4:11b5 with SMTP id 2adb3069b0e04-55ce01418d4mr655852e87.1.1755078533079;
+        Wed, 13 Aug 2025 02:48:53 -0700 (PDT)
+Received: from foxbook (bfd208.neoplus.adsl.tpnet.pl. [83.28.41.208])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55b88cb7c4dsm5262362e87.170.2025.08.13.02.48.52
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 13 Aug 2025 02:48:52 -0700 (PDT)
+Date: Wed, 13 Aug 2025 11:48:48 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Marcus =?UTF-8?B?UsO8Y2tlcnQ=?= <kernel@nordisch.org>
 Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Jiri Slaby	
  <jirislaby@kernel.org>, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, 	stern@rowland.harvard.edu,
- stable@vger.kernel.org, =?UTF-8?Q?=C5=81ukasz?= Bartosik
+ linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+ stable@vger.kernel.org, =?UTF-8?B?xYF1a2Fzeg==?= Bartosik
  <ukaszb@chromium.org>, Oliver Neukum <oneukum@suse.com>
-Date: Wed, 13 Aug 2025 11:14:04 +0200
-In-Reply-To: <20250813084252.4dcd1dc5@foxbook>
+Subject: Re: [PATCH] usb: hub: Don't try to recover devices lost during warm
+ reset.
+Message-ID: <20250813114848.71a3ad70@foxbook>
+In-Reply-To: <746fdb857648d048fd210fb9dc3b27067da71dff.camel@nordisch.org>
 References: <20250623133947.3144608-1-mathias.nyman@linux.intel.com>
-		<fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
-		<5b039333-fc97-43b0-9d7a-287a9b313c34@linux.intel.com>
-		<4fd2765f5454cbf57fbc3c2fe798999d1c4adccb.camel@nordisch.org>
-		<20250813000248.36d9689e@foxbook>
-		<bea9aa71d198ba7def318e6701612dfe7358b693.camel@nordisch.org>
-	 <20250813084252.4dcd1dc5@foxbook>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 
+	<fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
+	<5b039333-fc97-43b0-9d7a-287a9b313c34@linux.intel.com>
+	<4fd2765f5454cbf57fbc3c2fe798999d1c4adccb.camel@nordisch.org>
+	<20250813000248.36d9689e@foxbook>
+	<bea9aa71d198ba7def318e6701612dfe7358b693.camel@nordisch.org>
+	<20250813084252.4dcd1dc5@foxbook>
+	<746fdb857648d048fd210fb9dc3b27067da71dff.camel@nordisch.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2025-08-13 at 08:42 +0200, Micha=C5=82 Pecio wrote:
-> On Wed, 13 Aug 2025 03:58:07 +0200, Marcus R=C3=BCckert wrote:
-> > dmesg |grep 'usb 1-2' ; dmesg |grep 'descriptor read'
-> > [=C2=A0=C2=A0=C2=A0 2.686292] [=C2=A0=C2=A0=C2=A0 T787] usb 1-2: new fu=
-ll-speed USB device number
-> > 3
-> > using xhci_hcd
-> > [=C2=A0=C2=A0=C2=A0 3.054496] [=C2=A0=C2=A0=C2=A0 T787] usb 1-2: New US=
-B device found,
-> > idVendor=3D31e3,
-> > idProduct=3D1322, bcdDevice=3D 2.30
-> > [=C2=A0=C2=A0=C2=A0 3.054499] [=C2=A0=C2=A0=C2=A0 T787] usb 1-2: New US=
-B device strings: Mfr=3D1,
-> > Product=3D2, SerialNumber=3D3
-> > [=C2=A0=C2=A0=C2=A0 3.054500] [=C2=A0=C2=A0=C2=A0 T787] usb 1-2: Produc=
-t: Wooting 60HE+
-> > [=C2=A0=C2=A0=C2=A0 3.054501] [=C2=A0=C2=A0=C2=A0 T787] usb 1-2: Manufa=
-cturer: Wooting
+On Wed, 13 Aug 2025 11:14:04 +0200, Marcus R=C3=BCckert wrote:=20
+> Jul 24 15:56:34 kernel: usb 1-2: reset full-speed USB device number 14
+> using xhci_hcd
+> Jul 24 15:56:35 kernel: usb 1-2: reset full-speed USB device number 14
+> using xhci_hcd
+> Jul 24 15:56:36 kernel: usb 1-2: reset full-speed USB device number 14
+> using xhci_hcd
+> Jul 24 15:56:37 kernel: usb 1-2: reset full-speed USB device number 14
+> using xhci_hcd
+> Jul 24 15:57:56 kernel: xhci_hcd 0000:0e:00.0: HC died; cleaning up
+> Jul 31 19:53:02 kernel: usb 1-2: reset full-speed USB device number 50
+> using xhci_hcd
+> Jul 31 19:53:03 kernel: usb 1-2: reset full-speed USB device number 50
+> using xhci_hcd
+> Jul 31 19:53:04 kernel: usb 1-2: reset full-speed USB device number 50
+> using xhci_hcd
+> Jul 31 19:53:04 kernel: usb 1-2: reset full-speed USB device number 50
+> using xhci_hcd
+> Jul 31 19:55:05 kernel: xhci_hcd 0000:0e:00.0: HC died; cleaning up
+> Aug 06 16:51:34 kernel: usb 1-2: reset full-speed USB device number 12
+> using xhci_hcd
+> Aug 06 16:51:35 kernel: usb 1-2: reset full-speed USB device number 12
+> using xhci_hcd
+> Aug 06 16:51:36 kernel: usb 1-2: reset full-speed USB device number 12
+> using xhci_hcd
+> Aug 06 16:51:36 kernel: usb 1-2: reset full-speed USB device number 12
+> using xhci_hcd
+> Aug 06 16:52:50 kernel: xhci_hcd 0000:0e:00.0: HC died; cleaning up
 >=20
-> OK, so you had a keyboard in this port during the last boot. Is this
-> keyboard always connected to the same port? There is no bus 1 port 2
-> device on your earlier lsusb output, so it was either not connected
-> there or not detected due to malfunction.
+>=20
+> all HC died events were connected to reset full-speed.
 
-yes it is always connected to that port. the setup is quite static.
+OK, three reset loops and three HC died in the last month, both at
+the same time, about once a week. Possibly not a coincidence ;)
 
-> So this port was getting reset in the past. Can you also check:
-> - how many of those resets were followed by "HC died"
-> - if all "HC died" events were caused by resets of port usb 1-2
-> =C2=A0 (or some other port)
+Not sure if we can confidently say that reverting this patch helped,
+because a week is just passing today. But the same hardware worked
+fine for weeks/months/years? before a recent kernel upgrade, correct?
 
-Jul 24 15:56:34 kernel: usb 1-2: reset full-speed USB device number 14
-using xhci_hcd
-Jul 24 15:56:35 kernel: usb 1-2: reset full-speed USB device number 14
-using xhci_hcd
-Jul 24 15:56:36 kernel: usb 1-2: reset full-speed USB device number 14
-using xhci_hcd
-Jul 24 15:56:37 kernel: usb 1-2: reset full-speed USB device number 14
-using xhci_hcd
-Jul 24 15:57:56 kernel: xhci_hcd 0000:0e:00.0: HC died; cleaning up
-Jul 31 19:53:02 kernel: usb 1-2: reset full-speed USB device number 50
-using xhci_hcd
-Jul 31 19:53:03 kernel: usb 1-2: reset full-speed USB device number 50
-using xhci_hcd
-Jul 31 19:53:04 kernel: usb 1-2: reset full-speed USB device number 50
-using xhci_hcd
-Jul 31 19:53:04 kernel: usb 1-2: reset full-speed USB device number 50
-using xhci_hcd
-Jul 31 19:55:05 kernel: xhci_hcd 0000:0e:00.0: HC died; cleaning up
-Aug 06 16:51:34 kernel: usb 1-2: reset full-speed USB device number 12
-using xhci_hcd
-Aug 06 16:51:35 kernel: usb 1-2: reset full-speed USB device number 12
-using xhci_hcd
-Aug 06 16:51:36 kernel: usb 1-2: reset full-speed USB device number 12
-using xhci_hcd
-Aug 06 16:51:36 kernel: usb 1-2: reset full-speed USB device number 12
-using xhci_hcd
-Aug 06 16:52:50 kernel: xhci_hcd 0000:0e:00.0: HC died; cleaning up
-
-
-all HC died events were connected to reset full-speed.
-
-> And for the record, what exactly was the original problem which you
-> reported to Suse and believe to be caused by a kernel upgrade? Was it
-> "HC died" and loss of multiple devices, or just the keyborad failing
-> to work and spamming "reset USB device numebr x", or something else?
-
-The spamming I wouldnt have noticed. but the loss of the other devices
-from the "HC died" I did notice. So I asked Jiri if the recent kernel
-updates included USB changes and we started debugging :)
-
-   darix
-
---=20
-Always remember:
-  Never accept the world as it appears to be.
-    Dare to see it for what it could be.
-      The world can always use more heroes.
-
-
+Random idea: would anything happen if you run 'usbreset' to manually
+reset this device? Maybe a few times.
 
