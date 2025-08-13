@@ -1,114 +1,97 @@
-Return-Path: <linux-usb+bounces-26792-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26793-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1966BB246AE
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 12:09:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA000B246C8
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 12:14:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A8FB1AA5F9B
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 10:06:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B41907B55E8
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 10:12:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0ED32D73B7;
-	Wed, 13 Aug 2025 10:05:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FB02EFDA7;
+	Wed, 13 Aug 2025 10:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=permerror (0-bit key) header.d=nordisch.org header.i=@nordisch.org header.b="jPzTOxwL";
-	dkim=pass (1024-bit key) header.d=nordisch.org header.i=@nordisch.org header.b="i57PXeS6"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nvUDsrfR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from tengu.nordisch.org (tengu.nordisch.org [138.201.201.57])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB4D212559;
-	Wed, 13 Aug 2025 10:05:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=138.201.201.57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEB42ED169
+	for <linux-usb@vger.kernel.org>; Wed, 13 Aug 2025 10:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755079521; cv=none; b=TA/TAH0rZ5Cr6T4V0vGJklGR9A11Ckt+oVUflnKLKNRnAXHAxcI0uVP8BonQ3mBh9d3EuvYm7Oo/LlIGTb2RzWthKJmtIF6MZH1MuX5fGsSFYAikVqN7M7wCdM2/QniNE2M+fay9daMhPFflfcqqBgd2ykQ48V+KQM+HnYMTY1M=
+	t=1755080033; cv=none; b=uK10k46KFSEjxgGFL6O4DnRauS6v137jNxpEySH+oGKo1ASTO83BAyLKNX4t1aJfzx4PKFLtD9MGKYrZow3v9Fqw1fqmgc00MpzEzZjabEPcWl+ePbPKQPDQLoLFxUe2CGjPehMsObNu2pRez4e2cpzn4ueLI98iwSKhSJElaUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755079521; c=relaxed/simple;
-	bh=R+t/k4qhvgxrWpaSwg3//EQLBy7FkVy9BEYt/qNBRFU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZslwLfwD8pcS4u7NV3gDqUoXwdzPPEXteZ1NXfsZRTUSqKwWSn5CUOpVJDaEGauFI3YqmYdUHkhBOa/02ltYpsgEwR7XpzeYvfLuzR6+8ZGgarwodpACLNvx+c2FuFptdRzXpK+IufStHtfFQDKXmnd1OiaEvEl/pNioPxGwbq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nordisch.org; spf=pass smtp.mailfrom=nordisch.org; dkim=permerror (0-bit key) header.d=nordisch.org header.i=@nordisch.org header.b=jPzTOxwL; dkim=pass (1024-bit key) header.d=nordisch.org header.i=@nordisch.org header.b=i57PXeS6; arc=none smtp.client-ip=138.201.201.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nordisch.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nordisch.org
-Received: from [192.168.3.6] (fortress.wg.nordisch.org [192.168.3.6])
-	by tengu.nordisch.org (Postfix) with ESMTPSA id 99B927B5174;
-	Wed, 13 Aug 2025 12:05:16 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=nordisch.org;
-	s=tengu_ed25519; t=1755079516;
+	s=arc-20240116; t=1755080033; c=relaxed/simple;
+	bh=U/6z9EuFW5yuEe5BDIjFeLvVI0kXMK2Jf0kmaFK/5dc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FYMl/Lfd2K9cL8cg/E9D7EaEci+SlQA3g6fV8R/7P4JuMHIT05+6X5vbgU6/+PaKwsOA5VXO9SqZiqMkBooAepldlROwSESVVtiiPVcwM17UdjhNMR12vc6sCg2jUHMRXBCHA+vKYLV/7ftX1lrjE/zZvtcMm0gqw4hzJwJ6+R0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nvUDsrfR; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1755080029;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z+eIAA4OYkCg54VkoggBe1LYnd9NYvp9x/J64g5PC3Y=;
-	b=jPzTOxwL1TwPhrP+YGa2S8Ebw47jdATYAFuen758+mHq9UIVGr3wnVGLKp3qXTqQGVgnjo
-	X9Mmhg6x/FbsuFCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nordisch.org;
-	s=tengu_rsa; t=1755079516;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z+eIAA4OYkCg54VkoggBe1LYnd9NYvp9x/J64g5PC3Y=;
-	b=i57PXeS6T1hAmpDtxQiu77BRIhIltPQMtuEXC0Lq9QffOxXaLbuBgKPIZYhTi9DbABqlh4
-	XawL05quz9wZPv0FBTXUko1sXqeu8ywvVx+tMy6Pxh44csiu0NNxca2UQCPrRk9c/H+jK+
-	9W9Iw9uDCeBtdsnTkJva0yvi5P6lfNQ=
-Message-ID: <3566d1a04de7f61da46a11c7f1ec467e8b55e121.camel@nordisch.org>
-Subject: Re: [PATCH] usb: hub: Don't try to recover devices lost during warm
- reset.
-From: Marcus =?ISO-8859-1?Q?R=FCckert?= <kernel@nordisch.org>
-To: =?UTF-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Jiri Slaby	
- <jirislaby@kernel.org>, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, 	stern@rowland.harvard.edu,
- stable@vger.kernel.org, =?UTF-8?Q?=C5=81ukasz?= Bartosik
- <ukaszb@chromium.org>, Oliver Neukum <oneukum@suse.com>
-Date: Wed, 13 Aug 2025 12:05:16 +0200
-In-Reply-To: <20250813114848.71a3ad70@foxbook>
-References: <20250623133947.3144608-1-mathias.nyman@linux.intel.com>
-		<fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
-		<5b039333-fc97-43b0-9d7a-287a9b313c34@linux.intel.com>
-		<4fd2765f5454cbf57fbc3c2fe798999d1c4adccb.camel@nordisch.org>
-		<20250813000248.36d9689e@foxbook>
-		<bea9aa71d198ba7def318e6701612dfe7358b693.camel@nordisch.org>
-		<20250813084252.4dcd1dc5@foxbook>
-		<746fdb857648d048fd210fb9dc3b27067da71dff.camel@nordisch.org>
-	 <20250813114848.71a3ad70@foxbook>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=aSS/JGql2rVWBGs/YfOqn5/C1ygBaFsXRhS+TJXTsnI=;
+	b=nvUDsrfRBIvLA6GbHYTMNZTvKvne99xTN0deJDIk3MqMAwcttE8u1IkKq41ksqlFYOkGWU
+	emT7OE2lORgS+ophQ5s28KCGEtX1kSKd0Cc5/dpUjutuWni6i0XSvwavCS9PdPNUBNaY5d
+	9Qjg2+aJsXEUrlnxsIVu4NLsVFDI6aY=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] usb: storage: realtek_cr: Improve function parameter data types
+Date: Wed, 13 Aug 2025 12:12:47 +0200
+Message-ID: <20250813101249.158270-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 2025-08-13 at 11:48 +0200, Micha=C5=82 Pecio wrote:
-> OK, three reset loops and three HC died in the last month, both at
-> the same time, about once a week. Possibly not a coincidence ;)
->
-> Not sure if we can confidently say that reverting this patch helped,
-> because a week is just passing today. But the same hardware worked
-> fine for weeks/months/years? before a recent kernel upgrade, correct?
+In rts51x_bulk_transport() and rts51x_read_status(), change the function
+parameters 'buf_len' and 'len' from 'int' to 'unsigned int' because
+their values cannot be negative.
 
-From 2024-07 until end of July this year (when I upgraded to kernel
-6.15.7) everything was working fine. Also since I run with the kernel
-where the patch is reverted the issue has not shown up again.
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ drivers/usb/storage/realtek_cr.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> Random idea: would anything happen if you run 'usbreset' to manually
-> reset this device? Maybe a few times.
-
-How do I do that?
-
-   darix
-
---=20
-Always remember:
-  Never accept the world as it appears to be.
-    Dare to see it for what it could be.
-      The world can always use more heroes.
-
+diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+index 7dea28c2b8ee..d2c3e3a39693 100644
+--- a/drivers/usb/storage/realtek_cr.c
++++ b/drivers/usb/storage/realtek_cr.c
+@@ -199,7 +199,8 @@ static const struct us_unusual_dev realtek_cr_unusual_dev_list[] = {
+ #undef UNUSUAL_DEV
+ 
+ static int rts51x_bulk_transport(struct us_data *us, u8 lun,
+-				 u8 *cmd, int cmd_len, u8 *buf, int buf_len,
++				 u8 *cmd, int cmd_len, u8 *buf,
++				 unsigned int buf_len,
+ 				 enum dma_data_direction dir, int *act_len)
+ {
+ 	struct bulk_cb_wrap *bcb = (struct bulk_cb_wrap *)us->iobuf;
+@@ -417,7 +418,7 @@ static int rts51x_write_mem(struct us_data *us, u16 addr, u8 *data, u16 len)
+ }
+ 
+ static int rts51x_read_status(struct us_data *us,
+-			      u8 lun, u8 *status, int len, int *actlen)
++			      u8 lun, u8 *status, unsigned int len, int *actlen)
+ {
+ 	int retval;
+ 	u8 cmnd[12] = { 0 };
+-- 
+2.50.1
 
 
