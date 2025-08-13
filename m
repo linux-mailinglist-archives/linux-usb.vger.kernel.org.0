@@ -1,91 +1,102 @@
-Return-Path: <linux-usb+bounces-26810-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26811-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB004B24D0D
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 17:17:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4A91B24D64
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 17:30:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32DFF886143
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 15:10:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B81121B60F4C
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 15:27:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD5532ED157;
-	Wed, 13 Aug 2025 15:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268F823957D;
+	Wed, 13 Aug 2025 15:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SdMeFhAV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LumCyFXF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022F519E81F
-	for <linux-usb@vger.kernel.org>; Wed, 13 Aug 2025 15:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC2923B636;
+	Wed, 13 Aug 2025 15:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755097828; cv=none; b=PDDvV3trlb2r/YXKjz9ypOkOdKT27+N6PDr1I1S0UEE86N+LNbSBs3TfrP5R+4NG0782lzQF32KAJMqCfAAPXwYH8jfr8rKuNFOxWQZBURxJHaY7HwuNeYaLGlDLhteJ/JXuJ57pBtz6/RdaUV7ppoxEvdIxd66Zdp5XQLgavVk=
+	t=1755098796; cv=none; b=ROdRyGcTUIvyqpEKRJ3+hclFiY3uGl8ky8CWU2lMyxqb0hlt2hFdviQWmO0bOeNa652i637tcS23dyDPP+2B/cGcyMPE12R2Ey9VET3Y21MDETaGkBndxXq4peFJZcGqeQ9cUBIuWbI+139wgkcgntFk67LbcTxDjjatbl6wbwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755097828; c=relaxed/simple;
-	bh=99uxcXR1J2m2BQHk77hnPMNeqK1L68EQcBXd93xjZgI=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=jgLHBikrCYMG7hINWkwZuzYC10GKrbOdySuP3Z17car/FsMYCfLTxZti9kaP1/88whj3Utei/lwEtq17RDjNRUAbHJpJ0LXDtC4mXD7kTdE88uCwurOB74uxVaaAyLLVchyl9uZ5rcEuoX6Xb7Iy1cR++Izbnq0HIpTU0XmcxpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SdMeFhAV; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Content-Type: text/plain;
-	charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1755097822;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AGeRG7EIYSd/DYHs9x114MtCV4AwqXM+cwNPFQAJbMo=;
-	b=SdMeFhAVUAWHfrtYGvdN0CNlSrfvu6tfrH7yecpzEjjvnXmIrswCKomYEBSbnP/oEezy/3
-	adhrMngNvcTdPaZhmHSN7RmCkctR6TLGYhs26oKKYiUe5QfvvgiQfw+olh7tjrtFRcekYc
-	2b4/XQp+anvQvbJ+AN4oRnIg+fEZfLI=
+	s=arc-20240116; t=1755098796; c=relaxed/simple;
+	bh=r4yT008gulIsZaIB1+4+La/4aOXP2WFeEeTPwlUCmRQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RNJd6kqlBHd8PtTvKUiYtZUWERykqhXdHdL7JwF+zJRBUjQW4Gd4etE37qMdY1Qo2QM2Etrwavk48sFkPL+nr2ECbNDu7GOqz1AHBt6PuhqWh0Ty/yMHE1nh3LMPS9Vu3C4M85m+1ZE2eJncq5xeyGZ/qZu612z4bLJAOK+nAJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LumCyFXF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF15C4CEEB;
+	Wed, 13 Aug 2025 15:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1755098795;
+	bh=r4yT008gulIsZaIB1+4+La/4aOXP2WFeEeTPwlUCmRQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LumCyFXF25pdCtl3r5ZNUtIynR5FWAE1U81Corkq5Vxv8e8o5ny54H1BWTY0gUN7U
+	 +jwtMtGBBD5N6kATFgqSa44INfkCZ3d2PLD+6gnuUHTbQn5t1pw0HP3BpDQto07XMA
+	 fFeOPoqzivDGhZGxiDpVNweI5MqOBp7H0OSEoRm8=
+Date: Wed, 13 Aug 2025 17:26:31 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Mario Limonciello <superm1@kernel.org>,
+	"Rangoju, Raju" <raju.rangoju@amd.com>, linux-usb@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	andreas.noever@gmail.com, michael.jamet@intel.com,
+	westeri@kernel.org, YehezkelShB@gmail.com, bhelgaas@google.com,
+	Sanath.S@amd.com
+Subject: Re: [PATCH 0/3] thunderbolt: Update XDomain vendor properties
+ dynamically
+Message-ID: <2025081320-payroll-skydiver-51e5@gregkh>
+References: <2025080628-viral-untruth-4811@gregkh>
+ <20250807051533.GG476609@black.igk.intel.com>
+ <2025080758-supervise-craftily-9b7f@gregkh>
+ <17ed42fe-9d8d-46da-8434-f508ec5932fa@kernel.org>
+ <20250808044538.GK476609@black.igk.intel.com>
+ <2025080822-cardboard-aloha-3c5d@gregkh>
+ <20250808091313.GN476609@black.igk.intel.com>
+ <2025080832-poker-rectal-0895@gregkh>
+ <20250811045307.GP476609@black.igk.intel.com>
+ <20250811052555.GQ476609@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [usb-storage] [PATCH 1/3] usb: storage: realtek_cr: Improve
- function parameter data types
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Thorsten Blum <thorsten.blum@linux.dev>
-In-Reply-To: <a6deb8d0-dc8e-4d4a-94d2-ed2617091eef@rowland.harvard.edu>
-Date: Wed, 13 Aug 2025 17:10:10 +0200
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-usb@vger.kernel.org,
- usb-storage@lists.one-eyed-alien.net,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <E3437C91-EF05-4EB2-8998-10D599ED3AAD@linux.dev>
-References: <20250813101249.158270-2-thorsten.blum@linux.dev>
- <a6deb8d0-dc8e-4d4a-94d2-ed2617091eef@rowland.harvard.edu>
-To: Alan Stern <stern@rowland.harvard.edu>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250811052555.GQ476609@black.igk.intel.com>
 
-On 13. Aug 2025, at 15:59, Alan Stern wrote:
-> I just looked through the original source file.  What about 
-> rts51x_bulk_transport_special()?  Shouldn't its buf_len parameter also 
-> be unsigned?
+On Mon, Aug 11, 2025 at 07:25:55AM +0200, Mika Westerberg wrote:
+> On Mon, Aug 11, 2025 at 06:53:07AM +0200, Mika Westerberg wrote:
+> > On Fri, Aug 08, 2025 at 04:13:28PM +0100, Greg KH wrote:
+> > > > 0004 USB4
+> > > > 
+> > > > sounds good to me. In USB4 there is no "root hub". It's called host router
+> > > > (but we do have device routers that are called USB4 hubs for added
+> > > > confusion ;-).
+> > > > 
+> > > > But I'm fine with other numbers too, does not matter if you want to save it
+> > > > for some future USB variant.
+> > > 
+> > > Ok, use 0004 for this.  But what should I use for the text string here
+> > > in the usb.ids file?
+> > 
+> > Thanks! I'll cook up a patch changing these.
+> > 
+> > I don't think it should be in usb.ids because it is not visible anywhere
+> > except over USB4 link (between hosts). You don't see this through USB 2.x
+> > or 3.x.
 > 
-> For that matter, what about cmd_len in both routines?
+> Of course for documentation purposes it could be:
 > 
-> And have you checked the corresponding values in all the other 
-> usb-storage subdrivers?
+>     0004 Linux USB4 Connection Manager
 > 
-> As you can see, worrying about the difference between signed and 
-> unsigned values, when it doesn't really matter, quickly leads to a 
-> morass.
 
-There are many other instances throughout the kernel where types could
-be improved, which is why I originally combined this with the if check
-change and limited the data type changes to that scope. Feel free to
-skip this one, as it might not be worthwhile as a standalone patch.
+Now updated, thanks!
 
-Thanks,
-Thorsten
-
+greg k-h
 
