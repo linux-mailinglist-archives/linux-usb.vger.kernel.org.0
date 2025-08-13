@@ -1,55 +1,53 @@
-Return-Path: <linux-usb+bounces-26803-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26804-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 962E8B24C39
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 16:43:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB9DDB24C4E
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 16:47:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF1EF16F780
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 14:39:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A6E41BC0231
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 14:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CCBC1DE8A0;
-	Wed, 13 Aug 2025 14:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443691E2858;
+	Wed, 13 Aug 2025 14:43:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qm6K/qJP"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="sqSaQUSV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19DD1A2C06;
-	Wed, 13 Aug 2025 14:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7CE3C33
+	for <linux-usb@vger.kernel.org>; Wed, 13 Aug 2025 14:43:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755095982; cv=none; b=jwgKunhE8sXl712G+Iqq2kCKx/Qx5avcSDez/iufG/5c16i3lmH6H7A10mtQgKqjok2xiSzKrx/7C+6ZCMGIWSKREr+iwg+ztHkb/rY+tt6urI0rGiZjDQmNAEQl8Bi+qAmWSWAhXoj2AXU5I6whvZOBynv3XxRWZpKOiLdY9mE=
+	t=1755096188; cv=none; b=CwqhbBtDfnbVQ6Wzdg1Kskxl5/NgYs4w6QjQJ/DOjJIkOsqySYmi0XAqyJpsi6c1nR6BAO+vXDfCB+XJTIzZ2L3r81A1Xd/+Du7e3I8Itr3CasWHePty5t1crj/g71dRVv/5upJ5yQUwu+Lkrn/0hE6q6lJTOY2Ma9WWtL6pZcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755095982; c=relaxed/simple;
-	bh=1DxJ0yXU34ckoh7vdyqg5tNuqTpL7aVDJ2gqkAAqqA0=;
+	s=arc-20240116; t=1755096188; c=relaxed/simple;
+	bh=bQjmSg2uvnWJteEqi5cJX6ObQmiWkm8nUb4T0Rm9zb8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bxb6awC0lW7owCxsBJHLmCAwCONDTECDME07EyfJnBY8NkJjnIF4ZWg1/5gJNLc1Kh+secCDuiAH92z1qNIabGSFrMVe7RsiZsCSCZi63RSYvtGUaUSGfnPW6Uxp2NmfHnnEZpmElNrFF79lQFJKTB0b70PjqToaJLdpuggutSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Qm6K/qJP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C04CAC4CEEB;
-	Wed, 13 Aug 2025 14:39:41 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MiqEveaN2NgAsnLoGr9+iLT6LyI+MAKYyqpQtr7jlexJEEiZ97/l4QzkrO1vDNProt6VeyiZHXyV26qX5ebeSKAmlPp/uj9Ok/agzAD7y3S5eL/Qf1WEdT8JTL7+Kcif2emngRQ5oXwnEeb/9fuMgxGqzYE0RC+T2jR2DjDTD6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=sqSaQUSV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F534C4CEEB;
+	Wed, 13 Aug 2025 14:43:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755095982;
-	bh=1DxJ0yXU34ckoh7vdyqg5tNuqTpL7aVDJ2gqkAAqqA0=;
+	s=korg; t=1755096188;
+	bh=bQjmSg2uvnWJteEqi5cJX6ObQmiWkm8nUb4T0Rm9zb8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Qm6K/qJPbB3c8GG+i0EDFaWqK8v/gAhORkqiMgo4eL9IFi8kY/beZpAwST+NmiW7u
-	 0KeeHeORw1HjcpnX/8VId1TMGq3AiA/3+MtjF6NyrOoaaR+yMdmwSw+F2lFGMNvt8a
-	 cdYs/BYoZNWczl2FSHIruuo2ErkTFYPyKUBG3FeI=
-Date: Wed, 13 Aug 2025 16:39:39 +0200
+	b=sqSaQUSVPsD+5J8SRkzoT0N25jq/YDM018e6r545se4WvSaRT19cjgr86CIAJzfz9
+	 r1yggPW5VpFI6YNRisKpjaxDHheaIPEmox34N1MMYw6QGt6KqKfCDJCMs2v/ydH69Y
+	 qTf0/3OB0BAGX8VoILtC1k7TriaL7r8SQ2DdupHE=
+Date: Wed, 13 Aug 2025 16:43:05 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: Alan Stern <stern@rowland.harvard.edu>, wwang <wei_wang@realsil.com.cn>,
-	stable@vger.kernel.org, Greg Kroah-Hartman <gregkh@suse.de>,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] usb: storage: realtek_cr: Use correct byte order for
- bcs->Residue
-Message-ID: <2025081358-posted-ritzy-bd3f@gregkh>
-References: <20250813101249.158270-2-thorsten.blum@linux.dev>
- <20250813101249.158270-6-thorsten.blum@linux.dev>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>,
+	Oliver Neukum <oneukum@suse.com>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH 1/1] USB: Check no positive return values from
+ pm_runtime_resume_and_get()
+Message-ID: <2025081330-droplet-napping-6843@gregkh>
+References: <20250811062403.2116464-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,23 +56,20 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250813101249.158270-6-thorsten.blum@linux.dev>
+In-Reply-To: <20250811062403.2116464-1-sakari.ailus@linux.intel.com>
 
-On Wed, Aug 13, 2025 at 12:12:51PM +0200, Thorsten Blum wrote:
-> Since 'bcs->Residue' has the data type '__le32', we must convert it to
-> the correct byte order of the CPU using this driver when assigning it to
-> the local variable 'residue'.
+On Mon, Aug 11, 2025 at 09:24:03AM +0300, Sakari Ailus wrote:
+> pm_runtime_resume_and_get() always returns a negative error code or zero;
+> there's no need to check for positive values such as returned by
+> pm_runtime_get_sync(). Simply drop the check.
 > 
+> Fixes: 7626c52b6b46 ("usb: usb_autopm_get_interface use modern helper")
 > Cc: stable@vger.kernel.org
 
-When you have a bugfix, don't put it last in the patch series, as that
-doesn't make much sense if you want to backport it anywhere, like you
-are asking to do here.
+If there is no need for this check, why does this need to be backported
+to stable kernels?
 
-Please just send this as a separate patch, and do the cleanups in a
-different series.
-
-thanks,
+confused,
 
 greg k-h
 
