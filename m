@@ -1,116 +1,126 @@
-Return-Path: <linux-usb+bounces-26805-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26806-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54999B24C85
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 16:54:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34360B24C7D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 16:52:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0785D16A0CD
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 14:50:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FFF7188CA4C
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 14:50:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B912EBDC1;
-	Wed, 13 Aug 2025 14:50:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC4A2EACEB;
+	Wed, 13 Aug 2025 14:50:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cNuQsrcH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gakrKsDA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9D32D7395;
-	Wed, 13 Aug 2025 14:50:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5FC2EE296;
+	Wed, 13 Aug 2025 14:50:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755096602; cv=none; b=ls+Fux2/S4P5WmxJU4bHocoVeCifinZDXkeZ0G5Eq3rljlhniv2HuosQqsG2YBgW8HN85JEsCARx3fgYesSRlePpQdst9YqpqU/yC51/tb6aWKJYkRp9qe2YBB/fUGWiOKsLeLGWaPWawpGWelnYVHFnyAEggDlCCDmlgr82d/c=
+	t=1755096608; cv=none; b=rKT1quOSZ69lCbPKmDFGeW4kLLE5xXMVfbzUDo1yFY4z6h0W6M0QGPF67BZQ/oohFYpJTXm1WwKfz59fSVbx4sg/5XyLXTnF9JJX4jR3xAan7o4dU5zTePHb2VTzDopN+4jE0PfH8yY9UNc2HeGaAAkMXzkQt4dX/sKfOx2x+p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755096602; c=relaxed/simple;
-	bh=IKd79XSfYGYNJK3qu4xBaxWtMjaCoeER7z8B0Tnv+34=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jikviEPKKdLabEcQBUY31SryDouaBDqQEtAATLsLrEsUxhvN5PYszmqAbOTp+hiB/vQJ3bPmh5PRIrVIZfipzzyPgBJ+6wPbojGg16kSYiNnAgl6csj7gyA5SPVbEl2m/ULsfZTiE+yzAGtt9frTmgpPub6NrkrKez0v8KK9kl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cNuQsrcH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55D9C4CEEB;
-	Wed, 13 Aug 2025 14:50:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755096601;
-	bh=IKd79XSfYGYNJK3qu4xBaxWtMjaCoeER7z8B0Tnv+34=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cNuQsrcHD5VGQ+uByKxbvwmEZyCgKCmWumBJDT0EGv2CiEyL2RVSFLIM385uIr8wm
-	 pD0TB2dOWQ5I0WXMZ4q6Oj+EkJfcuuiwxrw+Ji1ZpfFb40sP2hEinKXJoxHRGicKD+
-	 2cj+PlTRIiVjqmywuneewZPQT7ExldINaqUH5iJU=
-Date: Wed, 13 Aug 2025 16:49:57 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: mathias.nyman@intel.com, hannelotta@gmail.com,
-	zijun.hu@oss.qualcomm.com, xu.yang_2@nxp.com,
-	stern@rowland.harvard.edu, andriy.shevchenko@linux.intel.com,
-	ben@decadent.org.uk, quic_wcheng@quicinc.com,
-	krzysztof.kozlowski@linaro.org, dh10.jung@samsung.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v15 2/4] usb: offload: add apis for offload usage tracking
-Message-ID: <2025081326-guileless-lego-ec59@gregkh>
-References: <20250801034004.3314737-1-guanyulin@google.com>
- <20250801034004.3314737-3-guanyulin@google.com>
+	s=arc-20240116; t=1755096608; c=relaxed/simple;
+	bh=kiPbq2yuers8ONVE4vELV/HFIzjx8z2LBCOCrgs/3mw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gI4M1sfmMD/7yEx3dEA4/dB0Fjety6meQ4xCcUr+Vhohq6kyV4MD3h0OyaIjlME4dn6QEsCh0V4FOMemxxHHRlUV07Mj1GFWEa6yohbMb3TSbtcBGYOACJ8nPDM3LNjw+tLaq5qgfL2kuqZJY7pUgrdVOjrEoTp2n39iShTr+HE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gakrKsDA; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55b978c61acso6543411e87.2;
+        Wed, 13 Aug 2025 07:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755096605; x=1755701405; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nIKXLEPNlesB2U05hQtb6a2B4R7/fXq7kK7C7dR2GO0=;
+        b=gakrKsDA5KfWoP7gPUVtwZzvQyNTX/taD90j7ITkTBaLNFdpa2vO1ztVHco6I0iAex
+         pHnQM0yWWsqsf+F3PSBQB0vAvU7pSzC6KRszYQUdaiAee4L/uARljP8GG9QzOqrGsuVA
+         1OpA2WBHUAfBX+o0hYEK6v7kSTujFntsKBK5kqriHhoqIWOKii7YWAop9lnPqwmtCvfT
+         Ypk/J2AXKlwRquZxfxery4MdJJqYqaZoC0n8VpIqXsnQ+3R4hRohzpZTcorTDPNjtP09
+         mq4KlrkOeh4b7OHpgXzNm0IgHkKH+pnT01tMYeQviFnlL46stjZIre+w12YKkGFAwh3J
+         E+zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755096605; x=1755701405;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nIKXLEPNlesB2U05hQtb6a2B4R7/fXq7kK7C7dR2GO0=;
+        b=ArLR7qlW7mOyfdLTdQVYpsYY62iPRQNuRwSpwSH33XOabrxGkQ5bNmYYaFoPup/wrU
+         cC1fwkQta+kjuHfTNS0pSJczPFUu9TQjr85fn1nhRUdRteXyjAoNKNgDV5Sn0xgaHE/r
+         2kc502Msnm213RE2NRYEyHrUD1Y4Xt1ifk9fqqB+4/QNbJCwq6nZWpvrtWtzIOxCJpSn
+         LSyHnPxzoQgt0xMVkgWmS48cHJSdUA6Y4hvht3WahU1B+hfDWxUHXrLbY+Svf75A1vsh
+         CcWfUay3s05wErveVTUbOH65UrHVitRJJ2vwDBRLmc0KMJ3GGzUfmzrWftXBPiqtH/7a
+         fvmw==
+X-Forwarded-Encrypted: i=1; AJvYcCWAOx6N7Mbrgedb5gPwZRVustHWPd1oo4eNc6zpLUx7C0GecIpbdMMuDQJp2pbJihV1FFByt8dvhGwfWw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaGNAirQtI0PEMn20UZm0WzJHweQd5f3egRtOIBf5dlLqFOoVe
+	DOCTFyq6EmcI6CnaR5tial5BJer5CvGNa4/YsBZLzIbi+PcQl88eQiuM
+X-Gm-Gg: ASbGncum+VeFaqNnFQZqRr3btKpDWfrkbkJu/kTi9YxilTMf8OE4/pdLDfDFedjJCL8
+	5EB5SD9Z4zKY2pXXDMAFB3THtaWGlJ5DJ90j7LDh/tGGX4T+bU7sUV7ZeJ8MjpJE3f2LEJ6/95D
+	BUrHL4KzSA+6C/lXdltEvg1hLd40GB4cyZvRKPjM4bBqjpVky7ZiT4CEC2eGtaOYzfvPS/Z3ZCy
+	JvJNn3OQBZiJZbhH428z8i74WOXf/E4EKtLWUTfIoZ6hJWlYmG157/rwp4uZg9kiYNTAQy3ZC7M
+	AF7ofSFub/AN5VscImUaPdAqRbsVh/he241xQHvKx1twNbo/2MsvEsHZfijFhwAyKzqD0gg3PP4
+	3YPgNeVky9T2EZhPEiB5s6DWLa8vWVKZ8w+g=
+X-Google-Smtp-Source: AGHT+IGDkmKuyXD+17t2o5yhmvXYNwfI25ZFwrNfuDfPmZcgv5OFoiur0nQUWZUmsCDW5EgSL0XRIw==
+X-Received: by 2002:a05:6512:b9c:b0:554:f76a:bac2 with SMTP id 2adb3069b0e04-55ce036cde4mr1105461e87.17.1755096604610;
+        Wed, 13 Aug 2025 07:50:04 -0700 (PDT)
+Received: from foxbook (bfd208.neoplus.adsl.tpnet.pl. [83.28.41.208])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55b889a03acsm5279770e87.51.2025.08.13.07.50.02
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 13 Aug 2025 07:50:03 -0700 (PDT)
+Date: Wed, 13 Aug 2025 16:49:58 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+ gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
+ hdegoede@redhat.com, Thinh.Nguyen@synopsys.com, Amardeep Rai
+ <amardeep.rai@intel.com>, Kannappan R <r.kannappan@intel.com>, Mathias
+ Nyman <mathias.nyman@linux.intel.com>, Alan Stern
+ <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v4 3/4] USB: Add a function to obtain USB version
+ independent maximum bpi value
+Message-ID: <20250813164958.6c6c34a4@foxbook>
+In-Reply-To: <20250812132445.3185026-4-sakari.ailus@linux.intel.com>
+References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
+	<20250812132445.3185026-4-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250801034004.3314737-3-guanyulin@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 01, 2025 at 03:39:31AM +0000, Guan-Yu Lin wrote:
-> Introduce offload_usage and corresponding apis to track offload usage
-> on each USB device. Offload denotes that there is another co-processor
-> accessing the USB device via the same USB host controller. To optimize
-> power usage, it's essential to monitor whether the USB device is
-> actively used by other co-processor. This information is vital when
-> determining if a USB device can be safely suspended during system power
-> state transitions.
+On Tue, 12 Aug 2025 16:24:44 +0300, Sakari Ailus wrote:
+> From: "Rai, Amardeep" <amardeep.rai@intel.com>
 > 
-> Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
-> ---
->  drivers/usb/core/Kconfig   |  10 +++
->  drivers/usb/core/Makefile  |   1 +
->  drivers/usb/core/offload.c | 136 +++++++++++++++++++++++++++++++++++++
->  drivers/usb/core/usb.c     |   1 +
->  include/linux/usb.h        |  18 +++++
->  5 files changed, 166 insertions(+)
->  create mode 100644 drivers/usb/core/offload.c
+> Add usb_endpoint_max_isoc_bpi() to obtain maximum bytes per interval for
+> isochronous endpoints in a USB version independent way.
 > 
-> diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
-> index 58e3ca7e4793..d5d38657f929 100644
-> --- a/drivers/usb/core/Kconfig
-> +++ b/drivers/usb/core/Kconfig
-> @@ -143,3 +143,13 @@ config USB_DEFAULT_AUTHORIZATION_MODE
->  	  ACPI selecting value 2 is analogous to selecting value 0.
->  
->  	  If unsure, keep the default value.
-> +
-> +config USB_OFFLOAD
-> +	bool "Enable USB offload feature"
+> Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Hans de Goede <hansg@kernel.org>
 
-I'm confused, we already have a "USB offload feature" that went into the
-last kernel release, why do we need a separate config option for this as
-well?  Shouldn't this code only get built if the drivers that need it
-select it automatically?  Forcing distros to configure this isn't
-generally a good idea if at all possible.
+Hi,
 
+This is practically identical to xhci_get_max_esit_payload().
 
-> +	depends on USB
-> +	depends on USB_XHCI_SIDEBAND_SUSPEND
-> +	help
-> +	  Offload denotes that there is another co-processor accessing the
-> +	  USB device via the same USB host controller, creating the
-> +	  "offloaded USB transfers". Say Y to allow offloaded USB
-> +	  transfers during system sleep (Suspend-to-RAM).
+Couldn't xhci also use this helper now, to reduce duplication and
+ensure that it has the same idea of ESIT payload as class drivers?
 
-Especially because all "desktops" do not want this code selected, so
-having it in all distros feels like a waste to me.
+Note that this here would need to also accept interrupt EPs:
+> +{
+> +	if (usb_endpoint_type(&ep->desc) != USB_ENDPOINT_XFER_ISOC)
+> +		return 0;
 
-thanks,
-
-greg k-h
+Regards,
+Michal
 
