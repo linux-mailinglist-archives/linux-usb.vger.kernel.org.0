@@ -1,156 +1,78 @@
-Return-Path: <linux-usb+bounces-26820-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26821-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AC38B2579A
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 01:32:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3018B257A7
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 01:36:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 918E03BF633
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 23:32:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 429FB3AD074
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 23:36:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 726CE2F60D4;
-	Wed, 13 Aug 2025 23:32:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588302980A8;
+	Wed, 13 Aug 2025 23:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eFT9La8q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZ73VgqP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8281F9475;
-	Wed, 13 Aug 2025 23:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA622F60A8;
+	Wed, 13 Aug 2025 23:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755127941; cv=none; b=UGnlNKgMTOWooJsIp6tgL/NhxBFos8GlkMDQ1Hvz8C39hwPyQQqDIas0wpO63qpT8cyPHuKDo5UZGI3+HfZU1TQnQrH3i1BDhcKvMcaBRZ5jLY2Znmc4iCdE/xYTn+Q78sESPBhsNvtx+CO6vESCDiKyBukhRrOE+3fAf78RU8E=
+	t=1755128199; cv=none; b=Mg0SgeX1W8P94zJe8038oUZSrJrAtFyqwVe8QOk3yLqR578PwQIKonzb9ZEPn23SiOAwXpoKTJT1Hu04cYDWoEldwfn20c6ZmRLNFWiMfM5ovXz1cvTUUA8GOdZsgphAts/ABnxQDOWJYv10pI29wxqI4/drMXyuXBS3JfwASZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755127941; c=relaxed/simple;
-	bh=IPZD2yebRuj/uMok82uFFvp8FHqpgQcFGQjagfqpNkA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=akjAh1pkI/f5pWf556dv0i+WsiO7ddnb87eRBnu3kgsxxtpUj4TXbKopLaUGVx9wAQuyP7JQ7dxrHtoC3bg/74rUTrvX4vt6pq6pekECioon2SVeeJSx8RsFpwvPOrgomQy+mtNpwBVdGkN5tKhPc7wreAHFP72rrhc/vwri4MA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eFT9La8q; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-244581d9866so2761295ad.2;
-        Wed, 13 Aug 2025 16:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755127938; x=1755732738; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DhsrtDmy6BVYWayk9pIuLqmtPvT+43DQ3nZ2+dNEhvc=;
-        b=eFT9La8qg+L0fg+k1G4jbH4UrNtm8S3QZFHlOZguvLjtGW8n2neqEoviCrXOjd5eZv
-         Tya/Gl2/NXh1ZX+ppRsUTthWOqLLaRu16ECpc30JcClsf82vlflxTBg4luucLz5BzoYo
-         rIfoOJmpyhItUauGeROUbTZpz38fCdftOgW0ObtOfFtDLItswykcslIITNBiaASst501
-         VG0k+BujArUPN1jfeptNxQyiFp8qxjYNN86HbpzjTeIcxNfHo7HYgB9BE3lkcOPRTe2f
-         cwc4a93Kma8uUt3oNDVrx9Vw7Kq+fM5kQyAthntrhDcM+Y/2iYVS0T51gKyoW1XZPAoF
-         7TnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755127938; x=1755732738;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DhsrtDmy6BVYWayk9pIuLqmtPvT+43DQ3nZ2+dNEhvc=;
-        b=u8n4SdvnAXtILOwFlCt6hBgy7liHixvbBRhq1qNOK08ZVXKJkzuHLKgGmqoaUToGzU
-         btiKNjDEBk/150ZuHGd5h2QeA5nkg6KC9VKAtROvinXi623tiapaT2f0HzQLG2TCTzqF
-         h4LhqoBVFj4HNPAQnlv49JPTnopQSbBSBYRJ5t2eGK0oGGB/B3BRyYMp5TSzZsX5iv7m
-         8EkUmTbRJNaKeBbTi5zjwXwRrYZM8mQAT03aCA1K4HvDFnvZXmzkZwdc3obI6EfChW4m
-         y5gqVX3tBeO7QaCPbrJJGc4RpMDmhFppYmPBxGv2CCGRR/EFEJtHodkiCic+V0vJaCot
-         B2kQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV/C/f9cDAtlkXW7vdssellOHDG1jDq44CDPZAjdXq32mu8e6/lBxSR6WoZqmZpNnB0e8bm+3CnTT69fC0=@vger.kernel.org, AJvYcCV/Gf0D18v0CxP/KOnnF7kI04lFqMOGjrHnMtdMwuWi4NwdiHaN1kGWTgwce9qflDNsEsIVGIlmDfbl@vger.kernel.org, AJvYcCVelaQMherZwCMyUOVcAaV8zRMoJN5hY7xecnfnyJJcVMHlQE5j9PhGjdHBEh/zZPTTgBi7TAqU@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTUYlHOBADhQGUWwuEiLNriC/1YnIfQ414t0mVl6KCtNxVfR/L
-	IwIEptyaO23dd7NzhVsMPLXH8l2KjZBdp793Pq0ohfXxA7EQCptF5tbP
-X-Gm-Gg: ASbGncuaMII66fIofbfhJoJMq3Y166ipM0Ok7BWMZMIhRg2ub0zg/RvGX+ObM94qS6r
-	dsjwZ3hPE82qQ0a+RiVGTY90Ewyv4L2rshN+fXFPprwjhtEsicg/SjpbD9lSy2Zezy6DYSHBcAB
-	UK5dETsIm31JVP/aYV4rNl1PZYBCE9eKuF8HRyQWJ6Bsh8fOvfvHrsNLU+6VBbulK7DX4/xO+SE
-	gJXsDChxA6lmLjJoEJ1pEPl3mk/dPf0TeIrqGAkjMJy43NTW8afzn2lqQKC5/ww2Hq6oFJjFT8U
-	IvApAjlzXGKOZefYl79X/nFv2t9SCuRd4YDmeLNkY66Dj7/ZrxjhRmm3/+rPFhS2V6mF9XRpLTx
-	5gq5zg6s05JaO7tGalBg/YBAD0ihBNjlliXawyavtkvF5W2w9wp4W
-X-Google-Smtp-Source: AGHT+IFIC2SD7jfDV+NnFqnL7JS06OvdUNGKsm3ogVSquVWJS5AdJuRgUW/FUpYLFzvsqZ0kjdzGAA==
-X-Received: by 2002:a17:903:b8f:b0:242:9d61:2b60 with SMTP id d9443c01a7336-244584b467cmr12353115ad.6.1755127938319;
-        Wed, 13 Aug 2025 16:32:18 -0700 (PDT)
-Received: from BM5220 (118-232-8-190.dynamic.kbronet.com.tw. [118.232.8.190])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-241d1f0e945sm335665145ad.56.2025.08.13.16.32.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Aug 2025 16:32:18 -0700 (PDT)
-From: Zenm Chen <zenmchen@gmail.com>
-To: giorgitchankvetadze1997@gmail.com
-Cc: gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	pkshih@realtek.com,
-	rtl8821cerfe2@gmail.com,
-	stable@vger.kernel.org,
-	stern@rowland.harvard.edu,
-	usb-storage@lists.one-eyed-alien.net,
-	usbwifi2024@gmail.com,
-	zenmchen@gmail.com
-Subject: Re: [PATCH] USB: storage: Ignore driver CD mode for Realtek multi-mode Wi-Fi dongles
-Date: Thu, 14 Aug 2025 07:32:13 +0800
-Message-ID: <20250813233214.5069-1-zenmchen@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <A54117AB-2BFD-4864-AEA3-4F1AF977A869@gmail.com>
-References: <A54117AB-2BFD-4864-AEA3-4F1AF977A869@gmail.com>
+	s=arc-20240116; t=1755128199; c=relaxed/simple;
+	bh=iIlYZ2rFZRhKoq1MEczmfzDZ3sh8XaeMe0QhC+qV2yg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HiAonhymyeJUm6+z/H7um6V4h/83XNe2BXzCIPzCGp6R2z2zWr2TppOB/R8lmoqnclb26lu/d3rXujDwhp099hT+1MVS0BLKWmjt9YSjg4QPUDyRCb6rdXLjKSXLCmyk4ZVrxe5yU0W8ZMpee3PfvQE8WDTCvDYqUzMPqDhG82c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZ73VgqP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F238EC4CEEB;
+	Wed, 13 Aug 2025 23:36:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755128197;
+	bh=iIlYZ2rFZRhKoq1MEczmfzDZ3sh8XaeMe0QhC+qV2yg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lZ73VgqPHBYXfJfl3GpSbhjQhFIatfnlyCPy4jchQyth3XBY5XgvVlEV23bjPtPAT
+	 EehO51xJ5Byid398hSV78PEkiZnyM10mk8lBfo13aUZg4TNVmW+189/cOG1qx96udZ
+	 Z9iPVzXjjLVz/3QLXYp6QRgG3ZNqACgXrdvJmw0jqCZ4aunG9pJNPwJQy29V94EFNY
+	 L6SOSIJaN9j/DDzkBEvZhVuVt4fCSs0ZT4SYVy/R/Yc44AYstz0GpwnHXHVO1pmDxU
+	 DzveLSKDltyZ+khOF5xxyfCF9a2eqwPS2eVFs5Y0QdKnYfaTCSBGo7VdPzhqDdaaWD
+	 KylZbSoMhQqwQ==
+Date: Wed, 13 Aug 2025 16:36:36 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: andrew@lunn.ch, o.rempel@pengutronix.de
+Cc: Xu Yang <xu.yang_2@nxp.com>, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, max.schulze@online.de, khalasa@piap.pl,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org, imx@lists.linux.dev
+Subject: Re: [PATCH v2] net: usb: asix_devices: add phy_mask for ax88772
+ mdio bus
+Message-ID: <20250813163636.21b5a3f5@kernel.org>
+In-Reply-To: <20250811092931.860333-1-xu.yang_2@nxp.com>
+References: <20250811092931.860333-1-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Giorgi <giorgitchankvetadze1997@gmail.com> 於 2025年8月14日 週四 上午2:07寫道：
->
-> Maybe we could only add US_FL_IGNORE_DEVICE for the exact Realtek-based models (Mercury MW310UH, D-Link AX9U, etc.) that fail with usb_modeswitch.
->
-> This avoids disabling access to the emulated CD for unrelated devices.
+On Mon, 11 Aug 2025 17:29:31 +0800 Xu Yang wrote:
+> Without setting phy_mask for ax88772 mdio bus, current driver may create
+> at most 32 mdio phy devices with phy address range from 0x00 ~ 0x1f.
+> DLink DUB-E100 H/W Ver B1 is such a device. However, only one main phy
+> device will bind to net phy driver. This is creating issue during system
+> suspend/resume since phy_polling_mode() in phy_state_machine() will
+> directly deference member of phydev->drv for non-main phy devices. Then
+> NULL pointer dereference issue will occur. Due to only external phy or
+> internal phy is necessary, add phy_mask for ax88772 mdio bus to workarnoud
+> the issue.
 
-All the Realtek multi-mode Wi-Fi dongles share these two ID (0bda:1a2b and 0bda:a192), so I don't know how to achieve this. 
-
->
->
-> On August 13, 2025 9:53:12 PM GMT+04:00, Zenm Chen <zenmchen@gmail.com> wrote:
->>
->> Alan Stern <stern@rowland.harvard.edu> 於 2025年8月14日 週四 上午12:58寫道：
->>>
->>>
->>>  On Thu, Aug 14, 2025 at 12:24:15AM +0800, Zenm Chen wrote:
->>>>
->>>> Many Realtek USB Wi-Fi dongles released in recent years have two modes:
->>>> one is driver CD mode which has Windows driver onboard, another one is
->>>> Wi-Fi mode. Add the US_FL_IGNORE_DEVICE quirk for these multi-mode devices.
->>>> Otherwise, usb_modeswitch may fail to switch them to Wi-Fi mode.
->>>
->>>
->>>  There are several other entries like this already in the unusual_devs.h
->>>  file.  But I wonder if we really still need them.  Shouldn't the
->>>  usb_modeswitch program be smart enough by now to know how to handle
->>>  these things?
->>
->>
->> Hi Alan,
->>
->> Thanks for your review and reply.
->>
->> Without this patch applied, usb_modeswitch cannot switch my Mercury MW310UH
->> into Wi-Fi mode [1]. I also ran into a similar problem like [2] with D-Link
->> AX9U, so I believe this patch is needed.
->>
->>>
->>>  In theory, someone might want to access the Windows driver on the
->>>  emulated CD.  With this quirk, they wouldn't be able to.
->>>
->>
->> Actually an emulated CD doesn't appear when I insert these 2 Wi-Fi dongles into
->> my Linux PC, so users cannot access that Windows driver even if this patch is not
->> applied.
->>
->>> Alan Stern
->>
->>
->> [1] https://drive.google.com/file/d/1YfWUTxKnvSeu1egMSwcF-memu3Kis8Mg/view?usp=drive_link
->>
->> [2] https://github.com/morrownr/rtw89/issues/10
->>
+Andrew, Oleksij, this looks like v2 of
+https://lore.kernel.org/all/20250806082931.3289134-1-xu.yang_2@nxp.com/
+are you willing to venture a Review tag here ? :)
 
