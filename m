@@ -1,100 +1,129 @@
-Return-Path: <linux-usb+bounces-26783-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26784-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 868A7B24121
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 08:09:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D35EEB2413A
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 08:16:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD99C16601A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 06:08:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EEE9B7ABC45
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 06:14:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C7C12C08A2;
-	Wed, 13 Aug 2025 06:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00562C1598;
+	Wed, 13 Aug 2025 06:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bdYEq6XR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MnbS1CC0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A782C033C
-	for <linux-usb@vger.kernel.org>; Wed, 13 Aug 2025 06:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C293597B;
+	Wed, 13 Aug 2025 06:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755065325; cv=none; b=FLX5XKxaPh1qQ6Qim+KLW+286clhae40XVAdt2KUOcpeTdO24JttZk3LPJEA2ay6Wy4Puf94H3gbyDKwts8nhnBfnE1ofBN1MXoS0ob0KCTYN9HGuqpyOQop8hmPyKlBpHhtWAhu7EJ5XZSKKywEI+cL74gZX6MgTCa1mPLfeIY=
+	t=1755065770; cv=none; b=YOhVcGvmk9mKFA5wwLQ6br2ux7tfX+x0mAERJYvvhjpOKqRA4xB+ufQiwQb7J3mYAN9hrRiQpEDRtV5bPnQYbEct/gqZjjwCJ+h7FRvewC5bazYfsVrGSHcAJnqQyV1mRCr50w/dLWODUMWrNOQX5guM0T35+afx2BtpXe867/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755065325; c=relaxed/simple;
-	bh=8vJMrIe8Twc1kQBCe/kluPY4gR5JSrlG7m9TRQJan98=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=a7XZBT0wAzhxwne3erodZlYUrQ9FfAi4vitFF4+7QldyRVwBMNVOLG0s3fdIeJLQ7OOa5sZ6R3hmdkr/7U9b+qlD5BWKhrt4daLYCdtlGThsF9w/QNk/WD4RwFArSBxc7wytNFFxsDUJXEDEXgz+Kr3aUnUz0HeESbBH00QvOxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bdYEq6XR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E3977C4CEED
-	for <linux-usb@vger.kernel.org>; Wed, 13 Aug 2025 06:08:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755065324;
-	bh=8vJMrIe8Twc1kQBCe/kluPY4gR5JSrlG7m9TRQJan98=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=bdYEq6XRowJ/rtucF9zR2w3ytJ/wu1+CzqYJnJoNKE+Jk85Okj2cUMQMWiVTXgsR2
-	 wvrqGaPB1Oy02MZWUdp+qgE6TtBWyTBaG9vSdngJi8EqiJ3aiULiYCpceWxmln4XHt
-	 rWnsGEU7Hk2f9p0EMcTi4YVXMOBOszt8vH3zc0Sg9GdEKSXimqHcBWgV013ZN22Qrn
-	 oKP0Qr1ywiKU/7m/K7wEk1tWviE9gc1qT3Zhm1IY6RAtuf0Q9tb8I/JvVMwoolzdcb
-	 ErcOsu5/3Eup3eYELhyYh0TzPwTa3uyCqgAUZHoDcZbYuW2TYlBOcujVnH7+MjuChp
-	 ID9HpsxA0cEpw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id CF342C3279F; Wed, 13 Aug 2025 06:08:44 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220284] USB4 / Thunderbolt not working after boot until
- thunderbolt module is reloaded
-Date: Wed, 13 Aug 2025 06:08:44 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: regressions@leemhuis.info
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220284-208809-f7gHADn5AI@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220284-208809@https.bugzilla.kernel.org/>
-References: <bug-220284-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1755065770; c=relaxed/simple;
+	bh=c+TZbzGFvRmXvp8+YzDXRVZQDNo78fe6EUXMrbYg4iM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B2q0LR9n3SyVX1+KFkc0DVZcJFRy7hxJNFXNPLsNbZfxW39t5b4PJno7QBmUd9wOiwd8HR8FLAKMmRgre59eneFs/kdcDbcmxAYSxogQmeKLpHqXcZASw22yIQ1/HslgH6HkALKCgWwhsjYtHjLY0gTC8nHW1acWfspo7t7p3xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MnbS1CC0; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-71bfdb6ff81so45645407b3.2;
+        Tue, 12 Aug 2025 23:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755065767; x=1755670567; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qGHs+XddNJPqC55SFwg8V5Yk+L2d1CEXmOV4NbKbVaI=;
+        b=MnbS1CC0qs+B9S8tj0skMW+uNvj/KiwsepdNNyVV5B4mZCjr0w4bfnvZ09h82OwKQY
+         BiQXf3Tu2fZzQZ7XFdle7hxPERiZqliSpW8KCxmNK2cmkZZcKbC2cV3cJTf2TIjETm69
+         LPy4oVAiiP7egZlyCHgxiLgyUcp47VqvId7hRITeSnGsRzqO9SEidBBw/iHqCC8YIGhN
+         b4N1FmsWIgkQfr06hGX229gOUaI8bAL2SI/EI7H8+HTpeYEtLX6mqgP6Ny+epSFdb0PG
+         /8lLNdDtR8KS9QCbPOixkQD94O/dEEFx3sfSCF+HYjs7+9cYh3LCdQrpj62PdpJxewPO
+         Vfhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755065767; x=1755670567;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qGHs+XddNJPqC55SFwg8V5Yk+L2d1CEXmOV4NbKbVaI=;
+        b=cLDg774c0GxPJRV9pwDxnjwi3wfO0E/zh/WTOq0lZ+jjPArt9zSP0jmOWOX55Ab7pl
+         817qCwZmL7mBbLBhSVdi6wkn7eX1ZBBgE89WBY7JQsPBeGRgJ+iO1QyIoldAMJBPJKfQ
+         1kKe4lrTFp8aOyn9LZ3eSsXGjJXbeV5PDwfeJloC61pJJwp0wHCSs+yMgC4rhucl7DOy
+         4InQgQ+K7BZfuBtS1JyYrWYLNyhKbksXNdeOvngE3fFXB0y1A8JvSbvZsL9u1Gtgtr96
+         dAdY0VYmGydftyN8JjqfY0azi3cbzqdPpOwUkIg+AHs4eUg/gvbMKQrOef8w+0ytXkHB
+         CVtg==
+X-Forwarded-Encrypted: i=1; AJvYcCUw6kpzxrmFTyQbpvHkFazALb9RqwBKuGCVmGO7BLtWsNWzuDDpfqjhy2ta57RgUNLELoMejJUNVq/7HzK3@vger.kernel.org, AJvYcCVHsCTlcbmG6jsOuw/e0/gIsnhr/rVN+vZ/QtDff3xWZyNV6Evl7HZPtwoY05WDEVdlxY0I0WJOpfWR@vger.kernel.org, AJvYcCWBmFOj9KI7HSS7PGiBKawxsp3keWj0+vRt8YqSsVROtLgy1z68DAY0ZFyz8gA3kG5cnQo7Fq8JivTuNGH8@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfZSIiBddGaBa0wWDR2OTa5Eeb+V9KndW6TKg0USZczUMLYlrS
+	GceX7aC1W3zE6qbHHyHupXBlqn1/R94zYCx5sAk2XCPYDAihqY5OTVGgTNoTrFpNaPtLRbi3YDH
+	MePv26CHiPO2mNfGegBr7VFYG9WL1D+k=
+X-Gm-Gg: ASbGncvsjIyHJL/j1yDUx+/h3nBi5cve0bYa1hLG2MoUa7+Ri9BbUDw7KUri4tCf4gh
+	zbhSgD9dOpvYNaVx/lez9m717XJvBHw4mdMf01y6sLNU9gy5za8Ar4lgAQvkEgUOc8vq4qK5R9h
+	tsqLqv6AmqL871i3zRJZ7cYBSscvTk9Nf0Bqe9KjhbZFK9rS/7c9KupxweV2A1xXN7tFfBZ61cK
+	AjlTw==
+X-Google-Smtp-Source: AGHT+IGvaTDOsSIZvcUhUIprekNfw4eqFtn3SKGv+2RTxiz9DQaG05Rg1F9rAYDGp1NHpAqlRVW3X/RQNstQZ3imKo8=
+X-Received: by 2002:a05:690c:308a:b0:71c:16b7:518e with SMTP id
+ 00721157ae682-71d4e588b36mr25640677b3.28.1755065767619; Tue, 12 Aug 2025
+ 23:16:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250812055542.1588528-1-krishna.kurapati@oss.qualcomm.com> <20250812055542.1588528-4-krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <20250812055542.1588528-4-krishna.kurapati@oss.qualcomm.com>
+From: Peter Chen <hzpeterchen@gmail.com>
+Date: Wed, 13 Aug 2025 14:16:21 +0800
+X-Gm-Features: Ac12FXzHVrNJ22jQgp5TTCQxddFQnye2KLkEtZEXVGLumYDMBYwBKhcv7bn2N3Q
+Message-ID: <CAL411-qmWLJ9vYTc+NHFYymsJ27ryge88nTc71NAnzDa7TrExg@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] usb: xhci: plat: Facilitate using autosuspend for
+ xhci plat devices
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Mathias Nyman <mathias.nyman@intel.com>, 
+	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, linux-arm-msm@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220284
+On Tue, Aug 12, 2025 at 1:58=E2=80=AFPM Krishna Kurapati
+<krishna.kurapati@oss.qualcomm.com> wrote:
+>
+> Allow autosuspend to be used by xhci plat device. For Qualcomm SoCs,
+> when in host mode, it is intended that the controller goes to suspend
+> state to save power and wait for interrupts from connected peripheral
+> to wake it up. This is particularly used in cases where a HID or Audio
+> device is connected. In such scenarios, the usb controller can enter
+> auto suspend and resume action after getting interrupts from the
+> connected device.
+>
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> ---
+>  drivers/usb/host/xhci-plat.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index 5eb51797de32..dd57ffedcaa2 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -171,6 +171,7 @@ int xhci_plat_probe(struct platform_device *pdev, str=
+uct device *sysdev, const s
+>                 return ret;
+>
+>         pm_runtime_set_active(&pdev->dev);
+> +       pm_runtime_use_autosuspend(&pdev->dev);
+>         pm_runtime_enable(&pdev->dev);
+>         pm_runtime_get_noresume(&pdev->dev);
+>
 
-The Linux kernel's regression tracker (Thorsten Leemhuis) (regressions@leem=
-huis.info) changed:
+There is an xhci quirk XHCI_DEFAULT_PM_RUNTIME_ALLOW for it, try to use it.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |regressions@leemhuis.info
-
---- Comment #2 from The Linux kernel's regression tracker (Thorsten Leemhui=
-s) (regressions@leemhuis.info) ---
-Does the problem still happen with 6.16? 6.15 will be EOL soon anyway.
-
-[Sorry, this fell through the cracks]
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Peter
 
