@@ -1,98 +1,166 @@
-Return-Path: <linux-usb+bounces-26789-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26790-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD7A0B243C8
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 10:10:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6748AB24510
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 11:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93DC916BC8E
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 08:09:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B18601AA584A
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Aug 2025 09:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE602DE6E3;
-	Wed, 13 Aug 2025 08:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0913A2F0681;
+	Wed, 13 Aug 2025 09:14:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IiehV5dE"
+	dkim=pass (1024-bit key) header.d=nordisch.org header.i=@nordisch.org header.b="ALYPG8CE";
+	dkim=permerror (0-bit key) header.d=nordisch.org header.i=@nordisch.org header.b="DsNCninU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from tengu.nordisch.org (tengu.nordisch.org [138.201.201.57])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727362D12F7
-	for <linux-usb@vger.kernel.org>; Wed, 13 Aug 2025 08:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3ADE2BE03C;
+	Wed, 13 Aug 2025 09:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=138.201.201.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755072571; cv=none; b=TMIqV1fJj3gXx46wz/QWjDywRpqdodf5SMv8Vl/Cjq7YgdaOGJEiSGxFlJU1RiOxOzeKvbbsCECreTpiC7aA0m0WtanS0KRUPlYTb1qDyTxINk//OWdguRzZODoP1XikiyeUV88Tgao7q/54KhmOCek2QcnKTlh8PtSIk1meJts=
+	t=1755076450; cv=none; b=gyV4HMEO39HoMovFC2o3/EgqR+2Yx/xXo4iDze9F9JlipCVFVCgRh/2GOTNiIqD/LQZDAFHZUeT7xxx/fYBKfwMUM3PJw2mjsLj3HC6MMVo+3zVVfUywU9jWE7nLkUoD+rL7GbCoLxkJXteuF/qPu2ylHqOC0zjDVKy8w4E00ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755072571; c=relaxed/simple;
-	bh=HGuGiN0JijFF8qWsK/N8qps7eBwpo4ESYxa8RzEmM8c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hFmO5qkP+q/nq4/GkT81hb1MTOhwQn6poQlsx1yTIZVGwQ4mYnglr7DgIpbRT+e0Ra56YeSIdCpm9siETexkvC1LScquXX7WoHRUsn1t9736T5FZjf+cWKCOHYdp9z8LSSJH4YZKp2BF1jxDG/mLPV5BQOY7fz+E3vyz7A+khK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IiehV5dE; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755072569; x=1786608569;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HGuGiN0JijFF8qWsK/N8qps7eBwpo4ESYxa8RzEmM8c=;
-  b=IiehV5dEI1TDyhdsPBwcoK5SRGENICN35uVsvTxFs63NK9q2Jg12L5zz
-   dQvKuzS0z+5uSa24RSKO+JJEza19rqsuToBwBChS2OC2PYvj3DBGurYJJ
-   xvgu3RDpj4JU2DkvvAworMZNVoF5YXG09K3NiH9Y78DIIwroZxqxBXEkg
-   MqgT+Lckf+xU+d9IiHlwoRhBVfbQYgnG5UZNTTbexSGXFO4LRNNLw27EA
-   kdOZeP1zuXJK9jRTy0G4wkAagUSeOFCttTetPllEfEoYgQjV7bN0+rdy/
-   KC0a9xs3z+7xTJH50BGEzyt9PPdypFxAuBwKHyEbgh6ezUKB3mQ+Ckoqy
-   A==;
-X-CSE-ConnectionGUID: lkPdjJsyQH2CusjpKFqN4Q==
-X-CSE-MsgGUID: 1YguYbFcQAezwLBPSk59pg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="68734780"
-X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
-   d="scan'208";a="68734780"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2025 01:09:28 -0700
-X-CSE-ConnectionGUID: QW1HO3C6TDasZFNYXDVd3A==
-X-CSE-MsgGUID: pzTknjAHQ0Gqi/ptuZ/K7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
-   d="scan'208";a="170617672"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa003.jf.intel.com with ESMTP; 13 Aug 2025 01:09:27 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id A8EBD95; Wed, 13 Aug 2025 10:09:25 +0200 (CEST)
-Date: Wed, 13 Aug 2025 10:09:25 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Raju Rangoju <Raju.Rangoju@amd.com>,
-	Mario Limonciello <superm1@kernel.org>,
-	Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] thunderbolt: Use Linux Foundation IDs for XDomain
- discovery
-Message-ID: <20250813080925.GY476609@black.igk.intel.com>
-References: <20250812054710.2910816-1-mika.westerberg@linux.intel.com>
+	s=arc-20240116; t=1755076450; c=relaxed/simple;
+	bh=KjbjAVn3Gb9G9bz5c2OJqKKSt9TVDIEL6NRHOoZeZgs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AHT09Kzz/J/Ez87bCLYSBNBtSypBscH3Sht02b1Tq360PfJmvf/AGr7ySVFC868SZ5cjJ2S5Yg5NFTa67+reb1LWBqfuZs/d8Vi+DbkHd7Mo+jk9hrUExcBMj3pwfZtCrJY+/9VSwdmqeGOdlvuD8uxGyUtjRr5joLJWu4rVIRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nordisch.org; spf=pass smtp.mailfrom=nordisch.org; dkim=pass (1024-bit key) header.d=nordisch.org header.i=@nordisch.org header.b=ALYPG8CE; dkim=permerror (0-bit key) header.d=nordisch.org header.i=@nordisch.org header.b=DsNCninU; arc=none smtp.client-ip=138.201.201.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nordisch.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nordisch.org
+Received: from [192.168.3.6] (fortress.wg.nordisch.org [192.168.3.6])
+	by tengu.nordisch.org (Postfix) with ESMTPSA id 31ECA7B517E;
+	Wed, 13 Aug 2025 11:14:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nordisch.org;
+	s=tengu_rsa; t=1755076445;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9CaejoTVD43Ah3sy14LUZJseEZ4zHH3xUVzztahkh+Y=;
+	b=ALYPG8CE9xQsU+c9vyRvulNIcmOjfvnJxKBMf2yMQu973nXxozheaOCTj5HF3bN8AaNhql
+	mLXt1tKgLLsBOE4OLQF8pOMw0u+QiM/UUdANkg7eQCUFoAULX7OpIAIY3e/Jtt5//nBCFC
+	x0JV6D+S+itD95KEvL7mQJMtfXdhw/M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=nordisch.org;
+	s=tengu_ed25519; t=1755076445;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9CaejoTVD43Ah3sy14LUZJseEZ4zHH3xUVzztahkh+Y=;
+	b=DsNCninU1qPWBkEpb2x0JO0eq7mwdZFBmoek0J+juu4QzMJOKIFIbHaXKg6BZdITq+PSvi
+	aa3eGvfXbgdiBgBQ==
+Message-ID: <746fdb857648d048fd210fb9dc3b27067da71dff.camel@nordisch.org>
+Subject: Re: [PATCH] usb: hub: Don't try to recover devices lost during warm
+ reset.
+From: Marcus =?ISO-8859-1?Q?R=FCckert?= <kernel@nordisch.org>
+To: =?UTF-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Jiri Slaby	
+ <jirislaby@kernel.org>, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, 	stern@rowland.harvard.edu,
+ stable@vger.kernel.org, =?UTF-8?Q?=C5=81ukasz?= Bartosik
+ <ukaszb@chromium.org>, Oliver Neukum <oneukum@suse.com>
+Date: Wed, 13 Aug 2025 11:14:04 +0200
+In-Reply-To: <20250813084252.4dcd1dc5@foxbook>
+References: <20250623133947.3144608-1-mathias.nyman@linux.intel.com>
+		<fc3e5cf5-a346-4329-a66e-5d28cb4fe763@kernel.org>
+		<5b039333-fc97-43b0-9d7a-287a9b313c34@linux.intel.com>
+		<4fd2765f5454cbf57fbc3c2fe798999d1c4adccb.camel@nordisch.org>
+		<20250813000248.36d9689e@foxbook>
+		<bea9aa71d198ba7def318e6701612dfe7358b693.camel@nordisch.org>
+	 <20250813084252.4dcd1dc5@foxbook>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250812054710.2910816-1-mika.westerberg@linux.intel.com>
 
-On Tue, Aug 12, 2025 at 07:47:09AM +0200, Mika Westerberg wrote:
-> There are other vendors now that have their own USB4 host router
-> hardware so using the Intel donated IDs may confuse users. For this
-> reason switch to use USB IDs provided by the Linux Foundation for
-> XDomain discovery.
-> 
-> Link: https://lore.kernel.org/linux-usb/20250722175026.1994846-1-Raju.Rangoju@amd.com/
-> Cc: Raju Rangoju <Raju.Rangoju@amd.com>
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Wed, 2025-08-13 at 08:42 +0200, Micha=C5=82 Pecio wrote:
+> On Wed, 13 Aug 2025 03:58:07 +0200, Marcus R=C3=BCckert wrote:
+> > dmesg |grep 'usb 1-2' ; dmesg |grep 'descriptor read'
+> > [=C2=A0=C2=A0=C2=A0 2.686292] [=C2=A0=C2=A0=C2=A0 T787] usb 1-2: new fu=
+ll-speed USB device number
+> > 3
+> > using xhci_hcd
+> > [=C2=A0=C2=A0=C2=A0 3.054496] [=C2=A0=C2=A0=C2=A0 T787] usb 1-2: New US=
+B device found,
+> > idVendor=3D31e3,
+> > idProduct=3D1322, bcdDevice=3D 2.30
+> > [=C2=A0=C2=A0=C2=A0 3.054499] [=C2=A0=C2=A0=C2=A0 T787] usb 1-2: New US=
+B device strings: Mfr=3D1,
+> > Product=3D2, SerialNumber=3D3
+> > [=C2=A0=C2=A0=C2=A0 3.054500] [=C2=A0=C2=A0=C2=A0 T787] usb 1-2: Produc=
+t: Wooting 60HE+
+> > [=C2=A0=C2=A0=C2=A0 3.054501] [=C2=A0=C2=A0=C2=A0 T787] usb 1-2: Manufa=
+cturer: Wooting
+>=20
+> OK, so you had a keyboard in this port during the last boot. Is this
+> keyboard always connected to the same port? There is no bus 1 port 2
+> device on your earlier lsusb output, so it was either not connected
+> there or not detected due to malfunction.
 
-Applied to thunderbolt.git/next.
+yes it is always connected to that port. the setup is quite static.
+
+> So this port was getting reset in the past. Can you also check:
+> - how many of those resets were followed by "HC died"
+> - if all "HC died" events were caused by resets of port usb 1-2
+> =C2=A0 (or some other port)
+
+Jul 24 15:56:34 kernel: usb 1-2: reset full-speed USB device number 14
+using xhci_hcd
+Jul 24 15:56:35 kernel: usb 1-2: reset full-speed USB device number 14
+using xhci_hcd
+Jul 24 15:56:36 kernel: usb 1-2: reset full-speed USB device number 14
+using xhci_hcd
+Jul 24 15:56:37 kernel: usb 1-2: reset full-speed USB device number 14
+using xhci_hcd
+Jul 24 15:57:56 kernel: xhci_hcd 0000:0e:00.0: HC died; cleaning up
+Jul 31 19:53:02 kernel: usb 1-2: reset full-speed USB device number 50
+using xhci_hcd
+Jul 31 19:53:03 kernel: usb 1-2: reset full-speed USB device number 50
+using xhci_hcd
+Jul 31 19:53:04 kernel: usb 1-2: reset full-speed USB device number 50
+using xhci_hcd
+Jul 31 19:53:04 kernel: usb 1-2: reset full-speed USB device number 50
+using xhci_hcd
+Jul 31 19:55:05 kernel: xhci_hcd 0000:0e:00.0: HC died; cleaning up
+Aug 06 16:51:34 kernel: usb 1-2: reset full-speed USB device number 12
+using xhci_hcd
+Aug 06 16:51:35 kernel: usb 1-2: reset full-speed USB device number 12
+using xhci_hcd
+Aug 06 16:51:36 kernel: usb 1-2: reset full-speed USB device number 12
+using xhci_hcd
+Aug 06 16:51:36 kernel: usb 1-2: reset full-speed USB device number 12
+using xhci_hcd
+Aug 06 16:52:50 kernel: xhci_hcd 0000:0e:00.0: HC died; cleaning up
+
+
+all HC died events were connected to reset full-speed.
+
+> And for the record, what exactly was the original problem which you
+> reported to Suse and believe to be caused by a kernel upgrade? Was it
+> "HC died" and loss of multiple devices, or just the keyborad failing
+> to work and spamming "reset USB device numebr x", or something else?
+
+The spamming I wouldnt have noticed. but the loss of the other devices
+from the "HC died" I did notice. So I asked Jiri if the recent kernel
+updates included USB changes and we started debugging :)
+
+   darix
+
+--=20
+Always remember:
+  Never accept the world as it appears to be.
+    Dare to see it for what it could be.
+      The world can always use more heroes.
+
+
 
