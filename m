@@ -1,111 +1,195 @@
-Return-Path: <linux-usb+bounces-26835-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26836-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72249B25F04
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 10:36:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 133C5B25F12
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 10:39:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A00B01C81721
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 08:34:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 130CF17228E
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 08:39:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82ACA2E975E;
-	Thu, 14 Aug 2025 08:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B77172DE6E3;
+	Thu, 14 Aug 2025 08:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eG6d/Wtq"
+	dkim=pass (1024-bit key) header.d=simcom.com header.i=@simcom.com header.b="NeOPeJPq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA0F2E8E1D
-	for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 08:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264991A317D;
+	Thu, 14 Aug 2025 08:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755160384; cv=none; b=GwaMgr/aOUXoHNvy04Cc/l5wceaSj+P36myAPpVzCrL4iw5T2YdAckALqR4poo5X2UX+G61px8LJIShYxUd+4llxRnciWiW/hQSuJtSBciZIPg83QRE5rr7WlFSGAVYmjNVjjfR98kv1o7lJgHmxZatZKfJ1/6Wq2Z0/elwZaq4=
+	t=1755160736; cv=none; b=jbwsfqyKfgu5KEx3T+yakRluOZMRW/W9CUDcGT6V+y0gkFLZPT9wLDpxfEajOqO8yfGuTnKtDnSpP/1zgFGuJuBmEl2OulJa/7Tr4gIa70xZdbmeS5/OB+CN9h6JgGv+acJPGgVPeYIvO6Yzsd6ba6y8d89wgYhvbv11tp2WkDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755160384; c=relaxed/simple;
-	bh=fOE4+FuGxAeI07oKZyLfHL9Fbc1CtVHng0E03UzPqU0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mT81V2HPOnoEjFJvC7fROfeuooEvzgrd30+pf5chzfz2PaC9xjZ30w4dTvoWdPhSDO2QjVqJzkWCbFykXPAvBYG6vUb8TaFgs3AV1NDFXNY9tPgB10SIZAYGCJFoIThHsEaHf0zjfd79gr8WSN+tFF6vho1bEAoGfhT+iptE8NY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eG6d/Wtq; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755160383; x=1786696383;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fOE4+FuGxAeI07oKZyLfHL9Fbc1CtVHng0E03UzPqU0=;
-  b=eG6d/WtqAcINxkMa59NYHSomBlPanH7Uc++9N2mMPIxyvVYRmR8BaemL
-   zFIFYmFVl6dupc6C+7e269Vtj7N+i1U+0gPgrAYCazDZv8Bvwl4swP/j+
-   SHZWMtgzNR0AjQGnZEBCFTRnpdizpoUSUFxHYMLFfjzz+brxmGuHqCiSk
-   Pc3bsvEI4n8OHpJEp25h9AgywKo3A5ESQAD0oABRLWHd7TqNJxTTTMqnx
-   GMle90+dgfPsJLM7KzGUxdhneVPzECIWKU/YGAfacAeXVn2TrghKS3mYQ
-   aKUQ9kZP1DiYnGDkcyn5wYQg/68vfEz3/HVJk0UD1H3tRgXUavQxZulTA
-   g==;
-X-CSE-ConnectionGUID: F7/Q4x72RfWJE1nxvPDw/A==
-X-CSE-MsgGUID: uLEWu6KSSPSVfJ603oNMhA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="57186991"
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="57186991"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 01:33:02 -0700
-X-CSE-ConnectionGUID: 53oBSir2TDKuPF0MQlKLlA==
-X-CSE-MsgGUID: ji88j3hCRV+ZE6FfL1SCgQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="197559349"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa001.fm.intel.com with ESMTP; 14 Aug 2025 01:33:00 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 2B69493; Thu, 14 Aug 2025 10:32:59 +0200 (CEST)
-Date: Thu, 14 Aug 2025 10:32:59 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: En-Wei WU <en-wei.wu@canonical.com>
-Cc: westeri@kernel.org, michael.jamet@intel.com, andreas.noever@gmail.com,
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
-Subject: Re: Thunderbolt call trace occurs on hot-plug
-Message-ID: <20250814083259.GE476609@black.igk.intel.com>
-References: <CAMqyJG2QceTyAONn_5m956zF_rpHLpognYYWnivm7J+w6Cw=RQ@mail.gmail.com>
- <20250728063329.GR2824380@black.fi.intel.com>
- <20250808064313.GM476609@black.igk.intel.com>
- <CAMqyJG3b5KsBjF=wW_+pB6MaSO0PQmq-iiAJ9aONZ6mZ1UtUNA@mail.gmail.com>
- <CAMqyJG1yK5B7w5Vp=LQNcWHDCdbWGiiuA0jru_U6zJ6WhUc5PQ@mail.gmail.com>
+	s=arc-20240116; t=1755160736; c=relaxed/simple;
+	bh=oC4w0r+Y8/lS2On04LFvZMxS/7HpI84hdXY8N9SeUYs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=n1tSTQ6ZvG+KCJ8tAYz7lXoe0tTPPstcrWl92nDAO959JThza5VSXmBU/C1Ax531cF8T0MreyOQ4NrVVIpWfCaK+bTLZd2T3KXWEpj8JgI9u3dH7xQ7D7g5bE6TvjemFTXiEz39ZTMRbFEIk/uV4rAFA7gUtIVnx71TGVNky03s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=simcom.com; spf=pass smtp.mailfrom=simcom.com; dkim=pass (1024-bit key) header.d=simcom.com header.i=@simcom.com header.b=NeOPeJPq; arc=none smtp.client-ip=18.169.211.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=simcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=simcom.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=simcom.com;
+	s=oxqy2404; t=1755160697;
+	bh=TmzLBsblzlVCGEigafIkJTDDPkH67MJneLNgOeHkKl0=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=NeOPeJPqg6hnP1cDxVt9Xw2IByLCMB87kEJGCiSz7AWfKwzQ+XPY9fIYCl4rs7yCa
+	 rVbyh12InNdt1a8lhPYM5kJwCzZzRo7+ulqrZAQ2ZMTGESdBfFWDyf4IklRl1FgLVW
+	 DKDVw5B1f5wfsoedT/R8vqcqS968b4oM+pwmq+mM=
+X-QQ-mid: zesmtpgz1t1755160695t54cc26cf
+X-QQ-Originating-IP: FSUdK7A9mQBvAWnD53mTRB/7AddW/leOstDRoZZH0XY=
+Received: from smart.. ( [116.2.183.233])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 14 Aug 2025 16:38:13 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 6810780293316914624
+EX-QQ-RecipientCnt: 5
+From: "xiaowei.li" <xiaowei.li@simcom.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"xiaowei.li" <xiaowei.li@simcom.com>
+Subject: [PATCH] USB: serial: option: add SIMCom 8230C compositions
+Date: Thu, 14 Aug 2025 16:38:11 +0800
+Message-Id: <20250814083811.2033720-1-xiaowei.li@simcom.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMqyJG1yK5B7w5Vp=LQNcWHDCdbWGiiuA0jru_U6zJ6WhUc5PQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpgz:simcom.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: NrYaBztQq5Mh5bKvkQFJnIqoy5bGmzsoJ8Q3o6gCRKglEdfovpmJxor8
+	crG4FQyL/Pr0yT4Gspgrsol268ua4qITPDrfsd5NCAViuCoHgjMe/jGSrjVWaXYpn1jEk6g
+	b4PRdy7Qk6QfXkYEO7AqWzSbBtU5P8IlCCzaTZkZ8yEax2wOe0D+iLfHR63TibgaOoNpKSL
+	mJ39jpiSlkVap/JOPm7wtW2530x5ld7MAut+yD+Qce7YuZ4tEJ/oB/HPS0YVj0a2yzggOpM
+	ha9cmEhlxA9InIUD87hEQ3VhyxF81BHCdE/o1odYzyWGDBOC4m1FuLgxpvCeBVrvtHXtURQ
+	IlBI7rFJLDLP6nGNFkVDRP7NXMgKr5SfDXUoWqGpA33W5lqrajov3Pe3AMrZINUgl4IRHs2
+	gk4lEMEUVGaWNqkyaHlub1j9kxPyezsDW/AVRSGueuphBOKk9X7BYnXQQg6OyCoAHJMhs4D
+	HNdZl7jJJGFUDWHVc+8uONrKOVaOg8ow9PKGOTwXOtzwDAZ9LdaoybF5KoiNM0rcAFKA9+U
+	KlMNIy+jWGNCtulyOo5L7kz2tUO0JChtiFI0tZMu2nOSoGgeH3msr+a/UuJAD8rkhjicnQu
+	SOSI7iHdh4Sfd2oexX+mAJVigphdQBtc1/guiZpSC4He9WRY+4v5ZliBQ1ZKlkBttbUV3SK
+	3V0i33ybSly1OpurosevcFshqym+0HhxGrEVElRns25aY32BVH826BtupeCLC1N9GrunKJf
+	vH8dCp8tHg3rTVG6ohhAb5trCNyIuLPvOZgtE62t+dLs9ulZpl4gLSVpd16E1DX/7ZsNnz0
+	mfBi0BS6kKW2KYslZ1o1/5KrqXdnG0DqeBTSmesNl1Uj8VknicWiD1bkpjO7PRdccWltbip
+	USnVVdiDWe2HwlFgDODWXPuFSTZ1HpvUvMft/nNkGvs0B0rklOuSC4N5u3CHOAyFVr30uGO
+	3H9yNdmUZwsiG+0H8wz0X5dmFRuDz2+T+9KXmPN6wQvx1r1hNSrL619ZVigpRPJNyJibOfT
+	HS9tsWHe28Di4RFp2P
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+X-QQ-RECHKSPAM: 0
 
-Hi,
+USB Device Listings:
+0x9071: tty (DM) + tty (NMEA) + tty (AT) + rmnet (QMI mode) + adb
+T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1e0e ProdID=9071 Rev= 5.15
+S:  Manufacturer=SIMCOM
+S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
+S:  SerialNumber=0123456789ABCDEF
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=86(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-On Thu, Aug 14, 2025 at 04:21:36PM +0800, En-Wei WU wrote:
-> I just ran a test using a different cable, and the issue remains.
-> 
-> One thing I've noticed is that no matter which cable and whether there
-> is a call trace on that hot-plug event, there is always the message:
-> 
-> thunderbolt:tb_cfg_ack_plug:842: thunderbolt 0000:00:0d.2: acking hot
-> unplug event on 0:1
+0x9078: tty (DM) + tty (NMEA) + tty (AT) + ECM + adb
+T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#=  9 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1e0e ProdID=9078 Rev= 5.15
+S:  Manufacturer=SIMCOM
+S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
+S:  SerialNumber=0123456789ABCDEF
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-That means the USB4 link went down at that point and the driver cannot do
-anything else except start tearing down the devices from that point.
+0x907b: RNDIS + tty (DM) + tty (NMEA) + tty (AT) + adb
+T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1e0e ProdID=907b Rev= 5.15
+S:  Manufacturer=SIMCOM
+S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
+S:  SerialNumber=0123456789ABCDEF
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=ef(misc ) Sub=04 Prot=01
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-We could try to look bit deeper what is happening there. However, if this
-is PD/cable issue then there is little we can do on software side. Anyways,
-I wonder if you can repro with tracing enabled?
+Signed-off-by: Xiaowei Li <xiaowei.li@simcom.com>
+---
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-There is info how to do that (let me know if any questions):
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index e5cd33093423..8c4d28dfd64e 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2097,6 +2097,12 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9003, 0xff) },	/* Simcom SIM7500/SIM7600 MBIM mode */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9011, 0xff),	/* Simcom SIM7500/SIM7600 RNDIS mode */
+ 	  .driver_info = RSVD(7) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x907b, 0xff),
++	  .driver_info = RSVD(5) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9078, 0xff),
++	  .driver_info = RSVD(5) },
++	{ USB_DEVICE(0x1e0e, 0x9071),
++	  .driver_info = RSVD(3) | RSVD(4) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9205, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT+ECM mode */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9206, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT-only mode */
+ 	{ USB_DEVICE(ALCATEL_VENDOR_ID, ALCATEL_PRODUCT_X060S_X200),
+-- 
+2.34.1
 
-  https://github.com/intel/tbtools/wiki/Useful-Commands#tracing
-
-Can you then provide me either the merged log or dmesg and trace
-separately? I can try to see if there is something suspicious happening
-prior that unplug.
 
