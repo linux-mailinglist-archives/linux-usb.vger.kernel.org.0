@@ -1,162 +1,132 @@
-Return-Path: <linux-usb+bounces-26880-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26881-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B2B6B26F04
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 20:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B9EFB26F30
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 20:45:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1DF01656CF
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 18:36:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 499805E365C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 18:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F80231A41;
-	Thu, 14 Aug 2025 18:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C87423BCF0;
+	Thu, 14 Aug 2025 18:45:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLm6nyJ6"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kxGgJ7U4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F6F31984B;
-	Thu, 14 Aug 2025 18:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABA523497B
+	for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 18:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755196559; cv=none; b=KPcF/RxvjnM9mpXR7/sa8c8g06s/KYHkHwxt+DaVbpvaKMJVy0dc7lpPgVWJH1vvtFFy3EYOmeNxhjejZyGxFdmAi5qngX27E6aEtybgaQrxFLm9KkZVuYtnJ0x30Gc7fkOW8+XLpv7Y3nKclgNSh16bBejbxq4UTHaoZ5+39UE=
+	t=1755197104; cv=none; b=G1DHux5RKRuka+y6caXr93/R20ayjUYx3DGpt4NtKC50L1/6xkW1UEq+Ci8LrUKOVlqIGGBQysLyPl91Ibza9yPQnawwyD3yO2yIaP9T0qlRzfzrmjzrJusWV3gRoVFtgH6XPw3NDQh/oZCXcp7Es/z2SGM+p2JiwSF1JCeN8Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755196559; c=relaxed/simple;
-	bh=oFoTevpJTkFC3fnPkHq5WaRUhn9wdzE1Nk7qHgaKBHA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Un+ZLK4JQjo236yeh56QBa+EW2n7j5vTFUR3q6G+TbfATWiBWYmhhLXLkTwThXaS9Egn5tIH7iVkkZAJ1lfCtHmcH2Ify2P1D2toja4mFIJGyiwjHNCioIssFDuJJ46yC//Fiv4Z/fE9166W/K+bQypvi3UhSWI1CDlgQ5kmz/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLm6nyJ6; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-76e2eb3726cso793730b3a.3;
-        Thu, 14 Aug 2025 11:35:57 -0700 (PDT)
+	s=arc-20240116; t=1755197104; c=relaxed/simple;
+	bh=9P7e+IQ8LG/P0atlVUdJXVTqMbr9yIy6QOCAwSCjxNM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lBU7ZP+WhK42DDM59XeVfeoqza8YpRHgIZdowYM8LlkMLLbrTTdlKvo4DmBnomWtXG9vxMsAvNjSBJgoENCKya+5ugrTLJHtO5r7RxMe//9cpe12ZlWRmKN/YE9cdCvPEUgcwSt8FzeU5ZGhBWNj+m5WHFSmEdUk91xhh/qKGPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kxGgJ7U4; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6188b6548adso2350330a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 11:45:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755196557; x=1755801357; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kJt/hcAMZ2yC+7PBLbpVyeoi2vS5Vy+duo50bI9bdV8=;
-        b=MLm6nyJ6KW8O7NRsS1xYgMlgzxBdCe+doD4YLtXX+JNh1ImEoaPnbvMEmumoLBPnJJ
-         KiFiVHSnT10uRU4GkpqEvJndzmljP6sneadVVSqjf6hHV3hihCsyl8mqwPdd4T3LK1k9
-         jwlKc5CdNA1xyQDV8tRGTKq3NFv66GYGj5qKvqyA9/StyqzkLCsnODoLWOO4QxiBXo7a
-         DqyUixtRAwjMYEW1aTGXLSlj23MkDOP/HliJfXsK80fHGOwFAzLWAicj56FFGmsSxaXZ
-         S3vy3kuULBT99ypBfxtrZWjhkXyJn32F6JT63YH6j5VfP0UDLXv4ihQN5586JGV3/muj
-         qRlw==
+        d=chromium.org; s=google; t=1755197101; x=1755801901; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1qBBuA2TErOLVDapmymnO1MTH+fFI4U6eOj26qi4Hg4=;
+        b=kxGgJ7U4NZahHQtCS/xFQBx93AovK6nZv0nTBWdy77a/YaTJCTVHNzrh2l0yezIhVN
+         9tGaqBR0srImFJMn3HLp9u5VkmWEBExFJpcuboqXv69JzGq6zvyYgHATKTTFHPWQXBXc
+         Yc2Yx3IzKiec4Ca/WIEAi7HV0izvTdkSDhrp8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755196557; x=1755801357;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kJt/hcAMZ2yC+7PBLbpVyeoi2vS5Vy+duo50bI9bdV8=;
-        b=YHjZMcdFvMaNnCuWrKwca3EWAROlX0/hYwN81fhOwG5vSc0iURtqosfWxOyiY4A4hs
-         0j0wKw4+y/usDipz9eMlZihexbnB1Icgdkizozvgc2YdKLeEsCsNZAc1Omlt52XsYIW2
-         ENeh61xRspgJQbongr2mPKgmF7CIdyQpCV4c2bDdVOenq4pKxyAAozxGuNFHJv7IutqY
-         /9pdENj975SLSxEa0BCSvyuE5wZHbTnUbEtQOhwm7sfARdJYOC1cWn8KjwBwVbXsQLSP
-         0PJkoRcAofKKi7XGDlWp1l5Azu719bAgfgDkoxkFTASUWyMustJQainDKFAgI5YexzEE
-         KS6A==
-X-Forwarded-Encrypted: i=1; AJvYcCUYxtyIfpSDK8OZzzF4KJEPcUFnJZThJLwOMmbftzPWMsaN3qb36Xx7IXRZNQOgS52ctRuNmg+OYxfT@vger.kernel.org, AJvYcCVIa2YskxUevOsawJ2pIlpHWCACV6fLJxYaTnln1loPNMOzxujMuZdTW6HQ7IcXItfZJDld26Nf6sfKdv4=@vger.kernel.org, AJvYcCVsyp1Bk6RcNaG6R3SerCpn/W8m12YmfNcQ6NZYuHbGDMHaT8o06GogXn/F3eJPNwuGOfj0aVY0x3VB@vger.kernel.org, AJvYcCW5z8Dq/7E7A8WYupuWuU1okaO9HuK0ALhTZKa0hgHcd+IjENcdU021+h9sVYNzgIg7AJp5YmZpKsSBAMI=@vger.kernel.org, AJvYcCWg1awFdJuB42m7U/gBV9Bet6SsW8scCeZi2CGwoEFJWj4ztr+LPt3ubuso7t8zmEbLriMVONm1lVKC@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2gcsjI2kSvgu6vyv0QHtvz3c5LkIE4FPP2E4JBnJcz65xMIhc
-	y3cNrEMkHWit4zqws485oRlZcn434BpyDfDER6yDm+sTWZUE4QC1Pnf4oyDNnQ==
-X-Gm-Gg: ASbGncthaXlYigHFUkOtislDlGVSHDJ5/vQh4pGaiy2/bQPFk5DJEfJ6UGuUN/Yl00t
-	q2Tpx9YSYW/bqwE07dt4E2Ns//iYmzp82m+Oktt19l6tdpWpfr8ekTO+X07KhW8SuCZPaNFcCYr
-	7y2sIlY/PZWD40WnOf1YRvnPoUb/fHpUmw7hsgZev1F10tziQqd2655foPqulN+YtblpE+d6SRT
-	MxvPlfh2lcNSlkf8tf4ha+cn/zsztfXhhebU0NUI/HrL88gtzWzQSMYEWmpxf5RKyXdQd7Khdjp
-	CWezE3+tBz7rT9Fh5trgqL93CNJo4hkNq7cE3id/DvL3N1A/6WWsUDHSolH37WjSk89UeZV3tSZ
-	dY6sjFKQ3xLGL7nN6dXfnyrQlaHfSJkztZg==
-X-Google-Smtp-Source: AGHT+IFTQsaL27wAfrPNbpedIL9oHlFrTHdo6Z1kKN/DyNl5f8XhqHluOPZCfB1ZEEe26gStm1qrjg==
-X-Received: by 2002:a05:6a20:12c2:b0:240:2265:acba with SMTP id adf61e73a8af0-240bd25247amr6795783637.42.1755196556706;
-        Thu, 14 Aug 2025 11:35:56 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:bd82:9778:4ed6:7372])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b424ca987desm25052379a12.40.2025.08.14.11.35.55
+        d=1e100.net; s=20230601; t=1755197101; x=1755801901;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1qBBuA2TErOLVDapmymnO1MTH+fFI4U6eOj26qi4Hg4=;
+        b=TL87CsLiLEW4DWogzeEiW6pJ0g5pWfIwn+Of0k6Tb+Hbg4m6k9fnhIZRCzhS/5jOQJ
+         TK4JyDw6SbNdO5bXKqIopivB2tXTT3/dN807BqrkwW6UVSdXkndfDJRKNTso/eiQIhBz
+         DYZrGrWucrxJxPVkRZVQ+VSu+VH9UqXSJHuBd7pXX7XEI7fpDBMzKyL7EaxsuqKCzBfE
+         WbH6qvULbL/sMRfoowi7jZrBPg/JjqBCpUIVyVKQ0WhyU2YXfoyaWy83IIIJLGlujChM
+         zQB1UgJaZVpkASH4kdMTbYr5wDjzuhVf8SENRLcixB/6evHTp1QOhvT/v3SqU7eHfdIr
+         6cbw==
+X-Forwarded-Encrypted: i=1; AJvYcCVQ5ygEfOjrB0IcolajsFZFrheZYLjhL8Uaniqp8Xm5atWjTcR6E1+fbKRnK4eyQl9HLGuR66xUuKE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywb0LVvJlYwUQjjn/6IVMDY2H3C7H4RgNQ9GQXgpgV6q7tqlQ9W
+	uoR3u8Ppa/CHpbfvonuxFf3Zg+zsw1rpL1EKhFb5Y2qjmGvNn4oCEOVIKQBA4lDC9A==
+X-Gm-Gg: ASbGnctsDAAzGyZuPSgXTWNHeQsxYUEOZVKbeMIg8pfR0Nulg2WXoUw9qpKwlgZiXvu
+	cV7vobQE+ljJqg5wHGLuISx1QrWGPavCg6wQtByfXpgUEoX/4Vu/t6F9lVNGmLNFD/wCSbnlbCW
+	PqxggSRKQq2+q1aEewYCiS9cnuoSGiAjW8jo23o4HVP/Up46OWtj5KJdD1l59IcycEsmJZEdQnV
+	Ej47u769k3AK0H+iPQSDfag8tGN/aTyiaTbqHu3ScCnX5rp+QUMSht0mkXbjfrxMwLeBvOF3fjM
+	wUeFaWA0yVCYrlOs8rmAi1KXlyfUaEIVT7bn88SEKZ8xEk7M/5+IzyvPteXSXcT2GM1Km/+R+P4
+	sv2tKv7fdo0SVOxTlJRR+FbDB52vUuLLprwPq3Wh0AhKoyUTAle++oMunHxv6H8uNx+Swcr9gPd
+	cRfX8Y5G4ZauwXCic62K5TgCY=
+X-Google-Smtp-Source: AGHT+IHefuGAAIAMEMqANOVYlKEH5+LAdTor4fxHNBiEz6a78unbBVFdrI8XeGRL3W3ATolBgKIenA==
+X-Received: by 2002:a17:907:1b0e:b0:af9:6f04:8dd0 with SMTP id a640c23a62f3a-afcb992ca27mr396658866b.55.1755197100634;
+        Thu, 14 Aug 2025 11:45:00 -0700 (PDT)
+Received: from akuchynski.c.googlers.com.com (37.247.91.34.bc.googleusercontent.com. [34.91.247.37])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a21c0f4sm2614772466b.106.2025.08.14.11.44.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 11:35:56 -0700 (PDT)
-Date: Thu, 14 Aug 2025 11:35:53 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
-Cc: linux-kernel@vger.kernel.org, andreas@kemnade.info, 
-	peter.ujfalusi@gmail.com, robh@kernel.org, krzk+dt@kernel.org, lgirdwood@gmail.com, 
-	tiwai@suse.com, conor+dt@kernel.org, lee@kernel.org, ukleinek@kernel.org, 
-	broonie@kernel.org, gregkh@linuxfoundation.org, linux-input@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-pwm@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-usb@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH v2 3/9] input: dt-bindings: ti,twl4030-keypad: convert to
- DT schema
-Message-ID: <ziwtdg4elih73nkguilamjh4gfgg76t2evwvnj6pscywvfexyc@abvlmgoij3us>
-References: <20250814132129.138943-1-jihed.chaibi.dev@gmail.com>
- <20250814132129.138943-4-jihed.chaibi.dev@gmail.com>
+        Thu, 14 Aug 2025 11:45:00 -0700 (PDT)
+From: Andrei Kuchynski <akuchynski@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Cc: Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	linux-kernel@vger.kernel.org,
+	Andrei Kuchynski <akuchynski@chromium.org>
+Subject: [PATCH v1 0/5] USB Type-C alternate mode priorities
+Date: Thu, 14 Aug 2025 18:44:50 +0000
+Message-ID: <20250814184455.723170-1-akuchynski@chromium.org>
+X-Mailer: git-send-email 2.51.0.rc1.163.g2494970778-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250814132129.138943-4-jihed.chaibi.dev@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 14, 2025 at 03:21:23PM +0200, Jihed Chaibi wrote:
-> Convert the legacy TXT binding for the TWL4030 keypad module
-> to the modern YAML DT schema format. This adds formal validation
-> and improves documentation by inheriting from the matrix-keymap schema.
-> 
-> Changes in v2:
-> Simplified the description field by removing redundant '|'
-> as it does not affect formatting in this context.
-> 
-> Signed-off-by: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
-> ---
->  .../bindings/input/ti,twl4030-keypad.yaml     | 44 +++++++++++++++++++
->  .../bindings/input/twl4030-keypad.txt         | 27 ------------
->  2 files changed, 44 insertions(+), 27 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/input/ti,twl4030-keypad.yaml
->  delete mode 100644 Documentation/devicetree/bindings/input/twl4030-keypad.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/input/ti,twl4030-keypad.yaml b/Documentation/devicetree/bindings/input/ti,twl4030-keypad.yaml
-> new file mode 100644
-> index 000000000..2efc88b89
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/ti,twl4030-keypad.yaml
-> @@ -0,0 +1,44 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/input/ti,twl4030-keypad.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments TWL4030-family Keypad Controller
-> +
-> +maintainers:
-> +  - Peter Ujfalusi <peter.ujfalusi@gmail.com>
-> +
-> +description:
-> +  TWL4030's Keypad controller is used to interface a SoC with a matrix-type
-> +  keypad device. The keypad controller supports multiple row and column lines.
-> +  A key can be placed at each intersection of a unique row and a unique column.
-> +  The keypad controller can sense a key-press and key-release and report the
-> +  event using a interrupt to the cpu.
-> +
-> +allOf:
-> +  - $ref: matrix-keymap.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: ti,twl4030-keypad
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +  - keypad,num-rows
-> +  - keypad,num-columns
+This patch series introduces a mechanism for setting USB Type-C alternate
+mode priorities. It allows the user to specify their preferred order for
+mode selection, such as USB4, Thunderbolt, or DisplayPort.
 
-I wonder if "linux,keymap" should not be made required as well... 
+A new sysfs attribute named 'priority' is exposed to provide user-space
+control over the mode selection process.
 
-Thanks.
+This series was tested on a Android OS device running kernel 6.16.
+
+Andrei Kuchynski (5):
+  usb: typec: Add alt_mode_override field to port property
+  platform/chrome: cros_ec_typec: Set alt_mode_override flag
+  usb: typec: ucsi: Set alt_mode_override flag
+  usb: typec: Implement alternate mode priority handling
+  usb: typec: Expose alternate mode priority via sysfs
+
+ Documentation/ABI/testing/sysfs-class-typec |  12 ++
+ drivers/platform/chrome/cros_ec_typec.c     |   1 +
+ drivers/usb/typec/Makefile                  |   2 +-
+ drivers/usb/typec/class.c                   |  61 +++++++++-
+ drivers/usb/typec/class.h                   |   3 +
+ drivers/usb/typec/mode_selection.c          | 127 ++++++++++++++++++++
+ drivers/usb/typec/mode_selection.h          |   8 ++
+ drivers/usb/typec/ucsi/ucsi.c               |   2 +
+ include/linux/usb/typec.h                   |   1 +
+ include/linux/usb/typec_altmode.h           |   9 ++
+ 10 files changed, 221 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/usb/typec/mode_selection.c
+ create mode 100644 drivers/usb/typec/mode_selection.h
 
 -- 
-Dmitry
+2.51.0.rc0.215.g125493bb4a-goog
+
 
