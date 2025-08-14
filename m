@@ -1,195 +1,301 @@
-Return-Path: <linux-usb+bounces-26836-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26837-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 133C5B25F12
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 10:39:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 740C6B2607A
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 11:15:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 130CF17228E
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 08:39:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 370C41CC6DC9
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 09:10:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B77172DE6E3;
-	Thu, 14 Aug 2025 08:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3729F2F83D5;
+	Thu, 14 Aug 2025 09:06:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=simcom.com header.i=@simcom.com header.b="NeOPeJPq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nCgv3bS+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264991A317D;
-	Thu, 14 Aug 2025 08:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2EE2EE61B
+	for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 09:06:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755160736; cv=none; b=jbwsfqyKfgu5KEx3T+yakRluOZMRW/W9CUDcGT6V+y0gkFLZPT9wLDpxfEajOqO8yfGuTnKtDnSpP/1zgFGuJuBmEl2OulJa/7Tr4gIa70xZdbmeS5/OB+CN9h6JgGv+acJPGgVPeYIvO6Yzsd6ba6y8d89wgYhvbv11tp2WkDk=
+	t=1755162387; cv=none; b=CxI/dJqN+URS4kmT+/HBQ6lX4FY+sooTKcCXHGTrk7Trnu3h8vKmD7tFa64OmWhQ9GcGcB+SHIsHcONxCloLIm2EB2w20X6ILQRZ+1bXpkz1LMfefJQcyVTdOhrPo3gR/dmHhLvUWX76R9M1f+rcPp0vzLylOz8wWrrQ6Cf8SMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755160736; c=relaxed/simple;
-	bh=oC4w0r+Y8/lS2On04LFvZMxS/7HpI84hdXY8N9SeUYs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=n1tSTQ6ZvG+KCJ8tAYz7lXoe0tTPPstcrWl92nDAO959JThza5VSXmBU/C1Ax531cF8T0MreyOQ4NrVVIpWfCaK+bTLZd2T3KXWEpj8JgI9u3dH7xQ7D7g5bE6TvjemFTXiEz39ZTMRbFEIk/uV4rAFA7gUtIVnx71TGVNky03s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=simcom.com; spf=pass smtp.mailfrom=simcom.com; dkim=pass (1024-bit key) header.d=simcom.com header.i=@simcom.com header.b=NeOPeJPq; arc=none smtp.client-ip=18.169.211.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=simcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=simcom.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=simcom.com;
-	s=oxqy2404; t=1755160697;
-	bh=TmzLBsblzlVCGEigafIkJTDDPkH67MJneLNgOeHkKl0=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=NeOPeJPqg6hnP1cDxVt9Xw2IByLCMB87kEJGCiSz7AWfKwzQ+XPY9fIYCl4rs7yCa
-	 rVbyh12InNdt1a8lhPYM5kJwCzZzRo7+ulqrZAQ2ZMTGESdBfFWDyf4IklRl1FgLVW
-	 DKDVw5B1f5wfsoedT/R8vqcqS968b4oM+pwmq+mM=
-X-QQ-mid: zesmtpgz1t1755160695t54cc26cf
-X-QQ-Originating-IP: FSUdK7A9mQBvAWnD53mTRB/7AddW/leOstDRoZZH0XY=
-Received: from smart.. ( [116.2.183.233])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 14 Aug 2025 16:38:13 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6810780293316914624
-EX-QQ-RecipientCnt: 5
-From: "xiaowei.li" <xiaowei.li@simcom.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"xiaowei.li" <xiaowei.li@simcom.com>
-Subject: [PATCH] USB: serial: option: add SIMCom 8230C compositions
-Date: Thu, 14 Aug 2025 16:38:11 +0800
-Message-Id: <20250814083811.2033720-1-xiaowei.li@simcom.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1755162387; c=relaxed/simple;
+	bh=lTDBN1grjmvLC5qe8Ewj7CPknpbtltPJvkDZojHtYlk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=jlbLESVfvnam6xWtE3hO0bEHjYDGSgq0RQKaEokhaRhnwfEgi65A8Im1cHdJ7mtkij4196JEmMIiYIPmj+p4pbaf8gFTaNHb4s7YMqGQGG+FVm/+7ZOgEPh8rUzONrBAuaNDk+jiUV+8+OH1+uTKF6KTEU8ZwTujLNngs25UgvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nCgv3bS+; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755162386; x=1786698386;
+  h=date:from:to:cc:subject:message-id;
+  bh=lTDBN1grjmvLC5qe8Ewj7CPknpbtltPJvkDZojHtYlk=;
+  b=nCgv3bS+8d9dq1Cf+TEXyu56Y9dbDEJtVNqKGyLLps5WTtbA/cfmIoFX
+   lhOWnBF8U5VcVS9vTQkwrOrgFrPISQesni4hs8WphQUWLnuMBshpwUCDI
+   ZtsKfDthWfgXjaXgX4Dm8mL1olJ/+02p3V29jY0ZTIxi5H7tVxSvjyy39
+   EXQ+bpF8u9YIpSA2g8IRmu8aH0aCwm3xKLcTlf/r7GlV48zdKnq3TtuYr
+   GeRTC4k6Zu8Ad5X7fBlwMcC8xtoD7tEEE3IYJJpYNnbbRZOJi0EEoUdf5
+   I7qyPUbp8gWCSXVguoM0DMrC99yyuH+7Xr7zFXjMVHN7tnRTQqqctRKV0
+   A==;
+X-CSE-ConnectionGUID: gvgPU7tsQF6+CynNMCJlMg==
+X-CSE-MsgGUID: w92FN3djR8exNhNFrxgTZQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="61277422"
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="61277422"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 02:06:25 -0700
+X-CSE-ConnectionGUID: FI5Ksh74TvGn4DT3kJY8lQ==
+X-CSE-MsgGUID: qUX2obQxT2G8OY5ANzJQRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="166696318"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 14 Aug 2025 02:06:24 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1umTuf-000AmP-1l;
+	Thu, 14 Aug 2025 09:06:21 +0000
+Date: Thu, 14 Aug 2025 17:04:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ c0485e864a2eaa1d5a84c71e573dd236d0e885ae
+Message-ID: <202508141759.qjzySQ6X-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:simcom.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: NrYaBztQq5Mh5bKvkQFJnIqoy5bGmzsoJ8Q3o6gCRKglEdfovpmJxor8
-	crG4FQyL/Pr0yT4Gspgrsol268ua4qITPDrfsd5NCAViuCoHgjMe/jGSrjVWaXYpn1jEk6g
-	b4PRdy7Qk6QfXkYEO7AqWzSbBtU5P8IlCCzaTZkZ8yEax2wOe0D+iLfHR63TibgaOoNpKSL
-	mJ39jpiSlkVap/JOPm7wtW2530x5ld7MAut+yD+Qce7YuZ4tEJ/oB/HPS0YVj0a2yzggOpM
-	ha9cmEhlxA9InIUD87hEQ3VhyxF81BHCdE/o1odYzyWGDBOC4m1FuLgxpvCeBVrvtHXtURQ
-	IlBI7rFJLDLP6nGNFkVDRP7NXMgKr5SfDXUoWqGpA33W5lqrajov3Pe3AMrZINUgl4IRHs2
-	gk4lEMEUVGaWNqkyaHlub1j9kxPyezsDW/AVRSGueuphBOKk9X7BYnXQQg6OyCoAHJMhs4D
-	HNdZl7jJJGFUDWHVc+8uONrKOVaOg8ow9PKGOTwXOtzwDAZ9LdaoybF5KoiNM0rcAFKA9+U
-	KlMNIy+jWGNCtulyOo5L7kz2tUO0JChtiFI0tZMu2nOSoGgeH3msr+a/UuJAD8rkhjicnQu
-	SOSI7iHdh4Sfd2oexX+mAJVigphdQBtc1/guiZpSC4He9WRY+4v5ZliBQ1ZKlkBttbUV3SK
-	3V0i33ybSly1OpurosevcFshqym+0HhxGrEVElRns25aY32BVH826BtupeCLC1N9GrunKJf
-	vH8dCp8tHg3rTVG6ohhAb5trCNyIuLPvOZgtE62t+dLs9ulZpl4gLSVpd16E1DX/7ZsNnz0
-	mfBi0BS6kKW2KYslZ1o1/5KrqXdnG0DqeBTSmesNl1Uj8VknicWiD1bkpjO7PRdccWltbip
-	USnVVdiDWe2HwlFgDODWXPuFSTZ1HpvUvMft/nNkGvs0B0rklOuSC4N5u3CHOAyFVr30uGO
-	3H9yNdmUZwsiG+0H8wz0X5dmFRuDz2+T+9KXmPN6wQvx1r1hNSrL619ZVigpRPJNyJibOfT
-	HS9tsWHe28Di4RFp2P
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-X-QQ-RECHKSPAM: 0
 
-USB Device Listings:
-0x9071: tty (DM) + tty (NMEA) + tty (AT) + rmnet (QMI mode) + adb
-T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1e0e ProdID=9071 Rev= 5.15
-S:  Manufacturer=SIMCOM
-S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
-S:  SerialNumber=0123456789ABCDEF
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-E:  Ad=86(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: c0485e864a2eaa1d5a84c71e573dd236d0e885ae  usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through secure calls
 
-0x9078: tty (DM) + tty (NMEA) + tty (AT) + ECM + adb
-T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#=  9 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1e0e ProdID=9078 Rev= 5.15
-S:  Manufacturer=SIMCOM
-S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
-S:  SerialNumber=0123456789ABCDEF
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+elapsed time: 1038m
 
-0x907b: RNDIS + tty (DM) + tty (NMEA) + tty (AT) + adb
-T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1e0e ProdID=907b Rev= 5.15
-S:  Manufacturer=SIMCOM
-S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
-S:  SerialNumber=0123456789ABCDEF
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#= 0 IfCount= 2 Cls=ef(misc ) Sub=04 Prot=01
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
-E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+configs tested: 208
+configs skipped: 5
 
-Signed-off-by: Xiaowei Li <xiaowei.li@simcom.com>
----
- drivers/usb/serial/option.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index e5cd33093423..8c4d28dfd64e 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2097,6 +2097,12 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9003, 0xff) },	/* Simcom SIM7500/SIM7600 MBIM mode */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9011, 0xff),	/* Simcom SIM7500/SIM7600 RNDIS mode */
- 	  .driver_info = RSVD(7) },
-+	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x907b, 0xff),
-+	  .driver_info = RSVD(5) },
-+	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9078, 0xff),
-+	  .driver_info = RSVD(5) },
-+	{ USB_DEVICE(0x1e0e, 0x9071),
-+	  .driver_info = RSVD(3) | RSVD(4) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9205, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT+ECM mode */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9206, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT-only mode */
- 	{ USB_DEVICE(ALCATEL_VENDOR_ID, ALCATEL_PRODUCT_X060S_X200),
--- 
-2.34.1
+tested configs:
+alpha                             allnoconfig    clang-22
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    clang-19
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    clang-19
+arc                              allmodconfig    clang-19
+arc                               allnoconfig    clang-22
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    clang-19
+arc                                 defconfig    clang-19
+arc                        nsimosci_defconfig    clang-22
+arc                   randconfig-001-20250814    gcc-10.5.0
+arc                   randconfig-001-20250814    gcc-12.5.0
+arc                   randconfig-002-20250814    gcc-10.5.0
+arc                   randconfig-002-20250814    gcc-13.4.0
+arc                    vdk_hs38_smp_defconfig    clang-22
+arm                              allmodconfig    clang-19
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    clang-19
+arm                                 defconfig    clang-19
+arm                            mps2_defconfig    clang-22
+arm                   randconfig-001-20250814    clang-22
+arm                   randconfig-001-20250814    gcc-10.5.0
+arm                   randconfig-002-20250814    clang-22
+arm                   randconfig-002-20250814    gcc-10.5.0
+arm                   randconfig-003-20250814    gcc-10.5.0
+arm                   randconfig-004-20250814    gcc-10.5.0
+arm                   randconfig-004-20250814    gcc-8.5.0
+arm                           sunxi_defconfig    clang-22
+arm                         vf610m4_defconfig    clang-22
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    clang-22
+arm64                             allnoconfig    gcc-15.1.0
+arm64                               defconfig    clang-19
+arm64                 randconfig-001-20250814    clang-17
+arm64                 randconfig-001-20250814    gcc-10.5.0
+arm64                 randconfig-002-20250814    gcc-10.5.0
+arm64                 randconfig-002-20250814    gcc-8.5.0
+arm64                 randconfig-003-20250814    gcc-10.5.0
+arm64                 randconfig-004-20250814    gcc-10.5.0
+arm64                 randconfig-004-20250814    gcc-13.4.0
+csky                              allnoconfig    clang-22
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    clang-19
+csky                  randconfig-001-20250814    gcc-10.5.0
+csky                  randconfig-001-20250814    gcc-15.1.0
+csky                  randconfig-002-20250814    gcc-10.5.0
+csky                  randconfig-002-20250814    gcc-15.1.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    clang-19
+hexagon                           allnoconfig    clang-22
+hexagon                          allyesconfig    clang-19
+hexagon                          allyesconfig    clang-22
+hexagon                             defconfig    clang-19
+hexagon               randconfig-001-20250814    clang-20
+hexagon               randconfig-001-20250814    gcc-10.5.0
+hexagon               randconfig-002-20250814    clang-22
+hexagon               randconfig-002-20250814    gcc-10.5.0
+i386                             allmodconfig    clang-20
+i386                              allnoconfig    clang-20
+i386                             allyesconfig    clang-20
+i386        buildonly-randconfig-001-20250814    clang-20
+i386        buildonly-randconfig-002-20250814    clang-20
+i386        buildonly-randconfig-002-20250814    gcc-12
+i386        buildonly-randconfig-003-20250814    clang-20
+i386        buildonly-randconfig-003-20250814    gcc-12
+i386        buildonly-randconfig-004-20250814    clang-20
+i386        buildonly-randconfig-005-20250814    clang-20
+i386        buildonly-randconfig-005-20250814    gcc-12
+i386        buildonly-randconfig-006-20250814    clang-20
+i386        buildonly-randconfig-006-20250814    gcc-12
+i386                                defconfig    clang-20
+i386                  randconfig-001-20250814    clang-20
+i386                  randconfig-002-20250814    clang-20
+i386                  randconfig-003-20250814    clang-20
+i386                  randconfig-004-20250814    clang-20
+i386                  randconfig-005-20250814    clang-20
+i386                  randconfig-006-20250814    clang-20
+i386                  randconfig-007-20250814    clang-20
+i386                  randconfig-011-20250814    gcc-12
+i386                  randconfig-012-20250814    gcc-12
+i386                  randconfig-013-20250814    gcc-12
+i386                  randconfig-014-20250814    gcc-12
+i386                  randconfig-015-20250814    gcc-12
+i386                  randconfig-016-20250814    gcc-12
+i386                  randconfig-017-20250814    gcc-12
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20250814    clang-22
+loongarch             randconfig-001-20250814    gcc-10.5.0
+loongarch             randconfig-002-20250814    gcc-10.5.0
+loongarch             randconfig-002-20250814    gcc-15.1.0
+m68k                             allmodconfig    clang-19
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    clang-19
+m68k                             allyesconfig    gcc-15.1.0
+m68k                                defconfig    clang-19
+microblaze                       allmodconfig    clang-19
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    clang-19
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                             allnoconfig    gcc-15.1.0
+nios2                               defconfig    gcc-15.1.0
+nios2                 randconfig-001-20250814    gcc-10.5.0
+nios2                 randconfig-002-20250814    gcc-10.5.0
+nios2                 randconfig-002-20250814    gcc-9.5.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250814    gcc-10.5.0
+parisc                randconfig-002-20250814    gcc-10.5.0
+parisc                randconfig-002-20250814    gcc-13.4.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    gcc-15.1.0
+powerpc               randconfig-001-20250814    gcc-10.5.0
+powerpc               randconfig-001-20250814    gcc-8.5.0
+powerpc               randconfig-002-20250814    gcc-10.5.0
+powerpc               randconfig-002-20250814    gcc-8.5.0
+powerpc               randconfig-003-20250814    gcc-10.5.0
+powerpc                     stx_gp3_defconfig    clang-22
+powerpc64             randconfig-001-20250814    clang-22
+powerpc64             randconfig-001-20250814    gcc-10.5.0
+powerpc64             randconfig-002-20250814    clang-22
+powerpc64             randconfig-002-20250814    gcc-10.5.0
+powerpc64             randconfig-003-20250814    clang-22
+powerpc64             randconfig-003-20250814    gcc-10.5.0
+riscv                            allmodconfig    gcc-15.1.0
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    gcc-15.1.0
+riscv                               defconfig    gcc-12
+riscv                 randconfig-001-20250814    clang-22
+riscv                 randconfig-002-20250814    clang-22
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    gcc-15.1.0
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    gcc-12
+s390                  randconfig-001-20250814    clang-22
+s390                  randconfig-002-20250814    clang-22
+s390                  randconfig-002-20250814    gcc-8.5.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-12
+sh                    randconfig-001-20250814    clang-22
+sh                    randconfig-001-20250814    gcc-9.5.0
+sh                    randconfig-002-20250814    clang-22
+sh                    randconfig-002-20250814    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20250814    clang-22
+sparc                 randconfig-001-20250814    gcc-14.3.0
+sparc                 randconfig-002-20250814    clang-22
+sparc                 randconfig-002-20250814    gcc-12.5.0
+sparc64                             defconfig    gcc-12
+sparc64               randconfig-001-20250814    clang-22
+sparc64               randconfig-002-20250814    clang-22
+sparc64               randconfig-002-20250814    gcc-8.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    clang-19
+um                               allyesconfig    gcc-12
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250814    clang-22
+um                    randconfig-002-20250814    clang-22
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250814    clang-20
+x86_64      buildonly-randconfig-002-20250814    clang-20
+x86_64      buildonly-randconfig-003-20250814    gcc-12
+x86_64      buildonly-randconfig-004-20250814    clang-20
+x86_64      buildonly-randconfig-005-20250814    gcc-12
+x86_64      buildonly-randconfig-006-20250814    gcc-12
+x86_64                              defconfig    clang-20
+x86_64                                  kexec    clang-20
+x86_64                randconfig-071-20250814    gcc-12
+x86_64                randconfig-072-20250814    gcc-12
+x86_64                randconfig-073-20250814    gcc-12
+x86_64                randconfig-074-20250814    gcc-12
+x86_64                randconfig-075-20250814    gcc-12
+x86_64                randconfig-076-20250814    gcc-12
+x86_64                randconfig-077-20250814    gcc-12
+x86_64                randconfig-078-20250814    gcc-12
+x86_64                               rhel-9.4    clang-20
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                       common_defconfig    clang-22
+xtensa                randconfig-001-20250814    clang-22
+xtensa                randconfig-001-20250814    gcc-8.5.0
+xtensa                randconfig-002-20250814    clang-22
+xtensa                randconfig-002-20250814    gcc-10.5.0
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
