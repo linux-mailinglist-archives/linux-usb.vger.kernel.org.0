@@ -1,108 +1,131 @@
-Return-Path: <linux-usb+bounces-26856-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26857-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F747B26799
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 15:37:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D0DFB26806
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 15:51:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91EAF7AF0F8
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 13:36:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F340E169C43
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 13:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B8C2FFDDE;
-	Thu, 14 Aug 2025 13:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D67FF2FF669;
+	Thu, 14 Aug 2025 13:46:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z3TFREvM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eP/p1H2J"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33AF21514E4;
-	Thu, 14 Aug 2025 13:33:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E692C2FCBE1
+	for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 13:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755178429; cv=none; b=dUpTggMM4qq5R4lleY+gKe9vBHUvY8aWrXd6qFWB8QFTnBUmxZxbN95dNG7KTAu73qpHlERP/FbzIMn0B7eLE4+0vfVBOe7uIytP46leyuH9ptMfxEHNrr8UVwCwIs4FeqgQ6CuYMw8nQ99xJiZqj863nT813D5l9e6XFA52LZc=
+	t=1755179175; cv=none; b=ZpLpN6yje3/2N3x07TpdIR6qKNrbliT2s36uVgnmHnU00G9PkWtbZuhH2UiJjiJNDdLAT+iEWYaB2Ohb9vYWwInw0oLrvFSV+l/MSZMhdOMhqUPduuMH/AHyd2+BPu9DLQNY+j4U8IsEFf7YKRfrsYQXXbS3WiknBuK0f+N77w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755178429; c=relaxed/simple;
-	bh=qzHOrb660hNBXkxGw6DWMOMC3lLxUoz/yT/E1S7tZKI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JmW4Ys8h5pnFaqpq+frJ4K4nAngN0V+2GyoD/vJoQZlO52BH2aWWRTUSHGnEoX5FjZB29zUTjpP9SFJx4OGHtWitt9MmpOeq1DmYT57s2KYd4XOUWx2vLxq/Fo66hTY+vUBehFBgY1khBjqdBoZwkxM445CzOBWTmoYYQEidB/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z3TFREvM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D9DC4CEED;
-	Thu, 14 Aug 2025 13:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755178428;
-	bh=qzHOrb660hNBXkxGw6DWMOMC3lLxUoz/yT/E1S7tZKI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z3TFREvMs1WoLOVL2tGaVT1AakYVA6W35J8m4vEyfQfAyM33dod6zbIvi5EZ1o4ab
-	 +wMY1hRryZmJya4eBLPwosoXvYCs7Hm8DP4mJqMxIjz+fK3bTqZyQyIajhMwZadJ3A
-	 VgKFpqwqWMz5XEiP87KZltrdbdpp7ekrl4gAU2w5KnSxbY9Tc79i75ZmxsSbc6noSa
-	 14Zr9EcpAfOR6dYy1EH27ORo6AzIYNG9OjyukxBmc9XHqR84SWyKav01vmYQ15nCYc
-	 kS4Zb/fu4eIRpPpxjviCrOuPbqL1PgkfEYx1n7Bl6BVDLraINW34jdIQrNZEM8PE8E
-	 hX7jkkQX4Kkqg==
-Date: Thu, 14 Aug 2025 14:33:42 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
-Cc: linux-kernel@vger.kernel.org, andreas@kemnade.info,
-	peter.ujfalusi@gmail.com, dmitry.torokhov@gmail.com,
-	robh@kernel.org, krzk+dt@kernel.org, lgirdwood@gmail.com,
-	tiwai@suse.com, conor+dt@kernel.org, lee@kernel.org,
-	ukleinek@kernel.org, gregkh@linuxfoundation.org,
-	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH v2 7/9] Documentation: omap-twl4030: convert to DT schema
-Message-ID: <8c9366a5-482e-4bf2-b8cc-79e789bf2ff0@sirena.org.uk>
-References: <20250814132129.138943-1-jihed.chaibi.dev@gmail.com>
- <20250814132129.138943-8-jihed.chaibi.dev@gmail.com>
+	s=arc-20240116; t=1755179175; c=relaxed/simple;
+	bh=Ywfuuv9+ay7gVSNzIskmPosSNb+1TLTIRyceJCIAlQk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h981BqOR66N/E4lYU8mbWw/2084g61I7Z9IjiqHgCDiJWRsWWCewBK+2fIokDpVlKekI4tDR11s5p+6O2+YSVYsGPruFZQOEqAq/FXIOxi9XR9iK45QkmIERLKUJjt7RjGxIRIyQxJYfL+a+Yh/Z3n4cwiPAoPPs9EoD6zBtzKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eP/p1H2J; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7e87055e1b6so126117085a.1
+        for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 06:46:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755179173; x=1755783973; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pS0QSowuThOQGjemDW6PP6Dt8bNAm15PG0h0id2d4eA=;
+        b=eP/p1H2JktLPHhABk2O4rojDShih736K+eozUuHlbGfI3+6rDVpgMnq0NTQSL6kBVU
+         h5sUF+q+bs/pwznXV7x4k49wTxckCRbILGpHLu3Fb1rCFiLaUdBzOBhHt03m2Af/oNs4
+         4OatdixlTwt1Q2UkDv0m1/qPWY17cHNMdumyf3QBXkPu3qqXQBV8tj3GhEXg8fC5aXGB
+         Qz41lfXjwnqjqJ+KNHy0ZMNplCzHKhbviv73yn/YE0D9Fgis8KTRIRkzCRpIvfKoGkfj
+         flMFLROXjWVQYeIuOneBRca/KpIEIK62W926d4QjaP/XCBXpY8xSYteM7NtsjwBEGtL9
+         9e/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755179173; x=1755783973;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pS0QSowuThOQGjemDW6PP6Dt8bNAm15PG0h0id2d4eA=;
+        b=xEls7hEU2wakJUBxK06/lZziTgBcL5oWcHMzT5BMic9mfmMv/YQwX2LGztUkpLAwXA
+         oCtpIo8RFzii1C65VZHi8/a7zXQZ+PDWMfiwsnZHGtuoaMK/6GN5o/PUeXfuve8+jgAK
+         q4loWh6vmfL0CIi8iC5sazlIJKMJzu35NsDEY5JpQ0LWXvyQFXiiEddwiQsbrko9J7i3
+         TE/rCvsnLxlPWFKHgRx54eXleXiKBK0IvY6cmXBRP3wynGwmn1eOBTP6+Z8aobbAPqZ5
+         IzGCx5LeBvLASW9/MAZRerzXuGq7el37MQQ3dWN//FyGjTpnSqYyAbrh9cfJG4ADtOA5
+         vQgg==
+X-Gm-Message-State: AOJu0YybzDOf2vTt8ERivHacO1N5ib7Dx9pN2JSnYcM63voAkqe2XNgk
+	QVUCNhHipIpAnrx5AX96RyOehdcvFTmpsGi7wVdBByONzXIUsg5v5gcH
+X-Gm-Gg: ASbGncuzoynuwJIRTdorx9i/HPIgb4aoO10CN2TCIkOPYm6Upzv+NcP0VdjcaZPuvGD
+	7dx+xt/q/6oPhmaQxAGF1TiMSx3MwIl7YIrRoqve5S6SOx+M+FqRNGnN6koa8hW4jy1sJRKpsqd
+	pNbdEFmibw/j9tqyRDtuz/FP2f0jGli/tajKCYVar4SMdmrlzXxoEwgv6hE2zuItLOc4YFOs4VQ
+	4IEYPsY0c4nZ4NSpkVVwWT1Ay8MLwYiaJruOXbinWJD0pSEWJ8nnfxp0Lgw7bR9Zv6kC6D7vuZN
+	3Sn7FiYmkoZ/T2ZNTx4IwqXQJ1hcldIlqETNTrM2ITJGd/z23bAC135Yu5moqnYx0GT5VmRPItC
+	p2TIvjSvmaG/j2z/itdTlsuAXevfIMY7GMoheg9wLSaPhcHKDbI6hBFa5wSgnlGyRW9AIhGz/S/
+	gHQtOHGfWDCCKhjPo=
+X-Google-Smtp-Source: AGHT+IHf03eJVkj2g2I1QX8iDWvelEMuA0T9hjyNVGKXAXreWu2eHIXWl3P0MeGXUEyRFrQ7VRQ8Ig==
+X-Received: by 2002:a05:620a:1791:b0:7e8:70b2:535a with SMTP id af79cd13be357-7e870b2a2f4mr467106485a.11.1755179172422;
+        Thu, 14 Aug 2025 06:46:12 -0700 (PDT)
+Received: from KAG-86297.KAGWERKS.LOCAL (static-108-44-230-106.clppva.fios.verizon.net. [108.44.230.106])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e8079cfcc9sm1596955585a.29.2025.08.14.06.46.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Aug 2025 06:46:11 -0700 (PDT)
+From: raub camaioni <raubcameo@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	raub camaioni <raubcameo@gmail.com>
+Subject: [PATCH] usb: gadget: f_ncm: Fix MAC assignment NCM ethernet
+Date: Thu, 14 Aug 2025 09:46:09 -0400
+Message-ID: <20250814134609.599023-1-raubcameo@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4nUJ618zm+2DpXSV"
-Content-Disposition: inline
-In-Reply-To: <20250814132129.138943-8-jihed.chaibi.dev@gmail.com>
-X-Cookie: This sentence no verb.
+Content-Transfer-Encoding: 8bit
 
+This fix is already present in f_ecm.c and was never propagated to f_ncm.c
 
---4nUJ618zm+2DpXSV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+When creating multiple NCM ethernet devices on a composite usb gadget device
+each MAC address on the HOST side will be identical.
+Having the same MAC on different network interfaces is bad.
 
-On Thu, Aug 14, 2025 at 03:21:27PM +0200, Jihed Chaibi wrote:
-> Convert the legacy TXT binding for the OMAP TWL4030 sound card
-> to the modern YAML DT schema format. This adds formal validation
-> and improves documentation.
+This fix updates the MAC address inside the ncm_strings_defs global during the ncm_bind call.
+This ensures each device has a unique MAC.
+In f_ecm.c ecm_string_defs is updated in the same way.
 
-> Changes in v2:
+The defunct MAC assignment in ncm_alloc has been removed.
 
-This should go after the ---, tools use this to remove the changelog
-when committing.
+Signed-off-by: raub camaioni <raubcameo@gmail.com>
+---
+ drivers/usb/gadget/function/f_ncm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> - Fixed comment formatting (added spaces for better alignment).
-> - Updated commit subject to align with subsystem style.
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index 58b0dd575af3..3164e75caa3b 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -1463,6 +1463,8 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+ 
+ 	ncm_opts->bound = true;
+ 
++	ncm_string_defs[1].s = ecm->ethaddr;
++	
+ 	us = usb_gstrings_attach(cdev, ncm_strings,
+ 				 ARRAY_SIZE(ncm_string_defs));
+ 	if (IS_ERR(us)) {
+@@ -1771,7 +1773,6 @@ static struct usb_function *ncm_alloc(struct usb_function_instance *fi)
+ 		mutex_unlock(&opts->lock);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+-	ncm_string_defs[STRING_MAC_IDX].s = ncm->ethaddr;
+ 
+ 	spin_lock_init(&ncm->lock);
+ 	ncm_reset_values(ncm);
+-- 
+2.34.1
 
-Should be ASoC: dt-bindings:=20
-
---4nUJ618zm+2DpXSV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmid5bUACgkQJNaLcl1U
-h9A2/gf8DYx2qBWKgxDl5J/9xk1Tol23Uwe7rnV2+wSVddxlxcPYEO+lCQ+ktiYz
-EJi0x9SUpw/em43nQulrEBY7vvJH6jlOMpM7qehbhuCdkAqIN1Be8e7/bR3LfGCM
-27wWzx1+Hxoun9V4q7w0MuKhjztsmti5MouUB03NQbR13uGmV9kNxJWF9juqAujI
-xfcamPWNGGyPF6GRjiuuBhPmrjl8yFh8u2UyiI4E1IS/GL3kth1FjC8igDAMniou
-2Fgn4M+BQrHi94iGGe+T19uAue1VARcg2RkYU6WUkuiBSRr673eL1OJQVOIoiFn6
-dm6JtgM4fu3FxSdbGp+fonGTJEdUZA==
-=3+dF
------END PGP SIGNATURE-----
-
---4nUJ618zm+2DpXSV--
 
