@@ -1,133 +1,190 @@
-Return-Path: <linux-usb+bounces-26844-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26845-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 685F4B266C2
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 15:17:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 377EAB266DE
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 15:21:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9883A189C9F9
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 13:16:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A600680238
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 13:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC8FA265284;
-	Thu, 14 Aug 2025 13:16:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5603002AD;
+	Thu, 14 Aug 2025 13:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZowA7Ua5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="htu5+Mgh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87512FD1DD
-	for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 13:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13B5191F92;
+	Thu, 14 Aug 2025 13:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755177375; cv=none; b=YpW2A0CoqQbCaZDqUTLW/Z3pD0eS0mp7NMAJYYV7BjBpZ8vC1XCLSOdFm1I00kRPT97aKXPzCrQkmbUyBO64AFmLJxysb0rANQ1yXbiCmiFHXATLHVSYn24f9fr0qYz6AcoOn1aECP77t6JJVlGPvgzwTzh3o7orlVfgZ2rg6cQ=
+	t=1755177707; cv=none; b=OOizPgKuLk3Q1WW87kzAFN3HjHchX6xDj+xrSpgQgmvX6iKRB35wOspqq0z+vsalmKGa5r7aKo/EWQJA0QqTl86JuNMgCN8B6CqIScXN3oHqGGlz3IDu9OES9Nimqa3Tvl/+ZgmTodIgA+CqrK7D3OT83SrKgU1KFBdur2Rj7TU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755177375; c=relaxed/simple;
-	bh=vDgLCKeM9Rm47mvfPdZQO1ayaJxXfRnOciQ3IniGbOk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WuJkhpzUFs3g7TsdNlS+lIm0ZiexfTHS+kRxIq5hmEdb/EKC2F5ta1RAro5acCej6V8V8LW6GM7woPW8Sj4clRqOg+OEyVwPrDS28qO40GZjiQ5JNqCYPiFuUcdfb8I8zBorYO5z0+un9INqzTorr9KmGXx57Ut2lCgTP7ARnAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZowA7Ua5; arc=none smtp.client-ip=209.85.128.177
+	s=arc-20240116; t=1755177707; c=relaxed/simple;
+	bh=0gNc8y0IxUkuy33DkYbXgIB1lUXVSIPD5J6S87Zz8uo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=GercWxGBFgSkN93Ribzwo98tAzpmTZHUTmTw9LiTs8x8o4meEDfiyhgC8kXKO2TKquB/LdoCY2ajn47mKNlLy0iTq6kxDSHjzIbgcJUjr4MUYfHVK4MMdEjLbFnq0OuB5MFHtSOKmZAI43ZKX0yS4W9E+neZVYtF5oWXLBR6t10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=htu5+Mgh; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-71d60504bf8so9457887b3.2
-        for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 06:16:13 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-45a1b0c8867so6948125e9.3;
+        Thu, 14 Aug 2025 06:21:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755177373; x=1755782173; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755177704; x=1755782504; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9Jgb4LzWojXG+ANRiQlMnzmPA1OevpTwzc0rGly+PU=;
-        b=ZowA7Ua5EtGIN3BU6K0zoFTBFnOivKBI49knpuJTAw8RnDTRlQGRBLqJ8GZb6rZ6y/
-         e4LeGCLIRoA1xgs/g+mQNq9JwNT69QZmL0WtWfdqxLXlF8YRgqJb+Q4uOggvdu6zn4j7
-         ZThtW93QCNc9iYhjrFaXi1tbkD1S8ueCjG3v/ac00auAmWGzEykvuT6J+NIgDhNATWCR
-         0LU5xFBUXNJ4O3SWpaNoTS/dsOOACNYG9ThUKBV5Ej/asHz+086o3hO9/5inOeZz0TcV
-         r3MgLmnzcwPscWje+Z4/dmjys0jpvhn/OcKJbcnRIyxrTRuyGKuU/RDg7N73k+MB/qEn
-         9t1g==
+        bh=7bMDJo186p2jEew+3Zrvp2fY8n4JWRnO1Ap6IS9F3qA=;
+        b=htu5+MghSTtEpIvCtptHhN7BReJOz4mTY0s09QMrZqyOZ/Hw/fx4xJpZLAGVIBz4d8
+         wWX/pKSgb6DPeoxiipf8pfVvV7CbjysSK94roSennAL65dzk7LuGA3Qu9UObqv7IU1bm
+         BRT6rDpIZpOWMp4QkDQBA8TkT4fpGYjDCzIsFMbTG3JqNv3Au9hlinrX33L/jWIqyB4Z
+         2d9fbgn4NIbepjCDapB2DP37bMczLOyU2DEmvAaTnC7cDpQ4HaU9ZCKKkhM3kwuSei1g
+         2OBzVO3cl/kA8Z7IZrIzW8iPLhSmZInR+O/DyCsTYzKCuoWfl8XDfg7QqC/UbmVb8a4K
+         Y2PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755177373; x=1755782173;
+        d=1e100.net; s=20230601; t=1755177704; x=1755782504;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Q9Jgb4LzWojXG+ANRiQlMnzmPA1OevpTwzc0rGly+PU=;
-        b=KYOBEFkKTZmdJA6vrU9vrjO8oNSMgKJN2puixC4nI3XqxLbhkmvj6bScCiK2AQISE2
-         Y/qTvozCqja2CfldnvhDNWHK+1sn2hLO/JXVXbn3eOb3er599bhTVUCTMJIgBOCLvOP1
-         WqzV005RDIhgLAtPISlQoCZJBXGqNnBWOr4kXdxM7sNSLpWB+MZTS4FjXr7JyupB8zXT
-         Oun0P4B+Pd9CwNgsAFemW3lI0uamdGHemRwOZJDlQof0JCUwm3JfRCZkgV+n73PmqMjo
-         dp5xUjdqGofAbqPPSIiPbXg7a39quLecFvHXzuYe287fDXnSMSmNg+8HrcshwBuzDc7C
-         nAGg==
-X-Gm-Message-State: AOJu0Yy8ClE3flyMaO28SApc/aHTh9LZnygXBFZf5KwmsNtCW1+cJsG3
-	v3bFptmd6Qd4ZN3JmEF43SX1OsLHjZ88eHYZtGTmiLs7zzUn0prhCrIY
-X-Gm-Gg: ASbGncvDN9X+gcgeIpxyjrlIuaopXhswjyJPyNekd3toL4KGN694RsW4kJ8cM5tGCGj
-	eB+37ceWAhXvHClZeGZbpV1oMbsoDmmPs/4dnTkp+6Xni2inYhyjFQiPVRLpVV8dQOo+BrWvw/Z
-	7NgOyRbRTL2g2Srue5NnL5k4HU5xsFehYj3wg1FOggpFwYlnnqjYY2PTSG5HDLzXnxoLP+H0mdA
-	G1B/8zdNgDbunECdLr2ReTiNQC9fryjQIx9kwNsedvZxlqSpPo5OoxMKUzgOaEQDcPq/o+CE7uk
-	gekW2XdoaxFT6cfRu91URWev1VAH0M2Kl7kIZII/jIZUhjZeWudzpynoo0/nIhWR7hfh8f1DK7g
-	cIGE9Ya2nQ1pR54BihASzmFWIRN5EyLkS/LZ7XMyi6f1OqCrsR3T4Z7qrPihUGLmAI7FEXB01v5
-	NFu7sH4XvUqT68ji8=
-X-Google-Smtp-Source: AGHT+IFHaQLrohfwWciNYh0bgIFdtlztuV1dcBZ66XAwOspA+7lBMViadrEJG4pQ4E/pFWm4tcLt8A==
-X-Received: by 2002:a05:690c:6002:b0:71b:f19a:8864 with SMTP id 00721157ae682-71d6363a792mr38868837b3.41.1755177372443;
-        Thu, 14 Aug 2025 06:16:12 -0700 (PDT)
-Received: from KAG-86297.KAGWERKS.LOCAL (static-108-44-230-106.clppva.fios.verizon.net. [108.44.230.106])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-71d60d5ff2bsm5948217b3.5.2025.08.14.06.16.11
+        bh=7bMDJo186p2jEew+3Zrvp2fY8n4JWRnO1Ap6IS9F3qA=;
+        b=gwS/vcPtvvKJ9z8GFTDrTWs/ipdsDH3E5A9sHjO9cCH0pyYkrqOjgIn+R80E5GBx0/
+         Zydv5x2zSmnYYrhMTMm4jswmWiyCRR5pmMl8YrB10sBvy8P65ScWXdPWGNiIlzI+isBY
+         Br8QyvUieZK7rRn0Wy9r4xfqd2oA0fMDjNmkhbU7dy/Ec5+3ObJOVm1QGZY8BR2ttPLK
+         TYemRWuiM6uwG5HhS7BPBJw3ITBsO15kAyoBqQ53yncWpybScHi28ZgrcdTKr8elXhlV
+         Cni9ynCiC3Hxqr1nTHkvTiXyv61q/pKC4vSZnat62/FlyZZuoaSdxPPFLSnFPOg/t3+p
+         iuMA==
+X-Forwarded-Encrypted: i=1; AJvYcCUBs0rH07hJLLnDNcyjFyz/jHPAXX25DjwTqv+qgZ3WiSdd2I0KXJkYqjfd03w0LZHrZtzGIS+eqe2U@vger.kernel.org, AJvYcCULeoNynuPt8uAjJGFxH8V1ytSYsX3mn3948FYwXRombIC3OWDBs8Q0ge+rWwP/69Bp4uUf+qp9vUAqADQ=@vger.kernel.org, AJvYcCWCZl+ms+q+rWOL4QnlsRktBVw6RYJ9O9FYUQY1B79dvkh4x4HNhrACLghxgBQqknBnDe+IEOMx2suv@vger.kernel.org, AJvYcCWVGalRs8yw9u1CKOViC9gtTco8wlIJQzWP6476MCJkLBdHi9lHNQ1kFeCq1D1aWoMt4iOjnMEXiEaHwic=@vger.kernel.org, AJvYcCXVXlrciv1OG8eZbelCGQRX1TxGNwV6uTbjHSpy8NoYoLhbl6z/8sif50WQKyq/2qW//GVLd4kAa7TP@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfxrUlgBgJ/LejtZlyBPEFniEXUhMNteoxx8XFQ+E+IHQahU17
+	duoYXAENPVeFfGzsKJVzXWsv7Dbc1xGdLKwToiM50E44Bc+mXZKD/a/NmzWF
+X-Gm-Gg: ASbGncvWDpYzGBrcgyACL2XH4qX3KfZFs1Eqivx40MS2AEPEs9iKSdW8I02p1NsgB2d
+	2hvyzThaH3UAT8qlmtUogJUm84Kxt28ck74PWoDgfKZpdhGZeAQiVwuN3Yc5E4V1UpPaXXnkQKu
+	CKe+4D/bzpJk7kfxj4rIR4TaRSIuw6JWo/gkOIQW3HmTSmrJ7+w9lodZ/abjC78/SWZZCsbI/jB
+	KKpzWcgwZcvL+pR+5mwvimYn+661BWwAw5K6O1/qH3AfoivE8WrxMCd1PW9vkzSH4uD10l2eX7l
+	6U+kOIKpwD1ZjXLUv9KFAVpIU5Wa08/2RCEHrC2lzdw2vmByicEmwfmnGH0Ef5S6N5DGzezQR94
+	j+izdG86ObPC9mfSXWYJZr1dZ/fatBscP9dpZJoN1Kq8KAe8ymMF46qX0aqWH6RR0pgziNwzM2D
+	kRKXQl+RikRTS+Go8eifVMdGMft3Y70z18
+X-Google-Smtp-Source: AGHT+IGjryud1OAhsbQzG5opdza3J0arXvGMqqvPhb9Y/7Sf6esDDcwIpDPlr3q8nLe5TGjuWY/5zA==
+X-Received: by 2002:a5d:64e8:0:b0:3b7:7936:e7fb with SMTP id ffacd0b85a97d-3b9edf3897emr2394083f8f.30.1755177703292;
+        Thu, 14 Aug 2025 06:21:43 -0700 (PDT)
+Received: from localhost.localdomain (lmontsouris-658-1-96-160.w81-250.abo.wanadoo.fr. [81.250.250.160])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c3b9386sm50998831f8f.18.2025.08.14.06.21.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 06:16:11 -0700 (PDT)
-From: raub camaioni <raubcameo@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	Raub <raubcameo@gmail.com>
-Subject: [PATCH] usb: gadget: f_ncm: Fix MAC assignment NCM ethernet
-Date: Thu, 14 Aug 2025 09:16:09 -0400
-Message-ID: <20250814131609.593641-1-raubcameo@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Thu, 14 Aug 2025 06:21:42 -0700 (PDT)
+From: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: andreas@kemnade.info,
+	peter.ujfalusi@gmail.com,
+	dmitry.torokhov@gmail.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	lgirdwood@gmail.com,
+	tiwai@suse.com,
+	conor+dt@kernel.org,
+	lee@kernel.org,
+	ukleinek@kernel.org,
+	broonie@kernel.org,
+	gregkh@linuxfoundation.org,
+	linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	shuah@kernel.org,
+	jihed.chaibi.dev@gmail.com
+Subject: [PATCH v2 0/9] dt-bindings: Convert TWL4030/6040 family binding to DT schema
+Date: Thu, 14 Aug 2025 15:21:20 +0200
+Message-Id: <20250814132129.138943-1-jihed.chaibi.dev@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Raub <raubcameo@gmail.com>
+Hi,
 
-This fix is already present in f_ecm.c and was never propagated to f_ncm.c
+This series modernizes the Device Tree bindings for the Texas
+Instruments TWL4030/TWL6040 family by converting all remaining
+legacy TXT bindings to the structured YAML DT schema format.
 
-When creating multiple NCM ethernet devices on a composite usb gadget device
-each MAC address on the HOST side will be identical.
-Having the same MAC on different network interfaces is bad.
+This improves the bindings by adding formal type checking, clear property
+definitions, and machine-readable examples, which allows for automated
+validation and better documentation for developers.
 
-This fix updates the MAC address inside the ncm_strings_defs global during the ncm_bind call.
-This ensures each device has a unique MAC.
-In f_ecm.c ecm_string_defs is updated in the same way.
+This v2 series addresses feedback from the initial submission, adds a new
+patch to fix validation errors that were uncovered by the stricter schemas,
+and includes several other minor improvements.
 
-The defunct MAC assignment in ncm_alloc has been removed.
-
-Signed-off-by: raub camaioni <raubcameo@gmail.com>
+Thank you,
+Jihed
 ---
- drivers/usb/gadget/function/f_ncm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index 58b0dd575af3..3164e75caa3b 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1463,6 +1463,8 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
- 
- 	ncm_opts->bound = true;
- 
-+	ncm_string_defs[1].s = ecm->ethaddr;
-+	
- 	us = usb_gstrings_attach(cdev, ncm_strings,
- 				 ARRAY_SIZE(ncm_string_defs));
- 	if (IS_ERR(us)) {
-@@ -1771,7 +1773,6 @@ static struct usb_function *ncm_alloc(struct usb_function_instance *fi)
- 		mutex_unlock(&opts->lock);
- 		return ERR_PTR(-EINVAL);
- 	}
--	ncm_string_defs[STRING_MAC_IDX].s = ncm->ethaddr;
- 
- 	spin_lock_init(&ncm->lock);
- 	ncm_reset_values(ncm);
+Changes from v2:
+
+  - Add new patch (9/9) to fix the parent ti,twl.yaml binding by adding
+    the missing sub-node definitions, resolving dtbs_check errors.
+  - (1/9) ti,twl4030-audio: Moved binding to sound/, added enum for
+    ti,enable-vibra, and simplified the example.
+  - (2/9) ti,twl6040: Renamed twl6040,audpwron-gpio to ti,audpwron-gpio
+    to fix a vendor prefix validation error.
+  - (8/9) ti,twlxxxx-usb: Added '#phy-cells' property to support the
+    standard PHY framework.
+  - (7/9) omap-twl4030: Minor cosmetic fixes, retaining Acked-by Mark Brown.
+  - Other patches: Minor description and formatting cleanups.
+
+The following nine patches are included in this series:
+Jihed Chaibi (9):
+  mfd: dt-bindings: ti,twl4030-audio: convert to DT schema
+  mfd: dt-bindings: ti,twl6040: convert to DT schema
+  input: dt-bindings: ti,twl4030-keypad: convert to DT schema
+  mfd: dt-bindings: ti,twl4030-power: convert to DT schema
+  pwm: dt-bindings: ti,twl-pwm: convert to DT schema
+  pwm: dt-bindings: ti,twl-pwmled: convert to DT schema
+  Documentation: omap-twl4030: convert to DT schema
+  usb: dt-bindings: ti,twlxxxx-usb: convert to DT schema
+  dt-bindings: mfd: twl: Add missing sub-nodes for TWL4030 & TWL603x
+
+ .../bindings/input/ti,twl4030-keypad.yaml     |  44 +++++
+ .../bindings/input/twl4030-keypad.txt         |  27 ---
+ .../devicetree/bindings/mfd/ti,twl.yaml       |  63 +++++++
+ .../bindings/mfd/ti,twl4030-power.yaml        |  69 ++++++++
+ .../devicetree/bindings/mfd/ti,twl6040.yaml   | 155 ++++++++++++++++++
+ .../devicetree/bindings/mfd/twl4030-audio.txt |  46 ------
+ .../devicetree/bindings/mfd/twl4030-power.txt |  48 ------
+ .../devicetree/bindings/mfd/twl6040.txt       |  67 --------
+ .../devicetree/bindings/pwm/ti,twl-pwm.txt    |  17 --
+ .../devicetree/bindings/pwm/ti,twl-pwm.yaml   |  46 ++++++
+ .../devicetree/bindings/pwm/ti,twl-pwmled.txt |  17 --
+ .../bindings/pwm/ti,twl-pwmled.yaml           |  46 ++++++
+ .../bindings/sound/omap-twl4030.txt           |  62 -------
+ .../bindings/sound/ti,omap-twl4030.yaml       | 102 ++++++++++++
+ .../bindings/sound/ti,twl4030-audio.yaml      |  90 ++++++++++
+ .../bindings/usb/ti,twlxxxx-usb.yaml          | 125 ++++++++++++++
+ .../devicetree/bindings/usb/twlxxxx-usb.txt   |  43 -----
+ 17 files changed, 740 insertions(+), 327 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/input/ti,twl4030-keypad.yaml
+ delete mode 100644 Documentation/devicetree/bindings/input/twl4030-keypad.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,twl4030-power.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,twl6040.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/twl4030-audio.txt
+ delete mode 100644 Documentation/devicetree/bindings/mfd/twl4030-power.txt
+ delete mode 100644 Documentation/devicetree/bindings/mfd/twl6040.txt
+ delete mode 100644 Documentation/devicetree/bindings/pwm/ti,twl-pwm.txt
+ create mode 100644 Documentation/devicetree/bindings/pwm/ti,twl-pwm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pwm/ti,twl-pwmled.txt
+ create mode 100644 Documentation/devicetree/bindings/pwm/ti,twl-pwmled.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/omap-twl4030.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/ti,omap-twl4030.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/ti,twl4030-audio.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,twlxxxx-usb.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/twlxxxx-usb.txt
+
 -- 
-2.34.1
+2.39.5
 
 
