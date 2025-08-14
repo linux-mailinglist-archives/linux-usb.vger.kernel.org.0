@@ -1,61 +1,92 @@
-Return-Path: <linux-usb+bounces-26830-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26831-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1E78B25B70
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 07:59:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE77FB25B7C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 08:02:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F0788872ED
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 05:58:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EA165C4876
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 06:01:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE09230BD2;
-	Thu, 14 Aug 2025 05:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAD2C22AE65;
+	Thu, 14 Aug 2025 06:01:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1Xngf2XY"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="d8UrASlb";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dpkrBCdp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94ECC2264A1;
-	Thu, 14 Aug 2025 05:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D67F21FF5C
+	for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 06:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755151082; cv=none; b=hcDarhnFeVgMceLjEow4hJmsYpEolnaFI6gqtPNXoDb7fKVC/QhqIcegzytI8uYSBSR4YEAxIKEJsMCeXR1kvlA+3gDFpFK9UT/T6TlWdEsOBqYMNGkXB00X5oPEKRMnNSahsu2MOb7/KA2nO2OeKhYOutfHjEMD8cPRJdraF3E=
+	t=1755151309; cv=none; b=bbOAxxHJX5c7Yo96ljqfMhEbdD1/FZFlcIzUuoWXbVNfzqfnyEMMhhE8IXBcIrh/n0Oh7eA0GBO52AvFoS0vB+47At/Oln+0l9r7pabd0V0WdNJj0DOTXbkNS2orq2JYglnCHfFBwQ9W+w9xlyN2UXszc1a5BdEABypEsmovjD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755151082; c=relaxed/simple;
-	bh=i+BULjIrt5Ty3hv65N41KIDjGgGgkaHyuvDeN1TuW7k=;
+	s=arc-20240116; t=1755151309; c=relaxed/simple;
+	bh=mfWdbbecNcADrYmnw7fcLHs/u+bn2umseKsKhE9Gvf4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kB799ypg+SvwCNLLK194vETdugaQxlx8l5QGLBMeoLtoRvyzJSWz5kqB6ODCQWjx6W3PXXavEsZDd7v0A10BAxBWCn1VcmhexPwlKIG5iznTM4y+/Gb2tcEz4cp2mMr2tU6Ua1VCjiQ0+iAKLJWfq1PaBUXrLd9F/DFT7ZIWLss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1Xngf2XY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3AFBC4CEEF;
-	Thu, 14 Aug 2025 05:58:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755151082;
-	bh=i+BULjIrt5Ty3hv65N41KIDjGgGgkaHyuvDeN1TuW7k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1Xngf2XYsaKJfjKq5a4SFvaG/HFhLb++ksZ0Xm9oIzgpfhgM/4M3Os4gAyr5ukE1Y
-	 aWM8omb7C8TNSaLSy+po4tYydM7GoUYMXTPdck/uY5V9hcG9d421V0WC1FEmdJd3+A
-	 lSCTj3C+aPuYKfV2AfC7FsGtInx5i07+jDZAlMJ4=
-Date: Thu, 14 Aug 2025 07:57:58 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Selvarasu Ganesan <selvarasu.g@samsung.com>
-Cc: Thinh.Nguyen@synopsys.com, m.grzeschik@pengutronix.de, balbi@ti.com,
-	bigeasy@linutronix.de, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
-	dh10.jung@samsung.com, akash.m5@samsung.com,
-	hongpooh.kim@samsung.com, eomji.oh@samsung.com,
-	shijie.cai@samsung.com, alim.akhtar@samsung.com,
-	muhammed.ali@samsung.com, thiagu.r@samsung.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb: dwc3: Remove WARN_ON for device endpoint command
- timeouts
-Message-ID: <2025081442-monotype-pony-83ed@gregkh>
-References: <CGME20250808125457epcas5p111426353bf9a15dacfa217a9abff6374@epcas5p1.samsung.com>
- <20250808125315.1607-1-selvarasu.g@samsung.com>
- <2025081348-depict-lapel-2e9e@gregkh>
- <f9120ba5-e22b-498f-88b3-817893af22be@samsung.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hCwhOqTzcJiPiaSv47WGuSNA0VqXf+Zo892ym0s4PQRpSvjuagT0UYf2q1LSFmIJ1NRJKSRD3Np5utcGlLABnfGFSMc2inNe/k0KPK+NxmexxPpEb7o0qr5hEL3hmH0YCMJ4DfdXTBtuZ+5vdhCl5DRuneLVvRRGGbRmPUNW2vI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=d8UrASlb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dpkrBCdp; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 3AFB17A0096;
+	Thu, 14 Aug 2025 02:01:45 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Thu, 14 Aug 2025 02:01:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1755151305; x=1755237705; bh=je+hLdQyHq
+	7KCNd+LRrHYZHEZbaOo/HAhuEWuxgrgqo=; b=d8UrASlbKd991w1Ta9A53Bk0A/
+	pjZWwBRCg83HaBe3FSs1m6ReoGOQwsK/oNkwIvGVssOzdmGSHciJtZNCmsAi4o8f
+	zzKraOdmZuN/O6qM/3ERkJNrQdJ6zqL56AnWJMV4kKk2OgN7SkjZklNz94zCc0Iw
+	Xy0dejP4s8P62e9yez6AR/m7TQ6TQ5OdtQDdsfzUeSvliPNKLuOlK46CNY8FZP8v
+	E5bLOlWjuiisHh/MOP2prBNNht+y9q54bblGBpxRABIqBMd9izWTzZKTrP2TBprf
+	9sNlc0XhP5pzKKLjfQsU0MmAr1NpmlehRg0YOPqytwuIQEgbBeYwnkuwoSIA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1755151305; x=1755237705; bh=je+hLdQyHq7KCNd+LRrHYZHEZbaOo/HAhuE
+	Wuxgrgqo=; b=dpkrBCdp1PJuyVFdW4OtuoQ4gJgeTUoCzFBRb8kGmcD7hTpqxKo
+	oos6wJ1KsannzbFOrhmGDSeovYXCv//QRFaEEfhy3Bc42uJ381NhOm4aRJ7MvUFn
+	Pf5CSaB64PCFjDZ4nfLHloC9ut1AbOgAQkxdc1MmDA7B/eNh9qLM+kaW5AwfVwPm
+	Sh9nyGAvMCdEoVsSrz/2D14TbfGHstitzu5NgEyXprtRQNvz1wJoQzwRV5UxRD8r
+	bdRKuxOExS9UeArGv0r2RSaLCr3oX2bUrLVssD3OFNwszFf4RNiQqEmWmHDc7Kax
+	NrTALdvlph06pcHPm4RiJp1/5eH5fvKkN9g==
+X-ME-Sender: <xms:yHudaIqpT3_vm30EnGWsE6TesYZD4K1tngme9TqG6vPGw_VDv9C50A>
+    <xme:yHudaKK-h2FZP3GARVWlLUvKw2LU7cqVfddZGTvtSCcMe4GEj7asGfudWEHjXoge-
+    1xmMzIOSE767Q>
+X-ME-Received: <xmr:yHudaDrhCjvfC3sPghzKkO3AsmWSRHaSSRuO-ldW5EC5CQ-MVzW0UTasultVtON1NnVhFrxNdmxnXWf3rBTQWnB3KqOK9WPErKzh2w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugedtfeduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdertd
+    dttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeen
+    ucggtffrrghtthgvrhhnpeehgedvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhf
+    dtueefhffgheekteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhdpnhgspghrtghpthhtohepgedpmhhoug
+    gvpehsmhhtphhouhhtpdhrtghpthhtohepihgrmhesvhgrlhguihhkshhsrdhorhhgrdhr
+    uhdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:yHudaKy-iQxkP_Xk2lQzdw3YfpzGhGC5o-5z4NQzKOH_HTIirYOdxg>
+    <xmx:yHudaPMQgQr3dL0ca_NVbH6jjHYwUb5IAu8DRiwwNbmzLNwBN5HVVQ>
+    <xmx:yHudaH7Rax6xMNrAd19VuiggWkrL4v7S34dIcXg-bxWZ-8f454hhcg>
+    <xmx:yHudaAmouC1y_fUUi-BJFCM8BSk3MBqo0aSthDBHB_RYKDdT7t-5-A>
+    <xmx:yXudaNi_XIEHiaOC_2e-tH4NLXqBfor5oMAXMAFrH0qbiUb4Jt7LUJRh>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 14 Aug 2025 02:01:44 -0400 (EDT)
+Date: Thu, 14 Aug 2025 08:01:42 +0200
+From: Greg KH <greg@kroah.com>
+To: ValdikSS <iam@valdikss.org.ru>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: USB 1.1 Full Speed OHCI slow/high latency
+Message-ID: <2025081405-lily-useable-75c1@gregkh>
+References: <3fe845b9-1328-4b40-8b02-61a879bea6df@valdikss.org.ru>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,104 +95,64 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f9120ba5-e22b-498f-88b3-817893af22be@samsung.com>
+In-Reply-To: <3fe845b9-1328-4b40-8b02-61a879bea6df@valdikss.org.ru>
 
-On Thu, Aug 14, 2025 at 10:23:38AM +0530, Selvarasu Ganesan wrote:
+On Thu, Aug 14, 2025 at 04:56:40AM +0300, ValdikSS wrote:
+> I have an old USB 1.1 Full Speed printer (Canon LBP1120) which can't print
+> large documents due to insufficient USB 1.1 transfer speed/high latency on
+> Linux.
+> I believe this may be Linux OHCI bug or deficiency.
 > 
-> On 8/13/2025 8:03 PM, Greg KH wrote:
-> > On Fri, Aug 08, 2025 at 06:23:05PM +0530, Selvarasu Ganesan wrote:
-> >> This commit addresses a rarely observed endpoint command timeout
-> >> which causes kernel panic due to warn when 'panic_on_warn' is enabled
-> >> and unnecessary call trace prints when 'panic_on_warn' is disabled.
-> >> It is seen during fast software-controlled connect/disconnect testcases.
-> >> The following is one such endpoint command timeout that we observed:
-> >>
-> >> 1. Connect
-> >>     =======
-> >> ->dwc3_thread_interrupt
-> >>   ->dwc3_ep0_interrupt
-> >>    ->configfs_composite_setup
-> >>     ->composite_setup
-> >>      ->usb_ep_queue
-> >>       ->dwc3_gadget_ep0_queue
-> >>        ->__dwc3_gadget_ep0_queue
-> >>         ->__dwc3_ep0_do_control_data
-> >>          ->dwc3_send_gadget_ep_cmd
-> >>
-> >> 2. Disconnect
-> >>     ==========
-> >> ->dwc3_thread_interrupt
-> >>   ->dwc3_gadget_disconnect_interrupt
-> >>    ->dwc3_ep0_reset_state
-> >>     ->dwc3_ep0_end_control_data
-> >>      ->dwc3_send_gadget_ep_cmd
-> >>
-> >> In the issue scenario, in Exynos platforms, we observed that control
-> >> transfers for the previous connect have not yet been completed and end
-> >> transfer command sent as a part of the disconnect sequence and
-> >> processing of USB_ENDPOINT_HALT feature request from the host timeout.
-> >> This maybe an expected scenario since the controller is processing EP
-> >> commands sent as a part of the previous connect. It maybe better to
-> >> remove WARN_ON in all places where device endpoint commands are sent to
-> >> avoid unnecessary kernel panic due to warn.
-> >>
-> >> Cc: stable@vger.kernel.org
-> >> Co-developed-by: Akash M <akash.m5@samsung.com>
-> >> Signed-off-by: Akash M <akash.m5@samsung.com>
-> >> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
-> >> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> >> ---
-> >>
-> >> Changes in v3:
-> >> - Added Co-developed-by tags to reflect the correct authorship.
-> >> - And Added Acked-by tag as well.
-> >> Link to v2: https://lore.kernel.org/all/20250807014639.1596-1-selvarasu.g@samsung.com/
-> >>
-> >> Changes in v2:
-> >> - Removed the 'Fixes' tag from the commit message, as this patch does
-> >>    not contain a fix.
-> >> - And Retained the 'stable' tag, as these changes are intended to be
-> >>    applied across all stable kernels.
-> >> - Additionally, replaced 'dev_warn*' with 'dev_err*'."
-> >> Link to v1: https://lore.kernel.org/all/20250807005638.thhsgjn73aaov2af@synopsys.com/
-> >> ---
-> >>   drivers/usb/dwc3/ep0.c    | 20 ++++++++++++++++----
-> >>   drivers/usb/dwc3/gadget.c | 10 ++++++++--
-> >>   2 files changed, 24 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-> >> index 666ac432f52d..b4229aa13f37 100644
-> >> --- a/drivers/usb/dwc3/ep0.c
-> >> +++ b/drivers/usb/dwc3/ep0.c
-> >> @@ -288,7 +288,9 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
-> >>   	dwc3_ep0_prepare_one_trb(dep, dwc->ep0_trb_addr, 8,
-> >>   			DWC3_TRBCTL_CONTROL_SETUP, false);
-> >>   	ret = dwc3_ep0_start_trans(dep);
-> >> -	WARN_ON(ret < 0);
-> >> +	if (ret < 0)
-> >> +		dev_err(dwc->dev, "ep0 out start transfer failed: %d\n", ret);
-> >> +
-> > If this fails, why aren't you returning the error and handling it
-> > properly?  Just throwing an error message feels like it's not going to
-> > do much overall.
+> If I connect the printer to USB 2.0 port (uses "companion" OHCI controller),
+> the printing engine reports data underflow using its proprietary command
+> protocol, and the full-page picture fails to print (only 1/3 is printed).
+> However if I connect it over USB 2.0 Hub (EHCI, hub does internal Full Speed
+> conversion) the printer works fine.
+> Same applies to USB 3.0 XHCI ports, via which the printer also works fine.
 > 
-> Hi Greg,
+> The issue is seen on Orange Pi Zero3 (Allwinner H618) and Radxa Rock S
+> (Rockchip 3308) boards, with different USB controllers.
 > 
-> Thanks for your review comments.
+> There's no USB-level errors (captured with tcpdump -i usbmon0), all URBs are
+> success, but they are much slower in OHCI than with EHCI Full Speed via hub.
 > 
-> The trigger EP command is followed by an error message in case of 
-> failure, but no corrective action is required from the driver's 
-> perspective. In this context, returning an error code is not necessary, 
-> as the driver's operation can continue uninterrupted.
+> Here's a speed comparison using simple Python script with asks the printer
+> status 10000 times.
 > 
-> This approach is consistent with how WARN_ON is handled, as it also does 
-> not return a value. Furthermore, This approach aligns with how handled 
-> similar situations elsewhere in the code, where added error messages 
-> instead of using WARN_ON.
+> Direct connection, OHCI:
+> 
+> # python3 speedtest.py
+> Opening printer at /dev/usb/lp0...
+> Testing 10000/10000...
+> Avg delta: 1.916 ms
+> Min: 1.443 ms
+> Max: 2.891 ms
+> 
+> Connection via the USB 2.0 hub, EHCI:
+> 
+> # python3 speedtest.py
+> Opening printer at /dev/usb/lp0...
+> Testing 10000/10000...
+> Avg delta: 0.696 ms
+> Min: 0.590 ms
+> Max: 1.072 ms
+> 
+> The printer is from year 2002, with USB 1.1 full speed, and was designed to
+> work via USB 1.1 controllers.
+> Any ideas what could be wrong?
 
-Ok, thanks for letting me know, but be prepared for someone in the
-future to come along and attempt to actually add error handling return
-logic as it does seem arbitrary to do this for these cases.
+Yes, the USB controllers on these devices just can't handle it, odds are
+they were never really designed for this type of workload.
+
+Stick with the hub solution, scheduling low speed transactions is a pain
+for many host controllers and it seems that it's better done by the USB
+3 controller than the older ones.
+
+If you really want to dig into this, perhaps the output of usbmon when
+the device is failing might provide some information as to what is going
+on.
+
+thanks,
 
 greg k-h
 
