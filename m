@@ -1,131 +1,137 @@
-Return-Path: <linux-usb+bounces-26877-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26878-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE396B26D41
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 19:06:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3F6BB26D4A
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 19:12:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 02A671CC5FD7
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 17:07:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47DA23A0115
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 17:12:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D2F1F3D54;
-	Thu, 14 Aug 2025 17:06:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 228221F869E;
+	Thu, 14 Aug 2025 17:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="R2sbObHT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6MK01vg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC023321446;
-	Thu, 14 Aug 2025 17:06:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB551E3DDB
+	for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 17:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755191205; cv=none; b=Sg2xn9u1RgE583gdKwU0ssl5YyO3qP1s23MPIPlRuVT6irZIQ0Y1vWCS1c95cGdA3jYmU8L5AmMGzXhirZ7W/mj3DxBWjKkhQwE+EG76H3wIEvrnOCU6sgIz76hKIU+CTdUNYtftcQ1+jW4vJ0C9CGimrSugmhsC3gweu2veIJE=
+	t=1755191517; cv=none; b=XrqlZI0WY5at9LpspOgTqq0ORcDcHtYpgmbA0o11EoqaLTi5tOp+4tZW3QLhsTZaVPvX736ik6Jm14HrOIDnAkStHMYXNJzds+u2kxvnKTlsl4BcXtdkwmv/NDqBB+LLXGzDrKnKbojs8PFdenvAZ6YId0m6Gr9iKQZM3ea+6XA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755191205; c=relaxed/simple;
-	bh=7ZxYnpu99t0vZK+i5eu58QROLyB3Osh4912wLP+tnas=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R9mtrDbnT8wPpSOWEsN1sgq2jgBuTrHOs4qhYvrspDASZjQe02+9zjmYcnpnDG1gTu4SH4S06R5U3YTtnKhNbA6+E3lmuzosS2eaRr5s6T8vn7ZqrNXd6HtzypeztL4Am+DM32IWd06eGS+AVu7tgKAfkrF8sVKLNzo/A0aXsAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=R2sbObHT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B07FDC4CEED;
-	Thu, 14 Aug 2025 17:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755191205;
-	bh=7ZxYnpu99t0vZK+i5eu58QROLyB3Osh4912wLP+tnas=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R2sbObHTU7j8tt1ACsqdXrxxy0DRrlkD6AzWHftGONh5kYE0OeE0LA3jZCM4cmbcS
-	 L20aaWDLkw1DM/nPhSNBFifj4b7k2mzoWsawWos9BqbPp5JU9cNjeac7GdQicyJH0p
-	 au6vTe0rnkXX/Dod1xOME9n2hdfVLBENtrqjA8wc=
-Date: Thu, 14 Aug 2025 19:06:41 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Zenm Chen <zenmchen@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, pkshih@realtek.com,
-	rtl8821cerfe2@gmail.com, stable@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net, usbwifi2024@gmail.com
-Subject: Re: [usb-storage] Re: [PATCH] USB: storage: Ignore driver CD mode
- for Realtek multi-mode Wi-Fi dongles
-Message-ID: <2025081428-unfold-shakily-6278@gregkh>
-References: <03d4c721-f96d-4ace-b01e-c7adef150209@rowland.harvard.edu>
- <20250814140329.2170-1-zenmchen@gmail.com>
- <b938a764-6ded-4b76-a15c-82c0062abf42@rowland.harvard.edu>
+	s=arc-20240116; t=1755191517; c=relaxed/simple;
+	bh=gr4TL1/b1EwVDkwJWACXu71TcqlU0190LABfPYRAE/g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fqbGvP/qTsPi0genqowd8aeEVj/YR/4PgklJlZbXdKGt1iqwB/qe9SWGqeyrPnUYBmMkY5Gi3U6Oc2LXoe1OPKRIFdR2AcCgZT0VBEZ+KYgC8fpwAM1aV6CcpERMeT+0Fz7aqGtY15lb+M4/t91a3wrb6th501cGNjbY+BiSpSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d6MK01vg; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4b109a95dddso15802311cf.1
+        for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 10:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755191515; x=1755796315; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/dJgAQgix5WC7CQxRz16uQIjrnIMfTS0V9XDzYp/tzk=;
+        b=d6MK01vgsZ/3rmnw/ArWeZ7sxlQGTr3UPpdAbaDzm43e3H17r2xkYs0nozjLlC04iv
+         5iu1F5cKzXpUH6XVPztguNnWxdJnhrUTuO/5PXP9uNAmIeT434BG/8W9NvbLQ1+Kdt5u
+         3t7uE7WzYixSD1Ma6qdckPB2+kLxjcRi0JuSV7tvIRfiQe9N3IMFB1c3JBrpknisyW+W
+         SLdG8ZJmNYxGtjsYBcyJZZMkvkxdFfCSCXkI37zWEBD5RmIafKWeqfpL/r3Ug5IlggTW
+         z4ZCkmfEaiNrAmzvl8lepPCfwMLBeFsOvtQR4Wwtkxc3mvu8uusyhY9ROebQ3Ud9bFK3
+         gwiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755191515; x=1755796315;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/dJgAQgix5WC7CQxRz16uQIjrnIMfTS0V9XDzYp/tzk=;
+        b=e7kzja2J2uiBDjyX59bmgkFrotWSH2UGAeiC/ywDr/mFoQD/jrD8QYc3myx9jmxXez
+         PoLLupU3UZn/667xM5ofvt/v+YEEXT1ZMsmfrEywo0fSGh7CrQPTygb++aOuJaENzIpL
+         pTvnqOUEkkYD+gFYpmPSzfPiUlhrKnzAX1zCegMdChitYRH4WQUa4oFz1r//fQWqYRjG
+         N+8RaYuk229svXfAbG+ZmrTBzwaep9Zq3eCx2Cw79Byf+TbKpB9YCHJzkZVD/AHA6mc+
+         Mtqp6IkMSlGlx0MJXv1FfZz8dtwfTmrLsetZx8dN8LCb2BI+QPaoCBRAE2HBmfi3a6Dl
+         ZLcg==
+X-Gm-Message-State: AOJu0YzWH433BZhmpddmr1TqtJM+YpldurftI4vVPgwD6ffcQZgIiuKB
+	TRpFqRB2MmkW9zMQnY1nCAGHFgCmK/b5eZlTWxxKnMWR5tKZfaiL68PY
+X-Gm-Gg: ASbGnctaBWi5ccbfNlH63M6tTjyS/TVELWT9/LLz/Vz8qRPXHUM4HuXGGeM5CUOLpv8
+	upel8wn061oJu4q6lqSbivXIR/Ft9HwR9jpQpIcUEZbRKGB4Y5xmhrOjIYp5IGJpj83Td1c2bwf
+	tLVEkc7J1M92zAlxBdCSEF1UTcM3wP3H1OKFSLwd30NLKHMm9bufs0eX93M63EEAPhxOOuGpUyb
+	J7gBF89ak6DHFf6bDVMK1PysFtKG0WZC5PoFrZbtVWxn0EE0++/wHbauW0s087ZcGbvPR4f60to
+	tR20XOLSSoIpSzeol3Ge/t3gOX9C5Cla2vWb3RxkKyOBUDkNXIfxsHTNZKiKLIfEYQyQ+TdhtCT
+	2CrlJO1h4236zQwW2Aa5LYeYGpgmKJPGfvVt7Y5PmMYCvSCSKCuXF/LsgAtcTbL6Y5qR0Dso1QE
+	67x14zs6aLzCePlDU=
+X-Google-Smtp-Source: AGHT+IFKV+WLf4Qt0xkN1UFpdPmb5vd/loXkGkYM/y1QEOXI5gIKAHYi2Ld2NHHlaAhnb92TYEkLYQ==
+X-Received: by 2002:ad4:5945:0:b0:709:6278:4f73 with SMTP id 6a1803df08f44-70ae6d3729amr54728736d6.9.1755191514874;
+        Thu, 14 Aug 2025 10:11:54 -0700 (PDT)
+Received: from KAG-86297.KAGWERKS.LOCAL (static-108-44-230-106.clppva.fios.verizon.net. [108.44.230.106])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70ae6ce563csm15322596d6.33.2025.08.14.10.11.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Aug 2025 10:11:54 -0700 (PDT)
+From: raub camaioni <raubcameo@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	raub camaioni <raubcameo@gmail.com>
+Subject: [PATCH v3] usb: gadget: f_ncm: Fix MAC assignment NCM ethernet
+Date: Thu, 14 Aug 2025 13:08:20 -0400
+Message-ID: <20250814171125.635429-1-raubcameo@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b938a764-6ded-4b76-a15c-82c0062abf42@rowland.harvard.edu>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 14, 2025 at 12:21:16PM -0400, Alan Stern wrote:
-> On Thu, Aug 14, 2025 at 10:03:29PM +0800, Zenm Chen wrote:
-> > > Also, can you collect a usbmon trace showing what happens when the dongle is plugged in?
-> > 
-> > Hi Alan,
-> > 
-> > Today I removed usb_modeswitch from my system and grabbed some data, could you please take
-> > a look what was wrong? many thanks!
-> 
-> Yes, this shows the problem.  I'll skip the unimportant stuff below.
-> 
-> > D-Link AX9U
-> 
-> ...
-> 
-> > ffff8ae1f0bee000 771359614 S Bo:2:053:5 -115 31 = 55534243 0a000000 08000000 80000a25 00000000 00000000 00000000 000000
-> > ffff8ae1f0bee000 771359684 C Bo:2:053:5 0 31 >
-> > ffff8ae1b52d83c0 771359702 S Bi:2:053:4 -115 8 <
-> > ffff8ae1b52d83c0 771359812 C Bi:2:053:4 0 8 = 00007bff 00000200
-> > ffff8ae1f0bee000 771359853 S Bi:2:053:4 -115 13 <
-> > ffff8ae1f0bee000 771359935 C Bi:2:053:4 0 13 = 55534253 0a000000 00000000 00
-> 
-> This is a READ CAPACITY(10) command.  It asks the device for the number
-> of data blocks it contains and the size of each block.  The reply says
-> there are 31744 blocks each containing 512 bytes (which is unheard-of
-> for CDs; they virtually always have 2048 bytes per block).
-> 
-> ...
-> 
-> > ffff8ae1f0bee000 771366235 S Bo:2:053:5 -115 31 = 55534243 17000000 0c000000 00000615 1000000c 00000000 00000000 000000
-> > ffff8ae1f0bee000 771366306 C Bo:2:053:5 0 31 >
-> > ffff8ae218ff2900 771366317 S Bo:2:053:5 -115 12 = 00000008 00000000 00000800
-> > ffff8ae218ff2900 771366432 C Bo:2:053:5 0 12 >
-> > ffff8ae1f0bee000 771366443 S Bi:2:053:4 -115 13 <
-> > ffff8ae1f0bee000 771366556 C Bi:2:053:4 0 13 = 55534253 17000000 0c000000 01
-> 
-> This is a MODE SELECT(6) command.  This one tells the device to change
-> the block size to 2048.  The device responds with an error indication.
-> 
-> > ffff8ae1f0bee000 771366567 S Bo:2:053:5 -115 31 = 55534243 18000000 12000000 80000603 00000012 00000000 00000000 000000
-> > ffff8ae1f0bee000 801899370 C Bo:2:053:5 -104 0
-> 
-> This is a REQUEST SENSE command; it asks the device to report the
-> details of the error condition from the previous command.  But the
-> device doesn't reply and the command times out.  From this point on,
-> the trace shows nothing but repeated resets.  They don't help and the
-> device appears to be dead.
-> 
-> I don't know of any reasonable way to tell the kernel not to send that
-> MODE SELECT(6) command.
-> 
-> The log for the Mercury is generally similar although the details are
-> different.  Everything works okay until the computer sends a command
-> that the device doesn't like.  At that point the device dies and
-> resets don't revive it.
-> 
-> So it does indeed look like there is no alternative to making
-> usb-storage ignore the devices.
-> 
-> Greg, do you still have the original patch email that started this 
-> thread?  You can add:
-> 
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+This fix is already present in f_ecm.c and was never
+propagated to f_ncm.c
 
-Thanks, I have it somewhere, I'll dig it up and apply it.
+When creating multiple NCM ethernet devices
+on a composite usb gadget device
+each MAC address on the HOST side will be identical.
+Having the same MAC on different network interfaces is bad.
 
-greg k-h
+This fix updates the MAC address inside the
+ncm_strings_defs global during the ncm_bind call.
+This ensures each device has a unique MAC.
+In f_ecm.c ecm_string_defs is updated in the same way.
+
+The defunct MAC assignment in ncm_alloc has been removed.
+
+Signed-off-by: raub camaioni <raubcameo@gmail.com>
+---
+V2 -> V3: Whitespace and line length style errors
+V1 -> V2: From and Signed-off set to be identical
+
+ drivers/usb/gadget/function/f_ncm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index 58b0dd575af3..186fbb9d0a3d 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -1463,6 +1463,8 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+ 
+ 	ncm_opts->bound = true;
+ 
++	ncm_string_defs[1].s = ecm->ethaddr;
++
+ 	us = usb_gstrings_attach(cdev, ncm_strings,
+ 				 ARRAY_SIZE(ncm_string_defs));
+ 	if (IS_ERR(us)) {
+@@ -1771,7 +1773,6 @@ static struct usb_function *ncm_alloc(struct usb_function_instance *fi)
+ 		mutex_unlock(&opts->lock);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+-	ncm_string_defs[STRING_MAC_IDX].s = ncm->ethaddr;
+ 
+ 	spin_lock_init(&ncm->lock);
+ 	ncm_reset_values(ncm);
+-- 
+2.34.1
+
 
