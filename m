@@ -1,86 +1,56 @@
-Return-Path: <linux-usb+bounces-26876-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26877-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E023B26CAF
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 18:41:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE396B26D41
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 19:06:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5947AA20F47
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 16:40:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 02A671CC5FD7
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 17:07:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4C152D6417;
-	Thu, 14 Aug 2025 16:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D2F1F3D54;
+	Thu, 14 Aug 2025 17:06:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ildeziRH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="R2sbObHT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943BE1F03D5
-	for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 16:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC023321446;
+	Thu, 14 Aug 2025 17:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755189616; cv=none; b=FiCtukcSGmlEr6Bxl0XlqkxsBX2wRfDnDgDMWCCRRDu8Z2y3Y1BwMcNmFhkZVlCmgjRklS7IgPRpm8frRuIh3ZFAHdP0QiyAXvnUtyf1bNsjuYj/F7Ej95ABFpxmyS2tJywkds+OYu27GbXz3Yj8QHKv5/uOh8zqc3MoeAjNqjo=
+	t=1755191205; cv=none; b=Sg2xn9u1RgE583gdKwU0ssl5YyO3qP1s23MPIPlRuVT6irZIQ0Y1vWCS1c95cGdA3jYmU8L5AmMGzXhirZ7W/mj3DxBWjKkhQwE+EG76H3wIEvrnOCU6sgIz76hKIU+CTdUNYtftcQ1+jW4vJ0C9CGimrSugmhsC3gweu2veIJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755189616; c=relaxed/simple;
-	bh=QduH4c5brwI/4+hqEhrAxeTpFSeLWUjt1M/2SDi++Ds=;
+	s=arc-20240116; t=1755191205; c=relaxed/simple;
+	bh=7ZxYnpu99t0vZK+i5eu58QROLyB3Osh4912wLP+tnas=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GfcGBhp+/nPA1Pe3rif4aYOLainuHu0xFLWE86szCdBOeHQNXOZ7eUtPSfQe2iInTA8eGSeEQe3ONdxQzI419+IX8a3dwVHXwkACtQSSRPKTuZzjD1+BPvxg6rq4gRVdW1rMQxisFGJK3Pw7Ra9gzGz+qHRQQ+E0LsPb2FRI2fc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ildeziRH; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-70a88ddb1a2so11286846d6.0
-        for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 09:40:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1755189613; x=1755794413; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=29njbwTGryaI4zzkUPtzktjdLisztvLZu5yB3ibhhRQ=;
-        b=ildeziRHUGhmY8tPbqX8zQI9srdn5tGfK9/aboh3lX9JDZIWH1Sv3wBbtrZRdHqMrh
-         cXFc9mNgGKpz2CwS3R6xeht3q2bD8hJmR7eBOsICgXEtkVpeop0nz2SbXiHSgPAPk7I0
-         OKO3V+pGurysWW7Y+L2jwsebjAhSTNN3nGgCbYrj4w/PHwkPygsN1pSMkt5RtbOvQlq2
-         4TEw0TMfGkSFuDtfmJhy+5WzlchEcdYP2amQdtLf/T7Skgj8Rn2LenBmIpGTtVCuc6Pl
-         p7HL1nR6V5xiozzMd/V09/k6h4fcgepxWT6hXCjt55KnDlzb40wjzLdbzl7CNGHF72dh
-         0VIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755189613; x=1755794413;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=29njbwTGryaI4zzkUPtzktjdLisztvLZu5yB3ibhhRQ=;
-        b=s8qNVAsV/EGMpq9ByRWVgFn8W6ZbXMrSrWcfcXa056gHSnt2zm8LaGPOWSO8oPwjvQ
-         OURu/eszIu7EC0Fd2IE/qIyW46Ien5TbUUQaGr9+YG4Y7tlErlgqJh2Cp2cyDL/Kusie
-         BYJF5DxAWLvHV+GLcHOC09FNGYWIKcvyy9CTDyRIJ6syRstEDMjEUYdAb9SYeUtpZNX6
-         7atEW/qzhz9oi+VfcwNnvURuKbeAqsZsG51sie7QS9mcRrWtOFb0ZLjuxaJMQE0LapSI
-         aEdYakw7dYGCyjXBcyo/nfsnh0U/3ZpGePmFtP4TvEfYphSOeYqSlpmicF5udb6UW24T
-         Skvg==
-X-Gm-Message-State: AOJu0YzVtE7LA7qZw5p9XP5KKhWGDa8AvB4wfIELVx+hYmC+pyEaDyBF
-	kP4HIF3/KHmXjX06jYoTJtYzFCSzd79gLnf7xE9uSIkIOa9knJkL87lRU3rUg9ATAAsuJNOrD0u
-	zLqQ=
-X-Gm-Gg: ASbGnctJMT1rjHzoYdIewulbBGTvqE+r8pWG80aVxBp23ckgeCtWFVOeEbhL1Zi18fm
-	05Ivkb5v6nRHOmnyc8F2jzXqgTvbaqP195pAaXBlIl9oqk67o/9NZmU2ILpNHvwiO6QZ6/vA5So
-	4uVICfHQhc0UpFd3zgYf5l18BtPe4mns+rgOwxFwHLjJeclYGOTxgQ2wYDX9MgSPhRW0k8lSYfB
-	EE0uIFeU295xUNvEETv6lNOoleFohqI7g3MSzeFDextKlgcx1qnorg1As2oB/TdZLe+N6PvVlf8
-	dla5x+kL1ZgQauRBBmiwdNHECI15c76sXhxSjAYNgy539IqAXOnb+EkXSVlmPDIJjCKb6hSIufj
-	tzp52XyVT0Veof4saVHBWfmSlCVaBj85jJur75g==
-X-Google-Smtp-Source: AGHT+IE/RjnW1Dy82VnS7rDOnaTND9WztvR5OcwX6ofLXTQa7QK4cyRONgMtyfBeY8L1bEasynqHFw==
-X-Received: by 2002:a05:6214:d0e:b0:70a:47b2:f92 with SMTP id 6a1803df08f44-70b98247a86mr36207206d6.11.1755189613248;
-        Thu, 14 Aug 2025 09:40:13 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::fa48])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70af5b0acf9sm15145706d6.38.2025.08.14.09.40.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 09:40:12 -0700 (PDT)
-Date: Thu, 14 Aug 2025 12:40:10 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: ValdikSS <iam@valdikss.org.ru>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: USB 1.1 Full Speed OHCI slow/high latency
-Message-ID: <d41d8488-9438-430a-88ab-f845df3655e1@rowland.harvard.edu>
-References: <3fe845b9-1328-4b40-8b02-61a879bea6df@valdikss.org.ru>
- <6017298f-fc03-41c9-b0e3-a74180f4c9a1@rowland.harvard.edu>
- <f2c433ae-f9d0-4beb-a2c7-84d2fd68e02e@valdikss.org.ru>
+	 Content-Type:Content-Disposition:In-Reply-To; b=R9mtrDbnT8wPpSOWEsN1sgq2jgBuTrHOs4qhYvrspDASZjQe02+9zjmYcnpnDG1gTu4SH4S06R5U3YTtnKhNbA6+E3lmuzosS2eaRr5s6T8vn7ZqrNXd6HtzypeztL4Am+DM32IWd06eGS+AVu7tgKAfkrF8sVKLNzo/A0aXsAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=R2sbObHT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B07FDC4CEED;
+	Thu, 14 Aug 2025 17:06:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1755191205;
+	bh=7ZxYnpu99t0vZK+i5eu58QROLyB3Osh4912wLP+tnas=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R2sbObHTU7j8tt1ACsqdXrxxy0DRrlkD6AzWHftGONh5kYE0OeE0LA3jZCM4cmbcS
+	 L20aaWDLkw1DM/nPhSNBFifj4b7k2mzoWsawWos9BqbPp5JU9cNjeac7GdQicyJH0p
+	 au6vTe0rnkXX/Dod1xOME9n2hdfVLBENtrqjA8wc=
+Date: Thu, 14 Aug 2025 19:06:41 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Zenm Chen <zenmchen@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, pkshih@realtek.com,
+	rtl8821cerfe2@gmail.com, stable@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net, usbwifi2024@gmail.com
+Subject: Re: [usb-storage] Re: [PATCH] USB: storage: Ignore driver CD mode
+ for Realtek multi-mode Wi-Fi dongles
+Message-ID: <2025081428-unfold-shakily-6278@gregkh>
+References: <03d4c721-f96d-4ace-b01e-c7adef150209@rowland.harvard.edu>
+ <20250814140329.2170-1-zenmchen@gmail.com>
+ <b938a764-6ded-4b76-a15c-82c0062abf42@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -89,107 +59,73 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f2c433ae-f9d0-4beb-a2c7-84d2fd68e02e@valdikss.org.ru>
+In-Reply-To: <b938a764-6ded-4b76-a15c-82c0062abf42@rowland.harvard.edu>
 
-On Thu, Aug 14, 2025 at 06:11:59PM +0300, ValdikSS wrote:
-> On 14.08.2025 5:24 PM, Alan Stern wrote:
-> > On Thu, Aug 14, 2025 at 04:56:40AM +0300, ValdikSS wrote:
-> > > I have an old USB 1.1 Full Speed printer (Canon LBP1120) which can't print
-> > > large documents due to insufficient USB 1.1 transfer speed/high latency on
-> > > Linux.
-> > > I believe this may be Linux OHCI bug or deficiency.
-> > > 
-> > > If I connect the printer to USB 2.0 port (uses "companion" OHCI controller),
-> > > the printing engine reports data underflow using its proprietary command
-> > > protocol, and the full-page picture fails to print (only 1/3 is printed).
+On Thu, Aug 14, 2025 at 12:21:16PM -0400, Alan Stern wrote:
+> On Thu, Aug 14, 2025 at 10:03:29PM +0800, Zenm Chen wrote:
+> > > Also, can you collect a usbmon trace showing what happens when the dongle is plugged in?
 > > 
-> > Why on earth would a printer protocol have speed/latency requirements?
-> > That's just bad design.  It's not like printers are under any severe
-> > time constraints -- they won't blow up if they have to wait an extra ten
-> > seconds for the computer to send the contents of a page.
-> 
-> That's a very old printer from the lower-end segment, which have so little
-> RAM that it requires page (not job) streaming from the PC.
-> AFAIK it has 512 KB of RAM, and the whole-page picture compressed to the
-> printer language (CAPTv1) is around 1.5 MB.
-> 
-> The printer doesn't use regular usb EP stall feature to tell the host that
-> it shouldn't send any more data. Instead, it uses bi-directional protocol
-> where the host polls the printer status every time during the printing
-> process, and checks whether printer says it can accept the data.
-> 
-> So it's constant:
-> 1. Hey printer, tell me your BasicStatus
-> 2. Here it is, 6 bytes of data
-> 3. Hey printer, tell me your ExtendedStatus
-> 4. Here it is, first BasicStatus again, then ExtendedStatus 16 bytes in the
-> next USB transfer
-> 5. So you're ready to accept the data? Here you are, your <=6144 raster.
-> 6. Hey printer, tell me your BasicStatus...
-> 
-> You can imagine how inefficient is that for USB 1.1.
-
-Yes, but I can't imagine why delays would cause a NOTREADY, OFFLINE, or 
-UNDERFLOW error.
-
-> And a single USB transfer raster data is limited to 6144 bytes in the
-> "driver" (CUPS filter) for some reason. This doesn't seem to be a printer
-> hardware limitation: I've patched this limit to 16128 and it seems to work
-> as a workaround for this issue (more data in a single USB transfer).
-> 
-> This is an official proprietary x86 Canon driver. I'm running it on ARM via
-> both qemu and box86 (and the interpretation performance is not an issue
-> here, I checked that. It works fine on much lower-end SBC which has MUSB
-> stack with EHCI only).
-> 
-> 
-> > The timing information in the usbmon traces will contain helpful clues
-> > about what's going on, especially if the OHCI trace is compared to the
-> > EHCI trace.  (Incidentally, you shouldn't use usbmon0; you should the
-> > bus number that the printer is attached to.)
-> 
-> The "success" response on OUT raster data takes about 2-2.5x longer with
-> OHCI than via the hub. And I can't say it's too slow either, everything
-> seems to be more or less fine regarding the timings, but the printer doesn't
-> like it, reporting NOT_READY | OFFLINE in BasicStatus and UNDERFLOW in
-> Engine ExtendedStatus.
-> 
-> I'm not very versed in USB though.
-> I can upload .pcaps if that's useful.
-> 
-> 
+> > Hi Alan,
 > > 
-> > > Here's a speed comparison using simple Python script with asks the printer
-> > > status 10000 times.
-> > > 
-> > > Direct connection, OHCI:
-> > > 
-> > > # python3 speedtest.py
-> > > Opening printer at /dev/usb/lp0...
-> > > Testing 10000/10000...
-> > > Avg delta: 1.916 ms
-> > > Min: 1.443 ms
-> > > Max: 2.891 ms
-> > > 
-> > > Connection via the USB 2.0 hub, EHCI:
-> > > 
-> > > # python3 speedtest.py
-> > > Opening printer at /dev/usb/lp0...
-> > > Testing 10000/10000...
-> > > Avg delta: 0.696 ms
-> > > Min: 0.590 ms
-> > > Max: 1.072 ms
-> > 
-> > Without knowing what these numbers refer to, it's hard to say anything
-> > useful.  About all I can glean is that EHCI is faster than OHCI, which
-> > we already know.
+> > Today I removed usb_modeswitch from my system and grabbed some data, could you please take
+> > a look what was wrong? many thanks!
 > 
-> The speedtest.py requests BasicStatus and reads the response in a loop.
+> Yes, this shows the problem.  I'll skip the unimportant stuff below.
+> 
+> > D-Link AX9U
+> 
+> ...
+> 
+> > ffff8ae1f0bee000 771359614 S Bo:2:053:5 -115 31 = 55534243 0a000000 08000000 80000a25 00000000 00000000 00000000 000000
+> > ffff8ae1f0bee000 771359684 C Bo:2:053:5 0 31 >
+> > ffff8ae1b52d83c0 771359702 S Bi:2:053:4 -115 8 <
+> > ffff8ae1b52d83c0 771359812 C Bi:2:053:4 0 8 = 00007bff 00000200
+> > ffff8ae1f0bee000 771359853 S Bi:2:053:4 -115 13 <
+> > ffff8ae1f0bee000 771359935 C Bi:2:053:4 0 13 = 55534253 0a000000 00000000 00
+> 
+> This is a READ CAPACITY(10) command.  It asks the device for the number
+> of data blocks it contains and the size of each block.  The reply says
+> there are 31744 blocks each containing 512 bytes (which is unheard-of
+> for CDs; they virtually always have 2048 bytes per block).
+> 
+> ...
+> 
+> > ffff8ae1f0bee000 771366235 S Bo:2:053:5 -115 31 = 55534243 17000000 0c000000 00000615 1000000c 00000000 00000000 000000
+> > ffff8ae1f0bee000 771366306 C Bo:2:053:5 0 31 >
+> > ffff8ae218ff2900 771366317 S Bo:2:053:5 -115 12 = 00000008 00000000 00000800
+> > ffff8ae218ff2900 771366432 C Bo:2:053:5 0 12 >
+> > ffff8ae1f0bee000 771366443 S Bi:2:053:4 -115 13 <
+> > ffff8ae1f0bee000 771366556 C Bi:2:053:4 0 13 = 55534253 17000000 0c000000 01
+> 
+> This is a MODE SELECT(6) command.  This one tells the device to change
+> the block size to 2048.  The device responds with an error indication.
+> 
+> > ffff8ae1f0bee000 771366567 S Bo:2:053:5 -115 31 = 55534243 18000000 12000000 80000603 00000012 00000000 00000000 000000
+> > ffff8ae1f0bee000 801899370 C Bo:2:053:5 -104 0
+> 
+> This is a REQUEST SENSE command; it asks the device to report the
+> details of the error condition from the previous command.  But the
+> device doesn't reply and the command times out.  From this point on,
+> the trace shows nothing but repeated resets.  They don't help and the
+> device appears to be dead.
+> 
+> I don't know of any reasonable way to tell the kernel not to send that
+> MODE SELECT(6) command.
+> 
+> The log for the Mercury is generally similar although the details are
+> different.  Everything works okay until the computer sends a command
+> that the device doesn't like.  At that point the device dies and
+> resets don't revive it.
+> 
+> So it does indeed look like there is no alternative to making
+> usb-storage ignore the devices.
+> 
+> Greg, do you still have the original patch email that started this 
+> thread?  You can add:
+> 
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Either .pcap files or the usbmon text output for both of these tests 
-would be good.  But set the number of iterations to something very 
-small, like 10 or so.  No point posting a log containing thousands of 
-repetitions of the same information...
+Thanks, I have it somewhere, I'll dig it up and apply it.
 
-Alan Stern
+greg k-h
 
