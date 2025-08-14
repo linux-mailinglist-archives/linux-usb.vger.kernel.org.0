@@ -1,151 +1,111 @@
-Return-Path: <linux-usb+bounces-26833-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26835-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AD69B25ED3
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 10:30:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72249B25F04
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 10:36:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C4C79E6D5A
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 08:28:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A00B01C81721
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Aug 2025 08:34:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C222E92B5;
-	Thu, 14 Aug 2025 08:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82ACA2E975E;
+	Thu, 14 Aug 2025 08:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CFz2J5Dg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eG6d/Wtq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7DC92E8E13
-	for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 08:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA0F2E8E1D
+	for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 08:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755160115; cv=none; b=FmON9hvDY1xyO38FnQVfpxGdW+KN6QQeDWVLGlV4nLJD3jGGudzpKKk/kmRys/WST+3epBF4LsD5W8HtBWhrvNNzmHk6U+kqsXD7SZq2RBqIMfMZ9o30QIuHcVeEHJCeDhjSouQAlfHjPFGKO8enLO3+7z4rmpRTA4R7FMbLMrY=
+	t=1755160384; cv=none; b=GwaMgr/aOUXoHNvy04Cc/l5wceaSj+P36myAPpVzCrL4iw5T2YdAckALqR4poo5X2UX+G61px8LJIShYxUd+4llxRnciWiW/hQSuJtSBciZIPg83QRE5rr7WlFSGAVYmjNVjjfR98kv1o7lJgHmxZatZKfJ1/6Wq2Z0/elwZaq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755160115; c=relaxed/simple;
-	bh=DXoZWllPvSAlTn6cKguWUx5XsVI696Dlfnu+ADK3Vug=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CZrXuxyiMMGrq8agX+28rvyOiy8rdqzBglVon8B/TocgD+RwiecUkLzGQl0wpDJnZatmR7uLsTKFYPMYKIzJfebxj6MID7aNGk0tsTC0YC83xKQMGMdw/xRSFqGt9yzynTESvRn1tD1D7VXv4Jf7/+BvzWf1hhp2viQazfjJSTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=CFz2J5Dg; arc=none smtp.client-ip=209.85.210.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-74381f217e7so468927a34.1
-        for <linux-usb@vger.kernel.org>; Thu, 14 Aug 2025 01:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1755160113; x=1755764913; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DXoZWllPvSAlTn6cKguWUx5XsVI696Dlfnu+ADK3Vug=;
-        b=CFz2J5Dg2T4Q44h2Q6ahAS3/PtT2Vz3DpoKx4nbNwTNpr3CATw3lrO1JAyiut1gOgy
-         agWLpaDv2J27PpXB/Wnv0zGJLViX76+skKoFXjhOvP+Ewqq5tKWC0+1EnB6J3sSYBmEf
-         C2Fdf+u9w6j8reQC4pF3zpAG8Ysf1+Aw6bMvg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755160113; x=1755764913;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DXoZWllPvSAlTn6cKguWUx5XsVI696Dlfnu+ADK3Vug=;
-        b=Q/GhD8ke11Q4QffGW68S3Ukc0W46metr1KakUS6riSSs7TPOPjMFMHCnJ8vIo+m1ta
-         S+P3lTKmC9qFM5qQayrf9Y3uKwECEnMu9F+TU/0o0njQaCdOfWyru5eu9wp+qHrFiZ9o
-         hoOKYacCl0VjMOtJz0/IV6PgL42iCgGQH/nFUCrmtTTpmXGXJXbDFBj/R9cB3R+CVh83
-         TRvxx0TPw+o0lfUufbVfimQDVC0v1Wd3h4neftN4SwdofErbsMawNnnyaaORwJM+e2nC
-         pdJjxXYKrpjoDYwaXFTuJ5aDCyvHe95r1Li0Gvzsvyi5KHKsIh7zUcvRn1AJvRyFwvTZ
-         RSCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV0EpP02n+dU3INRY4kV8A0PAlF7vX8C5/TCm665VBurFUBfSNjK432dmXzXwx06uBP1zAn1XSdFS8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygYeRxCzjZWPnqXBzbaFx5EgJtd77Ey7mTZ1REAvGt5J6Trpxx
-	4lrCW3t427FtqsVc900bgx6J+hSLR6zelo+0T7N5HrArWTDlRuZxkSFiyu/Aa17w+qSbxwePsTK
-	n4WlMZY0de5qyqan7XGPCapjOya0cktGSDdZYedZf8lmSOhGZBRf2zQ==
-X-Gm-Gg: ASbGncsMPwImmCw5yBoZs5o1wDk4xrw23PfNo1TwF/Vj5F5opyX/Dz8jLTx2y4jqbVE
-	tqp29vFdiRiQgvcaJscsT0UppZErarfg6ZKqZzOZMyHOdKGwfWg7SuLPIcZzuWJQeZk+4xmCtx1
-	zYkCP4QV4UdoLFtfrv61pqaDGfsb4KjFiqcMaRM77mC4ukYzhpd+0nBb68E8gTH6B5ClOQSz+7H
-	Xv4oRVvohMcXaFVxk0cjQl8WjLPMWKa+A==
-X-Google-Smtp-Source: AGHT+IFzeNU7id7rlH8AtFJTm1cePeOA784ZDto12yMUCjCqT2q+uwgR13V7z+m3dpw+DNaYtWcHDCtnfdbNOZZRXJk=
-X-Received: by 2002:a17:90b:35d0:b0:321:27d5:eaf1 with SMTP id
- 98e67ed59e1d1-32327b48f77mr3326450a91.25.1755159739419; Thu, 14 Aug 2025
- 01:22:19 -0700 (PDT)
+	s=arc-20240116; t=1755160384; c=relaxed/simple;
+	bh=fOE4+FuGxAeI07oKZyLfHL9Fbc1CtVHng0E03UzPqU0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mT81V2HPOnoEjFJvC7fROfeuooEvzgrd30+pf5chzfz2PaC9xjZ30w4dTvoWdPhSDO2QjVqJzkWCbFykXPAvBYG6vUb8TaFgs3AV1NDFXNY9tPgB10SIZAYGCJFoIThHsEaHf0zjfd79gr8WSN+tFF6vho1bEAoGfhT+iptE8NY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eG6d/Wtq; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755160383; x=1786696383;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fOE4+FuGxAeI07oKZyLfHL9Fbc1CtVHng0E03UzPqU0=;
+  b=eG6d/WtqAcINxkMa59NYHSomBlPanH7Uc++9N2mMPIxyvVYRmR8BaemL
+   zFIFYmFVl6dupc6C+7e269Vtj7N+i1U+0gPgrAYCazDZv8Bvwl4swP/j+
+   SHZWMtgzNR0AjQGnZEBCFTRnpdizpoUSUFxHYMLFfjzz+brxmGuHqCiSk
+   Pc3bsvEI4n8OHpJEp25h9AgywKo3A5ESQAD0oABRLWHd7TqNJxTTTMqnx
+   GMle90+dgfPsJLM7KzGUxdhneVPzECIWKU/YGAfacAeXVn2TrghKS3mYQ
+   aKUQ9kZP1DiYnGDkcyn5wYQg/68vfEz3/HVJk0UD1H3tRgXUavQxZulTA
+   g==;
+X-CSE-ConnectionGUID: F7/Q4x72RfWJE1nxvPDw/A==
+X-CSE-MsgGUID: uLEWu6KSSPSVfJ603oNMhA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="57186991"
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="57186991"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 01:33:02 -0700
+X-CSE-ConnectionGUID: 53oBSir2TDKuPF0MQlKLlA==
+X-CSE-MsgGUID: ji88j3hCRV+ZE6FfL1SCgQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="197559349"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa001.fm.intel.com with ESMTP; 14 Aug 2025 01:33:00 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 2B69493; Thu, 14 Aug 2025 10:32:59 +0200 (CEST)
+Date: Thu, 14 Aug 2025 10:32:59 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: En-Wei WU <en-wei.wu@canonical.com>
+Cc: westeri@kernel.org, michael.jamet@intel.com, andreas.noever@gmail.com,
+	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
+Subject: Re: Thunderbolt call trace occurs on hot-plug
+Message-ID: <20250814083259.GE476609@black.igk.intel.com>
+References: <CAMqyJG2QceTyAONn_5m956zF_rpHLpognYYWnivm7J+w6Cw=RQ@mail.gmail.com>
+ <20250728063329.GR2824380@black.fi.intel.com>
+ <20250808064313.GM476609@black.igk.intel.com>
+ <CAMqyJG3b5KsBjF=wW_+pB6MaSO0PQmq-iiAJ9aONZ6mZ1UtUNA@mail.gmail.com>
+ <CAMqyJG1yK5B7w5Vp=LQNcWHDCdbWGiiuA0jru_U6zJ6WhUc5PQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250804090340.3062182-1-akuchynski@chromium.org>
- <20250804090340.3062182-5-akuchynski@chromium.org> <aJn9ZSy3w4zW4Xvq@kuha.fi.intel.com>
- <CANFp7mVUFZyF8z0dN-Mo7ntPOXh06ZD0RH5GyvJJymOXrhSD1g@mail.gmail.com>
- <aJsoS3EXgoLP-f-E@kuha.fi.intel.com> <CANFp7mW92PgjSWyJq7Bz6ZLJ8ZgnsCRw2kAYAjKX3yymKW9hBA@mail.gmail.com>
-In-Reply-To: <CANFp7mW92PgjSWyJq7Bz6ZLJ8ZgnsCRw2kAYAjKX3yymKW9hBA@mail.gmail.com>
-From: Andrei Kuchynski <akuchynski@chromium.org>
-Date: Thu, 14 Aug 2025 10:22:07 +0200
-X-Gm-Features: Ac12FXz1UN0w6EPEh01uDLgnpov_q6H22DAPFIMRA5Ihvr9O148EKDmKL8f4WE8
-Message-ID: <CAMMMRMfo4n_xZPZG++OXoXJTeHuzzSBL0Bossn7+DMZMoRbqjQ@mail.gmail.com>
-Subject: Re: [PATCH v3 04/10] usb: typec: Expose mode priorities via sysfs
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Benson Leung <bleung@chromium.org>, Jameson Thies <jthies@google.com>, 
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, Guenter Roeck <groeck@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, "Christian A. Ehrhardt" <lk@c--e.de>, 
-	Venkat Jayaraman <venkat.jayaraman@intel.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMqyJG1yK5B7w5Vp=LQNcWHDCdbWGiiuA0jru_U6zJ6WhUc5PQ@mail.gmail.com>
 
-On Tue, Aug 12, 2025 at 10:34=E2=80=AFPM Abhishek Pandit-Subedi
-<abhishekpandit@chromium.org> wrote:
->
->
-> We interpreted this a bit differently (as just rename it):
-> https://patchwork.kernel.org/project/linux-usb/patch/20250616133147.18359=
-39-5-akuchynski@chromium.org/#26431992
->
-> Thanks for the clarification here. In that case, we'll get rid of
-> `usb_priorities` and `usb_results` and just add a new alternate mode
-> for USB4. The vendor ids list on usb.org
-> (https://www.usb.org/sites/default/files/vendor_ids072325_1.pdf) shows
-> 0xff00 for USB4 so that's what we'll use. So the attributes should be:
-> .active (similar to other modes), .mode =3D 1 (unused really), .svid =3D
-> 0xff00, .vdo =3D <usb eudo> (if supported).
->
-> >
-> > > As such, our current API recommendation looks like the following:
-> > >
-> > > * On each port, we lay out priorities for all supported alternate mod=
-es + USB4.
-> >
-> > This first part I understand.
-> >
-> > > * We expose a file to trigger the mode selection task. Reading from i=
-t
-> > > gives you the current status of mode selection (single value).
-> > > * Detailed results from mode entry are pushed to the mode sysfs group
-> > > (via entry_results). Converting these to UEVENT is fine but a more
-> > > persistent value in debugfs would be useful for debugging.
-> >
-> > This second part I would really like to handle separately, after we
-> > have a solution for the first part.
->
-> Ack. We'll reduce the series so it's easier to review for mode_priorities=
- first.
->
+Hi,
 
-Hi Heikki, Abhishek,
+On Thu, Aug 14, 2025 at 04:21:36PM +0800, En-Wei WU wrote:
+> I just ran a test using a different cable, and the issue remains.
+> 
+> One thing I've noticed is that no matter which cable and whether there
+> is a call trace on that hot-plug event, there is always the message:
+> 
+> thunderbolt:tb_cfg_ack_plug:842: thunderbolt 0000:00:0d.2: acking hot
+> unplug event on 0:1
 
-Thank you for your review. I have addressed the feedback and plan to
-resubmit the series.
+That means the USB4 link went down at that point and the driver cannot do
+anything else except start tearing down the devices from that point.
 
-Here are the changes I will make:
-- The `typec_mode_selection_init` function and the `name` member
-from the mode_selection_state struct will be removed.
-- Patch 4 will be split into API and ABI parts.
-- The entire series will be divided into `mode priority` (patches 1-4)
-and then `mode selection`.
-- The mode selection logic will be standardized to function
-identically for all modes, including USB4.
+We could try to look bit deeper what is happening there. However, if this
+is PD/cable issue then there is little we can do on software side. Anyways,
+I wonder if you can repro with tracing enabled?
 
-Thanks again for your guidance.
+There is info how to do that (let me know if any questions):
 
-Andrei
+  https://github.com/intel/tbtools/wiki/Useful-Commands#tracing
+
+Can you then provide me either the merged log or dmesg and trace
+separately? I can try to see if there is something suspicious happening
+prior that unplug.
 
