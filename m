@@ -1,266 +1,279 @@
-Return-Path: <linux-usb+bounces-26896-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26897-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FDF7B27691
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 05:13:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BBA3B276C5
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 05:29:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1C6C581CEC
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 03:13:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B9421C26EB4
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 03:27:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 132FE2BE631;
-	Fri, 15 Aug 2025 03:12:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC2529D27E;
+	Fri, 15 Aug 2025 03:27:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tWu/0bso"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MiXtzUrz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866AB29ACD1;
-	Fri, 15 Aug 2025 03:12:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8506829AB0E
+	for <linux-usb@vger.kernel.org>; Fri, 15 Aug 2025 03:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755227577; cv=none; b=eiWXR8xLihYR6BH3m119F/S0WivRXPPxMRVPbA/baRKBHJe/B3mN4Yoekwe/l9lr7iQf165XVTIkktYkHBakqxnJWbZVuvw6FmdC5hQXZRrpIAjFdwftwpoXBvBLP1u9Ij9PDww1FnRZcR+9LYB3HqGiiBOofHVpLD8+V+Wzq8U=
+	t=1755228448; cv=none; b=qBwyrJVQ8PN9DIrTRoF3cHU6xrD1yxZLYt3HgE1GA4NdIB7X0fjty/xbheqUv06BXLdiAIA+ZpGxvo8xJWWRKnvXFmSNO0alUYoUhF/aQQFXc9p4ORdU3JQ/mKz4oV0/unrOkowLKWcuXZvBuOVj2a5iNBLQf+CCc6M0QrqtTeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755227577; c=relaxed/simple;
-	bh=MN6grN1k65SjfjMv0Gt1FohyMOWXmsBPqK6RgkmtpVs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HqilGi3amET06C+GolbUtlsGReez62MKkVCWGqC81/KfhuWUDwaie8Q10++PYkHqOADka/Xf4A8DIk7U8bCJGr/GrWV3KU3gJE0wps6q66yL284fbNOAWaMdcwoWappSRyBEf3IkoNjTzELKwtlxSHZiEytUaYOPURCPvoJN3yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tWu/0bso; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50BBEC4CEF1;
-	Fri, 15 Aug 2025 03:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755227577;
-	bh=MN6grN1k65SjfjMv0Gt1FohyMOWXmsBPqK6RgkmtpVs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tWu/0bsoZkT+G3gMCPQ+ztfK3ArlCLIot22EpstExKo6v3A30r0P9d6kwkGNrtBxM
-	 VB7RsQsDuuDyxpFa67q1+mydKaaOexBcvWTAZpvpYdqVsffJzvVV2jaZgcCTFAsplW
-	 a4U5/j2wU1MrAbCCGmsHk5N2O1nlAD8OZ4cORTTxZmqnNZFVcuLOgeCrtlPyOzDOir
-	 Bk7MYdCrsNgoGYNQV0AZ5DRvGCZ6I+9OYQSEADC4K0VIP0CDv8r1u65PHOXswiRmot
-	 5wDd8gVNLxVTBH6nPY6sP3jO9UN3O7XxGdQdbtW6ygkSW1S8wa5Th5Fhu0ya/GLpOG
-	 5G6Gq3OiarLMA==
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Richard Leitner <richard.leitner@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] usb: usb251xb: support usage case without I2C control
-Date: Fri, 15 Aug 2025 10:55:40 +0800
-Message-ID: <20250815025540.30575-3-jszhang@kernel.org>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250815025540.30575-1-jszhang@kernel.org>
-References: <20250815025540.30575-1-jszhang@kernel.org>
+	s=arc-20240116; t=1755228448; c=relaxed/simple;
+	bh=bW+uJgKte380uNQOuKfxpAEeWHLg7iWcGLCs1RY0JtU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rAUcCwixXXw0b/LEDc5bpsN+eaaL5qAEeT5nhluJAjTEs7QA57PkVtXfoqLAlJUxIo681xI42H7xQgL5PVbr/a7wnGkD1jq7jFuH8Gs9ZEFKa+0abKWVI/q/Zx2zXm2Su2LVG+GuNiqVNYr8wTWrHugFypdwScLu9M6hfPpr1YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MiXtzUrz; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755228447; x=1786764447;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bW+uJgKte380uNQOuKfxpAEeWHLg7iWcGLCs1RY0JtU=;
+  b=MiXtzUrzVRvH4d62QTH+T61Svwh4RsR4RKqLAhfaCaOWl0b+u7is69i4
+   9iNS+QytjaSLThvLcta5UcCS1oLzOi7c49tyDd2ND2sh+NXJA5y1gGdZ6
+   KmySVjdtpIZaOHVIRrGAAVZ7uCKtqxUy2secMDfOmFG+xWxjQUTVyZnZp
+   wGkRMV8jqvdoVNzPts3vIivfIRsqbqQlv1do+1SP8qNNgqUU7cFliDRt6
+   O1PjcnCIeve70mzZ5N0S2aZk7hTAbythSssK+ZdLwHlMsOonLAs3jTQaH
+   vBZRbDu1TG4CwViu63yPu8K8UXVZVcnl5YElc+zGk6T82bQYLHcZX1U/R
+   g==;
+X-CSE-ConnectionGUID: ZEjLr4nXQQOrYTvLxWu3YA==
+X-CSE-MsgGUID: 19zOzxhQSfGIfIhbTHwjuA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11522"; a="57482485"
+X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
+   d="scan'208";a="57482485"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 20:27:26 -0700
+X-CSE-ConnectionGUID: DXyDdlgBRDyfovFeOPJsQw==
+X-CSE-MsgGUID: s1vbLnnKSam3ttkbgkeM7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
+   d="scan'208";a="167275091"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 14 Aug 2025 20:27:25 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uml69-000BVY-2e;
+	Fri, 15 Aug 2025 03:27:21 +0000
+Date: Fri, 15 Aug 2025 11:26:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: raub camaioni <raubcameo@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	raub camaioni <raubcameo@gmail.com>
+Subject: Re: [PATCH v3] usb: gadget: f_ncm: Fix MAC assignment NCM ethernet
+Message-ID: <202508151101.dzCtG6Wh-lkp@intel.com>
+References: <20250814171125.635429-1-raubcameo@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250814171125.635429-1-raubcameo@gmail.com>
 
-Refactor so that register writes for configuration are only performed if
-the device has a i2c_client provided and also register as a platform
-driver. This allows the driver to be used to manage GPIO based control
-of the device.
+Hi raub,
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- drivers/usb/misc/usb251xb.c | 108 +++++++++++++++++++++++++++++++-----
- 1 file changed, 94 insertions(+), 14 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-index 4fb453ca5450..ef5873009599 100644
---- a/drivers/usb/misc/usb251xb.c
-+++ b/drivers/usb/misc/usb251xb.c
-@@ -17,6 +17,7 @@
- #include <linux/module.h>
- #include <linux/nls.h>
- #include <linux/of.h>
-+#include <linux/platform_device.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- 
-@@ -242,15 +243,19 @@ static int usb251xb_check_dev_children(struct device *dev, void *child)
- static int usb251x_check_gpio_chip(struct usb251xb *hub)
- {
- 	struct gpio_chip *gc = gpiod_to_chip(hub->gpio_reset);
--	struct i2c_adapter *adap = hub->i2c->adapter;
-+	struct i2c_adapter *adap;
- 	int ret;
- 
-+	if (!hub->i2c)
-+		return 0;
-+
- 	if (!hub->gpio_reset)
- 		return 0;
- 
- 	if (!gc)
- 		return -EINVAL;
- 
-+	adap = hub->i2c->adapter;
- 	ret = usb251xb_check_dev_children(&adap->dev, gc->parent);
- 	if (ret) {
- 		dev_err(hub->dev, "Reset GPIO chip is at the same i2c-bus\n");
-@@ -271,7 +276,8 @@ static void usb251xb_reset(struct usb251xb *hub)
- 	if (!hub->gpio_reset)
- 		return;
- 
--	i2c_lock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
-+	if (hub->i2c)
-+		i2c_lock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
- 
- 	gpiod_set_value_cansleep(hub->gpio_reset, 1);
- 	usleep_range(1, 10);	/* >=1us RESET_N asserted */
-@@ -280,7 +286,8 @@ static void usb251xb_reset(struct usb251xb *hub)
- 	/* wait for hub recovery/stabilization */
- 	usleep_range(500, 750);	/* >=500us after RESET_N deasserted */
- 
--	i2c_unlock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
-+	if (hub->i2c)
-+		i2c_unlock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
- }
- 
- static int usb251xb_connect(struct usb251xb *hub)
-@@ -289,7 +296,11 @@ static int usb251xb_connect(struct usb251xb *hub)
- 	int err, i;
- 	char i2c_wb[USB251XB_I2C_REG_SZ];
- 
--	memset(i2c_wb, 0, USB251XB_I2C_REG_SZ);
-+	if (!hub->i2c) {
-+		usb251xb_reset(hub);
-+		dev_info(dev, "hub is put in default configuration.\n");
-+		return 0;
-+	}
- 
- 	if (hub->skip_config) {
- 		dev_info(dev, "Skip hub configuration, only attach.\n");
-@@ -698,18 +709,13 @@ static int usb251xb_i2c_probe(struct i2c_client *i2c)
- 	return usb251xb_probe(hub);
- }
- 
--static int __maybe_unused usb251xb_suspend(struct device *dev)
-+static int usb251xb_suspend(struct usb251xb *hub)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct usb251xb *hub = i2c_get_clientdata(client);
--
- 	return regulator_disable(hub->vdd);
- }
- 
--static int __maybe_unused usb251xb_resume(struct device *dev)
-+static int usb251xb_resume(struct usb251xb *hub)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct usb251xb *hub = i2c_get_clientdata(client);
- 	int err;
- 
- 	err = regulator_enable(hub->vdd);
-@@ -719,7 +725,23 @@ static int __maybe_unused usb251xb_resume(struct device *dev)
- 	return usb251xb_connect(hub);
- }
- 
--static SIMPLE_DEV_PM_OPS(usb251xb_pm_ops, usb251xb_suspend, usb251xb_resume);
-+static int usb251xb_i2c_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct usb251xb *hub = i2c_get_clientdata(client);
-+
-+	return usb251xb_suspend(hub);
-+}
-+
-+static int usb251xb_i2c_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct usb251xb *hub = i2c_get_clientdata(client);
-+
-+	return usb251xb_resume(hub);
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(usb251xb_i2c_pm_ops, usb251xb_i2c_suspend, usb251xb_i2c_resume);
- 
- static const struct i2c_device_id usb251xb_id[] = {
- 	{ "usb2422" },
-@@ -739,13 +761,71 @@ static struct i2c_driver usb251xb_i2c_driver = {
- 	.driver = {
- 		.name = DRIVER_NAME,
- 		.of_match_table = usb251xb_of_match,
--		.pm = &usb251xb_pm_ops,
-+		.pm = pm_sleep_ptr(&usb251xb_i2c_pm_ops),
- 	},
- 	.probe = usb251xb_i2c_probe,
- 	.id_table = usb251xb_id,
- };
- 
--module_i2c_driver(usb251xb_i2c_driver);
-+static int usb251xb_plat_probe(struct platform_device *pdev)
-+{
-+	struct usb251xb *hub;
-+
-+	hub = devm_kzalloc(&pdev->dev, sizeof(*hub), GFP_KERNEL);
-+	if (!hub)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, hub);
-+	hub->dev = &pdev->dev;
-+
-+	return usb251xb_probe(hub);
-+}
-+
-+static int usb251xb_plat_suspend(struct device *dev)
-+{
-+	return usb251xb_suspend(dev_get_drvdata(dev));
-+}
-+
-+static int usb251xb_plat_resume(struct device *dev)
-+{
-+	return usb251xb_resume(dev_get_drvdata(dev));
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(usb251xb_plat_pm_ops, usb251xb_plat_suspend, usb251xb_plat_resume);
-+
-+static struct platform_driver usb251xb_plat_driver = {
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.of_match_table = of_match_ptr(usb251xb_of_match),
-+		.pm = pm_ptr(&usb251xb_plat_pm_ops),
-+	},
-+	.probe		= usb251xb_plat_probe,
-+};
-+
-+static int __init usb251xb_init(void)
-+{
-+	int err;
-+
-+	err = i2c_add_driver(&usb251xb_i2c_driver);
-+	if (err)
-+		return err;
-+
-+	err = platform_driver_register(&usb251xb_plat_driver);
-+	if (err) {
-+		i2c_del_driver(&usb251xb_i2c_driver);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+module_init(usb251xb_init);
-+
-+static void __exit usb251xb_exit(void)
-+{
-+	platform_driver_unregister(&usb251xb_plat_driver);
-+	i2c_del_driver(&usb251xb_i2c_driver);
-+}
-+module_exit(usb251xb_exit);
- 
- MODULE_AUTHOR("Richard Leitner <richard.leitner@skidata.com>");
- MODULE_DESCRIPTION("USB251x/xBi USB 2.0 Hub Controller Driver");
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.17-rc1 next-20250814]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/raub-camaioni/usb-gadget-f_ncm-Fix-MAC-assignment-NCM-ethernet/20250815-011301
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250814171125.635429-1-raubcameo%40gmail.com
+patch subject: [PATCH v3] usb: gadget: f_ncm: Fix MAC assignment NCM ethernet
+config: i386-randconfig-011-20250815 (https://download.01.org/0day-ci/archive/20250815/202508151101.dzCtG6Wh-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250815/202508151101.dzCtG6Wh-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508151101.dzCtG6Wh-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/usb/gadget/function/f_ncm.c: In function 'ncm_bind':
+>> drivers/usb/gadget/function/f_ncm.c:1466:32: error: 'ecm' undeclared (first use in this function); did you mean 'ncm'?
+    1466 |         ncm_string_defs[1].s = ecm->ethaddr;
+         |                                ^~~
+         |                                ncm
+   drivers/usb/gadget/function/f_ncm.c:1466:32: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +1466 drivers/usb/gadget/function/f_ncm.c
+
+  1429	
+  1430	static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+  1431	{
+  1432		struct usb_composite_dev *cdev = c->cdev;
+  1433		struct f_ncm		*ncm = func_to_ncm(f);
+  1434		struct usb_string	*us;
+  1435		int			status = 0;
+  1436		struct usb_ep		*ep;
+  1437		struct f_ncm_opts	*ncm_opts;
+  1438	
+  1439		if (!can_support_ecm(cdev->gadget))
+  1440			return -EINVAL;
+  1441	
+  1442		ncm_opts = container_of(f->fi, struct f_ncm_opts, func_inst);
+  1443	
+  1444		if (cdev->use_os_string) {
+  1445			f->os_desc_table = kzalloc(sizeof(*f->os_desc_table),
+  1446						   GFP_KERNEL);
+  1447			if (!f->os_desc_table)
+  1448				return -ENOMEM;
+  1449			f->os_desc_n = 1;
+  1450			f->os_desc_table[0].os_desc = &ncm_opts->ncm_os_desc;
+  1451		}
+  1452	
+  1453		mutex_lock(&ncm_opts->lock);
+  1454		gether_set_gadget(ncm_opts->net, cdev->gadget);
+  1455		if (!ncm_opts->bound) {
+  1456			ncm_opts->net->mtu = (ncm_opts->max_segment_size - ETH_HLEN);
+  1457			status = gether_register_netdev(ncm_opts->net);
+  1458		}
+  1459		mutex_unlock(&ncm_opts->lock);
+  1460	
+  1461		if (status)
+  1462			goto fail;
+  1463	
+  1464		ncm_opts->bound = true;
+  1465	
+> 1466		ncm_string_defs[1].s = ecm->ethaddr;
+  1467	
+  1468		us = usb_gstrings_attach(cdev, ncm_strings,
+  1469					 ARRAY_SIZE(ncm_string_defs));
+  1470		if (IS_ERR(us)) {
+  1471			status = PTR_ERR(us);
+  1472			goto fail;
+  1473		}
+  1474		ncm_control_intf.iInterface = us[STRING_CTRL_IDX].id;
+  1475		ncm_data_nop_intf.iInterface = us[STRING_DATA_IDX].id;
+  1476		ncm_data_intf.iInterface = us[STRING_DATA_IDX].id;
+  1477		ecm_desc.iMACAddress = us[STRING_MAC_IDX].id;
+  1478		ncm_iad_desc.iFunction = us[STRING_IAD_IDX].id;
+  1479	
+  1480		/* allocate instance-specific interface IDs */
+  1481		status = usb_interface_id(c, f);
+  1482		if (status < 0)
+  1483			goto fail;
+  1484		ncm->ctrl_id = status;
+  1485		ncm_iad_desc.bFirstInterface = status;
+  1486	
+  1487		ncm_control_intf.bInterfaceNumber = status;
+  1488		ncm_union_desc.bMasterInterface0 = status;
+  1489	
+  1490		if (cdev->use_os_string)
+  1491			f->os_desc_table[0].if_id =
+  1492				ncm_iad_desc.bFirstInterface;
+  1493	
+  1494		status = usb_interface_id(c, f);
+  1495		if (status < 0)
+  1496			goto fail;
+  1497		ncm->data_id = status;
+  1498	
+  1499		ncm_data_nop_intf.bInterfaceNumber = status;
+  1500		ncm_data_intf.bInterfaceNumber = status;
+  1501		ncm_union_desc.bSlaveInterface0 = status;
+  1502	
+  1503		ecm_desc.wMaxSegmentSize = cpu_to_le16(ncm_opts->max_segment_size);
+  1504	
+  1505		status = -ENODEV;
+  1506	
+  1507		/* allocate instance-specific endpoints */
+  1508		ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_in_desc);
+  1509		if (!ep)
+  1510			goto fail;
+  1511		ncm->port.in_ep = ep;
+  1512	
+  1513		ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_out_desc);
+  1514		if (!ep)
+  1515			goto fail;
+  1516		ncm->port.out_ep = ep;
+  1517	
+  1518		ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_notify_desc);
+  1519		if (!ep)
+  1520			goto fail;
+  1521		ncm->notify = ep;
+  1522	
+  1523		status = -ENOMEM;
+  1524	
+  1525		/* allocate notification request and buffer */
+  1526		ncm->notify_req = usb_ep_alloc_request(ep, GFP_KERNEL);
+  1527		if (!ncm->notify_req)
+  1528			goto fail;
+  1529		ncm->notify_req->buf = kmalloc(NCM_STATUS_BYTECOUNT, GFP_KERNEL);
+  1530		if (!ncm->notify_req->buf)
+  1531			goto fail;
+  1532		ncm->notify_req->context = ncm;
+  1533		ncm->notify_req->complete = ncm_notify_complete;
+  1534	
+  1535		/*
+  1536		 * support all relevant hardware speeds... we expect that when
+  1537		 * hardware is dual speed, all bulk-capable endpoints work at
+  1538		 * both speeds
+  1539		 */
+  1540		hs_ncm_in_desc.bEndpointAddress = fs_ncm_in_desc.bEndpointAddress;
+  1541		hs_ncm_out_desc.bEndpointAddress = fs_ncm_out_desc.bEndpointAddress;
+  1542		hs_ncm_notify_desc.bEndpointAddress =
+  1543			fs_ncm_notify_desc.bEndpointAddress;
+  1544	
+  1545		ss_ncm_in_desc.bEndpointAddress = fs_ncm_in_desc.bEndpointAddress;
+  1546		ss_ncm_out_desc.bEndpointAddress = fs_ncm_out_desc.bEndpointAddress;
+  1547		ss_ncm_notify_desc.bEndpointAddress =
+  1548			fs_ncm_notify_desc.bEndpointAddress;
+  1549	
+  1550		status = usb_assign_descriptors(f, ncm_fs_function, ncm_hs_function,
+  1551				ncm_ss_function, ncm_ss_function);
+  1552		if (status)
+  1553			goto fail;
+  1554	
+  1555		/*
+  1556		 * NOTE:  all that is done without knowing or caring about
+  1557		 * the network link ... which is unavailable to this code
+  1558		 * until we're activated via set_alt().
+  1559		 */
+  1560	
+  1561		ncm->port.open = ncm_open;
+  1562		ncm->port.close = ncm_close;
+  1563	
+  1564		hrtimer_setup(&ncm->task_timer, ncm_tx_timeout, CLOCK_MONOTONIC, HRTIMER_MODE_REL_SOFT);
+  1565	
+  1566		DBG(cdev, "CDC Network: IN/%s OUT/%s NOTIFY/%s\n",
+  1567				ncm->port.in_ep->name, ncm->port.out_ep->name,
+  1568				ncm->notify->name);
+  1569		return 0;
+  1570	
+  1571	fail:
+  1572		kfree(f->os_desc_table);
+  1573		f->os_desc_n = 0;
+  1574	
+  1575		if (ncm->notify_req) {
+  1576			kfree(ncm->notify_req->buf);
+  1577			usb_ep_free_request(ncm->notify, ncm->notify_req);
+  1578		}
+  1579	
+  1580		ERROR(cdev, "%s: can't bind, err %d\n", f->name, status);
+  1581	
+  1582		return status;
+  1583	}
+  1584	
+
 -- 
-2.50.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
