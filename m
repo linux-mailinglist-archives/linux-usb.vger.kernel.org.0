@@ -1,101 +1,124 @@
-Return-Path: <linux-usb+bounces-26906-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26907-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FB3BB27E10
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 12:15:24 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 075AEB27F2B
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 13:31:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F56DB637B0
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 10:12:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B00214E58EF
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 11:31:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CBBB2FD7B5;
-	Fri, 15 Aug 2025 10:14:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD6CF2417E0;
+	Fri, 15 Aug 2025 11:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TJp4MPWx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EaEFCGIh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B6E1917E3
-	for <linux-usb@vger.kernel.org>; Fri, 15 Aug 2025 10:14:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C821E15A87C
+	for <linux-usb@vger.kernel.org>; Fri, 15 Aug 2025 11:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755252852; cv=none; b=hWOr4fAsRvel+UwTw+vHCIoR/yt3wdq8axiRd2NoEBu4dxtGCWWZz4jphqNcFdlIcD+bJHi9hRGLl+2eZC5gTj2+9FDyVDv4KXbRYRqbcWZFPTGAZh6KtsQsIjZd35vDBFkOXJN/aPKR7eA37D5zN2jIwj8CNNEU2sr7qY2WfMQ=
+	t=1755257488; cv=none; b=gdPGkNpZZ5HR7/1LyWbtx7ZkxJASj8CKcyPKKMevcq92W+pJ3pr2IG/KFgQf7iqroVvvpU/CNKbMCzg2/9Nzmn3sJlkvsXZq+EDq0CUJ4qM8JzbkNej4/n5Hscx0/PU5BjPboTlPOxuQmIHw5PGojrNSQBxD1DR76Lf+MlXprzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755252852; c=relaxed/simple;
-	bh=GKG3vxRct+7Wx8Tdr6SaductEeY1e/EHpW5i6HB9tpo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qrge+M3JLS6jkzxy5b98Ow7sL2PV8s9NBikbOOTsoVh+PbzVJm0WzqiKpB7uzfsuZN8wuFTZaf85uVpui5y8smBxC8LxA/wds14EC7rD/2ZNxDScyRqbNg17mPf0UIuRQcidhOW7Ik5FryKH5Z+IMLq9xOXXyotIIKAErzUV01A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TJp4MPWx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD54C4CEEB;
-	Fri, 15 Aug 2025 10:14:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755252852;
-	bh=GKG3vxRct+7Wx8Tdr6SaductEeY1e/EHpW5i6HB9tpo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TJp4MPWx0UhU+5f1/hXt8jWxKGKtCbV7w8YfTwstTyjnEo+x9dqnZB1Lxvc4juQEg
-	 P7mVeeL176ll2TuaBdpSWkb5dQLJw8IVd45yRRPoORN4j7XOG+OnHi98LmMNM7Gsfe
-	 vgbYKmLl/DmJCA3D1pQZ5hyuoFcD7Pwjk7pXXdLA=
-Date: Fri, 15 Aug 2025 12:14:09 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>,
+	s=arc-20240116; t=1755257488; c=relaxed/simple;
+	bh=JiRiI9UwdbQ/iZAm+WijWac7qDE9SjD8eYdG5aXC1pA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Qa8hcKLui3RQ7MvGQ3DJWHBuTu99wOlYo8IQ0iOQ5rr6ChbBWJdiT3O2U6mMzLyivXhElUU3+05cwc7JUh5bttVoJgAdUrCcZiwxQIyMZxzoFJipXaDkH+A7lCss7RGGUWCnNyLdQIxbFynIVKR3mVVoYJQNxQoOs2ttpL+LEKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EaEFCGIh; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755257487; x=1786793487;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JiRiI9UwdbQ/iZAm+WijWac7qDE9SjD8eYdG5aXC1pA=;
+  b=EaEFCGIhWTQe/adVHygSxdesvQjgbN1KXkwPfaQ5SDuPjto41e8ECdgI
+   Oh+Y/Ipn2Dw94WDrO8rX9mUi2uW9ofCa3Q9STiSck1eqJOYJqTbvMOOUg
+   efclMaiG9DyEV6hibdNsQp3ORxdF8H0BVi8N6x75Skt6Cup2ecpXxH6kN
+   442RxoHW686KZVQ3zvxHnj5GTnH6d8gUQCvk/lVAXVIthWBw3SuuyucEi
+   6RbwdDnivth9AqVJaTSt185XfRRg4d4kP8/Rw56Olfd/3lnScWevSBhWO
+   RZT1FAtMS1j5DMo8gALB/g2R5l4xFznA4w0SMAJicCmgpMPa7SQhePmUO
+   A==;
+X-CSE-ConnectionGUID: 7rEVPEmOSuS76mchXUyIgg==
+X-CSE-MsgGUID: MTK5vdXQSPmCOTM3wnLuIQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11522"; a="83010784"
+X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
+   d="scan'208";a="83010784"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 04:31:26 -0700
+X-CSE-ConnectionGUID: jLeQEEVHSxa+/3qAH6KgeA==
+X-CSE-MsgGUID: TCXeM999TGGbFqC8tc9jYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
+   d="scan'208";a="197847619"
+Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 04:31:25 -0700
+Received: from punajuuri.localdomain (unknown [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 5A0AB11FA65;
+	Fri, 15 Aug 2025 14:31:22 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1umseY-003snt-0j;
+	Fri, 15 Aug 2025 14:31:22 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Zijun Hu <quic_zijuhu@quicinc.com>,
 	Oliver Neukum <oneukum@suse.com>,
 	Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH 1/1] USB: Check no positive return values from
- pm_runtime_resume_and_get()
-Message-ID: <2025081502-universal-dropout-be0e@gregkh>
-References: <20250811062403.2116464-1-sakari.ailus@linux.intel.com>
- <2025081330-droplet-napping-6843@gregkh>
- <aJ7_CMzCVwPEMSOj@kekkonen.localdomain>
- <2025081502-opacity-rewire-447b@gregkh>
- <aJ8GlTon-wfFzsry@kekkonen.localdomain>
+Subject: [PATCH v2 1/1] USB: Check no positive return values from pm_runtime_resume_and_get()
+Date: Fri, 15 Aug 2025 14:31:21 +0300
+Message-Id: <20250815113121.925641-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aJ8GlTon-wfFzsry@kekkonen.localdomain>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 15, 2025 at 10:06:13AM +0000, Sakari Ailus wrote:
-> On Fri, Aug 15, 2025 at 11:38:28AM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, Aug 15, 2025 at 09:34:00AM +0000, Sakari Ailus wrote:
-> > > Hi Greg,
-> > > 
-> > > On Wed, Aug 13, 2025 at 04:43:05PM +0200, Greg Kroah-Hartman wrote:
-> > > > On Mon, Aug 11, 2025 at 09:24:03AM +0300, Sakari Ailus wrote:
-> > > > > pm_runtime_resume_and_get() always returns a negative error code or zero;
-> > > > > there's no need to check for positive values such as returned by
-> > > > > pm_runtime_get_sync(). Simply drop the check.
-> > > > > 
-> > > > > Fixes: 7626c52b6b46 ("usb: usb_autopm_get_interface use modern helper")
-> > > > > Cc: stable@vger.kernel.org
-> > > > 
-> > > > If there is no need for this check, why does this need to be backported
-> > > > to stable kernels?
-> > > 
-> > > It's not necessary IMO.
-> > > 
-> > > The practice lately has been to add Cc: stable if the Fixes: tag is there.
-> > 
-> > If it actually fixes a bug.
-> > 
-> > > But there was no actual bug in this case, just that this change ideally
-> > > would have been part of the original patch.
-> > 
-> > Then it's not really a "fix" so that tag does not need to be there
-> > either :)
-> 
-> I agree, both should be removed. Can you drop them or should I send v2?
+pm_runtime_resume_and_get() always returns a negative error code or zero;
+there's no need to check for positive values such as returned by
+pm_runtime_get_sync(). Simply drop the check.
 
-Please send a v2.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+since v1:
 
-thanks,
+- Drop Fixes: and Cc: stable tags.
 
-greg k-h
+ drivers/usb/core/driver.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index c3177034b779..d4df17b3d7e7 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1723,8 +1723,6 @@ int usb_autoresume_device(struct usb_device *udev)
+ 	dev_vdbg(&udev->dev, "%s: cnt %d -> %d\n",
+ 			__func__, atomic_read(&udev->dev.power.usage_count),
+ 			status);
+-	if (status > 0)
+-		status = 0;
+ 	return status;
+ }
+ 
+@@ -1829,8 +1827,6 @@ int usb_autopm_get_interface(struct usb_interface *intf)
+ 	dev_vdbg(&intf->dev, "%s: cnt %d -> %d\n",
+ 			__func__, atomic_read(&intf->dev.power.usage_count),
+ 			status);
+-	if (status > 0)
+-		status = 0;
+ 	return status;
+ }
+ EXPORT_SYMBOL_GPL(usb_autopm_get_interface);
+-- 
+2.39.5
+
 
