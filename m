@@ -1,120 +1,138 @@
-Return-Path: <linux-usb+bounces-26908-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26909-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A23AFB28039
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 14:59:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED02FB28070
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 15:14:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B2A0AA7ACF
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 12:59:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64F071CC43D1
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 13:14:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FD5A30148D;
-	Fri, 15 Aug 2025 12:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2786C302765;
+	Fri, 15 Aug 2025 13:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="h4QI56Rd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kZkx2FCy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB06D24395C;
-	Fri, 15 Aug 2025 12:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340F322A4F8
+	for <linux-usb@vger.kernel.org>; Fri, 15 Aug 2025 13:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755262768; cv=none; b=YmSSQJNw2S2zDaBQZBF2f86HcqhGPSMtGcQc+dufNu8H87AT7wN4oMbdbZIWXjtrupbBSvRv/UCHb3EqCvUZLPTrUI9iaoTyjoSwdtUrcECU3LjRsF43x0H3vLpIWVsomTJuNO4geICTQLJhEmK2xv1jv4R9XAfsd2/wTM+oBcs=
+	t=1755263647; cv=none; b=WvUxQq2jCfNnyWNpB846s2chvLnNe4pi9u7tW0SXGKmRvrkWpfQ4xFIaVanmvbTuHzsxW9gx8YVRAo6+PKBWRcH7MVqLalZCE7+ZW3pPWPj27VO6YmP08n4Ka0CKKGW88pCTKRAuyn/Nh4dwUfLR6Z7ARL/YdNQUwK7cr8dLesQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755262768; c=relaxed/simple;
-	bh=gGAyaHnJFqG3yEOMHo+9099n/xMwq45fZnZWGT3Npv8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qF+itnm86M6Tb1PUdyQ8o5SjAbeXrJz0Xpg11UkodYJmlhOhPjmnkcMrEFL+3ipkcif3495LPJD2193Ty/G1qV4BhcBz/nmGEY8+i9K3mEERFAEQI/u8R06tsUM9Mgs8aJTyN13g3XwwZ+MBSSgHO5pPv31zSgw6yEYmuExswHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=h4QI56Rd; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=WxxMg2CpYRBJYb9noYcqcSAL3Z0uD1GOUX0iFK8kymE=; b=h4QI56RdN+OJNfEUm8boNTz1Js
-	xC2T2k6zgAT4Fp2KI51rLoYAt+siWmkmEtWlqH6rdje3QsEn5M+IlOJswPKlN6WviQfWWSR2u3+5P
-	d/uidX1zqxu61DpUYESdaRaETTSIQ/gOFJJBxXhaQaD09vLFW6Ax5iE59wQ+ZPYfiXgo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1umu1Y-004ox6-Dh; Fri, 15 Aug 2025 14:59:12 +0200
-Date: Fri, 15 Aug 2025 14:59:12 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, max.schulze@online.de,
-	khalasa@piap.pl, o.rempel@pengutronix.de, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH] net: usb: asix: avoid to call phylink_stop() a second
- time
-Message-ID: <1c352c2f-c8b3-4cbe-9921-8ba5f0e4b433@lunn.ch>
-References: <20250806083017.3289300-1-xu.yang_2@nxp.com>
- <a28f38d5-215b-49fb-aad7-66e0a30247b9@lunn.ch>
- <e3oew536p4eghgtryz7luciuzg5wnwg27b6d3xn5btynmbjaes@dz46we4z4pzv>
- <c3e7m63qcff6dazjzualk7v2n3jtxujl43ynw7jtfuf34njt6w@5sml5vvq57gh>
+	s=arc-20240116; t=1755263647; c=relaxed/simple;
+	bh=YzqpBeHLQWFShEkm59/cGddLseeqgkSzjjd76FsVdDo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JeIkLmGsujoGKVSOxkkeaAq4trHrsMmSheohXGQhuWbgHoGWFTZ9oUeGIfFAaPr25FzU9S2hJB4mBs2S+NU9cNJLIq3QDbQBkdCaBDzmisEvLBUkDDxZ0bho0isGy9R7s+V9tt7+BWopsBedSOCuzEEO9pfeXGKPxz5xw1Wr0s0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kZkx2FCy; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7e87061d120so200688585a.2
+        for <linux-usb@vger.kernel.org>; Fri, 15 Aug 2025 06:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755263645; x=1755868445; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FaBn6yu6mKaAFUnmDJX4IzB7yUEkMp9/jeZ8442dcAg=;
+        b=kZkx2FCyD6aRxEeMIUXXdZf3vuLoEgqxE1yN9fencqO17B/n82ZgauqbAKbyYCfnzl
+         IbGYn3ksQ4/NOcEo7I+kMH9GarYg5G2F8uNkB/pWOhg/c97cHgC2FItLvsTeknwFMmRn
+         lxlmbkhDy/SlkcEkaR8YIhg7FW6zVzcVWQxygRUezG+Pgt10smYWJdfGHa6G5z4i3KtX
+         m24v0d7DT/6CXW45emEeDSQp2JG9nChSSzZOKQKuytDz05v+G1Gg7OpUbbLCePelRu+j
+         37FJ7nyoAo7goMSDhnOH8kzNK8fWCSuIx2wZGE/t54oRt4pV27Bh5fSMSLqS8vZHIC3d
+         f2yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755263645; x=1755868445;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FaBn6yu6mKaAFUnmDJX4IzB7yUEkMp9/jeZ8442dcAg=;
+        b=sdjGEub6ltscFi5+6qZnj4DETmKDMGDgtIl2iIr0da2l5O+l8ezewdLbz3SHhLGeJL
+         SFRxwFO7UUI4RIkOMPSdeSqRPa7HSrTTREmwDyv4C6uY/xpCGC/KVy3hzMLXGjgQ0IhK
+         MbEC3Yq4WqgE+fSZVkJvDkqBaPltFqDxBokgHlPJWqp5P4KR7jWJ+9vk3JuSBzObpnyL
+         N6AKcmTxiqgJC6uYo/7ojAbQZhc8EdRrJUknJBEsiHEhlhPbwS9IkGbHiPYjKtWFjcxy
+         AYj2JDE3Bm70v3am27iXhrBmmSiC8P7hNLmBTePRptMzhfvAIZOGcr3ISSp79BP9SsO8
+         +d0A==
+X-Gm-Message-State: AOJu0YxCAZZ0ko/vVfJ4YXrlNQKLvJmN+WtvkMnTrvC5u259xLAnq+Op
+	MBLEyIL1XArQusbeJH/AzgnObYN5zMw/PSt2er0e9OAa4gNg3Us4gWUxqqPPDLw2vqjGow==
+X-Gm-Gg: ASbGncvFK5c83x2LxfWL72fP7JCaQ/Tetvgf5VUvkFN+lOT4qhggyVgIpbvbPr6WSgA
+	wNx1d0eH8VOqttMrwDDnS0Mb3LQt0W/54eYQBfkLPEqgrrPW3lF1FNm8jFVM2sgkPbsCnf8FxJA
+	XwF8AsodlOHOGsk61jfsbdSFlz0x+vjS5cekcMd0/n0aCpaAvKQiOn0ouwWGTCcV9BSFRcuMe17
+	+XWdS/43CjLjuU8rBPd3e25bvS+5fhB8h2pteXWSgQ1i1MPbJD00E37ko/DT3zRQk/wlxsthmDd
+	1YlJ1h5SWiE6OUCbA/OJ9EAPe35d8b5v9Zt7uJApX5BzCfS43lzyqIG/dNj+EkK1p7doYlucN1o
+	phfq7J+HkY/PqJnQ0dK4jp8CyObApqLwkcN14dZAo2dPz/lz26bpRkwqwIqEQmdZSnd/+kb+cip
+	M2fXzohkn2ok6+VvA=
+X-Google-Smtp-Source: AGHT+IEKjJwrEUW1KqntvJV7zAcNPbUd5/0Q2h47aokTBqbWOAMzavah/S3vh7nR1PYYnLOCLkheOw==
+X-Received: by 2002:a05:620a:4402:b0:7e2:77d0:f33d with SMTP id af79cd13be357-7e87df91cbbmr278795085a.14.1755263644683;
+        Fri, 15 Aug 2025 06:14:04 -0700 (PDT)
+Received: from KAG-86297.KAGWERKS.LOCAL (static-108-44-230-106.clppva.fios.verizon.net. [108.44.230.106])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e87e052a95sm105612685a.20.2025.08.15.06.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Aug 2025 06:14:04 -0700 (PDT)
+From: raub camaioni <raubcameo@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	raub camaioni <raubcameo@gmail.com>
+Subject: [PATCH v4] usb: gadget: f_ncm: Fix MAC assignment NCM ethernet
+Date: Fri, 15 Aug 2025 09:07:21 -0400
+Message-ID: <20250815131358.1047525-1-raubcameo@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c3e7m63qcff6dazjzualk7v2n3jtxujl43ynw7jtfuf34njt6w@5sml5vvq57gh>
+Content-Transfer-Encoding: 8bit
 
-> > > Looking at ax88172a.c, lan78xx.c and smsc95xx.c, they don't have
-> > > anything like this. Is asix special, or are all the others broken as
-> > > well?
-> > 
-> > I have limited USB net devices. So I can't test others now.
-> > 
-> > But based on the error path, only below driver call phy_stop() or phylink_stop()
-> > in their stop() callback:
-> > 
-> > drivers/net/usb/asix_devices.c
-> >   ax88772_stop()
-> >     phylink_stop()
-> > 
-> > drivers/net/usb/ax88172a.c
-> >   ax88172a_stop()
-> >     phy_stop()
-> > 
-> > drivers/net/usb/lan78xx.c
-> >   lan78xx_stop()
-> >     phylink_stop()
-> > 
-> > drivers/net/usb/smsc95xx.c
-> >   smsc95xx_stop()
-> >     phy_stop()
-> > 
-> > However, only asix_devices.c and lan78xx.c call phylink_suspend() in suspend()
-> > callback. So I think lan78xx.c has this issue too.
-> > 
-> > Should I change usbnet common code like below?
-> > 
-> > diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> > index c39dfa17813a..44a8d325dfb1 100644
-> > --- a/drivers/net/usb/usbnet.c
-> > +++ b/drivers/net/usb/usbnet.c
-> > @@ -839,7 +839,7 @@ int usbnet_stop (struct net_device *net)
-> >         pm = usb_autopm_get_interface(dev->intf);
-> >         /* allow minidriver to stop correctly (wireless devices to turn off
-> >          * radio etc) */
-> > -       if (info->stop) {
-> > +       if (info->stop && !dev->suspend_count) {
-> >                 retval = info->stop(dev);
-> >                 if (retval < 0)
-> >                         netif_info(dev, ifdown, dev->net,
-> 
-> Do you mind sharing some suggestions on this? Thanks in advance!
+This fix is already present in f_ecm.c and was never
+propagated to f_ncm.c
 
-It does look to be a common problem, so solving it in usbnet would be
-best.
+When creating multiple NCM ethernet devices
+on a composite usb gadget device
+each MAC address on the HOST side will be identical.
+Having the same MAC on different network interfaces is bad.
 
-	Andrew
+This fix updates the MAC address inside the
+ncm_strings_defs global during the ncm_bind call.
+This ensures each device has a unique MAC.
+In f_ecm.c ecm_string_defs is updated in the same way.
+
+The defunct MAC assignment in ncm_alloc has been removed.
+
+Signed-off-by: raub camaioni <raubcameo@gmail.com>
+---
+V3 -> V4: fixed variable, added f_ncm.c to make, built, tested Jetson NX
+V2 -> V3: Corrected whitespace formating style error
+V1 -> V2: Corrected From and Signed-off to be identical
+
+ drivers/usb/gadget/function/f_ncm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index 58b0dd575af3..cad111f33552 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -1463,6 +1463,8 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+ 
+ 	ncm_opts->bound = true;
+ 
++	ncm_string_defs[1].s = ncm->ethaddr;
++
+ 	us = usb_gstrings_attach(cdev, ncm_strings,
+ 				 ARRAY_SIZE(ncm_string_defs));
+ 	if (IS_ERR(us)) {
+@@ -1771,7 +1773,6 @@ static struct usb_function *ncm_alloc(struct usb_function_instance *fi)
+ 		mutex_unlock(&opts->lock);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+-	ncm_string_defs[STRING_MAC_IDX].s = ncm->ethaddr;
+ 
+ 	spin_lock_init(&ncm->lock);
+ 	ncm_reset_values(ncm);
+-- 
+2.34.1
+
 
