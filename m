@@ -1,256 +1,220 @@
-Return-Path: <linux-usb+bounces-26901-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26902-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D25ABB27ACC
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 10:20:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4349AB27B63
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 10:43:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA3D15C5DC1
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 08:20:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D43711D00A60
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 08:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B26238C1A;
-	Fri, 15 Aug 2025 08:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C952E2494FF;
+	Fri, 15 Aug 2025 08:39:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="NtaGeCd8"
+	dkim=pass (2048-bit key) header.d=valdikss.org.ru header.i=@valdikss.org.ru header.b="rl+WmiLi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013004.outbound.protection.outlook.com [40.107.162.4])
+Received: from mail.valdk.tel (mail.valdk.tel [185.177.150.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5BC20A5F3;
-	Fri, 15 Aug 2025 08:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.4
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755246046; cv=fail; b=VWr3HhwDI/HtT1ZCWUmzEn5/Wih6Woehh63dSFOEIDT5bM6pXfaJPkF31SGdIfYmEKocq2czzNRssVojrXTvVqAgBqAfWj2u8oJzgZGbv1/etG4LHKEZxX+uqMwNI9IsHzA7E1aFf3gfiNiJqh4FFG/rHY7rI9yJJUg0JiBWSKA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755246046; c=relaxed/simple;
-	bh=8xAwJeT2XGizMOSAZe76Q9hPsa+v1p3N+sLDwRFWecs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=YDCrDNL6z+21Z8XwwL7KJbUVAB4q8oPfC1FydatihyVTOGSeMqXa/t7qm8B48ifwohr3akM50OVGEgGhVRQhR8lwgjV4cPhAA4AURlUIPKmdFK8HW5nhnPuLn5D5OkdHxuMdfaAuvIMq7P0zLl8Da6j+BoSoruKIK773Id8/7gQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=NtaGeCd8; arc=fail smtp.client-ip=40.107.162.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WGJxpQFfI8NVs880vUZoUzyNOiEWPTvmX0xiNDAg5mzooFu8Xtuj8E64PyDXMPjSoMOQR94UN0s9EyJpKSe5QebAUmaDX64iRTqjmrEkH2QI/42RX2//Uz44WEHZhqnTF8pYQL19/6n1OUV+zIjuCn7x+NezduNiDbHrJhqlykf89bYwYNbJNg2B6vYJ+JSFlZ0MVBbWay6CB55mWVUx+Ry/NVkOSPgkrswj4n15jL5KD8Lq4H4YIrzm6DHIZs0XY+JG0zQbUeciLzZijUGCGzburiDZqs9fGL1NFtGps7FwIkljDgTe7D7f1LrNZGBbfi7/TFNKoYfxe8O5kz0BIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q7R71ePFyiC9FrQFghDg/ZorV/OxfpPc8R8sEPUvPWg=;
- b=Xe2c8Svf6i/RK4kGa6vP6WloTh5NyrjLhxjGWuzRf3ycn2JJRsOsczXCIjmEmP5cLT7xLa71wHQRJ/B2lfNJAyqrLnH4nlovP9qJL7aDOE8bJ2y8yRpyF+fqgp4YRseq9YEjIcnFV2e7yGdZI5UpU0IWa7SQtvFC/FPZYCVp7aRavvOpyimJDqya7pKGEekn6Zu3rQTWNIWf1DHqUctpE7IBjtnx+PE6qpX2EAQI2gNAwb7TgFKRNkgwYxg9tP0XcwbEBZTfBJ0h0QMuh4HnBQqjnTpK9PjOBLAOxONYyEP+LBxiUt5j8v6b6YTWBiH2N4ux2/P9ZLc0tauoubLprg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q7R71ePFyiC9FrQFghDg/ZorV/OxfpPc8R8sEPUvPWg=;
- b=NtaGeCd8PNtTeKhDp2oJOqR321MTzHc15gJMCF4NBuRot2KTY5PKwac7lXkX0ITmiKFXPnqRziPfw7vlPmhIqC7Rk+VUvNFOu0UVhcxslkKIxcPnTcHdL3O3Bn0mcS2Gwevh0TYT6ZdDgrug+MHPl5qoN29O8BYqn69hDVD5CveqGwsyDY3JjIqD4rihFTk+xLan1yF7Hyaobop4ISmpdgXkWEgJFAZbLKf0jM6/Av76CUrITkDGmmCwyXTeRphdrrX3MlDFUY16dzOAEd1CareEsd8dfw757OVYkkLu0bINkTvBluZjTjiBTSVcrLWsgAZuatanxZztBBmsO0nQQQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by VI1PR04MB6863.eurprd04.prod.outlook.com (2603:10a6:803:12f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.17; Fri, 15 Aug
- 2025 08:20:41 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%4]) with mapi id 15.20.9031.014; Fri, 15 Aug 2025
- 08:20:41 +0000
-Date: Fri, 15 Aug 2025 16:15:09 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, max.schulze@online.de, khalasa@piap.pl, 
-	o.rempel@pengutronix.de, linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH] net: usb: asix: avoid to call phylink_stop() a second
- time
-Message-ID: <c3e7m63qcff6dazjzualk7v2n3jtxujl43ynw7jtfuf34njt6w@5sml5vvq57gh>
-References: <20250806083017.3289300-1-xu.yang_2@nxp.com>
- <a28f38d5-215b-49fb-aad7-66e0a30247b9@lunn.ch>
- <e3oew536p4eghgtryz7luciuzg5wnwg27b6d3xn5btynmbjaes@dz46we4z4pzv>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3oew536p4eghgtryz7luciuzg5wnwg27b6d3xn5btynmbjaes@dz46we4z4pzv>
-X-ClientProxiedBy: MA1PR01CA0174.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:d::12) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE12248868
+	for <linux-usb@vger.kernel.org>; Fri, 15 Aug 2025 08:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.177.150.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755247161; cv=none; b=urWjNFHVjWchyKNyLwmHgx3bT4EuPc4LB16k2KQIXYyDgsfoVBIAmenmpyP884FJV12fsjV9wBgRWPonggnqyPqYq7Hgef/CVmLp0LWZJZSjEGDj8lMJl4CUyY2sdGeYRX+qdTQwDAHQNEwaperX3iQ9RAl5xgULipu/ba2peK8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755247161; c=relaxed/simple;
+	bh=2N1jVzxZrvjzu6LY+cs2Y9xqsHsOn/xC0klMkiSE32E=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To; b=jv/n7Hoc/T4CcPuoSdfQnMfctV6THmD4ft86FJ4tkcfc0uII/CNlOjjW8FYqTWlTL/FAc67gAkE/xebf0rspdKhvM8fN/ILsylkTMjhxdrRwfAxD62qoEQjLXmjGxqBXxlfaJONNZRlzrIDn5FyXcPNf2o9cGjkMa8azH2HrrCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=valdikss.org.ru; spf=pass smtp.mailfrom=valdikss.org.ru; dkim=pass (2048-bit key) header.d=valdikss.org.ru header.i=@valdikss.org.ru header.b=rl+WmiLi; arc=none smtp.client-ip=185.177.150.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=valdikss.org.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valdikss.org.ru
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CAC131BC319C;
+	Fri, 15 Aug 2025 11:39:03 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valdikss.org.ru;
+	s=msrv; t=1755247145;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-language:in-reply-to:references:autocrypt;
+	bh=9cDWjsvi/ee8s9N1y6cWZWYEWLtZgUO7D+ZdqwX5QKY=;
+	b=rl+WmiLiD1cNfOL1/ze3UFIK/KBlxZWuFySnBvZs8kTRuotRYHrsic+kGtZzPqwMNr5sDw
+	btoO4cb/BbL5T+GLM5x2k9zgQ7b0xyl4J0ENGTcPoYu3j+G348n5oYuVHQZbOnFhynoV5j
+	JfvLZxi6yBc1iPRraPdNCrXaExlt1ETCaoYpoN8GTcOflctQ50oY8hFF4F3is1jqG8Pt63
+	vykTJPc5T4F9I8FJ/z7YWfiV2bYTJQC497FxjLeaHMoUah1nrwnx6Ux3s3J7F6GfDNnoPV
+	XsnP8PubwSmG2zvuyszZsboGjnpiwD6llgrMAdajIRZ5UCnNhzf5X0LXQ2g23Q==
+Content-Type: multipart/mixed; boundary="------------qcqX0BNvSvlhJvrVxHKLWlte"
+Message-ID: <2bf5c54e-7dac-4673-a696-e09eb8d459d5@valdikss.org.ru>
+Date: Fri, 15 Aug 2025 11:39:03 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|VI1PR04MB6863:EE_
-X-MS-Office365-Filtering-Correlation-Id: daba5f45-4887-4b96-ba07-08dddbd49f49
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|52116014|376014|19092799006|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?gVl+GDP1eHPkKj+qgFoOjX6dHPVqKMXNIoEHCCzFrIlyIZvqPd8Td1Lq9TIy?=
- =?us-ascii?Q?l4Udss1WPq5uHMca6Vte/5LCgucDJRCKgyz/JglNNaYOKqdyHKTH3wZ6K2J/?=
- =?us-ascii?Q?tRwdHawal2+3McDueJsKdw55w0fzI0dLsQSBLcV1MTa54ESAebzVklcs8Dxd?=
- =?us-ascii?Q?M/51XxADG569y6XkFTnBps1+nxVHfQzxQE/grkFEp52EimJVucnm4hGKO1bW?=
- =?us-ascii?Q?t30FBqO02pTQM5tf9xsysjkJhPkMW7WofdWwY7xMHugXF+sk3utytUgeUpCh?=
- =?us-ascii?Q?qn0QwAFRn0yaz4TPoYbzQxD2qIEm/5HkdEVl8zTi8kKoeThaU3nuBLXZ+/mu?=
- =?us-ascii?Q?ouMOdv05lS6giIrbpOeXuArC4qBAe7nHU2b+7GcdfXy3UdKvnEvW7Vte0+kj?=
- =?us-ascii?Q?Mo8If2FbO4uOPbrRd10UtIeGfX56ep39jplk9fdb2ML7O+xg2+l7ebReyGcC?=
- =?us-ascii?Q?pgen9vmyfMVMQTl31182kEykO81x5joXGVk1bo0/v8EmKvX5bvqcaUHeDCyk?=
- =?us-ascii?Q?cbfvgqhcZSRN9FVthHWN30nJ/s+qm6LjYxro1gIK7qeHZKiVOu9A1+UtqyEa?=
- =?us-ascii?Q?uTuGOZS1p+7Xbs5Oc0byzZ5RBE+Aydiq3j93RQJPTe739hsM9yrCaJGyX2Uh?=
- =?us-ascii?Q?WTie3zpGfLM9ffqhL5EmFBR9r9ktDgs+wJPnzATch0aw8/KoQakuAyacw+jG?=
- =?us-ascii?Q?gBxL8mPUEYsRGbhjq3xOFYwGoPsHrfdTlVxXinIqoWXO8K4lP2Eoc9010Jk7?=
- =?us-ascii?Q?W2FNvoaQLaX/fa3/3pgP5MXXReIOyTO+PJyIZm4scYEvSMsi8W7bgNWIWLZ6?=
- =?us-ascii?Q?V5Vv236xr2igmm+SP0jHF/6KPNM6tBD/oGxBnXxUT7T5f2fyH2PzlWWEqMHc?=
- =?us-ascii?Q?jit4A+c0Rz9NM8vD8vwyBq1bOZCdt3wzKyA1h0MzKCMP3GfBB1xAaWWbrmBh?=
- =?us-ascii?Q?LODvOFBTRghqLhtk5IhzqVVxd/bqcLidmw+wI0KmwwOACXP819p/fzd7iua0?=
- =?us-ascii?Q?R3IN4Afjnd7tEr7oUrqq+DXB+okvrMFe39hisSayCwFitUbiLeXNrU1+AIDS?=
- =?us-ascii?Q?+idFoieyTcXTtwBNb8abi3aAzUn9t7LrKbQpTHP/ij8T58ySTcIeovQy79ir?=
- =?us-ascii?Q?8Jo5iCBxxrxoquBh33jmw1ZDr1NOYTyykgd68T04y6Ylapw3EIwCoNANcWyZ?=
- =?us-ascii?Q?L53oUOsT2Rg42W8gHEogHIYb45ivEWMlWqbc/E/f/MgyWRLLK8DO/Xtc4SaB?=
- =?us-ascii?Q?2QQpPh9YW3TmB6BKBgaiQERKkNlGoaFyg8nfIpgUPlxsizSFRVEderwmVwON?=
- =?us-ascii?Q?bun0cK7ewKmvuU+ciuwyZUqLDBjYO1vXh6lRssu+s+QQUG3II68IydM9DXTW?=
- =?us-ascii?Q?EBL/XkLTQy7bxNwcFRidpaprz1nHoiF0FVrDY4WYsCPyhGMYBc/H+PTGYpaP?=
- =?us-ascii?Q?7EQL5xUBv5SGCIOmtlp0YtgSKQAHQJxyC2zrtUZO7KGenXqHoDZUvg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(52116014)(376014)(19092799006)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Z2/zossTeAKXTA9c1iNZi0LurM1/scfrUa9qLaBF1HS5YLJaVNGnPcE+ulwZ?=
- =?us-ascii?Q?+/qBirCxeB97kU+kSGSMaCGAnTt9RIRm9PzzO9+Q/FV2r4eQT7DIe1/U/7FX?=
- =?us-ascii?Q?3cyimrE+O5RVxqwubhEVV5yhcB5hzrNJiQQnG0Xkn6uxiijKI5Fpdw8Xris8?=
- =?us-ascii?Q?KpTt57daeDirQLdi4EHz/5+9r7ZLBH0hGe+w8QMCXJkoOp4/y8YA9hJkLEOo?=
- =?us-ascii?Q?GefF8CGTSqLwTRW3wszc6Q75Wnlb0xB9kLvFUKI2aO2/J/bFdmqUXnieYdAg?=
- =?us-ascii?Q?SPO9Z6fwbu5eL/lSM4uYmVRilizo8v4pewoEzLyKFVsUUj9VkvfSwQEIkc5b?=
- =?us-ascii?Q?JA1Ac01iBsZBQ/XZrnDv5g8IjfH3PKSnMetdNCgTK/UnJvE+lHK9hVh7WCqq?=
- =?us-ascii?Q?B6vMpFcKM0jad/5l5a5OeYR7keB7QcfCRqlQuwq3Nk+fKTGNSA9UJsX8Tzmx?=
- =?us-ascii?Q?LBX0PbXA7PGkl1UwSjGn/TYtYFx8tQKMGcZESQ5s6TCZ1xaSDrzzHja8PhjV?=
- =?us-ascii?Q?mxQMzCus/wl+ROx9al5eb/6MvW4Q3lI02ABkc5SaKye5HJM6l6VYElAAgwzW?=
- =?us-ascii?Q?UcsIsr2fA45+DiTv9pmIoMrqpce9mPhjQNnSVhMlMooDvQVPRjOwM+WK9B7T?=
- =?us-ascii?Q?aw9Znf6opmSxrtgKsCIGcQLmeg9z3nLvuf0S9NQZrOPYiuyQsepEXSEYZqKh?=
- =?us-ascii?Q?iiEGH/9VwYrTVwJVRchajIrSP+UvBD/qpI+Aw63WkCY+LTDSPzk0A3pOQUcc?=
- =?us-ascii?Q?Zb+XBFhC6t0VeNJS1Syw6KPu5aKjE7tQAvCMPKAuKXOKoRiS7YhlvaY4KH/O?=
- =?us-ascii?Q?wTtvan4NqLhB24xWVl+54rmpd2PRI6bE6zZA/bdFg3+faUbLL7RxYpJ54EZQ?=
- =?us-ascii?Q?0m9iEH8zvR/iQ6y1qTFWWq3X1ZpQkWsKQb995eVBScWesGxDDsYJcUYS3DJ7?=
- =?us-ascii?Q?TZYL3SINgPMcf7iE1L2mAfX2kePDGwVNSwM4C1OpaRovIX1P2wXAZ+ekihPw?=
- =?us-ascii?Q?M+6iYvNKihL/pBUcnqbC247KYRb3dpi95iIWy0auYWjvtKSBHxs+LWPtnlO1?=
- =?us-ascii?Q?xQ9m0XQpCi8z+xiM0RoSpBIqIxy0WdWqsKWveIhdGepo+MHIywD8I1Rso2n2?=
- =?us-ascii?Q?XQVBcm4tO4QbjnGNj9OBJ3kY7t68aD4WSI8ypkcm3gRz4YChApt/LqCjkphe?=
- =?us-ascii?Q?lDcytu8f471nWgBcECQG24/82UO0MNABM00K8GJHqdd0aa72sJNd2VxnpA4a?=
- =?us-ascii?Q?wi8K3rAhjYWVsgJ5fAMSCyKViNgyaRNbDyaUUyJm1RwlnvvWbQsy20pTTS7j?=
- =?us-ascii?Q?lXtt8rav4j4aSdIlaRJ/VJ9ILqPQIFdf31Ua2kf9tkQJhVyOiCIpgR2EWZUX?=
- =?us-ascii?Q?C87cgJRlvUIc+qEO4D/tO/SK8//x4NEPdUuBm3TalA1cZ2SnoKg/TYp8kwVy?=
- =?us-ascii?Q?cFR0nxDrv4saqBPANsLNBRW/cXRsGTeryFFq2t15lar1zEfG8fUw8gL9ps3r?=
- =?us-ascii?Q?jIV3vp/i0XeLFWVsLxOBgYzwfrJFVNbeM/3f+aTLvl4S/ECeexwX4vsuW5c/?=
- =?us-ascii?Q?OVhae5TYyPRudALlwcMzC7eiJB9yK6TObbfqxZwM?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: daba5f45-4887-4b96-ba07-08dddbd49f49
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2025 08:20:41.1313
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SoOmhOrY567NZw7AJYuDK3AoBq3OBWF+iLAyon0MBwb/xTJd4oHT3S9AeCo/+kVipyZU62TSmR5HyDd+17jehw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6863
+User-Agent: Mozilla Thunderbird
+Subject: Re: USB 1.1 Full Speed OHCI slow/high latency
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-usb@vger.kernel.org
+References: <3fe845b9-1328-4b40-8b02-61a879bea6df@valdikss.org.ru>
+ <6017298f-fc03-41c9-b0e3-a74180f4c9a1@rowland.harvard.edu>
+ <f2c433ae-f9d0-4beb-a2c7-84d2fd68e02e@valdikss.org.ru>
+ <d41d8488-9438-430a-88ab-f845df3655e1@rowland.harvard.edu>
+Content-Language: ru, en-US
+From: ValdikSS <iam@valdikss.org.ru>
+Autocrypt: addr=iam@valdikss.org.ru; keydata=
+ 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
+ OEcVmRU/pw5/zoQyQg==
+In-Reply-To: <d41d8488-9438-430a-88ab-f845df3655e1@rowland.harvard.edu>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, Aug 07, 2025 at 12:03:39PM +0800, Xu Yang wrote:
-> Hi Andrew,
-> 
-> Thanks for your comments!
-> 
-> On Wed, Aug 06, 2025 at 05:58:18PM +0200, Andrew Lunn wrote:
-> > On Wed, Aug 06, 2025 at 04:30:17PM +0800, Xu Yang wrote:
-> > > The kernel will have below dump when system resume if the USB net device
-> > > was already disconnected during system suspend.
-> > 
-> > By disconnected, you mean pulled out?
-> 
-> Yes.
-> 
-> > 
-> > > It's because usb_resume_interface() will be skipped if the USB core found
-> > > the USB device was already disconnected. In this case, asix_resume() will
-> > > not be called anymore. So asix_suspend/resume() can't be balanced. When
-> > > ax88772_stop() is called, the phy device was already stopped. To avoid
-> > > calling phylink_stop() a second time, check whether usb net device is
-> > > already in suspend state.
-> > > 
-> > > Fixes: e0bffe3e6894 ("net: asix: ax88772: migrate to phylink")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > > ---
-> > >  drivers/net/usb/asix_devices.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-> > > index 9b0318fb50b5..ac28f5fe7ac2 100644
-> > > --- a/drivers/net/usb/asix_devices.c
-> > > +++ b/drivers/net/usb/asix_devices.c
-> > > @@ -932,7 +932,8 @@ static int ax88772_stop(struct usbnet *dev)
-> > >  {
-> > >  	struct asix_common_private *priv = dev->driver_priv;
-> > >  
-> > > -	phylink_stop(priv->phylink);
-> > > +	if (!dev->suspend_count)
-> > > +		phylink_stop(priv->phylink);
-> > 
-> > Looking at ax88172a.c, lan78xx.c and smsc95xx.c, they don't have
-> > anything like this. Is asix special, or are all the others broken as
-> > well?
-> 
-> I have limited USB net devices. So I can't test others now.
-> 
-> But based on the error path, only below driver call phy_stop() or phylink_stop()
-> in their stop() callback:
-> 
-> drivers/net/usb/asix_devices.c
->   ax88772_stop()
->     phylink_stop()
-> 
-> drivers/net/usb/ax88172a.c
->   ax88172a_stop()
->     phy_stop()
-> 
-> drivers/net/usb/lan78xx.c
->   lan78xx_stop()
->     phylink_stop()
-> 
-> drivers/net/usb/smsc95xx.c
->   smsc95xx_stop()
->     phy_stop()
-> 
-> However, only asix_devices.c and lan78xx.c call phylink_suspend() in suspend()
-> callback. So I think lan78xx.c has this issue too.
-> 
-> Should I change usbnet common code like below?
-> 
-> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> index c39dfa17813a..44a8d325dfb1 100644
-> --- a/drivers/net/usb/usbnet.c
-> +++ b/drivers/net/usb/usbnet.c
-> @@ -839,7 +839,7 @@ int usbnet_stop (struct net_device *net)
->         pm = usb_autopm_get_interface(dev->intf);
->         /* allow minidriver to stop correctly (wireless devices to turn off
->          * radio etc) */
-> -       if (info->stop) {
-> +       if (info->stop && !dev->suspend_count) {
->                 retval = info->stop(dev);
->                 if (retval < 0)
->                         netif_info(dev, ifdown, dev->net,
+This is a multi-part message in MIME format.
+--------------qcqX0BNvSvlhJvrVxHKLWlte
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Do you mind sharing some suggestions on this? Thanks in advance!
+On 14.08.2025 7:40 PM, Alan Stern wrote:
+> Yes, but I can't imagine why delays would cause a NOTREADY, OFFLINE, or
+> UNDERFLOW error.
 
-Thanks,
-Xu Yang
+The laser printers roll the paper with the constant speed, they don't 
+slow down when they have insufficient data.
 
-> 
-> Thanks,
-> Xu Yang
-> 
-> > 
-> > 	Andrew
+If the host doesn't send the image data in time (and here it happens 
+during the print of a single page just as it rolls, as it is too large 
+to fit into the printer's RAM), the job is marked as failed due to 
+underflow of print data.
+
+It's similar to CnC device in that sense. Modern printers wait for the 
+full page, but this printer is from the era when RAM was expensive and 
+could not (reliably) fit the whole page.
+
+
+> Either .pcap files or the usbmon text output for both of these tests
+> would be good.  But set the number of iterations to something very
+> small, like 10 or so.  No point posting a log containing thousands of
+> repetitions of the same information...
+
+Here you are, check the attachment. It's a 30 times loop.
+
+Also tried the speedtest.py on an old HP T510 thin client (x86, VIA 
+chipset, UHCI), and the speeds are fine.
+
+Avg delta: 0.990 ms
+Min: 0.870 ms
+Max: 1.984 ms
+
+My guess it's OHCI to blame.
+
+--------------qcqX0BNvSvlhJvrVxHKLWlte
+Content-Type: application/zip; name="usb11-usb20-capture.zip"
+Content-Disposition: attachment; filename="usb11-usb20-capture.zip"
+Content-Transfer-Encoding: base64
+
+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
+3L0V+sGmfHKOuok8mieiWN3oiTMBojpKnvZ/zxHFYu/b/VY+US3+jzwyg7FYrCR5fX8BWUQl
+W/PITjwgfzFA9B4lTmdefXzeHnLmIYOjhNKmZM0rsYotD1HdJxUWFRTk2ZaFCbcEG99KbuxJ
+bWwTebKeAfnpAFETJc5cG08nN/ZQ2pSseR67nCyLFuIXPjUWpYUO223Rp8lFy9MWLc8ajHxh
+C9GHlDideZmLIoOjnNKm5F7Uk08EZNq+7VyeTTEMeqvFEPZuCdvm4shIO3H5iNEJ75awbS6O
+jLQTuM8f83e/QpZl58U78dsRfmNkpJ04edToRI6NkZF1wgfqifiFnx3lF0UGi/rSFvVlDUb+
+zXai45Q4cy2KDA4fpU3JvSg6YW+3bNq+zbLrUI3zeKBDoye+GCzK7nTeeTxfLf6PPyOD/Y1P
+HNfnQ/6Nr4voMFH8rFty5lnx/Z15yGAexrmOtBIPY8H8+DXvXEjt6MysT8w86MxEhnLNM2Yi
+v3uoiBqI4ufW+y5xz1s7IoOjIHnmuuexYEFyas1QasuJZXdJZKSSrUMpydQrky7ZOiSUXEhI
+bnyXunNnx8w7R0Z05wsFdMCLq/JGsjuU+fogI319XhzJfr0zJZGRSoZGeMnQiE7ydjAlmepk
+uiQyOsl7QV7yXlAu+W+Q7yQyUskDl3lJZDSSI+N8J5HRSV4Z5yWvjMslfx/nO4mMVHJjnJfc
+GNdJdoX4TiKjkzwd4iVPh+SSF0N8J5GRSr78Ky+JjEbyYJjvJDI6yaYwL9kUlkt2hflOIiOV
+fBLmJZ+EdZLeCN9JZHSSOyO85M6IXLI2wncSGank7QgveTuik/x7ku8kMjrJlUlecmVSLumd
+4juJjFRyeIqXHJ7SSV6d4TuJjE4yPMNLhmfkkvMzfCeRkUqenOUlkdFI9kf5TiKjkxyM8pKD
+Ubnk9SjfSWSkkh/N8ZLIaCRbFvlOIqOTbFvkJdsW5ZJfLfKdREYq+fo/vCQyGsmXlvlOIqOT
+rF7mJauX5ZJHl/lOIiOVpBVeEhmN5Ooq30lkdJKbq7zk5qpc8rU1vpPISCVn1njJmTWd5MQ6
+30lkdJLT67zk9LpccmOd7yQyUsnRZ7wkMhrJb8jLdhIZneQl8rKSl5JTJZJ/GPNydRIZqeSn
+lpeVREYjebzQy3YSGZ1kdyEv2V0olwwa83J1Ehmp5GEPL4mMRnJvMd9JZHSS9cW8ZH2xXPJU
+Md9JZKSSpTt4SWQ0klYZ30lkdJKlZbxkaZlc8lAZ30lkpJJLZbzkUplO8m4l30lkdJKPKnnJ
+R5VyyR0+vpPISCWv+XjJaz6d5FgV30lkdJJXq3jJq1VyyWdVfCeRkUqOvMpLIqORPFXNdxIZ
+neTZal7ybLVc8qdqvpPISCVb9vKSyGgk/TV8J5HRSTbX8JLNNXLJMzV8J5GRSu7az0sio5F8
+3s93EhmdZIWfl6zwyyXf9vOdREYqueLnJVf8OsmFBr6TyOgkHzfwko8b5JK7GvlOIiOVvNHI
+S95o1En+0sx3Ehmd5M1mXvJms1zyhUBqXv9fPxe6SSIjlZwMGJJRZ1665GRAJ3muNSXp7Jgp
+iYxOcrjVkIw6U9Mlh1vlkhFz3p/ukshIJYc+MCTn3SWRUf0+2ZaSdHbM+n2yTSvZ3mbc+by7
+ZHubXPJbY17/A3dJZKSS+4/xkshoJH0dRicfuEsio5Pc18FL7uuQSx7v4DuJjFTS/ph/dyOj
++n2yk+8kMjpJ6uLf3chIJfd08Z+TyEglp7sMyYfuktNdOsmJHv5zEhmd5GyPIfnQXXK2Ry5J
+vca3oKi7JDJSybFeQ/K+u+RYr07yQp/xLSjqLomMTjLYZ0jed5cM9sklZ415E3fcJZGRSnZ/
+npLsn3OXREYjeWzAkLzjLomMTrJzwHg3zrlLdg7IJb93mZcpiYxU8t0v3fZLv2tkNjEv15Gc
+9z9QSwECPwMUAAAACACKuA5bdhxXDmcGAADbMAAADwAAAAAAAAAAAAAApIEAAAAAYnVzMS11
+c2IyMC5wY2FwUEsBAj8DFAAAAAgAZ7gOW/u7QJwfBgAAJy4AAA8AAAAAAAAAAAAAAKSBlAYA
+AGJ1czQtdXNiMTEucGNhcFBLBQYAAAAAAgACAHoAAADgDAAAAAA=
+
+--------------qcqX0BNvSvlhJvrVxHKLWlte--
 
