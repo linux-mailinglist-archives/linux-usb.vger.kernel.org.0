@@ -1,124 +1,120 @@
-Return-Path: <linux-usb+bounces-26907-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26908-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 075AEB27F2B
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 13:31:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A23AFB28039
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 14:59:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B00214E58EF
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 11:31:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B2A0AA7ACF
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Aug 2025 12:59:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD6CF2417E0;
-	Fri, 15 Aug 2025 11:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FD5A30148D;
+	Fri, 15 Aug 2025 12:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EaEFCGIh"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="h4QI56Rd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C821E15A87C
-	for <linux-usb@vger.kernel.org>; Fri, 15 Aug 2025 11:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB06D24395C;
+	Fri, 15 Aug 2025 12:59:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755257488; cv=none; b=gdPGkNpZZ5HR7/1LyWbtx7ZkxJASj8CKcyPKKMevcq92W+pJ3pr2IG/KFgQf7iqroVvvpU/CNKbMCzg2/9Nzmn3sJlkvsXZq+EDq0CUJ4qM8JzbkNej4/n5Hscx0/PU5BjPboTlPOxuQmIHw5PGojrNSQBxD1DR76Lf+MlXprzU=
+	t=1755262768; cv=none; b=YmSSQJNw2S2zDaBQZBF2f86HcqhGPSMtGcQc+dufNu8H87AT7wN4oMbdbZIWXjtrupbBSvRv/UCHb3EqCvUZLPTrUI9iaoTyjoSwdtUrcECU3LjRsF43x0H3vLpIWVsomTJuNO4geICTQLJhEmK2xv1jv4R9XAfsd2/wTM+oBcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755257488; c=relaxed/simple;
-	bh=JiRiI9UwdbQ/iZAm+WijWac7qDE9SjD8eYdG5aXC1pA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Qa8hcKLui3RQ7MvGQ3DJWHBuTu99wOlYo8IQ0iOQ5rr6ChbBWJdiT3O2U6mMzLyivXhElUU3+05cwc7JUh5bttVoJgAdUrCcZiwxQIyMZxzoFJipXaDkH+A7lCss7RGGUWCnNyLdQIxbFynIVKR3mVVoYJQNxQoOs2ttpL+LEKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EaEFCGIh; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755257487; x=1786793487;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JiRiI9UwdbQ/iZAm+WijWac7qDE9SjD8eYdG5aXC1pA=;
-  b=EaEFCGIhWTQe/adVHygSxdesvQjgbN1KXkwPfaQ5SDuPjto41e8ECdgI
-   Oh+Y/Ipn2Dw94WDrO8rX9mUi2uW9ofCa3Q9STiSck1eqJOYJqTbvMOOUg
-   efclMaiG9DyEV6hibdNsQp3ORxdF8H0BVi8N6x75Skt6Cup2ecpXxH6kN
-   442RxoHW686KZVQ3zvxHnj5GTnH6d8gUQCvk/lVAXVIthWBw3SuuyucEi
-   6RbwdDnivth9AqVJaTSt185XfRRg4d4kP8/Rw56Olfd/3lnScWevSBhWO
-   RZT1FAtMS1j5DMo8gALB/g2R5l4xFznA4w0SMAJicCmgpMPa7SQhePmUO
-   A==;
-X-CSE-ConnectionGUID: 7rEVPEmOSuS76mchXUyIgg==
-X-CSE-MsgGUID: MTK5vdXQSPmCOTM3wnLuIQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11522"; a="83010784"
-X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
-   d="scan'208";a="83010784"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 04:31:26 -0700
-X-CSE-ConnectionGUID: jLeQEEVHSxa+/3qAH6KgeA==
-X-CSE-MsgGUID: TCXeM999TGGbFqC8tc9jYQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
-   d="scan'208";a="197847619"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 04:31:25 -0700
-Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 5A0AB11FA65;
-	Fri, 15 Aug 2025 14:31:22 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1umseY-003snt-0j;
-	Fri, 15 Aug 2025 14:31:22 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Zijun Hu <quic_zijuhu@quicinc.com>,
-	Oliver Neukum <oneukum@suse.com>,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v2 1/1] USB: Check no positive return values from pm_runtime_resume_and_get()
-Date: Fri, 15 Aug 2025 14:31:21 +0300
-Message-Id: <20250815113121.925641-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1755262768; c=relaxed/simple;
+	bh=gGAyaHnJFqG3yEOMHo+9099n/xMwq45fZnZWGT3Npv8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qF+itnm86M6Tb1PUdyQ8o5SjAbeXrJz0Xpg11UkodYJmlhOhPjmnkcMrEFL+3ipkcif3495LPJD2193Ty/G1qV4BhcBz/nmGEY8+i9K3mEERFAEQI/u8R06tsUM9Mgs8aJTyN13g3XwwZ+MBSSgHO5pPv31zSgw6yEYmuExswHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=h4QI56Rd; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=WxxMg2CpYRBJYb9noYcqcSAL3Z0uD1GOUX0iFK8kymE=; b=h4QI56RdN+OJNfEUm8boNTz1Js
+	xC2T2k6zgAT4Fp2KI51rLoYAt+siWmkmEtWlqH6rdje3QsEn5M+IlOJswPKlN6WviQfWWSR2u3+5P
+	d/uidX1zqxu61DpUYESdaRaETTSIQ/gOFJJBxXhaQaD09vLFW6Ax5iE59wQ+ZPYfiXgo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1umu1Y-004ox6-Dh; Fri, 15 Aug 2025 14:59:12 +0200
+Date: Fri, 15 Aug 2025 14:59:12 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, max.schulze@online.de,
+	khalasa@piap.pl, o.rempel@pengutronix.de, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH] net: usb: asix: avoid to call phylink_stop() a second
+ time
+Message-ID: <1c352c2f-c8b3-4cbe-9921-8ba5f0e4b433@lunn.ch>
+References: <20250806083017.3289300-1-xu.yang_2@nxp.com>
+ <a28f38d5-215b-49fb-aad7-66e0a30247b9@lunn.ch>
+ <e3oew536p4eghgtryz7luciuzg5wnwg27b6d3xn5btynmbjaes@dz46we4z4pzv>
+ <c3e7m63qcff6dazjzualk7v2n3jtxujl43ynw7jtfuf34njt6w@5sml5vvq57gh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3e7m63qcff6dazjzualk7v2n3jtxujl43ynw7jtfuf34njt6w@5sml5vvq57gh>
 
-pm_runtime_resume_and_get() always returns a negative error code or zero;
-there's no need to check for positive values such as returned by
-pm_runtime_get_sync(). Simply drop the check.
+> > > Looking at ax88172a.c, lan78xx.c and smsc95xx.c, they don't have
+> > > anything like this. Is asix special, or are all the others broken as
+> > > well?
+> > 
+> > I have limited USB net devices. So I can't test others now.
+> > 
+> > But based on the error path, only below driver call phy_stop() or phylink_stop()
+> > in their stop() callback:
+> > 
+> > drivers/net/usb/asix_devices.c
+> >   ax88772_stop()
+> >     phylink_stop()
+> > 
+> > drivers/net/usb/ax88172a.c
+> >   ax88172a_stop()
+> >     phy_stop()
+> > 
+> > drivers/net/usb/lan78xx.c
+> >   lan78xx_stop()
+> >     phylink_stop()
+> > 
+> > drivers/net/usb/smsc95xx.c
+> >   smsc95xx_stop()
+> >     phy_stop()
+> > 
+> > However, only asix_devices.c and lan78xx.c call phylink_suspend() in suspend()
+> > callback. So I think lan78xx.c has this issue too.
+> > 
+> > Should I change usbnet common code like below?
+> > 
+> > diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> > index c39dfa17813a..44a8d325dfb1 100644
+> > --- a/drivers/net/usb/usbnet.c
+> > +++ b/drivers/net/usb/usbnet.c
+> > @@ -839,7 +839,7 @@ int usbnet_stop (struct net_device *net)
+> >         pm = usb_autopm_get_interface(dev->intf);
+> >         /* allow minidriver to stop correctly (wireless devices to turn off
+> >          * radio etc) */
+> > -       if (info->stop) {
+> > +       if (info->stop && !dev->suspend_count) {
+> >                 retval = info->stop(dev);
+> >                 if (retval < 0)
+> >                         netif_info(dev, ifdown, dev->net,
+> 
+> Do you mind sharing some suggestions on this? Thanks in advance!
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
-since v1:
+It does look to be a common problem, so solving it in usbnet would be
+best.
 
-- Drop Fixes: and Cc: stable tags.
-
- drivers/usb/core/driver.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index c3177034b779..d4df17b3d7e7 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1723,8 +1723,6 @@ int usb_autoresume_device(struct usb_device *udev)
- 	dev_vdbg(&udev->dev, "%s: cnt %d -> %d\n",
- 			__func__, atomic_read(&udev->dev.power.usage_count),
- 			status);
--	if (status > 0)
--		status = 0;
- 	return status;
- }
- 
-@@ -1829,8 +1827,6 @@ int usb_autopm_get_interface(struct usb_interface *intf)
- 	dev_vdbg(&intf->dev, "%s: cnt %d -> %d\n",
- 			__func__, atomic_read(&intf->dev.power.usage_count),
- 			status);
--	if (status > 0)
--		status = 0;
- 	return status;
- }
- EXPORT_SYMBOL_GPL(usb_autopm_get_interface);
--- 
-2.39.5
-
+	Andrew
 
