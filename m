@@ -1,146 +1,239 @@
-Return-Path: <linux-usb+bounces-26941-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26942-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 348DBB2944C
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Aug 2025 18:52:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F111B29452
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Aug 2025 19:02:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7591E174F0C
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Aug 2025 16:52:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51D6E7A32BF
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Aug 2025 17:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2902FF160;
-	Sun, 17 Aug 2025 16:52:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF3E3226CFD;
+	Sun, 17 Aug 2025 17:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=mmeacs.de header.i=@mmeacs.de header.b="QTJPblHZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp6.goneo.de (smtp6.goneo.de [85.220.129.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5DA41F8733
-	for <linux-usb@vger.kernel.org>; Sun, 17 Aug 2025 16:52:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2471C2AE97
+	for <linux-usb@vger.kernel.org>; Sun, 17 Aug 2025 17:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.220.129.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755449555; cv=none; b=VkH9rcKhJmAQ7YSfH/UCtMTDQ1n9jRZpiHDaO2dBtJi9eVlY52xRo43JBp61l6pOxBRcDgnwQlFyla4j4Z2ePz3I82SieysqpMTEU7jG0IQbuyFyHumTWVdWtO2Az1DPieRikl/G0EnAFKKz5gvT26wbTByUMvLT18GVvyERdZE=
+	t=1755450116; cv=none; b=PXwOSTUQsenWD/Q+Yk1P6QUImK4EyMXg6WGV4yj/DGkCBDs3/UdgXcqU/ifLpc2GZftqo9l4eOI/mWLNELg3qVZxHcDnDdSKbUHH0wjiHDd094LZyuOy1VwCa5W+sbnDn7WeLoFlF+bgT2yYmvyJk6b/ke3ZvHk1yi+dzV6X1Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755449555; c=relaxed/simple;
-	bh=La33uNruziC6aK5yC+OZwi/CjaShNe4+LeE5OKVRtsM=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=YosJxFa0ZB1iDXDaugYX7PlHXjKREG6OCG6StUZMmmssOEg9PweyZf6ZryNGjRWvq8rYtZA/ByxIW5dXg/7JS2fZ1afAAPYIYwVAQZ2Sjq2P9156v6hmqNfu5vk7craOnMhHYNIrNNxRzP5RgPrkBR8/JxULGF49NJyHEPhO3JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-3e66741d1d0so24925355ab.0
-        for <linux-usb@vger.kernel.org>; Sun, 17 Aug 2025 09:52:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755449553; x=1756054353;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SMyjkT6Y8eXPsn2bZrda8Pw4BLi3+j8GhORmxcjlJ2s=;
-        b=v+HQQ0x49HXDgDCY5j1UXvS53DNDLWtH4OMrwPCaNuIKq6oXmy3eyvBTLdgTt8yTJg
-         InEkgafd86+bLtvkxZn9WeMd8p1XlHwGF+gNP9J+RrB6Q5jk5RGhGAUBgdk1bdINbKFd
-         HDivDg+v8Nkt8NH76DPmwo4QED8cMAh4iNhm+PXIZTcGCYMXngaTxJn+WnVmONXdmPfJ
-         2toGO7XKHLc42+64Yd8yX5C4X1PJHboW+CXJ193G4justQMsHQa1CzJZ2/6JZwVMuafT
-         lk5MXFbBYJ8Xg9gMwmaxXoB0+9N3K5oS2cq5p9Ti8dSS1EKd+Sp1XS2SxFlsQZ8sU0OU
-         /d/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW0HUrc2pGj/J/ZwKfM9kwE9jR+sb1Ku77DLwxQSBgO135NWPXxv0hX5GiVKBVbnkpbq3gSDo+ou3o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQJGwhjK/jUzzr+s0ZBOdSAS1lK+Zdt0U3jFU3Zyd88DhZh2/B
-	ouMhwZvrlQJbkJGqOlAO7ER7E+lGYOidT498CGXnE+5Xc2jvtfUXRt9PhjiTVI224nBPxxz1yYj
-	4h2PtHuFccyX28d5WYGmLwHxt3IyhPaXLeY2IaOzXDTy5B6BYqM3N11ad1a0=
-X-Google-Smtp-Source: AGHT+IER8rHkZb7o5CdFfjUuJKJFKzWg2Lr3WChYbhL47cIydC0zpBc3Cvdtsg86Gu7E4tkZUCkNR+ogQpn0f3GIRRMd4U/vDfEI
+	s=arc-20240116; t=1755450116; c=relaxed/simple;
+	bh=oXFTNsoC/ubRuyOEG0NCFAlt4jHbivcXBGTSNcYGVeI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CD9r688jSBr/pRDQBgQIMJuXqAB9z//qvDNSFQ9jyPhfxyYw5kJV1asv2gQIPbIgFPQFZ9qsrVFAI2dfI17sBUAxVl29iG13B0XbaNfCa6fJtlAh6p9eqleq7TW7WrLnwhTTSjt6TsdSadSZ6fDskjJtEc/AjYOxPf1jNMCy9l4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mmeacs.de; spf=pass smtp.mailfrom=mmeacs.de; dkim=pass (2048-bit key) header.d=mmeacs.de header.i=@mmeacs.de header.b=QTJPblHZ; arc=none smtp.client-ip=85.220.129.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mmeacs.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mmeacs.de
+Received: from hub1.goneo.de (hub1.goneo.de [85.220.129.52])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	by smtp6.goneo.de (Postfix) with ESMTPS id C32F12409FD;
+	Sun, 17 Aug 2025 19:01:48 +0200 (CEST)
+Received: from hub1.goneo.de (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	by hub1.goneo.de (Postfix) with ESMTPS id E397F24084C;
+	Sun, 17 Aug 2025 19:01:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mmeacs.de; s=DKIM001;
+	t=1755450107;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NHQiyJynyoB1XLNhvJtSFE+yVV/z0WrrcmSprfXEd3E=;
+	b=QTJPblHZc56AfU5O+Lnl0tahezeWImJ+sl8B2+a4lUH/ObQ48pKY/sVZIos04tlsmH/qzI
+	8UWwQXhKGFUiJ/c2iyYgaPkLpJnTs+Qk2k/VU389HggTl0mlScym7Rs6boGjGwUc+MoziR
+	5gu/NslTAJm3l5QVWfEweCUj2x1Z7lHl1je2znDLsU81GGq9qgk4pHK4o1f6BIYCMToywz
+	3Gj6CR1qE3NqhX2TLNMnuLKXKqJ1b7juBRzRiEKIsQzoduVKjuHwKm+1Ah8Ag357G9ZNNa
+	PG2uwz2xM5r5CPPIGOe3YiBIZo4wxj5N2Gfj+v8QCnG+x2bavThEP9ZUG9/qvA==
+Received: from [192.168.177.20] (tmo-080-85.customers.d1-online.com [80.187.80.85])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by hub1.goneo.de (Postfix) with ESMTPSA id 8D8212405BB;
+	Sun, 17 Aug 2025 19:01:46 +0200 (CEST)
+Message-ID: <8a7d28ac-a269-4ce5-ba72-a685541f4c16@mmeacs.de>
+Date: Sun, 17 Aug 2025 19:01:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:156a:b0:3e3:fe5e:9b96 with SMTP id
- e9e14a558f8ab-3e57e8a6872mr165247005ab.11.1755449553002; Sun, 17 Aug 2025
- 09:52:33 -0700 (PDT)
-Date: Sun, 17 Aug 2025 09:52:32 -0700
-In-Reply-To: <689ff631.050a0220.e29e5.0035.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68a208d0.050a0220.e29e5.006e.GAE@google.com>
-Subject: Re: [syzbot] [usb?] UBSAN: shift-out-of-bounds in ax88772_bind
-From: syzbot <syzbot+20537064367a0f98d597@syzkaller.appspotmail.com>
-To: andrew+netdev@lunn.ch, andrew@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: Problem hanging Bulk IN, with USB 3.x, perhaps due to
+ wMaxPacketSize = 1024 and wMaxBurst = 6 (OUT) and 2 (IN), tested and
+ reproduceable with i.MX8MP and Raspberry Pi Compute Module 5 (CM5)
+To: Daniele Palmas <dnlplm@gmail.com>
+Cc: linux-usb@vger.kernel.org, michal.pecio@gmail.com,
+ mathias.nyman@linux.intel.com
+References: <64e36d3b-606f-4fa7-bb6a-1dfd8a144de6@mmeacs.de>
+ <2c13a7f8-647e-4199-b0e6-451128bdd61e@linux.intel.com>
+ <1b1391ef-b8f4-48bd-952c-0530ebc97be4@mmeacs.de>
+ <CAGRyCJEaysizTYu=bsP2mhg54-iiP-rWeS6_9h5sfm4yr705yw@mail.gmail.com>
+From: Martin Maurer <martin.maurer@mmeacs.de>
+In-Reply-To: <CAGRyCJEaysizTYu=bsP2mhg54-iiP-rWeS6_9h5sfm4yr705yw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-UID: 8316da
+X-Rspamd-UID: 8fe525
 
-syzbot has found a reproducer for the following issue on:
+Hi Daniele,
 
-HEAD commit:    99bade344cfa Merge tag 'rust-fixes-6.17' of git://git.kern..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13ea1234580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ce98061fb8ee27bc
-dashboard link: https://syzkaller.appspot.com/bug?extid=20537064367a0f98d597
-compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=126d13a2580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1754faf0580000
+many thanks for your reply!
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e140d0491611/disk-99bade34.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f581d5a99c83/vmlinux-99bade34.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/feceb1caceef/bzImage-99bade34.xz
+I can only partly open
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+20537064367a0f98d597@syzkaller.appspotmail.com
+https://www.spinics.net
 
-------------[ cut here ]------------
-UBSAN: shift-out-of-bounds in drivers/net/usb/asix_devices.c:679:27
-shift exponent 208 is too large for 64-bit type 'unsigned long'
-CPU: 0 UID: 0 PID: 10 Comm: kworker/0:1 Not tainted 6.17.0-rc1-syzkaller-00214-g99bade344cfa #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
- ubsan_epilogue+0xa/0x40 lib/ubsan.c:233
- __ubsan_handle_shift_out_of_bounds+0x386/0x410 lib/ubsan.c:494
- ax88772_init_mdio drivers/net/usb/asix_devices.c:679 [inline]
- ax88772_bind+0xdcf/0xfa0 drivers/net/usb/asix_devices.c:910
- usbnet_probe+0xa96/0x2870 drivers/net/usb/usbnet.c:1781
- usb_probe_interface+0x668/0xc30 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x26a/0x9e0 drivers/base/dd.c:659
- __driver_probe_device+0x18c/0x2f0 drivers/base/dd.c:801
- driver_probe_device+0x4f/0x430 drivers/base/dd.c:831
- __device_attach_driver+0x2ce/0x530 drivers/base/dd.c:959
- bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:462
- __device_attach+0x2b8/0x400 drivers/base/dd.c:1031
- bus_probe_device+0x185/0x260 drivers/base/bus.c:537
- device_add+0x7b6/0xb50 drivers/base/core.c:3689
- usb_set_configuration+0x1a87/0x20e0 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0x8d/0x150 drivers/usb/core/generic.c:250
- usb_probe_device+0x1c1/0x390 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x26a/0x9e0 drivers/base/dd.c:659
- __driver_probe_device+0x18c/0x2f0 drivers/base/dd.c:801
- driver_probe_device+0x4f/0x430 drivers/base/dd.c:831
- __device_attach_driver+0x2ce/0x530 drivers/base/dd.c:959
- bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:462
- __device_attach+0x2b8/0x400 drivers/base/dd.c:1031
- bus_probe_device+0x185/0x260 drivers/base/bus.c:537
- device_add+0x7b6/0xb50 drivers/base/core.c:3689
- usb_new_device+0xa39/0x16f0 drivers/usb/core/hub.c:2694
- hub_port_connect drivers/usb/core/hub.c:5566 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
- port_event drivers/usb/core/hub.c:5870 [inline]
- hub_event+0x2958/0x4a20 drivers/usb/core/hub.c:5952
- process_one_work kernel/workqueue.c:3236 [inline]
- process_scheduled_works+0xade/0x17b0 kernel/workqueue.c:3319
- worker_thread+0x8a0/0xda0 kernel/workqueue.c:3400
- kthread+0x70e/0x8a0 kernel/kthread.c:463
- ret_from_fork+0x3f9/0x770 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
----[ end trace ]---
+pages, often pages time out...
+
+Have I understood correctly, that there is a known bug, but it was not 
+fixed (from 2020 till now).
+
+But as workaround enabling qmux/qmimux could work?
+
+Best regards,
+
+Martin
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+
+Am 17.08.2025 um 17:22 schrieb Daniele Palmas:
+> Hello Martin,
+>
+> Il giorno dom 17 ago 2025 alle ore 17:09 Martin Maurer
+> <martin.maurer@mmeacs.de> ha scritto:
+>> Hello Michał, hello Mathias at all,
+>>
+>> many thanks for your answers!
+>>
+>> I have tried if I can reproduce it with a AMD Linux PC, but
+>> unfortunately I was not able to reproduce (but setup is a bit different).
+>>
+>> So I went back to Raspberry Pi Compute Module 5, where I mainly
+>> connected the radio module (Quectel RM520N-GL) via USB3,
+>>
+>> and installed a Wifi access point. All data/all connections from Wifi
+>> access point are routed directly via wwan0 to radio module.
+>>
+>> This is currently my easiest setup to be able to reproduce the error.
+>> Mostly in a few seconds.
+>>
+>> My knowledge in area Linux Kernel + USB is unfortunately not yet enough
+>> to analyze and fix it by myself.
+>>
+>> But I used the help of ChatGPT-5 to create an usbmon and xhci kernel trace.
+>>
+>> I create an usbmon trace as well as a trace from xhci (both recorded in
+>> parallel):
+>>
+>> https://www.file-upload.net/en/download-15523936/usbmon_bus5_20250817-150158.log.html
+>>
+>> https://www.file-upload.net/en/download-15523937/xhci_20250817-150158.trace.html
+>>
+>> This was the last output, my ping in a shell has shown:
+>>
+>> 64 bytes from 8.8.8.8: icmp_seq=2323 ttl=112 time=26.0 ms
+>> 64 bytes from 8.8.8.8: icmp_seq=2324 ttl=112 time=25.0 ms
+>> 64 bytes from 8.8.8.8: icmp_seq=2325 ttl=112 time=29.1 ms
+>> 64 bytes from 8.8.8.8: icmp_seq=2326 ttl=112 time=37.8 ms
+>>
+>> In parallel created more data traffic, but with ping I see first when IP
+>> data connection does not work stable anymore.
+>>
+>> According to ChatGPT-5 the following places contain errors:
+>>
+>> *** USBMON ***
+>>
+>> In your usbmon_bus5_20250817-150158.log:
+>>
+>> First -71 (EPROTO) on the QMI Bulk-IN (Bi:5:005:14): line 2161,
+>> timestamp 493245744
+>>
+>> 2161: ffffff8003c8cb40 493245744 C Bi:5:005:14 -71 0
+>>
+>> Just before that, there’s a -75 (EOVERFLOW) on the same IN EP, which is
+>> often the first sign of trouble: line 2159, timestamp 493245221
+>>
+> I did not have the chance to look at the usbmon traces so I'm not sure
+> that this is really the same scenario, but you could take a look at
+> the whole thread at
+> https://www.spinics.net/lists/netdev/msg635944.html
+>
+> If it is the same issue, basically, if you setup the data connection
+> with QMAP you should not face the issue.
+>
+> Regards,
+> Daniele
+>
+>> 2159: ffffff8003c8cd80 493245221 C Bi:5:005:14 -75 1024 = ...
+>>
+>> So the sequence is: several good completions → EOVERFLOW (-75) → then a
+>> stream of EPROTO (-71) errors on Bi:5:005:14, which kills further ping
+>> replies after your last good seq (2326).
+>>
+>>
+>> *** XHCI TRACE ***
+>>
+>> I found the first failure in your xHCI trace.
+>>
+>> First error line: line 8216
+>>
+>> Timestamp: 758267.000115
+>>
+>> Event: xhci_handle_event … type 'Transfer Event' … 'Error' … slot 1 ep
+>> 29 … len 1472
+>>
+>> Why ep 29? In xHCI, the endpoint context index is ep_index = 2 *
+>> ep_number + (direction), where direction is 0=OUT, 1=IN.
+>> So for Bulk IN ep 14: 2*14+1 = 29 → that’s your IN 0x87 pipe.
+>>
+>> Right after that line you can see the driver react:
+>>
+>> xhci_handle_transfer … length 1472 … (the failed TD)
+>>
+>> xhci_queue_command: Reset Endpoint Command … ep 29 (host tries to recover)
+>>
+>> xhci_handle_event: … 'Command Completion Event' (reset completes)
+>>
+>> But from this point on, completions for that IN EP correspond to usbmon
+>> -71 (EPROTO) — matching what you saw.
+>>
+>>
+>> Does this give a clue, where it could be coming from?
+>>
+>> It is 100% reproduceable in a few seconds on Raspberry Pi Ccompute
+>> Module 5 (and I same behaviour on different kernel of i.MX8MP).
+>>
+>> Could it be a hardware problem? I already tried different radio module
+>> (all Qualcomm, X62/X65 and X72/X75),
+>>
+>> different cables (all same length, all from same source), different eval
+>> board for the M.2 radio modules (but from same source).
+>>
+>>
+>> Can you give me a hint, what to try next?
+>>
+>>
+>> ChatGPT-5 pinpoints me to try to disable LPM for USB3, could this be a
+>> next step? Or is it something  else?
+>>
+>>
+>> Many thanks for your help!
+>>
+>> Best regards,
+>>
+>> Martin
+>>
+>>
 
