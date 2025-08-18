@@ -1,273 +1,126 @@
-Return-Path: <linux-usb+bounces-26992-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26993-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E16DBB2B1E1
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 21:49:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89F6BB2B228
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 22:15:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 584751B65885
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 19:49:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 564E268426D
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 20:15:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A1F27466C;
-	Mon, 18 Aug 2025 19:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2013C224B0D;
+	Mon, 18 Aug 2025 20:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G7YeZIk2"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SsjrAwXa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257B91F37D3
-	for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 19:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB883451AA
+	for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 20:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755546568; cv=none; b=SZycsj03qdtCZ00MGuMETpR5vJDhVBCkGyYvwlwi/ZRRduhVlTSH69doIipj0gYGb0neqCw+2vDIhd5P4+KgtfLnQNjAABxlGL1tqQN5NhbADGaqwqIZzM/QYJlVZIVpDQ6CALJcYYmLkFllNi7IeRGyRbn9E/mOLZ37g8YBx9I=
+	t=1755548142; cv=none; b=FPyxz1yF2TsbG00PvxHxsLzjR6urf1fxRhtD0b82yM7ntZs93sKT4KRGwp0X8CQeEkHpIDBjEB73Dr+6UR9PzXxPRU1WVDxKATR/4nehCJxMThNkzXJFV6DgMMKVStdTZRAKBKFAXveciIp3iSyppeYanF7SszLnEoj6j2Grdi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755546568; c=relaxed/simple;
-	bh=QnaTRjbXWXHVKA1yp5+UcsMsVlyGYVtpbmG6LkuJ1UY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VoVgSo78m5bRRwVGYvxxpFt1JdBzPb+aW1Mk+v1j8YznxpG4hmrwBda7/SpswMuwTgTqul4Lk+sBCLl8+D/pUgWmfRHPZWRAGpcpb2kyMgKO7tSq6oYqNe71HErQGElid0VU1em0o/uBUSYKibwCFohgn0jHVObM/wVKVL6Nikw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G7YeZIk2; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45a1b04f8b5so22703205e9.1
-        for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 12:49:25 -0700 (PDT)
+	s=arc-20240116; t=1755548142; c=relaxed/simple;
+	bh=AJRr1pmfwAFojoj8scQGayhsSG5RjYydyI+9N43dH0Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=U5pmCZitIHAFkM2UH1CG9QccfxW5mO8a9xht0VerUeULt6kTf68pogzxWPofGUwvlYtzE1nij86WC/9//O3mC6zk9BnD+M1BaX78g8uOCkiaQm3XIys42wKtmwuHKhL3IY+yPJ2PpSl2zyUeYWAA1DuY8cmroSBWpTfqNVw7q1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SsjrAwXa; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-55ce521f77bso4609324e87.1
+        for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 13:15:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755546564; x=1756151364; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vYmMdVURkWTTR/wj2CkwKLf34zUz6vfpLh0Zo9oetsk=;
-        b=G7YeZIk2H3zgDjFy3PKJAjikj1w76BF0U2lxoikFJMop2ZJ9dZE+HsTW0Zhe9tzxYE
-         fhWFhuxeY9H1MdNQWsQUmEgJ4tSqPTPwdT/bLYHHp/KAvHfqrH6vUj8IXto1RX0hpho9
-         pfTs1MHWiRucfj+OmBSItYRkrqIvRRfWj6xuCATdLlm7QRSO4UmbrF2/slhlnqVYfW3z
-         s8zxIw0+PWE+I+HR9+NCNJHMttAQ9QgOKzyorR3I1Hli6cQfEYt5McToTQm1X4QkBgdb
-         EXGpmUhfh2/fUidY2sgmsPCVhR/My4qyxepA5EuT5494HixMdbX71xvGsGuh7Vd7siE3
-         WpUA==
+        d=chromium.org; s=google; t=1755548139; x=1756152939; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3pQTw4pj+T7PRPBakG+ijRSJnANn71d9h/koPyWygvM=;
+        b=SsjrAwXa++UN5sfgF7L+n7fEi/mYt3bHoIwaoMx1QhR0Fm3OR8xtG47tkdxLcbSxQl
+         9T6J3sP5zcecSVfYEeNnVLJChEcPmVOKLZAOKio1VKDJJafbQNPSatSRf6zfMH2GHXmM
+         0p8zm2FEJXarFZHGe5tcddKDktc37fZtq8/ME=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755546564; x=1756151364;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vYmMdVURkWTTR/wj2CkwKLf34zUz6vfpLh0Zo9oetsk=;
-        b=RB2OFcpq43LetaQTV7KC0x5XVYpqljXKgvNsmewM+Kq4ASjqsz3R8VL07omXI7X4ht
-         Us4rY3/fijY0NasbI53s6RmqV37+/p/WIQiCFIAE+K5J3gMvqFkfAaCaPDfyPe8rSX+t
-         uDUptq34vbOEip3l/9nvcQS8jJGViwkPPxbAorwWyG3KmFYpwajUypyC8zEpUyztHVyq
-         b71d+H0Rcf3JyCqpUO5xD/846UkVSNG/yAJauteqS5tUOeLp/azKPyHIr5EviJeJfHr8
-         QfVtNjOtZkSVmnOH2UYM2NkWKaeeqyVbWVON8CDoUipyj2cHnSHQc/2nC/WSXuO1ymxq
-         EglQ==
-X-Gm-Message-State: AOJu0YwYM2FE4haudlekYHf/QW/UMp4THRlM0XFirhMyeEB6Jdd/+/6M
-	t2yhUk8HxMvMoaEv4wIm/0PLf5nJ4gG7B4H3+t5Tp8+yTfjDQHZSI1k7A2OI4LezT9eqIpXzngt
-	xmfeoXHGcIReEPYihXsaqmn7f1E3so4Y=
-X-Gm-Gg: ASbGncvW+bDKQsO7uHDiKO9neaDp+5PPT6FBtJYMVsy0L1PACaZB/gsPf/RD+u+MAjB
-	CBKd7/7xh8TSSfG86acBDL0Y6i9ifiRrKc2XKF8rlfqsTk2OWkmHrij6HOX+HirM1w8Q5fGCBLe
-	yn4bowUFHnjLWtgLJUUNU1jUgzrK2c5u8hYDczbrFdzG0EWP7ad16bSGg1defV26w/rySheIp0u
-	xfPzOI=
-X-Google-Smtp-Source: AGHT+IFEPEcfBlyJZO76XJkA30Shzh4YmP/bwG2XwZSbuF+aWn/29kRiORnyDiJ+79t1XZr7AehepSxtVCQ0QtXa4IU=
-X-Received: by 2002:a05:600c:190e:b0:450:d4a6:799e with SMTP id
- 5b1f17b1804b1-45a26785296mr76164475e9.20.1755546564193; Mon, 18 Aug 2025
- 12:49:24 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755548139; x=1756152939;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3pQTw4pj+T7PRPBakG+ijRSJnANn71d9h/koPyWygvM=;
+        b=nMXJ/e2+3jMrJk1zYVlLFV6IIPnvIX/addvmB6glsU7rA3t43A+/9MlhwWS29XalpG
+         yVAqN5GIyzuEn8Zw6ytM1oam7jOvlFRh1aOWCQFQDUD4+wmHWAcxaDTurxNn5lhPCOYK
+         tP9YETYSAAEC6mzzNHHUXr7hVlx5mJqaWV6PxkA/ZkhnqyWxrH0QB1eQ2u2DWpRQWl6h
+         egR/856/HDDZVJHUxzL9QUUSAF9SDERsp0VKHcEeuK7D3QhGZfdc60KEZsZ5uVEeliuO
+         fNyLzBstfvrEjnk6ppfW4UFGfxogmHRJuxQNx0h+uABpwOwiWbJPAUP4pYAlhE1PjFgQ
+         TZ5A==
+X-Forwarded-Encrypted: i=1; AJvYcCW0mhHJLO8q79ZM2wZc8MAtConYSAANzGEMDi5SII8k9MlmUHjFryvIojhLRiCTSQGcD9oqVuPbiQY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDSQd9pDY1haL9yEHvWZemAbMm4iM7YTzhT7/kaRLsYVUJriKl
+	kiHCMckfT0m96IyvfYwQUxSpl/ZrFSkuEosY6N6OjyOS3PCvrsT/RH/YTIDMvMl3Zw==
+X-Gm-Gg: ASbGncvdLsohodEqIXmRNxIhkNE5EIr+Gh+s8B10ONKdgzPERlu+M1G4fATqPBta4qo
+	rq/8JVUr1RFYUz/saDbbHtY3lYdvDvLMe7cD5lrif/gAC2tOVjjhqPz+hbrtMuVyYYDFflqU7oK
+	rgYR7DWCAdCvsxUMteZAcM9d+vGhHZMjr3j/5gAWT5w2rYoMM3LFfvE/JuRS+tFLBjg5gHaih1D
+	YHGIJEG32NoNZrPI7srP5pIfz4eUduLjmNCL9SSvkYLAezEehh81J3IZ7hjENZ8IVOx6vadzjF1
+	NGlfD0jw+OU3KW/2b3v3PurPSzkU0K8sponlmDI+4QSLw4xNkA7QpCc+5buJ3cY+Cf3JSPsSO5y
+	FspsXefmEoFtqJMZMtoVe0eKyd6MTTjiCZMCej5mkM9+63M/ZSd82u19eIpuQRlz1hUJbdvkxV6
+	U=
+X-Google-Smtp-Source: AGHT+IG3TFzShY6yfe6XJmMNX+zhm5pE0AhCdI1YMtdo5PB/hPLK1e4o0t2sgzIesjN97Glq5qiZsg==
+X-Received: by 2002:a05:6512:ea5:b0:55b:9647:8e64 with SMTP id 2adb3069b0e04-55e0082d2ebmr42174e87.36.1755548139043;
+        Mon, 18 Aug 2025 13:15:39 -0700 (PDT)
+Received: from ribalda.c.googlers.com (237.65.88.34.bc.googleusercontent.com. [34.88.65.237])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef3f3476sm1789268e87.107.2025.08.18.13.15.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Aug 2025 13:15:38 -0700 (PDT)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH 0/4] media: uvcvideo: Add support for
+ UVC_CROSXU_CONTROL_IQ_PROFILE
+Date: Mon, 18 Aug 2025 20:15:35 +0000
+Message-Id: <20250818-uvc-iq-switch-v1-0-f7ea5e740ddd@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <64e36d3b-606f-4fa7-bb6a-1dfd8a144de6@mmeacs.de>
- <2c13a7f8-647e-4199-b0e6-451128bdd61e@linux.intel.com> <1b1391ef-b8f4-48bd-952c-0530ebc97be4@mmeacs.de>
- <CAGRyCJEaysizTYu=bsP2mhg54-iiP-rWeS6_9h5sfm4yr705yw@mail.gmail.com> <8a7d28ac-a269-4ce5-ba72-a685541f4c16@mmeacs.de>
-In-Reply-To: <8a7d28ac-a269-4ce5-ba72-a685541f4c16@mmeacs.de>
-From: Daniele Palmas <dnlplm@gmail.com>
-Date: Mon, 18 Aug 2025 21:49:13 +0200
-X-Gm-Features: Ac12FXzPZ4nLyErN2ozPHL_nXlI3exmETYFXiF07llSl7I4DGIJfHyk4VF_NW-0
-Message-ID: <CAGRyCJHX4r_Q3sLhgfzhD9J8CreH-YWkSmmuXfZrEQemzhD7Rw@mail.gmail.com>
-Subject: Re: Problem hanging Bulk IN, with USB 3.x, perhaps due to
- wMaxPacketSize = 1024 and wMaxBurst = 6 (OUT) and 2 (IN), tested and
- reproduceable with i.MX8MP and Raspberry Pi Compute Module 5 (CM5)
-To: Martin Maurer <martin.maurer@mmeacs.de>
-Cc: linux-usb@vger.kernel.org, michal.pecio@gmail.com, 
-	mathias.nyman@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOeJo2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDC0Nj3dKyZN3MQt3i8syS5AxdY/M0EzNDM1PzNEtTJaCegqLUtMwKsHn
+ RsbW1AAQehqRfAAAA
+X-Change-ID: 20250813-uvc-iq-switch-37f461657f95
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Hans de Goede <hansg@kernel.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Hans Verkuil <hverkuil@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.14.2
 
-Hi Martin,
+Add support for switching the IQ profile of a ChromeOS camera.
 
-Il giorno dom 17 ago 2025 alle ore 19:01 Martin Maurer
-<martin.maurer@mmeacs.de> ha scritto:
->
-> Hi Daniele,
->
-> many thanks for your reply!
->
-> I can only partly open
->
-> https://www.spinics.net
->
-> pages, often pages time out...
->
-> Have I understood correctly, that there is a known bug, but it was not
-> fixed (from 2020 till now).
->
-> But as workaround enabling qmux/qmimux could work?
+This patchset depends on 2 patches in uvc/for-next:
+- media: uvcvideo: Fix comments in uvc_meta_detect_msxu
+- media: uvcvideo: Move MSXU_CONTROL_METADATA definition to header
 
-If the problem is the same, it should. If your kernel version supports
-the passthrough sysfs file, you can also use the rmnet module (much
-better than the inbox qmap implementation).
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Laurent Pinchart (1):
+      media: uvcvideo: Move MSXU_CONTROL_METADATA definition to header
 
-If enabling QMAP is too complicated in your setup, you can just try to
-increase the rx_urb_size by increasing the mtu (at least 2048).
+Ricardo Ribalda (3):
+      media: uvcvideo: Fix comments in uvc_meta_detect_msxu
+      media: uvcvideo: Run uvc_ctrl_init_ctrl for all controls
+      media: uvcvideo: Support UVC_CROSXU_CONTROL_IQ_PROFILE
 
-Regards,
-Daniele
+ drivers/media/usb/uvc/uvc_ctrl.c     | 41 ++++++++++++++++++++++++++++--------
+ drivers/media/usb/uvc/uvc_metadata.c | 22 +++++++++++--------
+ include/linux/usb/uvc.h              | 22 +++++++++++++++++++
+ 3 files changed, 67 insertions(+), 18 deletions(-)
+---
+base-commit: 078f1a7eb48eef9b3cb78bcd2254356f3a332358
+change-id: 20250813-uvc-iq-switch-37f461657f95
 
-> Best regards,
->
-> Martin
->
->
->
-> Am 17.08.2025 um 17:22 schrieb Daniele Palmas:
-> > Hello Martin,
-> >
-> > Il giorno dom 17 ago 2025 alle ore 17:09 Martin Maurer
-> > <martin.maurer@mmeacs.de> ha scritto:
-> >> Hello Micha=C5=82, hello Mathias at all,
-> >>
-> >> many thanks for your answers!
-> >>
-> >> I have tried if I can reproduce it with a AMD Linux PC, but
-> >> unfortunately I was not able to reproduce (but setup is a bit differen=
-t).
-> >>
-> >> So I went back to Raspberry Pi Compute Module 5, where I mainly
-> >> connected the radio module (Quectel RM520N-GL) via USB3,
-> >>
-> >> and installed a Wifi access point. All data/all connections from Wifi
-> >> access point are routed directly via wwan0 to radio module.
-> >>
-> >> This is currently my easiest setup to be able to reproduce the error.
-> >> Mostly in a few seconds.
-> >>
-> >> My knowledge in area Linux Kernel + USB is unfortunately not yet enoug=
-h
-> >> to analyze and fix it by myself.
-> >>
-> >> But I used the help of ChatGPT-5 to create an usbmon and xhci kernel t=
-race.
-> >>
-> >> I create an usbmon trace as well as a trace from xhci (both recorded i=
-n
-> >> parallel):
-> >>
-> >> https://www.file-upload.net/en/download-15523936/usbmon_bus5_20250817-=
-150158.log.html
-> >>
-> >> https://www.file-upload.net/en/download-15523937/xhci_20250817-150158.=
-trace.html
-> >>
-> >> This was the last output, my ping in a shell has shown:
-> >>
-> >> 64 bytes from 8.8.8.8: icmp_seq=3D2323 ttl=3D112 time=3D26.0 ms
-> >> 64 bytes from 8.8.8.8: icmp_seq=3D2324 ttl=3D112 time=3D25.0 ms
-> >> 64 bytes from 8.8.8.8: icmp_seq=3D2325 ttl=3D112 time=3D29.1 ms
-> >> 64 bytes from 8.8.8.8: icmp_seq=3D2326 ttl=3D112 time=3D37.8 ms
-> >>
-> >> In parallel created more data traffic, but with ping I see first when =
-IP
-> >> data connection does not work stable anymore.
-> >>
-> >> According to ChatGPT-5 the following places contain errors:
-> >>
-> >> *** USBMON ***
-> >>
-> >> In your usbmon_bus5_20250817-150158.log:
-> >>
-> >> First -71 (EPROTO) on the QMI Bulk-IN (Bi:5:005:14): line 2161,
-> >> timestamp 493245744
-> >>
-> >> 2161: ffffff8003c8cb40 493245744 C Bi:5:005:14 -71 0
-> >>
-> >> Just before that, there=E2=80=99s a -75 (EOVERFLOW) on the same IN EP,=
- which is
-> >> often the first sign of trouble: line 2159, timestamp 493245221
-> >>
-> > I did not have the chance to look at the usbmon traces so I'm not sure
-> > that this is really the same scenario, but you could take a look at
-> > the whole thread at
-> > https://www.spinics.net/lists/netdev/msg635944.html
-> >
-> > If it is the same issue, basically, if you setup the data connection
-> > with QMAP you should not face the issue.
-> >
-> > Regards,
-> > Daniele
-> >
-> >> 2159: ffffff8003c8cd80 493245221 C Bi:5:005:14 -75 1024 =3D ...
-> >>
-> >> So the sequence is: several good completions =E2=86=92 EOVERFLOW (-75)=
- =E2=86=92 then a
-> >> stream of EPROTO (-71) errors on Bi:5:005:14, which kills further ping
-> >> replies after your last good seq (2326).
-> >>
-> >>
-> >> *** XHCI TRACE ***
-> >>
-> >> I found the first failure in your xHCI trace.
-> >>
-> >> First error line: line 8216
-> >>
-> >> Timestamp: 758267.000115
-> >>
-> >> Event: xhci_handle_event =E2=80=A6 type 'Transfer Event' =E2=80=A6 'Er=
-ror' =E2=80=A6 slot 1 ep
-> >> 29 =E2=80=A6 len 1472
-> >>
-> >> Why ep 29? In xHCI, the endpoint context index is ep_index =3D 2 *
-> >> ep_number + (direction), where direction is 0=3DOUT, 1=3DIN.
-> >> So for Bulk IN ep 14: 2*14+1 =3D 29 =E2=86=92 that=E2=80=99s your IN 0=
-x87 pipe.
-> >>
-> >> Right after that line you can see the driver react:
-> >>
-> >> xhci_handle_transfer =E2=80=A6 length 1472 =E2=80=A6 (the failed TD)
-> >>
-> >> xhci_queue_command: Reset Endpoint Command =E2=80=A6 ep 29 (host tries=
- to recover)
-> >>
-> >> xhci_handle_event: =E2=80=A6 'Command Completion Event' (reset complet=
-es)
-> >>
-> >> But from this point on, completions for that IN EP correspond to usbmo=
-n
-> >> -71 (EPROTO) =E2=80=94 matching what you saw.
-> >>
-> >>
-> >> Does this give a clue, where it could be coming from?
-> >>
-> >> It is 100% reproduceable in a few seconds on Raspberry Pi Ccompute
-> >> Module 5 (and I same behaviour on different kernel of i.MX8MP).
-> >>
-> >> Could it be a hardware problem? I already tried different radio module
-> >> (all Qualcomm, X62/X65 and X72/X75),
-> >>
-> >> different cables (all same length, all from same source), different ev=
-al
-> >> board for the M.2 radio modules (but from same source).
-> >>
-> >>
-> >> Can you give me a hint, what to try next?
-> >>
-> >>
-> >> ChatGPT-5 pinpoints me to try to disable LPM for USB3, could this be a
-> >> next step? Or is it something  else?
-> >>
-> >>
-> >> Many thanks for your help!
-> >>
-> >> Best regards,
-> >>
-> >> Martin
-> >>
-> >>
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
+
 
