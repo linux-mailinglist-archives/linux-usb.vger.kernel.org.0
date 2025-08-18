@@ -1,130 +1,130 @@
-Return-Path: <linux-usb+bounces-26960-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26961-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A68EB2995F
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 08:08:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29DC5B29961
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 08:08:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E68BC1896A42
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 06:08:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6D8F1899EFB
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 06:09:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5B22727F4;
-	Mon, 18 Aug 2025 06:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BC227147D;
+	Mon, 18 Aug 2025 06:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qvCJJjsr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PzAejRia"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f73.google.com (mail-lf1-f73.google.com [209.85.167.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F58B23AE9A
-	for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 06:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6D123AE9A;
+	Mon, 18 Aug 2025 06:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755497291; cv=none; b=UGyMJJszk/orU7nf7m6CPseBK2n8Vxu/kyuJiuFbWclahQJEXb7V01picrU6eDBNOqGb5ClHE0WaBYpMYhRR46Um+xJkEdKCvlqdxmSc5jhmSXi2AoeEDz9GNxjMTzDV7jMK2AkOUzQRM6aHtIlNM0JwPfdYF5LdIZ4969eP2zE=
+	t=1755497315; cv=none; b=Jw3CkgFcbyUsXzy+c1DuW9BvBLs7FuoA3futvAwSFqm+a/qIv2IrwCWvQKEgZ7hutWea/Po5xvyHVquVr2lUU/nJtHANHMp3Y/GB6rk9KhM9Kf7noPWVN1NKoVz5bcqKIZDn42KHRTOvua9T0QuGB3pbVRzmtv7Ewt2dQupAhTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755497291; c=relaxed/simple;
-	bh=EngOo9UQfEus4XJDxqngZ7VXC4E4SAALrw09aOuYgNM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=cUzN6vs05FIPP8yzuin5pwSttr2WQYTkfnx6XH6fdLwYDXET+5ztXpGE9rMN9k1EsuE0Dx9DVNBM1tYmK53+6FI6oTXVyf2Tk8zWwLJ4modnpAtPrzOAsXSdCE8msoUiSnjircVT9G2JELKz3PffG2cTONe/v65yxG5u53O4+9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qvCJJjsr; arc=none smtp.client-ip=209.85.167.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-lf1-f73.google.com with SMTP id 2adb3069b0e04-55ce50901a1so1982105e87.0
-        for <linux-usb@vger.kernel.org>; Sun, 17 Aug 2025 23:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755497288; x=1756102088; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BWT2t+jJBK9sAdHInrc6uLNTa9GVH1OTBmeM2Ig7zEg=;
-        b=qvCJJjsruqhY+OXpYmjWrwRptPCFF9b+VJ2xkHCMZZIEROmZDmsgdDIR8+si30vLFL
-         i6kJFEDXrdwGuGHpileuGfHfzO9l2/Q6cpHOrkZMe40pRwylZtiSj897A5wPkrqOuWWa
-         9Ov52gZVGQ6Q2uEb7OXik/1orS4U1pjG7bDTDnFirVmbmx0QNLwGpy2tUOClS8xCd+Sp
-         9X10Lopo1+QBO/7nCRsOZiYPzILXQuCzMCJfw/rfOPAD6DVc+SM2w1tu7fGvw9wU9Edg
-         CZj/v4zQerAcrmz6JkP/vtsVqmrFgMaZ9CcJUBlRwFnxfx+r/XyBZpXl9vsw9mcd/w0n
-         48mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755497288; x=1756102088;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BWT2t+jJBK9sAdHInrc6uLNTa9GVH1OTBmeM2Ig7zEg=;
-        b=VERmXU0hxRQM7kQ0WAz/wFM8lHtKbGRkzNcfH6uM/uxqu+bfYy7dLbGrgZ976viXZQ
-         qg1vcjUlKsHJbuufrMAjTEe4wj67eO08aK64sO1ASIUw4VB2IrGXmYVADxdozvWrSWwi
-         qb5CXn1tD4eJb918G7JHFqlu4kj775mm4amuMSp+OWQukRgcsI8fO5bMIaU7a48ARtXE
-         9Gki8kN8fEzScgYJVIFhuUFcILuzsl8GcWs9L4qMS8et+lG76lzOw7gWnnEctAJsIugf
-         xcwazRCKq1ho3gJmKGLzoxbwRwsQTLsvv5aQtncx93nsfBSYWyHsi3OxyGOxK3BBljN0
-         VtxQ==
-X-Gm-Message-State: AOJu0YzGOuW0kliGAYUiyeyXXcan83A7DzZmvmfDvHTZ2bDTmrSVGFdr
-	Y6GgWTRJq0zyIUF0LQ76lv55Dn3+JL+ToAcsjsrMvTPXSa5xViidkLFXtPEBLc5nZ2djq8+SyOA
-	MBEm7WA==
-X-Google-Smtp-Source: AGHT+IGGCOCCwfaMWb0F0aVjzApbARLSap43w9ZIM8SzF+Jg1lTj8MlMhGeg/mQmq64RFP52blM58FjhNWU=
-X-Received: from ljhz3.prod.google.com ([2002:a2e:9643:0:b0:330:95d2:fc9f])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6512:15a1:b0:55b:8a78:ac2
- with SMTP id 2adb3069b0e04-55ceeb5a631mr2871024e87.42.1755497288394; Sun, 17
- Aug 2025 23:08:08 -0700 (PDT)
-Date: Mon, 18 Aug 2025 14:07:35 +0800
-In-Reply-To: <20250818060757.2519126-1-khtsai@google.com>
+	s=arc-20240116; t=1755497315; c=relaxed/simple;
+	bh=NTb2AaPczZEAquJMxdZvmuT4EQqprD0a24G9265iQJc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AOEb7l/40MjHF3k5EWS2qkHreFQCA0qdlNBZXk1YcrXHJBhGgFCBtNt//GCJVe/IX2e2hSty543fIdbFosg2qtlqmM+dZXwAUYDybHgyWEHnzwAY3WwVx8Kc0+okkE/lbjMRR//+G9t5Q+m90N4FzilqWjoLM72L4jU69gssplA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PzAejRia; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755497314; x=1787033314;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=NTb2AaPczZEAquJMxdZvmuT4EQqprD0a24G9265iQJc=;
+  b=PzAejRiazbHpW5ByjrHCVnTmFzgHp3mShxoRDcxOiWBXM2LaKEUR8929
+   vQc+RaOKerwyTJGnNao/+tWhkT4dadKi5FVsW/fdLxNL3SZrHRmDcIR+6
+   +WXCQMvb6ZJ4D8L4X2zgc+E3mYr7Wy4VQrJuZJrA953L1x/cNIDxCzn+T
+   Ypg1enyTSivN3l77hwdddocNmgsen1odT+AypqaJmffDXvratwq4DlS8g
+   8kmcGWNGeUroMvxBKq07eOw3TyctMKUo7J0pkdmzsNpYYvKg7jYnOqYFm
+   i56FJMHYda2pt/yld9Drmi5wONyCwl5Xsk9v2UG81uWXNFfhwIXrSfLnL
+   g==;
+X-CSE-ConnectionGUID: BOZx33SwR56QlPCUwEKoLg==
+X-CSE-MsgGUID: TzQ8z4QaSI+iqI5BtUWxuw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11524"; a="67980375"
+X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
+   d="scan'208";a="67980375"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2025 23:08:34 -0700
+X-CSE-ConnectionGUID: N4C3MGssS2yRH1im6C24UQ==
+X-CSE-MsgGUID: 7u2rFr8oRt2mBE+33ZXddg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
+   d="scan'208";a="171733367"
+Received: from sschumil-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.152])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2025 23:08:30 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 0A5E5120339;
+	Mon, 18 Aug 2025 09:08:29 +0300 (EEST)
+Date: Mon, 18 Aug 2025 06:08:28 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
+	hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
+	Amardeep Rai <amardeep.rai@intel.com>,
+	Kannappan R <r.kannappan@intel.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v4 3/4] USB: Add a function to obtain USB version
+ independent maximum bpi value
+Message-ID: <aKLDXCchS20kaq20@kekkonen.localdomain>
+References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
+ <20250812132445.3185026-4-sakari.ailus@linux.intel.com>
+ <20250813164958.6c6c34a4@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250818060757.2519126-1-khtsai@google.com>
-X-Mailer: git-send-email 2.51.0.rc1.163.g2494970778-goog
-Message-ID: <20250818060757.2519126-2-khtsai@google.com>
-Subject: [PATCH 2/2] usb: dwc3: Refactor dwc3_mode_show
-From: Kuen-Han Tsai <khtsai@google.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kuen-Han Tsai <khtsai@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250813164958.6c6c34a4@foxbook>
 
-Use dwc3_mode_string as the single source of truth for mode-to-string
-conversion.
+Hi Michał,
 
-Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
----
- drivers/usb/dwc3/debugfs.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+Thank you for the review.
 
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index ebf03468fac4..d18bf5e32cc8 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
-@@ -402,6 +402,7 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
- 	struct dwc3		*dwc = s->private;
- 	unsigned long		flags;
- 	u32			reg;
-+	u32			mode;
- 	int			ret;
- 
- 	ret = pm_runtime_resume_and_get(dwc->dev);
-@@ -412,18 +413,15 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
- 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
--	switch (DWC3_GCTL_PRTCAP(reg)) {
-+	mode = DWC3_GCTL_PRTCAP(reg);
-+	switch (mode) {
- 	case DWC3_GCTL_PRTCAP_HOST:
--		seq_puts(s, "host\n");
--		break;
- 	case DWC3_GCTL_PRTCAP_DEVICE:
--		seq_puts(s, "device\n");
--		break;
- 	case DWC3_GCTL_PRTCAP_OTG:
--		seq_puts(s, "otg\n");
-+		seq_printf(s, "%s\n", dwc3_mode_string(mode));
- 		break;
- 	default:
--		seq_printf(s, "UNKNOWN %08x\n", DWC3_GCTL_PRTCAP(reg));
-+		seq_printf(s, "UNKNOWN %08x\n", mode);
- 	}
- 
- 	pm_runtime_put_sync(dwc->dev);
+On Wed, Aug 13, 2025 at 04:49:58PM +0200, Michał Pecio wrote:
+> On Tue, 12 Aug 2025 16:24:44 +0300, Sakari Ailus wrote:
+> > From: "Rai, Amardeep" <amardeep.rai@intel.com>
+> > 
+> > Add usb_endpoint_max_isoc_bpi() to obtain maximum bytes per interval for
+> > isochronous endpoints in a USB version independent way.
+> > 
+> > Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
+> > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> > Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Reviewed-by: Hans de Goede <hansg@kernel.org>
+> 
+> Hi,
+> 
+> This is practically identical to xhci_get_max_esit_payload().
+> 
+> Couldn't xhci also use this helper now, to reduce duplication and
+> ensure that it has the same idea of ESIT payload as class drivers?
+> 
+> Note that this here would need to also accept interrupt EPs:
+> > +{
+> > +	if (usb_endpoint_type(&ep->desc) != USB_ENDPOINT_XFER_ISOC)
+> > +		return 0;
+
+Sounds reasonable, I'll see how to best take that into account in v5.
+
+I wonder if I should adopt the name from the xHCI variant as the function
+would be also used for interrupt endpoints.
+
 -- 
-2.51.0.rc1.163.g2494970778-goog
+Regards,
 
+Sakari Ailus
 
