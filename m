@@ -1,104 +1,126 @@
-Return-Path: <linux-usb+bounces-26966-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26967-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 542F1B29C28
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 10:27:56 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F844B29C25
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 10:27:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08F341890294
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 08:27:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 076D54E21AD
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 08:27:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2E13002CB;
-	Mon, 18 Aug 2025 08:26:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9E413009ED;
+	Mon, 18 Aug 2025 08:27:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i9K45Mrr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2x0TEBro"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f202.google.com (mail-lj1-f202.google.com [209.85.208.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7E422F01
-	for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 08:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DD225F7A5
+	for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 08:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755505599; cv=none; b=aTzxQXTrsOM1IeaGfkwHYw9gWGFN1mpxarx1xL3eCd4Eyim/Ipmk3CKE9r3dz7Kpm5iiE0z4RZjuXiT2RzOShEB9zaFb5x/nn31RRcNF7ty6do4jKZMysc9q4URXcGmgsn4M/b1e+4d9EQ2sKkiLmYwL9Iakr4hCrUfpg8H+sEY=
+	t=1755505651; cv=none; b=hbHHFQyUlEgXqI3a8+jfVGkfPyGlcvy9cFvCZkz/2uFbb4m19fcQcLGMjh3NZINT4cAOoKpf/i4gXj30qBxJSa8K/uUo23vd/89iCcgBJoFa2HLYo3bc194OHSnow4xK+5pqiwDxOR/7WOSTKjpqtMEbjiLury4twnzqJxPlLJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755505599; c=relaxed/simple;
-	bh=m5wkKNb8rjVgeGCJH65Y6JSowAxzKYXbGTTGB4ajJL0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TdNipK0ck9oeYczfRnf0fhWo5TBD0FzLFMfPfqGzvpqSeJN1KxX2coZADTAVJKEYHbQ5/0SvU1o0lRykuQPKkcDRRHf/QaeHl5gFryrihAMFcGG7aPz79qpxZOPKZCJo6xzOa0Wx/b2Oz/ktLPEls8r23e14xe8kTr8rS+pTTp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i9K45Mrr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 37558C4CEEB
-	for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 08:26:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755505595;
-	bh=m5wkKNb8rjVgeGCJH65Y6JSowAxzKYXbGTTGB4ajJL0=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=i9K45MrrdEqpMcUWtk6IPXCMETV2XEmnLMajQISzt2MxwzcnScH5tA58xq4uZXaYr
-	 8dJkM1b1WXmQFQrE5Wl26WqJJMPQ9XL9rtlYv3KmgkkeRSgpSdpBgjCBLrNXhgqBDH
-	 CvJysonJmhIn2iptWJbFIMtrEyoF6fJYzR4MidLH4gvemPTq0GFqUfVPlaVMqZ/U5B
-	 w9myzuxmcDKfAi02VmOEG4fGUR9hHUXd7Y+IsFQ5lBdOIRBd23a4FI9E1QiUEFJsmu
-	 j1BqhX6YY0WDLTQX/2dzt70hLGFgzpxNeu1pv4VPjP4rQm744qZT7dnCaXGCib7vnW
-	 eNU07sNI1oBJg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 2A61FC4160E; Mon, 18 Aug 2025 08:26:35 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220460] Plugging USB-C adapter into one port results in `Failed
- to set U2 timeout to 0x3f,error code -110`
-Date: Mon, 18 Aug 2025 08:26:34 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.isobsolete attachments.created
-Message-ID: <bug-220460-208809-UykdChiszw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220460-208809@https.bugzilla.kernel.org/>
-References: <bug-220460-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1755505651; c=relaxed/simple;
+	bh=Q2rUv28LZiksZj3z/7RVMGWGxPcbEI8ZlUPHEnN95NA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=FCAZc9ZyjJkq8+uqBVB0BdD39yHIPBMromkGsJVQdE2nHB47NGqN0e7jnB9gJ338Wu392GkG67Mn+dFH/+FRD5oDVK1yp40Cr4D2dGWq+IDDDxRlBfveHYQ7cGNV5E6Mr3ni2P/JszxYz2sTS50hqyaWs/T3HdZP/z66u0Vp1Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2x0TEBro; arc=none smtp.client-ip=209.85.208.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
+Received: by mail-lj1-f202.google.com with SMTP id 38308e7fff4ca-333f903c00dso14239271fa.2
+        for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 01:27:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755505648; x=1756110448; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=woHVZ9xaLvn0f5ipMTuZWdrUXSwzm8lint/HyOAjQ/U=;
+        b=2x0TEBroBrkyTZB6so7ZBaHEiA4KIVe57aqAvA2XJocsHOiMLenMwpTL/pz3RifiyB
+         JGUqQI98qzXGo4fZoyAiSu4NOYBByjbea4n+FQ6nvVmD5BOFeDdC7Atl5Bx/AgiAavOm
+         tsjbcaBLBm3pxbjr9/Z8MioijY6/8UjpPl3hLYAhYHJ0gokYWoNA/v/EnJEI1o3Di4Hh
+         CMqdQn54CQwzNt1djpTbPBK6sTKjq3viDsIuJd1+C4owi2vaxJWTOZqhuGx43PlCrAQ+
+         6TRnN+pIynRNO+v6ZdJBLqzZIbwg5f1aFNmHlnDkLzAb/tX3BVoeoi9MPoEHHVj9F4GL
+         wS+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755505648; x=1756110448;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=woHVZ9xaLvn0f5ipMTuZWdrUXSwzm8lint/HyOAjQ/U=;
+        b=KSq5cOMxjYNj67rcg1zz0btQouN/U3uxoyMeIOUrAnQPTFO7Ktb+Ut+UuVvZbvOeF7
+         FsX3oH57ueo/EsUcOmTuA5WtnqFf877I8w165vhHZCiAfsjAfJ/0UBelrncSWMg/UmSi
+         I7NrFzJWozm6APQRqN2IS1Xvk/rOjjJkAdzfan76vqnW8Ie0VtYpVZvi0K/dTILs+cAX
+         JPRB3/91fgSPvpXvhGFlhay9lirmT6XQ64R1RWunOi8agR+z/o0cv46kqzfguXDlsNv4
+         xJYBRDWfaKuuNKDEORm+cuKLPYj4PB0wchcVN6vA33SS2pX95P9VmHnALm4UsL8nIcvh
+         nifw==
+X-Gm-Message-State: AOJu0YzVrJS+FnguPfMAWTU3YDjN001C9oZhgDVEgcXT8KHnhNNx375c
+	UiSO4b9r2kOhPf+FNoDU8mg5h8uQPUkvzMeIotUnQQx9HhV9UExdIRXv0tSN8iYOJSD9VuCXeHe
+	aBDjC2Q==
+X-Google-Smtp-Source: AGHT+IGrqcNd0p4GZP+SI/t90GUT0YAuHX6l0SKKrbFiWaZXPaDZJSorGQPaPiCRKA/+pAm6tSd5JldymVo=
+X-Received: from ljdt15.prod.google.com ([2002:a05:651c:31cf:b0:334:474:b29c])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a2e:be28:0:b0:334:14f:e9c0
+ with SMTP id 38308e7fff4ca-33409953eb8mr30417611fa.32.1755505647563; Mon, 18
+ Aug 2025 01:27:27 -0700 (PDT)
+Date: Mon, 18 Aug 2025 16:27:19 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.rc1.163.g2494970778-goog
+Message-ID: <20250818082722.2952867-1-khtsai@google.com>
+Subject: [PATCH] usb: udc: Add trace event for usb_gadget_set_state
+From: Kuen-Han Tsai <khtsai@google.com>
+To: gregkh@linuxfoundation.org, royluo@google.com, jkeeping@inmusicbrands.com, 
+	stern@rowland.harvard.edu
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Kuen-Han Tsai <khtsai@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220460
+While the userspace program can be notified of gadget state changes,
+timing issue can lead to missed transitions when reading the state
+value.
 
-Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de) changed:
+Introduce a trace event for usb_gadget_set_state to reliably track state
+transitions.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #308513|0                           |1
-        is obsolete|                            |
+Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+---
+ drivers/usb/gadget/udc/core.c  | 1 +
+ drivers/usb/gadget/udc/trace.h | 5 +++++
+ 2 files changed, 6 insertions(+)
 
---- Comment #4 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
- ---
-Created attachment 308514
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308514&action=3Dedit
-Content of `/sys/kernel/debug/tracing/trace`
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index d709e24c1fd4..e28fea614496 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1125,6 +1125,7 @@ void usb_gadget_set_state(struct usb_gadget *gadget,
+ {
+ 	gadget->state = state;
+ 	schedule_work(&gadget->work);
++	trace_usb_gadget_set_state(gadget, 0);
+ }
+ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
+ 
+diff --git a/drivers/usb/gadget/udc/trace.h b/drivers/usb/gadget/udc/trace.h
+index 4e334298b0e8..fa3e6ddf0a12 100644
+--- a/drivers/usb/gadget/udc/trace.h
++++ b/drivers/usb/gadget/udc/trace.h
+@@ -81,6 +81,11 @@ DECLARE_EVENT_CLASS(udc_log_gadget,
+ 		__entry->ret)
+ );
+ 
++DEFINE_EVENT(udc_log_gadget, usb_gadget_set_state,
++	TP_PROTO(struct usb_gadget *g, int ret),
++	TP_ARGS(g, ret)
++);
++
+ DEFINE_EVENT(udc_log_gadget, usb_gadget_frame_number,
+ 	TP_PROTO(struct usb_gadget *g, int ret),
+ 	TP_ARGS(g, ret)
+-- 
+2.51.0.rc1.163.g2494970778-goog
 
-Looks like the file wasn=E2=80=99t fully downloaded to my system. Try again=
-, and
-obsolete the other file.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
