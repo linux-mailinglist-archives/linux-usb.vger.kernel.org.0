@@ -1,120 +1,129 @@
-Return-Path: <linux-usb+bounces-26969-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26970-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 678A3B29CA7
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 10:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 30FF4B29D2C
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 11:08:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 600A6189380B
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 08:46:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57E6E188B473
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 09:06:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D57304962;
-	Mon, 18 Aug 2025 08:46:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0178930DEC2;
+	Mon, 18 Aug 2025 09:05:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="fZwW5P+w"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TfIjNGHz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.42.203.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA1732FF64D;
-	Mon, 18 Aug 2025 08:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.42.203.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFC630DEB4
+	for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 09:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755506760; cv=none; b=RBPInZCSpwgNbYkjTBs2FwxWu7wsGSczTI2HvLznA4Bi+osNcdp57r/29KF6dQnZE6yE4VvNC5/Pbp0PG/4ilMd+RBTskEgV9C0HyZMbtVx9alTiwyuN1zSrEWYec7DkUj5CxKknjI5fC/0Jdvj8VQoEPX1K12B2FAZmsWiPc3M=
+	t=1755507900; cv=none; b=sDI4nBn0niLZtVEfidYOJ1FIyxGCQ1TKhImEeNxgJ6X169Xav0C1HwpsikPYRWcadk2O9GHWh1YWH8pOfKb9cjO0HXfcCZFFAl0CHnGL2xyOyXps6oZw5JzOSOqIVdHm9QfSPVTuhDey4WEJjNxlMupezWREzJvSAE6z9MjpRA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755506760; c=relaxed/simple;
-	bh=gkk5Punudm3E+n5nYlLeniqR/ysIUuQfCso+2reJaBI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=U8yC8ZDI1oBuzHPTBA/SCgs73Coc8ezF7UPXIowl28VWZ1oyEI5iqMg5d4bNsaU4qzqNDlotbZLzrat9KQmIRzcl5ZKafpCs+nP2zntno08QyvVSYxMcX3aY7E66RD68NBa80Ygcs5I889+uEeuUvVDdOepZOeAZzboO1/yz6Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=fZwW5P+w; arc=none smtp.client-ip=52.42.203.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	s=arc-20240116; t=1755507900; c=relaxed/simple;
+	bh=va8sFiqZgyorC646JnNnwfGYSxGL3VGuAC6L/LkmHLE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GKdFSoUtTB/RHY0wWwVxQ5OAi9WIVpNNGMHZ7nr/Ays3/4uCWH5pNm0MKSGFy03Hijz84qGtLC37BzfstkvpX6mwzCZKjYgG4eUm/LPCrdH4kPADnmkFP34Zuz8jpq3iMJf4fwG7vyAsob2Y5S2257U6szoUJtqprA84Joujol4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TfIjNGHz; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-afcb72d51dcso552695066b.0
+        for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 02:04:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1755506758; x=1787042758;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MPRALudGkzcWuuQ0MxZaK3+KIi6aEACw/1pbTObCt3w=;
-  b=fZwW5P+wBbcUkWn8GvAKKViwGYz4I+IzODY7NSoMM9MN1xSm9ri3NrKH
-   RZY7sqEWOoOSZfjTGZ8Pjev4oqT10ixOrXu8xIvwR+SKMenGPKJsen3LT
-   qFdXU2SlrO5nApQ4fTaPoV5uz0fI13uLLeuWwX1w+bZLi+BLE9qJssY2F
-   VU9rJofmNLl1Ut1zhgWIdS6znIrOpupREXpEkC30fV7MfS5jEW6bZhKei
-   Q+MEAe/14HTCb1Smh8VwX8yBuRcoItn49cjPi65lVdZJ+paMaiyHMeUH5
-   Bkf/x/PXfYBMSJ1nKn5CI4MLq8hpx23a//CQy3z23TV7E3XM19WM9gJxR
-   w==;
-X-CSE-ConnectionGUID: iOSBl41wTTq/xVAdh7ht4A==
-X-CSE-MsgGUID: J0rDwryUSC2rti3XET8OwA==
-X-IronPort-AV: E=Sophos;i="6.17,293,1747699200"; 
-   d="scan'208";a="1291079"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 08:45:56 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.7.35:64875]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.29.170:2525] with esmtp (Farcaster)
- id 28691148-49b2-4270-a8ad-db7444f43ec5; Mon, 18 Aug 2025 08:45:56 +0000 (UTC)
-X-Farcaster-Flow-ID: 28691148-49b2-4270-a8ad-db7444f43ec5
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Mon, 18 Aug 2025 08:45:56 +0000
-Received: from HND-5CG1082HRX.ant.amazon.com (10.37.244.10) by
- EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.17;
- Mon, 18 Aug 2025 08:45:54 +0000
-From: Yuichiro Tsuji <yuichtsu@amazon.com>
-To: <linux-usb@vger.kernel.org>
-CC: <netdev@vger.kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S .
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Yuichiro Tsuji
-	<yuichtsu@amazon.com>,
-	<syzbot+20537064367a0f98d597@syzkaller.appspotmail.com>
-Subject: [PATCH] net: usb: asix_devices: Fix PHY address mask in MDIO bus initialization
-Date: Mon, 18 Aug 2025 17:45:07 +0900
-Message-ID: <20250818084541.1958-1-yuichtsu@amazon.com>
-X-Mailer: git-send-email 2.43.5
+        d=suse.com; s=google; t=1755507897; x=1756112697; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7Lw+LCxHSIFKIsmxIOr/OVqLwUPRzceVLg90y/kN8Gk=;
+        b=TfIjNGHzDdP0AtFVHVUW/HnFyVKbUGkkIpvADfMSCEI6vXz7rqp1F561VjLzZNECwd
+         bvJi//S1N381g8PXt5RBKm7B/55Nnv31YfEO5xyTpa7jwURTJLBl3yALgs5EKsroufaJ
+         imuG0L0vVYVzWI7M+V4/17Vewl2ZjyTWKu/nss5WwWp8THBMDasJIbf7r3koOPgtNFL5
+         aNgP/eu3qPruHrpU+2PZ+/UGh6C1rSp9SqMTuu7zzjexnPARbfuFE6PqsN7F3Y+/2QxO
+         KvfukXJVfnvDoL2ipJ0Vy9jJtL71UKrEhesbbdWLrv4EbmEH/cNqHcaGE8mkBBCfgjrK
+         E2CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755507897; x=1756112697;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Lw+LCxHSIFKIsmxIOr/OVqLwUPRzceVLg90y/kN8Gk=;
+        b=HI46d6wV9CSOBuSxVOzXygQCDJ0h3AKwD4zpPYVSloEZo2MKaTOK82XiZxvfXQyTaa
+         hYio9gut0UHrSsSKrLN2dNo1B9ln4hyGPrcBbekHwZkVordPE9SLZD57j5tm3K1c1dtH
+         07jM5TQ/RqSb8qoxrLnsFkKjhNxIJkxTzhZn7RLMHr0ll+OIpEVjtfhtqmlpR5fCCgTz
+         S3zELFnd6+VKrV/pYWvGhDy2+IJ1EM52rJ/ZCdbiZNphUgsjy6/fVgsLNQFKLJwwT/eF
+         Cg7ZoUwHh8Xyr8Aozix90nwp2PHMVZ/0jbC41//rNXr5CM2/SlFLLg4tSE5j/4f1UVgf
+         J/Eg==
+X-Forwarded-Encrypted: i=1; AJvYcCWSSXp+F9V6GOwVVUsYwP+FsXNXzvh0KmJuRH6Z/o2imzxsEIglhJF0FgaY5ocvkRmSnog3jBj1AS0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKyuld5ow0xvk1IdMXND37vvU23UxMQe4q0rUATqhKL6CH34wh
+	t+P+voU9Psm8IQReizDUzlP1qdGQ6nu4VMEKibbHY3aL6D2R2M2iblZvlyrDRoO2mkk=
+X-Gm-Gg: ASbGncuxRHQHFmWKVUwUCl2bvoAWNgUZ5UVf4K/ZEPqVXXJv84hk8uAOKJThGGT5oZw
+	wIoJOOgu2bJXwhjSPP+sn7tvsEnA5mZpPqCZxyUT3XJgf2ztUK2Cx2Jkjl6tjMVtNKBHJS8bDrG
+	XGBmnYxSNDXAv4eC78p2XHRH8iCP/ZUykm6J3Lcc3RbzsyDV7I9eftvc6Sn1k3iatZ01NJQKWPq
+	K77gimBNP/swEi081Wu0ZNoPY7JB6tgkMeznbxhuAfLxTZWwb8q2FfWeldeMyByoL7z5GywjxH4
+	/yZQDDasM3GCMqJiHOaCpNlUKQfvySmwcNSg1Tl5jfkmGn94etnpDmjWxJh4NxtUp+aWsu3vHEK
+	DiJZ46Kapjc1AOhsosjpuCSa/mjzmlD/G5XLlchZK+CZmq3lBxF0YuUM2kX4YeAVlkek=
+X-Google-Smtp-Source: AGHT+IFN2U0ifcOYrsiMP+SqBYw/LYY7lYQDL305dHhYuuI+QSSyvw76/BjR0E/2+wN/duSXPuQBIg==
+X-Received: by 2002:a17:907:3c88:b0:ae3:5185:541a with SMTP id a640c23a62f3a-afceae9fd2fmr810880066b.54.1755507896815;
+        Mon, 18 Aug 2025 02:04:56 -0700 (PDT)
+Received: from ?IPV6:2001:a61:134f:2b01:3c68:f773:4c52:94ed? ([2001:a61:134f:2b01:3c68:f773:4c52:94ed])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afcdce53c1bsm764036566b.13.2025.08.18.02.04.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Aug 2025 02:04:56 -0700 (PDT)
+Message-ID: <663e2978-8e89-4af4-bc1f-ebbcb2c57b1c@suse.com>
+Date: Mon, 18 Aug 2025 11:04:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D039UWA001.ant.amazon.com (10.13.139.110) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net: usbnet: skip info->stop() callback if suspend_count
+ is not 0
+To: Xu Yang <xu.yang_2@nxp.com>, oneukum@suse.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, linux-usb@vger.kernel.org
+Cc: netdev@vger.kernel.org
+References: <20250818075722.2575543-1-xu.yang_2@nxp.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250818075722.2575543-1-xu.yang_2@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Syzbot reported shift-out-of-bounds exception on MDIO bus initialization.
+On 8/18/25 09:57, Xu Yang wrote:
 
-The PHY address should be masked to 5 bits (0-31). Without this
-mask, invalid PHY addresses could be used, potentially causing issues
-with MDIO bus operations.
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -839,7 +839,7 @@ int usbnet_stop (struct net_device *net)
+>   	pm = usb_autopm_get_interface(dev->intf);
 
-Fix this by masking the PHY address with 0x1f (31 decimal) to ensure
-it stays within the valid range.
+This needs to fail ...
 
-Fixes: 4faff70959d5 ("net: usb: asix_devices: add phy_mask for ax88772 mdio bus")
-Reported-by: syzbot+20537064367a0f98d597@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=20537064367a0f98d597
-Tested-by: syzbot+20537064367a0f98d597@syzkaller.appspotmail.com
-Signed-off-by: Yuichiro Tsuji <yuichtsu@amazon.com>
----
- drivers/net/usb/asix_devices.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>   	/* allow minidriver to stop correctly (wireless devices to turn off
+>   	 * radio etc) */
+> -	if (info->stop) {
+> +	if (info->stop && !dev->suspend_count) {
 
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index d9f5942ccc44..792ddda1ad49 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -676,7 +676,7 @@ static int ax88772_init_mdio(struct usbnet *dev)
- 	priv->mdio->read = &asix_mdio_bus_read;
- 	priv->mdio->write = &asix_mdio_bus_write;
- 	priv->mdio->name = "Asix MDIO Bus";
--	priv->mdio->phy_mask = ~(BIT(priv->phy_addr) | BIT(AX_EMBD_PHY_ADDR));
-+	priv->mdio->phy_mask = ~(BIT(priv->phy_addr & 0x1f) | BIT(AX_EMBD_PHY_ADDR));
- 	/* mii bus name is usb-<usb bus number>-<usb device number> */
- 	snprintf(priv->mdio->id, MII_BUS_ID_SIZE, "usb-%03d:%03d",
- 		 dev->udev->bus->busnum, dev->udev->devnum);
--- 
-2.43.5
+... for !dev->suspend_count to be false
 
+>   		retval = info->stop(dev);
+>   		if (retval < 0)
+>   			netif_info(dev, ifdown, dev->net,
+
+In other words, this means that the driver has insufficient
+error handling in this method. This needs to be fixed and it
+needs to be fixed explicitly. We do not hide error handling.
+
+Please use a literal "if (pm < 0)" to skip the parts we need to skip
+if the resumption fails.
+
+	Regards
+		Oliver
+
+NACKED-BY: Oliver Neukum <oneukum@suse.com>
 
