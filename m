@@ -1,237 +1,87 @@
-Return-Path: <linux-usb+bounces-26988-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26989-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE4EFB2ACD0
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 17:34:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFA08B2AE46
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 18:35:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E34024E6C74
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 15:30:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0503A4E0473
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 16:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C696B259C9A;
-	Mon, 18 Aug 2025 15:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 816D5340D8F;
+	Mon, 18 Aug 2025 16:33:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NDhK59G7"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="3CrrFbAq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1E9238C33;
-	Mon, 18 Aug 2025 15:30:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6846B2765DF;
+	Mon, 18 Aug 2025 16:33:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755531029; cv=none; b=n1jQR19IDElGKmzCcNAGSLch1+TyhUpo3HTmeaAghCeXjZvgHs5/+YCI9ORKcg7lqMSYRN1vkr0Mz0W/8VTKixbn9EqsO71gQ3sleFhPLNeRqN5rTN9JZjcOPU6sw0yCkyEcx6nI5zzwQuZYDR8m7o5kHu8D8zoWw2L83RanPd0=
+	t=1755534785; cv=none; b=lO2RYFwhFFW/lCY/opS7kxPXLGftEImZ13fHJJgW7a8q9/N1fLfNOL+fqu5uOL5rG3//iaCr91mkKHBh9GWV1vawvqq2H/ciQrHy5e0BHb++flWF4VGS+k2LCiJ2ehAvnE8F9gXcAnQ0aZ1onwNRtIl5ojfLc+hWTXMNGH8TaiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755531029; c=relaxed/simple;
-	bh=PAs2zYadfrbseuYPwD0Hazw8SUYlBpAdgjoSnNNJ3Y8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F1YaFGAHDD4T8kfx1019zyO/jef04pL0U8USLphNHcwBareZAo0h1D+EM2fHp/rqA6fWErFkaFAGqJlt9jZhQMUuq+JUZAUNhDHcyfAi4/wpzAMAjz6xrUtYkoaV+dZ0VtULXDsohiwikt7od88LMAkU8tKZKqnL+ynFhegm+Rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NDhK59G7; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755531028; x=1787067028;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PAs2zYadfrbseuYPwD0Hazw8SUYlBpAdgjoSnNNJ3Y8=;
-  b=NDhK59G7H1f9X1w734NI2YzTkAgnUCLlxogKFpRyQ1SXVyiQvjQdR+81
-   MVy2XwPbfc4hHFqoaWMfGkQC09+uODsqioLol+qNki8dEJSitXheBgeek
-   A6qdifMmGABtXQzpf1UL/Y3mYyr2W9eZTUnXyuqDrqsdaEaLnOzz69jMg
-   /cd1Efwt/bSPjW42OVZy7lQeS0VzGOTE6evfl4RlK6ViWelw+oUaC1uRj
-   r67+hhjsP75RC6E8hG9zR0vlPtaOeaT4SzlFs3VKyut8+dFBkHiFEiuae
-   RMs3iTKu3I445gORikjQJ5Uyn+RNMj/UBFkNzjkum2r0oRV0bdBeRosYU
-   g==;
-X-CSE-ConnectionGUID: YCagSAT0R1iTjdiswZEsuA==
-X-CSE-MsgGUID: 2x3j4BFpQNSbSaelnBvETA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="57685440"
-X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="57685440"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 08:30:27 -0700
-X-CSE-ConnectionGUID: Cs3JZOZ+QTuZc0ySPR1+aA==
-X-CSE-MsgGUID: +sHnTrqtQnicb2jz/9g5QA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="167115940"
-Received: from mnyman-desk.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa007.fm.intel.com with ESMTP; 18 Aug 2025 08:30:24 -0700
-Message-ID: <1096ce5c-ac0a-49e0-9030-31c87c71b3c0@linux.intel.com>
-Date: Mon, 18 Aug 2025 18:30:23 +0300
+	s=arc-20240116; t=1755534785; c=relaxed/simple;
+	bh=LpDYJwQml6K7ScmsiUmXWa8XK8rlN0MtmCaLhB2epLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YX/VJUrcQrtMUnz30VpARwYiS35VWmgw2ENZ/MMjfOAa5K3BfRqp+lMF0VGnkWFVCTo7O6WyWaV3K4SPf2POAozw8ELLW87yNCAq2ZC417xoYFXftd3z/f8l4CE4VolYafYPBBTuyr1I1qoA+TWQerL4nwCeVbv74KAVUHadYCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=3CrrFbAq; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=uL98pD1sQoXBkFIUFFARl4rYL5BwKpcWigS1+Rd6l34=; b=3CrrFbAqxFm95zZxWx/KmSHeZv
+	daOW2p1YkZ6rqAw8WOfU/qms7I6+gqF3UsbRuN4sRshGQXkxYGyBH6C8p8XoI06NkQsNPfGxeerpk
+	dwF287SNLYdgDQs0ITk8dS6KtcwLFopigXwi/OHnXwNp5YMP9vwFCMXr/qO3gKqDaG9g=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uo2n6-00558J-5G; Mon, 18 Aug 2025 18:33:00 +0200
+Date: Mon, 18 Aug 2025 18:33:00 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Yuichiro Tsuji <yuichtsu@amazon.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	syzbot+20537064367a0f98d597@syzkaller.appspotmail.com
+Subject: Re: [PATCH] net: usb: asix_devices: Fix PHY address mask in MDIO bus
+ initialization
+Message-ID: <d6587783-6aa4-4e13-ae09-b5daa14c5859@lunn.ch>
+References: <20250818084541.1958-1-yuichtsu@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/4] xhci: Add host support for eUSB2 double
- isochronous bandwidth devices
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
- gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
- hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
- Amardeep Rai <amardeep.rai@intel.com>, Kannappan R <r.kannappan@intel.com>,
- Alan Stern <stern@rowland.harvard.edu>
-References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
- <20250812132445.3185026-2-sakari.ailus@linux.intel.com>
- <20250818115016.3611b910@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250818115016.3611b910@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250818084541.1958-1-yuichtsu@amazon.com>
 
-On 18.8.2025 12.50, Michał Pecio wrote:
-> On Tue, 12 Aug 2025 16:24:42 +0300, Sakari Ailus wrote:
->> From: "Rai, Amardeep" <amardeep.rai@intel.com>
->>
->> Detect eUSB2 double isoc bw capable hosts and devices, and set the proper
->> xhci endpoint context values such as 'Mult', 'Max Burst Size', and 'Max
->> ESIT Payload' to enable the double isochronous bandwidth endpoints.
->>
->> Intel xHC uses the endpoint context 'Mult' field for eUSB2 isoc
->> endpoints even if hosts supporting Large ESIT Payload Capability should
->> normally ignore the mult field.
->>
->> Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
->> Co-developed-by: Kannappan R <r.kannappan@intel.com>
->> Signed-off-by: Kannappan R <r.kannappan@intel.com>
->> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->> Co-developed-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->> ---
->>   drivers/usb/host/xhci-caps.h |  2 ++
->>   drivers/usb/host/xhci-mem.c  | 60 ++++++++++++++++++++++++++++--------
->>   drivers/usb/host/xhci-ring.c |  6 ++--
->>   drivers/usb/host/xhci.c      | 16 +++++++++-
->>   drivers/usb/host/xhci.h      | 19 ++++++++++++
->>   5 files changed, 87 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
->> index 4b8ff4815644..89bc83e4f1eb 100644
->> --- a/drivers/usb/host/xhci-caps.h
->> +++ b/drivers/usb/host/xhci-caps.h
->> @@ -89,3 +89,5 @@
->>   #define HCC2_GSC(p)             ((p) & (1 << 8))
->>   /* true: HC support Virtualization Based Trusted I/O Capability */
->>   #define HCC2_VTC(p)             ((p) & (1 << 9))
->> +/* true: HC support Double BW on a eUSB2 HS ISOC EP */
->> +#define HCC2_EUSB2_DIC(p)       ((p) & (1 << 11))
+On Mon, Aug 18, 2025 at 05:45:07PM +0900, Yuichiro Tsuji wrote:
+> Syzbot reported shift-out-of-bounds exception on MDIO bus initialization.
 > 
-> I guess this bit is not defined in the original xHCI 1.2 spec which
-> predates BW doubling, any reference to where it is specified and what
-> it means exactly?
-
-USB 2.0 Double Isochronous IN Bandwidth Capability (DIC) – RO.
-This bit when set to 1, indicates that the xHC supports the USB 2.0 Double Isochronous IN
-Bandwidth Capability on a eUSB2 HS Isochronous Endpoint.
-This feature is only applicable to a directly connected inbox native eUSB2 device.
-
-The xHCI specification with this addition is on its way, we got permission from
-author(s) to start upstreaming the code already.
-
+> The PHY address should be masked to 5 bits (0-31). Without this
+> mask, invalid PHY addresses could be used, potentially causing issues
+> with MDIO bus operations.
 > 
->> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
->> index 6680afa4f596..ea51434c80fa 100644
->> --- a/drivers/usb/host/xhci-mem.c
->> +++ b/drivers/usb/host/xhci-mem.c
->> @@ -1328,18 +1328,36 @@ static unsigned int xhci_get_endpoint_interval(struct usb_device *udev,
->>   	return interval;
->>   }
->>   
->> -/* The "Mult" field in the endpoint context is only set for SuperSpeed isoc eps.
->> +/*
->> + * xHCs without LEC use the "Mult" field in the endpoint context for SuperSpeed
->> + * isoc eps, and High speed isoc eps that support bandwidth doubling. Standard
->>    * High speed endpoint descriptors can define "the number of additional
->>    * transaction opportunities per microframe", but that goes in the Max Burst
->>    * endpoint context field.
->>    */
->> -static u32 xhci_get_endpoint_mult(struct usb_device *udev,
->> -		struct usb_host_endpoint *ep)
->> +static u32 xhci_get_endpoint_mult(struct xhci_hcd *xhci,
->> +				  struct usb_device *udev,
->> +				  struct usb_host_endpoint *ep)
->>   {
->> -	if (udev->speed < USB_SPEED_SUPER ||
->> -			!usb_endpoint_xfer_isoc(&ep->desc))
->> +	bool lec;
->> +
->> +	/* xHCI 1.1 with LEC set does not use mult field, except intel eUSB2 */
->> +	lec = xhci->hci_version > 0x100 && HCC2_LEC(xhci->hcc_params2);
->> +
->> +	/* eUSB2 double isoc bw devices are the only USB2 devices using mult */
->> +	if (xhci_eusb2_is_isoc_bw_double(udev, ep)) {
->> +		if (!lec || xhci->quirks & XHCI_INTEL_HOST)
->> +			return 1;
->> +	}
->> +
->> +	/* Oherwise only isoc transfers on hosts without LEC uses mult field */
->> +	if (!usb_endpoint_xfer_isoc(&ep->desc) || lec)
->>   		return 0;
->> -	return ep->ss_ep_comp.bmAttributes;
->> +
->> +	if (udev->speed >= USB_SPEED_SUPER)
->> +		return ep->ss_ep_comp.bmAttributes;
->> +
->> +	return 0;
->>   }
+> Fix this by masking the PHY address with 0x1f (31 decimal) to ensure
+> it stays within the valid range.
 > 
-> That's a complicated control flow. I think it could just be:
->> +	/* SuperSpeed isoc transfers on hosts without LEC uses mult field */
->> +	if (udev->speed >= USB_SPEED_SUPER && usb_endpoint_xfer_isoc(&ep->desc) && !lec)
->> +		return ep->ss_ep_comp.bmAttributes;
->> +	return 0;
+> Fixes: 4faff70959d5 ("net: usb: asix_devices: add phy_mask for ax88772 mdio bus")
+> Reported-by: syzbot+20537064367a0f98d597@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=20537064367a0f98d597
+> Tested-by: syzbot+20537064367a0f98d597@syzkaller.appspotmail.com
+> Signed-off-by: Yuichiro Tsuji <yuichtsu@amazon.com>
 
-Possibly, not sure there's much difference, especially if you break that line at
-80 columns
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
->> +/*
->> + * USB 2.0 specification, chapter 5.6.4 Isochronous Transfer Bus Access
->> + * Constraint. A high speed endpoint can move up to 3072 bytes per microframe
->> + * (or 192Mb/s).
->> + */
->> +#define MAX_ISOC_XFER_SIZE_HS  3072
->> +
->> +static inline bool xhci_eusb2_is_isoc_bw_double(struct usb_device *udev,
->> +						struct usb_host_endpoint *ep)
->> +{
->> +	return udev->speed == USB_SPEED_HIGH &&
->> +		usb_endpoint_is_isoc_in(&ep->desc) &&
->> +		le16_to_cpu(ep->desc.wMaxPacketSize) == 0 &&
->> +		le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval) >
->> +		MAX_ISOC_XFER_SIZE_HS;
->> +}
-> 
-> It looks like eUSB2v2 is another spec which uses this descriptor for
-> larger isoc endpoints and this code might trigger on such devices once
-> USB core learns to parse them.
-> 
-
-Could make sense to check that bcdUSB is 0x220 here to avoid that.
-
-We could also check if ep->eusb2_isoc_ep_comp.bDescriptorType exists
-like in PATCH 2/4, and could then remove the wMaxPacketSize == 0 check as
-usb core descriptor parsing will already do that check for us, before copying
-the descriptor.
-
-The USB_SPEED_HIGH check could also be moved to descriptor parsing in usb core.
-This way we could remove the speed check hare and from PATCH 2/3
-
-
-> Would there be no issues with that? Or conversely, any chance that your
-> code could be trivially modified to support full 2v2, and "bw doubling"
-> removed from names and comments?
-
-Proably not, eUSB2v2 may have some odd burst and mult fields while double
-bandwidth has fixed values.
-
-Thanks
-Mathias
+    Andrew
 
