@@ -1,120 +1,237 @@
-Return-Path: <linux-usb+bounces-26987-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26988-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F5D2B2AC14
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 17:06:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE4EFB2ACD0
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 17:34:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3B4E18A37B0
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 14:59:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E34024E6C74
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 15:30:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8291623F422;
-	Mon, 18 Aug 2025 14:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C696B259C9A;
+	Mon, 18 Aug 2025 15:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="UFw/tN1C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NDhK59G7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A90E23C50F
-	for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 14:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1E9238C33;
+	Mon, 18 Aug 2025 15:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755529154; cv=none; b=ndViSByj5tYUtNuEn5qIRASXIbsZLLLpGu5H2AWgz0Kj7L+JmWT8xMRuvKPPZCUQmu6CeksgHtQvevsTclIgIyQAKTlIF0ACDMPw4Ip7enbVB4fscY1liy1XueVZ2Q6IgtpJGojDqQBWQ8LfmGddq4gWSUVq7N9s5oNSc3rVL38=
+	t=1755531029; cv=none; b=n1jQR19IDElGKmzCcNAGSLch1+TyhUpo3HTmeaAghCeXjZvgHs5/+YCI9ORKcg7lqMSYRN1vkr0Mz0W/8VTKixbn9EqsO71gQ3sleFhPLNeRqN5rTN9JZjcOPU6sw0yCkyEcx6nI5zzwQuZYDR8m7o5kHu8D8zoWw2L83RanPd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755529154; c=relaxed/simple;
-	bh=JT9J9MuI5daNqLUfEAKiqcNxk3IUK9nL5GyYkUwosQo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OMkLLCXdF9f8tMGijzRCxM80fEmNFhQhXXPVJkXnnpYOPua+ApZQrQqohAmmO97TCl9XAYhwf2GFmlNsfj5Tzgsb8OBAbStA+8rzGutRM3AlESfje5jXf/2p2SYb+T/yD6ZZVf9PWFSV7aPtPuHnrQAgQfzDiEvDmS2wIpB/bRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=UFw/tN1C; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4b134a96ea9so13059831cf.1
-        for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 07:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1755529151; x=1756133951; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OASh2PMnoVxjDhswJjd5kHpLpQV6y4gJO+BmVfob4KI=;
-        b=UFw/tN1Cy8+Yrh20dl+Cs/7gfZrDCmoTz7+mi/wI65uKzXeYDhgMGCNYk6juCihSKz
-         giCFNhx42/YUK7YNC1ZUPvi0Zq72SDmvMVTLp1d2XhRamc6dV1qse3RF9q9sOUTxEQqX
-         xH9N5cgmon1kAESqqesE8puA3KI6+Hyva/pKhUK45KdPy7z0XX1k2intHopLbtYTLlBR
-         BJ/wO7PgKujuyzguSnZm7O60fl+On+JNK4n5YShQ1082X56bomlJnkLMJvgV1PYcTWjH
-         wsobpZuEiBF6HAnvHotF4m9VM6QK3vNMYM1l3gUbzT5gYpBZ72+RJ3wG0MJW7DPlxelt
-         linQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755529151; x=1756133951;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OASh2PMnoVxjDhswJjd5kHpLpQV6y4gJO+BmVfob4KI=;
-        b=GybGJQdCJTaMF3AmAKBFVJUGMVU6GxYDWUfbOR21amhyYKnHGSEoGYi5MrL1tim3f1
-         mSJ+9fklh3zVjxhiVeoCrsj+w9MHeTYr1fkO3u+GF7XinGXHe/9GY9XzQH/73KpzV/9Y
-         CWZ8Y4Zi9fuCL4Vz90F+RuFKeREa4YUG3T2Y184kp3oCKV1KJVNql6KcIeyRDR+MZ/gM
-         z+SeQz3Ir8ocYwjn7TFlg+bzpDSnaK5pMNaueQ4wFSSKrdwnRunL2u6ndqGAUVbYt405
-         Jrr4RGx3PE2EZmyQ9PA81mts+tBprlOM4KIaWen+tqpeOlKHpeX+ewfmQKmW8lOsZj5s
-         6XSQ==
-X-Gm-Message-State: AOJu0YyC7ckyRR2cDBbLzJ0t2YlTrGzzLW5D4xO04G6BXwzmxU2YUD7G
-	YxubqVAIG/Xt/pfIz6KLwexnE7dYpDCkwAptoVqDkiC6N31rji+wuSwFKu3gA0ZliQuuzEkOmcJ
-	SAQw=
-X-Gm-Gg: ASbGncvCTnhI3Bkys7GFXbEp0v5We24SA8RJOyNix4jwXnpAFtbIjsLxhodGoXBBnSJ
-	imiBz0jVzDga9CYIKZD38eZjbF+vtVMuLsrLyum5mhqhOfilCzMCox6r8vA52nZXIbQu7MF+BKn
-	glnbkfB+lRXKpJqU9ftm6jzJN4nZUZb2jMPWuKOyysu8ArPeKloVZ9Ws0COPWjA+yDvBkGKiq3y
-	Wb6X5Ub5mSUIdwt1FjqDAZl7Gge+VBXdYE1y7kRS0gLj5R1T7Cm3u+Ur2HrFV1vj5WgfWvxvbyP
-	RhTlsNu4/2f64NBhNr1CLTyIVCE1UGQN7HjFhb8t/kNBojR3dSx2JtNBTbUQtbprNEVTmV4q21B
-	+kzMY1qeS3R6CWFk+2Y4N0s64B/iNerqAexfE6vAjGfYPDVq+B+giLZw=
-X-Google-Smtp-Source: AGHT+IFczJfN8OvrVtXSTk6Dzt67bCrlzq4jkqSMjMQM0G1Ijkoo5sAYAgIJubHFNT8ePVjX9UnA3g==
-X-Received: by 2002:ac8:7d96:0:b0:4b0:8b50:35c with SMTP id d75a77b69052e-4b11e21b1c7mr136924101cf.30.1755529150839;
-        Mon, 18 Aug 2025 07:59:10 -0700 (PDT)
-Received: from rowland.harvard.edu ([2607:fb60:1011:2006:349c:f507:d5eb:5d9e])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b11dddad32sm53314671cf.30.2025.08.18.07.59.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 07:59:10 -0700 (PDT)
-Date: Mon, 18 Aug 2025 10:59:07 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: USB mailing list <linux-usb@vger.kernel.org>
-Subject: [PATCH] USB: core: Update kerneldoc for usb_hcd_giveback_urb()
-Message-ID: <41eaae05-116a-4568-940c-eeb94ab6baa0@rowland.harvard.edu>
+	s=arc-20240116; t=1755531029; c=relaxed/simple;
+	bh=PAs2zYadfrbseuYPwD0Hazw8SUYlBpAdgjoSnNNJ3Y8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F1YaFGAHDD4T8kfx1019zyO/jef04pL0U8USLphNHcwBareZAo0h1D+EM2fHp/rqA6fWErFkaFAGqJlt9jZhQMUuq+JUZAUNhDHcyfAi4/wpzAMAjz6xrUtYkoaV+dZ0VtULXDsohiwikt7od88LMAkU8tKZKqnL+ynFhegm+Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NDhK59G7; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755531028; x=1787067028;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PAs2zYadfrbseuYPwD0Hazw8SUYlBpAdgjoSnNNJ3Y8=;
+  b=NDhK59G7H1f9X1w734NI2YzTkAgnUCLlxogKFpRyQ1SXVyiQvjQdR+81
+   MVy2XwPbfc4hHFqoaWMfGkQC09+uODsqioLol+qNki8dEJSitXheBgeek
+   A6qdifMmGABtXQzpf1UL/Y3mYyr2W9eZTUnXyuqDrqsdaEaLnOzz69jMg
+   /cd1Efwt/bSPjW42OVZy7lQeS0VzGOTE6evfl4RlK6ViWelw+oUaC1uRj
+   r67+hhjsP75RC6E8hG9zR0vlPtaOeaT4SzlFs3VKyut8+dFBkHiFEiuae
+   RMs3iTKu3I445gORikjQJ5Uyn+RNMj/UBFkNzjkum2r0oRV0bdBeRosYU
+   g==;
+X-CSE-ConnectionGUID: YCagSAT0R1iTjdiswZEsuA==
+X-CSE-MsgGUID: 2x3j4BFpQNSbSaelnBvETA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="57685440"
+X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
+   d="scan'208";a="57685440"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 08:30:27 -0700
+X-CSE-ConnectionGUID: Cs3JZOZ+QTuZc0ySPR1+aA==
+X-CSE-MsgGUID: +sHnTrqtQnicb2jz/9g5QA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
+   d="scan'208";a="167115940"
+Received: from mnyman-desk.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa007.fm.intel.com with ESMTP; 18 Aug 2025 08:30:24 -0700
+Message-ID: <1096ce5c-ac0a-49e0-9030-31c87c71b3c0@linux.intel.com>
+Date: Mon, 18 Aug 2025 18:30:23 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/4] xhci: Add host support for eUSB2 double
+ isochronous bandwidth devices
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+ gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
+ hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
+ Amardeep Rai <amardeep.rai@intel.com>, Kannappan R <r.kannappan@intel.com>,
+ Alan Stern <stern@rowland.harvard.edu>
+References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
+ <20250812132445.3185026-2-sakari.ailus@linux.intel.com>
+ <20250818115016.3611b910@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250818115016.3611b910@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-The kerneldoc added for usb_hcd_giveback_urb() by commit 41631d3616c3
-("usb: core: Replace in_interrupt() in comments") is unclear and
-incorrect.  Update the text for greater clarity and to say that URBs
-for a root hub will always use a BH context for their completion.
+On 18.8.2025 12.50, Michał Pecio wrote:
+> On Tue, 12 Aug 2025 16:24:42 +0300, Sakari Ailus wrote:
+>> From: "Rai, Amardeep" <amardeep.rai@intel.com>
+>>
+>> Detect eUSB2 double isoc bw capable hosts and devices, and set the proper
+>> xhci endpoint context values such as 'Mult', 'Max Burst Size', and 'Max
+>> ESIT Payload' to enable the double isochronous bandwidth endpoints.
+>>
+>> Intel xHC uses the endpoint context 'Mult' field for eUSB2 isoc
+>> endpoints even if hosts supporting Large ESIT Payload Capability should
+>> normally ignore the mult field.
+>>
+>> Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
+>> Co-developed-by: Kannappan R <r.kannappan@intel.com>
+>> Signed-off-by: Kannappan R <r.kannappan@intel.com>
+>> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+>> Co-developed-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+>> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+>> ---
+>>   drivers/usb/host/xhci-caps.h |  2 ++
+>>   drivers/usb/host/xhci-mem.c  | 60 ++++++++++++++++++++++++++++--------
+>>   drivers/usb/host/xhci-ring.c |  6 ++--
+>>   drivers/usb/host/xhci.c      | 16 +++++++++-
+>>   drivers/usb/host/xhci.h      | 19 ++++++++++++
+>>   5 files changed, 87 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
+>> index 4b8ff4815644..89bc83e4f1eb 100644
+>> --- a/drivers/usb/host/xhci-caps.h
+>> +++ b/drivers/usb/host/xhci-caps.h
+>> @@ -89,3 +89,5 @@
+>>   #define HCC2_GSC(p)             ((p) & (1 << 8))
+>>   /* true: HC support Virtualization Based Trusted I/O Capability */
+>>   #define HCC2_VTC(p)             ((p) & (1 << 9))
+>> +/* true: HC support Double BW on a eUSB2 HS ISOC EP */
+>> +#define HCC2_EUSB2_DIC(p)       ((p) & (1 << 11))
+> 
+> I guess this bit is not defined in the original xHCI 1.2 spec which
+> predates BW doubling, any reference to where it is specified and what
+> it means exactly?
 
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+USB 2.0 Double Isochronous IN Bandwidth Capability (DIC) – RO.
+This bit when set to 1, indicates that the xHC supports the USB 2.0 Double Isochronous IN
+Bandwidth Capability on a eUSB2 HS Isochronous Endpoint.
+This feature is only applicable to a directly connected inbox native eUSB2 device.
 
----
+The xHCI specification with this addition is on its way, we got permission from
+author(s) to start upstreaming the code already.
 
- drivers/usb/core/hcd.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+>> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+>> index 6680afa4f596..ea51434c80fa 100644
+>> --- a/drivers/usb/host/xhci-mem.c
+>> +++ b/drivers/usb/host/xhci-mem.c
+>> @@ -1328,18 +1328,36 @@ static unsigned int xhci_get_endpoint_interval(struct usb_device *udev,
+>>   	return interval;
+>>   }
+>>   
+>> -/* The "Mult" field in the endpoint context is only set for SuperSpeed isoc eps.
+>> +/*
+>> + * xHCs without LEC use the "Mult" field in the endpoint context for SuperSpeed
+>> + * isoc eps, and High speed isoc eps that support bandwidth doubling. Standard
+>>    * High speed endpoint descriptors can define "the number of additional
+>>    * transaction opportunities per microframe", but that goes in the Max Burst
+>>    * endpoint context field.
+>>    */
+>> -static u32 xhci_get_endpoint_mult(struct usb_device *udev,
+>> -		struct usb_host_endpoint *ep)
+>> +static u32 xhci_get_endpoint_mult(struct xhci_hcd *xhci,
+>> +				  struct usb_device *udev,
+>> +				  struct usb_host_endpoint *ep)
+>>   {
+>> -	if (udev->speed < USB_SPEED_SUPER ||
+>> -			!usb_endpoint_xfer_isoc(&ep->desc))
+>> +	bool lec;
+>> +
+>> +	/* xHCI 1.1 with LEC set does not use mult field, except intel eUSB2 */
+>> +	lec = xhci->hci_version > 0x100 && HCC2_LEC(xhci->hcc_params2);
+>> +
+>> +	/* eUSB2 double isoc bw devices are the only USB2 devices using mult */
+>> +	if (xhci_eusb2_is_isoc_bw_double(udev, ep)) {
+>> +		if (!lec || xhci->quirks & XHCI_INTEL_HOST)
+>> +			return 1;
+>> +	}
+>> +
+>> +	/* Oherwise only isoc transfers on hosts without LEC uses mult field */
+>> +	if (!usb_endpoint_xfer_isoc(&ep->desc) || lec)
+>>   		return 0;
+>> -	return ep->ss_ep_comp.bmAttributes;
+>> +
+>> +	if (udev->speed >= USB_SPEED_SUPER)
+>> +		return ep->ss_ep_comp.bmAttributes;
+>> +
+>> +	return 0;
+>>   }
+> 
+> That's a complicated control flow. I think it could just be:
+>> +	/* SuperSpeed isoc transfers on hosts without LEC uses mult field */
+>> +	if (udev->speed >= USB_SPEED_SUPER && usb_endpoint_xfer_isoc(&ep->desc) && !lec)
+>> +		return ep->ss_ep_comp.bmAttributes;
+>> +	return 0;
 
-Index: usb-devel/drivers/usb/core/hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hcd.c
-+++ usb-devel/drivers/usb/core/hcd.c
-@@ -1706,10 +1706,10 @@ static void usb_giveback_urb_bh(struct w
-  * @urb: urb being returned to the USB device driver.
-  * @status: completion status code for the URB.
-  *
-- * Context: atomic. The completion callback is invoked in caller's context.
-- * For HCDs with HCD_BH flag set, the completion callback is invoked in BH
-- * context (except for URBs submitted to the root hub which always complete in
-- * caller's context).
-+ * Context: atomic. The completion callback is invoked either in a work queue
-+ * (BH) context or in the caller's context, depending on whether the HCD_BH
-+ * flag is set in the @hcd structure, except that URBs submitted to the
-+ * root hub always complete in BH context.
-  *
-  * This hands the URB from HCD to its USB device driver, using its
-  * completion function.  The HCD has freed all per-urb resources
+Possibly, not sure there's much difference, especially if you break that line at
+80 columns
+
+>> +/*
+>> + * USB 2.0 specification, chapter 5.6.4 Isochronous Transfer Bus Access
+>> + * Constraint. A high speed endpoint can move up to 3072 bytes per microframe
+>> + * (or 192Mb/s).
+>> + */
+>> +#define MAX_ISOC_XFER_SIZE_HS  3072
+>> +
+>> +static inline bool xhci_eusb2_is_isoc_bw_double(struct usb_device *udev,
+>> +						struct usb_host_endpoint *ep)
+>> +{
+>> +	return udev->speed == USB_SPEED_HIGH &&
+>> +		usb_endpoint_is_isoc_in(&ep->desc) &&
+>> +		le16_to_cpu(ep->desc.wMaxPacketSize) == 0 &&
+>> +		le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval) >
+>> +		MAX_ISOC_XFER_SIZE_HS;
+>> +}
+> 
+> It looks like eUSB2v2 is another spec which uses this descriptor for
+> larger isoc endpoints and this code might trigger on such devices once
+> USB core learns to parse them.
+> 
+
+Could make sense to check that bcdUSB is 0x220 here to avoid that.
+
+We could also check if ep->eusb2_isoc_ep_comp.bDescriptorType exists
+like in PATCH 2/4, and could then remove the wMaxPacketSize == 0 check as
+usb core descriptor parsing will already do that check for us, before copying
+the descriptor.
+
+The USB_SPEED_HIGH check could also be moved to descriptor parsing in usb core.
+This way we could remove the speed check hare and from PATCH 2/3
+
+
+> Would there be no issues with that? Or conversely, any chance that your
+> code could be trivially modified to support full 2v2, and "bw doubling"
+> removed from names and comments?
+
+Proably not, eUSB2v2 may have some odd burst and mult fields while double
+bandwidth has fixed values.
+
+Thanks
+Mathias
 
