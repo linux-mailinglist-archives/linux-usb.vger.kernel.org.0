@@ -1,171 +1,120 @@
-Return-Path: <linux-usb+bounces-26986-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26987-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD80AB2AA5C
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 16:31:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F5D2B2AC14
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 17:06:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2285D685F47
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 14:23:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3B4E18A37B0
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 14:59:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C2334AB1F;
-	Mon, 18 Aug 2025 14:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8291623F422;
+	Mon, 18 Aug 2025 14:59:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="FaiBwfuL"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="UFw/tN1C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E14633EAF4;
-	Mon, 18 Aug 2025 14:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A90E23C50F
+	for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 14:59:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755526384; cv=none; b=Hosa68FS+yfEgNdEPB+JBgw7QoL7tqPDOxf5aJZPjkjn6ugXhwydcOUkgyoQEbydsza0IFT2Ry1Gg3MCgMnCcpEq8hREcMQ0BfxwXSi+1duUpZww+g5oe/+or7RbRKDA8IkD2fFbHD11xgJW8ReZBr8bt/toBXX0F2nup0KSqmw=
+	t=1755529154; cv=none; b=ndViSByj5tYUtNuEn5qIRASXIbsZLLLpGu5H2AWgz0Kj7L+JmWT8xMRuvKPPZCUQmu6CeksgHtQvevsTclIgIyQAKTlIF0ACDMPw4Ip7enbVB4fscY1liy1XueVZ2Q6IgtpJGojDqQBWQ8LfmGddq4gWSUVq7N9s5oNSc3rVL38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755526384; c=relaxed/simple;
-	bh=T/CmkHuOLGFh1ps9RO37OptTPCwtI7brhG4vBsioHFM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type:References; b=Li7aJj85xFQHvnWG1R1JwEjORkEfRET2LRfFoa8pu4Qu5vKe26GmIWvykJCAzpF0ryL9/7LRHTKpk+t000KehpyR9DAk26fg5wQ/82UZRiRK+czoH2GOZrNzQ8QAKZuJXT4HMOpAHLnlNae2R7mkEy4tk0yvW8zBrw2b3Cqjiak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=FaiBwfuL; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250818141259euoutp01c5a5c72a970c88cb8463fa9bb50e5008~c4fDm0j1Y2172321723euoutp01y;
-	Mon, 18 Aug 2025 14:12:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250818141259euoutp01c5a5c72a970c88cb8463fa9bb50e5008~c4fDm0j1Y2172321723euoutp01y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1755526379;
-	bh=f6M/CURYsQXY3/uzXGcUkzo+e+ViGdgH1Lhlm1R/1iI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FaiBwfuLMFd8wcxb0jvuhKpukO35xdhs1to++ZaQ4Yqh+Gs6k/xhff2Sy966nKB1u
-	 Y4My6ONmPeJTOTI7B6gYhSXTwZkt1FTO9BnQ28BliriKoYXUtLcxp9F6Knuc9EUcs8
-	 MtUVtnwteswlZeCnCsdleiFKIXspagyS25wUueR4=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250818141258eucas1p21f750bd71f615e61da60af4f01b2bcdb~c4fDEmByv0907809078eucas1p2Q;
-	Mon, 18 Aug 2025 14:12:58 +0000 (GMT)
-Received: from localhost (unknown [106.120.51.111]) by eusmtip1.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20250818141258eusmtip1a60c9e78cf67f43b879dc2891aeb8d16~c4fDAo2330814408144eusmtip1y;
-	Mon, 18 Aug 2025 14:12:58 +0000 (GMT)
-From: Lukasz Stelmach <l.stelmach@samsung.com>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-media@vger.kernel.org,  linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev,  linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-tegra@vger.kernel.org, imx@lists.linux.dev, 
-	linux-renesas-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev, 
-	linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com, mjpeg-users@lists.sourceforge.net
-Subject: Re: [PATCH 27/65] media: Reset file->private_data to NULL in
- v4l2_fh_del()
-Date: Mon, 18 Aug 2025 16:12:58 +0200
-In-Reply-To: <20250802-media-private-data-v1-27-eb140ddd6a9d@ideasonboard.com>
-	(Jacopo Mondi's message of "Sat, 02 Aug 2025 11:22:49 +0200")
-Message-ID: <oypijd5xekra51.fsf%l.stelmach@samsung.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1755529154; c=relaxed/simple;
+	bh=JT9J9MuI5daNqLUfEAKiqcNxk3IUK9nL5GyYkUwosQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OMkLLCXdF9f8tMGijzRCxM80fEmNFhQhXXPVJkXnnpYOPua+ApZQrQqohAmmO97TCl9XAYhwf2GFmlNsfj5Tzgsb8OBAbStA+8rzGutRM3AlESfje5jXf/2p2SYb+T/yD6ZZVf9PWFSV7aPtPuHnrQAgQfzDiEvDmS2wIpB/bRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=UFw/tN1C; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4b134a96ea9so13059831cf.1
+        for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 07:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1755529151; x=1756133951; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OASh2PMnoVxjDhswJjd5kHpLpQV6y4gJO+BmVfob4KI=;
+        b=UFw/tN1Cy8+Yrh20dl+Cs/7gfZrDCmoTz7+mi/wI65uKzXeYDhgMGCNYk6juCihSKz
+         giCFNhx42/YUK7YNC1ZUPvi0Zq72SDmvMVTLp1d2XhRamc6dV1qse3RF9q9sOUTxEQqX
+         xH9N5cgmon1kAESqqesE8puA3KI6+Hyva/pKhUK45KdPy7z0XX1k2intHopLbtYTLlBR
+         BJ/wO7PgKujuyzguSnZm7O60fl+On+JNK4n5YShQ1082X56bomlJnkLMJvgV1PYcTWjH
+         wsobpZuEiBF6HAnvHotF4m9VM6QK3vNMYM1l3gUbzT5gYpBZ72+RJ3wG0MJW7DPlxelt
+         linQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755529151; x=1756133951;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OASh2PMnoVxjDhswJjd5kHpLpQV6y4gJO+BmVfob4KI=;
+        b=GybGJQdCJTaMF3AmAKBFVJUGMVU6GxYDWUfbOR21amhyYKnHGSEoGYi5MrL1tim3f1
+         mSJ+9fklh3zVjxhiVeoCrsj+w9MHeTYr1fkO3u+GF7XinGXHe/9GY9XzQH/73KpzV/9Y
+         CWZ8Y4Zi9fuCL4Vz90F+RuFKeREa4YUG3T2Y184kp3oCKV1KJVNql6KcIeyRDR+MZ/gM
+         z+SeQz3Ir8ocYwjn7TFlg+bzpDSnaK5pMNaueQ4wFSSKrdwnRunL2u6ndqGAUVbYt405
+         Jrr4RGx3PE2EZmyQ9PA81mts+tBprlOM4KIaWen+tqpeOlKHpeX+ewfmQKmW8lOsZj5s
+         6XSQ==
+X-Gm-Message-State: AOJu0YyC7ckyRR2cDBbLzJ0t2YlTrGzzLW5D4xO04G6BXwzmxU2YUD7G
+	YxubqVAIG/Xt/pfIz6KLwexnE7dYpDCkwAptoVqDkiC6N31rji+wuSwFKu3gA0ZliQuuzEkOmcJ
+	SAQw=
+X-Gm-Gg: ASbGncvCTnhI3Bkys7GFXbEp0v5We24SA8RJOyNix4jwXnpAFtbIjsLxhodGoXBBnSJ
+	imiBz0jVzDga9CYIKZD38eZjbF+vtVMuLsrLyum5mhqhOfilCzMCox6r8vA52nZXIbQu7MF+BKn
+	glnbkfB+lRXKpJqU9ftm6jzJN4nZUZb2jMPWuKOyysu8ArPeKloVZ9Ws0COPWjA+yDvBkGKiq3y
+	Wb6X5Ub5mSUIdwt1FjqDAZl7Gge+VBXdYE1y7kRS0gLj5R1T7Cm3u+Ur2HrFV1vj5WgfWvxvbyP
+	RhTlsNu4/2f64NBhNr1CLTyIVCE1UGQN7HjFhb8t/kNBojR3dSx2JtNBTbUQtbprNEVTmV4q21B
+	+kzMY1qeS3R6CWFk+2Y4N0s64B/iNerqAexfE6vAjGfYPDVq+B+giLZw=
+X-Google-Smtp-Source: AGHT+IFczJfN8OvrVtXSTk6Dzt67bCrlzq4jkqSMjMQM0G1Ijkoo5sAYAgIJubHFNT8ePVjX9UnA3g==
+X-Received: by 2002:ac8:7d96:0:b0:4b0:8b50:35c with SMTP id d75a77b69052e-4b11e21b1c7mr136924101cf.30.1755529150839;
+        Mon, 18 Aug 2025 07:59:10 -0700 (PDT)
+Received: from rowland.harvard.edu ([2607:fb60:1011:2006:349c:f507:d5eb:5d9e])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b11dddad32sm53314671cf.30.2025.08.18.07.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Aug 2025 07:59:10 -0700 (PDT)
+Date: Mon, 18 Aug 2025 10:59:07 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH] USB: core: Update kerneldoc for usb_hcd_giveback_urb()
+Message-ID: <41eaae05-116a-4568-940c-eeb94ab6baa0@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
-	protocol="application/pgp-signature"
-X-CMS-MailID: 20250818141258eucas1p21f750bd71f615e61da60af4f01b2bcdb
-X-Msg-Generator: CA
-X-RootMTR: 20250802092807eucas1p14e332744b667a8b03ef32135045d26c5
-X-EPHeader: CA
-X-CMS-RootMailID: 20250802092807eucas1p14e332744b667a8b03ef32135045d26c5
-References: <20250802-media-private-data-v1-0-eb140ddd6a9d@ideasonboard.com>
-	<CGME20250802092807eucas1p14e332744b667a8b03ef32135045d26c5@eucas1p1.samsung.com>
-	<20250802-media-private-data-v1-27-eb140ddd6a9d@ideasonboard.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
---=-=-=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+The kerneldoc added for usb_hcd_giveback_urb() by commit 41631d3616c3
+("usb: core: Replace in_interrupt() in comments") is unclear and
+incorrect.  Update the text for greater clarity and to say that URBs
+for a root hub will always use a BH context for their completion.
 
-It was <2025-08-02 sob 11:22>, when Jacopo Mondi wrote:
-> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->
-> Multiple drivers that use v4l2_fh and call v4l2_fh_del() manually reset
-> the file->private_data pointer to NULL in their video device .release()
-> file operation handler. Move the code to the v4l2_fh_del() function to
-> avoid direct access to file->private_data in drivers. This requires
-> adding a file pointer argument to the function.
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 
-[...]
+---
 
-> diff --git a/drivers/media/platform/samsung/s5p-g2d/g2d.c b/drivers/media=
-/platform/samsung/s5p-g2d/g2d.c
-> index e34cae9c9cf65d3161822b68233d28472171f917..922262f61e7b53baf1b5840d3=
-5149bf5b4b2e7ad 100644
-> --- a/drivers/media/platform/samsung/s5p-g2d/g2d.c
-> +++ b/drivers/media/platform/samsung/s5p-g2d/g2d.c
-> @@ -280,7 +280,7 @@ static int g2d_release(struct file *file)
->  	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
->  	mutex_unlock(&dev->mutex);
->  	v4l2_ctrl_handler_free(&ctx->ctrl_handler);
-> -	v4l2_fh_del(&ctx->fh);
-> +	v4l2_fh_del(&ctx->fh, file);
->  	v4l2_fh_exit(&ctx->fh);
->  	kfree(ctx);
->  	v4l2_info(&dev->v4l2_dev, "instance closed\n");
-> diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c b/driver=
-s/media/platform/samsung/s5p-jpeg/jpeg-core.c
-> index c4ad0196ed8f1bf579365a0a21dd8c4a78bdaa10..2a57efd181540183e7d2b66d5=
-1f9f2f274ddd100 100644
-> --- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-> +++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-> @@ -1005,7 +1005,7 @@ static int s5p_jpeg_open(struct file *file)
->  	return 0;
->=20=20
->  error:
-> -	v4l2_fh_del(&ctx->fh);
-> +	v4l2_fh_del(&ctx->fh, file);
->  	v4l2_fh_exit(&ctx->fh);
->  	mutex_unlock(&jpeg->lock);
->  free:
-> @@ -1021,7 +1021,7 @@ static int s5p_jpeg_release(struct file *file)
->  	mutex_lock(&jpeg->lock);
->  	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
->  	v4l2_ctrl_handler_free(&ctx->ctrl_handler);
-> -	v4l2_fh_del(&ctx->fh);
-> +	v4l2_fh_del(&ctx->fh, file);
->  	v4l2_fh_exit(&ctx->fh);
->  	kfree(ctx);
->  	mutex_unlock(&jpeg->lock);
+ drivers/usb/core/hcd.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Acked-by: =C5=81ukasz Stelmach <l.stelmach@samsung.com>
-
-
-
-[...]
-
-
-=2D-=20
-=C5=81ukasz Stelmach
-Samsung R&D Institute Poland
-Samsung Electronics
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmijNOoACgkQsK4enJil
-gBAXpggAhxgfNJt5JHfaNRWL4tntTEflz9jY6aL37c5XVvyFfbAOD9ZUAipWxJ3g
-fm3satj2+sGjeHZtH4lAnwpLpNY8egrTC1c9muXvIy/ExVz7jwo1JW/IKM9a0tZl
-D9N1GuZeTlQeLoFPsXl4LQhDbj48llm8roSKgfK4mU8ymTEw6BYOQ7bMZcxWKd9+
-amU+zqtKIXE3OHNKDB3Hoo9pLBhOIBPXcqEV8rwNbC0dyidV8GvVUUv4ptQBlAyV
-SNaaVoSHo+4P9caRnQOeX3kj7NXJa3ES03Cgpj8IhhZigvTtXJ+VL0fL283OuvOe
-p2JcG+pKY00NgIMbtv0xGbMhZGox9A==
-=VvC9
------END PGP SIGNATURE-----
---=-=-=--
+Index: usb-devel/drivers/usb/core/hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hcd.c
++++ usb-devel/drivers/usb/core/hcd.c
+@@ -1706,10 +1706,10 @@ static void usb_giveback_urb_bh(struct w
+  * @urb: urb being returned to the USB device driver.
+  * @status: completion status code for the URB.
+  *
+- * Context: atomic. The completion callback is invoked in caller's context.
+- * For HCDs with HCD_BH flag set, the completion callback is invoked in BH
+- * context (except for URBs submitted to the root hub which always complete in
+- * caller's context).
++ * Context: atomic. The completion callback is invoked either in a work queue
++ * (BH) context or in the caller's context, depending on whether the HCD_BH
++ * flag is set in the @hcd structure, except that URBs submitted to the
++ * root hub always complete in BH context.
+  *
+  * This hands the URB from HCD to its USB device driver, using its
+  * completion function.  The HCD has freed all per-urb resources
 
