@@ -1,122 +1,120 @@
-Return-Path: <linux-usb+bounces-26968-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26969-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 837B1B29C6B
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 10:38:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 678A3B29CA7
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 10:48:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DBE617AF5C
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 08:37:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 600A6189380B
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 08:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 159A630100E;
-	Mon, 18 Aug 2025 08:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D57304962;
+	Mon, 18 Aug 2025 08:46:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aBbjtFNv"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="fZwW5P+w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.42.203.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C161448E0;
-	Mon, 18 Aug 2025 08:37:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA1732FF64D;
+	Mon, 18 Aug 2025 08:45:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.42.203.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755506265; cv=none; b=iQb64Vbz6A6IRRyvbzvrLxNzEWZILn7fzuVXVy2/LmNttW5StiIIQ0olx3wXs2OGaftdkPTcIUGquBp34kb4a0LyO9FECwj1CCBco8BmE27PA2ojy6UjUjOkGcHRAKyXejWTi58DA4/ekDLwdseNHu9/KFkxxk28lZ+0yWOGU8w=
+	t=1755506760; cv=none; b=RBPInZCSpwgNbYkjTBs2FwxWu7wsGSczTI2HvLznA4Bi+osNcdp57r/29KF6dQnZE6yE4VvNC5/Pbp0PG/4ilMd+RBTskEgV9C0HyZMbtVx9alTiwyuN1zSrEWYec7DkUj5CxKknjI5fC/0Jdvj8VQoEPX1K12B2FAZmsWiPc3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755506265; c=relaxed/simple;
-	bh=N8VnjlPRnKqu/DSwOnID5+bTt9B/8Ll0cRHObBmy0ng=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fEVxwX6MYKUiMYo09McStLSOF+dCKBHC2WX0FvoCCWif6n+gY5z+XWBKjc005OG9k7Sb/D02GGb3QFzg6BVrbzqobPFpXn+ve3FO6sXvwzAwI1wMFWubQJJPpLphw+PUPzyqoMzafjnShNK7d+6YwxJg83FYRIxdB/eQLAWDDqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aBbjtFNv; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-55ce510b4ceso4437679e87.1;
-        Mon, 18 Aug 2025 01:37:43 -0700 (PDT)
+	s=arc-20240116; t=1755506760; c=relaxed/simple;
+	bh=gkk5Punudm3E+n5nYlLeniqR/ysIUuQfCso+2reJaBI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=U8yC8ZDI1oBuzHPTBA/SCgs73Coc8ezF7UPXIowl28VWZ1oyEI5iqMg5d4bNsaU4qzqNDlotbZLzrat9KQmIRzcl5ZKafpCs+nP2zntno08QyvVSYxMcX3aY7E66RD68NBa80Ygcs5I889+uEeuUvVDdOepZOeAZzboO1/yz6Wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=fZwW5P+w; arc=none smtp.client-ip=52.42.203.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755506262; x=1756111062; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w+SQhFuW5HpL3OJ4FWRgstFW2ENkzZUAlwMGpRfdru8=;
-        b=aBbjtFNvWNnWh2mvjQTZP2svJt1IH8g/JDxH/LmwnnTw2j/SR4PEoTeFnzWsRuVHEj
-         TimhYcvwYuYZXjv8R4eqxAHQ+kLE3KVgw5gwZ//ursPjxa2eoOFjKV2ostXNooWlFFdQ
-         ig19D7jTqMeXMZMOaeZvs7IuFRWbS9dubglgzm/7gDWcM+uWLnBJv/5Q+LeoRkcp2kBc
-         xUzgYhqX+lGHPbryFeLDuxScjfX8z9+DpeiV0IgEa9qQ7d29YTqdf/brH7gr2AV4RdPQ
-         YTs0UK2DnztMCmiCdoKOy6wZ/5AnsBuPycw7qzYIsAspsmGSY2z8a4hGfNDFU0urevyh
-         VUww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755506262; x=1756111062;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w+SQhFuW5HpL3OJ4FWRgstFW2ENkzZUAlwMGpRfdru8=;
-        b=dsYCYc1LOWXNTPyFjKeiC9SGalXj1+O2zGrPRyq7eBo5wGITigQm/we4duzi6hhvc2
-         F90Rpqhb6G/NPXItnQtP2bDBMcy2dVBfkG2F4CsgF3TWzV000rGF1XECzFH0roocdV99
-         uYcz+N/peBPrudjr/g4COSA/CZctnnd7+vB1zu6AzNiS5PJP2XAlYCfLk7GhG6aXXWcy
-         K17cbrP7b/HulcYphaEf1JPCdL6ApPKfwZhxgBRI4gCKLJ4NrrtPiSFXOPWLz+1g+he3
-         SJDCAM1HHknwEvunjUO1MWPbqae6bMa/F07VTaTRdICBajiB9tR9JIoiSsggoVr1anMv
-         E8UQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUHuj7e5+OXkkePnXIJWaM9lA9aIOHGNXSkYMh+MezolqyAMr0XoGBTrUFQ0RE4bCUZuZ/vP0FkYnwb@vger.kernel.org, AJvYcCWecGcwpJsWfyeb/tzwaMRuyiW0nT2bhJZ0icr8gSi7e6hJoeXoxKuxLJAsqr5JJBJ4BHkt57tU6yVV5w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFbdjpLa3xpYzxqnnH9ds+iDIzvTAKx6JTxKIQu7qn4Aplza1u
-	1BPWa/qB/UUtlxMKuRLIo7NCQNDcEdj+aX6VSTK17PbYnDEEPZap7AMGIlDB7w==
-X-Gm-Gg: ASbGnct5N49RuL7vSa44yITpZMS3zi1+fTnpWSl9lT5auoxgpxOnbSaJrzZzvs0yhaO
-	vTOn9qzQKfc0bCl9gJBKnBCyjkQAuIka1widNvKhPUM8+qBuiq9fkh48Q8sUfbPOxYNMlAu4ebd
-	yr1fPrJDRFrWpAFhxfbxQM5LUa4wpzi2TKIcZbluVQMe/Cfgjd8yDjry4naHp/3RjUcd5HS+n0Z
-	YCUv/qLHbBjh9k7X+mprXMlu+wPyatj3gMVqj084SVD4p3hObzu0HJe7nE+CIOWfDAIuCXZ7mYH
-	GmZnpDbRvKZIfQynFcNepLBwOHdWVARqm0n30JtAeP8HM47aZG3vYbGc0/DyMrFtOIhaufdURn/
-	AgfNcMXRjj49p99Xz9Ga0jtMIm/lM04uO1+8=
-X-Google-Smtp-Source: AGHT+IH8EWwSDmbDYhbwcw1H4Sve2jBWbulYVdOc5z1ZfHQvgKGrXE1heoo8VDNKPpg6c2fmUnradA==
-X-Received: by 2002:a05:6512:3b06:b0:55b:8d6a:be86 with SMTP id 2adb3069b0e04-55cf2bef24cmr1689982e87.0.1755506261594;
-        Mon, 18 Aug 2025 01:37:41 -0700 (PDT)
-Received: from foxbook (bfd208.neoplus.adsl.tpnet.pl. [83.28.41.208])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef43e52dsm1601758e87.152.2025.08.18.01.37.40
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 18 Aug 2025 01:37:41 -0700 (PDT)
-Date: Mon, 18 Aug 2025 10:37:37 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
- linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
- gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
- hdegoede@redhat.com, Thinh.Nguyen@synopsys.com, Amardeep Rai
- <amardeep.rai@intel.com>, Kannappan R <r.kannappan@intel.com>, Alan Stern
- <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v4 3/4] USB: Add a function to obtain USB version
- independent maximum bpi value
-Message-ID: <20250818103737.487e4093@foxbook>
-In-Reply-To: <767ac1c3-f09c-47cf-947d-968ae574e577@linux.intel.com>
-References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
-	<20250812132445.3185026-4-sakari.ailus@linux.intel.com>
-	<20250813164958.6c6c34a4@foxbook>
-	<aKLDXCchS20kaq20@kekkonen.localdomain>
-	<767ac1c3-f09c-47cf-947d-968ae574e577@linux.intel.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1755506758; x=1787042758;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MPRALudGkzcWuuQ0MxZaK3+KIi6aEACw/1pbTObCt3w=;
+  b=fZwW5P+wBbcUkWn8GvAKKViwGYz4I+IzODY7NSoMM9MN1xSm9ri3NrKH
+   RZY7sqEWOoOSZfjTGZ8Pjev4oqT10ixOrXu8xIvwR+SKMenGPKJsen3LT
+   qFdXU2SlrO5nApQ4fTaPoV5uz0fI13uLLeuWwX1w+bZLi+BLE9qJssY2F
+   VU9rJofmNLl1Ut1zhgWIdS6znIrOpupREXpEkC30fV7MfS5jEW6bZhKei
+   Q+MEAe/14HTCb1Smh8VwX8yBuRcoItn49cjPi65lVdZJ+paMaiyHMeUH5
+   Bkf/x/PXfYBMSJ1nKn5CI4MLq8hpx23a//CQy3z23TV7E3XM19WM9gJxR
+   w==;
+X-CSE-ConnectionGUID: iOSBl41wTTq/xVAdh7ht4A==
+X-CSE-MsgGUID: J0rDwryUSC2rti3XET8OwA==
+X-IronPort-AV: E=Sophos;i="6.17,293,1747699200"; 
+   d="scan'208";a="1291079"
+Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
+  by internal-pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 08:45:56 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [10.0.7.35:64875]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.29.170:2525] with esmtp (Farcaster)
+ id 28691148-49b2-4270-a8ad-db7444f43ec5; Mon, 18 Aug 2025 08:45:56 +0000 (UTC)
+X-Farcaster-Flow-ID: 28691148-49b2-4270-a8ad-db7444f43ec5
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Mon, 18 Aug 2025 08:45:56 +0000
+Received: from HND-5CG1082HRX.ant.amazon.com (10.37.244.10) by
+ EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.17;
+ Mon, 18 Aug 2025 08:45:54 +0000
+From: Yuichiro Tsuji <yuichtsu@amazon.com>
+To: <linux-usb@vger.kernel.org>
+CC: <netdev@vger.kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S .
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Yuichiro Tsuji
+	<yuichtsu@amazon.com>,
+	<syzbot+20537064367a0f98d597@syzkaller.appspotmail.com>
+Subject: [PATCH] net: usb: asix_devices: Fix PHY address mask in MDIO bus initialization
+Date: Mon, 18 Aug 2025 17:45:07 +0900
+Message-ID: <20250818084541.1958-1-yuichtsu@amazon.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D039UWA001.ant.amazon.com (10.13.139.110) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Mon, 18 Aug 2025 10:32:48 +0300, Mathias Nyman wrote:
-> I think the "ESIT" acronym (Endpoint Service Interval Time) is very xHCI spec
-> specific. Usb spec usually refers to isoc and interrupt endpoints as "periodic"
-> 
-> how about one of these:
-> usb_endpoint_max_periodic_bytes()
-> usb_endpoint_max_periodic_payload()
-> usb_endpoint_max_periodic_bpi()
+Syzbot reported shift-out-of-bounds exception on MDIO bus initialization.
 
-I was thinking just drop "isoch" and leave usb_endpoint_max_bpi(),
-because USB specs call this "bytes per interval".
+The PHY address should be masked to 5 bits (0-31). Without this
+mask, invalid PHY addresses could be used, potentially causing issues
+with MDIO bus operations.
 
-But Alan didn't like this 3LA so we can get creative. More ideas:
+Fix this by masking the PHY address with 0x1f (31 decimal) to ensure
+it stays within the valid range.
 
-usb_endpoint_interval_payload()
-usb_endpoint_interval_bytes()
+Fixes: 4faff70959d5 ("net: usb: asix_devices: add phy_mask for ax88772 mdio bus")
+Reported-by: syzbot+20537064367a0f98d597@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=20537064367a0f98d597
+Tested-by: syzbot+20537064367a0f98d597@syzkaller.appspotmail.com
+Signed-off-by: Yuichiro Tsuji <yuichtsu@amazon.com>
+---
+ drivers/net/usb/asix_devices.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index d9f5942ccc44..792ddda1ad49 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -676,7 +676,7 @@ static int ax88772_init_mdio(struct usbnet *dev)
+ 	priv->mdio->read = &asix_mdio_bus_read;
+ 	priv->mdio->write = &asix_mdio_bus_write;
+ 	priv->mdio->name = "Asix MDIO Bus";
+-	priv->mdio->phy_mask = ~(BIT(priv->phy_addr) | BIT(AX_EMBD_PHY_ADDR));
++	priv->mdio->phy_mask = ~(BIT(priv->phy_addr & 0x1f) | BIT(AX_EMBD_PHY_ADDR));
+ 	/* mii bus name is usb-<usb bus number>-<usb device number> */
+ 	snprintf(priv->mdio->id, MII_BUS_ID_SIZE, "usb-%03d:%03d",
+ 		 dev->udev->bus->busnum, dev->udev->devnum);
+-- 
+2.43.5
 
-Naming things and off-by-one errors...
 
