@@ -1,122 +1,170 @@
-Return-Path: <linux-usb+bounces-26984-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-26985-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73116B2A7A4
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 15:55:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43957B2AACB
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 16:36:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F110B1BA1ECB
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 13:42:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66ADD688471
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Aug 2025 14:19:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14ECB3218B3;
-	Mon, 18 Aug 2025 13:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 403633375AC;
+	Mon, 18 Aug 2025 14:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="wRx2Mkv9"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="nweMstTk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A1F320CA0
-	for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 13:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9263533471F;
+	Mon, 18 Aug 2025 14:10:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755524393; cv=none; b=fpHPkY+x0vSCwRxbSpNvouiiis1AnIo85TCFQCz2oISMjbwa11ooPZgY7lZ/E10yet3VIqX2lHpCOGZB1lDsE1vhAeWuXWwbWFTaCSxrt6VTZTVj2sQtsAwlf3Ui/QiQwhkq3VvPbNf6tS4h3utyYlcOpJVlgj0az64UC5ItkRc=
+	t=1755526247; cv=none; b=nh8YR0NuG+j2WsE2bBCoYe+qG1jH1RxAig2GXk3lx8WxW8IZSPvK8VPyiGY/YCetp5/FuBzmaRcKxecZ4c7JIFoZF997zG4tCjK7SZBm/mwtXpkp3Lv1DsTho4W8fJui9kgy7sfvyjFTCuP+ZDlhVOmtY7OTnHOdjEC2SO/G+zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755524393; c=relaxed/simple;
-	bh=AI6v7kPfWMA+miNg7wbOZdVUU4EmkESLIotA5sBin+E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qyl1I8ucxWwMFC4+8vRUf9zpVGx2mO34sPLNix+F8HNsKxn7SZtsi4+CS6Ju950zI45v3qRLIM7x73ZySLcXTxsUG5JTTFQwMY7NoYHpp0FRbSr9Z7Yeqzvqy78ptNDySNwUKkuE+UqxTdbyVU6pQzWK0cL9+uhB6A9phV9X7u8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=wRx2Mkv9; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7e8704c52b3so503326485a.1
-        for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 06:39:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1755524390; x=1756129190; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FJZQTHKlHSqbl45CU5FPQQ9yzybUQR3l/MQNkEVJRhY=;
-        b=wRx2Mkv9zLt0nIGnCW77nBfsTVYRAg2ety6hMo+mZfJE2rRcVM3JeOndPWXK4dIeoa
-         3mlgAVprmbr60nMjsQE4IDRt4jpJfbE8pWk+MtBhnB2pfPxv04+VHJjGt4OdpK2yTDx4
-         mmz/A9pboKrGcQB+T4iZnJ1SCnHE7STETDk98/ACUqHRRUIQVygjJtAbzcUcE7cU7Hej
-         m2652y+DijrCpYKTqIC7Fzg3/9QlvHNfSX48M9bTYqsBGUwLBdbrQyK3eDt/ddvT4BTx
-         04mFpDoLi0+ce1nLXkOMqfTrliuuwOZs6RrpuoMnVNrYjJn7xPsiZ+1IdeJ1Z/zsfp2h
-         CEMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755524390; x=1756129190;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FJZQTHKlHSqbl45CU5FPQQ9yzybUQR3l/MQNkEVJRhY=;
-        b=FyhQB1umRDlZHkU6XxuY1f1lWIOEC/HJfecFBZH/BVAG+PzGq5R4nwdtVZ7ZztjNbP
-         XqG0tMNAncVbIUoZXSGJJcLG3W3lTcUvGsheVn9Hrf3W+UfxMjOcLrkC/XO7sdkD5kZy
-         xauozFtNyPTozKc3gCY3wJ5BsSPhuaBx9lLlZTt9Sx9oZ8vBic197iQZ8MBryA39Yt/O
-         AuAM+jeGQB58F+3GeX0OOMG5tCGLWVznEkHA0eXQjkUO30E5CYgMM1FhNmf3HRezoQF/
-         Z/OqVHE0eSlAO6lDMxZyumUwF3h/2ayYJYfGC+uqlSYmv7XSf1vcgP3IWsQTVKsRVHXS
-         ZmNg==
-X-Forwarded-Encrypted: i=1; AJvYcCW4JrCKE01S6lXVWAToxgfZWvQTqKWyN2vm+4mjKaj9L0bpm8kvolH4vptAs5akqr9c6CArYRM5dOE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEhiwA4ZvU8INtmbatU32Pn0g9xpL3PEizfqn5CiXo6PkRjBxo
-	Ym/JU9RIOg0IgWbdin21pD4V1QjOAwQuhRMBoT2c9gtcp/RCrDe3KhASBawjg2+K67vrMrKLiYN
-	bkYw=
-X-Gm-Gg: ASbGnctvBslEwlypJy/J2+QtsmG8hyKz5F3OXSoUsle6oBV7SpSu1h5iPrM4m+lUvaA
-	Gd/rcs/3qquS6Rnh/v0K2Zzqe/xBIZIEPoYaTuee/6SSmHtFh19BugymcClY9zwnRY+g9buQEFE
-	rIpVH99ALO/T3f6wa2ADQ4JAyLDxXGKvVu3aqdjT/OO2bQs6cznPxknnmJTnG1hDx6b4uFjGHgb
-	V8hagx2HVyElxnJixOVjGvuMQkEEkjqnLFwmpcYE3Qhms4mPc6DC6ptLg3afgUecDg4fux/JJ4w
-	p5SthF8Htx0v26+1ZJsfxmt1/Xlz4GXY2LY/pW6nUhA4h/FhlPZQKTougJq+Te14PPYF08Qnwsi
-	0Jv5SJURiOyPQ49XL08PwuGkfVPa1qJBLLIZEp0A3Hnk/r4LdOsg=
-X-Google-Smtp-Source: AGHT+IEgkXGuq4e7M7fWzb2YB+PMFX6Ym9FJYxEKg3lgYKU5qsCNHsFfMVtFsUYrPZpoT3cKqxi19A==
-X-Received: by 2002:a05:620a:700d:b0:7e8:911:2311 with SMTP id af79cd13be357-7e87e0ba56fmr1573344785a.53.1755524390460;
-        Mon, 18 Aug 2025 06:39:50 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70ba90b8dc7sm52929266d6.30.2025.08.18.06.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 06:39:49 -0700 (PDT)
-Date: Mon, 18 Aug 2025 09:39:48 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	=?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>,
-	linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
-	hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
-	Amardeep Rai <amardeep.rai@intel.com>,
-	Kannappan R <r.kannappan@intel.com>
-Subject: Re: [PATCH v4 3/4] USB: Add a function to obtain USB version
- independent maximum bpi value
-Message-ID: <f8e186a9-015f-4df3-bc10-33eeef1146dd@rowland.harvard.edu>
-References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
- <20250812132445.3185026-4-sakari.ailus@linux.intel.com>
- <20250813164958.6c6c34a4@foxbook>
- <aKLDXCchS20kaq20@kekkonen.localdomain>
- <767ac1c3-f09c-47cf-947d-968ae574e577@linux.intel.com>
- <aKMOBPTqZX_yJjOv@kekkonen.localdomain>
- <aKMY0XPLmK-TOWIt@kekkonen.localdomain>
+	s=arc-20240116; t=1755526247; c=relaxed/simple;
+	bh=j0lyo02IFV4zcgXPYgENMtO59Au22hO0nmUipu26tPk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type:References; b=elExSWWS/R2HB5U8rlvPjkIkvwPR2ABgz5XH5yexSjf6egfZ0DloPYyh55+xTEu00CBO0qcwCp8W5LZNe6jhxqygAvcXV+QuMwMqDyS8cyfJAlVCc1N85TXJhujWAvwA7WYa1cMt+GTzOY9ohz8ffNXVOPqTLQMle+6m8S17yGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=nweMstTk; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250818141041euoutp01198781292bd5d26e9ea7136d3d3d73e8~c4dDIkjfs2135921359euoutp01S;
+	Mon, 18 Aug 2025 14:10:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250818141041euoutp01198781292bd5d26e9ea7136d3d3d73e8~c4dDIkjfs2135921359euoutp01S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1755526241;
+	bh=ts3A4MvB+pLF9b1fYr1OaRKHsIG9rXzjaSyR872fx0Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nweMstTkqZUfTDcgSuzWRYVoV9JvbPK+l2fq2+I3gRx0SKOetrGBglidgci/XLRHG
+	 yKiRGPTghNY65ZYuW+rQetbaj0UlX84N/HJy2tuH4Qs0xmThMbES7YZyWuK/y2EQwa
+	 pANBPLppgOKGZUguwTqkajXJsHrX4XbKh4XzMW6k=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250818141040eucas1p12598f376bdd8cfcb984a8a799373111d~c4dCdErup2133021330eucas1p1j;
+	Mon, 18 Aug 2025 14:10:40 +0000 (GMT)
+Received: from localhost (unknown [106.120.51.111]) by eusmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250818141040eusmtip168497366a830534395c067398c2a3939~c4dCY3Ph_0814408144eusmtip1d;
+	Mon, 18 Aug 2025 14:10:40 +0000 (GMT)
+From: Lukasz Stelmach <l.stelmach@samsung.com>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	linux-media@vger.kernel.org,  linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev,  linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-tegra@vger.kernel.org, imx@lists.linux.dev, 
+	linux-renesas-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev, 
+	linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com, mjpeg-users@lists.sourceforge.net
+Subject: Re: [PATCH 11/65] media: Replace file->private_data access with
+ custom functions
+Date: Mon, 18 Aug 2025 16:10:40 +0200
+In-Reply-To: <20250802-media-private-data-v1-11-eb140ddd6a9d@ideasonboard.com>
+	(Jacopo Mondi's message of "Sat, 02 Aug 2025 11:22:33 +0200")
+Message-ID: <oypijda53wra8v.fsf%l.stelmach@samsung.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aKMY0XPLmK-TOWIt@kekkonen.localdomain>
+Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
+	protocol="application/pgp-signature"
+X-CMS-MailID: 20250818141040eucas1p12598f376bdd8cfcb984a8a799373111d
+X-Msg-Generator: CA
+X-RootMTR: 20250802092520eucas1p2d0edfe269d3c423e6157bd7a0ec0b43c
+X-EPHeader: CA
+X-CMS-RootMailID: 20250802092520eucas1p2d0edfe269d3c423e6157bd7a0ec0b43c
+References: <20250802-media-private-data-v1-0-eb140ddd6a9d@ideasonboard.com>
+	<CGME20250802092520eucas1p2d0edfe269d3c423e6157bd7a0ec0b43c@eucas1p2.samsung.com>
+	<20250802-media-private-data-v1-11-eb140ddd6a9d@ideasonboard.com>
 
-On Mon, Aug 18, 2025 at 12:13:05PM +0000, Sakari Ailus wrote:
-> > > how about one of these:
-> > > usb_endpoint_max_periodic_bytes()
-> > > usb_endpoint_max_periodic_payload()
-> > > usb_endpoint_max_periodic_bpi()
-> > 
-> > How about usb_endpoint_max_si_payload() ("si" being for service interval)?
-> 
-> I somehow missed your latter sentence earlier. I'm totally fine with these,
-> perhaps I'm slightly leaning towards usb_endpoint_max_periodic_payload()
-> but let's see what others think.
+--=-=-=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-I'm okay with either usb_endpoint_max_periodic_bytes() or 
-usb_endpoint_max_periodic_payload().
+It was <2025-08-02 sob 11:22>, when Jacopo Mondi wrote:
+> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>
+> Accessing file->private_data manually to retrieve the v4l2_fh pointer is
+> error-prone, as the field is a void * and will happily cast implicitly
+> to any pointer type.
+>
+> Replace all remaining locations that read the v4l2_fh pointer directly
+> from file->private_data and cast it to driver-specific file handle
+> structures with driver-specific functions that use file_to_v4l2_fh() and
+> perform the same cast.
+>
+> No functional change is intended, this only paves the way to remove
+> direct accesses to file->private_data and make V4L2 drivers safer.
+> Other accesses to the field will be addressed separately.
+>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> ---
 
-Alan Stern
+[...]
+
+> diff --git a/drivers/media/platform/samsung/s5p-g2d/g2d.c b/drivers/media=
+/platform/samsung/s5p-g2d/g2d.c
+> index ffed16a34493be2edbdaee13619467417487c1e7..44fcedbbc90a9863827aacbcd=
+5f56d850cb552ea 100644
+> --- a/drivers/media/platform/samsung/s5p-g2d/g2d.c
+> +++ b/drivers/media/platform/samsung/s5p-g2d/g2d.c
+> @@ -25,7 +25,10 @@
+>  #include "g2d.h"
+>  #include "g2d-regs.h"
+>=20=20
+> -#define fh2ctx(__fh) container_of(__fh, struct g2d_ctx, fh)
+> +static inline struct g2d_ctx *file2ctx(struct file *filp)
+> +{
+> +	return container_of(file_to_v4l2_fh(filp), struct g2d_ctx, fh);
+> +}
+>=20=20
+>  static struct g2d_fmt formats[] =3D {
+>  	{
+> @@ -272,7 +275,7 @@ static int g2d_open(struct file *file)
+>  static int g2d_release(struct file *file)
+>  {
+>  	struct g2d_dev *dev =3D video_drvdata(file);
+> -	struct g2d_ctx *ctx =3D fh2ctx(file->private_data);
+> +	struct g2d_ctx *ctx =3D file2ctx(file);
+>=20=20
+>  	mutex_lock(&dev->mutex);
+>  	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
+
+
+Acked-by: Lukasz Stelmach <l.stelmach@samsung.com>
+
+
+[...]
+
+
+=2D-=20
+=C5=81ukasz Stelmach
+Samsung R&D Institute Poland
+Samsung Electronics
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmijNGAACgkQsK4enJil
+gBDoIQgAm0zhFQfQO2pDJE9DC0t6P4lrJ//jtdrQJtVSYpcaXDYP9Oq1iygQ3s54
+2wjf/n/+kXlE2cUM5pvbFc0c1qeuZipb+lexBpwBdogDE3njAsinDf4ohsWPGhJC
+TMOuWPadHmM0CXjuSWpeF+MoKtOJYJjdyVizq8ZoFwgGHssYApRxGVuXx6DRlsZK
+aqNXp4P9HNaVsxLl5JOCaeEaJLBkU++5rhIooxbmm/jPuM6WuOWil+jQKADaODeJ
+UfkLjfRCLFc4WdsXOBZuwqUiyU4imB8qJOlrjosCChiqKqr7up+cyr3YZ7PJEXPv
+jN4MErP/mPjxbYUi+bON3CbY2FlWfw==
+=alRq
+-----END PGP SIGNATURE-----
+--=-=-=--
 
