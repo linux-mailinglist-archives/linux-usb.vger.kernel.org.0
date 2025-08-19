@@ -1,266 +1,196 @@
-Return-Path: <linux-usb+bounces-27001-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27003-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70045B2B572
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 02:40:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49831B2B91A
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 08:08:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 937811697EC
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 00:40:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00F1C1964737
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 06:08:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977F91D8A0A;
-	Tue, 19 Aug 2025 00:39:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78BE1265CA7;
+	Tue, 19 Aug 2025 06:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fvwqBwGu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mIBKQB2U"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA071C2DB2;
-	Tue, 19 Aug 2025 00:39:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84771863E;
+	Tue, 19 Aug 2025 06:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755563978; cv=none; b=KSuVHmngycuzXlRA2ODwWhUhhn815lQ+tLjjq6th7JkNRCBZe0AB6Cc07E4s8F2pqzlVAU2feHrE2PuW1/GOWVYpueYfQ/pXMinqCBsAd1fUs8U4h+I6hxvZXFP1dcLHLuCe383C5hu9nPGa/HLdFF36fGdLNSJUDcFWjy6U/0k=
+	t=1755583701; cv=none; b=euDrQtMO2rUlsrejdKf4Wsi88rDY9zxvPQYW7bF2I4EZ1fC38halDX5rpMt8wUY2WRTtZotj2KjDqd9T4qgVkhF8zVxLSPpmkEmraMfD+aQPeirrwYcWUCZp+vqX/bcEnMkhH6dNtTx7aF/aw4tIS2Zsc0CVYffMdmODh/eG0+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755563978; c=relaxed/simple;
-	bh=MT2vNdM2lpeUGjwMVRdXAlWokrm3B+QB4lJckciXBxU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ifQbW4TfhV7TjMMAq4cDDHwjtktNBx6WVkCd+Z70WrQHSRj42CrNsv3J0kyUzvgPlFP4XY7C7T1wXNaPFmF96wE6K/+Y8Tb/DIpOnmSj1Gpl26Fnr5piW7reHc56xL3xd3AkxJeUtspYXo2sqn9Wc2KRJfVqJoBqhOTayk4p14Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fvwqBwGu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC980C4CEF1;
-	Tue, 19 Aug 2025 00:39:35 +0000 (UTC)
+	s=arc-20240116; t=1755583701; c=relaxed/simple;
+	bh=JFOqiQZygYJZwxR9jUnXSWxc6RjvoDhgTgxK8uDWeLw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B+oyngVtVGnD9IKF9WjYhuFYZcKZKv6ACRFyJoz2Qfb/JGWJ3gicbortAwhYRBRlsX0dxyRPsebw1ryVNSijjtTJ+Q+B9YugT0w8rmQ61V0xMZ8nF3hf7PITJ0Zu6Z+53OERV+rE7o3fRvIKuXWJHXgI2wjEC7PsiRX4V4xe3/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mIBKQB2U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC394C4CEF4;
+	Tue, 19 Aug 2025 06:08:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755563977;
-	bh=MT2vNdM2lpeUGjwMVRdXAlWokrm3B+QB4lJckciXBxU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fvwqBwGuz7ZAQ7sMMwxbDl+X91vBdhIqmYmS9kh4D3aTA/9OXlRkeTkeHq48gASPC
-	 80Z6dHdHtU2CDbJvZiGuzV8fMBwF1973YZYyaxzQGm/A/1rkh2G0nWY3DTR5ggBR1V
-	 8tpYQOWTHxYBH9FkB5+toOSoT2UXB75Wfu6j4+djkfHKb++gE9NZeFSog/N6X69fO2
-	 CwudJMhKKB2vbrzUGOAdc6tJzrCzDzFt6ZfTuscDj5xlJk8l/BjWVDjsCL+JXxnLaM
-	 HU63egFgL60f+rYeisR6iJAFCbDwOy7rQ4Hr+UbGa2lbDIq0cqIYF2mHEeJ9EfwfeF
-	 l35rIzcxNN5aw==
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Richard Leitner <richard.leitner@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] usb: usb251xb: support usage case without I2C control
-Date: Tue, 19 Aug 2025 08:22:17 +0800
-Message-ID: <20250819002217.30249-4-jszhang@kernel.org>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250819002217.30249-1-jszhang@kernel.org>
-References: <20250819002217.30249-1-jszhang@kernel.org>
+	s=k20201202; t=1755583700;
+	bh=JFOqiQZygYJZwxR9jUnXSWxc6RjvoDhgTgxK8uDWeLw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mIBKQB2Ug804maWvOPuUOfpcsNLZO1bdOfLqRy/haIy1HpbJEdniEvVrEjX5PGrkn
+	 Zd5u2y457HAPPZ8RqN9l1HIW1r7OVJ3BxFlrMeNwyNwtG5Wnt4gadHSrTP8r4C7F0K
+	 98OuY+3Az23afPP211w0a9J7MP4uvuIlsaXKZCrUDWFX/dtPUMNcjiJjxkXZuO7bi9
+	 LMLIUb51Dli9W6YN+iVU0eyQ0YEJlyXMUCuCQwX86yf5cz0p3UxRIV4GggyITumYiZ
+	 D1VsrhYN/uIL3KTNVTYTwWtYpx9P5V9N/HXa3s/Zu/0lsx42U78eU1axRYCNilOIV3
+	 DMaHPbYmlXnaA==
+Date: Tue, 19 Aug 2025 08:08:17 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+Cc: linux-kernel@vger.kernel.org, peter.ujfalusi@gmail.com, 
+	dmitry.torokhov@gmail.com, robh@kernel.org, krzk+dt@kernel.org, lgirdwood@gmail.com, 
+	tiwai@suse.com, conor+dt@kernel.org, lee@kernel.org, broonie@kernel.org, 
+	gregkh@linuxfoundation.org, linux-input@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, 
+	shuah@kernel.org
+Subject: Re: [PATCH 5/8] pwm: dt-bindings: ti,twl-pwm: convert to DT schema
+Message-ID: <xs5dgd57ycqaohpqevy67mrmngqei5pyg2a62mk6gjzawzvwfm@pzhw5jthxmyo>
+References: <20250811224739.53869-1-jihed.chaibi.dev@gmail.com>
+ <20250811224739.53869-6-jihed.chaibi.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5yzp6gv7etjwnva5"
+Content-Disposition: inline
+In-Reply-To: <20250811224739.53869-6-jihed.chaibi.dev@gmail.com>
 
-Refactor so that register writes for configuration are only performed if
-the device has a i2c_client provided and also register as a platform
-driver. This allows the driver to be used to manage GPIO based control
-of the device.
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- drivers/usb/misc/usb251xb.c | 108 +++++++++++++++++++++++++++++++-----
- 1 file changed, 94 insertions(+), 14 deletions(-)
+--5yzp6gv7etjwnva5
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 5/8] pwm: dt-bindings: ti,twl-pwm: convert to DT schema
+MIME-Version: 1.0
 
-diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-index cb2f946de42c..c900df69dd8d 100644
---- a/drivers/usb/misc/usb251xb.c
-+++ b/drivers/usb/misc/usb251xb.c
-@@ -17,6 +17,7 @@
- #include <linux/module.h>
- #include <linux/nls.h>
- #include <linux/of.h>
-+#include <linux/platform_device.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- 
-@@ -242,15 +243,19 @@ static int usb251xb_check_dev_children(struct device *dev, void *child)
- static int usb251x_check_gpio_chip(struct usb251xb *hub)
- {
- 	struct gpio_chip *gc = gpiod_to_chip(hub->gpio_reset);
--	struct i2c_adapter *adap = hub->i2c->adapter;
-+	struct i2c_adapter *adap;
- 	int ret;
- 
-+	if (!hub->i2c)
-+		return 0;
-+
- 	if (!hub->gpio_reset)
- 		return 0;
- 
- 	if (!gc)
- 		return -EINVAL;
- 
-+	adap = hub->i2c->adapter;
- 	ret = usb251xb_check_dev_children(&adap->dev, gc->parent);
- 	if (ret) {
- 		dev_err(hub->dev, "Reset GPIO chip is at the same i2c-bus\n");
-@@ -271,7 +276,8 @@ static void usb251xb_reset(struct usb251xb *hub)
- 	if (!hub->gpio_reset)
- 		return;
- 
--	i2c_lock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
-+	if (hub->i2c)
-+		i2c_lock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
- 
- 	gpiod_set_value_cansleep(hub->gpio_reset, 1);
- 	usleep_range(1, 10);	/* >=1us RESET_N asserted */
-@@ -280,7 +286,8 @@ static void usb251xb_reset(struct usb251xb *hub)
- 	/* wait for hub recovery/stabilization */
- 	usleep_range(500, 750);	/* >=500us after RESET_N deasserted */
- 
--	i2c_unlock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
-+	if (hub->i2c)
-+		i2c_unlock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
- }
- 
- static int usb251xb_connect(struct usb251xb *hub)
-@@ -289,7 +296,11 @@ static int usb251xb_connect(struct usb251xb *hub)
- 	int err, i;
- 	char i2c_wb[USB251XB_I2C_REG_SZ];
- 
--	memset(i2c_wb, 0, USB251XB_I2C_REG_SZ);
-+	if (!hub->i2c) {
-+		usb251xb_reset(hub);
-+		dev_info(dev, "hub is put in default configuration.\n");
-+		return 0;
-+	}
- 
- 	if (hub->skip_config) {
- 		dev_info(dev, "Skip hub configuration, only attach.\n");
-@@ -698,18 +709,13 @@ static int usb251xb_i2c_probe(struct i2c_client *i2c)
- 	return usb251xb_probe(hub);
- }
- 
--static int usb251xb_suspend(struct device *dev)
-+static int usb251xb_suspend(struct usb251xb *hub)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct usb251xb *hub = i2c_get_clientdata(client);
--
- 	return regulator_disable(hub->vdd);
- }
- 
--static int usb251xb_resume(struct device *dev)
-+static int usb251xb_resume(struct usb251xb *hub)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct usb251xb *hub = i2c_get_clientdata(client);
- 	int err;
- 
- 	err = regulator_enable(hub->vdd);
-@@ -719,7 +725,23 @@ static int usb251xb_resume(struct device *dev)
- 	return usb251xb_connect(hub);
- }
- 
--static DEFINE_SIMPLE_DEV_PM_OPS(usb251xb_pm_ops, usb251xb_suspend, usb251xb_resume);
-+static int usb251xb_i2c_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct usb251xb *hub = i2c_get_clientdata(client);
-+
-+	return usb251xb_suspend(hub);
-+}
-+
-+static int usb251xb_i2c_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct usb251xb *hub = i2c_get_clientdata(client);
-+
-+	return usb251xb_resume(hub);
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(usb251xb_i2c_pm_ops, usb251xb_i2c_suspend, usb251xb_i2c_resume);
- 
- static const struct i2c_device_id usb251xb_id[] = {
- 	{ "usb2422" },
-@@ -739,13 +761,71 @@ static struct i2c_driver usb251xb_i2c_driver = {
- 	.driver = {
- 		.name = DRIVER_NAME,
- 		.of_match_table = usb251xb_of_match,
--		.pm = pm_sleep_ptr(&usb251xb_pm_ops),
-+		.pm = pm_sleep_ptr(&usb251xb_i2c_pm_ops),
- 	},
- 	.probe = usb251xb_i2c_probe,
- 	.id_table = usb251xb_id,
- };
- 
--module_i2c_driver(usb251xb_i2c_driver);
-+static int usb251xb_plat_probe(struct platform_device *pdev)
-+{
-+	struct usb251xb *hub;
-+
-+	hub = devm_kzalloc(&pdev->dev, sizeof(*hub), GFP_KERNEL);
-+	if (!hub)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, hub);
-+	hub->dev = &pdev->dev;
-+
-+	return usb251xb_probe(hub);
-+}
-+
-+static int usb251xb_plat_suspend(struct device *dev)
-+{
-+	return usb251xb_suspend(dev_get_drvdata(dev));
-+}
-+
-+static int usb251xb_plat_resume(struct device *dev)
-+{
-+	return usb251xb_resume(dev_get_drvdata(dev));
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(usb251xb_plat_pm_ops, usb251xb_plat_suspend, usb251xb_plat_resume);
-+
-+static struct platform_driver usb251xb_plat_driver = {
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.of_match_table = of_match_ptr(usb251xb_of_match),
-+		.pm = pm_sleep_ptr(&usb251xb_plat_pm_ops),
-+	},
-+	.probe		= usb251xb_plat_probe,
-+};
-+
-+static int __init usb251xb_init(void)
-+{
-+	int err;
-+
-+	err = i2c_add_driver(&usb251xb_i2c_driver);
-+	if (err)
-+		return err;
-+
-+	err = platform_driver_register(&usb251xb_plat_driver);
-+	if (err) {
-+		i2c_del_driver(&usb251xb_i2c_driver);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+module_init(usb251xb_init);
-+
-+static void __exit usb251xb_exit(void)
-+{
-+	platform_driver_unregister(&usb251xb_plat_driver);
-+	i2c_del_driver(&usb251xb_i2c_driver);
-+}
-+module_exit(usb251xb_exit);
- 
- MODULE_AUTHOR("Richard Leitner <richard.leitner@skidata.com>");
- MODULE_DESCRIPTION("USB251x/xBi USB 2.0 Hub Controller Driver");
--- 
-2.50.0
+On Tue, Aug 12, 2025 at 12:47:36AM +0200, Jihed Chaibi wrote:
+> Convert the legacy TXT binding for the TWL-family PWM controller
+> to the modern YAML DT schema format. This adds formal validation
+> and improves documentation by inheriting from the base pwm schema.
+>=20
+> Signed-off-by: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+> ---
+>  .../devicetree/bindings/pwm/ti,twl-pwm.txt    | 17 -------
+>  .../devicetree/bindings/pwm/ti,twl-pwm.yaml   | 46 +++++++++++++++++++
+>  2 files changed, 46 insertions(+), 17 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/pwm/ti,twl-pwm.txt
+>  create mode 100644 Documentation/devicetree/bindings/pwm/ti,twl-pwm.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/pwm/ti,twl-pwm.txt b/Docum=
+entation/devicetree/bindings/pwm/ti,twl-pwm.txt
+> deleted file mode 100644
+> index d97ca1964..000000000
+> --- a/Documentation/devicetree/bindings/pwm/ti,twl-pwm.txt
+> +++ /dev/null
+> @@ -1,17 +0,0 @@
+> -Texas Instruments TWL series PWM drivers
+> -
+> -Supported PWMs:
+> -On TWL4030 series: PWM1 and PWM2
+> -On TWL6030 series: PWM0 and PWM1
+> -
+> -Required properties:
+> -- compatible: "ti,twl4030-pwm" or "ti,twl6030-pwm"
+> -- #pwm-cells: should be 2. See pwm.yaml in this directory for a descript=
+ion of
+> -  the cells format.
+> -
+> -Example:
+> -
+> -twl_pwm: pwm {
+> -	compatible =3D "ti,twl6030-pwm";
+> -	#pwm-cells =3D <2>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/pwm/ti,twl-pwm.yaml b/Docu=
+mentation/devicetree/bindings/pwm/ti,twl-pwm.yaml
+> new file mode 100644
+> index 000000000..5bbbdc13a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pwm/ti,twl-pwm.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pwm/ti,twl-pwm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments TWL4030/TWL6030 family PWM controller
+> +
+> +maintainers:
+> +  - Peter Ujfalusi <peter.ujfalusi@gmail.com>
+> +
+> +description: |
+> +  Bindings for the following PWM controllers :
+> +    TWL4030 series: PWMA and PWMB (connected to LEDA and LEDB terminals)
+> +    TWL6030 series: LED PWM (mainly used as charging indicator LED)
+> +
+> +allOf:
+> +  - $ref: /schemas/pwm/pwm.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,twl4030-pwm
+> +      - ti,twl6030-pwm
+> +
+> +  '#pwm-cells':
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - '#pwm-cells'
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    pwm {
+> +        compatible =3D "ti,twl4030-pwm";
+> +        #pwm-cells =3D <2>;
+> +    };
+> +
+> +  - |
+> +    pwm {
+> +        compatible =3D "ti,twl6030-pwm";
+> +        #pwm-cells =3D <2>;
+> +    };
 
+Without having asked dt_binding_check it looks ok formally. I guess you
+added Peter Ujfalusi as maintainer from the driver file. I'd like to see
+a confirmation from him this is fine.
+
+The 2nd example isn't very helpful. Unless I'm missing some detail that
+makes it have a value I suggest to drop it. (But no need to resend just
+for that, I don't feel that strong and can keep it or fixup when
+applying.)
+
+Best regards
+Uwe
+
+--5yzp6gv7etjwnva5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmikFM4ACgkQj4D7WH0S
+/k6TXQgAgOHpunUCvCKcPCdfYvw/x0GxIJld2NVPMHAvH/zoqHhuWyA80902Vml7
+oaOHd6EvK5AiYwfd6OFaODZy0zw4slH/wNW5v00NSJIkEj01gp/FLJGOmA1nEYSU
+oW6E4bjhEhaTM4LdDuIRBsi98yy1rmbwgRu0AgmoSv2Yof3jKwqbFW9UffjiJHus
+yjU8tTPF6Tcu7x9JaFNSEJqymp1K97cTTqs6e3njMt8OCCktpSNlKl/u4Wp2o6DY
+tXjPDChXLGYrcvwefTl2vb+qrc8/Q1xSx5GH/udU68l+c4RHdPivtxdwyUDOiWpB
+Ida7RVbLjhD3LQKIN8RWgaQxC6Pi8A==
+=hMLi
+-----END PGP SIGNATURE-----
+
+--5yzp6gv7etjwnva5--
 
