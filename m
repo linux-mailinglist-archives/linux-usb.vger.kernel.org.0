@@ -1,162 +1,135 @@
-Return-Path: <linux-usb+bounces-27028-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27029-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 891E4B2C6AE
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 16:15:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DE0AB2C76A
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 16:47:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 083D51BC5362
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 14:13:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC1317A70B9
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 14:45:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0B2226D14;
-	Tue, 19 Aug 2025 14:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D753F27E7EB;
+	Tue, 19 Aug 2025 14:46:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="TFfy3k/r"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Xvn2E8EJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78D62253AB
-	for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 14:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5C527E060;
+	Tue, 19 Aug 2025 14:46:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755612758; cv=none; b=OSqo3AB9N0Ngr2HNM5UqMeSTLePXTkcwYELTXnPcq94AGxGx7EoEacuWJLqoXWQbrZFrPI9dRbTrX5NZ0pdwPZ2j0Z1KxGE4+mvmBDQAJuxlw6WSaxnhXKHF4Kc6vvpP4PHEKqybYCdQahU9Ms3mssaBqpH4e0JztG2lP9CvYz4=
+	t=1755614808; cv=none; b=GYMgVi0Ru4zVtz9ehbhEDwJRU1nrE1RVAnfTpwfgeDpjnvN1Yvo/0t271uzQCWeNQJKSmeKU5GxS1IY7rsEaQzMmUNPNhPmC67JNGf1CuSMC1AIrteNg0WT93mZ9EIxfpP5z2aQ6n1GABmmDyK+bUaSDUgITdQalXWrLzjGGMkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755612758; c=relaxed/simple;
-	bh=gt4mRYfjODV9zhqfPjnfdU89Lq3jwQVRdixAwLEWLSw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HA6HH+4oy801cV49DlLMi09vHt6TjiOHhG2mTsDOa68fmfyK9SWX6YvNsYAP6pKfxAgCgsrK+iA+SV1hy8hCXfu0h8FDAID112VI52tWra4iWttE4PTBBboh1/dbQ6XwyjAAbCjnoFIiP8KhtP7FfGLVb9CyWBdrivUXzN3Hmyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=TFfy3k/r; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7e87036b8aeso604151085a.0
-        for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 07:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1755612756; x=1756217556; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bDLwUY8c5UikKYG43v+aAUoS5K12CXkZu1S6tpWU6eg=;
-        b=TFfy3k/rnhuwPkiNn4niFNUXwgmnpl7DS6gFMh18k8UWlbgbmf52NdHiFYbB1xjydb
-         wCJ8p3YuHFEkvLlTWoju5a+eHqH9DGz3Hbiif4xV9o9NRpsNjOArzd4M9YvD8VP75ZJX
-         pkDOzeFkrTfwpYv+dwmZ45w6j0PVnOoFVlUotxpoU5EiXMIQkDlxBuFLS/CODJVeQqVl
-         k2B0iiPHVSDMd355ILgBmMiJ2OxKEf95gtQPrCvxudYLMzuAgQiqJgejHHcARvVrKaGA
-         TBtvv0JrFfzEQD9NazxIe/YBHGEyTcHnvSc2Nw8HDkbzcJ2GJdX/JDfZf0O4a5rGMrxI
-         pooA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755612756; x=1756217556;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bDLwUY8c5UikKYG43v+aAUoS5K12CXkZu1S6tpWU6eg=;
-        b=mpnLqW/Lt6uLSXiUtcq0ljLWKkbxM0RI4pAQqooEVvnWAapl+/OuvvySt9uWs+M2iV
-         6JpQPSICTseGdFulQGqGK5ws9BMdDQba866MMkKfdP40WelqM5GyfZvksEDWWCYFEOSK
-         HaPekNo0Ne9vWDBcd6G80lR1Z0J7+tv1MtMg6tgAZjmKbKUK4JKVaQXShSzTa6sEOzH3
-         54SKsLo3hyxvjRlu6QTW8p2OkOANpaj4HOn1R9I8SO2fNf/VoLMKKbk1VVmx1tlmTKRz
-         xvEH6NreA1EYUEND3oms2ERyVJ3ltNrc9Wg4TEIaMl8XVslVmkamGnFUPVrXwYyXKfky
-         r9BQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUubW/c5QlLJsTrto2kd9eLlWBoW13DQEIKUb/0UQvPNzC6bBxodlpcqvG1bXynRT0srUYZd6blXjk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwERN2lgfsxYvBgosc7DOwKIxtnxECRCLx3pLO/JUhp7p6yY/oV
-	MXZ0NNWsSLIk2g6ccPAuJijLWrJ8KM8YcHPaqaPtE9YRKcRg7Ni/Wm/2HPXCSDZT3g==
-X-Gm-Gg: ASbGncu/Wa7qoM71Ea/5ILh/b+w9gZ6rQ+PHCyUQwUCUEjcZ1o1/YpT7QmZJhbKtUkK
-	40olvefZ4niB8Fqfvc/lQFCn9gG7EVBZpe3Pb05A2hUg77lt0YFVTO0x1LfNEPnNb1fTDAaiaDH
-	Ri6o9kgQ8F473YEs7ht+pfowRPa9FlTLgxbcPExO8+QcirqzESsAxElfg24I2GuoV+O88zCDn59
-	HumJP4+BzVjuuUyRipmWAB8iqADdP1MnZzhSS8E46IUtq3AfHzDzbdb6uOhw8cbVIt1ZbCdnwW5
-	CrqvKiiNOph3tYR89/ltHfTK+61/RL4cFqGaHYmsxcXQ0m2vljW6GN8A7Y/XowSFELTVJVPVO/p
-	0JzlFRofZvrltB1roECAPRzYOrcM=
-X-Google-Smtp-Source: AGHT+IHQg04DWf8DLLAvL7X03CUOIZTn7DoQBqcIlAoSiqB7A22l6EHFGlPS13+38MuE7eItCA2s6w==
-X-Received: by 2002:a05:620a:1a1f:b0:7e9:f17f:65b8 with SMTP id af79cd13be357-7e9f3361b7amr352563585a.39.1755612755346;
-        Tue, 19 Aug 2025 07:12:35 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::fa48])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e87e066da8sm771292885a.25.2025.08.19.07.12.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 07:12:34 -0700 (PDT)
-Date: Tue, 19 Aug 2025 10:12:31 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Yunseong Kim <ysk@kzalloc.com>, linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org,
-	Andrey Konovalov <andreyknvl@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	syzkaller@googlegroups.com
-Subject: Re: [BUG] usbip: vhci: Sleeping function called from invalid context
- in vhci_urb_enqueue on PREEMPT_RT
-Message-ID: <49ee1b8a-d47a-42df-aa64-d0d62798c45b@rowland.harvard.edu>
-References: <c6c17f0d-b71d-4a44-bcef-2b65e4d634f7@kzalloc.com>
- <f6cdf21a-642f-458c-85c1-0c2e1526f539@rowland.harvard.edu>
- <28544110-3021-43da-b32e-9785c81a42c1@kzalloc.com>
- <1088432b-b433-4bab-a927-69e55d9eb433@rowland.harvard.edu>
- <2bf33071-e05e-4b89-b149-30b90888606f@rowland.harvard.edu>
- <20250819110457.I46wiKTe@linutronix.de>
+	s=arc-20240116; t=1755614808; c=relaxed/simple;
+	bh=lIQwI5HsEj/MNS6ooAEjHaJqIuOIhzaddWDiwenv7EA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Riz1tnXmYWYZYDmmcPeD0/OjzeVOKEkZaD0qUZPyJ0EU2aN2Clsz+kRDKlvHiV6O+0FJqoZ9q3AacZPOusAweRX1UdTVeQcQs3N/wa/JOqXRLORaJdW92GLrdohemDHMW6mG5N9M0Hg17y5a8aOWyW3iRVCn6+6GdS5hjAKHWS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Xvn2E8EJ; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D0DE31F47A;
+	Tue, 19 Aug 2025 14:46:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1755614801;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+Nc/LQSMQfGgp1YRf3tUnRSaCb+wuSL3TiqDWsh2u7Q=;
+	b=Xvn2E8EJKnK2mFkg85Mx73CYet081ujXFBzOiakOaRo2V2LGzVAvgvmw2dyNP6RODq8dzG
+	ER8M0Hk40YfSelzHZBRU9PK/jvELYGwnT8ZtQnSuZXIlN+qK2b3DhAB0gw/cNq1x7+zhLI
+	4oYIcL3wTQOxxNaIVXd2zOnyQCGwKODvImC2rdRuNXTcc9QJl0pbZvosjV3NLOg96UAONK
+	NqPqI9ynkKqn/sFG3t4VSQF0cmy3hJF8BYkmMiTkleLZG6f/A1KRKhp5d529/OwuUJlGv5
+	LxiedjIRiRYDouo1J7nL/jGRLhgKtHu7Z8+B5uyPwqFqORjgp+iRh3hX+Wnc2Q==
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+ Xichao Zhao <zhao.xichao@vivo.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Xichao Zhao <zhao.xichao@vivo.com>
+Subject: Re: [PATCH] usb: typec: mux: Remove the use of dev_err_probe()
+Date: Tue, 19 Aug 2025 16:46:39 +0200
+Message-ID: <6186026.lOV4Wx5bFT@fw-rgant>
+In-Reply-To: <20250819112451.587817-1-zhao.xichao@vivo.com>
+References: <20250819112451.587817-1-zhao.xichao@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250819110457.I46wiKTe@linutronix.de>
+Content-Type: multipart/signed; boundary="nextPart5034698.31r3eYUQgx";
+ micalg="pgp-sha512"; protocol="application/pgp-signature"
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduheehjeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhggtgesghdtreertddtjeenucfhrhhomheptfhomhgrihhnucfirghnthhoihhsuceorhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeikeekffdvuefgkeejgeefhfdvteeuhfdtleeiudehieeludelvdetleeggfffffenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghlohepfhifqdhrghgrnhhtrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehhvghikhhkihdrkhhrohhgvghruhhssehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepiihhrghordigihgthhgrohesvhhivhhordgtohhmpdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhop
+ ehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: romain.gantois@bootlin.com
 
-On Tue, Aug 19, 2025 at 01:04:57PM +0200, Sebastian Andrzej Siewior wrote:
-> On 2025-08-17 10:27:11 [-0400], Alan Stern wrote:
-> > On Sat, Aug 16, 2025 at 10:16:34AM -0400, Alan Stern wrote:
-> > > So it looks like we should be using a different function instead of 
-> > > local_irq_disable().  We need something which in a non-RT build will 
-> > > disable interrupts on the local CPU, but in an RT build will merely 
-> > > disable preemption.  (In fact, every occurrence of local_irq_disable() 
-> > > in the USB subsystem probably should be changed in this way.)
-> > 
-> > Or maybe what we need is something that in a non-RT build will disable 
-> > local interrupts and in an RT build will do nothing.  (I suspect that RT 
-> > kernels won't like it if we call spin_lock() while preemption is 
-> > disabled.)
+--nextPart5034698.31r3eYUQgx
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Romain Gantois <romain.gantois@bootlin.com>
+Date: Tue, 19 Aug 2025 16:46:39 +0200
+Message-ID: <6186026.lOV4Wx5bFT@fw-rgant>
+In-Reply-To: <20250819112451.587817-1-zhao.xichao@vivo.com>
+References: <20250819112451.587817-1-zhao.xichao@vivo.com>
+MIME-Version: 1.0
+
+On Tuesday, 19 August 2025 13:24:51 CEST Xichao Zhao wrote:
+> The dev_err_probe() doesn't do anything when error is '-ENOMEM'.
+> Therefore, remove the useless call to dev_err_probe(), and just
+> return the value instead.
 > 
-> This is the local_irq_disable() in vhci_urb_enqueue() before
-> usb_hcd_giveback_urb() is invoked. It was added in 9e8586827a706
-> ("usbip: vhci_hcd: fix calling usb_hcd_giveback_urb() with irqs
-> enabled").
-> The warning that fixed back then was 
-> |         if (WARN_ON(in_task() && kcov_mode_enabled(mode))) {
-> which was kernel/kcov.c:834 as of v5.9-rc8 (as of report the mentioned
-> in the commit).
-> local_irq_disable() does not change the preemption counter so I am a bit
-> puzzled why this did shut the warning.
+> Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
+> ---
+>  drivers/usb/typec/mux/tusb1046.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > > Is there such a function?
+> diff --git a/drivers/usb/typec/mux/tusb1046.c
+> b/drivers/usb/typec/mux/tusb1046.c index b4f45c217b59..3c1a4551c2fb 100644
+> --- a/drivers/usb/typec/mux/tusb1046.c
+> +++ b/drivers/usb/typec/mux/tusb1046.c
+> @@ -129,7 +129,7 @@ static int tusb1046_i2c_probe(struct i2c_client *client)
 > 
-> We could use some API that accidentally does what you ask for. There
-> would be local_lock_t where local_lock_irq() does that.
-> What about moving the completion callback to softirq by setting HCD_BH?
+>  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+> -		return dev_err_probe(dev, -ENOMEM, "failed to allocate driver 
+data\n");
+> +		return -ENOMEM;
+> 
+>  	priv->client = client;
 
-You're missing the point.
+Reviewed-by: Romain Gantois <romain.gantois@bootlin.com>
 
-There are several places in the USB stack that disable local interrupts.  
-The idea was that -- on a non-RT system, which was all we had at the 
-time -- spin_lock_irqsave() is logically equivalent to a combination of 
-local_irq_save() and spin_lock().  Similarly, spin_lock_irq() is 
-logically equivalent to local_irq_disable() plus spin_lock().
 
-So code was written which, for various reasons, used local_irq_save() 
-(or local_irq_disable()) and spin_lock() instead of spin_lock_irqsave() 
-(or spin_lock_irq()).  But now we see that in RT builds, this 
-equivalency is not valid.  Instead, spin_lock_irqsave(flags) is 
-logically equivalent to "flags = 0" plus spin_lock() (and 
-spin_lock_irq() is logically equivalent to a nop plus spin_lock()).  At 
-least, that's how the material quoted earlier by Yunseong defines it.
 
-Therefore, throughout the USB stack, we should replace calls to 
-local_irq_save() and local_irq_disable() with functions that behave like 
-the original in non-RT builds but do nothing in RT builds.  We shouldn't 
-just worry about this one spot.
+--nextPart5034698.31r3eYUQgx
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
-I would expect that RT already defines functions which do this, but I 
-don't know their names.
+-----BEGIN PGP SIGNATURE-----
 
-Alan Stern
+iQIzBAABCgAdFiEEIcCsAScRrtr7W0x0KCYAIARzeA4FAmikjk8ACgkQKCYAIARz
+eA41AQ//QR8aTYlAaJQzQ4KHzYrI7WpumkxyF8uxkVvPMiCJHCsbpySePEn/sIGe
+tY42RUyYkQ2P5+eWqjJwy5qwFTl3neTxjFzWoJqEwpUBOCzSkKsHfEDoT5MWW7wc
+NUYKbxi73nvVawpfi5N762GxmWxBLgHxmmF0LnBVnldC16xcWCKB5F+PPOzgujk/
+peymHaShLBh+p1R9vXP2a19+wXyoP1DxNb05pfmVUAKTbu4cjExUOpXRdc0Jwfd7
+ZRXDJXyIN8Ahl9UI3alyia0nZkbUvpBpyWC0jpvsVDA7NljmUlGRfmtpQSwgFoR6
+e7ojvmRDU7oJuV002s8T9DSTdMA6HPZofKXDr4jRx/MQeV3p7tfECI5PTqxSuwfC
+kaJXU6b7H20GyIy5GV0J+WZb1cCMZrIVy6RJFUNWSAAb7G6EiIx1yz0H/dYKRAUJ
+Ul59se2GbwBIEauOiuzrHDBzJzUCRSHAevz6jsaiJmMTJQ7BGd01HRO007oHSq5y
+h7bX6ZBF5PHjW6vUWLS120UO4U6O9PAnNr5wF6MASMTU7SZrR0Z92MIblSBg7SyC
+aGd7X74WRQHhy21ufnO2/8xYOi9MqwDb/ig01FKDfAG7iiBUlk9yhSgdP42luczD
+bYWlXT02PR6u2TPeOzSbideSIy2zbdIOLDOVrYP5EkuIGRWUtq8=
+=GBSg
+-----END PGP SIGNATURE-----
+
+--nextPart5034698.31r3eYUQgx--
+
+
+
 
