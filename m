@@ -1,283 +1,178 @@
-Return-Path: <linux-usb+bounces-27032-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27034-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DA64B2C826
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 17:13:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0F7CB2CE1D
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 22:35:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACFCD6235E2
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 15:10:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58E064E3C62
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 20:35:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE086280033;
-	Tue, 19 Aug 2025 15:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED432342CAE;
+	Tue, 19 Aug 2025 20:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="kPYlxDI1"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="2t0nH+rw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010019.outbound.protection.outlook.com [52.101.84.19])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D748527E074;
-	Tue, 19 Aug 2025 15:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755616249; cv=fail; b=Pz1WFLZHCWUKe66GeTgUqlAfi+li3sUqJo3PsIwrx2u8X3GRwRDSeGb8Z2U8N9yV/1+yG2PWSnGWbM/SZYfizuhQego25utT6QPD1K5sQ/VxrqO7TXcIHjqCVfnrUyPphtlKJ0S5VyB0+k2114rfYVQR43TIJeDHU3mENmZYT3A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755616249; c=relaxed/simple;
-	bh=vDHbzgTeY7ir11uxiACvRgdesrOhksBXjHqrAhapGGQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=NGc80ZHjlwKp7ujdjM/mbspu6dhT0H9otQ+HB55IYNpWNNAkLGCqNvr+U9sNW6xh92RbffpX5+9P2+2J/M+Nx9QBTbtn7mcw1P7QdmpYQK7Q9jrkk+5/xG2NQdvrrRArP2uiJCYHY0y/kdH6IopBWcNkSFMckR2LVmich1VT/x0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=kPYlxDI1; arc=fail smtp.client-ip=52.101.84.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LKgMAe9Y25sojeNDUqHmtJ7rIQX4G8dusI31ZnR2dEcVvXsTg/KkoAR0Tgvr6dBSxwEEymjAuqzd/0XCUDIdmcp2hW1VJG9BEXPii0X93L/0oMY2sxgqLiUW+EzGuNtwyg2gkSRhy+buKSfVGJxw7OnPtrMzTHc147uHpOLmADswzq5sfw2KD1QUsTkQD9Izv/0fk7WTA65HcQya2HCp8wi9OrP4rti3/qeLBZ8obRbbKX+q4RgwbvSyGCrGnC0s94bFgCGAA9TXMBp7HSp/83HUE4H7TzEHKSjJnnxyD03TCYPDyp3L/eLcqTYoc3ZU2la+A0KTAL9PBajxepPv5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8DWzGELDm7HvUm9Ig0Kdx7q95mGb0NTyT4FofnD0iLI=;
- b=XXhUF1PEW1D9z4Se0GrCHnAG/NKJ+Fr8hSOAHQRxbXlDqg4+O7pOa2PD0W4JWI1yNgP1Uvt+1jZpm0nps8xeNV1tINILdNkNdk4rDQnFRuGBIqdv1fUfeaOuoqM0fGB427de1zzCM309MJzv1HZDTRDdAVLTsn8gaaAxgY/4x9LZMAQc5f9clOJ7Sg87jqXKkKU7lulex7mGAh/0vabcRfcpdsqwIwNrfNPWuBF8wdI5NzaAOVskc4agG27whptJBNbS7D2tgxm9AnNMya0Qkv7zbmi9lFvScwo7zrMywZEetAHZFQARNMlwVdsSNtKhoY2fo62yRlKhFRJ+JFrnWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8DWzGELDm7HvUm9Ig0Kdx7q95mGb0NTyT4FofnD0iLI=;
- b=kPYlxDI1xNEhQlHcyGCebZeQZ5WX82e4ZxmP8HPVIDS2LxPqtFo3NoksEsFxTt42iXQU8ERhYJ+5NUAcPpfEjbB+Mfe2KY6OKOkrlfaUJ5I1kHwu+KCsWayONT1UBFCIUID0kSF6bQ0mk9pjxFPfNO6XXcshm6NBN9EQVuk5MgngXmpQEnS8tkYlJ4xLuHucAWz/Ioa7ZZppHBDUd8loT66F+/3c8ZXkcqpQZbuULXWngMNpoVMNFJph/D5ygZo/OvDIvDYo9FH7X5UnJ17XNa3kr2ZQrjaIgjOW94T/DHt+qGhzVZcAU0ARyVrEt51VMD4TTnrCaspux1O/F0k9MQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by AM0PR04MB7154.eurprd04.prod.outlook.com (2603:10a6:208:19f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.13; Tue, 19 Aug
- 2025 15:10:42 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%7]) with mapi id 15.20.9052.011; Tue, 19 Aug 2025
- 15:10:40 +0000
-Date: Wed, 20 Aug 2025 00:21:33 +0800
-From: Peng Fan <peng.fan@oss.nxp.com>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Peng Fan <peng.fan@nxp.com>, jun.li@nxp.com,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Peter Chen <peter.chen@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, imx@lists.linux.dev,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/3] usb: chipidea: ci_hdrc_imx: Set out of band
- wakeup for i.MX95
-Message-ID: <20250819162133.GA18601@nxa18884-linux.ap.freescale.net>
-References: <20250801-pm-v2-0-97c8fb2a433c@nxp.com>
- <20250801-pm-v2-2-97c8fb2a433c@nxp.com>
- <zdzpddjjdj2ezkkfh5jjnnjvkvu4gb6vqmhkdlnnc2ioamvcuk@ftmezbyxrhfb>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <zdzpddjjdj2ezkkfh5jjnnjvkvu4gb6vqmhkdlnnc2ioamvcuk@ftmezbyxrhfb>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: SG2P153CA0016.APCP153.PROD.OUTLOOK.COM (2603:1096::26) To
- PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832E233EB02;
+	Tue, 19 Aug 2025 20:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755635617; cv=none; b=KmbvrB8oQCLQJ30Zx4mpDSj2aYILb/Sl17YIxb2OlOpn2ortmN0he8V3QWqFbkymAcTUw9M8vdUzBB15wGQvTpP9l2mCw+rqqEE9KXbz4yDFUriJvM6+khxfW8omcXhgTa0T6YRhyW5fCZw6IlPngCTWdYBel6FQMtYo6oOx1T4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755635617; c=relaxed/simple;
+	bh=u0jHy+96xQQc8Rsq14s4xOxOiOUOUoyteYoE2V6u/cs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=keESg/ZanVvBfLjES84GrfeI+YIOghKKARACJ7eGrtK3czKpvIaYtPXujFJMTCXzOpwxpcbs4UTK1qLS0mQYf38aBjhur/pt+GuGv1rKIUp6fCX+HWuB55veivIBgWQb0EZb93Shxv6qsywn7SNCygIag0gKxs7/GV7p1iFXnLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=2t0nH+rw; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=1/eUspNCUXyY5YlWldBkBwRS3SFcnhUn4WjHQtP/9wc=; b=2t0nH+rw7E8V78kWenP4au6K+4
+	exEwfVKJi8b0tPVduqB/o8rbtRCeUrCKje/ykiFOZopI3RhEtqZdqmYdm7DBGNefeRThMQJBt195Y
+	ADh1TgtWB7gNOx0iXJr67Cd9r/Ru148qKSOr2Ur3tE2CNtKuPFpxtpeWEqTlzh5VC3bft21T59xs4
+	3W/lkEzBbkczajoZIHzdhxFvbTaNAMXk1aNkAmSOAzyml43d0lDOd5EeHWpkyPExCBw03X66X2jmo
+	qIcEJJZbRla6DLBwkNeNn7lmyaF6Spxrn3gymHy0JHTIWpmhFX7vDrM8+SQdSS+IwK0GWYxC6IZ1E
+	5V3lht2A==;
+Date: Tue, 19 Aug 2025 22:31:57 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Jihed Chaibi <jihed.chaibi.dev@gmail.com>, linux-kernel@vger.kernel.org,
+ peter.ujfalusi@gmail.com, dmitry.torokhov@gmail.com, robh@kernel.org,
+ krzk+dt@kernel.org, lgirdwood@gmail.com, tiwai@suse.com,
+ conor+dt@kernel.org, lee@kernel.org, ukleinek@kernel.org,
+ broonie@kernel.org, gregkh@linuxfoundation.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, aaro.koskinen@iki.fi, khilman@baylibre.com,
+ rogerq@kernel.org, tony@atomide.com, linux-gpio@vger.kernel.org,
+ linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-omap@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH v3 1/6] dt-bindings: mfd: twl: Add missing sub-nodes for
+ TWL4030 & TWL603x
+Message-ID: <20250819223157.0b271c74@akair>
+In-Reply-To: <20250819-humongous-muscular-curassow-5accd5@kuoka>
+References: <20250816021523.167049-1-jihed.chaibi.dev@gmail.com>
+	<20250816021523.167049-2-jihed.chaibi.dev@gmail.com>
+	<20250819-humongous-muscular-curassow-5accd5@kuoka>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|AM0PR04MB7154:EE_
-X-MS-Office365-Filtering-Correlation-Id: c542f1a8-d7ab-408b-0901-08dddf328f56
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|52116014|7416014|376014|19092799006|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?rNZGVwpy5Mrx5VofjAQOHRzs31kJmoCwyq6RRHt8120NgbqxWNJpVb0awysf?=
- =?us-ascii?Q?BTgFLxD048Dx0aqnM6kUO2kPY53EcMJAYyHhW1/4/4JTd0GPr+eBS3IxW/qX?=
- =?us-ascii?Q?raQsAgq+eKBJWdZCc2rYvwLIHoxmy9HzOVV0c30nD4FSGukbt0z7cALB6Q/G?=
- =?us-ascii?Q?S/mGU4FeSbBaKWtjbnw63cKKKFiMQdeSjdSpIzEI/TdpI11uzqp498zGL3DM?=
- =?us-ascii?Q?SaZSs1+w/2SLm2Chb1ZQFPnqMaL8C62b99//GDkdM0IX62XT21kUUaqNqE21?=
- =?us-ascii?Q?2ZAtc62Si2ZuLt9iwZHoF188ym0jLuerosrT589GNx9wjzmgPHze3+S5p10/?=
- =?us-ascii?Q?wBdEyGRZEe+Xl7+97JWomxfr6GGo+k+xVZzZa1yOzHitKJAVy/+npb4KM6YV?=
- =?us-ascii?Q?xKQ0VNxEgf8miYh28QH++GSjBE6dkneM0KDu1NMN1l8uOUZ1y784cFV8sQJy?=
- =?us-ascii?Q?Q1q+SS2gr+IaUcvNTOErb3vSBn49WImSZ3qzoVqAZfWod67Ue9CSK8fdZpbW?=
- =?us-ascii?Q?ksy7nPIDE4MpYN5PpfyQE8s6JMw3UlT08mRZA+AjFhv5slyp+g94dQkKicjE?=
- =?us-ascii?Q?PMNf/y/LiJmIz/e6P6/MqAFHDhFLC6BJhBAeVRyQWZZV6imNK/9AojnaJA2j?=
- =?us-ascii?Q?HiSpSX7PQbiHsmE6fcmb2hEw784NJ97NUV5yLK3htW5k0RmzWnoUIr5i5bEh?=
- =?us-ascii?Q?id55sVvGmz1e1L7NmZ1IvNXkwk3RhpYCgsyi1pBrDPvrO/cQKwl/xy9jpXtP?=
- =?us-ascii?Q?xlvofCkeXuNnZ1zezUEWQriIvICBPhmIHb2EGgCP9gCSFS+1EtoFyu87+280?=
- =?us-ascii?Q?eWElPv9aOS1XBPVN5w69rmrDINWrp2aZSEKNFW3mIz3g40rgHv0PyQKRWYdT?=
- =?us-ascii?Q?brNcFhVctul9db/t2KDeMhfLZi4HyRqVWLvTzfGNf9Ckhl2DuUo3RwsMWhGn?=
- =?us-ascii?Q?TYMyOJNMnZKZkIt7T7n/Pz2UqU3GHLeX1lCmAMVeVvAFU6fkPiTOMZB5j2Mc?=
- =?us-ascii?Q?OlLCL49+dHzR3mvzmYRqmBnHdnTyxlc3/oKyytd0VsEilM2b/s4ygD3kOx6S?=
- =?us-ascii?Q?SNoMNHBJ0XOi8RAEboJPVrBXcER/P56P9Cw1iVbH7hEXxn9mMvTaQudFHehh?=
- =?us-ascii?Q?e9/5I2AzNnQ0It/B4aaGsAF0ueQmmWnwP2kZvxcr6yNsxcp6IOn5+D8fbyZX?=
- =?us-ascii?Q?b2Af64MhNs+R9IORO5NpGtrDLxwtYoM22x8C/KVeFGrud8jtueijH76nq0im?=
- =?us-ascii?Q?bDwSmiN/K/SLOUJz8N03+BIxyyVMvS8N4dVrIxdvBZLNTUz3dr+X4aVRLZHo?=
- =?us-ascii?Q?PUCx3Y8liXOWlNKaHJWkZy2PTKfHaCulU//DInvX7AhtaCBwQ98UycCNiHMz?=
- =?us-ascii?Q?MHeBEVPOUFPM7M5Lh3VFYwMFZ61NgPZTzsrnMmtHaXumU5HqE4Jtfd5ne+rz?=
- =?us-ascii?Q?ZxAs3IRlIVQ55gkbpPa17HGGn27aZfWmB7sl0tZVur1cdd3Hdg3bgA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(7416014)(376014)(19092799006)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?l9NGuaC0/rueOmdk/dQasoJGq4tsGP3drofFAdGo6A7wgJboRcEjdfMwoDZU?=
- =?us-ascii?Q?0ZLjwKxvFQTtJGXEp/1gzs4H06zFIiutXYZyTkWYbefyRNUkTyWYsEJa7hlV?=
- =?us-ascii?Q?gLo1x5nZ+H8ayfNMR4ClqEz1XvildtJaTrosmRdX3HU4THBMFVFPMYtFGSCs?=
- =?us-ascii?Q?/HTFsAhlhlRlMoh0viHoWbf8cstw7pyujXAGF0oxHqsILIHgjo1vAjyGV71e?=
- =?us-ascii?Q?B4VJ78nRrVNsDbxL1H7nNbKZ81TJd+YT5ZE2ppBt6YLrNjGG42nUdd0nnOoD?=
- =?us-ascii?Q?tRf4hvVaucdz+FAEkXVefimftzU92ly04c1Ezdr1crehXUbB2+xMhImzNTwI?=
- =?us-ascii?Q?6btZwTC/6RSY1pnmRlbkbyzLzcIeT0Bl6gyXbr69RM9oaAm8d2FTyAMVCoEb?=
- =?us-ascii?Q?KbwppApaMT7g6gmHduEuCWOFLiNBx277EV2TKaWOWEan1gyQe063CEMTHX0R?=
- =?us-ascii?Q?E3i/DnaeALXwrgskTsIfM3griShz0gnEs1S0Qx555XqF0jbzroxLtcbP6yg2?=
- =?us-ascii?Q?/9Xn/r4hEUykmnPQwNjvz/xgrCwcgn5+yKaSmF8uglzXkPMJEIPlk2kS4MYf?=
- =?us-ascii?Q?m/ihEGTwjQMK7EqsJjdxeYWgCj8z2oWYhxw9RjzZniJpPJ/yQYZw6LUGMngR?=
- =?us-ascii?Q?VHPLr2mb1/g5CGsjbFSn59eX9HyO3OO6ZzizHjIoG1bS0BrZghSQxzDolYXY?=
- =?us-ascii?Q?eTc8M7SBgJBsj2Q5JwftsuKEq7EHAnhXFF6xu1WTmGsIciDzNIZJXThYJtNH?=
- =?us-ascii?Q?kAF12upwWdLS8GDDHpAxDIECBJOEJXg/ek2pNktW6YHfv5DZBIaZbVXzCt7y?=
- =?us-ascii?Q?vXFs9/+vCfS5L9X5zU0A4lvHry4fwXShBth8kiog8DoALO6eXXAp3kYbOLiT?=
- =?us-ascii?Q?YuZMz+qZAfD74kkf2gOlWiJ6w9ikBz/fyOka6kqTjiJHXnYyu9cJ+guKusPe?=
- =?us-ascii?Q?lpBpOQqlHsQFS2J1/qR9aIsWMDjPmgVfmLlpvZH9pKz67PgBXmWcmxcFM3a3?=
- =?us-ascii?Q?IPJLKW9SucZUXLWo5IW8jB+IOvXTm6jwiw0CYEw7O0yhidzt0h5vOwksX9vq?=
- =?us-ascii?Q?9nCocO1noSc3j5pMWfqBZMQVNsagqFHhxNNLeXt1ko4CTjjLGQAcRo6owrA8?=
- =?us-ascii?Q?pc2V1zMbpufm1S+ML2ToRbPRabXw8BNxAT6oKqKpzmTUbhWTSYgkexEghUzt?=
- =?us-ascii?Q?jd/ubejRiWMnMUa7KHK+eLn2dHglt16qhse8e94IbkNMxZp+QOqG0nmzhvCm?=
- =?us-ascii?Q?CyFymyNPJCxqzKwC8RSxKz0maqrexXyUFDqhWc0WuheC0ZA6jwIk8dg59O/x?=
- =?us-ascii?Q?GVy4wiVFU0O3ylxZzWQwU7vpsXdEr7UxyUAbjKt8rRBJ6Cr7JKpucQa2BcGD?=
- =?us-ascii?Q?iJt3jQPkcSpCMOVcjzChq6n6ZJ8E+e/rhTkvFhhHsccc++UTlQvm46B4DmF2?=
- =?us-ascii?Q?OaqDcJBnW+QYn4VzRwaKjKxiSD2exqZyGxdLA6cHdTB1Abyp7LIQPcoxLnld?=
- =?us-ascii?Q?GIxXjL7LT+Gm6BN5/KXq6dLlr1efFt8MUFaW4G/j1iSbAy8iYWYjfQPlg+Oh?=
- =?us-ascii?Q?50fpOPRoh1FlE3kjQHTmP8Br6wJmteimHuDAxV+M?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c542f1a8-d7ab-408b-0901-08dddf328f56
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2025 15:10:40.6623
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bBmMAzu5hthG3ETeUzuTLcDVanhUgoGLb2MfKYx1cwIVUflhxW2lNIMrfgr63Vw2Ay6kYCvYqKBfvkYIUWND3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7154
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 06, 2025 at 05:28:08PM +0800, Xu Yang wrote:
->Hi Peng,
->
->On Fri, Aug 01, 2025 at 12:34:23PM +0800, Peng Fan wrote:
->> i.MX95 USB2 inside HSIOMIX could still wakeup Linux, even if HSIOMIX
->> power domain(Digital logic) is off. There is still always on logic
->> have the wakeup capability which is out band wakeup capbility.
->> 
->> So use device_set_out_band_wakeup for i.MX95 to make sure usb2 could
->> wakeup system even if HSIOMIX power domain is in off state.
->> 
->> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->> ---
->>  drivers/usb/chipidea/ci_hdrc_imx.c | 8 ++++++++
->>  include/linux/usb/chipidea.h       | 1 +
->>  2 files changed, 9 insertions(+)
->> 
->> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
->> index e1ec9b38f5b9ba0568101b51fbf16b99461b6ee2..7a3360d8a0fd065394393de829108a12c27c85b9 100644
->> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
->> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
->> @@ -79,6 +79,10 @@ static const struct ci_hdrc_imx_platform_flag imx8ulp_usb_data = {
->>  		CI_HDRC_HAS_PORTSC_PEC_MISSED,
->>  };
->>  
->> +static const struct ci_hdrc_imx_platform_flag imx95_usb_data = {
->> +	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM | CI_HDRC_OUT_BAND_WAKEUP,
->> +};
->> +
->>  static const struct ci_hdrc_imx_platform_flag s32g_usb_data = {
->>  	.flags = CI_HDRC_DISABLE_HOST_STREAMING,
->>  };
->> @@ -94,6 +98,7 @@ static const struct of_device_id ci_hdrc_imx_dt_ids[] = {
->>  	{ .compatible = "fsl,imx7d-usb", .data = &imx7d_usb_data},
->>  	{ .compatible = "fsl,imx7ulp-usb", .data = &imx7ulp_usb_data},
->>  	{ .compatible = "fsl,imx8ulp-usb", .data = &imx8ulp_usb_data},
->> +	{ .compatible = "fsl,imx95-usb", .data = &imx95_usb_data},
->>  	{ .compatible = "nxp,s32g2-usb", .data = &s32g_usb_data},
->>  	{ /* sentinel */ }
->>  };
->> @@ -569,6 +574,9 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
->>  
->>  	device_set_wakeup_capable(dev, true);
->>  
->> +	if (pdata.flags & CI_HDRC_OUT_BAND_WAKEUP)
->> +		device_set_out_band_wakeup(dev, true);
->> +
->
->In current design, ci_hdrc_imx_probe() will create another platform
->device B which will be a child of current device A. Furthermore, device
->A and device B will attached to a same power domain. In this case, some
->conflict setting may happen. For example, if the user wants to enable
->wakeup for this USB port, they may echo "enabled" to wakeup file for
->both device A and device B as before. As a result, device A is out
->band wakeup so it doesn't depend on power domain on, but device B has
->also enabled wakeup so the power domain will keep on finally. Actually,
->the power domain needs to be off for imx95.
->
->So I think only letting the parent device A itself attach to power domain
->should be enough. If it's the right way, then below change needs to be
->included to avoid potential misbehavior.
+Am Tue, 19 Aug 2025 10:13:39 +0200
+schrieb Krzysztof Kozlowski <krzk@kernel.org>:
 
-Thanks for looking into this.
-Just detaching the power domain may break others. I think the better one
-should be:
+> On Sat, Aug 16, 2025 at 04:15:18AM +0200, Jihed Chaibi wrote:
+> > Update the TI TWL family Device Tree binding to include additional
+> > subnodes for TWL4030, TWL6030, and TWL6032 devices.
+> > 
+> > The simple power and PWM bindings (ti,twl4030-power, ti,twl-pwm, and
+> > ti,twl-pwmled) are now defined directly within this binding.
+> > 
+> > Other child node definitions (audio, gpio, keypad, usb, etc.) are also
+> > added to the schema. These additions fix 'unevaluated properties'
+> > errors found during dtbs_check for boards like the omap3-beagle
+> > and improve the binding's overall completeness.
+> > 
+> > Signed-off-by: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+> > 
+> > ---
+> > Changes in v3:
+> >  - New patch to consolidate simple bindings (power, pwm) and add
+> >    definitions for all child nodes to fix dtbs_check validation
+> >    errors found in v2.
+> > ---
+> >  .../devicetree/bindings/mfd/ti,twl.yaml       | 191 ++++++++++++++++++
+> >  .../devicetree/bindings/mfd/twl4030-power.txt |  48 -----
+> >  .../devicetree/bindings/pwm/ti,twl-pwm.txt    |  17 --
+> >  .../devicetree/bindings/pwm/ti,twl-pwmled.txt |  17 --
+> >  4 files changed, 191 insertions(+), 82 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/mfd/twl4030-power.txt
+> >  delete mode 100644 Documentation/devicetree/bindings/pwm/ti,twl-pwm.txt
+> >  delete mode 100644 Documentation/devicetree/bindings/pwm/ti,twl-pwmled.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mfd/ti,twl.yaml b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+> > index f162ab60c..b0f1cb7b5 100644
+> > --- a/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+> > +++ b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+> > @@ -76,6 +76,98 @@ allOf:
+> >            properties:
+> >              compatible:
+> >                const: ti,twl4030-wdt
+> > +
+> > +        audio:
+> > +          type: object
+> > +          $ref: /schemas/sound/ti,twl4030-audio.yaml#
+> > +          unevaluatedProperties: false
+> > +
+> > +        keypad:
+> > +          type: object
+> > +          $ref: /schemas/input/ti,twl4030-keypad.yaml#
+> > +          unevaluatedProperties: false
+> > +
+> > +        pwm:
+> > +          type: object
+> > +          $ref: /schemas/pwm/pwm.yaml#
+> > +          unevaluatedProperties: false
+> > +          description: |
+> > +            TWL4030 series: PWMA and PWMB (connected to LEDA and LEDB terminals)
+> > +          properties:
+> > +            compatible:
+> > +              enum:
+> > +                - ti,twl4030-pwm
+> > +            '#pwm-cells':
+> > +              const: 2
+> > +          required:
+> > +            - compatible
+> > +            - '#pwm-cells'
+> > +
+> > +        pwmled:
+> > +          type: object
+> > +          $ref: /schemas/pwm/pwm.yaml#
+> > +          unevaluatedProperties: false
+> > +          description: |
+> > +            TWL4030 series: PWMA and PWMB (connected to LEDA and LEDB terminals)
+> > +          properties:
+> > +            compatible:
+> > +              enum:
+> > +                - ti,twl4030-pwmled
+> > +            '#pwm-cells':
+> > +              const: 2
+> > +          required:
+> > +            - compatible
+> > +            - '#pwm-cells'
+> > +
+> > +        'twl4030-usb':  
+> 
+> No need for quotes.
+> 
+> > +          type: object
+> > +          $ref: /schemas/usb/ti,twlxxxx-usb.yaml#  
+> 
+> Are you sure your patchset is bsiectable? Apply this patch and test. You
+> will see errors and you must fix these. Even after fixing you have
+> strict dependencies so your cover letter must explain these (or merging
+> constraints)...
+> 
+what are the rules here regarding bisectability? non-existing files
+in $ref are probably bad. Are then unveiled errors in dts also a
+problem? I would not expect too much fixing effort needed here. I have
+not run dtbs_check yet.
 
-if (device_get_out_band_wakeup(dev))
-	device_set_out_band_wakeup(&pdev->dev);
+I have expected this would all go via Lee's usual immutable branches. 
 
 Regards,
-Peng
->
->diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
->index 694b4a8e4e1d..c2ca81fe5e09 100644
->--- a/drivers/usb/chipidea/core.c
->+++ b/drivers/usb/chipidea/core.c
->@@ -915,6 +915,8 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
->        if (ret)
->                goto err;
->
->+       dev_pm_domain_detach(&pdev->dev, false);
-
-I think the 
-
->+
->        return pdev;
->
->Thanks,
->Xu Yang
->
->>  	return 0;
->>  
->>  disable_device:
->> diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
->> index e17ebeee24e3ecc4b1c2d153d9ea9b656b5a3d35..c6451191d2de68607a9380482701d11f949d0ff7 100644
->> --- a/include/linux/usb/chipidea.h
->> +++ b/include/linux/usb/chipidea.h
->> @@ -66,6 +66,7 @@ struct ci_hdrc_platform_data {
->>  #define CI_HDRC_HAS_PORTSC_PEC_MISSED	BIT(17)
->>  #define CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS	BIT(18)
->>  #define	CI_HDRC_HAS_SHORT_PKT_LIMIT	BIT(19)
->> +#define	CI_HDRC_OUT_BAND_WAKEUP		BIT(20)
->>  	enum usb_dr_mode	dr_mode;
->>  #define CI_HDRC_CONTROLLER_RESET_EVENT		0
->>  #define CI_HDRC_CONTROLLER_STOPPED_EVENT	1
->> 
->> -- 
->> 2.37.1
->> 
+Andreas
 
