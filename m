@@ -1,94 +1,144 @@
-Return-Path: <linux-usb+bounces-27020-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27019-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14503B2C1B8
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 13:50:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52D59B2C177
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 13:50:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D5A317762F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 11:48:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DD113A8236
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 11:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ABC7334701;
-	Tue, 19 Aug 2025 11:48:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D17932C323;
+	Tue, 19 Aug 2025 11:47:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X5aCQ/Kq"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="BwveoB+w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C04B32C31C;
-	Tue, 19 Aug 2025 11:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98331E4AB
+	for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 11:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755604103; cv=none; b=bABDp2UWyAniaE8Lq9wbI05zbd7jif0SYKOWVMep8Fmz0UZ0ceKjyUuTjzS04VY2QQ83OLqOqiakoyuX81gBZ4VYQqCbqPjBUzMW1KYoOukp6GzJd1JPN6HWjy//y3RCEGjhqcbg8kXrxGuOmlILPVDKQapM7ZqsyvU7pSq7c54=
+	t=1755604068; cv=none; b=tjzkuWBvtdQ/NlLe7xZ261FgZdtyyNLzyS96j5mG1Xhr0wJoGiwa/Sa5HdRpRXYpUmYLabOalnxAlL7iWD/LmscG6MSEnQqarAg5c38wghewjAO7hwbncKFztC6wpY6VVQ0ed7xxHkRYiu7DfLh+/VNKrEyiIkLQg9eGiEhbdpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755604103; c=relaxed/simple;
-	bh=kK494ULd0FaqUhSjJYz7AcYCn5SJUR6HSRFGqIrWw6k=;
+	s=arc-20240116; t=1755604068; c=relaxed/simple;
+	bh=a21opQrx6FtgjxLAH8msEDeK1LTD9NhoP7uXufEvrZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ungS9XRLAkIFuxBinXiLkMiaBo5wuq+FWIVdl4R37LnrGGIVnnqUegKrHegiCjkq4WHjNAcZxhqxx8UykCOVNGx2+4EMIhEfG7q8hzk6Zd+JvBsR7M3S+Q8n92S4uG1GqcLqb5skMuWISzaoHTwXgQXZdZ7/k8t/0YSZc73HOjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X5aCQ/Kq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA7CC4CEF1;
-	Tue, 19 Aug 2025 11:48:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755604103;
-	bh=kK494ULd0FaqUhSjJYz7AcYCn5SJUR6HSRFGqIrWw6k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X5aCQ/KqYRNrdXC8wx8LBSO/6BmDsylC64A39uv+l04MKM77Of6zuuRFMqnJ4jz1K
-	 QlIvn+Fz/+A7x+TRdqRFQTPklIQLQAXWZcJqQVuqGotceDheTuj3SkyyjznbVlQSq8
-	 7Z2AuiLooffkNLTStoKkVVnADcbQQB5WHISy1U04Srm/6hZfUvTPRbseAGTePd2zIn
-	 ZkeyZBNN0ON3E4xC/JXz5xLqKs9z/rZnyDM0JgIW9tX4GIkMQR9yXSej3wQyVJIo7B
-	 MI9jJD0aTOYZLG/nzGPtEJKSlEpElPFYMqrJtq+9j/RCoP8glBiGvW0QDCqf2dAhIV
-	 GJgXGjrR9wr0A==
-Date: Tue, 19 Aug 2025 19:31:08 +0800
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Richard Leitner <richard.leitner@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: usb251xb: make reg optional for
- no I2C ctrl use case
-Message-ID: <aKRgfFpF8thM3vjr@xhacker>
-References: <20250819002217.30249-1-jszhang@kernel.org>
- <20250819002217.30249-2-jszhang@kernel.org>
- <20250819-eminent-cobra-from-venus-d891b6@kuoka>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NCJztKYuvoG67z+Vq70vaHOeXUvomf6R9qmUjYjH1QgevUxFPN5LRTvZnmfQsV4G1GAnmKrFtNF5qC6JsbUdeD9lu8KO5t6JD6NXnDwYF+iMqLyFVgT5Sr386vFF0XdPaNtpzUQgOfjdNr9R0AsuycvQhYd1+2SR6OdmpZRPkoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=BwveoB+w; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57J90ZHD029801
+	for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 11:47:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=eTLV4pbAiALqLWMe9z9+F23m
+	6/Z57HSatoPEldwbxjY=; b=BwveoB+we/C98knvJ4KJIE+TpFVSfbPzdCUk6T1e
+	sS9viKkbTE8osTL7y8p/imthlQwonXoE95UXx68uVipXP4QGdCJwmP9YyQ8Ujhlw
+	b0UJrSEinRKtJN5+MSG80XO3u6cmKIcl8BKDHsnwkYcwW+bouG2zuf4joQ/v1t7Y
+	H6gJk/ydtNvtMcvLulX3Pfb03SW4mj2hE1qFpD0NWuVPwhab9OAYfMh5d/leUHE7
+	e7JzUB0jjgUR+lqT6Gpc9ZiXvd4HYafno5PloaWMhVPp9rnESCkebPRYwgT6zxlI
+	ABcj1gErNhi3Uzg5uNZrgd4GIuU0JnH1YOxELZAKcB+oVA==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48jk5mg8va-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 11:47:45 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b109bd3fa0so59276171cf.2
+        for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 04:47:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755604065; x=1756208865;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eTLV4pbAiALqLWMe9z9+F23m6/Z57HSatoPEldwbxjY=;
+        b=Tji+/B3o4DvJZHDACAFngzadb/HzYzwGUXQ2X7e35VPVJbTnNuT+ZBY1OYE5oJXUNO
+         GEyCGcey0QbVcr53X961OgzQVQAAl42zBAdHm2ARcf2f0n29YhA1k5N4uhIbWZMET4FL
+         iq9nZKX2aJDhoSOmGYK95ohPbXFRlyPdSBXVXsM6F0wMs3UhRBGXnTUe/vZV76yfxtNr
+         MJX6SntTAluAPRsqsqJGwtRmywDpPE68tktH/QbHlPizoiq1rOQAPs1CQMxB+R2y1PNR
+         uGOH+s6zyF6JHfWTpoSvak2oRG0ctEQo5ZuyplYVDOtLrcWxUME2RGKq48aYfl7oi8Am
+         mC/g==
+X-Forwarded-Encrypted: i=1; AJvYcCW0CkNLLcFaGnVB7G/ctfQBN6jFiUTah9EDZNHFTlcSkNNHoZZ2Uq3kdgxfWdGbjHdQ2zv6Jb5lat0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN/ScDIC+Xi2bUePNw7O59F40zvZi6XQQbSdfBbVMgViA4EiWp
+	TtFeyXBKPUdH55wX+jDNiQ7awQl064u0gn0CPc6H2fb0fehzmrabt5AYgwhuk+682AHTpkK9rLB
+	TpdVoo2kxNlLbHWFeZanJ+kadBDQxZHNC646AJInLWeBXyGBAjTyfEOGlJXk0cew=
+X-Gm-Gg: ASbGncuKEHemZgBMRIPAFYk4KaG3fYlEp+zWa27t5735miySFBTgzCViqxgKgzxLhbN
+	ItCSVtRQheA8iU+UTlUZP46QTCIAW76qB1Q0VANrj8inwrdJYTIx78EYl3kiQiFHfoYdGjbYrD1
+	NR/Ga+q0hCrXG9cYPxrsv5UTp0y37lPDTPIvE06xZCGk2DRghrnFAGK+b6jhuSE4wwQvXVoDgex
+	SUqomYHm/cXKn3uG9EbrKegYYShHXInIQ6S3ACozOyMGU0WkaKtM5CJMyn/tFqhZtsMJXx/mX6T
+	JvnUAMxxFx5KyB1ubwEGhbGNiz5XP2WCUT8Zvq7JYjjLA7seNrU4j6x57LUQQ5h2XYlEjjCSZT7
+	KgFsYPboodpr3EBfwNaoURR++C4JjcyMsypTuaMtfqJ7O2TcVnEKo
+X-Received: by 2002:a05:622a:4896:b0:4af:41b9:f66a with SMTP id d75a77b69052e-4b286d32b7cmr27661371cf.26.1755604064614;
+        Tue, 19 Aug 2025 04:47:44 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGUsM+R5H5wwSDp0LniUfNSxIvrGeWb7sj9B7rqdTJ3m7dL4JTwfKGIh+GVqeo5+ljeA2NF+A==
+X-Received: by 2002:a05:622a:4896:b0:4af:41b9:f66a with SMTP id d75a77b69052e-4b286d32b7cmr27661081cf.26.1755604064113;
+        Tue, 19 Aug 2025 04:47:44 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef3ff916sm2047292e87.131.2025.08.19.04.47.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Aug 2025 04:47:43 -0700 (PDT)
+Date: Tue, 19 Aug 2025 14:47:41 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Qianfeng Rong <rongqianfeng@vivo.com>
+Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: qcom-pmic-typec: use kcalloc() instead of
+ kzalloc()
+Message-ID: <x2fao6hlzdis6pqucfqwrjtv7xr274cdkjpz2jhz7iglbpcbei@y3dxedn2diwf>
+References: <20250819090125.540682-1-rongqianfeng@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250819-eminent-cobra-from-venus-d891b6@kuoka>
+In-Reply-To: <20250819090125.540682-1-rongqianfeng@vivo.com>
+X-Authority-Analysis: v=2.4 cv=Sdn3duRu c=1 sm=1 tr=0 ts=68a46462 cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=2OwXVqhp2XgA:10 a=1WtWmnkvAAAA:8 a=EUspDBNiAAAA:8 a=KBxqgXywe9IIF68hBIUA:9
+ a=CjuIK1q_8ugA:10 a=kacYvNCVWA4VmyqE58fU:22
+X-Proofpoint-ORIG-GUID: fdIIlZepEf4qETyrJQXjg0gsoWxWGVFU
+X-Proofpoint-GUID: fdIIlZepEf4qETyrJQXjg0gsoWxWGVFU
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE2MDA0MiBTYWx0ZWRfX6BT9XHAauMah
+ Oq3rE2zrF+fBbPkAmrdOZd2j2d8v9dv7u6l0cvSC2bmShDtALMJK4suO1omTf9daj3Dj89q9aGu
+ yQCc8ozovl3gPRVJ+P9kXOUrjT2aO13Dw7aOmfEDptirq3q7DuZHOpv61QlmQo9/yIK00Y56Ad4
+ OGBRJlt0gatzNV4kQZ2+1P4TzqXoZ9/k50v3FcFvtCaVPPOK/+e+Kj76ScQaH7A1Dbzgudadx8Z
+ +FrXH5p5l53oCrVJB7ZuwXmAEU7JjonLWAuvA+tb4MPkElotcVdciUwWogV8WOtnhpCBvfv51IV
+ kznEnRT7+MPreJ+iGk+xF0TXP7sx68kIu2+XuMiJ361oicjWA88WNtDeKMCV2a5zIKcKRVqd3SA
+ HALeQ02k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-19_02,2025-08-14_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1015 suspectscore=0 priorityscore=1501 spamscore=0
+ adultscore=0 malwarescore=0 bulkscore=0 phishscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508160042
 
-On Tue, Aug 19, 2025 at 11:22:51AM +0200, Krzysztof Kozlowski wrote:
-> On Tue, Aug 19, 2025 at 08:22:15AM +0800, Jisheng Zhang wrote:
-> > Make "reg" optional to allow the driver to be used to manage GPIO
-> > based control of the device.
+On Tue, Aug 19, 2025 at 05:01:24PM +0800, Qianfeng Rong wrote:
+> Replace devm_kzalloc() with devm_kcalloc() in qcom_pmic_typec_pdphy_probe()
+> and qcom_pmic_typec_port_probe() for safer memory allocation with built-in
+> overflow protection.
 > 
-> I don't understand how optional reg allows or disallows anything for the
-> driver. It's really not relevant to GPIO at all.
-
-w/o this patch, then there will be DT check complains for the following
-usb251xb usage:
-
-usb-hub {
-	compatible = "microchip,usb2512b";
-	reset-gpios = <&porta 2 GPIO_ACTIVE_LOW>;
-};
-
-
+> Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
+> ---
+>  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 2 +-
+>  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c  | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> Also feels wrong, but maybe you just lack proper, reasonable
-> justification. Just explain carefully the hardware, not drivers.
 
-It's simple, the hub allows usage w/o connecting to any i2c, see above
-example for reference. But current dt-binding make the reg required.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-Regards.
+
+-- 
+With best wishes
+Dmitry
 
