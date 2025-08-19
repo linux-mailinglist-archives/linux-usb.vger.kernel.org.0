@@ -1,99 +1,117 @@
-Return-Path: <linux-usb+bounces-27008-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27009-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AC19B2BB8C
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 10:16:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8BF6B2BC4D
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 10:57:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE7F8624B93
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 08:14:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 788994E09C9
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 08:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D08A31159C;
-	Tue, 19 Aug 2025 08:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2966F31159E;
+	Tue, 19 Aug 2025 08:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oIIFEWC3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P82NSUL0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8904721D3EE;
-	Tue, 19 Aug 2025 08:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B2B311C3C
+	for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 08:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755591271; cv=none; b=pBmZNfzmULaZF1Q7UiGK8ee6Ol0f5bpLqfMtLYb9mhi1RJPDh8LJjdmgvDRTSXJz3kBHojCYHXwE/5dVGU5im+zjSnkFhmiUILBAXcZOgmQyPB6bt9cqTO8lNpoLCOmDc8YBy5emGooriEB2oM2o4r3ky65EtHUSm6gY4d+cZ8w=
+	t=1755593819; cv=none; b=s3bILjz17TXecz0+gox5mtLVkQ11J0wMQ8IAByeduRzibgVBomTmlAJu2vqqau5ZV//uBSrM8T96U5yvnu5vNAE3u5+J4FnI3VgZSQp99e2dE23UlC9KV2Zsr4u+sYoptkbq5uXUlAzV6sENLHIAqDQUd0ZHxqisO8xjfYvlUVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755591271; c=relaxed/simple;
-	bh=tqkaoqXSQS6r9ypIv8V3rL0fxCKcJQKIsmosOm7DlMk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AE80XgzRsE5zeykFbVLHBOiHDtVw7ylwTIIaOzOwJCn9sQbgqRc1zBTYAJ+yMybsXSoGASZRuG/XbnHXpv05srlv6JNzn9jR87L9bBINJzJdWYDA9lXdWQiFiRvFnI/ffneri/DmdDQX6OOyEkCY8n1Zd6elwcodBz7hMyRaP0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oIIFEWC3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE84C4CEF1;
-	Tue, 19 Aug 2025 08:14:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755591271;
-	bh=tqkaoqXSQS6r9ypIv8V3rL0fxCKcJQKIsmosOm7DlMk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oIIFEWC33UWR/fYKDep/YSOwfh14lGoNfqxqfR3SQO0wyFdk4lZV753tQFSCBsfJx
-	 EmJSjBaZbDwtgLF9PbPqrWiwxbXg0XZ5tmomzxJABsOfk+7sk7qPCgbyKGvpq/AGaH
-	 aSYG1wl/9e12ENEI0PxIUgwOixY2aeWFUU69VTqF+mitoi6IsCgm+30zY3IJsJqnef
-	 K/8rdUO141ef7PrryN7ZTqq3BAGSFlAA57lcJB4shf0azDPR6ecjx6lAKhs1GiKpBC
-	 M3vSfIFD0Rid6+hcnJwGXxX5BNzQeUrAMXRZOkK0ulomKt3kFfOLoUoHJO0s8yhq1L
-	 OgUOtLMZj8XfA==
-Date: Tue, 19 Aug 2025 10:14:28 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
-Cc: linux-kernel@vger.kernel.org, andreas@kemnade.info, 
-	peter.ujfalusi@gmail.com, dmitry.torokhov@gmail.com, robh@kernel.org, krzk+dt@kernel.org, 
-	lgirdwood@gmail.com, tiwai@suse.com, conor+dt@kernel.org, lee@kernel.org, 
-	ukleinek@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org, 
-	linus.walleij@linaro.org, brgl@bgdev.pl, aaro.koskinen@iki.fi, khilman@baylibre.com, 
-	rogerq@kernel.org, tony@atomide.com, linux-gpio@vger.kernel.org, 
-	linux-input@vger.kernel.org, devicetree@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, linux-omap@vger.kernel.org, 
-	shuah@kernel.org
-Subject: Re: [PATCH v3 0/6] dt-bindings: Convert TWL4030/6040 family binding
- to DT schema
-Message-ID: <20250819-miniature-pug-of-whirlwind-acdfb6@kuoka>
-References: <20250816021523.167049-1-jihed.chaibi.dev@gmail.com>
+	s=arc-20240116; t=1755593819; c=relaxed/simple;
+	bh=6a8laetZdfI/EmW85Ejs9Q7D81ghz8COfCPeHQVxhwY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Tq6aVFtrvU8isngCc9EBfxhQic6QWzNFlH0PK/qv5tMYeieyCnorRTS2H0Bca3PvJWyCKcrOeelIFRdeezgDX7gKi5Om/ZlPo+rjCaEHKm/J4KAwD/SYh8z1jz1G7a5+hXCqaT9HBgQUxi4KTNyw3GBPdUHZsLINdCx0Rdkd+Cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P82NSUL0; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755593817; x=1787129817;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6a8laetZdfI/EmW85Ejs9Q7D81ghz8COfCPeHQVxhwY=;
+  b=P82NSUL0b+Ut3qsaTKbBCINrammJ1TDxGI+o+MWeV5tWVTKbfvDl9GpV
+   TXa4LLIsN+zUrOeEVaNv3s18yd4FFMIdzAeUyX+qOPaisj1YqcscxjJXC
+   g1PHpKnuW9huBivwga0ZgVTOI6uo072Sq7YD74V7ZoFTlpgxuSCPvWdHF
+   yvRggPEjHsrp2neZSJTyqX1BSpBWDwLp8E9NQvZrs96XbxXNsSBEwAq1N
+   oAW/bZWf1WQJ5SDFhqGBphzupXPDXAJWk0jlkeK6m4OwRwl9YxgnzPl0c
+   3qvXlrhzg5qoumf1z+qTsvStiXWuvcjd5VRLj1RX6vUePvyRSpTnIWpJX
+   A==;
+X-CSE-ConnectionGUID: /okJSIfJSGWWlUqnCXLDKw==
+X-CSE-MsgGUID: t0e3EnAMSjGrvI9zskkO6A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="57544888"
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="57544888"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 01:56:57 -0700
+X-CSE-ConnectionGUID: rNVOp52ZQqObxTQcvUahug==
+X-CSE-MsgGUID: rvkKU3EMSWmN0I92cy/LsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="173023857"
+Received: from mnyman-desk.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa004.fm.intel.com with ESMTP; 19 Aug 2025 01:56:55 -0700
+Message-ID: <2f2b66b5-d845-4e75-aaac-87974b592b4a@linux.intel.com>
+Date: Tue, 19 Aug 2025 11:56:54 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250816021523.167049-1-jihed.chaibi.dev@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION 6.16] xHCI host not responding to stop endpoint
+ command after suspend and resume
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
+ linux-usb@vger.kernel.org
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+ regressions@lists.linux.dev, Christian Heusel <christian@heusel.eu>
+References: <20250818231103.672ec7ed@foxbook>
+ <20250819084153.2c13c187@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250819084153.2c13c187@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sat, Aug 16, 2025 at 04:15:17AM +0200, Jihed Chaibi wrote:
-> Hello,
+On 19.8.2025 9.41, Michał Pecio wrote:
+> On Mon, 18 Aug 2025 23:11:03 +0200, Michał Pecio wrote:
+>> A bisect effort is ongoing and c0c9379f235d ("Merge tag 'usb-6.16-rc1'
+>> of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb") is bad,
+>> so that's where the bug likely came from.
 > 
-> This series converts the remaining legacy TXT bindings for the Texas
-> Instruments TWL4030/6030 family to the DT schema format.
+> Looks like the result is in.
 > 
-> This v3 series addresses extensive feedback from v2. The main changes
-> include consolidating the simple power and PWM bindings directly into the
-> main ti,twl.yaml binding for a cleaner structure. It also adds a fix for
-> an incorrect schema $id in the ti,twl4030-gpio binding and corrects
-> various properties based on reviewer feedback.
+> e1db856bd28891d70008880d7f1d3b8d1ea948fd is the first bad commit
+> commit e1db856bd28891d70008880d7f1d3b8d1ea948fd
+> Author: Niklas Neronin <niklas.neronin@linux.intel.com>
+> Date:   Thu May 15 16:56:14 2025 +0300
 > 
-> This results in a cleaner, more accurate, and more consolidated set of
-> bindings for this TWL family.
-> 
-> As requested, the unrelated ti,twl6040 binding conversion has been dropped
-> from this series and will be sent separately.
-> 
-> Thank you,
-> Jihed
-> 
-> There is a typo in the subject, "TWL4030/6040" should be "TWL4030/6030".
+>      usb: xhci: remove '0' write to write-1-to-clear register
 
-Huh? Why are you sending patches with known (at the time of sending)
-issues? Fix the issue instead.
+Thanks for tracking this down, I see the issue now
 
-Best regards,
-Krzysztof
+We may lose interrupts due to this patch, example:
+
+Hardware sets IMAN_IP BIT(0) when in needs attention
+Driver later allows xHC interrupt by setting IMAN_IE BIT(1), but
+Driver clears IMAN_IP (RW1C) when setting IMAN_IE so no interrupt is triggered.
+  
+interrupts are only triggered if both IMAN_IE and IMAN_IP are set, (and some other
+moderation and event handling bits are correct)
+
+we need to make sure we don't accidentally clear a pending interrupt (IMAN_IP)
+in both the enable and disable case.
+
+Thanks
+Mathias
+
 
 
