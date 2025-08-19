@@ -1,215 +1,166 @@
-Return-Path: <linux-usb+bounces-27030-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27031-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64C77B2C794
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 16:53:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C928B2C7D4
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 17:02:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 248AC16BBC9
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 14:51:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 768285C2C1C
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 14:58:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE06527FB21;
-	Tue, 19 Aug 2025 14:51:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF1E283FF1;
+	Tue, 19 Aug 2025 14:57:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XdzC9lTx"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XBPDLe0f";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="pS+8WlJ5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE1321772D;
-	Tue, 19 Aug 2025 14:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5A5283CAF;
+	Tue, 19 Aug 2025 14:57:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755615074; cv=none; b=roSGSQ7Nmkq556rsHpFIaw7vETOslsIbAR7hmWj2Fa8oACsWeRARHBV6w/sHJr80zkjDuPeQonx2qOme36YkZhHLQbYyQK8c1j4BErGXRIecneGCfmjP+u1HPG15srlm4E1m6Lx+yLsoIqXRpoKsNVLGrcYhmzbHnY4S1vDuRi0=
+	t=1755615426; cv=none; b=tGFC2W284dw+Pe9df+CXvzXCA77spL3BZe2JGNz2jQAyHHAQyJx7teaVbFoh0bEsnT/ZnYAsNoly2CTw/lfh3A+KP76Oxqe9hBbjPhsycdr1OEwptTVrZ0DQOATHSJmlBu0HwhIBkuhtKWG/01P9VX4AeHAHUgLdWslcZUfI+6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755615074; c=relaxed/simple;
-	bh=eKOwK0qY0XlIYHG/mfv6JRGT834tGvbpGugdoJwXfiw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XwJS/bUCRfST0w9SjKUZXWc7naqayJ1tYAzk5o7knUxNVAgm4Ycdti2y5thh6e7+jeferJKzcQvWeIT1DikL4R+b/rOCjYishrnwOF2KkmISlgoXY29F1Dvjb63LgTeoQfrB1sm9b6Ii715Yer4Jap0Ffd8m4suYiTD7AWh1iJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XdzC9lTx; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-32326de9f4eso4716286a91.2;
-        Tue, 19 Aug 2025 07:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755615072; x=1756219872; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=84JBC/K4prfKTVHBWmcQiE2Ae580xZlTp9zQ8TNTSNA=;
-        b=XdzC9lTxcPRY7N+Kabkp7vSPBem3WSlSNOEshPU6GORd84T7ObUDPJQbzgEytlWIpZ
-         b8EAwnVXR7bGkffTMlkb8tztOUw5qDAXsr/+VcU2wwyw7u2dbbtEnH3bR36RyK0WdZa8
-         N+fOxO1iViF9QOPFQZe9iyYHXmcWtrA4+CenTC2/qnIYkJlqK0z/QUF6Itr5VggV378M
-         FezOun4VLyRTIP19W3VHpcOAbVZXSp68ZbqxHhhBMwCSf1JyvjV+zSEtBFxnXRFFOs0I
-         Y6xX9bOdGRmpVcv+dZWzQJV6YZY/BPWga+KsXXvML0q30Pa+FT7pRk7/bt/zoJmY5UfD
-         OOXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755615072; x=1756219872;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=84JBC/K4prfKTVHBWmcQiE2Ae580xZlTp9zQ8TNTSNA=;
-        b=PrW47UPbb+4uCfby/Km8RJ/8e4Jj25Ns0KsJiV5bTFlqlJAE+6VD7wyrhf+5ZiMejs
-         ah6sw9tjx2bMwTYWUpnSZzE1kZmiVSRm6OSh91/MbB67iackG49WT5wkTap6YSvNUlvP
-         +YCTUeVA2qinrPK9NZr1c8fIO2+nnTptyrOTetOp11geFoMYZmG6PH4KTJPiEEIrJdj2
-         NBsHhs6dR1tpVlX12JpOFfDEud/pNTDJbvN9Vr+wEDU0t4MM6Yqrx60fbOXY3rmOxR/i
-         BEe7S5/BPPa18Oc1Fb/7PUKqElKl/jhSggrovo4g+V6mpsV22TmITAkBiMlpvAjZClzO
-         yLzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8F+0vySOpamRbWB4WbZtvAx0RUfP1tNdKcW4fd8NHoWzZGKpr3SRTCw/dlFDO3VnQ2BnHgPrZK9vm@vger.kernel.org, AJvYcCUMNPxlV51SSjs6jpID71dv2sq22lHK+zojmLiEdp3VqvstDlFzfpNJmTghlt+/sQIBSmjUzGREQCGG@vger.kernel.org, AJvYcCUXjKHFQxEh5Ry5NN6Evab2oE/TbrELeRdyihiPyMZ7AMrRLfFd349m/5SGz3OpiFBMjmD0geX5xM7hTg==@vger.kernel.org, AJvYcCUYVY3KNv8qU+LxsO3Vx8e+1n6w5FCpbW+WcQv0TSi6cPInA35WEAaFYG+D3aNf4v2f7G+P6pSfNkXYFZk=@vger.kernel.org, AJvYcCUqPgxIZK/i5BDL1sVPFnK5nVPL16xgGmw4cbngadDHXr5mbkM/90CQvALt175V/rdFVI22PdKeplr2@vger.kernel.org, AJvYcCWlwrj5HW9N/eGnok0i4T6KZGSgVF9VWVDMPWUd57SRxXN7GMA34DG2JEG3rlepwcTMu/aZirJJHhrLPLI=@vger.kernel.org, AJvYcCXscHSGQ+VNKQ1wVg11zKwO8hdefrj1pMJF2qdXJzjU/NFjoAhPvsKZcrupM1IUnrWHIHh9oDFMeDu59g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdpbGzsX4148l3IfsL/y1j+4+/bAyR9TN6H/HT7ST+UnL5m4E9
-	P+3OuIINNQiuecbqVsllY45dk9xArQu3mertCZk8rxRTitkC7Z7VYBq1cRq8hVBYJCLgcSTvtFJ
-	sEN0/h+i4XRH44/LLOoLL3o0k50da2w==
-X-Gm-Gg: ASbGnctYsyNVABx2OZB/+S+40W7KAvM/mNaFjqaGC0p0d1Jjw8BCTuvpR4UUNMsEA1F
-	BZYtqdRvQU9iKar9ahHJl3r5m5HhRLi4AWzFZMczblUSW2LymVG3jODtWqPcyRpyO5YQAZORFq0
-	Wo8nScz5QHYa8sVQpjF02ZNoJerNDBEmMXEqCEWRuDGPmrX251YY0qOVyQOSmtl/RYEP5U6baHW
-	A92Faw=
-X-Google-Smtp-Source: AGHT+IGFX3Kpa1nizieMl3Ixu9nhO8VijjVmgDz/D33VTEV/CrtZhkKtRMf84sQy3fytu82eKOQOb3mHib8daIX2DhE=
-X-Received: by 2002:a17:90b:134e:b0:311:df4b:4b7a with SMTP id
- 98e67ed59e1d1-32497102910mr3896605a91.29.1755615071705; Tue, 19 Aug 2025
- 07:51:11 -0700 (PDT)
+	s=arc-20240116; t=1755615426; c=relaxed/simple;
+	bh=jTRC/CHJntYVtBQIVMAGSv4VOFd+4rvA3L2Yn4gMfMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zhfw5flNhsITXMwhr1EiW1HoUSAYnIXULRZSrsu10bg5Zw/T3dxShnA0YaNljDABu6SkKD4nPyrty8VJU0FX+1TtUA2f5CjC5XSjDO6HFIjxIylHeyLSnxwjGZqc2hHdMX+0uii3aY+XjZPrTOfOyZHMgRiZG2tquVKYmXLP/Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XBPDLe0f; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=pS+8WlJ5; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 19 Aug 2025 16:57:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1755615423;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7fcGAbJPPdGZvSLVrtBanIpB5dI4uHVka3XSy/P+gA8=;
+	b=XBPDLe0fihzaCCfT5pSO53u96LHBo7uzmoa5bB9bv22RWOZ0eVnRBOIoXe98ff/e8PT0wI
+	mhthpjVcYpV90s/o5QvxRvtGnTJcN2H7jwDKz2ezq1IC6DYosgszQSOj8AZR6rCLGl3f7S
+	wDAi9K2a/WgdD+YmtNkgL4C9d1KESvtWt5Tv/TqmGtMCasIyY0iaH6bx1Nnhg0n+XPHQIN
+	AbItO/ZONX4jDmIskQjHDgGlM8Xwz50tYndwI7c6STP2TxlgdefXTdhlV4CCjQdPawL534
+	FqEl7d3x2aGNJchINbfzx4Edsvx8Pm1Hs7UPmG4TF0fZELygfr1SvARXl4KdZg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1755615423;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7fcGAbJPPdGZvSLVrtBanIpB5dI4uHVka3XSy/P+gA8=;
+	b=pS+8WlJ5up5SYgONcsS9fwRHHqpFdrbk9QbJm/n8kzF1IRzAe5hMxbfHUKOgN9Zw3Nl5Tn
+	AGGboCVmDy/vYiAQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Yunseong Kim <ysk@kzalloc.com>, linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	Andrey Konovalov <andreyknvl@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	syzkaller@googlegroups.com
+Subject: Re: [BUG] usbip: vhci: Sleeping function called from invalid context
+ in vhci_urb_enqueue on PREEMPT_RT
+Message-ID: <20250819145700.sIWRW7Oe@linutronix.de>
+References: <c6c17f0d-b71d-4a44-bcef-2b65e4d634f7@kzalloc.com>
+ <f6cdf21a-642f-458c-85c1-0c2e1526f539@rowland.harvard.edu>
+ <28544110-3021-43da-b32e-9785c81a42c1@kzalloc.com>
+ <1088432b-b433-4bab-a927-69e55d9eb433@rowland.harvard.edu>
+ <2bf33071-e05e-4b89-b149-30b90888606f@rowland.harvard.edu>
+ <20250819110457.I46wiKTe@linutronix.de>
+ <49ee1b8a-d47a-42df-aa64-d0d62798c45b@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250816021523.167049-1-jihed.chaibi.dev@gmail.com>
- <20250816021523.167049-2-jihed.chaibi.dev@gmail.com> <20250819-humongous-muscular-curassow-5accd5@kuoka>
-In-Reply-To: <20250819-humongous-muscular-curassow-5accd5@kuoka>
-From: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
-Date: Tue, 19 Aug 2025 16:51:00 +0200
-X-Gm-Features: Ac12FXwysxyGsjAabyXw5_P1WV9yLN_7McwriOwmRdAXImPNCo-sOD4JlUKkl3s
-Message-ID: <CANBuOYr9Kmj7n664CSRuORKfxx70w+DHzO5kToyBnHyBv0SjNg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] dt-bindings: mfd: twl: Add missing sub-nodes for
- TWL4030 & TWL603x
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-kernel@vger.kernel.org, andreas@kemnade.info, 
-	peter.ujfalusi@gmail.com, dmitry.torokhov@gmail.com, robh@kernel.org, 
-	krzk+dt@kernel.org, lgirdwood@gmail.com, tiwai@suse.com, conor+dt@kernel.org, 
-	lee@kernel.org, ukleinek@kernel.org, broonie@kernel.org, 
-	gregkh@linuxfoundation.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	aaro.koskinen@iki.fi, khilman@baylibre.com, rogerq@kernel.org, 
-	tony@atomide.com, linux-gpio@vger.kernel.org, linux-input@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-omap@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <49ee1b8a-d47a-42df-aa64-d0d62798c45b@rowland.harvard.edu>
 
-On Tue, Aug 19, 2025 at 10:13=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.o=
-rg> wrote:
->
-> On Sat, Aug 16, 2025 at 04:15:18AM +0200, Jihed Chaibi wrote:
-> > Update the TI TWL family Device Tree binding to include additional
-> > subnodes for TWL4030, TWL6030, and TWL6032 devices.
-> >
-> > The simple power and PWM bindings (ti,twl4030-power, ti,twl-pwm, and
-> > ti,twl-pwmled) are now defined directly within this binding.
-> >
-> > Other child node definitions (audio, gpio, keypad, usb, etc.) are also
-> > added to the schema. These additions fix 'unevaluated properties'
-> > errors found during dtbs_check for boards like the omap3-beagle
-> > and improve the binding's overall completeness.
-> >
-> > Signed-off-by: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
-> >
-> > ---
-> > Changes in v3:
-> >  - New patch to consolidate simple bindings (power, pwm) and add
-> >    definitions for all child nodes to fix dtbs_check validation
-> >    errors found in v2.
-> > ---
-> >  .../devicetree/bindings/mfd/ti,twl.yaml       | 191 ++++++++++++++++++
-> >  .../devicetree/bindings/mfd/twl4030-power.txt |  48 -----
-> >  .../devicetree/bindings/pwm/ti,twl-pwm.txt    |  17 --
-> >  .../devicetree/bindings/pwm/ti,twl-pwmled.txt |  17 --
-> >  4 files changed, 191 insertions(+), 82 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/mfd/twl4030-power=
-.txt
-> >  delete mode 100644 Documentation/devicetree/bindings/pwm/ti,twl-pwm.tx=
-t
-> >  delete mode 100644 Documentation/devicetree/bindings/pwm/ti,twl-pwmled=
-.txt
-> >
-> > diff --git a/Documentation/devicetree/bindings/mfd/ti,twl.yaml b/Docume=
-ntation/devicetree/bindings/mfd/ti,twl.yaml
-> > index f162ab60c..b0f1cb7b5 100644
-> > --- a/Documentation/devicetree/bindings/mfd/ti,twl.yaml
-> > +++ b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
-> > @@ -76,6 +76,98 @@ allOf:
-> >            properties:
-> >              compatible:
-> >                const: ti,twl4030-wdt
-> > +
-> > +        audio:
-> > +          type: object
-> > +          $ref: /schemas/sound/ti,twl4030-audio.yaml#
-> > +          unevaluatedProperties: false
-> > +
-> > +        keypad:
-> > +          type: object
-> > +          $ref: /schemas/input/ti,twl4030-keypad.yaml#
-> > +          unevaluatedProperties: false
-> > +
-> > +        pwm:
-> > +          type: object
-> > +          $ref: /schemas/pwm/pwm.yaml#
-> > +          unevaluatedProperties: false
-> > +          description: |
-> > +            TWL4030 series: PWMA and PWMB (connected to LEDA and LEDB =
-terminals)
-> > +          properties:
-> > +            compatible:
-> > +              enum:
-> > +                - ti,twl4030-pwm
-> > +            '#pwm-cells':
-> > +              const: 2
-> > +          required:
-> > +            - compatible
-> > +            - '#pwm-cells'
-> > +
-> > +        pwmled:
-> > +          type: object
-> > +          $ref: /schemas/pwm/pwm.yaml#
-> > +          unevaluatedProperties: false
-> > +          description: |
-> > +            TWL4030 series: PWMA and PWMB (connected to LEDA and LEDB =
-terminals)
-> > +          properties:
-> > +            compatible:
-> > +              enum:
-> > +                - ti,twl4030-pwmled
-> > +            '#pwm-cells':
-> > +              const: 2
-> > +          required:
-> > +            - compatible
-> > +            - '#pwm-cells'
-> > +
-> > +        'twl4030-usb':
->
-> No need for quotes.
->
-> > +          type: object
-> > +          $ref: /schemas/usb/ti,twlxxxx-usb.yaml#
->
-> Are you sure your patchset is bsiectable? Apply this patch and test. You
-> will see errors and you must fix these. Even after fixing you have
-> strict dependencies so your cover letter must explain these (or merging
-> constraints)...
->
-> I suggest listing here only compatible with additionalProperties:true
-> and splitting entire patchset per different maintainers.
+On 2025-08-19 10:12:31 [-0400], Alan Stern wrote:
+> > We could use some API that accidentally does what you ask for. There
+> > would be local_lock_t where local_lock_irq() does that.
+> > What about moving the completion callback to softirq by setting HCD_BH?
+> 
+> You're missing the point.
+> 
+> There are several places in the USB stack that disable local interrupts.  
 
-Hi Krzysztof,
+But *why*? You need locking due to SMP. So it should be simply to avoid
+irqrestore()/ irqsave() during unlock/lock or to avoid deadlocks if a
+callback is invoked from IRQ and process context and the callback
+handler does simply spin_lock() (without the _irq suffix).
+The latter shouldn't be problem due to commit
+	ed194d1367698 ("usb: core: remove local_irq_save() around ->complete() handler")
 
-Thank you for the review. That additionalProperties
-suggestion is definitely helpful in this scenario.
+So if completing the URB tasklet/ softirq context works for ehci/ xhci
+without creating any warning, it should also work for vhci, dummy_hcd.
+Only RH code completes directly, everything else is shifted to softirq
+context (for ehci/HCD_BH).
 
-I will split (in v4) the patchset into smaller & independent
-series for each subsystem as recommended.
+> The idea was that -- on a non-RT system, which was all we had at the 
+> time -- spin_lock_irqsave() is logically equivalent to a combination of 
+> local_irq_save() and spin_lock().  Similarly, spin_lock_irq() is 
+> logically equivalent to local_irq_disable() plus spin_lock().
+> 
+> So code was written which, for various reasons, used local_irq_save() 
+> (or local_irq_disable()) and spin_lock() instead of spin_lock_irqsave() 
+> (or spin_lock_irq()).  But now we see that in RT builds, this 
+> equivalency is not valid.  Instead, spin_lock_irqsave(flags) is 
+> logically equivalent to "flags = 0" plus spin_lock() (and 
+> spin_lock_irq() is logically equivalent to a nop plus spin_lock()).  At 
+> least, that's how the material quoted earlier by Yunseong defines it.
+> 
+> Therefore, throughout the USB stack, we should replace calls to 
+> local_irq_save() and local_irq_disable() with functions that behave like 
+> the original in non-RT builds but do nothing in RT builds.  We shouldn't 
+> just worry about this one spot.
 
-Thanks again for your guidance.
-Jihed
+| git grep -E 'local_irq_save|local_irq_disable' drivers/usb/ | wc -l
+| 21
+of which 10 are in pxa udc. The only one I am a bit concerned about is
+the one in usb_hcd_pci_remove() and I think we had reports and patches
+but somehow nothing did happen and I obviously forgot.
+
+> I would expect that RT already defines functions which do this, but I 
+> don't know their names.
+
+We don't have anything where
+	local_irq_disable()
+	spin_lock()
+
+can be mapped to something equivalent other than
+	spin_lock_irq()
+
+I was running around and kept changing code so that we don't end up in
+this scenario where we need to disable interrupts for some reason but on
+RT we don't.
+
+The closest thing we have is local_lock_irq() which maps to
+local_irq_disable() on !PREEMPT_RT systems. But I would prefer to avoid
+it because it serves a different purpose.
+What works is something like
+	spin_lock_irqsave();
+	spin_unlock();
+	$SOMETHING
+	spin_lock();
+	spin_unlock_irqestore().
+
+The question is why should $SOMETHING be invoked with disabled
+interrupts if the function was called from process context.
+
+If your concern is a missing _irqsave() in the callback then this
+shouldn't be an issue. If it is the wrong context from kcov's point of
+view then making the driver complete in tasklet should fix it since it
+would match what ehci/ xhci does. 
+
+> Alan Stern
+
+Sebastian
 
