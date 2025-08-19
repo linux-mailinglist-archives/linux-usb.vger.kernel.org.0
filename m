@@ -1,108 +1,87 @@
-Return-Path: <linux-usb+bounces-27005-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27006-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ECD2B2B9BE
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 08:44:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31BBEB2BB73
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 10:12:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1E3716A60F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 06:42:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C1A41B66A4A
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 08:12:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ADFA26B749;
-	Tue, 19 Aug 2025 06:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B905311587;
+	Tue, 19 Aug 2025 08:11:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JvqDjER/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EzX++Nil"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4594124E4A8
-	for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 06:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03E32B9B9;
+	Tue, 19 Aug 2025 08:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755585722; cv=none; b=cUKLAjKrnJDC1DILfsaahhJfkVyY6xGCNd1A1hEh5B7mIen1p5n491JCXaOkvgDDHuieeUbxciBqtcgt0+Ltd2+OirmlGKQB5IUkjuaT/ula/S/qpUIRav5cLXI2NvIHoGPWxy3DEM7hNEb/GG8fsVPtQ9ouSm79RzncvlJAA4I=
+	t=1755591094; cv=none; b=ctMUowUP6yNnab2NfU6FB9Vv06F/Rq3nXLRGf1OzTXXHwV+DNBO1UzlaiYJyCEEueRpHAwvdLm/8rukeHFRI9WP/ca+b4x5kXC8gjWXwUX843ZzIBOstDgyg3SC2dfCwU3MkN4teAjW5AmMpYCj60rZCjv+So40ZxV9LP0iFPks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755585722; c=relaxed/simple;
-	bh=oVhaykn237IE+sSiBFfDEYwLqYIDFYBWIbK7aE36V9M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RCMiNMNHI/ShnaMYURYXyj2WHJMMsQKZrghCpbI98yh5JVd7toiCPbcrCOkoFHy1tyl5Ucz4XtY75eQCILVQ+Kf/J2gNFhbQr4i5K3we3QUBjGTn9ksFH1U5/S3eD3zOJ52b46SdS5imle+4s2NiQ1yJxb85+au1PiwMdZNuFtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JvqDjER/; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-55ce521e3f4so5281112e87.1
-        for <linux-usb@vger.kernel.org>; Mon, 18 Aug 2025 23:42:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755585719; x=1756190519; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tl1eWlrDoTfqkIw6nCylIiO1PeyzsPYE6IbWS+8BGLU=;
-        b=JvqDjER/tm5J+AdSTX69+ES2hPFuChz8uqE4kCfPJGk6MMWuPImy+RhFKG7KWur0d/
-         M/j9kfZQ0xLpnrsGEp4W5WJ0W+QPsrTjmVhDyJ+rTnOOoOtj287Kp461IOEBpqxBMOnJ
-         r0Ob80FhEBsxYU/0zSLLS5MYahPJLWYwwc6FDAjjVe4/vjrrhipcuCRrGIHJkNconawJ
-         t+nWw3J/8ojapR28vjCcgJK1P6XOowrEon3z5qN5jEeimhbE60ljWytJO8BDNrZkOg6y
-         2mRzsiMVwfY+/TEguLrjQMBsrvD2hPapqcID5UzBslT1+9NZOxvLQfblq3qvjL78z7cu
-         uZBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755585719; x=1756190519;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tl1eWlrDoTfqkIw6nCylIiO1PeyzsPYE6IbWS+8BGLU=;
-        b=ZZqeNxoL/5Xl36tw/YI09M0c12m2ShRRf8U8U5FjFL5fcQJpgJS3caPW2JtqUiqZGU
-         iJalxS4EnSaHUSFTZgHRdGQSOiXlBBTulGCmuYmA76q7IVBpBU3sN3yCK5iXJ0/tqMFL
-         yrX0pnD9myXS6422YbR59NnYZTYmQOWjb0HFdHjEbNnuHxKdFUB8A4SMCyIvGx4PLkpq
-         A09zTFU4qQ8LajQH/Uf4JGjVcC9juFXGuG3dvEKjq1jiBxpSXwGI7G5C6DHgjctj31vr
-         s4MfyDr+Q4C5MKEqcExTcqHTVWz1Wv+xz795Z8F+qCJ+nPygPkJUql8yL/4+/BngDWaf
-         5yPw==
-X-Forwarded-Encrypted: i=1; AJvYcCWuofyCidgYtf2JkRQdrPbveJtRH3tAQzOXW/u5dwguG8nXXjwZ6st1LaG0ICa3TfZGNyXfllDDr1g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUY2BhNXary4Tf1vN4p8UGfZSeGf8MlR176L1JCMrJYkJpP+Gv
-	iOcHxfxNGn1WSk2odvV4gFIpa6/5JDsImt1eIjd0BLoHRaQLfc+Kj1PSgUhY1g==
-X-Gm-Gg: ASbGncuKQlJFLwrv/xCLPiCb8xOO5Cd+7YW4o7tcwftoTOlctRaYcEafjxlXclYqvqK
-	fLfsOekfpDyXgz/WzfHvoCgcsyOyj6JmPnzwtClI8jIzSaURsi2OKc2khv3BUDQhvSCBu2fOfpo
-	aCpHMY2x2SJeWC81SC82/dsl5u9bhC8I6QTMnCT5ioU9BYE3fmnQ/XTSireNIySnS5KGKEgpWTg
-	SnPYkGvGVxHos2uzacLBtAKAv/vjbz/d+NTvd+JyLH6YXD3eTcp1go+JWXxcboRkJlLjOdB3dMR
-	a8J5f0QfKp2px2D2di4YfBLwZH0sSiCuOiT1enh306ipem/qQtbmPRJsfqfUe15HXE/MJJcLv2l
-	Rg0R6MzQzTMoQ4UPjq/LR87mupIHmJGkN3AUTWwFbUMOY8w==
-X-Google-Smtp-Source: AGHT+IEElzTmBQKi8y9DVbV2R/gzGMxaQnK47ySW6v4/t+YPC/5YcZqI+tsKnlyL5G03VhAKgKe1FA==
-X-Received: by 2002:a05:6512:b99:b0:55b:8f02:c9e1 with SMTP id 2adb3069b0e04-55e007aa96dmr430802e87.27.1755585718981;
-        Mon, 18 Aug 2025 23:41:58 -0700 (PDT)
-Received: from foxbook (bfd208.neoplus.adsl.tpnet.pl. [83.28.41.208])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3340a41ded8sm22906461fa.4.2025.08.18.23.41.57
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 18 Aug 2025 23:41:58 -0700 (PDT)
-Date: Tue, 19 Aug 2025 08:41:53 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, linux-usb@vger.kernel.org
-Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
- regressions@lists.linux.dev, Christian Heusel <christian@heusel.eu>
-Subject: Re: [REGRESSION 6.16] xHCI host not responding to stop endpoint
- command after suspend and resume
-Message-ID: <20250819084153.2c13c187@foxbook>
-In-Reply-To: <20250818231103.672ec7ed@foxbook>
-References: <20250818231103.672ec7ed@foxbook>
+	s=arc-20240116; t=1755591094; c=relaxed/simple;
+	bh=3j9Oxbq/9jtnjR827ybfCD0f53dGZ18zhqTHoaC/+ac=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lnfiOxgBhv+CCFaLU577KdVSLifCrPIFmeTb41T2xlp//qIYvmldB5acxtUx6ixdglvNtvsLhmPjDfimXNjFXZvNVg8MLMkVCOJLqPam2crKREosjB0wA5llY0pyx4YTZU8B0CFoIRRFLOEtzL4LgAN8M8e7foUwe6WQGy4mJbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EzX++Nil; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D998EC4CEF1;
+	Tue, 19 Aug 2025 08:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755591094;
+	bh=3j9Oxbq/9jtnjR827ybfCD0f53dGZ18zhqTHoaC/+ac=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EzX++NillaBCks+hjcA7hDvXB2rWf9gQVUqvbPGyWil7O7XN5ciiG4pBkCUGtZece
+	 7G2IuPayDrM02yI6FgYuD3rxRBAqnUmmE+LDpsq2xOIJNzPvoc1ebE2NyQ9oGkIN7w
+	 AtP075qiDakx7jzeC6ov/2tsNXx1YftM02oLhpr1ob2vwCsqHUyBdZ5n/FI0NpAqZZ
+	 2O2p3uTScLX36laWk7MWRbfWuSZBWx3cc/SlKrEmCOMTlKQnKqZ10J6gv/dAyOmIjL
+	 RMmbHaxpN3MGjkfZ5v5Yf/zqulHv5zykX/8NBBSX74+drivXa9WCmkvXYpu//Sl2v6
+	 qQMYo0wUp/KVA==
+Date: Tue, 19 Aug 2025 10:11:31 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+Cc: linux-kernel@vger.kernel.org, andreas@kemnade.info, 
+	peter.ujfalusi@gmail.com, dmitry.torokhov@gmail.com, robh@kernel.org, krzk+dt@kernel.org, 
+	lgirdwood@gmail.com, tiwai@suse.com, conor+dt@kernel.org, lee@kernel.org, 
+	ukleinek@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org, 
+	linus.walleij@linaro.org, brgl@bgdev.pl, aaro.koskinen@iki.fi, khilman@baylibre.com, 
+	rogerq@kernel.org, tony@atomide.com, linux-gpio@vger.kernel.org, 
+	linux-input@vger.kernel.org, devicetree@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, linux-omap@vger.kernel.org, 
+	shuah@kernel.org
+Subject: Re: [PATCH v3 6/6] dt-bindings: gpio: ti,twl4030: Correct the schema
+ $id path
+Message-ID: <20250819-daring-shaggy-fossa-ee6d6c@kuoka>
+References: <20250816021523.167049-1-jihed.chaibi.dev@gmail.com>
+ <20250816021523.167049-7-jihed.chaibi.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250816021523.167049-7-jihed.chaibi.dev@gmail.com>
 
-On Mon, 18 Aug 2025 23:11:03 +0200, Micha=C5=82 Pecio wrote:
-> A bisect effort is ongoing and c0c9379f235d ("Merge tag 'usb-6.16-rc1'
-> of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb") is bad,
-> so that's where the bug likely came from.
+On Sat, Aug 16, 2025 at 04:15:23AM +0200, Jihed Chaibi wrote:
+> The $id for a binding should match its file path. The ti,twl4030-gpio
+> binding is located in the gpio/ subdirectory but was missing this from
+> its $id.
+> 
+> Correct the path to follow the standard convention.
+> 
 
-Looks like the result is in.
+Fixes: 842dcff8e2d6 ("dt-bindings: gpio: Convert ti,twl4030-gpio to DT schema")
 
-e1db856bd28891d70008880d7f1d3b8d1ea948fd is the first bad commit
-commit e1db856bd28891d70008880d7f1d3b8d1ea948fd
-Author: Niklas Neronin <niklas.neronin@linux.intel.com>
-Date:   Thu May 15 16:56:14 2025 +0300
 
-    usb: xhci: remove '0' write to write-1-to-clear register
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
