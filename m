@@ -1,198 +1,283 @@
-Return-Path: <linux-usb+bounces-27033-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27032-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1218FB2C8B2
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 17:46:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DA64B2C826
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 17:13:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43F2D1C24390
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 15:45:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACFCD6235E2
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 15:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD3C286425;
-	Tue, 19 Aug 2025 15:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE086280033;
+	Tue, 19 Aug 2025 15:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="OYZJmkin"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="kPYlxDI1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010019.outbound.protection.outlook.com [52.101.84.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629A4207A18
-	for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 15:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755618300; cv=none; b=aM+kwSkOZRwTNWHwKpgczoYA6iWKj1ZaXarTWdnePMmbh7lxFEFpXxuX9sYgHM3qs9hHNF3Yeh7ww8o2JIBwo3qCL0RIlWUbHRJ3Vgy1rBVGMCanCgi/O6dJZS2I6TxkZ7TQv+jahlD99pV5OvbiQosbfGWyVidQqyJ3zGFhxvY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755618300; c=relaxed/simple;
-	bh=pRJj1H5tO7XMkVZRCLKY+sRfLzGpi20O91KKFr0QgRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tOrLqzBngxTJKIdH3eMWhA6YJUAaAZ8QXyZb9SG6TnUKkmas/GVb9+U955DYnh6eHi1CRlS55WbiY1BjH/YDpjLUQ8t9QYI3D+ExJ5Iwl37PfNCqz0/q8F3jvnt2EVe0V2PGeXPV9aIX/AK2Mg+hE2kjYXKzAcqysxnAobYOP14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=OYZJmkin; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-70a9f5625b7so49675266d6.2
-        for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 08:44:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1755618297; x=1756223097; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3KlMvHTnEPY7TidCf7GXQGzitb9p96DYnk2H6Hb9KLY=;
-        b=OYZJmkini68JWEd+aizXrWYd9UbtL4fX0SK9HLZpAb4nJvdcK4zb/7U8zS7JCAZFky
-         mjwRhgVwLvMRelgaEzmuFXsHgtuovpSlDKFP2bjb0XpjS5c4R8Ti6/0ZFxPkN4ZMAvq0
-         GZaBLwlNPchRlMb/+XTcSGvnh6zY0nmE6qGhr85T7G3SDnuEEuhWyCgXByNYxKEQYLuX
-         jwpmkzW4/AvvmeVwI8dzX7nZCafA1nrCq1adcOnktHz6o7JrwJ4M32MeSQ0jkEYihZEV
-         VT8b42Dx1NbbrB3Zgxj3pqVlYE3sJWeH1cYGd2e3ac+agh85kbnx+dyCB40VlDsJmpiW
-         q4Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755618297; x=1756223097;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3KlMvHTnEPY7TidCf7GXQGzitb9p96DYnk2H6Hb9KLY=;
-        b=LVZEPmZ2Z0rJykH+PU/Wx1VZeE4dvBRcVpu6Ut8BrNtrU2jJIDyV2TJodHgLisSon6
-         sITRXlsJZfOjAsA8uccnE/p0OxOUgsnz0g3jiD9I1zD8GiTA139c+eKrnN7pXME8cpb9
-         22HPr5r7roivQ3FvF6usXFasaocFzvD1XIHWYv921dzWJP8pRFVxEt7eA+zl/KZuNvWF
-         egJHEW9v6pMGq7O3+pUkNCPVA5T0WWTaETF5+7BO/Z9VsBsVQj+FJe5B/xzT6MBoeRMT
-         xZMTvvQLKuANxmTLgF/c/Vibn+dMvaBoCsANcnteJKc7Cj9XXsYB1D37MRqC92QDSGjE
-         quhg==
-X-Forwarded-Encrypted: i=1; AJvYcCV6Le9OfKvIGSO6/MBSGmrUrulNSzaPo6I+ipSN//KkQ/o93MvpAIPIyTOMV3KFGYcUAyPUGCOIwSc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK1Gw6YOpLo6DC8JU/p3Url2Sl1t6PtcoPueFdqdCybK6nFlhf
-	R1rfGvKS7o/Fm3RO+DlKY1A0jAE/oZXRZur3rqKNtzOSsdjkYI2hgi7DoDfZwg+ExQ==
-X-Gm-Gg: ASbGncvdK7jSX/1ehg9BVK/EHJgfv30L+xQ2yjvaTRmnggFtkVKY2vyA7ZRnyXp3xig
-	Q1+7pPcrcCV6AuogB7wYOvtPrYSEnPLjINNMomUVlqhugAO34K8lBwsQOPCanG9tKPM3QlaGC/9
-	BJC3RsR8swXM3jolAV5WTv0UW9Mae9jaRRxFdudgBB8dx5yYvq6ih7+Rq9RvPm9ZYUT5U2Sotc9
-	O9UIpa7rhzJRb5IWwVXSPaXrh5QPX7N6BV2ftkON8y5QIa/BPsIL57Zq5/E/ALIorVP1Z9KxwdV
-	ZaOFS7nN1z0aZCr3LmifFYqU0h4+iSIWfSoMCCHr5TyOmQiGEb37unYl4UvrV211PsyHXcgDwDj
-	s8nnZu1Y76nZqjNbK8ZQjUaQAq+E=
-X-Google-Smtp-Source: AGHT+IHsJOHr6hojE7rqYrX+qOfnG5f94QM0U9BbVYttqZiqetVC0hqJlHsw3PTuBRo8TpfE2D4Y4w==
-X-Received: by 2002:a05:6214:2b0f:b0:709:b691:c9b3 with SMTP id 6a1803df08f44-70c35ba7757mr35172326d6.21.1755618297027;
-        Tue, 19 Aug 2025 08:44:57 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::fa48])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70ba902f4edsm71527736d6.14.2025.08.19.08.44.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 08:44:56 -0700 (PDT)
-Date: Tue, 19 Aug 2025 11:44:52 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Yunseong Kim <ysk@kzalloc.com>, linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org,
-	Andrey Konovalov <andreyknvl@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	syzkaller@googlegroups.com
-Subject: Re: [BUG] usbip: vhci: Sleeping function called from invalid context
- in vhci_urb_enqueue on PREEMPT_RT
-Message-ID: <bb7e34b7-c06b-4153-ba6c-009b9f1b34d0@rowland.harvard.edu>
-References: <c6c17f0d-b71d-4a44-bcef-2b65e4d634f7@kzalloc.com>
- <f6cdf21a-642f-458c-85c1-0c2e1526f539@rowland.harvard.edu>
- <28544110-3021-43da-b32e-9785c81a42c1@kzalloc.com>
- <1088432b-b433-4bab-a927-69e55d9eb433@rowland.harvard.edu>
- <2bf33071-e05e-4b89-b149-30b90888606f@rowland.harvard.edu>
- <20250819110457.I46wiKTe@linutronix.de>
- <49ee1b8a-d47a-42df-aa64-d0d62798c45b@rowland.harvard.edu>
- <20250819145700.sIWRW7Oe@linutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D748527E074;
+	Tue, 19 Aug 2025 15:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755616249; cv=fail; b=Pz1WFLZHCWUKe66GeTgUqlAfi+li3sUqJo3PsIwrx2u8X3GRwRDSeGb8Z2U8N9yV/1+yG2PWSnGWbM/SZYfizuhQego25utT6QPD1K5sQ/VxrqO7TXcIHjqCVfnrUyPphtlKJ0S5VyB0+k2114rfYVQR43TIJeDHU3mENmZYT3A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755616249; c=relaxed/simple;
+	bh=vDHbzgTeY7ir11uxiACvRgdesrOhksBXjHqrAhapGGQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=NGc80ZHjlwKp7ujdjM/mbspu6dhT0H9otQ+HB55IYNpWNNAkLGCqNvr+U9sNW6xh92RbffpX5+9P2+2J/M+Nx9QBTbtn7mcw1P7QdmpYQK7Q9jrkk+5/xG2NQdvrrRArP2uiJCYHY0y/kdH6IopBWcNkSFMckR2LVmich1VT/x0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=kPYlxDI1; arc=fail smtp.client-ip=52.101.84.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LKgMAe9Y25sojeNDUqHmtJ7rIQX4G8dusI31ZnR2dEcVvXsTg/KkoAR0Tgvr6dBSxwEEymjAuqzd/0XCUDIdmcp2hW1VJG9BEXPii0X93L/0oMY2sxgqLiUW+EzGuNtwyg2gkSRhy+buKSfVGJxw7OnPtrMzTHc147uHpOLmADswzq5sfw2KD1QUsTkQD9Izv/0fk7WTA65HcQya2HCp8wi9OrP4rti3/qeLBZ8obRbbKX+q4RgwbvSyGCrGnC0s94bFgCGAA9TXMBp7HSp/83HUE4H7TzEHKSjJnnxyD03TCYPDyp3L/eLcqTYoc3ZU2la+A0KTAL9PBajxepPv5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8DWzGELDm7HvUm9Ig0Kdx7q95mGb0NTyT4FofnD0iLI=;
+ b=XXhUF1PEW1D9z4Se0GrCHnAG/NKJ+Fr8hSOAHQRxbXlDqg4+O7pOa2PD0W4JWI1yNgP1Uvt+1jZpm0nps8xeNV1tINILdNkNdk4rDQnFRuGBIqdv1fUfeaOuoqM0fGB427de1zzCM309MJzv1HZDTRDdAVLTsn8gaaAxgY/4x9LZMAQc5f9clOJ7Sg87jqXKkKU7lulex7mGAh/0vabcRfcpdsqwIwNrfNPWuBF8wdI5NzaAOVskc4agG27whptJBNbS7D2tgxm9AnNMya0Qkv7zbmi9lFvScwo7zrMywZEetAHZFQARNMlwVdsSNtKhoY2fo62yRlKhFRJ+JFrnWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8DWzGELDm7HvUm9Ig0Kdx7q95mGb0NTyT4FofnD0iLI=;
+ b=kPYlxDI1xNEhQlHcyGCebZeQZ5WX82e4ZxmP8HPVIDS2LxPqtFo3NoksEsFxTt42iXQU8ERhYJ+5NUAcPpfEjbB+Mfe2KY6OKOkrlfaUJ5I1kHwu+KCsWayONT1UBFCIUID0kSF6bQ0mk9pjxFPfNO6XXcshm6NBN9EQVuk5MgngXmpQEnS8tkYlJ4xLuHucAWz/Ioa7ZZppHBDUd8loT66F+/3c8ZXkcqpQZbuULXWngMNpoVMNFJph/D5ygZo/OvDIvDYo9FH7X5UnJ17XNa3kr2ZQrjaIgjOW94T/DHt+qGhzVZcAU0ARyVrEt51VMD4TTnrCaspux1O/F0k9MQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+ by AM0PR04MB7154.eurprd04.prod.outlook.com (2603:10a6:208:19f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.13; Tue, 19 Aug
+ 2025 15:10:42 +0000
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630%7]) with mapi id 15.20.9052.011; Tue, 19 Aug 2025
+ 15:10:40 +0000
+Date: Wed, 20 Aug 2025 00:21:33 +0800
+From: Peng Fan <peng.fan@oss.nxp.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>, jun.li@nxp.com,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Peter Chen <peter.chen@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, imx@lists.linux.dev,
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] usb: chipidea: ci_hdrc_imx: Set out of band
+ wakeup for i.MX95
+Message-ID: <20250819162133.GA18601@nxa18884-linux.ap.freescale.net>
+References: <20250801-pm-v2-0-97c8fb2a433c@nxp.com>
+ <20250801-pm-v2-2-97c8fb2a433c@nxp.com>
+ <zdzpddjjdj2ezkkfh5jjnnjvkvu4gb6vqmhkdlnnc2ioamvcuk@ftmezbyxrhfb>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <zdzpddjjdj2ezkkfh5jjnnjvkvu4gb6vqmhkdlnnc2ioamvcuk@ftmezbyxrhfb>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: SG2P153CA0016.APCP153.PROD.OUTLOOK.COM (2603:1096::26) To
+ PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250819145700.sIWRW7Oe@linutronix.de>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|AM0PR04MB7154:EE_
+X-MS-Office365-Filtering-Correlation-Id: c542f1a8-d7ab-408b-0901-08dddf328f56
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|52116014|7416014|376014|19092799006|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?rNZGVwpy5Mrx5VofjAQOHRzs31kJmoCwyq6RRHt8120NgbqxWNJpVb0awysf?=
+ =?us-ascii?Q?BTgFLxD048Dx0aqnM6kUO2kPY53EcMJAYyHhW1/4/4JTd0GPr+eBS3IxW/qX?=
+ =?us-ascii?Q?raQsAgq+eKBJWdZCc2rYvwLIHoxmy9HzOVV0c30nD4FSGukbt0z7cALB6Q/G?=
+ =?us-ascii?Q?S/mGU4FeSbBaKWtjbnw63cKKKFiMQdeSjdSpIzEI/TdpI11uzqp498zGL3DM?=
+ =?us-ascii?Q?SaZSs1+w/2SLm2Chb1ZQFPnqMaL8C62b99//GDkdM0IX62XT21kUUaqNqE21?=
+ =?us-ascii?Q?2ZAtc62Si2ZuLt9iwZHoF188ym0jLuerosrT589GNx9wjzmgPHze3+S5p10/?=
+ =?us-ascii?Q?wBdEyGRZEe+Xl7+97JWomxfr6GGo+k+xVZzZa1yOzHitKJAVy/+npb4KM6YV?=
+ =?us-ascii?Q?xKQ0VNxEgf8miYh28QH++GSjBE6dkneM0KDu1NMN1l8uOUZ1y784cFV8sQJy?=
+ =?us-ascii?Q?Q1q+SS2gr+IaUcvNTOErb3vSBn49WImSZ3qzoVqAZfWod67Ue9CSK8fdZpbW?=
+ =?us-ascii?Q?ksy7nPIDE4MpYN5PpfyQE8s6JMw3UlT08mRZA+AjFhv5slyp+g94dQkKicjE?=
+ =?us-ascii?Q?PMNf/y/LiJmIz/e6P6/MqAFHDhFLC6BJhBAeVRyQWZZV6imNK/9AojnaJA2j?=
+ =?us-ascii?Q?HiSpSX7PQbiHsmE6fcmb2hEw784NJ97NUV5yLK3htW5k0RmzWnoUIr5i5bEh?=
+ =?us-ascii?Q?id55sVvGmz1e1L7NmZ1IvNXkwk3RhpYCgsyi1pBrDPvrO/cQKwl/xy9jpXtP?=
+ =?us-ascii?Q?xlvofCkeXuNnZ1zezUEWQriIvICBPhmIHb2EGgCP9gCSFS+1EtoFyu87+280?=
+ =?us-ascii?Q?eWElPv9aOS1XBPVN5w69rmrDINWrp2aZSEKNFW3mIz3g40rgHv0PyQKRWYdT?=
+ =?us-ascii?Q?brNcFhVctul9db/t2KDeMhfLZi4HyRqVWLvTzfGNf9Ckhl2DuUo3RwsMWhGn?=
+ =?us-ascii?Q?TYMyOJNMnZKZkIt7T7n/Pz2UqU3GHLeX1lCmAMVeVvAFU6fkPiTOMZB5j2Mc?=
+ =?us-ascii?Q?OlLCL49+dHzR3mvzmYRqmBnHdnTyxlc3/oKyytd0VsEilM2b/s4ygD3kOx6S?=
+ =?us-ascii?Q?SNoMNHBJ0XOi8RAEboJPVrBXcER/P56P9Cw1iVbH7hEXxn9mMvTaQudFHehh?=
+ =?us-ascii?Q?e9/5I2AzNnQ0It/B4aaGsAF0ueQmmWnwP2kZvxcr6yNsxcp6IOn5+D8fbyZX?=
+ =?us-ascii?Q?b2Af64MhNs+R9IORO5NpGtrDLxwtYoM22x8C/KVeFGrud8jtueijH76nq0im?=
+ =?us-ascii?Q?bDwSmiN/K/SLOUJz8N03+BIxyyVMvS8N4dVrIxdvBZLNTUz3dr+X4aVRLZHo?=
+ =?us-ascii?Q?PUCx3Y8liXOWlNKaHJWkZy2PTKfHaCulU//DInvX7AhtaCBwQ98UycCNiHMz?=
+ =?us-ascii?Q?MHeBEVPOUFPM7M5Lh3VFYwMFZ61NgPZTzsrnMmtHaXumU5HqE4Jtfd5ne+rz?=
+ =?us-ascii?Q?ZxAs3IRlIVQ55gkbpPa17HGGn27aZfWmB7sl0tZVur1cdd3Hdg3bgA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(7416014)(376014)(19092799006)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?l9NGuaC0/rueOmdk/dQasoJGq4tsGP3drofFAdGo6A7wgJboRcEjdfMwoDZU?=
+ =?us-ascii?Q?0ZLjwKxvFQTtJGXEp/1gzs4H06zFIiutXYZyTkWYbefyRNUkTyWYsEJa7hlV?=
+ =?us-ascii?Q?gLo1x5nZ+H8ayfNMR4ClqEz1XvildtJaTrosmRdX3HU4THBMFVFPMYtFGSCs?=
+ =?us-ascii?Q?/HTFsAhlhlRlMoh0viHoWbf8cstw7pyujXAGF0oxHqsILIHgjo1vAjyGV71e?=
+ =?us-ascii?Q?B4VJ78nRrVNsDbxL1H7nNbKZ81TJd+YT5ZE2ppBt6YLrNjGG42nUdd0nnOoD?=
+ =?us-ascii?Q?tRf4hvVaucdz+FAEkXVefimftzU92ly04c1Ezdr1crehXUbB2+xMhImzNTwI?=
+ =?us-ascii?Q?6btZwTC/6RSY1pnmRlbkbyzLzcIeT0Bl6gyXbr69RM9oaAm8d2FTyAMVCoEb?=
+ =?us-ascii?Q?KbwppApaMT7g6gmHduEuCWOFLiNBx277EV2TKaWOWEan1gyQe063CEMTHX0R?=
+ =?us-ascii?Q?E3i/DnaeALXwrgskTsIfM3griShz0gnEs1S0Qx555XqF0jbzroxLtcbP6yg2?=
+ =?us-ascii?Q?/9Xn/r4hEUykmnPQwNjvz/xgrCwcgn5+yKaSmF8uglzXkPMJEIPlk2kS4MYf?=
+ =?us-ascii?Q?m/ihEGTwjQMK7EqsJjdxeYWgCj8z2oWYhxw9RjzZniJpPJ/yQYZw6LUGMngR?=
+ =?us-ascii?Q?VHPLr2mb1/g5CGsjbFSn59eX9HyO3OO6ZzizHjIoG1bS0BrZghSQxzDolYXY?=
+ =?us-ascii?Q?eTc8M7SBgJBsj2Q5JwftsuKEq7EHAnhXFF6xu1WTmGsIciDzNIZJXThYJtNH?=
+ =?us-ascii?Q?kAF12upwWdLS8GDDHpAxDIECBJOEJXg/ek2pNktW6YHfv5DZBIaZbVXzCt7y?=
+ =?us-ascii?Q?vXFs9/+vCfS5L9X5zU0A4lvHry4fwXShBth8kiog8DoALO6eXXAp3kYbOLiT?=
+ =?us-ascii?Q?YuZMz+qZAfD74kkf2gOlWiJ6w9ikBz/fyOka6kqTjiJHXnYyu9cJ+guKusPe?=
+ =?us-ascii?Q?lpBpOQqlHsQFS2J1/qR9aIsWMDjPmgVfmLlpvZH9pKz67PgBXmWcmxcFM3a3?=
+ =?us-ascii?Q?IPJLKW9SucZUXLWo5IW8jB+IOvXTm6jwiw0CYEw7O0yhidzt0h5vOwksX9vq?=
+ =?us-ascii?Q?9nCocO1noSc3j5pMWfqBZMQVNsagqFHhxNNLeXt1ko4CTjjLGQAcRo6owrA8?=
+ =?us-ascii?Q?pc2V1zMbpufm1S+ML2ToRbPRabXw8BNxAT6oKqKpzmTUbhWTSYgkexEghUzt?=
+ =?us-ascii?Q?jd/ubejRiWMnMUa7KHK+eLn2dHglt16qhse8e94IbkNMxZp+QOqG0nmzhvCm?=
+ =?us-ascii?Q?CyFymyNPJCxqzKwC8RSxKz0maqrexXyUFDqhWc0WuheC0ZA6jwIk8dg59O/x?=
+ =?us-ascii?Q?GVy4wiVFU0O3ylxZzWQwU7vpsXdEr7UxyUAbjKt8rRBJ6Cr7JKpucQa2BcGD?=
+ =?us-ascii?Q?iJt3jQPkcSpCMOVcjzChq6n6ZJ8E+e/rhTkvFhhHsccc++UTlQvm46B4DmF2?=
+ =?us-ascii?Q?OaqDcJBnW+QYn4VzRwaKjKxiSD2exqZyGxdLA6cHdTB1Abyp7LIQPcoxLnld?=
+ =?us-ascii?Q?GIxXjL7LT+Gm6BN5/KXq6dLlr1efFt8MUFaW4G/j1iSbAy8iYWYjfQPlg+Oh?=
+ =?us-ascii?Q?50fpOPRoh1FlE3kjQHTmP8Br6wJmteimHuDAxV+M?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c542f1a8-d7ab-408b-0901-08dddf328f56
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2025 15:10:40.6623
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bBmMAzu5hthG3ETeUzuTLcDVanhUgoGLb2MfKYx1cwIVUflhxW2lNIMrfgr63Vw2Ay6kYCvYqKBfvkYIUWND3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7154
 
-On Tue, Aug 19, 2025 at 04:57:00PM +0200, Sebastian Andrzej Siewior wrote:
-> > There are several places in the USB stack that disable local interrupts.  
-> 
-> But *why*? You need locking due to SMP. So it should be simply to avoid
-> irqrestore()/ irqsave() during unlock/lock or to avoid deadlocks if a
-> callback is invoked from IRQ and process context and the callback
-> handler does simply spin_lock() (without the _irq suffix).
-> The latter shouldn't be problem due to commit
-> 	ed194d1367698 ("usb: core: remove local_irq_save() around ->complete() handler")
-> 
-> So if completing the URB tasklet/ softirq context works for ehci/ xhci
-> without creating any warning, it should also work for vhci, dummy_hcd.
+On Wed, Aug 06, 2025 at 05:28:08PM +0800, Xu Yang wrote:
+>Hi Peng,
+>
+>On Fri, Aug 01, 2025 at 12:34:23PM +0800, Peng Fan wrote:
+>> i.MX95 USB2 inside HSIOMIX could still wakeup Linux, even if HSIOMIX
+>> power domain(Digital logic) is off. There is still always on logic
+>> have the wakeup capability which is out band wakeup capbility.
+>> 
+>> So use device_set_out_band_wakeup for i.MX95 to make sure usb2 could
+>> wakeup system even if HSIOMIX power domain is in off state.
+>> 
+>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>> ---
+>>  drivers/usb/chipidea/ci_hdrc_imx.c | 8 ++++++++
+>>  include/linux/usb/chipidea.h       | 1 +
+>>  2 files changed, 9 insertions(+)
+>> 
+>> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+>> index e1ec9b38f5b9ba0568101b51fbf16b99461b6ee2..7a3360d8a0fd065394393de829108a12c27c85b9 100644
+>> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+>> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+>> @@ -79,6 +79,10 @@ static const struct ci_hdrc_imx_platform_flag imx8ulp_usb_data = {
+>>  		CI_HDRC_HAS_PORTSC_PEC_MISSED,
+>>  };
+>>  
+>> +static const struct ci_hdrc_imx_platform_flag imx95_usb_data = {
+>> +	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM | CI_HDRC_OUT_BAND_WAKEUP,
+>> +};
+>> +
+>>  static const struct ci_hdrc_imx_platform_flag s32g_usb_data = {
+>>  	.flags = CI_HDRC_DISABLE_HOST_STREAMING,
+>>  };
+>> @@ -94,6 +98,7 @@ static const struct of_device_id ci_hdrc_imx_dt_ids[] = {
+>>  	{ .compatible = "fsl,imx7d-usb", .data = &imx7d_usb_data},
+>>  	{ .compatible = "fsl,imx7ulp-usb", .data = &imx7ulp_usb_data},
+>>  	{ .compatible = "fsl,imx8ulp-usb", .data = &imx8ulp_usb_data},
+>> +	{ .compatible = "fsl,imx95-usb", .data = &imx95_usb_data},
+>>  	{ .compatible = "nxp,s32g2-usb", .data = &s32g_usb_data},
+>>  	{ /* sentinel */ }
+>>  };
+>> @@ -569,6 +574,9 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>>  
+>>  	device_set_wakeup_capable(dev, true);
+>>  
+>> +	if (pdata.flags & CI_HDRC_OUT_BAND_WAKEUP)
+>> +		device_set_out_band_wakeup(dev, true);
+>> +
+>
+>In current design, ci_hdrc_imx_probe() will create another platform
+>device B which will be a child of current device A. Furthermore, device
+>A and device B will attached to a same power domain. In this case, some
+>conflict setting may happen. For example, if the user wants to enable
+>wakeup for this USB port, they may echo "enabled" to wakeup file for
+>both device A and device B as before. As a result, device A is out
+>band wakeup so it doesn't depend on power domain on, but device B has
+>also enabled wakeup so the power domain will keep on finally. Actually,
+>the power domain needs to be off for imx95.
+>
+>So I think only letting the parent device A itself attach to power domain
+>should be enough. If it's the right way, then below change needs to be
+>included to avoid potential misbehavior.
 
-dummy-hcd is different from the others; its use of local_irq_save() is 
-in the gadget giveback path, not the host giveback path.  We would need 
-another audit similar to the one you did for ed194d136769, but this 
-time checking gadget completion handlers.
+Thanks for looking into this.
+Just detaching the power domain may break others. I think the better one
+should be:
 
-> Only RH code completes directly, everything else is shifted to softirq
-> context (for ehci/HCD_BH).
+if (device_get_out_band_wakeup(dev))
+	device_set_out_band_wakeup(&pdev->dev);
 
-Correct (except that RH code always uses softirq context; it never 
-completes directly -- the kerneldoc is wrong and Greg just accepted a 
-patch to change it).
+Regards,
+Peng
+>
+>diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+>index 694b4a8e4e1d..c2ca81fe5e09 100644
+>--- a/drivers/usb/chipidea/core.c
+>+++ b/drivers/usb/chipidea/core.c
+>@@ -915,6 +915,8 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
+>        if (ret)
+>                goto err;
+>
+>+       dev_pm_domain_detach(&pdev->dev, false);
 
-There are other places that disable local interrupts.  ehci-brcm.c does 
-it in order to meet a timing constraint.  ohci-omap.c and ohci-s3c2410.c 
-do it for reasons I'm not aware of (no comment about it in the source).  
-gadget/legacy/inode.c does it in ep_aio_cancel() -- I can only guess 
-that this is somehow related to aio and not to anything in USB.
+I think the 
 
-> | git grep -E 'local_irq_save|local_irq_disable' drivers/usb/ | wc -l
-> | 21
-> of which 10 are in pxa udc. The only one I am a bit concerned about is
-> the one in usb_hcd_pci_remove() and I think we had reports and patches
-> but somehow nothing did happen and I obviously forgot.
-> 
-> > I would expect that RT already defines functions which do this, but I 
-> > don't know their names.
-> 
-> We don't have anything where
-> 	local_irq_disable()
-> 	spin_lock()
-> 
-> can be mapped to something equivalent other than
-> 	spin_lock_irq()
-> 
-> I was running around and kept changing code so that we don't end up in
-> this scenario where we need to disable interrupts for some reason but on
-> RT we don't.
-> 
-> The closest thing we have is local_lock_irq() which maps to
-> local_irq_disable() on !PREEMPT_RT systems. But I would prefer to avoid
-> it because it serves a different purpose.
-> What works is something like
-> 	spin_lock_irqsave();
-> 	spin_unlock();
-> 	$SOMETHING
-> 	spin_lock();
-> 	spin_unlock_irqestore().
-
-That's just silly.  We should have something like this:
-
-#ifdef CONFIG_PREEMPT_RT
-static inline void local_irqsave_nonrt(unsigned long flags) {}
-static inline void local_irqrestore_nonrt(unsigned long flags) {}
-static inline void local_irq_disable_nonrt() {}
-static inline void local_irq_enable_nonrt() {}
-#else
-#define local_irqsave_nonrt	local_irqsave
-#define local_irqrestore_nonrt	local_irqrestore
-#define local_irq_disable_nonrt	local_irq_disable
-#define local_irq_enable_nonrt	local_irq_enable
-#endif
-
-> The question is why should $SOMETHING be invoked with disabled
-> interrupts if the function was called from process context.
-
-More to the point, out of all the possible reasons why $SOMETHING might 
-be invoked with disabled interrupts, which of these reasons remain valid 
-in RT builds and which don't?
-
-> If your concern is a missing _irqsave() in the callback then this
-> shouldn't be an issue. If it is the wrong context from kcov's point of
-> view then making the driver complete in tasklet should fix it since it
-> would match what ehci/ xhci does. 
-
-No, I'm not concerned about that.
-
-Alan Stern
+>+
+>        return pdev;
+>
+>Thanks,
+>Xu Yang
+>
+>>  	return 0;
+>>  
+>>  disable_device:
+>> diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
+>> index e17ebeee24e3ecc4b1c2d153d9ea9b656b5a3d35..c6451191d2de68607a9380482701d11f949d0ff7 100644
+>> --- a/include/linux/usb/chipidea.h
+>> +++ b/include/linux/usb/chipidea.h
+>> @@ -66,6 +66,7 @@ struct ci_hdrc_platform_data {
+>>  #define CI_HDRC_HAS_PORTSC_PEC_MISSED	BIT(17)
+>>  #define CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS	BIT(18)
+>>  #define	CI_HDRC_HAS_SHORT_PKT_LIMIT	BIT(19)
+>> +#define	CI_HDRC_OUT_BAND_WAKEUP		BIT(20)
+>>  	enum usb_dr_mode	dr_mode;
+>>  #define CI_HDRC_CONTROLLER_RESET_EVENT		0
+>>  #define CI_HDRC_CONTROLLER_STOPPED_EVENT	1
+>> 
+>> -- 
+>> 2.37.1
+>> 
 
