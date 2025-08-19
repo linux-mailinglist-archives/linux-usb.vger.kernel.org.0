@@ -1,131 +1,144 @@
-Return-Path: <linux-usb+bounces-27015-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27016-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7FE6B2BECC
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 12:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 29A02B2BF30
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 12:42:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02ED03A353A
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 10:21:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1106F3A9465
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 10:42:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B561727B34B;
-	Tue, 19 Aug 2025 10:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2295322C72;
+	Tue, 19 Aug 2025 10:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LQM38gBg";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="C3SPVIau"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YgHB5szz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83073451D2;
-	Tue, 19 Aug 2025 10:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FA9275AF7
+	for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 10:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755598889; cv=none; b=NVSHbh7cpqHLKQfLz4tOoqsFnIQrlyyywyxazKJAJxwBEAh1r9D+Wg/ovo25os2wI0j136Uvg43iR/KLM89W1YRgKop7lCF5RH89wXOH7F4oU7reglGwUgJYVchK48bfflLcS8NifqeDjjDIunkAfXObrjp1JkZ3ick3Yzd5rko=
+	t=1755600134; cv=none; b=PuKV40ZvhGaVvsupI7CioXd2ARsN+HUhnEyLjntL7QZUsaVkpUjd9bm7w1r0Ue+iC+iwHPO8sDoviF3bhDSp97UghWq2amMIM0bLiFp1QFNVryORuBbOGNcSOkL2zLP/AuZk42UZcDTlUIFM1MlwpvSMKDK9ea7SlDpwbuVl06M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755598889; c=relaxed/simple;
-	bh=rRqk9njGn48z615Rr5gmeoeW2PcgQLl2A9aZ7ED0mu0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O8DRgE+JzY2KHkfhEmkVk+p7oaNqwAxWvcELnSRbAoIBcldSegeV5bfKZqKl8bD6L18MpbFBU0VgBwomuIC8hFPwYwcer61gQioaLEP4tRg1onraSgPjOF9e7Wj5ewicHA2JbNq0mPGWhQsnDWMXKTrhJlz/YJsayA9o/nydtSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LQM38gBg; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=C3SPVIau; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 19 Aug 2025 12:21:24 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1755598885;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sd1NbSqSUSHxU54jSrNDalpf8ONqHH3DQZD09RzfBWM=;
-	b=LQM38gBgcRmJF24jHmc27bvLn2Hk60/XBsuvIDxQL1tNWGFMTDOcWKDLI1R1VR+zgEbuDR
-	kmgaWDboqqCGL13CztQRHciWdDP3T92S3jMj2Dmzdx6Q2MklTay9ZNbm4rFcXSqvA4+gO6
-	YEqqlVA3m1Gzmu9afnW9M/sc8i2NB7TrHcL7m9sxxWFoPWglVQ02FFzQ8vPwuqbf3xYHVR
-	YyI2V+hp9wi6wKu2XGFEkW2yyFKg63x9bMwYUkS9Hnh4IlcUwZxiUq++7WUjLYp7nOBd2r
-	KBmfZ79K7Bis/G1J43bObMZhvCZHlaIg0GGningphQQcoJ3PGo2lI9g20Ok1OA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1755598885;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sd1NbSqSUSHxU54jSrNDalpf8ONqHH3DQZD09RzfBWM=;
-	b=C3SPVIauGLe8408fq+HxrmLRQrTutc2xTJUFDGY1HmP8Y3pwo2fiFWHg/YS7DyJMPwGMr+
-	91AEgGX19OnrXPDA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Nam Cao <namcao@linutronix.de>
-Cc: Yunseong Kim <ysk@kzalloc.com>, gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Marcello Sylvester Bauer <sylv@sylv.io>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
-	Al Viro <viro@zeniv.linux.org.uk>, andreyknvl@gmail.com,
-	Austin Kim <austindh.kim@gmail.com>, linux-rt-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, syzkaller@googlegroups.com
-Subject: Re: [BUG] usb: gadget: dummy_hcd: Sleeping function called from
- invalid context in dummy_dequeue on PREEMPT_RT
-Message-ID: <20250819102124.O6E7YfEJ@linutronix.de>
-References: <5b337389-73b9-4ee4-a83e-7e82bf5af87a@kzalloc.com>
- <20250816065933.EPwBJ0Sd@linutronix.de>
+	s=arc-20240116; t=1755600134; c=relaxed/simple;
+	bh=GUHw2hkJ2M2Zhf8SAUCAWfslMLtGIo/U1p61rhrXQgI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VdGB02a2EYn59EBEw/0c9OkmCM9AX6C21fDl47a1QKVRXotMW3sUBoTBHtPlqRdIk3fFl/VEMFgYdlojhvZw4NZyWC3EFPvEQ9GxM8q76xy/8lsQM34Oqju4ADvDYdUfZd2mtq3i41Ea6nJn4dcwpRE5y1VksAXmwliaYPncE40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YgHB5szz; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755600133; x=1787136133;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GUHw2hkJ2M2Zhf8SAUCAWfslMLtGIo/U1p61rhrXQgI=;
+  b=YgHB5szzKKvm6bxLrdveWJOvM3MbgCHvg7kRAavYEgcbdAfuMTfD77l6
+   GWrDfBmYqCk9bFz37KrRvQGNBPjhD/TQAxETAvnfXyA6syD2d+8QM/iPh
+   cQy2R28YceJOr2vziaeObHj1fsQASxbX0JcEulLut1egHra/GCSiv6XHi
+   IX7ZTk/sy7UFlsgvnslv314xYFGw2awMewCoL+9nzXaTD3RariXiMp1nz
+   dQHfPA7Ozml9qwvrwG7PtmbsvnMMWyk0oI00ito5GN9ICPw4RyVOtuXFV
+   M8HzPkXRYVFuNWaY3BMoyne3GJruoUzv6uJTSm4qbAVNnEshemd7HdM6F
+   w==;
+X-CSE-ConnectionGUID: SPYIRgVbRBGTdjXybk1VzQ==
+X-CSE-MsgGUID: mwsLgsrBTT+yQrBfoJeXyA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="56867777"
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="56867777"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 03:42:12 -0700
+X-CSE-ConnectionGUID: abtz5msGRzWOwhcpLj8ZOw==
+X-CSE-MsgGUID: Ethlg0bdQOePFj6s1PWyDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="168171052"
+Received: from mnyman-desk.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa008.fm.intel.com with ESMTP; 19 Aug 2025 03:42:10 -0700
+Message-ID: <471aaca5-1e18-462f-b89c-768d7673bf0a@linux.intel.com>
+Date: Tue, 19 Aug 2025 13:42:09 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250816065933.EPwBJ0Sd@linutronix.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION 6.16] xHCI host not responding to stop endpoint
+ command after suspend and resume
+To: "Neronin, Niklas" <niklas.neronin@linux.intel.com>,
+ =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
+ linux-usb@vger.kernel.org
+Cc: regressions@lists.linux.dev, Christian Heusel <christian@heusel.eu>
+References: <20250818231103.672ec7ed@foxbook>
+ <20250819084153.2c13c187@foxbook>
+ <2f2b66b5-d845-4e75-aaac-87974b592b4a@linux.intel.com>
+ <a036342a-a430-4dc6-94a2-abc12cd3dd0f@linux.intel.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <a036342a-a430-4dc6-94a2-abc12cd3dd0f@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2025-08-16 08:59:33 [+0200], Nam Cao wrote:
-> diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-> index 21dbfb0b3bac..a4653c919664 100644
-> --- a/drivers/usb/gadget/udc/dummy_hcd.c
-> +++ b/drivers/usb/gadget/udc/dummy_hcd.c
-> @@ -765,8 +765,7 @@ static int dummy_dequeue(struct usb_ep *_ep, struct usb_request *_req)
->  	if (!dum->driver)
->  		return -ESHUTDOWN;
->  
-> -	local_irq_save(flags);
-> -	spin_lock(&dum->lock);
-> +	spin_lock_irqsave(&dum->lock, flags);
->  	list_for_each_entry(iter, &ep->queue, queue) {
->  		if (&iter->req != _req)
->  			continue;
-> @@ -776,15 +775,16 @@ static int dummy_dequeue(struct usb_ep *_ep, struct usb_request *_req)
->  		retval = 0;
->  		break;
->  	}
-> -	spin_unlock(&dum->lock);
-> +	spin_unlock_irqrestore(&dum->lock, flags);
+On 19.8.2025 12.08, Neronin, Niklas wrote:
+> 
+> 
+> On 19/08/2025 11.56, Mathias Nyman wrote:
+>> On 19.8.2025 9.41, Michał Pecio wrote:
+>>> On Mon, 18 Aug 2025 23:11:03 +0200, Michał Pecio wrote:
+>>>> A bisect effort is ongoing and c0c9379f235d ("Merge tag 'usb-6.16-rc1'
+>>>> of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb") is bad,
+>>>> so that's where the bug likely came from.
+>>>
+>>> Looks like the result is in.
+>>>
+>>> e1db856bd28891d70008880d7f1d3b8d1ea948fd is the first bad commit
+>>> commit e1db856bd28891d70008880d7f1d3b8d1ea948fd
+>>> Author: Niklas Neronin <niklas.neronin@linux.intel.com>
+>>> Date:   Thu May 15 16:56:14 2025 +0300
+>>>
+>>>       usb: xhci: remove '0' write to write-1-to-clear register
+>>
+>> Thanks for tracking this down, I see the issue now
+>>
+>> We may lose interrupts due to this patch, example:
+>>
+>> Hardware sets IMAN_IP BIT(0) when in needs attention
+>> Driver later allows xHC interrupt by setting IMAN_IE BIT(1), but
+>> Driver clears IMAN_IP (RW1C) when setting IMAN_IE so no interrupt is triggered.
+> 
+> Apologies for my blunder.
+> 
+> So, there can be an interrupt pending even when the interrupt is not enabled?
 
-The two above are fine.
+So it seems, Interrupt pending (IMAN_IP) is set if:
+- event handler busy (EHB) is 0, and
+- moderation counter (IMODC) reaches 0, and
+- Internal IPE bit is set, meaning:
+   xHC inserted an event to the event ring (ring not empty), and
+   "block event interrupt" (BEI) is 0
 
->  	if (retval == 0) {
->  		dev_dbg(udc_dev(dum),
->  				"dequeued req %p from %s, len %d buf %p\n",
->  				req, _ep->name, _req->length, _req->buf);
-> +		local_irq_save(flags);
->  		usb_gadget_giveback_request(_ep, _req);
-> +		local_irq_restore(flags);
+It does not depend on interrupt enable (IMAN_IE) bit, that only gates the interrupt from being
+generated for this interrupter
 
-This is not. I don't see the need for it. The queue part does
-	spin_lock_irqsave()
-	spin_unlock();
-	usb_gadget_giveback_request()
-	spin_lock();
-	spin_unlock_irqrestore();
+See xhci section 4.17.5
 
-and keeps the interrupts disabled during callback invocation. This seems
-to be just to unify the code vs the else path.
+> But there (ideally) should not be an interrupt pending when disabling the interrupt?
 
->  	}
-> -	local_irq_restore(flags);
->  	return retval;
->  }
+Yes, So it would be good to still print the debug message if IP is set.
+But we should not clear the IP bit here, it will trigger an interrupt and get handled once
+IE is enabled back.
 
-Sebastian
+> 
+> I can submit a fix patch.
+
+Sounds good.
+Lets get this fixed as soon as possible.
+
+Thanks
+Mathias
+
 
