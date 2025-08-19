@@ -1,137 +1,258 @@
-Return-Path: <linux-usb+bounces-27026-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27027-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C49F4B2C5D4
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 15:40:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3168CB2C68F
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 16:07:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FBEB16AB08
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 13:33:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FA6172122A
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 14:02:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18AF33EB09;
-	Tue, 19 Aug 2025 13:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F948221FC7;
+	Tue, 19 Aug 2025 14:01:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XXWYcuVe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IfzdRibm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F7233CEBD
-	for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 13:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4B21FE47B;
+	Tue, 19 Aug 2025 14:01:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755610376; cv=none; b=iQqd5QgKrSYR68/qrpcRmftLcFh+NvdrZ6uQZqadtLkdy3ZtF+FcbxiHYB1/RX5hP30zHOqChMCjQMt23+33uYIjjpXqrtfELvZ88dQgZi34NKj6pdc3pig9p/osoaQYdL7AVY4iCm0OhRsQYRjXyxW80kBHzeftUZlmlGFEiEM=
+	t=1755612086; cv=none; b=CElz+LfsNPBKpYKARslSWdsmDVc23dZtpD1b6xSWfGEQ3tLFPEhthQHUX8YAoYf0BUt/vry3J8P6HVa6Lkmg+u7bKSiNgy6vXihC9m46HWpvWs+KajpjZ9NgpEardgFp1cJPo8SywWyD0zg3CUjTMsEodxtHiEv+K+5pml7o24w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755610376; c=relaxed/simple;
-	bh=pSC5IgqyzZtG96ClfbXrgt5sbg1AohobwZVoz25rj/M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=bUwFdS9KpyS+lK1hFwJ1dMxW3VklaAUjqUJt/kkPYOeUoUD7dpz9USXzRdI8FmWj/iNHbq8L/zNAn/rdj/IHA/qIAkRqFlX2AlDrQVnBIhQ6IVU9nZl+ttK1C592O6QhjvVbYN9uHzXU84ufy6QjuOiOUA2OOGBOXciKLpW32JE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XXWYcuVe; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3b9e4106460so4218948f8f.2
-        for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 06:32:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755610373; x=1756215173; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FygJPUitZkmXwlp1RpWscijGjGvi5AqEQa7JO2lBl9w=;
-        b=XXWYcuVeZdjKkQpbmgtiXlCYl2P3uKIwc5vk/Jo460Xd8ezzS8QFMCAjkC3CFcBkq5
-         VW4Ej+rGwFUzbGHTZiSEUcXRxH6+omwQMCHHQ8UZ8F212Fj5ItogE2fwUBn64JLw3rRc
-         8petYKOwLYhlUHEw/L0Z9ZkyRbzgU5K8/LHZhpS/DUO7f0Invi60piAGW9odGopSSq7g
-         GVkdZ0Lts9g0aYG0WPYT9hmGl3junTZPCBRSZM25yU8Fk94+YxU6IPQKdt+hzTCB0lnR
-         xGN35RYy8u9zLJ95wGvXczvsAiCr7Pkl5/T5dANheglI9ftTOEttnFCJRH/7s+WebjJ0
-         VqQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755610373; x=1756215173;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FygJPUitZkmXwlp1RpWscijGjGvi5AqEQa7JO2lBl9w=;
-        b=wKuOekBcL5SSbv2ZwmVqdJSYWoI9vOrsvSmZgKUwKS2IN8VtH/GUtnA1+IX/w82mxu
-         asJOH60T3Q00YgN9wNJ7hlREFCTIjBqvcz3S3TYB9uOJyVy77GBrOJReo7cCeQrKtMQY
-         8uxtJ6zEWZ/ZXXhM3C4c3DAg61O4Mhfo9GtdtQfHO1QhNGDO6O0yvfweJdo+S9vo9Mke
-         Sbw2c/ho5bg1suHe+9eTgxkqkd0afKmFSZLdFDkILrcaRgFPifSJxVKtFUGJ1vOvJjuT
-         eRgkuK7e0o0B9rzt5VLrBwyl5ZxSGRdT3mB0aiUXNizuwpKFH6NcEBnIo41ZdDhDwNVz
-         RndQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVtR+VlI5JAZzjpP4LEtXd6xi5Z4C3Op17SyT831/RAJwhmDjrqql+IbsKifJquvw15b2TXEXr4Vng=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0wi1nD6ZGl5deokwPXrtXxkCzrALD+fz4R2jEviudgiD59g4P
-	toftRSYvUd29OmQCPoCaDEVAxI3KDBcU2avJGKMPEE/Ne1oeBg975AwsSeXnT3hFYxM=
-X-Gm-Gg: ASbGncsuTBp9V36MAsP728ThEUhRC+1W4R3Sz7ab5sUFNKPIs0scLIq44pohmSbZI4f
-	mbDUrw1xP51bt0lrxBB3iBcitGwZxJL6l1YpttwdvyEaZB2W01OpqqrnbBKCWar3Jc3Uy20TS5R
-	Hn+cY5dlMimPuwXvTDUWdUz4YFZfNtj2iK7KDW5bZypA2JoRkrncJwnR+vk8nxazuygQBXRJplu
-	94Xk4j0wNkU5pdh4JAYnh/9xGs0FRt3t15UjdoAUmDblDeoH9MjEiGNP+sEGt59LOaYerCwcdXt
-	TaDYpU3P89j/UW9wdIvRPuR/WkT/Jh58mOn5hJiChfdZPMorIxUDSReB2/Cojx9xoY2dcR50zjF
-	H/FvZYAWlYMqdZPJNRU0cb5YI45WntYErVW0WYgkuNCuD6G2o4frrOY/eaJNuawU=
-X-Google-Smtp-Source: AGHT+IHE3eWuGDJbAuuWclWDGhvbLd8+Nrm3L1V5+JQsqdxDxBiVDMEcNaBhcDl9yr9xN8B6hHRBKQ==
-X-Received: by 2002:a05:6000:24c3:b0:3a4:d64a:3df6 with SMTP id ffacd0b85a97d-3c0ea3cf081mr2302142f8f.3.1755610373108;
-        Tue, 19 Aug 2025 06:32:53 -0700 (PDT)
-Received: from [192.168.0.35] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c077c5776fsm3708064f8f.61.2025.08.19.06.32.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Aug 2025 06:32:52 -0700 (PDT)
-Message-ID: <bee2fce1-facb-44c2-8eed-2bb396f9c204@linaro.org>
-Date: Tue, 19 Aug 2025 14:32:51 +0100
+	s=arc-20240116; t=1755612086; c=relaxed/simple;
+	bh=UplIaD6WMxf+YtllImyjbwmF44hxcv0UBEJgrXkaS5M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NNce7NwMjberLwRl8FuXjrtstOKsxAQISStHWE0JJSYVwSD8InxyjnLTq+hkBhTwxjFLQR2OgrLo4/elvu+BzwtSXtQbgwGsgls/S3BsqjnseMGktIIuCR6DgXPDQurRaqT3Bg54gxmghX2WLwxi3pOPYDkl9ZPBOZ1i0bIWaoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IfzdRibm; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755612085; x=1787148085;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=UplIaD6WMxf+YtllImyjbwmF44hxcv0UBEJgrXkaS5M=;
+  b=IfzdRibmi41uFgXTRA/SXXS2w/roi2A0RYToN5Tn4b8pq2rxVIgptjjW
+   kHirW/LoyBJ4qjiOWDmdxIR7HoVu1V5JHFCmz1xKnO2R/Go2ANLknE8d3
+   PoU57nXzCRu5sI0nU8HRKyeuwvpfRM/2iqTviUnwuhJ0LyHqd/I3sLqcm
+   WMzNvlK5W9wayNvk456Ya0fPMqLYCBJHMUkYc2fie0mh7jZOFfOt6RoLF
+   4ExPtVYiTDp/L9vF83s2B2gMkOe4loroQMNRHD69vGFkoWJEDDzhFmjQv
+   MRlfLyFL0dLfXxbS+m77NRoDWzlprKk91OuYtth0Tx+C2xPdgXkeSN/WW
+   Q==;
+X-CSE-ConnectionGUID: cabQVIAOQR+32c4Aj2ZXJg==
+X-CSE-MsgGUID: 7ql5IkBDTPSjSQPE1QrIFg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57781415"
+X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
+   d="scan'208";a="57781415"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 07:01:18 -0700
+X-CSE-ConnectionGUID: 0k+1jtXDT7KLvMAvb6M0oA==
+X-CSE-MsgGUID: pTXPJ1O5Rvq69GKsw+vs7Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
+   d="scan'208";a="198867079"
+Received: from bergbenj-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.148])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 07:01:13 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 2D0A1120276;
+	Tue, 19 Aug 2025 17:01:10 +0300 (EEST)
+Date: Tue, 19 Aug 2025 17:01:10 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>,
+	linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
+	hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
+	Amardeep Rai <amardeep.rai@intel.com>,
+	Kannappan R <r.kannappan@intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v4 1/4] xhci: Add host support for eUSB2 double
+ isochronous bandwidth devices
+Message-ID: <aKSDpk1grmBJ2ZWd@kekkonen.localdomain>
+References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
+ <20250812132445.3185026-2-sakari.ailus@linux.intel.com>
+ <20250818115016.3611b910@foxbook>
+ <1096ce5c-ac0a-49e0-9030-31c87c71b3c0@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: typec: qcom-pmic-typec: use kcalloc() instead of
- kzalloc()
-To: Qianfeng Rong <rongqianfeng@vivo.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250819090125.540682-1-rongqianfeng@vivo.com>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20250819090125.540682-1-rongqianfeng@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1096ce5c-ac0a-49e0-9030-31c87c71b3c0@linux.intel.com>
 
-On 19/08/2025 10:01, Qianfeng Rong wrote:
-> Replace devm_kzalloc() with devm_kcalloc() in qcom_pmic_typec_pdphy_probe()
-> and qcom_pmic_typec_port_probe() for safer memory allocation with built-in
-> overflow protection.
+Hi Mathias, Michał,
+
+On Mon, Aug 18, 2025 at 06:30:23PM +0300, Mathias Nyman wrote:
+> On 18.8.2025 12.50, Michał Pecio wrote:
+> > On Tue, 12 Aug 2025 16:24:42 +0300, Sakari Ailus wrote:
+> > > From: "Rai, Amardeep" <amardeep.rai@intel.com>
+> > > 
+> > > Detect eUSB2 double isoc bw capable hosts and devices, and set the proper
+> > > xhci endpoint context values such as 'Mult', 'Max Burst Size', and 'Max
+> > > ESIT Payload' to enable the double isochronous bandwidth endpoints.
+> > > 
+> > > Intel xHC uses the endpoint context 'Mult' field for eUSB2 isoc
+> > > endpoints even if hosts supporting Large ESIT Payload Capability should
+> > > normally ignore the mult field.
+> > > 
+> > > Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
+> > > Co-developed-by: Kannappan R <r.kannappan@intel.com>
+> > > Signed-off-by: Kannappan R <r.kannappan@intel.com>
+> > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > Co-developed-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> > > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> > > Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > ---
+> > >   drivers/usb/host/xhci-caps.h |  2 ++
+> > >   drivers/usb/host/xhci-mem.c  | 60 ++++++++++++++++++++++++++++--------
+> > >   drivers/usb/host/xhci-ring.c |  6 ++--
+> > >   drivers/usb/host/xhci.c      | 16 +++++++++-
+> > >   drivers/usb/host/xhci.h      | 19 ++++++++++++
+> > >   5 files changed, 87 insertions(+), 16 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
+> > > index 4b8ff4815644..89bc83e4f1eb 100644
+> > > --- a/drivers/usb/host/xhci-caps.h
+> > > +++ b/drivers/usb/host/xhci-caps.h
+> > > @@ -89,3 +89,5 @@
+> > >   #define HCC2_GSC(p)             ((p) & (1 << 8))
+> > >   /* true: HC support Virtualization Based Trusted I/O Capability */
+> > >   #define HCC2_VTC(p)             ((p) & (1 << 9))
+> > > +/* true: HC support Double BW on a eUSB2 HS ISOC EP */
+> > > +#define HCC2_EUSB2_DIC(p)       ((p) & (1 << 11))
+> > 
+> > I guess this bit is not defined in the original xHCI 1.2 spec which
+> > predates BW doubling, any reference to where it is specified and what
+> > it means exactly?
 > 
-> Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
-> ---
->   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 2 +-
->   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c  | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+> USB 2.0 Double Isochronous IN Bandwidth Capability (DIC) – RO.
+> This bit when set to 1, indicates that the xHC supports the USB 2.0 Double Isochronous IN
+> Bandwidth Capability on a eUSB2 HS Isochronous Endpoint.
+> This feature is only applicable to a directly connected inbox native eUSB2 device.
 > 
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> index 18303b34594b..c8b1463e6e8b 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> @@ -567,7 +567,7 @@ int qcom_pmic_typec_pdphy_probe(struct platform_device *pdev,
->   	if (!res->nr_irqs || res->nr_irqs > PMIC_PDPHY_MAX_IRQS)
->   		return -EINVAL;
->   
-> -	irq_data = devm_kzalloc(dev, sizeof(*irq_data) * res->nr_irqs,
-> +	irq_data = devm_kcalloc(dev, res->nr_irqs, sizeof(*irq_data),
->   				GFP_KERNEL);
->   	if (!irq_data)
->   		return -ENOMEM;
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> index 4fc83dcfae64..8051eaa46991 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> @@ -713,7 +713,7 @@ int qcom_pmic_typec_port_probe(struct platform_device *pdev,
->   	if (!res->nr_irqs || res->nr_irqs > PMIC_TYPEC_MAX_IRQS)
->   		return -EINVAL;
->   
-> -	irq_data = devm_kzalloc(dev, sizeof(*irq_data) * res->nr_irqs,
-> +	irq_data = devm_kcalloc(dev, res->nr_irqs, sizeof(*irq_data),
->   				GFP_KERNEL);
->   	if (!irq_data)
->   		return -ENOMEM;
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> The xHCI specification with this addition is on its way, we got permission from
+> author(s) to start upstreaming the code already.
+> 
+> > 
+> > > diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> > > index 6680afa4f596..ea51434c80fa 100644
+> > > --- a/drivers/usb/host/xhci-mem.c
+> > > +++ b/drivers/usb/host/xhci-mem.c
+> > > @@ -1328,18 +1328,36 @@ static unsigned int xhci_get_endpoint_interval(struct usb_device *udev,
+> > >   	return interval;
+> > >   }
+> > > -/* The "Mult" field in the endpoint context is only set for SuperSpeed isoc eps.
+> > > +/*
+> > > + * xHCs without LEC use the "Mult" field in the endpoint context for SuperSpeed
+> > > + * isoc eps, and High speed isoc eps that support bandwidth doubling. Standard
+> > >    * High speed endpoint descriptors can define "the number of additional
+> > >    * transaction opportunities per microframe", but that goes in the Max Burst
+> > >    * endpoint context field.
+> > >    */
+> > > -static u32 xhci_get_endpoint_mult(struct usb_device *udev,
+> > > -		struct usb_host_endpoint *ep)
+> > > +static u32 xhci_get_endpoint_mult(struct xhci_hcd *xhci,
+> > > +				  struct usb_device *udev,
+> > > +				  struct usb_host_endpoint *ep)
+> > >   {
+> > > -	if (udev->speed < USB_SPEED_SUPER ||
+> > > -			!usb_endpoint_xfer_isoc(&ep->desc))
+> > > +	bool lec;
+> > > +
+> > > +	/* xHCI 1.1 with LEC set does not use mult field, except intel eUSB2 */
+> > > +	lec = xhci->hci_version > 0x100 && HCC2_LEC(xhci->hcc_params2);
+> > > +
+> > > +	/* eUSB2 double isoc bw devices are the only USB2 devices using mult */
+> > > +	if (xhci_eusb2_is_isoc_bw_double(udev, ep)) {
+> > > +		if (!lec || xhci->quirks & XHCI_INTEL_HOST)
+> > > +			return 1;
+> > > +	}
+> > > +
+> > > +	/* Oherwise only isoc transfers on hosts without LEC uses mult field */
+> > > +	if (!usb_endpoint_xfer_isoc(&ep->desc) || lec)
+> > >   		return 0;
+> > > -	return ep->ss_ep_comp.bmAttributes;
+> > > +
+> > > +	if (udev->speed >= USB_SPEED_SUPER)
+> > > +		return ep->ss_ep_comp.bmAttributes;
+> > > +
+> > > +	return 0;
+> > >   }
+> > 
+> > That's a complicated control flow. I think it could just be:
+> > > +	/* SuperSpeed isoc transfers on hosts without LEC uses mult field */
+> > > +	if (udev->speed >= USB_SPEED_SUPER && usb_endpoint_xfer_isoc(&ep->desc) && !lec)
+> > > +		return ep->ss_ep_comp.bmAttributes;
+> > > +	return 0;
+> 
+> Possibly, not sure there's much difference, especially if you break that line at
+> 80 columns
+
+I prefer Michał's suggestion, line breaks are fine, too...
+
+> 
+> > > +/*
+> > > + * USB 2.0 specification, chapter 5.6.4 Isochronous Transfer Bus Access
+> > > + * Constraint. A high speed endpoint can move up to 3072 bytes per microframe
+> > > + * (or 192Mb/s).
+> > > + */
+> > > +#define MAX_ISOC_XFER_SIZE_HS  3072
+> > > +
+> > > +static inline bool xhci_eusb2_is_isoc_bw_double(struct usb_device *udev,
+> > > +						struct usb_host_endpoint *ep)
+> > > +{
+> > > +	return udev->speed == USB_SPEED_HIGH &&
+> > > +		usb_endpoint_is_isoc_in(&ep->desc) &&
+> > > +		le16_to_cpu(ep->desc.wMaxPacketSize) == 0 &&
+> > > +		le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval) >
+> > > +		MAX_ISOC_XFER_SIZE_HS;
+> > > +}
+> > 
+> > It looks like eUSB2v2 is another spec which uses this descriptor for
+> > larger isoc endpoints and this code might trigger on such devices once
+> > USB core learns to parse them.
+> > 
+> 
+> Could make sense to check that bcdUSB is 0x220 here to avoid that.
+
+I'll add the check for v5.
+
+> 
+> We could also check if ep->eusb2_isoc_ep_comp.bDescriptorType exists
+> like in PATCH 2/4, and could then remove the wMaxPacketSize == 0 check as
+> usb core descriptor parsing will already do that check for us, before copying
+> the descriptor.
+
+Ack.
+
+> 
+> The USB_SPEED_HIGH check could also be moved to descriptor parsing in usb core.
+> This way we could remove the speed check hare and from PATCH 2/3
+
+Ack.
+
+> 
+> 
+> > Would there be no issues with that? Or conversely, any chance that your
+> > code could be trivially modified to support full 2v2, and "bw doubling"
+> > removed from names and comments?
+> 
+> Proably not, eUSB2v2 may have some odd burst and mult fields while double
+> bandwidth has fixed values.
+
+-- 
+Regards,
+
+Sakari Ailus
 
