@@ -1,258 +1,162 @@
-Return-Path: <linux-usb+bounces-27027-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27028-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3168CB2C68F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 16:07:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 891E4B2C6AE
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 16:15:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FA6172122A
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 14:02:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 083D51BC5362
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Aug 2025 14:13:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F948221FC7;
-	Tue, 19 Aug 2025 14:01:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0B2226D14;
+	Tue, 19 Aug 2025 14:12:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IfzdRibm"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="TFfy3k/r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4B21FE47B;
-	Tue, 19 Aug 2025 14:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78D62253AB
+	for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 14:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755612086; cv=none; b=CElz+LfsNPBKpYKARslSWdsmDVc23dZtpD1b6xSWfGEQ3tLFPEhthQHUX8YAoYf0BUt/vry3J8P6HVa6Lkmg+u7bKSiNgy6vXihC9m46HWpvWs+KajpjZ9NgpEardgFp1cJPo8SywWyD0zg3CUjTMsEodxtHiEv+K+5pml7o24w=
+	t=1755612758; cv=none; b=OSqo3AB9N0Ngr2HNM5UqMeSTLePXTkcwYELTXnPcq94AGxGx7EoEacuWJLqoXWQbrZFrPI9dRbTrX5NZ0pdwPZ2j0Z1KxGE4+mvmBDQAJuxlw6WSaxnhXKHF4Kc6vvpP4PHEKqybYCdQahU9Ms3mssaBqpH4e0JztG2lP9CvYz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755612086; c=relaxed/simple;
-	bh=UplIaD6WMxf+YtllImyjbwmF44hxcv0UBEJgrXkaS5M=;
+	s=arc-20240116; t=1755612758; c=relaxed/simple;
+	bh=gt4mRYfjODV9zhqfPjnfdU89Lq3jwQVRdixAwLEWLSw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NNce7NwMjberLwRl8FuXjrtstOKsxAQISStHWE0JJSYVwSD8InxyjnLTq+hkBhTwxjFLQR2OgrLo4/elvu+BzwtSXtQbgwGsgls/S3BsqjnseMGktIIuCR6DgXPDQurRaqT3Bg54gxmghX2WLwxi3pOPYDkl9ZPBOZ1i0bIWaoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IfzdRibm; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755612085; x=1787148085;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=UplIaD6WMxf+YtllImyjbwmF44hxcv0UBEJgrXkaS5M=;
-  b=IfzdRibmi41uFgXTRA/SXXS2w/roi2A0RYToN5Tn4b8pq2rxVIgptjjW
-   kHirW/LoyBJ4qjiOWDmdxIR7HoVu1V5JHFCmz1xKnO2R/Go2ANLknE8d3
-   PoU57nXzCRu5sI0nU8HRKyeuwvpfRM/2iqTviUnwuhJ0LyHqd/I3sLqcm
-   WMzNvlK5W9wayNvk456Ya0fPMqLYCBJHMUkYc2fie0mh7jZOFfOt6RoLF
-   4ExPtVYiTDp/L9vF83s2B2gMkOe4loroQMNRHD69vGFkoWJEDDzhFmjQv
-   MRlfLyFL0dLfXxbS+m77NRoDWzlprKk91OuYtth0Tx+C2xPdgXkeSN/WW
-   Q==;
-X-CSE-ConnectionGUID: cabQVIAOQR+32c4Aj2ZXJg==
-X-CSE-MsgGUID: 7ql5IkBDTPSjSQPE1QrIFg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57781415"
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="57781415"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 07:01:18 -0700
-X-CSE-ConnectionGUID: 0k+1jtXDT7KLvMAvb6M0oA==
-X-CSE-MsgGUID: pTXPJ1O5Rvq69GKsw+vs7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="198867079"
-Received: from bergbenj-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.148])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 07:01:13 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 2D0A1120276;
-	Tue, 19 Aug 2025 17:01:10 +0300 (EEST)
-Date: Tue, 19 Aug 2025 17:01:10 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>,
-	linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
-	hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
-	Amardeep Rai <amardeep.rai@intel.com>,
-	Kannappan R <r.kannappan@intel.com>,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v4 1/4] xhci: Add host support for eUSB2 double
- isochronous bandwidth devices
-Message-ID: <aKSDpk1grmBJ2ZWd@kekkonen.localdomain>
-References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
- <20250812132445.3185026-2-sakari.ailus@linux.intel.com>
- <20250818115016.3611b910@foxbook>
- <1096ce5c-ac0a-49e0-9030-31c87c71b3c0@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HA6HH+4oy801cV49DlLMi09vHt6TjiOHhG2mTsDOa68fmfyK9SWX6YvNsYAP6pKfxAgCgsrK+iA+SV1hy8hCXfu0h8FDAID112VI52tWra4iWttE4PTBBboh1/dbQ6XwyjAAbCjnoFIiP8KhtP7FfGLVb9CyWBdrivUXzN3Hmyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=TFfy3k/r; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7e87036b8aeso604151085a.0
+        for <linux-usb@vger.kernel.org>; Tue, 19 Aug 2025 07:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1755612756; x=1756217556; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bDLwUY8c5UikKYG43v+aAUoS5K12CXkZu1S6tpWU6eg=;
+        b=TFfy3k/rnhuwPkiNn4niFNUXwgmnpl7DS6gFMh18k8UWlbgbmf52NdHiFYbB1xjydb
+         wCJ8p3YuHFEkvLlTWoju5a+eHqH9DGz3Hbiif4xV9o9NRpsNjOArzd4M9YvD8VP75ZJX
+         pkDOzeFkrTfwpYv+dwmZ45w6j0PVnOoFVlUotxpoU5EiXMIQkDlxBuFLS/CODJVeQqVl
+         k2B0iiPHVSDMd355ILgBmMiJ2OxKEf95gtQPrCvxudYLMzuAgQiqJgejHHcARvVrKaGA
+         TBtvv0JrFfzEQD9NazxIe/YBHGEyTcHnvSc2Nw8HDkbzcJ2GJdX/JDfZf0O4a5rGMrxI
+         pooA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755612756; x=1756217556;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bDLwUY8c5UikKYG43v+aAUoS5K12CXkZu1S6tpWU6eg=;
+        b=mpnLqW/Lt6uLSXiUtcq0ljLWKkbxM0RI4pAQqooEVvnWAapl+/OuvvySt9uWs+M2iV
+         6JpQPSICTseGdFulQGqGK5ws9BMdDQba866MMkKfdP40WelqM5GyfZvksEDWWCYFEOSK
+         HaPekNo0Ne9vWDBcd6G80lR1Z0J7+tv1MtMg6tgAZjmKbKUK4JKVaQXShSzTa6sEOzH3
+         54SKsLo3hyxvjRlu6QTW8p2OkOANpaj4HOn1R9I8SO2fNf/VoLMKKbk1VVmx1tlmTKRz
+         xvEH6NreA1EYUEND3oms2ERyVJ3ltNrc9Wg4TEIaMl8XVslVmkamGnFUPVrXwYyXKfky
+         r9BQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUubW/c5QlLJsTrto2kd9eLlWBoW13DQEIKUb/0UQvPNzC6bBxodlpcqvG1bXynRT0srUYZd6blXjk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwERN2lgfsxYvBgosc7DOwKIxtnxECRCLx3pLO/JUhp7p6yY/oV
+	MXZ0NNWsSLIk2g6ccPAuJijLWrJ8KM8YcHPaqaPtE9YRKcRg7Ni/Wm/2HPXCSDZT3g==
+X-Gm-Gg: ASbGncu/Wa7qoM71Ea/5ILh/b+w9gZ6rQ+PHCyUQwUCUEjcZ1o1/YpT7QmZJhbKtUkK
+	40olvefZ4niB8Fqfvc/lQFCn9gG7EVBZpe3Pb05A2hUg77lt0YFVTO0x1LfNEPnNb1fTDAaiaDH
+	Ri6o9kgQ8F473YEs7ht+pfowRPa9FlTLgxbcPExO8+QcirqzESsAxElfg24I2GuoV+O88zCDn59
+	HumJP4+BzVjuuUyRipmWAB8iqADdP1MnZzhSS8E46IUtq3AfHzDzbdb6uOhw8cbVIt1ZbCdnwW5
+	CrqvKiiNOph3tYR89/ltHfTK+61/RL4cFqGaHYmsxcXQ0m2vljW6GN8A7Y/XowSFELTVJVPVO/p
+	0JzlFRofZvrltB1roECAPRzYOrcM=
+X-Google-Smtp-Source: AGHT+IHQg04DWf8DLLAvL7X03CUOIZTn7DoQBqcIlAoSiqB7A22l6EHFGlPS13+38MuE7eItCA2s6w==
+X-Received: by 2002:a05:620a:1a1f:b0:7e9:f17f:65b8 with SMTP id af79cd13be357-7e9f3361b7amr352563585a.39.1755612755346;
+        Tue, 19 Aug 2025 07:12:35 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::fa48])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e87e066da8sm771292885a.25.2025.08.19.07.12.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Aug 2025 07:12:34 -0700 (PDT)
+Date: Tue, 19 Aug 2025 10:12:31 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Yunseong Kim <ysk@kzalloc.com>, linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	Andrey Konovalov <andreyknvl@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	syzkaller@googlegroups.com
+Subject: Re: [BUG] usbip: vhci: Sleeping function called from invalid context
+ in vhci_urb_enqueue on PREEMPT_RT
+Message-ID: <49ee1b8a-d47a-42df-aa64-d0d62798c45b@rowland.harvard.edu>
+References: <c6c17f0d-b71d-4a44-bcef-2b65e4d634f7@kzalloc.com>
+ <f6cdf21a-642f-458c-85c1-0c2e1526f539@rowland.harvard.edu>
+ <28544110-3021-43da-b32e-9785c81a42c1@kzalloc.com>
+ <1088432b-b433-4bab-a927-69e55d9eb433@rowland.harvard.edu>
+ <2bf33071-e05e-4b89-b149-30b90888606f@rowland.harvard.edu>
+ <20250819110457.I46wiKTe@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1096ce5c-ac0a-49e0-9030-31c87c71b3c0@linux.intel.com>
+In-Reply-To: <20250819110457.I46wiKTe@linutronix.de>
 
-Hi Mathias, Michał,
-
-On Mon, Aug 18, 2025 at 06:30:23PM +0300, Mathias Nyman wrote:
-> On 18.8.2025 12.50, Michał Pecio wrote:
-> > On Tue, 12 Aug 2025 16:24:42 +0300, Sakari Ailus wrote:
-> > > From: "Rai, Amardeep" <amardeep.rai@intel.com>
-> > > 
-> > > Detect eUSB2 double isoc bw capable hosts and devices, and set the proper
-> > > xhci endpoint context values such as 'Mult', 'Max Burst Size', and 'Max
-> > > ESIT Payload' to enable the double isochronous bandwidth endpoints.
-> > > 
-> > > Intel xHC uses the endpoint context 'Mult' field for eUSB2 isoc
-> > > endpoints even if hosts supporting Large ESIT Payload Capability should
-> > > normally ignore the mult field.
-> > > 
-> > > Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
-> > > Co-developed-by: Kannappan R <r.kannappan@intel.com>
-> > > Signed-off-by: Kannappan R <r.kannappan@intel.com>
-> > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > Co-developed-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > > Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > ---
-> > >   drivers/usb/host/xhci-caps.h |  2 ++
-> > >   drivers/usb/host/xhci-mem.c  | 60 ++++++++++++++++++++++++++++--------
-> > >   drivers/usb/host/xhci-ring.c |  6 ++--
-> > >   drivers/usb/host/xhci.c      | 16 +++++++++-
-> > >   drivers/usb/host/xhci.h      | 19 ++++++++++++
-> > >   5 files changed, 87 insertions(+), 16 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
-> > > index 4b8ff4815644..89bc83e4f1eb 100644
-> > > --- a/drivers/usb/host/xhci-caps.h
-> > > +++ b/drivers/usb/host/xhci-caps.h
-> > > @@ -89,3 +89,5 @@
-> > >   #define HCC2_GSC(p)             ((p) & (1 << 8))
-> > >   /* true: HC support Virtualization Based Trusted I/O Capability */
-> > >   #define HCC2_VTC(p)             ((p) & (1 << 9))
-> > > +/* true: HC support Double BW on a eUSB2 HS ISOC EP */
-> > > +#define HCC2_EUSB2_DIC(p)       ((p) & (1 << 11))
+On Tue, Aug 19, 2025 at 01:04:57PM +0200, Sebastian Andrzej Siewior wrote:
+> On 2025-08-17 10:27:11 [-0400], Alan Stern wrote:
+> > On Sat, Aug 16, 2025 at 10:16:34AM -0400, Alan Stern wrote:
+> > > So it looks like we should be using a different function instead of 
+> > > local_irq_disable().  We need something which in a non-RT build will 
+> > > disable interrupts on the local CPU, but in an RT build will merely 
+> > > disable preemption.  (In fact, every occurrence of local_irq_disable() 
+> > > in the USB subsystem probably should be changed in this way.)
 > > 
-> > I guess this bit is not defined in the original xHCI 1.2 spec which
-> > predates BW doubling, any reference to where it is specified and what
-> > it means exactly?
+> > Or maybe what we need is something that in a non-RT build will disable 
+> > local interrupts and in an RT build will do nothing.  (I suspect that RT 
+> > kernels won't like it if we call spin_lock() while preemption is 
+> > disabled.)
 > 
-> USB 2.0 Double Isochronous IN Bandwidth Capability (DIC) – RO.
-> This bit when set to 1, indicates that the xHC supports the USB 2.0 Double Isochronous IN
-> Bandwidth Capability on a eUSB2 HS Isochronous Endpoint.
-> This feature is only applicable to a directly connected inbox native eUSB2 device.
+> This is the local_irq_disable() in vhci_urb_enqueue() before
+> usb_hcd_giveback_urb() is invoked. It was added in 9e8586827a706
+> ("usbip: vhci_hcd: fix calling usb_hcd_giveback_urb() with irqs
+> enabled").
+> The warning that fixed back then was 
+> |         if (WARN_ON(in_task() && kcov_mode_enabled(mode))) {
+> which was kernel/kcov.c:834 as of v5.9-rc8 (as of report the mentioned
+> in the commit).
+> local_irq_disable() does not change the preemption counter so I am a bit
+> puzzled why this did shut the warning.
 > 
-> The xHCI specification with this addition is on its way, we got permission from
-> author(s) to start upstreaming the code already.
+> > > Is there such a function?
 > 
-> > 
-> > > diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> > > index 6680afa4f596..ea51434c80fa 100644
-> > > --- a/drivers/usb/host/xhci-mem.c
-> > > +++ b/drivers/usb/host/xhci-mem.c
-> > > @@ -1328,18 +1328,36 @@ static unsigned int xhci_get_endpoint_interval(struct usb_device *udev,
-> > >   	return interval;
-> > >   }
-> > > -/* The "Mult" field in the endpoint context is only set for SuperSpeed isoc eps.
-> > > +/*
-> > > + * xHCs without LEC use the "Mult" field in the endpoint context for SuperSpeed
-> > > + * isoc eps, and High speed isoc eps that support bandwidth doubling. Standard
-> > >    * High speed endpoint descriptors can define "the number of additional
-> > >    * transaction opportunities per microframe", but that goes in the Max Burst
-> > >    * endpoint context field.
-> > >    */
-> > > -static u32 xhci_get_endpoint_mult(struct usb_device *udev,
-> > > -		struct usb_host_endpoint *ep)
-> > > +static u32 xhci_get_endpoint_mult(struct xhci_hcd *xhci,
-> > > +				  struct usb_device *udev,
-> > > +				  struct usb_host_endpoint *ep)
-> > >   {
-> > > -	if (udev->speed < USB_SPEED_SUPER ||
-> > > -			!usb_endpoint_xfer_isoc(&ep->desc))
-> > > +	bool lec;
-> > > +
-> > > +	/* xHCI 1.1 with LEC set does not use mult field, except intel eUSB2 */
-> > > +	lec = xhci->hci_version > 0x100 && HCC2_LEC(xhci->hcc_params2);
-> > > +
-> > > +	/* eUSB2 double isoc bw devices are the only USB2 devices using mult */
-> > > +	if (xhci_eusb2_is_isoc_bw_double(udev, ep)) {
-> > > +		if (!lec || xhci->quirks & XHCI_INTEL_HOST)
-> > > +			return 1;
-> > > +	}
-> > > +
-> > > +	/* Oherwise only isoc transfers on hosts without LEC uses mult field */
-> > > +	if (!usb_endpoint_xfer_isoc(&ep->desc) || lec)
-> > >   		return 0;
-> > > -	return ep->ss_ep_comp.bmAttributes;
-> > > +
-> > > +	if (udev->speed >= USB_SPEED_SUPER)
-> > > +		return ep->ss_ep_comp.bmAttributes;
-> > > +
-> > > +	return 0;
-> > >   }
-> > 
-> > That's a complicated control flow. I think it could just be:
-> > > +	/* SuperSpeed isoc transfers on hosts without LEC uses mult field */
-> > > +	if (udev->speed >= USB_SPEED_SUPER && usb_endpoint_xfer_isoc(&ep->desc) && !lec)
-> > > +		return ep->ss_ep_comp.bmAttributes;
-> > > +	return 0;
-> 
-> Possibly, not sure there's much difference, especially if you break that line at
-> 80 columns
+> We could use some API that accidentally does what you ask for. There
+> would be local_lock_t where local_lock_irq() does that.
+> What about moving the completion callback to softirq by setting HCD_BH?
 
-I prefer Michał's suggestion, line breaks are fine, too...
+You're missing the point.
 
-> 
-> > > +/*
-> > > + * USB 2.0 specification, chapter 5.6.4 Isochronous Transfer Bus Access
-> > > + * Constraint. A high speed endpoint can move up to 3072 bytes per microframe
-> > > + * (or 192Mb/s).
-> > > + */
-> > > +#define MAX_ISOC_XFER_SIZE_HS  3072
-> > > +
-> > > +static inline bool xhci_eusb2_is_isoc_bw_double(struct usb_device *udev,
-> > > +						struct usb_host_endpoint *ep)
-> > > +{
-> > > +	return udev->speed == USB_SPEED_HIGH &&
-> > > +		usb_endpoint_is_isoc_in(&ep->desc) &&
-> > > +		le16_to_cpu(ep->desc.wMaxPacketSize) == 0 &&
-> > > +		le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval) >
-> > > +		MAX_ISOC_XFER_SIZE_HS;
-> > > +}
-> > 
-> > It looks like eUSB2v2 is another spec which uses this descriptor for
-> > larger isoc endpoints and this code might trigger on such devices once
-> > USB core learns to parse them.
-> > 
-> 
-> Could make sense to check that bcdUSB is 0x220 here to avoid that.
+There are several places in the USB stack that disable local interrupts.  
+The idea was that -- on a non-RT system, which was all we had at the 
+time -- spin_lock_irqsave() is logically equivalent to a combination of 
+local_irq_save() and spin_lock().  Similarly, spin_lock_irq() is 
+logically equivalent to local_irq_disable() plus spin_lock().
 
-I'll add the check for v5.
+So code was written which, for various reasons, used local_irq_save() 
+(or local_irq_disable()) and spin_lock() instead of spin_lock_irqsave() 
+(or spin_lock_irq()).  But now we see that in RT builds, this 
+equivalency is not valid.  Instead, spin_lock_irqsave(flags) is 
+logically equivalent to "flags = 0" plus spin_lock() (and 
+spin_lock_irq() is logically equivalent to a nop plus spin_lock()).  At 
+least, that's how the material quoted earlier by Yunseong defines it.
 
-> 
-> We could also check if ep->eusb2_isoc_ep_comp.bDescriptorType exists
-> like in PATCH 2/4, and could then remove the wMaxPacketSize == 0 check as
-> usb core descriptor parsing will already do that check for us, before copying
-> the descriptor.
+Therefore, throughout the USB stack, we should replace calls to 
+local_irq_save() and local_irq_disable() with functions that behave like 
+the original in non-RT builds but do nothing in RT builds.  We shouldn't 
+just worry about this one spot.
 
-Ack.
+I would expect that RT already defines functions which do this, but I 
+don't know their names.
 
-> 
-> The USB_SPEED_HIGH check could also be moved to descriptor parsing in usb core.
-> This way we could remove the speed check hare and from PATCH 2/3
-
-Ack.
-
-> 
-> 
-> > Would there be no issues with that? Or conversely, any chance that your
-> > code could be trivially modified to support full 2v2, and "bw doubling"
-> > removed from names and comments?
-> 
-> Proably not, eUSB2v2 may have some odd burst and mult fields while double
-> bandwidth has fixed values.
-
--- 
-Regards,
-
-Sakari Ailus
+Alan Stern
 
