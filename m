@@ -1,206 +1,256 @@
-Return-Path: <linux-usb+bounces-27061-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27055-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30773B2DFC6
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 16:45:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 847E0B2DF97
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 16:39:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAB3E3AB03B
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 14:42:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14F961887E47
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 14:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E80C62DEA9E;
-	Wed, 20 Aug 2025 14:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21BD6275B06;
+	Wed, 20 Aug 2025 14:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hSfyjMuZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AbEkMXHj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005631DC98C
-	for <linux-usb@vger.kernel.org>; Wed, 20 Aug 2025 14:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F284278E5D;
+	Wed, 20 Aug 2025 14:38:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755700944; cv=none; b=VPHJ+XS3F6ea78OT2qQh3GOmVFNFBewDRPaZGOV6n3mgRvP/TEI4O9/5BR6mxyQpLw8mPvGXeBL3cwkrn4zgVA+8k61+o+2cyMbs0ELfETsN3u3ydMHz5asmTK5V15vNfDSqn6Rjt0XCLIs4KvrsyfTDObTKX5hCn2BtRNt1Sno=
+	t=1755700717; cv=none; b=aoonnY9VT73JiTswNjyW2E5y4grLhgpZjBGmq7RHr1E5dZOZdjk+IbTWtIwGmQulRiiVDKmmglTGlANdkMk0bVGtFpV4PcQb3K3eLzYcZnAcC8uKMfnyzw+gljVPsyVerzrpewsaNaFtihtIYx275easR9vGFcFkFg2MzHIqPGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755700944; c=relaxed/simple;
-	bh=1//0pOHJzE3qeXiVKJGxSkQXfG4IOrqXzwvqPAth5fg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=hg6KKmEgsYvneh6eZAcimgqNKFBVxmUVmWeIt6Nij3aTQMdnVa4bcuevDKMfPAdjcqsMHUhQn/tXd1vE2sKI9EMUU3AXtRfyURP0QcNOjFpSJbFB7Fl9vZRorBuCJqyAO439nb+ZECPcbR/gzkeYD9/ks38cnV8Xf6yW8OQe6jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hSfyjMuZ; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755700717; c=relaxed/simple;
+	bh=ix35BkXD6ts8fJLxvKeP9XJ+tGsi/pLXl1osSIABxC4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WtD69mD7c9SzkYn5eDOsT7hz395LKfBpQZpjWxOyDreNQ6+TiRhrgheyjZi6hSE7YpBJqxvM9Apqdic85U2KuNJN6aNt7ivazYA9dh81IdqUX6Q0BeR/0A61I+TGxw2oFqAK5NafxZTou4zARMmdgSTOcc/Dli7MMU0qXgU9aw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AbEkMXHj; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755700943; x=1787236943;
-  h=date:from:to:cc:subject:message-id;
-  bh=1//0pOHJzE3qeXiVKJGxSkQXfG4IOrqXzwvqPAth5fg=;
-  b=hSfyjMuZwH10JuX7wP10zYGyJ87fMQazUhWqyyQgTJsGl24Q8u7SNa8N
-   aGsUqfIpCiJsD9Hg1AfWt05Lo7Jfai9YOngpC7aaHMdcvLHn9ADlelGBP
-   BB9BSS4OrvSDIq/uF8LFRWRj+TGPbbLfXWzM4KjtuIj22wnbOQPSe0flQ
-   sr7Ct77sH0Eb5sizXRwWykHD9EMtBZ8JMSAXIg5kvzBExqggxDSM7JbvX
-   bNOPx4mLTIWTmrvpt/a4hhibqDPRBPtvaacjxLnCS+yBCeBCf8l+gDRVM
-   LxmhFMPEd6cMu+ZvxL4voOZ2mtBakD6QoMYn3cyeinUgRgKNUxb+C9T7H
-   g==;
-X-CSE-ConnectionGUID: qLL9ht9SRj+VTEpguVigjg==
-X-CSE-MsgGUID: vCboyMENRd2cTDtFKYep4w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="61798166"
+  t=1755700716; x=1787236716;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ix35BkXD6ts8fJLxvKeP9XJ+tGsi/pLXl1osSIABxC4=;
+  b=AbEkMXHj9dfUA+SFJLM0q/2XxQkqKRa9AtmIDRNiQu3orRsynxuNkhkh
+   5nYBnlutSj680ZPkmYtJO1M2/dLPXDpZZsX9flbVwDmulv0RgMz5O+L05
+   L5P4r0NeLZmfu3Tflbn2yLF1GCRowza+2e37LHh2cdBxehcWfdaZdO0NA
+   Qm7gND0KWVzNZq/v463iv1E1kKVLpSlxMmA2Qyd85gyEyx1Gf5V/FceHO
+   BRGFgaVntySSbAKCo72eJODh97gBZfj5WRHCFcluG5Aa+7BdO1xCCzrHu
+   0ZXkQ5ZhpQOxeuviG24wOtfgF/NSX/jfSN4gBr2vmjLqRD/xatgBATWqg
+   w==;
+X-CSE-ConnectionGUID: k2Tmc2psS7S1tCg6T8L9UA==
+X-CSE-MsgGUID: xIgu6Oh3QX2lcxR65y7Xzw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57167765"
 X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="61798166"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 07:42:08 -0700
-X-CSE-ConnectionGUID: lyZnPDF9R5Km3DFOTuv+IQ==
-X-CSE-MsgGUID: 2E8ONGmiQGuLyl9b3FtR+Q==
+   d="scan'208";a="57167765"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 07:38:31 -0700
+X-CSE-ConnectionGUID: YFIcrtKUT0qP6PNpVkb3NQ==
+X-CSE-MsgGUID: IK9JT3q5Tfmkskr5K4v7Ag==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="173400969"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 20 Aug 2025 07:42:07 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uok0r-000JJU-0K;
-	Wed, 20 Aug 2025 14:42:05 +0000
-Date: Wed, 20 Aug 2025 22:32:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- ff9a09b3e09c7b794b56f2f5858f5ce42ba46cb3
-Message-ID: <202508202237.pLCpYK6B-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+   d="scan'208";a="167368815"
+Received: from ettammin-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.19])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 07:38:28 -0700
+Received: from punajuuri.localdomain (unknown [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id CFE1F12024B;
+	Wed, 20 Aug 2025 17:38:24 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1uojxI-00000002JY7-3CWC;
+	Wed, 20 Aug 2025 17:38:24 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: linux-media@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	laurent.pinchart@ideasonboard.com,
+	hdegoede@redhat.com,
+	Thinh.Nguyen@synopsys.com,
+	Amardeep Rai <amardeep.rai@intel.com>,
+	Kannappan R <r.kannappan@intel.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	=?UTF-8?q?Micha=C5=82=20Pecio?= <michal.pecio@gmail.com>
+Subject: [PATCH v5 0/9] eUSB2 Double Isochronous IN Bandwidth support
+Date: Wed, 20 Aug 2025 17:38:15 +0300
+Message-ID: <20250820143824.551777-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: ff9a09b3e09c7b794b56f2f5858f5ce42ba46cb3  usb: xhci: fix host not responding after suspend and resume
+Hi all,
 
-elapsed time: 1446m
+This series enables support for eUSB2 Double Isochronous IN Bandwidth UVC
+devices specified in 'USB 2.0 Double Isochronous IN Bandwidth' ECN. In
+short, it adds support for new integrated USB2 webcams that can send twice
+the data compared to conventional USB2 webcams.
 
-configs tested: 113
-configs skipped: 4
+These devices are identified by the device descriptor bcdUSB 0x0220 value.
+They have an additional eUSB2 Isochronous Endpoint Companion Descriptor,
+and a zero max packet size in regular isoc endpoint descriptor. Support
+for parsing that new descriptor was added in commit
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+c749f058b437 ("USB: core: Add eUSB2 descriptor and parsing in USB core")
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                   randconfig-001-20250820    gcc-8.5.0
-arc                   randconfig-002-20250820    gcc-11.5.0
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    gcc-15.1.0
-arm                            mmp2_defconfig    gcc-15.1.0
-arm                   randconfig-001-20250820    gcc-8.5.0
-arm                   randconfig-002-20250820    gcc-15.1.0
-arm                   randconfig-003-20250820    gcc-13.4.0
-arm                   randconfig-004-20250820    clang-22
-arm                        realview_defconfig    clang-16
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250820    gcc-14.3.0
-arm64                 randconfig-002-20250820    gcc-14.3.0
-arm64                 randconfig-003-20250820    gcc-8.5.0
-arm64                 randconfig-004-20250820    gcc-14.3.0
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20250820    gcc-15.1.0
-csky                  randconfig-002-20250820    gcc-9.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon               randconfig-001-20250820    clang-22
-hexagon               randconfig-002-20250820    clang-22
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250819    gcc-12
-i386        buildonly-randconfig-002-20250819    clang-20
-i386        buildonly-randconfig-003-20250819    clang-20
-i386        buildonly-randconfig-004-20250819    clang-20
-i386        buildonly-randconfig-005-20250819    clang-20
-i386        buildonly-randconfig-006-20250819    clang-20
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch             randconfig-001-20250820    clang-18
-loongarch             randconfig-002-20250820    clang-22
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                           gcw0_defconfig    clang-22
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20250820    gcc-11.5.0
-nios2                 randconfig-002-20250820    gcc-10.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250820    gcc-8.5.0
-parisc                randconfig-002-20250820    gcc-13.4.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                    adder875_defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc               randconfig-001-20250820    gcc-12.5.0
-powerpc               randconfig-002-20250820    gcc-8.5.0
-powerpc               randconfig-003-20250820    gcc-13.4.0
-powerpc                     tqm8548_defconfig    clang-22
-powerpc64                        alldefconfig    clang-22
-powerpc64             randconfig-001-20250820    clang-22
-powerpc64             randconfig-002-20250820    clang-22
-powerpc64             randconfig-003-20250820    gcc-15.1.0
-riscv                             allnoconfig    gcc-15.1.0
-riscv                 randconfig-001-20250820    clang-20
-riscv                 randconfig-002-20250820    clang-22
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                  randconfig-001-20250820    clang-18
-s390                  randconfig-002-20250820    clang-22
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                    randconfig-001-20250820    gcc-15.1.0
-sh                    randconfig-002-20250820    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250820    gcc-8.5.0
-sparc                 randconfig-002-20250820    gcc-12.5.0
-sparc64               randconfig-001-20250820    clang-22
-sparc64               randconfig-002-20250820    clang-22
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250820    gcc-12
-um                    randconfig-002-20250820    gcc-12
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250820    clang-20
-x86_64      buildonly-randconfig-002-20250820    gcc-11
-x86_64      buildonly-randconfig-003-20250820    clang-20
-x86_64      buildonly-randconfig-004-20250820    gcc-12
-x86_64      buildonly-randconfig-005-20250820    clang-20
-x86_64      buildonly-randconfig-006-20250820    gcc-12
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250820    gcc-8.5.0
-xtensa                randconfig-002-20250820    gcc-8.5.0
+This series adds support to UVC, USB core, and xHCI to identify eUSB2
+double isoc devices, and allow and set proper max packet, iso frame desc
+sizes, bytes per interval, and other values in URBs and xHCI endpoint
+contexts needed to support the double data rates for eUSB2 double isoc
+devices.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+v1 can be found here
+<URL:https://lore.kernel.org/linux-usb/20250616093730.2569328-2-mathias.nyman@linux.intel.com/>.
+
+v2 can be found here
+<URL:https://lore.kernel.org/linux-usb/20250711083413.1552423-1-sakari.ailus@linux.intel.com/>.
+
+v3 can be found here
+<URL:https://lore.kernel.org/linux-usb/20250807055355.1257029-1-sakari.ailus@linux.intel.com/>.
+
+v4 can be found here
+<URL:https://lore.kernel.org/linux-usb/20250812132445.3185026-1-sakari.ailus@linux.intel.com/>.
+
+since v4:
+
+- New patch: use le16_to_cpu() to access endpoint descriptor's
+  wMaxPacketSize field, which is an __le16. This isn't a bugfix as the
+  value was compared to 0.
+
+- New patch: add USB device speed check for eUSB2 isochronous endpoint
+  companion parsing. The check is then removed from sites checking the
+  existence of the companion (through companion's bDescriptorType field,
+  which is non-zero for valid descriptors).
+
+- New patch: do not parse eUSB2 isoc double BW companion descriptor on
+  interrupt or OUT endpoints. It is not supposed to be found there,
+  according to the ECN.
+
+- Rename usb_endpoint_max_isoc_bpi() as
+  usb_endpoint_max_periodic_payload() and move it right after
+  usb_maxpacket().
+
+- Fixed @ep reference in kernel-doc documentation for
+  usb_endpoint_max_periodic_payload().
+
+- In usb_endpoint_max_periodic_payload(), call struct usb_device pointer
+  argument "udev" instead of "dev", to align with naming elsewhere.
+
+- Add support for interrupt endpoints in
+  usb_endpoint_max_periodic_payload(); eUSB2 double isoc BW is still
+  limited to isochronous endpoints though.
+
+- In usb_endpoint_max_periodic_payload(), remove the separate case for
+  USB_SPEED_HIGH as the check is already done in parsing the eUSB isoc
+  double BW companion, which is checked for.
+
+- New patch: use usb_endpoint_max_periodic_payload() in xHCI driver,
+  replacing xhci_get_max_esit_payload().
+
+- Check non-zero bDescriptorType field of ep->eusb2_isoc_ep_comp instead
+  of dwBytesPerInterval value exceeding 3072, where
+  xhci_eusb2_is_isoc_bw_double() was used. This aligns the checks of eUSB2
+  isochronous double bandwidth support for an endpoint.
+
+- New patch: introduce usb_endpoint_is_hs_isoc_double() to figure out
+  whether an endpoint uses isochronous double bandwidth and use the
+  function in the xHCI driver and the usb core.
+  xhci_eusb2_is_isoc_bw_double() is dropped, as well as the
+  MAX_ISOC_XFER_SIZE_HS macro. usb_endpoint_is_hs_isoc_double() also
+  includes check for bcdUSB == 0x220, to anticipate adding support for
+  eUSB2V2.
+
+- Merge condition for checking eUSB2 isoc double bw support for
+  xHCI/endpoint in xhci_get_endpoint_mult().
+
+- Improve comment regarding maximum packet size bits 12:11 in
+  xhci_get_endpoint_max_burst().
+
+- Aligned subject prefixes with the recent patches to the same files.
+
+since v3:
+
+- Use spaces in aligning macro body for HCC2_EUSB2_DIC() (1st patch).
+
+- Move usb_endpoint_max_isoc_bpi() to drivers/usb/core/usb.c (3rd patch).
+
+since v2:
+
+- Use ep->eusb2_isoc_ep_comp.bDescriptorType to determined whether the
+  eUSB2 isochronous endpoint companion descriptor exists.
+
+- Clean up eUSB2 double isoc bw maxp calculation.
+
+- Drop le16_to_cpu(udev->descriptor.bcdUSB) == 0x220 check from
+  xhci_eusb2_is_isoc_bw_double() -- it's redundant as
+  ep->eusb2_isoc_ep_comp.dwBytesPerInterval will be zero otherwise.
+
+- Add kernel-doc documentation for usb_endpoint_max_isoc_bpi().
+
+- Check the endpoint has IN direction in usb_endpoint_max_isoc_bpi() and
+  usb_submit_urb() as a condition for eUSB2 isoc double bw.
+
+since v1:
+
+- Introduce uvc_endpoint_max_isoc_bpi() to obtain maximum bytes per
+  interval value for an endpoint, in a new patch (3rd). This code has been
+  slightly reworked from the instance in the UVC driver, including support
+  for SuperSpeedPlus Isochronous Endpoint Companion.
+
+- Use usb_endpoint_max_isoc_bpi() in the UVC driver instead of open-coding
+  eUSB2 support there, also drop now-redundant uvc_endpoint_max_bpi().
+
+- Use u32 for maximum bpi and related information in the UVC driver -- the
+  value could be larger than a 16-bit type can hold.
+
+- Assume max in usb_submit_urb() is a natural number as
+  usb_endpoint_maxp() returns only natural numbers (2nd patch).
+
+Rai, Amardeep (3):
+  usb: core: Add a function to get USB version independent periodic
+    payload
+  usb: xhci: Add host support for eUSB2 double isochronous bandwidth
+    devices
+  usb: core: support eUSB2 double bandwidth large isoc URB frames
+
+Sakari Ailus (5):
+  usb: core: Use le16_to_cpu() to read __le16 value in
+    usb_parse_endpoint()
+  usb: core: Parse eUSB2 companion descriptors for high speed devices
+    only
+  usb: core: eUSB2 companion descriptor is for isoc IN endpoints only
+  usb: xhci: Use usb_endpoint_max_periodic_payload()
+  usb: core: Introduce usb_endpoint_is_hs_isoc_double()
+
+Tao Q Tao (1):
+  media: uvcvideo: eUSB2 double isochronous bandwidth support
+
+ drivers/media/usb/uvc/uvc_driver.c |  4 +-
+ drivers/media/usb/uvc/uvc_video.c  | 24 ++-------
+ drivers/media/usb/uvc/uvcvideo.h   |  4 +-
+ drivers/usb/core/config.c          |  4 +-
+ drivers/usb/core/urb.c             | 14 +++--
+ drivers/usb/core/usb.c             | 50 ++++++++++++++++++
+ drivers/usb/host/xhci-caps.h       |  2 +
+ drivers/usb/host/xhci-mem.c        | 85 ++++++++++++++----------------
+ drivers/usb/host/xhci-ring.c       |  6 +--
+ drivers/usb/host/xhci.c            | 16 +++++-
+ drivers/usb/host/xhci.h            |  2 +
+ include/linux/usb.h                |  6 +++
+ 12 files changed, 137 insertions(+), 80 deletions(-)
+
+-- 
+2.47.2
+
 
