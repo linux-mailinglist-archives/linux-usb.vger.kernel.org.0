@@ -1,138 +1,147 @@
-Return-Path: <linux-usb+bounces-27048-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27049-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C1D4B2DD9B
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 15:20:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B983B2DEBE
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 16:10:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BDDA1C43505
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 13:20:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 066614E5294
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 14:08:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B18131DD88;
-	Wed, 20 Aug 2025 13:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0835A26AA98;
+	Wed, 20 Aug 2025 14:07:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZByQORk1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jaa0EyC4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B8A2DE6ED;
-	Wed, 20 Aug 2025 13:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F86262FE7;
+	Wed, 20 Aug 2025 14:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755696001; cv=none; b=i17aqhV8rmvo9ptrbgJFdFEUwMQWY3MgfxaV9OdAePPEHoFSq1faHK3ljydqw9eg7LwCcuaFiYyvBcv03q06sHPYT9QajpITkanOKwqoOITwwkeb5373NBD4Unz0CupjvH5xRm9GmzdiEuH2qbYNGvtpySGprONoYb6SgcCVsDE=
+	t=1755698875; cv=none; b=L+5B26WKIaozLFpQrpj6nMUMtyafp54MtjeB51r5vygHCI1N1l6Qf5dwgS/IRapcEEJBmi9rsWx8FJ4MS81Y+3SVIaEugY7mFY4N6HTJOChbTm1GEpkQJVDzTAdYOjdOcKhUdSby/yVkBviUB1755BTsjMJaPldk9ZfomCVrq6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755696001; c=relaxed/simple;
-	bh=cW2J3cznJb8SCJEC0Zd0cLhUnApCtv6wMSIbGA5lfVc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pYUnNavIqnv1xE2UtjvxkCxtsLeBkQOScDw/kMtkxWG2y1ibTSQrskpAp363rg2e3M01hkgOodu7lbKOKCXbZqz86U6hkRjQzB/kz8TUadn8i12OHlYltlSM2AIPVlREU72qKmR/uLWQ6A9p6pWqRWUV4o0sbHWRA+pQ6A6bs0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZByQORk1; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755696000; x=1787232000;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=cW2J3cznJb8SCJEC0Zd0cLhUnApCtv6wMSIbGA5lfVc=;
-  b=ZByQORk1d/Rkhfs7hjhM2a4PDomKA9nGadFfhXjP658+N/OluUVrkNF1
-   WEth+MbdLG2GwhNYEJYLtGxhf2s55SI+Mzt/rRFqZL/wt8OZuIe9CyZVW
-   31uhtxLUGR0OGgC1j3MkfzhTCGD+EvA3ugZBQc3QwG8W+Q9b2eI7z6O/N
-   vl2MA2D6RjiXrTg0kwpO8S/PdX8xstk9XFSQOP3SYFGNIfJA65hMDkYKU
-   ZZRpJrPsq4bzLQE7I3KjswO6JCmYmKcMXXpMLhzM9QkgEQjcgJvte72dv
-   fd0XkSK55PRkCCkuXKbcnhr1hmAFoslbIcMf0w9v/+BP3Tw5/FKsWdL4u
-   A==;
-X-CSE-ConnectionGUID: Q8ew4YT5TU2PUuRhKVgPpg==
-X-CSE-MsgGUID: c0WiWbLUQAKFcSRRmjw9Qw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="75541636"
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="75541636"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 06:19:59 -0700
-X-CSE-ConnectionGUID: VFmZteUnRjqpT1z204NhNQ==
-X-CSE-MsgGUID: Uk8bhA24Qz6bvZkm6SHtyg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="172383404"
-Received: from ettammin-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.19])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 06:19:57 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 5585112024B;
-	Wed, 20 Aug 2025 16:19:54 +0300 (EEST)
-Date: Wed, 20 Aug 2025 16:19:54 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
-	hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
-	Amardeep Rai <amardeep.rai@intel.com>,
-	Kannappan R <r.kannappan@intel.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v4 1/4] xhci: Add host support for eUSB2 double
- isochronous bandwidth devices
-Message-ID: <aKXLegx2LWUcOPe1@kekkonen.localdomain>
-References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
- <20250812132445.3185026-2-sakari.ailus@linux.intel.com>
- <20250818115016.3611b910@foxbook>
- <aKWGOIsipctKEJP-@kekkonen.localdomain>
- <20250820104304.05a4373d@foxbook>
+	s=arc-20240116; t=1755698875; c=relaxed/simple;
+	bh=jHZPssfpSnHOkQxF/lA4aAePLLSqCiyC30mwcxtJ/V8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IZMY3n0BvWxVRJCdLtV/awmsLyXvASTqpVsss3s4Mzy/pcT51guALqrlr+JKc+w5moVT1JLqJfTf02keH+gz4hx4IWyPjZJkLRHDGT7BvG/cCgdGurBDe+Bj38Uv5Pe4YrbIY+yxXSUoKT6UizPc7JTxa8+NaELLI/FBIKwQ+xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jaa0EyC4; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-55ce52ab898so7680812e87.3;
+        Wed, 20 Aug 2025 07:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755698872; x=1756303672; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+jBaQdX4CtJ61ZDF7n57iwindu7YbGzD6BY9kNY9f38=;
+        b=Jaa0EyC4+QbEvNbsROsHa7iW5+h2zZByzL+jp94fiXF9NHbDoywlcBn6RyQvUUloV0
+         hot9dBiFlBmdrWJHIrvmNrQ0rAafG34oTLLmhe1Yq2+dxyq+16R36FlLnON08sRaiUsF
+         bWmWwhQQ5A+ISuZV4C84JOV81USre7D2ME5yrgJwA0VgJH45yGNV0ZG/e3XPHbg5Vf0O
+         bDcqVbo0FxK5/PPJ2drF5yBoD7ad5qfLEI70NzdDpJOAwVgKAd0X0xZrazPQx57LmO8o
+         wTUD5lIuPm93Kr/RpX923Lf8/qORN3sjY6cbmQtnRrLkcR2DDq8zdJn/Yt4RzanLHkjk
+         ysPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755698872; x=1756303672;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+jBaQdX4CtJ61ZDF7n57iwindu7YbGzD6BY9kNY9f38=;
+        b=eQxBMCs6ybOsg3FJM371gkXH5rBeB6IDTZ2hWDEmJaaTVGdRGAzF38uBpSJKBLJ58v
+         Uisq04AN+h2NJzhcXS4hocYluwZiUkVsUYNgG3wwZ2meUcGF3JPKd3Ld/XHwYny31rb5
+         5a0bs8/uXCIiXRhOeTr6fx2yuYf7DI2PlNV0Rjl/I4KaWSWivPZc3QyuIQZTlJtuxJIE
+         kctuENUX4MUK4/tQTxZt3Ao7XATKts8t4BHxpc7ODET8ZZe2SxI3uoz9Zywgxxiy1lOY
+         OxirY7jvAnynDNGiXZTI4NxJ+il8NOZDxLHsNOQSynzZsldhkN2RP0nGska5ojZlJkmD
+         vZ9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUiAH4DMAI7DZuoyTyHpMO+8jlnAX1dPa6aVr4wgowcaSMhkkVXcUEREkoQ/m5LkHD1Ya0GF8B0Y4pUBJA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxR8NjhRHNFo/7XJknWYGeOXouQ29xfhqCCX5qBv1Y4Rbnm9twk
+	dn01MfIXl2YOb0Lj4u0B8R91IpGXKEfIpk+Izi/dbNoHUlYVqcvd/UgOB1Gk9g==
+X-Gm-Gg: ASbGncvRUXdw/38Ds9au+OsgIErxAoT2+tNl8wXSX9Jwjx+3/eyJhdLvcK34oFuj+SP
+	GprQQ4j/jREFLuxBvtTmz4OHY1B4ZOeSqIjcKzKGYl2Mm83vFaSxu9y8h+6LDRmxPoar7nUwcKv
+	x931FQkVjShDko6/078Y1suTPLpbQy+Zzkkg8Va7ywgwpS9P+h2+cSIIeN4w1217T7o8KppB6Dp
+	I0wnYODA7onVcbHT0ckJZn2/SFpo8zyepeMLAA6Dy3p/6jJhHuabcaQT5oy+Cp/FaKNsrkLZ80K
+	BDUsW1k1jJS3ZFmaqYhg/EhHhS31ru2ulH8RjvCgqLJqBbkCH3KmfqQLyyITowa0Q+v0tYX909V
+	ICZAtM4NuTGPo6vQrT0PBgdjRkjwHzPgi6jA=
+X-Google-Smtp-Source: AGHT+IGXsYhlAJ+Cw1NAVWej17Jy3z/ZHh8MchwNrwtSO59Qr0J2jyPdt0yE/xDSSUT+tarUVOfw2w==
+X-Received: by 2002:a05:6512:340b:b0:553:2f72:9ce0 with SMTP id 2adb3069b0e04-55e06bcc2aamr834216e87.52.1755698871360;
+        Wed, 20 Aug 2025 07:07:51 -0700 (PDT)
+Received: from foxbook (bfd208.neoplus.adsl.tpnet.pl. [83.28.41.208])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef3cc9f5sm2686497e87.75.2025.08.20.07.07.50
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 20 Aug 2025 07:07:50 -0700 (PDT)
+Date: Wed, 20 Aug 2025 16:07:46 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] Revert "usb: xhci: Avoid Stop Endpoint retry loop if
+ the endpoint seems Running"
+Message-ID: <20250820160746.74276b40@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250820104304.05a4373d@foxbook>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 20, 2025 at 10:43:04AM +0200, Michał Pecio wrote:
-> On Wed, 20 Aug 2025 11:24:24 +0300, Sakari Ailus wrote:
-> > Hi Michał,
-> > 
-> > Thanks for the review.
-> > 
-> > On Mon, Aug 18, 2025 at 11:50:16AM +0200, Michał Pecio wrote:
-> > > > @@ -1351,8 +1369,18 @@ static u32 xhci_get_endpoint_max_burst(struct usb_device *udev,
-> > > >  
-> > > >  	if (udev->speed == USB_SPEED_HIGH &&
-> > > >  	    (usb_endpoint_xfer_isoc(&ep->desc) ||
-> > > > -	     usb_endpoint_xfer_int(&ep->desc)))
-> > > > +	     usb_endpoint_xfer_int(&ep->desc))) {
-> > > > +		/*
-> > > > +		 * eUSB2 double isoc bw endpoints max packet field service
-> > > > +		 * opportunity bits 12:11 are not valid, so set the ctx burst to
-> > > > +		 * max service opportunity "2" as these eps support transferring
-> > > > +		 * over 3072 bytes per interval
-> > > > +		 */  
-> > > 
-> > > I think a shorter comment would suffice: eUSB2 BWD uses fixed burst
-> > > size and max packets bits 12:11 are invalid.  
-> > 
-> > I'll use this:
-> > 
-> > +                * eUSB2 double isochronous BW ECN uses fixed burst size and max
-> > +                * packets bits 12:11 are invalid.
-> >
-> 
-> Fine. And by the way, it may look like my comment was overly pedantic,
-> but I though that mentioning "more than 3072 bytes per interval" not
-> only isn't necessary here, but it adds confusion. It was something that
-> would be more relevant to 'mult' than 'burst.
+This reverts commit 28a76fcc4c85dd39633fb96edb643c91820133e3.
 
-Further I corrected the ECN title, the result being:
+No actual HW bugs are known where Endpoint Context shows Running state
+but Stop Endpoint fails repeatedly with Context State Error and leaves
+the endpoint state unchanged. Stop Endpoint retries on Running EPs have
+been performed since early 2021 with no such issues reported so far.
 
-+                * USB 2 Isochronous Double IN Bandwidth ECN uses fixed burst
-+                * size and max packets bits 12:11 are invalid.
+Trying to handle this hypothetical case brings a more realistic danger:
+if Stop Endpoint fails on an endpoint which hasn't yet started after a
+doorbell ring and enough latency occurs before this completion event is
+handled, the driver may time out and begin removing cancelled TDs from
+a running endpoint, even though one more retry would stop it reliably.
 
-There are now quite a few other changes for v5 as well, I'll post it
-soonish.
+Such high latency is rare but not impossible, and removing TDs from a
+running endpoint can cause more damage than not giving back a cancelled
+URB (which wasn't happening anyway). So err on the side of caution and
+revert to the old policy of always retrying if the EP appears running.
 
+Fixes: 28a76fcc4c85d ("usb: xhci: Avoid Stop Endpoint retry loop if the endpoint seems Running")
+Cc: stable@vger.kernel.org
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+---
+ drivers/usb/host/xhci-ring.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 85b4791ccde5..3fef6454f3be 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1262,19 +1262,16 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+ 			 * Stopped state, but it will soon change to Running.
+ 			 *
+ 			 * Assume this bug on unexpected Stop Endpoint failures.
+-			 * Keep retrying until the EP starts and stops again.
++			 * Keep retrying until the EP starts and stops again, on
++			 * chips where this is known to help. Wait for 100ms.
+ 			 */
++			if (time_is_before_jiffies(ep->stop_time + msecs_to_jiffies(100)))
++				break;
+ 			fallthrough;
+ 		case EP_STATE_RUNNING:
+ 			/* Race, HW handled stop ep cmd before ep was running */
+ 			xhci_dbg(xhci, "Stop ep completion ctx error, ctx_state %d\n",
+ 					GET_EP_CTX_STATE(ep_ctx));
+-			/*
+-			 * Don't retry forever if we guessed wrong or a defective HC never starts
+-			 * the EP or says 'Running' but fails the command. We must give back TDs.
+-			 */
+-			if (time_is_before_jiffies(ep->stop_time + msecs_to_jiffies(100)))
+-				break;
+ 
+ 			command = xhci_alloc_command(xhci, false, GFP_ATOMIC);
+ 			if (!command) {
 -- 
-Sakari Ailus
+2.48.1
+
 
