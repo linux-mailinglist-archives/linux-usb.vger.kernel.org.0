@@ -1,120 +1,136 @@
-Return-Path: <linux-usb+bounces-27042-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27043-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3348BB2D658
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 10:29:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4609B2D6F4
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 10:45:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C9DC3BE7A0
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 08:25:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80298188C514
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 08:43:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608BB2D9797;
-	Wed, 20 Aug 2025 08:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE9DD2D979D;
+	Wed, 20 Aug 2025 08:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RrLsKgwL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f2Zimv+w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371A52C11CF;
-	Wed, 20 Aug 2025 08:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9400F2737F6;
+	Wed, 20 Aug 2025 08:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755678272; cv=none; b=AO515KYevTJi9lAjkSRxvN2qj4D3Z158SLx0ZHVuuy0ddC25/xxNqZ7BpFwIbbzNB+paDvpokfBUt10RCj8ClKxCzbp/biv+SeorkK7ojFZWDGEvk38VTOfvp5M5d6AqybakiEzXZ0b/9ZBGvhMylDRbnHaZxTqTnF0dYyrxOiY=
+	t=1755679393; cv=none; b=M+LCeCa2jT7HfIC8Bn43iMD65PAayoSprYg4XXi23EfWb60sMZF4cNbflynh625vizdssrEqZ052sCUEjsvRovZI4A8Su4hKdMd2yf0Upq1cbbwWbxjonlyge02koKAl2yUTc2tv6XcETGTdvM+UdhpAN0UaXpo++ZM0INJtsd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755678272; c=relaxed/simple;
-	bh=vy1xq+sepJ0MlgCA0u0ItjhJmyd3dYbZn3CgNuB34X0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YJj1jzjOqDuftz7liPdC1+AgDYKF2cuvLfqEdaMYNaXNCgJ/O71kim5eFNgH2gVSUKzCCy29hFfO4k3XQAoD60lUdzQYHdLz6qYy1Obn6aljfIDOJFjUUQOo4/OirbeDAGKm9Jgdk6DdO0R+6JQzZ6Rlo1mOWG9/oy4oRvO5gr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RrLsKgwL; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755678271; x=1787214271;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=vy1xq+sepJ0MlgCA0u0ItjhJmyd3dYbZn3CgNuB34X0=;
-  b=RrLsKgwLHe3PFdBu0GEiODMgeItiiSSPK6BGOVRiyzPWorQxyHY+YjfW
-   XFxsdl4RUrS/9Ak/yExeqModH3S29bhNhVdzxCweWuvK9xJWq9sQp2WbT
-   POPRxkGHoXaYfnjAsCFU/ivt+HD3tFZ5jgtnKsrJZhLYekMTFo7WTuJWH
-   hl6w3QYhRFtmKEJzKg3iIs+3UlITA2E1vdArK7t3VlrCqjM3HAAIjxKB1
-   Ky2zHyFe3DnA1kpq0b1e+JCLE9LAD8/kwVZLo1PLAo3/pzGRfnvDYLL2x
-   R3KKWrlD4eDFMEAgWhANR1KfvPsIXuqMbQ480m4q/A1mLisXi9Ks7LoLU
-   A==;
-X-CSE-ConnectionGUID: /2VlWTtzTQm6cIlb3eVmPg==
-X-CSE-MsgGUID: ebtG4UAKQ1+vu1Ec3YxuLg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="69317524"
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="69317524"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 01:24:30 -0700
-X-CSE-ConnectionGUID: rToL/CjuRWyzJceptfdsBQ==
-X-CSE-MsgGUID: RiXj+V3CQWiri6uq08i5uw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="172294000"
-Received: from ettammin-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.19])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 01:24:28 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id DCB2411F97F;
-	Wed, 20 Aug 2025 11:24:24 +0300 (EEST)
-Date: Wed, 20 Aug 2025 11:24:24 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+	s=arc-20240116; t=1755679393; c=relaxed/simple;
+	bh=NRd/86nn03gVwvWaVjK3dWj89kwjtvusHXCvu2az2Dw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YMXeV1Xb8PaA0Yd0ROabbd8IZ1CTz+n4UmE0g6JdKwpNcBTBDbNYxUpX0KkspC2dZI8yy31VLZ7Nghq1exuAbNC7b8aV2bmt0AIxSYvmGLje70zYevVesLqy9rw0rDRcH8bcN3KJCDuLIFB/vFILkv/0KtOPlf1PXWZR+ExPTUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f2Zimv+w; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-55ce526a25eso6162908e87.3;
+        Wed, 20 Aug 2025 01:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755679390; x=1756284190; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tevt+IUSGfeBECHJ34L6tymqtBLfbyfK+IzZat0dMtk=;
+        b=f2Zimv+wyuL4UEJzHH/jEpNGpDQ4K2eofJECk4iKVlfqS1iggsRBWnk+qZn4JURPDw
+         R1SpgSRNPGN81Z0b2Bt7m+07uQF5H8ToFc5zX8cLgsUJHJgaTeyRrd4j4nSaYT+wesIA
+         1zrc8shRb3PxTRFqBUuX7YP2UCNRUGTwgDdFBTX4M/aN8QTfiuYBkKHkPKkCqsS26khN
+         iGdXENdlc0WyW+XouaZgnzZ7+K776/KMVaAoDYd46TaN3M1glGl7WafKNAQAIuXutrGT
+         vAIoPiQ3sgPovobJd8psI5Y6ICxUP2nqaC26BDju+Sbz1a1u9SOmtA2974RWYo0XfPEl
+         Y59w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755679390; x=1756284190;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tevt+IUSGfeBECHJ34L6tymqtBLfbyfK+IzZat0dMtk=;
+        b=UPHBtE3q7jt1JBl5G+v5A6dsCtes3LeXVnKNafSWCOCQIrsIeb2VUX9ybfL3bVRGGB
+         1WYP2m9cNeCs3p8Wol05pfLw5CQuNBYv1avU9QyI+qkuR5gBLiQ9V0dWRB2mFZBzhCAx
+         qIWF8zQIYYVjk5y/78ItVgs7REvYIOIqXPT4DIw1+w06n/sqXpPVqA0s1upExCO4FUJd
+         8AzObx3ioSEr/GSaIs/JgVMNpgQAsKwfVO2XuKxWJ/N/PiUcIEq34b9jVWdhBgiYCBFs
+         56cmgMXq6HtBZVvnTFxPhfFokQrCKYbEA47d37DAFvJXBh+7Izq/XF1wHkZn8T9xz08s
+         PkGA==
+X-Forwarded-Encrypted: i=1; AJvYcCUauHXsB8f1aD+qbETK4qqsoE61YBmrapTN6sQN++gqWj05iQ9H8i2FywJoykwNKHw3NK40vFLXPeKvpQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzoostl/+agagYeQ2eNfIjvYRZwXy+4gayPJ/0enMT9xys7F2sg
+	8BJpx1XlVIo6R6E70+UtNIxP/6hCrunVV9VAA7jKkp4m8q1E9NuPmiOI
+X-Gm-Gg: ASbGncuSaxi0WCJPXijVd/37iZfS4ukbCuzX5jTXUW57h9h65T2GJvjPhwrllpVaFij
+	qnEmr5HTLoUjUGvsIBxx1BXU03Oo9EZKe4kjCaU47MxSaybkKJsUC1nAPk9QjyD6dzNmAzgDPrb
+	GECeqrfqhGPqaAk7SgB/QmpoepzLG4LAk2UqaEhiyiVLG/p6EF42g5fqv233cpvbeMOYE1FUhQx
+	omRiS94YUe1hywc6mo0gdVoRBm+ePomZgJVY5gKeHGf6jFlipCAiCAU1KtweDnN7sAfJBgmECbd
+	9T9/mekMAenyT/ba5gZ/WWE9R8qLnxgTNVljKbSxpAK4kOFQMjZjAl44J20ptGIKyP3RedTirFf
+	ZPKYTfemHGZACV6guW9irIbYgR+BPmKrOA/U=
+X-Google-Smtp-Source: AGHT+IE6VNKAjukswbuEeeqYnJRFYmSdL7Bgde6vylPE0Xm+kwIn9VGBLwpJCiAKp85XO64LPk4Akw==
+X-Received: by 2002:a05:6512:131c:b0:553:2c58:f96f with SMTP id 2adb3069b0e04-55e06b3d6c8mr517359e87.1.1755679389235;
+        Wed, 20 Aug 2025 01:43:09 -0700 (PDT)
+Received: from foxbook (bfd208.neoplus.adsl.tpnet.pl. [83.28.41.208])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef35160fsm2573103e87.22.2025.08.20.01.43.07
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 20 Aug 2025 01:43:08 -0700 (PDT)
+Date: Wed, 20 Aug 2025 10:43:04 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
-	hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
-	Amardeep Rai <amardeep.rai@intel.com>,
-	Kannappan R <r.kannappan@intel.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Alan Stern <stern@rowland.harvard.edu>
+ gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
+ hdegoede@redhat.com, Thinh.Nguyen@synopsys.com, Amardeep Rai
+ <amardeep.rai@intel.com>, Kannappan R <r.kannappan@intel.com>, Mathias
+ Nyman <mathias.nyman@linux.intel.com>, Alan Stern
+ <stern@rowland.harvard.edu>
 Subject: Re: [PATCH v4 1/4] xhci: Add host support for eUSB2 double
  isochronous bandwidth devices
-Message-ID: <aKWGOIsipctKEJP-@kekkonen.localdomain>
+Message-ID: <20250820104304.05a4373d@foxbook>
+In-Reply-To: <aKWGOIsipctKEJP-@kekkonen.localdomain>
 References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
- <20250812132445.3185026-2-sakari.ailus@linux.intel.com>
- <20250818115016.3611b910@foxbook>
+	<20250812132445.3185026-2-sakari.ailus@linux.intel.com>
+	<20250818115016.3611b910@foxbook>
+	<aKWGOIsipctKEJP-@kekkonen.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250818115016.3611b910@foxbook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Michał,
+On Wed, 20 Aug 2025 11:24:24 +0300, Sakari Ailus wrote:
+> Hi Micha=C5=82,
+>=20
+> Thanks for the review.
+>=20
+> On Mon, Aug 18, 2025 at 11:50:16AM +0200, Micha=C5=82 Pecio wrote:
+> > > @@ -1351,8 +1369,18 @@ static u32 xhci_get_endpoint_max_burst(struct =
+usb_device *udev,
+> > > =20
+> > >  	if (udev->speed =3D=3D USB_SPEED_HIGH &&
+> > >  	    (usb_endpoint_xfer_isoc(&ep->desc) ||
+> > > -	     usb_endpoint_xfer_int(&ep->desc)))
+> > > +	     usb_endpoint_xfer_int(&ep->desc))) {
+> > > +		/*
+> > > +		 * eUSB2 double isoc bw endpoints max packet field service
+> > > +		 * opportunity bits 12:11 are not valid, so set the ctx burst to
+> > > +		 * max service opportunity "2" as these eps support transferring
+> > > +		 * over 3072 bytes per interval
+> > > +		 */ =20
+> >=20
+> > I think a shorter comment would suffice: eUSB2 BWD uses fixed burst
+> > size and max packets bits 12:11 are invalid. =20
+>=20
+> I'll use this:
+>=20
+> +                * eUSB2 double isochronous BW ECN uses fixed burst size =
+and max
+> +                * packets bits 12:11 are invalid.
+>
 
-Thanks for the review.
-
-On Mon, Aug 18, 2025 at 11:50:16AM +0200, Michał Pecio wrote:
-> > @@ -1351,8 +1369,18 @@ static u32 xhci_get_endpoint_max_burst(struct usb_device *udev,
-> >  
-> >  	if (udev->speed == USB_SPEED_HIGH &&
-> >  	    (usb_endpoint_xfer_isoc(&ep->desc) ||
-> > -	     usb_endpoint_xfer_int(&ep->desc)))
-> > +	     usb_endpoint_xfer_int(&ep->desc))) {
-> > +		/*
-> > +		 * eUSB2 double isoc bw endpoints max packet field service
-> > +		 * opportunity bits 12:11 are not valid, so set the ctx burst to
-> > +		 * max service opportunity "2" as these eps support transferring
-> > +		 * over 3072 bytes per interval
-> > +		 */
-> 
-> I think a shorter comment would suffice: eUSB2 BWD uses fixed burst
-> size and max packets bits 12:11 are invalid.
-
-I'll use this:
-
-+                * eUSB2 double isochronous BW ECN uses fixed burst size and max
-+                * packets bits 12:11 are invalid.
-
--- 
-Sakari Ailus
+Fine. And by the way, it may look like my comment was overly pedantic,
+but I though that mentioning "more than 3072 bytes per interval" not
+only isn't necessary here, but it adds confusion. It was something that
+would be more relevant to 'mult' than 'burst.
 
