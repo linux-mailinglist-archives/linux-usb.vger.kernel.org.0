@@ -1,270 +1,190 @@
-Return-Path: <linux-usb+bounces-27067-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27063-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27DC6B2E274
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 18:36:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6CF1B2E24D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 18:30:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6467C1C836E1
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 16:36:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D55D33B713D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 16:26:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 925FD335BB4;
-	Wed, 20 Aug 2025 16:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E22FB32A3E4;
+	Wed, 20 Aug 2025 16:26:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m01NWVMR"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WuxZKwQY";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LWwwQLx3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016A633473D;
-	Wed, 20 Aug 2025 16:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02413277BD;
+	Wed, 20 Aug 2025 16:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755707707; cv=none; b=IiYb999o/+Hwbrz3dvscAM80/ipOpbqbHcZ5pFujR8fMXX0cTGAml8edy7oBKF++0gepJnhiKf6lb+QiqXe0vdqntP8Qfg+BrV3obxHCCJwCqDQclp9iej91CbSPoBA6RH5JtGVrM3qpgiW6kLm6b7DoWD760VhG9Ys84PrtpE8=
+	t=1755707186; cv=none; b=bjSN+WMJiHk5JrawFxxWb5waECcLHVVG5Tn7sRPiX4iuuwuMGxOsXOYsrwudniyMRWDIsoCbESXaqJSWJ1Vwb+y4fy1n8JveWPmkZthts2ek3dQx/GeHY1zWGA7aNvKFkFXc8EXbNJRRwku8gJfhYbhUSeV5Zjg9z/kdhcHyMUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755707707; c=relaxed/simple;
-	bh=FrznpbU3fmglS1A0BmiLOHaXcnCBK4s3GnkSnS4juc0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SdeSqY3Z99rsSSIuiB7NduE/WLAwZziULsrwy8tRKjWLgcdEhF0hZrD2I+8U9l/OofDTUPR8DbkjJE57McuhW9sUcoaHAPCPJyQwRM8ov2tKvO7PnUQEj9+KKK/GSQAZpNbAb1op5VDiVZuvPE4qbp8hud+Y0IN7ylMorT8TItQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m01NWVMR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F9CC116B1;
-	Wed, 20 Aug 2025 16:35:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755707706;
-	bh=FrznpbU3fmglS1A0BmiLOHaXcnCBK4s3GnkSnS4juc0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=m01NWVMRHGJg6a3/VnC8Sj3NSpiyeQg5nyC+7s3AdSBMDOp/0UN0kirXPpo3VRbzg
-	 dFyMl3MVv30glRD6rJqFSlqPTGNcd2or9zWExSDjXwynlz3nEOzAD5xbvlKF5AqZPK
-	 XofSMQUWqMkZrsiVv1Ojsr8lmMOnS9eL1tLcC7jUcK22eh99luYU+1eBh5B1aT1LnJ
-	 cVQQh1TYDdiC4SH0W89VNxQKWeAC6sZbb3wlXHah5fITwwyb+2y9FESoMUJWb4/oaz
-	 6LW4aiCwv3e2c6JoiYsxd1ElJlyLmke01BtfgA1ovjwg41XTtWpcPCJGG0PauhPyL+
-	 Fl+sk7/IHMaUA==
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Richard Leitner <richard.leitner@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] usb: usb251xb: support usage case without I2C control
-Date: Thu, 21 Aug 2025 00:17:43 +0800
-Message-ID: <20250820161743.23458-4-jszhang@kernel.org>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250820161743.23458-1-jszhang@kernel.org>
-References: <20250820161743.23458-1-jszhang@kernel.org>
+	s=arc-20240116; t=1755707186; c=relaxed/simple;
+	bh=T8j6isqYSCKhlG+L6afhHUWz7byFS3gj8o60l0dyXnA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JRzFvpEM2FF6Qw35mfO2WD4V7YdA0XxvJxOBh8ne/er4lqj3GVeU+YKd4Ntun8IGnfFuWcXkYm2+N74iy+vqpLsdV4mmw2zuHAxAfcm6X5C/FGYoiCyCWhjDTdfvEp6kyadcVks7SMx7DzMbQ9APkoPVyW+gM9VqdRFKXq7Crr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WuxZKwQY; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LWwwQLx3; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Wed, 20 Aug 2025 18:26:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1755707182;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vo8UrdLdOHJ5drKafQN3wALdlJqAJ1s63USmQ7QpBU4=;
+	b=WuxZKwQY3lG0qjgGSv/rkeqIV7PvX+cuQ8y+FQ0Z/XMWpFl6lpmKAMBMOPJMU4zskUY/eO
+	xGB5nZbYSgXMOcpMgt/ky+hS3p1fszDEK/O6HEskmKnVjdu/vOPMxCL5sHAXW8zhayUjX1
+	0xpwhGMJ6Vg1zZrmL7wBOe8QeZNOdwvhkv0OVSzvkF0yRH9Og0d+8nSWeu5xKDUo+rya++
+	FDh+mEyW5Ewchkyo+3jp/KduRs26ixt7WnXPQwvI2C7aL+h7x1kElHlb6xY3hAQJ+nlfgp
+	qXCWY6aUxeJcJCwghC/t/FfpLF37bJVMoP7+xfbt3lZ60W4J7F1MPR2R61mCrQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1755707182;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vo8UrdLdOHJ5drKafQN3wALdlJqAJ1s63USmQ7QpBU4=;
+	b=LWwwQLx3hva14oK38WOxyy/BZLuz6O3TYZFJ3kyxlLediNtw/cDmqTEMKkzABRCruzuShM
+	6elfKYb+aHQZIXAA==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Yunseong Kim <ysk@kzalloc.com>, linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	Andrey Konovalov <andreyknvl@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	syzkaller@googlegroups.com
+Subject: Re: [BUG] usbip: vhci: Sleeping function called from invalid context
+ in vhci_urb_enqueue on PREEMPT_RT
+Message-ID: <20250820162621.UiUQUcp1@linutronix.de>
+References: <c6c17f0d-b71d-4a44-bcef-2b65e4d634f7@kzalloc.com>
+ <f6cdf21a-642f-458c-85c1-0c2e1526f539@rowland.harvard.edu>
+ <28544110-3021-43da-b32e-9785c81a42c1@kzalloc.com>
+ <1088432b-b433-4bab-a927-69e55d9eb433@rowland.harvard.edu>
+ <2bf33071-e05e-4b89-b149-30b90888606f@rowland.harvard.edu>
+ <20250819110457.I46wiKTe@linutronix.de>
+ <49ee1b8a-d47a-42df-aa64-d0d62798c45b@rowland.harvard.edu>
+ <20250819145700.sIWRW7Oe@linutronix.de>
+ <bb7e34b7-c06b-4153-ba6c-009b9f1b34d0@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <bb7e34b7-c06b-4153-ba6c-009b9f1b34d0@rowland.harvard.edu>
 
-Currently, the usb251xb assumes i2c control. But from HW point of
-view, the hub supports usage case without any i2c, we only want the
-gpio controls.
+On 2025-08-19 11:44:52 [-0400], Alan Stern wrote:
+> dummy-hcd is different from the others; its use of local_irq_save() is=20
+> in the gadget giveback path, not the host giveback path.  We would need=
+=20
+> another audit similar to the one you did for ed194d136769, but this=20
+> time checking gadget completion handlers.
 
-Refactor the code so that register writes for configuration are only
-performed if the device has a i2c_client provided and also register as
-a platform driver. This allows the driver to be used to manage GPIO
-based control of the device.
+ach right.=20
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- drivers/usb/misc/usb251xb.c | 108 +++++++++++++++++++++++++++++++-----
- 1 file changed, 94 insertions(+), 14 deletions(-)
+> > Only RH code completes directly, everything else is shifted to softirq
+> > context (for ehci/HCD_BH).
+>=20
+> Correct (except that RH code always uses softirq context; it never=20
+> completes directly -- the kerneldoc is wrong and Greg just accepted a=20
+> patch to change it).
 
-diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-index cb2f946de42c..e9a9404d17b2 100644
---- a/drivers/usb/misc/usb251xb.c
-+++ b/drivers/usb/misc/usb251xb.c
-@@ -17,6 +17,7 @@
- #include <linux/module.h>
- #include <linux/nls.h>
- #include <linux/of.h>
-+#include <linux/platform_device.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- 
-@@ -242,15 +243,19 @@ static int usb251xb_check_dev_children(struct device *dev, void *child)
- static int usb251x_check_gpio_chip(struct usb251xb *hub)
- {
- 	struct gpio_chip *gc = gpiod_to_chip(hub->gpio_reset);
--	struct i2c_adapter *adap = hub->i2c->adapter;
-+	struct i2c_adapter *adap;
- 	int ret;
- 
-+	if (!hub->i2c)
-+		return 0;
-+
- 	if (!hub->gpio_reset)
- 		return 0;
- 
- 	if (!gc)
- 		return -EINVAL;
- 
-+	adap = hub->i2c->adapter;
- 	ret = usb251xb_check_dev_children(&adap->dev, gc->parent);
- 	if (ret) {
- 		dev_err(hub->dev, "Reset GPIO chip is at the same i2c-bus\n");
-@@ -271,7 +276,8 @@ static void usb251xb_reset(struct usb251xb *hub)
- 	if (!hub->gpio_reset)
- 		return;
- 
--	i2c_lock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
-+	if (hub->i2c)
-+		i2c_lock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
- 
- 	gpiod_set_value_cansleep(hub->gpio_reset, 1);
- 	usleep_range(1, 10);	/* >=1us RESET_N asserted */
-@@ -280,7 +286,8 @@ static void usb251xb_reset(struct usb251xb *hub)
- 	/* wait for hub recovery/stabilization */
- 	usleep_range(500, 750);	/* >=500us after RESET_N deasserted */
- 
--	i2c_unlock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
-+	if (hub->i2c)
-+		i2c_unlock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
- }
- 
- static int usb251xb_connect(struct usb251xb *hub)
-@@ -289,7 +296,11 @@ static int usb251xb_connect(struct usb251xb *hub)
- 	int err, i;
- 	char i2c_wb[USB251XB_I2C_REG_SZ];
- 
--	memset(i2c_wb, 0, USB251XB_I2C_REG_SZ);
-+	if (!hub->i2c) {
-+		usb251xb_reset(hub);
-+		dev_info(dev, "hub is put in default configuration.\n");
-+		return 0;
-+	}
- 
- 	if (hub->skip_config) {
- 		dev_info(dev, "Skip hub configuration, only attach.\n");
-@@ -698,18 +709,13 @@ static int usb251xb_i2c_probe(struct i2c_client *i2c)
- 	return usb251xb_probe(hub);
- }
- 
--static int usb251xb_suspend(struct device *dev)
-+static int usb251xb_suspend(struct usb251xb *hub)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct usb251xb *hub = i2c_get_clientdata(client);
--
- 	return regulator_disable(hub->vdd);
- }
- 
--static int usb251xb_resume(struct device *dev)
-+static int usb251xb_resume(struct usb251xb *hub)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct usb251xb *hub = i2c_get_clientdata(client);
- 	int err;
- 
- 	err = regulator_enable(hub->vdd);
-@@ -719,7 +725,23 @@ static int usb251xb_resume(struct device *dev)
- 	return usb251xb_connect(hub);
- }
- 
--static DEFINE_SIMPLE_DEV_PM_OPS(usb251xb_pm_ops, usb251xb_suspend, usb251xb_resume);
-+static int usb251xb_i2c_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct usb251xb *hub = i2c_get_clientdata(client);
-+
-+	return usb251xb_suspend(hub);
-+}
-+
-+static int usb251xb_i2c_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct usb251xb *hub = i2c_get_clientdata(client);
-+
-+	return usb251xb_resume(hub);
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(usb251xb_i2c_pm_ops, usb251xb_i2c_suspend, usb251xb_i2c_resume);
- 
- static const struct i2c_device_id usb251xb_id[] = {
- 	{ "usb2422" },
-@@ -739,13 +761,71 @@ static struct i2c_driver usb251xb_i2c_driver = {
- 	.driver = {
- 		.name = DRIVER_NAME,
- 		.of_match_table = usb251xb_of_match,
--		.pm = pm_sleep_ptr(&usb251xb_pm_ops),
-+		.pm = pm_sleep_ptr(&usb251xb_i2c_pm_ops),
- 	},
- 	.probe = usb251xb_i2c_probe,
- 	.id_table = usb251xb_id,
- };
- 
--module_i2c_driver(usb251xb_i2c_driver);
-+static int usb251xb_plat_probe(struct platform_device *pdev)
-+{
-+	struct usb251xb *hub;
-+
-+	hub = devm_kzalloc(&pdev->dev, sizeof(*hub), GFP_KERNEL);
-+	if (!hub)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, hub);
-+	hub->dev = &pdev->dev;
-+
-+	return usb251xb_probe(hub);
-+}
-+
-+static int usb251xb_plat_suspend(struct device *dev)
-+{
-+	return usb251xb_suspend(dev_get_drvdata(dev));
-+}
-+
-+static int usb251xb_plat_resume(struct device *dev)
-+{
-+	return usb251xb_resume(dev_get_drvdata(dev));
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(usb251xb_plat_pm_ops, usb251xb_plat_suspend, usb251xb_plat_resume);
-+
-+static struct platform_driver usb251xb_plat_driver = {
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.of_match_table = usb251xb_of_match,
-+		.pm = pm_sleep_ptr(&usb251xb_plat_pm_ops),
-+	},
-+	.probe		= usb251xb_plat_probe,
-+};
-+
-+static int __init usb251xb_init(void)
-+{
-+	int err;
-+
-+	err = i2c_add_driver(&usb251xb_i2c_driver);
-+	if (err)
-+		return err;
-+
-+	err = platform_driver_register(&usb251xb_plat_driver);
-+	if (err) {
-+		i2c_del_driver(&usb251xb_i2c_driver);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+module_init(usb251xb_init);
-+
-+static void __exit usb251xb_exit(void)
-+{
-+	platform_driver_unregister(&usb251xb_plat_driver);
-+	i2c_del_driver(&usb251xb_i2c_driver);
-+}
-+module_exit(usb251xb_exit);
- 
- MODULE_AUTHOR("Richard Leitner <richard.leitner@skidata.com>");
- MODULE_DESCRIPTION("USB251x/xBi USB 2.0 Hub Controller Driver");
--- 
-2.50.0
+Ach okay. I assumed it because the completion handler skips it. But that
+might be a shortcut because it already is in softirq context.
 
+> There are other places that disable local interrupts.  ehci-brcm.c does=
+=20
+> it in order to meet a timing constraint.  ohci-omap.c and ohci-s3c2410.c=
+=20
+> do it for reasons I'm not aware of (no comment about it in the source). =
+=20
+> gadget/legacy/inode.c does it in ep_aio_cancel() -- I can only guess=20
+> that this is somehow related to aio and not to anything in USB.
+
+the inode.c looks interesting.c. It got there in 75787d943ab37 ("[PATCH]
+USB: gadgetfs AIO support") which is 2004. So it might assume !SMP in
+terms of locking. Anyway=E2=80=A6
+
+> > The closest thing we have is local_lock_irq() which maps to
+> > local_irq_disable() on !PREEMPT_RT systems. But I would prefer to avoid
+> > it because it serves a different purpose.
+> > What works is something like
+> > 	spin_lock_irqsave();
+> > 	spin_unlock();
+> > 	$SOMETHING
+> > 	spin_lock();
+> > 	spin_unlock_irqestore().
+>=20
+> That's just silly.  We should have something like this:
+>=20
+> #ifdef CONFIG_PREEMPT_RT
+> static inline void local_irqsave_nonrt(unsigned long flags) {}
+> static inline void local_irqrestore_nonrt(unsigned long flags) {}
+> static inline void local_irq_disable_nonrt() {}
+> static inline void local_irq_enable_nonrt() {}
+> #else
+> #define local_irqsave_nonrt	local_irqsave
+> #define local_irqrestore_nonrt	local_irqrestore
+> #define local_irq_disable_nonrt	local_irq_disable
+> #define local_irq_enable_nonrt	local_irq_enable
+> #endif
+
+We managed over the years to get rid of each one of this instances/
+requirements. The RT tree used to have
+|#ifdef CONFIG_PREEMPT_RT_FULL
+|# define local_irq_disable_nort()     do { } while (0)
+|# define local_irq_disable_rt()               local_irq_disable()
+|#else
+|# define local_irq_disable_nort()     local_irq_disable()
+|# define local_irq_disable_rt()               do { } while (0)
+|#endif
+
+which was removed as of v4.16.7-rt1.
+The problem is usually that nobody knows why exactly interrupts are
+disabled an what purpose it serves. Often the reasons is no longer there
+but the code still does it.
+
+> > The question is why should $SOMETHING be invoked with disabled
+> > interrupts if the function was called from process context.
+>=20
+> More to the point, out of all the possible reasons why $SOMETHING might=
+=20
+> be invoked with disabled interrupts, which of these reasons remain valid=
+=20
+> in RT builds and which don't?
+
+None (in most cases) because interrupt handler are threaded. So
+interrupts are never truly disabled.
+Adding the macros as you suggest would gain probably three users:
+- inode
+- dummy_hcd
+- vhci-hcd
+
+Instead I would:
+- vhci I would suggest to remove the disabling and move its completion
+   to BH.
+- dummy_hcd I would suggest to either do the thing you called silly or
+  audit the gadgets and remove it.
+- inode I would suggest to keep it as-is and audit it properly later
+  once someone intends to use it. It would also give the opportunity to
+  clean up the commented locking statement.
+
+> Alan Stern
+
+Sebastian
 
