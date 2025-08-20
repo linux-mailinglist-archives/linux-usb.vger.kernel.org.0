@@ -1,159 +1,156 @@
-Return-Path: <linux-usb+bounces-27046-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27047-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E0CBB2DC23
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 14:11:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C651B2DD80
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 15:16:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 068BC725EFB
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 12:11:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59B6A581202
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 13:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7C962E7F1E;
-	Wed, 20 Aug 2025 12:11:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23CBF31DD8D;
+	Wed, 20 Aug 2025 13:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sjgXMTxS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fSJ4EbNb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E04283144
-	for <linux-usb@vger.kernel.org>; Wed, 20 Aug 2025 12:11:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A73C2E2294;
+	Wed, 20 Aug 2025 13:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755691866; cv=none; b=uIFWIxJi1wsmMpOkW2axm3j2n1j+2VXNw8R3AUC9nNtfj91ryEACJOYOkoO1lsCe+gcUdr9UG1+cv6JvHfwbzA3hJ3cAwYNMDGwKXe9QHAXkUwyEc3ZR2+Lhw3nlS2/abUDkgiL8waTdPFmED04KISx9X/1WcKo0KAYFEOXiMmk=
+	t=1755695745; cv=none; b=avhMr3UpyxdUibjAg1600Z/oheMNWuK0SExGqOWTsoz5OFk2nPAISLl+F14LKib9k2e5RWWQfmNrnI0o3u0ULh9/hJG1ySL3fqAJ/nwwukQFlIQ86BBXOdn8BjeUywthCQ2SSLJ0Q94RN6uHZHilJf91U5goVB7ettaT/WYhMzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755691866; c=relaxed/simple;
-	bh=f3xB0tvkuyaUVJ94KkePk91bBqSguAHtqworF2y0QNg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Qz2OnIjLY/uwPH7AwBTR2gJnqZMocnvz/fSXZ4FSXFQ9pFr9b4c911dSmwlHt0npzAXa7GN5bJ2IvGB4Xf4dX/BbG1sRrocPrOIINOnavL2Zk3JMVSpF4L+bmTS0xOEg/OV6iaLXf1qEv0OnPvTC9L4CAZ3XYgdhcCys5EFuSXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sjgXMTxS; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-55ce5243f6dso7076711e87.2
-        for <linux-usb@vger.kernel.org>; Wed, 20 Aug 2025 05:11:04 -0700 (PDT)
+	s=arc-20240116; t=1755695745; c=relaxed/simple;
+	bh=MR95KeLBXnAjoONlEEmciqveTZvYSEB/+NGwOV3m1HA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tqjnxWk/nYLjkyGDaNoI/YY68gODU8D7utqq52pKN1dHdjmidzEc2FFda8HH0ZH/nOYz3NcDKGBrzFOatJvkOho+TCHRTV/TAouZuFUhdg2bGumkoRhpZ6qba7RHgzgSrm6axN0klkqZ+e8bAOigL3O38+x+U3lAVT3XfG0eM24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fSJ4EbNb; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-323266cdf64so5085910a91.0;
+        Wed, 20 Aug 2025 06:15:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755691862; x=1756296662; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0uwFhS+61H7KqiQsmg/6fzZuNhHOEI84MRnG94LKZpo=;
-        b=sjgXMTxScJ9f0EK7gwEBacF/atcQPyv6TAtmm26PC39lAEow5pigMSYmb8IiSWB98U
-         hrlN86JlvqfjxWBoWIzPGFOzM+097j7wSqR+Qa0oA1cRpEUuttHzEfv3kppZu/JZzXo5
-         +vLuKV3WXWrJrKcuFv2anDT/URmKB07Eq3c+w+UASwaTKwVa1jCkAMh0EYDqieDXJOG4
-         x7GpqoPKOUkhtJZ+qflPiKLkHn6Qo3CFkCuy4wCIgazsaJLTxq4WcYxz69LBJqGlvwow
-         DNEZUnbvbzHXSHniHVMoyuzBnCpEJTz13sl43KWrJ8hPRIP/bYmzvBFY8wXVQEx+VuiP
-         rysQ==
+        d=gmail.com; s=20230601; t=1755695743; x=1756300543; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZhA+TycHOu2hS6f7GrjCAcmbAsgcqmJx9pZ/zTGM90U=;
+        b=fSJ4EbNbRxF9JfiPxCGUiw5Yug76WE4hb5GY7vCicY9JC2rJsDRBwk4Fupqg2AfjuO
+         2hSNvkFUymYmd1Gu31DvUGyHvdHYzIIvslIuhQEfRO/Lfm4W0Xw2L+h80xiV9rbYY/rl
+         EsNZnxcBwJPydHHJfX4KGoM5a57X/vBozkst5kLnmDWcoxf3f/QWEd6slVaB7THk0e3X
+         LUuT0xlqB2ilTmAGHIC6SHMiN4DggfpfVwe6wTv5xCjruJi9te4+6Wfv07XIFxD/n1Gm
+         ic2QOD7GPj1MOTZxTDKy3BSYTNKFdwtE7sKrorMmiugCkcP4N5pBlfASRygngE1NUeF/
+         LGQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755691862; x=1756296662;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0uwFhS+61H7KqiQsmg/6fzZuNhHOEI84MRnG94LKZpo=;
-        b=UtuKdS4ir9TFy1Slvai5VZ2cN8pOazrh6Wv55OqtpWRMn8fDyJlPLyv4xEBRrx8A5A
-         kQqGoXFypdNd2f7yrGpeZ06EMt5wflGQRNYKyQc64aeB584Bu64uuA1ZcgQUGOZiAiuf
-         KnJWOQDBIN13uW7gYP4s+cjw44UvgScbaKuAQpa+y6Xq+CCjto6KiFhvMeiAK2NXavdS
-         y5pGYluanrk8mIJAsPCzlrgozMYaSamfp9N6F74fvSexSI1dc1ssjI7Gfz9c1d3746Rr
-         5uMIQAF0JXTB2Cr2Jz6ZndmJCjcxu26HEh6VHrmWONLyLi/RgCfUq8TVxCos5ntadPBv
-         Yn8w==
-X-Gm-Message-State: AOJu0YxwMmYT6wni3MApq1PZI7IT1CUqiwS4JuyhGCRbv+Ef+1akrVqb
-	cbFhlTawlkLAhOMOv/iL+jP3N8oFVqmoPndruNRDnxnK64alLMHl9BNeN9arzF5jLNjeh/zPjIM
-	t7b4tryM=
-X-Gm-Gg: ASbGncuVfcZ3ueoW2HGtEN6gr7vDfkyaOFjbqiZwTT7j+7fiCthDGbX1+rplrXe8MxW
-	k3t8/3qXiax0ooOm4MQCKqfvjDlnBU58yMf+zl4ZulmZT8Jr1sRXcjUJdlNrUE136Wi99yLwlel
-	lY095jnLV6Nc2Tr+GzDD7A6uVSY4zjHEPbeHEdQcOKaD2VuKFvkSNbR51GdYKobDbYWKhtLDBLc
-	4tO2fFPqFXAqc3XpFwLJTarxx0zMYE+TVgBbHU4Ag0LhF8g7aR+NakrrTW9l0J5UlWsdAvpBC5B
-	/unY0berRSRx79LAASmsKyaQd6D4/K1bWEk9jLMmWH3uksv75vOW0pG8l3XJXN1nYShzuF92y6n
-	XMG8H3fdOsAzdYpqWu23FmJl99vLkbTAa
-X-Google-Smtp-Source: AGHT+IGO6nQK3uJ9oBAmWyOXIJ0GpBiUfeAWgsZoBMuAIXdZ0R3g2CyrH06LUAP2sTgMElpmFQMYlg==
-X-Received: by 2002:a05:6512:252b:b0:55b:5a47:a48c with SMTP id 2adb3069b0e04-55e06bc1147mr878583e87.43.1755691862349;
-        Wed, 20 Aug 2025 05:11:02 -0700 (PDT)
-Received: from [192.168.1.140] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef414f1esm2589129e87.140.2025.08.20.05.11.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Aug 2025 05:11:02 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 20 Aug 2025 14:11:01 +0200
-Subject: [PATCH] dt-bindings: usb: IXP4xx UDC bindings
+        d=1e100.net; s=20230601; t=1755695743; x=1756300543;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZhA+TycHOu2hS6f7GrjCAcmbAsgcqmJx9pZ/zTGM90U=;
+        b=cBgbfmvNKIPUTLFi68aMzyVS1PspDWf434XewrNunxL/mavbssKC77imUNzW8zx5+l
+         kJlHH9WorqyDEVU58Ktb9m3frnTVIY5PdiT59B7Lcpv3XfhST90X6cA+3UaURjR1HwiJ
+         sdaihbf7lB/YpZ2CHMFxPnWO2UcQlsLEhyF1nG8gYW43dVszPF0onTZDnR+U4KRfli3k
+         8b6xqtqghaP37Moptg3mlOYWY/u/PFo26xqrjRS8Qv54Z7vww9ceCP43JrvGoxhIR/oF
+         sakglJiLHYo1EVTJP3AF5FTwZlWe0ndYGuHob2l22fioEoiQdWLOr3GlS4KXFsXvY7rx
+         Q7Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCUEUi6GJtPGoBY6yZbuucsIPGO18q1bi3cR0f6CITPOzbGn8T0GMjLS1fnhDQYi86CxkvnmSI3dCsSn@vger.kernel.org, AJvYcCVvcqtIajYfSXu/uYQL5tvOJQ/qDL98hYsepRGwn6hS9ykwm1nGx2W0hacSFm188FftZedwedNW5H4OL6bR@vger.kernel.org, AJvYcCWD+7Metaagg4l/CBABPShjTr/pUuQ7yDpG687xZ9P2vorz8QuDs7ne8D9chrVCpXwx0IbVj+YonrV9pA==@vger.kernel.org, AJvYcCWG3EuAiWR0qa3R0kmhYDu1GU6rZliisUl5I59/JhJH0iRFOKE+bUolsAg4ZQnjP7SoRVz7FJCp3gyP@vger.kernel.org, AJvYcCWO02inTkf8tqn7MPPTggvB6KE8BWGeZNFewXVK9+wbNlVELXpcvky9m58oDDPrdPwCuu3LluVdZH+zS/c=@vger.kernel.org, AJvYcCWn10s8h0QiQIV6qfiUipqPXYW3jdVqcAO09Ja8qT9QRRjls1kLY5jDLOUtB9CEC9sjadv2Y3/WVVorolw=@vger.kernel.org, AJvYcCXGB+46/ZJykt/5GgVig39qT0qOybai4T8tRMrwoP/nWEETDIwtFmc7FvZvdP70MjKYdlKpyWxYyk4p@vger.kernel.org, AJvYcCXqHfMJO/inzDejhbRjwnloGIPxyrp1kBd/F1ejCjivtaviaPf8qXw/c4FfnhEU/jk9FwhcOycchmhlfw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaQTOpca+hiYbaZqxP0U1jgTTXJriFqp0gC2st0TlIiPO5u7IM
+	/oxMB/z4+frzdsFn4dB6sshNLZyuKM2O2zH1uPvDyekL3dtKSMqQqMq32/qcUGkQTmdsRSFRJwU
+	+JkspIRUqYsyRcWzFrIB5eZIY1T0+TWTahrI=
+X-Gm-Gg: ASbGncsaqmNMnKv28wH5JSMYjPqZAGJqSl4ad0E873XkJe1xz+kGBwpLYPUPoxTtx0d
+	g6z2pumTmaEr2kXgsO3tFSOB7wq0VR83uQ2Q7Prr4mdC8TWYY8Y1fl/PN7oPlxw1zIGXpmljopd
+	jeKqAMl2UCLGFaFFOocblBZP33z9uqqEi3mh2QlDGhMpglo97uxe5qZY22FD9xXJtL9Mh+uoMYZ
+	anRR7V3C+FxSE+S/FpmcECIdtmnuzkb7TtCkFhH
+X-Google-Smtp-Source: AGHT+IEQh0IA7hBcK+vbOCeiQ1tRGJH5G+7OtgvpKYYK6HmLASozA+JsGJ6hRWUdJWiR1ke/zCt0aQqhwBmm2t+61Ek=
+X-Received: by 2002:a17:90b:384d:b0:320:fda8:fabe with SMTP id
+ 98e67ed59e1d1-324e143edbemr3404966a91.22.1755695743221; Wed, 20 Aug 2025
+ 06:15:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250820-ixp4xx-udc-bindings-v1-1-640f29140164@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAFS7pWgC/x3MQQqAIBBA0avErBswNYquEi3KmWw2JkohRHdPW
- r7F/w9kTsIZpuaBxLdkOUNF1zbgjjV4RqFq0Er3atQKpURbCl7kcJNAEnxGR5bcYIzh3UAtY+J
- dyn+dl/f9AHFpRKNlAAAA
-X-Change-ID: 20250820-ixp4xx-udc-bindings-cd4dc7333ef3
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.14.2
+References: <20250816021523.167049-1-jihed.chaibi.dev@gmail.com>
+ <20250816021523.167049-2-jihed.chaibi.dev@gmail.com> <20250819-humongous-muscular-curassow-5accd5@kuoka>
+ <20250819223157.0b271c74@akair> <e0bec141-6aef-475f-b997-60fdf8234b82@kernel.org>
+In-Reply-To: <e0bec141-6aef-475f-b997-60fdf8234b82@kernel.org>
+From: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+Date: Wed, 20 Aug 2025 15:15:32 +0200
+X-Gm-Features: Ac12FXwJjTEuvAdX2Wnbu9Wcm5-vo-L0VsLLi4HcMA86Hx-OXfvGEyfpUyCJh3Y
+Message-ID: <CANBuOYrs2QNRXd6Qc28tBDSySrbh+vJ83+-+2XxB3jY2fH9qtg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: mfd: twl: Add missing sub-nodes for
+ TWL4030 & TWL603x
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Andreas Kemnade <andreas@kemnade.info>, linux-kernel@vger.kernel.org, 
+	peter.ujfalusi@gmail.com, dmitry.torokhov@gmail.com, robh@kernel.org, 
+	krzk+dt@kernel.org, lgirdwood@gmail.com, tiwai@suse.com, conor+dt@kernel.org, 
+	lee@kernel.org, ukleinek@kernel.org, broonie@kernel.org, 
+	gregkh@linuxfoundation.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	aaro.koskinen@iki.fi, khilman@baylibre.com, rogerq@kernel.org, 
+	tony@atomide.com, linux-gpio@vger.kernel.org, linux-input@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-omap@vger.kernel.org, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This adds device tree bindings for the IXP4xx USB Device
-Controller (UDC).
+On Wed, Aug 20, 2025 at 7:57=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 19/08/2025 22:31, Andreas Kemnade wrote:
+> >>
+> >>> +          type: object
+> >>> +          $ref: /schemas/usb/ti,twlxxxx-usb.yaml#
+> >>
+> >> Are you sure your patchset is bsiectable? Apply this patch and test. Y=
+ou
+> >> will see errors and you must fix these. Even after fixing you have
+> >> strict dependencies so your cover letter must explain these (or mergin=
+g
+> >> constraints)...
+> >>
+> > what are the rules here regarding bisectability? non-existing files
+>
+> dt_binding_check.
+>
+>
+> Best regards,
+> Krzysztof
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- .../devicetree/bindings/usb/intel,ixp4xx-udc.yaml  | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+Hello Krzysztof and Andreas,
 
-diff --git a/Documentation/devicetree/bindings/usb/intel,ixp4xx-udc.yaml b/Documentation/devicetree/bindings/usb/intel,ixp4xx-udc.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..4ed60274689725696a88dcda43b829cb0863cbc1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/intel,ixp4xx-udc.yaml
-@@ -0,0 +1,39 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/intel,ixp4xx-udc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Intel IXP4xx SoC USB Device Controller (UDC)
-+
-+description: The IXP4xx SoCs has a full-speed USB Device
-+  Controller with 16 endpoints and a built-in transceiver.
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+properties:
-+  compatible:
-+    const: intel,ixp4xx-udc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    usb@c800b000 {
-+        compatible = "intel,ixp4xx-udc";
-+        reg = <0xc800b000 0x1000>;
-+        interrupts = <12 IRQ_TYPE_LEVEL_HIGH>;
-+    };
+Thanks again for your feedback,
 
----
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20250820-ixp4xx-udc-bindings-cd4dc7333ef3
+You were right that my series had strict dependencies. Testing again I
+found that a
+local 'dt_binding_check' -only including this patch- passed, but the
+dependencies
+(non-existent yaml files in $ref) caused errors during a full 'dtbs_check'.
 
+I managed to fix those dtbs_check warnings/errors thanks to
+'additionalProperties: true'
+to break the hard dependencies on the other new YAML files, and by
+adding optional
+definitions for the 'clocks' and 'clock-names' properties, which I
+found are used by several
+OMAP dts files.
+
+Please let me know what you think of this, and whether I should send the ne=
+w,
+corrected v4 of this MFD (single) patch.
+
+I have already sent the independent v4 patches for the other
+subsystems (ASoC, USB, etc.).
+in order to reach a much better orthogonality and independence between
+the patches.
+
+Thanks again for your guidance.
 Best regards,
--- 
-Linus Walleij <linus.walleij@linaro.org>
 
+Jihed
 
