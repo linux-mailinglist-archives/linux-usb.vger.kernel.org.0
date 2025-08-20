@@ -1,156 +1,138 @@
-Return-Path: <linux-usb+bounces-27047-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27048-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C651B2DD80
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 15:16:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C1D4B2DD9B
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 15:20:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59B6A581202
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 13:15:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BDDA1C43505
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 13:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23CBF31DD8D;
-	Wed, 20 Aug 2025 13:15:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B18131DD88;
+	Wed, 20 Aug 2025 13:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fSJ4EbNb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZByQORk1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A73C2E2294;
-	Wed, 20 Aug 2025 13:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B8A2DE6ED;
+	Wed, 20 Aug 2025 13:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755695745; cv=none; b=avhMr3UpyxdUibjAg1600Z/oheMNWuK0SExGqOWTsoz5OFk2nPAISLl+F14LKib9k2e5RWWQfmNrnI0o3u0ULh9/hJG1ySL3fqAJ/nwwukQFlIQ86BBXOdn8BjeUywthCQ2SSLJ0Q94RN6uHZHilJf91U5goVB7ettaT/WYhMzI=
+	t=1755696001; cv=none; b=i17aqhV8rmvo9ptrbgJFdFEUwMQWY3MgfxaV9OdAePPEHoFSq1faHK3ljydqw9eg7LwCcuaFiYyvBcv03q06sHPYT9QajpITkanOKwqoOITwwkeb5373NBD4Unz0CupjvH5xRm9GmzdiEuH2qbYNGvtpySGprONoYb6SgcCVsDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755695745; c=relaxed/simple;
-	bh=MR95KeLBXnAjoONlEEmciqveTZvYSEB/+NGwOV3m1HA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tqjnxWk/nYLjkyGDaNoI/YY68gODU8D7utqq52pKN1dHdjmidzEc2FFda8HH0ZH/nOYz3NcDKGBrzFOatJvkOho+TCHRTV/TAouZuFUhdg2bGumkoRhpZ6qba7RHgzgSrm6axN0klkqZ+e8bAOigL3O38+x+U3lAVT3XfG0eM24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fSJ4EbNb; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-323266cdf64so5085910a91.0;
-        Wed, 20 Aug 2025 06:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755695743; x=1756300543; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZhA+TycHOu2hS6f7GrjCAcmbAsgcqmJx9pZ/zTGM90U=;
-        b=fSJ4EbNbRxF9JfiPxCGUiw5Yug76WE4hb5GY7vCicY9JC2rJsDRBwk4Fupqg2AfjuO
-         2hSNvkFUymYmd1Gu31DvUGyHvdHYzIIvslIuhQEfRO/Lfm4W0Xw2L+h80xiV9rbYY/rl
-         EsNZnxcBwJPydHHJfX4KGoM5a57X/vBozkst5kLnmDWcoxf3f/QWEd6slVaB7THk0e3X
-         LUuT0xlqB2ilTmAGHIC6SHMiN4DggfpfVwe6wTv5xCjruJi9te4+6Wfv07XIFxD/n1Gm
-         ic2QOD7GPj1MOTZxTDKy3BSYTNKFdwtE7sKrorMmiugCkcP4N5pBlfASRygngE1NUeF/
-         LGQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755695743; x=1756300543;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZhA+TycHOu2hS6f7GrjCAcmbAsgcqmJx9pZ/zTGM90U=;
-        b=cBgbfmvNKIPUTLFi68aMzyVS1PspDWf434XewrNunxL/mavbssKC77imUNzW8zx5+l
-         kJlHH9WorqyDEVU58Ktb9m3frnTVIY5PdiT59B7Lcpv3XfhST90X6cA+3UaURjR1HwiJ
-         sdaihbf7lB/YpZ2CHMFxPnWO2UcQlsLEhyF1nG8gYW43dVszPF0onTZDnR+U4KRfli3k
-         8b6xqtqghaP37Moptg3mlOYWY/u/PFo26xqrjRS8Qv54Z7vww9ceCP43JrvGoxhIR/oF
-         sakglJiLHYo1EVTJP3AF5FTwZlWe0ndYGuHob2l22fioEoiQdWLOr3GlS4KXFsXvY7rx
-         Q7Vw==
-X-Forwarded-Encrypted: i=1; AJvYcCUEUi6GJtPGoBY6yZbuucsIPGO18q1bi3cR0f6CITPOzbGn8T0GMjLS1fnhDQYi86CxkvnmSI3dCsSn@vger.kernel.org, AJvYcCVvcqtIajYfSXu/uYQL5tvOJQ/qDL98hYsepRGwn6hS9ykwm1nGx2W0hacSFm188FftZedwedNW5H4OL6bR@vger.kernel.org, AJvYcCWD+7Metaagg4l/CBABPShjTr/pUuQ7yDpG687xZ9P2vorz8QuDs7ne8D9chrVCpXwx0IbVj+YonrV9pA==@vger.kernel.org, AJvYcCWG3EuAiWR0qa3R0kmhYDu1GU6rZliisUl5I59/JhJH0iRFOKE+bUolsAg4ZQnjP7SoRVz7FJCp3gyP@vger.kernel.org, AJvYcCWO02inTkf8tqn7MPPTggvB6KE8BWGeZNFewXVK9+wbNlVELXpcvky9m58oDDPrdPwCuu3LluVdZH+zS/c=@vger.kernel.org, AJvYcCWn10s8h0QiQIV6qfiUipqPXYW3jdVqcAO09Ja8qT9QRRjls1kLY5jDLOUtB9CEC9sjadv2Y3/WVVorolw=@vger.kernel.org, AJvYcCXGB+46/ZJykt/5GgVig39qT0qOybai4T8tRMrwoP/nWEETDIwtFmc7FvZvdP70MjKYdlKpyWxYyk4p@vger.kernel.org, AJvYcCXqHfMJO/inzDejhbRjwnloGIPxyrp1kBd/F1ejCjivtaviaPf8qXw/c4FfnhEU/jk9FwhcOycchmhlfw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaQTOpca+hiYbaZqxP0U1jgTTXJriFqp0gC2st0TlIiPO5u7IM
-	/oxMB/z4+frzdsFn4dB6sshNLZyuKM2O2zH1uPvDyekL3dtKSMqQqMq32/qcUGkQTmdsRSFRJwU
-	+JkspIRUqYsyRcWzFrIB5eZIY1T0+TWTahrI=
-X-Gm-Gg: ASbGncsaqmNMnKv28wH5JSMYjPqZAGJqSl4ad0E873XkJe1xz+kGBwpLYPUPoxTtx0d
-	g6z2pumTmaEr2kXgsO3tFSOB7wq0VR83uQ2Q7Prr4mdC8TWYY8Y1fl/PN7oPlxw1zIGXpmljopd
-	jeKqAMl2UCLGFaFFOocblBZP33z9uqqEi3mh2QlDGhMpglo97uxe5qZY22FD9xXJtL9Mh+uoMYZ
-	anRR7V3C+FxSE+S/FpmcECIdtmnuzkb7TtCkFhH
-X-Google-Smtp-Source: AGHT+IEQh0IA7hBcK+vbOCeiQ1tRGJH5G+7OtgvpKYYK6HmLASozA+JsGJ6hRWUdJWiR1ke/zCt0aQqhwBmm2t+61Ek=
-X-Received: by 2002:a17:90b:384d:b0:320:fda8:fabe with SMTP id
- 98e67ed59e1d1-324e143edbemr3404966a91.22.1755695743221; Wed, 20 Aug 2025
- 06:15:43 -0700 (PDT)
+	s=arc-20240116; t=1755696001; c=relaxed/simple;
+	bh=cW2J3cznJb8SCJEC0Zd0cLhUnApCtv6wMSIbGA5lfVc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pYUnNavIqnv1xE2UtjvxkCxtsLeBkQOScDw/kMtkxWG2y1ibTSQrskpAp363rg2e3M01hkgOodu7lbKOKCXbZqz86U6hkRjQzB/kz8TUadn8i12OHlYltlSM2AIPVlREU72qKmR/uLWQ6A9p6pWqRWUV4o0sbHWRA+pQ6A6bs0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZByQORk1; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755696000; x=1787232000;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=cW2J3cznJb8SCJEC0Zd0cLhUnApCtv6wMSIbGA5lfVc=;
+  b=ZByQORk1d/Rkhfs7hjhM2a4PDomKA9nGadFfhXjP658+N/OluUVrkNF1
+   WEth+MbdLG2GwhNYEJYLtGxhf2s55SI+Mzt/rRFqZL/wt8OZuIe9CyZVW
+   31uhtxLUGR0OGgC1j3MkfzhTCGD+EvA3ugZBQc3QwG8W+Q9b2eI7z6O/N
+   vl2MA2D6RjiXrTg0kwpO8S/PdX8xstk9XFSQOP3SYFGNIfJA65hMDkYKU
+   ZZRpJrPsq4bzLQE7I3KjswO6JCmYmKcMXXpMLhzM9QkgEQjcgJvte72dv
+   fd0XkSK55PRkCCkuXKbcnhr1hmAFoslbIcMf0w9v/+BP3Tw5/FKsWdL4u
+   A==;
+X-CSE-ConnectionGUID: Q8ew4YT5TU2PUuRhKVgPpg==
+X-CSE-MsgGUID: c0WiWbLUQAKFcSRRmjw9Qw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="75541636"
+X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
+   d="scan'208";a="75541636"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 06:19:59 -0700
+X-CSE-ConnectionGUID: VFmZteUnRjqpT1z204NhNQ==
+X-CSE-MsgGUID: Uk8bhA24Qz6bvZkm6SHtyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
+   d="scan'208";a="172383404"
+Received: from ettammin-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.19])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 06:19:57 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 5585112024B;
+	Wed, 20 Aug 2025 16:19:54 +0300 (EEST)
+Date: Wed, 20 Aug 2025 16:19:54 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
+	hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
+	Amardeep Rai <amardeep.rai@intel.com>,
+	Kannappan R <r.kannappan@intel.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v4 1/4] xhci: Add host support for eUSB2 double
+ isochronous bandwidth devices
+Message-ID: <aKXLegx2LWUcOPe1@kekkonen.localdomain>
+References: <20250812132445.3185026-1-sakari.ailus@linux.intel.com>
+ <20250812132445.3185026-2-sakari.ailus@linux.intel.com>
+ <20250818115016.3611b910@foxbook>
+ <aKWGOIsipctKEJP-@kekkonen.localdomain>
+ <20250820104304.05a4373d@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250816021523.167049-1-jihed.chaibi.dev@gmail.com>
- <20250816021523.167049-2-jihed.chaibi.dev@gmail.com> <20250819-humongous-muscular-curassow-5accd5@kuoka>
- <20250819223157.0b271c74@akair> <e0bec141-6aef-475f-b997-60fdf8234b82@kernel.org>
-In-Reply-To: <e0bec141-6aef-475f-b997-60fdf8234b82@kernel.org>
-From: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
-Date: Wed, 20 Aug 2025 15:15:32 +0200
-X-Gm-Features: Ac12FXwJjTEuvAdX2Wnbu9Wcm5-vo-L0VsLLi4HcMA86Hx-OXfvGEyfpUyCJh3Y
-Message-ID: <CANBuOYrs2QNRXd6Qc28tBDSySrbh+vJ83+-+2XxB3jY2fH9qtg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] dt-bindings: mfd: twl: Add missing sub-nodes for
- TWL4030 & TWL603x
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Andreas Kemnade <andreas@kemnade.info>, linux-kernel@vger.kernel.org, 
-	peter.ujfalusi@gmail.com, dmitry.torokhov@gmail.com, robh@kernel.org, 
-	krzk+dt@kernel.org, lgirdwood@gmail.com, tiwai@suse.com, conor+dt@kernel.org, 
-	lee@kernel.org, ukleinek@kernel.org, broonie@kernel.org, 
-	gregkh@linuxfoundation.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	aaro.koskinen@iki.fi, khilman@baylibre.com, rogerq@kernel.org, 
-	tony@atomide.com, linux-gpio@vger.kernel.org, linux-input@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-omap@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250820104304.05a4373d@foxbook>
 
-On Wed, Aug 20, 2025 at 7:57=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On 19/08/2025 22:31, Andreas Kemnade wrote:
-> >>
-> >>> +          type: object
-> >>> +          $ref: /schemas/usb/ti,twlxxxx-usb.yaml#
-> >>
-> >> Are you sure your patchset is bsiectable? Apply this patch and test. Y=
-ou
-> >> will see errors and you must fix these. Even after fixing you have
-> >> strict dependencies so your cover letter must explain these (or mergin=
-g
-> >> constraints)...
-> >>
-> > what are the rules here regarding bisectability? non-existing files
->
-> dt_binding_check.
->
->
-> Best regards,
-> Krzysztof
+On Wed, Aug 20, 2025 at 10:43:04AM +0200, Michał Pecio wrote:
+> On Wed, 20 Aug 2025 11:24:24 +0300, Sakari Ailus wrote:
+> > Hi Michał,
+> > 
+> > Thanks for the review.
+> > 
+> > On Mon, Aug 18, 2025 at 11:50:16AM +0200, Michał Pecio wrote:
+> > > > @@ -1351,8 +1369,18 @@ static u32 xhci_get_endpoint_max_burst(struct usb_device *udev,
+> > > >  
+> > > >  	if (udev->speed == USB_SPEED_HIGH &&
+> > > >  	    (usb_endpoint_xfer_isoc(&ep->desc) ||
+> > > > -	     usb_endpoint_xfer_int(&ep->desc)))
+> > > > +	     usb_endpoint_xfer_int(&ep->desc))) {
+> > > > +		/*
+> > > > +		 * eUSB2 double isoc bw endpoints max packet field service
+> > > > +		 * opportunity bits 12:11 are not valid, so set the ctx burst to
+> > > > +		 * max service opportunity "2" as these eps support transferring
+> > > > +		 * over 3072 bytes per interval
+> > > > +		 */  
+> > > 
+> > > I think a shorter comment would suffice: eUSB2 BWD uses fixed burst
+> > > size and max packets bits 12:11 are invalid.  
+> > 
+> > I'll use this:
+> > 
+> > +                * eUSB2 double isochronous BW ECN uses fixed burst size and max
+> > +                * packets bits 12:11 are invalid.
+> >
+> 
+> Fine. And by the way, it may look like my comment was overly pedantic,
+> but I though that mentioning "more than 3072 bytes per interval" not
+> only isn't necessary here, but it adds confusion. It was something that
+> would be more relevant to 'mult' than 'burst.
 
-Hello Krzysztof and Andreas,
+Further I corrected the ECN title, the result being:
 
-Thanks again for your feedback,
++                * USB 2 Isochronous Double IN Bandwidth ECN uses fixed burst
++                * size and max packets bits 12:11 are invalid.
 
-You were right that my series had strict dependencies. Testing again I
-found that a
-local 'dt_binding_check' -only including this patch- passed, but the
-dependencies
-(non-existent yaml files in $ref) caused errors during a full 'dtbs_check'.
+There are now quite a few other changes for v5 as well, I'll post it
+soonish.
 
-I managed to fix those dtbs_check warnings/errors thanks to
-'additionalProperties: true'
-to break the hard dependencies on the other new YAML files, and by
-adding optional
-definitions for the 'clocks' and 'clock-names' properties, which I
-found are used by several
-OMAP dts files.
-
-Please let me know what you think of this, and whether I should send the ne=
-w,
-corrected v4 of this MFD (single) patch.
-
-I have already sent the independent v4 patches for the other
-subsystems (ASoC, USB, etc.).
-in order to reach a much better orthogonality and independence between
-the patches.
-
-Thanks again for your guidance.
-Best regards,
-
-Jihed
+-- 
+Sakari Ailus
 
