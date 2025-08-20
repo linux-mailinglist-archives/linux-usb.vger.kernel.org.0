@@ -1,84 +1,87 @@
-Return-Path: <linux-usb+bounces-27049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27050-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B983B2DEBE
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 16:10:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EF13B2DECC
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 16:12:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 066614E5294
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 14:08:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71C12720A13
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 14:09:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0835A26AA98;
-	Wed, 20 Aug 2025 14:07:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F368827145F;
+	Wed, 20 Aug 2025 14:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jaa0EyC4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cCbEuau3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F86262FE7;
-	Wed, 20 Aug 2025 14:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90F5263F30;
+	Wed, 20 Aug 2025 14:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755698875; cv=none; b=L+5B26WKIaozLFpQrpj6nMUMtyafp54MtjeB51r5vygHCI1N1l6Qf5dwgS/IRapcEEJBmi9rsWx8FJ4MS81Y+3SVIaEugY7mFY4N6HTJOChbTm1GEpkQJVDzTAdYOjdOcKhUdSby/yVkBviUB1755BTsjMJaPldk9ZfomCVrq6Q=
+	t=1755698944; cv=none; b=TeXo19/6Nf9BsHgZjzTG0gMT4CQa8VBU1DjlY4eVnk5Yv4eevQ/4H74VdC6wu873JhvZpp+1iIUZoCIeQPqNoOYShheGpnbuyUi6wxW6H58hMezpCJI8RJcwfCXc8LxlEbg/W4tp2JRUepqMNDB8+H7FlRJZwXJMeGQJ8rOSf1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755698875; c=relaxed/simple;
-	bh=jHZPssfpSnHOkQxF/lA4aAePLLSqCiyC30mwcxtJ/V8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IZMY3n0BvWxVRJCdLtV/awmsLyXvASTqpVsss3s4Mzy/pcT51guALqrlr+JKc+w5moVT1JLqJfTf02keH+gz4hx4IWyPjZJkLRHDGT7BvG/cCgdGurBDe+Bj38Uv5Pe4YrbIY+yxXSUoKT6UizPc7JTxa8+NaELLI/FBIKwQ+xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jaa0EyC4; arc=none smtp.client-ip=209.85.167.49
+	s=arc-20240116; t=1755698944; c=relaxed/simple;
+	bh=fVT3hvTcuyKwrwDs25V+5wgDjlHlTQg89khRdY1OiJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KPMG5K3IbBRXA4DddecXFc3Ve12BY9Zs/BH98/MeOjZGk2mVKNYYv+6auqwdYYoSs5XZnxFigA8XR3cVdCpa+X+iBuNKJjcfBmEuvk0raVb11z8PsknGAYN1ld1aADW1kAUeZJjBStr2g5QZy54GmQs1whmMP8sGh92OhujzMso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cCbEuau3; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-55ce52ab898so7680812e87.3;
-        Wed, 20 Aug 2025 07:07:53 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-333f8d1ecffso50755341fa.0;
+        Wed, 20 Aug 2025 07:09:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755698872; x=1756303672; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+jBaQdX4CtJ61ZDF7n57iwindu7YbGzD6BY9kNY9f38=;
-        b=Jaa0EyC4+QbEvNbsROsHa7iW5+h2zZByzL+jp94fiXF9NHbDoywlcBn6RyQvUUloV0
-         hot9dBiFlBmdrWJHIrvmNrQ0rAafG34oTLLmhe1Yq2+dxyq+16R36FlLnON08sRaiUsF
-         bWmWwhQQ5A+ISuZV4C84JOV81USre7D2ME5yrgJwA0VgJH45yGNV0ZG/e3XPHbg5Vf0O
-         bDcqVbo0FxK5/PPJ2drF5yBoD7ad5qfLEI70NzdDpJOAwVgKAd0X0xZrazPQx57LmO8o
-         wTUD5lIuPm93Kr/RpX923Lf8/qORN3sjY6cbmQtnRrLkcR2DDq8zdJn/Yt4RzanLHkjk
-         ysPg==
+        d=gmail.com; s=20230601; t=1755698941; x=1756303741; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3C1wPK3Uq/tkWRWxQsaA1tp31CDtvCsNsNMjY0U9BDY=;
+        b=cCbEuau3sxElDi+fsvI2hwEZjo6OtxKrgzruHJfcUfrTPVIcFnXgdA+ETJ+FZFJ4Nf
+         4HOIcwbLPp2Yx6dmxhE6u341s7tTn3fQnGfr1wudJdWUK6XizfHRkSvwYp68/WYOfgWH
+         swS4hhDS0WPeaEOPpSZfBn3h6aYgBniQYh3Pno0qBXgIV/IqLC2Lbnoc8VDWIByHy4uy
+         OYMqGSPYPlp4+HyH/Od/qfey9o87TQtAfvuC22iKbhsSm6OmrPUiA9UlvTcCNqBJchaq
+         Pmu7WJ3ImabeYnMNtOd7jj9iXjYxKUNXT2QG2UrIFlEReKIIs6IxmYpsPusRgNrZz06l
+         aTcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755698872; x=1756303672;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+jBaQdX4CtJ61ZDF7n57iwindu7YbGzD6BY9kNY9f38=;
-        b=eQxBMCs6ybOsg3FJM371gkXH5rBeB6IDTZ2hWDEmJaaTVGdRGAzF38uBpSJKBLJ58v
-         Uisq04AN+h2NJzhcXS4hocYluwZiUkVsUYNgG3wwZ2meUcGF3JPKd3Ld/XHwYny31rb5
-         5a0bs8/uXCIiXRhOeTr6fx2yuYf7DI2PlNV0Rjl/I4KaWSWivPZc3QyuIQZTlJtuxJIE
-         kctuENUX4MUK4/tQTxZt3Ao7XATKts8t4BHxpc7ODET8ZZe2SxI3uoz9Zywgxxiy1lOY
-         OxirY7jvAnynDNGiXZTI4NxJ+il8NOZDxLHsNOQSynzZsldhkN2RP0nGska5ojZlJkmD
-         vZ9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUiAH4DMAI7DZuoyTyHpMO+8jlnAX1dPa6aVr4wgowcaSMhkkVXcUEREkoQ/m5LkHD1Ya0GF8B0Y4pUBJA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxR8NjhRHNFo/7XJknWYGeOXouQ29xfhqCCX5qBv1Y4Rbnm9twk
-	dn01MfIXl2YOb0Lj4u0B8R91IpGXKEfIpk+Izi/dbNoHUlYVqcvd/UgOB1Gk9g==
-X-Gm-Gg: ASbGncvRUXdw/38Ds9au+OsgIErxAoT2+tNl8wXSX9Jwjx+3/eyJhdLvcK34oFuj+SP
-	GprQQ4j/jREFLuxBvtTmz4OHY1B4ZOeSqIjcKzKGYl2Mm83vFaSxu9y8h+6LDRmxPoar7nUwcKv
-	x931FQkVjShDko6/078Y1suTPLpbQy+Zzkkg8Va7ywgwpS9P+h2+cSIIeN4w1217T7o8KppB6Dp
-	I0wnYODA7onVcbHT0ckJZn2/SFpo8zyepeMLAA6Dy3p/6jJhHuabcaQT5oy+Cp/FaKNsrkLZ80K
-	BDUsW1k1jJS3ZFmaqYhg/EhHhS31ru2ulH8RjvCgqLJqBbkCH3KmfqQLyyITowa0Q+v0tYX909V
-	ICZAtM4NuTGPo6vQrT0PBgdjRkjwHzPgi6jA=
-X-Google-Smtp-Source: AGHT+IGXsYhlAJ+Cw1NAVWej17Jy3z/ZHh8MchwNrwtSO59Qr0J2jyPdt0yE/xDSSUT+tarUVOfw2w==
-X-Received: by 2002:a05:6512:340b:b0:553:2f72:9ce0 with SMTP id 2adb3069b0e04-55e06bcc2aamr834216e87.52.1755698871360;
-        Wed, 20 Aug 2025 07:07:51 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755698941; x=1756303741;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3C1wPK3Uq/tkWRWxQsaA1tp31CDtvCsNsNMjY0U9BDY=;
+        b=suwZmU0VA2V0UrgjvN0ode2xKwecuPrl61V9wMABUdWx4pMDiVQMre4LCM3ozHGyLF
+         XlHd5qe8lnrLEzNk0NMs+rRcivkzby6TjPiTdPqDa4vXKgi6qR8YeRfgxFydPSXqvp7v
+         K/CNV+3NZUpUNWfIpCY8Q8RLd6LCqGUiI6z8J3wR8ty9/4VwcCiUWLlzgO0TQpVptiaB
+         IYUbXLbGADjHtFKGRy3eqI5g3ic7c22kkOquBywZSTc6xF4jIdSywzyqT9LG68FpSC4m
+         ZEMsgn197f1jUOzAa1JIqN09MtbNFiBC2gXsEvNR5LwfdwAo7FBcXBVg2auKjT0ifz1q
+         Qhdw==
+X-Forwarded-Encrypted: i=1; AJvYcCVoSar7Su73UB3g5Iq+mSiR5ZAHfRFomCJt/yqm2kvVdXuESIIXv3QbwW29b8uw9H6/igbEyQzRNG3q3Jg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYIOeV+WMRMFOaU8HIjkIMHUNbcF0JXoHRuJcPZJY6J+Wn/sZw
+	8sCsp9kNunwUmJRgtNODU2SUcZadLY1vdoJxjKZUSaqgVPt+eekmnK36D207OA==
+X-Gm-Gg: ASbGncssDwqfXi9guNb5p6TYQhU+hAmxuC5XtapQSfbqvXMorJG3weW363x94Od0B3M
+	unyFkvKAedJOXRYjrRJVArZNEGQNZRnyEzhL8z6GI94VjemnZHjxwVUlRQZt054XzEstRqwZp6g
+	mSVLG1RFXZU7kj5sGDMhnI5eqr/k+g7jluq2zQBqOFzxJJ24N5sjrlobK14TX5Jv425PIOC5VRn
+	TWtzFbaiFCUA9k6sMcNws7LHnm3DMWJLJQMm/FoBUCvAzyC/OGicULZ5vrtSympiu2Uw1EENpi9
+	Za3QRd7eLUUlvWN9s7NP6RLEva9gx9kojdvdBTXhT3KAA73qchl/IQcs9psSW3n4PZsRB+pNUXV
+	GyNMpUk2LyuooLEQBl6u5zJLPKHMzmrcyxAo=
+X-Google-Smtp-Source: AGHT+IHXF5TPRFibj+zC+2Ytx99wQ1/wnsCLHNlowgbo6omQJb1wT/R8DZm5sJobvDZgOTAVlwWLIw==
+X-Received: by 2002:a05:651c:1544:b0:332:54fc:ef77 with SMTP id 38308e7fff4ca-3353bd91bd0mr9592881fa.32.1755698940274;
+        Wed, 20 Aug 2025 07:09:00 -0700 (PDT)
 Received: from foxbook (bfd208.neoplus.adsl.tpnet.pl. [83.28.41.208])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef3cc9f5sm2686497e87.75.2025.08.20.07.07.50
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3340a632e1csm27200141fa.63.2025.08.20.07.08.59
         (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 20 Aug 2025 07:07:50 -0700 (PDT)
-Date: Wed, 20 Aug 2025 16:07:46 +0200
+        Wed, 20 Aug 2025 07:08:59 -0700 (PDT)
+Date: Wed, 20 Aug 2025 16:08:55 +0200
 From: Michal Pecio <michal.pecio@gmail.com>
 To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
  <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] Revert "usb: xhci: Avoid Stop Endpoint retry loop if
- the endpoint seems Running"
-Message-ID: <20250820160746.74276b40@foxbook>
+Subject: [PATCH 2/2] usb: xhci: Update a comment about Stop Endpoint retries
+Message-ID: <20250820160855.06ad74aa@foxbook>
+In-Reply-To: <20250820160746.74276b40@foxbook>
+References: <20250820160746.74276b40@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -88,59 +91,30 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-This reverts commit 28a76fcc4c85dd39633fb96edb643c91820133e3.
+Retries are no longer gated by a quirk, so remove that part.
+Add a brief explanation of the timeout.
 
-No actual HW bugs are known where Endpoint Context shows Running state
-but Stop Endpoint fails repeatedly with Context State Error and leaves
-the endpoint state unchanged. Stop Endpoint retries on Running EPs have
-been performed since early 2021 with no such issues reported so far.
-
-Trying to handle this hypothetical case brings a more realistic danger:
-if Stop Endpoint fails on an endpoint which hasn't yet started after a
-doorbell ring and enough latency occurs before this completion event is
-handled, the driver may time out and begin removing cancelled TDs from
-a running endpoint, even though one more retry would stop it reliably.
-
-Such high latency is rare but not impossible, and removing TDs from a
-running endpoint can cause more damage than not giving back a cancelled
-URB (which wasn't happening anyway). So err on the side of caution and
-revert to the old policy of always retrying if the EP appears running.
-
-Fixes: 28a76fcc4c85d ("usb: xhci: Avoid Stop Endpoint retry loop if the endpoint seems Running")
-Cc: stable@vger.kernel.org
 Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 ---
- drivers/usb/host/xhci-ring.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ drivers/usb/host/xhci-ring.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 85b4791ccde5..3fef6454f3be 100644
+index 3fef6454f3be..9389645a1dd5 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -1262,19 +1262,16 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+@@ -1262,8 +1262,9 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
  			 * Stopped state, but it will soon change to Running.
  			 *
  			 * Assume this bug on unexpected Stop Endpoint failures.
--			 * Keep retrying until the EP starts and stops again.
-+			 * Keep retrying until the EP starts and stops again, on
-+			 * chips where this is known to help. Wait for 100ms.
+-			 * Keep retrying until the EP starts and stops again, on
+-			 * chips where this is known to help. Wait for 100ms.
++			 * Keep retrying until the EP starts and stops again or
++			 * up to a timeout (a defective HC may never start, or a
++			 * driver bug may cause stopping an already stopped EP).
  			 */
-+			if (time_is_before_jiffies(ep->stop_time + msecs_to_jiffies(100)))
-+				break;
- 			fallthrough;
- 		case EP_STATE_RUNNING:
- 			/* Race, HW handled stop ep cmd before ep was running */
- 			xhci_dbg(xhci, "Stop ep completion ctx error, ctx_state %d\n",
- 					GET_EP_CTX_STATE(ep_ctx));
--			/*
--			 * Don't retry forever if we guessed wrong or a defective HC never starts
--			 * the EP or says 'Running' but fails the command. We must give back TDs.
--			 */
--			if (time_is_before_jiffies(ep->stop_time + msecs_to_jiffies(100)))
--				break;
- 
- 			command = xhci_alloc_command(xhci, false, GFP_ATOMIC);
- 			if (!command) {
+ 			if (time_is_before_jiffies(ep->stop_time + msecs_to_jiffies(100)))
+ 				break;
 -- 
 2.48.1
 
