@@ -1,125 +1,136 @@
-Return-Path: <linux-usb+bounces-27038-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27039-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7245BB2D344
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 07:04:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0FECB2D3C9
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 07:57:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24981A011D9
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 05:04:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F49E58259A
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Aug 2025 05:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADCFF22F39B;
-	Wed, 20 Aug 2025 05:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF54B2BE7BE;
+	Wed, 20 Aug 2025 05:57:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VBhwTnvE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i1/hWcg0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51E91624C5;
-	Wed, 20 Aug 2025 05:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F03429ACFC;
+	Wed, 20 Aug 2025 05:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755666270; cv=none; b=Zrh9z9GcXQ5+WJH3GD2kcy14L098HsegJLX4YUtoHGwA562PN1FFWQSGhjw6YfGp1siuR0ypxI85Ecz4pLfVocPDO/pmE7aHRgrTII+hum4v+X4E008uecT0On/+5XAUs++G+tHn/B7AE0PP2x/dEvO7YtO0+t3OThzIcmgaSwE=
+	t=1755669444; cv=none; b=qr2gsY6YoAZNnFscyaYTYMRpbYKve/2wKVpiI+rjuGvjXScd2+BhKJlkoMLWO3nM9ddhPfAErrBtLFfx3wGcsbJ+iKQQS2zWxRcFMrqvLGebDzxXbOpf9rAtOFMcgppdS69r0uNzzRkjp3za6/HTDKamWnUPcsn4ykYZcdHM3Gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755666270; c=relaxed/simple;
-	bh=+7oJt7mjiQ4+3wCASgTtlO0icWAOnyNJxoLTgl75GmQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ie2MLqx+t2RpcE0di32Na9wT9P0BQaLIrhysPaSTkKLoOYkyOPNkaZMgUPVlvP+cODqDU51CzUStevcuqA/8pi6A1GcVDed7MX6i+bw71YgBM3+MEHX/Tj0Hc1KsPSkJQt/jMronrr4QwD/KbeiPkbGJUsLBqGui5gLQUnXBS1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VBhwTnvE; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-76e2ebe86ecso6948759b3a.3;
-        Tue, 19 Aug 2025 22:04:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755666268; x=1756271068; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wp+M3jDgKcAwOCJY0Je+VMzGmNYc5XHm9kodmrDxfvM=;
-        b=VBhwTnvEOQ29W7YOW1hWnQo9lfKDDMI7G3pi/v9o5envQV+wi4BOKWzaBDtLK6kRRC
-         lFTwa2Wtoc8aZcHDcdK0rZXRo4u43FnEfIQzK1cpjvOOztUGSVvG4WDJh17xkQyIcr8m
-         bCD9tHbtkZyPF+laJ3ilOiEGex9O2JiKMRahbhka/NaZ1vwTESpnX8xrjZR+SUKUfbFH
-         ZT/r3AAVJKpm2FLFZyeivGzhY2DzQ8LvM0IoIbK22S7GY1azUnKtPOZgjkvvcDviT/AJ
-         y+C0oUyd0IpYrLBPAxqH8z9uFfFpRQ/XXKrh+G+ldvIgLRIIEhiJ7WPWAhm77RS1w18E
-         2+lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755666268; x=1756271068;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wp+M3jDgKcAwOCJY0Je+VMzGmNYc5XHm9kodmrDxfvM=;
-        b=kxFqpWiPrCroKkp5/Llpb+NjOwsNG4cR3d5oAdgfW+6aWwA2PEaI21mjzdBHK+9cJo
-         KhjdsFIEK89ATSaVRxbDfajKVOh6Bg0HmBE3ATweSIr3GcIsvGl7FGjsY9r5ygYASIFb
-         PT3rWEOmdH+hLg/nY4ipoQ+0+4i6pqSSUbPThc5h04k9wg0b+9mNkZgxgsWN1CqQhoUb
-         L+byt7SdvAAM/thgko4c+GYPv6ziCwUJo5ftf3lJKZFyJUY31fMGRsd9Xqg7W40AP/Qo
-         B9OBuXlaTTRkOXKFRdz3lAA+tHO16HSIrMahrhINjwipkGTOlRZavR0WDdDEiWsUG4YT
-         k9ag==
-X-Forwarded-Encrypted: i=1; AJvYcCUGAy4haMmts5i+cKLt03zgTAPqiAmsJd0sK6J3GFpeqqcA8ZE0RvyjKCdifuROItsrov5fZvtAxto=@vger.kernel.org, AJvYcCXfyGbCbOXAdWBZAt9aV8ldQD0EIoS7J8oXkGRno+hrZe7ebInLzs4I+BRTNjsGDsuzySmt2GaaYKKS@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKz8F/xanxflM4TTD653uxwD78MeYghWH06Nb6SApE9jNLvAZI
-	2uz7lg1TIzBcNJZSLypfN8fepjValWIt5EdrPlwgxHkSW+iTWaQtjrcZ
-X-Gm-Gg: ASbGnct5+irEHxTYrrnpRpwEawOkn7GAFWDp3aWzuSjRGPGqxKcB/j7L2zolHu52RrM
-	iBkSoUnC3O0HD1Y2s+6g/+tqnKWl1QZgbZpyYR9s9tz76fYBor/wsYL2ePV4iLH9OwSAW6JecHS
-	OokewWX7typTVUw9UpT0afckziaSLmmE20B0yRMx+Lm1OHolEYRjrJzayCEghx62gesMA/usmHr
-	yvLV4P603OM2K6nCbEKA8XqFdhBdzP/vmtX9nBVRBqrxpkoKZ5EpRUrIG8P/SMJDG7wx1tvU1ci
-	B0InsHU10uHEMD0xlS5P80hCw7Y3KFz1mZ7l75cOWqL9RZs/RldG/XEx1zdlMSQtb23KUZYPZDF
-	nL8zP29TNLCH3HJBLtE1jew==
-X-Google-Smtp-Source: AGHT+IGM6VmwAFXdTYm7N3HTPpLGOkcKrTt5LmW3c0AzShObnErMBHLDonybFzMhQ7ASLye6YmS+Kg==
-X-Received: by 2002:a05:6a20:3ca3:b0:243:78a:82a9 with SMTP id adf61e73a8af0-2431ba80a37mr3263180637.49.1755666268046;
-        Tue, 19 Aug 2025 22:04:28 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3244235e3edsm1761166a91.3.2025.08.19.22.04.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 22:04:27 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id B14FC42B408B; Wed, 20 Aug 2025 12:04:24 +0700 (WIB)
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Documentation <linux-doc@vger.kernel.org>,
-	Linux USB <linux-usb@vger.kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH] Documentation: driver-api: usb: Limit toctree depth
-Date: Wed, 20 Aug 2025 12:04:16 +0700
-Message-ID: <20250820050416.25219-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1755669444; c=relaxed/simple;
+	bh=Y+062joObmsol1gkoHoKktNswPMSOYB1ABAm6sd7nWo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MUAlUtTlPH9ollUMNTVDz40Nbb7vF6a/0gppuQV8d5o49kGrHs/nz+gr3i2cz7qGXe+kmOCPX12d42XT92uv0+x7F3bZmwK7Jyb0lHotE0PiG6K9aMs0WDt21Gm1oWYWMuB7C+Yqg5T+7Fm2VSbZad+gZNt6RBgmA6jJyHb0ukY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i1/hWcg0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B74C4CEEB;
+	Wed, 20 Aug 2025 05:57:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755669443;
+	bh=Y+062joObmsol1gkoHoKktNswPMSOYB1ABAm6sd7nWo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=i1/hWcg0oXxgedGDs9KjrtglcEwNsrTrut3izxrXACCm9P0zu4NeOwzFQX/iBs1Ai
+	 ln5kfCMEwQgToHf7br9+tSkW04D24wQmuXdfabgarxqN1u1wb9CeZjGfRXi1IGHV68
+	 jFQ8x6sjaP6IjxNeiGf4Qd7yHiaSYdkXKqT2LQStSUdLtaP1PWR+zPVppgtOfAj+aU
+	 xRUZ0j0Fohp7Ib9Sr/MYaJhj/lysGt5D0vJDvCsk3buzO772Sn1Sto1L9zHVKoy1M/
+	 3pgniaoRYgIMWFjGb6AlzZN1wCjWRN5bkVbpCcN6H4w8zajy4NBAQQ7uiugbwIg4n6
+	 U12NwUktYflGg==
+Message-ID: <e0bec141-6aef-475f-b997-60fdf8234b82@kernel.org>
+Date: Wed, 20 Aug 2025 07:57:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=819; i=bagasdotme@gmail.com; h=from:subject; bh=+7oJt7mjiQ4+3wCASgTtlO0icWAOnyNJxoLTgl75GmQ=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDBlLw9QeN+7xCL3pFOZy4ZEJr58C786InkXv37yWkBdZH xT8a4pMRykLgxgXg6yYIsukRL6m07uMRC60r3WEmcPKBDKEgYtTACaS5MrIcDz/1WTZJcfrgx4/ eKs39dO8xSfVNsfoS+9+MvHszsDQHG1GhlWJL5keF7M5cDctKJI8tslRpIbbZaqkz65nloum5Bd b8gEA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/6] dt-bindings: mfd: twl: Add missing sub-nodes for
+ TWL4030 & TWL603x
+To: Andreas Kemnade <andreas@kemnade.info>
+Cc: Jihed Chaibi <jihed.chaibi.dev@gmail.com>, linux-kernel@vger.kernel.org,
+ peter.ujfalusi@gmail.com, dmitry.torokhov@gmail.com, robh@kernel.org,
+ krzk+dt@kernel.org, lgirdwood@gmail.com, tiwai@suse.com,
+ conor+dt@kernel.org, lee@kernel.org, ukleinek@kernel.org,
+ broonie@kernel.org, gregkh@linuxfoundation.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, aaro.koskinen@iki.fi, khilman@baylibre.com,
+ rogerq@kernel.org, tony@atomide.com, linux-gpio@vger.kernel.org,
+ linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-omap@vger.kernel.org, shuah@kernel.org
+References: <20250816021523.167049-1-jihed.chaibi.dev@gmail.com>
+ <20250816021523.167049-2-jihed.chaibi.dev@gmail.com>
+ <20250819-humongous-muscular-curassow-5accd5@kuoka>
+ <20250819223157.0b271c74@akair>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250819223157.0b271c74@akair>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-toctree index in USB driver api docs currently spoils the entire docs
-headings due to lack of :maxdepth: option. Add the option to limit
-toctree depth to 1, mirroring usb subsystem docs in
-Documentation/usb/index.rst.
+On 19/08/2025 22:31, Andreas Kemnade wrote:
+>>
+>>> +          type: object
+>>> +          $ref: /schemas/usb/ti,twlxxxx-usb.yaml#  
+>>
+>> Are you sure your patchset is bsiectable? Apply this patch and test. You
+>> will see errors and you must fix these. Even after fixing you have
+>> strict dependencies so your cover letter must explain these (or merging
+>> constraints)...
+>>
+> what are the rules here regarding bisectability? non-existing files
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/driver-api/usb/index.rst | 1 +
- 1 file changed, 1 insertion(+)
+dt_binding_check.
 
-diff --git a/Documentation/driver-api/usb/index.rst b/Documentation/driver-api/usb/index.rst
-index cfa8797ea6144b..fcb24d0500d91d 100644
---- a/Documentation/driver-api/usb/index.rst
-+++ b/Documentation/driver-api/usb/index.rst
-@@ -3,6 +3,7 @@ Linux USB API
- =============
- 
- .. toctree::
-+   :maxdepth: 1
- 
-    usb
-    gadget
 
-base-commit: 37c52167b007d9d0bb8c5ed53dd6efc4969a1356
--- 
-An old man doll... just what I always wanted! - Clara
-
+Best regards,
+Krzysztof
 
