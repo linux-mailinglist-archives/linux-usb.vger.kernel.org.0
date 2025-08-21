@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-27098-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27099-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD1BDB2FDDE
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 17:11:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D723B2FED9
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 17:44:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B32D81BA02FC
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 15:06:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 599D85E46D5
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 15:31:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92FC6263F3C;
-	Thu, 21 Aug 2025 15:05:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7795327511F;
+	Thu, 21 Aug 2025 15:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7CDlYDc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BnXh+nlo"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF1525A33F
-	for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 15:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A4D30F7E0
+	for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 15:26:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755788737; cv=none; b=g2cwjRb9Bxl2crXHDW9KlnN0l4Djh5f4z8nSS0hs4Br1JPKnwKpbn2ag5rZdzWDoyFk+0zke33dZDkRirncZb0aMbXIOfhAEX9TPltwiafgg3f5j2HjvDqGDyQymsKOKTDsXgFAOFHLvY4c+tswORo9XlHe0Gd5Oz7nFu7Tg2tk=
+	t=1755789982; cv=none; b=FniU3cub+NRkSgl50MSzvjA0n2VoS22Kpp4R1HGX4kPYNVwVTuYbhgxf8y4xSEhn9sis+iABKDgo5kVJx6e/S5OlaGVPi92kP9bTAOMYznqCUvXW6zYeJsMzpoYM2cuBex+10cn3J719HUkuvKFc/1Dm3vLEysZMDITc+l6DSb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755788737; c=relaxed/simple;
-	bh=NgXPXEHwosc9Y3swaUbHroEw5ms8A7Cq5F6vVWndFGk=;
+	s=arc-20240116; t=1755789982; c=relaxed/simple;
+	bh=0IodDOJHawrZwBogfWZlpLiRZP6+FY1q7gMh1y8+ruk=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mTX6zLSnfc4W0JKQHqAttJx99QZJiQFjOCNmhK+2eCnI4Omy8fQb6ASwRNrBn3eVhJdJufp4/8KcyI6jPYh18TIxj3VO1NoHC2xoGwUiSBkwLcOlpgZIDfGGtJAgE//4hMCHniHBv8HLJ3txhMiW4z1KaZPx1ZC1EcG1qP7GwkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7CDlYDc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 94210C4CEEB
-	for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 15:05:36 +0000 (UTC)
+	 Content-Type:MIME-Version; b=dKicuyGCroNplEUSKHgCY21InwyBx/+rVaab6yRwIKx/BMM/OufcFSIObU9JdmDSF0LaBwXocDJHgg9ecQbIkMB3Z3vNlyZ10cTmlQXxTxQpkuF3TBTgMQ9lfaeBbonJAr4qf5bZJjcTQOYuhT5rSxN/1JXIdjaBN1Tf6JBKQUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BnXh+nlo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 76C1CC16AAE
+	for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 15:26:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755788736;
-	bh=NgXPXEHwosc9Y3swaUbHroEw5ms8A7Cq5F6vVWndFGk=;
+	s=k20201202; t=1755789981;
+	bh=0IodDOJHawrZwBogfWZlpLiRZP6+FY1q7gMh1y8+ruk=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=U7CDlYDccyXgrL/DDGGfkfXLbKR5NNMNA+8nV6WhK661fLZy+Vab2xiROpRZlx2fi
-	 /eXMYw67aFx3YQKDkeEeoGF7HAWTHlyXt6pKkCdurtbSYoPh9RaVvQ93+olcaQ2era
-	 Jj5tglqlZdvgUjoSHeps+Nj+prHMx2rebCVT73/UEAZqiUBrWODFWap0E5E9R7z1iP
-	 0aLNzQr+uYe8fkpW0OTGG8hLf0ukL2usyRXG3YuLu6cKmo8ZaLhCkzGfeO8f/Pw7co
-	 +A+2bL41w3aXQ5eNodWJXXGS2qMbsY+W9nBbdZtOKkt/GpzTYgeOw6I/ZgfhNSUrI0
-	 CrTBNIBidizRA==
+	b=BnXh+nloaguHFU6roQamwNHUn+oK9wR7Yim1C5HmRj6+LyFVmup4QmFDNVJJWp9Jx
+	 mmO9501LypNeDC+2r6GTpuPN9cWgReW2VfxXxHJ4+BjESkdo4VnUJShPnwcObd4voY
+	 cB2HwilUa3JzUKIUxTtVOIRaI4Zev0nncBznhsQ6a+mXyPA/b9WYuGJFaCTP6QMkwL
+	 D38eLd6JNu01g8sMulinxZIICWGVqhqkCtHH/864FQpEx29dPSyc8pWSClsFS3zK1T
+	 RlOXRxi9KA+KmFXOLVILXgpiH7x7NHoVd0zg3wyXErN8TAsKOeidEt6yepb+kewydP
+	 KPsx+zLTy7SJQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 85CAEC53BC5; Thu, 21 Aug 2025 15:05:36 +0000 (UTC)
+	id 68061C53BBF; Thu, 21 Aug 2025 15:26:21 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220460] Plugging USB-C adapter into one port results in `Failed
  to set U2 timeout to 0x3f,error code -110`
-Date: Thu, 21 Aug 2025 15:05:36 +0000
+Date: Thu, 21 Aug 2025 15:26:21 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -56,14 +56,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220460-208809-a17SUvjnX5@https.bugzilla.kernel.org/>
+Message-ID: <bug-220460-208809-MVUztDIana@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220460-208809@https.bugzilla.kernel.org/>
 References: <bug-220460-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,11 +79,16 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220460
 
---- Comment #6 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-Could you take the same logs when connecting the dock to the working USB-C
-port?
+--- Comment #7 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
+ ---
+Yes, I am going to do so later. Just to avoid misunderstandings:
 
-Also output of "lsusb -v" (as root) with working dock could be useful
+1.  Even with the error messages, the USB-C hub seems to work. (I just test=
+ed
+the Ethernet port though.)
+2.  Does =E2=80=9Cworking dock=E2=80=9C dock mean, the USB-C port where I g=
+et no error
+messages?
 
 --=20
 You may reply to this email to add a comment.
