@@ -1,251 +1,137 @@
-Return-Path: <linux-usb+bounces-27085-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27086-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26EC8B2EFE4
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 09:39:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D896B2F003
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 09:46:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E147188EA1F
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 07:37:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1760E3B6D2E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 07:44:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 473EB281376;
-	Thu, 21 Aug 2025 07:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hsyOGwXA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E89642D3218;
+	Thu, 21 Aug 2025 07:44:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74432475E3;
-	Thu, 21 Aug 2025 07:36:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B1B18DB35
+	for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 07:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755761795; cv=none; b=qgpTJFxNjXUnPM/AhhRFg1qV/TPGv3HV+GYLX2+8uJd/a9M6VIRmFDCYeTs36nDz1RN2KjJj1Szdt+5QN/pAakYs5yMygNPmaD8llQOqSGdwdc832+RZxq7wszvjuRxek/buAPkmLMnIO/JtGzKIEARkv0eJH15B44EfSTdstVo=
+	t=1755762282; cv=none; b=bQpesRQiP7eR2fGbUfEGkp0WcU3MCqPbNLOqMQi7W3DYWOUJNVAbwZ0BLEiVLhq/Sb8eY3OcegjALdokgH6mw06tIwNfAvSVHG0h8UcEshKf6MOR+JqqF/d6rg3YFL1H7dka74pPDXBz7s5cGoB6TwpQMJyFJTK2YgGyOzyAfLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755761795; c=relaxed/simple;
-	bh=YZkwDPYNk80itruFLYL1PliWkKr5+IoGi3ov2d0PhyY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uO/73E8+bJkN9XCaSii79c7k2n4l01Veeyos4hrNZ8HD5rR/Zwt9rvRn/h95YBX0GCC4sjLm/8TyrmqSVXY3xOqRuT4l2tBFfHfp4HNeJVAa+3hzx7BTm+nqNX8JUlYe+FoxYQN3UVTkLq1c2Zs8X9mg43oONwOOC4E6tty+G9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hsyOGwXA; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755761794; x=1787297794;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YZkwDPYNk80itruFLYL1PliWkKr5+IoGi3ov2d0PhyY=;
-  b=hsyOGwXAR5WCIenRNV5mmN2eo3NInGvrz0NfJab54fozxR4yp8+8mxxA
-   No1CWft58NCD1RU3/TlNAirOVNySnvG0SYd+LGr4WQjVsF/Obb5DJYbRx
-   kQm4fq3aKNG/1nbIukuaAR2J6H990/uEpE3WV+AQwn7YxPeFEnb/1EVsI
-   Q7LJYmusZL5Hp8omSS4l/RO5cT84kTdaH/a2T4GULK44/oyiNajI/JQgU
-   TOgOlc3bRyFsFO3C0JvqJXqmWAxtpY7y4FQ2eIY8LM62DVrRrZnj6t12o
-   1+uE/D2nlHlsqsIPWbAAeJtX8suDbThO7kEOod2mtxSfK9un3OMN7V1rY
-   A==;
-X-CSE-ConnectionGUID: Eil3ozniTsag+8hhFWem6g==
-X-CSE-MsgGUID: iCIX7lNxT5y0wlN5ONh+KQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="68638815"
-X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="68638815"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 00:36:33 -0700
-X-CSE-ConnectionGUID: 2dMsqFG0QcSzB+3gJFySTw==
-X-CSE-MsgGUID: tqeg8/XVQSytM7etCX/cZA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="172757008"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa004.jf.intel.com with SMTP; 21 Aug 2025 00:36:26 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 21 Aug 2025 10:36:25 +0300
-Date: Thu, 21 Aug 2025 10:36:25 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	Guenter Roeck <groeck@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 5/5] usb: typec: Expose alternate mode priority via
- sysfs
-Message-ID: <aKbMeSCHf-ZhbcvT@kuha.fi.intel.com>
-References: <20250814184455.723170-1-akuchynski@chromium.org>
- <20250814184455.723170-6-akuchynski@chromium.org>
+	s=arc-20240116; t=1755762282; c=relaxed/simple;
+	bh=RPsoTO4rlnpyFuuaZg47NqGYR5lO798UEh7vSN56zY8=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=C63vXZ3lgP0siBXty4V+zxnTibGUDuUbX5xDefjjsoPLpSaSMZbCWvt0NYRN48oFu2UdBkwRb658YALkx+3/oS1wD/E7CjtPHNBu8LYAMWFZUG1f9zE7aCtYKKbOb4Naxm5cm79qlByHnrJk0sNIyfPs59jLXsNRxSWXPjq8n/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.192] (ip5f5af188.dynamic.kabel-deutschland.de [95.90.241.136])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 286FD6028827A;
+	Thu, 21 Aug 2025 09:44:12 +0200 (CEST)
+Message-ID: <ff53c471-eeee-44e3-b50c-49212227927a@molgen.mpg.de>
+Date: Thu, 21 Aug 2025 09:44:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250814184455.723170-6-akuchynski@chromium.org>
+User-Agent: Mozilla Thunderbird
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Re: Plugging USB-C adapter into one port results in `Failed to set U2
+ timeout to 0x3f,error code -110`
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+ Kai-Heng Feng <kaihengf@nvidia.com>
+References: <e6fa9169-fff7-4e44-90a4-e0efe4e176fd@molgen.mpg.de>
+ <97d9420f-1a7f-433c-bdd7-b7bab6c45f00@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <97d9420f-1a7f-433c-bdd7-b7bab6c45f00@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Andrei,
+Dear Mathias,
 
-On Thu, Aug 14, 2025 at 06:44:55PM +0000, Andrei Kuchynski wrote:
-> This patch introduces a priority sysfs attribute to the USB Type-C
-> alternate mode port interface. This new attribute allows user-space to
-> configure the numeric priority of alternate modes managing their preferred
-> order of operation.
+
+Thank you for your reply.
+
+
+Am 14.08.25 um 15:49 schrieb Mathias Nyman:
+> On 13.8.2025 10.47, Paul Menzel wrote:
+
+>> On an Intel Kaby Lake-R Dell XPS 13 9370, plugging in an 8-port LMP 
+>> USB-C mini Dock into the port on the left side closer to the panel, 
+>> Linux 6.16 logs:
+>>
+>>      [    0.000000] Linux version 6.16-amd64 (debian-kernel@lists.debian.org) (x86_64-linux-gnu-gcc-14 (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44) #1 SMP PREEMPT_DYNAMIC Debian 6.16-1~exp1 (2025-07-31)
+>>      […]
+>>      [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
+>>      […]
+>>      [   99.566522] xhci_hcd 0000:39:00.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
+>>      [   99.566565] usb 4-2.1: Failed to set U2 timeout to 0x3f,error code -110
+>>      [   99.566787] hub 4-2.1:1.0: USB hub found
+>>      [   99.587655] hub 4-2.1:1.0: config failed, can't read hub descriptor (err -22)
+>>      [   99.594669] usb 4-2.1: Failed to suspend device, error -19
+>>      […]
 > 
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> ---
->  Documentation/ABI/testing/sysfs-class-typec | 12 ++++++
->  drivers/usb/typec/class.c                   | 47 ++++++++++++++++++++-
->  2 files changed, 58 insertions(+), 1 deletion(-)
+> Looks like the left side port is connected to a PCI hotpluggable Alpine 
+> Ridge xHCI controller.
+> This whole xHCI host will only appear on the PCI bus once a device is 
+> connected to the USB-C port
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> index 38e101c17a00..001202d651fa 100644
-> --- a/Documentation/ABI/testing/sysfs-class-typec
-> +++ b/Documentation/ABI/testing/sysfs-class-typec
-> @@ -162,6 +162,18 @@ Description:	Lists the supported USB Modes. The default USB mode that is used
->  		- usb3 (USB 3.2)
->  		- usb4 (USB4)
->  
-> +		What:		/sys/class/typec/<port>/<alt-mode>/priority
-> +Date:		July 2025
-> +Contact:	Andrei Kuchynski <akuchynski@chromium.org>
-> +Description:
-> +		Displays and allows setting the priority for a specific alt-mode.
-> +		When read, it shows the current integer priority value. Lower numerical
-> +		values indicate higher priority (0 is the highest priority).
-> +		If the new value is already in use by another mode, the priority of the
-> +		conflicting mode and any subsequent modes will be incremented until they
-> +		are all unique.
-> +		This attribute is visible only if the kernel supports mode selection.
+> The right side port is handled by the other xHC that is always visible 
+> and already properly running.
+> 
+> The logs point towards Link Power Management or, runtime suspend race
+> issues with the two chained external USB 3 hubs.
+> 
+> Could you try running with the following kernel parameters set:
+> "usbcore.quirks=2109:0817:k"
+> to prevent Link Power Management (LPM) for the external hubs
 
-I was expecting this to be already used in this series.
+With this set, I am unable to reproduce this.
 
-IMO this file should be the only thing the user space needs to use by
-default at least.
+> "usbcore.autosuspend=-1"
+> to prevent runtime suspend of all usb devices
+> 
+> Does adding either one, or both help?
 
->  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
->  
->  What:		/sys/class/typec/<port>-partner/accessory_mode
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index a72325ff099a..708f3487222a 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -19,6 +19,7 @@
->  #include "bus.h"
->  #include "class.h"
->  #include "pd.h"
-> +#include "mode_selection.h"
->  
->  static DEFINE_IDA(typec_index_ida);
->  
-> @@ -445,11 +446,41 @@ svid_show(struct device *dev, struct device_attribute *attr, char *buf)
->  }
->  static DEVICE_ATTR_RO(svid);
->  
-> +static ssize_t priority_store(struct device *dev,
-> +			       struct device_attribute *attr,
-> +			       const char *buf, size_t size)
-> +{
-> +	unsigned int val;
-> +	int err = kstrtouint(buf, 10, &val);
-> +
-> +	if (!err) {
-> +		err = typec_mode_set_priority(to_typec_altmode(dev), val);
-> +		if (!err)
-> +			return size;
-> +	}
-> +
-> +	return err;
-> +}
-> +
-> +static ssize_t priority_show(struct device *dev,
-> +			      struct device_attribute *attr, char *buf)
-> +{
-> +	int val;
-> +	const int err = typec_mode_get_priority(to_typec_altmode(dev), &val);
-> +
-> +	if (err)
-> +		return err;
-> +
-> +	return sprintf(buf, "%d\n", val);
-> +}
-> +static DEVICE_ATTR_RW(priority);
-> +
->  static struct attribute *typec_altmode_attrs[] = {
->  	&dev_attr_active.attr,
->  	&dev_attr_mode.attr,
->  	&dev_attr_svid.attr,
->  	&dev_attr_vdo.attr,
-> +	&dev_attr_priority.attr,
->  	NULL
->  };
->  
-> @@ -458,7 +489,7 @@ static umode_t typec_altmode_attr_is_visible(struct kobject *kobj,
->  {
->  	struct typec_altmode *adev = to_typec_altmode(kobj_to_dev(kobj));
->  
-> -	if (attr == &dev_attr_active.attr)
-> +	if (attr == &dev_attr_active.attr) {
->  		if (!is_typec_port(adev->dev.parent)) {
->  			struct typec_partner *partner =
->  				to_typec_partner(adev->dev.parent);
-> @@ -469,6 +500,15 @@ static umode_t typec_altmode_attr_is_visible(struct kobject *kobj,
->  				!adev->ops->activate)
->  				return 0444;
->  		}
-> +	} else if (attr == &dev_attr_priority.attr) {
-> +		if (is_typec_port(adev->dev.parent))  {
-> +			struct typec_port *port = to_typec_port(adev->dev.parent);
-> +
-> +			if (!port->alt_mode_override)
-> +				return 0;
-> +		} else
-> +			return 0;
-> +	}
+I only tried the first one. Is that enough?
 
-If we have the local port variable, this should be enough:
+> Could you also take logs and traces with dynamic debug and tracing enabled:
+> 
+> mount -t debugfs none /sys/kernel/debug
+> echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
+> echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
+> echo 1 > /sys/kernel/debug/tracing/tracing_on
+> < Reproduce issue >
+> Send output of dmesg
+> Send content of /sys/kernel/debug/tracing/trace
 
-                if (!is_typec_port(adev->dev.parent) || !port->alt_mode_override)
-                        return 0;
+I uploaded everything to the Linux Kernel Bugzilla [1].
 
->  	return attr->mode;
->  }
-> @@ -2029,6 +2069,7 @@ static void typec_release(struct device *dev)
->  	typec_mux_put(port->mux);
->  	typec_retimer_put(port->retimer);
->  	kfree(port->cap);
-> +	typec_mode_selection_destroy(port);
->  	kfree(port);
->  }
->  
-> @@ -2496,6 +2537,8 @@ typec_port_register_altmode(struct typec_port *port,
->  		to_altmode(adev)->retimer = retimer;
->  	}
->  
-> +	typec_mode_set_priority(adev, -1);
 
-This really should not be necessary. Why can't we set the priority
-based on the order the drives registers the altmodes for the port?
+Kind regards,
 
->  	return adev;
->  }
->  EXPORT_SYMBOL_GPL(typec_port_register_altmode);
-> @@ -2645,6 +2688,8 @@ struct typec_port *typec_register_port(struct device *parent,
->  	port->con.attach = typec_partner_attach;
->  	port->con.deattach = typec_partner_deattach;
->  
-> +	INIT_LIST_HEAD(&port->mode_list);
-> +
->  	if (cap->usb_capability & USB_CAPABILITY_USB4)
->  		port->usb_mode = USB_MODE_USB4;
->  	else if (cap->usb_capability & USB_CAPABILITY_USB3)
+Paul
 
-thanks,
 
--- 
-heikki
+PS: I was not able to reproduce the issue at work with the same adapter 
+model. At home there is a Vodafone router, and at work a Zyxel switch. 
+No idea, if other things like running on battery play a role. Anyway, at 
+home, I was able to reproduce it.
+
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=220460
 
