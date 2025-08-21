@@ -1,156 +1,146 @@
-Return-Path: <linux-usb+bounces-27132-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27133-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF3EFB301D4
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 20:16:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86D40B30258
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 20:54:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD3E21CE5165
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 18:16:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82EAAAA3155
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 18:53:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CB1F284687;
-	Thu, 21 Aug 2025 18:16:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C27A4342CAD;
+	Thu, 21 Aug 2025 18:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hYp9AWFY"
+	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="VOhLKqCb";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="U3p0eNKU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0D54C6E;
-	Thu, 21 Aug 2025 18:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE8A157A48;
+	Thu, 21 Aug 2025 18:53:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755800168; cv=none; b=FBoq7QBwU2rfXtMYxppRz1l12UwH+47cAyqG+0qoVSRGBq7l1hPyPGp0uEp+pSH3zvv6URGW4rmiH1q6M31NWsf8IrtifXhBWhI1ZpFj7BCo5wH8icb0RuR5JW+KerMCBJnJXQvEz2KhqbZnXjqdprdl2MQY/Gwcup/SsgNJlwg=
+	t=1755802407; cv=none; b=DcG7NCjrzrsI0h7Pqkznc1mRXXtqYZ5F/uWMAFcRYkTm0GHcWFmjBDUiy5szLrV5YcPN9tLlJKX5F6Kyfx5KKWQLhkjwnb/E/IRXWne3Md9PUzLEv/0gWlZxYtpu7AmW6RwM1EfA8w1cqvB45C1O23pWa0XhmIlD8kT0oSu565o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755800168; c=relaxed/simple;
-	bh=veW0qVFrmP47n0MUNc/joNwN/5xsR0WE60fQR3ZiOZE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GF64UauMTBESS5MHbXMlEwWC+OqWuT4cVyZ96j4mMfrugHi6ev92iA7NgamuiqmrrYuS3PtgdIAzyYJIvWfPtt/tvLkiiJ+yEGTE/nD2s3RC3OTRTuD67AuZAF17o1BmsrAXwDBprbsZnKejO44ajmGa/pIdf1hv4SaSOmQJogE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hYp9AWFY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45BCC4CEEB;
-	Thu, 21 Aug 2025 18:16:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755800168;
-	bh=veW0qVFrmP47n0MUNc/joNwN/5xsR0WE60fQR3ZiOZE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hYp9AWFYRh3mF7NBTTSLlPoJwwxzpv25iOtNzhRzubHXstr/DOdqulCQZku3uk/jK
-	 06P3dfIOcjm/M2pdaPVTrhlZitfvwtEgaoBctkDJSCnVHRc7ysQ5/mi9JE3kWBK7VV
-	 7sUsQyv5eGwkFG/I1XIYUbo7T/d/tMtQJhQFKl0ORVnzrk52GEebLcreIsDWjQL417
-	 lcQr48Dt7kxy0etfmqWrwGcuaQU6wryRmP7ThyHrkxQR+havRdB4bbmCym+5EuAvnp
-	 QzLOP7I5ScwuC5aI1+t8HwNsEEiYFt31HfBZQknW9+7PSvOQJFYeY6aGNh+S2tWpPt
-	 7KO+Bft3YJRnQ==
-Date: Thu, 21 Aug 2025 19:16:03 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: "biju.das.au" <biju.das.au@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	"magnus.damm" <magnus.damm@gmail.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 06/11] dt-bindings: usb: Document Renesas RZ/G3E USB3HOST
-Message-ID: <20250821-arrange-exhume-aed87b75305c@spud>
-References: <20250820171812.402519-1-biju.das.jz@bp.renesas.com>
- <20250820171812.402519-7-biju.das.jz@bp.renesas.com>
- <20250820-onyx-salad-c5c96f6bd480@spud>
- <TY3PR01MB113464F2ED8BFBB823B038C038632A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+	s=arc-20240116; t=1755802407; c=relaxed/simple;
+	bh=EPCMCoGF7gljXImYIrIH9WCIHz6oSi5p0rIwFzncohY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BgXo3JRtIRt+GeKJB05qyQ3/kF0L6BFJ9uGRHU0pM8ma/NUL+aoP/7s23Fv/Mlzg4zgsaGKFQbzsCILwE6ZLXJoENvaMVAhmlNfkDmFOef9mGzBLJwxxC9n7xRQ3FuA6mCASLplEPWSv5H+q2CGdJRlaJlq5gFkOUDNGJemeono=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=VOhLKqCb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=U3p0eNKU; arc=none smtp.client-ip=202.12.124.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
+Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 695A67A0060;
+	Thu, 21 Aug 2025 14:53:23 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-08.internal (MEProxy); Thu, 21 Aug 2025 14:53:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1755802403; x=
+	1755888803; bh=Cth1hV7HSFBnl4TouUdtNRZlbqgis9EHwFGij6IrGus=; b=V
+	OhLKqCbQ5VMGzWNkKUuzpyUsPClcAR7voOuB/p+zZD0mAVvwDS2asxJHQSeTh6JH
+	mFRZWIuwS5EuuPrhMmg3lXIULrVZT9o6tkEwpZHWuoC/g/ElMS6MgtsMxb1y1Gto
+	qqrQSkPnIC9/kBsWBKLMUoG1tCBKTWEYxsvWDNZ3wtydXk8RZcrWFG91egdPxARq
+	mtY1m5/pxhqIOcOXFb7tkS55OCWDGba+zn6SKRyBfQdSDIyxHkJSncAhPpzRXzNR
+	1u4XLnkzSQhj5hzpz6yKVX+tWv2FrX0KmLq5si29BeHW+7HZdXcoOYy6y4xBgZut
+	XhMTcTvSdwCRl9qmaDeuA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm3; t=1755802403; x=1755888803; bh=C
+	th1hV7HSFBnl4TouUdtNRZlbqgis9EHwFGij6IrGus=; b=U3p0eNKUMCVhVa4cd
+	Uwav5G+YQs6dlXM3sFLQh7j/eoUK1z+Yg3rIPJQpQs/N9YraKOFPGL+wfQ2DKG+n
+	5VvtY+5yBZ1BPxV+lsSt9y1GC/t4WunXJlnomWyrFdFD9gJtZwfbiRNcGunxpAVJ
+	YVkUWo9g9Ku+DrzWhrcIGHM3reT/N/9dipV41INXPwL7BaiFP4fDTmpCshYAMAJi
+	HEpWIU7FKhU9q/MPaep16fU79mg8NHQYMhuac2Ike7KBAy89tMmDPTCqWBKfrOOP
+	x9ujgWIA8yB9xezWBmfn1VYXtYCp8qltJQ8e6H9f3bs+tgCKxSJvMhkfKPV6BsvR
+	mODQA==
+X-ME-Sender: <xms:ImunaEV4Uc4k8-CRASWIzerByeHIFbvRLydXhT2C3TgL0RZLL1BICQ>
+    <xme:ImunaGh7kxZheBokmNNTIgiDSvMaXmKUsvs2sSUc1u6YAkn-PP3wwlvIUYoJMgwkA
+    qmDR1DQvZNbqL8f_6I>
+X-ME-Received: <xmr:ImunaKs8_AhDto-aA2790v0JSMOUvwa0Mc9A5wxlH20KDKrYpyo2bOJN08OMxNxFAVv_fSRZrvElR-RvWaFMtx9-TqY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduiedvtdduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucgoteeftdduqddtudculdduhedmnecujfgurhephffvve
+    fufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrrhhkucfrvggrrhhsohhn
+    uceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrgeqnecuggftrfgrth
+    htvghrnhepfedtvdejfeelffevhffgjeejheduteetieeguefgkefhhfegjeduueethefg
+    vdffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    hpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrgdpnhgspghrtghpthhtohep
+    hedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhhpvggrrhhsohhnqdhlvghnoh
+    hvohesshhquhgvsggsrdgtrgdprhgtphhtthhopehhvghikhhkihdrkhhrohhgvghruhhs
+    sehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuh
+    igfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidquhhssgesvhhg
+    vghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvh
+    hgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:ImunaH7RTvLKHE5IfXuttvDLqSW7nl3HBmu4obRIv4sXGE1ByZ7dmQ>
+    <xmx:ImunaGPW20OfHOWYZD85vUZZjcgT28aEHK5HOcGUFdJ1uy9ROeN_sg>
+    <xmx:ImunaFsJ8Ur1zKZVAtdKWSTqM6VphI-oiU_jlZwCoVesyHECkpsIOA>
+    <xmx:ImunaJbcHJA7l46wvbBUyWS_LCjesvLH9WdY1UCXwRBPePo21amfUw>
+    <xmx:I2unaFG65gHm_ZKiFEfNRHjQIGQoHKcDhBz9iM8Q0KvMBGl53Dh4OzOM>
+Feedback-ID: ibe194615:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 21 Aug 2025 14:53:22 -0400 (EDT)
+From: Mark Pearson <mpearson-lenovo@squebb.ca>
+To: mpearson-lenovo@squebb.ca
+Cc: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: Handle incorrect num_connectors capability
+Date: Thu, 21 Aug 2025 14:53:07 -0400
+Message-ID: <20250821185319.2585023-1-mpearson-lenovo@squebb.ca>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <mpearson-lenovo@squebb.ca>
+References: <mpearson-lenovo@squebb.ca>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7GlMQwMLMmaJG8we"
-Content-Disposition: inline
-In-Reply-To: <TY3PR01MB113464F2ED8BFBB823B038C038632A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 
+The UCSI spec states that the num_connectors field is 7 bits, and the
+8th bit is reserved and should be set to zero.
+Some buggy FW has been known to set this bit, and it can lead to a
+system not booting.
+Flag that the FW is not behaving correctly, and auto-fix the value
+so that the system boots correctly.
 
---7GlMQwMLMmaJG8we
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Found on Lenovo P1 G8 during Linux enablement program. The FW will
+be fixed, but seemed worth addressing in case it hit platforms that
+aren't officially Linux supported.
 
-On Thu, Aug 21, 2025 at 07:15:59AM +0000, Biju Das wrote:
-> Hi Conor,
->=20
-> Thanks for the feedback.
->=20
-> > -----Original Message-----
-> > From: Conor Dooley <conor@kernel.org>
-> > Sent: 20 August 2025 21:11
-> > Subject: Re: [PATCH 06/11] dt-bindings: usb: Document Renesas RZ/G3E US=
-B3HOST
-> >=20
-> > On Wed, Aug 20, 2025 at 06:17:53PM +0100, Biju wrote:
-> > > From: Biju Das <biju.das.jz@bp.renesas.com>
-> > >
-> > > Document the Renesas RZ/G3E USB3.2 Gen2 Host Controller (a.k.a USB3HO=
-ST).
-> > > The USB3HOST is compliant with the Universal Serial Bus 3.2
-> > > Specification Revision 1.0.
-> > >  - Supports 1 downstream USB receptacles
-> > >      - Number of SSP Gen2 or SS ports: 1
-> > >      - Number of HS or FS or LS ports: 1
-> > >  - Supports Super Speed Plus Gen2x1 (10 Gbps), Super Speed (5 Gbps),
-> > >    High Speed (480 Mbps), Full Speed (12Mbps), and Low Speed (1.5 Mbp=
-s).
-> > >  - Supports all transfer-types: Control, Bulk, Interrupt, Isochronous=
-, and
-> > >    these split-transactions.
-> > >  - Supports Power Control and Over Current Detection.
-> > >
-> > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > > Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >=20
-> > > +---
-> > > +$id: http://devicetree.org/schemas/usb/renesas,rzg3e-xhci.yaml#
-> >=20
-> > > +    const: renesas,r9a09g047-xhci
-> >=20
-> > How come these don't match? I don't understand your naming scheme at al=
-l, so idk which is even correct!
->=20
-> r9a09g047 is SoC part number which also known as RZ/G3E SoC.
->=20
-> I just followed the convention used in [1] and [2].
-> Please let me know I should change rzg3e-xhci.yaml->r9a09g047-xhci.yaml ?
+Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-What's the benefit of using that instead of the compatible, other than
-confusing me?
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 5739ea2abdd1..181351afe887 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1790,6 +1790,12 @@ static int ucsi_init(struct ucsi *ucsi)
+ 		ret = -ENODEV;
+ 		goto err_reset;
+ 	}
++	/* Check if reserved bit set. This is out of spec but happens in buggy FW */
++	if (ucsi->cap.num_connectors & 0x80) {
++		dev_warn(ucsi->dev, "UCSI: Invalid num_connectors %d. Likely buggy FW\n",
++			 ucsi->cap.num_connectors);
++		ucsi->cap.num_connectors &= 0x7f; // clear bit and carry on
++	}
+ 
+ 	/* Allocate the connectors. Released in ucsi_unregister() */
+ 	connector = kcalloc(ucsi->cap.num_connectors + 1, sizeof(*connector), GFP_KERNEL);
+-- 
+2.43.0
 
->=20
-> [1]
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
-t/Documentation/devicetree/bindings?h=3Dnext-20250820&id=3D44b91d61c505863b=
-8ae90b7094aee5ca0dce808f
->=20
-> [2]
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
-t/Documentation/devicetree/bindings?h=3Dnext-20250820&id=3Db2d25905366b4e67=
-91f60e6bc76a636d1b88e6f8
->=20
-> Cheers,
-> Biju
-
---7GlMQwMLMmaJG8we
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaKdiYwAKCRB4tDGHoIJi
-0hSPAPoDdOTqCsOU1Lt3flNQYSPU1t6vbvU4LII0fUo2sw2JvAEA4rYPc7+ZtKBS
-xeByEQ0cVKS3bqvr0RWjOxjWXs2GRwA=
-=hwrx
------END PGP SIGNATURE-----
-
---7GlMQwMLMmaJG8we--
 
