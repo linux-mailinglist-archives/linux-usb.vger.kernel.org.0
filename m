@@ -1,75 +1,72 @@
-Return-Path: <linux-usb+bounces-27082-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27083-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BC13B2EF78
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 09:23:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D265AB2EF7F
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 09:24:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 104D9188D636
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 07:22:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D659AA27AC2
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 07:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A342E8DFA;
-	Thu, 21 Aug 2025 07:22:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B8132E8B87;
+	Thu, 21 Aug 2025 07:23:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OLvSf/w1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dMom5Aco"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331D72D97A9;
-	Thu, 21 Aug 2025 07:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73242283FEB;
+	Thu, 21 Aug 2025 07:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755760925; cv=none; b=TV1SlEtK1k+S1MeRb+MFkuCJrxA1o/CPKP3/Jbm8BLQusu7RhzbJLrd9nP9lHq4FkJwWq3x2HKByOq6NU3BTgMZpYDRgGhk8wFVGoEQqGfB0y5WDLIDmkrwsyQEcWH3h0+roCDFzg01ii0lNVL3Wed7fhwcRUfFnFxq2Tx2TNLs=
+	t=1755761002; cv=none; b=DumasI8N0ZJpwQsiI33wzpgTuK9FU/bceae9CsC37JbNjygmfHoSWoQO5+aZ+Jx4XurdsR3wbSnlaQwMsSZmu6cj2zeze0aimozKdFQX7Petk0MoKtjaI51aZgDfoDJxQnVunSGmb91gx4BLmurlmgS/k3qa25cYyIt/y/u9KRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755760925; c=relaxed/simple;
-	bh=9jqvzZDvhX+QL2Mnw32b1Jruz/NKey6zrKlijqESgQU=;
+	s=arc-20240116; t=1755761002; c=relaxed/simple;
+	bh=l+Xf6Cch4otNX9tUnaUGjMlw9IQdKLXtuDE0iA7v9pQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QqNef6it3QDgOGNEFwPx+TNIW6SnKxDiv0ZGZ2tvFJL3uRQJDgWHIxd0rUICnINsoPREEgZ9QK8ZLE7MVieKO2r8P9bFNxF/OJh+p9CTHj+1GMMR7iEWsTD9c3H8Z+ynUR8XD7LHnkZQQ67WFKy3fbz9Qgl/JVBptn9dfhM6txU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OLvSf/w1; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=Aw/WdkE5pEScTpyyb/H76Nt2p6Mcg28WqbohPzD3BztirAPuFCgtvf41SrapAzILrt+pQQXwWOFL5gWRQO96dYttduH/RKOLsuJEGE0k+ljb/2Qtxg8768SeACWPLD6vfHRVnmWCjN5g7xSXWESjb6vRQJG/iFojlHd8x58vfbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dMom5Aco; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755760924; x=1787296924;
+  t=1755761001; x=1787297001;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9jqvzZDvhX+QL2Mnw32b1Jruz/NKey6zrKlijqESgQU=;
-  b=OLvSf/w131kUedcsEzEBReKZbCNpT4NhxCqFlOVhMzrLyS6q4k7hYWVX
-   0bCtP/sbo3yOPlYchJ214PNFA3ixAFHf/JfODQzYV64WjK1oKoznd8LxF
-   qrQCAPXWG9PdRrPYUS2gNrj7s3M7/QaBfY8NdW6ND9csbVMHSTKYTYvkr
-   DpxEDgYxkDSNdDKlUi3imQ0cpnny+Bx6OurOaDSrASjMkCB5s+Eufxs30
-   j/4yYebpztmHoUAoyih8938oT6TSfrvff8EJ5whEyx7waJVTo0/9UQTSt
-   GM3r8GuH6AqIWSldxb8BKL07VKKw0ontqz071d1W82i1gzLjRdqzp9e9+
-   g==;
-X-CSE-ConnectionGUID: tV/ikWapS2i2ogbook1eUQ==
-X-CSE-MsgGUID: ssr4PU5GRgumUHjyNSqhfQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="60669024"
+  bh=l+Xf6Cch4otNX9tUnaUGjMlw9IQdKLXtuDE0iA7v9pQ=;
+  b=dMom5AcoubJ+XKVWlqkqsYvmR4Ay1rntK0J7WP6JMz+JRzjztKK8Z2aF
+   JB6aySfr+7USu0HaSXeVN/YIyT7pXv0P1NYEY48NJpsdJbU2WqFrLEoxe
+   U+ZJd3cmQX8Pzq1e0rDwOW42jfmKsa0QP0y1+OGwUf41NX5UDAZEaLjLD
+   D6g08dwaROu84D3liqL5izBz/28El9uPcXCJlFTuJm+gk2UU0mbC/CAG3
+   T63fkGga8Ny1rgsOuZQqGoOkGb/nLlLWu1bcZbBpBvIJeVJUSxQXo8kc0
+   VISl7VDQwqApZoaRMKDR2GfdRzGd+/Xm3gQdXezLLF6PPGcMlubXjGRP/
+   Q==;
+X-CSE-ConnectionGUID: 46Vo+Nh1Qv2HNBXtXcR6JA==
+X-CSE-MsgGUID: PO7KKEdwTaKHjiEstae0KQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="58136719"
 X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="60669024"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 00:22:04 -0700
-X-CSE-ConnectionGUID: Q193JMXcSlGictcgiuHC9A==
-X-CSE-MsgGUID: 7Xa+vRZzT1euEEGiWkYpFw==
+   d="scan'208";a="58136719"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 00:23:20 -0700
+X-CSE-ConnectionGUID: 2bruqgrORWCFqqqUbkKbrQ==
+X-CSE-MsgGUID: bcGw8VVRS2K/RI8OtffQdg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="205510285"
+   d="scan'208";a="199211870"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa001.jf.intel.com with SMTP; 21 Aug 2025 00:22:01 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 21 Aug 2025 10:21:59 +0300
-Date: Thu, 21 Aug 2025 10:21:59 +0300
+  by fmviesa001.fm.intel.com with SMTP; 21 Aug 2025 00:23:18 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 21 Aug 2025 10:23:17 +0300
+Date: Thu, 21 Aug 2025 10:23:17 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Qianfeng Rong <rongqianfeng@vivo.com>
-Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: qcom-pmic-typec: use kcalloc() instead of
- kzalloc()
-Message-ID: <aKbJF56n18KsHYyS@kuha.fi.intel.com>
-References: <20250819090125.540682-1-rongqianfeng@vivo.com>
+To: Xichao Zhao <zhao.xichao@vivo.com>
+Cc: romain.gantois@bootlin.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: mux: Remove the use of dev_err_probe()
+Message-ID: <aKbJZa1tQMpf0QWX@kuha.fi.intel.com>
+References: <20250819112451.587817-1-zhao.xichao@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,48 +75,34 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250819090125.540682-1-rongqianfeng@vivo.com>
+In-Reply-To: <20250819112451.587817-1-zhao.xichao@vivo.com>
 
-On Tue, Aug 19, 2025 at 05:01:24PM +0800, Qianfeng Rong wrote:
-> Replace devm_kzalloc() with devm_kcalloc() in qcom_pmic_typec_pdphy_probe()
-> and qcom_pmic_typec_port_probe() for safer memory allocation with built-in
-> overflow protection.
+On Tue, Aug 19, 2025 at 07:24:51PM +0800, Xichao Zhao wrote:
+> The dev_err_probe() doesn't do anything when error is '-ENOMEM'.
+> Therefore, remove the useless call to dev_err_probe(), and just
+> return the value instead.
 > 
-> Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
+> Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 2 +-
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c  | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  drivers/usb/typec/mux/tusb1046.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> index 18303b34594b..c8b1463e6e8b 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> @@ -567,7 +567,7 @@ int qcom_pmic_typec_pdphy_probe(struct platform_device *pdev,
->  	if (!res->nr_irqs || res->nr_irqs > PMIC_PDPHY_MAX_IRQS)
->  		return -EINVAL;
+> diff --git a/drivers/usb/typec/mux/tusb1046.c b/drivers/usb/typec/mux/tusb1046.c
+> index b4f45c217b59..3c1a4551c2fb 100644
+> --- a/drivers/usb/typec/mux/tusb1046.c
+> +++ b/drivers/usb/typec/mux/tusb1046.c
+> @@ -129,7 +129,7 @@ static int tusb1046_i2c_probe(struct i2c_client *client)
 >  
-> -	irq_data = devm_kzalloc(dev, sizeof(*irq_data) * res->nr_irqs,
-> +	irq_data = devm_kcalloc(dev, res->nr_irqs, sizeof(*irq_data),
->  				GFP_KERNEL);
->  	if (!irq_data)
->  		return -ENOMEM;
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> index 4fc83dcfae64..8051eaa46991 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
-> @@ -713,7 +713,7 @@ int qcom_pmic_typec_port_probe(struct platform_device *pdev,
->  	if (!res->nr_irqs || res->nr_irqs > PMIC_TYPEC_MAX_IRQS)
->  		return -EINVAL;
+>  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+> -		return dev_err_probe(dev, -ENOMEM, "failed to allocate driver data\n");
+> +		return -ENOMEM;
 >  
-> -	irq_data = devm_kzalloc(dev, sizeof(*irq_data) * res->nr_irqs,
-> +	irq_data = devm_kcalloc(dev, res->nr_irqs, sizeof(*irq_data),
->  				GFP_KERNEL);
->  	if (!irq_data)
->  		return -ENOMEM;
+>  	priv->client = client;
+>  
 > -- 
 > 2.34.1
 
