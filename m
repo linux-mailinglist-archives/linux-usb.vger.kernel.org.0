@@ -1,208 +1,146 @@
-Return-Path: <linux-usb+bounces-27075-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27076-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87F56B2EBAC
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 05:07:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61265B2EF1E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 09:12:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 687674E58E3
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 03:07:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87A6616C1A5
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 07:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1DE52D94BF;
-	Thu, 21 Aug 2025 03:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6312927C162;
+	Thu, 21 Aug 2025 07:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="aTHy6NnC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e5ezfTYU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013041.outbound.protection.outlook.com [52.101.72.41])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75802D5400;
-	Thu, 21 Aug 2025 03:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755745614; cv=fail; b=b1M1Z73hLbrjxryOZKpR/4ut/K1kIWUGlXa8CTqonNPfEvkr4hvSHzSbijDcR3ayAh1frCV+OqVhTOvLF9HAQz4AB9ivrHrxlsC0/iKw0r+UeFztH1WjC+ZkkkN9hYIhs1xqpv/Bj0Obdqy2xqwikxBjqzkd4uwrBh5CN4uBa7s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755745614; c=relaxed/simple;
-	bh=MpRfK6RvkZ5ef1OTBDER7Drl5skYsEklsHb9pOOMqzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=mfblz19StnwVNr5SWh1sQRIV8o2PnGycgMAgVOWTNyfPTj17KSUiBt7zN3vU2Up6Bf6SUzIwAflUDAGk+tJB9ScexNwTGESa5FTwGzVP8OxBQB5cSww9XstUkAaycFgq5dSObH9grt7z19I72Cw0tUNU0M0Xj4R1t30wdzHi0ZY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=aTHy6NnC; arc=fail smtp.client-ip=52.101.72.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Pidt3kUqqnWCN2m7wQ331KtG4jX/dhBWj/q8a1qgaV3jbMmUPEYM2C65aLJ/5cUrNT3vPWhe5bxmBTPcnsuHIXxqsWG/wi7XtPXE0wVpmAaMgN3TZjd7F/TsBKen4F5jOhp3bm3Yhg/Xjej1/0SyX87OCUkKn+uRnp90Xnhk1dz2uFuOPwDsrUg5RFKVPindrwntNBHqkxrOvEHIeQfKNBGXyVImLOIQ7iKH0OYs1rv2scDgFuRr3IV+IFPWcEjNbqPxQAOwfQDz37Ia4+zYdVwEKQEhPUSo275fXn8zYrGvDYe+5FbpSxziNMMX5t42u4l53nMQgnxFAwe9FKnFRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QjFPT8M5Z6N2M4ITLWRCB/DFaO3TDWlg+KhhtUyvouc=;
- b=IsjuCGFoGEUzCcK3eFqjCs+SklR0IDmvSde/hJSttGkTUjCJGHw3WBcFFwTBFJox0qhMuX6uNf2JrQ+bC7nyJ0+o9R5B4hejNn1nhuWissgSVcXQ+WrxhKsStU9+4l7f171OxoePB1KBbizOEJHg7n6m0ySv0wb1ZPrrLPWNZx2X+0uGliVHnsFyllPqzpB+lLP4RGjtH6FQoXvr448OO9Y8vui8zPcYNtTJH7oUgbqwCIt1APOhWSkSZQjBXJoomIy3wioA5Fo9DE/pBUbQfI/k8RHyeEkZdn4tsSvpbAutFInMkCmkpLfgG6NB90aG83gYQ5ASUky4R7PJp6ZpkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QjFPT8M5Z6N2M4ITLWRCB/DFaO3TDWlg+KhhtUyvouc=;
- b=aTHy6NnCpFlCKyqgGd77k2Ksj10Z+wUy5thlRyQTFPe9UfqYcERdh4QJ6nbWy2mKGugA62PSgbmDTdbeL/D3umIib5wjd3/nInXmogJkqmklvVXc0KMuBGbT0ZMu4mqgnJT93nWuPrCceXlpcVmhbvHC8d8hu4rMf4rwdnFpwpM2veOjOPWRiwh2BZm0TEnsPdFtwhAwYqKWeMjzskzkrDdZjAJTU6WGlTGr6QD9W0bw87jqkImapb5rBEmMiRRH5qtA+w8tPAX0HKz5UCnYNGtexTOUnAsAUrCNE5FwVdfXVsGyOougjqjYPKROt9g9lEuQzfmD1mAqj8acG697EA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by VI2PR04MB10978.eurprd04.prod.outlook.com (2603:10a6:800:27e::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.12; Thu, 21 Aug
- 2025 03:06:17 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%4]) with mapi id 15.20.9052.013; Thu, 21 Aug 2025
- 03:06:17 +0000
-Date: Thu, 21 Aug 2025 11:00:46 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org, 
-	netdev@vger.kernel.org
-Subject: Re: [PATCH] net: usbnet: skip info->stop() callback if suspend_count
- is not 0
-Message-ID: <ajje6wfqyyqocpx2nm6nmw3quubmg5l3zhuxv7ds2444hykgy5@xbi7uttxghv2>
-References: <20250818075722.2575543-1-xu.yang_2@nxp.com>
- <663e2978-8e89-4af4-bc1f-ebbcb2c57b1c@suse.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <663e2978-8e89-4af4-bc1f-ebbcb2c57b1c@suse.com>
-X-ClientProxiedBy: AM0PR05CA0094.eurprd05.prod.outlook.com
- (2603:10a6:208:136::34) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA431E7C12;
+	Thu, 21 Aug 2025 07:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755760271; cv=none; b=mXCVniVZV+XhvUksrVHSYgeOxiOuh878yuGsHJyrpImzGoo2YeKIenJypSW6eLjQtZJ8BtS3haX3+RKAiyrCJPjYWob+MVkFNk1BVKb6eT/az30sDEfsOrTQ384IXLL3UqO1mvtF8aWZa+yuIEMUI2iDoY2ii2iTFAclhfOzXbQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755760271; c=relaxed/simple;
+	bh=OUn2H5750HvrMtA7wkc7vbkYR2d2MeCJuYsZZvXJOB4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VQV/QE586pBB9fM3+BUplLLwVd00ORQzzits/jfD2/Fhp0p0QisfB/6iZqIglIvABHfGcJbmgjB0yfqQOasugyQVd2JB/fyAjWsmm1qpRl1dl2JLQ6r1jJiFPR5RrCJ4mADjxQu2NaWNPe5YJZoZCUz7PPuhLlyzw9vBxirg3gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e5ezfTYU; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755760270; x=1787296270;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OUn2H5750HvrMtA7wkc7vbkYR2d2MeCJuYsZZvXJOB4=;
+  b=e5ezfTYUq27U/PzS1XPEvel5waeBuv78OgCHwS7Om1lA7BG4odnCDZCa
+   jgmPqtGKdtwHXb1D4SwfR3K46tgnSKecbJxx6wIkHEuDwKNYbejOD/Wzn
+   WbUBq8QnVJWt/oCIStRPvtSKs7Fe9ZnHlg0vanSq8zZ7Sh8nLJl9qzP0J
+   d36z9GLWhGDbGcuJgyQ5ksx8BfcC9bIj4wWUkiRjGCrEi8C69oi7rZhx0
+   mT2bRwg2XPQ3tuTQqyRJupW/2HMmzACbM2q3ZSDAibIU1VOeaqbz9cabK
+   cy5pbDQNVyYN+/Wkm01nxkTiGuic94HPvawbTjG+ECV9TcdbeeDsyMhYT
+   A==;
+X-CSE-ConnectionGUID: BNAVKzZARiWgt1d2WXZ6dg==
+X-CSE-MsgGUID: BE/5ZXugRd+t4+Pei8qQQg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="61678741"
+X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
+   d="scan'208";a="61678741"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 00:11:10 -0700
+X-CSE-ConnectionGUID: OlO3aYLHTdOuly0hquwMZg==
+X-CSE-MsgGUID: wmLH5BeDSTiVvUVSelVnwQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
+   d="scan'208";a="168591804"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa008.jf.intel.com with SMTP; 21 Aug 2025 00:11:06 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 21 Aug 2025 10:11:04 +0300
+Date: Thu, 21 Aug 2025 10:11:04 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: amitsd@google.com
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: Re: [PATCH v2 1/2] usb: typec: maxim_contaminant: disable low power
+ mode when reading comparator values
+Message-ID: <aKbGiLh2FrCM4dLk@kuha.fi.intel.com>
+References: <20250815-fix-upstream-contaminant-v2-0-6c8d6c3adafb@google.com>
+ <20250815-fix-upstream-contaminant-v2-1-6c8d6c3adafb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|VI2PR04MB10978:EE_
-X-MS-Office365-Filtering-Correlation-Id: d989cd89-0250-4fb4-781b-08dde05fb219
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|19092799006|52116014|366016|7053199007|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TNInj1HMXBaUCLieKEcO2qU95wgEeZQfhELSGSDOlXP2QvWucYfLs0rxBSC4?=
- =?us-ascii?Q?zcwiPXXeyBWoe7KLMbAnPtlarJcerzzNY2PqRphw5SfESTR1nTeY2AfNPCWD?=
- =?us-ascii?Q?NFD2Mxpa9UGoSjZtvXUs6EepJm0BbojZqbzLlqIR5KMutB6Zug3Wn46Vsuze?=
- =?us-ascii?Q?A07Wi1vBoGCU3Mpj28c7wjSzHVn+Hbx9NwDdxvfw+Z/QiqAUA0xbDHWY9AxN?=
- =?us-ascii?Q?Er7+j6vof3Vf26eg0ubqDHdHyMRaSX5fiL8hVZ5ZaP82rpgumcwNhpDQ9TBy?=
- =?us-ascii?Q?kz7znWMkplSwjrmG/jm3F/Nj5IRAjzfdMuRnpoqD7+y1M3NQ5uni/7p/GXVv?=
- =?us-ascii?Q?++WidT827M2DukyLst6ec8LnVxDs8VIkt0g50sMuJdcjbglYOfLZiHMEeieP?=
- =?us-ascii?Q?jP/WX1B3b2hs80XhDYQfmN/i9ZGCL67ezo5hia5uJHsLZlEB1lxuA1QJVR1r?=
- =?us-ascii?Q?UGQIkVd3CGTgP4cDJPYuLNCtCWJeQYNrg9ltPmTs178mOTEFwko07qTk9cFh?=
- =?us-ascii?Q?J62bAf7q5Bwh/oKZqy2a5ttroKfLCP1e+qEA0Ls/sDgZaB7kNfvCl9NnpmJL?=
- =?us-ascii?Q?oLqwDEyROby/xM9k16nFk48evHO3kjhI964Zax/+svfA9X96OLNClLzlWfhx?=
- =?us-ascii?Q?JSsGMfAkrZVO1NY3oUds/pXMLHVjWerFBwoo6TEP58C60nQ0VXZYeCogKihg?=
- =?us-ascii?Q?QZZHgcFm9zSL0uhQKeZ7f3MLzTKIPneD9fKj9DnOXHyxgzjJIW3jXauMQNC/?=
- =?us-ascii?Q?TFpPRlRSTF1WDl550CxxwIeaU0p96w4FcUtaYVk646l8ORy/cbu1SihXLzLN?=
- =?us-ascii?Q?U/zIGnXQh78+ggKpkFigCB7Ij0aXJ2hfuKayrJETtse6SugVSulYYFeb+uY0?=
- =?us-ascii?Q?h+y++TyylMYMrwpx8HLE+V1SCswH6sZjUFU2GZsAPG3TpvB7puGzaLnlgoHw?=
- =?us-ascii?Q?9tsIIOJpJJTRuDEn1qF1PPkW0oJ/7bt8V29VurjIXXd461gly/xW7TvaEpPF?=
- =?us-ascii?Q?D5XAyE9PWCOV6+pznXmJskT6MQYo5h9nbvipX4U82gny5ZkwMrUMlje0ZZ6S?=
- =?us-ascii?Q?WqFCuKK0EWyVKSgku0StjsV8hF/Ql86XHpScexVkBe8B3b2g2tz0cReRRwWA?=
- =?us-ascii?Q?Xq/Avd4h0+Ty9Mi/ntdm4zX64MwG+pI8zIiN6qYWnu/wNy/wfvw0IJVNxUmL?=
- =?us-ascii?Q?eoarUdxsqcFG9P82rrGSRC87BqWJma9FRs1S+MkTJ9QY99RuL6OHYD07or3u?=
- =?us-ascii?Q?/N+SFUmUWoXB+daGx14m1GodmbKYpQAgY6Hdnt7BDhviXP0sMoz2vvRRAR9J?=
- =?us-ascii?Q?Mf81CDYN1qMHMvBaP6+DJtqYhqXFYrOCJien9++01RLv8J3PeT1n60IuBqb7?=
- =?us-ascii?Q?LGduFTmgFUgkbPuPJVyFK1/miL+xEivdufJg448LppORiEQ7MNRA7bKNBqdN?=
- =?us-ascii?Q?7DNa9mXe6aO8VTf9AddD8PI/zn64AoxACDOr51X0OXSxrzcogMdTMA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(19092799006)(52116014)(366016)(7053199007)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?+N5D3kuzGw1psthkbHdiFX0F5PWpk1VyvP81X07a2WX9vLN9I5dpTfzgpnuS?=
- =?us-ascii?Q?+nExFB2C7ku52JxEBy5zlDVQU+xV21OjpHihdVTlaS3dQtmb21oXQdwmXgs4?=
- =?us-ascii?Q?aheM4R52a/cNDzAk4asDVbY1QEYDJ8imhdKrkBG2GAWgrFG/FxQ3wVsrI0j7?=
- =?us-ascii?Q?JCPJcret9cH3KnRTazGTsKAIGsFDRnB6NqwPXIJVPDiyQFZsSqUGol2s390d?=
- =?us-ascii?Q?YgfcWz1O5ncS09TLWrJcnCXCPaaK3TbA+jafEoVptXT8DKkfIrBTHcg0Y53M?=
- =?us-ascii?Q?pdu4VAgsTdPlorQLv6ywSOB6Pn4G7oSVri7KnQgRNrJuRQQjtQgkxbcwNp7n?=
- =?us-ascii?Q?vEaxGHlrMAYRRsh9dcZP3z87JJBzM1pCeVGVi3dDhEb+mRqWlV0J4LVKA9jQ?=
- =?us-ascii?Q?LpSWmumFE4Z/rXR4QpkSEykah8FfZE1t9gzt1pT594g4DyJPWMWXJh5Qc+iP?=
- =?us-ascii?Q?xfixB0h3+UOXVUSpryqxohEZ94r9cGllAsDuaPQ8u7EkgzwOpZK+a6T1vxUy?=
- =?us-ascii?Q?IOGhD0vnyVKOYmNb0Zt/day+GB2d6vJS0QxJkCOLID2IqhIfSRcHJDVA6zCR?=
- =?us-ascii?Q?lQmuuzik9sr8dpWAxJUUKgH1rjgFtPqM10PB6BVGOcj8eqP9Ys0yph40fTtb?=
- =?us-ascii?Q?golpE6YTXM3p3w6F2khlRSE8llZT8W/OeSouTM3m/D2s+QSIwZHbSDyfAPLL?=
- =?us-ascii?Q?26bqY6PTE2I3l9qMtb2sioJ371XzTi4Tvu4+sQ3Rs+7LoQD4f7vsotehXknb?=
- =?us-ascii?Q?8NCXRGdyNJSOzV5U2I/ahnItrnJt6uldhs8pSvafssH7kkj4gROueZENGZ22?=
- =?us-ascii?Q?AOhtpVDfb9Fb/ehVfgVdKLKbHD8MOPxWEbEC24im+vTfC01mKWQ3/Ss+IorJ?=
- =?us-ascii?Q?Kiy8d3P9ctvI42YRqK9uAQYN5P3tBXWEhGmchpcPuaWIyX9yvM8h6TmRIe/+?=
- =?us-ascii?Q?RH0c7COYh0nATBJ4Nb5L79PDkAMGTz5dQcppo29E8KxiFaDU9k45MZoNoF9Y?=
- =?us-ascii?Q?9OwfuTV3YINj0lUmh8jlTb9InDq4X7Js3qjSsVuBFoe/K5yeCa4fsZgYGStR?=
- =?us-ascii?Q?cHUpl0E2mtgahFxzgBE4o81Vzvydza7spAZvzYBm0dk8tyBwBhujytx7ec62?=
- =?us-ascii?Q?GUhRCMCubmekOowyFnQvOHGxeAYBEO8uIiw3Pnrlw4E/GbuIzOHs85ukY4Bn?=
- =?us-ascii?Q?smsxcekCfwmdPthwv1TyiK0hBQi3DaDKDWUwXnBfVob25p/MzEpTLtKSIBC2?=
- =?us-ascii?Q?ipUA7eUZor51MDZEP1UqjDohZGKmHQgn7eNLSTr7DU+x3dCVFryuDL9KshLB?=
- =?us-ascii?Q?py8bXYQ5Jb23HgcMRQnuiLf7yVZui5EAAqG4Vlb/aZwlYugNnO21hyEaIHbU?=
- =?us-ascii?Q?iN8aNYQyCfL8kYDsyLk6dQVVTMEcgUXbZygeFaQzSwalua+TQpFHIU8v3QE7?=
- =?us-ascii?Q?tiVeVN7Yvz9fvPhFdrkbgvdSGmkpvbcFagJY5LBfi6LwXq2wI6MBO8NrkXX+?=
- =?us-ascii?Q?tU71S05bqsMeb0BMpTGdNvDMaulUwbKzYChMnQs6WbmOZ41+ejwhK9F08qKX?=
- =?us-ascii?Q?sGv5/Zv/57dxC+8uEmd126jmDarMfLhbP17VzkDy?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d989cd89-0250-4fb4-781b-08dde05fb219
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2025 03:06:17.3777
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7dGIfZHFbRaatgmWjjrbzszdsEaoMyvLr3yInRlFljQDvJiMd1FMdExQf6sCp9BB8jtmJg9oboG8CGAwBOkqSA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB10978
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250815-fix-upstream-contaminant-v2-1-6c8d6c3adafb@google.com>
 
-On Mon, Aug 18, 2025 at 11:04:55AM +0200, Oliver Neukum wrote:
-> On 8/18/25 09:57, Xu Yang wrote:
+On Fri, Aug 15, 2025 at 11:31:51AM -0700, Amit Sunil Dhamne via B4 Relay wrote:
+> From: Amit Sunil Dhamne <amitsd@google.com>
 > 
-> > --- a/drivers/net/usb/usbnet.c
-> > +++ b/drivers/net/usb/usbnet.c
-> > @@ -839,7 +839,7 @@ int usbnet_stop (struct net_device *net)
-> >   	pm = usb_autopm_get_interface(dev->intf);
+> Low power mode is enabled when reading CC resistance as part of
+> `max_contaminant_read_resistance_kohm()` and left in that state.
+> However, it's supposed to work with 1uA current source. To read CC
+> comparator values current source is changed to 80uA. This causes a storm
+> of CC interrupts as it (falsely) detects a potential contaminant. To
+> prevent this, disable low power mode current sourcing before reading
+> comparator values.
 > 
-> This needs to fail ...
+> Fixes: 02b332a06397 ("usb: typec: maxim_contaminant: Implement check_contaminant callback")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 
-It returns 0, so "pm = 0" here which means it succeed.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
+> ---
+>  drivers/usb/typec/tcpm/maxim_contaminant.c | 5 +++++
+>  drivers/usb/typec/tcpm/tcpci_maxim.h       | 1 +
+>  2 files changed, 6 insertions(+)
 > 
-> >   	/* allow minidriver to stop correctly (wireless devices to turn off
-> >   	 * radio etc) */
-> > -	if (info->stop) {
-> > +	if (info->stop && !dev->suspend_count) {
+> diff --git a/drivers/usb/typec/tcpm/maxim_contaminant.c b/drivers/usb/typec/tcpm/maxim_contaminant.c
+> index 0cdda06592fd3cc34e2179ccd49ef677f8ec9792..818cfe226ac7716de2fcbce205c67ea16acba592 100644
+> --- a/drivers/usb/typec/tcpm/maxim_contaminant.c
+> +++ b/drivers/usb/typec/tcpm/maxim_contaminant.c
+> @@ -188,6 +188,11 @@ static int max_contaminant_read_comparators(struct max_tcpci_chip *chip, u8 *ven
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	/* Disable low power mode */
+> +	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCLPMODESEL,
+> +				 FIELD_PREP(CCLPMODESEL,
+> +					    LOW_POWER_MODE_DISABLE));
+> +
+>  	/* Sleep to allow comparators settle */
+>  	usleep_range(5000, 6000);
+>  	ret = regmap_update_bits(regmap, TCPC_TCPC_CTRL, TCPC_TCPC_CTRL_ORIENTATION, PLUG_ORNT_CC1);
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
+> index 76270d5c283880dc49b13cabe7d682f2c2bf15fe..b33540a42a953dc6d8197790ee4af3b6f52791ce 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim.h
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
+> @@ -21,6 +21,7 @@
+>  #define CCOVPDIS                                BIT(6)
+>  #define SBURPCTRL                               BIT(5)
+>  #define CCLPMODESEL                             GENMASK(4, 3)
+> +#define LOW_POWER_MODE_DISABLE                  0
+>  #define ULTRA_LOW_POWER_MODE                    1
+>  #define CCRPCTRL                                GENMASK(2, 0)
+>  #define UA_1_SRC                                1
 > 
-> ... for !dev->suspend_count to be false
-
-The suspend_count won't go to 0 because there is no chance to call
-usbnet_resume() if the USB device is physically disconnected from the 
-USB port during system suspend.
-
+> -- 
+> 2.51.0.rc1.167.g924127e9c0-goog
 > 
-> >   		retval = info->stop(dev);
-> >   		if (retval < 0)
-> >   			netif_info(dev, ifdown, dev->net,
-> 
-> In other words, this means that the driver has insufficient
-> error handling in this method. This needs to be fixed and it
-> needs to be fixed explicitly. We do not hide error handling.
 
-Do you mean info->stop() should be called and return error code if something
-is wrong?
-
-> 
-> Please use a literal "if (pm < 0)" to skip the parts we need to skip
-> if the resumption fails.
-
-pm = 0 here.
-
-Thanks,
-Xu Yang
-
-> 
-> 	Regards
-> 		Oliver
-> 
-> NACKED-BY: Oliver Neukum <oneukum@suse.com>
+-- 
+heikki
 
