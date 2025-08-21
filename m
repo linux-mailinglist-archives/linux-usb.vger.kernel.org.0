@@ -1,42 +1,42 @@
-Return-Path: <linux-usb+bounces-27126-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27125-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E618CB30015
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 18:32:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E98BB3002E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 18:36:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0E2C7BD9C6
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 16:30:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB69FA01E9A
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 16:32:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B412DE1E0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B7B2DFA37;
 	Thu, 21 Aug 2025 16:32:02 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FF72DEA64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2072D9EEA
 	for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 16:31:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755793922; cv=none; b=dNzXrEVFWciJtSH+BuoONHn7THt8rnJQhj5Hru3kx6wnWx4TZDoA+D5+BWqMgWAAeWvZRkwaxt/uJnfhI5zKFqQPhxSx4FahJp5KyGDFTeBqtk5IxnBlUBHR5bggjnb7k2mdoPRZsUVjLcqcyXP2QhubPhIYa4jYAYtLm9OiRs8=
+	t=1755793921; cv=none; b=UwLKFlu95fKha6blbwmR2RWeNqx9H+AybLNNFmnHk/IcU7I0Dx0OrAr6LbJ2Td7F9QZHejeQ3Obr8Ayp8ztQemahSahu2pyJbSGPtONLuPsjQPDX+u+RKIo3H8gJ3tWgv5VesHBwWDLrC6SMTL3ja9VCTxmikDhSONDW/cQNKKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755793922; c=relaxed/simple;
-	bh=4cPDIenIDZFT0xPmTB+xHrnqirfM/zBjaZe2zVKjOYI=;
+	s=arc-20240116; t=1755793921; c=relaxed/simple;
+	bh=ra9ISEyMXDs2zybscuSanrfQzAoOc8Qx/WwdPW0DGuw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hp53YgQGCOJZ122BXPpY+itkfskDSIP4RP5OV8Mv2jQ5o47oluHOmyLsXj1ra3kEADlBmyYTk7LwmYXN97qTjCCgtFjFtOHO4UKmp7xtyxk0O8bZ0wXsO7mfM5ESLUgqxF8wU4issY+2wq8wxVgBhLQhsk+b2iZDvBFoLhNDoaQ=
+	 In-Reply-To:To:Cc; b=FwUnZ3gr2Fy5JaRtAscv0pe+QA87pvGXrV4O0Fo6PjMgbXLbTtOqRvzTcpTFjWeIpCwmYNSsno5ckH+kbt8DtG4Kehzu/kUqvbPhVAWg7pd9MHA8mO5hWPDcygOKS8g6Soxo3rmfZjqaKv4rruh5i3X4DjCmDez7uXsJBMI4yjk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <m.felsch@pengutronix.de>)
-	id 1up8Cj-0004O7-OD; Thu, 21 Aug 2025 18:31:57 +0200
+	id 1up8Cj-0004O7-Q8; Thu, 21 Aug 2025 18:31:57 +0200
 From: Marco Felsch <m.felsch@pengutronix.de>
-Date: Thu, 21 Aug 2025 18:31:57 +0200
-Subject: [PATCH v3 3/4] dt-bindings: usb: microchip,usb2514: add support
- for port vbus-supply
+Date: Thu, 21 Aug 2025 18:31:58 +0200
+Subject: [PATCH v3 4/4] usb: misc: onboard_dev: add ext-vbus-supply
+ handling
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250821-v6-16-topic-usb-onboard-dev-v3-3-6d2b38a5d818@pengutronix.de>
+Message-Id: <20250821-v6-16-topic-usb-onboard-dev-v3-4-6d2b38a5d818@pengutronix.de>
 References: <20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de>
 In-Reply-To: <20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -62,32 +62,197 @@ X-SA-Exim-Mail-From: m.felsch@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Some PCB designs don't connect the USB hub port power control GPIO and
-instead make use of a host controllable regulator. Add support for this
-use-case by introducing portX-vbus-supply property.
+Add support to power the port VBUS via host controlled regulators since
+some embedded hub PCB designs don't connect the dedicated USB hub port
+power GPIOs accordingly.
+
+To support the above use-case this commits adds support to parse the OF
+information and setup the regulators accordingly within the platform
+driver part. Furthermore the usb driver registers the set/clear features
+hooks via the new usb_hub_register_port_feature_hooks() if the
+onboard_dev is a hub. Afterwards all generic hub handling is passed to
+the onboard_dev driver too which allows us to control the regulators.
+
+At the moment this feature is limited to the following hubs:
+  - usb424,2412
+  - usb424,2414
+  - usb424,2417
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
- Documentation/devicetree/bindings/usb/microchip,usb2514.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/misc/onboard_usb_dev.c | 95 ++++++++++++++++++++++++++++++++++++++
+ drivers/usb/misc/onboard_usb_dev.h |  3 ++
+ 2 files changed, 98 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-index 4e3901efed3fcd4fbbd8cb777f9df4fcadf2ca00..ac1e5f1a5ea2e66c61ce92154385952b15e78e55 100644
---- a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-+++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-@@ -49,6 +49,12 @@ patternProperties:
-     $ref: /schemas/usb/usb-device.yaml
-     additionalProperties: true
+diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
+index 5b481876af1b2c10ce625fcf0fb8bfbe8905aa8c..bcb227c8dca2cecb3e49abfd41dcbe4e586d7d07 100644
+--- a/drivers/usb/misc/onboard_usb_dev.c
++++ b/drivers/usb/misc/onboard_usb_dev.c
+@@ -49,6 +49,8 @@ static DECLARE_WORK(attach_usb_driver_work, onboard_dev_attach_usb_driver);
  
-+  "^port[1-7]-vbus-supply$":
-+    type: object
-+    description:
-+      Regulator controlling the USB VBUS on portX. Only required if the host
-+      controls the portX VBUS.
+ /************************** Platform driver **************************/
+ 
++#define MAX_DOWNSTREAM_PORTS	7
 +
- allOf:
-   - $ref: usb-device.yaml#
-   - if:
+ struct usbdev_node {
+ 	struct usb_device *udev;
+ 	struct list_head list;
+@@ -65,6 +67,7 @@ struct onboard_dev {
+ 	struct list_head udev_list;
+ 	struct mutex lock;
+ 	struct clk *clk;
++	struct regulator *ext_vbus_supplies[MAX_DOWNSTREAM_PORTS];
+ };
+ 
+ static int onboard_dev_get_regulators(struct onboard_dev *onboard_dev)
+@@ -226,6 +229,53 @@ static int onboard_dev_add_usbdev(struct onboard_dev *onboard_dev,
+ 	return err;
+ }
+ 
++static int onboard_dev_port_power(struct onboard_dev *onboard_dev, int port1,
++				  bool enable)
++{
++	struct regulator *vbus_supply;
++	unsigned int port = port1 - 1;
++
++	if (WARN_ON(port >= MAX_DOWNSTREAM_PORTS))
++		return -EINVAL;
++
++	vbus_supply = onboard_dev->ext_vbus_supplies[port];
++
++	/* External supplies are optional */
++	if (!vbus_supply)
++		return 0;
++
++	if (enable)
++		return regulator_enable(vbus_supply);
++
++	return regulator_disable(vbus_supply);
++}
++
++static int onboard_dev_add_ext_vbus_supplies(struct onboard_dev *onboard_dev)
++{
++	struct device *dev = onboard_dev->dev;
++	unsigned int i;
++
++	if (!onboard_dev->pdata->support_ext_vbus_supplies)
++		return 0;
++
++	for (i = 0; i < MAX_DOWNSTREAM_PORTS; i++) {
++		char supply_name[] = "portX-vbus";
++		struct regulator *reg;
++
++		sprintf(supply_name, "port%u-vbus", i + 1);
++		reg = devm_regulator_get_optional(dev, supply_name);
++		if (!IS_ERR(reg)) {
++			onboard_dev->ext_vbus_supplies[i] = reg;
++		} else {
++			if (PTR_ERR(reg) != -ENODEV)
++				return dev_err_probe(dev, PTR_ERR(reg),
++						     "failed to get %s-supply\n", supply_name);
++		}
++	}
++
++	return 0;
++}
++
+ static void onboard_dev_remove_usbdev(struct onboard_dev *onboard_dev,
+ 				      const struct usb_device *udev)
+ {
+@@ -460,6 +510,10 @@ static int onboard_dev_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, PTR_ERR(onboard_dev->reset_gpio),
+ 				     "failed to get reset GPIO\n");
+ 
++	err = onboard_dev_add_ext_vbus_supplies(onboard_dev);
++	if (err)
++		return err;
++
+ 	mutex_init(&onboard_dev->lock);
+ 	INIT_LIST_HEAD(&onboard_dev->udev_list);
+ 
+@@ -573,6 +627,44 @@ static struct platform_driver onboard_dev_driver = {
+ #define VENDOR_ID_VIA		0x2109
+ #define VENDOR_ID_XMOS		0x20B1
+ 
++static int onboard_dev_port_feature(struct usb_device *udev, bool set,
++				    int feature, int port1)
++{
++	struct device *dev = &udev->dev;
++	struct onboard_dev *onboard_dev = dev_get_drvdata(dev);
++
++	/*
++	 * Check usb_hub_register_port_feature_hooks() if you want to extent
++	 * the list of handled features. At the moment only power is synced
++	 * after adding the hook.
++	 */
++	switch (feature) {
++	case USB_PORT_FEAT_POWER:
++		return onboard_dev_port_power(onboard_dev, port1, set);
++	default:
++		return 0;
++	}
++}
++
++static int
++onboard_dev_set_port_feature(struct usb_device *udev, int feature, int port1)
++{
++	return onboard_dev_port_feature(udev, true, feature, port1);
++}
++
++static int
++onboard_dev_clear_port_feature(struct usb_device *udev, int feature, int port1)
++{
++	return onboard_dev_port_feature(udev, false, feature, port1);
++}
++
++static void
++onboard_dev_register_hub_hooks(struct usb_device *udev)
++{
++	usb_hub_register_port_feature_hooks(udev, onboard_dev_set_port_feature,
++					    onboard_dev_clear_port_feature);
++}
++
+ /*
+  * Returns the onboard_dev platform device that is associated with the USB
+  * device passed as parameter.
+@@ -632,6 +724,9 @@ static int onboard_dev_usbdev_probe(struct usb_device *udev)
+ 
+ 	dev_set_drvdata(dev, onboard_dev);
+ 
++	if (onboard_dev->pdata->is_hub)
++		onboard_dev_register_hub_hooks(udev);
++
+ 	err = onboard_dev_add_usbdev(onboard_dev, udev);
+ 	if (err)
+ 		return err;
+diff --git a/drivers/usb/misc/onboard_usb_dev.h b/drivers/usb/misc/onboard_usb_dev.h
+index e017b8e22f936be66da73789abb4f620e6af4d6a..75aa2ab9297e272a98de15270d3595d7df03fb9c 100644
+--- a/drivers/usb/misc/onboard_usb_dev.h
++++ b/drivers/usb/misc/onboard_usb_dev.h
+@@ -14,6 +14,7 @@ struct onboard_dev_pdata {
+ 	unsigned int num_supplies;	/* number of supplies */
+ 	const char * const supply_names[MAX_SUPPLIES];
+ 	bool is_hub;
++	bool support_ext_vbus_supplies;
+ };
+ 
+ static const struct onboard_dev_pdata microchip_usb424_data = {
+@@ -21,6 +22,7 @@ static const struct onboard_dev_pdata microchip_usb424_data = {
+ 	.num_supplies = 1,
+ 	.supply_names = { "vdd" },
+ 	.is_hub = true,
++	.support_ext_vbus_supplies = true,
+ };
+ 
+ static const struct onboard_dev_pdata microchip_usb2514_data = {
+@@ -28,6 +30,7 @@ static const struct onboard_dev_pdata microchip_usb2514_data = {
+ 	.num_supplies = 2,
+ 	.supply_names = { "vdd", "vdda" },
+ 	.is_hub = true,
++	.support_ext_vbus_supplies = true,
+ };
+ 
+ static const struct onboard_dev_pdata microchip_usb5744_data = {
 
 -- 
 2.39.5
