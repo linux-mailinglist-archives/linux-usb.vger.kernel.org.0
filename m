@@ -1,137 +1,136 @@
-Return-Path: <linux-usb+bounces-27089-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27090-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCC44B2F40A
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 11:34:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0315FB2F499
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 11:52:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC130566E56
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 09:32:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9B871716B7
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 09:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A01A2D9ED8;
-	Thu, 21 Aug 2025 09:32:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A6562D97AA;
+	Thu, 21 Aug 2025 09:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RuzKaBQ0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i5BxnAeM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D6F1F3BAE
-	for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 09:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0462D47E6;
+	Thu, 21 Aug 2025 09:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755768774; cv=none; b=Mlww5cJV0GZ/DQGgAuqkw3a4O9MwACnd+w27GBLkymRksXjJx4sG/FF+tM1ovaMW/fRsZJ+MloINv+CZfyPQndVJeJObXoHBK0XG+RP7xw3BBEPymj8VHhvsKNUGtXmyhx057lhx995Y7xU6CnGzc9Sk3R8TZQ1GSuv01JaCaFs=
+	t=1755769915; cv=none; b=uKU2QQbWQ0pX5NilLlGj8NQdafmaoZ1aflioQ+QU2z8KeLolU8/gM0MivrITFRdKBpZsQ8EADqSWrmD9RX+cZ8gGntYu6etonvsjdO4NeXGD0KMZqJ96Wk/8wFkjJ/tu48XZpGtFpqB1XfJjNhQ+xYUMZEu45jBfUHKXkg7GQic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755768774; c=relaxed/simple;
-	bh=ysSF9ebmKEVHfdprQ5D5Dm2kzu+I5Ld0ThPsC2tCW5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UlRgWAI43V07HC2XqoFi3KqhrEvzcFtt2SzV7up4Tdd6pUt5IJTZIYmZtgktFNLUmGouGu9k7a4jLHOiN+pDMv100QYGuh2hpeA1P2SEM3j3MFEdILVcpxzVDsA2r6S6LejINX9d9oFDHUh7xQ19kO4FC3DSc4hPXQw4pVKlk8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RuzKaBQ0; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-55ce520caf9so809590e87.1
-        for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 02:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755768771; x=1756373571; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gbqQVG2o4Ov7l0KF995f/VySFMSSluItZPPu707e06w=;
-        b=RuzKaBQ0/WnmFaGmb2DHuj4YZJkS2WiCWw+qDFPov+cCPizMufbioUZ7ePAsTzaYeo
-         zgGKjP9R1h8P2s0XdPqknCSqjnq18d+O3fGlvXufgO7NNE3rdSiLiDNNnP6hx7XAkkmJ
-         KSk8UwpC6TlXaB+Tl4GL4c1YyipfqiY1DYkbMtjv6+GjZ+SjyI7roAcn/I8GdR0HCFwQ
-         K3zLRtP/FrTG1onKAfskk+NpMjTzS39XSXRQF0Q3zufw8RqT6nAYI/tNxF3sKr8QLFoF
-         J8H5t9lxTtnCWJ14NPsRxIy5NxIhHJqcWkPH8FZ+QJaaemneZDelWpTIsZ1PGjLvkYoj
-         71KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755768771; x=1756373571;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gbqQVG2o4Ov7l0KF995f/VySFMSSluItZPPu707e06w=;
-        b=p0urSUMqvgJM26jJcgliEOPA9z2VMRHyV8ytf5rDa+O42e+oi3endeK6zbZ4tiN8bf
-         w6gzZaL9d0MbvKUKZ+YVFiqoiWXDbT5Brv8tjVEh//89KqZcf6rRGsaOisOcYSWaNqa5
-         SNfVyTD4BwXW5OE8dP1JBTfw3vTGB9YxinejFOuDeNman8bdKRkZoaLkBMoZK+liTH3+
-         PsCaPj9FfJWscBXrIbjhzOnErOGNV0p5gitPvEUPXrjc8Mcd+rrBquy7H0+qoNh/Ragr
-         Vl0JCt1Hn+8yBuV+fXwnBF0St9MDPjFi9iDGpGB8btD9Uuwi85rqPYJ91keDQ3kUVfvJ
-         YFdw==
-X-Forwarded-Encrypted: i=1; AJvYcCVze0UZrj3Dy/h2uAwAStqlV962H4hF7tOmHg3Nke+HpJbuTFY0Ct0lTEUkAP51gVtllpkkr0Ju+zU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkEIMmrjS8mNzxKu1yZqnf3atDDv7ZnO7Wh8cFKyU1oE8PyDdd
-	+3cfoZ5gcgofjvJZ5koxjuLyyuJQPEOItwwlPE2BFyaORk/9TiM/uFzDKRk+Hw==
-X-Gm-Gg: ASbGncv/BXHrrF7NOPZQXThDWAha6txD4hhwYS8wSO7Ep7HeIYdXG2i2r3omovZVz39
-	apTwD4M/i31OYzBKrYPfIo1S+eHRqLZSJhCwr0k5BxsBOGa0xvCQM3jk8kzI7plTjgeZQmaJzSC
-	bdfbQQygW1QA3JJ8R0wQlkp4Z0daR9dCnTdPBF8sTj+LN0BnTi8TRVZJAqwhPjOy58Ea6uQxaLU
-	UwgbE1QxiaYDUiZm0T647M7xhjS1V2+vBqWxBdBI47rs0X/PdOiIOxG2uD1BLfZ9wxNWN2jh4hC
-	caHfNJM838ul10FelAdw17y9ba++Pg2XtcFefBEpAbKh5p5IJQ6bZQzl235JenrjzTeUFqM7O68
-	XMP4/rd+PkaPMrEW0PVLTCZ0Uz9bRfEi4H3w=
-X-Google-Smtp-Source: AGHT+IHfWKzY9gy4V6+p/TjEyOjOFhGHxJGkbgO3brrAt34QNGN688JZLz5Kh9AO1py3Y6d86FveQA==
-X-Received: by 2002:a05:6512:3e2a:b0:55b:8e3e:2be6 with SMTP id 2adb3069b0e04-55e0d520fb9mr680135e87.24.1755768770521;
-        Thu, 21 Aug 2025 02:32:50 -0700 (PDT)
-Received: from foxbook (bgt225.neoplus.adsl.tpnet.pl. [83.28.83.225])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef3517f7sm3040308e87.31.2025.08.21.02.32.48
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 21 Aug 2025 02:32:50 -0700 (PDT)
-Date: Thu, 21 Aug 2025 11:32:44 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/4] usb: xhci: handle Set TR Deq TRB Error
-Message-ID: <20250821113244.14168b1a.michal.pecio@gmail.com>
-In-Reply-To: <20250818125742.3572487-2-niklas.neronin@linux.intel.com>
-References: <20250818125742.3572487-1-niklas.neronin@linux.intel.com>
-	<20250818125742.3572487-2-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1755769915; c=relaxed/simple;
+	bh=4gcGUn4TyB1USpd6ffD+3JH+/nTU0Kh8bf8lUuUuy7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ghug3STBBk/zyUwuzBJxF7EgcHoTrTpAVfPIXDvHGFmJtGxHpVSNoiP55ox6NRuIic+y1GeCmF8Hf0ZD0HnTl8ScUeJ/HVk1CjdWkBCXn26rsCC5QNbECk+c84I7hpMAZzId5nUXcmRH41o8Vb3Pobf5G/Ii3bVd3nYkT7OVgCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i5BxnAeM; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755769914; x=1787305914;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=4gcGUn4TyB1USpd6ffD+3JH+/nTU0Kh8bf8lUuUuy7Q=;
+  b=i5BxnAeMuxuG3n/Pv0TetDrl7Oo3VExRJlDdd+6wWPkqUQfvULRLuCO+
+   BEIwXHQLZVaBenDUkA/afyypr7ilhNttJcTGSAhO+ySMDt8Y1Q00c3ev0
+   dT1ZFyXbfpGxS4N2Q/RjVouhYw0UE1tQ0sYX+2S8esKdWn6FZJ3uyT0ZJ
+   612uqp7J6Tg6HJPOrQVXchvpkMGkFxOdvBkQSw5KW7wAk8F2Nj6cvOILw
+   +Rsl+DeEmraBr7AHe8SOi4iDBZBKxP48vZltIObq5xooVf4MChAcIOC2B
+   DdeTT4aaAnZJPTVRodCEu10nr5T3KHDxrjaVjTh02HqberDgU/Vc9+CLx
+   Q==;
+X-CSE-ConnectionGUID: 05nlymn7RP+eNe++f3FPbw==
+X-CSE-MsgGUID: w8dZrBXJQIWExu+4/P3RSA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="45626159"
+X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
+   d="scan'208";a="45626159"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 02:51:52 -0700
+X-CSE-ConnectionGUID: AC22QJdSRr23Jaoaf2/wmw==
+X-CSE-MsgGUID: 6iFngBjxQj+3X42Nxi6DOw==
+X-ExtLoop1: 1
+Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.237])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 02:51:49 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id BB2C711F738;
+	Thu, 21 Aug 2025 12:51:47 +0300 (EEST)
+Date: Thu, 21 Aug 2025 12:51:47 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
+	hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
+	Amardeep Rai <amardeep.rai@intel.com>,
+	Kannappan R <r.kannappan@intel.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	=?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Subject: Re: [PATCH v5 9/9] media: uvcvideo: eUSB2 double isochronous
+ bandwidth support
+Message-ID: <aKbsM5TVUGT53J8N@kekkonen.localdomain>
+References: <20250820143824.551777-1-sakari.ailus@linux.intel.com>
+ <20250820143824.551777-10-sakari.ailus@linux.intel.com>
+ <CANiDSCuBNsRq45J6RZibD=fWxWuUKBWJfW=7addXK8g7J8R8mw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiDSCuBNsRq45J6RZibD=fWxWuUKBWJfW=7addXK8g7J8R8mw@mail.gmail.com>
 
-On Mon, 18 Aug 2025 14:57:39 +0200, Niklas Neronin wrote:
-> Set TR Deq TRB Error can occur for two reasons:
+Hi Ricardo,
 
-Surely for other reasons too, like the infamous ASMedia case
-I mentioned last time when this patch showed up here.
-
-In general, any illegal value in any TRB field is a TRB Error.
-
-And in general, I think it would be better if those log messages simply
-named the error received from HW, without trying to speculate about
-possible causes (and getting it wrong). It would be less misleading and
-it would instantly give the keywoard to search for in the spec, without
-grepping for the error message to find which event code triggers it.
-
-> 1. Stream ID is zero or more than the Max Primary Streams.
->    This is currently caught by xhci_virt_ep_to_ring(), at the start of the
->    function. Thus, this commit does not add handling for this error.
-
-Nit: this is only true if ep->stream_info->num_streams at the time of
-handling this event <= MaxPStreams at the time of command execution ;)
-
-So there are two theoretical bugs which could make this check fail.
-
-> 2. Stream ID is non-zero and Stream ID boundary check failed.
-
-Not sure what's the difference? Per spec, boundary check *is* checking
-if Stream ID is in range, to prevent the xHC from writing to a Stream
-Context outside actual SC Array and corrupting some random memory.
-
->    Add a warning detailing the exact reason for this failure and print
->    the deq ptr from the Set TR Deq command.
->    Macro 'SCTX_DEQ_MASK' is a mask for the TR Dequeue ptr bit field 63:4.
+On Wed, Aug 20, 2025 at 05:21:50PM +0200, Ricardo Ribalda wrote:
+> Hi Sakari
 > 
-> Reuse local variable 'deq'; just change it to 'dma_addr_t', which is what
-> it should have originally been.
+> I believe you have missed my previous email.
+> 
+> https://lore.kernel.org/linux-media/CANiDSCsocBBQRPRFAbAovkzauThgN8Qd1u8kjJ_af-83Nd4wvw@mail.gmail.com/
+> 
+> re-posting here
+> 
+> On Wed, 20 Aug 2025 at 16:39, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+> >
+> > From: Tao Q Tao <tao.q.tao@intel.com>
+> >
+> > Use usb_endpoint_max_esit_payload() from the USB framework to find the
+> > maximum bytes per interval for the endpoint. Consequently this adds eUSB2
+> > isochronous mode and SuperSpeedPlus Isochronous Endpoint Companion support
+> > where larger payloads within a service interval are possible.
+> >
+> >
+> 
+> Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Not sure, this is an always-64bit value read from xHCI data structures.
+Thank you.
 
-On a 32bit DMA system it probably won't have the high bits set if you
-are reading it from the command (unless there was a bug), but later
-other code will read it from HW and then all bets are off. Note that
-a 64bit xHC may be installed in a 32bit system. And it may be buggy,
-or it may have escaped the transfer ring due to broken Link TRB.
+> 
+> Co-developed-by: Amardeep Rai <amardeep.rai@intel.com>
+> > Signed-off-by: Amardeep Rai <amardeep.rai@intel.com>
+> > Signed-off-by: Tao Q Tao <tao.q.tao@intel.com>
+> > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> > Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> nit: I believe the last tag should be: Signed-off-by:
+
+Laurent has reviewed the patch, please see
+<20250807131555.GB13647@pendragon.ideasonboard.com>.
+
+-- 
+Regards,
+
+Sakari Ailus
 
