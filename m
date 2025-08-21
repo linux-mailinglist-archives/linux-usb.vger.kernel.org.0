@@ -1,260 +1,314 @@
-Return-Path: <linux-usb+bounces-27125-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27128-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E98BB3002E
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 18:36:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B80AB3003F
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 18:40:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB69FA01E9A
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 16:32:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CD5F60055E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 16:34:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B7B2DFA37;
-	Thu, 21 Aug 2025 16:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E958F2E092E;
+	Thu, 21 Aug 2025 16:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="o4O53yF+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="USZ+a7ET"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2072D9EEA
-	for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 16:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09612E0915;
+	Thu, 21 Aug 2025 16:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755793921; cv=none; b=UwLKFlu95fKha6blbwmR2RWeNqx9H+AybLNNFmnHk/IcU7I0Dx0OrAr6LbJ2Td7F9QZHejeQ3Obr8Ayp8ztQemahSahu2pyJbSGPtONLuPsjQPDX+u+RKIo3H8gJ3tWgv5VesHBwWDLrC6SMTL3ja9VCTxmikDhSONDW/cQNKKs=
+	t=1755794007; cv=none; b=To4TnvvtRerJQcF8OpVTYzdWLBUPZ7ch9D+DDWKBAtsjirc7LGlVHgtHsl5A+n0sO0OcLTr6k1+PcQ15qigXAU4QtfnjhMKLbVKnQU2T9TyLJw3MyOnQlgxe9aut2BCE3u9ocrmDi1UoH3t43L1o9adCnbDqK91Dry0cnH8QsoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755793921; c=relaxed/simple;
-	bh=ra9ISEyMXDs2zybscuSanrfQzAoOc8Qx/WwdPW0DGuw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FwUnZ3gr2Fy5JaRtAscv0pe+QA87pvGXrV4O0Fo6PjMgbXLbTtOqRvzTcpTFjWeIpCwmYNSsno5ckH+kbt8DtG4Kehzu/kUqvbPhVAWg7pd9MHA8mO5hWPDcygOKS8g6Soxo3rmfZjqaKv4rruh5i3X4DjCmDez7uXsJBMI4yjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <m.felsch@pengutronix.de>)
-	id 1up8Cj-0004O7-Q8; Thu, 21 Aug 2025 18:31:57 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-Date: Thu, 21 Aug 2025 18:31:58 +0200
-Subject: [PATCH v3 4/4] usb: misc: onboard_dev: add ext-vbus-supply
- handling
+	s=arc-20240116; t=1755794007; c=relaxed/simple;
+	bh=9o7K2oRkJ7uECcYLWLfQEr0rutUleUHG+qmIZqoxHQM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lj3YIGzMrLp8vs/EzW9NLZirA+AEK3qYyqKO96VHHXOEXXJs9vxJa179viA/z5wiT5AnB2xoE3osAQ7oOUlzMCHrWYZLTgHQ0+pnY/gDgz9vneeJjH7Jf9i99oLc4rERGOJCZf8zvHVymSjxL+nFH6svOIKGaWAbqN5ZmM7Fvf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=o4O53yF+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=USZ+a7ET; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 1ED2C14002A4;
+	Thu, 21 Aug 2025 12:33:24 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Thu, 21 Aug 2025 12:33:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1755794004; x=1755880404; bh=WnhvrMRU0G
+	4sFueNvawSUGt53uKKtYRG2McTbwQb1gk=; b=o4O53yF+lXPDP0nzGjDDcYosBQ
+	K2J2DmV4gOQeFdk8HCrL7+EsaBIlbzZ99pCPA4yfDkuIcYBTDBVQD3IErkd0i9Z4
+	7hsZWwpjcCX8E+jdf3IniO7n/0wogLgrUEUaxBCvXFFsrKJ2ufUh0Mwng/mr4qyI
+	HV0E3+fO/DWynna5QAYqI14MmiEOlIIAywFwAEUcpY1D2drymaFOwPuN7mVsqddh
+	V2VzbJIWu7PzN568ByWW3QDu/f7KzXNAqiEcHsvvUdYkCaHniySvkn/NIr2vMqyY
+	k7RoXfCm6bhpXK22h+Q653vGF8Wn9rU5raSZuhyqfhRx+UQMK4dy9r3E1n3g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1755794004; x=1755880404; bh=WnhvrMRU0G4sFueNvawSUGt53uKKtYRG2Mc
+	TbwQb1gk=; b=USZ+a7ET46mt/NqAtfTT80hSCq16JndAN3AsGUg15BS7AUJOYpZ
+	2zabDX95r8waba2ThKKKmMoWoTQfXyqc/CYAiT+LPdiDcVO1v6va9NvlEAhBNSgL
+	uC6UuNilVvshBwCew7jLWkU1mDUhaQEfGK7sZZYnQ88N+s2lJ7/eA1Q6N1Qei9FW
+	t3gieJZ0EW/ugtZbtPEmAczcZ/w/YhVrQvKBB3OIjC7ZIih6csGIWHimq0xP5fdj
+	8ig75d7bzrVO12qeUtXjaf1TDxDNHShX14BMhjxV44DS94JbkTSafNxc/3Aewj8s
+	9foB+FIlcgabXqPhXv25S0rn7hO26E0CCww==
+X-ME-Sender: <xms:UkqnaDpo1zdgcc3MUoykP1u5MRsaSTr0QVK4aSLHKfIoLtZI3X4IEA>
+    <xme:UkqnaMBmRgNl7WXHma0g0QJY822DxrUTSU6ED8dJk4x0Sy7tZUS92SvjD6gcXrSFK
+    MQWhzaX5n9Bc6xqIbg>
+X-ME-Received: <xmr:UkqnaMP4tVmbVk--IVeagBtMe1LcCdLalnqmTztgCZI-tFB7HU2nJ-_T-_zVcr1TJr2ReIbXkvUIysrxofzHRDrJX529GWZy5Ac>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduiedujedvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomheplfgrnhhnvgcu
+    ifhruhhnrghuuceojhesjhgrnhhnrghurdhnvghtqeenucggtffrrghtthgvrhhnpeettd
+    ehleefveduteehudeklefhhfdvheffudekkeelkeeijeejgfeljeevhefhtdenucffohhm
+    rghinhepuggvvhhitggvthhrvggvrdhorhhgpdhkvghrnhgvlhdrohhrghenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjsehjrghnnhgruhdr
+    nhgvthdpnhgspghrtghpthhtohepudelpdhmohguvgepshhmthhpohhuthdprhgtphhtth
+    hopehsvhgvnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhrvghgkhhhsehlihhn
+    uhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsggrlhgsih
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlhihsshgrsehrohhsvghniiifvghi
+    ghdrihhopdhrtghpthhtohepnhgvrghlsehgohhmphgrrdguvghvpdhrtghpthhtohepvh
+    hkohhulheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:UkqnaKCzGd7lNR73vqhqz3zUakNcVipSTIxeWaY6xlQ_y0xPglfJQQ>
+    <xmx:UkqnaK9cnQlTZFRIsxRQ0NZXZ5mXUfqIDt-WOUwKHJ8vUc3N3BH2rA>
+    <xmx:UkqnaLFkqHaQLEgb1tEXvT1vFWNr2SCbksOK3Ex11xwdfsGdHIyOTA>
+    <xmx:UkqnaBLzD6CtS6P_bX5Ek5zSBXhdtmNDdoqNeeYkNAzMGvH4W4HTdw>
+    <xmx:VEqnaEjtt7i03_bO3qzyfztIdHyrM3CKmFPT0wSwZD9jb5uJK3mMBEH3>
+Feedback-ID: i47b949f6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 21 Aug 2025 12:33:22 -0400 (EDT)
+Date: Thu, 21 Aug 2025 18:33:20 +0200
+From: Janne Grunau <j@jannau.net>
+To: Sven Peter <sven@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-phy@lists.infradead.org
+Subject: Re: [PATCH RFC 03/22] dt-bindings: phy: Add Apple Type-C PHY
+Message-ID: <20250821163320.GE1270980@robin.jannau.net>
+References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
+ <20250821-atcphy-6-17-v1-3-172beda182b8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250821-v6-16-topic-usb-onboard-dev-v3-4-6d2b38a5d818@pengutronix.de>
-References: <20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de>
-In-Reply-To: <20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
- Matthias Kaehlcke <mka@chromium.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, kernel@pengutronix.de, 
- Marco Felsch <m.felsch@pengutronix.de>
-X-Mailer: b4 0.14.2
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
-X-SA-Exim-Mail-From: m.felsch@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250821-atcphy-6-17-v1-3-172beda182b8@kernel.org>
 
-Add support to power the port VBUS via host controlled regulators since
-some embedded hub PCB designs don't connect the dedicated USB hub port
-power GPIOs accordingly.
+On Thu, Aug 21, 2025 at 03:38:55PM +0000, Sven Peter wrote:
+> Apple's Type-C PHY (ATCPHY) is a PHY for USB 2.0, USB 3.x,
+> USB4/Thunderbolt, and DisplayPort connectivity found in Apple Silicon
+> SoCs.
+> 
+> The PHY handles muxing between these different protocols and also provides
+> the reset controller for the attached dwc3 USB controller.
+> 
+> Signed-off-by: Sven Peter <sven@kernel.org>
+> ---
+>  .../devicetree/bindings/phy/apple,atcphy.yaml      | 210 +++++++++++++++++++++
+>  MAINTAINERS                                        |   1 +
+>  2 files changed, 211 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/apple,atcphy.yaml b/Documentation/devicetree/bindings/phy/apple,atcphy.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..eb14010557c94f313b54b528e2d4039fe540062a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/apple,atcphy.yaml
+> @@ -0,0 +1,210 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/apple,atcphy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Apple Type-C PHY (ATCPHY)
+> +
+> +maintainers:
+> +  - Sven Peter <sven@kernel.org>
+> +
+> +description:
+> +  The Apple Type-C PHY (ATCPHY) is a PHY for USB 2.0, USB 3.x,
+> +  USB4/Thunderbolt, and DisplayPort connectivity found in Apple Silicon SoCs.
+> +
+> +  The PHY handles muxing between these different protocols and also provides the
+> +  reset controller for the attached dwc3 USB controller.
+> +
+> +  The PHY is designed for USB4 operation and does not handle individual
+> +  differential pairs as distinct DisplayPort lanes. Any reference to lane in
+> +  this binding hence refers to two differential pairs (RX and TX) as used in USB
+> +  terminology.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - apple,t6000-atcphy
+> +      - apple,t6000-atcphy-dp-only # PHY hardwired to DP-to-HDMI converter on M2 Pro MacBook
 
-To support the above use-case this commits adds support to parse the OF
-information and setup the regulators accordingly within the platform
-driver part. Furthermore the usb driver registers the set/clear features
-hooks via the new usb_hub_register_port_feature_hooks() if the
-onboard_dev is a hub. Afterwards all generic hub handling is passed to
-the onboard_dev driver too which allows us to control the regulators.
+The comment is misleading, "t6000-atcphy-dp-only" would be for M1
+Pro/Max Macbooks. M2 Pro/Max Macbooks use the same design so the
+corresponding "apple,t6020-atcphy-dp-only" compatible is missing.
+I'm not sure this is the correct design though as the HW block is
+identical to "apple,t6000-atcphy".
+I think it might be better to have either the DRM KMS driver or a
+custom DP->HDMI drm_bridge switch the mode to DP-only.
+Or atcphy could initialize itself to DP-only based on the available
+ports.
 
-At the moment this feature is limited to the following hubs:
-  - usb424,2412
-  - usb424,2414
-  - usb424,2417
+> +      - apple,t6020-atcphy
+> +      - apple,t8103-atcphy
+> +      - apple,t8112-atcphy
+> +
+> +  reg:
+> +    minItems: 5
+> +    maxItems: 5
+> +
+> +  reg-names:
+> +    items:
+> +      - const: core
+> +      - const: lpdptx
+> +      - const: axi2af
+> +      - const: usb2phy
+> +      - const: pipehandler
+> +
+> +  "#phy-cells":
+> +    const: 1
+> +
+> +  "#reset-cells":
+> +    const: 0
+> +
+> +  orientation-switch:
+> +    type: boolean
+> +    description:
+> +      The PHY handles swapping lanes if the Type-C connector is flipped.
+> +
+> +  mode-switch:
+> +    type: boolean
+> +    description:
+> +      The PHY handles muxing between USB 2.0, USB 3.x, USB4/Thunderbolt, and DisplayPort.
 
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
- drivers/usb/misc/onboard_usb_dev.c | 95 ++++++++++++++++++++++++++++++++++++++
- drivers/usb/misc/onboard_usb_dev.h |  3 ++
- 2 files changed, 98 insertions(+)
+These two properties could be referenced from
+/schemas/usb/usb-switch.yaml, see
+https://lore.kernel.org/linux-devicetree/20250807-topic-4ln_dp_respin-v4-1-43272d6eca92@oss.qualcomm.com/
 
-diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
-index 5b481876af1b2c10ce625fcf0fb8bfbe8905aa8c..bcb227c8dca2cecb3e49abfd41dcbe4e586d7d07 100644
---- a/drivers/usb/misc/onboard_usb_dev.c
-+++ b/drivers/usb/misc/onboard_usb_dev.c
-@@ -49,6 +49,8 @@ static DECLARE_WORK(attach_usb_driver_work, onboard_dev_attach_usb_driver);
- 
- /************************** Platform driver **************************/
- 
-+#define MAX_DOWNSTREAM_PORTS	7
-+
- struct usbdev_node {
- 	struct usb_device *udev;
- 	struct list_head list;
-@@ -65,6 +67,7 @@ struct onboard_dev {
- 	struct list_head udev_list;
- 	struct mutex lock;
- 	struct clk *clk;
-+	struct regulator *ext_vbus_supplies[MAX_DOWNSTREAM_PORTS];
- };
- 
- static int onboard_dev_get_regulators(struct onboard_dev *onboard_dev)
-@@ -226,6 +229,53 @@ static int onboard_dev_add_usbdev(struct onboard_dev *onboard_dev,
- 	return err;
- }
- 
-+static int onboard_dev_port_power(struct onboard_dev *onboard_dev, int port1,
-+				  bool enable)
-+{
-+	struct regulator *vbus_supply;
-+	unsigned int port = port1 - 1;
-+
-+	if (WARN_ON(port >= MAX_DOWNSTREAM_PORTS))
-+		return -EINVAL;
-+
-+	vbus_supply = onboard_dev->ext_vbus_supplies[port];
-+
-+	/* External supplies are optional */
-+	if (!vbus_supply)
-+		return 0;
-+
-+	if (enable)
-+		return regulator_enable(vbus_supply);
-+
-+	return regulator_disable(vbus_supply);
-+}
-+
-+static int onboard_dev_add_ext_vbus_supplies(struct onboard_dev *onboard_dev)
-+{
-+	struct device *dev = onboard_dev->dev;
-+	unsigned int i;
-+
-+	if (!onboard_dev->pdata->support_ext_vbus_supplies)
-+		return 0;
-+
-+	for (i = 0; i < MAX_DOWNSTREAM_PORTS; i++) {
-+		char supply_name[] = "portX-vbus";
-+		struct regulator *reg;
-+
-+		sprintf(supply_name, "port%u-vbus", i + 1);
-+		reg = devm_regulator_get_optional(dev, supply_name);
-+		if (!IS_ERR(reg)) {
-+			onboard_dev->ext_vbus_supplies[i] = reg;
-+		} else {
-+			if (PTR_ERR(reg) != -ENODEV)
-+				return dev_err_probe(dev, PTR_ERR(reg),
-+						     "failed to get %s-supply\n", supply_name);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static void onboard_dev_remove_usbdev(struct onboard_dev *onboard_dev,
- 				      const struct usb_device *udev)
- {
-@@ -460,6 +510,10 @@ static int onboard_dev_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, PTR_ERR(onboard_dev->reset_gpio),
- 				     "failed to get reset GPIO\n");
- 
-+	err = onboard_dev_add_ext_vbus_supplies(onboard_dev);
-+	if (err)
-+		return err;
-+
- 	mutex_init(&onboard_dev->lock);
- 	INIT_LIST_HEAD(&onboard_dev->udev_list);
- 
-@@ -573,6 +627,44 @@ static struct platform_driver onboard_dev_driver = {
- #define VENDOR_ID_VIA		0x2109
- #define VENDOR_ID_XMOS		0x20B1
- 
-+static int onboard_dev_port_feature(struct usb_device *udev, bool set,
-+				    int feature, int port1)
-+{
-+	struct device *dev = &udev->dev;
-+	struct onboard_dev *onboard_dev = dev_get_drvdata(dev);
-+
-+	/*
-+	 * Check usb_hub_register_port_feature_hooks() if you want to extent
-+	 * the list of handled features. At the moment only power is synced
-+	 * after adding the hook.
-+	 */
-+	switch (feature) {
-+	case USB_PORT_FEAT_POWER:
-+		return onboard_dev_port_power(onboard_dev, port1, set);
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int
-+onboard_dev_set_port_feature(struct usb_device *udev, int feature, int port1)
-+{
-+	return onboard_dev_port_feature(udev, true, feature, port1);
-+}
-+
-+static int
-+onboard_dev_clear_port_feature(struct usb_device *udev, int feature, int port1)
-+{
-+	return onboard_dev_port_feature(udev, false, feature, port1);
-+}
-+
-+static void
-+onboard_dev_register_hub_hooks(struct usb_device *udev)
-+{
-+	usb_hub_register_port_feature_hooks(udev, onboard_dev_set_port_feature,
-+					    onboard_dev_clear_port_feature);
-+}
-+
- /*
-  * Returns the onboard_dev platform device that is associated with the USB
-  * device passed as parameter.
-@@ -632,6 +724,9 @@ static int onboard_dev_usbdev_probe(struct usb_device *udev)
- 
- 	dev_set_drvdata(dev, onboard_dev);
- 
-+	if (onboard_dev->pdata->is_hub)
-+		onboard_dev_register_hub_hooks(udev);
-+
- 	err = onboard_dev_add_usbdev(onboard_dev, udev);
- 	if (err)
- 		return err;
-diff --git a/drivers/usb/misc/onboard_usb_dev.h b/drivers/usb/misc/onboard_usb_dev.h
-index e017b8e22f936be66da73789abb4f620e6af4d6a..75aa2ab9297e272a98de15270d3595d7df03fb9c 100644
---- a/drivers/usb/misc/onboard_usb_dev.h
-+++ b/drivers/usb/misc/onboard_usb_dev.h
-@@ -14,6 +14,7 @@ struct onboard_dev_pdata {
- 	unsigned int num_supplies;	/* number of supplies */
- 	const char * const supply_names[MAX_SUPPLIES];
- 	bool is_hub;
-+	bool support_ext_vbus_supplies;
- };
- 
- static const struct onboard_dev_pdata microchip_usb424_data = {
-@@ -21,6 +22,7 @@ static const struct onboard_dev_pdata microchip_usb424_data = {
- 	.num_supplies = 1,
- 	.supply_names = { "vdd" },
- 	.is_hub = true,
-+	.support_ext_vbus_supplies = true,
- };
- 
- static const struct onboard_dev_pdata microchip_usb2514_data = {
-@@ -28,6 +30,7 @@ static const struct onboard_dev_pdata microchip_usb2514_data = {
- 	.num_supplies = 2,
- 	.supply_names = { "vdd", "vdda" },
- 	.is_hub = true,
-+	.support_ext_vbus_supplies = true,
- };
- 
- static const struct onboard_dev_pdata microchip_usb5744_data = {
+> +  power-domains:
+> +    minItems: 1
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Output endpoint of the PHY to the Type-C connector
 
--- 
-2.39.5
+Not sure if it's justified to mention the hardwired DP->HDMI converter
+in 14-/16-inch Macbooks Pro here as well.
 
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Incoming endpoint from the USB3 controller
+> +
+> +      port@2:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Incoming endpoint from the DisplayPort controller
+> +
+> +      port@3:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Incoming endpoint from the USB4/Thunderbolt controller
+> +
+> +  apple,tunable-axi2af:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      AXI2AF tunables.
+> +
+> +      This array is filled with 3-tuples each containing three 32-bit values
+> +      <register offset>, <mask>, and <value> by the bootloader.
+> +      The driver will use these to configure the PHY by reading from each
+> +      register, ANDing it with <mask>, ORing it with <value>, and storing the
+> +      result back to the register.
+> +      These values slightly differ even between different chips of the same
+> +      generation and are likely calibration values determined by Apple at
+> +      manufacturing time.
+> +
+> +  apple,tunable-common:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      Common tunables required for all modes, see apple,tunable-axi2af for details.
+> +
+> +  apple,tunable-fuses:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      Fuse based tunables required for all modes, see apple,tunable-axi2af for details.
+> +
+> +  apple,tunable-lane0-usb:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      USB tunables on lane 0, see apple,tunable-axi2af for details.
+> +
+> +  apple,tunable-lane1-usb:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      USB tunables on lane 1, see apple,tunable-axi2af for details.
+> +
+> +  apple,tunable-lane0-cio:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      USB4/Thunderbolt ("converged IO") tunables on lane 0, see apple,tunable-axi2af for details.
+> +
+> +  apple,tunable-lane1-cio:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      USB4/Thunderbolt ("converged IO") tunables on lane 1, see apple,tunable-axi2af for details.
+> +
+> +  apple,tunable-lane0-dp:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      DisplayPort tunables on lane 0, see apple,tunable-axi2af for details.
+> +
+> +      Note that lane here refers to a USB RX and TX pair re-used for DisplayPort
+> +      and not to an individual DisplayPort differential lane.
+> +
+> +  apple,tunable-lane1-dp:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      DisplayPort tunables on lane 1, see apple,tunable-axi2af for details.
+> +
+> +      Note that lane here refers to a USB RX and TX pair re-used for DisplayPort
+> +      and not to an individual DisplayPort differential lane.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - "#phy-cells"
+> +  - "#reset-cells"
+> +  - orientation-switch
+> +  - mode-switch
+
+any reason not to require "ports"? This would be carried over from
+usb-switch
+
+Janne
 
