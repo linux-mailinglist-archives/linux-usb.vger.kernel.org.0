@@ -1,146 +1,140 @@
-Return-Path: <linux-usb+bounces-27133-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27134-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86D40B30258
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 20:54:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F00A0B3077B
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 22:58:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82EAAAA3155
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 18:53:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 820171D047B8
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Aug 2025 20:54:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C27A4342CAD;
-	Thu, 21 Aug 2025 18:53:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00789350D4F;
+	Thu, 21 Aug 2025 20:38:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="VOhLKqCb";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="U3p0eNKU"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VOGQNs4A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE8A157A48;
-	Thu, 21 Aug 2025 18:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22380350826
+	for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 20:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755802407; cv=none; b=DcG7NCjrzrsI0h7Pqkznc1mRXXtqYZ5F/uWMAFcRYkTm0GHcWFmjBDUiy5szLrV5YcPN9tLlJKX5F6Kyfx5KKWQLhkjwnb/E/IRXWne3Md9PUzLEv/0gWlZxYtpu7AmW6RwM1EfA8w1cqvB45C1O23pWa0XhmIlD8kT0oSu565o=
+	t=1755808685; cv=none; b=rDFgzTa4n3uQ5w05wpwPyhs/eajyoEHLdCIb7gyPgAWSugwgRe8Ql3Q0qXwp1LDv8jZbrzG3m3NNd1kWGvUpNYHRfSUIRoM/dFMTL4xh01/fA3kYfnbF+GbSXlHOKtcCmLfYB3SmI3EuFucUebPwoHHzQDRXmbn91JQragteb68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755802407; c=relaxed/simple;
-	bh=EPCMCoGF7gljXImYIrIH9WCIHz6oSi5p0rIwFzncohY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BgXo3JRtIRt+GeKJB05qyQ3/kF0L6BFJ9uGRHU0pM8ma/NUL+aoP/7s23Fv/Mlzg4zgsaGKFQbzsCILwE6ZLXJoENvaMVAhmlNfkDmFOef9mGzBLJwxxC9n7xRQ3FuA6mCASLplEPWSv5H+q2CGdJRlaJlq5gFkOUDNGJemeono=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=VOhLKqCb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=U3p0eNKU; arc=none smtp.client-ip=202.12.124.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
-Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 695A67A0060;
-	Thu, 21 Aug 2025 14:53:23 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Thu, 21 Aug 2025 14:53:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1755802403; x=
-	1755888803; bh=Cth1hV7HSFBnl4TouUdtNRZlbqgis9EHwFGij6IrGus=; b=V
-	OhLKqCbQ5VMGzWNkKUuzpyUsPClcAR7voOuB/p+zZD0mAVvwDS2asxJHQSeTh6JH
-	mFRZWIuwS5EuuPrhMmg3lXIULrVZT9o6tkEwpZHWuoC/g/ElMS6MgtsMxb1y1Gto
-	qqrQSkPnIC9/kBsWBKLMUoG1tCBKTWEYxsvWDNZ3wtydXk8RZcrWFG91egdPxARq
-	mtY1m5/pxhqIOcOXFb7tkS55OCWDGba+zn6SKRyBfQdSDIyxHkJSncAhPpzRXzNR
-	1u4XLnkzSQhj5hzpz6yKVX+tWv2FrX0KmLq5si29BeHW+7HZdXcoOYy6y4xBgZut
-	XhMTcTvSdwCRl9qmaDeuA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1755802403; x=1755888803; bh=C
-	th1hV7HSFBnl4TouUdtNRZlbqgis9EHwFGij6IrGus=; b=U3p0eNKUMCVhVa4cd
-	Uwav5G+YQs6dlXM3sFLQh7j/eoUK1z+Yg3rIPJQpQs/N9YraKOFPGL+wfQ2DKG+n
-	5VvtY+5yBZ1BPxV+lsSt9y1GC/t4WunXJlnomWyrFdFD9gJtZwfbiRNcGunxpAVJ
-	YVkUWo9g9Ku+DrzWhrcIGHM3reT/N/9dipV41INXPwL7BaiFP4fDTmpCshYAMAJi
-	HEpWIU7FKhU9q/MPaep16fU79mg8NHQYMhuac2Ike7KBAy89tMmDPTCqWBKfrOOP
-	x9ujgWIA8yB9xezWBmfn1VYXtYCp8qltJQ8e6H9f3bs+tgCKxSJvMhkfKPV6BsvR
-	mODQA==
-X-ME-Sender: <xms:ImunaEV4Uc4k8-CRASWIzerByeHIFbvRLydXhT2C3TgL0RZLL1BICQ>
-    <xme:ImunaGh7kxZheBokmNNTIgiDSvMaXmKUsvs2sSUc1u6YAkn-PP3wwlvIUYoJMgwkA
-    qmDR1DQvZNbqL8f_6I>
-X-ME-Received: <xmr:ImunaKs8_AhDto-aA2790v0JSMOUvwa0Mc9A5wxlH20KDKrYpyo2bOJN08OMxNxFAVv_fSRZrvElR-RvWaFMtx9-TqY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduiedvtdduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucgoteeftdduqddtudculdduhedmnecujfgurhephffvve
-    fufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrrhhkucfrvggrrhhsohhn
-    uceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrgeqnecuggftrfgrth
-    htvghrnhepfedtvdejfeelffevhffgjeejheduteetieeguefgkefhhfegjeduueethefg
-    vdffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    hpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrgdpnhgspghrtghpthhtohep
-    hedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhhpvggrrhhsohhnqdhlvghnoh
-    hvohesshhquhgvsggsrdgtrgdprhgtphhtthhopehhvghikhhkihdrkhhrohhgvghruhhs
-    sehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuh
-    igfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidquhhssgesvhhg
-    vghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvh
-    hgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:ImunaH7RTvLKHE5IfXuttvDLqSW7nl3HBmu4obRIv4sXGE1ByZ7dmQ>
-    <xmx:ImunaGPW20OfHOWYZD85vUZZjcgT28aEHK5HOcGUFdJ1uy9ROeN_sg>
-    <xmx:ImunaFsJ8Ur1zKZVAtdKWSTqM6VphI-oiU_jlZwCoVesyHECkpsIOA>
-    <xmx:ImunaJbcHJA7l46wvbBUyWS_LCjesvLH9WdY1UCXwRBPePo21amfUw>
-    <xmx:I2unaFG65gHm_ZKiFEfNRHjQIGQoHKcDhBz9iM8Q0KvMBGl53Dh4OzOM>
-Feedback-ID: ibe194615:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 21 Aug 2025 14:53:22 -0400 (EDT)
-From: Mark Pearson <mpearson-lenovo@squebb.ca>
-To: mpearson-lenovo@squebb.ca
-Cc: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: ucsi: Handle incorrect num_connectors capability
-Date: Thu, 21 Aug 2025 14:53:07 -0400
-Message-ID: <20250821185319.2585023-1-mpearson-lenovo@squebb.ca>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <mpearson-lenovo@squebb.ca>
-References: <mpearson-lenovo@squebb.ca>
+	s=arc-20240116; t=1755808685; c=relaxed/simple;
+	bh=LK0ffmxwoRRSpUy6ETRxfmp+bDaVlq/xpqFIqDqFAm8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:Cc:Content-Type; b=UlezftvJioD8Jyqiir+B3MMZYLztYQg6hzaFRyCM+QcOFFAkG+F8TV55TvQ5XOkGarpxR3/0PZEtFcY00OK9B57oSfYZSzucQBEFB0KAsPa+t8Gn7FEIOQoOt/+9wSDje4cf2rrv3D1rB8jcKPNCrbpPfvjxfxiE8iny+jEs5x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VOGQNs4A; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-76e2e5fde8fso1352831b3a.0
+        for <linux-usb@vger.kernel.org>; Thu, 21 Aug 2025 13:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755808683; x=1756413483; darn=vger.kernel.org;
+        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=A6J8iPdaSliSAg1NNjehK3dJ+H9DoeAFsFqVWkQlMvg=;
+        b=VOGQNs4ABqDUuaqcQ4TmXvtFzHHs9sQSpHmYGGr40OMri48cncpSPqoxD1DPWhlZWo
+         UOZYoYBSHobvt/Mey5Ll4SpozKqsCtWl8Ws+OM7uFOS98PGOEZ1HzLM6Q7oOEj8p3KqD
+         Wxq0zj/IPPu1KgLzHkwTaZBuPZ56sqFEKiqtJgvxNCVpFuiVuLH8UGoKpjkuL/OqUTgQ
+         NnqviiCRMG2PXzNznS/JdoA7VHNEqiZVdWVruyhgLz0f6ftBGf4z59/MKrRV3ACC65ln
+         x9EQV5lLNnp725mKHcW3JpuwQPvrL+yDjPLCpsfv5Td/0Yw455AtB2Tj351JNNJIirgX
+         qiBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755808683; x=1756413483;
+        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A6J8iPdaSliSAg1NNjehK3dJ+H9DoeAFsFqVWkQlMvg=;
+        b=ozsEeKIb3J//dgahAUCJ/6ApTOVeIsNhqXuUOM1Vyk4V3sLNVUSjygAwrh2YflFPpC
+         zcGXO0ekacfEpfPIbHpBoxl6UXzqfZLAL5kuWNoa17apBoFSEaLG7Dl21GL4m9avvOkh
+         oRegrbxT0zyVX24YKybeWd8i/wFOZgYLWws6k09v+uW3GfFhRc8ipPHI0k/acxsr/dAP
+         pzj8+LBqyEw+t8WVVD/ehGsXES1wrF7p3culwcmicNRZCgJOUCAC7d91HpcY76pRGG8J
+         ZgvQG/2ZZJ7RpwCRuG1tX/NgImihZMj98tatoVEfwG0qduCrqLXvzPhWv8ewNuymvuU0
+         GDfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVrGVsviinXsxzr0PNyyKs+qMMNWnJV3FGrN1CcxGaQOM6kCKRY7J2Gz/N4afs38qGorNOKFzyia24=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvVahHRCpO0n9e8JgBD6OlVLHD5Qx+9+Sg23K3OurIuvyFlwPP
+	1njCXGBh5KJqM8SuSQu08ZvUT4rNoy955dDxQnJG8OW/hm/uUBGNPiJcBXHwKNTjR5vpWOsbPrb
+	CcyNg49LsM6rwEEe/Vg==
+X-Google-Smtp-Source: AGHT+IHTNg2XpUsrE+YHf5HG9pSwBMBRFWraLKsoDyvJj3fw3Vtl+2W4kClcaiFGfxlTTGUbBZuUq4sbjFR1Bu0=
+X-Received: from pjj13.prod.google.com ([2002:a17:90b:554d:b0:31f:b2f:aeed])
+ (user=rdbabiera job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a20:3ca1:b0:23f:f99d:465e with SMTP id adf61e73a8af0-24340c434a3mr587468637.16.1755808683509;
+ Thu, 21 Aug 2025 13:38:03 -0700 (PDT)
+Date: Thu, 21 Aug 2025 20:37:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2145; i=rdbabiera@google.com;
+ h=from:subject; bh=LK0ffmxwoRRSpUy6ETRxfmp+bDaVlq/xpqFIqDqFAm8=;
+ b=owGbwMvMwCVW0bfok0KS4TbG02pJDBnLm5fPWCW6yPpk7Yd00bRfWw8tvsKwLnl22AaFJn2/C
+ yLegTr9HaUsDGJcDLJiiiy6/nkGN66kbpnDWWMMM4eVCWQIAxenAEwk+Twjw9V1LKLTm8XazJwe
+ iRgL2W58tI35h9M/x0kr5M5PWJjBysTIcMdyob1ltEs2r451FfNiYbPO/R5cbwNWKWm+WD755FE vTgA=
+X-Mailer: git-send-email 2.51.0.261.g7ce5a0a67e-goog
+Message-ID: <20250821203759.1720841-2-rdbabiera@google.com>
+Subject: [PATCH v1] usb: typec: tcpm: properly deliver cable vdms to altmode drivers
+From: RD Babiera <rdbabiera@google.com>
+Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
+	badhri@google.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The UCSI spec states that the num_connectors field is 7 bits, and the
-8th bit is reserved and should be set to zero.
-Some buggy FW has been known to set this bit, and it can lead to a
-system not booting.
-Flag that the FW is not behaving correctly, and auto-fix the value
-so that the system boots correctly.
+tcpm_handle_vdm_request delivers messages to the partner altmode or the
+cable altmode depending on the SVDM response type, which is incorrect.
+The partner or cable should be chosen based on the received message type
+instead.
 
-Found on Lenovo P1 G8 during Linux enablement program. The FW will
-be fixed, but seemed worth addressing in case it hit platforms that
-aren't officially Linux supported.
+Also add this filter to ADEV_NOTIFY_USB_AND_QUEUE_VDM, which is used when
+the Enter Mode command is responded to by a NAK on SOP or SOP' and when
+the Exit Mode command is responded to by an ACK on SOP.
 
-Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+Fixes: 7e7877c55eb1 ("usb: typec: tcpm: add alt mode enter/exit/vdm support for sop'")
+Cc: stable@vger.kernel.org
+Signed-off-by: RD Babiera <rdbabiera@google.com>
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/typec/tcpm/tcpm.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 5739ea2abdd1..181351afe887 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1790,6 +1790,12 @@ static int ucsi_init(struct ucsi *ucsi)
- 		ret = -ENODEV;
- 		goto err_reset;
- 	}
-+	/* Check if reserved bit set. This is out of spec but happens in buggy FW */
-+	if (ucsi->cap.num_connectors & 0x80) {
-+		dev_warn(ucsi->dev, "UCSI: Invalid num_connectors %d. Likely buggy FW\n",
-+			 ucsi->cap.num_connectors);
-+		ucsi->cap.num_connectors &= 0x7f; // clear bit and carry on
-+	}
- 
- 	/* Allocate the connectors. Released in ucsi_unregister() */
- 	connector = kcalloc(ucsi->cap.num_connectors + 1, sizeof(*connector), GFP_KERNEL);
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 1f6fdfaa34bf..b2a568a5bc9b 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -2426,17 +2426,21 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
+ 		case ADEV_NONE:
+ 			break;
+ 		case ADEV_NOTIFY_USB_AND_QUEUE_VDM:
+-			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB, NULL));
+-			typec_altmode_vdm(adev, p[0], &p[1], cnt);
++			if (rx_sop_type == TCPC_TX_SOP_PRIME) {
++				typec_cable_altmode_vdm(adev, TYPEC_PLUG_SOP_P, p[0], &p[1], cnt);
++			} else {
++				WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB, NULL));
++				typec_altmode_vdm(adev, p[0], &p[1], cnt);
++			}
+ 			break;
+ 		case ADEV_QUEUE_VDM:
+-			if (response_tx_sop_type == TCPC_TX_SOP_PRIME)
++			if (rx_sop_type == TCPC_TX_SOP_PRIME)
+ 				typec_cable_altmode_vdm(adev, TYPEC_PLUG_SOP_P, p[0], &p[1], cnt);
+ 			else
+ 				typec_altmode_vdm(adev, p[0], &p[1], cnt);
+ 			break;
+ 		case ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL:
+-			if (response_tx_sop_type == TCPC_TX_SOP_PRIME) {
++			if (rx_sop_type == TCPC_TX_SOP_PRIME) {
+ 				if (typec_cable_altmode_vdm(adev, TYPEC_PLUG_SOP_P,
+ 							    p[0], &p[1], cnt)) {
+ 					int svdm_version = typec_get_cable_svdm_version(
+
+base-commit: 956606bafb5fc6e5968aadcda86fc0037e1d7548
 -- 
-2.43.0
+2.51.0.261.g7ce5a0a67e-goog
 
 
