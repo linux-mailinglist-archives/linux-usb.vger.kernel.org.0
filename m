@@ -1,171 +1,132 @@
-Return-Path: <linux-usb+bounces-27178-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27179-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6017BB312E2
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 11:24:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D034B312F0
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 11:26:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 398E97BEF92
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 09:22:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97BD062290A
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 09:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E4F62E3706;
-	Fri, 22 Aug 2025 09:24:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9DD52EDD62;
+	Fri, 22 Aug 2025 09:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xpxs5VXL"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l2tAGsDb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB8728852E
-	for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 09:24:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E86D02E8B6C
+	for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 09:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755854658; cv=none; b=e/Nj/jowsq/zJV1HQaFn/QzTBV+6cri3TxUghHFZUU+i9umLz8Sf1VO40QLjYKL2ya+awArbGUCYba2pX7resOLZZ16DP0u9Y/eJwtnegGzrQtuaRtP9DcNqzEzJkt7n8BT24AmqpsDilVnMwO6s0PHRT1rpCalPAA//jBo0VWo=
+	t=1755854660; cv=none; b=mGIv7cNY6/nLly7X/SyMoubX8dIKJlaiKI+O2Q6cJBHJOensdG1rCFCUFFb9bhzGUwNdk5pj+KEnY+zuWpRQvTf5A+0LFkgyc/MuvMpf3GVIbFsqnybgFV7TRV2KbQi8Uf40B2QYGepsZ4UG4kWFDbKgllCsI1eq0uSIl2VUfDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755854658; c=relaxed/simple;
-	bh=QZ1yMwiRS/edAk9yh784lz6Yhaw2nWEa1VIzlMHI840=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=DmO2G+/xuDyxFG+nvCDa591n82fhr34egsOjxUc9EjDNaMfUKolFTF4LdLBb0ptOliT22HEj2o/yi/Ex/lTwVrdNRIu5NYcUNciU7dAcKBHLeb/mWCTqjtQqWK+eg8IoIsudwl+3WqbhvrVEDsJWAJuLjvFn+kV5N00X7W6HwFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xpxs5VXL; arc=none smtp.client-ip=209.85.215.202
+	s=arc-20240116; t=1755854660; c=relaxed/simple;
+	bh=xBfS/aUPzryTTOAwRCBOYzWxM5jgrtLXSWJgAlMdQhE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ekg6Sx0uSf/jrAsaB8nU9s5jzgTIMWw+tgzLK7RSaMJZACgOcU+VqoW0KI0+HMoU8zhtAvpJkG1u9Ti5Onu5rzzQLgueUvk1qKojQ35GVDxD5dV2uvHJ/LRiIyBh1LYmoAW1jBKMvD/zM8/G19QGHfddtlIuAyzgAKW7wrAPSpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l2tAGsDb; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b49c1c40e12so350073a12.3
-        for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 02:24:15 -0700 (PDT)
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-32515ec1faeso788955a91.1
+        for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 02:24:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755854655; x=1756459455; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VyilXqTlTSUumeHDAFKTKU4l+yIbGUl58kzVG3ScM4s=;
-        b=xpxs5VXLk1T3mSKw48Z8zPeSmND+wwF/17996a0osPFMT6owKG0ABtqK5qkKxIMdav
-         t2ftKDoOdhzqnKWv6SgN+kzpV7Xm9WOV5a1IWWyTN30ZeQHM0jKQJBnlkUMhhJkPAdYo
-         YUh+TWBZ/U4vrPKTgTW3QhMa5gGvtbVLsTWa2xMpXvXS4mLMQ7qoS83SwF71viG29GXP
-         voJRTjarV3xvRh5c49vwJah8yGTKDfb1dsJHj3VPq7P30eWOBs0XSU7Nh/XCzUusOq3B
-         GvEafmZ3o7VKjUZ7vIbXTtaWjeTsJLHjZJl0qiy6hjh2ulb08q0wjYX2Tm6x2EgttloA
-         IAqw==
+        d=google.com; s=20230601; t=1755854658; x=1756459458; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yrv7lwvGLFeWfWcOe4UUVpb8JLfLX1obno5+HaM/rlM=;
+        b=l2tAGsDbj9j4uPD8wFNKfc0RMkT9rvlXWQxiZ3SbogwFgLhJzfj2CmZz6CDPHl0Ztr
+         xzfe8k6ro2qvwidwoqNj7I9tUoNxD82buoQWR5lQN8+DzuNA9dGUH/otzI3SLLjExMb5
+         707M3n1rw4pkXQZC+Sq16BJNGU5P5lvHB1Q8lC5BUlKL5L9jntr/7igspySl6vov9/Jq
+         JFtwj/uhCVWRwYPb3IQXN45aVmyqzXuPRdKlrlluEPYKczcGC8ikQjMunIEw2vmUPSNs
+         GlrNAEKgubzirdsx8jXFold1275YyRnQNN/2Hi5d4sn4dfqjs/vZG+s8w3DCR3tPoFo/
+         sZIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755854655; x=1756459455;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VyilXqTlTSUumeHDAFKTKU4l+yIbGUl58kzVG3ScM4s=;
-        b=A2da8D76WhvLV8NvbCrtKSjQMkizUcMVzdW7X0nbtYJMr7/jtQjCohUDnmm5/ip+fC
-         eg7CczjW81QtpQE7f1leS1+5BXECsrtgzB9/g5JZ6ml49i1sTcVejBjqVjcrwBQNzukC
-         GMAG06qKQsnmSVHVSdzECkJgpOaXWIogDBFBCMZZY+mnldnThkd4zty0HaP+PyXKLjyi
-         oOYFYSOnzCxVWjvvoX0yJVe7C0q7g+gRaiQ12usjniEU2k7VvGGBlIxzilD/t0mqQxCy
-         OaXBgCzckh4pr9KUR/sSOzbojIoCR6+mwsEt1HeS3mCZZKgWyYEnzUc0MywzJzggYFNa
-         meoA==
-X-Gm-Message-State: AOJu0Yw2N8PYmyPX41I35zUvGJGloGQflS+V/fYmBiwTH31lM1sIzkY8
-	gkuPtHC9tTvnU7iO3QkCeF9DuTaUViPU9wfoSi0Nmwef7P1beiaWdULTb+inKiictBN2cdNyUaB
-	TguLxBQ==
-X-Google-Smtp-Source: AGHT+IFjuPEKgVHXW9Ji15b2ymMDqqhJVr4Gn2I/XEBmf7Wb1DPa881urd/0sgYFstDva6Z7VUAN8u5wjXc=
-X-Received: from pgcv16.prod.google.com ([2002:a05:6a02:5310:b0:b1f:9534:4f55])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6300:8b0f:b0:243:78a:8299
- with SMTP id adf61e73a8af0-24340e068d0mr3373683637.50.1755854654776; Fri, 22
- Aug 2025 02:24:14 -0700 (PDT)
-Date: Fri, 22 Aug 2025 17:23:45 +0800
+        d=1e100.net; s=20230601; t=1755854658; x=1756459458;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yrv7lwvGLFeWfWcOe4UUVpb8JLfLX1obno5+HaM/rlM=;
+        b=Ljmsv7sZ0lrSwoGKmJMvDPZ8bqGp3LUtqhIhRLnVBw62COO9hJZUvNtPli5lTncXME
+         30U+rVl1dz7x8K+Lg9DYtIwAVTtgM9+19XdEa5oAd+4GR55/KW73JmjPEmvC5TUl1gpf
+         0viGAO4dhhP/+PKbpbv8CMbQTLI3R43Fil+VHkGi/vwsuzvvcYFlfrvKIzOJIBrksr1I
+         eupuk4rLl0L1y36CcnTZCZ7S8i5Xbxb77qHGCLAxGHPilJeO54T1KyrqBC27BxnILVAe
+         I8F0eMvvifdl0cDjJgKxxMHTlBeLLb+y4Ro7vzCQby/bT/x+LA3jC0J6w73ollfCPrLD
+         QtlA==
+X-Gm-Message-State: AOJu0YyAe2+Gd7/F9UB5i8VBV6qgg6p0lsqumm24m0ExNNYK8z/yLVFA
+	Lks/H5QefYGnAPsCbKYAu6fjGxR8kckt/h/Q4sYs624U1pY6E9Smg+lkr4kaW9Ij3UDQLFYHZqK
+	jnJH+tQ==
+X-Google-Smtp-Source: AGHT+IFM1v6jfSSYzAEfLVNCVVilohJmWgKU4BYWL6TUTKngyH5l8ic3ymYK1v8JHYZOj4JOaVKofm7nx9c=
+X-Received: from pjh3.prod.google.com ([2002:a17:90b:3f83:b0:325:23da:629b])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5101:b0:313:2206:adf1
+ with SMTP id 98e67ed59e1d1-32515ec3611mr3371270a91.4.1755854658316; Fri, 22
+ Aug 2025 02:24:18 -0700 (PDT)
+Date: Fri, 22 Aug 2025 17:23:46 +0800
+In-Reply-To: <20250822092411.173519-1-khtsai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20250822092411.173519-1-khtsai@google.com>
 X-Mailer: git-send-email 2.51.0.261.g7ce5a0a67e-goog
-Message-ID: <20250822092411.173519-1-khtsai@google.com>
-Subject: [PATCH v2 1/2] usb: dwc3: Add trace event for dwc3_set_prtcap
+Message-ID: <20250822092411.173519-2-khtsai@google.com>
+Subject: [PATCH v2 2/2] usb: dwc3: Refactor dwc3_mode_show
 From: Kuen-Han Tsai <khtsai@google.com>
 To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Kuen-Han Tsai <khtsai@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Changes to the port capability can be indirectly observed by tracing
-register writes to DWC3_GCTL. However, this requires interpreting the
-raw value, which is neither intuitive nor precise for debugging.
-Monitoring these mode changes is essential for resolving issues related
-to USB role switching and enumeration.
-
-Introduce a dedicated trace event to provide a human-readable log when
-the port capability is configured.
+Use dwc3_mode_string as the single source of truth for mode-to-string
+conversion.
 
 Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
-v1 -> v2: Updated the @mode description and added the Acked-by tag.
+v1 -> v2: Added the Acked-by tag.
 
- drivers/usb/dwc3/core.c  |  1 +
- drivers/usb/dwc3/debug.h | 18 ++++++++++++++++++
- drivers/usb/dwc3/trace.h | 17 +++++++++++++++++
- 3 files changed, 36 insertions(+)
+ drivers/usb/dwc3/debugfs.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 8002c23a5a02..370fc524a468 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -156,6 +156,7 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy)
- 	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index ebf03468fac4..d18bf5e32cc8 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -402,6 +402,7 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
+ 	struct dwc3		*dwc = s->private;
+ 	unsigned long		flags;
+ 	u32			reg;
++	u32			mode;
+ 	int			ret;
 
- 	dwc->current_dr_role = mode;
-+	trace_dwc3_set_prtcap(mode);
- }
+ 	ret = pm_runtime_resume_and_get(dwc->dev);
+@@ -412,18 +413,15 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
+ 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
 
- static void __dwc3_set_mode(struct work_struct *work)
-diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
-index 09d703852a92..6e1cdcdce7cc 100644
---- a/drivers/usb/dwc3/debug.h
-+++ b/drivers/usb/dwc3/debug.h
-@@ -13,6 +13,24 @@
-
- #include "core.h"
-
-+/**
-+ * dwc3_mode_string - returns mode name
-+ * @mode: GCTL.PrtCapDir value
-+ */
-+static inline const char *dwc3_mode_string(u32 mode)
-+{
+-	switch (DWC3_GCTL_PRTCAP(reg)) {
++	mode = DWC3_GCTL_PRTCAP(reg);
 +	switch (mode) {
-+	case DWC3_GCTL_PRTCAP_HOST:
-+		return "host";
-+	case DWC3_GCTL_PRTCAP_DEVICE:
-+		return "device";
-+	case DWC3_GCTL_PRTCAP_OTG:
-+		return "otg";
-+	default:
-+		return "UNKNOWN";
-+	}
-+}
-+
- /**
-  * dwc3_gadget_ep_cmd_string - returns endpoint command string
-  * @cmd: command code
-diff --git a/drivers/usb/dwc3/trace.h b/drivers/usb/dwc3/trace.h
-index bdeb1aaf65d8..b6ba984bafcd 100644
---- a/drivers/usb/dwc3/trace.h
-+++ b/drivers/usb/dwc3/trace.h
-@@ -19,6 +19,23 @@
- #include "core.h"
- #include "debug.h"
+ 	case DWC3_GCTL_PRTCAP_HOST:
+-		seq_puts(s, "host\n");
+-		break;
+ 	case DWC3_GCTL_PRTCAP_DEVICE:
+-		seq_puts(s, "device\n");
+-		break;
+ 	case DWC3_GCTL_PRTCAP_OTG:
+-		seq_puts(s, "otg\n");
++		seq_printf(s, "%s\n", dwc3_mode_string(mode));
+ 		break;
+ 	default:
+-		seq_printf(s, "UNKNOWN %08x\n", DWC3_GCTL_PRTCAP(reg));
++		seq_printf(s, "UNKNOWN %08x\n", mode);
+ 	}
 
-+DECLARE_EVENT_CLASS(dwc3_log_set_prtcap,
-+	TP_PROTO(u32 mode),
-+	TP_ARGS(mode),
-+	TP_STRUCT__entry(
-+		__field(u32, mode)
-+	),
-+	TP_fast_assign(
-+		__entry->mode = mode;
-+	),
-+	TP_printk("mode %s", dwc3_mode_string(__entry->mode))
-+);
-+
-+DEFINE_EVENT(dwc3_log_set_prtcap, dwc3_set_prtcap,
-+	TP_PROTO(u32 mode),
-+	TP_ARGS(mode)
-+);
-+
- DECLARE_EVENT_CLASS(dwc3_log_io,
- 	TP_PROTO(void *base, u32 offset, u32 value),
- 	TP_ARGS(base, offset, value),
+ 	pm_runtime_put_sync(dwc->dev);
 --
 2.51.0.261.g7ce5a0a67e-goog
 
