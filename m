@@ -1,103 +1,118 @@
-Return-Path: <linux-usb+bounces-27172-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27186-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41287B311CB
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 10:29:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D78ACB31751
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 14:15:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 149E81CC25F0
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 08:25:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 534481D018A6
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 12:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1620B2EBDF9;
-	Fri, 22 Aug 2025 08:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FA4A2FC014;
+	Fri, 22 Aug 2025 12:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bm9SIROR"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="VWc6BcnA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m32109.qiye.163.com (mail-m32109.qiye.163.com [220.197.32.109])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8132D2EDD51;
-	Fri, 22 Aug 2025 08:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B7C2FB639;
+	Fri, 22 Aug 2025 12:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.109
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755851026; cv=none; b=TB3rQ77VjylMfUdtIiFssu4mbvgmdQG0h68CDLWmI9U5Cn7cjEfOjXrJV9auvO/C26DBFo4CF7yupsCdAVH2y8A2j4pNDxc3wv+Ms9MSFNsVNYwiInIB+gBXsfm5eXe2xMSMvXL7Y8U/QGVIKyjz6ADCe6Fpm2ZgZQDw8sIyBrw=
+	t=1755864874; cv=none; b=mz1s4NQNd8Eh6RcC/6p5rla0JfBV8Hntk19Dn3cX6hu0loJGNGqRBrdpzJPFvSau8OwK1CYWYSXTBxrZxFPuFDv9LuAlhhBuS7N4PSZs36EWWeUPGKjsvOBRGweL6bmVrPJmmml6HHtIyUrFYbcg5Uh1gPcbs7PsQZiOacwC6pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755851026; c=relaxed/simple;
-	bh=03Yx5LsV5HItH5QD6ggezJ6636qthAU/TCRiuL0s6Rw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LOFYy3Y/N5jsJOYjscVPwHQq2l4I0LFCAB2Mb7POk9xLx1eAzAFeiEJgJAPUJFVpdr1GW//0YZ8j76Tb2C31hm/j16F0EDUhpnkCdfyz2NWFxJP/INB1XY8VlDxlyjtS2vXrbXUjF/y5SVC1+zzfNXeSQoRHqLnA2Ec1+Ktyv8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bm9SIROR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B9AC4CEF4;
-	Fri, 22 Aug 2025 08:23:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755851026;
-	bh=03Yx5LsV5HItH5QD6ggezJ6636qthAU/TCRiuL0s6Rw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bm9SIRORzl86UdGbHLm1Ms0KwZAMngOfadY+IvoGnbquFnazG1NnAYHBVt2tOPDsm
-	 HNAiSKCVAlS4KwVP1dK9/RGv9bKMYqNteVt2KmLUW4Li5zuu9gmsRp6nfHBA5BbvEY
-	 /Tc+MJk852doMdH5aGPZbDoFA4FJSFBYjer+enngRv0XMquboez/V1sJjj2IUge+VJ
-	 xCRjDGr7CCTiGQYYBbRpxgF48rREh87d5wJnc2iq/oPZzaJ6vy70yIeJrrv8bu2MrJ
-	 zU5qWKdRWNrSNjVtU+iQLC2qW3qgnPEFvhbrWvHLRP3unP8Dd4deWXy1qcMme+/tYZ
-	 Y7PSytC6wwRDA==
-Date: Fri, 22 Aug 2025 10:23:43 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Marco Felsch <m.felsch@pengutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
-	Matthias Kaehlcke <mka@chromium.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v3 3/4] dt-bindings: usb: microchip,usb2514: add support
- for port vbus-supply
-Message-ID: <20250822-maize-elk-of-growth-2a30bb@kuoka>
-References: <20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de>
- <20250821-v6-16-topic-usb-onboard-dev-v3-3-6d2b38a5d818@pengutronix.de>
+	s=arc-20240116; t=1755864874; c=relaxed/simple;
+	bh=mNQvOcjjLUsjMPK0Ge2NZOtca9480N6MLioMkGl/IUA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PaFcXnr7vKsB1f8br2zKINsuZkurl3PET9MhFkKTb+W4GZjxN99LOgYCBH0iAUndMszjzFSQOCGUwJGn0qW+tvhxbCWOIZZvA9zEJH7Mxwy8P8cLuyd6q45PIlsGooW1fIkoY5V+fBXiVW5Uz91z13aWa5GhnHLHOWRq1Tsp9VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=VWc6BcnA; arc=none smtp.client-ip=220.197.32.109
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.33.175] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 204432ef2;
+	Fri, 22 Aug 2025 16:45:06 +0800 (GMT+08:00)
+Message-ID: <61a7bf20-d9a0-4789-8c44-7630b34615d6@rock-chips.com>
+Date: Fri, 22 Aug 2025 16:45:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250821-v6-16-topic-usb-onboard-dev-v3-3-6d2b38a5d818@pengutronix.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: gadget: f_hid: Fix zero length packet transfer
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Chris.Wulff@biamp.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, frank.wang@rock-chips.com,
+ jianwei.zheng@rock-chips.com, yue.long@rock-chips.com
+References: <1755828118-21640-1-git-send-email-william.wu@rock-chips.com>
+ <2025082235-fondness-destruct-f8f6@gregkh>
+From: wuliangfeng <william.wu@rock-chips.com>
+In-Reply-To: <2025082235-fondness-destruct-f8f6@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Tid: 0a98d0f3f96909d4kunm9dfc621616a01b0
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQh9ITFZPTR5DTElLS09DTU1WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUJCSU5LVU
+	pLS1VKQktCWQY+
+DKIM-Signature: a=rsa-sha256;
+	b=VWc6BcnAML6KLeYKr7BxS6rPYgvthG5iRlzVui0M6z6a2UFNjAqU365e9aRcVCoqNQrn0sBwx7NVGNk/iE0+TuDaBUUcoJ1dXZqIzX3KYrdrwhQ6yUuJKY8n3PDn1oM7JcsUSRBX3rPs4aqCy1FtxG2tC0n67eF4PDeBkwJEgZU=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=9h36v6z5jw9feLJK7q2WkHj5YgXyiYTUvmPXIhbXB54=;
+	h=date:mime-version:subject:message-id:from;
 
-On Thu, Aug 21, 2025 at 06:31:57PM +0200, Marco Felsch wrote:
-> Some PCB designs don't connect the USB hub port power control GPIO and
-> instead make use of a host controllable regulator. Add support for this
-> use-case by introducing portX-vbus-supply property.
+
+
+On 8/22/2025 12:45 PM, Greg KH wrote:
+> On Fri, Aug 22, 2025 at 10:01:58AM +0800, William Wu wrote:
+>> If the hid transfer with size divisible to EPs max packet
+>> size, it needs to set the req->zero to true, then the usb
+>> controller can transfer a zero length packet at the end
+>> according to the USB 2.0 spec.
+>>
+>> Signed-off-by: William Wu <william.wu@rock-chips.com>
+>> ---
+>>   drivers/usb/gadget/function/f_hid.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+>> index 8e1d1e8..8021af3 100644
+>> --- a/drivers/usb/gadget/function/f_hid.c
+>> +++ b/drivers/usb/gadget/function/f_hid.c
+>> @@ -511,7 +511,7 @@ static ssize_t f_hidg_write(struct file *file, const char __user *buffer,
+>>   	}
+>>   
+>>   	req->status   = 0;
+>> -	req->zero     = 0;
+>> +	req->zero     = ((count % hidg->in_ep->maxpacket) == 0);
+>>   	req->length   = count;
+>>   	req->complete = f_hidg_req_complete;
+>>   	req->context  = hidg;
+>> @@ -967,7 +967,7 @@ static int hidg_setup(struct usb_function *f,
+>>   	return -EOPNOTSUPP;
+>>   
+>>   respond:
+>> -	req->zero = 0;
+>> +	req->zero = ((length % cdev->gadget->ep0->maxpacket) == 0);
+>>   	req->length = length;
+>>   	status = usb_ep_queue(cdev->gadget->ep0, req, GFP_ATOMIC);
+>>   	if (status < 0)
 > 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/usb/microchip,usb2514.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+> What commit id does this fix?
+It seems that the first verison of the f_hid.c had this issue.
+commit 71adf1189469 ("USB: gadget: add HID gadget driver")
+
+Best Regards,
+William Wu>
+> thanks,
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> index 4e3901efed3fcd4fbbd8cb777f9df4fcadf2ca00..ac1e5f1a5ea2e66c61ce92154385952b15e78e55 100644
-> --- a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> +++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> @@ -49,6 +49,12 @@ patternProperties:
->      $ref: /schemas/usb/usb-device.yaml
->      additionalProperties: true
->  
-> +  "^port[1-7]-vbus-supply$":
-> +    type: object
-> +    description:
-> +      Regulator controlling the USB VBUS on portX. Only required if the host
-> +      controls the portX VBUS.
-
-Your commit msg should briefly describe status of previous discussion:
-why Rob's comment was not applied. Otherwise we repeat: this looks like
-property of specific port.
-
-The binding does not list ports now, but lists hard-wired devices, so my
-question is now: is this per hard-wired device or per port (even if port
-is hot-pluggable)?
-
-Best regards,
-Krzysztof
+> greg k-h
+> 
+> 
+> 
 
 
