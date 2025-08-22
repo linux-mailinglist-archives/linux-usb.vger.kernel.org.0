@@ -1,141 +1,155 @@
-Return-Path: <linux-usb+bounces-27195-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27196-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3469FB3235E
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 22:05:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2758EB32379
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 22:18:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01E67B6245D
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 20:03:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 443E9B65AAC
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 20:16:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05562D6E66;
-	Fri, 22 Aug 2025 20:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B630189BB6;
+	Fri, 22 Aug 2025 20:17:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gbj0m+8n"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GuSsiA2N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6D61F418D;
-	Fri, 22 Aug 2025 20:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058AB1D5174;
+	Fri, 22 Aug 2025 20:17:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755893118; cv=none; b=dqTxPsWP9WZst4aj65+6q8UDn/gxBKm4VAx64VQGYQcZ1Wu4tsasUB5pbbZInM2kPsaCoFRgjboDthlMuzx1oU6sfcwsE6SOx3/P5I60GWy5KQm+j3KhVHyTvki4verh73iY1bBT1DQnhSeuTRlWlFJAPXtUCuArrUfAFKW/p40=
+	t=1755893868; cv=none; b=G0gt97d0/EF6Bjsw/jG2hthOePlVOt+GEM40PzUOO+Kv+44opgzlCcSS4i3y0EpMO4hmcvIEp/x20jmag8eBQfiIQjNf4yq3KHLDCfZTkQ9GUXxMQz724L2U7a4FE4qAhAV5kAL+Qy2y1mPHbpU8m0jUY4cXtyyhCKKMue+zYXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755893118; c=relaxed/simple;
-	bh=FJYKSaWg9qfXe9WhCcNjPEiiwTTwCMlUdpAl+aVXHpk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RXVuLtz9TdY1CBMP6dc3i+JHMugND5Oma26CZF3ykHyP8fdLnY36zpOc9saryNZvucVmCHPYqrQzWMaD+sNDH0+8ZHSBdVzm321M8MrxcpJFYZ+SehCji8NX3n/sRf+6SMJ8Gz0XgSrLko3iBLbHLnAKgVpogOLuOtmCSA6aWUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gbj0m+8n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F7B3C4CEED;
-	Fri, 22 Aug 2025 20:05:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755893116;
-	bh=FJYKSaWg9qfXe9WhCcNjPEiiwTTwCMlUdpAl+aVXHpk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gbj0m+8nozri5c8U3S2Zv0AfT230nTh/sYeos0NSYVdHUysxGUdGTLCmkLFKmw4yr
-	 zTW6lUDsp08O3/vQiuzLc2RZ/T7cN/5DFHB3tRTRicvIF0zWkMX34303y7TX5aPUq5
-	 kSFj+ohdfVffexSNACB+1gql9djQo5YpyL1mw1hTAHJJv+G7hKJGZiVhQUsJ0GTN1x
-	 Ldjt1AepnXOSDnkl+VC0FOJMlTkl46yWse96gQFhO2CyVK+jEMnhjUNCQcpRIikB0M
-	 iqy5M2j5eSsqgBj0+tn1n/rkqmDU4c15SfZRguJVtpen+cvomBUW/v7oTOiuYKpvJL
-	 9eK0Enurv6o0g==
-Date: Fri, 22 Aug 2025 15:05:15 -0500
-From: Rob Herring <robh@kernel.org>
-To: Marco Felsch <m.felsch@pengutronix.de>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Matthias Kaehlcke <mka@chromium.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: Re: [PATCH v3 3/4] dt-bindings: usb: microchip,usb2514: add support
- for port vbus-supply
-Message-ID: <20250822200515.GA204607-robh@kernel.org>
-References: <20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de>
- <20250821-v6-16-topic-usb-onboard-dev-v3-3-6d2b38a5d818@pengutronix.de>
- <20250822-maize-elk-of-growth-2a30bb@kuoka>
- <20250822103005.c7ba7dclbgdadyw7@pengutronix.de>
+	s=arc-20240116; t=1755893868; c=relaxed/simple;
+	bh=jAAyVcFMvHBlJFEs2XB61oIZ044lEzeW/L7kWAD+lIE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PsJfU4m91TNgvZLJ2CkoWr1MWXePUPG8Ie5r+vxOs2JUIjljrJQPNIM4yuTgw44DqFKNxHF/KZDllRGoSfBVWiCFC//AX4/gMyLWHW+zOaTs4OZnGOql/HNgYPv6jjo8WG28DpDjCmDoVhk/s7ecJkkH+tPqSI+tVLpQ1reLb68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GuSsiA2N; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3b9d41bfa35so1915410f8f.0;
+        Fri, 22 Aug 2025 13:17:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755893864; x=1756498664; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BhVMJ3YLUuoHZUXPKfr0vbflwD175WfvNAQOTAyxVbQ=;
+        b=GuSsiA2NWFG7nqOc14Ir8jh5qpbwiTHUVdosZoRc/HnJdxTEr+S2OzkZIqOn4GKYsG
+         F9fv3dYJeeouNBYkbK0d/twmiLCuXns4d0ohAS0+6EBc6By+fh2pFZVwCNpMzgge9xnL
+         RDAaQ7v+8+9HvDxQ3xhALPBK4ymfiV09QySYQPOeU6llZDvB3ahAkLWhre9fBbwn8TXM
+         Oh+34ptXOiKXQBvXEOq+TK4XDuQGn6bjeD0jUhku3kW++ApmyxAe+26jpb/7scJbmGUY
+         wjPaSBO787ckiLMFu49rB05UXe5g9TC/qeCKvIYG4SDisONLrsk+/cE37QVhMgVUHTec
+         HBSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755893864; x=1756498664;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BhVMJ3YLUuoHZUXPKfr0vbflwD175WfvNAQOTAyxVbQ=;
+        b=hXawV/OipZUOvCejmZLkkA94kohCo4CY9OJNylf48dSnDegz2uW+ETWoCIHEEjlbZF
+         k7JAN+siHO45lEkuTdkT/bUjpsaHhc71B3tfcpXB5fcnsOwg6BWGGNHfPWYI4C/FhOdF
+         4iuUSfkxp2Db9nRgtzoYMVcrZQsJQhW97+c3MgSruBxWnWHQATsOYRiPUkhwlZ9oAAmB
+         QuyhSodMrCIf1JIaZN4zXRbIyTEHU00qHxgGvstAfnckuvAZVtu7lVTX+w0ZiuanZu1q
+         CtU3atDFJEvKNRjRgkZ1XXLowZLXBdWf1M23HffgjrmSYooBOKWti5n503exRoXDBpUA
+         MakQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU+8CrR0NUJoEbgU+habKubWtVDEO5kttMXXrNGWcPrKd2gcnLwCF5KmQizfbXnaWe7XQPvQPtbr/D+@vger.kernel.org, AJvYcCWe6LaGgxWjIH1/7al3sYS6yh5T0vYUV2J+DtZks1mEed4Ldq1SD8p6WFIoLFOJUNNdRvoqW2YsQDS9@vger.kernel.org, AJvYcCXEGYkOmclbIEJAhnu8EvgOc/wKobLm9KL/U0Y0bjug4GHYgU6ynZCQXqAydmuBUkW6VthRgNXIOkjx9hat@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/AVf8Lvm+L/cQg80QWJv2ZAN/yQxrBb4cGdZYxzlUxPxcvTZn
+	1nfY2TXoDtjvZyZyav5JCEPf2TJlO0eqsOntFnBJa/03HkKUX1i2mPyFW+ebbMM=
+X-Gm-Gg: ASbGncusnk0PKLEKyNO8Bbx1R0O7DMd6M6Gk9Da48ZDZAKeUsMheO/g9HR8PkcmU8I9
+	OWSpCLX0ZQgFlF7wCGkzN+pI44jIAxxq2nC5zpJLXs6JW+avxNvsvQx2xd/czgDjVbbSPyTS/i/
+	s9/Fvhj6d7ReR6EXUBOx2CyhO3/crWWVAu2WB7AXm2hy6nB1fvVgifYGelbHvpy785ZSCCjuKjp
+	gAJBzaG8xeY9EeAYDRDo254+rygzQgAdYiUqPSbZW5huFKSYNVQTG0Q7x9j+cAmbNAXkIMNINRp
+	KOnSLaYWWQ0EFT5EVjxlclHLaa1D5gqLzH9Y7mdgSgaoMBo6zDz+46cFM75NlKWk/jxOhuyfYIK
+	N5DPkltfU2mOuMObiOpldEzSrHXMMwcGu2Zs7SUFN58KhqA==
+X-Google-Smtp-Source: AGHT+IEN6R6H0FaGCpWfE7IYVuRm41MEXO1zxSp33BkRVDnuZD8L7cgHea3pkIGG2m7WpM5sSdhtPg==
+X-Received: by 2002:a05:6000:2dc7:b0:3b9:15eb:6464 with SMTP id ffacd0b85a97d-3c5daefa9e0mr3375503f8f.15.1755893864093;
+        Fri, 22 Aug 2025 13:17:44 -0700 (PDT)
+Received: from localhost.localdomain ([2a0d:e487:58f:6d42:4e65:e74f:bc8e:3791])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c70e4b9e1fsm840377f8f.14.2025.08.22.13.17.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Aug 2025 13:17:43 -0700 (PDT)
+From: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+To: robh@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	peter.ujfalusi@gmail.com,
+	devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	shuah@kernel.org,
+	jihed.chaibi.dev@gmail.com
+Subject: [PATCH v6 0/2] usb: dt-bindings: ti,twlxxxx-usb: convert to DT schema
+Date: Fri, 22 Aug 2025 22:17:25 +0200
+Message-Id: <20250822201727.71593-1-jihed.chaibi.dev@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250822103005.c7ba7dclbgdadyw7@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 22, 2025 at 12:30:05PM +0200, Marco Felsch wrote:
-> On 25-08-22, Krzysztof Kozlowski wrote:
-> > On Thu, Aug 21, 2025 at 06:31:57PM +0200, Marco Felsch wrote:
-> > > Some PCB designs don't connect the USB hub port power control GPIO and
-> > > instead make use of a host controllable regulator. Add support for this
-> > > use-case by introducing portX-vbus-supply property.
-> > > 
-> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > ---
-> > >  Documentation/devicetree/bindings/usb/microchip,usb2514.yaml | 6 ++++++
-> > >  1 file changed, 6 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> > > index 4e3901efed3fcd4fbbd8cb777f9df4fcadf2ca00..ac1e5f1a5ea2e66c61ce92154385952b15e78e55 100644
-> > > --- a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> > > +++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> > > @@ -49,6 +49,12 @@ patternProperties:
-> > >      $ref: /schemas/usb/usb-device.yaml
-> > >      additionalProperties: true
-> > >  
-> > > +  "^port[1-7]-vbus-supply$":
-> > > +    type: object
-> > > +    description:
-> > > +      Regulator controlling the USB VBUS on portX. Only required if the host
-> > > +      controls the portX VBUS.
-> > 
-> > Your commit msg should briefly describe status of previous discussion:
-> > why Rob's comment was not applied. Otherwise we repeat: this looks like
-> > property of specific port.
-> 
-> I answered Rob on my v1 but got no feedback. 
+Hello,
 
-I just read it and don't understand. You don't have to have all 
-properties for a driver in the node associated with the driver. The 
-driver can freely look in the child nodes or anywhere else in the whole 
-tree if needed. Is that what you meant?
+This series converts the legacy TXT bindings for the TI TWL4030
+and TWL6030 USB modules to the modern YAML DT schema format.
 
-For USB hubs we generally define child nodes for each port. Some of the 
-hub bindings don't because they are incomplete. If you have a per port 
-property, then the DT property belongs in the port's node.
+This version (v6) addresses maintainer feedback by defining the
+'interrupts' property with a list of 'items' for better clarity and
+validation.
 
-> My v2 caused an issue found
-> by Rob's test bot. Therefore I thought he is okay and applied the
-> patchset for testing.
+With the conversion complete, the second patch in this series removes
+the now-obsolete .txt binding file.
 
-Other way around. If it doesn't pass tests, I don't look at it. (Well, I 
-do, but don't expect a reply.)
+Thank you,
+Jihed
 
-> At least to me it's unclear when Rob's test bot is executed.
+---
+Changes in v6:
+ - Reworked 'interrupts' property in both patches to use a list of
+   items with descriptions, per reviewer feedback.
 
-When you submit something. It's all automatic, though sometimes the 
-emails are delayed. Results are always in PW within 1-2 hours (unless 
-someone patch bombs us with a large series).
+Changes in v5:
+ - Split combined twlxxxx-usb binding into two dedicated files
+   for TWL4030 and TWL6030 per maintainer feedback.
+ - Used more accurate header file for interrupt macros.
+ - Improved formatting in the examples.
+ - Patch 2/2 removes the old .txt file.
 
-> 
-> > The binding does not list ports now, but lists hard-wired devices, so my
-> > question is now: is this per hard-wired device or per port (even if port
-> > is hot-pluggable)?
-> 
-> Sorry but I don't get you. The binding lists the regulators required to
-> enable/disable the hub downstream port VBUS. These regulators are
-> controlled by an external party e.g. the CPU instead of the USB hub
-> itself. The connection from the CPU to the regulator which controlls the
-> +5V usb-connector pin is hard-wired, yes.
-> 
-> Regards,
->   Marco
+Changes in v4:
+ - This patch is split from larger series per maintainer feedback.
+ - v3 link:
+    https://lore.kernel.org/all/20250816021523.167049-1-jihed.chaibi.dev@gmail.com/
+ - Removed i2c node as it wasn't required by the old binding file.
+ - Updated node names to 'usb' and 'usb-phy' in the examples to follow
+   generic naming conventions per the Device Tree specification.
+ - Replaced raw interrupt values with standard defines for clarity.
+ - Improved formatting in the examples for clarity and consistency.
+
+Changes in v3:
+ - No changes.
+
+Changes in v2:
+ - Added '#phy-cells' property to support PHY framework integration.
+
+Jihed Chaibi (2):
+  usb: dt-bindings: ti,twl4030-usb: convert to DT schema
+  usb: dt-bindings: ti,twl6030-usb: convert to DT schema
+
+ .../bindings/usb/ti,twl4030-usb.yaml          | 74 +++++++++++++++++++
+ .../bindings/usb/ti,twl6030-usb.yaml          | 48 ++++++++++++
+ .../devicetree/bindings/usb/twlxxxx-usb.txt   | 43 -----------
+ 3 files changed, 122 insertions(+), 43 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,twl4030-usb.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,twl6030-usb.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/twlxxxx-usb.txt
+
+-- 
+2.39.5
+
 
