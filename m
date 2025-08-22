@@ -1,134 +1,138 @@
-Return-Path: <linux-usb+bounces-27163-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27164-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2615DB3103D
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 09:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C84B31041
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 09:24:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BF085E4C4F
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 07:23:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FBD35E3A25
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 07:24:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17A7E2E7BBA;
-	Fri, 22 Aug 2025 07:23:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 165B42E7BDB;
+	Fri, 22 Aug 2025 07:24:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bl7G0lPP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Stzro7uf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D732E4266
-	for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 07:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854C1222587;
+	Fri, 22 Aug 2025 07:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755847387; cv=none; b=fenNgdRgoV3WREHkMgxFFKeJPYHbFkIyxjwLQUsStskeTEjJWYgwYbmCSpVFySLmFepJouhJ7aBSwPByfzzJnZKZNm1YS8bttU18uUNwiCwscG40fFzOiuDynkwZh8D08ARK0/d7J9eqOG6sBOReYIK77nCpgKfzSAZt8GEJK1Y=
+	t=1755847443; cv=none; b=sQHbYyNOSt8/NylU6MXNjcGCOdsHGgDILk4nXStbYqrQMeFZBbS6XnuA5BZHI3sM+6CIQFJKfj/Z1i1G50BBJyOb64aFIdqhywoF17aVbrBe7exjImNi7NI1FINCnq/q+2dInft2UEk8e1w1BJg+bzSmRyGbtWPzyibWDbDaMc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755847387; c=relaxed/simple;
-	bh=86NxbLP5stu7jdC+97Y7NDfFNJItInZZBVtvmEEYzTo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=guQMGpKMACDFN3Gm9IdGt93XF7gUAGT+6lBzWzoZ1eRU/L/Q9damXRVlEQW+Zr9FyQTEZzB+x3aeV4NpIrUsKYwwF12OWC5VhXKU3FsUfS9a3yglpy4MvUrNkVyHqTowTZWmhjPs2nYrfGHB0FYOQv12sQtd93tTwYd0CRyi9uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bl7G0lPP; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-55ce52658a7so1600347e87.2
-        for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 00:23:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755847384; x=1756452184; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=86NxbLP5stu7jdC+97Y7NDfFNJItInZZBVtvmEEYzTo=;
-        b=Bl7G0lPPWhmC03Y2Dse9IEt9mbUregAVxsKvTPQM2cWy61qbdr7PyNxNgnRR1gDmJR
-         817l6brz5o2j4JzK42nqu5/+BGZrKDt1rrehI7zKOVFYMMmHYl/Mr0QoceXafaaOVcVj
-         BDUXx91T0IOgQMdnreKLv6tbBBGNvJEVv2X2fb3QpKnTVsKfLlnXzoCkxAh66AyTT7Lr
-         ZZwdphmrTbGT7/b1h5xKc8px9rUZv75JebH2IqMA/+erq/q1OzvT48dp5JXBqUwTZKYY
-         +wf0EZhq4qao+3btvqW2tFuZNGJu5QAejTmzdOO2BfQ6GPTskJmxeOj7MElA6ljjXHiP
-         rZig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755847384; x=1756452184;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=86NxbLP5stu7jdC+97Y7NDfFNJItInZZBVtvmEEYzTo=;
-        b=DSW8/hjHJkuvWhmiIu9GEts7rIpRgMbInVdKtKeKXUX2bywOyjoqkw23mST8I90Pb+
-         kwKWPAIePgh6euqo7W4X5Xqnz3CAM/A3SXiaUFQgC3VqjsUFOlwJE4094lAq4KPAbWJL
-         k0PxYqobIrajsyW7Nxuajoa4tiGjqg8kofVDitiL9vYw2dUFEVDTZv0mCIJKhBa77ZxV
-         RV5e1lXB1lkRH8oWScLGanS97aBc7ziIImwgUIQAdfQ0OTAu4kVov52/vHJgy5cDyPNK
-         EtqO5Ad2wcy74hD0KZaJUh9nUDvnZHUiGqYYcLbD5p7HAolaCgbwRPjGZQvBCLTRylp1
-         Vogw==
-X-Gm-Message-State: AOJu0Yz+UmB/0vuI4RpifcSNESR6XpSMqaYRHHie7bnNW30HJtf3oUkF
-	6CsK2uiJywAoH1JXIWn6T6e/+/+1qED1Lbin4WHF6urhgiOWaxyFhto9TyLMtg==
-X-Gm-Gg: ASbGnctHTYJloRIRGh+taMzNwdptFPV/PJGE8dqASMvE5q9ZI7uebKMcU86TV/Q9ahq
-	xz+VZ4GUJLVzBpCLmAvc+kyjkaidHYNVaB8s+N5i7LkjzssHWmDXJnG+G51JZGpq/p30ZKYomgt
-	21cbmfRBkObWTIRRxsUPkzqTyzx5X4lJbNSctgxObmItzWrWSBAyNIZ04GpAdRhWKIlsagaoSGo
-	CfWP6Na9AgmW5l8cdCx9qZktKsKJnsuBiZwKR7DUxQ/A4LWG3VeGcyTWNsv419/feRC2Qm8sR9P
-	0uuILkxDPU7fjcYEj6ezDhi6UiBlIcytV9Y7ECJZpqwlVJI0D0O+oKXkKDVG52JxBKUyoAWNUL3
-	R/xqpdwlmys7ehSUOl+ksnWd+CSXRCzyQItrIDgQjIiBVxg==
-X-Google-Smtp-Source: AGHT+IGmgqoUW4Uy4atPDW7nGbrUaYBPpBKVxt7iVP+knQPSJUuLyBw8k9GTkIw16or8B6S7MyzjUQ==
-X-Received: by 2002:a05:6512:4004:b0:55b:8d66:f7f8 with SMTP id 2adb3069b0e04-55f0cd47f4dmr779614e87.1.1755847383650;
-        Fri, 22 Aug 2025 00:23:03 -0700 (PDT)
-Received: from foxbook (bhd106.neoplus.adsl.tpnet.pl. [83.28.93.106])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef351625sm3484689e87.9.2025.08.22.00.23.01
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 22 Aug 2025 00:23:03 -0700 (PDT)
-Date: Fri, 22 Aug 2025 09:22:57 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>,
- mathias.nyman@linux.intel.com
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/4] usb: xhci: handle Set TR Deq Slot Not Enabled Error
-Message-ID: <20250822092257.493903f4.michal.pecio@gmail.com>
-In-Reply-To: <20250821123521.53e7c37e.michal.pecio@gmail.com>
-References: <20250818125742.3572487-1-niklas.neronin@linux.intel.com>
-	<20250818125742.3572487-3-niklas.neronin@linux.intel.com>
-	<20250821123521.53e7c37e.michal.pecio@gmail.com>
+	s=arc-20240116; t=1755847443; c=relaxed/simple;
+	bh=WuDthur/naSlz9x9SdcEfVIvLuh26ZaWEM8NRd6Pykk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=khrX5SdHGhTIa/WJFP9EO992NCcte4l38TLaLaJRx5HGGDU+YsPA8+iyRCQRU0sJdhR9cOYDGcoqRMDzZ+uz74Mk4MpYNSKgjJnZkfEqZDGbcp4aN4Fo/POHyW0g/KBuwwDjVJRNTbo31dbj6QR9Rziken9Z4Zj6LIdg+31zQFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Stzro7uf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B8F5C4CEF4;
+	Fri, 22 Aug 2025 07:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755847443;
+	bh=WuDthur/naSlz9x9SdcEfVIvLuh26ZaWEM8NRd6Pykk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Stzro7ufnPBe9angyz46enQdBWHrKwFmd9T/VQcGvILXha1ulT3tW8OKmepm4mWZj
+	 1j2TWmF3Sp0JkrV2MAOi3A28voPvdLBM/rw5MP2PZuI59lCJ4tiwEp+XNAxfgX8GYR
+	 atgzOKqF4XCDTz3v/K7fqG5c7h3pmYohSBCww0HLHGBXibjeNXehjrJpdqMiKYKcZX
+	 pMDWngELOgsdI/k+3H/6z79sqlBxIEKBsE7eE6De905l6ReWId2yH2y8IBJ14WgE2L
+	 buLW/+xWUg5qKgc4o3w+xSw1XGi1b1Loe0h8UwFYiyisucKcINC+GvSxK3nHOsdWMY
+	 2QIIWsh96WG1Q==
+Date: Fri, 22 Aug 2025 09:24:00 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Sven Peter <sven@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, Janne Grunau <j@jannau.net>, 
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-phy@lists.infradead.org
+Subject: Re: [PATCH RFC 02/22] dt-bindings: usb: Add Apple dwc3
+Message-ID: <20250822-banana-ferret-of-opposition-0bcfad@kuoka>
+References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
+ <20250821-atcphy-6-17-v1-2-172beda182b8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250821-atcphy-6-17-v1-2-172beda182b8@kernel.org>
 
-On Thu, 21 Aug 2025 12:35:21 +0200, Micha=C5=82 Pecio wrote:
-> And suppose that somebody does indeed disable a slot without waiting
-> for pending URBs to finish unlinking, what if he also frees those
-> virtual endpoints that you would like to manipulate here? And maybe
-> forgets to clear xhci->devs[x]->eps[y] to NULL?
+On Thu, Aug 21, 2025 at 03:38:54PM +0000, Sven Peter wrote:
+> +
+> +  The common content of the node is defined in snps,dwc3.yaml.
 
-I dug deeper and realized that this cannot happen, because virtual eps
-belong to the same allocation as their parent virtual dev.
+Drop sentence, redundant. Schema tells that.
 
-What is actually going to happen is that every xhci_disable_slot() is
-followed by xhci_free_virt_dev(), so virtual endpoint lookup at the
-beginning of xhci_handle_cmd_set_deq() will fail and the function will
-bail out silently. This 'td_cleanup' code will get no chance to run.
+...
 
-The silent bailout is obviously wrong, but it can only be improved by
-logging the error, and queuing Set TR Deq onto a disabled slot needs to
-be prevented from happening in the first place.
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  iommus:
+> +    maxItems: 2
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +unevaluatedProperties: false
 
-As far as I see, it currently is supposed to be prevented by:
-1. the core not freeing devices with pending URBs
-2. the driver not giving back URBs before Set TR Dequeue completes
+This goes after required.
 
-One interesting question is what happens if Set TR Dequeue is pending
-but the endpoint starts and completes the CLEARING_CACHE TD normally,
-I suspect that handle_tx_event() may give it back. Will look into it.
-
-BTW, endpoints are not supposed to start like that after Stop Endpoint
-retries have been implemented and I just sent a revert of a dodgy patch
-which broke that, but well, in theory it *might* possibly still happen.
-
-> What if a different device uses the same slot ID now? (That's possibly
-> a serious problem which perhaps requires a serious solution, btw).
-
-Actually, nothing interesting happens. SLOT_NOT_ENABLED means that the
-slot was Disabled. By now, it can at most be Enabled, because any
-completion of a later Enable Slot command couldn't have executed yet.
-There are no new TDs on the slot and no damage by giving them back.
-
-Also no point trying to give them back ;)
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - iommus
+> +  - resets
+> +  - power-domains
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    usb@82280000 {
+> +      compatible = "apple,t8103-dwc3", "snps,dwc3";
+> +      reg = <0x82280000 0x10000>;
+> +      interrupts = <AIC_IRQ 777 IRQ_TYPE_LEVEL_HIGH>;
+> +      iommus = <&dwc3_0_dart_0 0>, <&dwc3_0_dart_1 1>;
+> +
+> +      dr_mode = "otg";
+> +      usb-role-switch;
+> +      role-switch-default-mode = "host";
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fe168477caa45799dfe07de2f54de6d6a1ce0615..0e085cb0762f765958d67be61ae0d3d773503431 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2399,6 +2399,7 @@ F:	Documentation/devicetree/bindings/power/reset/apple,smc-reboot.yaml
+>  F:	Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+>  F:	Documentation/devicetree/bindings/spi/apple,spi.yaml
+>  F:	Documentation/devicetree/bindings/spmi/apple,spmi.yaml
+> +F:	Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+>  F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+>  F:	arch/arm64/boot/dts/apple/
+>  F:	drivers/bluetooth/hci_bcm4377.c
+> 
+> -- 
+> 2.34.1
+> 
+> 
 
