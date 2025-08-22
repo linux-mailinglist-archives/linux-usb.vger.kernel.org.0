@@ -1,145 +1,95 @@
-Return-Path: <linux-usb+bounces-27183-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27184-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91A3EB315FF
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 13:00:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89EB2B31752
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 14:15:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56812622564
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 11:00:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 965BAB038D0
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 12:12:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81E0260582;
-	Fri, 22 Aug 2025 11:00:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABED02FABF7;
+	Fri, 22 Aug 2025 12:12:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k+nxzg2c"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILqhu273"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6612919007D
-	for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 11:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F7E2F90ED
+	for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 12:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755860421; cv=none; b=u6O88LCyDO5h3r3kd0FJntCs/ti9l+k7El7nmGX5M7/Gd3jUSVYtlPLuQIfs1+8DGgMNNyUi1FgrvVzzqkAtGm7ixXg+PIEkQ8PMIPBJMkWm//Z18qQnlmXSrPO0KuimeFXq7Wuh6OjpQCwKXFvoSGW9NJAfqecDZrp99+pcEPk=
+	t=1755864773; cv=none; b=iQBCfpXWY/Nz1VKgSGNVo6kP5j4QPhwFPmPp4N7o2vd7bBEyMacfeVehzAF6Yhw6Iiont78tm0LXzi53lBGLqOtShkCydfzKoM1K36LbY/4Sz7cwBmIWPhanYmijg4rlorWe8Ov67iUtnicMI9uQbsU570Zo3ad6+mxFiJjSfdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755860421; c=relaxed/simple;
-	bh=jhU07vNwV58UCBNCUNBHGm+TUZjGV6u/GluCCN5WP7I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ec7yHQFmzOEnepjLFSztkkyQD0RHoKLM282Wonfy9m9qYqK3cYCrhHy2quzHgDXTMFSBKquUDIAVYxW0SVbv+yJflxZql94kychD3h1EzuywwELgKcAwjEwMlDKmG+RCTnqRXgV4iVTYa+w4ko1fa0kWB/uzCc5FPcfjLY4zHVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k+nxzg2c; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755860419; x=1787396419;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jhU07vNwV58UCBNCUNBHGm+TUZjGV6u/GluCCN5WP7I=;
-  b=k+nxzg2cktpLVSMjTWu4SpGq6ahDNoQ9cKd6mWSycA3L36QywVloBd4Y
-   8TQ2+x1QzMdo5mv6kzW927baPZj7ievgJRHk28OT8Xb5wPemkTwsJjPIA
-   Q2Wojw383qckBjIEKLjakMWURGqz3BIuF2jjDMmrxXca0BvGilVj73Kmu
-   c8wPPONCjvgk0BT/vtlOJlQrlsNVh2iyVSRULxSDXuADMGSpQv/9ZYHBV
-   KM///QGbUw/H16BUei2dZc9Y3J4Ae7LhGmhd9REN+Upw1OsRrPFQP385r
-   9stVo0X/tmWWLTR/FdCkI1FmXagPWXhE4JWg8PQEC+gA0/nrm5OzjQKeA
-   A==;
-X-CSE-ConnectionGUID: nEfM+hQvSMm7co56x6kRzQ==
-X-CSE-MsgGUID: q/kQhP3gQJS7n9yETdGG5A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="83581349"
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="83581349"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 04:00:19 -0700
-X-CSE-ConnectionGUID: 4zh/Aq6pTfaX+3M++4E27A==
-X-CSE-MsgGUID: N3+NUp6JSBOSCXJybCq5gg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="169080939"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.120.28]) ([10.245.120.28])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 04:00:17 -0700
-Message-ID: <359bc120-13d7-4f4b-8f25-945bf1638d69@linux.intel.com>
-Date: Fri, 22 Aug 2025 14:00:06 +0300
+	s=arc-20240116; t=1755864773; c=relaxed/simple;
+	bh=yykFoMyh3EhvfFBul6Z6Q3d3wrLInjT7BSRTKD7ElpI=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ouKur3Z7uHh6s+WQc/ve8XCoGQwZ+NfljxnyzMkpUgQ1nR1QuQ8XvOyEYAr2m8DFB4Dx/s2qGFYref99V7ypYjMHef5yMKSdGAb3MXbnbWsukc0C/K+Af0AsLAL4PBpkQxD/s18WWNAmYplFqfria6ZmadfgXHA8CKrUQIWpsBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ILqhu273; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9035EC116B1
+	for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 12:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755864772;
+	bh=yykFoMyh3EhvfFBul6Z6Q3d3wrLInjT7BSRTKD7ElpI=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ILqhu2739wllBwifAiv3TkDihYwP4qvI8v6gfivXJj6V2oSzu5drWQtBxOOdsQFQG
+	 HbzPHt/p/RZPhqiEQFSXqwPMrnfESFClgh256ZC6011lRVlVzAzFbdILQd+SG201rq
+	 xbe7Taxrhqec/V376cHdS4QK64gJHdP9YTOKjXuW04JH0rbXGuOBuX8RpBoqWMjLo0
+	 +UNMylOBk3laeI6RbZ0s3f8Fyu0ioPLR172n3Ciml6tYIrT8bn27V48+j0XU/4oWdx
+	 oEHedn92F36c6rxsvsknt7RkQHDB9qHDpkNiea8WprJGuQT7Fc8VQRYiWF7upIv4/Q
+	 DBL38SMJAiF0g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 87CC1C4160E; Fri, 22 Aug 2025 12:12:52 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220460] Plugging USB-C adapter into one port results in `Failed
+ to set U2 timeout to 0x3f,error code -110`
+Date: Fri, 22 Aug 2025 12:12:52 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-220460-208809-4Y1CAQlDMq@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220460-208809@https.bugzilla.kernel.org/>
+References: <bug-220460-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] usb: xhci: handle Set TR Deq TRB Error
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-References: <20250818125742.3572487-1-niklas.neronin@linux.intel.com>
- <20250818125742.3572487-2-niklas.neronin@linux.intel.com>
- <20250821113244.14168b1a.michal.pecio@gmail.com>
-Content-Language: en-US
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-In-Reply-To: <20250821113244.14168b1a.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220460
 
-On 21/08/2025 12.32, Michał Pecio wrote:
-> On Mon, 18 Aug 2025 14:57:39 +0200, Niklas Neronin wrote:
->> Set TR Deq TRB Error can occur for two reasons:
-> 
-> Surely for other reasons too, like the infamous ASMedia case
-> I mentioned last time when this patch showed up here.
+--- Comment #8 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
+ ---
+Created attachment 308535
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308535&action=3Dedit
+Output of `sudo lsusb -v` with LMP adapter connected to left USB-C port wit=
+h no
+errors/warnings
 
-I poorly worded it, the reasons are according to Set TR Deq TRB
-Error reasons outlined in xHCI specification Section 4.6.10, page 142.
-The entire series adds only error handling according to the reasons
-in the xHCI specification.
+--=20
+You may reply to this email to add a comment.
 
-> 
-> In general, any illegal value in any TRB field is a TRB Error.
-> 
-> And in general, I think it would be better if those log messages simply
-> named the error received from HW, without trying to speculate about
-> possible causes (and getting it wrong). It would be less misleading and
-> it would instantly give the keywoard to search for in the spec, without
-> grepping for the error message to find which event code triggers it.
-
-Good point, there can still be "out-of-spec" reasons for a TRB Error.
-A generic TRB error warning is better.
-
-> 
->> 1. Stream ID is zero or more than the Max Primary Streams.
->>    This is currently caught by xhci_virt_ep_to_ring(), at the start of the
->>    function. Thus, this commit does not add handling for this error.
-> 
-> Nit: this is only true if ep->stream_info->num_streams at the time of
-> handling this event <= MaxPStreams at the time of command execution ;)
-> 
-> So there are two theoretical bugs which could make this check fail.
-> 
->> 2. Stream ID is non-zero and Stream ID boundary check failed.
-> 
-> Not sure what's the difference? Per spec, boundary check *is* checking
-> if Stream ID is in range, to prevent the xHC from writing to a Stream
-> Context outside actual SC Array and corrupting some random memory.
-> 
->>    Add a warning detailing the exact reason for this failure and print
->>    the deq ptr from the Set TR Deq command.
->>    Macro 'SCTX_DEQ_MASK' is a mask for the TR Dequeue ptr bit field 63:4.
->>
->> Reuse local variable 'deq'; just change it to 'dma_addr_t', which is what
->> it should have originally been.
-> 
-> Not sure, this is an always-64bit value read from xHCI data structures.
-> 
-> On a 32bit DMA system it probably won't have the high bits set if you
-> are reading it from the command (unless there was a bug), but later
-> other code will read it from HW and then all bets are off. Note that
-> a 64bit xHC may be installed in a 32bit system. And it may be buggy,
-> or it may have escaped the transfer ring due to broken Link TRB.
-
-As I understand it, the actual address values stored in the bitfields
-may vary depending on the system architecture, but the bitfield size itself
-remains consistent. On a 32-bit system, 'dma_addr_t' is 32 bits, and placing
-a 64-bit value into it will result in the upper 32 bits being dropped.
-
-Thank you for the review.
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
