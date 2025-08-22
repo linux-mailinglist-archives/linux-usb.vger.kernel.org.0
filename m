@@ -1,186 +1,142 @@
-Return-Path: <linux-usb+bounces-27187-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27188-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17463B3185E
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 14:53:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50537B31891
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 14:59:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 895FD1C8171B
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 12:52:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 175CBAE230C
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 12:56:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 915A22FC025;
-	Fri, 22 Aug 2025 12:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A0192FE585;
+	Fri, 22 Aug 2025 12:54:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="STDm5/53"
+	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="O9i05IB8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QJf9FCrO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A897E2FB607
-	for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 12:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4892FD1BB;
+	Fri, 22 Aug 2025 12:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755867140; cv=none; b=iWxNlI9fl7/z9GfXNRq/46Wa2hhVhQHbw/BHt/F4H4jLZIb/dUbcgOsSCqmrdv73sB4fVXU/asAQ65hy6TTtmNDoxhX4hmoR+o66nw4FPwNVwCiLVTthZK8zd70ZmCyBp/lKW7yP7esHWgAulNAjaU1m+YgfgIqiJxzuIHrGYEc=
+	t=1755867286; cv=none; b=qbI0r/cMbLqPeQsq4TqMv5jsP2356oBgSuE1C0lhS5NiVwBK8OMy1N6BjRbTyOjg8cG5wJ6zHeU4z7Ks19vjLYxhuqEN5YQboeN/5VGBS0jE2k0jrJI8jvlu7x+cFrBhCQT1Or/Spu//dMloys4/PYpw7VJn20I3EtNVUdljy60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755867140; c=relaxed/simple;
-	bh=Qvkm8ZvcKVj/gdX6BAq0K2JgptBY3L/xiu5D9dt3b90=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gPG+mwZUUx0+wmDCpzixmpRW9BQSZhJtEP5hxNQUCqLqaWj85kSm093dqConbPW95Hx6ztykzS8WrnSO5x+GInXE4zftUqfCsswyKC6EeSO8oPOd8xjf2EJ3vD6/E7R14xAnOhEhNK+0v7OxBIwHBtV+yu7KuN9/3ZnWt9QZ96A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=STDm5/53; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-76e2ea6ccb7so1679078b3a.2
-        for <linux-usb@vger.kernel.org>; Fri, 22 Aug 2025 05:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1755867138; x=1756471938; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yPWZ0k713TIq/QYfMNdmSvfN5q6KC+M5vfGH3Fh2z5k=;
-        b=STDm5/53EXT1VljXn6BGfCspYCVEX2AZpq506mI8kXtBAAxGhHiYkO345XzmHjhH+b
-         bx0hJN12V3NAFUXu4uNF+xu4WnaOvZ9MFvn6sK26XKIdguvCvZFB3a8Wsp/FY7oZg6rC
-         KcgnTenKiLi78N1FGLwD7BlWlDbrEpNiMD5Ys=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755867138; x=1756471938;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yPWZ0k713TIq/QYfMNdmSvfN5q6KC+M5vfGH3Fh2z5k=;
-        b=N6/QdDL+zQQShM8kfy43kcuxHVSO6fC8jlQ0avbo7arPux+53n5U//Lo0tXvQRe8Of
-         OFxLwmlbaYlmxWAwoWZ34A0n86FubDYa8SgpyxskPKQcgEwscNfAjVbZfspVyKBn0LyD
-         MwiYbhKhIUddFs5Zg/b4F8g3DsrWv5rxuaM/gWTX/CRyKJnez+RbXbUZtPiijR5AtFYk
-         kzmLF7npvme5gv1oEgfSaLcaXzWfS3Eu2zy3LasnC04OCOIRiETp0BW6Sy5CpSqxyacB
-         iud8gKKTkQlitwc9v5uUQmE3unsRX37TTMPStlPCZJEGleVrxhY5PoLB5hkLcY0/rzNN
-         CrSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW6dLrcnqWt+Nn5DqLucUgZbrI3coj58+Nrw1UpHOgmJd9MrJbEquTbZ393mjYh91JOY1LHUoe6pUM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzowg+j0FwrPZbxDP6t8gLaqZq3OyG63coL3MS/TKzjxCivRRK1
-	mutiisNdm4tq+lXthAGBYMXxaL6hxk2vua64QccehzMTbTHb3NEQx8kfpXo2F5d/3NZTQC9zrPU
-	Rivt/3KNzE3IyoFQ7FkrQvDhazjmXwOu99mU7uiJl
-X-Gm-Gg: ASbGncsYvQKjZ5KdNXu+d4fPK+d1xaWb4TjMOTOR+/ggyJNncGkaag8edaBMITHm8Zf
-	Kkvi+juaS6L49lK45SOuzaUXT4cUS6uUk9Nr/ARgN6bZmbd/PslEi9dNBr3g+n4Fr6I4BX7KmWo
-	nNtNvqvW/AhLabho1nmQircdeFB9xp7Si814US8htysD87wDQMPHwsP+mUmp99qfQCumXG5K+6l
-	CZLRA44k4hFGqa3nMvK/RG+Pgi5AZfCqXgP+4YdCXc7
-X-Google-Smtp-Source: AGHT+IGRt7T15g4J9TtJHeozRsfP6YTUMgnhVNdFI3+HALeg7CoNfApLp63yXeFIxoeJ6WrrgpylLU3LPWYlGugAkhs=
-X-Received: by 2002:a05:6a20:430b:b0:23d:54bd:92e6 with SMTP id
- adf61e73a8af0-24340d02428mr4351745637.29.1755867137998; Fri, 22 Aug 2025
- 05:52:17 -0700 (PDT)
+	s=arc-20240116; t=1755867286; c=relaxed/simple;
+	bh=9WM5jNaY2Wf4YG1NJEB50AfU0AlRHyDxQ+QQLN1yREI=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=O+tBeuzD13nskyzvn+eHvAwfe2VzPQTnEiHnwxAeGUefnLD0vH+0cT9beLi0jUwEtW+gDyTP6GKJhKSIqaxHRrb2XD/w/K8G4dw387xYdXWV4vfgSO7flyKGFV4Sc4U1yArJk/nPEOk9B/XStm4pmW/w5hcFiOvJbgFAfGiDn5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=O9i05IB8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QJf9FCrO; arc=none smtp.client-ip=202.12.124.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfout.stl.internal (Postfix) with ESMTP id 1E5251D00234;
+	Fri, 22 Aug 2025 08:54:43 -0400 (EDT)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-12.internal (MEProxy); Fri, 22 Aug 2025 08:54:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1755867282;
+	 x=1755953682; bh=aRZ2w4aRXo6qUfdO68AWObxskrE0DCs20pt2DafQLDY=; b=
+	O9i05IB8zSotgJBhPcH917nbpHH/qgqfnnFgsj4vfqka64s9qF4kPKS/O6VC0ic6
+	AAe8nf4dUWW27Kr3n8WQlNPVBvEYxNHOtY3RCaVxX28xivHTuWlMl6orHvowzh6n
+	G2CXDCjtp50AojrgnWYvQOINiw8LfWeWlUWP4OxSEs5Xo6u+6PFtXi63/tRXPPR6
+	laCFNlrTbwwOxKXFI5YGdH5zQwGuCMlQIS+NuEylXhUcsb2sIZP7XyvCCfcYEChh
+	Hhf03wja9RAShRYoojScQG6Ltgl0UeoEJfHGip7aHX2wbBxpDYwuJF4RG1mmQE2Q
+	EE/g/Xv66RnZ6VWazcUFgg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1755867282; x=
+	1755953682; bh=aRZ2w4aRXo6qUfdO68AWObxskrE0DCs20pt2DafQLDY=; b=Q
+	Jf9FCrO4swUngwR9t6qnHdFLxYD9lJFCVeDsnmwr742WBgL0im5dWqXN6q/ETZ+r
+	wL16Uo4/slFz6TFJB8U6br4Ep5OVchTB5AwtR9Jjk77FaEmzbi6rMK3kwbpiHW0N
+	1Xhe/+PCFsv25DNN1+ToDWxINJP75qqAcz3ICMGbqSItW6yTt2FWyfZVz4Kv4DE6
+	PL0bblRMbtrHHIeYO58mroytKXUw6FN8+Z4trhqvZXaiYp9gOI/Ee417BunzNE7Q
+	OQx5A4O0JTCkQLdbg0wqEYnlZeUaNR1iY6Gx6ZoH8jnvioCoR9aXQ/q2rYwU0cCt
+	72gLWFn8zKMR7MZ8pP7SA==
+X-ME-Sender: <xms:kmioaP9U_Se6dGPj_PDiMrw-8NA6u4uQNknJv8YXUJOue_N3gtzphg>
+    <xme:kmioaLtmRGYTzVwkqVZm96sK0Odoj3ClLMOCCjQ2fJd-8gEMlqZUAL2kwfBODM1yQ
+    DKqP7JD7GGcyj1Ku0Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduieefkeduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedfofgrrhhk
+    ucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtg
+    grqeenucggtffrrghtthgvrhhnpefhuedvheetgeehtdehtdevheduvdejjefggfeijedv
+    geekhfefleehkeehvdffheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggrpdhn
+    sggprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehhvghikh
+    hkihdrkhhrohhgvghruhhssehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohep
+    ghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplh
+    hinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    lhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:kmioaL_aU2PGTjjy-D1D4lKNo8mtFcZ1nvqwKg5mvTYTLrGW9Q0_Iw>
+    <xmx:kmioaDNQYo5OiBu3lKEa22pxYQ2N3rWNrp_f6IpNTAwbjPqeXJpj-Q>
+    <xmx:kmioaPchj6JjjIYTl54JF72vc07_LFJhb7QNkhX0qLZl-QMsheQpWw>
+    <xmx:kmioaCUdP4ZzuX0-vhC1NZnY5-36TCMDhYNrT_Sjj81erVPnq2wAoA>
+    <xmx:kmioaJvfIWkvGDTph2iSPqb6xKTpUMSNtN6EGAM93zOJ6Uam9RKCOkEu>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 501182CE0071; Fri, 22 Aug 2025 08:54:42 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250814184455.723170-1-akuchynski@chromium.org>
- <20250814184455.723170-5-akuchynski@chromium.org> <aKbwby7OYdUpLvhA@kuha.fi.intel.com>
- <aKb_rwVqqzipHHqf@kuha.fi.intel.com>
-In-Reply-To: <aKb_rwVqqzipHHqf@kuha.fi.intel.com>
-From: Andrei Kuchynski <akuchynski@chromium.org>
-Date: Fri, 22 Aug 2025 14:52:05 +0200
-X-Gm-Features: Ac12FXx3ANTUMIa8Fow-ciMNUPql3vLmAiHYubi-qOYKb8F15LFr1nZlCVhH7cs
-Message-ID: <CAMMMRMc6YYpQMo0hDqvjVwg28tTazJxxxgQ5j9iUq-ZWeYg6qA@mail.gmail.com>
-Subject: Re: [PATCH v1 4/5] usb: typec: Implement alternate mode priority handling
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
-	Jameson Thies <jthies@google.com>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, Guenter Roeck <groeck@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, "Christian A. Ehrhardt" <lk@c--e.de>, 
-	Venkat Jayaraman <venkat.jayaraman@intel.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: ADpVV-8_W703
+Date: Fri, 22 Aug 2025 08:54:22 -0400
+From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To: "Greg KH" <gregkh@linuxfoundation.org>
+Cc: "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <0ac78125-a028-4d99-b106-d792d8660d0f@app.fastmail.com>
+In-Reply-To: <2025082213-antacid-correct-53b1@gregkh>
+References: <mpearson-lenovo@squebb.ca>
+ <20250821185319.2585023-1-mpearson-lenovo@squebb.ca>
+ <2025082213-antacid-correct-53b1@gregkh>
+Subject: Re: [PATCH] usb: typec: ucsi: Handle incorrect num_connectors capability
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, Aug 21, 2025 at 1:15=E2=80=AFPM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi again,
->
-> On Thu, Aug 21, 2025 at 01:09:57PM +0300, Heikki Krogerus wrote:
-> > > diff --git a/drivers/usb/typec/mode_selection.c b/drivers/usb/typec/m=
-ode_selection.c
-> > > new file mode 100644
-> > > index 000000000000..8a54639b86bf
-> > > --- /dev/null
-> > > +++ b/drivers/usb/typec/mode_selection.c
-> > > @@ -0,0 +1,127 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Copyright 2025 Google LLC.
-> > > + */
-> > > +
-> > > +#include <linux/usb/typec_altmode.h>
-> > > +#include <linux/slab.h>
-> > > +#include <linux/list.h>
-> > > +#include "mode_selection.h"
-> > > +#include "class.h"
-> > > +
-> > > +static const char * const mode_names[TYPEC_ALTMODE_MAX] =3D {
-> > > +   [TYPEC_ALTMODE_DP] =3D "DisplayPort",
-> > > +   [TYPEC_ALTMODE_TBT] =3D "Thunderbolt3",
-> > > +   [TYPEC_ALTMODE_USB4] =3D "USB4",
-> > > +};
-> >
-> > You only need string for USB4. The altmode names come from the drivers.
->
-> Sorry, that won't work with port altmode. But you can still do the
-> lookup with just the sid.
->
+Hi Greg,
 
-Hi Heikki,
-
-I can get names from altmode partner. Names are only needed to
-provide results of entering the mode. No partner - no results.
-
+On Fri, Aug 22, 2025, at 12:51 AM, Greg KH wrote:
+> On Thu, Aug 21, 2025 at 02:53:07PM -0400, Mark Pearson wrote:
+>> The UCSI spec states that the num_connectors field is 7 bits, and the
+>> 8th bit is reserved and should be set to zero.
+>> Some buggy FW has been known to set this bit, and it can lead to a
+>> system not booting.
+>> Flag that the FW is not behaving correctly, and auto-fix the value
+>> so that the system boots correctly.
+>> 
+>> Found on Lenovo P1 G8 during Linux enablement program. The FW will
+>> be fixed, but seemed worth addressing in case it hit platforms that
+>> aren't officially Linux supported.
+>> 
+>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 >
-> I think this needs to be simplified. You don't need this elaborate
-> implementation in the beginning.
->
-> I'm going to do some suggestions. I don't know if all of them work,
-> but hopefully you get the idea how I would like to see the initial
-> support to be implemented.
->
-
-I checked your suggestions. It looks like all of them should
-work. Thank you!
-
-- priority is a member to struct typec_altmode
-- use svid instead of enum typec_mode_type
-- no list or other variables in struct typec_port.
-- struct mode_selection_state will be introduced in other series
-
->
-> The default priorities is an array of svids. And I really think that
-> the highest priority should be 1 not 0.
->
-
-I think your idea of setting priorities based on the order of
-port altmod registrations is better. We don't really need default
-priorities in this case.
-
->
-> No driver so you would need to use the mode_names, but instead of
-> doing that, just don't limit this at all.
->
-> If there is no name for the mode, use the svid.
+> Any hints as to what commit id this fixes?
 >
 > thanks,
 >
-> --
-> heikki
+> greg k-h
 
-What if we later create typec_USB4 driver, similar to the
-existing typec_displayport and typec_thunderbolt?
-This approach could unify how various modes are handled,
-eliminating exceptions for USB4 or any other mode.
+Maybe 3cf657f ('Remove all bit-fields')?
 
-The port altmode would contain priority and support "enter" and
-"exit" operations, while partner altmode would handle "activate"
-and name field. I've explored this approach with cros_ec_typec
-driver, and it appears to be a promising way to manage USB4 as
-alternate mode.
+The commit there states that 'We can't use bit fields with data that is received or send
+to/from the device.'
+Not sure why that is, but I assumed this means we shouldn't change the structure to use 7 bits for num_connectors, which was my original plan.
 
-Thanks,
+After that, we go all the way back to the file creation (c1b0bc2) where it was defined as 8 bit.
 
-Andrei
+Mark
 
