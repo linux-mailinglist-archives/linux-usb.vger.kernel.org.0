@@ -1,57 +1,57 @@
-Return-Path: <linux-usb+bounces-27166-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27167-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 426CDB310BB
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 09:45:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C44CB310C1
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 09:47:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A8A8AC7808
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 07:44:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89DCB1C83E59
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 07:46:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1F872E9EA4;
-	Fri, 22 Aug 2025 07:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43DA12E9743;
+	Fri, 22 Aug 2025 07:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6bqkKnn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CacS4nRL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9042E229D;
-	Fri, 22 Aug 2025 07:44:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B03C02E6115;
+	Fri, 22 Aug 2025 07:45:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755848654; cv=none; b=IWQg6WZtkcvIrik9uqT74xkRQ+ipO8RJYN1KQJydbsUrtBzCSz1jsD4I1YBnl0QrVyhEkJvHwVQ7fi7fbyfN05NSy3Ub11Kzyu6x9+KNSsUC11c6lAIVhuQoFDtLB6hycAAlDNfjmsRaXNRaZb2JGKCmxQmruWWR9a53RWOCiTM=
+	t=1755848737; cv=none; b=pOLUVdJi0mVIkWcHZuPFJdTZZCM8FP5r7QfiDe9xxHqeFA/AF43jnxDfwwQw+QzKg0rXYwn6BuZWVgtW47Po3epjeguF96gE4Osq1gE2ceoTxAZ3Do8gOzKJJOEyyNUEO0FJOpkYyG5FETd3vmBsHcQ1vjeX/NnaSFnzyfJON/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755848654; c=relaxed/simple;
-	bh=r2Pfl5nt6sdysHXXpL7eYWKTHAGJiVdYcKYqAZD4g8c=;
+	s=arc-20240116; t=1755848737; c=relaxed/simple;
+	bh=o1oCYNAE5S3d3+cWMnU9MkrLgM16Mf5zN/vKcGN7oXc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=csTN4OboF2IiIuqs5wdXOf3q1sx09wwt3vWBn8LIk1a3M8jLXULMC9l5CY2V+Y6HfEwdTIQlZyWV93M+uTYk+5gvVvpcpiYuHU8UN8FvKZeMaH1XUfb7cg5chVMvg5/eje7DvZiuZLlhn7TX+GISnjqtvMGNcmDRc1Fxf9gY/jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D6bqkKnn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3137DC4CEF1;
-	Fri, 22 Aug 2025 07:44:13 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=qI5FZiPf0U5nwUtGrqY9UzSgFHx5HRqxTmH9ZjPjx9/kc4upYXID9Ilz3k9K4uywz0WS56Hjfyad/4vAeoJ2N49K69fHTZNsr2x0Q4FIXZFagkNu3s3G7VTutknwByk76AkF4BBAAP9WxvXW+EovOgciBCbhRRFEJ1E8Qahc9Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CacS4nRL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C41C4CEF1;
+	Fri, 22 Aug 2025 07:45:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755848653;
-	bh=r2Pfl5nt6sdysHXXpL7eYWKTHAGJiVdYcKYqAZD4g8c=;
+	s=k20201202; t=1755848737;
+	bh=o1oCYNAE5S3d3+cWMnU9MkrLgM16Mf5zN/vKcGN7oXc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D6bqkKnnzj0cveORmGv6va44wNp63V0sDMipCbgl6kf+WuR3FQBP8f74LJTgDybbW
-	 dbUhspyi9wKpzGbDgomBukxOrrl3ckY+rgY2nj2cs/zvCVzHN9g4XIh5NJ0KfPGaRu
-	 tx9Z0iFhOYxmZR361b2wdfVw3NXrNruBbnrwlbJl+EuI8SP93ztUtKmOV1DyBqqsMO
-	 SQ29wbvnJtQ5+0lNbew/pX7aIxBJY/QOZp6zSp/G34n2PY39rtscLCXbHsE1uaqMGp
-	 lFvEUIV6YhcLkJLPH7zjaHVDtkqZRemNpsR/n5S7NQJL4VoxdZZ++h6ivDE4t4sECj
-	 3N5jwACuA8oWg==
-Date: Fri, 22 Aug 2025 09:44:11 +0200
+	b=CacS4nRLoOK8++Ox+Fskby9oVc/kdJx0j0WArtxfj8kZ/MVyXD98TSI5VDu6Fko2I
+	 X1OiwokdwHLY8FrITjKkXM765CKeK7DOeW8uaWydf8C/bW0JqZ2EUWsEv0+bPXca9N
+	 ZNQdufsP/yWAPWgQTNoWRb8gGVIQVVYnBK/KGjgKQWjdPZaZTYp/mXHOjjUhNu++wz
+	 pMdQXCQbm1k/N/wPqc9nvy6QZ2T5ds9XJui3jPo8cyzojTy8Et3KZS2hzt6oCec3Rr
+	 20ntJ36rh5VizlrsX0WpmZRrXJoC1jPEm3unj0AIe+oSbV5o6vnc8HmeIP+kO61QEm
+	 LSbervCQuyNYw==
+Date: Fri, 22 Aug 2025 09:45:34 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
 Cc: robh@kernel.org, gregkh@linuxfoundation.org, krzk+dt@kernel.org, 
 	conor+dt@kernel.org, peter.ujfalusi@gmail.com, devicetree@vger.kernel.org, 
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH v5 1/2] usb: dt-bindings: ti,twl4030-usb: convert to DT
+Subject: Re: [PATCH v5 2/2] usb: dt-bindings: ti,twl6030-usb: convert to DT
  schema
-Message-ID: <20250822-wealthy-oyster-of-upgrade-fdb4e2@kuoka>
+Message-ID: <20250822-elegant-olive-rhino-3bf988@kuoka>
 References: <20250821212824.70569-1-jihed.chaibi.dev@gmail.com>
- <20250821212824.70569-2-jihed.chaibi.dev@gmail.com>
+ <20250821212824.70569-3-jihed.chaibi.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,94 +60,25 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250821212824.70569-2-jihed.chaibi.dev@gmail.com>
+In-Reply-To: <20250821212824.70569-3-jihed.chaibi.dev@gmail.com>
 
-On Thu, Aug 21, 2025 at 11:28:23PM +0200, Jihed Chaibi wrote:
-> Convert the legacy TXT binding for the TWL4030 USB module
-> to the modern YAML DT schema format. This adds formal validation
-> and improves documentation using a conditional schema.
-> 
-> Signed-off-by: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
-> 
-> ---
-> Changes in v5:
-> 
->  - Split combined twlxxxx-usb binding into a dedicated file for
->    twl4030-usb per maintainer feedback.
->  - Used more accurate header for interrupt macros.
->  - Improved formatting in the examples.
-> 
-> Changes in v4:
->  - This patch is split from larger series per maintainer feedback.
->  - v3 link:
->     https://lore.kernel.org/all/20250816021523.167049-1-jihed.chaibi.dev@gmail.com/
->  - Removed i2c node as it wasn't required by the old binding file.
->  - Updated node names to 'usb' and 'usb-phy' in the examples to follow
->    generic naming conventions per the Device Tree specification.
->  - Replaced raw interrupt values with standard defines for clarity.
->  - Improved formatting in the examples for clarity and consistency.
-> 
-> Changes in v3:
->  - No changes.
-> 
-> Changes in v2:
->  - Added '#phy-cells' property to support PHY framework integration.
-> ---
->  .../bindings/usb/ti,twl4030-usb.yaml          | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/ti,twl4030-usb.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/ti,twl4030-usb.yaml b/Documentation/devicetree/bindings/usb/ti,twl4030-usb.yaml
-> new file mode 100644
-> index 000000000..a2d3c5f60
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/ti,twl4030-usb.yaml
-> @@ -0,0 +1,76 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/ti,twl4030-usb.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments TWL4030 USB PHY and Comparator
-> +
-> +maintainers:
-> +  - Peter Ujfalusi <peter.ujfalusi@gmail.com>
-> +
-> +description:
-> +  Bindings for the USB PHY and comparator module found within the
-> +  TWL4030 family of companion chips. If a sibling node is compatible with
-> +  "ti,twl4030-bci", the driver for that node will query this device for
-> +  USB power status.
-> +
-> +properties:
-> +  compatible:
-> +    const: ti,twl4030-usb
-> +
+On Thu, Aug 21, 2025 at 11:28:24PM +0200, Jihed Chaibi wrote:
 > +  interrupts:
 > +    description:
-> +      Interrupt numbers to the CPU for ID and VBUS events. The first interrupt
+> +      Interrupts for ID and VBUS events, two interrupts must be specified,
+> +      the first is the OTG interrupt for ID events (host mode), the second
+> +      is the USB interrupt for VBUS events (device mode).
+> +    minItems: 2
+> +    maxItems: 2
 
-Confusing. So first is CPU?
+Redundant constraints and description.
 
-> +      is the OTG interrupt for both ID and VBUS events. The second interrupt
+interrupts:
+  items:
+    - description: OTG for ID events in host mode
+    - description: USB device mode for VBUS events
 
-But furst is OTG?
-
-> +      is optional.
-
-After splitting the binding this should be rewritten. Drop description,
-no need for free form text.
-
-minItems: 1
-items:
-  - description: OTG for ...
-  - description: foo bar and do not say it is optional because it is obvious from schema
-
-
-Missing also removal of this device from the TXT binding.
-
-Best regards,
-Krzysztof
+    Best regards,
+    Krzysztof
 
 
