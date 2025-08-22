@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-27153-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27154-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62175B30DA9
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 06:45:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EFC5B30DB0
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 06:49:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 504F15E20F8
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 04:45:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EAA81CC7C8A
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 04:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9191226D4C1;
-	Fri, 22 Aug 2025 04:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548ED26CE2A;
+	Fri, 22 Aug 2025 04:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VUag2PQi"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UqbPcm62"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC68223507C;
-	Fri, 22 Aug 2025 04:45:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3EE393DF0;
+	Fri, 22 Aug 2025 04:49:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755837910; cv=none; b=clLX65kSxwGgGyTRFoustmCvpUtyjHfdMZRs//UY+8scx0cju0VSBDj6yT/bxIrn7cTHEF734ly75YZM9A2JxzyOVr5Agv0xeBHMUMfevjxVoG9So+rurBh7n9ogQa5Tm/oTZ97D5ftPL6gP7tI42HAZJVhLyAFikwCNjnOoG3M=
+	t=1755838167; cv=none; b=GJ+DDZapeRQ+FZaX3VMBH8kxk5ErdqQG9KIirFnjCUXtw+0o48AyU9K2yX+U8RTmXe1Vnm1f6woNwhXDIVc8l+7DjlPpS0ZnmHuakp0XLUL4WNcQx3a828ZV9LS+IBuO8+HYPhAB1p22A42sIMwi7QnrGM3kzrn2rUJG78jtUfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755837910; c=relaxed/simple;
-	bh=xr9HAgxXfe1LuG2e1xdt+RJHcAoEpm5QP45MW7qu8PA=;
+	s=arc-20240116; t=1755838167; c=relaxed/simple;
+	bh=lrB9DC2wIo77kTJ7HkkZjFXvU4Cb/omt9e+VHXMqLRA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iEWaYC1r/K4P1YIZRCgmuXjuFA68yHJpOZBufSfgjZ2tjl90/kVT/LXhdLj8TInFGTGBYVIKzN7jLnDonZhGspFPpnVhjhxQCvTLrhMaTcBJry1leVRFyVckUo1ia6hfFYnD7yyfXuMwPCAh8ItgBZUHhmLbPmqMJ0cxtnhHxa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VUag2PQi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD8CC4CEF1;
-	Fri, 22 Aug 2025 04:45:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=aFwvdOYYEe+nj7WEUhtzTMdQK3Eb+QIrbQ2QHQIS4T//E7+42/w4wLKW8qJqMvHkrtoI8fo+CYg6YC0DehXjhHwSVcKHBk2Cook/4GsC8GAPg1AU1B6+TWmApfh/JIRpBMb4NuPFO8Xu2SF505SfA5ncjyoRks3dFPa/B5E10ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UqbPcm62; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED3CAC4CEF1;
+	Fri, 22 Aug 2025 04:49:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755837909;
-	bh=xr9HAgxXfe1LuG2e1xdt+RJHcAoEpm5QP45MW7qu8PA=;
+	s=korg; t=1755838167;
+	bh=lrB9DC2wIo77kTJ7HkkZjFXvU4Cb/omt9e+VHXMqLRA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VUag2PQikMSCxt+pmRY4xpu1udTUdmHuBtHqKJ9v96X2xES9SDzV8aSu422xN0QNB
-	 XXFuG7cwtAAPuf2asy46I+O84+dS6U9PLr0Zh/35HcS7puEXGmu8Ck83Fb3qZVt2Oh
-	 hOw+QQHOFaSjrmRRC9IU7fVVJf7/j4xP5GHA+hQY=
-Date: Fri, 22 Aug 2025 06:45:04 +0200
+	b=UqbPcm62uMesDWkt7g9hqVghT0corwH37xjm8lxMY7iq54BBBEi/iKJWFHBOT17uZ
+	 rX4ev0Pe1F7ZFOapgE100JYc8FHHP9en2xlhSqpbloh1QbfS60JC3mEz9ca/wMsNkG
+	 32sBoSwWSJ4lcqseo8v5bWZR8ns2Wm8lxAZ/RX74=
+Date: Fri, 22 Aug 2025 06:49:23 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: William Wu <william.wu@rock-chips.com>
-Cc: Chris.Wulff@biamp.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, frank.wang@rock-chips.com,
-	jianwei.zheng@rock-chips.com, yue.long@rock-chips.com
-Subject: Re: [PATCH] usb: gadget: f_hid: Fix zero length packet transfer
-Message-ID: <2025082235-fondness-destruct-f8f6@gregkh>
-References: <1755828118-21640-1-git-send-email-william.wu@rock-chips.com>
+To: ccc194101@163.com
+Cc: jannh@google.com, stern@rowland.harvard.edu, rex.nie@jaguarmicro.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	chenchangcheng <chenchangcheng@kylinos.cn>
+Subject: Re: [PATCH] usb: usbfs: Add reset_resume callback to usbfs.
+Message-ID: <2025082256-wizard-traverse-1c88@gregkh>
+References: <20250822024602.42894-1-ccc194101@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,43 +55,46 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1755828118-21640-1-git-send-email-william.wu@rock-chips.com>
+In-Reply-To: <20250822024602.42894-1-ccc194101@163.com>
 
-On Fri, Aug 22, 2025 at 10:01:58AM +0800, William Wu wrote:
-> If the hid transfer with size divisible to EPs max packet
-> size, it needs to set the req->zero to true, then the usb
-> controller can transfer a zero length packet at the end
-> according to the USB 2.0 spec.
+On Fri, Aug 22, 2025 at 10:46:02AM +0800, ccc194101@163.com wrote:
+> From: chenchangcheng <chenchangcheng@kylinos.cn>
 > 
-> Signed-off-by: William Wu <william.wu@rock-chips.com>
+> When an Apple device is inserted into the host, and the host
+> wakes up from S3/S4 power states, if the reset_resume process
+> is triggered, the absence of a reset_resume callback in usbfs will
+> cause the device to unbind.
+> By adding a reset_resume callback to usbfs and reporting REMOVE and ADD
+> uevents in reset_resume, the userspace is prompted to reissue commands
+> to re-establish the binding with usbfs.
+> 
+> Signed-off-by: chenchangcheng <chenchangcheng@kylinos.cn>
+
+Nit, we need a "real name", see the kernel documentation for details.
+
 > ---
->  drivers/usb/gadget/function/f_hid.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/usb/core/devio.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-> index 8e1d1e8..8021af3 100644
-> --- a/drivers/usb/gadget/function/f_hid.c
-> +++ b/drivers/usb/gadget/function/f_hid.c
-> @@ -511,7 +511,7 @@ static ssize_t f_hidg_write(struct file *file, const char __user *buffer,
->  	}
+> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> index f6ce6e26e0d4..358850596b0d 100644
+> --- a/drivers/usb/core/devio.c
+> +++ b/drivers/usb/core/devio.c
+> @@ -749,6 +749,14 @@ static int driver_resume(struct usb_interface *intf)
+>  	return 0;
+>  }
 >  
->  	req->status   = 0;
-> -	req->zero     = 0;
-> +	req->zero     = ((count % hidg->in_ep->maxpacket) == 0);
->  	req->length   = count;
->  	req->complete = f_hidg_req_complete;
->  	req->context  = hidg;
-> @@ -967,7 +967,7 @@ static int hidg_setup(struct usb_function *f,
->  	return -EOPNOTSUPP;
->  
->  respond:
-> -	req->zero = 0;
-> +	req->zero = ((length % cdev->gadget->ep0->maxpacket) == 0);
->  	req->length = length;
->  	status = usb_ep_queue(cdev->gadget->ep0, req, GFP_ATOMIC);
->  	if (status < 0)
+> +static int driver_reset_resume(struct usb_interface *intf)
+> +{
+> +	struct usb_device *udev = interface_to_usbdev(intf);
+> +
+> +	kobject_uevent(&udev->dev.kobj, KOBJ_REMOVE);
+> +	kobject_uevent(&udev->dev.kobj, KOBJ_ADD);
 
-What commit id does this fix?
+But the object is not being removed and added.  So why lie like this?
+How does userspace now handle this as the device did not go away?
+
+This feels odd, what changed to require this kernel change to be added?
 
 thanks,
 
