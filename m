@@ -1,113 +1,109 @@
-Return-Path: <linux-usb+bounces-27150-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27151-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7060BB30C00
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 04:46:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 209A2B30CA3
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 05:36:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D6421D01CAA
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 02:47:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78D2D7B184A
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Aug 2025 03:35:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F5421CFF6;
-	Fri, 22 Aug 2025 02:46:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13FCB28AAF9;
+	Fri, 22 Aug 2025 03:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="S/BAgFdq"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="CPzj808T"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08A0B21ADB9;
-	Fri, 22 Aug 2025 02:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from mail-m3282.qiye.163.com (mail-m3282.qiye.163.com [220.197.32.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15DED1684B4;
+	Fri, 22 Aug 2025 03:36:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.82
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755830798; cv=none; b=mT33mbrKJgqaomIAGaBfKp/Cm6XVMfWWOliSxp15Gf/cL/dsAluYvrnWsge+GGNxDbUR7mFxmyQh3btYvfem0/6zE0fXdN1DRTkHQ8PqlUWhJET+topx7CYghMJnika58cHP/gYWFvA60MLkcH92ANQCrtn1WtJBhFOth2F5Yv4=
+	t=1755833786; cv=none; b=rmroafN6iNh5wbfrk59h/bXjbCETH0hFn7wkZy25syh/1y2wCPhaPdx4HUAH1B3zz3Fd5F5MeC17rZUU2p/8MU8ZoNuXkNnPVRlm6eDgc3p6OHFDdGDAjiLs/O5bUGBe9+pEYSj1ns+oA48BC2POdWTNdZN2TISAY+XqFZ9qm8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755830798; c=relaxed/simple;
-	bh=Ywx7e4h2sBHfe1jk7/s3AaNTx3ChkLUEFIgXEVyKgeo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T2LHBPNFBUgVoQOyU3V+8hM+fgMvYDAE6NBH7txGK+TiQcXUus3w0EegM25KU2bSv04fPfDOEQR+NJMAFHlSfI+y8SlhLLMqSqnQSDX//Q2mYL4huc3p6jg3skYnMAcRJ99woihASEC6gnz6SiUXXJW4j0N/PDQl4KtDgH6SCkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=S/BAgFdq; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=KD
-	wtmxqmQM9tsvXEIkX1bqnD+g/okK51Yr1LWmD6FtQ=; b=S/BAgFdq1KJgUy1iY3
-	ZV/J1xzDVVZEd97HLj8yqABh7m5xpW8TMtg7o4D9oWhf7dWCnId8krWsYGe2QxnK
-	NW4cpHsViHrb9y4l09bvlVxHbmKQNyZLywPd2KAkBbHoBFOsdnbeMBZUNodg+jB4
-	eHxOUURNEpM2B01NVXJZEU0HQ=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wDHKo7t2adoOpKLDg--.63895S2;
-	Fri, 22 Aug 2025 10:46:06 +0800 (CST)
-From: ccc194101@163.com
+	s=arc-20240116; t=1755833786; c=relaxed/simple;
+	bh=rM1ahS6a2B8+/PWLYl+bW846eAp8FZu42OwordjjBKA=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=q2sWWO66uRAwuQAt89N8Zkzsl2CKgTmKYHbJXvWzUsG5QcJ6hVrO09EimQR1ehp8nWsMrxzVOVd6QIuKfpJZURdIgNcoCzIZGncHIhgVVWnKe7cWvNpryca0iC0/FlXL2B7F+nkXMeDvRSAiaHhtODzC7GSIGqqgqx3FeKvs7Bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=CPzj808T; arc=none smtp.client-ip=220.197.32.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 20397154d;
+	Fri, 22 Aug 2025 11:36:11 +0800 (GMT+08:00)
+From: William Wu <william.wu@rock-chips.com>
 To: gregkh@linuxfoundation.org
-Cc: jannh@google.com,
-	stern@rowland.harvard.edu,
-	rex.nie@jaguarmicro.com,
-	linux-usb@vger.kernel.org,
+Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	chenchangcheng <chenchangcheng@kylinos.cn>
-Subject: [PATCH] usb: usbfs: Add reset_resume callback to usbfs.
-Date: Fri, 22 Aug 2025 10:46:02 +0800
-Message-Id: <20250822024602.42894-1-ccc194101@163.com>
-X-Mailer: git-send-email 2.25.1
+	william.wu@rock-chips.com,
+	frank.wang@rock-chips.com,
+	jianwei.zheng@rock-chips.com,
+	yue.long@rock-chips.com
+Subject: [PATCH] usb: gadget: configfs: Correctly set use_os_string at bind
+Date: Fri, 22 Aug 2025 11:36:09 +0800
+Message-Id: <1755833769-25434-1-git-send-email-william.wu@rock-chips.com>
+X-Mailer: git-send-email 2.0.0
+X-HM-Tid: 0a98cfd9271009d4kunm74fcece015f95ec
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGUIeGVZCT0gaTktJQx8aTEtWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=CPzj808TVqFupTStMStpwMw0ZjUufp+iz2JziOQ6PsgoX10QbK7qmI4eFrKNfSu7VbefOGYdkMqZ8l1zCXEdY+aVrGpNDgHcBPwy9xUCKUFTkDyqp1apCfs3txItWOVMl4HZ6GXXHNIOmiSAiLS/1eczAv4T4UAKfQeqaP8RxPY=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=9EwhBvf+CZi7anqyyhJMIJS9Q2jTsfhtrsAiA+38Igc=;
+	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDHKo7t2adoOpKLDg--.63895S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zw1UCF47Zw13tFWDGFyfJFb_yoW8Wr18pF
-	WYya9Fyr1UJr47WrsYyFn5ZFyrAanYyay2kry3Z39xua43J34xtF18tFy5J3WDKr129r9x
-	tF17Kwnxua4rGrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j7YFAUUUUU=
-X-CM-SenderInfo: 5fffimiurqiqqrwthudrp/1tbiYxyx3min1YSMSQAAsL
 
-From: chenchangcheng <chenchangcheng@kylinos.cn>
+Once the use_os_string flag is set to true for some functions
+(e.g. adb/mtp) which need to response the OS string, and then
+if we re-bind the ConfigFS gadget to use the other functions
+(e.g. hid) which should not to response the OS string, however,
+because the use_os_string flag is still true, so the usb gadget
+response the OS string descriptor incorrectly, this can cause
+the USB device to be unrecognizable on the Windows system.
 
-When an Apple device is inserted into the host, and the host
-wakes up from S3/S4 power states, if the reset_resume process
-is triggered, the absence of a reset_resume callback in usbfs will
-cause the device to unbind.
-By adding a reset_resume callback to usbfs and reporting REMOVE and ADD
-uevents in reset_resume, the userspace is prompted to reissue commands
-to re-establish the binding with usbfs.
+An example of this as follows:
 
-Signed-off-by: chenchangcheng <chenchangcheng@kylinos.cn>
+echo 1 > os_desc/use
+ln -s functions/ffs.adb configs/b.1/function0
+start adbd
+echo "<udc device>" > UDC   #succeed
+
+stop adbd
+rm configs/b.1/function0
+echo 0 > os_desc/use
+ln -s functions/hid.gs0 configs/b.1/function0
+echo "<udc device>" > UDC  #fail to connect on Windows
+
+This patch sets the use_os_string flag to false at bind if
+the functions not support OS Descriptors.
+
+Signed-off-by: William Wu <william.wu@rock-chips.com>
 ---
- drivers/usb/core/devio.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/usb/gadget/configfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index f6ce6e26e0d4..358850596b0d 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -749,6 +749,14 @@ static int driver_resume(struct usb_interface *intf)
- 	return 0;
- }
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index f94ea19..6bcac85 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -1750,6 +1750,8 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
+ 		cdev->use_os_string = true;
+ 		cdev->b_vendor_code = gi->b_vendor_code;
+ 		memcpy(cdev->qw_sign, gi->qw_sign, OS_STRING_QW_SIGN_LEN);
++	} else {
++		cdev->use_os_string = false;
+ 	}
  
-+static int driver_reset_resume(struct usb_interface *intf)
-+{
-+	struct usb_device *udev = interface_to_usbdev(intf);
-+
-+	kobject_uevent(&udev->dev.kobj, KOBJ_REMOVE);
-+	kobject_uevent(&udev->dev.kobj, KOBJ_ADD);
-+	return 0;
-+}
- #ifdef CONFIG_PM
- /* The following routines apply to the entire device, not interfaces */
- void usbfs_notify_suspend(struct usb_device *udev)
-@@ -776,6 +784,7 @@ struct usb_driver usbfs_driver = {
- 	.disconnect =	driver_disconnect,
- 	.suspend =	driver_suspend,
- 	.resume =	driver_resume,
-+	.reset_resume =	driver_reset_resume,
- 	.supports_autosuspend = 1,
- };
- 
-
-base-commit: b19a97d57c15643494ac8bfaaa35e3ee472d41da
+ 	if (gadget_is_otg(gadget) && !otg_desc[0]) {
 -- 
-2.25.1
+2.0.0
 
 
