@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-27200-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27201-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38F9CB327F2
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Aug 2025 11:32:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8144B32858
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Aug 2025 13:42:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A4E67B9DAF
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Aug 2025 09:31:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDD155C58FF
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Aug 2025 11:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 186EC23C519;
-	Sat, 23 Aug 2025 09:32:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9272F258ECD;
+	Sat, 23 Aug 2025 11:42:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FhjPaQhP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AjNwp0ui"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78ECE4A33;
-	Sat, 23 Aug 2025 09:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0412024BBEE;
+	Sat, 23 Aug 2025 11:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755941550; cv=none; b=jzC0F9mC0l6mW/8ZxiDocjYSNKyIwk8kcaWIJWS5Y2kclRxyIKgulk1BwfCvMwvI71kxGy5mT+YZsueGmsrU61o2sPh//ujCe4sg41wc/c8A9uCiSyTBMy543NBZjooLM7irUxSczlZPoHMa5+1xMlWG0zqkoVy9bgc677PbSEs=
+	t=1755949336; cv=none; b=iyD8i7q3xb1lH2MKz1lueSCMcxLe5rW7WHzZH4Key59ne7Dj7NW7btGDwjjTAt1SZX6zNilvQVwkaKN4k7ZTRZJJREheFZfdO3T0IJqt1XpZMxtvNeKFc0PowOjG0snyzy/vi9QNK8tGkR6jDmQ6cXeuggWDfQng5mXjxGR+8eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755941550; c=relaxed/simple;
-	bh=+gmaRG4bCJwAnZiedCk4uT+ovE7FPGaq2RQsy9fyihM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=EMs7bwROMqY+sVejCCj18upGupFvCcM8Xnt0r3anWC/GN1meLirZeKCS13bdNwnYFN8zrwM7tW4vy4DNEwMhYDlGJOpcVshqh1q1qkFUDtEF54WGLtGPJ1G3/ifjvpiP1r99L74mJhzqaArx3j754zJWP2evx9JpgAddPCxAB/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FhjPaQhP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD2E1C4CEE7;
-	Sat, 23 Aug 2025 09:32:25 +0000 (UTC)
+	s=arc-20240116; t=1755949336; c=relaxed/simple;
+	bh=Z4TA0OORd5nq/VOXrmsLKOQ3PrHPQ4mtK8elrLgVns0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B/1SVPKdRIzWQBBnbNRgJw5e2pReGES6a54mBVofJnzZvfHPyi2xWA4qLi9mwFua8D7Xb2BSLvzmRFWvzl3dAoBUjGQQtqSBXIo2sIX5CXXVzeQNy0SNCez+HvOS3qXpEdpK63cQpGPSIn93quepKPzQA4zuguHUmrH1vGvtWQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AjNwp0ui; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C4DC4CEE7;
+	Sat, 23 Aug 2025 11:42:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755941549;
-	bh=+gmaRG4bCJwAnZiedCk4uT+ovE7FPGaq2RQsy9fyihM=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=FhjPaQhPe0F68Fk8Xg+5uYwyCCuS30Qb3gJ47QfVRuDzDVENxq/NbNpZI/Am7oLbf
-	 +aAUIa9Qk/rz5HZeQ2srhbwDNhMs/cz2aeDfaHpfYlAuH7f0T/JsyrArRXpNjEjjZs
-	 6pbeqYT1CrU2lWc24aBYLB5HgJbetmavjZFWWVlV2Mcu7ZPGQMPItkt/9ww1vNnILp
-	 Jp/xLMUbklEpqp3VlycKxM4hbuQXSGOR4LeFtVIWnzuKJKQZPON9fEn6hcwHiCknk9
-	 gAblSTs8LXPsE0SRQBdAECmv/RK3U3/rY8dhFXrA19yQ8eMUzUQiKYaXrJZfSFZVVf
-	 7s3OE9FSPbxdg==
-Message-ID: <0289f92d-0d18-43d2-b98a-da8bb08e9342@kernel.org>
-Date: Sat, 23 Aug 2025 11:32:23 +0200
+	s=k20201202; t=1755949335;
+	bh=Z4TA0OORd5nq/VOXrmsLKOQ3PrHPQ4mtK8elrLgVns0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=AjNwp0ui/uADg+X4ucpgn1s6FF8CXSUBXc/Jz7Ak4Z+Q3bcm0tDi9nuRj0ves0dwH
+	 c34w/S5I1jgXInE96uhXZeOkkNwvuyxGfVIz9aEJmJRIfWmgbsUDHAOfPOIxfiZzLW
+	 JpPI9tBgizTCPSqqcD/SYXA7tVG9xCtttIkTHrYZDzDEw1NlXXpCh9/XE7j8Nnjgb+
+	 H4xz2GVXRNrqp3aJmEFBbyzEwb5skBgFkpMxe+lOBvwUfEzAq5QeSiUX1wa/tMs4uH
+	 vqbmqQrbMQ8mr78GOJPNKB07GWoiyBF6XUyi3vOVd+cBMbayP4x96nOZKzt6pkGEL6
+	 zdfg6ZVOhi+Vw==
+Message-ID: <c052860b-c239-43a6-b05d-c8495bc1c731@kernel.org>
+Date: Sat, 23 Aug 2025 13:42:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,9 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Sven Peter <sven@kernel.org>
-Subject: Re: [PATCH RFC 07/22] usb: dwc3: apple: Adjust vendor-specific
- registers during init
+Subject: Re: [PATCH RFC 05/22] usb: dwc3: apple: Do not use host-vbus-glitches
+ workaround
 To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -68,37 +67,45 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
  "linux-arm-kernel@lists.infradead.org"
  <linux-arm-kernel@lists.infradead.org>,
- "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
- Hector Martin <marcan@marcan.st>
+ "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>
 References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
- <20250821-atcphy-6-17-v1-7-172beda182b8@kernel.org>
- <20250821221832.zsn4rk7nomsbgytx@synopsys.com>
+ <20250821-atcphy-6-17-v1-5-172beda182b8@kernel.org>
+ <20250821222842.fqrxjp56czc7ubok@synopsys.com>
 Content-Language: en-US
-In-Reply-To: <20250821221832.zsn4rk7nomsbgytx@synopsys.com>
+From: Sven Peter <sven@kernel.org>
+In-Reply-To: <20250821222842.fqrxjp56czc7ubok@synopsys.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Thinh,
+On 22.08.25 00:28, Thinh Nguyen wrote:
+> On Thu, Aug 21, 2025, Sven Peter wrote:
+>> From: Janne Grunau <j@jannau.net>
 
-On 22.08.25 00:18, Thinh Nguyen wrote:
-> For this patch, however, I'd prefer these vendor-specific settings to be
-> in their own glue driver. I can only imagine more changes will be
-> introduced in the future with this vendor. See if we can use the new
-> glue interface in glue.h (some call this the new "flatten" model) when
-> creating a glue driver.
+[...]
 
-Nice, thanks! Hints like that are exactly what I was hoping for when
-I sent this RFC.
+>>   	/*
+>>   	 * Some platforms need to power off all Root hub ports immediately after DWC3 set to host
+>>   	 * mode to avoid VBUS glitch happen when xhci get reset later.
+>> +	 * On Apple platforms we must not touch any MMIO yet because dwc3
+>> +	 * will not work correctly before its PHY has been initialized.
+> 
+> This doesn't make sense, the phy should've been initialized by this
+> point. We already access MMIO before this. Even your [PATCH RFC 7/22]
+> attempts to access MMIO before this, yet accessing here causes problem.
+> Do we know when the phy get initialized then?
 
-When I originally started working on this I tried to use the 
-parent/child model but didn't really get anywhere. This flattened model 
-looks very useful though.
+You're absolutely right, this doesn't make any sense!
 
-I think I can even move some of logic from the previous commits to 
-dwc3-apple.c if I extend the glue a little bit. I'll see how that works 
-out and maybe do that for the next version then.
+dwc3_power_off_all_roothub_ports uses ioremap which will map the XHCI 
+region as Device-nGnRE. That just doesn't work on these machines and 
+actually explains the SErrors.
+Resources on these machines generally have the IORESOURCE_MEM_NONPOSTED 
+flag set (via the nonposted-mmio dt property) and then use ioremap_np to 
+map them using Device-nGnRnE.
 
-Thanks,
+
+Best,
+
 
 Sven
 
