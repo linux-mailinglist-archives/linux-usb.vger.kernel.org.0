@@ -1,112 +1,157 @@
-Return-Path: <linux-usb+bounces-27201-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27202-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8144B32858
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Aug 2025 13:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 14742B32963
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Aug 2025 16:46:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDD155C58FF
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Aug 2025 11:42:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B3BB173651
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Aug 2025 14:44:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9272F258ECD;
-	Sat, 23 Aug 2025 11:42:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62D142BD01E;
+	Sat, 23 Aug 2025 14:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AjNwp0ui"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GZ0U1lwO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0412024BBEE;
-	Sat, 23 Aug 2025 11:42:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79A429CB56;
+	Sat, 23 Aug 2025 14:44:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755949336; cv=none; b=iyD8i7q3xb1lH2MKz1lueSCMcxLe5rW7WHzZH4Key59ne7Dj7NW7btGDwjjTAt1SZX6zNilvQVwkaKN4k7ZTRZJJREheFZfdO3T0IJqt1XpZMxtvNeKFc0PowOjG0snyzy/vi9QNK8tGkR6jDmQ6cXeuggWDfQng5mXjxGR+8eM=
+	t=1755960289; cv=none; b=EgvLz52ft1syfxsQ5shKaOyShAZ2HsBMEtJ5kB+SXSUxR117KhufVXTAJfEzCrHMfbfNRCWH9m3T5x3hz1urLGAjsJFMlRt2+LiBtjA9RiINA2wp0qDfmlkWtKxSfXzP4HLtZSDUDmQ02BTe31dq6lEt777h2UvYDPeXm8dNz5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755949336; c=relaxed/simple;
-	bh=Z4TA0OORd5nq/VOXrmsLKOQ3PrHPQ4mtK8elrLgVns0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B/1SVPKdRIzWQBBnbNRgJw5e2pReGES6a54mBVofJnzZvfHPyi2xWA4qLi9mwFua8D7Xb2BSLvzmRFWvzl3dAoBUjGQQtqSBXIo2sIX5CXXVzeQNy0SNCez+HvOS3qXpEdpK63cQpGPSIn93quepKPzQA4zuguHUmrH1vGvtWQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AjNwp0ui; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C4DC4CEE7;
-	Sat, 23 Aug 2025 11:42:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755949335;
-	bh=Z4TA0OORd5nq/VOXrmsLKOQ3PrHPQ4mtK8elrLgVns0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AjNwp0ui/uADg+X4ucpgn1s6FF8CXSUBXc/Jz7Ak4Z+Q3bcm0tDi9nuRj0ves0dwH
-	 c34w/S5I1jgXInE96uhXZeOkkNwvuyxGfVIz9aEJmJRIfWmgbsUDHAOfPOIxfiZzLW
-	 JpPI9tBgizTCPSqqcD/SYXA7tVG9xCtttIkTHrYZDzDEw1NlXXpCh9/XE7j8Nnjgb+
-	 H4xz2GVXRNrqp3aJmEFBbyzEwb5skBgFkpMxe+lOBvwUfEzAq5QeSiUX1wa/tMs4uH
-	 vqbmqQrbMQ8mr78GOJPNKB07GWoiyBF6XUyi3vOVd+cBMbayP4x96nOZKzt6pkGEL6
-	 zdfg6ZVOhi+Vw==
-Message-ID: <c052860b-c239-43a6-b05d-c8495bc1c731@kernel.org>
-Date: Sat, 23 Aug 2025 13:42:09 +0200
+	s=arc-20240116; t=1755960289; c=relaxed/simple;
+	bh=XLNrun7kIQT0mqwRRQMKsvdopi3C5S5qwDroaXv6eG0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PV1ZN6KMpXTIIiOtLYCFe6D5g9KArZdsWKh29Uj5LU1jZf6Gi4+DazNysRIgnptWbHqxATHDYZARCSvQdg6SPbR1tzGqv7DWOMWK6cvYfAqcKA0cuxz6RyHG/JuflnND3/aZKquAwdHxSwbqVpdDKmM7QF1YDpY92/pEPNVqglY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GZ0U1lwO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E44D5C4CEE7;
+	Sat, 23 Aug 2025 14:44:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1755960289;
+	bh=XLNrun7kIQT0mqwRRQMKsvdopi3C5S5qwDroaXv6eG0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=GZ0U1lwOKx2sLU1WmkoD6So2eMp9mWJ16iqwQxRUgZNwJMlUAgG3d5BseorFi9YPe
+	 sS8QZsjaWHnhjR6BLzrTBsleSjqZVkANwyAinIn7PQFm3y0u7ZgYrBuDkE/xF2ngXV
+	 1yOuoSe+zTavB/ewPWaeYGfxEZp4dIVkY7Zvty90=
+Date: Sat, 23 Aug 2025 16:44:46 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.17-rc3
+Message-ID: <aKnT3gmJbnYFoALE@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 05/22] usb: dwc3: apple: Do not use host-vbus-glitches
- workaround
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
- Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>
-References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
- <20250821-atcphy-6-17-v1-5-172beda182b8@kernel.org>
- <20250821222842.fqrxjp56czc7ubok@synopsys.com>
-Content-Language: en-US
-From: Sven Peter <sven@kernel.org>
-In-Reply-To: <20250821222842.fqrxjp56czc7ubok@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 22.08.25 00:28, Thinh Nguyen wrote:
-> On Thu, Aug 21, 2025, Sven Peter wrote:
->> From: Janne Grunau <j@jannau.net>
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-[...]
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
->>   	/*
->>   	 * Some platforms need to power off all Root hub ports immediately after DWC3 set to host
->>   	 * mode to avoid VBUS glitch happen when xhci get reset later.
->> +	 * On Apple platforms we must not touch any MMIO yet because dwc3
->> +	 * will not work correctly before its PHY has been initialized.
-> 
-> This doesn't make sense, the phy should've been initialized by this
-> point. We already access MMIO before this. Even your [PATCH RFC 7/22]
-> attempts to access MMIO before this, yet accessing here causes problem.
-> Do we know when the phy get initialized then?
+are available in the Git repository at:
 
-You're absolutely right, this doesn't make any sense!
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.17-rc3
 
-dwc3_power_off_all_roothub_ports uses ioremap which will map the XHCI 
-region as Device-nGnRE. That just doesn't work on these machines and 
-actually explains the SErrors.
-Resources on these machines generally have the IORESOURCE_MEM_NONPOSTED 
-flag set (via the nonposted-mmio dt property) and then use ioremap_np to 
-map them using Device-nGnRnE.
+for you to fetch changes up to ff9a09b3e09c7b794b56f2f5858f5ce42ba46cb3:
 
+  usb: xhci: fix host not responding after suspend and resume (2025-08-19 16:12:13 +0200)
 
-Best,
+----------------------------------------------------------------
+USB fixes for 6.17-rc3
 
+Here are some small USB driver fixes for 6.17-rc3 to resolve a bunch of
+reported issues.  Included in here are:
+  - typec driver fixes
+  - dwc3 new device id
+  - dwc3 driver fixes
+  - new usb-storage driver quirks
+  - xhci driver fixes
+  - other tiny USB driver fixes to resolve bugs
 
-Sven
+All of these have been in linux-next this week with no reported issues.
 
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (1):
+      USB: core: Update kerneldoc for usb_hcd_giveback_urb()
+
+Amit Sunil Dhamne (2):
+      usb: typec: maxim_contaminant: disable low power mode when reading comparator values
+      usb: typec: maxim_contaminant: re-enable cc toggle if cc is open and port is clean
+
+Heikki Krogerus (1):
+      usb: dwc3: pci: add support for the Intel Wildcat Lake
+
+Kuen-Han Tsai (1):
+      usb: dwc3: Ignore late xferNotReady event to prevent halt timeout
+
+Mael GUERIN (1):
+      USB: storage: Add unusual-devs entry for Novatek NTK96550-based camera
+
+Marek Vasut (1):
+      usb: renesas-xhci: Fix External ROM access timeouts
+
+Miao Li (1):
+      usb: quirks: Add DELAY_INIT quick for another SanDisk 3.2Gen1 Flash Drive
+
+Niklas Neronin (1):
+      usb: xhci: fix host not responding after suspend and resume
+
+Russell King (Oracle) (1):
+      usb: gadget: tegra-xudc: fix PM use count underflow
+
+Sebastian Andrzej Siewior (1):
+      kcov, usb: Don't disable interrupts in kcov_remote_start_usb_softirq()
+
+Sebastian Reichel (1):
+      usb: typec: fusb302: Revert incorrect threaded irq fix
+
+Selvarasu Ganesan (1):
+      usb: dwc3: Remove WARN_ON for device endpoint command timeouts
+
+Thorsten Blum (1):
+      usb: storage: realtek_cr: Use correct byte order for bcs->Residue
+
+Weitao Wang (1):
+      usb: xhci: Fix slot_id resource race conflict
+
+Xu Yang (2):
+      usb: core: hcd: fix accessing unmapped memory in SINGLE_STEP_SET_FEATURE test
+      usb: chipidea: imx: improve usbmisc_imx7d_pullup()
+
+Zenm Chen (1):
+      USB: storage: Ignore driver CD mode for Realtek multi-mode Wi-Fi dongles
+
+ drivers/usb/chipidea/ci_hdrc_imx.c         |  3 +-
+ drivers/usb/chipidea/usbmisc_imx.c         | 23 ++++++++----
+ drivers/usb/core/hcd.c                     | 28 ++++++++-------
+ drivers/usb/core/quirks.c                  |  1 +
+ drivers/usb/dwc3/dwc3-pci.c                |  2 ++
+ drivers/usb/dwc3/ep0.c                     | 20 ++++++++---
+ drivers/usb/dwc3/gadget.c                  | 19 ++++++++--
+ drivers/usb/gadget/udc/tegra-xudc.c        |  9 +++--
+ drivers/usb/host/xhci-hub.c                |  3 +-
+ drivers/usb/host/xhci-mem.c                | 22 ++++++------
+ drivers/usb/host/xhci-pci-renesas.c        |  7 ++--
+ drivers/usb/host/xhci-ring.c               |  9 +++--
+ drivers/usb/host/xhci.c                    | 23 ++++++++----
+ drivers/usb/host/xhci.h                    |  3 +-
+ drivers/usb/storage/realtek_cr.c           |  2 +-
+ drivers/usb/storage/unusual_devs.h         | 29 +++++++++++++++
+ drivers/usb/typec/tcpm/fusb302.c           | 12 ++++---
+ drivers/usb/typec/tcpm/maxim_contaminant.c | 58 ++++++++++++++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpci_maxim.h       |  1 +
+ include/linux/kcov.h                       | 47 +++++-------------------
+ 20 files changed, 224 insertions(+), 97 deletions(-)
 
