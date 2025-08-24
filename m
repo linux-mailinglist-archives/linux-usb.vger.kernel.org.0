@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-27213-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27214-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E16FB32FA3
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 13:42:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF62EB32FA5
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 13:43:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8892445F13
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 11:42:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C20A1B6098C
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 11:43:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D2B2D6E7B;
-	Sun, 24 Aug 2025 11:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C4742D7DCA;
+	Sun, 24 Aug 2025 11:42:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="meoHjqTS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IU7E91y6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCD12877C3;
-	Sun, 24 Aug 2025 11:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0894C20A5F3;
+	Sun, 24 Aug 2025 11:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756035766; cv=none; b=De1AoyOLjXULOQ8iaJhDg6UAmDBanydkLOzIvX4H2oYnwrKxcXCyRB0ko0EscjvqlV9vZ+nUPHVynenpFXGaqcI7nm/ohy9S4trhPMwnKpdGi+Gqsk5jl0EiWiKA3QcmTc1tDfH/StpkuUYt5LXtm6KjrRCzYog0yVrAnBBcOjo=
+	t=1756035772; cv=none; b=s7DOfzwcbEciIagqlHoMQD1pQtd6bu2OYCfwnjdnPioXL/sHnQaaqVNHs1vJttjB9FwZX9zl+YDpgsnmCEGnmN5XfXrW8h0SydIcCVVtB4BIR4WgTJY0WOy7C43N6zJm28Dl9FwlI1L5359O7v33QBiQXX6PwCMgpzGqs6VkATk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756035766; c=relaxed/simple;
-	bh=64HttTbzPfkDJxUOdPli9+ijugUFPTSgR4EwH4hNuPE=;
+	s=arc-20240116; t=1756035772; c=relaxed/simple;
+	bh=G68wyxPpd9RvxTfToEwu1txsuR/ahQrNsieW+Wfhg4Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bl7ojCtVzoKOSXfQlWiP7+VngVsAbfhaij/pPIHQ4pLuB3FzCcxfBCR4lbbr5q2Sf2oOAOVmHQenZj/wL//LR2qu/gRq8RhtHtGSm5X/kBy3eZIR8xq5uXsus4/W3gE/HKGovJU0EQPw5WE1koC7wvi9U2b1d9V0B64ISteI7KM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=meoHjqTS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AFBDC4CEEB;
-	Sun, 24 Aug 2025 11:42:43 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=SUR3bCkfMarzwiDLjvDeFhPZyMKg5nN68zIcY+8vwV+M2ZTiOZT3r94TX3RvnLvJ/fdAiFjkJKrPrmLD5KvpSXbYcfsvyJ+7mnjEigi3GqoK84bwyV6Aass3HZpoEGP3O8bK8f6+Q/T0U/rIA0ZXZm9gYXrqQGar3SPDgAKQUrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IU7E91y6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 168FBC4CEED;
+	Sun, 24 Aug 2025 11:42:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756035765;
-	bh=64HttTbzPfkDJxUOdPli9+ijugUFPTSgR4EwH4hNuPE=;
+	s=k20201202; t=1756035771;
+	bh=G68wyxPpd9RvxTfToEwu1txsuR/ahQrNsieW+Wfhg4Q=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=meoHjqTSqEBYNADihRovKzmL2nUg+86kRvlW3cuKdimFoFlph5OAYWOoLh+PSk7o/
-	 sezUPYd3PJGuZLUAgAMvnC19I5/UWsc+HMH5OOu4HsolsGV3Wv/sSatm285DtnTmmB
-	 GNiVeyHaUiUZz+gNxtP8BNCOyrsrcrQw9HIpG94DyTmkyQkua61JO8/lXiHhfowtH6
-	 aGTh3HDRVIuNnYJIW36HeQgvH4aH1lS38wxgjJlTd8PsaWrZ7FEgJ2qk759PA43Hra
-	 1mvYJ2Fi9vw7AGe1IQGuriNAA5S7ojLOPQum3MbtGJMWPM7qaj68y/ej7OIboiEyQb
-	 lVx/7iAAo3+Bw==
-Message-ID: <ca63f8fc-6766-4361-a180-9fa90af04439@kernel.org>
-Date: Sun, 24 Aug 2025 13:42:41 +0200
+	b=IU7E91y64RKvUwMDuW0EnaEg/2TRsF0YeaAosIZRup5o6KKliVTBdA3IUkO9SXAr9
+	 4nC6oBi1efRgYChAihbDKj1EovFXDuAA/kdH93PEdYJlQLZO+cYeweEtDIJAVaWVVR
+	 YVdsPZGT0/+JoPCFOBjnhjNdZiKTZGC07VdaOXlLGJ6fSCdwNTcECiqay7125dSjBV
+	 CbZ8zEdRs2HCQBR4jezZ8uP+F3Oq48PPp2alb3D4YiOEV6hbrC1E6xR4+30oyrX/ek
+	 8uh9GwP2V7GiFWLwGG6/plISC2qW/DPvZlX3ZCUiu871zcGtzCuKj3dy7TrBqYK+bh
+	 ZCP7RKHLxGGTw==
+Message-ID: <ea4e49ff-46cf-4927-880e-70b6563e4027@kernel.org>
+Date: Sun, 24 Aug 2025 13:42:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,14 +50,14 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/2] usb: dt-bindings: ti,twl4030-usb: convert to DT
+Subject: Re: [PATCH v7 2/2] usb: dt-bindings: ti,twl6030-usb: convert to DT
  schema
 To: Jihed Chaibi <jihed.chaibi.dev@gmail.com>, krzk+dt@kernel.org
 Cc: gregkh@linuxfoundation.org, robh@kernel.org, conor+dt@kernel.org,
  peter.ujfalusi@gmail.com, devicetree@vger.kernel.org,
  linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, shuah@kernel.org
 References: <20250824112338.64953-1-jihed.chaibi.dev@gmail.com>
- <20250824112338.64953-2-jihed.chaibi.dev@gmail.com>
+ <20250824112338.64953-3-jihed.chaibi.dev@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -103,16 +103,16 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250824112338.64953-2-jihed.chaibi.dev@gmail.com>
+In-Reply-To: <20250824112338.64953-3-jihed.chaibi.dev@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 24/08/2025 13:23, Jihed Chaibi wrote:
-> Convert the legacy TXT binding for the TWL4030 USB module
+> Convert the legacy TXT binding for the TWL6030 USB module
 > to the modern YAML DT schema format. This adds formal validation
 > and improves documentation using a conditional schema.
 > 
-> Remove the twl4030 section from the obsolete .txt binding file
+> The legacy twlxxxx-usb.txt file is no longer needed and is removed.
 > 
 > Signed-off-by: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
 > 
