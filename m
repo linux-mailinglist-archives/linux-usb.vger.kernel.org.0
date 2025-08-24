@@ -1,197 +1,191 @@
-Return-Path: <linux-usb+bounces-27215-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27216-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37D9EB3300F
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 15:19:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06D99B3311A
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 17:13:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 426CE20293F
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 13:18:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78AED7A17BC
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 15:12:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F4592D5A14;
-	Sun, 24 Aug 2025 13:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A127329AB13;
+	Sun, 24 Aug 2025 15:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="dY0Fki/U";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ezBPRlDE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UgSogNzO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4871DA60D;
-	Sun, 24 Aug 2025 13:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DCE244663
+	for <linux-usb@vger.kernel.org>; Sun, 24 Aug 2025 15:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756041529; cv=none; b=cLSsfqTix3KJh6UFeh1m+7oJdhbNV36nffMfGz6EXo4aBjSDSwJrRruXM8nXIRfFnMdMFoL/pPiSDbUjhNV1jexoYvjHRMfSr9DVl1U0HWwUF4Q4rRRaOcsFOw3qylxlj58YeiGTOohB6JHxW+mkBJh9y5MW7m//xlR38EANZOo=
+	t=1756048411; cv=none; b=Trn8CUggUQ6zeXJQ6LYxY9EKWb25M4osyM93mbpIcJ0BlsXVO5JOg+ic9fQYaEb+gD9Cw9ZCWkETpIZeWG3/Ijgud8TLRwg5wGEb99VfU91f/0gLxCRJYFQ6ocM+c3yhSB54QLxwPqQYChMu/f4WZCLfBzuOm9N1USlx5zqia0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756041529; c=relaxed/simple;
-	bh=Y3HaksNBo3DV7bLbSC3M7I7b4eJP4LGWu6gpDI/98EU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hshm3H3Y2V58kVAP3Sm9/OhyCAVin5L0rukBH9jxR6dKQbJuvki3iBspNvNi7s9nJ4BHeHMDfs+//YCuuU1vc32qqYRlu+/cBlzXV/xe1gOK/FunIzNCIicgv1b8p1n6+F8H64fylSo0WZGRL6+ct/4rpD9qLUCbV8s/ATe4Ju0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=dY0Fki/U; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ezBPRlDE; arc=none smtp.client-ip=202.12.124.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.stl.internal (Postfix) with ESMTP id BE2501D00095;
-	Sun, 24 Aug 2025 09:18:45 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Sun, 24 Aug 2025 09:18:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1756041525; x=1756127925; bh=3prZoZB8qt
-	UY6cMZZ2NVeXAFCSeqIEGUhlmdlNJvu3c=; b=dY0Fki/UXlewD9rNROFjTngj5X
-	j4+oBWxM5/68hjgRw0rcab6Qjc532yYJs1TwVwAALlBwai8sqbS7sVOjHRwn4ZGL
-	nCFZ5bsAW1TeIVDCk5pJwtw0bqiAao7H1tC1Nxq/qTkdfuK4Fj9bu9qY5YBTJxPE
-	0rPSm5MbTZ1OpAzjQDzqkd8aDh+7WhnsvkFyRPk/Y4iU4O+wI41/fAclQXJlsN9A
-	57jsxzBOvas0e/BmUe8jX61e7Hph2QSKZzJpBNq6uV+8QTqb5PzXHTzFQljcyAhN
-	/TtbwKKJiTBScVxdTaXMRRwSgkjAImipuLumyQCJ/Os/RshRNzf8KvcuU9Wg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1756041525; x=1756127925; bh=3prZoZB8qtUY6cMZZ2NVeXAFCSeqIEGUhlm
-	dlNJvu3c=; b=ezBPRlDERXj9t162ceFYHGaikmaDdpwRVQPtjblaCgeHZj42Y2U
-	+Wlr3l2OIwFHpJRz+7bINCxDMy8nu/u7mTGwIE5aP7RH3DnZ7+qusBNlJuRPug5j
-	0fF45hIPYMvLYV+i/mo0kMXFPwnPa1CXiu2kak97SBvR9BPjPMyj2LaEkjEWZeWL
-	0e4R5JTOdV6z9yJ5geKX5hytpx3l97WGe4sVu8vF9XLjcex6Z2GfCx++zdo733kY
-	FXClxJ1MFdYTVB4m2QfafjDe9d+m7BKLhXVRlXMXhaJOkWRtCSbA25n22dwwMr4B
-	TobLERzrHFBFuptb43LGjpnq088M3Gy/P+A==
-X-ME-Sender: <xms:NBGraIKCqo-GFIKftdCgEmK2UwGG5cg-SEkjE40So6oWlqn3gmgIqA>
-    <xme:NBGraF1ExnEVCFABdybfg36CZCNsM0bymCUDrPdpPRcAeq7xEI50wKmIMb-iZezDn
-    Ah3dHiSd0BHnI-bvEs>
-X-ME-Received: <xmr:NBGraKeTBZKmc6v9HXIv4n_mjzCXbUjpPfcp72k12dL81XuqNHe1RVN8GeNRByYn0rTDur5fQO8SqEYTdpRzl465jvWT5dhXMx0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduieeliedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomheplfgrnhhnvgcu
-    ifhruhhnrghuuceojhesjhgrnhhnrghurdhnvghtqeenucggtffrrghtthgvrhhnpefgvd
-    ffveelgedujeeffeehheekheelheefgfejffeftedugeethfeuudefheefteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjsehjrghnnhgruh
-    drnhgvthdpnhgspghrtghpthhtohepudelpdhmohguvgepshhmthhpohhuthdprhgtphht
-    thhopehthhhinhhhrdhnghhuhigvnhesshihnhhophhshihsrdgtohhmpdhrtghpthhtoh
-    epshhvvghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehgrhgvghhkhheslhhinhhu
-    gihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrd
-    horhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    oheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegsrghlsghise
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhihshhsrgesrhhoshgvnhiifigvihhg
-    rdhiohdprhgtphhtthhopehnvggrlhesghhomhhprgdruggvvh
-X-ME-Proxy: <xmx:NBGraB6hZ5q-Svkbm2ty2CCEP_CAbOL495fy91yKgR8Wq7eaHVgzvw>
-    <xmx:NBGraF8k5CTxPZAkjPP5BMWybAClWCipgkqeV3tw6ZVKNCpH_N_Mag>
-    <xmx:NBGraAL4LqFl6Tm4RJuOqEqtUcF6E8g_MkxVJLNkQqXN-hRnzOLXPQ>
-    <xmx:NBGraAgZuPu3S5haJ24eHA7YcubO9p9kyHm7-tbxABj9KjuFjLgRFA>
-    <xmx:NRGraDmBjBJnwCIeb4-lr5-V1cpi2gSP19-8yGyHidyMMe0wHDHneZkU>
-Feedback-ID: i47b949f6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 24 Aug 2025 09:18:43 -0400 (EDT)
-Date: Sun, 24 Aug 2025 15:18:41 +0200
-From: Janne Grunau <j@jannau.net>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Sven Peter <sven@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"asahi@lists.linux.dev" <asahi@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>
-Subject: Re: [PATCH RFC 04/22] usb: dwc3: apple: Reset dwc3 during role
- switches
-Message-ID: <20250824131841.GG1270980@robin.jannau.net>
-References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
- <20250821-atcphy-6-17-v1-4-172beda182b8@kernel.org>
- <20250821232547.qzplkafogsacnbti@synopsys.com>
+	s=arc-20240116; t=1756048411; c=relaxed/simple;
+	bh=dFNv3kuKX6xNETfwvmPN0ESJ7Y4BSG4qSLKcoxFk+oI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DTEGu6gl6JGqFwEW0lebuXrQGGi6r+ufeCV8Xk7zFhtB7HcMfZGhn6/yDz/1e7nERWZLtjlMLPihUYXW9xX46bMPf/taqS0aR//0xbQbr+xnJs4s8AzygRTGL4iii5wdaDWN8hEsHtqe0E/k7VIiztjvZ7JTV6HXYz8U6S5ik6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UgSogNzO; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4b2cf656e4fso3512631cf.0
+        for <linux-usb@vger.kernel.org>; Sun, 24 Aug 2025 08:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756048408; x=1756653208; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2HX9YUCYX4wD+L8eYWIxV5b+Y9/4LeqoXjBA/t1VUmk=;
+        b=UgSogNzOs9C+bdilCK2G6EzHKs9p5hrbIa5s3MJFJlj0aBD793WiurzLunCbh4TUyp
+         zLC9zxpSgFRomOCw+bLGqeM8eH6Ox7KFazllfj7ZmRXq/BPIzvziPomeOLx+Lfz3PBic
+         BIqMCTa0RZ19A6aOmKyFydjpmwHzSaccKLjvqHFUqC2kTrXexk5hxdmPxz2u565Pi6gG
+         3TWUAjM5FfS8Y8RyM+ybE6ioHPyogDNh6kJ3gOiUHhC31LfrMM+sMiw+udXdRwkA8rIQ
+         JUim+pRcvZzLfWP8AY/cVCJiA/Fj4TNgcpTkvDowiyr2h4iYc6GDp3q60LNzbyKFAPmr
+         o56w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756048408; x=1756653208;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2HX9YUCYX4wD+L8eYWIxV5b+Y9/4LeqoXjBA/t1VUmk=;
+        b=uToRp5Uh1ozNE2WskCwEVaUU92lux8pLZqi35CILDKeJ0e1rxLcnHgWRH9zD86LiAv
+         9lFVkpvWg8OGeFfEOWIskXpgNN3DqhG8Xay5JZGHe7VczU+Q6SlObzFe9kJi+V0dOHgl
+         DGuJnpNFhm9Og0h317uG2eebWrqMHObymnICtoTPyXYu6kH4OOEegvTYnZbVjc6i032L
+         JHTBb2XbVzv7hrehXy+R6ydZE1ipeeU2c9PuKOzHueH1nttvwBm7bUGLN9oWqg/VuaXT
+         xQbx5GfGvxAzd3Ow/ayiL9Xhi2IgRGrndE0vcPAENz+aYh05V62NNuRAxIMD2OfWkTZt
+         muCw==
+X-Gm-Message-State: AOJu0YyYHHE0A+X20lEPeEZ0+9/pN+Nr9eevEUB8p7LjIVcneQBNH5EW
+	owCbiVIWWqoQPitT5iC8Yxh0fyWGyTwEQaRQs7FRKYEfKn8ZmZxN+ekS
+X-Gm-Gg: ASbGnctC71GwItWKaX3zPqjIcUHzf2haYU5zC1g1yf8+TVNjtWyTvygRUys6Ec3DTdW
+	FzvFClBX2oD+ovthumUupbxnmsH6Oih9D45WRErTDcn4cunM5MhuPKLHXcSM092tcuIHbCvFkta
+	rsYF7TxnhB2SqV9heiEQPIgf9WuNX0MTm2Q9Z/RbfyTcZqhooO+tnRns4ZATRkFcJgwC+j/m58d
+	EhB+I7CXDA08WH6dpqIqVQhMqhNevqacQitf0wQWIdWREj2mOj7s+d98i84UotlwPPYBXS8jj71
+	MAHNWfY3C+FBhkjGOFkJ4pA4a8+ZzySpqvY81ctd1gQYgYswM7BTogK+uVSFU8uflhnjpMAwRie
+	fREWtyJphbxYfzY/I9KqcY6+5F75Ymps6/RCqcedplAwg4jP+n+bHdckR+Q==
+X-Google-Smtp-Source: AGHT+IEIqH9duUT7lFwviPRhNVrA9H4qelpELN86rmSQ04BWlw1NWWeSo/7150bP+HyT1y4qDKLXUQ==
+X-Received: by 2002:a05:622a:4d2:b0:4ab:3963:c650 with SMTP id d75a77b69052e-4b29fe9bb8cmr121552871cf.10.1756048408172;
+        Sun, 24 Aug 2025 08:13:28 -0700 (PDT)
+Received: from cr-x-redhat96-nsd-2.fyre.ibm.com ([129.41.87.0])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b2b8c61627sm33356731cf.8.2025.08.24.08.13.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Aug 2025 08:13:27 -0700 (PDT)
+From: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+To: andreas.noever@gmail.com,
+	westeri@kernel.org,
+	michael.jamet@intel.com,
+	YehezkelShB@gmail.com
+Cc: linux-usb@vger.kernel.org,
+	Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+Subject: [PATCH] drivers: thunderbolt: Use string choices helpers
+Date: Sun, 24 Aug 2025 08:13:16 -0700
+Message-ID: <20250824151316.2388812-1-chelsyratnawat2001@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250821232547.qzplkafogsacnbti@synopsys.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 21, 2025 at 11:25:51PM +0000, Thinh Nguyen wrote:
-> On Thu, Aug 21, 2025, Sven Peter wrote:
-> > As mad as it sounds, the dwc3 controller present on the Apple M1 must be
-> > reset and reinitialized whenever a device is unplugged from the root
-> > port or when the PHY mode is changed.
-> > 
-> > This is required for at least the following reasons:
-> > 
-> >   - The USB2 D+/D- lines are connected through a stateful eUSB2 repeater
-> >     which in turn is controlled by a variant of the TI TPS6598x USB PD
-> >     chip. When the USB PD controller detects a hotplug event it resets
-> >     the eUSB2 repeater. Afterwards, no new device is recognized before
-> >     the DWC3 core and PHY are reset as well because the eUSB2 repeater
-> >     and the PHY/dwc3 block disagree about the current state.
-> > 
-> >   - It's possible to completely break the dwc3 controller by switching
-> >     it to device mode and unplugging the cable at just the wrong time.
-> >     If this happens dwc3 behaves as if no device is connected.
-> >     CORESOFTRESET will also never clear after it has been set. The only
-> >     workaround is to trigger a hard reset of the entire dwc3 core with
-> >     its external reset line.
-> > 
-> >   - Whenever the PHY mode is changed (to e.g. transition to DisplayPort
-> >     alternate mode or USB4) dwc3 has to be shutdown and reinitialized.
-> >     Otherwise the Type-C port will not be usable until the entire SoC
-> >     has been reset.
-> > 
-> > All of this can be easily worked around by respecting transitions to
-> > USB_ROLE_NONE and making sure the external reset line is asserted when
-> > switching roles. We additionally have to ensure that the PHY is
-> > suspended during init.
-> > 
-> > Signed-off-by: Sven Peter <sven@kernel.org>
-> > ---
-> >  drivers/usb/dwc3/core.c | 61 +++++++++++++++++++++++++++++++++++++++++++++----
-> >  drivers/usb/dwc3/core.h |  3 +++
-> >  drivers/usb/dwc3/drd.c  | 11 ++++++++-
-> >  drivers/usb/dwc3/host.c |  3 ++-
-> >  4 files changed, 72 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index 8002c23a5a02acb8f3e87b2662a53998a4cf4f5c..26aa507a738f001409a97ef563c6561433a1cac5 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
+Use string_choices.h helpers instead of hard-coded strings.
 
-...
+Signed-off-by: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+---
+ drivers/thunderbolt/debugfs.c |  3 ++-
+ drivers/thunderbolt/nhi.c     |  3 ++-
+ drivers/thunderbolt/usb4.c    | 13 +++++++------
+ 3 files changed, 11 insertions(+), 8 deletions(-)
 
-> >  	/*
-> >  	 * When current_dr_role is not set, there's no role switching.
-> >  	 * Only perform GCTL.CoreSoftReset when there's DRD role switching.
-> >  	 */
-> > -	if (dwc->current_dr_role && ((DWC3_IP_IS(DWC3) ||
-> > +	if (dwc->role_switch_reset_quirk ||
-> 
-> Don't override the use of GCTL.CoreSoftReset with this quirk. Not all
-> controller versions should use GCTL.CoreSoftReset, the new controller
-> version don't even have it. What version is this vendor using?
+diff --git a/drivers/thunderbolt/debugfs.c b/drivers/thunderbolt/debugfs.c
+index f8328ca7e22e..628337ac880e 100644
+--- a/drivers/thunderbolt/debugfs.c
++++ b/drivers/thunderbolt/debugfs.c
+@@ -13,6 +13,7 @@
+ #include <linux/delay.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/uaccess.h>
++#include <linux/string_choices.h>
+ 
+ #include "tb.h"
+ #include "sb_regs.h"
+@@ -691,7 +692,7 @@ static int margining_caps_show(struct seq_file *s, void *not_used)
+ 		seq_printf(s, "0x%08x\n", margining->caps[i]);
+ 
+ 	seq_printf(s, "# software margining: %s\n",
+-		   supports_software(margining) ? "yes" : "no");
++		   str_yes_no(supports_software(margining)));
+ 	if (supports_hardware(margining)) {
+ 		seq_puts(s, "# hardware margining: yes\n");
+ 		seq_puts(s, "# minimum BER level contour: ");
+diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+index f3a2264e012b..679c51440174 100644
+--- a/drivers/thunderbolt/nhi.c
++++ b/drivers/thunderbolt/nhi.c
+@@ -20,6 +20,7 @@
+ #include <linux/delay.h>
+ #include <linux/property.h>
+ #include <linux/string_helpers.h>
++#include <linux/string_choices.h>
+ 
+ #include "nhi.h"
+ #include "nhi_regs.h"
+@@ -146,7 +147,7 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
+ 		dev_WARN(&ring->nhi->pdev->dev,
+ 					 "interrupt for %s %d is already %s\n",
+ 					 RING_TYPE(ring), ring->hop,
+-					 active ? "enabled" : "disabled");
++					 str_enabled_disabled(active));
+ 
+ 	if (active)
+ 		iowrite32(new, ring->nhi->iobase + reg);
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index fdae76c8f728..4729b45aac1f 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -10,6 +10,7 @@
+ #include <linux/delay.h>
+ #include <linux/ktime.h>
+ #include <linux/units.h>
++#include <linux/string_choices.h>
+ 
+ #include "sb_regs.h"
+ #include "tb.h"
+@@ -172,8 +173,8 @@ void usb4_switch_check_wakes(struct tb_switch *sw)
+ 			return;
+ 
+ 		tb_sw_dbg(sw, "PCIe wake: %s, USB3 wake: %s\n",
+-			  (val & ROUTER_CS_6_WOPS) ? "yes" : "no",
+-			  (val & ROUTER_CS_6_WOUS) ? "yes" : "no");
++			  str_yes_no(val & ROUTER_CS_6_WOPS),
++			  str_yes_no(val & ROUTER_CS_6_WOUS));
+ 
+ 		wakeup = val & (ROUTER_CS_6_WOPS | ROUTER_CS_6_WOUS);
+ 	}
+@@ -191,9 +192,9 @@ void usb4_switch_check_wakes(struct tb_switch *sw)
+ 			break;
+ 
+ 		tb_port_dbg(port, "USB4 wake: %s, connection wake: %s, disconnection wake: %s\n",
+-			    (val & PORT_CS_18_WOU4S) ? "yes" : "no",
+-			    (val & PORT_CS_18_WOCS) ? "yes" : "no",
+-			    (val & PORT_CS_18_WODS) ? "yes" : "no");
++			    str_yes_no(val & PORT_CS_18_WOU4S),
++			    str_yes_no(val & PORT_CS_18_WOCS),
++			    str_yes_no(val & PORT_CS_18_WODS));
+ 
+ 		wakeup_usb4 = val & (PORT_CS_18_WOU4S | PORT_CS_18_WOCS |
+ 				     PORT_CS_18_WODS);
+@@ -260,7 +261,7 @@ int usb4_switch_setup(struct tb_switch *sw)
+ 	tbt3 = !(val & ROUTER_CS_6_TNS);
+ 
+ 	tb_sw_dbg(sw, "TBT3 support: %s, xHCI: %s\n",
+-		  tbt3 ? "yes" : "no", xhci ? "yes" : "no");
++		  str_yes_no(tbt3), str_yes_no(xhci));
+ 
+ 	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, ROUTER_CS_5, 1);
+ 	if (ret)
+-- 
+2.47.3
 
-It reports DWC31, revision 190A and the unlisted version_types
-0x736f3035 (M1), 0x736f3039 (M1 Pro/Max/Ultra) and 0x736f3130 (M2, M2
-Pro/Max/Ultra).
-
-> I'm concern how this condition is needed...
-> 
-> > +		(dwc->current_dr_role && ((DWC3_IP_IS(DWC3) ||
-> >  			DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
-> > -			desired_dr_role != DWC3_GCTL_PRTCAP_OTG)) {
-> > +			desired_dr_role != DWC3_GCTL_PRTCAP_OTG))) {
-> >  		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-> >  		reg |= DWC3_GCTL_CORESOFTRESET;
-> >  		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-
-Janne
 
