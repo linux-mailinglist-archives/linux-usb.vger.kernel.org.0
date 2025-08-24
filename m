@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-27206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C392FB32E2A
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 10:32:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2D26B32E94
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 11:03:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 329887AB044
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 08:30:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FDCF4445CA
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 09:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56387258CE7;
-	Sun, 24 Aug 2025 08:32:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E0F122F177;
+	Sun, 24 Aug 2025 09:03:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VpuZHKG8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RiasseGH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19463FF1;
-	Sun, 24 Aug 2025 08:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0631422DD;
+	Sun, 24 Aug 2025 09:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756024326; cv=none; b=qswG2PzHzDobMeBLAZaYhlPW7HIF6QG9agHkbXwMn0I43E7z03x0EK1/iBNcY5xiPGA7/6GUbxW93GBbcv8Omz54KjSRPHNZI+EZfwEDf+GddiA9LWXhXHJkmRcPLc5LOBXZS/wO7lea5H1C4NRvbIzgUErA59Z0rqPkjhGtTdE=
+	t=1756026203; cv=none; b=bgByGdevg8W79A3pSxCi1HF3j9DSGLC6LzpF2TmNDFpiDKvFDppVUeyZhA/gi63ZJl2zf1nOtxxppUwdkKqha+nlZI/IDDV72Ti0WjWfkYTtF2d8BUKsya02PYTq84Xl+8D4+btcEtAmEih0l4cWaueZL+9odC0zb6E1cNqBd10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756024326; c=relaxed/simple;
-	bh=riG39t2xdTtd/RF9lzly1W+o4O54tVxjLbjpDCJIcCM=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=mVMohBCbSCjIJir6CVyArLsHIhTRiN7gCdzkzT43khZ80BpVEwsB75Gywj30t3m4TIGsf3hu7QX//pWfSWhhDRdoY7Mc9MaptG22Cq7hJcbzXDsA1QIQeBa15iRNbeZiNzGtKUNQ4CsIt3U1A4wT/WpR2kvJIQ55yydr0ubWOto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VpuZHKG8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1667C4CEEB;
-	Sun, 24 Aug 2025 08:32:01 +0000 (UTC)
+	s=arc-20240116; t=1756026203; c=relaxed/simple;
+	bh=aKK+a5Rtq2g2c4ZYWeMrcXzRrs5bD2smvrtbxPiNkFg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hdiJiY+LFCE+aZ2V6DMwG3QxnbQeEddNtxyxCCjk4hEQuxiLyEVllNLnbJMwO8ZZohwLWD1WmNAzdTAQrqDUtTRcxoSMqvDgsH7vBmv2LK6mJa/NKrjSAm8lE8w3nB/13Lo8LiYBbrLmSofdQ7SSmPfd3HMYYi9NMKzrMA32LoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RiasseGH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A7BEC4CEEB;
+	Sun, 24 Aug 2025 09:03:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756024326;
-	bh=riG39t2xdTtd/RF9lzly1W+o4O54tVxjLbjpDCJIcCM=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=VpuZHKG8B2zTAFdsRQok94hncp2cF1ytkHq/tEOICeEb0ZJQJAt+4ifwbX95eoHMX
-	 gEsJe9i/CAj8bqIz2tlxG2hiyur2drmdWn48x14H/hdRDXShShrrNRjBPI07b22dEA
-	 e0jWpZmfAGtuTp5ZpAB90So30YNhx4V0mBublUvm71jMMjb2aJAQQjoxSSmeLfElR+
-	 VKmVpILxXPt8V/8nmru6qZEkzQO11sZdSFw63kEwtbl2b4vTV8x5hzEkm7BTEB4DbI
-	 r/kY80PDdGhp51S6TgVmYXi/SmXM1gVapr+tUNHnUu3LfRmaebDjO2yRYKZu45OeFF
-	 aMLRdyyB/jBVg==
-Message-ID: <e4c730d2-6ee1-46d7-850b-8ebbe0a1bfcd@kernel.org>
-Date: Sun, 24 Aug 2025 10:31:59 +0200
+	s=k20201202; t=1756026203;
+	bh=aKK+a5Rtq2g2c4ZYWeMrcXzRrs5bD2smvrtbxPiNkFg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RiasseGHLltxvDNCMxwushOE4q4tUe/6u5UQN1v/gkJ0M74FjyqY8DKO4qfztpd68
+	 MJnyFvww6ZFVdUtvJWIWCbc2WpJYJTI28Fx/n2T1CFoySwuU4O7YTgSgRVQ6eDzc2f
+	 QSGS5AxJfPYg7DYZZQdbPzQlM0jzOHlQV3kyo5dWlSvHUrsLtX8FVsC3dBLIZBdTLD
+	 N1spvrCXKE/UzIFhY346cQt4Mu3ct/atUsImruSwSVTQMczp1QL7pbSuw+RwVNRCRO
+	 c8QCaCqtRIyQ5LgM/TnncY/jcMfWQVqAFLOrcAtm+hUHQuTssiSPC9GsLqrKILMUJD
+	 yFtCnBXhKxErQ==
+Message-ID: <dc4046e5-7912-4942-b313-20f29213773c@kernel.org>
+Date: Sun, 24 Aug 2025 11:03:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,25 +50,21 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 01/22] dt-bindings: usb: snps,dwc3: Allow multiple
- iommus
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Sven Peter <sven@kernel.org>
+Subject: Re: [PATCH v3 3/4] dt-bindings: usb: microchip,usb2514: add support
+ for port vbus-supply
+To: Marco Felsch <m.felsch@pengutronix.de>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
- Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-phy@lists.infradead.org
-References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
- <20250821-atcphy-6-17-v1-1-172beda182b8@kernel.org>
- <20250822-skinny-clay-harrier-64dc58@kuoka>
+ Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>,
+ Matthias Kaehlcke <mka@chromium.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ kernel@pengutronix.de
+References: <20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de>
+ <20250821-v6-16-topic-usb-onboard-dev-v3-3-6d2b38a5d818@pengutronix.de>
+ <20250822-maize-elk-of-growth-2a30bb@kuoka>
+ <20250822103005.c7ba7dclbgdadyw7@pengutronix.de>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -113,35 +109,26 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250822-skinny-clay-harrier-64dc58@kuoka>
+In-Reply-To: <20250822103005.c7ba7dclbgdadyw7@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 22/08/2025 09:22, Krzysztof Kozlowski wrote:
-> On Thu, Aug 21, 2025 at 03:38:53PM +0000, Sven Peter wrote:
->> Apple's dwc3 variant requires two iommus.
->>
->> Signed-off-by: Sven Peter <sven@kernel.org>
->> ---
->>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> index 4380bb6fa2f08a475b557e80467abc2861f622e2..6d35dcc605c01977f4fc6fdb6f12976f1cef2b9e 100644
->> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> @@ -60,7 +60,7 @@ properties:
->>    dma-coherent: true
->>  
->>    iommus:
->> -    maxItems: 1
->> +    maxItems: 2
+On 22/08/2025 12:30, Marco Felsch wrote:
+>> The binding does not list ports now, but lists hard-wired devices, so my
+>> question is now: is this per hard-wired device or per port (even if port
+>> is hot-pluggable)?
 > 
-> Never tested. You anyway need specific constraints.
-I realized that's pretty vague, so clarifying: you changed all bindings
-to have two iommus and that's unexpected. All other devices have only
-one IOMMU mapping here, so they need to stay like that. If these IOMMUs
-differ, you should also list them, but probably that's not the case here.
+> Sorry but I don't get you. The binding lists the regulators required to
+> enable/disable the hub downstream port VBUS. These regulators are
+
+Is the port an external facing connector or a hard-wired USB device
+(please read the binding)?
+
+> controlled by an external party e.g. the CPU instead of the USB hub
+> itself. The connection from the CPU to the regulator which controlls the
+> +5V usb-connector pin is hard-wired, yes.
+
+I speak about USB devices.
 
 Best regards,
 Krzysztof
