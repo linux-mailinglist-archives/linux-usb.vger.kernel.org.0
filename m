@@ -1,191 +1,242 @@
-Return-Path: <linux-usb+bounces-27216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27217-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06D99B3311A
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 17:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 931D3B3312C
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 17:24:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78AED7A17BC
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 15:12:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6111C7A4E57
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 15:22:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A127329AB13;
-	Sun, 24 Aug 2025 15:13:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476BB2DA740;
+	Sun, 24 Aug 2025 15:24:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UgSogNzO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JVNQqRF7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DCE244663
-	for <linux-usb@vger.kernel.org>; Sun, 24 Aug 2025 15:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07601DB356;
+	Sun, 24 Aug 2025 15:24:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756048411; cv=none; b=Trn8CUggUQ6zeXJQ6LYxY9EKWb25M4osyM93mbpIcJ0BlsXVO5JOg+ic9fQYaEb+gD9Cw9ZCWkETpIZeWG3/Ijgud8TLRwg5wGEb99VfU91f/0gLxCRJYFQ6ocM+c3yhSB54QLxwPqQYChMu/f4WZCLfBzuOm9N1USlx5zqia0E=
+	t=1756049052; cv=none; b=IJB8WSzQuOJhbl5I1UzjVmT1hCMVUl98JEEB/lPWEWT+t51/fJszVhkhEXRQBv3GlhSXtclyczTnV/OiXx7SvSQYoIO9xhmzUCzRtgSfC2mpQW6SaxNCnXAfKwctbx/z/fI+qqGSV97ALE4/ycXCmIbVsKAF0U7FAjrnxAvqLHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756048411; c=relaxed/simple;
-	bh=dFNv3kuKX6xNETfwvmPN0ESJ7Y4BSG4qSLKcoxFk+oI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DTEGu6gl6JGqFwEW0lebuXrQGGi6r+ufeCV8Xk7zFhtB7HcMfZGhn6/yDz/1e7nERWZLtjlMLPihUYXW9xX46bMPf/taqS0aR//0xbQbr+xnJs4s8AzygRTGL4iii5wdaDWN8hEsHtqe0E/k7VIiztjvZ7JTV6HXYz8U6S5ik6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UgSogNzO; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4b2cf656e4fso3512631cf.0
-        for <linux-usb@vger.kernel.org>; Sun, 24 Aug 2025 08:13:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756048408; x=1756653208; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2HX9YUCYX4wD+L8eYWIxV5b+Y9/4LeqoXjBA/t1VUmk=;
-        b=UgSogNzOs9C+bdilCK2G6EzHKs9p5hrbIa5s3MJFJlj0aBD793WiurzLunCbh4TUyp
-         zLC9zxpSgFRomOCw+bLGqeM8eH6Ox7KFazllfj7ZmRXq/BPIzvziPomeOLx+Lfz3PBic
-         BIqMCTa0RZ19A6aOmKyFydjpmwHzSaccKLjvqHFUqC2kTrXexk5hxdmPxz2u565Pi6gG
-         3TWUAjM5FfS8Y8RyM+ybE6ioHPyogDNh6kJ3gOiUHhC31LfrMM+sMiw+udXdRwkA8rIQ
-         JUim+pRcvZzLfWP8AY/cVCJiA/Fj4TNgcpTkvDowiyr2h4iYc6GDp3q60LNzbyKFAPmr
-         o56w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756048408; x=1756653208;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2HX9YUCYX4wD+L8eYWIxV5b+Y9/4LeqoXjBA/t1VUmk=;
-        b=uToRp5Uh1ozNE2WskCwEVaUU92lux8pLZqi35CILDKeJ0e1rxLcnHgWRH9zD86LiAv
-         9lFVkpvWg8OGeFfEOWIskXpgNN3DqhG8Xay5JZGHe7VczU+Q6SlObzFe9kJi+V0dOHgl
-         DGuJnpNFhm9Og0h317uG2eebWrqMHObymnICtoTPyXYu6kH4OOEegvTYnZbVjc6i032L
-         JHTBb2XbVzv7hrehXy+R6ydZE1ipeeU2c9PuKOzHueH1nttvwBm7bUGLN9oWqg/VuaXT
-         xQbx5GfGvxAzd3Ow/ayiL9Xhi2IgRGrndE0vcPAENz+aYh05V62NNuRAxIMD2OfWkTZt
-         muCw==
-X-Gm-Message-State: AOJu0YyYHHE0A+X20lEPeEZ0+9/pN+Nr9eevEUB8p7LjIVcneQBNH5EW
-	owCbiVIWWqoQPitT5iC8Yxh0fyWGyTwEQaRQs7FRKYEfKn8ZmZxN+ekS
-X-Gm-Gg: ASbGnctC71GwItWKaX3zPqjIcUHzf2haYU5zC1g1yf8+TVNjtWyTvygRUys6Ec3DTdW
-	FzvFClBX2oD+ovthumUupbxnmsH6Oih9D45WRErTDcn4cunM5MhuPKLHXcSM092tcuIHbCvFkta
-	rsYF7TxnhB2SqV9heiEQPIgf9WuNX0MTm2Q9Z/RbfyTcZqhooO+tnRns4ZATRkFcJgwC+j/m58d
-	EhB+I7CXDA08WH6dpqIqVQhMqhNevqacQitf0wQWIdWREj2mOj7s+d98i84UotlwPPYBXS8jj71
-	MAHNWfY3C+FBhkjGOFkJ4pA4a8+ZzySpqvY81ctd1gQYgYswM7BTogK+uVSFU8uflhnjpMAwRie
-	fREWtyJphbxYfzY/I9KqcY6+5F75Ymps6/RCqcedplAwg4jP+n+bHdckR+Q==
-X-Google-Smtp-Source: AGHT+IEIqH9duUT7lFwviPRhNVrA9H4qelpELN86rmSQ04BWlw1NWWeSo/7150bP+HyT1y4qDKLXUQ==
-X-Received: by 2002:a05:622a:4d2:b0:4ab:3963:c650 with SMTP id d75a77b69052e-4b29fe9bb8cmr121552871cf.10.1756048408172;
-        Sun, 24 Aug 2025 08:13:28 -0700 (PDT)
-Received: from cr-x-redhat96-nsd-2.fyre.ibm.com ([129.41.87.0])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b2b8c61627sm33356731cf.8.2025.08.24.08.13.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Aug 2025 08:13:27 -0700 (PDT)
-From: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
-To: andreas.noever@gmail.com,
-	westeri@kernel.org,
-	michael.jamet@intel.com,
-	YehezkelShB@gmail.com
-Cc: linux-usb@vger.kernel.org,
-	Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
-Subject: [PATCH] drivers: thunderbolt: Use string choices helpers
-Date: Sun, 24 Aug 2025 08:13:16 -0700
-Message-ID: <20250824151316.2388812-1-chelsyratnawat2001@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1756049052; c=relaxed/simple;
+	bh=8wQtpQH1TlV2K94OX/d1Zy6vAxp627HaTZKKXCwGJMc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cVqGw0Zdvp8yWgS9swAEtC7tosGzuENbTZLhioP2WxgnqnMcsomohQACvxEaRIrmsP8ty5S9m3pIHfAIoISsB+mEkAxWWBhF7De6hor+6XwOE6CEDl0qt7sSDiMGBBu3pOTNEEXPv03KFvS+gGTWIre8/vsFX8sYlrqRTVTL5xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JVNQqRF7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 618EAC4CEEB;
+	Sun, 24 Aug 2025 15:24:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756049052;
+	bh=8wQtpQH1TlV2K94OX/d1Zy6vAxp627HaTZKKXCwGJMc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JVNQqRF79BT1l4/KZeMe33EiEKJ1JMNlsNOAcvzY3NlyHYXYBOQvQIJ5wkwzxJF54
+	 5EyBy3glSbARx+QcYRaWRJj8GgSfxQV8zulen0nZxZCfNa0OYWr8ZwoVnd8Hy2bmTw
+	 AtG1+8+kAj34Wju3bgusUedc/p1nybrMvFyJGKVIFhxMmZxoszkCIYWziYY6lz+Fzv
+	 ju7lNMsckVFngXkBdZLXshJII/7YipNjl5E7UOymmx3L20X2r4KyperlyNRwJRvXfB
+	 F87Wi21qCVGcqxZPkpZB2WTh1SPzhKJwtVZp1C4z1tahFdUmy7hXUPsdgP3zhCJRq4
+	 iVRk5OOFv+jyg==
+Message-ID: <bc4fa511-5dc5-4844-8206-eb55783647e8@kernel.org>
+Date: Sun, 24 Aug 2025 17:24:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 04/22] usb: dwc3: apple: Reset dwc3 during role
+ switches
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+ Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>
+References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
+ <20250821-atcphy-6-17-v1-4-172beda182b8@kernel.org>
+ <20250821232547.qzplkafogsacnbti@synopsys.com>
+Content-Language: en-US
+From: Sven Peter <sven@kernel.org>
+In-Reply-To: <20250821232547.qzplkafogsacnbti@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Use string_choices.h helpers instead of hard-coded strings.
+On 22.08.25 01:25, Thinh Nguyen wrote:
+> On Thu, Aug 21, 2025, Sven Peter wrote:
+>> As mad as it sounds, the dwc3 controller present on the Apple M1 must be
+>> reset and reinitialized whenever a device is unplugged from the root
+>> port or when the PHY mode is changed.
+>>
+>> This is required for at least the following reasons:
+>>
+>>    - The USB2 D+/D- lines are connected through a stateful eUSB2 repeater
+>>      which in turn is controlled by a variant of the TI TPS6598x USB PD
+>>      chip. When the USB PD controller detects a hotplug event it resets
+>>      the eUSB2 repeater. Afterwards, no new device is recognized before
+>>      the DWC3 core and PHY are reset as well because the eUSB2 repeater
+>>      and the PHY/dwc3 block disagree about the current state.
+>>
+>>    - It's possible to completely break the dwc3 controller by switching
+>>      it to device mode and unplugging the cable at just the wrong time.
+>>      If this happens dwc3 behaves as if no device is connected.
+>>      CORESOFTRESET will also never clear after it has been set. The only
+>>      workaround is to trigger a hard reset of the entire dwc3 core with
+>>      its external reset line.
+>>
+>>    - Whenever the PHY mode is changed (to e.g. transition to DisplayPort
+>>      alternate mode or USB4) dwc3 has to be shutdown and reinitialized.
+>>      Otherwise the Type-C port will not be usable until the entire SoC
+>>      has been reset.
+>>
+>> All of this can be easily worked around by respecting transitions to
+>> USB_ROLE_NONE and making sure the external reset line is asserted when
+>> switching roles. We additionally have to ensure that the PHY is
+>> suspended during init.
+>>
+>> Signed-off-by: Sven Peter <sven@kernel.org>
+>> ---
+>>   drivers/usb/dwc3/core.c | 61 +++++++++++++++++++++++++++++++++++++++++++++---
 
-Signed-off-by: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
----
- drivers/thunderbolt/debugfs.c |  3 ++-
- drivers/thunderbolt/nhi.c     |  3 ++-
- drivers/thunderbolt/usb4.c    | 13 +++++++------
- 3 files changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/thunderbolt/debugfs.c b/drivers/thunderbolt/debugfs.c
-index f8328ca7e22e..628337ac880e 100644
---- a/drivers/thunderbolt/debugfs.c
-+++ b/drivers/thunderbolt/debugfs.c
-@@ -13,6 +13,7 @@
- #include <linux/delay.h>
- #include <linux/pm_runtime.h>
- #include <linux/uaccess.h>
-+#include <linux/string_choices.h>
- 
- #include "tb.h"
- #include "sb_regs.h"
-@@ -691,7 +692,7 @@ static int margining_caps_show(struct seq_file *s, void *not_used)
- 		seq_printf(s, "0x%08x\n", margining->caps[i]);
- 
- 	seq_printf(s, "# software margining: %s\n",
--		   supports_software(margining) ? "yes" : "no");
-+		   str_yes_no(supports_software(margining)));
- 	if (supports_hardware(margining)) {
- 		seq_puts(s, "# hardware margining: yes\n");
- 		seq_puts(s, "# minimum BER level contour: ");
-diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-index f3a2264e012b..679c51440174 100644
---- a/drivers/thunderbolt/nhi.c
-+++ b/drivers/thunderbolt/nhi.c
-@@ -20,6 +20,7 @@
- #include <linux/delay.h>
- #include <linux/property.h>
- #include <linux/string_helpers.h>
-+#include <linux/string_choices.h>
- 
- #include "nhi.h"
- #include "nhi_regs.h"
-@@ -146,7 +147,7 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
- 		dev_WARN(&ring->nhi->pdev->dev,
- 					 "interrupt for %s %d is already %s\n",
- 					 RING_TYPE(ring), ring->hop,
--					 active ? "enabled" : "disabled");
-+					 str_enabled_disabled(active));
- 
- 	if (active)
- 		iowrite32(new, ring->nhi->iobase + reg);
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index fdae76c8f728..4729b45aac1f 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -10,6 +10,7 @@
- #include <linux/delay.h>
- #include <linux/ktime.h>
- #include <linux/units.h>
-+#include <linux/string_choices.h>
- 
- #include "sb_regs.h"
- #include "tb.h"
-@@ -172,8 +173,8 @@ void usb4_switch_check_wakes(struct tb_switch *sw)
- 			return;
- 
- 		tb_sw_dbg(sw, "PCIe wake: %s, USB3 wake: %s\n",
--			  (val & ROUTER_CS_6_WOPS) ? "yes" : "no",
--			  (val & ROUTER_CS_6_WOUS) ? "yes" : "no");
-+			  str_yes_no(val & ROUTER_CS_6_WOPS),
-+			  str_yes_no(val & ROUTER_CS_6_WOUS));
- 
- 		wakeup = val & (ROUTER_CS_6_WOPS | ROUTER_CS_6_WOUS);
- 	}
-@@ -191,9 +192,9 @@ void usb4_switch_check_wakes(struct tb_switch *sw)
- 			break;
- 
- 		tb_port_dbg(port, "USB4 wake: %s, connection wake: %s, disconnection wake: %s\n",
--			    (val & PORT_CS_18_WOU4S) ? "yes" : "no",
--			    (val & PORT_CS_18_WOCS) ? "yes" : "no",
--			    (val & PORT_CS_18_WODS) ? "yes" : "no");
-+			    str_yes_no(val & PORT_CS_18_WOU4S),
-+			    str_yes_no(val & PORT_CS_18_WOCS),
-+			    str_yes_no(val & PORT_CS_18_WODS));
- 
- 		wakeup_usb4 = val & (PORT_CS_18_WOU4S | PORT_CS_18_WOCS |
- 				     PORT_CS_18_WODS);
-@@ -260,7 +261,7 @@ int usb4_switch_setup(struct tb_switch *sw)
- 	tbt3 = !(val & ROUTER_CS_6_TNS);
- 
- 	tb_sw_dbg(sw, "TBT3 support: %s, xHCI: %s\n",
--		  tbt3 ? "yes" : "no", xhci ? "yes" : "no");
-+		  str_yes_no(tbt3), str_yes_no(xhci));
- 
- 	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, ROUTER_CS_5, 1);
- 	if (ret)
--- 
-2.47.3
+[...]
+
+> 
+>> +			dwc3_core_exit(dwc);
+>> +		}
+>> +
+>> +		if (desired_dr_role) {
+>> +			ret = dwc3_core_init_for_resume(dwc);
+> 
+> The dwc3_core_init_for_resume() is for PM, reusing this with its
+> current name is confusing.
+
+Ack, I was going to clean this up later and wanted to get feedback on 
+this entire approach first. Won't be used anymore when moving to a 
+glue.h based approach anyway.
+
+> 
+>> +			if (ret) {
+>> +				dev_err(dwc->dev,
+>> +				    "failed to reinitialize core\n");
+>> +				goto out;
+>> +			}
+>> +		} else {
+>> +			goto out;
+>> +		}
+>> +	}
+>> +
+>>   	/*
+>>   	 * When current_dr_role is not set, there's no role switching.
+>>   	 * Only perform GCTL.CoreSoftReset when there's DRD role switching.
+>>   	 */
+>> -	if (dwc->current_dr_role && ((DWC3_IP_IS(DWC3) ||
+>> +	if (dwc->role_switch_reset_quirk ||
+> 
+> Don't override the use of GCTL.CoreSoftReset with this quirk. Not all
+> controller versions should use GCTL.CoreSoftReset, the new controller
+> version don't even have it. What version is this vendor using?
+> 
+> I'm concern how this condition is needed...
+
+This is actually a leftover from the first attempts at making this work. 
+I didn't know about the external reset line back then and had to 
+soft-reset it here because it would not see new devices otherwise IIRC.
+Since we're going through a hard-reset now anyway this can be dropped
+and this entire commit will disappear in favor of a glue.h based driver 
+anyway.
+
+> 
+>> +		(dwc->current_dr_role && ((DWC3_IP_IS(DWC3) ||
+>>   			DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
+>> -			desired_dr_role != DWC3_GCTL_PRTCAP_OTG)) {
+>> +			desired_dr_role != DWC3_GCTL_PRTCAP_OTG))) {
+>>   		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+>>   		reg |= DWC3_GCTL_CORESOFTRESET;
+>>   		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+>> @@ -1372,6 +1394,9 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>>   	if (ret)
+>>   		goto err_exit_phy;
+>>   
+>> +	if (dwc->role_switch_reset_quirk)
+>> +		dwc3_enable_susphy(dwc, true);
+>> +
+> 
+> Why do you need to enable susphy here?
+
+The only place we actually need it is when we shut down the Type-C PHY 
+due some what I assume is some hardware quirk, i.e. just before 
+dwc3_core_exit.
+
+The PHY will otherwise not be able to acquire some hardware lock (which 
+they call PIPEHANDLER lock in debug strings) to switch from e.g. USB3 
+PHY to a dummy PHY for USB2 only. It then can't shut down cleanly 
+anymore and will get stuck in a weird state where the port refuses to 
+work until I reset everything.
+Originally it was added because we just undid some commit where susphy 
+handling was made unconditional IIRC.
+
+I'll move this to the glue driver with a comment explaining why it's 
+required.
+
+
+> 
+>>   	dwc3_core_setup_global_control(dwc);
+
+[...]
+
+>> +	if (dev->of_node) {
+>> +		if (of_device_is_compatible(dev->of_node, "apple,t8103-dwc3")) {
+>> +			if (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+>> +			    !IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)) {
+>> +				dev_err(dev,
+>> +				    "Apple DWC3 requires role switch support.\n"
+>> +				    );
+>> +				ret = -EINVAL;
+>> +				goto err_put_psy;
+>> +			}
+>> +
+>> +			dwc->dr_mode = USB_DR_MODE_OTG;
+>> +			dwc->role_switch_reset_quirk = true;
+> 
+> Put this in your glue driver or device tree.
+
+Ack.
+
+> 
+>> +		}
+>> +	}
+
+[...]
+
+>> +
+>> +	if (dwc->role_switch_reset_quirk && !dwc->current_dr_role)
+>> +		role = USB_ROLE_NONE;
+> 
+> Don't return USB_ROLE_NONE on role_switch get. The USB_ROLE_NONE is the
+> default role. The role_switch get() should return exactly which role the
+> controller is currently in, and the driver can figure that out.
+
+Ack, will also happen from inside the glue driver now.
+
+
+
+
+Sven
 
 
