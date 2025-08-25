@@ -1,212 +1,178 @@
-Return-Path: <linux-usb+bounces-27262-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27263-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79745B344E7
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 17:01:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B494B34692
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 18:00:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08186203BC1
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 15:01:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9C5C3A2F3C
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 16:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A861C3019CD;
-	Mon, 25 Aug 2025 14:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42CC31E9B37;
+	Mon, 25 Aug 2025 16:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IgSX/PBm"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="EMvFI8t7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F8930149F
-	for <linux-usb@vger.kernel.org>; Mon, 25 Aug 2025 14:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA1A1E32DB
+	for <linux-usb@vger.kernel.org>; Mon, 25 Aug 2025 16:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756133899; cv=none; b=nL5hgERLoxT+aA6VK690USnckz73suDWxAvAjbUwhQ1ezT7eTGyr0hPbhnfVOCkGG9KbWtO5PVt6Vf5UPnJhovn4p0NM7oD2MYnfC2IxKjR806b+aJeMMtXVGPoLSEclPbjiN8BNtsVLiyPRaWmHa1LzygAm4jbp7a8cBCyYUZQ=
+	t=1756137629; cv=none; b=MFqSu9jcwviMsdTbfSSoGmZS+ciya8RGwwIyosBVDkoG8E1qVqN5YoY+nnYi8Evv5RFSoaC8IyPLpBzJnzysrJOFyuEErmDtxFJ6NnX4oTibVI+I1Ny1qdommr9Fc30qVQqWru3dCpbeFgOv5+BJjyLk9pqvhPP/jXWZfK+HVQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756133899; c=relaxed/simple;
-	bh=XF1HMt7dKr2pKHf61hV+dMVYlJL1q20sHlne9+/cMD8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n/HDDU+2WdPuLsx9LcTsGqFEUrRyocamMIyqa2USbRYX7hNBOqB/CiEeVO7Ed9Oqj0wOLvPYe7WN36h9kSURMRPImkx1cqmZgG0JELF1F/LYuZzJbPvfejXlImgpIYYHbJSoxcpqf49CBGxCr9DSIYmrT4clnruzpDDONlue/Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=IgSX/PBm; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-afcb7a3ee3cso648452266b.2
-        for <linux-usb@vger.kernel.org>; Mon, 25 Aug 2025 07:58:16 -0700 (PDT)
+	s=arc-20240116; t=1756137629; c=relaxed/simple;
+	bh=Hy0wGiDo+bKCq4jLZKQQ0h09edDWE6osGvN+8inMYUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T1QSIo4H9o1Y39Q/GypVAdUoWOqSTNnQQIalMleekQVoPsnZ6zTBp2iAoELgbg6wI/LcOFh2/uHdotd66kiK++rxxq19+6ktL5hldlznNpfeEbQuUvaalWLMLUWkvnu9t3UHZzTmw4CyAnZdtSQQ8/AV+QLZJSTJspquN+TpfOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=EMvFI8t7; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7e87063d4a9so524457585a.2
+        for <linux-usb@vger.kernel.org>; Mon, 25 Aug 2025 09:00:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1756133895; x=1756738695; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q03fJibhKtDh3Ep473H06zamAbGTx2QJY+Jsovc71/Q=;
-        b=IgSX/PBmrfE9IeRxR7sXEgZ/hCpJmvjQSwIf+y8zziwdRpcMZ9AlbMbSwNY3pFfFzg
-         k6cHiEslq4PNVBqiIVxRtVOsca8anSZF/l+k0qkUfI5OWgGNmxIs8eSBWa1zADJSssK0
-         6yIaEBT1N+0uq4RZJcIvv3GHSqzXXOSGu12nc=
+        d=rowland.harvard.edu; s=google; t=1756137627; x=1756742427; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vh2bnZm5lGiADC/Jp4IzuzvCUyqVlJnewJ7GveeEWWI=;
+        b=EMvFI8t71DTRLSxoKlx/VZmN49VFk4YnRnShpqUNYU6dgXplW0/w3uuoONYY3D8ftB
+         jpVKu7zfhe3JOYxeHlkGhiISmN9IDxtIXRzYuXgRJiv2uw3ylwfCxss1W2u/8SKkqde+
+         zKUsShdqOhwrIbqxez/h9/NzU77DEbWruvGWX/m63Z+fpyKCIDpq7PyFg/dDNqCzSdxZ
+         8DgELfKDvyLQEX98T/6YdjbmZ3xi1cAzthm3AR682JZ3VHPoIaMwTuUXQeHoE4Tmeju6
+         y+28uJj7t2pwkEI21X7nXV5x90PQGcMR6zc9K7xxoAZeBNiMCZ/ecFlKGg/sZY+U/SFL
+         c69Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756133895; x=1756738695;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q03fJibhKtDh3Ep473H06zamAbGTx2QJY+Jsovc71/Q=;
-        b=FZ8Zo/RcgShzev59D7wt6dj1GNZdafb7gCGtstyaNyXcUIppEY0G4JdzKeGRpzdSjd
-         dfND6GguY8XW1CQZjlw/ZEVpf3HyLSBQq8nCZlOcDPr3Uw5LqRT8gOzts3YrUxacCPbl
-         t+XW/zLGRJwnOUvZuOvOQTfR61PeExgH7dDFQy4ne3P9xsDdOYuBDnx3K6oVDR0gWi+i
-         iGzRLmeGEXZcOgkPWc0C+R7V2SJvt9XY16eQf1DPg2xX+NHcdhIPC9hzo7Udaveovb7i
-         2Gcedd6LYOdW3g9LIukLxA3YYwi4hIeJmm2TOJBprO9wwJFQDEB9h6FQAkl+VYBqbt3d
-         7U/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUOkssX7YMQwILRwoMq08pd9lJPXAnXiNAQpM2voIIAhS5WPofhumvKlqhy+ZPMMipkegMZfG0h3n4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8gnRRoY0DmThWcJLUyr9G0UiD/7gVw733IVIfZLTlUKTgq4CE
-	Dh3X2KsAZ1lfLHcEfqVCYc3XFaHftddaP8vgt8vnMQ2aqk+PSDvs7Y8SaoRI0OxApA==
-X-Gm-Gg: ASbGncuxA5KOm0BsyEO2MXydeJ9BV4PifV6degpU2Pw8U2LioB4tUm39EIkKE3dPo0w
-	GDQ/eY0B7LlGuGwWWn0DENFz7eF5OrMTmY5Wd9wu2W1IL4FdEUXFCNXoF2163cvBD9E28i8b33H
-	FVpXegArKRKsaCkbEZZwCzIDvmUJVmVD/aj1nHLy4yIdiwZEWo3DTm2D3AXAkwryJv1hEolv4fe
-	Q8WVqoT4aKlhfbV2jE/ADy6TwggvQ1vRtDEnAoWUMXd4f+fhCquvNmlz3psiGS3HuJF//4AgvBy
-	pvubRu9nfyJhTWGUZkRIVt2b1/B22u7SlyMZ+iA8GIu0l4qmp100WH/QpFDyFaqiPuSVOvEFPQZ
-	X4qIiNUzE+hUeNmLViRQj3FVYuzvqVEZCwGXTEAaP39fGaqxSnnHnV9RIrY9dVZPTGPA2tr9YTH
-	AlQNWU7KbOfJGZ0GXUTxmTuRHfesqtRx8YQw==
-X-Google-Smtp-Source: AGHT+IFQk16CgrOBqQfmn0Kw8YzFpuW8oHF6Fa5HEls+UObeDgxxUHP9Lle73RVTSHFp8RT//Y03tg==
-X-Received: by 2002:a17:907:9611:b0:afd:be7d:725 with SMTP id a640c23a62f3a-afe296e8771mr1244313266b.61.1756133895202;
-        Mon, 25 Aug 2025 07:58:15 -0700 (PDT)
-Received: from akuchynski.c.googlers.com.com (168.23.91.34.bc.googleusercontent.com. [34.91.23.168])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afe8d03f981sm117294166b.60.2025.08.25.07.58.14
+        d=1e100.net; s=20230601; t=1756137627; x=1756742427;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vh2bnZm5lGiADC/Jp4IzuzvCUyqVlJnewJ7GveeEWWI=;
+        b=CF4I+JEPsdCoq0GxK1P9Yqc0xqQi4L/2aob/iM8WzG8CsqVO1jj5SHmynrUpCHKALc
+         9do1A1s0L86k5JXPcbd1Mk+gOkM76UtE4Ciru8XRzaKCZm2ba1zhxngJMfMGH7B+K6/z
+         MhoAbxU852AAQMJ+nJ224jwIDTI2ov0eYu8btkfgUVVSPBVaJI6mn2MF9guwIqznFjS/
+         F4x9GIhUZuihJGWi+jM1oDLvqtCokPokSuWrFwAavL31O4cLt1Mx4PkOrHSXPZecBbNe
+         bn5UNpV9wrQy0WF4eOBo2kGK2OzwVO7ZHnanKp5ffpKgMfj3EIIltdnWi6iKFxChPMmB
+         nNHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLdWvxQOcRdWME4ssIgZspizt09XFYIGscZxMgCjYVcVtosMvJBIZp8koF+xQOuhKKYSc5mnNh5Gw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWlyoaIkFxp9XEeZfZX0Wgu/7Txl1fXzRnWBd78yfEYuQfaTHi
+	B8ms16cG0GrUo0nckqFuFD+N7gbgYksO+Yv9jdvqnfHah4WGl02s0/tV/sfmP/W7rw==
+X-Gm-Gg: ASbGncsqizHA9Fk41ZPCZU3OujpCZd1AYl9gdgDh6SzOOvhbL3F/YOVpZaVvpmWNQyo
+	sRvL0mcR6bFNX7iVWY35KGIgTSV5drlVG7u+W96sh39MFxlvm7kHtJeBjBxuvp0lXV+AheMXeVU
+	gIgE8BYzphcDQdM9Mc9W24aIAr6TVOvJIZC83ETEFwkDW2tvcUJKphh899L6Wxep2c6GrZeZTW1
+	5CJqPvenLZCKCQji4xwGOchGjJjXbnCdGYp659jOTrRM//JrPtrcmvSnuKzQoqHU8yn1v+1Ze8x
+	LY1p5z5qX/2ccM4dludgzAWzfM6Dir5fj0uQvn3C3uImszj6dDHBtmAe7k5jVF3hFym/BUW1T9j
+	yOLUOnKqax7IyCXNEvYFsIpJH
+X-Google-Smtp-Source: AGHT+IFC/2VToTJTB0jWiApGWNCuagW5UM2XuBLjed3+M+u7hzdQK7qfJoOF6vStDIX35DzVloj9Kw==
+X-Received: by 2002:a05:620a:258d:b0:7e8:6364:2e6f with SMTP id af79cd13be357-7ea10f96b04mr1388416585a.2.1756137626034;
+        Mon, 25 Aug 2025 09:00:26 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:156:8000:24f0::eb06])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7ebf2b505d3sm506626685a.37.2025.08.25.09.00.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Aug 2025 07:58:14 -0700 (PDT)
-From: Andrei Kuchynski <akuchynski@chromium.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Cc: Guenter Roeck <groeck@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	linux-kernel@vger.kernel.org,
-	Andrei Kuchynski <akuchynski@chromium.org>
-Subject: [PATCH v2 5/5] usb: typec: Expose alternate mode priority via sysfs
-Date: Mon, 25 Aug 2025 14:57:50 +0000
-Message-ID: <20250825145750.58820-6-akuchynski@chromium.org>
-X-Mailer: git-send-email 2.51.0.rc2.233.g662b1ed5c5-goog
-In-Reply-To: <20250825145750.58820-1-akuchynski@chromium.org>
-References: <20250825145750.58820-1-akuchynski@chromium.org>
+        Mon, 25 Aug 2025 09:00:25 -0700 (PDT)
+Date: Mon, 25 Aug 2025 12:00:22 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg KH <greg@kroah.com>
+Cc: syzbot <syzbot+8baacc4139f12fa77909@syzkaller.appspotmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Yunseong Kim <ysk@kzalloc.com>,
+	USB mailing list <linux-usb@vger.kernel.org>,
+	syzkaller-bugs@googlegroups.com
+Subject: [PATCH] USB: gadget: dummy-hcd: Fix locking bug in RT-enabled kernels
+Message-ID: <bb192ae2-4eee-48ee-981f-3efdbbd0d8f0@rowland.harvard.edu>
+References: <0d6d8778-a45e-498f-9e31-1d926f582d7e@rowland.harvard.edu>
+ <68ac790c.050a0220.37038e.0095.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <68ac790c.050a0220.37038e.0095.GAE@google.com>
 
-This patch introduces a priority sysfs attribute to the USB Type-C
-alternate mode port interface. This new attribute allows user-space to
-configure the numeric priority of alternate modes managing their preferred
-order of operation.
+Yunseong Kim and the syzbot fuzzer both reported a problem in
+RT-enabled kernels caused by the way dummy-hcd mixes interrupt
+management and spin-locking.  The pattern was:
 
-Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+	local_irq_save(flags);
+	spin_lock(&dum->lock);
+	...
+	spin_unlock(&dum->lock);
+	...		// calls usb_gadget_giveback_request()
+	local_irq_restore(flags);
+
+The code was written this way because usb_gadget_giveback_request()
+needs to be called with interrupts disabled and the private lock not
+held.
+
+While this pattern works fine in non-RT kernels, it's not good when RT
+is enabled.  RT kernels handle spinlocks much like mutexes; in particular,
+spin_lock() may sleep.  But sleeping is not allowed while local
+interrupts are disabled.
+
+To fix the problem, rewrite the code to conform to the pattern used
+elsewhere in dummy-hcd and other UDC drivers:
+
+	spin_lock_irqsave(&dum->lock, flags);
+	...
+	spin_unlock(&dum->lock);
+	usb_gadget_giveback_request(...);
+	spin_lock(&dum->lock);
+	...
+	spin_unlock_irqrestore(&dum->lock, flags);
+
+This approach satisfies the RT requirements.
+
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Fixes: b4dbda1a22d2 ("USB: dummy-hcd: disable interrupts during req->complete")
+Reported-by: Yunseong Kim <ysk@kzalloc.com>
+Closes: <https://lore.kernel.org/linux-usb/5b337389-73b9-4ee4-a83e-7e82bf5af87a@kzalloc.com/>
+Reported-by: syzbot+8baacc4139f12fa77909@syzkaller.appspotmail.com
+Closes: <https://lore.kernel.org/linux-usb/68ac2411.050a0220.37038e.0087.GAE@google.com/>
+Tested-by: syzbot+8baacc4139f12fa77909@syzkaller.appspotmail.com
+CC: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+CC: <stable@vger.kernel.org>
+
 ---
- Documentation/ABI/testing/sysfs-class-typec | 11 +++++++
- drivers/usb/typec/class.c                   | 32 ++++++++++++++++++++-
- 2 files changed, 42 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-index 38e101c17a00..dab3e4e727b6 100644
---- a/Documentation/ABI/testing/sysfs-class-typec
-+++ b/Documentation/ABI/testing/sysfs-class-typec
-@@ -162,6 +162,17 @@ Description:	Lists the supported USB Modes. The default USB mode that is used
- 		- usb3 (USB 3.2)
- 		- usb4 (USB4)
+ drivers/usb/gadget/udc/dummy_hcd.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
++++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -765,8 +765,7 @@ static int dummy_dequeue(struct usb_ep *
+ 	if (!dum->driver)
+ 		return -ESHUTDOWN;
  
-+		What:		/sys/class/typec/<port>/<alt-mode>/priority
-+Date:		July 2025
-+Contact:	Andrei Kuchynski <akuchynski@chromium.org>
-+Description:
-+		Displays and allows setting the priority for a specific alt-mode.
-+		When read, it shows the current integer priority value. Lower numerical
-+		values indicate higher priority (0 is the highest priority).
-+		If the new value is already in use by another mode, the priority of the
-+		conflicting mode and any subsequent modes will be incremented until they
-+		are all unique.
-+
- USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
- 
- What:		/sys/class/typec/<port>-partner/accessory_mode
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 9f86605ce125..aaab2e1e98b4 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -19,6 +19,7 @@
- #include "bus.h"
- #include "class.h"
- #include "pd.h"
-+#include "mode_selection.h"
- 
- static DEFINE_IDA(typec_index_ida);
- 
-@@ -445,11 +446,34 @@ svid_show(struct device *dev, struct device_attribute *attr, char *buf)
- }
- static DEVICE_ATTR_RO(svid);
- 
-+static ssize_t priority_store(struct device *dev,
-+			       struct device_attribute *attr,
-+			       const char *buf, size_t size)
-+{
-+	unsigned int val;
-+	int err = kstrtouint(buf, 10, &val);
-+
-+	if (!err) {
-+		typec_mode_set_priority(to_typec_altmode(dev), val);
-+		return size;
-+	}
-+
-+	return err;
-+}
-+
-+static ssize_t priority_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%u\n", to_typec_altmode(dev)->priority);
-+}
-+static DEVICE_ATTR_RW(priority);
-+
- static struct attribute *typec_altmode_attrs[] = {
- 	&dev_attr_active.attr,
- 	&dev_attr_mode.attr,
- 	&dev_attr_svid.attr,
- 	&dev_attr_vdo.attr,
-+	&dev_attr_priority.attr,
- 	NULL
- };
- 
-@@ -459,11 +483,15 @@ static umode_t typec_altmode_attr_is_visible(struct kobject *kobj,
- 	struct typec_altmode *adev = to_typec_altmode(kobj_to_dev(kobj));
- 	struct typec_port *port = typec_altmode2port(adev);
- 
--	if (attr == &dev_attr_active.attr)
-+	if (attr == &dev_attr_active.attr) {
- 		if (!is_typec_port(adev->dev.parent)) {
- 			if (!port->mode_control || !adev->ops || !adev->ops->activate)
- 				return 0444;
- 		}
-+	} else if (attr == &dev_attr_priority.attr) {
-+		if (!is_typec_port(adev->dev.parent) || !port->mode_control)
-+			return 0;
-+	}
- 
- 	return attr->mode;
- }
-@@ -2491,6 +2519,8 @@ typec_port_register_altmode(struct typec_port *port,
- 		to_altmode(adev)->retimer = retimer;
+-	local_irq_save(flags);
+-	spin_lock(&dum->lock);
++	spin_lock_irqsave(&dum->lock, flags);
+ 	list_for_each_entry(iter, &ep->queue, queue) {
+ 		if (&iter->req != _req)
+ 			continue;
+@@ -776,15 +775,16 @@ static int dummy_dequeue(struct usb_ep *
+ 		retval = 0;
+ 		break;
  	}
+-	spin_unlock(&dum->lock);
  
-+	typec_mode_set_priority(adev, 0);
-+
- 	return adev;
+ 	if (retval == 0) {
+ 		dev_dbg(udc_dev(dum),
+ 				"dequeued req %p from %s, len %d buf %p\n",
+ 				req, _ep->name, _req->length, _req->buf);
++		spin_unlock(&dum->lock);
+ 		usb_gadget_giveback_request(_ep, _req);
++		spin_lock(&dum->lock);
+ 	}
+-	local_irq_restore(flags);
++	spin_unlock_irqrestore(&dum->lock, flags);
+ 	return retval;
  }
- EXPORT_SYMBOL_GPL(typec_port_register_altmode);
--- 
-2.51.0.rc2.233.g662b1ed5c5-goog
-
+ 
 
