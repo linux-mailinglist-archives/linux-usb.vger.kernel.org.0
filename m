@@ -1,104 +1,105 @@
-Return-Path: <linux-usb+bounces-27224-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27225-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7958B33342
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 01:20:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8996B3339E
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 03:37:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B620B204B34
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Aug 2025 23:20:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E103165573
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 01:37:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E46DC257830;
-	Sun, 24 Aug 2025 23:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F650223DDA;
+	Mon, 25 Aug 2025 01:37:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ScE1069r"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="DpCKLDb4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B49D246333
-	for <linux-usb@vger.kernel.org>; Sun, 24 Aug 2025 23:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B3EA1DF73A;
+	Mon, 25 Aug 2025 01:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756077591; cv=none; b=oudTcI2UKSqb7Lc2aiowOy9vUnjLZzd59uVnhE/F05IDmDj57o8K/wkGha9PLyQ8BWhuXWlh5qP5wiIf+q5N9dLu5eJ5vdQehsxw0BFPNCNLmzmWFwjsbA4e0tsz+UV9K7LLt0dPSlbt0yUzvmM1GA0MyGfY+lmperyZjvQRy/A=
+	t=1756085838; cv=none; b=hOJ4lCdLcIjlO3CWk+aEyVsiBQp6WHDoYUD+6+g5XZeW1Z6pdi4YR2FswnunKpPWSR7mS/JWjPglDcXe8YUl61zKXODq4eS9sGN+9XiAvkx6dQdx73AmHbOsG8Pfed5qFvVJT0BRZifgKoWQWqZF3vBoebbNRAHBHioxYI6ujzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756077591; c=relaxed/simple;
-	bh=4OgCRnYO/gd7qQxsurpZByOWJ7JPwaMN5MFz6oCHgnE=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uFK+duTT3Vm6916bGg0nLVvTJA8TD1qEEmc5COyS3TvfkoSnJmbjtsyKj4aLg5p5zn9E11ux2r3Y6lcxR64O+gArQ8YaGr+ifeshITjgxu0ZTCZTbtf7u3PyopCrdMmNJtMt5AwqHv2ylSvLcbppRfLpbTv0qlAV5zY1zJbDFeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ScE1069r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B92BCC4CEEB
-	for <linux-usb@vger.kernel.org>; Sun, 24 Aug 2025 23:19:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756077590;
-	bh=4OgCRnYO/gd7qQxsurpZByOWJ7JPwaMN5MFz6oCHgnE=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ScE1069r+Iyago7TEYs0JvLjez1QkTpU8kXBrkxtT3t/K+wi+38baKmkz7UAQrMg5
-	 xHyhZyqmae2+mB3RBIjtc/yC2R31gPJCzie/Y536rKRR9VZY/9Yr7bOkWpKoPLMrEq
-	 Drj4MMbwvYO5pvSjieQEvNmMu9r81xz3S2ejF1tRcYKMdt9UDTktLvthESTkOztumm
-	 i/XFG4mqg+j7yAbi1yrwrQv1JmOkGK5C7pdJiLO8A9AzgdlD3QhTlj7rRzcS02RkqA
-	 WbqJC2uOanNid+B2KJP8gfhEfof5xjUPrI8jvL/8MXGGUKK7b4L6u7JF5uimuo9VMK
-	 dKJj2Blal8bEg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id AC2C8C53BC9; Sun, 24 Aug 2025 23:19:50 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: =?UTF-8?B?W0J1ZyAyMjAxODFdIFVzZXJzIGFjcm9zcyBkaXN0cmlidXRpb25z?=
- =?UTF-8?B?IHNlZSDigJxjb25maWcgZmFpbGVkLCBodWIgZG9lc27igJl0IGhhdmUgYW55?=
- =?UTF-8?B?IHBvcnRzISAoZXJyIC0xOSnigJ0gZnJvbSB4aGNpX2hjZCBhdCBib290Lg==?=
-Date: Sun, 24 Aug 2025 23:19:50 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: danagoyette@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: CODE_FIX
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220181-208809-r02HNy95HE@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220181-208809@https.bugzilla.kernel.org/>
-References: <bug-220181-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1756085838; c=relaxed/simple;
+	bh=CYxRMx3JKPMFk0XIbw57x4SFeAQzU/07YODBSok7L/U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=vDaFZQtFKoulv4MML43dTA1D+tw8lYzaLi1C1f4371CZnSRvSrr2Lf+vcuoizQREfJsp5ti0eM5IuotB9QrHq906g/DhNQkpKgiHlw6/AeXf2hSg3MHFqsGsnsbJdHeetxqTOt8/pw0Sgr/57Rydm+FnrAWbnWHCR5wXQ9tp4Ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=DpCKLDb4 reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=Xky+Bq7YlamxTZUutvPOTGMHUmRRJgrM7Mv/sxUPEXU=; b=D
+	pCKLDb4IWJUriMDids2kfp/jx4eCWtqcszBlOuQxmz7aKjs4K6rAr8YrwHJLbwCS
+	mPLfg+nsnSMC0RCWi/9LYRx5Jlul5FBHbe5apOH+O/BwHEG50icA3C3JPKzNR1pf
+	wfpPA9zMns0qEpT2hb2ltxQowBLD74zQEOQKMmJ2Do=
+Received: from ccc194101$163.com ( [116.128.244.169] ) by
+ ajax-webmail-wmsvr-40-126 (Coremail) ; Mon, 25 Aug 2025 09:36:49 +0800
+ (CST)
+Date: Mon, 25 Aug 2025 09:36:49 +0800 (CST)
+From: =?GBK?B?19S8ug==?= <ccc194101@163.com>
+To: "Alan Stern" <stern@rowland.harvard.edu>, gregkh@linuxfoundation.org
+Cc: jannh@google.com, rex.nie@jaguarmicro.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	chenchangcheng <chenchangcheng@kylinos.cn>
+Subject: Re:Re: [PATCH] usb: usbfs: Add reset_resume callback to usbfs.
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <f159e37f-3b27-4977-9712-345e8902eb48@rowland.harvard.edu>
+References: <20250822024602.42894-1-ccc194101@163.com>
+ <f159e37f-3b27-4977-9712-345e8902eb48@rowland.harvard.edu>
+X-NTES-SC: AL_Qu2eBPyTukAr7yGZY+kfmkYVh+06W8K2vvwh24JUOJ94jA3p/B8sUHRSAkXw0O60MD68mgmGXhVg5uN+dJB/UoAB0djI+0bN5MEZZVblaHGd9g==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-ID: <4cdaecd1.131d.198dedeefe2.Coremail.ccc194101@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:figvCgD3X9YyvqtouGMgAA--.366W
+X-CM-SenderInfo: 5fffimiurqiqqrwthudrp/1tbiZQ2x3mioYIwoAwAGsG
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220181
-
-Dana Goyette (danagoyette@gmail.com) changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |danagoyette@gmail.com
-
---- Comment #14 from Dana Goyette (danagoyette@gmail.com) ---
-I filed a bug a while ago on the Ubuntu bug tracker with information about =
-the
-device from a few utilities on Windows, on an X870E Taichi.
-
-https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2097466
-
-I should test out the patch sometime this week.  What kernel version is the
-patch for?
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+QXQgMjAyNS0wOC0yMyAwNDozMDoxOCwgIkFsYW4gU3Rlcm4iIDxzdGVybkByb3dsYW5kLmhhcnZh
+cmQuZWR1PiB3cm90ZToKPk9uIEZyaSwgQXVnIDIyLCAyMDI1IGF0IDEwOjQ2OjAyQU0gKzA4MDAs
+IGNjYzE5NDEwMUAxNjMuY29tIHdyb3RlOgo+PiBGcm9tOiBjaGVuY2hhbmdjaGVuZyA8Y2hlbmNo
+YW5nY2hlbmdAa3lsaW5vcy5jbj4KPj4gCj4+IFdoZW4gYW4gQXBwbGUgZGV2aWNlIGlzIGluc2Vy
+dGVkIGludG8gdGhlIGhvc3QsIGFuZCB0aGUgaG9zdAo+PiB3YWtlcyB1cCBmcm9tIFMzL1M0IHBv
+d2VyIHN0YXRlcywgaWYgdGhlIHJlc2V0X3Jlc3VtZSBwcm9jZXNzCj4+IGlzIHRyaWdnZXJlZCwg
+dGhlIGFic2VuY2Ugb2YgYSByZXNldF9yZXN1bWUgY2FsbGJhY2sgaW4gdXNiZnMgd2lsbAo+PiBj
+YXVzZSB0aGUgZGV2aWNlIHRvIHVuYmluZC4KPj4gQnkgYWRkaW5nIGEgcmVzZXRfcmVzdW1lIGNh
+bGxiYWNrIHRvIHVzYmZzIGFuZCByZXBvcnRpbmcgUkVNT1ZFIGFuZCBBREQKPj4gdWV2ZW50cyBp
+biByZXNldF9yZXN1bWUsIHRoZSB1c2Vyc3BhY2UgaXMgcHJvbXB0ZWQgdG8gcmVpc3N1ZSBjb21t
+YW5kcwo+PiB0byByZS1lc3RhYmxpc2ggdGhlIGJpbmRpbmcgd2l0aCB1c2Jmcy4KPgo+dXNiZnMg
+aGFzIG5vIHdheSB0byBpbmZvcm0gdXNlcnNwYWNlIHdoZW4gdGhlIGRldmljZSBpcyByZXNldC4g
+IFRoaXMgaXMgCj50cnVlIGZvciBub3JtYWwgcmVzZXRzIGFzIHdlbGwgYXMgZm9yIHJlc2V0LXJl
+c3VtZXMgKG5vIHByZV9yZXNldCwgCj5wb3N0X3Jlc2V0LCBvciByZXNldF9yZXN1bWUgY2FsbGJh
+Y2tzKS4gIEkgZG9uJ3Qgc2VlIGFueSBwb2ludCBpbiB0cnlpbmcgCj50byBhZGQgc3VwcG9ydCBm
+b3IgdGhlIGxhdHRlciBidXQgbm90IHRoZSBmb3JtZXIuCj4KPlVuYmluZGluZyB0aGUgZGV2aWNl
+IGZvcmNlcyB1c2Vyc3BhY2UgdG8gcmUtb3BlbiB0aGUgZGV2aWNlIGZpbGUgYW5kIAo+ZXN0YWJs
+aXNoIGEgbmV3IGJpbmRpbmcuICBIb3cgZG9lcyBhZGRpbmcgUkVNT1ZFIGFuZCBBREQgdWV2ZW50
+cyBtYWtlIAo+dGhlIHNpdHVhdGlvbiBhbnkgYmV0dGVyIHRoYW4gaXQgYWxyZWFkeSBpcz8KPgoK
+PkFsYW4gU3Rlcm4KCkhlcmUgaXMgbXkgcmVhc29uaW5nOiAKQ3VycmVudGx5LCBmb3IgQXBwbGUg
+ZGV2aWNlcyBhZnRlciBTMy9TNCBzdGF0ZXMsIHNpbmNlIHRoZSBVU0IgaHViIGxvc2VzIHBvd2Vy
+LCAKdGhlIHJlc2V0LXJlc3VtZSBwcm9jZXNzIGlzIHRyaWdnZXJlZCBkdXJpbmcgcmVzdW1lLiBJ
+ZiB0aGUgb3JpZ2luYWwgCnJlc2V0X3Jlc3VtZSBwcm9jZXNzIGlzIGZvbGxvd2VkLCB0aGUgZGV2
+aWNlIHdvdWxkIGJlIGZvcmNpYmx5IHVuYm91bmQsCmFuZCB0aGUgZGV2aWNlX2F0dGFjaCBmdW5j
+dGlvbiB3b3VsZCBiZSB1c2VkIHRvIHJlYmluZCB0aGUgZHJpdmVyLgpIb3dldmVyLCB1c2JmcyBp
+cyBkaWZmZXJlbnQgaW4gdGhhdCBpdCBjYW5ub3QgYXV0b21hdGljYWxseSByZWJpbmQKYWZ0ZXIg
+dW5iaW5kaW5nIGFuZCByZXF1aXJlcyBhIHVzZXJzcGFjZSBpb2N0bCB0byByZS1lc3RhYmxpc2gg
+dGhlIGJpbmRpbmcuCgpJZiB3ZSBhc3N1bWUgdGhhdCB0aGUgcmVzZXRfcmVzdW1lIGNhbGxiYWNr
+IG9mIHVzYmZzIGRvZXMgbm90aGluZwphbmQgc2ltcGx5IHJldHVybnMgMCwgdGhlIFVTQiBkZXZp
+Y2Ugd291bGQgc3RpbGwgYmUgcmVzZXQuIFdoZW4gdXNlcnNwYWNlCnVzZXMgdGhlIHByZXZpb3Vz
+IGZpbGUgZGVzY3JpcHRvciBoYW5kbGUgdG8gaXNzdWUgYSBjb21tYW5kLCBpdCB3b3VsZCByZXN1
+bHQKaW4gYW4gZXJyb3I6ICJQVFBfT0MgMHgxMDA3IHJlY2VpdmluZyByZXNwIGZhaWxlZDogUFRQ
+IFNlc3Npb24gTm90IE9wZW4gKDB4MjAwMykuIgoKVGhlcmVmb3JlLCBieSBhZGRpbmcgUkVNT1ZF
+IGFuZCBBREQgdWV2ZW50cyBpbiB0aGUgcmVzZXRfcmVzdW1lIHByb2Nlc3MsCnVzZXJzcGFjZSBp
+cyBub3RpZmllZCB0byBmaXJzdCB1bmJpbmQgYW5kIHRoZW4gcmViaW5kLiBUaGlzIGFwcHJvYWNo
+IGF2b2lkcyB0aGUgYWZvcmVtZW50aW9uZWQgaXNzdWUuCgpDaGVuIENoYW5nY2hlbmc=
 
