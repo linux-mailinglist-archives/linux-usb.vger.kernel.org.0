@@ -1,125 +1,100 @@
-Return-Path: <linux-usb+bounces-27272-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27273-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE5A0B34D74
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 23:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 23A36B34FE0
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 02:02:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFCF6207A00
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 21:04:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE3D216B127
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 00:02:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3475F299AA9;
-	Mon, 25 Aug 2025 21:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5BE27461;
+	Tue, 26 Aug 2025 00:02:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="jtic36Cv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r5YVWmrH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F066928F1;
-	Mon, 25 Aug 2025 21:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756155878; cv=pass; b=OwqT2kSxPNOYrCLAtQzC2a3RNshGzAe5gIETPD8yvAqOsRxFLeRsanUkMZw4VLoCNwEaQcYz2SQPE+1Fcc0/REC5C3tBBprtHFZHnEUoyQZb0e/Kc8y3oZxBecrkxv6E72O+or55H4fcqX4orH7VTvNS5Ne84FfLIetOllZZrKk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756155878; c=relaxed/simple;
-	bh=b37jhv+kGMI15914BeD2tiD8jn0xOmD1cJ6McU6fLsA=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=HgoqvvJ/mtlXy8XLsKFXkJUuGwXg+rGq11RxviEw5kGuKxqAScQj/0FSySiFDpU6ZmrGOHF4dRHCe6MiikrQLMkXk9nuuC1b1LVX22d1ah7dEAtmUTy23+9Cqy8fFWXSGHWTuR13u7m1uGXhcOsTeblSXxQwQzR4YylLQ5YsLPg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=jtic36Cv; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1756155859; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Jb/C7ul2FX6aDzriINIjzgOoTSyEO62ELGIz6Mw5McNJG32l0ilCy3jh8XcG1xqUOKRU5izgB9JAtunlrs7+n1RLlHceVP1TGztdbN2ZSaZze+K3Hj0ZBFVSqmQczv+PQw2WRaeWcx3ym5F8xamjGw+ViTXlomcG4ylZ9XQrqBs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1756155859; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=aQZ34qMB2MkZ3sj3Nimg7SXXJ98jUa07zNRI6NcIVCk=; 
-	b=jNpyRGLrxIikLT3DMxhBKlHqefZQpV1zXMwTlzxgKifX2VORTrVCwQFRSsaWgpuJaSLwQmJpPCv0e1CqLgEVY8t//0OskLT0ovjDUxTbYh92FgMO/wiinAB97x9jO3KfkZb7t7/JVcQjwdcIJ3kEq9amb5n2SXLkwf0nmXuSWHQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1756155859;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=aQZ34qMB2MkZ3sj3Nimg7SXXJ98jUa07zNRI6NcIVCk=;
-	b=jtic36CvGS09Eq7xfx2oNuKDlcInTZxL7w/UGpraRxadqCWjZKDw7p+igSx2X98C
-	GZUgH6YyuRWJk4quM0gZaYb8G4KeR1koMudQdfGr74mNRNTn+B6n89T37ifUTBO0guA
-	wn8NssZ78mO72MChLfSHjDQw/o692hY8A2eypCwM=
-Received: by mx.zohomail.com with SMTPS id 1756155856444766.20600042314;
-	Mon, 25 Aug 2025 14:04:16 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F071E29A2;
+	Tue, 26 Aug 2025 00:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756166548; cv=none; b=fF7mefl3jpiBG3KFLHDS/pVllVFDDGdxgJFEDXTAc6XfzNklVFKc2iPAlCFmY7KKdD2G1Dv0jX0pUI8BRxm2ZoXqRsanYht2XVrBBIj+RTSNMX9K+XGWQLsnuMsz7OqZhy1Pof4f4DUWmo/Cx0w94dkcBFywSpLkXC4ccu6pE4E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756166548; c=relaxed/simple;
+	bh=Loc5pohHYUjhyJpSTUM6FXiXSt81XFswTcKuhTvLXa8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dRQjNWGIcOoyEBQ1J86pkLgK/PL/KMDyrvaikZ8vJXsqgpydxRcCYWz3RFzKr0vBF/5IFeJPIubwlkA27ef5pe8+GxfBVDcTdLeadT60on6Bpo3DBn1ZNZuDPEj4DmShoq0S6xjC1aCek7a2PLODPXI6hUYujEuIcIyv58PqOZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r5YVWmrH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D1BC4CEED;
+	Tue, 26 Aug 2025 00:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756166547;
+	bh=Loc5pohHYUjhyJpSTUM6FXiXSt81XFswTcKuhTvLXa8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=r5YVWmrHj7xVjWD6QCu15oSr1HYapHyDPkoDoAyrSIbW4aZJV0odYiTYpxMysfOPP
+	 vRW2QdgMnVIQpslTZTitlbRFZZOWTza+NlEDsgyTek9XIwqrAl4jieLUo+JKxQNvu8
+	 qLNA+fB1BOBRDz9XxQfD5MA4p9fl6pvs1JRtv0qbPeam8U393A6eifcKlt/HdLzW/h
+	 NCxueYoFRsXSOOGO/Q2vkNO7SFf4XoriFJuwOzBFkQoFG4ly6K2NerfNM8n6IG2OBo
+	 tFUxhoQuU+yl5fFIUtsfj6nl+hLiVRUIzCiyEih1KXzgXR+HeKr6CrbxKZzJFAqnuk
+	 4Ed9VWUXBWv7A==
+From: Jisheng Zhang <jszhang@kernel.org>
+To: Richard Leitner <richard.leitner@linux.dev>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/3] usb: usb251xb: support usage case without I2C control
+Date: Tue, 26 Aug 2025 07:45:06 +0800
+Message-ID: <20250825234509.1041-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH 1/2] rust: usb: add basic USB abstractions
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <DCBSZC9IDT4L.SPHF4KVM5KEW@kernel.org>
-Date: Mon, 25 Aug 2025 18:03:59 -0300
-Cc: Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org,
- linux-usb@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6FFC1A6F-D403-4BCC-9B0C-CD05A07B9923@collabora.com>
-References: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
- <20250825-b4-usb-v1-1-7aa024de7ae8@collabora.com>
- <DCBSZC9IDT4L.SPHF4KVM5KEW@kernel.org>
-To: Benno Lossin <lossin@kernel.org>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Benno,
+Currently, the usb251xb assumes i2c control. But from HW point of
+view, the hub supports usage case without any i2c, we only want the
+gpio controls.
 
-> On 25 Aug 2025, at 17:49, Benno Lossin <lossin@kernel.org> wrote:
->=20
-> On Mon Aug 25, 2025 at 8:18 PM CEST, Daniel Almeida wrote:
->> +impl DeviceId {
->> +    /// Equivalent to C's `USB_DEVICE` macro.
->> +    pub const fn from_id(vendor: u16, product: u16) -> Self {
->> +        Self(bindings::usb_device_id {
->> +            match_flags: bindings::USB_DEVICE_ID_MATCH_DEVICE as =
-u16,
->> +            idVendor: vendor,
->> +            idProduct: product,
->> +            // SAFETY: It is safe to use all zeroes for the other =
-fields of `usb_device_id`.
->> +            ..unsafe { MaybeUninit::zeroed().assume_init() }
->=20
-> You can avoid this usage of `unsafe` with this patch series:
->=20
->    =
-https://lore.kernel.org/all/20250814093046.2071971-1-lossin@kernel.org
->=20
-> I'd like to avoid introducing any new one of these.
->=20
-> ---
-> Cheers,
-> Benno
->=20
->> +        })
->> +    }
->=20
+Refactor the code so that register writes for configuration are only
+performed if the device has a i2c_client provided and also register as
+a platform driver. This allows the driver to be used to manage GPIO
+based control of the device.
 
-Ah, nice, you spoke about this in the last RFL call, I remember it now.
+Since v3:
+ - collect Reviewed-by tags
+ - update commit msg to remove redundant content
+ - keep memset of i2c_wb[]
 
-Ok, I will address this in the next version.
+Since v2:
+ - add usage example w/o i2c control in dt-binding
+ - update commit msg
+ - remove of_match_ptr
 
-=E2=80=94 Daniel=
+Since v1:
+ - make the modern pm macros usage a separate patch
+ - use pm_sleep_ptr instead of pm_ptr for usb251xb_plat_pm_ops, because
+   this ops is for PM_SLEEP only.
+
+Jisheng Zhang (3):
+  dt-bindings: usb: usb251xb: support usage case without I2C control
+  usb: usb251xb: use modern PM macros
+  usb: usb251xb: support usage case without I2C control
+
+ .../devicetree/bindings/usb/usb251xb.yaml     |   9 +-
+ drivers/usb/misc/usb251xb.c                   | 108 +++++++++++++++---
+ 2 files changed, 103 insertions(+), 14 deletions(-)
+
+-- 
+2.50.0
+
 
