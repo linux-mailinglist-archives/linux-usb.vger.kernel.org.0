@@ -1,41 +1,41 @@
-Return-Path: <linux-usb+bounces-27228-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27235-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A7B6B33470
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 05:13:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25EEBB3387E
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 10:11:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BFFE3B9FC6
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 03:13:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4FC53BFD5E
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 08:11:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D42A23ABB9;
-	Mon, 25 Aug 2025 03:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D73D29B78F;
+	Mon, 25 Aug 2025 08:11:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="b6M6UPhk"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="jZTcCQqM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m49242.qiye.163.com (mail-m49242.qiye.163.com [45.254.49.242])
+Received: from mail-m49206.qiye.163.com (mail-m49206.qiye.163.com [45.254.49.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B001A5BBC;
-	Mon, 25 Aug 2025 03:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.242
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A8F29B793;
+	Mon, 25 Aug 2025 08:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756091581; cv=none; b=RFbuksBmazBpqSkwFQiWLkizv6bPIyN5a0HxOUdhqrTycfNKm6qAGnuXEpwbfjz3fwVo3pTVGy7Z1mj+vKrZFK2QJy17lzQlgtPZ66bs6FEkXYSuN6ulEgJJS8SN/f5Wwh/lOrc1iBbfKHoDSQwIZjHasZ0VUp8F4Q7FKtb2T0A=
+	t=1756109482; cv=none; b=hAJTQtGhcHUXZ+d0epsJZ5P2gPLWcunKgQumYhwNc/VQ+U6PZIM31DASQj9ljNj4Xv+18+5RQqKOwGOtMd1BUrg6Y8YU6Ct5u/k/NPg5oMjVkW04I+MljMdPg8p5mogZVgzLMNhmcm2xWBkwakag6piRFFKGpkSOSmPGY4NHSAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756091581; c=relaxed/simple;
-	bh=0yG5XdTfUkLYWsRifYXye+8/PpxJP4IkPaV9PoR+Zsc=;
+	s=arc-20240116; t=1756109482; c=relaxed/simple;
+	bh=NGv79DTk6F7a87cvl4FUlWH3mVBfPqdnx9mJIeeHa5c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uPlvCML9LHowiBoxKjeaXNQkgk7qbIuwXJGdcQBLSuIgssOm3n1JA16I/w4/Fg/uKCS63mFZ9v4H7ZGRyHo5vlUPCfvsXnlTydDVRvPB2y3UTJYYCdgS1G39WYxlVxhEUi/CXklg1OvJoNhyKu3Fzwlp/szIZw7Ta8Yav5R4/Vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=b6M6UPhk; arc=none smtp.client-ip=45.254.49.242
+	 In-Reply-To:Content-Type; b=Rjw2y891k4GLhCthBeJ3KWvpzrT3tItSjBrQ/5esRl3vTfHBBIHDYUCVSVpXEjAxnO2YF8BxwD1B5j6lkLudgAJ9ycBj58RNtHjT69aG6K9OH6j8UzGHjwyeANFYy3mFB9urd955JcuO5x7ZqakGhCVTvbAyiw8s07YV3UQn0y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=jZTcCQqM; arc=none smtp.client-ip=45.254.49.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
 Received: from [172.16.33.94] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 2073181e1;
-	Mon, 25 Aug 2025 11:12:46 +0800 (GMT+08:00)
-Message-ID: <b62f3f22-d8a0-46ca-a261-fece95d6ae66@rock-chips.com>
-Date: Mon, 25 Aug 2025 11:12:46 +0800
+	by smtp.qiye.163.com (Hmail) with ESMTP id 20740ab50;
+	Mon, 25 Aug 2025 11:35:11 +0800 (GMT+08:00)
+Message-ID: <5252b43d-a7ee-42b5-932e-6c6eadd04543@rock-chips.com>
+Date: Mon, 25 Aug 2025 11:35:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -43,67 +43,76 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: configfs: Correctly set use_os_string at
- bind
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+Subject: Re: [PATCH] usb: gadget: f_hid: Fix zero length packet transfer
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: gregkh@linuxfoundation.org, Chris.Wulff@biamp.com,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
  frank.wang@rock-chips.com, jianwei.zheng@rock-chips.com,
  yue.long@rock-chips.com
-References: <1755833769-25434-1-git-send-email-william.wu@rock-chips.com>
- <2025082244-celery-frenzy-2a70@gregkh>
+References: <1755828118-21640-1-git-send-email-william.wu@rock-chips.com>
+ <c09f21ee-be83-4880-841b-70e1e5c036f0@rowland.harvard.edu>
 From: William Wu <william.wu@rock-chips.com>
-In-Reply-To: <2025082244-celery-frenzy-2a70@gregkh>
+In-Reply-To: <c09f21ee-be83-4880-841b-70e1e5c036f0@rowland.harvard.edu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a98df36c91309d4kunm11a8e5e61b01e43
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a98df4b4d9709d4kunm3b6efc731b10cc1
 X-HM-MType: 1
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQk9ITVZIHxhDSExKQhgdTE1WFRQJFh
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGh4YGVZJSk5OS0wfSh0ZSENWFRQJFh
 	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUJCSU5LVU
 	pLS1VKQktCWQY+
 DKIM-Signature: a=rsa-sha256;
-	b=b6M6UPhk83aNW/p73FH+nQlGI5YCvaPZ5LjUua6hqy/6owdRsc9jpNXAaetPt+pEqTdQ+3P9y5rJVz4XM5bOwUSDIfcLlGlAt5vTVzK6E0RoJDTqD1D7xUBHY3XKW5DvNyuOGlHGERiqYq7glLr8w/MIxutDcxGJuch6LCWIsGs=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=yj4F49I+jZVVLGBFwXoCtgdfwHr9IKcDHw7rukvwJqc=;
+	b=jZTcCQqM5yrjKOFSAtYk0EnwukWfQDkymkU92Bs/8bgdkoPL4iFiWgwJQ0RWrLDRT0s05dijmxWi39X56bJypBnDZJPRelZpNaRs6nQiCRqooJycG19YKE9GFZan4yvA4KXRKygdrWj8BKp8qrjw1L2zGaovhMjvOgSZYCkCrg0=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=G4TTjMMxsEMVdyTYcmWj7mnrO5XKGcr4tlqnkm4eDc8=;
 	h=date:mime-version:subject:message-id:from;
 
 
 
-On 8/22/2025 12:50 PM, Greg KH wrote:
-> On Fri, Aug 22, 2025 at 11:36:09AM +0800, William Wu wrote:
->> Once the use_os_string flag is set to true for some functions
->> (e.g. adb/mtp) which need to response the OS string, and then
->> if we re-bind the ConfigFS gadget to use the other functions
->> (e.g. hid) which should not to response the OS string, however,
->> because the use_os_string flag is still true, so the usb gadget
->> response the OS string descriptor incorrectly, this can cause
->> the USB device to be unrecognizable on the Windows system.
->>
->> An example of this as follows:
->>
->> echo 1 > os_desc/use
->> ln -s functions/ffs.adb configs/b.1/function0
->> start adbd
->> echo "<udc device>" > UDC   #succeed
->>
->> stop adbd
->> rm configs/b.1/function0
->> echo 0 > os_desc/use
->> ln -s functions/hid.gs0 configs/b.1/function0
->> echo "<udc device>" > UDC  #fail to connect on Windows
->>
->> This patch sets the use_os_string flag to false at bind if
->> the functions not support OS Descriptors.
+On 8/22/2025 9:56 PM, Alan Stern wrote:
+> On Fri, Aug 22, 2025 at 10:01:58AM +0800, William Wu wrote:
+>> If the hid transfer with size divisible to EPs max packet
+>> size, it needs to set the req->zero to true, then the usb
+>> controller can transfer a zero length packet at the end
+>> according to the USB 2.0 spec.
 >>
 >> Signed-off-by: William Wu <william.wu@rock-chips.com>
+>> ---
+>>   drivers/usb/gadget/function/f_hid.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+>> index 8e1d1e8..8021af3 100644
+>> --- a/drivers/usb/gadget/function/f_hid.c
+>> +++ b/drivers/usb/gadget/function/f_hid.c
+>> @@ -511,7 +511,7 @@ static ssize_t f_hidg_write(struct file *file, const char __user *buffer,
+>>   	}
+>>   
+>>   	req->status   = 0;
+>> -	req->zero     = 0;
+>> +	req->zero     = ((count % hidg->in_ep->maxpacket) == 0);
 > 
-> What commit id does this fix?
-Fixes: 87213d388e92 ("usb: gadget: configfs: OS String support")
-
-Best Regards,
-William Wu>
-> thanks,
+> Here and below, there is no need to check whether count is divisible by
+> the maxpacket length.  The UDC driver does this for you automatically.
+> (See the kerneldoc for struct usb_request.)  Simply set req->zero to 1.
 > 
-> greg k-h
+> Alan Stern
+Good idea，I checked the UDC drivers (drivers/usb/gadget/udc and 
+dwc2/dwc3), they test if zlp is actually needed if req->zero to 1.>
+>>   	req->length   = count;
+>>   	req->complete = f_hidg_req_complete;
+>>   	req->context  = hidg;
+>> @@ -967,7 +967,7 @@ static int hidg_setup(struct usb_function *f,
+>>   	return -EOPNOTSUPP;
+>>   
+>>   respond:
+>> -	req->zero = 0;
+>> +	req->zero = ((length % cdev->gadget->ep0->maxpacket) == 0);
+>>   	req->length = length;
+>>   	status = usb_ep_queue(cdev->gadget->ep0, req, GFP_ATOMIC);
+>>   	if (status < 0)
+>> -- 
+>> 2.0.0
+> 
 > 
 > 
 
