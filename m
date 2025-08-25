@@ -1,167 +1,113 @@
-Return-Path: <linux-usb+bounces-27252-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27253-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4474AB33F0D
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 14:15:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5134B34004
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 14:50:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 426883B4650
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 12:15:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4BA217A1442
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 12:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B24FA23DE;
-	Mon, 25 Aug 2025 12:15:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CDF41F0E26;
+	Mon, 25 Aug 2025 12:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s1pOUzQH"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="Hgz/7Tvh";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="oplpzs3E"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF449478;
-	Mon, 25 Aug 2025 12:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5578A6BFCE;
+	Mon, 25 Aug 2025 12:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756124109; cv=none; b=odE2zcTN2YN/XuF5nnc4iMlsKdh0h5SnvSoV93sOsBXoXwCGaxZR/bg+Eo4MPO23KZd2zu8iHvP0lv61hbjOy2yA60ze3cVSuaM3dZzc71Wom3BZcksIPPBWzRvIEoeGdjdfEar/7f09f+ghJrazfIDffdYYEQlYmAHG4PSx4nY=
+	t=1756126173; cv=none; b=fSEkQctzw7IAK9TdrLPngX+nWkMI3SxqNqENXszP4bjZ4emAMECfWvxKn23Yq+0MU9seEI0qpJnzO1plbE4pdARJsMe+ACR2sQ6Gl+LWJZAybUBZDvR3lAaaA+RIHbFZFghqgs7Qzw21szjT11DGhd4lFBUlqcRb0m34TpOfEHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756124109; c=relaxed/simple;
-	bh=alL0tPmHLDm5NA77251sOI6jBFp6e0bCu3oKZ1m9NgA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nh9NtzHlyVHecNzmc9bnA7Xjcqi6l3qEIcv+hGajcHxwodCODLiDBJjZKQm1ZoKVgn3FD/LhsauwSYMKtOGdJmZhqTIjTCXkAwRD0K8gQp4xdoJFQqbEN+fvVwcdnfIIet01qtgkj2Dkb5D9dHUEXoThU9WmmRn6EbPjeQyKOhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s1pOUzQH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDADDC116B1;
-	Mon, 25 Aug 2025 12:15:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756124108;
-	bh=alL0tPmHLDm5NA77251sOI6jBFp6e0bCu3oKZ1m9NgA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=s1pOUzQHV6wUhy1er26yz/7G7BNYQj9jWP1/WWRQnaJTnD2GqLh/uV1JYUZFEoBx4
-	 VMkjGOBmCuFcu7rC0vbugF7rlV7GNWYPK3b16CWfCKzVUNhhbuhG3uyGFTwUDVctEq
-	 oJxLmJ7zxtyVKQx0pWjdcx3k8TvyAbdKQiJFfNS0zP9sXj27MwM2Kg5OsBz+8h9h6U
-	 1XJ4JwIztW/efn9iDDL5tEjgw4B+cOoDzZ9WJzFgNd/qkiEYws/ExlG3Ps07H4qPtQ
-	 YZLZ/IBB8nivMn8O1NpwoFfgCWYBvQOr46njmuGWkJbFolbwYA1ZF9aBQKxEU4Su/p
-	 jv+FJpxuCSuIQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Lubomir Rintel <lkundrak@v3.sk>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	oliver@neukum.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.16-6.1] cdc_ncm: Flag Intel OEM version of Fibocom L850-GL as WWAN
-Date: Mon, 25 Aug 2025 08:14:51 -0400
-Message-ID: <20250825121505.2983941-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250825121505.2983941-1-sashal@kernel.org>
-References: <20250825121505.2983941-1-sashal@kernel.org>
+	s=arc-20240116; t=1756126173; c=relaxed/simple;
+	bh=IQKOOFlqFAtLTzqwcUqS5SNkGjI4OBb8Q9xA9VpRGko=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z0xu+N/v1iD0AGxNex7g7wXsIc7jDDkez//UQ7j91hxDQk188Rq3jweccr4IrWdirn8wMlNwyvCbFkDXOLuVlnmputrW8azMDw2dK0b/j2raIGWTDMc9Le8Gw4nZvopqCi1CG++o6nAu411MUBqXPKt8v1M+E1tGbNFcirZ/ON4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=Hgz/7Tvh; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=oplpzs3E reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1756126168; x=1787662168;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gaQtNdcQBw6TkuqQOMHaCaeCRNbn0y4lit9cmniz650=;
+  b=Hgz/7TvhTs5V9IiLufYlzfL2GuzK3eKx3qjFz5tO1y+dKGesnN1HQlmy
+   71HxxkPBk5IjbAs+mMtGyYd2jju/LyPog5brK6lb20HAQ2kTtEeUaLt12
+   GBLEZPxml8UPISqj5XwNMzk5O3fV7czvsPNyXay9pZcJkWcK7QKQe4QYh
+   EufLcobj0nN15+moy2qst/MHzk5nltnGcMm8jsQKj34uftGVpgkSTPPlV
+   lxeIw3WVpxp0w0Rkogf6DUWFdHnBkBLiaxi7FEhItRTj5BNC2n7fIbgkP
+   Kgjgg/fXIbBhl3RdB4+MwX3iwLsMuDjCCHeKIckENUbPBW4igQCYFWRof
+   A==;
+X-CSE-ConnectionGUID: pJelOCvFSz2XARN0aE7ROQ==
+X-CSE-MsgGUID: 17NcARDYRgGqhtmNI6XchA==
+X-IronPort-AV: E=Sophos;i="6.18,213,1751234400"; 
+   d="scan'208";a="45893996"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 25 Aug 2025 14:49:12 +0200
+X-CheckPoint: {68AC5BC8-37-299FBAB0-EF52EDE7}
+X-MAIL-CPID: 1C9800A739D44A8B67B14F2EC758D138_5
+X-Control-Analysis: str=0001.0A002108.68AC5B6F.006B,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 175AB166EEF;
+	Mon, 25 Aug 2025 14:49:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1756126148; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=gaQtNdcQBw6TkuqQOMHaCaeCRNbn0y4lit9cmniz650=;
+	b=oplpzs3EqosJx63n/4EpCqhJ3g9eyh+vRg5k40QFy4vlKzYTwpTd1GLnbghXWouiPcWES7
+	DmAsx0qWN+G8xxmrjCjcu+chwHC1bXiN2J7p/e77tPUMbz30Bq8AW3ZMk9PIS3oJONqpwa
+	zlAt00ETMwAaBiM89dzF6eky82y+InLe2kVWQow4nhBoqAtTwaqiY2GFkcOY9B6o8X4BDE
+	QVomUKGgdlnY1xA4arEKaUZk5WZp8PqRJY5nYgQAFg26B4xnPBh1qdbsl7n9emFLxnHycP
+	DQHtz29h66hBKh7nEdtVU5MMxV+yYZJdOp3knS1lnS9Ov4BgZqP2tOQloF+ozw==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Bin Liu <b-liu@ti.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Matthias Schiffer <matthias.schiffer@tq-group.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexander Stein <alexander.stein@ew.tq-group.com>
+Subject: [PATCH 1/1] usb: musb: dsps: use platform_get_irq_byname_optional() for vbus IRQ
+Date: Mon, 25 Aug 2025 14:49:00 +0200
+Message-ID: <20250825124901.2190539-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.16.3
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-From: Lubomir Rintel <lkundrak@v3.sk>
+From: Matthias Schiffer <matthias.schiffer@tq-group.com>
 
-[ Upstream commit 4a73a36cb704813f588af13d9842d0ba5a185758 ]
+The vbus IRQ is optional, so no error message should be printed if it is
+not available.
 
-This lets NetworkManager/ModemManager know that this is a modem and
-needs to be connected first.
-
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-Link: https://patch.msgid.link/20250814154214.250103-1-lkundrak@v3.sk
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Matthias Schiffer <matthias.schiffer@tq-group.com>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
+ drivers/usb/musb/musb_dsps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-LLM Generated explanations, may be completely bogus:
-
-**Backport Status: YES**
-
-This commit should be backported to stable kernel trees for the
-following reasons:
-
-## Analysis of the Commit:
-
-1. **Nature of the change**: This is a simple device ID addition that
-   adds USB vendor/device ID pair (0x8087:0x095a) for the Intel OEM
-   version of Fibocom L850-GL modem to the cdc_ncm driver's device
-   table.
-
-2. **Bug fix vs feature**: This is a **hardware enablement fix** rather
-   than a new feature. Without this change, the Intel-branded Fibocom
-   L850-GL modem won't be properly recognized as a WWAN device, causing
-   NetworkManager/ModemManager to fail to handle it correctly. This
-   directly impacts users with this hardware.
-
-3. **Code impact**: The change is minimal - just 7 lines adding a new
-   entry to the `cdc_devs[]` USB device table:
-  ```c
-  /* Intel modem (label from OEM reads Fibocom L850-GL) */
-  { USB_DEVICE_AND_INTERFACE_INFO(0x8087, 0x095a,
-  USB_CLASS_COMM,
-  USB_CDC_SUBCLASS_NCM, USB_CDC_PROTO_NONE),
-  .driver_info = (unsigned long)&wwan_info,
-  },
-  ```
-
-4. **Risk assessment**:
-   - **Extremely low risk** - The change only adds a new device ID entry
-   - No existing functionality is modified
-   - Uses the existing `wwan_info` driver configuration (FLAG_WWAN flag)
-   - Follows the same pattern as other WWAN devices in the driver
-   - Cannot cause regressions for other hardware
-
-5. **User impact**: Users with this specific hardware (Intel OEM version
-   with VID:PID 0x8087:0x095a) cannot use their modem properly without
-   this fix. The modem won't be recognized as a WWAN device, preventing
-   proper network management.
-
-6. **Stable tree criteria compliance**:
-   - ✓ Fixes a real bug (hardware not working properly)
-   - ✓ Minimal change (7 lines)
-   - ✓ No architectural changes
-   - ✓ Self-contained to specific hardware
-   - ✓ Clear and obvious correctness
-
-7. **Historical context**: The git history shows numerous quirks and
-   fixes for the Fibocom L850-GL modem variants, indicating this is
-   well-known hardware that has required various fixes over time. This
-   particular Intel OEM variant (0x8087:0x095a) was simply missing from
-   the device table.
-
-This is a textbook example of a stable-worthy commit: it enables
-specific hardware that should already be working, with zero risk to
-existing functionality.
-
- drivers/net/usb/cdc_ncm.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index ea0e5e276cd6..5d123df0a866 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -2087,6 +2087,13 @@ static const struct usb_device_id cdc_devs[] = {
- 	  .driver_info = (unsigned long)&wwan_info,
- 	},
+diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
+index 12f587ab85117..a08ce96c08d3a 100644
+--- a/drivers/usb/musb/musb_dsps.c
++++ b/drivers/usb/musb/musb_dsps.c
+@@ -839,7 +839,7 @@ static int dsps_setup_optional_vbus_irq(struct platform_device *pdev,
+ {
+ 	int error;
  
-+	/* Intel modem (label from OEM reads Fibocom L850-GL) */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x8087, 0x095a,
-+		USB_CLASS_COMM,
-+		USB_CDC_SUBCLASS_NCM, USB_CDC_PROTO_NONE),
-+	  .driver_info = (unsigned long)&wwan_info,
-+	},
-+
- 	/* DisplayLink docking stations */
- 	{ .match_flags = USB_DEVICE_ID_MATCH_INT_INFO
- 		| USB_DEVICE_ID_MATCH_VENDOR,
+-	glue->vbus_irq = platform_get_irq_byname(pdev, "vbus");
++	glue->vbus_irq = platform_get_irq_byname_optional(pdev, "vbus");
+ 	if (glue->vbus_irq == -EPROBE_DEFER)
+ 		return -EPROBE_DEFER;
+ 
 -- 
-2.50.1
+2.43.0
 
 
