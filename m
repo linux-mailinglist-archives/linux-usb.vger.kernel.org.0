@@ -1,149 +1,125 @@
-Return-Path: <linux-usb+bounces-27226-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27227-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3FA2B333D0
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 04:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09432B333E9
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 04:22:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F8243AF5ED
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 02:01:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A86BD3B6895
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Aug 2025 02:20:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11EDD21CA0E;
-	Mon, 25 Aug 2025 02:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3959C222562;
+	Mon, 25 Aug 2025 02:20:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="HZv21MBT"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="jzHPeM6M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BDD1E4BE
-	for <linux-usb@vger.kernel.org>; Mon, 25 Aug 2025 02:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4109D28F1;
+	Mon, 25 Aug 2025 02:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756087310; cv=none; b=bFDe12B1s2dQ+ZQeqqGeLoubrh0pI33OpBGYKZfI7XzmIujG7QYjey29CrjBVNYnFi4TeDxJnVUoeKpx5Wy8Odr40edvhslFwiichZhQh5Ku+BZQdwcS/0CmBhdJOHy+X+g1xVZgtjSbBSUH550md2y29P26pA95AXleT5nw7AQ=
+	t=1756088425; cv=none; b=aZjxcqdOyEd8p0fgQs+PEQj8vIu4E+GSFoyiFe9xQCDS5Prk407gy12BX8ZJ9xOuGnfsjttCtS9VQvwyI6PHECmKNlMVeRGu9gHdvHepIyIUIg7+biqE8S9OASAQYs6dlWltWO4jyu4jVCz9E6rpnm5xv8ggDXs8DrFjcEPJkUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756087310; c=relaxed/simple;
-	bh=wIGH0m9FtHFoD1tG6AB6wD3rrqQLE7xeks1HyczeahU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cbj1MzYntkRz9jWCZwxXE/cLJ9S8BFrkBdK7dmpFeAoY2o0AyWECVar5wy+7CHomksMAn/5WR9s0pn91gIYiXDRuw/M9qX1mTAhuSwwN2g6Tb88P4BpGDxbUX8pg4Nx3fOqYEcA4YhrNkOiPcgNrn4SYNEmdUZiYb9fCf0xj000=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=HZv21MBT; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-71d71bcac45so31332127b3.0
-        for <linux-usb@vger.kernel.org>; Sun, 24 Aug 2025 19:01:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1756087308; x=1756692108; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xPoitRQ/IXYB+BKPn84zctYfWeLgkj6/m9I8qp2PJXo=;
-        b=HZv21MBTsj6l0pHaEdgSCX6vQhqg+9hwxrx8S28ICUZ6c8K6TWqQ1k9Cy2L9uavfsL
-         79o/II/Qmq6MCEBGhwHBfLDdKwfnJNNuN2OiV9td7a0BdqwQuj54ZPut17GT2mbL6jWR
-         EffQPOsJr3DKi+Tplk9Lj5RMEh658V0RsqySjGOmIsbvyxEyOJNCogY/qfB42nqWVXPx
-         b9YHLScWiaB0s5rs43AWkJu0SsC0QBYHZ/6nUrrxpEo2pOQ9QCECEvZTqrHCOisAcSD4
-         3+wvRLZKm+eYMDL/HJxdoOhjyCOldGwcxr6YRkNShVPxenOaO0v1L1FCyhOyuzAkJlu4
-         zQ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756087308; x=1756692108;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xPoitRQ/IXYB+BKPn84zctYfWeLgkj6/m9I8qp2PJXo=;
-        b=okfwtbNpqZzK9ynmsWw/CNxyx4qW7XIWZ4ug99RQTKYGwyy1IB5NRXzMeXXMBXflwu
-         eIOI+HEfCzOF/GupsRH5fUoLrWtQD5NxE+WB/TX/z/7W5Xjv38/+JGNq0a5bz4bKVC+0
-         pcPxcRLD1y8hMv6tdaBgeK5o4c3ScKbkA0TiX6WJ64FAoBpbZ8HcS5VjykDjqqHyyY2/
-         Ge+P96usJ3qKOZLlccsORDH5s+93T6YlNKVXnZQg0luzQB/YFRRhc2EjWZ7UuXT4bFo5
-         nglEsG5IcHS+NgfdZUQ28/Fvhwgp1jaGyZLhn8ffUJtO/WVxPqTjT/y3eJka/1UBFAuI
-         LfPw==
-X-Forwarded-Encrypted: i=1; AJvYcCXowSunfUfpzxlY6fB13K8HsIJB1hb+BjwTuRmqYaQxxbeQayhcGrE+cYB/PjhYX0/yft+06HkKjNs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3dnzxeYizXhA6dIyyHpbTRXr708ovZaDCyYQ1GMbbnO1w1ewj
-	vql6erKIvFvmDeK49rBuNKyPcOd29wlUJb8LHLvpdxfOeEjQy5ldp/5+zwxs3b/J4g==
-X-Gm-Gg: ASbGncvnTmTZYa02EgHsrL0X1OBrZRPmiZxvJJP9yPyroliXaY+lVO3mf2BullQ1lmL
-	K+HhLGOxwrmTZqKZ0TYVrvasapRLRQ5SMCEbji8rCykw5u//hMJJe+6f2gkXDNV6wfR0mEmLbn2
-	FEH10HqjVZtBjp/evBIKVAMAdfAQcjKa+lk1ADyttqW8E17ascy+PGe0OpHk11FSd9+63ES6RjL
-	TWrdqfB/Q3tIq4CyuoMUV8SFl7H8O8Om+kN1bqZmRhrnHIRknl4HEYp7/ibQZZWC/iX8F0l7V5d
-	FzS/xlzeopUnyaCTDAnFBXXQC0B9oae8L9SV94JtqPgrtIn3XpO7CMPTdJDvqAbrtP8gcuqgtFA
-	JwFlAYIoOvyTuOCooKswVO5sS
-X-Google-Smtp-Source: AGHT+IFxKtN4MqdM2gDpwPd6SRGHpoxBytgfZTiGfc8g8PTZSK+gRpxzSn7VRwg26oj1n6BvjcMuvQ==
-X-Received: by 2002:a05:690c:250a:b0:719:fafe:e822 with SMTP id 00721157ae682-71fdc2df5femr118396297b3.21.1756087307850;
-        Sun, 24 Aug 2025 19:01:47 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:156:8000:24f0::eb06])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-71ffce104d1sm11087847b3.28.2025.08.24.19.01.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Aug 2025 19:01:47 -0700 (PDT)
-Date: Sun, 24 Aug 2025 22:01:44 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: =?utf-8?B?6Ieq5bex?= <ccc194101@163.com>
+	s=arc-20240116; t=1756088425; c=relaxed/simple;
+	bh=NLBXpdkTGR1++BuR1EyUUOZbQMMlZib74w2PqrVBLkQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=eIhi6dj2cYxFmYc4IKxpJ/VOM9PsRc2I4rfBX1xX//8QnTJ/DeAAbpwMmZMU4CpNT8hoF2/VqRNWxGtHAOtprp6rwGtALrg/w7Nl5GUqWdRwsj8MfUx3IJ3qIpyqi/biRKhuaW1WBvmQ9T7IAh49OTR/PESKp9B1wPpm+cgkmMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=jzHPeM6M reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=V5sRSh7yg1UXMP+4s0+Wv0rYRYfuN+Dpb8VZccuYtLc=; b=j
+	zHPeM6MLD/tM85GUIbq9Ph73R3Fevwc/n96YW9ug+L8wdttYDn0SrBe3fico8xcJ
+	Rd5bbbhwl6024CO2TB0mzA23GAaKH0WZWwcA4oAuFm/3fBoMoUaFRXd03y/hJaJ0
+	G4bG+CPyfvZU4SniiSLfQZORwp3vy2fwCpw7ZUL0B4=
+Received: from ccc194101$163.com ( [116.128.244.169] ) by
+ ajax-webmail-wmsvr-40-126 (Coremail) ; Mon, 25 Aug 2025 10:19:56 +0800
+ (CST)
+Date: Mon, 25 Aug 2025 10:19:56 +0800 (CST)
+From: =?GBK?B?19S8ug==?= <ccc194101@163.com>
+To: "Alan Stern" <stern@rowland.harvard.edu>
 Cc: gregkh@linuxfoundation.org, jannh@google.com, rex.nie@jaguarmicro.com,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 	chenchangcheng <chenchangcheng@kylinos.cn>
-Subject: Re: Re: [PATCH] usb: usbfs: Add reset_resume callback to usbfs.
-Message-ID: <379c80f7-aa01-4575-aa0b-d64ef01c1346@rowland.harvard.edu>
+Subject: Re:Re: Re: [PATCH] usb: usbfs: Add reset_resume callback to usbfs.
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <379c80f7-aa01-4575-aa0b-d64ef01c1346@rowland.harvard.edu>
 References: <20250822024602.42894-1-ccc194101@163.com>
  <f159e37f-3b27-4977-9712-345e8902eb48@rowland.harvard.edu>
  <4cdaecd1.131d.198dedeefe2.Coremail.ccc194101@163.com>
+ <379c80f7-aa01-4575-aa0b-d64ef01c1346@rowland.harvard.edu>
+X-NTES-SC: AL_Qu2eBPyTt0si4CiZZukfmkYVh+06W8K2vvwh24JUOJ94jA3p/B8sUHRSAkXw0O60MD68mgmGXhVg5uN+dJB/UoABr4Ed7vVd5bnQhyiaW/9Tlg==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4cdaecd1.131d.198dedeefe2.Coremail.ccc194101@163.com>
+Message-ID: <23f1c6c2.2011.198df066c15.Coremail.ccc194101@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:figvCgD33+BMyKtoanYgAA--.571W
+X-CM-SenderInfo: 5fffimiurqiqqrwthudrp/1tbiYw603mirw3EYngACsy
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-On Mon, Aug 25, 2025 at 09:36:49AM +0800, 自己 wrote:
-> At 2025-08-23 04:30:18, "Alan Stern" <stern@rowland.harvard.edu> wrote:
-> >On Fri, Aug 22, 2025 at 10:46:02AM +0800, ccc194101@163.com wrote:
-> >> From: chenchangcheng <chenchangcheng@kylinos.cn>
-> >> 
-> >> When an Apple device is inserted into the host, and the host
-> >> wakes up from S3/S4 power states, if the reset_resume process
-> >> is triggered, the absence of a reset_resume callback in usbfs will
-> >> cause the device to unbind.
-> >> By adding a reset_resume callback to usbfs and reporting REMOVE and ADD
-> >> uevents in reset_resume, the userspace is prompted to reissue commands
-> >> to re-establish the binding with usbfs.
-> >
-> >usbfs has no way to inform userspace when the device is reset.  This is 
-> >true for normal resets as well as for reset-resumes (no pre_reset, 
-> >post_reset, or reset_resume callbacks).  I don't see any point in trying 
-> >to add support for the latter but not the former.
-> >
-> >Unbinding the device forces userspace to re-open the device file and 
-> >establish a new binding.  How does adding REMOVE and ADD uevents make 
-> >the situation any better than it already is?
-> >
-> 
-> >Alan Stern
-> 
-> Here is my reasoning: 
-> Currently, for Apple devices after S3/S4 states, since the USB hub loses power, 
-> the reset-resume process is triggered during resume. If the original 
-> reset_resume process is followed, the device would be forcibly unbound,
-> and the device_attach function would be used to rebind the driver.
-> However, usbfs is different in that it cannot automatically rebind
-> after unbinding and requires a userspace ioctl to re-establish the binding.
-> 
-> If we assume that the reset_resume callback of usbfs does nothing
-> and simply returns 0, the USB device would still be reset. When userspace
-> uses the previous file descriptor handle to issue a command, it would result
-> in an error: "PTP_OC 0x1007 receiving resp failed: PTP Session Not Open (0x2003)."
-> 
-> Therefore, by adding REMOVE and ADD uevents in the reset_resume process,
-> userspace is notified to first unbind and then rebind. This approach avoids the aforementioned issue.
-
-Doesn't the "PTP Session Not Open" error notify userspace to unbind and 
-rebind?  Why is adding REMOVE and ADD uevents any better?
-
-In the current kernel there is no reset_resume callback for usbfs.  
-Consequently, when userspace uses the previous file descriptor handle to 
-issue an ioctl command after a resume, it gets a -ENODEV error.  Doesn't 
-this also notify userspace that it should unbind and rebind?  Why is 
-adding a reset_resume callback any better?
-
-Alan Stern
+QXQgMjAyNS0wOC0yNSAxMDowMTo0NCwgIkFsYW4gU3Rlcm4iIDxzdGVybkByb3dsYW5kLmhhcnZh
+cmQuZWR1PiB3cm90ZToKPk9uIE1vbiwgQXVnIDI1LCAyMDI1IGF0IDA5OjM2OjQ5QU0gKzA4MDAs
+INfUvLogd3JvdGU6Cj4+IEF0IDIwMjUtMDgtMjMgMDQ6MzA6MTgsICJBbGFuIFN0ZXJuIiA8c3Rl
+cm5Acm93bGFuZC5oYXJ2YXJkLmVkdT4gd3JvdGU6Cj4+ID5PbiBGcmksIEF1ZyAyMiwgMjAyNSBh
+dCAxMDo0NjowMkFNICswODAwLCBjY2MxOTQxMDFAMTYzLmNvbSB3cm90ZToKPj4gPj4gRnJvbTog
+Y2hlbmNoYW5nY2hlbmcgPGNoZW5jaGFuZ2NoZW5nQGt5bGlub3MuY24+Cj4+ID4+IAo+PiA+PiBX
+aGVuIGFuIEFwcGxlIGRldmljZSBpcyBpbnNlcnRlZCBpbnRvIHRoZSBob3N0LCBhbmQgdGhlIGhv
+c3QKPj4gPj4gd2FrZXMgdXAgZnJvbSBTMy9TNCBwb3dlciBzdGF0ZXMsIGlmIHRoZSByZXNldF9y
+ZXN1bWUgcHJvY2Vzcwo+PiA+PiBpcyB0cmlnZ2VyZWQsIHRoZSBhYnNlbmNlIG9mIGEgcmVzZXRf
+cmVzdW1lIGNhbGxiYWNrIGluIHVzYmZzIHdpbGwKPj4gPj4gY2F1c2UgdGhlIGRldmljZSB0byB1
+bmJpbmQuCj4+ID4+IEJ5IGFkZGluZyBhIHJlc2V0X3Jlc3VtZSBjYWxsYmFjayB0byB1c2JmcyBh
+bmQgcmVwb3J0aW5nIFJFTU9WRSBhbmQgQURECj4+ID4+IHVldmVudHMgaW4gcmVzZXRfcmVzdW1l
+LCB0aGUgdXNlcnNwYWNlIGlzIHByb21wdGVkIHRvIHJlaXNzdWUgY29tbWFuZHMKPj4gPj4gdG8g
+cmUtZXN0YWJsaXNoIHRoZSBiaW5kaW5nIHdpdGggdXNiZnMuCj4+ID4KPj4gPnVzYmZzIGhhcyBu
+byB3YXkgdG8gaW5mb3JtIHVzZXJzcGFjZSB3aGVuIHRoZSBkZXZpY2UgaXMgcmVzZXQuICBUaGlz
+IGlzIAo+PiA+dHJ1ZSBmb3Igbm9ybWFsIHJlc2V0cyBhcyB3ZWxsIGFzIGZvciByZXNldC1yZXN1
+bWVzIChubyBwcmVfcmVzZXQsIAo+PiA+cG9zdF9yZXNldCwgb3IgcmVzZXRfcmVzdW1lIGNhbGxi
+YWNrcykuICBJIGRvbid0IHNlZSBhbnkgcG9pbnQgaW4gdHJ5aW5nIAo+PiA+dG8gYWRkIHN1cHBv
+cnQgZm9yIHRoZSBsYXR0ZXIgYnV0IG5vdCB0aGUgZm9ybWVyLgo+PiA+Cj4+ID5VbmJpbmRpbmcg
+dGhlIGRldmljZSBmb3JjZXMgdXNlcnNwYWNlIHRvIHJlLW9wZW4gdGhlIGRldmljZSBmaWxlIGFu
+ZCAKPj4gPmVzdGFibGlzaCBhIG5ldyBiaW5kaW5nLiAgSG93IGRvZXMgYWRkaW5nIFJFTU9WRSBh
+bmQgQUREIHVldmVudHMgbWFrZSAKPj4gPnRoZSBzaXR1YXRpb24gYW55IGJldHRlciB0aGFuIGl0
+IGFscmVhZHkgaXM/Cj4+ID4KPj4gCj4+ID5BbGFuIFN0ZXJuCj4+IAo+PiBIZXJlIGlzIG15IHJl
+YXNvbmluZzogCj4+IEN1cnJlbnRseSwgZm9yIEFwcGxlIGRldmljZXMgYWZ0ZXIgUzMvUzQgc3Rh
+dGVzLCBzaW5jZSB0aGUgVVNCIGh1YiBsb3NlcyBwb3dlciwgCj4+IHRoZSByZXNldC1yZXN1bWUg
+cHJvY2VzcyBpcyB0cmlnZ2VyZWQgZHVyaW5nIHJlc3VtZS4gSWYgdGhlIG9yaWdpbmFsIAo+PiBy
+ZXNldF9yZXN1bWUgcHJvY2VzcyBpcyBmb2xsb3dlZCwgdGhlIGRldmljZSB3b3VsZCBiZSBmb3Jj
+aWJseSB1bmJvdW5kLAo+PiBhbmQgdGhlIGRldmljZV9hdHRhY2ggZnVuY3Rpb24gd291bGQgYmUg
+dXNlZCB0byByZWJpbmQgdGhlIGRyaXZlci4KPj4gSG93ZXZlciwgdXNiZnMgaXMgZGlmZmVyZW50
+IGluIHRoYXQgaXQgY2Fubm90IGF1dG9tYXRpY2FsbHkgcmViaW5kCj4+IGFmdGVyIHVuYmluZGlu
+ZyBhbmQgcmVxdWlyZXMgYSB1c2Vyc3BhY2UgaW9jdGwgdG8gcmUtZXN0YWJsaXNoIHRoZSBiaW5k
+aW5nLgo+PiAKPj4gSWYgd2UgYXNzdW1lIHRoYXQgdGhlIHJlc2V0X3Jlc3VtZSBjYWxsYmFjayBv
+ZiB1c2JmcyBkb2VzIG5vdGhpbmcKPj4gYW5kIHNpbXBseSByZXR1cm5zIDAsIHRoZSBVU0IgZGV2
+aWNlIHdvdWxkIHN0aWxsIGJlIHJlc2V0LiBXaGVuIHVzZXJzcGFjZQo+PiB1c2VzIHRoZSBwcmV2
+aW91cyBmaWxlIGRlc2NyaXB0b3IgaGFuZGxlIHRvIGlzc3VlIGEgY29tbWFuZCwgaXQgd291bGQg
+cmVzdWx0Cj4+IGluIGFuIGVycm9yOiAiUFRQX09DIDB4MTAwNyByZWNlaXZpbmcgcmVzcCBmYWls
+ZWQ6IFBUUCBTZXNzaW9uIE5vdCBPcGVuICgweDIwMDMpLiIKPj4gCj4+IFRoZXJlZm9yZSwgYnkg
+YWRkaW5nIFJFTU9WRSBhbmQgQUREIHVldmVudHMgaW4gdGhlIHJlc2V0X3Jlc3VtZSBwcm9jZXNz
+LAo+PiB1c2Vyc3BhY2UgaXMgbm90aWZpZWQgdG8gZmlyc3QgdW5iaW5kIGFuZCB0aGVuIHJlYmlu
+ZC4gVGhpcyBhcHByb2FjaCBhdm9pZHMgdGhlIGFmb3JlbWVudGlvbmVkIGlzc3VlLgo+Cj5Eb2Vz
+bid0IHRoZSAiUFRQIFNlc3Npb24gTm90IE9wZW4iIGVycm9yIG5vdGlmeSB1c2Vyc3BhY2UgdG8g
+dW5iaW5kIGFuZCAKPnJlYmluZD8gIFdoeSBpcyBhZGRpbmcgUkVNT1ZFIGFuZCBBREQgdWV2ZW50
+cyBhbnkgYmV0dGVyPwo+Cj5JbiB0aGUgY3VycmVudCBrZXJuZWwgdGhlcmUgaXMgbm8gcmVzZXRf
+cmVzdW1lIGNhbGxiYWNrIGZvciB1c2Jmcy4gIAo+Q29uc2VxdWVudGx5LCB3aGVuIHVzZXJzcGFj
+ZSB1c2VzIHRoZSBwcmV2aW91cyBmaWxlIGRlc2NyaXB0b3IgaGFuZGxlIHRvIAo+aXNzdWUgYW4g
+aW9jdGwgY29tbWFuZCBhZnRlciBhIHJlc3VtZSwgaXQgZ2V0cyBhIC1FTk9ERVYgZXJyb3IuICBE
+b2Vzbid0IAo+dGhpcyBhbHNvIG5vdGlmeSB1c2Vyc3BhY2UgdGhhdCBpdCBzaG91bGQgdW5iaW5k
+IGFuZCByZWJpbmQ/ICBXaHkgaXMgCj5hZGRpbmcgYSByZXNldF9yZXN1bWUgY2FsbGJhY2sgYW55
+IGJldHRlcj8KPgo+QWxhbiBTdGVybgoKQWNjb3JkaW5nIHRvIHRoZSBjdXJyZW50IGV4cGVyaW1l
+bnRhbCBmaW5kaW5ncywgd2hlbiB1c2Vyc3BhY2UgZW5jb3VudGVycwphbiBlcnJvciB3aGlsZSB1
+c2luZyB0aGUgcHJldmlvdXMgZmlsZSBkZXNjcmlwdG9yIChmZCksIGl0IGRvZXMgbm90IHByb2Nl
+ZWQgdG8gdW5iaW5kCmFuZCByZWJpbmQgYXV0b21hdGljYWxseS4gVGhlcmVmb3JlLCB0aGUgdHdv
+IHVldmVudHMgd2VyZSBhZGRlZCBpbiB0aGUga2VybmVsIHRvIGV4cGxpY2l0bHkKbm90aWZ5IHVz
+ZXJzcGFjZSB0byB1bmJpbmQgYW5kIHJlYmluZC4KCkNoZW4gQ2hhbmdjaGVuZwo=
 
