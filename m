@@ -1,53 +1,86 @@
-Return-Path: <linux-usb+bounces-27289-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27291-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A1F5B35552
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 09:20:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 689DEB3568A
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 10:18:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0A16188DA37
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 07:20:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A8503B741A
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 08:18:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF6C2FB982;
-	Tue, 26 Aug 2025 07:18:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDAA2F6599;
+	Tue, 26 Aug 2025 08:17:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iscT6gSZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eUpypntO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E722F83B6;
-	Tue, 26 Aug 2025 07:18:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85DC1487D1;
+	Tue, 26 Aug 2025 08:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756192718; cv=none; b=KythlgmitbvCnaCzc3bnr4tv8yIS4klkdyqlJQEvo3aPZNdEH6/1vwitL6fm9//jfRThrCIoB0PgqMb+4S6ow/sBgek6OO4LYOUsT1AeBeX7L7xQWGf+/QO/BYy7A2hrfabMStA8kBPfaRynAJ4FFrZLKpCeBXmOEXOQYVrYTD4=
+	t=1756196279; cv=none; b=pL7H6MiTGquVVwPOwMJV+abbjttPdi8FLhFJQ6Z1ORANXBYOsDf+mAFD5xt25iQNaHt7+AB3r/X/EwDddpRBybikQBOf8KS+WZtwqOCS5+u84LaivRW/Cqpo6KAPzjVPgNJuuSCShHKgoImsOIo4ZGAm6h3fQudBZ5/E8onp9G0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756192718; c=relaxed/simple;
-	bh=i0Nfy+9gssKmarkh7J2+cP0xs3hncTO4KeRTAk5qZO8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=huZCbrkCTK5qj8SdSa93deVIwK8fDWjid2kS60gGvJvxOa7BupriDWtdPTLDtMFDIWV0jDu3cRdstjVwVrsalkS2Vi41PwEeRVg3yqUAkcTNVJZi+okgG0mPEuUCLc+vSth/xb8qUOqqOGycYHZYBYb2W6OY4LciSTvalYon+yY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iscT6gSZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9BDD2C2BCB7;
-	Tue, 26 Aug 2025 07:18:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756192717;
-	bh=i0Nfy+9gssKmarkh7J2+cP0xs3hncTO4KeRTAk5qZO8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=iscT6gSZf9IrQsmHBTplipM+0F9X9OI8CwAzh0KIFSezDZwQHScS8J/8uoohKSUUs
-	 KBWZcz3v4+r7ykZS64xQcl9bUFHXYLBsXsx7VbqzgoU2nHVpR0ur5q5S8iOu+ZyLhr
-	 YPQ4mcjX4bCSzTB2hzQIvxOZsUJ1hhTwH7qY70WWRldfwv0Z3CVADnoDY/AL8z2X0w
-	 7MDg8Dw/Vkdc5pK0aXCZDhu7MX3AgpZIlwUT8AeB+ksROrBq0vm8ynlp3veYmCxdkq
-	 N1M5S6rI/o4xKWeYuf8omNKus4x6V/hEwRKrAM2UW2pkOqOiiaIf/kVNQ/1XSxYcr8
-	 4rQUrZbMgNM6g==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93069CA0FEB;
-	Tue, 26 Aug 2025 07:18:37 +0000 (UTC)
-From: Fenglin Wu via B4 Relay <devnull+fenglin.wu.oss.qualcomm.com@kernel.org>
-Date: Tue, 26 Aug 2025 15:18:35 +0800
-Subject: [PATCH v3 8/8] arm64: dts: qcom: x1e80100-crd: Add charge limit
- nvmem
+	s=arc-20240116; t=1756196279; c=relaxed/simple;
+	bh=LMGUqtcZeT7/g276uoOG8szisYQQkCxA0/lcjLZV6AU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZNQ/kKgChsjfdcpQAXJhnBjoOmjh49GClXZubOXJk9xQ2CmyRPsKg2B+rhpa36VDBHjYWduptSKLZ2n1d23h1LpxgB3vk6Dbcljhw8eWjCWWhoBfw5VmgLsO2tSlZIHpq/2uaOiQYtEbAPGeS8rrE4IOq0kxLDkzWz3RcXetHJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eUpypntO; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45b618e067eso11011945e9.1;
+        Tue, 26 Aug 2025 01:17:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756196276; x=1756801076; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LJUJQoyHSPHbY3KTaWEDFqhSXMoUl3AzxQn8TTn8tek=;
+        b=eUpypntOvS37U6HjgzkoUR5siyt+Y9ph/C24VebdEx1kiC0HAgwHbz3kPuRTr/9Zoy
+         B6ywgoym6QKmLhLYtzWaynX7T5mewXE2YHeh6h8W6KcgvbMubbDwIUlqcpLLYzkDyXkI
+         IrkRvIH091ZM/vIZqPtB6LT0eDD6JvWreQALxCqoZBIiwXFzQ0d4kglbS1scrtR4Z3Dn
+         u/86bb5H4ItUYajTv4IrrFGvELjZcKJqUusP3d3G0bWDfBxOdBjyAkOGgIdDVjkhngMV
+         /CQ0mrJh4BcJvFTk+eOcQCSmKxRXvEjc8R6FPF1Y9zM91c7qf3DVnQo8pUezSMOPgw5f
+         SSkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756196276; x=1756801076;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LJUJQoyHSPHbY3KTaWEDFqhSXMoUl3AzxQn8TTn8tek=;
+        b=YkbtsV7hv/3bJYv92wc+ASCpWfSW0tR5IhFeDodqhc1mK8jxQlrPc1NRndkZzFYmo1
+         52/MpUStE0gLt91j1sDNQkn/cE24vKq/IdOslSBwkqi6BQCHW2HAgblSXy884jS7tvNn
+         YudBhXLF22dKT2bRpPduURearctT8WuNkgYgSzITKz85dV/sRWVYzwZg3rDmWPFqaNVS
+         2/Vpjh/1/VXJ1rsiVMK4tgcDZN0Z2Dz7R9t2jflEdEbHD8Vqai9fPlMKXv1dt/rygr8W
+         D/FQffM184BaPNOzLMVeLKMhfwgFSNPItPSmVFJgqTHWEQXXRw2R8KhAOvHLNU+GFN5D
+         fkMg==
+X-Forwarded-Encrypted: i=1; AJvYcCWpTq8zwkkH/IbXnYFfU8UpcOqLZQjluTtJEnEl5DsHnN/19GsTqq616RhXE97DqHCm3cdHBBhf3QAX@vger.kernel.org, AJvYcCXpoCHfePZC9Cl2DMZ/ceLcPahlj9eueyfKNyAPbBhQa/28MJpjmw2vjlg/on6Rw4/MSUaAQtXmhHg+2BQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwG1vAAnAlz53LbRUx1DYMr5HCfzNQZdVQZCH18zuHLKrAaPwee
+	go98gveaWtA06CykstcOs1T3Yev24vltOKwtTsgGpsEAgzfS16ay+vK4
+X-Gm-Gg: ASbGncvfNPjH/NZDIG/rFhFNveN0zEQQCp8LZ70Uvz/7gGqsW6a2G3MjT6e9FCO60W2
+	fohUfBql0ANPPe0LbZooGtkSECzlEZSvF4Q4KrQIE38QRLCUv4akAkrft/WaCJPZ7RJ2K3QcAfr
+	Uej28bA01diZqOPw7FJ8b3P5L5DItKnZ+NVJo9ZHMpz6vbG5ei21I/GMlF4Rc9YecQh4yxnDENP
+	9q5u0+EWvCTENsk7MqbQAMH8BLsFmXFP+KOuxoMqE7HjPFEoJhjlVUMacZTs2Tb34+BnzWZG/w9
+	9gx6JmV0su3ww+rgCcThVQnICawJAaZSTn1wYzzlSI3uTzUVCVTfgUUobF4v7G+KGqC623GVYqI
+	PkqM+S8pxIdhNq8wCBwor
+X-Google-Smtp-Source: AGHT+IFYFc10tLW0YGsmzF2EtA7gngRNsl8XML7EAgQtXXeTV6Em3ObVTXtgXi9jOujJAzDo9JsfNw==
+X-Received: by 2002:a05:600c:a20c:b0:456:1146:5c01 with SMTP id 5b1f17b1804b1-45b6870d983mr4539175e9.12.1756196275810;
+        Tue, 26 Aug 2025 01:17:55 -0700 (PDT)
+Received: from localhost ([87.254.0.133])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3c711bb1d3esm14970896f8f.55.2025.08.26.01.17.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Aug 2025 01:17:55 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Johan Hovold <johan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH][next] USB: serial: remove extranenous ; after comment
+Date: Tue, 26 Aug 2025 09:17:12 +0100
+Message-ID: <20250826081712.1415484-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,97 +88,29 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250826-qcom_battmgr_update-v3-8-74ea410ef146@oss.qualcomm.com>
-References: <20250826-qcom_battmgr_update-v3-0-74ea410ef146@oss.qualcomm.com>
-In-Reply-To: <20250826-qcom_battmgr_update-v3-0-74ea410ef146@oss.qualcomm.com>
-To: Sebastian Reichel <sre@kernel.org>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>, 
- David Collins <david.collins@oss.qualcomm.com>, 
- =?utf-8?q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- kernel@oss.qualcomm.com, devicetree@vger.kernel.org, 
- linux-usb@vger.kernel.org, Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756192715; l=1892;
- i=fenglin.wu@oss.qualcomm.com; s=20240327; h=from:subject:message-id;
- bh=nz0xqUIFES4rZCFzolpsU95uZVTcAXXyGgr1rWpbGA4=;
- b=DtfgkJIdv343kcIVoBWGlbvfyvBVocOucPuihWubpjjDuFsrX/vYpzAfcFgXdtNSKANvONaOl
- 83AnAvPj5lSDPvb5Z24TD+c7MHXCLo7Ic+6QxroMCMFUFp1JzvbD6i1
-X-Developer-Key: i=fenglin.wu@oss.qualcomm.com; a=ed25519;
- pk=BF8SA4IVDk8/EBCwlBehKtn2hp6kipuuAuDAHh9s+K4=
-X-Endpoint-Received: by B4 Relay for fenglin.wu@oss.qualcomm.com/20240327
- with auth_id=406
-X-Original-From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-Reply-To: fenglin.wu@oss.qualcomm.com
+Content-Transfer-Encoding: 8bit
 
-From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+There is a redundant semicolon after a comment, remove it.
 
-Add nvmem cells for getting charge control thresholds if they have
-been set previously.
-
-Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/x1-crd.dtsi         |  2 ++
- arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi | 20 ++++++++++++++++++++
- 2 files changed, 22 insertions(+)
+ drivers/usb/serial/oti6858.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/x1-crd.dtsi b/arch/arm64/boot/dts/qcom/x1-crd.dtsi
-index c9f0d505267081af66b0973fe6c1e33832a2c86b..8c3d30dd936ef9b12867971f5f237dd12484072d 100644
---- a/arch/arm64/boot/dts/qcom/x1-crd.dtsi
-+++ b/arch/arm64/boot/dts/qcom/x1-crd.dtsi
-@@ -82,6 +82,8 @@ pmic-glink {
- 				    <&tlmm 123 GPIO_ACTIVE_HIGH>,
- 				    <&tlmm 125 GPIO_ACTIVE_HIGH>;
+diff --git a/drivers/usb/serial/oti6858.c b/drivers/usb/serial/oti6858.c
+index 24068368892c..bd206cb9cc08 100644
+--- a/drivers/usb/serial/oti6858.c
++++ b/drivers/usb/serial/oti6858.c
+@@ -106,7 +106,7 @@ struct oti6858_control_pkt {
+ #define PIN_DTR			0x04	/* output pin */
+ #define PIN_RI			0x02	/* input pin, active low */
+ #define PIN_DCD			0x01	/* input pin, active low */
+-	u8	rx_bytes_avail;		/* number of bytes in rx buffer */;
++	u8	rx_bytes_avail;		/* number of bytes in rx buffer */
+ };
  
-+		nvmem-cells = <&charge_limit_en>, <&charge_limit_end>, <&charge_limit_delta>;
-+		nvmem-cell-names = "charge_limit_en", "charge_limit_end", "charge_limit_delta";
- 		/* Left-side rear port */
- 		connector@0 {
- 			compatible = "usb-c-connector";
-diff --git a/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi b/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
-index c02fd4d15c9649c222caaafa5ed2c777a10fb4f5..abf7afe5127d7b8b572513234e00009ce837837d 100644
---- a/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
-+++ b/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
-@@ -239,6 +239,26 @@ reboot_reason: reboot-reason@48 {
- 			};
- 		};
- 
-+		pmk8550_sdam_15: nvram@7e00 {
-+			compatible = "qcom,spmi-sdam";
-+			reg = <0x7e00>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x7e00 0x100>;
-+
-+			charge_limit_en: charge-limit-en@73 {
-+				reg = <0x73 0x1>;
-+			};
-+
-+			charge_limit_end: charge-limit-end@75 {
-+				reg = <0x75 0x1>;
-+			};
-+
-+			charge_limit_delta: charge-limit-delta@75 {
-+				reg = <0x76 0x1>;
-+			};
-+		};
-+
- 		pmk8550_gpios: gpio@8800 {
- 			compatible = "qcom,pmk8550-gpio", "qcom,spmi-gpio";
- 			reg = <0xb800>;
-
+ #define OTI6858_CTRL_PKT_SIZE	sizeof(struct oti6858_control_pkt)
 -- 
-2.34.1
-
+2.50.1
 
 
