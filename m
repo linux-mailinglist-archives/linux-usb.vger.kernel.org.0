@@ -1,114 +1,94 @@
-Return-Path: <linux-usb+bounces-27306-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27307-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DF34B36489
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 15:39:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E94E2B36D3E
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 17:10:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DD17563849
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 13:29:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E84601893973
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 15:06:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E034D321433;
-	Tue, 26 Aug 2025 13:28:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF05D24CEE8;
+	Tue, 26 Aug 2025 15:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gsv2LqOV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UfbSzaLy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DFAC196C7C;
-	Tue, 26 Aug 2025 13:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3531EDA09
+	for <linux-usb@vger.kernel.org>; Tue, 26 Aug 2025 15:05:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756214912; cv=none; b=BCScPsu6hi6bKukPGtjSBd6lBMMyGLJBLivKhp49JwpcCPsDCpCdlGGrP9tg0WwAbO7QnniTWmr2Crw2H8Mwdndj0Z+jXzhF4C0V3Bh7r7pZvSu1yVyRK23ErVjyIDPvUO3H6JYdGRWtHw+6m9cCbGSNxzRUgpmc/8Wd/BqiPYo=
+	t=1756220759; cv=none; b=szYNhs8fd6dZ50nEgDaIL17pvDVf/du6/7BgH8gboz042pZa6xwxVHRXV7cid+VExk7NH1ctR0JmE7t3EXh0pnMU0jXEoqElWyVBNIoxupCDEX1yNkAEJSa06vYxl5afgRhL6D7CTiPEEDP2EmpHvT9L4Ls7RDCr777UXa/HLp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756214912; c=relaxed/simple;
-	bh=37a8LAHXzTg6IWIz/YV4jPKUZg0+8vEej2K94q6CR68=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bhYQoAsS06jPCRAaa8oWseAQKwniBKil/KoMp1p3feOeE6qS5dqAjXvk/TqLURf7ljYHgEF/wFkrEyxF6TPtCzpUE56Bv2d1lor2mFktJtbAQ4Yz3NlqKUNRV8Vl65juT/93+Rkjt98AJlJ4+ae2al4nK2IDLXiCnzDaR3h66fI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gsv2LqOV; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756214910; x=1787750910;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=37a8LAHXzTg6IWIz/YV4jPKUZg0+8vEej2K94q6CR68=;
-  b=Gsv2LqOVtpNMAG4zBXR2zEDKAFbElGKvo4ZMFs+u5EXLLoVUAxa6ONwn
-   vNGtFE9DV1Z7Og8/e2oX4LwKRvSZ5+49frjTElycAxgq0INBVgS1I3UnJ
-   L/ZvA/wSAWgnN7GEkFTAPAtNAr1wzggpceDYGFzhLH060UGib4iAdQu0d
-   ZGIGX8fl2NyPZweP1qGIpcYAfz1C6STquHU+ZKTtolGN+kq6nHjOZwFPw
-   agqrxoPo1bl/gQVkZFm7rDDOJedWnVkd7+MeM1Wj02Tq946ZkQ1aDlPpy
-   YkH8JekvwIthH2w+MaNOzeA955DwIJdVucRwjzQf+0AcUO7GCv4/OlaIm
-   w==;
-X-CSE-ConnectionGUID: pUbG4VdISxmyPEKxZ/BBDw==
-X-CSE-MsgGUID: pVr90eQ0SCmNHHjIIwPi/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="58506368"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58506368"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 06:28:29 -0700
-X-CSE-ConnectionGUID: 8UGtDv7cREih42E+7uUz+w==
-X-CSE-MsgGUID: E82XdXJsTf63uN3rJlicGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="169187681"
-Received: from bergbenj-mobl1.ger.corp.intel.com (HELO [10.245.245.218]) ([10.245.245.218])
-  by orviesa009.jf.intel.com with ESMTP; 26 Aug 2025 06:28:26 -0700
-Message-ID: <ef2689c0-b814-4338-bf8d-d96ef4483e3b@linux.intel.com>
-Date: Tue, 26 Aug 2025 16:28:24 +0300
+	s=arc-20240116; t=1756220759; c=relaxed/simple;
+	bh=5B8ez0npUoA1k2cQSJaJnl/DLgzTCNrYjh/RwgsevOg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=flhFJivimlFB61qTK090z0tavwStjL6FWkca8bmHy+rXBCMc0rarfmsJu9z86KEoA4s8vJkbPNLDsNLq3p3hogIj/0OIQKq4R0Xk3MyeDwdojIDuhvS/7+KEEeSKdHnfiq2mzhFZycyjrQRp6vBCGh7xeBg94VpMpphAkhz9ikA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UfbSzaLy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CD7D0C113D0
+	for <linux-usb@vger.kernel.org>; Tue, 26 Aug 2025 15:05:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756220758;
+	bh=5B8ez0npUoA1k2cQSJaJnl/DLgzTCNrYjh/RwgsevOg=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=UfbSzaLy8lTosFzUHy2mPShF4YuBZKjCWoukvaWI8wjRujqFe+9OfYe+a8iNpfsE0
+	 QKTQcVFSyyHXyU7xXaEWCJzxyP9CDT3iC4TgM3jdohaLIqtoHyGA0RidwFNc2SvyLa
+	 L6AwiIPS6P1DmeAh7l8zmya6f4F45j0Ak0e3BaMcWHiEdXtqEiDoqEZjKYWjYFv8X3
+	 AI1WwyOzsQ41RKB5twnLx7g2u2GcqnpoVYF0Q2jaLjmgfxQVkkYlO8Js4uO+mgY01l
+	 3zl/F/DHLRw407NyC8bL8UnX4glO6LSSXxZm/IdyNHE9rZOy8lAtFfKJTVQxxOOwmB
+	 NwvOntmMKOc6g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id B302AC4160E; Tue, 26 Aug 2025 15:05:58 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
+ resume from suspend
+Date: Tue, 26 Aug 2025 15:05:58 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: paula@alumni.cse.ucsc.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220491-208809-KX5pCwkRKe@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
+References: <bug-220491-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/9] eUSB2 Double Isochronous IN Bandwidth support
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-usb@vger.kernel.org
-Cc: linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
- laurent.pinchart@ideasonboard.com, hdegoede@redhat.com,
- Thinh.Nguyen@synopsys.com, Amardeep Rai <amardeep.rai@intel.com>,
- Kannappan R <r.kannappan@intel.com>, Alan Stern <stern@rowland.harvard.edu>,
- =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-References: <20250820143824.551777-1-sakari.ailus@linux.intel.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250820143824.551777-1-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 20.8.2025 17.38, Sakari Ailus wrote:
-> Hi all,
-> 
-> This series enables support for eUSB2 Double Isochronous IN Bandwidth UVC
-> devices specified in 'USB 2.0 Double Isochronous IN Bandwidth' ECN. In
-> short, it adds support for new integrated USB2 webcams that can send twice
-> the data compared to conventional USB2 webcams.
-> 
-> These devices are identified by the device descriptor bcdUSB 0x0220 value.
-> They have an additional eUSB2 Isochronous Endpoint Companion Descriptor,
-> and a zero max packet size in regular isoc endpoint descriptor. Support
-> for parsing that new descriptor was added in commit
-> 
-> c749f058b437 ("USB: core: Add eUSB2 descriptor and parsing in USB core")
-> 
-> This series adds support to UVC, USB core, and xHCI to identify eUSB2
-> double isoc devices, and allow and set proper max packet, iso frame desc
-> sizes, bytes per interval, and other values in URBs and xHCI endpoint
-> contexts needed to support the double data rates for eUSB2 double isoc
-> devices.
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+--- Comment #3 from Paul Ausbeck (paula@alumni.cse.ucsc.edu) ---
+The problem is related to a usb_storage device, not uas. This particular SD
+card reader has a USB 3.0 interface but only provides about 18MB/s throughp=
+ut
+from the SD card. From what I have seen, this is quite typical of laptop
+internal SD card readers.
 
-The v5 of this series looks good to me, and could from my perspective be
-picked directly to usb-next
+--=20
+You may reply to this email to add a comment.
 
-Thanks
-Mathias
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
