@@ -1,162 +1,92 @@
-Return-Path: <linux-usb+bounces-27308-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27309-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7C5DB36D52
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 17:12:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43CD2B3700B
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 18:21:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A7E91899479
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 15:09:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6348A56203C
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 16:18:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA8211713;
-	Tue, 26 Aug 2025 15:08:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DECE276025;
+	Tue, 26 Aug 2025 16:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kt5nYDYi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JiX/5SJU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D311219E96D;
-	Tue, 26 Aug 2025 15:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5FD1B85F8
+	for <linux-usb@vger.kernel.org>; Tue, 26 Aug 2025 16:18:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756220919; cv=none; b=rQ8/yvhnjvNh7j7InULF72zmk5RgBm/CaFm+39uJjpL/HKWPtQtHzxIup2cPJ0hyqd6mBxEvompGIlVVbwlLmk03Hx1DZelHwsY9+QNtDi3FGUvjO90tA+Ob8btMnzwTU4KkUE+bKUiV41eNGattMLTwEZLlGZD2PO1zF7EKIXg=
+	t=1756225119; cv=none; b=NlZP168vz5oMsOuy617RYF+ROcY6mgg4qfRT1fRSicvuaKW+WwoWG7h3LumLPMZbbZ15DQR1Ox4RZ8Szdk7+W3CH0iBzbt4PHbWLcndBFAyVGZwR2c995TuMBVqct2sKZj2cC7Ztb/DcRAo4mDuFh1lXXWNM6ThN3kvKiy53zuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756220919; c=relaxed/simple;
-	bh=W21NQZVhesJtBq0xj/kSQKsKlU3qd0NhFQAYcSiC7G0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=akcC2UZdchyDRVfrNRSj0aO0etL5puh7oK+DgBxnlhwx6dzjYmJXyUHOC7qJFDLhHTTEuiQunTIAmhqN5OI9yLPdDi9fYXHKvLW3Tk7mA8U5q2weFQ3CuyNemB6B4KR+LBDUvMk/YIXIEK6TW7jLa1UAS4BFHZvzOvtNbbAuk2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kt5nYDYi; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-76e2e88c6a6so5077678b3a.1;
-        Tue, 26 Aug 2025 08:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756220914; x=1756825714; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dkW0jN2wo9GzfPCzxypiZo0lFb+ddp6azlGYsLnGuuQ=;
-        b=kt5nYDYiuUlG33bktvHegsliXF1BjGQ0i2KdJrR427k5r0ioN40QzV1ESoyKh7xmYR
-         5psxG6c9Lt3EmO4mGjxKHZ8vCfc1UX4MXPq3K4bEAeqCAnUVBEoNdvhcGl7XA/fuQ/Sn
-         kqxsteXqowBkrASrpoXkLHYA9DTFEWcLqwnQvxw8rXEWGwSNsBhixjpRDEpEnl+7XeGZ
-         6G3QLLM1bSEQuFNqoqR75fGlCOJKCaRhqmUDCf/xT7al5NrwIf2Hm6MRW9gTNyVZ8mzv
-         HjblfNPSepIkgGeMkOHJf1DeVK/7uE+lMPpREOSpt7Yy0lBNDV5bFA9E6OGlOiftqWKm
-         xiHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756220914; x=1756825714;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dkW0jN2wo9GzfPCzxypiZo0lFb+ddp6azlGYsLnGuuQ=;
-        b=QZwZxwok629XgNX/LFgc9gAHrsTIAxt3HWZrnSdFb4b2dvSMI8KIe2Jg/SZC6VVtRJ
-         RjBbDUauZR4U4uWppONIN1K5D0HYLUA5FlyXDCjLomQWCq5tU7/MVwGd3bKYqffnIK8y
-         t0gBNTefcymevovUQmX1WGkcVCCZMfvDKvUdW3IK9WAoViS62t7uqQbMODz1FLd+4MeU
-         POOoqgKmrrBPIqUboKFt/JljGcw5fABkkAAyrk4wtT4vzrf1GxJwcf3B+wXg9CX+YCzC
-         6L7hE45BCN90kQ7MN0phed5BM2l0QhlPaS9qWRCFSLlw05L7PNcmm7EbmCqRm5zEunR/
-         X4Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCUaQVJ0kyyJb331/WykrsBmOAdvHRrRbeM5awpSOJVO9dX9j7/3EkfYptfpLrSENPoxR3y3ZDmAhmVj@vger.kernel.org, AJvYcCX7jPK3uSFfwbMzd4mSl0G36t20C2xqsPs5d5tPIeGL9NpOkimbSUKfPJ3DUJbiRwUC2vQbhGcFPiNg5lY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxu7DQRR/jhItiDo4QGLWxAq+kRSDm3hNw51q/FFRL58cntDl/2
-	1e0hw/YJDQ9inR0o5g7lEMiRVjhZh75h+DFkcY+6pcQkmhOjIG9fuo1E
-X-Gm-Gg: ASbGncusRutJXS4pc7wcVxC3nntZqu3/XXLN4j3CsO6+DbBMIMwsODjitGqsjSEZQEu
-	tAA5lmcHkXhqahKaZWpQg05H62dmxaDdqmbiiohLxMbQttqx+fcCipkFkOlwqeV5WkVih+CJPoc
-	VWeSyc5nl1CamrvYVPmqS0MjpkO75oqS02Q+V01YcoHvj5Z3chDtZAIMAu5FT+vaDwr7EbXQvvj
-	slF3JI9gLH3fuGFn33qId6wR3OzzPwnH0oRpV806hH65/zAWXKbAfLQgn70R59z+gFc8l4/Iz9k
-	G2ZdNayTmsy0+EB50ZJNBTTeHUxJhmO36guQZF95fdquU6Nhcpx1n/CZ0CO0JCSXTr6lqNeypiX
-	v+gtVva4=
-X-Google-Smtp-Source: AGHT+IHpvhGFD8Uqd1jZ2V5zDm4pk296jsaMf5yG31mSyBIsRiAJP8sCr7izZINDolhSKeMp8La4lQ==
-X-Received: by 2002:a05:6a20:939d:b0:243:78a:8294 with SMTP id adf61e73a8af0-24340e2f1a5mr25415816637.59.1756220913907;
-        Tue, 26 Aug 2025 08:08:33 -0700 (PDT)
-Received: from localhost ([2a09:bac5:3983:16d2::246:5f])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-771fd80300csm1468446b3a.106.2025.08.26.08.08.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Aug 2025 08:08:33 -0700 (PDT)
-From: Ryan Zhou <ryanzhou54@gmail.com>
-To: Thinh.Nguyen@synopsys.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ryan Zhou <ryanzhou54@gmail.com>
-Subject: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate child device xxx.dwc3 but parent is not active
-Date: Tue, 26 Aug 2025 23:08:26 +0800
-Message-Id: <20250826150826.11096-1-ryanzhou54@gmail.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1756225119; c=relaxed/simple;
+	bh=BzVjmzLijM0FhofwnCTTjAx54vOZUpBOn/3a9ONndrQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sRdzFzELrR1LdpZpdTolbeVQ7v4SMeV9o1K5HVac1ghUiUeKR/jsWOm1FhTK1ZtpDJc0kCZg7/wc1RkEd5A3mWYX+Y/NeHXieQG07R9rGizk1lFRpamBco6eTnlO6MACAdedfb1yFI++YK8KF93jc1TwHJ42QBIc977E0blasOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JiX/5SJU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 18B3FC113CF
+	for <linux-usb@vger.kernel.org>; Tue, 26 Aug 2025 16:18:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756225118;
+	bh=BzVjmzLijM0FhofwnCTTjAx54vOZUpBOn/3a9ONndrQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=JiX/5SJUIiZFj5NgVQQ5rJPPGWcOIBKpFIP5tin4C3OA5j4Axt57jOY/la/xMUd5x
+	 IKXJmFRMwGJ0Y2iYxLRF4i4ViWafPKi38LkvgXhLHe5Cv2NNhf+bvJufIfncUBD5IO
+	 w0Zg6/P6FzMwPz/hiNNgHv64Ipppg7MHZheYmReq1XMr/Wszo7Fu4Llp/10F0nCAca
+	 +1zRPG0s/KlezrhOOPEl/AeqOSUk0SL74Sz552GcagBJa8n4vwOBtgC1tPs95gacSc
+	 QnoNM6J224ORXHjJ5VzHgHhWH/O9pIsEqFnRvnngZPZHhLgrd37lHPyg37HvzmCzZ8
+	 bnRiwWK5KErKw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id F31F4C433E1; Tue, 26 Aug 2025 16:18:37 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
+ resume from suspend
+Date: Tue, 26 Aug 2025 16:18:37 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220491-208809-yYcaGemDEP@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
+References: <bug-220491-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Issue description:
-The parent device dwc3_glue has runtime PM enabled and is in the
-runtime suspended state. The system enters the deep sleep process
-but is interrupted by another task. When resuming dwc3,
-console outputs the log 'runtime PM trying to activate child device
-xxx.dwc3 but parent is not active'.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
-However, the child device dwc3 continues to sleep pm_resume, calling
-phy_init and phy_power_on, which sets phy->init_count and
-phy->power_count to 1. Later when the system meets the conditions
-for deep sleep again, it attempts another 'PM: suspend entry (deep)'.
-dwc3 driver executes sleep pm_suspend function but dwc3
-already in suspended state, skipping the suspend process in
-commit 0227cc84c4441 ("usb: dwc3: core: don't do suspend for device mode
-if already suspended"), so phy_exit and phy_power_off are not executed,
-keeping phy->init_count and phy->power_count at 1.
-During the next deep resume, phy_init and phy_power_on will not be called
-due to non-zero count, but the count still increments, preventing recovery.
-Eventually, this leads to USB device phy cannot be reinitialized.
+--- Comment #4 from Alan Stern (stern@rowland.harvard.edu) ---
+You should collect a usbmon trace showing what happens during a suspend and
+subsequent resume.  It might turn out to be a lot more useful than the xHCI
+dynamic debugging.
 
-Log:
-[  130.284870][C5 t2624] PM: suspend entry (deep)
-[  130.391369][C3 t2624] dwc3 51600000.dwc3: dwc3_suspend
-[  130.406326][C3 t2624] alarmtimer.0.auto: PM: dpm_run_callback():
-platform_pm_suspend+0x0/0x90 returns -16
-[  130.407873][C3 t2624] alarmtimer.0.auto: PM: failed to suspend: error -16
-[  130.417756][C3 t2624] PM: Some devices failed to suspend, or early wake
-event detected
-[  130.438254][C3 t2624] [asr_drm_resume][726]: ==debug==
-[  130.440178][C3 t2624] dwc3 51600000.dwc3: dwc3_resume
-[  130.440950][C3 t2624] dwc3 51600000.dwc3: runtime PM trying to activate
-child device 51600000.dwc3 but parent (51600000.usb) is not active
+--=20
+You may reply to this email to add a comment.
 
-Solution: During the dwc3 suspend process, check the runtime state of dwc3
-to ensure it enters the suspend process only when in the runtime active
-state. This way, even if the system suspend process is interrupted,
-the parent device will remain in the active state when resuming dwc3 from
-deep suspend, allowing successful resumption of the dwc3 device.
-
-Signed-off-by: Ryan Zhou <ryanzhou54@gmail.com>
----
- drivers/usb/dwc3/core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 8002c23a5a02..20945cad29a1 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -2439,8 +2439,6 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- 
- 	switch (dwc->current_dr_role) {
- 	case DWC3_GCTL_PRTCAP_DEVICE:
--		if (pm_runtime_suspended(dwc->dev))
--			break;
- 		ret = dwc3_gadget_suspend(dwc);
- 		if (ret)
- 			return ret;
-@@ -2671,6 +2669,9 @@ int dwc3_pm_suspend(struct dwc3 *dwc)
- 	struct device *dev = dwc->dev;
- 	int		ret;
- 
-+	if (pm_runtime_suspended(dev))
-+		pm_runtime_resume(dev);
-+
- 	ret = dwc3_suspend_common(dwc, PMSG_SUSPEND);
- 	if (ret)
- 		return ret;
--- 
-2.25.1
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
