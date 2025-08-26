@@ -1,107 +1,98 @@
-Return-Path: <linux-usb+bounces-27299-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27300-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC0A6B35A22
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 12:33:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 038EFB35A37
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 12:42:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CBBB3B232F
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 10:33:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 666DA1653E1
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 10:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A192F83C9;
-	Tue, 26 Aug 2025 10:33:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FFAC30BF64;
+	Tue, 26 Aug 2025 10:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="BMFSLoTS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g8qOUzkP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m49206.qiye.163.com (mail-m49206.qiye.163.com [45.254.49.206])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214F0283FD9;
-	Tue, 26 Aug 2025 10:33:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAFE63090E8
+	for <linux-usb@vger.kernel.org>; Tue, 26 Aug 2025 10:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756204410; cv=none; b=OeotXaCTiSmCjxw7OKzBZ1pP1LHHUIi0IFdAZukKlwStgq5LDepsBccHffHY4JS9RNKiRFuRVg2Cq/JDb4COamJ6LfyRdPX15eNvq6RXFDmbl5eojNnyrjCYA4avytLRxpOuxT2a1rI6hY3bhh0k5pY/G9OE+bt3O4NQtQvu8zY=
+	t=1756204877; cv=none; b=jp8RI2u92vpCQIWe0HqK3Y6XJ6djukZEYXZoVUH4w5z+eu7yDK4ljZ95UkWV7DumdYxuj0VY/crVVxZ4kJ2cXigvW5XuLrljwnm48rIg5Idac5sKxNViNncKxMyQJ+zKpNKRXq25b1bedStHGA2sbb3a896pIBv8xnCOd1OyLT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756204410; c=relaxed/simple;
-	bh=mCOke6z4Vp1IBz3rwFaXtqftHItJ0eYd5Jx1m2mIi5g=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=Lf2BhFWFqOtE8XWb83g5EtVXpAIXR+drN7RFN2s4zfYcFLTUheHzVnZhOnM9BXbKxEpPfmBYI3cK8vE0tVuPucBaOkmmbXfKMwtsf0yv0gXjeu5ozFXvFdc/CythKqBuavPY5gXx5uQUZuO5ouUq0EIVF2vU4gAYMetXnTUOni4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=BMFSLoTS; arc=none smtp.client-ip=45.254.49.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 20a829612;
-	Tue, 26 Aug 2025 18:28:09 +0800 (GMT+08:00)
-From: William Wu <william.wu@rock-chips.com>
-To: gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu
-Cc: Chris.Wulff@biamp.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	william.wu@rock-chips.com,
-	frank.wang@rock-chips.com,
-	jianwei.zheng@rock-chips.com,
-	yue.long@rock-chips.com
-Subject: [PATCH v2] usb: gadget: f_hid: Fix zero length packet transfer
-Date: Tue, 26 Aug 2025 18:28:07 +0800
-Message-Id: <1756204087-26111-1-git-send-email-william.wu@rock-chips.com>
-X-Mailer: git-send-email 2.0.0
-X-HM-Tid: 0a98e5ebbf5009d4kunm056b0d8e1e30a37
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQk9OSVZIGR5OTkhCQ0hIHxhWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=BMFSLoTSQrzB2qd14D+YsLRuZqrL14mi4mWft6QpL0jROP/vvo9AHs4SdjEKgb1ge9glYJBxXtpy5be6krAAsO9AeGQmR4dU9fZinYQrX2znt7b3+3201ZRe6oDVWNEHmmYsqtfpOWErLXYIxRopsuGfSPknmt5vypSkCVsjCHo=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=POoCJLr7koKkSK8ECwifDJVRzPcPrxk5sZPXFgFOKOc=;
-	h=date:mime-version:subject:message-id:from;
+	s=arc-20240116; t=1756204877; c=relaxed/simple;
+	bh=Hua/Ogxv7kYVa+/I49tm2lbKEtd+LcDkgtmY4/cpXF0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=oWa/83WCjIG/jVG73pRxImrghkNHXoEXb831OvmM+zQKhEzMPa+rI0s94/eJEUg7U5o2RvI3DXlfUiHXdiVZv52dybrmlTd4JOMLe6rVip8WLlpVgnbmnhCAox/WIZ9eFvf0tupmtJ9TWz65a7wUoTwaJ09J1x+4Ll/0xjYadVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g8qOUzkP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 42A2EC4CEF4
+	for <linux-usb@vger.kernel.org>; Tue, 26 Aug 2025 10:41:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756204877;
+	bh=Hua/Ogxv7kYVa+/I49tm2lbKEtd+LcDkgtmY4/cpXF0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=g8qOUzkPW15nQIT4OQA76eLsul9iIjpYkpodJ9m3SWu2ZkMDFTbPQvD+CL76REBSy
+	 BrHa64SFCcgY3Q5aDC16ph+ieLco7ebPzVMlyNpGDAJn0XKnHk0OwK6o5jU3PlpcyQ
+	 U/mCHOdbsVd3R0OPUv3zgp+0yYikP5GJ8So072oM+QcJTuxT1Vm3cH28AJ17pgYkQ0
+	 y2eISXwRWr4EQ4+5/th0qhHZS9QhZEGwpC5WXUWR+AlKM9y5CBVwblCx5uublkEvNz
+	 eryKZALctMpND0bj86YnDc21BHMIdTH0XiD6GrZjWyyPD2M213H9Csun2tI1wnzUdJ
+	 7qimg+KopaUCA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 3356AC433E1; Tue, 26 Aug 2025 10:41:17 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
+ resume from suspend
+Date: Tue, 26 Aug 2025 10:41:17 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: oliver@neukum.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-220491-208809-Zr0xHaRYoR@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
+References: <bug-220491-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Set the hid req->zero flag of ep0/in_ep to true by default,
-then the UDC drivers can transfer a zero length packet at
-the end if the hid transfer with size divisible to EPs max
-packet size according to the USB 2.0 spec.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
-Signed-off-by: William Wu <william.wu@rock-chips.com>
----
-Changelog:
+Oliver Neukum (oliver@neukum.org) changed:
 
-v2:
-- set req->zero to 1 instead of check whether the length is divisible by the maxpacket
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |oliver@neukum.org
 
----
- drivers/usb/gadget/function/f_hid.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--- Comment #2 from Oliver Neukum (oliver@neukum.org) ---
+For the record:
 
-diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-index 8e1d1e8..307ea56 100644
---- a/drivers/usb/gadget/function/f_hid.c
-+++ b/drivers/usb/gadget/function/f_hid.c
-@@ -511,7 +511,7 @@ static ssize_t f_hidg_write(struct file *file, const char __user *buffer,
- 	}
- 
- 	req->status   = 0;
--	req->zero     = 0;
-+	req->zero     = 1;
- 	req->length   = count;
- 	req->complete = f_hidg_req_complete;
- 	req->context  = hidg;
-@@ -967,7 +967,7 @@ static int hidg_setup(struct usb_function *f,
- 	return -EOPNOTSUPP;
- 
- respond:
--	req->zero = 0;
-+	req->zero = 1;
- 	req->length = length;
- 	status = usb_ep_queue(cdev->gadget->ep0, req, GFP_ATOMIC);
- 	if (status < 0)
--- 
-2.0.0
+The issue is not with UAS, but at the XHCI layer.
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
