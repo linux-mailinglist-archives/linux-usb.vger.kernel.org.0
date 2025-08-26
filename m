@@ -1,116 +1,77 @@
-Return-Path: <linux-usb+bounces-27291-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27292-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 689DEB3568A
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 10:18:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83511B35958
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 11:49:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A8503B741A
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 08:18:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DADEB7ABD8B
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Aug 2025 09:48:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDAA2F6599;
-	Tue, 26 Aug 2025 08:17:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90600308F03;
+	Tue, 26 Aug 2025 09:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eUpypntO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G+aDotNs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85DC1487D1;
-	Tue, 26 Aug 2025 08:17:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2262FE065;
+	Tue, 26 Aug 2025 09:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756196279; cv=none; b=pL7H6MiTGquVVwPOwMJV+abbjttPdi8FLhFJQ6Z1ORANXBYOsDf+mAFD5xt25iQNaHt7+AB3r/X/EwDddpRBybikQBOf8KS+WZtwqOCS5+u84LaivRW/Cqpo6KAPzjVPgNJuuSCShHKgoImsOIo4ZGAm6h3fQudBZ5/E8onp9G0=
+	t=1756201771; cv=none; b=VhM5SEu51YQxuoxmDw+ptpdvFJ4O1BJS46bOkACysW796B9x6TxCnG+5zEe3Mz3KwDe2zyQqBzZS4RA0hPFasaVrVun1hjyCdpbBlyYml8Lp19gct3jpm508IpYSHN0M7sjS3jp4A8vlZT0RPNp64ViEXhs1bf4y4nnri3pt7lQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756196279; c=relaxed/simple;
-	bh=LMGUqtcZeT7/g276uoOG8szisYQQkCxA0/lcjLZV6AU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZNQ/kKgChsjfdcpQAXJhnBjoOmjh49GClXZubOXJk9xQ2CmyRPsKg2B+rhpa36VDBHjYWduptSKLZ2n1d23h1LpxgB3vk6Dbcljhw8eWjCWWhoBfw5VmgLsO2tSlZIHpq/2uaOiQYtEbAPGeS8rrE4IOq0kxLDkzWz3RcXetHJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eUpypntO; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45b618e067eso11011945e9.1;
-        Tue, 26 Aug 2025 01:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756196276; x=1756801076; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LJUJQoyHSPHbY3KTaWEDFqhSXMoUl3AzxQn8TTn8tek=;
-        b=eUpypntOvS37U6HjgzkoUR5siyt+Y9ph/C24VebdEx1kiC0HAgwHbz3kPuRTr/9Zoy
-         B6ywgoym6QKmLhLYtzWaynX7T5mewXE2YHeh6h8W6KcgvbMubbDwIUlqcpLLYzkDyXkI
-         IrkRvIH091ZM/vIZqPtB6LT0eDD6JvWreQALxCqoZBIiwXFzQ0d4kglbS1scrtR4Z3Dn
-         u/86bb5H4ItUYajTv4IrrFGvELjZcKJqUusP3d3G0bWDfBxOdBjyAkOGgIdDVjkhngMV
-         /CQ0mrJh4BcJvFTk+eOcQCSmKxRXvEjc8R6FPF1Y9zM91c7qf3DVnQo8pUezSMOPgw5f
-         SSkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756196276; x=1756801076;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LJUJQoyHSPHbY3KTaWEDFqhSXMoUl3AzxQn8TTn8tek=;
-        b=YkbtsV7hv/3bJYv92wc+ASCpWfSW0tR5IhFeDodqhc1mK8jxQlrPc1NRndkZzFYmo1
-         52/MpUStE0gLt91j1sDNQkn/cE24vKq/IdOslSBwkqi6BQCHW2HAgblSXy884jS7tvNn
-         YudBhXLF22dKT2bRpPduURearctT8WuNkgYgSzITKz85dV/sRWVYzwZg3rDmWPFqaNVS
-         2/Vpjh/1/VXJ1rsiVMK4tgcDZN0Z2Dz7R9t2jflEdEbHD8Vqai9fPlMKXv1dt/rygr8W
-         D/FQffM184BaPNOzLMVeLKMhfwgFSNPItPSmVFJgqTHWEQXXRw2R8KhAOvHLNU+GFN5D
-         fkMg==
-X-Forwarded-Encrypted: i=1; AJvYcCWpTq8zwkkH/IbXnYFfU8UpcOqLZQjluTtJEnEl5DsHnN/19GsTqq616RhXE97DqHCm3cdHBBhf3QAX@vger.kernel.org, AJvYcCXpoCHfePZC9Cl2DMZ/ceLcPahlj9eueyfKNyAPbBhQa/28MJpjmw2vjlg/on6Rw4/MSUaAQtXmhHg+2BQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwG1vAAnAlz53LbRUx1DYMr5HCfzNQZdVQZCH18zuHLKrAaPwee
-	go98gveaWtA06CykstcOs1T3Yev24vltOKwtTsgGpsEAgzfS16ay+vK4
-X-Gm-Gg: ASbGncvfNPjH/NZDIG/rFhFNveN0zEQQCp8LZ70Uvz/7gGqsW6a2G3MjT6e9FCO60W2
-	fohUfBql0ANPPe0LbZooGtkSECzlEZSvF4Q4KrQIE38QRLCUv4akAkrft/WaCJPZ7RJ2K3QcAfr
-	Uej28bA01diZqOPw7FJ8b3P5L5DItKnZ+NVJo9ZHMpz6vbG5ei21I/GMlF4Rc9YecQh4yxnDENP
-	9q5u0+EWvCTENsk7MqbQAMH8BLsFmXFP+KOuxoMqE7HjPFEoJhjlVUMacZTs2Tb34+BnzWZG/w9
-	9gx6JmV0su3ww+rgCcThVQnICawJAaZSTn1wYzzlSI3uTzUVCVTfgUUobF4v7G+KGqC623GVYqI
-	PkqM+S8pxIdhNq8wCBwor
-X-Google-Smtp-Source: AGHT+IFYFc10tLW0YGsmzF2EtA7gngRNsl8XML7EAgQtXXeTV6Em3ObVTXtgXi9jOujJAzDo9JsfNw==
-X-Received: by 2002:a05:600c:a20c:b0:456:1146:5c01 with SMTP id 5b1f17b1804b1-45b6870d983mr4539175e9.12.1756196275810;
-        Tue, 26 Aug 2025 01:17:55 -0700 (PDT)
-Received: from localhost ([87.254.0.133])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3c711bb1d3esm14970896f8f.55.2025.08.26.01.17.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Aug 2025 01:17:55 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] USB: serial: remove extranenous ; after comment
-Date: Tue, 26 Aug 2025 09:17:12 +0100
-Message-ID: <20250826081712.1415484-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1756201771; c=relaxed/simple;
+	bh=iaPzBqDKWZB4os6/7I6hJ1eE45Ek8EtyobRUhpF3kbU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qpKbG7+NfL3G6WnqX8IoGvzfatfvTLKjzR9sAfojOTQL2/m88dEpTNPDV4h2mbarackxPHncDoF63RpS0eo+KkkqIYukWPyN7B/uaPDwsPlkv9siAY5OVKw+V0QkZf3EhtkWukTHXyNHnXqpnBQkpxBHaIrNvFx8Mqb4Rsnxs5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G+aDotNs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81483C4CEF1;
+	Tue, 26 Aug 2025 09:49:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756201770;
+	bh=iaPzBqDKWZB4os6/7I6hJ1eE45Ek8EtyobRUhpF3kbU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=G+aDotNsQ5ukGAXkmP97Gtbn4fNwPDl6pjMK96C4Pg6keNwhs0A/TTmdc88UGkdlx
+	 bnZjymxF9J5Kx0CSHawJtnl+fI/mn+k6EXBgcy/mzJ43MkLF7IBJ3TRnZPb3Lui38p
+	 bIbYiagzl4wKiHy4PuoOFAvXJM3aDuAKzMe5AfV+MU1LljCtuCCfQAh5sUlXQf4JoF
+	 EwV7Dnr4SBdCmRtJCmCuIFFd0v0nouijsdyzuwh9VwlQVOFmoPxS93Cixub40BaCmF
+	 RrHI0SP4LLisEpzro0TeW9SthPOgRQEvah/7rgp4ez19QNOybF4HKPu+2vv+LpGZfz
+	 aHz3XlaYBcEqQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1uqqIp-0000000009w-2bZe;
+	Tue, 26 Aug 2025 11:49:19 +0200
+Date: Tue, 26 Aug 2025 11:49:19 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Telit Cinterion FN990A w/audio
+ compositions
+Message-ID: <aK2DH9NB7v6uYraH@hovoldconsulting.com>
+References: <20250806120926.144800-1-fabio.porcedda@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250806120926.144800-1-fabio.porcedda@gmail.com>
 
-There is a redundant semicolon after a comment, remove it.
+On Wed, Aug 06, 2025 at 02:09:26PM +0200, Fabio Porcedda wrote:
+> Add the following Telit Cinterion FN990A w/audio compositions:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/usb/serial/oti6858.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-diff --git a/drivers/usb/serial/oti6858.c b/drivers/usb/serial/oti6858.c
-index 24068368892c..bd206cb9cc08 100644
---- a/drivers/usb/serial/oti6858.c
-+++ b/drivers/usb/serial/oti6858.c
-@@ -106,7 +106,7 @@ struct oti6858_control_pkt {
- #define PIN_DTR			0x04	/* output pin */
- #define PIN_RI			0x02	/* input pin, active low */
- #define PIN_DCD			0x01	/* input pin, active low */
--	u8	rx_bytes_avail;		/* number of bytes in rx buffer */;
-+	u8	rx_bytes_avail;		/* number of bytes in rx buffer */
- };
- 
- #define OTI6858_CTRL_PKT_SIZE	sizeof(struct oti6858_control_pkt)
--- 
-2.50.1
+Now applied, thanks.
 
+Johan
 
