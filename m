@@ -1,161 +1,171 @@
-Return-Path: <linux-usb+bounces-27324-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27325-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B212DB38473
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 16:09:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A83E6B38577
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 16:52:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6710417EDDA
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 14:09:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A2BB5E0EF3
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 14:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415933570DF;
-	Wed, 27 Aug 2025 14:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7B2621C16A;
+	Wed, 27 Aug 2025 14:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lj5NMgJO"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="lFrIB6/z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C252EBDCF;
-	Wed, 27 Aug 2025 14:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B10F78472
+	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 14:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756303764; cv=none; b=UMNV28du+8E5M/b9wvP8S8P97vV5cMeXK0mpdmClfDQoxLRj+Egwifdp6sL34efIYwd6JYx6XDDxu4go2Uw733z+GeVz5S//FJYpK07AldRux/6tcMysiOXuFbwAYg9EK1cz6dg/AlLBTeAIzHDGHQ7LamWVv4kchIdBQrz+Huk=
+	t=1756306343; cv=none; b=CGAaDTOn7YLdHcFUtg7Z1B6wQ8Lg3+du6kk0Htq5/j+CS+oKo5xGgcXmSw5f5TLOMeOttJI+RrLznWSG4T/yetNZpz0a2CWqq4mUqeE4pXEDvGCDLwFSUlZyO2IwqxOl+dqbhWCKGsbC1CuxCDNGrGBTxWYIzyssy4qtam7KaHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756303764; c=relaxed/simple;
-	bh=lw/ewX5G9BRbmm4WjkDHiNTtRtMqaUqiqwaQ6Fn7fsc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QAJD7Ic5g4QoG2r99PNdgikoRcNWI8nUYToaeoKZT+aBNAnyZwa4doMAsonWDLLC4xKf+ktDG66zkakxuqx3dwyfMtdiwIeNGoPpSBn6AtQKdjSVjcvYLjeeAsUYmQVfm02dJpO9+NEdnE8MT7naHrQergpuJJh5SKVszchCVWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lj5NMgJO; arc=none smtp.client-ip=209.85.217.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-520c0e267bcso1236702137.1;
-        Wed, 27 Aug 2025 07:09:23 -0700 (PDT)
+	s=arc-20240116; t=1756306343; c=relaxed/simple;
+	bh=ThVMa0VjSVebwOgOVvao7s4xw6N5DyuHLHJOViqjIao=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C8N6xn2RAS35XpZBiw1dfVg7EcgGKTLBWxM1/l3JFeqLcTTgeSUZ23+2HteS7ZHYSnmbNiGLd6YUwfIUIBoexODLjivZgqsbpN2w8i9u+erA6/KDkqSTWNSUVgAnssojLYa/+0j1zjGokiiKUnQHF3nFcipCUax3Wan/DGX8u3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=lFrIB6/z; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4b2b859ab0dso42595301cf.1
+        for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 07:52:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756303762; x=1756908562; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lw/ewX5G9BRbmm4WjkDHiNTtRtMqaUqiqwaQ6Fn7fsc=;
-        b=Lj5NMgJOxc0NvXe02uSTqgA4VIqNfrENO57DI13J0rZdduSQsBw7zsPtEee9azvlAc
-         CHFFSm85nxK5uw9bd0kZSm1krbe9iUV7dwRkgywixOtrpmxtHSNyizspcEypL9qRUZu0
-         HdNsOn6McUB3KW5b8+YabprnBQ/gFziI6mnQQo5IqkL9crs16bslzVqI8E4xI7SdHfv1
-         U0A9fVPDlXRy9QVxjxtg+VXxhl0RzTw6K5rDUk4+T86+veBtKIPfgOp+WmWMVrbFXOjy
-         JlkkWg9Y9YWwhcYO/SfQtqYiHlk8vFDPQtPyB7NDAZ61CUHInpnYiNfI+5welovswwKf
-         vMOg==
+        d=rowland.harvard.edu; s=google; t=1756306341; x=1756911141; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DzCFdrHjD97smBgVN53iARzVNKgmIKQSQPUy52DLyR8=;
+        b=lFrIB6/zV+TnWJS9GUJpgCVnlT0jdVkV4uZ+g1dxzysM0uYvDcbLUtI8Otj8gOInNw
+         wdjEcMax2I7lfVzuniO2409gjlQmgtD1ceSXoUoIErq1CDpSOFuGBVHFbPoLHHdM3dhi
+         TntyKwtuB3aGWxQ4v9ZTUx32bIgQfemFmBp64BAMnZj95zKsJrkB75V2bDek4lYA1es9
+         kay9Pv+55F5393svhQilKbZDN9bMy7E9F7XH6wf6HWMYvN9PqfBARv4vlVUhQ/Okuzlk
+         DtvZ152suTrL2FXbM4GwComywuSdfVPpe2R9y2fcUXdcf+ky30qv1M49NLs5TKlj8j3h
+         aaIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756303762; x=1756908562;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lw/ewX5G9BRbmm4WjkDHiNTtRtMqaUqiqwaQ6Fn7fsc=;
-        b=K8xpUmfwXitjFj4wmT5z1ZcPxnC7TZwJGSYLzvFeh9ofQ/ffBu1JLmw4ysXWO/CbaC
-         FCLVXjha4qelmjt93zI47MCEEkc8GkNFZe+BHjMkSBaH0eBN+cLC5uZu8fA0psctbJXy
-         CPDVma+IW3WhLrA33ETKxzqlpOStvGjQy2qP7SCV7G8ChGRgDldtxg2rjpK/nvKVJ6Qx
-         q31rYgcwldTb6G3ILbQS/1LxQW4FiowZ7OBkLX7EeDbLVcYwCaR7Rvq2HC0ZdyfLuBQY
-         HUb7btmm1xwgsOvbUwJxzw6gjY9IXUd97192yt1zZJvCxPnRJp5Vis0BgQVdZ8ul2f5f
-         U2vg==
-X-Forwarded-Encrypted: i=1; AJvYcCWK0RRd4D2fbFUi9mgwvlHh1EXDOmWJNRqoE7sENRW2HA8RwmxbGFOjYS7izy8yQ0BB9ftN3+hFws37nIY=@vger.kernel.org, AJvYcCXHvuiDAb8LPirGaqgs1P7fTNs6AmePGJbwaQhoTeQX80XlNbO9uotIsboNRq2N+AX+yIqNzIpTeq8m@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBaq6/w7EmQA2ftYPM3+NGhE+ZonL6TRc4xBIR/9PZZFVdg3tQ
-	GD/qAJMRssmMAgsyN7ABYAqbyBK38Z0H4WqXV7R869UnLdnFlbpMOXYGs+xtvHyrWZBvFl996rV
-	+K21vq+sQS+zxuGiDaWk/bf+T+MxdzRc=
-X-Gm-Gg: ASbGncsnPVFxt/gIXFFFUC3ea7v2JWieqEW6+1fQlALBJ7advJxJVhfA9CGnjnTU3ht
-	kfIAjCkGxjcNTnpm15ns21T6Ls3JTviNzwysR06MB7NwaEgwvAooqJbU7syX2jw69tafTVCGHCe
-	lyb571z4imyyJrz7tDxGBtuSVqt58gjK8reH7RmI/Qt4ECmy8RsYIr+ivWscNntGAwZDP99C1YA
-	XxsBQtHNgXDDkDh7NjNnQt2cOhT4FPFBg==
-X-Google-Smtp-Source: AGHT+IEsHqORETtcRAqgaEWBcvCh4LHCsnL8g9LYpLirejx7dyaIzf7+44UuXaRbms0Hlagzl1uMpfcD3HDhSjx8Q1w=
-X-Received: by 2002:a05:6102:809e:b0:51a:4906:f194 with SMTP id
- ada2fe7eead31-51d0f2f9a6cmr6143334137.28.1756303761898; Wed, 27 Aug 2025
- 07:09:21 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756306341; x=1756911141;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DzCFdrHjD97smBgVN53iARzVNKgmIKQSQPUy52DLyR8=;
+        b=ZdR4depGkOA9SJ7HzbZDPcpyBowTO4eIkMAr9Kny4SK3E/vj6F2GjQBNMLm2UXEZqf
+         6Mfan5UdUz8b7dic6BKWPtgxHU3MQUGCieQ9sOT9l868I4lK/OlzlMyuG4DPwz+bhpnZ
+         PIcbV0oiZcnokjc9tqS4ghpYQfvp7Awy5UyiIJm40Ek/y/XK2eCj+24sSBZEohJkfqfu
+         /i8ni2c1HnDwPbnp3iEBM/1cjdNm+3nmO8nokO6ICgqnKTKaoHOSRs81QJNbabsHfled
+         qjOEAYLgyL0MzIYzzOfWkNgWnErZVHRZTTWE+/hQSsktkJceg8h5jwxj9CNvKxMf7fuV
+         2g7g==
+X-Forwarded-Encrypted: i=1; AJvYcCUFusVboqN+NDvXZlGWiQ+iCHo4QSMMrziSomO/Ls7ivmofe0bam/3ExnuXp2TBzIBG8bm0FjRZLPo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7BdmaPz38IUPQ1IbAy0uBojSiiTxtLxQz6BgLh4iiYjD4BBda
+	M8yzkI0SJ0R8hjYNBKjTG9RDR+PiTyJp0pb4pw7SPKF8CI+nydYRJvZ+tyzuKUFqhw==
+X-Gm-Gg: ASbGncsd3HxOOx7+LAsi+OIBhKJdU4aDO+39+6WSmI/pbnKw6jShp3QqUMND/AmmxAB
+	fZBOegQ/OZw0+oEaeVmyRmeO1rJorAT2pL3eYFuu0yqU2aKetvw9DrPlYwZUezuBvsVxNhFpAND
+	Xj6x61Y8ZxN0+lGrHM7v8m1LY+NtcxefkSL+imCkF/CgeZsyEHMKGdsN5D7T9+BqfNNj/afO0Kc
+	HvT/5YZZOYip7/mMVKdC0nMutWwlUIRUfWUc+6aKBtbJ70UKTi9a4iSSe8sjgIcpxfxnwtMp2qo
+	OvhcycXgccsO7lCEOhXV9XmpyPmYaRHx82Z4m4Sxe4jIdjI1XlTmK3WEpQ7Kv1DxD6Hdy6rKXly
+	DY7dpgsXn2e4jl8jVTopW4Ow2hxm8yty5Ll+CNnerRg/pN9cGecklp1y7gw==
+X-Google-Smtp-Source: AGHT+IGI69TxmEa7cNmRHXE8TQb0IknN+13n0MWxeBuaynrVToE2H9keJBWKDhweukHWinjWveqfuQ==
+X-Received: by 2002:a05:622a:1390:b0:4a9:7a4e:7e93 with SMTP id d75a77b69052e-4b2aaa5618emr235523941cf.8.1756306340567;
+        Wed, 27 Aug 2025 07:52:20 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7ebf41772d8sm872657985a.64.2025.08.27.07.52.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Aug 2025 07:52:20 -0700 (PDT)
+Date: Wed, 27 Aug 2025 10:52:17 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: ryan zhou <ryanzhou54@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Roy Luo <royluo@google.com>, Thinh.Nguyen@synopsys.com,
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
+ child device xxx.dwc3 but parent is not active
+Message-ID: <5d692b81-6f58-4e86-9cb0-ede69a09d799@rowland.harvard.edu>
+References: <20250826150826.11096-1-ryanzhou54@gmail.com>
+ <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
+ <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250826150826.11096-1-ryanzhou54@gmail.com> <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
-In-Reply-To: <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
-From: ryan zhou <ryanzhou54@gmail.com>
-Date: Wed, 27 Aug 2025 22:09:10 +0800
-X-Gm-Features: Ac12FXwQ-ThUrJUqJwXUGkI_6xk5qW_tdN4AELgG8XuFDbYTWP_0wCw7B03cV0I
-Message-ID: <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
-Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
- child device xxx.dwc3 but parent is not active
-To: Roy Luo <royluo@google.com>
-Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
 
-Hi Roy,
-Thank you for reviewing my patch.
->
-> Wouldn't the parent glue dev already resume before resuming the child dwc=
-3?
->
-No, in the following case, the parent device will not be reviewed
-before resuming the child device.
-Taking the 'imx8mp-dwc3' driver as an example.
-Step 1.usb disconnect trigger: the child device dwc3 enter runtime
-suspend state firstly, followed by
-the parent device imx8mp-dwc3 enters runtime suspend
-flow:dwc3_runtime_suspend->dwc3_imx8mp_runtime_suspend
-Step2.system deep trigger:consistent with the runtime suspend flow,
-child enters pm suspend and followed
-by parent
-flow: dwc3_pm_suspend->dwc3_imx8mp_pm_suspend
-Step3: After dwc3_pm_suspend, and before dwc3_imx8mp_pm_suspend, a
-task terminated the system suspend process
-. The system will resume from the checkpoint, and resume devices in
-the suspended state in the reverse
-of pm suspend, but excluding the parent device imx8mp-dwc3 since it
-did not execute the suspend process.
+Ryan:
 
->
->Why would 'runtime PM trying to activate child device xxx.dwc3 but parent =
-is not active' happen in the first place?
->
-Following the above analysis, dwc3_resume calls
-pm_runtime_set_active(dev), it checks the
-parent.power->runtime_status is not RPM_ACTIVE and outputs the error log.
+You should present your questions to the maintainer of the kernel's 
+Power Management subsystem, Rafael Wysocki (added to the To: list for 
+this email).
 
->
->What is the glue driver that's being used here? Knowing what's being done =
-in the glue driver pm callbacks
->would help in understanding the issue.
->
-Refer to the driver 'dwc3-imx8mp.c' please, maybe you could help me
-find a better solution.
+Alan Stern
 
-
-Thanks,
-ryan
-
-Roy Luo <royluo@google.com> =E4=BA=8E2025=E5=B9=B48=E6=9C=8827=E6=97=A5=E5=
-=91=A8=E4=B8=89 02:38=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, Aug 26, 2025 at 8:12=E2=80=AFAM Ryan Zhou <ryanzhou54@gmail.com> =
-wrote:
+On Wed, Aug 27, 2025 at 10:09:10PM +0800, ryan zhou wrote:
+> Hi Roy,
+> Thank you for reviewing my patch.
 > >
-> > Issue description:
-> > The parent device dwc3_glue has runtime PM enabled and is in the
-> > runtime suspended state. The system enters the deep sleep process
-> > but is interrupted by another task. When resuming dwc3,
-> > console outputs the log 'runtime PM trying to activate child device
-> > xxx.dwc3 but parent is not active'.
+> > Wouldn't the parent glue dev already resume before resuming the child dwc3?
 > >
->
-> Wouldn't the parent glue dev already resume before resuming the child dwc=
-3?
-> Why would 'runtime PM trying to activate child device xxx.dwc3 but parent=
- is
-> not active' happen in the first place?
-> What is the glue driver that's being used here? Knowing what's being done=
- in
-> the glue driver pm callbacks would help in understanding the issue.
->
-> Regards,
-> Roy
+> No, in the following case, the parent device will not be reviewed
+> before resuming the child device.
+> Taking the 'imx8mp-dwc3' driver as an example.
+> Step 1.usb disconnect trigger: the child device dwc3 enter runtime
+> suspend state firstly, followed by
+> the parent device imx8mp-dwc3 enters runtime suspend
+> flow:dwc3_runtime_suspend->dwc3_imx8mp_runtime_suspend
+> Step2.system deep trigger:consistent with the runtime suspend flow,
+> child enters pm suspend and followed
+> by parent
+> flow: dwc3_pm_suspend->dwc3_imx8mp_pm_suspend
+> Step3: After dwc3_pm_suspend, and before dwc3_imx8mp_pm_suspend, a
+> task terminated the system suspend process
+> . The system will resume from the checkpoint, and resume devices in
+> the suspended state in the reverse
+> of pm suspend, but excluding the parent device imx8mp-dwc3 since it
+> did not execute the suspend process.
+> 
+> >
+> >Why would 'runtime PM trying to activate child device xxx.dwc3 but parent is not active' happen in the first place?
+> >
+> Following the above analysis, dwc3_resume calls
+> pm_runtime_set_active(dev), it checks the
+> parent.power->runtime_status is not RPM_ACTIVE and outputs the error log.
+> 
+> >
+> >What is the glue driver that's being used here? Knowing what's being done in the glue driver pm callbacks
+> >would help in understanding the issue.
+> >
+> Refer to the driver 'dwc3-imx8mp.c' please, maybe you could help me
+> find a better solution.
+> 
+> 
+> Thanks,
+> ryan
+> 
+> Roy Luo <royluo@google.com> 于2025年8月27日周三 02:38写道：
+> >
+> > On Tue, Aug 26, 2025 at 8:12 AM Ryan Zhou <ryanzhou54@gmail.com> wrote:
+> > >
+> > > Issue description:
+> > > The parent device dwc3_glue has runtime PM enabled and is in the
+> > > runtime suspended state. The system enters the deep sleep process
+> > > but is interrupted by another task. When resuming dwc3,
+> > > console outputs the log 'runtime PM trying to activate child device
+> > > xxx.dwc3 but parent is not active'.
+> > >
+> >
+> > Wouldn't the parent glue dev already resume before resuming the child dwc3?
+> > Why would 'runtime PM trying to activate child device xxx.dwc3 but parent is
+> > not active' happen in the first place?
+> > What is the glue driver that's being used here? Knowing what's being done in
+> > the glue driver pm callbacks would help in understanding the issue.
+> >
+> > Regards,
+> > Roy
+> 
 
