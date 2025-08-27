@@ -1,96 +1,99 @@
-Return-Path: <linux-usb+bounces-27318-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27319-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08130B37DD6
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 10:29:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 803DAB37DF3
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 10:37:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51390460EB1
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 08:29:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CA437C0F56
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 08:37:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A0E83314C5;
-	Wed, 27 Aug 2025 08:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0375F3314C6;
+	Wed, 27 Aug 2025 08:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oHgoao14"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZaN/nhGq"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF7527780C
-	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 08:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCBF20ED
+	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 08:37:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756283324; cv=none; b=Fzl7U18KwWnCWv91MSRjV5ucUx8A417VWqSWC+c+mdUhDFoQ7z7eg8BBsNswdOIe7n6N76OW53VXwZh/iDEvxwtAAvPhxy4/bK2n1WnaRwHIuUMG83iOqN2VWHM1RoD6IA5nIB87j/FcHQ4lTDJaYFRA/IzCN84Yyw81Q16iNMQ=
+	t=1756283835; cv=none; b=ACUXYcaNbOQVtn6cG4zdZxQpnNo4H7cBiF82BgYDbzjGiYtdKt5ivyOXWKXK8+QJ5f17sv4pUGKNc/2apJzRLDNBNhQ5TeVAfL1sdoUNEAGlotVgiT31qo3YPIAa85vgZnxOYY2Y5zkddl+/b7kHMHa4wpPQJQmJY90FQA0LeJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756283324; c=relaxed/simple;
-	bh=Myjw9QnMPPcxiyDwUe5dViztAyJODgzSg8qoSXJw010=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZSScv2SiTNi/pJk1ySZTpSEgw0GGw7m801aOXLYlw9ZLxgfSTvLwbmNa/Kb54o7cKKOYtMVN6ecTtmx6KcQ0Kcqxqu4JTxpi5GGFOYTjWBFt9tuvVuS229FcC0sucwF1CEFHNd0kU0yLOX6nW81WMqdeb24S50wMYFw6qmuO4pE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oHgoao14; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A17DC4CEEB
-	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 08:28:43 +0000 (UTC)
+	s=arc-20240116; t=1756283835; c=relaxed/simple;
+	bh=9dzCyQctSb5gfPXKA+y7/2vQ+tun0+KtQsTi+l6v8tU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LKaOXjGA+Ng4K1m8k5bMiCjZS7Bux7ZvWnJHetjIfy/P5xcJIBegZL1zMF2s9eeVMPXWUwh3qDfaZKkSk4MyiFHnVCv13Xx4M2nLFcdMMOjrSRwoIuh6enmpAzadRLFnYGkDCLbI72zj8ZnuotHBzOgvHD4JIUawERZHK+DbyFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZaN/nhGq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B154C4CEEB;
+	Wed, 27 Aug 2025 08:37:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756283323;
-	bh=Myjw9QnMPPcxiyDwUe5dViztAyJODgzSg8qoSXJw010=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=oHgoao14/b1195JFBq5Kv7QzLUQ21Zdqr1iaCdaZmtmcRqZKwECsNemInmqBdjS3H
-	 o1E7Ft7dqvhVCwNuK+N0L5d2vg3ezjy/n+JfqjW4yndCjgZnr/2KmlaBk4QywftsYb
-	 nYyrE+QzjwaxjPdQFZxSfJSijSmSKLjUSRkZB6KH3et9bQAJURwyFmcTyGkwmpQ0Pu
-	 BMRUDY0kiLVtSA0sBCaj+32Ilr6JnqgTfWoyTYwRRb5733Ldfs9ow0668vTkXePYOk
-	 /HNKBa6RAZWS7ysvDgSylqHMp3SGm+joJliTwtTK06nPbkyIkaHKCS1Sqf+ZXnmy1o
-	 e62nsnX8hAn+Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8687FC3279F; Wed, 27 Aug 2025 08:28:43 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
- resume from suspend
-Date: Wed, 27 Aug 2025 08:28:43 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: oliver@neukum.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220491-208809-T7jwXvXxHo@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
-References: <bug-220491-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1756283835;
+	bh=9dzCyQctSb5gfPXKA+y7/2vQ+tun0+KtQsTi+l6v8tU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZaN/nhGq+2+c/DrsWLR9QgPhR1VrPcZRBreXM0mdtrJmW4tl+7zd6Ioegx2aEGMZM
+	 z3rnnyF864uy0qDmhNJRj2Cnr/2NMZrrh0LLwdzy3aUjgDdsUIUFYoihKD9GS0JZaD
+	 j58g3lUQ4uBxkDlggR5TxaixWLqB1vsSzVloxvXAguPCGR1lZP7etJ0Sy9Bui36XSe
+	 UFw09EwB2uwe2zSr8X86cJE5kmpqEYF5WAe3IN6zGtvMyuKJht+Flxi32Z1gUpaMpu
+	 s597sq7pWgu6noDj5JINQGb2xQ98dMF3lCJ04GywzU6/llgdmsyCFnoosOm2obgP5h
+	 Bj4DiBE687ShQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1urBeQ-000000001Bs-0yJq;
+	Wed, 27 Aug 2025 10:37:02 +0200
+Date: Wed, 27 Aug 2025 10:37:02 +0200
+From: Johan Hovold <johan@kernel.org>
+To: bugzilla-daemon@kernel.org
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [Bug 220331] New: FTDI serial IO - unknown device type: 0x8312
+Message-ID: <aK7DruP4nmgw0gjy@hovoldconsulting.com>
+References: <bug-220331-208809@https.bugzilla.kernel.org/>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bug-220331-208809@https.bugzilla.kernel.org/>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
+On Thu, Jul 10, 2025 at 09:11:14AM +0000, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=220331
 
---- Comment #8 from Oliver Neukum (oliver@neukum.org) ---
-(In reply to Paul Ausbeck from comment #7)
+> Issue with a newer hardware with USB DisplayLink adapter, syslog throws
+> following error about unrecognized device type 0x8312:
+> 
+> > [    4.447826] usb 1-8.2.1: New USB device found, idVendor=17e9,
+> > idProduct=ff00, bbcdDevice=83.12
+> > [    4.447833] usb 1-8.2.1: New USB device strings: Mfr=1, Product=2,
+> > SerialNumber
+> > =3
+> > [    4.447835] usb 1-8.2.1: Product: PM1000
+> > [    4.447836] usb 1-8.2.1: Manufacturer: DisplayLink
+> > [    4.447837] usb 1-8.2.1: SerialNumber: 9638293100007141
 
-> disconnect/reconnect of the usb_storage device. If it would be helpful, I
-> can do some more work and supply a new usbmon trace with the quirk in pla=
-ce.
+This does not look like an FTDI device and as far as I can see ftdi_sio
+driver should not even try to bind to it currently as the VID/PID is not
+in the driver's match table.
 
-Please do so.
+> > [    4.479297] usbcore: registered new interface driver ftdi_sio
+> > [    4.479363] usbserial: USB Serial support registered for FTDI USB Serial
+> > Device
+> > [    4.480786] ftdi_sio 1-8.2.1:1.0: FTDI USB Serial Device converter
+> > detected
+> > [    4.480848] ftdi_sio ttyUSB0: unknown device type: 0x8312
+> > [    4.480923] ftdi_sio 1-8.2.1:1.1: FTDI USB Serial Device converter
+> > detected
+> > [    4.480957] ftdi_sio ttyUSB1: unknown device type: 0x8312
+> > [    4.486014] ftdi_sio ttyUSB0: unknown device type: 0x8312
+> > [    4.486049] ftdi_sio ttyUSB1: unknown device type: 0x8312
 
---=20
-You may reply to this email to add a comment.
+Please post the output of "lsusb -v" for this device.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Johan
 
