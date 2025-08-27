@@ -1,112 +1,122 @@
-Return-Path: <linux-usb+bounces-27312-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27313-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30DE7B3760E
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 02:20:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4339FB37771
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 03:55:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 912D24E131F
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 00:20:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56F7B1892A8E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 01:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4B5B187346;
-	Wed, 27 Aug 2025 00:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFDE91A23B6;
+	Wed, 27 Aug 2025 01:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gIcHo2Au"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eDUIQyb2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4015F219EB;
-	Wed, 27 Aug 2025 00:20:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7550A1B5EC8
+	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 01:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756254002; cv=none; b=iLbjFyBe6t8s7/RScs7PwlEIy7v0C4riPKqLL5HehximiZXqqK+xSmfnOGSUZp3nxGzJf3hYGv1EatkWhreccq6uw+VWPlXYUikb5haFpW5f4gIP2hVSG+JDy0kB6ppGJvB1EJWMZiYFaR62q+Qj16zU/B0FzRrncVz2nRnPFVo=
+	t=1756259724; cv=none; b=n1eCIGnVEXX5ARCHPhK9rKnAT2pYGaDeADBuk2+gusw+SHG3wCd2b7+8xNGNWSD2ayzP3SYtquNWzeTlpcJDgSeLoF255oe7GXUljyC77ZP08Ujx+Tqq9ivOL4R/cTB4ja8Jq36aylPgaMnVg46ywXcMZX7DpIFkzU22WzAwLbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756254002; c=relaxed/simple;
-	bh=CUqjJTDn42AU9aihGGGRqwzymVVnZVgyspIVU6cz4BI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=BYLpszm5INdeUQxiY37c9M6/sVt9r/MFvOgKyRL9Gy5GeQ2ZtMtETOk96g6Ma1g8gpSMbVOBNE0C8Opnp2coc9hF4ge3hLQhY28tw+U4lrZdfIZJQKfR+OVFDQhGYYKXmu6W7KjWUSTaWVnvQxgfx7eeFREK56774w73niracCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gIcHo2Au; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEBE4C4CEF1;
-	Wed, 27 Aug 2025 00:20:00 +0000 (UTC)
+	s=arc-20240116; t=1756259724; c=relaxed/simple;
+	bh=gWlpWz+arko0N8d1eEKhTt0r9y8Onan7/QnQC4yJm+Y=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hflZxSyQm8hBEc4v/XSBoZc5RhZVHpVpDGe662ln3QmJEyAF5K0xYn4EeIW+0U08WGc2oTMTYluzFB/Wax8UqL3zIK6PpxDcGx0E9seLZNFmqszTwSDjyLo0U2wdYMC97t/h6FgAukvmC7nzp9GIHAp9mPS9H+cgECfm/DYmHjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eDUIQyb2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2CE76C4CEF4
+	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 01:55:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756254000;
-	bh=CUqjJTDn42AU9aihGGGRqwzymVVnZVgyspIVU6cz4BI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=gIcHo2AuyWKJotZssrpdk7L0eZ//QzifIcYL1GhIYtAT+NmjTdCss/9jH7ZtQsUXE
-	 o6IjhM+plquBwmvTNt6T7LTAuyYXhtQ1+FujMHDleuQfEeUdh5z2m4FVtxQmEd+AhL
-	 Ch9kum+n9fBfRIRYccnpjcPQSX6csSKMP43oAyI5NkzE9vLODPhdaTUVkja8eZ/A/O
-	 xfCGsBlTqhUWn0duEHZTHfNXqAQc8QsWX70DBgch7fYNPLZoGagn9bwpZz1/HxkSSr
-	 gNX1sQyWV31vjgBDj7OTrWSIJp1LVx+unxAE/yeyTWiBFpSDktvNC3MKrg/vKog0qz
-	 1BOmAYRinKD3g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB5A9383BF70;
-	Wed, 27 Aug 2025 00:20:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1756259724;
+	bh=gWlpWz+arko0N8d1eEKhTt0r9y8Onan7/QnQC4yJm+Y=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=eDUIQyb2ciCV9aJ7NInW/218N3XkHVJ4euUMz2P7zG1aJLiZ350thcoCVgZrtPTqR
+	 TujFOrxJl8J3Z2IQ9NTvOIl5O79afJJdFb6rf54vwnbGl63MFQzRdPa4ISR86hnENx
+	 bXkqxgH2ESp6U2b/pNwfcVZ7Urbm3faNLmcrE4qtb3Y8gHJ/NFAVhfAqKoi14pSVnM
+	 vDkytsczq2BL0k+VYIO2aEVSrsE882YXrCUZ4ioePB1t1bvZ8+C//SR+rJ8/YUFT1D
+	 vg946QU0HogZL+cP+NTHsWOim7ZEQvfBms6v4njzdHfkEhRxUtqx3nstM30b5zINcj
+	 PBisqFnMgztXw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 21AF2C433E1; Wed, 27 Aug 2025 01:55:24 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
+ resume from suspend
+Date: Wed, 27 Aug 2025 01:55:24 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220491-208809-lWnLdvULe1@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
+References: <bug-220491-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: qmi_wwan: add Telit Cinterion LE910C4-WWX new
- compositions
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175625400775.147674.147296191175890132.git-patchwork-notify@kernel.org>
-Date: Wed, 27 Aug 2025 00:20:07 +0000
-References: <20250822091324.39558-1-Fabio.Porcedda@telit.com>
-In-Reply-To: <20250822091324.39558-1-Fabio.Porcedda@telit.com>
-To: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: bjorn@mork.no, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- netdev@vger.kernel.org, linux-usb@vger.kernel.org, dnlplm@gmail.com,
- stable@vger.kernel.org
 
-Hello:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+--- Comment #6 from Alan Stern (stern@rowland.harvard.edu) ---
+The usbmon trace is opaque to people who aren't familiar with the USB proto=
+col,
+but to people who are, it's a trove of information.
 
-On Fri, 22 Aug 2025 11:13:24 +0200 you wrote:
-> From: Fabio Porcedda <fabio.porcedda@gmail.com>
-> 
-> Add the following Telit Cinterion LE910C4-WWX new compositions:
-> 
-> 0x1034: tty (AT) + tty (AT) + rmnet
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  8 Spd=480 MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1bc7 ProdID=1034 Rev=00.00
-> S:  Manufacturer=Telit
-> S:  Product=LE910C4-WWX
-> S:  SerialNumber=93f617e7
-> C:  #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=500mA
-> I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> [...]
+The trace initially shows the card reader getting suspended.  Then during t=
+he
+resume it shows that the connection was dropped during the suspend (possibly
+because the device wasn't powered).  The device gets reset okay, but then
+things start to go wrong at this point:
 
-Here is the summary with links:
-  - net: usb: qmi_wwan: add Telit Cinterion LE910C4-WWX new compositions
-    https://git.kernel.org/netdev/net/c/e81a7f65288c
+ffff9bbf9f9de0c0 215868796 S Co:3:003:0 s 00 03 0031 0000 0000 0
+ffff9bbf9f9de0c0 215872346 C Co:3:003:0 -71 0
+ffff9bbf9f9de0c0 215872402 S Co:3:001:0 s 23 03 0018 0004 0000 0
+ffff9bbf9f9de0c0 215872413 C Co:3:001:0 0 0
+ffff9bbf9f9de0c0 215872539 S Co:3:003:0 s 00 03 0032 0000 0000 0
+ffff9bbf9f9de0c0 220976339 C Co:3:003:0 -2 0
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The first two lines show the computer telling the device to enable the U2
+low-power link state and the device not replying.  The last two lines show =
+the
+computer telling the device to enable Latency Tolerance Messages (a part of
+Link Power Management) and the device not acknowledging.
 
+This strongly suggests that the device can't handle LPM properly, and it mi=
+ght
+start working if you tell the kernel not to use LPM with the device.  You c=
+an
+do this by adding a parameter to the kernel's boot command line:
 
+   ... usbcore.quirks=3D05e3:0747:k
+
+where 05e3 and 0747 are the card reader's vendor and product IDs, and 'k' is
+the code letter for "No LPM".
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
