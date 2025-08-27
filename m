@@ -1,171 +1,121 @@
-Return-Path: <linux-usb+bounces-27325-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27326-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A83E6B38577
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 16:52:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50CFCB38755
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 18:07:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A2BB5E0EF3
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 14:52:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 884041B232E8
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 16:07:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7B2621C16A;
-	Wed, 27 Aug 2025 14:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C9A30FC17;
+	Wed, 27 Aug 2025 16:07:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="lFrIB6/z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4QVOu/5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B10F78472
-	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 14:52:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E9A221543;
+	Wed, 27 Aug 2025 16:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756306343; cv=none; b=CGAaDTOn7YLdHcFUtg7Z1B6wQ8Lg3+du6kk0Htq5/j+CS+oKo5xGgcXmSw5f5TLOMeOttJI+RrLznWSG4T/yetNZpz0a2CWqq4mUqeE4pXEDvGCDLwFSUlZyO2IwqxOl+dqbhWCKGsbC1CuxCDNGrGBTxWYIzyssy4qtam7KaHk=
+	t=1756310830; cv=none; b=W3K9jtdoY+/E0I631+AAzothFUHIuuPKUFOVvTp828QfKlyoCJrjbnkOtR/y86LMaTJgf4+VwtsM6E5xNZVCgDSoB2TZLmoM/PkpJoty2eYAFo1cEnsX01meaSLAblpTUpTkZqdf5rkz2EtLnWPKMiJbtTTY9MYLwrFqDI6IyZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756306343; c=relaxed/simple;
-	bh=ThVMa0VjSVebwOgOVvao7s4xw6N5DyuHLHJOViqjIao=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C8N6xn2RAS35XpZBiw1dfVg7EcgGKTLBWxM1/l3JFeqLcTTgeSUZ23+2HteS7ZHYSnmbNiGLd6YUwfIUIBoexODLjivZgqsbpN2w8i9u+erA6/KDkqSTWNSUVgAnssojLYa/+0j1zjGokiiKUnQHF3nFcipCUax3Wan/DGX8u3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=lFrIB6/z; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4b2b859ab0dso42595301cf.1
-        for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 07:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1756306341; x=1756911141; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DzCFdrHjD97smBgVN53iARzVNKgmIKQSQPUy52DLyR8=;
-        b=lFrIB6/zV+TnWJS9GUJpgCVnlT0jdVkV4uZ+g1dxzysM0uYvDcbLUtI8Otj8gOInNw
-         wdjEcMax2I7lfVzuniO2409gjlQmgtD1ceSXoUoIErq1CDpSOFuGBVHFbPoLHHdM3dhi
-         TntyKwtuB3aGWxQ4v9ZTUx32bIgQfemFmBp64BAMnZj95zKsJrkB75V2bDek4lYA1es9
-         kay9Pv+55F5393svhQilKbZDN9bMy7E9F7XH6wf6HWMYvN9PqfBARv4vlVUhQ/Okuzlk
-         DtvZ152suTrL2FXbM4GwComywuSdfVPpe2R9y2fcUXdcf+ky30qv1M49NLs5TKlj8j3h
-         aaIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756306341; x=1756911141;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DzCFdrHjD97smBgVN53iARzVNKgmIKQSQPUy52DLyR8=;
-        b=ZdR4depGkOA9SJ7HzbZDPcpyBowTO4eIkMAr9Kny4SK3E/vj6F2GjQBNMLm2UXEZqf
-         6Mfan5UdUz8b7dic6BKWPtgxHU3MQUGCieQ9sOT9l868I4lK/OlzlMyuG4DPwz+bhpnZ
-         PIcbV0oiZcnokjc9tqS4ghpYQfvp7Awy5UyiIJm40Ek/y/XK2eCj+24sSBZEohJkfqfu
-         /i8ni2c1HnDwPbnp3iEBM/1cjdNm+3nmO8nokO6ICgqnKTKaoHOSRs81QJNbabsHfled
-         qjOEAYLgyL0MzIYzzOfWkNgWnErZVHRZTTWE+/hQSsktkJceg8h5jwxj9CNvKxMf7fuV
-         2g7g==
-X-Forwarded-Encrypted: i=1; AJvYcCUFusVboqN+NDvXZlGWiQ+iCHo4QSMMrziSomO/Ls7ivmofe0bam/3ExnuXp2TBzIBG8bm0FjRZLPo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7BdmaPz38IUPQ1IbAy0uBojSiiTxtLxQz6BgLh4iiYjD4BBda
-	M8yzkI0SJ0R8hjYNBKjTG9RDR+PiTyJp0pb4pw7SPKF8CI+nydYRJvZ+tyzuKUFqhw==
-X-Gm-Gg: ASbGncsd3HxOOx7+LAsi+OIBhKJdU4aDO+39+6WSmI/pbnKw6jShp3QqUMND/AmmxAB
-	fZBOegQ/OZw0+oEaeVmyRmeO1rJorAT2pL3eYFuu0yqU2aKetvw9DrPlYwZUezuBvsVxNhFpAND
-	Xj6x61Y8ZxN0+lGrHM7v8m1LY+NtcxefkSL+imCkF/CgeZsyEHMKGdsN5D7T9+BqfNNj/afO0Kc
-	HvT/5YZZOYip7/mMVKdC0nMutWwlUIRUfWUc+6aKBtbJ70UKTi9a4iSSe8sjgIcpxfxnwtMp2qo
-	OvhcycXgccsO7lCEOhXV9XmpyPmYaRHx82Z4m4Sxe4jIdjI1XlTmK3WEpQ7Kv1DxD6Hdy6rKXly
-	DY7dpgsXn2e4jl8jVTopW4Ow2hxm8yty5Ll+CNnerRg/pN9cGecklp1y7gw==
-X-Google-Smtp-Source: AGHT+IGI69TxmEa7cNmRHXE8TQb0IknN+13n0MWxeBuaynrVToE2H9keJBWKDhweukHWinjWveqfuQ==
-X-Received: by 2002:a05:622a:1390:b0:4a9:7a4e:7e93 with SMTP id d75a77b69052e-4b2aaa5618emr235523941cf.8.1756306340567;
-        Wed, 27 Aug 2025 07:52:20 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7ebf41772d8sm872657985a.64.2025.08.27.07.52.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 07:52:20 -0700 (PDT)
-Date: Wed, 27 Aug 2025 10:52:17 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: ryan zhou <ryanzhou54@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Roy Luo <royluo@google.com>, Thinh.Nguyen@synopsys.com,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
- child device xxx.dwc3 but parent is not active
-Message-ID: <5d692b81-6f58-4e86-9cb0-ede69a09d799@rowland.harvard.edu>
-References: <20250826150826.11096-1-ryanzhou54@gmail.com>
- <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
- <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
+	s=arc-20240116; t=1756310830; c=relaxed/simple;
+	bh=8/nHBBY+4VBhT+YC6UcqQvlwOolIbFpQ9L4LggP+E0w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YH1jI9ykMyOoKi7+hKwNhKoGCleFDy4IQobA5ZzpOGzujEuNLD5/JEoXfHHyNvtwtSXIfqJqu94nqc/ZgaUAwrKm2SdHI/9hB2eHtIWlNdhBgf0o+UL402GAGZARD7m2xWLtXubLVj4dsZcigMiUWM0ywhRA75ecUiTMvVmo6fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4QVOu/5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D71C4CEEB;
+	Wed, 27 Aug 2025 16:07:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756310830;
+	bh=8/nHBBY+4VBhT+YC6UcqQvlwOolIbFpQ9L4LggP+E0w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=X4QVOu/5Y1nL6frM1iU4gWhATYdfU0A2DDYCR/HCU+tNO4/rv0GSkcWe1bav1YKZS
+	 qQ9atRMkj6ljLH8X6u7yydleAg+yG4d+QuB4R9PB+FsmKZHxZWYZT5clhh/lDkLG5O
+	 6ypIT8ddQeiXDVgm1tRCXvHlGmz09/9B97PucyrKh+CY95TSCS3PyV+bs1LCKbtegx
+	 xCK8S/DKDtQ+GQvVGCdsQAmlNIqDcAHa9h3iYaW+VFn+19EiDRkU4WreLRRBGX3K78
+	 5OQgM0pEeYdx+hlyoKl4p9avrBArAhHYmoJqIXBj61VIx1Uzmy2MLjog6VVU9OZnmF
+	 I2IwA8MCBqDvQ==
+Message-ID: <a89ba427-b174-42c3-b3b4-5e4079942c3c@kernel.org>
+Date: Wed, 27 Aug 2025 18:07:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 01/22] dt-bindings: usb: snps,dwc3: Allow multiple
+ iommus
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+ Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-phy@lists.infradead.org
+References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
+ <20250821-atcphy-6-17-v1-1-172beda182b8@kernel.org>
+ <20250822-skinny-clay-harrier-64dc58@kuoka>
+ <e4c730d2-6ee1-46d7-850b-8ebbe0a1bfcd@kernel.org>
+Content-Language: en-US
+From: Sven Peter <sven@kernel.org>
+In-Reply-To: <e4c730d2-6ee1-46d7-850b-8ebbe0a1bfcd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Ryan:
+On 24.08.25 10:31, Krzysztof Kozlowski wrote:
+> On 22/08/2025 09:22, Krzysztof Kozlowski wrote:
+>> On Thu, Aug 21, 2025 at 03:38:53PM +0000, Sven Peter wrote:
+>>> Apple's dwc3 variant requires two iommus.
+>>>
+>>> Signed-off-by: Sven Peter <sven@kernel.org>
+>>> ---
+>>>   Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>> index 4380bb6fa2f08a475b557e80467abc2861f622e2..6d35dcc605c01977f4fc6fdb6f12976f1cef2b9e 100644
+>>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>> @@ -60,7 +60,7 @@ properties:
+>>>     dma-coherent: true
+>>>   
+>>>     iommus:
+>>> -    maxItems: 1
+>>> +    maxItems: 2
+>>
+>> Never tested. You anyway need specific constraints.
+> I realized that's pretty vague, so clarifying: you changed all bindings
+> to have two iommus and that's unexpected. All other devices have only
+> one IOMMU mapping here, so they need to stay like that. If these IOMMUs
+> differ, you should also list them, but probably that's not the case here.
 
-You should present your questions to the maintainer of the kernel's 
-Power Management subsystem, Rafael Wysocki (added to the To: list for 
-this email).
+Makes sense, thanks for the detailed explanation.
 
-Alan Stern
+I don't quite understand why this controller needs two iommus but they 
+must essentially be programmed to the same mapping for xhci to work.
+All of device mode goes through one of them and xhci buffers are split 
+between the two iommus (iirc I saw the command ring using the first one 
+and the event ring the second one and then just decided to program them 
+the same since anything else would result in a big mess).
 
-On Wed, Aug 27, 2025 at 10:09:10PM +0800, ryan zhou wrote:
-> Hi Roy,
-> Thank you for reviewing my patch.
-> >
-> > Wouldn't the parent glue dev already resume before resuming the child dwc3?
-> >
-> No, in the following case, the parent device will not be reviewed
-> before resuming the child device.
-> Taking the 'imx8mp-dwc3' driver as an example.
-> Step 1.usb disconnect trigger: the child device dwc3 enter runtime
-> suspend state firstly, followed by
-> the parent device imx8mp-dwc3 enters runtime suspend
-> flow:dwc3_runtime_suspend->dwc3_imx8mp_runtime_suspend
-> Step2.system deep trigger:consistent with the runtime suspend flow,
-> child enters pm suspend and followed
-> by parent
-> flow: dwc3_pm_suspend->dwc3_imx8mp_pm_suspend
-> Step3: After dwc3_pm_suspend, and before dwc3_imx8mp_pm_suspend, a
-> task terminated the system suspend process
-> . The system will resume from the checkpoint, and resume devices in
-> the suspended state in the reverse
-> of pm suspend, but excluding the parent device imx8mp-dwc3 since it
-> did not execute the suspend process.
-> 
-> >
-> >Why would 'runtime PM trying to activate child device xxx.dwc3 but parent is not active' happen in the first place?
-> >
-> Following the above analysis, dwc3_resume calls
-> pm_runtime_set_active(dev), it checks the
-> parent.power->runtime_status is not RPM_ACTIVE and outputs the error log.
-> 
-> >
-> >What is the glue driver that's being used here? Knowing what's being done in the glue driver pm callbacks
-> >would help in understanding the issue.
-> >
-> Refer to the driver 'dwc3-imx8mp.c' please, maybe you could help me
-> find a better solution.
-> 
-> 
-> Thanks,
-> ryan
-> 
-> Roy Luo <royluo@google.com> 于2025年8月27日周三 02:38写道：
-> >
-> > On Tue, Aug 26, 2025 at 8:12 AM Ryan Zhou <ryanzhou54@gmail.com> wrote:
-> > >
-> > > Issue description:
-> > > The parent device dwc3_glue has runtime PM enabled and is in the
-> > > runtime suspended state. The system enters the deep sleep process
-> > > but is interrupted by another task. When resuming dwc3,
-> > > console outputs the log 'runtime PM trying to activate child device
-> > > xxx.dwc3 but parent is not active'.
-> > >
-> >
-> > Wouldn't the parent glue dev already resume before resuming the child dwc3?
-> > Why would 'runtime PM trying to activate child device xxx.dwc3 but parent is
-> > not active' happen in the first place?
-> > What is the glue driver that's being used here? Knowing what's being done in
-> > the glue driver pm callbacks would help in understanding the issue.
-> >
-> > Regards,
-> > Roy
-> 
+
+
+Thanks,
+
+
+Sven
+
 
