@@ -1,155 +1,123 @@
-Return-Path: <linux-usb+bounces-27334-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27335-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83E89B38BB9
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 23:55:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49294B38F1D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 01:22:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23E483B1CC2
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 21:55:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1C609805D4
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 23:22:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F45230E0C5;
-	Wed, 27 Aug 2025 21:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9947E31076C;
+	Wed, 27 Aug 2025 23:22:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE1F2853F2
-	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 21:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95E42777FC
+	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 23:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756331733; cv=none; b=ddReEWsDqMV05jKQyH2x0B9jVLIuUs0N4fW5Sws/Hb2IVV12R2dujOoo5yMMuM7k5iiwaipCZNeLz+3aeRYisfFyPuhGf3oxlNTZOLocQ8qaNbobImKGF7OaTerYWbnXFaS0k+YWUCBH39W6nUOvhtuks0QQbxjlBqb9rtH9IE8=
+	t=1756336957; cv=none; b=i7pl1XaSTClelyBtkCAMlcib2ejgFEyMqnpZBroIe1BOYeEFBXIxIV5yoNXeFIriq70Hzf4CNOtHNV+UU281JkqZ4MrylJL2/9YyrqKOXfj4ICpggHEshPzpg2bK2mGznVRfmt+HfkiOc1ruhAa8wD3rUc01IJ/tLJsU6ksbh5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756331733; c=relaxed/simple;
-	bh=fekcYIpj6NxQjUC7dhUDgp2J22u0DhmISBwjnMhI4+w=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=bMTNpZKfPF0x53BMh6NPgrwzUdwVhn8r0smQFRt7BzjQYDcRzcWHZ1DVmQB9mHA5YcrcXeiCo0RuO0OThPKEdlArosPhFg/ez23J2pP/S31cMTv2dgFJ6ScMysByDFGyF0af8TuugcsSCnvuVGYlPxBo+pZba7Legpld2prXJg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+	s=arc-20240116; t=1756336957; c=relaxed/simple;
+	bh=0GRIOvOeVhXcTpXjeCZTG4Wm6VLWPHRblsRlooK4Ayg=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=r7B1W1jzx7PiAM39sQ7wHUXRKJtK9upN7uy7P4dGBxQWX1ORBuby8s1p793Buo56Qo2h8BRDThVOMUO8K0SkUhe79OziaHFpVo+FOnHwJNVjuDl3QjxCIaTXh12vcSCYf2AtiqWZvy8IcjXWwrLowVBy89UyYFh+F/sw/LiDz+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3f0d4ad1c3aso4042035ab.2
-        for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 14:55:32 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-88432cb7627so40667839f.0
+        for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 16:22:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756331731; x=1756936531;
+        d=1e100.net; s=20230601; t=1756336955; x=1756941755;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xF+jtFQ9b8zMRrU/Cm5qYAVQe6xzCcpYtRD3ii11fhQ=;
-        b=iZNjX5V5HqkIq1WWf7Ca3IxjRyrYBK2kn5tUqjQvICSk3KtvUZLHJ5zxz2kpzZOq6v
-         Z7f0/fkiNb8rqII5AkLx7ShF8/9KisvI8LVCRspb6VBsfmZ9FkScTs9nFgHJKkYTK2G7
-         YWQcijdIDgR7MoHf2TZfrOeyNnSGvwsVLWa+4pmlJROnEten2yOPjvS0JNGqo+TY9iX5
-         jAW8jYdZnAv8dGBDryob5NCn1qVGm4Vje81wr9Vo+tqkjAkFlS4ciix3jeud8rHTf0qo
-         s9Gqx7VWoYlYOWmHreaTAG84F4IYZhaaa+7GqRhb8vbioTEMYs3lwfivMOVZdTl0t/yy
-         UcWA==
-X-Forwarded-Encrypted: i=1; AJvYcCXv+V9XHDwPifEfyROjAAcYOgAPeyR07L/jrEmVWgH+oC96yH9sLOEIDWKu5nFSrWLGCKJcCxW1lnY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUp8rJ8uMt0IsvpG7w0gyOqJhEiOGDPLJDNXTPj/cKTTLtlYTw
-	Zf+3nHFh48VOCt00Bx2xOu73yxVYOLPSmwYJpBNjiFTARxnzyuh292jIvhg/CpVoQ0askC1ul5h
-	ohTHJIWwza5bKBM0UYqyzwrHiCodNeUe3dAavsm0/WzDKWdu9vvz6drtlB44=
-X-Google-Smtp-Source: AGHT+IES9W9i5BDPnigPWHyPwFFVK8HYOg02PCDU4wDRx1cddarSx3N77jLS8b/A0OljZ6ZaxmpeRG+Ewn6Lzi0PSQIKRrS28joC
+        bh=ki+X7udoy2qkKDlMn7tVUFGA43nOQ+o8mdWuhpBpgeA=;
+        b=k1ft8K5SH6BPxtVjcGMi0oE5iFB3rb24MjrY7mSMLF6zDUMPKwMVi/23e1SLyM9m/3
+         YNLR2CbqY7nUVhqK3mcNov44okfKY+JVi4HTkKxEuySE5+JjtM2Swn36io3a+AMX5sL+
+         q6CPg/9TU9UpCNdxyJ97iHJFtnHi5VDLwrQp4rx0dPItEH8SM4ufhmP/onY2z1lJtVJA
+         o3KuauD4w8C9MpdXz/4eKBv9U4HdB8kj9VDb5r0O8ia98iEtw5M1PcnbPIqqn8D/8LnP
+         ktRK9EIk4wwvS28bnGUJ/7aVFBhcZPvpWjVKjjk1E6LXOISrEers0CG0CywVOwZawdfY
+         gLEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV/yjKMEyYq86xWvOCo3zXwZ74x5dhCRGzFjCtrpzwQk3qjTmfW0y0MO7un4t5wJokFgXgSXSaq+9c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YypQx/9x+Rb1TVaeUqm/Pn8wE2QWWEdVSmSK6QemPHpxIEi1S2M
+	T6Pgbythf0/bifTOpmr88+Tvragq91jGt9DBk/xjeprlol5z0VGIJ5zt7/pSeuC5gKFs5ZaYGFY
+	botI6HI3y5ZGJT/Ys5akpUMolJhQsp/yCkLI8nvHOoFD9Zmq9T4ywCxprwV8=
+X-Google-Smtp-Source: AGHT+IH3N1ARNwZGmUjEWCZQJ81oG91H3vhlVBbtDcF1nVYElY3E28RiYQ5MQlN4AKZM4aYUDzUYwQE5O+jjny0YFPioim6so6+G
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:148f:b0:3f0:78c3:8fc5 with SMTP id
- e9e14a558f8ab-3f078c392cdmr43149115ab.5.1756331731412; Wed, 27 Aug 2025
- 14:55:31 -0700 (PDT)
-Date: Wed, 27 Aug 2025 14:55:31 -0700
+X-Received: by 2002:a05:6602:2c11:b0:881:87ac:24a with SMTP id
+ ca18e2360f4ac-886bd14dd6cmr2927042739f.7.1756336955004; Wed, 27 Aug 2025
+ 16:22:35 -0700 (PDT)
+Date: Wed, 27 Aug 2025 16:22:34 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68af7ed3.a00a0220.2929dc.0004.GAE@google.com>
-Subject: [syzbot] [mm?] [usb?] WARNING in __alloc_skb (4)
-From: syzbot <syzbot+5a2250fd91b28106c37b@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, apopple@nvidia.com, byungchul@sk.com, 
-	david@redhat.com, gourry@gourry.net, joshua.hahnjy@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-usb@vger.kernel.org, 
-	matthew.brost@intel.com, rakie.kim@sk.com, syzkaller-bugs@googlegroups.com, 
-	ying.huang@linux.alibaba.com, ziy@nvidia.com
+Message-ID: <68af933a.a00a0220.2929dc.0007.GAE@google.com>
+Subject: [syzbot] [net?] [usb?] KMSAN: uninit-value in rtl8150_open
+From: syzbot <syzbot+b4d5d8faea6996fd55e3@syzkaller.appspotmail.com>
+To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	netdev@vger.kernel.org, pabeni@redhat.com, petkan@nucleusys.com, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 
 Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    7fa4d8dc380f Add linux-next specific files for 20250821
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=11fecc42580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ae76068823a236b3
-dashboard link: https://syzkaller.appspot.com/bug?extid=5a2250fd91b28106c37b
+HEAD commit:    fab1beda7597 Merge tag 'devicetree-fixes-for-6.17-1' of gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17a9e462580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6ccfdce02093e91f
+dashboard link: https://syzkaller.appspot.com/bug?extid=b4d5d8faea6996fd55e3
 compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14c94858580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=108ea7bc580000
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/63178c6ef3f8/disk-7fa4d8dc.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c5c27b0841e0/vmlinux-7fa4d8dc.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9a8832715cca/bzImage-7fa4d8dc.xz
+disk image: https://storage.googleapis.com/syzbot-assets/db03ab9be061/disk-fab1beda.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/465314c75c15/vmlinux-fab1beda.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/02e5480b1de2/bzImage-fab1beda.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5a2250fd91b28106c37b@syzkaller.appspotmail.com
+Reported-by: syzbot+b4d5d8faea6996fd55e3@syzkaller.appspotmail.com
 
-------------[ cut here ]------------
-WARNING: mm/page_alloc.c:5124 at __alloc_frozen_pages_noprof+0x2c8/0x370 mm/page_alloc.c:5124, CPU#0: dhcpcd/5530
-Modules linked in:
-CPU: 0 UID: 0 PID: 5530 Comm: dhcpcd Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
-RIP: 0010:__alloc_frozen_pages_noprof+0x2c8/0x370 mm/page_alloc.c:5124
-Code: 74 10 4c 89 e7 89 54 24 0c e8 f4 11 0d 00 8b 54 24 0c 49 83 3c 24 00 0f 85 a5 fe ff ff e9 a6 fe ff ff c6 05 fe aa b7 0d 01 90 <0f> 0b 90 e9 18 ff ff ff a9 00 00 08 00 48 8b 4c 24 10 4c 8d 44 24
-RSP: 0018:ffffc90000007780 EFLAGS: 00010246
-RAX: ffffc90000007700 RBX: 0000000000000014 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffc900000077e8
-RBP: ffffc90000007870 R08: ffffc900000077e7 R09: 0000000000000000
-R10: ffffc900000077c0 R11: fffff52000000efd R12: 0000000000000000
-R13: 1ffff92000000ef4 R14: 0000000000060820 R15: dffffc0000000000
-FS:  00007f4fd75a9740(0000) GS:ffff8881257c4000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffebb07e018 CR3: 000000001dadc000 CR4: 00000000003526f0
-Call Trace:
- <IRQ>
- alloc_pages_mpol+0x232/0x4a0 mm/mempolicy.c:2416
- ___kmalloc_large_node+0x5f/0x1b0 mm/slub.c:4306
- __kmalloc_large_node_noprof+0x18/0x90 mm/slub.c:4337
- __do_kmalloc_node mm/slub.c:4353 [inline]
- __kmalloc_node_track_caller_noprof+0x34d/0x4a0 mm/slub.c:4384
- kmalloc_reserve+0x1b8/0x290 net/core/skbuff.c:608
- __alloc_skb+0x142/0x2d0 net/core/skbuff.c:669
- __netdev_alloc_skb+0x108/0x970 net/core/skbuff.c:733
- rx_submit+0x100/0xab0 drivers/net/usb/usbnet.c:-1
- rx_alloc_submit+0xa6/0x140 drivers/net/usb/usbnet.c:1538
- usbnet_bh+0x9a5/0xd70 drivers/net/usb/usbnet.c:1607
- process_one_work kernel/workqueue.c:3236 [inline]
- process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3319
- bh_worker+0x2b1/0x600 kernel/workqueue.c:3579
- tasklet_action+0xc/0x70 kernel/softirq.c:854
- handle_softirqs+0x283/0x870 kernel/softirq.c:579
- do_softirq+0xec/0x180 kernel/softirq.c:480
- </IRQ>
- <TASK>
- __local_bh_enable_ip+0x17d/0x1c0 kernel/softirq.c:407
- __dev_open+0x694/0x880 net/core/dev.c:1690
- __dev_change_flags+0x1ea/0x6d0 net/core/dev.c:9549
- netif_change_flags+0x88/0x1a0 net/core/dev.c:9612
- dev_change_flags+0x130/0x260 net/core/dev_api.c:68
- devinet_ioctl+0xbb4/0x1b50 net/ipv4/devinet.c:1200
- inet_ioctl+0x3c0/0x4c0 net/ipv4/af_inet.c:1001
- sock_do_ioctl+0xd9/0x300 net/socket.c:1238
- sock_ioctl+0x576/0x790 net/socket.c:1359
+usb 1-1: device reset failed
+=====================================================
+BUG: KMSAN: uninit-value in set_carrier drivers/net/usb/rtl8150.c:721 [inline]
+BUG: KMSAN: uninit-value in rtl8150_open+0x1131/0x1360 drivers/net/usb/rtl8150.c:758
+ set_carrier drivers/net/usb/rtl8150.c:721 [inline]
+ rtl8150_open+0x1131/0x1360 drivers/net/usb/rtl8150.c:758
+ __dev_open+0x7e9/0xc60 net/core/dev.c:1682
+ __dev_change_flags+0x3a8/0x9f0 net/core/dev.c:9549
+ netif_change_flags+0x8d/0x1e0 net/core/dev.c:9612
+ dev_change_flags+0x18c/0x320 net/core/dev_api.c:68
+ devinet_ioctl+0x1186/0x2500 net/ipv4/devinet.c:1200
+ inet_ioctl+0x4c0/0x6f0 net/ipv4/af_inet.c:1001
+ sock_do_ioctl+0x9c/0x480 net/socket.c:1238
+ sock_ioctl+0x70b/0xd60 net/socket.c:1359
  vfs_ioctl fs/ioctl.c:51 [inline]
  __do_sys_ioctl fs/ioctl.c:598 [inline]
- __se_sys_ioctl+0xf9/0x170 fs/ioctl.c:584
+ __se_sys_ioctl+0x23c/0x400 fs/ioctl.c:584
+ __x64_sys_ioctl+0x97/0xe0 fs/ioctl.c:584
+ x64_sys_call+0x1cbc/0x3e20 arch/x86/include/generated/asm/syscalls_64.h:17
  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xfa/0xfa0 arch/x86/entry/syscall_64.c:94
+ do_syscall_64+0xd9/0x210 arch/x86/entry/syscall_64.c:94
  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f4fd76a9378
-Code: 00 00 48 8d 44 24 08 48 89 54 24 e0 48 89 44 24 c0 48 8d 44 24 d0 48 89 44 24 c8 b8 10 00 00 00 c7 44 24 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 07 89 d0 c3 0f 1f 40 00 48 8b 15 49 3a 0d
-RSP: 002b:00007ffc26f40168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000016 RCX: 00007f4fd76a9378
-RDX: 00007ffc26f50360 RSI: 0000000000008914 RDI: 0000000000000016
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffc26f60500
-R13: 00007f4fd75a96c8 R14: 0000000000000028 R15: 0000000000008914
- </TASK>
+
+Local variable tmp created at:
+ number+0x8a/0x2200 lib/vsprintf.c:469
+ vsnprintf+0xd21/0x1bd0 lib/vsprintf.c:2890
+
+CPU: 1 UID: 0 PID: 5461 Comm: dhcpcd Not tainted syzkaller #0 PREEMPT(none) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+=====================================================
 
 
 ---
@@ -162,10 +130,6 @@ https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
 If the report is already addressed, let syzbot know by replying with:
 #syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
 
 If you want to overwrite report's subsystems, reply with:
 #syz set subsystems: new-subsystem
