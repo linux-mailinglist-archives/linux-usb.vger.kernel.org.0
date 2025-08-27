@@ -1,154 +1,161 @@
-Return-Path: <linux-usb+bounces-27323-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27324-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1077B381C1
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 13:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B212DB38473
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 16:09:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E4E4368363
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 11:54:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6710417EDDA
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 14:09:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBEE42F8BC8;
-	Wed, 27 Aug 2025 11:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415933570DF;
+	Wed, 27 Aug 2025 14:09:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C2iIEuDJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lj5NMgJO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE17722A7F9
-	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 11:54:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C252EBDCF;
+	Wed, 27 Aug 2025 14:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756295643; cv=none; b=ffXcLbbxii1Fc+72JT7L2lq2cTL/uvfulOD7Nr1IPn/3tq27a52OmTCnL36qfgBy+W8dX9YXxUIeyxCUFlue9nBc+1vFOArkzWK9sYVflNmJXojJHEBiXcZeRwa5YxsKEMs/bvrSn6ublpXtzj5hE5dxYxf99z3W4d1o5of5fJA=
+	t=1756303764; cv=none; b=UMNV28du+8E5M/b9wvP8S8P97vV5cMeXK0mpdmClfDQoxLRj+Egwifdp6sL34efIYwd6JYx6XDDxu4go2Uw733z+GeVz5S//FJYpK07AldRux/6tcMysiOXuFbwAYg9EK1cz6dg/AlLBTeAIzHDGHQ7LamWVv4kchIdBQrz+Huk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756295643; c=relaxed/simple;
-	bh=VmgWlhMqDyT/9QyEcGf8x+TcB5gb7H+E3RrIw03crnI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=YeHJVh3ah40+9yHmp0/HIxz4IdRlz+2CeUSYlg4dUnWLXv78WwkiD658ifNgz0WwvaBUc8rG2qjRiwgkc7yB9+dYHLlM34r2WgxLN+gFXfmtnotYT6KXyuHq646W4HQ43PE9uUusktn2zoekJAGwLXDxHxIi/aTexk91irfZaTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C2iIEuDJ; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756295641; x=1787831641;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=VmgWlhMqDyT/9QyEcGf8x+TcB5gb7H+E3RrIw03crnI=;
-  b=C2iIEuDJKSSpIExZH9oIApTd++2WRZlyqDwkD7gP8cg8ZvfjnucMbZOq
-   3psVZusRlFH71vyzzIn4Tn1UEj95xYZRShdnSBV520cGBS0diCTdHKpLb
-   Hg7bYUe6pKDpX3oT7oRJm7AZfbHx+gzbNcZfbh/loxh0AGbfSrvuHuxwS
-   CYpSpVpkZeojW+wbcwMNuzu/F9PE2V6YaE5bklTesO5Lwr1qEEvqPNtxd
-   2q+h9+H79pzhvUjmh8U5u7xlw+/MPGTYhta4NkZa58eds2XgZvS41OiV1
-   jv5s657ck8KesWbTCpCxC4zjsSyvzmgEyqgQEmNZwTVoHNttcniz5ATme
-   A==;
-X-CSE-ConnectionGUID: gix1TkcMShmkap0WZEL0OQ==
-X-CSE-MsgGUID: IhUPNYzVTESgS2f3fglKaQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="46121352"
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="46121352"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2025 04:54:00 -0700
-X-CSE-ConnectionGUID: AL7DyD3tSpOrPR9bBuhICg==
-X-CSE-MsgGUID: qRg/5UybRNqZaSxfiiltEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="169073846"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.83.145]) ([10.245.83.145])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2025 04:53:59 -0700
-Message-ID: <7b70c5d1-b83a-4bce-8d3f-9e181a0329a6@linux.intel.com>
-Date: Wed, 27 Aug 2025 14:53:14 +0300
+	s=arc-20240116; t=1756303764; c=relaxed/simple;
+	bh=lw/ewX5G9BRbmm4WjkDHiNTtRtMqaUqiqwaQ6Fn7fsc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QAJD7Ic5g4QoG2r99PNdgikoRcNWI8nUYToaeoKZT+aBNAnyZwa4doMAsonWDLLC4xKf+ktDG66zkakxuqx3dwyfMtdiwIeNGoPpSBn6AtQKdjSVjcvYLjeeAsUYmQVfm02dJpO9+NEdnE8MT7naHrQergpuJJh5SKVszchCVWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lj5NMgJO; arc=none smtp.client-ip=209.85.217.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-520c0e267bcso1236702137.1;
+        Wed, 27 Aug 2025 07:09:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756303762; x=1756908562; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lw/ewX5G9BRbmm4WjkDHiNTtRtMqaUqiqwaQ6Fn7fsc=;
+        b=Lj5NMgJOxc0NvXe02uSTqgA4VIqNfrENO57DI13J0rZdduSQsBw7zsPtEee9azvlAc
+         CHFFSm85nxK5uw9bd0kZSm1krbe9iUV7dwRkgywixOtrpmxtHSNyizspcEypL9qRUZu0
+         HdNsOn6McUB3KW5b8+YabprnBQ/gFziI6mnQQo5IqkL9crs16bslzVqI8E4xI7SdHfv1
+         U0A9fVPDlXRy9QVxjxtg+VXxhl0RzTw6K5rDUk4+T86+veBtKIPfgOp+WmWMVrbFXOjy
+         JlkkWg9Y9YWwhcYO/SfQtqYiHlk8vFDPQtPyB7NDAZ61CUHInpnYiNfI+5welovswwKf
+         vMOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756303762; x=1756908562;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lw/ewX5G9BRbmm4WjkDHiNTtRtMqaUqiqwaQ6Fn7fsc=;
+        b=K8xpUmfwXitjFj4wmT5z1ZcPxnC7TZwJGSYLzvFeh9ofQ/ffBu1JLmw4ysXWO/CbaC
+         FCLVXjha4qelmjt93zI47MCEEkc8GkNFZe+BHjMkSBaH0eBN+cLC5uZu8fA0psctbJXy
+         CPDVma+IW3WhLrA33ETKxzqlpOStvGjQy2qP7SCV7G8ChGRgDldtxg2rjpK/nvKVJ6Qx
+         q31rYgcwldTb6G3ILbQS/1LxQW4FiowZ7OBkLX7EeDbLVcYwCaR7Rvq2HC0ZdyfLuBQY
+         HUb7btmm1xwgsOvbUwJxzw6gjY9IXUd97192yt1zZJvCxPnRJp5Vis0BgQVdZ8ul2f5f
+         U2vg==
+X-Forwarded-Encrypted: i=1; AJvYcCWK0RRd4D2fbFUi9mgwvlHh1EXDOmWJNRqoE7sENRW2HA8RwmxbGFOjYS7izy8yQ0BB9ftN3+hFws37nIY=@vger.kernel.org, AJvYcCXHvuiDAb8LPirGaqgs1P7fTNs6AmePGJbwaQhoTeQX80XlNbO9uotIsboNRq2N+AX+yIqNzIpTeq8m@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBaq6/w7EmQA2ftYPM3+NGhE+ZonL6TRc4xBIR/9PZZFVdg3tQ
+	GD/qAJMRssmMAgsyN7ABYAqbyBK38Z0H4WqXV7R869UnLdnFlbpMOXYGs+xtvHyrWZBvFl996rV
+	+K21vq+sQS+zxuGiDaWk/bf+T+MxdzRc=
+X-Gm-Gg: ASbGncsnPVFxt/gIXFFFUC3ea7v2JWieqEW6+1fQlALBJ7advJxJVhfA9CGnjnTU3ht
+	kfIAjCkGxjcNTnpm15ns21T6Ls3JTviNzwysR06MB7NwaEgwvAooqJbU7syX2jw69tafTVCGHCe
+	lyb571z4imyyJrz7tDxGBtuSVqt58gjK8reH7RmI/Qt4ECmy8RsYIr+ivWscNntGAwZDP99C1YA
+	XxsBQtHNgXDDkDh7NjNnQt2cOhT4FPFBg==
+X-Google-Smtp-Source: AGHT+IEsHqORETtcRAqgaEWBcvCh4LHCsnL8g9LYpLirejx7dyaIzf7+44UuXaRbms0Hlagzl1uMpfcD3HDhSjx8Q1w=
+X-Received: by 2002:a05:6102:809e:b0:51a:4906:f194 with SMTP id
+ ada2fe7eead31-51d0f2f9a6cmr6143334137.28.1756303761898; Wed, 27 Aug 2025
+ 07:09:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-Subject: Re: [PATCH 4/4] usb: xhci: handle Set TR Deq Context State Error due
- to Endpoint state
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@linux.intel.com>
-References: <20250818125742.3572487-1-niklas.neronin@linux.intel.com>
- <20250818125742.3572487-5-niklas.neronin@linux.intel.com>
- <20250822101514.3a730f4f.michal.pecio@gmail.com>
- <20250825091552.350d027e.michal.pecio@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20250825091552.350d027e.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250826150826.11096-1-ryanzhou54@gmail.com> <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
+In-Reply-To: <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
+From: ryan zhou <ryanzhou54@gmail.com>
+Date: Wed, 27 Aug 2025 22:09:10 +0800
+X-Gm-Features: Ac12FXwQ-ThUrJUqJwXUGkI_6xk5qW_tdN4AELgG8XuFDbYTWP_0wCw7B03cV0I
+Message-ID: <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
+Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
+ child device xxx.dwc3 but parent is not active
+To: Roy Luo <royluo@google.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Roy,
+Thank you for reviewing my patch.
+>
+> Wouldn't the parent glue dev already resume before resuming the child dwc=
+3?
+>
+No, in the following case, the parent device will not be reviewed
+before resuming the child device.
+Taking the 'imx8mp-dwc3' driver as an example.
+Step 1.usb disconnect trigger: the child device dwc3 enter runtime
+suspend state firstly, followed by
+the parent device imx8mp-dwc3 enters runtime suspend
+flow:dwc3_runtime_suspend->dwc3_imx8mp_runtime_suspend
+Step2.system deep trigger:consistent with the runtime suspend flow,
+child enters pm suspend and followed
+by parent
+flow: dwc3_pm_suspend->dwc3_imx8mp_pm_suspend
+Step3: After dwc3_pm_suspend, and before dwc3_imx8mp_pm_suspend, a
+task terminated the system suspend process
+. The system will resume from the checkpoint, and resume devices in
+the suspended state in the reverse
+of pm suspend, but excluding the parent device imx8mp-dwc3 since it
+did not execute the suspend process.
+
+>
+>Why would 'runtime PM trying to activate child device xxx.dwc3 but parent =
+is not active' happen in the first place?
+>
+Following the above analysis, dwc3_resume calls
+pm_runtime_set_active(dev), it checks the
+parent.power->runtime_status is not RPM_ACTIVE and outputs the error log.
+
+>
+>What is the glue driver that's being used here? Knowing what's being done =
+in the glue driver pm callbacks
+>would help in understanding the issue.
+>
+Refer to the driver 'dwc3-imx8mp.c' please, maybe you could help me
+find a better solution.
 
 
-Thank you for the thorough review and the additional debugging efforts;
-they are greatly appreciated. :)
+Thanks,
+ryan
 
-
-I want to clarify my intentions with this patch set:
-1. Add exit points for as many error cases as possible. The function
-   xhci_handle_cmd_set_deq() is tightly interwoven, causing any change to
-   impact all completion cases. By adding exit points to error cases,
-   future modifications can be more precise and targeted.
-
-2. Keep it simple. Handle errors that do not require "fixing" and handle
-   them simply. For example, Set TR Deq commands that failed because the
-   command is no longer needed. In this case, the logical coding pattern
-   is to free the command and return. This approach does not require the
-   reader to know that a completion handler for some other command has
-   freed the TDs.
-
-3. Assume the cause of the errors are according to the xHCI specification,
-   section 4.6.10.
-
-With the above in mind, this is how each error IMO should be handled:
-
-case COMP_TRB_ERROR:
-	No known fix, print warning without specifying a reason.
-case COMP_SLOT_NOT_ENABLED_ERROR:
-	The Set TR Deq command is no longer needed, free and exit.
-case COMP_CONTEXT_STATE_ERROR:
-	case SLOT_STATE_ENABLED:
-		The Set TR Deq command is no longer needed, free and exit.
-
-	case EP_STATE_DISABLED:
-		The Set TR Deq command is no longer needed, free and exit.
-	case EP_STATE_RUNNING:
-	case EP_STATE_HALTED:
-		No simple fix, print detailed warning and proceed as usual.
-	case EP_STATE_STOPPED:
-	case EP_STATE_ERROR:
-		IMO it is worthwhile to retry the Set TR Deq command.
-		If we don't retry, the driver and hardware will become out
-		of sync, which eventually leads to a crash. By retrying,
-		we either succeed or still face a potential crash.
-		But I'm open to simply printing a warning, as this should
-		be an extremely uncommon error case.
-
-> 1. I'm not aware of any known cases leading to this situation.
-
-If that's the case, then we have successfully prevented the error,
-which is the best outcome. :)
-However, if it happens or a future unrelated change causes it to happen,
-we have at least some error handling in place.
-
-> 2. A loop which finds and updates the TD_CLEARING_CACHE item already
->    exists, so I think it would be better to modify this loop instead
->    of adding another one. And the loop prints some xhci_dbg(), so it
->    would be nice if they showed up in this case as well.
-
-To keep things simple, it's better to keep them separate for now. 
-This patch set is not the final version of the function; instead,
-it's a small step.
-However, adding a debug message to the 'td_cleanup' is a good idea.
-
-
-That being said, I'll do some more testing for the cases you mentioned.
-And it might be better as a first step to just print a detailed warning
-and promptly exit the function for all error cases. Then in separate
-patch sets add handling for specific error cases.
-
-Best Regards
-Niklas
+Roy Luo <royluo@google.com> =E4=BA=8E2025=E5=B9=B48=E6=9C=8827=E6=97=A5=E5=
+=91=A8=E4=B8=89 02:38=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Tue, Aug 26, 2025 at 8:12=E2=80=AFAM Ryan Zhou <ryanzhou54@gmail.com> =
+wrote:
+> >
+> > Issue description:
+> > The parent device dwc3_glue has runtime PM enabled and is in the
+> > runtime suspended state. The system enters the deep sleep process
+> > but is interrupted by another task. When resuming dwc3,
+> > console outputs the log 'runtime PM trying to activate child device
+> > xxx.dwc3 but parent is not active'.
+> >
+>
+> Wouldn't the parent glue dev already resume before resuming the child dwc=
+3?
+> Why would 'runtime PM trying to activate child device xxx.dwc3 but parent=
+ is
+> not active' happen in the first place?
+> What is the glue driver that's being used here? Knowing what's being done=
+ in
+> the glue driver pm callbacks would help in understanding the issue.
+>
+> Regards,
+> Roy
 
