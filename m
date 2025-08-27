@@ -1,97 +1,140 @@
-Return-Path: <linux-usb+bounces-27329-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27330-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90C5CB3882D
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 19:01:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B5CAB389F2
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 20:57:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA47B7AFAEF
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 16:59:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEC5F178D57
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 18:57:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6BC92F28E2;
-	Wed, 27 Aug 2025 17:01:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFB7D2E8893;
+	Wed, 27 Aug 2025 18:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPrFk8b4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ltXO+4Qr"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC7A275AF9
-	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 17:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5954B1DFE0B;
+	Wed, 27 Aug 2025 18:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756314082; cv=none; b=pJXFFF6+yFv+M0FcuLjjgLUe1YrIbg1oXWFcODEa8Bmv8BfhO7X06RPvIdf9Ch12zEz0w70nyo7F/OAkXomw6PDrvoxMoZn4mkU5KseeFEyWNq6S7GXlCvF7Vwsc48MpR4DbV66jAtcGM9ox8ZiKc+4LVhUJGE6llewI5/Spwzo=
+	t=1756321032; cv=none; b=YDmBbz1rtxtUgV7OinKdNBb1krCUHB2B35RMIaC7tY1vnb3BGOfYhy5IjJ0S6YTWfhaWR6yRQcBB6A/KMBDyZytHTn8ppiV92WibLNZivU8lNhlHuCYMMJH+SyncDpO827rJC8IFnYStzQM67+WrfsBBRk720g7pefBJZrH6wBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756314082; c=relaxed/simple;
-	bh=WJyOagGkt+CvSgIO7h9hsBcRhoKY8/Od7NYQoHq4TVE=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Mw4eBOZaLGW6XusHaqhVq8+Spm11P16Eeof8d2bGKcVsobJzI+1qELbjy1YBt4+M24HKg3Iaem0wn0LNXwR99wLkHPkf0YblnYXwyO6f+d4rABqu+jUEwZVnV5TN4oSdn+gHvdvPmiZqCr1H6YMcBj5p6jCCYIg66xaEXnlOeTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPrFk8b4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C4E13C4CEEB
-	for <linux-usb@vger.kernel.org>; Wed, 27 Aug 2025 17:01:20 +0000 (UTC)
+	s=arc-20240116; t=1756321032; c=relaxed/simple;
+	bh=DFcwD5wv8boG5Yw+kZoSyddpCexgu/K9NQMraZJx9i8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mo+8y8eki4X1HEgL5IP105ziKWcQmlOtJUtPm9w1KjrZD9YAzFacsfFvJEJHL6XikWOsXDeRXK4GuQcQULeNffJfbgUdXjZse2gUODy3o737q5igSmBA4hYh9L6CH9J0tBcPZeymSka+izOovj1IKf9e9yweZBx7quVtbvY7Ekc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ltXO+4Qr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E52FFC4CEFA;
+	Wed, 27 Aug 2025 18:57:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756314080;
-	bh=WJyOagGkt+CvSgIO7h9hsBcRhoKY8/Od7NYQoHq4TVE=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=hPrFk8b4YtLuu80X+qLLKyYXd7S2IdVYv9b54MBpjbY4aS5glkil5gB68a2YC1+D3
-	 d/u6kPbnR7fIr/cwIPDAmy4f5iQ4LOJhgHNWP3tFmqM8LpMEMNCKjsrukrBD2TVSNU
-	 8/snLErPs5F5ppWqW0BRDP2n3Fd1f9a/i9wla5chyeyD2R78uQMs1eSuESJm4i1ynu
-	 1LZpFjmzyntYWzj/RkDEmQSDi4bKooKcBzwHtXPhxrnVnCaCLu868f33aO2SQcvCdK
-	 ywxubuAmA9Wk3lP9H9J0aa6gp/6Zn1FpHpFq/cTyCEO6KeURHovNH1Del238NsAhJA
-	 9eXwjwkTNGaSg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id B1F29C3279F; Wed, 27 Aug 2025 17:01:20 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
- resume from suspend
-Date: Wed, 27 Aug 2025 17:01:20 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: paula@alumni.cse.ucsc.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-220491-208809-EKV54L0vO7@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
-References: <bug-220491-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1756321031;
+	bh=DFcwD5wv8boG5Yw+kZoSyddpCexgu/K9NQMraZJx9i8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ltXO+4QrZcKiWl8KcMd/n0W3EtEqJ3EffFBILsTzuhRBgM/Pbuh2CKSU6MWxNvz4O
+	 sDAcGoqZQ1NfZS926zQtaxnWo7MEPxrnM3trQhHRQcbq8mF8ruGtSOBB2YObDWpBur
+	 dbbcerasz0BrYk6Mn5Sf/GuK3+ycMR86wkXqQ2R2/NyK6QzP8BXImp4FOtudYuJ/UC
+	 4QFJSGu8O2Aeg1xFuStBUkkV0huotYRirRffiAGNz0ELr+p29JI0njXpTuFPeVAc+J
+	 pUB0sZboY0jc3t/gaLjA317M/++CRkp6fR6O7mAFsmMqf4sjGcLbfzA+Uure3rOi24
+	 m4cNBcaFw2uwg==
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-743749537caso1030961a34.0;
+        Wed, 27 Aug 2025 11:57:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUVqZmngs9APkZcyykXGPjdsBoo5Xvhvt9p1ehKxULx/cD6XCLZOMOZXTVuKP3yJHVLLlDw6btDKfMPyH4=@vger.kernel.org, AJvYcCVvaQmKi90y2SIceBzypkb5s88yIll/prBBJ+/broOepRaEzDoK4EG9AqRH/WMZOsdw/2hIs8RdJJSL@vger.kernel.org, AJvYcCWeuSKUgjL2dYDqMhFPUfZPcOmyabPsQ80nwbwENB6YDn3NoMMPicydLEqlva3o9UkSXXZWjXWx7N0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsFFfyxq9O9k0guutx444dvYBfsdHg88klHEXkFHppSM30NnYa
+	ApyN2DaN/HfbGoTQDhRowqyioI0TGygdpCuzs3COJkSm/jFNAH3zl5RjUYWm+7OxO8i5rfFBD4G
+	uKotL0LReVB56RiDiAz2sveDymrkcb1U=
+X-Google-Smtp-Source: AGHT+IEC2ghCQ0MO1CJCGsXmI5mtSbb6TkKZeWUOoMwVPghWXTpZl6QcvCdI3YgtP05qnKHcAXNzKpCNWfVMRWLM8Io=
+X-Received: by 2002:a05:6808:1b1f:b0:437:75ea:6c72 with SMTP id
+ 5614622812f47-437c544113bmr3155427b6e.21.1756321031183; Wed, 27 Aug 2025
+ 11:57:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250826150826.11096-1-ryanzhou54@gmail.com> <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
+ <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com> <5d692b81-6f58-4e86-9cb0-ede69a09d799@rowland.harvard.edu>
+In-Reply-To: <5d692b81-6f58-4e86-9cb0-ede69a09d799@rowland.harvard.edu>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 27 Aug 2025 20:56:59 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jQpQjfU5YCDbfdsJNV=6XWD=PyazGC3JykJVdEX3hQ2Q@mail.gmail.com>
+X-Gm-Features: Ac12FXwZkTPT2-RMDugAYZDU2uopbwIA2WbOc1-Kkou8zroX8GC-ntYgdaMUhSM
+Message-ID: <CAJZ5v0jQpQjfU5YCDbfdsJNV=6XWD=PyazGC3JykJVdEX3hQ2Q@mail.gmail.com>
+Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
+ child device xxx.dwc3 but parent is not active
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: ryan zhou <ryanzhou54@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Roy Luo <royluo@google.com>, 
+	Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
+On Wed, Aug 27, 2025 at 4:52=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> Ryan:
+>
+> You should present your questions to the maintainer of the kernel's
+> Power Management subsystem, Rafael Wysocki (added to the To: list for
+> this email).
 
---- Comment #11 from Paul Ausbeck (paula@alumni.cse.ucsc.edu) ---
-Created attachment 308566
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308566&action=3Dedit
-usbmon trace, S/R, "k" quirk enabled, usb_storage disconnect/reconnect
+Thanks Alan!
 
-This is a usbmon trace of suspend/resume with associated disconnect/reconne=
-ct
-of the internal usb_storage device. The "k" quirk is enabled during this tr=
-ace.
 
---=20
-You may reply to this email to add a comment.
+> On Wed, Aug 27, 2025 at 10:09:10PM +0800, ryan zhou wrote:
+> > Hi Roy,
+> > Thank you for reviewing my patch.
+> > >
+> > > Wouldn't the parent glue dev already resume before resuming the child=
+ dwc3?
+> > >
+> > No, in the following case, the parent device will not be reviewed
+> > before resuming the child device.
+> > Taking the 'imx8mp-dwc3' driver as an example.
+> > Step 1.usb disconnect trigger: the child device dwc3 enter runtime
+> > suspend state firstly, followed by
+> > the parent device imx8mp-dwc3 enters runtime suspend
+> > flow:dwc3_runtime_suspend->dwc3_imx8mp_runtime_suspend
+> > Step2.system deep trigger:consistent with the runtime suspend flow,
+> > child enters pm suspend and followed
+> > by parent
+> > flow: dwc3_pm_suspend->dwc3_imx8mp_pm_suspend
+> > Step3: After dwc3_pm_suspend, and before dwc3_imx8mp_pm_suspend, a
+> > task terminated the system suspend process
+> > . The system will resume from the checkpoint, and resume devices in
+> > the suspended state in the reverse
+> > of pm suspend, but excluding the parent device imx8mp-dwc3 since it
+> > did not execute the suspend process.
+> >
+> > >
+> > >Why would 'runtime PM trying to activate child device xxx.dwc3 but par=
+ent is not active' happen in the first place?
+> > >
+> > Following the above analysis, dwc3_resume calls
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+I assume that dwc3_pm_resume() is meant here.
+
+> > pm_runtime_set_active(dev), it checks the
+> > parent.power->runtime_status is not RPM_ACTIVE and outputs the error lo=
+g.
+
+And it does so because enabling runtime PM for the child with
+runtime_status =3D=3D RPM_ACTIVE does not make sense when the parent has
+runtime PM enabled and its status is not RPM_ACTIVE.
+
+It looks like the runtime PM status of the parent is not as expected,
+but quite frankly I don't quite follow the logic in dwc3_pm_resume().
+
+Why does it disable runtime PM just for the duration of
+dwc3_resume_common()?  If runtime PM is functional before the
+pm_runtime_disable() call in dwc3_pm_resume(), the device may as well
+be resumed by calling pm_runtime_resume() on it without disabling
+runtime PM.  In turn, if runtime PM is not functional at that point,
+it should not be enabled.
 
