@@ -1,120 +1,141 @@
-Return-Path: <linux-usb+bounces-27321-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27322-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3770B37E88
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 11:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 494D7B37F7C
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 12:08:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB96C2035A8
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 09:14:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F9F91724DB
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Aug 2025 10:08:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DC5A342C88;
-	Wed, 27 Aug 2025 09:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D51C33EAFF;
+	Wed, 27 Aug 2025 10:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="pWsGU5MR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jV+SY8KV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61B0343D7E;
-	Wed, 27 Aug 2025 09:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223EF2AE90;
+	Wed, 27 Aug 2025 10:08:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756286059; cv=none; b=AaiY8ctbC2TKR8mvUS7NFOHxC/P2DECnzlKeia/YKQ6u7jwEhxR/TDZ3hWik7X5z9uyNn5TyyXtbYG71QdNM9wU8yoxWNaFI+zY4Uacgm8yKyNXCVjMgJilUvZGacy8zxYgvE3ZDLmZkYn/1uuvDtQinulG9QsPHrAhD7rHdcNo=
+	t=1756289284; cv=none; b=puIBbPL0tc5E9M54D39gFuBekvaPUFQVTWnVFjRYs9rTCGL6EObzGpE6fD6OT+kPuaftd1RzpStBzcthGBNFDLAoMTJWoNadGzd0uzsnPnoh89yqneeX8+a+v0Z9LlRCE5v30/JVXh2zaZ1auSfKJFC5fjMJYVyeOyT/U3ysMLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756286059; c=relaxed/simple;
-	bh=5D1RSNh8SPdHigkKTi5kPrSK7v3ph6xdRdhiellMLZc=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=owMwBsigcH4lpsj+qhzcOfiYyPXp5cm7MUHClgcERNNQp4Hy9+KulqOx664XS03JSjGnCseEIxntMW4YCixfVnweM+5n+IxwDjbP9vPDD+xXbr66X3ikU2Y13BqzBRU/uLLsMJGBKT9deCkXt3gGBW2rsLd/Ua1ezXwGeolw8fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=pWsGU5MR; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1756286056;
-	bh=5D1RSNh8SPdHigkKTi5kPrSK7v3ph6xdRdhiellMLZc=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=pWsGU5MRZ2qpbkEohHl6lbG0wwsZ8JKYMT3LgJinrwGS2Mk4kgREOXv3ta0bLBsZp
-	 IRnWDKF4XcYXFw0+3VFGmxYHcruDSLuJA6US/u8hhniXX5r1QdmRQk+FlXHwJZOcoY
-	 Oh1pw+TiQ8K8t/EKT0Acrbnz6YqiTzKLuqoE/AFDrzCEsLUTsjMEjC5di8lj4VElfh
-	 1VUWpNuE6NxcpKhXc2f8EcXOFMgU76GDG0YY0Cu0f6Bhy82k/oiKrM/resVEp3whZt
-	 25+e1Gwg/9irqA5liQxpDcm2kRE8vXxb3/1qwKkr3QZ8tfb12oTPa/uhpnGHUA/vEI
-	 PaiFe9cjl4/Mw==
-Received: from [192.168.1.90] (unknown [82.79.138.60])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: cristicc)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id B1FB817E0483;
-	Wed, 27 Aug 2025 11:14:15 +0200 (CEST)
-Message-ID: <5b39ce10-9845-4429-95bb-18b03513cdaf@collabora.com>
-Date: Wed, 27 Aug 2025 12:14:15 +0300
+	s=arc-20240116; t=1756289284; c=relaxed/simple;
+	bh=KiGizTKELKsAGoKxMS4KCkY7Hr/uMnzCC5mTyvqi0Oo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V0RxPSVKdKsIgc5FFOZ4oKB/kO5yNdRXXDSDC87nyClhGI5RFiSlpgyM56W4NvOLsdi7nNhHjel807yg1KyHBvqf1NufkSJlo3rGRGRFKRWCiNR+DtDSPYTlN2gZFzeVDUF3RqHkf3VO0UkgSqKjmCu1hLRmYqRfKPS0wqIso+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jV+SY8KV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A057BC4CEEB;
+	Wed, 27 Aug 2025 10:08:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756289282;
+	bh=KiGizTKELKsAGoKxMS4KCkY7Hr/uMnzCC5mTyvqi0Oo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jV+SY8KV71KFJEKgesNxp80Ah9zFR49xaSzd8tlZWma0vjBbVmuJqrw2OBE8KvP6V
+	 rEkr0ieVkjw4D7+c5cSN86mnLzAeNdnOk9Xm24SRbIjVhg/D3okntMJ5ZVHAEUPSz8
+	 CYGUiB9Uhdc9oXhh5v7rx/WvWQSop/2goIs+FHk5GEF68lPV896I6J7nPtTwDCOtze
+	 QKMQ8p7f4/EkRVZJTQTAJL1lpjDeKihjsMjid5N2t7JbqUmmQYsFF0VPCoo5mjw63J
+	 P2llqNumZxtupscpznfMIqrz10cA2QeUUgg/ZeM/+vv1UGDhV4I0rKTygte0raag3u
+	 NjOjOB6mXXFuQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1urD4I-000000002dB-166y;
+	Wed, 27 Aug 2025 12:07:50 +0200
+Date: Wed, 27 Aug 2025 12:07:50 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: Corentin Labbe <clabbe@baylibre.com>, gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	david@ixit.cz
+Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
+Message-ID: <aK7Y9rRIsGBKRFAO@hovoldconsulting.com>
+References: <20250204135842.3703751-1-clabbe@baylibre.com>
+ <20250204135842.3703751-2-clabbe@baylibre.com>
+ <aCHHfY2FkVW2j0ML@hovoldconsulting.com>
+ <CAFBinCAUNNfOp4qvn2p8AETossePv2aL7jBkFxVZV_XzzULgVg@mail.gmail.com>
+ <aINXS813fmWNJh3A@hovoldconsulting.com>
+ <CAFBinCBMTOM-FMgENS-mrnV17HbKzhtPUd44_dDiwnD=+HVMWQ@mail.gmail.com>
+ <aIiXyEuPmWU00hFf@hovoldconsulting.com>
+ <CAFBinCBZhjs7DGEgxhz54Dg8aW3NX9_LdnoZeUZpm5ohaT_-oQ@mail.gmail.com>
+ <aJCoRFe-RFW1MuDk@hovoldconsulting.com>
+ <CAFBinCCYsWHsNwi99kFqvLv+xOYtp9u3omhrPdV-hdH+5Cfyew@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/18] USB/IP VHCI suspend fix and driver cleanup
-From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Valentina Manea <valentina.manea.m@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
- "Brian G. Merrell" <bgmerrell@novell.com>, kernel@collabora.com,
- Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250726-vhci-hcd-suspend-fix-v2-0-189266dfdfaa@collabora.com>
- <2025072637-corny-careless-8523@gregkh>
- <3dd94c4f-0971-4744-91e1-3a5474e1576c@collabora.com>
-Content-Language: en-US
-In-Reply-To: <3dd94c4f-0971-4744-91e1-3a5474e1576c@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFBinCCYsWHsNwi99kFqvLv+xOYtp9u3omhrPdV-hdH+5Cfyew@mail.gmail.com>
 
-On 7/28/25 12:41 PM, Cristian Ciocaltea wrote:
-> Hi Greg,
+On Mon, Aug 04, 2025 at 11:35:35PM +0200, Martin Blumenstingl wrote:
+> On Mon, Aug 4, 2025 at 2:32 PM Johan Hovold <johan@kernel.org> wrote:
+> > On Tue, Jul 29, 2025 at 10:45:20PM +0200, Martin Blumenstingl wrote:
+
+> > > My general flow is:
+> > > - check if we have received THRE - if not: don't transmit more data on this port
+> > > - submit up to two URBs with up to 512 - 3 (CH348_TX_HDRSIZE) bytes to
+> > > not exceed the HW TX FIFO size of 1024 bytes (page 1 in the datasheet)
+> > > if the kfifo has enough data
+> >
+> > If you're going to wait for the device fifo to clear completely you can
+> > just use a single urb with larger (1k) buffer too.
+
+> I set .bulk_out_size = 1024 in struct usb_serial_driver. Writing a 1k
+> buffer immediately results in:
+>    ch348 1-1:1.0: device disconnected
 > 
-> On 7/26/25 9:43 AM, Greg Kroah-Hartman wrote:
->> On Sat, Jul 26, 2025 at 01:08:02AM +0300, Cristian Ciocaltea wrote:
->>> The USB/IP Virtual Host Controller (VHCI) platform driver is expected to
->>> prevent entering system suspend when at least one remote device is
->>> attached to the virtual USB root hub.
->>>
->>> However, in some cases, the detection logic for active USB/IP
->>> connections doesn't seem to work reliably, e.g. when all devices
->>> attached to the virtual hub have been already suspended.  This will
->>> normally lead to a broken suspend state, with unrecoverable resume.
->>>
->>> The first patch of the series provides a workaround to ensure the
->>> virtually attached devices do not enter suspend.  Note this is currently
->>> limited to the client side (vhci_hcd) only, since the server side
->>> (usbip_host) doesn't implement system suspend prevention.
->>>
->>> Additionally, during the investigation I noticed and fixed a bunch of
->>> coding style issues, hence the subsequent patches contain all the
->>> changes needed to make checkpatch happy for the entire driver.
->>
->> You are doing two major things here, fixing suspend, and cleaning up
->> checkpatch issues.  Please make that two different patch sets as those
->> are not logical things to put together at all.  Work on the suspend
->> issue first, and after that is all done and working, then consider
->> checkpatch cleanups, those are not that important overall :)
+> I don't know if I need to set some kind of flag on the URB to have it
+> split or whether the kernel / USB controller does that automatically
+> (as you can tell: I'm not familiar with USB).
+> If not: 512 byte transfers at a time it is.
+
+The host controller should split the buffer, but apparently this crashes
+the device firmware.
+
+> > > > > On my test board the CFG pin is HIGH. From how I understand you, RTS
+> > > > > should at least change (even if DTR is in TNOW mode).
+> > > > > No matter what I do: both pins are always LOW (right after modprobe,
+> > > > > after opening the console, closing the console again, ...).
+> > > > > I even set up the vendor driver to test this: it's the same situation there.
+> > > >
+> > > > I don't think the console code will assert DTR/RTS, you need to open the
+> > > > port as a regular tty.
+> >
+> > Yes, even if the device is configured in hardware for TNOW mode (instead
+> > of DTR function) you should still be able to control RTS (at least as
+> > long as the device is not configured for automatic hardware flow control).
+
+> I think I made it work, sort of.
+> It's a bit annoying because of code I don't understand. It seems that
+> R_4 has the following settings:
+> 0x00 DTR off
+> 0x01 DTR on
+> 0x10 RTS off
+> 0x11 RTS on
+> 0x08 activate (used during port initialization)
+> 0x50 HW flow on
+> 0x51 no RTS / HW flow off
 > 
-> Yeah, the cleanup part ended up larger than initially anticipated, but I
-> don't really expect further changes on the fixup side.  I can handle the
-> split if another revision would be still required, or would you like me to
-> do this regardless?  I've just made a quick test moving the first patch to
-> the end of the series and it didn't cause any conflicts, hence there won't 
-> be any dependencies between the two patch sets.
+> That said, poking 0x00, 0x01, 0x10 and 0x11 by themselves didn't do much.
+> One also has to write 0x06 to the per-port VEN_R register.
+> The vendor driver only does that in .set_termios, which I call
+> questionable until someone calls me out on this and is willing to
+> share a good reason why that's a good idea ;-)
+> 
+> However, I'm unable to control the RTS line of port 1. It works for
+> port 0, port 2 and 3 but not for port 1.
+> Ports 4-7 don't have the TNOW/DTR and RTS lines routed outside the
+> package, so I can't test these.
 
-This continues to apply cleanly on recent linux-next, hence I'm not sure if
-there's still a need to resend as two separate patch sets.
+Sounds like good progress. Have you made sure HW flow isn't just enabled
+by default on port 1 or similar?
 
-Please let me know how should we move further.
-
-Thanks,
-Cristian
-
+Johan
 
