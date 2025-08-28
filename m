@@ -1,246 +1,172 @@
-Return-Path: <linux-usb+bounces-27350-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27351-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD3AEB39B94
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 13:31:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C22E3B39CC6
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 14:18:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BC397C07F7
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 11:31:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E4ED1C82F4F
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 12:18:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63DE530E85E;
-	Thu, 28 Aug 2025 11:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517BE3101C7;
+	Thu, 28 Aug 2025 12:15:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="C9cwxVvE"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="joJzk8fP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2050.outbound.protection.outlook.com [40.107.94.50])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C5C208994;
-	Thu, 28 Aug 2025 11:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756380634; cv=fail; b=ZMnCQRsLgYjB0dg4DPtG0XNw9Vm+fi5C5T7hFYNS7OPzwSxZmmllkcjsSJE7hAE+M+4SBz1jMblx7mT3NQnI2fVJEptdJKEpWAsyxtLU6/ZMkV90pQcdw2a67oXMCGA8rt2wIRh5nycvVDaO/791xzpRKTu+orA8VVP4vUxY074=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756380634; c=relaxed/simple;
-	bh=ZW5oQQwQOl91dEY2a4IRXYtsE9EUX42HwrIRLt1SGnE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=phiuOKAJ6HFbgsvecXaFQX4FgTsFq/30l3/ojPVNKLzTCvyBA2IgThXUG3Y3jkFz+3MkLhHRh7JOY/SLuWiI3ZQjkbsFMIVlp2pqsIxrIoTOj5b3sC8iA+SECD/lJF7r/JF0p+DV2vGQmwK/cGfo0MI4tISQjoiBpNIWdJUbZaM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=C9cwxVvE; arc=fail smtp.client-ip=40.107.94.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rgOxM2rMOqYO9jgzy1yIGCw0DJR7lQRPqJX2xRtOKacD/g7BH7xVpXT6/Dy3ho4EIN6qSYvYdH1PAgvhSIr0lGLgqhGQNt48UjUMPGGb7BLlJVw01jpSyGWyqTUGUOa6VNt0C34frVd+PT9SRfdelpy7VFr+3Tr56icBJmqSEj5M+uoLtGuYgdsJTTlXj4N/X78NFHr/JxprEe60uHUIz2p+FNKd4y+G1Y2nF8SunjQrCpcBLCKVsL/qqctuE8Tebok167nPfWOAHsF4a+ky8faZaLoiMcgy24MD73NhkCIW0KEQRWrG+qDw5uO9RLxk+l4NJNDkQglKMi9BTXKOzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EaVe6+EdNumKhu+obM1hpLejQVVP5C2HuCP1OQVYX1g=;
- b=DUV+WDsscinHC6E5wd9MQ49w2ZrELuh7WuSs0cOdg7w01moRZ8YAt6FCe/ApJCXmBKWWC2dwi5WPRKpBe3Zmcb0n0nRqfAcLhl8AAa3wNtfSGZ6+YwKunyj5tFitfQGv1qsh7vZ4GbC08HYHuxnGhYbvYQNt3jbOoTo1tEz5I2tuvQwWeLOvHI3+B2sc+y21VnKVcrTQL4opvi4JiZbrITuBghVXU5HhXBZW+VZZBHqoEmfBUH1p2y6XJ3W269HFQnfOsqQsLb7dy+YGuPS77uwLl0eKkJnbHz+/7cVvUi4zaFeUzM7lRH3KVj4xCBaBomPGm4YAIxQQM+xrzPOcug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EaVe6+EdNumKhu+obM1hpLejQVVP5C2HuCP1OQVYX1g=;
- b=C9cwxVvEyom3CYuFLAjrTSkzpvbgG6UibD5RZa80LJfPVC0etrp4PmzeOioYNVCYbe7FWL4lPIe5WSeGwUE5NWQ08ZxDmNw5CSxSmnEKI/+CeeaF7d4RtQ1k2Q7z4go35qqkbEJrdqGYGlSOnWC3H6AlM3vsHWy8wJHqedYlvsc=
-Received: from BYAPR01CA0026.prod.exchangelabs.com (2603:10b6:a02:80::39) by
- MN2PR12MB4318.namprd12.prod.outlook.com (2603:10b6:208:1d8::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Thu, 28 Aug
- 2025 11:30:25 +0000
-Received: from SJ5PEPF00000208.namprd05.prod.outlook.com
- (2603:10b6:a02:80:cafe::15) by BYAPR01CA0026.outlook.office365.com
- (2603:10b6:a02:80::39) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9073.17 via Frontend Transport; Thu,
- 28 Aug 2025 11:30:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- SJ5PEPF00000208.mail.protection.outlook.com (10.167.244.41) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9073.11 via Frontend Transport; Thu, 28 Aug 2025 11:30:24 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 28 Aug
- 2025 06:30:08 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 28 Aug
- 2025 06:30:08 -0500
-Received: from xhdctallapa40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Thu, 28 Aug 2025 06:30:06 -0500
-From: Srikanth Chary Chennoju <srikanth.chary-chennoju@amd.com>
-To: <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-	<m.grzeschik@pengutronix.de>, <Chris.Wulff@biamp.com>, <tiwai@suse.de>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<punnaiah.choudary.kalluri@amd.com>, Srikanth Chary Chennoju
-	<srikanth.chary-chennoju@amd.com>
-Subject: [PATCH v2 3/3] usb: gadget: f_sourcesink: Addition of SSP endpoint for ISOC transfers
-Date: Thu, 28 Aug 2025 16:59:44 +0530
-Message-ID: <20250828112944.2042343-4-srikanth.chary-chennoju@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250828112944.2042343-1-srikanth.chary-chennoju@amd.com>
-References: <20250828112944.2042343-1-srikanth.chary-chennoju@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AE730DECC
+	for <linux-usb@vger.kernel.org>; Thu, 28 Aug 2025 12:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756383346; cv=none; b=qfyxc7MflcUOXZZcKH8PgJ428tf5hqHRO6o8QowBezK7sz1CDl+2nH/le+49HD6aBUek79n6Emnce69TFpp5mlHroGfGL14LploAdrqvML6VC1GYbG0VrEICtrlf95AqmuW88DwVkcKxXhms21G3mzYA4hW0X3x1deqYQGtW2XI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756383346; c=relaxed/simple;
+	bh=2xhCRHRTLxjuQLGzNqN8SkuqvNwon6nBw35IuX6DRFU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VXgRew71zLYWWP5aSrqzcWMKCsTgH4TeWmS9zBmVdzFS/FtuVs3XxgFI5B5xg5JTyCEc0oS4+mZzLz15xAczlIQT3PgWAiTqCZ5dpkc6HwFEKBBTWgsRZAoDKa9/9w3NnAKuf9o9cPn/kWZGemGym+RG3r5Ja3Gge3Y3rLdNOAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=joJzk8fP; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57S60nMi008186
+	for <linux-usb@vger.kernel.org>; Thu, 28 Aug 2025 12:15:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	sOlqLjJ4+85L5pngv20TDeHigXp7nWgjBGPjqExbJGw=; b=joJzk8fPNrb07kV1
+	dPOO5dApt8wVm5oGGKgWCtdV1DFmHk6YUQr/vY+qBY/dA8Yp4hWvEQoBbrOyffgC
+	BGUsq0HIo3yO1faSCFveHXeFtNtrfvVejrq9dSn+Dkmb3XT1d5HU0z/f8zK+OAHl
+	ahjtbhYx5A4Xg6LJwcZOM8UpLCihss2TAa6A8jBAhImd87Gh8js3+Wlzs2uiBWK6
+	ptDkBEyTayINCtjYnqoXXdfgiZNvmjbEPj8Z3fWZJuNy6HVOS/kjpXptsxpCL6hI
+	/KDPt004yUYkMVNXtjmtXJwa9NZRbA3EPFR40LhwZrTpoC04a9IvCRhmsoGfEAWz
+	rf4YAQ==
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48sh8ape55-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Thu, 28 Aug 2025 12:15:43 +0000 (GMT)
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3276575ae5eso1047289a91.1
+        for <linux-usb@vger.kernel.org>; Thu, 28 Aug 2025 05:15:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756383342; x=1756988142;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sOlqLjJ4+85L5pngv20TDeHigXp7nWgjBGPjqExbJGw=;
+        b=DhdsN7u55NtWS/CRz4Ce67Lx6j1wl6U6oK1H90AjEitl/dPp1PfQ5G967Uy031iAnD
+         Y2LWHyRnGO7DqOcBtop0Tgoski5fDP7u12bqdwf9/Rl0/OfWnekgI88cNjongpMPI9dz
+         n2yjc44qzdEi57YcbvznGs9WdF95boSA4PyxVatUy3yKnz44hSJDNDLmKgyhdEYZ7GL+
+         8wKpuEYKjCV0vNje6e9bOpygkvA8FNk9PyEYe1i+oSdfeGEKScP1fu7jb8Jq973uLQ9f
+         7t/cUO8cF4BqSqPR0bj+HRgNmt35o7Aty0IQ4tHhZUVK2rEdcPwr/vvz0d0QTQssDix7
+         Bxaw==
+X-Forwarded-Encrypted: i=1; AJvYcCWwRFVYEm7FDs16CnpOak09pXr/R2MftaqCCfPluKkckqlMaQZy6aGHLROSd7E4yTJPN8n0xvZnTgw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRiGyWaH6+suGzkMMyfeSIuT+TTMS0bAOUbOzIZSrENvjNlYTh
+	IYMQdqOSQ5IQjBGH9PHh6uQMSnY6E0W4z+lawKJr0qvXEy10GKtboIwINa7A3n2WMLFSekL4IPu
+	L7flc9CuG9V8yjMvE5kLKAF979ct59BQhQIvRZvYleFUlWc+K2/oEIGkrZWMU5Rbt/ZmAivJtH8
+	wFyxl7YALj6qS37XQsbRE/JCDVIycfi3PnI+Diug==
+X-Gm-Gg: ASbGnctwXjA+nhnmaB0Apu1OSyTMZlZlNGsQcc2XrIERnHdF0x60wbXpTBVEBU9JTSY
+	Wn+B4Hm1zOwiSvsdNDVjFJz53dB+gv56jM48DlygEufT/NR850u4K64Q0JyMEGNRtD41a0SRiTe
+	vWDJnfyFoVRf2tSFmJ1pkKao0=
+X-Received: by 2002:a17:90b:3bcd:b0:31e:ec02:2297 with SMTP id 98e67ed59e1d1-3251744bd07mr31170096a91.19.1756383342303;
+        Thu, 28 Aug 2025 05:15:42 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHSsXkSAZdNMuiuXSHYHnTqO7N+RkBf5W6xlTEjzKw50BVu/0ezesPtrdfj3US2rSF06Spip/rafkI1bV+Bz8o=
+X-Received: by 2002:a17:90b:3bcd:b0:31e:ec02:2297 with SMTP id
+ 98e67ed59e1d1-3251744bd07mr31170041a91.19.1756383341777; Thu, 28 Aug 2025
+ 05:15:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF00000208:EE_|MN2PR12MB4318:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c4acb40-2f53-4798-4677-08dde62647c1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?f93PyFZJDUtxzyDNii7gqn4FW3TgYO04TFv/Yhyw9DVc7UvP6Rd0rshtm0oA?=
- =?us-ascii?Q?MTg05+y3+GD035BrFspi6+55Iw7eteIfCvpylDfWsZgCaZhfQz23x8BMSu9y?=
- =?us-ascii?Q?M0iTKjWQd+xjMHwk+8lg2kzPBz4Vxhyu/HazsfwLKWYAdPoVVAQqxkJ64h9m?=
- =?us-ascii?Q?fJiLkBzac/FB6C/Hr7SEupaUXLdjDlW4LQO/ANIKWh9OrOQamaKLQNbpw6YC?=
- =?us-ascii?Q?K0hiG9LmUk4INQJgjI0WBNAAw6GvMxhSFTdpxgedB8WzaatA1NQoJzXLc+je?=
- =?us-ascii?Q?8nQT7IMpFBRTu5XcApYQcuCq2TWKU8/NgMNw7Si6jfgj7y2HQ/bq53ujeapN?=
- =?us-ascii?Q?2a8nBG3C319Q5tvD58do+Jjo+ql2VHm7oObHfG8cvnOt/jRCwvURBuT9WWJe?=
- =?us-ascii?Q?5b3D1xQcSvzvmyVspaNmHjdMAF+PmARpmW1U2q7gxz/yvCUocoXm5orYST3t?=
- =?us-ascii?Q?niKdSpGl8Q3ftg0A7tSDx41oISeLQ4zHpVbLDrFCnKCykDNfO/qlFIo528cr?=
- =?us-ascii?Q?At0Ug2xVax+LsANU0GkQNnSGo6PbveSgoc56FT8gIDdN4JYzqMiQvHE/qSAs?=
- =?us-ascii?Q?T+bFacqq1/y21FqUXK00PvgFPdtPqB6DREOMlnUdzArbZFkLHXWE7jK53AUu?=
- =?us-ascii?Q?/nq3912eXyyeb++HKeU/Q4bYN2t23H65y+4CyEJ8Tpr78g55bOy8ifFWF9ct?=
- =?us-ascii?Q?JtqbvcL9a7+xZmfJN673yG4D/qjVrKegVAEUoVlXKUhqlSiUZ8OYvhElgNXZ?=
- =?us-ascii?Q?ivop39/bvyS23GPanrg50wN1bdqgATMlI3Z6AMR5+D72sbCpB4rs8fwkB+w4?=
- =?us-ascii?Q?EvCvBnEWDp1hFvtpLVvHQ1eof5KNgdsKpJ9g48jmRu1MSqt6aykQKqf27RTY?=
- =?us-ascii?Q?M5cHKe3C6Oi2Uc2d3oAXkJzvNIAK9e8YkUc0Fr8MpcC477s04WMP+Bq7YZqz?=
- =?us-ascii?Q?bJsF54mK63zh593T9slQBMP+knT6Ne+0WI6vxO7v4SuanhrWCIEDsKK9Zvg0?=
- =?us-ascii?Q?xANdvDeSWMepEMuQcj33ztv+W/kM6qFeIMiNDxcyvJJvACA7USL5Js0HNwiy?=
- =?us-ascii?Q?in9x2KLXq6plBYRfIhxBplLAZK/LaJA/AWIWfOBGmXMMNffxRanQj+tGLd5n?=
- =?us-ascii?Q?FMNUCDDzD+ZreGwdg7Ay0OjMPRaHL0xvpsM0hEL8ggwUiS/aQefBuXK74dut?=
- =?us-ascii?Q?UH8+lb5kkeG5+uyNff03aBT3rWDkB4QSHrRVfxJOJK5aPt3oDoTWXexGmLuf?=
- =?us-ascii?Q?y4S//8x9wTQ/lxh3qJ+ZI1QvjCEm1x475cqnoPDg6ITTUzI6XuEjR+BqdlrM?=
- =?us-ascii?Q?49jzKoghc9GmR6K0DkGvXMJCLKxVA7Yz3Z2iLwksMnTzR3VWzBOXGxa1gpHz?=
- =?us-ascii?Q?GbJo0+PbcOFHsPz09baCPIDoADZERuQpe2m+wtKsjCfUrCtqhA0MsfJUZXCM?=
- =?us-ascii?Q?zUKjnWqbR8slZsveRQUV3coRBM6OshXfHePmCPkPVmFBZgOF3GS14VUoweSi?=
- =?us-ascii?Q?2HxLt1ucLUj452QcoE5yjmyk3v/fP+02FTxv?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2025 11:30:24.2210
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c4acb40-2f53-4798-4677-08dde62647c1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF00000208.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4318
+References: <20250812055542.1588528-1-krishna.kurapati@oss.qualcomm.com>
+ <20250812055542.1588528-4-krishna.kurapati@oss.qualcomm.com> <d121952e-4662-4651-9398-3a5446a2281c@oss.qualcomm.com>
+In-Reply-To: <d121952e-4662-4651-9398-3a5446a2281c@oss.qualcomm.com>
+From: Udipto Goswami <udipto.goswami@oss.qualcomm.com>
+Date: Thu, 28 Aug 2025 17:45:29 +0530
+X-Gm-Features: Ac12FXxpoBpQzfudUCruaW0Kd4qcz4c4oR-SINclPGIyBv5ZH2lkiXCY60AdRnw
+Message-ID: <CAMTwNXBM2m6sazPZVng3V-DDJP2T0aVBgh8C5d4K7Yq_O_A2Jg@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] usb: xhci: plat: Facilitate using autosuspend for
+ xhci plat devices
+To: Krishna Kurapati PSSNV <krishna.kurapati@oss.qualcomm.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Authority-Analysis: v=2.4 cv=cLDgskeN c=1 sm=1 tr=0 ts=68b0486f cx=c_pps
+ a=RP+M6JBNLl+fLTcSJhASfg==:117 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10
+ a=EUspDBNiAAAA:8 a=VUFb5atXsKZqicoco_gA:9 a=QEXdDO2ut3YA:10
+ a=iS9zxrgQBfv6-_F4QbHw:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODI2MDE1MyBTYWx0ZWRfX6nlZnAq/CyIt
+ iQsYXTk95o/rrLbJaC/cfYiWjuHti3JUPzu+MSzAaadOyB/07n5mpIiyrXHrluTv2n5E417Iu9B
+ 5Dr6ZknlRGh5B9ujYhKrs+VBDKpZN/P0HkCz2nxBTJKS6rqgPhgyPemOedH4xRkizgwwtsu3vZw
+ VstZPGDEhKmhOhYKsSBJqFAj9Mtb28+X1Rua9CTQMRaQnig04fA8rG1TGcB0vxeCHdTQmr95sXb
+ nKQvu/P/d4mP5bmjSWjvTQV9VFqj9C/FhEWUdFSxOZSTsrDIe2Yl4HFmDn5BJ5rs6RUcqZy69XM
+ 3JCt12pGY17s4/H9OamARGbyc/i/jetOa7j/+nUQaehDP5g6C+2zjRTblvuxxHYJwWigxAf18Ct
+ fg2x9W83
+X-Proofpoint-GUID: -ic_6-9-nZwE9n2tkG7YDLaE4UGedsjL
+X-Proofpoint-ORIG-GUID: -ic_6-9-nZwE9n2tkG7YDLaE4UGedsjL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-28_03,2025-08-28_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 clxscore=1015 malwarescore=0 spamscore=0 adultscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508260153
 
-This patch is created to support super speed plus endpoint for Isoc
-transfers. Now super speed endpoint companion is accompanied by super
-speed plus endpoint companion. With this change we could see the Isoc IN
-and OUT performance reaching to ~749MB/sec which is 96K per uframe.
-The performance numbers are confirmed through Lecroy trace.
+On Mon, Aug 25, 2025 at 11:10=E2=80=AFAM Krishna Kurapati PSSNV
+<krishna.kurapati@oss.qualcomm.com> wrote:
+>
+>
+>
+> On 8/12/2025 11:25 AM, Krishna Kurapati wrote:
+> > Allow autosuspend to be used by xhci plat device. For Qualcomm SoCs,
+> > when in host mode, it is intended that the controller goes to suspend
+> > state to save power and wait for interrupts from connected peripheral
+> > to wake it up. This is particularly used in cases where a HID or Audio
+> > device is connected. In such scenarios, the usb controller can enter
+> > auto suspend and resume action after getting interrupts from the
+> > connected device.
+> >
+> > Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> > ---
+> >   drivers/usb/host/xhci-plat.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.=
+c
+> > index 5eb51797de32..dd57ffedcaa2 100644
+> > --- a/drivers/usb/host/xhci-plat.c
+> > +++ b/drivers/usb/host/xhci-plat.c
+> > @@ -171,6 +171,7 @@ int xhci_plat_probe(struct platform_device *pdev, s=
+truct device *sysdev, const s
+> >               return ret;
+> >
+> >       pm_runtime_set_active(&pdev->dev);
+> > +     pm_runtime_use_autosuspend(&pdev->dev);
+> >       pm_runtime_enable(&pdev->dev);
+> >       pm_runtime_get_noresume(&pdev->dev);
+> >
+>
+> Hi Mathias,
+>
+>   Can you help provide your review on this patch.
+>
+Hi Krishna,
 
-Signed-off-by: Srikanth Chary Chennoju <srikanth.chary-chennoju@amd.com>
----
- drivers/usb/gadget/function/f_sourcesink.c | 23 ++++++++++++++++++++--
- include/uapi/linux/usb/ch9.h               |  2 ++
- 2 files changed, 23 insertions(+), 2 deletions(-)
+I think the email added for Mathias isn't correct.
+Adding the correct one.
 
-diff --git a/drivers/usb/gadget/function/f_sourcesink.c b/drivers/usb/gadget/function/f_sourcesink.c
-index a3a69166c343..79efb6295725 100644
---- a/drivers/usb/gadget/function/f_sourcesink.c
-+++ b/drivers/usb/gadget/function/f_sourcesink.c
-@@ -232,6 +232,12 @@ static struct usb_ss_ep_comp_descriptor ss_iso_source_comp_desc = {
- 	.wBytesPerInterval =	cpu_to_le16(1024),
- };
- 
-+static struct usb_ssp_isoc_ep_comp_descriptor ssp_iso_source_comp_desc = {
-+	.bLength =		USB_DT_SSP_ISOC_EP_COMP_SIZE,
-+	.bDescriptorType =	USB_DT_SSP_ISOC_ENDPOINT_COMP,
-+	.dwBytesPerInterval =	cpu_to_le32(1024),
-+};
-+
- static struct usb_endpoint_descriptor ss_iso_sink_desc = {
- 	.bLength =		USB_DT_ENDPOINT_SIZE,
- 	.bDescriptorType =	USB_DT_ENDPOINT,
-@@ -250,6 +256,12 @@ static struct usb_ss_ep_comp_descriptor ss_iso_sink_comp_desc = {
- 	.wBytesPerInterval =	cpu_to_le16(1024),
- };
- 
-+static struct usb_ssp_isoc_ep_comp_descriptor ssp_iso_sink_comp_desc = {
-+	.bLength =		USB_DT_SSP_ISOC_EP_COMP_SIZE,
-+	.bDescriptorType =	USB_DT_SSP_ISOC_ENDPOINT_COMP,
-+	.dwBytesPerInterval =	cpu_to_le32(1024),
-+};
-+
- static struct usb_descriptor_header *ss_source_sink_descs[] = {
- 	(struct usb_descriptor_header *) &source_sink_intf_alt0,
- 	(struct usb_descriptor_header *) &ss_source_desc,
-@@ -264,8 +276,10 @@ static struct usb_descriptor_header *ss_source_sink_descs[] = {
- 	(struct usb_descriptor_header *) &ss_sink_comp_desc,
- 	(struct usb_descriptor_header *) &ss_iso_source_desc,
- 	(struct usb_descriptor_header *) &ss_iso_source_comp_desc,
-+	(struct usb_descriptor_header *) &ssp_iso_source_comp_desc,
- 	(struct usb_descriptor_header *) &ss_iso_sink_desc,
- 	(struct usb_descriptor_header *) &ss_iso_sink_comp_desc,
-+	(struct usb_descriptor_header *) &ssp_iso_sink_comp_desc,
- 	NULL,
- };
- 
-@@ -423,7 +437,7 @@ sourcesink_bind(struct usb_configuration *c, struct usb_function *f)
- 	 */
- 	ss_iso_source_desc.wMaxPacketSize = ss->isoc_maxpacket;
- 	ss_iso_source_desc.bInterval = ss->isoc_interval;
--	ss_iso_source_comp_desc.bmAttributes = ss->isoc_mult;
-+	ss_iso_source_comp_desc.bmAttributes = USB_DT_SSP_ISOC_COMP | ss->isoc_mult;
- 	ss_iso_source_comp_desc.bMaxBurst = ss->isoc_maxburst;
- 	ss_iso_source_comp_desc.wBytesPerInterval = ss->isoc_maxpacket *
- 		(ss->isoc_mult + 1) * (ss->isoc_maxburst + 1);
-@@ -432,12 +446,17 @@ sourcesink_bind(struct usb_configuration *c, struct usb_function *f)
- 
- 	ss_iso_sink_desc.wMaxPacketSize = ss->isoc_maxpacket;
- 	ss_iso_sink_desc.bInterval = ss->isoc_interval;
--	ss_iso_sink_comp_desc.bmAttributes = ss->isoc_mult;
-+	ss_iso_sink_comp_desc.bmAttributes = USB_DT_SSP_ISOC_COMP | ss->isoc_mult;
- 	ss_iso_sink_comp_desc.bMaxBurst = ss->isoc_maxburst;
- 	ss_iso_sink_comp_desc.wBytesPerInterval = ss->isoc_maxpacket *
- 		(ss->isoc_mult + 1) * (ss->isoc_maxburst + 1);
- 	ss_iso_sink_desc.bEndpointAddress = fs_iso_sink_desc.bEndpointAddress;
- 
-+	ssp_iso_source_comp_desc.dwBytesPerInterval = ss->isoc_maxpacket *
-+	  (ss->isoc_mult + 1) * (ss->isoc_maxburst + 1) * USB_LANE_SPEED_MANTISSA_GEN2_BY_GEN1;
-+	ssp_iso_sink_comp_desc.dwBytesPerInterval = ss->isoc_maxpacket *
-+	  (ss->isoc_mult + 1) * (ss->isoc_maxburst + 1) * USB_LANE_SPEED_MANTISSA_GEN2_BY_GEN1;
-+
- 	ret = usb_assign_descriptors(f, fs_source_sink_descs,
- 			hs_source_sink_descs, ss_source_sink_descs,
- 			ss_source_sink_descs);
-diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
-index 8003243a4937..22782c5cb2f3 100644
---- a/include/uapi/linux/usb/ch9.h
-+++ b/include/uapi/linux/usb/ch9.h
-@@ -702,6 +702,8 @@ struct usb_ssp_isoc_ep_comp_descriptor {
- } __attribute__ ((packed));
- 
- #define USB_DT_SSP_ISOC_EP_COMP_SIZE		8
-+#define USB_DT_SSP_ISOC_COMP			(1 << 7) /*support for SSP ISOC EP COMP*/
-+#define USB_LANE_SPEED_MANTISSA_GEN2_BY_GEN1    2
- 
- /*-------------------------------------------------------------------------*/
- 
--- 
-2.25.1
-
+Thanks,
+-Udipto
 
