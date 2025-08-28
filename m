@@ -1,76 +1,76 @@
-Return-Path: <linux-usb+bounces-27345-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27346-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB681B39975
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 12:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D4DAB39AFE
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 13:05:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C2A31C27FE6
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 10:19:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F8C01C80EFC
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 11:05:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 296A030ACED;
-	Thu, 28 Aug 2025 10:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B1030DED4;
+	Thu, 28 Aug 2025 11:05:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kCdrXVHt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jht5DGNm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAA33081CF;
-	Thu, 28 Aug 2025 10:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1147430DD39;
+	Thu, 28 Aug 2025 11:05:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756376191; cv=none; b=aM44kFxF4vkE9nHLGed0nJKOvH+m6mVWwnld6ETqyqvBSPpcIEvBvbcAdrCmNcdSoqFifYJynH8cnuT/luSvufH5P4ivlf2xVvQUmbYBF3YoPq12Kw8fcd6dyufJyijTJJR86505xmW8VXKoGMCpUpThk0dtIgDykGct9lpxeGo=
+	t=1756379122; cv=none; b=Oxa24xbSuqSHUFW/dN8uDDpZePttZKxOOgKQYgJarGmhYXYzUG5wCJjlMug7VGIUSM1KuZrP2jE2CoVtl70H4gi6NLrPQcIoBUN1hWmqwDY2LNjMMjWgSciLGaE6kkARxfOkBjHVKcmESuh6w9cdF5JX1ctl6UU7ATVsFotvd1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756376191; c=relaxed/simple;
-	bh=9AhecmCpNrrUSjsrecrQe2CL2tQ3LbxLRxBTLNW/I6c=;
+	s=arc-20240116; t=1756379122; c=relaxed/simple;
+	bh=mqeKXy8uMfNWh+NWLomeK5bdnLxYj7mZ0K6eeuy24AE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NTABESY/rBQt5yebqUZO7zLUq+OYWEdnZ6umzSMJ7cBXrk9kky08neMl9lQDrCy3bZudwO1LChe8uPD253/19wTms/uB0ebQmNfBrVQNv/MLGvZaLEzUqMmCLv57ZdsMrMvdyVPmr0kUdeG07BYz0sHN+NcUhDYK9KrIPmxSX/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kCdrXVHt; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=oPycgqUh1q3uwGrRonr+ziuHGHJxFuK0U3HPFDBsYT2zBuP0D/exNy9Jl92m9pQhC9edsXqmpABJjdwnAKDhBepHUvHC4H97nQM3ZD8HWltCwKB/+jeeJgI8hvwUVskpfgrJa+4A/4Dd4u2OHm/RdXXnPuEnmcUhTaVnrNPseOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jht5DGNm; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756376190; x=1787912190;
+  t=1756379120; x=1787915120;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9AhecmCpNrrUSjsrecrQe2CL2tQ3LbxLRxBTLNW/I6c=;
-  b=kCdrXVHtp9FG7/CD6ZMRFsyip8/keO39uzTqgaBiZVHy7b3LC46cyb4o
-   FhNJHeyO5Gn1/NTcp2ngsen+o46eTGkv+3aR74g2aKkpzTV5Vgg1mdOh3
-   b7VDyQise8Sq1LcMNqxABxwlQggJTVZtnQakfDL/AAafMw9agfCalaSMM
-   ZLfnOxHvApZ9XUIwGOmMfslBjbdh86sKW7I9U0HBs8X/CTDK1fak8FrSn
-   oaAp1YbQYv/e1HJ8BbraQKsthLxqOEwdeuXcF23/agZn5SJOCCNlgHwf0
-   QaA4uBvAkp8PZJCpaZZh452P1IFnHsQw8GbVA/ASvgtGkiTzwtAxv6fE8
-   A==;
-X-CSE-ConnectionGUID: Ov98luw6Q7awMDOEOrubhA==
-X-CSE-MsgGUID: 1ZGw79ajSjmXyUHRsvLj+Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="61275397"
+  bh=mqeKXy8uMfNWh+NWLomeK5bdnLxYj7mZ0K6eeuy24AE=;
+  b=Jht5DGNmlEPS6apoJDpVUEQj1mBRguI3RdnJBuvUNhYf82MKUM29J+TR
+   GkaZguZeyd27wAZBYjCWJ+7IkxCPkPBa10f86zuyjjhTgdNdR6NNRa9Ua
+   1AgQIK/VQoy/7nfPEd1v284p4O/Lr4uqSNIaNhz20XT4MBahrL2N2qYwz
+   DuIB/iW81i5+T9MKZnvgILLYa3YbJeLGNdp0QF9kRA7oM/JKW0gvFfVMj
+   2mYBWYSKsPSR2jQamqwEHcgLG6fisU5KYFVULPkXXy15S5LI32Afm/0Kc
+   bvgjdbzcmqZs4lmMrCHu+PyQOVph39/QI4XoDU+Sc3IYmlFeF4e45oZIh
+   g==;
+X-CSE-ConnectionGUID: l+DwmFMJRLimNrs8IaJDuw==
+X-CSE-MsgGUID: 4k8D1GYDS3Wap/PavrUKRQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="58575789"
 X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="61275397"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 03:16:29 -0700
-X-CSE-ConnectionGUID: F7FbhJlcRg69b1NtU/w1ag==
-X-CSE-MsgGUID: aCGmAGT2S76Yjxj5AMYN1Q==
+   d="scan'208";a="58575789"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 04:05:18 -0700
+X-CSE-ConnectionGUID: D8e8zTdSTIKZnt/blpTSyg==
+X-CSE-MsgGUID: L1YI7WELR2eZJAeBG6teIA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="170246185"
+   d="scan'208";a="207229710"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa008.jf.intel.com with SMTP; 28 Aug 2025 03:16:26 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 28 Aug 2025 13:16:24 +0300
-Date: Thu, 28 Aug 2025 13:16:24 +0300
+  by orviesa001.jf.intel.com with SMTP; 28 Aug 2025 04:05:14 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 28 Aug 2025 14:05:13 +0300
+Date: Thu, 28 Aug 2025 14:05:13 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
 Cc: gregkh@linuxfoundation.org, lumag@kernel.org, neil.armstrong@linaro.org,
 	johan+linaro@kernel.org, quic_bjorande@quicinc.com,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] usb: typec: ucsi_glink: Update request/response
- buffers to be packed
-Message-ID: <aLAseOzr9_s0_lOv@kuha.fi.intel.com>
+Subject: Re: [PATCH v3 2/2] usb: typec: ucsi_glink: Increase buffer size to
+ support UCSI v2
+Message-ID: <aLA36Ttc3CawHBIZ@kuha.fi.intel.com>
 References: <20250827201241.3111857-1-anjelique.melendez@oss.qualcomm.com>
- <20250827201241.3111857-2-anjelique.melendez@oss.qualcomm.com>
+ <20250827201241.3111857-3-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,55 +79,175 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250827201241.3111857-2-anjelique.melendez@oss.qualcomm.com>
+In-Reply-To: <20250827201241.3111857-3-anjelique.melendez@oss.qualcomm.com>
 
-On Wed, Aug 27, 2025 at 01:12:40PM -0700, Anjelique Melendez wrote:
-> Update the ucsi request/response buffers to be packed to ensure there
-> are no "holes" in memory while we read/write these structs.
+On Wed, Aug 27, 2025 at 01:12:41PM -0700, Anjelique Melendez wrote:
+> UCSI v2 specification has increased the MSG_IN and MSG_OUT size from
+> 16 bytes to 256 bytes each for the message exchange between OPM and PPM
+> This makes the total buffer size increase from 48 bytes to 528 bytes.
+> Update the buffer size to support this increase.
 > 
 > Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
 > ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 85 +++++++++++++++++++++++++----
+>  1 file changed, 75 insertions(+), 10 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index 8af79101a2fc..1f9f0d942c1a 100644
+> index 1f9f0d942c1a..fc12569ec520 100644
 > --- a/drivers/usb/typec/ucsi/ucsi_glink.c
 > +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -30,24 +30,24 @@ struct ucsi_read_buf_req_msg {
->  	struct pmic_glink_hdr   hdr;
->  };
+> @@ -16,10 +16,10 @@
 >  
-> -struct ucsi_read_buf_resp_msg {
-> +struct __packed ucsi_read_buf_resp_msg {
+>  #define PMIC_GLINK_MAX_PORTS		3
+>  
+> -#define UCSI_BUF_SIZE                   48
+> +#define UCSI_BUF_V1_SIZE		(UCSI_MESSAGE_OUT + (UCSI_MESSAGE_OUT - UCSI_MESSAGE_IN))
+> +#define UCSI_BUF_V2_SIZE		(UCSIv2_MESSAGE_OUT + (UCSIv2_MESSAGE_OUT - UCSI_MESSAGE_IN))
+>  
+>  #define MSG_TYPE_REQ_RESP               1
+> -#define UCSI_BUF_SIZE                   48
+>  
+>  #define UC_NOTIFY_RECEIVER_UCSI         0x0
+>  #define UC_UCSI_READ_BUF_REQ            0x11
+> @@ -32,13 +32,25 @@ struct ucsi_read_buf_req_msg {
+>  
+>  struct __packed ucsi_read_buf_resp_msg {
 >  	struct pmic_glink_hdr   hdr;
->  	u8                      buf[UCSI_BUF_SIZE];
+> -	u8                      buf[UCSI_BUF_SIZE];
+> +	u8                      buf[UCSI_BUF_V1_SIZE];
+> +	u32                     ret_code;
+> +};
+> +
+> +struct __packed ucsi_v2_read_buf_resp_msg {
+> +	struct pmic_glink_hdr   hdr;
+> +	u8                      buf[UCSI_BUF_V2_SIZE];
 >  	u32                     ret_code;
 >  };
->  
-> -struct ucsi_write_buf_req_msg {
-> +struct __packed ucsi_write_buf_req_msg {
+
+Couldn't you just make a union inside that original struct
+ucsi_read_buf_resp_msg?
+
+>  struct __packed ucsi_write_buf_req_msg {
 >  	struct pmic_glink_hdr   hdr;
->  	u8                      buf[UCSI_BUF_SIZE];
+> -	u8                      buf[UCSI_BUF_SIZE];
+> +	u8                      buf[UCSI_BUF_V1_SIZE];
+> +	u32                     reserved;
+> +};
+> +
+> +struct __packed ucsi_v2_write_buf_req_msg {
+> +	struct pmic_glink_hdr   hdr;
+> +	u8                      buf[UCSI_BUF_V2_SIZE];
 >  	u32                     reserved;
 >  };
+
+Ditto for the ucsi_write_buf_req_msg.
+
+> @@ -72,7 +84,7 @@ struct pmic_glink_ucsi {
+>  	bool ucsi_registered;
+>  	bool pd_running;
 >  
-> -struct ucsi_write_buf_resp_msg {
-> +struct __packed ucsi_write_buf_resp_msg {
->  	struct pmic_glink_hdr   hdr;
->  	u32                     ret_code;
+> -	u8 read_buf[UCSI_BUF_SIZE];
+> +	u8 read_buf[UCSI_BUF_V2_SIZE];
 >  };
 >  
-> -struct ucsi_notify_ind_msg {
-> +struct __packed ucsi_notify_ind_msg {
->  	struct pmic_glink_hdr   hdr;
->  	u32                     notification;
->  	u32                     receiver;
-> -- 
-> 2.34.1
+>  static int pmic_glink_ucsi_read(struct ucsi *__ucsi, unsigned int offset,
+> @@ -131,18 +143,34 @@ static int pmic_glink_ucsi_read_message_in(struct ucsi *ucsi, void *val, size_t
+>  static int pmic_glink_ucsi_locked_write(struct pmic_glink_ucsi *ucsi, unsigned int offset,
+>  					const void *val, size_t val_len)
+>  {
+> -	struct ucsi_write_buf_req_msg req = {};
+> +	struct ucsi_v2_write_buf_req_msg req = {};
+> +	size_t len, max_buf_len;
+>  	unsigned long left;
+>  	int ret;
+>  
+>  	req.hdr.owner = PMIC_GLINK_OWNER_USBC;
+>  	req.hdr.type = MSG_TYPE_REQ_RESP;
+>  	req.hdr.opcode = UC_UCSI_WRITE_BUF_REQ;
+> +
+> +	if (ucsi->ucsi->version >= UCSI_VERSION_2_0) {
+> +		max_buf_len = UCSI_BUF_V2_SIZE;
+> +		len = sizeof(req);
+> +	} else if (ucsi->ucsi->version) {
+> +		max_buf_len = UCSI_BUF_V1_SIZE;
+> +		len = sizeof(struct ucsi_write_buf_req_msg);
+> +	} else {
+> +		dev_err(ucsi->dev, "UCSI version not set\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (offset + val_len > max_buf_len)
+> +		return -EINVAL;
+> +
+>  	memcpy(&req.buf[offset], val, val_len);
+>  
+>  	reinit_completion(&ucsi->write_ack);
+>  
+> -	ret = pmic_glink_send(ucsi->client, &req, sizeof(req));
+> +	ret = pmic_glink_send(ucsi->client, &req, len);
+>  	if (ret < 0) {
+>  		dev_err(ucsi->dev, "failed to send UCSI write request: %d\n", ret);
+>  		return ret;
+> @@ -216,12 +244,49 @@ static const struct ucsi_operations pmic_glink_ucsi_ops = {
+>  
+>  static void pmic_glink_ucsi_read_ack(struct pmic_glink_ucsi *ucsi, const void *data, int len)
+>  {
+> -	const struct ucsi_read_buf_resp_msg *resp = data;
+> +	u32 ret_code, buf_len, max_len;
+> +	u8 *buf;
+> +
+> +	if (ucsi->ucsi->version) {
+> +		if (ucsi->ucsi->version >= UCSI_VERSION_2_0) {
+> +			max_len = sizeof(struct ucsi_v2_read_buf_resp_msg);
+> +			buf = ((struct ucsi_v2_read_buf_resp_msg *)data)->buf;
+> +			buf_len = UCSI_BUF_V2_SIZE;
+> +		} else {
+> +			max_len = sizeof(struct ucsi_read_buf_resp_msg);
+> +			buf = ((struct ucsi_read_buf_resp_msg *)data)->buf;
+> +			buf_len = UCSI_BUF_V1_SIZE;
+> +		}
+> +	} else if (!ucsi->ucsi->version && !ucsi->ucsi_registered) {
+
+ucsi->ucsi->version will never be set in this else condition,
+so no need to check it, no?
+
+> +		/*
+> +		 * If UCSI version is not known yet because device is not registered, choose buffer
+> +		 * size which best fits incoming data
+> +		 */
+> +		if (len > sizeof(struct pmic_glink_hdr) + UCSI_BUF_V2_SIZE) {
+> +			max_len = sizeof(struct ucsi_v2_read_buf_resp_msg);
+> +			buf = ((struct ucsi_v2_read_buf_resp_msg *)data)->buf;
+> +			buf_len = UCSI_BUF_V2_SIZE;
+> +		} else {
+> +			max_len = sizeof(struct ucsi_read_buf_resp_msg);
+> +			buf = ((struct ucsi_read_buf_resp_msg *)data)->buf;
+> +			buf_len = UCSI_BUF_V1_SIZE;
+> +		}
+> +	} else {
+> +		dev_err(ucsi->dev, "UCSI version not set\n");
+> +		return;
+> +	}
+
+I don't really see when you could enter that else statement?
+
+> -	if (resp->ret_code)
+> +	if (len > max_len)
+> +		return;
+> +
+> +	if (buf_len > len - sizeof(struct pmic_glink_hdr) - sizeof(u32))
+> +		buf_len = len - sizeof(struct pmic_glink_hdr) - sizeof(u32);
+> +
+> +	memcpy(&ret_code, buf + sizeof(struct pmic_glink_hdr) + buf_len, sizeof(u32));
+> +	if (ret_code)
+>  		return;
+>  
+> -	memcpy(ucsi->read_buf, resp->buf, UCSI_BUF_SIZE);
+> +	memcpy(ucsi->read_buf, buf, buf_len);
+>  	complete(&ucsi->read_ack);
+>  }
+
+thanks,
 
 -- 
 heikki
