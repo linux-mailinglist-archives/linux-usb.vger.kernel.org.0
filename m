@@ -1,73 +1,76 @@
-Return-Path: <linux-usb+bounces-27344-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27345-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C2B4B398A7
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 11:44:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB681B39975
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 12:18:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6145556072B
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 09:44:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C2A31C27FE6
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Aug 2025 10:19:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE392E0910;
-	Thu, 28 Aug 2025 09:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 296A030ACED;
+	Thu, 28 Aug 2025 10:16:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JgeicMyP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kCdrXVHt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4D8277C85;
-	Thu, 28 Aug 2025 09:44:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAA33081CF;
+	Thu, 28 Aug 2025 10:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756374242; cv=none; b=mzMkOm+uKb74DZqMogzwdIUrPQ2a/ywuqr15WsP1/4iB42jeCXRjo8EKV6DjDK56D8wzvOby+VrAE5vTaGmwT7/ALEGaPg7sVfuQyTa2Wid3MO5t9RKS+zuuusiMNCap7mwR6Ji0vr0Pe7fJw0K7BVt7ujHoZkCu5pAxVXPMJ+g=
+	t=1756376191; cv=none; b=aM44kFxF4vkE9nHLGed0nJKOvH+m6mVWwnld6ETqyqvBSPpcIEvBvbcAdrCmNcdSoqFifYJynH8cnuT/luSvufH5P4ivlf2xVvQUmbYBF3YoPq12Kw8fcd6dyufJyijTJJR86505xmW8VXKoGMCpUpThk0dtIgDykGct9lpxeGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756374242; c=relaxed/simple;
-	bh=HffZ3rnLNcupsAjrlSDPYdJVw5yH4MPfwql68TJ5bCo=;
+	s=arc-20240116; t=1756376191; c=relaxed/simple;
+	bh=9AhecmCpNrrUSjsrecrQe2CL2tQ3LbxLRxBTLNW/I6c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=euUegjnoEpSUi+IHbwnxhEmOTMcZFj4g52KVf65vFqLxuhVjmZu4WwjEEDXdUgzprEkZl70crfwY8ARzavNcZ7IH2tbTNh1Ro3Ksf9+XP0OasX+YS+R40j/dOYB481IwlDYGmfhIMdYvx+OdA8xecdtrO9FsokPO/y7lg8Ks6a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JgeicMyP; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=NTABESY/rBQt5yebqUZO7zLUq+OYWEdnZ6umzSMJ7cBXrk9kky08neMl9lQDrCy3bZudwO1LChe8uPD253/19wTms/uB0ebQmNfBrVQNv/MLGvZaLEzUqMmCLv57ZdsMrMvdyVPmr0kUdeG07BYz0sHN+NcUhDYK9KrIPmxSX/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kCdrXVHt; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756374241; x=1787910241;
+  t=1756376190; x=1787912190;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=HffZ3rnLNcupsAjrlSDPYdJVw5yH4MPfwql68TJ5bCo=;
-  b=JgeicMyPTksyA5tI3JkLvjHa9i3YQeNFtC58500Kd6ApeAp7+7TmyWpB
-   OPhsHkveNcg/xEPexFuoOBn6bbRYndVKp7l8txxcPS3gcdBcBGsSND/qd
-   wnGG1pTP6ZQClyD9+D+lyetnqye9Lc5bNdPV8BRgL31sBCpgm8pk3Fh9C
-   qEcEnfN7TkREiKh6qiXm6mp/V8NpDF+nYsfcW2iJLze8tauU65/vQCKGG
-   JRxMoLIKisMIReUKcePxTvDAr5bAApMQj+WfNQwzIrCf18/ymdpd14uj4
-   KLf8o+07XRIVr2EqQ+IO/abk4nfc9eyu8jv174Zyfh78p9968EeQA5jRN
-   g==;
-X-CSE-ConnectionGUID: bt3cHTdyQuuaKzUEv+ksiQ==
-X-CSE-MsgGUID: UFAI9aWvRhOP3JBzSlgBnA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="70079996"
+  bh=9AhecmCpNrrUSjsrecrQe2CL2tQ3LbxLRxBTLNW/I6c=;
+  b=kCdrXVHtp9FG7/CD6ZMRFsyip8/keO39uzTqgaBiZVHy7b3LC46cyb4o
+   FhNJHeyO5Gn1/NTcp2ngsen+o46eTGkv+3aR74g2aKkpzTV5Vgg1mdOh3
+   b7VDyQise8Sq1LcMNqxABxwlQggJTVZtnQakfDL/AAafMw9agfCalaSMM
+   ZLfnOxHvApZ9XUIwGOmMfslBjbdh86sKW7I9U0HBs8X/CTDK1fak8FrSn
+   oaAp1YbQYv/e1HJ8BbraQKsthLxqOEwdeuXcF23/agZn5SJOCCNlgHwf0
+   QaA4uBvAkp8PZJCpaZZh452P1IFnHsQw8GbVA/ASvgtGkiTzwtAxv6fE8
+   A==;
+X-CSE-ConnectionGUID: Ov98luw6Q7awMDOEOrubhA==
+X-CSE-MsgGUID: 1ZGw79ajSjmXyUHRsvLj+Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="61275397"
 X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="70079996"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 02:44:00 -0700
-X-CSE-ConnectionGUID: B45B30emQTqoA5e2CL/7Zg==
-X-CSE-MsgGUID: 3UpS4AUIQoS7nsbnrvHrtw==
+   d="scan'208";a="61275397"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 03:16:29 -0700
+X-CSE-ConnectionGUID: F7FbhJlcRg69b1NtU/w1ag==
+X-CSE-MsgGUID: aCGmAGT2S76Yjxj5AMYN1Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="207213589"
+   d="scan'208";a="170246185"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa001.jf.intel.com with SMTP; 28 Aug 2025 02:43:57 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 28 Aug 2025 12:43:56 +0300
-Date: Thu, 28 Aug 2025 12:43:56 +0300
+  by orviesa008.jf.intel.com with SMTP; 28 Aug 2025 03:16:26 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 28 Aug 2025 13:16:24 +0300
+Date: Thu, 28 Aug 2025 13:16:24 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: RD Babiera <rdbabiera@google.com>
-Cc: gregkh@linuxfoundation.org, badhri@google.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] usb: typec: class: add typec_get_data_role symbol
-Message-ID: <aLAk3MJuso1w4Kkl@kuha.fi.intel.com>
-References: <20250821203838.1721581-4-rdbabiera@google.com>
- <20250821203838.1721581-5-rdbabiera@google.com>
+To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+Cc: gregkh@linuxfoundation.org, lumag@kernel.org, neil.armstrong@linaro.org,
+	johan+linaro@kernel.org, quic_bjorande@quicinc.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] usb: typec: ucsi_glink: Update request/response
+ buffers to be packed
+Message-ID: <aLAseOzr9_s0_lOv@kuha.fi.intel.com>
+References: <20250827201241.3111857-1-anjelique.melendez@oss.qualcomm.com>
+ <20250827201241.3111857-2-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,87 +79,55 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250821203838.1721581-5-rdbabiera@google.com>
+In-Reply-To: <20250827201241.3111857-2-anjelique.melendez@oss.qualcomm.com>
 
-On Thu, Aug 21, 2025 at 08:38:34PM +0000, RD Babiera wrote:
-> Alt Mode drivers are responsible for sending Enter Mode through the TCPM,
-> but only a DFP is allowed to send Enter Mode. typec_get_data_role gets
-> the port's data role, which can then be used in altmode drivers via
-> typec_altmode_get_data_role to know if Enter Mode should be sent.
-
-The functions are okay by me, but is the above statement correct?
-Are you mixing power role and data role?
-
-> Signed-off-by: RD Babiera <rdbabiera@google.com>
-> ---
->  drivers/usb/typec/class.c         | 13 +++++++++++++
->  include/linux/usb/typec.h         |  1 +
->  include/linux/usb/typec_altmode.h | 12 ++++++++++++
->  3 files changed, 26 insertions(+)
+On Wed, Aug 27, 2025 at 01:12:40PM -0700, Anjelique Melendez wrote:
+> Update the ucsi request/response buffers to be packed to ensure there
+> are no "holes" in memory while we read/write these structs.
 > 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 67a533e35150..9b2647cb199b 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -2120,6 +2120,19 @@ void typec_set_data_role(struct typec_port *port, enum typec_data_role role)
->  }
->  EXPORT_SYMBOL_GPL(typec_set_data_role);
->  
-> +/**
-> + * typec_get_data_role - Get port data role
-> + * @port: The USB Type-C Port to query
-> + *
-> + * This routine is used by the altmode drivers to determine if the port is the
-> + * DFP before issuing Enter Mode
-> + */
-> +enum typec_data_role typec_get_data_role(struct typec_port *port)
-> +{
-> +	return port->data_role;
-> +}
-> +EXPORT_SYMBOL_GPL(typec_get_data_role);
-> +
->  /**
->   * typec_set_pwr_role - Report power role change
->   * @port: The USB Type-C Port where the role was changed
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index 252af3f77039..309251572e2e 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -337,6 +337,7 @@ struct typec_plug *typec_register_plug(struct typec_cable *cable,
->  void typec_unregister_plug(struct typec_plug *plug);
->  
->  void typec_set_data_role(struct typec_port *port, enum typec_data_role role);
-> +enum typec_data_role typec_get_data_role(struct typec_port *port);
->  void typec_set_pwr_role(struct typec_port *port, enum typec_role role);
->  void typec_set_vconn_role(struct typec_port *port, enum typec_role role);
->  void typec_set_pwr_opmode(struct typec_port *port, enum typec_pwr_opmode mode);
-> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-> index b3c0866ea70f..559cd6865ba1 100644
-> --- a/include/linux/usb/typec_altmode.h
-> +++ b/include/linux/usb/typec_altmode.h
-> @@ -172,6 +172,18 @@ typec_altmode_get_svdm_version(struct typec_altmode *altmode)
->  	return typec_get_negotiated_svdm_version(typec_altmode2port(altmode));
->  }
->  
-> +/**
-> + * typec_altmode_get_data_role - Get port data role. Alt Mode drivers should only
-> + * issue Enter Mode through the port if they are the DFP.
+> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
 
-The second sentence should go below. But I'm not sure it's correct.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> + * @altmode Handle to the alternate mode
-> + */
-> +static inline enum typec_data_role
-> +typec_altmode_get_data_role(struct typec_altmode *altmode)
-> +{
-> +	return typec_get_data_role(typec_altmode2port(altmode));
-> +}
-> +
->  /**
->   * struct typec_altmode_driver - USB Type-C alternate mode device driver
->   * @id_table: Null terminated array of SVIDs
+> ---
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index 8af79101a2fc..1f9f0d942c1a 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -30,24 +30,24 @@ struct ucsi_read_buf_req_msg {
+>  	struct pmic_glink_hdr   hdr;
+>  };
+>  
+> -struct ucsi_read_buf_resp_msg {
+> +struct __packed ucsi_read_buf_resp_msg {
+>  	struct pmic_glink_hdr   hdr;
+>  	u8                      buf[UCSI_BUF_SIZE];
+>  	u32                     ret_code;
+>  };
+>  
+> -struct ucsi_write_buf_req_msg {
+> +struct __packed ucsi_write_buf_req_msg {
+>  	struct pmic_glink_hdr   hdr;
+>  	u8                      buf[UCSI_BUF_SIZE];
+>  	u32                     reserved;
+>  };
+>  
+> -struct ucsi_write_buf_resp_msg {
+> +struct __packed ucsi_write_buf_resp_msg {
+>  	struct pmic_glink_hdr   hdr;
+>  	u32                     ret_code;
+>  };
+>  
+> -struct ucsi_notify_ind_msg {
+> +struct __packed ucsi_notify_ind_msg {
+>  	struct pmic_glink_hdr   hdr;
+>  	u32                     notification;
+>  	u32                     receiver;
 > -- 
-> 2.51.0.261.g7ce5a0a67e-goog
+> 2.34.1
 
 -- 
 heikki
