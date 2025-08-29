@@ -1,113 +1,111 @@
-Return-Path: <linux-usb+bounces-27374-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27375-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AB2DB3C06E
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 18:17:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67A1EB3C0D2
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 18:33:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7050D1C804FA
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 16:17:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F7D21C88137
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 16:33:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D779E233159;
-	Fri, 29 Aug 2025 16:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20400326D54;
+	Fri, 29 Aug 2025 16:33:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eOGWoYJR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fDvC81Ed"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC207EACD
-	for <linux-usb@vger.kernel.org>; Fri, 29 Aug 2025 16:17:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794261917ED;
+	Fri, 29 Aug 2025 16:33:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756484239; cv=none; b=D3qzOHG50NcmhLVCs1d3hT/Nx/8zAcZEV6hHNJxSvtK5e9kyXRbfPOaL+6RJvzSdSFBMyWulScSEqI2GSCd51aKOxwtTrfRoi4su8lLwH/0CU1ACRTREA1mSxqDUdOXyz1v2RWpMopV09DWc0yuPPk5MftLoGe2HSolDYibeHG4=
+	t=1756485205; cv=none; b=Wh4zriOpSju2GBBVr5XgUWdO9pZFhYYerL/Loz7PibyJ7JkifTTy/O146XkrI6fCClxE1MEtMjijVLIe8h9LXhwAW+dkzsG2HMe7qayrStT34L3t/r4W5OjqA88T5UT+RWFuNBZCoUDZdGWYP4SIZWJ0AXSw33EI/csQPTHdlxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756484239; c=relaxed/simple;
-	bh=IqEu0mZHV63RbT7c7EW1+o9eNW8DrWljfij7oXtVruw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tq3IFTwKsaXDKALicmAxIbsjq1/OmIGoM0kVeQWpHyo0e4EZAdA14/sfqX1xglEMwSFsKq2zJQjkqlMdiC2e84F81zQ9/qqnZo7PKO4nMTkgKKUWbU1S1005Kda3uc0SZ0zhDhTk+gI1Vk7+GkTBOvQY7JZmsagIyKXF/4ymMcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eOGWoYJR; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45a1b0bde14so14738235e9.2
-        for <linux-usb@vger.kernel.org>; Fri, 29 Aug 2025 09:17:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756484234; x=1757089034; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5/xgVxD2MLPErZaWTxQKc6/6L7tUcPgyK4Fuh97vP9A=;
-        b=eOGWoYJRsyTTW2+ffxKoTBbps7UMle83c9OZu9Ym+S7GWP71/54uIlpwYUWX1oGUJg
-         SlpJuwdkw8Co+NdPQylK3+PQciJ5QQPHaQxrDS1mAdACp0Wp0FMPtK48xekl62zmP/XD
-         xF/PhgjShIjwfdZil49flbk9j78ywdpZNQFHfDbfQvcVk2o5uzd2Xui+o1G0470DRJzM
-         dlg0uE4uQHHI+iJlUEt8tiwpf/l/nRrJhMGvrD84aYJX3QnjFakfFamPZW+S9XmFvUPF
-         k6dqm8Ta0p3Hqi2tBR6sq0OWKBBSytKAy5e0VEj60qUKIv1q5k/pQGa6gKU1Ky1Liaq1
-         vQtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756484234; x=1757089034;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5/xgVxD2MLPErZaWTxQKc6/6L7tUcPgyK4Fuh97vP9A=;
-        b=TaRAoNyHb2s4hhhVyDYR3kIMt0ierLA2eJlhf6nofqMhT7pLiQWtFtxJfmWNiVmMB0
-         P5mk0aEuKq11dqqQlAPb3EarIoBG1/F7nHMAhVFRHXomcKfJkNzfZabvPNYHYPEecLGU
-         bTLGSn8EE53TLm5L6Dvlnzcb6poWqBSJmG6mwcH2otQzGFIybGYA8aHp3UD3QmIdxRcO
-         I9ONRge6TORWKnvi27vjcTHq/v51knc703NW8c7rSFNtfhEyqFmGzx4mFWEwvMK3n55z
-         ISyb+DOXiP3SsFrTXpJ5L1uRun1h4XXBaT8Ra1QyI5K88JiBoDz11x7N/apMgEnodSjK
-         EuBw==
-X-Gm-Message-State: AOJu0YyaoWPzrpdd17wcrGAFrOaogpyDUts0hTg3KcICv+F+neniWxTb
-	xZH5CaI0+kiAe+GdyANxtAdnKcTRkiwAYRIHAxvbKXCCFaposONJUutzv78IAw==
-X-Gm-Gg: ASbGnct/CtWgMciwesYy5dM1mgQdqHKN/Ll7mn0H/EpRLH7bA+IEgb9TASyl393qD3O
-	KPyrQkyZJ1BB6UwBZjpiOgR1S2/9CLsFsX3ei7cUYY38zahOPEq7FT87S3BiUuDnJdHf8mafjBj
-	+OG7Pd341BBZcMezQH2cd6B8fC1VEE086dNZG30vEPMaaGEA/6QjvDyCgTlACRRb0IYLxkvg0Eb
-	BgL+jwqPZu53CMS2OXKtMQYyeSHIxkOfM/3Y0FmJ4LZAQGKdOBFVD4uAGUm+IlZGmyeGOchfX3E
-	wnFSc7s6knqgOuSBDj4uy6Zhd/Bf7DDcK9THbRSsGazJ5awXi3VNLsQHbBtV+M4WwixoqlzjCTn
-	Qi61AhIIF0xPl9xlM6Em4QRl14liP/5IM57cR
-X-Google-Smtp-Source: AGHT+IFxjmJYI2By5cid1aYQOeORQ3RHFcmraw1huTuiFFs2qT5P/IDEnwai5VQ36YN3v8yNcFOQiQ==
-X-Received: by 2002:a05:600c:3144:b0:45b:64bc:56ea with SMTP id 5b1f17b1804b1-45b68229282mr130962915e9.23.1756484233771;
-        Fri, 29 Aug 2025 09:17:13 -0700 (PDT)
-Received: from x230.suse.cz (gw1.ms-free.net. [185.243.124.10])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b73cf86f4sm103683005e9.6.2025.08.29.09.17.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Aug 2025 09:17:13 -0700 (PDT)
-From: Petr Vorel <petr.vorel@gmail.com>
-To: linux-usb@vger.kernel.org
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Subject: [PATCH 1/1] usb: misc: Update link to EHSET pdf doc
-Date: Fri, 29 Aug 2025 18:17:08 +0200
-Message-ID: <20250829161708.106813-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1756485205; c=relaxed/simple;
+	bh=jgKCSrHUv6K524VE1l0gFO14QqQhak8oamgEm7Ome3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n4TBnTysFkSb0utOEBubz/WzIwzz5tyo28l506rg7jvwsnSCDIVBRO2P7037aCWxkiHlojIQ4l0i/ysq/EnnletuAWp9AdVXiUQ4OjARQLKQlfOACSu4Ov1FqQE7NiIkOiU7wKUk7tPSA7qX6r+neOPClVe70+MS5mjklkh8CTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fDvC81Ed; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94756C4CEF0;
+	Fri, 29 Aug 2025 16:33:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1756485205;
+	bh=jgKCSrHUv6K524VE1l0gFO14QqQhak8oamgEm7Ome3A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fDvC81EdV68n1C2rjUnPP0FGw7Ro+eO2SKfgVaNU53F46YJnPfz0uHojZ+hM+b912
+	 e5UuCgDEslujPigKXynTswZGejWJnsPnogn5b0CztVhjZEiU32X5SVpODA01DxqLRB
+	 PRJO47xgWBLI1QdBK6gSSadZmivfOJMw86AuxagM=
+Date: Fri, 29 Aug 2025 18:33:21 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc: Valentina Manea <valentina.manea.m@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+	"Brian G. Merrell" <bgmerrell@novell.com>, kernel@collabora.com,
+	Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/18] USB/IP VHCI suspend fix and driver cleanup
+Message-ID: <2025082941-frenzied-chaos-890c@gregkh>
+References: <20250726-vhci-hcd-suspend-fix-v2-0-189266dfdfaa@collabora.com>
+ <2025072637-corny-careless-8523@gregkh>
+ <3dd94c4f-0971-4744-91e1-3a5474e1576c@collabora.com>
+ <5b39ce10-9845-4429-95bb-18b03513cdaf@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b39ce10-9845-4429-95bb-18b03513cdaf@collabora.com>
 
-Obviously file on the website was renamed.
+On Wed, Aug 27, 2025 at 12:14:15PM +0300, Cristian Ciocaltea wrote:
+> On 7/28/25 12:41 PM, Cristian Ciocaltea wrote:
+> > Hi Greg,
+> > 
+> > On 7/26/25 9:43 AM, Greg Kroah-Hartman wrote:
+> >> On Sat, Jul 26, 2025 at 01:08:02AM +0300, Cristian Ciocaltea wrote:
+> >>> The USB/IP Virtual Host Controller (VHCI) platform driver is expected to
+> >>> prevent entering system suspend when at least one remote device is
+> >>> attached to the virtual USB root hub.
+> >>>
+> >>> However, in some cases, the detection logic for active USB/IP
+> >>> connections doesn't seem to work reliably, e.g. when all devices
+> >>> attached to the virtual hub have been already suspended.  This will
+> >>> normally lead to a broken suspend state, with unrecoverable resume.
+> >>>
+> >>> The first patch of the series provides a workaround to ensure the
+> >>> virtually attached devices do not enter suspend.  Note this is currently
+> >>> limited to the client side (vhci_hcd) only, since the server side
+> >>> (usbip_host) doesn't implement system suspend prevention.
+> >>>
+> >>> Additionally, during the investigation I noticed and fixed a bunch of
+> >>> coding style issues, hence the subsequent patches contain all the
+> >>> changes needed to make checkpatch happy for the entire driver.
+> >>
+> >> You are doing two major things here, fixing suspend, and cleaning up
+> >> checkpatch issues.  Please make that two different patch sets as those
+> >> are not logical things to put together at all.  Work on the suspend
+> >> issue first, and after that is all done and working, then consider
+> >> checkpatch cleanups, those are not that important overall :)
+> > 
+> > Yeah, the cleanup part ended up larger than initially anticipated, but I
+> > don't really expect further changes on the fixup side.  I can handle the
+> > split if another revision would be still required, or would you like me to
+> > do this regardless?  I've just made a quick test moving the first patch to
+> > the end of the series and it didn't cause any conflicts, hence there won't 
+> > be any dependencies between the two patch sets.
+> 
+> This continues to apply cleanly on recent linux-next, hence I'm not sure if
+> there's still a need to resend as two separate patch sets.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- drivers/usb/misc/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+As I no longer have any of these in my review queue, yes, you are going
+to have to resend whatever you want us to accept :)
 
-diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-index 6497c4e81e951..f314f0ec777df 100644
---- a/drivers/usb/misc/Kconfig
-+++ b/drivers/usb/misc/Kconfig
-@@ -231,8 +231,8 @@ config USB_EHSET_TEST_FIXTURE
- 	  VID/PID pairs. This driver then initiates a corresponding test mode on
- 	  the downstream port to which the test fixture is attached.
- 
--	  See <http://www.usb.org/developers/onthego/EHSET_v1.01.pdf> for more
--	  information.
-+	  See <https://www.usb.org/sites/default/files/EHSET_v1.01%281%29.pdf>
-+	  for more information.
- 
- config USB_ISIGHTFW
- 	tristate "iSight firmware loading support"
--- 
-2.51.0
+thanks,
 
+greg k-h
 
