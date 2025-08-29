@@ -1,151 +1,95 @@
-Return-Path: <linux-usb+bounces-27367-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27368-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A364B3B0B2
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 03:57:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57F43B3B228
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 06:34:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD0611C8682E
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 01:57:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EC955682EC
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 04:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C521224B01;
-	Fri, 29 Aug 2025 01:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 682591C8606;
+	Fri, 29 Aug 2025 04:34:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kMf/YGJo"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yAapb0he"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1CF1E1C1A;
-	Fri, 29 Aug 2025 01:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D584B30CD9F;
+	Fri, 29 Aug 2025 04:34:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756432590; cv=none; b=IKfCR7zVv/1Mz4v2H9ssRG+e7xCIyqdwN3utvk6z/fhDJNz/WhMu0zYZ12dSElPo3lCO2DVmZsjgof9IfttlQjc4PIDI7/c0w1F2LCqk929nhc4s6XfmhpRXmXS+g0BYnqB51Wrypq+CUgb82iqJ6cOuF9SG/IGi0SJ7UAaLCu4=
+	t=1756442092; cv=none; b=AtvAEj24T7dtKfxsTPgEt3cPkoVMEFXJlpDEIapqmhqT/zuyQQPRcu47NRHtBeozuGE2IqAMFE/kHOo9wHxjKgzXUbjx1ajsskwxDreFpTaYXb6vblEmMOhmxoY1JEI01/nPnx7DgByWYv2pzqENlgEV94wyw/PqhIb2qJwMSKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756432590; c=relaxed/simple;
-	bh=5TyW6yrGeyb7nMU0ulwU5MSbnNPSaEJZ7KfGOW7dCqw=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=Mekl5tagGsgOXW3iy5wHT1oLLqwcEYNWO4BNW4Oa/gm1b0yx5cgHjOGvYGPa8s2IZ+b1g4cUwx0HknhT58OIRW5HyiJyeQQ2ujVRMd3Flu1RQ5T/IG8i0Vz8FHCPThWNdjSosLfOEMjVHRmQ86FVvTzeh8a/i3Emi3C+In4F8t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kMf/YGJo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC48C4CEFB;
-	Fri, 29 Aug 2025 01:56:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756432588;
-	bh=5TyW6yrGeyb7nMU0ulwU5MSbnNPSaEJZ7KfGOW7dCqw=;
-	h=Date:From:To:Cc:Subject:References:From;
-	b=kMf/YGJoHz5UypoQ6DWMc2pj+6VszUnwU/bXsBp6B7JdXcDzW8R+qXfO5rIAfzzfO
-	 cktfF/ok9SbvgcrUC384jdu/6Sn33Ee8Q2ewcmjBaRtinvwM/J7vcxcL+ay2xERKH4
-	 Xi3VZAs/noLrmq9WGyxo5Tv48SPB9+r1NjaI4XzlksbnSeA3IZyHhFaufaF1thP/2E
-	 afvwE19UHg94YAuUszAgCawiTqM/FltkKaaMkR0A4+S5kdilZckzHoPD/p1DVbemBk
-	 pTelZssk1wSEc9XPBNH05VFn+1qnt7o1yxHetkBpsXHOH2qVikSn+hHbyP8S+GsHmO
-	 9WwhoFiBO6NdA==
-Received: from rostedt by gandalf with local (Exim 4.98.2)
-	(envelope-from <rostedt@kernel.org>)
-	id 1uroME-00000004Prb-1YA0;
-	Thu, 28 Aug 2025 21:56:50 -0400
-Message-ID: <20250829015650.224063821@kernel.org>
-User-Agent: quilt/0.68
-Date: Thu, 28 Aug 2025 21:55:55 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Peter Chen <peter.chen@kernel.org>,
- Pawel Laszczak <pawell@cadence.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 3/3] cdnsp: Remove unused tracepoints
-References: <20250829015552.314865014@kernel.org>
+	s=arc-20240116; t=1756442092; c=relaxed/simple;
+	bh=VlQ3Mz+r5uMRCf+BfLcw3ZUlAXPfXkZczHUyPQ+xhOc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WUgflCNg6JcT1KVgButhSKkp7b4Os6KGexiwlcsNVjRYKLC8b4d4xT4PzH6D4m/sVRO/psqZ6GwK6kuOHW1maQM5vA+/48YLmY39b7gdclRy84IX0wgVESF7276Yqxx2cRimeKZEuwAetcvyQh/c4p2Sv9UCjJ8pFvjGBHaqS2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yAapb0he; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA35AC4CEF0;
+	Fri, 29 Aug 2025 04:34:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1756442091;
+	bh=VlQ3Mz+r5uMRCf+BfLcw3ZUlAXPfXkZczHUyPQ+xhOc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=yAapb0heZRx+LSySIAoIu5qkfrdxo7RAi3c3ma6c86paGH1iQxBQfApyi6hN6EDkB
+	 CwFCpsHj1SDR9ahTqYiLgEojUyjGfmVh+P1OAEOcRH3/zSSJgf1amyECveC3rba1T2
+	 wYvQpRk4iX/QbKsUrIlr6rwzd/ibpKF7rt3EJRw8=
+Date: Fri, 29 Aug 2025 06:34:47 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] usb: storage: realtek_cr: Simplify residue
+ calculation in rts51x_bulk_transport()
+Message-ID: <2025082922-almanac-derby-632d@gregkh>
+References: <20250828162623.4840-3-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250828162623.4840-3-thorsten.blum@linux.dev>
 
-From: Steven Rostedt <rostedt@goodmis.org>
+On Thu, Aug 28, 2025 at 06:26:24PM +0200, Thorsten Blum wrote:
+> Simplify the calculation of 'residue' in rts51x_bulk_transport() and
+> avoid unnecessarily reassigning 'residue' to itself.
+> 
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> ---
+>  drivers/usb/storage/realtek_cr.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+> index 2a6c7c567e1c..758258a569a6 100644
+> --- a/drivers/usb/storage/realtek_cr.c
+> +++ b/drivers/usb/storage/realtek_cr.c
+> @@ -261,8 +261,8 @@ static int rts51x_bulk_transport(struct us_data *us, u8 lun,
+>  	 * try to compute the actual residue, based on how much data
+>  	 * was really transferred and what the device tells us
+>  	 */
+> -	if (residue)
+> -		residue = residue < buf_len ? residue : buf_len;
+> +	if (residue > buf_len)
+> +		residue = buf_len;
+>  
+>  	if (act_len)
+>  		*act_len = buf_len - residue;
+> -- 
+> 2.50.1
+> 
+> 
 
-Tracepoints that are defined take up around 5K each, even if they are not
-used. If they are defined and not used, then they waste memory for unused
-code. Soon unused tracepoints will cause warnings.
+Why is this a RESEND?  What happened to the first one?
 
-Remove the unused tracepoints of the cdnsp subsystem. They are:
+thanks,
 
-cdnsp_defered_event
-cdnsp_ep0_halted
-cdnsp_free_priv_device
-cdnsp_handle_cmd_flush_ep
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- drivers/usb/cdns3/cdnsp-trace.h | 25 -------------------------
- 1 file changed, 25 deletions(-)
-
-diff --git a/drivers/usb/cdns3/cdnsp-trace.h b/drivers/usb/cdns3/cdnsp-trace.h
-index f2bcf77a5d0a..9b33a736c3de 100644
---- a/drivers/usb/cdns3/cdnsp-trace.h
-+++ b/drivers/usb/cdns3/cdnsp-trace.h
-@@ -178,11 +178,6 @@ DEFINE_EVENT(cdnsp_log_simple, cdnsp_ep0_set_config,
- 	TP_ARGS(msg)
- );
- 
--DEFINE_EVENT(cdnsp_log_simple, cdnsp_ep0_halted,
--	TP_PROTO(char *msg),
--	TP_ARGS(msg)
--);
--
- DEFINE_EVENT(cdnsp_log_simple, cdnsp_ep_halt,
- 	TP_PROTO(char *msg),
- 	TP_ARGS(msg)
-@@ -399,11 +394,6 @@ DEFINE_EVENT(cdnsp_log_trb, cdnsp_cmd_timeout,
- 	TP_ARGS(ring, trb)
- );
- 
--DEFINE_EVENT(cdnsp_log_trb, cdnsp_defered_event,
--	TP_PROTO(struct cdnsp_ring *ring, struct cdnsp_generic_trb *trb),
--	TP_ARGS(ring, trb)
--);
--
- DECLARE_EVENT_CLASS(cdnsp_log_pdev,
- 	TP_PROTO(struct cdnsp_device *pdev),
- 	TP_ARGS(pdev),
-@@ -433,16 +423,6 @@ DEFINE_EVENT(cdnsp_log_pdev, cdnsp_alloc_priv_device,
- 	TP_ARGS(vdev)
- );
- 
--DEFINE_EVENT(cdnsp_log_pdev, cdnsp_free_priv_device,
--	TP_PROTO(struct cdnsp_device *vdev),
--	TP_ARGS(vdev)
--);
--
--DEFINE_EVENT(cdnsp_log_pdev, cdnsp_setup_device,
--	TP_PROTO(struct cdnsp_device *vdev),
--	TP_ARGS(vdev)
--);
--
- DEFINE_EVENT(cdnsp_log_pdev, cdnsp_setup_addressable_priv_device,
- 	TP_PROTO(struct cdnsp_device *vdev),
- 	TP_ARGS(vdev)
-@@ -575,11 +555,6 @@ DEFINE_EVENT(cdnsp_log_ep_ctx, cdnsp_handle_cmd_stop_ep,
- 	TP_ARGS(ctx)
- );
- 
--DEFINE_EVENT(cdnsp_log_ep_ctx, cdnsp_handle_cmd_flush_ep,
--	TP_PROTO(struct cdnsp_ep_ctx *ctx),
--	TP_ARGS(ctx)
--);
--
- DEFINE_EVENT(cdnsp_log_ep_ctx, cdnsp_handle_cmd_set_deq_ep,
- 	TP_PROTO(struct cdnsp_ep_ctx *ctx),
- 	TP_ARGS(ctx)
--- 
-2.50.1
-
-
+greg k-h
 
