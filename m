@@ -1,146 +1,99 @@
-Return-Path: <linux-usb+bounces-27378-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27379-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36EB5B3C24D
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 20:16:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E32CB3C26F
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 20:31:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBA6BA60E8E
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 18:16:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC7A01C86A40
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 18:31:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F17338F2E;
-	Fri, 29 Aug 2025 18:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A791F4192;
+	Fri, 29 Aug 2025 18:31:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="D2MkfVAj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b2dI1Rsh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5044B224D6;
-	Fri, 29 Aug 2025 18:16:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC76215E5D4
+	for <linux-usb@vger.kernel.org>; Fri, 29 Aug 2025 18:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756491366; cv=none; b=FC2nPdZo2txq7VER7ggC/dChpdIIzuVwxxdWsH48pzWOR6Vm65XAwS5Wza9BoyoQ1O9blKIAMEQOh4T30eSOu5oWh75wlZ/G2wWHpnpy1Qh3hqa3ZD1gL+pox66xLlcp1QNA0J+QoowpWNDqALyN4zxVJMIjoJWUD4c1kPN+2IQ=
+	t=1756492276; cv=none; b=okJUS6TbH5KDLmScFD859FICMQnQjRyRX02aqoltgydLBgsT3mMpyZRbfIkgEqoIXJaOI92/d+7qqijO76l2s+lVTutPcf85/agclCm9Tyb3ZylMraPHkYbskQCNbAFTDP9qJ6QQs1QueCNLUNOVd88sXRveotCuscqV0GV6CCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756491366; c=relaxed/simple;
-	bh=Vnyqj1sA+eIkplLrCxNKuA2MWjJFlyxhJHFMJUC8XJY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FR8FFDsnwkTK7bMqnV2j0R5DayCRdMcoktZQbbwv8HHkbYKIYhY41j3XAMJM1jl2Qpg4U7qsncpjpKN0QqkvsnVSoU/ALLnKvJpkcKIrjtJ3TMcNvH0H1OXENo0i+H503HS1C82szLsriBPZECstzxUMi0fIXqiHEMutMrBj/nE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=D2MkfVAj; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=R6
-	s5WxCEkgSAAluKgFDGaXXXwuLdmTx3ZMN+nst+nbM=; b=D2MkfVAjGdb9dPxF8y
-	Wmw4ISC3+3vc3O0BbhB96tZjHdwSH28Uf66QAMbm4e+tWebP+olMQtFXz7ZMmm8w
-	3pK4cThCTNSqiVkMKzurMHcGKndjbko9DZhZNTS89l+BOiNoyeFOshLSTlNt/4jN
-	D0f2HFhtibrLELoZlXXjIsHZM=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wBn4qXi7bFoEYb2Eg--.41361S4;
-	Sat, 30 Aug 2025 02:14:11 +0800 (CST)
-From: David Wang <00107082@163.com>
-To: WeitaoWang-oc@zhaoxin.com,
-	mathias.nyman@linux.intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	regressions@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	surenb@google.com,
-	kent.overstreet@linux.dev
-Subject: [REGRESSION 6.17-rc3] usb/xhci: possible memory leak after suspend/resume cycle.
-Date: Sat, 30 Aug 2025 02:13:54 +0800
-Message-ID: <20250829181354.4450-1-00107082@163.com>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1756492276; c=relaxed/simple;
+	bh=u8Joe7CQWaOVqCc7amOi7gBAAPQ/LzJGV3ah62k2Fj0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TlRVU3Z100ghmhcWHeoKe0nkBN3d+u/12SS82S4X7hGzWmPb1qnWMpkeltKXsJrY8JCVQRFjn5NeX43sPzEWkjU1EESAd4NTBRDKbSF0SlziRfKKPTDBULlNyP6wJN6iSCT05LRBnJG8763dLm6zbxqhh5r0dD8wc0tFE+3w5jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b2dI1Rsh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 54622C4CEF4
+	for <linux-usb@vger.kernel.org>; Fri, 29 Aug 2025 18:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756492276;
+	bh=u8Joe7CQWaOVqCc7amOi7gBAAPQ/LzJGV3ah62k2Fj0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=b2dI1Rshbl2wLulX1JPHTqJNJvGPy+JRIPv2Gxx9YYWP3udkElX2358TRhsI84N3i
+	 7n5Y7JrzXTJ1aexxsmUBfnvAJ/a++l33CeoJvqpYrjkm5XELasz53Cutv7rKPHVZJM
+	 f9SQ5vAPDdBWuJitF2GoXMp+Z7GvpjNr561etp4b9yCj7/WpIWwtvaMKq80kPjITr7
+	 KocrBUdWCGjGTv6dlUatZC+Jw3AFCJ7YuVmpHOzWclc2A9M1fAVWdYsdX+DqFciOl7
+	 NTYrHcwTbyOMTFSIW22byqx0/GkRXiR3V4DWKH/5KpgYRdfS059erWI8t083DhY9b3
+	 6vUAAkvo/eiAA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 4108AC3279F; Fri, 29 Aug 2025 18:31:16 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
+ resume from suspend
+Date: Fri, 29 Aug 2025 18:31:16 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220491-208809-Xa0iPB0Pf3@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
+References: <bug-220491-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBn4qXi7bFoEYb2Eg--.41361S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxuFWDurW3AFyrGw17KF45Wrg_yoW7Xw15pF
-	4fZ34jkrn0yrWxZF4DuryDAa4rJa18GrW8Wr9rG3y5ZrWjqw1UXF4qyFW7A3Wa9r4UJ34Y
-	qFn0gr95W3y7GaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jY89tUUUUU=
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiMwi4qmixlu1tEwABs0
 
-Hi,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
-I have been watching kernel memory usage for drivers for a while, via /proc/allocinfo.
-After upgrade to 6.17-rc3, I notice memory usage behavior changes for usb drivers:
+--- Comment #16 from Alan Stern (stern@rowland.harvard.edu) ---
+I can't tell what's happening just from reading the dmesg log; I need to se=
+e a
+usbmon trace too.  Maybe an xhci-hcd maintainer would be able to interpret =
+the
+log better, but I can't.
 
-Before rc3, after several suspend/resume cycles, usb devices's memory usage is very stable:
+However, the repeated 0x341 and 0x2a0 port-status values are new.  They
+indicate that the card reader is behaving in some strange way, different fr=
+om
+what it was doing before.
 
-       40960        5 drivers/usb/host/xhci-mem.c:980 [xhci_hcd] func:xhci_alloc_virt_device 9
-        1024        1 drivers/usb/host/xhci-mem.c:841 [xhci_hcd] func:xhci_alloc_tt_info 2
-         320       10 drivers/usb/host/xhci-mem.c:461 [xhci_hcd] func:xhci_alloc_container_ctx 31
-        1920       15 drivers/usb/host/xhci-mem.c:377 [xhci_hcd] func:xhci_ring_alloc 31
-         112       12 drivers/usb/host/xhci-mem.c:49 [xhci_hcd] func:xhci_segment_alloc 32
-        1792       28 drivers/usb/host/xhci-mem.c:38 [xhci_hcd] func:xhci_segment_alloc 59
+--=20
+You may reply to this email to add a comment.
 
-But with rc3, the memory usage increase after each suspend/resume cycle: 
-
-#1:
-       49152        6 drivers/usb/host/xhci-mem.c:980 [xhci_hcd] func:xhci_alloc_virt_device 9
-        1024        1 drivers/usb/host/xhci-mem.c:841 [xhci_hcd] func:xhci_alloc_tt_info 2
-         384       12 drivers/usb/host/xhci-mem.c:461 [xhci_hcd] func:xhci_alloc_container_ctx 32
-        2176       17 drivers/usb/host/xhci-mem.c:377 [xhci_hcd] func:xhci_ring_alloc 32
-         128       14 drivers/usb/host/xhci-mem.c:49 [xhci_hcd] func:xhci_segment_alloc 34
-        2048       32 drivers/usb/host/xhci-mem.c:38 [xhci_hcd] func:xhci_segment_alloc 61
-#2:
-       57344        7 drivers/usb/host/xhci-mem.c:980 [xhci_hcd] func:xhci_alloc_virt_device 13
-        1024        1 drivers/usb/host/xhci-mem.c:841 [xhci_hcd] func:xhci_alloc_tt_info 3
-         448       14 drivers/usb/host/xhci-mem.c:461 [xhci_hcd] func:xhci_alloc_container_ctx 46
-        2432       19 drivers/usb/host/xhci-mem.c:377 [xhci_hcd] func:xhci_ring_alloc 43
-         144       16 drivers/usb/host/xhci-mem.c:49 [xhci_hcd] func:xhci_segment_alloc 44
-        2304       36 drivers/usb/host/xhci-mem.c:38 [xhci_hcd] func:xhci_segment_alloc 82
-#3:
-       65536        8 drivers/usb/host/xhci-mem.c:980 [xhci_hcd] func:xhci_alloc_virt_device 17
-        1024        1 drivers/usb/host/xhci-mem.c:841 [xhci_hcd] func:xhci_alloc_tt_info 4
-         512       16 drivers/usb/host/xhci-mem.c:461 [xhci_hcd] func:xhci_alloc_container_ctx 60
-        2688       21 drivers/usb/host/xhci-mem.c:377 [xhci_hcd] func:xhci_ring_alloc 54
-         160       18 drivers/usb/host/xhci-mem.c:49 [xhci_hcd] func:xhci_segment_alloc 54
-        2560       40 drivers/usb/host/xhci-mem.c:38 [xhci_hcd] func:xhci_segment_alloc 103
-
-The memory increasing pattern keeps going on for each suspend/resume afterwards, I am not
-sure whether those memory would be released sometime later.
-
-And in kernel log, two lines of error always showed up after suspend/resume:
-
-	[  295.613598] xhci_hcd 0000:03:00.0: dma_pool_destroy xHCI ring segments busy
-	[  295.613605] xhci_hcd 0000:03:00.0: dma_pool_destroy xHCI input/output contexts busy
-
-And bisect narrow down to commit 2eb03376151bb8585caa23ed2673583107bb5193(
-"usb: xhci: Fix slot_id resource race conflict"):
-
-	git bisect start 'drivers/usb'
-	# status: waiting for both good and bad commits
-	# good: [c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9] Linux 6.17-rc2
-	git bisect good c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
-	# status: waiting for bad commit, 1 good commit known
-	# bad: [1b237f190eb3d36f52dffe07a40b5eb210280e00] Linux 6.17-rc3
-	git bisect bad 1b237f190eb3d36f52dffe07a40b5eb210280e00
-	# good: [e86ba12cf84ab9cf42fbc2382235fa7ba616e18b] Merge tag 'nfs-for-6.17-2' of git://git.linux-nfs.org/projects/trondmy/linux-nfs
-	git bisect good e86ba12cf84ab9cf42fbc2382235fa7ba616e18b
-	# good: [471b25a2fcbb25dccd7c9bece30313f2440a554e] Merge tag 'for-linus-iommufd' of git://git.kernel.org/pub/scm/linux/kernel/git/jgg/iommufd
-	git bisect good 471b25a2fcbb25dccd7c9bece30313f2440a554e
-	# good: [52025b8fc992972168128be40bffee7eafa532b5] Merge tag 'driver-core-6.17-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core
-	git bisect good 52025b8fc992972168128be40bffee7eafa532b5
-	# bad: [8004d08330e1aa7ae797778509e864f7ac3da687] Merge tag 'usb-6.17-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
-	git bisect bad 8004d08330e1aa7ae797778509e864f7ac3da687
-	# good: [a381c6d6f646226924809d0ad01a9465786da463] usb: typec: maxim_contaminant: re-enable cc toggle if cc is open and port is clean
-	git bisect good a381c6d6f646226924809d0ad01a9465786da463
-	# good: [4013aef2ced9b756a410f50d12df9ebe6a883e4a] ftrace: Fix potential warning in trace_printk_seq during ftrace_dump
-	git bisect good 4013aef2ced9b756a410f50d12df9ebe6a883e4a
-	# bad: [2eb03376151bb8585caa23ed2673583107bb5193] usb: xhci: Fix slot_id resource race conflict
-	git bisect bad 2eb03376151bb8585caa23ed2673583107bb5193
-	# good: [309b6341d5570fb2b41b923de2fc9bb147106b80] usb: typec: fusb302: Revert incorrect threaded irq fix
-	git bisect good 309b6341d5570fb2b41b923de2fc9bb147106b80
-	# first bad commit: [2eb03376151bb8585caa23ed2673583107bb5193] usb: xhci: Fix slot_id resource race conflict
-
-
-
-Thanks
-David
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
