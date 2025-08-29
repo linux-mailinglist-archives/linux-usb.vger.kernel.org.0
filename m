@@ -1,193 +1,113 @@
-Return-Path: <linux-usb+bounces-27373-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27374-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68499B3B795
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 11:37:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AB2DB3C06E
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 18:17:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 925701C8474E
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 09:38:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7050D1C804FA
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Aug 2025 16:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D27F2F4A12;
-	Fri, 29 Aug 2025 09:37:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D779E233159;
+	Fri, 29 Aug 2025 16:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lwUEE9KO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eOGWoYJR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01C426FA58;
-	Fri, 29 Aug 2025 09:37:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC207EACD
+	for <linux-usb@vger.kernel.org>; Fri, 29 Aug 2025 16:17:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756460253; cv=none; b=b/vdN1iZwGbfZaKyHdb/q45BlR48ZOgKG/fGSxs+kjZuP4kQglE1m9EPGEYIYF5MpZhYEKPldAQuAZihuSXDSN7umQ7ChC6fMbud/Ue0wSPPcP4OF9ML8t6A/PTHLMaxtlgpjl17t2lAq48hBBl0gRYRk0vuubdS6pukElkZ9xY=
+	t=1756484239; cv=none; b=D3qzOHG50NcmhLVCs1d3hT/Nx/8zAcZEV6hHNJxSvtK5e9kyXRbfPOaL+6RJvzSdSFBMyWulScSEqI2GSCd51aKOxwtTrfRoi4su8lLwH/0CU1ACRTREA1mSxqDUdOXyz1v2RWpMopV09DWc0yuPPk5MftLoGe2HSolDYibeHG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756460253; c=relaxed/simple;
-	bh=Ap6TpSpSWfu+GxU/IBIYtbECJ/gJQjgTTVqFq2X5zn4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QsuhqWG0tvK/DVEVzHL3mjS6/2wrI3evxDmjae2JInZ2lyM+M0fCIA1hePBlLSMZoYv9lga8BJ7gsxA92dnpGkuocGU5xaZ2uL761EpgM/FtwCtiJy/nlkwuwHgiL0V2ierkZ7MZbCgB72jvsxAfkiB8AR8BrRsKjYHTJdYqTzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lwUEE9KO; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756460250; x=1787996250;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ap6TpSpSWfu+GxU/IBIYtbECJ/gJQjgTTVqFq2X5zn4=;
-  b=lwUEE9KO9i2eTD9WdwPBSucbkT+6rHxmNwM71Jo9LaU4XAZF3Slon6c6
-   0Q6NgqBHxnLP3Q1jVLLGfYDaW9nmXJBTOUa5GVUfCQeLc4B2Oilk2uebQ
-   Btwc+otAJvk7140Y6M/XfGJUEwDjmkPkhUU0dLMtmb8uhzRg0+RlylAcz
-   odzDXYOp6rdd8PRRt+1DPAfo56vf5JThJtv6I6MUzge2rjsdFYBsSUVvq
-   SbE6y1IJbWtooEHm6slTUHQFcWj2UX0vBI40ySUjrYB8kfHvECn2iD62+
-   SCmAuCSGPw/U8PipLBOC1QwzHQMVd7o6MTXPtR3weJmtDBVhJ3xwXsqVX
-   w==;
-X-CSE-ConnectionGUID: ew2t07vxRByJxbdN2gyYHQ==
-X-CSE-MsgGUID: psbmDvU/TI2IrT/2kv8VnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="62389368"
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="62389368"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 02:37:30 -0700
-X-CSE-ConnectionGUID: J7/Vuy9PRtaesA1hnRSVOQ==
-X-CSE-MsgGUID: BWMYcSp6RXqR0c2ViZZwaQ==
-X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa003.fm.intel.com with SMTP; 29 Aug 2025 02:37:24 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 29 Aug 2025 12:37:23 +0300
-Date: Fri, 29 Aug 2025 12:37:23 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Sven Peter <sven@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-phy@lists.infradead.org, stable@kernel.org
-Subject: Re: [PATCH RFC 08/22] usb: typec: tipd: Clear interrupts first
-Message-ID: <aLF00zGWg2MPUlyJ@kuha.fi.intel.com>
-References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
- <20250821-atcphy-6-17-v1-8-172beda182b8@kernel.org>
+	s=arc-20240116; t=1756484239; c=relaxed/simple;
+	bh=IqEu0mZHV63RbT7c7EW1+o9eNW8DrWljfij7oXtVruw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tq3IFTwKsaXDKALicmAxIbsjq1/OmIGoM0kVeQWpHyo0e4EZAdA14/sfqX1xglEMwSFsKq2zJQjkqlMdiC2e84F81zQ9/qqnZo7PKO4nMTkgKKUWbU1S1005Kda3uc0SZ0zhDhTk+gI1Vk7+GkTBOvQY7JZmsagIyKXF/4ymMcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eOGWoYJR; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45a1b0bde14so14738235e9.2
+        for <linux-usb@vger.kernel.org>; Fri, 29 Aug 2025 09:17:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756484234; x=1757089034; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5/xgVxD2MLPErZaWTxQKc6/6L7tUcPgyK4Fuh97vP9A=;
+        b=eOGWoYJRsyTTW2+ffxKoTBbps7UMle83c9OZu9Ym+S7GWP71/54uIlpwYUWX1oGUJg
+         SlpJuwdkw8Co+NdPQylK3+PQciJ5QQPHaQxrDS1mAdACp0Wp0FMPtK48xekl62zmP/XD
+         xF/PhgjShIjwfdZil49flbk9j78ywdpZNQFHfDbfQvcVk2o5uzd2Xui+o1G0470DRJzM
+         dlg0uE4uQHHI+iJlUEt8tiwpf/l/nRrJhMGvrD84aYJX3QnjFakfFamPZW+S9XmFvUPF
+         k6dqm8Ta0p3Hqi2tBR6sq0OWKBBSytKAy5e0VEj60qUKIv1q5k/pQGa6gKU1Ky1Liaq1
+         vQtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756484234; x=1757089034;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5/xgVxD2MLPErZaWTxQKc6/6L7tUcPgyK4Fuh97vP9A=;
+        b=TaRAoNyHb2s4hhhVyDYR3kIMt0ierLA2eJlhf6nofqMhT7pLiQWtFtxJfmWNiVmMB0
+         P5mk0aEuKq11dqqQlAPb3EarIoBG1/F7nHMAhVFRHXomcKfJkNzfZabvPNYHYPEecLGU
+         bTLGSn8EE53TLm5L6Dvlnzcb6poWqBSJmG6mwcH2otQzGFIybGYA8aHp3UD3QmIdxRcO
+         I9ONRge6TORWKnvi27vjcTHq/v51knc703NW8c7rSFNtfhEyqFmGzx4mFWEwvMK3n55z
+         ISyb+DOXiP3SsFrTXpJ5L1uRun1h4XXBaT8Ra1QyI5K88JiBoDz11x7N/apMgEnodSjK
+         EuBw==
+X-Gm-Message-State: AOJu0YyaoWPzrpdd17wcrGAFrOaogpyDUts0hTg3KcICv+F+neniWxTb
+	xZH5CaI0+kiAe+GdyANxtAdnKcTRkiwAYRIHAxvbKXCCFaposONJUutzv78IAw==
+X-Gm-Gg: ASbGnct/CtWgMciwesYy5dM1mgQdqHKN/Ll7mn0H/EpRLH7bA+IEgb9TASyl393qD3O
+	KPyrQkyZJ1BB6UwBZjpiOgR1S2/9CLsFsX3ei7cUYY38zahOPEq7FT87S3BiUuDnJdHf8mafjBj
+	+OG7Pd341BBZcMezQH2cd6B8fC1VEE086dNZG30vEPMaaGEA/6QjvDyCgTlACRRb0IYLxkvg0Eb
+	BgL+jwqPZu53CMS2OXKtMQYyeSHIxkOfM/3Y0FmJ4LZAQGKdOBFVD4uAGUm+IlZGmyeGOchfX3E
+	wnFSc7s6knqgOuSBDj4uy6Zhd/Bf7DDcK9THbRSsGazJ5awXi3VNLsQHbBtV+M4WwixoqlzjCTn
+	Qi61AhIIF0xPl9xlM6Em4QRl14liP/5IM57cR
+X-Google-Smtp-Source: AGHT+IFxjmJYI2By5cid1aYQOeORQ3RHFcmraw1huTuiFFs2qT5P/IDEnwai5VQ36YN3v8yNcFOQiQ==
+X-Received: by 2002:a05:600c:3144:b0:45b:64bc:56ea with SMTP id 5b1f17b1804b1-45b68229282mr130962915e9.23.1756484233771;
+        Fri, 29 Aug 2025 09:17:13 -0700 (PDT)
+Received: from x230.suse.cz (gw1.ms-free.net. [185.243.124.10])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b73cf86f4sm103683005e9.6.2025.08.29.09.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Aug 2025 09:17:13 -0700 (PDT)
+From: Petr Vorel <petr.vorel@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Subject: [PATCH 1/1] usb: misc: Update link to EHSET pdf doc
+Date: Fri, 29 Aug 2025 18:17:08 +0200
+Message-ID: <20250829161708.106813-1-petr.vorel@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250821-atcphy-6-17-v1-8-172beda182b8@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 21, 2025 at 03:39:00PM +0000, Sven Peter wrote:
-> Right now the interrupt handler first reads all updated status registers
-> and only then clears the interrupts. It's possible that a duplicate
-> interrupt for a changed register or plug state comes in after the
-> interrupts have been processed but before they have been cleared:
-> 
-> * plug is inserted, TPS_REG_INT_PLUG_EVENT is set
-> * TPS_REG_INT_EVENT1 is read
-> * tps6598x_handle_plug_event() has run and registered the plug
-> * plug is removed again, TPS_REG_INT_PLUG_EVENT is set (again)
-> * TPS_REG_INT_CLEAR1 is written, TPS_REG_INT_PLUG_EVENT is cleared
-> 
-> We then have no plug connected and no pending interrupt but the tipd
-> core still thinks there is a plug. It's possible to trigger this with
-> e.g. a slightly broken Type-C to USB A converter.
-> 
-> Fix this by first clearing the interrupts and only then reading the
-> updated registers.
-> 
-> Fixes: 45188f27b3d0 ("usb: typec: tipd: Add support for Apple CD321X")
-> Fixes: 0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
-> Cc: stable@kernel.org
-> Signed-off-by: Sven Peter <sven@kernel.org>
+Obviously file on the website was renamed.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ drivers/usb/misc/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->  drivers/usb/typec/tipd/core.c | 24 +++++++++++-------------
->  1 file changed, 11 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index dcf141ada07812295a6f07e41d77f95f98116010..1c80296c3b273e24ceacb3feff432c4f6e6835cc 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -545,24 +545,23 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  	if (!event)
->  		goto err_unlock;
->  
-> +	tps6598x_write64(tps, TPS_REG_INT_CLEAR1, event);
-> +
->  	if (!tps6598x_read_status(tps, &status))
-> -		goto err_clear_ints;
-> +		goto err_unlock;
->  
->  	if (event & APPLE_CD_REG_INT_POWER_STATUS_UPDATE)
->  		if (!tps6598x_read_power_status(tps))
-> -			goto err_clear_ints;
-> +			goto err_unlock;
->  
->  	if (event & APPLE_CD_REG_INT_DATA_STATUS_UPDATE)
->  		if (!tps6598x_read_data_status(tps))
-> -			goto err_clear_ints;
-> +			goto err_unlock;
->  
->  	/* Handle plug insert or removal */
->  	if (event & APPLE_CD_REG_INT_PLUG_EVENT)
->  		tps6598x_handle_plug_event(tps, status);
->  
-> -err_clear_ints:
-> -	tps6598x_write64(tps, TPS_REG_INT_CLEAR1, event);
-> -
->  err_unlock:
->  	mutex_unlock(&tps->lock);
->  
-> @@ -668,25 +667,24 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
->  	if (!(event1[0] | event1[1] | event2[0] | event2[1]))
->  		goto err_unlock;
->  
-> +	tps6598x_block_write(tps, TPS_REG_INT_CLEAR1, event1, intev_len);
-> +	tps6598x_block_write(tps, TPS_REG_INT_CLEAR2, event2, intev_len);
-> +
->  	if (!tps6598x_read_status(tps, &status))
-> -		goto err_clear_ints;
-> +		goto err_unlock;
->  
->  	if ((event1[0] | event2[0]) & TPS_REG_INT_POWER_STATUS_UPDATE)
->  		if (!tps6598x_read_power_status(tps))
-> -			goto err_clear_ints;
-> +			goto err_unlock;
->  
->  	if ((event1[0] | event2[0]) & TPS_REG_INT_DATA_STATUS_UPDATE)
->  		if (!tps6598x_read_data_status(tps))
-> -			goto err_clear_ints;
-> +			goto err_unlock;
->  
->  	/* Handle plug insert or removal */
->  	if ((event1[0] | event2[0]) & TPS_REG_INT_PLUG_EVENT)
->  		tps6598x_handle_plug_event(tps, status);
->  
-> -err_clear_ints:
-> -	tps6598x_block_write(tps, TPS_REG_INT_CLEAR1, event1, intev_len);
-> -	tps6598x_block_write(tps, TPS_REG_INT_CLEAR2, event2, intev_len);
-> -
->  err_unlock:
->  	mutex_unlock(&tps->lock);
->  
-> 
-> -- 
-> 2.34.1
-> 
-
+diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+index 6497c4e81e951..f314f0ec777df 100644
+--- a/drivers/usb/misc/Kconfig
++++ b/drivers/usb/misc/Kconfig
+@@ -231,8 +231,8 @@ config USB_EHSET_TEST_FIXTURE
+ 	  VID/PID pairs. This driver then initiates a corresponding test mode on
+ 	  the downstream port to which the test fixture is attached.
+ 
+-	  See <http://www.usb.org/developers/onthego/EHSET_v1.01.pdf> for more
+-	  information.
++	  See <https://www.usb.org/sites/default/files/EHSET_v1.01%281%29.pdf>
++	  for more information.
+ 
+ config USB_ISIGHTFW
+ 	tristate "iSight firmware loading support"
 -- 
-heikki
+2.51.0
+
 
