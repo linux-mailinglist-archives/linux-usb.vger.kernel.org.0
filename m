@@ -1,131 +1,104 @@
-Return-Path: <linux-usb+bounces-27393-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27394-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98039B3CA4D
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Aug 2025 12:53:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 442C4B3CA53
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Aug 2025 13:05:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3A641BA6D79
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Aug 2025 10:53:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F07D189C6BC
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Aug 2025 11:05:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4261D275B13;
-	Sat, 30 Aug 2025 10:53:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064182773F5;
+	Sat, 30 Aug 2025 11:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="U+pYRvpK"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dsyx5OLa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943C423D2B2;
-	Sat, 30 Aug 2025 10:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D4E275870
+	for <linux-usb@vger.kernel.org>; Sat, 30 Aug 2025 11:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756551193; cv=none; b=NUdJMpXUQPlGfzTUHjaJ6LeNX12DcfOZVrkZv/QaUpFtbDruMAPaNVWZvyTTeJppRw8QBT3oTVHq282JG/baEm+a4+OwAtyadC9s4fqssfx5svO4+mB5rOik38v3BrQMUmSBk8stRzmGbq6Bj9aZ5S4Ci++TYPmYqDQR8Jj9g2U=
+	t=1756551934; cv=none; b=BsQObNZ4KaS/LRwVWY8qK7M/Q8VXp/TsWRenJfrVWsJGay+3nzubW8Svd/8m4oOq6+E4KxIBPknXBzN/uf73qKcMBTXUYbR+Gk5l95A6d5RcpgUEWbYh4EcZvfFUOO6D1SY5KYlC0rLJF/Uw9l4wB5DMsmFhgL6rQv+SLZsM3vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756551193; c=relaxed/simple;
-	bh=6tj5SitoC1vZtWTu4pzefYAXr8XTw577Ykpl6aPWOvs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t4+3D663PD2hyruElKGWj7OfhSruCQeEIWmDM2sWDd1aUOt5UtjTs5/pCL+YTzNUuRB6ABRe4h9LyRAdP1vQGgK2vqhDXTDasqjmefFyy4n2je/dSA+WkyyRYnZngNxDx7toEvW7U6QlZrj0pVburXabNeQomh67udSE98raNcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=U+pYRvpK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9357AC4CEEB;
-	Sat, 30 Aug 2025 10:53:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1756551193;
-	bh=6tj5SitoC1vZtWTu4pzefYAXr8XTw577Ykpl6aPWOvs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U+pYRvpKzsTu6o15jK2fsAJPwuEkT3sUmuwBc4S/FVggsu82i+pBPakOb7DkEOXRY
-	 2gLVu+5txMrQxmLfMgcQ7Dm4xSrkgEKNmvVHDO4eP1sgQ7gkzvPFcWpEiDUfVqiDig
-	 IImTuYJvrOaLCEzL+wTNIJU34mJQCMz+cTkM1h0E=
-Date: Sat, 30 Aug 2025 12:53:09 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Miaoqian Lin <linmq006@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Max Schulze <max.schulze@online.de>,
-	Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-	David Hollis <dhollis@davehollis.com>,
-	Greg Kroah-Hartman <gregkh@suse.de>,
-	David Brownell <david-b@pacbell.net>, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: asix_devices: Check return value of
- usbnet_get_endpoints
-Message-ID: <2025083031-lavender-rebel-ee20@gregkh>
-References: <20250830103743.2118777-1-linmq006@gmail.com>
+	s=arc-20240116; t=1756551934; c=relaxed/simple;
+	bh=/KD5l739dunYlba49vMptsdtoAjaH+WTxMZs40EP7x4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m6y8KLRO1KqllRkt93PTu+3nCfGeqmbhdwf679sS1IJ5joEF2XLuODd9YT+c98EPaE80xOl9tw7M8Etm0jSNVZiMqdiMXg8oXxAbnrgTzLaNPCk6DkZW0SiIa5LPrGpWdcTV6nITO9FYL6RtQKzvAQ7Tc8Mn4fH6rsZXPs7Q6M8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dsyx5OLa; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1756551927;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=y6eUtUQ02u5rezVEVOgcTxRprhXqjnk3WqB6i5j0+DI=;
+	b=dsyx5OLaLkbGBVOV2cA+VO323Uaoo28CF7YowEEWLL1EjbStcsce8x4ke/e+jbvOo4uQBb
+	IfWce4okynDccVnJ4+9cRL2wmuIpzvEnC4jVdtTxUBNPYULxpwPrlSmWYZcLOXJXp4cGTj
+	aZeUNFxEevxjH2FacO90OYwhw26VAoI=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Fedor Pchelkin <boddah8794@gmail.com>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Al Viro <viro@zeniv.linux.org.uk>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-usb@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: ucsi: stm32: Use min() to improve ucsi_stm32g0_fw_cb()
+Date: Sat, 30 Aug 2025 13:04:20 +0200
+Message-ID: <20250830110426.10007-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250830103743.2118777-1-linmq006@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Aug 30, 2025 at 06:37:41PM +0800, Miaoqian Lin wrote:
-> The code did not check the return value of usbnet_get_endpoints.
-> Add checks and return the error if it fails to transfer the error.
-> 
-> Fixes: 933a27d39e0e ("USB: asix - Add AX88178 support and many other changes")
-> Fixes: 2e55cc7210fe ("[PATCH] USB: usbnet (3/9) module for ASIX Ethernet adapters")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/net/usb/asix_devices.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-> index 9b0318fb50b5..92a5d6956cb3 100644
-> --- a/drivers/net/usb/asix_devices.c
-> +++ b/drivers/net/usb/asix_devices.c
-> @@ -230,7 +230,9 @@ static int ax88172_bind(struct usbnet *dev, struct usb_interface *intf)
->  	int i;
->  	unsigned long gpio_bits = dev->driver_info->data;
->  
-> -	usbnet_get_endpoints(dev,intf);
-> +	ret = usbnet_get_endpoints(dev, intf);
-> +	if (ret)
-> +		goto out;
->  
->  	/* Toggle the GPIOs in a manufacturer/model specific way */
->  	for (i = 2; i >= 0; i--) {
-> @@ -832,7 +834,9 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->  
->  	dev->driver_priv = priv;
->  
-> -	usbnet_get_endpoints(dev, intf);
-> +	ret = usbnet_get_endpoints(dev, intf);
-> +	if (ret)
-> +		return ret;
->  
->  	/* Maybe the boot loader passed the MAC address via device tree */
->  	if (!eth_platform_get_mac_address(&dev->udev->dev, buf)) {
-> @@ -1256,7 +1260,9 @@ static int ax88178_bind(struct usbnet *dev, struct usb_interface *intf)
->  	int ret;
->  	u8 buf[ETH_ALEN] = {0};
->  
-> -	usbnet_get_endpoints(dev,intf);
-> +	ret = usbnet_get_endpoints(dev, intf);
-> +	if (ret)
-> +		return ret;
->  
->  	/* Get the MAC address */
->  	ret = asix_read_cmd(dev, AX_CMD_READ_NODE_ID, 0, 0, ETH_ALEN, buf, 0);
-> @@ -1609,4 +1615,3 @@ MODULE_AUTHOR("David Hollis");
->  MODULE_VERSION(DRIVER_VERSION);
->  MODULE_DESCRIPTION("ASIX AX8817X based USB 2.0 Ethernet Devices");
->  MODULE_LICENSE("GPL");
-> -
+Use min() to improve ucsi_stm32g0_fw_cb() and avoid calculating
+'end - data' twice.
 
-Why did you remove this blank line?
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ drivers/usb/typec/ucsi/ucsi_stm32g0.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Also, how was this tested?
+diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+index 57ef7d83a412..838ac0185082 100644
+--- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
++++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+@@ -10,6 +10,7 @@
+ #include <linux/firmware.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
++#include <linux/minmax.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/unaligned.h>
+@@ -523,11 +524,7 @@ static void ucsi_stm32g0_fw_cb(const struct firmware *fw, void *context)
+ 	data = fw->data;
+ 	end = fw->data + fw->size;
+ 	while (data < end) {
+-		if ((end - data) < STM32G0_I2C_BL_SZ)
+-			size = end - data;
+-		else
+-			size = STM32G0_I2C_BL_SZ;
+-
++		size = min(end - data, STM32G0_I2C_BL_SZ);
+ 		ret = ucsi_stm32g0_bl_write(g0->ucsi, addr, data, size);
+ 		if (ret) {
+ 			dev_err(g0->dev, "Write failed %d\n", ret);
+-- 
+2.50.1
 
-And you forgot to add a cc: stable?
-
-thanks,
-
-greg k-h
 
