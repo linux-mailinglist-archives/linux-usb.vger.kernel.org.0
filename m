@@ -1,167 +1,156 @@
-Return-Path: <linux-usb+bounces-27391-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27392-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF96DB3CA08
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Aug 2025 12:18:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9815BB3CA44
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Aug 2025 12:38:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC7521B22AEF
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Aug 2025 10:18:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8D721BA1681
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Aug 2025 10:38:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75CF266581;
-	Sat, 30 Aug 2025 10:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4766927932F;
+	Sat, 30 Aug 2025 10:37:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="HfsX2sG9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GCFfXRae"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF92DDF76;
-	Sat, 30 Aug 2025 10:18:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6257E214210;
+	Sat, 30 Aug 2025 10:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756549096; cv=none; b=l0THGGbBk3bn7wRRG6EJlbxUYbTqEzhkyhH4dB3iuFtqekLotdSWPwdMNu9X/QGcOjlBm+ucarq6akQAKOdo8b4Noq/FYubgWvwVbrQINscONOZdVmF8xp4QkbtDY4OJopSMi/kHCCD0OICUyqmDIa1SI9KI9yMo1+2PN5+wBzA=
+	t=1756550275; cv=none; b=Ew/kB2yeZwAp2lxpqsrV1LBynrQ26gKhG4oRMARgrejPbqlmkEoHO4MaE2Vn4JLZv8MxHPX9ks14i/dqUSMVwl/T+5jJ/qgBuS+vXhjI6Y1XJJVGi3pmuBJmM6i4A/Ph34//f/M0ngeiGV864Cvxkvz8YofpgVj3WWq7uEloYEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756549096; c=relaxed/simple;
-	bh=0w3YD8sb0RsX3y4Q5t8QZY/EchpMvzahkWMQ4sDo2Ys=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=FpApJsd+cUqqvIbEEFY26cO1CUuSGUjUjuH5SYFBqfoRLfkimAQqCP3sf2OzbSjbR6yZXInqig0eOR4njWn8Kb8iO+MOsgmT80SbW0MX8k/iufRUuRs3TWyCRpg2WG+W51XVOqH0DgJS/hIlKo/mzRnby9INs3rOG48n4RUvsKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=HfsX2sG9 reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=EyP7AQUP7TP7kXoIPH1lKGMAhRYZRfOP8QoxBd9jQfI=; b=H
-	fsX2sG9G0l2wwY9n+SP4FsKsVkvwLQOWWOodAPvg9g/mHk1A/s1SVHhp+4BnQIPB
-	sJQbPUP2z6GKbJFyGnKTc2VA21pXo7nC8w9WR8McxKzWE1cdogbD8OktWu95IASw
-	FUYdLXNftltoweXQhaH1GkQxPNQq0P3nlcWXZL2fps=
-Received: from 00107082$163.com ( [111.35.190.191] ) by
- ajax-webmail-wmsvr-40-133 (Coremail) ; Sat, 30 Aug 2025 18:17:26 +0800
- (CST)
-Date: Sat, 30 Aug 2025 18:17:26 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: WeitaoWang-oc@zhaoxin.com, mathias.nyman@linux.intel.com,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	regressions@lists.linux.dev, linux-kernel@vger.kernel.org,
-	surenb@google.com, kent.overstreet@linux.dev
-Subject: Re: [REGRESSION 6.17-rc3] usb/xhci: possible memory leak after
- suspend/resume cycle.
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
- Copyright (c) 2002-2025 www.mailtech.cn 163com
-In-Reply-To: <20250830114828.3dd8ed56.michal.pecio@gmail.com>
-References: <20250829181354.4450-1-00107082@163.com>
- <20250830114828.3dd8ed56.michal.pecio@gmail.com>
-X-NTES-SC: AL_Qu2eBPmftkgv4CCdZukXn0oTju85XMCzuv8j3YJeN500mSXW+jIDdm5AMmXN3PmPFgGmoQm0dwRQyvxjQYhRRomb2bOuKJeOUNRWw8Ux1/pM
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1756550275; c=relaxed/simple;
+	bh=92s0xkNcJcNFoJTJ9YgU0ubfeA/k4I5bNPkZ8gIr1Ck=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=dFJMV8oGTw6oApXhnUDIyg+l+Y08kjf3dzPiE5T8QcrNveVr93aDdWMWIZBUE+M38mWl5E0G4tSwsNH1HcROMGAhoPqwHBLoORF2MPcsdTvtUhGpnMlZYFgoDvXFhb/RHakZdUuKfK8tx6pJqk1SYqBzFRnoOBtY/yciFXoB7pM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GCFfXRae; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-323266cdf64so2458401a91.0;
+        Sat, 30 Aug 2025 03:37:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756550273; x=1757155073; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EdmEievJd3EEga1bSy7r02AJQvZ6G/baQRGFflIOctY=;
+        b=GCFfXRae55wuiQLHyKXWQLd3pOZZ4vEUaJmy+PWtP7ui0i3hnEG7mUFjQWAI3Po4O0
+         QO32fTtZJRgQosMbt/IeE8QqCQB9AzX1Y/1n8hPVU+M8QPdX6tNCna3/77EoCkmJILiI
+         SlRYiJcgu5I1Z1UJ0TGqKEE+vh3/qBgzGF/Zd2Oxq4ttjOFgAza6IRhWiHW+JY1/+zii
+         XYhLhFPxMmzwZ+edAvCCs82N6V2vHBD+rtiRO7RFZtKQMutml8bEw7A2YdGGTtaV7ndf
+         lTBhMF0AGGdy5iuCOeDB/UEU4Tnuc3D6wq9vsPcjTFyExKYxexpsaB6BzXtkLEOf4oDH
+         EPdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756550273; x=1757155073;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EdmEievJd3EEga1bSy7r02AJQvZ6G/baQRGFflIOctY=;
+        b=tPZ7OMyinQY2XzdyJuXxFlgTSqrJ/j+5KgpV+gtCY0J7pA/WwWxff+yU4B4bAhhUbl
+         yi7nwTl0x9aHqq6KhMUeKTGTws9yl29KyT+/flclYsVof/FTq6DdJ51u5eLyT6iHfvLq
+         sJwcL2Zy08qQ7RVXuwdiKgIHbYSs3HlRWDrGMqFzL6zyaFk2sZP+qHmvvPPFsiZfzb4l
+         sP5f8TVMnooThRddm4z47GX6s2H8D2ZEQ0JRjb2iQ8sJkIBYu8nmVjjOKTOGJx3QSqJe
+         RdgR6qcoWVXM8o1pKBvBRAkNrk3uyBWDwYSu24lM5/u+voODwQmlCT2EReXTWznsfZc8
+         fmVg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3hTrB9qEpFHXLtmWA/lWrYqaB89hlCgdH1Yve2jm0HBpnz2Ca8n7oohNdU/SmWeh1BQpc1ZKn4xeN9+0=@vger.kernel.org, AJvYcCXePO82u62aQlL3/fLS5KbexjSz/vonQu27VMHrBOLYB5lq/yEa4jWNi+bSvDe1L2hLNqlQuqa70ehO@vger.kernel.org, AJvYcCXlWDcBagh5eZiTNJlUuqs93PDrB983LCCTbPaN0ZzvNSsDAqTFnIq3QTBoIzeqCBZ1CWpDDeOa@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4rvSfQJJRVSnfi4d3v+nAYtlRK0+T6isQwyU76+68pwMADtHm
+	VSRyJpcSqUcVbUWhRCKVtaehR5i2z9dp//PEV1EW3auvSQ6zyyz96+Ji
+X-Gm-Gg: ASbGncsHopqa+R9vTQjqh4txoNbyLbP2V07tNVDtTv9idKFvUlj6d5vseW+VaqKtvDS
+	rJgjr9q1DaSY+E+M2IBzHt69rommogBiqjCApwuk5U0bnaJ/7xrBBLcYPQjkv4fg+JHkwhaE7P/
+	eCTgox+rdAHZGrRNFOv0uEp+5phf5E1eoWlMAIHdUKEpJS0v9ygolT6vWrmx5CAjqYFDTcv2bbq
+	dZnJ3Nx6HHpMXagLVSascjuZkb4F5DvMG3TfcVmuN9RBAXoqLyBKBRzfVdE97cCRDIOqnBye4gH
+	ahI5eKBVaJa83CompeyFiPdprdrGTfFxCFemCwGVqhZYDgv2dwb6BHxfb5S183a8LxKhANVRqls
+	RbWkd60HmzG1LsOUKdN5locsJfEoLgP9Un/vXkWSV9870IsoFuEvsxjMbHsTzhRUXzNUpWxlF4c
+	w6ejGglUGx69mRWFU9t7kFNJH8OSLwi9atb7jh9CWnULxO3A==
+X-Google-Smtp-Source: AGHT+IFbTIicJ6cs6FlAg9iL117Ehvwbzc0ORL6rHnLDCmiNTAlFUCldexDRLUdmq14XMrH3ElwbjQ==
+X-Received: by 2002:a17:90b:4acf:b0:327:6823:bfe with SMTP id 98e67ed59e1d1-32815412a3fmr2366254a91.8.1756550273475;
+        Sat, 30 Aug 2025 03:37:53 -0700 (PDT)
+Received: from vickymqlin-1vvu545oca.codev-2.svc.cluster.local ([14.116.239.36])
+        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-327d9330b73sm5446673a91.4.2025.08.30.03.37.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Aug 2025 03:37:52 -0700 (PDT)
+From: Miaoqian Lin <linmq006@gmail.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Max Schulze <max.schulze@online.de>,
+	Miaoqian Lin <linmq006@gmail.com>,
+	=?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+	David Hollis <dhollis@davehollis.com>,
+	Greg Kroah-Hartman <gregkh@suse.de>,
+	David Brownell <david-b@pacbell.net>,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] net: usb: asix_devices: Check return value of usbnet_get_endpoints
+Date: Sat, 30 Aug 2025 18:37:41 +0800
+Message-Id: <20250830103743.2118777-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <5051e27a.2ba3.198fa7b5f31.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:hSgvCgD3__u2z7JoIF8lAA--.311W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiMxG5qmiyvgHQnQAEsd
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Transfer-Encoding: 8bit
 
-CkF0IDIwMjUtMDgtMzAgMTc6NDg6MjgsICJNaWNoYcWCIFBlY2lvIiA8bWljaGFsLnBlY2lvQGdt
-YWlsLmNvbT4gd3JvdGU6Cj5PbiBTYXQsIDMwIEF1ZyAyMDI1IDAyOjEzOjU0ICswODAwLCBEYXZp
-ZCBXYW5nIHdyb3RlOgo+PiBIaSwKPj4KPj4gSSBoYXZlIGJlZW4gd2F0Y2hpbmcga2VybmVsIG1l
-bW9yeSB1c2FnZSBmb3IgZHJpdmVycyBmb3IgYSB3aGlsZSwgdmlhIC9wcm9jL2FsbG9jaW5mby4K
-Pj4gQWZ0ZXIgdXBncmFkZSB0byA2LjE3LXJjMywgSSBub3RpY2UgbWVtb3J5IHVzYWdlIGJlaGF2
-aW9yIGNoYW5nZXMgZm9yIHVzYiBkcml2ZXJzOgo+PiAKPj4gQmVmb3JlIHJjMywgYWZ0ZXIgc2V2
-ZXJhbCBzdXNwZW5kL3Jlc3VtZSBjeWNsZXMsIHVzYiBkZXZpY2VzJ3MgbWVtb3J5IHVzYWdlIGlz
-IHZlcnkgc3RhYmxlOgo+PiAKPj4gICAgICAgIDQwOTYwICAgICAgICA1IGRyaXZlcnMvdXNiL2hv
-c3QveGhjaS1tZW0uYzo5ODAgW3hoY2lfaGNkXSBmdW5jOnhoY2lfYWxsb2NfdmlydF9kZXZpY2Ug
-OQo+PiAgICAgICAgIDEwMjQgICAgICAgIDEgZHJpdmVycy91c2IvaG9zdC94aGNpLW1lbS5jOjg0
-MSBbeGhjaV9oY2RdIGZ1bmM6eGhjaV9hbGxvY190dF9pbmZvIDIKPj4gICAgICAgICAgMzIwICAg
-ICAgIDEwIGRyaXZlcnMvdXNiL2hvc3QveGhjaS1tZW0uYzo0NjEgW3hoY2lfaGNkXSBmdW5jOnho
-Y2lfYWxsb2NfY29udGFpbmVyX2N0eCAzMQo+PiAgICAgICAgIDE5MjAgICAgICAgMTUgZHJpdmVy
-cy91c2IvaG9zdC94aGNpLW1lbS5jOjM3NyBbeGhjaV9oY2RdIGZ1bmM6eGhjaV9yaW5nX2FsbG9j
-IDMxCj4+ICAgICAgICAgIDExMiAgICAgICAxMiBkcml2ZXJzL3VzYi9ob3N0L3hoY2ktbWVtLmM6
-NDkgW3hoY2lfaGNkXSBmdW5jOnhoY2lfc2VnbWVudF9hbGxvYyAzMgo+PiAgICAgICAgIDE3OTIg
-ICAgICAgMjggZHJpdmVycy91c2IvaG9zdC94aGNpLW1lbS5jOjM4IFt4aGNpX2hjZF0gZnVuYzp4
-aGNpX3NlZ21lbnRfYWxsb2MgNTkKPj4gCj4+IEJ1dCB3aXRoIHJjMywgdGhlIG1lbW9yeSB1c2Fn
-ZSBpbmNyZWFzZSBhZnRlciBlYWNoIHN1c3BlbmQvcmVzdW1lIGN5Y2xlOiAKPj4gCj4+ICMxOgo+
-PiAgICAgICAgNDkxNTIgICAgICAgIDYgZHJpdmVycy91c2IvaG9zdC94aGNpLW1lbS5jOjk4MCBb
-eGhjaV9oY2RdIGZ1bmM6eGhjaV9hbGxvY192aXJ0X2RldmljZSA5Cj4+ICAgICAgICAgMTAyNCAg
-ICAgICAgMSBkcml2ZXJzL3VzYi9ob3N0L3hoY2ktbWVtLmM6ODQxIFt4aGNpX2hjZF0gZnVuYzp4
-aGNpX2FsbG9jX3R0X2luZm8gMgo+PiAgICAgICAgICAzODQgICAgICAgMTIgZHJpdmVycy91c2Iv
-aG9zdC94aGNpLW1lbS5jOjQ2MSBbeGhjaV9oY2RdIGZ1bmM6eGhjaV9hbGxvY19jb250YWluZXJf
-Y3R4IDMyCj4+ICAgICAgICAgMjE3NiAgICAgICAxNyBkcml2ZXJzL3VzYi9ob3N0L3hoY2ktbWVt
-LmM6Mzc3IFt4aGNpX2hjZF0gZnVuYzp4aGNpX3JpbmdfYWxsb2MgMzIKPj4gICAgICAgICAgMTI4
-ICAgICAgIDE0IGRyaXZlcnMvdXNiL2hvc3QveGhjaS1tZW0uYzo0OSBbeGhjaV9oY2RdIGZ1bmM6
-eGhjaV9zZWdtZW50X2FsbG9jIDM0Cj4+ICAgICAgICAgMjA0OCAgICAgICAzMiBkcml2ZXJzL3Vz
-Yi9ob3N0L3hoY2ktbWVtLmM6MzggW3hoY2lfaGNkXSBmdW5jOnhoY2lfc2VnbWVudF9hbGxvYyA2
-MQo+PiAjMjoKPj4gICAgICAgIDU3MzQ0ICAgICAgICA3IGRyaXZlcnMvdXNiL2hvc3QveGhjaS1t
-ZW0uYzo5ODAgW3hoY2lfaGNkXSBmdW5jOnhoY2lfYWxsb2NfdmlydF9kZXZpY2UgMTMKPj4gICAg
-ICAgICAxMDI0ICAgICAgICAxIGRyaXZlcnMvdXNiL2hvc3QveGhjaS1tZW0uYzo4NDEgW3hoY2lf
-aGNkXSBmdW5jOnhoY2lfYWxsb2NfdHRfaW5mbyAzCj4+ICAgICAgICAgIDQ0OCAgICAgICAxNCBk
-cml2ZXJzL3VzYi9ob3N0L3hoY2ktbWVtLmM6NDYxIFt4aGNpX2hjZF0gZnVuYzp4aGNpX2FsbG9j
-X2NvbnRhaW5lcl9jdHggNDYKPj4gICAgICAgICAyNDMyICAgICAgIDE5IGRyaXZlcnMvdXNiL2hv
-c3QveGhjaS1tZW0uYzozNzcgW3hoY2lfaGNkXSBmdW5jOnhoY2lfcmluZ19hbGxvYyA0Mwo+PiAg
-ICAgICAgICAxNDQgICAgICAgMTYgZHJpdmVycy91c2IvaG9zdC94aGNpLW1lbS5jOjQ5IFt4aGNp
-X2hjZF0gZnVuYzp4aGNpX3NlZ21lbnRfYWxsb2MgNDQKPj4gICAgICAgICAyMzA0ICAgICAgIDM2
-IGRyaXZlcnMvdXNiL2hvc3QveGhjaS1tZW0uYzozOCBbeGhjaV9oY2RdIGZ1bmM6eGhjaV9zZWdt
-ZW50X2FsbG9jIDgyCj4+ICMzOgo+PiAgICAgICAgNjU1MzYgICAgICAgIDggZHJpdmVycy91c2Iv
-aG9zdC94aGNpLW1lbS5jOjk4MCBbeGhjaV9oY2RdIGZ1bmM6eGhjaV9hbGxvY192aXJ0X2Rldmlj
-ZSAxNwo+PiAgICAgICAgIDEwMjQgICAgICAgIDEgZHJpdmVycy91c2IvaG9zdC94aGNpLW1lbS5j
-Ojg0MSBbeGhjaV9oY2RdIGZ1bmM6eGhjaV9hbGxvY190dF9pbmZvIDQKPj4gICAgICAgICAgNTEy
-ICAgICAgIDE2IGRyaXZlcnMvdXNiL2hvc3QveGhjaS1tZW0uYzo0NjEgW3hoY2lfaGNkXSBmdW5j
-OnhoY2lfYWxsb2NfY29udGFpbmVyX2N0eCA2MAo+PiAgICAgICAgIDI2ODggICAgICAgMjEgZHJp
-dmVycy91c2IvaG9zdC94aGNpLW1lbS5jOjM3NyBbeGhjaV9oY2RdIGZ1bmM6eGhjaV9yaW5nX2Fs
-bG9jIDU0Cj4+ICAgICAgICAgIDE2MCAgICAgICAxOCBkcml2ZXJzL3VzYi9ob3N0L3hoY2ktbWVt
-LmM6NDkgW3hoY2lfaGNkXSBmdW5jOnhoY2lfc2VnbWVudF9hbGxvYyA1NAo+PiAgICAgICAgIDI1
-NjAgICAgICAgNDAgZHJpdmVycy91c2IvaG9zdC94aGNpLW1lbS5jOjM4IFt4aGNpX2hjZF0gZnVu
-Yzp4aGNpX3NlZ21lbnRfYWxsb2MgMTAzCj4+IAo+PiBUaGUgbWVtb3J5IGluY3JlYXNpbmcgcGF0
-dGVybiBrZWVwcyBnb2luZyBvbiBmb3IgZWFjaCBzdXNwZW5kL3Jlc3VtZSBhZnRlcndhcmRzLCBJ
-IGFtIG5vdAo+PiBzdXJlIHdoZXRoZXIgdGhvc2UgbWVtb3J5IHdvdWxkIGJlIHJlbGVhc2VkIHNv
-bWV0aW1lIGxhdGVyLgo+PiAKPj4gQW5kIGluIGtlcm5lbCBsb2csIHR3byBsaW5lcyBvZiBlcnJv
-ciBhbHdheXMgc2hvd2VkIHVwIGFmdGVyIHN1c3BlbmQvcmVzdW1lOgo+PiAKPj4gCVsgIDI5NS42
-MTM1OThdIHhoY2lfaGNkIDAwMDA6MDM6MDAuMDogZG1hX3Bvb2xfZGVzdHJveSB4SENJIHJpbmcg
-c2VnbWVudHMgYnVzeQo+PiAJWyAgMjk1LjYxMzYwNV0geGhjaV9oY2QgMDAwMDowMzowMC4wOiBk
-bWFfcG9vbF9kZXN0cm95IHhIQ0kgaW5wdXQvb3V0cHV0IGNvbnRleHRzIGJ1c3kKPgo+SGksCj4K
-Pkdvb2Qgd29yaywgbG9va3MgbGlrZSBzdXNwZW5kL3Jlc3VtZSBpcyBhIGxpdHRsZSB1bmRlcnN0
-ZXN0ZWQgY29ybmVyCj5vZiB0aGlzIGRyaXZlci4KPgo+RGlkIHlvdSBjaGVjayB3aGV0aGVyIHRo
-ZSBzYW1lIGxlYWsgb2NjdXJzIGlmIHlvdSBzaW1wbHkgZGlzY29ubmVjdAo+YSBkZXZpY2Ugb3Ig
-aWYgaXQncyB0cnVseSB1bmlxdWUgdG8gc3VzcGVuZD8KPgo+PiBBbmQgYmlzZWN0IG5hcnJvdyBk
-b3duIHRvIGNvbW1pdCAyZWIwMzM3NjE1MWJiODU4NWNhYTIzZWQyNjczNTgzMTA3YmI1MTkzKAo+
-PiAidXNiOiB4aGNpOiBGaXggc2xvdF9pZCByZXNvdXJjZSByYWNlIGNvbmZsaWN0Iik6Cj4KPkkg
-c2VlIGEgdHJpdmlhbCBidWcgd2hpY2ggZXZlcnlvbmUgKG15c2VsZiBpbmNsdWRlZCB0YmgpIG1p
-c3NlZCBiZWZvcmUuCj5Eb2VzIHRoaXMgaGVscD8KPgo+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNi
-L2hvc3QveGhjaS1tZW0uYyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tZW0uYwo+aW5kZXggZjEx
-ZTEzZjljZGI0Li5mMjk0MDMyYzJhZDcgMTAwNjQ0Cj4tLS0gYS9kcml2ZXJzL3VzYi9ob3N0L3ho
-Y2ktbWVtLmMKPisrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tZW0uYwo+QEAgLTkzMiw3ICs5
-MzIsNyBAQCB2b2lkIHhoY2lfZnJlZV92aXJ0X2RldmljZShzdHJ1Y3QgeGhjaV9oY2QgKnhoY2ks
-IHN0cnVjdCB4aGNpX3ZpcnRfZGV2aWNlICpkZXYsCj4gICovCj4gc3RhdGljIHZvaWQgeGhjaV9m
-cmVlX3ZpcnRfZGV2aWNlc19kZXB0aF9maXJzdChzdHJ1Y3QgeGhjaV9oY2QgKnhoY2ksIGludCBz
-bG90X2lkKQo+IHsKPi0Jc3RydWN0IHhoY2lfdmlydF9kZXZpY2UgKnZkZXY7Cj4rCXN0cnVjdCB4
-aGNpX3ZpcnRfZGV2aWNlICp2ZGV2LCAqdG1wX3ZkZXY7Cj4gCXN0cnVjdCBsaXN0X2hlYWQgKnR0
-X2xpc3RfaGVhZDsKPiAJc3RydWN0IHhoY2lfdHRfYndfaW5mbyAqdHRfaW5mbywgKm5leHQ7Cj4g
-CWludCBpOwo+QEAgLTk1Miw4ICs5NTIsOCBAQCBzdGF0aWMgdm9pZCB4aGNpX2ZyZWVfdmlydF9k
-ZXZpY2VzX2RlcHRoX2ZpcnN0KHN0cnVjdCB4aGNpX2hjZCAqeGhjaSwgaW50IHNsb3RfaQo+IAkJ
-aWYgKHR0X2luZm8tPnNsb3RfaWQgPT0gc2xvdF9pZCkgewo+IAkJCS8qIGFyZSBhbnkgZGV2aWNl
-cyB1c2luZyB0aGlzIHR0X2luZm8/ICovCj4gCQkJZm9yIChpID0gMTsgaSA8IEhDU19NQVhfU0xP
-VFMoeGhjaS0+aGNzX3BhcmFtczEpOyBpKyspIHsKPi0JCQkJdmRldiA9IHhoY2ktPmRldnNbaV07
-Cj4tCQkJCWlmICh2ZGV2ICYmICh2ZGV2LT50dF9pbmZvID09IHR0X2luZm8pKQo+KwkJCQl0bXBf
-dmRldiA9IHhoY2ktPmRldnNbaV07Cj4rCQkJCWlmICh0bXBfdmRldiAmJiAodG1wX3ZkZXYtPnR0
-X2luZm8gPT0gdHRfaW5mbykpCj4gCQkJCQl4aGNpX2ZyZWVfdmlydF9kZXZpY2VzX2RlcHRoX2Zp
-cnN0KAo+IAkJCQkJCXhoY2ksIGkpOwoKSSBjb25maXJtZWQgdGhpcyAqc2lsbHkqIGNvZGUgaXMg
-dGhlIHJvb3QgY2F1c2Ugb2YgdGhpcyBtZW1vcnkgbGVhay4KQW5kIEkgd291bGQgc3VnZ2VzdCBz
-aW1wbGVyIGNvZGUgY2hhbmdlcyAod2hpY2ggaXMgd2hhdCBJIHdhcyB0ZXN0aW5nKTogIAoKCmRp
-ZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbWVtLmMgYi9kcml2ZXJzL3VzYi9ob3N0
-L3hoY2ktbWVtLmMKaW5kZXggODFlYWFkODdhM2Q5Li5jNGE2NTQ0YWExMDcgMTAwNjQ0Ci0tLSBh
-L2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tZW0uYworKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2kt
-bWVtLmMKQEAgLTk2Miw3ICs5NjIsNyBAQCBzdGF0aWMgdm9pZCB4aGNpX2ZyZWVfdmlydF9kZXZp
-Y2VzX2RlcHRoX2ZpcnN0KHN0cnVjdCB4aGNpX2hjZCAqeGhjaSwgaW50IHNsb3RfaQogb3V0Ogog
-ICAgICAgIC8qIHdlIGFyZSBub3cgYXQgYSBsZWFmIGRldmljZSAqLwogICAgICAgIHhoY2lfZGVi
-dWdmc19yZW1vdmVfc2xvdCh4aGNpLCBzbG90X2lkKTsKLSAgICAgICB4aGNpX2ZyZWVfdmlydF9k
-ZXZpY2UoeGhjaSwgdmRldiwgc2xvdF9pZCk7CisgICAgICAgeGhjaV9mcmVlX3ZpcnRfZGV2aWNl
-KHhoY2ksIHhoY2ktPmRldnNbc2xvdF9pZF0sIHNsb3RfaWQpOwogfQogCiBpbnQgeGhjaV9hbGxv
-Y192aXJ0X2RldmljZShzdHJ1Y3QgeGhjaV9oY2QgKnhoY2ksIGludCBzbG90X2lkLAoKCgpUaGFu
-a3MKRGF2aWQK
+The code did not check the return value of usbnet_get_endpoints.
+Add checks and return the error if it fails to transfer the error.
+
+Fixes: 933a27d39e0e ("USB: asix - Add AX88178 support and many other changes")
+Fixes: 2e55cc7210fe ("[PATCH] USB: usbnet (3/9) module for ASIX Ethernet adapters")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/net/usb/asix_devices.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 9b0318fb50b5..92a5d6956cb3 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -230,7 +230,9 @@ static int ax88172_bind(struct usbnet *dev, struct usb_interface *intf)
+ 	int i;
+ 	unsigned long gpio_bits = dev->driver_info->data;
+ 
+-	usbnet_get_endpoints(dev,intf);
++	ret = usbnet_get_endpoints(dev, intf);
++	if (ret)
++		goto out;
+ 
+ 	/* Toggle the GPIOs in a manufacturer/model specific way */
+ 	for (i = 2; i >= 0; i--) {
+@@ -832,7 +834,9 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+ 
+ 	dev->driver_priv = priv;
+ 
+-	usbnet_get_endpoints(dev, intf);
++	ret = usbnet_get_endpoints(dev, intf);
++	if (ret)
++		return ret;
+ 
+ 	/* Maybe the boot loader passed the MAC address via device tree */
+ 	if (!eth_platform_get_mac_address(&dev->udev->dev, buf)) {
+@@ -1256,7 +1260,9 @@ static int ax88178_bind(struct usbnet *dev, struct usb_interface *intf)
+ 	int ret;
+ 	u8 buf[ETH_ALEN] = {0};
+ 
+-	usbnet_get_endpoints(dev,intf);
++	ret = usbnet_get_endpoints(dev, intf);
++	if (ret)
++		return ret;
+ 
+ 	/* Get the MAC address */
+ 	ret = asix_read_cmd(dev, AX_CMD_READ_NODE_ID, 0, 0, ETH_ALEN, buf, 0);
+@@ -1609,4 +1615,3 @@ MODULE_AUTHOR("David Hollis");
+ MODULE_VERSION(DRIVER_VERSION);
+ MODULE_DESCRIPTION("ASIX AX8817X based USB 2.0 Ethernet Devices");
+ MODULE_LICENSE("GPL");
+-
+-- 
+2.35.1
+
 
