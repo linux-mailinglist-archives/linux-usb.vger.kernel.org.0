@@ -1,149 +1,311 @@
-Return-Path: <linux-usb+bounces-27403-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27404-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 410BBB3D3DF
-	for <lists+linux-usb@lfdr.de>; Sun, 31 Aug 2025 16:13:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3B7FB3D4E4
+	for <lists+linux-usb@lfdr.de>; Sun, 31 Aug 2025 21:23:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8604189CA0A
-	for <lists+linux-usb@lfdr.de>; Sun, 31 Aug 2025 14:13:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F531179E64
+	for <lists+linux-usb@lfdr.de>; Sun, 31 Aug 2025 19:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBFC526E6E6;
-	Sun, 31 Aug 2025 14:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D036274B44;
+	Sun, 31 Aug 2025 19:23:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="O29geZKM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i+svRBbS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CB423F413
-	for <linux-usb@vger.kernel.org>; Sun, 31 Aug 2025 14:13:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BEF919D89E;
+	Sun, 31 Aug 2025 19:23:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756649605; cv=none; b=NqgaT8n5otAfy3lzVCM2WGE1ftNLeaCZ0RS5lTuNsJmj3B/4AptkytJXFtIreVflih1doe8puZ5sNTt6rSqW+/FRx8lW7yTMw+QeJ0TkS62Vo6KlgG9aeUEfMp9NFUBYUUCbaGPyLexvQCMd6iFNBk2ehQifSzYmmvaqZlfbaNQ=
+	t=1756668182; cv=none; b=LeQgKMZONynx26X3RS0CaMXCtKlNOC3xlf62WOiN6leUFuEWBKl9qFPRAaZRWcnXDJD8rkbzdOabUlPhn113GWwg4PqyEw9KzK8aNgsMUXTgl+pOl9Dfg1hfqpxnawJjosews5wOqg60Bb+YkRIRZG+bIXCKvv+roXxLCrJML/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756649605; c=relaxed/simple;
-	bh=NNaRzc54R7CkH8DGod84aqEZIb1kdPD8DIczOdskT5k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LiOCFsTi2ai4lcRpr060RsHe377LpI8Suf+HTrOF42b+UCs2GBLW+6K2IoQlXCnTXMujyt8Sa6mZ26Qbn5R0aF9GaozRyxF41IxEg562sGhpOzFRyt9NbVlJgoUVqVpcjmA2QTyxxTEJW+CVkMIBafP6D8wCxh7/cVAsyex9SwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=O29geZKM; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7e86faa158fso369458485a.1
-        for <linux-usb@vger.kernel.org>; Sun, 31 Aug 2025 07:13:22 -0700 (PDT)
+	s=arc-20240116; t=1756668182; c=relaxed/simple;
+	bh=CbCff7WnxsS6J7stxa7pIncOKua91mLgE+ZaX6aIzWY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SdHBwhh9/yNgO9uTE6hRRlyNjATl+0D6cDFz+/L9rRDJFTICUFwvhFwFFRx52AHi0LYFZLEfhWHX1p0gXDFZpE2ReyFxQWy5Q/MtrwD5bdlrVcPEA7xkcPugvZX1Jx/mDU+udxFwS3gOyMfNgNSDmuB2yLQ6Z4TceCDXnDfAPhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i+svRBbS; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-327e5b65e2cso1883979a91.2;
+        Sun, 31 Aug 2025 12:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1756649602; x=1757254402; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cZYLdktZ4EPO06YD32v1q0DpK8GiNv05c9EBnf+HoCw=;
-        b=O29geZKMmzrLZzRwJdLGYMPODpfdZoO4R5zPykibV8/KA6hWs1WzLvzch2KWTutR1Z
-         rl791j0cLnbpDlo8A9rT/DipI16oUUUloWeCd/8VKM+oEXB0qrmldl6Wn6GoBJQt85Aw
-         eQ/jNuKHtNLYYwnjSdSgDGABnuA0lzGZ8MHoFBU6FVbY83lsm1+eNFNlPOuroC5XlPM+
-         Phue281M/aqU4I+UaeGSFruxx/IlxP1NRxyNswtAUhE/de8VSx8/rbQzRqqTBF92jpc0
-         1c7cKkay188khUT4k4brf1p68kP/X6kn1cfwnSbJBAFqxMF4nwT/lj00pTKDhS2V7oL7
-         gi/A==
+        d=gmail.com; s=20230601; t=1756668180; x=1757272980; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LYdqga2UZn0l7KZz7GVGu4hJVZ86hvaVSdUZ6IyURfo=;
+        b=i+svRBbSK7SiLzoSmEa6DA1jwMKy5mCd1QKfd804tuCCHiurAlmX8YEavYXwokkgb+
+         fjk15vtyFmkZE9nocXzg3iEsvZ9oBfnvvgLCKofv3T7CmW66my4HQQrLaxF8DW9Oi2Q4
+         aL7KAo/X78ZbNF2NwUCpzIDS3GoHof9rXTGr1yB27JXX6JlK0KUpF3jvUZHr9P4jRaLy
+         5/1MeR+iF4KbXzS1+r0OzC8kDd6KEMQxGvaxbydKI1FD9PW1a3Q/ybbJmBdJ922vLpkz
+         9FjuCw363eXjDSc2cU8w8w5YNJSmpVKIC9mP93sAjBVY+9NfAsGTarY+XW9ybGJZ9c82
+         vgnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756649602; x=1757254402;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cZYLdktZ4EPO06YD32v1q0DpK8GiNv05c9EBnf+HoCw=;
-        b=Km8bysRE18YGRz6U0zdC38tgcJcjZg105K3PLFlgdQyk2eQpqs4LSmhx17xuwO8ys2
-         UADNUh6xtIUPNKfZPl7EZCCPEW8UdHgQ3BwNNkufjTlTgr7kSM7PhvmSMksLPU+qGcub
-         bpt0yQWw2YT1Ngxjc2EeGrhwhd68dKg0xeIDwo+2zCflzKQPzMS/Iie1JHN0WzU+ZtVF
-         iSkSAiDNYTITaIcJMxcJ77S1zs4NOW4k48bNAEXePbTI+dKgca2cnYLtar+VZNJdII0Y
-         7fsGS7aCx8jbJTlsLm37ti5Thp1w3RXJKWHzCmGrwrC5jb1cZKJlQFvVZg/4L4J5txvr
-         u9KA==
-X-Forwarded-Encrypted: i=1; AJvYcCXUKls88AnA6CkDcXh3jDXTYtGW5T8IMubhMTi1AfAQpE4v4XVY+EJQa+jYiCWzR5rokSGtUfFWg5Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0AVmzKgVYz2YoYqRROpvuefRZZMnR7O2+oXdSB61W3g0tX6PX
-	i/FQiLN/zFRNqc5PMjHJG9KxYyo+r1srNPi1KMotSuMxXx5TEea+99OrLJaTz/46+g==
-X-Gm-Gg: ASbGncvEod2lzWU5j1D5bEjfE/May8boB/cxpSwtF8azSTaTABcG52EHVZJ2+JO0BP1
-	94ytq1IX21bGBJms4Z1muXoagfSzZjA9ZjYtUvA9ZUGSSpSUl0OQeMgKG335hTA2GAVfjZVFCbs
-	AWiH05jwICoqk0QBG53AzXWakV1B9wAfvBDrjfFIFeikKglwJF/OjQb5FC0kQjhIDQfwLphD6a/
-	D+cS0j3ybXW2Maq/C37J76WK3LXOh2D/UU/r5vrnt/ddf4TwktVyomQOxQYPh+OUWHztpkF2Vs8
-	9uoNdaCM7HRrI8XcGY8iAe3oxx4TOu1vczMCNRYrkSJ66EFSzzqO22SMgHdF+5C53HIWXX5jcwB
-	fkUeVNEc0zlHaktZIWgA3ZQ72FJ2/0A==
-X-Google-Smtp-Source: AGHT+IE8Mqej1JDZrtuPz7sl66EYUl3Vb5Z2gtzRXa0W+3TefhnO3F5sshyISi1xvDod49i2QcLnew==
-X-Received: by 2002:a05:620a:172a:b0:7ea:61e:3ce with SMTP id af79cd13be357-7ff26f9fd08mr460588985a.4.1756649601956;
-        Sun, 31 Aug 2025 07:13:21 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::f777])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7fc1484a7a8sm512990985a.43.2025.08.31.07.13.20
+        d=1e100.net; s=20230601; t=1756668180; x=1757272980;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LYdqga2UZn0l7KZz7GVGu4hJVZ86hvaVSdUZ6IyURfo=;
+        b=uNuCBZWT8+ZlD6TYhHXqk9auTXoUHZ7Hn89N+kZR0FQ7URKYLDJpY2TZi2cZx52vmA
+         6cR/4fReZoDHjlxacv9RCBdpbhRbXml5SzDE1wHHEX8YgFKF8A+6auNAy+jF/Y0hH8Zb
+         V2aE03akE1rE5lMJ77FmiMF5TQb8BByYOaMZUhOdSnqCZ88RnA3nTN5gTOK1ZX3vITzG
+         hmJ0YsGhdNkSAogRr8zPXAKPXLQkj5irZRk89kPzzOvOZcESF/EL4itG+KyzkglQN0uK
+         RRKOZT12p4cTW/z3Z2IUxdeSZyyIJ+RDkAuMNnJhfr3EV2xSYqJQxrOV2Gp+VpyLe40h
+         Ikiw==
+X-Forwarded-Encrypted: i=1; AJvYcCVKI0z/BZdKOXZem3BaBGz9Vqpb7Z5q5NShD9YvcWFzr6UQEs/J20QlQAfO8bwpItXj3EyUpr4bk/qS@vger.kernel.org, AJvYcCVr19EKXjk67Eg5N/Io0lAaVaazIvYe9xt3WVcmE2OWzkUke8hiP/qTqQgkrhWoqO0al5FcKvo5ARMp+DY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7AdNl3zZ00tLyvdLPxcn6XiB6iQjL7yjT5SifJGo/15sO0XvI
+	DC65UaDsY+9f+7V4eJMxuuFIIAm1PfX7Wdi2ZjwybzNU5il5hvBxdiXPJ4+4Dd6JRUY=
+X-Gm-Gg: ASbGnct3vQ91ODRyOQA0uvbJanvt2dPgsGCi7Rn0JtdTg7mwhgUPm8t8MPpLkxlZzRl
+	uksgDVHMp0DfXEfxpT/6eVzDzuVscYpLAhpn0euCu5BKRBoq46Bxz32BCI2EIVtO0upjqlLGnEQ
+	vCduXkXsD4w6YsXk/q0u6T1BHPNDRVwjneMNty4L9sgymOd4DiShECYvnheO0kO0QkRya5+IAbM
+	Mb3+BCa7bh484uwTKhw5VkLOQn9Sz3/RDO2qYOVuo6zTebiwkwY6TnoEA/JzM/AVoArDbpZhlm2
+	zR6WwQ2XfTvEcmYDbTJM1/B2uhkuk/9KUvQIqjtV+kwJh2WuBfrVZJew6iSQYl2WoJHmJGnZtBt
+	DrBa+7rVEBZtB+XovCMwU4qTjP6gwZoaUu+92m6LwGoEHMrzefJUPSAxzCzv1lAE=
+X-Google-Smtp-Source: AGHT+IEqQWamZYIQ2ye2qzty0CYeeLql5rk8APf3tzIf/PM4GCbdSeBa0D5K2wt+o+ufEkn5/yTdUw==
+X-Received: by 2002:a17:90b:58a6:b0:327:fb42:2472 with SMTP id 98e67ed59e1d1-328156cc767mr4506361a91.28.1756668179516;
+        Sun, 31 Aug 2025 12:22:59 -0700 (PDT)
+Received: from fedora ([172.59.162.44])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7722a2b65a2sm8402069b3a.34.2025.08.31.12.22.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Aug 2025 07:13:21 -0700 (PDT)
-Date: Sun, 31 Aug 2025 10:13:18 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] usb: ohci: s3c2410: Drop support for S3C2410
- systems
-Message-ID: <188881e4-09a7-49fb-8128-ea7ee85147a2@rowland.harvard.edu>
-References: <20250831122222.50332-3-krzysztof.kozlowski@linaro.org>
+        Sun, 31 Aug 2025 12:22:59 -0700 (PDT)
+From: Alex Tran <alex.t.tran@gmail.com>
+To: stern@rowland.harvard.edu
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org,
+	Alex Tran <alex.t.tran@gmail.com>
+Subject: [PATCH v1] usb: storage: sddr09: move write buffers into info struct
+Date: Sun, 31 Aug 2025 12:22:47 -0700
+Message-ID: <20250831192247.1120619-1-alex.t.tran@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250831122222.50332-3-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Aug 31, 2025 at 02:22:23PM +0200, Krzysztof Kozlowski wrote:
-> Samsung S3C24xx family of SoCs was removed the Linux kernel in the
-> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support"), in January
-> 2023.  There are no in-kernel users of remaining S3C24xx compatibles.
-> 
-> The driver (named s3c2410) is still being used via platform code for
-> S3C64xx platforms.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
+Changelog:
+- Moved allocation of buffers ('blockbuffer', 'buffer') in 
+  'sddr09_write_data' into info struct and freeing into 
+  'sddr09_card_info_destructor' so that the operations are only 
+  performed once.
+- 'buffer' length is now size of a full block instead of being 
+  dependent on sectors.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Alex Tran <alex.t.tran@gmail.com>
+---
+ drivers/usb/storage/sddr09.c | 100 ++++++++++++++++++-----------------
+ 1 file changed, 51 insertions(+), 49 deletions(-)
 
-> Changes in v2:
-> 1. Commit subject (Alan).
-> ---
->  drivers/usb/host/ohci-s3c2410.c | 8 --------
->  1 file changed, 8 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ohci-s3c2410.c b/drivers/usb/host/ohci-s3c2410.c
-> index 66d970854357..e623e24d3f8e 100644
-> --- a/drivers/usb/host/ohci-s3c2410.c
-> +++ b/drivers/usb/host/ohci-s3c2410.c
-> @@ -448,13 +448,6 @@ static const struct dev_pm_ops ohci_hcd_s3c2410_pm_ops = {
->  	.resume		= ohci_hcd_s3c2410_drv_resume,
->  };
->  
-> -static const struct of_device_id ohci_hcd_s3c2410_dt_ids[] = {
-> -	{ .compatible = "samsung,s3c2410-ohci" },
-> -	{ /* sentinel */ }
-> -};
-> -
-> -MODULE_DEVICE_TABLE(of, ohci_hcd_s3c2410_dt_ids);
-> -
->  static struct platform_driver ohci_hcd_s3c2410_driver = {
->  	.probe		= ohci_hcd_s3c2410_probe,
->  	.remove		= ohci_hcd_s3c2410_remove,
-> @@ -462,7 +455,6 @@ static struct platform_driver ohci_hcd_s3c2410_driver = {
->  	.driver		= {
->  		.name	= "s3c2410-ohci",
->  		.pm	= &ohci_hcd_s3c2410_pm_ops,
-> -		.of_match_table	= ohci_hcd_s3c2410_dt_ids,
->  	},
->  };
->  
-> -- 
-> 2.48.1
-> 
+diff --git a/drivers/usb/storage/sddr09.c b/drivers/usb/storage/sddr09.c
+index e66b920e9..27c318266 100644
+--- a/drivers/usb/storage/sddr09.c
++++ b/drivers/usb/storage/sddr09.c
+@@ -255,6 +255,8 @@ struct sddr09_card_info {
+ 	int		*pba_to_lba;	/* physical to logical map */
+ 	int		lbact;		/* number of available pages */
+ 	int		flags;
++	unsigned char	*buffer; /* staging buffer */
++	unsigned char	*blockbuffer; /* bounce buffer */
+ #define	SDDR09_WP	1		/* write protected */
+ };
+ 
+@@ -847,11 +849,9 @@ sddr09_find_unused_pba(struct sddr09_card_info *info, unsigned int lba) {
+ 	return 0;
+ }
+ 
+-static int
+-sddr09_write_lba(struct us_data *us, unsigned int lba,
+-		 unsigned int page, unsigned int pages,
+-		 unsigned char *ptr, unsigned char *blockbuffer) {
+-
++static int sddr09_write_lba(struct us_data *us, unsigned int lba,
++			    unsigned int page, unsigned int pages)
++{
+ 	struct sddr09_card_info *info = (struct sddr09_card_info *) us->extra;
+ 	unsigned long address;
+ 	unsigned int pba, lbap;
+@@ -890,13 +890,13 @@ sddr09_write_lba(struct us_data *us, unsigned int lba,
+ 	/* read old contents */
+ 	address = (pba << (info->pageshift + info->blockshift));
+ 	result = sddr09_read22(us, address>>1, info->blocksize,
+-			       info->pageshift, blockbuffer, 0);
++			       info->pageshift, info->blockbuffer, 0);
+ 	if (result)
+ 		return result;
+ 
+ 	/* check old contents and fill lba */
+ 	for (i = 0; i < info->blocksize; i++) {
+-		bptr = blockbuffer + i*pagelen;
++		bptr = info->blockbuffer + i * pagelen;
+ 		cptr = bptr + info->pagesize;
+ 		nand_compute_ecc(bptr, ecc);
+ 		if (!nand_compare_ecc(cptr+13, ecc)) {
+@@ -915,9 +915,9 @@ sddr09_write_lba(struct us_data *us, unsigned int lba,
+ 	}
+ 
+ 	/* copy in new stuff and compute ECC */
+-	xptr = ptr;
++	xptr = info->buffer;
+ 	for (i = page; i < page+pages; i++) {
+-		bptr = blockbuffer + i*pagelen;
++		bptr = info->blockbuffer + i * pagelen;
+ 		cptr = bptr + info->pagesize;
+ 		memcpy(bptr, xptr, info->pagesize);
+ 		xptr += info->pagesize;
+@@ -930,7 +930,7 @@ sddr09_write_lba(struct us_data *us, unsigned int lba,
+ 	usb_stor_dbg(us, "Rewrite PBA %d (LBA %d)\n", pba, lba);
+ 
+ 	result = sddr09_write_inplace(us, address>>1, info->blocksize,
+-				      info->pageshift, blockbuffer, 0);
++				      info->pageshift, info->blockbuffer, 0);
+ 
+ 	usb_stor_dbg(us, "sddr09_write_inplace returns %d\n", result);
+ 
+@@ -961,9 +961,6 @@ sddr09_write_data(struct us_data *us,
+ 
+ 	struct sddr09_card_info *info = (struct sddr09_card_info *) us->extra;
+ 	unsigned int lba, maxlba, page, pages;
+-	unsigned int pagelen, blocklen;
+-	unsigned char *blockbuffer;
+-	unsigned char *buffer;
+ 	unsigned int len, offset;
+ 	struct scatterlist *sg;
+ 	int result;
+@@ -975,35 +972,6 @@ sddr09_write_data(struct us_data *us,
+ 	if (lba >= maxlba)
+ 		return -EIO;
+ 
+-	/*
+-	 * blockbuffer is used for reading in the old data, overwriting
+-	 * with the new data, and performing ECC calculations
+-	 */
+-
+-	/*
+-	 * TODO: instead of doing kmalloc/kfree for each write,
+-	 * add a bufferpointer to the info structure
+-	 */
+-
+-	pagelen = (1 << info->pageshift) + (1 << CONTROL_SHIFT);
+-	blocklen = (pagelen << info->blockshift);
+-	blockbuffer = kmalloc(blocklen, GFP_NOIO);
+-	if (!blockbuffer)
+-		return -ENOMEM;
+-
+-	/*
+-	 * Since we don't write the user data directly to the device,
+-	 * we have to create a bounce buffer and move the data a piece
+-	 * at a time between the bounce buffer and the actual transfer buffer.
+-	 */
+-
+-	len = min_t(unsigned int, sectors, info->blocksize) * info->pagesize;
+-	buffer = kmalloc(len, GFP_NOIO);
+-	if (!buffer) {
+-		kfree(blockbuffer);
+-		return -ENOMEM;
+-	}
+-
+ 	result = 0;
+ 	offset = 0;
+ 	sg = NULL;
+@@ -1024,11 +992,10 @@ sddr09_write_data(struct us_data *us,
+ 		}
+ 
+ 		/* Get the data from the transfer buffer */
+-		usb_stor_access_xfer_buf(buffer, len, us->srb,
+-				&sg, &offset, FROM_XFER_BUF);
++		usb_stor_access_xfer_buf(info->buffer, len, us->srb, &sg,
++					 &offset, FROM_XFER_BUF);
+ 
+-		result = sddr09_write_lba(us, lba, page, pages,
+-				buffer, blockbuffer);
++		result = sddr09_write_lba(us, lba, page, pages);
+ 		if (result)
+ 			break;
+ 
+@@ -1037,9 +1004,6 @@ sddr09_write_data(struct us_data *us,
+ 		sectors -= pages;
+ 	}
+ 
+-	kfree(buffer);
+-	kfree(blockbuffer);
+-
+ 	return result;
+ }
+ 
+@@ -1193,6 +1157,36 @@ sddr09_get_cardinfo(struct us_data *us, unsigned char flags) {
+ 	return cardinfo;
+ }
+ 
++static int sddr09_init_card_buffers(struct us_data *us)
++{
++	struct sddr09_card_info *info = (struct sddr09_card_info *)us->extra;
++	unsigned int pagelen, blocklen, len;
++
++	/*
++	 * blockbuffer is used for reading in the old data, overwriting
++	 * with the new data, and performing ECC calculations
++	 */
++	pagelen = (1 << info->pageshift) + (1 << CONTROL_SHIFT);
++	blocklen = (pagelen << info->blockshift);
++	info->blockbuffer = kmalloc(blocklen, GFP_NOIO);
++	if (!info->blockbuffer)
++		return -ENOMEM;
++
++	/*
++	 * Since we don't write the user data directly to the device,
++	 * we have to create a bounce buffer and move the data a piece
++	 * at a time between the bounce buffer and the actual transfer buffer.
++	 */
++	len = info->blocksize * info->pagesize;
++	info->buffer = kmalloc(len, GFP_NOIO);
++	if (!info->buffer) {
++		kfree(info->blockbuffer);
++		return -ENOMEM;
++	}
++
++	return 0;
++}
++
+ static int
+ sddr09_read_map(struct us_data *us) {
+ 
+@@ -1403,6 +1397,8 @@ sddr09_card_info_destructor(void *extra) {
+ 	if (!info)
+ 		return;
+ 
++	kfree(info->buffer);
++	kfree(info->blockbuffer);
+ 	kfree(info->lba_to_pba);
+ 	kfree(info->pba_to_lba);
+ }
+@@ -1592,6 +1588,8 @@ static int sddr09_transport(struct scsi_cmnd *srb, struct us_data *us)
+ 		if (!cardinfo) {
+ 			/* probably no media */
+ 		init_error:
++			kfree(info->buffer);
++			kfree(info->blockbuffer);
+ 			sensekey = 0x02;	/* not ready */
+ 			sensecode = 0x3a;	/* medium not present */
+ 			return USB_STOR_TRANSPORT_FAILED;
+@@ -1604,6 +1602,10 @@ static int sddr09_transport(struct scsi_cmnd *srb, struct us_data *us)
+ 		info->blocksize = (1 << info->blockshift);
+ 		info->blockmask = info->blocksize - 1;
+ 
++		if (sddr09_init_card_buffers(us)) {
++			goto init_error;
++		}
++
+ 		// map initialization, must follow get_cardinfo()
+ 		if (sddr09_read_map(us)) {
+ 			/* probably out of memory */
+-- 
+2.51.0
+
 
