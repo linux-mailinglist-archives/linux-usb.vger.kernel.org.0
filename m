@@ -1,207 +1,121 @@
-Return-Path: <linux-usb+bounces-27412-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27413-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CA56B3DB6E
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 09:49:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC23EB3DBD8
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 10:04:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23F1818859AC
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 07:50:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E22C3A1922
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 08:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 364F32EDD55;
-	Mon,  1 Sep 2025 07:49:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C8B2EDD51;
+	Mon,  1 Sep 2025 08:04:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lgrAG/j6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jEpwW2/R"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83E92ED84C
-	for <linux-usb@vger.kernel.org>; Mon,  1 Sep 2025 07:49:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3611D8E01;
+	Mon,  1 Sep 2025 08:04:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756712977; cv=none; b=rBFqALbaMem1mxr3Gn5Aul8y/OUk6GJlxLjgXqawMrb2HuPaYpa2EtKFfoRs2O90/HiC3n8wTZ28WJsmYL4L1t5K02yFYxAhJf9qc5sZ7WQfQiq5/4nyjRXOfvz1CM2SinvrPburXp7gtOoY0F8n7oOuvZuWYejZsgNtF29PtNI=
+	t=1756713887; cv=none; b=G6rUFG6jP5/s3bxxQz4PEp1PuHV94qb+sWiVY/wDJQyktwUwxE+Q3uwBSdLz82S9+P1LkU7SK1TEAUmIWyYrHZu+cFEShXuEcG34ar9rCu6rw9/5D89HGgTAR+i2Xr44H8AQc4UqrKnjjdoBFf/U31JiwVh7bVH5sf4iAE4cw8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756712977; c=relaxed/simple;
-	bh=wt7jMIX425N5nVqlgcRtissbwXHoecRg/KMwSPDH1RA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=o7wP4ugPmJgLhbloEYgnWU8EyoUJlNlqQxd/jWDNVie1QcxtYqcdGiFCMpp8Z/1cy7GX6IhROhUqFwQdSzZW6DxQccXqi7hSLEWKBmyXMdXSn6MvvkZUQ0h45mvxScvJsopiAW51cVabNLhQ61SARfxRPctn1Id2zkLLVUKMVd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lgrAG/j6; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45b7e69570bso17967575e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 01 Sep 2025 00:49:35 -0700 (PDT)
+	s=arc-20240116; t=1756713887; c=relaxed/simple;
+	bh=i56wBB4rgAtMJDEKaM2MnQaXskJih+VGQ0oSinL3QQk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=G2c/00pqRHwrpTmWgsf4mF2AM20G5KKCnyV/nn8i6oQeRj8YxI1NBuFr7I1hpUC2l/2SiZAowLZVuLBfPbrZ2ghjJntEvKpq50/iCNJcczbZfb2uo2PZ98MWnhKuWI21F6raCvNmxb2pe+BdL0La/KIP+Iae1l6oUe9Qg5ucO8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jEpwW2/R; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7724df82cabso1050859b3a.2;
+        Mon, 01 Sep 2025 01:04:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756712974; x=1757317774; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qFAUVdnouAwZ3cp4lqEcKiYkIXhIbzxnN6Z1FUOocpw=;
-        b=lgrAG/j6TpLDKGEGTyiIIERkHrIyWa9EKJk5Omxrs5RKPc+rx2ZviH3+PvIESrWMMS
-         O6xM/UJ8OKML+aC9wmY8UIggicHGb23EdRK0kpIaoVf3TvFplChcH1GVqeZXOSDJNugQ
-         GX/15v0aO8naF82R8QUySKl+FxlqMl6ce2y9R0RTv1k4vHuJoByr1BnYzMKph+01QoVh
-         EfuiXlJ+7L7lvJTKgiQAs8d9TlHuptoRdD7tCPuC/FNTanfQq/z64H+DYDaByXQuJ2Wg
-         2PEOfsTjiLFCSDlROqsMk0TJCiAaxiM4LSMxyj0/mAa03WW6LwlAIfpk7iZm2c9fDmnf
-         cjJQ==
+        d=gmail.com; s=20230601; t=1756713885; x=1757318685; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ANYnP0mnn2BNW6DSdQB01HVrQ7wQ6DtZcdXbGpJTFao=;
+        b=jEpwW2/RX4AmSMnvo+byJmFiBhC/XRTovXR8GcpZ2TESJpcglFWQ4/NTf1kFbPkT7O
+         y8miSc65oOA5U0ZhoyTcXjrdNRqjsbDIS0IHfMZll3iH1xdWBipom5yqONm6mos2ymFY
+         cE6emd8pgsAmiYKy6mXFpI6aMoz1UmohP7A/u/b9SVAPoLLJ9NQYc5stbpryJmWGAfSk
+         qR/ZI0jzmBqY8O5eyhAK2A25akdmM1XT4Sq30730FzOCZnxhXb+Jw9CYOiOkhCfd94XJ
+         MskllSwsv6fJlafma5PuH159PpHylZP2zwCq7FpcqRlE/W1mC1r8XganIDel4cxeowr9
+         QqTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756712974; x=1757317774;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qFAUVdnouAwZ3cp4lqEcKiYkIXhIbzxnN6Z1FUOocpw=;
-        b=l+3EeMYgU/THoQGOtHkbDlYQCzlVPzDbJKMzskoXWuj4NXy6Ak+pL7Bw7ZM/I0f4fb
-         fcI0xwMx1617Hrpv+LtnpXUzOiEJLxK6gLaLE4NFLQ+5z1i+vyv5RD3Xqeh74t8YsJVH
-         i66lGMxiZJ44vuAB9loof0H0arDklfPTXfDR2efRMqbQq9+4UN6mx210hnUAzrBdeWE9
-         eGUdWu/FhKzepx41ZhpNC/I23u47k04HrzmwpbKD8AthyG60hznPYTLhlRdAvYsYSa5e
-         BZCYU19Ts5dfpjH+R2FoKYdjGbj5s3zsfFrkZQNHRs+fVt7R9Lhz3I64baH2y8lcStv2
-         EByA==
-X-Forwarded-Encrypted: i=1; AJvYcCWH+Auhk9DDo6s2QpyuFcSrsiGcwGE7WvlNKGJ11vISiNF+bSwiUfXqXZTtuceufwZ2PYse2KLlpLY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzW+EFTK2lglprurHmvACdA/hngghc+BXPs9WMjDvfukJLTyFln
-	zC6ccF0K6RaAh44cVT1YbkhyKB1uL6NoXRFUAbdevd5uQAxgohFQxmWouP33ldfNU/4=
-X-Gm-Gg: ASbGncv+N/pDIL9J7aQebHOF4USgJhgwxmpClUHRaZA7DYpYMvfurytzjICEybrPv6I
-	A35EdLvaeC8r3pON4SNqB9FX2f5UmNzJIpB5FWkwNCIRH2W6ohySo9aGq6xC4+KfS+72Khx3lol
-	ahqo3B+72YxXTeZZ5jkplqdYKz3NiwmxD1czqLrXamxIfT9mDrTKfeflpUpLOezk5XoOlbdknUp
-	OhCF6LHz9DEO9L0EEf4pzDhM3gPgc09IOfFgnoOTGIkf4gtf0pZUYNra9IPL2nvTHJfYs/fSjxX
-	TEkLLIFdj/crfgb66t1KwmMcul+xgl2YUUmhiwFZj5apFUtsGvpMiOrEMACSXschUWTjegQs3IN
-	3ZKfOcFICQMVxVNEhoRAsLy+lCCYQLoElnLQVQpR+n9ErvPW2gU0j7uXZLNLSQrP/5ut4rITqPS
-	MhYCOThBk=
-X-Google-Smtp-Source: AGHT+IEvo5gEev1pOaIge4iAPVDCYZYnhg74I6cnBK5MKrWVgUvYE2R3wq25uTqs186q9y1es2PNOQ==
-X-Received: by 2002:a05:600c:4fcd:b0:45b:7185:9e5 with SMTP id 5b1f17b1804b1-45b85525cddmr59925615e9.5.1756712974015;
-        Mon, 01 Sep 2025 00:49:34 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:3d9:2080:881c:7d0e:ad0a:d9a? ([2a01:e0a:3d9:2080:881c:7d0e:ad0a:d9a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b6f0c6fe5sm225181805e9.5.2025.09.01.00.49.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Sep 2025 00:49:33 -0700 (PDT)
-Message-ID: <b897d082-0d74-46fc-a0e4-7745347ba597@linaro.org>
-Date: Mon, 1 Sep 2025 09:49:32 +0200
+        d=1e100.net; s=20230601; t=1756713885; x=1757318685;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ANYnP0mnn2BNW6DSdQB01HVrQ7wQ6DtZcdXbGpJTFao=;
+        b=k8stDtzyMyuSTkkWKpOVeYYj4mJfoLIaq6Oe/Rf9ii0DG7/IacFiUx9eGiN27DD4Cz
+         Y4/Z/rQRFgLD67wBEUELZwQG7Ua8BcnSB5boSoVAR3V66Vo45F8DqsQi3h+FtpNKPQkX
+         I9PGNvaOYpz36ROMaKseZTSqGznKwc0/WaYv2ToSZBJmYHjzUmR3Qym3s6W1YGn7+CsM
+         4EuI4TkiH4ASn1JgyM5gANTNxbzs9legrwGySmT7rFpAk3the7jGgcyxPhItQdazxjXC
+         r2PzayJSZuW7oVIyYevjnlU4xTXelg8LmNbx2FSZeGNuExZlll6xW7xQZSLBO5AAVxPI
+         wtWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAzmlLzjpFdcY7wANoCamg9Ns4u0gCCre+W63gfTKW/es2YJoHBpREKzxu+t9OXAfhZaCLFvJWwCrp@vger.kernel.org, AJvYcCUPpmZlOwnK9YL2iWXZVlMAh0tzbbKJRc6zf+sJZLaRx5V2AWbWt/8texJGO0IreskdkOm69kHq@vger.kernel.org, AJvYcCXGHCeBTL/KQuBCFep4G2ckHSzS0/zuWhLVp1bgO2M3QMymYzebnQXe9DVOnrJuZDWBYEye5SAw0iUqIb4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLi3PFbBSPq8U7fTXr75xlp8LpQoHdcgJlNLK/nhVqe8hFzoK1
+	DbF4rIlO/sOOzZeGd8mfy5RpWJDb3CJVP0sFYgE+T7loDN72b19yc96U
+X-Gm-Gg: ASbGncvjVwrt0urOZ/l6O7GG0x4t3HT+/i9e3DBzY2hUBRXpvQcKVyJgxdmhG4Bu1BT
+	fGUDRdgPaYjt9ztGac0g62TfRi3epyXvjjgd3Lc4SdpSOeaHVB12P7ZadOVMRDlJ+FSAnLLW+L1
+	kq5YIXs7GDE+OiNOHwilptRbN6X3kXLBQQsJV57RR5l8H/rfUWh6YBoYTtXIrM22p6Sd12VNHbx
+	rumsED3uskQ0eBfjTgA1akpKj4H7Jwfr4NNf0ALUtDTCCQYCTcBqISvVX1+uMYMj5ZBkyt5RBKS
+	v35mEf9pBGTEI7oeGGiPqWRUEbBRRQXxtkaiDfQcmFWjBg0sfFK1Q8NPLwGLy8rsFx/xKhgtWTt
+	WIK3RISFN/w0fZAcbu2SWq/hA6ACPWXGNKL3cHFgzndis5PnxiBXN2hn/XVzeXAfNec31giCxZc
+	YRQKau8TlBLFBhHMPvgblGXS9sHkSm7RsE4u8BNiT8uSQ7PgVraK1WFhM=
+X-Google-Smtp-Source: AGHT+IHV+Phuoer5B5gaEp0gOshZXDInSBHq9pKfZrei8iCCGDhU3xkC66HC8hO8CvJ4QSG2GfcDhw==
+X-Received: by 2002:a05:6a21:999a:b0:243:d63b:d264 with SMTP id adf61e73a8af0-243d6f37e4fmr8403209637.47.1756713885340;
+        Mon, 01 Sep 2025 01:04:45 -0700 (PDT)
+Received: from vickymqlin-1vvu545oca.codev-2.svc.cluster.local ([14.22.11.164])
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-77241f08b45sm5982326b3a.22.2025.09.01.01.04.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Sep 2025 01:04:44 -0700 (PDT)
+From: Miaoqian Lin <linmq006@gmail.com>
+To: Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: linmq006@gmail.com,
+	stable@vger.kernel.org
+Subject: [PATCH] thunderbolt: debugfs: Fix dentry reference leaks in margining_port_init
+Date: Mon,  1 Sep 2025 16:04:37 +0800
+Message-Id: <20250901080438.2278730-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v3] usb: typec: ucsi: Add support for READ_POWER_LEVEL
- command
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Venkat Jayaraman <venkat.jayaraman@intel.com>, linux-usb@vger.kernel.org,
- gregkh@linuxfoundation.org, pse.type-c.linux@intel.com,
- linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <20250814163028.18058-1-venkat.jayaraman@intel.com>
- <91cb0acb-73c4-4d3a-9aa8-1056f367d82e@linaro.org>
- <aKbI4DnIDD9fD_Gz@kuha.fi.intel.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <aKbI4DnIDD9fD_Gz@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+The debugfs_lookup() function returns a dentry with an increased
+reference count that must be released by calling dput().
 
-On 21/08/2025 09:21, Heikki Krogerus wrote:
-> On Tue, Aug 19, 2025 at 11:47:58AM +0200, Neil Armstrong wrote:
->> Hi,
->>
->> On 14/08/2025 18:30, Venkat Jayaraman wrote:
->>> Add support for UCSI READ_POWER_LEVEL command as per
->>> UCSI specification v2.1 and above to debugfs.
->>>
->>> Following power related fields will be exposed as files in debugfs:-
->>> peak_current (Peak current),
->>> avg_current (Average current) and
->>> vbus_voltage (VBUS voltage)
->>>
->>> These files will be updated either when a READ_POWER_LEVEL
->>> command is sent from OS or when a device is connected.
->>>
->>> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->>> Signed-off-by: Venkat Jayaraman <venkat.jayaraman@intel.com>
->>> ---
->>> Changelog v3:
->>> - Rebased to kernel 6.17-rc1
->>>
->>> Changelog v2:
->>> - Removed extra space in declaration
->>> - Made the call to debugfs_create_file single line for clarity
->>>
->>>    drivers/usb/typec/ucsi/debugfs.c | 31 +++++++++++++++++++++++++++++++
->>>    drivers/usb/typec/ucsi/ucsi.c    | 16 ++++++++++++++++
->>>    drivers/usb/typec/ucsi/ucsi.h    | 13 +++++++++++++
->>>    3 files changed, 60 insertions(+)
->>>
->>
->> This commit causes the following warning:
->> [    8.646179] ------------[ cut here ]------------
->> [    8.650986] Access to unsupported field at offset 0x59 (need version 0210)
->> [    8.651044] WARNING: drivers/usb/typec/ucsi/ucsi.c:1296 at ucsi_handle_connector_change+0x380/0x414 [typec_ucsi], CPU#0: kworker/0:0/9
->> <snip>
->> [    8.832491] Hardware name: Qualcomm Technologies, Inc. SM8550 HDK (DT)
->> [    8.839228] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
->> [    8.846084] pstate: 63400005 (nZCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
->> [    8.853277] pc : ucsi_handle_connector_change+0x380/0x414 [typec_ucsi]
->> [    8.860031] lr : ucsi_handle_connector_change+0x380/0x414 [typec_ucsi]
->> <snip>
->> [    8.944023] Call trace:
->> [    8.946570]  ucsi_handle_connector_change+0x380/0x414 [typec_ucsi] (P)
->> [    8.953328]  process_one_work+0x148/0x28c
->> [    8.957502]  worker_thread+0x2c8/0x3d0
->> [    8.961401]  kthread+0x12c/0x204
->> [    8.964759]  ret_from_fork+0x10/0x20
->> [    8.968474] ---[ end trace 0000000000000000 ]---
->>
->> on:
->> 8550-hdk:
->> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253312#L1418
->> 8550-qrd:
->> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253306#L1560
->> 8650-hdk:
->> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253308#L1494
->> 8650-qrd:
->> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253309#L1594
->> x1-crd:
->> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253311#L2226
->> x1-qcp:
->> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253310#L2160
->>
->> I guess the version should be checked.
-> 
-> Venkat, can you be prepare the fix for this?
-> 
-> thanks,
-> 
+Fixes: d0f1e0c2a699 ("thunderbolt: Add support for receiver lane margining")
+Cc: stable@vger.kernel.org
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/thunderbolt/debugfs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Gentle ping, can this be fixed ? Should I send a revert patch ?
-
-Neil
+diff --git a/drivers/thunderbolt/debugfs.c b/drivers/thunderbolt/debugfs.c
+index f8328ca7e22e..2aadbec9a3e5 100644
+--- a/drivers/thunderbolt/debugfs.c
++++ b/drivers/thunderbolt/debugfs.c
+@@ -1770,6 +1770,7 @@ static void margining_port_init(struct tb_port *port)
+ 	port->usb4->margining = margining_alloc(port, &port->usb4->dev,
+ 						USB4_SB_TARGET_ROUTER, 0,
+ 						parent);
++	dput(parent);
+ }
+ 
+ static void margining_port_remove(struct tb_port *port)
+-- 
+2.35.1
 
 
