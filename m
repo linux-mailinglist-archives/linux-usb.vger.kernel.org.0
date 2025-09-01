@@ -1,110 +1,91 @@
-Return-Path: <linux-usb+bounces-27420-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27421-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F0B0B3EEA3
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 21:47:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95672B3EF29
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 22:05:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56078170332
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 19:47:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A84501A86565
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 20:06:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A808E33EAF9;
-	Mon,  1 Sep 2025 19:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D43A254AFF;
+	Mon,  1 Sep 2025 20:05:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="inF4XbGW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Md6hGjPb"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B1133436D;
-	Mon,  1 Sep 2025 19:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65E24409;
+	Mon,  1 Sep 2025 20:05:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756755976; cv=none; b=ZANKJFCKlIBSrDnPiPjeSrHDmxRrDLk2cqYwkjUwTc03fu5+G/URXr7dL1LW7XyWY5gVQSKwf7GSW8X2wRjs7S65zGD2f2a/68d38esVbBUaWh7kieQMfwjhA31+3C/cibrTiKZA7WFYoH0LBI1IKPOJJJp7Fp2GaUxbl8uhdZk=
+	t=1756757130; cv=none; b=czpyIfUHxNDbOIrHPvsbSXf6jxvsEZwzqn7t17j0hxrRfPVE4BkHavNJ0PTdA02RfPJsRz/0rnTsiZSWiAn/0FOh8INR63/09NjmJPm1h5oaZoVk57sRxrv8HmlB3lru9nBAyP+zDr1XXY3Nq1SRk511zyMA5tq21E5K+DmHZF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756755976; c=relaxed/simple;
-	bh=aQrXio5Jf/NDWTWdeYPH5rpy20fy2si9Jfrk1vT737o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cS9rE+O1n8RPkid3hCeq7Op/fRcuERvVIH+cVhnNtZMyYyIp2UQH3UbdtgKGupJe9SW815dVrjpSRwIdIolkeZcSRbl+5tC4xnxxd6B5uif2uAKP4P4f1xGCApLy1t6UrXXKACcWq+kLBUZ3sWQmDckR3zkP13IAvCDhwTs1CTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=inF4XbGW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF4B7C4CEF0;
-	Mon,  1 Sep 2025 19:46:14 +0000 (UTC)
+	s=arc-20240116; t=1756757130; c=relaxed/simple;
+	bh=RAim03favvAaUeqPJwCMd2IVGw1/U66PABzxHIdIwiY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DnlQXFqO2dXSferFd/rPRiFIXgEUwjQk+TiqYA8gM+ZCE7Pq2wMonfEQNUyogskuW77NmM6l4DDmsNlFW17xIsoTSny5eHPPl1cIDA+cciCuZF6SaJagJ3DlDIdWocvsL1M3fRpp1ksqwJiUj9Li0kR2tIBIjWY2i4bUV0nCR6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Md6hGjPb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 034F1C4CEF0;
+	Mon,  1 Sep 2025 20:05:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756755975;
-	bh=aQrXio5Jf/NDWTWdeYPH5rpy20fy2si9Jfrk1vT737o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=inF4XbGWN3kxua2x98XVhDsJy0i+urO9Px1bdHkQ1WmA1ENTYUf3W5mUDsmdVPMgj
-	 8wRxDXF4uj3AZhIRFuJXhcxcoxjumWH1vunCvj/a56zjQ1tuNkES2e+xOjzidHh/Zf
-	 lXuoNhMcoGMRUDknQEPUdLDSewM9OJZ17S6nxcAYr3d5qXTL6EzsenRJmWfx0gefoT
-	 qN9JmeSVjf65hJgsXgWNfDVkZA2dPwu80iZhVS1wugR836WHIzDJDBsXQI9cApRsUd
-	 OCvl2Tj3ITZWzOWcVwBhY+wofwqKfQ0fwqrpaSQF1wCEqSyf1hx3Fmk/slRwXIzN2k
-	 taxbupUviga/Q==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Kaehlcke <mka@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Cc: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>,
+	s=k20201202; t=1756757130;
+	bh=RAim03favvAaUeqPJwCMd2IVGw1/U66PABzxHIdIwiY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Md6hGjPbHG5zimFZFjh3NJDnJu5+ynifyjubmfmOqKPWU5EQqbRPY8mgS9SR34b20
+	 KXLKVrBS7jtKhzUNk0gc2JapL24eK3LJ8EY9xm2CoEbj+uQ2kPLhm/VSM3OIdckKs+
+	 kUJtDbZRjOQwHaGmzSdcarReJQ0ZTU2qkTkttUJs4D/RSMDxneGQZ/va5Xf/J18Hqi
+	 T6n4EW+W1xlQO9CwlNybVXOzIOXhlW89lTdd26jN9l+FeiPZ+/4fPj6qS5uMgpvVFv
+	 AHWauX3trQXxKiuxkYRagYWIMWxBJqvp/nITLKSJ3brlbuhEndLe6ObwXpikyO3jJL
+	 iivAHPeazk8Dw==
+Date: Mon, 1 Sep 2025 15:05:29 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Sebastian Reichel <sre@kernel.org>, linux-usb@vger.kernel.org,
+	kernel@oss.qualcomm.com, linux-pm@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	David Collins <david.collins@oss.qualcomm.com>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+	=?iso-8859-1?Q?Gy=F6rgy?= Kurucz <me@kuruczgy.com>,
 	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH v12 0/3] arm64: dts: qcom: Add Lenovo ThinkBook 16 device tree
-Date: Mon,  1 Sep 2025 14:45:57 -0500
-Message-ID: <175675595923.1796591.4838334156014810124.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250822-tb16-dt-v12-0-bab6c2986351@oldschoolsolutions.biz>
-References: <20250822-tb16-dt-v12-0-bab6c2986351@oldschoolsolutions.biz>
+	Krzysztof Kozlowski <krzk+dt@kernel.org>
+Subject: Re: [PATCH v3 6/8] dt-bindings: soc: qcom,pmic-glink: Add charge
+ limit nvmem properties
+Message-ID: <175675712869.236292.8855356859371359871.robh@kernel.org>
+References: <20250826-qcom_battmgr_update-v3-0-74ea410ef146@oss.qualcomm.com>
+ <20250826-qcom_battmgr_update-v3-6-74ea410ef146@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250826-qcom_battmgr_update-v3-6-74ea410ef146@oss.qualcomm.com>
 
 
-On Fri, 22 Aug 2025 08:44:09 +0200, Jens Glathe wrote:
-> Device tree for the Lenovo Thinkbook 16 G7 QOY
+On Tue, 26 Aug 2025 15:18:33 +0800, Fenglin Wu wrote:
+> Add nvmem properties to retrieve charge control configurations
+> from the PMIC SDAM registers.
 > 
-> The Laptop is a Snapdragon X1 / X1 Plus (Purwa) based device [1].
+> Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+> ---
+>  .../devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml      | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-> Supported features:
-> 
-> - USB type-c and type-a ports
-> - Keyboard
-> - Touchpad (all that are described in the dsdt)
-> - Touchscreen (described in the dsdt, no known SKUss)
-> - Display including PWM backlight control
-> - PCIe devices
-> - nvme
-> - SDHC card reader
-> - ath12k WCN7850 Wifi and Bluetooth
-> - ADSP and CDSP
-> - GPIO keys (Lid switch)
-> - Sound via internal speakers / DMIC / USB / headphone jack
-> - DP Altmode with 2 lanes (as all of these still do)
-> - Integrated fingerprint reader (FPC)
-> - Integrated UVC camera
-> - X1-45 GPU
-> 
-> [...]
 
-Applied, thanks!
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-[1/3] dt-bindings: arm: qcom: Add Lenovo TB16 support
-      commit: 63727c59a917b6ffdb13d51c251727a3e21d38d9
-[3/3] arm64: dts: qcom: Add Lenovo ThinkBook 16 G7 QOY device tree
-      commit: d3f600dc452df45f0f404eba65a88f4aecc48b43
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
 
