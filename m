@@ -1,223 +1,115 @@
-Return-Path: <linux-usb+bounces-27422-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27423-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00563B3EFCB
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 22:40:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C518EB3F01B
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 22:54:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF53B3AE782
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 20:40:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E24E17FF2B
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Sep 2025 20:53:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD364272802;
-	Mon,  1 Sep 2025 20:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133052737E5;
+	Mon,  1 Sep 2025 20:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WkHy7zYn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m0Okr67q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF4D26CE3A;
-	Mon,  1 Sep 2025 20:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6283EEC0
+	for <linux-usb@vger.kernel.org>; Mon,  1 Sep 2025 20:52:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756759238; cv=none; b=Dxmlo73frlSekk8PMp3leN3DYOOciRLAi7mAxORYxPf0yJ/n//W8e7nd5Nu0mw1UHvX5Ze/dpz/zU7mX4TMNQQJ8e/JppDyVFCKwLqV+qFVmB7oFUXkuECz+43yAMrZQ2Rl8z4fnPhpVW48D1ZLlJ8jezk1U069Eb/SkZev8P0s=
+	t=1756759976; cv=none; b=jfuhtDcdEAslqsUzqAFBkWNcD7uFbkWYZSTtHvSZk8qhuvVanyYECtEZA72Fmyq0AjRb6266GBqLXZrfRX6GkzFE+JSsU3qrKdjDvqNRlUoU1w0cku4Majw40RnvI0CPLiQOk6RKzXeFPpFG5mZMkJean8NtBT1Rtf4re7koU0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756759238; c=relaxed/simple;
-	bh=qygvqnPVTLVPc7F2G9GUBXCTIt0bz9f4pcFJIFmo5MY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i7HYvfHWQuIWTdxuwXz8uKGfJ9NPGBCGTSltCSSZP1++vI/gLFTt9apfmx2Eq3dqXbzOuyrmNM+EPN85n2fSMtIqQ9XGPLS6hmVZm290QlkRW1MCMwK2yhSMi1SMGyVQ/Ie7VjTrO/RTn6IVbUuZBb+G3js2D9T4O8Qdx8TTM5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WkHy7zYn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBED8C4CEF7;
-	Mon,  1 Sep 2025 20:40:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756759237;
-	bh=qygvqnPVTLVPc7F2G9GUBXCTIt0bz9f4pcFJIFmo5MY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WkHy7zYnsFXBai212YbrT/68mFbNkTsIIU6s6bmSLrbyctm604ezppyREjDkzs7X3
-	 eigGTEiRzo19/JGVFRPm+4e6w4gOVQ0XSYvm/n9aXfT18Au0QQMPR6guAKPT1zxZGG
-	 nShOHwMF5Vj3lgpqTcPXp1tY7ZxZfC4S0y+xGlY1cfFGb3XtJkLece9fZmmLGZBZzh
-	 WKYyqF5LrHk9N0mqkTNN/2mbVdsBAIoezmWq4J5OgUNdEsJ5mVIfODR40uAkF01I26
-	 jb4ipeusps/rg4ZkUFRySAgnswUqFexunsqj5tnyNfQNOm8VR2MD6ravBnBbyyNz0L
-	 RX1j3bt3PTVjw==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-61bd4d14bc4so2579529eaf.1;
-        Mon, 01 Sep 2025 13:40:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV/Cd97sB2nnpVwiepnUWCefmBwdSGwsSbbgwJ74uccEGxIbw4KVGnzUv/vJakD9qOgEbD6n0FbXOY=@vger.kernel.org, AJvYcCVADPMcGLGnzHPW+MkmIngVm1UU7+YEQs0Xvd4ajo9U2g+9jywCnThNVg/y7cz9uy/kxyahLuZMbld72Cw=@vger.kernel.org, AJvYcCXOT0/UaCItuJOdkaS3M94B/luJGC+4MASb5kdpQH2lm9vPbH7LeDuJ0h/YxWltSUdI4ZHUiNNl1XSO@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZqYjWiTBvpcw4hfweACfY2QY/WgvLgPRwbxTvyVDcCT0s5oEq
-	BFVms+AdHLW+SIxghaT74lE5rcUwVkhnBRxNyLkCkPU2vxM6CQPi1GgCWDulmy4iFl7IrEzQ/ey
-	vGJr4Qf/okDx7TmpToZ7iwg0grubrdQg=
-X-Google-Smtp-Source: AGHT+IEHgorDUlefSMlIfkV7MKPXOXpe1teq+UGG3UeasIMKLioaOhksTWveVQdimpj5xsyNPxe9dgUvPvTAo/Vx3zk=
-X-Received: by 2002:a05:6820:548:b0:61d:ce66:3715 with SMTP id
- 006d021491bc7-61e337170cbmr4752697eaf.3.1756759236986; Mon, 01 Sep 2025
- 13:40:36 -0700 (PDT)
+	s=arc-20240116; t=1756759976; c=relaxed/simple;
+	bh=ytlWATWjcBQWrzRAGj8X4KZBLKKh5rsUh+peglojg9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CYi4j9lBoLGNreRZEUmp78sEmDo2mXfha5y6Jen+VwZrpmaLvCUhbzKuCMj3LwFoOXbNe5+8MCq2VHfGYRnrGe7fb4owswHJFSNfRpvbD3cz/7tfkmiZZlIkMbrHn6TFf/9StV4F7k/xbPh02FTriyGNo0SvfZ7CeKrB8TAuw4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m0Okr67q; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756759975; x=1788295975;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ytlWATWjcBQWrzRAGj8X4KZBLKKh5rsUh+peglojg9k=;
+  b=m0Okr67qS3k4mBtnVhIO0/VKr6hFImthkCit3XLgIldUnRRVfQcKN7AM
+   d9nZhpmnqLUjJH65w544KaGblABQUR4TBnCZ7W4ljUZPtPb8p6VVcXmTh
+   bd+a4UDm/v8bSLSV6gsN5eeHkzOlTk8Oj4hM4AxbDXP/B79JdQyqz9+g6
+   dXtFjfHXa1VEJHop4qAZJjNkhKKmKLI6kIIExV6Y4n5uPU9+X2xk4Fu1W
+   AOvun1UYMzTbkJqndq6rVZbMf4B5CbO08TAzTxp/WrjLXn1fnuOFe4X+k
+   Ir90Z0fTlBAbAUl3IaiCfs4NMkcz7LDYl0W6Jd6pNv3eQzfnY3gC7rUvt
+   Q==;
+X-CSE-ConnectionGUID: rhItqPd+QcaRu0BmdfacsA==
+X-CSE-MsgGUID: mh3UByomSkaZFFb4uuc5yQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11540"; a="59160968"
+X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
+   d="scan'208";a="59160968"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 13:52:54 -0700
+X-CSE-ConnectionGUID: ul9j6b0aRt+/Vppyy7oDIg==
+X-CSE-MsgGUID: XnwJyJlWTrCnx8TWLP7WRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
+   d="scan'208";a="170367195"
+Received: from kniemiec-mobl1.ger.corp.intel.com (HELO [10.245.244.170]) ([10.245.244.170])
+  by orviesa006.jf.intel.com with ESMTP; 01 Sep 2025 13:52:53 -0700
+Message-ID: <c7b57073-bd8c-4646-b93a-266ae6f3d557@linux.intel.com>
+Date: Mon, 1 Sep 2025 23:52:51 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250826150826.11096-1-ryanzhou54@gmail.com> <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
- <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
- <5d692b81-6f58-4e86-9cb0-ede69a09d799@rowland.harvard.edu>
- <CAJZ5v0jQpQjfU5YCDbfdsJNV=6XWD=PyazGC3JykJVdEX3hQ2Q@mail.gmail.com>
- <20250829004312.5fw5jxj2gpft75nx@synopsys.com> <e3b5a026-fe08-4b7e-acd1-e78a88c5f59c@rowland.harvard.edu>
- <CAJZ5v0gwBvC-y0fgWLMCkKdd=wpXs2msf5HCFaXkc1HbRfhNsg@mail.gmail.com>
- <f8965cfe-de9a-439c-84e3-63da066aa74f@rowland.harvard.edu> <CAJZ5v0g9nip2KUs2hoa7yMMAow-WsS-4EYX6FvEbpRFw10C2wQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0g9nip2KUs2hoa7yMMAow-WsS-4EYX6FvEbpRFw10C2wQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 1 Sep 2025 22:40:25 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gzFWW6roYTjUFeL2Tt8kKJ_g5Q=tp2=s87dy05x-Hvww@mail.gmail.com>
-X-Gm-Features: Ac12FXzQ9hcEjurH8eUEd3X09l0F1Sv2FyEpPrrVXnlvaPC7gF5PlnObyV0V71Y
-Message-ID: <CAJZ5v0gzFWW6roYTjUFeL2Tt8kKJ_g5Q=tp2=s87dy05x-Hvww@mail.gmail.com>
-Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
- child device xxx.dwc3 but parent is not active
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, ryan zhou <ryanzhou54@gmail.com>, 
-	Roy Luo <royluo@google.com>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/2] usb: xhci: Drop the TD_CLEARING_CACHE_DEFERRED
+ cancel
+To: Michal Pecio <michal.pecio@gmail.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Niklas Neronin <niklas.neronin@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+References: <20250901084642.2b42c0e7.michal.pecio@gmail.com>
+ <20250901084858.27f91ab7.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250901084858.27f91ab7.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 1, 2025 at 9:41=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
->
-> On Fri, Aug 29, 2025 at 9:58=E2=80=AFPM Alan Stern <stern@rowland.harvard=
-.edu> wrote:
-> >
-> > On Fri, Aug 29, 2025 at 09:23:12PM +0200, Rafael J. Wysocki wrote:
-> > > On Fri, Aug 29, 2025 at 3:25=E2=80=AFAM Alan Stern <stern@rowland.har=
-vard.edu> wrote:
-> > > > It sounds like the real question is how we should deal with an
-> > > > interrupted system suspend.  Suppose parent device A and child devi=
-ce B
-> > > > are both in runtime suspend when a system sleep transition begins. =
- The
-> > > > PM core invokes the ->suspend callback of B (and let's say the call=
-back
-> > > > doesn't need to do anything because B is already suspended with the
-> > > > appropriate wakeup setting).
-> > > >
-> > > > But then before the PM core invokes the ->suspend callback of A, th=
-e
-> > > > system sleep transition is cancelled.  So the PM core goes through =
-the
-> > > > device tree from parents to children, invoking the ->resume callbac=
-k for
-> > > > all the devices whose ->suspend callback was called earlier.  Thus,=
- A's
-> > > > ->resume is skipped because A's ->suspend wasn't called, but B's
-> > > > ->resume callback _is_ invoked.  This callback fails, because it ca=
-n't
-> > > > resume B while A is still in runtime suspend.
-> > > >
-> > > > The same problem arises if A isn't a parent of B but there is a PM
-> > > > dependency from B to A.
-> > > >
-> > > > It's been so long since I worked on the system suspend code that I =
-don't
-> > > > remember how we decided to handle this scenario.
-> > >
-> > > We actually have not made any specific decision in that respect.  Tha=
-t
-> > > is, in the error path, the core will invoke the resume callbacks for
-> > > devices whose suspend callbacks were invoked and it won't do anything
-> > > beyond that because it has too little information on what would need
-> > > to be done.
-> > >
-> > > Arguably, though, the failure case described above is not different
-> > > from regular resume during which the driver of A decides to retain th=
-e
-> > > device in runtime suspend.
-> > >
-> > > I'm not sure if the core can do anything about it.
-> > >
-> > > But at the time when the B's resume callback is invoked, runtime PM i=
-s
-> > > enabled for A, so the driver of B may as well use runtime_resume() to
-> > > resume the device if it wants to do so.  It may also decide to do
-> > > nothing like in the suspend callback.
-> >
-> > Good point.  Since both devices were in runtime suspend before the slee=
-p
-> > transition started, there's no reason they can't remain in runtime
-> > suspend after the sleep transition is cancelled.
-> >
-> > On the other hand, it seems clear that this scenario doesn't get very
-> > much testing.
->
-> No, it doesn't in general AFAICS.
->
-> > I'm pretty sure the USB subsystem in general is
-> > vulnerable to this problem; it doesn't consider suspended devices to be
-> > in different states according to the reason for the suspend.  That is, =
-a
-> > USB device suspended for runtime PM is in the same state as a device
-> > suspended for system PM (aside from minor details like wakeup settings)=
-.
-> > Consequently the ->resume and ->runtime_resume callbacks do essentially
-> > the same thing, both assuming the parent device is not suspended.  As w=
-e
-> > have discussed, this assumption isn't always correct.
-> >
-> > I'm open to suggestions for how to handle this.  Should we keep track o=
-f
-> > whether a device was in runtime suspend when a system suspend happens,
-> > so that the ->resume callback can avoid doing anything?  Will that work
-> > if the device was the source of a wakeup request?
->
-> Generally speaking, for proper integration of system suspend with
-> runtime suspend at all levels, it is necessary to track whether or not
-> the given device has been suspended prior to system suspend.
->
-> In fact, there are even ways to opt-in for assistance from the PM core
-> and bus types in that respect to some extent.
->
-> In the particular case at hand though, the PM core is not involved in
-> making the decision whether or not to leave the devices in runtime
-> suspend during system suspend and it all depends on the drivers of A
-> and B.
->
-> Note here that the problematic situation occurs when the suspend of B
-> has run, but the suspend of A has not run yet and the transition is
-> aborted between them, so the driver of A cannot do much to help.  The
-> driver of B has a couple of options though.
->
-> First off, it might decide to runtime-resume the device in its system
-> suspend callback (as long as we are talking about the "suspend" phase
-> and not any later phases of system suspend) before suspending it again
-> which will also cause A to runtime-resume and aborting system suspend
-> would not be problematic any more.  So that's one of the options, but
-> it is kind of wasteful and time-consuming.
->
-> Another option, which I mentioned before, might be to call
-> runtime_resume() from the system resume callback of B (again, as long
-> as we are talking about the "resume" phase, not any of the earlier
-> phases of system resume).  This assumes that runtime PM is enabled at
-> this point for both A and B and so it should work properly.
->
-> Now, if the driver of B needs to do something special to the device in
-> its system suspend callback, it may want (and likely should) disable
-> runtime PM prior to this and in that case it will have to check what
-> the runtime PM status of the device is and adjust its actions
-> accordingly.  That really depends on what those actions are etc, so
-> I'd rather not talk about it without a specific example.
+On 1.9.2025 9.48, Michal Pecio wrote:
+> The last remaining use is inside xhci_invalidate_cancelled_tds() for
+> destroying deferred TDs under certain failure conditions.
+> 
+> Instead of violating the spec by crudely erasing those deferred TDs,
+> we may give them one last chance to get their Set TR Dequeue. Maybe
+> the prior failure was caused by some corruption of one stream's ring
+> and other streams are fine, maybe it was a transient -ENOMEM.
+> 
+> Or maybe we want to cover this obscure case with less extra code.
+> 
+> Remove the search for TD_CLEARING_CACHE_DEFERRED TDs, nuke the one
+> cached TD we tried and failed to skip, and jump back to the main
+> loop to handle any TDs still in TD_DIRTY or TD_HALTED state. These
+> are our deferred TDs - all other dirty TDs have been given back.
+> 
+> If we fail again, the deferred TD will be nuked and so on, until we
+> run out of TDs. We are under the lock so nobody can keep submitting
+> and cancelling them forever.
+> 
+> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 
-Of course, the driver of B may also choose to leave the device in
-runtime suspend in its system resume callback.  This requires checking
-the runtime PM status of the device upfront, but the driver needs to
-do that anyway in order to leave the device in runtime suspend during
-system suspend, so it can record the fact that the device has been
-left in runtime suspend.  That record can be used later during system
-resume.
+Looks good to me.
 
-The kind of tricky aspect of this is when the device triggers a system
-wakeup by generating a wakeup signal.  In that case, it is probably
-better to resume it during system resume, but the driver should know
-that it is the case (it has access to the device's registers after
-all).  It may, for example, use runtime_resume() for resuming the
-device (and its parent etc) then.
+Gives every stream ring a chance to move past the cancelled TD, unlike
+the current code that bails out all stream rings on first set TR Deq failure.
+
+Thanks
+Mathias
+
+
 
