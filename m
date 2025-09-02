@@ -1,56 +1,56 @@
-Return-Path: <linux-usb+bounces-27467-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27468-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 721CDB3FF1D
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 14:07:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84F1DB40048
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 14:24:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EAD14E5585
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 12:03:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52DC654442B
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 12:18:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E85530DD34;
-	Tue,  2 Sep 2025 11:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B131F1E5B7C;
+	Tue,  2 Sep 2025 12:16:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="hIwOtF85"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="kydl/mlD"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B322830ACF9;
-	Tue,  2 Sep 2025 11:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F601A9F88;
+	Tue,  2 Sep 2025 12:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756814234; cv=none; b=SoUqusNeKrb5vhIfgOcSZA9r/j/7enW02OzDV1gnHk2fuWQ8EN4Ig5UcZZPr2Csaefhv/gD6Sleav5tFAeaWxa1VsUBNLf+I92KyRgMsowBObROzV1LM8ZPEEMW+jIuUNBOi+rcoXFDJ0p25Q+USP8Shpx7FUuWDNCY3KYe5/Yo=
+	t=1756815360; cv=none; b=P/Rz63AujfdfQ/ypOC8Vt0RPSQwbyXWE7lKCu6Vu1n5wtxkcGmI1cGurb7vdnxz3C0Tl6/wI9qyF45360eL7PShOXY/oHm90NyuJ3TT2Mb81oETFa/5BOYQt4wMX73idjTgg/IonQAGAWD1dLpvReh2YHumB+NKYKU9ZfTTjaos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756814234; c=relaxed/simple;
-	bh=X2wWmrA7oxTuQEVLARGVrxI0qGFtwivbsfhTFPTU2wc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qqjPKwcyp65UG8oZWT6crKyCQMtvAFN4DGR0/+ZXrPEO07XprzUTl+BBXfwlnrVFU+XiO+HyiHiFquWLvvgkrZVE7QYe4Qrp9nMktH/LcxeRU4wA8Io+ozjf3PuEG7a8SzLWwHd4KiT2RKKHyD4PEtqcRJiYxl4FvO56p8h6w5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=hIwOtF85; arc=none smtp.client-ip=148.251.105.195
+	s=arc-20240116; t=1756815360; c=relaxed/simple;
+	bh=wcgX/ND25g46C+3//qVJGQeuiEX4k18tJpZkfsw3LzA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YBOv/hy9wTDuUXiDHToHHFhQIAerKbP3+o6VjT1KCQL/PmdhVjiaLPM9XNdk1zC/pwnP86Lauu9wwGTbjVfaeVxqcKaLhmmt7lhOqhJVBRC2Vxv9pBhrKbnbiwP7AtN+4M8coXjttfrUD+7Qf0yi8Q/+gRuSGqxSZQTpNaFsZRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=kydl/mlD; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1756814230;
-	bh=X2wWmrA7oxTuQEVLARGVrxI0qGFtwivbsfhTFPTU2wc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=hIwOtF85SbWrwXLcYnYeRvsNTlEAgL8YD8p8b6eB8ABB9l6TYtRVBGJakLlHeWWGh
-	 mK7Ke6zgEUjBnJG9yWOrjO7eAg4FqdkwwtPnze2gBVv88LqJWC2dtxW80Abb+dScAy
-	 aWf6u8p6JBuZgKMsF3xwvgdlU8q1YbtTlNzUgAVjAkT89YS4XJnPUgWoX3LYeKaROM
-	 Aw63UNt9yMbaobdytQ4s8m4KOJPIClR8vxotAXLHQdAXfZG5Zff7BbfXlksan7NShL
-	 KMBZhrxsGdwIwxAWXisGxc3GyPgPPnKPH6ODlmt3nEdSv9/q+1vfa0cIyhz+91JlAJ
-	 1nrjzGFfKwJ0Q==
+	s=mail; t=1756815356;
+	bh=wcgX/ND25g46C+3//qVJGQeuiEX4k18tJpZkfsw3LzA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=kydl/mlDHGjU3q9Ui0EeiX3+eXd/aIkSsiytK3TKiV4h95c6L7cG/uM87flEsLXC4
+	 aaxQJQ+cvYnhoaisiZERVO7tJ2yF3J/twQV1k8hv/Gg1qhTjhBa3c+6kS9lFwASOkq
+	 XQT0Yl+wXg5Sy4WWupNPDa3HQtRFssu+NfQz9DfhYjHHRlPu0CdrrwdiLqzGDHfawq
+	 Gmww8VNg16zybXVMKOtS+glItvleaeEDOpZWv4YUzd8a2dljNaB1Uc+xpevUw5Z37t
+	 lDAFQW3zYSRAj7R/DRJXBhCMTPW3/TZ/6nNBpASWoA0XgBa673i+ZOGrduPf78zXMm
+	 1FimqLdXCieGA==
 Received: from localhost (unknown [82.79.138.60])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: cristicc)
-	by bali.collaboradmins.com (Postfix) with UTF8SMTPSA id CB50617E10B7;
-	Tue,  2 Sep 2025 13:57:09 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with UTF8SMTPSA id 069C417E12A2;
+	Tue,  2 Sep 2025 14:15:55 +0200 (CEST)
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Date: Tue, 02 Sep 2025 14:56:39 +0300
-Subject: [PATCH 17/17] usb: vhci-hcd: Replace pr_*() with dev_*() logging
+Date: Tue, 02 Sep 2025 15:15:46 +0300
+Subject: [PATCH v3] usb: vhci-hcd: Prevent suspending virtually attached
+ devices
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,217 +59,127 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250902-vhci-hcd-cleanup-v1-17-1d46247cb234@collabora.com>
-References: <20250902-vhci-hcd-cleanup-v1-0-1d46247cb234@collabora.com>
-In-Reply-To: <20250902-vhci-hcd-cleanup-v1-0-1d46247cb234@collabora.com>
+Message-Id: <20250902-vhci-hcd-suspend-fix-v3-1-864e4e833559@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAPHftmgC/3XNQQrCMBCF4atI1o5MR9NaV95DXKST1ARqUxINS
+ undTQuCiC7/B/PNKKIJzkRxWI0imOSi832O7Xol2Kr+YsDp3IKQJFbFDpJlB5Y1xHscTK+hdQ+
+ odCOZJEustcinQzB5XtjTObd18ebDc/mSinl9g9VvMBWAQA0iskZZSzqy7zrV+KA27K9iRhN9Q
+ FT+gShDxb6mstStbpX6hqZpegHJgtV+BQEAAA==
+X-Change-ID: 20250714-vhci-hcd-suspend-fix-7db5c25c509d
 To: Valentina Manea <valentina.manea.m@gmail.com>, 
  Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel@collabora.com, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Brian G. Merrell" <bgmerrell@novell.com>
+Cc: kernel@collabora.com, Greg Kroah-Hartman <gregkh@suse.de>, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Mailer: b4 0.14.2
 
-Where possible, use driver model logging helpers dev_*() instead of
-pr_*() to ensure the messages are always associated with the
-corresponding device/driver.
+The VHCI platform driver aims to forbid entering system suspend when at
+least one of the virtual USB ports are bound to an active USB/IP
+connection.
 
+However, in some cases, the detection logic doesn't work reliably, i.e.
+when all devices attached to the virtual root hub have been already
+suspended, leading to a broken suspend state, with unrecoverable resume.
+
+Ensure the virtually attached devices do not enter suspend by setting
+the syscore PM flag.  Note this is currently limited to the client side
+only, since the server side doesn't implement system suspend prevention.
+
+Fixes: 04679b3489e0 ("Staging: USB/IP: add client driver")
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 ---
- drivers/usb/usbip/vhci_hcd.c | 43 +++++++++++++++++++++++--------------------
- 1 file changed, 23 insertions(+), 20 deletions(-)
+The USB/IP Virtual Host Controller (VHCI) platform driver is expected to
+prevent entering system suspend when at least one remote device is
+attached to the virtual USB root hub.
+
+However, in some cases, the detection logic for active USB/IP
+connections doesn't seem to work reliably, e.g. when all devices
+attached to the virtual hub have been already suspended.  This will
+normally lead to a broken suspend state, with unrecoverable resume.
+
+The first patch of the series provides a workaround to ensure the
+virtually attached devices do not enter suspend.  Note this is currently
+limited to the client side (vhci_hcd) only, since the server side
+(usbip_host) doesn't implement system suspend prevention.
+
+IMPORTANT:
+
+Please note commit aa7a9275ab81 ("PM: sleep: Suspend async parents after
+suspending children") from v6.16-rc1 introduced a regression which
+breaks the suspend cancellation and hangs the system.
+
+A fix [1] has been already provided, which also landed soon after in
+v6.16-rc7 under commit ebd6884167ea ("PM: sleep: Update power.completion
+for all devices on errors").
+
+[1] https://lore.kernel.org/all/6191258.lOV4Wx5bFT@rjwysocki.net/
+---
+Changes in v3:
+- Moved all driver cleanup patches to a separate series:
+  https://lore.kernel.org/all/20250902-vhci-hcd-cleanup-v1-0-1d46247cb234@collabora.com/
+- Replaced FIXME with NOTE in the new comment block, as it refers to a
+  potential cleanup of redundant code rather than addressing a
+  functional issue
+- Rebased remaining patch onto next-20250902
+- Link to v2: https://lore.kernel.org/r/20250726-vhci-hcd-suspend-fix-v2-0-189266dfdfaa@collabora.com
+
+Changes in v2:
+- Updated cover letter to indicate the PM core fix has landed in
+  v6.16-rc7
+- Also made it clear that the patch fixing up suspend prevention only
+  applies to the client side (vhci_hcd), since the server side
+  (usbip_host) doesn't implement this functionality
+- Documented the usage of dev_pm_syscore_device() in vhci_urb_enqueue()
+- Reworked most of the cleanup patches according to the feedback
+  received from Greg
+- Link to v1: https://lore.kernel.org/r/20250717-vhci-hcd-suspend-fix-v1-0-2b000cd05952@collabora.com
+---
+ drivers/usb/usbip/vhci_hcd.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 8304df3dc94c415bea5252dc0044611f4c862ba5..64fe2f9e22f13b7d0234319521e0a7282c65411a 100644
+index e70fba9f55d6a0edf3c5fde56a614dd3799406a1..0d6c10a8490c0b3fdbebbc98c856a6c0c9b477cf 100644
 --- a/drivers/usb/usbip/vhci_hcd.c
 +++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -347,7 +347,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 	if (wIndex < 1 || wIndex > VHCI_HC_PORTS) {
- 		invalid_rhport = true;
- 		if (wIndex > VHCI_HC_PORTS)
--			pr_err("invalid port number %d\n", wIndex);
-+			dev_err(hcd_dev(hcd), "invalid port number %d\n", wIndex);
- 	} else {
- 		rhport = wIndex - 1;
- 	}
-@@ -370,7 +370,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		break;
- 	case ClearPortFeature:
- 		if (invalid_rhport) {
--			pr_err("invalid port number %d\n", wIndex);
-+			dev_err(hcd_dev(hcd), "invalid port number %d\n", wIndex);
- 			goto error;
- 		}
+@@ -765,6 +765,17 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 				 ctrlreq->wValue, vdev->rhport);
  
-@@ -410,7 +410,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		usbip_dbg_vhci_rh(" GetHubDescriptor\n");
- 		if (hcd->speed >= HCD_USB3 &&
- 		    (wLength < USB_DT_SS_HUB_SIZE || wValue != (USB_DT_SS_HUB << 8))) {
--			pr_err("Wrong hub descriptor type for USB 3.0 roothub.\n");
-+			dev_err(hcd_dev(hcd),
-+				"Wrong hub descriptor type for USB 3.0 roothub.\n");
- 			goto error;
- 		}
+ 			vdev->udev = usb_get_dev(urb->dev);
++			/*
++			 * NOTE: A similar operation has been done via
++			 * USB_REQ_GET_DESCRIPTOR handler below, which is
++			 * supposed to always precede USB_REQ_SET_ADDRESS.
++			 *
++			 * It's not entirely clear if operating on a different
++			 * usb_device instance here is a real possibility,
++			 * otherwise this call and vdev->udev assignment above
++			 * should be dropped.
++			 */
++			dev_pm_syscore_device(&vdev->udev->dev, true);
+ 			usb_put_dev(old);
  
-@@ -436,7 +437,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 	case GetPortStatus:
- 		usbip_dbg_vhci_rh(" GetPortStatus port %x\n", wIndex);
- 		if (invalid_rhport) {
--			pr_err("invalid port number %d\n", wIndex);
-+			dev_err(hcd_dev(hcd), "invalid port number %d\n", wIndex);
- 			retval = -EPIPE;
- 			goto error;
- 		}
-@@ -485,7 +486,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 						USB_PORT_STAT_LOW_SPEED;
- 					break;
- 				default:
--					pr_err("vhci_device speed not set\n");
-+					dev_err(hcd_dev(hcd), "vhci_device speed not set\n");
- 					break;
- 				}
- 			}
-@@ -539,7 +540,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			}
+ 			spin_lock(&vdev->ud.lock);
+@@ -785,6 +796,17 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 					"Not yet?:Get_Descriptor to device 0 (get max pipe size)\n");
  
- 			if (invalid_rhport) {
--				pr_err("invalid port number %d\n", wIndex);
-+				dev_err(hcd_dev(hcd), "invalid port number %d\n", wIndex);
- 				goto error;
- 			}
+ 			vdev->udev = usb_get_dev(urb->dev);
++			/*
++			 * Set syscore PM flag for the virtually attached
++			 * devices to ensure they will not enter suspend on
++			 * the client side.
++			 *
++			 * Note this doesn't have any impact on the physical
++			 * devices attached to the host system on the server
++			 * side, hence there is no need to undo the operation
++			 * on disconnect.
++			 */
++			dev_pm_syscore_device(&vdev->udev->dev, true);
+ 			usb_put_dev(old);
+ 			goto out;
  
-@@ -548,7 +549,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		case USB_PORT_FEAT_POWER:
- 			usbip_dbg_vhci_rh("SetPortFeature: USB_PORT_FEAT_POWER\n");
- 			if (invalid_rhport) {
--				pr_err("invalid port number %d\n", wIndex);
-+				dev_err(hcd_dev(hcd), "invalid port number %d\n", wIndex);
- 				goto error;
- 			}
- 
-@@ -560,7 +561,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		case USB_PORT_FEAT_BH_PORT_RESET:
- 			usbip_dbg_vhci_rh("SetPortFeature: USB_PORT_FEAT_BH_PORT_RESET\n");
- 			if (invalid_rhport) {
--				pr_err("invalid port number %d\n", wIndex);
-+				dev_err(hcd_dev(hcd), "invalid port number %d\n", wIndex);
- 				goto error;
- 			}
- 
-@@ -574,7 +575,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		case USB_PORT_FEAT_RESET:
- 			usbip_dbg_vhci_rh("SetPortFeature: USB_PORT_FEAT_RESET\n");
- 			if (invalid_rhport) {
--				pr_err("invalid port number %d\n", wIndex);
-+				dev_err(hcd_dev(hcd), "invalid port number %d\n", wIndex);
- 				goto error;
- 			}
- 
-@@ -598,7 +599,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			usbip_dbg_vhci_rh(" SetPortFeature: default %d\n",
- 					  wValue);
- 			if (invalid_rhport) {
--				pr_err("invalid port number %d\n", wIndex);
-+				dev_err(hcd_dev(hcd), "invalid port number %d\n", wIndex);
- 				goto error;
- 			}
- 
-@@ -637,7 +638,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		}
- 		break;
- 	default:
--		pr_err("default hub control req: %04x v%04x i%04x l%d\n",
-+		dev_err(hcd_dev(hcd),
-+			"default hub control req: %04x v%04x i%04x l%d\n",
- 			typeReq, wValue, wIndex, wLength);
- error:
- 		/* "protocol stall" on error */
-@@ -645,7 +647,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 	}
- 
- 	if (usbip_dbg_flag_vhci_rh) {
--		pr_debug("port %d\n", rhport);
-+		dev_dbg(hcd_dev(hcd), "%s port %d\n", __func__, rhport);
- 		/* Only dump valid port status */
- 		if (!invalid_rhport) {
- 			dump_port_status_diff(prev_port_status[rhport],
-@@ -705,7 +707,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 	unsigned long flags;
- 
- 	if (portnum > VHCI_HC_PORTS) {
--		pr_err("invalid port number %d\n", portnum);
-+		dev_err(hcd_dev(hcd), "invalid port number %d\n", portnum);
- 		return -ENODEV;
- 	}
- 	vdev = &vhci_hcd->vdev[portnum - 1];
-@@ -936,7 +938,7 @@ static int vhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
- 
- 		unlink->seqnum = atomic_inc_return(&vhci_hcd->seqnum);
- 		if (unlink->seqnum == 0xffff)
--			pr_info("seqnum max\n");
-+			dev_info(hcd_dev(hcd), "seqnum max\n");
- 
- 		unlink->unlink_seqnum = priv->seqnum;
- 
-@@ -1013,10 +1015,11 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
- static void vhci_shutdown_connection(struct usbip_device *ud)
- {
- 	struct vhci_device *vdev = container_of(ud, struct vhci_device, ud);
-+	struct usb_hcd *hcd = vhci_hcd_to_hcd(vdev_to_vhci_hcd(vdev));
- 
- 	/* need this? see stub_dev.c */
- 	if (ud->tcp_socket) {
--		pr_debug("shutdown tcp_socket %d\n", ud->sockfd);
-+		dev_dbg(hcd_dev(hcd), "shutdown tcp_socket %d\n", ud->sockfd);
- 		kernel_sock_shutdown(ud->tcp_socket, SHUT_RDWR);
- 	}
- 
-@@ -1029,7 +1032,7 @@ static void vhci_shutdown_connection(struct usbip_device *ud)
- 		kthread_stop_put(vdev->ud.tcp_tx);
- 		vdev->ud.tcp_tx = NULL;
- 	}
--	pr_info("stop threads\n");
-+	dev_info(hcd_dev(hcd), "stop threads\n");
- 
- 	/* active connection is closed */
- 	if (vdev->ud.tcp_socket) {
-@@ -1037,7 +1040,7 @@ static void vhci_shutdown_connection(struct usbip_device *ud)
- 		vdev->ud.tcp_socket = NULL;
- 		vdev->ud.sockfd = -1;
- 	}
--	pr_info("release socket\n");
-+	dev_info(hcd_dev(hcd), "release socket\n");
- 
- 	vhci_device_unlink_cleanup(vdev);
- 
-@@ -1063,7 +1066,7 @@ static void vhci_shutdown_connection(struct usbip_device *ud)
- 	 */
- 	rh_port_disconnect(vdev);
- 
--	pr_info("disconnect device\n");
-+	dev_info(hcd_dev(hcd), "disconnect device\n");
- }
- 
- static void vhci_device_reset(struct usbip_device *ud)
-@@ -1197,7 +1200,7 @@ static int vhci_start(struct usb_hcd *hcd)
- 
- 	id = hcd_name_to_id(hcd_name(hcd));
- 	if (id < 0) {
--		pr_err("invalid vhci name %s\n", hcd_name(hcd));
-+		dev_err(hcd_dev(hcd), "invalid vhci name %s\n", hcd_name(hcd));
- 		return -EINVAL;
- 	}
- 
-@@ -1216,7 +1219,7 @@ static int vhci_start(struct usb_hcd *hcd)
- 			return err;
- 		}
- 
--		pr_info("created sysfs %s\n", hcd_name(hcd));
-+		dev_info(hcd_dev(hcd), "created sysfs %s\n", hcd_name(hcd));
- 	}
- 
- 	return 0;
 
--- 
-2.51.0
+---
+base-commit: 3db46a82d467bd23d9ebc473d872a865785299d8
+change-id: 20250714-vhci-hcd-suspend-fix-7db5c25c509d
 
 
