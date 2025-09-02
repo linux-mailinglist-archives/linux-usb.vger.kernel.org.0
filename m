@@ -1,161 +1,186 @@
-Return-Path: <linux-usb+bounces-27471-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27472-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B635BB401D1
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 15:03:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6237EB40340
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 15:31:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 266CB188D686
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 13:01:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC1773AE969
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 13:30:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32DFD2DA757;
-	Tue,  2 Sep 2025 12:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691CC307491;
+	Tue,  2 Sep 2025 13:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RH2p/s+9"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="i89wwht4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013017.outbound.protection.outlook.com [52.101.127.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2E628489B;
-	Tue,  2 Sep 2025 12:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756817926; cv=none; b=ThtvqwJsQvTaZXR9oFNFbuHRhYEYe+MiPwcFC3YHBNPRl7xhCEZIg6CoZKKQW0RhP1ykZcbKkcwEsAQnsP57odNAQaukyvMIZAHvyAmLNjk8Q3JmL0wN02uDGs2C+KgRGXdIcfqG7APOy5wVZvdGglx6j/nvsNOLFZlmJ1E8jzI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756817926; c=relaxed/simple;
-	bh=JbvKZYq/T9c+ex/qOUiFNhbDFAJ4YblHQurbSxyz1VA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NmAdTwZZ8RlDwEGzu3hmJyF5CjAy22eRBQjAV6qXkzj+nYIdjdPy6Whc8snPJxf2A6EihQIqRyA2ZHfDbq7waLgOL4b8B/bG/Vww3Gsjh4H6rRpn05A6v5CTBlH/XSryblJQIMUNvRRSP61SJxOURoEomKwtPFJAole9bDzVn8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RH2p/s+9; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756817925; x=1788353925;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JbvKZYq/T9c+ex/qOUiFNhbDFAJ4YblHQurbSxyz1VA=;
-  b=RH2p/s+9c0GVNoogMwXquql4CuddXQaPCsmUNSq9AMj+9//KpeITJot4
-   it5wc0xUzfqXM2Ewep7JiHeTbVLZD9zVRc+T9j0lnB5Q265Hz76bks+FF
-   uaV2I+WssBLiwRFRyj68ar1yBtvymlPbrm9iZRTZD8G6Z1hNaN0dTpHHz
-   /LWotSvCEApsDGZR6wVqmPXmpRg8uiLka73JJgeaqYdpww1rcUUr9wYYC
-   SgLKzgn53VxeaoptaZ1EFpCI+4Rk7UaVxc/nzk1u8KKfemBv8zaZWqHQB
-   1MkEhpYQVMNNcjLrva6oLCds8rB8iwT/2nK/FWw8RWZiEINYV4D1dLvHj
-   A==;
-X-CSE-ConnectionGUID: mbODwKUiRBGL+50WKrkb4w==
-X-CSE-MsgGUID: +bmSos0LT0O15j0XsDXADQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11541"; a="58295409"
-X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
-   d="scan'208";a="58295409"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 05:58:44 -0700
-X-CSE-ConnectionGUID: m2TTrK6USFGW+SuBwk1Wmg==
-X-CSE-MsgGUID: 1cdbdKubTfm/vYWEHWTpkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
-   d="scan'208";a="171713789"
-Received: from johunt-mobl9.ger.corp.intel.com (HELO [10.245.245.90]) ([10.245.245.90])
-  by fmviesa009.fm.intel.com with ESMTP; 02 Sep 2025 05:58:42 -0700
-Message-ID: <20baae05-167f-42bc-aa08-33df1aaa095a@linux.intel.com>
-Date: Tue, 2 Sep 2025 15:58:40 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E651305062;
+	Tue,  2 Sep 2025 13:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756819596; cv=fail; b=npfAXZP8NN2erEO2a6/CFtXwSm5qdJToaxKqPfGadZ2WkYggeOGzJ1p11qJSPJScXd9VTDYeRpPY9m7GxFWskGDVYKprAWapzwxvJfQgOuGe1Jyjf6W4gnXEtZ13VD7ye0Z56RGO68eC13uXViJv4nxFdX/Rr3vUriUv0/LiU9g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756819596; c=relaxed/simple;
+	bh=kafDs09stbl4RDuYLmmjasRnAnWCNprgM3KZ1Dnd5EY=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=cCKbImyq0d5ociBn0/p8gnfQb30aw43ydoL2G9WsvHp9BqeNEODk9tSg4FYBBTlDFnqV3PK0thDeTQFqrlxW8x3lO+bgR4GJ0l25jNzI2oVgZ8mrsIKgxH7NkXExzCN5z9RKCt68QQZgs7KLsR5tyRvvTpoou4Drw9KEw3Q2h4g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=i89wwht4; arc=fail smtp.client-ip=52.101.127.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=c9hOVi8IRF940avQ4cmJxCZo64VInEomPDvo6EnGFFbHPfpsX6Gk1Bj7nPm/0jERIWOMX+fNsV4KYGbZL3yAJahhTqFjcyT5l9O2tb43xavML0ejtKSX63EVv1H1OXC1BIBr004bkLJVJHVemT2CTy+RHgS0IXRrp2HDT+K9p5x+eDSdKGNhRwW4j2NkRh1CWubH9G5u+QEp7qYBGvU7IVcu4HOxcD5/kPUzfCJDwiPS14H6MJc+ydDsJCTM8LRdk6NSf/h7qvzRGBKQvslvNRizurPPW9huOZQt6LZ6UdA/H4pdKIgQ3C7VXVY3f13+ge0bIHmeiS9ZwrC3etxUPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0NJ/bPjM5558QzF5DWIpqzCq3swRFnx85TVvt8K8ksQ=;
+ b=dPPhw+1319y3M5foO/Ed9nToUPMxXicF0T+pBeCiDR6/fCL66PO//q7cQvEXLiMAZoQW670irha6IWonMuzJZbcKuDJGwU7fB47u/TiKji0ikYdhA2/6qWujqfBaZQoE40v6Ih6NVN5S9/tsjynMRoaaFLqRyJPJf9OmdTp51Q9PXmgigXOFWHMsiclmlUOTfwhUFyJxiEB3E83KZPsZVj7Wt6nLx/KzQRe3GtSEUJ5aXPkSlMZqxLhiFgxXB+A1FcE/dPJcXbzzUPDsN07Bylj/MADF7FoURx/GFizkdbXPfKNmqd5JWd82PXJLoll9xgrSvybTtPboJNWtRtFgZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0NJ/bPjM5558QzF5DWIpqzCq3swRFnx85TVvt8K8ksQ=;
+ b=i89wwht4Brz3TzrKbgxHBZBVqGYSpTnkFEroSm3X0ctxSZ8PtmGpwMHoMIN91Z9s19pNzZkXyCfZHZD5lcHRhkYNrnbXjmGm+tJi/CHHcymZ0Ssm9bzE/CUMLKsvKY+TFjhX7d6kQdmnfIk1sCzT146uxdoBgCteYfvtzUEBlgjvj+93gyw5Reu3W7zw3VgTpx6nZ4u5yrKbkea5+J6mqlRFvgnBdB2v0HCgrM4qwSpIV6pzmny8iP2532Q25k6VOUllfzREx3JQGFNaYPKlOzpO5HQ+6wfrF12oIWpDQOvCd7BJB0KB4R6xN7+1KnF2UvSaDccBWO71mUDw0wkAJw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5576.apcprd06.prod.outlook.com (2603:1096:101:c9::14)
+ by TYZPR06MB6379.apcprd06.prod.outlook.com (2603:1096:400:424::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.27; Tue, 2 Sep
+ 2025 13:26:32 +0000
+Received: from SEZPR06MB5576.apcprd06.prod.outlook.com
+ ([fe80::5c0a:2748:6a72:99b6]) by SEZPR06MB5576.apcprd06.prod.outlook.com
+ ([fe80::5c0a:2748:6a72:99b6%7]) with mapi id 15.20.9073.026; Tue, 2 Sep 2025
+ 13:26:32 +0000
+From: Liao Yuanhong <liaoyuanhong@vivo.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Wayne Chang <waynec@nvidia.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
+	linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT),
+	linux-kernel@vger.kernel.org (open list)
+Cc: Liao Yuanhong <liaoyuanhong@vivo.com>
+Subject: [PATCH] usb: gadget: tegra-xudc: Remove redundant ternary operators
+Date: Tue,  2 Sep 2025 21:26:08 +0800
+Message-Id: <20250902132613.84876-1-liaoyuanhong@vivo.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYWPR01CA0023.jpnprd01.prod.outlook.com
+ (2603:1096:400:aa::10) To SEZPR06MB5576.apcprd06.prod.outlook.com
+ (2603:1096:101:c9::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: xhci: Fix xhci_free_virt_devices_depth_first()
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: David Wang <00107082@163.com>, WeitaoWang-oc@zhaoxin.com,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- regressions@lists.linux.dev, linux-kernel@vger.kernel.org,
- surenb@google.com, kent.overstreet@linux.dev
-References: <20250829181354.4450-1-00107082@163.com>
- <20250830114828.3dd8ed56.michal.pecio@gmail.com>
- <5051e27a.2ba3.198fa7b5f31.Coremail.00107082@163.com>
- <f9476552-a6dc-4f1c-91da-b15c8f0d9844@linux.intel.com>
- <20250902093017.13d6c666.michal.pecio@gmail.com>
- <446082a4.7dbe.199098cd654.Coremail.00107082@163.com>
- <20250902104630.6a9f088a.michal.pecio@gmail.com>
- <20250902110730.723a48a0.michal.pecio@gmail.com>
- <6042295b-8dad-4816-8505-b9b6c6f6049d@linux.intel.com>
- <20250902125549.03f22bcf.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250902125549.03f22bcf.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5576:EE_|TYZPR06MB6379:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2d1b753d-d41c-4c30-9994-08ddea24549f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ozBuVOLKi6eCDT7KnE6sL6jA5NGmF9mrSM1RyaDfjp+605RuMNXZbXDZaPav?=
+ =?us-ascii?Q?S+Gn582llwvfyYAwe8QloAO9Y2LHbR5CR9/enCZAD8792Z2ScEm4HI3lHiG2?=
+ =?us-ascii?Q?eB1/HWOqJlSIzOMgvTBcwkKCxJcFdyJAd/IHEMrCv24H+C/UTr1/QsxEOj56?=
+ =?us-ascii?Q?UhUy6cIgczbNZ243KRuNizUC3FlZSwm/eyXgU+s8dLGxnOHPIKKZp76Hg0HJ?=
+ =?us-ascii?Q?pGN+fygUzoqfSn8wTmHIo9bxPlFnnGFwICmylbp/Cwjb4MLOF4MQxB2drhor?=
+ =?us-ascii?Q?rF0DqcgVnMCTxXVN4b5ZSwwx47taUmWQoHgqwN/zVwLcVCjXHb9zCslmWEoj?=
+ =?us-ascii?Q?S3FRGQpkDQ96FOOz7Cdql8aZZI8Wr0y03gR7mGnAKDLY3yKMvD+6aJcWqrdn?=
+ =?us-ascii?Q?3eEnjvA7TYutD4qtkXON7pcitsKfaJbqxpQ+COQoFak6GQpnckEt0/XgYSRU?=
+ =?us-ascii?Q?58qllL3qo/ySNdTqlVdiTxMiWLFrRA5t3aaDLmj1EI7nTcP6SxQ3xaK5Owe8?=
+ =?us-ascii?Q?nmt2DHRtcIyEg6+oL0E7iyamxL+HNZ1E57MT3oS7oSJG7RwbjaeFJTPc2Af5?=
+ =?us-ascii?Q?dm5h4n6S+xK6hXeKPafuxcMW2wjYB0yFaw9+S0O1quuzZBak1Rd7rABeT0Dh?=
+ =?us-ascii?Q?wKDyl3BLzIjPZCje4Obq5rsGT7339sBVnbcJZLpk6n6bh1bUz3O3PfYBDjL/?=
+ =?us-ascii?Q?j1RJVlui0q9lHVFgd6xtCek5/qPOnDAPm1IS+T+yqZRzRFRUz1NYOdVH6+zp?=
+ =?us-ascii?Q?FdjjBg67WsLR2MRj6nNQbUVLnvmlnJ/+RqZMxp8rR77HJ0Txg2rhVWQnc7rt?=
+ =?us-ascii?Q?e3fqtC5U64Mxbz0d/adgx4XQQpV7JWRvYljkKMu64wdQv0r0C+s57VdI7he0?=
+ =?us-ascii?Q?gwLi50/AswNREyjbzRvdu2iajGyVIurrFn8a2TEf/auU8XnRpnf97gb7yoPc?=
+ =?us-ascii?Q?eWwq3TAYXBV8ONrwOlHBlXQ0VJ8izs9h71PbJ1l3nsWRI8HBnjhN9xSl8g1H?=
+ =?us-ascii?Q?fB1mTQamVX6bvJWUaCtzVDvP74f4KFsWQyMGvnRrhrQJgYbkCodN9lhz3L/w?=
+ =?us-ascii?Q?wdIjkwfoYJnVNZo2W6PG2TfYMtXAfoB1vw4LX6HXskkzCZcGq8qpFr8s3Fgm?=
+ =?us-ascii?Q?pgtUUz1H2GSY30HlxMgjN7HDsz3iHwh5DaXII4tyx34TYn8iGYitw+0qWE5n?=
+ =?us-ascii?Q?Mj6InIthJuZRMuMupyrb5IlLIgjqrcu/G/mD3Jbvc5FE76eNg9oJkBw2wi2I?=
+ =?us-ascii?Q?ecCZyVsO9tU9Ezk7bn39h+j2yOYL1nVOwtxcUjVtUIkg7GPATj/KLA/eoSB4?=
+ =?us-ascii?Q?tfhgic38OqvBjfW5Royx43/NZEP7u2PksYGEDcnZZIUVOQzqWCEtqUFSrakt?=
+ =?us-ascii?Q?Bn/9NIS5J0QWYFu+7CxJm388AatnSiDHOvU2DpHZ53a2jz4ZYl4pnRXZVEz8?=
+ =?us-ascii?Q?JzZX681OFyw1UFYrcui366WhI+Jr5wAwvSKpWSNAKFZIV4uRW96pBQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5576.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Q4rxkOfwAXnniYVLCJJxTdJjswmBgL/pkjGlPmvgW6rHG+txdWMDrPJtDF5i?=
+ =?us-ascii?Q?UgOYeknb42LQogqLx9kuzn58EAoWDo+AB6Z7Wq3WuR5802+MJcFuJeUXVgGb?=
+ =?us-ascii?Q?3n7QIZGv5qr38Ozxs7QftmBpm7gmFq7vMNQBcj+HYvFFE1kqn3IsaLcku8lF?=
+ =?us-ascii?Q?WZFjz6l11WiQ9FFp9wLpZl8eMaaW8A4yKGFZx5yPLLMhRqheriggNwjrTSQo?=
+ =?us-ascii?Q?IV6CIG2gxaj+mOxAMwkrAFNzCUEKPrLCjrhy2YLcuMv8nxoVar2/olCSz1vM?=
+ =?us-ascii?Q?b4lCvHzKYmCEYE008BW05D9JqkoMTsxNVYGD7kg2BL/1NzRRSF/mUfZHZuA8?=
+ =?us-ascii?Q?fAtdgekKAm4SiE1O0kkX0b6txvOOvB6WUEAFDPY0VziD+Fn11T9UmSAxROZz?=
+ =?us-ascii?Q?IpkC/Q4Fz4HmDheS9k6xstXDndUfXqyS0u7mx/me3Z4dVY+q6BNrZsBgKaNm?=
+ =?us-ascii?Q?ycf89yo/V5mLAeErhJYGAeJpuI+mD4kBYfYHPVIKS+10m7i9beT+G/SvA3gD?=
+ =?us-ascii?Q?SzY1pCobrfC2TTR5BQcY7zC61A9HTrV6ZcwPnQ8gpfRZLiR2WbgZr8m2iXW2?=
+ =?us-ascii?Q?YecydDiYmtA5xMSP/MQKDw5hTlML5COwk8jqvC3Jt+g1aSSwMNON+EpLQbDT?=
+ =?us-ascii?Q?+6DWPXDimSkqBP17k4a+f5VI6BXlq+MHsn/GglFq/gzxpminctCDpgBrE4UH?=
+ =?us-ascii?Q?ch2SwAtBp99m7xWq3jCfEanycaWyB/6r1XP4hhb8jO6zoHdjl7Lb4ccK6LP/?=
+ =?us-ascii?Q?h1TR5sOsgT2b72B2ArCgdZkPjo+xfE3fuxmEXDy+y4wvZoYNgwhPf7qFp7Tf?=
+ =?us-ascii?Q?43qJzHtY2nFGhfSIMALpA1gBVzkhOim/Dt8K7heQrRpyz0nlJ89b2VPreXEB?=
+ =?us-ascii?Q?QaNYW0C+nyDG5ECbwzqI4boDeqVYZ8GLf9ZMdhsksa0Pf9bsUiI3WHmce0U7?=
+ =?us-ascii?Q?OnM+0KLA1GveIRMs2BHN+izthlXVGrR5M19i/Bp9Q3MG6OWCADker170n7++?=
+ =?us-ascii?Q?sPPezCwggVjCf2oXrs6/EEeDxgwRtfiBX2xiIYCoKmejATSEscBxKN+R5drg?=
+ =?us-ascii?Q?Lc/MBiezvf9TcqvPLD9xD3qa2NBopoNIccL7RRrx4bSrtPpd3Z2yxvqxH0pb?=
+ =?us-ascii?Q?7BXspblH48ETV4zmqIFrkeObmxCvNj0Z2/+dTAmd2sHDemXGFxUAPRi07LtG?=
+ =?us-ascii?Q?uRmnZNaVr0eVcspC+wZX+cbLVqfxeCNb63VRtBLCiP8hGy5xR81M+NBX++Z9?=
+ =?us-ascii?Q?UORfwdKUuQguw36UPPHO83o6bU4v7hZkiJRaTrxfuQ+OJqy5eluIZlv422sD?=
+ =?us-ascii?Q?IojIkaGJNzxeDcrMFFOn9DXlG+6aR8Db9m70A6rNvKSgx3hGdGLRc9aGMjAi?=
+ =?us-ascii?Q?7rmd+NDbPdv5r5L0u5X9PcarFcmND3ZplGL8pl3uTy/8jUhnhjQuCeAyZVfK?=
+ =?us-ascii?Q?cq5anT3+Hva472QpniKB62tFU8isn0YpQsrr6VjUeuEVqEuK9Xv1aUpyAChn?=
+ =?us-ascii?Q?aEtyeLwZv96UxpNXxIWO5+6i68/v4MHbhN9l6px2OTKwvlQjw+iBINsSqJ45?=
+ =?us-ascii?Q?ULvyqgZABYecfBABmMrkcQ1Q+2B6GUGtbw9JCxJh?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d1b753d-d41c-4c30-9994-08ddea24549f
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5576.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2025 13:26:31.8904
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u8wg8YsR7pqZW3GD0SRkXQGcG7Rs+uK/YRG3CRc+Uxdx+0zhMUSbZ3ZGr9oLv5xk16LWawiAxDVI9DR184PhSQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6379
 
-On 2.9.2025 13.55, Michał Pecio wrote:
-> On Tue, 2 Sep 2025 13:13:12 +0300, Mathias Nyman wrote:
->> On 2.9.2025 12.07, Michał Pecio wrote:
->>> On Tue, 2 Sep 2025 10:46:30 +0200, Michał Pecio wrote:
->>>> On Tue, 2 Sep 2025 16:30:48 +0800 (CST), David Wang wrote:
->>>>> About the change from "<" to "<=", I did not observe any difference on my system. Is it because my system does not use up all slots?
->>>>
->>>> This too, you would need to fiddle with devices (or connect enough
->>>> of them) to reach Slot ID 255 (probably the highest on most systems),
->>>> depending on the xHCI controller and its ID allocation policy.
->>>
->>> This made me wonder what those policies are. I'm too lazy for thorough
->>> testing, but I plugged and unplugged the same device a few times.
->>>
->>> Most HCs kept assigning ID 1, so they likely always pick the lowest.
->>>
->>> My AMD chipset, two ASMedia USB 3.1 controllers and a Fresco FL1100
->>> kept assigning sequentially increasing IDs, so I suppose I could pump
->>> it up near the top, connect two high speed hubs and trigger this bug.
->>>    
->>>> But also as explained, this bug doesn't make things go boom just yet.
->>>>
->>>> Except if combined with your bug in an obscure edge case:
->>>>
->>>> 1. A high speed hub has slot ID HCS_MAX_SLOTS-1 and some TT children.
->>>> 2. Another high speed hub has slot ID HCS_MAX_SLOTS.
->>>> 3. We start with freeing the second hub.
->>>> 4. The loop is entered and leaves vdev pointing at the first hub.
->>>> 5. The first hub is freed instead of the second one.
->>>> 6. Then its children are freed and UAF its tt_info.
->>
->> I'm not sure I follow the above.
->>
->> I agree that changing the "<" to "<=" makes sense, but fortunately for us there shouldn't be any
->> issue with current implementation as xhci_free_virt_devices_depth_first() is called with highest possible
->> slot_id value first:
->>
->> in xhci-memm.c:
->>    for (i = HCS_MAX_SLOTS(xhci->hcs_params1); i > 0; i--)
->>                   xhci_free_virt_devices_depth_first(xhci, i);
->>
->> if HCS_MAX_SLOTS slot_id is a hs-hub then all its children have slot_id < HCS_MAX_SLOTS,
->> and loop works fine.
-> 
-> The loop works fine, but it exists with vdev pointing at MAX_SLOTS-1
-> due to off by one and then this happens:
-> 
-> 	xhci_free_virt_device(xhci, vdev, slot_id);
-> 
-> which means:
-> 
-> 	xhci_free_virt_device(xhci, xhci->devs[MAX_SLOTS-1], MAX_SLOTS);
-> 
-> If MAX_SLOTS-1 is a high speed hub, it will be freed right now, without
-> freeing its children first.
-> 
-> And whatever this device is, it will be freed without nulling
-> xhci->devs[MAX_SLOTS-1], which might cause other UAF later (not sure).
-> 
-> I think it's possible, though I haven't tried actually triggering it.
-> The problem didn't exist before this recent patch.
-> 
+For ternary operators in the form of "a ? true : false", if 'a' itself
+returns a boolean result, the ternary operator can be omitted. Remove
+redundant ternary operators to clean up the code.
 
-I see, yes with the slot_id regression the incorrect vdev will cause issues.
+Signed-off-by: Liao Yuanhong <liaoyuanhong@vivo.com>
+---
+ drivers/usb/gadget/udc/tegra-xudc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Sent the patch to fix it forward
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index 1d3085cc9d22..0c38fc37b6e6 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -812,8 +812,7 @@ static void tegra_xudc_update_data_role(struct tegra_xudc *xudc,
+ 		return;
+ 	}
+ 
+-	xudc->device_mode = (usbphy->last_event == USB_EVENT_VBUS) ? true :
+-								     false;
++	xudc->device_mode = usbphy->last_event == USB_EVENT_VBUS;
+ 
+ 	phy_index = tegra_xudc_get_phy_index(xudc, usbphy);
+ 	dev_dbg(xudc->dev, "%s(): current phy index is %d\n", __func__,
+-- 
+2.34.1
 
-Thanks
-Mathias
 
