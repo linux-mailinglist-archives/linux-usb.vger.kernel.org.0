@@ -1,140 +1,119 @@
-Return-Path: <linux-usb+bounces-27469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27470-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CAAAB400A1
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 14:32:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BBC1B401B7
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 15:00:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE9633A56B8
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 12:26:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A54E188DC58
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 12:59:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6961F2C0266;
-	Tue,  2 Sep 2025 12:26:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD062D9491;
+	Tue,  2 Sep 2025 12:56:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MDBcOynS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pwazNMHJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9D5246BB4
-	for <linux-usb@vger.kernel.org>; Tue,  2 Sep 2025 12:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7272D5C95;
+	Tue,  2 Sep 2025 12:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756816009; cv=none; b=sRhkZqdPuC8zbzvmnDoVfemyTkHFScONAG6DrGvdNgUMny3u1io9cyNPG6axXBmHxhTHnHyq3aI8Xy86JYDVlGK56NEU52Ulu94SbilWP3nURr7GEIQCNMWP1GMurCjDp7Y/rTrPBUYSxy/bR8pAijDmnenCQJHGkTxuz+1UjIY=
+	t=1756817774; cv=none; b=OflUV30N9gXKLZY2hp1scbAjUj1nG7/F7KbOGURtB9TKkMiYSECYRchaPr+iogtlSvc0M3LDgz+FL4yizQttHuOfFP4CCFOnGUcufEgK+5v8aovMvDfMsQmQGbHUPGGCFhnaPGC4Wuqs26I/xM+E9Z44vn1YgwlaY6H4MBQhDP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756816009; c=relaxed/simple;
-	bh=OyC1Nbd1YPqVRkGG71rBmFB24au3devhB/+Z25AecIA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M2MoWtpWlHM2pF96cBh7HU7ZTkvhIhEgq/ryWfduFmHvLe0xmfw2W1rKwgTVocsI40Z9szeS1KIVaG5UHnMZOX15/aFs3yxM/ygWfrRnuzKSqdyI+0NT+Fl0I7YzMiiupNQ2dOurRxtOKD9OPVEv/zCm2CDiRdpy9Yj5Gc2mNZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MDBcOynS; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756816008; x=1788352008;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OyC1Nbd1YPqVRkGG71rBmFB24au3devhB/+Z25AecIA=;
-  b=MDBcOynSC9301IQN61Hof2MX0t4x07nSNKVzdA7sNlyGpclfVQrzChyn
-   oni42CcJgdI8Oz0A07tHx7NgZ97bKAeQ6cGfQ/uSsIirzLTcR72BJmeiv
-   wpCxIseh104/30K7j6uBymrofRv7/ehZbhejuVOYGyPmnzEwc7ZGUIbEW
-   5CKOaEjECB0FSUGsGaUsKwC7IinN8m22CWi+LD7WIKAytmm68/95mGafE
-   LJT3hGcrC7COkFuWtA42KdPmviQcBHXNLpmNpVp02LX8hXAtaCUqmgMq1
-   pJ36P2Ju26h71AqiF1hEyFcUmTKGEeabQSe+YoQsT/Wx1ppyOv3mJifVk
-   w==;
-X-CSE-ConnectionGUID: 1lj881xBRP68DrEN1ZSZCA==
-X-CSE-MsgGUID: qZU/JQNqQCOWlaYz4nqlpQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11540"; a="70467655"
-X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
-   d="scan'208";a="70467655"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 05:26:47 -0700
-X-CSE-ConnectionGUID: frv3VFzXTySxcU2oRDO8Kw==
-X-CSE-MsgGUID: R6VoU3TJT1mhNw1TC+Ecag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
-   d="scan'208";a="175399726"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.120.28]) ([10.245.120.28])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 05:26:46 -0700
-Message-ID: <5d2fbba0-63f3-444a-adfc-b0773bf20774@linux.intel.com>
-Date: Tue, 2 Sep 2025 15:26:13 +0300
+	s=arc-20240116; t=1756817774; c=relaxed/simple;
+	bh=6fXt4bhKhGQeDgocLc+VTGxwmm9hlaSYbwbrhqO4eo4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=lucBmrwg++jHdYRdZCeDdEewQV8yTkO9VH8r6aYoCyLEEhM0cDDeEv8/AIXY67ZL3LWYQcVHHiNWJD5xn5U+4WUcSIpBx3RR4JXNSxUZLX+nXr1non7c0csbBC4IV4YCXN7SAqCKcTorBGJl/TCEpKSfyYL+WcrC63s32vPSHTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pwazNMHJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F86C4CEF4;
+	Tue,  2 Sep 2025 12:56:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756817774;
+	bh=6fXt4bhKhGQeDgocLc+VTGxwmm9hlaSYbwbrhqO4eo4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=pwazNMHJ405xvwddvksWXCvf2Bzxx2noy2IUYDoxR08pNT70eoYJ6avMGFl9/Brfy
+	 djIhKc4IwsWYRDzf4ckgbuj4YCoKw+9YxQrmPP2zcN5BTWN72msT/8L7gG1b4AnNXA
+	 H4LLv6NBYhzDqxK03/Bs/TmEL+LOYNY+NS+YPvoSxcEaL2K4fCDy8dQcwcD1Yoj3r7
+	 9WeAzZMLfWuw825r0YE0Jvdw3d0z5Gpm6BLaVjSBhLdAAnUEwVxIWvjvouZoMk16IB
+	 vPb54RivBXsgQ9vEkrWC7YCee6GXl108+ujfuPj+LCZ1l3MNDksA1EisuEfyh34BqK
+	 8exw6nerb4i/Q==
+From: Lee Jones <lee@kernel.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>, 
+ Linus Walleij <linus.walleij@linaro.org>, linux-gpio@vger.kernel.org, 
+ Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andrew Lunn <andrew@lunn.ch>, 
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
+ Gregory Clement <gregory.clement@bootlin.com>, 
+ Russell King <linux@armlinux.org.uk>, Daniel Mack <daniel@zonque.org>, 
+ Haojian Zhuang <haojian.zhuang@gmail.com>, 
+ Robert Jarzmik <robert.jarzmik@free.fr>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, 
+ Geert Uytterhoeven <geert@linux-m68k.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Lee Jones <lee@kernel.org>, 
+ Pavel Machek <pavel@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Jeff Johnson <jjohnson@kernel.org>, Hans de Goede <hansg@kernel.org>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ "Dr. David Alan Gilbert" <linux@treblig.org>, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-samsung-soc@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+ linux-mips@vger.kernel.org, linux-sh@vger.kernel.org, 
+ linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
+ linux-media@vger.kernel.org, patches@opensource.cirrus.com, 
+ netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
+ ath10k@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-sound@vger.kernel.org
+In-Reply-To: <20250808151822.536879-1-arnd@kernel.org>
+References: <20250808151822.536879-1-arnd@kernel.org>
+Subject: Re: (subset) [PATCH 00/21] gpiolib: fence off legacy interfaces
+Message-Id: <175681776381.2341743.17892612215782644085.b4-ty@kernel.org>
+Date: Tue, 02 Sep 2025 13:56:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: xhci: improve TR Dequeue Pointer mask
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-References: <20250826130656.277633-1-niklas.neronin@linux.intel.com>
- <20250828101207.49aea3b5.michal.pecio@gmail.com>
-Content-Language: en-US
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-In-Reply-To: <20250828101207.49aea3b5.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-c81fc
 
-
-
-On 28/08/2025 11.12, Michał Pecio wrote:
-> On Tue, 26 Aug 2025 15:06:56 +0200, Niklas Neronin wrote:
->> Address the naming and usage of the TR Dequeue Pointer mask in the xhci
->> driver. The Endpoint Context Field at offset 0x08 is defined as follows:
->>  Bit 0		Dequeue Cycle State (DCS)
->>  Bits 3:1	RsvdZ (Reserved and Zero)
->>  Bits 63:4	TR Dequeue Pointer
->>
->> When extracting the TR Dequeue Pointer for an Endpoint without Streams,
->> in xhci_handle_cmd_set_deq(), the inverted Dequeue Cycle State mask
->> (~EP_CTX_CYCLE_MASK) is used, inadvertently including the Reserved bits.
->> Although bits 3:1 are typically zero, using the incorrect mask could cause
->> issues.
->>
->> The existing mask, named "SCTX_DEQ_MASK," is misleading because "SCTX"
->> implies exclusivity to Stream Contexts, whereas the TR Dequeue Pointer is
->> applicable to both Stream and non-Stream Contexts.
->>
->> Rename the mask to "TR_DEQ_PTR_MASK", utilize GENMASK_ULL() macro and use
->> the mask when handling the TR Dequeue Pointer field.
->>
->> Function xhci_get_hw_deq() returns the Endpoint Context Field 0x08, either
->> directly from the Endpoint context or a Stream.
->>
->> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
->> ---
-...
+On Fri, 08 Aug 2025 17:17:44 +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
->> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
->> index a20f4e7cd43a..59ff84ba2d4a 100644
->> --- a/drivers/usb/host/xhci.h
->> +++ b/drivers/usb/host/xhci.h
->> @@ -500,7 +500,8 @@ struct xhci_ep_ctx {
->>  
->>  /* deq bitmasks */
->>  #define EP_CTX_CYCLE_MASK		(1 << 0)
->> -#define SCTX_DEQ_MASK			(~0xfL)
->> +/* bits 63:4 - TR Dequeue Pointer */
->> +#define TR_DEQ_PTR_MASK			GENMASK_ULL(63, 4)
+> Commit 678bae2eaa81 ("gpiolib: make legacy interfaces optional") was
+> merged for linux-6.17, so now it is possible to use the legacy interfaces
+> conditionally and eventually have the support left out of the kernel
+> whenever it is not needed.
 > 
-> I don't care much about this rename, but I can't help but notice that
-> naming is not consistent with the related EP_CTX_CYCLE_MASK above and
-> that it too applies to both types of contexts.
-> 
-> If I wanted to fix this, I would just drop the 'EP_' and 'S' prefixes.
+> [...]
 
-I have an Endpoint Context patch series in progress that will address all
-Endpoint Context macro naming, comments, and related issues.
+Applied, thanks!
 
-Because, this patch set is quite old, v1 sent in February this year, all
-my current patches are built and tested on top of it, so this is why I
-am sending it first.
+[12/21] mfd: arizona: make legacy gpiolib interface optional
+        commit: 12f6c0afc8987d72017a3ecf7c1183cb951b0d24
+[13/21] mfd: si476x: add GPIOLIB_LEGACY dependency
+        commit: 1ae250257e43b3fba225e4f8ea7d87125dc861ae
+[14/21] mfd: aat2870: add GPIOLIB_LEGACY dependency
+        commit: 3144986f37911f131f373743f294b2941a8ef37c
 
-Best Regards,
-Niklas
-
+--
+Lee Jones [李琼斯]
 
 
