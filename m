@@ -1,122 +1,168 @@
-Return-Path: <linux-usb+bounces-27448-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27449-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29782B3FD10
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 12:53:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9AA4B3FD1F
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 12:56:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD1FA3A5330
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 10:53:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BDC8189D304
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 10:56:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 866C12F5497;
-	Tue,  2 Sep 2025 10:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D14C2F617E;
+	Tue,  2 Sep 2025 10:56:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aNszoWJO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aNGDNomK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99ECC2F5462;
-	Tue,  2 Sep 2025 10:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A112F617B;
+	Tue,  2 Sep 2025 10:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756810404; cv=none; b=jyL8aUiwPoXXzJ1u//NXnTtarYAI6VyJvn2K6xBCQ/URn5g+CY7UcXAv1pvCjlAAFVmu5HLNoIMpFzJLoTzAuAv+PfdZeaU8qNf9ETQCPp+EYGQUqoB0rgK6qHK6d6+AHdXTODPIaYmRQ4Jbps7o0Vc758goNS5v6Loioxi/X7M=
+	t=1756810559; cv=none; b=r3etgc4oPp6Ply1vg+A5+zNSav+xrPs7ZAZwPefUenux/d0/wrdPL8X9vd2C1sc8H9tDIXP3CbPhGb3vkp1cqrYLaHU0H8sIZONWb4M2tD7t6cfr3h5UCgLjvcysqKA6nw0TLQkZ0CLGPdVJkYjRK2jEiXlVMUBU10ag34arPrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756810404; c=relaxed/simple;
-	bh=/gCB6WlvMhpjTnQIW9fQa+utrVlQOJYK8p0PmDQ4Xss=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rkoUQxw6YVPq/WQxhWKRtzeciN8gDZXlTpKvkJDeX/+v41Lt3lDoQOILelD2qE8F2mMFwMbjXKQ/RuGA2jmFiW/oNCFWjviNNLvGJFfWpO4TUfcgNuCM9YQmoMNDaP1IelkUJp6au0l/t6PjnywU9H8GQT41ZI+8xm8AkxH42V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aNszoWJO; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756810402; x=1788346402;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/gCB6WlvMhpjTnQIW9fQa+utrVlQOJYK8p0PmDQ4Xss=;
-  b=aNszoWJOMVy2SLoC/oD/bcNknnpKwfC9lQfrct0bDSwOdZgNGJjmOphr
-   zBi0ili8uA8ysWEBYTpLVeJEO0cn3CaPySniUCVaHQDkY8yi8inoxHNhD
-   O0pLTnYD0UiJo6bDCPPrT+cTw0mjSi6dtA5z/IvGd3Y6kZh4NKWh+l0tv
-   O4DYMdjEnHa5kDCGTFkoJJtbWTBAP2h2BlBwKRcF4zUv5GBfBA4NIucgO
-   RILU2HOS5HeVf0Pw/cwGqB6DXFiOMGr4OV65AiNXwuRwLyzLmNp1Z07jZ
-   mYZE6E7CgyeSfpOCgHI2Te2eNv649aU9Akhk65EuhIREd8Z5kTpL7UF62
-   Q==;
-X-CSE-ConnectionGUID: k1BBHM2xSiizYJU4CsSZVw==
-X-CSE-MsgGUID: gvARtAXuRva1/2LtB37dXQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11540"; a="76678017"
-X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
-   d="scan'208";a="76678017"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 03:53:22 -0700
-X-CSE-ConnectionGUID: T+W0tHl8SDyhEuDaMzGfhA==
-X-CSE-MsgGUID: aNFcd6WRRwCT+HKEbXJRDw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
-   d="scan'208";a="171609576"
-Received: from johunt-mobl9.ger.corp.intel.com (HELO mnyman-desk.intel.com) ([10.245.245.90])
-  by fmviesa008.fm.intel.com with ESMTP; 02 Sep 2025 03:53:20 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	David Wang <00107082@163.com>,
-	Michal Pecio <michal.pecio@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH 3/3] xhci: fix memory leak regression when freeing xhci vdev devices depth first
-Date: Tue,  2 Sep 2025 13:53:06 +0300
-Message-ID: <20250902105306.877476-4-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250902105306.877476-1-mathias.nyman@linux.intel.com>
-References: <20250902105306.877476-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1756810559; c=relaxed/simple;
+	bh=/yv6wfMBCGauFEEG8NIOdTF35ZEmcQyAzbZ0UEyxGqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=k1Hld37Snl1g6sdHGQsv7rR2DgJNRVFAWp5fTIR7BbyFs8+ahTJRUNSg+Fz3Ajyf98BHP21TkqCYRRy3gkpYsmXLc7wtkNM39SWeby+X29S6JaNB74RKecCrEQYN+JU9RxEJubL/diJC91kiuKeex8ip6c/c3FQ+HA9EG8jlktU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aNGDNomK; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-336e44ca0e4so14828681fa.0;
+        Tue, 02 Sep 2025 03:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756810556; x=1757415356; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D4z3tt/EVCscRadpcGAdkkLAF52cp5gwcdFwhvouaew=;
+        b=aNGDNomKtNNflXcBf7BaDSmqLEn0WLTwmp9b88P7O4/Rnyj8Z1YWXOtM8BDiXAKFh0
+         16LNKlWiCwPGsaJyfRavUCGdIQ+dhXUXGlNj87ppYVtXoVSBeCpAl1DWPe5IQVmF6xKy
+         rpA1YT9ohgwlUkkV48PIHQ60VK8NT6yW0FdgfPDdkg7NVCWukPRuBb/jUXFH8A/Zvd2B
+         QP9UN+t10TYuBLGk1eRCoLrNYQIyGPAJP6VXY4h0CjnmZlOXrXdahdgn/zWtv/1cG5Fd
+         Fi94kqn/E7+b16+b14h6Q8bOjPlqwH2u+1b5DyEu2A3APTxsJkFNCa0FVZhUyCRGjHwL
+         OEqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756810556; x=1757415356;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D4z3tt/EVCscRadpcGAdkkLAF52cp5gwcdFwhvouaew=;
+        b=aoRiBYsTNz0GPQFT4rryMc/pAYuD5CQyRjdRd2O0EoEAKDkq/poaiURjtofBUO5aDV
+         er2IUFFDGB0JyoKwU6oLADhzmqkBZ/IgYuD6s2nxqtnZmKR+2kMHAvnG9ztuQPEGvyDw
+         GDUIu6NiO0rgwrud1nfUub3Hw06vh8JJ75+pHTWRx4Rb941aofnFXIEYha0kt8jofH4p
+         1dUmOeG3kUy17FYiMyLnEjyo7u8WE5jF+jdenIpysoY4Izd67rKdI8T21zYtb4/WU5T5
+         4wZFfL7hWlq2cFeL8hwWmnTI2IWq/MIzV+CKLtdefxsidYnxt5S9WlY2IG60q9DzGqH4
+         TjXA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCyfRuzO50gTfyZhp2Bh9VXyhbALW5647BVtSe7TmXhVt+dmeS9H6V7AGV8NLC4oa4fdhjP4ZIvrPkTMA=@vger.kernel.org, AJvYcCVVRoOcQGFVh5KNHDdPwYG8cIE+4FxeLEGgi/wDaVZpskDLbyrelpgw+G2QOJ1qWLpiQ/pZ6/lGYh9z@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNrUaXWhRAiFD0hvmgjiQFkOXgyHBvuOvI/kddt2JGdiS/9RNf
+	YRBlUFPbmc5sZ0vzp8AwSl5stTvJ/AnLKrVGl8BgszC2n+qi6uZAkBcm
+X-Gm-Gg: ASbGncvMJWiCwNJRFBzex6u6cyzbpfLfYR8qkPrh2xIT31ixoIv0q7Z7MtDIxhiC5nk
+	yWL+e45/G+mcx61LWFpQUZm/Oj041siLkeSJ9KZ5Ig2QhHvn4Gj43CkCxvHN97qJJrjfZGkumvU
+	wMwB9JmJAE20VTR4Zt5VG79isdWazk5AwT6VMpXb3Fqooqq2WBTZXBFnUnECJHLvB1paKyNeSsB
+	G6+hkrIL0bvNpEsABtUXkiHGBKVRgGUKuKHHac49g2TDhRKbJcfdLrfGnFPhQM3L0K3OJ4xPn7V
+	pYWTYk60ynmNotDe5FlqJ5OOIHRUQz0AsONoKMGIBjR5uuvcF3/OVuo8v4AsenwxDlC8WYAKCZK
+	7XeUlEwatdVPxACo2i4raK8PEOPk3dbJUO44FQii2iqzSvA==
+X-Google-Smtp-Source: AGHT+IGFRu3XuFoSm3+DreztlNP5a2guSHIu9vPQibD3J7e0m7KGfv6NGgjaA6PXiAIVw8hDKcXQzw==
+X-Received: by 2002:a2e:b889:0:b0:336:8228:29f7 with SMTP id 38308e7fff4ca-336caad86acmr35778241fa.27.1756810555583;
+        Tue, 02 Sep 2025 03:55:55 -0700 (PDT)
+Received: from foxbook (bey208.neoplus.adsl.tpnet.pl. [83.28.36.208])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-560826d1188sm603738e87.31.2025.09.02.03.55.53
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 02 Sep 2025 03:55:54 -0700 (PDT)
+Date: Tue, 2 Sep 2025 12:55:49 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: David Wang <00107082@163.com>, WeitaoWang-oc@zhaoxin.com,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ regressions@lists.linux.dev, linux-kernel@vger.kernel.org,
+ surenb@google.com, kent.overstreet@linux.dev
+Subject: Re: [PATCH] usb: xhci: Fix xhci_free_virt_devices_depth_first()
+Message-ID: <20250902125549.03f22bcf.michal.pecio@gmail.com>
+In-Reply-To: <6042295b-8dad-4816-8505-b9b6c6f6049d@linux.intel.com>
+References: <20250829181354.4450-1-00107082@163.com>
+	<20250830114828.3dd8ed56.michal.pecio@gmail.com>
+	<5051e27a.2ba3.198fa7b5f31.Coremail.00107082@163.com>
+	<f9476552-a6dc-4f1c-91da-b15c8f0d9844@linux.intel.com>
+	<20250902093017.13d6c666.michal.pecio@gmail.com>
+	<446082a4.7dbe.199098cd654.Coremail.00107082@163.com>
+	<20250902104630.6a9f088a.michal.pecio@gmail.com>
+	<20250902110730.723a48a0.michal.pecio@gmail.com>
+	<6042295b-8dad-4816-8505-b9b6c6f6049d@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Suspend-resume cycle test revealed a memory leak in 6.17-rc3
+On Tue, 2 Sep 2025 13:13:12 +0300, Mathias Nyman wrote:
+> On 2.9.2025 12.07, Micha=C5=82 Pecio wrote:
+> > On Tue, 2 Sep 2025 10:46:30 +0200, Micha=C5=82 Pecio wrote: =20
+> >> On Tue, 2 Sep 2025 16:30:48 +0800 (CST), David Wang wrote: =20
+> >>> About the change from "<" to "<=3D", I did not observe any difference=
+ on my system. Is it because my system does not use up all slots? =20
+> >>
+> >> This too, you would need to fiddle with devices (or connect enough
+> >> of them) to reach Slot ID 255 (probably the highest on most systems),
+> >> depending on the xHCI controller and its ID allocation policy. =20
+> >=20
+> > This made me wonder what those policies are. I'm too lazy for thorough
+> > testing, but I plugged and unplugged the same device a few times.
+> >=20
+> > Most HCs kept assigning ID 1, so they likely always pick the lowest.
+> >=20
+> > My AMD chipset, two ASMedia USB 3.1 controllers and a Fresco FL1100
+> > kept assigning sequentially increasing IDs, so I suppose I could pump
+> > it up near the top, connect two high speed hubs and trigger this bug.
+> >  =20
+> >> But also as explained, this bug doesn't make things go boom just yet.
+> >>
+> >> Except if combined with your bug in an obscure edge case:
+> >>
+> >> 1. A high speed hub has slot ID HCS_MAX_SLOTS-1 and some TT children.
+> >> 2. Another high speed hub has slot ID HCS_MAX_SLOTS.
+> >> 3. We start with freeing the second hub.
+> >> 4. The loop is entered and leaves vdev pointing at the first hub.
+> >> 5. The first hub is freed instead of the second one.
+> >> 6. Then its children are freed and UAF its tt_info. =20
+>=20
+> I'm not sure I follow the above.
+>=20
+> I agree that changing the "<" to "<=3D" makes sense, but fortunately for =
+us there shouldn't be any
+> issue with current implementation as xhci_free_virt_devices_depth_first()=
+ is called with highest possible
+> slot_id value first:
+>=20
+> in xhci-memm.c:
+>   for (i =3D HCS_MAX_SLOTS(xhci->hcs_params1); i > 0; i--)
+>                  xhci_free_virt_devices_depth_first(xhci, i);
+>=20
+> if HCS_MAX_SLOTS slot_id is a hs-hub then all its children have slot_id <=
+ HCS_MAX_SLOTS,
+> and loop works fine.
 
-Turns out the slot_id race fix changes accidentally ends up calling
-xhci_free_virt_device() with an incorrect vdev parameter.
-The vdev variable was reused for temporary purposes right before calling
-xhci_free_virt_device().
+The loop works fine, but it exists with vdev pointing at MAX_SLOTS-1
+due to off by one and then this happens:
 
-Fix this by passing the correct vdev parameter.
+	xhci_free_virt_device(xhci, vdev, slot_id);
 
-The slot_id race fix that caused this regression was targeted for stable,
-so this needs to be applied there as well.
+which means:
 
-Fixes: 2eb03376151b ("usb: xhci: Fix slot_id resource race conflict")
-Reported-by: David Wang <00107082@163.com>
-Closes: https://lore.kernel.org/linux-usb/20250829181354.4450-1-00107082@163.com
-Suggested-by: Michal Pecio <michal.pecio@gmail.com>
-Suggested-by: David Wang <00107082@163.com>
-Cc: stable@vger.kernel.org
-Tested-by: David Wang <00107082@163.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-mem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+	xhci_free_virt_device(xhci, xhci->devs[MAX_SLOTS-1], MAX_SLOTS);
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 81eaad87a3d9..c4a6544aa107 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -962,7 +962,7 @@ static void xhci_free_virt_devices_depth_first(struct xhci_hcd *xhci, int slot_i
- out:
- 	/* we are now at a leaf device */
- 	xhci_debugfs_remove_slot(xhci, slot_id);
--	xhci_free_virt_device(xhci, vdev, slot_id);
-+	xhci_free_virt_device(xhci, xhci->devs[slot_id], slot_id);
- }
- 
- int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id,
--- 
-2.43.0
+If MAX_SLOTS-1 is a high speed hub, it will be freed right now, without
+freeing its children first.
 
+And whatever this device is, it will be freed without nulling
+xhci->devs[MAX_SLOTS-1], which might cause other UAF later (not sure).
+
+I think it's possible, though I haven't tried actually triggering it.
+The problem didn't exist before this recent patch.
 
