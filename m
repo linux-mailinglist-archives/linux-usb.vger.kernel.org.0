@@ -1,56 +1,56 @@
-Return-Path: <linux-usb+bounces-27464-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27465-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E43B6B3FEFC
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 14:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB4CFB3FEFF
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 14:03:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCFE31B27068
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 12:02:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3C59188B455
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Sep 2025 12:03:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D6030749B;
-	Tue,  2 Sep 2025 11:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5720B30AAB1;
+	Tue,  2 Sep 2025 11:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ZyluWRcc"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BP1MMOSS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB19306D3F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7DA255F5C;
 	Tue,  2 Sep 2025 11:57:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756814231; cv=none; b=dZawysY+OBpUu1y2vy8YqkY1BIQZn92KKss1h7NaIKxi62Xc3pHVGucKeT+nEXmAcOZEavBqg/1y+44guBS426pT6Bs16wbp5Ur7IPRBbG5+hSuIWDz/2iL2AJp2ASTlznnS4dqgGUwgHhVv/hlqEbxi8erl2j/WtBxOxd8o3f0=
+	t=1756814231; cv=none; b=Z2mC8JZvVAPWPAqwkd+zdaOlLDV9WYrlHWbiLRrgQ5MzZ36M090XfHH1Bd5uSAEM13MffGZQnGGMJYaU5zKA8AEriVo1tB2UOw0jN9QRxa8zX794Y+CNawU9O2KvXF/10H6M49K/miodFFK4tww/qswAF7WBSPLk+sVQAazSuxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756814231; c=relaxed/simple;
-	bh=yE4k/N92zxT8/ez56q76hETeCl2+RzWZurf0SczBZ1s=;
+	bh=KGlUlP+wqP8TkULvUNOhgzB0XAxuC0vVIsj3uFCmKRE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aSRyKEkUFDh992Lp7mz3hrneyZzjm1ZNw3AglknCLYsn3Jc7QTmY8McJf0+FwqYEHLn7XfKotY4JrdIczvdHPY/YplqcvmSnZMs2SefsdbkWn3PaFl92mheAqbujqm0LBdAPJq59z+bo1NA8DA1Ecu1njH24caW43ToX7zFVCks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ZyluWRcc; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:To:Cc; b=FL++IF8kEeAbziVVD7q6kfHCKXOkDqqwM4MJtu8+mrdf96lrDOjsEuWjoZJF39sRqQIcppe5CfH0bQmsEnxUq1NXqdkOJkEzBwW8VvKWIjQZLlTt5vffAYtyrbhsMCYfKqzFrjgg8JlAHAr8nj8OK2FK3sPZs3DZs5tGCZJDYME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BP1MMOSS; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1756814227;
-	bh=yE4k/N92zxT8/ez56q76hETeCl2+RzWZurf0SczBZ1s=;
+	s=mail; t=1756814228;
+	bh=KGlUlP+wqP8TkULvUNOhgzB0XAxuC0vVIsj3uFCmKRE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ZyluWRccMxk7iA3YNY/oikM/fS8xnj9abGZpRiAwVUeXK2ISLokIJNa3XY98JJVat
-	 E7j9i+mULdp74VwdtBXo59UaCJR2/JMOOd+UKLOvjma6G5u/ZtYfP/c/JT4Vq4qQHk
-	 EybmQJDYcF4gXXDEey2eSArbS5GH7AbmH+xOL7gHWPzAoELprCjYBZ2Tiqte0gKj1x
-	 2/c6uwZCoq+zlcBbL73t4tdZUJujnOxGaVIXQVTZf3+MJR7+uf2O5dN9wtKLbBSrxZ
-	 aeR6vU2HLESiARf5X4LqAmVr/sG2mwHZ3KVHWg5HjUh40t0skBYEpdFCP8nftD/68P
-	 MsJnrC6MnLB8A==
+	b=BP1MMOSSTBo7VEaXomhy/iR+6nI5qUMk4Ph9SeYS7NnudVVB56ryt0/X7tVdtKp+V
+	 6kDxx8jpSnA3/2hBJ7475aFOIt8ueHMpPAkVSaFkZsvI/RqlHTr63FBZCueQ4OsE5Y
+	 NhLZOImCADkWXmPSggonbJuVYVXeYn77+vHW1+4PMTkJcXYKWpT+WdWG/38RKIazbP
+	 bRitUhOf5DNPds6zc4xw7rHXvObZiI4vxGG7TYyjk6Z16/99kBQDcq0Zrm6Kij07Ho
+	 lJdfgp+AF/zVwJOk/8AuePTya3VxHVPH2QetACzSRUrj1N4qVmQw5Igun8ohfTsAMh
+	 HLCTvx3bjMfHg==
 Received: from localhost (unknown [82.79.138.60])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: cristicc)
-	by bali.collaboradmins.com (Postfix) with UTF8SMTPSA id 7E6C917E1355;
-	Tue,  2 Sep 2025 13:57:07 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with UTF8SMTPSA id 46C4117E135D;
+	Tue,  2 Sep 2025 13:57:08 +0200 (CEST)
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Date: Tue, 02 Sep 2025 14:56:36 +0300
-Subject: [PATCH 14/17] usb: vhci-hcd: Consistently use __func__
+Date: Tue, 02 Sep 2025 14:56:37 +0300
+Subject: [PATCH 15/17] usb: vhci-hcd: Do not split quoted strings
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,7 +59,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250902-vhci-hcd-cleanup-v1-14-1d46247cb234@collabora.com>
+Message-Id: <20250902-vhci-hcd-cleanup-v1-15-1d46247cb234@collabora.com>
 References: <20250902-vhci-hcd-cleanup-v1-0-1d46247cb234@collabora.com>
 In-Reply-To: <20250902-vhci-hcd-cleanup-v1-0-1d46247cb234@collabora.com>
 To: Valentina Manea <valentina.manea.m@gmail.com>, 
@@ -69,89 +69,99 @@ Cc: kernel@collabora.com, linux-usb@vger.kernel.org,
  linux-kernel@vger.kernel.org
 X-Mailer: b4 0.14.2
 
-Replace all explicit function names in string literals with __func__ and
-silent several checkpatch complaints similar to the following one:
+Join the split strings to make checkpatch happy and regain ability to
+grep for those log messages in the source code:
 
-  WARNING: Prefer using '"%s...", __func__' to using 'vhci_start', this function's name, in a string
+  WARNING: quoted string split across lines
 
-In case of the usbip_dbg_*() helpers, which are wrappers over
-pr_debug(), the function names end up duplicated, hence replace the
-superfluous strings with some useful info or simply drop the log entries
-altogether if they become ftrace-like.
+While at it, replace the affected pr_err() calls with dev_err().
 
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 ---
- drivers/usb/usbip/vhci_hcd.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ drivers/usb/usbip/vhci_hcd.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index a71a542e6eec42c79cff091fe0168f44c8c9b4b2..c790e3a435e2b1493c1ed88d3a98edb7c2e35912 100644
+index c790e3a435e2b1493c1ed88d3a98edb7c2e35912..9e88fe6424f723709c07e91df21481ae91c1f1b5 100644
 --- a/drivers/usb/usbip/vhci_hcd.c
 +++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -160,8 +160,6 @@ void rh_port_connect(struct vhci_device *vdev, enum usb_device_speed speed)
- 	u32		status;
- 	unsigned long	flags;
+@@ -377,8 +377,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		switch (wValue) {
+ 		case USB_PORT_FEAT_SUSPEND:
+ 			if (hcd->speed >= HCD_USB3) {
+-				pr_err(" ClearPortFeature: USB_PORT_FEAT_SUSPEND req not "
+-				       "supported for USB 3.0 roothub\n");
++				dev_err(hcd_dev(hcd),
++					"ClearPortFeature: USB_PORT_FEAT_SUSPEND req not supported for USB 3.0 roothub\n");
+ 				goto error;
+ 			}
  
--	usbip_dbg_vhci_rh("rh_port_connect %d\n", rhport);
--
- 	spin_lock_irqsave(&vhci->lock, flags);
+@@ -507,8 +507,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		case USB_PORT_FEAT_LINK_STATE:
+ 			usbip_dbg_vhci_rh("SetPortFeature: USB_PORT_FEAT_LINK_STATE\n");
+ 			if (hcd->speed < HCD_USB3) {
+-				pr_err("USB_PORT_FEAT_LINK_STATE req not "
+-				       "supported for USB 2.0 roothub\n");
++				dev_err(hcd_dev(hcd),
++					"USB_PORT_FEAT_LINK_STATE req not supported for USB 2.0 roothub\n");
+ 				goto error;
+ 			}
  
- 	status = vhci_hcd->port_status[rhport];
-@@ -183,6 +181,8 @@ void rh_port_connect(struct vhci_device *vdev, enum usb_device_speed speed)
+@@ -524,8 +524,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			usbip_dbg_vhci_rh("SetPortFeature: USB_PORT_FEAT_U2_TIMEOUT\n");
+ 			/* TODO: add suspend/resume support! */
+ 			if (hcd->speed < HCD_USB3) {
+-				pr_err("USB_PORT_FEAT_U1/2_TIMEOUT req not "
+-				       "supported for USB 2.0 roothub\n");
++				dev_err(hcd_dev(hcd),
++					"USB_PORT_FEAT_U1/2_TIMEOUT req not supported for USB 2.0 roothub\n");
+ 				goto error;
+ 			}
+ 			break;
+@@ -533,8 +533,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			usbip_dbg_vhci_rh("SetPortFeature: USB_PORT_FEAT_SUSPEND\n");
+ 			/* Applicable only for USB2.0 hub */
+ 			if (hcd->speed >= HCD_USB3) {
+-				pr_err("USB_PORT_FEAT_SUSPEND req not "
+-				       "supported for USB 3.0 roothub\n");
++				dev_err(hcd_dev(hcd),
++					"USB_PORT_FEAT_SUSPEND req not supported for USB 3.0 roothub\n");
+ 				goto error;
+ 			}
  
- 	spin_unlock_irqrestore(&vhci->lock, flags);
+@@ -566,8 +566,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
  
-+	usbip_dbg_vhci_rh("rhport: %d status: %u\n", rhport, status);
-+
- 	usb_hcd_poll_rh_status(vhci_hcd_to_hcd(vhci_hcd));
- }
- 
-@@ -194,8 +194,6 @@ static void rh_port_disconnect(struct vhci_device *vdev)
- 	u32		status;
- 	unsigned long	flags;
- 
--	usbip_dbg_vhci_rh("rh_port_disconnect %d\n", rhport);
--
- 	spin_lock_irqsave(&vhci->lock, flags);
- 
- 	status = vhci_hcd->port_status[rhport];
-@@ -206,6 +204,9 @@ static void rh_port_disconnect(struct vhci_device *vdev)
- 	vhci_hcd->port_status[rhport] = status;
- 
- 	spin_unlock_irqrestore(&vhci->lock, flags);
-+
-+	usbip_dbg_vhci_rh("rhport: %d status: %u\n", rhport, status);
-+
- 	usb_hcd_poll_rh_status(vhci_hcd_to_hcd(vhci_hcd));
- }
- 
-@@ -1173,8 +1174,6 @@ static int vhci_start(struct usb_hcd *hcd)
- 	int id, rhport;
- 	int err;
- 
--	usbip_dbg_vhci_hc("enter vhci_start\n");
--
- 	if (usb_hcd_is_primary_hcd(hcd))
- 		spin_lock_init(&vhci_hcd->vhci->lock);
- 
-@@ -1296,7 +1295,7 @@ static int vhci_alloc_streams(struct usb_hcd *hcd, struct usb_device *udev,
- 			      struct usb_host_endpoint **eps, unsigned int num_eps,
- 			      unsigned int num_streams, gfp_t mem_flags)
- {
--	dev_dbg(&hcd->self.root_hub->dev, "vhci_alloc_streams not implemented\n");
-+	dev_dbg(&hcd->self.root_hub->dev, "%s not implemented\n", __func__);
- 	return 0;
- }
- 
-@@ -1305,7 +1304,7 @@ static int vhci_free_streams(struct usb_hcd *hcd, struct usb_device *udev,
- 			     struct usb_host_endpoint **eps, unsigned int num_eps,
- 			     gfp_t mem_flags)
- {
--	dev_dbg(&hcd->self.root_hub->dev, "vhci_free_streams not implemented\n");
-+	dev_dbg(&hcd->self.root_hub->dev, "%s not implemented\n", __func__);
- 	return 0;
- }
- 
+ 			/* Applicable only for USB3.0 hub */
+ 			if (hcd->speed < HCD_USB3) {
+-				pr_err("USB_PORT_FEAT_BH_PORT_RESET req not "
+-				       "supported for USB 2.0 roothub\n");
++				dev_err(hcd_dev(hcd),
++					"USB_PORT_FEAT_BH_PORT_RESET req not supported for USB 2.0 roothub\n");
+ 				goto error;
+ 			}
+ 			fallthrough;
+@@ -621,8 +621,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 	case GetPortErrorCount:
+ 		usbip_dbg_vhci_rh(" GetPortErrorCount\n");
+ 		if (hcd->speed < HCD_USB3) {
+-			pr_err("GetPortErrorCount req not "
+-			       "supported for USB 2.0 roothub\n");
++			dev_err(hcd_dev(hcd),
++				"GetPortErrorCount req not supported for USB 2.0 roothub\n");
+ 			goto error;
+ 		}
+ 		/* We'll always return 0 since this is a dummy hub */
+@@ -631,8 +631,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 	case SetHubDepth:
+ 		usbip_dbg_vhci_rh(" SetHubDepth\n");
+ 		if (hcd->speed < HCD_USB3) {
+-			pr_err("SetHubDepth req not supported for "
+-			       "USB 2.0 roothub\n");
++			dev_err(hcd_dev(hcd),
++				"SetHubDepth req not supported for USB 2.0 roothub\n");
+ 			goto error;
+ 		}
+ 		break;
 
 -- 
 2.51.0
