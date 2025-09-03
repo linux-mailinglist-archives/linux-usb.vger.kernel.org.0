@@ -1,119 +1,138 @@
-Return-Path: <linux-usb+bounces-27479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF675B4124D
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 04:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 49C6EB4139A
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 06:42:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80C6A5E6F7A
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 02:27:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E69CC680053
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 04:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC734221710;
-	Wed,  3 Sep 2025 02:26:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A2062D46C3;
+	Wed,  3 Sep 2025 04:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t70X+wWy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s/wbSSBA"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F89512CD8B
-	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 02:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2C02D3A71;
+	Wed,  3 Sep 2025 04:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756866419; cv=none; b=g0jy0cvjI9PjN+noXPsXOpzI1dFMBadkx+W+7LxkHcG3pKKpvcCheV/DctIKMJul8fgzbHF2o+cxUSYjjkgLSCja49B3wXAI4zvGBFYMMG/OT20o0+6kFuJteRPjvCtd5NFoigni7itHWamONFwpn7yIWmZhk7DaGv8Ple76d3U=
+	t=1756874516; cv=none; b=B+NgY05FhnMe9/GGYizIUfc2kR89n73Qit/Q3xbIKge6nxlqgdmB03IS0TtbJN51cnLTpoerHgMQy6rqFBSX1uJKWl1a/Bic9JuNo0iuiOLlkUuAN/EPitQKsSlbJAq03UrA6yL9Y+tPHui0MGRCvaFt7SGygDOZ42UDrHQIIJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756866419; c=relaxed/simple;
-	bh=/euu9I9T4YAEJ+8A6irGiIZ6CXZrbYSrXkOVRy3CxS8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=D3F6WjagxXvXYGMm+DIzGdqrE//zgmoG3qCnw4yN/4QkDkXmNz/JDuipUg9DcfM8mnv1Ah3QNeDSrEfyi6Osx0deMZVrHwiVFVrmTlR5pTsTCOzVwuSzuZT+bUaDfGcNGECpp/K2LQgjWUMXcdxJkZqrFNITwMb+m+AWbOGntck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t70X+wWy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C55E5C4CEED
-	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 02:26:58 +0000 (UTC)
+	s=arc-20240116; t=1756874516; c=relaxed/simple;
+	bh=Ce5ETH+F6WnWDEeaq7pLglfV4JdFcr3PKEJyxp/keno=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XN1gnNkX7wy3aXifhWNBNemX2RmarO9zHhtk1Ze6t0g6gjegt/ZxAMu8qTJ6Hi/Yt/LwYqJAyhhuOmXvSkrZQx7UFXHeLf9Rr93OO5gXQrCVwHhHApvfKP981Mpzds8AMMnBpMoCYBI5jbjN4aFiDKh14WrcYF49m2VMjN3vIqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s/wbSSBA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2AAC4CEF0;
+	Wed,  3 Sep 2025 04:41:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756866418;
-	bh=/euu9I9T4YAEJ+8A6irGiIZ6CXZrbYSrXkOVRy3CxS8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=t70X+wWyuq7FUskPSlefwairZPm0xO05m1suq2Z0t9G1A+ApWzCS9sdlI7c5eQtSO
-	 Lauq8nf239xY1KqK4dX+Mm7iucWbj5knW3OuL1JoMY8z6tBhbWTLVD/ST2A6cj3mHe
-	 v6amGo9e8PCI4BOcNlUtxJakQTgPZQ5LYK0pjKAfUyCQRF5h+XKqJh2uaPT7G8Lewr
-	 6Bsz+KZS7cX2nfRIsVHGV6DP63rpUrNhuOVW4fGow3dQgI++tuuhngwy5YCC0U5KR4
-	 CWpJIh6Fkt1EnGR20SKhjY/Su4ZzfLCLOzyjsABK/FTVG6YQ2ICof0wypuCPTsQ0r7
-	 3NKK5D4Bm9NNA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id AF4A1C433E1; Wed,  3 Sep 2025 02:26:58 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
- resume from suspend
-Date: Wed, 03 Sep 2025 02:26:58 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220491-208809-AsMSNgQKJc@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
-References: <bug-220491-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1756874516;
+	bh=Ce5ETH+F6WnWDEeaq7pLglfV4JdFcr3PKEJyxp/keno=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=s/wbSSBARIKT8Fd9JqzskawfzifT7+BPOBAzwXDl6WBxhU410noLNvQWfHvv+Nb4Q
+	 SbPcIb3hxSHQY5dHlRH7uTb7j/F/Gu7pEGr7MuO33HXsvNskDBMUab0jPLJFQsfQGn
+	 DBDR9JuXyqBeBGip1IjfApmvbUcrJdSUfPe1zWbEw+SMhMPPGSNw74IL9FARn5fKmF
+	 zjHgI792YdyiwMwWOpQd3S9Oo3Edup8Zqq77sQ1wl2zqgUT6OeYww9IfARtdlcDtB3
+	 vOHV/VFLi6+2jqm//3XxZoeker+XP6Xe8Qrr8AEKkb368Q3fZA1sXUVv4Sn/GGGapn
+	 XGwAwOPKYtzMA==
+Message-ID: <29e61472-5f41-4e76-9b5b-f3e106d6a629@kernel.org>
+Date: Tue, 2 Sep 2025 23:41:52 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 00/11] Improvements to S5 power consumption
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>
+Cc: Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Danilo Krummrich <dakr@kernel.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
+ <linux-pm@vger.kernel.org>,
+ "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+ "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+ "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+ "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+ "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+ "open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
+ AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng <kaihengf@nvidia.com>,
+ Mark Pearson <mpearson-lenovo@squebb.ca>,
+ =?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+ Eric Naim <dnaim@cachyos.org>
+References: <20250818020101.3619237-1-superm1@kernel.org>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <20250818020101.3619237-1-superm1@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
+On 8/17/2025 9:00 PM, Mario Limonciello (AMD) wrote:
+> A variety of issues both in function and in power consumption have been
+> raised as a result of devices not being put into a low power state when
+> the system is powered off.
+> 
+> There have been some localized changes[1] to PCI core to help these issues,
+> but they have had various downsides.
+> 
+> This series instead tries to use the S4 flow when the system is being
+> powered off.  This lines up the behavior with what other operating systems
+> do as well.  If for some reason that fails or is not supported, run their
+> shutdown() callbacks.
+> 
+> Cc: AceLan Kao <acelan.kao@canonical.com>
+> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
+> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
+> Cc: Merthan Karakaş <m3rthn.k@gmail.com>
+> Cc: Eric Naim <dnaim@cachyos.org>
+> ---
+> v5->v6:
+>   * Fix for LKP robot issue
+>   * Some commit message changes
+>   * Rebase on 6.17-rc2
+> 
+> Mario Limonciello (AMD) (11):
+>    PM: Introduce new PMSG_POWEROFF event
+>    scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+>    usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+>    USB: Pass PMSG_POWEROFF event to suspend_common() for poweroff with S4
+>      flow
+>    PCI: PM: Disable device wakeups when halting system through S4 flow
+>    PCI: PM: Split out code from pci_pm_suspend_noirq() into helper
+>    PCI: PM: Run bridge power up actions as part of restore phase
+>    PCI: PM: Use pci_power_manageable() in pci_pm_poweroff_noirq()
+>    PCI: Put PCIe bridges with downstream devices into D3 at hibernate
+>    drm/amd: Avoid evicting resources at S5
+>    PM: Use hibernate flows for system power off
+> 
+>   drivers/base/power/main.c                  |  7 ++
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 +
+>   drivers/pci/pci-driver.c                   | 99 +++++++++++++++-------
+>   drivers/scsi/mesh.c                        |  1 +
+>   drivers/scsi/stex.c                        |  1 +
+>   drivers/usb/core/hcd-pci.c                 | 11 ++-
+>   drivers/usb/host/sl811-hcd.c               |  1 +
+>   include/linux/pm.h                         |  5 +-
+>   include/trace/events/power.h               |  3 +-
+>   kernel/reboot.c                            |  6 ++
+>   10 files changed, 103 insertions(+), 35 deletions(-)
+> 
 
---- Comment #20 from Alan Stern (stern@rowland.harvard.edu) ---
-When devices "reliably disconnect/reconnect" on the emb-qm77 system, do they
-work reliably afterward?  Always, sometimes, or never?
+Rafael, Bjorn,
 
-Remember, the traces you have collected so far on the Samsung machine show =
-the
-card reader device disconnecting/reconnecting on every suspend -- but on so=
-me
-of them it worked afterward and on some it did not.
+Any feedback for this series?
 
-I agree that it would be good to solve this problem somehow in the kernel.=
-=20
-However, at this point we do not know enough about what is going wrong to t=
-ell
-if this is even possible, let alone how to do it.  For all we know, the pro=
-blem
-might be fixed by something as simple as adding a 10-ms delay during the re=
-sume
-procedure.
-
-Also, I don't fully understand what you mean by "extend the linux kernel's
-usb_persist mechanism to encompass disconnection and reconnection of USB 3.0
-devices".  That's what it does right now -- in the case where the card read=
-er
-worked following suspend/resume, it was because the device disconnected and
-reconnected and the usb-persist mechanism was successful.  (In the cases wh=
-ere
-the card reader didn't work following suspend/resume, it was because the de=
-vice
-disconnected and reconnected and then so many other errors occurred that the
-usb-persist mechanism was unable to cope and thus failed.)
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks,
 
