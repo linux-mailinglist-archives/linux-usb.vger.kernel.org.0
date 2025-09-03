@@ -1,144 +1,111 @@
-Return-Path: <linux-usb+bounces-27515-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27516-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87876B42C31
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 23:54:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEF70B42D19
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 00:57:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DE89485A04
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 21:54:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 966BE18958A8
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 22:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E329B2ECD1C;
-	Wed,  3 Sep 2025 21:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6766C2EE5E8;
+	Wed,  3 Sep 2025 22:57:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ZxF5ALnS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z8yqS6I4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A2F1917FB
-	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 21:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3D732F75C
+	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 22:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756936459; cv=none; b=lj+IJzTvw4sUKXt1r3N06fZKhBVDqKGNRxuHkWIWz3DoxC60ESijNAzdI9bbBBI+L1LsDHQmJbRmK290+SE19iC7lcQZ9rGXoO1a7OmaiYBHKwjbAFFLPRqy9sCBNfPi29MmKWPDhDW4VYdqmP91+hhkikTOLBxWxiCGcMOYI/g=
+	t=1756940223; cv=none; b=o2pr3QcXLDc2aLFduDbYRP9oi6VcPmsNZv4v0lZKIMyyjSpSJmz7Ng4eNZMqhoxYKTZRSZnKsza3bmvOBbnMtZ/9DRjSggdtly2FS5Sms4XH+TwSYAOAva4GIgXCZcUeNAqefS+BfvTw1wx4APPQKxrlSLfU54UG2DggB5UQ7yY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756936459; c=relaxed/simple;
-	bh=tswpR0eGqHosqIn747IEZC9EzPHFnq+U1jAp/krTHUE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uHitR29rC1cqwVK2Ql8I9Ew3CkKwsI5YsRVpOAxeOb+cgLmg78iOIBQrbL36HPjuxIJ+EA9M/HpJIXTxRvaGpqjzNjgr6FN5Q8I+6it6kd5YtSeNRHZ5vADkiOupljsudvQI6Sz25i36ps/d6mRp4MDtdRVc939SfCG5fDUw3Cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ZxF5ALnS; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7f901afc2fbso37157185a.0
-        for <linux-usb@vger.kernel.org>; Wed, 03 Sep 2025 14:54:16 -0700 (PDT)
+	s=arc-20240116; t=1756940223; c=relaxed/simple;
+	bh=cf41n1NC3cILHg4dGNYajKktGrIxlqwD9MEyOFVa4dI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=TOahOSrvaQKTGwG4dVtaDsBIp+bc6F7nWgz/44qAP2lpX8LG5iOi5tpS4GChTx31D2px3jgzCy7w6owcR6aaROIHw5Glwu5DUiuiFVgOawCEr04zqnyw3EzSYFMkf3W1WZ/qy0Ct5YCmQZX+AXbxPHuJfl+gCIgeO0MZ0WmNRBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z8yqS6I4; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3db9641b725so363106f8f.2
+        for <linux-usb@vger.kernel.org>; Wed, 03 Sep 2025 15:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1756936456; x=1757541256; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iWRgOnL0eoFk2ynixMqxAVyWo1C3OiiDh4wrpd6Cmnw=;
-        b=ZxF5ALnSUUaShuhYrRlDUZ4Q3HhPIxoE90rDO/IkgM0bxi5+uBH9eHjZwDZ7iuANY2
-         HYoeusXOpjpPlAX/PFyFjQreU17Avex88jDg06CQxWnCqdiPr+sc9KinyyLmFBsbXpd7
-         8nSrsEhwOIfrvhcxlbSYVNj6pmRvZnS07n6d6fuPqaENlc+uxPIRCb11aMgLyZVqIfRi
-         H4Hvx3QzNjDqyXmBw7b7+PexBu4+kC+Qge46c9krKBIFPg1yUK8p4kAdLoom07XH5RU7
-         jmPjIeu0JAyYiJXYYO3HqCz9dSqWKgXrztxpb3aTQrgCspq4L7FUG1xX0PYKVw8ppHr7
-         oGeg==
+        d=gmail.com; s=20230601; t=1756940219; x=1757545019; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cf41n1NC3cILHg4dGNYajKktGrIxlqwD9MEyOFVa4dI=;
+        b=Z8yqS6I4MrmQxnFp3c55s6ACkEK2HsCZPOvDAfkxbR15qJR5uyFpAk5ZulCk/Eia80
+         zyiOoCsA3YSCEj28Tcgt8DEmTAEwU/Hyr1z8xfePcMAg2ZiaFZanrG4wbPbTH45OO6Wf
+         At3JeECcnsBe6nBcSFXWLeGKWiQ683zTZFq4np0k1MWif1rsrlT6/LPv5oZhiCsdOLz3
+         eAFDAcVhjZ0r05+NkrRIHv70EuLCWfHDBH1J01MEbltJpb4N4qeQpGdkF+gebtqduV9A
+         YyypRzwHgJ5uH7acYtoHeHNDr4tbpowUCh4sbn6cKs6nnEHfC9jiig2UBpHLB4Sn7LsT
+         Wjeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756936456; x=1757541256;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iWRgOnL0eoFk2ynixMqxAVyWo1C3OiiDh4wrpd6Cmnw=;
-        b=n8C+kh51g+m6qaehTeCO4vVLErR9mS1L5USH4ofvO7d0cxuW144GjUFQBkUowOXsIG
-         FHSPsYTtyOt/jF+PNX3z7eVUh/bE8NZsjEqc8VTxBnicBeNYK2axyk1nY2H+Nha+cZtv
-         +rthTb4tp4J+HDLugHxg7QppQCUisUVZvaLx9isUFDSGuI4JmIZP1lL19rSx6x9egzYj
-         N3mjawO/0PJTzm5qBFFJA3QNF4nwEGalXJwkNP93VQeU03Bw7NdIQdbxcKTiRFIgj6KP
-         qzgHAM/GJ/pZ1/Sh9pwJPy4f4KgSmsi4txgSUk4bKddErAaqqlrx8NWogh9xcZIVZKOu
-         krsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnRoOAxqJJQVYg5I/D9ByxiH2LpaOLnqau8Gh4OQ2P0niltzoH+ijeDPaPz9VP/L1RJgYet72EG4Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWbVu7nrutHiODFRBXtnjs0p/FTUcHh7Lho8IOwuY+iOITvKjG
-	WFQL/gRZwp75dQM01eIC2Aj/OkANJswDyr9qFmJxu5L3pjRzyY3Hxme6Tib5YEpESQ==
-X-Gm-Gg: ASbGnctjL+rMC71/IvcMjDw7jsifPflClSA9V5VbLrPHTX6z7Sv4o2dZA7AH5beC/an
-	ESStbfp3R2Pk5EAwIMW6x9c3kMg5zuuHGPgGWvyb2osgocH1LS06xLe/F6kY+VOCbX97jnTzgYu
-	z8i//1ZtMrkd6jRUkBaelFXNU97OOmKJ2Uj95VH6Zs216Qp4QIuAMfeAHEXqXB9osKteguLZDEs
-	XQg8rT4H/UX2hNwCuAZso9qKkXqjiaMNkv3azal9j9M8FcCMONxbrynip7pVrlw/ejND8p9OBYy
-	aiDIVY6TwuyQw+5rZvx/yRlq/gL1R2wvR+s+7zHzWWhaootRYwFoV1n1ZO//10237lT2tOZNObU
-	Dnqo1AdxqPJAfqgHavqC9UpNmxeXTVK0wegV6hPCL
-X-Google-Smtp-Source: AGHT+IE8dw4k/KGdYZTX/v7KzznvvPVdvFeyTtaQcGhN2f5ubQ2hCe5z/yb9tY8RXq8ykcDEwkDi1Q==
-X-Received: by 2002:a05:620a:450b:b0:7f8:dc79:317c with SMTP id af79cd13be357-7fed2f47b4amr1752914885a.11.1756936455749;
-        Wed, 03 Sep 2025 14:54:15 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::207])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-80af4b3bda6sm155836585a.39.2025.09.03.14.54.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 14:54:15 -0700 (PDT)
-Date: Wed, 3 Sep 2025 17:54:12 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	ryan zhou <ryanzhou54@gmail.com>, Roy Luo <royluo@google.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
- child device xxx.dwc3 but parent is not active
-Message-ID: <59951c2d-60e8-47a8-a43c-00b92e095043@rowland.harvard.edu>
-References: <5d692b81-6f58-4e86-9cb0-ede69a09d799@rowland.harvard.edu>
- <CAJZ5v0jQpQjfU5YCDbfdsJNV=6XWD=PyazGC3JykJVdEX3hQ2Q@mail.gmail.com>
- <20250829004312.5fw5jxj2gpft75nx@synopsys.com>
- <e3b5a026-fe08-4b7e-acd1-e78a88c5f59c@rowland.harvard.edu>
- <CAJZ5v0gwBvC-y0fgWLMCkKdd=wpXs2msf5HCFaXkc1HbRfhNsg@mail.gmail.com>
- <f8965cfe-de9a-439c-84e3-63da066aa74f@rowland.harvard.edu>
- <CAJZ5v0g9nip2KUs2hoa7yMMAow-WsS-4EYX6FvEbpRFw10C2wQ@mail.gmail.com>
- <CAJZ5v0gzFWW6roYTjUFeL2Tt8kKJ_g5Q=tp2=s87dy05x-Hvww@mail.gmail.com>
- <38b706cc-5966-4766-9165-51935fdcd790@rowland.harvard.edu>
- <CAJZ5v0h=i9XF_SQMOhz3P+4SAH3Qy-r1oUiiw7Bp=PcRnJjVbQ@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1756940219; x=1757545019;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cf41n1NC3cILHg4dGNYajKktGrIxlqwD9MEyOFVa4dI=;
+        b=iLlqrUZlFWkkc3sfSJMAOJuDZNPlS0p6Z/kBjWTGuu05NGmcgkEqGXsCOpdTTpgrOP
+         wlpfbwFbAooFFOKDOAZPqOHncLDyHbJtUrJThRzVJ1niCAdu8aW9hGwOG+jHg3457IWW
+         cvYyQVnzHQmveJ98YoWlIrLnqiWzthKozXv67Nosvu5WJLaSwIUUv4XCtzI7vRMLx08i
+         Gb/iAr36ZCk+UIXhJNZp+ipL21rVKDLc7BdSCEBV9oxTHyFOWLtwOcp1pkdcGgXyOKoO
+         DsXL7SB7KWRlzwVRD2wbRX8kzzuPcryW3p74ZtamjBMjaLNUbxG6gyshEXrWwEJSQAOk
+         morw==
+X-Gm-Message-State: AOJu0YwzVp2GE7n+iwjjp24op8VUXz1CXe1rqANi446lFlkY6AkSIt2D
+	Tt/ENW7/5VfaanbQOuVDaQhipUnuz+MGRzOgqf73O9GIJMmIf1g432r9VcYhMk9+NCtQ9xTpxld
+	zeHcqtdrCeJrevQ31wkTVWC2KbYOJB8hHj+Xe
+X-Gm-Gg: ASbGncvxelu/jI+vFmHTUzpSxl4UrOqbz6VZkjXBsyI45xHDsGKuDuDqbJJ+7Q4SxHF
+	fQdhwyamcs2px5IjixrJpCLXLeCw4hxS+jb3q8ZDdbPR7LRtYln4y4a7whhI3oiaA9YLFoygi9t
+	RbZ4SrV6un/diJIjnMSiIm3t2efrZk9BDRs6B+Zf2n4jTmFcVyz+1BBocjcGkDAopvjfVxsYNQz
+	zDtGTCKNw==
+X-Google-Smtp-Source: AGHT+IGTdWYxPoEyeXDb0+E+XwQgp+NqaMP+HJrSfmx/MfL6B8cTpO3D9BbHJNi8HqxRfovR0UZKZ6xA++OadOsz5jA=
+X-Received: by 2002:a05:6000:2289:b0:3de:9ea4:8f5 with SMTP id
+ ffacd0b85a97d-3de9ea40c0bmr2395929f8f.9.1756940218465; Wed, 03 Sep 2025
+ 15:56:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0h=i9XF_SQMOhz3P+4SAH3Qy-r1oUiiw7Bp=PcRnJjVbQ@mail.gmail.com>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Thu, 4 Sep 2025 00:56:47 +0200
+X-Gm-Features: Ac12FXyimavJ-PGI31L7QHCxBfBQ09lp0T3QZ8c70WbrTF_3i2DzgyBg-bRMJSE
+Message-ID: <CA+fCnZfnyjTCByBB7nsW0kb7CTABaq_-u5-qtv9UWV3Rrg_khw@mail.gmail.com>
+Subject: Reasonable limits on transfer length for usb_ep_queue
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Sep 03, 2025 at 09:30:47PM +0200, Rafael J. Wysocki wrote:
-> I personally think that it would be reasonable to simply preserve
-> device states in error paths unless they have been changed already
-> before the error (or suspend abort due to a wakeup signal).
+Hi Alan,
 
-The problem is complicated by the interaction between runtime-PM states 
-and system-sleep states.  In the case, we've been considering, B changes 
-from runtime-suspended to runtime-suspended + system-suspended.  
-Therefore the error path is allowed to modify B's state.
+I have a question about enforcing limits on the length of USB
+transfers on the Raw Gadget side.
 
-> By this rule, B would be left in runtime suspend if it were still in
-> runtime suspend when the error (or suspend abort in general) occurred
-> and then it doesn't matter what happens to A.
+Currently, Raw Gadget limits the transfer length (usb_request->len) to
+PAGE_SIZE for both control and non-control transfers.
 
-More fully, B would be changed from runtime-suspended + system-suspended 
-back to simply runtime-suspended.  Unfortunately, none of the PM 
-callbacks in the kernel are defined to make this change -- at least, not 
-without some cooperation from the driver.
+This proves to be not enough, at least for control transfers: the full
+configuration descriptors for some USB devices are larger, and thus
+sending them as a response to a USB_REQ_GET_DESCRIPTOR/USB_DT_CONFIG
+request is impossible. And I assume there might be need to support
+larger non-control transfers as well.
 
-> The PM core can do something like that for the drivers opting in for
-> runtime PM integration assistance, so to speak.  That is, drivers that
-> point their ->suspend() and ->resume() callbacks to
-> pm_runtime_force_suspend() and pm_runtime_force_resume(),
-> respectively, or set DPM_FLAG_SMART_SUSPEND (or both at the same time
-> which is now feasible).  Otherwise, it is hard to say what the
-> expectations of the driver are and some code between the driver and
-> the PM core may be involved (say, the PCI bus type).
+I see that GadgetFS limits the total size of USB descriptors to 4 *
+PAGE_SIZE. And there appears to be no limit on the non-control
+transfer length.
 
-Setting DPM_FLAG_SMART_SUSPEND really does sound like the best answer.
+Is 4 * PAGE_SIZE a reasonable limit that makes sense to replicate in
+Raw Gadget for control transfers?
 
-But there still should be some way the PM core can make resumes easier 
-for drivers that don't set the flag.  Something like: If the device is 
-in runtime suspend with SMART_SUSPEND clear, perform a runtime resume on 
-the device's parent (and anything else the device depends on) before 
-invoking ->resume.
+And for non-control transfers, does it make sense to enforce any limit
+at all in Raw Gadget?
 
-Alan Stern
+Assuming that we want to allow Raw Gadget to be as flexible as
+possible but without breaking/crashing the gadget subsystem.
+
+Thank you!
 
