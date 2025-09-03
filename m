@@ -1,138 +1,147 @@
-Return-Path: <linux-usb+bounces-27480-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27481-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49C6EB4139A
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 06:42:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5952B4146A
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 07:39:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E69CC680053
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 04:42:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EB517A4D52
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 05:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A2062D46C3;
-	Wed,  3 Sep 2025 04:41:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9352D63FC;
+	Wed,  3 Sep 2025 05:39:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s/wbSSBA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tYPKGErH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2C02D3A71;
-	Wed,  3 Sep 2025 04:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A16232F744
+	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 05:39:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756874516; cv=none; b=B+NgY05FhnMe9/GGYizIUfc2kR89n73Qit/Q3xbIKge6nxlqgdmB03IS0TtbJN51cnLTpoerHgMQy6rqFBSX1uJKWl1a/Bic9JuNo0iuiOLlkUuAN/EPitQKsSlbJAq03UrA6yL9Y+tPHui0MGRCvaFt7SGygDOZ42UDrHQIIJA=
+	t=1756877946; cv=none; b=UZrUJ2ekZkhp7k4HGwccr63U7VIFs/rCVfVl8qwk1dq37tKThhYpGmaJpq/LcnI0OQ6I69fHuPsdsA67QWRViox770z88DN+lRdNoIc8emsJwCutKjPslYpx3ZdQiDhqIDvWpGO+N09fTHTajk4SD7EyoVuqDyW35xPi8s3rN6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756874516; c=relaxed/simple;
-	bh=Ce5ETH+F6WnWDEeaq7pLglfV4JdFcr3PKEJyxp/keno=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XN1gnNkX7wy3aXifhWNBNemX2RmarO9zHhtk1Ze6t0g6gjegt/ZxAMu8qTJ6Hi/Yt/LwYqJAyhhuOmXvSkrZQx7UFXHeLf9Rr93OO5gXQrCVwHhHApvfKP981Mpzds8AMMnBpMoCYBI5jbjN4aFiDKh14WrcYF49m2VMjN3vIqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s/wbSSBA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2AAC4CEF0;
-	Wed,  3 Sep 2025 04:41:53 +0000 (UTC)
+	s=arc-20240116; t=1756877946; c=relaxed/simple;
+	bh=oOQnXys+3VNCKpz0Ev5i9S+4TO4KzCsdNVMSBWUVu1g=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=iGqd5rmrDn5cavqT/2kWWpA3IYOUvyvuMMDgCjHxUt2THFW0JUbAYlzsfDgbIkqsfqLWoTuMuyuvQEklYQWZqqJ9eB+Ds8U9ZBVhrHEfH0jdQd6mSqSJdCxdYC/oedswEEfIahRodJA/MIrgILXV9FvV9ghA8ySgutACBvq3tmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tYPKGErH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 054CEC4CEF0
+	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 05:39:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756874516;
-	bh=Ce5ETH+F6WnWDEeaq7pLglfV4JdFcr3PKEJyxp/keno=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=s/wbSSBARIKT8Fd9JqzskawfzifT7+BPOBAzwXDl6WBxhU410noLNvQWfHvv+Nb4Q
-	 SbPcIb3hxSHQY5dHlRH7uTb7j/F/Gu7pEGr7MuO33HXsvNskDBMUab0jPLJFQsfQGn
-	 DBDR9JuXyqBeBGip1IjfApmvbUcrJdSUfPe1zWbEw+SMhMPPGSNw74IL9FARn5fKmF
-	 zjHgI792YdyiwMwWOpQd3S9Oo3Edup8Zqq77sQ1wl2zqgUT6OeYww9IfARtdlcDtB3
-	 vOHV/VFLi6+2jqm//3XxZoeker+XP6Xe8Qrr8AEKkb368Q3fZA1sXUVv4Sn/GGGapn
-	 XGwAwOPKYtzMA==
-Message-ID: <29e61472-5f41-4e76-9b5b-f3e106d6a629@kernel.org>
-Date: Tue, 2 Sep 2025 23:41:52 -0500
+	s=k20201202; t=1756877946;
+	bh=oOQnXys+3VNCKpz0Ev5i9S+4TO4KzCsdNVMSBWUVu1g=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=tYPKGErHFIFBVyl8y00UED1nTa/DiaE8gim7QwIC4XX8n0Rnq4HNVdnFBfve9Q/Ux
+	 r1Y46GK9KJNWeb3bJMudZDgWGvv0j3Mfl6jYAKV0yITXUHntNyf4nV8VA6EKkqpdUh
+	 3IXqAtnr0ii4q7uZITX7/UOuVbff5dcOIPYwre28AqSSxcvBHexjUF5VCnXQd2T6Tb
+	 PRCWlroF0FEwulCo7l/79hORcnbMXO7DXdQ9iC91991sruPxfHa82/gEAW2bD67FxC
+	 HlJTz911wL5HNBJr38MDeN1D5cWFmVUTu0Sl24EnI7Kz50uArd6goe/lT7IaYK8oYv
+	 Ax0felFTZaCUw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id E417AC4160E; Wed,  3 Sep 2025 05:39:05 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
+ resume from suspend
+Date: Wed, 03 Sep 2025 05:39:05 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-220491-208809-hLyyOGCIch@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
+References: <bug-220491-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 00/11] Improvements to S5 power consumption
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>
-Cc: Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Danilo Krummrich <dakr@kernel.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
- <linux-pm@vger.kernel.org>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
- "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
- "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
- "open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
- AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng <kaihengf@nvidia.com>,
- Mark Pearson <mpearson-lenovo@squebb.ca>,
- =?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>,
- Eric Naim <dnaim@cachyos.org>
-References: <20250818020101.3619237-1-superm1@kernel.org>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <20250818020101.3619237-1-superm1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 8/17/2025 9:00 PM, Mario Limonciello (AMD) wrote:
-> A variety of issues both in function and in power consumption have been
-> raised as a result of devices not being put into a low power state when
-> the system is powered off.
-> 
-> There have been some localized changes[1] to PCI core to help these issues,
-> but they have had various downsides.
-> 
-> This series instead tries to use the S4 flow when the system is being
-> powered off.  This lines up the behavior with what other operating systems
-> do as well.  If for some reason that fails or is not supported, run their
-> shutdown() callbacks.
-> 
-> Cc: AceLan Kao <acelan.kao@canonical.com>
-> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
-> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
-> Cc: Merthan Karakaş <m3rthn.k@gmail.com>
-> Cc: Eric Naim <dnaim@cachyos.org>
-> ---
-> v5->v6:
->   * Fix for LKP robot issue
->   * Some commit message changes
->   * Rebase on 6.17-rc2
-> 
-> Mario Limonciello (AMD) (11):
->    PM: Introduce new PMSG_POWEROFF event
->    scsi: Add PM_EVENT_POWEROFF into suspend callbacks
->    usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
->    USB: Pass PMSG_POWEROFF event to suspend_common() for poweroff with S4
->      flow
->    PCI: PM: Disable device wakeups when halting system through S4 flow
->    PCI: PM: Split out code from pci_pm_suspend_noirq() into helper
->    PCI: PM: Run bridge power up actions as part of restore phase
->    PCI: PM: Use pci_power_manageable() in pci_pm_poweroff_noirq()
->    PCI: Put PCIe bridges with downstream devices into D3 at hibernate
->    drm/amd: Avoid evicting resources at S5
->    PM: Use hibernate flows for system power off
-> 
->   drivers/base/power/main.c                  |  7 ++
->   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 +
->   drivers/pci/pci-driver.c                   | 99 +++++++++++++++-------
->   drivers/scsi/mesh.c                        |  1 +
->   drivers/scsi/stex.c                        |  1 +
->   drivers/usb/core/hcd-pci.c                 | 11 ++-
->   drivers/usb/host/sl811-hcd.c               |  1 +
->   include/linux/pm.h                         |  5 +-
->   include/trace/events/power.h               |  3 +-
->   kernel/reboot.c                            |  6 ++
->   10 files changed, 103 insertions(+), 35 deletions(-)
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
-Rafael, Bjorn,
+Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
 
-Any feedback for this series?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |michal.pecio@gmail.com
 
-Thanks,
+--- Comment #21 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+We have those PORTSC messages telling what the xHCI controller thinks about=
+ the
+state of particular root hub ports and what gets sometimes written to change
+this state. See xHCI spec 5.4.8 for the meaning of those bits. Note that the
+kernel doesn't write back exactly the same things it reads, because some bi=
+ts
+(notably PED) are "write 1 to clear" or other oddities, see section 5.1.1 f=
+or
+the meaning of bit attributes.
+
+In this latest case, I suppose you mean device on port 3-2.
+
+Suspending:
+[ 1097.437841] xhci_hcd 0000:00:14.0: Set port 3-2 link state, portsc: 0x12=
+03,
+write 0x11261
+
+1203 seems to be the normal working state for a SuperSpeed device:
+12 - SuperSpeed, port power on, top bit of link state is 0
+0 - link state U0, not currently resetting
+3 - no overcurrent, port is enabled and connected
+
+11261 requests transition to U3 (port suspend).
+
+But after resuming things get a little different:
+[ 1097.766164] xhci_hcd 0000:00:14.0: Port change event, 3-2, id 6, portsc:
+0x100080
+
+That's a lot of zeros here. Link disabled, port disabled, not connected, not
+powered, no overcurrent but overcurrent status has changed since the last t=
+ime
+the change bit was cleared or observed clear.
+
+So I can't be sure what happens here, I'm far from expert on USB 3.0 link
+management and xHCI root hubs, but it looks like hardware took action to
+completely disable this port in the meantime, possibly due to actual
+overcurrent or some HW bug or other problem.
+
+Then we see:
+[ 1098.777817] xhci_hcd 0000:00:14.0: set port power 3-2 ON, portsc: 0x1000=
+80
+[ 1098.881792] xhci_hcd 0000:00:14.0: Get port status 3-2 read: 0x1002a0,
+return 0x802a0
+[ 1099.080653] xhci_hcd 0000:00:14.0: Port change event, 3-2, id 6, portsc:
+0x21203
+
+The value written by the kernel isn't logged, but a moment later we see
+'powered up' and the link advancing to RxDetect state and then it's up and
+running.
+
+Then it looks like USB core registers disconnection, resets the port and the
+device works normally from there.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
