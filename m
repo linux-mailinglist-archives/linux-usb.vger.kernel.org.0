@@ -1,155 +1,103 @@
-Return-Path: <linux-usb+bounces-27482-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27483-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53BB5B414BF
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 08:12:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42B4BB41564
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 08:46:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCE29189F046
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 06:12:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F4861684C4
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 06:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A49D22D73A8;
-	Wed,  3 Sep 2025 06:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMDM6FYo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C31E72D6E6C;
+	Wed,  3 Sep 2025 06:46:36 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C0F14A9B
-	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 06:12:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F20523817C
+	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 06:46:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756879934; cv=none; b=eIhDdhGxSVObdbiohzYpRMPPQ7A5S/sY2SoAspCrjlZ0zYY45khfcLuZCB55qz0hL0491G0Vlybszn/L7KcNdjYs8ifOWHYQz91rJl7dvC+SgGLpf+ia7T50n0c/NpLI7WsqYI7srnq/OUk/XIVhJSrtKy611TAG/rVRivuF9vg=
+	t=1756881996; cv=none; b=TI7SFXjEST5KJv4O2Ja13aKuteJ/7hWxCYJtI0UJIdQs2p3o7WzXQWYOWGJ+1nwCvZTc1XS3qyR689s3fNjcCQzSGvskIRRPWr9E/msSay0eZLm4sI+QKW1rFyh9RLLoBRtOfT1vLdQzoMLarM+Z4wANxOfgtIvi3VvlM+DCCxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756879934; c=relaxed/simple;
-	bh=ndj3k+dD2fWtkIEC3ej5iD08vXvV9F98FcQ81h1joxo=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BFo93/aQycDb8omY8vj5sRqx9bRrVsXfPqPyz4CDunaqkbyBUo4q7v5MEyQC7CcQZdLFPDmZUKyOJ7fng+tyUfx/khK8pJDCECcUnMWX/bPV6/428iPCZTyOzk5EdhdBpy7X3aavGvwiuSFFYF4/HuRpUtAKM2AD5oy0BhOjA4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMDM6FYo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9ED08C4CEF0
-	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 06:12:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756879931;
-	bh=ndj3k+dD2fWtkIEC3ej5iD08vXvV9F98FcQ81h1joxo=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=iMDM6FYo+aBwVQ9fg6LB1L6rOxo/2lSfeUl5ytIipWbVc5jDTEln05DnCD3e6cvBX
-	 tbCsqnhs0Ev7O4Y2MnZyZvVvF/V5AXFDvoQxIOuUCtARvMbxvLo57HR921ZAxKszl0
-	 9uC1bra/FPzqPciOIzeTtQ+4A22CKfj1sFvepMbvUmwQba4uGO4plqV8uNgcuA7TxG
-	 iPRLJHE7xmvGKF875Y2IH7aJnAGqUmFDk1QYtwefETKgeuIE/M9MrJfljTjstuMe1O
-	 UrBdF5PMsJmAa7erKVWd1cObM7Degh122OSi3UVuRy7rdjkL/+VPLZP32V4ahvinvH
-	 xx7emj2z//NVw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8D274C4160E; Wed,  3 Sep 2025 06:12:11 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
- resume from suspend
-Date: Wed, 03 Sep 2025 06:12:11 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220491-208809-Mnu7iNmPPl@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
-References: <bug-220491-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1756881996; c=relaxed/simple;
+	bh=1Ai3J0OtNFLrQkIvtX6zHQqcvy0P1Ph7PXPl85zrnb4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PAbanqc4YKQvE4qMjY1dBYs3BdZ7ElT8TU1njkd9CUIJUg0UXVKprpExIv+ef7l1RsA0LKPLcp3bAvdHE7waX5L7MDATqo61x1ivUwmjTef2Kza6GXZxhu5p5+VM7dc8HG/M9DNCEsb4DKNwBbgwkPX7MwHGoRb0R03zQlJdl+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uthG9-00042x-7J; Wed, 03 Sep 2025 08:46:21 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uthG7-003W5b-2M;
+	Wed, 03 Sep 2025 08:46:19 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uthG7-00HVQ8-1u;
+	Wed, 03 Sep 2025 08:46:19 +0200
+Date: Wed, 3 Sep 2025 08:46:19 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Oleksij Rempel <linux@rempel-privat.de>,
+	Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION] net: usb: asix: deadlock on interface setup
+Message-ID: <aLfkOyYFY5ZGG6lZ@pengutronix.de>
+References: <DCGHG5UJT9G3.2K1GHFZ3H87T0@gmail.com>
+ <20250902163511.181fa76a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250902163511.181fa76a@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
+On Tue, Sep 02, 2025 at 04:35:11PM -0700, Jakub Kicinski wrote:
+> On Sun, 31 Aug 2025 10:50:35 +0200 Hubert Wiśniewski wrote:
+> > Trying to bring an AX88772B-based USB-Ethernet adapter up results in a
+> > deadlock if the adapter was suspended at the time. Most network-related
+> > software hangs up indefinitely as a result. This can happen on systems
+> > which configure USB power control to 'auto' by default, e.g. laptops
+> > running `tlp`.
+>  
+> Oleksij, this seems to date back to commit e0bffe3e6894 ("net: asix:
+> ax88772: migrate to phylink"). Taking rtnl_lock in runtime resume
+> callbacks is known to result in unhappiness :(
+> 
+> Could you check if commit e110bc825897 ("net: usb:
+> lan78xx: Convert to PHYLINK for improved PHY and MAC management")
+> isn't similarly flawed?
 
---- Comment #22 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-Note that these numbers are completely different from the other cases, so I=
-'m
-not sure if the cases are really related.
+Yes, sorry for delay answer.  I'll investigate it at Friday.
 
-For example, the very first log posted here shows suspending the devices fr=
-om
-U1 low power state to U3 and then the device is at U0 after resuming with
-"connect status changed". Perhaps it got power cycled by HW?
-
-The kernel immediately attempts some control transfers which fail, maybe de=
-vice
-firmware is waiting for a reset?
-
-The device gets reset after the control transfers fail:
-[  158.205065] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x1203, ret=
-urn
-0x203
-[  158.205101] xhci_hcd 0000:00:14.0: set port reset, actual port 3-4 statu=
-s  =3D
-0x1311
-[  158.268775] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x4202d0,
-return 0x4102d0
-
-Things are different from the other case, because "connect status change" a=
-nd
-"port link state" change are set. And the 'd' stands for 'port reset' (still
-pending) and link state SS.Inactive.
-
-Then it comes back:
-[  158.332893] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x621203,
-return 0x510203
-
-If not a HW bug then I would guess the device disabled/enabled its upstream
-port. And xhci_hcd has flagged it as "inactive" and will be returning -ENOD=
-EV
-on URB submissions:
-
-[  158.389217] usb 3-4: reset SuperSpeed USB device number 2 using xhci_hcd
-[  158.404819] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
-inactive
-[  158.404838] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
-inactive
-[  158.404847] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
-inactive
-[  158.476865] xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping usb3 p=
-ort
-polling
-[  158.508898] usb 3-4: reset SuperSpeed USB device number 2 using xhci_hcd
-[  158.524913] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
-inactive
-[  158.524933] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
-inactive
-[  158.524941] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
-inactive
-
-I see no way to clear this VDEV_PORT_ERROR flag, I guess the core needs to
-destroy and recreate the device?
-
-Then the port seems to be put into U3.
-[  158.629069] xhci_hcd 0000:00:14.0: Set port 3-4 link state, portsc: 0x12=
-03,
-write 0x11261
-
-[  158.656170] usb 3-4: USB disconnect, device number 2
-
-And later the device comes up after being reset once again.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
