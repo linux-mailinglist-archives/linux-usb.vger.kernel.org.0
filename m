@@ -1,111 +1,153 @@
-Return-Path: <linux-usb+bounces-27516-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27517-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEF70B42D19
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 00:57:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78798B42D1C
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 00:57:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 966BE18958A8
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 22:57:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 493F25479F6
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 22:57:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6766C2EE5E8;
-	Wed,  3 Sep 2025 22:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z8yqS6I4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE0352EF670;
+	Wed,  3 Sep 2025 22:57:51 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3D732F75C
-	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 22:57:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472A732F75C
+	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 22:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756940223; cv=none; b=o2pr3QcXLDc2aLFduDbYRP9oi6VcPmsNZv4v0lZKIMyyjSpSJmz7Ng4eNZMqhoxYKTZRSZnKsza3bmvOBbnMtZ/9DRjSggdtly2FS5Sms4XH+TwSYAOAva4GIgXCZcUeNAqefS+BfvTw1wx4APPQKxrlSLfU54UG2DggB5UQ7yY=
+	t=1756940271; cv=none; b=PwzESs9EU/Xs19haXNAAs1Hb67+q5EYrcaLnyc7uHa1JKphJVshhpbdD2qCJkxvJwPAk0Y3NICF7pgjUFRWg49VUEQhUjOdzmBjSwbAoiRqnfXmqk4hs/1b9U3htiOdbfbfCYCo63y/kDDf5JQjqkxPRn9QEi7Y4Mx10hU3+aVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756940223; c=relaxed/simple;
-	bh=cf41n1NC3cILHg4dGNYajKktGrIxlqwD9MEyOFVa4dI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=TOahOSrvaQKTGwG4dVtaDsBIp+bc6F7nWgz/44qAP2lpX8LG5iOi5tpS4GChTx31D2px3jgzCy7w6owcR6aaROIHw5Glwu5DUiuiFVgOawCEr04zqnyw3EzSYFMkf3W1WZ/qy0Ct5YCmQZX+AXbxPHuJfl+gCIgeO0MZ0WmNRBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z8yqS6I4; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3db9641b725so363106f8f.2
-        for <linux-usb@vger.kernel.org>; Wed, 03 Sep 2025 15:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756940219; x=1757545019; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cf41n1NC3cILHg4dGNYajKktGrIxlqwD9MEyOFVa4dI=;
-        b=Z8yqS6I4MrmQxnFp3c55s6ACkEK2HsCZPOvDAfkxbR15qJR5uyFpAk5ZulCk/Eia80
-         zyiOoCsA3YSCEj28Tcgt8DEmTAEwU/Hyr1z8xfePcMAg2ZiaFZanrG4wbPbTH45OO6Wf
-         At3JeECcnsBe6nBcSFXWLeGKWiQ683zTZFq4np0k1MWif1rsrlT6/LPv5oZhiCsdOLz3
-         eAFDAcVhjZ0r05+NkrRIHv70EuLCWfHDBH1J01MEbltJpb4N4qeQpGdkF+gebtqduV9A
-         YyypRzwHgJ5uH7acYtoHeHNDr4tbpowUCh4sbn6cKs6nnEHfC9jiig2UBpHLB4Sn7LsT
-         Wjeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756940219; x=1757545019;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cf41n1NC3cILHg4dGNYajKktGrIxlqwD9MEyOFVa4dI=;
-        b=iLlqrUZlFWkkc3sfSJMAOJuDZNPlS0p6Z/kBjWTGuu05NGmcgkEqGXsCOpdTTpgrOP
-         wlpfbwFbAooFFOKDOAZPqOHncLDyHbJtUrJThRzVJ1niCAdu8aW9hGwOG+jHg3457IWW
-         cvYyQVnzHQmveJ98YoWlIrLnqiWzthKozXv67Nosvu5WJLaSwIUUv4XCtzI7vRMLx08i
-         Gb/iAr36ZCk+UIXhJNZp+ipL21rVKDLc7BdSCEBV9oxTHyFOWLtwOcp1pkdcGgXyOKoO
-         DsXL7SB7KWRlzwVRD2wbRX8kzzuPcryW3p74ZtamjBMjaLNUbxG6gyshEXrWwEJSQAOk
-         morw==
-X-Gm-Message-State: AOJu0YwzVp2GE7n+iwjjp24op8VUXz1CXe1rqANi446lFlkY6AkSIt2D
-	Tt/ENW7/5VfaanbQOuVDaQhipUnuz+MGRzOgqf73O9GIJMmIf1g432r9VcYhMk9+NCtQ9xTpxld
-	zeHcqtdrCeJrevQ31wkTVWC2KbYOJB8hHj+Xe
-X-Gm-Gg: ASbGncvxelu/jI+vFmHTUzpSxl4UrOqbz6VZkjXBsyI45xHDsGKuDuDqbJJ+7Q4SxHF
-	fQdhwyamcs2px5IjixrJpCLXLeCw4hxS+jb3q8ZDdbPR7LRtYln4y4a7whhI3oiaA9YLFoygi9t
-	RbZ4SrV6un/diJIjnMSiIm3t2efrZk9BDRs6B+Zf2n4jTmFcVyz+1BBocjcGkDAopvjfVxsYNQz
-	zDtGTCKNw==
-X-Google-Smtp-Source: AGHT+IGTdWYxPoEyeXDb0+E+XwQgp+NqaMP+HJrSfmx/MfL6B8cTpO3D9BbHJNi8HqxRfovR0UZKZ6xA++OadOsz5jA=
-X-Received: by 2002:a05:6000:2289:b0:3de:9ea4:8f5 with SMTP id
- ffacd0b85a97d-3de9ea40c0bmr2395929f8f.9.1756940218465; Wed, 03 Sep 2025
- 15:56:58 -0700 (PDT)
+	s=arc-20240116; t=1756940271; c=relaxed/simple;
+	bh=7ZCx4CH/nMDIQM6h0Tdqbvb3yVRC6/7a48WxJlNL5uQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oZBusVT8PmYayQxkD4cU9hIn9sMLnT4mttkNw1OUx3kxGX7+ZkJVqr1WekQfXF9S6nd9j16ZSvGqsv8LoHHVxa53DR9FvJAvlND5Lw42WeMo4TzT14BR/rL1eQY74G0Zp8u/PH0BS/d1GxvyxWoEkgJ/Q5Rxe5uRHnLegBODsiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1utwQ2-0002jI-LW; Thu, 04 Sep 2025 00:57:34 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1utwQ2-003dBR-0q;
+	Thu, 04 Sep 2025 00:57:34 +0200
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1utwQ2-0008ir-0M;
+	Thu, 04 Sep 2025 00:57:34 +0200
+Date: Thu, 4 Sep 2025 00:57:34 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: Re: [PATCH v3 3/4] dt-bindings: usb: microchip,usb2514: add support
+ for port vbus-supply
+Message-ID: <20250903225734.yfu5gvsclcxr4wge@pengutronix.de>
+References: <20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de>
+ <20250821-v6-16-topic-usb-onboard-dev-v3-3-6d2b38a5d818@pengutronix.de>
+ <20250822-maize-elk-of-growth-2a30bb@kuoka>
+ <20250822103005.c7ba7dclbgdadyw7@pengutronix.de>
+ <20250822200515.GA204607-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Thu, 4 Sep 2025 00:56:47 +0200
-X-Gm-Features: Ac12FXyimavJ-PGI31L7QHCxBfBQ09lp0T3QZ8c70WbrTF_3i2DzgyBg-bRMJSE
-Message-ID: <CA+fCnZfnyjTCByBB7nsW0kb7CTABaq_-u5-qtv9UWV3Rrg_khw@mail.gmail.com>
-Subject: Reasonable limits on transfer length for usb_ep_queue
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250822200515.GA204607-robh@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Hi Alan,
+On 25-08-22, Rob Herring wrote:
+> On Fri, Aug 22, 2025 at 12:30:05PM +0200, Marco Felsch wrote:
+> > On 25-08-22, Krzysztof Kozlowski wrote:
+> > > On Thu, Aug 21, 2025 at 06:31:57PM +0200, Marco Felsch wrote:
+> > > > Some PCB designs don't connect the USB hub port power control GPIO and
+> > > > instead make use of a host controllable regulator. Add support for this
+> > > > use-case by introducing portX-vbus-supply property.
+> > > > 
+> > > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/usb/microchip,usb2514.yaml | 6 ++++++
+> > > >  1 file changed, 6 insertions(+)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+> > > > index 4e3901efed3fcd4fbbd8cb777f9df4fcadf2ca00..ac1e5f1a5ea2e66c61ce92154385952b15e78e55 100644
+> > > > --- a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+> > > > +++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
+> > > > @@ -49,6 +49,12 @@ patternProperties:
+> > > >      $ref: /schemas/usb/usb-device.yaml
+> > > >      additionalProperties: true
+> > > >  
+> > > > +  "^port[1-7]-vbus-supply$":
+> > > > +    type: object
+> > > > +    description:
+> > > > +      Regulator controlling the USB VBUS on portX. Only required if the host
+> > > > +      controls the portX VBUS.
+> > > 
+> > > Your commit msg should briefly describe status of previous discussion:
+> > > why Rob's comment was not applied. Otherwise we repeat: this looks like
+> > > property of specific port.
+> > 
+> > I answered Rob on my v1 but got no feedback. 
+> 
+> I just read it and don't understand. You don't have to have all 
+> properties for a driver in the node associated with the driver. The 
+> driver can freely look in the child nodes or anywhere else in the whole 
+> tree if needed. Is that what you meant?
+> 
+> For USB hubs we generally define child nodes for each port. Some of the 
+> hub bindings don't because they are incomplete. If you have a per port 
+> property, then the DT property belongs in the port's node.
 
-I have a question about enforcing limits on the length of USB
-transfers on the Raw Gadget side.
+The problem was, that the regulator API didn't supported to search for
+regulators which don't belong to its own DT node.
 
-Currently, Raw Gadget limits the transfer length (usb_request->len) to
-PAGE_SIZE for both control and non-control transfers.
+I wasn't sure if this is intented or not. Now I see that, the regulator
+API gained the support for this use-case else I would have pinged Mark
+if we need to add support for it.
 
-This proves to be not enough, at least for control transfers: the full
-configuration descriptors for some USB devices are larger, and thus
-sending them as a response to a USB_REQ_GET_DESCRIPTOR/USB_DT_CONFIG
-request is impossible. And I assume there might be need to support
-larger non-control transfers as well.
+I will change the "vbus-supply" to be specified within the port DT
+nodes.
 
-I see that GadgetFS limits the total size of USB descriptors to 4 *
-PAGE_SIZE. And there appears to be no limit on the non-control
-transfer length.
+> > My v2 caused an issue found
+> > by Rob's test bot. Therefore I thought he is okay and applied the
+> > patchset for testing.
+> 
+> Other way around. If it doesn't pass tests, I don't look at it. (Well, I 
+> do, but don't expect a reply.)
 
-Is 4 * PAGE_SIZE a reasonable limit that makes sense to replicate in
-Raw Gadget for control transfers?
+Okay, thanks for the clarification.
 
-And for non-control transfers, does it make sense to enforce any limit
-at all in Raw Gadget?
+> > At least to me it's unclear when Rob's test bot is executed.
+> 
+> When you submit something. It's all automatic, though sometimes the 
+> emails are delayed. Results are always in PW within 1-2 hours (unless 
+> someone patch bombs us with a large series).
 
-Assuming that we want to allow Raw Gadget to be as flexible as
-possible but without breaking/crashing the gadget subsystem.
+Thanks.
 
-Thank you!
+Regards,
+  Marco
 
