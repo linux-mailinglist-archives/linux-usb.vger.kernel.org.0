@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-27502-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27505-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62E3DB42781
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 19:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 99202B42786
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 19:02:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEE797B2A01
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 17:00:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F6B97B3091
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Sep 2025 17:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2D52FD1C2;
-	Wed,  3 Sep 2025 17:01:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 054A731B11F;
+	Wed,  3 Sep 2025 17:01:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GfkunUjU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gZznCImF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED3A2BCF5D
-	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 17:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB2631B137
+	for <linux-usb@vger.kernel.org>; Wed,  3 Sep 2025 17:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756918912; cv=none; b=Mb9MTuL32dytw+3i9msQGGpMVHfhrFfrYhfs9lL5L72Be2NBJxrINnVfec0UEGOx0MAWlaWJ+9iHORlq3MorkuZPAwii7+ajiHkiibFeTFUdM86xUyFPgEUaLHdtjJjujH6FYCKMFTfxs9oLt6HIl+faFDHQImRvNLW2AtPDy/E=
+	t=1756918914; cv=none; b=e+zR+35lTJgvEdtLBSMV9zjuQLDmWiQ5UroLZ85rml+yiX8bmGi7wZH4cBB+MEXPp8Gzb1M8djGrAbrsTBqwc6dKkQY8MUG8m9X/hZlK6J5idvMO5Cfgl4eSUK+gG2yKot4MQba9k3A0lobcqXrV5dNqRD5MepTk8sxqcRw7dCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756918912; c=relaxed/simple;
-	bh=gHs2+iYkfhzHJQ7V5td6wFQ5XfN887fGS4w0ecyKfoY=;
+	s=arc-20240116; t=1756918914; c=relaxed/simple;
+	bh=R2FhFqRoKr0RI/tRjNk9Syi/Gd3/b9VoU+w0zXBAN0k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=layDRB6HjHf8TDfBKe13+4RAnMbpyElcokjeDip/CwhQJQLlWV0Ag0/xrcXFiTz7NpN9VktaHkhaKO4jk0WMRbDFZa+j3uRPrsMd/lGzFwmb6goVFI4I2Ox+ywM//wQcLKtXUymz6er9LR0HKT73aH8MC5BCZTeXRS4yFibg8hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GfkunUjU; arc=none smtp.client-ip=198.175.65.10
+	 MIME-Version; b=QhyPTm3n/lOqfrqSCJslX0/hGRopD17hmEEkDPBbgdjlGzumqSklvgZuYIaFNelQsG43RajO0f65T6reYAqKHEv7teU1qIq7LyFNG6FRBO+gG0bmkB/mgZ508nTFcF1h4Hjt8cZCFG0WLe+pAKczJUHleUaiEkFXzXf0/RmksSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gZznCImF; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756918912; x=1788454912;
+  t=1756918914; x=1788454914;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gHs2+iYkfhzHJQ7V5td6wFQ5XfN887fGS4w0ecyKfoY=;
-  b=GfkunUjUcpefHZpj2m/9P8ZrEJRbTI/wJlUPHJM2VrevG8K1L6IxhAUg
-   UQbZuDxt9hHSQ91gSLuQMGZtR9PzTVXnJC2GrMUIGT+zYWkZ66JvQMegj
-   XAbMYC5sucxwve0z8ceZaWj59DOk3+BTBiWMFtctbR39CCwOMtxryidnF
-   yb2jq/Oj3U6BBYOIl1MRM0isiMxrv0yuRTwZejov4pNpC8X//FILRjdL1
-   ZzZzNaAwtjPL/5HHEwWwxjpGt/CTNrGAiQo8HnBdixsRu+0rPSYTtzMCf
-   4MCInrt47QSoyIXg0E3OmPGcn+pCxNgq9xhPL4SzJianUIW6ZylLjMV02
-   w==;
-X-CSE-ConnectionGUID: XebMoLUtQM6feaQpQDvBlg==
-X-CSE-MsgGUID: Gl80hYNHQmOXtIagZg3XuQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="76687953"
+  bh=R2FhFqRoKr0RI/tRjNk9Syi/Gd3/b9VoU+w0zXBAN0k=;
+  b=gZznCImFH7sDfFJfCOIB2xpiUN/ELL4PhuvnfII37I+hStxRmlryFmB0
+   jJFGWppGC4f48EfA2updyNnXgh3G2vWbiFJ76G9FWDXhNc48ob188XZhc
+   bXw5Q3WnnWS8SuGQJgL3jw+0aXnor2h4sBcyb9ZUQF+zUFjxSdLGtpmR2
+   nx4EbLwUgMBslrTPBgkcmV/tmncPh9qsfoYYd0eLzQyypJXrZG7wtT7l4
+   hZG131fn65oThhpzAeoL7imdsjikpqaz3XEt90VfGJay9wzJcZ5SXdN6u
+   v3FtOVEGgN32LsmbWf0ocmd0OOjeRjXNwpKIjvuwZv41pdHHn183PArNv
+   Q==;
+X-CSE-ConnectionGUID: Hx5vK56DQm2TTboesUyr1g==
+X-CSE-MsgGUID: +ITbJ8wFQkWU72uxAi/BaQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="76687955"
 X-IronPort-AV: E=Sophos;i="6.18,236,1751266800"; 
-   d="scan'208";a="76687953"
+   d="scan'208";a="76687955"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
   by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2025 10:01:52 -0700
-X-CSE-ConnectionGUID: SsBNjaC1SleTOdqYMqKypQ==
-X-CSE-MsgGUID: Qz+LAqmOQNu8QN4du49/dA==
+X-CSE-ConnectionGUID: 6L0rMyg9TXS8MiEuDd33dA==
+X-CSE-MsgGUID: amznMWCFQemOEtUPGbIY5Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,236,1751266800"; 
-   d="scan'208";a="176007531"
+   d="scan'208";a="176007540"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa004.jf.intel.com with ESMTP; 03 Sep 2025 10:01:50 -0700
+  by orviesa004.jf.intel.com with ESMTP; 03 Sep 2025 10:01:51 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id ED17396; Wed, 03 Sep 2025 19:01:48 +0200 (CEST)
+	id A6B4B94; Wed, 03 Sep 2025 19:01:49 +0200 (CEST)
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 To: mathias.nyman@linux.intel.com
 Cc: linux-usb@vger.kernel.org,
 	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 3/7] usb: xhci: improve Stream Context register debugging
-Date: Wed,  3 Sep 2025 19:01:23 +0200
-Message-ID: <20250903170127.2190730-4-niklas.neronin@linux.intel.com>
+Subject: [PATCH 4/7] usb: xhci: improve Endpoint Context register debugging
+Date: Wed,  3 Sep 2025 19:01:24 +0200
+Message-ID: <20250903170127.2190730-5-niklas.neronin@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
 References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
@@ -78,19 +78,16 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Improve the debugging output for Stream Context registers in the xHCI
-driver. The Stream Context registers consist of the following fields:
+Improve the debugging output for Endpoint Context registers in the xHCI
+driver. The Endpoint Context registers consist of the following fields:
  bit 0 - Dequeue Cycle State.
- bits 3:1 - Stream Context Type.
+ bits 3:1 - RsvdZ.
  bits 63:4 - TR Dequeue Pointer, is 16-byte aligned.
 
 Instead of printing the entire 64-bit register as a single block, each
 field is now printed separately. This approach enhances the readability.
 
-Remove xhci_dbg() in xhci_alloc_stream_info(). A detailed trace message is
-printed after xhci_update_stream_mapping() call.
-
-xHCI specification, section 6.2.4.1.
+xHCI specification, section 6.2.3.
 
 Why not use 'dma_addr_t' for the address?
 The 'dma_addr_t' type can vary between 32 and 64 bits depending on the
@@ -102,73 +99,24 @@ detected.
 
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 ---
- drivers/usb/host/xhci-debugfs.c | 16 ++++++++++------
- drivers/usb/host/xhci-mem.c     |  1 -
- drivers/usb/host/xhci-trace.h   |  5 +++--
- 3 files changed, 13 insertions(+), 9 deletions(-)
+ drivers/usb/host/xhci.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-index c6d44977193f..35398b95c5a2 100644
---- a/drivers/usb/host/xhci-debugfs.c
-+++ b/drivers/usb/host/xhci-debugfs.c
-@@ -521,6 +521,7 @@ static int xhci_stream_context_array_show(struct seq_file *s, void *unused)
- 	struct xhci_ep_priv	*epriv = s->private;
- 	struct xhci_stream_ctx	*stream_ctx;
- 	dma_addr_t		dma;
-+	u64			ctx;
- 	int			id;
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 59ff84ba2d4a..2662356d048e 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -2580,9 +2580,9 @@ static inline const char *xhci_decode_ep_context(char *str, u32 info,
+ 	ret += sprintf(str + ret, "interval %d us max ESIT payload %d CErr %d ",
+ 			(1 << interval) * 125, esit, cerr);
  
- 	if (!epriv->stream_info)
-@@ -533,12 +534,15 @@ static int xhci_stream_context_array_show(struct seq_file *s, void *unused)
- 	for (id = 0; id < epriv->stream_info->num_stream_ctxs; id++) {
- 		stream_ctx = epriv->stream_info->stream_ctx_array + id;
- 		dma = epriv->stream_info->ctx_array_dma + id * 16;
--		if (id < epriv->stream_info->num_streams)
--			seq_printf(s, "%pad stream id %d deq %016llx\n", &dma,
--				   id, le64_to_cpu(stream_ctx->stream_ring));
--		else
--			seq_printf(s, "%pad stream context entry not used deq %016llx\n",
--				   &dma, le64_to_cpu(stream_ctx->stream_ring));
-+
-+		if (id < epriv->stream_info->num_streams) {
-+			ctx = le64_to_cpu(stream_ctx->stream_ring);
-+			seq_printf(s, "%pad stream %d: deq %016llx SCT %llu cycle %llu\n",
-+				   &dma, id, ctx & TR_DEQ_PTR_MASK, CTX_TO_SCT(ctx),
-+				   ctx & EP_CTX_CYCLE_MASK);
-+		} else {
-+			seq_printf(s, "%pad stream %d: entry not used\n", &dma, id);
-+		}
- 	}
+-	ret += sprintf(str + ret, "Type %s %sburst %d maxp %d deq %016llx ",
++	ret += sprintf(str + ret, "Type %s %sburst %d maxp %d deq %016llx cycle %llu",
+ 			xhci_ep_type_string(ep_type), hid ? "HID" : "",
+-			burst, maxp, deq);
++			burst, maxp, deq & TR_DEQ_PTR_MASK, deq & EP_CTX_CYCLE_MASK);
  
- 	return 0;
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 2a414dee7233..9520e7c6e774 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -676,7 +676,6 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
- 			cur_ring->cycle_state;
- 		stream_info->stream_ctx_array[cur_stream].stream_ring =
- 			cpu_to_le64(addr);
--		xhci_dbg(xhci, "Setting stream %d ring ptr to 0x%08llx\n", cur_stream, addr);
- 
- 		ret = xhci_update_stream_mapping(cur_ring, mem_flags);
- 
-diff --git a/drivers/usb/host/xhci-trace.h b/drivers/usb/host/xhci-trace.h
-index 8451e9386aa9..f6a2b4cedb8d 100644
---- a/drivers/usb/host/xhci-trace.h
-+++ b/drivers/usb/host/xhci-trace.h
-@@ -329,9 +329,10 @@ DECLARE_EVENT_CLASS(xhci_log_stream_ctx,
- 		__entry->ctx_array_dma = info->ctx_array_dma + stream_id * 16;
- 
- 	),
--	TP_printk("stream %u ctx @%pad: SCT %llu deq %llx", __entry->stream_id,
-+	TP_printk("stream %u ctx @%pad: SCT %llu deq %llx cycle %llu", __entry->stream_id,
- 		&__entry->ctx_array_dma, CTX_TO_SCT(__entry->stream_ring),
--		__entry->stream_ring
-+		__entry->stream_ring & TR_DEQ_PTR_MASK,
-+		__entry->stream_ring & EP_CTX_CYCLE_MASK
- 	)
- );
+ 	ret += sprintf(str + ret, "avg trb len %d", avg);
  
 -- 
 2.50.1
