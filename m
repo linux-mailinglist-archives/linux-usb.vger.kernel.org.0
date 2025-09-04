@@ -1,129 +1,112 @@
-Return-Path: <linux-usb+bounces-27531-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27532-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52201B42FC1
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 04:32:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 413A5B43005
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 04:49:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 049A75E53C8
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 02:32:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8F963B5C0F
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 02:49:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02181C5F13;
-	Thu,  4 Sep 2025 02:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B39B81F8691;
+	Thu,  4 Sep 2025 02:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="M5KeDl8O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CopUoU4V"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A505C17BA6
-	for <linux-usb@vger.kernel.org>; Thu,  4 Sep 2025 02:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA983A8F7
+	for <linux-usb@vger.kernel.org>; Thu,  4 Sep 2025 02:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756953126; cv=none; b=Z5Qw4rMQd0zaCr1QcMk6gcXg5eVq9ejV66/wQzMQHGwWmEU6faRVVB2YOoZejYI6nFfAY6s1urvFT3U2VsX5HvNssyoO/QPoigFbeg8zAfNKxgJSXgoyczVsygT2/CkzfleqIH1qywk9zhymXZVjcNkYf9tKFHIVbbprLjQ2sAI=
+	t=1756954170; cv=none; b=KJMsrslOBvg3IAip2dw8YQCG0NBRI1IRsv1s0hgHes0U0eEfUJ3f6VQCokGoadXjjD9Zg0JGwltw59KE/nQ4VorxKf2fvRF/AkV4b+Ww8xZqg7xxYs1HAK2sG/FM8mQ+qe6DrTGCGw8fFW5dDaKvW7WC033MoU4UMjo/bzM6ndA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756953126; c=relaxed/simple;
-	bh=htuU5+NuVKChl4GPxDbo2Lo92+SW/HaQGQcpZ9akDME=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z3y9cCI+4WIgJh6xvcSrgAe1y4InmjVsRYBDdywWlUcuGvfrbXxMhfOrEUZ3r2J5m4WzRWYyqAy6bq/cKsIcOVLX8fJWYF6GfqZ6t2H2k3PVyb2MTqSinSPg6C9Ug0ZhnC6b8dC0zmhg9pbt0P2P8hH7THVyMbI2Sz6UtY/wlBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=M5KeDl8O; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4b2fa418ef3so5940061cf.0
-        for <linux-usb@vger.kernel.org>; Wed, 03 Sep 2025 19:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1756953123; x=1757557923; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HbjTpMAPEbAf1Br5ZNIXzpEOFgMILtG/nyvDoq5Mcl0=;
-        b=M5KeDl8OLSYrsrlRreE87GIiAf5YqSY04ApPZGRxtqBP7uWbKvjgjOFa1Na9KyjqQ/
-         cJkMo31UltsjMor+Hs9Kn4ZSJ4WnqKKDWBeILloQZigM2+cjsLHv8YtQxik6VquAdnv+
-         LcOrTLfn0tZxK/AKNPEFXVyVIWatho4nEFidhco5CHZPh3YgJagwHlIUB5RJ4jHikhbh
-         2KvKHup95pekAZ6abgN6m7OjL+b/bljehW3O8CsUCM+wX6Leqjv8rhDQ4momoTQ9imiy
-         nk9GH/U3tjJWpZGsHtY2Qe4Q2ggZVP+rcN2VCOjGncizLcPr43tsyJzIUO6M54LL0r0f
-         OZNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756953123; x=1757557923;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HbjTpMAPEbAf1Br5ZNIXzpEOFgMILtG/nyvDoq5Mcl0=;
-        b=i2mOxlFH+K5vEv4dVxbduprHlJt9O0dwjSRAoM/oxdLK0jQGHOPXMTCLZjqCbHGKxL
-         fL4VUKBq/sD113QEeBdrhwgSkZqXJb1heENGNuckUX9WcT7wdYE4ZD7SUyWp+q4VTjfs
-         5d/eHtXcPARo3XgXVifNmheXmmfzWVATcfkFAZqNMsfn6fvtMqTWUzIJyRAMxUnC/lFb
-         A7JmCTFeaXz7YfK/5q/0yVuL5iwHmlUnMma44ZDHH58hHbMLUA4yS4mbjU3D+1eQH3WK
-         BCMqyhmPrr2b0ty0veHrJ9tKnFHGX20iHUxmmELI+Kz7n3kHiTet2X/yenf1v1g1U4zB
-         PNQw==
-X-Gm-Message-State: AOJu0YyXOKduwsJgBm00X+tAWFHBKSG7MScw73GiJMkdeNHvp8e9s6gg
-	aSLG3e3KiwgTR5j56IUCefgTrVTmJzT1RGwIjcJVIS4dEvdmIPvHdhB/2jS6sLOYNje055KAf/D
-	KWpM=
-X-Gm-Gg: ASbGncsM2hBKx6y7k6KRLfp9xQtfJWmd7zVGOU9oAxHPklgCUpa5D11lyIK4M1Si06p
-	K2UCZBUyn4gE9FZZ75pH3BCpGnQoZmkjZKLdLsg0oa1GwaLfDIhbVoTnDLgw8S+7Dk24ldVlFTN
-	Wof04/rPTpVBzYhc/v0yWaF9e+khZiYY8GeqlRiJ7MsIz/yu1zR+6GzFxPoi9r82Sl7hZE60uAO
-	reHnCfy+fh9vrN8DZ/Je6HqCdMOZdnuI/v/v0j5y/uMZoIKE4P5DzHUZV4DqUceDulkH9h3Q8Ii
-	IxywrNK6XT5S+EEdWo5lO9D6nRd7ukBGGkpNk6zOvmL+q+keEYrlFns6zKi+PprA+2zI1NzVS9j
-	fssDSmMATyNn+zfyRtg/ZqE0QM1Zlew==
-X-Google-Smtp-Source: AGHT+IFtc5bgn+GQjA10tdlWpfgMBnhLlP9rJYAxMlAQwxgNI5Mi8xR5DfiPObsf1clwzGJcTzFjjw==
-X-Received: by 2002:a05:622a:1214:b0:4b3:10f0:15cb with SMTP id d75a77b69052e-4b31da3fe45mr217168511cf.38.1756953123571;
-        Wed, 03 Sep 2025 19:32:03 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::207])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b48f799b83sm21558631cf.45.2025.09.03.19.32.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 19:32:02 -0700 (PDT)
-Date: Wed, 3 Sep 2025 22:31:59 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: USB list <linux-usb@vger.kernel.org>
-Subject: Re: Reasonable limits on transfer length for usb_ep_queue
-Message-ID: <08127d96-5d17-491e-93b1-42aef891ab11@rowland.harvard.edu>
-References: <CA+fCnZfnyjTCByBB7nsW0kb7CTABaq_-u5-qtv9UWV3Rrg_khw@mail.gmail.com>
+	s=arc-20240116; t=1756954170; c=relaxed/simple;
+	bh=91vF5Q4Mc/gIa06QBPUs7ktKs/z/M3Yj+odxnokMjG0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=iP9A8AfnkynuPdgt3mtEFMRkZx6azSnD0AbGPWMFVOBYHbEejWCRlneuox6hFJF1226QZkjklv4uNtU0WDTf8lP4xr2vS1kG4HMEvl7v18E9dUylkbAqMGKbjeWQAb9PzldyDf56/HgcB1xT5nF2kDnPfO3HbA3Iy+jSWIXNRWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CopUoU4V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A2F30C4CEF0
+	for <linux-usb@vger.kernel.org>; Thu,  4 Sep 2025 02:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756954169;
+	bh=91vF5Q4Mc/gIa06QBPUs7ktKs/z/M3Yj+odxnokMjG0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=CopUoU4VrOPZwtejpyJB8VWHnTtFTDC9103KYkaH0cPMqqNOHe+96RsE+0o3Xl2BT
+	 gLpRbzhc2rnP/SM+v/DZGiGpiZOdr91VX7aIZiTHoML3FsGKUs/MK6n/iWJJAJLnza
+	 plN2tqZpIazQPtplJdSNWRply0bm4kpGhMfacAElg3v114Cwfhk7Cz5/sU6ardUIdo
+	 O0RvC6YM1HODDIRtom8on5glU/Gfb44rfUBYmniuUP2GZ2jrnNYu+ZQ8CgGoWf7nPZ
+	 xIggoAuPy6OQwb56F1DG2uxnS+w3dl+axlspzfIagwlpDmwf74v/0sBFxQ1qxKvNPn
+	 +zjXPW2DXxcAg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 93788C4160E; Thu,  4 Sep 2025 02:49:29 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
+ resume from suspend
+Date: Thu, 04 Sep 2025 02:49:29 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220491-208809-RQWC5YuSF6@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
+References: <bug-220491-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+fCnZfnyjTCByBB7nsW0kb7CTABaq_-u5-qtv9UWV3Rrg_khw@mail.gmail.com>
 
-On Thu, Sep 04, 2025 at 12:56:47AM +0200, Andrey Konovalov wrote:
-> Hi Alan,
-> 
-> I have a question about enforcing limits on the length of USB
-> transfers on the Raw Gadget side.
-> 
-> Currently, Raw Gadget limits the transfer length (usb_request->len) to
-> PAGE_SIZE for both control and non-control transfers.
-> 
-> This proves to be not enough, at least for control transfers: the full
-> configuration descriptors for some USB devices are larger, and thus
-> sending them as a response to a USB_REQ_GET_DESCRIPTOR/USB_DT_CONFIG
-> request is impossible. And I assume there might be need to support
-> larger non-control transfers as well.
-> 
-> I see that GadgetFS limits the total size of USB descriptors to 4 *
-> PAGE_SIZE. And there appears to be no limit on the non-control
-> transfer length.
-> 
-> Is 4 * PAGE_SIZE a reasonable limit that makes sense to replicate in
-> Raw Gadget for control transfers?
-> 
-> And for non-control transfers, does it make sense to enforce any limit
-> at all in Raw Gadget?
-> 
-> Assuming that we want to allow Raw Gadget to be as flexible as
-> possible but without breaking/crashing the gadget subsystem.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
-As far as I'm aware, there's no theoretical reason to limit the length 
-of any USB transfers, other than the fact that wLength is 16 bits.
+--- Comment #37 from Alan Stern (stern@rowland.harvard.edu) ---
+The usbmon trace in comment #35 does contain a disconnect/reconnect.  And it
+did propagate up to the usbcore level, which is where the usb-persist mecha=
+nism
+lives.  usb-persist is what keeps it from going any farther, in particular,
+from showing up in the dmesg log.
 
-There is a practical reason, however: Some host controller drivers 
-(ohci-hcd for example) can't handle control transfers that are longer 
-than 8 KB or possibly 4 KB.  On the other hand, I'm not aware of any 
-such limits for the high-speed or SuperSpeed host controller drivers.
+In case you're curious, in that trace:
 
-Alan Stern
+ffff9bb60d581f00 127168165 S Ci:3:001:0 s a3 00 0000 0004 0004 4 <
+ffff9bb60d581f00 127168171 C Ci:3:001:0 0 4 =3D 03020100
+ffff9bb60d581f00 127168174 S Co:3:001:0 s 23 01 0010 0004 0000 0
+ffff9bb60d581f00 127168181 C Co:3:001:0 0 0
+
+The first two lines are Get-Port-Status for port 4 (the port the card reade=
+r is
+plugged into) near the start of the resume, with the returned status showin=
+g a
+connect-change.  The next two lines are a command to clear the port's
+connect-change status bit.  The fact that these lines are present is proof =
+that
+usbcore was aware of the disconnection, because usbcore is the component th=
+at
+ordered the status bit to be cleared.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
