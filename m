@@ -1,44 +1,44 @@
-Return-Path: <linux-usb+bounces-27538-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27539-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D630B43448
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 09:38:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80A02B4344C
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 09:39:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3056586CD7
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 07:38:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AD62586E48
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 07:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D0762D9795;
-	Thu,  4 Sep 2025 07:33:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEA492BD5BB;
+	Thu,  4 Sep 2025 07:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SsoYk+7l"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zHNtuccX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7783C2D8781;
-	Thu,  4 Sep 2025 07:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C61529C33F;
+	Thu,  4 Sep 2025 07:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756971219; cv=none; b=VB4Z6hW3i+wJ+rOt1Yu5vNS0UymOe4b35USf/3bI+QP3ZcYhaYz0LMUw/0FfbNKePkhaife0XvfF2+6Lfmd2VJYAPCGfT0xFyAykqinzMiVRUxCjBoy+s3Jyrl4/lA8Mehrlex+sOrHXmuQVS6zvBEvT7ekQ54aPRibofM7bhQ0=
+	t=1756971237; cv=none; b=ANY1Jkv6tmQfRLAoKDcSGtKzRgYudmyc5IQN8KiA4+fvPClFLp2jvtTaOgQ2vNqNcRUkq2+vT7geetqjs1TQR1J0auFyFes+rMuM3YmUAClLNU74XjtdrEp5G9+9jFuPNwgeovLYpNwP43QVIBuyp67dxOXck470l0ti87XDFcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756971219; c=relaxed/simple;
-	bh=H61z2NonCvlgcGkc+m/zzHM6ka1MurtUbR3vVk9tS+A=;
+	s=arc-20240116; t=1756971237; c=relaxed/simple;
+	bh=Qr04LJto2UZzgwUz5dPBMi+5BZlYNfRAH2bzLTO8lKI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oXL+3RqV5WJIvBJZjZ8CUokFVX7mzTjqCM3JhPE2gJgz51NV4S7+CnXLBUHlNCr6baOzDJkITCQEW3OEnZuDuoKVFFKPFKuk8sAXHf3g5K92Ua25TqXoFo2MDX6dX+mG53O/Gv+y1odRXsx5djT9p03ycjFO9qbg6l7+5nLwTVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SsoYk+7l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D8C9C4CEF0;
-	Thu,  4 Sep 2025 07:33:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=IYFecv48vuuIml0yeGHhRFJI/WGiTUzdF4mnCbz4LHsJsnJLPPyN16C3GY7bkELVl9UiSGdRhgAEej+B3NekzIBHAKlKP0s5I17Uw/pmC2WHpTIhsG3p4Olr9IducbA0prAnUbWXoygj05L4rGKp1xEzwJpeFFQFAon7n9P+rBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zHNtuccX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F070C4CEF0;
+	Thu,  4 Sep 2025 07:33:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1756971218;
-	bh=H61z2NonCvlgcGkc+m/zzHM6ka1MurtUbR3vVk9tS+A=;
+	s=korg; t=1756971236;
+	bh=Qr04LJto2UZzgwUz5dPBMi+5BZlYNfRAH2bzLTO8lKI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SsoYk+7l8227znG5+DBzWr4VrQ8XPH93wNyByQYTtHg5EVjdnvHi/ao3aDEuYDRm9
-	 7t6M/e6WR6W5VQUz645kF/Mh9IzQTiwE+BVgXJlXpFiGfXuq2eEZ+YZIJMlKTPzut0
-	 Vw7LGElVbxcyjUUcWF5qibAzownaYzYZQeP7aIQc=
-Date: Thu, 4 Sep 2025 09:33:32 +0200
+	b=zHNtuccXkJxCUDj+r3HS2Nfya69B7GqPu4E5Q9rS9V4mR/bTzsGwVXbIv6YcAJRPE
+	 zqz0J6ETw198sFSpPQC5MDNwZXBuXQgsNV0PiQfIwtmCiN9smB0lB3aLcOjdXY53hd
+	 smpwcSlm5Xwfz6/NA+iFJ/FixmgpZlWnIinHU70k=
+Date: Thu, 4 Sep 2025 09:33:51 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Kuen-Han Tsai <khtsai@google.com>
 Cc: krzysztof.kozlowski@linaro.org, prashanth.k@oss.qualcomm.com,
@@ -47,7 +47,7 @@ Cc: krzysztof.kozlowski@linaro.org, prashanth.k@oss.qualcomm.com,
 	stable@kernel.org
 Subject: Re: [PATCH v2] usb: gadget: f_ecm: Fix ecm_opts->bound logic in bind
  path
-Message-ID: <2025090429-snooze-womankind-77fb@gregkh>
+Message-ID: <2025090436-baffle-clubbing-1a20@gregkh>
 References: <20250904065203.1162629-1-khtsai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -100,21 +100,29 @@ On Thu, Sep 04, 2025 at 02:52:00PM +0800, Kuen-Han Tsai wrote:
 > 
 > 
 
-
 Hi,
 
-This is the friendly semi-automated patch-bot of Greg Kroah-Hartman.
-You have sent him a patch that has triggered this response.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Right now, the development tree you have sent a patch for is "closed"
-due to the timing of the merge window.  Don't worry, the patch(es) you
-have sent are not lost, and will be looked at after the merge window is
-over (after the -rc1 kernel is released by Linus).
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-So thank you for your patience and your patches will be reviewed at this
-later time, you do not have to do anything further, this is just a short
-note to let you know the patch status and so you don't worry they didn't
-make it through.
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
