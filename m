@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-27532-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27533-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 413A5B43005
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 04:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 92BC4B43184
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 07:11:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8F963B5C0F
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 02:49:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 326325E68D2
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Sep 2025 05:11:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B39B81F8691;
-	Thu,  4 Sep 2025 02:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8090422A4FC;
+	Thu,  4 Sep 2025 05:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CopUoU4V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iah+ywNM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA983A8F7
-	for <linux-usb@vger.kernel.org>; Thu,  4 Sep 2025 02:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3A91C84B9
+	for <linux-usb@vger.kernel.org>; Thu,  4 Sep 2025 05:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756954170; cv=none; b=KJMsrslOBvg3IAip2dw8YQCG0NBRI1IRsv1s0hgHes0U0eEfUJ3f6VQCokGoadXjjD9Zg0JGwltw59KE/nQ4VorxKf2fvRF/AkV4b+Ww8xZqg7xxYs1HAK2sG/FM8mQ+qe6DrTGCGw8fFW5dDaKvW7WC033MoU4UMjo/bzM6ndA=
+	t=1756962674; cv=none; b=lD9GC+nGjGxBMu8H38WC9TCjP9vHsfFhucEwSdL4lOEzWdMuM3Iwf8OS9wNPNlZmcjSapCppz3v0uJoyLDiLKjLKvFubneLBkOCOpuurlMcRjUX22tDGAFtqC89RWPRpaWE6kWTVPs0slJUGmPcrn6xawgXbUCKjvUlDjKfddvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756954170; c=relaxed/simple;
-	bh=91vF5Q4Mc/gIa06QBPUs7ktKs/z/M3Yj+odxnokMjG0=;
+	s=arc-20240116; t=1756962674; c=relaxed/simple;
+	bh=BYO8fsKfOpMAZVDvBEorJfYVbipCWw4asgU6o2P6pwk=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iP9A8AfnkynuPdgt3mtEFMRkZx6azSnD0AbGPWMFVOBYHbEejWCRlneuox6hFJF1226QZkjklv4uNtU0WDTf8lP4xr2vS1kG4HMEvl7v18E9dUylkbAqMGKbjeWQAb9PzldyDf56/HgcB1xT5nF2kDnPfO3HbA3Iy+jSWIXNRWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CopUoU4V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A2F30C4CEF0
-	for <linux-usb@vger.kernel.org>; Thu,  4 Sep 2025 02:49:29 +0000 (UTC)
+	 Content-Type:MIME-Version; b=jL3TWRhKaDFE8BVUrMIKGnieFg192OQ86vXnXLH950E3u8w5xD9wtWpBGLYBJTb4yxfIm3cC1k2R3BwkV02wwoEQfVUFbKVCqOV9V3LDTa7yPeYwI7RXBJWuWdes0/ciqIbmBrK18VzrkVKcd9KcL6B0BhqMRsGQppjwk5bLPb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iah+ywNM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7CFD3C4CEF0
+	for <linux-usb@vger.kernel.org>; Thu,  4 Sep 2025 05:11:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756954169;
-	bh=91vF5Q4Mc/gIa06QBPUs7ktKs/z/M3Yj+odxnokMjG0=;
+	s=k20201202; t=1756962672;
+	bh=BYO8fsKfOpMAZVDvBEorJfYVbipCWw4asgU6o2P6pwk=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=CopUoU4VrOPZwtejpyJB8VWHnTtFTDC9103KYkaH0cPMqqNOHe+96RsE+0o3Xl2BT
-	 gLpRbzhc2rnP/SM+v/DZGiGpiZOdr91VX7aIZiTHoML3FsGKUs/MK6n/iWJJAJLnza
-	 plN2tqZpIazQPtplJdSNWRply0bm4kpGhMfacAElg3v114Cwfhk7Cz5/sU6ardUIdo
-	 O0RvC6YM1HODDIRtom8on5glU/Gfb44rfUBYmniuUP2GZ2jrnNYu+ZQ8CgGoWf7nPZ
-	 xIggoAuPy6OQwb56F1DG2uxnS+w3dl+axlspzfIagwlpDmwf74v/0sBFxQ1qxKvNPn
-	 +zjXPW2DXxcAg==
+	b=Iah+ywNMVM85Lru0thQggNoSBkT6kQ+iK/mwKHWkRiYMTuJhw1TGyHq4L0kuSVGUk
+	 79MsVM1Vag6MCtxNLIzde9CSvWdhsmEKYeA66VKp4IZQjviB/zV9p5xDfSm/BDQZ8r
+	 JyFDz2vGO579NOp02VOguphcSrentcqkJzzfrZ2GiEyxizuI2ylScTwvh4FoM+3AZ0
+	 SzP45hX0yb1539X6LvNBQA/osHR9U0ObKtcTl5de0zyeebaJMFhlTp3GeGELX52t6J
+	 +rOIZYJ85Ode35rt/tJyvvoNiw6K1qBhEGqiK6eg9GQj/yswMg7qMW2FE1A+AFuhot
+	 H2YgmYYczwR2g==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 93788C4160E; Thu,  4 Sep 2025 02:49:29 +0000 (UTC)
+	id 6C281C3279F; Thu,  4 Sep 2025 05:11:12 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
  resume from suspend
-Date: Thu, 04 Sep 2025 02:49:29 +0000
+Date: Thu, 04 Sep 2025 05:11:12 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -56,14 +56,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Who: michal.pecio@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220491-208809-RQWC5YuSF6@https.bugzilla.kernel.org/>
+Message-ID: <bug-220491-208809-Kt0fNF335S@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
 References: <bug-220491-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,30 +79,37 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
---- Comment #37 from Alan Stern (stern@rowland.harvard.edu) ---
-The usbmon trace in comment #35 does contain a disconnect/reconnect.  And it
-did propagate up to the usbcore level, which is where the usb-persist mecha=
-nism
-lives.  usb-persist is what keeps it from going any farther, in particular,
-from showing up in the dmesg log.
+--- Comment #38 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+(In reply to Paul Ausbeck from comment #31)
+> Created attachment 308613 [details]
+> xhci_hcd and usbcore dmesg trace, emb-qm77, S/R, USB storage manually
+> disconnected
+>=20
+> This is a dmesg log fragment with xhci_hcd and usbcore dynamic debug
+> enabled, suspend/resume events, with the USB storage device being physica=
+lly
+> unplugged wile the machine is suspended.
 
-In case you're curious, in that trace:
+This nicely illustrates why usb_persist is hard (and dangerous: you could
+disconnect the device and connect a different one). This log is *exactly* t=
+he
+same as the one you posted before, except that when the kernel restores pow=
+er,
+the root hub port goes to RxDetect state (detecting electrical SuperSpeed
+connection) and stays there because the device is gone.
 
-ffff9bb60d581f00 127168165 S Ci:3:001:0 s a3 00 0000 0004 0004 4 <
-ffff9bb60d581f00 127168171 C Ci:3:001:0 0 4 =3D 03020100
-ffff9bb60d581f00 127168174 S Co:3:001:0 s 23 01 0010 0004 0000 0
-ffff9bb60d581f00 127168181 C Co:3:001:0 0 0
+[  368.488920] xhci_hcd 0000:00:14.0: Set port 4-2 link state, portsc: 0x12=
+03,
+write 0x11261
+[  368.859068] xhci_hcd 0000:00:14.0: Port change event, 4-2, id 6, portsc:
+0x100080
+[  369.862706] xhci_hcd 0000:00:14.0: set port power 4-2 ON, portsc: 0x1000=
+80
+[  369.966674] xhci_hcd 0000:00:14.0: Get port status 4-2 read: 0x1002a0,
+return 0x802a0
 
-The first two lines are Get-Port-Status for port 4 (the port the card reade=
-r is
-plugged into) near the start of the resume, with the returned status showin=
-g a
-connect-change.  The next two lines are a command to clear the port's
-connect-change status bit.  The fact that these lines are present is proof =
-that
-usbcore was aware of the disconnection, because usbcore is the component th=
-at
-ordered the status bit to be cleared.
+I suspect that usb_persist fails in this case because it simply doesn't
+consider overcurrent ports to be eligible, or something like that.
 
 --=20
 You may reply to this email to add a comment.
