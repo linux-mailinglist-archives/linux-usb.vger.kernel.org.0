@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-27578-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27579-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FFC6B453D8
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:57:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDC4AB453DC
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:58:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40FF11C27177
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 09:58:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99063A4637D
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 09:58:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3C6D298991;
-	Fri,  5 Sep 2025 09:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322C2298CBE;
+	Fri,  5 Sep 2025 09:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cbBysEbq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="db5PG2Gf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF691D555;
-	Fri,  5 Sep 2025 09:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 252BE1D555;
+	Fri,  5 Sep 2025 09:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757066267; cv=none; b=IeJ8tvPNptZ33NzgX3De1XsSbU8R4QRoMRZ/YVdoRNEi9vAk7rrzZWNYI8RmtWOzToKzVXRHkHoOQlGOZ/7wUwWgWHLxpzUVI/EJeBp7rggKqr+w0CxlLxUcipBzKr4rRJtiBnPFl1//AnyAV+RxzCmEdEtuB4Tt/SlHQa7DNPI=
+	t=1757066303; cv=none; b=iSU6/oYPxGTUXgM7X7c0gIVC1kwXwdw9pbRX44AI6sALr405CrjzHFHVgVmsHjolp7YMzFTidt3o6TWt7qh9/lzeX/S7Rcc2chVbizy6nzPGtZCi/Y7dim+NMi3s5RtSSjd1GLGNjGFvI7NRZ2b0d2/KPVxDqXfnFAKoNPTL5/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757066267; c=relaxed/simple;
-	bh=8q8nnACbLJ2cv9OUfaS30eEGHF3yr2aXfrpwZpdTxko=;
+	s=arc-20240116; t=1757066303; c=relaxed/simple;
+	bh=fH/fH9IlI4y4iyWIl9EmyomPqVs0ZCb7wQlHJg8l0wE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WspvI0hDIpCmSmLswZUAvqbTGTW1Sr1UAd3z2JyMl+VVzjEICQXE9DqqZiis9/SOgOChEay+Lbch02Jg0rhJDTXT+mlATJx74Tsr9QoCUpALC90Pti5rnbhLeL64Np2WpuPPpVyg7RujdoxbQu5GjY8n/JW5CuZSLxehPcn5/XY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cbBysEbq; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jo5d1GK00WnoTk8UsmTE/M5EGJb3YpRbHRC/T1Y9zjhmo3wUPQTfdXD9Ejn0Dj9NEDUAEPDcMKpksl/784YiRr9hq5pVJQhIT5HoLVDnqfDMLHGfAaAMJejp7yEXfiCIxdZLT9Fs8jxqf6FzZbig30xD7Yy+obDxqRps8X/QRKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=db5PG2Gf; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757066266; x=1788602266;
+  t=1757066302; x=1788602302;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8q8nnACbLJ2cv9OUfaS30eEGHF3yr2aXfrpwZpdTxko=;
-  b=cbBysEbq+p6NxfzEB/Pu+DXZU2x6QQwdQMGcTyYwC7ZmEfvenp3RCl0D
-   vbB6/M79+AvIL5D5Ag3i19CzsNEaj152pv3+5SGTDga7XWwQsJicABj3N
-   RdwG5+bhOyxh3JGtX0RCDhM/uxQv85oxG4TF74WcjBf3TlF0fdlf8vrZm
-   kLEbrw1gRRYwW5wfP6rnNJT0pMw6oGuL5DEFkQj/7ZxY3JX2FbiiOedE9
-   QL8f8wnt08yuYgg0tlkrOeBamHbOn/cnYwxkj2NyOZUkJE6pZcZ6yMolR
-   l36RbUpBjvVXD457unJ7dfNeGX6sBYMPsWizY73vx87aAn1uq4764NtUC
+  bh=fH/fH9IlI4y4iyWIl9EmyomPqVs0ZCb7wQlHJg8l0wE=;
+  b=db5PG2GfI28nnHosiqzbBN03rtLe6M42XT5kDhu3n/FKiZrA5ZaBgY/r
+   TtJMW4ERo5hCfwHMh29uArmivTgE/z5g5jdsOf5+pSVY7zeNFkQ0Oa0W/
+   3cQ7f+fyAdGTTeIUF7m/ayTAG7EgQEJ+7gZCFqiqJjolGlX0fQLVZlqS+
+   sNrYUSpxpEA54yWS/ytraoZyUIrQv8CeSxA78epdwrdkfo+WHcqVYWIlf
+   2wGhPeAape9f2FncujvMQxPXqFseVQ0/ihSIHS5FGCpt3tP+gf74nXdJt
+   SKH+k/pBOIuRYfC4k7v95p5aFePLzLtBUu3yaQuABrK3S1vx0EdJQMGtj
    g==;
-X-CSE-ConnectionGUID: XqQjnu5NQ0eqHGiZQMQEgQ==
-X-CSE-MsgGUID: ANbHkn6fSM67vwtGARVXpw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="69674223"
+X-CSE-ConnectionGUID: ewbEAwIOTEeQ6dFu4Nqwcw==
+X-CSE-MsgGUID: bAn+OmcySuuw4uZO+2R0Xw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="58450173"
 X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="69674223"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 02:57:46 -0700
-X-CSE-ConnectionGUID: 6PjwMeliRNKQnt9UZ2URIA==
-X-CSE-MsgGUID: MS9w3seGQie4fm37vdOTBQ==
+   d="scan'208";a="58450173"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 02:58:21 -0700
+X-CSE-ConnectionGUID: z3iBlKTRSkixb0iLo9lHyw==
+X-CSE-MsgGUID: cxdbLLL0T9quPQjZfy/Yfw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="176454114"
+   d="scan'208";a="172012263"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa005.fm.intel.com with SMTP; 05 Sep 2025 02:57:41 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 12:57:40 +0300
-Date: Fri, 5 Sep 2025 12:57:40 +0300
+  by orviesa007.jf.intel.com with SMTP; 05 Sep 2025 02:58:17 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 12:58:16 +0300
+Date: Fri, 5 Sep 2025 12:58:16 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Andrei Kuchynski <akuchynski@chromium.org>
 Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
@@ -73,11 +73,11 @@ Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
 	"Christian A. Ehrhardt" <lk@c--e.de>,
 	Venkat Jayaraman <venkat.jayaraman@intel.com>,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] usb: typec: Add alt_mode_override field to port
- property
-Message-ID: <aLq0FCAq-LiB139t@kuha.fi.intel.com>
+Subject: Re: [PATCH v2 2/5] platform/chrome: cros_ec_typec: Set
+ alt_mode_override flag
+Message-ID: <aLq0OD_7lIP6B-eJ@kuha.fi.intel.com>
 References: <20250825145750.58820-1-akuchynski@chromium.org>
- <20250825145750.58820-2-akuchynski@chromium.org>
+ <20250825145750.58820-3-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,78 +86,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250825145750.58820-2-akuchynski@chromium.org>
+In-Reply-To: <20250825145750.58820-3-akuchynski@chromium.org>
 
-On Mon, Aug 25, 2025 at 02:57:46PM +0000, Andrei Kuchynski wrote:
-> This new field in the port properties dictates whether the Platform Policy
-> Manager (PPM) allows the OS Policy Manager (OPM) to change the currently
-> active, negotiated alternate mode.
+On Mon, Aug 25, 2025 at 02:57:47PM +0000, Andrei Kuchynski wrote:
+> This flag specifies that the Embedded Controller (EC) must receive explicit
+> approval from the Application Processor (AP) before initiating Type-C
+> alternate modes or USB4 mode.
 > 
 > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  drivers/usb/typec/class.c | 9 ++++++---
->  drivers/usb/typec/class.h | 2 ++
->  include/linux/usb/typec.h | 1 +
->  3 files changed, 9 insertions(+), 3 deletions(-)
-
-This is okay by me, but you forgot to document the file.
-
-thanks,
-
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 67a533e35150..9f86605ce125 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -457,11 +457,13 @@ static umode_t typec_altmode_attr_is_visible(struct kobject *kobj,
->  					     struct attribute *attr, int n)
->  {
->  	struct typec_altmode *adev = to_typec_altmode(kobj_to_dev(kobj));
-> +	struct typec_port *port = typec_altmode2port(adev);
+>  drivers/platform/chrome/cros_ec_typec.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> index b712bcff6fb2..c0806c562bb9 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -491,6 +491,7 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
 >  
->  	if (attr == &dev_attr_active.attr)
-> -		if (!is_typec_port(adev->dev.parent) &&
-> -		    (!adev->ops || !adev->ops->activate))
-> -			return 0444;
-> +		if (!is_typec_port(adev->dev.parent)) {
-> +			if (!port->mode_control || !adev->ops || !adev->ops->activate)
-> +				return 0444;
-> +		}
+>  		cap->driver_data = cros_port;
+>  		cap->ops = &cros_typec_usb_mode_ops;
+> +		cap->no_mode_control = !typec->ap_driven_altmode;
 >  
->  	return attr->mode;
->  }
-> @@ -2681,6 +2683,7 @@ struct typec_port *typec_register_port(struct device *parent,
->  	}
->  
->  	port->pd = cap->pd;
-> +	port->mode_control = !cap->no_mode_control;
->  
->  	ret = device_add(&port->dev);
->  	if (ret) {
-> diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-> index db2fe96c48ff..c53a04b9dc75 100644
-> --- a/drivers/usb/typec/class.h
-> +++ b/drivers/usb/typec/class.h
-> @@ -80,6 +80,8 @@ struct typec_port {
->  	 */
->  	struct device			*usb2_dev;
->  	struct device			*usb3_dev;
-> +
-> +	bool				mode_control;
->  };
->  
->  #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index 252af3f77039..cbc94282e45e 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -304,6 +304,7 @@ struct typec_capability {
->  	enum typec_accessory	accessory[TYPEC_MAX_ACCESSORY];
->  	unsigned int		orientation_aware:1;
->  	u8			usb_capability;
-> +	bool			no_mode_control;
->  
->  	struct fwnode_handle	*fwnode;
->  	void			*driver_data;
+>  		cros_port->port = typec_register_port(dev, cap);
+>  		if (IS_ERR(cros_port->port)) {
 > -- 
 > 2.51.0.rc2.233.g662b1ed5c5-goog
 > 
