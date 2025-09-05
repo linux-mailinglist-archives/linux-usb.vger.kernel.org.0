@@ -1,83 +1,100 @@
-Return-Path: <linux-usb+bounces-27612-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27611-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28272B46620
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 23:48:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2A61B4661E
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 23:47:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D915AC4629
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 21:47:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB81717D910
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 21:47:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB962283C9D;
-	Fri,  5 Sep 2025 21:47:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EFC42F3C28;
+	Fri,  5 Sep 2025 21:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ms29.hinet.net header.i=@ms29.hinet.net header.b="4weWjWEM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vmn+yCul"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cdmsr2.hinet.net (210-65-1-144.hinet-ip.hinet.net [210.65.1.144])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E601DE2C2
-	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 21:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.65.1.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2EF82EFDAD
+	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 21:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757108835; cv=none; b=eDLCK5sV7XvEJJr0TL/kXJ/y5qLmgSi+NcggMdG3LweAWD5HhTEcHG3xMiD32JqMoGhp1b8z64Z1h1BOHTNL54oALIJg3N9NgwxF6NhK++lUoOgBeED8OPpB25vF3AUkASyt15Brw/AgsbhqNtuNevEu8v3I60ih4MWbDsOO+TI=
+	t=1757108692; cv=none; b=dzSKcc641UERpeDb/9DlxFQVizkI41W8djnbehiq7da8hLK2RjJ/VsKYcE+RLjNz2+KGWo2W6/c/WJjXTwLjC5QL+AKd2PvJRtvI9eq777c9SU/P+BROjS+MMwU3+wmh7KlozJoJkbr7EMoqLa2xA7p+hspU7VWEfzlXN91HKPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757108835; c=relaxed/simple;
-	bh=o+qLoQAhjBVgxw8p+p/znE8CwPM+2fMcRkqJQKlzslw=;
-	h=From:To:Subject:Message-ID:Date:MIME-Version:Content-Type; b=epu6NUSs5jqxW7lYJgg7tlxwlUjPxa3ikIq0rNAk8OQl/ajecA5IYCTaRk9QG66tC005JMX19UdNhyanARXI3N2PcrQMjA236lAaUhS6ygyDR3k5bFYUuRYxKYeu1oI6wuTQB4yNa5iNF/hYCyeOOh6uJNpt/WTY5YVBp9LjzZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ms29.hinet.net; spf=pass smtp.mailfrom=ms29.hinet.net; dkim=pass (1024-bit key) header.d=ms29.hinet.net header.i=@ms29.hinet.net header.b=4weWjWEM; arc=none smtp.client-ip=210.65.1.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ms29.hinet.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ms29.hinet.net
-Received: from cmsr8.hinet.net ([10.199.216.87])
-	by cdmsr2.hinet.net (8.15.2/8.15.2) with ESMTPS id 585Ll8cK896029
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
-	for <linux-usb@vger.kernel.org>; Sat, 6 Sep 2025 05:47:10 +0800
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; d=ms29.hinet.net;
-	s=default; t=1757108830; bh=v28bNIItIv9p9u+ELmiBhD/hU/A=;
-	h=From:To:Subject:Date;
-	b=4weWjWEM+FsfcjlVnDzpT/RgBxSx0X83aDKoYCUJx+f7jiWpWq3clSVm1F9+nV2sp
-	 9NiHjfnal3JmiWyjCazY3fOZvcsMxCOWN/cmMLQSc40uxvh12Np77P7vh+iq4Ew9hX
-	 eNsmbl50TaSEnb0hrWBO/AlTShZMU8f64y2cRFI8=
-Received: from [127.0.0.1] (111-242-93-98.dynamic-ip.hinet.net [111.242.93.98])
-	by cmsr8.hinet.net (8.15.2/8.15.2) with ESMTPS id 585Lbqq5102955
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
-	for <linux-usb@vger.kernel.org>; Sat, 6 Sep 2025 05:40:51 +0800
-From: "Info - Albinayah 032" <Linux-usb@ms29.hinet.net>
+	s=arc-20240116; t=1757108692; c=relaxed/simple;
+	bh=qfaV1nI9qbT5fQ6RxVVI/9Xoj4uRB6F2xUzjcidGxX8=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NDRLaPxXHF+oZ/B9j0v/imzPus+z0HOBYkTyz+VVzsmpIkBC7xZrPPRaaJbTxhcaPSuhgYt4xOll+5QXoNLWTXDuwF/qxhQCi8bGgT5m02VSI6sVGqGQd2Fk+AMzIjal7xv6OywsU0cPWxwpdLFm+e0fuBN5ksd5Ao6nvsVAUqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vmn+yCul; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5BEA0C4CEF5
+	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 21:44:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757108692;
+	bh=qfaV1nI9qbT5fQ6RxVVI/9Xoj4uRB6F2xUzjcidGxX8=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Vmn+yCulLEDSwCxCsh5mVziUknOsS4yNtzPWbHNktTlQvEyYKD5nFIIFlLrut9uSR
+	 9xnOyHHQpyy6uKdqIGSA3ZaugziwYZHb0IFeEkxCSsKaGRx6nLMfE8x0t8GvcYcEug
+	 EYks6ZLliRxFZNgsB2pQjztqPmsVo9VchHCLDrPSU8/aJyBaSAp0F7dnRVj90rJe3W
+	 NP5VaSlMmSobBt7UGEZwny1FAtyOsfWIrCgQZQ2R0ZMWWBeNLuoZSuaL8e6rZZvLcC
+	 dIyd8uL3mGpmx9Ge08tpxSGRe6NnKG5OpQuQylk624nli/S2So4+1Khw6hOe5DCZmX
+	 AVauwqBqPNH8Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 4E360C41614; Fri,  5 Sep 2025 21:44:52 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
-Reply-To: "Info - Albinayah." <europe-sales@albinayah-group.com>
-Subject: =?UTF-8?B?TmV3IFNlcHRlbWJlciBPcmRlci4gMzU2OTcgRnJpZGF5LCBTZXB0ZW1iZXIgNSwgMjAyNSBhdCAxMTo0MDo0OSBQTQ==?=
-Message-ID: <aa1f01f4-f8d0-386b-a86b-121b19ac4a78@ms29.hinet.net>
-Content-Transfer-Encoding: 7bit
-Date: Fri, 05 Sep 2025 21:40:50 +0000
+Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
+ resume from suspend
+Date: Fri, 05 Sep 2025 21:44:52 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: paula@alumni.cse.ucsc.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220491-208809-TlqDPrKQmn@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
+References: <bug-220491-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-X-HiNet-Brightmail: Spam
-X-CMAE-Score: 100
-X-CMAE-Analysis: v=2.4 cv=V87e0vni c=0 sm=1 tr=0 ts=68bb58e4
-	p=OrFXhexWvejrBOeqCD4A:9 a=dz3rte2YA/NWJqL9zhb/1g==:117 a=IkcTkHD0fZMA:10
-	a=5KLPUuaC_9wA:10
 
-Hi Linux-usb,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
-Please provide a quote for your products:
+--- Comment #45 from Paul Ausbeck (paula@alumni.cse.ucsc.edu) ---
+Things have taken an unexpected turn. I tested a reset_resume_delay=3D500
+together with Mathias' urb queuing patch and my original problem, unmount of
+the internal SD card upon resume, returned. I was expecting that I would not
+have the unmount problem with this configuration. Right now, it looks like
+Mathias' patch somehow interferes with reset. I have again reconfigured wit=
+hout
+Mathias' patch and with reset-resume_delay=3D500 and have again confirmed t=
+hat
+the unmount problem does not occur. I will look at this further and post so=
+me
+traces/logs.
 
-Include:
-1.Pricing (per unit)
-2.Delivery cost & timeline
-3.Quote expiry date
+--=20
+You may reply to this email to add a comment.
 
-Deadline: September
-
-Thanks!
-
-Kamal Prasad
-
-Albinayah Trading
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
