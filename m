@@ -1,195 +1,117 @@
-Return-Path: <linux-usb+bounces-27576-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27577-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E253B44FE4
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 09:33:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C6C9B453C2
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:49:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B0FE17A03C
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 07:33:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6376A60FB7
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 09:49:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD5632D3A65;
-	Fri,  5 Sep 2025 07:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l9B1z/vP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A41A28BA83;
+	Fri,  5 Sep 2025 09:49:18 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D101DDC37;
-	Fri,  5 Sep 2025 07:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2A92777FE
+	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 09:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757057523; cv=none; b=chitmZVuTtmEIieeIzKPppKAduQFoSCAs3IO4PjVZwEN0Lfa1w3owJ/CtDeDVQmzzIsEdxeKFV/S2Eu2sz5OKaE8NfsO/N9BelDBqv5ju1ZG8bzMjLT5Ha96dC2bgKcfQGFABv3QCxQHBbrYVkWvSK3dD3BGWLKnq6zuS2hUo6Q=
+	t=1757065758; cv=none; b=gXzwKPGmqXWOpjxisRcRHmCUR6WKJerkbN8VdUrNbglB8mRA+2B+4zTOxWMp5XaR8kbMPT1NmjplfuaIggDR8EhlV/DnnslINFfFyWtBhRoimkaME63OMzyYawTX/8gZUHJCZj2TCgIVA+2gOemzsJ6qZLDvasm706KYi0fZtW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757057523; c=relaxed/simple;
-	bh=hT9AxadC5iAK+JNW21MjSBtwwyo1LI3n1xgeNnxspHE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KwWzIIZhYcgYKapEEkXLvZC5CpcxsXcvE5wUb3VbMVlDB8qJhKkrH8qNhx9N+vO5SR+0NPS05y0ojHo+o5NKtxg8uuDgZRI7Vt6hbEgSHWK/ovnPSNEYy/lAYD8+o3gsW9XjLgBeCNbWmb9+Rd+labOt9t1zwLk4vNxP5nYEXDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l9B1z/vP; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757057522; x=1788593522;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hT9AxadC5iAK+JNW21MjSBtwwyo1LI3n1xgeNnxspHE=;
-  b=l9B1z/vP0n5sGGvJOw3agwBoVNGyPjsrgQUSX91lrpfE9UEPHSLz3jRN
-   mZfmR+w4GFBB4El3r2AvV7ebQp6A4+HBjdB3DU5Lt6mc4C8NdmP4W5Zo9
-   qp8mg8ozaPz3NUtz8ztofqtXv61KiaSAJqi+QH/TXQIHU+fGrTD2E4uNG
-   q6GTjx/fERh16euXwXxvzpD0PUxh5tafmqSi/goULj/+28Mr3dIHXsGlH
-   JVvl6J9xdf2OEcgloJ42l2pXgbiOrj6510dn7FMPSlfgZYfGkBZCyV50k
-   3JoE6LelHaR6FLU4YhnmjgDK9SrohlPfOQ/xh6NXKKz5pQK7dCypr5iXx
-   A==;
-X-CSE-ConnectionGUID: 6X6djPZETs+JeVBdjcGQ/g==
-X-CSE-MsgGUID: IPrY3Ph1Tu6rMUoUhYXlUA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="63047296"
-X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="63047296"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 00:32:02 -0700
-X-CSE-ConnectionGUID: wK34IIBTTkm5b+TvUQ45dg==
-X-CSE-MsgGUID: N4k6vEQgQie6WHUbCQT8BQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="172540025"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa009.fm.intel.com with SMTP; 05 Sep 2025 00:31:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 10:31:56 +0300
-Date: Fri, 5 Sep 2025 10:31:56 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: "Jayaraman, Venkat" <venkat.jayaraman@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	PSE Type-C Linux <pse.type-c.linux@intel.com>,
-	linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v3] usb: typec: ucsi: Add support for READ_POWER_LEVEL
- command
-Message-ID: <aLqR7ECma5JFojcU@kuha.fi.intel.com>
-References: <20250814163028.18058-1-venkat.jayaraman@intel.com>
- <91cb0acb-73c4-4d3a-9aa8-1056f367d82e@linaro.org>
- <aKbI4DnIDD9fD_Gz@kuha.fi.intel.com>
- <b897d082-0d74-46fc-a0e4-7745347ba597@linaro.org>
- <CH0PR11MB5300AD8DD6BE6CBC799B49DD8000A@CH0PR11MB5300.namprd11.prod.outlook.com>
- <d7nbjyz27pcvsic2gsho6ft6pjubmq2x4she5kvcd57i6dirns@bte5b5aap3wb>
+	s=arc-20240116; t=1757065758; c=relaxed/simple;
+	bh=kZ70zfrO6Xb/o+PqCbl2KixYQYlxecOgBAnFmZIBOZY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e2PbCcdGCIA9eXv1TaZH1r/7/bkaj4+OyUt0nSr16PhfLbvIWFkcwygUEY3rorDKjZsY+jPUInLpSmmen0/3+TS2heLLH4jiniqkhUbakz5j7ZYwJU7EtXNbnIXWAZ7wjIgXrejRXwLay93Qh0SZE8Jidxgqa/ET7MHhEdnPfEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iie.ac.cn; spf=pass smtp.mailfrom=iie.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iie.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iie.ac.cn
+Received: from localhost.localdomain (unknown [159.226.95.28])
+	by APP-03 (Coremail) with SMTP id rQCowADn+4UJsrpos2rIAA--.986S2;
+	Fri, 05 Sep 2025 17:48:58 +0800 (CST)
+From: Chen Yufeng <chenyufeng@iie.ac.cn>
+To: pawell@cadence.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	Chen Yufeng <chenyufeng@iie.ac.cn>
+Subject: [PATCH] usb: cdns3: gadget: Use-after-free during failed initialization and exit of cdnsp gadget
+Date: Fri,  5 Sep 2025 17:48:42 +0800
+Message-ID: <20250905094842.1232-1-chenyufeng@iie.ac.cn>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d7nbjyz27pcvsic2gsho6ft6pjubmq2x4she5kvcd57i6dirns@bte5b5aap3wb>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowADn+4UJsrpos2rIAA--.986S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar43Xw1UXr4fCF1UWF45Jrb_yoW8CFy5pa
+	98JFWIkrsrArZ8trnrJr4DZrWrJw4jvrn7KF92kw42vF1fJw1kGF1DAr1rKF4xuFykJr45
+	ta1v93W09F4I9wUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUka14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+	4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+	6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUIhFcUUUUU=
+X-CM-SenderInfo: xfkh05xxih0wo6llvhldfou0/1tbiDAgQEmi6oeEvOgABsA
 
-On Thu, Sep 04, 2025 at 11:17:09PM +0300, Dmitry Baryshkov wrote:
-> On Thu, Sep 04, 2025 at 07:14:59PM +0000, Jayaraman, Venkat wrote:
-> > Hi Neil, 
-> > 
-> > > -----Original Message-----
-> > > From: Neil Armstrong <neil.armstrong@linaro.org>
-> > > Sent: Monday, September 1, 2025 12:50 AM
-> > > To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > Cc: Jayaraman, Venkat <venkat.jayaraman@intel.com>; linux-usb@vger.kernel.org; gregkh@linuxfoundation.org; PSE Type-C Linux
-> > > <pse.type-c.linux@intel.com>; linux-arm-msm <linux-arm-msm@vger.kernel.org>
-> > > Subject: Re: [PATCH v3] usb: typec: ucsi: Add support for READ_POWER_LEVEL command
-> > > 
-> > > Hi,
-> > > 
-> > > On 21/08/2025 09:21, Heikki Krogerus wrote:
-> > > > On Tue, Aug 19, 2025 at 11:47:58AM +0200, Neil Armstrong wrote:
-> > > >> Hi,
-> > > >>
-> > > >> On 14/08/2025 18:30, Venkat Jayaraman wrote:
-> > > >>> Add support for UCSI READ_POWER_LEVEL command as per
-> > > >>> UCSI specification v2.1 and above to debugfs.
-> > > >>>
-> > > >>> Following power related fields will be exposed as files in debugfs:-
-> > > >>> peak_current (Peak current),
-> > > >>> avg_current (Average current) and
-> > > >>> vbus_voltage (VBUS voltage)
-> > > >>>
-> > > >>> These files will be updated either when a READ_POWER_LEVEL
-> > > >>> command is sent from OS or when a device is connected.
-> > > >>>
-> > > >>> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > >>> Signed-off-by: Venkat Jayaraman <venkat.jayaraman@intel.com>
-> > > >>> ---
-> > > >>> Changelog v3:
-> > > >>> - Rebased to kernel 6.17-rc1
-> > > >>>
-> > > >>> Changelog v2:
-> > > >>> - Removed extra space in declaration
-> > > >>> - Made the call to debugfs_create_file single line for clarity
-> > > >>>
-> > > >>>    drivers/usb/typec/ucsi/debugfs.c | 31 +++++++++++++++++++++++++++++++
-> > > >>>    drivers/usb/typec/ucsi/ucsi.c    | 16 ++++++++++++++++
-> > > >>>    drivers/usb/typec/ucsi/ucsi.h    | 13 +++++++++++++
-> > > >>>    3 files changed, 60 insertions(+)
-> > > >>>
-> > > >>
-> > > >> This commit causes the following warning:
-> > > >> [    8.646179] ------------[ cut here ]------------
-> > > >> [    8.650986] Access to unsupported field at offset 0x59 (need version 0210)
-> > > >> [    8.651044] WARNING: drivers/usb/typec/ucsi/ucsi.c:1296 at ucsi_handle_connector_change+0x380/0x414 [typec_ucsi], CPU#0:
-> > > kworker/0:0/9
-> > > >> <snip>
-> > > >> [    8.832491] Hardware name: Qualcomm Technologies, Inc. SM8550 HDK (DT)
-> > > >> [    8.839228] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-> > > >> [    8.846084] pstate: 63400005 (nZCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
-> > > >> [    8.853277] pc : ucsi_handle_connector_change+0x380/0x414 [typec_ucsi]
-> > > >> [    8.860031] lr : ucsi_handle_connector_change+0x380/0x414 [typec_ucsi]
-> > > >> <snip>
-> > > >> [    8.944023] Call trace:
-> > > >> [    8.946570]  ucsi_handle_connector_change+0x380/0x414 [typec_ucsi] (P)
-> > > >> [    8.953328]  process_one_work+0x148/0x28c
-> > > >> [    8.957502]  worker_thread+0x2c8/0x3d0
-> > > >> [    8.961401]  kthread+0x12c/0x204
-> > > >> [    8.964759]  ret_from_fork+0x10/0x20
-> > > >> [    8.968474] ---[ end trace 0000000000000000 ]---
-> > > >>
-> > > >> on:
-> > > >> 8550-hdk:
-> > > >> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253312#L1418
-> > > >> 8550-qrd:
-> > > >> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253306#L1560
-> > > >> 8650-hdk:
-> > > >> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253308#L1494
-> > > >> 8650-qrd:
-> > > >> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253309#L1594
-> > > >> x1-crd:
-> > > >> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253311#L2226
-> > > >> x1-qcp:
-> > > >> https://git.codelinaro.org/linaro/qcomlt/ci/staging/cdba-tester/-/jobs/253310#L2160
-> > > >>
-> > > >> I guess the version should be checked.
-> > > >
-> > > > Venkat, can you be prepare the fix for this?
-> > > >
-> > > > thanks,
-> > > >
-> > > 
-> > > Gentle ping, can this be fixed ? Should I send a revert patch ?
-> > > 
-> > > Neil
-> > 
-> > The Fix patch, for this warning, is ready and approved, can submit once the initial patch is merged.
-> 
-> Can't you submit the fixed patch instead? It would be much better than
-> merging the known-broken patch.
+In the __cdnsp_gadget_init() and cdnsp_gadget_exit() functions, the gadget 
+structure (pdev->gadget) was freed before its endpoints.
+The endpoints are linked via the ep_list in the gadget structure. 
+Freeing the gadget first leaves dangling pointers in the endpoint list.
+When the endpoints are subsequently freed, this results in a use-after-free.
 
-The patch is already in Greg's usb-next and he likes to keep it
-immutable.
+Fix:
+By separating the usb_del_gadget_udc() operation into distinct "del" and 
+"put" steps, cdnsp_gadget_free_endpoints() can be executed prior to the 
+final release of the gadget structure with usb_put_gadget().
 
-Venkat, please send the fix.
+A patch similar to bb9c74a5bd14("usb: dwc3: gadget: Free gadget structure 
+ only after freeing endpoints").
 
-thansks,
+Signed-off-by: Chen Yufeng <chenyufeng@iie.ac.cn>
+---
+ drivers/usb/cdns3/cdnsp-gadget.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+index 55f95f41b3b4..0252560cbc80 100644
+--- a/drivers/usb/cdns3/cdnsp-gadget.c
++++ b/drivers/usb/cdns3/cdnsp-gadget.c
+@@ -1976,7 +1976,10 @@ static int __cdnsp_gadget_init(struct cdns *cdns)
+ 	return 0;
+ 
+ del_gadget:
+-	usb_del_gadget_udc(&pdev->gadget);
++	usb_del_gadget(&pdev->gadget);
++	cdnsp_gadget_free_endpoints(pdev);
++	usb_put_gadget(&pdev->gadget);
++	goto halt_pdev;
+ free_endpoints:
+ 	cdnsp_gadget_free_endpoints(pdev);
+ halt_pdev:
+@@ -1998,8 +2001,9 @@ static void cdnsp_gadget_exit(struct cdns *cdns)
+ 	devm_free_irq(pdev->dev, cdns->dev_irq, pdev);
+ 	pm_runtime_mark_last_busy(cdns->dev);
+ 	pm_runtime_put_autosuspend(cdns->dev);
+-	usb_del_gadget_udc(&pdev->gadget);
++	usb_del_gadget(&pdev->gadget);
+ 	cdnsp_gadget_free_endpoints(pdev);
++	usb_put_gadget(&pdev->gadget);
+ 	cdnsp_mem_cleanup(pdev);
+ 	kfree(pdev);
+ 	cdns->gadget_dev = NULL;
 -- 
-heikki
+2.34.1
+
 
