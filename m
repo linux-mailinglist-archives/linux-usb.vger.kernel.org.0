@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-27585-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27586-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60640B4559C
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 13:03:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4CE9B455BF
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 13:09:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50C741C83DFA
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:04:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69E113A222B
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCDB03431F5;
-	Fri,  5 Sep 2025 11:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B0B8341AC8;
+	Fri,  5 Sep 2025 11:09:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NVvq4Cf/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="btMw55hj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290E1341677;
-	Fri,  5 Sep 2025 11:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A47296BB0;
+	Fri,  5 Sep 2025 11:09:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757070204; cv=none; b=OBvw3v/n1bZHAZ1PMwLYcwrmkm9xVTBm5tnnUZ4ZDwhafeq+zhtS+1BAIyu/KHPixYpL7piGaAwIh8cj40oFvPOj0wljk9IIIhY6dKDsKKEbV6hZYeobgeI2yB5QPxmWVraxj8k15L3/gxkZHbpVIqqG7oPpjtQZIcWghZzBsFc=
+	t=1757070582; cv=none; b=OUqnLq+1KfiH3nLjZ5dvwVQw7DB32ibNrKNWWdreKZ1Un42tiasuHGqNfG2ifdMgJaTyJNm3m9ULrsNHdX19bPvSdLe7/rNykbwIhLZsCq5d3Z1q9LywCyy9HpGMjJ3JoaQEh3RCxYydwqqXBgra/UwW1bpTz8JDmncgpLSw5Z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757070204; c=relaxed/simple;
-	bh=KN4dsiaZ268F8wno1pY0dZJf8plsMc1elk4smFEFKIw=;
+	s=arc-20240116; t=1757070582; c=relaxed/simple;
+	bh=7m/86o3yQ77TEdGSH2MiSbmes09C1SQZCM+n87rz7fg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lJYYHKW7wdxVoCuLjGALtjc4/HVTqiQDqw+WoEgickq4ocLkEOpX2ObfQ8zD7W8nWlJPG1duC0xMzJYIDOAWNYQx4V9PQShQPOIgiE2fibuurQOyS6FlQVsJUJJIsycAUUuaEnZp44vSAjmgMVC0knMBDitJ6NYQ586v9tMrE70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NVvq4Cf/; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=OoNuWo6SDAO0eQiq4dE/3eN0w2BI4lMnPQVOpJNoCf72jvK7+h81IHzoSuhR7pmGZcPQRyWvzx1R1GEtcD+IHjySMo1iCBfHhmWAdwjwcCw5PNWV5L4JsGnubNrqVPOielaQCh5qSq3KRBIc66FaBRtdBFqKVpnzm5Ctjv8Dgag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=btMw55hj; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757070202; x=1788606202;
+  t=1757070581; x=1788606581;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KN4dsiaZ268F8wno1pY0dZJf8plsMc1elk4smFEFKIw=;
-  b=NVvq4Cf/wLcHx5L3RGfDGUcNiiVibONg5QGpVx5rIIZqKpHdQauMVoyF
-   p3KfJA7EksHe/6Q4QGw0WuDKo5QH6fi+kybYR/YAhd/JP8Ka/SwSBkDwA
-   gmGJr0mSXytj5ERRLQVKQ+rtiULeQQIvXVZ+T5dhU4ssYo885dVbSJadK
-   MkyfMGuL5U0+QNULvIYACwwq9znhpmXZouI/r4mzfixJDjbJhZ/4vxhjf
-   gHt3WtZZg2ZKilGkmFGOZGbdIQZwRwo5BhabQFpx6Bn0MWa3XtXj+FqaG
-   ibk0agI2+5peWKWz7bnk1772WYk5cOoUzH1Gyr9d2A1Nj/4ipv+JQAOpJ
-   w==;
-X-CSE-ConnectionGUID: +EKZJ7OrT8ecc3A1/2cuUA==
-X-CSE-MsgGUID: +8WZ4em4RDSAtuEt9WX8gQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="62050711"
+  bh=7m/86o3yQ77TEdGSH2MiSbmes09C1SQZCM+n87rz7fg=;
+  b=btMw55hjbBZs6N/QPh47X4FjGcefjA4z+UmuZG5jcrM9XXjd9jbsgQhg
+   Z4RnK8wP1i0w8bSypqZ/FNU45tFfqXIqPyeROlII+vrOiBUIrzSU+8Ihr
+   Tj4hDO+aiuRpI+AlazFkxh32nMHnegT9D4z7o+SKCbnAHpoqS5f9wILkO
+   J46UbmxS7BUcpZpPsw7drfPk3axRm3hKsL/zv/ETEAXUUDryykI07+rc8
+   Enpu91XHMzTdWk+WMYUjM2vYXXDbhB5baCAjBXjclz4COsZMff9B7514V
+   dZpvhJ9808hJAtpS/RDB92In2lZ49Sg8FC0kPZLnZ1XlM2js2Jh8EoBwo
+   g==;
+X-CSE-ConnectionGUID: 2DmGJfxPSe6pezeaP5nM3Q==
+X-CSE-MsgGUID: 1HMOVnrDQs2fRjR+ORZejw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="58454999"
 X-IronPort-AV: E=Sophos;i="6.18,241,1751266800"; 
-   d="scan'208";a="62050711"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 04:03:21 -0700
-X-CSE-ConnectionGUID: 53kU7cAnTr6NKDSKeZLK+w==
-X-CSE-MsgGUID: P5pb7rInQZK8UjIlkKEOQQ==
+   d="scan'208";a="58454999"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 04:09:40 -0700
+X-CSE-ConnectionGUID: Q+k0m8w6TqGxOoJFGC8I5g==
+X-CSE-MsgGUID: NcHeEyL0SVK7RRDj8ZOf7g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,241,1751266800"; 
-   d="scan'208";a="176470702"
+   d="scan'208";a="202960490"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa005.fm.intel.com with SMTP; 05 Sep 2025 04:03:16 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 14:03:15 +0300
-Date: Fri, 5 Sep 2025 14:03:15 +0300
+  by orviesa002.jf.intel.com with SMTP; 05 Sep 2025 04:09:35 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 14:09:34 +0300
+Date: Fri, 5 Sep 2025 14:09:34 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Sven Peter <sven@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -75,11 +75,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
 	linux-phy@lists.infradead.org
-Subject: Re: [PATCH RFC 09/22] usb: typec: tipd: Move initial irq mask to
+Subject: Re: [PATCH RFC 10/22] usb: typec: tipd: Move switch_power_state to
  tipd_data
-Message-ID: <aLrDc-IMZkqzvnv2@kuha.fi.intel.com>
+Message-ID: <aLrE7uzHH-ZloOWS@kuha.fi.intel.com>
 References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
- <20250821-atcphy-6-17-v1-9-172beda182b8@kernel.org>
+ <20250821-atcphy-6-17-v1-10-172beda182b8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -88,97 +88,75 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250821-atcphy-6-17-v1-9-172beda182b8@kernel.org>
+In-Reply-To: <20250821-atcphy-6-17-v1-10-172beda182b8@kernel.org>
 
-On Thu, Aug 21, 2025 at 03:39:01PM +0000, Sven Peter wrote:
-> Since the irq mask was originally added more tipd variants have been
-> introduced and there's now struct tipd_data. Move the initial mask in
-> there.
+On Thu, Aug 21, 2025 at 03:39:02PM +0000, Sven Peter wrote:
+> When support for CD321x was originally added no other hardware variant
+> was supported and there was no need for struct tipd_data. Now that it
+> exists move the special case in there so that we can drop the
+> of_device_is_compatible_check entirely.
 > 
 > Signed-off-by: Sven Peter <sven@kernel.org>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tipd/core.c | 23 +++++++++++------------
->  1 file changed, 11 insertions(+), 12 deletions(-)
+>  drivers/usb/typec/tipd/core.c | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 1c80296c3b273e24ceacb3feff432c4f6e6835cc..6d8bcbc9cad8a1394e066504d4c5ca570edd4e4f 100644
+> index 6d8bcbc9cad8a1394e066504d4c5ca570edd4e4f..4815c5c462837865a5f9d37bbc139249c82c2f75 100644
 > --- a/drivers/usb/typec/tipd/core.c
 > +++ b/drivers/usb/typec/tipd/core.c
-> @@ -112,6 +112,7 @@ struct tps6598x;
->  
->  struct tipd_data {
->  	irq_handler_t irq_handler;
-> +	u64 irq_mask1;
->  	int (*register_port)(struct tps6598x *tps, struct fwnode_handle *node);
->  	void (*trace_power_status)(u16 status);
+> @@ -118,6 +118,7 @@ struct tipd_data {
 >  	void (*trace_status)(u32 status);
-> @@ -1298,7 +1299,6 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	int (*apply_patch)(struct tps6598x *tps);
+>  	int (*init)(struct tps6598x *tps);
+> +	int (*switch_power_state)(struct tps6598x *tps, u8 target_state);
+>  	int (*reset)(struct tps6598x *tps);
+>  };
+>  
+> @@ -1293,7 +1294,6 @@ tps25750_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
+>  
+>  static int tps6598x_probe(struct i2c_client *client)
+>  {
+> -	struct device_node *np = client->dev.of_node;
+>  	struct tps6598x *tps;
+>  	struct fwnode_handle *fwnode;
 >  	u32 status;
->  	u32 vid;
->  	int ret;
-> -	u64 mask1;
+> @@ -1331,18 +1331,16 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	if (i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+>  		tps->i2c_protocol = true;
 >  
->  	tps = devm_kzalloc(&client->dev, sizeof(*tps), GFP_KERNEL);
->  	if (!tps)
-> @@ -1337,16 +1337,6 @@ static int tps6598x_probe(struct i2c_client *client)
->  		if (ret)
->  			return ret;
->  
-> -		/* CD321X chips have all interrupts masked initially */
-> -		mask1 = APPLE_CD_REG_INT_POWER_STATUS_UPDATE |
-> -			APPLE_CD_REG_INT_DATA_STATUS_UPDATE |
-> -			APPLE_CD_REG_INT_PLUG_EVENT;
+> -	if (np && of_device_is_compatible(np, "apple,cd321x")) {
+> -		/* Switch CD321X chips to the correct system power state */
+> -		ret = cd321x_switch_power_state(tps, TPS_SYSTEM_POWER_STATE_S0);
+> -		if (ret)
+> -			return ret;
 > -
-> -	} else {
-> -		/* Enable power status, data status and plug event interrupts */
-> -		mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
-> -			TPS_REG_INT_DATA_STATUS_UPDATE |
-> -			TPS_REG_INT_PLUG_EVENT;
->  	}
->  
+> -	}
+> -
 >  	tps->data = i2c_get_match_data(client);
-> @@ -1364,7 +1354,7 @@ static int tps6598x_probe(struct i2c_client *client)
->  			return ret;
->  	}
+>  	if (!tps->data)
+>  		return -EINVAL;
 >  
-> -	ret = tps6598x_write64(tps, TPS_REG_INT_MASK1, mask1);
-> +	ret = tps6598x_write64(tps, TPS_REG_INT_MASK1, tps->data->irq_mask1);
->  	if (ret)
->  		goto err_reset_controller;
->  
-> @@ -1527,6 +1517,9 @@ static const struct dev_pm_ops tps6598x_pm_ops = {
->  
->  static const struct tipd_data cd321x_data = {
->  	.irq_handler = cd321x_interrupt,
-> +	.irq_mask1 = APPLE_CD_REG_INT_POWER_STATUS_UPDATE |
-> +		     APPLE_CD_REG_INT_DATA_STATUS_UPDATE |
-> +		     APPLE_CD_REG_INT_PLUG_EVENT,
->  	.register_port = tps6598x_register_port,
->  	.trace_power_status = trace_tps6598x_power_status,
+> +	if (tps->data->switch_power_state) {
+> +		ret = tps->data->switch_power_state(tps, TPS_SYSTEM_POWER_STATE_S0);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	/* Make sure the controller has application firmware running */
+>  	ret = tps6598x_check_mode(tps);
+>  	if (ret < 0)
+> @@ -1525,6 +1523,7 @@ static const struct tipd_data cd321x_data = {
 >  	.trace_status = trace_tps6598x_status,
-> @@ -1536,6 +1529,9 @@ static const struct tipd_data cd321x_data = {
+>  	.init = cd321x_init,
+>  	.reset = cd321x_reset,
+> +	.switch_power_state = cd321x_switch_power_state,
+>  };
 >  
 >  static const struct tipd_data tps6598x_data = {
->  	.irq_handler = tps6598x_interrupt,
-> +	.irq_mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
-> +		     TPS_REG_INT_DATA_STATUS_UPDATE |
-> +		     TPS_REG_INT_PLUG_EVENT,
->  	.register_port = tps6598x_register_port,
->  	.trace_power_status = trace_tps6598x_power_status,
->  	.trace_status = trace_tps6598x_status,
-> @@ -1546,6 +1542,9 @@ static const struct tipd_data tps6598x_data = {
->  
->  static const struct tipd_data tps25750_data = {
->  	.irq_handler = tps25750_interrupt,
-> +	.irq_mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
-> +		     TPS_REG_INT_DATA_STATUS_UPDATE |
-> +		     TPS_REG_INT_PLUG_EVENT,
->  	.register_port = tps25750_register_port,
->  	.trace_power_status = trace_tps25750_power_status,
->  	.trace_status = trace_tps25750_status,
 > 
 > -- 
 > 2.34.1
