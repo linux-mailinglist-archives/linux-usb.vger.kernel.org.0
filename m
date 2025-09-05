@@ -1,106 +1,204 @@
-Return-Path: <linux-usb+bounces-27607-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27608-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A7BEB46284
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 20:44:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF8DBB462DC
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 20:54:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13AEBA67DAA
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 18:44:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22CF61888CE6
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 18:55:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC92277028;
-	Fri,  5 Sep 2025 18:43:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69770281351;
+	Fri,  5 Sep 2025 18:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eYEQxSgB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VXxNLfPE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A7233987
-	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 18:43:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9C9315D5A;
+	Fri,  5 Sep 2025 18:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757097835; cv=none; b=DX7NBlcnVeQXaLPNcukkah988i6uISLXxwE/AyblFah+sKtYgBs/RfapC5LJNkHXV3+wJRTHY7CzjRWtFIf78dDcXpzt5Ukp/9qfr4nRPFglLIMJ1MtGxcO5xanGXtBzYHWIBImFeIRvlF8uAQc3po86L/ETy1e0holVLM5wyy0=
+	t=1757098234; cv=none; b=Y7WFrzEcd3wi6sofxeucHV01880dc+WsIj/VlgZNvTZyERf2Hq/9x3f1fuyp+XDNQClqDlH/fmytW28q5zkZNsOywxmdqkqcjYDoAPIkPCrKkgx7DJnPF9QfxGMsVzbeiM+JPWI6eCnenPw5d3zYsmHNK08TZ1rwkjDu6CjilRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757097835; c=relaxed/simple;
-	bh=x6tBVIhCVvljH1GPAcc34jdicPlrCzRb3SNOzWRI5IE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SP9beEek6tUuMnUdeYEOVxFryrvcdETWW3qERiVOQceuFD8of4G7LGcZDTfyEO3BoGqnpc4OHDw2xptZnSa2q5Iaoj3EuWMHJQt9K7UPbP3rx67A3qFVI41LIxdYtJPhTXH/iDVcpOOW6/+x4Fs0/f+6HVQfF1MFgGNUyeccSSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eYEQxSgB; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757097832; x=1788633832;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=x6tBVIhCVvljH1GPAcc34jdicPlrCzRb3SNOzWRI5IE=;
-  b=eYEQxSgB1vSrDJb6We3OHtzgtlLu9X66E7ezHRtb4p7HlWHr9H7YEbqZ
-   AaU1uHfWt/JprU0LDOgHpJl+znEfOY/4BaRHLBrgjut29nOCmoUYKTOnr
-   Qih1G7XUMaPPiEPhEIQo7HCfewcuJcYgZCPZC6TO/FxlkFkuAH/VZXbV7
-   5LHQtm2wjPk3wYV/Pr6I24o2v5/HxvL2cCgD27Xnowed8U76e9T6UiOp5
-   Mlv/TYBiNd0naL3wr+U6ZBXc9vGUz9bM6KkejNym6fxoeIu0u2tDlNvox
-   s//GBednY+Vk6qgrujSRGMJ/238hO1Y4eAl7dF42ukK2G5/7e2QF/zXMK
-   Q==;
-X-CSE-ConnectionGUID: 3bumvCzfTxeNXsIR37LRSg==
-X-CSE-MsgGUID: 9akdYT/VSq2LSn72zcOyJg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63283806"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="63283806"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 11:43:52 -0700
-X-CSE-ConnectionGUID: 6Ff06I6vTSWeeHFc/tG5wA==
-X-CSE-MsgGUID: q6NsEElKSpazfcptAdO0NA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,242,1751266800"; 
-   d="scan'208";a="195889461"
-Received: from clke15vm100.fm.intel.com (HELO clke15vm100.amr.corp.intel.com) ([10.80.46.92])
-  by fmviesa002.fm.intel.com with ESMTP; 05 Sep 2025 11:43:52 -0700
-From: Venkat Jayaraman <venkat.jayaraman@intel.com>
-To: linux-usb@vger.kernel.org
-Cc: gregkh@linuxfoundation.org,
-	heikki.krogerus@linux.intel.com,
-	neil.armstrong@linaro.org,
-	pse.type-c.linux@intel.com,
-	venkat.jayaraman@intel.com
-Subject: [PATCH] usb: typec: ucsi: Add check for UCSI version
-Date: Fri,  5 Sep 2025 11:44:01 -0700
-Message-ID: <20250905184401.3222530-1-venkat.jayaraman@intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1757098234; c=relaxed/simple;
+	bh=/+is5jxNJVPx7UiHsW2765/QY6JX77gNcTLZ+G6khaQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=o8eKIiejVHkWb/MAdy3XOnvryiMDElUtlxG3QGDJ4siMgi5PEIVSmI0eHFeywuhJz1ekBj7/+P/4YMYr00v7Do0CPtZx8b/WqPuhYV1Ii4T+ylvGa0iSL7O/VKvlPD+BaMZECC2jmYJOI007W8rke/cDNLLhfzIdOrp4mpc2hP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VXxNLfPE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E2AC4CEF7;
+	Fri,  5 Sep 2025 18:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757098233;
+	bh=/+is5jxNJVPx7UiHsW2765/QY6JX77gNcTLZ+G6khaQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=VXxNLfPEv0afBpCYlzaX/fYMiTb8MI/wrVUkGr8FVCnxLid4rw/W/8ci/h3BMQqiV
+	 YsiBQGRWS39TGFcERhOBvoPoMGx3oKpQMPkVI4UPF4MeJVMFKjxE7NE7FIEmu41XXY
+	 khgE0OI91T8y6Ihks5ep9rRSnhvViWmIXnlvQ0LGv6MQIcBdfQezGUez/YpgBjTBXV
+	 Nee5antpqhFZeZCKB8AWQ4phN8mZ8Vci0LhgjzQsia18H/SDdi75pdQPEN+tUYMt+2
+	 12XJ4mL9Pllk32RD1eXis9PbNZKQnrejoZCUo7+e6ELRaXQJkYddxgM9btYbnPihkn
+	 2Qr4d4kPOBnZA==
+Message-ID: <3f8e5fbc-fc33-43a2-93f2-be087f8a343e@kernel.org>
+Date: Fri, 5 Sep 2025 20:50:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] i2c: Add Intel USBIO I2C driver
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+ Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij
+ <linus.walleij@linaro.org>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20250809102326.6032-1-hansg@kernel.org>
+ <20250809102326.6032-4-hansg@kernel.org>
+ <aJmY42ugarABq0Ew@kekkonen.localdomain>
+From: Hans de Goede <hansg@kernel.org>
+Content-Language: en-US, nl
+In-Reply-To: <aJmY42ugarABq0Ew@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-"Power Reading" bit is introduced in UCSI v2.1 and so limit the
-check for that bit only if version supported is 2.1 or above.
+Hi,
 
-Fixes: c851b71fd6cd ("usb: typec: ucsi: Add support for READ_POWER_LEVEL command")
-Signed-off-by: Venkat Jayaraman <venkat.jayaraman@intel.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 11-Aug-25 9:16 AM, Sakari Ailus wrote:
+> Hi Hans, Israel,
+> 
+> My comments on newlines and parentheses apply to this one, too; I'm not
+> making new ones in similar locations on that subject anymore for this
+> patch.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 0d6b0cf5a7cd..3f568f790f39 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1293,7 +1293,8 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 	if (change & UCSI_CONSTAT_BC_CHANGE)
- 		ucsi_port_psy_changed(con);
- 
--	if (UCSI_CONSTAT(con, PWR_READING_READY_V2_1)) {
-+	if (con->ucsi->version >= UCSI_VERSION_2_1 &&
-+	    UCSI_CONSTAT(con, PWR_READING_READY_V2_1)) {
- 		curr_scale = UCSI_CONSTAT(con, CURRENT_SCALE_V2_1);
- 		volt_scale = UCSI_CONSTAT(con, VOLTAGE_SCALE_V2_1);
- 
--- 
-2.43.0
+Ack I've added the necessary new-line changes,
+thank you for the review.
+
+> On Sat, Aug 09, 2025 at 12:23:26PM +0200, Hans de Goede wrote:
+>> From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+>>
+>> Add a a driver for the I2C auxbus child device of the Intel USBIO USB
+>> IO-expander used by the MIPI cameras on various new (Meteor Lake and
+>> later) Intel laptops.
+>>
+>> Co-developed-by: Hans de Goede <hansg@kernel.org>
+>> Signed-off-by: Hans de Goede <hansg@kernel.org>
+>> Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+
+...
+
+>> diff --git a/drivers/i2c/busses/i2c-usbio.c b/drivers/i2c/busses/i2c-usbio.c
+>> new file mode 100644
+>> index 000000000000..82c4769852f8
+>> --- /dev/null
+>> +++ b/drivers/i2c/busses/i2c-usbio.c
+>> @@ -0,0 +1,344 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2025 Intel Corporation.
+>> + * Copyright (c) 2025 Red Hat, Inc.
+>> + */
+>> +
+>> +#include <linux/auxiliary_bus.h>
+>> +#include <linux/dev_printk.h>
+>> +#include <linux/device.h>
+>> +#include <linux/i2c.h>
+>> +#include <linux/types.h>
+>> +#include <linux/usb/usbio.h>
+>> +
+>> +#define I2C_RW_OVERHEAD (sizeof(struct usbio_bulk_packet) + sizeof(struct usbio_i2c_rw))
+>> +
+>> +struct usbio_i2c {
+>> +	u32 speed;
+> 
+> You could declare this with the smaller fields for better struct packing.
+
+Ack, fixed for v2.
+
+>> +	struct i2c_adapter adap;
+>> +	struct auxiliary_device *adev;
+>> +	struct usbio_i2c_rw *rwbuf;
+>> +	bool init_supports_ack_flag;
+>> +	u16 txbuf_len;
+>> +	u16 rxbuf_len;
+>> +};
+
+...
+
+>> +static void usbio_i2c_uninit(struct i2c_adapter *adap, struct i2c_msg *msg)
+>> +{
+>> +	struct usbio_i2c *i2c = i2c_get_adapdata(adap);
+>> +	struct usbio_i2c_uninit ubuf;
+>> +
+>> +	ubuf.busid = i2c->adev->id;
+>> +	ubuf.config = msg->addr;
+> 
+> You can initialise this in declaration.
+
+With the changes to use __le16 and _le32 for multi-byte words
+which Greg rightfully asked for this now looks like this:
+
+        ubuf.busid = i2c->adev->id;
+        ubuf.config = cpu_to_le16(msg->addr);
+
+having a function call in a struct initializer looks weird / wrong,
+so I'm going to keep these one as well as the other places as-is.
+
+Also in the usbio_i2c_read() / write() cases the struct may
+get re-initialized several times if needing to split the
+i2c-transfer into multiple bulk transfers.
+
+Using struct initilization for the first one in that case
+feels rather inconsistent.
+
+...
+
+>> +static int usbio_i2c_probe(struct auxiliary_device *adev,
+>> +		const struct auxiliary_device_id *adev_id)
+>> +{
+>> +	struct usbio_i2c_bus_desc *i2c_desc;
+>> +	struct device *dev = &adev->dev;
+>> +	u8 dummy_read_buf;
+>> +	struct i2c_msg dummy_read = {
+>> +		.addr = 0x08,
+>> +		.flags = I2C_M_RD,
+>> +		.len = 1,
+>> +		.buf = &dummy_read_buf,
+>> +	};
+>> +	struct usbio_i2c *i2c;
+>> +	u32 max_speed;
+>> +	int ret;
+>> +
+>> +	i2c_desc = dev_get_platdata(dev);
+>> +	if (!i2c_desc)
+>> +		return -EINVAL;
+>> +
+>> +	/* Some USBIO chips have caps set to 0, but all chips can do 400KHz */
+>> +	if (!i2c_desc->caps)
+>> +		max_speed = I2C_MAX_FAST_MODE_FREQ;
+>> +	else
+>> +		max_speed = usbio_i2c_speeds[i2c_desc->caps & USBIO_I2C_BUS_MODE_CAP_MASK];
+>> +
+>> +	i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
+>> +	if (!i2c)
+>> +		return -ENOMEM;
+> 
+> Same comment on devm memory allocation than on the GPIO driver: I think you
+> need to use the release callback of struct device here.
+
+We unregister the adapter in remove() after that no callbacks into
+the driver can be made, so using devm() managed memory here is fine.
+
+Regards,
+
+Hans
+
 
 
