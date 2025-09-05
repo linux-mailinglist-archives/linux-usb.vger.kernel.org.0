@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-27579-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27580-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDC4AB453DC
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:58:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2542B453E7
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:59:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99063A4637D
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 09:58:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 962995A226A
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 09:59:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322C2298CBE;
-	Fri,  5 Sep 2025 09:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BBBC299954;
+	Fri,  5 Sep 2025 09:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="db5PG2Gf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QTKzlnep"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 252BE1D555;
-	Fri,  5 Sep 2025 09:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5650D29992B;
+	Fri,  5 Sep 2025 09:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757066303; cv=none; b=iSU6/oYPxGTUXgM7X7c0gIVC1kwXwdw9pbRX44AI6sALr405CrjzHFHVgVmsHjolp7YMzFTidt3o6TWt7qh9/lzeX/S7Rcc2chVbizy6nzPGtZCi/Y7dim+NMi3s5RtSSjd1GLGNjGFvI7NRZ2b0d2/KPVxDqXfnFAKoNPTL5/I=
+	t=1757066355; cv=none; b=ACyixzgR/I/RWhZLIQy8T/PruhQbMoMnR7TNw2Swx7cHtzNFa3vzJKKdszpqvdsxHONjlM4A/s2HwN8hC4Eoy9bsxdCAigmwYycZiiwwtJzbtnI8SChXxY7NTxI74qa+ATtubokFLM40KSnKKZx/WriJWOiQy2NU2pqwprG/vFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757066303; c=relaxed/simple;
-	bh=fH/fH9IlI4y4iyWIl9EmyomPqVs0ZCb7wQlHJg8l0wE=;
+	s=arc-20240116; t=1757066355; c=relaxed/simple;
+	bh=Oc5oxzPko0VSO8pZR2WCr8boFGP/lzIgTp951BTp44A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jo5d1GK00WnoTk8UsmTE/M5EGJb3YpRbHRC/T1Y9zjhmo3wUPQTfdXD9Ejn0Dj9NEDUAEPDcMKpksl/784YiRr9hq5pVJQhIT5HoLVDnqfDMLHGfAaAMJejp7yEXfiCIxdZLT9Fs8jxqf6FzZbig30xD7Yy+obDxqRps8X/QRKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=db5PG2Gf; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=sSkVM0ckp+qqELDw2D+cyfa3N8Ay7tBt2babIzSTw+Xdzv/M4ywpwpem2iys7WnnRDwt0eTLziARHN5zm04oeAmJ7FBDzNPhGaFLSdag1GekVOCH/lJs6UP6GenUF6S4XpIwe5Dc84ZjwALR3WakW25TTTtVmSFRMfWx9gVK3+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QTKzlnep; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757066302; x=1788602302;
+  t=1757066353; x=1788602353;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=fH/fH9IlI4y4iyWIl9EmyomPqVs0ZCb7wQlHJg8l0wE=;
-  b=db5PG2GfI28nnHosiqzbBN03rtLe6M42XT5kDhu3n/FKiZrA5ZaBgY/r
-   TtJMW4ERo5hCfwHMh29uArmivTgE/z5g5jdsOf5+pSVY7zeNFkQ0Oa0W/
-   3cQ7f+fyAdGTTeIUF7m/ayTAG7EgQEJ+7gZCFqiqJjolGlX0fQLVZlqS+
-   sNrYUSpxpEA54yWS/ytraoZyUIrQv8CeSxA78epdwrdkfo+WHcqVYWIlf
-   2wGhPeAape9f2FncujvMQxPXqFseVQ0/ihSIHS5FGCpt3tP+gf74nXdJt
-   SKH+k/pBOIuRYfC4k7v95p5aFePLzLtBUu3yaQuABrK3S1vx0EdJQMGtj
-   g==;
-X-CSE-ConnectionGUID: ewbEAwIOTEeQ6dFu4Nqwcw==
-X-CSE-MsgGUID: bAn+OmcySuuw4uZO+2R0Xw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="58450173"
-X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="58450173"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 02:58:21 -0700
-X-CSE-ConnectionGUID: z3iBlKTRSkixb0iLo9lHyw==
-X-CSE-MsgGUID: cxdbLLL0T9quPQjZfy/Yfw==
+  bh=Oc5oxzPko0VSO8pZR2WCr8boFGP/lzIgTp951BTp44A=;
+  b=QTKzlnepQ2ohWBFQIhnSkDkZ02qVJ/a5+zEVCKLfQJQmFLIkMcAvLmHg
+   rTq3beDwZfHGX7p7yFoxi4c1wnXpGS00UqsjBqET07GnRpbC5KBZM5eNI
+   JY62HwW8AAqg6pIodoYv/0tXcmGl2pAunl9QnKKDmxDxBy8lGAh4Jxori
+   t6ciZBMb+G5vb1iArCJmoZQb7wscLUVKEkKM+HGc0izKYgAPdjmvD3jQK
+   Ez3U+gShsz7Ca1CUyaXaF6d0Zi2WC1SRIhP4sym+DfKkCAf3nVl6mYwFA
+   jjRkcAzgP2hPgDe+Nx+8sE0bO1836d3fgSBeFoXrAaxF/MPN07nIyNnsa
+   Q==;
+X-CSE-ConnectionGUID: LeKcOVZyTjCMxVyZj7kGpg==
+X-CSE-MsgGUID: hJq3fttFR5CB/Sml/aK2GQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="59368734"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="59368734"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 02:59:13 -0700
+X-CSE-ConnectionGUID: tob/WFwEQ562+GvuXs11xg==
+X-CSE-MsgGUID: Q0cV4h2pQJKjymxh1k3+jg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="172012263"
+   d="scan'208";a="177344958"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa007.jf.intel.com with SMTP; 05 Sep 2025 02:58:17 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 12:58:16 +0300
-Date: Fri, 5 Sep 2025 12:58:16 +0300
+  by fmviesa004.fm.intel.com with SMTP; 05 Sep 2025 02:59:09 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 12:59:07 +0300
+Date: Fri, 5 Sep 2025 12:59:07 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Andrei Kuchynski <akuchynski@chromium.org>
 Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
@@ -73,11 +73,10 @@ Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
 	"Christian A. Ehrhardt" <lk@c--e.de>,
 	Venkat Jayaraman <venkat.jayaraman@intel.com>,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] platform/chrome: cros_ec_typec: Set
- alt_mode_override flag
-Message-ID: <aLq0OD_7lIP6B-eJ@kuha.fi.intel.com>
+Subject: Re: [PATCH v2 3/5] usb: typec: ucsi: Set alt_mode_override flag
+Message-ID: <aLq0a4fPzeWKzaxk@kuha.fi.intel.com>
 References: <20250825145750.58820-1-akuchynski@chromium.org>
- <20250825145750.58820-3-akuchynski@chromium.org>
+ <20250825145750.58820-4-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,36 +85,31 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250825145750.58820-3-akuchynski@chromium.org>
+In-Reply-To: <20250825145750.58820-4-akuchynski@chromium.org>
 
-On Mon, Aug 25, 2025 at 02:57:47PM +0000, Andrei Kuchynski wrote:
-> This flag specifies that the Embedded Controller (EC) must receive explicit
-> approval from the Application Processor (AP) before initiating Type-C
-> alternate modes or USB4 mode.
+On Mon, Aug 25, 2025 at 02:57:48PM +0000, Andrei Kuchynski wrote:
+> This flag indicates that the PPM allows the OPM to change the currently
+> negotiated alternate mode using the SET_NEW_CAM command.
 > 
 > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
 > ---
->  drivers/platform/chrome/cros_ec_typec.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/usb/typec/ucsi/ucsi.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> index b712bcff6fb2..c0806c562bb9 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -491,6 +491,7 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 0d6b0cf5a7cd..85a6b7fc6d93 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1632,6 +1632,8 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
 >  
->  		cap->driver_data = cros_port;
->  		cap->ops = &cros_typec_usb_mode_ops;
-> +		cap->no_mode_control = !typec->ap_driven_altmode;
->  
->  		cros_port->port = typec_register_port(dev, cap);
->  		if (IS_ERR(cros_port->port)) {
-> -- 
-> 2.51.0.rc2.233.g662b1ed5c5-goog
-> 
+>  	cap->driver_data = con;
+>  	cap->ops = &ucsi_ops;
+> +	cap->no_mode_control =
+> +		!(con->ucsi->cap.features & UCSI_CAP_ALT_MODE_OVERRIDE);
+
+Fits to one.
+
+thanks,
 
 -- 
 heikki
