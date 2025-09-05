@@ -1,85 +1,84 @@
-Return-Path: <linux-usb+bounces-27596-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27597-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C216B457B5
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 14:25:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E60A1B45800
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 14:41:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A06B3AC986
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 12:23:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8546165646
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 12:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB9C2D8DCE;
-	Fri,  5 Sep 2025 12:22:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCAD934AB07;
+	Fri,  5 Sep 2025 12:41:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZcDZfvg9"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RsdeZiHP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65CD34DCDD
-	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 12:22:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07B02747B
+	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 12:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757074976; cv=none; b=Yi7ubx2YysUhvmxiDH7lCGQ0jDaDNmFotVg5qLuTmlBa4lRYQRTSXXgBLySm0hUxXOsOf+R6DW/jfXoZZpyz8gh1vHJ7hWq5YT5J7wIj+ipy9EMxLn5Ixc3A0Ua12DIgaY1kyyCfCncVGgd4xqGXoxQXnAcEzs/0AKHZNEFf5hc=
+	t=1757076075; cv=none; b=ESY6gDoRXqZke3DhkeSr37I0FZzvCTrrY79zXtYD3kBiyVAUk9C6EiuPGz8aBMdblzNIMEM0M/bZumV/+vwaSuRZBfUPXBEBgB+t4QK52XfiH+dJLRFuWfTKJ4OCarP4IugBJACTglDw8tNzNhTFriQCnfdNqwtyzngR/cVZ3Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757074976; c=relaxed/simple;
-	bh=f88gDGGRbMwX7i/jLItg/xSlOYP4VRiz0z3DVlv7lp8=;
+	s=arc-20240116; t=1757076075; c=relaxed/simple;
+	bh=oBXHKrWN/b8xEphfOBxvMXuoVFvsOyyVX+52kY7ZBjE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=InnoDoIf2GeQrBM+dAS1k/chQyyCaGsT3NKtrcm0ImeVJsFnQv3hMD/qhTm9iKqiidbk7o/DE5VjPJaKu70thyFv+nIRdDspl1Wp/o9LULBMVURFrNPYiLRPL0GfDEYFrChpt10ILDEOk/i87ZmqaAYupCWOad5feHZ1PwPH7/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ZcDZfvg9; arc=none smtp.client-ip=209.85.216.41
+	 To:Cc:Content-Type; b=VETTu5rbJr4wR9EBflf2RNhaRqGIRDfmNy+T+Db+iMjefhMmSE4mW2SK6i0yBM7WApfN0ZETlHC582sbjb5KgFWLw6SWAoaOTtaTLQtQDCWK+h8p6Ii+RGxt//8mJgN9o0V5yDVIeKP8L2zHHonFXwlOR0fRvYoLkkv6QZ9eUBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=RsdeZiHP; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-32b02d88d80so1829111a91.0
-        for <linux-usb@vger.kernel.org>; Fri, 05 Sep 2025 05:22:53 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-323266d6f57so2328777a91.0
+        for <linux-usb@vger.kernel.org>; Fri, 05 Sep 2025 05:41:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1757074973; x=1757679773; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1757076073; x=1757680873; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T6lxWl4V7y/wDq+LroI79aYAazd8UwfuBLrDZ9Wkh6o=;
-        b=ZcDZfvg9I2bRfVaxkaMhG0zdzk0xKSkjiJDrY9+xoL0FwGP4vDoF8q8F59cypTym0i
-         ysBQ8mUX94CVFz0toM4fmacAXH5A9p/ooUS7WjY+2OwljbDt/oaZM8hU+sa/vZXjwBQq
-         ngfpTcmIhdOG9jOuljJC2aB9o1bgRyOeJ3w+8=
+        bh=CDIiR34iXezMR7BHEFFCv6iSUlhvz1mav6TCgrGlsTQ=;
+        b=RsdeZiHPpHq0LgG1fPIuYRZOQ1TgGLw+legfSIYFUisEzOVuZOyPPmpViTDn16AGqj
+         aOfr57mpsU6y5hKF2L0XSqFBPVU0+LtzeL5MUaYeLDiQUCVIqpm1fgTRZtactURtMHVx
+         0HqxcUqhCl7w0PUv687i96Abswp1MapFMgGAQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757074973; x=1757679773;
+        d=1e100.net; s=20230601; t=1757076073; x=1757680873;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=T6lxWl4V7y/wDq+LroI79aYAazd8UwfuBLrDZ9Wkh6o=;
-        b=L/S7Jc40yYxKNEnGhrpzEJQvcCHvE0npfg7ZEe16bfNLedHVnb6p99aihoRFedAJ7I
-         VhwrTWLmSssFXnEWlLbhd0xW0SFiHyfK4dLKVl32HJTy+yNEtkFbDSYX0BSCzql55brC
-         lFFVxVAIfZ+5sW278KQXf7uFPLd0oMHYUbWfhy72ZsSsQmCaKZWv5oNgsiiv3qvzqbbs
-         eyDWfqfknqAnnjhGX3maAsyQM+oSIwB+NWKZq4hUJAgfrhbTWNMrVhhagKcoqn/2CdwI
-         5c2qaijnV5LZCCCYmLYR5JpSexRwCJ9Rqp5pBoOhwG3nZAy9LLwZ6Izdr49u00ywNPW5
-         sdqg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZWSz8coS7Yfcc1x28s7bseGq9Y2kpN6JfduQFeMrsTfVyAt03M3129AeXbzAbWt6KJmEu69BzZJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0vcMlWC9gsrRb9P7Nq4EN5UIbiz97opymSpy83qAxianPFhOs
-	w70Vyh1LdiPqOIq0BXaQgkF/TahXMSYkkYlYkfEPztB4tgiRsIgom1FD+xFyZkXp/fLMJkGPWe3
-	LdyzBUttkv5Ww1SU2P49YEcIq/xHzAzEdLqBZbYGG6s6VwcmuNauy9A==
-X-Gm-Gg: ASbGncvAip2+5p13sYxMxfpJA/nQ6uRrlgulfdb8xHhwwKwncJzNcKyQSfi9c7/sWub
-	ZHFJd3bD8n4EQqXonLs/zE+LEWqcxKIeA3pLun9btKnpLgkatn7MMAdQfW2jOaqYMkbyudvya98
-	CRlSOgurHaMw4ENGW9+ZNH2xHKuw1sgUU6GQH7nEv7Xw7Hg/GXN4kOyXD1ly4AfDEdw1tOTx4ks
-	zVcV/XNwWBJAv51EiUQjQIysGr6VLBCezDidlWP0aK6
-X-Google-Smtp-Source: AGHT+IGUt0+NPYxAOfpcTKsdIZgMD/2aTOnjQauBXAsedoGoDooyWb+qeKpbfOZSEHR/boIOsnXxSpzklV+PIcXMqPQ=
-X-Received: by 2002:a17:90b:3f8f:b0:32b:be39:7804 with SMTP id
- 98e67ed59e1d1-32bbe3978aemr3553401a91.8.1757074973067; Fri, 05 Sep 2025
- 05:22:53 -0700 (PDT)
+        bh=CDIiR34iXezMR7BHEFFCv6iSUlhvz1mav6TCgrGlsTQ=;
+        b=tBji88yvS/7xnAv99+BuXHMWGlszey6FxisCCx306h5JvdDUjybRCvUcykES7gGOXK
+         U5ZK27dDxkVFtu+EpLLwO8h4+8IaUTinipCBBPfb9eLwExSVkL4Cm36socQxmppU0iAf
+         BIhB64cPa4mqHL5UQXMxIvpT+pVmfavZK0yPh7uX4i4QLv8/TqC0Hsef4E+NdZedBVz2
+         oJnrzWXcX6daupvtCZAI7mVoA/UBXSDYiudp+B/4N51WdTmMs7kH2zkg/2bZXakUgoqK
+         oGzYgMmns8o40tOmrH+xtVjK88rrdYbAHVAAehYOCRmVkwifQOIRjhFcKM7o4ZXfSyUO
+         PzgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVEOVfWqje9Dy0vrpAf59X9aDX2ujlMvyXC5VrutT372WmH5Y4dukZaKj71iBf2j5avne6s4a3kBkg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN+9M5taznnDIha1qKVP3FY2zEkrnEW5Z/l5hBFDbjyMpOUmn8
+	pn8fdwHiRs1G3mX+WbUWO43babWODurzJQ3LmSZVi5BGDuMqEQhG7DC65jbDfSGQe2/SASAyPHB
+	oq/baQcMp5AhVMvLEU5B36SilFLipSnfGncGiacbN
+X-Gm-Gg: ASbGncs/fltzq/hhKEj5hiQoESaeOx1qH+Mxebb9zw4DU6wXBq7egrNUHYKaATrQnnP
+	NLnzcp6fzd1xd2gBGkK8iNw906HgFtNsf458UpJgYyMBwmYbDv+vQ0Xv5CFCunX8ib609UtgV9x
+	f+YXSjn6LUlHDNmPmGppwENJ8upa9cCPWbcDyAZl01hYFjWDlszAY6KrPbYikoQjKukPlVnEXmI
+	FiQ3uYJqQg6h/eQuX5u0jYbhmPnl6Hm8w==
+X-Google-Smtp-Source: AGHT+IE1e9GdET1HkJdnTcqNZ6pmew3/GoNUVVNslDsopYdaiOZRiWcX4ix6U/VN/o6VHJOiC5A+QLarYg2TUdmWIjE=
+X-Received: by 2002:a17:90b:3d48:b0:32b:70a7:16da with SMTP id
+ 98e67ed59e1d1-32b70a71b2fmr11961610a91.20.1757076073274; Fri, 05 Sep 2025
+ 05:41:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250825145750.58820-1-akuchynski@chromium.org>
- <20250825145750.58820-6-akuchynski@chromium.org> <aLq8tUogl67VptRC@kuha.fi.intel.com>
-In-Reply-To: <aLq8tUogl67VptRC@kuha.fi.intel.com>
+References: <20250825145750.58820-1-akuchynski@chromium.org> <aLrQKurGZkbCkjlw@kuha.fi.intel.com>
+In-Reply-To: <aLrQKurGZkbCkjlw@kuha.fi.intel.com>
 From: Andrei Kuchynski <akuchynski@chromium.org>
-Date: Fri, 5 Sep 2025 14:22:39 +0200
-X-Gm-Features: Ac12FXyeappBWW9ObA85nA1cNYhj4olXtKb4gTth6JkKRBs9zpklMmd4xbjPsrc
-Message-ID: <CAMMMRMf1g+EwYfRmygCYiJGJd_XEeHrt-jrQaqKk1_SPyoRhXg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] usb: typec: Expose alternate mode priority via sysfs
+Date: Fri, 5 Sep 2025 14:41:01 +0200
+X-Gm-Features: Ac12FXyxvfhy8ARaoEcCu19f2V-MoHQ9ApY5WO6r6Z4u1iuoDkWCmEuJxuSbxjQ
+Message-ID: <CAMMMRMcYiB8Sb5sjjdH_TcX8b2kGZFcM=r8L_txpZtyBGZt4Gg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] USB Type-C alternate mode priorities
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
 	Jameson Thies <jthies@google.com>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
@@ -90,36 +89,60 @@ Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@c
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 5, 2025 at 12:34=E2=80=AFPM Heikki Krogerus
+On Fri, Sep 5, 2025 at 1:57=E2=80=AFPM Heikki Krogerus
 <heikki.krogerus@linux.intel.com> wrote:
 >
-> On Mon, Aug 25, 2025 at 02:57:50PM +0000, Andrei Kuchynski wrote:
-> > This patch introduces a priority sysfs attribute to the USB Type-C
-> > alternate mode port interface. This new attribute allows user-space to
-> > configure the numeric priority of alternate modes managing their prefer=
-red
-> > order of operation.
+> Hi Andrei,
+>
+> On Mon, Aug 25, 2025 at 02:57:45PM +0000, Andrei Kuchynski wrote:
+> > This patch series introduces a mechanism for setting USB Type-C alterna=
+te
+> > mode priorities. It allows the user to specify their preferred order fo=
+r
+> > mode selection, such as USB4, Thunderbolt, or DisplayPort.
 > >
-> > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> > ---
-> >  Documentation/ABI/testing/sysfs-class-typec | 11 +++++++
-> >  drivers/usb/typec/class.c                   | 32 ++++++++++++++++++++-
+> > A new sysfs attribute named 'priority' is exposed to provide user-space
+> > control over the mode selection process.
+> >
+> > This series was tested on a Android OS device running kernel 6.16.
+> >
+> > Changes in v2:
+> > - The priority variable is now a member of the typec_altmode struct
+> > - typec_altmode2port is used to obtain the typec_port struct pointer
+> > - Default priorities are now set based on the order of registration
+> > - The mode_control capability is enabled by default
+> > - The mode_selection_state struct will be introduced in a separate seri=
+es
+> > - svid will be used instead of the typec_mode_type enum
+> >
+> > Andrei Kuchynski (5):
+> >   usb: typec: Add alt_mode_override field to port property
+> >   platform/chrome: cros_ec_typec: Set alt_mode_override flag
+> >   usb: typec: ucsi: Set alt_mode_override flag
+> >   usb: typec: Implement alternate mode priority handling
+> >   usb: typec: Expose alternate mode priority via sysfs
 >
-> Maybe patch 4/5 could be squashed into this patch, and I'm wondering
-> would it make sense to just keep the typec_mode_set_priority() in this
-> file (drivers/usb/typec/class.c).
+> I'm sorry for keeping you waiting. I think these are okay - although,
+> I had to put a few nitpicks :) but they are minor - but can you
+> include a patch where you use the priority member in a driver (maybe
+> cros_ec_typec.c)?
 >
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> thanks,
 >
 > --
 > heikki
 
-You're right, mode_selection.c is quite empty now. However, in the next
-series, it will be the only user of the priority variable. So I'd prefer to
-keep it there, if you don=E2=80=99t mind.
-I think putting it in class.c would create a mess.
+Thank you for your review and feedback! I appreciate you taking the time to
+provide these notes.
 
-Thank you for the review!
+The patch using the priority member is part of a subsequent series that I
+have ready. I will send it shortly. This functionality is implemented in
+mode_selection.c to determine the mode order, and we plan to use it for
+both the cros_ec_typec and UCSI implementations.
 
+I will send a new v3 patch set shortly with the minor changes you suggested=
+.
+
+Thanks!
 Andrei
 
