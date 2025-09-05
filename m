@@ -1,148 +1,170 @@
-Return-Path: <linux-usb+bounces-27597-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27598-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E60A1B45800
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 14:41:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C1FAB45933
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 15:36:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8546165646
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 12:41:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43F2CA60CFD
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 13:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCAD934AB07;
-	Fri,  5 Sep 2025 12:41:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 277B4353341;
+	Fri,  5 Sep 2025 13:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RsdeZiHP"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1u/3mWPG";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="A+tXZiTT";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1u/3mWPG";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="A+tXZiTT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07B02747B
-	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 12:41:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B593D352FF9
+	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 13:32:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757076075; cv=none; b=ESY6gDoRXqZke3DhkeSr37I0FZzvCTrrY79zXtYD3kBiyVAUk9C6EiuPGz8aBMdblzNIMEM0M/bZumV/+vwaSuRZBfUPXBEBgB+t4QK52XfiH+dJLRFuWfTKJ4OCarP4IugBJACTglDw8tNzNhTFriQCnfdNqwtyzngR/cVZ3Mo=
+	t=1757079168; cv=none; b=m0lRStb5Vn6lyqOymX1CnbOFJrZ2L9nhDa8THw80Q49WXzaV6oYIxOOh6X4ocYK86DEHoMeaw2iYI5zAIbqgTWxQP4Y+In3vSfSsld0GGvFXdpORlp1Zsmd3w1+wqVmijbBMGBk8zTxa9/QlonQl7Z7SWlxehrowlGKJ3cROm2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757076075; c=relaxed/simple;
-	bh=oBXHKrWN/b8xEphfOBxvMXuoVFvsOyyVX+52kY7ZBjE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VETTu5rbJr4wR9EBflf2RNhaRqGIRDfmNy+T+Db+iMjefhMmSE4mW2SK6i0yBM7WApfN0ZETlHC582sbjb5KgFWLw6SWAoaOTtaTLQtQDCWK+h8p6Ii+RGxt//8mJgN9o0V5yDVIeKP8L2zHHonFXwlOR0fRvYoLkkv6QZ9eUBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=RsdeZiHP; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-323266d6f57so2328777a91.0
-        for <linux-usb@vger.kernel.org>; Fri, 05 Sep 2025 05:41:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1757076073; x=1757680873; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CDIiR34iXezMR7BHEFFCv6iSUlhvz1mav6TCgrGlsTQ=;
-        b=RsdeZiHPpHq0LgG1fPIuYRZOQ1TgGLw+legfSIYFUisEzOVuZOyPPmpViTDn16AGqj
-         aOfr57mpsU6y5hKF2L0XSqFBPVU0+LtzeL5MUaYeLDiQUCVIqpm1fgTRZtactURtMHVx
-         0HqxcUqhCl7w0PUv687i96Abswp1MapFMgGAQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757076073; x=1757680873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CDIiR34iXezMR7BHEFFCv6iSUlhvz1mav6TCgrGlsTQ=;
-        b=tBji88yvS/7xnAv99+BuXHMWGlszey6FxisCCx306h5JvdDUjybRCvUcykES7gGOXK
-         U5ZK27dDxkVFtu+EpLLwO8h4+8IaUTinipCBBPfb9eLwExSVkL4Cm36socQxmppU0iAf
-         BIhB64cPa4mqHL5UQXMxIvpT+pVmfavZK0yPh7uX4i4QLv8/TqC0Hsef4E+NdZedBVz2
-         oJnrzWXcX6daupvtCZAI7mVoA/UBXSDYiudp+B/4N51WdTmMs7kH2zkg/2bZXakUgoqK
-         oGzYgMmns8o40tOmrH+xtVjK88rrdYbAHVAAehYOCRmVkwifQOIRjhFcKM7o4ZXfSyUO
-         PzgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEOVfWqje9Dy0vrpAf59X9aDX2ujlMvyXC5VrutT372WmH5Y4dukZaKj71iBf2j5avne6s4a3kBkg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzN+9M5taznnDIha1qKVP3FY2zEkrnEW5Z/l5hBFDbjyMpOUmn8
-	pn8fdwHiRs1G3mX+WbUWO43babWODurzJQ3LmSZVi5BGDuMqEQhG7DC65jbDfSGQe2/SASAyPHB
-	oq/baQcMp5AhVMvLEU5B36SilFLipSnfGncGiacbN
-X-Gm-Gg: ASbGncs/fltzq/hhKEj5hiQoESaeOx1qH+Mxebb9zw4DU6wXBq7egrNUHYKaATrQnnP
-	NLnzcp6fzd1xd2gBGkK8iNw906HgFtNsf458UpJgYyMBwmYbDv+vQ0Xv5CFCunX8ib609UtgV9x
-	f+YXSjn6LUlHDNmPmGppwENJ8upa9cCPWbcDyAZl01hYFjWDlszAY6KrPbYikoQjKukPlVnEXmI
-	FiQ3uYJqQg6h/eQuX5u0jYbhmPnl6Hm8w==
-X-Google-Smtp-Source: AGHT+IE1e9GdET1HkJdnTcqNZ6pmew3/GoNUVVNslDsopYdaiOZRiWcX4ix6U/VN/o6VHJOiC5A+QLarYg2TUdmWIjE=
-X-Received: by 2002:a17:90b:3d48:b0:32b:70a7:16da with SMTP id
- 98e67ed59e1d1-32b70a71b2fmr11961610a91.20.1757076073274; Fri, 05 Sep 2025
- 05:41:13 -0700 (PDT)
+	s=arc-20240116; t=1757079168; c=relaxed/simple;
+	bh=GtEJWrEres7rwBd187ORd43g7mXHoj113YAAzRhrZ6o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YzDUIplb/5stOyhjnq28LAkfPw/RHHrYyCJY2qXINI1XdOR4jKX91k1R1o24aAlCfY4w+bxpV1LoBGCb1Z0w8AIBC5e607VVLj/98mSqZpIHrvBFAHSzgle7uW51XeSNRGgbQd5jTi6j0SMdBKOYxhuBfwvBqaXE2BCDNu9jbWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1u/3mWPG; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=A+tXZiTT; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1u/3mWPG; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=A+tXZiTT; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id A6CB355CE;
+	Fri,  5 Sep 2025 13:32:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1757079164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=xaEQOXHnj5AQbKgdBzSltCb7gf/7Q/irpuQGgAGye2I=;
+	b=1u/3mWPG+EObXouIIIQDBwTgbqLW+Jbg4IgyqK7YeVtGItiE8rw9BPTkRpxA7y2wP9C14+
+	0r3mACK4Czq1EcBKWZ9QBVFTY5JfHo8V44hlvHumZLP6JX/yYnZqdcD801wyyVF7q1UIom
+	IFyAfz8Fu/i7NUBumj5xuN8jzNM8BMU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1757079164;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=xaEQOXHnj5AQbKgdBzSltCb7gf/7Q/irpuQGgAGye2I=;
+	b=A+tXZiTT7pSs+iSkahqm7dN83kqEx8kkSowrNmB3mwElQtV6ipgJO0P0rhnFho3cliiHOy
+	xM/JCMem0Y4lTkAg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1757079164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=xaEQOXHnj5AQbKgdBzSltCb7gf/7Q/irpuQGgAGye2I=;
+	b=1u/3mWPG+EObXouIIIQDBwTgbqLW+Jbg4IgyqK7YeVtGItiE8rw9BPTkRpxA7y2wP9C14+
+	0r3mACK4Czq1EcBKWZ9QBVFTY5JfHo8V44hlvHumZLP6JX/yYnZqdcD801wyyVF7q1UIom
+	IFyAfz8Fu/i7NUBumj5xuN8jzNM8BMU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1757079164;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=xaEQOXHnj5AQbKgdBzSltCb7gf/7Q/irpuQGgAGye2I=;
+	b=A+tXZiTT7pSs+iSkahqm7dN83kqEx8kkSowrNmB3mwElQtV6ipgJO0P0rhnFho3cliiHOy
+	xM/JCMem0Y4lTkAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 812AE13306;
+	Fri,  5 Sep 2025 13:32:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id gawlHnzmumg5dgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 05 Sep 2025 13:32:44 +0000
+From: Takashi Iwai <tiwai@suse.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: midi2: Fix MIDI2 IN EP max packet size
+Date: Fri,  5 Sep 2025 15:32:34 +0200
+Message-ID: <20250905133240.20966-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250825145750.58820-1-akuchynski@chromium.org> <aLrQKurGZkbCkjlw@kuha.fi.intel.com>
-In-Reply-To: <aLrQKurGZkbCkjlw@kuha.fi.intel.com>
-From: Andrei Kuchynski <akuchynski@chromium.org>
-Date: Fri, 5 Sep 2025 14:41:01 +0200
-X-Gm-Features: Ac12FXyxvfhy8ARaoEcCu19f2V-MoHQ9ApY5WO6r6Z4u1iuoDkWCmEuJxuSbxjQ
-Message-ID: <CAMMMRMcYiB8Sb5sjjdH_TcX8b2kGZFcM=r8L_txpZtyBGZt4Gg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] USB Type-C alternate mode priorities
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
-	Jameson Thies <jthies@google.com>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, Guenter Roeck <groeck@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, "Christian A. Ehrhardt" <lk@c--e.de>, 
-	Venkat Jayaraman <venkat.jayaraman@intel.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RCPT_COUNT_THREE(0.00)[3];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
 
-On Fri, Sep 5, 2025 at 1:57=E2=80=AFPM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Andrei,
->
-> On Mon, Aug 25, 2025 at 02:57:45PM +0000, Andrei Kuchynski wrote:
-> > This patch series introduces a mechanism for setting USB Type-C alterna=
-te
-> > mode priorities. It allows the user to specify their preferred order fo=
-r
-> > mode selection, such as USB4, Thunderbolt, or DisplayPort.
-> >
-> > A new sysfs attribute named 'priority' is exposed to provide user-space
-> > control over the mode selection process.
-> >
-> > This series was tested on a Android OS device running kernel 6.16.
-> >
-> > Changes in v2:
-> > - The priority variable is now a member of the typec_altmode struct
-> > - typec_altmode2port is used to obtain the typec_port struct pointer
-> > - Default priorities are now set based on the order of registration
-> > - The mode_control capability is enabled by default
-> > - The mode_selection_state struct will be introduced in a separate seri=
-es
-> > - svid will be used instead of the typec_mode_type enum
-> >
-> > Andrei Kuchynski (5):
-> >   usb: typec: Add alt_mode_override field to port property
-> >   platform/chrome: cros_ec_typec: Set alt_mode_override flag
-> >   usb: typec: ucsi: Set alt_mode_override flag
-> >   usb: typec: Implement alternate mode priority handling
-> >   usb: typec: Expose alternate mode priority via sysfs
->
-> I'm sorry for keeping you waiting. I think these are okay - although,
-> I had to put a few nitpicks :) but they are minor - but can you
-> include a patch where you use the priority member in a driver (maybe
-> cros_ec_typec.c)?
->
-> thanks,
->
-> --
-> heikki
+The EP-IN of MIDI2 (altset 1) wasn't initialized in
+f_midi2_create_usb_configs() as it's an INT EP unlike others BULK
+EPs.  But this leaves rather the max packet size unchanged no matter
+which speed is used, resulting in the very slow access.
+And the wMaxPacketSize values set there look legit for INT EPs, so
+let's initialize the MIDI2 EP-IN there for achieving the equivalent
+speed as well.
 
-Thank you for your review and feedback! I appreciate you taking the time to
-provide these notes.
+Fixes: 8b645922b223 ("usb: gadget: Add support for USB MIDI 2.0 function driver")
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ drivers/usb/gadget/function/f_midi2.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-The patch using the priority member is part of a subsequent series that I
-have ready. I will send it shortly. This functionality is implemented in
-mode_selection.c to determine the mode order, and we plan to use it for
-both the cros_ec_typec and UCSI implementations.
+diff --git a/drivers/usb/gadget/function/f_midi2.c b/drivers/usb/gadget/function/f_midi2.c
+index b351f9ae0fc5..de16b02d857e 100644
+--- a/drivers/usb/gadget/function/f_midi2.c
++++ b/drivers/usb/gadget/function/f_midi2.c
+@@ -1737,9 +1737,12 @@ static int f_midi2_create_usb_configs(struct f_midi2 *midi2,
+ 	case USB_SPEED_HIGH:
+ 		midi2_midi1_ep_out_desc.wMaxPacketSize = cpu_to_le16(512);
+ 		midi2_midi1_ep_in_desc.wMaxPacketSize = cpu_to_le16(512);
+-		for (i = 0; i < midi2->num_eps; i++)
++		for (i = 0; i < midi2->num_eps; i++) {
+ 			midi2_midi2_ep_out_desc[i].wMaxPacketSize =
+ 				cpu_to_le16(512);
++			midi2_midi2_ep_in_desc[i].wMaxPacketSize =
++				cpu_to_le16(512);
++		}
+ 		fallthrough;
+ 	case USB_SPEED_FULL:
+ 		midi1_in_eps = midi2_midi1_ep_in_descs;
+@@ -1748,9 +1751,12 @@ static int f_midi2_create_usb_configs(struct f_midi2 *midi2,
+ 	case USB_SPEED_SUPER:
+ 		midi2_midi1_ep_out_desc.wMaxPacketSize = cpu_to_le16(1024);
+ 		midi2_midi1_ep_in_desc.wMaxPacketSize = cpu_to_le16(1024);
+-		for (i = 0; i < midi2->num_eps; i++)
++		for (i = 0; i < midi2->num_eps; i++) {
+ 			midi2_midi2_ep_out_desc[i].wMaxPacketSize =
+ 				cpu_to_le16(1024);
++			midi2_midi2_ep_in_desc[i].wMaxPacketSize =
++				cpu_to_le16(1024);
++		}
+ 		midi1_in_eps = midi2_midi1_ep_in_ss_descs;
+ 		midi1_out_eps = midi2_midi1_ep_out_ss_descs;
+ 		break;
+-- 
+2.50.1
 
-I will send a new v3 patch set shortly with the minor changes you suggested=
-.
-
-Thanks!
-Andrei
 
