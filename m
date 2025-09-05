@@ -1,180 +1,106 @@
-Return-Path: <linux-usb+bounces-27606-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27607-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39FEFB46259
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 20:36:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A7BEB46284
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 20:44:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B516B5A1F5A
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 18:36:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13AEBA67DAA
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 18:44:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A99A7273D81;
-	Fri,  5 Sep 2025 18:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC92277028;
+	Fri,  5 Sep 2025 18:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFSM/hip"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eYEQxSgB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FB9305947;
-	Fri,  5 Sep 2025 18:36:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A7233987
+	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 18:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757097384; cv=none; b=ICZrymLsY2w2zFhTOmbSCV5dJXNUFbn4NDHPGWkKVazhMC0epm7hoS292FvF5Cy/DyQqWnAx/LRITD16jCybhelQggsoej4UHm+qbiZIDiPj4WHArLPPkn37qLvMQsZdEqBK0f55lUoGW7/dcOVXzhB4sge7VQ9UUjZlCvWEzU4=
+	t=1757097835; cv=none; b=DX7NBlcnVeQXaLPNcukkah988i6uISLXxwE/AyblFah+sKtYgBs/RfapC5LJNkHXV3+wJRTHY7CzjRWtFIf78dDcXpzt5Ukp/9qfr4nRPFglLIMJ1MtGxcO5xanGXtBzYHWIBImFeIRvlF8uAQc3po86L/ETy1e0holVLM5wyy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757097384; c=relaxed/simple;
-	bh=Z0l0aww+0sTvmNTqaq97C4lrWO6iKtSAsranbZR2N6U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sq8E4JIdSvLlXPcSUQhuu8AhQAfztt4O+3uPwTjFm0EUfeYkhROUVKnWvxWxX/CMjtvqml5USxmfIVWvBrGPzcExBf4i6DLVL/FwjqZOJtJ5wtCth3F0BXebpdsi0VymzIKtOb3GOwDBPZ0xevW4cE0uVLmgF8SjP4JpXRTOJ28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFSM/hip; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D823C4CEF1;
-	Fri,  5 Sep 2025 18:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757097383;
-	bh=Z0l0aww+0sTvmNTqaq97C4lrWO6iKtSAsranbZR2N6U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dFSM/hip1IM+ZMi1IniF1JusPZmfyWStbu37GUi3tUsTTMb5yRA+0crc0aAUs6PwP
-	 mRzwZwlDQbWgitgaCY+QeVcYSqO7pTU6G18+buVPNZmKIPM6h/3SBLxqqRrJLj/dLl
-	 kVjqIEFEMgi47BHsCgiaCDxI1C/6WO0PGYClk0ftVvL4vrfD7PJEKaEt3PybNNc/Ox
-	 3uuymTce4+GQvzBQVr9ubQxv2xOMVeqgOsBlH0EB6cyd9k+aHXMLQBWlBEjC7HQaYI
-	 z1LH3FZsS1a2GJOK0a72H/vUOMRgp65hxc2nN3d1a7Uf+nQyBVf1HDCS4sOlpF+g6A
-	 fiMBpaiDJ07Ug==
-Message-ID: <3173a8f8-ccbb-4478-8b2f-b7770cf3815c@kernel.org>
-Date: Fri, 5 Sep 2025 20:36:19 +0200
+	s=arc-20240116; t=1757097835; c=relaxed/simple;
+	bh=x6tBVIhCVvljH1GPAcc34jdicPlrCzRb3SNOzWRI5IE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SP9beEek6tUuMnUdeYEOVxFryrvcdETWW3qERiVOQceuFD8of4G7LGcZDTfyEO3BoGqnpc4OHDw2xptZnSa2q5Iaoj3EuWMHJQt9K7UPbP3rx67A3qFVI41LIxdYtJPhTXH/iDVcpOOW6/+x4Fs0/f+6HVQfF1MFgGNUyeccSSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eYEQxSgB; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757097832; x=1788633832;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x6tBVIhCVvljH1GPAcc34jdicPlrCzRb3SNOzWRI5IE=;
+  b=eYEQxSgB1vSrDJb6We3OHtzgtlLu9X66E7ezHRtb4p7HlWHr9H7YEbqZ
+   AaU1uHfWt/JprU0LDOgHpJl+znEfOY/4BaRHLBrgjut29nOCmoUYKTOnr
+   Qih1G7XUMaPPiEPhEIQo7HCfewcuJcYgZCPZC6TO/FxlkFkuAH/VZXbV7
+   5LHQtm2wjPk3wYV/Pr6I24o2v5/HxvL2cCgD27Xnowed8U76e9T6UiOp5
+   Mlv/TYBiNd0naL3wr+U6ZBXc9vGUz9bM6KkejNym6fxoeIu0u2tDlNvox
+   s//GBednY+Vk6qgrujSRGMJ/238hO1Y4eAl7dF42ukK2G5/7e2QF/zXMK
+   Q==;
+X-CSE-ConnectionGUID: 3bumvCzfTxeNXsIR37LRSg==
+X-CSE-MsgGUID: 9akdYT/VSq2LSn72zcOyJg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63283806"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63283806"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 11:43:52 -0700
+X-CSE-ConnectionGUID: 6Ff06I6vTSWeeHFc/tG5wA==
+X-CSE-MsgGUID: q6NsEElKSpazfcptAdO0NA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,242,1751266800"; 
+   d="scan'208";a="195889461"
+Received: from clke15vm100.fm.intel.com (HELO clke15vm100.amr.corp.intel.com) ([10.80.46.92])
+  by fmviesa002.fm.intel.com with ESMTP; 05 Sep 2025 11:43:52 -0700
+From: Venkat Jayaraman <venkat.jayaraman@intel.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	heikki.krogerus@linux.intel.com,
+	neil.armstrong@linaro.org,
+	pse.type-c.linux@intel.com,
+	venkat.jayaraman@intel.com
+Subject: [PATCH] usb: typec: ucsi: Add check for UCSI version
+Date: Fri,  5 Sep 2025 11:44:01 -0700
+Message-ID: <20250905184401.3222530-1-venkat.jayaraman@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] usb: misc: Add Intel USBIO bridge driver
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
- Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij
- <linus.walleij@linaro.org>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20250809102326.6032-1-hansg@kernel.org>
- <20250809102326.6032-2-hansg@kernel.org>
- <aJmS15MlcHz__S0p@kekkonen.localdomain>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <aJmS15MlcHz__S0p@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Sakari,
+"Power Reading" bit is introduced in UCSI v2.1 and so limit the
+check for that bit only if version supported is 2.1 or above.
 
-On 11-Aug-25 8:51 AM, Sakari Ailus wrote:
-> Hi Hans,
-> 
-> Thanks for posting this. Some comments below...
-> 
-> On Sat, Aug 09, 2025 at 12:23:24PM +0200, Hans de Goede wrote:
->> From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
->>
->> Add a driver for the Intel USBIO USB IO-expander used by the MIPI cameras
->> on various new (Meteor Lake and later) Intel laptops.
->>
->> This is an USB bridge driver which adds auxbus child devices for the GPIO,
->> I2C and SPI functions of the USBIO chip and which exports IO-functions for
->> the drivers for the auxbus child devices to communicate with the USBIO
->> device's firmware.
->>
->> Co-developed-by: Hans de Goede <hansg@kernel.org>
->> Signed-off-by: Hans de Goede <hansg@kernel.org>
->> Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+Fixes: c851b71fd6cd ("usb: typec: ucsi: Add support for READ_POWER_LEVEL command")
+Signed-off-by: Venkat Jayaraman <venkat.jayaraman@intel.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Once more thank you for the review.
-
-I'm replying here to correct some of my previous replies to your
-review. Anything not mentioned below I've addressed as discussed
-before.
-
-...
-
->> diff --git a/drivers/usb/misc/usbio.c b/drivers/usb/misc/usbio.c
->> new file mode 100644
->> index 000000000000..88197092f39a
->> --- /dev/null
->> +++ b/drivers/usb/misc/usbio.c
->> @@ -0,0 +1,693 @@
-
-...
-
->> +#define adev_to_client(adev) container_of(adev, struct usbio_client, adev)
-> 
-> Please use a different name than "adev" for the argument, which is also the
-> struct field of interest.
-
-Ignore my previous comment on this remark. I've decided to
-clean this up for v2 and use a different names for the 2
-container_of() arguments.
-
->> +
->> +static int usbio_ctrl_msg(struct usbio_device *usbio, u8 type, u8 cmd,
->> +			  const void *obuf, u16 obuf_len, void *ibuf, u16 ibuf_len)
->> +{
->> +	u8 request = USB_TYPE_VENDOR | USB_RECIP_DEVICE;
->> +	struct usbio_ctrl_packet *cpkt;
->> +	unsigned int pipe;
->> +	u16 cpkt_len;
->> +	int ret;
->> +
->> +	lockdep_assert_held(&usbio->mutex);
->> +
->> +	if ((obuf_len > (usbio->ctrlbuf_len - sizeof(*cpkt))) ||
->> +	    (ibuf_len > (usbio->ctrlbuf_len - sizeof(*cpkt))))
-> 
-> You can (and should) remove all parentheses except the outer ones here.
-
-As mentioned by Greg parentheses help to keep the code readable, so
-I'm going to keep these as well as those in other places where you've
-asked to drop them.
-
-...
-
->> +	pipe = usb_sndctrlpipe(usbio->udev, usbio->ctrl_pipe);
->> +	cpkt_len = sizeof(*cpkt) + obuf_len;
->> +	ret = usb_control_msg(usbio->udev, pipe, 0, request | USB_DIR_OUT, 0, 0,
->> +			      cpkt, cpkt_len, USBIO_CTRLXFER_TIMEOUT);
->> +	dev_dbg(usbio->dev, "control out %d hdr %*phN data %*phN\n", ret,
->> +		(int)sizeof(*cpkt), cpkt, (int)cpkt->len, cpkt->data);
-> 
-> Instead of casting, how about using %zu for printing a size_t?
-
-This is not printing the size, this is filling the * field-width
-parameter for the %*phN dumping of the header. Using an int when
-setting field-width with * is mandatory. The same applies to
-your other %zu review remarks.
-
-...
-
->> +	if (ibuf_len < cpkt->len)
->> +		return -ENOSPC;
->> +
->> +	memcpy(ibuf, cpkt->data, cpkt->len);
-> 
-> It'd be nice to have one more newline here.
-
-As already mentioned I've fixed for v2, as well as all the other
-requests for extra newlines.
-
-> 
->> +	return cpkt->len;
->> +}
-
-...
-
-Regards,
-
-Hans
-
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 0d6b0cf5a7cd..3f568f790f39 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1293,7 +1293,8 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 	if (change & UCSI_CONSTAT_BC_CHANGE)
+ 		ucsi_port_psy_changed(con);
+ 
+-	if (UCSI_CONSTAT(con, PWR_READING_READY_V2_1)) {
++	if (con->ucsi->version >= UCSI_VERSION_2_1 &&
++	    UCSI_CONSTAT(con, PWR_READING_READY_V2_1)) {
+ 		curr_scale = UCSI_CONSTAT(con, CURRENT_SCALE_V2_1);
+ 		volt_scale = UCSI_CONSTAT(con, VOLTAGE_SCALE_V2_1);
+ 
+-- 
+2.43.0
 
 
