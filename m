@@ -1,117 +1,167 @@
-Return-Path: <linux-usb+bounces-27577-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27578-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C6C9B453C2
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:49:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FFC6B453D8
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:57:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6376A60FB7
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 09:49:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40FF11C27177
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 09:58:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A41A28BA83;
-	Fri,  5 Sep 2025 09:49:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3C6D298991;
+	Fri,  5 Sep 2025 09:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cbBysEbq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2A92777FE
-	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 09:49:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF691D555;
+	Fri,  5 Sep 2025 09:57:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757065758; cv=none; b=gXzwKPGmqXWOpjxisRcRHmCUR6WKJerkbN8VdUrNbglB8mRA+2B+4zTOxWMp5XaR8kbMPT1NmjplfuaIggDR8EhlV/DnnslINFfFyWtBhRoimkaME63OMzyYawTX/8gZUHJCZj2TCgIVA+2gOemzsJ6qZLDvasm706KYi0fZtW8=
+	t=1757066267; cv=none; b=IeJ8tvPNptZ33NzgX3De1XsSbU8R4QRoMRZ/YVdoRNEi9vAk7rrzZWNYI8RmtWOzToKzVXRHkHoOQlGOZ/7wUwWgWHLxpzUVI/EJeBp7rggKqr+w0CxlLxUcipBzKr4rRJtiBnPFl1//AnyAV+RxzCmEdEtuB4Tt/SlHQa7DNPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757065758; c=relaxed/simple;
-	bh=kZ70zfrO6Xb/o+PqCbl2KixYQYlxecOgBAnFmZIBOZY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e2PbCcdGCIA9eXv1TaZH1r/7/bkaj4+OyUt0nSr16PhfLbvIWFkcwygUEY3rorDKjZsY+jPUInLpSmmen0/3+TS2heLLH4jiniqkhUbakz5j7ZYwJU7EtXNbnIXWAZ7wjIgXrejRXwLay93Qh0SZE8Jidxgqa/ET7MHhEdnPfEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iie.ac.cn; spf=pass smtp.mailfrom=iie.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iie.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iie.ac.cn
-Received: from localhost.localdomain (unknown [159.226.95.28])
-	by APP-03 (Coremail) with SMTP id rQCowADn+4UJsrpos2rIAA--.986S2;
-	Fri, 05 Sep 2025 17:48:58 +0800 (CST)
-From: Chen Yufeng <chenyufeng@iie.ac.cn>
-To: pawell@cadence.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	Chen Yufeng <chenyufeng@iie.ac.cn>
-Subject: [PATCH] usb: cdns3: gadget: Use-after-free during failed initialization and exit of cdnsp gadget
-Date: Fri,  5 Sep 2025 17:48:42 +0800
-Message-ID: <20250905094842.1232-1-chenyufeng@iie.ac.cn>
-X-Mailer: git-send-email 2.43.0.windows.1
+	s=arc-20240116; t=1757066267; c=relaxed/simple;
+	bh=8q8nnACbLJ2cv9OUfaS30eEGHF3yr2aXfrpwZpdTxko=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WspvI0hDIpCmSmLswZUAvqbTGTW1Sr1UAd3z2JyMl+VVzjEICQXE9DqqZiis9/SOgOChEay+Lbch02Jg0rhJDTXT+mlATJx74Tsr9QoCUpALC90Pti5rnbhLeL64Np2WpuPPpVyg7RujdoxbQu5GjY8n/JW5CuZSLxehPcn5/XY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cbBysEbq; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757066266; x=1788602266;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8q8nnACbLJ2cv9OUfaS30eEGHF3yr2aXfrpwZpdTxko=;
+  b=cbBysEbq+p6NxfzEB/Pu+DXZU2x6QQwdQMGcTyYwC7ZmEfvenp3RCl0D
+   vbB6/M79+AvIL5D5Ag3i19CzsNEaj152pv3+5SGTDga7XWwQsJicABj3N
+   RdwG5+bhOyxh3JGtX0RCDhM/uxQv85oxG4TF74WcjBf3TlF0fdlf8vrZm
+   kLEbrw1gRRYwW5wfP6rnNJT0pMw6oGuL5DEFkQj/7ZxY3JX2FbiiOedE9
+   QL8f8wnt08yuYgg0tlkrOeBamHbOn/cnYwxkj2NyOZUkJE6pZcZ6yMolR
+   l36RbUpBjvVXD457unJ7dfNeGX6sBYMPsWizY73vx87aAn1uq4764NtUC
+   g==;
+X-CSE-ConnectionGUID: XqQjnu5NQ0eqHGiZQMQEgQ==
+X-CSE-MsgGUID: ANbHkn6fSM67vwtGARVXpw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="69674223"
+X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
+   d="scan'208";a="69674223"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 02:57:46 -0700
+X-CSE-ConnectionGUID: 6PjwMeliRNKQnt9UZ2URIA==
+X-CSE-MsgGUID: MS9w3seGQie4fm37vdOTBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
+   d="scan'208";a="176454114"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa005.fm.intel.com with SMTP; 05 Sep 2025 02:57:41 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 12:57:40 +0300
+Date: Fri, 5 Sep 2025 12:57:40 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] usb: typec: Add alt_mode_override field to port
+ property
+Message-ID: <aLq0FCAq-LiB139t@kuha.fi.intel.com>
+References: <20250825145750.58820-1-akuchynski@chromium.org>
+ <20250825145750.58820-2-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowADn+4UJsrpos2rIAA--.986S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ar43Xw1UXr4fCF1UWF45Jrb_yoW8CFy5pa
-	98JFWIkrsrArZ8trnrJr4DZrWrJw4jvrn7KF92kw42vF1fJw1kGF1DAr1rKF4xuFykJr45
-	ta1v93W09F4I9wUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUka14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-	4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-	6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUIhFcUUUUU=
-X-CM-SenderInfo: xfkh05xxih0wo6llvhldfou0/1tbiDAgQEmi6oeEvOgABsA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250825145750.58820-2-akuchynski@chromium.org>
 
-In the __cdnsp_gadget_init() and cdnsp_gadget_exit() functions, the gadget 
-structure (pdev->gadget) was freed before its endpoints.
-The endpoints are linked via the ep_list in the gadget structure. 
-Freeing the gadget first leaves dangling pointers in the endpoint list.
-When the endpoints are subsequently freed, this results in a use-after-free.
+On Mon, Aug 25, 2025 at 02:57:46PM +0000, Andrei Kuchynski wrote:
+> This new field in the port properties dictates whether the Platform Policy
+> Manager (PPM) allows the OS Policy Manager (OPM) to change the currently
+> active, negotiated alternate mode.
+> 
+> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+> ---
+>  drivers/usb/typec/class.c | 9 ++++++---
+>  drivers/usb/typec/class.h | 2 ++
+>  include/linux/usb/typec.h | 1 +
+>  3 files changed, 9 insertions(+), 3 deletions(-)
 
-Fix:
-By separating the usb_del_gadget_udc() operation into distinct "del" and 
-"put" steps, cdnsp_gadget_free_endpoints() can be executed prior to the 
-final release of the gadget structure with usb_put_gadget().
+This is okay by me, but you forgot to document the file.
 
-A patch similar to bb9c74a5bd14("usb: dwc3: gadget: Free gadget structure 
- only after freeing endpoints").
+thanks,
 
-Signed-off-by: Chen Yufeng <chenyufeng@iie.ac.cn>
----
- drivers/usb/cdns3/cdnsp-gadget.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 67a533e35150..9f86605ce125 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -457,11 +457,13 @@ static umode_t typec_altmode_attr_is_visible(struct kobject *kobj,
+>  					     struct attribute *attr, int n)
+>  {
+>  	struct typec_altmode *adev = to_typec_altmode(kobj_to_dev(kobj));
+> +	struct typec_port *port = typec_altmode2port(adev);
+>  
+>  	if (attr == &dev_attr_active.attr)
+> -		if (!is_typec_port(adev->dev.parent) &&
+> -		    (!adev->ops || !adev->ops->activate))
+> -			return 0444;
+> +		if (!is_typec_port(adev->dev.parent)) {
+> +			if (!port->mode_control || !adev->ops || !adev->ops->activate)
+> +				return 0444;
+> +		}
+>  
+>  	return attr->mode;
+>  }
+> @@ -2681,6 +2683,7 @@ struct typec_port *typec_register_port(struct device *parent,
+>  	}
+>  
+>  	port->pd = cap->pd;
+> +	port->mode_control = !cap->no_mode_control;
+>  
+>  	ret = device_add(&port->dev);
+>  	if (ret) {
+> diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
+> index db2fe96c48ff..c53a04b9dc75 100644
+> --- a/drivers/usb/typec/class.h
+> +++ b/drivers/usb/typec/class.h
+> @@ -80,6 +80,8 @@ struct typec_port {
+>  	 */
+>  	struct device			*usb2_dev;
+>  	struct device			*usb3_dev;
+> +
+> +	bool				mode_control;
+>  };
+>  
+>  #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 252af3f77039..cbc94282e45e 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -304,6 +304,7 @@ struct typec_capability {
+>  	enum typec_accessory	accessory[TYPEC_MAX_ACCESSORY];
+>  	unsigned int		orientation_aware:1;
+>  	u8			usb_capability;
+> +	bool			no_mode_control;
+>  
+>  	struct fwnode_handle	*fwnode;
+>  	void			*driver_data;
+> -- 
+> 2.51.0.rc2.233.g662b1ed5c5-goog
+> 
 
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-index 55f95f41b3b4..0252560cbc80 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.c
-+++ b/drivers/usb/cdns3/cdnsp-gadget.c
-@@ -1976,7 +1976,10 @@ static int __cdnsp_gadget_init(struct cdns *cdns)
- 	return 0;
- 
- del_gadget:
--	usb_del_gadget_udc(&pdev->gadget);
-+	usb_del_gadget(&pdev->gadget);
-+	cdnsp_gadget_free_endpoints(pdev);
-+	usb_put_gadget(&pdev->gadget);
-+	goto halt_pdev;
- free_endpoints:
- 	cdnsp_gadget_free_endpoints(pdev);
- halt_pdev:
-@@ -1998,8 +2001,9 @@ static void cdnsp_gadget_exit(struct cdns *cdns)
- 	devm_free_irq(pdev->dev, cdns->dev_irq, pdev);
- 	pm_runtime_mark_last_busy(cdns->dev);
- 	pm_runtime_put_autosuspend(cdns->dev);
--	usb_del_gadget_udc(&pdev->gadget);
-+	usb_del_gadget(&pdev->gadget);
- 	cdnsp_gadget_free_endpoints(pdev);
-+	usb_put_gadget(&pdev->gadget);
- 	cdnsp_mem_cleanup(pdev);
- 	kfree(pdev);
- 	cdns->gadget_dev = NULL;
 -- 
-2.34.1
-
+heikki
 
