@@ -1,79 +1,85 @@
-Return-Path: <linux-usb+bounces-27584-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27585-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45570B4557D
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 13:00:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60640B4559C
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 13:03:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43C513AAC57
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:00:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50C741C83DFA
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:04:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77B4330E0DB;
-	Fri,  5 Sep 2025 11:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCDB03431F5;
+	Fri,  5 Sep 2025 11:03:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PUI5oZU+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NVvq4Cf/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F09E30BB9C;
-	Fri,  5 Sep 2025 11:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290E1341677;
+	Fri,  5 Sep 2025 11:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757070004; cv=none; b=rT5GH+aj0rt14+rAt49roymol76q4JlDA3A0a8jXEW7VsSOaI6YS/u+wGG2SOI8lFBfvBfm5b+Wzb2pZGp+5lVPOxj8K70UzCn23kBSLVeJ2XGe2wdJj80xSUsJ+qnksRBU093lV/umurSkVErd4/VewLp2v2YS2H8hUGcIihQQ=
+	t=1757070204; cv=none; b=OBvw3v/n1bZHAZ1PMwLYcwrmkm9xVTBm5tnnUZ4ZDwhafeq+zhtS+1BAIyu/KHPixYpL7piGaAwIh8cj40oFvPOj0wljk9IIIhY6dKDsKKEbV6hZYeobgeI2yB5QPxmWVraxj8k15L3/gxkZHbpVIqqG7oPpjtQZIcWghZzBsFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757070004; c=relaxed/simple;
-	bh=xWFG9IcSFRaAzKyA5Lio/LJJoAzp+33hlHZFKOaExJw=;
+	s=arc-20240116; t=1757070204; c=relaxed/simple;
+	bh=KN4dsiaZ268F8wno1pY0dZJf8plsMc1elk4smFEFKIw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e4k5wIUoWOSTh0ctg4N5JfRxMN1t9Skf9k7n0UTmkSkr3bbUbEKAgFOEeyNQzxIvNGCGQ7QO97ell8J8lncYTmxCywioKv+gCryk6pwonlLyaWNck9b7oY6v8WuflLdj7lns4Nu5YgzEfF+29NLqMhjQdegUeDyp/hI7LRIbYh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PUI5oZU+; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=lJYYHKW7wdxVoCuLjGALtjc4/HVTqiQDqw+WoEgickq4ocLkEOpX2ObfQ8zD7W8nWlJPG1duC0xMzJYIDOAWNYQx4V9PQShQPOIgiE2fibuurQOyS6FlQVsJUJJIsycAUUuaEnZp44vSAjmgMVC0knMBDitJ6NYQ586v9tMrE70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NVvq4Cf/; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757070002; x=1788606002;
+  t=1757070202; x=1788606202;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xWFG9IcSFRaAzKyA5Lio/LJJoAzp+33hlHZFKOaExJw=;
-  b=PUI5oZU+WbcD5TRE5B1gzpA3ji46yxWYYV84kOnwJvwNgxtAxrR4p28b
-   q50qbhe6Zl9eC69UepGrKFCU556x/KiKT8R84Z8AbBr8wpxZ0xC98pnSC
-   yFhyTm7+BZpv3pcxjrfGGEVvLRfyVPg51Oege4jd+2he6TJpfVta9SQja
-   JiQz7/XfVDM7AmNPBYprAMlFj1/V+swY2mQHX+xgxsCqvbOiKEZ3fsuMW
-   8AXK9eNwyjzyxeXfEcRNDovFIdIh9auNKJVvINAYufKcJq5KHAjyh8wqH
-   UK5bC/dj9w/7topFCYZK2SrRMpwGnWwXgt5Bk//TvLTIUK35+lfaYpmWc
+  bh=KN4dsiaZ268F8wno1pY0dZJf8plsMc1elk4smFEFKIw=;
+  b=NVvq4Cf/wLcHx5L3RGfDGUcNiiVibONg5QGpVx5rIIZqKpHdQauMVoyF
+   p3KfJA7EksHe/6Q4QGw0WuDKo5QH6fi+kybYR/YAhd/JP8Ka/SwSBkDwA
+   gmGJr0mSXytj5ERRLQVKQ+rtiULeQQIvXVZ+T5dhU4ssYo885dVbSJadK
+   MkyfMGuL5U0+QNULvIYACwwq9znhpmXZouI/r4mzfixJDjbJhZ/4vxhjf
+   gHt3WtZZg2ZKilGkmFGOZGbdIQZwRwo5BhabQFpx6Bn0MWa3XtXj+FqaG
+   ibk0agI2+5peWKWz7bnk1772WYk5cOoUzH1Gyr9d2A1Nj/4ipv+JQAOpJ
    w==;
-X-CSE-ConnectionGUID: p9S9SDCySq2s9KefkPIA7Q==
-X-CSE-MsgGUID: Azqi8x4kS5CuwXXMYLbkFA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="59118962"
+X-CSE-ConnectionGUID: +EKZJ7OrT8ecc3A1/2cuUA==
+X-CSE-MsgGUID: +8WZ4em4RDSAtuEt9WX8gQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="62050711"
 X-IronPort-AV: E=Sophos;i="6.18,241,1751266800"; 
-   d="scan'208";a="59118962"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 04:00:01 -0700
-X-CSE-ConnectionGUID: zgDOmaF0S/+OTUlsH0/d9g==
-X-CSE-MsgGUID: 7w6td42BQWaRq1lJzsfd3A==
+   d="scan'208";a="62050711"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 04:03:21 -0700
+X-CSE-ConnectionGUID: 53kU7cAnTr6NKDSKeZLK+w==
+X-CSE-MsgGUID: P5pb7rInQZK8UjIlkKEOQQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,241,1751266800"; 
-   d="scan'208";a="172579445"
+   d="scan'208";a="176470702"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa009.fm.intel.com with SMTP; 05 Sep 2025 03:59:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 13:59:57 +0300
-Date: Fri, 5 Sep 2025 13:59:57 +0300
+  by fmviesa005.fm.intel.com with SMTP; 05 Sep 2025 04:03:16 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 14:03:15 +0300
+Date: Fri, 5 Sep 2025 14:03:15 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Thorsten Blum <thorsten.blum@linux.dev>
+To: Sven Peter <sven@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Fedor Pchelkin <boddah8794@gmail.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Al Viro <viro@zeniv.linux.org.uk>, linux-usb@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: ucsi: stm32: Use min() to improve
- ucsi_stm32g0_fw_cb()
-Message-ID: <aLrCrQOdLsqq0U37@kuha.fi.intel.com>
-References: <20250830110426.10007-2-thorsten.blum@linux.dev>
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+	Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-phy@lists.infradead.org
+Subject: Re: [PATCH RFC 09/22] usb: typec: tipd: Move initial irq mask to
+ tipd_data
+Message-ID: <aLrDc-IMZkqzvnv2@kuha.fi.intel.com>
+References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
+ <20250821-atcphy-6-17-v1-9-172beda182b8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,47 +88,101 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250830110426.10007-2-thorsten.blum@linux.dev>
+In-Reply-To: <20250821-atcphy-6-17-v1-9-172beda182b8@kernel.org>
 
-On Sat, Aug 30, 2025 at 01:04:20PM +0200, Thorsten Blum wrote:
-> Use min() to improve ucsi_stm32g0_fw_cb() and avoid calculating
-> 'end - data' twice.
+On Thu, Aug 21, 2025 at 03:39:01PM +0000, Sven Peter wrote:
+> Since the irq mask was originally added more tipd variants have been
+> introduced and there's now struct tipd_data. Move the initial mask in
+> there.
 > 
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> Signed-off-by: Sven Peter <sven@kernel.org>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/ucsi/ucsi_stm32g0.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+>  drivers/usb/typec/tipd/core.c | 23 +++++++++++------------
+>  1 file changed, 11 insertions(+), 12 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> index 57ef7d83a412..838ac0185082 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> @@ -10,6 +10,7 @@
->  #include <linux/firmware.h>
->  #include <linux/i2c.h>
->  #include <linux/interrupt.h>
-> +#include <linux/minmax.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/unaligned.h>
-> @@ -523,11 +524,7 @@ static void ucsi_stm32g0_fw_cb(const struct firmware *fw, void *context)
->  	data = fw->data;
->  	end = fw->data + fw->size;
->  	while (data < end) {
-> -		if ((end - data) < STM32G0_I2C_BL_SZ)
-> -			size = end - data;
-> -		else
-> -			size = STM32G0_I2C_BL_SZ;
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 1c80296c3b273e24ceacb3feff432c4f6e6835cc..6d8bcbc9cad8a1394e066504d4c5ca570edd4e4f 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -112,6 +112,7 @@ struct tps6598x;
+>  
+>  struct tipd_data {
+>  	irq_handler_t irq_handler;
+> +	u64 irq_mask1;
+>  	int (*register_port)(struct tps6598x *tps, struct fwnode_handle *node);
+>  	void (*trace_power_status)(u16 status);
+>  	void (*trace_status)(u32 status);
+> @@ -1298,7 +1299,6 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	u32 status;
+>  	u32 vid;
+>  	int ret;
+> -	u64 mask1;
+>  
+>  	tps = devm_kzalloc(&client->dev, sizeof(*tps), GFP_KERNEL);
+>  	if (!tps)
+> @@ -1337,16 +1337,6 @@ static int tps6598x_probe(struct i2c_client *client)
+>  		if (ret)
+>  			return ret;
+>  
+> -		/* CD321X chips have all interrupts masked initially */
+> -		mask1 = APPLE_CD_REG_INT_POWER_STATUS_UPDATE |
+> -			APPLE_CD_REG_INT_DATA_STATUS_UPDATE |
+> -			APPLE_CD_REG_INT_PLUG_EVENT;
 > -
-> +		size = min(end - data, STM32G0_I2C_BL_SZ);
->  		ret = ucsi_stm32g0_bl_write(g0->ucsi, addr, data, size);
->  		if (ret) {
->  			dev_err(g0->dev, "Write failed %d\n", ret);
+> -	} else {
+> -		/* Enable power status, data status and plug event interrupts */
+> -		mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
+> -			TPS_REG_INT_DATA_STATUS_UPDATE |
+> -			TPS_REG_INT_PLUG_EVENT;
+>  	}
+>  
+>  	tps->data = i2c_get_match_data(client);
+> @@ -1364,7 +1354,7 @@ static int tps6598x_probe(struct i2c_client *client)
+>  			return ret;
+>  	}
+>  
+> -	ret = tps6598x_write64(tps, TPS_REG_INT_MASK1, mask1);
+> +	ret = tps6598x_write64(tps, TPS_REG_INT_MASK1, tps->data->irq_mask1);
+>  	if (ret)
+>  		goto err_reset_controller;
+>  
+> @@ -1527,6 +1517,9 @@ static const struct dev_pm_ops tps6598x_pm_ops = {
+>  
+>  static const struct tipd_data cd321x_data = {
+>  	.irq_handler = cd321x_interrupt,
+> +	.irq_mask1 = APPLE_CD_REG_INT_POWER_STATUS_UPDATE |
+> +		     APPLE_CD_REG_INT_DATA_STATUS_UPDATE |
+> +		     APPLE_CD_REG_INT_PLUG_EVENT,
+>  	.register_port = tps6598x_register_port,
+>  	.trace_power_status = trace_tps6598x_power_status,
+>  	.trace_status = trace_tps6598x_status,
+> @@ -1536,6 +1529,9 @@ static const struct tipd_data cd321x_data = {
+>  
+>  static const struct tipd_data tps6598x_data = {
+>  	.irq_handler = tps6598x_interrupt,
+> +	.irq_mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
+> +		     TPS_REG_INT_DATA_STATUS_UPDATE |
+> +		     TPS_REG_INT_PLUG_EVENT,
+>  	.register_port = tps6598x_register_port,
+>  	.trace_power_status = trace_tps6598x_power_status,
+>  	.trace_status = trace_tps6598x_status,
+> @@ -1546,6 +1542,9 @@ static const struct tipd_data tps6598x_data = {
+>  
+>  static const struct tipd_data tps25750_data = {
+>  	.irq_handler = tps25750_interrupt,
+> +	.irq_mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
+> +		     TPS_REG_INT_DATA_STATUS_UPDATE |
+> +		     TPS_REG_INT_PLUG_EVENT,
+>  	.register_port = tps25750_register_port,
+>  	.trace_power_status = trace_tps25750_power_status,
+>  	.trace_status = trace_tps25750_status,
+> 
 > -- 
-> 2.50.1
+> 2.34.1
+> 
 
 -- 
 heikki
