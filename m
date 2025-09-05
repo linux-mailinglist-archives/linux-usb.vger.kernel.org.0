@@ -1,140 +1,115 @@
-Return-Path: <linux-usb+bounces-27590-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27591-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC423B456A0
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 13:40:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A512B456ED
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 13:53:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71D555A740A
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:40:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2538165756
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 11:53:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED6C834A305;
-	Fri,  5 Sep 2025 11:40:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C1334A318;
+	Fri,  5 Sep 2025 11:53:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SBnNCUSt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uN0R/hXN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FF2343218;
-	Fri,  5 Sep 2025 11:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACBC345730
+	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 11:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757072409; cv=none; b=TGQMi5UKmOjXWzkzK+C7wyGDtJeyfSyKn7g7dn2wI2CZpadxDzVy/W+OSibYlSDhxpO0dqm+2EqyoZDA1eqnZQ0Fm2OLavPkgkDG2lLjuVt1RfPk/uzefseLFZCo64wA860L2aZbwjNzc78uMCQxDG7eOHhZZQxjpss/rTZfcA4=
+	t=1757073199; cv=none; b=DCkbMPb6cJ3RDVAOj1TUw+H/r3lz660xXzYlQBSTf5fAm7SgK4rFLBKiP2sO3WEs7TA6Zk8COTvsvFxhYNuKih45wav4I7zT/HkiYcjWkBolTFLZPpzBxGmuC3lGq+gck9sLslxitYR1LDNZ9oQ9U9DP4n2nCErCy03af25h5nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757072409; c=relaxed/simple;
-	bh=sx2wz53gv4OIUWMCEXeNS8i0YplTPAB4OZ9qODA9qog=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yq1ExSVckm+9XO1wGnhh8YtSCU0RE6YXwxsLOmgEVJUTFRt9Wv6js9XKqbWlmIglWwIGZiFJFainXr5PHbCiXMoTgTARiBnIcwsyeur0tEZ1cQWUKibk2E1E4ToI6lmQOkFwq7beu2YW6vo+ds60Lrp1wCH+VR9iF/oMVAi7osA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SBnNCUSt; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757072408; x=1788608408;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sx2wz53gv4OIUWMCEXeNS8i0YplTPAB4OZ9qODA9qog=;
-  b=SBnNCUStDUL8/JU+555300KEYJqMKh87/udKHLgCPI8aYRdDCjWyf+HH
-   J/XeWcr05hfN7fZ99VbPcOW7GMdjSiv8urOg2/PuOWC7ls+yYT0rS1+Hp
-   8qMda3aFHc81hPO8FfSU2yG5bJ86J424+lzCFWpCixOJc+e8KwAkNTALv
-   cZ3T162/4IXaz39sq4e11W3VQgHh3h7zssBKWhItn/bPzx7JiWTzkBOQH
-   YPsIff6m5zRlHu+rdkAyY3HJDh1Oo6G1H6inNmssLXFF1LqzGIWe9C2U1
-   zlJ3qGyKfAy+tc1kWS/cf+5Yrn5wCmjSG4GStGxJiQeFGFuLWBicJWISE
-   Q==;
-X-CSE-ConnectionGUID: ctwFtdUfRUKCae+fE+b6gA==
-X-CSE-MsgGUID: ZlCcPbIKRliMa9oxkWWuFA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="63064752"
-X-IronPort-AV: E=Sophos;i="6.18,241,1751266800"; 
-   d="scan'208";a="63064752"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 04:40:07 -0700
-X-CSE-ConnectionGUID: 7ivWf5SiTburyJTsZYw9/Q==
-X-CSE-MsgGUID: Mm1LtjFKRfexLBEV4Qw4+w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,241,1751266800"; 
-   d="scan'208";a="171710329"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa007.fm.intel.com with SMTP; 05 Sep 2025 04:40:01 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Sep 2025 14:40:00 +0300
-Date: Fri, 5 Sep 2025 14:40:00 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Sven Peter <sven@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-phy@lists.infradead.org, Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH RFC 15/22] usb: typec: tipd: Update partner identity when
- power status was updated
-Message-ID: <aLrMEL_St_0JlZYG@kuha.fi.intel.com>
-References: <20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org>
- <20250821-atcphy-6-17-v1-15-172beda182b8@kernel.org>
+	s=arc-20240116; t=1757073199; c=relaxed/simple;
+	bh=YEJSRCY2YbfuH8NRhBsrc6iE65M1hVVMTQ53icziiQA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=DKtKaT6JCI+fJFZMAzp1TAq/b8/5oHCYplIdaqnmXrmgRDHd9+jvFXa/X2uMzeqRXzWA54MFST79jIOK8O192QK5YuiOqJ1SwoeEq4Up16969MWTvj41uOTq7OwO7Furb0A0HBiuWzAdhtPwkdNzU0S0QJAHxhMeuP685poalW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uN0R/hXN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D4C1C4CEF1
+	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 11:53:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757073196;
+	bh=YEJSRCY2YbfuH8NRhBsrc6iE65M1hVVMTQ53icziiQA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=uN0R/hXNWDhfkcincu77U9pwAOgb2JKOPxSPu6o79JRDD626A6p/i+BcdWWknn+Ih
+	 yJrBXDF80mYZs5V5spcdJFm/7VXH6lSZvr3l37X6cvLzhtHZ0KmHBoYPDsHtWNCir5
+	 wVB3Q77E8esgjHJ0DiVCxdDtUeCKVi2kC9nZqOwlhXOkPBtW9t/MhCZgDnQTEPUBXU
+	 whiAN4MSMLFe28ixOGqR8DdBIb8u4/DZIcWItUQmn/CQMv3XOf8qEXfpDayhO+Znai
+	 01jEsp0ffQ9QVWZpOM7J2iZnMzPFzc892PWWgxMOHreuisVTfahpyUVyZIMGprMzWO
+	 9kNHBEbF8Cdwg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 80953C41614; Fri,  5 Sep 2025 11:53:16 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
+ resume from suspend
+Date: Fri, 05 Sep 2025 11:53:16 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-220491-208809-4yRI2TQQj0@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
+References: <bug-220491-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250821-atcphy-6-17-v1-15-172beda182b8@kernel.org>
 
-Hi,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
-On Thu, Aug 21, 2025 at 03:39:07PM +0000, Sven Peter wrote:
-> From: Hector Martin <marcan@marcan.st>
-> 
-> Whenever the power status is changed make sure to also update the
-> partner identity to be able to detect changes once de-bouncing and mode
-> changes arre added for CD321x.
+--- Comment #43 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+Created attachment 308620
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308620&action=3Dedit
+partial fix to sort xhci-hcd side issue that prevents urb queuing
 
-s/arre/are/
+Patch so ensure xhci driver does not unnecessary prevent transfers, and thus
+causing the recovery after resume to take even longer.
 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> Signed-off-by: Sven Peter <sven@kernel.org>
-> ---
->  drivers/usb/typec/tipd/core.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index e369897bfa017ca96e559a8bd70da11207d4513a..b0fdd4dddd3a490dbc2a8ced21ea0803658f36a7 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -636,9 +636,16 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  	if (!tps6598x_read_status(tps, &status))
->  		goto err_unlock;
->  
-> -	if (event & APPLE_CD_REG_INT_POWER_STATUS_UPDATE)
-> +	if (event & APPLE_CD_REG_INT_POWER_STATUS_UPDATE) {
->  		if (!tps6598x_read_power_status(tps))
->  			goto err_unlock;
-> +		if (TPS_POWER_STATUS_PWROPMODE(tps->pwr_status) == TYPEC_PWR_MODE_PD) {
-> +			if (tps6598x_read_partner_identity(tps)) {
-> +				dev_err(tps->dev, "%s: failed to partner identity\n", __func__);
+should sort out these extra messages in the log:
+[73415.446721] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
+inactive
+[73415.446746] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
+inactive
+[73415.446755] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
+inactive
+[73415.474680] xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping usb3 p=
+ort
+polling
+[73415.550753] usb 3-4: reset SuperSpeed USB device number 8 using xhci_hcd
+[73415.566718] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
+inactive
+[73415.566738] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
+inactive
+[73415.566746] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link
+inactive
 
-				dev_err(tps->dev, "failed to read partner identity\n");
+reset-resume may still fail, and device get disconnected/reconnected
 
-> +				tps->partner_identity = (struct usb_pd_identity) {0};
-> +			}
-> +		}
-> +	}
->  
->  	if (event & APPLE_CD_REG_INT_DATA_STATUS_UPDATE)
->  		if (!tps->data->read_data_status(tps))
+--=20
+You may reply to this email to add a comment.
 
-thanks,
-
--- 
-heikki
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
