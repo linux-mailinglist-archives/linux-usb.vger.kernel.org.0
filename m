@@ -1,199 +1,141 @@
-Return-Path: <linux-usb+bounces-27626-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27627-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECBB0B46CDE
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 14:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 71F50B46CF7
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 14:42:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A8D5A4401D
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 12:28:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35634A4652C
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 12:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EA6A296BC8;
-	Sat,  6 Sep 2025 12:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77CAD2E975E;
+	Sat,  6 Sep 2025 12:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="e1Nnok++"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="ktQDE/DP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073BA266EF1;
-	Sat,  6 Sep 2025 12:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757161721; cv=none; b=GvXMMGphDSCqMZqmiDELHEVEAOU9+vMhYpXyU9vfKVSQ6wgMg6G71ByPGuAsR/5P7cGWHykkc/AQOKvnzchLDK9tvnIzpS2xtWOI8sazP0b7RcfP5zkDoyVcART33ugCafrH0zQ8/j5ZQtPI3Ctn7d2PZQyU+b4MVWMlUwK9+Kk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757161721; c=relaxed/simple;
-	bh=I4i+IgJmgw5WM8bIZquAFLkwMBcSojuAyx5U4cuiJxM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p1LJ4psN4ZNEyk2Cq610DYtfrh+9koaGJBjLuxLaM3cm3ZKRB687ByObnfvA4bJDTIXg0BiKy6JzB/JVAVip4ewDQyMMS+fpjVD261S9VYXLUnqPyZsSp8VfzqOu9szdhvZ3O3VtAHESulvYt+xvfBjCMWljvQ3Mfy59BTxvZ+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=e1Nnok++; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33AA9C4CEE7;
-	Sat,  6 Sep 2025 12:28:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1757161720;
-	bh=I4i+IgJmgw5WM8bIZquAFLkwMBcSojuAyx5U4cuiJxM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e1Nnok++md1RI2K/nanVK36/O5Fze7xgAVc14dXXVDm8SF6b5lGnvSb4QdymqBqkr
-	 /T2F63D2VJapngpnsEy+CTldYCah9o68Ue8M8a8rAgVIj6vvhlYiBb/hRfjb5jYt+A
-	 /Uvr4Xykb4hTK0MYjfOow60EI8HX8NFDgeGBNkYA=
-Date: Sat, 6 Sep 2025 14:28:37 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Akshay Gujar <Akshay.Gujar@harman.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	naveen.v@harman.com, sankarkumar.krishnasamy@harman.com
-Subject: Re: [PATCH] usb: core: notify unrecognized usb device
-Message-ID: <2025090610-donation-sprawl-f6f7@gregkh>
-References: <2025022131-silo-impeach-3f24@gregkh>
- <20250826165244.22283-1-Akshay.Gujar@harman.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35334289E07;
+	Sat,  6 Sep 2025 12:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757162513; cv=pass; b=nLuoQ8GlImy9K0z+Tmfi/mQntbWOwh6RNw+swGjurTlO/N1pczvzm2/sqLLA2ilTJtNTxJAb8AOa+lk43JWn8ytBY1jBIUx9aU7+oERz2j4+W9KakXmeR9vf7SDtR8GkWnB+PWOLDujPN3GHEjwDW+RP/5rFgSSNjpL4faNQosU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757162513; c=relaxed/simple;
+	bh=+eqeUrynzQyETIKqPK5kWdB5I+zyHoqmenioXoReh5U=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=cp0kwl0PcczPeECAstCjloi2qksosTYksNbEf5UUcHmU1l10eMiOZ8z6WTRVdRe60rRwLtzsRrtE87+Zy+o+Cu2Azoph7V+YMYZ3WgshUdgiah+DZMLScf+jAgamQ5TgjjtsOsZmqbA2SF6bqpODW5+0tObthCiSijEzWvi3E+c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=ktQDE/DP; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1757162494; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=QOnfWk4m4j7fpjBWdqk0hMHsSHbVAlxZu1w7RVdhw6lt6oY0+BmBvJHwV+m3GL2+Y+w7i9CUm5CrviDIFj3S999aETwDWarETnLxA9sXNXQc2ZguWv/iutv093jKcBwHXPDLlsApc5VhBROGnuzzDs4jx3Dw9iK2NuOraa0j0kE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1757162494; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=vb8MLbau1tNKQMfwbKPgSSgl5gQ2XVqDf0CiTm+vxpA=; 
+	b=NSjHh3RGtNul/0g7fkyh4fdMw18+UQo//Qak3ELI9OKoRuoGoxtyAPLTIrtgHJ7N7ApheFYWhRrcEHuPHWV/8xhqXulgCKCw23aqnh5aWzNNq92iGNR9SdsEzv8UKgHVB2c0Va+EVewKeo7okJKSmajjDuZhPyrIKuiPf/QzNv0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757162494;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=vb8MLbau1tNKQMfwbKPgSSgl5gQ2XVqDf0CiTm+vxpA=;
+	b=ktQDE/DP8rnsRJQbqtCtTlK+WiT3gPXETnFSIFS4sqDG73Ebr3wz/QWUP30piBpO
+	xjfY4A0nJ8cp+ODUh/wt6B+l68enxTdfzAr5v3NIrUmtbJ0itWPCSc3iOqLtB6pWAP6
+	rV0j9cEE7L0cSCEp01ukCIYGTtbee61TLxN1UFGI=
+Received: by mx.zohomail.com with SMTPS id 1757162492631331.60289813179213;
+	Sat, 6 Sep 2025 05:41:32 -0700 (PDT)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250826165244.22283-1-Akshay.Gujar@harman.com>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH 2/2] samples: rust: add a USB driver sample
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <2025090601-iron-glitter-c77d@gregkh>
+Date: Sat, 6 Sep 2025 09:41:16 -0300
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org,
+ linux-usb@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <831C4AE2-6964-4699-9E74-E4B721B87B17@collabora.com>
+References: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
+ <20250825-b4-usb-v1-2-7aa024de7ae8@collabora.com>
+ <2025090618-smudgy-cringing-a7a4@gregkh>
+ <D8EAF874-4FED-42EE-8FD8-E89B6CB0086A@collabora.com>
+ <2025090601-iron-glitter-c77d@gregkh>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
-On Tue, Aug 26, 2025 at 04:52:44PM +0000, Akshay Gujar wrote:
-> Sorry for delayed response.
-> 
-> On Fri, Feb 21, 2025 11:53:01AM +0100, Greg KH wrote:
 
-That was many months :)
 
-> >> As per the usb compliance, USB-IF enforces a "no silent failure" rule.
-> >> This means that an implementation of USB must not appear broken to the
-> >> consumer. In configurations where the consumer's expectations are not
-> >> met, either the peripheral or host must provide appropriate and useful
-> >> feedback to the consumer regarding the problem.
-> >> 
-> >> Link: https://compliance.usb.org/index.asp?UpdateFile=Embedded%20Host&Format=Standard#10
-> 
-> >Odd, many Linux devices have passed usb-if testing since 2005 when this
-> >was made a "rule", how did that happen?  What recently changed to
-> >suddenly require this be a kernel issue?
-> 
-> Previously, OEMs handled this with private kernel patches or custom modifications. 
-> However, with Android's Generic Kernel Image (GKI) initiative, vendors can no longer make arbitrary kernel modifications. 
-> GKI requires using a common upstream kernel, so functionality like this needs to be up streamed rather than handled with vendor-specific patches.
-> This patch provides a standard upstream solution for what was previously handled with custom kernel modifications.
+>>=20
+>> I thought that an iterative approach would work here, i.e.: merge =
+this, then
+>> URBs, then more stuff, etc.
+>=20
+> Ah, that makes sense, I didn't realize you want that here.  What USB
+> device do you want to write a rust driver for?  Are you going to need
+> bindings to the usb major number, or is it going to talk to some other
+> subsystem instead?
+>=20
+> Right now, these bindings don't really do anything USB specific at all
+> except allow a driver to bind to a device.
+>=20
+> thanks,
+>=20
+> greg k-h
 
-That's good, but that does not mean that what you are attempting to do
-really is the correct thing to do.  Here you were trying to say that
-this is a requirement of USB-IF, but it really is not.  This is just
-wanting to add a new feature to the USB core that previously was only
-out-of-tree for your devices.  Please be more specific in your
-description of the problem and issues involved.
+To be honest, I'm trying to pave the way for others.
 
-> >And does usb-if even matter these days?  You do know what they think
-> >about Linux overall, right (hint, they kicked us out from
-> >participating...) so why should we follow their "requirements" when they
-> >do not allow us to even participate or provide feedback when they create
-> >them?
-> 
-> I understand your frustration with USB-IF's treatment of Linux.
-> Rather than frame this as following USB-IF requirements, this patch addresses a practical Automotive ecosystem need: providing userspace notification of USB enumeration failures.
-> However, this patch isn't really about following USB-IF requirements - it's about providing useful functionality.
+I often hear people saying that they would look into Rust drivers if =
+only they
+did not have to write all the surrounding infrastructure themselves. On =
+the
+other hand, there is no infrastructure because there are no drivers. =
+It's a
+chicken and egg problem that I am trying to solve.
 
-Then don't say it has anything to do with USB-IF if it does not.
+It's also a cool opportunity to learn about USB, but I don't have any =
+plans
+for a driver at the moment other than a instructional sample driver in =
+Rust.
 
-> >> ---
-> >>  drivers/usb/core/hub.c | 24 +++++++++++++++++++++++-
-> >>  1 file changed, 23 insertions(+), 1 deletion(-)
-> >> 
-> >> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> >> index c3f839637..d00129b59 100644
-> >> --- a/drivers/usb/core/hub.c
-> >> +++ b/drivers/usb/core/hub.c
-> >> @@ -5343,6 +5343,26 @@ static int descriptors_changed(struct usb_device *udev,
-> >>  	return changed;
-> >>  }
-> >>  
-> >> +static void unrecognized_usb_device_notify(struct usb_port *port_dev)
-> >> +{
-> >> +	char *envp[2] = { NULL, NULL };
-> >> +	struct device *hub_dev;
-> >> +
-> >> +	hub_dev = port_dev->dev.parent;
-> >> +
-> >> +	if (!hub_dev)
-> >> +		return;
-> 
-> >How can this be true?
-> 
-> You're absolutely right. This check is unnecessary. I'll remove this in v2.
-> 
-> >> +
-> >> +	envp[0] = kasprintf(GFP_KERNEL, "UNRECOGNIZED_USB_DEVICE_ON_PORT=%s",
-> >> +				kobject_name(&port_dev->dev.kobj));
-> 
-> >Hint, if a driver ever starts calling into kobject or sysfs functions,
-> >usually something is wrong.  This should just use dev_name(), right?
-> 
-> Correct! I'll change this to use dev_name(&port_dev->dev) in v2.
-> 
-> >> +	if (!envp[0])
-> >> +		return;
-> >> +
-> >> +	kobject_uevent_env(&hub_dev->kobj, KOBJ_CHANGE, envp);
-> 
-> >Where is this new uevent documented?  What userspace tool will see this
-> >and do something about it?  How was this tested?
-> 
-> I'll add documentation to Documentation/ABI/testing/ describing 
-> the uevent format and intended consumers.
-> 
-> For testing: I used "udevadm monitor --property" to verify uevent 
-> generation during enumeration failures.
-> 
-> For Android usage: Our USB HAL service uses a NetlinkListener to 
-> capture these events and provide user feedback for connection issues.
-> 
-> >> +
-> >> +	kfree(envp[0]);
-> >> +}
-> >> +
-> >>  static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
-> >>  		u16 portchange)
-> >>  {
-> >> @@ -5569,9 +5589,11 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
-> >>  	if (hub->hdev->parent ||
-> >>  			!hcd->driver->port_handed_over ||
-> >>  			!(hcd->driver->port_handed_over)(hcd, port1)) {
-> >> -		if (status != -ENOTCONN && status != -ENODEV)
-> >> +		if (status != -ENOTCONN && status != -ENODEV) {
-> >>  			dev_err(&port_dev->dev,
-> >>  					"unable to enumerate USB device\n");
-> >> +			unrecognized_usb_device_notify(port_dev);
-> 
-> >This is only if a hub acts up with talking to a device, it does not mean
-> >the device was not supported at all.  So this isn't going to meet the
-> >standard that you describe above.  Userspace is really the only thing
-> >that can know if a device is "supported" or not, not the kernel.
-> 
-> I mischaracterized this. This detects enumeration failures, not unsupported devices. 
+Give me a few more weeks and I'll come up with the code for the other =
+things
+you've pointed out.
 
-That's a very big difference.  Enumeration failures happen all the time
-due to horrible cables and other hardware issues.  If you are now going
-to flood userspace with this information, it better be ready to handle
-it and do something with it.
+By the way, I wonder how testing would work. I tested this by plugging =
+in my
+mouse and fiddling around with =
+/sys/bus/usb/drivers/rust_driver_usb/new_id. I
+am not sure how this is going to work once I start looking into data =
+transfer
+and etc. Perhaps there's a simple device out there that I should target? =
+Or
+maybe there's a way to "fake" a USB device that would work with the =
+sample
+driver for demonstration purposes.
 
-But, for an enumeration failure, you can't do anything with it, so why
-report it at all?
-
-> Userspace determines device support. I'll rename the function to "usb_enumeration_failure_notify" and update.
-> The use case is for USB-IF compliance testing (DevNoResponse tests) where test equipment needs to verify enumeration failure detection. 
-
-There is no such requirement for the kernel to provide this information,
-why can't you just do this all in userspace with the information that
-you have?  You know if a device is active or bound to a driver properly,
-why not just rely on that instead of making the kernel do something
-different here?
-
-thanks,
-
-greg k-h
+-- Daniel=
 
