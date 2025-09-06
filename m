@@ -1,132 +1,135 @@
-Return-Path: <linux-usb+bounces-27632-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27633-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE900B46E04
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 15:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 22EEBB4708D
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 16:37:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D0E0178CBD
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 13:23:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB0E55A2735
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 14:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D15B2F0C6B;
-	Sat,  6 Sep 2025 13:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A68852459E7;
+	Sat,  6 Sep 2025 14:37:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="icNF3Rmw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bZaI5oaf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060CE2EDD7D;
-	Sat,  6 Sep 2025 13:23:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12453366;
+	Sat,  6 Sep 2025 14:36:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757164987; cv=none; b=sk5nKm3q6NdnNHqpIkWXHM97gT6nveNONPTpLnvLwZMJArWsUD5FKCXWUaYcxFDDGL8klkHuVMlOLianW3XvIlV2zSnOlhd4XHmy63QCDzg/dP9wQy86QQCJ3ebMMF8UzrZZ898weteSfzE6RBLy9W2ajKRZG1K4F9OiqYBRhBc=
+	t=1757169420; cv=none; b=SDyijB8rEumHrtWeX74K59+TEgjsQfeY4ostdozPx8KKGKjhRpEAykDelm7JvfmpdJxifgk7NiKYjEZUbjuWKxfoajspqLbf82wz3ZQ2LWatzfdcrCJmWeUF4UCoZwy60jrglUxWIWQ2jxGKcpF+HIWNZuGrkr8xIGROvHlWm3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757164987; c=relaxed/simple;
-	bh=sYB5IWtfYTmTQeQ4X93FIP5aR5W4PpyksSFlqOXcQxU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=GYeJrEYj702Ck8wN9rmA3ZacT3hBdwzLwS7qRAlxSbF+Y80bxpSXJfLHGIA0x0g2Y3L+xWKUhopYK1Nt7thPR/Ej7uC4Ki3/sJEFWR7sllp/wtBRX37ZG/c0J3BFLX/joOwXWMRle8T6A5HaMwHxFKuIoFZaNeR9QWncYyR8zUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=icNF3Rmw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F87C4CEE7;
-	Sat,  6 Sep 2025 13:23:01 +0000 (UTC)
+	s=arc-20240116; t=1757169420; c=relaxed/simple;
+	bh=SPU2rnbsPpnstPtgpQEh1/Gq9XANzp8yZYv6RSNItC8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uR9FCE2G2aHvAq+XxwHpkoFC5kFDgdaKXeeH1ASUDU/IGW51ipsL7rtTay6JsxgnQES9Uw+uZxboe3qdlZkLMO68E6hFig+npOzD6rNhXkBDHDSmDUWDwcEoH+htBpi45SIK3f/4qKUWm585twHYbxxWV8sztumC+HiN+vZJ8/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bZaI5oaf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ABB2C4CEE7;
+	Sat,  6 Sep 2025 14:36:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757164986;
-	bh=sYB5IWtfYTmTQeQ4X93FIP5aR5W4PpyksSFlqOXcQxU=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=icNF3Rmw9uebeAPQGmvzwDSNbzo/ccCYh7lWmqxBTGSdNySNlJJLl6pjyCvVjMR7F
-	 PcSqLvjAqTZf/86so+7WIhgYnMfvWDIZRkTEBLJqxshTCZ3QtZxDV5NO+Y5VhRK8xi
-	 w5BFwMZRRqvfLWkdUzhm6a46jYhxWP5wRT6kg2jFh3Mz3yaak1dRBtebkXybA/G0RL
-	 1GMnVSmtNlv+DSQsPU1Kcro783kUrVTtj3IneahIx4pSVSK80tvuv8SGSsMCQHFR6n
-	 vRqc62cyTOjEMKDeNQbhkjKeao4TD+nkpgiiB1vWlujZ1bN7m4uffbQsDFCeOBPb+1
-	 KENCKRzxJ0VxQ==
+	s=k20201202; t=1757169419;
+	bh=SPU2rnbsPpnstPtgpQEh1/Gq9XANzp8yZYv6RSNItC8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=bZaI5oafURYYPGJpisV1NWTga0qD7gCgf/AiF1LmzZ/ePkOFrGtTchlAz7tqchQtD
+	 3qjUuj5dM0rhoXSbeagUMyQXRutyKeCZGCFikUNjMBpvkOsEQJs0IEewcMU9HbvB3k
+	 sjYuk0wFzY2oXq56y+s8uJHHbOWvxvoMDzqQB5jgenVE42/qRsCXLOQ4/bcXU3dLit
+	 luUv0gv/3yarlN4l3yDo6Oq5nxLh9Fy4j2fSR6ne/CO3xNXf/gcYlTYBoaYwTTQdbC
+	 cw2hl+t9IWInTxAfLfg/UiY3nkOghC4lgGYTYwK6wArROyonuwMOKaO6pYkAXN86MV
+	 RiallcJb6wzkg==
+From: "Mario Limonciello (AMD)" <superm1@kernel.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>
+Cc: Pavel Machek <pavel@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
+	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
+	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
+	linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
+	linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
+	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
+	linux-trace-kernel@vger.kernel.org (open list:TRACING),
+	AceLan Kao <acelan.kao@canonical.com>,
+	Kai-Heng Feng <kaihengf@nvidia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	=?UTF-8?q?Merthan=20Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+	Eric Naim <dnaim@cachyos.org>,
+	"Mario Limonciello (AMD)" <superm1@kernel.org>
+Subject: [PATCH v6 RESEND 00/11] Improvements to S5 power consumption
+Date: Sat,  6 Sep 2025 09:36:31 -0500
+Message-ID: <20250906143642.2590808-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 06 Sep 2025 15:22:59 +0200
-Message-Id: <DCLQZZHU42HN.4Y4PP0PPR10O@kernel.org>
-Subject: Re: [PATCH 2/2] samples: rust: add a USB driver sample
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
- <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
- <linux-usb@vger.kernel.org>
-To: "Daniel Almeida" <daniel.almeida@collabora.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
- <20250825-b4-usb-v1-2-7aa024de7ae8@collabora.com>
- <2025090618-smudgy-cringing-a7a4@gregkh>
- <D8EAF874-4FED-42EE-8FD8-E89B6CB0086A@collabora.com>
- <2025090601-iron-glitter-c77d@gregkh>
- <831C4AE2-6964-4699-9E74-E4B721B87B17@collabora.com>
-In-Reply-To: <831C4AE2-6964-4699-9E74-E4B721B87B17@collabora.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat Sep 6, 2025 at 2:41 PM CEST, Daniel Almeida wrote:
->>>=20
->>> I thought that an iterative approach would work here, i.e.: merge this,=
- then
->>> URBs, then more stuff, etc.
->>=20
->> Ah, that makes sense, I didn't realize you want that here.  What USB
->> device do you want to write a rust driver for?  Are you going to need
->> bindings to the usb major number, or is it going to talk to some other
->> subsystem instead?
->>=20
->> Right now, these bindings don't really do anything USB specific at all
->> except allow a driver to bind to a device.
->>=20
->> thanks,
->>=20
->> greg k-h
->
-> To be honest, I'm trying to pave the way for others.
->
-> I often hear people saying that they would look into Rust drivers if only=
- they
-> did not have to write all the surrounding infrastructure themselves. On t=
-he
-> other hand, there is no infrastructure because there are no drivers.
+A variety of issues both in function and in power consumption have been
+raised as a result of devices not being put into a low power state when
+the system is powered off.
 
-I think saying that there is no infrastructure for writing Rust drivers is =
-not
-accurate:
+There have been some localized changes[1] to PCI core to help these issues,
+but they have had various downsides.
 
-We already have lots of infrastructure in place, such as device / driver co=
-re
-infrastructure, PCI, platform (with OF and ACPI), faux and auxilirary bus
-infrastructure, I/O, workqueues, timekeeping, cpufreq, firmware, DMA and a =
-lot
-more.
+This series instead tries to use the S4 flow when the system is being
+powered off.  This lines up the behavior with what other operating systems
+do as well.  If for some reason that fails or is not supported, run their
+shutdown() callbacks.
 
-Not to forget the absolute core primitives, such as kernel allocators, xarr=
-ay,
-locking infrastructure or very recently maple tree and LKMM atomics.
+Cc: AceLan Kao <acelan.kao@canonical.com>
+Cc: Kai-Heng Feng <kaihengf@nvidia.com>
+Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
+Cc: Merthan Karakaş <m3rthn.k@gmail.com>
+Cc: Eric Naim <dnaim@cachyos.org>
+---
+v6 RESEND:
+ * Resent because Greg said he was ignoring it and would like the whole
+   series to be able to review.
+v5->v6:
+ * Fix for LKP robot issue
+ * Some commit message changes
+ * Rebase on 6.17-rc2
 
-Besides that we also have a lot of infrastructure that we do not have in C
-because it's simply not possible or applicable.
+Mario Limonciello (AMD) (11):
+  PM: Introduce new PMSG_POWEROFF event
+  scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+  usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+  USB: Pass PMSG_POWEROFF event to suspend_common() for poweroff with S4
+    flow
+  PCI: PM: Disable device wakeups when halting system through S4 flow
+  PCI: PM: Split out code from pci_pm_suspend_noirq() into helper
+  PCI: PM: Run bridge power up actions as part of restore phase
+  PCI: PM: Use pci_power_manageable() in pci_pm_poweroff_noirq()
+  PCI: Put PCIe bridges with downstream devices into D3 at hibernate
+  drm/amd: Avoid evicting resources at S5
+  PM: Use hibernate flows for system power off
 
-However, it is in fact true that there is no USB infrastructure yet.
+ drivers/base/power/main.c                  |  7 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 +
+ drivers/pci/pci-driver.c                   | 99 +++++++++++++++-------
+ drivers/scsi/mesh.c                        |  1 +
+ drivers/scsi/stex.c                        |  1 +
+ drivers/usb/core/hcd-pci.c                 | 11 ++-
+ drivers/usb/host/sl811-hcd.c               |  1 +
+ include/linux/pm.h                         |  5 +-
+ include/trace/events/power.h               |  3 +-
+ kernel/reboot.c                            |  6 ++
+ 10 files changed, 103 insertions(+), 35 deletions(-)
 
-> It's a chicken and egg problem that I am trying to solve.
+-- 
+2.43.0
 
-This is exactly why we develop Nova in-tree, such that we have a justificat=
-ion
-for adding all this infrastructure.
-
-Lot's of the stuff I listed above originates from that and I think the Nova
-project has proven that we can break this chicken and egg problem. I think
-one proof for that is that Tyr follows the approach.
-
-However, I agree that it still remains that someone (i.e. some driver) has =
-to
-take the burden of doing the "heavy lifting" for a particular subsystem.
 
