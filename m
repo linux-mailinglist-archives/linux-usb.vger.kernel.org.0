@@ -1,129 +1,300 @@
-Return-Path: <linux-usb+bounces-27648-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27649-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12619B47200
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 17:22:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2F61B47231
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 17:44:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E90AF1BC63D7
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 15:23:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2BDE5A0CC8
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 15:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E583221DA5;
-	Sat,  6 Sep 2025 15:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4437C2ECD2E;
+	Sat,  6 Sep 2025 15:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AC/KHFZn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h6MZJCsO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97B71C4A0A;
-	Sat,  6 Sep 2025 15:22:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E542AE84;
+	Sat,  6 Sep 2025 15:43:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757172165; cv=none; b=Jq55QkmYSA2K1tAa3tYbLwcKuWruEmDsqKjY7qE4E5yuIXuW7AOi5tt+egrEu2w7elYfZ+qM5PEqmfmHrLCEV9+xYTEkgrQZ8weAChatB4Q92k3Ia/Fw8O+haMM42EwDkKRE/T7r0Kc2HzDS2SOKdSaHGUOBA+GRn6Gh+3nXC5g=
+	t=1757173419; cv=none; b=g9H9F/wAFnboVrPgGjgvZP0SCYSonl60eOwEID/E1U/w4onkp9TiTaKf82XDNd2zbPCnQSVqZXobzSoFoN+AAQdpeq2cG28p5d0JC/lpe3wxM73uCFTkkmw/klr9mUqpk+NwG5XE7QeFFU5DpWxW8osVtzkXAyXDTMs2dyya7MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757172165; c=relaxed/simple;
-	bh=2Cc+y+nYgnXueTnsUZYSLj+5OAuyyh/BgYgWxkTKnGg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=kdX4tueBwAn99IpQL/EDu/UcQ4dKT5PAeSpeth8quV9z/p2ihepTO3D06t48KP9/FQu/LOGA404IrN3LtJntUIpcJ9J/V+nszZFgiWzFrhRMbBOKkIy6KzF98ny0/3qqeBwDNksso3eGlFFWw4vNXdr7virojx1XUi3oyhjDSGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AC/KHFZn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49804C4CEE7;
-	Sat,  6 Sep 2025 15:22:42 +0000 (UTC)
+	s=arc-20240116; t=1757173419; c=relaxed/simple;
+	bh=B2PmqO8jFsYcp9IfYjXmvUC+hdyx9Na0xGIpQfiCq3E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=RmGN/BT4qHhRfKFXyKxdof2XMCoLjuZLqDYn0c26cxnUWcTBIkpLA/v8F5Oh/z27FCk1vg9r3MqEdA+ofjFAKA9xtIiREJTPPJbtHVZ/p9fPwjAOyDJsVoohBxj2F3yEFhJ1Iq9oA6k0x7l9Nd0+CrY1jc2bFUgUYFzplzW4eIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h6MZJCsO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F90FC4CEE7;
+	Sat,  6 Sep 2025 15:43:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757172165;
-	bh=2Cc+y+nYgnXueTnsUZYSLj+5OAuyyh/BgYgWxkTKnGg=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=AC/KHFZnlJhJkkKKxrzfCtHXTj8Q6PELcIschWfrR+TNZdZnOf2miZdvxOH/ar+/i
-	 ba+zZ6s2ECkyZ/+z1LO5plSw8+Tv4PQdJM2BR0rNmgpjBeVqiOBIOORWAdcfT+QFU5
-	 1q3p5km08PCnLX9jaKKuhTH9tSP8L9jE3xOp/Wwpg5QgkJxjuHuMkGLTuhsUxlAwXH
-	 dM1xpDhI7F4+M4hbW6cCEss2wD2R8TdNoPICKkX7JwvFuDI+RoFeVhI8IsmJuUWCKA
-	 R9HZv6nBbuYr0E6P1m6XX1Uk6AEgaTD0sGxb64iSWjwJB3RSDxmuafp4CSImxHPsd0
-	 qyeGrBzleLPSQ==
+	s=k20201202; t=1757173419;
+	bh=B2PmqO8jFsYcp9IfYjXmvUC+hdyx9Na0xGIpQfiCq3E=;
+	h=From:Subject:Date:To:Cc:From;
+	b=h6MZJCsO3bY+g0PaDB3Jo/YumM41bXU4GFkK8br8wcMHwX2ucGQMQ1teTnlpgK2Nx
+	 DtiHEndmhKIC5WkvLNktB/ngDwqwgemSW7mrVBCqLaLVZhEj8T3lYjuZxY/nWMu6b8
+	 HM2TRzxAhODw+oYIW4KbuepEjmmabms12hDkESOtG+4KGgPh+cQMLCuzh5oKqS2Utt
+	 LQy9MKm8Ffx/Rst4euC55clR10WEogAo1tje25DL9Rx77qAI+RlDN+BI0BbPPGBmHp
+	 Y/m2j0WZFe+0n2hSjcJCghGvX6Ew7nJww+w374mUQOras5mecxTfT5GdwvyIjiFUEK
+	 MP68H778hDStg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19EB6CA0FED;
+	Sat,  6 Sep 2025 15:43:39 +0000 (UTC)
+From: Sven Peter <sven@kernel.org>
+Subject: [PATCH v2 00/22] Apple Silicon USB3 support
+Date: Sat, 06 Sep 2025 15:43:13 +0000
+Message-Id: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 06 Sep 2025 17:22:40 +0200
-Message-Id: <DCLTJMIAMCVL.35U236MMS5CCK@kernel.org>
-Subject: Re: [PATCH 2/2] samples: rust: add a USB driver sample
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
- <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Michal
- Wilczynski" <m.wilczynski@samsung.com>, "Igor Korotin"
- <igor.korotin.linux@gmail.com>, <linux-kernel@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, <linux-usb@vger.kernel.org>
-To: "Daniel Almeida" <daniel.almeida@collabora.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
- <20250825-b4-usb-v1-2-7aa024de7ae8@collabora.com>
- <2025090618-smudgy-cringing-a7a4@gregkh>
- <D8EAF874-4FED-42EE-8FD8-E89B6CB0086A@collabora.com>
- <2025090601-iron-glitter-c77d@gregkh>
- <831C4AE2-6964-4699-9E74-E4B721B87B17@collabora.com>
- <DCLQZZHU42HN.4Y4PP0PPR10O@kernel.org>
- <9657C897-087E-4544-849B-964E99D95A50@collabora.com>
-In-Reply-To: <9657C897-087E-4544-849B-964E99D95A50@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJJWvGgC/1XMQQrDIBCF4auEWdeiU1qlq94jZKFmEqVFgwZpC
+ N69NtBFV8M/8L4dMiVPGe7dDomKzz6GFnjqwDodZmJ+bA3I8coVcqZXu7iN3ZiQzEjSE14MCWm
+ hLZZEk38fWj+0dj6vMW0HXsT3+3PEn1ME4+2ioVELhUY9npQCvc4xzTDUWj/mE1lwpwAAAA==
+X-Change-ID: 20250820-atcphy-6-17-b7eaf23be17c
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
+ Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+ Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <Frank.Li@nxp.com>, 
+ Ran Wang <ran.wang_1@nxp.com>, Peter Chen <peter.chen@nxp.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, asahi@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org, 
+ Sven Peter <sven@kernel.org>, stable@kernel.org, 
+ Hector Martin <marcan@marcan.st>, R <rqou@berkeley.edu>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10497; i=sven@kernel.org;
+ h=from:subject:message-id;
+ bh=B2PmqO8jFsYcp9IfYjXmvUC+hdyx9Na0xGIpQfiCq3E=;
+ b=owGbwMvMwCHmIlirolUq95LxtFoSQ8aesMlmluHV2zTUZB173myaePexf/uspYEqlw47XHrSw
+ vPrRlxYRykLgxgHg6yYIsv2/famTx6+EVy66dJ7mDmsTCBDGLg4BWAiCVwM/3OWcm7WeaoboSbN
+ OKvVIqXK+lNLnl6WXW/gfKs1EQeXXWb4w98TGXD49Mbirn5d2ecfD34x2D5z6zr52RvXl0qmxlo
+ kMwAA
+X-Developer-Key: i=sven@kernel.org; a=openpgp;
+ fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
+X-Endpoint-Received: by B4 Relay for sven@kernel.org/default with
+ auth_id=407
 
-On Sat Sep 6, 2025 at 4:50 PM CEST, Daniel Almeida wrote:
-> So far I see a pattern where sample drivers count as users. This has been=
- the
-> case, for example, for rust_dma.rs. I was under the impression that the s=
-ame
-> would apply here. Although I do realize that there were plans for dma cod=
-e
-> other than rust_dma.rs, of course.
+Hi,
 
-This isn't the case, we have those sample drivers to make it easy to review=
- the
-the code and illustrate in an isolated context how it works. But, there has
-always been a "real" user behind that. In the case of the DMA work it was N=
-ova.
+With the dwc3 glue approach this is starting to look reasonable to me.
 
-> As for Nova and Tyr, these are projects with a lot of big companies invol=
-ved.
->
-> They were able to break this chicken and egg situation in part due to tha=
-t,
-> because companies were willing to allocate engineers for both the drivers=
- _and_
-> the required infrastructure. Unless the same can be said for USB, media o=
-r any
-> other subsystems, I don't see it happening.
+There's still one issue (SuperSpeed devices have a 5 second delay before
+they come up; This has been known for ages and we haven't been able to
+identify the root cause) but otherwise both host and device mode have
+been working quite well across a number of different devices (usb3 only,
+usb3+dp, dp-only, usb4, and the first two combined with a broken c-to-a
+adapter that can trigger a lot of quick plug/unplug events ;)) for me.
 
-Well, this is true for Nova and Tyr, but I disagree that this is the reason=
- we
-were able to break the chicken and egg problem.
+With the dwc3 glue driver this series can now also be merged independently
+once it's ready: Patches 1-4 can go through the dwc3 tree, 5-15 through
+tipd, 16-18 should go together through the phy tree, and I'll take the
+DTS changes through my tree. If everyone's happy with the overall
+approach here I can also just send these as individual series.
 
-For instance, the initial lift around the driver core, PCI, I/O, etc.
-infrastructure was done by me, a single person. This could have been happen=
-ing
-in the context of a very simple and small driver as well, rather than a big=
- GPU
-driver with lots of companies and people involved.
+A tree for testing is again available as apple-usb3-v2 at [5]. 
 
-Igor (Cc) is doing the initial lift for I2C and Michal (Cc) for PWM for
-instance.
+Changes in v2:
+- Link to v1: https://lore.kernel.org/r/20250821-atcphy-6-17-v1-0-172beda182b8@kernel.org
+- Fixed dt-binding warnings
+- Extended the glue layer to allow control over mode switching
+- Removed quirks added to dwc3 and implemented them as a glue
+  driver instead as suggested by Thinh
+- Dropped snps,dwc3 fallback compatible since this is neither compatible
+  with the glue driver approach nor is this hardware truly compatible
+  with snps,dwc3 unless the bootloader did a lot of heavy-lifting and
+  left everything in just the right state
+- Dropped atcphy dp-only compatible since this can be detected in other
+  ways or just be driven from the dp controller once we upstream that
+- Fixed duplicate #define in TIPD
+- Use ioremap_np when required instead of just skipping
+  dwc3_power_off_all_roothub_ports
+- Dropped the change that added the USB role to typec_mux_state since
+  the new glue driver approach no longer requires this.
+- Cleaned up some leftover TODOs in atcphy and ran clang-format
+- Reworked tunables.c to use a variable sized member and alloc the
+  entire struct directly
+- Shortened debug messages in atcphy
+- Added DTS changes for t8112 and t600x
+- Call typec_unregister_altmode unconditionally as it's NULL-safe
+- Fixed arre -> arr typo in commit message
+- Drop __func__ from cd321x_interrupt debug print
+- Picked up Heikki's r-b tags
 
-So, I see those things happen and I don't think that such initial lifting
-necessarily needs big companies with dozens of engineers being involved.
+Original cover letter:
 
-If we know people who want to write drivers for a subsystem that doesn't ye=
-t
-have Rust infrastructure (such as USB), let's encourage them to get started=
- /
-involved anyways and let's help them as they go.
+This series includes changes to dwc3, tipd and a new phy driver to enable
+USB3 on these machines. There's also some preparations to eventually enable
+DisplayPort AltMode and Thunderbolt but those need future work.
+Overall, this entire setup is quite a mess and we've tried to make it work
+for quite a while now and finally came up with this solution here.
 
-But also please don't get me wrong, I understand and very much appreciate y=
-ou
-want to get the ball rolling, but let's not discourage people by making it
-sounds as if it would be impossible for individuals.
+The USB3 controller is a very special kind of broken: It never sees any port
+plug/unplug events that should normally arrive directly at dwc3.
+Additionally, it needs to go through a full hard reset for every new connection
+and most mode change. Details on why this is required are in the commit
+description.
+
+On top of that we need to keep the Type-C PHY bringup and dwc3 bringup tightly
+synchronized. If there's a race between the two systems at best the port stops
+working until a system reboot and at worst there's a watchdog somewhere that
+forcefully resets the entire SoC after ~5 seconds. I've only seen the latter
+when bringing up thunderbolt so far but wouldn't be surprised if it happens
+with just usb3 as well.
+
+The entire bringup/bringup is orchestrated by a TIPD variant called CD321x
+found on these machines. Unlike the original chips we however get no control
+over which mode is negotiated or are even able to see the PDOs or VDOs. We only
+get to know once the mode has been negotiated and have to act accordingly. I
+even went as far as dumping the firmware from the chip to confirm this [1][2].
+
+Hector wrote another summary of this early in January as well [3] and this
+series is the only way we've been able to bring these ports up reliably.
+It's not pretty in some places but I have no other idea how to implement this,
+hence the RFC tag. Happy to discuss other approaches as well.
+
+Both the PHY and the TIPD driver already include changes for DisplayPort
+AltMode and USB4/Thunderbolt. These need additional work though but
+since we can't control the mode devices end up in we can already merge
+them now.
+
+I used phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml as a template for the dt-binding
+for atcphy (especially the ports). That was the most recent binding I found for
+a PHY with similar features.
+
+In order to test this you need to run the latest m1n1 master [4] because the
+1.5.0 release does not include the code that lifts the tunables from Apple's
+device tree. A kernel tree for testing is also tagged as apple-usb3-v1 at [5].
+
+If the overall approach here is fine and no one can think of a better way to
+support this SoC I'll drop the RFC and include the dts changes for the other
+M1 and M2 machines as well.
+
+Best,
+
+Sven
+
+[1] https://social.treehouse.systems/@sven/111092587315536174
+[2] https://social.treehouse.systems/@sven/111096589846468888
+[3] https://lore.kernel.org/all/fda8b831-1ffc-4087-8e7b-d97779b3ecc5@marcan.st/
+[4] https://github.com/AsahiLinux/m1n1
+[5] https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux.git
+
+Signed-off-by: Sven Peter <sven@kernel.org>
+---
+To: Sven Peter <sven@kernel.org>
+To: Janne Grunau <j@jannau.net>
+To: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+To: Neal Gompa <neal@gompa.dev>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To: Frank Li <Frank.Li@nxp.com>
+To: Ran Wang <ran.wang_1@nxp.com>
+To: Peter Chen <peter.chen@nxp.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Vinod Koul <vkoul@kernel.org>
+To: Kishon Vijay Abraham I <kishon@kernel.org>
+Cc: asahi@lists.linux.dev
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-usb@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-phy@lists.infradead.org
+
+---
+Hector Martin (5):
+      usb: typec: tipd: Update partner identity when power status was updated
+      usb: typec: tipd: Use read_power_status function in probe
+      usb: typec: tipd: Read data status in probe and cache its value
+      usb: typec: tipd: Handle mode transitions for CD321x
+      arm64: dts: apple: t8103: Mark ATC USB AON domains as always-on
+
+Janne Grunau (2):
+      arm64: dts: apple: t8112: Add Apple Type-C PHY and dwc3 nodes
+      arm64: dts: apple: t600x: Add Apple Type-C PHY and dwc3 nodes
+
+Sven Peter (15):
+      dt-bindings: usb: Add Apple dwc3
+      usb: dwc3: dwc3_power_off_all_roothub_ports: Use ioremap_np when required
+      usb: dwc3: glue: Allow more fine grained control over mode switches
+      usb: dwc3: Add Apple Silicon DWC3 glue layer driver
+      usb: typec: tipd: Clear interrupts first
+      usb: typec: tipd: Move initial irq mask to tipd_data
+      usb: typec: tipd: Move switch_power_state to tipd_data
+      usb: typec: tipd: Trace data status for CD321x correctly
+      usb: typec: tipd: Add cd321x struct with separate size
+      usb: typec: tipd: Read USB4, Thunderbolt and DisplayPort status for cd321x
+      usb: typec: tipd: Register DisplayPort and Thunderbolt altmodes for cd321x
+      dt-bindings: phy: Add Apple Type-C PHY
+      soc: apple: Add hardware tunable support
+      phy: apple: Add Apple Type-C PHY
+      arm64: dts: apple: t8103: Add Apple Type-C PHY and dwc3 nodes
+
+ .../devicetree/bindings/phy/apple,atcphy.yaml      |  213 ++
+ .../devicetree/bindings/usb/apple,dwc3.yaml        |   80 +
+ MAINTAINERS                                        |    4 +
+ arch/arm64/boot/dts/apple/t6001.dtsi               |    1 +
+ arch/arm64/boot/dts/apple/t6002-j375d.dts          |  197 +-
+ arch/arm64/boot/dts/apple/t6002.dtsi               |    1 +
+ arch/arm64/boot/dts/apple/t600x-dieX.dtsi          |  212 ++
+ arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi     |  236 +++
+ arch/arm64/boot/dts/apple/t600x-j375.dtsi          |  275 +++
+ arch/arm64/boot/dts/apple/t8103-j274.dts           |   12 +
+ arch/arm64/boot/dts/apple/t8103-j293.dts           |   12 +
+ arch/arm64/boot/dts/apple/t8103-j313.dts           |   12 +
+ arch/arm64/boot/dts/apple/t8103-j456.dts           |   12 +
+ arch/arm64/boot/dts/apple/t8103-j457.dts           |   12 +
+ arch/arm64/boot/dts/apple/t8103-jxxx.dtsi          |  137 ++
+ arch/arm64/boot/dts/apple/t8103-pmgr.dtsi          |    2 +
+ arch/arm64/boot/dts/apple/t8103.dtsi               |  105 +
+ arch/arm64/boot/dts/apple/t8112-j413.dts           |   12 +
+ arch/arm64/boot/dts/apple/t8112-j473.dts           |   11 +
+ arch/arm64/boot/dts/apple/t8112-j493.dts           |   12 +
+ arch/arm64/boot/dts/apple/t8112-jxxx.dtsi          |  137 ++
+ arch/arm64/boot/dts/apple/t8112.dtsi               |  105 +
+ drivers/phy/Kconfig                                |    1 +
+ drivers/phy/Makefile                               |    1 +
+ drivers/phy/apple/Kconfig                          |   14 +
+ drivers/phy/apple/Makefile                         |    4 +
+ drivers/phy/apple/atc.c                            | 2214 ++++++++++++++++++++
+ drivers/soc/apple/Kconfig                          |    4 +
+ drivers/soc/apple/Makefile                         |    3 +
+ drivers/soc/apple/tunable.c                        |   71 +
+ drivers/usb/dwc3/Kconfig                           |   11 +
+ drivers/usb/dwc3/Makefile                          |    1 +
+ drivers/usb/dwc3/core.c                            |   16 +-
+ drivers/usb/dwc3/dwc3-apple.c                      |  425 ++++
+ drivers/usb/dwc3/gadget.c                          |    2 +
+ drivers/usb/dwc3/glue.h                            |   14 +
+ drivers/usb/dwc3/host.c                            |    7 +-
+ drivers/usb/typec/tipd/core.c                      |  564 ++++-
+ drivers/usb/typec/tipd/tps6598x.h                  |    5 +
+ drivers/usb/typec/tipd/trace.h                     |   39 +
+ include/linux/soc/apple/tunable.h                  |   60 +
+ 41 files changed, 5192 insertions(+), 64 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250820-atcphy-6-17-b7eaf23be17c
+
+Best regards,
+-- 
+Sven Peter <sven@kernel.org>
+
+
 
