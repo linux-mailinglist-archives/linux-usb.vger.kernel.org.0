@@ -1,100 +1,103 @@
-Return-Path: <linux-usb+bounces-27611-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27613-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2A61B4661E
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 23:47:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60FE6B46906
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 06:30:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB81717D910
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Sep 2025 21:47:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFF063BBC2A
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Sep 2025 04:30:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EFC42F3C28;
-	Fri,  5 Sep 2025 21:44:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D45E826057C;
+	Sat,  6 Sep 2025 04:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vmn+yCul"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GLGQyzud"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2EF82EFDAD
-	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 21:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76E22397BF
+	for <linux-usb@vger.kernel.org>; Sat,  6 Sep 2025 04:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757108692; cv=none; b=dzSKcc641UERpeDb/9DlxFQVizkI41W8djnbehiq7da8hLK2RjJ/VsKYcE+RLjNz2+KGWo2W6/c/WJjXTwLjC5QL+AKd2PvJRtvI9eq777c9SU/P+BROjS+MMwU3+wmh7KlozJoJkbr7EMoqLa2xA7p+hspU7VWEfzlXN91HKPE=
+	t=1757133053; cv=none; b=OuaQu4KO+KMpaHTEBJiTnzOVlgoTlejZ7MJn+ksMlJbRq7gWD0ZiP812djxRDQNWa5XtUPJfLlHrVAgnt/I2XolBWb0DrR2cAAiAvmvdodwyauQAE7ty+pSzy2JFIj2rihOX13MY5BHCblMthGi0XO++C5rV9GsrtfTkRRvFMnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757108692; c=relaxed/simple;
-	bh=qfaV1nI9qbT5fQ6RxVVI/9Xoj4uRB6F2xUzjcidGxX8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NDRLaPxXHF+oZ/B9j0v/imzPus+z0HOBYkTyz+VVzsmpIkBC7xZrPPRaaJbTxhcaPSuhgYt4xOll+5QXoNLWTXDuwF/qxhQCi8bGgT5m02VSI6sVGqGQd2Fk+AMzIjal7xv6OywsU0cPWxwpdLFm+e0fuBN5ksd5Ao6nvsVAUqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vmn+yCul; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5BEA0C4CEF5
-	for <linux-usb@vger.kernel.org>; Fri,  5 Sep 2025 21:44:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757108692;
-	bh=qfaV1nI9qbT5fQ6RxVVI/9Xoj4uRB6F2xUzjcidGxX8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Vmn+yCulLEDSwCxCsh5mVziUknOsS4yNtzPWbHNktTlQvEyYKD5nFIIFlLrut9uSR
-	 9xnOyHHQpyy6uKdqIGSA3ZaugziwYZHb0IFeEkxCSsKaGRx6nLMfE8x0t8GvcYcEug
-	 EYks6ZLliRxFZNgsB2pQjztqPmsVo9VchHCLDrPSU8/aJyBaSAp0F7dnRVj90rJe3W
-	 NP5VaSlMmSobBt7UGEZwny1FAtyOsfWIrCgQZQ2R0ZMWWBeNLuoZSuaL8e6rZZvLcC
-	 dIyd8uL3mGpmx9Ge08tpxSGRe6NnKG5OpQuQylk624nli/S2So4+1Khw6hOe5DCZmX
-	 AVauwqBqPNH8Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4E360C41614; Fri,  5 Sep 2025 21:44:52 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
- resume from suspend
-Date: Fri, 05 Sep 2025 21:44:52 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: paula@alumni.cse.ucsc.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220491-208809-TlqDPrKQmn@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
-References: <bug-220491-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1757133053; c=relaxed/simple;
+	bh=/JvYGo8wio9b1WEq67ViyQiaAJ9oX/hOljx8zUDo+rU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TnYfKr58rFk6zyTDUjkDnPNqJMkZx/1CicNyMCVAW/l2mDf8XQG3Cow/zpu3P2hREPJDbmpbsmgLH/es0kRuJtZMr5p2YTMcjwGywk/TTOA2sp1qSD8aKVE3tmlsa7giR3p1CrTVVS5pY7fxkAH7WbtvgluJxdeC5D0h9uiIUPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GLGQyzud; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757133051; x=1788669051;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/JvYGo8wio9b1WEq67ViyQiaAJ9oX/hOljx8zUDo+rU=;
+  b=GLGQyzudSZju7sLHEcDi90PojPguyn+0U1KWvcJZ23JstCW8O50Q5nK8
+   ija3kPxocPCl84RawHyyUeMrU5PCL1IwRSn2CWjoJrLK9uIfwnI7gV9Mu
+   E9JRwoUBJNc+2rJTek1H0Dg0HqhCuD2eNqK4FXPCw26U0oIkuxSYiQwq6
+   iBBeFbJbGjXpp4Vkqt7ph58WSjkD5+tXRnrQSGKdB8fVFb28hyScgCQ3g
+   ZbSdjNjVYuZBXZqmfJojb1tc58YRldzyWrjZENIjTF4FQ10fsmQKhrpZU
+   j3bQlGDDpgrawc54QcyEVixZfMXzKDLrroChze4HGhMfsKUXQkTuPNWAR
+   g==;
+X-CSE-ConnectionGUID: dvzOX6JAReeIkLR163kviQ==
+X-CSE-MsgGUID: v4l0PU2bSUKK+BsQwQzYxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11544"; a="63307757"
+X-IronPort-AV: E=Sophos;i="6.18,243,1751266800"; 
+   d="scan'208";a="63307757"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 21:30:51 -0700
+X-CSE-ConnectionGUID: J3TQF+EuTLqlbvHYEWfKxg==
+X-CSE-MsgGUID: /VQRLjdWTnGXwmERMP0kXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,243,1751266800"; 
+   d="scan'208";a="173128874"
+Received: from clke07vm102.fm.intel.com (HELO clke07vm102.amr.corp.intel.com) ([10.80.128.226])
+  by fmviesa010.fm.intel.com with ESMTP; 05 Sep 2025 21:30:51 -0700
+From: Pooja Katiyar <pooja.katiyar@intel.com>
+To: linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org
+Cc: dmitry.baryshkov@oss.qualcomm.com,
+	pooja.katiyar@intel.com
+Subject: [PATCH v3 0/4] usb: typec: ucsi: Add support for SET_PDOS command
+Date: Fri,  5 Sep 2025 21:30:57 -0700
+Message-ID: <cover.1757024530.git.pooja.katiyar@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
+This series implements support for UCSI SET_PDOS command. It provides
+interface to send message out data structure and update source or sink
+capabilities PDOs on a connector over debugfs interface.
 
---- Comment #45 from Paul Ausbeck (paula@alumni.cse.ucsc.edu) ---
-Things have taken an unexpected turn. I tested a reset_resume_delay=3D500
-together with Mathias' urb queuing patch and my original problem, unmount of
-the internal SD card upon resume, returned. I was expecting that I would not
-have the unmount problem with this configuration. Right now, it looks like
-Mathias' patch somehow interferes with reset. I have again reconfigured wit=
-hout
-Mathias' patch and with reset-resume_delay=3D500 and have again confirmed t=
-hat
-the unmount problem does not occur. I will look at this further and post so=
-me
-traces/logs.
+It also updates UCSI structure to have message in and message out fields
+instead of handling them as separate parameters.
 
---=20
-You may reply to this email to add a comment.
+Pooja Katiyar (4):
+  usb: typec: ucsi: Update UCSI structure to have message in and message
+    out fields
+  usb: typec: ucsi: Add support for message out data structure
+  usb: typec: ucsi: Enable debugfs for message_out data structure
+  usb: typec: ucsi: Add support for SET_PDOS command
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c |   5 +-
+ drivers/usb/typec/ucsi/debugfs.c      |  36 +++++++-
+ drivers/usb/typec/ucsi/displayport.c  |  11 ++-
+ drivers/usb/typec/ucsi/ucsi.c         | 118 ++++++++++++++++++--------
+ drivers/usb/typec/ucsi/ucsi.h         |  22 +++--
+ drivers/usb/typec/ucsi/ucsi_acpi.c    |  25 ++++--
+ drivers/usb/typec/ucsi/ucsi_ccg.c     |  11 ++-
+ 7 files changed, 165 insertions(+), 63 deletions(-)
+
+-- 
+2.43.0
+
 
