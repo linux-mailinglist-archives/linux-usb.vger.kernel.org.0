@@ -1,84 +1,85 @@
-Return-Path: <linux-usb+bounces-27691-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27692-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F815B47CBD
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 20:14:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CE77B47CC0
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 20:14:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D23EE17D7FC
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 18:14:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2745E17DEE6
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 18:14:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6016D299949;
-	Sun,  7 Sep 2025 18:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1642329B799;
+	Sun,  7 Sep 2025 18:14:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="GauMgnjW"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aQqyvQc0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0013594C
-	for <linux-usb@vger.kernel.org>; Sun,  7 Sep 2025 18:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A3529AAFD
+	for <linux-usb@vger.kernel.org>; Sun,  7 Sep 2025 18:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757268862; cv=none; b=j0+AAfZA18W6s86s4ocatSo1Ed6HHX/3asCsgU2c7jbsTt0d5HBQ5aZ9GcHjoD6c0BrLoJF8AtV+FUAdMbG2wr2mfg2QTk5eid+ShgBLcvaUcb7D7xoGWF+y+g/fMuCxC2SyzIjn6nlnZKo71mMoXjz6lt5Zot0YMlLLFcsscbI=
+	t=1757268866; cv=none; b=Ah4uAlgDFOy+UBgwpzGxPATfIlfQ6XeJx5H9yRs5/VVFgIhfNTmzmkjojyOjhc/rORaFdZL/aLbJhrpfNx47EopElsiNWR938bt8fa8ZIo+FVBnlYBDLetH/OUjn8vvo9G38OgBk1TpGmJqbcvlwAfKEI/4q7seZd4C7EuLVvLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757268862; c=relaxed/simple;
-	bh=11/dD3dDcCOc9MsrcPqs0qbvB/s/is+nEp2ZS7rQWfQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TsfF3A5QXS+Wq0jgMpNkWoDnU2UuH/aMKEKpqk+Ircd39Gs16MiGCHGEwbfBZX6iaW1UdvYF81FbGsrVYjq8B+zKqTmDrTDe257007aR4b5xUaG59+0hV9IcwqdOVSZWO2JUwm82v/n0voUqa8DK6oY/n9Hnf8j56nysJVbBqJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=GauMgnjW; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1757268866; c=relaxed/simple;
+	bh=FWBE8TbnpDoILTgny5SLZBpQh7y0VgQZiXP6ZqS4dy4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=fOORcfHdaA8zJIb4w8oue78sIywbS1eaPDCchPbBZBx4y7thXmB9fl1OJjooPLZo1XHbgBA8H9YWyEyu136isct4/UfATuo0yT1oAOApRv2qp2nataIvx+v+LaWsJWrOBl5v1oUXSkDR4qQSUAPhyAAFQqNY7F0LKP2zk+6xw0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aQqyvQc0; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 587HE5BH018823
-	for <linux-usb@vger.kernel.org>; Sun, 7 Sep 2025 18:14:20 GMT
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 587FPbj8002796
+	for <linux-usb@vger.kernel.org>; Sun, 7 Sep 2025 18:14:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=8UMw1xCRpkP/WZEjhmDx4M+05aTIY2seDc4
-	onliaA1Q=; b=GauMgnjWWmWyWiEVqykL95sY8fp/QrekbaishAfietoABQa71rd
-	Ye8/dvIx1shaN+x+qgEDoHu9asL2eRtcll0IdHK31RrsgolL83UxLDvyPMjQxb4N
-	Agz9JBgeuPQI1UAezcND1jteut2FFLn0lw0CWTIwhZlBcw+MxW1cHd/UkQXGFcnn
-	uj69uRGMRDg1uIfA1tfxOSKUrIHZCiAkPjJ4pHH3BPmhmebWt9FlJGiWIFym4BdF
-	V71wJo0Z4Xz66PpU1js1UabAD41bx5haK6zDXVC+yYjjBU7gh2kUGl0xVuIvp+Fu
-	6RwHjGWXE5z9ISc8BUo38aYzOa9hWu3CAJg==
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490bws2gkc-1
+	cc:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=qcppdkim1; bh=zXbvHhAHt3e
+	XLIh4fGNwnDZCLikwnim4WFNUvEbF34I=; b=aQqyvQc0HXfZCig0yNWtZPUzqtV
+	XRX51ydJPaziJ4FujVFMTVQ7z7X+ZOEZhyKz1Rflhul7xtyzBNBPxoeIvfpLVij/
+	/ktL6/Ey6vFSljnVqj+uAOhHa/BK+L2D1ddSLw2GrWq5oXd+C5/D7i96E/Tz/8Ck
+	4MIUsq3ifXW1DWM2AWHvepeSV4oeWF3c8ZxnVw8CBZ8wVwsxvQdUo9yuRibLDtGk
+	9Ks+bDko+jCpJDJQsKO8Iqpm1s44brak2bSY6pNKYaO3voDOQWTKc5SK053Tg3Nq
+	kRftvkvhRcX4pyiOFRGuTQY6KzIuYCLx47HbGXPoMbPslFHG4sFlFs2ewMA==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490dqftc4r-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Sun, 07 Sep 2025 18:14:20 +0000 (GMT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-32d4e8fe166so2086945a91.2
-        for <linux-usb@vger.kernel.org>; Sun, 07 Sep 2025 11:14:20 -0700 (PDT)
+	for <linux-usb@vger.kernel.org>; Sun, 07 Sep 2025 18:14:24 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-24456ebed7bso54755235ad.0
+        for <linux-usb@vger.kernel.org>; Sun, 07 Sep 2025 11:14:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757268859; x=1757873659;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8UMw1xCRpkP/WZEjhmDx4M+05aTIY2seDc4onliaA1Q=;
-        b=xT0ZL38AzJx1xO7YdmNMFUEqmUiZQXZlnasiYkfspA2wRtj5K8/sOKrpK6JWCvmSMI
-         a3uFgidD0y0N5x6x9Drkgw/dmr6RB6a0jVY1/ttV59MkMpIcrvTeLGYOli3+8urGBDU3
-         VFFt1SdYL/E6OL+OleGsbjXXNi1YgyIKNihc8p9oSPZYc9+7k6VOks9qzczp78ByWqsp
-         f1DSZdSEfQWmYaMMKcAJx2Jj/YpWT/0Fv6TrKTjnBZrOxqBrv1wuCIKtX8qKSHDQaGT+
-         13yrARk2l6aKGjbhFjhWHVDGgJRw/q7nsT0y4ovAU/GM5fXWW/FbPyBGxGdn5ECTU6Xt
-         jalQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUqIYsIew+v3aY4ByV9hLLp0+tygmuRLzAGxcUtLceMYt5Mc1YWLAEQYoPkG8aq+9KK8xXLfO/oDY0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRw4YyEMqtZ0ER/RGnGCAgu053NDPrYHyERCybSjEVUGTvhjI3
-	WNhZdGXV35RtjXGOdVPD8EJq38KQT6F3fUtJ9hR2EJfdPPCVFZcL9aXTzSR9R4W+VKghxQbC+W1
-	LRJM7BJGtV2lqZUanDTHD3s7Li9QxwGTB/o5mtmmS1vWgUI+Rj4wrubIruvSKE18=
-X-Gm-Gg: ASbGncvngjdiDxCcDtszrj/X3KKYMp9l3323GtMBdNWC2PV28oQ68/ugL1n6hjI1A9l
-	FZVll3KhuYkAQ4lp0j3ZSV4ckHCfBQ8qEeBmGLsN/DIqlTf8b+iU9V/AaZctC8GQumIUgIJAGm5
-	Tmu5rl5PUqcD4q/4d+3WTYDmsK2ZZsvB59tocIVVnBQ+iIzdNwAdl74ZAlyaHyPQ0l/FUYYjFzi
-	Is3Y/qxmt1dh1e0OB7suC1vwEDFrFPqvpRrZ/vOhOlO9KWbXCMgE7d+9sqFFQC8/qO5kjVf57rE
-	ekEmtxPH5w2VVEZA2lfPtAac0WQIiTw7x2npic9koufC3mkaYw+xT0/uiDqsAkW4dlrXoU3/BVq
-	H9Q==
-X-Received: by 2002:a17:902:ebca:b0:24b:15b3:223d with SMTP id d9443c01a7336-2516e4afbb7mr77564485ad.16.1757268859241;
-        Sun, 07 Sep 2025 11:14:19 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGG+UNmMjk66/DHR5BZpjwkre26K4bock2ih9UrjjrcOP8jRkmrHlvdcCEFIq8xuAbsJqi3xg==
-X-Received: by 2002:a17:902:ebca:b0:24b:15b3:223d with SMTP id d9443c01a7336-2516e4afbb7mr77564175ad.16.1757268858705;
-        Sun, 07 Sep 2025 11:14:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757268863; x=1757873663;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zXbvHhAHt3eXLIh4fGNwnDZCLikwnim4WFNUvEbF34I=;
+        b=Z8FsAh/SKPaJtv8y1PMBXMNInIvty/IPjawzz6pXsDP8edVS1gQTqifT+DmqwHn+mf
+         u5IzOesHTDfM0i2SNiLZhw4tWY+j/AgnnYFeTM3RrSBcIVUhuljSkIrio5HxjHlEO5Bk
+         Ak8RIUHTuWsmvEGkfjxl2WMNtwLSFW/QrRWx94Qj7YUrxsJmrteCAv2ao/Z5TgHpYtF/
+         rAu7KCJhUh2+0nYoIg/BWW7/WxpjIXrvmsUHTH5e6/GKNjJwIm98w/+AaP5MDYdoVckB
+         m1xp3Phf+CKYlIBzh36b++DCK+SZtn3iyc69ZH4bO8ghXXGpeygnLHx4GUtBFBUzK22T
+         e26Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVCoJCcnk7coSaFvS9npOPENEutPSTZvw6xkOOmbnmZc4vvRP+/m7sdCV4LYQsLMCTRr+ykegTuJuQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/v2CtCWbB6cAYykLAAxkvPbvvu/uEzfv/cnRa0nswHNc3wNJb
+	OagT2tMLOe+DFXnnKXVG6Gbhu8y3gAPtFIiIix2/WM47AoCES8vIO1xWwMYJ98pm0dpuAvBQMOE
+	41mxOJvpbBFzdmEY8PK5eBpTlO4nlBf5sJjZuDKMxafDyC0KSd80YGWgQ0YMRVUA=
+X-Gm-Gg: ASbGnctULsT6N5MeV70HP95q9pm38RyhekYch5WgPEvRiSNcyi1/H45BME7jJkNbac4
+	7Z7bKVyJoKu6Nwg9IsRmZYUt9yLTHeNaJtE3YWn0pfxCqehrNfdhC/8SBZdCDicgBmC+qdYcbdD
+	Nf5j7PUXUd1oTPJV9+5YVDkQKhsS4sCu5+fnjC6cjS9CgAg4nFWW86Awgea8t9PeL7JrLoUyX61
+	p7xhViWoe5VokLNYm96UmRDrhCPOK88FwlGESDpMaA8/wUw6u9Lus5X15jWeTMMGnxCuvCraJy4
+	wfxO3QLKqjz/b2OJZ6imbnHiFVYY+1SZ1BuKbZcGd8AfMXx58xP7wMgXYrRi/hWQkmAad4Pgl5B
+	d0w==
+X-Received: by 2002:a17:903:1905:b0:24b:1585:6350 with SMTP id d9443c01a7336-25175f6e65emr79397065ad.11.1757268863155;
+        Sun, 07 Sep 2025 11:14:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGfb9X7Y0iEuBI2GhrDyKdeAQMyHma5HcIN4lLPMF+QE9VYRSDXVNdwO2//mXVcLKZed3gAiw==
+X-Received: by 2002:a17:903:1905:b0:24b:1585:6350 with SMTP id d9443c01a7336-25175f6e65emr79396855ad.11.1757268862650;
+        Sun, 07 Sep 2025 11:14:22 -0700 (PDT)
 Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24cde5b6484sm84074765ad.19.2025.09.07.11.14.15
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24cde5b6484sm84074765ad.19.2025.09.07.11.14.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Sep 2025 11:14:18 -0700 (PDT)
+        Sun, 07 Sep 2025 11:14:22 -0700 (PDT)
 From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
 To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -86,10 +87,12 @@ Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com,
         konrad.dybcio@oss.qualcomm.com,
         Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Subject: [PATCH v5 0/2] usb: dwc3: Modify role-switching QC drd usb controllers
-Date: Sun,  7 Sep 2025 23:44:10 +0530
-Message-Id: <20250907181412.2174616-1-krishna.kurapati@oss.qualcomm.com>
+Subject: [PATCH v5 1/2] usb: dwc3: core: Introduce glue callbacks for flattened implementations
+Date: Sun,  7 Sep 2025 23:44:11 +0530
+Message-Id: <20250907181412.2174616-2-krishna.kurapati@oss.qualcomm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250907181412.2174616-1-krishna.kurapati@oss.qualcomm.com>
+References: <20250907181412.2174616-1-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -97,126 +100,144 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: u5rm4Qh2PNPSNjDydc_RCdyQ7WuA19vK
-X-Proofpoint-GUID: u5rm4Qh2PNPSNjDydc_RCdyQ7WuA19vK
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAxOCBTYWx0ZWRfX22glPKq89Mtd
- giVlPyoICOaWhaAtBDIKgqgnsdD4PvktBx1suRIHJrQ4/aF+cPLTZTgds/+XzRCsWGvboQJoIXP
- PBJKXMbyqTYSf4H8CmxzhnoWLeu04bD3wiZJms7vYIUb9lltYDu+KGqw2/8+Xjqq9dEFW07r9ug
- tyqXYeXfvozbnCF4w+jG4MzCvZUbI/AruKFJybl8vEpAJ6t8BI5Oo52wuDXMgY49cwktuH+ylXl
- mvcKOzfzqg+/BAeTcPDBcF5oYJrNc0nywhoWx/einQX0vDx2hT3tAErtong/OUrdTTBDXyAYJNQ
- jIfT8OsYmd45TkrVk+BRbHrn+YDlv1IY11AtWSLtbR7/fxeg+KIjcvzMzkwAvqCf252sT9+r0w4
- TtOdadss
-X-Authority-Analysis: v=2.4 cv=G4kcE8k5 c=1 sm=1 tr=0 ts=68bdcb7c cx=c_pps
- a=0uOsjrqzRL749jD1oC5vDA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
- a=aun3V7K2MoTQ9LCyWAoA:9 a=mQ_c8vxmzFEMiUWkPHU9:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: 4BIW35Nv0iilRCCATooyL26jLn781dEL
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAzNSBTYWx0ZWRfX8PpQWjvb+qPg
+ HGfesE+tCq9rLeIvAim3MqPXMRMpwET2hDgQFnfqd0/O6+LAGQ6cJ93h3r4XeeiXfD1Y5f9x04K
+ SJixL8akib5tpMGfKhNmL1K0AMKWUBaLfLLntQM1+kgFjV4NkKT51OVorK7VBUcb4tXghYmdOpj
+ 0cxT+kj/27MGQ4wqxRVLmJRFdAq/dtyez/SSVdiqAEdEccYFJpEUAb9vdtqAV1+o0mTqH8pvl2U
+ lk0Sq9tJQCxgL4Q2BZD+L8XwE03Igki127GhIeQCac511hNSg5ofE51gB21gBTbBwFYOUG7x13e
+ 5uNPSf6N00rcrdMxXzs/C4KE6eE3Us4Vu73iItAIAlLRZIRIV8NgXkE3Z4U7FR1yJ/xHTtex195
+ ktXPQa9+
+X-Proofpoint-GUID: 4BIW35Nv0iilRCCATooyL26jLn781dEL
+X-Authority-Analysis: v=2.4 cv=N8UpF39B c=1 sm=1 tr=0 ts=68bdcb80 cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=yJojWOMRYYMA:10 a=jIQo8A4GAAAA:8 a=EUspDBNiAAAA:8 a=9UFxAfr_hboBSpCGZXUA:9
+ a=uG9DUKGECoFWVXl0Dc02:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-07_07,2025-09-04_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 phishscore=0 bulkscore=0 suspectscore=0 clxscore=1015
- malwarescore=0 adultscore=0 impostorscore=0 spamscore=0
+ adultscore=0 spamscore=0 malwarescore=0 clxscore=1015 bulkscore=0
+ suspectscore=0 priorityscore=1501 impostorscore=0 phishscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060018
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060035
 
-Currently on QC targets, the conndone/disconnect events in device mode are
-generated by controller when software writes to QSCRATCH registers in qcom
-glue layer rather than the vbus line being routed to dwc3 core IP for it
-to recognize and generate these events. We need to set UTMI_OTG_VBUS_VALID
-bit of QSCRATCH_HS_PHY_CTRL register to generate a connection done event
-and clear it to generate a disconnect event during cable removal or mode
-switch is done
+In certain situations like role switching, the glue layers need to be
+informed of these events, so that they can take any necessary action.
+But in non-flattened implementations, the glue drivers have no data on
+when the core driver probe was successful post invoking of_platform_
+populate. Now that the core driver supports flattened implementations
+as well, introduce vendor callbacks that can be passed on from glue to
+core before invoking dwc3_core_probe.
 
-When the disconnect is not generated upon cable removal, the "connected"
-flag of dwc3 is left marked as "true" and it blocks suspend routines and
-for that to happen upon cable removal, the cable disconnect notification
-from usb_role_switch to DWC3 core driver needs to reach DWC3 Qualcomm glue
-driver for it generate the event.
+Introduce callbacks to notify glue layer of role_switch and run_stop
+changes. These can be used by flattened implementation of Qualcomm
+glue layer to generate connect/disconnect events in controller during
+cable connect and run stop modifications by udc in device mode.
 
-Currently, the way DWC3 core and Qualcomm glue driver is designed, there
-is no mechanism through which the DWC3 core can notify the Qualcomm glue
-layer of any role changes which it receives from usb_role_switch. To
-register these glue callbacks at probe time, for enabling core to notify
-glue layer, the legacy Qualcomm driver has no way to find out when the
-child driver probe was successful since it does not check for the same
-during of_platform_populate.
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+---
+ drivers/usb/dwc3/core.c   |  1 +
+ drivers/usb/dwc3/core.h   | 26 ++++++++++++++++++++++++++
+ drivers/usb/dwc3/drd.c    |  1 +
+ drivers/usb/dwc3/gadget.c |  1 +
+ 4 files changed, 29 insertions(+)
 
-For flattened implementation of the glue driver, register callbacks for
-core to invoke and notify glue layer of role switch notifications.
-
-Set-Role and Run_stop notifier callbacks have been added to inform glue
-of changes in role and any modifications UDC might be performing on the
-controller. These callbacks allow us to modify qscratch accordingly and
-generate disconnect/connect events to facilitate suspend entry and proper
-enumeration.
-
-The series only allows autosuspend to be used but still relies on user
-enabling it from userspace (echo auto > a600000.usb/power/control).
-
-Functionality checked:
-1. Enumeration in device mode:
-After creating symlinks to ffs.adb and writing to UDC node, ADB is up and
-working in a stable way.
-
-2. When none is written to UDC, device enters suspend.
-
-3. When cable is removed, cable disconnect notification comes and when
-qscratch registers are cleared properly, it is generating disconnect event
-
-4. Device enters suspend upon removing cable (host and device mode).
-
-This series has been tested on SM8450 QRD.
-The previous version [1] had one extra patch to enable autosuspend for
-host mode, but it is removed in this version. The two patches in this
-version are independent of the third patch. Since the third patch has
-review pending, sending the ACKed first two patches in v5 to get them
-merged.
-
-[1]: https://lore.kernel.org/all/20250812055542.1588528-1-krishna.kurapati@oss.qualcomm.com/
-
-This series applies cleanly on top of usb-next and usb-testing branches.
-
-Changes in v5:
-Removed autosuspend functionality for host mode. Will send it separately.
-
-Link to v4: https://lore.kernel.org/all/20250812055542.1588528-1-krishna.kurapati@oss.qualcomm.com/
-
-Changes in v4:
-Fixed function names in comments in core.h (Thinh).
-Fixed nitpicks in dwc3-qcom mentioned by Konrad.
-
-Link to v3:
-https://lore.kernel.org/all/20250806095828.1582917-1-krishna.kurapati@oss.qualcomm.com/
-
-Changes in v3:
-Removal of extcon functionality has been moved out of this series.
-Addressed coding style comments from Thinh.
-Instead of adding notifier and enabling autosuspend for xhci, it has been
-done in xhci-plat.c
-
-Link to v2:
-https://lore.kernel.org/all/20250610091357.2983085-1-krishna.kurapati@oss.qualcomm.com/
-
-Changes in v2:
-Rebased on top of usb-next.
-Removed glue's extcon handling and made use of in-core handling.
-
-Link to v1:
-https://lore.kernel.org/all/20231017131851.8299-1-quic_kriskura@quicinc.com/
-
-Krishna Kurapati (2):
-  usb: dwc3: core: Introduce glue callbacks for flattened
-    implementations
-  usb: dwc3: qcom: Implement glue callbacks to facilitate runtime
-    suspend
-
- drivers/usb/dwc3/core.c      |  1 +
- drivers/usb/dwc3/core.h      | 26 ++++++++++++
- drivers/usb/dwc3/drd.c       |  1 +
- drivers/usb/dwc3/dwc3-qcom.c | 78 +++++++++++++++++++++++++++++++-----
- drivers/usb/dwc3/gadget.c    |  1 +
- 5 files changed, 97 insertions(+), 10 deletions(-)
-
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 370fc524a468..ae140c356295 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -2352,6 +2352,7 @@ static int dwc3_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	dwc->dev = &pdev->dev;
++	dwc->glue_ops = NULL;
+ 
+ 	probe_data.dwc = dwc;
+ 	probe_data.res = res;
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index d5b985fa12f4..a5fc92c4ffa3 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -992,6 +992,17 @@ struct dwc3_scratchpad_array {
+ 	__le64	dma_adr[DWC3_MAX_HIBER_SCRATCHBUFS];
+ };
+ 
++/**
++ * struct dwc3_glue_ops - The ops indicate the notifications that
++ *				need to be passed on to glue layer
++ * @pre_set_role: Notify glue of role switch notifications
++ * @pre_run_stop: Notify run stop enable/disable information to glue
++ */
++struct dwc3_glue_ops {
++	void	(*pre_set_role)(struct dwc3 *dwc, enum usb_role role);
++	void	(*pre_run_stop)(struct dwc3 *dwc, bool is_on);
++};
++
+ /**
+  * struct dwc3 - representation of our controller
+  * @drd_work: workqueue used for role swapping
+@@ -1012,6 +1023,7 @@ struct dwc3_scratchpad_array {
+  * @eps: endpoint array
+  * @gadget: device side representation of the peripheral controller
+  * @gadget_driver: pointer to the gadget driver
++ * @glue_ops: Vendor callbacks for flattened device implementations.
+  * @bus_clk: clock for accessing the registers
+  * @ref_clk: reference clock
+  * @susp_clk: clock used when the SS phy is in low power (S3) state
+@@ -1197,6 +1209,8 @@ struct dwc3 {
+ 	struct usb_gadget	*gadget;
+ 	struct usb_gadget_driver *gadget_driver;
+ 
++	const struct dwc3_glue_ops	*glue_ops;
++
+ 	struct clk		*bus_clk;
+ 	struct clk		*ref_clk;
+ 	struct clk		*susp_clk;
+@@ -1614,6 +1628,18 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
+ int dwc3_core_soft_reset(struct dwc3 *dwc);
+ void dwc3_enable_susphy(struct dwc3 *dwc, bool enable);
+ 
++static inline void dwc3_pre_set_role(struct dwc3 *dwc, enum usb_role role)
++{
++	if (dwc->glue_ops && dwc->glue_ops->pre_set_role)
++		dwc->glue_ops->pre_set_role(dwc, role);
++}
++
++static inline void dwc3_pre_run_stop(struct dwc3 *dwc, bool is_on)
++{
++	if (dwc->glue_ops && dwc->glue_ops->pre_run_stop)
++		dwc->glue_ops->pre_run_stop(dwc, is_on);
++}
++
+ #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+ int dwc3_host_init(struct dwc3 *dwc);
+ void dwc3_host_exit(struct dwc3 *dwc);
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index 7977860932b1..4c91240eb429 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -464,6 +464,7 @@ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
+ 		break;
+ 	}
+ 
++	dwc3_pre_set_role(dwc, role);
+ 	dwc3_set_mode(dwc, mode);
+ 	return 0;
+ }
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 554f997eb8c4..6f18b4840a25 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2662,6 +2662,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on)
+ 		dwc->pullups_connected = false;
+ 	}
+ 
++	dwc3_pre_run_stop(dwc, is_on);
+ 	dwc3_gadget_dctl_write_safe(dwc, reg);
+ 
+ 	do {
 -- 
 2.34.1
 
