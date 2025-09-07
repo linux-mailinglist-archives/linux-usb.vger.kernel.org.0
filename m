@@ -1,47 +1,52 @@
-Return-Path: <linux-usb+bounces-27682-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27683-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8A85B47B78
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 14:51:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28959B47B81
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 15:12:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40E0E7AB367
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 12:49:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D62BF3A2C51
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 13:12:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 685282727EB;
-	Sun,  7 Sep 2025 12:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E715273811;
+	Sun,  7 Sep 2025 13:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="d4kJMwi2"
+	dkim=pass (2048-bit key) header.d=rosenzweig.io header.i=@rosenzweig.io header.b="Xa1Qe31i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB371C8606;
-	Sun,  7 Sep 2025 12:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D125A29A2;
+	Sun,  7 Sep 2025 13:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757249474; cv=none; b=ZJ7OObRw8D0p/6snFlgE3tuoEXlR6wYqu5nSJw3ljTQxgY7bbX+xpUntu1CyEC91037OvD7utztGWqpDWN+uJFnHkUPchCvlf/WDJhSz/3vmFxM2T2RkCWUDO1qAAdqWriwpv5lSzX3luBgsMEjhcE4hR7qmtFlD7wqwYKs6IEw=
+	t=1757250770; cv=none; b=GQvLbql9m5CGYkCPgSXtTKfibwKjOPWr/q8lJ+OW0R8WFLoX6XXamjvhBWFlCDnDSclp1Nm3kRi+E/IsSflJEKcJqJeaZIPZ03UqUtaRIRp8fKH3sIA9nnmjdJKjagwfbnc9AQxnNrUWWVLeF8HUfxwG5o4wmR9qhiNxOxvC/sE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757249474; c=relaxed/simple;
-	bh=IWYocY3Q/qyYFd0mqeYzdKytf2h0IHxXtx9zAXWQ5sM=;
+	s=arc-20240116; t=1757250770; c=relaxed/simple;
+	bh=nG5wetaJQPoFOgX2jI1XYan+GC+3MW+xi5ekXTnU0OM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fW7Tc2ZfQ637ZDPFn5cXv65AMmP/vT1gACNlCBLKhNcJHf0688mjeQgZKVgxFDAKI314kB0bqzk+sxYe9T6rAvuJS12Uy2+laNOAinSDNDcl0Rw/PUTwpR/MLjZTQHDTNhGhYAtTRi8hc0RVPjGOC/TMCOtxSUg6cI+e2J8UZUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=d4kJMwi2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB9B1C4CEF0;
-	Sun,  7 Sep 2025 12:51:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1757249474;
-	bh=IWYocY3Q/qyYFd0mqeYzdKytf2h0IHxXtx9zAXWQ5sM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d4kJMwi2GGoks7Kj/YqNlzkZ8fzdRPWDzA8Yye8QtWHeG0O4qtLYiLNvDGGw9/ETt
-	 hxpApDrcdwzYed/fwOJs1CKTfPyOtqsQcv0lY+HwPhbbmsS5JoC+iPcb2PrTS2Q24Q
-	 OLHeb2bfAj7QKuRymS01IPveabspeYWifp1uRcEA=
-Date: Sun, 7 Sep 2025 14:51:11 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Alyssa Anne Rosenzweig <alyssa@rosenzweig.io>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Sven Peter <sven@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=pLwJu8O/DQtXUSwx4vdUuaiepVSQSORok3kh2jC7XsHXkXUXqaA096TmJVd6Lpy8C7rl6aaGVn0JRmRozlqBas3RUGdGuJPcs7TlZUmKRHFLnL0NXuJy0wKzHsOtcnHek6c/HlbMiIL+mNaebLwULIU0rZhVrwm3Aki1IJ5URMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosenzweig.io; spf=pass smtp.mailfrom=rosenzweig.io; dkim=pass (2048-bit key) header.d=rosenzweig.io header.i=@rosenzweig.io header.b=Xa1Qe31i; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosenzweig.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosenzweig.io
+Date: Sun, 7 Sep 2025 09:12:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosenzweig.io;
+	s=key1; t=1757250755;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c6m2JvKKQLislbG/lLsCQpWLwDoRY8Pnbo43WEoeMe4=;
+	b=Xa1Qe31ib2MbCn8EA7bchWhfdlA69tFg5z35UwJQfmd/Y+tD/PnIaII2ok+/cGbmnaygXG
+	cnw0y5r7Lms2YbuHpkXTnZCsUwBRzmNUq0k2vkecwSzbffFAP5DJB/cgPz2kYUDhWVQydd
+	MxpBtCD9cBLbhBTqvlClPvOT+OV0rOM3rCofbu3hXvPlLJDNFiPdeWMyrU+CCuBkmMtoaw
+	Gtga+xNV4nk42xOEzsnqV6FeJAZ86ROd+Y12UL15xy8xQYr4FlA62dk47mPE1AdKArv3Ag
+	aSPKmGr8VWm5B50+e1c/3HddNFZeSixDBFM38iHoz+QSwegkhGRdJDD4gc2PDQ==
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Alyssa Anne Rosenzweig <alyssa@rosenzweig.io>
+To: Sven Peter <sven@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
@@ -56,13 +61,10 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>, Sven Peter <sven@kernel.org>,
 	linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
 	Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2 20/22] arm64: dts: apple: t8103: Add Apple Type-C PHY
- and dwc3 nodes
-Message-ID: <2025090726-overcoat-unskilled-3228@gregkh>
+Subject: Re: [PATCH v2 18/22] phy: apple: Add Apple Type-C PHY
+Message-ID: <aL2EvQojjEv7z_y-@fedora>
 References: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
- <20250906-atcphy-6-17-v2-20-52c348623ef6@kernel.org>
- <20250907-zippy-auburn-koel-d6da32@kuoka>
- <aL199DK3XfkaelgH@fedora>
+ <20250906-atcphy-6-17-v2-18-52c348623ef6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -71,44 +73,69 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aL199DK3XfkaelgH@fedora>
+In-Reply-To: <20250906-atcphy-6-17-v2-18-52c348623ef6@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, Sep 07, 2025 at 08:43:32AM -0400, Alyssa Anne Rosenzweig wrote:
-> > Please do not combine DTS patches in patchsets for Greg (e.g. USB). Greg
-> > expressed that many times, that he takes all or nothing, and DTS cannot
-> > go via driver branches/trees.
-> 
-> >From the cover letter, emphasis mine:
-> 
-> > With the dwc3 glue driver this series can now also be merged independently
-> > once it's ready: Patches 1-4 can go through the dwc3 tree, 5-15 through
-> > tipd, 16-18 should go together through the phy tree, and I'll take the
-> > DTS changes through my tree. **If everyone's happy with the overall
-> > approach here I can also just send these as individual series**
-> 
+Looks a lot nicer than the initial version I looked at a few months ago,
+nice work Sven :-)
 
-That's great, but a major pain in the butt for any maintainer.  It would
-require me to manually pick out the patches to be added to my tree and
-manually apply them?  We have good tools now, b4, that wants to take a
-whole patch series.
+If we're going to define all those mask32/clear32/etc convenience
+helpers, there are a couple more we should probably add and use too:
 
-And you want me to take a whole patch series, as I can now add the info
-that is in 00/XX to the "merge point" of a big patch series to preserve
-the information that is provided here.  So you loose out if you that is
-not preserved in the tree, and you make more work for maintainers to try
-to sift through just what should, and should not, be taken.
+1.
+    void cond_set32(void __iomem *reg, bool cond, u32 mask) {
+        if (cond) {
+            set32(reg, mask);
+        } else {
+            clear32(reg, mask);
+        }
+    }
 
-Remember, some of us maintainers get 1000+ emails a day to do something
-with.  Our development process is optimized for our most limited
-resource, maintainers, not developers, sorry.  Think about it if you
-were on the receiving end of this, what would you want to see present
-for you to be able to review and then apply this to your tree?
+Not sure on the name but this shows up a bunch of places and turns
+messy sequences into straight-line code at least.
 
-So please, split patches up into "one series per tree".  It's the only
-sane way for us to work.  Yes, it's a pain for platform/dts stuff at
-times, but for everything else, it works really well.
+2.
+   #define bit_to_OV(reg, bit) \
+        clear32(reg, bit); \
+        set32(reg, bit ## _OV); \
 
-thanks,
+Also not sure on the name, but this would make a bunch of sequences
+more compact. For example
 
-greg k-h
+> clear32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_POST);
+> set32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_POST_OV);
+> clear32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_POST_2R);
+> set32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_POST_2R_OV);
+> clear32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_POST_4R);
+> set32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_POST_4R_OV);
+> clear32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_PRE);
+> set32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_PRE_OV);
+> clear32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_PRE_2R);
+> set32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_PRE_2R_OV);
+> clear32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_PRE_4R);
+> set32(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_PRE_4R_OV);
+
+turns into
+
+> bit_to_OV(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_POST);
+> bit_to_OV(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_POST_2R);
+> bit_to_OV(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_POST_4R);
+> bit_to_OV(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_PRE);
+> bit_to_OV(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_PRE_2R);
+> bit_to_OV(tx_shm + LN_AUSPMA_TX_SHM_TXA_IMP_REG3, LN_TXA_MARGIN_PRE_4R);
+
+3. static inline const struct atcphy_mode_configuration
+*get_mode_cfg(struct apple_atcphy *atcphy, enum atcphy_mode) {
+	if (atcphy->swap_lanes)
+		return &atcphy_modes[mode].swapped;
+	else
+		return &atcphy_modes[mode].normal;
+   }
+
+This only shows up two places but both would be improved by its use.
+
+---
+
+With those cleanups (or an explanation why they're silly), ttbomk this
+is r-b me, thank you!
 
