@@ -1,147 +1,82 @@
-Return-Path: <linux-usb+bounces-27676-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27677-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFA64B479E3
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 10:54:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D5C7B47A3C
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 11:45:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E05C2189F7C2
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 08:55:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D65643AD404
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 09:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C45421CC7B;
-	Sun,  7 Sep 2025 08:54:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC9F2222BB;
+	Sun,  7 Sep 2025 09:45:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mLZY/c2W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3AL4c9P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3019818EAB;
-	Sun,  7 Sep 2025 08:54:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811EA1C7013;
+	Sun,  7 Sep 2025 09:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757235278; cv=none; b=isYWlfR5QT4firqyk9937gQKCYbfw5UKUOn05qxzdNLgQOiY8h2qvbpxTLbGfazZcZft7TJNpPuUmhIVAJnfvx0AK/TkP0uLNgJAKl0fozL75LVr0dib5qVlePUP7vVDHpldQTGh3MvXze4C5e2C1J5IlWeha5/A4tMgJra70dY=
+	t=1757238326; cv=none; b=VOoCun4Uv92z+7PUbRtgUfcrnerSIaSKeWq14iG323ZS7jIjriSTyNo56OMbTRRX2HLakJw7G/KWwS1nXLAAN26dIzxK4QfiUC6wd/oaTSzw7A09pk2pDrVcCgjAHcclDgCAdAtyl7r+/xkvdYAE6iE91EW0kWryIqzwrY/xJWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757235278; c=relaxed/simple;
-	bh=sI7STwx5H6Ky6Q9bvFA9/p6Gsvpg4KWheBRc3GxyDeE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lZTqJ5AxWSRvryjyOFsSc6ScMSC9GU95Z/bz0AkzhP2+tuCmlpLNjaaMVKXhepgf63aZjrICdHDRjFR1D8ifKXzHcNO/9EZ1jDkoSUuq3WR9LBE5LSQ+6FRrA3K1pc+WxPrrcFlSn65kUf9ISMKty8uAEQLQH+q9voXwiO9TKQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mLZY/c2W; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-55f6017004dso3607111e87.0;
-        Sun, 07 Sep 2025 01:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757235275; x=1757840075; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ta1cFo0XDUArRgBS4UrHkNCAuCKCm6jMm0yBvo/F4kU=;
-        b=mLZY/c2WkXfAl5Rmexd4az1RfwefyGAQhNI5mBMeSjUVdVW6pspXJk6n3wHbLlQkqR
-         NlMSRloH5G6Zp0TBFiHYKzQHk+e0hiqTmQbgyxHS5upQKSWm7mWyQnOtOTLbNqIjdOEx
-         Rd/h30UbEcvT6B+abhdR+AQrJGRtCWIfz2QxVlnZ0TkKB8Lz7pWO/uAwgpcMM+Stumxz
-         hXSNYTVhlLoHSssHUr1SVT7HELVhqnAs6eVCmQLuWupKsbyNqHs7KLsBms5g/GnOBNI9
-         vaRghc1fttVlsX4vsm1EjZXN/Z24rJ6hzWhkTpIy0PdkokTzcqsUzHCsR/QMvKQqqhMz
-         +x3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757235275; x=1757840075;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ta1cFo0XDUArRgBS4UrHkNCAuCKCm6jMm0yBvo/F4kU=;
-        b=vKBatk30zr58bEUN8lbXEk8rX9LMn83LzxMb4bxMkSuj+h4fR3nNsUtOSkP1/vxrSq
-         9Jv2rxu5TNjV7hF4swkk/ciLELjxEHCXNaL75rEbzfjoZsI7rS4x1iWtTQiZn7HsmLoR
-         Gf6zJd5nVhJkJRGGGwcPv4LcsVxxgcRX8oAXmwfjYRKfuTiKoB1k0PKMlWG+ZTNKPjGf
-         DRCwHmxvMLsMZvB6Cvh8M2it8Q7PcI6Aju4Q0NHxMQCuVifDgjOwoujFjmrkAzWOPoOK
-         4T5kAXBJWOrszAXULyD6ZfwldoxeiOaMunIcUzcolKf9Wuw70+482MtswbcFpU9O5a3k
-         Gc3g==
-X-Forwarded-Encrypted: i=1; AJvYcCUhl0FicvO7+bbCbzoXB8/f/KKgKETCM8wZn1LEL74gufiRh6v8Qb5Pe6nbw4WLGg2G19OkPHWyM+AfHvBe@vger.kernel.org, AJvYcCWuoU6Aytll0XjOldOa63AvVPKV8vtwsJOkl7p6RQxFFXaK3FKa2mqzKZESOQKY811ghpu7McAVHbSa@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZ0kY0zS2EaAMY4pQnQG6kdBZlCa/FK+xP0QMbucJcusWhSCVJ
-	ollx6lJHq6kIp/l+8aUHnLftxxpc0iYnYvIEw0TpjoZ+vPlXqbxt1e3f
-X-Gm-Gg: ASbGncuAkbSuRW5keVNWzJNOZSO+YmmwsorKS1lpRiRKAGvssaTMUp93aMnYEF4ZY7v
-	4krz8Bdtuz29EDW/wPxXKlxSmGsFqfIws8vG/iDcSlvHmobgxYuUJtXKZtInCMCZdpQ/+LzWOXZ
-	FAmCIA77sE7l2FtIDkb4kRlAhBJ2uxr3WJmUiwQJ5qT82JBwl5L22ImOOfTrZLTuLRhlVvYOs49
-	6vVXWLTNR0S8WAKD6yBa+PtXIdu0k16bJLaZwDq4d/9RC6imVHgQGOaytxMIHKYLaRg9j8/PMSb
-	EYjXLM6/YRpuDaIA+RPJsZPGCIBYIqL4vOl/5x/JHMZkF1jlVmNhiKgFj3or0PflGMam482ffNS
-	/wTOWFP/zOAAyqpqHZY0lkBvS5cXx4gaUUKEz1L0rrFhmTwWBg73skKlga48qj4WyvGYa0tDFcE
-	Zs
-X-Google-Smtp-Source: AGHT+IFiJ49HQNMd/IFx7xIzrrtqMETUdaxARpaq6+DVUgUYdtERBew8emcGESiiMQvJ8usHN1vC9A==
-X-Received: by 2002:a05:6512:3e25:b0:55f:6759:a792 with SMTP id 2adb3069b0e04-562636d6328mr1074855e87.34.1757235275009;
-        Sun, 07 Sep 2025 01:54:35 -0700 (PDT)
-Received: from ?IPV6:2a00:1fa0:730:6bf5:b6a:8710:4129:8b95? ([2a00:1fa0:730:6bf5:b6a:8710:4129:8b95])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5608ace8121sm2814508e87.84.2025.09.07.01.54.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Sep 2025 01:54:33 -0700 (PDT)
-Message-ID: <f09dedfc-1f1b-4416-b854-9c4059ba264a@gmail.com>
-Date: Sun, 7 Sep 2025 11:54:31 +0300
+	s=arc-20240116; t=1757238326; c=relaxed/simple;
+	bh=Wj1dGLxR4qgsTZ0aZBldBZFaPGiNLGjozuSVRrz3bP0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PAB39w2CqFXpFtezkvq9tmayW6Vrc2xkPaOJfLQBNn6fiHa8Z4MIZ56ccqXCzvV8QgpJgkL+s1sRLNwQNbDxi6ml9qtuiGLJRG39EwyfPpJu54XpbTR79vcyey21X1yH5lXApauAoKa5VVVZw4XiTtpZjf0vJ9d57eQgmYKf/es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3AL4c9P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FE08C4CEF0;
+	Sun,  7 Sep 2025 09:45:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757238326;
+	bh=Wj1dGLxR4qgsTZ0aZBldBZFaPGiNLGjozuSVRrz3bP0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=S3AL4c9PHdg6Qii9YNc10lqtSsTHGRv9Qh51rLh2bXdntVpsumkK0cF/JYkj9SGSW
+	 rnb9xA4t2Sf9NolQlYvbOBhfl8HHB2m+N73yWXxmXbvOTsOIJXE2dDfgv94YkLP9bx
+	 naah1RuzOQEK6cpwV13Bt6yUG3ru8LiIDXKAHf50TgJ2MDwZ3lfu7SFXhapgvvIuEs
+	 Qo6nfN4Et7v5XXcAqT7+vCTx/RBqd8IbBHzs6uDHRvzdIfjw7yLYOibnV/D26ue1ku
+	 qU+6H1crWor1wPug98flICsKczSjibNsPBAKBiUpNDnvOz3RsGKKjY+WqARkmhAnFi
+	 9dpx61eOemTRQ==
+Date: Sun, 7 Sep 2025 11:45:23 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Sven Peter <sven@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, Janne Grunau <j@jannau.net>, 
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Frank Li <Frank.Li@nxp.com>, Ran Wang <ran.wang_1@nxp.com>, Peter Chen <peter.chen@nxp.com>, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-phy@lists.infradead.org
+Subject: Re: [PATCH v2 01/22] dt-bindings: usb: Add Apple dwc3
+Message-ID: <20250907-benevolent-dogfish-from-wonderland-be2eac@kuoka>
+References: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
+ <20250906-atcphy-6-17-v2-1-52c348623ef6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 12/22] usb: typec: tipd: Update partner identity when
- power status was updated
-To: Sven Peter <sven@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
- Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <Frank.Li@nxp.com>,
- Ran Wang <ran.wang_1@nxp.com>, Peter Chen <peter.chen@nxp.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
- Hector Martin <marcan@marcan.st>
-References: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
- <20250906-atcphy-6-17-v2-12-52c348623ef6@kernel.org>
-Content-Language: en-US
-From: Sergey Shtylyov <sergei.shtylyov@gmail.com>
-In-Reply-To: <20250906-atcphy-6-17-v2-12-52c348623ef6@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250906-atcphy-6-17-v2-1-52c348623ef6@kernel.org>
 
-On 9/6/25 6:43 PM, Sven Peter wrote:
-
-> From: Hector Martin <marcan@marcan.st>
+On Sat, Sep 06, 2025 at 03:43:14PM +0000, Sven Peter wrote:
+> Apple Silicon uses Synopsys DesignWare dwc3 based USB controllers for
+> their Type-C ports.
 > 
-> Whenever the power status is changed make sure to also update the
-> partner identity to be able to detect changes once de-bouncing and mode
-> changes are added for CD321x.
-> 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
 > Signed-off-by: Sven Peter <sven@kernel.org>
-> ---
->  drivers/usb/typec/tipd/core.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index c7cf936e5a61a331271c05b68ff1b77b89c0f643..cd427eecd8a594b7e609a20de27a9722055307d8 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -635,9 +635,16 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  	if (!tps6598x_read_status(tps, &status))
->  		goto err_unlock;
->  
-> -	if (event & APPLE_CD_REG_INT_POWER_STATUS_UPDATE)
-> +	if (event & APPLE_CD_REG_INT_POWER_STATUS_UPDATE) {
->  		if (!tps6598x_read_power_status(tps))
->  			goto err_unlock;
-> +		if (TPS_POWER_STATUS_PWROPMODE(tps->pwr_status) == TYPEC_PWR_MODE_PD) {
-> +			if (tps6598x_read_partner_identity(tps)) {
-> +				dev_err(tps->dev, "failed to partner identity\n");
 
-    Perhaps "failed to read partner identity\n"?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[...]
-
-MBR, Sergey
+Best regards,
+Krzysztof
 
 
