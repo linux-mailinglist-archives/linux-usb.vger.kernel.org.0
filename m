@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-27723-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27725-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28A55B4958D
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:38:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0F97B4958E
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:38:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C7781C209AF
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:38:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48171171C69
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:38:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B780030FC21;
-	Mon,  8 Sep 2025 16:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9393730FF13;
+	Mon,  8 Sep 2025 16:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cdkjgcoO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WKqS1NuP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA29830F94F
-	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 16:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4289A30FC03
+	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 16:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757349157; cv=none; b=nw02+Ao/IXCEfyb5I0BeNKY2V2ur38yR3I1XxWAQ2TXCqGnWuIwr7IjKFIJRdJXL3MHEgw3X20JImcCRKvI/lphUJs7tbCDD6ofBO5rwP43WDccifuC1WR9lNPMvJYj1fsJmwXUbcN41840b8yPcp866bZgMIwX31zANEGv073A=
+	t=1757349158; cv=none; b=lXgFOudpmE2ZO+PzFmToEfcXMnQIA6UYkuHzACXS9af3Ke8QMEpxNufURSWAeMCnemoSf4SJP/8rqPw/LDV/WJUFwpc7ThHvJcZty9Aq30T7ASjSFBCW1StvgYQomHpm6tcB528jYvReYVWy65Th61eRI+LBNDq74sagy92mOng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757349157; c=relaxed/simple;
-	bh=exwjebDi6DfkgVM/7Sl1dNi1W8E5IeORyo8K6bq74FY=;
+	s=arc-20240116; t=1757349158; c=relaxed/simple;
+	bh=z9x6jpbisfkfvEx6j4+11qoxu9bY9+aWBhbwxiBWqJM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qzbe2Q6zq/r55AjHCseRMr8O3T3iciGJV4eTaZaeC0AXKU6YvWj+yg8xN1b4POiXHhodioLo+rtC7BxVNHEoCNFhd2TqzJVKNB9twB5RCmrNH0jR/1E6M0eV084H+vHOhdzv/piK44D3N0tpMd9VIfDZMx1d28/EGBCLlZd4GUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cdkjgcoO; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=Jh86LPTdmxsY76Z4oW+V3UKZxYgViXXCKvMmekuCe47phHt3YcfmhvEHfNRTTSCO2KutcmhJlvYawldcWJRRZSUi8n0vcQYqPpe/AJEy90VJmW8fw4E7tY/+Zv4GYpNYSwiFzMWoarH30p4+hVnUYFMOo3TkjLJYwJkCpia3fgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WKqS1NuP; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757349156; x=1788885156;
+  t=1757349155; x=1788885155;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=exwjebDi6DfkgVM/7Sl1dNi1W8E5IeORyo8K6bq74FY=;
-  b=cdkjgcoOGWYPoEJudAgYSD8Fp/C3nr9uluiIqmjU4ftJuf/G/5qFDQ+q
-   AeVI73ErpxMV/mTMaSLX5YUxwnrCZ0eRSPqyUAHNVwip8CkzFDnMv1CAN
-   Ab+BkSBzj9DiFJOACZh++UBbo1tJzK3bnVt0SGDfF4lZCw65pOEjWRqg+
-   ILT/YjSAkhDxrcYwcPyIltI8nMlzfTkWwf43Tf33CcwIYOC0T7idHZjH7
-   482TBaxqdJx0m7uC3kxwqAHOnM2LgNXJbspUSG/PO95tWWQTfuy+ncNIa
-   I0nZm+hd2LUewVq1Ox5mWnTCRyc/F4D/WawhPyKgOzeY6vfzxgjgxwnRz
-   A==;
-X-CSE-ConnectionGUID: H7yPcsrjR7yDVU+tooZcMA==
-X-CSE-MsgGUID: lpY9IXN+SgOgReenmu2J0A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="63252089"
-X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="63252089"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 09:32:34 -0700
-X-CSE-ConnectionGUID: x3wIWIGRShODOE31eZqNbA==
-X-CSE-MsgGUID: owgZHFXoT4S8s6V5ybfRIA==
+  bh=z9x6jpbisfkfvEx6j4+11qoxu9bY9+aWBhbwxiBWqJM=;
+  b=WKqS1NuPXYGfeumuHbShjZ3a03nvp7YLChG61OeOMgCooAlY6XXr9d5F
+   XNpfiBp7RrXTunkGqQ72C0Pr1arLIGTzFH/uq8MjqeJaQfxjvtm340Lll
+   yh/R5ZtiJk1CDPVYcni9x3r+kAOvuQNQat4T9+aBAM6GwpbehlDrXSyUw
+   jb7puxCUXwcD9ainLc4ZOrOMtjfy+3Jcwvxu8/X9HmGfeIAKjf0osoFYo
+   jN7UnQZDuHr8vfrRM/MH3kfF9Rh+uDs5hytrSPwz+MoAkm0yJF5AxmcI4
+   UN8CgnN5no9JuKuBolXUnLr9m0WRgWKc8JTJHDUWof+7rFdHp/vjTDNoI
+   Q==;
+X-CSE-ConnectionGUID: 1nw6th49R3SC77zqvKLZ3A==
+X-CSE-MsgGUID: GlNNUWXvQ7yd/fLbbnfLHQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63443040"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63443040"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 09:32:33 -0700
+X-CSE-ConnectionGUID: za5tVIOYRnOLf5ddcxRQeA==
+X-CSE-MsgGUID: 02IN+gzGQzSPGFicLksa3w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="203622633"
+   d="scan'208";a="173291146"
 Received: from unknown (HELO black.igk.intel.com) ([10.91.253.5])
-  by orviesa002.jf.intel.com with ESMTP; 08 Sep 2025 09:32:31 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 08 Sep 2025 09:32:31 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id C769A92; Mon, 08 Sep 2025 18:32:30 +0200 (CEST)
+	id CA65796; Mon, 08 Sep 2025 18:32:30 +0200 (CEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -68,9 +68,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 01/26] thunderbolt: Update acpi.c function documentation
-Date: Mon,  8 Sep 2025 18:32:05 +0200
-Message-ID: <20250908163230.2614397-2-mika.westerberg@linux.intel.com>
+Subject: [PATCH 02/26] thunderbolt: Update cap.c function documentation
+Date: Mon,  8 Sep 2025 18:32:06 +0200
+Message-ID: <20250908163230.2614397-3-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250908163230.2614397-1-mika.westerberg@linux.intel.com>
 References: <20250908163230.2614397-1-mika.westerberg@linux.intel.com>
@@ -84,102 +84,102 @@ Content-Transfer-Encoding: 8bit
 
 From: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
 
-Make acpi.c function documentation compliant with current kernel-doc
+Make cap.c function documentation compliant with current kernel-doc
 standards. No functional changes.
 
 Signed-off-by: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/acpi.c | 28 +++++++++++++++-------------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+ drivers/thunderbolt/cap.c | 49 +++++++++++++++++++++++++--------------
+ 1 file changed, 31 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
-index d2a0054217da..45d1415871b4 100644
---- a/drivers/thunderbolt/acpi.c
-+++ b/drivers/thunderbolt/acpi.c
-@@ -86,7 +86,7 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
-  * @nhi ACPI node. For each reference a device link is added. The link
-  * is automatically removed by the driver core.
+diff --git a/drivers/thunderbolt/cap.c b/drivers/thunderbolt/cap.c
+index 8ecd610c62d5..4ab22d5291ac 100644
+--- a/drivers/thunderbolt/cap.c
++++ b/drivers/thunderbolt/cap.c
+@@ -64,10 +64,14 @@ static void tb_port_dummy_read(struct tb_port *port)
+  * @port: Port to find the capability for
+  * @offset: Previous capability offset (%0 for start)
   *
-- * Returns %true if at least one link was created.
-+ * Returns %true if at least one link was created, %false otherwise.
-  */
- bool tb_acpi_add_links(struct tb_nhi *nhi)
- {
-@@ -113,8 +113,10 @@ bool tb_acpi_add_links(struct tb_nhi *nhi)
- /**
-  * tb_acpi_is_native() - Did the platform grant native TBT/USB4 control
-  *
-- * Returns %true if the platform granted OS native control over
-- * TBT/USB4. In this case software based connection manager can be used,
-+ * Return: %true if the platform granted OS native control over
-+ * TBT/USB4, %false otherwise.
+- * Returns dword offset of the next capability in port config space
+- * capability list and returns it. Passing %0 returns the first entry in
+- * the capability list. If no next capability is found returns %0. In case
+- * of failure returns negative errno.
++ * Finds dword offset of the next capability in port config space
++ * capability list. When passed %0 in @offset parameter, first entry
++ * will be returned, if it exists.
 + *
-+ * When returned %true, software based connection manager can be used,
-  * otherwise there is firmware based connection manager running.
++ * Return:
++ * * Double word offset of the first or next capability - On success.
++ * * %0 - If no next capability is found.
++ * * Negative errno - Another error occurred.
   */
- bool tb_acpi_is_native(void)
-@@ -126,8 +128,8 @@ bool tb_acpi_is_native(void)
- /**
-  * tb_acpi_may_tunnel_usb3() - Is USB3 tunneling allowed by the platform
-  *
-- * When software based connection manager is used, this function
-- * returns %true if platform allows native USB3 tunneling.
-+ * Return: %true if software based connection manager is used and
-+ * platform allows native USB 3.x tunneling, %false otherwise.
-  */
- bool tb_acpi_may_tunnel_usb3(void)
+ int tb_port_next_cap(struct tb_port *port, unsigned int offset)
  {
-@@ -139,8 +141,8 @@ bool tb_acpi_may_tunnel_usb3(void)
- /**
-  * tb_acpi_may_tunnel_dp() - Is DisplayPort tunneling allowed by the platform
+@@ -112,9 +116,10 @@ static int __tb_port_find_cap(struct tb_port *port, enum tb_port_cap cap)
+  * @port: Port to find the capability for
+  * @cap: Capability to look
   *
-- * When software based connection manager is used, this function
-- * returns %true if platform allows native DP tunneling.
-+ * Return: %true if software based connection manager is used and
-+ * platform allows native DP tunneling, %false otherwise.
+- * Returns offset to start of capability or %-ENOENT if no such
+- * capability was found. Negative errno is returned if there was an
+- * error.
++ * Return:
++ * * Offset to the start of capability - On success.
++ * * %-ENOENT - If no such capability was found.
++ * * Negative errno - Another error occurred.
   */
- bool tb_acpi_may_tunnel_dp(void)
+ int tb_port_find_cap(struct tb_port *port, enum tb_port_cap cap)
  {
-@@ -152,8 +154,8 @@ bool tb_acpi_may_tunnel_dp(void)
- /**
-  * tb_acpi_may_tunnel_pcie() - Is PCIe tunneling allowed by the platform
+@@ -137,10 +142,14 @@ int tb_port_find_cap(struct tb_port *port, enum tb_port_cap cap)
+  * @sw: Switch to find the capability for
+  * @offset: Previous capability offset (%0 for start)
   *
-- * When software based connection manager is used, this function
-- * returns %true if platform allows native PCIe tunneling.
-+ * Return: %true if software based connection manager is used and
-+ * platform allows native PCIe tunneling, %false otherwise.
+- * Finds dword offset of the next capability in router config space
+- * capability list and returns it. Passing %0 returns the first entry in
+- * the capability list. If no next capability is found returns %0. In case
+- * of failure returns negative errno.
++ * Finds dword offset of the next capability in port config space
++ * capability list. When passed %0 in @offset parameter, first entry
++ * will be returned, if it exists.
++ *
++ * Return:
++ * * Double word offset of the first or next capability - On success.
++ * * %0 - If no next capability is found.
++ * * Negative errno - Another error occurred.
   */
- bool tb_acpi_may_tunnel_pcie(void)
+ int tb_switch_next_cap(struct tb_switch *sw, unsigned int offset)
  {
-@@ -165,8 +167,8 @@ bool tb_acpi_may_tunnel_pcie(void)
- /**
-  * tb_acpi_is_xdomain_allowed() - Are XDomain connections allowed
+@@ -181,9 +190,10 @@ int tb_switch_next_cap(struct tb_switch *sw, unsigned int offset)
+  * @sw: Switch to find the capability for
+  * @cap: Capability to look
   *
-- * When software based connection manager is used, this function
-- * returns %true if platform allows XDomain connections.
-+ * Return: %true if software based connection manager is used and
-+ * platform allows XDomain tunneling, %false otherwise.
+- * Returns offset to start of capability or %-ENOENT if no such
+- * capability was found. Negative errno is returned if there was an
+- * error.
++ * Return:
++ * * Offset to the start of capability - On success.
++ * * %-ENOENT - If no such capability was found.
++ * * Negative errno - Another error occurred.
   */
- bool tb_acpi_is_xdomain_allowed(void)
+ int tb_switch_find_cap(struct tb_switch *sw, enum tb_switch_cap cap)
  {
-@@ -256,7 +258,7 @@ static int tb_acpi_retimer_set_power(struct tb_port *port, bool power)
+@@ -213,10 +223,13 @@ int tb_switch_find_cap(struct tb_switch *sw, enum tb_switch_cap cap)
+  * @sw: Switch to find the capability for
+  * @vsec: Vendor specific capability to look
   *
-  * This should only be called if the USB4/TBT link is not up.
-  *
-- * Returns %0 on success.
-+ * Return: %0 on success, negative errno otherwise.
+- * Functions enumerates vendor specific capabilities (VSEC) of a switch
+- * and returns offset when capability matching @vsec is found. If no
+- * such capability is found returns %-ENOENT. In case of error returns
+- * negative errno.
++ * This function enumerates vendor specific capabilities (VSEC) of a
++ * switch and returns offset when capability matching @vsec is found.
++ *
++ * Return:
++ * * Offset of capability - On success.
++ * * %-ENOENT - If capability was not found.
++ * * Negative errno - Another error occurred.
   */
- int tb_acpi_power_on_retimers(struct tb_port *port)
- {
-@@ -270,7 +272,7 @@ int tb_acpi_power_on_retimers(struct tb_port *port)
-  * This is the opposite of tb_acpi_power_on_retimers(). After returning
-  * successfully the normal operations with the @port can continue.
-  *
-- * Returns %0 on success.
-+ * Return: %0 on success, negative errno otherwise.
-  */
- int tb_acpi_power_off_retimers(struct tb_port *port)
+ int tb_switch_find_vse_cap(struct tb_switch *sw, enum tb_switch_vse_cap vsec)
  {
 -- 
 2.50.1
