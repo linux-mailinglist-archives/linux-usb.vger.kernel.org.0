@@ -1,197 +1,140 @@
-Return-Path: <linux-usb+bounces-27751-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27752-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C83FB49883
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 20:43:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E49B49C40
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 23:41:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B6041BC623C
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:43:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B35941C214D0
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 21:41:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1297A31C568;
-	Mon,  8 Sep 2025 18:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0B502EF65A;
+	Mon,  8 Sep 2025 21:34:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="gZnKd5Je"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KG0xsGVK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.228])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B0230ACF0;
-	Mon,  8 Sep 2025 18:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.166.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378BB2DFA38;
+	Mon,  8 Sep 2025 21:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757356974; cv=none; b=XZa4O/tWf0WvVSmq+dINCoZSSQ5WTQvQdfreYbxCdpevpfQzN6mPx03dH4pXNCEj/cosbuUc5OSnuBakQiGBqCUgiR4461Jo0ap7QmUWTNrzAh92OB3DPICHrr5PDUN92QVdsBsxCXJO2fyvKZdNjPpHm+8jzmKDht+G7lKXt4c=
+	t=1757367278; cv=none; b=nVNfJWvnHOzYXVDxEBjYU/Rkj8MVXMYhWROCovjGIWzh5eqtMpfOueGR4LMu9Q1fP8ig/skHcszk8xV9uIxuFeWIPJT89IVPXqyMfB1WvDT7c/M/ffUYBtE9kc1uqEttz0hJQ6S4AQq4YbJgxJPzNnJ65r+g4BFFe2Vk0C2shxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757356974; c=relaxed/simple;
-	bh=zHdgNKydKxrw1fqRJFtZWEZd13udUyK6lu/VL/D0pMQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YJU0/v3P+On1SS09s3miwe5VctveABPf09oOfBHdfR9rZhXlVY/8hL0MH/1678NaaKhiTZalcTw9qge0xuLMsSyzk+3Q9hDvJlrBFiZeoeLqYA8Uc+w64NCoH8VgC5jc6M6Fwivjr6lAx8nM+sFwQs796c5OoyJcMhGKPGznHN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=gZnKd5Je; arc=none smtp.client-ip=192.19.166.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-acc-it-01.broadcom.com (mail-acc-it-01.acc.broadcom.net [10.35.36.83])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 57CCFC0000F2;
-	Mon,  8 Sep 2025 11:42:45 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 57CCFC0000F2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1757356965;
-	bh=zHdgNKydKxrw1fqRJFtZWEZd13udUyK6lu/VL/D0pMQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=gZnKd5Jecs8rqbYHprlxd/hMi6jxwtHbV31sGvJDDGKItghJE1WMLDKc6NrRY+2tU
-	 sYmYjlCObbaHaObAXm10/ggE3it75EYA9pv+pmRA07zv5gEMI0T+cQXKljh9M+Edca
-	 2llMRDkZxLSW1gS+UR4J5BG2T6+reHf1dazb3A5s=
-Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id 16D844002F44;
-	Mon,  8 Sep 2025 14:42:44 -0400 (EDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: stable@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	stable <stable@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	s=arc-20240116; t=1757367278; c=relaxed/simple;
+	bh=NzbMSMpQ4f3Do6KUVa9pmwGpe4Sd68+LnHSAddc02hc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=B1s4PIkGbgBYJr+ScN37qa1B35KItZg55lRHCDkHlxlCSOPAJAKuhnJ+CCHoCxip6HB5Gysg0vTmwvsRiWoRQfsbUGxntRcqh8nXPnAvHPsWxIvYnXjq1Bva68l59KnV3oBwipvkfY3bOCKoq0nOLmIUNJ+w7vESvmYadOtLQSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KG0xsGVK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95884C4CEF1;
+	Mon,  8 Sep 2025 21:34:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757367277;
+	bh=NzbMSMpQ4f3Do6KUVa9pmwGpe4Sd68+LnHSAddc02hc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=KG0xsGVKP50g/2MEAKc7sN+1zhMxdzclu/RHx9bMUgGoudP8nnKRnjTGCvWakiHcD
+	 7BhxiVTC6Xp/z989LDquWV9Mqeppxh8onBPSxzNPfFi29SBSOmyvb17FABTwAshXqa
+	 pfRK2KiQ1GzMrYFZLhZFEcd+vQ5OQx1EOaHKahYYZWahdltSQDUS70YkkRyA5uqDhg
+	 NQ+tiTpyReOIBucvYBR86yByR8r2tWIzuHishUj92EgsVC8pcxC53NrnFtSOLaViZo
+	 9s7opjqTUVpPIxAgNzXNUP6kVgIcE2AQGGdPA8X9cgOLETH5L5lx6WVFIEHiioBIzq
+	 ZEYlJbuyV5RfA==
+Date: Mon, 8 Sep 2025 16:34:36 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: "Mario Limonciello (AMD)" <superm1@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Sasha Levin <sashal@kernel.org>,
-	Hardik Gajjar <hgajjar@de.adit-jv.com>,
-	Ma Ke <make_ruc2021@163.com>,
-	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH stable 5.4] usb: hub: Fix flushing of delayed work used for post resume purposes
-Date: Mon,  8 Sep 2025 11:42:33 -0700
-Message-Id: <20250908184233.1596036-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
+	Danilo Krummrich <dakr@kernel.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>,
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+	"open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
+	AceLan Kao <acelan.kao@canonical.com>,
+	Kai-Heng Feng <kaihengf@nvidia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	Merthan =?utf-8?Q?Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+	Eric Naim <dnaim@cachyos.org>
+Subject: Re: [PATCH v6 05/11] PCI: PM: Disable device wakeups when halting
+ system through S4 flow
+Message-ID: <20250908213436.GA1465429@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250818020101.3619237-6-superm1@kernel.org>
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In subject, s|PCI: PM:|PCI/PM:| to follow previous practice.
 
-commit 9bd9c8026341f75f25c53104eb7e656e357ca1a2 upstream
+On Sun, Aug 17, 2025 at 09:00:55PM -0500, Mario Limonciello (AMD) wrote:
+> PCI devices can be programmed as a wakeup source from low power states
+> by sysfs.  However when using the S4 flow to go into S5 these wakeup
+> sources should be disabled to avoid what users would perceive as
+> spurious wakeup events.
 
-Delayed work that prevents USB3 hubs from runtime-suspending too early
-needed to be flushed in hub_quiesce() to resolve issues detected on
-QC SC8280XP CRD board during suspend resume testing.
+Is the "can be programmed vis sysfs" part relevant here?
 
-This flushing did however trigger new issues on Raspberry Pi 3B+, which
-doesn't have USB3 ports, and doesn't queue any post resume delayed work.
+I think S4 and S5 are ACPI sleep states not applicable to all
+platforms.  Is it relevant that we got here via ACPI?
 
-The flushed 'hub->init_work' item is used for several purposes, and
-is originally initialized with a 'NULL' work function. The work function
-is also changed on the fly, which may contribute to the issue.
+I assume non-ACPI systems can also exercise this path.  Is there a way
+to describe this scenario in a way that would apply to all systems?
 
-Solve this by creating a dedicated delayed work item for post resume work,
-and flush that delayed work in hub_quiesce()
+I'm not sure what "using the S4 flow to go in to S5" means.
 
-Cc: stable <stable@kernel.org>
-Fixes: a49e1e2e785f ("usb: hub: Fix flushing and scheduling of delayed work that tunes runtime pm")
-Reported-by: Mark Brown <broonie@kernel.org>
-Closes: https://lore.kernel.org/linux-usb/aF5rNp1l0LWITnEB@finisterre.sirena.org.uk
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Tested-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com> # SC8280XP CRD
-Tested-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20250627164348.3982628-2-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-[florian: adjust for lack of hub_{get,put} and timer_delete_sync]
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
- drivers/usb/core/hub.c | 21 ++++++++-------------
- drivers/usb/core/hub.h |  1 +
- 2 files changed, 9 insertions(+), 13 deletions(-)
+It would be nice to have a spec reference or some sort of rationale
+for the requirement to disable all wakeup sources in SYSTEM_HALT and
+SYSTEM_POWER_OFF.
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 1a2039d1b342..63bb62680362 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1030,12 +1030,11 @@ int usb_remove_device(struct usb_device *udev)
- 
- enum hub_activation_type {
- 	HUB_INIT, HUB_INIT2, HUB_INIT3,		/* INITs must come first */
--	HUB_POST_RESET, HUB_RESUME, HUB_RESET_RESUME, HUB_POST_RESUME,
-+	HUB_POST_RESET, HUB_RESUME, HUB_RESET_RESUME,
- };
- 
- static void hub_init_func2(struct work_struct *ws);
- static void hub_init_func3(struct work_struct *ws);
--static void hub_post_resume(struct work_struct *ws);
- 
- static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
- {
-@@ -1059,12 +1058,6 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
- 		goto init3;
- 	}
- 
--	if (type == HUB_POST_RESUME) {
--		usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
--		kref_put(&hub->kref, hub_release);
--		return;
--	}
--
- 	kref_get(&hub->kref);
- 
- 	/* The superspeed hub except for root hub has to use Hub Depth
-@@ -1318,8 +1311,8 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
- 		usb_autopm_get_interface_no_resume(
- 			to_usb_interface(hub->intfdev));
- 
--		INIT_DELAYED_WORK(&hub->init_work, hub_post_resume);
--		queue_delayed_work(system_power_efficient_wq, &hub->init_work,
-+		queue_delayed_work(system_power_efficient_wq,
-+				   &hub->post_resume_work,
- 				   msecs_to_jiffies(USB_SS_PORT_U0_WAKE_TIME));
- 		return;
- 	}
-@@ -1344,9 +1337,10 @@ static void hub_init_func3(struct work_struct *ws)
- 
- static void hub_post_resume(struct work_struct *ws)
- {
--	struct usb_hub *hub = container_of(ws, struct usb_hub, init_work.work);
-+	struct usb_hub *hub = container_of(ws, struct usb_hub, post_resume_work.work);
- 
--	hub_activate(hub, HUB_POST_RESUME);
-+	usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
-+	kref_put(&hub->kref, hub_release);
- }
- 
- enum hub_quiescing_type {
-@@ -1374,7 +1368,7 @@ static void hub_quiesce(struct usb_hub *hub, enum hub_quiescing_type type)
- 
- 	/* Stop hub_wq and related activity */
- 	del_timer_sync(&hub->irq_urb_retry);
--	flush_delayed_work(&hub->init_work);
-+	flush_delayed_work(&hub->post_resume_work);
- 	usb_kill_urb(hub->urb);
- 	if (hub->has_indicators)
- 		cancel_delayed_work_sync(&hub->leds);
-@@ -1921,6 +1915,7 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
- 	hub->hdev = hdev;
- 	INIT_DELAYED_WORK(&hub->leds, led_work);
- 	INIT_DELAYED_WORK(&hub->init_work, NULL);
-+	INIT_DELAYED_WORK(&hub->post_resume_work, hub_post_resume);
- 	INIT_WORK(&hub->events, hub_event);
- 	spin_lock_init(&hub->irq_urb_lock);
- 	timer_setup(&hub->irq_urb_retry, hub_retry_irq_urb, 0);
-diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-index 1c455800f7d3..de29ce856953 100644
---- a/drivers/usb/core/hub.h
-+++ b/drivers/usb/core/hub.h
-@@ -69,6 +69,7 @@ struct usb_hub {
- 	u8			indicator[USB_MAXCHILDREN];
- 	struct delayed_work	leds;
- 	struct delayed_work	init_work;
-+	struct delayed_work	post_resume_work;
- 	struct work_struct      events;
- 	spinlock_t		irq_urb_lock;
- 	struct timer_list	irq_urb_retry;
--- 
-2.34.1
+> Tested-by: Eric Naim <dnaim@cachyos.org>
+> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+> ---
+> v5:
+>  * Re-order
+>  * Add tags
+> v4:
+>  * https://lore.kernel.org/linux-pci/20250616175019.3471583-1-superm1@kernel.org/
+> ---
+>  drivers/pci/pci-driver.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index 63665240ae87f..f201d298d7173 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -1139,6 +1139,10 @@ static int pci_pm_poweroff(struct device *dev)
+>  	struct pci_dev *pci_dev = to_pci_dev(dev);
+>  	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+>  
+> +	if (device_may_wakeup(dev) &&
+> +	    (system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF))
+> +		device_set_wakeup_enable(dev, false);
 
+I guess the suggestion is that we can't wake up at all from
+SYSTEM_HALT or SYSTEM_POWER_OFF?  Would both be considered S5?
+
+Does this mean we need a physical power button push to start up again?
+I guess ACPI r6.5, sec 16.1.5 kind of suggests that: "hardware does
+allow a transition to S0 due to power button press or a Remote Start."
+
+>  	if (pci_has_legacy_pm_support(pci_dev))
+>  		return pci_legacy_suspend(dev, PMSG_HIBERNATE);
+>  
+> -- 
+> 2.43.0
+> 
 
