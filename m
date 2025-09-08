@@ -1,137 +1,212 @@
-Return-Path: <linux-usb+bounces-27711-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27712-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3A48B48DC8
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 14:40:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBB63B48FC5
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 15:37:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A33464E17A5
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 12:40:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C218F17D9DC
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 13:36:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25D2301022;
-	Mon,  8 Sep 2025 12:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ufv6Hcx6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F29B30BBA9;
+	Mon,  8 Sep 2025 13:36:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315F42FE598;
-	Mon,  8 Sep 2025 12:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA33530AD14
+	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 13:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757335150; cv=none; b=EeIMP0RHw7FjrwCyR1JjzJNSR2VLM5XSJuaYm1cNT+Nz2ZBGpuWix0p7GYY5iu8nUL7JE1xcEXCoOR3qn0oekG9/FfBBJ0Cy+DW8wOQXQNs4y0DLoA9yqobQp2crb4BEtXci9tCThmYFkyELZ86y0lk393RJpbb8IZYb14XsOnA=
+	t=1757338593; cv=none; b=C3LpQK1Y59kIZPYbE+Fmzuiu5hvbkWCMmNUnQjww22v9faljMdV/TTR0EogqcMNIz94jB6aCnq31ZU3rAGXdHSAa36LyXbp82E5VqL3i96S+tpIQ62g/0l0wa0A8PiVQtu/E0YICK5hTJTPshVLhD7bxDHM/v3qly2EkcG1pIdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757335150; c=relaxed/simple;
-	bh=Kmgj7JQ2MfTOSMke4wzOHnSg8Sksyl64nAuAQ+DhI4A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=txoUPBc6zRjvFy/iM6Eum2PuclmrTR+x0oYJjk4+drzC6p7wmPIdyRwrT/GNSXLpwi22Lcp45nZqGL7cuMLWNZt921a6y6vwT/tUzNmeobHVWAFut0iuKYPKqdBZVQxHxeDKotN+skwaJmzPJrmqBYaH94e6LUHFzx21U6yvbK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ufv6Hcx6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D710C4CEF1;
-	Mon,  8 Sep 2025 12:39:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757335150;
-	bh=Kmgj7JQ2MfTOSMke4wzOHnSg8Sksyl64nAuAQ+DhI4A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ufv6Hcx6jWD5AxW92cK+ljuNUfSXKHnQZv3kXveaEsZj/qc477qtV8lnGeC+yl2LV
-	 RS+Xs28IVJiEsEENic3DIoEPQdZSHhAU4cy+TktV0KVy4p51YIFXAv1grFur5A4cuH
-	 6bQZcKwbFMBzc6sdl3QoFscqqxGb0GSshxGjTLYgZ5ZSGs+wSs4Anmp+mAqfz/3G43
-	 d2i25P5YPiPUgIUQnhTbmOJCWuiJLaNYNMsOWex5ofVrrPe+JZ78aYrYUP0jSNG4sY
-	 WuOYdOOajtBz008C++gHVHO1nJV3AOOUYzXAxps+DjP5BGGjNMGuX5Ral+AlLsdZhH
-	 w1T2hkMKtFUDQ==
-Message-ID: <af78dfb4-de61-4b8c-a131-cf39a4c3c4b0@kernel.org>
-Date: Mon, 8 Sep 2025 07:39:07 -0500
+	s=arc-20240116; t=1757338593; c=relaxed/simple;
+	bh=WwjFSgide+j0J8+MEM1KQVy1lEu8jTrK1hDVyDW0bww=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=agyM8ANJslKbKxQrYolXQgu5XrWHmu81rV6EpQJh3eOFAFGQip7IecJqD8ncScRSW2Sn+uyYQo99yRIqQa0xo42sf/6lpRvFAxb/0qQEY0iAodMHn3cY+YZxdeAucTNp52u6AqsE28yqu1Nb4rHINTpd94JgmHjOX9e0O+c23bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-88724fdcd7dso438476039f.0
+        for <linux-usb@vger.kernel.org>; Mon, 08 Sep 2025 06:36:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757338591; x=1757943391;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tz62WV/AVE2GA/H5HhYYG8S1kte75hYZLJm6MRCusx8=;
+        b=H68eqMuBSCqJoER3wyKNaqm+mG0PDeYmXUUS/MhRbiLKNdb/prYh/QI59IgFOxr6hS
+         L6g/OP0AYfDmnqLkZUGG+5mYn403vsHvaS1DQpO/Pxn7v4Fye0ZlWY3YuefprGWYktx0
+         SFk6BBvEhtsLjN2ukI+4QPrRtG2VpRkYh6amnjNC+cvYY5NF0FGLbV1vyhon2th0I6XH
+         gFGQjHJaTln4nY702JNF7FmBq4EgkrJC+YAczEqT8Gp5tOp2Wju/Hg/g0nfLhGPv8Sqw
+         YHZIViIuOywdsEc/CFV5IHV7nlNLHLRA6o6vMvQqS96mtf4TTI9CpQC3jJ9gAZJH/sgP
+         3dZg==
+X-Forwarded-Encrypted: i=1; AJvYcCWx7QhIcRLfiPRGFIFXSD1aYH788KZGh5CsM/OtxR54ZP2bD9QPUXo65gnWr/CI/ZrmMrxYwXQxgcQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YybXA+8CtW+Wr+fkfVanatNbzJBtxY2P+S/8d1ySuZxPGV27f6r
+	cLWkTasd2hLJXqdomrEEmjbCEnuR6ua+o1c5X+ZxktO1FOcHPU5br63FynLpVTSQOY4Adxx/c7K
+	9/vU9GVHxCOc8X0+OYUvxIseBSsWFM2pfF3d0q1cQJnHN6eukA9aX2LKFIBg=
+X-Google-Smtp-Source: AGHT+IGGfzTq3QneV+RLtg8/QyXJD91IY25TclMqkc100fjXHn73SB+BU6srBxJY/uMDyhe2nekn3IGCKmswEpQ0t1iS12Po6v4Z
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 RESEND 00/11] Improvements to S5 power consumption
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>
-Cc: Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
- Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
- <linux-pm@vger.kernel.org>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
- "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
- "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
- "open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
- AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng <kaihengf@nvidia.com>,
- Mark Pearson <mpearson-lenovo@squebb.ca>,
- =?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>,
- Eric Naim <dnaim@cachyos.org>
-References: <20250906143642.2590808-1-superm1@kernel.org>
- <2025090852-coma-tycoon-9f37@gregkh>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <2025090852-coma-tycoon-9f37@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:228a:b0:408:1ec5:ddd7 with SMTP id
+ e9e14a558f8ab-4081ec5dee5mr42031245ab.20.1757338590807; Mon, 08 Sep 2025
+ 06:36:30 -0700 (PDT)
+Date: Mon, 08 Sep 2025 06:36:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68bedbde.050a0220.192772.087c.GAE@google.com>
+Subject: [syzbot] [net?] [usb?] WARNING: ODEBUG bug in trace_suspend_resume
+From: syzbot <syzbot+51fb5a1c5d4b6056f9f1@syzkaller.appspotmail.com>
+To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	netdev@vger.kernel.org, oneukum@suse.com, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    76eeb9b8de98 Linux 6.17-rc5
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=170e587c580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1ea9f6450a1c85f2
+dashboard link: https://syzkaller.appspot.com/bug?extid=51fb5a1c5d4b6056f9f1
+compiler:       arm-linux-gnueabi-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: arm
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/98a89b9f34e4/non_bootable_disk-76eeb9b8.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3f783b9be048/vmlinux-76eeb9b8.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1eaa9296791e/zImage-76eeb9b8.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+51fb5a1c5d4b6056f9f1@syzkaller.appspotmail.com
+
+dm9601 1-1:0.0 eth1: register 'dm9601' at usb-dummy_hcd.0-1, Davicom DM96xx USB 10/100 Ethernet, 6e:f1:98:9e:dd:08
+usb 1-1: USB disconnect, device number 3
+dm9601 1-1:0.0 eth1: unregister 'dm9601' usb-dummy_hcd.0-1, Davicom DM96xx USB 10/100 Ethernet
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 11 at lib/debugobjects.c:612 debug_print_object+0xc4/0xd8 lib/debugobjects.c:612
+ODEBUG: free active (active state 0) object: 83fea804 object type: work_struct hint: usbnet_deferred_kevent+0x0/0x38c drivers/net/usb/usbnet.c:1862
+Modules linked in:
+Kernel panic - not syncing: kernel: panic_on_warn set ...
+CPU: 0 UID: 0 PID: 11 Comm: kworker/0:1 Not tainted syzkaller #0 PREEMPT 
+Hardware name: ARM-Versatile Express
+Workqueue: usb_hub_wq hub_event
+Call trace: 
+[<80201a24>] (dump_backtrace) from [<80201b20>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:257)
+ r7:00000000 r6:8281f77c r5:00000000 r4:82260afc
+[<80201b08>] (show_stack) from [<8021fbe4>] (__dump_stack lib/dump_stack.c:94 [inline])
+[<80201b08>] (show_stack) from [<8021fbe4>] (dump_stack_lvl+0x54/0x7c lib/dump_stack.c:120)
+[<8021fb90>] (dump_stack_lvl) from [<8021fc24>] (dump_stack+0x18/0x1c lib/dump_stack.c:129)
+ r5:00000000 r4:82a77d18
+[<8021fc0c>] (dump_stack) from [<80202624>] (vpanic+0x10c/0x30c kernel/panic.c:430)
+[<80202518>] (vpanic) from [<80202858>] (trace_suspend_resume+0x0/0xd8 kernel/panic.c:566)
+ r7:808dcb04
+[<80202824>] (panic) from [<80254960>] (check_panic_on_warn kernel/panic.c:323 [inline])
+[<80202824>] (panic) from [<80254960>] (get_taint+0x0/0x1c kernel/panic.c:318)
+ r3:8280c684 r2:00000001 r1:82247518 r0:8224ef94
+[<802548e8>] (check_panic_on_warn) from [<80254ac4>] (__warn+0x80/0x188 kernel/panic.c:837)
+[<80254a44>] (__warn) from [<80254db4>] (warn_slowpath_fmt+0x1e8/0x1f4 kernel/panic.c:872)
+ r8:00000009 r7:822b9fa4 r6:df845a84 r5:83210000 r4:00000000
+[<80254bd0>] (warn_slowpath_fmt) from [<808dcb04>] (debug_print_object+0xc4/0xd8 lib/debugobjects.c:612)
+ r10:00000005 r9:83fea000 r8:81c01e68 r7:822e5578 r6:82ae3d64 r5:df845b2c
+ r4:8280ccb8
+[<808dca40>] (debug_print_object) from [<808de568>] (__debug_check_no_obj_freed lib/debugobjects.c:1099 [inline])
+[<808dca40>] (debug_print_object) from [<808de568>] (debug_check_no_obj_freed+0x25c/0x2a4 lib/debugobjects.c:1129)
+ r8:83feb000 r7:83fea804 r6:00000100 r5:00000003 r4:00000000
+[<808de30c>] (debug_check_no_obj_freed) from [<804ff448>] (slab_free_hook mm/slub.c:2353 [inline])
+[<808de30c>] (debug_check_no_obj_freed) from [<804ff448>] (slab_free mm/slub.c:4695 [inline])
+[<808de30c>] (debug_check_no_obj_freed) from [<804ff448>] (kfree+0x190/0x394 mm/slub.c:4894)
+ r10:00000100 r9:8297e2a0 r8:83fea000 r7:805002d4 r6:83002480 r5:dde88ca0
+ r4:83fea000
+[<804ff2b8>] (kfree) from [<805002d4>] (kvfree+0x2c/0x30 mm/slub.c:5110)
+ r10:00000100 r9:8297e2a0 r8:83fea000 r7:00000000 r6:85cfb6c0 r5:85ce5380
+ r4:83fea000
+[<805002a8>] (kvfree) from [<815c2d70>] (netdev_release+0x2c/0x34 net/core/net-sysfs.c:2250)
+ r5:85ce5380 r4:83fea000
+[<815c2d44>] (netdev_release) from [<80b3d638>] (device_release+0x38/0xa8 drivers/base/core.c:2565)
+ r5:85ce5380 r4:83fea3a0
+[<80b3d600>] (device_release) from [<81a13a90>] (kobject_cleanup lib/kobject.c:689 [inline])
+[<80b3d600>] (device_release) from [<81a13a90>] (kobject_release lib/kobject.c:720 [inline])
+[<80b3d600>] (device_release) from [<81a13a90>] (kref_put include/linux/kref.h:65 [inline])
+[<80b3d600>] (device_release) from [<81a13a90>] (kobject_put+0xa0/0x1f4 lib/kobject.c:737)
+ r5:81d4ebec r4:83fea3a0
+[<81a139f0>] (kobject_put) from [<80b3d884>] (put_device+0x18/0x1c drivers/base/core.c:3797)
+ r7:000000c0 r6:00000000 r5:00000000 r4:83fea000
+[<80b3d86c>] (put_device) from [<815733f0>] (free_netdev+0x190/0x248 net/core/dev.c:12002)
+[<81573260>] (free_netdev) from [<80e326e0>] (usbnet_disconnect+0xb8/0xfc drivers/net/usb/usbnet.c:1673)
+ r7:85c75400 r6:83fea7d4 r5:83fea6c0 r4:00000000
+[<80e32628>] (usbnet_disconnect) from [<80e9ce4c>] (usb_unbind_interface+0x84/0x2bc drivers/usb/core/driver.c:458)
+ r8:85c77c88 r7:85c75474 r6:85c75430 r5:00000000 r4:85c77c00
+[<80e9cdc8>] (usb_unbind_interface) from [<80b45a00>] (device_remove drivers/base/dd.c:571 [inline])
+[<80e9cdc8>] (usb_unbind_interface) from [<80b45a00>] (device_remove+0x64/0x6c drivers/base/dd.c:563)
+ r10:00000100 r9:85c77c88 r8:00000044 r7:85c75474 r6:8297e2a0 r5:00000000
+ r4:85c75430
+[<80b4599c>] (device_remove) from [<80b46ef0>] (__device_release_driver drivers/base/dd.c:1274 [inline])
+[<80b4599c>] (device_remove) from [<80b46ef0>] (device_release_driver_internal+0x18c/0x200 drivers/base/dd.c:1297)
+ r5:00000000 r4:85c75430
+[<80b46d64>] (device_release_driver_internal) from [<80b46f7c>] (device_release_driver+0x18/0x1c drivers/base/dd.c:1320)
+ r9:85c77c88 r8:8335cd40 r7:8335cd38 r6:8335cd0c r5:85c75430 r4:8335cd30
+[<80b46f64>] (device_release_driver) from [<80b45040>] (bus_remove_device+0xcc/0x120 drivers/base/bus.c:579)
+[<80b44f74>] (bus_remove_device) from [<80b3f2d8>] (device_del+0x148/0x38c drivers/base/core.c:3878)
+ r9:85c77c88 r8:83210000 r7:04208060 r6:00000000 r5:85c75430 r4:85c75474
+[<80b3f190>] (device_del) from [<80e9a888>] (usb_disable_device+0xd4/0x1e8 drivers/usb/core/message.c:1418)
+ r10:00000100 r9:00000000 r8:00000000 r7:85c75400 r6:85c77c00 r5:85d09588
+ r4:00000002
+[<80e9a7b4>] (usb_disable_device) from [<80e8f650>] (usb_disconnect+0xec/0x2ac drivers/usb/core/hub.c:2344)
+ r9:84966e00 r8:85c77ccc r7:83f41000 r6:85c77c88 r5:85c77c00 r4:60000013
+[<80e8f564>] (usb_disconnect) from [<80e9264c>] (hub_port_connect drivers/usb/core/hub.c:5406 [inline])
+[<80e8f564>] (usb_disconnect) from [<80e9264c>] (hub_port_connect_change drivers/usb/core/hub.c:5706 [inline])
+[<80e8f564>] (usb_disconnect) from [<80e9264c>] (port_event drivers/usb/core/hub.c:5870 [inline])
+[<80e8f564>] (usb_disconnect) from [<80e9264c>] (hub_event+0x1194/0x1950 drivers/usb/core/hub.c:5952)
+ r10:00000100 r9:83ce2f2c r8:83f40800 r7:85c77c00 r6:83ce2800 r5:00000001
+ r4:00000001
+[<80e914b8>] (hub_event) from [<8027a398>] (process_one_work+0x1b4/0x4f4 kernel/workqueue.c:3236)
+ r10:8335cf70 r9:8326fe05 r8:83210000 r7:dddced40 r6:8326fe00 r5:83ce2f2c
+ r4:830b9600
+[<8027a1e4>] (process_one_work) from [<8027afe0>] (process_scheduled_works kernel/workqueue.c:3319 [inline])
+[<8027a1e4>] (process_one_work) from [<8027afe0>] (worker_thread+0x1fc/0x3d8 kernel/workqueue.c:3400)
+ r10:61c88647 r9:83210000 r8:830b962c r7:82804d40 r6:dddced40 r5:dddced60
+ r4:830b9600
+[<8027ade4>] (worker_thread) from [<80281fcc>] (kthread+0x12c/0x280 kernel/kthread.c:463)
+ r10:00000000 r9:830b9600 r8:8027ade4 r7:df83de60 r6:830b9700 r5:83210000
+ r4:00000001
+[<80281ea0>] (kthread) from [<80200114>] (ret_from_fork+0x14/0x20 arch/arm/kernel/entry-common.S:137)
+Exception stack(0xdf845fb0 to 0xdf845ff8)
+5fa0:                                     00000000 00000000 00000000 00000000
+5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+ r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:80281ea0
+ r4:830b6a40
+Rebooting in 86400 seconds..
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On 9/8/25 4:19 AM, Greg Kroah-Hartman wrote:
-> On Sat, Sep 06, 2025 at 09:36:31AM -0500, Mario Limonciello (AMD) wrote:
->> A variety of issues both in function and in power consumption have been
->> raised as a result of devices not being put into a low power state when
->> the system is powered off.
->>
->> There have been some localized changes[1] to PCI core to help these issues,
->> but they have had various downsides.
->>
->> This series instead tries to use the S4 flow when the system is being
->> powered off.  This lines up the behavior with what other operating systems
->> do as well.  If for some reason that fails or is not supported, run their
->> shutdown() callbacks.
->>
->> Cc: AceLan Kao <acelan.kao@canonical.com>
->> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
->> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
->> Cc: Merthan Karakaş <m3rthn.k@gmail.com>
->> Cc: Eric Naim <dnaim@cachyos.org>
->> ---
->> v6 RESEND:
->>   * Resent because Greg said he was ignoring it and would like the whole
->>     series to be able to review.
-> 
-> Messy, but wow, I'll trust you all that this actually works properly.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Yes; I double checked from a UART log all devices (now) went to correct 
-state and from power measurement hardware the respective drop in power.
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-I will note I have a sampling bias of hardware being x86 AMD hardware.
-Some of the testers of the series also tested Intel hardware which had 
-similar power consumption problem, and I know there were improvements 
-there too.
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-We probably will have to wait for linux-next for non-x86 hardware coverage.
-> No objections from me, but I don't want my ack on this as I don't know
-> how to maintain it :)
-> 
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-I mean - if all goes well even a failed S4 flow should fall back to old 
-path shutdown.  I *did contrive some failures* in an earlier version of 
-the series and confirmed in the UART log it emitted the printk that it 
-was falling back to shutdown.
-
-I had two ideas that maybe could help for regression risk though:
-1) I could add a shutdown= kernel parameter.  I'm not sure what words to 
-use for the two paths but the idea would be if someone had a shutdown 
-failure they could isolate if it's due to this by adding the parameter.
-
-2) I could make a Documentation/ file explaining some examples how to 
-get the shutdown log saved to pstore in case they don't have a UART 
-available.
-
+If you want to undo deduplication, reply with:
+#syz undup
 
