@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-27728-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27730-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B27E5B49590
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:38:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61932B49592
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:38:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD6131C209CE
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:38:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 521201C20A21
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:39:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E80FF31770F;
-	Mon,  8 Sep 2025 16:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7754D318138;
+	Mon,  8 Sep 2025 16:32:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i2ORILSw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZE6IBarG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B170030FC1E
-	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 16:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227E930FC2F
+	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 16:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757349159; cv=none; b=H0NKjSqI7Ce1lTfJgYs0zO0LWci5Pb+JhWV0prS7e8ejDnpNoQRrYf6EFYYfsYCQwZdAZuMO7bEH3fkShNqP+/YK414F1elJlDl+C4FV3H5mdRkzjy5JS9vqLuHIDKWB09Zu/JzZ23AYMv2tDrl0tcYGmGYu7EnFt67qwWbKV7A=
+	t=1757349159; cv=none; b=ZEHbJs4jOYRHlimJrduF989eJnfzsO70P39JXBaMI8F1rV31QG+5n+T2r6pzf+eM5KT/tsrNk7fy4Zus9D8GL8vviyx9+eGm6FXILDdUFT7SXdkXoK+Bo/gVCAgJ25AonnvZVO0FMUPHk/Komgy4EpsLxR1WKcoCjyW15K9YAWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1757349159; c=relaxed/simple;
-	bh=WZBVgCN3blb2G8PMjjegoM/EFNItIRbl30HzqXUn6DI=;
+	bh=8Hf47h04LS3jGfZAqVgu5kE+o5YbkqCt83zFQawxXvE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qv6hZtw7YgDhMh844xXMIPGZghGY59hoeS81Dy7PbolrUDozrq3yV4fvUivpWaf0ZsR7FmoTslT3QIZT1EfmybOHXpAzx1cQdbweO2HR8zQH2DYXY/Bdq6GAFgocOvzTDfnLc66tJDFc51cjYS11MahVjcJkhiUWEtOV60sT8PA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i2ORILSw; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=BFdhKWLLvcwLxwptYItpyGiua9Yirg3pQD0/PHY3ECfO45thcd7wUmKyAR/1oU54RHDtMEKvHVvA1ExmWZ/VDMfQwaOb0ePutOyhDwh+Udp6losbHcixG35+xmHu9ZGW2tjNd9VsQ7dJ0jX9Uxrx+aCqfqVnYP33aDUGiTw9yIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZE6IBarG; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757349158; x=1788885158;
+  t=1757349157; x=1788885157;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WZBVgCN3blb2G8PMjjegoM/EFNItIRbl30HzqXUn6DI=;
-  b=i2ORILSwl6y12HbJ5GCFsTV1Qf7S/EeLjFMPtFBm4DbL3xXXRs+eZGjf
-   WsBWL6GiG25y90xOyEFtVQ42QpNQEY/MfYkw8MQ8R3IA85yBCQCJ07JGO
-   7RFcT+JePemvyt/rISiM09VSGyP4Hb2RhNluOst6H13FufxjhzHskITq9
-   efKGRIovySaS53kS9ag3FHjXshlOItjMFMic+V52Jadjmd7ciJNko9sV9
-   5B+WqqZNE7BmgodEwexkPD13d+Kh13ofY2+B02DvaOZ2dz05PPOzG8QQ2
-   6Zl4Xhk4EaC8Uf6I+82AnCkpXkoqO8wauf4/tqH12c5+J+xmAwjD5kPnR
-   g==;
-X-CSE-ConnectionGUID: f1VHUf2dQbGkEyCNjGIgww==
-X-CSE-MsgGUID: VjollZ6HTPelLb1X6NduUA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="63252102"
-X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="63252102"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 09:32:37 -0700
-X-CSE-ConnectionGUID: 6qRgsJ9UQqCGaOELgmFgmA==
-X-CSE-MsgGUID: h+O6PZUgQ0qzqGWJUe85dw==
+  bh=8Hf47h04LS3jGfZAqVgu5kE+o5YbkqCt83zFQawxXvE=;
+  b=ZE6IBarGq67ybb2meBnnj6G9m0SmkKl2S1UJ7dhd66clIKuybfJML13K
+   bEwO4vI0MatkUJQNbQVtWusRr+ew9oJh2Ce1u110ryfstcXStoPfPZuWs
+   mIxRDx3EqATlotFJiABspKiTdlfNty7oQYgYPHhX02dLZNjUIPwS7jAcn
+   ubeDHWtu+YpjvufWGMtMAEulDPhj4BuutZTLVmxKVmTrtuBqSQJH9Cg72
+   j4rPudvxn7tRC6Arta4hxX8h5PrSezZti8lIpTJaxZ4pv2ThyY/kkrd3y
+   +vvnXkDnLGOygt+TexMDUFqGqQxTBLZJkWFqmrt+ZGefOgsc8A1qgn5CO
+   A==;
+X-CSE-ConnectionGUID: D+di1XKCR0ayH5k+3Z29ZA==
+X-CSE-MsgGUID: Dv0AgcOUSLi0kMjSO1I8cA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63443049"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63443049"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 09:32:35 -0700
+X-CSE-ConnectionGUID: nNppU07XRqmnlwxSuIcaEw==
+X-CSE-MsgGUID: w7YXxbZUSCiC5HOidi19Ew==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="203622641"
+   d="scan'208";a="173291148"
 Received: from unknown (HELO black.igk.intel.com) ([10.91.253.5])
-  by orviesa002.jf.intel.com with ESMTP; 08 Sep 2025 09:32:34 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 08 Sep 2025 09:32:34 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id D719A9A; Mon, 08 Sep 2025 18:32:30 +0200 (CEST)
+	id DA3A19B; Mon, 08 Sep 2025 18:32:30 +0200 (CEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -68,9 +68,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 06/26] thunderbolt: Update dma_port.c function documentation
-Date: Mon,  8 Sep 2025 18:32:10 +0200
-Message-ID: <20250908163230.2614397-7-mika.westerberg@linux.intel.com>
+Subject: [PATCH 07/26] thunderbolt: Update domain.c function documentation
+Date: Mon,  8 Sep 2025 18:32:11 +0200
+Message-ID: <20250908163230.2614397-8-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250908163230.2614397-1-mika.westerberg@linux.intel.com>
 References: <20250908163230.2614397-1-mika.westerberg@linux.intel.com>
@@ -84,83 +84,103 @@ Content-Transfer-Encoding: 8bit
 
 From: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
 
-Make dma_port.c function documentation compliant with current kernel-doc
+Make domain.c function documentation compliant with current kernel-doc
 standards. No functional changes.
 
 Signed-off-by: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/dma_port.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ drivers/thunderbolt/domain.c | 28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/thunderbolt/dma_port.c b/drivers/thunderbolt/dma_port.c
-index 9f20c7bbf0ce..dc8ea188a114 100644
---- a/drivers/thunderbolt/dma_port.c
-+++ b/drivers/thunderbolt/dma_port.c
-@@ -197,6 +197,8 @@ static int dma_find_port(struct tb_switch *sw)
+diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+index 45239703745e..1d9992ce6a09 100644
+--- a/drivers/thunderbolt/domain.c
++++ b/drivers/thunderbolt/domain.c
+@@ -368,7 +368,7 @@ static bool tb_domain_event_cb(void *data, enum tb_cfg_pkg_type type,
+  * Call tb_domain_put() to release the domain before it has been added
+  * to the system.
   *
-  * The DMA control port is functional also when the switch is in safe
-  * mode.
-+ *
-+ * Return: &struct tb_dma_port on success, %NULL otherwise.
+- * Return: allocated domain structure on %NULL in case of error
++ * Return: Pointer to &struct tb or %NULL in case of error.
   */
- struct tb_dma_port *dma_port_alloc(struct tb_switch *sw)
+ struct tb *tb_domain_alloc(struct tb_nhi *nhi, int timeout_msec, size_t privsize)
  {
-@@ -354,6 +356,8 @@ static int dma_port_flash_write_block(void *data, unsigned int dwaddress,
-  * @address: Address relative to the start of active region
-  * @buf: Buffer where the data is read
-  * @size: Size of the buffer
-+ *
+@@ -430,7 +430,7 @@ struct tb *tb_domain_alloc(struct tb_nhi *nhi, int timeout_msec, size_t privsize
+  * and release the domain after this function has been called, call
+  * tb_domain_remove().
+  *
+- * Return: %0 in case of success and negative errno in case of error
 + * Return: %0 on success, negative errno otherwise.
   */
- int dma_port_flash_read(struct tb_dma_port *dma, unsigned int address,
- 			void *buf, size_t size)
-@@ -372,6 +376,8 @@ int dma_port_flash_read(struct tb_dma_port *dma, unsigned int address,
-  * Writes block of data to the non-active flash region of the switch. If
-  * the address is given as %DMA_PORT_CSS_ADDRESS the block is written
-  * using CSS command.
-+ *
-+ * Return: %0 on success, negative errno otherwise.
-  */
- int dma_port_flash_write(struct tb_dma_port *dma, unsigned int address,
- 			 const void *buf, size_t size)
-@@ -393,6 +399,8 @@ int dma_port_flash_write(struct tb_dma_port *dma, unsigned int address,
-  * dma_port_flash_update_auth_status() to get status of this command.
-  * This is because if the switch in question is root switch the
-  * thunderbolt host controller gets reset as well.
-+ *
-+ * Return: %0 on success, negative errno otherwise.
-  */
- int dma_port_flash_update_auth(struct tb_dma_port *dma)
+ int tb_domain_add(struct tb *tb, bool reset)
  {
-@@ -410,12 +418,13 @@ int dma_port_flash_update_auth(struct tb_dma_port *dma)
-  * @status: Status code of the operation
+@@ -518,6 +518,8 @@ void tb_domain_remove(struct tb *tb)
+  * @tb: Domain to suspend
   *
-  * The function checks if there is status available from the last update
-- * auth command. Returns %0 if there is no status and no further
-- * action is required. If there is status, %1 is returned instead and
-- * @status holds the failure code.
-+ * auth command.
+  * Suspends all devices in the domain and stops the control channel.
++ *
++ * Return: %0 on success, negative errno otherwise.
+  */
+ int tb_domain_suspend_noirq(struct tb *tb)
+ {
+@@ -544,6 +546,8 @@ int tb_domain_suspend_noirq(struct tb *tb)
   *
-- * Negative return means there was an error reading status from the
-- * switch.
+  * Re-starts the control channel, and resumes all devices connected to
+  * the domain.
++ *
++ * Return: %0 on success, negative errno otherwise.
+  */
+ int tb_domain_resume_noirq(struct tb *tb)
+ {
+@@ -643,6 +647,8 @@ int tb_domain_disapprove_switch(struct tb *tb, struct tb_switch *sw)
+  * This will approve switch by connection manager specific means. In
+  * case of success the connection manager will create PCIe tunnel from
+  * parent to @sw.
++ *
++ * Return: %0 on success, negative errno otherwise.
+  */
+ int tb_domain_approve_switch(struct tb *tb, struct tb_switch *sw)
+ {
+@@ -773,7 +779,7 @@ int tb_domain_challenge_switch_key(struct tb *tb, struct tb_switch *sw)
+  * This needs to be called in preparation for NVM upgrade of the host
+  * controller. Makes sure all PCIe paths are disconnected.
+  *
+- * Return %0 on success and negative errno in case of error.
++ * Return: %0 on success and negative errno in case of error.
+  */
+ int tb_domain_disconnect_pcie_paths(struct tb *tb)
+ {
+@@ -795,9 +801,11 @@ int tb_domain_disconnect_pcie_paths(struct tb *tb)
+  * Calls connection manager specific method to enable DMA paths to the
+  * XDomain in question.
+  *
+- * Return: 0% in case of success and negative errno otherwise. In
+- * particular returns %-ENOTSUPP if the connection manager
+- * implementation does not support XDomains.
 + * Return:
-+ * * %0 - If there is no status and no further action is required.
-+ * * %1 - If there is some status. @status holds the failure code.
-+ * * Negative errno - An error occurred when reading status from the
-+ *   switch.
++ * * %0 - On success.
++ * * %-ENOTSUPP - If the connection manager implementation does not support
++ *   XDomains.
++ * * Negative errno - An error occurred.
   */
- int dma_port_flash_update_auth_status(struct tb_dma_port *dma, u32 *status)
- {
-@@ -446,6 +455,8 @@ int dma_port_flash_update_auth_status(struct tb_dma_port *dma, u32 *status)
-  * @dma: DMA control port
+ int tb_domain_approve_xdomain_paths(struct tb *tb, struct tb_xdomain *xd,
+ 				    int transmit_path, int transmit_ring,
+@@ -822,9 +830,11 @@ int tb_domain_approve_xdomain_paths(struct tb *tb, struct tb_xdomain *xd,
+  * Calls connection manager specific method to disconnect DMA paths to
+  * the XDomain in question.
   *
-  * Triggers power cycle to the switch.
-+ *
-+ * Return: %0 on success, negative errno otherwise.
+- * Return: 0% in case of success and negative errno otherwise. In
+- * particular returns %-ENOTSUPP if the connection manager
+- * implementation does not support XDomains.
++ * Return:
++ * * %0 - On success.
++ * * %-ENOTSUPP - If the connection manager implementation does not support
++ *   XDomains.
++ * * Negative errno - An error occurred.
   */
- int dma_port_power_cycle(struct tb_dma_port *dma)
- {
+ int tb_domain_disconnect_xdomain_paths(struct tb *tb, struct tb_xdomain *xd,
+ 				       int transmit_path, int transmit_ring,
 -- 
 2.50.1
 
