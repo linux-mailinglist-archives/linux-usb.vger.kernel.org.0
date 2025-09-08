@@ -1,127 +1,197 @@
-Return-Path: <linux-usb+bounces-27750-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27751-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 870E7B49846
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 20:26:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C83FB49883
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 20:43:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1547B4454EC
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:26:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B6041BC623C
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7B931B83D;
-	Mon,  8 Sep 2025 18:26:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1297A31C568;
+	Mon,  8 Sep 2025 18:42:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E7dR2oSh"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="gZnKd5Je"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5873A8F7;
-	Mon,  8 Sep 2025 18:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B0230ACF0;
+	Mon,  8 Sep 2025 18:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.166.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757355996; cv=none; b=A0OwjV1YWLQvNF5a2qvbjDJ5JkhEriWRGLweq4/mWy2z41hJOo+2vI/FsjDPUDlRgm/FQOJgLx8ZBW22WoxhF8ov6qZp3PfYRXOmoNjzUFSTBE9gttLyY+INipCSuPo4LEbno+AZT+xxYkbBRTokg452JDiSWFh2YvlU8PLZLVk=
+	t=1757356974; cv=none; b=XZa4O/tWf0WvVSmq+dINCoZSSQ5WTQvQdfreYbxCdpevpfQzN6mPx03dH4pXNCEj/cosbuUc5OSnuBakQiGBqCUgiR4461Jo0ap7QmUWTNrzAh92OB3DPICHrr5PDUN92QVdsBsxCXJO2fyvKZdNjPpHm+8jzmKDht+G7lKXt4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757355996; c=relaxed/simple;
-	bh=1FS5scoih1u+HaSjmztbMQ4nC1lS+/D7jKLkfmmmHTk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ftEJDjsJgrsuQKGX/w5vv55f4DMeOsQdZxfytTs5X842jSV+ztsWZGMwfxvtfk2qnpdmq5Rm5KoClGjsWuM91Ih3zsF7lP7Gh0SjeRIrFWUNVAPafgFdD19wB0ta4aHsulvbmlJZ3zxoj/4oSyrQ7Z+w3Csfxp5/5HMMSaGAF28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E7dR2oSh; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757355995; x=1788891995;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1FS5scoih1u+HaSjmztbMQ4nC1lS+/D7jKLkfmmmHTk=;
-  b=E7dR2oShvIRbMdX48aNu4vYiNVTxnf4Zhdkx7Oe63PacVbBRsEN7iM0f
-   MmqdfpJwHTOzfwnsUgjGJbt/HABnDL/4YaytliVLqv01PF0B1WOHalJ8F
-   KX/67kC2nVJTRYpdyxS7CM2FHl/0/ccj99Lg8mhWN2qwzjjzIjIAxlr9U
-   9RVGPeAkK25VSNsirTWJjWFDd4p3hs8KDnjra5zFCqMcsPaPAWRCGMlGz
-   vvAKRCU4gLj1R8T1yR7x/YjStphwJ7pdv3zuiRKBPnaOLT+CedAQdh1zh
-   nRS9yJu11HyQrzZadJxE1cUFLhFVdGkIy5jBgO9SAK4wiTIke+PtIZLkO
-   g==;
-X-CSE-ConnectionGUID: ybG6PPmCR4+Sd6Gf9q0s/w==
-X-CSE-MsgGUID: DG5ukmaPTumnXUF+ehjW1w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="59550948"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="59550948"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 11:26:34 -0700
-X-CSE-ConnectionGUID: MllgzNCGQFq6WgvL3jDGrQ==
-X-CSE-MsgGUID: HekVWCbyQaKYkp2vSYwe/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="177201647"
-Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 08 Sep 2025 11:26:31 -0700
-Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uvgZR-00044h-2P;
-	Mon, 08 Sep 2025 18:26:29 +0000
-Date: Tue, 9 Sep 2025 02:25:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dmitry.baryshkov@oss.qualcomm.com, konrad.dybcio@oss.qualcomm.com,
-	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Subject: Re: [PATCH v5 2/2] usb: dwc3: qcom: Implement glue callbacks to
- facilitate runtime suspend
-Message-ID: <202509090115.dVhd78BE-lkp@intel.com>
-References: <20250907181412.2174616-3-krishna.kurapati@oss.qualcomm.com>
+	s=arc-20240116; t=1757356974; c=relaxed/simple;
+	bh=zHdgNKydKxrw1fqRJFtZWEZd13udUyK6lu/VL/D0pMQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YJU0/v3P+On1SS09s3miwe5VctveABPf09oOfBHdfR9rZhXlVY/8hL0MH/1678NaaKhiTZalcTw9qge0xuLMsSyzk+3Q9hDvJlrBFiZeoeLqYA8Uc+w64NCoH8VgC5jc6M6Fwivjr6lAx8nM+sFwQs796c5OoyJcMhGKPGznHN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=gZnKd5Je; arc=none smtp.client-ip=192.19.166.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-acc-it-01.broadcom.com (mail-acc-it-01.acc.broadcom.net [10.35.36.83])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 57CCFC0000F2;
+	Mon,  8 Sep 2025 11:42:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 57CCFC0000F2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1757356965;
+	bh=zHdgNKydKxrw1fqRJFtZWEZd13udUyK6lu/VL/D0pMQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gZnKd5Jecs8rqbYHprlxd/hMi6jxwtHbV31sGvJDDGKItghJE1WMLDKc6NrRY+2tU
+	 sYmYjlCObbaHaObAXm10/ggE3it75EYA9pv+pmRA07zv5gEMI0T+cQXKljh9M+Edca
+	 2llMRDkZxLSW1gS+UR4J5BG2T6+reHf1dazb3A5s=
+Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id 16D844002F44;
+	Mon,  8 Sep 2025 14:42:44 -0400 (EDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: stable@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	stable <stable@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Sasha Levin <sashal@kernel.org>,
+	Hardik Gajjar <hgajjar@de.adit-jv.com>,
+	Ma Ke <make_ruc2021@163.com>,
+	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+Subject: [PATCH stable 5.4] usb: hub: Fix flushing of delayed work used for post resume purposes
+Date: Mon,  8 Sep 2025 11:42:33 -0700
+Message-Id: <20250908184233.1596036-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250907181412.2174616-3-krishna.kurapati@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Krishna,
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-kernel test robot noticed the following build warnings:
+commit 9bd9c8026341f75f25c53104eb7e656e357ca1a2 upstream
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next next-20250908]
-[cannot apply to usb/usb-linus linus/master v6.17-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Delayed work that prevents USB3 hubs from runtime-suspending too early
+needed to be flushed in hub_quiesce() to resolve issues detected on
+QC SC8280XP CRD board during suspend resume testing.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/usb-dwc3-core-Introduce-glue-callbacks-for-flattened-implementations/20250908-021710
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20250907181412.2174616-3-krishna.kurapati%40oss.qualcomm.com
-patch subject: [PATCH v5 2/2] usb: dwc3: qcom: Implement glue callbacks to facilitate runtime suspend
-config: hexagon-randconfig-r132-20250908 (https://download.01.org/0day-ci/archive/20250909/202509090115.dVhd78BE-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce: (https://download.01.org/0day-ci/archive/20250909/202509090115.dVhd78BE-lkp@intel.com/reproduce)
+This flushing did however trigger new issues on Raspberry Pi 3B+, which
+doesn't have USB3 ports, and doesn't queue any post resume delayed work.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509090115.dVhd78BE-lkp@intel.com/
+The flushed 'hub->init_work' item is used for several purposes, and
+is originally initialized with a 'NULL' work function. The work function
+is also changed on the fly, which may contribute to the issue.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/usb/dwc3/dwc3-qcom.c:605:22: sparse: sparse: symbol 'dwc3_qcom_glue_ops' was not declared. Should it be static?
+Solve this by creating a dedicated delayed work item for post resume work,
+and flush that delayed work in hub_quiesce()
 
-vim +/dwc3_qcom_glue_ops +605 drivers/usb/dwc3/dwc3-qcom.c
+Cc: stable <stable@kernel.org>
+Fixes: a49e1e2e785f ("usb: hub: Fix flushing and scheduling of delayed work that tunes runtime pm")
+Reported-by: Mark Brown <broonie@kernel.org>
+Closes: https://lore.kernel.org/linux-usb/aF5rNp1l0LWITnEB@finisterre.sirena.org.uk
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Tested-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com> # SC8280XP CRD
+Tested-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20250627164348.3982628-2-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[florian: adjust for lack of hub_{get,put} and timer_delete_sync]
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+ drivers/usb/core/hub.c | 21 ++++++++-------------
+ drivers/usb/core/hub.h |  1 +
+ 2 files changed, 9 insertions(+), 13 deletions(-)
 
-   604	
- > 605	struct dwc3_glue_ops dwc3_qcom_glue_ops = {
-   606		.pre_set_role	= dwc3_qcom_set_role_notifier,
-   607		.pre_run_stop	= dwc3_qcom_run_stop_notifier,
-   608	};
-   609	
-
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 1a2039d1b342..63bb62680362 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -1030,12 +1030,11 @@ int usb_remove_device(struct usb_device *udev)
+ 
+ enum hub_activation_type {
+ 	HUB_INIT, HUB_INIT2, HUB_INIT3,		/* INITs must come first */
+-	HUB_POST_RESET, HUB_RESUME, HUB_RESET_RESUME, HUB_POST_RESUME,
++	HUB_POST_RESET, HUB_RESUME, HUB_RESET_RESUME,
+ };
+ 
+ static void hub_init_func2(struct work_struct *ws);
+ static void hub_init_func3(struct work_struct *ws);
+-static void hub_post_resume(struct work_struct *ws);
+ 
+ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ {
+@@ -1059,12 +1058,6 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ 		goto init3;
+ 	}
+ 
+-	if (type == HUB_POST_RESUME) {
+-		usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
+-		kref_put(&hub->kref, hub_release);
+-		return;
+-	}
+-
+ 	kref_get(&hub->kref);
+ 
+ 	/* The superspeed hub except for root hub has to use Hub Depth
+@@ -1318,8 +1311,8 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ 		usb_autopm_get_interface_no_resume(
+ 			to_usb_interface(hub->intfdev));
+ 
+-		INIT_DELAYED_WORK(&hub->init_work, hub_post_resume);
+-		queue_delayed_work(system_power_efficient_wq, &hub->init_work,
++		queue_delayed_work(system_power_efficient_wq,
++				   &hub->post_resume_work,
+ 				   msecs_to_jiffies(USB_SS_PORT_U0_WAKE_TIME));
+ 		return;
+ 	}
+@@ -1344,9 +1337,10 @@ static void hub_init_func3(struct work_struct *ws)
+ 
+ static void hub_post_resume(struct work_struct *ws)
+ {
+-	struct usb_hub *hub = container_of(ws, struct usb_hub, init_work.work);
++	struct usb_hub *hub = container_of(ws, struct usb_hub, post_resume_work.work);
+ 
+-	hub_activate(hub, HUB_POST_RESUME);
++	usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
++	kref_put(&hub->kref, hub_release);
+ }
+ 
+ enum hub_quiescing_type {
+@@ -1374,7 +1368,7 @@ static void hub_quiesce(struct usb_hub *hub, enum hub_quiescing_type type)
+ 
+ 	/* Stop hub_wq and related activity */
+ 	del_timer_sync(&hub->irq_urb_retry);
+-	flush_delayed_work(&hub->init_work);
++	flush_delayed_work(&hub->post_resume_work);
+ 	usb_kill_urb(hub->urb);
+ 	if (hub->has_indicators)
+ 		cancel_delayed_work_sync(&hub->leds);
+@@ -1921,6 +1915,7 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
+ 	hub->hdev = hdev;
+ 	INIT_DELAYED_WORK(&hub->leds, led_work);
+ 	INIT_DELAYED_WORK(&hub->init_work, NULL);
++	INIT_DELAYED_WORK(&hub->post_resume_work, hub_post_resume);
+ 	INIT_WORK(&hub->events, hub_event);
+ 	spin_lock_init(&hub->irq_urb_lock);
+ 	timer_setup(&hub->irq_urb_retry, hub_retry_irq_urb, 0);
+diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+index 1c455800f7d3..de29ce856953 100644
+--- a/drivers/usb/core/hub.h
++++ b/drivers/usb/core/hub.h
+@@ -69,6 +69,7 @@ struct usb_hub {
+ 	u8			indicator[USB_MAXCHILDREN];
+ 	struct delayed_work	leds;
+ 	struct delayed_work	init_work;
++	struct delayed_work	post_resume_work;
+ 	struct work_struct      events;
+ 	spinlock_t		irq_urb_lock;
+ 	struct timer_list	irq_urb_retry;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
