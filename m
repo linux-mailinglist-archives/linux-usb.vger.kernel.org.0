@@ -1,109 +1,82 @@
-Return-Path: <linux-usb+bounces-27696-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27697-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D61FDB47CF4
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 21:02:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B595BB4830D
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 05:57:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92F5517A73E
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Sep 2025 19:02:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5941017BD60
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 03:57:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5611E26E71C;
-	Sun,  7 Sep 2025 19:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF2A21ABC1;
+	Mon,  8 Sep 2025 03:57:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qPghQDwE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pH1nX3ru"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23BC315D43;
-	Sun,  7 Sep 2025 19:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80FB1946AA;
+	Mon,  8 Sep 2025 03:57:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757271761; cv=none; b=SqJL9Wwp4OLZKrjZRn66t+CSvTWcxh7n3ZcYc1+j8jQ8x5UF+i6wmjoLowoOlLkUNB47+TYQVqqlEdzevqY2dS/uC2JvrlmCAm53vmTFusb4DETTQgrF6SZ+9ZV+vcvKMiQk/9OJ1sdV82MY9t1Cw3D4dzTdYA+VdNC35hzpboA=
+	t=1757303831; cv=none; b=EmW34kE5jhnGAUu6PE3QfVWcrRS5+m03lNIyVn3oDTWfAkojunTKxHGObabSBRersthAoCJcGlVfAQDu8ivKHwp1l/yg8rfuJT43QSrHBvvB7pJowPpa2bwiiwRQoUteEMeLJJ3kHvya/kt2zZu8/bYuQO1DMmTRu9Ck77azsy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757271761; c=relaxed/simple;
-	bh=oCLELgIBeep9ZVlxy13VvPQGLOoUE9donTEF1yMVwJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lbeg4b2NE+oGe7dSPIXRM/oGwOPUkk1aMl8AAFBI3WU6uuUREXRBnWScmxrPirMJuN7pXv6kg9PtSY4LPhmsJa8roscKNLE+3Fv2np/v98LVg7Edo7vY3SEM4ZIK5aLbSUnXoww07GUybgtWHEMXBbNZtyTEnDJSLlkxyd5hhPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qPghQDwE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79608C4CEF5;
-	Sun,  7 Sep 2025 19:02:36 +0000 (UTC)
+	s=arc-20240116; t=1757303831; c=relaxed/simple;
+	bh=i9+jxlXHHwr6XtwkjqS08DAQOKAY8CAV8kZO53PWBkE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ecnD8gunniERvhK535TexBfuLK9I65VLqEMV850KRfyygO/u4EJjBtue7co8zlTEeP4BGSJvQO3Q3vAhOPa9omyjQdmzL+OFtjLNg/Jm01vHeJAfU1lCWaX2jBcXZGrHGFhsFDXZ6k1cbvyQsrfbZwiz7/VrUTf+v1aRPChuHGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pH1nX3ru; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCAA9C4CEF8;
+	Mon,  8 Sep 2025 03:57:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757271761;
-	bh=oCLELgIBeep9ZVlxy13VvPQGLOoUE9donTEF1yMVwJ8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qPghQDwEBlowBEth9fyjp4vjY5wZh04XJFkbFxS85DYfRxVSLTclt0Tm0PbzqVlNX
-	 M935vCEYzcsbk4iD6E6BJkMIxuRPGwFpTQGJghxOJ5/zjCrGjecLpDofYagYrA8t56
-	 bh2yzv4UA53Zaj1A5kF81C23Nll8suCUaR4U/EHhmtOKptRSeLdswBtR3iqxq9vixk
-	 nkATV7LU5KAJrv4DvdjClLWYAqdXkygCO3aHjCXv4nI/fj2xamFy5LE+ghMUy0eO9r
-	 zR7TaQXYAXIpjaqiQhBi6L5ilXeIuBrvZqDXOylAv2LCZ7nBkztRas9+ZO6389TevX
-	 ep8IsixfMLrMw==
-Message-ID: <2b950163-dc2e-4753-b411-5c694d55eafd@kernel.org>
-Date: Sun, 7 Sep 2025 21:02:34 +0200
+	s=k20201202; t=1757303830;
+	bh=i9+jxlXHHwr6XtwkjqS08DAQOKAY8CAV8kZO53PWBkE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pH1nX3ruaOph6o/MCPrO6clRVFmJTfJAQAcPTdeQEThyJnLC+jBC8m1rPOxLsopf4
+	 cpaY0moZvwzI9GdF8otwVERG7vKsl5Euvncf2wBwabeFdC5Zy2qvGWhaOxl38zHrSR
+	 fZ9WVMxpTNtOSL+3XMXTJP5rZiXudmU3/Q+qkpdOpLZ40X/z+5Bjyox859/BxJfOx9
+	 NPBiBabcDcESdJ1LsLlJ5WzRL9WBfl7PG6KX7LeLJmUE+XZJVMDjuuQj1QHbK8uWcb
+	 bBoerC5K5Bh4JDrk0CPXGli0s9u1ZVIDqln38ZAU07DPc8XssNTdoAY0tRIEs0qKhY
+	 dtIR37jCBdrBA==
+Date: Mon, 8 Sep 2025 03:57:06 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] platform/chrome: cros_ec_typec: Set
+ no_mode_control flag
+Message-ID: <aL5UErs3iHMnYGZm@google.com>
+References: <20250905142206.4105351-1-akuchynski@chromium.org>
+ <20250905142206.4105351-3-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 20/22] arm64: dts: apple: t8103: Add Apple Type-C PHY
- and dwc3 nodes
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
- Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <Frank.Li@nxp.com>,
- Ran Wang <ran.wang_1@nxp.com>, Peter Chen <peter.chen@nxp.com>,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
- Hector Martin <marcan@marcan.st>
-References: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
- <20250906-atcphy-6-17-v2-20-52c348623ef6@kernel.org>
- <20250907-zippy-auburn-koel-d6da32@kuoka>
-Content-Language: en-US
-From: Sven Peter <sven@kernel.org>
-In-Reply-To: <20250907-zippy-auburn-koel-d6da32@kuoka>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250905142206.4105351-3-akuchynski@chromium.org>
 
-On 07.09.25 11:47, Krzysztof Kozlowski wrote:
-> On Sat, Sep 06, 2025 at 03:43:33PM +0000, Sven Peter wrote:
->> Add all nodes and connections required to make USB3 work on M1-based
->> Apple machines.
->>
->> Co-developed-by: Hector Martin <marcan@marcan.st>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> Signed-off-by: Sven Peter <sven@kernel.org>
->> ---
->>   arch/arm64/boot/dts/apple/t8103-j274.dts  |  12 +++
->>   arch/arm64/boot/dts/apple/t8103-j293.dts  |  12 +++
->>   arch/arm64/boot/dts/apple/t8103-j313.dts  |  12 +++
->>   arch/arm64/boot/dts/apple/t8103-j456.dts  |  12 +++
->>   arch/arm64/boot/dts/apple/t8103-j457.dts  |  12 +++
->>   arch/arm64/boot/dts/apple/t8103-jxxx.dtsi | 137 ++++++++++++++++++++++++++++++
->>   arch/arm64/boot/dts/apple/t8103.dtsi      | 105 +++++++++++++++++++++++
->>   7 files changed, 302 insertions(+)
+On Fri, Sep 05, 2025 at 02:22:03PM +0000, Andrei Kuchynski wrote:
+> This flag specifies that the Embedded Controller (EC) must receive explicit
+> approval from the Application Processor (AP) before initiating Type-C
+> alternate modes or USB4 mode.
 > 
-> Please do not combine DTS patches in patchsets for Greg (e.g. USB). Greg
-> expressed that many times, that he takes all or nothing, and DTS cannot
-> go via driver branches/trees.
+> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Okay, thanks for the hint. I wasn't aware that he prefers related 
-patches that go through a different tree to be split off.
-
-
-Best,
-
-Sven
-
+Acked-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
