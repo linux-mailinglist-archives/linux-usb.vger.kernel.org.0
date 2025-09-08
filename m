@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-27733-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27737-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B75D1B49595
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:38:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FA56B49597
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:39:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DB811C208A9
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:39:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FE4E1C20B02
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:39:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1851E30FC2F;
-	Mon,  8 Sep 2025 16:32:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 720D43191D8;
+	Mon,  8 Sep 2025 16:32:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KyplIg4r"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ExS25ilN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3EC43115B5
-	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 16:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9FC317717
+	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 16:32:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757349160; cv=none; b=FOS1ghbOqa6saxrbdGmvGLEJFtNLRJRJqT63zX+cqp16lqE/cFkL/vhtmW92BSjvLQ6OyemgNsoqVaShAOk9Jfmqy6nMhs4JjpCrOmjfm9y3UpY+qABHyLS+1m0ck2FXFUERzzE1yvo3ffokP1IS3DHZD8PsYA+m6TTtXeeEkUc=
+	t=1757349161; cv=none; b=PyfH2Vkr1KS7qswBmjcjTO/aAkxz2qmdYe0+7vWFAR6MCxiqq/2riPx4pdZ4tW188AiDT8XCVdaHi9mf9rAIgEiurL0Dm+EKNhB+51bEM9xVi/qX2avfxt7SifwdbbPLGNGi9lKcr2hC1JqU121WYam4mhHT3tMIAw0X18+u+1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757349160; c=relaxed/simple;
-	bh=ayhLE47PZTaDIp3ntX6M9zCsn0gZirSonHoOi69fftc=;
+	s=arc-20240116; t=1757349161; c=relaxed/simple;
+	bh=1JGkUZAPUVhbnMgiHCs/mibRBYQCFYkXBZE8z704BXw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GedtCzDyedgFm0H8N2C2Fx2ofV7oFQ+xIvCnjdIP819zRTQnXeovH1+xwj4yl2aCTxWaHC3RlGSdjusr5tNKiLOIfxaV2gptUd/vq9ws51UF8a93W2FwhZ9j+ccETgo6QhHb0NGdRPZ1iR/Mui1UMsaVkRnS+DvxjmRRFVdLJbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KyplIg4r; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=V99fbYIhKd1FxG8GvmEbfcGTjmv0c4tUGAf3hPPJpa++F3u/gQvMemMxxskc8pI+YFZi3vSGPXwlRl/yyFsTHsE/8C1/+fUIhXPSP9kY5WXtEMez6QBMw2tpgXB0cATbDZcZzD5IK2A6bgufNkpRUI0bmDr4VZL52LAimId8opE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ExS25ilN; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757349160; x=1788885160;
+  t=1757349159; x=1788885159;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ayhLE47PZTaDIp3ntX6M9zCsn0gZirSonHoOi69fftc=;
-  b=KyplIg4rSXmyE4Fy0o8pL9aWhkVj0AVo5n7wJUx2vnRz7XAVkoFYwiCn
-   vW1WO/61TPN6gVRdEiV9YGtpNjbnzR0cz/ZZdmlwqko+2B4M6yFg6I7zr
-   YE8dJd5SMudoLfgzNPYMhyqutxncP9H4c1mvg2/XIKS1pVRtRfBXWa0mF
-   2ECiq1nrm349Wfugi6nATpCmVMWV2VlJFLgYHdI8biD1lwRw8+gRVvLLt
-   yLwDxTj8T+N8RIX2U5P9J1U2ZpnuAzRLGa2eRA3lb5K/BHrVH08f34KoO
-   eD0mkRTF0P/Zxz880bql3im9H3ORLo+IUWmliaXBtQcZwl3nZInBcOjmh
+  bh=1JGkUZAPUVhbnMgiHCs/mibRBYQCFYkXBZE8z704BXw=;
+  b=ExS25ilNHra7WTJB38zCCkLlxQiLuUfeCitx7l1vl2AbrhyYc7T3kAd5
+   ZsJwUB3vGp9mwSD188CsxJnxRKDD1BOWFiSTZL9SillW8B9HRvIO4ONnu
+   266vsxFQh4/wEPE/OuRm0D/BGZCShpVeOTu5cfUecNMU6V/W8a0Y5iJT0
+   zfgSjBiMpNd/7J/2XYCQou1S1coGFc8XqJNvxEcQai9bxb9hqEn3Af4jL
+   XmFNWkUntcylClSudggljjXhgdEJsxTP0HcsNuAHrtYkX1YxqGenYtQ3u
+   puARTrKGATYGusgrb8rNq85IpPIOkavIIIMIotAI52aGvdoOBCxCUuJhV
    g==;
-X-CSE-ConnectionGUID: 8pQ8IBr1Qwee7tYYtH8YFw==
-X-CSE-MsgGUID: 5w4QcmBrTtu5hu6Jfhr00Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="63252109"
-X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="63252109"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 09:32:37 -0700
-X-CSE-ConnectionGUID: 2bDCj/2JSOONkHir0mg0cw==
-X-CSE-MsgGUID: 8F5efss1Rd+bLQ1zPq34Gg==
+X-CSE-ConnectionGUID: FIDNAbhjTdu44RNk1gXRUA==
+X-CSE-MsgGUID: WaCKltPuQUGOpjUKYqSdZA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63443062"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63443062"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 09:32:35 -0700
+X-CSE-ConnectionGUID: 42w+2ZLrTDe2kwl1SZ5CEA==
+X-CSE-MsgGUID: iLNMa2taT2Ot78T3k6UTVQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="203622644"
+   d="scan'208";a="173291152"
 Received: from unknown (HELO black.igk.intel.com) ([10.91.253.5])
-  by orviesa002.jf.intel.com with ESMTP; 08 Sep 2025 09:32:34 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 08 Sep 2025 09:32:34 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id ED1CFA1; Mon, 08 Sep 2025 18:32:30 +0200 (CEST)
+	id F062AA2; Mon, 08 Sep 2025 18:32:30 +0200 (CEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -68,9 +68,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 13/26] thunderbolt: Update path.c function documentation
-Date: Mon,  8 Sep 2025 18:32:17 +0200
-Message-ID: <20250908163230.2614397-14-mika.westerberg@linux.intel.com>
+Subject: [PATCH 14/26] thunderbolt: Update property.c function documentation
+Date: Mon,  8 Sep 2025 18:32:18 +0200
+Message-ID: <20250908163230.2614397-15-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250908163230.2614397-1-mika.westerberg@linux.intel.com>
 References: <20250908163230.2614397-1-mika.westerberg@linux.intel.com>
@@ -84,75 +84,130 @@ Content-Transfer-Encoding: 8bit
 
 From: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
 
-Make path.c function documentation compliant with current kernel-doc
+Make property.c function documentation compliant with current kernel-doc
 standards. No functional changes.
 
 Signed-off-by: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/path.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/thunderbolt/property.c | 38 +++++++++++++++++++++++++---------
+ 1 file changed, 28 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/thunderbolt/path.c b/drivers/thunderbolt/path.c
-index e1a5f6e3d0b6..f9b11dadfbdd 100644
---- a/drivers/thunderbolt/path.c
-+++ b/drivers/thunderbolt/path.c
-@@ -96,7 +96,7 @@ static int tb_path_find_src_hopid(struct tb_port *src,
-  * that the @dst port is the expected one. If it is not, the path can be
-  * cleaned up by calling tb_path_deactivate() before tb_path_free().
+diff --git a/drivers/thunderbolt/property.c b/drivers/thunderbolt/property.c
+index dc555cda98e6..31aa0516932a 100644
+--- a/drivers/thunderbolt/property.c
++++ b/drivers/thunderbolt/property.c
+@@ -211,11 +211,13 @@ static struct tb_property_dir *__tb_property_parse_dir(const u32 *block,
   *
-- * Return: Discovered path on success, %NULL in case of failure
-+ * Return: Pointer to &struct tb_path, %NULL in case of failure.
+  * This function parses the XDomain properties data block into format that
+  * can be traversed using the helper functions provided by this module.
+- * Upon success returns the parsed directory. In case of error returns
+- * %NULL. The resulting &struct tb_property_dir needs to be released by
++ *
++ * The resulting &struct tb_property_dir needs to be released by
+  * calling tb_property_free_dir() when not needed anymore.
+  *
+  * The @block is expected to be root directory.
++ *
++ * Return: Pointer to &struct tb_property_dir, %NULL in case of failure.
   */
- struct tb_path *tb_path_discover(struct tb_port *src, int src_hopid,
- 				 struct tb_port *dst, int dst_hopid,
-@@ -233,7 +233,7 @@ struct tb_path *tb_path_discover(struct tb_port *src, int src_hopid,
-  * links on the path, prioritizes using @link_nr but takes into account
-  * that the lanes may be bonded.
+ struct tb_property_dir *tb_property_parse_dir(const u32 *block,
+ 					      size_t block_len)
+@@ -238,6 +240,8 @@ struct tb_property_dir *tb_property_parse_dir(const u32 *block,
   *
-- * Return: Returns a tb_path on success or NULL on failure.
-+ * Return: Pointer to &struct tb_path, %NULL in case of failure.
+  * Creates new, empty property directory. If @uuid is %NULL then the
+  * directory is assumed to be root directory.
++ *
++ * Return: Pointer to &struct tb_property_dir, %NULL in case of failure.
   */
- struct tb_path *tb_path_alloc(struct tb *tb, struct tb_port *src, int src_hopid,
- 			      struct tb_port *dst, int dst_hopid, int link_nr,
-@@ -452,7 +452,9 @@ static int __tb_path_deactivate_hop(struct tb_port *port, int hop_index,
-  * @hop_index: HopID of the path to be cleared
+ struct tb_property_dir *tb_property_create_dir(const uuid_t *uuid)
+ {
+@@ -481,9 +485,11 @@ static ssize_t __tb_property_format_dir(const struct tb_property_dir *dir,
+  * @block_len: Length of the property block
   *
-  * This deactivates or clears a single path config space entry at
-- * @hop_index. Returns %0 in success and negative errno otherwise.
-+ * @hop_index.
+  * This function formats the directory to the packed format that can be
+- * then send over the thunderbolt fabric to receiving host. Returns %0 in
+- * case of success and negative errno on faulure. Passing %NULL in @block
+- * returns number of entries the block takes.
++ * then sent over the thunderbolt fabric to receiving host.
++ *
++ * Passing %NULL in @block returns number of entries the block takes.
 + *
 + * Return: %0 on success, negative errno otherwise.
   */
- int tb_path_deactivate_hop(struct tb_port *port, int hop_index)
- {
-@@ -498,7 +500,7 @@ void tb_path_deactivate(struct tb_path *path)
-  * Activate a path starting with the last hop and iterating backwards. The
-  * caller must fill path->hops before calling tb_path_activate().
+ ssize_t tb_property_format_dir(const struct tb_property_dir *dir, u32 *block,
+ 			       size_t block_len)
+@@ -505,9 +511,9 @@ ssize_t tb_property_format_dir(const struct tb_property_dir *dir, u32 *block,
+  * tb_property_copy_dir() - Take a deep copy of directory
+  * @dir: Directory to copy
   *
-- * Return: Returns 0 on success or an error code on failure.
+- * This function takes a deep copy of @dir and returns back the copy. In
+- * case of error returns %NULL. The resulting directory needs to be
+- * released by calling tb_property_free_dir().
++ * The resulting directory needs to be released by calling tb_property_free_dir().
++ *
++ * Return: Pointer to &struct tb_property_dir, %NULL in case of failure.
+  */
+ struct tb_property_dir *tb_property_copy_dir(const struct tb_property_dir *dir)
+ {
+@@ -577,6 +583,8 @@ struct tb_property_dir *tb_property_copy_dir(const struct tb_property_dir *dir)
+  * @parent: Directory to add the property
+  * @key: Key for the property
+  * @value: Immediate value to store with the property
++ *
 + * Return: %0 on success, negative errno otherwise.
   */
- int tb_path_activate(struct tb_path *path)
- {
-@@ -592,7 +594,7 @@ int tb_path_activate(struct tb_path *path)
-  * tb_path_is_invalid() - check whether any ports on the path are invalid
-  * @path: Path to check
+ int tb_property_add_immediate(struct tb_property_dir *parent, const char *key,
+ 			      u32 value)
+@@ -606,6 +614,8 @@ EXPORT_SYMBOL_GPL(tb_property_add_immediate);
+  * @buflen: Number of bytes in the data buffer
   *
-- * Return: Returns true if the path is invalid, false otherwise.
-+ * Return: %true if the path is invalid, %false otherwise.
-  */
- bool tb_path_is_invalid(struct tb_path *path)
- {
-@@ -613,6 +615,8 @@ bool tb_path_is_invalid(struct tb_path *path)
-  *
-  * Goes over all hops on path and checks if @port is any of them.
-  * Direction does not matter.
+  * Function takes a copy of @buf and adds it to the directory.
 + *
-+ * Return: %true if port is on the path, %false otherwise.
++ * Return: %0 on success, negative errno otherwise.
   */
- bool tb_path_port_on_path(const struct tb_path *path, const struct tb_port *port)
- {
+ int tb_property_add_data(struct tb_property_dir *parent, const char *key,
+ 			 const void *buf, size_t buflen)
+@@ -642,6 +652,8 @@ EXPORT_SYMBOL_GPL(tb_property_add_data);
+  * @text: String to add
+  *
+  * Function takes a copy of @text and adds it to the directory.
++ *
++ * Return: %0 on success, negative errno otherwise.
+  */
+ int tb_property_add_text(struct tb_property_dir *parent, const char *key,
+ 			 const char *text)
+@@ -676,6 +688,8 @@ EXPORT_SYMBOL_GPL(tb_property_add_text);
+  * @parent: Directory to add the property
+  * @key: Key for the property
+  * @dir: Directory to add
++ *
++ * Return: %0 on success, negative errno otherwise.
+  */
+ int tb_property_add_dir(struct tb_property_dir *parent, const char *key,
+ 			struct tb_property_dir *dir)
+@@ -716,8 +730,10 @@ EXPORT_SYMBOL_GPL(tb_property_remove);
+  * @key: Key to look for
+  * @type: Type of the property
+  *
+- * Finds and returns property from the given directory. Does not recurse
+- * into sub-directories. Returns %NULL if the property was not found.
++ * Finds and returns property from the given directory. Does not
++ * recurse into sub-directories.
++ *
++ * Return: Pointer to &struct tb_property, %NULL if the property was not found.
+  */
+ struct tb_property *tb_property_find(struct tb_property_dir *dir,
+ 	const char *key, enum tb_property_type type)
+@@ -737,6 +753,8 @@ EXPORT_SYMBOL_GPL(tb_property_find);
+  * tb_property_get_next() - Get next property from directory
+  * @dir: Directory holding properties
+  * @prev: Previous property in the directory (%NULL returns the first)
++ *
++ * Return: Pointer to &struct tb_property, %NULL if property was not found.
+  */
+ struct tb_property *tb_property_get_next(struct tb_property_dir *dir,
+ 					 struct tb_property *prev)
 -- 
 2.50.1
 
