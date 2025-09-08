@@ -1,141 +1,134 @@
-Return-Path: <linux-usb+bounces-27714-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27715-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0676B491EB
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:43:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6926B4921E
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:55:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F90016AE79
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 14:42:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDDE13A812E
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 14:55:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DC5630BB9D;
-	Mon,  8 Sep 2025 14:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D0A30C621;
+	Mon,  8 Sep 2025 14:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SBS/Rsse"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l3itzo1a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BD222A4EB;
-	Mon,  8 Sep 2025 14:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7057C30BF70
+	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 14:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757342515; cv=none; b=krePh76x6YgMjV9UztuTQFa/rxncX7e0G3nXWmVtLWMMkZy1uSG5D9GWeL+4xO/uuw/dOOeac23jgVnK51ZkrI1uZrFVmsa5kpvcsZ45j8iwYcj9pXZRSXCLyEkLPPcOmpcpyuPx4jt/XIxI795fywcRCTdsVllfXWL9g8NaIxA=
+	t=1757343306; cv=none; b=soinaPtpBz5QXWkGQwh226iUSgLeN3prEuaAHfbYt/KcVRrGC4UwpC5zyjZr6ihu3LvzpBpBV37L68gq7fo7tTzX+l6+3nMbAsZlNON/pzs6dC/S+QCA/VnJBiVecF+GXt5BUZ1kdkIhXhzJc8+zo/REv8QjrqLhBChIKFFxT5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757342515; c=relaxed/simple;
-	bh=QA8+1tr7brTem22zB+pPbb3Pb/1XaSIDYubStR1J+c0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q9h1vUkiyGhrXG2qi6p0IMMyzK5eQ+l05MRgA2UcJVRhhGeqWYFU45OrL5V2DArWVYzwYzGLF59HY5XWQtWEWu2F5PFLEnkyYMrFFLzy3gQlizpZeJgKonYZi9Bz7b8zg0Li596l2e8cqVTMSnw7E0H8GiFE9o7L0CsBYwV/Bmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SBS/Rsse; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F82C4CEF1;
-	Mon,  8 Sep 2025 14:41:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1757342515;
-	bh=QA8+1tr7brTem22zB+pPbb3Pb/1XaSIDYubStR1J+c0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SBS/RssesVLX/VJuLdbwuauXCp03O+vb5iBteVppwG8XWw5JLrnwqRGjbcD6uI3If
-	 MbUR4xwEEj0zSfxeWEY3sYsI+AkUMpVhLJGvsaMfS4Azp9JIR8CF5qsqTs5VAsS2nn
-	 5d5wpyksQDJFegCKprTXVt6aH0twfYOCyCDr0oXc=
-Date: Mon, 8 Sep 2025 16:41:51 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>,
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-	"open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
-	AceLan Kao <acelan.kao@canonical.com>,
-	Kai-Heng Feng <kaihengf@nvidia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Merthan =?utf-8?Q?Karaka=C5=9F?= <m3rthn.k@gmail.com>,
-	Eric Naim <dnaim@cachyos.org>
-Subject: Re: [PATCH v6 RESEND 00/11] Improvements to S5 power consumption
-Message-ID: <2025090839-desktop-ladder-c2f7@gregkh>
-References: <20250906143642.2590808-1-superm1@kernel.org>
- <2025090852-coma-tycoon-9f37@gregkh>
- <af78dfb4-de61-4b8c-a131-cf39a4c3c4b0@kernel.org>
+	s=arc-20240116; t=1757343306; c=relaxed/simple;
+	bh=aGsydcUMA/jOLT4vwzuU75S1DRg0E0EjYR8MHM1PC9c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gDrlim57kum+3NocyZEkuazkYXhxEmDOHuzAHyR+RzSj3+DofN8r1H9ZYxYAKv1EEFrv2ULqg/oMG4IrDf/5E6H9ccogp2W1CI6gOsYwdeWJgd0t3RtTUg3gKfP7BO35tCY7JqG5HrgOMeiqw4ALD14dcWea/pTBdzlldq3LLM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l3itzo1a; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757343304; x=1788879304;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aGsydcUMA/jOLT4vwzuU75S1DRg0E0EjYR8MHM1PC9c=;
+  b=l3itzo1antrlilSWYOKLy+oX521/L/zHqAjxXSWfCKhiT4JJqesvzqMA
+   oMlAUEVQVfu3u+LMNq78Zb14s5X539uJNDFIW4vOy32o+Ew75stOSRDn5
+   1D0ZkO94jaNPXuOQK+bAcPJERYwFnNZOS6ZhfhLgdtRgxoBVWlSKnWnAc
+   bovfXVdpA9mNaFdZJMkUUGB452lpdbReUScev5E+bL1gU3fDpm+d9Q/33
+   A9LFoxbPeDuER3pLwsnXWeUdjlrn+cJHFlSVZjI5plNL5X4CImT2xPKXC
+   5IYT458ffvi9HpECZeIHU+yO2D/RYo0wyfzP8da4ZPxWuGxu1RFn58e9h
+   w==;
+X-CSE-ConnectionGUID: QBfikyiyRHuK86DMRGmQuw==
+X-CSE-MsgGUID: Ree6KERuTsOQBRdDzyuhcQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="77057631"
+X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
+   d="scan'208";a="77057631"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 07:55:04 -0700
+X-CSE-ConnectionGUID: 5YrpXSNzTbWeO86FmoyThg==
+X-CSE-MsgGUID: 7cOZu4XcTNSImXla1Y01fg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
+   d="scan'208";a="172381150"
+Received: from unknown (HELO black.igk.intel.com) ([10.91.253.5])
+  by orviesa009.jf.intel.com with ESMTP; 08 Sep 2025 07:55:03 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 8993C94; Mon, 08 Sep 2025 16:55:01 +0200 (CEST)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <jametm@gmail.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH] MAINTAINERS: Update Michael Jamet's maintainer entries
+Date: Mon,  8 Sep 2025 16:55:01 +0200
+Message-ID: <20250908145501.2612218-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <af78dfb4-de61-4b8c-a131-cf39a4c3c4b0@kernel.org>
 
-On Mon, Sep 08, 2025 at 07:39:07AM -0500, Mario Limonciello wrote:
-> 
-> 
-> On 9/8/25 4:19 AM, Greg Kroah-Hartman wrote:
-> > On Sat, Sep 06, 2025 at 09:36:31AM -0500, Mario Limonciello (AMD) wrote:
-> > > A variety of issues both in function and in power consumption have been
-> > > raised as a result of devices not being put into a low power state when
-> > > the system is powered off.
-> > > 
-> > > There have been some localized changes[1] to PCI core to help these issues,
-> > > but they have had various downsides.
-> > > 
-> > > This series instead tries to use the S4 flow when the system is being
-> > > powered off.  This lines up the behavior with what other operating systems
-> > > do as well.  If for some reason that fails or is not supported, run their
-> > > shutdown() callbacks.
-> > > 
-> > > Cc: AceLan Kao <acelan.kao@canonical.com>
-> > > Cc: Kai-Heng Feng <kaihengf@nvidia.com>
-> > > Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
-> > > Cc: Merthan Karakaş <m3rthn.k@gmail.com>
-> > > Cc: Eric Naim <dnaim@cachyos.org>
-> > > ---
-> > > v6 RESEND:
-> > >   * Resent because Greg said he was ignoring it and would like the whole
-> > >     series to be able to review.
-> > 
-> > Messy, but wow, I'll trust you all that this actually works properly.
-> 
-> Yes; I double checked from a UART log all devices (now) went to correct
-> state and from power measurement hardware the respective drop in power.
-> 
-> I will note I have a sampling bias of hardware being x86 AMD hardware.
-> Some of the testers of the series also tested Intel hardware which had
-> similar power consumption problem, and I know there were improvements there
-> too.
-> 
-> We probably will have to wait for linux-next for non-x86 hardware coverage.
-> > No objections from me, but I don't want my ack on this as I don't know
-> > how to maintain it :)
-> > 
-> 
-> I mean - if all goes well even a failed S4 flow should fall back to old path
-> shutdown.  I *did contrive some failures* in an earlier version of the
-> series and confirmed in the UART log it emitted the printk that it was
-> falling back to shutdown.
-> 
-> I had two ideas that maybe could help for regression risk though:
-> 1) I could add a shutdown= kernel parameter.  I'm not sure what words to use
-> for the two paths but the idea would be if someone had a shutdown failure
-> they could isolate if it's due to this by adding the parameter.
-> 
-> 2) I could make a Documentation/ file explaining some examples how to get
-> the shutdown log saved to pstore in case they don't have a UART available.
+Michael Jamet is about to continue his professional journey outside of
+Intel and is stepping down as maintainer of Thunderbolt/USB4 subsystem,
+and the networking driver. Move him from MAINTAINERS to CREDITS.
 
-This second one is probably the best.  A new command line is not going
-to probably be used and just be a pain to maintain over time.
+Thank you, Michael!
 
-thanks,
+Cc: Michael Jamet <jametm@gmail.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ CREDITS     | 5 +++++
+ MAINTAINERS | 2 --
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-greg k-h
+diff --git a/CREDITS b/CREDITS
+index a687c3c35c4c..1bd483631939 100644
+--- a/CREDITS
++++ b/CREDITS
+@@ -1890,6 +1890,11 @@ S: Reading
+ S: RG6 2NU
+ S: United Kingdom
+ 
++N: Michael Jamet
++E: michael.jamet@intel.com
++D: Thunderbolt/USB4 driver maintainer
++D: Thunderbolt/USB4 networking driver maintainer
++
+ N: Dave Jeffery
+ E: dhjeffery@gmail.com
+ D: SCSI hacks and IBM ServeRAID RAID driver maintenance
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cd7ff55b5d32..ca1bb43889c6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -25126,7 +25126,6 @@ F:	drivers/thunderbolt/dma_test.c
+ 
+ THUNDERBOLT DRIVER
+ M:	Andreas Noever <andreas.noever@gmail.com>
+-M:	Michael Jamet <michael.jamet@intel.com>
+ M:	Mika Westerberg <westeri@kernel.org>
+ M:	Yehezkel Bernat <YehezkelShB@gmail.com>
+ L:	linux-usb@vger.kernel.org
+@@ -25137,7 +25136,6 @@ F:	drivers/thunderbolt/
+ F:	include/linux/thunderbolt.h
+ 
+ THUNDERBOLT NETWORK DRIVER
+-M:	Michael Jamet <michael.jamet@intel.com>
+ M:	Mika Westerberg <westeri@kernel.org>
+ M:	Yehezkel Bernat <YehezkelShB@gmail.com>
+ L:	netdev@vger.kernel.org
+-- 
+2.50.1
+
 
