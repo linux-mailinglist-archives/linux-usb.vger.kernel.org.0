@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-27729-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27733-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FD2BB49591
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:38:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B75D1B49595
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:38:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D8E4175013
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:38:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DB811C208A9
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:39:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23485318125;
-	Mon,  8 Sep 2025 16:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1851E30FC2F;
+	Mon,  8 Sep 2025 16:32:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iOySWvvT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KyplIg4r"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25E930FC2E
-	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 16:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3EC43115B5
+	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 16:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757349159; cv=none; b=SLkSxhiT/VByrAxRL1HMIfY7mNXVtgIKD73vr3BDyig3lk8PlQ9Ds/GVjm8im5BlfUMsIXX6i3TCmUDYyBqGp9HRsefqticSPJVVWGBXtRJ49Ot3j+knoDklHo6ztnkUrSxHnFSdZlFg3ivfjLi7rRYKGj4djvtqXEAkfOGatws=
+	t=1757349160; cv=none; b=FOS1ghbOqa6saxrbdGmvGLEJFtNLRJRJqT63zX+cqp16lqE/cFkL/vhtmW92BSjvLQ6OyemgNsoqVaShAOk9Jfmqy6nMhs4JjpCrOmjfm9y3UpY+qABHyLS+1m0ck2FXFUERzzE1yvo3ffokP1IS3DHZD8PsYA+m6TTtXeeEkUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757349159; c=relaxed/simple;
-	bh=LJC70j92Ql84y3vV9Kqc/0ci0uuk26Z91+zjR+el5KE=;
+	s=arc-20240116; t=1757349160; c=relaxed/simple;
+	bh=ayhLE47PZTaDIp3ntX6M9zCsn0gZirSonHoOi69fftc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D9Xeix5icRl316JN5Yyt8hBp6H/ByxGZFnu7VIEtw5IjO5DGDxmhaBAdONfR8cAsg5jV5yCFwh8oRJc0ON4QEOjMTNK3g+haCN1vbi7Hur2Iusss0tgeYO2RaxgDbVf2R/y6S4lgFlnHMpkREUF3B/HWdIweZB8+HvAo2K5y9os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iOySWvvT; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=GedtCzDyedgFm0H8N2C2Fx2ofV7oFQ+xIvCnjdIP819zRTQnXeovH1+xwj4yl2aCTxWaHC3RlGSdjusr5tNKiLOIfxaV2gptUd/vq9ws51UF8a93W2FwhZ9j+ccETgo6QhHb0NGdRPZ1iR/Mui1UMsaVkRnS+DvxjmRRFVdLJbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KyplIg4r; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757349159; x=1788885159;
+  t=1757349160; x=1788885160;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LJC70j92Ql84y3vV9Kqc/0ci0uuk26Z91+zjR+el5KE=;
-  b=iOySWvvTixFEueyCyRRLjG0gOErOuAyvc9hV6qZM32K3he1Z9MXhdqlW
-   OryLcx/+IRpdXwxvdXUtKrS39ptg3KDBIuB6/q+XVhpprvOFfApHkrbE+
-   p9JD8VHSh9yqy8IgHgyiY4LrWkqFFgGYAzHmvdKYYApA+n/4oTAWslz7c
-   pOnuRkMHpjkO17eXRd6tJ5+HcverFgQJeorfPuVezkKUSqFfyPmNOL5Kv
-   H9m4/6q84hqLL0/eEZLarJp0TpLRcnmYzo7dDg8yhUHoHKG+Q4KzFkWR1
-   FpxF/1jczpFuZhrDi2tIfK6ouN7NwBiAyIYP4v2gmmwBzTSWrVnohF4OZ
-   A==;
-X-CSE-ConnectionGUID: GeOVc/uITx2gh/7Ag2IyhA==
-X-CSE-MsgGUID: BPD/i+1lRmmsuFyFgZHMzg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="63252106"
+  bh=ayhLE47PZTaDIp3ntX6M9zCsn0gZirSonHoOi69fftc=;
+  b=KyplIg4rSXmyE4Fy0o8pL9aWhkVj0AVo5n7wJUx2vnRz7XAVkoFYwiCn
+   vW1WO/61TPN6gVRdEiV9YGtpNjbnzR0cz/ZZdmlwqko+2B4M6yFg6I7zr
+   YE8dJd5SMudoLfgzNPYMhyqutxncP9H4c1mvg2/XIKS1pVRtRfBXWa0mF
+   2ECiq1nrm349Wfugi6nATpCmVMWV2VlJFLgYHdI8biD1lwRw8+gRVvLLt
+   yLwDxTj8T+N8RIX2U5P9J1U2ZpnuAzRLGa2eRA3lb5K/BHrVH08f34KoO
+   eD0mkRTF0P/Zxz880bql3im9H3ORLo+IUWmliaXBtQcZwl3nZInBcOjmh
+   g==;
+X-CSE-ConnectionGUID: 8pQ8IBr1Qwee7tYYtH8YFw==
+X-CSE-MsgGUID: 5w4QcmBrTtu5hu6Jfhr00Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="63252109"
 X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="63252106"
+   d="scan'208";a="63252109"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 09:32:37 -0700
-X-CSE-ConnectionGUID: Rwfbj4krThqv0hYJvpRneQ==
-X-CSE-MsgGUID: V+0WIZQZQM22sahDKCBVpw==
+X-CSE-ConnectionGUID: 2bDCj/2JSOONkHir0mg0cw==
+X-CSE-MsgGUID: 8F5efss1Rd+bLQ1zPq34Gg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="203622643"
+   d="scan'208";a="203622644"
 Received: from unknown (HELO black.igk.intel.com) ([10.91.253.5])
   by orviesa002.jf.intel.com with ESMTP; 08 Sep 2025 09:32:34 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id E9C51A0; Mon, 08 Sep 2025 18:32:30 +0200 (CEST)
+	id ED1CFA1; Mon, 08 Sep 2025 18:32:30 +0200 (CEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -68,9 +68,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 12/26] thunderbolt: Update nvm.c function documentation
-Date: Mon,  8 Sep 2025 18:32:16 +0200
-Message-ID: <20250908163230.2614397-13-mika.westerberg@linux.intel.com>
+Subject: [PATCH 13/26] thunderbolt: Update path.c function documentation
+Date: Mon,  8 Sep 2025 18:32:17 +0200
+Message-ID: <20250908163230.2614397-14-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250908163230.2614397-1-mika.westerberg@linux.intel.com>
 References: <20250908163230.2614397-1-mika.westerberg@linux.intel.com>
@@ -84,125 +84,75 @@ Content-Transfer-Encoding: 8bit
 
 From: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
 
-Make nvm.c function documentation compliant with current kernel-doc
+Make path.c function documentation compliant with current kernel-doc
 standards. No functional changes.
 
 Signed-off-by: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/nvm.c | 42 ++++++++++++++++++++++++---------------
- 1 file changed, 26 insertions(+), 16 deletions(-)
+ drivers/thunderbolt/path.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
-index da11c8112e29..6901058b7ac0 100644
---- a/drivers/thunderbolt/nvm.c
-+++ b/drivers/thunderbolt/nvm.c
-@@ -278,9 +278,13 @@ static const struct tb_nvm_vendor retimer_nvm_vendors[] = {
-  * tb_nvm_alloc() - Allocate new NVM structure
-  * @dev: Device owning the NVM
+diff --git a/drivers/thunderbolt/path.c b/drivers/thunderbolt/path.c
+index e1a5f6e3d0b6..f9b11dadfbdd 100644
+--- a/drivers/thunderbolt/path.c
++++ b/drivers/thunderbolt/path.c
+@@ -96,7 +96,7 @@ static int tb_path_find_src_hopid(struct tb_port *src,
+  * that the @dst port is the expected one. If it is not, the path can be
+  * cleaned up by calling tb_path_deactivate() before tb_path_free().
   *
-- * Allocates new NVM structure with unique @id and returns it. In case
-- * of error returns ERR_PTR(). Specifically returns %-EOPNOTSUPP if the
-- * NVM format of the @dev is not known by the kernel.
-+ * Allocates new NVM structure with unique @id and returns it.
-+ *
-+ * Return:
-+ * * Pointer to &struct tb_nvm - On success.
-+ * * %-EOPNOTSUPP - If the NVM format of the @dev is not known by the
-+ *   kernel.
-+ * * %ERR_PTR - In case of failure.
+- * Return: Discovered path on success, %NULL in case of failure
++ * Return: Pointer to &struct tb_path, %NULL in case of failure.
   */
- struct tb_nvm *tb_nvm_alloc(struct device *dev)
- {
-@@ -347,9 +351,10 @@ struct tb_nvm *tb_nvm_alloc(struct device *dev)
-  * tb_nvm_read_version() - Read and populate NVM version
-  * @nvm: NVM structure
+ struct tb_path *tb_path_discover(struct tb_port *src, int src_hopid,
+ 				 struct tb_port *dst, int dst_hopid,
+@@ -233,7 +233,7 @@ struct tb_path *tb_path_discover(struct tb_port *src, int src_hopid,
+  * links on the path, prioritizes using @link_nr but takes into account
+  * that the lanes may be bonded.
   *
-- * Uses vendor specific means to read out and fill in the existing
-- * active NVM version. Returns %0 in case of success and negative errno
-- * otherwise.
-+ * Uses vendor specific means to read and fill out the existing
-+ * active NVM version.
+- * Return: Returns a tb_path on success or NULL on failure.
++ * Return: Pointer to &struct tb_path, %NULL in case of failure.
+  */
+ struct tb_path *tb_path_alloc(struct tb *tb, struct tb_port *src, int src_hopid,
+ 			      struct tb_port *dst, int dst_hopid, int link_nr,
+@@ -452,7 +452,9 @@ static int __tb_path_deactivate_hop(struct tb_port *port, int hop_index,
+  * @hop_index: HopID of the path to be cleared
+  *
+  * This deactivates or clears a single path config space entry at
+- * @hop_index. Returns %0 in success and negative errno otherwise.
++ * @hop_index.
 + *
 + * Return: %0 on success, negative errno otherwise.
   */
- int tb_nvm_read_version(struct tb_nvm *nvm)
+ int tb_path_deactivate_hop(struct tb_port *port, int hop_index)
  {
-@@ -365,12 +370,11 @@ int tb_nvm_read_version(struct tb_nvm *nvm)
-  * tb_nvm_validate() - Validate new NVM image
-  * @nvm: NVM structure
+@@ -498,7 +500,7 @@ void tb_path_deactivate(struct tb_path *path)
+  * Activate a path starting with the last hop and iterating backwards. The
+  * caller must fill path->hops before calling tb_path_activate().
   *
-- * Runs vendor specific validation over the new NVM image and if all
-- * checks pass returns %0. As side effect updates @nvm->buf_data_start
-- * and @nvm->buf_data_size fields to match the actual data to be written
-- * to the NVM.
-+ * Runs vendor specific validation over the new NVM image. As a
-+ * side effect, updates @nvm->buf_data_start and @nvm->buf_data_size
-+ * fields to match the actual data to be written to the NVM.
-  *
-- * If the validation does not pass then returns negative errno.
-+ * Return: %0 on successful validation, negative errno otherwise.
-  */
- int tb_nvm_validate(struct tb_nvm *nvm)
- {
-@@ -405,7 +409,7 @@ int tb_nvm_validate(struct tb_nvm *nvm)
-  * the image, this function does that. Can be called even if the device
-  * does not need this.
-  *
-- * Returns %0 in case of success and negative errno otherwise.
+- * Return: Returns 0 on success or an error code on failure.
 + * Return: %0 on success, negative errno otherwise.
   */
- int tb_nvm_write_headers(struct tb_nvm *nvm)
+ int tb_path_activate(struct tb_path *path)
  {
-@@ -423,7 +427,8 @@ int tb_nvm_write_headers(struct tb_nvm *nvm)
-  * Registers new active NVmem device for @nvm. The @reg_read is called
-  * directly from NVMem so it must handle possible concurrent access if
-  * needed. The first parameter passed to @reg_read is @nvm structure.
-- * Returns %0 in success and negative errno otherwise.
+@@ -592,7 +594,7 @@ int tb_path_activate(struct tb_path *path)
+  * tb_path_is_invalid() - check whether any ports on the path are invalid
+  * @path: Path to check
+  *
+- * Return: Returns true if the path is invalid, false otherwise.
++ * Return: %true if the path is invalid, %false otherwise.
+  */
+ bool tb_path_is_invalid(struct tb_path *path)
+ {
+@@ -613,6 +615,8 @@ bool tb_path_is_invalid(struct tb_path *path)
+  *
+  * Goes over all hops on path and checks if @port is any of them.
+  * Direction does not matter.
 + *
-+ * Return: %0 on success, negative errno otherwise.
++ * Return: %true if port is on the path, %false otherwise.
   */
- int tb_nvm_add_active(struct tb_nvm *nvm, nvmem_reg_read_t reg_read)
+ bool tb_path_port_on_path(const struct tb_path *path, const struct tb_port *port)
  {
-@@ -461,6 +466,11 @@ int tb_nvm_add_active(struct tb_nvm *nvm, nvmem_reg_read_t reg_read)
-  * Helper function to cache the new NVM image before it is actually
-  * written to the flash. Copies @bytes from @val to @nvm->buf starting
-  * from @offset.
-+ *
-+ * Return:
-+ * * %0 - On success.
-+ * * %-ENOMEM - If buffer allocation failed.
-+ * * Negative errno - Another error occurred.
-  */
- int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
- 		     size_t bytes)
-@@ -488,7 +498,7 @@ int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
-  * needed. The first parameter passed to @reg_write is @nvm structure.
-  * The size of the NVMem device is set to %NVM_MAX_SIZE.
-  *
-- * Returns %0 in success and negative errno otherwise.
-+ * Return: %0 on success, negative errno otherwise.
-  */
- int tb_nvm_add_non_active(struct tb_nvm *nvm, nvmem_reg_write_t reg_write)
- {
-@@ -545,7 +555,7 @@ void tb_nvm_free(struct tb_nvm *nvm)
-  * This is a generic function that reads data from NVM or NVM like
-  * device.
-  *
-- * Returns %0 on success and negative errno otherwise.
-+ * Return: %0 on success, negative errno otherwise.
-  */
- int tb_nvm_read_data(unsigned int address, void *buf, size_t size,
- 		     unsigned int retries, read_block_fn read_block,
-@@ -592,7 +602,7 @@ int tb_nvm_read_data(unsigned int address, void *buf, size_t size,
-  *
-  * This is generic function that writes data to NVM or NVM like device.
-  *
-- * Returns %0 on success and negative errno otherwise.
-+ * Return: %0 on success, negative errno otherwise.
-  */
- int tb_nvm_write_data(unsigned int address, const void *buf, size_t size,
- 		      unsigned int retries, write_block_fn write_block,
 -- 
 2.50.1
 
