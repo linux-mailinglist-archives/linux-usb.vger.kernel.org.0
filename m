@@ -1,71 +1,76 @@
-Return-Path: <linux-usb+bounces-27720-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27722-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E228BB49523
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:23:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D781B4958C
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 18:38:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E53841BC4D16
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:23:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D1711C208EA
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 16:38:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750E431062C;
-	Mon,  8 Sep 2025 16:21:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99FFA30F925;
+	Mon,  8 Sep 2025 16:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fb6MBuAY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vv3JA4+z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5765030FF33;
-	Mon,  8 Sep 2025 16:21:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F27630F93C
+	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 16:32:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757348479; cv=none; b=VfnH6Fd984jHNP+6B6ttEhpYTrcxX37rmXIvOpXKbdYnADlU2HvU6uVU+GWs+KdVsW1sKr4mthLwinTVmagKMHBwhbznxoEHXmjZ1LL/dX5/7Ee7TYOvuIEPYRoguq9TFT1/YnQYvm6dyDcE3ZbzbdKgLTYjtSf255Gf4fuYi+s=
+	t=1757349156; cv=none; b=SjDWYfg/PFLYHzX5ZyT0zHs87vuHcsH6NZ8CowWqce1IguGcBGIzY+X9FfHn497NtY+Mfv7padmtifWedqBmAlnncVsoWAQkDtIgrNAXyPIOJWMwU6CmEK4K4SU9/nh2YiOB8NyyQd5LA5AB4OkUqJX19PZuuQJTl9nHXPf0rkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757348479; c=relaxed/simple;
-	bh=ObIz+zp4lgzgox/7k1WlzLLzMcg9mj+QVGcH9Gr3WV8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r9otK4+Acc37YCyDw9wHnZVx6OxsjUe46S2ORu5MFZvgrXMpgEa0ncZIffVGNKr4EidOx3PQki5Ly+ej91MrEoLAiMWJrzQo1wuCFitTTaffHLIDgOU+mK+j1eWngc9wC43TgQjhVf8GmCYW+xoQfPoF3oz2WrQi5t5d5EgX+Qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fb6MBuAY; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id CB5CD4E40BFB;
-	Mon,  8 Sep 2025 16:21:15 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id A03D66061A;
-	Mon,  8 Sep 2025 16:21:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4F428102F23A0;
-	Mon,  8 Sep 2025 18:21:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1757348475; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=5UhibPtQVINFYBbqXWLMG4UxJzAoW2vDCrPuqBZnckk=;
-	b=fb6MBuAYKGgiKvyw1GlL2AM9X+MT2/NIV9LiTB9fspBia5AIVHnZ4lOyjGimoTP5JXAIjb
-	EXXt714Xl6CXh7PtfUC69+Pj/qsbLqm1v3r0ImtAZ17kdIBR3pMvvzXPpliKmCQNqIuGht
-	ESL1cdO3Xk3CNmgfABqfzdYNOFBGPJM0uI8wGgRr2WUToAeuPGlATNcnolL10L6lT3Hxaj
-	/SY43Q06F+8cRcVuLjPO3MWfzLfN+ZDkybW1AneAKhxIcSjJRpMQDGlbT05nn/IvA7ANHU
-	aKtzaSPHw/OB+aNAGw0q5z5nfFcaUrUxqmGcmk8txfCQHU64TmtUsOVkT6OdMQ==
-From: Richard Genoud <richard.genoud@bootlin.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Aswath Govindraju <a-govindraju@ti.com>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Richard Genoud <richard.genoud@bootlin.com>
-Subject: [PATCH 2/2] usb: dwc3-am62: support ti,lane-reverse property
-Date: Mon,  8 Sep 2025 18:20:52 +0200
-Message-ID: <20250908162052.355341-3-richard.genoud@bootlin.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20250908162052.355341-1-richard.genoud@bootlin.com>
-References: <20250908162052.355341-1-richard.genoud@bootlin.com>
+	s=arc-20240116; t=1757349156; c=relaxed/simple;
+	bh=9Q96o+R44rT7rSMYfGJdXOPELN7ODPO2soevOqQZtW0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pJ1I6XDLeBbjp1tPYnsooFy5MC+HX8wnVzHdemBjRHtB51XZgQQJzp0J2fvWQwVHWheI+IF6LdCZuaukqqfNLUyGQBL09NwNb7+4epBSF+geBA+dJKWOcuRvZTG/CO4COarykZb75X/hKhzPOVOeP/8eKiL4nBkCHLtBxrFg9/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vv3JA4+z; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757349153; x=1788885153;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9Q96o+R44rT7rSMYfGJdXOPELN7ODPO2soevOqQZtW0=;
+  b=Vv3JA4+zotVFKpkM3BYAIciHBgthQz7/VN1ms+DjLNVZbrLzclViZ2MW
+   NkbI9pk9HRmkLDGPU71L0oCHqa8zYh5Pvnmk3wE4J6w6glkacwoIpUZax
+   GataYmvVmc65n5IOJTbrlZeyBP0O4szzaiTLDJdAL2nadSQ2tC6u7glEr
+   NgSdCkqOq8OdXNkyDA5C0z6YfrpY6uysBDgtDFrBiU/NfHXHVphDWx99x
+   2K2unBpEvHcAfN8H/0XVGVLe0FT31ZhuCpB5rR0V5hjAfcHorkE5EUl3r
+   MtD4FhVdLkRh5+GGVtDYsm7KwSN0HF0KhCiIXfGckVVii6iLnbl5PaOmy
+   A==;
+X-CSE-ConnectionGUID: Rh+vw/6JREqETY99+jtu/g==
+X-CSE-MsgGUID: SToVF6sKRzilyToukk0YtQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63443037"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63443037"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 09:32:32 -0700
+X-CSE-ConnectionGUID: 3WX5PrboSNOX1jN0Fbhp4A==
+X-CSE-MsgGUID: 4lZk2viaSJW9iv6+mfjRPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
+   d="scan'208";a="173291147"
+Received: from unknown (HELO black.igk.intel.com) ([10.91.253.5])
+  by fmviesa009.fm.intel.com with ESMTP; 08 Sep 2025 09:32:31 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id C555894; Mon, 08 Sep 2025 18:32:30 +0200 (CEST)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 00/26] thunderbolt: kernel-doc fixes
+Date: Mon,  8 Sep 2025 18:32:04 +0200
+Message-ID: <20250908163230.2614397-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,47 +78,77 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Support the ti,lane-reverse property by setting the
-USBSS_PHY_LANE_REVERSE bit.
-This way, D+ line become D- and vice and versa.
+Hi all,                                                                                             
+                                                                                                    
+This series fixes kernel-docs in the Thunderbolt/USB4 subsystem to adhere
+the current standards.
 
-Tested on am625 SoC.
+All errors/warnings in documentation were found by kernel-doc script and
+were subsequently fixed. Main recurring complaint was incorrect or missing
+"Return: " section in kernel-doc comments. Besides that, few missing
+parameters and structure field descriptions.                                                        
 
-Signed-off-by: Richard Genoud <richard.genoud@bootlin.com>
----
- drivers/usb/dwc3/dwc3-am62.c | 5 +++++
- 1 file changed, 5 insertions(+)
+No functional changes.
 
-diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
-index 9db8f3ca493d..9437d2246ee9 100644
---- a/drivers/usb/dwc3/dwc3-am62.c
-+++ b/drivers/usb/dwc3/dwc3-am62.c
-@@ -119,6 +119,7 @@ struct dwc3_am62 {
- 	struct regmap *syscon;
- 	unsigned int offset;
- 	unsigned int vbus_divider;
-+	unsigned int lane_reverse;
- 	u32 wakeup_stat;
- 	void __iomem *phy_regs;
- };
-@@ -203,6 +204,9 @@ static int dwc3_ti_init(struct dwc3_am62 *am62)
- 	if (am62->vbus_divider)
- 		reg |= 1 << USBSS_PHY_VBUS_SEL_SHIFT;
- 
-+	if (am62->lane_reverse)
-+		reg |= USBSS_PHY_LANE_REVERSE;
-+
- 	dwc3_ti_writel(am62, USBSS_PHY_CONFIG, reg);
- 
- 	clk_prepare_enable(am62->usb2_refclk);
-@@ -264,6 +268,7 @@ static int dwc3_ti_probe(struct platform_device *pdev)
- 	}
- 
- 	am62->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
-+	am62->lane_reverse = device_property_read_bool(dev, "ti,lane-reverse");
- 
- 	ret = dwc3_ti_init(am62);
- 	if (ret)
+This series was suggested by Andy Shevchenko.
+
+Alan Borzeszkowski (26):
+  thunderbolt: Update acpi.c function documentation
+  thunderbolt: Update cap.c function documentation
+  thunderbolt: Update clx.c function documentation
+  thunderbolt: Update ctl.c function documentation
+  thunderbolt: Add missing documentation in ctl.h tb_cfg_request struct
+  thunderbolt: Update dma_port.c function documentation
+  thunderbolt: Update domain.c function documentation
+  thunderbolt: Update eeprom.c function documentation
+  thunderbolt: Update lc.c function documentation
+  thunderbolt: Update nhi.c function documentation
+  thunderbolt: Add missing documentation in nhi_regs.h ring_desc structure
+  thunderbolt: Update nvm.c function documentation
+  thunderbolt: Update path.c function documentation
+  thunderbolt: Update property.c function documentation
+  thunderbolt: Update retimer.c function documentation
+  thunderbolt: Update switch.c function documentation
+  thunderbolt: Update tb.c function documentation
+  thunderbolt: Update tb.h function documentation
+  thunderbolt: Add missing documentation in tb.h
+  thunderbolt: Update tmu.c function documentation
+  thunderbolt: Update tunnel.c function documentation
+  thunderbolt: Update tunnel.h function documentation
+  thunderbolt: Update usb4.c function documentation
+  thunderbolt: Update usb4_port.c function documentation
+  thunderbolt: Update xdomain.c function documentation
+  thunderbolt: Update thunderbolt.h header file
+
+ drivers/thunderbolt/acpi.c      |  28 +--
+ drivers/thunderbolt/cap.c       |  49 +++--
+ drivers/thunderbolt/clx.c       |  12 +-
+ drivers/thunderbolt/ctl.c       |  33 +++-
+ drivers/thunderbolt/ctl.h       |   1 +
+ drivers/thunderbolt/dma_port.c  |  21 +-
+ drivers/thunderbolt/domain.c    |  28 ++-
+ drivers/thunderbolt/eeprom.c    |   4 +-
+ drivers/thunderbolt/lc.c        |  58 ++++--
+ drivers/thunderbolt/nhi.c       |  17 +-
+ drivers/thunderbolt/nhi_regs.h  |   6 +
+ drivers/thunderbolt/nvm.c       |  42 ++--
+ drivers/thunderbolt/path.c      |  14 +-
+ drivers/thunderbolt/property.c  |  38 +++-
+ drivers/thunderbolt/retimer.c   |   7 +-
+ drivers/thunderbolt/switch.c    | 140 ++++++++++----
+ drivers/thunderbolt/tb.c        |  30 +--
+ drivers/thunderbolt/tb.h        |  45 +++--
+ drivers/thunderbolt/tmu.c       |  16 +-
+ drivers/thunderbolt/tunnel.c    |  85 +++++---
+ drivers/thunderbolt/tunnel.h    |   9 +-
+ drivers/thunderbolt/usb4.c      | 333 ++++++++++++++++++++++----------
+ drivers/thunderbolt/usb4_port.c |   7 +-
+ drivers/thunderbolt/xdomain.c   |  46 +++--
+ include/linux/thunderbolt.h     |  25 +--
+ 25 files changed, 749 insertions(+), 345 deletions(-)
+
+-- 
+2.50.1
+
 
