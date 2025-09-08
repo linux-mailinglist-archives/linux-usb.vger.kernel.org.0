@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-27710-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27711-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2EFBB48C3A
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 13:32:04 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3A48B48DC8
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 14:40:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 184AE16508A
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 11:32:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A33464E17A5
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 12:40:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1F02F069B;
-	Mon,  8 Sep 2025 11:31:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25D2301022;
+	Mon,  8 Sep 2025 12:39:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjkAqspg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ufv6Hcx6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB51522FDE8;
-	Mon,  8 Sep 2025 11:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315F42FE598;
+	Mon,  8 Sep 2025 12:39:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757331107; cv=none; b=WlZuS7NAXCLg9uP/Hk18OajY+r+S017j5j5Jt97OqTZ683IIpN1JlBLSkbS3H3Z1CVzXYUD5fUAzVABlWsCmt2I3YAk1m74srUmXAtJA5KBOfT27+Ai0y69raIdPMK8+NogFuFRMvGw7iVP76uVqUPZKdUqOwLtrB79i1RPSx0g=
+	t=1757335150; cv=none; b=EeIMP0RHw7FjrwCyR1JjzJNSR2VLM5XSJuaYm1cNT+Nz2ZBGpuWix0p7GYY5iu8nUL7JE1xcEXCoOR3qn0oekG9/FfBBJ0Cy+DW8wOQXQNs4y0DLoA9yqobQp2crb4BEtXci9tCThmYFkyELZ86y0lk393RJpbb8IZYb14XsOnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757331107; c=relaxed/simple;
-	bh=/2NMAx7CdEyJz+oFeKiwwNv2fjn4p93tWohQc2Rt3qg=;
+	s=arc-20240116; t=1757335150; c=relaxed/simple;
+	bh=Kmgj7JQ2MfTOSMke4wzOHnSg8Sksyl64nAuAQ+DhI4A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=thD5pDP61vo4H6pim7315YJMeIHiewYBZ989ssp+7+aupYgjxpXcifJmhUXqebvEhQgHp3frfyVNeZKh2SZIF/UUUx4XrvEscg7pE4q7xIRLKxuDdwgnjY4lvit+tK3wMgime0Kcgjpas+Q/da16qOX4y3OnuU0qAYrKE5rGkxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjkAqspg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A102C4CEF8;
-	Mon,  8 Sep 2025 11:31:42 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=txoUPBc6zRjvFy/iM6Eum2PuclmrTR+x0oYJjk4+drzC6p7wmPIdyRwrT/GNSXLpwi22Lcp45nZqGL7cuMLWNZt921a6y6vwT/tUzNmeobHVWAFut0iuKYPKqdBZVQxHxeDKotN+skwaJmzPJrmqBYaH94e6LUHFzx21U6yvbK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ufv6Hcx6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D710C4CEF1;
+	Mon,  8 Sep 2025 12:39:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757331107;
-	bh=/2NMAx7CdEyJz+oFeKiwwNv2fjn4p93tWohQc2Rt3qg=;
+	s=k20201202; t=1757335150;
+	bh=Kmgj7JQ2MfTOSMke4wzOHnSg8Sksyl64nAuAQ+DhI4A=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mjkAqspghZDLdaGIS6dJG7QjOCNVTbhkmGhOXT5Re5HymFcK4wCRi7hD587x1HebB
-	 poX+aI3vVP4FVvvKfEflA0T7CAMbFfFl4MD8Z4v1hgKT2HkYRdcjl3fP3o6GVXpmdr
-	 SsxzGMvkxQTancm35B8yjws8XA6ZlJLCA2FzZQ5EvoPfk7BYilYAr3a/IeBlgu4ZWi
-	 /pZrij6pzAqwTcGXOqrnxoxHlUrDFNSoHpJytrOLyBQzjPhAe2QRlGWlzEpaeEulMo
-	 B+lftDXpCzQZYcTdYpaPQuNKQmKNjViLsRbzYbIZlzT9UJlYlrggnVVRwFX8KNkDk5
-	 VA9rsKVu+FQDg==
-Message-ID: <fe7bc889-9ba3-4621-8257-e81ba02db9d4@kernel.org>
-Date: Mon, 8 Sep 2025 13:31:41 +0200
+	b=Ufv6Hcx6jWD5AxW92cK+ljuNUfSXKHnQZv3kXveaEsZj/qc477qtV8lnGeC+yl2LV
+	 RS+Xs28IVJiEsEENic3DIoEPQdZSHhAU4cy+TktV0KVy4p51YIFXAv1grFur5A4cuH
+	 6bQZcKwbFMBzc6sdl3QoFscqqxGb0GSshxGjTLYgZ5ZSGs+wSs4Anmp+mAqfz/3G43
+	 d2i25P5YPiPUgIUQnhTbmOJCWuiJLaNYNMsOWex5ofVrrPe+JZ78aYrYUP0jSNG4sY
+	 WuOYdOOajtBz008C++gHVHO1nJV3AOOUYzXAxps+DjP5BGGjNMGuX5Ral+AlLsdZhH
+	 w1T2hkMKtFUDQ==
+Message-ID: <af78dfb4-de61-4b8c-a131-cf39a4c3c4b0@kernel.org>
+Date: Mon, 8 Sep 2025 07:39:07 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,170 +50,88 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 10/12] media: uvcvideo: Add get_* functions to
- uvc_entity
-To: Ricardo Ribalda <ribalda@chromium.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Hans de Goede <hdegoede@redhat.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil
- <hverkuil@xs4all.nl>, Sakari Ailus <sakari.ailus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <20250605-uvc-orientation-v2-0-5710f9d030aa@chromium.org>
- <20250605-uvc-orientation-v2-10-5710f9d030aa@chromium.org>
- <20250629181246.GE6260@pendragon.ideasonboard.com>
- <CANiDSCsu0RT4dcGyBJRutP=9HTe+niUoohxTZE=qJ8O_9ez=+A@mail.gmail.com>
- <20250714142926.GI8243@pendragon.ideasonboard.com>
- <CANiDSCvFe23xmrJ0-qbWWa6+vKGb+QdDFV8VSLkmWdAnfsFtzw@mail.gmail.com>
- <20250715193505.GB19299@pendragon.ideasonboard.com>
- <CANiDSCtvt6qnROQ0_-0iG5hqkU_uHZABujZPN7xuh7pUASSGyw@mail.gmail.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <CANiDSCtvt6qnROQ0_-0iG5hqkU_uHZABujZPN7xuh7pUASSGyw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v6 RESEND 00/11] Improvements to S5 power consumption
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
+ <linux-pm@vger.kernel.org>,
+ "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+ "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+ "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+ "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+ "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+ "open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
+ AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng <kaihengf@nvidia.com>,
+ Mark Pearson <mpearson-lenovo@squebb.ca>,
+ =?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+ Eric Naim <dnaim@cachyos.org>
+References: <20250906143642.2590808-1-superm1@kernel.org>
+ <2025090852-coma-tycoon-9f37@gregkh>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <2025090852-coma-tycoon-9f37@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
 
-On 16-Jul-25 12:32, Ricardo Ribalda wrote:
-> On Tue, 15 Jul 2025 at 21:35, Laurent Pinchart
-> <laurent.pinchart@ideasonboard.com> wrote:
 
-...
-
->> As for the minimum and maximum, they are currently set to 0 if the
->> corresponding operations are not supported. I wonder if we should set
->> them to the current value instead for read-only controls (as in controls
->> whose flags report support for GET_CUR only)..
+On 9/8/25 4:19 AM, Greg Kroah-Hartman wrote:
+> On Sat, Sep 06, 2025 at 09:36:31AM -0500, Mario Limonciello (AMD) wrote:
+>> A variety of issues both in function and in power consumption have been
+>> raised as a result of devices not being put into a low power state when
+>> the system is powered off.
+>>
+>> There have been some localized changes[1] to PCI core to help these issues,
+>> but they have had various downsides.
+>>
+>> This series instead tries to use the S4 flow when the system is being
+>> powered off.  This lines up the behavior with what other operating systems
+>> do as well.  If for some reason that fails or is not supported, run their
+>> shutdown() callbacks.
+>>
+>> Cc: AceLan Kao <acelan.kao@canonical.com>
+>> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
+>> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
+>> Cc: Merthan Karakaş <m3rthn.k@gmail.com>
+>> Cc: Eric Naim <dnaim@cachyos.org>
+>> ---
+>> v6 RESEND:
+>>   * Resent because Greg said he was ignoring it and would like the whole
+>>     series to be able to review.
 > 
-> I am not sure that I like that approach IMO the code looks worse...
-> but if you prefer that, we can go that way
+> Messy, but wow, I'll trust you all that this actually works properly.
+
+Yes; I double checked from a UART log all devices (now) went to correct 
+state and from power measurement hardware the respective drop in power.
+
+I will note I have a sampling bias of hardware being x86 AMD hardware.
+Some of the testers of the series also tested Intel hardware which had 
+similar power consumption problem, and I know there were improvements 
+there too.
+
+We probably will have to wait for linux-next for non-x86 hardware coverage.
+> No objections from me, but I don't want my ack on this as I don't know
+> how to maintain it :)
 > 
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index ec472e111248..47224437018b 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -35,6 +35,8 @@
->  /* ------------------------------------------------------------------------
->   * Controls
->   */
-> +static int __uvc_ctrl_load_cur(struct uvc_video_chain *chain,
-> +                              struct uvc_control *ctrl);
-> 
->  static const struct uvc_control_info uvc_ctrls[] = {
->         {
-> @@ -1272,6 +1274,13 @@ static int uvc_ctrl_populate_cache(struct
-> uvc_video_chain *chain,
->                                         uvc_ctrl_data(ctrl, UVC_CTRL_DATA_DEF));
->                 if (ret < 0)
->                         return ret;
-> +       } else if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR)) {
-> +               ret = __uvc_ctrl_load_cur(chain, ctrl);
-> +               if (!ret) {
-> +                       memcpy(uvc_ctrl_data(ctrl, UVC_CTRL_DATA_DEF),
-> +                              uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
-> +                              ctrl->info.size);
-> +               }
->         }
-> 
->         if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN) {
 
-Interesting change. Note you also need to check for
-(ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR) being true,
-__uvc_ctrl_load_cur() will return a 0 filled buffer
-and success if that is not set.
+I mean - if all goes well even a failed S4 flow should fall back to old 
+path shutdown.  I *did contrive some failures* in an earlier version of 
+the series and confirmed in the UART log it emitted the printk that it 
+was falling back to shutdown.
 
-I wonder why not do something like this instead though:
+I had two ideas that maybe could help for regression risk though:
+1) I could add a shutdown= kernel parameter.  I'm not sure what words to 
+use for the two paths but the idea would be if someone had a shutdown 
+failure they could isolate if it's due to this by adding the parameter.
 
-        if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR) &&
-            (ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR) &&
-            __uvc_ctrl_load_cur(chain, ctrl) == 0) {
-                /* Read-only control, set def / min / max to cur */
-                memcpy(uvc_ctrl_data(ctrl, UVC_CTRL_DATA_DEF),
-                       uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
-                       ctrl->info.size);
-                memcpy(uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN),
-                       uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
-                       ctrl->info.size);
-                memcpy(uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX),
-                       uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
-                       ctrl->info.size);
-        }
-
-IOW why bother to make the GET_DEF, etc. calls at all for a
-read-only control (even if they are supported) ?
-
-Generally speaking making less calls into the hw seems better?
-
-Although maybe replace the:
-
-        if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR) &&
-            (ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR) &&
-
-part of the check with a flag in ctrl->info indicating to do
-this and do this for specific controls like the new
-rotation and orientation controls ?
-
-...
-
-> @@ -1541,11 +1573,8 @@ static int __uvc_queryctrl_boundaries(struct
-> uvc_video_chain *chain,
->                         return ret;
->         }
-> 
-> -       if (ctrl->info.flags & UVC_CTRL_FLAG_GET_DEF)
->                 v4l2_ctrl->default_value = uvc_mapping_get_s32(mapping,
->                                 UVC_GET_DEF, uvc_ctrl_data(ctrl,
-> UVC_CTRL_DATA_DEF));
-> -       else
-> -               v4l2_ctrl->default_value = 0;
-> 
->         switch (mapping->v4l2_type) {
->         case V4L2_CTRL_TYPE_MENU:
-> @@ -1576,23 +1605,14 @@ static int __uvc_queryctrl_boundaries(struct
-> uvc_video_chain *chain,
->                 break;
->         }
-> 
-> -       if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN)
-> -               v4l2_ctrl->minimum = uvc_mapping_get_s32(mapping, UVC_GET_MIN,
-> -                               uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN));
-> -       else
-> -               v4l2_ctrl->minimum = 0;
-> +       v4l2_ctrl->minimum = uvc_mapping_get_s32(mapping, UVC_GET_MIN,
-> +                                       uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN));
-> 
-> -       if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MAX)
-> -               v4l2_ctrl->maximum = uvc_mapping_get_s32(mapping, UVC_GET_MAX,
-> -                               uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
-> -       else
-> -               v4l2_ctrl->maximum = 0;
-> +       v4l2_ctrl->maximum = uvc_mapping_get_s32(mapping, UVC_GET_MAX,
-> +                                       uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
-> 
-> -       if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)
-> -               v4l2_ctrl->step = uvc_mapping_get_s32(mapping, UVC_GET_RES,
-> -                               uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
-> -       else
-> -               v4l2_ctrl->step = 0;
-> +       v4l2_ctrl->step = uvc_mapping_get_s32(mapping, UVC_GET_RES,
-> +                                       uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
-> 
->         return 0;
->  }
-
-I agree with Laurent that thee changes are nice, but please split them into
-a separate patch.
-
-Regards,
-
-Hans
+2) I could make a Documentation/ file explaining some examples how to 
+get the shutdown log saved to pstore in case they don't have a UART 
+available.
 
 
