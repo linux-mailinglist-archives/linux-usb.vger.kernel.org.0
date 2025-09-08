@@ -1,105 +1,96 @@
-Return-Path: <linux-usb+bounces-27755-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27756-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2635B49C6E
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 23:52:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A56DAB49D0D
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 00:41:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 992B116671A
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 21:52:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67DCE17BF79
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Sep 2025 22:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1362D2E5427;
-	Mon,  8 Sep 2025 21:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E760F2ECEAC;
+	Mon,  8 Sep 2025 22:41:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H6u59PSM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4NIg5XL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCDA22A4D5;
-	Mon,  8 Sep 2025 21:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8CF2EB879
+	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 22:41:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757368357; cv=none; b=SrHUPMoXCGA9StkO6wee5Ij5ytdAHqh8gvLBrraVkKRHbqvtIufuB6bqBwgPwtOHw+AmA/KHKGBRmmZlkfbVlQEgvkIMxxtT1QznJb96Oyr3PcHsq6+AZzM/nRVRGpxwG00SuFA1n4EdpzpxLsfV1NYy9u61McOQTdRD1rvA3u0=
+	t=1757371294; cv=none; b=DFat3GvIclgm/SpLiT8J9eyo3I0vuBIxcbbRvd/6YxZNvkk4E1HqCUQXkuOxzUDZ+1NTrdeXxMmy0bRBGETXjC6Mg7e6yZ9wvg+qRR80T6+/2gHRt7I6SFQgbmr2YXoa++7tiaNrvFwGSByNMW+X32jKbIn0mIu88X3KLy1V3f8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757368357; c=relaxed/simple;
-	bh=UjtDIvZYjEWZH3kRKI9614LSSjakj2QKhQXXNwaBl8E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VsIXuIVKUVa62u6QRaRAC8Yrr8o7s3TckKN6nC5KHVK89lTpqdBlBsFOL2vjMVlrkSuIiOHkWPHu8q7WXTWojGU0FlhCroGPeLR0VnA7hOPaqRwVaT1TLDZ73QMBGcrG188c03iKiu5ukCH0QPnf6FYbFD1TMcAk9r4yloo49zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H6u59PSM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F265BC4CEF1;
-	Mon,  8 Sep 2025 21:52:33 +0000 (UTC)
+	s=arc-20240116; t=1757371294; c=relaxed/simple;
+	bh=PL0kf76lq/beCXOqj0IpQm3xlIT3H9CyelZQLsyuxBw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mjF9sVrRM2SU/ptNfE/HX5I8+IHKIb7nSkM+uE/KVOopcGstYUpGrtpMBUH319emvZMRhYk812Iwbavh3WaVPQE2kXKSqVmsDqX0PW4dNt3uleQ17pMY00MulzX5j3c1nnupCaSbKMNFCoAn5VF8LRV0jq+k6XMb1oGbzVXIE58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4NIg5XL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EA43FC4CEF7
+	for <linux-usb@vger.kernel.org>; Mon,  8 Sep 2025 22:41:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757368356;
-	bh=UjtDIvZYjEWZH3kRKI9614LSSjakj2QKhQXXNwaBl8E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=H6u59PSMlbvOILddp3WNHEOz866E9hf3I8aIPPd/b3tAl9UOaJ9JqB9nXZmNPWEyC
-	 ZBfwsiyRjOL2HFWv/wd4w7kdVGXizhaEUVFi3xTW22Pm2gm5qTyPKy3Ghmx3KmFl1Z
-	 mGvtUlmCct7ht3TYjNYWupt4vz5mkafScBDxTZQRfU6aPm65zbqHL5ZZi1ZUZooYzL
-	 RWa7RoSe2SVBeEuWpMK5o72EPxJPrCc67Qd+LhJrKVHtB+CqoD1OOt7st7hAN5+4kR
-	 h6j55QnMspz2Pk83fm0TsoRwvGdPH2oPQ4Vh4UtwdtgH6+2huzP5yFbtNTWBho5EWO
-	 wYx3jQwCsiFHQ==
-Message-ID: <f33c93cd-92c6-49c9-aa83-9f46841c5879@kernel.org>
-Date: Mon, 8 Sep 2025 16:52:33 -0500
+	s=k20201202; t=1757371294;
+	bh=PL0kf76lq/beCXOqj0IpQm3xlIT3H9CyelZQLsyuxBw=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=X4NIg5XLVSfAlluKBlqZ1c3Ki7644adtl14+bdDGhUGwp2ngvUhl0fSXh43D+1eec
+	 Jr90vWhLJQGH3fGhhWIRnNNWay6WE0tgWMCp58ayQCnDhjiu+UEwsOUeA7kBzeO5L+
+	 bd7wkGnnLQ9XWqXy+MRJOOd5Nb6bWmNB/yw30RHOgAy9pQ0eJ322kflxN9Ou+KOTZH
+	 hVtGOnkp7C9jTxz97e/eD1H5kxb/iAk8V5hQte3dYRJacY9KUgX/RNMiNFY7fW/I8f
+	 vUG3pnMgSvRHSr3vit9qiUdHRq0YIHADa8a/VD8IUZZBPjXaVewYvHWQZLAEOFSUu6
+	 P0VS4juhlWNxw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id DE598C41612; Mon,  8 Sep 2025 22:41:33 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
+ resume from suspend
+Date: Mon, 08 Sep 2025 22:41:33 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: paula@alumni.cse.ucsc.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220491-208809-ivdjX5KKuA@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
+References: <bug-220491-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 09/11] PCI: Put PCIe bridges with downstream devices
- into D3 at hibernate
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Pavel Machek <pavel@kernel.org>,
- Len Brown <lenb@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
- <linux-pm@vger.kernel.org>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
- "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
- "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
- "open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
- AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng <kaihengf@nvidia.com>,
- Mark Pearson <mpearson-lenovo@squebb.ca>,
- =?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>,
- Eric Naim <dnaim@cachyos.org>, Denis Benato <benato.denis96@gmail.com>
-References: <20250908215031.GA1467002@bhelgaas>
-Content-Language: en-US
-From: "Mario Limonciello (kernel.org)" <superm1@kernel.org>
-In-Reply-To: <20250908215031.GA1467002@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
+--- Comment #47 from Paul Ausbeck (paula@alumni.cse.ucsc.edu) ---
+After some more testing it now appears that Alan's reset_resume_delay patch=
+ is
+not a true solution to the ativ9 SD card reader unmount problem. After I
+applied and unapplied Mathias' patch the original problem returned. I've tr=
+ied
+to get back to the "lucky" state where unmounts weren't happening on S/R but
+thus far I can't get there.
 
-On 9/8/2025 4:50 PM, Bjorn Helgaas wrote:
-> On Sun, Aug 17, 2025 at 09:00:59PM -0500, Mario Limonciello (AMD) wrote:
->> For the suspend flow PCIe bridges that have downstream devices are put into
->> the appropriate low power state (D3hot or D3cold depending upon specific
->> devices). For the hibernate flow, PCIe bridges with downstream devices
->> stay in D0 however. This can lead to PCIe bridges that are remained
->> powered on needlessly during hibernate.
-> 
-> s/are remained/remain/ I guess?
+--=20
+You may reply to this email to add a comment.
 
-Yeah, I'll adjust.
-
-> 
->> Adjust the pci_pm_poweroff_noirq() to follow the same flow as
->> pci_pm_suspend_noirq() by using pci_pm_suspend_noirq_common().
->>
->> This introduces a functional change that the hibernate flow will now
->> call pci_save_state() and unless bus PM is skipped will also set
->> the PCIe device into an unknown state.
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
