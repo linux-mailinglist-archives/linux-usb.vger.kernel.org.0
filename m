@@ -1,65 +1,95 @@
-Return-Path: <linux-usb+bounces-27801-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27802-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBCA6B4FC00
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 15:04:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BA2BB4FC0C
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 15:06:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B771441078
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 13:04:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CF5F18942AC
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 13:07:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB97233CE97;
-	Tue,  9 Sep 2025 13:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2737233EAF8;
+	Tue,  9 Sep 2025 13:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jkUKeMv+"
+	dkim=pass (2048-bit key) header.d=rwth-aachen.de header.i=@rwth-aachen.de header.b="lXYXjcMn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mail-out-4.itc.rwth-aachen.de (mail-out-4.itc.rwth-aachen.de [134.130.5.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E4EF9C1;
-	Tue,  9 Sep 2025 13:04:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B40B3314C1;
+	Tue,  9 Sep 2025 13:06:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.130.5.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757423078; cv=none; b=rZIf3Y31SBEuk5CFOxIQBtogMfjaoT2dWKVZ8sRS8raoJv3TcCVVfXHxfId8rT7sHRARApPCLOKYH3nDNKDnP5J75wLVPEkUu1UZGVGyjDcdmyb1Iz6Z0fZShtNci7dvkzYoFxWVdg+fq52opSXH0xGoW/2BiCpOO3+ZCdM1RVU=
+	t=1757423193; cv=none; b=e5bRoVrzlXAfmGgtF83f+fnRCfFMf/ddtmUDCWCg/Yo12UR8SB1e/OgZVdCII6CcBZUX5ESgy5OkKMcV/usNZeOfp7zHaWMU7dSjuJWm/bulAa2Wg4GHm5/3ZS7m17dwDVvw8WGaC1d3TPsgkiK1su/UcA6CbQVeMGG23eZdun8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757423078; c=relaxed/simple;
-	bh=2XAecwrmpL2ME82rkHSXihuD/QhtSEyswB/Tapt+0cQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SxkL6cDTbNoRFHpNwPlMfsDTgma0D0XGGwrHvuagvEir7JOC279jyyCzuTvw3E6Mpc2n4bRJzW6EUOKnN3RbezHAUUKXT1Q5ddlTzwMSyPoG4tVyJHRFZfWgw1Pqk237K1B0N6q0fmxtK9QKIXNf0AKmjVDCDbFLJzOpz+WyUbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jkUKeMv+; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757423077; x=1788959077;
+	s=arc-20240116; t=1757423193; c=relaxed/simple;
+	bh=O14MT3OexWqSwE6jX8bgZKElE6VAnUMMz4AXWZjD7xk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=sPSu6BodTlT/Ws/YHkHCNgh4outl0GApRNia3eCQbdnjgIVknlr6T8ZBIMSJK8P9LJms9gd/VESwUPf2yPNzQpPGQLWNnmMeep8A2tix9f2W1Elw2e7+P9V2j9Fo3BCuiVNvfhSV0zxZPwULcNd7T3zZ77GBOBIC5tRFg5bShhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rwth-aachen.de; spf=pass smtp.mailfrom=rwth-aachen.de; dkim=pass (2048-bit key) header.d=rwth-aachen.de header.i=@rwth-aachen.de header.b=lXYXjcMn; arc=none smtp.client-ip=134.130.5.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rwth-aachen.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rwth-aachen.de
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=rwth-aachen.de; i=@rwth-aachen.de; q=dns/txt;
+  s=20240516-RWTH; t=1757423190; x=1788959190;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=2XAecwrmpL2ME82rkHSXihuD/QhtSEyswB/Tapt+0cQ=;
-  b=jkUKeMv+FRDepHrn4fdGWRqXgxlbP3Iy/X5KUVxRimHtH2VGvMnxkjew
-   hVNzeEKZtI68n9PB057yRwQOP0NH23eDBGHL9slS8cxiVy8DX3D2dZE5t
-   qrqdEIZR162nzkfcpv6/6TV2qlRCUvYzW9hXVImwc70JN8VSW2vE6opEk
-   Br5wxrJnrWVanPKdSMmGstQjgF12dSxTH8csJuiXVKn0pQVK3MCEk84eq
-   cqtTS36J3KUyEx4u68WyX70An5/nxvS0zEy6MylhLTwXTBslpL7KKEuio
-   833+ktnvdbInjp6wkTXseI/lENXcHq1an0x3vw2bt1mJlV9WVnyXMNztk
-   Q==;
-X-CSE-ConnectionGUID: CTKfm2wkSMiQiXLl4cvdUQ==
-X-CSE-MsgGUID: ikXLcoBDS3WcSDPlSh7GRQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="62332874"
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="62332874"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 06:04:36 -0700
-X-CSE-ConnectionGUID: EKr4eiYkS2q3SOwhsjGziw==
-X-CSE-MsgGUID: Jd/DxpVWSzavxrF7NxmweQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="203855368"
-Received: from abityuts-desk.ger.corp.intel.com (HELO [10.245.244.110]) ([10.245.244.110])
-  by orviesa002.jf.intel.com with ESMTP; 09 Sep 2025 06:04:35 -0700
-Message-ID: <6ca18b05-80d4-4988-bb08-3cad003e10f4@linux.intel.com>
-Date: Tue, 9 Sep 2025 16:04:33 +0300
+  bh=O14MT3OexWqSwE6jX8bgZKElE6VAnUMMz4AXWZjD7xk=;
+  b=lXYXjcMn+amozPOZf1PeKL3bmuIyZZJx8VuVXnPBDCErjJnppjnGwp0k
+   f79xdbYk3re/LJfaNfVtjwsp3lOej0JXz8/AWXTiTDoLVRVFlDf/gNesf
+   1zklWR727TdpZ4LVrh61IA9ZWfZiN5UE8Q+qXbIjYrH5PnrQ3p6BlUH0G
+   ZeEyQZWOybJBj6rugLv8INvKqOczbO+Fdm99B1wclttayAW+XJoSlvthI
+   pMGW6JlVlcjxxmsQPXmB5bz3nZrelcb5ZcrMgEmcbKyPih+bYQitZQq5i
+   wOaR0qukQKRFwThDN7VaC1zjlDcdmhQgUvdbHcaOQJGM0509XXJvmZnII
+   w==;
+X-CSE-ConnectionGUID: BAjXdRxMRHOmUpuF/WAxHw==
+X-CSE-MsgGUID: 8nctHbJ+RlC6+eGCBY8/Ag==
+X-IPAS-Result: =?us-ascii?q?A2AaEACAnnto/5oagoZaHAEBATwBAQQEAQECAQEHAQEVg?=
+ =?us-ascii?q?VMCiXuRcQOUBYcuhGQPAQEBAQEBAQEBCAEUPQQBAYITgnQCjBIoNwYOAQIEA?=
+ =?us-ascii?q?QEBAQMCAwEBAQEBAQEBAQEBCwEBBgEBAQEBAQYFgSGFNVOGWgEBAQECASMPA?=
+ =?us-ascii?q?QVBBQsJAhgCAiYCAlYGDgcBAYJ+gksklEubS3qBMoEB3jiBSiMJAYERLgGFb?=
+ =?us-ascii?q?IJkAYFtg3+EdzaBVUSBFSeDAz6ELYNxgmkEgiKBFopXhhOHfAlJeHgsAVUTF?=
+ =?us-ascii?q?wsHBYEgQwOBDyNLBS0dgSd+hBiEKCtPgiJ1gRBpQRk/g1MeBm0PBoEYGkoCA?=
+ =?us-ascii?q?gIFAkNFd0ACAQttPTcJCxuXWROBaTECAS4KCy8DkySCcAGvaTQHgjiBZ4FeB?=
+ =?us-ascii?q?pZZiR4GQpdfkwqZBqkUAgQCBAUCGIF+gX9xgzdRFwIPji0WxWeBMgIHAQoBA?=
+ =?us-ascii?q?QMJjlKBfAEB?=
+IronPort-Data: A9a23:HAko+K+1YcrWZsWk5/KSDrUDWH6TJUtcMsCJ2f8bNWPcYEJGY0x3n
+ TRJXW2POPiMa2Kkcttzb9yz/EwEvJTQm9NlTAtl+ytEQiMRo6IpJzg4wmTYYnnOdJ2TFCqLy
+ +1EN7Es+ehtFie0Si+Fa+an9T8lk/nRF9IQMcacUghpXwhoVSw9vhxqnu89k+ZAjMOwa++3k
+ YqaT/b3Zhn8hVaYDkpOs/je8Ew27ayr0N8llgVWic5j7Qe2e0Y9Ucp3yZGZdxPQXoRSF+imc
+ OfPpJnR1n/Z5RokFuS+mb/9dEAQKpaKVeRZoiMLM0QKqkEqSh0ais7XBtJFAatko2nhc+RK9
+ Tl4ncfYpTEBY/eQwrRNC3G0JAklVUFO0OevzXFSKqV/xWWeG5fn660G4E3boeT0984vaVyi+
+ 8D0JxgnRxKzi9im5YibbexRntkNa/bCLKMA7yQIITHxVZ7KQLjZXLnK6M8dx211j4ZUAureI
+ sMVLzZiBPjCS0QUZhFOU8p4xrnu3ySjG9FbgAv9Sa4f+GnWywo31rXwPdzVc8GRSMN9hFmEp
+ ifP9m/5DxdcONH3JT+tqCL027SRxHyqMG4UPO2+/eJKin/Q/Gg4Vl4benCRkKn+o0HrDrqzL
+ GRRoELCt5Ma+1amQdr9dxm5pmOUsBkBXdZZD+w97keK0KW8ywKYAHUUCz1MctorsOcoSjEwk
+ FyEhdXkAXpoqrL9YXOS8a3SrjSoPjQUKykGZCkZXSMK5tDipMc4iRenZtMlD6+xhc/kHyrzw
+ hiRpS0lmrMcy8UM0s2T4VXImTW3vbDUSw8+5kPaUn/Nxgp9ZYWofZ2o7XDU6vFPKIvfRV6E1
+ FAN3cif6uwECouCvC+AWuMAGPeu/fntGCfBmkIqEZ47sjCs/WOzVZ5f7Ss4J0pzNMsAPzjzb
+ yf7vQRK/55VFHind6l6Z8S2EctC5afpD8XNWfnOf9VTZd53eRPv1CtpfFOWmW7glkcEnqQ2O
+ JPdesGpZV4TDal3ijW/VuEay5ckwyk/wSXYQpWT5xOl3LaXTH2YU7EINB2JdO9RxK+Nox/98
+ NtFMcaOjRJFX4XWbiDR8IMXa1kOKHU6CZneoMtTcueJJRBvXmomDpf5y7EmYYo+qKtVvv/S+
+ W26XEpRyV65jnrCQS2Oa3Z+ePbyRpxXs302J2ovMEyu1nxlZpyghJrzbLMtYqUn+fwm1qQxR
+ r8fZNmAR/1DDDjKk9gAUaTAQEVZXEzDrWqz0+CNOVDTo7YIq9T1x+LZ
+IronPort-HdrOrdr: A9a23:2BZ1U6H3IWKAxSgZpLqE+ceALOsnbusQ8zAXPo5KJyC9Ffbo8v
+ xG/c5rtyMc5wx6ZJhNo7290cq7MBDhHPxOgLX5VI3KNGLbUQCTQ72Kg7GP/9StIU3DytI=
+X-Talos-CUID: =?us-ascii?q?9a23=3AivFpomtKtnli3IPuAW8Bxz2/6IsPW3/twE3ABnW?=
+ =?us-ascii?q?YLmNUUKC7DmC56IN7xp8=3D?=
+X-Talos-MUID: 9a23:Av+LFggw9dJnXc50FOa/5MMpZMFj/4SkKgM3lb5Y+MSrHgZBa3C0g2Hi
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.16,324,1744063200"; 
+   d="scan'208";a="280536179"
+Received: from rwthex-s2-a.rwth-ad.de ([134.130.26.154])
+  by mail-in-4.itc.rwth-aachen.de with ESMTP; 09 Sep 2025 15:05:18 +0200
+Received: from [IPV6:2a00:8a60:c000:1:6109:d098:ebb8:aa0]
+ (2a00:8a60:c000:1:6109:d098:ebb8:aa0) by rwthex-s2-a.rwth-ad.de
+ (2a00:8a60:1:e500::26:154) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.36; Tue, 9 Sep
+ 2025 15:05:17 +0200
+Message-ID: <03b0cd37-4b05-4b5e-a395-5e5d405e1b20@rwth-aachen.de>
+Date: Tue, 9 Sep 2025 15:05:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,57 +97,78 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/1] usb: xhci: Queue URB_ZERO_PACKET as one TD
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250908130128.7ed81912.michal.pecio@gmail.com>
+Subject: Re: [PATCH 2/2] samples: rust: add a USB driver sample
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Daniel Almeida <daniel.almeida@collabora.com>, Danilo Krummrich
+	<dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
+	<alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
+	<gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+	<bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Andreas
+ Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor
+ Gross <tmgross@umich.edu>, Michal Wilczynski <m.wilczynski@samsung.com>, Igor
+ Korotin <igor.korotin.linux@gmail.com>, <linux-kernel@vger.kernel.org>,
+	<rust-for-linux@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20250825-b4-usb-v1-2-7aa024de7ae8@collabora.com>
+ <2025090618-smudgy-cringing-a7a4@gregkh>
+ <D8EAF874-4FED-42EE-8FD8-E89B6CB0086A@collabora.com>
+ <2025090601-iron-glitter-c77d@gregkh>
+ <831C4AE2-6964-4699-9E74-E4B721B87B17@collabora.com>
+ <DCLQZZHU42HN.4Y4PP0PPR10O@kernel.org>
+ <9657C897-087E-4544-849B-964E99D95A50@collabora.com>
+ <DCLTJMIAMCVL.35U236MMS5CCK@kernel.org>
+ <85B643A9-1657-43ED-BE98-BE7E502D08DA@collabora.com>
+ <3aca9e74-b67c-4bfe-a206-9a6eecdf76ab@rwth-aachen.de>
+ <2025090916-dill-elated-3d68@gregkh>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250908130128.7ed81912.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Simon Neuenhausen <simon.neuenhausen@rwth-aachen.de>
+In-Reply-To: <2025090916-dill-elated-3d68@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: RWTHEX-S2-B.rwth-ad.de (2a00:8a60:1:e500::26:155) To
+ rwthex-s2-a.rwth-ad.de (2a00:8a60:1:e500::26:154)
 
-On 8.9.2025 14.01, Michal Pecio wrote:
-> Hi Mathias,
-> 
-> I wanted to finish and send v2 of "Simplify TD cancellation and drop
-> some states" over the weekend, but I encountered an annoying roadblock
-> and I need your input.
-> 
-> Basically, there is a bug: URB_ZERO_PACKET is queued as two TDs, and
-> when the first TD halts, the driver simply advances to the second one.
-> 
-> I found that extending the event handler to cover this case requires
-> multiple changes:
-> 
-> 1. obviously, all TDs must be cancelled, not just the current one
-> 2. they may be given back in weird order (waiting for Set Deq), so
->     we need to store the status on urb_priv and override td->status
-> 3. xhci_invalidate_cancelled_tds() would need to recognize multiple
->     halted TDs on the same URB as valid
-> 
-> This is doable, and I have already implemented most of it in that
-> series, but there is an alternative solution: simply stop worrying
-> about halted multi-TD URBs, because this is the only case and it
-> can be converted to pretend that it's just one TD per URB as usual.
-> 
-> If you are OK with this patch, cancellation logic will be simpler,
-> because this time there really are no remaining cases of multi-TD
-> URBs except isochronous. This is clear in xhci_urb_enqueue():
-> 
+(Sorry for sending this again. I forgot to hit reply all, since I'm 
+pretty new to this.)
 
-Adding the zero-length TRB to the original TD when we need to send a
-zero-length packet would simplify things, and I would otherwise fully
-support this, but the xHCI spec is pretty clear that it requires a
-dedicated TD for zero-length transactions.
+On 09.09.25 14:14, Greg Kroah-Hartman wrote:
 
-See xhci spec section 4.9.1:
+> On Tue, Sep 09, 2025 at 01:19:12PM +0200, Simon Neuenhausen wrote:
+>> Hi,
+>>
+>>> On 06.09.25 17:46, Daniel Almeida wrote:
+>>> As I said to Greg above, I’m here to help if anyone wants to write a 
+>>> USB
+>>> driver. Those interested
+>> are free to reach out to me and we will work together to merge the 
+>> required
+>> abstractions with a real user in mind. Hopefully this encourages 
+>> others to
+>> join in this work 🙂
+>> I had planned on writing a USB driver for TI nspire calculators, that 
+>> would
+>> make them mountable as USB mass storage devices, since they use a
+>> proprietary USB protocol, that usually requires paid software from 
+>> TI. At
+>> the time I gave up on that, due to the lack of USB support in RFL, but I
+>> could revive the effort using this.
+> usb-storage is really just SCSI, so if you want to try to do this, you
+> are going to have to write a scsi driver for the calculator.  Not
+> something you probably really want to do 🙁
+AFAIK it's not actually SCSI, but some custom USB protocol, that doesn't 
+work on blocks, but files and directories directly. It also allows 
+taking screenshots and performing firmware updates.
+> Odd are this would be a much simpler userspace program instead, as you
+> can control USB devices directly from userspace, no kernel driver
+> needed.
 
-"To generate a “zero-length” USB transaction, software shall explicitly
-define a TD with a single Transfer TRB, and its TRB Transfer Length
-field shall equal ‘0’. Note that this TD may include non-Transfer TRBs,
-e.g. an Event Data or Link TRB."
+Yes, a userspace program using FUSE would probably be simpler, since 
+there's already exists "libnspire" for interacting with nspire 
+calculators in userspace.
 
-Thanks
-Mathias
+As I said, it's gimmicky.
+
+
+Greetings
+
+Simon
 
