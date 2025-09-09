@@ -1,136 +1,458 @@
-Return-Path: <linux-usb+bounces-27782-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27783-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C149B4A901
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:56:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD1F1B4A927
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:59:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EA5B3B340D
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:56:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 127C136283E
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:59:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA362D193B;
-	Tue,  9 Sep 2025 09:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 114B12D1926;
+	Tue,  9 Sep 2025 09:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VkU8Kh3D"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="qVc4mLn7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1D4256C7E;
-	Tue,  9 Sep 2025 09:56:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662192D24AB
+	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 09:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757411782; cv=none; b=P/GKxJ4u/qm4AT7S7HWA/rOd0IDALuVWi/e3CAL+XCbpJAZ6I2j1nJnvyoZwghj1V0brjWzzDrchCawqm+nARKiQzDXA+GlJbe7zYelfwo13I74n0Xl3tXREFeFPjUvok2AmHTiDdlCd8pHaL8rZI1EBrOVIe6+6q89mNlaQOMs=
+	t=1757411895; cv=none; b=ZRAB+1qqSJbGv/r71x6WdpR3BbR2F1CgoG2fTuJYMZ/H+ty7iszwk0Q/GZnY3w2vk28oNh8j2mp3oBV3OYesY0VRtEoHIIYFzn1QpAokqFuYDTZAunBV1lK99ceXbZ1HvbyJh3QTCJsQd7vYnBTTV6N8mhwrwS0ybeNjtiqfjPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757411782; c=relaxed/simple;
-	bh=uo5ZUhYMuByiGgJRlg8TUV2xCirGU9z4qi8EAlibyr8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=StAzifZ83fejtjp2N9CMVOSL7EHG1zqNVRElyElM7bhKsV5gv0ON7koTSOvZMyIkHDwiH+K/AckyRjG8MSNk16Cr/CaRDI0YhpLULeQyhLHlQPJ6HluyDtB2IE+ylDujXu6kw9/KwBpkv8kCIcJpxiAKGLpF9qG82Q3IBSpjhYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VkU8Kh3D; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757411781; x=1788947781;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uo5ZUhYMuByiGgJRlg8TUV2xCirGU9z4qi8EAlibyr8=;
-  b=VkU8Kh3DXAo47And/As3kxpv0wyHxDgnai1kTCz2f6BTeJmXj4P2E3Cf
-   7r9EMazmDHP5I8lk1Uq84kjBiNAP+7i+Fn5UySa7yD/B8JAynTms5UXCZ
-   coWOqAcLWNQWw2AHWZyXLLeU8ZBYNwsU++vaYwOBNj5dKox7UHm6UK0jY
-   Q/7n9K/r4jAED5zP712FEAcV8c7KThIeDTHLn1x6aDRL7LTBxD7low/MZ
-   VTPwFSBGMjayYWtrml+tbGf//RN4z5cxgdIa+BJUn5EWz6AL/lnPSd9sO
-   UgOnFJeMxKFPEM9npmt43jpjcahQYnHyUT7iUUgZ9kPy2XwL7PuftZQ8K
-   g==;
-X-CSE-ConnectionGUID: oNRwR22qTrezmsxRkZ+Q+w==
-X-CSE-MsgGUID: 3MXa3Dz6TySVnSUH272l6A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="70308685"
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="70308685"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 02:56:20 -0700
-X-CSE-ConnectionGUID: P1az0YAkRKGZnXA+YSHqnw==
-X-CSE-MsgGUID: x+o8/7BtRJCBL8qT1k7V2g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="172209638"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa006.jf.intel.com with SMTP; 09 Sep 2025 02:56:15 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Sep 2025 12:56:13 +0300
-Date: Tue, 9 Sep 2025 12:56:13 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Sven Peter <sven@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <Frank.Li@nxp.com>,
-	Ran Wang <ran.wang_1@nxp.com>, Peter Chen <peter.chen@nxp.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
-	Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2 13/22] usb: typec: tipd: Use read_power_status
- function in probe
-Message-ID: <aL_5vZvZG4oYQACo@kuha.fi.intel.com>
-References: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
- <20250906-atcphy-6-17-v2-13-52c348623ef6@kernel.org>
+	s=arc-20240116; t=1757411895; c=relaxed/simple;
+	bh=T7Ev5cNgLKHl6Cmgtm7LAwxpQOK1XkyS90S/YXcfBgo=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zm6zb68usFMPTE0vZzyt+2ovEDd5vIc/oMX6OrG3YT+Yc7391vqYUdkYSyi/lsU2/evWT1Ja6R++ECM6SE+LcNNbw9xrKTiezn2tfUlzYWkTQ/aYU1AS/g+Ren0bbNF51oP0cMAh4fi9zqwgmdYB+ifD85EWaviBO2ZdMs+fUsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=qVc4mLn7; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-560880bb751so5422894e87.3
+        for <linux-usb@vger.kernel.org>; Tue, 09 Sep 2025 02:58:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757411891; x=1758016691; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VJF1duQr2oyBZoSzr/wPPSh77li3ds+SnbMQo5OkAPc=;
+        b=qVc4mLn73/7BOeRfuTk3+P60nnE4Yn9yx/8UB1YmpwYlKvUVTZgD1vLak8Vg+PRjBG
+         J5QzH3WVE8LbvUUhKmucDAAoQwBfXtrH0HK5IjYU2IlkwPiIoI7BAPhqFF8H+H+EQsoN
+         UtXcSgsLxFOz8ONEZqhiTU5cCH/h3SEpWn4nuC/48IoF/zFSL7BWWZXSLqlkiayZ0kOC
+         GluSj4EaRQFNhjHlIFM9pfLFot0hU32TeKVXYYNXFFd9WYQ1NWVyEQtHd+5gT2CZ/ni1
+         W0EFG80IWObT/QW2IolrjSNGdnCI3EwaPqIRavBF7329JIQZZnJtr0MZFnIjLAdg3zr+
+         iUHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757411891; x=1758016691;
+        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VJF1duQr2oyBZoSzr/wPPSh77li3ds+SnbMQo5OkAPc=;
+        b=Xlm6567FJ0PRrHZBWmWmdSD//2/lQGD92kON8/QzjKQTjm16vwXVGy9x+X6u9P600L
+         JGngPIHO33gUdtXPKIWUITQXAz0l5K5dLP5H5ofE9olVUl/vetovF2uAz8yNTSGuE0Bw
+         O9UZqldg7sr02xXVIzVuLujivTfSPnXtvprwJ63rCn/xlnMkRazm16JpBrjGdWc8zc0u
+         h9nibRZC7BZvNTPsQIZYriMkqqO5HkiUba8iuCq3T9SU+1P+VTd4L6Y9COSG8l8jVnSU
+         ao2+EZ95sjgLf2rBaaCEAJiqubKRg6z6ezfS2F7e4eKxXtFv8wr4KuNUfRYAcClhQZlT
+         DSuA==
+X-Forwarded-Encrypted: i=1; AJvYcCV8CdEQc2I2UG48UWPTJEJZ/Z012kQEFj9LrXcoyc+IE3Yhn8W9NM7EzZVWxnAVnXt2129c21GvnZQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCIQYNugj8tZ7NuVloq9Yrxm6W/PaU3vMy5oQJLYo6KxiHnRu2
+	9apwhD9Ci1XTd6F10d5CwgjQYWm9A7KZOGS2eQ2rZ4OLfplBCNsLmtRm2IKVdMXoOhO2rPSbPq/
+	d0WRuVng0Q5OXv9PCNYvoJUMOkEHy5GW74/i541H2eQ==
+X-Gm-Gg: ASbGncspmgMUwellNviVeVzuNAJtLBtxNy3quhiGucUq1RbQj+KVhNSKSKkxI+KpjVB
+	0MF5SI7/lqVuGPTQ49if/oI8ABEiUGpmOrhgKvoVpbjW3W0ptZsL+PuSwvK7t6xVl5bJyIzaAA4
+	QbM0eRoIYhCT7BDSQNZWlckyvdhkMb+QrWG/WeQCJmC1yFcQz0ffjavEwI0KnWKFjRXkWiGhBwL
+	aWVaKZnlBOYy09i1DbsvHuFFXQh0uGE47UEBEU=
+X-Google-Smtp-Source: AGHT+IEVDjpmFPACQTAt4gqSdq/uBCscF04VL86vB0z+7xLSRa6u30fjR5G7q2baeKk9R0l506WCTfY+R2BGmgWSBe0=
+X-Received: by 2002:a05:6512:ba2:b0:55b:574c:6bf9 with SMTP id
+ 2adb3069b0e04-5626275d987mr3100087e87.29.1757411891511; Tue, 09 Sep 2025
+ 02:58:11 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 9 Sep 2025 05:58:09 -0400
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 9 Sep 2025 05:58:09 -0400
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+In-Reply-To: <20250907175056.47314-3-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250906-atcphy-6-17-v2-13-52c348623ef6@kernel.org>
+References: <20250907175056.47314-1-hansg@kernel.org> <20250907175056.47314-3-hansg@kernel.org>
+Date: Tue, 9 Sep 2025 05:58:09 -0400
+X-Gm-Features: Ac12FXz7X9E7GtOk4hqwLTIsJNgJfQ8iONpwJQqjMuKQQrGZV3LAtNACphMmsRQ
+Message-ID: <CAMRc=Mcwez1bebe4KBxh2V23+U3A6Fhz3q_dC1XmnT1DfD2Yig@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] gpio: Add Intel USBIO GPIO driver
+To: Hans de Goede <hansg@kernel.org>
+Cc: Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	Israel Cepeda <israel.a.cepeda.lopez@intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Sep 06, 2025 at 03:43:26PM +0000, Sven Peter wrote:
-> From: Hector Martin <marcan@marcan.st>
-> 
-> We need the initial power status to be able to reliably detect connector
-> changes once we introduce de-bouncing for CD321x next. read_power_status
-> takes care of this and also forwards the status to the trace subsystem
-> so let's use that instead of open-coding it inside probe.
-> 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> Signed-off-by: Sven Peter <sven@kernel.org>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+On Sun, 7 Sep 2025 19:50:55 +0200, Hans de Goede <hansg@kernel.org> said:
+> From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+>
+> Add a a driver for the GPIO auxbus child device of the Intel USBIO USB
+> IO-expander used by the MIPI cameras on various new (Meteor Lake and
+> later) Intel laptops.
+>
+> Co-developed-by: Hans de Goede <hansg@kernel.org>
+> Signed-off-by: Hans de Goede <hansg@kernel.org>
+> Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
 > ---
->  drivers/usb/typec/tipd/core.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index cd427eecd8a594b7e609a20de27a9722055307d8..e6e9730ee6dacd8c1271b1d52a02da49ff248d3e 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -1549,11 +1549,8 @@ static int tps6598x_probe(struct i2c_client *client)
->  		goto err_role_put;
->  
->  	if (status & TPS_STATUS_PLUG_PRESENT) {
-> -		ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &tps->pwr_status);
-> -		if (ret < 0) {
-> -			dev_err(tps->dev, "failed to read power status: %d\n", ret);
-> +		if (!tps6598x_read_power_status(tps))
->  			goto err_unregister_port;
-> -		}
->  		ret = tps6598x_connect(tps, status);
->  		if (ret)
->  			dev_err(&client->dev, "failed to register partner\n");
-> 
-> -- 
-> 2.34.1
-> 
+> Changes in v2:
+> - Add a config_mutex protect usbio_gpio_update_config() calls, which
+>   read-modify-write banks[x].config, racing with each other
+> - Adjust usbio_gpio_get() to have an int return value and propagate the
+>   usbio_control_msg() return value
+> - Use __le16, __le32 type + cpu_to_le16() and friends for on wire words
+> - Some small style fixes from Sakari's review
+> ---
+>  MAINTAINERS               |   1 +
+>  drivers/gpio/Kconfig      |  11 ++
+>  drivers/gpio/Makefile     |   1 +
+>  drivers/gpio/gpio-usbio.c | 267 ++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 280 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-usbio.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3410699ad0b2..53694bd91861 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12699,6 +12699,7 @@ M:	Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+>  M:	Hans de Goede <hansg@kernel.org>
+>  R:	Sakari Ailus <sakari.ailus@linux.intel.com>
+>  S:	Maintained
+> +F:	drivers/gpio/gpio-usbio.c
+>  F:	drivers/usb/misc/usbio.c
+>  F:	include/linux/usb/usbio.h
+>
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index e43abb322fa6..5d3ca3dd2687 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -1448,6 +1448,17 @@ config GPIO_LJCA
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called gpio-ljca.
+>
+> +config GPIO_USBIO
+> +	tristate "Intel USBIO GPIO support"
+> +	depends on USB_USBIO
+> +	default USB_USBIO
+> +	help
+> +	  Select this option to enable GPIO driver for the INTEL
+> +	  USBIO driver stack.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called gpio_usbio.
+> +
+>  config GPIO_LP3943
+>  	tristate "TI/National Semiconductor LP3943 GPIO expander"
+>  	depends on MFD_LP3943
+> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+> index 379f55e9ed1e..8c55e2d5de42 100644
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -90,6 +90,7 @@ obj-$(CONFIG_GPIO_JANZ_TTL)		+= gpio-janz-ttl.o
+>  obj-$(CONFIG_GPIO_KEMPLD)		+= gpio-kempld.o
+>  obj-$(CONFIG_GPIO_LATCH)		+= gpio-latch.o
+>  obj-$(CONFIG_GPIO_LJCA) 		+= gpio-ljca.o
+> +obj-$(CONFIG_GPIO_USBIO) 		+= gpio-usbio.o
+>  obj-$(CONFIG_GPIO_LOGICVC)		+= gpio-logicvc.o
+>  obj-$(CONFIG_GPIO_LOONGSON1)		+= gpio-loongson1.o
+>  obj-$(CONFIG_GPIO_LOONGSON)		+= gpio-loongson.o
+> diff --git a/drivers/gpio/gpio-usbio.c b/drivers/gpio/gpio-usbio.c
+> new file mode 100644
+> index 000000000000..1df32105cf51
+> --- /dev/null
+> +++ b/drivers/gpio/gpio-usbio.c
+> @@ -0,0 +1,267 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2025 Intel Corporation.
+> + * Copyright (c) 2025 Red Hat, Inc.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/auxiliary_bus.h>
+> +#include <linux/cleanup.h>
+> +#include <linux/dev_printk.h>
+> +#include <linux/device.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/mutex.h>
+> +#include <linux/types.h>
+> +#include <linux/usb/usbio.h>
+> +
+> +struct usbio_gpio_bank {
+> +	u8 config[USBIO_GPIOSPERBANK];
+> +	u32 bitmap;
+> +};
+> +
+> +struct usbio_gpio {
+> +	struct mutex config_mutex; /* Protects banks[x].config */
+> +	struct usbio_gpio_bank banks[USBIO_MAX_GPIOBANKS];
+> +	struct gpio_chip gc;
+> +	struct auxiliary_device *adev;
+> +};
+> +
+> +static const struct acpi_device_id usbio_gpio_acpi_hids[] = {
+> +	{ "INTC1007" }, /* MTL */
+> +	{ "INTC10B2" }, /* ARL */
+> +	{ "INTC10B5" }, /* LNL */
+> +	{ "INTC10E2" }, /* PTL */
+> +	{ }
+> +};
+> +
+> +static bool usbio_gpio_get_bank_and_pin(struct gpio_chip *gc, unsigned int offset,
+> +					struct usbio_gpio_bank **bank_ret,
+> +					unsigned int *pin_ret)
+> +{
+> +	struct usbio_gpio *gpio = gpiochip_get_data(gc);
+> +	struct device *dev = &gpio->adev->dev;
+> +	struct usbio_gpio_bank *bank;
+> +	unsigned int pin;
+> +
+> +	if (offset >= gc->ngpio)
+> +		return false;
+> +
 
--- 
-heikki
+No need for that, GPIO core will make sure this never happens.
+
+> +	bank = &gpio->banks[offset / USBIO_GPIOSPERBANK];
+> +	pin = offset % USBIO_GPIOSPERBANK;
+> +	if (~bank->bitmap & BIT(pin)) {
+> +		/* The FW bitmap sometimes is invalid, warn and continue */
+> +		dev_warn_once(dev, FW_BUG "GPIO %u is not in FW pins bitmap\n", offset);
+> +	}
+> +
+> +	*bank_ret = bank;
+> +	*pin_ret = pin;
+> +	return true;
+> +}
+> +
+> +static int usbio_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	struct usbio_gpio_bank *bank;
+> +	unsigned int pin;
+> +	u8 cfg;
+> +
+> +	if (!usbio_gpio_get_bank_and_pin(gc, offset, &bank, &pin))
+> +		return -EINVAL;
+> +
+> +	cfg = bank->config[pin] & USBIO_GPIO_PINMOD_MASK;
+> +
+> +	return (cfg == USBIO_GPIO_PINMOD_OUTPUT) ?
+> +		GPIO_LINE_DIRECTION_OUT : GPIO_LINE_DIRECTION_IN;
+> +}
+> +
+> +static int usbio_gpio_get(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	struct usbio_gpio *gpio = gpiochip_get_data(gc);
+> +	struct usbio_gpio_bank *bank;
+> +	struct usbio_gpio_rw gbuf;
+> +	unsigned int pin;
+> +	int ret;
+> +
+> +	if (!usbio_gpio_get_bank_and_pin(gc, offset, &bank, &pin))
+> +		return -EINVAL;
+> +
+> +	gbuf.bankid = offset / USBIO_GPIOSPERBANK;
+> +	gbuf.pincount  = 1;
+> +	gbuf.pin = pin;
+> +
+> +	ret = usbio_control_msg(gpio->adev, USBIO_PKTTYPE_GPIO, USBIO_GPIOCMD_READ,
+> +				&gbuf, sizeof(gbuf) - sizeof(gbuf.value),
+> +				&gbuf, sizeof(gbuf));
+> +	if (ret != sizeof(gbuf))
+> +		return (ret < 0) ? ret : -EPROTO;
+> +
+> +	return (le32_to_cpu(gbuf.value) >> pin) & 1;
+> +}
+> +
+> +static int usbio_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
+> +{
+> +	struct usbio_gpio *gpio = gpiochip_get_data(gc);
+> +	struct usbio_gpio_bank *bank;
+> +	struct usbio_gpio_rw gbuf;
+> +	unsigned int pin;
+> +
+> +	if (!usbio_gpio_get_bank_and_pin(gc, offset, &bank, &pin))
+> +		return -EINVAL;
+> +
+> +	gbuf.bankid = offset / USBIO_GPIOSPERBANK;
+> +	gbuf.pincount  = 1;
+> +	gbuf.pin = pin;
+> +	gbuf.value = cpu_to_le32(value << pin);
+> +
+> +	return usbio_control_msg(gpio->adev, USBIO_PKTTYPE_GPIO, USBIO_GPIOCMD_WRITE,
+> +				 &gbuf, sizeof(gbuf), NULL, 0);
+> +}
+> +
+> +static int usbio_gpio_update_config(struct gpio_chip *gc, unsigned int offset,
+> +				    u8 mask, u8 value)
+> +{
+> +	struct usbio_gpio *gpio = gpiochip_get_data(gc);
+> +	struct usbio_gpio_bank *bank;
+> +	struct usbio_gpio_init gbuf;
+> +	unsigned int pin;
+> +
+> +	if (!usbio_gpio_get_bank_and_pin(gc, offset, &bank, &pin))
+> +		return -EINVAL;
+> +
+> +	guard(mutex)(&gpio->config_mutex);
+> +
+> +	bank->config[pin] &= ~mask;
+> +	bank->config[pin] |= value;
+> +
+> +	gbuf.bankid = offset / USBIO_GPIOSPERBANK;
+> +	gbuf.config = bank->config[pin];
+> +	gbuf.pincount  = 1;
+> +	gbuf.pin = pin;
+> +
+> +	return usbio_control_msg(gpio->adev, USBIO_PKTTYPE_GPIO, USBIO_GPIOCMD_INIT,
+> +				 &gbuf, sizeof(gbuf), NULL, 0);
+> +}
+> +
+> +static int usbio_gpio_direction_input(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	return usbio_gpio_update_config(gc, offset, USBIO_GPIO_PINMOD_MASK,
+> +					USBIO_GPIO_SET_PINMOD(USBIO_GPIO_PINMOD_INPUT));
+> +}
+> +
+> +static int usbio_gpio_direction_output(struct gpio_chip *gc,
+> +		unsigned int offset, int value)
+> +{
+> +	int ret;
+> +
+> +	ret = usbio_gpio_update_config(gc, offset, USBIO_GPIO_PINMOD_MASK,
+> +				       USBIO_GPIO_SET_PINMOD(USBIO_GPIO_PINMOD_OUTPUT));
+> +	if (ret)
+> +		return ret;
+> +
+> +	usbio_gpio_set(gc, offset, value);
+> +	return 0;
+
+return usbio_gpio_set(gc, offset, value);?
+
+> +}
+> +
+> +static int usbio_gpio_set_config(struct gpio_chip *gc, unsigned int offset,
+> +		unsigned long config)
+> +{
+> +	u8 value;
+> +
+> +	switch (pinconf_to_config_param(config)) {
+> +	case PIN_CONFIG_BIAS_PULL_PIN_DEFAULT:
+> +		value = USBIO_GPIO_SET_PINCFG(USBIO_GPIO_PINCFG_DEFAULT);
+> +		break;
+> +	case PIN_CONFIG_BIAS_PULL_UP:
+> +		value = USBIO_GPIO_SET_PINCFG(USBIO_GPIO_PINCFG_PULLUP);
+> +		break;
+> +	case PIN_CONFIG_BIAS_PULL_DOWN:
+> +		value = USBIO_GPIO_SET_PINCFG(USBIO_GPIO_PINCFG_PULLDOWN);
+> +		break;
+> +	case PIN_CONFIG_DRIVE_PUSH_PULL:
+> +		value = USBIO_GPIO_SET_PINCFG(USBIO_GPIO_PINCFG_PUSHPULL);
+> +		break;
+> +	default:
+> +		return -ENOTSUPP;
+> +	}
+> +
+> +	return usbio_gpio_update_config(gc, offset, USBIO_GPIO_PINCFG_MASK, value);
+> +}
+> +
+> +static int usbio_gpio_probe(struct auxiliary_device *adev,
+> +		const struct auxiliary_device_id *adev_id)
+> +{
+> +	struct usbio_gpio_bank_desc *bank_desc;
+> +	struct device *dev = &adev->dev;
+> +	struct usbio_gpio *gpio;
+> +	int bank, ret;
+> +
+> +	bank_desc = dev_get_platdata(dev);
+> +	if (!bank_desc)
+> +		return -EINVAL;
+> +
+> +	gpio = devm_kzalloc(dev, sizeof(*gpio), GFP_KERNEL);
+> +	if (!gpio)
+> +		return -ENOMEM;
+> +
+> +	ret = devm_mutex_init(dev, &gpio->config_mutex);
+> +	if (ret)
+> +		return ret;
+> +
+> +	gpio->adev = adev;
+> +
+> +	usbio_acpi_bind(gpio->adev, usbio_gpio_acpi_hids);
+> +
+> +	for (bank = 0; bank < USBIO_MAX_GPIOBANKS && bank_desc[bank].bmap; bank++)
+> +		gpio->banks[bank].bitmap = le32_to_cpu(bank_desc[bank].bmap);
+> +
+> +	gpio->gc.label = ACPI_COMPANION(dev) ?
+> +					acpi_dev_name(ACPI_COMPANION(dev)) : dev_name(dev);
+> +	gpio->gc.parent = dev;
+> +	gpio->gc.owner = THIS_MODULE;
+> +	gpio->gc.get_direction = usbio_gpio_get_direction;
+> +	gpio->gc.direction_input = usbio_gpio_direction_input;
+> +	gpio->gc.direction_output = usbio_gpio_direction_output;
+> +	gpio->gc.get = usbio_gpio_get;
+> +	gpio->gc.set = usbio_gpio_set;
+> +	gpio->gc.set_config = usbio_gpio_set_config;
+> +	gpio->gc.base = -1;
+> +	gpio->gc.ngpio = bank * USBIO_GPIOSPERBANK;
+> +	gpio->gc.can_sleep = true;
+> +
+> +	auxiliary_set_drvdata(adev, gpio);
+> +
+> +	ret = gpiochip_add_data(&gpio->gc, gpio);
+
+Please use the devres variant, you'll be able to drop the remove() callback.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (has_acpi_companion(dev))
+> +		acpi_dev_clear_dependencies(ACPI_COMPANION(dev));
+> +
+> +	return 0;
+> +}
+> +
+> +static void usbio_gpio_remove(struct auxiliary_device *adev)
+> +{
+> +	struct usbio_gpio *gpio = auxiliary_get_drvdata(adev);
+> +
+> +	gpiochip_remove(&gpio->gc);
+> +}
+> +
+> +static const struct auxiliary_device_id usbio_gpio_id_table[] = {
+> +	{ "usbio.usbio-gpio" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(auxiliary, usbio_gpio_id_table);
+> +
+> +static struct auxiliary_driver usbio_gpio_driver = {
+> +	.name = USBIO_GPIO_CLIENT,
+> +	.probe = usbio_gpio_probe,
+> +	.remove = usbio_gpio_remove,
+> +	.id_table = usbio_gpio_id_table
+> +};
+> +module_auxiliary_driver(usbio_gpio_driver);
+> +
+> +MODULE_DESCRIPTION("Intel USBIO GPIO driver");
+> +MODULE_AUTHOR("Israel Cepeda <israel.a.cepeda.lopez@intel.com>");
+> +MODULE_AUTHOR("Hans de Goede <hansg@kernel.org>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS("USBIO");
+> --
+> 2.51.0
+>
+>
+
+Looks good otherwise.
+
+Bartosz
 
