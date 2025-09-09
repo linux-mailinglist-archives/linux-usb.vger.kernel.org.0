@@ -1,115 +1,80 @@
-Return-Path: <linux-usb+bounces-27834-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27835-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AE2CB50902
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 00:57:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D2D3B5096C
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 01:56:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A71881C60B34
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 22:58:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2338E3BF391
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 23:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26F85273D7B;
-	Tue,  9 Sep 2025 22:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1783296159;
+	Tue,  9 Sep 2025 23:56:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G90SVAff"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fs8wGUhr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51A726AEC;
-	Tue,  9 Sep 2025 22:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1952D266EFC;
+	Tue,  9 Sep 2025 23:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757458663; cv=none; b=iP2Sjkzzz61zCyg0gn8yfeCLxuAJHv3fEn2kVDt1n03z+P1A4CsSGqRyweUrDlgBstVQ3gkC7qsia0QqMcUqGsx6r5jauAmTBoVvwcbrhYCMJQ38sWU23mNKuq1lcL3z2H6S0qT5V+f4COUCkWVZfWPe1Sx+yACN/gxocXSSq54=
+	t=1757462207; cv=none; b=dc7urvl4/wdxhyceQm4CYTGK4ErCONkQIyx7xSuQ1abfuFn+W6I2wkKyb8EOAnaNNYB5N0CmOTBtgh0iVO5WAYkY2aDgPu4mLstjQGYV4BEZK/LPGeO8eAwoDxoe0YbFND1splmtmWQ7GK/qGV7Lg+8JwuLyRjuPjNjr1QbuI90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757458663; c=relaxed/simple;
-	bh=1qrMDdgRVUTxlcehEiCAg8EBNYG4zIVOPgE34DWrMyk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oHQf/XmZwHo4m0Visvl55IMaY5SG05B0n1CIdTq6UsDuIvheqJhe1L0+44K5dW1GGr9AyYPMXXlLUDIxTBvnkjvP73coBA9jDETxWbCeMpo/xG4HQuie8J1ZRQ+FoPE1OZknoHY0MNcPR71k2vxPkJj5Mor3BAzqGBvkrIFrkpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G90SVAff; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757458662; x=1788994662;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1qrMDdgRVUTxlcehEiCAg8EBNYG4zIVOPgE34DWrMyk=;
-  b=G90SVAffrHxWRXLymomgzNzukzi98cUNp5J1Jhh9tuTNO/EQsK2QQAnd
-   EwdGtlSJ9iIcFrcMsbsvtz9HesxJiDJX9bOC5TNREXcpK0ZASSdFdi4XA
-   hsKA5IYakHDV8haRF1PliM8Bit0U/5dmSofmByYN70IuKMDcpS7IO+Uio
-   VZlvkwXGxrfmQ4UW4mLaAVtSS3j0N/QD/96xoRjLGO8de0frbD2Jw3u4H
-   YL/Sj/lmUrsdYvDJhK9PBMYVsGquHc93ek2HnNVhLtfqgKQ4YN4cfjGvA
-   pVB+bvbk0hZiWGaAbj8IoOzu1m/Xh6GYqBsm46rMoXPXg/3T5F05fdfeB
-   A==;
-X-CSE-ConnectionGUID: zEUdadQ9SVq2kHaanT33cQ==
-X-CSE-MsgGUID: h4X09MMJRle87KF1eBtG5A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="59699528"
-X-IronPort-AV: E=Sophos;i="6.18,252,1751266800"; 
-   d="scan'208";a="59699528"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 15:57:41 -0700
-X-CSE-ConnectionGUID: ixjKb18jT5GYZr3kVdO0XQ==
-X-CSE-MsgGUID: VoglGF7sQFWJVbMp24c6Ew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,252,1751266800"; 
-   d="scan'208";a="173131049"
-Received: from fpallare-mobl4.ger.corp.intel.com (HELO [10.245.244.230]) ([10.245.244.230])
-  by fmviesa006.fm.intel.com with ESMTP; 09 Sep 2025 15:57:40 -0700
-Message-ID: <e29fa12b-55e4-4ab1-b623-11feb447bdf7@linux.intel.com>
-Date: Wed, 10 Sep 2025 01:57:39 +0300
+	s=arc-20240116; t=1757462207; c=relaxed/simple;
+	bh=RtMtg9jTo0dPnCXR9Ongd8bypezQi/dR6SjGeueSbhM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tejjuxHP/5R2YyD9JNHe2BopkFFue9Z2xLc1hQzd1iR32aJ6h0uxec1+bU4nvsr6KkQLPwJclNzCCr5LXJCtfBbmZxdgzirlE2vSAd9MJ03adcYFlq6IAnlaGvxpDWrRfvFo9SJ6H9+m54n1XAl6KDCc4RzjV3WBU7Ic4LvKt8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fs8wGUhr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17CFBC4CEF4;
+	Tue,  9 Sep 2025 23:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757462206;
+	bh=RtMtg9jTo0dPnCXR9Ongd8bypezQi/dR6SjGeueSbhM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fs8wGUhrX3o0Ej2360sNBrMWJpeOhmM6XmykZSWKWc5rve4fKMLdlYaVcKT1DSosc
+	 mCIZXVZmW/CgxdzPx9x8CCYk5/VukqLnVEwN/4b47GzYqg0NCcE2/FxnOWTVFlM+n0
+	 626943MC7WnEHmrOxJQ6xRt0KlfsgpxBDB/X0s9zS9IOHkI0BzNW0CvRvwmNtFZ8w0
+	 hA5OB909ONlsSiOfhsT1nAEHQ7YO0Zoa+gBnx7Ts1esg/W/snqXXEBlebPWuqZiDHc
+	 P/Cv6DG4waKcSPQrLox+e8Vkt1fshQxuf7aa9K63GZA/e3p/2cCicMReIcO9mUXV1l
+	 DkDteNlI6CdGQ==
+Date: Tue, 9 Sep 2025 16:56:45 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Hubert =?UTF-8?B?V2nFm25pZXdza2k=?= <hubert.wisniewski.25632@gmail.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, stable@vger.kernel.org, kernel@pengutronix.de,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, Lukas Wunner
+ <lukas@wunner.de>, Russell King <linux@armlinux.org.uk>, Xu Yang
+ <xu.yang_2@nxp.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
+ PM to avoid MDIO runtime PM wakeups
+Message-ID: <20250909165645.755e52f6@kernel.org>
+In-Reply-To: <aL_UfST0Q3HrSEtM@pengutronix.de>
+References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
+	<DCNKVCWI6VEQ.30M6YA786ZIX2@gmail.com>
+	<aL_UfST0Q3HrSEtM@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/1] usb: xhci: Queue URB_ZERO_PACKET as one TD
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250908130128.7ed81912.michal.pecio@gmail.com>
- <6ca18b05-80d4-4988-bb08-3cad003e10f4@linux.intel.com>
- <20250909193859.73127f85.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250909193859.73127f85.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 9.9.2025 20.38, Michal Pecio wrote:
-> On Tue, 9 Sep 2025 16:04:33 +0300, Mathias Nyman wrote:
->> Adding the zero-length TRB to the original TD when we need to send a
->> zero-length packet would simplify things, and I would otherwise fully
->> support this, but the xHCI spec is pretty clear that it requires a
->> dedicated TD for zero-length transactions.
+On Tue, 9 Sep 2025 09:17:17 +0200 Oleksij Rempel wrote:
+> > > Fixes: e0bffe3e6894 ("net: asix: ax88772: migrate to phylink")  
+> > 
+> > It does, but v5.15 (including v5.15.191 LTS) is affected as well, from
+> > 4a2c7217cd5a ("net: usb: asix: ax88772: manage PHY PM from MAC"). I think
+> > it could also use a patch, but I won't insist.  
 > 
-> You are right of course, an empty TRB in a TD would simply send no
-> data, or maybe it's a TRB Error, I'm not sure.
-> 
-> But this is not what this patch is about - the trick is to use an
-> *unchained* TRB, which is a separate TD from HW's perspective, and
-> to count it as part of the same TD from the driver's perspective.
+> Ack, I'll try do address it later.
 
-Ok, I see.
-The whole TD without completion flag does worry me a bit.
-
-We need to make sure stop/stald mid TD cases work, and  urb length is
-set correctly.
-
-> 
-> Control URBs are like that and they work fine. They can halt on any
-> TRB (which are all unchained, per spec) and the whole URB goes out.
-> 
-> This bug is (probably?) low impact, but it bothers me because it's
-> a design flaw: either non-isoc multi-TD URBs are supported, or they
-> are not. One or another part of the driver needs to adapt.
-
-There is a risk that this is one of those "cure is worse than the
-disease" cases.
-
-Thanks
-Mathias
+Any idea what the problem is there? Deadlocking on a different lock?
 
