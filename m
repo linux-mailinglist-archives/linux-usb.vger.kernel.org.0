@@ -1,183 +1,115 @@
-Return-Path: <linux-usb+bounces-27833-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27834-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72EC5B508DD
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 00:26:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AE2CB50902
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 00:57:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E2DE4E7E9E
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 22:26:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A71881C60B34
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 22:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98FC726D4C3;
-	Tue,  9 Sep 2025 22:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26F85273D7B;
+	Tue,  9 Sep 2025 22:57:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YFY0rBtt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G90SVAff"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 219792571A5
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 22:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51A726AEC;
+	Tue,  9 Sep 2025 22:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757456759; cv=none; b=NPsVmDfctJImEX2jnGR2RKwNY1RTEoL9BInmse1k6A4p8Ab08syDuEoGVe6itJePBi5qriQkJEyt6qDNT1eujKLWOGNKR0vAmLPMnvl6ucPbzOi3mW5kBOYV8sfsKDjqdp+SQjYCHayAAI1Oqqm/Q8W07ROVhoFlixttDJAoW2I=
+	t=1757458663; cv=none; b=iP2Sjkzzz61zCyg0gn8yfeCLxuAJHv3fEn2kVDt1n03z+P1A4CsSGqRyweUrDlgBstVQ3gkC7qsia0QqMcUqGsx6r5jauAmTBoVvwcbrhYCMJQ38sWU23mNKuq1lcL3z2H6S0qT5V+f4COUCkWVZfWPe1Sx+yACN/gxocXSSq54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757456759; c=relaxed/simple;
-	bh=MBONf201380PGhlpdSePFnk21F67tkR/cvdY2Cx4IDg=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=urNbQkS+xhNsS/1u0cc3pS6V7WGlmW4+PDFgvbPcp5B3SKZ9Eqpns6LR7W2tU27F5AVqzFnJ7tHUUb02xco0lEwKkR92BNgYADrBFDjVKSKNEOJv76pbjmo+C2iifVJ8ACwQ9Ud7zqdCLC+vnF5U/UA2c/OzMRhHOdFNKEVpIio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YFY0rBtt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AC591C4CEF4
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 22:25:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757456758;
-	bh=MBONf201380PGhlpdSePFnk21F67tkR/cvdY2Cx4IDg=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=YFY0rBttXlkIvsYJCyuTKzZcEfH18P3IadUlXJiGokpwj573GudNnR3kqkTLQmoSz
-	 3+bWoH9IdfzEoJkpfcjN2FY7NGlg3TBd7YMC6zrmpfB67DxoedgbXYJJw7F0XRkHdA
-	 DWhbhSZxnZYKSaLbCVz+vRBswu9yyVAi4iIM2fJcaCjXobgRZJR8AfEXyZhEYDw3E3
-	 uaLpsy//fUYGp2XhSUYx0xfWQrUQy7Jea2xYTJsML7AQhFBrt6fVRXBUzDAwjsDW/j
-	 vpwIzyL+jNRppma5Vz7KreVYMZoSREaJbhi4sajUHUiW6OJaShFBfFtAjMo8Q4VFEF
-	 db70QH8qrA0rg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id A2DBFC4160E; Tue,  9 Sep 2025 22:25:58 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
- resume from suspend
-Date: Tue, 09 Sep 2025 22:25:58 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220491-208809-tqtW83BEoO@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
-References: <bug-220491-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1757458663; c=relaxed/simple;
+	bh=1qrMDdgRVUTxlcehEiCAg8EBNYG4zIVOPgE34DWrMyk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oHQf/XmZwHo4m0Visvl55IMaY5SG05B0n1CIdTq6UsDuIvheqJhe1L0+44K5dW1GGr9AyYPMXXlLUDIxTBvnkjvP73coBA9jDETxWbCeMpo/xG4HQuie8J1ZRQ+FoPE1OZknoHY0MNcPR71k2vxPkJj5Mor3BAzqGBvkrIFrkpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G90SVAff; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757458662; x=1788994662;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1qrMDdgRVUTxlcehEiCAg8EBNYG4zIVOPgE34DWrMyk=;
+  b=G90SVAffrHxWRXLymomgzNzukzi98cUNp5J1Jhh9tuTNO/EQsK2QQAnd
+   EwdGtlSJ9iIcFrcMsbsvtz9HesxJiDJX9bOC5TNREXcpK0ZASSdFdi4XA
+   hsKA5IYakHDV8haRF1PliM8Bit0U/5dmSofmByYN70IuKMDcpS7IO+Uio
+   VZlvkwXGxrfmQ4UW4mLaAVtSS3j0N/QD/96xoRjLGO8de0frbD2Jw3u4H
+   YL/Sj/lmUrsdYvDJhK9PBMYVsGquHc93ek2HnNVhLtfqgKQ4YN4cfjGvA
+   pVB+bvbk0hZiWGaAbj8IoOzu1m/Xh6GYqBsm46rMoXPXg/3T5F05fdfeB
+   A==;
+X-CSE-ConnectionGUID: zEUdadQ9SVq2kHaanT33cQ==
+X-CSE-MsgGUID: h4X09MMJRle87KF1eBtG5A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="59699528"
+X-IronPort-AV: E=Sophos;i="6.18,252,1751266800"; 
+   d="scan'208";a="59699528"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 15:57:41 -0700
+X-CSE-ConnectionGUID: ixjKb18jT5GYZr3kVdO0XQ==
+X-CSE-MsgGUID: VoglGF7sQFWJVbMp24c6Ew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,252,1751266800"; 
+   d="scan'208";a="173131049"
+Received: from fpallare-mobl4.ger.corp.intel.com (HELO [10.245.244.230]) ([10.245.244.230])
+  by fmviesa006.fm.intel.com with ESMTP; 09 Sep 2025 15:57:40 -0700
+Message-ID: <e29fa12b-55e4-4ab1-b623-11feb447bdf7@linux.intel.com>
+Date: Wed, 10 Sep 2025 01:57:39 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/1] usb: xhci: Queue URB_ZERO_PACKET as one TD
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250908130128.7ed81912.michal.pecio@gmail.com>
+ <6ca18b05-80d4-4988-bb08-3cad003e10f4@linux.intel.com>
+ <20250909193859.73127f85.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250909193859.73127f85.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
+On 9.9.2025 20.38, Michal Pecio wrote:
+> On Tue, 9 Sep 2025 16:04:33 +0300, Mathias Nyman wrote:
+>> Adding the zero-length TRB to the original TD when we need to send a
+>> zero-length packet would simplify things, and I would otherwise fully
+>> support this, but the xHCI spec is pretty clear that it requires a
+>> dedicated TD for zero-length transactions.
+> 
+> You are right of course, an empty TRB in a TD would simply send no
+> data, or maybe it's a TRB Error, I'm not sure.
+> 
+> But this is not what this patch is about - the trick is to use an
+> *unchained* TRB, which is a separate TD from HW's perspective, and
+> to count it as part of the same TD from the driver's perspective.
 
---- Comment #54 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-I'm not sure if the kdb stall is helpful, or if it just adds one more moving
-part to this whole issue, possibly even causing usb link issues.
-The USB SD device, and xHCI controller are probably still running, expecting
-cpu/device drivers to handle certain things in time.
+Ok, I see.
+The whole TD without completion flag does worry me a bit.
 
-Anyways, your dmesg does reveal another issue in recovering links in
-ss.inactive error state. port_event() in hub.c ends up resetting just the p=
-ort,
-even if a usb device is present and the whole device should be reset. After=
- a
-successful reset port_event() calls  hub_port_connect_change(..., portstatu=
-s,
-portchange) with old, stale, pre-reset portstatus value.=20=20=20
+We need to make sure stop/stald mid TD cases work, and  urb length is
+set correctly.
 
-Details:
-Link goes to ss.Inactive error state "0x2c0", this is common on disconnect
-before link goes to rx.detect. Driver gives it some time before reset:
+> 
+> Control URBs are like that and they work fine. They can halt on any
+> TRB (which are all unchained, per spec) and the whole URB goes out.
+> 
+> This bug is (probably?) low impact, but it bothers me because it's
+> a design flaw: either non-isoc multi-TD URBs are supported, or they
+> are not. One or another part of the driver needs to adapt.
 
-[62691.183508] xhci_hcd 0000:00:14.0: Transfer error for slot 6 ep 3 on
-endpoint
-[62691.204674] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x2c0, retu=
-rn
-0x2c0
-[62691.204720] usb usb3-port4: Wait for inactive link disconnect detect
-[62691.228672] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x2c0, retu=
-rn
-0x2c0
-[62691.228722] usb usb3-port4: Wait for inactive link disconnect detect
-[62691.252648] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x2c0, retu=
-rn
-0x2c0
-[62691.252692] usb usb3-port4: Wait for inactive link disconnect detect
-[62691.276646] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x2c0, retu=
-rn
-0x2c0
-[62691.276695] usb usb3-port4: Wait for inactive link disconnect detect
-[62691.300652] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x2c0, retu=
-rn
-0x2c0
-[62691.300697] usb usb3-port4: Wait for inactive link disconnect detect
+There is a risk that this is one of those "cure is worse than the
+disease" cases.
 
-Here we only reset the port when we should reset the whole device.
-Looks like this is because USB3 portstatus doesn't show "connected" when li=
-nk
-is in ss.Inactive error, and the following check in hub.c port_event() is t=
-rue:
-
-else if (!udev || !(portstatus & USB_PORT_STAT_CONNECTION)
-                                || udev->state =3D=3D USB_STATE_NOTATTACHED=
-) {
-
-
-[62691.300704] usb usb3-port4: do warm reset, port only
-[62691.316596] xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping usb3 p=
-ort
-polling
-[62691.356676] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x2d0, retu=
-rn
-0x2d0
-[62691.356722] usb usb3-port4: not warm reset yet, waiting 50ms
-[62691.408710] xhci_hcd 0000:00:14.0: Port change event, 3-4, id 15, portsc:
-0x2a1203
-[62691.408729] xhci_hcd 0000:00:14.0: handle_port_status: starting usb3 port
-polling.
-[62691.412657] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x2a1203,
-return 0x310203
-[62691.412787] usb usb3-port4: Connection change during reset, retrying
-[62691.412812] xhci_hcd 0000:00:14.0: clear port4 connect change, portsc:
-0x281203
-[62691.412832] hub 3-0:1.0: port_wait_reset: err =3D -11
-[62691.412837] usb usb3-port4: not enabled, trying warm reset again...
-[62691.616651] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x281203,
-return 0x300203
-[62691.616709] xhci_hcd 0000:00:14.0: clear port4 reset change, portsc: 0x8=
-1203
-[62691.616732] xhci_hcd 0000:00:14.0: clear port4 warm(BH) reset change,
-portsc: 0x1203
-[62691.616752] xhci_hcd 0000:00:14.0: clear port4 link state change, portsc:
-0x1203
-[62691.616768] xhci_hcd 0000:00:14.0: Get port status 3-4 read: 0x1203, ret=
-urn
-0x203
-
-port is now properly reset and ready in enabled u0 "0x1203" state. hub driv=
-er
-does however call  hub_port_connect_change() with stale portstatus value st=
-ill
-showing link in ss.Inactive "0x2c0":
-
-[62691.672631] usb usb3-port4: status 02c0, change 0041, 5.0 Gb/s
-[62741.591943] xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping usb3 p=
-ort
-polling
-[62741.593180] usb 3-4: USB disconnect, device number 3
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks
+Mathias
 
