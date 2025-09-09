@@ -1,116 +1,124 @@
-Return-Path: <linux-usb+bounces-27774-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27775-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B687B4A6BB
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:08:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67FD9B4A725
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:15:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1732C543061
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:08:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0329C444202
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:12:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 359B828369A;
-	Tue,  9 Sep 2025 09:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 226FC27B357;
+	Tue,  9 Sep 2025 09:12:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DXVBGM+h"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="w2YD8++8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3989A28136F;
-	Tue,  9 Sep 2025 09:07:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7672C275AF6;
+	Tue,  9 Sep 2025 09:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757408878; cv=none; b=XdVvpjix5eQEpcAX4bo1yQOB8HOzYf6+LZVfmwAtOkk6YpMX+ZxBU0ZVgyEem/ShvcjxsMDcEKMVLGq/aQCSHr3EAgRfVJ6enqMt9BklA444Qw5hzAH/+djqxCz+WaWA4Jfgaf+gBWtluQQnqvmg2/ahN85VS1oc7N0UlEeO1D8=
+	t=1757409125; cv=none; b=eWycFrfbQRSCXisNPbGTzcHPmoEw2PW+xqQND6ylBbCdNAdlZ7OLWGWFBoRWplpKXHUnIPTTyYL2gAxz6sAzUJBRdPJekwX/y1K49hm2P/wZkR/b8M72xqYEeNpaCCFWh+R5aiPNRxwc0xMkaideFAtOkN0m439C7TRkeHuogcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757408878; c=relaxed/simple;
-	bh=WD/veY6O9nbXJ4rBWI8CJZC9zCfx1N915s17C4ExMOM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RRpoShA7z8Wu1JWqlQgvchDv9tppRDlTtMy4MAB4fTDy/0zw7YDc/q4baGrT+Qe2x37ZIG9adG5TrVK2okanuVqg19+N+SgO7s6ZXaCvWwPu43/fZFVT092UmUE5fd2CuBufETyaXcgO68mIsR7kSA7Hi6Ht5cMT495fOrNCGA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DXVBGM+h; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757408877; x=1788944877;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WD/veY6O9nbXJ4rBWI8CJZC9zCfx1N915s17C4ExMOM=;
-  b=DXVBGM+hIRCNm9KXtUp3tbYMIAtgXk1iF2wf1cBBelkNYs6zUx25kGt3
-   oWVUvKCBat1M89+4BRyJ/QpUwDcRRxw0zmA3DQHnGqTz8Y/LYOzLj06uy
-   DC9SWm3Vd97bnNPFGxoHvb5jrMUjbCRNIAlN2uw1Db1ajRjbRG8SfMhEm
-   uGxG9WdSAWbyKnztzgn7wMPJwi77HQUNzMNATPMqsem7NljAmY+ez+hdN
-   D8Ngyqm5NU0Yfih6MuoaQz9HmqOXpAHyTHwtqZE07EHTe0tEPXpyNjmUL
-   78uDjtr34SXq9PxgMQLmCtCl/3WIHdSweyKlm1kNxhLMBGUG6XyET4CV3
-   A==;
-X-CSE-ConnectionGUID: TfBb8X1BQ9euHRlTgDktww==
-X-CSE-MsgGUID: luZ2HQq6QzaICM4OW23hNQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="85132854"
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="85132854"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 02:07:56 -0700
-X-CSE-ConnectionGUID: suuo11xPTgyHPNT80Zh/vQ==
-X-CSE-MsgGUID: H6m7DZRTQlGVevJFCZ5OLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="172950676"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa006.fm.intel.com with SMTP; 09 Sep 2025 02:07:52 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Sep 2025 12:07:51 +0300
-Date: Tue, 9 Sep 2025 12:07:51 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	Guenter Roeck <groeck@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/5] usb: typec: ucsi: Set no_mode_control flag
-Message-ID: <aL_uZxBkBfC9Etrk@kuha.fi.intel.com>
-References: <20250905142206.4105351-1-akuchynski@chromium.org>
- <20250905142206.4105351-4-akuchynski@chromium.org>
+	s=arc-20240116; t=1757409125; c=relaxed/simple;
+	bh=2e83reysY5H5m6nmYmalJnlN7Al1n9K+XBXCcduWVMI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k1locKq3JH5WybspQj2ODOK4D9WGv49/sdF41ZkQ1zNdU7J56d0yZctaq0sdDMd+xXrZ9+C8oPLgJecSYvrLlOeNYPr9kD274mQSRgfba087q3cXK1Dkajl+A/THkG2tJ3MeYfFLepIn60oOs4pjgJuoFOTSLQkFGxdNYvhkIjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=w2YD8++8; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 6ECA0C6B39B;
+	Tue,  9 Sep 2025 09:11:38 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 0A4F460630;
+	Tue,  9 Sep 2025 09:11:54 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5D070102F27D2;
+	Tue,  9 Sep 2025 11:11:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1757409113; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=YyeFSv8G8VagVLbPZr7Jz9cHj6+OjDL5VXZ6S6Zjn4M=;
+	b=w2YD8++8nnm1tP/wIanutigjiur6Mjwhvnyc4ddj9jKMkjcLvS3U8FmCSmazKypDlcfN1g
+	tLYeD1aFrKF5oLM76zkM0iSkGvx0ffgKNyhiSqtk/eu1aQBGBVIxFxIYt6gB7kzIs5lT9S
+	EH/8sGIAEfGsx6A8FB39bPj9bTBgMbSFOH+SdK1QFM/LGRCLgZ0KPSf5eCQ5rOQxGL4Qs7
+	KxTTV2lAITO1Sgyc6Bgv2U4E9EJCjPU/KgO8AFxAxRncyEamCuvrw+nXQmDDnwKu/YSO68
+	hVt9mkMcOMWRtA9TfGorsArgxvCf83PAQE/oCS0q45DKBmuOogv88s4ISjAGqg==
+Message-ID: <464f5995-be7d-41f6-8e95-7d724e2b5308@bootlin.com>
+Date: Tue, 9 Sep 2025 11:11:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250905142206.4105351-4-akuchynski@chromium.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: usb/ti,am62-usb.yaml: Add
+ ti,lane-reverse property
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen
+ <Thinh.Nguyen@synopsys.com>, Aswath Govindraju <a-govindraju@ti.com>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250908162052.355341-1-richard.genoud@bootlin.com>
+ <20250908162052.355341-2-richard.genoud@bootlin.com>
+ <20250909-curvy-happy-pug-eeffda@kuoka>
+From: Richard GENOUD <richard.genoud@bootlin.com>
+Content-Language: en-US, fr
+Organization: Bootlin
+In-Reply-To: <20250909-curvy-happy-pug-eeffda@kuoka>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, Sep 05, 2025 at 02:22:04PM +0000, Andrei Kuchynski wrote:
-> This flag indicates that the PPM allows the OPM to change the currently
-> negotiated alternate mode using the SET_NEW_CAM command.
+Le 09/09/2025 à 09:32, Krzysztof Kozlowski a écrit :
+> On Mon, Sep 08, 2025 at 06:20:51PM +0200, Richard Genoud wrote:
+>> On some designs, the D+ and D- lines are swapped (on purpose or not).
+>> The PHY can handle that with the LANE_REVERSE bit.
+>>
+>> Signed-off-by: Richard Genoud <richard.genoud@bootlin.com>
+>> ---
+>>   Documentation/devicetree/bindings/usb/ti,am62-usb.yaml | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>> index f6e6d084d1c5..ba894d610af0 100644
+>> --- a/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>> @@ -36,6 +36,11 @@ properties:
+>>       items:
+>>         - const: ref
+>>   
+>> +  ti,lane-reverse:
+>> +    description:
+>> +      Should be present if D+ and D- lanes have to be swapped.
+>> +    type: boolean
 > 
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 1 +
->  1 file changed, 1 insertion(+)
+> What is not working with existing data-lanes property?
+Hum, indeed. data-lanes could definitely be used here.
+
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 0d6b0cf5a7cd..9f754344a841 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1632,6 +1632,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
->  
->  	cap->driver_data = con;
->  	cap->ops = &ucsi_ops;
-> +	cap->no_mode_control = !(con->ucsi->cap.features & UCSI_CAP_ALT_MODE_OVERRIDE);
+> Plus, lanes are swapped per port, not for entire device, no?
+I'm not sure to get what you mean here.
+The use case I'm trying to address is:
+pin AD10(USB1_DM) of the AM625 is routed to USB_DP pin of an USB connector.
+And pin AE9(USB1_DP) of the AM625 is routed to USB_DM pin of an USB 
+connector.
+And using LANE_REVERSE bit of MMR_USB2SS_CFG_PHY_CONFIG swaps the DM/DP 
+lines of the corresponding USB instance.
 
-The flag is now used to expose the priority file, but you can't affect
-the order in which the UCSI attempts to enter the modes, or can you?
+Regards,
+Richard
 
-thanks,
+> 
+> Best regards,
+> Krzysztof
+> 
 
--- 
-heikki
 
