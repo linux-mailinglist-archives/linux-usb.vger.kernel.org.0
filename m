@@ -1,134 +1,144 @@
-Return-Path: <linux-usb+bounces-27784-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27785-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9767B4A940
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 12:02:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAACAB4A945
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 12:03:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A38571881F07
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 10:00:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69174444D68
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 10:02:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CD442EA74C;
-	Tue,  9 Sep 2025 09:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2E42D481D;
+	Tue,  9 Sep 2025 10:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f8ey8xvQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ac6XIqw3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256812D7386
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 09:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE6F2853F2;
+	Tue,  9 Sep 2025 10:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757411997; cv=none; b=GBegrWnyUwbFtBbcNa34zSHx9MsOxzKTDb0mP6mp1Ws5YEiubOiHudAesiykjcq3I8oeCliOaVkNueqDHvRHbQa0LrGQAshfsi1Z+V5S7y8LMDDiAQ0JxXOfd2KTo/HlifjylZwaUvTgjzvvYuRhZErAFSZC0yTr6sJAPL2JrDs=
+	t=1757412135; cv=none; b=ucuW31DwKqJvYhD+XqXMJ9F+YXUccJmqG/YDoUqYyIbnwLL411UyECvf2GYQr1DIsJy+/EmLlFpPR3D3+hY4OOAdrRF/7ftcjMduOdc//Efi/QisBQ7Khnma9sRUR/mNkFy3vO1wFGG+CEO60fy+BBs5LRoP351iNvyrDhH6OcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757411997; c=relaxed/simple;
-	bh=4Fp6UjHynRXRx/cnEW41Tea/jANni2Q7fiHMRPfINKU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WQ7e1sajQX5cZqpnVFY3Pmzj9asklQMdeRAIEMUL5ZGuHGKtFlarfdsveBFEnRUsD6iGO0wFRegoENJ0W6wV2g8gYr+LnasrmXfpDKhNbmESWor15gL6HXZa/0usE2WEOXVZxsT/PZqZvoYlGDeGdcB47uL1mvTebViWMtQ/lzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f8ey8xvQ; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-55f72452a8eso6432902e87.3
-        for <linux-usb@vger.kernel.org>; Tue, 09 Sep 2025 02:59:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757411994; x=1758016794; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=diwfDCRNV6uVKkzI1ORZVz9UNKBiNOea7Y9VqPoMEug=;
-        b=f8ey8xvQnQ8XR/811qrQzifW7V00KtpIrVRJQzoDCL4hjgzhrJ+dV9Z0SkrtUhOLL1
-         HZmF8ayGSesJvhRvrwhtpyCvjslNr0xGp3nrZqGPw5AZfsSy9mC5c07U3Tjs0B7vyuoG
-         pMI1OZnhXt3TFtSSeL0OBIJIFQ+VC4gIhqyEupqaR5qlx6guIQBI6bRtowcWm2/JnU1N
-         jqM+FvxKwujxGo1h3CqJ8EN9fSfV+PvTIE1JQtW5I9Vmxo9E4hvqwToi8PYwEOQ3bfTR
-         6cua8bJ1d5IBkHkwneA7fcI9n33iO5huXUO45luSWdBZpVaqsWqrcxBhdYaTwXJqSy/q
-         jGlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757411994; x=1758016794;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=diwfDCRNV6uVKkzI1ORZVz9UNKBiNOea7Y9VqPoMEug=;
-        b=rEWOB/OAiCo8333wlkysf+Ele+wrSgN+xjJFNBJ+sH4YsrNrBIIGGCvQQrEeWbugeg
-         AyoaJ3emvZxjJDx9vYrrVhTFMifZzZDMH9xrDS1+6rQss+pjZcF4mPYeYXKHcQNDr92F
-         51Cts63IpZELHx4HUd0Lr17Wts8xk5wNuhbaC/VS+ARc45yzhuqe91oDjxe0fjie/Uez
-         3jBtpcorXCGOpcASV1cYcwfzd4xB8of6TwggYeFzryvfYfYcI4ShoqhjkvNIUhwIYCkg
-         UBkKRvnj3oXJNaVmfyI4yaQ2Ie51TjF8j6ng59GNWPjZfyJCU98ZZ8qaP1+mUqzFKisp
-         6+pw==
-X-Forwarded-Encrypted: i=1; AJvYcCXgTblqcuLCIbb9AEda9rF4gKBsYxBUoYmZLoBErEnAfnpNmCvqInc6DdAqfpzpcWCFkzPb5j7EwFU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfpeyYRIntbUeW08cJ3ziAVI7OG5YLFLUVSJa37zME0Vm9DeFW
-	VAvr8FF1m6TdFNp6R9yJKUe604Mcv8hQhyH2mV72A1SqNjHvMnhgcW2y
-X-Gm-Gg: ASbGncsO/wfb9Y3nxWoY7nMbEsmAKcXV58xX88c2Lviof88fLNUmVHqalFoHtDp+X0/
-	5jexmaLPKHhrQvYDFK5Ol8iF9S1HPZ18LjSBaRgKGexBAklgkh8ukbBNoFzgqP9pQZZG5GaM34F
-	JBHwDzdwvTtts8tX2/U9MOEZiffwPiuqqkBZbpHAXpTsR6dNniU1FBF+0pAK4qbHmsTZYP7VqLZ
-	qgarUS9VFoS3RGagWEgGauiWrSYxlSze72MnL+ruVpQKNTF9J+o5qIskOF5Rcr46mT/fN7VkLj+
-	aXZZp4EoNsBRVoW4y5TVbn4UKo9+j1SXbA+KiTMH0ozYUVzaoScHe1advTfdREuBThCjVu1NL8T
-	qaHngOKH6x+GAUR+7CwdrnRVehzfYvM6OQBo=
-X-Google-Smtp-Source: AGHT+IFC3ZFY7BHHYinEvwAuBOnY5d4RewbrCfNJgP5lAUIyTuz8hpJ/CI7zaFIvXJhzuPX0U77Tvg==
-X-Received: by 2002:a05:6512:239f:b0:568:2583:9485 with SMTP id 2adb3069b0e04-568258397f9mr769067e87.41.1757411993948;
-        Tue, 09 Sep 2025 02:59:53 -0700 (PDT)
-Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5680c8f9e78sm405590e87.37.2025.09.09.02.59.53
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 09 Sep 2025 02:59:53 -0700 (PDT)
-Date: Tue, 9 Sep 2025 11:59:49 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 2/7] usb: xhci: use '%pad' specifier for DMA address
- printing
-Message-ID: <20250909115949.610922a3.michal.pecio@gmail.com>
-In-Reply-To: <20250903170127.2190730-3-niklas.neronin@linux.intel.com>
-References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
-	<20250903170127.2190730-3-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1757412135; c=relaxed/simple;
+	bh=tEjUpDYvYVCiLuU5pbp0rm5Pfjj/tg0TJ9N8gnYaMb8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YAyTgxVs/UYLT3M3PRd9QFDIZH0IMz38Lq9OLgJQ4nC0OkA+OyCdZJqzOfL5k3w9YPZwRmHBScib+BGJXjQDf/F0hSLE2RNRS4FSD7ChzsG/oh06k5i2OkgbmZQqOEJqAQKwOADMVp00PB+y/B/jbHhRntbIAoAQmmaZUSJGiKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ac6XIqw3; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757412134; x=1788948134;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tEjUpDYvYVCiLuU5pbp0rm5Pfjj/tg0TJ9N8gnYaMb8=;
+  b=ac6XIqw3h/x/eFpMHOzAmDaGZsExBmZiupjwyvTJ3SF3tDUgexDJevhC
+   lLKHYhV+cwIXFjLVrQhkShh3sVlk1eGPDpV+94WJhSsEDl1+VvYTNG/Pu
+   VyFH60+YtwFikNMCRfCltF7THA3qSGXy5xTMo0UZgUkWSCEZbB51O/J6N
+   N36DG3A2hgu52W/N3bHofGOswREfO3Vuwzd5qsBWU3HR4mpHwzn1JSdp5
+   KeMhNIt2joQMUh7U1B21IpE1YRQ1wqpWWg6iV0SwED1GYQEvepNO7gK1X
+   +owaX1AJTKCLXLOpZh2nAeW+XuEyLF9MZJumAy8LufG7u0gizvpk5OVbc
+   g==;
+X-CSE-ConnectionGUID: vgWVE26wSYahaQubXGuBDA==
+X-CSE-MsgGUID: ELk+hLv3Th6IFVFVt3POTg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="59627226"
+X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
+   d="scan'208";a="59627226"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 03:02:13 -0700
+X-CSE-ConnectionGUID: 6CAL+BkbQ0GLmY9r/PDbfQ==
+X-CSE-MsgGUID: bWb6v0dzQF2Nf5Sb/J+gnA==
+X-ExtLoop1: 1
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa003.fm.intel.com with SMTP; 09 Sep 2025 03:02:07 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Sep 2025 13:02:06 +0300
+Date: Tue, 9 Sep 2025 13:02:06 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Sven Peter <sven@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+	Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <Frank.Li@nxp.com>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
+	Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v2 14/22] usb: typec: tipd: Read data status in probe and
+ cache its value
+Message-ID: <aL_7Hklraq2ff_YA@kuha.fi.intel.com>
+References: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
+ <20250906-atcphy-6-17-v2-14-52c348623ef6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250906-atcphy-6-17-v2-14-52c348623ef6@kernel.org>
 
-On Wed,  3 Sep 2025 19:01:22 +0200, Niklas Neronin wrote:
-> Switch all printing of DMA addresses to '%pad' specifier. This specifier
-> ensures that the address is printed correctly, regardless of whether the
-> kernel is running in a 32-bit or 64-bit environment.
+On Sat, Sep 06, 2025 at 03:43:27PM +0000, Sven Peter wrote:
+> From: Hector Martin <marcan@marcan.st>
+> 
+> Just like for power status we also need to keep track of data status to
+> be able to detect mode changes once we introduce de-bouncing for CD321x.
+> Read it during probe and keep a cached copy of its value.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> Signed-off-by: Sven Peter <sven@kernel.org>
 
-Old %llx with (long long) cast also prints it corretly.
+Reviewed-by: Heikki Krogerus <>
 
-I had the same idea and even implemented it in some private debugging
-patches, but I found %pad just annoying in practice.
+> ---
+>  drivers/usb/typec/tipd/core.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index e6e9730ee6dacd8c1271b1d52a02da49ff248d3e..b558fc5ecbc35a9dabbf33c444f38173740af7c3 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -176,6 +176,7 @@ struct tps6598x {
+>  
+>  	int wakeup;
+>  	u32 status; /* status reg */
+> +	u32 data_status;
+>  	u16 pwr_status;
+>  	struct delayed_work	wq_poll;
+>  
+> @@ -538,6 +539,7 @@ static bool tps6598x_read_data_status(struct tps6598x *tps)
+>  		dev_err(tps->dev, "failed to read data status: %d\n", ret);
+>  		return false;
+>  	}
+> +	tps->data_status = data_status;
+>  
+>  	if (tps->data->trace_data_status)
+>  		tps->data->trace_data_status(data_status);
+> @@ -1551,6 +1553,8 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	if (status & TPS_STATUS_PLUG_PRESENT) {
+>  		if (!tps6598x_read_power_status(tps))
+>  			goto err_unregister_port;
+> +		if (!tps->data->read_data_status(tps))
+> +			goto err_unregister_port;
+>  		ret = tps6598x_connect(tps, status);
+>  		if (ret)
+>  			dev_err(&client->dev, "failed to register partner\n");
+> 
+> -- 
+> 2.34.1
+> 
 
-
-%pad isn't guaranteed to be at least 64 bit long, so some DMAs from
-64 bit hardware will always need to be printed with %llx or similar.
-
-Secondly, padding is not optional with %pad. Maybe not a big deal, but
-on 64 bit systems with comparatively little RAM it adds clutter.
-
-Thirdly, %pad can't be passed by value. Hence pollution like:
-
-> @@ -2654,7 +2654,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->  	unsigned int slot_id;
->  	int ep_index;
->  	struct xhci_td *td = NULL;
-> -	dma_addr_t ep_trb_dma;
-> +	dma_addr_t ep_trb_dma, deq, td_start, td_end;
->  	struct xhci_segment *ep_seg;
->  	union xhci_trb *ep_trb;
->  	int status = -EINPROGRESS;
-
-This function has plenty of variables already, not sure if it needs
-three more. We could work around it by introducing {} scopes around
-printing, or functions like print_scary_error_message(), but it ends
-up being more hassle than type casting at some point.
-
-Maybe a small helper if the verbose casts really bother people?
-static inline unsigned long long dma2llx(dma_addr_t dma) {return dma;}
-
-BTW, isn't unsigned unnecessary?
+-- 
+heikki
 
