@@ -1,111 +1,126 @@
-Return-Path: <linux-usb+bounces-27831-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27832-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34282B507F2
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 23:16:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF569B508DB
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 00:25:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE2227A95B2
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 21:14:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79EBB4E7DCB
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 22:25:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1978257843;
-	Tue,  9 Sep 2025 21:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1401D26D4ED;
+	Tue,  9 Sep 2025 22:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qnhv7Rt0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eDguUCwp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E71B1C68F
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 21:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8762571A5;
+	Tue,  9 Sep 2025 22:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757452587; cv=none; b=AqA3E4NVcbvYKXvJ3v28yL1Wcr1/1Cyc1/h/mw6iF/L9opbYmC/SPCIcXhA35fKcu1/WsiCjGgbgcSPz0vWvJFPyxhuogBj7+8INgGlBlqZCoAWI1XOF6EszYQLE2eJPSlthrrUkPTOk456PsqxFzvmWiYG5Giq2nRIaYcLABD0=
+	t=1757456752; cv=none; b=NP8XoJnKNKhJvs2nm2yk+nDWUGT7ypYNMeVY60Md2FhS9T/eBKYw1meBpSD3XZpwSch0XLY++xjNBtowRlVkYBdI1OkqS2lEB9DgQhYTX6bj+JyCrEJ6EuDjg9TJ0kWtNejaDlTCqxwWg1cJhsq3+O/xg4HSwLuCHWoOdauBq3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757452587; c=relaxed/simple;
-	bh=5KFUyCUtRozKEBd1I1Tvh0Jn9MZriF2eUaNMkE9RULk=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VQYm0WQEHSVFqnZrSG6ua9ECsxXq+3TM1G4H/959LxQxYe9a7wZIWr7db+4c5Q83GWBacRm3Mb7lVyMFtzufYjIbNssR6Vd9EIUdd99UFyl8A9bzr/u9zrrKsLHAnGMMAmzO5SNfXMUMpGCmwCZJs9DHf7GqQL/onnn3736mwbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qnhv7Rt0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D18B0C4CEF8
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 21:16:26 +0000 (UTC)
+	s=arc-20240116; t=1757456752; c=relaxed/simple;
+	bh=645iNWZvifz2eZ9NwLWXL2PDwmHsJ84rWYVLdtzlJcw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U0fUWnFfhu005lVoXPZgjtAPyHLINZcp1r54C0IH4hTL2ACAU6zsFU4KJL/tOmWfP1soX0aLPhEKaSOjX07Y+zuLL9ejAwyPqn3+OIC0FifMgnVSOyf0RHFAGSEgF+A+8zt2tw4XWAD1gVELyDhiseTrPfTq5dPBqNH5Pv52flg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eDguUCwp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B288C4CEF4;
+	Tue,  9 Sep 2025 22:25:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757452586;
-	bh=5KFUyCUtRozKEBd1I1Tvh0Jn9MZriF2eUaNMkE9RULk=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=qnhv7Rt0N0pOQudeg5SeyVJWzqPIB5goJbKg2QScoZcPRVYF7uqboGWx7SmgNfmAA
-	 t9eN5OIXVK7LvRMyhXyOBj23s/bEjHISsUBUzgFNs3gBVokuP8LL7J51CGAZrZZaaS
-	 3LWx73vAkpZNQ+dkC17ERylmyd+fzDtyTCUt1cAlSDNCBX+2dm+GwgoMXdFotMhE1R
-	 J3xjoXSlsPg3OaUVn5yoU0JWcJi8QYpTB+aO8BgmYiqnCCduWCgI9/w51u51yTFkbf
-	 gzYVjCPc5IOA01Rl+wMl2WqJC/MQ/pYI8aeXV+oh0vYDApvsq7nuTVaxpRVjE2nyMW
-	 +QJadApdV6c+w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id C064BC41612; Tue,  9 Sep 2025 21:16:26 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
- resume from suspend
-Date: Tue, 09 Sep 2025 21:16:26 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: paula@alumni.cse.ucsc.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-220491-208809-2RMzntO6c6@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
-References: <bug-220491-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1757456752;
+	bh=645iNWZvifz2eZ9NwLWXL2PDwmHsJ84rWYVLdtzlJcw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eDguUCwpP9DVZVJwqqXIS/8y+jxOr7scjJ9bBrqVu1QLkosCL1Q5bmmUweG86WMZs
+	 WapvOtaFO0Fw14T0KpYJewJLFCHA76Ab0TaFT7asDgviu5k/H8ADlWe9OrPy8Kw1Vp
+	 +GlOVH0potqCtmkT7JGk8dRFFMFi67AP5up6zC90pM/j5RP4YTw9OQ1M3YgOvazV+q
+	 JUzlNqx+918BupWoYts7eeW05nAvLSc5m6AGmD06XxqXT1k4DmI5DycUEKNORgm+mj
+	 xD6tAQjEYLbpYjI2BRfhJLZnOKAyFsoiUeHZEb85mVW8JJY7RBnmMWpsZMie+iIIoB
+	 fXsdel/5IWekQ==
+Date: Tue, 9 Sep 2025 15:25:44 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Janne Grunau <j@jannau.net>
+Cc: Sven Peter <sven@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <Frank.Li@nxp.com>,
+	Ran Wang <ran.wang_1@nxp.com>, Peter Chen <peter.chen@nxp.com>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
+	Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v2 18/22] phy: apple: Add Apple Type-C PHY
+Message-ID: <20250909222544.GA3282617@ax162>
+References: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
+ <20250906-atcphy-6-17-v2-18-52c348623ef6@kernel.org>
+ <20250908181259.GC89417@robin.jannau.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250908181259.GC89417@robin.jannau.net>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
+On Mon, Sep 08, 2025 at 08:12:59PM +0200, Janne Grunau wrote:
+> On Sat, Sep 06, 2025 at 03:43:31PM +0000, Sven Peter wrote:
+> > diff --git a/drivers/phy/apple/atc.c b/drivers/phy/apple/atc.c
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..9213485234873fcaafeb1d1d9de3ddf07767d552
+> > --- /dev/null
+> > +++ b/drivers/phy/apple/atc.c
+> > @@ -0,0 +1,2214 @@
+> 
+> [...]
+> 
+> > +static int atcphy_load_tunables(struct apple_atcphy *atcphy)
+> > +{
+> > +	int ret;
+> > +	struct {
+> > +		const char *dt_name;
+> > +		struct apple_tunable **tunable;
+> > +	} tunables[] = {
+> > +		{ "apple,tunable-fuses", &atcphy->tunables.fuses },
+> > +		{ "apple,tunable-axi2af", &atcphy->tunables.axi2af },
+> > +		{ "apple,tunable-common", &atcphy->tunables.common },
+> > +		{ "apple,tunable-lane0-usb", &atcphy->tunables.lane_usb3[0] },
+> > +		{ "apple,tunable-lane1-usb", &atcphy->tunables.lane_usb3[1] },
+> > +		{ "apple,tunable-lane0-cio", &atcphy->tunables.lane_usb4[0] },
+> > +		{ "apple,tunable-lane1-cio", &atcphy->tunables.lane_usb4[1] },
+> > +		{ "apple,tunable-lane0-dp", &atcphy->tunables.lane_displayport[0] },
+> > +		{ "apple,tunable-lane1-dp", &atcphy->tunables.lane_displayport[1] },
+> > +	};
+> > +
+> > +	for (int i = 0; i < ARRAY_SIZE(tunables); i++) {
+> > +		*tunables[i].tunable =
+> > +			devm_apple_tunable_parse(atcphy->dev, atcphy->np, tunables[i].dt_name);
+> > +		if (IS_ERR(tunables[i].tunable)) {
+> > +			dev_err(atcphy->dev, "Failed to read tunable %s: %ld\n",
+> > +				tunables[i].dt_name, PTR_ERR(tunables[i].tunable));
+> > +			return ret;
+> 
+> ret is unitialized here, could be `return PTR_ERR(tunables[i].tunable);`
+> instead
 
---- Comment #53 from Paul Ausbeck (paula@alumni.cse.ucsc.edu) ---
-Created attachment 308646
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308646&action=3Dedit
-kdb triggered disconnect, dmesg tail
+This could also use '%pe' to symbolically print the error name instead
+of the integer value.
 
-I have correlated disconnection of the USB connected SD card with stalling =
-the
-kernel with kdb. Thus far, a long kdb stall, perhaps as long as overnight, =
-is
-necessary for the SD card to disconnect upon resuming kernel operation.
-Interestingly, the disconnection is not immediate, minutes elapse between
-kernel resumption and device disconnection. Also interesting is that once t=
-he
-device starts disconnecting, it will disconnect several times, maybe
-indefinitely, with several minutes elapsed time between each hit of the
-usb_disconnect breakpoint. When the usb_disconnect breakpoint it hit, backt=
-race
-shows hub_event as the calling routine.
+    dev_err(atcphy->dev, "Failed to read tunable %s: %pe\n",
+            tunables[i].dt_name, tunables[i].tunable);
 
-The attached file is a dmesg fragment starting upon kernel resumption via t=
-he
-kdb "go" command. The previous attachment is a usbmon trace of the same
-activity period.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Cheers,
+Nathan
 
