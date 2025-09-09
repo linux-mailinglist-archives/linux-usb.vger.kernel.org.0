@@ -1,66 +1,59 @@
-Return-Path: <linux-usb+bounces-27767-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27768-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF4AB4A34D
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:18:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87862B4A392
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:32:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E086416D3FB
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 07:17:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F8957B0D14
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 07:30:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4CF305970;
-	Tue,  9 Sep 2025 07:17:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0A1304BA8;
+	Tue,  9 Sep 2025 07:32:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n4M0GeqG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5814304973
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 07:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7C521FF23;
+	Tue,  9 Sep 2025 07:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757402264; cv=none; b=tmqqh52/BhScdJ1bq9Y3HIXnAysCQ840QL5gSYANkoZB8G6PswP3tFeMe/9i64GmZ9E9uFlQl0N4FmlZr8XKsliUPzRh5dPFigWWyHC/ryPU1GxSV3G5xB5dSZSt64dphEuBqqdTSs/voQc6hoyaQPkdihroVMVWqUbu0eaCvxo=
+	t=1757403124; cv=none; b=IQpuwSb8dciAjH3Nrn9bwDV7mhOjND7ny/jOchf/qthxu0RCb7aZAxqWz7nWfcwyC8KBVYU0ihLcN6XRY/8mrWVP3s3gzcmR9HSiEl0YLlqAiAO9kgyc6g9pPU4UEiCDpVGr7wxW4CeDzBU3rrhq+FmYd+eoYjAppt8Lxr4FPEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757402264; c=relaxed/simple;
-	bh=xcbuBAIcV7PYG4iVvgt6Hx4JudC8RwH/H+Q+eNBFY44=;
+	s=arc-20240116; t=1757403124; c=relaxed/simple;
+	bh=tCqoK8+8l4HoLkfeBErfXAHZKgNG8757+5Zhpl8dWMM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LlT5yvftkx5Zh+ie46EMe1XEMq1BXPyLdrDbUn+CL7JesPoT8U8xdS7G44BUhJY0jqoaWFz1ThX8IlaLeOg5BlivbVqEAVx1TuKipQn9SW7GmMIJgFOdL0y8mGOR3zhZZoPhEqpwd9rfXqKXIi+NdWlfuNFEKSm6sFIULycREUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uvsbO-0003x4-SX; Tue, 09 Sep 2025 09:17:18 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uvsbN-000Nkg-0l;
-	Tue, 09 Sep 2025 09:17:17 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uvsbN-00DwzJ-0J;
-	Tue, 09 Sep 2025 09:17:17 +0200
-Date: Tue, 9 Sep 2025 09:17:17 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	stable@vger.kernel.org, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	Lukas Wunner <lukas@wunner.de>,
-	Russell King <linux@armlinux.org.uk>, Xu Yang <xu.yang_2@nxp.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
- PM to avoid MDIO runtime PM wakeups
-Message-ID: <aL_UfST0Q3HrSEtM@pengutronix.de>
-References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
- <DCNKVCWI6VEQ.30M6YA786ZIX2@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rJH4Em4mKoyYHTY6tWZ5ouLLYx69U4k9zeRruoGWubrjP+tijBuHZ+EkkXLeV1nBHiDxS2DLsNdoNWwMnFlF9gRdEfRQnaJZ6Ecrq+wHUOB/MtRzShUUA0GdTnE3JxEYs1MO+oQgH4CcJRVf7wq88t6Zr5kp20d0GXHrxUelNfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n4M0GeqG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AC92C4CEF4;
+	Tue,  9 Sep 2025 07:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757403124;
+	bh=tCqoK8+8l4HoLkfeBErfXAHZKgNG8757+5Zhpl8dWMM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n4M0GeqGSsSX4Y4S8pxZFZK160Z82Y5c9E88to32tLpfDcHEe8Jyc5M41+Ue5wiLz
+	 ybGlrvBEEAb1rNOJFSEfGReZX2U/TODKG/aTaIiWKbpmFVbN8q+H7G++bffxdVf2Ov
+	 GJJFB7CCV0gPK/UgsesYJK5Yy+yFxlr5j2m0wrutZKVLsnga+B242mn7w5npkheNZM
+	 6ns4/i9sSL5BJrUpD1k+rqbG4b+73mv7+MbzTIqF0g3kZDRl5bVMwvrCOg2S9gTk1h
+	 ERWB8SM3F0XIuAsPLPeQczW1jmnO2FTAIAWwsRNsT7mj0jlZgkbb1XSxBtWsN+A7Gk
+	 QLFsMSou3UJXQ==
+Date: Tue, 9 Sep 2025 09:32:01 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Richard Genoud <richard.genoud@bootlin.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Aswath Govindraju <a-govindraju@ti.com>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb/ti,am62-usb.yaml: Add
+ ti,lane-reverse property
+Message-ID: <20250909-curvy-happy-pug-eeffda@kuoka>
+References: <20250908162052.355341-1-richard.genoud@bootlin.com>
+ <20250908162052.355341-2-richard.genoud@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,50 +62,35 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DCNKVCWI6VEQ.30M6YA786ZIX2@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20250908162052.355341-2-richard.genoud@bootlin.com>
 
-On Mon, Sep 08, 2025 at 07:00:09PM +0200, Hubert Wiśniewski wrote:
-> On Mon Sep 8, 2025 at 1:26 PM CEST, Oleksij Rempel wrote:
-> > Drop phylink_{suspend,resume}() from ax88772 PM callbacks.
-> >
-> > MDIO bus accesses have their own runtime-PM handling and will try to
-> > wake the device if it is suspended. Such wake attempts must not happen
-> > from PM callbacks while the device PM lock is held. Since phylink
-> > {sus|re}sume may trigger MDIO, it must not be called in PM context.
-> >
-> > No extra phylink PM handling is required for this driver:
-> > - .ndo_open/.ndo_stop control the phylink start/stop lifecycle.
-> > - ethtool/phylib entry points run in process context, not PM.
-> > - phylink MAC ops program the MAC on link changes after resume.
+On Mon, Sep 08, 2025 at 06:20:51PM +0200, Richard Genoud wrote:
+> On some designs, the D+ and D- lines are swapped (on purpose or not).
+> The PHY can handle that with the LANE_REVERSE bit.
 > 
-> Thanks for the patch! Applied to v6.17-rc5, it fixes the problem for me.
+> Signed-off-by: Richard Genoud <richard.genoud@bootlin.com>
+> ---
+>  Documentation/devicetree/bindings/usb/ti,am62-usb.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> Tested-by: Hubert Wiśniewski <hubert.wisniewski.25632@gmail.com>
+> diff --git a/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+> index f6e6d084d1c5..ba894d610af0 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+> @@ -36,6 +36,11 @@ properties:
+>      items:
+>        - const: ref
+>  
+> +  ti,lane-reverse:
+> +    description:
+> +      Should be present if D+ and D- lanes have to be swapped.
+> +    type: boolean
 
-Thank you for testing!
+What is not working with existing data-lanes property?
 
-> > Fixes: e0bffe3e6894 ("net: asix: ax88772: migrate to phylink")
-> 
-> It does, but v5.15 (including v5.15.191 LTS) is affected as well, from
-> 4a2c7217cd5a ("net: usb: asix: ax88772: manage PHY PM from MAC"). I think
-> it could also use a patch, but I won't insist.
+Plus, lanes are swapped per port, not for entire device, no?
 
-Ack, I'll try do address it later.
+Best regards,
+Krzysztof
 
-Best Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
