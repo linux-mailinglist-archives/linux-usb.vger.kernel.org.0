@@ -1,196 +1,277 @@
-Return-Path: <linux-usb+bounces-27779-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27780-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F5F3B4A7F4
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:32:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7371B4A8AB
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:49:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED4E017562F
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:31:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8177F1BC1F03
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:47:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59CD423D7EF;
-	Tue,  9 Sep 2025 09:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36C502D2390;
+	Tue,  9 Sep 2025 09:41:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j0kZL3ui"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WiuJqTct"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04352288C96
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 09:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7EDC2D130A;
+	Tue,  9 Sep 2025 09:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757409826; cv=none; b=g0IW2BadgbBs9Fh7PiBdnXBXVyiYNW4QZHxWMEw6M8A3e2Gw8dKGlkTxjtkerb3fHICl8qIiJ04YceNEDXOlvvX/2eX/cTtWLS4b3UzENAPwX7LD0HCwZ+G6c94/beSfiT7JZfGOyXa9eHlyTWdQwM8UnfBQ/UbVmzoIGEqr0Lk=
+	t=1757410894; cv=none; b=Z6V5dUGsrcD04mnGZcNnN1ZzNw6smY/zzKQeDr7GDWXAiONtzQeivuONdNQuc7OeD1TCvDEelGSsrjOlWnxadpttBX4wessLjwUROM+CYRCUPVdiHQ91DKQZavnG4qzjK0csQy0qvIIK2a0lrCsdu0Hzt3Pz3c3YPXZ9SmpfIbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757409826; c=relaxed/simple;
-	bh=1x2MoA5UWS/pTHQho0bKZ/nq7FY01sKAQYrLX6tgXEU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YPgEVCOPrd7nmLx8AFQ7hVtIs5xKK01pt5MblS42TFQMAA6TCkfFw991sSDDQLoZT9rVbY5g1A7ODcYzXQ9Wujsomoa3TPkS1pYAPxoCx0m+hPAud7cULoBvnFn0tKQfTVi0kF90MUSqKAuCzxlFVx18jRf4swGwsRd9vIyINqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j0kZL3ui; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-55f753ec672so6092108e87.2
-        for <linux-usb@vger.kernel.org>; Tue, 09 Sep 2025 02:23:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757409823; x=1758014623; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jhor/ZicUvholsFe5QbIiTrWlOQxqwQ0jmOPkz5PsTM=;
-        b=j0kZL3uip5DJ/jKXvomTIDOrLbLW4yZjcwsH2xpPcYURBRMU8FXDDnDal679hH1E7z
-         W3HqcUZV8SwE7r0EEvQTa6lSohoG4uhEOzspgPaRcNaI144mLzhHlMm6aKYZWjL7PuA2
-         J53VZj7UluRn/qBEtNlu8hIu+9dN6C/Gh5OziXrFnXs9++1MChVGHiRkaQnGukfnapni
-         lQWwvMcD3XDr2pK7jLzDl0IXqDX2uSehTx5CIO720MhAD5jRy8KA9UMPEWLWnxQ76QiF
-         0PR3sdM1wWcN4Jkcz6MQG7MRsX6bluERv6MvAqxAFzmhhifqh5NZhB/Ezev4oss3YcVM
-         y+tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757409823; x=1758014623;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jhor/ZicUvholsFe5QbIiTrWlOQxqwQ0jmOPkz5PsTM=;
-        b=q+Qrn1G6hdoogQ3DxiIeocofX7PUeVAOu/Wxxy3ANWH1bfBst1VTO0l96IqF4YC2nr
-         iLQVejaC2jqh0MMmKSVk1jU0HnVSm1fjnciS5/6RT3fq73QJMyObekMAKbVYeyDySMxX
-         TV3Rdm+FtRwNxWqUPV6KtDlxX+RuM6sOEOd5Y784PaJOhJP44BRTHx/xtoWxTSXbirt8
-         JcqRWV1gvbWQHXGQK6v6Ts1FBKnlfV9YZA2Ir0z7ef8f6fRBq3+VCWkPfeQWlFV1TwI9
-         N9dM0ubr+ynT7nch3gXVXu+i071hStDKK+VEk+POADT7A8EcXGWeJTlIvXBoiih56KZT
-         eOsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXiiyVqv6CPHh4Zqtrx6wnC7F6yFSXnODHQdQ58FgIJXIf+ppzPAU2HiOL989ZHIdF4KppTs5xSVx8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqaCmCVgnP1Zip1nW4tznVO78E81lWGwxFwTKV7WNPQwLt/Abb
-	ba4KcpohiSNNblqxkq/eH9Y9AuPoG33eI5QNuD1SSzU523aalNvB7eApUvgbpg==
-X-Gm-Gg: ASbGnctTRUbvJ8wRGzB6w31CrV1223AD+xdX9tcH9jvuuFJRGp6KlVyGMFvF2FRPTBJ
-	YB1maZ8KPDAlyQx8EU3CCpOt+rc6lufR2H0xLen2NUpcrhTCj2wFTfuc6vY2uJdjhdZY34gHeY2
-	dkUT+jtO0MN1Y1UAkNAt3s89oEOFhg8jgvjrR/OfEuEaTTWGNKFBAF12mKh+OXJxfjcVnsCtUsH
-	y1V1HPCmsow8Y4K5jpPd45DKXdD75Q+VyAHt9QPFF68fkF+Ik3+fC2V6B7OTKfHDoMBeAPL9DAp
-	VIE1Eb2WtvZK5fOOaRYW0eeVb9W/t2lW2lIAECYIVIcMQa6kl6zSgMJS4Xxg3X4mPGn2QGWqlY6
-	fqnxaffO1iPCed49CAebarb9uRRWI3Iaa1ZQ=
-X-Google-Smtp-Source: AGHT+IF3Hgmt+pDq/zr4rnCL9F6hG748sWYeEntYhWQ9Efg8PNAWivYsb0rz5FDNn2ZWYhpuHVtukg==
-X-Received: by 2002:a05:6512:acc:b0:55b:9045:ec5e with SMTP id 2adb3069b0e04-5625f535a6amr3628737e87.18.1757409822884;
-        Tue, 09 Sep 2025 02:23:42 -0700 (PDT)
-Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5680c4243e4sm402498e87.27.2025.09.09.02.23.42
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 09 Sep 2025 02:23:42 -0700 (PDT)
-Date: Tue, 9 Sep 2025 11:23:39 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/7] usb: xhci: improve Stream Context register
- debugging
-Message-ID: <20250909112339.032b4671.michal.pecio@gmail.com>
-In-Reply-To: <20250903170127.2190730-4-niklas.neronin@linux.intel.com>
-References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
-	<20250903170127.2190730-4-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1757410894; c=relaxed/simple;
+	bh=iDZvQAjGdFONOD0C7BJifOhr90vJwi4Gs1ZMg3jQOdU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NQwY07MY9BDE+aqHJdIoODe94vnIo7dFjtZFcTsRbKKz9KPsrDwBvZqyDj4UyIwwBakgJH9H0XUzWNJpwpPdK2TMauajbDmhASRzX0ANR/azk6ekZC/uRngGOh/v+NmJEK/e7qCQehMiDe/EdSI8ulyQlUTTVmjg8GnFTE56d+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WiuJqTct; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757410892; x=1788946892;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iDZvQAjGdFONOD0C7BJifOhr90vJwi4Gs1ZMg3jQOdU=;
+  b=WiuJqTctcrNXsBYQIA5Lw/Q4ua6oji3tR51RSX4tZ8fT2S/NJnoOhQfA
+   d26w0wCdnOMPHKKh/hy2nzcqz3qi8ddGldD2rpuvLtdTcCGFtARUNAOkh
+   7/I56J+5EC435j4AljPZkLPmPkuidmB7TrTU7CHRmkVcaOamwWy9ORN00
+   Whn6FQsEaO/CmvLTARfZgI+qYwjQ5tXSfpPdWoY8jL6V2mWxsXgUNTVkP
+   C7/k1zyXaRfyVCR2ZvGUczIQ6MUhWlcbN5OHEL8v3awsLyFkYXhlyrGTz
+   PHvj+cZjkvy8ouhsMmFQM4R9hb9OGo7xNeTujLwiQbBUcPXZjzHZgZcfH
+   w==;
+X-CSE-ConnectionGUID: eXwRG7/zSNOYhdvTI5m9Pg==
+X-CSE-MsgGUID: 7Q8xyct2QXGtbrUSSQifeg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="62315387"
+X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
+   d="scan'208";a="62315387"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 02:41:32 -0700
+X-CSE-ConnectionGUID: y4y1TQowQ3WfYBEL7QqmVw==
+X-CSE-MsgGUID: A6PAWP7WSNC5vsBA9uaY2Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
+   d="scan'208";a="173163265"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa008.jf.intel.com with SMTP; 09 Sep 2025 02:41:25 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Sep 2025 12:41:23 +0300
+Date: Tue, 9 Sep 2025 12:41:23 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Sven Peter <sven@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+	Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <Frank.Li@nxp.com>,
+	Ran Wang <ran.wang_1@nxp.com>, Peter Chen <peter.chen@nxp.com>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org
+Subject: Re: [PATCH v2 10/22] usb: typec: tipd: Read USB4, Thunderbolt and
+ DisplayPort status for cd321x
+Message-ID: <aL_2Q6obeQdYZuHE@kuha.fi.intel.com>
+References: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
+ <20250906-atcphy-6-17-v2-10-52c348623ef6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250906-atcphy-6-17-v2-10-52c348623ef6@kernel.org>
 
-On Wed,  3 Sep 2025 19:01:23 +0200, Niklas Neronin wrote:
-> Improve the debugging output for Stream Context registers in the xHCI
-> driver. The Stream Context registers consist of the following fields:
->  bit 0 - Dequeue Cycle State.
->  bits 3:1 - Stream Context Type.
->  bits 63:4 - TR Dequeue Pointer, is 16-byte aligned.
+On Sat, Sep 06, 2025 at 03:43:23PM +0000, Sven Peter wrote:
+> CD321x supports various alternate modes and stores information once
+> these are entered into separate status registers. Read those when they
+> are active when reading TPS_DATA_STATUS to prepare supporting these.
 > 
-> Instead of printing the entire 64-bit register as a single block, each
-> field is now printed separately. This approach enhances the readability.
-> 
-> Remove xhci_dbg() in xhci_alloc_stream_info(). A detailed trace message is
-> printed after xhci_update_stream_mapping() call.
-> 
-> xHCI specification, section 6.2.4.1.
-> 
-> Why not use 'dma_addr_t' for the address?
-> The 'dma_addr_t' type can vary between 32 and 64 bits depending on the
-> system architecture or xHCI driver flags, whereas the 64-bit address field
-> size remains constant. Since hardware cannot be fully trusted, it's better
-> to print the entire 64-bit address to detect any non-zero values in the
-> upper 32 bits. This approach ensures that potential issues are easily
-> detected.
-> 
-> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+> Signed-off-by: Sven Peter <sven@kernel.org>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  drivers/usb/host/xhci-debugfs.c | 16 ++++++++++------
->  drivers/usb/host/xhci-mem.c     |  1 -
->  drivers/usb/host/xhci-trace.h   |  5 +++--
->  3 files changed, 13 insertions(+), 9 deletions(-)
+>  drivers/usb/typec/tipd/core.c | 80 ++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 76 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-> index c6d44977193f..35398b95c5a2 100644
-> --- a/drivers/usb/host/xhci-debugfs.c
-> +++ b/drivers/usb/host/xhci-debugfs.c
-> @@ -521,6 +521,7 @@ static int xhci_stream_context_array_show(struct seq_file *s, void *unused)
->  	struct xhci_ep_priv	*epriv = s->private;
->  	struct xhci_stream_ctx	*stream_ctx;
->  	dma_addr_t		dma;
-> +	u64			ctx;
->  	int			id;
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 51b0f3be8b66a743ddc3ea96c1b25f597a1e8f6c..afd11b3e1ae596c7f3283e4336aaa57874c9378d 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -35,14 +35,18 @@
+>  #define TPS_REG_INT_MASK2		0x17
+>  #define TPS_REG_INT_CLEAR1		0x18
+>  #define TPS_REG_INT_CLEAR2		0x19
+> -#define TPS_REG_SYSTEM_POWER_STATE	0x20
+>  #define TPS_REG_STATUS			0x1a
+> +#define TPS_REG_SYSTEM_POWER_STATE	0x20
+> +#define TPS_REG_USB4_STATUS		0x24
+>  #define TPS_REG_SYSTEM_CONF		0x28
+>  #define TPS_REG_CTRL_CONF		0x29
+>  #define TPS_REG_BOOT_STATUS		0x2D
+>  #define TPS_REG_POWER_STATUS		0x3f
+>  #define TPS_REG_PD_STATUS		0x40
+>  #define TPS_REG_RX_IDENTITY_SOP		0x48
+> +#define TPS_REG_CF_VID_STATUS		0x5e
+> +#define TPS_REG_DP_SID_STATUS		0x58
+> +#define TPS_REG_INTEL_VID_STATUS	0x59
+>  #define TPS_REG_DATA_STATUS		0x5f
+>  #define TPS_REG_SLEEP_CONF		0x70
 >  
->  	if (!epriv->stream_info)
-> @@ -533,12 +534,15 @@ static int xhci_stream_context_array_show(struct seq_file *s, void *unused)
->  	for (id = 0; id < epriv->stream_info->num_stream_ctxs; id++) {
->  		stream_ctx = epriv->stream_info->stream_ctx_array + id;
->  		dma = epriv->stream_info->ctx_array_dma + id * 16;
-> -		if (id < epriv->stream_info->num_streams)
-> -			seq_printf(s, "%pad stream id %d deq %016llx\n", &dma,
-> -				   id, le64_to_cpu(stream_ctx->stream_ring));
-> -		else
-> -			seq_printf(s, "%pad stream context entry not used deq %016llx\n",
-> -				   &dma, le64_to_cpu(stream_ctx->stream_ring));
+> @@ -85,6 +89,31 @@ struct tps6598x_rx_identity_reg {
+>  	struct usb_pd_identity identity;
+>  } __packed;
+>  
+> +/* TPS_REG_USB4_STATUS */
+> +struct tps6598x_usb4_status_reg {
+> +	u8 mode_status;
+> +	__le32 eudo;
+> +	__le32 unknown;
+> +} __packed;
 > +
-> +		if (id < epriv->stream_info->num_streams) {
-> +			ctx = le64_to_cpu(stream_ctx->stream_ring);
-> +			seq_printf(s, "%pad stream %d: deq %016llx SCT %llu cycle %llu\n",
-> +				   &dma, id, ctx & TR_DEQ_PTR_MASK, CTX_TO_SCT(ctx),
-> +				   ctx & EP_CTX_CYCLE_MASK);
+> +/* TPS_REG_DP_SID_STATUS */
+> +struct tps6598x_dp_sid_status_reg {
+> +	u8 mode_status;
+> +	__le32 status_tx;
+> +	__le32 status_rx;
+> +	__le32 configure;
+> +	__le32 mode_data;
+> +} __packed;
+> +
+> +/* TPS_REG_INTEL_VID_STATUS */
+> +struct tps6598x_intel_vid_status_reg {
+> +	u8 mode_status;
+> +	__le32 attention_vdo;
+> +	__le16 enter_vdo;
+> +	__le16 device_mode;
+> +	__le16 cable_mode;
+> +} __packed;
+> +
+>  /* Standard Task return codes */
+>  #define TPS_TASK_TIMEOUT		1
+>  #define TPS_TASK_REJECTED		3
+> @@ -121,6 +150,7 @@ struct tipd_data {
+>  	int (*apply_patch)(struct tps6598x *tps);
+>  	int (*init)(struct tps6598x *tps);
+>  	int (*switch_power_state)(struct tps6598x *tps, u8 target_state);
+> +	bool (*read_data_status)(struct tps6598x *tps);
+>  	int (*reset)(struct tps6598x *tps);
+>  };
+>  
+> @@ -151,6 +181,10 @@ struct tps6598x {
+>  
+>  struct cd321x {
+>  	struct tps6598x tps;
+> +
+> +	struct tps6598x_dp_sid_status_reg dp_sid_status;
+> +	struct tps6598x_intel_vid_status_reg intel_vid_status;
+> +	struct tps6598x_usb4_status_reg usb4_status;
+>  };
+>  
+>  static enum power_supply_property tps6598x_psy_props[] = {
+> @@ -505,6 +539,41 @@ static bool tps6598x_read_data_status(struct tps6598x *tps)
+>  	return true;
+>  }
+>  
+> +static bool cd321x_read_data_status(struct tps6598x *tps)
+> +{
+> +	struct cd321x *cd321x = container_of(tps, struct cd321x, tps);
+> +	int ret;
+> +
+> +	ret = tps6598x_read_data_status(tps);
+> +	if (ret < 0)
+> +		return false;
+> +
+> +	if (tps->data_status & TPS_DATA_STATUS_DP_CONNECTION) {
+> +		ret = tps6598x_block_read(tps, TPS_REG_DP_SID_STATUS,
+> +				&cd321x->dp_sid_status, sizeof(cd321x->dp_sid_status));
+> +		if (ret)
+> +			dev_err(tps->dev, "Failed to read DP SID Status: %d\n",
+> +				ret);
+> +	}
+> +
+> +	if (tps->data_status & TPS_DATA_STATUS_TBT_CONNECTION) {
+> +		ret = tps6598x_block_read(tps, TPS_REG_INTEL_VID_STATUS,
+> +				&cd321x->intel_vid_status, sizeof(cd321x->intel_vid_status));
+> +		if (ret)
+> +			dev_err(tps->dev, "Failed to read Intel VID Status: %d\n", ret);
+> +	}
+> +
+> +	if (tps->data_status & CD321X_DATA_STATUS_USB4_CONNECTION) {
+> +		ret = tps6598x_block_read(tps, TPS_REG_USB4_STATUS,
+> +				&cd321x->usb4_status, sizeof(cd321x->usb4_status));
+> +		if (ret)
+> +			dev_err(tps->dev,
+> +				"Failed to read USB4 Status: %d\n", ret);
+> +	}
+> +
+> +	return true;
+> +}
+> +
+>  static bool tps6598x_read_power_status(struct tps6598x *tps)
+>  {
+>  	u16 pwr_status;
+> @@ -565,7 +634,7 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
+>  			goto err_unlock;
+>  
+>  	if (event & APPLE_CD_REG_INT_DATA_STATUS_UPDATE)
+> -		if (!tps6598x_read_data_status(tps))
+> +		if (!tps->data->read_data_status(tps))
+>  			goto err_unlock;
+>  
+>  	/* Handle plug insert or removal */
+> @@ -614,7 +683,7 @@ static irqreturn_t tps25750_interrupt(int irq, void *data)
+>  			goto err_clear_ints;
+>  
+>  	if (event[0] & TPS_REG_INT_DATA_STATUS_UPDATE)
+> -		if (!tps6598x_read_data_status(tps))
+> +		if (!tps->data->read_data_status(tps))
+>  			goto err_clear_ints;
+>  
+>  	/*
+> @@ -688,7 +757,7 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
+>  			goto err_unlock;
+>  
+>  	if ((event1[0] | event2[0]) & TPS_REG_INT_DATA_STATUS_UPDATE)
+> -		if (!tps6598x_read_data_status(tps))
+> +		if (!tps->data->read_data_status(tps))
+>  			goto err_unlock;
+>  
+>  	/* Handle plug insert or removal */
+> @@ -1534,6 +1603,7 @@ static const struct tipd_data cd321x_data = {
+>  	.trace_power_status = trace_tps6598x_power_status,
+>  	.trace_status = trace_tps6598x_status,
+>  	.init = cd321x_init,
+> +	.read_data_status = cd321x_read_data_status,
+>  	.reset = cd321x_reset,
+>  	.switch_power_state = cd321x_switch_power_state,
+>  };
+> @@ -1550,6 +1620,7 @@ static const struct tipd_data tps6598x_data = {
+>  	.trace_status = trace_tps6598x_status,
+>  	.apply_patch = tps6598x_apply_patch,
+>  	.init = tps6598x_init,
+> +	.read_data_status = tps6598x_read_data_status,
+>  	.reset = tps6598x_reset,
+>  };
+>  
+> @@ -1565,6 +1636,7 @@ static const struct tipd_data tps25750_data = {
+>  	.trace_status = trace_tps25750_status,
+>  	.apply_patch = tps25750_apply_patch,
+>  	.init = tps25750_init,
+> +	.read_data_status = tps6598x_read_data_status,
+>  	.reset = tps25750_reset,
+>  };
 
-That SCT could benefit from decoding to human readable form,
-but AFAIK the driver currently isn't using it anyway, so it
-doesn't matter very much.
-
-> +		} else {
-> +			seq_printf(s, "%pad stream %d: entry not used\n", &dma, id);
-> +		}
->  	}
->  
->  	return 0;
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index 2a414dee7233..9520e7c6e774 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -676,7 +676,6 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
->  			cur_ring->cycle_state;
->  		stream_info->stream_ctx_array[cur_stream].stream_ring =
->  			cpu_to_le64(addr);
-> -		xhci_dbg(xhci, "Setting stream %d ring ptr to 0x%08llx\n", cur_stream, addr);
->  
->  		ret = xhci_update_stream_mapping(cur_ring, mem_flags);
->  
-> diff --git a/drivers/usb/host/xhci-trace.h b/drivers/usb/host/xhci-trace.h
-> index 8451e9386aa9..f6a2b4cedb8d 100644
-> --- a/drivers/usb/host/xhci-trace.h
-> +++ b/drivers/usb/host/xhci-trace.h
-> @@ -329,9 +329,10 @@ DECLARE_EVENT_CLASS(xhci_log_stream_ctx,
->  		__entry->ctx_array_dma = info->ctx_array_dma + stream_id * 16;
->  
->  	),
-> -	TP_printk("stream %u ctx @%pad: SCT %llu deq %llx", __entry->stream_id,
-> +	TP_printk("stream %u ctx @%pad: SCT %llu deq %llx cycle %llu", __entry->stream_id,
->  		&__entry->ctx_array_dma, CTX_TO_SCT(__entry->stream_ring),
-> -		__entry->stream_ring
-> +		__entry->stream_ring & TR_DEQ_PTR_MASK,
-> +		__entry->stream_ring & EP_CTX_CYCLE_MASK
->  	)
->  );
->  
-> -- 
-> 2.50.1
-> 
+-- 
+heikki
 
