@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-27830-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27831-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0BC0B507A3
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 23:05:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34282B507F2
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 23:16:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96C273A418C
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 21:05:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE2227A95B2
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 21:14:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC13E244698;
-	Tue,  9 Sep 2025 21:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1978257843;
+	Tue,  9 Sep 2025 21:16:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nsfo/u7l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qnhv7Rt0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0B4242D7D
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 21:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E71B1C68F
+	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 21:16:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757451906; cv=none; b=sZyRIWAZ3BNTmg7+aJIFXvTy1cwzX3qkd7u071SZPg9P4ELVm5SyLYhO8aEGuaUH6J3jAdUyS1rtyiHJ9ginYRX7sNZ5sFdjqCSfCFPknNX5G3IwoQoovl5X1yv957EIbbf0Uwo2U6OX72P4+TlOSf6gOv3B3m2nyQ2tm39DZL4=
+	t=1757452587; cv=none; b=AqA3E4NVcbvYKXvJ3v28yL1Wcr1/1Cyc1/h/mw6iF/L9opbYmC/SPCIcXhA35fKcu1/WsiCjGgbgcSPz0vWvJFPyxhuogBj7+8INgGlBlqZCoAWI1XOF6EszYQLE2eJPSlthrrUkPTOk456PsqxFzvmWiYG5Giq2nRIaYcLABD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757451906; c=relaxed/simple;
-	bh=6p1aZtfbBioOs/0YgV5x9pHyIeQ2ZDn82yCzc4X3CJY=;
+	s=arc-20240116; t=1757452587; c=relaxed/simple;
+	bh=5KFUyCUtRozKEBd1I1Tvh0Jn9MZriF2eUaNMkE9RULk=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KtuMPW1wWtuUtO7U5xM5NETHPXhOm7qTR3CfnoZ2vv02CSiLnteLx0DT8Fc4N0FTZ9Ehs9yiS8h8xwkZmyoXmr+WPov7lOmX4C6tw6/C0bKQ9pr3vxr9/fFRR63bz7sCWfgjdqdYBxkzLy16T4Gl3/tP1dguvcO0qlXNHw2y+xQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nsfo/u7l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D655BC4CEF8
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 21:05:05 +0000 (UTC)
+	 Content-Type:MIME-Version; b=VQYm0WQEHSVFqnZrSG6ua9ECsxXq+3TM1G4H/959LxQxYe9a7wZIWr7db+4c5Q83GWBacRm3Mb7lVyMFtzufYjIbNssR6Vd9EIUdd99UFyl8A9bzr/u9zrrKsLHAnGMMAmzO5SNfXMUMpGCmwCZJs9DHf7GqQL/onnn3736mwbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qnhv7Rt0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D18B0C4CEF8
+	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 21:16:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757451905;
-	bh=6p1aZtfbBioOs/0YgV5x9pHyIeQ2ZDn82yCzc4X3CJY=;
+	s=k20201202; t=1757452586;
+	bh=5KFUyCUtRozKEBd1I1Tvh0Jn9MZriF2eUaNMkE9RULk=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Nsfo/u7ljYJkkv42MtEU6bbJAm6sbJs4fi4aizkpMEXltKTBg3WDUzB9BhEdE+t2e
-	 HejQrG5UntPPdU9Gf8D1WtJbA50OmQNPhe+xNpu0RTX8xscLQlccfulkzXktNhvzgq
-	 2dGatQWDHP4Z8g1VRGDd4KuEWuuL31pxmn9DTPEDx5KE5Avbh2JXhntL09k3yjHYlK
-	 3ATCfBh5HUR1qpC7Fm2kiqjh+TXcU6qiOvtHMuKhovYR+GiUjsj69eEMBWOXaeOQTj
-	 vy0ewNFMkqAnwEHgxcRlKEHmRKM8T9qNWFTcztr8yPvvOkqnJgiQuuikeQvLdKml07
-	 lyDxSCOK6tFOg==
+	b=qnhv7Rt0N0pOQudeg5SeyVJWzqPIB5goJbKg2QScoZcPRVYF7uqboGWx7SmgNfmAA
+	 t9eN5OIXVK7LvRMyhXyOBj23s/bEjHISsUBUzgFNs3gBVokuP8LL7J51CGAZrZZaaS
+	 3LWx73vAkpZNQ+dkC17ERylmyd+fzDtyTCUt1cAlSDNCBX+2dm+GwgoMXdFotMhE1R
+	 J3xjoXSlsPg3OaUVn5yoU0JWcJi8QYpTB+aO8BgmYiqnCCduWCgI9/w51u51yTFkbf
+	 gzYVjCPc5IOA01Rl+wMl2WqJC/MQ/pYI8aeXV+oh0vYDApvsq7nuTVaxpRVjE2nyMW
+	 +QJadApdV6c+w==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id C6E4BC41612; Tue,  9 Sep 2025 21:05:05 +0000 (UTC)
+	id C064BC41612; Tue,  9 Sep 2025 21:16:26 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220491] usb_storage connected SD card disconnects/reconnects on
  resume from suspend
-Date: Tue, 09 Sep 2025 21:05:05 +0000
+Date: Tue, 09 Sep 2025 21:16:26 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -63,7 +63,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-220491-208809-vCtOVPl9Nx@https.bugzilla.kernel.org/>
+Message-ID: <bug-220491-208809-2RMzntO6c6@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220491-208809@https.bugzilla.kernel.org/>
 References: <bug-220491-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,10 +79,29 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220491
 
---- Comment #52 from Paul Ausbeck (paula@alumni.cse.ucsc.edu) ---
-Created attachment 308645
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308645&action=3Dedit
-kdb triggered disconnect usbmon trace
+--- Comment #53 from Paul Ausbeck (paula@alumni.cse.ucsc.edu) ---
+Created attachment 308646
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308646&action=3Dedit
+kdb triggered disconnect, dmesg tail
+
+I have correlated disconnection of the USB connected SD card with stalling =
+the
+kernel with kdb. Thus far, a long kdb stall, perhaps as long as overnight, =
+is
+necessary for the SD card to disconnect upon resuming kernel operation.
+Interestingly, the disconnection is not immediate, minutes elapse between
+kernel resumption and device disconnection. Also interesting is that once t=
+he
+device starts disconnecting, it will disconnect several times, maybe
+indefinitely, with several minutes elapsed time between each hit of the
+usb_disconnect breakpoint. When the usb_disconnect breakpoint it hit, backt=
+race
+shows hub_event as the calling routine.
+
+The attached file is a dmesg fragment starting upon kernel resumption via t=
+he
+kdb "go" command. The previous attachment is a usbmon trace of the same
+activity period.
 
 --=20
 You may reply to this email to add a comment.
