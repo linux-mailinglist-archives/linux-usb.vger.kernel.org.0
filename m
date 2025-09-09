@@ -1,101 +1,149 @@
-Return-Path: <linux-usb+bounces-27790-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27791-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7665B4AA7B
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 12:24:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C0DAB4ABA7
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 13:23:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F7A17AB5FE
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 10:23:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 120C43AAC81
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68EE2D480E;
-	Tue,  9 Sep 2025 10:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E96C932039B;
+	Tue,  9 Sep 2025 11:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ebLeMhPP"
+	dkim=pass (2048-bit key) header.d=rwth-aachen.de header.i=@rwth-aachen.de header.b="TIaMCPI7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-out-3.itc.rwth-aachen.de (mail-out-3.itc.rwth-aachen.de [134.130.5.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45B02C0F60
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 10:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EE931D72A;
+	Tue,  9 Sep 2025 11:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.130.5.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757413477; cv=none; b=YNjETe1aNulbcqIe/rrDdXtGhWyvsN0WcHnaeYpg8dpQ12+GRxx5f8+nBoe35N0fwBc0T07Xx+giQ3hrg60vaBXG+gXszbXsjatLsDJ5CxeUxfQne4QHWZz1tGnlu8BjKIuyeezvngS/O93El0953oZ/iLirde34tvq+wOX7glk=
+	t=1757416772; cv=none; b=ofvk3F01isOXNpybYoU6zgtOXnOKIuzxWedPVhlXsbT4fKUJcp1u32QAcUuiqSAX7+dtzNgqLwO9UCHYTclAL0HtuIt5zT8Nz0LC2FaamlUzP6rOisPMRAL7baCtmhXhjmY8Vfp4sS8nEay3e581joAhdJ+78Rw8aH+/ZqxfzgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757413477; c=relaxed/simple;
-	bh=pA9O/1TEZiqVEmRFY+M+6nhqiYbJtoPI4Ud46NNOb3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aAIYlLbVjx6Qzu5hZKj9DEYiN+B/2iDLW3Sdk55lU5qEWOGkqp1uL4g/gqfq5qY43rnzTJolduXeCTVE7bkXDY7Aro59Rv1yd/bcyry0aEt+o8XQnOez6fReS8hePwtEugfUFAjQN9+NkLSW5Ot50m37CSQrcqmL1qt7l148sug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ebLeMhPP; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-336c86796c0so43338791fa.2
-        for <linux-usb@vger.kernel.org>; Tue, 09 Sep 2025 03:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757413474; x=1758018274; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pA9O/1TEZiqVEmRFY+M+6nhqiYbJtoPI4Ud46NNOb3k=;
-        b=ebLeMhPPb/U+8BF5pshIZdu7Tr+SIP5hP1LCw+Cf++HXMFRht6pKIzp8SJCHjX5vnt
-         P+qgpzKqDEEX2EquaGdxipxJUjnk+nNbSLD9UBtnBLoxEXBGg48t1Zh6XhpdDr8S9+Ys
-         hbDbrm7+ZVDPGSpG8zbezWcNjsbEqAl7UhRbVgdkXgEJtOJQnSCobgGslaujd0Bco0AN
-         qsbSVGw5uDvwIgOgugDgiChy0jvrnWGYuga2Cip1WVZ2WoSokqVMqIAkNo2X2bVSiMxZ
-         a8sSgRc16czRdzPwWO8BekNTtdntR9AySrsRjdNLaeGTswU4/mxilGF4dpKXqDNvYDzX
-         /hgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757413474; x=1758018274;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pA9O/1TEZiqVEmRFY+M+6nhqiYbJtoPI4Ud46NNOb3k=;
-        b=gxO2a46vDBBO+tvK0Ck4NY6u9VeHOie4wZAC6cOw5Q6CpdxYnBft2PUktbzXdsWI4G
-         Tjy4MUAHveBBVL3XQ1VN9pOSsPhR6IaayWgwIqyYQUDxqpfXw0jIJoGUQ2bxbJc3pP6X
-         nie4LWc36PdwBKQgEnHEWWBjwkaDULAyKV/gqV2+sOQY2GTL0aaCC8Wy0hIu2Ta3GS4F
-         o5rz3q3a6tYaL9hNlDQVZw7Y4p1AeHg/GXo10MaMtcPVvMHRVbyx6GBWzBCp85Az9c5T
-         +FUl81pZOeQ5A4pidvdJDpOWTSoRe3JlKprKenqEkQ56XSBe1X9RCPKl1Q0CRKxqtvcU
-         0kgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU57P5SkZjx55nAY3vZfIF81spFI9rEYZ4OHISqCOjljaHIeKa5epaamXbu/Do1FRKM4jpjYFM+EAs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU5OzMqMfGFyNAbpisuq0Jrrw+1hqLXzFZFgjv6ZL/OVoGmgwG
-	s8eLtZ+/WHt/ninl2SWJdaXqQU7n8tlaK/8oAG6XjxHasrFJqpRAPkjHjRORLA==
-X-Gm-Gg: ASbGncvBodxrC99SGclvE/7jqS+yWTv5P/Vxo5jJ8AVfbaIDM+KHylXyHawz0+s1mcR
-	RhYV5RAlhvYS/ziVUXLMsps+UontJKuJseXRlZF94a5XqiD2H4sNQjXp3fKhQ3C/+wMryAIBN+E
-	P3kki3yGjdyampPMOayWze/QP2Vjezv6V2tJw3RKLX5PT7SShoeRUWUXwkDIpUeCsxLwFle7L3S
-	PZG7GBqMYlvJydmfd87F9JG9jreRq+GPFcR6oPmY0AkvGkhYmptYqG+qCgbZp5ggpXrYTGQpijW
-	PaakFOB/u9K5ZW5dzly3dgb+M7nzIB2oxcgRI1pQMRZAxYJiWuWshCTckvRmlnvzAkuAqBgAQZO
-	oBCuPc/OKpVgOAo3YfCN2AM2UKAV4tmoE8NV3Z/ksnXLKyA==
-X-Google-Smtp-Source: AGHT+IG9GlmdgCtiX96dDRsk45wtZ3upqN8TRcAiXoGZufx0Im1b5No2jIds18kFE6ZrOo/H/S8dbQ==
-X-Received: by 2002:a05:651c:418c:b0:336:d2fa:b62 with SMTP id 38308e7fff4ca-33b564fda62mr27093861fa.36.1757413473785;
-        Tue, 09 Sep 2025 03:24:33 -0700 (PDT)
-Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-337f4c503edsm39078681fa.10.2025.09.09.03.24.33
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 09 Sep 2025 03:24:33 -0700 (PDT)
-Date: Tue, 9 Sep 2025 12:24:30 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 4/7] usb: xhci: improve Endpoint Context register
- debugging
-Message-ID: <20250909122430.65e3d283.michal.pecio@gmail.com>
-In-Reply-To: <20250909112017.707158a9.michal.pecio@gmail.com>
-References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
-	<20250903170127.2190730-5-niklas.neronin@linux.intel.com>
-	<20250909112017.707158a9.michal.pecio@gmail.com>
+	s=arc-20240116; t=1757416772; c=relaxed/simple;
+	bh=1P+ZrNe5SqDuDrHn2ZCxT6bCqkhzSrtwuPJKZgG8f7I=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=tJJECiVN49pdaKXRN6K6vzXJRdMwoUshA+HzyjKhDZWlrudKAd3OhqZhE92un046WT8g2ryHCeixR8nCk3dYDT/zQ1DY8lfdrH1N7Uxc8K7P+lUX9YgeLjWSmW2InlBQnkz+mnjizOnrIHd87izkPsskB7oDyxsJouP1MrLgGO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rwth-aachen.de; spf=pass smtp.mailfrom=rwth-aachen.de; dkim=pass (2048-bit key) header.d=rwth-aachen.de header.i=@rwth-aachen.de header.b=TIaMCPI7; arc=none smtp.client-ip=134.130.5.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rwth-aachen.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rwth-aachen.de
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=rwth-aachen.de; i=@rwth-aachen.de; q=dns/txt;
+  s=20240516-RWTH; t=1757416768; x=1788952768;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=1P+ZrNe5SqDuDrHn2ZCxT6bCqkhzSrtwuPJKZgG8f7I=;
+  b=TIaMCPI7gaum302xwDGCXridbmSXA5Cuq4t1Y/s4kqWg2HJS3poPCFvb
+   OaxnKSgbRmAts9tVEFYYMJosFrGiU47h2MF8d72z7B3J8H+5IIxLA7ezv
+   jutjLA+1TOvjVLNHtTyNXk8jRiR6236v2QreijDHFtqxGPFU0ALfP7nAd
+   X4fSaprtEhHMoYPi6HdyVLQKQhSPvG0zNBkz1Wk+n5nhrusQFxTrQ7h1d
+   hKBEad+V+jyT2KcUWoNKZvsrlwTujms2MnI73J2y9+DIvuKZZBmM1DiBZ
+   bsCp0S/+MGbk0fXrlVTCjKZoH7UrdLofeG+vrhRCIpsUQts1Sk07/XqrT
+   g==;
+X-CSE-ConnectionGUID: hiJebw+cRoSGOKhdqH9siQ==
+X-CSE-MsgGUID: JLCnfXVpQuKVR39IVr0Ijg==
+X-IPAS-Result: =?us-ascii?q?A2B0BAAFnnto/5oagoZaHgE8DAILFYFTiX2RcQOUBYcuh?=
+ =?us-ascii?q?GQPAQEBAQEBAQEBCAFRBAEBghOCdAKMEig3Bg4BAgQBAQEBAwIDAQEBAQEBA?=
+ =?us-ascii?q?QEBAQELAQEGAQEBAQEBBgWBIYU1U4ZbAQQBIw8BBUEFCwsaAiYCAlYGAQ0HA?=
+ =?us-ascii?q?QGCfoJLJLEYgTKBAYR92TuBSiMJAYERLoVtgmQBgW2DfzuEPDaBVUSBPIMDP?=
+ =?us-ascii?q?oQtg3GCaQSCIoEWileGE4d8CUl4eCwBVRMXCwcFgSBDAyo0MSNLBS0dgSd+h?=
+ =?us-ascii?q?BiEKCtPgiJ1gRBpQRk/g1MeBm0PBoEYGkoCAgIFAkNFd0ACAQttPTcJCxuXb?=
+ =?us-ascii?q?BCCDAE4Cy8DkySCcAGvaTQHgjiBZ4FeBpZZiR4GQpdfkwqZBiKocgIEAgQFA?=
+ =?us-ascii?q?hiBflGBLnGDN1EXAg+OLRbFYIEyAgcBCgEBAwmOUoF8AQE?=
+IronPort-Data: A9a23:p9rzE68j8lDvQCivQzleDrUDWH6TJUtcMsCJ2f8bNWPcYEJGY0x3y
+ WcaC2zUM62DM2vyLYt+Oonl8EpX6MCDmtQ3SlY//n9EQiMRo6IpJzg4wmTYYnnOdJ2TFCqLy
+ +1EN7Es+ehtFie0Si+Fa+an9T8lk/nRF9IQMcacUghpXwhoVSw9vhxqnu89k+ZAjMOwa++3k
+ YqaT/b3Zhn8hVaYDkpOs/je8Ew27ayr0N8llgVWic5j7Qe2e0Y9Ucp3yZGZdxPQXoRSF+imc
+ OfPpJnR1n/Z5RokFuS+mb/9dEAQKpaKVeRZoiMLM0QKqkEqSh0ais7XBtJFAatko2nhc+RK9
+ Tl4ncfYpTEBY/eQwrRNC3G0JAklVUFO0OevzXFSKqV/xWWeG5fn660G4E3boeT0984vaVyi+
+ 8D0JxgNbzKOjf31y4i8ccZLpcQvNem6J4Im7yQIITHxVZ7KQLjZXLnK6M8dx211j4ZUAureI
+ sMVLzZiBPjCS0QUZhFOU8p4xrnu3ySjG9FbgAv9Sa4f+GnWywo31rXwPdzVc8GRSMN9hFmEp
+ ifP9m/5DxdcONH3JT+tqCPx3b6Qx3+rMG4UPJ+c3fhksGOL/3EwNidNBHqFu6GYiEHrDrqzL
+ GRRoELCt5Ma+EWtT9T5GRS8pXOFshc0UN1UF+Qw7xuEjKHT5m6xAmkCUy4Ea9E8ssIybSIl2
+ 0XPnN7zAzFr9rqPRhq197iTt3WxPjISMW4EIysFSxYVy9bmqYA3yBnIS75LFeiqj9n+CyD22
+ DOLhDM3gq4Oi8FN3KK+lXjbhj22oYPSZhMw5w7XGG+p82tRbYqkbIGy+FjfxflHK4mdQx+Ku
+ 31ss8HY7OEIAZuKjiOlQ+gXGrytofGfP1X0m0N0A9wv8C7o/3+lYJB4/j5zPgFqP9wCdDuvZ
+ 1Xc0StV44RIPX2CbqJtZY+1TcMwwsDIGt3/R9jbZ8BfbYV2MgmK4ElGb0mJwmarnkUqnokwP
+ J6adYCnCnNyIa1jwSrwSO4M17gx7i87zGLXA5v8ynyP1riTaHe9SrofNlaKKOcj48usrx/Y/
+ NVfH8+LzQhPXurjZCXe7Y8UKxYNN3dTLZz/qNZ/deOZJAdiXmY7BJf5y7EmYYo+qKtVvv/S+
+ W26XEpRyV65jnrCQS2Oa3Z+ePbyRpxXs302J2ovMEyu1nxlZpyghJrzbLMtYqUn+fwm1qQxR
+ r8fZNmAR/1DDDjKk9gAUaTAQEVZXEzDrWqz0+CNOVDTo7YIq9T1x+LZ
+IronPort-HdrOrdr: A9a23:OVZ7sq/khJmajasM1Hduk+DvI+orL9Y04lQ7vn2YSXRuA6+lfr
+ OV7ZEmPHjP+VAssRAb6Le90ca7LE80maQa3WBVB8bHYOCEggeVxeNZh7cKqgeIc0bDH6xmpM
+ VdmsBFeaTN5DNB7PoSjjPZLz9t+ra6GPfCv5ak8547d3ATV51d
+X-Talos-CUID: 9a23:xxbi72Pz/mnp/O5DWChF+UQLWcsfdUby61TQL1aYWH1ocejA
+X-Talos-MUID: 9a23:wcA7VQqPoQ1z/64acHsezxNGH8Fm05q2MV0ur69d6ui6L3RROTjI2Q==
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.16,324,1744063200"; 
+   d="scan'208";a="295397248"
+Received: from rwthex-s2-a.rwth-ad.de ([134.130.26.154])
+  by mail-in-3.itc.rwth-aachen.de with ESMTP; 09 Sep 2025 13:19:20 +0200
+Received: from [IPV6:2a00:8a60:c000:1:6109:d098:ebb8:aa0]
+ (2a00:8a60:c000:1:6109:d098:ebb8:aa0) by rwthex-s2-a.rwth-ad.de
+ (2a00:8a60:1:e500::26:154) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.36; Tue, 9 Sep
+ 2025 13:19:19 +0200
+Message-ID: <3aca9e74-b67c-4bfe-a206-9a6eecdf76ab@rwth-aachen.de>
+Date: Tue, 9 Sep 2025 13:19:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+From: Simon Neuenhausen <simon.neuenhausen@rwth-aachen.de>
+Subject: Re: [PATCH 2/2] samples: rust: add a USB driver sample
+To: Daniel Almeida <daniel.almeida@collabora.com>, Danilo Krummrich
+	<dakr@kernel.org>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Miguel Ojeda
+	<ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng
+	<boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Benno Lossin
+	<lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl
+	<aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Michal Wilczynski
+	<m.wilczynski@samsung.com>, Igor Korotin <igor.korotin.linux@gmail.com>,
+	<linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+	<linux-usb@vger.kernel.org>
+References: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
+ <20250825-b4-usb-v1-2-7aa024de7ae8@collabora.com>
+ <2025090618-smudgy-cringing-a7a4@gregkh>
+ <D8EAF874-4FED-42EE-8FD8-E89B6CB0086A@collabora.com>
+ <2025090601-iron-glitter-c77d@gregkh>
+ <831C4AE2-6964-4699-9E74-E4B721B87B17@collabora.com>
+ <DCLQZZHU42HN.4Y4PP0PPR10O@kernel.org>
+ <9657C897-087E-4544-849B-964E99D95A50@collabora.com>
+ <DCLTJMIAMCVL.35U236MMS5CCK@kernel.org>
+ <85B643A9-1657-43ED-BE98-BE7E502D08DA@collabora.com>
+Content-Language: en-US
+In-Reply-To: <85B643A9-1657-43ED-BE98-BE7E502D08DA@collabora.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: rwthex-s2-a.rwth-ad.de (2a00:8a60:1:e500::26:154) To
+ rwthex-s2-a.rwth-ad.de (2a00:8a60:1:e500::26:154)
 
-On Tue, 9 Sep 2025 11:20:17 +0200, Michal Pecio wrote:
-> Also, I am highly confident that you haven't even tested this patch.
-> Try it and see what happens ;)
+Hi,
 
-And apologies for being rude, but this patch really is broken.
+> On 06.09.25 17:46, Daniel Almeida wrote:
+
+> As I said to Greg above, I’m here to help if anyone wants to write a USB driver. Those interested 
+are free to reach out to me and we will work together to merge the 
+required abstractions with a real user in mind. Hopefully this 
+encourages others to join in this work :)
+I had planned on writing a USB driver for TI nspire calculators, that 
+would make them mountable as USB mass storage devices, since they use a 
+proprietary USB protocol, that usually requires paid software from TI. 
+At the time I gave up on that, due to the lack of USB support in RFL, 
+but I could revive the effort using this.
+
+I'll admit that this is pretty gimmicky, but if it helps to get this 
+merged, I would be happy to do it.
+
+Greetings
+
+Simon Neuenhausen
 
