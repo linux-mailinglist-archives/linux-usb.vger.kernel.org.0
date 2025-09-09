@@ -1,174 +1,116 @@
-Return-Path: <linux-usb+bounces-27773-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27774-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6A42B4A6A2
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:07:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B687B4A6BB
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:08:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C36E542694
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:07:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1732C543061
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:08:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E47CD274B5D;
-	Tue,  9 Sep 2025 09:07:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 359B828369A;
+	Tue,  9 Sep 2025 09:07:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Abqdfo2Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DXVBGM+h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B363F24167B
-	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 09:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3989A28136F;
+	Tue,  9 Sep 2025 09:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757408822; cv=none; b=VYCx9N73GZ302aHVEOiydibpt7qWc1dC7J9KM+c4XudIghLBr85xiaMDpNCC/EPUtAOAJmALoP0WDPFAQ2tTpDC9wQkW0Xt/xT889/TLeoap2CHt6jSgij8OLZec57wwuKWnscL/PnYfHcvm+0O4QiFz2kW++O9lGi0awvyfIrI=
+	t=1757408878; cv=none; b=XdVvpjix5eQEpcAX4bo1yQOB8HOzYf6+LZVfmwAtOkk6YpMX+ZxBU0ZVgyEem/ShvcjxsMDcEKMVLGq/aQCSHr3EAgRfVJ6enqMt9BklA444Qw5hzAH/+djqxCz+WaWA4Jfgaf+gBWtluQQnqvmg2/ahN85VS1oc7N0UlEeO1D8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757408822; c=relaxed/simple;
-	bh=Mu9heSLDA8nrQUe2B/mKsd26ur+XOD84VbVNg+JI7pk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TNM0FXnXsVwlCHz4uhhwgzgCKjeI9lRhIJB9EmyjR7GKQ6DYp3qZ6j9xzKJ/inJCGQ03NROQtTMis23SEfCdeT6NQpBL69LRoa0I6k58Ok6SJ9FyNvKGE/F5q4KtTBv9XhcwrKfq7GN1o/Nnucdq21/YPdEx6rNNVD6c0ONsmf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Abqdfo2Q; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-55f6b0049fbso6109477e87.0
-        for <linux-usb@vger.kernel.org>; Tue, 09 Sep 2025 02:07:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757408819; x=1758013619; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M4706Y7VhoKoZU56xrEsFzu6JL1W9AYpGaPBNaBL4gw=;
-        b=Abqdfo2Qy6fwdERAMHmepd8ZP8FWiRJW6ZEUvzpwkXnFYiu9mN0UQGka+hbGcltxkV
-         COJNcY8ZfblSzMwOEveiGURclZXJ95KmYfP2CxQQ1Ws1+pEZjnzyHLmwFAQBix+nkiJC
-         3zaPGWVlAWOPIaPULCUVKRp8rbNIJM32MZgrUa4CeujnhRWNfEdFI0qtoU4wxZFhm6po
-         DXiFmp7Ezildb13hezb9b47qKLH2seL9iV+Rk9lcQDQSn3cVAy7OhfhfxIrPEuM2Lraq
-         F4673Izx8ma+/bx8d9GsGDf7pD0kDvCUekyOTniumbU3Z75E4MMqfQqeZKpLfA4ZbZsu
-         Fl9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757408819; x=1758013619;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M4706Y7VhoKoZU56xrEsFzu6JL1W9AYpGaPBNaBL4gw=;
-        b=N/MaaMYYTAXP2Dapst6z0aPmpWCQ1hzgKc9qn+vkdIFl9x7Pdz85EG0lxsoRMzu3iJ
-         wruM8P6zRoDTnTUcI3VlwAV9cWcLxXlzWJUHQR9DpaUXrdnG8NP+W/niw4FwTGbNdRZR
-         zd04NN3Belf+ZQq2gs7Jrjbza6MQxw+Ek2Dr1iEJnhTaKNri0NCiApxdnKnobaJrWtXo
-         GY28yx3AKHGF1dlHYTsXrnNn9zK6Kf5mAVqe5y+AoullRMCVYQlFrpYSTozqdm8WRTEs
-         JY6K8J8/ft4sB+BB9gZUMdswnyX1XW0VjeJAlajnJb3FdaxCyhzk6UwpmPnEgqGQcZJE
-         KciQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVAQUbN/oypwz7maIEf038ZiZ60tBQT3Mn2SDx5I3OFeXbjD5lh5LG/VwWv/fPdH+hSWzTvD0MaCQw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzX/aA0wFWWxgI/BJnU4G6L+zmbb4+N4nwHceqeMMCHbz6nf4QI
-	0xzv7LCg7+KdWFXNe0MHwCYxKMc0RNMMnMqt7CjT1LrXaOXq9zMIhTrA
-X-Gm-Gg: ASbGncvSdphsDbPlaTn0A0+apBqlJ811/EQsXvOkD3UMf8fqGyCT099fPkay1Mml7iu
-	Nwp0pYNup9FJqtaY0vmpH88x0cTjk1PlNgX+cHgvNu03Mlrr7wnUMifJ+jFSMtKDvDp/05M8Hj7
-	hy8XIEeT9/KukPTOEc/qpfwrnCc3c7eAVCxGp1IotNVpcxU+d18leqIbhnot7uuDP8jEs+UFrgu
-	F3D4hOaUNn9bDzWuAyAWzSmhgJC3shSlWVuwfh7f1MCP/9eXoAgWygRa3Y0u9GqEfSZHatAvyph
-	pL9cxOeWBXx3JKkXaDtQa5pYlPA3NkLevjMGY24PrAyK4mpjV/T9rnfbJ7w5OZMqxG5cFDgHsoy
-	rvq0tMsNHygfOyeocmzBYWO1awNIaoyMycC51dqsf1anANA==
-X-Google-Smtp-Source: AGHT+IGqqvxgXY2OC9at7e+Z/dJe6HNnDTsrlz4oZFJzvocQesOciANg3kl63GyEUEZ9jeQdxahboQ==
-X-Received: by 2002:a05:6512:131f:b0:55f:3ebc:133d with SMTP id 2adb3069b0e04-56260f37ba6mr3071966e87.21.1757408818324;
-        Tue, 09 Sep 2025 02:06:58 -0700 (PDT)
-Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-56818445b20sm368617e87.111.2025.09.09.02.06.57
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 09 Sep 2025 02:06:57 -0700 (PDT)
-Date: Tue, 9 Sep 2025 11:06:54 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 7/7] usb: xhci: standardize address format
-Message-ID: <20250909110654.4d064391.michal.pecio@gmail.com>
-In-Reply-To: <20250903170127.2190730-8-niklas.neronin@linux.intel.com>
-References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
-	<20250903170127.2190730-8-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1757408878; c=relaxed/simple;
+	bh=WD/veY6O9nbXJ4rBWI8CJZC9zCfx1N915s17C4ExMOM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RRpoShA7z8Wu1JWqlQgvchDv9tppRDlTtMy4MAB4fTDy/0zw7YDc/q4baGrT+Qe2x37ZIG9adG5TrVK2okanuVqg19+N+SgO7s6ZXaCvWwPu43/fZFVT092UmUE5fd2CuBufETyaXcgO68mIsR7kSA7Hi6Ht5cMT495fOrNCGA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DXVBGM+h; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757408877; x=1788944877;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WD/veY6O9nbXJ4rBWI8CJZC9zCfx1N915s17C4ExMOM=;
+  b=DXVBGM+hIRCNm9KXtUp3tbYMIAtgXk1iF2wf1cBBelkNYs6zUx25kGt3
+   oWVUvKCBat1M89+4BRyJ/QpUwDcRRxw0zmA3DQHnGqTz8Y/LYOzLj06uy
+   DC9SWm3Vd97bnNPFGxoHvb5jrMUjbCRNIAlN2uw1Db1ajRjbRG8SfMhEm
+   uGxG9WdSAWbyKnztzgn7wMPJwi77HQUNzMNATPMqsem7NljAmY+ez+hdN
+   D8Ngyqm5NU0Yfih6MuoaQz9HmqOXpAHyTHwtqZE07EHTe0tEPXpyNjmUL
+   78uDjtr34SXq9PxgMQLmCtCl/3WIHdSweyKlm1kNxhLMBGUG6XyET4CV3
+   A==;
+X-CSE-ConnectionGUID: TfBb8X1BQ9euHRlTgDktww==
+X-CSE-MsgGUID: luZ2HQq6QzaICM4OW23hNQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="85132854"
+X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
+   d="scan'208";a="85132854"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 02:07:56 -0700
+X-CSE-ConnectionGUID: suuo11xPTgyHPNT80Zh/vQ==
+X-CSE-MsgGUID: H6m7DZRTQlGVevJFCZ5OLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
+   d="scan'208";a="172950676"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa006.fm.intel.com with SMTP; 09 Sep 2025 02:07:52 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Sep 2025 12:07:51 +0300
+Date: Tue, 9 Sep 2025 12:07:51 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/5] usb: typec: ucsi: Set no_mode_control flag
+Message-ID: <aL_uZxBkBfC9Etrk@kuha.fi.intel.com>
+References: <20250905142206.4105351-1-akuchynski@chromium.org>
+ <20250905142206.4105351-4-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250905142206.4105351-4-akuchynski@chromium.org>
 
-On Wed,  3 Sep 2025 19:01:27 +0200, Niklas Neronin wrote:
-> In the xHCI driver, printed hexadecimal values can be ambiguous, making it
-> difficult to distinguish between values and addresses. To enhance clarity,
-> all DMA addresses are now prefixed with the '@' symbol, ensuring immediate
-> recognition as addresses.
+On Fri, Sep 05, 2025 at 02:22:04PM +0000, Andrei Kuchynski wrote:
+> This flag indicates that the PPM allows the OPM to change the currently
+> negotiated alternate mode using the SET_NEW_CAM command.
+> 
+> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 0d6b0cf5a7cd..9f754344a841 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1632,6 +1632,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>  
+>  	cap->driver_data = con;
+>  	cap->ops = &ucsi_ops;
+> +	cap->no_mode_control = !(con->ucsi->cap.features & UCSI_CAP_ALT_MODE_OVERRIDE);
 
-Is it really a problem? Which values look like addresses?
+The flag is now used to expose the priority file, but you can't affect
+the order in which the UCSI attempts to enter the modes, or can you?
 
-Is it important enough to justify merge conflicts on multiple debug
-messages when porting patches to stable? There are many inconsistencies
-and typose in those messages, but I only clean them up if change is
-necessary for other reasons.
+thanks,
 
-> The '@' prefix is removed from '%p' specifiers, as they represent unique
-> address IDs rather than actual addresses. The hashing process does not
-> preserve any relation between addresses; for instance, if two addresses
-> are X bytes apart, their hashed counterparts will not reflect this
-> distinction.
-
-Is it really a problem? BTW, you can reboot with 'no_hash_pointers'
-to make %p work normally for debugging.
-
-Personally, I do believe that there is a problem: those @ add no real
-information and they need to be stripped by scripts or when copying
-numbers from logs to calculators. But see comment above.
-
-This problem applies to new cases added by this patch as well.
-
-And what if the kernel starts hashing %pad by default? ;)
-
-> Exceptions to the '@' prefix rule are functions xhci_ring_enqueue_show()
-> and xhci_ring_dequeue_show(), which exclusively print to the enqueue and
-> dequeue debugfs files, containing only addresses.
-
-So debugfs will also get @ now, except for two files apparently?
-
-Why are those files left out and inconsistent with the rest? If the
-answer is "because the @ prefix is annoying and breaks tools" then the
-same answer applies to every other debugfs file ;)
-
-I have a script which parses event-ring/trbs and command-ring/trbs to
-print commands and their completions together. Others may have other
-scripts. They will stop working now. And for what gain?
-
-debugfs is nothing but dumps od xHCI data structures, anyone going
-there already knows what those fields are.
-
-> Standardize printing of all 64-bit addresses read from registers, using
-> the "0x%llx" specifier.
-
-%#llx is easier to type and less eye sore than 0x%llx.
-
-The 0x prefix is maybe rarely necessary for humans, but useful because
-such format is ready to parse by hex-aware calculators or scripts.
-
-Same argument works against @ prefix. Scripting languages, terminals
-and text editors can select whole words and we don't need @ included.
-
-> Adding padding is unnecessary and provides no useful information.
-> Prefix the value with "0x" to clearly indicate that its a hexadecimal.
-
-Sounds like an argument against converting to %pad in other places?
-
-That being said, I'm not sure if %08llx is truly evil yet.
-
-> $ git grep -n '0x%' | wc -l
-> 39796
-> $ git grep -n '%#' | wc -l
-> 5204
-
-Not sure what is this doing in a commit message?
-
-> Redundant "0x" string prefix is removed from DMA addresses printed
-> using the '%pad' specifier, since '%pad' automatically includes the
-> "0x" prefix.
-
-Not sure if urgent enough to bother, but makes sense of course.
-
-Regards,
-Michal
+-- 
+heikki
 
