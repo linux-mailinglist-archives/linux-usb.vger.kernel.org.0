@@ -1,175 +1,141 @@
-Return-Path: <linux-usb+bounces-27828-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27829-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25F85B50646
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 21:18:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B75F5B50758
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 22:46:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D269316D256
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 19:18:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 610CD16D78F
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 20:46:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D5836C07C;
-	Tue,  9 Sep 2025 19:17:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52A9A35E4D9;
+	Tue,  9 Sep 2025 20:44:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RSkozw1g"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aln3b+ZW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D604225415;
-	Tue,  9 Sep 2025 19:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1592935CEB6
+	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 20:44:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757445424; cv=none; b=DTOmIWovHHygKtFUmVLp8K/Yt59fdZ1jv3/o3MERGv5Try95QmP+xPuq/geVd57dYfNHqwZS+oFaKeuSwJdxugQ7qUhZiGTu/1klKx2rIGfLTd+03BDveMacQOVH6uH0/IQ+yqvztifpEphLCvQuHOfsvRDWrXAyv2bSDaJUYrY=
+	t=1757450665; cv=none; b=LoPtKqgJ9GFwtkJdh9JY6yZjnp9SJcyP49GqJI4W7JX7f+T+9q/DEtD+tGPkqezG3FoGw557wVJQSWvBESxonpAwZm1BHAzDrUXB49hXzFfna1cY0djXpYEPXPtSIKkiH4iuj0a5Za91hozvTHWiCYok+cxm2gW/UdzgyfztCd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757445424; c=relaxed/simple;
-	bh=gVzxOE/pl/exM5/3ViV8ssmW6tGDSsp+WYKa5FxPoEY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h5olin/UFd7YO21u/deCoR1U8qdN/TWamRtaquA8vH7Bn/qGF7XbjKgJgNzCpqoxjjf8vFAUj3TigdAwBDMsEheTKqAD8SRIZxbQ5ONig36BW2/ivXgAscL726St8Qa4I3aWM3m5WWyWCOqpXM6PahitNeruj8ZVviFUiR9KSuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RSkozw1g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB4B2C4CEF4;
-	Tue,  9 Sep 2025 19:17:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757445424;
-	bh=gVzxOE/pl/exM5/3ViV8ssmW6tGDSsp+WYKa5FxPoEY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RSkozw1g/nG+tUtkLwJcR5YP+2XwvAU++L0WUndrrz/c+jjIsjZLVcIdlHQHNZyg2
-	 il0Xe+pJk7IP0kyenCv5oitFAZB3uHCGXuQHm6eqP21QvXCOIr6y7y99FYK2r0Loa5
-	 /qfrvRMe2yAZDoN+IVzyENwZU+bpO5HxzRu08huVBQr/zmBi27gIPHhHwN82UrNXbg
-	 a/RMIiLygBst9XuqPL0YYkYuE+NzoS9sQD5NHiYvd//Wn87YYFnkGvmrsLgPnnwZpJ
-	 ws4lbjKAoOEzhCJ53lPNJOPQCRSixjZEkaTd6I44jjftM4WyFq77QM6pPyaU7ex/7k
-	 y3uBQcISsATrg==
-From: "Mario Limonciello (AMD)" <superm1@kernel.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>
-Cc: Pavel Machek <pavel@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
-	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-	linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
-	linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
-	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-	linux-trace-kernel@vger.kernel.org (open list:TRACING),
-	AceLan Kao <acelan.kao@canonical.com>,
-	Kai-Heng Feng <kaihengf@nvidia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	=?UTF-8?q?Merthan=20Karaka=C5=9F?= <m3rthn.k@gmail.com>,
-	Eric Naim <dnaim@cachyos.org>,
-	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-	"Mario Limonciello (AMD)" <superm1@kernel.org>
-Subject: [PATCH v7 12/12] Documentation: power: Add document on debugging shutdown hangs
-Date: Tue,  9 Sep 2025 14:16:19 -0500
-Message-ID: <20250909191619.2580169-13-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250909191619.2580169-1-superm1@kernel.org>
-References: <20250909191619.2580169-1-superm1@kernel.org>
+	s=arc-20240116; t=1757450665; c=relaxed/simple;
+	bh=4Rb1yEm46kYBDaw1DBgu4gZefKn3DY0kxe6RsvnZ0Lw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uZkkeoigNZ2D3AKK/usriFJFADF0XHrCqFYKOJ2/tMKvyHuQ7++TRbAUg5plla7SzieEwdcxh+ptwEVc/j2Olz9dpVY7MGo68e9EdjMnRoKX60WLoqhG1RnPWWW0jD2Mg2z96+eiDB257jcFFzT7zEQrIGp1bjFj+0MJyxTI6jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aln3b+ZW; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-55ce508d4d6so5655147e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 09 Sep 2025 13:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757450662; x=1758055462; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MzBRzvKW2zdhXk7uB4HX6mdUtJFNu392EQuszh5zjhE=;
+        b=aln3b+ZW92Dyn0gbojk0kAf5oyOveA7RstXyq5RNFA4F5qWoZpTG/pph87Y1s/YcFU
+         9OXfH747u1Xbe4XQDOSFazW9eqIyfx01h2KQpI4kjG3wlaNHwyB+iGS6b9fP+7L/+wQK
+         RPazEG9Pzt5g9RGdHIUK7V1Ycs7rzs1tEqoykbioXwJpcaYoI9IJN+z36qW8BRfHxoBP
+         lsZodMiUOz+M2NGbJghmqwvivVQfIShl4wxzidDGZjuzapk6nD/Ym6Qqm4UqLOeJAp/A
+         FP6ogEqUkYOydRludpWZ2zaNbvO80E3w0LTSlOnVsoRnKfP1j2ikI6AspY+RIH9oYOcV
+         1ZGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757450662; x=1758055462;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MzBRzvKW2zdhXk7uB4HX6mdUtJFNu392EQuszh5zjhE=;
+        b=Z3xEkJY8KEomjL5SMQeWv2Qz4l21+vPUnpwqWLE71nH9A2GL2GeFg6dYcrzu/z/ZUT
+         RO1danrQENewhKayZ43OT+i0G8Bfg+sdtcXqWlw9i/+ze1vlw5yqXbv5v0julht1nxKZ
+         SJkkVYtfuDBv1elFNzXRPGO+olIDcIvZMkqIJww6dDKO8LW6XGbXf1qd+Xx6O1j/bWEb
+         8pgS8d50dEYM1As6QFH876LSFofNiiI3GlhCBdRMVuPlr4JZt8ZWQZsoXv5GizlMXv7i
+         iaQDjyYsVgqWlESMAZYQD08X/J4ElBWCvsZPukPu3FnDOUt3RVMNirGWSovT33I84A90
+         U9Uw==
+X-Forwarded-Encrypted: i=1; AJvYcCVI1oJuLd5riVuO0xljoPxte1LuLBHmnCfQk3Bop0uzStgYAmTjJzPSQK224G+mzcmyhjvNfiNmhdA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTO6GeY7PeI9wFjSL61/jmK7Vlclel7B+mIzkB2eA/QykLIfwN
+	SfS5tHbfFhQZKbh6lmweNBOku3wedXtvMcj5WjOY0S36nvndztm5yboR6xELSA==
+X-Gm-Gg: ASbGncsM0jSauLQeLj4bF40ZbBPwDflIcg/eENRXQbtnj7/kTIu2U8lRLMg42P1DRWn
+	pJtRtJY5yXSY9nqk876EgYK+vhhwWlMV9KHmQpmGBFNcaRsLxXBajIGUi3SRT2+eus9xKiIsa5I
+	OuUGMUB8NHNg5/WniR59BCTfSJXEX9wkixBt3Yr7L6rQ1hlPHH9ztxCBCMQBS5HCH2voOipzo/2
+	S9wuysPtAQ/MCYSX+reMJLMiGpR6vk89I6MlIDrcvYaL35DdLZG/WytX1pNoL8jet+7M5E7xxmM
+	cDbPPOPD+oGFO3OZ+TU1ygnEcWhTWaVzBnUcIDuAqhv0rvl80hDfMSoedxQLxIxj+/io7Vw3l8k
+	atwFXO3z54QXX9tE9V0d/InK+9yXonle/u3UXLvJ+p0aUNY0iq8YCxtCt
+X-Google-Smtp-Source: AGHT+IGtfmecFTDLgx5CmLdQpYU0Hps7t+OGk6514SR36ZxUpu3kbmPe6mlwuJxKopKqb+ducmuA2A==
+X-Received: by 2002:a05:6512:158a:b0:55f:6cec:2890 with SMTP id 2adb3069b0e04-5626247911emr4333491e87.38.1757450661576;
+        Tue, 09 Sep 2025 13:44:21 -0700 (PDT)
+Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-568190f828fsm731178e87.147.2025.09.09.13.44.20
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 09 Sep 2025 13:44:21 -0700 (PDT)
+Date: Tue, 9 Sep 2025 22:44:16 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+ mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/7] usb: xhci: use '%pad' specifier for DMA address
+ printing
+Message-ID: <20250909224416.691e47c9.michal.pecio@gmail.com>
+In-Reply-To: <aMAPkH5-4rLdmx_9@smile.fi.intel.com>
+References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
+	<20250903170127.2190730-3-niklas.neronin@linux.intel.com>
+	<20250909115949.610922a3.michal.pecio@gmail.com>
+	<aMAPkH5-4rLdmx_9@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The kernel will attempt hibernation callbacks before shutdown callbacks.
-If there is any problem with this, ideally a UART log should be captured
-to debug the problem.  However if one isn't available users can use the
-pstore functionality to retrieve logs.  Add a document explaining how
-this works.
+On Tue, 9 Sep 2025 14:29:20 +0300, Andy Shevchenko wrote:
+> On Tue, Sep 09, 2025 at 11:59:49AM +0200, Michal Pecio wrote:
+> > Old %llx with (long long) cast also prints it corretly.  
+> 
+> Not really. It prints unnecessary long values on 32-bit machines
+> making an impression that something works somewhere in 64-bit
+> address space.
 
-Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
----
-v7:
- * New patch
----
- Documentation/power/index.rst              |  1 +
- Documentation/power/shutdown-debugging.rst | 55 ++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
- create mode 100644 Documentation/power/shutdown-debugging.rst
+The %016llx format you are alluding to is used in two error messages
+actually seen by users, that's an issue. My crazy personal preference
+would be %08llx, but I concede it's unprofessional, so %pad it seems.
 
-diff --git a/Documentation/power/index.rst b/Documentation/power/index.rst
-index a0f5244fb4279..ea70633d9ce6c 100644
---- a/Documentation/power/index.rst
-+++ b/Documentation/power/index.rst
-@@ -19,6 +19,7 @@ Power Management
-     power_supply_class
-     runtime_pm
-     s2ram
-+    shutdown-debugging
-     suspend-and-cpuhotplug
-     suspend-and-interrupts
-     swsusp-and-swap-files
-diff --git a/Documentation/power/shutdown-debugging.rst b/Documentation/power/shutdown-debugging.rst
-new file mode 100644
-index 0000000000000..d4bf12000c1cd
---- /dev/null
-+++ b/Documentation/power/shutdown-debugging.rst
-@@ -0,0 +1,55 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Debugging Kernel Shutdown Hangs with pstore
-++++++++++++++++++++++++++++++++++++++++++++
-+
-+Overview
-+========
-+When the system is shut down to either a halt or power off, the kernel will
-+attempt to run hibernation calls for all devices. If this fails, the kernel will
-+fall back to shutdown callbacks. If this process fails and the system hangs
-+the kernel logs will need to be retrieved to debug the issue.
-+
-+On systems that have a UART available, it is best to configure the kernel to use
-+this UART for kernel console output.
-+
-+If a UART isn't available, the ``pstore`` subsystem provides a mechanism to
-+persist this data across a system reset, allowing it to be retrieved on the next
-+boot.
-+
-+Kernel Configuration
-+====================
-+To enable ``pstore`` and enable saving kernel ring buffer logs, set the
-+following kernel configuration options:
-+
-+* ``CONFIG_PSTORE=y``
-+* ``CONFIG_PSTORE_CONSOLE=y``
-+
-+Additionally, enable a backend to store the data. Depending upon your platform
-+some options include:
-+
-+* ``CONFIG_EFI_VARS_PSTORE=y``
-+* ``CONFIG_PSTORE_RAM=y``
-+* ``CONFIG_PSTORE_FIRMWARE=y``
-+* ``CONFIG_PSTORE_BLK=y``
-+
-+Kernel Command-line Parameters
-+==============================
-+Add these parameters to your kernel command line:
-+
-+* ``printk.always_kmsg_dump=Y``
-+	* Forces the kernel to dump the entire message buffer to pstore during
-+		shutdown
-+* ``efi_pstore.pstore_disable=N``
-+	* For EFI-based systems, ensures the EFI backend is active
-+
-+Userspace Interaction and Log Retrieval
-+=======================================
-+On the next boot after a hang, pstore logs will be available in the pstore
-+filesystem (``/sys/fs/pstore``) and can be retrieved by userspace.
-+
-+On systemd systems, the ``systemd-pstore`` service will help do the following:
-+
-+#. Locate pstore data in ``/sys/fs/pstore``
-+#. Read and save it to ``/var/lib/systemd/pstore``
-+#. Clear pstore data for the next event
--- 
-2.43.0
+But it's the exact function I have shown where three otherwise useless
+dma_addr_t are introduced to get around pass-by-reference limitation.
 
+Maybe there would be a way to limit their scope at least?
+
+In these messages, all values are indeed known-good DMA pointers or
+truncated to dma_addr_t by the time they are printed (but ep_trb_dma
+is truncated silently, not ideal).
+
+
+Elsewhere, HW-originated DMA pointers are handled as u64 and dynamic-
+debugged as %08llx. Call it messy or sloppy, but it's automagic and
+convenient - with no leading zeros, significant digits stand out more.
+A nonzero top DWORD on a 32 bit system sticks out like a sore thumb.
+
+The exact same *value* may be handled as dma_addr_t before it passes
+through HW and as u64 after it comes out. It would be nice if both
+copies looked the same in the log.
+
+> > Secondly, padding is not optional with %pad. Maybe not a big deal, but
+> > on 64 bit systems with comparatively little RAM it adds clutter.  
+> 
+> I don't get this, can you elaborate what's the problem in using _standard_
+> way of printing pointers / addresses?
+
+I simply find that leading zeros are distracting and make it harder
+to visually scan for equal or similar numbers in a wall of text,
+which is what dynamic debug is about.
+
+Regards,
+Michal
 
