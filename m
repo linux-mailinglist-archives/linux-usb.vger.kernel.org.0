@@ -1,106 +1,140 @@
-Return-Path: <linux-usb+bounces-27794-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27795-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA0A5B4FA1B
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 14:15:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FF10B4FADB
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 14:30:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D00FE16C6A4
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 12:14:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DF194E15F4
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 12:30:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE9963375A2;
-	Tue,  9 Sep 2025 12:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C7743218B0;
+	Tue,  9 Sep 2025 12:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tMr2axex"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="S6knxmHL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C4D32F775;
-	Tue,  9 Sep 2025 12:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3811E19CC27
+	for <linux-usb@vger.kernel.org>; Tue,  9 Sep 2025 12:30:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757420060; cv=none; b=ABwRLwkTNkn/t8o3qDxYNKoJiAoTnzUF0E5Wy6SayN9s2/ZAzVBuc1gvME2b+25icVkiN9KtLHQ0xBt5HUM9uu7F5G/ZfaePr6Tq9aWjO7SQeTFWRoqbGNFc/0Pc68j45kaVgY3ImKmVgg8EbS9CXBuqKKuc5K8M71J1lh/VnOc=
+	t=1757421041; cv=none; b=WexUURF+Ybfy7IUu+FcIpZF0g5JKlkK6/SchuxwWYBmiS8IRfyFOxQWUQrSaWE88vHLWfm7lIX3AetN8QYZYW/VONz6WjeM2TEh97UqQJ5FS8QQmIkFRAHD/rU/0bmkFRfZnkp+d0sSeYP4JSIwz0UFYUVfwgVudLKDkc2ryFm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757420060; c=relaxed/simple;
-	bh=nfO6Qip4wT2nqsDYDR/PKlg64uG9rndsPou4q5q7/AM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ve8asKqQ9ZUwXTgHfiu4nKANNDvg05OoPsxRqNnn2ittlow5ce/nA1qgGaVn7btP0AX+JjixCoFNlBo2ufe4Un7FazM1O8b2YTaUYJjpUx42kEzC6g3pjImFBNdLdOrfGfroASlLlQOLGJY0XknPRtc51FD4CGwp3ojJDbQKAV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tMr2axex; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA92C4CEF7;
-	Tue,  9 Sep 2025 12:14:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1757420059;
-	bh=nfO6Qip4wT2nqsDYDR/PKlg64uG9rndsPou4q5q7/AM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tMr2axexlrFj5gL9A5wx0Pm7Zq/Y5C2R915B/D1ID5hwZs1w5i55e/R1gqXyDFoKa
-	 aEdpr+MCr+XI+VwdTGdvIzXtoaB0zx4kSNQ1i+Set8uNLjFS24RS9FTTGXQQpco5OB
-	 nOD/LoJaq3ADDiRQO8QYtOQKbBjMqrXkRjlZFabc=
-Date: Tue, 9 Sep 2025 14:14:15 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Simon Neuenhausen <simon.neuenhausen@rwth-aachen.de>
-Cc: Daniel Almeida <daniel.almeida@collabora.com>,
-	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Michal Wilczynski <m.wilczynski@samsung.com>,
-	Igor Korotin <igor.korotin.linux@gmail.com>,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] samples: rust: add a USB driver sample
-Message-ID: <2025090916-dill-elated-3d68@gregkh>
-References: <20250825-b4-usb-v1-2-7aa024de7ae8@collabora.com>
- <2025090618-smudgy-cringing-a7a4@gregkh>
- <D8EAF874-4FED-42EE-8FD8-E89B6CB0086A@collabora.com>
- <2025090601-iron-glitter-c77d@gregkh>
- <831C4AE2-6964-4699-9E74-E4B721B87B17@collabora.com>
- <DCLQZZHU42HN.4Y4PP0PPR10O@kernel.org>
- <9657C897-087E-4544-849B-964E99D95A50@collabora.com>
- <DCLTJMIAMCVL.35U236MMS5CCK@kernel.org>
- <85B643A9-1657-43ED-BE98-BE7E502D08DA@collabora.com>
- <3aca9e74-b67c-4bfe-a206-9a6eecdf76ab@rwth-aachen.de>
+	s=arc-20240116; t=1757421041; c=relaxed/simple;
+	bh=TfgD91280mBYMbtyc2gQAhw5K8G243a5cAzgwqvOrWk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GZMBx8Ye+iYiRF/OR9dELIlaFcNGLA95+hCrQJH8UNqo74wcS2S66ByQ+9P1UXxgmwxASh9lNhtkcfFD3wspY6iXM8AmyovM7tmj1DKSAds+JWRFyiobqpKsJqo4i1UuzwJvQQLRQ5ukPEr06siHBuiyiZuBOuyHQGKXyUrmX50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=S6knxmHL; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b04271cfc3eso756009066b.3
+        for <linux-usb@vger.kernel.org>; Tue, 09 Sep 2025 05:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1757421037; x=1758025837; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gGGblSmY23n3+zeJrFP+XTBfpalkEjJ+yTGcmc0kj3M=;
+        b=S6knxmHLDTOOkGkG+JM6Tl0al/mGsZwySLZ5FT/NOZINOuXTSAx3h9kkiaIge2Fhw3
+         HSHTRbHSZgSccsG26mfcItetDTkQdwYs0IpayX5cagSjgXLy+YW8A86/SJ1wvkqiFthn
+         oPdGwY3himbP0thsAgx5edWaOLVpD8u2iH6xQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757421037; x=1758025837;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gGGblSmY23n3+zeJrFP+XTBfpalkEjJ+yTGcmc0kj3M=;
+        b=VUXk+H5RIIXXJX6AXWrBGH4+laAPm5zvNqLMn8CZyx4Z8h/WVh17LJLSrJfMQd8YTn
+         wetMlRwLyDvDDDBj/AWAUu7ySgIRihjakg1VICA1zX6bVU5PpvGsNYMH7R/8J5C/KtoL
+         L/vlfkFBu4hlELkxPwKm7RzkZZCNCp0dVX6ZX8uK5scHW222PVD4xKtKU+E5EMmzZKzp
+         8IOYBahLo0w0oVLvaxRSThSlBT5hxguk07bKdL942T/H8HM3t66WIuG1djKW+86wFcid
+         rqB0SB4UR66ao2h99Zb2BTfYCHCNrLfABYgtkdtZJTF91kjE2+ib0yNBcgHCyB5EMdyO
+         G6fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVyA6/+XshfXsKZax5woI06lYJUoPNf+X7a6IiRulfrRSxnVixRwxA18v2Pu+EKgaoLFrjjEc1LvHY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoP3lkuXydgKsTV1Iys+PItxPv+TRbcEN4Om985BA6rRocyn8q
+	FHFvE48eOvmTUrnb5Y/jCF/FQzHBV+W6ebBkhSRSiFcxWdTrzpWvjsf80sPsHwSCMw==
+X-Gm-Gg: ASbGncs0kova/v1EFmvCTM+85zuJyTb+2LDQFG9qdG3f8oA4rQOC9Q0f0dGgu3yoRJs
+	M1ck5wwW0/p/OKyjCA3O8ri/wAU5MJR9U5TbNi1Ky7qa1o1trFCnxtQC9T+PzbyzByTNoyWG+3v
+	E+Lk4R3h/dB+fv6oBkKwXXwTQ70KlMnhJa2cRWSsnUFxTvVceyKMmWjFGPyOpauPj6Eka61XCqC
+	Sp9H3FY8zwrZtieGIjHIPDQdXAGwMKsbem5IENzKUNxR9xftIc4qKPnrzshghIpaeY8LDnDRgEW
+	2bri1LphiH51LwNidGsg3I6DZjDQAQRiM+J9omNVikXHv42cRNYptaIvI4EN+h5KyxN9gWfdfia
+	g41pbwodG6fyUslHYoClr5jsJHvlrD06eLXjw6kKY0wzFAiTiBrNsFYHT7YC/Q6ZcsOHucsxszu
+	a38qkOenFyzwI0dbw=
+X-Google-Smtp-Source: AGHT+IEP5lq99tnWBWbz1GGVF0Gt4go+YIyrowIZeG7BiR/j4Mlu3jscXCr+tcpjkuM3py/ouJ5XJQ==
+X-Received: by 2002:a17:907:9342:b0:afe:e745:c3b with SMTP id a640c23a62f3a-b04b13d20dfmr1011225366b.12.1757421037456;
+        Tue, 09 Sep 2025 05:30:37 -0700 (PDT)
+Received: from akuchynski.c.googlers.com.com (240.225.32.34.bc.googleusercontent.com. [34.32.225.240])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b01902d0e99sm2409702166b.12.2025.09.09.05.30.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Sep 2025 05:30:36 -0700 (PDT)
+From: Andrei Kuchynski <akuchynski@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Cc: Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org,
+	Andrei Kuchynski <akuchynski@chromium.org>
+Subject: [PATCH RFC 0/5] USB Type-C alternate mode selection
+Date: Tue,  9 Sep 2025 12:30:23 +0000
+Message-ID: <20250909123028.2127449-1-akuchynski@chromium.org>
+X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3aca9e74-b67c-4bfe-a206-9a6eecdf76ab@rwth-aachen.de>
 
-On Tue, Sep 09, 2025 at 01:19:12PM +0200, Simon Neuenhausen wrote:
-> Hi,
-> 
-> > On 06.09.25 17:46, Daniel Almeida wrote:
-> 
-> > As I said to Greg above, I’m here to help if anyone wants to write a USB
-> > driver. Those interested
-> are free to reach out to me and we will work together to merge the required
-> abstractions with a real user in mind. Hopefully this encourages others to
-> join in this work :)
-> I had planned on writing a USB driver for TI nspire calculators, that would
-> make them mountable as USB mass storage devices, since they use a
-> proprietary USB protocol, that usually requires paid software from TI. At
-> the time I gave up on that, due to the lack of USB support in RFL, but I
-> could revive the effort using this.
+This patch series introduces a flexible mechanism for USB Type-C mode
+selection, enabling into USB4 mode, Thunderbolt alternate mode, or
+DisplayPort alternate mode.
 
-usb-storage is really just SCSI, so if you want to try to do this, you
-are going to have to write a scsi driver for the calculator.  Not
-something you probably really want to do :(
+New sysfs `mode_selection` attribute is exposed to provide user control
+over mode selection. It triggers an alternate mode negotiation.
+The mode selection logic attempts to enter prioritized modes sequentially.
+A mode is considered successfully negotiated only when its alternate mode
+driver explicitly reports a positive status. Alternate mode drivers are
+required to report their mode entry status (either successful or failed).
+If the driver does not report its status within a defined timeout period,
+the system automatically proceeds to attempt entry into the next preferred
+mode.
 
-Odd are this would be a much simpler userspace program instead, as you
-can control USB devices directly from userspace, no kernel driver
-needed.
+This series was tested on an Android OS device with kernel 6.16.
+This series depends on the 'USB Type-C alternate mode priorities' series:
+https://lore.kernel.org/all/20250905142206.4105351-1-akuchynski@chromium.org/ 
 
-thanks,
+Andrei Kuchynski (5):
+  usb: typec: Implement mode selection
+  usb: typec: Expose mode_selection attribute via sysfs
+  usb: typec: Report altmode entry status via callback
+  usb: typec: ucsi: displayport: Propagate DP altmode entry result
+  platform/chrome: cros_ec_typec: Propagate altmode entry result
 
-greg k-h
+ Documentation/ABI/testing/sysfs-class-typec  |  11 +
+ drivers/platform/chrome/cros_ec_typec.c      |   9 +
+ drivers/platform/chrome/cros_typec_altmode.c |  32 +-
+ drivers/platform/chrome/cros_typec_altmode.h |   6 +
+ drivers/usb/typec/altmodes/displayport.c     |  19 +-
+ drivers/usb/typec/altmodes/thunderbolt.c     |  10 +
+ drivers/usb/typec/class.c                    |  37 ++
+ drivers/usb/typec/class.h                    |   4 +
+ drivers/usb/typec/mode_selection.c           | 345 +++++++++++++++++++
+ drivers/usb/typec/mode_selection.h           |  25 ++
+ drivers/usb/typec/ucsi/displayport.c         |  10 +-
+ include/linux/usb/typec_altmode.h            |  11 +
+ include/linux/usb/typec_dp.h                 |   2 +
+ include/linux/usb/typec_tbt.h                |   3 +
+ 14 files changed, 516 insertions(+), 8 deletions(-)
+
+-- 
+2.51.0.384.g4c02a37b29-goog
+
 
