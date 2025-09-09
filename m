@@ -1,246 +1,153 @@
-Return-Path: <linux-usb+bounces-27815-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27816-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9BB2B504F9
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 20:09:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86F93B5060D
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 21:16:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55D0317BDC8
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 18:09:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A93D717C154
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 19:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22B9A369973;
-	Tue,  9 Sep 2025 18:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14E5A352080;
+	Tue,  9 Sep 2025 19:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="neSwnwxH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ph09nlnz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A4F362988;
-	Tue,  9 Sep 2025 18:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C556225415;
+	Tue,  9 Sep 2025 19:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757441295; cv=none; b=bFEBVKK1yfcIDG2cxD7AdNnHjJrFUTC2UMBDzd6FY7H8GdYqYEmzbHVtklW2YIyknzAC0Q1w7RRCdY8bwsyCITnOWHatbUlwhoTK9Kw8Knr/DkO9cNdCXBRnw/bd0s+2+WzJxsGv6cqiPvHyvd8Ippd7kAKoEtH8aYpauLWzn3M=
+	t=1757445395; cv=none; b=lHN/9pDIfMstCUoIyK61xmJU1KJxSGLB89iYaiCDjX0W1OmzSW3O41QhITeyhGz9LkVdrOv8wc5vM7zhNTwR5xNEsHtQe3dn7jNSqbiqNCLRFxJFw1Q4a+FfRGG8bIg1JRIsS37tdoWXVBoBZFUqq/xJL2xQPjn1T0ibJJrXaPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757441295; c=relaxed/simple;
-	bh=QXN6ui8koLwxkiJuZO6e64rL8TFfhfstw4IEOinL4KQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PLrR2LlSDBMZ6jNEu+V/twhaN7wTIDtTbq/DhaTRH8mY97oRYNuI5Ax4UB2rEeli73qOA/vMWbVUvPtR1RzSsuv3mqmxe2TDeuWRpRxizP0hjB7MhrQknkQL3/2BXEkDXnGeDeXf4f0ZmEdg+jicXQPty7pEaRtztvinPF6EfoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=neSwnwxH; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3df15fdf0caso4544478f8f.0;
-        Tue, 09 Sep 2025 11:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757441292; x=1758046092; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BtgoC1iOeueD6v2dNa4JLHXcBGAaf8DrU7TRJZiMWKA=;
-        b=neSwnwxHofDrIpyPHbXV6dtvPaK4dOdm/qgu3AltV+ydyTrmYBZiyDrgM8PiRKTIiL
-         3GzFnhWvZPGMH/W9ZjvTr1VZ40RnBQSYjivdKopOAY1vG/zXeH/yhBshcfoXYb4QQ8Zm
-         y72WcHJ4eyzvoeFr4LJwi6/lbVQjF2fjaU4YUcrKSo883q4qJzKx/AaAZBB4LXSsP/UO
-         +D9H421w2JDJhZ1WtmSuGF2UB/0F0d4Fww7dZDhAjAYDHP9SkA67lz6gjmvkSAeEwusI
-         HZEBVRbX6fdrT8X4JFwq5f+vyvIiTs5ZLje35Z33ZiCGYA45p6s2A7EroeXuwg5E77uM
-         6C/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757441292; x=1758046092;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BtgoC1iOeueD6v2dNa4JLHXcBGAaf8DrU7TRJZiMWKA=;
-        b=V5y07AfQy1+yMNByr/8DJjcP6uG9l9o3mHYmdBshcO7B+MdPG53QgbG3NmhPxl0IhR
-         ca7oAjLdrkCncv35PnDUOoeT7Mz/ZwEih/OfG2+A3HUJAHrMmZb49o7k3tdLPh9GAkIO
-         8iGGabJUV6pwaTBmpHjkz+wJJulR4+gU1FZs8lHY6pwNCjxUvJpFTK+9j4jSMpBKjXzj
-         44h0uebGs8LFXBTr2mSHwx7+pTjKLlBl5jJOv8nbuDoGZgapn9ro3VRSb27L/ZHTE6IW
-         vKL1GNevOrevbVb7HuEGt/4Cwg2HDKK5J9++C5BV6MLyJRVD403/rzKDPBiHwSiQzrKp
-         JhlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUe2c/68WTn+TYG7Zy2458DfRam9Pmiyxmfhs1fwdbkhkyt3yMkQ5AJ/dvtDf3dDilJ54EITVeomSgI7d2lFTcehUg=@vger.kernel.org, AJvYcCX7OnlnC70a46DqGoC+jjWJYrt2/OQOCTKWHyZsgbA00y9/Z18EUR6C+q02O7ZldSRUlkUbrR/Gz+mH@vger.kernel.org, AJvYcCXSc/0g649RTv0FVWQ1rw3ZDnV9oaoeIl2DpuaN2jwBOk5FcbTPSdy7eV9H4JAAdMGTo/oDLGs2vvoz6Dw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVwZ21/r4yhnNVYYfFGZQ0qUdi8bCsyKq2LdIXI3pqxteuxFPt
-	IuamOU6Z2xfrFC5j4E73IB4XNq4SWfZQLWXqikReu1YEwVKRM54/0FSS
-X-Gm-Gg: ASbGncupvcW7adcgYxXgNBH24YJdqs6m+0tRwtZuKz4LQFKA0zV7zansjVR51fdRQkt
-	kDGZYWSLl50mC30/+/3RfOfPsR7/BypqiPB1iK0+TqFxM4W/9hhtM9EauXFXLltNI1tDRLycmzw
-	PKSSU5YTlmjTwiN9czTORIniq78UleV/KSVvb+0SY0+7IGGPpDm+/Y5a/QlAZgB3XqoWkBQUWop
-	/PmzKeWhEbSvNpHKWBy2PJ9rtkgQ7rqfjwM2LK32GpkipWu8aOgTG/S8302rBuBlCBwlzzBBb7Z
-	Bgal/QJvWwUP7gmaLKH/TCDRoS1wPO500QGQf+2aLcNQtPhOdMq4BfkRXbWI5NmOW6WpWhajDZz
-	6rC/b6eypqVTW+kqLY4XdPscn8yzyWrewt+4SR+vM/1u+iY0FTpmJ+HPY/PEQKWWspung4MWj/g
-	grqCXi+jkhMVHK
-X-Google-Smtp-Source: AGHT+IEML9DA91qaCQap22hVs9zxDqMiUjCMenZYdxXRBKjDJ7zG4bXS40xu0ZdlwvMCA6EYh6jEng==
-X-Received: by 2002:a5d:5f96:0:b0:3b7:8da6:1bb4 with SMTP id ffacd0b85a97d-3e64cd59b54mr9655478f8f.58.1757441291837;
-        Tue, 09 Sep 2025 11:08:11 -0700 (PDT)
-Received: from biju.lan (host86-139-30-37.range86-139.btcentralplus.com. [86.139.30.37])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45df679a4c9sm4174015e9.3.2025.09.09.11.08.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Sep 2025 11:08:11 -0700 (PDT)
-From: Biju <biju.das.au@gmail.com>
-X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v2 08/11] usb: host: xhci-rcar: Add Renesas RZ/G3E USB3 Host driver support
-Date: Tue,  9 Sep 2025 19:07:53 +0100
-Message-ID: <20250909180803.140939-9-biju.das.jz@bp.renesas.com>
+	s=arc-20240116; t=1757445395; c=relaxed/simple;
+	bh=cvjs2rCwr/swxBfVgyr8t6/tNbruth6PRMQgQt0HV2o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Yqefw+/brIiHZpbs0LbRce03CnxF8Ix2J9Thia7f3KfQfY99t2hUiSy7xbG0Pt7XjF2nXqqdewEsqZqLJBCYweqQP5WdyxRkc8PGXKuHqmVFyZ31k7/hYlYsr4R8FNR6tSAzIiMKuaNTp7h0Nfj5tuFFpNDOMjqsUHzeJugHkLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ph09nlnz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB41C4CEF4;
+	Tue,  9 Sep 2025 19:16:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757445395;
+	bh=cvjs2rCwr/swxBfVgyr8t6/tNbruth6PRMQgQt0HV2o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Ph09nlnz48AjrwU0S1msu7S5hr3O+7fKDONrb0Bijxmc3Hfl96BS2wieCUFGV9fc2
+	 LrluOAXBbIY66Ri3uJ+1w1sKyPx/FDqxehGF3AlcOOkLOTijudI3PHRb6mNUKauToI
+	 pvYM2nxD91T3MkYdFhf1lKJAxdQyKHVF8prjBhojOD+EwX7+anAlSTLBQXz/rZRxyy
+	 +a5N/vFrsIobkE/CjU+wkpj+BECOOVN4WxWwQCX2k0to2derBibL5M9+Wi71juUhiq
+	 Mx9AsUaJQPypGWH06reV28bBNDgOMRPUkOIdvtyOwlkb8aFAz0GjMx1+81koMTDvwZ
+	 LXkyxfJXJs/8w==
+From: "Mario Limonciello (AMD)" <superm1@kernel.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>
+Cc: Pavel Machek <pavel@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
+	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
+	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
+	linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
+	linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
+	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
+	linux-trace-kernel@vger.kernel.org (open list:TRACING),
+	AceLan Kao <acelan.kao@canonical.com>,
+	Kai-Heng Feng <kaihengf@nvidia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	=?UTF-8?q?Merthan=20Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+	Eric Naim <dnaim@cachyos.org>,
+	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+	"Mario Limonciello (AMD)" <superm1@kernel.org>
+Subject: [PATCH v7 00/12] Improvements to S5 power consumption
+Date: Tue,  9 Sep 2025 14:16:07 -0500
+Message-ID: <20250909191619.2580169-1-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250909180803.140939-1-biju.das.jz@bp.renesas.com>
-References: <20250909180803.140939-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+A variety of issues both in function and in power consumption have been
+raised as a result of devices not being put into a low power state when
+the system is powered off.
 
-The USB3.2 Gen2 Host controller (a.k.a USB3HOST), IP found on the RZ/G3E
-SoC is similar to R-Car XHCI, but it doesn't require any firmware.
+There have been some localized changes[1] to PCI core to help these issues,
+but they have had various downsides.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+This series instead uses the driver hibernate flows when the system is
+being powered off or halted.  This lines up the behavior with what other
+operating systems do as well.  If for some reason that fails or is not
+supported, run driver shutdown() callbacks.
+
+Rafael did mention in earlier versions of the series concerns about
+regression risk.  He was looking for thoughts from Greg who isn't against
+it but also isn't sure about how to maintain it. [1]
+
+This has been validated by me and several others in AMD
+on a variety of AMD hardware platforms. It's been validated by some
+community members on their Intel hardware. To my knowledge it has not
+been validated on non-x86.
+
+On my development laptop I have also contrived failures in the hibernation
+callbacks to make sure that the fallback to shutdown callback works.
+
+In order to assist with potential regressions the series also includes
+documentation to help with getting a kernel log at shutdown after
+the disk is unmounted.
+
+Cc: AceLan Kao <acelan.kao@canonical.com>
+Cc: Kai-Heng Feng <kaihengf@nvidia.com>
+Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
+Cc: Merthan Karakaş <m3rthn.k@gmail.com>
+Cc: Eric Naim <dnaim@cachyos.org>
+Link: https://lore.kernel.org/linux-usb/2025090852-coma-tycoon-9f37@gregkh/ [1]
 ---
-v1->v2:
- * No change.
----
- drivers/usb/host/Kconfig           |  2 +-
- drivers/usb/host/xhci-rcar.c       | 55 ++++++++++++++++++++++++++++++
- drivers/usb/host/xhci-rzg3e-regs.h | 12 +++++++
- 3 files changed, 68 insertions(+), 1 deletion(-)
- create mode 100644 drivers/usb/host/xhci-rzg3e-regs.h
+v6->v7:
+ * Add documentation on how to debug a shutdown hang
+ * Adjust commit messages per feedback from Bjorn
 
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 109100cc77a3..c4f17ce5c77b 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -93,7 +93,7 @@ config USB_XHCI_RCAR
- 	default ARCH_RENESAS
- 	help
- 	  Say 'Y' to enable the support for the xHCI host controller
--	  found in Renesas R-Car ARM SoCs.
-+	  found in Renesas R-Car and RZ/G3E alike ARM SoCs.
- 
- config USB_XHCI_RZV2M
- 	bool "xHCI support for Renesas RZ/V2M SoC"
-diff --git a/drivers/usb/host/xhci-rcar.c b/drivers/usb/host/xhci-rcar.c
-index 6d4662def87f..8a993ee21c87 100644
---- a/drivers/usb/host/xhci-rcar.c
-+++ b/drivers/usb/host/xhci-rcar.c
-@@ -11,10 +11,12 @@
- #include <linux/platform_device.h>
- #include <linux/of.h>
- #include <linux/usb/phy.h>
-+#include <linux/reset.h>
- 
- #include "xhci.h"
- #include "xhci-plat.h"
- #include "xhci-rcar-regs.h"
-+#include "xhci-rzg3e-regs.h"
- #include "xhci-rzv2m.h"
- 
- #define XHCI_RCAR_FIRMWARE_NAME_V1	"r8a779x_usb3_v1.dlmem"
-@@ -67,6 +69,48 @@ static void xhci_rcar_start(struct usb_hcd *hcd)
- 	}
- }
- 
-+static void xhci_rzg3e_start(struct usb_hcd *hcd)
-+{
-+	u32 int_en;
-+
-+	if (hcd->regs) {
-+		/* Update the controller initial setting */
-+		writel(0x03130200, hcd->regs + RZG3E_USB3_HOST_U3P0PIPESC(0));
-+		writel(0x00160200, hcd->regs + RZG3E_USB3_HOST_U3P0PIPESC(1));
-+		writel(0x03150000, hcd->regs + RZG3E_USB3_HOST_U3P0PIPESC(2));
-+		writel(0x03130200, hcd->regs + RZG3E_USB3_HOST_U3P0PIPESC(3));
-+		writel(0x00180000, hcd->regs + RZG3E_USB3_HOST_U3P0PIPESC(4));
-+
-+		/* Interrupt Enable */
-+		int_en = readl(hcd->regs + RZG3E_USB3_HOST_INTEN);
-+		int_en |= RZG3E_USB3_HOST_INTEN_ENA;
-+		writel(int_en, hcd->regs + RZG3E_USB3_HOST_INTEN);
-+	}
-+}
-+
-+static int xhci_rzg3e_resume(struct usb_hcd *hcd)
-+{
-+	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+
-+	return reset_control_deassert(xhci->reset);
-+}
-+
-+static int xhci_rzg3e_post_resume(struct usb_hcd *hcd)
-+{
-+	xhci_rzg3e_start(hcd);
-+
-+	return 0;
-+}
-+
-+static int xhci_rzg3e_suspend(struct usb_hcd *hcd)
-+{
-+	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+
-+	reset_control_assert(xhci->reset);
-+
-+	return 0;
-+}
-+
- static int xhci_rcar_download_firmware(struct usb_hcd *hcd)
- {
- 	struct device *dev = hcd->self.controller;
-@@ -190,6 +234,14 @@ static const struct xhci_plat_priv xhci_plat_renesas_rzv2m = {
- 	.plat_start = xhci_rzv2m_start,
- };
- 
-+static const struct xhci_plat_priv xhci_plat_renesas_rzg3e = {
-+	.quirks = XHCI_NO_64BIT_SUPPORT | XHCI_RESET_ON_RESUME | XHCI_SUSPEND_RESUME_CLKS,
-+	.plat_start = xhci_rzg3e_start,
-+	.suspend_quirk = xhci_rzg3e_suspend,
-+	.resume_quirk = xhci_rzg3e_resume,
-+	.post_resume_quirk = xhci_rzg3e_post_resume,
-+};
-+
- static const struct of_device_id usb_xhci_of_match[] = {
- 	{
- 		.compatible = "renesas,xhci-r8a7790",
-@@ -206,6 +258,9 @@ static const struct of_device_id usb_xhci_of_match[] = {
- 	}, {
- 		.compatible = "renesas,xhci-r8a7796",
- 		.data = &xhci_plat_renesas_rcar_gen3,
-+	}, {
-+		.compatible = "renesas,r9a09g047-xhci",
-+		.data = &xhci_plat_renesas_rzg3e,
- 	}, {
- 		.compatible = "renesas,rcar-gen2-xhci",
- 		.data = &xhci_plat_renesas_rcar_gen2,
-diff --git a/drivers/usb/host/xhci-rzg3e-regs.h b/drivers/usb/host/xhci-rzg3e-regs.h
-new file mode 100644
-index 000000000000..7a244a47b882
---- /dev/null
-+++ b/drivers/usb/host/xhci-rzg3e-regs.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __XHCI_RZG3E_H
-+#define __XHCI_RZG3E_H
-+
-+#define RZG3E_USB3_HOST_INTEN		0x1044	/* Interrupt Enable */
-+#define RZG3E_USB3_HOST_U3P0PIPESC(x)	(0x10c0 + (x) * 4) /* PIPE Status and Control Register */
-+
-+#define RZG3E_USB3_HOST_INTEN_XHC	BIT(0)
-+#define RZG3E_USB3_HOST_INTEN_HSE	BIT(2)
-+#define RZG3E_USB3_HOST_INTEN_ENA	(RZG3E_USB3_HOST_INTEN_XHC | RZG3E_USB3_HOST_INTEN_HSE)
-+
-+#endif /* __XHCI_RZG3E_H */
+Mario Limonciello (AMD) (12):
+  PM: Introduce new PMSG_POWEROFF event
+  scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+  usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+  USB: Pass PMSG_POWEROFF event to suspend_common()
+  PCI/PM: Disable device wakeups when halting or powering off system
+  PCI/PM: Split out code from pci_pm_suspend_noirq() into helper
+  PCI/PM: Run bridge power up actions as part of restore phase
+  PCI/PM: Use pci_power_manageable() in pci_pm_poweroff_noirq()
+  PCI: Put PCIe bridges with downstream devices into D3 at hibernate
+  drm/amd: Avoid evicting resources at S5
+  PM: Use hibernate flows for system power off
+  Documentation: power: Add document on debugging shutdown hangs
+
+ Documentation/power/index.rst              |  1 +
+ Documentation/power/shutdown-debugging.rst | 55 ++++++++++++
+ drivers/base/power/main.c                  |  7 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 +
+ drivers/pci/pci-driver.c                   | 99 +++++++++++++++-------
+ drivers/scsi/mesh.c                        |  1 +
+ drivers/scsi/stex.c                        |  1 +
+ drivers/usb/core/hcd-pci.c                 | 11 ++-
+ drivers/usb/host/sl811-hcd.c               |  1 +
+ include/linux/pm.h                         |  5 +-
+ include/trace/events/power.h               |  3 +-
+ kernel/reboot.c                            |  6 ++
+ 12 files changed, 159 insertions(+), 35 deletions(-)
+ create mode 100644 Documentation/power/shutdown-debugging.rst
+
+
+base-commit: 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
 -- 
 2.43.0
 
