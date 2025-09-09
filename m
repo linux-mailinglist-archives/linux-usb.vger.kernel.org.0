@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-27781-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27782-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B85D3B4A8BD
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:50:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C149B4A901
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 11:56:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 634C2360D6E
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:50:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EA5B3B340D
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 09:56:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCD6C2D23B8;
-	Tue,  9 Sep 2025 09:47:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA362D193B;
+	Tue,  9 Sep 2025 09:56:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Obor1TMN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VkU8Kh3D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653382D239D;
-	Tue,  9 Sep 2025 09:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1D4256C7E;
+	Tue,  9 Sep 2025 09:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757411272; cv=none; b=k3HjYQfQfby27/aZwgCQ6KxXAaNYieOkQ5ayymj4Hs9xpMHEg1/NEJvUrnYP4e3AKGAhwp3LBAxEqQ9viJI/ZdzmmojrLs/mj//wa0wkxr2l4QBgHBaSU4Nv8qAiHxuzyfL0MQZqQCpBMVrW2dmVi5BDMvW9FlWOr4j/vkefddw=
+	t=1757411782; cv=none; b=P/GKxJ4u/qm4AT7S7HWA/rOd0IDALuVWi/e3CAL+XCbpJAZ6I2j1nJnvyoZwghj1V0brjWzzDrchCawqm+nARKiQzDXA+GlJbe7zYelfwo13I74n0Xl3tXREFeFPjUvok2AmHTiDdlCd8pHaL8rZI1EBrOVIe6+6q89mNlaQOMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757411272; c=relaxed/simple;
-	bh=JrPGhCJ7nJZqXECYZOjxg/ffsRI6LCeK6wQeJaLY740=;
+	s=arc-20240116; t=1757411782; c=relaxed/simple;
+	bh=uo5ZUhYMuByiGgJRlg8TUV2xCirGU9z4qi8EAlibyr8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SCzSDqoyLTKab4/gm55SrKTuL1e3lWauzJIGyI7lryqUsxRhQiCLjaRH+OMICs+hH3iUXiqry6js442wB476O+vTMBEPBUaiGbwq5W1nBXSjmLW2PwOscUD/EzuiiV4kPC+cXF6im3QtXga8bBGm/rMfZcEf+0IUvThsySlOt7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Obor1TMN; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=StAzifZ83fejtjp2N9CMVOSL7EHG1zqNVRElyElM7bhKsV5gv0ON7koTSOvZMyIkHDwiH+K/AckyRjG8MSNk16Cr/CaRDI0YhpLULeQyhLHlQPJ6HluyDtB2IE+ylDujXu6kw9/KwBpkv8kCIcJpxiAKGLpF9qG82Q3IBSpjhYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VkU8Kh3D; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757411271; x=1788947271;
+  t=1757411781; x=1788947781;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JrPGhCJ7nJZqXECYZOjxg/ffsRI6LCeK6wQeJaLY740=;
-  b=Obor1TMNaA1nQ3KRNRykQizITzHocfqG2hUBzUdV7zEo5mjbMwZyEUWD
-   z2whlB5VlqV4pEWLLDMAIDD1lDf/2xmfOSZQX8u7FHerPg3yyR6l30Dug
-   QYocmMa4L1BF69M63+WtpvgNzj9wfDu4ZBSFw6r2BeFX1nzjc9JZ/BIJ9
-   wwHC0Z8Ll0G9seic9x1jF57gc6JWH5ccHgHadsRzohl88YWIPqz4S6L2I
-   sC6/2r8UtpvKl51QHgQscLDtwFZ43kqIZN4rGoxfMHfm0Ru6pxRcONwGJ
-   fu2ogXCAzns/Fzy2O88dzoSlqBwocxt5u6uwW2eNGwj9u2lLDYQ4zMhsD
-   Q==;
-X-CSE-ConnectionGUID: Nqdti6QESIiBfdypcxbaow==
-X-CSE-MsgGUID: DQvlQYsNQaCUrN7+b3jxww==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="59624989"
+  bh=uo5ZUhYMuByiGgJRlg8TUV2xCirGU9z4qi8EAlibyr8=;
+  b=VkU8Kh3DXAo47And/As3kxpv0wyHxDgnai1kTCz2f6BTeJmXj4P2E3Cf
+   7r9EMazmDHP5I8lk1Uq84kjBiNAP+7i+Fn5UySa7yD/B8JAynTms5UXCZ
+   coWOqAcLWNQWw2AHWZyXLLeU8ZBYNwsU++vaYwOBNj5dKox7UHm6UK0jY
+   Q/7n9K/r4jAED5zP712FEAcV8c7KThIeDTHLn1x6aDRL7LTBxD7low/MZ
+   VTPwFSBGMjayYWtrml+tbGf//RN4z5cxgdIa+BJUn5EWz6AL/lnPSd9sO
+   UgOnFJeMxKFPEM9npmt43jpjcahQYnHyUT7iUUgZ9kPy2XwL7PuftZQ8K
+   g==;
+X-CSE-ConnectionGUID: oNRwR22qTrezmsxRkZ+Q+w==
+X-CSE-MsgGUID: 3MXa3Dz6TySVnSUH272l6A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="70308685"
 X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="59624989"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 02:47:50 -0700
-X-CSE-ConnectionGUID: NpxynYzHTfWJfZtZqNyrWQ==
-X-CSE-MsgGUID: AHAG1jdMRGmJ/7J4oPLZ8g==
+   d="scan'208";a="70308685"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 02:56:20 -0700
+X-CSE-ConnectionGUID: P1az0YAkRKGZnXA+YSHqnw==
+X-CSE-MsgGUID: x+o8/7BtRJCBL8qT1k7V2g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="210194115"
+   d="scan'208";a="172209638"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa001.jf.intel.com with SMTP; 09 Sep 2025 02:47:43 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Sep 2025 12:47:42 +0300
-Date: Tue, 9 Sep 2025 12:47:42 +0300
+  by orviesa006.jf.intel.com with SMTP; 09 Sep 2025 02:56:15 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 09 Sep 2025 12:56:13 +0300
+Date: Tue, 9 Sep 2025 12:56:13 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Sven Peter <sven@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -75,12 +75,13 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Ran Wang <ran.wang_1@nxp.com>, Peter Chen <peter.chen@nxp.com>,
 	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org
-Subject: Re: [PATCH v2 11/22] usb: typec: tipd: Register DisplayPort and
- Thunderbolt altmodes for cd321x
-Message-ID: <aL_3vn7VYiapI3_N@kuha.fi.intel.com>
+	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
+	Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v2 13/22] usb: typec: tipd: Use read_power_status
+ function in probe
+Message-ID: <aL_5vZvZG4oYQACo@kuha.fi.intel.com>
 References: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
- <20250906-atcphy-6-17-v2-11-52c348623ef6@kernel.org>
+ <20250906-atcphy-6-17-v2-13-52c348623ef6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -89,173 +90,42 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250906-atcphy-6-17-v2-11-52c348623ef6@kernel.org>
+In-Reply-To: <20250906-atcphy-6-17-v2-13-52c348623ef6@kernel.org>
 
-On Sat, Sep 06, 2025 at 03:43:24PM +0000, Sven Peter wrote:
-> Ports equipped with a CD321x are only found on Apple Silicon machines
-> and always support DisplayPort, Thunderbolt and USB4. Register these
-> port modes unconditionally.
+On Sat, Sep 06, 2025 at 03:43:26PM +0000, Sven Peter wrote:
+> From: Hector Martin <marcan@marcan.st>
 > 
+> We need the initial power status to be able to reliably detect connector
+> changes once we introduce de-bouncing for CD321x next. read_power_status
+> takes care of this and also forwards the status to the trace subsystem
+> so let's use that instead of open-coding it inside probe.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > Signed-off-by: Sven Peter <sven@kernel.org>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tipd/core.c | 85 +++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 82 insertions(+), 3 deletions(-)
+>  drivers/usb/typec/tipd/core.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index afd11b3e1ae596c7f3283e4336aaa57874c9378d..c7cf936e5a61a331271c05b68ff1b77b89c0f643 100644
+> index cd427eecd8a594b7e609a20de27a9722055307d8..e6e9730ee6dacd8c1271b1d52a02da49ff248d3e 100644
 > --- a/drivers/usb/typec/tipd/core.c
 > +++ b/drivers/usb/typec/tipd/core.c
-> @@ -16,6 +16,8 @@
->  #include <linux/interrupt.h>
->  #include <linux/usb/typec.h>
->  #include <linux/usb/typec_altmode.h>
-> +#include <linux/usb/typec_dp.h>
-> +#include <linux/usb/typec_tbt.h>
->  #include <linux/usb/role.h>
->  #include <linux/workqueue.h>
->  #include <linux/firmware.h>
-> @@ -144,6 +146,7 @@ struct tipd_data {
->  	u64 irq_mask1;
->  	size_t tps_struct_size;
->  	int (*register_port)(struct tps6598x *tps, struct fwnode_handle *node);
-> +	void (*unregister_port)(struct tps6598x *tps);
->  	void (*trace_data_status)(u32 status);
->  	void (*trace_power_status)(u16 status);
->  	void (*trace_status)(u32 status);
-> @@ -185,6 +188,9 @@ struct cd321x {
->  	struct tps6598x_dp_sid_status_reg dp_sid_status;
->  	struct tps6598x_intel_vid_status_reg intel_vid_status;
->  	struct tps6598x_usb4_status_reg usb4_status;
-> +
-> +	struct typec_altmode *port_altmode_dp;
-> +	struct typec_altmode *port_altmode_tbt;
->  };
+> @@ -1549,11 +1549,8 @@ static int tps6598x_probe(struct i2c_client *client)
+>  		goto err_role_put;
 >  
->  static enum power_supply_property tps6598x_psy_props[] = {
-> @@ -964,6 +970,76 @@ tps6598x_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
->  	return 0;
->  }
->  
-> +static int cd321x_register_port_altmodes(struct cd321x *cd321x)
-> +{
-> +	struct typec_altmode_desc desc;
-> +	struct typec_altmode *amode;
-> +
-> +	memset(&desc, 0, sizeof(desc));
-> +	desc.svid = USB_TYPEC_DP_SID;
-> +	desc.mode = USB_TYPEC_DP_MODE;
-> +	desc.vdo = DP_CONF_SET_PIN_ASSIGN(BIT(DP_PIN_ASSIGN_C) | BIT(DP_PIN_ASSIGN_D));
-> +	desc.vdo |= DP_CAP_DFP_D;
-> +	amode = typec_port_register_altmode(cd321x->tps.port, &desc);
-> +	if (IS_ERR(amode))
-> +		return PTR_ERR(amode);
-> +	cd321x->port_altmode_dp = amode;
-> +
-> +	memset(&desc, 0, sizeof(desc));
-> +	desc.svid = USB_TYPEC_TBT_SID;
-> +	desc.mode = TYPEC_ANY_MODE;
-> +	amode = typec_port_register_altmode(cd321x->tps.port, &desc);
-> +	if (IS_ERR(amode)) {
-> +		typec_unregister_altmode(cd321x->port_altmode_dp);
-> +		cd321x->port_altmode_dp = NULL;
-> +		return PTR_ERR(amode);
-> +	}
-> +	cd321x->port_altmode_tbt = amode;
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +cd321x_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
-> +{
-> +	struct cd321x *cd321x = container_of(tps, struct cd321x, tps);
-> +	int ret;
-> +
-> +	ret = tps6598x_register_port(tps, fwnode);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = cd321x_register_port_altmodes(cd321x);
-> +	if (ret)
-> +		goto err_unregister_port;
-> +
-> +	typec_set_mode(tps->port, TYPEC_STATE_SAFE);
-> +
-> +	return 0;
-> +
-> +err_unregister_port:
-> +	typec_unregister_port(tps->port);
-> +	return ret;
-> +}
-> +
-> +static void
-> +tps6598x_unregister_port(struct tps6598x *tps)
-> +{
-> +	typec_unregister_port(tps->port);
-> +}
-> +
-> +static void
-> +cd321x_unregister_port(struct tps6598x *tps)
-> +{
-> +	struct cd321x *cd321x = container_of(tps, struct cd321x, tps);
-> +
-> +	typec_unregister_altmode(cd321x->port_altmode_dp);
-> +	cd321x->port_altmode_dp = NULL;
-> +	typec_unregister_altmode(cd321x->port_altmode_tbt);
-> +	cd321x->port_altmode_tbt = NULL;
-> +	typec_unregister_port(tps->port);
-> +}
-> +
->  static int tps_request_firmware(struct tps6598x *tps, const struct firmware **fw,
->  				const char **firmware_name)
->  {
-> @@ -1505,7 +1581,7 @@ static int tps6598x_probe(struct i2c_client *client)
->  err_disconnect:
->  	tps6598x_disconnect(tps, 0);
->  err_unregister_port:
-> -	typec_unregister_port(tps->port);
-> +	tps->data->unregister_port(tps);
->  err_role_put:
->  	usb_role_switch_put(tps->role_sw);
->  err_fwnode_put:
-> @@ -1529,7 +1605,7 @@ static void tps6598x_remove(struct i2c_client *client)
->  		devm_free_irq(tps->dev, client->irq, tps);
->  
->  	tps6598x_disconnect(tps, 0);
-> -	typec_unregister_port(tps->port);
-> +	tps->data->unregister_port(tps);
->  	usb_role_switch_put(tps->role_sw);
->  
->  	/* Reset PD controller to remove any applied patch */
-> @@ -1598,7 +1674,8 @@ static const struct tipd_data cd321x_data = {
->  		     APPLE_CD_REG_INT_DATA_STATUS_UPDATE |
->  		     APPLE_CD_REG_INT_PLUG_EVENT,
->  	.tps_struct_size = sizeof(struct cd321x),
-> -	.register_port = tps6598x_register_port,
-> +	.register_port = cd321x_register_port,
-> +	.unregister_port = cd321x_unregister_port,
->  	.trace_data_status = trace_cd321x_data_status,
->  	.trace_power_status = trace_tps6598x_power_status,
->  	.trace_status = trace_tps6598x_status,
-> @@ -1615,6 +1692,7 @@ static const struct tipd_data tps6598x_data = {
->  		     TPS_REG_INT_PLUG_EVENT,
->  	.tps_struct_size = sizeof(struct tps6598x),
->  	.register_port = tps6598x_register_port,
-> +	.unregister_port = tps6598x_unregister_port,
->  	.trace_data_status = trace_tps6598x_data_status,
->  	.trace_power_status = trace_tps6598x_power_status,
->  	.trace_status = trace_tps6598x_status,
-> @@ -1631,6 +1709,7 @@ static const struct tipd_data tps25750_data = {
->  		     TPS_REG_INT_PLUG_EVENT,
->  	.tps_struct_size = sizeof(struct tps6598x),
->  	.register_port = tps25750_register_port,
-> +	.unregister_port = tps6598x_unregister_port,
->  	.trace_data_status = trace_tps6598x_data_status,
->  	.trace_power_status = trace_tps25750_power_status,
->  	.trace_status = trace_tps25750_status,
+>  	if (status & TPS_STATUS_PLUG_PRESENT) {
+> -		ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &tps->pwr_status);
+> -		if (ret < 0) {
+> -			dev_err(tps->dev, "failed to read power status: %d\n", ret);
+> +		if (!tps6598x_read_power_status(tps))
+>  			goto err_unregister_port;
+> -		}
+>  		ret = tps6598x_connect(tps, status);
+>  		if (ret)
+>  			dev_err(&client->dev, "failed to register partner\n");
 > 
 > -- 
 > 2.34.1
