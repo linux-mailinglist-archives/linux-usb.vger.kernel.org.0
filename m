@@ -1,113 +1,237 @@
-Return-Path: <linux-usb+bounces-27810-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27811-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28533B50494
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 19:39:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FEB4B504DE
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 20:08:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C7027ACB84
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 17:37:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFBC616F350
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Sep 2025 18:08:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED397353359;
-	Tue,  9 Sep 2025 17:39:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D490335AAB5;
+	Tue,  9 Sep 2025 18:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IcxKhFVp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RdVOS2x1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8C52E2DD4;
-	Tue,  9 Sep 2025 17:39:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D6931D37B;
+	Tue,  9 Sep 2025 18:08:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757439548; cv=none; b=Qj6mJ9Ity0zsBF3ardAOEFaq3v3qkh+TKA+l5K0t2nFgmVgRKVYsZkZYYOLfqYa8JuVwE88vNnIc8fmF0rjE9xz5JgmhGsMMEWojKvhBLRcUh4FEP7N/EjqiEo+mnsarUhx3MHPnozcSVJkI/RU7yZgSUGwEX2sS5axmRoQhXeY=
+	t=1757441289; cv=none; b=OMs+Vneu4VKo12QS4V3HE6wOg1dUf2Lqw1G5dFqUwiup9NGakqDMlZK+f7DSBb4Rhsyb2f8tGKQ01RCEb0eaEG1vrkwOw1+B8djhU5kh0HHbYJkQIU0x1jBF8ykqQzqcwSnSovrwMRhT5FA5323DI5Z2jEmg5oa4Qvccb3PTCEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757439548; c=relaxed/simple;
-	bh=D8P+ydIh1g7UUzi4cVL3bh5pORMt8yqpdxoukEo72Fc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RmfFrGFyb6OgIInqFXaCGcv+L28S1XyA7+cYjz+JVJJytpbLdPvFINJvlmbTA3YwyYSQDmCmkKz1w9TJdUTutbwF7iHK5Ibb6S9pHOiTKr0Uu30Rd/sDL9V1SKU8e6zvD+jCBydtsFcfaHSIJ5DQM8EpHkcR5H5d4mM/3ooYWqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IcxKhFVp; arc=none smtp.client-ip=209.85.167.54
+	s=arc-20240116; t=1757441289; c=relaxed/simple;
+	bh=1E/FEfgXbxlTyDOQEnGwwHybKyqopOrH/LUQEsD4bdY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=opzGf2J6X4GfYVAl7mWdZois3zBlP6+TFoo/embo70T3KYb8uOe/HSH/RvGlpx0JcyGoHUOBD9Eoj/K/HcQTjSD0X4CCEg3NI1841shxkv2IjsgP3drIee3EO2fCTDaryocIiq16/0yEEbzaObnWpSb0pDHIXmqqO+o9Cg2UGhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RdVOS2x1; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55f6017004dso6221084e87.0;
-        Tue, 09 Sep 2025 10:39:06 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-45dd5e24d16so42735355e9.3;
+        Tue, 09 Sep 2025 11:08:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757439545; x=1758044345; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D8P+ydIh1g7UUzi4cVL3bh5pORMt8yqpdxoukEo72Fc=;
-        b=IcxKhFVpBC2VGiRwoCivOO9HhovqxAkcgW6niZCekZcuVnWH/OgQWU4cL5h1wMrLYA
-         gNFqZ7VM+kkIiK7J5YLDGIpP50cpWr4fOuQpsQkqapxoorohWniEZE/JYLHGPj5P705L
-         Tqjwm7DAOw2LMi/0qUke5L8I9DPclSDSZG0lESPrDcF7yK9FjwIFg0qCJ7xnlN8LuBVp
-         I3Dof921aLs5ORPxK4yfu0iQet7hntG8CyXsUD5HvBE65jW9k6PtNrMY7KFCy0XtrhMx
-         zaDqMWgnqRltFfqUiAb67Nu649o9rDkVkI51aDkDM4cdG5UnBEJgfstvJ2d5S4N32oOP
-         bJ8Q==
+        d=gmail.com; s=20230601; t=1757441286; x=1758046086; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pzISf5D7Sm/re0S/MlFezCf6LIeMNaY1mdeO+lXW9Lw=;
+        b=RdVOS2x13d05QH7s06mD6PVBar/crYdXNBnpvI2/2d9ZHpwqSd+JgIYTh0IBblF77I
+         JKORmagnx3Oznpwd5+RswAxDaBZXcSJy+AtZu4yWmUtPibCxSipd2JfuHsQSWUIb6D9z
+         lPcZG4l+srJpHMz2LU2M+r331hBVxJeK6iDi8vA8ZeFdJZtIg1KMP0lvOrTPBXayw77b
+         EJkScyLbxKJWltaBsrnqGdTyw1YDMJuxiZrqm+w8O7f0rJAc7o+oYSC8xm5uFR1wr9Dv
+         KkLVAMumqJ0pOltw03QpG7fhFWH8gR94o7hfKLCiFCCRpRoN190aB0hReKqXB7Or/26f
+         roHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757439545; x=1758044345;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D8P+ydIh1g7UUzi4cVL3bh5pORMt8yqpdxoukEo72Fc=;
-        b=ZVC1LIkhePLhZDwwtv6RYbA9S3D1GVX1x1sp5MDjF8+nQx0zT0avYD3kS1Ldr/S+6H
-         KW3L2mM79o/HX1qReul4t+6uDtdzRyxXvvfmlFJVF4Cp6Q7GGtXC8tA/WIduL94Gpnhu
-         rKyYoSmN+2n7zMjF2CmhpKji0TOyE1mc9zNhOlyGc5OwT4YybvUUAs3GQ1HdFnlXjAFo
-         iNzBEDoHsUU4E1y1un33pWAYv3yaGp1cc+aHPTGtnFoyD8r9B+9bVGsw/bdcgbdZMwX9
-         q6OuHWT/lOTyl5naGx6UQgfncZC1HmoMGqfmmjRBLHuveB41Jx2yCFzBim/+Ko5YECI9
-         iIyw==
-X-Forwarded-Encrypted: i=1; AJvYcCXQmwBlHbGVQwEUyrdzQK4bnNHvSTL/UNTvdHitcYKn7SBdC7WSQzQU/+WGfbCoo2nj78ml6bEUbfgNI1w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzU2bFy/H4vTpqN29W82HFAmOHBsDEF3TlSYcdAMz2PrrJ/cnb9
-	bL+PZEtJRCUNi/FXxFlNbRbnlaNW1AV+r0kmig9rzKtuGAA0NpK9xv6pu0uh3A==
-X-Gm-Gg: ASbGncuYdhLKMdkQi/kcuccQ2Zwpc2NCAwTZK0f7pwBRkbas+U3htpWRu0zc0Veibb9
-	4b+6Y4zJiAKg356+pbAJoMsYK5IWQx4parWGvXojCVkr+azulaDzO1dHkhv66N0qXdE7mOKpv7V
-	KvrrCAyY6RGnN99R5WlMVrrP18DEdKYx2LMCvV4hRq2yQFUz3OZv/951NS7G/qnpVAawyeXRJl2
-	dYctmC548bGGcrSw/g+8Mjuc/+cuLS6DwNRB8DyyL34l0aHEU8IBKlv/7vMyGQ3khU3+8qHkKVa
-	rhaN3//SXTJxofUiw2H2HQW87bpfmK8wukofo+4iTUG8vND4pa8ItcI6herQGE0wTkQZwUrbFOv
-	8wqKMhxUAx+sQnC8RD/AOMZ0NOsKAzGgOobT47j+vdM5ccQ==
-X-Google-Smtp-Source: AGHT+IGxkJ6SEZ2Sv2UhkNnI2cJcU4uiq2WO+Zps2TWWvKEfWs+5kkxgjkVAnKXEzMNzouKco2urqg==
-X-Received: by 2002:a05:6512:1049:b0:560:8d97:8bb5 with SMTP id 2adb3069b0e04-562636d6312mr3872923e87.29.1757439544516;
-        Tue, 09 Sep 2025 10:39:04 -0700 (PDT)
-Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-56818dfc960sm645864e87.141.2025.09.09.10.39.03
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 09 Sep 2025 10:39:04 -0700 (PDT)
-Date: Tue, 9 Sep 2025 19:38:59 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/1] usb: xhci: Queue URB_ZERO_PACKET as one TD
-Message-ID: <20250909193859.73127f85.michal.pecio@gmail.com>
-In-Reply-To: <6ca18b05-80d4-4988-bb08-3cad003e10f4@linux.intel.com>
-References: <20250908130128.7ed81912.michal.pecio@gmail.com>
-	<6ca18b05-80d4-4988-bb08-3cad003e10f4@linux.intel.com>
+        d=1e100.net; s=20230601; t=1757441286; x=1758046086;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pzISf5D7Sm/re0S/MlFezCf6LIeMNaY1mdeO+lXW9Lw=;
+        b=IjG2HW7sCOzddJZseD3vgMLvnzx6NUbLLZY+1+XqRu9aejOUFt7nj3XLCJaSvVbjFJ
+         DbUVbbZJ/B7wdKt2LNAU2muSn9sYCZyg8Knxt85G9aNjIUvs16KQqJ1FaRGN4Ox4868R
+         yi3g/6j1XjmCJmnURtmjSTOLlzyycCZE39XzNVORfBIo2uCzThvktgVj8UnQFVnWcb2j
+         Ure9HKd770PCNtf7gczYQgWMNUVCU1W6BkSZJN7yTYBsXjOLFL2CJu9ULsm18qhX0iuc
+         LwKTmVAVinss+0xlEeUyVaaiWJMqcSTX6DpvvFPLO/U3K5oDczcx3PMox+GZwSAF9oA2
+         GjGA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwqLdVQlp6+3pYF1l6vKVsAXgx1XDSFtqZntohcN+LP92/vfpGtFJ6IA7xw74LfQ0vCadt8Z9teSojftuQbQAsgFA=@vger.kernel.org, AJvYcCVJMT+gNyIuM55cTaLMcGwcIT794eMe6NnwaoZ1/y15nFmU0a4SjvmmdtGDTeKPrztuTjolaeqFFA5N@vger.kernel.org, AJvYcCVocqrdigTCqtzqm11Lo/PjvYlwTnDQtQKEsYKJPFZgdQ1/4OQ3nCcJgc64XOUAQPpdCZZNedEWew9F2YIr@vger.kernel.org, AJvYcCWnxa2C8YhvVdXWH6BE1fMsHGiu8WDP1u/K5n+srDW/1+pf3w1CHzdhgaOUVWo+Ku9ypf6wc6W9+6gO@vger.kernel.org, AJvYcCXK5NVhaXEZmzPCYSesy71s43Ly+7RLrADMI1IcP3tDAoLCoRMrYP3s5JaviSlZR9iwjVNKzmJE5arv@vger.kernel.org
+X-Gm-Message-State: AOJu0YzePGykLJ3CQDgomQNVHxkIoRtIBOhpOHJJYBgL9tjyq4vLE5d8
+	2hLQpJW7sOOEMBmAaN2Yoh1w118OO2EP195JF3AczZc070P3QBkKKw2q
+X-Gm-Gg: ASbGnctvLQzNWQ8PBjSfbzPCh7wVkLUKZwCpPljoUs3x0Fq94VgBA0B7DdyadGlhqVI
+	X611OZccrY47V3Ctqp59gcswe+JWCQZpU7Tyj6wF+Nuzn0PsyvSpomNxswXWQzQKZCQeU2mjLwV
+	DquzYZ8T5EH3Q7eBxLTKm0f1oOy7UeO1w+92WqK7fmwfgLfAwYH3ZtuTmw/L5JldAmRWjDiwYB0
+	qoBYe2Ulg6gV5tKNBbYUoPARKq7w80FOuiyV4PeL0K+lBfyhIyMcfov3LXThCY9CFwPPrkLq/x0
+	fKHNYjdVHuFHKcxAJxaGB+9Z/T0DvcVMHuI2ehRsBcf9FLjHQTY815admQQ6JiV8/qnPkXeyVHx
+	afe+pKTSK22ppsidMq5rGs9ErtQoanI+G+TJmMzg3l02rSRGtViOz4O6YVboORw8rvFYl2H0JcG
+	tIQb+GB1gRDyZn
+X-Google-Smtp-Source: AGHT+IHU8RVQLjbJmIfVzd4tfEr5Aww1xmlwzaYanHEmYj2UDm4y3gZ47LxspBoB5NASAirXTwqtAA==
+X-Received: by 2002:a05:600c:3596:b0:45d:d6fc:2509 with SMTP id 5b1f17b1804b1-45dddeb00bfmr133247045e9.6.1757441285524;
+        Tue, 09 Sep 2025 11:08:05 -0700 (PDT)
+Received: from biju.lan (host86-139-30-37.range86-139.btcentralplus.com. [86.139.30.37])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45df679a4c9sm4174015e9.3.2025.09.09.11.08.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Sep 2025 11:08:05 -0700 (PDT)
+From: Biju <biju.das.au@gmail.com>
+X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	linux-clk@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH v2 00/11] Add RZ/G3E USB3.2 Gen1 Host Controller support
+Date: Tue,  9 Sep 2025 19:07:45 +0100
+Message-ID: <20250909180803.140939-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, 9 Sep 2025 16:04:33 +0300, Mathias Nyman wrote:
-> Adding the zero-length TRB to the original TD when we need to send a
-> zero-length packet would simplify things, and I would otherwise fully
-> support this, but the xHCI spec is pretty clear that it requires a
-> dedicated TD for zero-length transactions.
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-You are right of course, an empty TRB in a TD would simply send no
-data, or maybe it's a TRB Error, I'm not sure.
+Add RZ/G3E USB3.2 Gen1 Host Controller and PHY support. The USB3HOST
+is compliant with the Universal Serial Bus 3.2 Specification Revision 1.0.
+ - Supports 1 downstream USB receptacles
+     - Number of SSP Gen2 or SS ports: 1
+     - Number of HS or FS or LS ports: 1
+ - Supports Super Speed Plus Gen2x1 (10 Gbps), Super Speed (5 Gbps),
+   High Speed (480 Mbps), Full Speed (12Mbps), and Low Speed (1.5 Mbps).
+ - Supports all transfer-types: Control, Bulk, Interrupt, Isochronous, and
+   these split-transactions.
+ - Supports Power Control and Over Current Detection.
 
-But this is not what this patch is about - the trick is to use an
-*unchained* TRB, which is a separate TD from HW's perspective, and
-to count it as part of the same TD from the driver's perspective.
+v1->v2:
+ * Collected tags.
+ * Replaced usb30->usb3_0 for clocks and resets.
+ * Replaced magic numbers with macros iphy driver.
+ * Added ref to usb-xhci.yaml in USB3 binding patch.
+ 
+ Logs:
+ root@smarc-rzg3e:/cip-test-scripts/py# cat /proc/interrupts | grep SLEEP
+133:          0          0          0          0 rzv2h-icu   0 Edge      SLEEP
+root@smarc-rzg3e:/cip-test-scripts/py# [  128.532806] PM: suspend entry (deep)
+[  128.536700] Filesystems sync: 0.000 seconds
+[  128.542466] Freezing user space processes
+[  128.548296] Freezing user space processes completed (elapsed 0.001 seconds)
+[  128.555283] OOM killer disabled.
+[  128.558531] Freezing remaining freezable tasks
+[  128.564240] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
+[  128.571649] printk: Suspending console(s) (use no_console_suspend to debug)
+NOTICE:  BL2: v2.10.5(release):2.10.5/rz_soc_dev-169-g1410189b0
+NOTICE:  BL2: Built : 12:53:12, Jul 15 2025
+NOTICE:  BL2: SYS_LSI_MODE: 0x13e06
+NOTICE:  BL2: SYS_LSI_DEVID: 0x8679447
+NOTICE:  BL2: SYS_LSI_PRR: 0x0
+NOTICE:  BL2: Booting BL31
+[  128.604363] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+[  128.670116] renesas-gbeth 15c30000.ethernet end0: Link is Down
+[  128.683550] Disabling non-boot CPUs ...
+[  128.688394] psci: CPU3 killed (polled 4 ms)
+[  128.695415] psci: CPU2 killed (polled 0 ms)
+[  128.702070] psci: CPU1 killed (polled 0 ms)
+[  128.704897] Enabling non-boot CPUs ...
+[  128.705107] Detected VIPT I-cache on CPU1
+[  128.705157] GICv3: CPU1: found redistributor 100 region 0:0x0000000014960000
+[  128.705195] CPU1: Booted secondary processor 0x0000000100 [0x412fd050]
+[  128.706006] CPU1 is up
+[  128.706106] Detected VIPT I-cache on CPU2
+[  128.706128] GICv3: CPU2: found redistributor 200 region 0:0x0000000014980000
+[  128.706149] CPU2: Booted secondary processor 0x0000000200 [0x412fd050]
+[  128.706732] CPU2 is up
+[  128.706831] Detected VIPT I-cache on CPU3
+[  128.706854] GICv3: CPU3: found redistributor 300 region 0:0x00000000149a0000
+[  128.706876] CPU3: Booted secondary processor 0x0000000300 [0x412fd050]
+[  128.707557] CPU3 is up
+[  128.724000] dwmac4: Master AXI performs fixed burst length
+[  128.724900] renesas-gbeth 15c30000.ethernet end0: No Safety Features support found
+[  128.724920] renesas-gbeth 15c30000.ethernet end0: IEEE 1588-2008 Advanced Timestamp supported
+[  128.728436] renesas-gbeth 15c30000.ethernet end0: configuring for phy/rgmii-id link mode
+[  128.745766] dwmac4: Master AXI performs fixed burst length
+[  128.746653] renesas-gbeth 15c40000.ethernet end1: No Safety Features support found
+[  128.746668] renesas-gbeth 15c40000.ethernet end1: IEEE 1588-2008 Advanced Timestamp supported
+[  128.750222] renesas-gbeth 15c40000.ethernet end1: configuring for phy/rgmii-id link mode
+[  128.797030] usb usb1: root hub lost power or was reset
+[  128.797038] usb usb2: root hub lost power or was reset
+[  130.956146] usb 2-1: reset SuperSpeed Plus Gen 2x1 USB device number 2 using xhci-renesas-hcd
+[  131.143425] OOM killer enabled.
+[  131.146563] Restarting tasks: Starting
+[  131.151382] Restarting tasks: Done
+[  131.154877] random: crng reseeded on system resumption
+[  131.160209] PM: suspend exit
+[  131.494956] renesas-gbeth 15c30000.ethernet end0: Link is Up - 1Gbps/Full - flow control rx/tx
 
-Control URBs are like that and they work fine. They can halt on any
-TRB (which are all unchained, per spec) and the whole URB goes out.
+root@smarc-rzg3e:/cip-test-scripts/py# ./run_pytests.sh tests/test_xhci.py -k test_xhci_005
+==================================================================== test session starts ====================================================================
+INFO     root:spl2_test_helpers.py:2059 DD performance with bs=32M count=32 is
+Write= 383 MB/s
+Read= 555 MB/s
 
-This bug is (probably?) low impact, but it bothers me because it's
-a design flaw: either non-isoc multi-TD URBs are supported, or they
-are not. One or another part of the driver needs to adapt.
+INFO     root:spl2_test_helpers.py:2099 fio performance with bs=32m for Sequential and bs=4m for random access are
+
+INFO     root:spl2_test_helpers.py:2104 b'   READ: bw=562MiB/s (590MB/s), 562MiB/s-562MiB/s (590MB/s-590MB/s), io=5024MiB (5268MB), run=8936-8936msec'
+INFO     root:spl2_test_helpers.py:2104 b'  WRITE: bw=555MiB/s (582MB/s), 555MiB/s-555MiB/s (582MB/s-582MB/s), io=5024MiB (5268MB), run=9058-9058msec'
+INFO     root:spl2_test_helpers.py:2104 b'   READ: bw=373MiB/s (391MB/s), 373MiB/s-373MiB/s (391MB/s-391MB/s), io=5000MiB (5243MB), run=13394-13394msec'
+INFO     root:spl2_test_helpers.py:2104 b'  WRITE: bw=387MiB/s (406MB/s), 387MiB/s-387MiB/s (406MB/s-406MB/s), io=5000MiB (5243MB), run=12920-12920msec'
+
+Biju Das (11):
+  dt-bindings: clock: renesas,r9a09g047-cpg: Add USB3.0 core clocks
+  clk: renesas: r9a09g047: Add USB3.0 clocks/resets
+  dt-bindings: phy: renesas: Document Renesas RZ/G3E USB3.0 PHY
+  phy: renesas: Add Renesas RZ/G3E USB3.0 PHY driver
+  usb: host: xhci-rcar: Move R-Car reg definitions
+  dt-bindings: usb: Document Renesas RZ/G3E USB3HOST
+  usb: host: xhci-plat: Add .post_resume_quirk for struct xhci_plat_priv
+  usb: host: xhci-rcar: Add Renesas RZ/G3E USB3 Host driver support
+  arm64: dts: renesas: r9a09g047: Add USB3 PHY/Host nodes
+  arm64: dts: renesas: r9a09g047e57-smarc: Enable USB3HOST
+  arm64: defconfig: Enable RZ/G3E USB3 PHY driver
+
+ .../bindings/phy/renesas,rzg3e-usb3-phy.yaml  |  63 ++++
+ .../bindings/usb/renesas,rzg3e-xhci.yaml      |  87 ++++++
+ arch/arm64/boot/dts/renesas/r9a09g047.dtsi    |  30 ++
+ .../boot/dts/renesas/r9a09g047e57-smarc.dts   |  10 +
+ .../boot/dts/renesas/renesas-smarc2.dtsi      |   8 +
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/clk/renesas/r9a09g047-cpg.c           |   9 +-
+ drivers/phy/renesas/Kconfig                   |   7 +
+ drivers/phy/renesas/Makefile                  |   1 +
+ drivers/phy/renesas/phy-rzg3e-usb3.c          | 271 ++++++++++++++++++
+ drivers/usb/host/Kconfig                      |   2 +-
+ drivers/usb/host/xhci-plat.c                  |  14 +
+ drivers/usb/host/xhci-plat.h                  |   1 +
+ drivers/usb/host/xhci-rcar-regs.h             |  49 ++++
+ drivers/usb/host/xhci-rcar.c                  | 100 ++++---
+ drivers/usb/host/xhci-rzg3e-regs.h            |  12 +
+ .../dt-bindings/clock/renesas,r9a09g047-cpg.h |   2 +
+ 17 files changed, 621 insertions(+), 46 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/renesas,rzg3e-usb3-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/renesas,rzg3e-xhci.yaml
+ create mode 100644 drivers/phy/renesas/phy-rzg3e-usb3.c
+ create mode 100644 drivers/usb/host/xhci-rcar-regs.h
+ create mode 100644 drivers/usb/host/xhci-rzg3e-regs.h
+
+-- 
+2.43.0
+
 
