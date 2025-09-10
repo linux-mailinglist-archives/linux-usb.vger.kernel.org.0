@@ -1,147 +1,149 @@
-Return-Path: <linux-usb+bounces-27899-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27900-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC853B52132
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 21:36:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51B93B52391
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 23:37:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37A011C87C4D
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 19:37:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 009CD5829BD
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 21:37:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B26312D8DA9;
-	Wed, 10 Sep 2025 19:36:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B99B631197C;
+	Wed, 10 Sep 2025 21:37:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DlC3EKUD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VgJSU0K2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E172D7DC0
-	for <linux-usb@vger.kernel.org>; Wed, 10 Sep 2025 19:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4B3260587;
+	Wed, 10 Sep 2025 21:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757532975; cv=none; b=KkUFUNiyWwYr2pWOpwh8goFnk0832sA8u/BTs5aXr1rcKhn1A2q/vYwajGfUcAEWGQHrGyV9Y0E7M8A+DUCqQLNPY+sPZAr30pmCRTIOXS1ZxYT0QKMQiOjet/6VEBdGoOzj/HAhZC7lpQ418GsHD/BwsRx1JNFjKfHmm2wOGpg=
+	t=1757540229; cv=none; b=BkN64BZnIzoUKnJfaXKfc15MUV08WVl8WZ3CfifULYZUQijmHtWuT0OF4NUXmwVCjmx+6pWPerdTN3rRXBTRkSP+4c4JfUXnVG7TyqCQTjeGOzt0oCEVFaqp4FNEkd0BYgaN1vWRTIzNPIAk/Cu2nA4SjBnbf7qy5yTmArNaOe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757532975; c=relaxed/simple;
-	bh=AV456wGx4AS1v+tWNKPuHFhSCTC9E7/Gz+sOHtQdrVk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cL83eaJMJ4R9QYAvH868vbv9+9/gW11MMwVLw+C8vU4UIlNShRgL3rMwVqyMY5ayRZNdOmzToYmixeQHBXq3s9/8mEK0azdjBhxOF1vttD9OVfwDBs5gXYjfBnX63WdiKKpvyPgwBbPb7P1sE6Ze4kbTXBjQKa3lOBIIEuTr0V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DlC3EKUD; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-323266d6f57so8105181a91.0
-        for <linux-usb@vger.kernel.org>; Wed, 10 Sep 2025 12:36:13 -0700 (PDT)
+	s=arc-20240116; t=1757540229; c=relaxed/simple;
+	bh=A93YtdEOI/AAYDWJZk4hc8HIpFAjpOSMLPRF6Urmkn4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A0WajI2c54to6dIRAtSXqYERH756NvIUPVf0qSH6YparaAiUVxPZMr8xUwoFJnS5iJgQ7VSVlSI/n5HpYWMhJMN8TEU9QGtdL0iYI+OXczS+oBa+GcG1u2Lk44W7v6e2IiTJECSqTHvfM2t/thVfUI2tKGDPZn/YiUyZdh4Uk0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VgJSU0K2; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55f69cf4b77so7527387e87.2;
+        Wed, 10 Sep 2025 14:37:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1757532973; x=1758137773; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1757540226; x=1758145026; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PQPkqSciunRqKLia3Mm+0rllHHUFhVihDlipeR5N4p8=;
-        b=DlC3EKUDkhA7/Dt14CSo/RkGBxbWyLGRPmRws0lHHwYpthqEOQrvmh2gS5E//6bimv
-         i0ZYRDeCbEYQlXs1n5F5HuuXaJxT8CLxfnPg6qHyy2tdxZIUvbO3IuWvhBG7qtjddyXm
-         VN3w0/3gqRELfdHRlgOJiqF5ldFDjIKMZ44iU=
+        bh=Dm4kTYERBB4pA5rR/atZvPgHbgG3iGEIeYGNqcCGxv8=;
+        b=VgJSU0K2inm4A/Mjr3dBjWwEVtR16ybaT+Kv4wtPMlrAq8CjE/pGY1m3mmGDKSDqbc
+         oIZ4A3GvXKqC78PxyB1oby0+xaNZxVt1p5Kdt4Lo/KT15ScelqWgCB86Dt5Ic1K4FKYw
+         Zq8q3jxsCNpByu6zrubWjfM2uUe1G5mfpCFekaAdsKZiafNCsW1/TDK/gjPh4s4Io50o
+         Jbx+bS+tf7du/D1DFKYXoQP9VCd8NQI79r8mOO4yc5+Df6K23j3Ts3wyaL64btKNL1mT
+         OGX2MKPFc5c84MFRHjNNFdH9b76czTbq+y2zne7VvU2MsPVx2NgZ4VhN8bIa6H6/BnPB
+         Ccpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757532973; x=1758137773;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1757540226; x=1758145026;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PQPkqSciunRqKLia3Mm+0rllHHUFhVihDlipeR5N4p8=;
-        b=db2UKUYsyNX4ypF51u8sElFKJR7Er79TJ5JATX0n2RmCSDI/eGUS/Q7djf7q70ckQF
-         d+aOvZFUuC/MM9PKuqfnrCwCH76yw7R9OR8kY+9ri1R8r3fOeNxDMzDHlBYOD5ytgUCs
-         xFyOt4AyqobiDNQu6Zzsyq6YarXGr0ecpZeKBZRbPchXwX5szqUyzv6NvOF+6bJ7LrDf
-         kHEv6+mLlzm6RBS02fLFDraYT1Q6yP6jxqWhHiilTx+cr4tP0iMkCmMIeTTmNIEYDnRr
-         3CZhZeaioigTv/tSR3axEtj8JvdKpPBrF7g3GToSVfeBhHOgVHWNbVaDQXdFFH5l53Yj
-         Locw==
-X-Forwarded-Encrypted: i=1; AJvYcCWbXOOpLpUkwewk38TL9x68n/lRwcISzAom/v4YoirZy0AdkuaDpjpXqMo3oY6TwOVYnoqBQvq3Ygw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnynzfnWDaQofQQ31p60RMjR6lzXUudbmMWiQvnyGVfiL3EG+e
-	MWaAg+d9AoVPvTvJ9XrMDbPoBmBoAnHU3TnePdogWMbAyvWUNYDPMyVcX739YioENKPwcallq8s
-	AOCds8z1SZTvmbp57ZWUs+tKzKd/tdGOKr3Yamd7r
-X-Gm-Gg: ASbGncscWOIbtP3RFxL/AbTnDmDLzoro3RfgaIfftrPozH0DG2XADFfLn+juml93Ku8
-	bkE8POFW8eyB7DvzNOqsHAW3ajTsSsUZgho4jfTQHHHEwEzGwdKCbT21hO2oZ5i2K1s0mmYzW/D
-	IRRq0jGE3gRIy3HHNOUDqzQoAP+4KFdyFAJ8q+9VENmTDxuRniBSEdAWYTnTH0DK1B1cFsvdS1A
-	up5BW2hl7/mcnIj0QQuiQecByYVhn+v6Fk=
-X-Google-Smtp-Source: AGHT+IFLlqBtDvao2RSq+mhvGeHwBwcVPZTa96veAgv1c4asfQuU7YhSG8xzoqQz1gsfHfDLzgkwBOAWmBsrpMX6k00=
-X-Received: by 2002:a17:90b:350b:b0:32b:9d3c:13c4 with SMTP id
- 98e67ed59e1d1-32d43f8ea76mr22921491a91.24.1757532972973; Wed, 10 Sep 2025
- 12:36:12 -0700 (PDT)
+        bh=Dm4kTYERBB4pA5rR/atZvPgHbgG3iGEIeYGNqcCGxv8=;
+        b=njn6ln9nv83LtYHgeV+HEVUfapG2ySrG/R4QS0Sp0NiiAHxryWk8tmLp9WgplxPIKP
+         OJ1MVsxObXwXs0DiEclDlSYe7ZEVruyAEjrscYmn2l303RkBGdmpcPlgC8+rKqAprgi3
+         bRlbpHiHvRzenPPQkJxLmAB2/iUuoUKoV7AlgonOjDwyJ49HnxVnXciFpY26gHy4JM90
+         POJnkb6gONDkA3A1XCNCskg265UrdufiLhVuihb201XomnhO1ED36R0YX0lyLDpK2nXo
+         fO2hpjy63nYwaRGCojKZ5OuIUS+0Y7BahX6CgHQ3+rpXBSuFDyNY6kkqdXStJa3qe5gH
+         lBww==
+X-Forwarded-Encrypted: i=1; AJvYcCWY3Cp7LU/rjQ8rEyyM6NcGwYjOcb4fkJBKADbWEFWvs4Jy5NNIXLnPbo+mdkRdDHWs+PvE/DGfIUSAboA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzigGgisPqkKB4UotLQSrlb2/8VCJwn/l4Va4FrW4JY5GqR6kop
+	Av2niskqQBkfJu7z0+64XUV+wwjSOqDQB4A7KCRHkNyO/Ji57d4GuA6fzCrjdQ==
+X-Gm-Gg: ASbGnctcAjN3fulc0yCcE4++Vszy/LAjyl+zIMeQe8sFa0h8YZUE1HMUh8TqgNA84eP
+	0qLgeAzFP05/nlJKQhQjHTVvfM4APUuUq8qd5AaOiXPe447kzwyrJCH571tRAYU20oFGWhJCA/V
+	g2W7fJ3lrCRxUkyYDQt8+f/mmOWIK3K7jriTMHNWwZhR/V1teYre5CjuuZQh2NgKI3wognm8Kb+
+	DYT801xyWyS+ZJETRQ/qvAoDMkZ4NnPCs1eXK2b5Nz8O56SkgGIL/+Duh+aEM0CRfSCQ+2b1H2X
+	w5mU8Bqkp463yMAAHLScOwpe4IxwUCTpK7w4Y6dXWnMRM4R28lXMKkX9nNd2GDPL2yqD8bWVFGi
+	drY+Plwu90tMbUzU+qr0NDhWeFYRnb1fSoEE=
+X-Google-Smtp-Source: AGHT+IET1a3jfKjhnlCiZYjEfIN5JZuKPSjNxY+X6Z0sbe1gj3t0dL3k7IVB3FzKJCRBI/rqmUL2kQ==
+X-Received: by 2002:a05:6512:12ca:b0:55f:4b01:30a6 with SMTP id 2adb3069b0e04-5625c9e9e74mr5250459e87.0.1757540225546;
+        Wed, 10 Sep 2025 14:37:05 -0700 (PDT)
+Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-56e23e8891bsm9116e87.86.2025.09.10.14.37.04
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 10 Sep 2025 14:37:05 -0700 (PDT)
+Date: Wed, 10 Sep 2025 23:37:00 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/1] usb: xhci: Queue URB_ZERO_PACKET as one TD
+Message-ID: <20250910233700.506a81a0.michal.pecio@gmail.com>
+In-Reply-To: <20250910021519.13f78e21.michal.pecio@gmail.com>
+References: <20250908130128.7ed81912.michal.pecio@gmail.com>
+	<6ca18b05-80d4-4988-bb08-3cad003e10f4@linux.intel.com>
+	<20250909193859.73127f85.michal.pecio@gmail.com>
+	<e29fa12b-55e4-4ab1-b623-11feb447bdf7@linux.intel.com>
+	<20250910020306.1d77d7e5.michal.pecio@gmail.com>
+	<20250910021519.13f78e21.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250905142206.4105351-1-akuchynski@chromium.org>
- <20250905142206.4105351-4-akuchynski@chromium.org> <aL_uZxBkBfC9Etrk@kuha.fi.intel.com>
- <CAMMMRMf_zDx43-Orf1zE31hE+QmPgkDMz2UTrYjyS=pjHUZvYA@mail.gmail.com>
-In-Reply-To: <CAMMMRMf_zDx43-Orf1zE31hE+QmPgkDMz2UTrYjyS=pjHUZvYA@mail.gmail.com>
-From: Andrei Kuchynski <akuchynski@chromium.org>
-Date: Wed, 10 Sep 2025 19:36:01 +0000
-X-Gm-Features: Ac12FXxddXEMRnJtLrfvERjfHZezzuZuMnfwdZigQDg7YqiQEYPvS9eHewf1Njc
-Message-ID: <CAMMMRMcX4k3Ry6ruQhA39hFze+fMttUajwaBP5TrbvP7Ryy9zg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] usb: typec: ucsi: Set no_mode_control flag
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
-	Jameson Thies <jthies@google.com>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, Guenter Roeck <groeck@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, "Christian A. Ehrhardt" <lk@c--e.de>, 
-	Venkat Jayaraman <venkat.jayaraman@intel.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 9, 2025 at 9:22=E2=80=AFAM Andrei Kuchynski <akuchynski@chromiu=
-m.org> wrote:
->
-> On Tue, Sep 9, 2025 at 11:08=E2=80=AFAM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > On Fri, Sep 05, 2025 at 02:22:04PM +0000, Andrei Kuchynski wrote:
-> > > This flag indicates that the PPM allows the OPM to change the current=
-ly
-> > > negotiated alternate mode using the SET_NEW_CAM command.
-> > >
-> > > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> > > ---
-> > >  drivers/usb/typec/ucsi/ucsi.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/u=
-csi.c
-> > > index 0d6b0cf5a7cd..9f754344a841 100644
-> > > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > > @@ -1632,6 +1632,7 @@ static int ucsi_register_port(struct ucsi *ucsi=
-, struct ucsi_connector *con)
-> > >
-> > >       cap->driver_data =3D con;
-> > >       cap->ops =3D &ucsi_ops;
-> > > +     cap->no_mode_control =3D !(con->ucsi->cap.features & UCSI_CAP_A=
-LT_MODE_OVERRIDE);
-> >
-> > The flag is now used to expose the priority file, but you can't affect
-> > the order in which the UCSI attempts to enter the modes, or can you?
-> >
-> > thanks,
-> >
-> > --
-> > heikki
->
-> Hello Heikki,
-> Thank you for your review!
->
-> You are right, this patch does not affect the order in which UCSI
-> attempts to enter modes. Currently, UCSI implementation only has
-> DisplayPort alternate mode support. We are preparing to submit patches
-> for Thunderbolt.
->
+On Wed, 10 Sep 2025 02:15:19 +0200, Michal Pecio wrote:
+> Generally, I tried running this with wMaxPacket=3D64, TRB length reduced
+> to 64B (patched xhci_hcd) to force multiple TRBs in the first TD and
+> with transfer lengths of 32, 64, 96, 128, 192, 256. It worked.
+>=20
+> I can run it again tomorrow and send event-ring/trbs and epXX/trbs.
 
-Hi Heikki,
+I found that my rtw88 WiFi dongle actually uses URB_ZERO_PACKET.
+And it needs it - if the driver is patched to ignore the flag, ping at
+certain packet size simply stops working, unless there is additional
+traffic with random packet sizes to produce short transfers on the USB.
 
-should I send this patch later with the Thunderbolt UCSI support
-implementation?
+This is a high speed device. I also patched xhci to split TRBs on 512
+rather than 65536 byte boundaries to get more TRBs per TD.
 
-Thanks,
-Andrei
+Result is OK I think, completion events as expected, the device works.
+Note: the class driver submits URBs with misaligned data buffers.
+
+ 1 0x00000000ffed8f20: Buffer 00000000ffe9a80e length 498 TD size 2 intr 0 =
+type 'Normal' flags b:i:i:C:s:i:e:C
+ 1 0x00000000ffed8f30: Buffer 00000000ffe9aa00 length 512 TD size 1 intr 0 =
+type 'Normal' flags b:i:i:C:s:i:e:C
+ 1 0x00000000ffed8f40: Buffer 00000000ffe9ac00 length 14 TD size 0 intr 0 t=
+ype 'Normal' flags b:i:i:c:s:i:e:C
+ 1 0x00000000ffed8f50: Buffer 0000000000000000 length 0 TD size 0 intr 0 ty=
+pe 'Normal' flags b:i:I:c:s:i:e:C
+=3D>  0 0x00000000ff988c60: TRB 00000000ffed8f50 status 'Success' len 0 slo=
+t 2 ep 16 type 'Transfer Event' flags e:c=20
+ 1 0x00000000ffed8f60: Buffer 00000000fff0e80e length 498 TD size 2 intr 0 =
+type 'Normal' flags b:i:i:C:s:i:e:C
+ 1 0x00000000ffed8f70: Buffer 00000000fff0ea00 length 512 TD size 1 intr 0 =
+type 'Normal' flags b:i:i:C:s:i:e:C
+ 1 0x00000000ffed8f80: Buffer 00000000fff0ec00 length 14 TD size 0 intr 0 t=
+ype 'Normal' flags b:i:i:c:s:i:e:C
+ 1 0x00000000ffed8f90: Buffer 0000000000000000 length 0 TD size 0 intr 0 ty=
+pe 'Normal' flags b:i:I:c:s:i:e:C
+=3D>  0 0x00000000ff988e20: TRB 00000000ffed8f90 status 'Success' len 0 slo=
+t 2 ep 16 type 'Transfer Event' flags e:c=20
+
+This was tested on some AMD, ASMedia, Renesas, NEC, VIA and Fresco.
+
+=C3=85nd then there is Etron. This old junk doesn't support zero-length TDs
+at all, neither my version nor mainline works. No events and apparently
+no USB packets either, because even if xhci is patched to "skip missed
+TDs" to keep the class driver happy, ping is still getting stuck.
+
+Maybe something to keep in mind if there is ever a bug about it.
+I hope not too many people are still using this horrible HW.
+
+Regards,
+Michal
 
