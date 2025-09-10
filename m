@@ -1,138 +1,104 @@
-Return-Path: <linux-usb+bounces-27853-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27854-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA4F3B5113A
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 10:28:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8912B5113F
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 10:29:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A7693A55B7
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 08:28:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A43693A77DF
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 08:29:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF60230F801;
-	Wed, 10 Sep 2025 08:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EC2230F941;
+	Wed, 10 Sep 2025 08:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XxXVQbjd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fpVYH/di"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D035C275AFB;
-	Wed, 10 Sep 2025 08:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD1830F558;
+	Wed, 10 Sep 2025 08:29:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757492933; cv=none; b=Q3sKCuJXtlr9SbYWMIM0526sCveFwQDJ3q2QbM3MTkyaiUNFZ3WYOWbCxyM9wfBOcvFxZBGAQ6mVt6PKOvvrOKXNH123PnA0/f2xb/71OyWQy16uwUTsWG+zj3BEdDZhAYdu+cIBPqp5rSzFVa88722GE/ngJcGc4moDol7iT/g=
+	t=1757492962; cv=none; b=AzcHUNjnXKjzdRCswPpuv5BGwiVeCp+4bA7V6xkiCVRWZvw+Kt+1tNLROcui0+Bun++y6fsZyo+NkUyP9V5pMlFsW1odkTw6RT25T10c/cq9aeMBTfAIh+kkvN4i2bVyUu7s3H3pGVT1kxjrt34h3B8wtl1X6QNsbZOsjhP8rUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757492933; c=relaxed/simple;
-	bh=q/1ZE3PXAs88kpq1OOMpxNmoZPuIeIOeXhOw8k6yfmU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YOaz1wQm0K9FmZ7PbdF3NB4ZbWhePtNxN/sj0nTctCSy8XMT5Vc7vzfx5LUYgkeyLASL/JBc+zH5GshhVqDFVg0MTjNsLc33NUj4nO8Y8SgU6JNG7NiWxK2S8gxkLmMVTTulStArRqZZmtFZBQX+ZEpKksCHjm6dTENgNPGPin0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XxXVQbjd; arc=none smtp.client-ip=209.85.208.181
+	s=arc-20240116; t=1757492962; c=relaxed/simple;
+	bh=1mTwkUq7dRAhbqn/fyhOeIAqtw/i0fbkfFE21F31X28=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=ozeOnD7ulU0RgUgbwqAVy/LVK3bvc+5u6ScPvo1cjfABZ6yVyLSEgAYMI3IaCt15RhbdrESplmZ+GfNnITpOKI05A2KYyXfUT4RP9bHoMIvJJXGbDTHcjQSX4bbTTKNYZvG+FxSgJXMbXlQUCV1oyqEVCHFerpF6UIXfhiRF0bA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fpVYH/di; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-33c9ca16a64so32036591fa.3;
-        Wed, 10 Sep 2025 01:28:50 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b046fc9f359so1146605266b.0;
+        Wed, 10 Sep 2025 01:29:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757492929; x=1758097729; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Il1eL+RQOm+itMiKRM51rKcZfVj/Pae94v1C9COD6Mc=;
-        b=XxXVQbjd7XK3SelKROjbbJFTXtRobGVFPtkN2mpJqnDDE7qXGXbY4vBnw5f8SiX+Sc
-         cidUKFraXCBJWkYlWuyzByW5bXnpPPR3O9GZieyLvxhIbzXNKGtBYWIwzNT+5JfsbEll
-         DiT6y/G442ijX2FoeBfss0oq0LOpCerX9r6GBdkYnOUvdIP8lasC1b+Itn/XC8XtKO/G
-         ZFO5eggR1BTS8gZT362uyMiOJVmCvLrhNB0B+UDbZ65rOWrfTxdFbSd4yGfHHoDu2pkC
-         QP4srT8Y8/cWojtaKW/BHqFhyt1dGAWyooHmZJhqgcc6NxC0swmSFQSG/gLZzCiT9IMi
-         nrKw==
+        d=gmail.com; s=20230601; t=1757492959; x=1758097759; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1mTwkUq7dRAhbqn/fyhOeIAqtw/i0fbkfFE21F31X28=;
+        b=fpVYH/diGkul4fPuInIqNFRHiLZqVta+VVNSsJAlIrNzZCNZxz2H4ECS7rUmbWtn+5
+         7cdlg8SvF+qJlUZfI+IN3+Y7bQBq4aK7hqIY63VRtuRNjG6chzP8ZI09vs6DAOtL1o4a
+         g3eAjkgxDChDKjl3u3hm61zFvsec9eMxHnEdAVOxPS+VEc98/zN9xfZ7JGNYHsrKtH3K
+         SU1iZem/APO/PkwfK8KrgTG7zAqSXxj111OwhUs6Cn5vnfWSWsF0QcWSg55LZ6f6YbA8
+         owgQjFcfagiRjpJCLXrNhPupvp1p+B+/J1jkOccBJLSdUW/rfIvHSf4h2uS2ajDpF6Hs
+         1Zgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757492929; x=1758097729;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Il1eL+RQOm+itMiKRM51rKcZfVj/Pae94v1C9COD6Mc=;
-        b=cZDTSvBuNApdTMOLTnEwym2ic4c2lWTo8ukljkkc9rklWQM++Pju0jOQ4RoMXpmh5U
-         n9u4ZOeXxGflHSbXKuZblt7aBkhKWHW26IUUVYtTA/6R4Ydp6Td5fCeAl7RFNbv3IQoi
-         aUiHlIArTZt/odKoRvuElxhtlEiIh+q8v7BPgx1vXo0HnRXe+NHZy+pMYlLhpRhbSEm+
-         rN2/a8w9IwdbK9BTrvEJFoPachZvhcdINQsJvbj5eWH7xB9NnNQs1O/q6fsdX1CfB/QS
-         hF+5oLSfMDm44LpQ60pZL9yANYI5R8ltlEGjiWYY/uyUIjqFYAEP08MhhIHhncCa8i5W
-         0fJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8drDUMJ9oG9pxbzTWn5Rx2Z+7S7uJBcSTR4aR8gRoxi3TklzWzi1VLLJ5iCgov+liCW5J3a9EJOz4@vger.kernel.org, AJvYcCXlbAu8nNLyJzqUTcaQy9Rp0HwJwlh/bAhzBqwm660f8tFhlwp0v+iAaL7SW9YpsghfZHhohDSxTPpx34o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2/Z7tO2sP9JOs8fb7xEQBVdGTBYRsJur6iHec6oZwmXB94Xmc
-	VPELxugI/PRWWeKZEDFu4SQmumwC6SRsQ69D7ac5GL3TE3elc8ILU9eN
-X-Gm-Gg: ASbGnctyeMxCNW5e3oXSos8lSFIWOx8K7iVwDCF5EMG3/Y1+6BMQyaX9ZILljxJxwmh
-	WzsRIby4uwnsQqdAE/F8daDF6SST5DOwDSGDSAS2WR7MGdKp1o5T8eEZFflRgM5Y2aIc9JEMbmg
-	Q+OyVcFz3jfbJJYAJv6RqZtlSMDUG3wMHxtrPW3TcEdlndTMzhi5gIh2t8foNKAF9yY9r1UbOZ9
-	I6lUPRCV5J08jCXYSidqBIoqQ1EZ+tEaI1UqiyHLY/k/A7diKcx0mPP40rNpV6yRepX7GXyySy9
-	GlViV1vW7yQ8R792aRZKiDrfRmvux8rufOdDyZshKEPfKvcVQ3iJMnOPFTAtTOlONa4DfzMuHJp
-	ABoJHSsI8Q71vKyTqvhihpFVq4vh6hMgdKJ0=
-X-Google-Smtp-Source: AGHT+IFfhNdaWAKQKHo6mTTPYGZiDqlB419AfQvtStJlwa8BybO4/MFstjUvPibjDFoxTMM/k/3GWQ==
-X-Received: by 2002:a05:651c:1504:b0:336:c9be:c164 with SMTP id 38308e7fff4ca-33b603f5101mr38187041fa.45.1757492928514;
-        Wed, 10 Sep 2025 01:28:48 -0700 (PDT)
-Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-337f5075c85sm40890321fa.50.2025.09.10.01.28.47
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 10 Sep 2025 01:28:48 -0700 (PDT)
-Date: Wed, 10 Sep 2025 10:28:43 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>
-Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: xhci: Check for events pointing above DMA space
-Message-ID: <20250910102843.61e4a277.michal.pecio@gmail.com>
+        d=1e100.net; s=20230601; t=1757492959; x=1758097759;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1mTwkUq7dRAhbqn/fyhOeIAqtw/i0fbkfFE21F31X28=;
+        b=dwaB8d+qhQ47XMctOFef3ehTkqtdBcFqgs9dEmqlN5YCujoQvXOcs5p485ZTjmpPwh
+         WKH9utLckeUtP4ambJgpLkyFL81tCsEWg3geROLXLmXgwsJpIXgiwFqtVdqcKtskBn1o
+         xRqpuivmLBZcA7btP+XYe5/bq08KRN5a8GPklLhQyHQf3nOy0bwjsAZub58dodhkobAp
+         AL3lHhK7C8J9Vg8WWoSORBM0H8EQIfBYqx+RyqLWaegBFGfeMJGgFwqMK8110S3QVJaa
+         uGIvEhxVok9oB3ZRVknz90JeqKiEr6G8KEXTYx6RhlqGmBJ3G43KkYmH7G4HN++HJEpT
+         m+PA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7BMAxHnkYrLGnasr6ssmlVtKJuriW5MYZMoTTDOBLLaOoTVGwo4uBg9ews2OR1JD+t7z9Cvx7d66KG1M=@vger.kernel.org, AJvYcCW6//Fg+JFTYVMfUxzuNnIUaaD26IpDPwobqCg56oTi92KRsSPlrdFOzPgqKo+d8xMtuldbU66J@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWXCZF9D5vt60alqDE0+DOSXx9ySnq6IDkEqfY/xPi8aArs3xf
+	CXbQ1KGUWEPKKpScEXmCY1Hb/LYE7M/pXNraZXK/OUXmNu9nGH0Ks8Mc
+X-Gm-Gg: ASbGncuDDsgwVXUt45ceXcnKGqK12+I0u64QBanwvvdWJtgY5z9YQuWfC6jdNAt1OQI
+	ZlC/Jux8Wqdu0yiVl866i+nm80kqUJe1WbPd7lValWrLiOUMrYJOltRHFOqw+QlWYaGST0z9FJl
+	IX7pDmMt0VwrQ41K4wNUDEz4HpNVLaTiosfurmQvuLzhy2ysUthZzv3QptnapfW9Fd8lo9auU1f
+	hxki7r/NQhRfPBNvUdmgJcFqc0CJUwYk9YogJSAa/Y+4kUeNCup1dyRoZ9EpgZKXi6V1Dk62US/
+	juZgmMXZFsGagKAavXVVVi1bJv9ChRvD7bhPwX9buCIID7HOn3gU7qL6F00HVU+XxocYHBoamiW
+	nH9bHClBPg4YSVUTQ+w8k9qjmOyfUyBJRgqg3siPC3hc3QjcoH2aqu9NDkiG3dWFo2BXVb5LnC+
+	9UZA==
+X-Google-Smtp-Source: AGHT+IEGlLGLHWy4VSYvtPlZdL0zIAxuRa0BqhKCh35i4BIZvTkG53oBP+b+dE3GST5/RJnfR/ncqQ==
+X-Received: by 2002:a17:907:2d91:b0:b04:3302:d7a8 with SMTP id a640c23a62f3a-b04b16d300dmr1359997466b.58.1757492959169;
+        Wed, 10 Sep 2025 01:29:19 -0700 (PDT)
+Received: from localhost (public-gprs292944.centertel.pl. [31.62.31.145])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b078334b3c0sm125451966b.68.2025.09.10.01.29.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Sep 2025 01:29:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 10 Sep 2025 10:29:17 +0200
+Message-Id: <DCOZ9AOMAZM0.G789W69TWCUO@gmail.com>
+Subject: Re: [REGRESSION] net: usb: asix: deadlock on interface setup
+From: =?utf-8?q?Hubert_Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>
+To: "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Oleksij
+ Rempel" <linux@rempel-privat.de>
+Cc: <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <regressions@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.20.0
+References: <DCGHG5UJT9G3.2K1GHFZ3H87T0@gmail.com>
+In-Reply-To: <DCGHG5UJT9G3.2K1GHFZ3H87T0@gmail.com>
 
-On systems with 32 bit DMA, we could get events pointing above 4G due
-bad link TRBs, contexts or commands, or simply HW malfunction.
+On Sun Aug 31, 2025 at 10:50 AM CEST, Hubert Wi=C5=9Bniewski wrote:
+> #regzbot introduced: 4a2c7217cd5a
 
-Catch this when truncating to dma_addr_t, log the anomaly, bail out.
-An alternative is to handle untrusted HW-originated DMAs as u64, but
-it adds overhead on 32 bit machines for no clear benefit.
-
-In 64 bit DMA builds this check should optimize to nothing and all
-errors are handled as usual "event TRB doesn't match pending TRB".
-
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
----
- drivers/usb/host/xhci-ring.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index a879c569c2f2..a2100e0a5d0a 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1809,6 +1809,12 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
- 	cmd_dma = le64_to_cpu(event->cmd_trb);
- 	cmd_trb = xhci->cmd_ring->dequeue;
- 
-+	if (sizeof(cmd_dma) < sizeof(u64) && cmd_dma < le64_to_cpu(event->cmd_trb)) {
-+		xhci_err(xhci, "slot %d command completion points above DMA space (%#llx)\n",
-+				slot_id, le64_to_cpu(event->cmd_trb));
-+		return;
-+	}
-+
- 	trace_xhci_handle_command(xhci->cmd_ring, &cmd_trb->generic, cmd_dma);
- 
- 	cmd_comp_code = GET_COMP_CODE(le32_to_cpu(event->status));
-@@ -2673,6 +2679,12 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	trb_comp_code = GET_COMP_CODE(le32_to_cpu(event->transfer_len));
- 	ep_trb_dma = le64_to_cpu(event->buffer);
- 
-+	if (sizeof(ep_trb_dma) < sizeof(u64) && ep_trb_dma < le64_to_cpu(event->buffer)) {
-+		xhci_err(xhci, "slot %d ep %d transfer event points above DMA space\n",
-+				slot_id, ep_index);
-+		goto err_out;
-+	}
-+
- 	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
- 	if (!ep) {
- 		xhci_err(xhci, "ERROR Invalid Transfer event\n");
--- 
-2.48.1
+#regzbot monitor: https://lore.kernel.org/linux-usb/20250908112619.2900723-=
+1-o.rempel@pengutronix.de/
 
