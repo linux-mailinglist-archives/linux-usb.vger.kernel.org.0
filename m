@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-27849-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27850-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 022D8B50EDB
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 09:13:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6FFBB50F28
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 09:25:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 317521C22A24
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 07:13:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A84943A7BB7
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 07:25:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE623081BA;
-	Wed, 10 Sep 2025 07:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057B63090E2;
+	Wed, 10 Sep 2025 07:24:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XKGyYwwp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eroy7Q7U"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25ACC308F1A
-	for <linux-usb@vger.kernel.org>; Wed, 10 Sep 2025 07:12:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0191E1A4E70
+	for <linux-usb@vger.kernel.org>; Wed, 10 Sep 2025 07:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757488362; cv=none; b=LTa4987hY0NCsPThvoBHt2cO4cJBfGt3tFuuXi+aTTkm9jDhFu2IDLUPHxZD5Db8f0vH9p2CpX/WeBLTha9X0rN2Ft+PlFzRSCNzwp1QDrgH+l4XO25O/04vJ7T9mQkoIz4HYLUJ/4nM4su2+G0/ChPNAbAzhGuBKfPpDaj4TBY=
+	t=1757489098; cv=none; b=V6bX2Xk9NhLbkG4NHo+sFWJs/dpEQphSkEpd+Zgeuaiwv9X45in3qoe43SsLh+h6DpwiIUOzBrDIvN1BePrLfg5/GnoiJi6OukFSgs3NPdnNkgUS2SyWV33Uql30Ecg2IyAkA3lQxsRHkgNd+ieyzgzthM4lvSa3bWd46ZWTcvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757488362; c=relaxed/simple;
-	bh=T8pLwzNvCxyYQgm0NgXtikvOD3VCUXG3SvdnXj3iSO0=;
+	s=arc-20240116; t=1757489098; c=relaxed/simple;
+	bh=ez2sjPVJR++wik++/snFD7+3OEDibcy9FPFLiKIgWsU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eEBVHr8+Zb8H+RYJa0S8V7oK8x6UrjUvIfB/WaI+aRWFxO1Vk5glUH+n0DwPR8fWZmwnDqQzTPAO9d/8aZadUa83RBHhox4X7jrLTyCaE1ApROrPZW5HYO5fOFPhAC6jhZgN1S1WRz0iUb3k2jdRHCOdCbf166mBHayaW9nWH7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XKGyYwwp; arc=none smtp.client-ip=198.175.65.16
+	 In-Reply-To:Content-Type; b=CXIQTmOMG6OIKVnyv8SboCQY8+qkNroiowdTivNGq3COaHNbkWH4Zqdw9E3Op0h26pvdzkMIkaPY8GrW3obHqhfk5U4L57NHb+vuq5ET9iYWr/LslbFusIZAMDd2Ba7lQrjs80bfVg7dvyYKcqyNxqvJkJaQTTvl7PlVmoQ10+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eroy7Q7U; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757488361; x=1789024361;
+  t=1757489097; x=1789025097;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=T8pLwzNvCxyYQgm0NgXtikvOD3VCUXG3SvdnXj3iSO0=;
-  b=XKGyYwwpfnsoTwbn//eI5ibH+qLlDc1MCKEDLQUSpnn/raXd2HjHyWbP
-   WbgxDaWsROBaWxeLZRogHTM3ik+UK2vhw5I05eLFnjQxUiC9sDmAtfWD2
-   hvsEzKe0ygiufPDzZHUJjf8JjRBdzQ+m7qd4asexp2wZkppAnF6uUSIjV
-   vr5Z0PCC8+lcPoI7sDJL/FyOQaWTwtfg41HFbiypkzb3eQPGXfCI85A9b
-   29uKc83VqZr8YlWdd+16iRYOnxNOIty40ZZaczy8t5XfMwsUemxPG5Uze
-   MMjw2NDur3R8V9ndtnRuI66JFzMGyvHuDkO128afDv44tJw4x9ZjCd8L0
-   Q==;
-X-CSE-ConnectionGUID: sPhRd6FOTZerfPLiCC+RYQ==
-X-CSE-MsgGUID: U6AkRtB+Rsu1VhQ18TBgWQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="59932338"
+  bh=ez2sjPVJR++wik++/snFD7+3OEDibcy9FPFLiKIgWsU=;
+  b=eroy7Q7UQxEfemwvtl/0MCI3oWK6HpHgSYVSpMfwYQnMQBUc2X01SLz2
+   oEh/b3wHCSGO3FYwiLtINUuTIllCF8sYC94y09alCsFx8K550pBUjClgo
+   BDSrf4lqYF0FwMNXYMzO7cU7pL+7rHD7508tP1ndSU5uzRmzHWgXsbBUo
+   qRghjW4wdwZQVF57WA+9uOz8R1AvzrmFTEGNT+eTcYZ+hXXKzyEPupH76
+   SzzzTzS6J1VpyODGHUOlrL+kgXOnqHnN7A1+2SIUS9in3j7Y7u7VhrU3r
+   IadnJH7DsfGhhy4DObgBm9YujzEB4yBSIb1cY284fxknZjkpXkfkcmSi8
+   w==;
+X-CSE-ConnectionGUID: 3ENukeozQBSij7Hilqq+Zg==
+X-CSE-MsgGUID: AdPrD5LlQY2z4jSwxjQKjA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="70889625"
 X-IronPort-AV: E=Sophos;i="6.18,253,1751266800"; 
-   d="scan'208";a="59932338"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 00:12:41 -0700
-X-CSE-ConnectionGUID: PkOOdYZUQbe6vbjapGYU6A==
-X-CSE-MsgGUID: mG//fALmSzCS85rBbNJyGQ==
+   d="scan'208";a="70889625"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 00:24:51 -0700
+X-CSE-ConnectionGUID: 1Q3jFDPARESzuVdwJJxxaQ==
+X-CSE-MsgGUID: Qo4e2qtBSByzhCHTYXRGUA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,253,1751266800"; 
-   d="scan'208";a="173400082"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.83.145]) ([10.245.83.145])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 00:12:39 -0700
-Message-ID: <971bf77d-da06-40d4-872d-b47a4a95f467@linux.intel.com>
-Date: Wed, 10 Sep 2025 10:12:30 +0300
+   d="scan'208";a="210436762"
+Received: from unknown (HELO [10.245.255.79]) ([10.245.255.79])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 00:24:49 -0700
+Message-ID: <70cf1755-bc20-4703-b812-cce89ef2ef1a@linux.intel.com>
+Date: Wed, 10 Sep 2025 10:24:37 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,28 +67,45 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/7] usb: xhci: Port Register Set improvements
+Subject: Re: [PATCH 7/7] usb: xhci: rename Port Register Set pointer in struct
+ 'xhci_port'
 To: "Peter Chen (CIX)" <peter.chen@kernel.org>
 Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
 References: <20250904154221.2314596-1-niklas.neronin@linux.intel.com>
- <20250905015739.GA2473920@nchen-desktop>
+ <20250904154221.2314596-8-niklas.neronin@linux.intel.com>
+ <20250905024003.GB2473920@nchen-desktop>
 Content-Language: en-US
 From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-In-Reply-To: <20250905015739.GA2473920@nchen-desktop>
+In-Reply-To: <20250905024003.GB2473920@nchen-desktop>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 05/09/2025 4.57, Peter Chen (CIX) wrote:
-> On 25-09-04 17:42:13, Niklas Neronin wrote:
->> The aim of this patch set is to introduce tracing for PORTCS writes and 
+On 05/09/2025 5.40, Peter Chen (CIX) wrote:
+> On 25-09-04 17:42:20, Niklas Neronin wrote:
+>> Rename the Host Controller USB Port Register Set pointer in the 'xhci_port'
+>> struct from "addr" to "port_reg". This new name accurately reflects the
+>> purpose of the pointer.
+>>
 > 
-> I find several patches you are using PORTCS instead of PORTSC, is it typo?
+> I am also implementing a wrapper that needs to cover all PORTSC
+> registers access, it is used to cover the controllers which have some
+> problems to access PORTSC when the USB PHY switches to DP for USB/DP
+> altmode scenario, current USB core and xHCI core access USB3 PORTSC
+> at some places (detail could see the changes you do below) if controller
+> supports both USB2 and USB3, even the USB3 connection is not there.
+> 
+> I am thinking is it possible you add a wrapper like
+> xhci_port_readl/xhci_port_writel for all PORTSC access, otherwise I
+> also need to change all places you make.
 > 
 
-Yes, it should be "PORTSC" (Port Status and Control). Good catch thanks!
+Yes, I will add a read PORTSC functions, in version 2.
+I am on vacation this week, so v2 will be ready next week.
 
 Best Regards,
-Niklas
+Niklas 
+
+
 
