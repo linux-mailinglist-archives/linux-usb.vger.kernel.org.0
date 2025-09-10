@@ -1,171 +1,130 @@
-Return-Path: <linux-usb+bounces-27871-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27872-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC031B517F5
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 15:31:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC76FB51805
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 15:36:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EB5B1C83182
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 13:32:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04239188D94E
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Sep 2025 13:37:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26D6A30649B;
-	Wed, 10 Sep 2025 13:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E7C030CDA5;
+	Wed, 10 Sep 2025 13:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MFExHsTn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nd8YzN4z"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C4D4A1A;
-	Wed, 10 Sep 2025 13:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964901BF58;
+	Wed, 10 Sep 2025 13:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757511100; cv=none; b=Gj5pEOjZvf8UccGW0nYe4Ps1WUy12YoWqJzWsg83L8FEQhi6vkRriLq3EFQ8DWiYMPQPcNNx3nktZIjhG88Nt2cHxMv+1SaFo93r6RnqgL0RryzvBg3yYGDVoOhMu+3mQLsYEtz5cE7dZdkyT6KSFioJ+a05THflN/2Q3ZmHJQY=
+	t=1757511399; cv=none; b=hFNkzxMKMt/3qzHVA90nKSbHfbR98ALjgfvxPSUcc0UdVMXRhp6PmpbwXwN9EFR0Kt0CAzxjNWavuXzFoEhesN1TNaylTEzciVjqL4GMAYvdDS0SZLBO0rF0Nfofoj2R0iT+tBZ0TQ3qN2tVYgvixLEsVMPuCJTGpK294TU253Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757511100; c=relaxed/simple;
-	bh=UDpje6m1xlgONj6ZK3LPa5ZB65IKuApE8hhhpSoZSZU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FBcsCZqYZAfMMEwhf+KIMmr1y9GCl03lFC8MOv44EJCVtLm4Flh6vz8MuKAux5CvrV7618zEOex61/IMxtiXuk/AlkRI6LuUhDPIEMheWWvhwPFwAcKKhN/Tii03OA97nhWuhIBYz+jMt/bOjny/zyoipwmf2O9bibnsgEUe0+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MFExHsTn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4158BC4CEF0;
-	Wed, 10 Sep 2025 13:31:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1757511100;
-	bh=UDpje6m1xlgONj6ZK3LPa5ZB65IKuApE8hhhpSoZSZU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MFExHsTnPFKyUcqjBFXkokDS2qNnzJ4U3lyqbyLL3XjeT8sOye5qBo8Wg2JSbCf5z
-	 72vl34xODtA2omsbutw1nIlI99rKEB4Am2Tz1kJ6lhp3oZgMt3c2JMc1qz5dm+GtkL
-	 DB/wxtJNLOYLRRwdu7HNrx9qQJr9IERJrVHXkvTQ=
-Date: Wed, 10 Sep 2025 15:31:37 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	Guenter Roeck <groeck@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] usb: typec: Implement alternate mode priority
- handling
-Message-ID: <2025091029-snarl-decimal-aea2@gregkh>
-References: <20250905142206.4105351-1-akuchynski@chromium.org>
- <20250905142206.4105351-5-akuchynski@chromium.org>
+	s=arc-20240116; t=1757511399; c=relaxed/simple;
+	bh=Rmmz0W1YezkmiOArAFJY2L0ckRfJRNnGANNFgHFpCkM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mlkIzs4HrtKceJ9UO/w2+3w9dtVdLYB0XwYvR/vx55FBESSgRK9CbgMGA2hmjvmgWlZ/vPE4+KUzW2f3idyeuMcKkjEF+52xpUOGBh/jZ4D+c+8/HsadYXp5GBUJkFRMxKH94L8b4P5MGnV1Vxvj+m+5scI9HYJUHPwtvBlX07s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nd8YzN4z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B409C4CEF0;
+	Wed, 10 Sep 2025 13:36:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757511398;
+	bh=Rmmz0W1YezkmiOArAFJY2L0ckRfJRNnGANNFgHFpCkM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=nd8YzN4zrI3cv+L0pcTB96L+Xvgn3Zfdf88h/aRu/YPwHlqa5N5LXOyK9NI4D8fOO
+	 758CPm8AoHrUcbs5Qj/HwMncYb70RNMq+ZVUQw4r1R//1nFPMW3f+++7ZeXMld7Exe
+	 opLKuTsoyr2K7SJdWul3EvQ2A8sEfZTlIV4ehkY8WMhUQIYKh/+J5gRrpAeAfpzWtP
+	 xHa1ms1R3er18BQphxDuxKK+3iO7/i9SnOslVPJ1eYuxFocmaPs/2r5Yx7gbsIupuC
+	 I45BPOZF+U9q/eI9ELVru9h2oFHE7zvtOFRFcfXVdENqQCpxpR6Qw2ld6nVU5Al4Jw
+	 4CyDzF6C8db1w==
+Message-ID: <dbfe2464-394e-46fd-9e4d-7e41b62069e8@kernel.org>
+Date: Wed, 10 Sep 2025 15:36:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250905142206.4105351-5-akuchynski@chromium.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] usb/gpio/i2c: Add Intel USBIO USB IO-expander
+ drivers
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Linus Walleij <linus.walleij@linaro.org>, Richard Hughes
+ <rhughes@redhat.com>, linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-gpio@vger.kernel.org
+References: <20250907175056.47314-1-hansg@kernel.org>
+ <2025091045-expel-fiction-299f@gregkh>
+From: Hans de Goede <hansg@kernel.org>
+Content-Language: en-US, nl
+In-Reply-To: <2025091045-expel-fiction-299f@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 05, 2025 at 02:22:05PM +0000, Andrei Kuchynski wrote:
-> This patch introduces APIs to manage the priority of USB Type-C alternate
-> modes. These APIs allow for setting and retrieving a priority number for
-> each mode. If a new priority value conflicts with an existing mode's
-> priority, the priorities of the conflicting mode and all subsequent modes
-> are automatically incremented to ensure uniqueness.
+Hi Greg,
+
+On 10-Sep-25 3:25 PM, Greg Kroah-Hartman wrote:
+> On Sun, Sep 07, 2025 at 07:50:53PM +0200, Hans de Goede wrote:
+>> Hi All,
+>>
+>> Here is v2 of the patch series to add support for the Intel USBIO USB
+>> IO-expander used by the MIPI cameras on various new (Meteor Lake and later)
+>> Intel laptops.
+>>
+>> Changes in v2:
+>> - Split usbio-bridge mutex into ctrl_mutex and bulk_mutex
+>> - Drop SPI support since this is not used on devices in the field
+>> - Rework disconnect handling to be more robust
+>> - Several different revisions need special casing add a quirks mechanism
+>>   for this
+>> - Stop using stdint.h (uintX_t) types
+>> - Use __le16, __le32 type + cpu_to_le16() and friends for on wire words
+>> - Properly check auxiliary_device_add() return value
+>> - Add a mutex to the GPIO driver to protect usbio_gpio_update_config()
+>>   calls, which read-modify-write banks[x].config, racing with each other
+>> - Adjust usbio_gpio_get() to have an int return value and propagate the
+>>   usbio_control_msg() return value
+>> - Various (small) style fixes from Sakari's review of all 3 patches
+>>
+>> The first patch adds an USB bridge driver which registers auxbus children
+>> for the GPIO and I2C functions of the USBIO chip.
+>>
+>> The second and third patch add a GPIO resp. an I2C driver for the
+>> auxbus children using the IO functions exported by the USB bridge driver.
+>>
+>> The second and third patch depend on the IO functions exported by
+>> the first patch. So to merge this we will need either an immutable tag on
+>> the USB tree, or all 3 patches can be merged through the USB tree with
+>> acks from the GPIO and I2C subsystem maintainers.
 > 
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> ---
->  drivers/usb/typec/Makefile         |  2 +-
->  drivers/usb/typec/mode_selection.c | 38 ++++++++++++++++++++++++++++++
->  drivers/usb/typec/mode_selection.h |  6 +++++
->  include/linux/usb/typec_altmode.h  |  1 +
->  4 files changed, 46 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/usb/typec/mode_selection.c
->  create mode 100644 drivers/usb/typec/mode_selection.h
-> 
-> diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-> index 7a368fea61bc..8a6a1c663eb6 100644
-> --- a/drivers/usb/typec/Makefile
-> +++ b/drivers/usb/typec/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-$(CONFIG_TYPEC)		+= typec.o
-> -typec-y				:= class.o mux.o bus.o pd.o retimer.o
-> +typec-y				:= class.o mux.o bus.o pd.o retimer.o mode_selection.o
->  typec-$(CONFIG_ACPI)		+= port-mapper.o
->  obj-$(CONFIG_TYPEC)		+= altmodes/
->  obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
-> diff --git a/drivers/usb/typec/mode_selection.c b/drivers/usb/typec/mode_selection.c
-> new file mode 100644
-> index 000000000000..2179bf25f5d4
-> --- /dev/null
-> +++ b/drivers/usb/typec/mode_selection.c
-> @@ -0,0 +1,38 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright 2025 Google LLC.
-> + */
-> +
-> +#include "mode_selection.h"
-> +#include "class.h"
-> +#include "bus.h"
-> +
-> +static int increment_duplicated_priority(struct device *dev, void *data)
-> +{
-> +	struct typec_altmode **alt_target = (struct typec_altmode **)data;
-> +
-> +	if (is_typec_altmode(dev)) {
-> +		struct typec_altmode *alt = to_typec_altmode(dev);
-> +
-> +		if (alt != *alt_target && alt->priority == (*alt_target)->priority) {
-> +			alt->priority++;
-> +			*alt_target = alt;
-> +			return 1;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +void typec_mode_set_priority(struct typec_altmode *alt,
-> +		const unsigned int priority)
-> +{
-> +	struct typec_port *port = to_typec_port(alt->dev.parent);
-> +	int res = 1;
-> +
-> +	alt->priority = priority;
-> +
-> +	while (res)
-> +		res = device_for_each_child(&port->dev, &alt,
-> +				increment_duplicated_priority);
-> +}
-> diff --git a/drivers/usb/typec/mode_selection.h b/drivers/usb/typec/mode_selection.h
-> new file mode 100644
-> index 000000000000..cbf5a37e6404
-> --- /dev/null
-> +++ b/drivers/usb/typec/mode_selection.h
-> @@ -0,0 +1,6 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#include <linux/usb/typec_altmode.h>
-> +
-> +void typec_mode_set_priority(struct typec_altmode *alt,
-> +		const unsigned int priority);
-> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-> index b3c0866ea70f..571c6e00b54f 100644
-> --- a/include/linux/usb/typec_altmode.h
-> +++ b/include/linux/usb/typec_altmode.h
-> @@ -28,6 +28,7 @@ struct typec_altmode {
->  	int				mode;
->  	u32				vdo;
->  	unsigned int			active:1;
-> +	unsigned int			priority;
+> Either is fine with me, patch 1 looks good enough for me to queue it up
+> now.
 
-What is the range of this?  And this value is only incremented, never
-decremented?
+That is good news.
 
-thanks,
+> Let me know what you want me to do.
 
-greg k-h
+I've done a v3 of just the GPIO patch since Bart had some review-comments
+there. Bart still had 2 more small remarks on the v3 GPIO patch. So I'm
+about to send out a v4 series (with just changes to the GPIO driver
+compared to this v2).
+
+I hope Bart will be happy with v4, so then Bart can let you know if
+he prefers an immutable tag, or wants you to merge the GPIO driver
+into usb-next.
+
+Once it is clear how to proceed with the GPIO driver I suggest that
+we get both of them merged and then wait for feedback on the I2C driver.
+
+Regards,
+
+Hans
+
+
 
