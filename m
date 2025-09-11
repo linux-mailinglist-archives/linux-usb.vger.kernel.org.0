@@ -1,253 +1,119 @@
-Return-Path: <linux-usb+bounces-27980-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27981-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF0A8B53D0C
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 22:23:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75428B53D44
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 22:47:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 741D5488147
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 20:23:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D4CE5A24E8
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 20:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B2B2773F3;
-	Thu, 11 Sep 2025 20:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC91F2D2495;
+	Thu, 11 Sep 2025 20:46:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="nDousAk5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE95274670
-	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 20:22:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2532DC775;
+	Thu, 11 Sep 2025 20:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757622179; cv=none; b=Arujg2rt/3/JvVdZoMJ9inzkGJKCZRs3iHGdnhxAciB8dcqQPmxeRrbHfqShuGrYPurIeFxVyfPKW7o9ORPi5+WcE9322NBpaeMV5JID2lXj8m+H/Wq1kiG1Xt5X9QxUV9cTzVFS6Q8E7gCD8Ke0Q1m+k6C/UAT0gvIpVBuvOSk=
+	t=1757623614; cv=none; b=F2LckAbINULk8prR9l/veNvnOZAl6HtF+PAY8otMW0ftfX3LvQzkKqe1TuLRK4KUnaDYps5NspmoypUKyadPFWi/Cgffc11I8IT9j8KO0PXZxl/m0OECSDummh2jz/zBnu/ocbV2h1IKfrAXuKCVboA+2ehRf/k9/4yPl5WkSvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757622179; c=relaxed/simple;
-	bh=t3Qxwy3AnC9M50lFGea/MNR0jGvER4KJxcZ+31kFsDs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FXpiRafYw95PiX/dI89arcRu3vPNBuVd4yR1a66hJBh1CVKNln/x78jX4aOxI95pnEzk0cFUsxLZaCt/e7pBIh6WX6Z9fd4xaiaZKIITCzIgTO55oZrkfkHdx3TXeUhevowDFYuK8eplAc6t9rWq7v1Dm+6EhkkyT/UHPvFpeVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <m.felsch@pengutronix.de>)
-	id 1uwnog-0005yg-QY; Thu, 11 Sep 2025 22:22:50 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-Date: Thu, 11 Sep 2025 22:22:46 +0200
-Subject: [PATCH v4 5/5] usb: misc: onboard_dev: add hub downstream port
- host vbus-supply handling
+	s=arc-20240116; t=1757623614; c=relaxed/simple;
+	bh=1isUSRl5kbt6ekppmtJi/xrvSMndt1O8ZLVTprW8rA8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZgsGxhx3lO2CcVh+8eC/4zfzXT+3Vqsty1WnCsoG4Xefk1/BpGrAPN22YOCT91wPrflbFlx3f6e+P6b9oprvQRnkLftaTspU4fqJ5yVJ91Y1RkMknHy0NQWNVAcT5erBdeRcfcH0mTdfws17vP6EPX1sX9UDf2Gl0jZVo3SDfpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=nDousAk5; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=0YBafjYQdiIF2lXwZ2cx5VVofHoYSwzD6di7O2ITSYc=; b=nDousAk5HazAghqDWfgpvEpO5x
+	RLwZkEqcCOA+PvSA5gFNirWB3ViumIJgXrbbfEmzi7/SPhW0MmMX7bTy+Y0WTB4D00j+1KNl51XeQ
+	C4H0o/Le39tpc23S1YG9PhU5IQ7vi98pTtkOTYXFmpTsFaw+J4nKv+y6CBAFwbMMwq1JMZy62opvI
+	qNpTUR48Dzy0Zl8nL0Q7F4UB8VakYvcJDX4S6IT81bsjPS/qUtitEo2biOXLweEQln2OOJsy23ZHw
+	9fSMsh4+i4FM6Rj9PjI7vCk2RQI1eRiYZ0h8Bg+CyassYU5IFYVToE4cbeGnjTTO7S3D48JmyBT10
+	L1ZGQ4dw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32794)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1uwoBl-000000003aE-3osZ;
+	Thu, 11 Sep 2025 21:46:42 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1uwoBg-000000002g5-04Xg;
+	Thu, 11 Sep 2025 21:46:36 +0100
+Date: Thu, 11 Sep 2025 21:46:35 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
+	stable@vger.kernel.org, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>, Xu Yang <xu.yang_2@nxp.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
+ PM to avoid MDIO runtime PM wakeups
+Message-ID: <aMM1K_bkk4clt5WD@shell.armlinux.org.uk>
+References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
+ <CGME20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94@eucas1p2.samsung.com>
+ <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
+ <aMLfGPIpWKwZszrY@shell.armlinux.org.uk>
+ <20250911075513.1d90f8b0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250911-v6-16-topic-usb-onboard-dev-v4-5-1af288125d74@pengutronix.de>
-References: <20250911-v6-16-topic-usb-onboard-dev-v4-0-1af288125d74@pengutronix.de>
-In-Reply-To: <20250911-v6-16-topic-usb-onboard-dev-v4-0-1af288125d74@pengutronix.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
- Matthias Kaehlcke <mka@chromium.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, kernel@pengutronix.de, 
- Marco Felsch <m.felsch@pengutronix.de>
-X-Mailer: b4 0.14.2
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
-X-SA-Exim-Mail-From: m.felsch@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250911075513.1d90f8b0@kernel.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-Some PCB designs don't use the dedicated USB hub port power GPIOs.
-Instead they route the signals to the host. So the host is in charge to
-power the VBUS supplies.
+On Thu, Sep 11, 2025 at 07:55:13AM -0700, Jakub Kicinski wrote:
+> On Thu, 11 Sep 2025 15:39:20 +0100 Russell King (Oracle) wrote:
+> > I'm not surprised. I'm guessing phylib is using polled mode, and
+> > removing the suspend/resume handling likely means that it's at the
+> > mercy of the timings of the phylib state machine running (which is
+> > what is complaining here) vs the MDIO bus being available for use.
+> > 
+> > Given that this happens, I'm convinced that the original patch is
+> > the wrong approach. The driver needs the phylink suspend/resume
+> > calls to shutdown and restart phylib polling, and the resume call
+> > needs to be placed in such a location that the MDIO bus is already
+> > accessible.
+> 
+> We keep having issues with rtnl_lock taken from resume.
+> Honestly, I'm not sure anyone has found a good solution, yet.
+> Mostly people just don't implement runtime PM.
+> 
+> If we were able to pass optional context to suspend/resume
+> we could implement conditional locking. We'd lose a lot of
+> self-respect but it'd make fixing such bugs easier..
 
-As first step the USB hub OF information is parsed and possible optional
-vbus-supply regulators are added. This is done during the platform
-driver probe() function.
+Normal drivers have the option of separate callbacks for runtime PM
+vs system suspend/resume states. It seems USB doesn't, just munging
+everything into one pair of suspend and resume ops without any way
+of telling them apart. I suggest that is part of the problem here.
 
-Afterwards, during the usb driver probe() function and in case this is
-an USB hub, the set/clear features hooks are registered via the new
-usb_hub_register_port_feature_hooks().
-
-After this registration all generic usb hub set/clear features calls are
-passed to the onboard_dev driver too. This allows the driver to
-en-/disable the regulators.
-
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
- drivers/usb/misc/onboard_usb_dev.c | 117 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 117 insertions(+)
-
-diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
-index 5b481876af1b2c10ce625fcf0fb8bfbe8905aa8c..1ceea75d30d320e5d2203c768b9641876ebd37ad 100644
---- a/drivers/usb/misc/onboard_usb_dev.c
-+++ b/drivers/usb/misc/onboard_usb_dev.c
-@@ -54,6 +54,12 @@ struct usbdev_node {
- 	struct list_head list;
- };
- 
-+struct onboard_dev_port_regulator {
-+	struct regulator *vbus_supply;
-+	unsigned int port;
-+	struct list_head list;
-+};
-+
- struct onboard_dev {
- 	struct regulator_bulk_data supplies[MAX_SUPPLIES];
- 	struct device *dev;
-@@ -65,6 +71,7 @@ struct onboard_dev {
- 	struct list_head udev_list;
- 	struct mutex lock;
- 	struct clk *clk;
-+	struct list_head ext_vbus_supplies;
- };
- 
- static int onboard_dev_get_regulators(struct onboard_dev *onboard_dev)
-@@ -226,6 +233,71 @@ static int onboard_dev_add_usbdev(struct onboard_dev *onboard_dev,
- 	return err;
- }
- 
-+static int onboard_dev_port_power(struct onboard_dev *onboard_dev, int port1,
-+				  bool enable)
-+{
-+	struct onboard_dev_port_regulator *regulator;
-+	struct regulator *vbus_supply = NULL;
-+
-+	list_for_each_entry(regulator, &onboard_dev->ext_vbus_supplies, list) {
-+		if (regulator->port == port1) {
-+			vbus_supply = regulator->vbus_supply;
-+			break;
-+		}
-+	}
-+
-+	/* External supplies are optional, return no error */
-+	if (!vbus_supply)
-+		return 0;
-+
-+	if (enable)
-+		return regulator_enable(vbus_supply);
-+
-+	return regulator_disable(vbus_supply);
-+}
-+
-+static int onboard_dev_add_ext_vbus_supplies(struct onboard_dev *onboard_dev)
-+{
-+	struct device *dev = onboard_dev->dev;
-+
-+	if (!onboard_dev->pdata->is_hub)
-+		return 0;
-+
-+	INIT_LIST_HEAD(&onboard_dev->ext_vbus_supplies);
-+
-+	for_each_child_of_node_scoped(dev->of_node, child) {
-+		struct onboard_dev_port_regulator *regulator;
-+		struct regulator *port_supply;
-+		u32 port;
-+
-+		port_supply = devm_of_regulator_get_optional(dev, child, "vbus");
-+		if (IS_ERR(port_supply)) {
-+			if (PTR_ERR(port_supply) == -ENODEV)
-+				continue;
-+			return PTR_ERR(port_supply);
-+		}
-+
-+		/*
-+		 * The VBUS of this downstream port is controlled by a host
-+		 * managed regulator
-+		 */
-+		if (of_property_read_u32(child, "reg", &port)) {
-+			dev_err(dev, "Failed to parse USB device reg property\n");
-+			return -EINVAL;
-+		}
-+
-+		regulator = devm_kzalloc(dev, sizeof(*regulator), GFP_KERNEL);
-+		if (!regulator)
-+			return -ENOMEM;
-+
-+		regulator->vbus_supply = port_supply;
-+		regulator->port = port;
-+		list_add(&regulator->list, &onboard_dev->ext_vbus_supplies);
-+	}
-+
-+	return 0;
-+}
-+
- static void onboard_dev_remove_usbdev(struct onboard_dev *onboard_dev,
- 				      const struct usb_device *udev)
- {
-@@ -460,6 +532,10 @@ static int onboard_dev_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, PTR_ERR(onboard_dev->reset_gpio),
- 				     "failed to get reset GPIO\n");
- 
-+	err = onboard_dev_add_ext_vbus_supplies(onboard_dev);
-+	if (err)
-+		return dev_err_probe(dev, err, "failed to parse port vbus supplies\n");
-+
- 	mutex_init(&onboard_dev->lock);
- 	INIT_LIST_HEAD(&onboard_dev->udev_list);
- 
-@@ -573,6 +649,44 @@ static struct platform_driver onboard_dev_driver = {
- #define VENDOR_ID_VIA		0x2109
- #define VENDOR_ID_XMOS		0x20B1
- 
-+static int onboard_dev_port_feature(struct usb_device *udev, bool set,
-+				    int feature, int port1)
-+{
-+	struct device *dev = &udev->dev;
-+	struct onboard_dev *onboard_dev = dev_get_drvdata(dev);
-+
-+	/*
-+	 * Check usb_hub_register_port_feature_hooks() if you want to extent
-+	 * the list of handled features. At the moment only power is synced
-+	 * after adding the hook.
-+	 */
-+	switch (feature) {
-+	case USB_PORT_FEAT_POWER:
-+		return onboard_dev_port_power(onboard_dev, port1, set);
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int
-+onboard_dev_set_port_feature(struct usb_device *udev, int feature, int port1)
-+{
-+	return onboard_dev_port_feature(udev, true, feature, port1);
-+}
-+
-+static int
-+onboard_dev_clear_port_feature(struct usb_device *udev, int feature, int port1)
-+{
-+	return onboard_dev_port_feature(udev, false, feature, port1);
-+}
-+
-+static void
-+onboard_dev_register_hub_hooks(struct usb_device *udev)
-+{
-+	usb_hub_register_port_feature_hooks(udev, onboard_dev_set_port_feature,
-+					    onboard_dev_clear_port_feature);
-+}
-+
- /*
-  * Returns the onboard_dev platform device that is associated with the USB
-  * device passed as parameter.
-@@ -632,6 +746,9 @@ static int onboard_dev_usbdev_probe(struct usb_device *udev)
- 
- 	dev_set_drvdata(dev, onboard_dev);
- 
-+	if (onboard_dev->pdata->is_hub)
-+		onboard_dev_register_hub_hooks(udev);
-+
- 	err = onboard_dev_add_usbdev(onboard_dev, udev);
- 	if (err)
- 		return err;
+However, I'm not a USB expert, so...
 
 -- 
-2.47.3
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
