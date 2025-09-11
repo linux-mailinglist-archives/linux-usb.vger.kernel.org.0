@@ -1,99 +1,92 @@
-Return-Path: <linux-usb+bounces-27967-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27968-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A76D0B536CE
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 17:02:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70BDEB53B19
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 20:13:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DC683B53F1
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 15:00:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88DF87BE4DC
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 18:11:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E448343D6B;
-	Thu, 11 Sep 2025 15:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08CA3629B9;
+	Thu, 11 Sep 2025 18:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oC9lKxEE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fnbKlJdP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09A5322DAD;
-	Thu, 11 Sep 2025 15:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D21A2AD0C;
+	Thu, 11 Sep 2025 18:12:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757602804; cv=none; b=SSwhV6kqdpf3+R2vk1vicD/B8vCb3puZmKGMuKJsnECEbwOFsE0DFumhawu9hTmYnsXJJjZGLxQ8p+S8ruS/UfVbtaArvoGpCZMpO9ioeQB0ARILlAXk19iftcq3/DvJAmGd3YpKZHDqKxBbGPAeAgN3CJmvWCTdXZrsLJuFY8w=
+	t=1757614376; cv=none; b=FulkV/NWg1wc39zsjbL7IiOTfKxLPHgXh3j4fttWWaNLPcKNZ2JmcNgluesc93OH/unybvx31jbMk6ozqTof1YKX5JmZcLKhgfzGdK/gGIeabi+WCgU6DWGmi/lKrS0hEVCcl2WuF6W9jviFUKud0qssCRIRQzgDguWwqgQEqEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757602804; c=relaxed/simple;
-	bh=1E1cqC5r3mV4aDOiVcQQ97fkxUwbFiA7fMztwzGI/Ro=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=jPHZVjQny5V7+2Te5fXY94Y8jUVeMFikyCdgx1SK+P4cRl0MTgZkAzJUa912zT5gOCYL2PCXFvyNJpU1YYFFSWBMxpofn5YPuUWd9KWiPVvCFN16m7mFjiK2dM/ox+FPNtMiqwIZasYq2HN1MmI82E8RVgMYQFvghYPuf0LRN1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oC9lKxEE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABEF8C4CEF0;
-	Thu, 11 Sep 2025 15:00:04 +0000 (UTC)
+	s=arc-20240116; t=1757614376; c=relaxed/simple;
+	bh=o+oKyNK/TJhMds4XtjGojexaBcvpvabR1DYMKWUHSNE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VqjpaceUkwwxWTL+p31pWeAK3Nfihawt2H4V//n9HTFSDIRctZkmBkz2p+GMiWU7h4wmJzP4mjS7Gw5dL5PHfW7fsmD3FtHVZiB3cspZFom9X4XSBv9CBR4Co/f5OF68dWcm3/w2IWzoj4zi316XsOaLf5gQJsVUqRmv5ZFa9o0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fnbKlJdP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 143EDC4CEF0;
+	Thu, 11 Sep 2025 18:12:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757602804;
-	bh=1E1cqC5r3mV4aDOiVcQQ97fkxUwbFiA7fMztwzGI/Ro=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=oC9lKxEEQOwppv+V+Mq2yG4+KEut1F/qQXumaJbfUMDl65htG16/WTAyeKHAXRY5G
-	 uvn79Av7KtrtNPW7RanNbo2mps7WRxo+tfrYyGcvZCCLuaj9RY6/O+rC+EUKAiG+jI
-	 mZs7WsAZKnJptuTCNGGnKJQa1l3ieggyzoXLbJN9oZRFVEyrk/oKg07gAPx6zdd4vE
-	 0UZIE+ZTe/BjoWxQC6XJOJeV3h7swGtZBmPxZhw0NM2fpanEru1RFkmzCdKqm1IGvl
-	 qcYuBDpDdQbFZQfjyKNoybvLI6GcqOw1EH+TSPrI6PENJWCmBnF1GzbIL+YURe2tnS
-	 18s+38klgzfhw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4A517383BF6C;
-	Thu, 11 Sep 2025 15:00:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1757614375;
+	bh=o+oKyNK/TJhMds4XtjGojexaBcvpvabR1DYMKWUHSNE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fnbKlJdPu2bMH+2orQuO2qrz/yjFa6P6x/dZm2R+eBJqDx0KZX20ewscVq2jLsZMe
+	 N2TVgFtMQmxKsftgCC1uhpM49gAO+D/3oG4O7i2AoXy1PhwOkuHtOOKP32SXh/ViCc
+	 PTmcjIviw4Q2e/8QI7VqnYNfvf4dqBlEps46r3zy+nElAcYPzebl4YJXfaB7w9lC1g
+	 o6309xxRRHyYTXvK4v/dQTDpYCwLuQsAJQIpcbHSXEWBCJyxNHqGifedjHrFWkvf46
+	 T0bhK1L+RHicL+v7+0BF/A3KpzW5WIRFxdZSos8AkF5lAnTkmJ2LxJ0c7gFdlITeFi
+	 50sue4YpJn2xQ==
+Message-ID: <fcf2f155-9215-4a73-98b7-de8f58fe851a@kernel.org>
+Date: Thu, 11 Sep 2025 20:12:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] Revert "net: usb: asix: ax88772: drop phylink use in
- PM
- to avoid MDIO runtime PM wakeups"
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175760280699.2209403.2224152727971942532.git-patchwork-notify@kernel.org>
-Date: Thu, 11 Sep 2025 15:00:06 +0000
-References: 
- <2945b9dbadb8ee1fee058b19554a5cb14f1763c1.1757601118.git.pabeni@redhat.com>
-In-Reply-To: 
- <2945b9dbadb8ee1fee058b19554a5cb14f1763c1.1757601118.git.pabeni@redhat.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, o.rempel@pengutronix.de,
- linux-usb@vger.kernel.org, m.szyprowski@samsung.com,
- hubert.wisniewski.25632@gmail.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/3] i2c: Add Intel USBIO I2C driver
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij
+ <linus.walleij@linaro.org>, Richard Hughes <rhughes@redhat.com>,
+ linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-gpio@vger.kernel.org
+References: <20250910133958.224921-1-hansg@kernel.org>
+ <20250910133958.224921-4-hansg@kernel.org> <aMHznOCa_9vtW6_1@shikoro>
+ <4e2f79bc-2827-4db9-bb2b-4a330cd14f2d@kernel.org> <aMLf9Nj3hF4t9rQH@ninjato>
+From: Hans de Goede <hansg@kernel.org>
+Content-Language: en-US, nl
+In-Reply-To: <aMLf9Nj3hF4t9rQH@ninjato>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
+Hi,
 
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Thu, 11 Sep 2025 16:33:31 +0200 you wrote:
-> This reverts commit 5537a4679403 ("net: usb: asix: ax88772: drop
-> phylink use in PM to avoid MDIO runtime PM wakeups"), it breaks
-> operation of asix ethernet usb dongle after system suspend-resume
-> cycle.
+On 11-Sep-25 4:43 PM, Wolfram Sang wrote:
 > 
-> Link: https://lore.kernel.org/all/b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com/
-> Fixes: 5537a4679403 ("net: usb: asix: ax88772: drop phylink use in PM to avoid MDIO runtime PM wakeups")
-> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+>>> How did you test 10 bit addresses? I have never seen them in the wild?
+>>
+>> I did not test 10 bit addresses. This was there in the original code
+>> from Intel.
 > 
-> [...]
+> I suggest to drop it. There is no code handling the I2C_M_TEN flag which
+> should be handled if support is advertised.
 
-Here is the summary with links:
-  - [net] Revert "net: usb: asix: ax88772: drop phylink use in PM to avoid MDIO runtime PM wakeups"
-    https://git.kernel.org/netdev/net/c/63a796558bc2
+Ok, I'll drop this for v6. Hopefully that will be the last
+version of this series then.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Regards,
+
+Hans
 
 
 
