@@ -1,192 +1,137 @@
-Return-Path: <linux-usb+bounces-27938-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27939-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADB84B533B2
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 15:27:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB7E6B533B9
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 15:29:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65DE53BC7DA
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 13:26:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C4CFAA04C5
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 13:27:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0595D32A830;
-	Thu, 11 Sep 2025 13:26:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56131324B24;
+	Thu, 11 Sep 2025 13:27:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QrnZIKv5"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="tRHrj973"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D376432A822
-	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 13:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D9C2E9EC1
+	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 13:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757597165; cv=none; b=dRi6of3SRxaV9jgX666m89noi9vsVCtuSndAAky6DVoJeB1MZi+XvftcKR/Hku/pWsFxxeIT2CtZT6667e4wl4xMNjxTURDtq1MtxwurPnbt6hd6a0EFgR7QkuqkZhGia6t0NjLD0yHSAqzQTlfNsKBiSi1EkisKEPozlT+VW4c=
+	t=1757597244; cv=none; b=WlA3onucoZX1oa+2c9mvUaKBdA8QQzgE3hFKsTZV1eK1sqCAyMU0EAVghMcbAHQi7TI3mzmSJbb6goHRd2VwZLgDuRrB6OXdRKyOHcI7f1E/8q1GjBiqdba9awGXwRAFPUjU11Mr55Kx1XXnLBSFZVhGb7oPUJtiIgcJM0RE6BU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757597165; c=relaxed/simple;
-	bh=bck2b0HUyvf0F/4ArW7/OnJRrl2YOIY5cBIvwDrnajM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nBeqQ+CpnadG0cNAEqqvbBO8GevBzPCWSTFq3fRrM8SMScggG8l+Y13VrlnPWiXXyOJMEwP6jisfmkC6Yk9mA0S+gWSXHMIaSXugw7hQm7o7SgLesf3bDjWmVkDi6ovgkaC4VMzkIlVPat0ED9Oamul+wAo/CWb8sU1UNoQpmAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QrnZIKv5; arc=none smtp.client-ip=209.85.217.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-552d3a17a26so244885137.2
-        for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 06:26:03 -0700 (PDT)
+	s=arc-20240116; t=1757597244; c=relaxed/simple;
+	bh=A7yKxmDExMeHFoZ5DS5kS/O/awUG1znqYvQLffqw0n0=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bsC+ULhSW5HDDVzaw2rw3feNLZVZmH9l1BPipzW7tPnkt8wQtGuQYoeJ19TSa8/oKfHBNiDnT7MKE7ojhkUYzVbnCbvF3tUj2EvA5XNuDuS7YsM6FblOjPgKmhrSKv4wnqn2QKsXaALT4VBTIAT/ygjAFxiEJTj8cwGOiMZszyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=tRHrj973; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-336dc57f3f2so6499191fa.3
+        for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 06:27:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757597163; x=1758201963; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4fdmTjQ3zuf0zvoi7FPSNx1/h36C75iwg/2B5LQDt1k=;
-        b=QrnZIKv5mhGqugMTADC6dnpRI2/8eP0/fCiqDI9eiGuQvhy6SnYn8LFdSv2c8BI4hQ
-         KuhCURF7G8pGTXDCGQUXAeWtiolgUPrIsvtU18H7G1Y3/SeVfMuHrqae4gdWzW3YiAS2
-         qJPn5XgCjQ13ShN/peFfBiH8PV6eSrgQnNT+YZmM6RjJ9Fh5YFtIVG1u/GYOHJgXXMRO
-         2UWoNtrpE5K0u54WVjskPJ7xY0cUkTSV5gzK19K1w4Dn5F66PxEr9dJbRpIjsd4agbCa
-         mbOl3LoGOYgKKRPJY2LUTOKr+X9G8wYDcBPGRhxdDmMAgyMjSpV688lrMiaGoyp7IDuw
-         k18w==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757597241; x=1758202041; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DeUccbeQ/kyM8X+MjI6gjEtxWNHGIttYsHKE4be0R7E=;
+        b=tRHrj973G55r4OyQWIn7hI2+n0BSnUWv57OqmDIfoBhLK1FL40cPaHiE73uh2bV4Wy
+         41aqxqZx+QMhqjklcVLEmqBG38QE/c97qC6X3ptv/mmv/LFMEwNi/Whqzqa3vz1u4hao
+         4OlbtV8G1ULnGjE1QyBEZwQsfDE2xPGPI7g61osmt6ISwibFpglCJB3NU6FxIEZppT+1
+         bQ+/advy5gI6LNRHiW1HYSgo5ydlP2Jxz/Se4H3GihA16QS2f6UbVKQBqLPHp1/F7yMY
+         rpIBF/oUpvwtxyVa3CuyEbqgdbOrXy1x0fzoGn5aC2i8E6nB78qEMB+e9IwttCUzCSFE
+         TFFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757597163; x=1758201963;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4fdmTjQ3zuf0zvoi7FPSNx1/h36C75iwg/2B5LQDt1k=;
-        b=dUf2bN/RuJQNke+xWlNlhTbZDNQe6So844/LVCE4Rx7UufWOgKw4PIQ2XrAHLhEp4z
-         /Kb2BEVHJ2cZJ1f9ZM7cVxiIRJYFib+394lz62njjNbTU+DbAucB6kCps4DkL7ibN0gM
-         Ky60+/ZpFpzkPLta+o+5Q6SNPgeowRli8+PKqTB4MeAGHBoVvoDELNc0/+VKE+Ru+5ZK
-         tAlC+K9bjQdwLUqXHX4+NcxbTDevFYjNCK4J+mGYkY0gN6HTb6hBff37Q761apB6ZHsX
-         uJrM2Zf8+KqrqdeVs1QFfCy11sHZ5tk7QU7mep1Co+OTmGJQSuT0k2n5WBpnWuxjQWvL
-         0J/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVZqi3C+cC9Vxgj+LkbwV0yDIM2edPzq6TUfaZACu9cY5/Sob1g+r3bCPEf8ey/C2h6/7mc2k0xPFs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyE395GsPHkHrhL6l+ynww9uDESQc3QOdXlE4i24WplTe8hEfCq
-	FA4q7BKl4wd2kjClHAW3ey3doN880XTIVd3TxcdBuZBsbHhu1oc6tl1C6mmvUjLL8j37RqsevFj
-	5zYlykba13rMMuzjUzOQexeYluaWK0io=
-X-Gm-Gg: ASbGncuSU5kNiqnvM+USwWNLhX9zEXS0ri6hgMIhG50w9vMJrhNMKPFkp44wZi6s5VY
-	VVbRhEwyJHUVBey3YjYBMGuPA0bCxlTqMWHVmEXoXqyAgWjMvl5EMayiP1uGk0m2gOIVcBfvMFO
-	4xwsc0iT1MUqQgtg4cZZJMEH7SVGz0IZxXqrblKsBlc3fEw72wJYvorH+Oz5LvjXG/HGZOg8UPh
-	6Bplb5tQFQed7asCNSn9J3Ux6reFgIfU4x/l5vIalSApg==
-X-Google-Smtp-Source: AGHT+IF9HHTf/6XsZ4xmdiVceKWAiZfJlu2nUBunXuEeleQrXxA2m4sgS4aY/AJqPtQQMw8wN97GSp36mzUPZNs+cMc=
-X-Received: by 2002:a05:6102:d89:b0:4f9:6a91:cc96 with SMTP id
- ada2fe7eead31-53d231f8bcamr6485049137.26.1757597162651; Thu, 11 Sep 2025
- 06:26:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757597241; x=1758202041;
+        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DeUccbeQ/kyM8X+MjI6gjEtxWNHGIttYsHKE4be0R7E=;
+        b=oqsPYQRetMpR7///UWZpGqsB6mCrvq2Sa/J5pt1OGuRJqfq6Onuj3WjG2gf2kdycFa
+         BIM32G6ayo0qPu6pCT7PlB/OnnL2Hoj8P19dSzqHIyW+uyjgpM4RI+QFD2CNoBcHvXcz
+         ew1eAWuFK2WXUHXwjpIv6hfswaT8okb6Vgga2xlTs8IB9VXafvsD9AQsituRUayhQLwV
+         NWJk0BDSKwKssn2KRU3QYrmr8rgFfIp+K+zi5UehEPZvJSd5y2WLv4bEtP+MXMWrMj52
+         h7PYBDnrM6CL7i+dE2M1JURRjnnpvQGBlMYpky2UY/jEFI6KLPQbedrqaddNe421U3Ao
+         mNiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVg7MUVpKSMRBbLQtWVOsSZvRvDvcctb/u9kbCnp0eMJcRDWPDe/DvOOgN5TjQFCQSxp9h3jH2pkz0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzS+x9Z6JR1NxP0COakR8LeDLm7kAFsZhzlKtljFm6jNNMIS6aQ
+	4CUsqsuN/YTPVyFKFeN+csXBOs2Y8LVG37iBXpD7UIr66GnCyj98c8iy09JhwtbskC4boBpkoTA
+	+GEUrYnB04DK7K3uCDoupvYprFXpMA6zjRZlr79Gqmg==
+X-Gm-Gg: ASbGncvZuv3BSlaLyOvTyAVISTH0sLzlZeXB8H0ThgsRV+hRFCFvhL5CgLycPj0gvmU
+	Zwd8zFUyIOwRqy/BU+jNlwOURGUIU+F8bz1AJ1ptydta5lI3VqT+cgZ3RU52DdFpPlVZ2UonLor
+	AojHrObsvJ7eUSnljkHvtQez4V5dysGq0/5AO2jU4UbVouJSD1sxnMcDZCOkODn7uEvgURxoT6W
+	nLb95QdHN9MaLdyQPykYZcIVFiWH491Xhz03JOPcISQxL3qkg==
+X-Google-Smtp-Source: AGHT+IGBB6D1hNdnllPGf95Uj3l9EU2JfY7JcduwYvVgx0oChEBeWjvr5yTav4TCpbqAhFjiHyDJdIQ3rvnvP4CkIb8=
+X-Received: by 2002:a05:651c:1117:10b0:336:b4d2:6c4 with SMTP id
+ 38308e7fff4ca-33b520d6d1emr49059301fa.17.1757597241429; Thu, 11 Sep 2025
+ 06:27:21 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 11 Sep 2025 09:27:19 -0400
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 11 Sep 2025 09:27:19 -0400
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+In-Reply-To: <20250911131832.59335-3-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <385dccf3-234a-4f83-9610-81ac30bf1466@rowland.harvard.edu>
- <20250909161901.10733-1-ryanzhou54@gmail.com> <2025090959-italicize-silly-f628@gregkh>
- <CAPwe5RPxRhvYmoDZF792Vwv638kt+Hk+CYoJJCmcjewGp8NfYQ@mail.gmail.com> <2025091023-joylessly-finlike-8382@gregkh>
-In-Reply-To: <2025091023-joylessly-finlike-8382@gregkh>
-From: ryan zhou <ryanzhou54@gmail.com>
-Date: Thu, 11 Sep 2025 21:25:51 +0800
-X-Gm-Features: AS18NWCxyjTDGGLxyQAVfnWFUrASUcULEFlA34l1zFRHyjFJ7Q9X875EKse4BK0
-Message-ID: <CAPwe5RNF6gPkD7yt6AgZs=0ATeGrzBdeQEcWx9j=1MJwzfn5OA@mail.gmail.com>
-Subject: Re: [PATCH v2] drvier: usb: dwc3: Fix runtime PM trying to activate
- child device xxx.dwc3 but parent is not active
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: stern@rowland.harvard.edu, Thinh.Nguyen@synopsys.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, rafael@kernel.org, royluo@google.com
+References: <20250911131832.59335-1-hansg@kernel.org> <20250911131832.59335-3-hansg@kernel.org>
+Date: Thu, 11 Sep 2025 09:27:19 -0400
+X-Gm-Features: Ac12FXwV3WssWXmZ6g0rdQcbcorV7HFa5hX2cT1C7ZyRIRy9qt885Y0faI-jmjQ
+Message-ID: <CAMRc=McKOTWxu=M0S0p0Uyhod-h4mNH9QfsLsycN4vbHJPtgeQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] gpio: Add Intel USBIO GPIO driver
+To: Hans de Goede <hansg@kernel.org>
+Cc: Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	Israel Cepeda <israel.a.cepeda.lopez@intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij <linus.walleij@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2025=E5=B9=B49=E6=9C=8810=E6=
-=97=A5=E5=91=A8=E4=B8=89 21:07=E5=86=99=E9=81=93=EF=BC=9A
+On Thu, 11 Sep 2025 15:18:31 +0200, Hans de Goede <hansg@kernel.org> said:
+> From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
 >
-> On Wed, Sep 10, 2025 at 08:56:36PM +0800, ryan zhou wrote:
-> > Hi Greg KH,
-> > Sorry, I didn't understand your question. Are you asking for my patch
-> > commit ID? I've resubmitted patch v3, and the commit details are as
-> > follows:
-> >
-> > commit 92bc5086f53404f6d14d8550209d1c8cd3fa9036 (HEAD -> usb-next-devel=
-op)
-> >
-> > Or do you need the commit that introduced this issue?
+> Add a a driver for the GPIO auxbus child device of the Intel USBIO USB
+> IO-expander used by the MIPI cameras on various new (Meteor Lake and
+> later) Intel laptops.
 >
-> Sorry, I mean "what commit does this fix", so that you can add a
-> "Fixes:" tag to it.
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Co-developed-by: Hans de Goede <hansg@kernel.org>
+> Signed-off-by: Hans de Goede <hansg@kernel.org>
+> Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+> ---
+> Changes in v5:
+> - Move GPIO_USBIO Kconfig option under 'menu "USB GPIO expanders"'
+>
+> Changes in v4:
+> - Drop include <linux/dev_printk.h>, unneeded auxiliary_set_drvdata()
+>
+> Changes in v3:
+> - Drop (offset >= gc->ngpio) check and make usbio_gpio_get_bank_and_pin()
+>   return void
+> - Propagate usbio_gpio_set() ret val in usbio_gpio_direction_output()
+> - Use devm_gpiochip_add_data() and drop auxiliary_driver remove() callback
+>
+> Changes in v2:
+> - Add a config_mutex protect usbio_gpio_update_config() calls, which
+>   read-modify-write banks[x].config, racing with each other
+> - Adjust usbio_gpio_get() to have an int return value and propagate the
+>   usbio_control_msg() return value
+> - Use __le16, __le32 type + cpu_to_le16() and friends for on wire words
+> - Some small style fixes from Sakari's review
 
-I initially targeted these two issues:
-commit1=EF=BC=9A 0227cc84c44417a29c8102e41db8ec2c11ebc6b2
-usb: dwc3: core: don't do suspend for device mode if already suspended
-commit2=EF=BC=9A 68c26fe58182f5af56bfa577d1cc0c949740baab
-usb: dwc3: set pm runtime active before resume common
+If Greg wants to take it:
 
-When the DWC3 controller is in a runtime suspend state, an interruption occ=
-urs
-during the system sleep transition, resulting in USB failure to resume
-properly after wakeup.
-The detailed sequence is as follows:=EF=BC=88refer to commit e3a9bd247cddf
-merged by Ray Chi=EF=BC=89
-    EX.
-    RPM suspend: ... -> dwc3_runtime_suspend()
-                          -> rpm_suspend() of parent device
-    ...
-    PM suspend: ... -> dwc3_suspend() -> pm_suspend of parent device
-                                     ^ interrupt, so resume suspended devic=
-e
-              ...  <-  dwc3_resume()  <-/
-                          ^ pm_runtime_set_active() returns erro
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Post-analysis reveals:
-    =E2=80=8CCommit 2=E2=80=8C generates unexpected error logs ( runtime PM=
- trying to
-activate child device xxx.dwc3 but parent is not active).
-    =E2=80=8CCommit 1=E2=80=8C disrupts USB recovery in this context, attri=
-butable to
-the following factors:
+or I can take it once patch 1/3 is in an immutable branch.
 
-    EX.
-    RPM suspend: ... -> dwc3_runtime_suspend()
-                          -> rpm_suspend() of parent device
-    ...
+I'm fine either way.
 
-    PM suspend: ... -> dwc3_suspend()
-                                     |___dwc3_suspend_common()
-                                              ^ if
-(pm_runtime_suspended(dwc->dev)) then skip suspend process
-                                          |___dwc3_core_exit()
-                                               |___dwc3_phy_exit()
-      PM resume   ...  <-  dwc3_resume()
-                          |___dwc3_resume_common()
-                                       ^ pm_runtime_set_active()
-report error(error logs : runtime PM trying to activate child device
-xxx.dwc3 but parent is not active).
-                              |___dwc3_core_init_for_resume()
-                                  |___dwc3_core_init()
-                                      |___dwc3_phy_init()
-                                               ^ phy->init_count++ and
-phy->power_count++
-     ... Next,usb connect (Note: dwc3 is always in runtime suspend)
-      RPM resume   ...  <-  dwc3_runtime_resume()
-                          |___dwc3_resume_common()
-                              |___dwc3_core_init_for_resume()
-                                  |___dwc3_core_init()
-                                      |___dwc3_phy_init()
-                                              ^PHY reinitialization is
-prevented due to non-zero values in phy->init_count and phy->power_on.
-
-However, during my submission process, I found that Ray Chi
-encountered the same issue and has already merged commit e3a9bd247cddf
-(usb: dwc3:
-Skip resume if pm_runtime_set_active() fails), which fixed the problem
-introduced by commit 2. But the error logs (runtime PM trying to
-activate child
-device xxx.dwc3 but parent is not active) introduced by commit 1 still rema=
-ins.
-I will now evaluate whether to proceed with further fixes for the
-issue introduced by commit 1, based on Ray Chi's submission. And also
-I will incorporate
-the relevant background details in the subsequent commit.In my view,
-commit e3a9bd247cddf (usb: dwc3:Skip resume if pm_runtime_set_active()
-fails)
-appears to be more of a workaround solution.
-
-
-thanks,
-
-Ryan
+Bartosz
 
