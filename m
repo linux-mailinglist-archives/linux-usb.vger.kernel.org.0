@@ -1,84 +1,96 @@
-Return-Path: <linux-usb+bounces-27905-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27906-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD3D3B5252A
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 02:51:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A7AEB5253A
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 03:00:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 373AB1C20C37
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 00:51:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 503941C201F7
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 01:00:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50CC11F91F6;
-	Thu, 11 Sep 2025 00:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FB21CD15;
+	Thu, 11 Sep 2025 01:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b1pxoLt6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PpMBew0H"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C6F1DE4CD;
-	Thu, 11 Sep 2025 00:50:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FD71F91F6;
+	Thu, 11 Sep 2025 01:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757551848; cv=none; b=KRZpJfamGwvEWoxbTuhMAINPs0Zs6HgAbqpA86bukAg4KTawCA51qHtVrGvJonTbT4NwBWRi2ryXnrUeU7tjMkyvQG48BXMq5A50bp6DOPQar1l5aGab1J4zwfb01TFBrN1RwXk9oLpcbVqjvCG4H+G1K4ji5G/htZbnWa4rhDI=
+	t=1757552405; cv=none; b=JndZi2FiIn3Zly9cxC7nrccrSETAwBo08nEwydenWCVZPlwfbO8niy1bcg2YLIJlC/Bn4lm12BDRWMS1Hd1lODs2/2k0UetNZaTfCJe+HhLiAlwRJfofdnhzrrgPHyNuYMN7UlBSOFPL4+yfctSpCw9YjFziTaLxdgAWoyjoM6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757551848; c=relaxed/simple;
-	bh=CCzEqYjRt9XWktduZvjN/8dY64I8avmb7eUyz9LoKxk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F5gEPOfXJyYRpM5PDPtCaou9oZeKvmNINh79gcGGe2zV/r1PYDYHvzGPzMxKjl5Legz+v/GeKX8T7dfMusMlli5vS9+fxPzZjCAiuUR+kY4KqyCLfLS9NCT0DvYZjcNH1vDuJgQCYDCRw23p02H9xAYfpDx+4hxiWjx8gW2dtdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b1pxoLt6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BC7C4CEEB;
-	Thu, 11 Sep 2025 00:50:47 +0000 (UTC)
+	s=arc-20240116; t=1757552405; c=relaxed/simple;
+	bh=qwuXpus2HWlOop1DAknXNJAailxPHFlyyk/IHmk53HM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=nRXccg2OrLz89rSRXpu/Er9gw+3m8QQl7RDl/Q6foHUVDCdgtyeh7GSKnZVxJoPenySHpCjQNTBEIe9gLSzFYGQ75xUV8hfCOhyFjBM+yov/UWEU+k2f8Zv1w2vxGoeO7h+mEM6hc9SRrX2n5Wv8U7kCwyA3LA+72en44g6fbr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PpMBew0H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF02C4CEEB;
+	Thu, 11 Sep 2025 01:00:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757551848;
-	bh=CCzEqYjRt9XWktduZvjN/8dY64I8avmb7eUyz9LoKxk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=b1pxoLt6g/EcpvVYn4QDPnaMSs5+Pq2BTmIcKYki/RMPxWIWVjwg9xHq0JKqC9EeG
-	 l0V9dmuhbyIu/1NnA7Rn9DaPhy9bkXn4elZPFSgRqYd4uYziaQeKXukxhKyFBJiQZ3
-	 34Q+eyRB9pdUShBB/lcfIZONCfNr+r8y3dz5lpbA50XEsDZkfDo/TizqzTtTaITa0R
-	 Gx1QJ8wTS7KbYi5dN0oHL1QIsFFC3ShyKSw2suZGaeg1LOvI+l6TdaXICSNSOGhH80
-	 z/IqasKXgx0gdd7o0efDJBxpxkHBVwruX3tqjzr5m2J02vgijS22yBSFl0F9h5ppP9
-	 0hrBP3ppvJsBw==
-Date: Wed, 10 Sep 2025 17:50:46 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Hubert =?UTF-8?B?V2nFm25pZXdza2k=?=
- <hubert.wisniewski.25632@gmail.com>, stable@vger.kernel.org,
- kernel@pengutronix.de, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, Russell King
- <linux@armlinux.org.uk>, Xu Yang <xu.yang_2@nxp.com>,
- linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
- PM to avoid MDIO runtime PM wakeups
-Message-ID: <20250910175046.689f6abb@kernel.org>
-In-Reply-To: <aMD6W80KfjcSz4In@pengutronix.de>
-References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
-	<20250909165803.656d3442@kernel.org>
-	<aMD6W80KfjcSz4In@pengutronix.de>
+	s=k20201202; t=1757552404;
+	bh=qwuXpus2HWlOop1DAknXNJAailxPHFlyyk/IHmk53HM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=PpMBew0HCzA09m6fBendvnylpvAzecO78yo5XL3bVqbq72OO/QTDHosm4SnBPq23X
+	 scPl5PcGMzDi/UcIFtrpPradMXUYela68oztOJMfNJSLPRKGwW5Oi4fcBLrxeY1fzl
+	 fNB3Ldhh0NnjODu/m8FcKulBEwfpaCR0+IaXIX28H0OB46BzY/1wosfrReNNFzlREx
+	 Ci5kSzODn6z/qT+yBxLGV71+Gs5hToKcfZIiftp4aS3XhD3kz/gKK1fRaidN571XBC
+	 FCXvOr5HCUuIzVbip5pnhdoxqQQx7lM1o/zVHY12AZ3Aa2f7gEa1RJgW6YvpLk6DzF
+	 4IROVwNLPYy0Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB546383BF69;
+	Thu, 11 Sep 2025 01:00:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
+ PM to
+ avoid MDIO runtime PM wakeups
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175755240775.1614523.6238417350387130294.git-patchwork-notify@kernel.org>
+Date: Thu, 11 Sep 2025 01:00:07 +0000
+References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
+In-Reply-To: <20250908112619.2900723-1-o.rempel@pengutronix.de>
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, hubert.wisniewski.25632@gmail.com,
+ stable@vger.kernel.org, kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, lukas@wunner.de, linux@armlinux.org.uk,
+ xu.yang_2@nxp.com, linux-usb@vger.kernel.org
 
-On Wed, 10 Sep 2025 06:11:07 +0200 Oleksij Rempel wrote:
-> On Tue, Sep 09, 2025 at 04:58:03PM -0700, Jakub Kicinski wrote:
-> > On Mon,  8 Sep 2025 13:26:19 +0200 Oleksij Rempel wrote:  
-> > > No extra phylink PM handling is required for this driver:
-> > > - .ndo_open/.ndo_stop control the phylink start/stop lifecycle.  
-> > 
-> > Meaning the interface is never suspended when open?  
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon,  8 Sep 2025 13:26:19 +0200 you wrote:
+> Drop phylink_{suspend,resume}() from ax88772 PM callbacks.
 > 
-> Ack.
+> MDIO bus accesses have their own runtime-PM handling and will try to
+> wake the device if it is suspended. Such wake attempts must not happen
+> from PM callbacks while the device PM lock is held. Since phylink
+> {sus|re}sume may trigger MDIO, it must not be called in PM context.
+> 
+> [...]
 
-Alright, last time we touched usbnet we broke Linus's setup.
-So let's say a quick prayer and..
-:D
+Here is the summary with links:
+  - [net,v1,1/1] net: usb: asix: ax88772: drop phylink use in PM to avoid MDIO runtime PM wakeups
+    https://git.kernel.org/netdev/net/c/5537a4679403
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
