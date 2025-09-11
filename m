@@ -1,263 +1,102 @@
-Return-Path: <linux-usb+bounces-27945-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27946-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FE27B534AF
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 15:59:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC0A2B534D4
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 16:06:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6C833B2E92
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 13:59:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 375B77AA915
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 14:05:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE893314C8;
-	Thu, 11 Sep 2025 13:59:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E8E335BAC;
+	Thu, 11 Sep 2025 14:06:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="M1/pwIJ1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="InRDpZTU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67EAB32F75F
-	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 13:59:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB2A29B8F8;
+	Thu, 11 Sep 2025 14:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757599143; cv=none; b=SvhYKPIkKaFnXKMHDRiNg1SDO8uMmix1E2n+vDfF9A2kYngMUXkyLjz7qF/HkGd3Hnl5KSG6gH9IkaBso0newcf8Sw4fnX5JV7RLZm7BALSev2+4ARy512Oyu2Vsid+Py3s2Hh/yF6fMYorOiGcTR1N/QjQ57t/V+SdGapeBjVM=
+	t=1757599601; cv=none; b=Lsu6Ou7SMdQs2pw1zLUdf033M/QjVeVHRMVCZzUgYkD9dLlPGy8aL+ujkS7QC7Bh3GSqrihVJQmK0fOFmq/37yCqL6bEAtbblT4AMDvdhVm1K+E9XEhWxWncp4UBa51e2WEaoK47A8MD+clmP1n2OvTf2i5knFksBtBMyjdsAPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757599143; c=relaxed/simple;
-	bh=fHBHCQmnDZz6FRpjpKWMXovmU8dVnIIVwcvWahYEhes=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=ei/RWqKkzyDOm/Y7BjXMa/BW3p9DxUvoe664QFeCBKXieMZUbKkbQtFX3qk/ux4dhP2yy2lV3huKg5StiYk+Eu+e3/rnAu22cAcfOsUtMMN8IO3B+gRXoIj9kCs3GSp1pdAxqUiNDfgzw3lT1DsFcD7+mQfQYOCTb+9kupDxZpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=M1/pwIJ1; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250911135853euoutp02fff24e398a49f243b693977d089ec2b8~kPxmQcMpr2205922059euoutp02F
-	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 13:58:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250911135853euoutp02fff24e398a49f243b693977d089ec2b8~kPxmQcMpr2205922059euoutp02F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1757599133;
-	bh=01UFvrYlJ970r9Bcj467+Hwxw2DXN8UdPW70CypFosc=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=M1/pwIJ1orJH0+nnFXJdQFgTOKWgBLbQyWXSf9UUP7NWRjXeLQoxyKbyaony9kHhY
-	 mDEAy3Vfc9OyPpBS1aMgftDFlmeFdgxAR0QVYvt2KfheZGG595DxJN8uLEN7T+oay3
-	 Hg/s9tMr3DZPEDEPBisSx8sepekf7BC3vtlZwnTI=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94~kPxltjvy-0341403414eucas1p2Y;
-	Thu, 11 Sep 2025 13:58:53 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250911135851eusmtip1c3fabbd783fee7b6f83d8a3c99979aa5~kPxkUDm1p0287802878eusmtip1E;
-	Thu, 11 Sep 2025 13:58:51 +0000 (GMT)
-Message-ID: <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
-Date: Thu, 11 Sep 2025 15:58:50 +0200
+	s=arc-20240116; t=1757599601; c=relaxed/simple;
+	bh=r/fd32BMQW5jA16SBItGqzeeWa+XuSVC32RtvyZrgbc=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type; b=GoSQsgm8Ydn6wzLfsJbYnlLCtEKV12pOIaFKPy6Ab8snZkU1pySBIbPXDs+UHz/OkD6b1rxIc3lJ9RCGxsfYhtAnvZ8zfn/6YP+RZQPolADvREmMk90eANND23zRgXxuQjIG+2TzT92EJu9rka0kTZLqEBI0mKWkQ/l8ULxd0Jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=InRDpZTU; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55f7039a9fdso781733e87.1;
+        Thu, 11 Sep 2025 07:06:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757599598; x=1758204398; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r/fd32BMQW5jA16SBItGqzeeWa+XuSVC32RtvyZrgbc=;
+        b=InRDpZTUR/1luR7G4QSL6MIL28J73bKFfjL7kF8NQ5Xl/KDmWSJksQdR7igyTaxxjx
+         I5X0Logq0bNojg9gJXYTanbFHrzM+xxFYJQxRKbF7i9XV7QOY6cukutS8uh+fNcLaqv8
+         f72qdpISkJiGNS7Hk7bywOTN9OsWIZNV68WtIQ6/WH+Q+i3ltreLBbxwhYJeSivH8LD1
+         cP1NnYxAeoedghSxAnWPQk2uUWYyMxRuimWpBao46YZvrNPguMQ1kLnnDAHesxUxyEob
+         A7MzACzz8ZWdERI5ljh035/gPwRYI9ux26Q4VLq/cbh19XOO45KQS8KL6dmgIj4Dvya4
+         hUvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757599598; x=1758204398;
+        h=content-transfer-encoding:mime-version:message-id:subject:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r/fd32BMQW5jA16SBItGqzeeWa+XuSVC32RtvyZrgbc=;
+        b=MWcddFJ6obPWFsZE77lb8RgCN8ohOMMfbXj4E+tnSGXDaO2dohkma/SAdIyGl8wkQ2
+         30lqQB9gCNtW5gt+Za7dmcG7LQYXjZj64pcrlbk5IpEgQR/NP5NTTy2sFVUgoBhaH6nF
+         OAMVyhCDi9vtx4ro6PUSEMegjG3PyRDjNKUaIFEgSKpJnSmu/P27C1Dw+Ve9djgs1Xl6
+         dhs8AjmmeJHKS3fQ/xm6+r/ovSckmPUxWhx4Li05GHcIP1phBPR4OLIH05guYmiPBCoZ
+         0+ffe+OL3qeyB8mAPWjNlXFPts7sZ8PIXUlLngLW4QwRIPOaLJT7mJ8sBO+49e7fBuIP
+         ju5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUofjYcGdnbP/1lhp7g4cwgrWoBVzfsOCUQZeymDJUA7ZzsWzHFUsA8udbXY/QbcUEgl/mAxNhYCJI+iJA=@vger.kernel.org, AJvYcCXNOfIALw9ClgIHIC0ocqHoYcb4G/hQx2DPiimzRNS0sfiyAyWB284NOuShyS3Qxin9IfCuf9IFHICr@vger.kernel.org
+X-Gm-Message-State: AOJu0YywPsORWycRpFd8vc4/b5tkORoWSCz8Wpo+2Z36zkC/yULVYd3N
+	k5+z/T3kaKHgMKygiK0OCm6USRCDU8AaIG7bBnDZj9ohOeQP+EKNaCTgXFYT2w==
+X-Gm-Gg: ASbGncuOEvLcieEQVzCNd69YiTBYcooG1kDNhTocaCS42FGTjQ2R+Vd5Foo7RqT0kk8
+	hGmuTEGY6b+lKgW/OtOpWdZaGGrZmCWnVYmkq2RwACmlU435SX1V+rdBAEX85jdcp7/g7RqOSzM
+	yi2n/IFM6hCLNePMT1WMCNOHXkaBpHlDI79mQsXrhdJQ6QU2Pxr+1dCYXHPs4pjgla1P5KUQBPQ
+	DYLH5fiOgmXWIVbX9YlmVC1EXeO6LtGek4vRB5rNGQvtMSVkZTKV50uHknCOhKwX8yKRwsYpHpA
+	zyRf0F9WkxQDyyYsxcN41Mwu+zjAjWaoemrC7eBAjoC5qnMBcaThMACMTF+jxfvH+zpKhNrXhnN
+	G2ci0mgzf3KtusBaJTDbGYDzjLAY4/Z/6/G/Br7pmycWMeQ==
+X-Google-Smtp-Source: AGHT+IGWWVMS+k63AA7mnv922QVbg4VGH6ET7kmQLWfe0pDFnilfmjEVRfmcnmgpZgE3GGVb4JX8DQ==
+X-Received: by 2002:a05:6512:b01:b0:55f:4902:6f20 with SMTP id 2adb3069b0e04-5626266807bmr6058203e87.27.1757599597384;
+        Thu, 11 Sep 2025 07:06:37 -0700 (PDT)
+Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-56e64bcf3a1sm429020e87.115.2025.09.11.07.06.36
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Thu, 11 Sep 2025 07:06:37 -0700 (PDT)
+Date: Thu, 11 Sep 2025 16:06:32 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: xhci: Small cleanup of TD giveback and status tracking
+Message-ID: <20250911160632.46245dc4.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
- PM to avoid MDIO runtime PM wakeups
-To: Oleksij Rempel <o.rempel@pengutronix.de>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
-	Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>
-Cc: =?UTF-8?Q?Hubert_Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
-	stable@vger.kernel.org, kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, Russell King
-	<linux@armlinux.org.uk>, Xu Yang <xu.yang_2@nxp.com>,
-	linux-usb@vger.kernel.org
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20250908112619.2900723-1-o.rempel@pengutronix.de>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94
-X-EPHeader: CA
-X-CMS-RootMailID: 20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94
-References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
-	<CGME20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94@eucas1p2.samsung.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 08.09.2025 13:26, Oleksij Rempel wrote:
-> Drop phylink_{suspend,resume}() from ax88772 PM callbacks.
->
-> MDIO bus accesses have their own runtime-PM handling and will try to
-> wake the device if it is suspended. Such wake attempts must not happen
-> from PM callbacks while the device PM lock is held. Since phylink
-> {sus|re}sume may trigger MDIO, it must not be called in PM context.
->
-> No extra phylink PM handling is required for this driver:
-> - .ndo_open/.ndo_stop control the phylink start/stop lifecycle.
-> - ethtool/phylib entry points run in process context, not PM.
-> - phylink MAC ops program the MAC on link changes after resume.
->
-> Fixes: e0bffe3e6894 ("net: asix: ax88772: migrate to phylink")
-> Reported-by: Hubert Wiśniewski <hubert.wisniewski.25632@gmail.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
+Hi,
 
-This patch landed in today's linux-next as commit 5537a4679403 ("net: 
-usb: asix: ax88772: drop phylink use in PM to avoid MDIO runtime PM 
-wakeups"). In my tests I found that it breaks operation of asix ethernet 
-usb dongle after system suspend-resume cycle. The ethernet device is 
-still present in the system, but it is completely dysfunctional. Here is 
-the log:
+I noticed some redundant 'status' parameters which obscure how URB
+status assignment really works (it's very simple at the moment) and
+create opportunity for errors like cleanup(cached_td, td->status).
 
-root@target:~# time rtcwake -s10 -mmem
-rtcwake: wakeup from "mem" using /dev/rtc0 at Thu Sep 11 13:02:23 2025
-PM: suspend entry (deep)
-Filesystems sync: 0.002 seconds
-Freezing user space processes
-Freezing user space processes completed (elapsed 0.003 seconds)
-OOM killer disabled.
-Freezing remaining freezable tasks
-Freezing remaining freezable tasks completed (elapsed 0.024 seconds)
-...
-usb usb1: root hub lost power or was reset
-...
-usb usb2: root hub lost power or was reset
-xhci-hcd xhci-hcd.7.auto: xHC error in resume, USBSTS 0x401, Reinit
-usb usb3: root hub lost power or was reset
-usb usb4: root hub lost power or was reset
-asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
-asix 2-1:1.0 eth0: Failed to enable software MII access
-asix 2-1:1.0 eth0: Failed to read reg index 0x0000: -113
-asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
-asix 2-1:1.0 eth0: Failed to enable software MII access
-... (the above error repeated many times)
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 9 at drivers/net/phy/phy.c:1346 
-_phy_state_machine+0x158/0x2d0
-phy_check_link_status+0x0/0x140: returned: -110
-Modules linked in: cmac bnep mwifiex_sdio mwifiex btmrvl_sdio btmrvl 
-sha256 bluetooth cfg80211 s5p_mfc exynos_gsc v4l2_mem2mem 
-videobuf2_dma_contig videobuf2_memops videobuf2_v4l2 videobuf2_common 
-videodev ecdh_generic ecc mc s5p_cec
-CPU: 0 UID: 0 PID: 9 Comm: kworker/0:0 Not tainted 
-6.17.0-rc4-00221-g5537a4679403 #11106 PREEMPT
-Hardware name: Samsung Exynos (Flattened Device Tree)
-Workqueue: events_power_efficient phy_state_machine
-Call trace:
-  unwind_backtrace from show_stack+0x10/0x14
-  show_stack from dump_stack_lvl+0x68/0x88
-  dump_stack_lvl from __warn+0x80/0x1d0
-  __warn from warn_slowpath_fmt+0x124/0x1bc
-  warn_slowpath_fmt from _phy_state_machine+0x158/0x2d0
-  _phy_state_machine from phy_state_machine+0x24/0x44
-  phy_state_machine from process_one_work+0x24c/0x70c
-  process_one_work from worker_thread+0x1b8/0x3bc
-  worker_thread from kthread+0x13c/0x264
-  kthread from ret_from_fork+0x14/0x28
-Exception stack(0xf0879fb0 to 0xf0879ff8)
-...
-irq event stamp: 221553
-hardirqs last  enabled at (221559): [<c01bae94>] __up_console_sem+0x50/0x60
-hardirqs last disabled at (221564): [<c01bae80>] __up_console_sem+0x3c/0x60
-softirqs last  enabled at (219346): [<c013b93c>] handle_softirqs+0x328/0x520
-softirqs last disabled at (219327): [<c013bce0>] __irq_exit_rcu+0x144/0x1f0
----[ end trace 0000000000000000 ]---
-asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
-asix 2-1:1.0 eth0: Failed to enable software MII access
-asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
-asix 2-1:1.0 eth0: Failed to write Medium Mode mode to 0x0000: ffffff8f
-asix 2-1:1.0 eth0: Link is Down
-asix 2-1:1.0 eth0: Failed to read reg index 0x0000: -113
-asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
-asix 2-1:1.0 eth0: Failed to enable software MII access
-asix 2-1:1.0 eth0: Failed to read reg index 0x0000: -113
-asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
-asix 2-1:1.0 eth0: Failed to enable software MII access
-... (the above error repeated many times)
-usb 2-1: reset high-speed USB device number 2 using exynos-ehci
-OOM killer enabled.
-Restarting tasks: Starting
-Restarting tasks: Done
-PM: suspend exit
+Removing them seems harmless.
 
-real    0m14.105s
-user    0m0.002s
-sys     0m2.025s
-root@target:~#
-root@target:~# ifconfig -a
-eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        inet 192.168.100.17  netmask 255.255.255.0  broadcast 
-192.168.100.255
-        inet6 fe80::250:b6ff:fe18:92ee  prefixlen 64  scopeid 0x20<link>
-        ether 00:50:b6:18:92:ee  txqueuelen 1000  (Ethernet)
-        RX packets 242  bytes 18250 (17.8 KiB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 258  bytes 22474 (21.9 KiB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+Also included is a copypasta cleanup and removal of some questionable
+IMO logic, partly because it was getting in the way.
 
-lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
-        inet 127.0.0.1  netmask 255.0.0.0
-        inet6 ::1  prefixlen 128  scopeid 0x10<host>
-        loop  txqueuelen 1000  (Local Loopback)
-        RX packets 0  bytes 0 (0.0 B)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 0  bytes 0 (0.0 B)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-root@target:~# ping host
-PING host (192.168.100.1) 56(84) bytes of data.
-^C
---- host ping statistics ---
-2 packets transmitted, 0 received, 100% packet loss, time 1053ms
-
-
-Reverting $subject on top of today's linux-next restores ethernet 
-operation after system suspend-resume cycle.
-
-
->   drivers/net/usb/asix_devices.c | 13 -------------
->   1 file changed, 13 deletions(-)
->
-> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-> index 792ddda1ad49..1e8f7089f5e8 100644
-> --- a/drivers/net/usb/asix_devices.c
-> +++ b/drivers/net/usb/asix_devices.c
-> @@ -607,15 +607,8 @@ static const struct net_device_ops ax88772_netdev_ops = {
->
->   static void ax88772_suspend(struct usbnet *dev)
->   {
-> -	struct asix_common_private *priv = dev->driver_priv;
->   	u16 medium;
->
-> -	if (netif_running(dev->net)) {
-> -		rtnl_lock();
-> -		phylink_suspend(priv->phylink, false);
-> -		rtnl_unlock();
-> -	}
-> -
->   	/* Stop MAC operation */
->   	medium = asix_read_medium_status(dev, 1);
->   	medium &= ~AX_MEDIUM_RE;
-> @@ -644,12 +637,6 @@ static void ax88772_resume(struct usbnet *dev)
->   	for (i = 0; i < 3; i++)
->   		if (!priv->reset(dev, 1))
->   			break;
-> -
-> -	if (netif_running(dev->net)) {
-> -		rtnl_lock();
-> -		phylink_resume(priv->phylink);
-> -		rtnl_unlock();
-> -	}
->   }
->
->   static int asix_resume(struct usb_interface *intf)
-> --
-> 2.47.3
->
->
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+Regards,
+Michal
 
