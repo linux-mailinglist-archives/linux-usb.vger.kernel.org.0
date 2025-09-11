@@ -1,161 +1,263 @@
-Return-Path: <linux-usb+bounces-27944-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27945-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31C1FB534AD
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 15:58:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FE27B534AF
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 15:59:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5EA3A7B78F8
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 13:57:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6C833B2E92
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 13:59:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3935632F751;
-	Thu, 11 Sep 2025 13:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE893314C8;
+	Thu, 11 Sep 2025 13:59:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CKKHGHUr"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="M1/pwIJ1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F7054763;
-	Thu, 11 Sep 2025 13:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67EAB32F75F
+	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 13:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757599126; cv=none; b=dYxstVMZNTZngKNs4muYqxSK9reEw0zjknkcbE1Qf+HZjaBANLAzWNo75jD5G3qZC6AmWb9z5NgqPqWAkYtEvZcCLC6SAIiRIxZ21IGfrauQpvip/PX5lSa+D1BP2Aktp4ZDwMfICYmq6cXi6G/QzAD/TfSdSDCqaVvZlk5QZmE=
+	t=1757599143; cv=none; b=SvhYKPIkKaFnXKMHDRiNg1SDO8uMmix1E2n+vDfF9A2kYngMUXkyLjz7qF/HkGd3Hnl5KSG6gH9IkaBso0newcf8Sw4fnX5JV7RLZm7BALSev2+4ARy512Oyu2Vsid+Py3s2Hh/yF6fMYorOiGcTR1N/QjQ57t/V+SdGapeBjVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757599126; c=relaxed/simple;
-	bh=zUOI85Wk3s5W8+C/qhkRVlPvNB7zX3sTSR/t7JsqQdI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=je2YgllR3pSbDokzfQZFbUg9wQ9+IUsTDqNeNlGVWheylwmbUotXk3RYF0XNTZr7adgh1iM+7OBc97diHRUiN6b51kXVH6sOSmCgQa2W5ngKD4g2sZX8ACSNoEBwez6usVbEF8SwsXnjW0bI3J+xKl1/X26N2G+7MlrvZImkn7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CKKHGHUr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FE3C4CEF0;
-	Thu, 11 Sep 2025 13:58:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757599126;
-	bh=zUOI85Wk3s5W8+C/qhkRVlPvNB7zX3sTSR/t7JsqQdI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CKKHGHUrRl5i1ljvmz9lsju3Bx+AQgCbS4WCooXwHI7VaohAX33ZN+ZSVk7Tlac3c
-	 CsnwDklUxZx3W6QT7PyEd5o9JVgLjJqJMaifdb/N02pAS1LR5724wsRnO0XA8dPAjj
-	 0YDo08jUqYbQap3ZfUpBL4MK1bCWaZPmzlNSVPTiwnBiRpXF8A16PhE95c+8j/zAl9
-	 6hFFflycJE3An18xeaQ4VBPQQ1xRXaOi4xjlHAvaoY1eHxLYiWZh7455zqMGQ40OME
-	 Lgm/WXYezcXViTP/Nc46yKqEbNu+5XcpaHycdGs07K6h6t5eDjnkZISTySl1yIJrzb
-	 32PJIEWlXuk/g==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-621b965a114so266009eaf.1;
-        Thu, 11 Sep 2025 06:58:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUAbXD5q74B/ibykvP+MsKuFd7PNGleXzHgxp7/z4ie6evd5u2Pft5laiB3r3J+ZY6jxOG4uSqkL6E3zN4=@vger.kernel.org, AJvYcCXMJ7dQSrbn8abLeH0oE/adPZ2NpyTF6L6elJiP7Y5r99kXXAsyL7R+4iDpISobJWjsN0c8CUdGiGI=@vger.kernel.org, AJvYcCXdtt/f0MZM8p/iOTVEkndV/KBnOEW4SDspE5hZC/cjuUpU1CkuAOaHdNac6TZpf3xc5+joxHQSw6wH@vger.kernel.org
-X-Gm-Message-State: AOJu0YzL7ZYfP72oeRy8TQviGLGyxvN7mDYKtiJe3Q5nDqDzDPTv778n
-	sc9bvhGUPaOc/L+BTtsu21tEBiyp32oRAWuZjZAT8xAejh/8C+ea5RP82bY1gKw0I9xJQW0x3WU
-	4WpMS8CME3FGRKUDAxQ3FMz4WP+I12kI=
-X-Google-Smtp-Source: AGHT+IFR256VrR2uXDvTtVSQ4KENYiS/q+WF+wlT+K2JOF02yDIg0gDxY9vVsXuSyke4TCTcXPfQu04EX9C9awhl1dk=
-X-Received: by 2002:a05:6820:624:b0:621:7131:2e2b with SMTP id
- 006d021491bc7-62178a8b54amr9148386eaf.7.1757599125607; Thu, 11 Sep 2025
- 06:58:45 -0700 (PDT)
+	s=arc-20240116; t=1757599143; c=relaxed/simple;
+	bh=fHBHCQmnDZz6FRpjpKWMXovmU8dVnIIVwcvWahYEhes=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=ei/RWqKkzyDOm/Y7BjXMa/BW3p9DxUvoe664QFeCBKXieMZUbKkbQtFX3qk/ux4dhP2yy2lV3huKg5StiYk+Eu+e3/rnAu22cAcfOsUtMMN8IO3B+gRXoIj9kCs3GSp1pdAxqUiNDfgzw3lT1DsFcD7+mQfQYOCTb+9kupDxZpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=M1/pwIJ1; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250911135853euoutp02fff24e398a49f243b693977d089ec2b8~kPxmQcMpr2205922059euoutp02F
+	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 13:58:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250911135853euoutp02fff24e398a49f243b693977d089ec2b8~kPxmQcMpr2205922059euoutp02F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1757599133;
+	bh=01UFvrYlJ970r9Bcj467+Hwxw2DXN8UdPW70CypFosc=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=M1/pwIJ1orJH0+nnFXJdQFgTOKWgBLbQyWXSf9UUP7NWRjXeLQoxyKbyaony9kHhY
+	 mDEAy3Vfc9OyPpBS1aMgftDFlmeFdgxAR0QVYvt2KfheZGG595DxJN8uLEN7T+oay3
+	 Hg/s9tMr3DZPEDEPBisSx8sepekf7BC3vtlZwnTI=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94~kPxltjvy-0341403414eucas1p2Y;
+	Thu, 11 Sep 2025 13:58:53 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250911135851eusmtip1c3fabbd783fee7b6f83d8a3c99979aa5~kPxkUDm1p0287802878eusmtip1E;
+	Thu, 11 Sep 2025 13:58:51 +0000 (GMT)
+Message-ID: <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
+Date: Thu, 11 Sep 2025 15:58:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <385dccf3-234a-4f83-9610-81ac30bf1466@rowland.harvard.edu>
- <20250909161901.10733-1-ryanzhou54@gmail.com> <20250911013242.oxm2kwfaqvmybbhk@synopsys.com>
- <xbfvykzfi26pyaycd7efbqvmraxcu6zzgqjfxtk33wcsjsnnal@5e3g4pq5qcj3>
- <CAJZ5v0gT26VK-sHmgK_S4RjjO3Uc-ZmoAYos43S5yWh0zWc9DA@mail.gmail.com> <CAPwe5RP14woNEiux4e4xfL0W=53rogmcionLuvYt37aLz-i-nA@mail.gmail.com>
-In-Reply-To: <CAPwe5RP14woNEiux4e4xfL0W=53rogmcionLuvYt37aLz-i-nA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 11 Sep 2025 15:58:34 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g_0D7-68eM6ofv3naSipvXEF4pLMknjwGaA6kLm1FzMg@mail.gmail.com>
-X-Gm-Features: Ac12FXztfpoz0wfYIHdtahSgMF__AuYX2WX63LsezHHyUZxy1AASDifWg2WLTUU
-Message-ID: <CAJZ5v0g_0D7-68eM6ofv3naSipvXEF4pLMknjwGaA6kLm1FzMg@mail.gmail.com>
-Subject: Re: [PATCH v2] drvier: usb: dwc3: Fix runtime PM trying to activate
- child device xxx.dwc3 but parent is not active
-To: ryan zhou <ryanzhou54@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Xu Yang <xu.yang_2@nxp.com>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	"stern@rowland.harvard.edu" <stern@rowland.harvard.edu>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, "royluo@google.com" <royluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
+ PM to avoid MDIO runtime PM wakeups
+To: Oleksij Rempel <o.rempel@pengutronix.de>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+	Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>
+Cc: =?UTF-8?Q?Hubert_Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
+	stable@vger.kernel.org, kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, Russell King
+	<linux@armlinux.org.uk>, Xu Yang <xu.yang_2@nxp.com>,
+	linux-usb@vger.kernel.org
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20250908112619.2900723-1-o.rempel@pengutronix.de>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94
+X-EPHeader: CA
+X-CMS-RootMailID: 20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94
+References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
+	<CGME20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94@eucas1p2.samsung.com>
 
-On Thu, Sep 11, 2025 at 3:57=E2=80=AFPM ryan zhou <ryanzhou54@gmail.com> wr=
-ote:
+On 08.09.2025 13:26, Oleksij Rempel wrote:
+> Drop phylink_{suspend,resume}() from ax88772 PM callbacks.
 >
-> Rafael J. Wysocki <rafael@kernel.org> =E4=BA=8E2025=E5=B9=B49=E6=9C=8811=
-=E6=97=A5=E5=91=A8=E5=9B=9B 19:36=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > On Thu, Sep 11, 2025 at 12:58=E2=80=AFPM Xu Yang <xu.yang_2@nxp.com> wr=
-ote:
-> > >
-> > > Hi Ryan,
-> > >
-> > > On Thu, Sep 11, 2025 at 01:32:47AM +0000, Thinh Nguyen wrote:
-> > > > On Wed, Sep 10, 2025, Ryan Zhou wrote:
-> > > > > Issue description:During the wake-up sequence, if the system invo=
-kes
-> > > > >  dwc3->resume and detects that the parent device of dwc3 is in a
-> > > > > runtime suspend state, the system will generate an error: runtime=
- PM
-> > > > > trying to activate child device xxx.dwc3 but parent is not active=
-.
-> > > > >
-> > > > > Solution:At the dwc3->resume entry point, if the dwc3 controller
-> > > > > is detected in a suspended state, the function shall return
-> > > > > immediately without executing any further operations.
-> > > > >
-> > > > > Signed-off-by: Ryan Zhou <ryanzhou54@gmail.com>
-> > > > > ---
-> > > > >  drivers/usb/dwc3/core.c | 3 +++
-> > > > >  1 file changed, 3 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > > > index 370fc524a468..06a6f8a67129 100644
-> > > > > --- a/drivers/usb/dwc3/core.c
-> > > > > +++ b/drivers/usb/dwc3/core.c
-> > > > > @@ -2687,6 +2687,9 @@ int dwc3_pm_resume(struct dwc3 *dwc)
-> > > > >     struct device *dev =3D dwc->dev;
-> > > > >     int             ret =3D 0;
-> > > > >
-> > > > > +   if (pm_runtime_suspended(dev))
-> > > > > +           return ret;
-> > > > > +
-> > > >
-> > > > Is this a documented behavior where the device should remain runtim=
-e
-> > > > suspend on system resume? I feel that that this should be configura=
-ble
-> > > > by the user or defined the PM core. I don't think we should change
-> > > > default behavior here just to workaround the issue that we're facin=
-g.
-> > > >
-> > > > What if the user wants to keep the old behavior and resume up the d=
-evice
-> > > > on system resume?
-> > >
-> > > What about resume the device firstly if it's already runtime suspende=
-d when
-> > > call dwc3_pm_suspend(). Therefor, the old behavior can be kept and th=
-e issue
-> > > can be avoided.
-> > >
-> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > index 370fc524a468..1b8dbb260017 100644
-> > > --- a/drivers/usb/dwc3/core.c
-> > > +++ b/drivers/usb/dwc3/core.c
-> > > @@ -2672,6 +2672,9 @@ int dwc3_pm_suspend(struct dwc3 *dwc)
-> > >         struct device *dev =3D dwc->dev;
-> > >         int             ret;
-> > >
-> > > +       if (pm_runtime_suspended(dev))
-> > > +               pm_runtime_resume(dev);
-> >
-> > You can just call pm_runtime_resume() here without the preliminary chec=
-k.
+> MDIO bus accesses have their own runtime-PM handling and will try to
+> wake the device if it is suspended. Such wake attempts must not happen
+> from PM callbacks while the device PM lock is held. Since phylink
+> {sus|re}sume may trigger MDIO, it must not be called in PM context.
 >
-> If the device is active before sleep, skip runtime_resume after wakeup
-> and just call dwc3->suspend.
+> No extra phylink PM handling is required for this driver:
+> - .ndo_open/.ndo_stop control the phylink start/stop lifecycle.
+> - ethtool/phylib entry points run in process context, not PM.
+> - phylink MAC ops program the MAC on link changes after resume.
+>
+> Fixes: e0bffe3e6894 ("net: asix: ax88772: migrate to phylink")
+> Reported-by: Hubert Wiśniewski <hubert.wisniewski.25632@gmail.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
 
-But pm_runtime_resume() will not resume an active device, will it?
+This patch landed in today's linux-next as commit 5537a4679403 ("net: 
+usb: asix: ax88772: drop phylink use in PM to avoid MDIO runtime PM 
+wakeups"). In my tests I found that it breaks operation of asix ethernet 
+usb dongle after system suspend-resume cycle. The ethernet device is 
+still present in the system, but it is completely dysfunctional. Here is 
+the log:
+
+root@target:~# time rtcwake -s10 -mmem
+rtcwake: wakeup from "mem" using /dev/rtc0 at Thu Sep 11 13:02:23 2025
+PM: suspend entry (deep)
+Filesystems sync: 0.002 seconds
+Freezing user space processes
+Freezing user space processes completed (elapsed 0.003 seconds)
+OOM killer disabled.
+Freezing remaining freezable tasks
+Freezing remaining freezable tasks completed (elapsed 0.024 seconds)
+...
+usb usb1: root hub lost power or was reset
+...
+usb usb2: root hub lost power or was reset
+xhci-hcd xhci-hcd.7.auto: xHC error in resume, USBSTS 0x401, Reinit
+usb usb3: root hub lost power or was reset
+usb usb4: root hub lost power or was reset
+asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
+asix 2-1:1.0 eth0: Failed to enable software MII access
+asix 2-1:1.0 eth0: Failed to read reg index 0x0000: -113
+asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
+asix 2-1:1.0 eth0: Failed to enable software MII access
+... (the above error repeated many times)
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 9 at drivers/net/phy/phy.c:1346 
+_phy_state_machine+0x158/0x2d0
+phy_check_link_status+0x0/0x140: returned: -110
+Modules linked in: cmac bnep mwifiex_sdio mwifiex btmrvl_sdio btmrvl 
+sha256 bluetooth cfg80211 s5p_mfc exynos_gsc v4l2_mem2mem 
+videobuf2_dma_contig videobuf2_memops videobuf2_v4l2 videobuf2_common 
+videodev ecdh_generic ecc mc s5p_cec
+CPU: 0 UID: 0 PID: 9 Comm: kworker/0:0 Not tainted 
+6.17.0-rc4-00221-g5537a4679403 #11106 PREEMPT
+Hardware name: Samsung Exynos (Flattened Device Tree)
+Workqueue: events_power_efficient phy_state_machine
+Call trace:
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x68/0x88
+  dump_stack_lvl from __warn+0x80/0x1d0
+  __warn from warn_slowpath_fmt+0x124/0x1bc
+  warn_slowpath_fmt from _phy_state_machine+0x158/0x2d0
+  _phy_state_machine from phy_state_machine+0x24/0x44
+  phy_state_machine from process_one_work+0x24c/0x70c
+  process_one_work from worker_thread+0x1b8/0x3bc
+  worker_thread from kthread+0x13c/0x264
+  kthread from ret_from_fork+0x14/0x28
+Exception stack(0xf0879fb0 to 0xf0879ff8)
+...
+irq event stamp: 221553
+hardirqs last  enabled at (221559): [<c01bae94>] __up_console_sem+0x50/0x60
+hardirqs last disabled at (221564): [<c01bae80>] __up_console_sem+0x3c/0x60
+softirqs last  enabled at (219346): [<c013b93c>] handle_softirqs+0x328/0x520
+softirqs last disabled at (219327): [<c013bce0>] __irq_exit_rcu+0x144/0x1f0
+---[ end trace 0000000000000000 ]---
+asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
+asix 2-1:1.0 eth0: Failed to enable software MII access
+asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
+asix 2-1:1.0 eth0: Failed to write Medium Mode mode to 0x0000: ffffff8f
+asix 2-1:1.0 eth0: Link is Down
+asix 2-1:1.0 eth0: Failed to read reg index 0x0000: -113
+asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
+asix 2-1:1.0 eth0: Failed to enable software MII access
+asix 2-1:1.0 eth0: Failed to read reg index 0x0000: -113
+asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
+asix 2-1:1.0 eth0: Failed to enable software MII access
+... (the above error repeated many times)
+usb 2-1: reset high-speed USB device number 2 using exynos-ehci
+OOM killer enabled.
+Restarting tasks: Starting
+Restarting tasks: Done
+PM: suspend exit
+
+real    0m14.105s
+user    0m0.002s
+sys     0m2.025s
+root@target:~#
+root@target:~# ifconfig -a
+eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 192.168.100.17  netmask 255.255.255.0  broadcast 
+192.168.100.255
+        inet6 fe80::250:b6ff:fe18:92ee  prefixlen 64  scopeid 0x20<link>
+        ether 00:50:b6:18:92:ee  txqueuelen 1000  (Ethernet)
+        RX packets 242  bytes 18250 (17.8 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 258  bytes 22474 (21.9 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+root@target:~# ping host
+PING host (192.168.100.1) 56(84) bytes of data.
+^C
+--- host ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1053ms
+
+
+Reverting $subject on top of today's linux-next restores ethernet 
+operation after system suspend-resume cycle.
+
+
+>   drivers/net/usb/asix_devices.c | 13 -------------
+>   1 file changed, 13 deletions(-)
+>
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index 792ddda1ad49..1e8f7089f5e8 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -607,15 +607,8 @@ static const struct net_device_ops ax88772_netdev_ops = {
+>
+>   static void ax88772_suspend(struct usbnet *dev)
+>   {
+> -	struct asix_common_private *priv = dev->driver_priv;
+>   	u16 medium;
+>
+> -	if (netif_running(dev->net)) {
+> -		rtnl_lock();
+> -		phylink_suspend(priv->phylink, false);
+> -		rtnl_unlock();
+> -	}
+> -
+>   	/* Stop MAC operation */
+>   	medium = asix_read_medium_status(dev, 1);
+>   	medium &= ~AX_MEDIUM_RE;
+> @@ -644,12 +637,6 @@ static void ax88772_resume(struct usbnet *dev)
+>   	for (i = 0; i < 3; i++)
+>   		if (!priv->reset(dev, 1))
+>   			break;
+> -
+> -	if (netif_running(dev->net)) {
+> -		rtnl_lock();
+> -		phylink_resume(priv->phylink);
+> -		rtnl_unlock();
+> -	}
+>   }
+>
+>   static int asix_resume(struct usb_interface *intf)
+> --
+> 2.47.3
+>
+>
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
 
