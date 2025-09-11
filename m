@@ -1,149 +1,149 @@
-Return-Path: <linux-usb+bounces-27916-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27917-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C324B5293B
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 08:50:52 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CFE1B529DF
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 09:28:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD26B3B85CA
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 06:50:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D17604E1618
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 07:28:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81928257AC1;
-	Thu, 11 Sep 2025 06:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 575CC26CE26;
+	Thu, 11 Sep 2025 07:28:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0gwuG8z0"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BI34y01B"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577D9145A05
-	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 06:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B63269B0D
+	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 07:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757573446; cv=none; b=jq3Y9H6p6PhbnM273TmrUpSnktl9sizsI8rGjEYkV8hx2JRhV0DkZsu/GC8JFfFOJ56Yyj987IDSpYnEV9pBRjTBL6MMjJx0PZJB9bjhmZSB458QzQKX7piVLI/05Nxl5EWNw2tKvuwcb22VmWMMY2PULwTi8YRh3t93Xro/fOE=
+	t=1757575705; cv=none; b=o3vBrfiQdXc86Pw8G+xcoZjL50Kx8E1BdQN1aloPtj6wgxYDsbMfXjY1rlw5pqLRjt0OowZRsc7jO3Xa/7DJ7GyQVT/NhDtHjDqpxsyfbV3o1Y5BcwA6mpLu405sOxaHPt4g6CKD445mnygDM6S3ukOptzLzOQAmSjpzv3orm8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757573446; c=relaxed/simple;
-	bh=Qmej7+PbGLzKdrf5NwREGPDWn8BnQ+ox2SidyFmQdxw=;
+	s=arc-20240116; t=1757575705; c=relaxed/simple;
+	bh=3LhkY1jX7VWQuXhPNbPkpRjL05D6uPNjtQLzUhymk24=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fvEjkOO51E9DoMy06MV7qufPpMkXAIc3LwbQYzhdXD1nki2ttXoTJvPHUA6KCaqDCpwoOdvoNQZlc9REH2Dy8IuOFAbg0AatySdDnMLi2wz8HCbsaVBhqZpmbJzJuNlUEy1cyeMQn7HYxkKYDSrm52ChXzXBOUZ1ihplu8NwX+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0gwuG8z0; arc=none smtp.client-ip=209.85.128.45
+	 To:Cc:Content-Type; b=ZvHIfLBXb2n4XbAuJBly7dLxB2JTBeW20rj7P9wXkl1JmBfM01+qgw8ptc35FyoeDgz5NB8Y2p0w2W5zsb3nq05eq0ATz+AilGfqme6fF3sbanBnY3z3/0wi4DBCG8TIHWsKCu3pFHDcJSFNyMMJ6J3QlIfsA96racyl18r219g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BI34y01B; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45de54bfc36so52725e9.0
-        for <linux-usb@vger.kernel.org>; Wed, 10 Sep 2025 23:50:44 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45dd9d72f61so62205e9.0
+        for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 00:28:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757573443; x=1758178243; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1757575702; x=1758180502; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FYiFEl1cKyTzdaxqboCqwBqA3eL+ISbCaMPkWSxLypQ=;
-        b=0gwuG8z0AUSg4EHovM95JhXgLPVSeaWXR5PqvVxEiUEQ3EKiAKD5/SQnZFhC7jUKu4
-         uJ11zOhwYVKYt/hTh468v5sXKrRz5SWjTFCatC2hjSiN6nT/6NKAWRoUeeAf5oiVDw8K
-         Dv6jdUxmbkdGz5A+e5mVF/ornV6ESQhtW82KGOzavRgZqRu2vW5CyuDQxDk/ILeWdM0o
-         le3SHHgFRtqpS4Ej0HFvNFJrcvswh1v7NFBacFmuhN2/tq7V56mt2MVrsNopDR3mFYOn
-         o11ZYItvOLmiwwz1MKLxRS09LI1uNHYeplX81IEGmC10uWt8eJccdHkI1lTYiK5usykG
-         jF6A==
+        bh=FK7U3lnC3y7/ffQqOSxbeSeWtjBYH2LRmWQkOy2vWj8=;
+        b=BI34y01Bi9b5mt85ULdCsq2yDo6aOmkHLrmKltQbP5knXvX57Hgq+up2ZFKDFy36FM
+         ZY9gZHF6HoKW3adLm+X/mIHntwSx/wRY0QxlfA57Sqfci8Zzl6Y2V0OlAK1FUmZNudpp
+         dANhUrVQE2pLPJ5W0gNUQScgXTBXjUHVxb4f8tPpK42q+SF2RTzujVAs2AXUuU9xzoYR
+         v3ot67AzUlQ64pLDWI1U4bncCeFk9aQKclUhnqlIq4gS2vvYeVFc2fU/1TjVNRZ43sSW
+         8QkO8RbGMnqV814XaXAzYe3vz3p317lkBYPT+zIM+t2dwCzAY6MxwHUFo0C6rUddsnRv
+         7Ycg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757573443; x=1758178243;
+        d=1e100.net; s=20230601; t=1757575702; x=1758180502;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FYiFEl1cKyTzdaxqboCqwBqA3eL+ISbCaMPkWSxLypQ=;
-        b=Dk+hZo1uCBDTOu4vABGhJ8tH8xjAffCZsb4luxM+LyAGtnuo+oFRIqrtw9GttFbVBs
-         PyS2dVLQDIbcXzpuZbFGmHeWLNKETzDHBZgD64zrv/dikIc/fPUK5L1ZX5c5CC2z42V9
-         epCTT7EfvJjxKnPBcxSXXPPFrNaCbL72GKNgdSA2T1s/04zKkroeOKd4afuuLgB79wQ4
-         agmSkMhGYtAq7uOoulNSioHtTAngqSxppSben+T5l9k3042vD8z3wk390PxHX/8If/sk
-         fVoJqMPcZzi43liw8Il3GqezkTMbRhODwUpYZNFA92pmIxBfs096ClqCG1e+VsGB5wv4
-         bgBg==
-X-Forwarded-Encrypted: i=1; AJvYcCW4F5CTgXkokepfFLtQ6OgpBKRz6gu9zuFXLneK8pz4FRJycNnZj0+FYIAmfICwJ434bj4yrekNbrM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxl/4GPvn76bla20ow+q9KGl2BrYqa0UILtlVMehGuMzGBB39ME
-	8jul68WwsTtinNhuWFMVnY6MGPy++VTVO9/9o81Bv2lM+eYz+ksAE6o3eJF0bJ9x35RMqi4AsFV
-	ZZVUy+bp5hWuUQuyUeZMGEXzUlti+KuYm9ylUKwv6
-X-Gm-Gg: ASbGncvDNgmE3EFtu3B0Mz8TORbSKsRZBoVcst7c8+DHxgXwW5AIXBxishWLRUSGBA6
-	JB6hhPNrp3A/r3/fZiJsPCRBsBgQX3RI5YiZ4O3kV1tm/ZwnzDqJj95OXxjMxqT4MqBtsezEPnp
-	XzJ68bG4FeTHexvEbYwTt2+8CCAm8zPlP1cgG4CgSRyDGxlNF9kgC6mahaS5AB4CMUSHl3kSn32
-	q0H9VIIZjeXz4Vf9naifIFgdLPfQ4qI3GmxAznw
-X-Google-Smtp-Source: AGHT+IFJbf1IyXGBCFdg7upsR0ji8KKP+f1JtPl42/vxHPTsLQ1LycUtAnMTQe1qYHPH1lEHLbkyiQchIBkA8tyrg54=
-X-Received: by 2002:a05:600c:12c9:b0:45d:cfca:a92d with SMTP id
- 5b1f17b1804b1-45df74af1b6mr2252505e9.2.1757573442443; Wed, 10 Sep 2025
- 23:50:42 -0700 (PDT)
+        bh=FK7U3lnC3y7/ffQqOSxbeSeWtjBYH2LRmWQkOy2vWj8=;
+        b=I6eBSIs6b8Bl6aKaDeWUrHPKFvCkxbfwJTJff6MbcygpDdGmeF2I2JK4nvnGd9tJAI
+         FXu93hRGMEutapBRaZk/l1sYdSqUXMIq01lX3AVmUwMmlHn0UqLvgN03Cjj8p5inpqoq
+         d9iUqeMOXQ/GFb+yIzoYbfQYnGir+we7jHPHwKxfeosYqV6iyDPU1GMj3nUmpwrz1yIT
+         LdKjBQkVkBYqXczrXPYPwd1gVwYA3Q8m3IuzGdEJ5YArZn+fNyV7smobiz1mf8KkAtBm
+         4c3htzq1IdGl5E0v72THDpp8EUy4eCIRMeB+s8F/oyc12+hEpHum5eQxsXlfSi2S0I+H
+         FrHA==
+X-Forwarded-Encrypted: i=1; AJvYcCX3mDhTvfg78fulWzxk4ZFjQ4VCReFCZs9VZR+Vvp+/93x1MXugz0KGT78+TG9XfI/g1M+vEF9fTkc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0Jvuz7B/ArI3Iugm53Anr0/wWKQ9y4Pyw7lsyWYqRzpLubSi4
+	xjMffjC8QnWrFxO+BG//v+lw/w2OS2f9zz5onIecflIHcyPHzXIxPWa7gAfqVelJQlYvvlCc6DW
+	8hCjKPhfuqfhUb+PqxDx7nHHTwitNugoK4AyV6Neu
+X-Gm-Gg: ASbGncsV1qXG1bDiuJyalm98W1m34voJ9JKtHo8h5E4UWj8IesY/9yGt/Ndg4LKVRlG
+	k3N9K/KbOH/6jAsp1TCjiyXSzLwDM1NPCaeczDRD6GSUy7RsFuuxzgkgjz4/Sr0cNn6QVuumEha
+	CuIKBHnSB1+m9CIP5BQMmgxgyt3gaONuBKL79p+MDEdIa56g47eaSZLXv7tnc2zipdI2pm4Ay/I
+	0XQJNJomzUC2oVy63GPzTYFNTQFoJIXehM6uGm3dfPwBSdTVlo9hyYqfuZtkQ==
+X-Google-Smtp-Source: AGHT+IEbjA8wA5uTk3TcHbPBQJWjhclijtbB5//wAB0Y6KJCSvzkuEDQ/JZz09gc9AUpAZcVbdPxutDodlFxxbV1cXQ=
+X-Received: by 2002:a05:600c:c058:b0:45c:b4fb:f0b3 with SMTP id
+ 5b1f17b1804b1-45df81fcfe9mr2603385e9.3.1757575702354; Thu, 11 Sep 2025
+ 00:28:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250904114854.1913155-1-khtsai@google.com> <2025090651-unifier-award-3e0a@gregkh>
-In-Reply-To: <2025090651-unifier-award-3e0a@gregkh>
+References: <20250818082722.2952867-1-khtsai@google.com> <2025090657-unpinned-unnatural-2ccd@gregkh>
+In-Reply-To: <2025090657-unpinned-unnatural-2ccd@gregkh>
 From: Kuen-Han Tsai <khtsai@google.com>
-Date: Thu, 11 Sep 2025 14:50:15 +0800
-X-Gm-Features: AS18NWAMPsNVcx8vukdIJf2WC9FuB49krMkFwHqi-L2lEbkeXdxFuuWz00OB9vc
-Message-ID: <CAKzKK0oi85bnyT3Lq_TXz8YwFrmBxQd8K1q7hRDv-Oww75F_tQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: f_ncm: Fix NPE in ncm_bind error path
+Date: Thu, 11 Sep 2025 15:27:55 +0800
+X-Gm-Features: AS18NWBti6JrawpdlOsgZ6vAT-gYWOrF4Yel8dW_q6Hc4XuwW9RLv4IpCjBtqnk
+Message-ID: <CAKzKK0oyBomOOFGv4LHM18BgN8tS=Mcyok4gfq4q81vgk54iVA@mail.gmail.com>
+Subject: Re: [PATCH] usb: udc: Add trace event for usb_gadget_set_state
 To: Greg KH <gregkh@linuxfoundation.org>
-Cc: zack.rusin@broadcom.com, krzysztof.kozlowski@linaro.org, 
-	namcao@linutronix.de, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@kernel.org
+Cc: royluo@google.com, jkeeping@inmusicbrands.com, stern@rowland.harvard.edu, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 Hi Greg,
 
-On Sat, Sep 6, 2025 at 8:15=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
+On Sat, Sep 6, 2025 at 9:16=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
  wrote:
 >
-> On Thu, Sep 04, 2025 at 07:46:13PM +0800, Kuen-Han Tsai wrote:
-> > When an ncm_bind/unbind cycle occurs, the ncm->notify_req pointer is
-> > left pointing to a stale address. If a subsequent call to ncm_bind()
-> > fails to allocate the endpoints, the function jumps to the unified erro=
-r
-> > label. The cleanup code sees the stale ncm->notify_req pointer and call=
-s
-> > usb_ep_free_request().
+> On Mon, Aug 18, 2025 at 04:27:19PM +0800, Kuen-Han Tsai wrote:
+> > While the userspace program can be notified of gadget state changes,
+> > timing issue can lead to missed transitions when reading the state
+> > value.
 > >
-> > This results in a NPE because it attempts to access the free_request
-> > function through the endpoint's operations table (ep->ops), which is
-> > NULL.
+> > Introduce a trace event for usb_gadget_set_state to reliably track stat=
+e
+> > transitions.
 > >
-> > Refactor the error path to use cascading goto labels, ensuring that
-> > resources are freed in reverse order of allocation. Besides, explicitly
-> > set pointers to NULL after freeing them.
+> > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+> > ---
+> >  drivers/usb/gadget/udc/core.c  | 1 +
+> >  drivers/usb/gadget/udc/trace.h | 5 +++++
+> >  2 files changed, 6 insertions(+)
+> >
+> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/cor=
+e.c
+> > index d709e24c1fd4..e28fea614496 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -1125,6 +1125,7 @@ void usb_gadget_set_state(struct usb_gadget *gadg=
+et,
+> >  {
+> >       gadget->state =3D state;
+> >       schedule_work(&gadget->work);
+> > +     trace_usb_gadget_set_state(gadget, 0);
 >
-> Why must the pointers be set to NULL?  What is checking and requiring
-> that?
+> Will this show the state the gadget has been set to?  And why not just
+> do that in the work callback, as that is when it really happens.
 
-I set them to null as a standard safety measure to prevent potential
-use-after-free issues. I can remove it if you prefer.
+Yes, it shows the new state by logging the state field from the gadget obje=
+ct.
+
+The work callback is for handling asynchronous sysfs notifications
+that occur later. Placing the tracepoint here accurately reflects when
+the state change actually happens.
 
 >
-> And this unwinding is tailor-made for the guard() type of logic, why not
-> convert this code to do that instead, which will fix all of these bugs
-> automatically, right?
+> What is the output of this trace line?
+>
 
-The __free() cleanup mechanism is unfortunately infeasible in this
-case. The usb_ep_free_request(ep, req) requires two parameters, but
-the automatic cleanup mechanism only needs one: the resource being
-freed.
+The output looks like
 
-Since the struct usb_request doesn't contain the pointer to its
-associated endpoint, the @free function cannot retrieve the ep pointer
-it needs for the cleanup call.  We would need to add an endpoint
-pointer to usb_request to make it work. However, this will be a
-significant change and we might also need to refactor drivers that use
-the usb_ep_free_request(ep, req), usb_ep_queue(ep, req) and
-usb_ep_dequeue(ep, req) as the endpoint parameter is no longer needed.
-
-I also want to point out that this bug isn't specific to the f_ncm
-driver. The f_acm, f_rndis and f_ecm are also vulnerable because their
-bind paths have the same flaw. We have already observed this issue in
-both f_ncm and f_acm on Android devices.
-
-My plan was to merge this fix for f_ncm first and then apply the same
-pattern to the other affected drivers. However, I am happy to have a
-more thorough design discussion if you feel using __free()/guard()
-automatic cleanup is the better path forward.
+usb_gadget_set_state: speed 5/5 state 5 100mA
+[sg:self-powered:activated:connected] --> 0
+usb_gadget_set_state: speed 5/5 state 6 100mA
+[sg:self-powered:activated:connected] --> 0
+usb_gadget_set_state: speed 5/5 state 7 100mA
+[sg:self-powered:activated:connected] --> 0
+usb_gadget_set_state: speed 5/5 state 7 900mA
+[sg:bus-powered:activated:connected] --> 0
 
 Regards,
 Kuen-Han
