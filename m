@@ -1,231 +1,204 @@
-Return-Path: <linux-usb+bounces-27949-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27950-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3C91B534E6
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 16:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 00337B53519
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 16:21:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5582E1734D1
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 14:09:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CEAD5A3D8B
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 14:21:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BFF0337688;
-	Thu, 11 Sep 2025 14:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D65EF314A65;
+	Thu, 11 Sep 2025 14:21:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TQ2AtMQK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3fRxzJNH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F243375CD
-	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 14:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05A721019E
+	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 14:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757599725; cv=none; b=uJkGSlNh0Ol0qSPgbDx6/aS8VyqSgQ6e1xA3wa7bzbJRnkRJ+4REGyN3dMRNrrRyVOixIgdWjl2qhVqnrtMi6xFWu6ioyAiMQzNBTA2ZuBlmvP8kvBgBhzAToaNBLTBj+CQD8NpZIHZj8BdhwBOCYQEe+cAWQF3xOnh0mtYIiss=
+	t=1757600469; cv=none; b=snEy2mccMydOMvF6woix/CkxWe4du2bzeQ9xdq9kjqGoCHJzV5isP0sruwaY0AixgtpaJ4I0SDanfdv8zFqUiauy+ugMSOUS4Et3u3ZYCRfZmOcQNgHwNq1+XpoZOLGq+LSLCnX16S5jovccPGh4ShYk18UuMkDG/PUu9bBWIoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757599725; c=relaxed/simple;
-	bh=mOLt+XGUrVj19AXzeQRFbEHbu7fcm3XZRuCyxtrI6Cw=;
-	h=Date:From:To:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NTOtJnARsGELilymgDlIzFDJ3zM5hWZzDtCdSgfiR63mH5BtZa0b99oI/f4aSPZIO+1QQvwAywTG/TiAX7bupmH/91yb5sxgASlZ6mVRSXURVKO07DhQqHyKhWJ9qbp5Cwp7gNQ/DgzxX4ie3kJQ/XOE/eG09TZd7ZU0u1m1+JQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TQ2AtMQK; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-337cc414358so5918621fa.3
-        for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 07:08:42 -0700 (PDT)
+	s=arc-20240116; t=1757600469; c=relaxed/simple;
+	bh=+iYwU3lAJZN4irjGgO7FnAikEFpf8kacEm1KMOnoLBg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=cpYjB+nipjVQS4vwqBHlNSRmhCStY1iCazkXMLeOHittp/QWd8HlQvCCTY/Pb+nNHsc+kdE9+dc//hyffXF9jSIV4mPshrnGZOBZEvbnJudIyD4NjpAAAgUzRx4uow2kKp/Fd7RUUsSAOYHcojI12VnNR+yz3U1DL7C+YWrw6v0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3fRxzJNH; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-76e6e71f7c6so925471b3a.0
+        for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 07:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757599721; x=1758204521; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:to:from:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N7ikg4uEXf2zepRARGuys+VOvsS77v9Qe7k9flW+NsE=;
-        b=TQ2AtMQKb4I3fai+WqFH+MVtgI3QiXx8qyo8311k5t6ggUl3Mu4xDATzoCTOO5ay1n
-         pWNlWvqRJll2S10BmSYe3iYMVm8SqU8CI9XyhIhlAk0KML1AnFZMp96AeLJSfbBmwwcI
-         7MrFhRgGPaP4+zoh0/QT/d7VOnaBRw0rq72oWeSjZQyB6ZW3lYHD0VBxS/HEMnlCZOiS
-         6qN5nTfnI0k6SjtoqQmECwAZwtIBLw9++MvZKonKo8XvTFgL0ZaENHL0qYGbYf6SA7B0
-         SHZGzcFDXJ+mXknyWjQXDjaSE9oedIxzFHksE0UJYvPPhRHfQ7W5w0S1og9EWXOAKbke
-         J9qg==
+        d=google.com; s=20230601; t=1757600467; x=1758205267; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BXpKyC+FtSuNs0YLqsRlk5q4vvwtie8skRJ55fTgeiY=;
+        b=3fRxzJNHgCMbaPx6pKhdQkp0+jihAeT3dp61558GeulI03lflmoJmFaMh6UUARDVff
+         PASyDbCvocIam9I/pqITXuXj6jl1jqfmUFpgY7FKw8/lZhW41aZL9IsoE5aCAHn+mX7X
+         Qs50sWhgc/K0y0kwXShHMyTfP8MXWrlAFTnX5+JVVz+7AKAg6RyQvO5Fd/72WHUw45sb
+         JTDHpxi7/LT9og9yoAxtlm3ps4YkEdppSuDc3hDihfhYUS68P2xoryiAU7RdHSTEkZ+Y
+         0tmoNwJLHdA5U/l4g3hX71BG3Qe76g6ZRiivMJymbq116uMxegHCGbuf3wSJGsbgVJiG
+         qt2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757599721; x=1758204521;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N7ikg4uEXf2zepRARGuys+VOvsS77v9Qe7k9flW+NsE=;
-        b=ibhD4LsMdKYkSwDJnh71Fo9Vv8jiuJk3tIzAUJYv+6svePx0V8mxv9bN+yhWaSLhfu
-         fpDgmxekH79xWQU95nSQ8NUwYfkxf+IBylXFZ/n+EYoapyiWFGzXLQsW3Kjs+W6rQ8rF
-         cOWKWfQp7yc6O9xcBOhxsrUlaeiSMZ/BruNn4QOZRPtkOuUrG/+/jmoYsmVGWaT/GZ+H
-         d02NzztYz/sqNeqBBKho5U5d1dMUfx2HR83uk2XkOeIuzuI1WoCuk6ZPc0geXTd2OrDw
-         jqGWPBAlARopkg7lLZg4nPT1argWibNumgg0EePJ9hHcoVHpKIpvB52p2yZ+Z3Pv/KZo
-         VOFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXrO1fFpMH8nAHNvRSeeOCEeec86Bdx5lyzXtwvnZhKsMJVmMyU8hVjk5UEDAFEAf2OLPOjYGxvLFw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzObkayDnFmqSvI+9W9RaGWtwHePtQjQdGhHxEj23eLAE+y6rnU
-	SzVKqI6drLLAGmW0BG5iLK1ERDjVE/4FT27Oc4dLqhnSvavqzpyT908u
-X-Gm-Gg: ASbGncuC/jZc+TXo1vLvrPjKzIBioxB05Nib8L01reJ+Uc/1GVwd6pi2xbFrFTyJ4Nw
-	uOWAtYTXl/vNS91Pl3GekLi2N8/eZLVYUDuXeWnAzyd18jwtR77sWbLoJGjfPMu39z5jERApMWD
-	ZWGQi2EkkvpLjS3cPGp6chHbDvQD9SfJaBdLM4DSRxyTz2kiG8xcbifyAsPjTMFxnJZJXn6LF6r
-	k6nxayY0tltg9rvO7TYKZr9RjjTpYzTpnsQOnZ1YljbSuj0V77rxE5bDzuBa2yZRDRrvhTvCiHm
-	kk9W+ktkfsG9D+4jAfU1LckyBJQNA9chT7qcPj/HjvvBcit9ZKgUKZxo4SAj985uiq0RbuPjPFM
-	3pdZQHoOg7uTYBoE2QGJIZbFXhkh0MVQ4MuA=
-X-Google-Smtp-Source: AGHT+IFUfW3kaUwJF5BeUHILYWUbIJE4ip74vjat1+eebjQt5+pDDB2w5zXRfmUuz8JAPqpbow2Bdg==
-X-Received: by 2002:a05:651c:2221:b0:336:c310:6ff9 with SMTP id 38308e7fff4ca-33b4dab7891mr48661971fa.19.1757599720885;
-        Thu, 11 Sep 2025 07:08:40 -0700 (PDT)
-Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-350a153c10fsm342271fa.3.2025.09.11.07.08.38
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 11 Sep 2025 07:08:40 -0700 (PDT)
-Date: Thu, 11 Sep 2025 16:08:36 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] usb: xhci: Clean up TD status passing
-Message-ID: <20250911160836.57e1d159.michal.pecio@gmail.com>
-In-Reply-To: <20250911160632.46245dc4.michal.pecio@gmail.com>
-References: <20250911160632.46245dc4.michal.pecio@gmail.com>
+        d=1e100.net; s=20230601; t=1757600467; x=1758205267;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BXpKyC+FtSuNs0YLqsRlk5q4vvwtie8skRJ55fTgeiY=;
+        b=uanBlBCOpI1m7V7yuuMnYDgs+unQaawmpoIEFbGKxmtRFsW/APrBLfMceBUOvUU5Dc
+         w+xVOmuBNYaZhxAPxgidEiUNHl4SRtrbqO7qAqYbgNyxUupiz/bzRSlhYvRzWQxbOaS9
+         4PwOmhpO09tMkWiwyJGncvi3qBCBOGgTJdx7te/nrIM4oful1yZeRkmHEF2+EtdGwTKy
+         kLx8h+PkPCbng9Nv2vxnsN4GtdhLrxJaMP95F5vNKjwcZE+YF9vJN0KoMClSMHByZc+p
+         1t6Co0xMLXclxFgtS8c32l0gm/2PNbNO2l5phdgVwIuzlNHf2KjgE5md+ycUfkge2SlD
+         v1jw==
+X-Gm-Message-State: AOJu0Yxe9jLgcs0DQej/YXEkLE/kwgeF5spVc/WM+TYxKot0UT5EwWBz
+	ZZuw5Zqwyx/mXXikKpj1hJbJ6SUOY1hYITLD80FM0tYGuHAFEPCNjzgxCrlN1QXDpUUP5IokxgK
+	gvGLxrH1ppUiefELyPw==
+X-Google-Smtp-Source: AGHT+IGxazJ6wSRTWeq83hZ8mq5zVKYCYBbAtGgqkOmgLsu8aqytxOCePqUp/OIJ0Q3QGgdvYcabZuO39IHBHJs=
+X-Received: from pgam28.prod.google.com ([2002:a05:6a02:2b5c:b0:b47:1324:ea0a])
+ (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a20:939e:b0:251:5160:f6c4 with SMTP id adf61e73a8af0-25345e324ebmr25326771637.50.1757600467216;
+ Thu, 11 Sep 2025 07:21:07 -0700 (PDT)
+Date: Thu, 11 Sep 2025 14:20:12 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
+Message-ID: <20250911142051.90822-1-guanyulin@google.com>
+Subject: [PATCH v16 0/4] Support system sleep with offloaded usb transfers
+From: Guan-Yu Lin <guanyulin@google.com>
+To: gregkh@linuxfoundation.org, mathias.nyman@intel.com, hannelotta@gmail.com, 
+	zijun.hu@oss.qualcomm.com, xu.yang_2@nxp.com, stern@rowland.harvard.edu, 
+	andriy.shevchenko@linux.intel.com, amardeep.rai@intel.com, 
+	dominique.martinet@atmark-techno.com, quic_wcheng@quicinc.com, 
+	sakari.ailus@linux.intel.com, dh10.jung@samsung.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-xhci_td_cleanup() has a 'status' parameter, which determines completion
-status of the URB if this happens to be the last TD to be given back.
-Most callers simply pass td->status here.
+Wesley Cheng and Mathias Nyman's USB offload design enables a co-processor
+to handle some USB transfers, potentially allowing the system to sleep
+(suspend-to-RAM) and save power. However, Linux's System Sleep model halts
+the USB host controller when the main system isn't managing any USB
+transfers. To address this, the proposal modifies the system to recognize
+offloaded USB transfers and manage power accordingly. This way, offloaded
+USB transfers could still happen during system sleep (Suspend-to-RAM).
 
-One bogus case is skip_isoc_td(), which is called with status determined
-by some TD which triggered skipping, not the one being skipped, and the
-status is later ignored anyway because it's an isochronous URB.
+This involves two key steps:
+1. Transfer Status Tracking: Propose offload_usage and corresponding apis
+drivers could track USB transfers on the co-processor, ensuring the
+system is aware of any ongoing activity.
+2. Power Management Adjustment:  Modifications to the USB driver stack
+(xhci host controller driver, and USB device drivers) allow the system to
+sleep (Suspend-to-RAM) without disrupting co-processor managed USB
+transfers. This involves adding conditional checks to bypass some power
+management operations in the System Sleep model.
 
-All those parameters can be removed and td->status used automatically by
-xhci_td_cleanup(). This makes the URB status policy immediately clear.
+changelog
+----------
+Changes in v16:
+- Consolidate configs into only CONFIG_USB_XHCI_SIDEBAND.
 
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+Changes in v15:
+- Rebase on TOT.
+
+Changes in v14:
+- Introduce CONFIG_USB_OFFLOAD for control usb offload related features.
+- Specify __must_hold marco on usb_offload_check().
+- Cosmetics changes on coding style.
+
+Changes in v13:
+- Ensure offload_usage is modified only when the device is neither
+  suspended nor marked as "offload_at_suspend".
+- Move lock manipulations into usb_offload_get()/usb_offload_put().
+- Cosmetics changes on coding style.
+
+Changes in v12:
+- Rebase on TOT.
+- Cosmetics changes on coding style.
+
+Changes in v11:
+- Use USB subsystem wrappers in usb_offload_get()/usb_offload_put().
+- Refine logics and add comment in usb_suspend_both()/usb_resume_both().
+
+Changes in v10:
+- Remove unnecessary operations in dwc3 driver.
+- Introduce CONFIG_USB_XHCI_SIDEBAND_SUSPEND to enable/disable offloaded
+  usb transfers during system Suspend-to-RAM.
+- Modify the approach to detect offloaded USB transfers when the system
+  resumes from Suspend-to-RAM.
+- Mark sideband activity when sideband interrupters are created/removed.
+- Cosmetics changes on coding style.
+
+Changes in v9:
+- Remove unnecessary white space change.
+
+Changes in v8:
+- Change the runtime pm api to correct the error handling flow.
+- Not flushing endpoints of actively offloaded USB devices to avoid
+  possible USB transfer conflicts.
+
+Changes in v7:
+- Remove counting mechanism in struct usb_hcd. The USB device's offload
+  status will be solely recorded in each related struct usb_device.
+- Utilizes `needs_remote_wakeup` attribute in struct usb_interface to
+  control the suspend flow of USB interfaces and associated USB endpoints.
+  This addresses the need to support interrupt transfers generated by
+  offloaded USB devices while the system is suspended.
+- Block any offload_usage change during USB device suspend period.
+
+Changes in v6:
+- Fix build errors when CONFIG_USB_XHCI_SIDEBAND is disabled.
+- Explicitly specify the data structure of the drvdata refereced in
+  dwc3_suspend(), dwc3_resume().
+- Move the initialization of counters to the patches introducing them.
+
+Changes in v5:
+- Walk through the USB children in usb_sideband_check() to determine the
+  sideband activity under the specific USB device. 
+- Replace atomic_t by refcount_t.
+- Reduce logs by using dev_dbg & remove __func__.
+
+Changes in v4:
+- Isolate the feature into USB driver stack.
+- Integrate with series "Introduce QC USB SND audio offloading support"
+
+Changes in v3:
+- Integrate the feature with the pm core framework.
+
+Changes in v2:
+- Cosmetics changes on coding style.
+
+[v3] PM / core: conditionally skip system pm in device/driver model
+[v2] usb: host: enable suspend-to-RAM control in userspace
+[v1] [RFC] usb: host: Allow userspace to control usb suspend flows
 ---
- drivers/usb/host/xhci-ring.c | 31 +++++++++++++++----------------
- 1 file changed, 15 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 34905c8dee25..e0814282732b 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -870,10 +870,10 @@ static void xhci_unmap_td_bounce_buffer(struct xhci_hcd *xhci,
- 	seg->bounce_offs = 0;
- }
- 
--static void xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
--			    struct xhci_ring *ep_ring, int status)
-+static void xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td, struct xhci_ring *ep_ring)
- {
- 	struct urb *urb = NULL;
-+	int status = td->status;
- 
- 	/* Clean up the endpoint's TD list */
- 	urb = td->urb;
-@@ -917,14 +917,13 @@ static void xhci_td_cleanup(struct xhci_hcd *xhci, struct xhci_td *td,
- }
- 
- /* Give back previous TD and move on to the next TD. */
--static void xhci_dequeue_td(struct xhci_hcd *xhci, struct xhci_td *td, struct xhci_ring *ring,
--			    u32 status)
-+static void xhci_dequeue_td(struct xhci_hcd *xhci, struct xhci_td *td, struct xhci_ring *ring)
- {
- 	ring->dequeue = td->end_trb;
- 	ring->deq_seg = td->end_seg;
- 	inc_deq(xhci, ring);
- 
--	xhci_td_cleanup(xhci, td, ring, status);
-+	xhci_td_cleanup(xhci, td, ring);
- }
- 
- /* Complete the cancelled URBs we unlinked from td_list. */
-@@ -941,7 +940,7 @@ static void xhci_giveback_invalidated_tds(struct xhci_virt_ep *ep)
- 		if (td->cancel_status == TD_CLEARED) {
- 			xhci_dbg(ep->xhci, "%s: Giveback cancelled URB %p TD\n",
- 				 __func__, td->urb);
--			xhci_td_cleanup(ep->xhci, td, ring, td->status);
-+			xhci_td_cleanup(ep->xhci, td, ring);
- 		} else {
- 			xhci_dbg(ep->xhci, "%s: Keep cancelled URB %p TD as cancel_status is %d\n",
- 				 __func__, td->urb, td->cancel_status);
-@@ -1305,7 +1304,8 @@ static void xhci_kill_ring_urbs(struct xhci_hcd *xhci, struct xhci_ring *ring)
- 	struct xhci_td *tmp;
- 
- 	list_for_each_entry_safe(cur_td, tmp, &ring->td_list, td_list) {
--		xhci_td_cleanup(xhci, cur_td, ring, -ESHUTDOWN);
-+		cur_td->status = -ESHUTDOWN;
-+		xhci_td_cleanup(xhci, cur_td, ring);
- 	}
- }
- 
-@@ -1347,8 +1347,8 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
- 	}
- 
- 	list_for_each_entry_safe(cur_td, tmp, &ep->cancelled_td_list, cancelled_td_list) {
--		ring = xhci_urb_to_transfer_ring(xhci, cur_td->urb);
--		xhci_td_cleanup(xhci, cur_td, ring, -ESHUTDOWN);
-+		cur_td->status = -ESHUTDOWN;
-+		xhci_td_cleanup(xhci, cur_td, xhci_urb_to_transfer_ring(xhci, cur_td->urb));
- 	}
- }
- 
-@@ -1510,7 +1510,7 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd *xhci, int slot_id,
- 			td->cancel_status = TD_CLEARED;
- 			xhci_dbg(ep->xhci, "%s: Giveback cancelled URB %p TD\n",
- 				 __func__, td->urb);
--			xhci_td_cleanup(ep->xhci, td, ep_ring, td->status);
-+			xhci_td_cleanup(ep->xhci, td, ep_ring);
- 		} else {
- 			xhci_dbg(ep->xhci, "%s: Keep cancelled URB %p TD as cancel_status is %d\n",
- 				 __func__, td->urb, td->cancel_status);
-@@ -2278,7 +2278,7 @@ static void finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		break;
- 	}
- 
--	xhci_dequeue_td(xhci, td, ep_ring, td->status);
-+	xhci_dequeue_td(xhci, td, ep_ring);
- }
- 
- /* sum trb lengths from the first trb up to stop_trb, _excluding_ stop_trb */
-@@ -2500,8 +2500,7 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 	finish_td(xhci, ep, ep_ring, td, trb_comp_code);
- }
- 
--static void skip_isoc_td(struct xhci_hcd *xhci, struct xhci_td *td,
--			 struct xhci_virt_ep *ep, int status)
-+static void skip_isoc_td(struct xhci_hcd *xhci, struct xhci_td *td, struct xhci_ring *ep_ring)
- {
- 	struct urb_priv *urb_priv;
- 	struct usb_iso_packet_descriptor *frame;
-@@ -2517,7 +2516,7 @@ static void skip_isoc_td(struct xhci_hcd *xhci, struct xhci_td *td,
- 	/* calc actual length */
- 	frame->actual_length = 0;
- 
--	xhci_dequeue_td(xhci, td, ep->ring, status);
-+	xhci_dequeue_td(xhci, td, ep_ring);
- }
- 
- /*
-@@ -2822,7 +2821,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 
- 	if (td && td->error_mid_td && !trb_in_td(td, ep_trb_dma)) {
- 		xhci_dbg(xhci, "Missing TD completion event after mid TD error\n");
--		xhci_dequeue_td(xhci, td, ep_ring, td->status);
-+		xhci_dequeue_td(xhci, td, ep_ring);
- 	}
- 
- 	/* If the TRB pointer is NULL, missed TDs will be skipped on the next event */
-@@ -2862,7 +2861,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 				if (trb_comp_code == COMP_STOPPED_LENGTH_INVALID)
- 					return 0;
- 
--				skip_isoc_td(xhci, td, ep, status);
-+				skip_isoc_td(xhci, td, ep_ring);
- 
- 				if (!list_empty(&ep_ring->td_list)) {
- 					if (ring_xrun_event) {
+Guan-Yu Lin (4):
+  usb: xhci-plat: separate dev_pm_ops for each pm_event
+  usb: offload: add apis for offload usage tracking
+  xhci: sideband: add api to trace sideband usage
+  usb: host: enable USB offload during system sleep
+
+ drivers/usb/core/Makefile         |   1 +
+ drivers/usb/core/driver.c         |  50 +++++++++--
+ drivers/usb/core/offload.c        | 136 ++++++++++++++++++++++++++++++
+ drivers/usb/core/usb.c            |   1 +
+ drivers/usb/host/xhci-plat.c      |  42 ++++++++-
+ drivers/usb/host/xhci-plat.h      |   1 +
+ drivers/usb/host/xhci-sideband.c  |  36 ++++++++
+ include/linux/usb.h               |  18 ++++
+ include/linux/usb/xhci-sideband.h |   9 ++
+ 9 files changed, 284 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/usb/core/offload.c
+
 -- 
-2.48.1
+2.51.0.384.g4c02a37b29-goog
+
 
