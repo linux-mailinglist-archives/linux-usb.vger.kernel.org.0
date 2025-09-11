@@ -1,147 +1,133 @@
-Return-Path: <linux-usb+bounces-27918-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27919-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DB18B52A48
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 09:42:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E5C1B52BC9
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 10:35:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 07F884E2727
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 07:42:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2840D58644D
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 08:35:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78CFE2773FC;
-	Thu, 11 Sep 2025 07:41:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 140892E2DDE;
+	Thu, 11 Sep 2025 08:35:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NW3mTcLo"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="H407TJpZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3E5277C9A
-	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 07:41:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77AE22E2DDD;
+	Thu, 11 Sep 2025 08:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757576517; cv=none; b=PsaafYLzkQxkDu+ru1tgPk4qNQdF7byA2cJMzxGEw6b/peGdatSVR86Y44fS9N7Nu4Is/by48yR8zgSW1UzfTkkKbgLbDyGf7zlD8dwCA2isFn5hQHl93aiwJZ9/7eOVUA97h05SX1InQy75FJms8WveFjL/DQnr1+0AzjXnkrU=
+	t=1757579716; cv=none; b=W9H+w99WYrY3RX3uD+HC9bvgpsSo9Oxemv1xWT6NjwYHfpe+Nj5nhIniM7eY+/ZAn8LJm//6so0UDL2krQ2N503bisqyt7fRULUwePjSa80y9HzRcKASavdsrOvRb7b8xkif4ETSU/N9QBtpngESos4+0YSQBeMiWdVFpu0drxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757576517; c=relaxed/simple;
-	bh=1j6Pg/CEMA3AfJZdituR/PA9zmVAVNIKCldPz7vp9sI=;
+	s=arc-20240116; t=1757579716; c=relaxed/simple;
+	bh=aUlg7LEpD7b3mMOp6aM+uF70jgwT3fGRPOK3IMebm2Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pY+lNJ6Z/V6kmBE68REJhyTbhUyuKwgSNlm08fGbnfp8B2/dImLoZRu0sBYFgCYlGI+bhIoE7a9Ol5aYhNkv3GkjXo2oQe+aoiXVvi6g4OsLxjpyOh8KqPkR4Pyx07mlvDGsz1b+0O4YDVTpj2l72e6eiaoUYeXlwfZwANy4e3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NW3mTcLo; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757576515; x=1789112515;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1j6Pg/CEMA3AfJZdituR/PA9zmVAVNIKCldPz7vp9sI=;
-  b=NW3mTcLoaeYklRcqSU9Dz0CGf6rIhF6i65b7/bf6BRR8W9Ew2Sd761WY
-   xRZkj0TZEwDvOcncGWVGdmH4BJC/yRam0EtNIGw13Sqy5ts7mxM8HHCCT
-   WBtqEa2HnlqsAIxuNSjzJZ5Tzam3T4w2F10t4uIsU9Fg35/NpA9My0OuF
-   jeZ/ABizmjKoe2mN74PI5db9tPWqjoYr8mbsiQBcCxnHgayBDEbnFubc1
-   pkd5mOvVYEWDIIVEtBYH8+h55c85Eu/97GEokXVs2nORKdf5puvzXaB1D
-   5hZtExtYzFf2iznwDS3KWYTjst2WlEb8c2FF6ydPxLFfzIiEDliDGpW/s
-   Q==;
-X-CSE-ConnectionGUID: Ru23iMJfR5Ob2B/cihrJeA==
-X-CSE-MsgGUID: Mkau10xsSZ6yItzXVW6nkA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="59837424"
-X-IronPort-AV: E=Sophos;i="6.18,256,1751266800"; 
-   d="scan'208";a="59837424"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 00:41:54 -0700
-X-CSE-ConnectionGUID: P8DbYGsaS++LW4cNJhyuFQ==
-X-CSE-MsgGUID: 587E9xrTRHCh1jouMN6w8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,256,1751266800"; 
-   d="scan'208";a="173684512"
-Received: from smile.fi.intel.com ([10.237.72.51])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 00:41:52 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uwbwE-000000022JA-0CcE;
-	Thu, 11 Sep 2025 10:41:50 +0300
-Date: Thu, 11 Sep 2025 10:41:49 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
-	mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/7] usb: xhci: use '%pad' specifier for DMA address
- printing
-Message-ID: <aMJ9PbOxn3CCuaYJ@smile.fi.intel.com>
-References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
- <20250903170127.2190730-3-niklas.neronin@linux.intel.com>
- <20250909115949.610922a3.michal.pecio@gmail.com>
- <aMAPkH5-4rLdmx_9@smile.fi.intel.com>
- <20250909224416.691e47c9.michal.pecio@gmail.com>
- <20250910075630.0389536f.michal.pecio@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=SFKg2ssSVG0l2O0HAHPr69DStt8Vx3YTK24DbK3wervuOejD9ub08AiJyD09Tz9Qu+LphQYIFv2Ot4y1QprrXCtdBNfrEVOkMhLeui05E4kX1t1pT6lVYVukY0f4kJ7+UE2aa5vrZsh0kdPiYPESGQgiRZ7OS3VG7bwcBowErnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=H407TJpZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3DC6C4CEF1;
+	Thu, 11 Sep 2025 08:35:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1757579716;
+	bh=aUlg7LEpD7b3mMOp6aM+uF70jgwT3fGRPOK3IMebm2Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H407TJpZfFP0RFaHZw1BGqy7boDGd0W7hmO74Llpr1MTTOceYUnujI78bwEQBtERz
+	 gR+Lv+H5ZrBPf/iKe0UhMXw8g3+Q82IC86kT5c++Uqa/G/Iy+avAslcHzjWeP2J3KT
+	 rDJQw48/k1N5q/NHGEs+tVhpoOKY0+YNAvau9ERk=
+Date: Thu, 11 Sep 2025 10:35:13 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Kuen-Han Tsai <khtsai@google.com>
+Cc: zack.rusin@broadcom.com, krzysztof.kozlowski@linaro.org,
+	namcao@linutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@kernel.org
+Subject: Re: [PATCH] usb: gadget: f_ncm: Fix NPE in ncm_bind error path
+Message-ID: <2025091132-scenic-avalanche-7bec@gregkh>
+References: <20250904114854.1913155-1-khtsai@google.com>
+ <2025090651-unifier-award-3e0a@gregkh>
+ <CAKzKK0oi85bnyT3Lq_TXz8YwFrmBxQd8K1q7hRDv-Oww75F_tQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250910075630.0389536f.michal.pecio@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKzKK0oi85bnyT3Lq_TXz8YwFrmBxQd8K1q7hRDv-Oww75F_tQ@mail.gmail.com>
 
-On Wed, Sep 10, 2025 at 07:56:30AM +0200, Michal Pecio wrote:
-> On Tue, 9 Sep 2025 22:44:16 +0200, Michal Pecio wrote:
-> > On Tue, 9 Sep 2025 14:29:20 +0300, Andy Shevchenko wrote:
-> > > Not really. It prints unnecessary long values on 32-bit machines
-> > > making an impression that something works somewhere in 64-bit
-> > > address space.  
-> > 
-> > The %016llx format you are alluding to is used in two error messages
-> > actually seen by users, that's an issue. My crazy personal preference
-> > would be %08llx, but I concede it's unprofessional, so %pad it seems.
+On Thu, Sep 11, 2025 at 02:50:15PM +0800, Kuen-Han Tsai wrote:
+> Hi Greg,
 > 
-> Actually, I take this back.
+> On Sat, Sep 6, 2025 at 8:15 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Sep 04, 2025 at 07:46:13PM +0800, Kuen-Han Tsai wrote:
+> > > When an ncm_bind/unbind cycle occurs, the ncm->notify_req pointer is
+> > > left pointing to a stale address. If a subsequent call to ncm_bind()
+> > > fails to allocate the endpoints, the function jumps to the unified error
+> > > label. The cleanup code sees the stale ncm->notify_req pointer and calls
+> > > usb_ep_free_request().
+> > >
+> > > This results in a NPE because it attempts to access the free_request
+> > > function through the endpoint's operations table (ep->ops), which is
+> > > NULL.
+> > >
+> > > Refactor the error path to use cascading goto labels, ensuring that
+> > > resources are freed in reverse order of allocation. Besides, explicitly
+> > > set pointers to NULL after freeing them.
+> >
+> > Why must the pointers be set to NULL?  What is checking and requiring
+> > that?
 > 
-> I think that leading zeros are evil and I agree this message is bad.
-> But I don't understand why 64 bit users should put up with this:
-> 
-> [  140.106751] xhci_hcd 0000:07:00.0: Event dma 0x00000000ffeec7f0 for ep 2 status 13 not part of TD at 00000000ffeec800 - 00000000ffeec800
-> [  140.476573] xhci_hcd 0000:07:00.0: Event dma 0x00000000ffeec1a0 for ep 2 status 13 not part of TD at 00000000ffeec1b0 - 00000000ffeec1b0
-> [  140.502855] xhci_hcd 0000:07:00.0: Event dma 0x00000000ffeecd60 for ep 2 status 13 not part of TD at 00000000ffeecd70 - 00000000ffeecd70
-> [  141.225300] xhci_hcd 0000:07:00.0: Event dma 0x00000000ffeeb970 for ep 2 status 13 not part of TD at 00000000ffeeb980 - 00000000ffeeb980
-> 
-> when we can have this:
-> 
-> [  419.967755] xhci_hcd 0000:07:00.0: Event dma 0xffc34760 for ep 2 status 13 not part of TD at 0xffc34770 - 0xffc34770
-> [  420.100611] xhci_hcd 0000:07:00.0: Event dma 0xffc34bc0 for ep 2 status 13 not part of TD at 0xffc34bd0 - 0xffc34bd0
-> [  420.360917] xhci_hcd 0000:07:00.0: Event dma 0xffc34e70 for ep 2 status 13 not part of TD at 0xffc34e80 - 0xffc34e80
-> [  421.719530] xhci_hcd 0000:07:00.0: Event dma 0xffc35770 for ep 2 status 13 not part of TD at 0xffc35780 - 0xffc35780
-> 
-> with a simple change (anything wrong with u64 cast here?):
-> 
-> -       xhci_err(xhci, "Event dma %pad for ep %d status %d not part of TD at %016llx - %016llx\n",
-> -                &ep_trb_dma, ep_index, trb_comp_code,
-> +       xhci_err(xhci, "Event dma %#08llx for ep %d status %d not part of TD at %#08llx - %#08llx\n",
+> I set them to null as a standard safety measure to prevent potential
+> use-after-free issues. I can remove it if you prefer.
 
-How is 0 will be printed with %#08x?
+So either you have a use-after-free, or a NULL crash, either way it's
+bad and the real bug should be fixed if this can happen.  If it can not
+happen, then there is no need to set this to NULL.
 
-> +                (u64) ep_trb_dma, ep_index, trb_comp_code,
+> > And this unwinding is tailor-made for the guard() type of logic, why not
+> > convert this code to do that instead, which will fix all of these bugs
+> > automatically, right?
 > 
-> These zeros only add noise, and in many cases make difference between
-> line wrapping or not because this is longer than 99% of kernel messages
-> and some people want their terminal window not to take the whole screen.
+> The __free() cleanup mechanism is unfortunately infeasible in this
+> case. The usb_ep_free_request(ep, req) requires two parameters, but
+> the automatic cleanup mechanism only needs one: the resource being
+> freed.
+> 
+> Since the struct usb_request doesn't contain the pointer to its
+> associated endpoint, the @free function cannot retrieve the ep pointer
+> it needs for the cleanup call.  We would need to add an endpoint
+> pointer to usb_request to make it work. However, this will be a
+> significant change and we might also need to refactor drivers that use
+> the usb_ep_free_request(ep, req), usb_ep_queue(ep, req) and
+> usb_ep_dequeue(ep, req) as the endpoint parameter is no longer needed.
 
-I disagree on this. The 64-bit platforms are 64-bit. If the address in use is
-_capable_ of 64-bit, it should be printed as 64-bit. Otherwise make it u32 in
-the code and then I will agree with you.
+It's odd that the ep is needed to create a request, but it's not saved.
+So yes, I think it should be saved, and that will make the cleanup logic
+a lot simpler, as well as allow us to use the __free() logic overall.
 
-> The main thing we care about here are the last 3-4 digits and we could
-> have made it little more than (ep_trb_dma & 0xffff) long ago, but then
-> Niklas asked "what about correlation with tracing/debugfs/dyndbg?", so
-> it was left the way it is.
+> I also want to point out that this bug isn't specific to the f_ncm
+> driver. The f_acm, f_rndis and f_ecm are also vulnerable because their
+> bind paths have the same flaw. We have already observed this issue in
+> both f_ncm and f_acm on Android devices.
+> 
+> My plan was to merge this fix for f_ncm first and then apply the same
+> pattern to the other affected drivers. However, I am happy to have a
+> more thorough design discussion if you feel using __free()/guard()
+> automatic cleanup is the better path forward.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I think all of them need to be fixed up, and by adding the endpoint
+pointer to the request, that should help make the logic overall for all
+of these drivers simpler and easier to maintain over time.
 
+So yes, if you could do that, it would be wonderful.
 
+thanks,
+
+greg k-h
 
