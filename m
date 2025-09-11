@@ -1,150 +1,147 @@
-Return-Path: <linux-usb+bounces-27917-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27918-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CFE1B529DF
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 09:28:33 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DB18B52A48
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 09:42:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D17604E1618
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 07:28:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 07F884E2727
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 07:42:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 575CC26CE26;
-	Thu, 11 Sep 2025 07:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78CFE2773FC;
+	Thu, 11 Sep 2025 07:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BI34y01B"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NW3mTcLo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B63269B0D
-	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 07:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3E5277C9A
+	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 07:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757575705; cv=none; b=o3vBrfiQdXc86Pw8G+xcoZjL50Kx8E1BdQN1aloPtj6wgxYDsbMfXjY1rlw5pqLRjt0OowZRsc7jO3Xa/7DJ7GyQVT/NhDtHjDqpxsyfbV3o1Y5BcwA6mpLu405sOxaHPt4g6CKD445mnygDM6S3ukOptzLzOQAmSjpzv3orm8g=
+	t=1757576517; cv=none; b=PsaafYLzkQxkDu+ru1tgPk4qNQdF7byA2cJMzxGEw6b/peGdatSVR86Y44fS9N7Nu4Is/by48yR8zgSW1UzfTkkKbgLbDyGf7zlD8dwCA2isFn5hQHl93aiwJZ9/7eOVUA97h05SX1InQy75FJms8WveFjL/DQnr1+0AzjXnkrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757575705; c=relaxed/simple;
-	bh=3LhkY1jX7VWQuXhPNbPkpRjL05D6uPNjtQLzUhymk24=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZvHIfLBXb2n4XbAuJBly7dLxB2JTBeW20rj7P9wXkl1JmBfM01+qgw8ptc35FyoeDgz5NB8Y2p0w2W5zsb3nq05eq0ATz+AilGfqme6fF3sbanBnY3z3/0wi4DBCG8TIHWsKCu3pFHDcJSFNyMMJ6J3QlIfsA96racyl18r219g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BI34y01B; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45dd9d72f61so62205e9.0
-        for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 00:28:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757575702; x=1758180502; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FK7U3lnC3y7/ffQqOSxbeSeWtjBYH2LRmWQkOy2vWj8=;
-        b=BI34y01Bi9b5mt85ULdCsq2yDo6aOmkHLrmKltQbP5knXvX57Hgq+up2ZFKDFy36FM
-         ZY9gZHF6HoKW3adLm+X/mIHntwSx/wRY0QxlfA57Sqfci8Zzl6Y2V0OlAK1FUmZNudpp
-         dANhUrVQE2pLPJ5W0gNUQScgXTBXjUHVxb4f8tPpK42q+SF2RTzujVAs2AXUuU9xzoYR
-         v3ot67AzUlQ64pLDWI1U4bncCeFk9aQKclUhnqlIq4gS2vvYeVFc2fU/1TjVNRZ43sSW
-         8QkO8RbGMnqV814XaXAzYe3vz3p317lkBYPT+zIM+t2dwCzAY6MxwHUFo0C6rUddsnRv
-         7Ycg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757575702; x=1758180502;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FK7U3lnC3y7/ffQqOSxbeSeWtjBYH2LRmWQkOy2vWj8=;
-        b=I6eBSIs6b8Bl6aKaDeWUrHPKFvCkxbfwJTJff6MbcygpDdGmeF2I2JK4nvnGd9tJAI
-         FXu93hRGMEutapBRaZk/l1sYdSqUXMIq01lX3AVmUwMmlHn0UqLvgN03Cjj8p5inpqoq
-         d9iUqeMOXQ/GFb+yIzoYbfQYnGir+we7jHPHwKxfeosYqV6iyDPU1GMj3nUmpwrz1yIT
-         LdKjBQkVkBYqXczrXPYPwd1gVwYA3Q8m3IuzGdEJ5YArZn+fNyV7smobiz1mf8KkAtBm
-         4c3htzq1IdGl5E0v72THDpp8EUy4eCIRMeB+s8F/oyc12+hEpHum5eQxsXlfSi2S0I+H
-         FrHA==
-X-Forwarded-Encrypted: i=1; AJvYcCX3mDhTvfg78fulWzxk4ZFjQ4VCReFCZs9VZR+Vvp+/93x1MXugz0KGT78+TG9XfI/g1M+vEF9fTkc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0Jvuz7B/ArI3Iugm53Anr0/wWKQ9y4Pyw7lsyWYqRzpLubSi4
-	xjMffjC8QnWrFxO+BG//v+lw/w2OS2f9zz5onIecflIHcyPHzXIxPWa7gAfqVelJQlYvvlCc6DW
-	8hCjKPhfuqfhUb+PqxDx7nHHTwitNugoK4AyV6Neu
-X-Gm-Gg: ASbGncsV1qXG1bDiuJyalm98W1m34voJ9JKtHo8h5E4UWj8IesY/9yGt/Ndg4LKVRlG
-	k3N9K/KbOH/6jAsp1TCjiyXSzLwDM1NPCaeczDRD6GSUy7RsFuuxzgkgjz4/Sr0cNn6QVuumEha
-	CuIKBHnSB1+m9CIP5BQMmgxgyt3gaONuBKL79p+MDEdIa56g47eaSZLXv7tnc2zipdI2pm4Ay/I
-	0XQJNJomzUC2oVy63GPzTYFNTQFoJIXehM6uGm3dfPwBSdTVlo9hyYqfuZtkQ==
-X-Google-Smtp-Source: AGHT+IEbjA8wA5uTk3TcHbPBQJWjhclijtbB5//wAB0Y6KJCSvzkuEDQ/JZz09gc9AUpAZcVbdPxutDodlFxxbV1cXQ=
-X-Received: by 2002:a05:600c:c058:b0:45c:b4fb:f0b3 with SMTP id
- 5b1f17b1804b1-45df81fcfe9mr2603385e9.3.1757575702354; Thu, 11 Sep 2025
- 00:28:22 -0700 (PDT)
+	s=arc-20240116; t=1757576517; c=relaxed/simple;
+	bh=1j6Pg/CEMA3AfJZdituR/PA9zmVAVNIKCldPz7vp9sI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pY+lNJ6Z/V6kmBE68REJhyTbhUyuKwgSNlm08fGbnfp8B2/dImLoZRu0sBYFgCYlGI+bhIoE7a9Ol5aYhNkv3GkjXo2oQe+aoiXVvi6g4OsLxjpyOh8KqPkR4Pyx07mlvDGsz1b+0O4YDVTpj2l72e6eiaoUYeXlwfZwANy4e3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NW3mTcLo; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757576515; x=1789112515;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1j6Pg/CEMA3AfJZdituR/PA9zmVAVNIKCldPz7vp9sI=;
+  b=NW3mTcLoaeYklRcqSU9Dz0CGf6rIhF6i65b7/bf6BRR8W9Ew2Sd761WY
+   xRZkj0TZEwDvOcncGWVGdmH4BJC/yRam0EtNIGw13Sqy5ts7mxM8HHCCT
+   WBtqEa2HnlqsAIxuNSjzJZ5Tzam3T4w2F10t4uIsU9Fg35/NpA9My0OuF
+   jeZ/ABizmjKoe2mN74PI5db9tPWqjoYr8mbsiQBcCxnHgayBDEbnFubc1
+   pkd5mOvVYEWDIIVEtBYH8+h55c85Eu/97GEokXVs2nORKdf5puvzXaB1D
+   5hZtExtYzFf2iznwDS3KWYTjst2WlEb8c2FF6ydPxLFfzIiEDliDGpW/s
+   Q==;
+X-CSE-ConnectionGUID: Ru23iMJfR5Ob2B/cihrJeA==
+X-CSE-MsgGUID: Mkau10xsSZ6yItzXVW6nkA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="59837424"
+X-IronPort-AV: E=Sophos;i="6.18,256,1751266800"; 
+   d="scan'208";a="59837424"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 00:41:54 -0700
+X-CSE-ConnectionGUID: P8DbYGsaS++LW4cNJhyuFQ==
+X-CSE-MsgGUID: 587E9xrTRHCh1jouMN6w8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,256,1751266800"; 
+   d="scan'208";a="173684512"
+Received: from smile.fi.intel.com ([10.237.72.51])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 00:41:52 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1uwbwE-000000022JA-0CcE;
+	Thu, 11 Sep 2025 10:41:50 +0300
+Date: Thu, 11 Sep 2025 10:41:49 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+	mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/7] usb: xhci: use '%pad' specifier for DMA address
+ printing
+Message-ID: <aMJ9PbOxn3CCuaYJ@smile.fi.intel.com>
+References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
+ <20250903170127.2190730-3-niklas.neronin@linux.intel.com>
+ <20250909115949.610922a3.michal.pecio@gmail.com>
+ <aMAPkH5-4rLdmx_9@smile.fi.intel.com>
+ <20250909224416.691e47c9.michal.pecio@gmail.com>
+ <20250910075630.0389536f.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250818082722.2952867-1-khtsai@google.com> <2025090657-unpinned-unnatural-2ccd@gregkh>
-In-Reply-To: <2025090657-unpinned-unnatural-2ccd@gregkh>
-From: Kuen-Han Tsai <khtsai@google.com>
-Date: Thu, 11 Sep 2025 15:27:55 +0800
-X-Gm-Features: AS18NWBti6JrawpdlOsgZ6vAT-gYWOrF4Yel8dW_q6Hc4XuwW9RLv4IpCjBtqnk
-Message-ID: <CAKzKK0oyBomOOFGv4LHM18BgN8tS=Mcyok4gfq4q81vgk54iVA@mail.gmail.com>
-Subject: Re: [PATCH] usb: udc: Add trace event for usb_gadget_set_state
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: royluo@google.com, jkeeping@inmusicbrands.com, stern@rowland.harvard.edu, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250910075630.0389536f.michal.pecio@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Greg,
+On Wed, Sep 10, 2025 at 07:56:30AM +0200, Michal Pecio wrote:
+> On Tue, 9 Sep 2025 22:44:16 +0200, Michal Pecio wrote:
+> > On Tue, 9 Sep 2025 14:29:20 +0300, Andy Shevchenko wrote:
+> > > Not really. It prints unnecessary long values on 32-bit machines
+> > > making an impression that something works somewhere in 64-bit
+> > > address space.  
+> > 
+> > The %016llx format you are alluding to is used in two error messages
+> > actually seen by users, that's an issue. My crazy personal preference
+> > would be %08llx, but I concede it's unprofessional, so %pad it seems.
+> 
+> Actually, I take this back.
+> 
+> I think that leading zeros are evil and I agree this message is bad.
+> But I don't understand why 64 bit users should put up with this:
+> 
+> [  140.106751] xhci_hcd 0000:07:00.0: Event dma 0x00000000ffeec7f0 for ep 2 status 13 not part of TD at 00000000ffeec800 - 00000000ffeec800
+> [  140.476573] xhci_hcd 0000:07:00.0: Event dma 0x00000000ffeec1a0 for ep 2 status 13 not part of TD at 00000000ffeec1b0 - 00000000ffeec1b0
+> [  140.502855] xhci_hcd 0000:07:00.0: Event dma 0x00000000ffeecd60 for ep 2 status 13 not part of TD at 00000000ffeecd70 - 00000000ffeecd70
+> [  141.225300] xhci_hcd 0000:07:00.0: Event dma 0x00000000ffeeb970 for ep 2 status 13 not part of TD at 00000000ffeeb980 - 00000000ffeeb980
+> 
+> when we can have this:
+> 
+> [  419.967755] xhci_hcd 0000:07:00.0: Event dma 0xffc34760 for ep 2 status 13 not part of TD at 0xffc34770 - 0xffc34770
+> [  420.100611] xhci_hcd 0000:07:00.0: Event dma 0xffc34bc0 for ep 2 status 13 not part of TD at 0xffc34bd0 - 0xffc34bd0
+> [  420.360917] xhci_hcd 0000:07:00.0: Event dma 0xffc34e70 for ep 2 status 13 not part of TD at 0xffc34e80 - 0xffc34e80
+> [  421.719530] xhci_hcd 0000:07:00.0: Event dma 0xffc35770 for ep 2 status 13 not part of TD at 0xffc35780 - 0xffc35780
+> 
+> with a simple change (anything wrong with u64 cast here?):
+> 
+> -       xhci_err(xhci, "Event dma %pad for ep %d status %d not part of TD at %016llx - %016llx\n",
+> -                &ep_trb_dma, ep_index, trb_comp_code,
+> +       xhci_err(xhci, "Event dma %#08llx for ep %d status %d not part of TD at %#08llx - %#08llx\n",
 
-On Sat, Sep 6, 2025 at 9:16=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
- wrote:
->
-> On Mon, Aug 18, 2025 at 04:27:19PM +0800, Kuen-Han Tsai wrote:
-> > While the userspace program can be notified of gadget state changes,
-> > timing issue can lead to missed transitions when reading the state
-> > value.
-> >
-> > Introduce a trace event for usb_gadget_set_state to reliably track stat=
-e
-> > transitions.
-> >
-> > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
-> > ---
-> >  drivers/usb/gadget/udc/core.c  | 1 +
-> >  drivers/usb/gadget/udc/trace.h | 5 +++++
-> >  2 files changed, 6 insertions(+)
-> >
-> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/cor=
-e.c
-> > index d709e24c1fd4..e28fea614496 100644
-> > --- a/drivers/usb/gadget/udc/core.c
-> > +++ b/drivers/usb/gadget/udc/core.c
-> > @@ -1125,6 +1125,7 @@ void usb_gadget_set_state(struct usb_gadget *gadg=
-et,
-> >  {
-> >       gadget->state =3D state;
-> >       schedule_work(&gadget->work);
-> > +     trace_usb_gadget_set_state(gadget, 0);
->
-> Will this show the state the gadget has been set to?  And why not just
-> do that in the work callback, as that is when it really happens.
+How is 0 will be printed with %#08x?
 
-Yes, it shows the new state by logging the state field from the gadget obje=
-ct.
+> +                (u64) ep_trb_dma, ep_index, trb_comp_code,
+> 
+> These zeros only add noise, and in many cases make difference between
+> line wrapping or not because this is longer than 99% of kernel messages
+> and some people want their terminal window not to take the whole screen.
 
-The work callback is for handling asynchronous sysfs notifications
-that occur later. Placing the tracepoint here accurately reflects when
-the state change actually happens.
+I disagree on this. The 64-bit platforms are 64-bit. If the address in use is
+_capable_ of 64-bit, it should be printed as 64-bit. Otherwise make it u32 in
+the code and then I will agree with you.
 
->
-> What is the output of this trace line?
->
+> The main thing we care about here are the last 3-4 digits and we could
+> have made it little more than (ep_trb_dma & 0xffff) long ago, but then
+> Niklas asked "what about correlation with tracing/debugfs/dyndbg?", so
+> it was left the way it is.
 
-The output looks like
+-- 
+With Best Regards,
+Andy Shevchenko
 
-usb_gadget_set_state: speed 5/5 state 5 100mA
-[sg:self-powered:activated:connected] --> 0
-usb_gadget_set_state: speed 5/5 state 6 100mA
-[sg:self-powered:activated:connected] --> 0
-usb_gadget_set_state: speed 5/5 state 7 100mA
-[sg:self-powered:activated:connected] --> 0
-usb_gadget_set_state: speed 5/5 state 7 900mA
-[sg:bus-powered:activated:connected] --> 0
 
-Regards,
-Kuen-Han
 
