@@ -1,108 +1,145 @@
-Return-Path: <linux-usb+bounces-27940-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27941-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ADD4B533CE
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 15:31:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3A9CB53416
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 15:43:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39305487F9D
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 13:31:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FF0D1CC1519
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 13:43:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F2C72EDD64;
-	Thu, 11 Sep 2025 13:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 754EE335BC4;
+	Thu, 11 Sep 2025 13:41:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="d+owmBMM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ai8tWGpS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E601E87B;
-	Thu, 11 Sep 2025 13:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E0C33470A;
+	Thu, 11 Sep 2025 13:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757597511; cv=none; b=iZ2sr1CigB+JvHEj9SkiQk0ZBTTvvBVx+UeJi85Ba8r9TN7dY8kjdGAreJIH3spxEDJxWoPjeaslz8W68Ij7pepkD8PAfHBl8RpqRHehuJSWQw5ZlrRv/H8NGSRnnjhEXsou9hsaEn2gd4UEP/pG8g/EvoFOz4K8WF+x1kupCCM=
+	t=1757598064; cv=none; b=C7lbHeCPPr7ClhUWsAIVW0U70iapTPs3JdinLFdgvZjcx7XPdsRPD8VHJfz8xRkDbRS8iJbNGQWSQxEfAXG9wO1w8lEuwJ8107pkBvtgmbXqPzTYgLllqDOrft9G/o26zfqMKZF9vT3G+aWohwYnhh0yGFATfVpOjNMpv0NT7Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757597511; c=relaxed/simple;
-	bh=bdkAfeqOtLrw8Rk5fQ1/9AGIZ5sgo/ymKSpCkXno8jU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X6H6rneVk/QPNabVlfWdOARWtnYD82/q5bMjlhxnGAZnqQErBhQRFSJ5UWsPfkd95yuG7qF2qBT/RlZ+VlPXDL95MRwWBvuQos+oqivgAk5cOUt8XZQpn7n29IVPPsUQtYQ/CFx1h+uArAR/1Wy4Lw5UMTv8T+3tZO3Lj4eDe+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=d+owmBMM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AA7DC4CEF0;
-	Thu, 11 Sep 2025 13:31:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1757597511;
-	bh=bdkAfeqOtLrw8Rk5fQ1/9AGIZ5sgo/ymKSpCkXno8jU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d+owmBMMaoEYzj7ijuFcfepx8EZTCenoIM/Aas2XsSCUme6oQf3QNm9c+C5pmAVTy
-	 1nI6kLuQiegxBIBwQQm1ocG9LPSAfY0JgGVHgQ2LZvKmjfKInjJLLQnSDinuVDIkje
-	 kHIztKDvS5rbYjRd2ciomJgpFwf99XX5bQ39NvOE=
-Date: Thu, 11 Sep 2025 15:31:48 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Hans de Goede <hansg@kernel.org>, Richard Hughes <rhughes@redhat.com>,
-	linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 2/3] gpio: Add Intel USBIO GPIO driver
-Message-ID: <2025091139-scalping-twenty-93d2@gregkh>
-References: <20250911131832.59335-1-hansg@kernel.org>
- <20250911131832.59335-3-hansg@kernel.org>
- <CAMRc=McKOTWxu=M0S0p0Uyhod-h4mNH9QfsLsycN4vbHJPtgeQ@mail.gmail.com>
+	s=arc-20240116; t=1757598064; c=relaxed/simple;
+	bh=4GOimZuCjMjnQDw/vO7zqnA0XrzTPhX1XwC3bOoutuM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fdHmrLRHb9wxqUd3uRjUrgDxu7HQcM0Pgwfv6S0nN8wEPbAmdKYAak214eq1uszG8f5Hy1RZ+XRjhvsLZGl5doBEIz9jH7CSEsi13Om+/sr7sX6jSBGUwmZs3gbKTzjg8oyy4BICrEP/vb+5uHTSwd+b+AGkgd3vUtgCGnu48vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ai8tWGpS; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-544bac3caf2so1376406e0c.0;
+        Thu, 11 Sep 2025 06:41:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757598061; x=1758202861; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QFoqqg9HB/F9uRN/q/qwY87bYq3FGS0iKiVdBCe8Ns4=;
+        b=Ai8tWGpSIV4cVAmfRgWN72jhVjo6OkPFn0z5gjRATZekRAzzsa5r5Fj8iMAppofW5a
+         Rx6bGfOCyLt1sBWQnRIpAsMTSEVOY/0wxru+Z2Rh1nGzpKOoLNfqHT59GX/yB5MbNEkA
+         rj+W4QcgcYZCzeg/+Zmffb7VpNr/uXVcJsEWUOzKdcP20Pu6Y030Hkpv1ep+elJaUWit
+         u3MWPact9IkKY1fYpEHC5OJQnvS2abdEC5ekVd/I20ZSUSla1zYLmFy9rYvP0tifOuvx
+         bwOQYqxmcOD/WzgziHlqRDY2b0KD/D4SnH5h4MvFWepDmFSNwO5j1ki0YWGw9iepy2yN
+         qhcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757598061; x=1758202861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QFoqqg9HB/F9uRN/q/qwY87bYq3FGS0iKiVdBCe8Ns4=;
+        b=rFs3/8K/FsmmwOEhQqpn66+U4JfMNO8564sBa6XTyGtsfZhWrAKKm3OV9uEoseqgxT
+         MOXZzr/dxZnqk/SpMolfTXTRQFanVQbQIlQSJpK5EukhOMFQR1ogbAnCqVcqkvcCHE45
+         mhn0ZIQx2Hl1CaPu8fydQcypeCZEkNZDsvkpONl0KjsfoCouQpOwgq3eYWUhRbol/8JJ
+         iYom0foWg+/oYUb+5cRJ2LDH6GWhUUlPzJOWfJ3ORmckhaBBGMRDel7NfMuf0CMr2cpM
+         /1EISTseR0oZbwJzonKVq1kirN/YJTHChq9UOiVjEF19ePyochxM8XKfjp03CHTwQWQR
+         UfRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVLFYV3L5DY4nnj4QuaSJdDr9S9ztMSn5OS7r6sqG8/wuxMpgdRVjGsuGGajb/QpHr55JZie4zNM1M=@vger.kernel.org, AJvYcCW3g2vTkL31kEUizBSiqrbwnoHL0GsEJxpORsdpX7tRbnK1iSF23azfNzXMgJ9Ss76/thvYxd0sqfv7@vger.kernel.org, AJvYcCWvmGsVUVo+/zLIBBefUiWX0J9WLa2dhg6S8vZyJPZtWEZ0ogCmN2Db2ZA4zFtTif+/PykULUUsDB46aJs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZtzFUwlxMV1jfLhEX/5nntyhl5s5r7VsOvVDdHiQhjbetOpZI
+	FeoJ4+4lJlDWQm7HPF/hCCygmcb96qb/FYgZga3vq/OQnRD1q3WI3UzG09cBEzqlDCMHt58irfd
+	mMznONdIrC4kAxUeRnpkPsN3PfxfDbwQ=
+X-Gm-Gg: ASbGncvVYvCLm12IuCwJ1A+9DMOFPHxNQbTHl5m5Wr0M+GZTw20tJ5NW73JTpV2PpEX
+	QeIJiygrHqpKKSO3qr22BI2KpoibjDMx2yNsxYHIHD8N+agKagmWK86BtSpQM4/5oNlSJ1Y3jxV
+	k4t6SAqkyKL9VYNGtjIqhujMzslhMDl0BwB2X7m+NW0KeLfMP62kwCvThSIT036LuRLG/lEZIQy
+	TIBUb9p5gQ8VbU3E/ZMMReNyi+dd7snNZIIrSoSyPUrpYxIJS9Mj2iP
+X-Google-Smtp-Source: AGHT+IGrWc6XTmA/v3/IdSr1elQps78uszCOTQk4mSLJ3DEhbUGYLXFk2shr6X2ypJW7j1eC7QInQ9A102NMrOsd8Qc=
+X-Received: by 2002:a05:6122:2053:b0:544:9147:52 with SMTP id
+ 71dfb90a1353d-54a098ba0cdmr934429e0c.5.1757598061035; Thu, 11 Sep 2025
+ 06:41:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=McKOTWxu=M0S0p0Uyhod-h4mNH9QfsLsycN4vbHJPtgeQ@mail.gmail.com>
+References: <385dccf3-234a-4f83-9610-81ac30bf1466@rowland.harvard.edu>
+ <20250909161901.10733-1-ryanzhou54@gmail.com> <20250911013242.oxm2kwfaqvmybbhk@synopsys.com>
+In-Reply-To: <20250911013242.oxm2kwfaqvmybbhk@synopsys.com>
+From: ryan zhou <ryanzhou54@gmail.com>
+Date: Thu, 11 Sep 2025 21:40:48 +0800
+X-Gm-Features: AS18NWCKtePHYMAduUSHTwN9PCNXyjxTh0Zg1L3vfISxH0xuTEalPCDfAK8rEgY
+Message-ID: <CAPwe5RNddK2=bvrd6h_xyxH+SDDx7kx2tyDKRhyuDGvHYewGvg@mail.gmail.com>
+Subject: Re: [PATCH v2] drvier: usb: dwc3: Fix runtime PM trying to activate
+ child device xxx.dwc3 but parent is not active
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>, 
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, "rafael@kernel.org" <rafael@kernel.org>, 
+	"royluo@google.com" <royluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 11, 2025 at 09:27:19AM -0400, Bartosz Golaszewski wrote:
-> On Thu, 11 Sep 2025 15:18:31 +0200, Hans de Goede <hansg@kernel.org> said:
-> > From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> =E4=BA=8E2025=E5=B9=B49=E6=9C=8811=
+=E6=97=A5=E5=91=A8=E5=9B=9B 09:32=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Wed, Sep 10, 2025, Ryan Zhou wrote:
+> > Issue description:During the wake-up sequence, if the system invokes
+> >  dwc3->resume and detects that the parent device of dwc3 is in a
+> > runtime suspend state, the system will generate an error: runtime PM
+> > trying to activate child device xxx.dwc3 but parent is not active.
 > >
-> > Add a a driver for the GPIO auxbus child device of the Intel USBIO USB
-> > IO-expander used by the MIPI cameras on various new (Meteor Lake and
-> > later) Intel laptops.
+> > Solution:At the dwc3->resume entry point, if the dwc3 controller
+> > is detected in a suspended state, the function shall return
+> > immediately without executing any further operations.
 > >
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Co-developed-by: Hans de Goede <hansg@kernel.org>
-> > Signed-off-by: Hans de Goede <hansg@kernel.org>
-> > Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+> > Signed-off-by: Ryan Zhou <ryanzhou54@gmail.com>
 > > ---
-> > Changes in v5:
-> > - Move GPIO_USBIO Kconfig option under 'menu "USB GPIO expanders"'
+> >  drivers/usb/dwc3/core.c | 3 +++
+> >  1 file changed, 3 insertions(+)
 > >
-> > Changes in v4:
-> > - Drop include <linux/dev_printk.h>, unneeded auxiliary_set_drvdata()
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 370fc524a468..06a6f8a67129 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -2687,6 +2687,9 @@ int dwc3_pm_resume(struct dwc3 *dwc)
+> >       struct device *dev =3D dwc->dev;
+> >       int             ret =3D 0;
 > >
-> > Changes in v3:
-> > - Drop (offset >= gc->ngpio) check and make usbio_gpio_get_bank_and_pin()
-> >   return void
-> > - Propagate usbio_gpio_set() ret val in usbio_gpio_direction_output()
-> > - Use devm_gpiochip_add_data() and drop auxiliary_driver remove() callback
-> >
-> > Changes in v2:
-> > - Add a config_mutex protect usbio_gpio_update_config() calls, which
-> >   read-modify-write banks[x].config, racing with each other
-> > - Adjust usbio_gpio_get() to have an int return value and propagate the
-> >   usbio_control_msg() return value
-> > - Use __le16, __le32 type + cpu_to_le16() and friends for on wire words
-> > - Some small style fixes from Sakari's review
-> 
-> If Greg wants to take it:
-> 
-> Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> or I can take it once patch 1/3 is in an immutable branch.
+> > +     if (pm_runtime_suspended(dev))
+> > +             return ret;
+> > +
+>
+> Is this a documented behavior where the device should remain runtime
+> suspend on system resume? I feel that that this should be configurable
+> by the user or defined the PM core. I don't think we should change
+> default behavior here just to workaround the issue that we're facing.
 
-I'll just take it, simpler that way, thanks!
+No documentation was found, but modifying the runtime suspend state
+after wakeup from sleep seems unnecessary if the device was already
+in runtime suspend before sleep.
 
-greg k-h
+> What if the user wants to keep the old behavior and resume up the device
+> on system resume?
+For USB devices, RPM resume should be initiated by plug/unplug events,
+not PM resume when the device is physically disconnected.
+
+
+Thanks,
+
+Ryan
 
