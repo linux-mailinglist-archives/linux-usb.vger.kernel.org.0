@@ -1,206 +1,150 @@
-Return-Path: <linux-usb+bounces-27915-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27916-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2ACBB52803
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 07:07:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C324B5293B
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 08:50:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A424465A51
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 05:07:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD26B3B85CA
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 06:50:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B61A23A9AE;
-	Thu, 11 Sep 2025 05:07:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81928257AC1;
+	Thu, 11 Sep 2025 06:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Gx4CKW4v"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0gwuG8z0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5D9168BD;
-	Thu, 11 Sep 2025 05:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577D9145A05
+	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 06:50:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757567270; cv=none; b=FzL8+XzN3NBx73T5rNEIwKeZAE9HsBY0UAkOjuWJqCRfRdZBLbBvXwF4k7eXkrIG7KHwiOXDz0ZyE5rDai6vgWCxnZ/cU8n87pMgAt3hskwDcnYKu2nDGhnKhoRKB9GiODTGOmzX+/jwHSQNUYcdn1FH0ZYYQ/xdX5xt99ogOMA=
+	t=1757573446; cv=none; b=jq3Y9H6p6PhbnM273TmrUpSnktl9sizsI8rGjEYkV8hx2JRhV0DkZsu/GC8JFfFOJ56Yyj987IDSpYnEV9pBRjTBL6MMjJx0PZJB9bjhmZSB458QzQKX7piVLI/05Nxl5EWNw2tKvuwcb22VmWMMY2PULwTi8YRh3t93Xro/fOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757567270; c=relaxed/simple;
-	bh=KH2wkFXlVei/WW7nagdlfBjNyhLSrk/crkoND0qCP+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ssfS8eWMPDjZoCA1a1ZnafDw8dN5u1TGLiahCYSX5Wperb/G6HlQjeLbTJZ2jD3AydNFzgwee75B//RyrpZp78+3buLnUTxdFPuBUo8ZY5aykOZaBz9CFxguxQY2eJYhgVi2xFmTQ2QkP9BX1uzw7/EklRjTi60Y8JsaZLOSxJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Gx4CKW4v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BAD5C4CEF1;
-	Thu, 11 Sep 2025 05:07:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1757567270;
-	bh=KH2wkFXlVei/WW7nagdlfBjNyhLSrk/crkoND0qCP+I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gx4CKW4v7LDVwHiGe+yrfg/EKMy6SQOWzI9wVFTzfs8d85X8JOGqWJmH7Ci+sn30B
-	 ZFqInQWLEWQIJg4PiOS0fZk9LV4XHiCIAZQOkWZg3ZhrI3sB8XIOpz44/yHtQoNPxp
-	 gzOLg4hUPfVoHik3apNxpKzRAAKbW+F79n/+VFo4=
-Date: Thu, 11 Sep 2025 07:07:46 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	Guenter Roeck <groeck@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] usb: typec: Implement alternate mode priority
- handling
-Message-ID: <2025091117-herring-crazy-d13c@gregkh>
-References: <20250905142206.4105351-1-akuchynski@chromium.org>
- <20250905142206.4105351-5-akuchynski@chromium.org>
- <2025091029-snarl-decimal-aea2@gregkh>
- <CAMMMRMdOiGQdmgQ7COa1Nf9Rh9BQLD79TJ77VW4ejadx_bNyeg@mail.gmail.com>
+	s=arc-20240116; t=1757573446; c=relaxed/simple;
+	bh=Qmej7+PbGLzKdrf5NwREGPDWn8BnQ+ox2SidyFmQdxw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fvEjkOO51E9DoMy06MV7qufPpMkXAIc3LwbQYzhdXD1nki2ttXoTJvPHUA6KCaqDCpwoOdvoNQZlc9REH2Dy8IuOFAbg0AatySdDnMLi2wz8HCbsaVBhqZpmbJzJuNlUEy1cyeMQn7HYxkKYDSrm52ChXzXBOUZ1ihplu8NwX+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0gwuG8z0; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45de54bfc36so52725e9.0
+        for <linux-usb@vger.kernel.org>; Wed, 10 Sep 2025 23:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1757573443; x=1758178243; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FYiFEl1cKyTzdaxqboCqwBqA3eL+ISbCaMPkWSxLypQ=;
+        b=0gwuG8z0AUSg4EHovM95JhXgLPVSeaWXR5PqvVxEiUEQ3EKiAKD5/SQnZFhC7jUKu4
+         uJ11zOhwYVKYt/hTh468v5sXKrRz5SWjTFCatC2hjSiN6nT/6NKAWRoUeeAf5oiVDw8K
+         Dv6jdUxmbkdGz5A+e5mVF/ornV6ESQhtW82KGOzavRgZqRu2vW5CyuDQxDk/ILeWdM0o
+         le3SHHgFRtqpS4Ej0HFvNFJrcvswh1v7NFBacFmuhN2/tq7V56mt2MVrsNopDR3mFYOn
+         o11ZYItvOLmiwwz1MKLxRS09LI1uNHYeplX81IEGmC10uWt8eJccdHkI1lTYiK5usykG
+         jF6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757573443; x=1758178243;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FYiFEl1cKyTzdaxqboCqwBqA3eL+ISbCaMPkWSxLypQ=;
+        b=Dk+hZo1uCBDTOu4vABGhJ8tH8xjAffCZsb4luxM+LyAGtnuo+oFRIqrtw9GttFbVBs
+         PyS2dVLQDIbcXzpuZbFGmHeWLNKETzDHBZgD64zrv/dikIc/fPUK5L1ZX5c5CC2z42V9
+         epCTT7EfvJjxKnPBcxSXXPPFrNaCbL72GKNgdSA2T1s/04zKkroeOKd4afuuLgB79wQ4
+         agmSkMhGYtAq7uOoulNSioHtTAngqSxppSben+T5l9k3042vD8z3wk390PxHX/8If/sk
+         fVoJqMPcZzi43liw8Il3GqezkTMbRhODwUpYZNFA92pmIxBfs096ClqCG1e+VsGB5wv4
+         bgBg==
+X-Forwarded-Encrypted: i=1; AJvYcCW4F5CTgXkokepfFLtQ6OgpBKRz6gu9zuFXLneK8pz4FRJycNnZj0+FYIAmfICwJ434bj4yrekNbrM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl/4GPvn76bla20ow+q9KGl2BrYqa0UILtlVMehGuMzGBB39ME
+	8jul68WwsTtinNhuWFMVnY6MGPy++VTVO9/9o81Bv2lM+eYz+ksAE6o3eJF0bJ9x35RMqi4AsFV
+	ZZVUy+bp5hWuUQuyUeZMGEXzUlti+KuYm9ylUKwv6
+X-Gm-Gg: ASbGncvDNgmE3EFtu3B0Mz8TORbSKsRZBoVcst7c8+DHxgXwW5AIXBxishWLRUSGBA6
+	JB6hhPNrp3A/r3/fZiJsPCRBsBgQX3RI5YiZ4O3kV1tm/ZwnzDqJj95OXxjMxqT4MqBtsezEPnp
+	XzJ68bG4FeTHexvEbYwTt2+8CCAm8zPlP1cgG4CgSRyDGxlNF9kgC6mahaS5AB4CMUSHl3kSn32
+	q0H9VIIZjeXz4Vf9naifIFgdLPfQ4qI3GmxAznw
+X-Google-Smtp-Source: AGHT+IFJbf1IyXGBCFdg7upsR0ji8KKP+f1JtPl42/vxHPTsLQ1LycUtAnMTQe1qYHPH1lEHLbkyiQchIBkA8tyrg54=
+X-Received: by 2002:a05:600c:12c9:b0:45d:cfca:a92d with SMTP id
+ 5b1f17b1804b1-45df74af1b6mr2252505e9.2.1757573442443; Wed, 10 Sep 2025
+ 23:50:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMMMRMdOiGQdmgQ7COa1Nf9Rh9BQLD79TJ77VW4ejadx_bNyeg@mail.gmail.com>
+References: <20250904114854.1913155-1-khtsai@google.com> <2025090651-unifier-award-3e0a@gregkh>
+In-Reply-To: <2025090651-unifier-award-3e0a@gregkh>
+From: Kuen-Han Tsai <khtsai@google.com>
+Date: Thu, 11 Sep 2025 14:50:15 +0800
+X-Gm-Features: AS18NWAMPsNVcx8vukdIJf2WC9FuB49krMkFwHqi-L2lEbkeXdxFuuWz00OB9vc
+Message-ID: <CAKzKK0oi85bnyT3Lq_TXz8YwFrmBxQd8K1q7hRDv-Oww75F_tQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: f_ncm: Fix NPE in ncm_bind error path
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: zack.rusin@broadcom.com, krzysztof.kozlowski@linaro.org, 
+	namcao@linutronix.de, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 10, 2025 at 07:35:42PM +0000, Andrei Kuchynski wrote:
-> On Wed, Sep 10, 2025 at 1:31 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
+Hi Greg,
+
+On Sat, Sep 6, 2025 at 8:15=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
+ wrote:
+>
+> On Thu, Sep 04, 2025 at 07:46:13PM +0800, Kuen-Han Tsai wrote:
+> > When an ncm_bind/unbind cycle occurs, the ncm->notify_req pointer is
+> > left pointing to a stale address. If a subsequent call to ncm_bind()
+> > fails to allocate the endpoints, the function jumps to the unified erro=
+r
+> > label. The cleanup code sees the stale ncm->notify_req pointer and call=
+s
+> > usb_ep_free_request().
 > >
-> > On Fri, Sep 05, 2025 at 02:22:05PM +0000, Andrei Kuchynski wrote:
-> > > This patch introduces APIs to manage the priority of USB Type-C alternate
-> > > modes. These APIs allow for setting and retrieving a priority number for
-> > > each mode. If a new priority value conflicts with an existing mode's
-> > > priority, the priorities of the conflicting mode and all subsequent modes
-> > > are automatically incremented to ensure uniqueness.
-> > >
-> > > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> > > ---
-> > >  drivers/usb/typec/Makefile         |  2 +-
-> > >  drivers/usb/typec/mode_selection.c | 38 ++++++++++++++++++++++++++++++
-> > >  drivers/usb/typec/mode_selection.h |  6 +++++
-> > >  include/linux/usb/typec_altmode.h  |  1 +
-> > >  4 files changed, 46 insertions(+), 1 deletion(-)
-> > >  create mode 100644 drivers/usb/typec/mode_selection.c
-> > >  create mode 100644 drivers/usb/typec/mode_selection.h
-> > >
-> > > diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-> > > index 7a368fea61bc..8a6a1c663eb6 100644
-> > > --- a/drivers/usb/typec/Makefile
-> > > +++ b/drivers/usb/typec/Makefile
-> > > @@ -1,6 +1,6 @@
-> > >  # SPDX-License-Identifier: GPL-2.0
-> > >  obj-$(CONFIG_TYPEC)          += typec.o
-> > > -typec-y                              := class.o mux.o bus.o pd.o retimer.o
-> > > +typec-y                              := class.o mux.o bus.o pd.o retimer.o mode_selection.o
-> > >  typec-$(CONFIG_ACPI)         += port-mapper.o
-> > >  obj-$(CONFIG_TYPEC)          += altmodes/
-> > >  obj-$(CONFIG_TYPEC_TCPM)     += tcpm/
-> > > diff --git a/drivers/usb/typec/mode_selection.c b/drivers/usb/typec/mode_selection.c
-> > > new file mode 100644
-> > > index 000000000000..2179bf25f5d4
-> > > --- /dev/null
-> > > +++ b/drivers/usb/typec/mode_selection.c
-> > > @@ -0,0 +1,38 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Copyright 2025 Google LLC.
-> > > + */
-> > > +
-> > > +#include "mode_selection.h"
-> > > +#include "class.h"
-> > > +#include "bus.h"
-> > > +
-> > > +static int increment_duplicated_priority(struct device *dev, void *data)
-> > > +{
-> > > +     struct typec_altmode **alt_target = (struct typec_altmode **)data;
-> > > +
-> > > +     if (is_typec_altmode(dev)) {
-> > > +             struct typec_altmode *alt = to_typec_altmode(dev);
-> > > +
-> > > +             if (alt != *alt_target && alt->priority == (*alt_target)->priority) {
-> > > +                     alt->priority++;
-> > > +                     *alt_target = alt;
-> > > +                     return 1;
-> > > +             }
-> > > +     }
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +void typec_mode_set_priority(struct typec_altmode *alt,
-> > > +             const unsigned int priority)
-> > > +{
-> > > +     struct typec_port *port = to_typec_port(alt->dev.parent);
-> > > +     int res = 1;
-> > > +
-> > > +     alt->priority = priority;
-> > > +
-> > > +     while (res)
-> > > +             res = device_for_each_child(&port->dev, &alt,
-> > > +                             increment_duplicated_priority);
-> > > +}
-> > > diff --git a/drivers/usb/typec/mode_selection.h b/drivers/usb/typec/mode_selection.h
-> > > new file mode 100644
-> > > index 000000000000..cbf5a37e6404
-> > > --- /dev/null
-> > > +++ b/drivers/usb/typec/mode_selection.h
-> > > @@ -0,0 +1,6 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +
-> > > +#include <linux/usb/typec_altmode.h>
-> > > +
-> > > +void typec_mode_set_priority(struct typec_altmode *alt,
-> > > +             const unsigned int priority);
-> > > diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-> > > index b3c0866ea70f..571c6e00b54f 100644
-> > > --- a/include/linux/usb/typec_altmode.h
-> > > +++ b/include/linux/usb/typec_altmode.h
-> > > @@ -28,6 +28,7 @@ struct typec_altmode {
-> > >       int                             mode;
-> > >       u32                             vdo;
-> > >       unsigned int                    active:1;
-> > > +     unsigned int                    priority;
+> > This results in a NPE because it attempts to access the free_request
+> > function through the endpoint's operations table (ep->ops), which is
+> > NULL.
 > >
-> > What is the range of this?  And this value is only incremented, never
-> > decremented?
-> >
-> 
-> The range extends from 0 to UINT_MAX. The value is only incremented.
-> The only exception is that If the user sets UINT_MAX for two alternate
-> modes in turn, the priority of the first mode becomes 0. This does not
-> break the algorithm, and the user can check all priorities via
-> ‘priority’ attributes.
+> > Refactor the error path to use cascading goto labels, ensuring that
+> > resources are freed in reverse order of allocation. Besides, explicitly
+> > set pointers to NULL after freeing them.
+>
+> Why must the pointers be set to NULL?  What is checking and requiring
+> that?
 
-Why not use u32 to define a sane range?  Or u8?  How many different
-priorities will actually be used in the real world?
+I set them to null as a standard safety measure to prevent potential
+use-after-free issues. I can remove it if you prefer.
 
-And what happens when it wraps?
+>
+> And this unwinding is tailor-made for the guard() type of logic, why not
+> convert this code to do that instead, which will fix all of these bugs
+> automatically, right?
 
-> I am unsure if a check for this specific case is necessary, as it
-> would require examining priorities across all modes, not just a simple
-> 'if' statement.
-> There are a few ideas in this algorithm:
-> - all priorities must always be valid and unique
+The __free() cleanup mechanism is unfortunately infeasible in this
+case. The usb_ep_free_request(ep, req) requires two parameters, but
+the automatic cleanup mechanism only needs one: the resource being
+freed.
 
-Is that true?  Where is that validated?
+Since the struct usb_request doesn't contain the pointer to its
+associated endpoint, the @free function cannot retrieve the ep pointer
+it needs for the cleanup call.  We would need to add an endpoint
+pointer to usb_request to make it work. However, this will be a
+significant change and we might also need to refactor drivers that use
+the usb_ep_free_request(ep, req), usb_ep_queue(ep, req) and
+usb_ep_dequeue(ep, req) as the endpoint parameter is no longer needed.
 
-> - no unnecessary restrictions for the user
+I also want to point out that this bug isn't specific to the f_ncm
+driver. The f_acm, f_rndis and f_ecm are also vulnerable because their
+bind paths have the same flaw. We have already observed this issue in
+both f_ncm and f_acm on Android devices.
 
-What does the user actually want to do here?
+My plan was to merge this fix for f_ncm first and then apply the same
+pattern to the other affected drivers. However, I am happy to have a
+more thorough design discussion if you feel using __free()/guard()
+automatic cleanup is the better path forward.
 
-> - as simple as possible
-
-But not too simple :)
-
-thanks,
-
-greg k-h
+Regards,
+Kuen-Han
 
