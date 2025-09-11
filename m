@@ -1,155 +1,116 @@
-Return-Path: <linux-usb+bounces-27962-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27963-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 857F9B535F6
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 16:42:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22534B53601
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 16:43:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74E3E5A66B5
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 14:40:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7237188C348
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Sep 2025 14:43:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 348EC3431E4;
-	Thu, 11 Sep 2025 14:39:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FC1A341656;
+	Thu, 11 Sep 2025 14:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="r769PxGr"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="k9acTOFS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86865338F4E;
-	Thu, 11 Sep 2025 14:39:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028361FE44A
+	for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 14:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757601576; cv=none; b=XUwv8XhzSY5n0HpFgVHAb0ioeP76xvXhFRgDG8+wcwEUU/eXRRfoKrLLEA/lK31cq6btypbTBb9kLAMAlZMcQ3ANiivAID79hjUmHl9P7c4dRevcbL0O1EZSNYpImIEupUBkY1eamisHn34oeHQm+omPDeTadhYfQCrOk88k/0g=
+	t=1757601792; cv=none; b=p7WlMO4B01yaB/p58BNXXs/BfWD2xzsEMBnE2eBXu/q/EeBkPIoLPTQsccWlCuQZuy8u3okUJrhDjPz5abvaoxBwd04+9ym1GSMyUDP8cNV1oD2Ld/8seXwFEzb/1jay9f9KWKWPKuDSzLGD8akpjfY1buYHB9C5H+XJCJ+TOUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757601576; c=relaxed/simple;
-	bh=mPhRSz02axb+92Rdqq5SC3Csl0OIf9zO1JftDdB061w=;
+	s=arc-20240116; t=1757601792; c=relaxed/simple;
+	bh=72IiQUsPXoMJq5hAR0wcPhwXrau91fca7fQ408J4nl8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jkGSlMZLOtvijB+G//aDrUSikX1YOvwDkC6Fst/Mlyzv7UN4xNIIqrdnA1+Pzx/vpFu0hOwUSSAElj/yPTLVEsqqg5D9MbSJide/dXJXXwsxOGtNzXUr+AD5Su7PRJ+sDjnuPv5PmSsnpgr3WF14/TcF6DN3xZ/hfn3V83yaKLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=r769PxGr; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=VeF93NLQYati3cJU4QRm7yhxeHlkMwFBcqHspj8dzm8=; b=r769PxGraMr7edBlBl3w5COYwA
-	PgRQDWnmRPr6Rc/G9jnT0MqljaRIo4oiEVXWAnq5xce8kTKUu01qlJkKIElfQWRK8kL2LQpNltRZv
-	WHSfXSUDk4liMET5ouUHb935XWjHX1b7Dd+jcF+W0o/kIHx9Bv/X/h3a7SLCrVieDy1p/fcrz8JrG
-	PBD8RWUG6yunwi9moF6PZyJqtw9CZafMEmEKo8t79S0DSrG6IhfgLfE6IxQIVzVylMTlqcPpUaOw4
-	dAMI1l0zwKh+xOYTRW3gJbcVOJjV9gzaVc+G97ADOQ2uBErKFpXt8XJHoDB/D1Rtps70N6TGl9Q+p
-	Z+hTrM2w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55722)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1uwiSK-000000003Cw-3C4A;
-	Thu, 11 Sep 2025 15:39:24 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1uwiSG-000000002QC-2K8T;
-	Thu, 11 Sep 2025 15:39:20 +0100
-Date: Thu, 11 Sep 2025 15:39:20 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
-	stable@vger.kernel.org, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	Lukas Wunner <lukas@wunner.de>, Xu Yang <xu.yang_2@nxp.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
- PM to avoid MDIO runtime PM wakeups
-Message-ID: <aMLfGPIpWKwZszrY@shell.armlinux.org.uk>
-References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
- <CGME20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94@eucas1p2.samsung.com>
- <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=pnq+a4dhhA2uCrPa8268KmGajXMF3Lqr9rwkxnRYCvmHzJimV2iybb34HyesLBQLGAD/WJG6IosTYdYfGMHcpvN/EC3I9fXxUBT4HODX5IzkpohmshgHHb4o/MsAp7RJSiZd75k8pU7KS5XMz5xfD91Wm5MM6DEBCMqrd93LQpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=k9acTOFS; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=72Ii
+	QUsPXoMJq5hAR0wcPhwXrau91fca7fQ408J4nl8=; b=k9acTOFSwd0N9zSy9Oxs
+	ohOGSYqJFYqgyrRQeZFSo8yiNFv/ropt/BJ4rnrJVibg5WAW2Tpsl2PulHwyccl2
+	EQgCSU1ba+mIuESJds/Ufi6yj9NQO7guUtAt1LE+BIDDU4sqSj48HmSFQaVUEITO
+	Jk4fxUOVG/AhnAbKhv1fvWKV4r8bzHg7YuMqs3P0i0IRq1edyejrx1zIXk7LrN/+
+	5/rT2p5jTECcGD+Cgb+rV6K9McDVxEDI9vM5lsA4koOOS/m4On6lZ/XraYKQEtbj
+	bCqgIiluDBj+E+dljnt/nrdwWmbKPoy9kLeD6Qo8vbXG5nkBJ0dC8QjXm4lTlmH/
+	sw==
+Received: (qmail 1019085 invoked from network); 11 Sep 2025 16:43:01 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Sep 2025 16:43:01 +0200
+X-UD-Smtp-Session: l3s3148p1@HaDOjYc+zpYujnsE
+Date: Thu, 11 Sep 2025 16:43:00 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Hans de Goede <hansg@kernel.org>
+Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] i2c: Add Intel USBIO I2C driver
+Message-ID: <aMLf9Nj3hF4t9rQH@ninjato>
+References: <20250910133958.224921-1-hansg@kernel.org>
+ <20250910133958.224921-4-hansg@kernel.org>
+ <aMHznOCa_9vtW6_1@shikoro>
+ <4e2f79bc-2827-4db9-bb2b-4a330cd14f2d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bsepv0u1s7GMfX7n"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <4e2f79bc-2827-4db9-bb2b-4a330cd14f2d@kernel.org>
 
-On Thu, Sep 11, 2025 at 03:58:50PM +0200, Marek Szyprowski wrote:
-> On 08.09.2025 13:26, Oleksij Rempel wrote:
-> > Drop phylink_{suspend,resume}() from ax88772 PM callbacks.
-> >
-> > MDIO bus accesses have their own runtime-PM handling and will try to
-> > wake the device if it is suspended. Such wake attempts must not happen
-> > from PM callbacks while the device PM lock is held. Since phylink
-> > {sus|re}sume may trigger MDIO, it must not be called in PM context.
-> >
-> > No extra phylink PM handling is required for this driver:
-> > - .ndo_open/.ndo_stop control the phylink start/stop lifecycle.
-> > - ethtool/phylib entry points run in process context, not PM.
-> > - phylink MAC ops program the MAC on link changes after resume.
-> >
-> > Fixes: e0bffe3e6894 ("net: asix: ax88772: migrate to phylink")
-> > Reported-by: Hubert Wiśniewski <hubert.wisniewski.25632@gmail.com>
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> 
-> This patch landed in today's linux-next as commit 5537a4679403 ("net: 
-> usb: asix: ax88772: drop phylink use in PM to avoid MDIO runtime PM 
-> wakeups"). In my tests I found that it breaks operation of asix ethernet 
-> usb dongle after system suspend-resume cycle. The ethernet device is 
-> still present in the system, but it is completely dysfunctional. Here is 
-> the log:
-> 
-> root@target:~# time rtcwake -s10 -mmem
-> rtcwake: wakeup from "mem" using /dev/rtc0 at Thu Sep 11 13:02:23 2025
-> PM: suspend entry (deep)
-> Filesystems sync: 0.002 seconds
-> Freezing user space processes
-> Freezing user space processes completed (elapsed 0.003 seconds)
-> OOM killer disabled.
-> Freezing remaining freezable tasks
-> Freezing remaining freezable tasks completed (elapsed 0.024 seconds)
-> ...
-> usb usb1: root hub lost power or was reset
-> ...
-> usb usb2: root hub lost power or was reset
-> xhci-hcd xhci-hcd.7.auto: xHC error in resume, USBSTS 0x401, Reinit
-> usb usb3: root hub lost power or was reset
-> usb usb4: root hub lost power or was reset
-> asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
-> asix 2-1:1.0 eth0: Failed to enable software MII access
-> asix 2-1:1.0 eth0: Failed to read reg index 0x0000: -113
-> asix 2-1:1.0 eth0: Failed to write reg index 0x0000: -113
-> asix 2-1:1.0 eth0: Failed to enable software MII access
-> ... (the above error repeated many times)
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 9 at drivers/net/phy/phy.c:1346 
-> _phy_state_machine+0x158/0x2d0
-> phy_check_link_status+0x0/0x140: returned: -110
 
-I'm not surprised. I'm guessing phylib is using polled mode, and
-removing the suspend/resume handling likely means that it's at the
-mercy of the timings of the phylib state machine running (which is
-what is complaining here) vs the MDIO bus being available for use.
+--bsepv0u1s7GMfX7n
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Given that this happens, I'm convinced that the original patch is
-the wrong approach. The driver needs the phylink suspend/resume
-calls to shutdown and restart phylib polling, and the resume call
-needs to be placed in such a location that the MDIO bus is already
-accessible.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> > How did you test 10 bit addresses? I have never seen them in the wild?
+>=20
+> I did not test 10 bit addresses. This was there in the original code
+> from Intel.
+
+I suggest to drop it. There is no code handling the I2C_M_TEN flag which
+should be handled if support is advertised.
+
+> So I'll add I2C_AQ_NO_ZERO_LEN to the quirks.
+
+Ack.
+
+
+--bsepv0u1s7GMfX7n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjC3/AACgkQFA3kzBSg
+KbbDUg/9Gk2G4vWSrykXFqKNb8AMMd2P8HsNCzQKlfLni2gtPRwzPgSZqSLCHFDc
+/qM7G7PIxgT5/7qgFfWVR1jK2QGt4XSQoW6Mysl0yZd8l3rAlW4Ukr1lBSL/I0dR
+EcoOHLy/3T2k965QHz55UIRXNiTB6F18g8AihZv7EZTXkrzp4UHks0gf1fQa5Tj5
+P5S8UKQbS6KCyhw/dvCzos3B0cxSRxtV7pIafNI7CMJUaXWS6PVe5rUQEfyLzUbX
+CgYLzHe5zaQAJCJYrrrn76fnEB4NwXWwi3p7i2sAY3w1+3zi84vDgYtk7XqCQnl4
+yyyVSfkgwPqquddPzqCc+FMhgp2CapFdQ8lZnzF4VZ6E8ANzvr4S9Tbk1S+ALEHB
+k0G7D2Y8Qq4vUqhHAvxp32DuWaRCM3KluTYoWPaMxRd/YrM6gfYFAX26PgACYren
+ZmieofajMYD4ZYXQqoeKLywyRVx3MH2QAbiKybVDBXOZXERjmWxAAGju31NkKcAP
+jgxcpKVrPzwmnTKEF/apQ5UrF4Yi7JjvcGlmhJmILnbMiCmE20nJDYqlkgPxKTDI
+xmKWxYX3s9mgJD3PxZo/uxQRVaHfAnLgWQBTaZ6slNksGioi9gU5l1v2UdSlJaqd
+pjxPkWFu+T6VR02IE7qKB64RTA+YsaAZDgtFlVza8WClsSt7N18=
+=BQwX
+-----END PGP SIGNATURE-----
+
+--bsepv0u1s7GMfX7n--
 
