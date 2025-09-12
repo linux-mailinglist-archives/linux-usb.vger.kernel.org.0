@@ -1,131 +1,98 @@
-Return-Path: <linux-usb+bounces-27984-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-27986-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94DABB5405F
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 04:30:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41824B5415D
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 06:06:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61D333AC398
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 02:30:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 874FA1C82C99
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 04:07:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A2E1FBEAC;
-	Fri, 12 Sep 2025 02:30:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Wfq4yWJ/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9326E1DE2BD;
+	Fri, 12 Sep 2025 04:06:49 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7981E3DDB
-	for <linux-usb@vger.kernel.org>; Fri, 12 Sep 2025 02:30:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [207.226.244.123])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3406842065
+	for <linux-usb@vger.kernel.org>; Fri, 12 Sep 2025 04:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.226.244.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757644217; cv=none; b=hWE/14yXIhY+g+NuYpwtFch5Zhg9Fqq9tSs7FqhZW55xS0sfGPDyuyGovfyH14hgxMCEUCSMj5hL4Gc41Ot/ZmykiCqkVmFwGmPs9DVoCqybv+CjxUl3ggc7So4QbLteoK/+/1Go4EuRrXA/QaqXh7rCY/ifFxZhASJO+SY995U=
+	t=1757650009; cv=none; b=te2qFdGi8WLqT1jwxO2U/uLot/jPuqTrlGOYePOEc+gHfsZeZlod1PEAQefE+8IZNImag1vszmycatVXwwA4vuJ3uuHcGBJzvZV7iBI2P/Z5XlCRqfb0EfmL7UtELPEPS7GHYQCZiAPBcI9T2wjvXt0Fsnq4LPel74JX7Wbp6VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757644217; c=relaxed/simple;
-	bh=vQQIU6ckHc2+RvHHnlo2eleJNpXZev81qLhetlXEw2Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u9ur7suCDXHJ9TU3zTzBBUbWZojpwVA35CWtMCsK3MPSiKJjTw+SG5r32rmAXQT7OB4eRF+yOspJileHk6i+8vUAuioxOul4HYp3NFaWBLBLf8rgpAyWeJDO4Jh8eGPHJE5NlGi9OzlU6//t/lGjQ1CoAikmR3wT+oLBElLFJqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Wfq4yWJ/; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-7639af4c4acso14158336d6.2
-        for <linux-usb@vger.kernel.org>; Thu, 11 Sep 2025 19:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1757644214; x=1758249014; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bOcBl4BVZOSZI/RGkDZyOTuzjiM4ERqznZpinFtbvyg=;
-        b=Wfq4yWJ/5fRvTYXWHplP2tcJqgI4K5WhBq7exprxaW8O9GnbMVmnQ+WyHtXgyGfoZm
-         qFaaMQ3X/vTI0zZA/7YyhB6ZxyrqgXvEr495XVxOxW0xNtX/Bh+JDkwP4P+neeOQQiHi
-         dXPIgz9l7wEbaiUNqzp+UbdFXOlWSiLmBnjtVwHpkga+6vplDydwiVbt1v323n9qIixg
-         /mzQlk81GgqKDqfrYI7Z3150UXzl6iBlAUkgNfY8oO0K/hz9Mf4vGjCd77NKUlo9MFkU
-         trZdi5ItiDQeB4+ODoTvYS9SJtB1+4dqL7oyaYH3kSDQcHLFwh0/eNK9g9fviC2SVJZs
-         q6Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757644214; x=1758249014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bOcBl4BVZOSZI/RGkDZyOTuzjiM4ERqznZpinFtbvyg=;
-        b=djOnbfUgWGxNQ3Gufnys9TvXbSqyv96DhamhZc3O5fR8Rom41kzYUPRd5w24FM8W9e
-         xLhSQ6aqeHzvNFy8tweOJUQKld4FoR1Prwfu5ASGw4549jVGA2e3SEx0nocOqg5IxkeF
-         EWMVSdh7NuWwM5ajs8E3dQ7UmsVttwdEGHwuOmpAd0s8c8v2Uvb2h0Fy3lh50CMV0+hS
-         bwMz52+c5VvBsM2dkFg1voCQteFV5upJqVNsBdoWfPNZP6evXLjQ2idwFhwMre1RBxU1
-         ZUSZUr6NSWfZUAPzbrgvOg2Gujr43Xal20iq0gcWxuSBb9nODeOWfth/ozS9umKNLbtW
-         HbJA==
-X-Forwarded-Encrypted: i=1; AJvYcCVxtahEMalRroEX8wUYGgDJPlSjTlbVGhPw65CZfWaW/akCLg1m15v/Pi8rekmVTHkGf0HsjGniQ/I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/chIb8ChbhuJHlYHuLnRtlbEv9lBHDonoKBp/7G8zMYkBk242
-	2SKqpQvaowcdte19vE18pPeXQezENGlR5lJvSIykxHm7kvU1PY+tTQWr2mwhaEyLOQ==
-X-Gm-Gg: ASbGncvk9HAOCVsV1kGvxUwrqAu+5J9rnsq9jjMji8mjlWrRh08jd4O/n/0vWM9NyCv
-	F8mye6VoM2cslnwYFRBYdmG38qQFP2/NaeI5PF22pVShNgrKl73R0s8a2QM++AMdJ6+slvco7e0
-	4D3q3KDCrl4XhhWEGJ7EqqVE/HzWei2NrLD1hH/7ouod0uX2v883QFx/nTFV81H0C6xIJmrsNBd
-	8PM4H2w7ELIVZHCJzfftfgNv9TgaK36mEEmRrPv4/WxSZ3MAOI24/+HYqfm1SbjnGL+CYdKuxBV
-	SihcntfaeLPKXMhbI0tSlrHYCwX+IYqmRX//qX9mMCvCTMj9DcQl/mXEAfuWlGonXpEqX4jGAMB
-	ftts30SoFBVquYPJCCb1rdL5EMp/+ZT3SC9g=
-X-Google-Smtp-Source: AGHT+IF3YJcN8fftkWAXBvp5e8ChiQTwvDs2PYP+e/p5pRC3qGnSYo/pJ7OVH35ncvR4Bc8YEDrv+A==
-X-Received: by 2002:a05:6214:230c:b0:70d:b2cb:d015 with SMTP id 6a1803df08f44-767c88fae6bmr22357036d6.67.1757644213876;
-        Thu, 11 Sep 2025 19:30:13 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::6aa9])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-763bdd3773bsm19545826d6.36.2025.09.11.19.30.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Sep 2025 19:30:13 -0700 (PDT)
-Date: Thu, 11 Sep 2025 22:30:09 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
-	stable@vger.kernel.org, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	Lukas Wunner <lukas@wunner.de>, Xu Yang <xu.yang_2@nxp.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
- PM to avoid MDIO runtime PM wakeups
-Message-ID: <22773d93-cbad-41c5-9e79-4d7f6b9e5ec0@rowland.harvard.edu>
-References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
- <CGME20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94@eucas1p2.samsung.com>
- <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
- <aMLfGPIpWKwZszrY@shell.armlinux.org.uk>
- <20250911075513.1d90f8b0@kernel.org>
- <aMM1K_bkk4clt5WD@shell.armlinux.org.uk>
+	s=arc-20240116; t=1757650009; c=relaxed/simple;
+	bh=fF8vCfOt+S5aPG/1ijDb0Emw7dl6dGIA8UJSxeLfhok=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AouamNcWdqxAZF8+H2/v9gQZFv2EP7D+oMeGwfFZOwe4rgVwubcXhdq7YxiF/X/nNEqp9MuvVm0PiPd55FtSCSH/AJSTXiaOYPuMBUZuYud0eo79+3feext/SFaAguq/fHSfffgLtskMJROl0tcbWN7632dPiNTZGFXiEVfqJIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=207.226.244.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: FRrPLi8wSS+lI5YDg6DwmQ==
+X-CSE-MsgGUID: wkeMHx1WSnK7LiJhOVY4Qw==
+X-IronPort-AV: E=Sophos;i="6.18,259,1751212800"; 
+   d="scan'208";a="152185542"
+From: guhuinan <guhuinan@xiaomi.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, "Ingo
+ Rohloff" <ingo.rohloff@lauterbach.com>, Christian Brauner
+	<brauner@kernel.org>, Chen Ni <nichen@iscas.ac.cn>, Peter Zijlstra
+	<peterz@infradead.org>, Sabyrzhan Tasbolatov <snovitoll@gmail.com>, Akash M
+	<akash.m5@samsung.com>, chenyu <chenyu45@xiaomi.com>, yudongbin
+	<yudongbin@xiaomi.com>, mahongwei <mahongwei3@xiaomi.com>, jiangdayu
+	<jiangdayu@xiaomi.com>, guhuinan <guhuinan@xiaomi.com>
+Subject: [PATCH] usb: gadget: f_fs: Fix epfile null pointer access after ep enable.
+Date: Fri, 12 Sep 2025 12:05:06 +0800
+Message-ID: <20250912040506.142146-1-guhuinan@xiaomi.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aMM1K_bkk4clt5WD@shell.armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BJ-MBX17.mioffice.cn (10.237.8.137) To BJ-MBX05.mioffice.cn
+ (10.237.8.125)
 
-On Thu, Sep 11, 2025 at 09:46:35PM +0100, Russell King (Oracle) wrote:
-> On Thu, Sep 11, 2025 at 07:55:13AM -0700, Jakub Kicinski wrote:
-> > We keep having issues with rtnl_lock taken from resume.
-> > Honestly, I'm not sure anyone has found a good solution, yet.
-> > Mostly people just don't implement runtime PM.
-> > 
-> > If we were able to pass optional context to suspend/resume
-> > we could implement conditional locking. We'd lose a lot of
-> > self-respect but it'd make fixing such bugs easier..
-> 
-> Normal drivers have the option of separate callbacks for runtime PM
-> vs system suspend/resume states. It seems USB doesn't, just munging
-> everything into one pair of suspend and resume ops without any way
-> of telling them apart. I suggest that is part of the problem here.
-> 
-> However, I'm not a USB expert, so...
+A race condition occurs when ffs_func_eps_enable() runs concurrently
+with ffs_data_reset(). The ffs_data_clear() called in ffs_data_reset()
+sets ffs->epfiles to NULL before resetting ffs->eps_count to 0, leading
+to a NULL pointer dereference when accessing epfile->ep in
+ffs_func_eps_enable() after successful usb_ep_enable().
 
-The USB subsystem uses only one pair of callbacks for suspend and resume 
-because USB hardware has only one suspend state.  However, the callbacks 
-do get an extra pm_message_t parameter which they can use to distinguish 
-between system sleep transitions and runtime PM transitions.
+Signed-off-by: guhuinan <guhuinan@xiaomi.com>
+---
+ drivers/usb/gadget/function/f_fs.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Alan Stern
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 08a251df20c4..f4aae91e7864 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -2407,7 +2407,13 @@ static int ffs_func_eps_enable(struct ffs_function *func)
+ 	ep = func->eps;
+ 	epfile = ffs->epfiles;
+ 	count = ffs->eps_count;
+-	while(count--) {
++	if (!epfile) {
++		pr_err("%s: epfiles is NULL\n", __func__);
++		ret = -ENOMEM;
++		goto done;
++	}
++
++	while (count--) {
+ 		ep->ep->driver_data = ep;
+ 
+ 		ret = config_ep_by_speed(func->gadget, &func->function, ep->ep);
+@@ -2431,6 +2437,7 @@ static int ffs_func_eps_enable(struct ffs_function *func)
+ 	}
+ 
+ 	wake_up_interruptible(&ffs->wait);
++done:
+ 	spin_unlock_irqrestore(&func->ffs->eps_lock, flags);
+ 
+ 	return ret;
+-- 
+2.43.0
+
 
