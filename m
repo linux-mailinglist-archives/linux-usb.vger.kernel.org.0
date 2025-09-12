@@ -1,117 +1,100 @@
-Return-Path: <linux-usb+bounces-28025-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28026-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB7E7B54FFC
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 15:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E749B5508C
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 16:12:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 111EC465C1C
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 13:47:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4B8E5863F7
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 14:12:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77B8F2FD1C3;
-	Fri, 12 Sep 2025 13:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72A383115A0;
+	Fri, 12 Sep 2025 14:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZg/tTeq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [207.226.244.123])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BE3D2DC779
-	for <linux-usb@vger.kernel.org>; Fri, 12 Sep 2025 13:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.226.244.123
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E378530FF26;
+	Fri, 12 Sep 2025 14:11:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757684855; cv=none; b=Tddl0ytWqaJdscKaVM/uERzEahJZZJcO4Z59qdGT7mGhws/DkkPcXfcpmsOmRGCv1KTyeTMPjdOvdlImEuMFaPAZ4tzIcfUb+GQ7Tb4jTpRZbRfpxvOYpRPU4X9V/4DZcdT16fikvTXAHaCsmcI0JW7y0ZyG1fzdIU9xznzPqCM=
+	t=1757686321; cv=none; b=lfAVoTOv+i9OF/hqLrQebq8zgCYht03fG1cBFVFXa2VHGVQcNHtwphZnKPOxp+ElRGTcvIRHLKf255PbICgk7J5XyAkbJeBMCfz3dyKnm7/6sWUEwOoKmqbVp3PV6P9gXufxRENg2IySXzxUYqVQM88WlRQgz2lSZA86o/T12HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757684855; c=relaxed/simple;
-	bh=WXKRQVCVk8/Wcmy+TTTtXBq2npq7gMGmTzJ+JkuZL0U=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ETj2hwdrrG9F3TtqYYt0eAVRCKiYGo7M7u9ZK4OY6HM8QShusDcDT5gZAuU7Cw1DrWLo1PADKrVkhW/tc8jplsjastpL8Qbc2iDTbHCNctr9M2pYylbtRKW3LejjKNUiiQrxAymYO2wZmecd+jkFSchLfAnIYb72ECpmij4MEPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=207.226.244.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
-X-CSE-ConnectionGUID: z8kMex75QLakQu35MWYsZQ==
-X-CSE-MsgGUID: umtB1NhtQwCm/QZeoiZgbQ==
-X-IronPort-AV: E=Sophos;i="6.18,259,1751212800"; 
-   d="scan'208";a="152247380"
-Date: Fri, 12 Sep 2025 21:47:26 +0800
-From: Owen Gu <guhuinan@xiaomi.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, "Ingo
- Rohloff" <ingo.rohloff@lauterbach.com>, Christian Brauner
-	<brauner@kernel.org>, Chen Ni <nichen@iscas.ac.cn>, Peter Zijlstra
-	<peterz@infradead.org>, Sabyrzhan Tasbolatov <snovitoll@gmail.com>, Akash M
-	<akash.m5@samsung.com>, chenyu <chenyu45@xiaomi.com>, yudongbin
-	<yudongbin@xiaomi.com>, mahongwei <mahongwei3@xiaomi.com>, jiangdayu
-	<jiangdayu@xiaomi.com>
-Subject: Re: [PATCH] usb: gadget: f_fs: Fix epfile null pointer access after
- ep enable.
-Message-ID: <aMQckhj2UotZZpVa@oa-guhuinan-2.localdomain>
-References: <20250912040506.142146-1-guhuinan@xiaomi.com>
- <2025091255-bluff-next-ea2b@gregkh>
+	s=arc-20240116; t=1757686321; c=relaxed/simple;
+	bh=LKtdVcB24TA6kT82dIILASuQfzu8Nt31tfoFx3rj/28=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k5mw37O8rI8yQUJMs0pYiuvUzobNjhgd4bssfYTuKrRvilrdK6EsvkoiuLVzZcnEsCZMjbl9PneJ6jE7lZDvcgz0XDIdTPer1nFvRhfuKtGS5XTRu8CrPoBbyYJVKaf5jbec0HeBEHN86F47FtmJB54CBjaflqQH7zIxXYtFy+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZg/tTeq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D462C4CEF1;
+	Fri, 12 Sep 2025 14:11:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757686319;
+	bh=LKtdVcB24TA6kT82dIILASuQfzu8Nt31tfoFx3rj/28=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OZg/tTeqPJMheVhBk4O1oGKCISt2iMzLThJi9ISyIB8Wv3OniEGWPF24vUbwrMgNr
+	 7Kh89CsHRNehjT/rjq89QVhDwujgj5COQJNRaQWc+s9Y1R5RtaCQe5o1QuEUmsKDN2
+	 MTi/hRjm63tNdAtQJ/7uOTyk34JvRDeCRObtuY4CC2sPvjVfULVLelIGWwg6AlTz4j
+	 GS+0k+/sTyo14DQfruH0E6qoJC+t6/4VdRChPXiVVXZtw+ar56QrT/1cKZ3Nxdmwnd
+	 PsXWFFsRdwXZxSfXLJcJeFbQfN2Xp364KG9jW0PV1mPix8xszxJhL2jRiLOCMi4g0c
+	 5nfDfUV9MOm6g==
+Date: Fri, 12 Sep 2025 09:11:58 -0500
+From: Rob Herring <robh@kernel.org>
+To: Marco Felsch <m.felsch@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>, Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	kernel@pengutronix.de, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v4 4/5] dt-bindings: usb: microchip,usb2514: add
+ vbus-supply example
+Message-ID: <20250912141158.GA1330389-robh@kernel.org>
+References: <20250911-v6-16-topic-usb-onboard-dev-v4-0-1af288125d74@pengutronix.de>
+ <20250911-v6-16-topic-usb-onboard-dev-v4-4-1af288125d74@pengutronix.de>
+ <175763620958.1187267.14091957840948870392.robh@kernel.org>
+ <20250912085156.h4hhye5vc2rbntyl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2025091255-bluff-next-ea2b@gregkh>
-X-ClientProxiedBy: bj-mbx09.mioffice.cn (10.237.8.129) To BJ-MBX05.mioffice.cn
- (10.237.8.125)
+In-Reply-To: <20250912085156.h4hhye5vc2rbntyl@pengutronix.de>
 
-On Fri, Sep 12, 2025 at 07:32:04AM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Sep 12, 2025 at 12:05:06PM +0800, guhuinan wrote:
-> > A race condition occurs when ffs_func_eps_enable() runs concurrently
-> > with ffs_data_reset(). The ffs_data_clear() called in ffs_data_reset()
-> > sets ffs->epfiles to NULL before resetting ffs->eps_count to 0, leading
-> > to a NULL pointer dereference when accessing epfile->ep in
-> > ffs_func_eps_enable() after successful usb_ep_enable().
+On Fri, Sep 12, 2025 at 10:51:56AM +0200, Marco Felsch wrote:
+> On 25-09-11, Rob Herring (Arm) wrote:
 > > 
-> > Signed-off-by: guhuinan <guhuinan@xiaomi.com>
-> 
-> Please use your name, not your email alias for the From: and
-> signed-off-by lines.
-> 
-Okay
-> > ---
-> >  drivers/usb/gadget/function/f_fs.c | 9 ++++++++-
-> >  1 file changed, 8 insertions(+), 1 deletion(-)
+> > On Thu, 11 Sep 2025 22:22:45 +0200, Marco Felsch wrote:
+> > > Add an usb hub vbus-supply example to make it easier for users to
+> > > understand the binding, after the usb-device.yaml gained the support for
+> > > it.
+> > > 
+> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > > ---
+> > >  Documentation/devicetree/bindings/usb/microchip,usb2514.yaml | 7 +++++++
+> > >  1 file changed, 7 insertions(+)
+> > > 
 > > 
-> > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> > index 08a251df20c4..f4aae91e7864 100644
-> > --- a/drivers/usb/gadget/function/f_fs.c
-> > +++ b/drivers/usb/gadget/function/f_fs.c
-> > @@ -2407,7 +2407,13 @@ static int ffs_func_eps_enable(struct ffs_function *func)
-> >  	ep = func->eps;
-> >  	epfile = ffs->epfiles;
-> >  	count = ffs->eps_count;
-> > -	while(count--) {
-> > +	if (!epfile) {
-> > +		pr_err("%s: epfiles is NULL\n", __func__);
+> > My bot found errors running 'make dt_binding_check' on your patch:
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/microchip,usb2514.example.dtb: ethernet@2 (usbb95,772b): 'vbus-supply' does not match any of the regexes: '^pinctrl-[0-9]+$'
+> > 	from schema $id: http://devicetree.org/schemas/net/asix,ax88178.yaml#
 > 
-> No need for this debugging line, right?
-> 
-Okay
-> > +		ret = -ENOMEM;
-> > +		goto done;
-> > +	}
-> > +
-> > +	while (count--) {
-> 
-> What prevents the pointer from changing right after you check it?  This
-> will still race :(
-> 
-> You need a lock somewhere to fix this properly.
+> Well this is just an example on how to use it, we can drop this patch of
+> course.
 
-Dear, 
-The ffs->epfiles pointer is set to NULL in both ffs_data_clear() and 
-ffs_data_close() functions, and its modification is protected by the
-spinlock ffs->eps_lock.
-And the whole ffs_func_eps_enable() function is also protected by ffs->eps_lock.
+Yes, but how's it going to work for an actual user?
 
-Thanks
-
-> 
-> thanks,
-> 
-> greg k-h
+Rob
 
