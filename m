@@ -1,83 +1,83 @@
-Return-Path: <linux-usb+bounces-28021-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28022-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72DA6B5497C
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 12:21:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F15BFB54B51
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 13:44:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9AFA7B8003
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 10:19:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE55917ABA2
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 11:44:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CDD2F1FD2;
-	Fri, 12 Sep 2025 10:17:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B79E301020;
+	Fri, 12 Sep 2025 11:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ms29.hinet.net header.i=@ms29.hinet.net header.b="A1LX22iq"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZTs+bXh6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cdmsr1.hinet.net (210-65-1-144.hinet-ip.hinet.net [210.65.1.144])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89ED82F1FC8
-	for <linux-usb@vger.kernel.org>; Fri, 12 Sep 2025 10:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.65.1.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3CAA920;
+	Fri, 12 Sep 2025 11:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757672219; cv=none; b=CPYLmVCRb1wVMu7m5V2yQlk0euTNFh2+lBtOzKZc0x40NfQpQfluyJyGJ+pXJDFAKnVVkanhMJhAOPECsKDLLY70oDg7ilHVn6xKf37nLj1AnoN7gv/XQ+A3sSg4ubPtI5wFhPhdeocP4spCDrtsdM3fwmVTiMxOMhzTwd2mq18=
+	t=1757677487; cv=none; b=QAp+F8Q/Wz+mi6PcLL0SqYvgXRri1MiAR8UxgGaswagqndGbrHXy36BhsKWfeIUeShj913XC0MAbOm1nkEY5mEQ2HZPi9YWRR5zEUKGtDHseUJiBmbW9ecXaoVHMEAvAfeqAd1NtMHeSIm0dZCIfzDfmjC/5hYCpVfNksVdAd6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757672219; c=relaxed/simple;
-	bh=o+qLoQAhjBVgxw8p+p/znE8CwPM+2fMcRkqJQKlzslw=;
-	h=From:To:Subject:Message-ID:Date:MIME-Version:Content-Type; b=NQP3yjbbhMTJtqQedl1OsVH3P+WJlqHgEAADYy6KURycW29myDBQ/DMyhVOzNdaCii8nGneTxBQOn/NjGQnk/Ufj1c/rP1qp0y1fwIbinLs1T907Astax5OBEnb+dvNIRXUl2WmJuPw2g8y8LysvLOX0BrglJJoKM0EM84NEZM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ms29.hinet.net; spf=pass smtp.mailfrom=ms29.hinet.net; dkim=pass (1024-bit key) header.d=ms29.hinet.net header.i=@ms29.hinet.net header.b=A1LX22iq; arc=none smtp.client-ip=210.65.1.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ms29.hinet.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ms29.hinet.net
-Received: from cmsr10.hinet.net ([10.199.216.89])
-	by cdmsr1.hinet.net (8.15.2/8.15.2) with ESMTPS id 58CAGkkJ860690
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
-	for <linux-usb@vger.kernel.org>; Fri, 12 Sep 2025 18:16:49 +0800
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; d=ms29.hinet.net;
-	s=default; t=1757672209; bh=v28bNIItIv9p9u+ELmiBhD/hU/A=;
-	h=From:To:Subject:Date;
-	b=A1LX22iqCoc9d5PTcLKJK55lrXi1AU1TFRM73LApPCkC62ilTIJDtYJlc1CdUzvkw
-	 utEv54C+RfDZoOiReoTfvYKW7o6NV7giI2UozbCZ0zJ1OuztdK7QwlcJHLI1P4M+Kn
-	 DuoqrGNTPFidEBL0USa9id3qqN8X6v4GuMOUhcGg=
-Received: from [127.0.0.1] (111-246-134-52.dynamic-ip.hinet.net [111.246.134.52])
-	by cmsr10.hinet.net (8.15.2/8.15.2) with ESMTPS id 58CA9d8a508151
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
-	for <linux-usb@vger.kernel.org>; Fri, 12 Sep 2025 18:12:01 +0800
-From: "Info - Albinayah 789" <Linux-usb@ms29.hinet.net>
-To: linux-usb@vger.kernel.org
-Reply-To: "Info - Albinayah." <europe-sales@albinayah-group.com>
-Subject: =?UTF-8?B?TmV3IFNlcHRlbWJlciBPcmRlci4gNzc4MjEgRnJpZGF5LCBTZXB0ZW1iZXIgMTIsIDIwMjUgYXQgMTI6MTE6NTkgUE0=?=
-Message-ID: <c5b5b4c5-2e96-1edc-69cc-06f0b56d5af2@ms29.hinet.net>
-Content-Transfer-Encoding: 7bit
-Date: Fri, 12 Sep 2025 10:12:00 +0000
+	s=arc-20240116; t=1757677487; c=relaxed/simple;
+	bh=DMcy4lLGqxGXpI3eI5YfoU8fCZvbZRIkrODm2pgnZYM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pNGO3uryYPcLGEGtoqZQ1d2v/oW793VZ9a8w+X1rUgUJgkyztmK2RmqRGIG159UXcKz/yZAwUD3PlXnoIGMEnkQAHwKVxTyq1wkoDxeLY+/wG9l1exsnlkUwoIcs6C35ieUMMsj3SCU3daSYHjfqPzDgrFZm7SROlGAgh2XWBVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZTs+bXh6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C686C4CEF1;
+	Fri, 12 Sep 2025 11:44:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1757677487;
+	bh=DMcy4lLGqxGXpI3eI5YfoU8fCZvbZRIkrODm2pgnZYM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZTs+bXh6i96O0UC3UUh+pXJqabqWk4F8pucNNfqNHO3is9SsKiyYs6fE9bLMeF69l
+	 3HjJMa2ZTrl9XYUdd12FlbqTAjDm4FLqYmRh4GH2VAR6yusS95ld3MacpcKBtxx5Hy
+	 P5fGQo6hMIsREQOGbaACjWU9gUxVr1UKz9QI2EGA=
+Date: Fri, 12 Sep 2025 13:44:44 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v6 3/3] i2c: Add Intel USBIO I2C driver
+Message-ID: <2025091232-abruptly-stargazer-4a0e@gregkh>
+References: <20250911181343.77398-1-hansg@kernel.org>
+ <20250911181343.77398-4-hansg@kernel.org>
+ <aMMVKsbDIIFzaWdu@ninjato>
+ <18011d86-6f9e-4a0d-9514-fcc69cec1fc2@kernel.org>
+ <aMPc_jHmlMsVtJKG@ninjato>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-X-HiNet-Brightmail: Spam
-X-CMAE-Score: 100
-X-CMAE-Analysis: v=2.4 cv=Au5N3/9P c=0 sm=1 tr=0 ts=68c3f1f2
-	p=OrFXhexWvejrBOeqCD4A:9 a=ZDli3yJdMke8RanEWuCuFA==:117 a=IkcTkHD0fZMA:10
-	a=5KLPUuaC_9wA:10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aMPc_jHmlMsVtJKG@ninjato>
 
-Hi Linux-usb,
+On Fri, Sep 12, 2025 at 10:42:38AM +0200, Wolfram Sang wrote:
+> 
+> > > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> > 
+> > Thank you.
+> > 
+> > Is it ok if Greg picks this up together with the rest of
+> > the series?
+> 
+> Yes.
 
-Please provide a quote for your products:
+Great, I'll go queue it up in a bit, thanks!
 
-Include:
-1.Pricing (per unit)
-2.Delivery cost & timeline
-3.Quote expiry date
-
-Deadline: September
-
-Thanks!
-
-Kamal Prasad
-
-Albinayah Trading
+greg k-h
 
