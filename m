@@ -1,80 +1,61 @@
-Return-Path: <linux-usb+bounces-28027-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28028-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20E80B551B1
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 16:34:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E92ADB551DE
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 16:39:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 674A2BA082C
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 14:32:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA73AA01A06
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 14:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7203313278;
-	Fri, 12 Sep 2025 14:29:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EEFB3128D9;
+	Fri, 12 Sep 2025 14:38:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="m1AbP2Ti"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="aFT/2EW8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B2A3128AF
-	for <linux-usb@vger.kernel.org>; Fri, 12 Sep 2025 14:29:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9DD3128AF;
+	Fri, 12 Sep 2025 14:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757687393; cv=none; b=mtDVPkil+L7i8AasXlhNnCwqVTyXv7bEu8kJp/024Vq9hUOsm6j/x2MzcHMXwirGhro0YPCS/pnl8xin7drHDWchyaYVdkizdJEJ9u8T533osp0QkvAQKYHiItoM3I4TdEKk3I9IdGD2FuC/N4mEMfHV/HZFz4Zanq+AXq+lhdU=
+	t=1757687894; cv=none; b=a5h4SVXsZ9G7bBP+LT3P/GkPAOwfnaryd/sOS7RpCMdggF6FeWnhEYcOC6Kzj+s+gcrDfmf/o/7cyAku5OFPgieRyrF9St7YIzDi+kQmh23tWyHrgwPPCYzYjgVrrzlX35hXbJgGEnyF/toNlibO+iALbvtaZJ+V3Re0xbZW2ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757687393; c=relaxed/simple;
-	bh=hV+fkBeoyEL70BR3AZPZk+/IitPWaFSZ0qChnKQvBhE=;
+	s=arc-20240116; t=1757687894; c=relaxed/simple;
+	bh=+W9RkNkmmT1IiTtBnRQIf0vW4aRt3gzcijwo74OaTUw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oR8uofJi6zVDj3co96mmeETL0UNR5R8jbyDWgthZ4NgknwT/g5f2h1hnWnpgD2uWoeCgNVYO/tU+eh+s1PtSjaBdF7txPlBwd7JysdPBB1/RyTWbSbNzG79Ds3faarTiyKCrOOmklWcQvTCkXuZcD6z6SxNZKrie6p7PvGlFq3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=m1AbP2Ti; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-81076e81a23so245571385a.3
-        for <linux-usb@vger.kernel.org>; Fri, 12 Sep 2025 07:29:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1757687391; x=1758292191; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S3815g4jYHJhhlasvHknAmQ5Z8UgQ2k4aKoITX7J8o4=;
-        b=m1AbP2TiBWtGuDVgJM36Uezne+LnA/gzOl8SdHNdXU34loo/EgugyBnirTRGsxRW3m
-         k8nKZ+auOjobx9jh0dA63MFEDUbgqMvQP9/qmSArJJ0jfqxR6v8x4h3mECdnal7q0Wxj
-         3K5na5eCWipWSvNNxvxLGqNGC7dLOXzEDghMojfkXqM0gRQNiXhEuNP8+t+xF0olzl7h
-         Kwwddtadp+J11xnRaMrKXx3YwWXctlNqvvkLJ0k2BUmLq5zwVJiAkTS+dJ2BHVoCerYy
-         4aFY2YYTmC4/VcbIxCxzVSu0wr0j4+WPVm2dR+eO0+AcrU6ok/J75dFtFx6FpgvUa3IK
-         XVeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757687391; x=1758292191;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S3815g4jYHJhhlasvHknAmQ5Z8UgQ2k4aKoITX7J8o4=;
-        b=ky+Ec0Vfmq5o2SdChJVJL/ycYS8UV74ILO4EmmacO/pcV9rSbLFItmPuE4Wdnp8vNv
-         q0jPCY90M6bTO723QO7hYE1FAimNPklknzkbgZueOvcG1M41kwzgts+rJ2AElSsXIGUu
-         JuggqknWA5/y+O5NL2uAkt6eXtbazCKuN52ZAoLKpa8sepkH0bMLqaovE3J0nVIzGA5/
-         wpqvMFUPHGeo8aINdh2jvXQVIA0cNhKfZBBS5/EYLyRH/atDYQMQnbFCjxCTXTr/rfAz
-         tImb5Yzg1ICaRDizY2uq5NNuHaQbGmQU3fUoW4utdsIqmhEFdm55VfSZyx93UWS/aQbc
-         MVbA==
-X-Forwarded-Encrypted: i=1; AJvYcCWFi4Kv3r44MSk5s5ebkEmCs+pH7wZbiISyVvoBf0GMuxp+KLElz7xITGelQq3f1gX1jdQGc+GK5ww=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzbxO30sKO2cQryVZOGceBr/Mp28M9w1th65szmBxHvBQsRBOQ
-	6JpQ1phIGxCP2WnLClesL1tOwM6GGATnId+p6GzXO84Jx/DKPzhRkaF6P/TeX4+u8g==
-X-Gm-Gg: ASbGncv/wT+ICPrGCEw2N7WdA1NaxJ+C9/qeKM7BDdObtgr0YtYKlJnkE3tEQ93M4xF
-	PxbS8OF5pi8FCzwT7lWoShONtyOIU1Mt9KNJ4QFZngfXy2vPDK+SX98O4iEgn+VOVVKIyJta+f9
-	Ca5tzi/p2ICrXQc4RpSokqpJgAcxN4N7cihD5zRUHYhe3OezYuM5KWUC1WkxtuGNvF9ZxyzswuJ
-	uxJkhLh31HLzvYMc4EDrdPdikDcCVjahXWrzLzxXezynI+4AvaeF7AvcthfzzLhcXkSo75VRU+T
-	/Polou/AHT55+buXMQk317c5oe+SBkc/N/VoJsXY2IsxouthDwtyRpR0dQWOObYY2DeVQxogTk+
-	D0sXJOGihRbg8EyK0ZWNrE8GfMR6gtQJzX3Q=
-X-Google-Smtp-Source: AGHT+IFHGCNDq4E3kronwhkO+pICG0brIM0Kb9Hz7hqiD4Sy52fYKpi6o68Y7702rWJbbRJBfdlK+A==
-X-Received: by 2002:a05:620a:190f:b0:823:a881:e447 with SMTP id af79cd13be357-824013d8d5bmr375511385a.77.1757687390335;
-        Fri, 12 Sep 2025 07:29:50 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::6aa9])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-820c974d68dsm276204885a.16.2025.09.12.07.29.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Sep 2025 07:29:49 -0700 (PDT)
-Date: Fri, 12 Sep 2025 10:29:47 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DxD9ITJzvsmsQl6kzHhOHc/8XNBPsB/r3UFXneOaHgD/aVyGgiJzpjsOQW3hl2kR2+7GlGPXtnIKs2HQNdCebAnf2tY28IEofK4BsXvl8rBkuae+MFgcpo4nnqF/UOm77/ZRDI4DocYCtyxGT3OBbgpz4Yb2GTWWYZ7bYMgbegQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=aFT/2EW8; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=KqBKUZlM/P2XIZmldzfqFf87P0LiDauesCM5frm4wHM=; b=aFT/2EW8+DdbUF9V9Qseem00aq
+	TKs/hvQR3QWDTBkaq6UvjrdPvBvBTAu1IbZOng6qIKS58tCRLOhFgdsMyztFvTGf/rtswHIbWnGCL
+	BZ7l4RDv+5NK2eDycPi+DVEuTxHcYKAjNU6kJ02nGhu93bMTq6j1rz3jWpz83Lw6AI8N/dUA2JzFt
+	j+OQEJdOEIMaaEa8pOOhvIPwGc5PDjjUiDfjg2KABjPJxrsJqApXFvWjH29BDxTA3E60fe755FaPg
+	C/3FkTHnZwWYk8tnDcI9tfNsAdfKbM9o0dxnXeA0BuFGhpPMAi/1Okcl5Beu7wFDw9ZDCdhSPecfq
+	4XopNUTw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38276)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1ux4uT-000000004j2-1wjo;
+	Fri, 12 Sep 2025 15:37:57 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1ux4uO-000000003Za-2uZp;
+	Fri, 12 Sep 2025 15:37:52 +0100
+Date: Fri, 12 Sep 2025 15:37:52 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Alan Stern <stern@rowland.harvard.edu>
 Cc: Jakub Kicinski <kuba@kernel.org>,
 	Marek Szyprowski <m.szyprowski@samsung.com>,
 	Oleksij Rempel <o.rempel@pengutronix.de>,
@@ -88,7 +69,7 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	linux-usb@vger.kernel.org
 Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
  PM to avoid MDIO runtime PM wakeups
-Message-ID: <a25b24ec-67bd-42b7-ac7b-9b8d729faba4@rowland.harvard.edu>
+Message-ID: <aMQwQAaoSB0Y0-YD@shell.armlinux.org.uk>
 References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
  <CGME20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94@eucas1p2.samsung.com>
  <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
@@ -97,6 +78,7 @@ References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
  <aMM1K_bkk4clt5WD@shell.armlinux.org.uk>
  <22773d93-cbad-41c5-9e79-4d7f6b9e5ec0@rowland.harvard.edu>
  <aMPawXCxlFmz6MaC@shell.armlinux.org.uk>
+ <a25b24ec-67bd-42b7-ac7b-9b8d729faba4@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -105,65 +87,72 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aMPawXCxlFmz6MaC@shell.armlinux.org.uk>
+In-Reply-To: <a25b24ec-67bd-42b7-ac7b-9b8d729faba4@rowland.harvard.edu>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Fri, Sep 12, 2025 at 09:33:05AM +0100, Russell King (Oracle) wrote:
-> On Thu, Sep 11, 2025 at 10:30:09PM -0400, Alan Stern wrote:
-> > The USB subsystem uses only one pair of callbacks for suspend and resume 
-> > because USB hardware has only one suspend state.  However, the callbacks 
-> > do get an extra pm_message_t parameter which they can use to distinguish 
-> > between system sleep transitions and runtime PM transitions.
+On Fri, Sep 12, 2025 at 10:29:47AM -0400, Alan Stern wrote:
+> On Fri, Sep 12, 2025 at 09:33:05AM +0100, Russell King (Oracle) wrote:
+> > On Thu, Sep 11, 2025 at 10:30:09PM -0400, Alan Stern wrote:
+> > > The USB subsystem uses only one pair of callbacks for suspend and resume 
+> > > because USB hardware has only one suspend state.  However, the callbacks 
+> > > do get an extra pm_message_t parameter which they can use to distinguish 
+> > > between system sleep transitions and runtime PM transitions.
+> > 
+> > Unfortunately, this isn't the case. While a struct usb_device_driver's
+> > suspend()/resume() methods get the pm_message_t, a struct usb_driver's
+> > suspend()/resume() methods do not:
+> > 
+> > static int usb_resume_interface(struct usb_device *udev,
+> >                 struct usb_interface *intf, pm_message_t msg, int reset_resume)
+> > {
+> >         struct usb_driver       *driver;
+> > ...
+> >         if (reset_resume) {
+> >                 if (driver->reset_resume) {
+> >                         status = driver->reset_resume(intf);
+> > ...
+> >         } else {
+> >                 status = driver->resume(intf);
+> > 
+> > vs
+> > 
+> > static int usb_resume_device(struct usb_device *udev, pm_message_t msg)
+> > {
+> >         struct usb_device_driver        *udriver;
+> > ...
+> >         if (status == 0 && udriver->resume)
+> >                 status = udriver->resume(udev, msg);
+> > 
+> > and in drivers/net/usb/asix_devices.c:
+> > 
+> > static struct usb_driver asix_driver = {
+> > ...
+> >         .suspend =      asix_suspend,
+> >         .resume =       asix_resume,
+> >         .reset_resume = asix_resume,
+> > 
+> > where asix_resume() only takes one argument:
+> > 
+> > static int asix_resume(struct usb_interface *intf)
+> > {
 > 
-> Unfortunately, this isn't the case. While a struct usb_device_driver's
-> suspend()/resume() methods get the pm_message_t, a struct usb_driver's
-> suspend()/resume() methods do not:
+> Your email made me go back and check the code more carefully, and it 
+> turns out that we were both half-right.  :-)
 > 
-> static int usb_resume_interface(struct usb_device *udev,
->                 struct usb_interface *intf, pm_message_t msg, int reset_resume)
-> {
->         struct usb_driver       *driver;
-> ...
->         if (reset_resume) {
->                 if (driver->reset_resume) {
->                         status = driver->reset_resume(intf);
-> ...
->         } else {
->                 status = driver->resume(intf);
+> The pm_message_t argument is passed to the usb_driver's ->suspend 
+> callback in usb_suspend_interface(), but not to the ->resume callback in 
+> usb_resume_interface().  Yes, it's inconsistent.
 > 
-> vs
-> 
-> static int usb_resume_device(struct usb_device *udev, pm_message_t msg)
-> {
->         struct usb_device_driver        *udriver;
-> ...
->         if (status == 0 && udriver->resume)
->                 status = udriver->resume(udev, msg);
-> 
-> and in drivers/net/usb/asix_devices.c:
-> 
-> static struct usb_driver asix_driver = {
-> ...
->         .suspend =      asix_suspend,
->         .resume =       asix_resume,
->         .reset_resume = asix_resume,
-> 
-> where asix_resume() only takes one argument:
-> 
-> static int asix_resume(struct usb_interface *intf)
-> {
+> I suppose the API could be changed, at the cost of updating a lot of 
+> drivers.  But it would be easier if this wasn't necessary, if there was 
+> some way to work around the problem.  Unfortunately, I don't know 
+> anything about how the network stack handles suspend and resume, or 
+> what sort of locking it requires, so I can't offer any suggestions.
 
-Your email made me go back and check the code more carefully, and it 
-turns out that we were both half-right.  :-)
+I, too, am unable to help further as I have no bandwidth available
+to deal with this. Sorry.
 
-The pm_message_t argument is passed to the usb_driver's ->suspend 
-callback in usb_suspend_interface(), but not to the ->resume callback in 
-usb_resume_interface().  Yes, it's inconsistent.
-
-I suppose the API could be changed, at the cost of updating a lot of 
-drivers.  But it would be easier if this wasn't necessary, if there was 
-some way to work around the problem.  Unfortunately, I don't know 
-anything about how the network stack handles suspend and resume, or 
-what sort of locking it requires, so I can't offer any suggestions.
-
-Alan Stern
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
