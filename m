@@ -1,157 +1,97 @@
-Return-Path: <linux-usb+bounces-28006-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28007-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6885DB54586
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 10:33:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EE7CB545A8
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 10:39:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87CE64855DC
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 08:33:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78B8C1B2455E
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 08:39:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 269A6241667;
-	Fri, 12 Sep 2025 08:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C42EC2D46B1;
+	Fri, 12 Sep 2025 08:38:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="IMcAcadQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MxTXHgMm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0F9221FA8;
-	Fri, 12 Sep 2025 08:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351C219E97A;
+	Fri, 12 Sep 2025 08:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757666002; cv=none; b=fY6QEtr/v3xgF5Tu7wYlOagWn1i0sknsaqM1edxjaK4jPE39xQo/lXhUfsRKSRxdSU7bsq0asKLqhEPPfsuiQqDkiE7dEgdh8mYzs9Nf23YbAj/+tpUUzfpe4hu+nClSFS/tDGwhjppZkaKaNGyn8lQzr6uZ3jOgIR3orcpjWbI=
+	t=1757666335; cv=none; b=QVK2UUVwj/vuAVG/cj1qb0ALOJ8c4L0/AaOfwmH7Sab1AK0gxdAXV1bhB+J6Rt8v2FoT/zfQKzeGliyA8vNzdulQrcY+Wvb80P+jcznnBJMwAMGLCIlyFrLul+k2de+JeMDsIgXLl6ZQoMFILMCkt645rEW3Rdk6NkeCJKUI9Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757666002; c=relaxed/simple;
-	bh=Mxr62HmVtfbP4jbUBdHvnIYP+nC/oO9ivF+eEK18zmI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CKnPf+/9XGA0g0OHuK0UXFT1CCf63aLqtobaYLJduDjZSJXjYPuclqIVytzPhyiiZWvf0LjKXrUQRWiT9D16LNHyaaqZm6dV2sRMs/v9RFxFnfpr38H8nmZDUH8YQkGKagYSugOhxEhNOSu1RM5wX//LbrAeZKyOtozshP+SANA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=IMcAcadQ; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=q2YkID527W7lqOrFnU+Vj4fmcAikRXDTUil4ImrM08E=; b=IMcAcadQP51YLAcZorEteZBCmA
-	kHyIwUIejCR7dqhdjIASnNPssJcKRtuhf4SADoBZxqMzdh/7ToTfXtHTaaPOTmXFfym56ush1FBpJ
-	J3+/oxD3+I4CJh3Eao7/oApSfPGhWbuY1zg7DQAkC2nf9N1BHvwCOkt5bIy8gDCgQUKorJdAwbBp7
-	KMkcZrGZr6ekvAqrDC7d4OJOON2/b12yqXXz8EN+5UXla65O81da5qCqHxdlPUja2hIxO+N2qSYit
-	zaaHMFzGGzb+4rD4mCRKKW5/hf+BIva2+eca3tYmQ0QsTWcJuliso1abBiaCBphTFeFm8vX0IqI2F
-	KrJF13xA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52752)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1uwzDQ-000000004AH-2Pau;
-	Fri, 12 Sep 2025 09:33:08 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1uwzDN-000000003N7-0zes;
-	Fri, 12 Sep 2025 09:33:05 +0100
-Date: Fri, 12 Sep 2025 09:33:05 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
-	stable@vger.kernel.org, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	Lukas Wunner <lukas@wunner.de>, Xu Yang <xu.yang_2@nxp.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
- PM to avoid MDIO runtime PM wakeups
-Message-ID: <aMPawXCxlFmz6MaC@shell.armlinux.org.uk>
-References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
- <CGME20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94@eucas1p2.samsung.com>
- <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
- <aMLfGPIpWKwZszrY@shell.armlinux.org.uk>
- <20250911075513.1d90f8b0@kernel.org>
- <aMM1K_bkk4clt5WD@shell.armlinux.org.uk>
- <22773d93-cbad-41c5-9e79-4d7f6b9e5ec0@rowland.harvard.edu>
+	s=arc-20240116; t=1757666335; c=relaxed/simple;
+	bh=hagDPXklpTYs2DndspEwvgWoWk3PxuoK9oj2KTwSBB0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ESg+E9WS4+Zi93NgShVdNRngWgtq5j9MVjyk8WWXt+qQotBhIEPDNkdO9SAXi9JnRtibee8FNB394MWi05iPdAUcGOi/EFyIYroUNJUA5D2K5tXb4Rq7GWcySvB4PpD5uBkO4XVjwZbkRn8JYTmn5vHdHyM64xA7mG3kJhE8AwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MxTXHgMm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA43C4CEF4;
+	Fri, 12 Sep 2025 08:38:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757666333;
+	bh=hagDPXklpTYs2DndspEwvgWoWk3PxuoK9oj2KTwSBB0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=MxTXHgMmXic5UwWdvCJriQLR7BVaQkrgR4r5P+SSHhH4lwC8SuZRFUAX0Cyxn6Ylo
+	 vx4jC2lC6uuvCyrI7LmiA5+FJNRl4vB+3dzRg5ymBnAVpz+pPn+7l8ln21QcJ9Rh1R
+	 hCi/BNTXYGknN4hwxf+o3WhIvPeqecl8kAKEbGmZIk0MeYHsm3nvBWdGgxF1m1Cl/2
+	 iuhXU+YeVy+owLP4sYsBMhr4wRLYTY90salXjiDFHnioos42//Fc3b3IDk6f84zvFj
+	 ihHZJVToOECcuWD4fJpqAjlHj5lL+whtTUFZSSRyjWJoj+jVrRH4fNc4yTTcqB4qGk
+	 ab/QBdrxZ3ijA==
+Message-ID: <18011d86-6f9e-4a0d-9514-fcc69cec1fc2@kernel.org>
+Date: Fri, 12 Sep 2025 10:38:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22773d93-cbad-41c5-9e79-4d7f6b9e5ec0@rowland.harvard.edu>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 3/3] i2c: Add Intel USBIO I2C driver
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij
+ <linus.walleij@linaro.org>, Richard Hughes <rhughes@redhat.com>,
+ linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-gpio@vger.kernel.org
+References: <20250911181343.77398-1-hansg@kernel.org>
+ <20250911181343.77398-4-hansg@kernel.org> <aMMVKsbDIIFzaWdu@ninjato>
+From: Hans de Goede <hansg@kernel.org>
+Content-Language: en-US, nl
+In-Reply-To: <aMMVKsbDIIFzaWdu@ninjato>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 11, 2025 at 10:30:09PM -0400, Alan Stern wrote:
-> On Thu, Sep 11, 2025 at 09:46:35PM +0100, Russell King (Oracle) wrote:
-> > On Thu, Sep 11, 2025 at 07:55:13AM -0700, Jakub Kicinski wrote:
-> > > We keep having issues with rtnl_lock taken from resume.
-> > > Honestly, I'm not sure anyone has found a good solution, yet.
-> > > Mostly people just don't implement runtime PM.
-> > > 
-> > > If we were able to pass optional context to suspend/resume
-> > > we could implement conditional locking. We'd lose a lot of
-> > > self-respect but it'd make fixing such bugs easier..
-> > 
-> > Normal drivers have the option of separate callbacks for runtime PM
-> > vs system suspend/resume states. It seems USB doesn't, just munging
-> > everything into one pair of suspend and resume ops without any way
-> > of telling them apart. I suggest that is part of the problem here.
-> > 
-> > However, I'm not a USB expert, so...
+Hi Wolfram,
+
+On 11-Sep-25 8:30 PM, Wolfram Sang wrote:
+> On Thu, Sep 11, 2025 at 08:13:43PM +0200, Hans de Goede wrote:
+>> From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+>>
+>> Add a a driver for the I2C auxbus child device of the Intel USBIO USB
+>> IO-expander used by the MIPI cameras on various new (Meteor Lake and
+>> later) Intel laptops.
+>>
+>> Co-developed-by: Hans de Goede <hansg@kernel.org>
+>> Signed-off-by: Hans de Goede <hansg@kernel.org>
+>> Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
 > 
-> The USB subsystem uses only one pair of callbacks for suspend and resume 
-> because USB hardware has only one suspend state.  However, the callbacks 
-> do get an extra pm_message_t parameter which they can use to distinguish 
-> between system sleep transitions and runtime PM transitions.
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Unfortunately, this isn't the case. While a struct usb_device_driver's
-suspend()/resume() methods get the pm_message_t, a struct usb_driver's
-suspend()/resume() methods do not:
+Thank you.
 
-static int usb_resume_interface(struct usb_device *udev,
-                struct usb_interface *intf, pm_message_t msg, int reset_resume)
-{
-        struct usb_driver       *driver;
-...
-        if (reset_resume) {
-                if (driver->reset_resume) {
-                        status = driver->reset_resume(intf);
-...
-        } else {
-                status = driver->resume(intf);
+Is it ok if Greg picks this up together with the rest of
+the series?
 
-vs
+Regards,
 
-static int usb_resume_device(struct usb_device *udev, pm_message_t msg)
-{
-        struct usb_device_driver        *udriver;
-...
-        if (status == 0 && udriver->resume)
-                status = udriver->resume(udev, msg);
+Hans
 
-and in drivers/net/usb/asix_devices.c:
 
-static struct usb_driver asix_driver = {
-...
-        .suspend =      asix_suspend,
-        .resume =       asix_resume,
-        .reset_resume = asix_resume,
-
-where asix_resume() only takes one argument:
-
-static int asix_resume(struct usb_interface *intf)
-{
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
