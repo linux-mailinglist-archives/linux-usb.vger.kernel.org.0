@@ -1,293 +1,159 @@
-Return-Path: <linux-usb+bounces-28033-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28034-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 197D8B55524
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 18:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A85B5B555CA
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 20:02:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AA0B1D62AE3
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 16:55:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 025351CC786F
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Sep 2025 18:02:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ADFC329F2B;
-	Fri, 12 Sep 2025 16:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E3731A06F;
+	Fri, 12 Sep 2025 18:02:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="O/k3tQ4+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GXNTr3K7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86559326D4A
-	for <linux-usb@vger.kernel.org>; Fri, 12 Sep 2025 16:54:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C965819994F
+	for <linux-usb@vger.kernel.org>; Fri, 12 Sep 2025 18:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757696059; cv=none; b=K04ORHnqjedOnt0u8SGOmop+8UScRZxRGpN8UrO5XpOIfrvz1HlUeeg3Z6R4jELGKu9aDyTNjkSTzTGdech1652NxR+YJk7y4QuoQ0mL1fsDf2EpYR8disgFgkKE7EQVmRl4xrjzpYb3yiLSChDiB0jqzRp4qHSoNkzE4u29ylM=
+	t=1757700151; cv=none; b=W1061C9EGeQe/JmRSCXPf2WogUZGcQKCyxWjD1xKNztFQDs3lxhEP0klfG24T9plgdXnjQI1iv/sks7VlnJF0R8eamfQYNPcaN8aE/PPYd4p27CU67LizNjCOmdjJ7tqBo+wTnpuUMj3l8ppdZFMVT+7EOow9n39c3FthfrOk5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757696059; c=relaxed/simple;
-	bh=FfgkdU6etZrYAfvJBDW3eVcqdsFZWMjbz1Dd8LUWRgw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rG/keJFGJirTSfF2bAzYAyPE64LpAhM3EMpHxj8oHdYn3/Xqp03P71fVocGkSiacSmTH1KSEJ6TR8mBTYx0XK0DyPrJg6C3AhdR7ceyckOjsINkGcRk9BrBlLPY+B+ZLWYN7vUSBx/3wuW6E1s5CE+tRRjdlPwYI0fJL7bwymC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=O/k3tQ4+; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1757696054;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zZNri8xN5U7Vx0F01Sp7vJZsX4j0K/IC1lKGnDrBvpw=;
-	b=O/k3tQ4+g/0+rpbSpw7sbARdvoMR1xVwthpuB9MxRtifJRLY61qimQXiWWpoxP8WWyvEZf
-	zODN95PTl4WqF5lWFdYrs8fKPp/2YMK2yuC6mzmzoqN2SOQHCwT+UykUzfYHLSF4qUjTEF
-	m2AgvKDFbRyRsAbvbWbcOeBOk69wsbQ=
-From: Ze Huang <huang.ze@linux.dev>
-Date: Sat, 13 Sep 2025 00:53:48 +0800
-Subject: [PATCH v8 2/2] usb: dwc3: add generic driver to support flattened
+	s=arc-20240116; t=1757700151; c=relaxed/simple;
+	bh=uwOTsiVxhfUbqNKwHJGl2sJvxOMymjxnpanJT07CD2M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o9sfo1b3qJK+zucbDBc8Z2mVbX5knlFcvjM3O3o7LlTpbWyn5cohvrP6XgY84taNGGzWGoX8WgH1/fWyc3x7HF4Pi6fYlTpThzCuFL7M4Jlqmlzy5XCKAUCiFBJfCRgL4ofHoofONJm6BiV7CQVIGNBr4PIM7KUvw1wkP3nQ6t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GXNTr3K7; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757700150; x=1789236150;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uwOTsiVxhfUbqNKwHJGl2sJvxOMymjxnpanJT07CD2M=;
+  b=GXNTr3K7vLWPj9XHGG37NBHASVA//CEuvpLynaWWg9Nyt5koi2/WDNhC
+   0E2iVQ52IYHyLaaG/kuephtznQB1HDnbedZrFmUC40aEk9ia7eTVHdchH
+   AyHYRiDipRtgdl/oPEy8fgtObjyUAXnudvs/6lOt3XMoTUyW4VzRmjhhV
+   XA/BPol4IPZG5jBiEkGCw9A6eX7AiOOaqehybCRLaA4ZaiC1Trrth61ZB
+   us5VsV7AgOyw9jv5+DkzAqU3a/RwI60KrT4eoJOIU6OtmLWQPKmfDpf/K
+   j7OP14X/DIW4kmv5KSfEDU/o4ui6s0Sr7HRRIgTaMlMtEEFIPqYXYwqIO
+   Q==;
+X-CSE-ConnectionGUID: qxH32O3WToeKC8GyNhsMqA==
+X-CSE-MsgGUID: xRxgY0OpSQGYsphqcQIQfA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11551"; a="77506965"
+X-IronPort-AV: E=Sophos;i="6.18,259,1751266800"; 
+   d="scan'208";a="77506965"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2025 11:02:29 -0700
+X-CSE-ConnectionGUID: Bw+5bMaGS0Cjmxf27QMAPg==
+X-CSE-MsgGUID: DqdMH6oUT3ewGzFAD5w8ew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,259,1751266800"; 
+   d="scan'208";a="211168154"
+Received: from smile.fi.intel.com ([10.237.72.51])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2025 11:02:27 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1ux86K-00000002Svj-1QD5;
+	Fri, 12 Sep 2025 21:02:24 +0300
+Date: Fri, 12 Sep 2025 21:02:23 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+	mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/7] usb: xhci: use '%pad' specifier for DMA address
+ printing
+Message-ID: <aMRgL4fus--v4QjP@smile.fi.intel.com>
+References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
+ <20250903170127.2190730-3-niklas.neronin@linux.intel.com>
+ <20250909115949.610922a3.michal.pecio@gmail.com>
+ <aMAPkH5-4rLdmx_9@smile.fi.intel.com>
+ <20250909224416.691e47c9.michal.pecio@gmail.com>
+ <20250910075630.0389536f.michal.pecio@gmail.com>
+ <aMJ9PbOxn3CCuaYJ@smile.fi.intel.com>
+ <20250911113451.1f5e5ca4.michal.pecio@gmail.com>
+ <aMMtgsAa-dovMqdG@smile.fi.intel.com>
+ <20250912114644.7b9bfe37.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250913-dwc3_generic-v8-2-b50f81f05f95@linux.dev>
-References: <20250913-dwc3_generic-v8-0-b50f81f05f95@linux.dev>
-In-Reply-To: <20250913-dwc3_generic-v8-0-b50f81f05f95@linux.dev>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
- linux-kernel@vger.kernel.org, Ze Huang <huang.ze@linux.dev>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757696039; l=6552;
- i=huang.ze@linux.dev; s=20250705; h=from:subject:message-id;
- bh=FfgkdU6etZrYAfvJBDW3eVcqdsFZWMjbz1Dd8LUWRgw=;
- b=gH7DEKhPnuHMv4E13jQV6dT1Uy5BuV//pCHGR5nlTXxk3OMFYtgL4ZmcEhzK4VR+dp5gosxZt
- QAg2fT6J5Z1B1k24+gPbQHA4mirhrdw1jLpVk8XVaxsOQi0kJx6bIHY
-X-Developer-Key: i=huang.ze@linux.dev; a=ed25519;
- pk=Kzc4PMu5PTo8eZZQ5xmTNL9jeXcQ9Wml0cs+vlQpBkg=
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250912114644.7b9bfe37.michal.pecio@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-To support flattened dwc3 dt model and drop the glue layer, introduce the
-`dwc3-generic` driver. This enables direct binding of the DWC3 core driver
-and offers an alternative to the existing glue driver `dwc3-of-simple`.
+On Fri, Sep 12, 2025 at 11:46:44AM +0200, Michal Pecio wrote:
+> On Thu, 11 Sep 2025 23:13:54 +0300, Andy Shevchenko wrote:
+> > On Thu, Sep 11, 2025 at 11:34:51AM +0200, Michal Pecio wrote:
+> > > As for the %08llx format widespread in dynamic debug, I think it was
+> > > used in the past because it does approximately the right thing on both
+> > > types of systems and it's the only format capable of giving consistent
+> > > result on both dma_addr_t and u64, used for some DMA pointers too.  
+> > 
+> > The problem with it is that it can't give the proper result for the ranges that
+> > span over the 4G. Which I consider a bad thing. So, the correct use is to stick
+> > with HW register size and do appropriate specifier as it was a pointer.
+> 
+> I see no reason to bother padding pointers to full variable width and
+> when I run 'dmesg' on my 64 bit machine I see that most of the kernel
+> doesn't really bother either, so xhci isn't any outlier.
 
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Ze Huang <huang.ze@linux.dev>
----
- drivers/usb/dwc3/Kconfig             |  11 +++
- drivers/usb/dwc3/Makefile            |   1 +
- drivers/usb/dwc3/dwc3-generic-plat.c | 166 +++++++++++++++++++++++++++++++++++
- 3 files changed, 178 insertions(+)
+Can you point out to some examples? I see that pointers printed in many cases
+normally as 64-bit values.
 
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index 310d182e10b50b253d7e5a51674806e6ec442a2a..4925d15084f816d3ff92059b476ebcc799b56b51 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -189,4 +189,15 @@ config USB_DWC3_RTK
- 	  or dual-role mode.
- 	  Say 'Y' or 'M' if you have such device.
- 
-+config USB_DWC3_GENERIC_PLAT
-+	tristate "DWC3 Generic Platform Driver"
-+	depends on OF && COMMON_CLK
-+	default USB_DWC3
-+	help
-+	  Support USB3 functionality in simple SoC integrations.
-+	  Currently supports SpacemiT DWC USB3. Platforms using
-+	  dwc3-of-simple can easily switch to dwc3-generic by flattening
-+	  the dwc3 child node in the device tree.
-+	  Say 'Y' or 'M' here if your platform integrates DWC3 in a similar way.
-+
- endif
-diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
-index 830e6c9e5fe073c1f662ce34b6a4a2da34c407a2..96469e48ff9d189cc8d0b65e65424eae2158bcfe 100644
---- a/drivers/usb/dwc3/Makefile
-+++ b/drivers/usb/dwc3/Makefile
-@@ -57,3 +57,4 @@ obj-$(CONFIG_USB_DWC3_IMX8MP)		+= dwc3-imx8mp.o
- obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
- obj-$(CONFIG_USB_DWC3_OCTEON)		+= dwc3-octeon.o
- obj-$(CONFIG_USB_DWC3_RTK)		+= dwc3-rtk.o
-+obj-$(CONFIG_USB_DWC3_GENERIC_PLAT)	+= dwc3-generic-plat.o
-diff --git a/drivers/usb/dwc3/dwc3-generic-plat.c b/drivers/usb/dwc3/dwc3-generic-plat.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..d96b20570002dc619ea813f4d6a8013636a0f346
---- /dev/null
-+++ b/drivers/usb/dwc3/dwc3-generic-plat.c
-@@ -0,0 +1,166 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * dwc3-generic-plat.c - DesignWare USB3 generic platform driver
-+ *
-+ * Copyright (C) 2025 Ze Huang <huang.ze@linux.dev>
-+ *
-+ * Inspired by dwc3-qcom.c and dwc3-of-simple.c
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+#include "glue.h"
-+
-+struct dwc3_generic {
-+	struct device		*dev;
-+	struct dwc3		dwc;
-+	struct clk_bulk_data	*clks;
-+	int			num_clocks;
-+	struct reset_control	*resets;
-+};
-+
-+#define to_dwc3_generic(d) container_of((d), struct dwc3_generic, dwc)
-+
-+static void dwc3_generic_reset_control_assert(void *data)
-+{
-+	reset_control_assert(data);
-+}
-+
-+static int dwc3_generic_probe(struct platform_device *pdev)
-+{
-+	struct dwc3_probe_data probe_data = {};
-+	struct device *dev = &pdev->dev;
-+	struct dwc3_generic *dwc3g;
-+	struct resource *res;
-+	int ret;
-+
-+	dwc3g = devm_kzalloc(dev, sizeof(*dwc3g), GFP_KERNEL);
-+	if (!dwc3g)
-+		return -ENOMEM;
-+
-+	dwc3g->dev = dev;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res) {
-+		dev_err(&pdev->dev, "missing memory resource\n");
-+		return -ENODEV;
-+	}
-+
-+	dwc3g->resets = devm_reset_control_array_get_optional_exclusive(dev);
-+	if (IS_ERR(dwc3g->resets))
-+		return dev_err_probe(dev, PTR_ERR(dwc3g->resets), "failed to get resets\n");
-+
-+	ret = reset_control_assert(dwc3g->resets);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to assert resets\n");
-+
-+	/* Not strict timing, just for safety */
-+	udelay(2);
-+
-+	ret = reset_control_deassert(dwc3g->resets);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to deassert resets\n");
-+
-+	ret = devm_add_action_or_reset(dev, dwc3_generic_reset_control_assert, dwc3g->resets);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_clk_bulk_get_all_enabled(dwc3g->dev, &dwc3g->clks);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to get clocks\n");
-+
-+	dwc3g->num_clocks = ret;
-+	dwc3g->dwc.dev = dev;
-+	probe_data.dwc = &dwc3g->dwc;
-+	probe_data.res = res;
-+	probe_data.ignore_clocks_and_resets = true;
-+	ret = dwc3_core_probe(&probe_data);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to register DWC3 Core\n");
-+
-+	return 0;
-+}
-+
-+static void dwc3_generic_remove(struct platform_device *pdev)
-+{
-+	struct dwc3 *dwc = platform_get_drvdata(pdev);
-+	struct dwc3_generic *dwc3g = to_dwc3_generic(dwc);
-+
-+	dwc3_core_remove(dwc);
-+
-+	clk_bulk_disable_unprepare(dwc3g->num_clocks, dwc3g->clks);
-+}
-+
-+static int dwc3_generic_suspend(struct device *dev)
-+{
-+	struct dwc3 *dwc = dev_get_drvdata(dev);
-+	struct dwc3_generic *dwc3g = to_dwc3_generic(dwc);
-+	int ret;
-+
-+	ret = dwc3_pm_suspend(dwc);
-+	if (ret)
-+		return ret;
-+
-+	clk_bulk_disable_unprepare(dwc3g->num_clocks, dwc3g->clks);
-+
-+	return 0;
-+}
-+
-+static int dwc3_generic_resume(struct device *dev)
-+{
-+	struct dwc3 *dwc = dev_get_drvdata(dev);
-+	struct dwc3_generic *dwc3g = to_dwc3_generic(dwc);
-+	int ret;
-+
-+	ret = clk_bulk_prepare_enable(dwc3g->num_clocks, dwc3g->clks);
-+	if (ret)
-+		return ret;
-+
-+	ret = dwc3_pm_resume(dwc);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int dwc3_generic_runtime_suspend(struct device *dev)
-+{
-+	return dwc3_runtime_suspend(dev_get_drvdata(dev));
-+}
-+
-+static int dwc3_generic_runtime_resume(struct device *dev)
-+{
-+	return dwc3_runtime_resume(dev_get_drvdata(dev));
-+}
-+
-+static int dwc3_generic_runtime_idle(struct device *dev)
-+{
-+	return dwc3_runtime_idle(dev_get_drvdata(dev));
-+}
-+
-+static const struct dev_pm_ops dwc3_generic_dev_pm_ops = {
-+	SYSTEM_SLEEP_PM_OPS(dwc3_generic_suspend, dwc3_generic_resume)
-+	RUNTIME_PM_OPS(dwc3_generic_runtime_suspend, dwc3_generic_runtime_resume,
-+		       dwc3_generic_runtime_idle)
-+};
-+
-+static const struct of_device_id dwc3_generic_of_match[] = {
-+	{ .compatible = "spacemit,k1-dwc3", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, dwc3_generic_of_match);
-+
-+static struct platform_driver dwc3_generic_driver = {
-+	.probe		= dwc3_generic_probe,
-+	.remove		= dwc3_generic_remove,
-+	.driver		= {
-+		.name	= "dwc3-generic-plat",
-+		.of_match_table = dwc3_generic_of_match,
-+		.pm	= pm_ptr(&dwc3_generic_dev_pm_ops),
-+	},
-+};
-+module_platform_driver(dwc3_generic_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("DesignWare USB3 generic platform driver");
+> (Plus: why should we stop at pointers? Integers too have a width.)
+
+This is not an argument at all. Pointers are special, they are not _just_
+integers. Coincidentally I read an article about pointer in C
+https://stefansf.de/post/pointers-are-more-abstract-than-you-might-expect/
+
+> It amounts to embedding static type information in logs. Maybe there
+> are cases where it could be helpful for people reading the log, maybe
+> there aren't, but this patch doesn't even attempt to make such case,
+> it just talks vaguely about "correctness".
+
+The correctness here is in information that is printed. Again, imagine
+the loop that goes above 4G on a 64-bit machine. Out of a sudden %08llx will be
+expanded to cover the 64-bit addresses and becomes one digit at a time creating
+a ladder (ugly looking) output. This is incorrect.
+
+> I only see one truly incorrect case fixed here, a missing (u64) cast
+> for %llx format, which I presume will print garbage on 32 bits.
+
+No, it's other way around, we should not put explicit casts in printf() in C
+as there are plenty of the format specifiers that allows us to be sure that
+the printed value is correct independently on architecture, endianess, etc.
+
+> This brings up another problem with %pad: it is unknown to compilers
+> so they don't type check it. 
+> 
+> but if I switch to %pad and later change my mind and extend 'addr' to
+> u64 without updating this format, the compiler will eat it up and once
+> again garbage will be printed on some systems.
+
+This topic was risen a few times in the past. Somebody proposed to have a GCC
+plugin with that, somebody else proposed to completely rewrite the %p
+extensions to be more like Pyhon or C++ ones (when you just specify argument
+and handler for it). None so far is implemented AFAIK. But this is not
+particular problem of %pad, it's for all %p extensions. And the extensions
+exist for a purpose. What you are proposing here behind the lines is to kill
+that completely. I believe this is not the right direction to go. So, TL;DR:
+one should be careful about %p extensions, but at the same time open coding
+them is not a good idea either.
 
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
 
