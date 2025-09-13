@@ -1,329 +1,169 @@
-Return-Path: <linux-usb+bounces-28043-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28044-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41A4FB55EE9
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 08:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 76A5BB55F08
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 08:45:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA415AC18D5
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 06:17:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3115DAA0BCC
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 06:45:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2DDB2E719B;
-	Sat, 13 Sep 2025 06:17:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M2UNra0s"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BCE12E88AA;
+	Sat, 13 Sep 2025 06:45:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FD884A3E
-	for <linux-usb@vger.kernel.org>; Sat, 13 Sep 2025 06:17:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26FBE2E888F
+	for <linux-usb@vger.kernel.org>; Sat, 13 Sep 2025 06:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757744264; cv=none; b=eLp0771Vd9smPFMfBgfzdPWxJqS3Tgb/upOIygx7uzvWrzDfx4R6OgIMeQZk+AIPzPr95zVM4Nr2FB4dRCMvTo4d2uQxclwpzAdhXe7VUVvmK14QwaILTWikhm8HoZ+YTk1Gd11vwzpN+JLy+ITOQNgwLIDaHhz2GkVZTekW6QM=
+	t=1757745929; cv=none; b=G5yAXrrHfqOYZjN4IuDW2aBCHlmz3wiftliQvfHJgJxmZnRSGgp2IYX/EHGHU0Hu2Y3p/HLRywh1G8MQ5gWptCEqKjqE+rYG463gD1TVR5ATJ4VuAu8DE+LLxK5XivDlQOjU8StDDUKcZcQzM6Pjdlu8mM6IhaZxa0bnOoF99dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757744264; c=relaxed/simple;
-	bh=AT/89DwzPiffjHYEx8etva1sTydujvFnCGEEQG4mGy4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=P2f6h7lo9NJzyTMlzKEMnyTojufcvme8Jl+PpJSm+qQcXMHgFYtIvW6UzFrwClFMtfi5594DE+lLdQszMxHln/+GyVIVv+QwaUs9R0h/xY5eGKzR6NCsp5DiF8fZrOdceZT/2n3WnjhWbVd6vQrbtLGF5AzagaOZtutO4uZSL8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M2UNra0s; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757744262; x=1789280262;
-  h=date:from:to:cc:subject:message-id;
-  bh=AT/89DwzPiffjHYEx8etva1sTydujvFnCGEEQG4mGy4=;
-  b=M2UNra0sc8G14QfZOD0bg25DNoiK8FE44EtQt3v9lZ2dmLLsHFo5pU8L
-   Nh8n2F67vcPYXJydtMKl6+xSK4HWzXvPbNL2sllRl/umVVmeQ6G+77LMR
-   9j4+LVFQcqNn0A6FlVmYeGq1/qOs4izO++j+b36fW9aQIA3G//ecwtTx/
-   EU9asv23Nihzih9DgsBOPPTcr54k5VtU8WblMvZT/k/8B4A4NSFj9UQn0
-   pvitWgmhfjrXYddoUB/nO3H71YUxJamo+LRg2LkH3KtzhQMCsCNbaBEnK
-   Dgw/9Tj+Zje6SiUVHTCZVFSVTgYiR9FbJM+wXc88ypPHwWUTX3KdWISW+
-   w==;
-X-CSE-ConnectionGUID: AUMIosivTwK5OJa0/bnEOg==
-X-CSE-MsgGUID: q32Zx3qNSnSYAD1Ro1Hlmg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11551"; a="77538738"
-X-IronPort-AV: E=Sophos;i="6.18,261,1751266800"; 
-   d="scan'208";a="77538738"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2025 23:17:41 -0700
-X-CSE-ConnectionGUID: /kYjCAn8Qp2mxbOePnCMoA==
-X-CSE-MsgGUID: YI37m+1HQZW1EQKyRFJPAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,261,1751266800"; 
-   d="scan'208";a="179333863"
-Received: from lkp-server02.sh.intel.com (HELO eb5fdfb2a9b7) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 12 Sep 2025 23:17:40 -0700
-Received: from kbuild by eb5fdfb2a9b7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uxJZp-0001OW-39;
-	Sat, 13 Sep 2025 06:17:37 +0000
-Date: Sat, 13 Sep 2025 14:17:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [westeri-thunderbolt:next] BUILD SUCCESS
- 00f2bf97544cdc7e5b166d19f896f5eaa2bb02ae
-Message-ID: <202509131411.YbI0SHYH-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1757745929; c=relaxed/simple;
+	bh=PYlgmZhwhioZnSwJzR77QkbxJdvtLyYNPx/bF8eOzn8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h+PylRklAWs6uvwRYO++77PXofyqyw7sDS/lt9ijVeqVQoyR5Uz5nsU5NM1r6SsJ4jlZLZ1F6owTXC1IegItU4jNSss7dwjNXVFpnM7GGmVGP6yeu51CQmYUAmD7XIsLycITCQ7GsaXuvo1ihDRtCsU0ZhfJVyLA4HLszGPntwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uxK0S-0003EI-0E; Sat, 13 Sep 2025 08:45:08 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uxK0P-0013XQ-2K;
+	Sat, 13 Sep 2025 08:45:05 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uxK0P-00544Q-1t;
+	Sat, 13 Sep 2025 08:45:05 +0200
+Date: Sat, 13 Sep 2025 08:45:05 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
+	stable@vger.kernel.org, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>, Xu Yang <xu.yang_2@nxp.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
+ PM to avoid MDIO runtime PM wakeups
+Message-ID: <aMUS8ZIUpZJ4HNNX@pengutronix.de>
+References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
+ <CGME20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94@eucas1p2.samsung.com>
+ <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
+ <aMLfGPIpWKwZszrY@shell.armlinux.org.uk>
+ <20250911075513.1d90f8b0@kernel.org>
+ <aMM1K_bkk4clt5WD@shell.armlinux.org.uk>
+ <22773d93-cbad-41c5-9e79-4d7f6b9e5ec0@rowland.harvard.edu>
+ <aMPawXCxlFmz6MaC@shell.armlinux.org.uk>
+ <a25b24ec-67bd-42b7-ac7b-9b8d729faba4@rowland.harvard.edu>
+ <aMQwQAaoSB0Y0-YD@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aMQwQAaoSB0Y0-YD@shell.armlinux.org.uk>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
-branch HEAD: 00f2bf97544cdc7e5b166d19f896f5eaa2bb02ae  MAINTAINERS: Update Michael Jamet's maintainer entries
+On Fri, Sep 12, 2025 at 03:37:52PM +0100, Russell King (Oracle) wrote:
+> On Fri, Sep 12, 2025 at 10:29:47AM -0400, Alan Stern wrote:
+> > On Fri, Sep 12, 2025 at 09:33:05AM +0100, Russell King (Oracle) wrote:
+> > > On Thu, Sep 11, 2025 at 10:30:09PM -0400, Alan Stern wrote:
+> > > > The USB subsystem uses only one pair of callbacks for suspend and resume 
+> > > > because USB hardware has only one suspend state.  However, the callbacks 
+> > > > do get an extra pm_message_t parameter which they can use to distinguish 
+> > > > between system sleep transitions and runtime PM transitions.
+> > > 
+> > > Unfortunately, this isn't the case. While a struct usb_device_driver's
+> > > suspend()/resume() methods get the pm_message_t, a struct usb_driver's
+> > > suspend()/resume() methods do not:
+> > > 
+> > > static int usb_resume_interface(struct usb_device *udev,
+> > >                 struct usb_interface *intf, pm_message_t msg, int reset_resume)
+> > > {
+> > >         struct usb_driver       *driver;
+> > > ...
+> > >         if (reset_resume) {
+> > >                 if (driver->reset_resume) {
+> > >                         status = driver->reset_resume(intf);
+> > > ...
+> > >         } else {
+> > >                 status = driver->resume(intf);
+> > > 
+> > > vs
+> > > 
+> > > static int usb_resume_device(struct usb_device *udev, pm_message_t msg)
+> > > {
+> > >         struct usb_device_driver        *udriver;
+> > > ...
+> > >         if (status == 0 && udriver->resume)
+> > >                 status = udriver->resume(udev, msg);
+> > > 
+> > > and in drivers/net/usb/asix_devices.c:
+> > > 
+> > > static struct usb_driver asix_driver = {
+> > > ...
+> > >         .suspend =      asix_suspend,
+> > >         .resume =       asix_resume,
+> > >         .reset_resume = asix_resume,
+> > > 
+> > > where asix_resume() only takes one argument:
+> > > 
+> > > static int asix_resume(struct usb_interface *intf)
+> > > {
+> > 
+> > Your email made me go back and check the code more carefully, and it 
+> > turns out that we were both half-right.  :-)
+> > 
+> > The pm_message_t argument is passed to the usb_driver's ->suspend 
+> > callback in usb_suspend_interface(), but not to the ->resume callback in 
+> > usb_resume_interface().  Yes, it's inconsistent.
+> > 
+> > I suppose the API could be changed, at the cost of updating a lot of 
+> > drivers.  But it would be easier if this wasn't necessary, if there was 
+> > some way to work around the problem.  Unfortunately, I don't know 
+> > anything about how the network stack handles suspend and resume, or 
+> > what sort of locking it requires, so I can't offer any suggestions.
+> 
+> I, too, am unable to help further as I have no bandwidth available
+> to deal with this. Sorry.
 
-elapsed time: 1450m
+Thanks for all the valuable input.
 
-configs tested: 236
-configs skipped: 5
+I’ll process the feedback and investigate possible ways to proceed. As a
+first step I’ll measure the actual power savings from USB auto-suspend
+on AX88772 to see if runtime PM is worth the added complexity.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig    clang-22
-alpha                            allyesconfig    clang-19
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    clang-19
-arc                              allmodconfig    clang-19
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    clang-22
-arc                              allyesconfig    clang-19
-arc                              allyesconfig    gcc-15.1.0
-arc                                 defconfig    clang-19
-arc                   randconfig-001-20250912    gcc-10.5.0
-arc                   randconfig-001-20250913    gcc-8.5.0
-arc                   randconfig-002-20250912    gcc-12.5.0
-arc                   randconfig-002-20250913    gcc-8.5.0
-arm                              allmodconfig    clang-19
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    clang-19
-arm                              allyesconfig    gcc-15.1.0
-arm                                 defconfig    clang-19
-arm                          exynos_defconfig    clang-22
-arm                   milbeaut_m10v_defconfig    gcc-15.1.0
-arm                       omap2plus_defconfig    clang-22
-arm                             pxa_defconfig    clang-22
-arm                   randconfig-001-20250912    clang-22
-arm                   randconfig-001-20250913    gcc-8.5.0
-arm                   randconfig-002-20250912    gcc-14.3.0
-arm                   randconfig-002-20250913    gcc-8.5.0
-arm                   randconfig-003-20250912    clang-22
-arm                   randconfig-003-20250913    gcc-8.5.0
-arm                   randconfig-004-20250912    gcc-10.5.0
-arm                   randconfig-004-20250913    gcc-8.5.0
-arm                        realview_defconfig    clang-22
-arm                           sama5_defconfig    gcc-15.1.0
-arm                        spear6xx_defconfig    gcc-15.1.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    clang-22
-arm64                               defconfig    clang-19
-arm64                 randconfig-001-20250912    clang-20
-arm64                 randconfig-001-20250913    gcc-8.5.0
-arm64                 randconfig-002-20250912    clang-16
-arm64                 randconfig-002-20250913    gcc-8.5.0
-arm64                 randconfig-003-20250912    clang-22
-arm64                 randconfig-003-20250913    gcc-8.5.0
-arm64                 randconfig-004-20250912    clang-19
-arm64                 randconfig-004-20250913    gcc-8.5.0
-csky                             alldefconfig    gcc-15.1.0
-csky                              allnoconfig    clang-22
-csky                                defconfig    clang-19
-csky                  randconfig-001-20250912    gcc-15.1.0
-csky                  randconfig-001-20250913    clang-16
-csky                  randconfig-002-20250912    gcc-11.5.0
-csky                  randconfig-002-20250913    clang-16
-hexagon                          allmodconfig    clang-19
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-19
-hexagon                          allyesconfig    clang-22
-hexagon                             defconfig    clang-19
-hexagon               randconfig-001-20250912    clang-22
-hexagon               randconfig-001-20250913    clang-16
-hexagon               randconfig-002-20250912    clang-22
-hexagon               randconfig-002-20250913    clang-16
-i386                             allmodconfig    clang-20
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    clang-20
-i386                              allnoconfig    gcc-14
-i386                             allyesconfig    clang-20
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20250912    gcc-14
-i386        buildonly-randconfig-002-20250912    clang-20
-i386        buildonly-randconfig-003-20250912    gcc-13
-i386        buildonly-randconfig-004-20250912    clang-20
-i386        buildonly-randconfig-005-20250912    gcc-14
-i386        buildonly-randconfig-006-20250912    clang-20
-i386                                defconfig    clang-20
-i386                  randconfig-001-20250913    gcc-14
-i386                  randconfig-002-20250913    gcc-14
-i386                  randconfig-003-20250913    gcc-14
-i386                  randconfig-004-20250913    gcc-14
-i386                  randconfig-005-20250913    gcc-14
-i386                  randconfig-006-20250913    gcc-14
-i386                  randconfig-007-20250913    gcc-14
-i386                  randconfig-011-20250913    clang-20
-i386                  randconfig-012-20250913    clang-20
-i386                  randconfig-013-20250913    clang-20
-i386                  randconfig-014-20250913    clang-20
-i386                  randconfig-015-20250913    clang-20
-i386                  randconfig-016-20250913    clang-20
-i386                  randconfig-017-20250913    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20250912    gcc-15.1.0
-loongarch             randconfig-001-20250913    clang-16
-loongarch             randconfig-002-20250912    clang-22
-loongarch             randconfig-002-20250913    clang-16
-m68k                             allmodconfig    clang-19
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    clang-19
-m68k                             allyesconfig    gcc-15.1.0
-m68k                          atari_defconfig    gcc-15.1.0
-m68k                                defconfig    clang-19
-microblaze                       allmodconfig    clang-19
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    clang-19
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                          ath25_defconfig    clang-22
-mips                         bigsur_defconfig    gcc-15.1.0
-mips                           jazz_defconfig    clang-22
-nios2                             allnoconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-15.1.0
-nios2                               defconfig    gcc-15.1.0
-nios2                 randconfig-001-20250912    gcc-11.5.0
-nios2                 randconfig-001-20250913    clang-16
-nios2                 randconfig-002-20250912    gcc-11.5.0
-nios2                 randconfig-002-20250913    clang-16
-openrisc                          allnoconfig    clang-22
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-14
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    clang-22
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250912    gcc-14.3.0
-parisc                randconfig-001-20250913    clang-16
-parisc                randconfig-002-20250912    gcc-8.5.0
-parisc                randconfig-002-20250913    clang-16
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    clang-22
-powerpc                          allyesconfig    gcc-15.1.0
-powerpc                 mpc8313_rdb_defconfig    clang-22
-powerpc               randconfig-001-20250912    gcc-8.5.0
-powerpc               randconfig-001-20250913    clang-16
-powerpc               randconfig-002-20250912    clang-22
-powerpc               randconfig-002-20250913    clang-16
-powerpc               randconfig-003-20250912    clang-17
-powerpc               randconfig-003-20250913    clang-16
-powerpc64             randconfig-001-20250912    gcc-12.5.0
-powerpc64             randconfig-001-20250913    clang-16
-powerpc64             randconfig-002-20250912    clang-22
-powerpc64             randconfig-002-20250913    clang-16
-powerpc64             randconfig-003-20250912    clang-19
-powerpc64             randconfig-003-20250913    clang-16
-riscv                            allmodconfig    gcc-15.1.0
-riscv                             allnoconfig    clang-22
-riscv                            allyesconfig    gcc-15.1.0
-riscv                               defconfig    gcc-14
-riscv                 randconfig-001-20250912    clang-16
-riscv                 randconfig-001-20250913    gcc-14.3.0
-riscv                 randconfig-002-20250912    gcc-9.5.0
-riscv                 randconfig-002-20250913    gcc-14.3.0
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    gcc-15.1.0
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    gcc-14
-s390                  randconfig-001-20250912    gcc-10.5.0
-s390                  randconfig-001-20250913    gcc-14.3.0
-s390                  randconfig-002-20250912    gcc-10.5.0
-s390                  randconfig-002-20250913    gcc-14.3.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-14
-sh                        edosk7705_defconfig    gcc-15.1.0
-sh                    randconfig-001-20250912    gcc-15.1.0
-sh                    randconfig-001-20250913    gcc-14.3.0
-sh                    randconfig-002-20250912    gcc-15.1.0
-sh                    randconfig-002-20250913    gcc-14.3.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250912    gcc-8.5.0
-sparc                 randconfig-001-20250913    gcc-14.3.0
-sparc                 randconfig-002-20250912    gcc-13.4.0
-sparc                 randconfig-002-20250913    gcc-14.3.0
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20250912    gcc-8.5.0
-sparc64               randconfig-001-20250913    gcc-14.3.0
-sparc64               randconfig-002-20250912    clang-20
-sparc64               randconfig-002-20250913    gcc-14.3.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    clang-19
-um                               allyesconfig    gcc-14
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20250912    clang-22
-um                    randconfig-001-20250913    gcc-14.3.0
-um                    randconfig-002-20250912    gcc-14
-um                    randconfig-002-20250913    gcc-14.3.0
-um                           x86_64_defconfig    gcc-14
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250912    gcc-14
-x86_64      buildonly-randconfig-002-20250912    gcc-14
-x86_64      buildonly-randconfig-003-20250912    clang-20
-x86_64      buildonly-randconfig-004-20250912    clang-20
-x86_64      buildonly-randconfig-005-20250912    clang-20
-x86_64      buildonly-randconfig-006-20250912    gcc-14
-x86_64                              defconfig    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20250913    clang-20
-x86_64                randconfig-002-20250913    clang-20
-x86_64                randconfig-003-20250913    clang-20
-x86_64                randconfig-004-20250913    clang-20
-x86_64                randconfig-005-20250913    clang-20
-x86_64                randconfig-006-20250913    clang-20
-x86_64                randconfig-007-20250913    clang-20
-x86_64                randconfig-008-20250913    clang-20
-x86_64                randconfig-071-20250913    gcc-14
-x86_64                randconfig-072-20250913    gcc-14
-x86_64                randconfig-073-20250913    gcc-14
-x86_64                randconfig-074-20250913    gcc-14
-x86_64                randconfig-075-20250913    gcc-14
-x86_64                randconfig-076-20250913    gcc-14
-x86_64                randconfig-077-20250913    gcc-14
-x86_64                randconfig-078-20250913    gcc-14
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250912    gcc-9.5.0
-xtensa                randconfig-001-20250913    gcc-14.3.0
-xtensa                randconfig-002-20250912    gcc-12.5.0
-xtensa                randconfig-002-20250913    gcc-14.3.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
