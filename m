@@ -1,169 +1,152 @@
-Return-Path: <linux-usb+bounces-28044-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28045-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76A5BB55F08
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 08:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 19C43B55F42
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 10:13:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3115DAA0BCC
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 06:45:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A368CAA0E7E
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 08:12:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BCE12E88AA;
-	Sat, 13 Sep 2025 06:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF662E8B6A;
+	Sat, 13 Sep 2025 08:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EtYpIyjr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26FBE2E888F
-	for <linux-usb@vger.kernel.org>; Sat, 13 Sep 2025 06:45:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEA42BCFB
+	for <linux-usb@vger.kernel.org>; Sat, 13 Sep 2025 08:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757745929; cv=none; b=G5yAXrrHfqOYZjN4IuDW2aBCHlmz3wiftliQvfHJgJxmZnRSGgp2IYX/EHGHU0Hu2Y3p/HLRywh1G8MQ5gWptCEqKjqE+rYG463gD1TVR5ATJ4VuAu8DE+LLxK5XivDlQOjU8StDDUKcZcQzM6Pjdlu8mM6IhaZxa0bnOoF99dw=
+	t=1757751175; cv=none; b=cPzI3h6eFqq+uKrfYLFZyGJcOF/kokgDqKlchaJPiDHZUgDbAbMTJqQu0jP/+ti5Zm3SqQsi5DiuCNMl3vU6obRl3l8obCWx1fA3gZlCMj/kXQuf/np+MS4vVIToKcZDnsHJ7syFV+pkayQiOxfrlOJk897dj8fbJvFbOf9XHf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757745929; c=relaxed/simple;
-	bh=PYlgmZhwhioZnSwJzR77QkbxJdvtLyYNPx/bF8eOzn8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h+PylRklAWs6uvwRYO++77PXofyqyw7sDS/lt9ijVeqVQoyR5Uz5nsU5NM1r6SsJ4jlZLZ1F6owTXC1IegItU4jNSss7dwjNXVFpnM7GGmVGP6yeu51CQmYUAmD7XIsLycITCQ7GsaXuvo1ihDRtCsU0ZhfJVyLA4HLszGPntwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uxK0S-0003EI-0E; Sat, 13 Sep 2025 08:45:08 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uxK0P-0013XQ-2K;
-	Sat, 13 Sep 2025 08:45:05 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uxK0P-00544Q-1t;
-	Sat, 13 Sep 2025 08:45:05 +0200
-Date: Sat, 13 Sep 2025 08:45:05 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
-	stable@vger.kernel.org, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	Lukas Wunner <lukas@wunner.de>, Xu Yang <xu.yang_2@nxp.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
- PM to avoid MDIO runtime PM wakeups
-Message-ID: <aMUS8ZIUpZJ4HNNX@pengutronix.de>
-References: <20250908112619.2900723-1-o.rempel@pengutronix.de>
- <CGME20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94@eucas1p2.samsung.com>
- <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
- <aMLfGPIpWKwZszrY@shell.armlinux.org.uk>
- <20250911075513.1d90f8b0@kernel.org>
- <aMM1K_bkk4clt5WD@shell.armlinux.org.uk>
- <22773d93-cbad-41c5-9e79-4d7f6b9e5ec0@rowland.harvard.edu>
- <aMPawXCxlFmz6MaC@shell.armlinux.org.uk>
- <a25b24ec-67bd-42b7-ac7b-9b8d729faba4@rowland.harvard.edu>
- <aMQwQAaoSB0Y0-YD@shell.armlinux.org.uk>
+	s=arc-20240116; t=1757751175; c=relaxed/simple;
+	bh=R0zHToYnuiQEcRHbpnTZ0Nwu1p01PFg+ubOn0A+ZmJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dlCRXxtMGTGraPFqup0tIAe4j3wR8LsfuY6UBLn+gb0PIlgxU8NIalrzCwDO8y7SiMCgHfaBoH4BtBHFyNFww7hmRXskWaXE2iWDQwjEMKL6Sf5DtoMGR0cHHpbWDrFc2zhW5Avi2rsg9i7ZjZEnaonewYnOaO9gmRaJP4oARS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EtYpIyjr; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-55f72452a8eso3156128e87.3
+        for <linux-usb@vger.kernel.org>; Sat, 13 Sep 2025 01:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757751172; x=1758355972; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UfQhDuSvzHIkemDW8GNUkq4GLhACt1FD+0aGxJPOI+o=;
+        b=EtYpIyjrMxawlHYypmt/TbcevYQjjtlwxLGjgPWEuV5m7p3vNuv76i82FxjrMkuQ3U
+         sMwcpcj8sgG3+jzy6aEGY1d52iHeR+zrdakxsMKpFNOSVLlX5QwemzpUT6P/xe+X0lzw
+         jwr3min/nYTWH0mFzH4aRpqiaJaQUmT2YRUvL3GIHV6ffgaD6me3J8D8Il3/vZ1MYGD6
+         Vv0re9pf9Jyp+D0pQ2wOHAEGNJPtPD/4yrAs0MW94r09P6IHpHVfQjL3FDlYfVehJKCe
+         oagZnL/GNwwVbFnjh1Juw0LU8ACjTVZy3Mmu/l+yRvWyrIWD+m+eib7+79hMZe6aOrmX
+         fhhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757751172; x=1758355972;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UfQhDuSvzHIkemDW8GNUkq4GLhACt1FD+0aGxJPOI+o=;
+        b=rKhWxOULy+XGV8HeaczMiC8R5zJBGpImMe8LwBGokwmH/Ashw4aEtXuey6wIsQaTvY
+         CNKMc7iWgHLwNaZYF6UW3hKrpG5ZMpXVPmZdKJO5iqa010Nyo8DOaOtcp1z4T4qkmnPA
+         zeonHG4ygpYw97HNnrEOGqOXKPo9TDKQT8saVSYXZyt0ojlR8sMbzG5Z26Tf/MKn4AcV
+         rpawoEXSw8TsfhjOxRGSz+Ch9iiu4++7HGUhCI19PUC5se7MO0Us+bO2KeUleGGfULpg
+         mX2tPuwb6k9UAl9zus8IxCcGr7ATN/2lCLzjH0IRzzNTxIroN4dWCVEnRMpgz2po8fId
+         I7/g==
+X-Forwarded-Encrypted: i=1; AJvYcCUAfSLxF0qsO2zhb4gX0ziAcjBk0+nezBW1/Nb6she90QHxJV6MTAjN9ZAX3/mrO3ZZKgYB//2GN5Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJK1pzLusKGfgHKvUxZmUiHwGx3XG8VymlOy8yeJV1XfWVgzg9
+	4ydJ7Gpau7KtQ0+r61wye500aJLxts5xn4JqfWOtRSU+tflgbFIuctEWnABUDg==
+X-Gm-Gg: ASbGncsYxrg8n0DSeD+aWXyPyFSfl98oPSvGtixZbsxNHqpyZOydw6Cgp/3EP/euaYB
+	s6Zis0t/I0A3Dtc8Au5G64zVRR676ciofaJpadPwvUfjMaLReBFbs0kUQ5uKCsIydl+IYdsRSwn
+	WCfCrDGU3ZziYQt2i2bTE2j7qBm+kCvczUH+co3nIW4yMJEJmpDTL5g/1Mt6dK9fxUCRxKumofV
+	Cy+XsXWqxOo4F0WQI8/yJgF8DOQYWQ/QhSkvVMV+zdWYblTouMTV2SitEQH/510C9/1mzGGXjJ1
+	iYlK04kYMEWklBYNlNDGLgUUOUKDUGj3+GQEPauMvhvOD7Cp0rao/jhO2fE7i/ZF7MnQzgHp5ZS
+	hemVwMTPobhjc0lxSuV9A/USjd8fHvRzTyaZjRMnpeSIg8w==
+X-Google-Smtp-Source: AGHT+IH2AD5BXTQAgCsKFKU70bkQeF93I7gukIqkNtAzap8icHw0uG0c2ZukmHH3I/86xL2nJAU//g==
+X-Received: by 2002:a05:6512:6707:b0:571:7b89:b413 with SMTP id 2adb3069b0e04-5717b98f8f3mr1030726e87.5.1757751171469;
+        Sat, 13 Sep 2025 01:12:51 -0700 (PDT)
+Received: from foxbook (bfg216.neoplus.adsl.tpnet.pl. [83.28.44.216])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-56e5d5e6fd0sm1794103e87.50.2025.09.13.01.12.50
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 13 Sep 2025 01:12:51 -0700 (PDT)
+Date: Sat, 13 Sep 2025 10:12:46 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+ mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/7] usb: xhci: use '%pad' specifier for DMA address
+ printing
+Message-ID: <20250913101246.515abfc4.michal.pecio@gmail.com>
+In-Reply-To: <aMRgL4fus--v4QjP@smile.fi.intel.com>
+References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
+	<20250903170127.2190730-3-niklas.neronin@linux.intel.com>
+	<20250909115949.610922a3.michal.pecio@gmail.com>
+	<aMAPkH5-4rLdmx_9@smile.fi.intel.com>
+	<20250909224416.691e47c9.michal.pecio@gmail.com>
+	<20250910075630.0389536f.michal.pecio@gmail.com>
+	<aMJ9PbOxn3CCuaYJ@smile.fi.intel.com>
+	<20250911113451.1f5e5ca4.michal.pecio@gmail.com>
+	<aMMtgsAa-dovMqdG@smile.fi.intel.com>
+	<20250912114644.7b9bfe37.michal.pecio@gmail.com>
+	<aMRgL4fus--v4QjP@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aMQwQAaoSB0Y0-YD@shell.armlinux.org.uk>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 12, 2025 at 03:37:52PM +0100, Russell King (Oracle) wrote:
-> On Fri, Sep 12, 2025 at 10:29:47AM -0400, Alan Stern wrote:
-> > On Fri, Sep 12, 2025 at 09:33:05AM +0100, Russell King (Oracle) wrote:
-> > > On Thu, Sep 11, 2025 at 10:30:09PM -0400, Alan Stern wrote:
-> > > > The USB subsystem uses only one pair of callbacks for suspend and resume 
-> > > > because USB hardware has only one suspend state.  However, the callbacks 
-> > > > do get an extra pm_message_t parameter which they can use to distinguish 
-> > > > between system sleep transitions and runtime PM transitions.
-> > > 
-> > > Unfortunately, this isn't the case. While a struct usb_device_driver's
-> > > suspend()/resume() methods get the pm_message_t, a struct usb_driver's
-> > > suspend()/resume() methods do not:
-> > > 
-> > > static int usb_resume_interface(struct usb_device *udev,
-> > >                 struct usb_interface *intf, pm_message_t msg, int reset_resume)
-> > > {
-> > >         struct usb_driver       *driver;
-> > > ...
-> > >         if (reset_resume) {
-> > >                 if (driver->reset_resume) {
-> > >                         status = driver->reset_resume(intf);
-> > > ...
-> > >         } else {
-> > >                 status = driver->resume(intf);
-> > > 
-> > > vs
-> > > 
-> > > static int usb_resume_device(struct usb_device *udev, pm_message_t msg)
-> > > {
-> > >         struct usb_device_driver        *udriver;
-> > > ...
-> > >         if (status == 0 && udriver->resume)
-> > >                 status = udriver->resume(udev, msg);
-> > > 
-> > > and in drivers/net/usb/asix_devices.c:
-> > > 
-> > > static struct usb_driver asix_driver = {
-> > > ...
-> > >         .suspend =      asix_suspend,
-> > >         .resume =       asix_resume,
-> > >         .reset_resume = asix_resume,
-> > > 
-> > > where asix_resume() only takes one argument:
-> > > 
-> > > static int asix_resume(struct usb_interface *intf)
-> > > {
+On Fri, 12 Sep 2025 21:02:23 +0300, Andy Shevchenko wrote:
+> Again, imagine the loop that goes above 4G on a 64-bit machine. Out
+> of a sudden %08llx will be expanded to cover the 64-bit addresses and
+> becomes one digit at a time creating a ladder (ugly looking) output.
+> This is incorrect.
+
+If I equated correctness with ugliness I would equally confidently
+state that unnecessary zero-padding is incorrect. But I don't.
+This is exactly the absurd argument I previously made for padding all
+%x and %d formats to full width. Pad tables, not lone log messages.
+
+> No, it's other way around, we should not put explicit casts in printf() in C
+> as there are plenty of the format specifiers that allows us to be sure that
+> the printed value is correct independently on architecture, endianess, etc.
+
+At least if you do it, the compiler will also do the right thing:
+- if the cast doesn't match the format, warn (xhci needs a patch here)
+- if it matches, widen the provided value as necessary
+
+And it works consistently regardless of whether the variable is a
+dma_addr_t or u64, on all architectures, with or without PAE.
+
+Reminder: this drivers handles DMAs as u64 too, so it will *never*
+print all DMAs as %pad. And if it tries, it will be a silent bug.
+
+> > This brings up another problem with %pad: it is unknown to compilers
+> > so they don't type check it. 
 > > 
-> > Your email made me go back and check the code more carefully, and it 
-> > turns out that we were both half-right.  :-)
-> > 
-> > The pm_message_t argument is passed to the usb_driver's ->suspend 
-> > callback in usb_suspend_interface(), but not to the ->resume callback in 
-> > usb_resume_interface().  Yes, it's inconsistent.
-> > 
-> > I suppose the API could be changed, at the cost of updating a lot of 
-> > drivers.  But it would be easier if this wasn't necessary, if there was 
-> > some way to work around the problem.  Unfortunately, I don't know 
-> > anything about how the network stack handles suspend and resume, or 
-> > what sort of locking it requires, so I can't offer any suggestions.
+> > but if I switch to %pad and later change my mind and extend 'addr' to
+> > u64 without updating this format, the compiler will eat it up and once
+> > again garbage will be printed on some systems.  
 > 
-> I, too, am unable to help further as I have no bandwidth available
-> to deal with this. Sorry.
+> This topic was risen a few times in the past. Somebody proposed to have a GCC
+> plugin with that, somebody else proposed to completely rewrite the %p
+> extensions to be more like Pyhon or C++ ones (when you just specify argument
+> and handler for it). None so far is implemented AFAIK.
 
-Thanks for all the valuable input.
+Indeed, not holding my breath for the %pad situation improving.
+This includes impossibility of passing it by value - it's forced
+by compilers being unaware of %pad and following usual %p rules.
 
-I’ll process the feedback and investigate possible ways to proceed. As a
-first step I’ll measure the actual power savings from USB auto-suspend
-on AX88772 to see if runtime PM is worth the added complexity.
+> But this is not particular problem of %pad, it's for all %p
+> extensions. And the extensions exist for a purpose. What you are
+> proposing here behind the lines is to kill that completely.
 
-Best Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Surely people would laugh me off if I actually suggested that.
+If those formats work for their cases, use them.
 
