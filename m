@@ -1,170 +1,178 @@
-Return-Path: <linux-usb+bounces-28048-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28049-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68E98B560E2
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 14:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 11FFFB56132
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 15:42:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FBC11C817FF
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 12:44:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C1981BC4F60
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Sep 2025 13:43:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0542E2ECE9B;
-	Sat, 13 Sep 2025 12:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48C792EFD89;
+	Sat, 13 Sep 2025 13:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I0Yu6R2r"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="u9bKJf8K"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4032ECD28
-	for <linux-usb@vger.kernel.org>; Sat, 13 Sep 2025 12:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E17182B4;
+	Sat, 13 Sep 2025 13:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757767427; cv=none; b=ZpDiDxxHQFCYOdjgUMv8UHMGlBnethscGBNPAPx+2WTyOpzA+cqhud3BZZC0RS+vMQrGZC3KzaMp/NFFD5bI7+rswZcioUMZKTzKjrC8Gtv5W2l/TTnviy1f/bMuUTQ6jfee6EX8o32CiH/OUSA2mfYvroaQPlfTPZnY7nLH/NA=
+	t=1757770965; cv=none; b=YCdtAcXAnD5/BI0hgQZ9yAgygZxGwBZTidztpHRNplPwtzJNPBVGUYlhxv80jqL11rkpOoUMUz+bup7b6h/4TkUhZ4I8ekgdXYKwxKdzloBBTMTGujL96tESKyYDb74S8SmuL8+fEI7e2Q+j03rKBY8uXCTqfmzkIV8w/jHK/BE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757767427; c=relaxed/simple;
-	bh=jfB70gQONh76s9eOb2k7EuWL0y+TqUWsvIBuoaHEIgk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PvI3IIk36uQ//zfn3rETZHnX3bQ2S2UCpjoqEpWtA0WR8FQcHnD8x4MB8AL39DKTJMKHt0011GAm0j7nq4dPtqFWO9mdxvKJtPre2BUZ+2pqkSOD6uxwzI48fhZj0Yo4bmkcHpwctorgeN5zBdTN3P6u8i5PIPidQ9KnzbV0Cwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I0Yu6R2r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34860C4CEFA
-	for <linux-usb@vger.kernel.org>; Sat, 13 Sep 2025 12:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757767427;
-	bh=jfB70gQONh76s9eOb2k7EuWL0y+TqUWsvIBuoaHEIgk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=I0Yu6R2ra4/DT88cl44PVNrMfOeFPiljiPHENl5VxvrHmS+ej9ozfV7A8c/PYgBZe
-	 scUc3sbvYnHIGJ9IRQlt3IPC3bgrWTQriV20RfRklMtvd2pKgOYr44J1FsReV0SFzf
-	 RpFIXWz7Ad0dwnisoRvoYb5ZuaRaRy8wEdnWRXHwlqtKjzpjoDD9dsJXXW+Pzr7amJ
-	 SiyjHa/c8jR0EDfSLQdHaGyTJkuyeTOXGMQOslwjJlNgvRHmrQo1mXp9PsMMoFDTww
-	 Cf7+FFrNDAwPze3x1i9OXPhy4ZJ9hDmFEjZzdaaHOrvLhlhwlH5nk6ww1MfqwWNOm8
-	 ayyXZeQdMi8Gw==
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-74c1251df00so1486772a34.0
-        for <linux-usb@vger.kernel.org>; Sat, 13 Sep 2025 05:43:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUVbrAbcV+GeUDCFGgn5cbAAIxfK13a3IrotZjmzLPX6joTT/GWN+m/3gWyMCtNHEHeN+FM46h9pJg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCbRL3EdHrpEk8o+eMmqL7+Q9JSxjlieQOSJcV8SsFFjHnHaxu
-	4UrPaj9fI+oXfuc0wJm2bL/3hNcXONVb9FlI36D5oyiHEecVLA3x2j0Y4D1mwl8kFNp7jWd/IlZ
-	hBg536L6uJxhnDI2QM3s3lgc+Jb9qgIg=
-X-Google-Smtp-Source: AGHT+IEAmiMQnLcYLV/Pkj3NHYryOaXFljpsolHDj1IzK9H2zh00ir+lNbAaqOUzWhVVfMZ1hKEiamyleS7v2ajPG3Y=
-X-Received: by 2002:a05:6830:6d15:b0:746:f391:9d71 with SMTP id
- 46e09a7af769-753550e2c12mr3640920a34.23.1757767426497; Sat, 13 Sep 2025
- 05:43:46 -0700 (PDT)
+	s=arc-20240116; t=1757770965; c=relaxed/simple;
+	bh=nLO1F8+f5KOWc4rLVGDrhuASC8iN5AllB+IaQ48VKMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q0ZJEHMZDLQ4wBMCtXYjf0SGLBWgjsvpFIs+h43BkZG2MAV2TdfTLGUDQaMNzElslPJvbcb3IJt8XNxI9fTiR0gFa+j7RRFMAfjK4F8CocCrb9xqUiJ2SQwhkKSpoWQOq2L+krWE/KJ7YSCpEcjar9K8B2g6t7rn6x44cc0c/HY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=u9bKJf8K; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 5720E6F3;
+	Sat, 13 Sep 2025 15:41:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1757770885;
+	bh=nLO1F8+f5KOWc4rLVGDrhuASC8iN5AllB+IaQ48VKMw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=u9bKJf8KXJuQ+Ly/3qOXIlTGLpGdkCj8vskYd0elr4fwROmyR0JlDBTt1KaPcENgF
+	 YpK8LVcvZw0xwHgBvqb7EflCXMEilfW2xcR6+jD70N3o56Ad/xKcJ8/OOzFveboaW+
+	 GtG6bDI5pfqdiyFQ4VgXv8qfeTuwS/OTyDFFUgls=
+Date: Sat, 13 Sep 2025 16:42:16 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/4] media: uvcvideo: Run uvc_ctrl_init_ctrl for all
+ controls
+Message-ID: <20250913134216.GA10328@pendragon.ideasonboard.com>
+References: <20250818-uvc-iq-switch-v1-0-f7ea5e740ddd@chromium.org>
+ <20250818-uvc-iq-switch-v1-3-f7ea5e740ddd@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <f8965cfe-de9a-439c-84e3-63da066aa74f@rowland.harvard.edu>
- <CAJZ5v0g9nip2KUs2hoa7yMMAow-WsS-4EYX6FvEbpRFw10C2wQ@mail.gmail.com>
- <CAJZ5v0gzFWW6roYTjUFeL2Tt8kKJ_g5Q=tp2=s87dy05x-Hvww@mail.gmail.com>
- <38b706cc-5966-4766-9165-51935fdcd790@rowland.harvard.edu>
- <CAJZ5v0h=i9XF_SQMOhz3P+4SAH3Qy-r1oUiiw7Bp=PcRnJjVbQ@mail.gmail.com>
- <59951c2d-60e8-47a8-a43c-00b92e095043@rowland.harvard.edu>
- <CAJZ5v0i6aFarDU8OTZ_3VS9dp4SaqKJ0SuiN4gFSxrRoAAV5CQ@mail.gmail.com>
- <24a69e4d-2f10-43fb-81d4-f7eea44a6b8d@rowland.harvard.edu>
- <CAJZ5v0gUjgY45WFye5STJ7kv30O4rQ=23qkOsHEMSxfwg8jO4g@mail.gmail.com>
- <385dccf3-234a-4f83-9610-81ac30bf1466@rowland.harvard.edu> <20250912222321.ct5ezgvsgyvos2ah@synopsys.com>
-In-Reply-To: <20250912222321.ct5ezgvsgyvos2ah@synopsys.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 13 Sep 2025 14:43:32 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jvDxpB_8Um=SgWWFU8S8YVe4jmLa+yP_676sj+NNM5Bw@mail.gmail.com>
-X-Gm-Features: Ac12FXzJER_E5HTgLjQMRgzyIRC7l3RKWw6eF7pJn9dN0S6FsvStekeOeK0QqhY
-Message-ID: <CAJZ5v0jvDxpB_8Um=SgWWFU8S8YVe4jmLa+yP_676sj+NNM5Bw@mail.gmail.com>
-Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
- child device xxx.dwc3 but parent is not active
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	ryan zhou <ryanzhou54@gmail.com>, Roy Luo <royluo@google.com>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250818-uvc-iq-switch-v1-3-f7ea5e740ddd@chromium.org>
 
-On Sat, Sep 13, 2025 at 12:23=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsy=
-s.com> wrote:
->
-> On Thu, Sep 04, 2025, Alan Stern wrote:
-> > On Thu, Sep 04, 2025 at 07:34:22PM +0200, Rafael J. Wysocki wrote:
-> > > On Thu, Sep 4, 2025 at 4:19=E2=80=AFPM Alan Stern <stern@rowland.harv=
-ard.edu> wrote:
-> > > >
-> > > > On Thu, Sep 04, 2025 at 04:08:47PM +0200, Rafael J. Wysocki wrote:
-> >
-> > > > > Say this is not the case and say that the device is runtime-suspe=
-nded
-> > > > > to start with.  Then the "suspend" callback has two choices: eith=
-er
-> > > > > (1) it can runtime-resume the device before doing anything to it,
-> > > > > which will also cause the device's parent and suppliers to
-> > > > > runtime-resume, or (2) it can update the device's state without
-> > > > > resuming it.
-> > > > >
-> > > > > If it chooses (1), then "resume" is straightforward.  If it choos=
-es
-> > > > > (2), "resume" may just reverse the changes made by "suspend" and
-> > > > > declare that the device is runtime-suspended.  And if it really r=
-eally
-> > > > > wants to resume the device then, why not call runtime_resume() on=
- it?
-> > > >
-> > > > That's what I meant by needing "cooperation from the driver".  The
-> > > > driver's ->resume callback needs to do this check to see which path=
-way
-> > > > to follow: (1) or (2).
-> > >
-> > > Unless "suspend" always does the same thing, so it always does (1) or
-> > > it always does (2).
-> > >
-> > > In that case, "resume" will know what to do without checking.
-> >
-> > It still has to check whether the device is runtime suspended.
-> >
-> > > I'd like to mention that if "suspend" chooses (2), it may need to
-> > > resume the suspended parent or suppliers to be able to access the
-> > > device even though the device itself won't be resumed.  I'm not sure
-> > > if (2) is really attractive then, though.
-> >
-> > True.
-> >
-> > > Also, in the example we've been considering so far, the assumption is
-> > > that B can just stay in runtime suspend, so why would it need to be
-> > > resumed by "resume"?  And if there is a specific reason for resuming
-> > > it, "resume" can just call runtime_resume() on it AFAICS.
-> >
-> > So it appears to boil down to this, as far as ->resume is concerned: At
-> > the start of the callback routine, there should be something like:
-> >
-> >       if (pm_runtime_suspended(dev)) {
-> >               if (the device needs to be woken up) {
-> >                       pm_runtime_resume(dev);
-> >                       ... whatever else is needed ...
-> >               }
-> >               return 0;
-> >       }
-> >
-> > If ->suspend is clever, it can clear or set the SMART_SUSPEND flag
-> > according to whether the device will need to be woken up.  Then the
-> > second conditional above will always be true whenever the callback runs=
-,
-> > so the test can be skipped.
-> >
->
-> So, can this solution be the default behavior in the PM core? That it
-> would initiate pm_runtime_resume by default?
+Hi Ricardo,
 
-Not really because there are drivers that don't want that to be done.
-For example, everybody pointing their suspend/resume callbacks to
-pm_runtime_force_suspend/resume(), respectively, and not setting
-SMART_SUSPEND.
+Thank you for the patch.
 
-> Seems you want this to be handled in the device driver and not PM core
-> right? ie. the condition "the device needs to be woken up" will not be a
-> PM user flag/config but the device driver needs to check that itself.
+On Mon, Aug 18, 2025 at 08:15:38PM +0000, Ricardo Ribalda wrote:
+> The function uvc_ctrl_init_ctrl() is called for every control for every
+> entity, but it exits early if the entity is a extension unit. The comment
+> claims that this is done to avoid querying XU controls during probe.
+> 
+> We only query a control if its entity GUIDs and index matches the
+> uvc_ctrls list. There are only controls for the following GUIDs:
+> UVC_GUID_UVC_PROCESSING, UVC_GUID_UVC_CAMERA and
+> UVC_GUID_EXT_GPIO_CONTROLLER.
+> 
+> In other words, XU controls will not be queried even without this
+> condition.
 
-Not necessarily.  I'll write more about this next week (well, hopefully).
+Looking at the commit that introduced this code
+
+commit 52c58ad6f95ff60343bf0c517182d5f649ca0403
+Author: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Date:   Wed Sep 29 16:03:03 2010 -0300
+
+    [media] uvcvideo: Delay initialization of XU controls
+
+we see it contains the following change
+
+-       /* Query XU controls for control information */
+-       if (UVC_ENTITY_TYPE(ctrl->entity) == UVC_VC_EXTENSION_UNIT) {
+-               struct uvc_control_info info;
+-               int ret;
+-
+-               ret = uvc_ctrl_fill_xu_info(dev, ctrl, &info);
+-               if (ret < 0)
+-                       return;
+-
+-               ret = uvc_ctrl_add_info(dev, ctrl, &info);
+-               if (ret < 0) {
+-                       /* Skip the control */
+-                       uvc_trace(UVC_TRACE_CONTROL, "Failed to initialize "
+-                               "control %pUl/%u on device %s entity %u\n",
+-                               info.entity, info.selector, dev->udev->devpath,
+-                               ctrl->entity->id);
+-                       memset(ctrl, 0, sizeof(*ctrl));
+-               }
++       /* XU controls initialization requires querying the device for control
++        * information. As some buggy UVC devices will crash when queried
++        * repeatedly in a tight loop, delay XU controls initialization until
++        * first use.
++        */
++       if (UVC_ENTITY_TYPE(ctrl->entity) == UVC_VC_EXTENSION_UNIT)
+                return;
+-       }
+
+
+This is followed by
+
+        for (; info < iend; ++info) {
+                if (uvc_entity_match_guid(ctrl->entity, info->entity) &&
+                    ctrl->index == info->index) {
+                        uvc_ctrl_add_info(dev, ctrl, info);
+                        break;
+                 }
+        }
+
+        if (!ctrl->initialized)
+                return;
+
+(this loops over uvc_ctrls). As uvc_ctrls doesn't contain any non-XU
+control, you're right that the function never calls uvc_ctrl_add_info()
+for XU controls. The ctrl->initialized check then causes the function to
+return, as uvc_ctrl_add_info() wasn't called and initialized is false.
+The entity type check was therefore not needed, and can be removed.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> In future patches we want to add ChromeOS XU controls that need to the
+> initialized. We will make sure that all cameras with ChromeOS XU can
+> be queried at probe time.
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c | 9 ---------
+>  1 file changed, 9 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index efe609d7087752cb2ef516eef0fce12acd13e747..ff975f96e1325532e2299047c07de5d1b9cf09db 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -3181,15 +3181,6 @@ static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
+>  {
+>  	unsigned int i;
+>  
+> -	/*
+> -	 * XU controls initialization requires querying the device for control
+> -	 * information. As some buggy UVC devices will crash when queried
+> -	 * repeatedly in a tight loop, delay XU controls initialization until
+> -	 * first use.
+> -	 */
+> -	if (UVC_ENTITY_TYPE(ctrl->entity) == UVC_VC_EXTENSION_UNIT)
+> -		return;
+> -
+>  	for (i = 0; i < ARRAY_SIZE(uvc_ctrls); ++i) {
+>  		const struct uvc_control_info *info = &uvc_ctrls[i];
+>  
+
+-- 
+Regards,
+
+Laurent Pinchart
 
