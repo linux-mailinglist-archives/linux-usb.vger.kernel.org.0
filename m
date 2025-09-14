@@ -1,124 +1,137 @@
-Return-Path: <linux-usb+bounces-28051-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53CAEB56825
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 13:54:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25E82B568EC
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 14:57:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED2A83B6366
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 11:54:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0CDA175294
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 12:57:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91B67246BA9;
-	Sun, 14 Sep 2025 11:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EED427056D;
+	Sun, 14 Sep 2025 12:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="B6c33VgV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YXEulGsW"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE721DE2B4;
-	Sun, 14 Sep 2025 11:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9185E1922DD;
+	Sun, 14 Sep 2025 12:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757850891; cv=none; b=QW9FqlYhdRGJNs6+UQCQORwJd4uCSHqhIfMNvp11qHXnU7sGMHqBh5ARkP7FCQaVY9ybNx10CLJAO+5B8YlaGWCAOEDGtfuzHGP07+GTfxi6yL7E8/HPXaturZLdio5TyAKj8vCBcsAYAx0kPhuajlmshlMY1w283BC3c/XKM1Q=
+	t=1757854608; cv=none; b=Wh53u+0t3axpIKC/JnM/yBWB5xvJfVDvLssA5vFEyXAgMopIGpYu9d9Rp6ZjNT/71nXQdBS+1DYjMHrC/DsFyxLNgbZOTFzlGa6Nn6SOdQ0GfgaAoWvKWsxKjwrbSQqFyn46Z5Ltfpn/OjA/YOOpDCjG2SCg2dl671UqvfTOeN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757850891; c=relaxed/simple;
-	bh=GOXPOqzQuRntabt4eueE99lOc9bd94jNtNwxBGOe7dU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nbgOWhtoM3MMUGbHcyaHYX9q6d6Y6sIUAuzNQRmypRugyVjDYKwnrFek9nm6IsFt/eeiL6VSFPt+ZrNws3ZOasIT2M7+4Jdz5Sl3pSRXDib0pb70D1uHdXtTRtReAKqHiB+m95QtHo/YArvNpFpGwLKNo3kD0utzmH5cKd6T55c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=B6c33VgV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C7AC4CEF0;
-	Sun, 14 Sep 2025 11:54:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1757850890;
-	bh=GOXPOqzQuRntabt4eueE99lOc9bd94jNtNwxBGOe7dU=;
-	h=Date:From:To:Cc:Subject:From;
-	b=B6c33VgVq8Jbqo1guaWrHbfz4BvMQ99KuJ5f3u+q1M5GJgJb1wEsCuNkLFc6OIb6o
-	 ituH6FoENfXifZw9C1PIXMXbOQARQbdDcdDKFyghMSgWsIlBOzeGKZbPE06t0ou42c
-	 0HzPR/fudD51TULbmIS72/ovtQ729iF6ZxkhHvxg=
-Date: Sun, 14 Sep 2025 13:54:46 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.17-rc6
-Message-ID: <aMatBsRj8kbv4VoO@kroah.com>
+	s=arc-20240116; t=1757854608; c=relaxed/simple;
+	bh=nhfs+mEuuE8OzOKQk+B9DPGOqq0cCbj6Jqm6nThYyu0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bw0RwGmElt5FxHZC58GfSDPd2ZnxmrGuMaFKAmtWNV+G149ki/NrGhr1TW3IGq5kcvE5m4NhfIzpqZfq5FjE5EUhK0uRj6785oB6IwWq5XjtuYXn/vtEaMG+aIeTS0wut9xMcbWS5+yvjZqeZ23+HjMooFKDbd0vsyHGK77jPKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YXEulGsW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 202DBC4CEF0;
+	Sun, 14 Sep 2025 12:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757854608;
+	bh=nhfs+mEuuE8OzOKQk+B9DPGOqq0cCbj6Jqm6nThYyu0=;
+	h=From:Subject:Date:To:Cc:From;
+	b=YXEulGsW23Is7++kfnodIGhBSLMgaqoGdGo2nU6MpgqZo749OGb43GdSUsHv5CmiP
+	 Ojomeg5TfVXp6swxdvEYfFwHUKsNDoJ/c4548/RhwdDTtUkevchsm7nLlCTbtDncVf
+	 ckt2qupVmcrLk4sNFOwLT4WzZVJEnd6arDfQD4pLbYizj+cuhs10Rz2I+poJMsx3Wl
+	 mrLFwrLN5RxBqyw2GQ1GcJUr2AOm+sKAC45T+ukcfQtUqhGLXMy17IoYxDPKRHXc3o
+	 /NKuz38NhZaj569Gb/R/1rhmLQaTDxBFUj2nTwF+qOuOK4R5nJ5TDCcv3qvVwDHAli
+	 MRssd8zp6+W3g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CE9ACAC587;
+	Sun, 14 Sep 2025 12:56:48 +0000 (UTC)
+From: Sven Peter <sven@kernel.org>
+Subject: [PATCH 00/11] Apple Silicon USB3 support - TIPD changes
+Date: Sun, 14 Sep 2025 12:56:05 +0000
+Message-Id: <20250914-apple-usb3-tipd-v1-0-4e99c8649024@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGW7xmgC/x3MQQqAIBBA0avErBvQTMKuEi00pxoIE60IorsnL
+ d/i/wcyJaYMffVAoosz76FA1hVMqw0LIftiaESjhZEt2hg3wjM7hQdHj9qITqvOS3IaShUTzXz
+ /x2F83w/4AgR6YQAAAA==
+X-Change-ID: 20250914-apple-usb3-tipd-5907537d1eb5
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ Sven Peter <sven@kernel.org>, stable@kernel.org, 
+ Hector Martin <marcan@marcan.st>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2202; i=sven@kernel.org;
+ h=from:subject:message-id;
+ bh=nhfs+mEuuE8OzOKQk+B9DPGOqq0cCbj6Jqm6nThYyu0=;
+ b=owGbwMvMwCHmIlirolUq95LxtFoSQ8ax3aUW55adaz7+q4BDcRbvi28b+jek9dwN2m74X2lF3
+ NKtWp3nOkpZGMQ4GGTFFFm277c3ffLwjeDSTZfew8xhZQIZwsDFKQATWVXC8E+PPfVNaej1N/Of
+ Pt3gnOkxMbrmtEtr/JMVaxL9nuRwpP1nZLhmYZByw/eBv4r7gVopj3CHjboTQxsaZpdurloVvak
+ 3gg0A
+X-Developer-Key: i=sven@kernel.org; a=openpgp;
+ fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
+X-Endpoint-Received: by B4 Relay for sven@kernel.org/default with
+ auth_id=407
 
-The following changes since commit 1b237f190eb3d36f52dffe07a40b5eb210280e00:
+This series contains the required TIPD changes to support USB3 on Apple
+Silicon machines and also prepares DisplayPort alternate mode and
+Thunderbolt/USB4 support there.
 
-  Linux 6.17-rc3 (2025-08-24 12:04:12 -0400)
+As discussed in the series combining TIPD, DWC3, PHY, and DTS changes
+this series contains only the TIPD changes which are already in a pretty
+decent shape.
 
-are available in the Git repository at:
+Link to v2 of the combined series: https://lore.kernel.org/asahi/20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org/
+Changes since v2 of that series:
+- Added r-b tags from Heikki and Neal
+- Addressed Janne's feedback:
+  - Updated the tipd commit description to match the dwc3 glue driver
+    approach
+  - Removed a stale comment left-over from a WIP version and no longer
+    required
+  - Cleared cd321x->state.data after typec_set_mode is done
+  - Removed spurious NULL checks for typec_mux_put and typec_unregister_altmode
+  - Call cd321x_connect instead of open-coding almost the same logic
+    inside cd321x_interrupt
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.17-rc6
+Best,
 
-for you to fetch changes up to 9dfec4a51df9cf0dcc23cb4ac6fc314bf9e999d0:
+Sven
 
-  USB: core: remove the move buf action (2025-09-12 13:41:55 +0200)
+Signed-off-by: Sven Peter <sven@kernel.org>
+---
+Hector Martin (4):
+      usb: typec: tipd: Update partner identity when power status was updated
+      usb: typec: tipd: Use read_power_status function in probe
+      usb: typec: tipd: Read data status in probe and cache its value
+      usb: typec: tipd: Handle mode transitions for CD321x
 
-----------------------------------------------------------------
-USB fixes for 6.17-rc6
+Sven Peter (7):
+      usb: typec: tipd: Clear interrupts first
+      usb: typec: tipd: Move initial irq mask to tipd_data
+      usb: typec: tipd: Move switch_power_state to tipd_data
+      usb: typec: tipd: Trace data status for CD321x correctly
+      usb: typec: tipd: Add cd321x struct with separate size
+      usb: typec: tipd: Read USB4, Thunderbolt and DisplayPort status for cd321x
+      usb: typec: tipd: Register DisplayPort and Thunderbolt altmodes for cd321x
 
-Here are some small USB driver fixes and new device ids for 6.17-rc6.
-Included in here are:
-  - new usb-serial driver device ids
-  - dummy-hcd locking bugfix for rt-enabled systems (which is crazy, but
-    people have odd testing requirements at times...)
-  - xhci driver bugfixes for reported issues
-  - typec driver bugfix
-  - midi2 gadget driver bugfixes
-  - usb core sysfs file regression fix from -rc1
+ drivers/usb/typec/tipd/core.c     | 559 ++++++++++++++++++++++++++++++++++----
+ drivers/usb/typec/tipd/tps6598x.h |   5 +
+ drivers/usb/typec/tipd/trace.h    |  39 +++
+ 3 files changed, 550 insertions(+), 53 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250914-apple-usb3-tipd-5907537d1eb5
 
-All of these, except for the last usb sysfs file fix, have been in
-linux-next with no reported issues.  The sysfs fix was added to the tree
-on Friday, and is "obviously correct" and should not have any problems
-either, it just didn't have any time for linux-next to pick up (0-day
-had no problems with it.)
+Best regards,
+-- 
+Sven Peter <sven@kernel.org>
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-----------------------------------------------------------------
-Alan Stern (1):
-      USB: gadget: dummy-hcd: Fix locking bug in RT-enabled kernels
-
-Edward Adam Davis (1):
-      USB: core: remove the move buf action
-
-Fabio Porcedda (2):
-      USB: serial: option: add Telit Cinterion FN990A w/audio compositions
-      USB: serial: option: add Telit Cinterion LE910C4-WWX new compositions
-
-Greg Kroah-Hartman (1):
-      Merge tag 'usb-serial-6.17-rc6' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-
-Mathias Nyman (3):
-      xhci: dbc: decouple endpoint allocation from initialization
-      xhci: dbc: Fix full DbC transfer ring after several reconnects
-      xhci: fix memory leak regression when freeing xhci vdev devices depth first
-
-RD Babiera (1):
-      usb: typec: tcpm: properly deliver cable vdms to altmode drivers
-
-Takashi Iwai (2):
-      usb: gadget: midi2: Fix missing UMP group attributes initialization
-      usb: gadget: midi2: Fix MIDI2 IN EP max packet size
-
- drivers/usb/core/driver.c             |  4 +-
- drivers/usb/gadget/function/f_midi2.c | 11 +++-
- drivers/usb/gadget/udc/dummy_hcd.c    |  8 +--
- drivers/usb/host/xhci-dbgcap.c        | 94 +++++++++++++++++++++++++----------
- drivers/usb/host/xhci-mem.c           |  2 +-
- drivers/usb/serial/option.c           | 17 +++++++
- drivers/usb/typec/tcpm/tcpm.c         | 12 +++--
- 7 files changed, 108 insertions(+), 40 deletions(-)
 
