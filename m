@@ -1,79 +1,100 @@
-Return-Path: <linux-usb+bounces-28068-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28069-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D382B56AF6
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 20:01:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBB51B56D05
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 01:45:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A5C4177F3F
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 18:01:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21E8C7ABD04
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 23:44:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D2B248F68;
-	Sun, 14 Sep 2025 18:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB08C25B695;
+	Sun, 14 Sep 2025 23:45:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOmV0LwM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YbY0Dsm1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD662AD11;
-	Sun, 14 Sep 2025 18:01:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132EB2101AE;
+	Sun, 14 Sep 2025 23:45:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757872878; cv=none; b=j4H1UbN+cD+xFrWNpSf85MkzypkNRGEBM4BTayIMLFARK20MBoc8XkFFtK1FzJ7hF5D2L7rByKg5ofpsWcLac2IEqy9GPTwhGwb0MZU079DpNBC6GHVE8CEthXDTuymxdhEiA7MKkzOn91oSFnEoDt0y/0mT1GylhTv4WXCGwm0=
+	t=1757893533; cv=none; b=d7UvxBrU4jArQzGsQda+KMEZm+V8Hnf3a+LpNI/4EQf56bVi/UJ8nnDdobk4/fSIKYxB71jcPo1Q8YfwFHfJI06zCa408mV3hKlo3ppVA0FdrNLJnBxkB5rayMszHDMNiPSbPHn0r3+8kIbE47WRxTV+C7JynqmRax+VhX0ps+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757872878; c=relaxed/simple;
-	bh=kJH+F84Ru1SGVet3qFX0qlo2JR5sD1xkYAKuMjovgCk=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=d+46rtVusQWXjEaE/OyNyfQyP7ja0kW3SQWG69M9atdlj4E41TbRn8eLbxD6X3GYfsedltcSb42OtwbN0vRdM4GlpNpqLMZjcNreW9Aiz0nJK8zIOak2gNZOeYASAMltd7uhzfVOjeSn0QQFy2EQ9DTshVF4tyvwLKxYSMB7nic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fOmV0LwM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F3FC4CEF0;
-	Sun, 14 Sep 2025 18:01:17 +0000 (UTC)
+	s=arc-20240116; t=1757893533; c=relaxed/simple;
+	bh=EtcNLf6b+VeOq3VY58DGr/jltFde/1cmlo9BtZ5d+VY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cNFwY6aT8rSMzO2SDPYbD6OUxbThBggWBJBYTV5b4Q05+lIwfZJBnsiXitptU7s9pAwvbBsqksIwdHvMpnGu2ZydkYhr/y/h/RXrmtxSBPL8wm4Eoab1XlrnH6qx28n9bNaYTpNIbRZi388R1d9VqrdNon1c26C287o4f2TT73k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YbY0Dsm1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DF12C4CEF0;
+	Sun, 14 Sep 2025 23:45:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757872877;
-	bh=kJH+F84Ru1SGVet3qFX0qlo2JR5sD1xkYAKuMjovgCk=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=fOmV0LwM5zGQWOOICHQ/DpYdBthfPSNtOji7BqygnwsaA7WwiHjupTBM7yz93YF3h
-	 f1A9MwCHeqf7HuBV27JrXMmNiFja0s4MVrWa8mkqTVR3DVAxue/rmrHCeODKP398F/
-	 +4dGo5IE4NqKoQiRJccaVyZ02L13wTS/JsY8ihqjQS1sKZMt8phSrFUGqpJ6CEVmHV
-	 sSeuyY5Sj5UwprKEM042U1QSLBDgXQCcjJudqWrXNCVOnzd0QJ2WsOQhsMT7/Btr1k
-	 cM6CkELQx4cfTSgtzO4el9VeBEZrXJdtVuWOJ9R9DmjnQB8vBtfcC+r+kqHwm+3cg0
-	 QLarY4+mq7CfA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E6D39B167D;
-	Sun, 14 Sep 2025 18:01:20 +0000 (UTC)
-Subject: Re: [GIT PULL] USB driver fixes for 6.17-rc6
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <aMatBsRj8kbv4VoO@kroah.com>
-References: <aMatBsRj8kbv4VoO@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <aMatBsRj8kbv4VoO@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.17-rc6
-X-PR-Tracked-Commit-Id: 9dfec4a51df9cf0dcc23cb4ac6fc314bf9e999d0
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d6b42787f30d86ef3aa5313c8a43c0b228d1f11b
-Message-Id: <175787287895.3518752.6982863115921848006.pr-tracker-bot@kernel.org>
-Date: Sun, 14 Sep 2025 18:01:18 +0000
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+	s=k20201202; t=1757893531;
+	bh=EtcNLf6b+VeOq3VY58DGr/jltFde/1cmlo9BtZ5d+VY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YbY0Dsm1wbXp4m9MjjJsCVC9YC+X3KN4JQgs3wQeU4bCOZAP+S+w700Bw/OI/xE3M
+	 Ku2VuwzCvBd+5HEnavvOQ1Y2lnbmgPnKwkJelnG4VNz4QeRVtpE8t1fcAWOACMvY+6
+	 GRjlGymazfoOiydkVvMpKairo+vBsyhStWW5LBS+R3qlDLc+j4g+0/Qa44QX+HUpkh
+	 kiI6ph7tdJX06zXe59/Otn813m+4sEuwoqHy2t3mG9sObS7UtjUCOtO+5CZ1qzlFbY
+	 6xDetuZa13KKmy1qdT2ZDWfGFrY35URJ32XW2vXHP0IM+qKWtz8tmJ9miHap7Mq4aP
+	 H9HDwMDTnHiNg==
+Date: Sun, 14 Sep 2025 18:45:30 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Biju <biju.das.au@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	linux-renesas-soc@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	devicetree@vger.kernel.org, Magnus Damm <magnus.damm@gmail.com>
+Subject: Re: [PATCH v2 06/11] dt-bindings: usb: Document Renesas RZ/G3E
+ USB3HOST
+Message-ID: <175789353005.2252414.10762360255516722224.robh@kernel.org>
+References: <20250909180803.140939-1-biju.das.jz@bp.renesas.com>
+ <20250909180803.140939-7-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250909180803.140939-7-biju.das.jz@bp.renesas.com>
 
-The pull request you sent on Sun, 14 Sep 2025 13:54:46 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.17-rc6
+On Tue, 09 Sep 2025 19:07:51 +0100, Biju wrote:
+> From: Biju Das <biju.das.jz@bp.renesas.com>
+> 
+> Document the Renesas RZ/G3E USB3.2 Gen2 Host Controller (a.k.a USB3HOST).
+> The USB3HOST is compliant with the Universal Serial Bus 3.2 Specification
+> Revision 1.0.
+>  - Supports 1 downstream USB receptacles
+>      - Number of SSP Gen2 or SS ports: 1
+>      - Number of HS or FS or LS ports: 1
+>  - Supports Super Speed Plus Gen2x1 (10 Gbps), Super Speed (5 Gbps),
+>    High Speed (480 Mbps), Full Speed (12Mbps), and Low Speed (1.5 Mbps).
+>  - Supports all transfer-types: Control, Bulk, Interrupt, Isochronous, and
+>    these split-transactions.
+>  - Supports Power Control and Over Current Detection.
+> 
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v1->v2:
+>  * Added ref to usb-xhci.yaml
+>  * Dropped Rb tag
+> ---
+>  .../bindings/usb/renesas,rzg3e-xhci.yaml      | 87 +++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/renesas,rzg3e-xhci.yaml
+> 
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d6b42787f30d86ef3aa5313c8a43c0b228d1f11b
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
 
