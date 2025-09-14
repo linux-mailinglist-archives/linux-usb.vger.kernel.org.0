@@ -1,150 +1,123 @@
-Return-Path: <linux-usb+bounces-28064-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28065-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B3F6B56952
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 15:29:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5E45B56981
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 15:57:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4EAF17CFC8
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 13:29:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D7297A042A
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Sep 2025 13:55:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E1F2522B5;
-	Sun, 14 Sep 2025 13:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73A421F463E;
+	Sun, 14 Sep 2025 13:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="IQgfEDg+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lfVi7Z2+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHR/9HUm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AD91C6FF4;
-	Sun, 14 Sep 2025 13:29:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAEC1A9F89
+	for <linux-usb@vger.kernel.org>; Sun, 14 Sep 2025 13:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757856576; cv=none; b=hNvkiwQC2rGnAfZwhEEYk+owaMAW4UUslHjObzhNNYZahvW1hvZohPt++hOMZTXdh7Gf677asbLI1Z79cZhTeYPvgQIwuQtnBSHRl8fxGGBMlrbzIgMXR51tYTMW9kO4sEONkZtrtGZcX+HuTsJQ+va+Qrm5ajnIIujSt1YVBDk=
+	t=1757858220; cv=none; b=HItmDZ8Da3/UUDHkCgzkx76tef97xG3s9yHe1dzz0VqofNCftG9f0R6p2aSDLiQaUeJFRFmJvBrqPA+nrIWvdMYW1ZAM8WppWNG4tbEjXooSjqyjlsrLVlt0oSPuMYd/QgH7jg3xCdLp+CJcxzink9xFNy2YxU9Aw7RN+7riTUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757856576; c=relaxed/simple;
-	bh=ynUogUtMc6vDYR4x765+JnL05KuJsA3l4L/avvP9S5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ODhKwJtKucBqdkerR4h3Ixw54bqx0VYpMh/8dLu8LVJHvtsBIC6AehAaJKSz5CbTvRtZtnaVF79lTtTuS+jNStEyK4t4U4D/3VIlY/L8xHIQIDFYHRa/rOqclO1h0gh3vjrH1iTc20yijHMOpDpR5yKTPyH41Aapxwzf/EcYiNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=IQgfEDg+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lfVi7Z2+; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 935AB1400159;
-	Sun, 14 Sep 2025 09:29:33 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-09.internal (MEProxy); Sun, 14 Sep 2025 09:29:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1757856573; x=1757942973; bh=LvsmTEFXWc
-	PhwHybn1QAYEPHsP2aICJv87mnJcBL40Q=; b=IQgfEDg+V+jQq/fGUCNiVStmpK
-	oXzUFOXkQ6/ZAPZaVaVVeC95EiWKWi5NGzEBD5q2/SEX48NHbdMpddPfsfjdSNNK
-	qHG2seezTvBTML7cxiHqiBxbas707WKhaej0pf//0/0yhZIhnybHSl6+GfLAH+AA
-	TvRTz+blNLVwEH7NDbaiGh/iybaD5ZGuHfX5NhLffmX3EC4l77q0bCRHAGa+M56z
-	zGt1Gby+cmz8IrW7LbbjOMfynrbKJHDUryFXWQG+OMko8ny/kdl4+Oymkm471nCj
-	5RcglM4KgIfq0kRwJKxqtJgF9Ex3QLBwSK3MTQiVICg/sFyK3kRfL2G0U8cA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1757856573; x=1757942973; bh=LvsmTEFXWcPhwHybn1QAYEPHsP2aICJv87m
-	nJcBL40Q=; b=lfVi7Z2+L9AAnvqnsmH1l/jCzm64AjOMwM51PY9vTe8wyG/+LAL
-	zORo9AQvItcCvA+nkKEVpjOfUS0PUdkh5AjljL2gYpqkwqiXZixJ+kVLy48rLrs5
-	RLvuPfXIrNrQYiBMaO1OOSls3oh/OLBxlvxazVCLFJ/zyTwpdTVd+gpMS5PUMbhB
-	E89oP8Fa/NsCspBApHst6GsXW7sFvsLgwbNiRxDJzm6sI3aiMCj9NQZEny0PE4rG
-	qSYmlkFMdEXioAd231Zctb+7ni58KnGol4VcJfsEOElRdLE2QM0Q/wz+SHUEHouP
-	3/iuDK4YacmXT442vM582AruqP1v6yipyew==
-X-ME-Sender: <xms:O8PGaOxJ_4eixX8UbkrLeeC0Lz1rH78kfNVEh1kVGnTqOj-t4FMS9w>
-    <xme:O8PGaHpZym2tR0jeNIthcXgqHm2ATq_fKhouXZulW1V06biJOl0LJF16gzMZ6tpcG
-    c-Vb1-sJxHqq5lxwpo>
-X-ME-Received: <xmr:O8PGaHosBq3SqVX1KS0IjpCtfCH7_E8zeamvdW8KEyk6t7cAK_d2RhaShTNkkq6aAcA5VB0yAvB1U0Uy3NRbGrUNEhPY54COHc0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdefgeelfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpeflrghnnhgvucfi
-    rhhunhgruhcuoehjsehjrghnnhgruhdrnhgvtheqnecuggftrfgrthhtvghrnhepgfdvff
-    evleegudejfeefheehkeehleehfefgjefffeetudegtefhuedufeehfeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhesjhgrnhhnrghurd
-    hnvghtpdhnsggprhgtphhtthhopeelpdhmohguvgepshhmthhpohhuthdprhgtphhtthho
-    pehsvhgvnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgvihhkkhhirdhkrhhogh
-    gvrhhusheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehgrhgvghhkhhes
-    lhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehnvggrlhesghhomh
-    hprgdruggvvhdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtoheprghsrghhiheslhhishhtshdrlhhinhhugidruggvvhdp
-    rhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrg
-    guvggrugdrohhrghdprhgtphhtthhopehmrghrtggrnhesmhgrrhgtrghnrdhsth
-X-ME-Proxy: <xmx:O8PGaPD0zpc_tUdoucETqraXdhPJkYm_iWnRwd8sxl3PUxLU_io26A>
-    <xmx:O8PGaNv630J6Q-86-2yxNnZTHNsvN9m_qxXTYPiSZq3Yxp49E9qByg>
-    <xmx:O8PGaGJTHWqJX_n5T-frTo2-d1C6XMCx4JKOLZLa-xilIYedZmrBlA>
-    <xmx:O8PGaMYSN8RaXUyMnT72wTpo_2VBS08NPqNW7SPhrLTYYnaANbhHKQ>
-    <xmx:PcPGaOqGpExHgXCr2sGckUvN3lNhAAH2HN1ttpohvNhUKO9DIQHHlVAK>
-Feedback-ID: i47b949f6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 14 Sep 2025 09:29:30 -0400 (EDT)
-Date: Sun, 14 Sep 2025 15:29:29 +0200
-From: Janne Grunau <j@jannau.net>
-To: Sven Peter <sven@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	s=arc-20240116; t=1757858220; c=relaxed/simple;
+	bh=G/YgUWwYgipT54ZkK5S7t4iIid/jh16TP1NiVGcDIfY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mqLXxxhJnPmbw4/gKr5VvfjaBnbYuWZh/ZLWmEbBgdl1y1a0VTTKd67vyj8QePApLdvDarN10XLHpt4LbRZ2XtR7+zccUA3y/JQaowgL3k1LPVPm8fOj9+NRhkKUHr6v0B6tF5WihHGpQBoQG6Tq/NMvfc9IxuNUJ64eP1yttpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHR/9HUm; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-45f29e5e89bso8565225e9.2
+        for <linux-usb@vger.kernel.org>; Sun, 14 Sep 2025 06:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757858217; x=1758463017; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2UA8yGhG9kMHYtx0Te9toutlRddNLKPlgFwt+Jj5ZBw=;
+        b=aHR/9HUmPwzCarHoxiVPUS/JKdRy83Hp2l549rHvBav+G1aHNjN8qNTMr40oPOfbx4
+         +/pXMl/O8BAX45mR7VNJdalKpzw/ueWtoibME1WjIYjIVvfII2wtNIOk6BUyhZ+huHJU
+         RP4zk1sttF/Fr3XykCaT96FjN/pzMD7cacDdbisKuIt2+/xBjvtBdlyUKqeN76Js32Yl
+         NbBQCkiQ2dLlPVZWvlgDoQWdvkP9LbJpQrdXsb1Q8Fv+DPHKbmfReTMnQnPiMW5DYOmx
+         H/POhEFkC1UL76iwgvGaYxf2baU6iK0r12ik59DM1mohymEmc9ZjME7Cnch6pQPtqmW4
+         UZ3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757858217; x=1758463017;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2UA8yGhG9kMHYtx0Te9toutlRddNLKPlgFwt+Jj5ZBw=;
+        b=ejkT4q4/VwnllCB4p54D7awE/heHAmf5NKTmPqDKLLFOoPnJL3uvPgQOkZODgVQjoA
+         zwRyD0gh5edcSRCvxQCYlTUfCjENigqHDmybBmV2nkpnO/PbGDrAr5P4R0AbdCM2z82w
+         Z6s934e+sEDOcewwreFShTRfIH6Ix+HsGvbW2TjkHrFOvgk88hc/EVTF/Vn+qxY3XRa4
+         z6ggbKbgTYuVlUVFVNOHG3VwglweIjxmZbnkZao7/wSm2YvH3pLiKlQrI9hcGcKjLmmS
+         87sEEp+dDpQNxRrNNpvu+JzKy+z026XatbpWmyZjMKOpuSpSc5oIROL8reyjf77PNnJe
+         nRnA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2d1vDIX6ZlWSq3XtMLqzulffBdUtLS4OMYnMPPZQ/u1gqmuZBsF+ejtzwDtAUm7SVDii84jghN1g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHcZd6/zf9c+qept4EkGZ+Vpl6ApFNRHPBpMIUgezdOjeWkx6W
+	d+ZYktxAqEMgowPLkv57fkjCJYrmjHXMIviSjoZB2OPmP5pqFUfXlvi8
+X-Gm-Gg: ASbGncukXv7PeGJl8DBtiXCBk0BH25si6UbEY1RZoxxgNxkkJ9WYrfMNRgLVtmF6Qgm
+	GpDkP126MFA10mhxg/5i1VBeBreyqBYuTimPKunU4tDlg0Z0An5RjZ1WEpoAJrruOP8pHjqlQZ6
+	p4RiYczrWbz5uHYJbSoLXP+DwERi0XjsAATEpCx0ANZ/85GT/KEO5ffBesJyU4jIv+DnFQBnTv1
+	VaULhpkOjawvO4reQfwt+Vinu4T3B2JqyqrOIo+vs8Ej1D+tf5OEpXoCgCtYzO8Sg3LVwOROFZ9
+	5VZ2IA/qNXZWM0mTJAiZg63Ic2O/Z6ifpKzKOEqWB7ut9Jc+iGFpL+2r0IHkUwPewDZcMaLMrHL
+	8djMgOOvrRPg7usIzUi8p8O+OOb+X5cvi0srpwFbB0s34YMzV1w+KS7HUhO3cqVjHQunBzj1noA
+	==
+X-Google-Smtp-Source: AGHT+IHB+VULFKNGf84XS/gc0CK50EFtBdez3HC/85lxGgum+zb542w5P3i1LGfQ0Av13zEl30jWvw==
+X-Received: by 2002:a05:600c:1387:b0:45b:88d6:8ddb with SMTP id 5b1f17b1804b1-45f211fc2dbmr82961965e9.37.1757858216790;
+        Sun, 14 Sep 2025 06:56:56 -0700 (PDT)
+Received: from ivaylo-T580.. (91-139-201-119.stz.ddns.bulsat.com. [91.139.201.119])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e84de17f9bsm6740887f8f.49.2025.09.14.06.56.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Sep 2025 06:56:56 -0700 (PDT)
+From: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neal Gompa <neal@gompa.dev>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-samsung-soc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 11/11] usb: typec: tipd: Handle mode transitions for
- CD321x
-Message-ID: <20250914132929.GA1645557@robin.jannau.net>
-References: <20250914-apple-usb3-tipd-v1-0-4e99c8649024@kernel.org>
- <20250914-apple-usb3-tipd-v1-11-4e99c8649024@kernel.org>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] dt-bindings: usb: samsung,exynos-dwc3 add exynos8890 compatible
+Date: Sun, 14 Sep 2025 16:56:52 +0300
+Message-ID: <20250914135652.2626066-1-ivo.ivanov.ivanov1@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250914-apple-usb3-tipd-v1-11-4e99c8649024@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Sep 14, 2025 at 12:56:16PM +0000, Sven Peter wrote:
-> From: Hector Martin <marcan@marcan.st>
-> 
-> On Apple Silicon machines there is no control over which alt mode is
-> chosen. The CD321x' firmware negotiates the target mode on its own and
-> only lets the main CPU know after the mode has already been chosen.
-> Especially after plugging a new cable in this can result to quick mode
-> changes from e.g. power only -> USB3 only -> USB3+DisplayPort in a short
-> time. It is not possile to influence this in any way and we also do not
-> get direct access to the PDOs or VDOs exchanged via USB PD.
-> 
-> Additionally, mode changes must be tightly synchronized between DWC3 and
-> the Type C PHY and most mode changes require a full reset of DWC3 to
-> make the port work correctly.
-> This is all done synchronously from the role switch handler inside the
-> DWC3 glue driver on these machines to avoid tripping any failsafes or
-> watchdogs inside the Type-C PHY that may, in the worst case, reset the
-> entire SoC.
-> 
-> To be able to control all this we trigger the entire process in the
-> correct order directly from the TIPD driver and de-bounce any mode
-> changes to avoid tearing down and re-setting DWC3 back up multiple times
-> any time a new connection is made.
-> 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Reviewed-by: Neal Gompa <neal@gompa.dev>
-> Co-developed-by: Sven Peter <sven@kernel.org>
-> Signed-off-by: Sven Peter <sven@kernel.org>
-> ---
->  drivers/usb/typec/tipd/core.c | 290 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 286 insertions(+), 4 deletions(-)
+Add a compatible for the exynos8890-dwusb3 node. It features the same
+clocks and regulators as exynos7, so reuse its compatible.
 
-Reviewed-by: Janne Grunau <j@jannau.net>
+Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+---
+ Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Janne
+diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+index 6d39e5066..6ecbf53d8 100644
+--- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+@@ -21,6 +21,9 @@ properties:
+           - samsung,exynos7870-dwusb3
+           - samsung,exynos850-dwusb3
+           - samsung,exynosautov920-dwusb3
++      - items:
++          - const: samsung,exynos8890-dwusb3
++          - const: samsung,exynos7-dwusb3
+       - items:
+           - const: samsung,exynos990-dwusb3
+           - const: samsung,exynos850-dwusb3
+-- 
+2.43.0
+
 
