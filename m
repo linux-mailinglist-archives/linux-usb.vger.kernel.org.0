@@ -1,182 +1,206 @@
-Return-Path: <linux-usb+bounces-28073-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28074-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB3DDB5711F
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 09:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8470B57129
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 09:22:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C639189D53D
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 07:21:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33396189D183
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 07:22:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D31B2D47EA;
-	Mon, 15 Sep 2025 07:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80A612D542A;
+	Mon, 15 Sep 2025 07:22:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NsxC32oE"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vSY/eILt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C122D46B2
-	for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 07:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0902D46BB;
+	Mon, 15 Sep 2025 07:21:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757920841; cv=none; b=fnupHr2P8/VDm/mFdSM9eykAGwgQBoY03e0G92vuLLHzeHk977kzEmvWaRpPVxxl32X6rTC48yHbkOW94GTvr6aaFVWtFwFFIfpqzpXuFyj9Cf0KGujuuvBuqVlbwTSkhQLIalcXDD/coUiJB3+YyILABpqoqZXdQeeOU1/EK3M=
+	t=1757920920; cv=none; b=fzoLc1r8h6kkKSHvsV+3UKccLxpOO+Q4vK7mwMhKxpP3RCuw9egf4jyACbgrPRHVgRFan5u6hGKu+TisYYTwT46pEB3Kmu5IHrkVA/eEdvOmJsNuDAClbPyPDMPzDJFJyC9waubA36pCwDYeVvrDRH5yoFskCn5quPQ3nAzQhdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757920841; c=relaxed/simple;
-	bh=vEb4enFEkPbw9ltqXLTHdAVBvTDpxzpvgVh33kZW4c8=;
+	s=arc-20240116; t=1757920920; c=relaxed/simple;
+	bh=iER8ImaZiIpxm5WMViFuw+tlKm3YdnHp1TOGEzGXbY0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a9Yz9dGjshYvtBe2x3Yt4+/S9Azt2lLdsyjOFyzqEOL6gDoIn6GyTkhMX7UpsOJSMWUc/22jF0grbk1UltJVozsSzMFnCWu8SEncPh+ReYcRmmkfTKnTmXuDiB3aXGmdlsdcztFpJCeVlmMpNZ/7MYXt5fW2GZKuCwTY1SL6iYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NsxC32oE; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757920839; x=1789456839;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vEb4enFEkPbw9ltqXLTHdAVBvTDpxzpvgVh33kZW4c8=;
-  b=NsxC32oE1BsP6nWRaeDx8giBI9/pkbagNS/m6Yq9ZOBrzNuZGoT1DISf
-   r0fnsGplOCwvF3Cb2J/F8HeG/gmdf3Tw16NZMMkpmMUuFMrXCBB+UyL8i
-   Oi6K2A9lF90fs0XSPfA1niXayBH1+h0HACqG8JrKemdxWMwmKXLc8m0PL
-   2QmNni0fF1rDO2lzyFBwEMpT2/ZFXEbb0AiZqwQzd5ReqI+RJMLj4J1N5
-   4+2LrsmPuiWIlvt06PentNTjOHdUkCGY6rcdtylArzUzA3QvjsN67hC2f
-   2IFU2g0vfFJNfHABLjayL2B0vycxz/ht6AdRPR2IRpWB0vJ2XOmCWoX5b
-   g==;
-X-CSE-ConnectionGUID: /Krtdgg+RtiZJJgR/M1OUA==
-X-CSE-MsgGUID: sKZntfU0RSyQb9mAfHXV4w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11553"; a="59208391"
-X-IronPort-AV: E=Sophos;i="6.18,265,1751266800"; 
-   d="scan'208";a="59208391"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 00:20:38 -0700
-X-CSE-ConnectionGUID: 1qkoP5TuTfKwhaeFzimOuA==
-X-CSE-MsgGUID: VyuXwzW/QySUw78Ve83nLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,265,1751266800"; 
-   d="scan'208";a="173835374"
-Received: from smile.fi.intel.com ([10.237.72.51])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 00:20:36 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uy3Vp-00000003BVo-3jm6;
-	Mon, 15 Sep 2025 10:20:33 +0300
-Date: Mon, 15 Sep 2025 10:20:33 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
-	mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/7] usb: xhci: use '%pad' specifier for DMA address
- printing
-Message-ID: <aMe-QcrnE5hMHC5E@smile.fi.intel.com>
-References: <20250909115949.610922a3.michal.pecio@gmail.com>
- <aMAPkH5-4rLdmx_9@smile.fi.intel.com>
- <20250909224416.691e47c9.michal.pecio@gmail.com>
- <20250910075630.0389536f.michal.pecio@gmail.com>
- <aMJ9PbOxn3CCuaYJ@smile.fi.intel.com>
- <20250911113451.1f5e5ca4.michal.pecio@gmail.com>
- <aMMtgsAa-dovMqdG@smile.fi.intel.com>
- <20250912114644.7b9bfe37.michal.pecio@gmail.com>
- <aMRgL4fus--v4QjP@smile.fi.intel.com>
- <20250913101246.515abfc4.michal.pecio@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=YJJIk2HzCU3IeLfZIm7GGPytBUcgcihiT3PdPXpusr79+7bNRDPqRIJc7eQDcxVRRbVHowWzJjtgApPqSprO7d9U/rrTcui+OBRtGe7fOw1YBjYpcqORHUrcFYglJhn4ChuJ3760lRkO5eG0z6TMAMhgbRfBqfu+qQ4e83ugjQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=vSY/eILt; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 2EBF4EC1;
+	Mon, 15 Sep 2025 09:20:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1757920839;
+	bh=iER8ImaZiIpxm5WMViFuw+tlKm3YdnHp1TOGEzGXbY0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vSY/eILtKKl4P0nyN5UgnhsW7UIlSlOsre213uDiQJJOQuyIVQ9vK72NPsAlw/SUn
+	 9arqxyv8XHSiMeN87a7PkuFzmd3NQ23SzLe1RjkMFgyX7ZDVvquYuCo0OiXcrjtb9U
+	 rik6JNhebmltMDYD3kcICSgvnxAs/NcoTr1kx+ic=
+Date: Mon, 15 Sep 2025 10:21:31 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 4/4] media: uvcvideo: Support
+ UVC_CROSXU_CONTROL_IQ_PROFILE
+Message-ID: <20250915072131.GA22385@pendragon.ideasonboard.com>
+References: <20250818-uvc-iq-switch-v1-0-f7ea5e740ddd@chromium.org>
+ <20250818-uvc-iq-switch-v1-4-f7ea5e740ddd@chromium.org>
+ <20250913140628.GB10328@pendragon.ideasonboard.com>
+ <CANiDSCtsFYoDdQPakhX=mvkYCFpP-U82FBhDwdGJwOME-hFYQg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250913101246.515abfc4.michal.pecio@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <CANiDSCtsFYoDdQPakhX=mvkYCFpP-U82FBhDwdGJwOME-hFYQg@mail.gmail.com>
 
-On Sat, Sep 13, 2025 at 10:12:46AM +0200, Michal Pecio wrote:
-> On Fri, 12 Sep 2025 21:02:23 +0300, Andy Shevchenko wrote:
-> > Again, imagine the loop that goes above 4G on a 64-bit machine. Out
-> > of a sudden %08llx will be expanded to cover the 64-bit addresses and
-> > becomes one digit at a time creating a ladder (ugly looking) output.
-> > This is incorrect.
+On Mon, Sep 15, 2025 at 09:18:33AM +0200, Ricardo Ribalda wrote:
+> On Sat, 13 Sept 2025 at 16:06, Laurent Pinchart wrote:
+> > On Mon, Aug 18, 2025 at 08:15:39PM +0000, Ricardo Ribalda wrote:
+> > > The ChromeOS XU provides a control to change the IQ profile for a camera.
+> > > It can be switched from VIVID (a.k.a. standard) to NONE (a.k.a. natural).
+> > >
+> > > Wire it up to the standard v4l2 control.
+> > >
+> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > ---
+> > >  drivers/media/usb/uvc/uvc_ctrl.c | 32 ++++++++++++++++++++++++++++++++
+> > >  include/linux/usb/uvc.h          |  5 +++++
+> > >  2 files changed, 37 insertions(+)
+> > >
+> > > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> > > index ff975f96e1325532e2299047c07de5d1b9cf09db..8766a441ad1d8554c0daaed3f87758321684246b 100644
+> > > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > > @@ -376,6 +376,15 @@ static const struct uvc_control_info uvc_ctrls[] = {
+> > >                               | UVC_CTRL_FLAG_GET_DEF
+> > >                               | UVC_CTRL_FLAG_AUTO_UPDATE,
+> > >       },
+> > > +     {
+> > > +             .entity         = UVC_GUID_CHROMEOS_XU,
+> > > +             .selector       = UVC_CROSXU_CONTROL_IQ_PROFILE,
+> > > +             .index          = 3,
+> > > +             .size           = 1,
+> > > +             .flags          = UVC_CTRL_FLAG_SET_CUR
+> > > +                             | UVC_CTRL_FLAG_GET_RANGE
+> > > +                             | UVC_CTRL_FLAG_RESTORE,
+> > > +     },
+> > >  };
+> > >
+> > >  static const u32 uvc_control_classes[] = {
+> > > @@ -384,6 +393,17 @@ static const u32 uvc_control_classes[] = {
+> > >  };
+> > >
+> > >  static const int exposure_auto_mapping[] = { 2, 1, 4, 8 };
+> > > +static const int cros_colorfx_mapping[] = { 1, // V4L2_COLORFX_NONE
+> > > +                                         -1, // V4L2_COLORFX_BW
+> > > +                                         -1, // V4L2_COLORFX_SEPIA
+> > > +                                         -1, // V4L2_COLORFX_NEGATIVE
+> > > +                                         -1, // V4L2_COLORFX_EMBOSS
+> > > +                                         -1, // V4L2_COLORFX_SKETCH
+> > > +                                         -1, // V4L2_COLORFX_SKY_BLUE
+> > > +                                         -1, // V4L2_COLORFX_GRASS_GREEN
+> > > +                                         -1, // V4L2_COLORFX_SKIN_WHITEN
+> > > +                                         0}; // V4L2_COLORFX_VIVID};
+> >
+> > Extar '};' at the end of the line. The indentation also looks a bit
+> > weird. I'll replace it with
+> >
+> > static const int cros_colorfx_mapping[] = {
+> >         1,      /* V4L2_COLORFX_NONE */
+> >         -1,     /* V4L2_COLORFX_BW */
+> >         -1,     /* V4L2_COLORFX_SEPIA */
+> >         -1,     /* V4L2_COLORFX_NEGATIVE */
+> >         -1,     /* V4L2_COLORFX_EMBOSS */
+> >         -1,     /* V4L2_COLORFX_SKETCH */
+> >         -1,     /* V4L2_COLORFX_SKY_BLUE */
+> >         -1,     /* V4L2_COLORFX_GRASS_GREEN */
+> >         -1,     /* V4L2_COLORFX_SKIN_WHITEN */
+> >         0,      /* V4L2_COLORFX_VIVID */
+> > };
+> >
+> > > +
+> > >
+> > >  static bool uvc_ctrl_mapping_is_compound(struct uvc_control_mapping *mapping)
+> > >  {
+> > > @@ -975,6 +995,18 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
+> > >               .data_type      = UVC_CTRL_DATA_TYPE_BITMASK,
+> > >               .name           = "Region of Interest Auto Ctrls",
+> > >       },
+> > > +     {
+> > > +             .id             = V4L2_CID_COLORFX,
+> > > +             .entity         = UVC_GUID_CHROMEOS_XU,
+> > > +             .selector       = UVC_CROSXU_CONTROL_IQ_PROFILE,
+> > > +             .size           = 8,
+> > > +             .offset         = 0,
+> > > +             .v4l2_type      = V4L2_CTRL_TYPE_MENU,
+> > > +             .data_type      = UVC_CTRL_DATA_TYPE_ENUM,
+> > > +             .menu_mapping   = cros_colorfx_mapping,
+> > > +             .menu_mask      = BIT(V4L2_COLORFX_VIVID) |
+> > > +                               BIT(V4L2_COLORFX_NONE),
+> > > +     },
+> > >  };
+> > >
+> > >  /* ------------------------------------------------------------------------
+> > > diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
+> > > index 12a57e1d34674a3a264ed7f88bed43926661fcd4..22e0dab0809e296e089940620ae0e8838e109701 100644
+> > > --- a/include/linux/usb/uvc.h
+> > > +++ b/include/linux/usb/uvc.h
+> > > @@ -29,6 +29,9 @@
+> > >  #define UVC_GUID_EXT_GPIO_CONTROLLER \
+> > >       {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
+> > >        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
+> > > +#define UVC_GUID_CHROMEOS_XU \
+> > > +     {0x24, 0xe9, 0xd7, 0x74, 0xc9, 0x49, 0x45, 0x4a, \
+> > > +      0x98, 0xa3, 0xc8, 0x07, 0x7e, 0x05, 0x1c, 0xa3}
+> >
+> > I'd like to add a link to the documentation, but searching for the GUID
+> > didn't turn up any meaningful result. Where can I find documentation for
+> > this XU ?
 > 
-> If I equated correctness with ugliness I would equally confidently
+> It is not public yet. Not because there is anything secret about it,
+> but because of the "making documentation process".
 
-Ugliness?! No, the full information printed is way too better than
-whatever pieces of it are (even if it's correct in some cases).
-We are doing 64-bit hardware, we have to deal with 64-bit pointers.
-Period. Shortcutting and premature optimizing is always a slippery slope
-when we enter to the debugging field.
+That makes reviewing patches annoying :-/ Any expected time frame ?
 
-> state that unnecessary zero-padding is incorrect. But I don't.
+You don't have to polish the documentation, if it was good enough to be
+shared with webcam vendors to be implemented, it's good enough for the
+community too :-)
 
-Right, because it won't be incorrect, there is no such thing as unnecessary
-zero-padding for the pointers.
-
-> This is exactly the absurd argument I previously made for padding all
-> %x and %d formats to full width. Pad tables, not lone log messages.
-
-> > No, it's other way around, we should not put explicit casts in printf() in C
-> > as there are plenty of the format specifiers that allows us to be sure that
-> > the printed value is correct independently on architecture, endianess, etc.
+> Once there is a public document I will add a link.
 > 
-> At least if you do it, the compiler will also do the right thing:
-> - if the cast doesn't match the format, warn (xhci needs a patch here)
-
-Of course this doesn't work properly on the types that are less than int. So,
-this is fragile argument to support explicit castings.
-
-> - if it matches, widen the provided value as necessary
-> 
-> And it works consistently regardless of whether the variable is a
-> dma_addr_t or u64, on all architectures, with or without PAE.
-
-Yes, with "unnecessary" zero-paddings (that case when they are not needed).
-
-> Reminder: this drivers handles DMAs as u64 too, so it will *never*
-> print all DMAs as %pad. And if it tries, it will be a silent bug.
-
-Yes, and the problem here is not in the printf() specifiers, the problem is
-in the (used) data types. For the printf() it's crystal clear, if the type of
-the variable is dma_addr_t, we have %pad. No need to reinvent the wheel.
-
-> > > This brings up another problem with %pad: it is unknown to compilers
-> > > so they don't type check it. 
-> > > 
-> > > but if I switch to %pad and later change my mind and extend 'addr' to
-> > > u64 without updating this format, the compiler will eat it up and once
-> > > again garbage will be printed on some systems.  
-> > 
-> > This topic was risen a few times in the past. Somebody proposed to have a GCC
-> > plugin with that, somebody else proposed to completely rewrite the %p
-> > extensions to be more like Pyhon or C++ ones (when you just specify argument
-> > and handler for it). None so far is implemented AFAIK.
-> 
-> Indeed, not holding my breath for the %pad situation improving.
-> This includes impossibility of passing it by value - it's forced
-> by compilers being unaware of %pad and following usual %p rules.
-> 
-> > But this is not particular problem of %pad, it's for all %p
-> > extensions. And the extensions exist for a purpose. What you are
-> > proposing here behind the lines is to kill that completely.
-> 
-> Surely people would laugh me off if I actually suggested that.
-> If those formats work for their cases, use them.
-
-Sure, there are thousands of the cases in the kernel when we print our custom
-data types in a better format and this works and will continue working
-independently on the legacy of the compilers or C standard modifications.
-
-Removing them is like suggesting Americans to drop automatic gear in favour of
-the manual to the promoting eco-transportation (horses + carts). I don't believe
-this is valuable proposal.
-
-P.S.
-I'm sorry, but I lost the objective of this discussion. Can you summarize,
-please, what's wrong with the patch?
+> > The link can be added later, so
+> >
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> >
+> > >  #define UVC_GUID_MSXU_1_5 \
+> > >       {0xdc, 0x95, 0x3f, 0x0f, 0x32, 0x26, 0x4e, 0x4c, \
+> > >        0x92, 0xc9, 0xa0, 0x47, 0x82, 0xf4, 0x3b, 0xc8}
+> > > @@ -50,6 +53,8 @@
+> > >  #define UVC_MSXU_CONTROL_FIELDOFVIEW2_CONFIG 0x0f
+> > >  #define UVC_MSXU_CONTROL_FIELDOFVIEW2                0x10
+> > >
+> > > +#define UVC_CROSXU_CONTROL_IQ_PROFILE                0x04
+> > > +
+> > >  #define UVC_GUID_FORMAT_MJPEG \
+> > >       { 'M',  'J',  'P',  'G', 0x00, 0x00, 0x10, 0x00, \
+> > >        0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards,
 
-
+Laurent Pinchart
 
