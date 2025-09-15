@@ -1,229 +1,165 @@
-Return-Path: <linux-usb+bounces-28125-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28126-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCB2FB584FB
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 20:54:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 937CBB585A3
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 21:57:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79F71201E77
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 18:54:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 282941B24E25
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 19:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBC4A27C872;
-	Mon, 15 Sep 2025 18:54:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C61B28727E;
+	Mon, 15 Sep 2025 19:55:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kX21VYbS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="URrTDOqs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584711FA859
-	for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 18:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B08F279DC8
+	for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 19:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757962454; cv=none; b=ssHMcftNq9qwcCyIsWurw/B8LrA52jYYyH5BSHNSQiaPnm1SVGicEH/G6Lrb4gcEPq7Nx9CTdv+vfnOlpIrtt1sPVEJ5WiD9WPgp9Umu/MOYPO+I3jg0n2LnsCUoD65z9Mf7LbJx78YxlaV1tGxtxuMeKEnOa9Xx1R2aZPFR/fE=
+	t=1757966114; cv=none; b=gXf9IOaGg8we5usiEcja7beXytwxbgmfuiZvFapKY+Mv5AmctWWsL5Ie+mHfsMvBCsSklaDbpg0Dgv1/9v80nRlRVzL7uq74cz8iRm9NVD4/549n8YKXaS/6EFmrze6PtSLE76HE9/jmvstiKVomTl3Jy7dodRFPFjKsEk/LkEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757962454; c=relaxed/simple;
-	bh=vHuBfMHoMx8dK7KQND5u4RNvPFCFvG6tmu15bWgwy8k=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=IZdYNJgvPC6+SXzyYloRWFWn3lgVKd5Mr+Ie/kA7XV54BLx9R5GWNXnKbQ6jVQlnNnOPKN/y+apvsf0WglwLe4QoEZzvhLP/moJl1Ds3A9QgB9mBx0yPP6q3re3kVKV+Cw1giGuf4qPpUxObgfXLW6ho4aBSamyvIZEhKP6kE68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kX21VYbS; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757962452; x=1789498452;
-  h=date:from:to:cc:subject:message-id;
-  bh=vHuBfMHoMx8dK7KQND5u4RNvPFCFvG6tmu15bWgwy8k=;
-  b=kX21VYbSO3d8IGrf1h1OyQDJCYEI8Rkh2lFZN//Rkb6eafOjr/JAvWrJ
-   b92IXX62smanuGnAamE2qBm5abyz69LpqfcdDSZFC1IKAUvExEMJDPVLD
-   1UQLnjTwniNNXTozXGAqg0O8P5VsaMhZY65FDoE9Ndfof999ISWdT0gVg
-   g0oa8hdEQVJfMdk0RQqGDvlY7yq3WA7HgAddHQS5u6O3Y70Eovy5qjJX3
-   mu75By3iFr361AusIdXTGDYGJdUTeJ5T85xiT81ECIVLzK9xp8arCAwSp
-   BUoDzJNDlElIrOHkV0fgSw8rLHAtPbQzlp+Y6xmuywnQC3zn9wucSlRo2
-   A==;
-X-CSE-ConnectionGUID: Va+onaZJTnKVPMYh2TrbSQ==
-X-CSE-MsgGUID: lRRrcyduSJOqFQaavY45IA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="62862122"
-X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="62862122"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 11:54:11 -0700
-X-CSE-ConnectionGUID: YpEfdA6QTiS++ETzWIgvZQ==
-X-CSE-MsgGUID: PoBfRoyFTU+q2KrsgkLXqw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="179957545"
-Received: from lkp-server01.sh.intel.com (HELO 5b01dd97f97c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 15 Sep 2025 11:54:11 -0700
-Received: from kbuild by 5b01dd97f97c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uyEL2-0000ad-1r;
-	Mon, 15 Sep 2025 18:54:08 +0000
-Date: Tue, 16 Sep 2025 02:53:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- a4d43c1f17b9f143af5868285c513c866e9cf67b
-Message-ID: <202509160218.NvLgMRQq-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1757966114; c=relaxed/simple;
+	bh=oX6S3cWQPf1Wb59k65AxqPaya62lhiPp4qMPjhmTyNc=;
+	h=From:MIME-Version:Date:Message-ID:Subject:To:Cc:Content-Type; b=L9TLyqYgz+JU5C68RPkJiHYQLe694u4z7rvVvHKChrXnciwguOSG7CQ+eOLiLaHld4DO4IkymrYF+QrcxeneNqQRYp7T+L8t9F4Ii8nLD8M44VY5PIbzqi4xtpZp4eivoHML2009zMu4owXDvGTD1J6wLnsAzpIz5IZ4A/wcAmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=URrTDOqs; arc=none smtp.client-ip=209.85.222.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-80e3612e1a7so798334685a.0
+        for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 12:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757966112; x=1758570912; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date
+         :mime-version:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LrHpUBXq6LbkNxh4bGp0NBkouZcQAg01k90RPNhfloY=;
+        b=URrTDOqsZlnEx07R/uklzEm654OnofT6MxN5fYpSgrPXi71RR0Mgyp5e2oAaTOfBj+
+         Qflz01ocnq+fLRT7ZNJyI8C45GR4FtDbjhRfQvlrWpi/8PUwY+eSzYyZhUdUrps+O46X
+         bPq2ytbrtX/wY3jafv3I4B8E4LeIIJOLschV0TBH+7MO7n8Lx4J97+maw1Xa816Vzgh/
+         huErKJiBxKZVm+jejUQBEz80v++ccXsLQ2ClqkeG0asg9HbYzLlbIl7gtl8XaGONmXTA
+         sfWRzf3pCRu74zXq1P14Vk1MOhHCGR73FI+3Z1FAJSWB6Gm7be5u8PIf9jX46hLyV8Ru
+         JT9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757966112; x=1758570912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date
+         :mime-version:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LrHpUBXq6LbkNxh4bGp0NBkouZcQAg01k90RPNhfloY=;
+        b=jQNSsyiqpBJSthU3Rjt/QkZYNdI6VXz2lptQ0EFTHYMwTxRBw08Bydd4Q84Co15gfQ
+         RlalHJTjAx6GpHZ3FwM6X6po0lieicpjVVhV5NJCtlg4dgUWI39YZ0bfpGqdNRum4PqV
+         e+Qrb6ijS8xGN0DwFHpE2HfxVj94SsPQToLh2VSpM2pgpr6GJPiXRY/50lWWQ3Xyr5np
+         DfJJz/8q2w6XhmIwRZ8HuMCvYEZ1RW9PlUq8cgTTgEZ4r3cEfKnh8w9VJoSWzj4u8li2
+         FQtH81PACrUWHRHEiTmYNIIRRkPROhxtYKwu4RDHNY0CTYbvd7wENoOAtEVDTRCRMMAr
+         cdoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUzuaI6MdELeCKG3bz7OKgSlRCSYdZsIPuWxQOeG2SPmTJnW4SFC5nVjeuqikI4oMM1btuj5gg4Gcc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJsbGmouj49jW1/S0xe8+aZ+VCl4lf+3vKr5ROJlWscK5gcKAb
+	PSf2v3FAc7nH7eBOHETD7rhInyitrQit5KFjn/AKH0V7fMkhpWok8Bd/v0MOev2q6zHcP/5fTo3
+	xkDZ9x22Himc4Tj8cR6L3HHKOVsJJsUk=
+X-Gm-Gg: ASbGncuPiFzqiAveDse0ZqO1yibaZSecbSbgUZz5XtvLSt4I41CGlGCFHrzwXl1eSn2
+	L4RIetFS3xnJrJ0zi93WvoRZCgheykXRmyenLz4cvjwUSPB2K2OlYXA/kBwADYeQsqfG5SQTUOa
+	bVGItbwWz3f9TwRBYr3zOudR/XBBGuVaqzA5y/ULbUWFAydRuM8lkZD/cDAwvYAMT1xZJ4Bn2to
+	Vdc3Eo=
+X-Google-Smtp-Source: AGHT+IFUzzuKQ8JsfJOXQyRYVUMVYOuuFNnM/IAsaG2fXI4NKfNZLDWdB0liX7BfPt053GTWuMSCzOJ5Fhqsf3ub5oA=
+X-Received: by 2002:a05:620a:178a:b0:82a:1dc8:2139 with SMTP id
+ af79cd13be357-82a1dc82187mr450528285a.13.1757966111509; Mon, 15 Sep 2025
+ 12:55:11 -0700 (PDT)
+Received: from 377903785069 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 15 Sep 2025 15:55:10 -0400
+Received: from 377903785069 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 15 Sep 2025 15:55:10 -0400
+From: Forest Crossman <cyrozap@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Date: Mon, 15 Sep 2025 15:55:10 -0400
+X-Gm-Features: Ac12FXzjEDjGuN-06MEOsUYrs9iJmmp3HVtQ3bq0H83JzQKrw5fDVigzNACASBA
+Message-ID: <CAO3ALPxU5RzcoueC454L=WZ1qGMfAcnxm+T+p+9D8O9mcrUbCQ@mail.gmail.com>
+Subject: [PATCH] usb: mon: Increase BUFF_MAX to 64 MiB to support multi-MB URBs
+To: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: a4d43c1f17b9f143af5868285c513c866e9cf67b  Merge 6.17-rc6 into usb-next
+The usbmon binary interface currently truncates captures of large
+transfers from higher-speed USB devices. Because a single event capture
+is limited to one-fifth of the total buffer size, the current maximum
+size of a captured URB is around 240 KiB. This is insufficient when
+capturing traffic from modern devices that use transfers of several
+hundred kilobytes or more, as truncated URBs can make it impossible for
+user-space USB analysis tools like Wireshark to properly defragment and
+reassemble higher-level protocol packets in the captured data.
 
-elapsed time: 733m
+The root cause of this issue is the 1200 KiB BUFF_MAX limit, which has
+not been changed since the binary interface was introduced in 2006.
 
-configs tested: 136
-configs skipped: 3
+To resolve this issue, this patch increases BUFF_MAX to 64 MiB. The
+original comment for BUFF_MAX based the limit's calculation on a
+saturated 480 Mbit/s bus. Applying the same logic to a modern USB 3.2
+Gen 2=C3=972 20 Gbit/s bus (~2500 MB/s over a 20ms window) indicates the
+buffer should be at least 50 MB. The new limit of 64 MiB covers that,
+plus a little extra for any overhead.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+With this change, both users and developers should now be able to debug
+and reverse engineer modern USB devices even when running unmodified
+distro kernels.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                   randconfig-001-20250915    gcc-9.5.0
-arc                   randconfig-002-20250915    gcc-9.5.0
-arc                    vdk_hs38_smp_defconfig    gcc-15.1.0
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    gcc-15.1.0
-arm                        clps711x_defconfig    clang-22
-arm                   randconfig-001-20250915    gcc-13.4.0
-arm                   randconfig-002-20250915    clang-20
-arm                   randconfig-003-20250915    gcc-8.5.0
-arm                   randconfig-004-20250915    gcc-11.5.0
-arm                       spear13xx_defconfig    gcc-15.1.0
-arm                    vt8500_v6_v7_defconfig    gcc-15.1.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250915    clang-22
-arm64                 randconfig-002-20250915    clang-22
-arm64                 randconfig-003-20250915    gcc-8.5.0
-arm64                 randconfig-004-20250915    gcc-11.5.0
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20250915    gcc-15.1.0
-csky                  randconfig-002-20250915    gcc-15.1.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon               randconfig-001-20250915    clang-22
-hexagon               randconfig-002-20250915    clang-22
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    gcc-14
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20250915    clang-20
-i386        buildonly-randconfig-002-20250915    gcc-14
-i386        buildonly-randconfig-003-20250915    gcc-14
-i386        buildonly-randconfig-004-20250915    gcc-14
-i386        buildonly-randconfig-005-20250915    gcc-14
-i386        buildonly-randconfig-006-20250915    gcc-14
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch             randconfig-001-20250915    clang-22
-loongarch             randconfig-002-20250915    gcc-12.5.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-m68k                       m5208evb_defconfig    gcc-15.1.0
-m68k                        mvme147_defconfig    gcc-15.1.0
-m68k                           sun3_defconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                       bmips_be_defconfig    gcc-15.1.0
-mips                           ci20_defconfig    clang-22
-mips                           ip30_defconfig    gcc-15.1.0
-mips                          rb532_defconfig    clang-18
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20250915    gcc-11.5.0
-nios2                 randconfig-002-20250915    gcc-11.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                           alldefconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250915    gcc-9.5.0
-parisc                randconfig-002-20250915    gcc-14.3.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-22
-powerpc                   motionpro_defconfig    clang-22
-powerpc                     mpc512x_defconfig    clang-22
-powerpc               randconfig-001-20250915    gcc-14.3.0
-powerpc               randconfig-002-20250915    gcc-8.5.0
-powerpc               randconfig-003-20250915    clang-22
-powerpc                    socrates_defconfig    gcc-15.1.0
-powerpc64             randconfig-001-20250915    clang-20
-powerpc64             randconfig-002-20250915    clang-22
-powerpc64             randconfig-003-20250915    clang-22
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-22
-riscv                 randconfig-001-20250915    gcc-8.5.0
-riscv                 randconfig-002-20250915    clang-22
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-22
-s390                  randconfig-001-20250915    clang-22
-s390                  randconfig-002-20250915    clang-22
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                    randconfig-001-20250915    gcc-15.1.0
-sh                    randconfig-002-20250915    gcc-13.4.0
-sh                      rts7751r2d1_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250915    gcc-8.5.0
-sparc                 randconfig-002-20250915    gcc-8.5.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20250915    gcc-13.4.0
-sparc64               randconfig-002-20250915    gcc-12.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-14
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20250915    gcc-14
-um                    randconfig-002-20250915    gcc-14
-um                           x86_64_defconfig    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250915    clang-20
-x86_64      buildonly-randconfig-002-20250915    gcc-12
-x86_64      buildonly-randconfig-003-20250915    gcc-14
-x86_64      buildonly-randconfig-004-20250915    clang-20
-x86_64      buildonly-randconfig-005-20250915    clang-20
-x86_64      buildonly-randconfig-006-20250915    gcc-14
-x86_64                              defconfig    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250915    gcc-9.5.0
-xtensa                randconfig-002-20250915    gcc-11.5.0
+Please note that this change does not affect the default buffer size. A
+larger buffer is only allocated when a user explicitly requests it via
+the MON_IOCT_RING_SIZE ioctl, so the change to the maximum buffer size
+should not unduly increase memory usage for users that don't
+deliberately request a larger buffer.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Fixes: 6f23ee1fefdc ("USB: add binary API to usbmon")
+Link: https://lore.kernel.org/CAO3ALPzdUkmMr0YMrODLeDSLZqNCkWcAP8NumuPHLjNJ=
+8wC1kQ@mail.gmail.com
+Signed-off-by: Forest Crossman <cyrozap@gmail.com>
+---
+ drivers/usb/mon/mon_bin.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+index c93b43f5bc46..e713fc5964b1 100644
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -68,18 +68,20 @@
+  * The magic limit was calculated so that it allows the monitoring
+  * application to pick data once in two ticks. This way, another applicati=
+on,
+  * which presumably drives the bus, gets to hog CPU, yet we collect our da=
+ta.
+- * If HZ is 100, a 480 mbit/s bus drives 614 KB every jiffy. USB has an
+- * enormous overhead built into the bus protocol, so we need about 1000 KB=
+.
++ *
++ * Originally, for a 480 Mbit/s bus this required a buffer of about 1 MB. =
+For
++ * modern 20 Gbps buses, this value increases to over 50 MB. The maximum
++ * buffer size is set to 64 MiB to accommodate this.
+  *
+  * This is still too much for most cases, where we just snoop a few
+  * descriptor fetches for enumeration. So, the default is a "reasonable"
+- * amount for systems with HZ=3D250 and incomplete bus saturation.
++ * amount for typical, low-throughput use cases.
+  *
+  * XXX What about multi-megabyte URBs which take minutes to transfer?
+  */
+-#define BUFF_MAX  CHUNK_ALIGN(1200*1024)
+-#define BUFF_DFL   CHUNK_ALIGN(300*1024)
+-#define BUFF_MIN     CHUNK_ALIGN(8*1024)
++#define BUFF_MAX  CHUNK_ALIGN(64*1024*1024)
++#define BUFF_DFL      CHUNK_ALIGN(300*1024)
++#define BUFF_MIN        CHUNK_ALIGN(8*1024)
+
+ /*
+  * The per-event API header (2 per URB).
+--=20
+2.50.1
 
