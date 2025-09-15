@@ -1,131 +1,131 @@
-Return-Path: <linux-usb+bounces-28111-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28112-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E290B57B93
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 14:46:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33601B57C97
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 15:15:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A4D67B2F4D
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 12:44:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0925F7AFD85
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 13:12:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 582A82D63F6;
-	Mon, 15 Sep 2025 12:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DB62229B36;
+	Mon, 15 Sep 2025 13:14:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bBuiGV8n"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EEQk+VY2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7C61D9346
-	for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 12:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A4D305E31;
+	Mon, 15 Sep 2025 13:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757940307; cv=none; b=hOuAo5pDl8lByJLQOnODiVlITAqOHk9627oOWFqQH4NPcM4JboTTcjaQx3DrpCGEcQCzd786dZLbWapQZF1XxYOWT93v85wnjdsS6Rlsu635916wtBApLh67UElTlFmzHwG3iiQXLHjYL6L78UjauLCDi9HXJ+U8l2oBmZ5DOFQ=
+	t=1757942056; cv=none; b=pdG1C/v0mdvPq80O1WsIrExIy2vOXvW8cT6o49m3si1hY0Hq+85sASh5OTKjPsMmiQLci6L7YeArrEuzCwZjiwYh5d1YkwzSRJ5FDVqajM4yQOGyOn55yplyKI1e5FewFWGymh084t4OWuD8agdfiCaDvW6pjHHs/qZqR2QHpR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757940307; c=relaxed/simple;
-	bh=CNcS7/7KVZ/eFOLlqmMT175KvAeXxT5qq2/8+VICH8s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YMF3iSQVDbnwZG+MONLgqhZC5Yyk9llPZIDgUJilZ5IpXRIfX6kalKkO+ZF4bxpRYm1obSDKV6ve8Aq8A8L9F2xCkTtMwQGN4B7/wXF/laWG+v8UuFTz/qxHzfmd/2LiW4n+YOmUPsuemJGKEMXtt3WRgmOa20OnW43Smkf5O4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bBuiGV8n; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1757942056; c=relaxed/simple;
+	bh=Dle/WCXE1FdM2SDAFI+ZfumRAap/NFKRsz2OC6kLbMo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=orSsjQNhwuiv2tSqk8TybIQq9YD89ib8tnmIXon+zL4D5K0630aZm1YiscaYEwNndv0O0Y4ifoKlLw/olJd4XAy4gHLJEQJhrmWbM0XQuogt7uFhOMYVjvOLaUd7iP4Yatg29JdOfBcPBbFcBCQplpFftUruNr7JCisTgYQ264Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EEQk+VY2; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757940306; x=1789476306;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CNcS7/7KVZ/eFOLlqmMT175KvAeXxT5qq2/8+VICH8s=;
-  b=bBuiGV8nBI+nWce7X1ro5ma0R5IpnlMH5kUI4jrFnc3RS2p2qid6nx7u
-   M11kvjzP9C5Oz6i1vqDq/g0d1DhXjl6Fvmv/pu08bLp+yD+QTwwWFjjz4
-   6CTEOq7MMsZacPzgSVh8i/pt2pZHUptAzrhANmtuJM9cH6pfG+FJM0AQ6
-   w4BAaXHQWfl05n/2mxNyTzac5x5mkhOt3n4joe1K3zi2+ew/iaLo83wUD
-   k7PIxoW3MroXRIIH5DRbhhemJPXLfthoI7lEbvIUWwCjiwVxVPwn3FIF4
-   5CqNG6ruQvbwWbimOr/hyDZraQkpcxAj1XbxI9BzwU48w/bvn3KkuA4Re
-   A==;
-X-CSE-ConnectionGUID: Atwzz7RgSsOWjS2xs6rkNw==
-X-CSE-MsgGUID: +loBoOt8RICdep66xIDngg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="62820509"
+  t=1757942055; x=1789478055;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Dle/WCXE1FdM2SDAFI+ZfumRAap/NFKRsz2OC6kLbMo=;
+  b=EEQk+VY2zgy3DD2NAPrFkOLEq5b8VpHcN2hMfI39JNt3gE1vZ5LhF6ID
+   FBTvTQ9wgDL6bdj+s9caEm1hN0453LnWW0084wQCJpQTaiIgEtim4obsS
+   b15ZudlCW/k3vyZvOsErzBh03V3zXHVx7yy4UsD5KXx9HJGVIdbVdJX7v
+   XnMtvZuuwvjWOGTz9rI5UHY+TFMDkk9/YEJ2L+LUZy6UzzzAptw3hiCdW
+   qpInlk3M28aaR/+UE2jf/Av7jnwoixYUU4/7R9tfvEKFXsaJ47muKK6i2
+   lxhwtf7iIPLF6BZdMJUHEdF3HsSUAwXC/BHuhnpjE765rpPPG+AtnoRgX
+   w==;
+X-CSE-ConnectionGUID: Zk9B7UcCSWu+U3KtotEUnw==
+X-CSE-MsgGUID: C+lAYfb2RsiklqLQYVyfhA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="59890761"
 X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="62820509"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 05:45:05 -0700
-X-CSE-ConnectionGUID: YVFr2rSwSTirJSZeGsa3dA==
-X-CSE-MsgGUID: 7MFTHE0XSUyeF0+kreyn1A==
+   d="scan'208";a="59890761"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 06:14:15 -0700
+X-CSE-ConnectionGUID: zpz3F27SSnSNkSqFUpMt/A==
+X-CSE-MsgGUID: ac8/E/joTTG4Igx2G0j/KQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="174560566"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.255.79]) ([10.245.255.79])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 05:45:04 -0700
-Message-ID: <f7816a29-6e9a-4edf-b9b7-5614d112f62b@linux.intel.com>
-Date: Mon, 15 Sep 2025 15:45:01 +0300
+   d="scan'208";a="173942411"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa010.jf.intel.com with SMTP; 15 Sep 2025 06:14:11 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Sep 2025 16:14:10 +0300
+Date: Mon, 15 Sep 2025 16:14:10 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Sven Peter <sven@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 08/11] usb: typec: tipd: Update partner identity when
+ power status was updated
+Message-ID: <aMgRIoaIbMDH3aAl@kuha.fi.intel.com>
+References: <20250914-apple-usb3-tipd-v1-0-4e99c8649024@kernel.org>
+ <20250914-apple-usb3-tipd-v1-8-4e99c8649024@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/7] usb: xhci: improve Endpoint Context register
- debugging
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
- <20250903170127.2190730-5-niklas.neronin@linux.intel.com>
- <20250909112017.707158a9.michal.pecio@gmail.com>
-Content-Language: en-US
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-In-Reply-To: <20250909112017.707158a9.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250914-apple-usb3-tipd-v1-8-4e99c8649024@kernel.org>
 
-On 09/09/2025 12.20, Michal Pecio wrote:
->>  drivers/usb/host/xhci.h | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
->> index 59ff84ba2d4a..2662356d048e 100644
->> --- a/drivers/usb/host/xhci.h
->> +++ b/drivers/usb/host/xhci.h
->> @@ -2580,9 +2580,9 @@ static inline const char *xhci_decode_ep_context(char *str, u32 info,
->>  	ret += sprintf(str + ret, "interval %d us max ESIT payload %d CErr %d ",
->>  			(1 << interval) * 125, esit, cerr);
->>  
->> -	ret += sprintf(str + ret, "Type %s %sburst %d maxp %d deq %016llx ",
->> +	ret += sprintf(str + ret, "Type %s %sburst %d maxp %d deq %016llx cycle %llu",
->>  			xhci_ep_type_string(ep_type), hid ? "HID" : "",
->> -			burst, maxp, deq);
->> +			burst, maxp, deq & TR_DEQ_PTR_MASK, deq & EP_CTX_CYCLE_MASK);
+On Sun, Sep 14, 2025 at 12:56:13PM +0000, Sven Peter wrote:
+> From: Hector Martin <marcan@marcan.st>
 > 
-> Does it really bother people who use debugfs that deq includes the
-> cycle bit, which is exactly what anyone who know xHCI will expect?
+> Whenever the power status is changed make sure to also update the
+> partner identity to be able to detect changes once de-bouncing and mode
+> changes are added for CD321x.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> Reviewed-by: Neal Gompa <neal@gompa.dev>
+> Signed-off-by: Sven Peter <sven@kernel.org>
 
-Not only because of the cycle bit, but also for the other bits. All 64-bit
-register are not exactly the same and clearly communicating what each value
-represents is always preferable IMO. As demonstrated in the examples below,
-bits 3:1 differ from one another.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Stream Context register, section 6.2.4.1.
- bit 0 - Dequeue Cycle State.
- bits 3:1 - Stream Context Type.
- bits 63:4 - TR Dequeue Pointer, is 16-byte aligned.
+> ---
+>  drivers/usb/typec/tipd/core.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index c7cf936e5a61a331271c05b68ff1b77b89c0f643..e16c6c07c72a3e285f1fc94db72bed8dc3217a1d 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -635,9 +635,16 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
+>  	if (!tps6598x_read_status(tps, &status))
+>  		goto err_unlock;
+>  
+> -	if (event & APPLE_CD_REG_INT_POWER_STATUS_UPDATE)
+> +	if (event & APPLE_CD_REG_INT_POWER_STATUS_UPDATE) {
+>  		if (!tps6598x_read_power_status(tps))
+>  			goto err_unlock;
+> +		if (TPS_POWER_STATUS_PWROPMODE(tps->pwr_status) == TYPEC_PWR_MODE_PD) {
+> +			if (tps6598x_read_partner_identity(tps)) {
+> +				dev_err(tps->dev, "failed to read partner identity\n");
+> +				tps->partner_identity = (struct usb_pd_identity) {0};
+> +			}
+> +		}
+> +	}
+>  
+>  	if (event & APPLE_CD_REG_INT_DATA_STATUS_UPDATE)
+>  		if (!tps->data->read_data_status(tps))
+> 
+> -- 
+> 2.34.1
+> 
 
-Endpoint Context register, section 6.2.3.
- bit 0 - Dequeue Cycle State.
- bits 3:1 - RsvdZ.
- bits 63:4 - TR Dequeue Pointer, is 16-byte aligned.
-
-> This line is quite damn long already.
-
-Is this really a problem for debugfs?
-Should debugfs not be more verbose than debug messages? 
-> Also, I am highly confident that you haven't even tested this patch.
-> Try it and see what happens ;)
-
-Nice catch, I'll add the missing space in v2. Thanks!
-
-Best Regards,
-Niklas 
-
+-- 
+heikki
 
