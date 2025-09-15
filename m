@@ -1,135 +1,200 @@
-Return-Path: <linux-usb+bounces-28120-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28121-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA2F7B58110
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 17:43:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE121B583B6
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 19:33:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CDBEE4E223E
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 15:43:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7E0A4856FF
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 17:33:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5367E2264CB;
-	Mon, 15 Sep 2025 15:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B79328A1ED;
+	Mon, 15 Sep 2025 17:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oNnF+avu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D6yF07HM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF9E223715
-	for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 15:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06CD2284684;
+	Mon, 15 Sep 2025 17:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757950994; cv=none; b=AlwE74/SfYynF2QZt6wizFpMoehpuaJByyRjFMVFlqLrxavGR/QAgNvCPitGuIqusyPK5mxOLlxMOC9xRPNsntwoqDV9q8GUbC5hYsHvfNPgOXgUYA9caeJPIy2q8P7wwMleUIyxX6E2NlX+5ReJ81n1tdcA52bAHXv5Wz93HmU=
+	t=1757957613; cv=none; b=i7B7/dz9oS1GmsnNPxlkn4chdQLCAt0grPSHBdVjcyGyuXBs/PKnaKivjLRBo+9qModUExR8PTbdCQQh32CJOZambCfk8TLyrEmZnTctZRPL/l9gAoeGd1wYNn8lrFwTGvPvHDldNTD3OI0EOgcw6JFvRFgEwRzXKEms+e7CBvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757950994; c=relaxed/simple;
-	bh=FKRBnaOrnPBkRqNb4ej9Sesul3Gr7J/yTqmmnMxcFYY=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=dOtk2F1ONh3Sa09tsUqPvHGxvK1yb8xp8Ku6j52qlpsw9x+BmuOadnWOQzva8DeO+oOVh/gX3CVxE6hOgDtYd9H6jHeQEiuBJA5b4lc1w711yQyZC+Iktt+/4Y+is3gxT1tMuJupAZmxtEj7yxAIJIG8ObiI3zx6eC1xWAnW9O0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oNnF+avu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 519D6C4CEF7
-	for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 15:43:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757950994;
-	bh=FKRBnaOrnPBkRqNb4ej9Sesul3Gr7J/yTqmmnMxcFYY=;
-	h=From:To:Subject:Date:From;
-	b=oNnF+avuDPY9r7Ft2F7rgIRFiFp4lbercYNgeudy0mJmxPt7TLrKF1I4EIHqVrCyl
-	 T/d4dniGeAaDddVQRj3DACOglm8B0t5ZlR/qjxlPOUKgfaefgtnwBkvxnBKAu5jD3B
-	 r5ujObXC+AUq98MuoNXi//s9R2xLXEx1THFQiP9PI+rgk+4vOPFeAcnoBbYW+9wxJ6
-	 QBIHkcnoVklc9yVN0XIiIFbzbKwncCOEtvJvf59rShF9Q/oFznK9WuzrWkdbv5gXsw
-	 ahBAiD/6awikSBwc/wq7PpCIUrGkOAQTRv3szwB4KohhMQTSn90iel6LdqkTu3BY79
-	 /ACSB9M2lG4ow==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 3FDF2C41612; Mon, 15 Sep 2025 15:43:14 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220576] New: USB port disable doesn't work on all ports
-Date: Mon, 15 Sep 2025 15:43:14 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: forum@docmax.my.to
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-220576-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1757957613; c=relaxed/simple;
+	bh=tcA5ilNGhf5LDCGb0wQj3jRtCt/yW5+rVMlOSjIZFag=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L7nPPW2magHnW6OEWP0qQjl/4supxMqcEyCJLHeo9+9o4gtKMtusswTCX4pv0L5coaSBFGQtwRN9QCpXY4U50L1n/OANXJumVZQkHGGiLBkHlVu3edPVbBgFtm1GHQ+/MBed3WnoS4k8Abo7q8XZh1N79bhStrhgh9hWmHC1on0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D6yF07HM; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757957612; x=1789493612;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tcA5ilNGhf5LDCGb0wQj3jRtCt/yW5+rVMlOSjIZFag=;
+  b=D6yF07HM/D0U+a8ozdaSkHPilY/Cu5LjC558iFFRpRsLztXG8Ax6Fek8
+   HFNF7ZOR84DB1ojNk/6sDyu5jvAgxZtosRjOAwgTw9c3IyQGvWwxLrYLo
+   KYPCtj0jrFsXN09jhlWiDzrQE3zv03bXUSwmfOb32Dcw6pxqY3hr3ph5S
+   3zg+fVHX6pL1zkejE4Kga/pT2OZjlUmj6TE13cmviAJsPlWE9YA19QCHh
+   KhgV+nZuWVUv8QcpMYq+fj6FQcvNJnOB9VGY1QkHvkyV4KFC3L0VN8q6J
+   3FxadTVfqSCTL/ec0+EievdARoc62neL+G8vO+jymV6U5a895JCZHvoxj
+   w==;
+X-CSE-ConnectionGUID: XiV2NU09Tk6JMZGEJinrJQ==
+X-CSE-MsgGUID: 3WrYf+fRQou2wS5WxYeb9w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="77832487"
+X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
+   d="scan'208";a="77832487"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 10:33:23 -0700
+X-CSE-ConnectionGUID: PZ65g/EDS1KR6VeXQ2N8UA==
+X-CSE-MsgGUID: AdkmSubKSW6orL1pB1KVFA==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 5b01dd97f97c) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 15 Sep 2025 10:32:01 -0700
+Received: from kbuild by 5b01dd97f97c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uyD3X-0000Ux-01;
+	Mon, 15 Sep 2025 17:31:59 +0000
+Date: Tue, 16 Sep 2025 01:31:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: caohang@eswincomputing.com, gregkh@linuxfoundation.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, Thinh.Nguyen@synopsys.com,
+	p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, ningyu@eswincomputing.com,
+	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
+	Hang Cao <caohang@eswincomputing.com>,
+	Senchuan Zhang <zhangsenchuan@eswincomputing.com>
+Subject: Re: [PATCH v3 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
+Message-ID: <202509160138.P7gRM9Bt-lkp@intel.com>
+References: <20250915091051.2148-1-caohang@eswincomputing.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250915091051.2148-1-caohang@eswincomputing.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220576
+Hi,
 
-            Bug ID: 220576
-           Summary: USB port disable doesn't work on all ports
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: forum@docmax.my.to
-        Regression: No
+kernel test robot noticed the following build warnings:
 
-Hello,
-with
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus robh/for-next pza/reset/next linus/master v6.17-rc6 next-20250912]
+[cannot apply to pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-echo 0 > /sys/bus/usb/devices/4-1.1/port/disable
-echo 0 > /sys/bus/usb/devices/4-1.2/port/disable
-echo 0 > /sys/bus/usb/devices/4-1.4/port/disable
+url:    https://github.com/intel-lab-lkp/linux/commits/caohang-eswincomputing-com/dt-bindings-usb-Add-ESWIN-EIC7700-USB-controller/20250915-171407
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250915091051.2148-1-caohang%40eswincomputing.com
+patch subject: [PATCH v3 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
+config: i386-buildonly-randconfig-003-20250915 (https://download.01.org/0day-ci/archive/20250916/202509160138.P7gRM9Bt-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250916/202509160138.P7gRM9Bt-lkp@intel.com/reproduce)
 
-i can disable the ports on my usb 3.2 hub. It's a 10-port hub from RSHTECH
-(RSH-ST10C).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509160138.P7gRM9Bt-lkp@intel.com/
 
-Output of uhubctl for the USB 3.2 part:
+All warnings (new ones prefixed by >>):
 
-Current status for hub 4-1 [0bda:0423 TerraMaster 4-Port USB 3.0 Hub, USB 3=
-.20,
-4 ports, ppps]
-  Port 1: 0203 power 5gbps U0 enable connect [2109:8822 VIA Labs, Inc. USB3=
-.1
-Hub 000000001, USB 3.20, 4 ports, ppps]
-  Port 2: 0203 power 5gbps U0 enable connect [2109:8822 VIA Labs, Inc. USB3=
-.1
-Hub 000000001, USB 3.20, 4 ports, ppps]
-  Port 3: 0263 power 5gbps U3 enable connect [0bda:0411 Generic USB3.2 Hub,=
- USB
-3.20, 4 ports, ppps]
-  Port 4: 0203 power 5gbps U0 enable connect [2109:8822 VIA Labs, Inc. USB3=
-.1
-Hub 000000001, USB 3.20, 4 ports, ppps]
+>> drivers/usb/dwc3/dwc3-eic7700.c:225:12: warning: 'dwc3_eswin_runtime_idle' defined but not used [-Wunused-function]
+     225 | static int dwc3_eswin_runtime_idle(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/usb/dwc3/dwc3-eic7700.c:210:12: warning: 'dwc3_eswin_runtime_resume' defined but not used [-Wunused-function]
+     210 | static int dwc3_eswin_runtime_resume(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/usb/dwc3/dwc3-eic7700.c:196:12: warning: 'dwc3_eswin_runtime_suspend' defined but not used [-Wunused-function]
+     196 | static int dwc3_eswin_runtime_suspend(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/usb/dwc3/dwc3-eic7700.c:181:12: warning: 'dwc3_eswin_pm_resume' defined but not used [-Wunused-function]
+     181 | static int dwc3_eswin_pm_resume(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~~~~
+>> drivers/usb/dwc3/dwc3-eic7700.c:166:12: warning: 'dwc3_eswin_pm_suspend' defined but not used [-Wunused-function]
+     166 | static int dwc3_eswin_pm_suspend(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~~~~~
 
-The strange thing is, powering off port 1 and 4 works, but power 2 says it's
-powered off, but the LED indicatior on the hub is still on (usb drive bay
-doesn't suspend, the other 2 do).
 
-Now i don't know if it is a hardware or a software bug. How to find out? Ca=
-n it
-be fixed?
+vim +/dwc3_eswin_runtime_idle +225 drivers/usb/dwc3/dwc3-eic7700.c
 
---=20
-You may reply to this email to add a comment.
+   165	
+ > 166	static int dwc3_eswin_pm_suspend(struct device *dev)
+   167	{
+   168		struct dwc3 *dwc = dev_get_drvdata(dev);
+   169		struct dwc3_eswin *eswin = to_dwc3_eswin(dwc);
+   170		int ret;
+   171	
+   172		ret = dwc3_pm_suspend(&eswin->dwc);
+   173		if (ret)
+   174			return ret;
+   175	
+   176		clk_bulk_disable_unprepare(eswin->num_clks, eswin->clks);
+   177	
+   178		return 0;
+   179	}
+   180	
+ > 181	static int dwc3_eswin_pm_resume(struct device *dev)
+   182	{
+   183		struct dwc3 *dwc = dev_get_drvdata(dev);
+   184		struct dwc3_eswin *eswin = to_dwc3_eswin(dwc);
+   185		int ret;
+   186	
+   187		ret = clk_bulk_prepare_enable(eswin->num_clks, eswin->clks);
+   188		if (ret) {
+   189			dev_err(dev, "Failed to enable clocks: %d\n", ret);
+   190			return ret;
+   191		}
+   192	
+   193		return dwc3_pm_resume(&eswin->dwc);
+   194	}
+   195	
+ > 196	static int dwc3_eswin_runtime_suspend(struct device *dev)
+   197	{
+   198		struct dwc3 *dwc = dev_get_drvdata(dev);
+   199		struct dwc3_eswin *eswin = to_dwc3_eswin(dwc);
+   200		int ret;
+   201	
+   202		ret = dwc3_runtime_suspend(&eswin->dwc);
+   203		if (ret)
+   204			return ret;
+   205	
+   206		clk_bulk_disable_unprepare(eswin->num_clks, eswin->clks);
+   207		return 0;
+   208	}
+   209	
+ > 210	static int dwc3_eswin_runtime_resume(struct device *dev)
+   211	{
+   212		struct dwc3 *dwc = dev_get_drvdata(dev);
+   213		struct dwc3_eswin *eswin = to_dwc3_eswin(dwc);
+   214		int ret;
+   215	
+   216		ret = clk_bulk_prepare_enable(eswin->num_clks, eswin->clks);
+   217		if (ret) {
+   218			dev_err(dev, "Failed to enable clocks: %d\n", ret);
+   219			return ret;
+   220		}
+   221	
+   222		return dwc3_runtime_resume(&eswin->dwc);
+   223	}
+   224	
+ > 225	static int dwc3_eswin_runtime_idle(struct device *dev)
+   226	{
+   227		return dwc3_runtime_idle(dev_get_drvdata(dev));
+   228	}
+   229	
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
