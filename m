@@ -1,131 +1,143 @@
-Return-Path: <linux-usb+bounces-28112-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28113-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33601B57C97
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 15:15:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6E2EB57CCB
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 15:24:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0925F7AFD85
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 13:12:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A782D1883F2F
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 13:25:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DB62229B36;
-	Mon, 15 Sep 2025 13:14:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69BC30F929;
+	Mon, 15 Sep 2025 13:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EEQk+VY2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AYeCrBeu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A4D305E31;
-	Mon, 15 Sep 2025 13:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BFB1E7C2E
+	for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 13:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757942056; cv=none; b=pdG1C/v0mdvPq80O1WsIrExIy2vOXvW8cT6o49m3si1hY0Hq+85sASh5OTKjPsMmiQLci6L7YeArrEuzCwZjiwYh5d1YkwzSRJ5FDVqajM4yQOGyOn55yplyKI1e5FewFWGymh084t4OWuD8agdfiCaDvW6pjHHs/qZqR2QHpR8=
+	t=1757942688; cv=none; b=M5dqUjBWbyqHRZRZ1Ki48sXjYScW4cmSPm/NQhiETYuPw1Inf6Ir3ZNe90oPn4pRmeQRWAFP3MeT5G85qzbbPBOx7BpV3ClFmBfapWZ+MEBdXz4nnI8nAXBB2Go9gKJuGN7dm4ymU6KPQplsQs15cPanEXFJ89/YfToJBd8YN8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757942056; c=relaxed/simple;
-	bh=Dle/WCXE1FdM2SDAFI+ZfumRAap/NFKRsz2OC6kLbMo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=orSsjQNhwuiv2tSqk8TybIQq9YD89ib8tnmIXon+zL4D5K0630aZm1YiscaYEwNndv0O0Y4ifoKlLw/olJd4XAy4gHLJEQJhrmWbM0XQuogt7uFhOMYVjvOLaUd7iP4Yatg29JdOfBcPBbFcBCQplpFftUruNr7JCisTgYQ264Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EEQk+VY2; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1757942688; c=relaxed/simple;
+	bh=PEwpJ4ejyhyZaxDRkOFfGAESxgF2WF43wMDTYXOU1XY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gtrXtfwYCo/rViXnThZNbCChbeSzcGvAPknf32zOBXbJmj3/fbNT5guFzYKiaxKQu/cGNIls1jTPuiTW5NE+hd0Fbzdo2kKWKIog3wm486a/SDN7ctKDphsWZ8P6/a6LrMpHZNyUmFmI6xCOo6eDNmNipP/sJTcK0Q4pEXxsicc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AYeCrBeu; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757942055; x=1789478055;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Dle/WCXE1FdM2SDAFI+ZfumRAap/NFKRsz2OC6kLbMo=;
-  b=EEQk+VY2zgy3DD2NAPrFkOLEq5b8VpHcN2hMfI39JNt3gE1vZ5LhF6ID
-   FBTvTQ9wgDL6bdj+s9caEm1hN0453LnWW0084wQCJpQTaiIgEtim4obsS
-   b15ZudlCW/k3vyZvOsErzBh03V3zXHVx7yy4UsD5KXx9HJGVIdbVdJX7v
-   XnMtvZuuwvjWOGTz9rI5UHY+TFMDkk9/YEJ2L+LUZy6UzzzAptw3hiCdW
-   qpInlk3M28aaR/+UE2jf/Av7jnwoixYUU4/7R9tfvEKFXsaJ47muKK6i2
-   lxhwtf7iIPLF6BZdMJUHEdF3HsSUAwXC/BHuhnpjE765rpPPG+AtnoRgX
-   w==;
-X-CSE-ConnectionGUID: Zk9B7UcCSWu+U3KtotEUnw==
-X-CSE-MsgGUID: C+lAYfb2RsiklqLQYVyfhA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="59890761"
+  t=1757942687; x=1789478687;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PEwpJ4ejyhyZaxDRkOFfGAESxgF2WF43wMDTYXOU1XY=;
+  b=AYeCrBeuEvaatFOFOyH3i6y9uu6+dNOWrHOuRE93msa5fmwdCBJU7suj
+   KDHUXBfejL/ArFWGKZKy0j7s89FCeVM3ML5b8nVt9DPx2d1bne72f52N/
+   b7hHFGERmkG4G89AdMQFYsOYxs4cmc0zRTRVHdIRDtzNajMJszqkC5odp
+   oDwL4FutEkTHk6cVoew80ykxn4Z0vCQGbRn6JLOXWe8PkP4ERaKW9nS7X
+   NwfkZsm9jmIqwwp5wSqsEo/vYvzbMeCGjoQgs4wXQZWA6AnTbKl7ojsAi
+   eC2SsdLzdxmr9DJtb6bbgMHZjvnhQuJC47LUIAOkNQL0wpa15RY/5CONh
+   g==;
+X-CSE-ConnectionGUID: gQe6aM/+TT+XlKVLcGAPrA==
+X-CSE-MsgGUID: s/0LFZG8SiSnUWHE8HVnvA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="59422041"
 X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="59890761"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 06:14:15 -0700
-X-CSE-ConnectionGUID: zpz3F27SSnSNkSqFUpMt/A==
-X-CSE-MsgGUID: ac8/E/joTTG4Igx2G0j/KQ==
+   d="scan'208";a="59422041"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 06:24:46 -0700
+X-CSE-ConnectionGUID: qdBAJsxyTAOY70MxNHxftw==
+X-CSE-MsgGUID: H/CTc49+T6u/v4qyROvz1Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="173942411"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa010.jf.intel.com with SMTP; 15 Sep 2025 06:14:11 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Sep 2025 16:14:10 +0300
-Date: Mon, 15 Sep 2025 16:14:10 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Sven Peter <sven@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 08/11] usb: typec: tipd: Update partner identity when
- power status was updated
-Message-ID: <aMgRIoaIbMDH3aAl@kuha.fi.intel.com>
-References: <20250914-apple-usb3-tipd-v1-0-4e99c8649024@kernel.org>
- <20250914-apple-usb3-tipd-v1-8-4e99c8649024@kernel.org>
+   d="scan'208";a="174247028"
+Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.255.79]) ([10.245.255.79])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 06:24:45 -0700
+Message-ID: <bac8551a-f216-4118-bf97-137cb9c837a2@linux.intel.com>
+Date: Mon, 15 Sep 2025 16:24:42 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250914-apple-usb3-tipd-v1-8-4e99c8649024@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 7/7] usb: xhci: standardize address format
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
+References: <20250903170127.2190730-1-niklas.neronin@linux.intel.com>
+ <20250903170127.2190730-8-niklas.neronin@linux.intel.com>
+ <20250909110654.4d064391.michal.pecio@gmail.com>
+Content-Language: en-US
+From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+In-Reply-To: <20250909110654.4d064391.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Sep 14, 2025 at 12:56:13PM +0000, Sven Peter wrote:
-> From: Hector Martin <marcan@marcan.st>
-> 
-> Whenever the power status is changed make sure to also update the
-> partner identity to be able to detect changes once de-bouncing and mode
-> changes are added for CD321x.
-> 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> Reviewed-by: Neal Gompa <neal@gompa.dev>
-> Signed-off-by: Sven Peter <sven@kernel.org>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> ---
->  drivers/usb/typec/tipd/core.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+On 09/09/2025 12.06, Michal Pecio wrote:
+> On Wed,  3 Sep 2025 19:01:27 +0200, Niklas Neronin wrote:
+>> In the xHCI driver, printed hexadecimal values can be ambiguous, making it
+>> difficult to distinguish between values and addresses. To enhance clarity,
+>> all DMA addresses are now prefixed with the '@' symbol, ensuring immediate
+>> recognition as addresses.
 > 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index c7cf936e5a61a331271c05b68ff1b77b89c0f643..e16c6c07c72a3e285f1fc94db72bed8dc3217a1d 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -635,9 +635,16 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  	if (!tps6598x_read_status(tps, &status))
->  		goto err_unlock;
->  
-> -	if (event & APPLE_CD_REG_INT_POWER_STATUS_UPDATE)
-> +	if (event & APPLE_CD_REG_INT_POWER_STATUS_UPDATE) {
->  		if (!tps6598x_read_power_status(tps))
->  			goto err_unlock;
-> +		if (TPS_POWER_STATUS_PWROPMODE(tps->pwr_status) == TYPEC_PWR_MODE_PD) {
-> +			if (tps6598x_read_partner_identity(tps)) {
-> +				dev_err(tps->dev, "failed to read partner identity\n");
-> +				tps->partner_identity = (struct usb_pd_identity) {0};
-> +			}
-> +		}
-> +	}
->  
->  	if (event & APPLE_CD_REG_INT_DATA_STATUS_UPDATE)
->  		if (!tps->data->read_data_status(tps))
-> 
-> -- 
-> 2.34.1
-> 
+> Is it really a problem? Which values look like addresses?
 
--- 
-heikki
+Examples from before my patch series:
+"Setting command ring address to 0x%llx" - Not an address.
+"Already resolving halted ep for 0x%llx" - DMA address
+"stream %u ctx @%pad: SCT %llu deq %llx" - deq is not and address
+"Slot ID %d dcbaa entry @%p = %#016llx - Both addresses
+
+I'll drop the "@" prefix from DMA and virtual addresses, as it's no longer
+necessary now that addresses read from hardware are printed separately.
+Originally, the prefix was used to distinguish between register hex dumps
+and pure addresses.
+
+> And what if the kernel starts hashing %pad by default? ;)
+
+Good point. But this also means that 'dma_addr_t' should be printed using %pad :)
+>> Exceptions to the '@' prefix rule are functions xhci_ring_enqueue_show()
+>> and xhci_ring_dequeue_show(), which exclusively print to the enqueue and
+>> dequeue debugfs files, containing only addresses.
+> 
+> So debugfs will also get @ now, except for two files apparently?
+> 
+> Why are those files left out and inconsistent with the rest? If the
+> answer is "because the @ prefix is annoying and breaks tools" then the
+> same answer applies to every other debugfs file ;)
+
+The prefix was originally intended to indicate that a hex value represents an
+address. However, if a user opens a file containing only a address, the prefix
+becomes redundant, as you said "anyone going there already knows what those
+fields are".
+>> Adding padding is unnecessary and provides no useful information.
+> 
+> Sounds like an argument against converting to %pad in other places?
+
+The value is not an actual address but a 'u64' that represents an address,
+so it doesn't require padding. All 'dma_addr_t' values, which are actual
+addresses, include padding.
+
+>> $ git grep -n '0x%' | wc -l
+>> 39796
+>> $ git grep -n '%#' | wc -l
+>> 5204
+> 
+> Not sure what is this doing in a commit message?
+
+Justifying "0x" prefix instead of '#' flag. The "0x" prefix is more commonly
+used in the Linux kernel compared to the '#' flag.
+
+Even with "git grep -e '%#' -e '%08#' -e '%016#'" it is only 5207.
+
+Best Regards,
+Niklas
 
