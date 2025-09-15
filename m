@@ -1,272 +1,221 @@
-Return-Path: <linux-usb+bounces-28070-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28071-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D389B56DD7
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 03:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AF2FB56E2F
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 04:14:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5F31172547
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 01:29:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5566179B3C
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 02:14:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB80E1EB5F8;
-	Mon, 15 Sep 2025 01:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A5C721D3CC;
+	Mon, 15 Sep 2025 02:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b="kVR9k2Us"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dPMfCx5a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24BA933E7;
-	Mon, 15 Sep 2025 01:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DF01E98EF
+	for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 02:14:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757899749; cv=none; b=SIZ2VUyL8H0Nxg2pX08cCUTYNDU7SDKcqwyUVOmxV2KX7n7dumvYO5hv81TnV1U5jIMC7tWcvnhXUQ3BQazBhWhH0o5D3XSmigF3ZuYSuzSLQN4Ar0KLBgNbzjPzRXj/ftJHx+GMaMTo7oUTxcafarTB3vvPtta+4tVcuR0qL+g=
+	t=1757902459; cv=none; b=CRb1UCLaw6Rzwg4uARSy13VN8ftVoXDFjxFaMRY+X0BhnFLI0HYNuyr2M1UvDWz3oN6R/BSmOz0aLblcYZFMjutH/vbE/UytWv3jiQ/fgAG0okA5ssTHV9H8p6rJvV7TabLdJkfxmk9w6hPqBP9qyjfnDa/FShEdULHVhf62iQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757899749; c=relaxed/simple;
-	bh=2MlKAYm7yrQrGxGujK8xQVyxnpm/lcPNTVDilg2v1fI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AEwYnv6itOrLLpSUJxtCc9tIZVRgrHdePJYx6MhhvMVUCb2szGXn4ccD7784T0z38Tx2Yjzg/NcLA9fNVpAlB6R4Vdwhq5Ik72CpPsnihxRboV9+Iy3FVzMFT88wEved7ugx0HA1ISP/CQcooVQ3TJObN9UaB93H1LS7/R0++OE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b=kVR9k2Us; arc=none smtp.client-ip=205.220.166.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 58F1GuhP2870035;
-	Sun, 14 Sep 2025 18:28:54 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	PPS06212021; bh=y6fXwu0IxA+IuoJSpK1cBwOxgIlm26NM+dYcdXUKfJI=; b=
-	kVR9k2UsS7k2y1GqTt+Mi7wCl40i6r2/dBuFc74eUVuGUQTgFmNYm8LfnIchoOY2
-	VXHbikwdXv3qUIWJ7xWS6s6EHLWQbdm//4oaSuPzx25mJh50GrcGHJqjX2CKKSiG
-	j5b632Uy6+YsKDurEXliunHUHCotxEGVnuMkopYZyA+g4TGaJ7jWcQQVWth//2zZ
-	XAmtpxiLvDdWSCpU1hGxQcuBJTQzDc57JzbZ4hbvSQARSqlyynJ+0Yv72lCq+hjI
-	S20E+7ZpPlg7/GirLpx7Gs1ao+QBV7iufOGyneoAxakpjqBZZ1tMRjQg7K7An1l+
-	OBVLna5FstlhxVpfCS4pKA==
-Received: from ala-exchng01.corp.ad.wrs.com ([128.224.246.36])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 49584hh788-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Sun, 14 Sep 2025 18:28:53 -0700 (PDT)
-Received: from ala-exchng01.corp.ad.wrs.com (10.11.224.121) by
- ala-exchng01.corp.ad.wrs.com (10.11.224.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Sun, 14 Sep 2025 18:29:21 -0700
-Received: from pek-lpd-ccm6.wrs.com (10.11.232.110) by
- ala-exchng01.corp.ad.wrs.com (10.11.224.121) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Sun, 14 Sep 2025 18:29:19 -0700
-From: Lizhi Xu <lizhi.xu@windriver.com>
-To: <syzbot+205ef33a3b636b4181fb@syzkaller.appspotmail.com>
-CC: <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
-Subject: [PATCH] usb: mon: Make mon_bus::lock a raw spinlock
-Date: Mon, 15 Sep 2025 09:29:13 +0800
-Message-ID: <20250915012914.361334-1-lizhi.xu@windriver.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <68c4cfc8.050a0220.2ff435.0369.GAE@google.com>
-References: <68c4cfc8.050a0220.2ff435.0369.GAE@google.com>
+	s=arc-20240116; t=1757902459; c=relaxed/simple;
+	bh=T2F+N7ye2u7PHdmam/6/LtfK1iYYmMNigo/ZMfy5z0A=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Y0E3idmQMtdGzVS9wjwktZ8zgzKWT9JoVE/9Y2+NCntOAsiG+bVT3LRytWvrw6Ox7DfZY/s9iIT8EehWvtss6NgG+0tclcFT9ZaQbimk1EQl6qwnJTi7IUkSbfa/HbdTwYkM+UWz3fXGE6yuJiqG0Kb3qvT3TVSW6hP8OoANMQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dPMfCx5a; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757902458; x=1789438458;
+  h=date:from:to:cc:subject:message-id;
+  bh=T2F+N7ye2u7PHdmam/6/LtfK1iYYmMNigo/ZMfy5z0A=;
+  b=dPMfCx5aYmYJVIqXODVxMrgTKkdtTlh4ElZXR9TK9OWHBySXIpu6U3G8
+   8LkdivPfQvqcB1cFAxfL4WJ+z2J1l1zyHBhsnMrCqq10NWq4ETSadVADg
+   qPNUCj7/8h5azlqXIc9Q8AUpi9cIqqsGcvXCpvq7rlWgmZHUA2QvDbAbE
+   QsONyxgBokmGT4OxYzS6xQIsCZoCNqJUMU8iZekzkDB7BLgFgoGsq4/c1
+   lig8Xv6VXrK8TDhxlZgjfBDdosacSiOKhEo2VwLqziKPrSGFehVDvrofV
+   ukcSzOuxy3BhZt5MFthg9vfNFqxw7YcJE9nFbbq07NlWWggxgipYG9g1g
+   A==;
+X-CSE-ConnectionGUID: BxWWQIvRQ/ixSa8XDlW9FA==
+X-CSE-MsgGUID: V0qObTaLTQmqgt1C73Tlww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11553"; a="59846998"
+X-IronPort-AV: E=Sophos;i="6.18,265,1751266800"; 
+   d="scan'208";a="59846998"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2025 19:14:17 -0700
+X-CSE-ConnectionGUID: yTkBvtRXQ3un3qQF2pzrRg==
+X-CSE-MsgGUID: +Ve0vnQWSvmIFTYiSnVbqQ==
+X-ExtLoop1: 1
+Received: from lkp-server02.sh.intel.com (HELO eb5fdfb2a9b7) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 14 Sep 2025 19:14:16 -0700
+Received: from kbuild by eb5fdfb2a9b7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uxyjN-0002sk-26;
+	Mon, 15 Sep 2025 02:14:13 +0000
+Date: Mon, 15 Sep 2025 10:14:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 82432bbfb9e83b7e81d04660fe129b99a29b2ac2
+Message-ID: <202509151057.DAjdCsP3-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Authority-Analysis: v=2.4 cv=Pbj/hjhd c=1 sm=1 tr=0 ts=68c76bd5 cx=c_pps
- a=AbJuCvi4Y3V6hpbCNWx0WA==:117 a=AbJuCvi4Y3V6hpbCNWx0WA==:17
- a=yJojWOMRYYMA:10 a=edf1wS77AAAA:8 a=hSkVLCK3AAAA:8 a=t7CeM3EgAAAA:8
- a=HlowLYmpaW5TbMPn4j8A:9 a=DcSpbTIhAlouE1Uv7lRv:22 a=cQPPKAXgyycSBL8etih5:22
- a=FdTzh2GWekK77mhwV6Dw:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE1MDAxMSBTYWx0ZWRfX3bQQUjivvpQ8
- Wjr99af/Y2I+GMWmWJbQsaJJPI7JwpkRC006hQ/jccOFEJxPAxWR034otQ8b8Xjdr86BX+WNYFA
- CHb9kvuTSHjoqwZcfuZH1ojuqP39VHv47r4lPBXbQn0iXHyElwxmdD2+Hcf85TPbe4HK6DYF9+8
- i7V6Qt9fH9MbaXTM73tupPI4JHxQwtmt74KYAlwLpIhLqoYtT85lYYXD2GuyN7XSdzWBaIPtaip
- RIGzPHfPF+czdqNlT0O7+AzuvZUpOkcvGuGEJdU+yRJozF4XEz4wbcFnMLg9rv+N9aGiF1NBDEk
- 1S5qNM5xjo5EJw0MCtct6TM6gNAbe/asRjD5rxi2R9jf2/XGHJcqJk/GJpKZWk=
-X-Proofpoint-GUID: k2vhVHEL8RpLEvNZmr0uo2SIMcLHFjzw
-X-Proofpoint-ORIG-GUID: k2vhVHEL8RpLEvNZmr0uo2SIMcLHFjzw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-14_08,2025-09-12_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 impostorscore=0 phishscore=0 malwarescore=0 priorityscore=1501
- suspectscore=0 adultscore=0 bulkscore=0 spamscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.22.0-2507300000 definitions=firstrun
 
-Interrupts are disabled before entering usb_hcd_giveback_urb().
-A spinlock_t becomes a sleeping lock on PREEMPT_RT, so it cannot be
-acquired with disabled interrupts.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 82432bbfb9e83b7e81d04660fe129b99a29b2ac2  usb: typec: tipd: Handle mode transitions for CD321x
 
-Make mon_bus::lock a raw spinlock so it can be used with interrupts disabled.
+elapsed time: 724m
 
-syz reported:
-BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
-CPU: 1 UID: 0 PID: 45 Comm: kworker/1:1 Not tainted syzkaller #0 PREEMPT_{RT,(full)}
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
- __might_resched+0x44b/0x5d0 kernel/sched/core.c:8957
- rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
- spin_lock include/linux/spinlock_rt.h:44 [inline]
- mon_bus_complete drivers/usb/mon/mon_main.c:134 [inline]
- mon_complete+0x5c/0x200 drivers/usb/mon/mon_main.c:147
- usbmon_urb_complete include/linux/usb/hcd.h:738 [inline]
- __usb_hcd_giveback_urb+0x254/0x5e0 drivers/usb/core/hcd.c:1647
- vhci_urb_enqueue+0xb4f/0xe70 drivers/usb/usbip/vhci_hcd.c:818
+configs tested: 130
+configs skipped: 3
 
-Reported-by: syzbot+205ef33a3b636b4181fb@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=205ef33a3b636b4181fb
-Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
----
- drivers/usb/mon/mon_main.c | 24 +++++++++---------------
- drivers/usb/mon/mon_text.c |  6 +++---
- drivers/usb/mon/usb_mon.h  |  2 +-
- 3 files changed, 13 insertions(+), 19 deletions(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/drivers/usb/mon/mon_main.c b/drivers/usb/mon/mon_main.c
-index af852d53aac6..83d19b769d84 100644
---- a/drivers/usb/mon/mon_main.c
-+++ b/drivers/usb/mon/mon_main.c
-@@ -38,7 +38,7 @@ void mon_reader_add(struct mon_bus *mbus, struct mon_reader *r)
- 	unsigned long flags;
- 	struct list_head *p;
- 
--	spin_lock_irqsave(&mbus->lock, flags);
-+	raw_spin_lock_irqsave(&mbus->lock, flags);
- 	if (mbus->nreaders == 0) {
- 		if (mbus == &mon_bus0) {
- 			list_for_each (p, &mon_buses) {
-@@ -52,7 +52,7 @@ void mon_reader_add(struct mon_bus *mbus, struct mon_reader *r)
- 	}
- 	mbus->nreaders++;
- 	list_add_tail(&r->r_link, &mbus->r_list);
--	spin_unlock_irqrestore(&mbus->lock, flags);
-+	raw_spin_unlock_irqrestore(&mbus->lock, flags);
- 
- 	kref_get(&mbus->ref);
- }
-@@ -66,12 +66,12 @@ void mon_reader_del(struct mon_bus *mbus, struct mon_reader *r)
- {
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&mbus->lock, flags);
-+	raw_spin_lock_irqsave(&mbus->lock, flags);
- 	list_del(&r->r_link);
- 	--mbus->nreaders;
- 	if (mbus->nreaders == 0)
- 		mon_stop(mbus);
--	spin_unlock_irqrestore(&mbus->lock, flags);
-+	raw_spin_unlock_irqrestore(&mbus->lock, flags);
- 
- 	kref_put(&mbus->ref, mon_bus_drop);
- }
-@@ -80,14 +80,12 @@ void mon_reader_del(struct mon_bus *mbus, struct mon_reader *r)
-  */
- static void mon_bus_submit(struct mon_bus *mbus, struct urb *urb)
- {
--	unsigned long flags;
- 	struct mon_reader *r;
- 
--	spin_lock_irqsave(&mbus->lock, flags);
-+	guard(raw_spinlock_irqsave)(&mbus->lock);
- 	mbus->cnt_events++;
- 	list_for_each_entry(r, &mbus->r_list, r_link)
- 		r->rnf_submit(r->r_data, urb);
--	spin_unlock_irqrestore(&mbus->lock, flags);
- }
- 
- static void mon_submit(struct usb_bus *ubus, struct urb *urb)
-@@ -104,14 +102,12 @@ static void mon_submit(struct usb_bus *ubus, struct urb *urb)
-  */
- static void mon_bus_submit_error(struct mon_bus *mbus, struct urb *urb, int error)
- {
--	unsigned long flags;
- 	struct mon_reader *r;
- 
--	spin_lock_irqsave(&mbus->lock, flags);
-+	guard(raw_spinlock_irqsave)(&mbus->lock);
- 	mbus->cnt_events++;
- 	list_for_each_entry(r, &mbus->r_list, r_link)
- 		r->rnf_error(r->r_data, urb, error);
--	spin_unlock_irqrestore(&mbus->lock, flags);
- }
- 
- static void mon_submit_error(struct usb_bus *ubus, struct urb *urb, int error)
-@@ -128,14 +124,12 @@ static void mon_submit_error(struct usb_bus *ubus, struct urb *urb, int error)
-  */
- static void mon_bus_complete(struct mon_bus *mbus, struct urb *urb, int status)
- {
--	unsigned long flags;
- 	struct mon_reader *r;
- 
--	spin_lock_irqsave(&mbus->lock, flags);
-+	guard(raw_spinlock_irqsave)(&mbus->lock);
- 	mbus->cnt_events++;
- 	list_for_each_entry(r, &mbus->r_list, r_link)
- 		r->rnf_complete(r->r_data, urb, status);
--	spin_unlock_irqrestore(&mbus->lock, flags);
- }
- 
- static void mon_complete(struct usb_bus *ubus, struct urb *urb, int status)
-@@ -277,7 +271,7 @@ static void mon_bus_init(struct usb_bus *ubus)
- 	if (mbus == NULL)
- 		goto err_alloc;
- 	kref_init(&mbus->ref);
--	spin_lock_init(&mbus->lock);
-+	raw_spin_lock_init(&mbus->lock);
- 	INIT_LIST_HEAD(&mbus->r_list);
- 
- 	/*
-@@ -304,7 +298,7 @@ static void mon_bus0_init(void)
- 	struct mon_bus *mbus = &mon_bus0;
- 
- 	kref_init(&mbus->ref);
--	spin_lock_init(&mbus->lock);
-+	raw_spin_lock_init(&mbus->lock);
- 	INIT_LIST_HEAD(&mbus->r_list);
- 
- 	mbus->text_inited = mon_text_add(mbus, NULL);
-diff --git a/drivers/usb/mon/mon_text.c b/drivers/usb/mon/mon_text.c
-index 68b9b2b41189..b482c610dad1 100644
---- a/drivers/usb/mon/mon_text.c
-+++ b/drivers/usb/mon/mon_text.c
-@@ -307,15 +307,15 @@ static struct mon_event_text *mon_text_fetch(struct mon_reader_text *rp,
- 	struct list_head *p;
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&mbus->lock, flags);
-+	raw_spin_lock_irqsave(&mbus->lock, flags);
- 	if (list_empty(&rp->e_list)) {
--		spin_unlock_irqrestore(&mbus->lock, flags);
-+		raw_spin_unlock_irqrestore(&mbus->lock, flags);
- 		return NULL;
- 	}
- 	p = rp->e_list.next;
- 	list_del(p);
- 	--rp->nevents;
--	spin_unlock_irqrestore(&mbus->lock, flags);
-+	raw_spin_unlock_irqrestore(&mbus->lock, flags);
- 	return list_entry(p, struct mon_event_text, e_link);
- }
- 
-diff --git a/drivers/usb/mon/usb_mon.h b/drivers/usb/mon/usb_mon.h
-index aa64efaba366..d2a342feaad3 100644
---- a/drivers/usb/mon/usb_mon.h
-+++ b/drivers/usb/mon/usb_mon.h
-@@ -17,7 +17,7 @@
- 
- struct mon_bus {
- 	struct list_head bus_link;
--	spinlock_t lock;
-+	raw_spinlock_t lock;
- 	struct usb_bus *u_bus;
- 
- 	int text_inited;
--- 
-2.43.0
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    gcc-15.1.0
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    gcc-15.1.0
+arc                                 defconfig    gcc-15.1.0
+arc                   randconfig-001-20250914    gcc-9.5.0
+arc                   randconfig-002-20250914    gcc-10.5.0
+arm                              allmodconfig    gcc-15.1.0
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    gcc-15.1.0
+arm                         assabet_defconfig    clang-18
+arm                   randconfig-001-20250914    clang-22
+arm                   randconfig-002-20250914    clang-19
+arm                   randconfig-003-20250914    gcc-14.3.0
+arm                   randconfig-004-20250914    gcc-12.5.0
+arm                           sunxi_defconfig    gcc-15.1.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-15.1.0
+arm64                 randconfig-001-20250914    gcc-9.5.0
+arm64                 randconfig-002-20250914    clang-22
+arm64                 randconfig-003-20250914    clang-17
+arm64                 randconfig-004-20250914    gcc-8.5.0
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    gcc-15.1.0
+csky                  randconfig-001-20250914    gcc-15.1.0
+csky                  randconfig-002-20250914    gcc-13.4.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-22
+hexagon                          allyesconfig    clang-22
+hexagon               randconfig-001-20250914    clang-22
+hexagon               randconfig-002-20250914    clang-22
+i386                             allmodconfig    gcc-14
+i386                              allnoconfig    gcc-14
+i386                             allyesconfig    gcc-14
+i386        buildonly-randconfig-001-20250914    gcc-13
+i386        buildonly-randconfig-002-20250914    gcc-14
+i386        buildonly-randconfig-003-20250914    gcc-14
+i386        buildonly-randconfig-004-20250914    gcc-14
+i386        buildonly-randconfig-005-20250914    clang-20
+i386        buildonly-randconfig-006-20250914    gcc-14
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-22
+loongarch             randconfig-001-20250914    clang-22
+loongarch             randconfig-002-20250914    gcc-15.1.0
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+m68k                       m5249evb_defconfig    gcc-15.1.0
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    gcc-11.5.0
+nios2                 randconfig-001-20250914    gcc-10.5.0
+nios2                 randconfig-002-20250914    gcc-11.5.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250914    gcc-8.5.0
+parisc                randconfig-002-20250914    gcc-10.5.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    clang-22
+powerpc               randconfig-001-20250914    clang-22
+powerpc               randconfig-002-20250914    clang-22
+powerpc               randconfig-003-20250914    clang-22
+powerpc64             randconfig-001-20250914    clang-22
+powerpc64             randconfig-002-20250914    clang-22
+powerpc64             randconfig-003-20250914    gcc-13.4.0
+riscv                            allmodconfig    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-22
+riscv                 randconfig-001-20250914    clang-22
+riscv                 randconfig-002-20250914    gcc-12.5.0
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    clang-22
+s390                  randconfig-001-20250914    gcc-10.5.0
+s390                  randconfig-002-20250914    gcc-15.1.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                         ap325rxa_defconfig    gcc-15.1.0
+sh                                  defconfig    gcc-15.1.0
+sh                    randconfig-001-20250914    gcc-15.1.0
+sh                    randconfig-002-20250914    gcc-10.5.0
+sh                          sdk7780_defconfig    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20250914    gcc-11.5.0
+sparc                 randconfig-002-20250914    gcc-14.3.0
+sparc                       sparc64_defconfig    gcc-15.1.0
+sparc64                             defconfig    clang-20
+sparc64               randconfig-001-20250914    gcc-8.5.0
+sparc64               randconfig-002-20250914    clang-22
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    gcc-14
+um                                  defconfig    clang-22
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20250914    clang-22
+um                    randconfig-002-20250914    clang-18
+um                           x86_64_defconfig    clang-22
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250914    clang-20
+x86_64      buildonly-randconfig-002-20250914    clang-20
+x86_64      buildonly-randconfig-003-20250914    clang-20
+x86_64      buildonly-randconfig-004-20250914    clang-20
+x86_64      buildonly-randconfig-005-20250914    gcc-14
+x86_64      buildonly-randconfig-006-20250914    clang-20
+x86_64                              defconfig    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20250914    gcc-14.3.0
+xtensa                randconfig-002-20250914    gcc-8.5.0
+xtensa                         virt_defconfig    gcc-15.1.0
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
