@@ -1,166 +1,201 @@
-Return-Path: <linux-usb+bounces-28094-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28095-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A593FB57415
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 11:07:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA125B57426
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 11:11:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 451507B13B1
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 09:04:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54F4B162318
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Sep 2025 09:11:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDED02F549F;
-	Mon, 15 Sep 2025 09:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eg1VOmR7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F722ED16C;
+	Mon, 15 Sep 2025 09:11:03 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909102F5463
-	for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 09:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.142.27])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FF642D3ECC;
+	Mon, 15 Sep 2025 09:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.142.27
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757926969; cv=none; b=lfvThoBYdvX7uJZr/AqAd93L9MzmB2YTWbai+AWsdnufANG+LbQN8J+eblSAdmEQKrMRnJjwCB0lD1n+FRZzwa0NeaXnuaxO8wHa4v2Sw3IOJh0Giuh2RyDcawTESTtlEb/Pqv8ZDmr0LW2zOGUj9PuVMY/0fjIRU25RS9ujF1I=
+	t=1757927463; cv=none; b=b8A+ps7iF8c796bM25kXFkv4BKvXj2iu/4RhRBXFAXHTMi6vP/SLp/6JXY+AdrOS1FUCkamD4Dj77P5q6qnd3AC7YZwlUwS6XR5NTXi2O3R8NGa/nreuVreGGECDBcXnVFH/N8vGoIXtOGTNqFodA/AzKcrMtKUlJ2q4iU/LeaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757926969; c=relaxed/simple;
-	bh=C0YkUmrHajMk+TIUliZWVchR3y+Q8yUcd/+iydBLkn4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JiQGZ6ZJy0dhCCU6n5b7LUmBn2dMmrNa9Q9JLhP3ciTAAGPDisQQLqY/TOm/WYQ7bW7SrTLYpIKV/JpE8Ioqnqj7A91zZ6MbBejN4vRvKJ6T7fXIiHjZX6VwMwkhKJVLLYa0c/c30XeBHBEhjDSrPnmK/4QhnzkOgvMqU6H5Jm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eg1VOmR7; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-62f28b8e12cso2205973a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 15 Sep 2025 02:02:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757926966; x=1758531766; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ApShfXQF2Oi6G8dmAOghgnsvmVSLzQLwz5wXFZQiKw=;
-        b=eg1VOmR7zShmn+hHiqoCSBy9ccujENIgSGAfLe204EOGU+XnJDTA3uYY8umymARXlN
-         mJiY1n1EO+fP2t/Yv9+0vIPcSgNHdjRCF0a9bbhCFjuDH4rhR1sWlo30kRcfOH/R0OOI
-         ICqhmxH2Vt+03zkTpaeq9H2WkOO2S4PO2l3Y0MrGiBlSLkqn74zgfRTD9/M6DEXBNfmT
-         wEkZQ5AVpYlW77o1vaZxEo6SDDGHcAmb6wQ4JQ3BbUiWbFWqLJi7+KX48YYXrFQ8KKNL
-         xEM3y9sv2DBW6OBq+2WGpC8ujzyJuGSMaN7LbOZ5S+PgKMdbuFfsqbIVQZS5XOptyuG3
-         g7qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757926966; x=1758531766;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4ApShfXQF2Oi6G8dmAOghgnsvmVSLzQLwz5wXFZQiKw=;
-        b=UBovrs1tcUI8OXO23OxPB9ohzcYeY7lqg04XHQbVl/1wxWO5cvhCFUUfA3oWE70WWd
-         mQyQhzQsa2b2/R06HJXTqAUCyDvmP8ocoOCPFlreWW3H50b3JKzPv8MxQ6KVD5kdby6D
-         hu2jUQeWK59i8O3YMX084mAniNHFyWVpNiP8lC4g8YWUgHNUHTsnmSxEuk2POkX2GE+q
-         PeaboShWa4hM2URtdNwc9ghXsm2oL63vUX/KYnzl4w/tXx6ua/RkPywk88hr+5W4729+
-         ZXfkp43+8xpowvHfCuucvkK44fgJd0KsY/ztnVDz4otfVd7LVk5aZJhar8w6j0oPdyhx
-         TOww==
-X-Forwarded-Encrypted: i=1; AJvYcCUloeP0ednrBkSB4N0s/S3aZoR1lDNr28ccLwU4EJzvXd5P114V+GB11bMhSrY0wGAyn1cxsvo1KIY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWAXNDE3jrU7yFxDfJrWA9LPRyqqAvCAuSypBC1qUDfyssn6oL
-	fTyqVTtD6heN+RBE8ndlKwomyzQk+ecziBk8RbRJLHUAACh840v+7+UadQhclXI2xkI=
-X-Gm-Gg: ASbGncvyXztE4ye/QiNUS41IbmeJJ7sYtzmaHwG5fJfTCgT+ymuVXvKEr+6Clvv2m8Z
-	oTEauebzqQozJhF14vn2pDttAhRGw6f9OLT8b4ZfGxvFam8Sal7CcUWNgseUqxQUy11JqJf61E3
-	exv3RxjUJgTzehtSSExq4KdXVtHKatHQ5Mz9aELiIWHdXKl9iQcLhbovufdNUKC2LoY5vQhgkDE
-	rC3Nw7MyD/Vy3T2bVzwJMZW21Zp7bOhr0MKCnOvdGqObzzt+CbA0u4MlBg+CUEaa4HDhKxKGuyh
-	wjh940X61qDo2T78LGnEKrR3/tVw5MtUgjVX/IJHBnYtHAHoo2Rn4lsQVeJUqKQDr4Ou9gyF0lf
-	di8BVe55J4MxO+xtLvBSNgUkwV5wIJZRunR5YtRgzutc=
-X-Google-Smtp-Source: AGHT+IFJqW4ATs8hpOqhKur7nNuySu2I9qWO2KqW58kjbzZTek7UpaV471VVvj9InZNl3XX07WRoUQ==
-X-Received: by 2002:a17:907:86a0:b0:afc:a190:848a with SMTP id a640c23a62f3a-b07c3a78fb9mr1146716866b.60.1757926965242;
-        Mon, 15 Sep 2025 02:02:45 -0700 (PDT)
-Received: from linaro.org ([2a02:2454:ff21:30:ab20:75dc:ab3e:bbb9])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07d2870da1sm574403366b.13.2025.09.15.02.02.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Sep 2025 02:02:44 -0700 (PDT)
-Date: Mon, 15 Sep 2025 11:02:34 +0200
-From: Stephan Gerhold <stephan.gerhold@linaro.org>
-To: fenglin.wu@oss.qualcomm.com
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
-	David Collins <david.collins@oss.qualcomm.com>,
-	=?iso-8859-1?Q?Gy=F6rgy?= Kurucz <me@kuruczgy.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 5/8] power: supply: qcom_battmgr: update compats for
- SM8550 and X1E80100
-Message-ID: <aMfWKobwM5bhJEAd@linaro.org>
-References: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
- <20250915-qcom_battmgr_update-v4-5-6f6464a41afe@oss.qualcomm.com>
+	s=arc-20240116; t=1757927463; c=relaxed/simple;
+	bh=Zg+Cjg6CtSK5GQfxDG2h5bhG1qulDyJ5GSBAAWf0PUI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VQIfcXX0+fxSDl/F/qb670TJp6HvhDgwzba7STgwPpdNo7u+bWQEjiL5yJEf//CFqRldO1UIkLME2V83m9eWnYQYpZAKCbKsFxs9brcs6l9+hfY4XYmKsd4iLjHlGZlcSuzNCay2kEd7gBDavesdMI6CAy2wwatEmf/kfGKc3u8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=13.76.142.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from E0006493LT.eswin.cn (unknown [10.127.112.153])
+	by app2 (Coremail) with SMTP id TQJkCgBX9pQK2MdoM1HRAA--.17112S4;
+	Mon, 15 Sep 2025 17:10:37 +0800 (CST)
+From: caohang@eswincomputing.com
+To: gregkh@linuxfoundation.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	Thinh.Nguyen@synopsys.com,
+	p.zabel@pengutronix.de,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org
+Cc: ningyu@eswincomputing.com,
+	linmin@eswincomputing.com,
+	pinkesh.vaghela@einfochips.com,
+	Hang Cao <caohang@eswincomputing.com>,
+	Senchuan Zhang <zhangsenchuan@eswincomputing.com>
+Subject: [PATCH v3 1/2] dt-bindings: usb: Add ESWIN EIC7700 USB controller
+Date: Mon, 15 Sep 2025 17:10:24 +0800
+Message-ID: <20250915091024.2128-1-caohang@eswincomputing.com>
+X-Mailer: git-send-email 2.45.1.windows.1
+In-Reply-To: <20250915085329.2058-1-caohang@eswincomputing.com>
+References: <20250915085329.2058-1-caohang@eswincomputing.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250915-qcom_battmgr_update-v4-5-6f6464a41afe@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:TQJkCgBX9pQK2MdoM1HRAA--.17112S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw48GFWUGF1kZw4DAFWUArb_yoW5CrWkpa
+	97GrWDGr1fXr1xXa18tF10kFn3J3Z3CF10krZ7Jw17tr9Yqa40qw4akFy5Wa4UCr1xZr98
+	WFWav3y2yw4xCFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ec7CjxVAajcxG14v26r1j6r4UMcIj6I8E87Iv67AKxV
+	WUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS
+	5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7xC0wCY1x0262kKe7
+	AKxVWUtVW8ZwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+	Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
+	CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
+	I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
+	8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73
+	UjIFyTuYvjfUOb10UUUUU
+X-CM-SenderInfo: xfdrxt1qj6v25zlqu0xpsx3x1qjou0bp/
 
-On Mon, Sep 15, 2025 at 04:49:57PM +0800, Fenglin Wu via B4 Relay wrote:
-> From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> 
-> Add variant definitions for SM8550 and X1E80100 platforms. Add a compat
-> for SM8550 and update match data for X1E80100 specifically so that they
-> could be handled differently in supporting charge control functionality.
-> 
-> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on Thinkpad T14S OLED
-> Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> ---
->  drivers/power/supply/qcom_battmgr.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-> index 008e241e3eac3574a78459a2256e006e48c9f508..174d3f83ac2b070bb90c21a498686e91cc629ebe 100644
-> --- a/drivers/power/supply/qcom_battmgr.c
-> +++ b/drivers/power/supply/qcom_battmgr.c
-> @@ -19,8 +19,10 @@
->  #define BATTMGR_STRING_LEN	128
->  
->  enum qcom_battmgr_variant {
-> -	QCOM_BATTMGR_SM8350,
->  	QCOM_BATTMGR_SC8280XP,
-> +	QCOM_BATTMGR_SM8350,
-> +	QCOM_BATTMGR_SM8550,
-> +	QCOM_BATTMGR_X1E80100,
->  };
->  
->  #define BATTMGR_BAT_STATUS		0x1
-> @@ -1333,7 +1335,8 @@ static void qcom_battmgr_pdr_notify(void *priv, int state)
->  static const struct of_device_id qcom_battmgr_of_variants[] = {
->  	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
->  	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
-> -	{ .compatible = "qcom,x1e80100-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
-> +	{ .compatible = "qcom,sm8550-pmic-glink", .data = (void *)QCOM_BATTMGR_SM8550 },
-> +	{ .compatible = "qcom,x1e80100-pmic-glink", .data = (void *)QCOM_BATTMGR_X1E80100 },
->  	/* Unmatched devices falls back to QCOM_BATTMGR_SM8350 */
->  	{}
->  };
+From: Hang Cao <caohang@eswincomputing.com>
 
-I think you need to squash this with "[PATCH 7/8] power: supply:
-qcom_battmgr: Add charge control support", or move the modified checks
-for
+Add Device Tree binding documentation for the ESWIN EIC7700
+usb controller module.
 
-	if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
-	    battmgr->variant == QCOM_BATTMGR_X1E80100) {
+Signed-off-by: Senchuan Zhang <zhangsenchuan@eswincomputing.com>
+Signed-off-by: Hang Cao <caohang@eswincomputing.com>
+---
+ .../bindings/usb/eswin,eic7700-usb.yaml       | 99 +++++++++++++++++++
+ 1 file changed, 99 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml
 
-into this patch.
+diff --git a/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml b/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml
+new file mode 100644
+index 000000000000..37797b85f417
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/eswin,eic7700-usb.yaml
+@@ -0,0 +1,99 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/eswin,eic7700-usb.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ESWIN EIC7700 SoC Usb Controller
++
++maintainers:
++  - Wei Yang <yangwei1@eswincomputing.com>
++  - Senchuan Zhang <zhangsenchuan@eswincomputing.com>
++  - Hang Cao <caohang@eswincomputing.com>
++
++description:
++  The Usb controller on EIC7700 SoC.
++
++allOf:
++  - $ref: snps,dwc3-common.yaml#
++
++properties:
++  compatible:
++    const: eswin,eic7700-dwc3
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  interrupt-names:
++    items:
++      - const: peripheral
++
++  clocks:
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: aclk
++      - const: cfg
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    items:
++      - const: vaux
++
++  eswin,hsp-sp-csr:
++    description:
++      HSP CSR is to control and get status of different high-speed peripherals
++      (such as Ethernet, USB, SATA, etc.) via register, which can close
++      module's clock,reset module independently and tune board-level's
++      parameters of PHY, etc.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      - items:
++          - description: phandle to HSP Register Controller hsp_sp_csr node.
++          - description: usb bus register offset.
++          - description: axi low power register offset.
++          - description: vbus frequency register offset.
++          - description: mpll register offset.
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - interrupts
++  - interrupt-names
++  - resets
++  - reset-names
++  - eswin,hsp-sp-csr
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    usb@50480000 {
++        compatible = "eswin,eic7700-dwc3";
++        reg = <0x50480000 0x10000>;
++        clocks = <&clock 170>,
++                 <&clock 171>;
++        clock-names = "aclk", "cfg";
++        interrupt-parent = <&plic>;
++        interrupts = <85>;
++        interrupt-names = "peripheral";
++        resets = <&reset 84>;
++        reset-names = "vaux";
++        dr_mode = "peripheral";
++        maximum-speed = "high-speed";
++        phy_type = "utmi";
++        snps,dis_enblslpm_quirk;
++        snps,dis-u2-freeclk-exists-quirk;
++        snps,dis_u2_susphy_quirk;
++        snps,dis-del-phy-power-chg-quirk;
++        snps,parkmode-disable-ss-quirk;
++        eswin,hsp-sp-csr = <&hsp_sp_csr 0x800 0x818 0x83c 0x840>;
++    };
+-- 
+2.34.1
 
-With this patch right now, I would expect that your series is not
-bisectable: The wrong code paths are chosen if you only apply this patch
-because e.g. X1E doesn't use the QCOM_BATTMGR_SC8280XP code anymore.
-
-Thanks,
-Stephan
 
