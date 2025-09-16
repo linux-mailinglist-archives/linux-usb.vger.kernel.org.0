@@ -1,166 +1,134 @@
-Return-Path: <linux-usb+bounces-28155-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28156-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 474B0B59861
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 15:58:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E279BB59AA2
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 16:44:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2827B189076C
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 13:57:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94E01468111
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 14:39:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 601DD3218BA;
-	Tue, 16 Sep 2025 13:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C7633EB03;
+	Tue, 16 Sep 2025 14:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="osr0DlN8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k+Q8lbQv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643D0306B16
-	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 13:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70BE63081AE;
+	Tue, 16 Sep 2025 14:38:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758031043; cv=none; b=N0K3HbidwllAliU+9dGZbrHfqPgat7fxMqD871CF7g3NftDAUeTOAYAw6cdxgu4V8zAdO9brkSaeaqcsxNvhsrgdYfPQBIC+4CjJ1UwzP00EhL6XeGcaqcKNLRY+nOK5LEHOOf990p4xRSu7wUtqMekYEvMtkJBBIHdmyCJGjt4=
+	t=1758033535; cv=none; b=D0Mt/XvXX+2jopZcqBFeFPIbojy87gDczqNeipNMsHT0uar/ovY7Zy2hgwp9dXJTn2VT7w9MWHaNLqaiwCyyagrBWdLXD+hOp2OtRLaLdbx6njpoTf06i6M5tMhNqnZ4pUNEmDdi5/1+3QBAlP/9Zz85L3jxGbjyWoUJBECjZCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758031043; c=relaxed/simple;
-	bh=EZixtvrl1rqBKt+UGIfg0P0b7+HT9wRSGmhgvCNmej4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NMo1MN42PlupEZfnulvzmEzjwJvt1WtrfRhXm/iiRObWb9+3yaxg/R/ty7JgfUzJ1GruZnaiRsIjjj/+rLZGZIgb2aVCM86lv7vbaKDpLZqPgNIh3wEfa79zJ7MJwi4uxjeqIBc7j0g+nNI2daXe/k5Cmph3My514rmPEJEUVHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=osr0DlN8; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58GABrOB003666
-	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 13:57:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	GICyQL3CHMsQbYNvbBfWi61BrYKwCgI38BYL5tUJcxo=; b=osr0DlN8eEm/LYjO
-	p2aYTKBFdbjlOuhYriHYjC1HEk2yWXuZwszWVhlsMiyFMa7/6HXQgHm17j/88u7f
-	xB2rvfha76uO0oRf7CZCH/aR3/sN5gNibwnsdlqceYyDUpp7DnhG/ztMj9LZR6vM
-	MmzwxO554+PvpfcXtrrybhcRPHiPWjKYMRg6/b5sSi3HpVQWCIda5yChWm0t2884
-	rrfaRZeLwa10BJ0vR1jTFJiV9Sj6yljg/6DoK1CTewzuxYl+358L9AhYgNTrQ2qj
-	c/ZXCB9kIB5K3M4KSjC8lhUbvziMTDYhcjWKW3rLbq1yD4Ye/CSs7eirFcmWfgmr
-	x/MVzQ==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 494wyr9bqs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 13:57:21 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b7ad884ac8so2524641cf.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 06:57:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758031040; x=1758635840;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GICyQL3CHMsQbYNvbBfWi61BrYKwCgI38BYL5tUJcxo=;
-        b=OUgxb3mKUfT3mmuNKZOjLfg7ICtlKcj3tWmLKvtrMdsJo+l1J4DkBVGEanrxcPukG4
-         xECaWdOEyZ55aY+UG38DS77y2KzOOs7kI3tOrVzQzEuX2nEXTS6svKKPgAYkknpIca1Y
-         OkQOeC41aeu79RynOEdXaNTH5maXSbm9Zg3noxLEvlbSZyBd7F8AGF5VN/uv1Rzgehba
-         0SrMjmArgUw7Uh91joWXISDXrr8H1w9Xc3HPR8771YTS1Tsco8kUrHf1uIorxGHeGz86
-         It9YFOsY7GrRb3f9e9ATIYW41lEVgZ/qyQQwSX4pgeFp4Gu+mxkM15xB2A3uq5IAXs/9
-         kiAA==
-X-Forwarded-Encrypted: i=1; AJvYcCV2odctxAmko39OOEUASvXys78gqrzq4kHl2MrEl2use5N3k5Smp8CCjLwNJsPgpAfhNOFXpbrovOQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqGP+1h1P2qYrAORRypF/x0foFERx6uYfxJyHvqNn4qXpFeAxS
-	qUm2L5uSYSGKfQrWLE2Kz1LrCQXpNajpg+et/+0/P9WcnNdyr2HN/TbegoH45YAyJNgjAUSUPsj
-	cOE2GZ2inbe7ZVT8bYeI+Ih5tzyo+o1cIkp5sPEqVLaAwRvX1U5jMcSYeYcBnPDU=
-X-Gm-Gg: ASbGncvcJP5grfTDerxur47ubcQozBG6mxslS9BdzC47D8guHYzyzewavJoyf3Isgp6
-	l2/xX30aQaX8bWhNmaZw0U/VW2FVB3Dq9YeUZoh2v+58YEvPQJKd1cHOrf6/jdHJqAl6uJNOvZ9
-	MwdR7+j6cw6mMjHMzY7HRnJNhnoUQGdJF8m8lHxuI6oQ8LiaNBLmau7lMIYMmV66Wa8jTHjVRjX
-	IhlCBHKakUy2Gx34KJwHth3dKi02AfjsJHkNZhfryUXqeusHzO8+TP5RuNUKhJ/4wVTzRCVofH0
-	ddjnyfznar8Eip8dK+n63oHYIaeTXOj38V3MP3mkfUJmNdQZn0FZdTbjnZTECeU+nMHQ7BQRXO/
-	oDnxBIK5QCxCg+z2QJsSH4g==
-X-Received: by 2002:a05:622a:1ba9:b0:4b5:f68b:86a0 with SMTP id d75a77b69052e-4b77d06cb12mr133428551cf.5.1758031040177;
-        Tue, 16 Sep 2025 06:57:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEx/IVvun0KQAKtNqHCv75Rapju/SmJgazDgix/mPxZhD+7Qis2vnTHkkgiNCjklXyICvOOjw==
-X-Received: by 2002:a05:622a:1ba9:b0:4b5:f68b:86a0 with SMTP id d75a77b69052e-4b77d06cb12mr133428091cf.5.1758031039594;
-        Tue, 16 Sep 2025 06:57:19 -0700 (PDT)
-Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07b32ddf93sm1149921166b.69.2025.09.16.06.57.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Sep 2025 06:57:19 -0700 (PDT)
-Message-ID: <4d83b7af-ec45-43c6-aac4-148580a81924@oss.qualcomm.com>
-Date: Tue, 16 Sep 2025 15:57:16 +0200
+	s=arc-20240116; t=1758033535; c=relaxed/simple;
+	bh=Ph/hIiO+tXjORKxzfu06YoivQsZaFkxYB4pQsUq4gpQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sf9FxGW+yWha84yJlVqeAhNaPs7M0f6OXTtfKHKvX9DOPNJL+DmRR7S3KKm4belqof8AIQi35NAbL/shV+373M7j72bDqqOi+6VnDt9zJ/TjT4xe1UphDNeIhBLZkqLGPM5V751tn9x+i1j5EmqKse+z3Q9W7ePvRCpM/yherv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k+Q8lbQv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C2FAC4CEEB;
+	Tue, 16 Sep 2025 14:38:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758033535;
+	bh=Ph/hIiO+tXjORKxzfu06YoivQsZaFkxYB4pQsUq4gpQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k+Q8lbQvzfiLPscbR5ZPBPkpIbgIzkAK2T0BtjPuBHrfNmtyNZj/YF2ioJPAu+aqT
+	 k0Fj5O2OQ1MMzl3YYquE394xUYf9bbOTEbgwFoppUmMbqRQKQbQmxJ/af6CuOV+Ct2
+	 sKjZxOjK/W5NMn3Z1o+rQ0FB78oookqGpHcoucoZ1FOPU8LXl8KgBkD25Txo9bfdhL
+	 hkwet2ivAS5IRwptEjYJl735BJoSktrlFCsOILzOWHB/GWz+YtSaHdmKkxx24a9q1e
+	 eT0tDZHSOp3d0yvhUYi3GttGy7WSLJgG1HXn8jer+jI+O1V+vV6aGKuYr5nRGCxCUd
+	 SSSsnYJSBNujA==
+Date: Tue, 16 Sep 2025 15:38:47 +0100
+From: Lee Jones <lee@kernel.org>
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH RESEND v14 0/7] Add Nuvoton NCT6694 MFD drivers
+Message-ID: <20250916143847.GF3585920@google.com>
+References: <20250912091952.1169369-1-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/8] power: supply: qcom_battmgr: Add resistance power
- supply property
-To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc: Fenglin Wu <fenglin.wu@oss.qualcomm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
-        David Collins <david.collins@oss.qualcomm.com>,
-        =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-References: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
- <20250915-qcom_battmgr_update-v4-3-6f6464a41afe@oss.qualcomm.com>
- <gk2ho7ugp35kb4x65meqsm3aufnry6srr4p7jspf6xyn7ywzkh@vd5ca7txjdk6>
- <0cf4b0fd-e468-4aab-9ec2-38da93435557@oss.qualcomm.com>
- <5736df73-c90e-4f11-b461-c38da4e811e1@oss.qualcomm.com>
- <20250916-almond-pelican-from-vega-a8d01d@lemur>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250916-almond-pelican-from-vega-a8d01d@lemur>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: BGPMLn_d39i5umIfDGNMPeiDGInRrUAK
-X-Authority-Analysis: v=2.4 cv=SouQ6OO0 c=1 sm=1 tr=0 ts=68c96cc1 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=-oxkEHOTVg5AFfsLEusA:9
- a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTEzMDAwMCBTYWx0ZWRfX4omfYvOik1go
- K4ZkMUah29hs0yhNwgSe1MPVRtURwZRpLMucieRsYTaXxuPJSbZ727AqfIbJbSEiBfs1Fa6poZb
- d7+8uRTnmaPX9PoOlJswefyPn9ySr/3HV1OMNYxkwVk5PKSYnfmWKiH+YsBTcOaz8OAh7biclF4
- GRdaIU3J9ph/rLQ8q6KX2voaol4Ym+sbXzrEEmahpsBDNw8uCU1zZzrnAQO6Dnv86PK9bDR4Si9
- 5gmd40bNstNK/VUso7yNUeohPf4M2yEc5Jhpqw8cgR9IKlsXWZwyDycUjB++YuoR5GVSV8rQGMx
- GiV6ecZLO1BW8RadOlKwbWaKgD9fRXJzhvtXbfnWH31dpIzlIfgQAugyqkPC2vf1TzaL0rlqIPu
- gNJE4AF6
-X-Proofpoint-GUID: BGPMLn_d39i5umIfDGNMPeiDGInRrUAK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-16_02,2025-09-12_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 phishscore=0 adultscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509130000
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250912091952.1169369-1-a0282524688@gmail.com>
 
-On 9/16/25 3:37 PM, Konstantin Ryabitsev wrote:
-> On Tue, Sep 16, 2025 at 09:59:04AM +0200, Konrad Dybcio wrote:
->> + Konstantin
->>
->> It's quite common to see someone leaving a T-b on the cover letter,
->> trying to say "I gave this series a spin" and then seeing the tag
->> appear on unrelated commits within the series (e.g. bindings or some
->> cosmetic fixes". Maybe some sort of an interactive (opt-in is fine)
->> dialog for "which patches to apply t-b/tags to" could be worth the
->> effort?
-> 
-> The plan is to add interactive mode to a few commands, including to the
-> trailers command. This will open an interface similar to interactive rebase,
-> where you can mark trailers as accept, skip, or ignore. That should do what
-> you're asking for, I believe.
+Enjoy!
 
-That is amazing to hear, thank you
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-Konrad
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-gpio-hwmon-i2c-can-rtc-watchdog-v6.18
+
+for you to fetch changes up to d463bb140583609f78f61d48c3dfb6f46c5cb062:
+
+  rtc: Add Nuvoton NCT6694 RTC support (2025-09-16 14:41:58 +0100)
+
+----------------------------------------------------------------
+Immutable branch between MFD, GPIO, HWMON, I2C, CAN, RTC and Watchdog due for the v6.18 merge window
+
+----------------------------------------------------------------
+Ming Yu (7):
+      mfd: Add core driver for Nuvoton NCT6694
+      gpio: Add Nuvoton NCT6694 GPIO support
+      i2c: Add Nuvoton NCT6694 I2C support
+      can: Add Nuvoton NCT6694 CANFD support
+      watchdog: Add Nuvoton NCT6694 WDT support
+      hwmon: Add Nuvoton NCT6694 HWMON support
+      rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                         |  12 +
+ drivers/gpio/Kconfig                |  12 +
+ drivers/gpio/Makefile               |   1 +
+ drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig          |  10 +
+ drivers/i2c/busses/Makefile         |   1 +
+ drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++++
+ drivers/mfd/Kconfig                 |  15 +
+ drivers/mfd/Makefile                |   2 +
+ drivers/mfd/nct6694.c               | 388 +++++++++++++++
+ drivers/net/can/usb/Kconfig         |  11 +
+ drivers/net/can/usb/Makefile        |   1 +
+ drivers/net/can/usb/nct6694_canfd.c | 832 +++++++++++++++++++++++++++++++
+ drivers/rtc/Kconfig                 |  10 +
+ drivers/rtc/Makefile                |   1 +
+ drivers/rtc/rtc-nct6694.c           | 297 +++++++++++
+ drivers/watchdog/Kconfig            |  11 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/nct6694_wdt.c      | 307 ++++++++++++
+ include/linux/mfd/nct6694.h         | 102 ++++
+ 23 files changed, 3669 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
+
+-- 
+Lee Jones [李琼斯]
 
