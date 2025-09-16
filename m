@@ -1,219 +1,153 @@
-Return-Path: <linux-usb+bounces-28129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28130-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EFE3B58A9A
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 03:04:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02C3DB58B57
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 03:42:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C6E81B267C0
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 01:05:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 671EB1B27AE9
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 01:42:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EDA51E5714;
-	Tue, 16 Sep 2025 01:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60CEB22127D;
+	Tue, 16 Sep 2025 01:42:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="gc2lks6n"
+	dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b="ckVUvVbD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11022134.outbound.protection.outlook.com [52.101.126.134])
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9B83A1DB;
-	Tue, 16 Sep 2025 01:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.134
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757984670; cv=fail; b=l3Hw1J5gj/E1rBn0V77ms+tWXjBTajd90XTdQIzqSzPoyFpiQavlB/ZfqEPmQczZHW+Y8Xyn70a/gRFAXNfp9Rz4FN8TE0nYB+BqZzUgfiCvWkPGzgjO8vs5bLhGU2DOjhCYjG2VKorEK3K8lnso6Rd93730M8/Ve15GtOpUVWA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757984670; c=relaxed/simple;
-	bh=eeg1+7kXoSAJ1omyXToZHu3UKI8/b4EA3pqnXznxfbU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=GQdybmSQBSgmOfrfcC+aOtGA8v4a9TueK6DRt1oNtMOuhtQy0vl0rwLWwh92FecTsjm0AP/kYXxLyMYKK9cWu4SuhVIfQZswYXuEXCM/7AG5CRRW3CttkLSHM+J2ym7CTngbAgX6mgRQeLNdmf/r/asphG3JltUEtvZk2W28JBM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=gc2lks6n; arc=fail smtp.client-ip=52.101.126.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iZayM0S1E2ZuliZq9+kXJc52GaLVk0OZyAJXB3pTvJHKec6tqY1jV7P1rtmHkV4YbnoaiSU849PRicyNhuKY5FBLO7xvZM9MMG3hTrqrGPq2NWTXFioauQq9WNB0MarNT9PyWCNGF1rWcCPiayCN7k5Kvq77ehLRB6YAd3Q9wazky10nrIS+I8BnPpfqYFKcZy40EjoVeJ4x+w4nMELMzt1/TqNBZs7Jev/rskPuLYrmqnxSGB9PR+JBbxiEEh0Kf5wZ04BN9jz1604JqFKsZhTLbVJG3zFM4S6BUxOi2BPu6qVgchDy/apEFZkHEUHqb9LjhC9ZlrJzxr9lxz9LKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WMpfAQ+xe3+7G5D6Q5f/tq9NYwKuvCmJKnCOcU8OIPM=;
- b=E4YRQo8gRgCSAYcvLJo90i1P1Hqu2ezd1zZGo4CrbaoNp2mIhgbD5rP+1gT9/gMo9MOGID09GnHXgXUNwGp/RDAyXj7HLiNS7ZMbenvMOwxcFE6P/f3MWppYq9QvqbshEL6jdpqECniMV1f84u/Pp8+wMC/Os2SWX5a/iNTKhCjAPDfZEkWFe08uwnHD0dM5BYEfHVS58KuPgHFApWPx5PhHga+QyRzBNXKbe4tKQMYyRk5EcRebA1riCAePIecCiAT+RrA6vQjhGWD9CzikE8nPK35CbFbROois3LIcrmcGL+03MvBUbs5g7LAgU0UjII8HxTn/bJgZfkARcyZIMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WMpfAQ+xe3+7G5D6Q5f/tq9NYwKuvCmJKnCOcU8OIPM=;
- b=gc2lks6n0m4obxYNnwL9LL3Q4wLpku5ZZycNqUxQlzuP0IZQX9DfGcoMe4NXeHEEX9fIvU6p8H/8qRjZxS4J1H8thu/uI36jjykrdks8ha5D4xueC6sNYn6xh1VwPmifWbmGhe1pOSjoNLKpRh6rvVrOT1puPu5vYX1nUkmxWa2CkkCxygddwKKkjdvWw0BiVJEx3U93l+AYYJ9ISGJj2LGSYQoBvCHUQAw3gS7VP/YgblGjYTW1XaXGBBCJKzqrptRQAlW8AHEYwJTdCVB/cqfKVFGxwcQnFelO7yXrRRwxPkzwUfwIfU+Zfu+SMqD8ZCudSoi7rzVGZVw847Ktvg==
-Received: from OS8PR06MB7541.apcprd06.prod.outlook.com (2603:1096:604:2b1::11)
- by SEYPR06MB8115.apcprd06.prod.outlook.com (2603:1096:101:2da::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.22; Tue, 16 Sep
- 2025 01:04:25 +0000
-Received: from OS8PR06MB7541.apcprd06.prod.outlook.com
- ([fe80::9f51:f68d:b2db:da11]) by OS8PR06MB7541.apcprd06.prod.outlook.com
- ([fe80::9f51:f68d:b2db:da11%6]) with mapi id 15.20.9115.018; Tue, 16 Sep 2025
- 01:04:25 +0000
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-To: Conor Dooley <conor@kernel.org>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, Philipp Zabel
-	<p.zabel@pengutronix.de>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/4] dt-bindings: usb: uhci: Add reset property
-Thread-Topic: [PATCH 1/4] dt-bindings: usb: uhci: Add reset property
-Thread-Index: AQHcJhPguoKJzJBy+Eq6KXY5LwuI1bSUglCAgAB892A=
-Date: Tue, 16 Sep 2025 01:04:25 +0000
-Message-ID:
- <OS8PR06MB75419B97CDB5EA24560FB9ECF214A@OS8PR06MB7541.apcprd06.prod.outlook.com>
-References: <20250915073926.3057368-1-ryan_chen@aspeedtech.com>
- <20250915073926.3057368-2-ryan_chen@aspeedtech.com>
- <20250915-fifteen-sappy-82f26231843a@spud>
-In-Reply-To: <20250915-fifteen-sappy-82f26231843a@spud>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS8PR06MB7541:EE_|SEYPR06MB8115:EE_
-x-ms-office365-filtering-correlation-id: 867c3d6a-2e84-4847-af7a-08ddf4bcfab8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|7416014|366016|376014|1800799024|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?dHP3tT7OTZx0QsZWGI+W9XaMt05yVwRKa7Vl/CaMnDP+SYJHcRCtc9ih2n3L?=
- =?us-ascii?Q?oTHL9aUswau/3XzW/sxigPtWgFdC6En/xhaSWFxX+6gjpa/oy6DID3nicDc0?=
- =?us-ascii?Q?Yv+eYqhnPbYbrARwe6JhPwm35FYKPgR7UmW+8pe1JcHwsAGR289i97Fosg8L?=
- =?us-ascii?Q?h8LPfhBUPY8ic5AJD14kOH2Fj2CTNjoPGRp7+VLv/tl6RR0dYn2tNdMcoSoO?=
- =?us-ascii?Q?HMr9yHa5bnq9fCEtnVFmcuWXrOSJcrZNEir39gEn/i3iXWwlnYmVIiGpPn4U?=
- =?us-ascii?Q?sbNRMvnmlM0Z3BQW72N28kUkv9WJShSuIuJt+PbyS7PgVl/igbe2uVqZmTMJ?=
- =?us-ascii?Q?O3UTTJCMWJGooW6jeh0+qj99/8hylMUL1nfkz/RAhWpSA3zWM/oOTpx2DFZH?=
- =?us-ascii?Q?CoQsD+F0Ap2Irn5zYTTn599rT4StZVx85lYU06NqwR1FGjAsBmabgYvfzEfX?=
- =?us-ascii?Q?k+9Am9k70nJ1+yu0xSQYNx6DR9UPYrkS6DgCjp5ZFZshBQoaySQmw3oehGgv?=
- =?us-ascii?Q?p1VV1aRAd70IV2w+pMxwymK6rdavqrglFinBqGwqhwKqYlMb7N6DnqxN6rFe?=
- =?us-ascii?Q?uU0oJiRtQRUf8gm9JJzQvqfXJgpYRkr+k5+mVGx236YDt3+mDu1Blh0JhxB0?=
- =?us-ascii?Q?SGrudC2vIY8sQjVhfprdAPaLJTdudakJdcCMUKjOPxGKak+2d/XeL0GTT5m7?=
- =?us-ascii?Q?Q7oPP4zsrFsCj+SLpyybjuZ4Qt5np2lGcOWefA7c9Kjxodi5mzIwmZBHK7B7?=
- =?us-ascii?Q?y7uc0fDlN+pQpJAx2tZfM9m+dysW/HDqVl4CwjVZMZCL9Qpje9KnNwEEXXvC?=
- =?us-ascii?Q?PPrm/E5GaCUuiL9S1qfv6SHhWbqBx+u2osnAGvtZZYpcOalEFX9reukgU151?=
- =?us-ascii?Q?vvTlib6oHTipR1EkO2MZGJaC9Vhvv5ozLdjVqERvcSrzMYh5NWaIyY/mcTGd?=
- =?us-ascii?Q?qJlS0Ecrz25fOCLQWamBzJ1/6GL6y1NeXvv0RQBdW5L12G3iFVa6BhPIQp9d?=
- =?us-ascii?Q?NPEgI6DzShYEdEUNJgsg/0TU2mG+dMm83Kd//DJPMXchL+243qLy65a8iVOt?=
- =?us-ascii?Q?On/2aDhk3QkMtpB/0FLUIwVcXmEYTnNntVnxjnnRWduJ+jokn8iSSiq1V1JA?=
- =?us-ascii?Q?l+0Bvgdw44Z/eSr72+u28cXmxg11EKQ4yqYExtKS8TUuO46sltoAdcKF0mrD?=
- =?us-ascii?Q?WLI5JjLoKOfaIImbdynashIk6QKCEAi7P6OLcGAIFZf4aHiF/wpfYFqSYnIP?=
- =?us-ascii?Q?a1rE5ybNHObXqVHIOqsa4/oLKNNRbPXcyml9vYDf7oy3/TiJBKs7vt1hOB1s?=
- =?us-ascii?Q?3dr9qIS6v5WYUMIYGEchquICvoQqx/kAD+sdxA3Pi3uC8NrRJxvh8+Y1DtFI?=
- =?us-ascii?Q?V5XXC175Z3Ieub9N4frlHL2IOuBlcjqhu8Hxl/4dV22oVcH+1lYfBAkRp8pF?=
- =?us-ascii?Q?wzMmShf00og+OAB2B5Wv0TOPqh6dw9a3ZnPjoTT5/9k0iRLzoP2UYw=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7541.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?XBbAn5P2y1+7ejLGwQXxdkaekL9YEBUukmbsOalRn0xzSKB1qvHAbDU45bHM?=
- =?us-ascii?Q?JNXNCGzFgbh+BbYB4sitv84ZJu9UhLgviyM3TCFPbCtmDDyMU+aEyYYqaN34?=
- =?us-ascii?Q?UsaTkvhF2AsNrCS0BPLlvA7LGa6UxP61N4PDHplvZ8B5pSUgFMrQruhWTJT2?=
- =?us-ascii?Q?MnZPP//bAi42Rc1/Q7QrJ+Ri43PKLrKglAq7Dw9SDNAyFbYdHVFe6BaxgEV/?=
- =?us-ascii?Q?t3xzIuPiM2sSf2WEe5vZJXu3LoBjaAx9TkajtfyYxyK+dVcNjph2UhOqEdeg?=
- =?us-ascii?Q?6WPoPGnLabNqi+Q3UHsz/0Om0+r+6gLTsNS4CDDHQW26KFr5B4CZdHFamaKu?=
- =?us-ascii?Q?ljcLq1VZncJ9LnaVf4mmGehMa1SaVE7dsVVzS25hnbdR9msphnA7S9IpMunx?=
- =?us-ascii?Q?Wvj28dVrVLORkxt6OpztjWAA+icpBiy+QAw+K4WofGtqF++4/zXAJehaz1bs?=
- =?us-ascii?Q?1K1QO2XF38q5GNTHbWQuykhcGj/J0bwISbb8NnXj6ewZZ5GV/i0Bo7Lkjews?=
- =?us-ascii?Q?o4o/2RF+gGqA65qQ8mfOH9P8vlPAc+du9+PiHweU8pmM/Qj2y/WEHV9I94Xh?=
- =?us-ascii?Q?/yLmOY4FHZEVIfAqs/4/82kqDJDH15gPhM5Lhp/l/hFBOtdZaRHWmjwcIh1l?=
- =?us-ascii?Q?Lojc/byFpuuXEGqXXE2nKVyK2vu+bYO2ikUBGkszIx6rMf2k8VtP37yY8hFU?=
- =?us-ascii?Q?3as40SmODnDNyWnpu948ibg8KondIeKdOvaogGN2JZEVf76tcS8Z+m10x9cf?=
- =?us-ascii?Q?gRfvsKFrv4PuZ+yQm7+w+Y76DWe1OwPZNO87JTR5zBzYYeRyrTc/oXNqMA2Q?=
- =?us-ascii?Q?uDZzGTUG0eiuKgumey2u3OtQtXumf9KtcMZRna31dIUkLgjo5cWxYNQz9Oan?=
- =?us-ascii?Q?dXjpNDCuLg4ZMAwSYUS873M6wnn2FxnGCzK0szL2/P6KC5M83A5we8+QXfCk?=
- =?us-ascii?Q?g59j+VO2aRTx/eyzZJtVB2uzCczp2JZEmwdwRwGQ1bkBVGZYZtDsE+heHdlS?=
- =?us-ascii?Q?xULSY5V/XTZvjsu2rSKWRnis5upz1LXGpzG95+AfY5OqMUgvnoHAINu6xYUv?=
- =?us-ascii?Q?r9z977ZXNPyVxyrV6kl+9tJwCyDBsrDaoKBDW8lHePlP0TtRhI8k1gmnrvwG?=
- =?us-ascii?Q?k2wRMoSo/dma9TAlL0DSJc+tv0PSXUKuqfTGOocvGd50RZcRkH+s5+zyF048?=
- =?us-ascii?Q?fhOh+9BLySrbyALFmPJjWI76kuhoYMsqC3BCtC9aP2USVLGqq0gK/P566aOu?=
- =?us-ascii?Q?A+tWgWHdsMJWKInju1P4Tt5O8Yz4PAWgmAHIuWE50eg1VUPfeJfBZgQ5+n2v?=
- =?us-ascii?Q?lQKt81of6EcoOoXhkLbxTSUL8vF1+IA2o3nICpKycqaZ/mJB9dklC0uHBIdX?=
- =?us-ascii?Q?upY8Qvtbjha7yDmjsdg+k2pMshR4k+6/ztiTfhln2shNd2KDVaQ45K3SOEx6?=
- =?us-ascii?Q?M/d5cADNfIXKyigFbZ2YqR0ouCvPteOb/v8jzesOM0ffSU36nVib4li02GtP?=
- =?us-ascii?Q?4CYB3iE9h8J/GzWeBgEOWF5xgYAz+o1iMbiuS2nZGfPlWQZ8vZLJmD69H2m1?=
- =?us-ascii?Q?ykbUEsXuRnoC0/GW7oSnan0oKKSd+IcSpghQ1dwc?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8818421E091;
+	Tue, 16 Sep 2025 01:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757986921; cv=none; b=PTf7TDiL0qI54L05CxYB3EHXI9KGOePArOK4fGrSgZRHRkFG8/2cRimNS9Vv0ET3k8w/xv5MI/QJW6MT/PwKqYr2TNRiuIEg/5w5MEaQugecHw05w0kz9svS/FSMGYKSawXNn5J3VxkR7o5t2u2OcqYSxAwjDMoQgg+xRmn8LN4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757986921; c=relaxed/simple;
+	bh=/NPj9Ibu/YPqLUGYduS8ZQ+yboz39j3GCC9JfG/uqU8=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Xo/RROuQJNxKtlB8kzmNC0nhLsc6l0aZ74JY7Rd45wYs7azVgNlP+5Luubd+9lLyAXuHzeCmV3IkdzUN5kPR3CcWDTMOoADrZNCE5cSae4JBTT9pV2WEwPItgLby2M+qxIs6Hyo65pHhZ+sHuCfyJN1Bjrw8ADuia1L9BinewbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b=ckVUvVbD; arc=none smtp.client-ip=205.220.166.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 58G1Qt2f2132534;
+	Mon, 15 Sep 2025 18:41:46 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	PPS06212021; bh=uS5bE8x+pR5Prss8iPbMqoOog2KOIzRW5TEeu+WHybI=; b=
+	ckVUvVbDPL+bypnY8+3HhViyZ1xjjWjhZOfiLmIpFM1S76S7WiCm6puFick67qtI
+	1jlQ6weO1g6e+RxEvCL/8gE2rhLy01BVCPHK7Yyj6Wjsz2Z1VvxF7aCQJZ3mBL+Z
+	BC3e/Wa+gW9y/8CWUiAo3RJx40ItGH55+ASsTF5YC8Q5TxcS48bzJHzisYC7+kIF
+	KzxzVKN9yvooZJRwXAlVvu7yKuRAg9+h7hbcloH7jAOm5wp6yLqTdT8ACSgcgNdj
+	rc1hXEUrGck+pyVCy9arCzcXWI1iWSuWbQjQdacgYKLoc7Z2bAxIrXpFczZ9oTTy
+	KMPPxUOdjBXRU6LMMH9puA==
+Received: from ala-exchng01.corp.ad.wrs.com ([128.224.246.36])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 4953w2anby-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 15 Sep 2025 18:41:46 -0700 (PDT)
+Received: from ALA-EXCHNG02.corp.ad.wrs.com (10.11.224.122) by
+ ala-exchng01.corp.ad.wrs.com (10.11.224.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Mon, 15 Sep 2025 18:41:45 -0700
+Received: from pek-lpd-ccm6.wrs.com (10.11.232.110) by
+ ALA-EXCHNG02.corp.ad.wrs.com (10.11.224.122) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Mon, 15 Sep 2025 18:41:44 -0700
+From: Lizhi Xu <lizhi.xu@windriver.com>
+To: <stern@rowland.harvard.edu>
+CC: <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <lizhi.xu@windriver.com>,
+        <syzbot+205ef33a3b636b4181fb@syzkaller.appspotmail.com>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: [PATCH V2] usbip: Fix locking bug in RT-enabled kernels
+Date: Tue, 16 Sep 2025 09:41:43 +0800
+Message-ID: <20250916014143.1439759-1-lizhi.xu@windriver.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <4f7805f7-805a-4678-8844-c38a97650dda@rowland.harvard.edu>
+References: <4f7805f7-805a-4678-8844-c38a97650dda@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7541.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 867c3d6a-2e84-4847-af7a-08ddf4bcfab8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2025 01:04:25.3466
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: a2J3I4lbAnmkmDZE9ChvP26Wq9y18JGtV3oFmVqh+iUugS4judJ/As9jHTJM+//ZACI75+ieLB5zjtlOkuSowogyP/IfEtpKNXVP2kuu6h4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB8115
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: xibJtnXIw66-bGH7dp6QEJphXQmeAh5H
+X-Proofpoint-ORIG-GUID: xibJtnXIw66-bGH7dp6QEJphXQmeAh5H
+X-Authority-Analysis: v=2.4 cv=PuaTbxM3 c=1 sm=1 tr=0 ts=68c8c05a cx=c_pps
+ a=AbJuCvi4Y3V6hpbCNWx0WA==:117 a=AbJuCvi4Y3V6hpbCNWx0WA==:17
+ a=yJojWOMRYYMA:10 a=edf1wS77AAAA:8 a=hSkVLCK3AAAA:8 a=t7CeM3EgAAAA:8
+ a=dz-7SrBNJNoZnK-ZadwA:9 a=DcSpbTIhAlouE1Uv7lRv:22 a=cQPPKAXgyycSBL8etih5:22
+ a=FdTzh2GWekK77mhwV6Dw:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDAxMyBTYWx0ZWRfXxR6UQM/DQLzc
+ a7YfW+waQOG5LsT9h8G4dbIdZG4gPiPNOxjYoFTnJzjhJMS6+Jav7TZPXZQkjokRQvnaLqcETbp
+ 8hKzA4bXN/Bva8mCuWs2VMrt7LiP7re9NM1ledNteUjN1wVh1C0mQJ62ku27shB/NfmlYdQT/1f
+ /dKv6/JyvVHg2Vq9lKh6BuaI0a3b5KBZg/y95cd2PbbSdqfmXFagO+6oOIvz6J8f0gAjo1rCpxG
+ yaKSeuBnHOpSVh+nIgGo9FCbSX/0P6AhXIiiZ8N9w2IbKGfTJnzwquugvq+mOcr1sbVATnVqVgy
+ QHxn0L7UsEjYS07mLGxk39R/tnQxiJ4mmHFo8heoB1UQo1ArWLCBtX/+VXnGDY=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-16_01,2025-09-12_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 adultscore=0 priorityscore=1501 spamscore=0 clxscore=1011
+ phishscore=0 impostorscore=0 malwarescore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2507300000 definitions=firstrun
 
-> Subject: Re: [PATCH 1/4] dt-bindings: usb: uhci: Add reset property
->=20
-> On Mon, Sep 15, 2025 at 03:39:23PM +0800, Ryan Chen wrote:
-> > The UHCI controller on Aspeed SoCs (including AST2700) requires its
-> > reset line to be deasserted before the controller can be used.
-> > Add an optional "resets" property to the UHCI device tree bindings to
-> > describe the phandle to the reset controller.
->=20
-> Looks like the property is not optional at all for your aspeed devices, a=
-nd you
-> should require it for those compatibles.
->=20
-> >
-> > This property is optional for platforms which do not require explicit
-> > reset handling.
+Interrupts are disabled before entering usb_hcd_giveback_urb().
+A spinlock_t becomes a sleeping lock on PREEMPT_RT, so it cannot be
+acquired with disabled interrupts.
 
-Thanks, resets is required for ast2700-uhci.
-I will add in following.
+Save the interrupt status and restore it after usb_hcd_giveback_urb().
 
-- if:
-      properties:
-        compatible:
-          contains:
-            const: aspeed,ast2700-uhci
-    then:
-      required:
-        - resets
+syz reported:
+BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+Call Trace:
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
+ spin_lock include/linux/spinlock_rt.h:44 [inline]
+ mon_bus_complete drivers/usb/mon/mon_main.c:134 [inline]
+ mon_complete+0x5c/0x200 drivers/usb/mon/mon_main.c:147
+ usbmon_urb_complete include/linux/usb/hcd.h:738 [inline]
+ __usb_hcd_giveback_urb+0x254/0x5e0 drivers/usb/core/hcd.c:1647
+ vhci_urb_enqueue+0xb4f/0xe70 drivers/usb/usbip/vhci_hcd.c:818
 
-> >
-> > Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/usb-uhci.yaml | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/usb-uhci.yaml
-> > b/Documentation/devicetree/bindings/usb/usb-uhci.yaml
-> > index d8336f72dc1f..b1f2b9bd7921 100644
-> > --- a/Documentation/devicetree/bindings/usb/usb-uhci.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/usb-uhci.yaml
-> > @@ -28,6 +28,9 @@ properties:
-> >    interrupts:
-> >      maxItems: 1
-> >
-> > +  resets:
-> > +    maxItems: 1
-> > +
-> >    '#ports':
-> >      $ref: /schemas/types.yaml#/definitions/uint32
-> >
-> > --
-> > 2.34.1
-> >
+Reported-by: syzbot+205ef33a3b636b4181fb@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=205ef33a3b636b4181fb
+Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+---
+V1 -> V2: fix it in usbip
+
+ drivers/usb/usbip/vhci_hcd.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index e70fba9f55d6..eb6de7e8ea7b 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -809,15 +809,15 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ no_need_xmit:
+ 	usb_hcd_unlink_urb_from_ep(hcd, urb);
+ no_need_unlink:
+-	spin_unlock_irqrestore(&vhci->lock, flags);
+ 	if (!ret) {
+ 		/* usb_hcd_giveback_urb() should be called with
+ 		 * irqs disabled
+ 		 */
+-		local_irq_disable();
++		spin_unlock(&vhci->lock);
+ 		usb_hcd_giveback_urb(hcd, urb, urb->status);
+-		local_irq_enable();
++		spin_lock(&vhci->lock);
+ 	}
++	spin_unlock_irqrestore(&vhci->lock, flags);
+ 	return ret;
+ }
+ 
+-- 
+2.43.0
+
 
