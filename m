@@ -1,170 +1,196 @@
-Return-Path: <linux-usb+bounces-28166-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28167-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04CCAB59C82
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 17:51:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E620B59E3B
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 18:49:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 998AB1892BA6
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 15:51:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E38713ADBA9
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 16:48:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271C0345745;
-	Tue, 16 Sep 2025 15:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9EB2F261E;
+	Tue, 16 Sep 2025 16:48:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="UgBeV/kq"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dyIEiICP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f65.google.com (mail-qv1-f65.google.com [209.85.219.65])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04740309DB0
-	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 15:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D6627F16A
+	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 16:47:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758037853; cv=none; b=ns5qwABBCIKSY68bivhxZ2aWGovpCqc1LZafYnmZyfkfusI4DqwRNIyuq3RxlfJFqQIbXcag17PFGWtJy9wphi4WTAMzXXz9VJGEyCncwSUFdt4JwMxq5/+wTmIzCA0SyDIQlketjfnPOAu9XjeQZqgsHMDPR3EpcdrMLTtDkAw=
+	t=1758041281; cv=none; b=jsXPfVHzuRNS0eZsqPqDczmQ/XUgDvr20jf3Ob/mHZQSZZmTYguHXvOGj3IeDOl/j/FRznS+r1u7fkqm4ngLutMGwfasXPDFqdCL2I4edOcOpKtkSxEv771vMixIn6ISIftjG+vV/4+04xruDorZKVgABrLPIWqoxxCKwmsbMog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758037853; c=relaxed/simple;
-	bh=/oQCj6AGCHXiIzQ552zCryq6vTKe7P9wZDScjAfRDts=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bpJFVupmtmj0ACMdy0JFO4tPuqR9Bx1x3SxJ6HtxjWLalQ8Hm9LkC1OxleYSRlWHl8Oqtu2HBr+z/YyKGVngp//lN+YDkNPHCC/YjGUEWVNsFX40O/iFcvor8ZTop1OtIVOmQl1BBO0zqK3kBs0nh5aAaIptiYy3mj07O8cWfEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=UgBeV/kq; arc=none smtp.client-ip=209.85.219.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f65.google.com with SMTP id 6a1803df08f44-76e2efbd84cso44066346d6.1
-        for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 08:50:51 -0700 (PDT)
+	s=arc-20240116; t=1758041281; c=relaxed/simple;
+	bh=71RTH5dtO3mKhxi62YpmdZ3mPiuAXTAABtxH+Y5Q4WY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rXZuKapYyyIJ4NPv9FwTEVCLP0gEm5B8l3h7CW4w85SzsoUeRUFe8utlhoogdvMXk3EDPmDbpVbhW4F+x7hMD3XXgtneP61pH5dcu+2ThSyPTTGUBv5i4p0rYQkDQpushzMuCeKSYZbwgQDVHplxCYtCwzKj+iij5aJn0FDNzzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dyIEiICP; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-73400edf776so21829237b3.3
+        for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 09:47:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1758037851; x=1758642651; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zpOQuO2AzlrOCSxcAUjngawCtKZasp8FGNW77i+FdyA=;
-        b=UgBeV/kqKJYKQUirg5HjRuxttTIHlY7S0nokqCZqU80y2NIuZ6AjK2gnIr0ZNlshlW
-         /kEOhGBcleje7iNoiHpXxaWopwUSsw25YMhjPs9DVLcKzv548zZIw2e2fEyVZ30nFa4s
-         LuH025a6tmal8FsxslTurJwV9GcKlWbOJKlYXamTSNNbA7IYSDn0EeRmxR9UIdmKuJwF
-         RNaPQ87876lvfksTWX310zJkbVr8I9cGddTCOL4Y8hWs87mM93RXUc9Zlka91wZsOcYu
-         5dPoL33UYQS3lxIsQh/5CpGb/nbHcPSSbMgtJYR+fSanSPOHSEqtDo7cn3q6GXRGh2aY
-         i8BQ==
+        d=chromium.org; s=google; t=1758041278; x=1758646078; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3ETmZDpbYmqIU0hIW51Fx0lZCbZYUtcEVM1kLaNYVSU=;
+        b=dyIEiICP6ZyCyzDD5nAbP+ENRdLWmV4wu4OKbQU2lusvsdGQtWZahEiYIKUsoOc+Kz
+         mPaWA2SA5Kk/W1O6rdpi4ZI1o7ytKv+X8y62tdKwYqeXS86W+4rzYk24XjvMLcT1s6B3
+         iuWf+7CQ+Z2l+9it4pp0qP1FvIhV8ExG1RDes=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758037851; x=1758642651;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zpOQuO2AzlrOCSxcAUjngawCtKZasp8FGNW77i+FdyA=;
-        b=eDGTLcU3kmhJryFYm1dLKk6T+SsjGaAlX1NIljXDwyVPlL2IBm6wKkIvGFGLD63Y/O
-         h9pV/lb9rCWK27TqjLMFdonmO4ZgnU9WU9CEfUigSLgCzo3TX8c+Yvwh4fp2R0u8Tb+A
-         7Yoi83msOuFTajVJT9tFx0fDSbEGA+g4S96DoVcLmlddzpXW56tlDUIAx+KmM3JuXcw/
-         NPjS8uQy6fwYnXRczptX6L9/Z4btgFysqlaYxKrxLHuT3/+oD1DkP4LKJYVs0U0bZZxq
-         7TCOw+aIsraIr7nRUVEcjj22evGGK1GeZ0F6X/eZWRnYEhNVbKCaWu+Pf5dI2OPdFbuo
-         4B7g==
-X-Forwarded-Encrypted: i=1; AJvYcCVKtWYrSQvCNj5Xe7o9iLDOYUvloZAWUyhiz9WaDPs+4W3pekft7XILj6jngdyo7NDVnf9pq6DFMcE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSLL7bIN9u7g6RG1Ak17R6RYhv8GvXHN5ybXhzBd97ymp75NS/
-	EkIKmZq2b+hrxazzsCOgG26FAjvhYd+bsfq0EFREPYOC1/CjcLF/tXHW00kulDGVJQ==
-X-Gm-Gg: ASbGncukkjwGPuFMWNNXHytNNe8KbCp0h6QLSBA0EmHtFcKGFEevaYN65eaBclNnTyI
-	cHHIp3Z6TbBh8UJUMpKui52tY3IGhrgZh73piaJKOozF30i5vdxSskyVjA7wCV6EAM5t5Z72wgd
-	rFeuvJJLL/T35Yn6/lgVRwoZsGDyQofD0uElSJ/wvn+ywKQkzofVGeUOZed/LrKKfuruYMBYi0G
-	GYp25zGV1kZrQtFlodFzqO1ZWNHNZixjNdc0ok1CAA5BVUaj7hLLovHsSZry8bHkInsQmEErrUg
-	/yVdhX7iU+KjxqlstGUKX7Qqpyfw2533BYRZYCm3jyWzt6l4bXll5NSvlv45Z1yiCxbUHkS8Z8/
-	xzpzX73Jn9iqXB3dxNmTW4fvw
-X-Google-Smtp-Source: AGHT+IHlu6/GC+A+RiCBx7oFM1gRRrMK6+30Wjlt3XNsXbM0ezmzY2fnfdid1MXma85FjlRr9GKT3Q==
-X-Received: by 2002:a05:6214:238e:b0:727:66fd:60bd with SMTP id 6a1803df08f44-767c7013d49mr181451996d6.56.1758037850719;
-        Tue, 16 Sep 2025 08:50:50 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::bb27])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-77f44157463sm45876326d6.2.2025.09.16.08.50.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Sep 2025 08:50:49 -0700 (PDT)
-Date: Tue, 16 Sep 2025 11:50:47 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Forest Crossman <cyrozap@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: mon: Increase BUFF_MAX to 64 MiB to support
- multi-MB URBs
-Message-ID: <475764c3-ac04-4a8b-8301-8f05c781eaf8@rowland.harvard.edu>
-References: <CAO3ALPxU5RzcoueC454L=WZ1qGMfAcnxm+T+p+9D8O9mcrUbCQ@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1758041278; x=1758646078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3ETmZDpbYmqIU0hIW51Fx0lZCbZYUtcEVM1kLaNYVSU=;
+        b=APbEjg30S3rC+eagaxvvjGBViE4U02MGelJdECE8WPlEMKiiADIRNIPC5G3uZjdbrk
+         0UpR7UKmbjHVYNTbgiekzAHOo4duPbkiN61yNc4zi5w+8np7Iwp09IUerfgTkI8mUQy9
+         kyvD28ZYcEBaWEkvLS9C1QVI1WGHH8zdSXZ+15gLpMqL79SiHUFlUcJm10WFEC2xW7KP
+         GPt6pXvPj2Gg+Ty3iz0AVQOn18/T5Bse6TDMGXqd2Ez5ODmdfLctGx67CKIrC1gqI3kE
+         6Y6ivOweJN350lyIb2+1t6vAHZJbAINrKaARmQt1e5oi03T/lSjVwdZfuhZw/zOzQSwA
+         3J+A==
+X-Forwarded-Encrypted: i=1; AJvYcCWx5qsoSEaxacweC7GEKUM1Lz0sO0IfSY/n92h16hhNgOumhzu41Ps78B0OExBrLeaAqqpMUgP4CsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6FMgzT/SCIMJAya1pMHdFhLAiNV2Tr8/UmCd1Du6KVFXzoMjP
+	p7qI7Y1bPF+wCOCRiIFhSMX9Fa2UOBmx41+ZTfVNBCCLxb5JgANifbAJubWmKdg5WFZmw6MTKoJ
+	JAdMP4nbI+IlhPmwBkEdC6CrwPiHqprMIOSWFS1Xx
+X-Gm-Gg: ASbGnculqKgtrex9XaPkpD3G5RFgt7OIlNQHhZgg/fE86tc75XBQqYVU3BdtaMq5M+g
+	Nnd8OIIhbf3cuEcEpS9ql41E8DlUhHsAErk2JGhYfCvsh6CQTbOfqOv8z+lgE75UPyc2BkfGLCR
+	8MK+Z7UL0VVjBGvBZZblXSjK0P2nhkWZgeUbYrVVLsfifRIrZUlt8YCW9T+v9jzehbSH8jlA2B6
+	lBVPX8=
+X-Google-Smtp-Source: AGHT+IFZt1kfGdCyhiAecc8NbMlubsrrYf2Bl36ioKqJQz0ak2LxPjQCNPumVJf96dL1uLcuYz1CuE3rsG4iLt7nm2E=
+X-Received: by 2002:a05:690c:314:b0:722:6c4d:a46c with SMTP id
+ 00721157ae682-730654cd3c3mr154591707b3.48.1758041278330; Tue, 16 Sep 2025
+ 09:47:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAO3ALPxU5RzcoueC454L=WZ1qGMfAcnxm+T+p+9D8O9mcrUbCQ@mail.gmail.com>
+References: <20250909123028.2127449-1-akuchynski@chromium.org> <aMliLCWFKy5Esl0-@kuha.fi.intel.com>
+In-Reply-To: <aMliLCWFKy5Esl0-@kuha.fi.intel.com>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Tue, 16 Sep 2025 09:47:44 -0700
+X-Gm-Features: AS18NWAU9Wq6pK_RLACFVUfRmWbdIPmVUr2iNMaa6noro-Cml5cKdRX1otFdb8w
+Message-ID: <CANFp7mXvpNXr=01nQR54d+Z+vSiiwiDLB+3B+1eR6Ks7b37gtg@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/5] USB Type-C alternate mode selection
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Andrei Kuchynski <akuchynski@chromium.org>, Benson Leung <bleung@chromium.org>, 
+	Jameson Thies <jthies@google.com>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
+	chrome-platform@lists.linux.dev, Guenter Roeck <groeck@chromium.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 15, 2025 at 03:55:10PM -0400, Forest Crossman wrote:
-> The usbmon binary interface currently truncates captures of large
-> transfers from higher-speed USB devices. Because a single event capture
-> is limited to one-fifth of the total buffer size, the current maximum
-> size of a captured URB is around 240 KiB. This is insufficient when
-> capturing traffic from modern devices that use transfers of several
-> hundred kilobytes or more, as truncated URBs can make it impossible for
-> user-space USB analysis tools like Wireshark to properly defragment and
-> reassemble higher-level protocol packets in the captured data.
-> 
-> The root cause of this issue is the 1200 KiB BUFF_MAX limit, which has
-> not been changed since the binary interface was introduced in 2006.
-> 
-> To resolve this issue, this patch increases BUFF_MAX to 64 MiB. The
-> original comment for BUFF_MAX based the limit's calculation on a
-> saturated 480 Mbit/s bus. Applying the same logic to a modern USB 3.2
-> Gen 2×2 20 Gbit/s bus (~2500 MB/s over a 20ms window) indicates the
-> buffer should be at least 50 MB. The new limit of 64 MiB covers that,
-> plus a little extra for any overhead.
-> 
-> With this change, both users and developers should now be able to debug
-> and reverse engineer modern USB devices even when running unmodified
-> distro kernels.
-> 
-> Please note that this change does not affect the default buffer size. A
-> larger buffer is only allocated when a user explicitly requests it via
-> the MON_IOCT_RING_SIZE ioctl, so the change to the maximum buffer size
-> should not unduly increase memory usage for users that don't
-> deliberately request a larger buffer.
-> 
-> Fixes: 6f23ee1fefdc ("USB: add binary API to usbmon")
-> Link: https://lore.kernel.org/CAO3ALPzdUkmMr0YMrODLeDSLZqNCkWcAP8NumuPHLjNJ8wC1kQ@mail.gmail.com
-> Signed-off-by: Forest Crossman <cyrozap@gmail.com>
-> ---
+On Tue, Sep 16, 2025 at 6:12=E2=80=AFAM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> On Tue, Sep 09, 2025 at 12:30:23PM +0000, Andrei Kuchynski wrote:
+> > This patch series introduces a flexible mechanism for USB Type-C mode
+> > selection, enabling into USB4 mode, Thunderbolt alternate mode, or
+> > DisplayPort alternate mode.
+> >
+> > New sysfs `mode_selection` attribute is exposed to provide user control
+> > over mode selection. It triggers an alternate mode negotiation.
+> > The mode selection logic attempts to enter prioritized modes sequential=
+ly.
+> > A mode is considered successfully negotiated only when its alternate mo=
+de
+> > driver explicitly reports a positive status. Alternate mode drivers are
+> > required to report their mode entry status (either successful or failed=
+).
+> > If the driver does not report its status within a defined timeout perio=
+d,
+> > the system automatically proceeds to attempt entry into the next prefer=
+red
+> > mode.
+>
+> I'm still struggling to understand what is the benefit from this - why
+> would you want the user space to explicitly start the entry process
+> like this? Instead why would you not just take full control over the
+> alt modes in user space by enabling the them one by one in what ever
+> order you want?
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+I think after the many patch iterations we went through upstreaming,
+we may have lost the point a little bit wrt/ the mode selection task.
+We talked about this on the very first iteration of this patchset
+here: https://lore.kernel.org/linux-usb/CANFp7mVWo4GhiYqfLcD_wFV34WMkmXncMT=
+OnmMfnKH4vm2X8Hg@mail.gmail.com/
 
->  drivers/usb/mon/mon_bin.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
-> index c93b43f5bc46..e713fc5964b1 100644
-> --- a/drivers/usb/mon/mon_bin.c
-> +++ b/drivers/usb/mon/mon_bin.c
-> @@ -68,18 +68,20 @@
->   * The magic limit was calculated so that it allows the monitoring
->   * application to pick data once in two ticks. This way, another application,
->   * which presumably drives the bus, gets to hog CPU, yet we collect our data.
-> - * If HZ is 100, a 480 mbit/s bus drives 614 KB every jiffy. USB has an
-> - * enormous overhead built into the bus protocol, so we need about 1000 KB.
-> + *
-> + * Originally, for a 480 Mbit/s bus this required a buffer of about 1 MB. For
-> + * modern 20 Gbps buses, this value increases to over 50 MB. The maximum
-> + * buffer size is set to 64 MiB to accommodate this.
->   *
->   * This is still too much for most cases, where we just snoop a few
->   * descriptor fetches for enumeration. So, the default is a "reasonable"
-> - * amount for systems with HZ=250 and incomplete bus saturation.
-> + * amount for typical, low-throughput use cases.
->   *
->   * XXX What about multi-megabyte URBs which take minutes to transfer?
->   */
-> -#define BUFF_MAX  CHUNK_ALIGN(1200*1024)
-> -#define BUFF_DFL   CHUNK_ALIGN(300*1024)
-> -#define BUFF_MIN     CHUNK_ALIGN(8*1024)
-> +#define BUFF_MAX  CHUNK_ALIGN(64*1024*1024)
-> +#define BUFF_DFL      CHUNK_ALIGN(300*1024)
-> +#define BUFF_MIN        CHUNK_ALIGN(8*1024)
-> 
->  /*
->   * The per-event API header (2 per URB).
-> -- 
-> 2.50.1
-> 
+The motivation behind it was to allow the kernel driver to own mode
+selection entirely and not need user space intervention. The current
+alt-mode drivers attempt to own the mode entry process and this fails
+when you have two or more altmode drivers loaded (i.e. displayport,
+thunderbolt). The original goal of the mode selection task was to move
+the mode entry decision away from the alt-mode driver and to the port
+driver instead.
+
+What's missing in the current patch series to show this is probably
+actually calling mode_selection once all partner modes are added :)
+Andrei should be adding that to this patch series in the next patch
+version.
+
+Adding the mode_selection sysfs trigger is for another reason: to
+re-run mode selection after priorities have been changed in userspace
+and there is no partner hotplug. We specifically have some security
+policies around PCI tunnels that result in the following need:
+* When we enable pci tunneling, we PREFER tbt over dp and would like
+to select the preferred mode. When we disable it, we PREFER dp over
+TBT and would like to select the preferred mode.
+* When users are logged out, we always prefer DP over TBT.
+* When the system is locked, we prefer DP over TBT for new connections
+(but existing connections can be left as TBT). When we unlock, we want
+to enter the most preferred mode (TBT > DP).
+
+While this is do-able with the alt-mode active sysfs field, we would
+basically be re-creating the priority selection done in the kernel in
+user space again. Hence why we want to expose the mode selection
+trigger as done here.
+
+>
+> I don't believe you can make this approach scale much if and when in
+> the future the use cases change. Right now I don't feel comfortable
+> with this at all.
+>
+> thanks,
+>
+> > This series was tested on an Android OS device with kernel 6.16.
+> > This series depends on the 'USB Type-C alternate mode priorities' serie=
+s:
+> > https://lore.kernel.org/all/20250905142206.4105351-1-akuchynski@chromiu=
+m.org/
+> >
+> > Andrei Kuchynski (5):
+> >   usb: typec: Implement mode selection
+> >   usb: typec: Expose mode_selection attribute via sysfs
+> >   usb: typec: Report altmode entry status via callback
+> >   usb: typec: ucsi: displayport: Propagate DP altmode entry result
+> >   platform/chrome: cros_ec_typec: Propagate altmode entry result
+> >
+> >  Documentation/ABI/testing/sysfs-class-typec  |  11 +
+> >  drivers/platform/chrome/cros_ec_typec.c      |   9 +
+> >  drivers/platform/chrome/cros_typec_altmode.c |  32 +-
+> >  drivers/platform/chrome/cros_typec_altmode.h |   6 +
+> >  drivers/usb/typec/altmodes/displayport.c     |  19 +-
+> >  drivers/usb/typec/altmodes/thunderbolt.c     |  10 +
+> >  drivers/usb/typec/class.c                    |  37 ++
+> >  drivers/usb/typec/class.h                    |   4 +
+> >  drivers/usb/typec/mode_selection.c           | 345 +++++++++++++++++++
+> >  drivers/usb/typec/mode_selection.h           |  25 ++
+> >  drivers/usb/typec/ucsi/displayport.c         |  10 +-
+> >  include/linux/usb/typec_altmode.h            |  11 +
+> >  include/linux/usb/typec_dp.h                 |   2 +
+> >  include/linux/usb/typec_tbt.h                |   3 +
+> >  14 files changed, 516 insertions(+), 8 deletions(-)
+> >
+> > --
+> > 2.51.0.384.g4c02a37b29-goog
+>
+> --
+> heikki
 
