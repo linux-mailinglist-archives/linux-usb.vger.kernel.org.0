@@ -1,155 +1,145 @@
-Return-Path: <linux-usb+bounces-28150-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28151-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD2C1B595BA
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 14:05:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0899AB59719
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 15:12:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6DCB67A933B
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 12:03:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B7C132022F
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 13:12:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 561A030DEB1;
-	Tue, 16 Sep 2025 12:04:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A24663019BE;
+	Tue, 16 Sep 2025 13:12:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="OLolk+bk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HYb2LQGG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA13288C35
-	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 12:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9755C1A9F86;
+	Tue, 16 Sep 2025 13:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758024287; cv=none; b=fdhyRFwkCexGqgOkV20iZwYamOEQuwl9//3R9nkvnkClPHUak/77szUCTxXqWOT1/tYF2GgctonmkZMBIHU8By5HdGDKWKp3PfFop/4x0vIpe6kywKURggANb4S09fEFpstdv7Epn1WFgVGsji0RLTj1mOMIHS6AnNkA58xpeK4=
+	t=1758028339; cv=none; b=OyaOLOlfhe/omc6V5I6WTPTRuW0SnyMNZZEU+yFh4PHfTwpwvcLqF/wWSwJXtqMyOmugxGwDmgxPgjoZxnSthv03Oo6IB8+pwqjDcqCoT7PUXTrlHgoH7hyfRH7U3gWeO3l3Ailay59j0zTQh0TAC78tz6hcq2XvAPuskeOGNEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758024287; c=relaxed/simple;
-	bh=xUh5XUbBjpOpz0SoXD7lETMxuGColdpkGmfgztO7nrQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BnTicjxrAm3PQQ2rGTWBMG3diK1VO+leZQatZVM+pzylAdXkfOCqA9MB51Qn417DfhHs0dE+zLbdHrix7cGVP0kFUScXeZix01FTH/NYGjq7pIEpkcMpFeNAasdsP8PFesOmhm9mvMT9Pwxa/qv3x668Z2ksTqyUEuft7N56Q5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=OLolk+bk; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58GACdaR020146
-	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 12:04:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=w+W9oth6fhri0HzfV/QBf6Xhmg/maZtyf8O
-	bMO2KriM=; b=OLolk+bkWS3tsltlBtTTNwucVc5+5K/F5bGXLZ3kfo8dlgxBfZ/
-	EruoXh6WoFUtta1aKrdqXAGg7YG/TAUtdruTJcQPzCm0sTinTz7sGoQ6b8YPypw6
-	YV6Rgz76xsM1xar0LsGAqCUa6hVjoqZTmjVMIOcN/xivE6RdKpOM8zRd9kAHzxgQ
-	BEE8VmRnLLGejjmSfys9DtN8xo0t/7Kb5UWH4/8fd91qcxyyH+Ag7O7q9fe4D5IY
-	i3eUj7NIwOsoa9dBDwAEGbX7ai2Ykb26ZRw8IKQlnb2NXCSJcuUqfigZ5jZ6xsVz
-	Qx5Nz9hdBckURcyDonSp1GNJT+MslF9KNYg==
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 494yma8ra9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 12:04:44 +0000 (GMT)
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-b54a2ab0f2aso3084070a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 05:04:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758024283; x=1758629083;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w+W9oth6fhri0HzfV/QBf6Xhmg/maZtyf8ObMO2KriM=;
-        b=BUWSeTpYLwMCMWV15Rr7e3volGkMytQ2KLTFASPgT1Is1GJYi0rAkjFtcrJcAY4qmr
-         XNplViVJWqj/caChfQTTw2hdpVUR919Z3NgX74uiS4aLu47tY5x1nZMV8rGVNhmAZi9T
-         tdHEKYiZT6AYcfcTC/3oKkMoZtpYaA/rQUIUgGPCKT6trO5TNZPR8nbClbAIps7MjrtB
-         VWYrC/mouON+e5c72ql3oonePitoh4LSCLIWuNsn8r2migFH0HUmkbjVdr0M2jlowNjC
-         d0Jep6xA+hf56fKB10xLVUjct6EGTp6QiS/W8GvqVHM1Dxz1PFp6Qe4FvyvHD/981Dze
-         IZPw==
-X-Gm-Message-State: AOJu0YwSK0rMiwwC6ckIzAOiElYJ64riN9/xa0GGGJmqFKDff2JlDkzz
-	NLUTKK6HAEnB/taGwJJKCocw5twrrORVCTC7riGajpdfNCKLMw8M1QE5ceSpnu243Lu0pW3gAOL
-	JWFC4FAQlZfhGvsKtkbpqmjLVhhXewNccilkXu8cIFiYqfHuchS44j944PZfDxeQ=
-X-Gm-Gg: ASbGncvfZz2HftdDgVYLJeJL7tHSOQ61Kk5PWyV0lWqyiO3shYdjJ0kbXkDM08LP1D1
-	SGVa2e1dbrh+O1Kvr53jq23Eo1XiSz+wJCIZykJYqaxHWcuBZFfq3CeVRRZmckRr5XFI8pXFtb+
-	x4ntXUrCQZ7UV0Rgc5OMt6H7eZ1HUOa2WxJi3sfx59G7dWYPdfKphlQVSDmiOnFV8rPtzp5BT8A
-	mI9ViVVkAsJFOSBgs7MVm/t+lRFY57CNmKeSHgeL7Nx9OHQ7i0QIBiHhI107cyq+ObyTz3wYI7V
-	OEvnYE7V9dEQ1rZS6P/WI1kcyC8SUIHtN0p3nol5ZdgrUwQ46T3iLf3IPkoRCt81RYVa5qNhJJm
-	9Qg==
-X-Received: by 2002:a05:6a20:729c:b0:246:ba:2d9c with SMTP id adf61e73a8af0-266f4bdfa24mr3552857637.16.1758024283192;
-        Tue, 16 Sep 2025 05:04:43 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGIqXSj4l9GAjmL9lt59m63rsw5wiZleFNjvUVePTkoUn5anrZpPBsI/29/AsNEwgoAx3fnPQ==
-X-Received: by 2002:a05:6a20:729c:b0:246:ba:2d9c with SMTP id adf61e73a8af0-266f4bdfa24mr3552792637.16.1758024282667;
-        Tue, 16 Sep 2025 05:04:42 -0700 (PDT)
-Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b54a3a9e9ddsm14128397a12.51.2025.09.16.05.04.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Sep 2025 05:04:42 -0700 (PDT)
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Subject: [PATCH v5] usb: xhci: plat: Facilitate using autosuspend for xhci plat devices
-Date: Tue, 16 Sep 2025 17:34:36 +0530
-Message-Id: <20250916120436.3617598-1-krishna.kurapati@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1758028339; c=relaxed/simple;
+	bh=BvfyFTru9mXRTZz7YArqGXU+e/DDntydsXP6ZZ6RHcA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m12GB+VYwRi59wzBs35cpf9s59PDMieyv7C+j5MyMI+DBOWvGzGkdmKKZOY8ZYVkpQJ8SqbCF1PMkFtStuSr5d9xUxjy6PvS11t3NY3JoAV/kTqz82WbnLvQW4DzgcU+264Pm/mDbQJItkZ5CUSErcwA3wa7iWq8Puz5WOZT8hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HYb2LQGG; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758028338; x=1789564338;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BvfyFTru9mXRTZz7YArqGXU+e/DDntydsXP6ZZ6RHcA=;
+  b=HYb2LQGGwOqh7xyrH0yPzYQQburJI/9s8Qtfzh5J3426bb2leBGr4mXd
+   Jb5KaYoNWrbQzLlsrIwUMM5QViuV50IPOzSNbI5z3kOdEZ2ThVDA4JMxd
+   SY/5/SHk1QWj9FdR9uIvShs0nC4KAo2vv2aEgtanXUwvYy+ARjT7aUNLo
+   7gmyoS44atSAzBts/tEM2hXG7Mk7+6xXyEbZc1YZmfKtLGrh9KYIJSwcH
+   0VvkKadCR7ERJQYtj3RHhIeGJ41YmhkJCfuSZiiX+GO+XpgOX0o5fDgdL
+   f6/kxBC+ycIHRok/Q4Y9K6MtSq7ZqWcZHwqzac3CV3I1MinDlBy99INhh
+   Q==;
+X-CSE-ConnectionGUID: SyBE2/RURK6K/nc7i131dA==
+X-CSE-MsgGUID: thjoXGuCRFululVe4d+X0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="60253734"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="60253734"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 06:12:17 -0700
+X-CSE-ConnectionGUID: /x4HogcOTKqgXPeIt6uj2Q==
+X-CSE-MsgGUID: 42EV5/ekTMC2BezzGoHhTA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,269,1751266800"; 
+   d="scan'208";a="175354969"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa008.fm.intel.com with SMTP; 16 Sep 2025 06:12:13 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 16 Sep 2025 16:12:12 +0300
+Date: Tue, 16 Sep 2025 16:12:12 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/5] USB Type-C alternate mode selection
+Message-ID: <aMliLCWFKy5Esl0-@kuha.fi.intel.com>
+References: <20250909123028.2127449-1-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTEzMDAxOSBTYWx0ZWRfXwzwo3BDNJW59
- tIZ9OFNAFmOylmxQnBDL8c0nmdx8OF0glck08t/Bp9pUyFUbPeMZ681WoE+2qBiTIKsmMhdL0Yh
- ZMOdNkakWoCtmSniA+X39stDZrjcq8Ew01KbbksPNSbO+Ne3ZKkoLGBIAswUudAvs9B0TqO9QWX
- ZbQ5nhScW007Z8XIPybaPEUNSQWWWTCRWR7Eueijzw5vmOYgYxvxzLDIQi/AB9cCocOVAbKz9sz
- 3zBlHzApbJK98SHCwazF6P67ZVy+I27OwBcyvyI9LG8KF15vLSyBqnBqyFUcu3RGjG0sNGVR5zb
- 6GNy90BmrkHEokSjZik6wAy2rNy6x9g3t91SkJE8q14ISASiI2v4mfGcZeFc+12yc5A14q7Uq4b
- Ae13zfJ+
-X-Authority-Analysis: v=2.4 cv=cdTSrmDM c=1 sm=1 tr=0 ts=68c9525c cx=c_pps
- a=rz3CxIlbcmazkYymdCej/Q==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=dywq_Bg9ifu0WOeA0n0A:9
- a=bFCP_H2QrGi7Okbo017w:22
-X-Proofpoint-ORIG-GUID: Ato0dT0dsf1cKWWQWDbiSJ_oW-eOgcO7
-X-Proofpoint-GUID: Ato0dT0dsf1cKWWQWDbiSJ_oW-eOgcO7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-16_02,2025-09-12_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 phishscore=0 priorityscore=1501 adultscore=0 suspectscore=0
- bulkscore=0 impostorscore=0 spamscore=0 malwarescore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2509130019
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250909123028.2127449-1-akuchynski@chromium.org>
 
-Allow autosuspend to be used by xhci plat device. For Qualcomm SoCs,
-when in host mode, it is intended that the controller goes to suspend
-state to save power and wait for interrupts from connected peripheral
-to wake it up. This is particularly used in cases where a HID or Audio
-device is connected. In such scenarios, the usb controller can enter
-auto suspend and resume action after getting interrupts from the
-connected device.
+On Tue, Sep 09, 2025 at 12:30:23PM +0000, Andrei Kuchynski wrote:
+> This patch series introduces a flexible mechanism for USB Type-C mode
+> selection, enabling into USB4 mode, Thunderbolt alternate mode, or
+> DisplayPort alternate mode.
+> 
+> New sysfs `mode_selection` attribute is exposed to provide user control
+> over mode selection. It triggers an alternate mode negotiation.
+> The mode selection logic attempts to enter prioritized modes sequentially.
+> A mode is considered successfully negotiated only when its alternate mode
+> driver explicitly reports a positive status. Alternate mode drivers are
+> required to report their mode entry status (either successful or failed).
+> If the driver does not report its status within a defined timeout period,
+> the system automatically proceeds to attempt entry into the next preferred
+> mode.
 
-Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
----
-Changes in v5:
-Rebased on top of latest usb-next.
-The first two patches in v4 have been sent separately and merged.
-Sending the third patch independently now.
+I'm still struggling to understand what is the benefit from this - why
+would you want the user space to explicitly start the entry process
+like this? Instead why would you not just take full control over the
+alt modes in user space by enabling the them one by one in what ever
+order you want?
 
-Link to v4:
-https://lore.kernel.org/all/20250812055542.1588528-4-krishna.kurapati@oss.qualcomm.com/
+I don't believe you can make this approach scale much if and when in
+the future the use cases change. Right now I don't feel comfortable
+with this at all.
 
- drivers/usb/host/xhci-plat.c | 1 +
- 1 file changed, 1 insertion(+)
+thanks,
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 5eb51797de32..dd57ffedcaa2 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -171,6 +171,7 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 		return ret;
- 
- 	pm_runtime_set_active(&pdev->dev);
-+	pm_runtime_use_autosuspend(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 	pm_runtime_get_noresume(&pdev->dev);
- 
+> This series was tested on an Android OS device with kernel 6.16.
+> This series depends on the 'USB Type-C alternate mode priorities' series:
+> https://lore.kernel.org/all/20250905142206.4105351-1-akuchynski@chromium.org/ 
+> 
+> Andrei Kuchynski (5):
+>   usb: typec: Implement mode selection
+>   usb: typec: Expose mode_selection attribute via sysfs
+>   usb: typec: Report altmode entry status via callback
+>   usb: typec: ucsi: displayport: Propagate DP altmode entry result
+>   platform/chrome: cros_ec_typec: Propagate altmode entry result
+> 
+>  Documentation/ABI/testing/sysfs-class-typec  |  11 +
+>  drivers/platform/chrome/cros_ec_typec.c      |   9 +
+>  drivers/platform/chrome/cros_typec_altmode.c |  32 +-
+>  drivers/platform/chrome/cros_typec_altmode.h |   6 +
+>  drivers/usb/typec/altmodes/displayport.c     |  19 +-
+>  drivers/usb/typec/altmodes/thunderbolt.c     |  10 +
+>  drivers/usb/typec/class.c                    |  37 ++
+>  drivers/usb/typec/class.h                    |   4 +
+>  drivers/usb/typec/mode_selection.c           | 345 +++++++++++++++++++
+>  drivers/usb/typec/mode_selection.h           |  25 ++
+>  drivers/usb/typec/ucsi/displayport.c         |  10 +-
+>  include/linux/usb/typec_altmode.h            |  11 +
+>  include/linux/usb/typec_dp.h                 |   2 +
+>  include/linux/usb/typec_tbt.h                |   3 +
+>  14 files changed, 516 insertions(+), 8 deletions(-)
+> 
+> -- 
+> 2.51.0.384.g4c02a37b29-goog
+
 -- 
-2.34.1
-
+heikki
 
