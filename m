@@ -1,153 +1,423 @@
-Return-Path: <linux-usb+bounces-28169-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28170-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85E68B5A189
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 21:36:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 138D3B5A1D4
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 22:07:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75281488252
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 19:36:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FCA61BC2560
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 20:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFB552E1EE0;
-	Tue, 16 Sep 2025 19:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BEA2DF15A;
+	Tue, 16 Sep 2025 20:07:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="IyJWJaCy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pKntb37w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D5927A907;
-	Tue, 16 Sep 2025 19:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758051371; cv=pass; b=pRebJjowyi2SqM/TxCTKMTKmaVF0Q9vcp91d8N9a8M5GYOkEKTuY1yQmHqD8wKlcd8Zt/iCCaz6IBj8TrNvFQpjHKQutWELn5MUBzU5lAMgMxM6m3dOYH9w1WGGDQyvbMHB0XvpBrbbw88YmYjjy4vFQFTr0R4l4wt7s7W8CuFg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758051371; c=relaxed/simple;
-	bh=EPKW0Hv4jB6StlyVkeD8DuM/FdXIbHZ/uCo3nGrmUYA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VSaqbfOj4SPn0K/FYV1ITuFtLdM+9qE6DHZ9mly+GlT51W5PIjB4M0Ia+BK6DtlDoXHOXuPrHaCaHMhF+04tQFPmKtwai1JV6lVT6dfYtVa0T5jifIft8pOjVPMQS5kpnB2/ZUQUi3FWZnjiBVFfOXflGcH2Qmmm5oIFaAuK+wE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=IyJWJaCy; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758051347; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=AMGRqJTbSPtwOV7oRnaCTlZ6S7Okj4t3dm1mb19NFRlOAV0vPO7oJPvpK0EWhBhdxOSb06EsTGM6+/6eU+uJL3ktbWhXfwFn7ChlnKVMXjFulbzlkuxCLaAEuTDF7i7+Y1yhRvPEC+0iQtVnzEPyqLbbeRHHTfDiQXy67Bc+WNs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758051347; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=8ntexXLv31C2JME2WNT4kxVTkVYgJZZd07oFmq0TU+g=; 
-	b=eFupUJsTE2TLzq3zRcINnT7Lq/LNDEOeYtWDaOrWv5uOEqjGRI1ExvdahZ0qq9O+17SNuV0/VxZPy2QWYQ+dKdc7sqGWEPFNmj0t7l9S8a/mlqmVMh/4OWY9sulT6irX6QSHTylNBZ+h67YhkDoJnWHDqGtrcfn5kgIgnAcw3XE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758051347;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=8ntexXLv31C2JME2WNT4kxVTkVYgJZZd07oFmq0TU+g=;
-	b=IyJWJaCyiRuthMad1/PqnHsCUv/TOQwHDmG9EBCCu01jC+kCg7uo/o+6S8TqVKle
-	Din0vV50/GjWU7W6RecfskzLSDzBj60XlXNi11l3q7hbv+6XMgsDGZGItHTfrs1Xrvj
-	90QixqwZCkM9qGPSb2tGe9YQkyP7Bo1yW4+daW6c=
-Received: by mx.zohomail.com with SMTPS id 1758051344739982.4683264465028;
-	Tue, 16 Sep 2025 12:35:44 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 6DA9B180733; Tue, 16 Sep 2025 21:35:31 +0200 (CEST)
-Date: Tue, 16 Sep 2025 21:35:31 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: fenglin.wu@oss.qualcomm.com
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
-	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>, David Collins <david.collins@oss.qualcomm.com>, 
-	=?utf-8?Q?Gy=C3=B6rgy?= Kurucz <me@kuruczgy.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com, devicetree@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 0/8] power: supply: Add several features support in
- qcom-battmgr driver
-Message-ID: <r65idyc4of5obo6untebw4iqfj2zteiggnnzabrqtlcinvtddx@xc4aig5abesu>
-References: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B1B21FF55;
+	Tue, 16 Sep 2025 20:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758053227; cv=none; b=G2NBaN/xXaK5eow4U4oTFyM2a5TX6o2PH55f5Znlc8ceDgmioIy5bJ6vW4NJjxMKDRFPX989xTPfeITdkcufgh/erG7YZ8pMqAsKBj4AM8ZTvhk7ojuDMUFqZf6M6IH68lnmWxrp2hLbPS+wuI6fApS1kNMhlrg0EkTDdY9iU5E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758053227; c=relaxed/simple;
+	bh=82ODHO+ZHstBJ3tXU3RRL74ckaZe2VyLF/nSIFdDBC8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=j1Ko12bceJ/jepiswCtdCPMR0DS0NuMjujsTQbQvEp6qG0GF38nNCW07aJ+TWQGnFOWijSVUZyzR3X62YZ3R3zssCLpCfzhnQc5W9ND5lKc3UbcIXMdhOuPtDS3RKJbHf1gO0Iq9yl00Zf1CDrLeGW8cd9+iEodM3iQ2kV3ir2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pKntb37w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 778CEC4CEEB;
+	Tue, 16 Sep 2025 20:07:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758053227;
+	bh=82ODHO+ZHstBJ3tXU3RRL74ckaZe2VyLF/nSIFdDBC8=;
+	h=From:Date:Subject:To:Cc:From;
+	b=pKntb37wA+2URaeTKiVR+RnQbI2WbfCKz730Q24GL5W0vJAHW42XiP1iyQNsV5T+6
+	 ADqKBCXgAwUQzapNWsEOQvIieUu7bDStup/B+aA88AQm+NGYVe0Se0jCG6UTFk5SRd
+	 /TqGnSXlUZAhuiBMZTIV+qvYWYb8pkGvwfCT/33LrRmmOd4zn7iiaHP2JDHgMsl3hE
+	 Py5lO1/tecsKMj1vons8Z7ae4eHkOj5mo2/iov7y4ToQxTGsVyi1rmKquWyq9CMyBa
+	 hj0rg3Nj7K9YikoDJ4MlhQVpBEY8yVRPiw/tXnuUS5Qi6uYHcp/ERnVEwgJLdz1BJ6
+	 QQYHlXzHkpsgQ==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Date: Tue, 16 Sep 2025 22:06:01 +0200
+Subject: [PATCH RFC] dt-bindings: thunderbolt: Add Qualcomm USB4 Host
+ Router
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7yyu3k5bxetq5asm"
-Content-Disposition: inline
-In-Reply-To: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/258.4.7
-X-ZohoMailClient: External
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250916-topic-qcom_usb4_bindings-v1-1-943ecb2c0fa7@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIACjDyWgC/x3MSwqDMBRG4a3IHRvIwxZ1KyKi8a+9AxPNbUtB3
+ LvB4Tc45yBBYgi1xUEJPxaOIcOUBfn3GBYonrPJavvQjXmqT9zYq93HdfjKVA0Th5nDIsqhdrB
+ WNzCgnG8JL/7f664/zwtboI2GagAAAA==
+X-Change-ID: 20250916-topic-qcom_usb4_bindings-3e83e2209e1e
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+ Wesley Cheng <quic_wcheng@quicinc.com>, Jack Pham <quic_jackp@quicinc.com>, 
+ Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ Mayank Rana <mayank.rana@oss.qualcomm.com>, 
+ Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>, 
+ Mika Westerberg <westeri@kernel.org>, 
+ Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758053222; l=10454;
+ i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
+ bh=7i8SYua4P42R+C99GKv8GP2AAHRi2AKDbV2qgnnCITg=;
+ b=LoBP/bKbJzR7Kyy+IEwJNJ/xwVx2S+enbDx0KSUpbMST4m+/tWbYApZeIlW5t7WCTO37b1FXh
+ kavzL8gNx8LCzFFtYX5Ds/d4zNiD1E1m9c8CdT6Y2cn4fKJj6g2O76h
+X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
---7yyu3k5bxetq5asm
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 0/8] power: supply: Add several features support in
- qcom-battmgr driver
-MIME-Version: 1.0
+Several Qualcomm platforms feature an in-house Host Router IP block,
+which enables USB4 and Thunderbolt 3 functionality. It implements the
+common NHI interface, allowing for easier integration with existing
+Thunderbolt driver implementations.
 
-Hi,
+The Host Router features a microcontroller (with loadable firmware),
+which takes care of detecting and acting upon plug events, initiating
+high-speed link establishment or performing HW power management
+operations.
 
-On Mon, Sep 15, 2025 at 04:49:52PM +0800, Fenglin Wu via B4 Relay wrote:
-> Add following features in qcom-battmgr drivers as the battery management
-> firmware has provided such capabilities:
->  - Add resistance power supply property in core driver and qcom-battmgr
->    driver to get battery resistance
->  - Add state_of_health power supply property in core driver and
->    qcom-battmgr driver to get battery health percentage
->  - Add charge control start/end threshold control by using
->    charge_control_start_threshold and charge_control_end_threshold power
->    supply properties
->=20
-> The changes have been tested on QRD8650 and X1E80100-CRD devices based on
-> qcom/linux.git for-next commit a679f3f6931cdb0c2ef5dc0c26f895ae3f6c1ddc.
->=20
-> Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> ---
+Each instance is connected to a single USB3.x host, a PCIe RC and a
+DisplayPort controller through a fitting Protocol Adapter, allowing
+for the tunneling of the respective protocols between the USB4/TBT3
+device and the on-SoC controller.
 
-Unrelated to this series specifically, but can you look into fixing
-the following errors (appearing at least on X1E based Thinkpad T14s)?
+Describe the block, as present on the X1E family of SoCs, where it
+implements the USB4v1 standard.
 
-qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown not=
-ification: 0x283
-qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown not=
-ification: 0x283
-qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown not=
-ification: 0x483
-qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown not=
-ification: 0x83
+Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+---
+Hello!
 
-Thanks,
+This is our stab at USB4/Thunderbolt dt-bindings.
 
--- Sebastian
+This submission, as stated in the commit message, describes our USB4
+Host Router block, which is roughly the same class of hardware that you
+can find on add-in PCIe cards aimed at x86 machines.
 
---7yyu3k5bxetq5asm
-Content-Type: application/pgp-signature; name="signature.asc"
+This specific patch is NOT supposed to be merged, since the bindings
+may still ever so slightly change, as we continue work on the driver
+(i.e. it's still possible that we omitted some resource).
 
------BEGIN PGP SIGNATURE-----
+It is however published early to create grounds for a discussion.
+This is the first bring-up of USB4/TBT3 on a DT platform, so this
+binding is likely going to influence all subsequent submissions. I've
+added various DT and TBT folks to the recipient list to make everyone
+aware of any decisions we settle on.
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjJu/wACgkQ2O7X88g7
-+prvHg/7BJXwOEfENpjb+Lvn03BDEtvTKwc1pWwW9nTsVTOz2q8Y3/uroczVeoWy
-UpinHAxIRPLl0UVqR9kcCIPn1R8NJgnNnibV0hiczlm3LdYGeuCLuF1DULcX8MXI
-hWeNdsT9ql5IKpdUtwyilxy9tX4/NKt5bOioDcAluMrrJMAObQCjEwv1IcKNbn/6
-8TxIeuv9K+wwBekx+5Jzz/Xyx5UfPqvkkwkM0kLW6mrZH3RWTuXqJrJHfB9J+FPG
-vUA+QA/djKjV2K78s0XYSai02qOQ2Gpnc5esAPH1NQJivCRRxjm75likH0g2bgFC
-9y3JSzUmbkiCd5PkBf2NvHUjedXdVRM1F8+ggFt4rLvJj+5ty5QW8HKVe+aXxZCP
-jCDi4avGcSzZFtZg7RSUA4ZJbEqXcMlZMXPvZ04hGrWnOFv+Ku93wouUuhYmA5hK
-+R5zM64lrtrpOuHb8P5n5DSJNdgQfDNj35lM3dNEpyMWRJGK5PWqHQWHhZgyYhtg
-62ezZra7P7CAFtiq+XyUOIzZMFBw5vnkjCMxZfyz5R8k7NFJIZTpkP/tmLfcKAEs
-foFyol14MgGPuN1nqGqoUHxJW1UhGreqvYLvgJRlTMqC62KLLdrH+KGd7ZAp3v9v
-XlaE7dveUDUaDHtUAo1vhrlUOk9iDifrM7T4HxXL522Mn0NMavY=
-=Sioo
------END PGP SIGNATURE-----
+Comments very welcome!
 
---7yyu3k5bxetq5asm--
+P.S.
+The driver part (which has quite some dependencies) is not yet 100%
+ready to share and will be published at a later date.
+---
+ .../bindings/thunderbolt/qcom,usb4-hr.yaml         | 263 +++++++++++++++++++++
+ MAINTAINERS                                        |   1 +
+ 2 files changed, 264 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/thunderbolt/qcom,usb4-hr.yaml b/Documentation/devicetree/bindings/thunderbolt/qcom,usb4-hr.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..1cf3d083c6129a492010a4b98fea0e8dec9746cf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thunderbolt/qcom,usb4-hr.yaml
+@@ -0,0 +1,263 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thunderbolt/qcom,usb4-hr.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm USB4 Host Router
++
++maintainers:
++  - Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
++
++description:
++  The Qualcomm USB4 Host Router IP block implements the NHI standard
++  as described in the USB4 specification.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - qcom,x1e80100-usb4-hr # USB4v1
++      - const: qcom,usb4-hr
++
++  reg:
++    maxItems: 17
++
++  reg-names:
++    items:
++      - const: router
++      - const: router_config
++      - const: tmu_config
++      - const: port_group
++      - const: sideband
++      - const: uc_ram
++      - const: uc_per
++      - const: uc_mbox
++      - const: nhi
++      - const: cfg
++      - const: debug
++      - const: usbap_config
++      - const: pcieap_config
++      - const: dpap0_aux
++      - const: dpap0_config
++      - const: dpap1_aux
++      - const: dpap1_config
++
++  interrupts:
++    items:
++      - description: Combined event interrupt for all three rings
++      - description: OOB Firmware interrupt
++
++  interrupt-names:
++    items:
++      - const: ring
++      - const: fw
++
++  clocks:
++    maxItems: 10
++
++  clock-names:
++    items:
++      - const: sys
++      - const: tmu
++      - const: ahb
++      - const: axi
++      - const: master
++      - const: phy_rx0
++      - const: phy_rx1
++      - const: sb
++      - const: dp0
++      - const: dp1
++
++  resets:
++    maxItems: 13
++
++  reset-names:
++    items:
++      - const: core
++      - const: phy_nocsr
++      - const: sys
++      - const: rx0
++      - const: rx1
++      - const: usb_pipe
++      - const: pcie_pipe
++      - const: tmu
++      - const: sideband_iface
++      - const: hia_master
++      - const: ahb
++      - const: dp0
++      - const: dp1
++
++  power-domains:
++    maxItems: 1
++
++  required-opps:
++    maxItems: 1
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    const: usb4
++
++  iommus:
++    maxItems: 1
++
++  interconnects:
++    maxItems: 2
++
++  interconnect-names:
++    items:
++      - const: usb4-ddr
++      - const: apps-usb4
++
++  mode-switch: true
++
++  wakeup-source: true
++
++allOf:
++  - $ref: /schemas/usb/usb-switch.yaml#
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++  - resets
++  - reset-names
++  - power-domains
++  - phys
++  - phy-names
++  - iommus
++  - interconnects
++  - interconnect-names
++  - mode-switch
++  - port
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,x1e80100-gcc.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        usb4_router0: usb4-host-router@15600000 {
++            compatible = "qcom,x1e80100-usb4-hr",
++                         "qcom,usb4-hr";
++            reg = <0x0 0x15600000 0x0 0x8000>,
++                  <0x0 0x15608000 0x0 0x70>,
++                  <0x0 0x15608070 0x0 0x500>,
++                  <0x0 0x1560d000 0x0 0x1000>,
++                  <0x0 0x15612000 0x0 0x1000>,
++                  <0x0 0x15613000 0x0 0xe000>,
++                  <0x0 0x15621000 0x0 0x2000>,
++                  <0x0 0x15623000 0x0 0x2000>,
++                  <0x0 0x1563f000 0x0 0x40000>,
++                  <0x0 0x1567f000 0x0 0x1000>,
++                  <0x0 0x15680000 0x0 0x1000>,
++                  <0x0 0x15681000 0x0 0x1000>,
++                  <0x0 0x15682000 0x0 0x1000>,
++                  <0x0 0x15683000 0x0 0x1000>,
++                  <0x0 0x15685000 0x0 0x1000>,
++                  <0x0 0x15686000 0x0 0x1000>,
++                  <0x0 0x15688000 0x0 0x1000>;
++            reg-names = "router",
++                        "router_config",
++                        "tmu_config",
++                        "port_group",
++                        "sideband",
++                        "uc_ram",
++                        "uc_per",
++                        "uc_mbox",
++                        "nhi",
++                        "cfg",
++                        "debug",
++                        "usbap_config",
++                        "pcieap_config",
++                        "dpap0_aux",
++                        "dpap0_config",
++                        "dpap1_aux",
++                        "dpap1_config";
++
++            interrupts = <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 579 IRQ_TYPE_LEVEL_HIGH>;
++            interrupt-names = "ring",
++                              "fw";
++
++            clocks = <&gcc_usb4_0_sys_clk>,
++                     <&gcc_usb4_0_tmu_clk>,
++                     <&gcc_usb4_0_cfg_ahb_clk>,
++                     <&gcc_aggre_usb4_0_axi_clk>,
++                     <&gcc_usb4_0_master_clk>,
++                     <&gcc_usb4_0_phy_rx0_clk>,
++                     <&gcc_usb4_0_phy_rx1_clk>,
++                     <&gcc_usb4_0_sb_if_clk>,
++                     <&gcc_usb4_0_dp0_clk>,
++                     <&gcc_usb4_0_dp1_clk>;
++            clock-names = "sys",
++                          "tmu",
++                          "ahb",
++                          "axi",
++                          "master",
++                          "phy_rx0",
++                          "phy_rx1",
++                          "sb",
++                          "dp0",
++                          "dp1";
++
++            resets = <&gcc_usb4_0_bcr>,
++                     <&gcc_usb4phy_phy_prim_bcr>,
++                     <&gcc_usb4_0_misc_usb4_sys_bcr>,
++                     <&gcc_usb4_0_misc_rx_clk_0_bcr>,
++                     <&gcc_usb4_0_misc_rx_clk_1_bcr>,
++                     <&gcc_usb4_0_misc_usb_pipe_bcr>,
++                     <&gcc_usb4_0_misc_pcie_pipe_bcr>,
++                     <&gcc_usb4_0_misc_tmu_bcr>,
++                     <&gcc_usb4_0_misc_sb_if_bcr>,
++                     <&gcc_usb4_0_misc_hia_mstr_bcr>,
++                     <&gcc_usb4_0_misc_ahb_bcr>,
++                     <&gcc_usb4_0_misc_dp0_max_pclk_bcr>,
++                     <&gcc_usb4_0_misc_dp1_max_pclk_bcr>;
++            reset-names = "core",
++                          "phy_nocsr",
++                          "sys",
++                          "rx0",
++                          "rx1",
++                          "usb_pipe",
++                          "pcie_pipe",
++                          "tmu",
++                          "sideband_iface",
++                          "hia_master",
++                          "ahb",
++                          "dp0",
++                          "dp1";
++
++            power-domains = <&gcc GCC_USB4_0_GDSC>;
++
++            phys = <&usb4_phy>;
++            phy-names = "usb4";
++
++            iommus = <&apps_smmu 0x1440 0x0>;
++
++            interconnects = <&icc0 &icc1>,
++                            <&icc2 &icc3>;
++            interconnect-names = "usb4-ddr",
++                                 "apps-usb4";
++
++            mode-switch;
++
++            port {
++                usb4_0_mode_in: endpoint {
++                };
++            };
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9da37c8dee69de9421d4f70906b4e623a442d171..b607f0a66f953fb1ea72e3405820288850004dfe 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -25428,6 +25428,7 @@ L:	linux-usb@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git
+ F:	Documentation/admin-guide/thunderbolt.rst
++F:	Documentation/devicetree/bindings/thunderbolt/
+ F:	drivers/thunderbolt/
+ F:	include/linux/thunderbolt.h
+ 
+
+---
+base-commit: 05af764719214d6568adb55c8749dec295228da8
+change-id: 20250916-topic-qcom_usb4_bindings-3e83e2209e1e
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+
 
