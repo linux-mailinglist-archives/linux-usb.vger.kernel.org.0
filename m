@@ -1,216 +1,201 @@
-Return-Path: <linux-usb+bounces-28137-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28138-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CAC2B58EF9
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 09:18:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9980EB58FD1
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 10:00:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7713A1BC31D6
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 07:19:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FD3F5259CD
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 07:59:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17CD02E6125;
-	Tue, 16 Sep 2025 07:18:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4062848A0;
+	Tue, 16 Sep 2025 07:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aZqfDEOl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9712DECDF
-	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 07:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E34284671
+	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 07:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758007116; cv=none; b=JCUqrvM2ZaQxgIq5uYDsG4p9oSQSiLw4f2T9XcpM+NwBlwLrGgLITD0xKKhio4b1iaD1LQQ0iwgBSjWKINUjIcf7BVf65/BT3TjgjJtha4swo5xWmcPQmr8yBN9LJ+h0JP0xv4JrYbu0F3mcnI7LPfIsowzFyOmAayOAOZsDf8c=
+	t=1758009551; cv=none; b=nIxFaqbYSD2wet5Gpzn2Qjs3gtn9XmnBOH1svuXG0ikznxWHloRvZ8TBRKnTDD79Mpc4pMeHEZ6E5X7wM11VOfPdwuF4nCihd0iEd1USu//cFhhpsMXthAg7ovJrdq8KexLhFVOEO4J2diUwXCFT+aGyZvf+hutPMnTMJF5SjVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758007116; c=relaxed/simple;
-	bh=/n5L0zuim9T9324maodQZtpPeiOd0fceXfQP+n+Thx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Poe/qae0mSz6jGO7jBek+Nku9Dy7T1vPxUJzSSJrq0iZ5eLx0oGxo3o9D3kOoVhd6/EjT0w6Nat1qXPusfKR0eIUlLbGMw4tdodM4/geQFJOAVzCdYEoAHaV8LbMsu5nVs7wJkEUwtStrNf1pwc4ko78GDwc8IFzanw5Uasu9Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uyPx6-0007Fb-L3; Tue, 16 Sep 2025 09:18:12 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uyPx4-001Y7t-0T;
-	Tue, 16 Sep 2025 09:18:10 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uyPx3-00BTqe-3A;
-	Tue, 16 Sep 2025 09:18:10 +0200
-Date: Tue, 16 Sep 2025 09:18:09 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
-	stable@vger.kernel.org, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	Lukas Wunner <lukas@wunner.de>, Xu Yang <xu.yang_2@nxp.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: drop phylink use in
- PM to avoid MDIO runtime PM wakeups
-Message-ID: <aMkPMa650kfKfmF4@pengutronix.de>
-References: <CGME20250911135853eucas1p283b1afd37287b715403cd2cdbfa03a94@eucas1p2.samsung.com>
- <b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com>
- <aMLfGPIpWKwZszrY@shell.armlinux.org.uk>
- <20250911075513.1d90f8b0@kernel.org>
- <aMM1K_bkk4clt5WD@shell.armlinux.org.uk>
- <22773d93-cbad-41c5-9e79-4d7f6b9e5ec0@rowland.harvard.edu>
- <aMPawXCxlFmz6MaC@shell.armlinux.org.uk>
- <a25b24ec-67bd-42b7-ac7b-9b8d729faba4@rowland.harvard.edu>
- <aMQwQAaoSB0Y0-YD@shell.armlinux.org.uk>
- <aMUS8ZIUpZJ4HNNX@pengutronix.de>
+	s=arc-20240116; t=1758009551; c=relaxed/simple;
+	bh=luXA3BAxwfQykxsWgqlH1n5LzWlMt8n5hBlB3Owwr/I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Fco6q/xP3r6PbLIcBVzF9uCIbyBpw7inf3mYwyGBP5X6+x7JWoUuVf07bYzEUNqx8dY61/l7b5qNDyFoAVDvmolAT9n+6C54MpqyJL3jQheBrAn2KnAp29/t6+PUVoXCZxOxDuTpdjjzAtGoJkdigw+/xZ0wCKoPswN8J6PBK9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aZqfDEOl; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58G3qL9l021231
+	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 07:59:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Bl6XIkWkFljciR/SPXMo9xgXQdmc9fkaHnQt4AwcHd8=; b=aZqfDEOlATWoThDM
+	ovnK8QdibZ7MoP6MD4xtyQjIMUXl5SGGabYbOV0MOFfRcCtNDw1M4lwluURmWhKm
+	iRLViQFxuKsDeTUoEFgpX4h6P0Qc4V+g4S16QTRdV4bozcGIXbbcNt8bNR0iOQ/n
+	KXurKArH5gI0jOf/XdBpKcVmvJV9dPPb3YChdbIrJBjRs9+rUT9Xre3Sjv7DQimj
+	11KucwtHUmvuDfIiZlVI3rRoBs7AaqThTRrwHVk4rrW/daJfMGJ+7DTBmG8r37us
+	yipYnAwNOOG+xRAvLiIFtQG3HWw3Ox/VKdnogaOKwe2ZLYuvm1do6iwXRFfuel2k
+	VGCn2Q==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 494yma7yq1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 07:59:08 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4b4bcb1e32dso16601381cf.1
+        for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 00:59:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758009547; x=1758614347;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bl6XIkWkFljciR/SPXMo9xgXQdmc9fkaHnQt4AwcHd8=;
+        b=fTS5DfHct4wSysqfKacUet76Bq33v7HTNQO0lUG1WIIY9ASlHPmMaSVml2tiemL/D+
+         tKD5t3DwF8mFEijI3AFz2W9ltRJwXcDmEVqTzCJz7G2L4s2vW+5nqEBOtr/qtKLB3lnP
+         iKxaJ4lWpM15n85taQ1JkREsuqPHufuuwBmiy/R5mQ1cYhoGeB2gwUHZHq5vJ/xyduJw
+         xkPBaDLAtX6vm6Az5ELkKvC6cnXXbL4Hgdjpx06IBBhRlpWwSMoIT0WySPr2oz4JVIpg
+         O//1XJUx0hBJ5ScY2RMd5Ig/1EsmrEe+Z5gKFCM6k4hiuVQum3fs8jkxMTT7uxg85jjC
+         wTqg==
+X-Forwarded-Encrypted: i=1; AJvYcCVU8DEwdNn7Ec3GLKeXikqikAQZPtK6f25aJUNuwTId008rbxSWQkeJhrdJKkBY6V5SfI7OgO2sInw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzyk4z13V7I17l4RvYKb5HX0ZP8ljpYwF8SsxpyWojPYxBujFcZ
+	6Ly+b3zee7vs9EcCQ93HFaKPEIzU3QvP6atTdW6E1jgxc4TWT+gnlmVqDOu+JpJ0lNPgGMWz+2Y
+	ejkqhpimg/2jf5jfuK5rxPgl8mpgIg3kt6vuhnnooAx8Epk7YOHXOLcJSFn0q1pE=
+X-Gm-Gg: ASbGncs/o9KxCbDw+vauqas07r6zzLzYjRHJRDeqXAWKQZKdoqI12svtighPfxCpsJe
+	qIZ4UKU+EpPKZsnikQpcdfSyI3SjaUvBJWzEt5z9EsQecZCRUlPYmRXkaeZXD9Jzx4/ZkdYqbd4
+	REAxBz7YJIA6mHHWXS8p5bGlbqN5WDeKPofhfC0m8zg6Z+Oz2v4F+yWnu3si3sXdVb9eMAyUWa+
+	+aOeCn83kS2PfPtUvVpGlaLRmstQNwH2MKfgq0pSj79CHEB7kQNRh+omXdZQfhrGtfMwNnWGKEt
+	gmAFTbZ9s/0XaFZhICv2eyzNIabkdBCuwEx5wmmAcvykjMpQRjth5iV9bg/YWzG4mRyeeIBCstU
+	Ks9sMC3uQTbd3SgICtBGBxQ==
+X-Received: by 2002:a05:622a:1819:b0:4b7:9ae7:4cdd with SMTP id d75a77b69052e-4b79ae7518amr65238601cf.8.1758009547481;
+        Tue, 16 Sep 2025 00:59:07 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHmODftrEEwDnmk4gqtDucReWHiHbxT+KlMqX2icp9tsQ6afSGP7fT1h5VI8YPit50d0g7z1w==
+X-Received: by 2002:a05:622a:1819:b0:4b7:9ae7:4cdd with SMTP id d75a77b69052e-4b79ae7518amr65238401cf.8.1758009546833;
+        Tue, 16 Sep 2025 00:59:06 -0700 (PDT)
+Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62f416db508sm3528606a12.32.2025.09.16.00.59.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Sep 2025 00:59:06 -0700 (PDT)
+Message-ID: <5736df73-c90e-4f11-b461-c38da4e811e1@oss.qualcomm.com>
+Date: Tue, 16 Sep 2025 09:59:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aMUS8ZIUpZJ4HNNX@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/8] power: supply: qcom_battmgr: Add resistance power
+ supply property
+To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc: Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson
+ <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+        David Collins <david.collins@oss.qualcomm.com>,
+        =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+References: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
+ <20250915-qcom_battmgr_update-v4-3-6f6464a41afe@oss.qualcomm.com>
+ <gk2ho7ugp35kb4x65meqsm3aufnry6srr4p7jspf6xyn7ywzkh@vd5ca7txjdk6>
+ <0cf4b0fd-e468-4aab-9ec2-38da93435557@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <0cf4b0fd-e468-4aab-9ec2-38da93435557@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTEzMDAxOSBTYWx0ZWRfXzzKygPl473DV
+ B3ccSY/4fu1x/ilm80L4TNC+b9l4D4MDMWUC+Nb0txlxgEOJ1wbscQjmt+3E9lcbE0l8XOErpsd
+ bG+AUX5fGbs3RlB9zzEHvWuoBXMbhBNQaCx1rlYTBdWPagUkMaSqP+2dhYLZVjGfJvv/GE/ecjy
+ FRfwKjpyGvaFYli9GI4N1NcAnPGReW26HpcAV96l7j9Mj2oMgXAO1bDNMsZkkO3mrPMJdT+hUQt
+ hvVeELRpjQm6jGMC0gG9Sw5kbqOJurFQkLuHW9AMdYOrPBEBCza4560REm8gaBgeeHl41TpgLd4
+ xrR5L8VDzW4HEjcPtGVCm1pDlUdpKGp3Jg9MJW1R3Q2pFWMFz4qZsX8SOPxzBr+ZEngonc6zV80
+ SYWIPiQh
+X-Authority-Analysis: v=2.4 cv=cdTSrmDM c=1 sm=1 tr=0 ts=68c918cc cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=KKAkSRfTAAAA:8
+ a=mNYpJT6RAAAA:8 a=BliEHdnzWw9z4Hsov9QA:9 a=QEXdDO2ut3YA:10
+ a=dawVfQjAaf238kedN5IG:22 a=cvBusfyB2V15izCimMoJ:22 a=eybOJ6GWDyyBfQoUqdmp:22
+X-Proofpoint-ORIG-GUID: zHYyVZ_G4gYKGgF5hpi48kJZt5gN4E9P
+X-Proofpoint-GUID: zHYyVZ_G4gYKGgF5hpi48kJZt5gN4E9P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-16_02,2025-09-12_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 phishscore=0 priorityscore=1501 adultscore=0 suspectscore=0
+ bulkscore=0 impostorscore=0 spamscore=0 malwarescore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2509130019
 
-On Sat, Sep 13, 2025 at 08:45:05AM +0200, Oleksij Rempel wrote:
-> On Fri, Sep 12, 2025 at 03:37:52PM +0100, Russell King (Oracle) wrote:
-> > On Fri, Sep 12, 2025 at 10:29:47AM -0400, Alan Stern wrote:
-> > > On Fri, Sep 12, 2025 at 09:33:05AM +0100, Russell King (Oracle) wrote:
-> > > > On Thu, Sep 11, 2025 at 10:30:09PM -0400, Alan Stern wrote:
-> > > > > The USB subsystem uses only one pair of callbacks for suspend and resume 
-> > > > > because USB hardware has only one suspend state.  However, the callbacks 
-> > > > > do get an extra pm_message_t parameter which they can use to distinguish 
-> > > > > between system sleep transitions and runtime PM transitions.
-> > > > 
-> > > > Unfortunately, this isn't the case. While a struct usb_device_driver's
-> > > > suspend()/resume() methods get the pm_message_t, a struct usb_driver's
-> > > > suspend()/resume() methods do not:
-> > > > 
-> > > > static int usb_resume_interface(struct usb_device *udev,
-> > > >                 struct usb_interface *intf, pm_message_t msg, int reset_resume)
-> > > > {
-> > > >         struct usb_driver       *driver;
-> > > > ...
-> > > >         if (reset_resume) {
-> > > >                 if (driver->reset_resume) {
-> > > >                         status = driver->reset_resume(intf);
-> > > > ...
-> > > >         } else {
-> > > >                 status = driver->resume(intf);
-> > > > 
-> > > > vs
-> > > > 
-> > > > static int usb_resume_device(struct usb_device *udev, pm_message_t msg)
-> > > > {
-> > > >         struct usb_device_driver        *udriver;
-> > > > ...
-> > > >         if (status == 0 && udriver->resume)
-> > > >                 status = udriver->resume(udev, msg);
-> > > > 
-> > > > and in drivers/net/usb/asix_devices.c:
-> > > > 
-> > > > static struct usb_driver asix_driver = {
-> > > > ...
-> > > >         .suspend =      asix_suspend,
-> > > >         .resume =       asix_resume,
-> > > >         .reset_resume = asix_resume,
-> > > > 
-> > > > where asix_resume() only takes one argument:
-> > > > 
-> > > > static int asix_resume(struct usb_interface *intf)
-> > > > {
-> > > 
-> > > Your email made me go back and check the code more carefully, and it 
-> > > turns out that we were both half-right.  :-)
-> > > 
-> > > The pm_message_t argument is passed to the usb_driver's ->suspend 
-> > > callback in usb_suspend_interface(), but not to the ->resume callback in 
-> > > usb_resume_interface().  Yes, it's inconsistent.
-> > > 
-> > > I suppose the API could be changed, at the cost of updating a lot of 
-> > > drivers.  But it would be easier if this wasn't necessary, if there was 
-> > > some way to work around the problem.  Unfortunately, I don't know 
-> > > anything about how the network stack handles suspend and resume, or 
-> > > what sort of locking it requires, so I can't offer any suggestions.
-> > 
-> > I, too, am unable to help further as I have no bandwidth available
-> > to deal with this. Sorry.
+On 9/16/25 4:31 AM, Fenglin Wu wrote:
 > 
-> Thanks for all the valuable input.
+> On 9/15/2025 6:18 PM, Dmitry Baryshkov wrote:
+>> On Mon, Sep 15, 2025 at 04:49:55PM +0800, Fenglin Wu via B4 Relay wrote:
+>>> From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+>>>
+>>> Add power supply property to get battery internal resistance from
+>>> the battery management firmware.
+>>>
+>>> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on Thinkpad T14S OLED
+>> T14S is X1E80100, which uses SC8280XP-specific sets of properties. This
+>> patch changes only SM8350-related data. How was it tested?
 > 
-> I’ll process the feedback and investigate possible ways to proceed. As a
-> first step I’ll measure the actual power savings from USB auto-suspend
-> on AX88772 to see if runtime PM is worth the added complexity.
+> I assumed that Neil has picked the series of the changes and tested the charge control limit functionality on his T14S device.
+> 
+> When I run "b4 trailers -u", the tag was added on all patches. I will remove the "Tested-by" trailer for the patches with functionality not applicable for X1E80100 platform.
 
-I ran quick power measurements to check whether USB autosuspend is worth the
-added complexity.
++ Konstantin
 
-Meaning:
-- "admin up/down" = ip link set dev <if> up/down.
-- No link partner was attached, so the physical link was down in all tests.
+It's quite common to see someone leaving a T-b on the cover letter,
+trying to say "I gave this series a spin" and then seeing the tag
+appear on unrelated commits within the series (e.g. bindings or some
+cosmetic fixes". Maybe some sort of an interactive (opt-in is fine)
+dialog for "which patches to apply t-b/tags to" could be worth the
+effort?
 
-Setups:
-- Debian 5.10 (USB autosuspend present, no phylib).
-- Debian 6.1 (phylib present, no regression).
-- Power meter: Fnirsi FNB58.
-- Env: QEMU 9.2.1 (USB passthrough)
-       xHCI host Intel 100/C230
-       device ASIX AX88772B (0b95:772b)
+I was imagining two options:
 
-Legend:
-- "RT: active" = runtime PM on;
-- "RT: suspended" = runtime PM auto (device suspended).
+$ b4 trailers -u --lalala
+> Grabbing tags..
+> Found:
+> [Patch 0/n] Very Nice Changeset
+>   Tested-by: Foo Bar <foo@bar.com>
+>
+> Which patches do you want the Tested-by tags to apply to? [all]: 2-5
 
-Results:
-- Kernel 5.10.237-1
-  admin up (link down): 0.453 W (RT: active)
-  admin down: 0.453 W (RT: active)
-  admin down: 0.453 W (RT: suspended)
+or:
 
-- Kernel 6.1.148-1
-  admin up (link down): 0.453 W (RT: active)
-  admin down: 0.248 W (RT: active)
-  admin down: 0.248 W (RT: suspended)
+$ b4 trailers -u --lalala2
+> Grabbing tagsd..
+> Found:
+> [Patch 0/n] Very Nice Changeset
+>   Apply to Patch 1 ("soc: qcom: Fix all bugs")? [Y/n/a] y
+>   Apply to Patch 2 ("dt-bindings: foobarbaz")? [Y/n/a] n
+>   Apply to Patch 3 ("clk: qcom: Fix ABCD")? [Y/n/a] a
+>   Applying to Patch 4 ("clk: qcom: Fix DEFG")
+>   . . .
+>   Applying to Patch n ("clk: qcom: Fix XYZ")
+> Tags applied!
 
-Observations:
-In this setup, USB autosuspend did not reduce power further (admin-down power
-is identical with/without autosuspend).
+As I'm writing this, I'm thinking option 2 offers much more
+fine-grained control, which is always nice to see..
 
-The drop from ~0.453 W -> ~0.248 W on 6.1 appears to come from the phylib
-migration (PHY powered down on admin-down), not from autosuspend.
+Konrad
 
-Proposal:
-Given autosuspend brings no measurable benefit here, and it hasn’t been
-effectively functional for this device in earlier kernels, I suggest a minimal
--stable patch that disables USB autosuspend for ASIX driver to avoid the
-PM/RTNL/MDIO issues. If someone needs autosuspend-based low-power later, they
-can implement a proper device low-power sequence and re-enable it.
-
-Would this minimal -stable patch be acceptable?
-
-Best Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
