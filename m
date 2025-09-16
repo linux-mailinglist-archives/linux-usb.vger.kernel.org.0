@@ -1,243 +1,158 @@
-Return-Path: <linux-usb+bounces-28164-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28165-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31C72B59C68
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 17:46:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AADBB59C6C
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 17:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B05E41C034E2
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 15:46:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 203A11747EA
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 15:48:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D2526B0B3;
-	Tue, 16 Sep 2025 15:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF6B2765CD;
+	Tue, 16 Sep 2025 15:48:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Kp0cfW5l"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="wiOGfKu6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011001.outbound.protection.outlook.com [40.107.130.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f193.google.com (mail-qk1-f193.google.com [209.85.222.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1151FBEA2;
-	Tue, 16 Sep 2025 15:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.1
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758037581; cv=fail; b=t8uo/XnHzD51sXnMQiZ6OZ4cPfu1GPuerJZXbD7krJZirWoT82l2yCn4HZBdM8Z+ESU5ndZLBHMbYq2BJMQvogJlH1p2VJcfa2NlB9/g6MnlBmWiDIrqzSi2dOFqwhF82BXVrubUrfPO4uuT3+zDuDhgjVYZSTT2IhcgI1OBTq4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758037581; c=relaxed/simple;
-	bh=erBCDtsaW2PaBNI8zufX7HTbn3Urap0UgEc1NN2/uKs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=cCR9Ban1T+p9RIqMlMeh3gLCxJkrz/tChClSqYp1Adx/bfOc3eRrpt8TK2lyyFMlLEDpw+CifDSGrmHpPXw9FOiYGazshVPyZzspps0ynm363z3+NePnAIpXPLSEwuG0Wlj06JMBpvaPBkEFqw/nV1rVfjzyjHCLAuQqVUGzM6Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Kp0cfW5l; arc=fail smtp.client-ip=40.107.130.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=U1nPChOOPj44CcvdwjTQWLlNTYJpTVIt+CTQZ3GZJNDwz2RQe3VYLyhxCtssipJg86lX7StIYFR6RLUka+NUDF96x5mVSxxXYcFjFuqUKqwmhU+3XgazfKEhxmILPATaysjyrzR4M0vIsfCKn7+udEFlZ0EVvnboxI/yr35nfjlToNkF3lqUFw0kvS4/bWBaxwVEqXFpPIZwaFnS8VISNgzylFXmAUenal31r+P8E2BtQkSP1g9OvoYNwMVOij0Ps/+LAsvNFwnxT+t/LJeL5xWTVaodKeLCGaDSfLX3oqkeaCDmgF6bFV470+kzeYsJxPcPhG2U5xZ2hghp39Cx2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yaALLyC1ugR/Foi5tdl5wZjJ1XN9H8cQh83oSTPsSjo=;
- b=hoSz4QueCZHCyLf3ui5+x64fnqI/5r18GTdfpUKXY10kmvD7p20fB6iZRwdRRcdJ1srrV2KeZckZeOZnV0jczRL0ZxIJhI3y2iV8GO62ryfumw/HzDyw5GueJeu2o+dB0/xVdGDFHOKHny5rP0J94q3M3us/PERYHl9iFNnLB7DdUDSziMimCnBAAi3F9fOVAsHcqbchFzO44XfbWbs75AkSsoWmXyUtsWzvJH82zFe8k8CMQ75+m81QzEjfi88zvkmyUfA29Q1rMNGQyBKYIPZYHeMuFCyU8VvN8dkeNdm4HEvMo3Fj1hT6XiFLVtKFQyCPVmo4k1IoEc3VDwrjVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yaALLyC1ugR/Foi5tdl5wZjJ1XN9H8cQh83oSTPsSjo=;
- b=Kp0cfW5lq8P5U9mZ4nG63FYOn/RAhGeHmLUxpiptru19wE0s3lbGiBw/Dn/Lp/tlqjk7oSUpfBvG0tmMLwo7foPRAnY9Z2hOMFBEW1mlTvK0GC/qVXv+M9ajqoEouNojnu5DUXdkPYogMOLnvHQbHuRGccuMSZDKnd/OIeQ00nk7OguqpnLy+ybxDtjd1kyUhc3d/gtI20uV4PEqqpy2ornjXveDeLJXGCFM5cUHjZvkOVry5W7AYfogYlYUWg9F49dk9tXAXuoBqo7cbQgOucTt+Pmv9Tmd2wHou52SUUDT8YD5PbWLOseWridbV8NxpiQM2NMDmfHL7JhAXWpXCg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS4PR04MB9621.eurprd04.prod.outlook.com (2603:10a6:20b:4ff::22)
- by AS8PR04MB8578.eurprd04.prod.outlook.com (2603:10a6:20b:425::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.12; Tue, 16 Sep
- 2025 15:46:14 +0000
-Received: from AS4PR04MB9621.eurprd04.prod.outlook.com
- ([fe80::a84d:82bf:a9ff:171e]) by AS4PR04MB9621.eurprd04.prod.outlook.com
- ([fe80::a84d:82bf:a9ff:171e%4]) with mapi id 15.20.9137.010; Tue, 16 Sep 2025
- 15:46:14 +0000
-Date: Tue, 16 Sep 2025 11:46:06 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, tglx@linutronix.de, mingo@kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH v2] usb: gadget: zero: add function wakeup support
-Message-ID: <aMmGPmBdRi7ACxBm@lizhi-Precision-Tower-5810>
-References: <20250916020544.1301866-1-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250916020544.1301866-1-xu.yang_2@nxp.com>
-X-ClientProxiedBy: BY5PR17CA0026.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::39) To AS4PR04MB9621.eurprd04.prod.outlook.com
- (2603:10a6:20b:4ff::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1E3239573
+	for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 15:48:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.193
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758037683; cv=none; b=ZzcyHPQxj8/JKz5askIFx1Dd29XleYpwPADcDNW3ojGGAr7Md8xnGd+uPyUDOdRvRaZPVLGv+++BgyC0nB3YA2O8yi7TPyjIY47Uj2M4/hHvvk4w5y8LuBuy+t1bwhQuBewZsGThBUTseW+/dlZBSz6EQITDM34F67ECw4VVlLs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758037683; c=relaxed/simple;
+	bh=5vmeuOQep/axLIESm0gMGf7FNHR8sSOeAgD3FaJZAjI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TvRn99CEr2Ixnt3m7x3BT3lf8CQzc02szwXtQVmffMXrxF9yv7NOTLHPh919vka85/4Nbp0MTCoT3/klfe+DUWw8T8WeTSzoME7Y2kJCHx4nkO4mBdbbn3kp2tOFny7GRUdBpMwzh8moFdHNVF2d65jUfZaAm+Nj7mIOgyU8u94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=wiOGfKu6; arc=none smtp.client-ip=209.85.222.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f193.google.com with SMTP id af79cd13be357-8275237837fso341560385a.2
+        for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 08:48:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1758037681; x=1758642481; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SmRV7y5RVjtRRykDfJzsy6QTbLlkodoS8n+eLseT97c=;
+        b=wiOGfKu6v1zDczasHwIQP03QsEZ1p8C2BqSVbPUn5+/B/UumfCz526uny3femMJlC9
+         6GfVFNxGQH+k4KZxSCHY28amgRW7RKoTgHLdTssHsiHLjiR7movuLjAAhetQt8D+Yf1m
+         eOjSFTQEdKVvZ0sE2X4FVWgMrFAuiuVxbIKyhPZSTCgi/c3A5snCGfcLq28rSOffjf4C
+         8nU+6zxaR+Aw3w7/ZsgHEimt9KYhn1moJoJ3bhIRLH/k+srTPS5SrsiZ68rfViMehLdm
+         xEMsmyxcHxrYXg8pGQRoJyuvNWHaa+cY0ZPcuj934vAzdmqwsHpO4/tYzqVN11BDoMq0
+         yK6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758037681; x=1758642481;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SmRV7y5RVjtRRykDfJzsy6QTbLlkodoS8n+eLseT97c=;
+        b=M0YBBlzg8QPiylK9uwsn2v3JU0Yv7Udw0HAESwAU8uWgfouAhKc4TaDTSz6qRSzthv
+         GtVFrYVxIzZrlx5ZZgWuiF6nzW7d9zkkxziZ6DOUsBQZMfo6SdNSuqLraYXpFMwWq2wG
+         qSY1c1f38Nkv6iLZlIrm6FgBQkxqPWC+2/hXBFG0cDgczJLYaGrKhP31uYaQAvXq2l4d
+         SM/pEDMnTBJbFqUxj/n2KzHCo+huaGIpDyJUFqcur8Jt47dCa52yaaZIf1n/I1baobYf
+         DZ6+WcB06eO1nVDJ6RhOfSYIQzLm5BfVCu7hbpFI2B+KerxBKI4VsSzqbXqlBez3MNsm
+         fEUw==
+X-Forwarded-Encrypted: i=1; AJvYcCWZ9BE3hd921Xim6kDC33zdSAOygnifEglGTIit0NekdtQadmI2eH47jT07tAfSgSQlsPQSGO1S+Lk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvPdriEvHIqC64fMoC2DecOt3DfUwAwdwPCSHkOTUtSXsP/5Hi
+	jpBFbNgg3fJnTibb9mU2PBOesyZV67V4jdWmAUFPmae2yxR8dYDXaZf18HFHOnzVwQ==
+X-Gm-Gg: ASbGncu1ciTE9CHB31Wp047+PtRmjcb+P07Ujx6uWaZrMCUwQgjY+Mbc1Bcy0qKOAh/
+	Q85UgHHAfwefEOCE2X4QJR3AxiA4ZsmEmTjfhKjZMsARsSwG85X67QF4S8e1E2CINPsb8oMW33Z
+	vplMn2ZvYARnjOBSo7w6DwIRVrTsdAMcpyEI4YhfPSKPKPXml+yC2fPFMyhRvP7pIOdyCGATAX6
+	r1lvOEXsqtKxGyIDSk7ZBRFt/x0XudB57DVdir8sIoZj0YOpL1u6rCAg8tk2awx6KV7JaxvR4iG
+	PUsGl5LA/3BZYoqEyogHpUp2l/C7/MJxZv94EJISLpOnwx7ABll0zQh60nnvJ4qktJ58/OWtoEU
+	iE+CAp6uxpfuDWrT1wrog0Sj1
+X-Google-Smtp-Source: AGHT+IHHEf/KxYrGaKTUWfkkpxyRuBCTOhkh8z8aYBa5H4Ru1Ukx3upLhzLd3vbVwE1UnR0C68KKrw==
+X-Received: by 2002:a05:620a:4628:b0:80b:981:a0e4 with SMTP id af79cd13be357-8240084e283mr1902714085a.70.1758037681099;
+        Tue, 16 Sep 2025 08:48:01 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::bb27])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-820ce19d151sm954058385a.50.2025.09.16.08.47.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Sep 2025 08:47:59 -0700 (PDT)
+Date: Tue, 16 Sep 2025 11:47:56 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Lizhi Xu <lizhi.xu@windriver.com>,
+	Valentina Manea <valentina.manea.m@gmail.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzbot+205ef33a3b636b4181fb@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH V2] usbip: Fix locking bug in RT-enabled kernels
+Message-ID: <61e796d2-0139-4459-a4e3-f27892384de2@rowland.harvard.edu>
+References: <4f7805f7-805a-4678-8844-c38a97650dda@rowland.harvard.edu>
+ <20250916014143.1439759-1-lizhi.xu@windriver.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR04MB9621:EE_|AS8PR04MB8578:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9bc6bca6-d4f9-4fb1-8e9e-08ddf5382a7a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|366016|376014|52116014|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?nFp8CxNs+dolGraKX9BVl7SjP+d/2zvaNof7eTefbxMSrKq0gNtUVcAZlrVg?=
- =?us-ascii?Q?Ae9QoS9BweUYNul8L+NcaUAcxUbXkEaJBcXz6i82xOEugDzWgHOHYkHPKONO?=
- =?us-ascii?Q?5aXhj2qy1lmeKtv46Eaa40ltL2wTXHLI0Mc9A6uMMLEXzmHuLJXiScjpRDVk?=
- =?us-ascii?Q?uE3RjI3zqavCkC3s23j+oYPyF8J/iSUQxl5jr75Iu/rbO2riYGv+wH9x5g04?=
- =?us-ascii?Q?L3yMXso6U1IizYC8XoZ2snqVz+hOtyK/o1DLF4aDfZPm3h3MFD5WBdA4O4Qq?=
- =?us-ascii?Q?vCtP9toZ1tkpPIaZX8owsWi2tzYKQ0Rtz+wqK0qsFRtvUnE3HVKS7lOrdTFe?=
- =?us-ascii?Q?z+JGp60XwKxlv+WoNmpz7jEZZ1Z1ZFtzCW/CUccsU+PQTg2Uig1/fzcGxQno?=
- =?us-ascii?Q?MTzvo9KdTzJk4eFFdNMRVIEjfxSB7NNpCwiW1+za1UK30BqBDLjFHT1rBKnf?=
- =?us-ascii?Q?BLo/w8vRl0yZdb2zQMnVhltXiWBEq5kB7xyWwDjXJljhNs23PiGLyNKiMKbT?=
- =?us-ascii?Q?Bb56yfcqQj/sVptfHGcJAnDeb8xlMfiRmoLeYUFGs0EYuVC9qkhnevFYiKFC?=
- =?us-ascii?Q?590/MF0dsV53+W2Dkf9tw8MYAVjKpsz/6u/OIW/2njRLDrKjt8zbpDGg6Rf+?=
- =?us-ascii?Q?aDlNx5UeSVritkzYPDX5Cho/i+hzGieT3mByFYjk7pICHp+mpq/kVcAM+GIO?=
- =?us-ascii?Q?zXz92o9yLBru1jk5lE9Ctyk34LM/r/9o+1eGZasUVlC+fQvXWVkTl7zeSXr5?=
- =?us-ascii?Q?Gpuv+gEan+cALPcr0FtZEUMDd6RosPhPFq7tNrAdxPigAC7TC5ebARTzyzUj?=
- =?us-ascii?Q?k6j7XBkg9fOde36QuGr1cg8X6q4pZ40Qt5hrM1gfWrgEJUvYfCTj7F5dx4/d?=
- =?us-ascii?Q?VDLeotzX8cLaUA322AzxBc69Tm0EyinNLbseuAk8Q/wNS2JbocZYOVSniILm?=
- =?us-ascii?Q?a/P5PeirxZeIW5mgpk0bUizDSIXowpaomOlcU5XNgstMvlzSPsJCWhbLXhOV?=
- =?us-ascii?Q?LAzO8j/FvDi0AdsMhm4+fQjC9FbvQ80D2IRSyR3Nx4RluWGaSjs9xCDxjSec?=
- =?us-ascii?Q?Vfu/uOfu60zVUWwkuoZNvv+OO1sVme+jZ2Lm3uE8a06DjqMK5dh54bK5A7M9?=
- =?us-ascii?Q?KbLguCZ9mhS0HImC7UXzvrBD1NiXALGV7eW04TLYayCZVSQq6n6V6d4z9Gbe?=
- =?us-ascii?Q?u39qOl4lpFU8jELGpB5N3tY02OlpKxtbb7bXu5JWx7uJFWKwMp3a2gE6B1c1?=
- =?us-ascii?Q?hk8ymP0EoWNoM107XeQ/PGiT6viv3lBzzpDhT9QjOFWDUpxYoe+nLq4P4PTr?=
- =?us-ascii?Q?H0bAMzCdhVOWKSk1mMji2duMyyer3zYSfMNyU8ywC04QAfYuQ+tGJSqVW2EK?=
- =?us-ascii?Q?KbRykl3cLYWbWq5Z6nbFujwrg0A6VYUymc+tJ49vY9QAGtvacTq/VfcARKd8?=
- =?us-ascii?Q?5WdwujwghAG2vMLqAtznpuT86J11MuDRt0wHpS4/0YURw/Mp5iu6CDC6bQoo?=
- =?us-ascii?Q?fuP4eQCWsvuXVTY=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9621.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(366016)(376014)(52116014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?6ohftw9rpKsCG6krb80FJXb5A2Giyid7tTUPD7jbL2y/83nVyhceNt9mjsq+?=
- =?us-ascii?Q?g+f3yKjEla1EBi+hPDsx2WPX3zdMdx5uD/vF36uCAlZquaxkEX6T9o8Ngq3F?=
- =?us-ascii?Q?vohoIOpjECzFwTirH9pvbOyqaZZdGw0b1QX86y6GKQ1lllfIV3VnA6amhcAx?=
- =?us-ascii?Q?nxsANzw7FlLYoTWiBUIU7TWnBZ+yfkqUstTaSko/KF0zaNk2K4DuxVlW8jou?=
- =?us-ascii?Q?D2fRa9oyLlIxOK+qXDiSNv8/RuH3x1pKnyuNdRrof5mJsXlmyLLoEwJg9H2p?=
- =?us-ascii?Q?zzJmkESUzYwgtCNA7Ssqmg48JVLizvoaRaieIt//ySDjO+ej8iPrB+jjutvU?=
- =?us-ascii?Q?pnevVHC7TfGUQWqQq/IZ8ke5dYp23hLcg+TRD7xrvCOqHQ0xLzwucfCN9QDM?=
- =?us-ascii?Q?ycIqgzPFzNdincdTjMZlp0EiW4xsI9TrsxRil81Bd7VCv3yGLLHJ8Zzawlkl?=
- =?us-ascii?Q?3n5SNrM+f5Q17rcK9qlKNNRpjGWkfqQbnTu4OOUfFNktpJHPcTuxonp7Ol0Q?=
- =?us-ascii?Q?exzoN1ezwmN8Yrvq3aAm+gPatNDiZzdLjoh82IbWsQca/yMx34Dsu8Qg1Sjl?=
- =?us-ascii?Q?jMd/SWMP+EZFAXByAlk+2S1d6WuwJj5W/9iCc8rWsUOhX5fGJQnI750UmS9E?=
- =?us-ascii?Q?ZOgdxz7WHJKt+42XSKf5gu0ddD4c+eJ1rvThIqsnpE5OHAOE5JjtrOQKexiI?=
- =?us-ascii?Q?LrGapsc6ZjL9xYw4QMKs+UL7AInvQ9jpjdESBVwzgQHqHfkBKcViwTkabcYA?=
- =?us-ascii?Q?jrEecMw4Ol1tTSgUCXNDuXsPQlRpd3/IR0C4m/bEnh+OrvZ1fZ3ZGZCJYGqV?=
- =?us-ascii?Q?E0AgOo3zMopf5RLIevyLYw5r9eTK3OW8ZgpNFmO5pPXqOWZO2w1HWEG5ELMx?=
- =?us-ascii?Q?GYozQP2OZ8j1P1yYuaGked2Vi/CEDYdZVBomJS3+yeM4mgnfZL3HqQGtAPFP?=
- =?us-ascii?Q?TRqqR7JB3wV783/yFzWs1yg7h9nqDYyTMsYk8BPMXdZdvabIZUkHC1RyK0pX?=
- =?us-ascii?Q?niTtFbVH1DjK1VIqxp2gSVfDvsDc1BFiwRBdLVk8gmGRrNc0CtP59CLwv1l2?=
- =?us-ascii?Q?UbhUoeQJu3hDp7RmoTm1xi2jzo+PlHWw+EhWZdlyg+/5h1AtvO/jQYv6MNO7?=
- =?us-ascii?Q?CdoZ5Sxye1BkoIohQrpgBMvKZVGoAO33iAqg56CUZxy7T9BF9MzGEHEWaye8?=
- =?us-ascii?Q?+JNYJAtFXBdExWh5jfgCmbDIhJ2WnPrwOZ1B0ePdJLn0h3rfDPfTRnimp0Vn?=
- =?us-ascii?Q?Ns3zzhkFghSKWJ37NVN4w6+CCazPWhGV+OgHhikIIG/6RppLQPR6w59pa5Z3?=
- =?us-ascii?Q?C5yL/n6LLQ6BkSd2c8nNf2ad3dfw4Merfg/RTBRzGgr++42ZJEmq0nr4QrtT?=
- =?us-ascii?Q?zJ7CNFxlgYSW8eT7rvrwQe9ehHWo7JofpwtdQjmATV1CVDChtXuV/cQEwQbM?=
- =?us-ascii?Q?aKy5oKFkGcYI47r+V7V4aLPJpg/lG1Sfr7VDHiBbo1UHJI3cDvLZWQdaMMLn?=
- =?us-ascii?Q?V5pLUdvLuoydmTY5xPAqVspyLV7o73U1yaBzsmn5gkdCCxQht4wDtPvGgFSy?=
- =?us-ascii?Q?uzMnvZo6ve068cnnR9tzm6Ba6M6WbTS5avs/Ecg/?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9bc6bca6-d4f9-4fb1-8e9e-08ddf5382a7a
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9621.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2025 15:46:14.5130
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NUXES0SaR+WJoA67X/SFA1Gi0x4ndIET4UOk9U9W3AWsiqkSgNvCDj/UgRH4PVxRzg80SwVx/dc0rfE7hMk0PQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8578
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250916014143.1439759-1-lizhi.xu@windriver.com>
 
-On Tue, Sep 16, 2025 at 10:05:44AM +0800, Xu Yang wrote:
-> When the device working at enhanced superspeed, it needs to send function
-> remote wakeup signal to the host instead of device remote wakeup. Add
-> function wakeup support for the purpose.
->
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
->
+On Tue, Sep 16, 2025 at 09:41:43AM +0800, Lizhi Xu wrote:
+> Interrupts are disabled before entering usb_hcd_giveback_urb().
+> A spinlock_t becomes a sleeping lock on PREEMPT_RT, so it cannot be
+> acquired with disabled interrupts.
+> 
+> Save the interrupt status and restore it after usb_hcd_giveback_urb().
+> 
+> syz reported:
+> BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+> Call Trace:
+>  dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+>  rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
+>  spin_lock include/linux/spinlock_rt.h:44 [inline]
+>  mon_bus_complete drivers/usb/mon/mon_main.c:134 [inline]
+>  mon_complete+0x5c/0x200 drivers/usb/mon/mon_main.c:147
+>  usbmon_urb_complete include/linux/usb/hcd.h:738 [inline]
+>  __usb_hcd_giveback_urb+0x254/0x5e0 drivers/usb/core/hcd.c:1647
+>  vhci_urb_enqueue+0xb4f/0xe70 drivers/usb/usbip/vhci_hcd.c:818
+> 
+> Reported-by: syzbot+205ef33a3b636b4181fb@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=205ef33a3b636b4181fb
+> Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
 > ---
-> Changes in v2:
->  - fix alignment
-> ---
->  drivers/usb/gadget/legacy/zero.c | 27 ++++++++++++++++++---------
->  1 file changed, 18 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/usb/gadget/legacy/zero.c b/drivers/usb/gadget/legacy/zero.c
-> index a05785bdeb30..08a21bd0c2ba 100644
-> --- a/drivers/usb/gadget/legacy/zero.c
-> +++ b/drivers/usb/gadget/legacy/zero.c
-> @@ -147,6 +147,12 @@ static struct usb_gadget_strings *dev_strings[] = {
->  	NULL,
->  };
->
-> +static struct usb_function *func_lb;
-> +static struct usb_function_instance *func_inst_lb;
-> +
-> +static struct usb_function *func_ss;
-> +static struct usb_function_instance *func_inst_ss;
-> +
->  /*-------------------------------------------------------------------------*/
->
->  static struct timer_list	autoresume_timer;
-> @@ -156,6 +162,7 @@ static void zero_autoresume(struct timer_list *unused)
->  {
->  	struct usb_composite_dev	*cdev = autoresume_cdev;
->  	struct usb_gadget		*g = cdev->gadget;
-> +	int				status;
->
->  	/* unconfigured devices can't issue wakeups */
->  	if (!cdev->config)
-> @@ -165,10 +172,18 @@ static void zero_autoresume(struct timer_list *unused)
->  	 * more significant than just a timer firing; likely
->  	 * because of some direct user request.
->  	 */
-> -	if (g->speed != USB_SPEED_UNKNOWN) {
-> -		int status = usb_gadget_wakeup(g);
-> -		INFO(cdev, "%s --> %d\n", __func__, status);
-> +	if (g->speed == USB_SPEED_UNKNOWN)
-> +		return;
-> +
-> +	if (g->speed >= USB_SPEED_SUPER) {
-> +		if (loopdefault)
-> +			status = usb_func_wakeup(func_lb);
-> +		else
-> +			status = usb_func_wakeup(func_ss);
-> +	} else {
-> +		status = usb_gadget_wakeup(g);
+> V1 -> V2: fix it in usbip
+> 
+>  drivers/usb/usbip/vhci_hcd.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+> index e70fba9f55d6..eb6de7e8ea7b 100644
+> --- a/drivers/usb/usbip/vhci_hcd.c
+> +++ b/drivers/usb/usbip/vhci_hcd.c
+> @@ -809,15 +809,15 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+>  no_need_xmit:
+>  	usb_hcd_unlink_urb_from_ep(hcd, urb);
+>  no_need_unlink:
+> -	spin_unlock_irqrestore(&vhci->lock, flags);
+>  	if (!ret) {
+>  		/* usb_hcd_giveback_urb() should be called with
+>  		 * irqs disabled
+>  		 */
+> -		local_irq_disable();
+> +		spin_unlock(&vhci->lock);
+>  		usb_hcd_giveback_urb(hcd, urb, urb->status);
+> -		local_irq_enable();
+> +		spin_lock(&vhci->lock);
 >  	}
-> +	INFO(cdev, "%s --> %d\n", __func__, status);
+> +	spin_unlock_irqrestore(&vhci->lock, flags);
+>  	return ret;
 >  }
->
->  static void zero_suspend(struct usb_composite_dev *cdev)
-> @@ -206,9 +221,6 @@ static struct usb_configuration loopback_driver = {
->  	/* .iConfiguration = DYNAMIC */
->  };
->
-> -static struct usb_function *func_ss;
-> -static struct usb_function_instance *func_inst_ss;
-> -
->  static int ss_config_setup(struct usb_configuration *c,
->  		const struct usb_ctrlrequest *ctrl)
->  {
-> @@ -248,9 +260,6 @@ module_param_named(isoc_maxburst, gzero_options.isoc_maxburst, uint,
->  		S_IRUGO|S_IWUSR);
->  MODULE_PARM_DESC(isoc_maxburst, "0 - 15 (ss only)");
->
-> -static struct usb_function *func_lb;
-> -static struct usb_function_instance *func_inst_lb;
-> -
->  module_param_named(qlen, gzero_options.qlen, uint, S_IRUGO|S_IWUSR);
->  MODULE_PARM_DESC(qlen, "depth of loopback queue");
->
-> --
-> 2.34.1
->
+
+This looks right to me; it's the same pattern that the other host 
+controller drivers use.  However, the final decision is up to the usbip 
+maintainers.
+
+Also, there are several other places in the usbip drivers where 
+usb_hcd_giveback_urb() gets called; shouldn't they all be changed to 
+follow this pattern?
+
+Alan Stern
 
