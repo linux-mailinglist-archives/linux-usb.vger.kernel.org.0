@@ -1,153 +1,178 @@
-Return-Path: <linux-usb+bounces-28130-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28131-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02C3DB58B57
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 03:42:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E218BB58BA7
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 04:04:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 671EB1B27AE9
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 01:42:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A7B2480FA6
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Sep 2025 02:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60CEB22127D;
-	Tue, 16 Sep 2025 01:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA272208994;
+	Tue, 16 Sep 2025 02:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b="ckVUvVbD"
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="qjuek8yx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11022123.outbound.protection.outlook.com [52.101.126.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8818421E091;
-	Tue, 16 Sep 2025 01:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757986921; cv=none; b=PTf7TDiL0qI54L05CxYB3EHXI9KGOePArOK4fGrSgZRHRkFG8/2cRimNS9Vv0ET3k8w/xv5MI/QJW6MT/PwKqYr2TNRiuIEg/5w5MEaQugecHw05w0kz9svS/FSMGYKSawXNn5J3VxkR7o5t2u2OcqYSxAwjDMoQgg+xRmn8LN4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757986921; c=relaxed/simple;
-	bh=/NPj9Ibu/YPqLUGYduS8ZQ+yboz39j3GCC9JfG/uqU8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xo/RROuQJNxKtlB8kzmNC0nhLsc6l0aZ74JY7Rd45wYs7azVgNlP+5Luubd+9lLyAXuHzeCmV3IkdzUN5kPR3CcWDTMOoADrZNCE5cSae4JBTT9pV2WEwPItgLby2M+qxIs6Hyo65pHhZ+sHuCfyJN1Bjrw8ADuia1L9BinewbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b=ckVUvVbD; arc=none smtp.client-ip=205.220.166.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 58G1Qt2f2132534;
-	Mon, 15 Sep 2025 18:41:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	PPS06212021; bh=uS5bE8x+pR5Prss8iPbMqoOog2KOIzRW5TEeu+WHybI=; b=
-	ckVUvVbDPL+bypnY8+3HhViyZ1xjjWjhZOfiLmIpFM1S76S7WiCm6puFick67qtI
-	1jlQ6weO1g6e+RxEvCL/8gE2rhLy01BVCPHK7Yyj6Wjsz2Z1VvxF7aCQJZ3mBL+Z
-	BC3e/Wa+gW9y/8CWUiAo3RJx40ItGH55+ASsTF5YC8Q5TxcS48bzJHzisYC7+kIF
-	KzxzVKN9yvooZJRwXAlVvu7yKuRAg9+h7hbcloH7jAOm5wp6yLqTdT8ACSgcgNdj
-	rc1hXEUrGck+pyVCy9arCzcXWI1iWSuWbQjQdacgYKLoc7Z2bAxIrXpFczZ9oTTy
-	KMPPxUOdjBXRU6LMMH9puA==
-Received: from ala-exchng01.corp.ad.wrs.com ([128.224.246.36])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 4953w2anby-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 15 Sep 2025 18:41:46 -0700 (PDT)
-Received: from ALA-EXCHNG02.corp.ad.wrs.com (10.11.224.122) by
- ala-exchng01.corp.ad.wrs.com (10.11.224.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Mon, 15 Sep 2025 18:41:45 -0700
-Received: from pek-lpd-ccm6.wrs.com (10.11.232.110) by
- ALA-EXCHNG02.corp.ad.wrs.com (10.11.224.122) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Mon, 15 Sep 2025 18:41:44 -0700
-From: Lizhi Xu <lizhi.xu@windriver.com>
-To: <stern@rowland.harvard.edu>
-CC: <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <lizhi.xu@windriver.com>,
-        <syzbot+205ef33a3b636b4181fb@syzkaller.appspotmail.com>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: [PATCH V2] usbip: Fix locking bug in RT-enabled kernels
-Date: Tue, 16 Sep 2025 09:41:43 +0800
-Message-ID: <20250916014143.1439759-1-lizhi.xu@windriver.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <4f7805f7-805a-4678-8844-c38a97650dda@rowland.harvard.edu>
-References: <4f7805f7-805a-4678-8844-c38a97650dda@rowland.harvard.edu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56041367;
+	Tue, 16 Sep 2025 02:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.123
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757988267; cv=fail; b=CLtYEWWh59M+UeboojJBEjhlkqpK0UncTTQwFIv2INmfO/CrU3bnY0KW66VfcFKaBSBQ9pNoz/OpQ7psv203IBtBfd/EclNRxdCNF+5o6WhOXgUZgAh2tMbE1XlMf3ecoM7lTKxXVQ4I2rGs7s2EJTLK2Q2d51wORZ8lhnvQAbg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757988267; c=relaxed/simple;
+	bh=ps4uTmMjDs9NITxgBkpwD01Y+o7lfN0Ub6Ht0xF4JeY=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=dbTbu9MmtzrdEzTawJCNTSWMEYaezQ0PKmDoA1g99OQd2GqSpzeQfI409Bn8OhkhAO+zLsGFa3Dzw3DcipKI+psTiWrdyJtdTyYRDH5RmA/OHlnqzlujdsO3kvjo7joSWXeN7GUmIcNTlfjLdqqRt9IMZ/Tlg0dtoLTP5HZSynQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=qjuek8yx; arc=fail smtp.client-ip=52.101.126.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oW30yu6lifxsQ46eUPCB317uH97seRDQt/MM31DbQoVsAEM4wh87eS/sfFDGpxdVX2GzGJ6e1kzKbTqVQWIGV31JkfmwUDdd9pGRyYN6TVbpX6zrfBHe06MYmhZWsSaeJoipSfrccHPzl3ZyBVD22EJkViE45SVseJe3tlVto+7pM/o8TVusOyULtvUEJAKLOtRf5lRZ0TsWGT8JNkAEuNe1DZbG0xswf70nKhqYey2cw4I15W3OFyrJtEYCQ/0Iy70Cyo84UvrGejra9hV/HBIuemOb9jRBoUo9QRv2zKxDkJV4I/EPwkldDfDXfZkiGX9lC89q+nqMvpyAr/rZKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8/O3jMUaKXiDlqJpHuvY4zPzKmtckjADwp5DUqbHZiw=;
+ b=tDVP1CtQ8iamaqYTzG29T5+ywAA6EkEu8sXClZ+qpeIsM3mZJjvIbnCWVLdGIaYWCHBNtM2qVmfHsKbu9f38mRMDsinEw5xFoVh4jQXUH4Nzd+mDFPL92fQTuuF9pBwzGXDGk6f5O85QGV1gX88/ouEvq+zbOurxMNX76CbEqlKFtW9WeFW0bBxkaRsGFVX8zAAyubLk5PVWGKdgUumodTvwbvX1qLuOg7lQyvi/lt15WhHAnuXVcDiGSpx++BB2ijgeHSJyJ1D5sPD6OlM1ERq8dv/0u9CWDtSeLt2f6nZg4eZCluoKsivR0sSs0DkGOmkEtLfCCOs27WHtYFH80Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8/O3jMUaKXiDlqJpHuvY4zPzKmtckjADwp5DUqbHZiw=;
+ b=qjuek8yxBdW9LIWTW4P0O2F44ltKxVQ+4l7trRHHvcUc0moN0VtZhCVAzoAch+C44tnwuIBqusgWeJ1IpE1V+819TPPU5ZE/DUOCHwg9ketsb/tQXkZt91VYgmvZ/HB70tOO+oBxX6dm92GvKra+Q9dvYGlhX5Af5nDU6Ap57k7Bqs+VmOrA3a5btKZ5jLM5g2POpUcF0VT2JCxvoTxFIS0qbyHz2E1H46UG1rstGhukYSziGdUYqdH3tyKNC6hEFvtVevRi9DxvDmo/CCqEKs1Ci0j/ufMNBqVvvqzsdUcGz2SzT/WHbQDVN9BYwzVN4F2m6ngKhyD1ivYDNdYkjQ==
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com (2603:1096:604:2b1::11)
+ by TYZPR06MB6328.apcprd06.prod.outlook.com (2603:1096:400:363::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.22; Tue, 16 Sep
+ 2025 02:04:20 +0000
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11]) by OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11%6]) with mapi id 15.20.9115.018; Tue, 16 Sep 2025
+ 02:04:20 +0000
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+To: Conor Dooley <conor@kernel.org>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, Philipp Zabel
+	<p.zabel@pengutronix.de>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 3/4] dt-bindings: usb: uhci: Add Aspeed AST2700 compatible
+Thread-Topic: [PATCH 3/4] dt-bindings: usb: uhci: Add Aspeed AST2700
+ compatible
+Thread-Index: AQHcJhPiKmhtXybkdUGOA1Z2FmFS6bSUggUAgACOBYA=
+Date: Tue, 16 Sep 2025 02:04:20 +0000
+Message-ID:
+ <OS8PR06MB7541EEFF4F1F9BA788F2BF13F214A@OS8PR06MB7541.apcprd06.prod.outlook.com>
+References: <20250915073926.3057368-1-ryan_chen@aspeedtech.com>
+ <20250915073926.3057368-4-ryan_chen@aspeedtech.com>
+ <20250915-whoopee-badass-a748ee552ae0@spud>
+In-Reply-To: <20250915-whoopee-badass-a748ee552ae0@spud>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS8PR06MB7541:EE_|TYZPR06MB6328:EE_
+x-ms-office365-filtering-correlation-id: ec92c092-8208-4a0b-2841-08ddf4c559b9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|7416014|376014|366016|38070700021;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?Kzrhto681mI01fhs4ScVF6yl72bU6dayIq5EEpT5gFAP5cDsvjE7SzPX1bEK?=
+ =?us-ascii?Q?DqriJ84fyi/mdq8JY+oPPJmjpLXK64UxhiVyREipRWDWx8G0DEQxwWci5fnc?=
+ =?us-ascii?Q?T/wbICLtcMpY+AiBLU4/4I1GNxmx0RomAxVEEP8NXRkDtV8fOxUxbuyJzjXP?=
+ =?us-ascii?Q?S4e3FqWmxof67gpEMyU8CHKDo1lD/4Q0wkpI1EMB/91n9VI8bTQ4FYJa/Osy?=
+ =?us-ascii?Q?h/KxCZY9pZLkNfOoZ7qOpOTGZ4FN5EzGDJB5vvgd1gFYd+vg4O1NcLHfRon8?=
+ =?us-ascii?Q?2qQ5+oVdWbPOuplOiJ4FMfH9mGw3kxr3/pHrB9i+B59vvqK81c3gsbztMeBE?=
+ =?us-ascii?Q?ynk2+OlSFun8rXmbR4v3AJNFEchUTje8OI9gFUMqRgCEtU0utcwwbyIPYpYG?=
+ =?us-ascii?Q?AHXFhfJke6V3a0BVsf0/iWaXwFNGqHWQ+fzPwAMILDKHy9NU0QiDBvwMTM6B?=
+ =?us-ascii?Q?7wesl4c9mqeKis1tcIFnGMHuaYxL75x8OUq64NGBsbkscc5xmaPErlOLsRo1?=
+ =?us-ascii?Q?CwkbhHuXNkya1WFPj606W5KrQDEb50oYjXtVwYBvv5eM7sxV5Ll5E2wc0mem?=
+ =?us-ascii?Q?4YGr9ulUDflY/Mf2jGYSAABE2u5YxcMKCFVjodyavTpNjNbpVmd67YVtKYum?=
+ =?us-ascii?Q?s6mkHS1TQp08+6K9dtq3OVljdflya4AYjpJsok6xZ3wuxuOI4BsRFTxDJUXM?=
+ =?us-ascii?Q?2tJ+oPn2dSCHMxxfhguPSSLLFI1YY0rvanMlAB3y6qok/RyxSharTWh1RAaf?=
+ =?us-ascii?Q?T8c9ERwCHrOf/poOcbq1ewbUmZS5kuNwbtU65LOqPuJXkpOjRyrSmav+pM/w?=
+ =?us-ascii?Q?XifEIEyJ0djVGKXYy7sxus+31F6NPVQdKtB9eTbx+U4LVFJylSw8OOjp3bUO?=
+ =?us-ascii?Q?2zQIeu7Q/0AVVl+iRIKUe1s690yyhhYsHcqtNoD9z2466/HQ8d/dNHwwZQTc?=
+ =?us-ascii?Q?BobTtWwwNrVqOj3iRaOlgRwLnO6jJ2QH4v2vyfSLKE48aV9VjLbizvgNvfVO?=
+ =?us-ascii?Q?T7Ns70R7oevgbgq9y896UcVBtYUfPtlvmKpFKAI/oLLViU+t8BHgpzgzjCdt?=
+ =?us-ascii?Q?5HIIXmT3ZT1MdlCy08FbpGqhbfp0TG5cp8stc4/ZT7JmTWDmwIx0by3xlTCP?=
+ =?us-ascii?Q?M5AUQrngcunyT7XR7xwJN2WMlIEVxou9hR70N3q4Xwsf1n0uO5uU/WnyNZAt?=
+ =?us-ascii?Q?1PNje3lxjLAKZcbjjzQvXGxxtpHeq6XO+kWIdwpdoz8SR3jCXrvaPCSL+jXe?=
+ =?us-ascii?Q?4g7fkus7ybD8oK8M/NEkddOoaqUejcQIXzxxjygLDmvu8eqmlXzK/n45v+9i?=
+ =?us-ascii?Q?zGxqegFkwj8exMICPVIs8lmyTSuuxrPWsPQjSLV2Ha4LBVwbXjY8HH31LvQi?=
+ =?us-ascii?Q?z0D6qCM7t3CFZzfAHR2lGKCKaRLLxJH6GtPqc+UuLrAX+kCD6de93V7DG/44?=
+ =?us-ascii?Q?J+Wd2hirVuA=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7541.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(38070700021);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?cjYQ8XPKz6nLue3U4C368i5HTc3CwrdrwwuTwLoMitem/Qj5Uu+ZALvJVrWN?=
+ =?us-ascii?Q?WTK76suNChmjG/U9XXMDkC7EbZj4t7u2B8w8dGHTLIOz2sc1WSPRdbZSfg3Z?=
+ =?us-ascii?Q?49yrPD+B9HBWkVvrWAyRfVtvr+VJ6OIyRrZQ8odDP6dEdBvMn0cZUYu6g6ao?=
+ =?us-ascii?Q?ppk5tbESSRzK72OlC9aZgfin6wfomZo9ZqoixlHPrs1+yMziJ1AI4T3MvF1n?=
+ =?us-ascii?Q?JozL4Qf6jO5IhcgJaEmCUpUl5Ft8FJx7/4p1hnVCeOxuX1kKMUwMX6nYQuEk?=
+ =?us-ascii?Q?hvKvviwtrycu1QRm8q6WT8QNn7FcfgffpBKel//wvz6UkG4x+NXV/u8aoCXt?=
+ =?us-ascii?Q?52c/2I95I6ZTPuOdQLKtnV1vCxOW/Zy12KWiXRL6Qk/1MxBJTbfUpcTDINb5?=
+ =?us-ascii?Q?nQkB4WpCqXHcCUgNoB8uQZ3cmObP3NOM3rBheuOnw3RBz84bdOZiYwBE9q2Z?=
+ =?us-ascii?Q?NRoWyMMGzqrook7GOKJRGqWWf4BgIHIq/Oq8X1rEl6bmC6vfJzJdioto3h8V?=
+ =?us-ascii?Q?4iTsig2uosczKEA6mD1Q4y/rVy6ewKw9+0a4zu2LoHJD1bZTmeTD/XIf6WjA?=
+ =?us-ascii?Q?8BMcgnNEm/iKINYLni4Ly9FR+7mBJP6dyonM4gpL/rDcU/VMfRKmDXPFgQfa?=
+ =?us-ascii?Q?tNW2vVnZ2bGc9reORLXSSjWm/GGxKawHL1L7wwdYuibvKxMzAHKhcjN9zCSs?=
+ =?us-ascii?Q?uTf/Ej0+UotkPc32RpTkjZ7sIATjTqoK/IKa/tOdOs7P/2M6Etz0eTOI7Oa/?=
+ =?us-ascii?Q?qaTI4TiL3gLoux+mnu5df1Bx0G2d2n5SzM8kcTH/q4wd1d2y5j8iWyq7bwB4?=
+ =?us-ascii?Q?CaeGc+PbcYYL/XK4GMmpYBdPlG0Da2mFm66fCANBaW9B2KOGUkKqG6VFHDbq?=
+ =?us-ascii?Q?oSC8t3TTyvYy+MFawA/Mzb1aNOZ6/KmcYz686jDSvPXy7ifxRYsD3cmJhfKa?=
+ =?us-ascii?Q?6au4zVBZVyXUA0z80929L7QfwShxgYf0O/eE75CBIeEPoUlygwfLMjTQDjSL?=
+ =?us-ascii?Q?iVf/c4nZz9KU7Nzl5ZcawJQ4yW/87tx04CS2m4nLEOYKg9T/hK3Za4zoMhqq?=
+ =?us-ascii?Q?r6sYHNzcmAt/0l5PgMfk8pCxpsrma7PYxhkc5vDgwYTGuyK8pbTwcPZ53PJy?=
+ =?us-ascii?Q?OiNepz9X8TZky6jJXbv3b+5H5rtvq1211Re3xLMBZgNDpDvyA//uVRJOyXQw?=
+ =?us-ascii?Q?uqu5UJBdKG5Umt7M2HuKYmOXrZ6kvXV89LOpuzb72adY+T7IcrPEdzljTpBM?=
+ =?us-ascii?Q?4xf1+shUznO/CYy77SCFI+8sY/Ohm1dycrbwrsDNxETdQtqCkKe1BMXN30sS?=
+ =?us-ascii?Q?3yQOvrjPWcjy5Q9A3SgKiO2aN/95EXKuUWGaXuuFSsVFFzi3rv0afK9BHG+r?=
+ =?us-ascii?Q?q9bLwSpoi13EW0us/FoEQkwZXl+wZG58q0DmPo2zY2GdwvyzQqykbYQYIYFw?=
+ =?us-ascii?Q?sNFvvgq14HAQ3cdBmmiwxxFMURmhE1/7zVR10cvu0VzOX5nQfhHZciJMSXCI?=
+ =?us-ascii?Q?UCio3GA4m6FTucQw7jWFyrdPrxUMYyR+JyVgz/XkuWXUIFt0lElNjHePWakS?=
+ =?us-ascii?Q?kLG8S//UNkYtEYdh/vmdSgSx+zuV69WnLgGrJsUF?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: xibJtnXIw66-bGH7dp6QEJphXQmeAh5H
-X-Proofpoint-ORIG-GUID: xibJtnXIw66-bGH7dp6QEJphXQmeAh5H
-X-Authority-Analysis: v=2.4 cv=PuaTbxM3 c=1 sm=1 tr=0 ts=68c8c05a cx=c_pps
- a=AbJuCvi4Y3V6hpbCNWx0WA==:117 a=AbJuCvi4Y3V6hpbCNWx0WA==:17
- a=yJojWOMRYYMA:10 a=edf1wS77AAAA:8 a=hSkVLCK3AAAA:8 a=t7CeM3EgAAAA:8
- a=dz-7SrBNJNoZnK-ZadwA:9 a=DcSpbTIhAlouE1Uv7lRv:22 a=cQPPKAXgyycSBL8etih5:22
- a=FdTzh2GWekK77mhwV6Dw:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDAxMyBTYWx0ZWRfXxR6UQM/DQLzc
- a7YfW+waQOG5LsT9h8G4dbIdZG4gPiPNOxjYoFTnJzjhJMS6+Jav7TZPXZQkjokRQvnaLqcETbp
- 8hKzA4bXN/Bva8mCuWs2VMrt7LiP7re9NM1ledNteUjN1wVh1C0mQJ62ku27shB/NfmlYdQT/1f
- /dKv6/JyvVHg2Vq9lKh6BuaI0a3b5KBZg/y95cd2PbbSdqfmXFagO+6oOIvz6J8f0gAjo1rCpxG
- yaKSeuBnHOpSVh+nIgGo9FCbSX/0P6AhXIiiZ8N9w2IbKGfTJnzwquugvq+mOcr1sbVATnVqVgy
- QHxn0L7UsEjYS07mLGxk39R/tnQxiJ4mmHFo8heoB1UQo1ArWLCBtX/+VXnGDY=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-16_01,2025-09-12_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 priorityscore=1501 spamscore=0 clxscore=1011
- phishscore=0 impostorscore=0 malwarescore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2507300000 definitions=firstrun
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7541.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec92c092-8208-4a0b-2841-08ddf4c559b9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2025 02:04:20.7443
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G10VbzW5Qk5z1zpicSllu3zQKf9CTEMMO1iFRcDWjUVWXm5J8lqUcseZiWBrNCtsBp16m0kJCDfHR7meny39kxR7Sm7tBLDmVJRa9LNqoSE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6328
 
-Interrupts are disabled before entering usb_hcd_giveback_urb().
-A spinlock_t becomes a sleeping lock on PREEMPT_RT, so it cannot be
-acquired with disabled interrupts.
+> Subject: Re: [PATCH 3/4] dt-bindings: usb: uhci: Add Aspeed AST2700
+> compatible
+Hello Conor,
+	I will add resets required in this patch at next send patch, is this ok fo=
+r you?
+https://lore.kernel.org/all/OS8PR06MB75419B97CDB5EA24560FB9ECF214A@OS8PR06M=
+B7541.apcprd06.prod.outlook.com/
 
-Save the interrupt status and restore it after usb_hcd_giveback_urb().
-
-syz reported:
-BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
-Call Trace:
- dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
- rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
- spin_lock include/linux/spinlock_rt.h:44 [inline]
- mon_bus_complete drivers/usb/mon/mon_main.c:134 [inline]
- mon_complete+0x5c/0x200 drivers/usb/mon/mon_main.c:147
- usbmon_urb_complete include/linux/usb/hcd.h:738 [inline]
- __usb_hcd_giveback_urb+0x254/0x5e0 drivers/usb/core/hcd.c:1647
- vhci_urb_enqueue+0xb4f/0xe70 drivers/usb/usbip/vhci_hcd.c:818
-
-Reported-by: syzbot+205ef33a3b636b4181fb@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=205ef33a3b636b4181fb
-Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
----
-V1 -> V2: fix it in usbip
-
- drivers/usb/usbip/vhci_hcd.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index e70fba9f55d6..eb6de7e8ea7b 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -809,15 +809,15 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- no_need_xmit:
- 	usb_hcd_unlink_urb_from_ep(hcd, urb);
- no_need_unlink:
--	spin_unlock_irqrestore(&vhci->lock, flags);
- 	if (!ret) {
- 		/* usb_hcd_giveback_urb() should be called with
- 		 * irqs disabled
- 		 */
--		local_irq_disable();
-+		spin_unlock(&vhci->lock);
- 		usb_hcd_giveback_urb(hcd, urb, urb->status);
--		local_irq_enable();
-+		spin_lock(&vhci->lock);
- 	}
-+	spin_unlock_irqrestore(&vhci->lock, flags);
- 	return ret;
- }
- 
--- 
-2.43.0
-
+>=20
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
