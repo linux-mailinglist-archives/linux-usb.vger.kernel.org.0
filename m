@@ -1,122 +1,139 @@
-Return-Path: <linux-usb+bounces-28213-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28214-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55C86B7E8A8
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:52:41 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F37DB7EDD7
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 15:04:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C9517BAA69
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 12:50:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EC0554E292A
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 13:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3783435CED0;
-	Wed, 17 Sep 2025 12:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82A0032E749;
+	Wed, 17 Sep 2025 12:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZjVDeEFG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fhwgoSBf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54F136D;
-	Wed, 17 Sep 2025 12:50:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8068031A802
+	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 12:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758113421; cv=none; b=oo0NyS3TqthjCD0M9KAaf0xCSPInu9/XG/JEPwj6VQqbGB+WK5VSCZqqrZUSnAc84cppbf9ZB2Ou90oJWDnkJ0Dzj/w9aj2PuQ+v118wGrHmeAuVDwWHa8t6a57CGuCWYYZmM32UBj98ZIFgCYUmn9QeEVDurWa7y6edhzNae2E=
+	t=1758113946; cv=none; b=YrKtGoCHVTRNFjD/4GZKk86BQ1gMBEtykM7DViq8gqrVWntCgKCdE5lt31gKn1bFAyS7vgbK4CxQy1lClSwWnyvE9cVAAWBMxVs3rbp5QFUAR04B9R/RGYIB99/A8A38KjrB99SGxXMUixRxEwfjZcQJSLL41S990zIlyMhIQeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758113421; c=relaxed/simple;
-	bh=KRsBp9Gi04Q8OS7/4OHYDrvltmfbgN/visXkqBJSvf8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A9OgpcIduZvNzHpkDn5FvGj0UPpeYegSwSrEF1byC9L3Ge3NM3xgBVpSIAnO9h+CdY/23+hIUVCys5jfSlRNNq0eCzrzYGPVxBoT14DLdTj2Da2NklVizpERxOU0+iWIXBL5e28So8R2hs7tNv+VP4yQmUNPP8pSOnxqVTEUfM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZjVDeEFG; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1758113946; c=relaxed/simple;
+	bh=RQ+ZOLQQaZ+f1lIWRHshp1FsRA6OMG6A2uxA8cwXYLY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bTF5DM2z66RsMabQg1sB/NM2q43/lEyjyOflAvJ4LLC/dxn975gVMKdF6FwYpQWhIZF6RnaxSZ2H1ByDH/FtdGP29FIaBndaqZrlcQxoYOtAKGmvvXgpFRxiKCSGb27qG/cT6v0NvOKrkL+61eS7clt0KsPtothsuZoIEr8plY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fhwgoSBf; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758113420; x=1789649420;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=KRsBp9Gi04Q8OS7/4OHYDrvltmfbgN/visXkqBJSvf8=;
-  b=ZjVDeEFGgW523xJn3ObPGTZ2sPSvFzQdH9C4qS1lUHmoVBQNOfvdwuQU
-   gL7hquRYFT6rMPDbD/dfbwTBuoWS73bW5DuXN2DmRIM9h8IYCUtlO0k6N
-   2Y+ZnsTkDnpvAXfBar3G/ejIEzOC2QeBRg/Mmcn43SqiqjdlATdmcE/6m
-   VczFxMm9Y7A7wc8zDSYQu7zypsEUKdjPrAlIXRz9ohOA3w55MpeAN3sJ6
-   vJG5fI/inC4mTpRpF1s6GdD6ftU1sUwiUpg0feYqJ548EkPecgU3WP+RA
-   Km92A/HvUO2SOQ13OczSp+lT94E0E3dSxHfhvLBILbExOpawl9wUnyckk
-   A==;
-X-CSE-ConnectionGUID: l/Q5DomcRS+sYnO1SPvhPg==
-X-CSE-MsgGUID: OWXMX+KZT7mkJpX5OD3I1w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="60526906"
+  t=1758113944; x=1789649944;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RQ+ZOLQQaZ+f1lIWRHshp1FsRA6OMG6A2uxA8cwXYLY=;
+  b=fhwgoSBfGX3I4e5IdObRh0vyuDS+HxHPJz/TkLLr2+Baz/jCnROZ2Ntb
+   jwfGR1KLkXJHWoej3q67WZshuAM69VYhDlGNLafCVWh3IBIOGbo9UvZFW
+   j+qf6R2ni/2C4eusla+2ODu6qe+t/XCh4vucYmlfAWW613eQltv3gidQ/
+   9BlU6yNp0QPFiBj73RBzTYkyU+6Xerc8bZqm0KcOdWrrvBQOtS6j+1NND
+   DboohNLzBATv2zP/58SZTUUi2FsrJaQ28gAuDvjajobkIpJveEVIxEqYE
+   NyhK0RreWH3/5p13kNhOBJp/fyONyUmq2UmxL+AWwyBAWWy8ItLjkUgG3
+   Q==;
+X-CSE-ConnectionGUID: wMsjUEMISZqb/cxWITHddQ==
+X-CSE-MsgGUID: NlauAlUvTMe4h4DiNhwrfw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="60484583"
 X-IronPort-AV: E=Sophos;i="6.18,272,1751266800"; 
-   d="scan'208";a="60526906"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 05:50:19 -0700
-X-CSE-ConnectionGUID: vqszKZX8TyGvI5PixBBnPw==
-X-CSE-MsgGUID: 0ptKBxAnRo2FKLRRpfIsrg==
+   d="scan'208";a="60484583"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 05:59:04 -0700
+X-CSE-ConnectionGUID: 7crLX5ytRQaD2N+H/uJSYw==
+X-CSE-MsgGUID: GxA8jB6XS7SPtAd5s4H2fA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,272,1751266800"; 
-   d="scan'208";a="198924930"
+   d="scan'208";a="175159040"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa002.fm.intel.com with ESMTP; 17 Sep 2025 05:50:18 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 076FA98; Wed, 17 Sep 2025 14:50:17 +0200 (CEST)
-Date: Wed, 17 Sep 2025 14:50:17 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: =?utf-8?B?5p2O5L2z5oCh?= <lijiayi@kylinos.cn>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH RFC] thunderbolt: Re-add DP resources on resume
-Message-ID: <20250917125017.GI2912318@black.igk.intel.com>
-References: <20250917082456.1790252-1-lijiayi@kylinos.cn>
- <0540df54-efd6-4b79-90f9-ec305e1f5f7e@kylinos.cn>
+  by fmviesa006.fm.intel.com with ESMTP; 17 Sep 2025 05:59:02 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1058)
+	id 7429597; Wed, 17 Sep 2025 14:59:01 +0200 (CEST)
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
+To: mathias.nyman@linux.intel.com
+Cc: linux-usb@vger.kernel.org,
+	peter.chen@kernel.org,
+	Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: [PATCH v2 0/8] usb: xhci: Port Register Set improvements
+Date: Wed, 17 Sep 2025 14:58:41 +0200
+Message-ID: <20250917125850.3380560-1-niklas.neronin@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0540df54-efd6-4b79-90f9-ec305e1f5f7e@kylinos.cn>
 
-On Wed, Sep 17, 2025 at 06:12:31PM +0800, 李佳怡 wrote:
-> 
-> As requested, I've attached the complete dmesg output (from boot to after
-> resume) reproducing the issue.
-> 
-> Testing Methodology:
-> 1. Start with the Targus Thunderbolt dock already connected to the system
-> 2. Enter S3 suspend (sleep) with no DP monitor connected to the dock
-> 3. Resume from S3
-> 4. After the system has fully resumed, connect the DP monitor to the dock
+The aim of this patch set is to introduce tracing for PORTSC writes and 
+implement a Port Register Set struct. This is the first part in a larger
+series of changes.
 
-Thanks! It is badly line wrapped. I wonder if you can just attach it?
-Anyways I found some unexpected things there:
+Introduces a new struct for the Host Controller USB Port Register Set.
+The current implementation accesses these registers through a single
+'__le32' pointer, which, in conjunction with a macro, navigates to the
+specific register using (base address + offset).
 
-> [    8.647850] With USB4 patch v1.0.0
+ Currently, how its accessed	| Register Name
+--------------------------------------------------------------------------
+ port->addr			| Port Status and Control
+ port->addr + PORTPMSC		| Port Power Management Status and Control
+ port->addr + PORTLI		| Port Link Info
+ port->addr + PORTHLPMC		| Port Hardware LPM Control
 
-What is this? ;-)
+ After, how its accessed	| Register Name
+--------------------------------------------------------------------------
+ port->port_reg->portsc		| Port Status and Control
+ port->port_reg->portpmsc	| Port Power Management Status and Control
+ port->port_reg->portli		| Port Link Info
+ port->port_reg->porthlmpc	| Port Hardware LPM Control
 
-> [    8.647860] ACPI: bus type thunderbolt registered
-> [    8.664660] [7] nhi_probe:1326: thunderbolt 0000:2c:00.0: total paths: 21
-> [    8.665209] [7] tb_ring_alloc:586: thunderbolt 0000:2c:00.0: allocating
-> TX ring 0 of size 10
-> [    8.665243] [7] tb_ring_alloc:586: thunderbolt 0000:2c:00.0: allocating
-> RX ring 0 of size 10
-> [    8.665267] [7] tb_ctl_alloc:665: thunderbolt 0000:2c:00.0: control
-> channel created
-> [    8.665272] [7] icm_probe:2549: thunderbolt 0000:2c:00.0: ICM not
-> supported on this controller
-> [    8.665285] [7] tb_ring_free:840: thunderbolt 0000:2c:00.0: freeing RX
-> ring 0
-> [    8.665294] [7] tb_ring_free:840: thunderbolt 0000:2c:00.0: freeing TX
-> ring 0
+These changes make it easier for future modification and their review.
 
-What is this?
+Note:
+I have chosen to split the struct changes across three separate commits
+due to the substantial number of modified lines. Personally, I find that
+minor typos are more likely to occur when dealing with larger patches.
+However, I am open to consolidating these patches into a single commit
+after review.
 
-Is this Intel TB/USB4 controller or something else? All USB4 compliant
-controllers should go directly to tb.c as that's the part dealing with
-software connection manager. The above looks like it tries first with the
-firmware connection manager and that should not happen outside of Intel
-Thunderbolt 3 hosts.
+v2 changes:
+ * Fix acronym spelling to PORTSC from PORTCS, in all commit messages.
+ * Add patch introducing xhci_get_portsc().
+
+Niklas Neronin (8):
+  usb: xhci: correct indentation for PORTSC tracing function
+  usb: xhci: align PORTSC trace with one-based port numbering
+  usb: xhci: improve xhci_decode_portsc()
+  usb: xhci: add tracing for PORTSC register writes
+  usb: xhci: add PORTSC read function
+  usb: xhci: add USB Port Register Set struct
+  usb: xhci: implement USB Port Register Set struct
+  usb: xhci: rename Port Register Set pointer in struct 'xhci_port'
+
+ drivers/usb/host/xhci-debugfs.c |   6 +-
+ drivers/usb/host/xhci-hub.c     | 115 ++++++++++++++++----------------
+ drivers/usb/host/xhci-mem.c     |   3 +-
+ drivers/usb/host/xhci-pci.c     |   4 +-
+ drivers/usb/host/xhci-ring.c    |   2 +-
+ drivers/usb/host/xhci-tegra.c   |  12 ++--
+ drivers/usb/host/xhci-trace.h   |  39 ++++++-----
+ drivers/usb/host/xhci.c         |  46 ++++++++-----
+ drivers/usb/host/xhci.h         |  95 +++++++++++++-------------
+ 9 files changed, 167 insertions(+), 155 deletions(-)
+
+-- 
+2.50.1
+
 
