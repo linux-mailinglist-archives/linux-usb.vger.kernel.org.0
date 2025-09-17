@@ -1,83 +1,88 @@
-Return-Path: <linux-usb+bounces-28235-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28236-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31D16B81673
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 20:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE716B81A60
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 21:32:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3EA31C26CE4
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 18:58:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8793B189720F
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 19:33:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9B4C30149C;
-	Wed, 17 Sep 2025 18:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76A22FF66E;
+	Wed, 17 Sep 2025 19:32:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kfVN5yUk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1A518D656;
-	Wed, 17 Sep 2025 18:58:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6289E2DAFCA;
+	Wed, 17 Sep 2025 19:32:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758135509; cv=none; b=XM4J2JizVMGOb8/y3y2UCWxbnnDwYrYlwftO4Tq6gSzGy1TCigfjtIk3XJKdwJqv6KX6FUVBqMxTQ3OjaH5N68/YVarIwCt3HmlRTuQgJ39laejPm0vRVINIrZhBt8iKv0V3C/se/C3QQqD8yk4WRD3oklYOTSToRldga5PqMB8=
+	t=1758137560; cv=none; b=Ct4rb2cbSxLZYRkyF3zW0hAmrWs9iXPscDdU4ox9sfplKWgPkTJeDxr8KBriUKLiu0z2HzNJvpU7BkXQ6X0/l+YaM2KfWXj4t3H4oO8UonLFzTXHxiiJrSz6wasKvvIz9la5LHMML3VkrkQfy/qgbBFRMUd91o9SsPnHRX6lqwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758135509; c=relaxed/simple;
-	bh=UJV1axYFUWahAo/wlw4bcjdRchM59PcQ4RAHtgD9ZE0=;
+	s=arc-20240116; t=1758137560; c=relaxed/simple;
+	bh=9gUuYG0/AfVljxVjoeAhuZ6GhRyks5zOw/l/5c8VnCE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iNNBctYGQ13fkxzEFK9AL44uhkC3t/xHpWviJMhi72NdY1YdG2MF7uBQv44+m8GbKvHQqY7Q3Kl4O/LKSpZwxINLkfe/L5JFBuzRrQO+paYPRdFLyog3DiPrvpcjtTLNRTuoHCvhSJzvzAgnfmniQxysbB52OBv+7R583c5QFz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout3.hostsharing.net (Postfix) with ESMTPS id ADCA32C0163F;
-	Wed, 17 Sep 2025 20:58:17 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 7CE07149290; Wed, 17 Sep 2025 20:58:17 +0200 (CEST)
-Date: Wed, 17 Sep 2025 20:58:17 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Hubert Wi??niewski <hubert.wisniewski.25632@gmail.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>, stable@vger.kernel.org,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-	Xu Yang <xu.yang_2@nxp.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: forbid runtime PM to avoid
- PM/MDIO + RTNL deadlock
-Message-ID: <aMsEyXPMVWewOmQS@wunner.de>
-References: <20250917095457.2103318-1-o.rempel@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mHW9TQLiJzFo2vBEVpBuWq9MRO3n/xT8RGCXzfdsvHVd7Ny6YFEl0dWmhR5rjohmfgnGgNy2JPnVXcj01K15Eu3TQxSHXhc9mUzn+bMc/RAlWNqgw/3uuKjW3YbWIjhuzLNualQcyI2D3O2sJQQ/SC5HlKP3biM+EHBtygHHS0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kfVN5yUk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AD2C4CEF7;
+	Wed, 17 Sep 2025 19:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758137560;
+	bh=9gUuYG0/AfVljxVjoeAhuZ6GhRyks5zOw/l/5c8VnCE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kfVN5yUkCQGO+bzwQ51dJuP6XctWgNxnL/TWRIsWRQfQaNxyu59gS6Q2J5iqPcJQg
+	 0bCV769gmxZIDF5WyKIfXXFGt98BzWqX8aNk/gS2Crmzs0jvgKHO3mVFj36hD5lixz
+	 INRQjsTWTWUjo4Y2DbJYeVH5/MtRxffGP0UM4BY2w6nD1kbXIN7bQbyQUPLasjdine
+	 EKn2ow/ZK0okUqK7M+buVI2YasOUq2bXXL7aB3oostDyEkmA0hAZCDfDWRlKvdMC55
+	 +I/RQiPTujek8i1nsGZCCQUVsvJU7BseuWro0c1Nd/SgRdCt0WdBmOR5pMJmcpv1un
+	 KWcjb2bk7U1qw==
+Date: Wed, 17 Sep 2025 20:32:35 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: usb: uhci: Add reset property
+Message-ID: <20250917-unsolved-thwarting-df2ecb073dc4@spud>
+References: <20250917021926.3692137-1-ryan_chen@aspeedtech.com>
+ <20250917021926.3692137-2-ryan_chen@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="pmNo4lOHtwxZfDxc"
+Content-Disposition: inline
+In-Reply-To: <20250917021926.3692137-2-ryan_chen@aspeedtech.com>
+
+
+--pmNo4lOHtwxZfDxc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250917095457.2103318-1-o.rempel@pengutronix.de>
 
-On Wed, Sep 17, 2025 at 11:54:57AM +0200, Oleksij Rempel wrote:
-> Forbid USB runtime PM (autosuspend) for AX88772* in bind.
-[...]
-> With autosuspend active, resume paths may require calling phylink/phylib
-> (caller must hold RTNL) and doing MDIO I/O. Taking RTNL from a USB PM
-> resume can deadlock (RTNL may already be held), and MDIO can attempt a
-> runtime-wake while the USB PM lock is held.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-FWIW, for smsc95xx.c, the MDIO deadlock issue was resolved by commit
-7b960c967f2a ("usbnet: smsc95xx: Fix deadlock on runtime resume").
-I would assume that something similar would be possible for
-asix_devices.c as well.
+--pmNo4lOHtwxZfDxc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
+-----BEGIN PGP SIGNATURE-----
 
-Lukas
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMsM0wAKCRB4tDGHoIJi
+0oyzAP9DNkFwxH23oc/iXzGyVofh6CPc12IAHVCsfBtYmUC6JAEA590KG0Ads9J9
+3zU17P0dT11oRco429a3uu6Sgm+mIwo=
+=m5lc
+-----END PGP SIGNATURE-----
+
+--pmNo4lOHtwxZfDxc--
 
