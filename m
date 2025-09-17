@@ -1,127 +1,120 @@
-Return-Path: <linux-usb+bounces-28183-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28185-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C78A6B80194
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 16:40:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4797CB7C7F5
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:04:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 914671C05830
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 08:16:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8DB01BC4948
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 08:26:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E114308F0F;
-	Wed, 17 Sep 2025 08:15:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gM9Mv+XD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A253093B8;
+	Wed, 17 Sep 2025 08:25:48 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82308306D5E
-	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 08:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A50621CA0D;
+	Wed, 17 Sep 2025 08:25:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758096936; cv=none; b=c6no2EAwuyh+Fa1AqR3DsHhFPbfd1j8PyUdc8RSiGY+CkeRjbaSN56KW+w61yj01FKA+lcWCtxGCcpkSjo+4AEU2BcdUTX2cgzY/XmENm3RpMeqd+oz2rljgL/ydQOBDsciV2mlmxKizsCfVk689ekRky/IVJc1lejzQsI7Hqmc=
+	t=1758097548; cv=none; b=KeNVZSCfsBnjEgXqdNv5uVVPB8QWsF80Z0IJgA/dmGNIKpt7IJ+7A6nbA0d8K2hhos6DFTC6G6297/8X0JPWBjvlspYMu8qAKo8+aendlv0Y8049D7BqEWdXnsgYYK1tzRQUk7TSGwhXpPmhypsqyb6qqvwqqP5zFVqUWiLf7NY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758096936; c=relaxed/simple;
-	bh=ac0PNbFeZ46ykl3bTgNh+S2AWHduWK7f9ew3aBhT2Uw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K46uVhdYB2AAdNb5z2R2If5gFGZBovkn0UAyxZIdCpBoH3V0K1G2i71tM/IR8uRpBXIjerc1gd9HmIzEq1I3sC7vqLzq2r7jRkRkvGAtbUNVOyh1QJxzKBL7X0GJtpj29wlLe3648fqT2JVJKdFY4iulSNSJoBX/C78cQvSd8mE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gM9Mv+XD; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758096934; x=1789632934;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ac0PNbFeZ46ykl3bTgNh+S2AWHduWK7f9ew3aBhT2Uw=;
-  b=gM9Mv+XDRDtVLuR5VJktL+s4BF6lztmfmyIH8QGiMDpeZeweJ1HGcv5G
-   ll6J8/MILMeRXkpKzDquddrhDj/5RmR5o177DizMcn4t2ct7NQTXp0Ynn
-   gvJWRkCXv3pKSGVHS1AneLnf2Q+BEgeVGReEAHsYhKu24Z0k1KlAwEOYu
-   58D943kSzzf0t1z7ty4K0VqfoBsQ3qvM6BSJJBHEDEru/+vt5bAG0obun
-   sds1zdEdoM9bYfEtpIpzW/wdB8iJ+CyUxX1rqAro2kN6vmdoHJMimRCMe
-   sI5Sq9h9OYVrcUAbRAvvUSVXZJ05oF3uG9aRANLvgjI6sexgmiqLBEj+Z
-   Q==;
-X-CSE-ConnectionGUID: 24chgmrMRYCk2zezEvwkqQ==
-X-CSE-MsgGUID: ZZh53hAOQcSCuLeYNKBVjg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11555"; a="59438764"
-X-IronPort-AV: E=Sophos;i="6.18,271,1751266800"; 
-   d="scan'208";a="59438764"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 01:15:29 -0700
-X-CSE-ConnectionGUID: 3FFSvvLqQFyYbDdBrT9ykw==
-X-CSE-MsgGUID: 6B1y2J5wSn+iaN7HMxIR4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,271,1751266800"; 
-   d="scan'208";a="206128969"
-Received: from smile.fi.intel.com ([10.237.72.51])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 01:15:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uynK0-00000003kWF-3aHO;
-	Wed, 17 Sep 2025 11:15:24 +0300
-Date: Wed, 17 Sep 2025 11:15:24 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
-Subject: Re: [PATCH 00/26] thunderbolt: kernel-doc fixes
-Message-ID: <aMpuHEhV4BhzUf_1@smile.fi.intel.com>
-References: <20250908163230.2614397-1-mika.westerberg@linux.intel.com>
- <20250917055202.GE2912318@black.igk.intel.com>
+	s=arc-20240116; t=1758097548; c=relaxed/simple;
+	bh=Wh0c6cnsANVn3Q7Tby8/Zat2Nt4mwlunMzaJrcSfQvU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dGnFrbcw9N0+BhbCmvp6QvPxqfeIm7qDxs28JSjBMB/k6tRgorSvzLsJbJPnZdyf0NU51DBiz+53Hr3FU7umvIk1FJLrctqDs4rVS9R2SBNlUo/hWY04t6HqnS2EGKqAvot+JIzGI3Mqcm97swc48iEBmiLga4cKtiEbkZEWLKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: e0f1f170939f11f0b29709d653e92f7d-20250917
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:74a35ace-c176-442b-bed6-2e9c10f5b03f,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:19058ad1ff0e6319eff22cbc49470bf1,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:nil,UR
+	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
+	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: e0f1f170939f11f0b29709d653e92f7d-20250917
+Received: from node4.com.cn [(10.44.16.170)] by mailgw.kylinos.cn
+	(envelope-from <lijiayi@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 499005851; Wed, 17 Sep 2025 16:25:33 +0800
+Received: from node4.com.cn (localhost [127.0.0.1])
+	by node4.com.cn (NSMail) with SMTP id ED20B160042A4;
+	Wed, 17 Sep 2025 16:25:32 +0800 (CST)
+X-ns-mid: postfix-68CA707B-5921601002
+Received: from kylin-pc.. (unknown [172.25.130.133])
+	by node4.com.cn (NSMail) with ESMTPA id DA285160042A0;
+	Wed, 17 Sep 2025 08:25:30 +0000 (UTC)
+From: Jiayi Li <lijiayi@kylinos.cn>
+To: westeri@kernel.org
+Cc: andreas.noever@gmail.com,
+	michael.jamet@intel.com,
+	YehezkelShB@gmail.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jiayi_dec@163.com,
+	Jiayi Li <lijiayi@kylinos.cn>
+Subject: [PATCH RFC] thunderbolt: Re-add DP resources on resume
+Date: Wed, 17 Sep 2025 16:24:56 +0800
+Message-ID: <20250917082456.1790252-1-lijiayi@kylinos.cn>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250917055202.GE2912318@black.igk.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 17, 2025 at 07:52:02AM +0200, Mika Westerberg wrote:
-> On Mon, Sep 08, 2025 at 06:32:04PM +0200, Mika Westerberg wrote:
-> > Alan Borzeszkowski (26):
-> >   thunderbolt: Update acpi.c function documentation
-> >   thunderbolt: Update cap.c function documentation
-> >   thunderbolt: Update clx.c function documentation
-> >   thunderbolt: Update ctl.c function documentation
-> >   thunderbolt: Add missing documentation in ctl.h tb_cfg_request struct
-> >   thunderbolt: Update dma_port.c function documentation
-> >   thunderbolt: Update domain.c function documentation
-> >   thunderbolt: Update eeprom.c function documentation
-> >   thunderbolt: Update lc.c function documentation
-> >   thunderbolt: Update nhi.c function documentation
-> >   thunderbolt: Add missing documentation in nhi_regs.h ring_desc structure
-> >   thunderbolt: Update nvm.c function documentation
-> >   thunderbolt: Update path.c function documentation
-> >   thunderbolt: Update property.c function documentation
-> >   thunderbolt: Update retimer.c function documentation
-> >   thunderbolt: Update switch.c function documentation
-> >   thunderbolt: Update tb.c function documentation
-> >   thunderbolt: Update tb.h function documentation
-> >   thunderbolt: Add missing documentation in tb.h
-> >   thunderbolt: Update tmu.c function documentation
-> >   thunderbolt: Update tunnel.c function documentation
-> >   thunderbolt: Update tunnel.h function documentation
-> >   thunderbolt: Update usb4.c function documentation
-> >   thunderbolt: Update usb4_port.c function documentation
-> >   thunderbolt: Update xdomain.c function documentation
-> >   thunderbolt: Update thunderbolt.h header file
-> 
-> All applied to thunderbolt.git/next.
+During suspend, DP resources are released through tb_disconnect_and_relea=
+se_dp()
+but were not being re-added during resume, preventing DP tunnels from bei=
+ng
+re-established.
 
-Thank you!
+This caused DP displays connected via Thunderbolt docks (such as Targus d=
+ocks)
+to not display after S3 resume. The issue was visible in logs:
 
--- 
-With Best Regards,
-Andy Shevchenko
+[246.397437] tb_cfg_ack_plug:819: thunderbolt 0000:2c:00.0: acking hot pl=
+ug event on 3:10
+[246.398282] tb_dp_resource_available:2019: thunderbolt 0000:2c:00.0: 3:1=
+0: DP OUT resource available
+[246.398291] tb_tunnel_dp:1875: thunderbolt 0000:2c:00.0: looking for DP =
+IN <-> DP OUT pairs:
+[246.398294] tb_tunnel_dp:1899: thunderbolt 0000:2c:00.0: no suitable DP =
+IN adapter available, not tunneling
 
+Add call to tb_add_dp_resources() in tb_resume_noirq() to ensure DP resou=
+rces
+are properly re-added during resume, allowing DP tunnels to be re-establi=
+shed.
+
+Signed-off-by: Jiayi Li <lijiayi@kylinos.cn>
+---
+ drivers/thunderbolt/tb.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index c14ab1fbeeaf..cb652df3fc9f 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -3119,6 +3119,7 @@ static int tb_resume_noirq(struct tb *tb)
+ 		tb_switch_reset(tb->root_switch);
+=20
+ 	tb_switch_resume(tb->root_switch, false);
++	tb_add_dp_resources(tb->root_switch);
+ 	tb_free_invalid_tunnels(tb);
+ 	tb_free_unplugged_children(tb->root_switch);
+ 	tb_restore_children(tb->root_switch);
+--=20
+2.47.1
 
 
