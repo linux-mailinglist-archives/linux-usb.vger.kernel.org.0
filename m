@@ -1,94 +1,90 @@
-Return-Path: <linux-usb+bounces-28225-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28226-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5059CB7FA0F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 15:58:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04472B7FE52
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 16:20:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC10F6221D2
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 13:56:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0716B542577
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:11:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 202A432E720;
-	Wed, 17 Sep 2025 13:54:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5CA2C2AA2;
+	Wed, 17 Sep 2025 14:02:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="fmGapKok"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="fQQ/etmm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7C632BBF8
-	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 13:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4856429E10C
+	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 14:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758117248; cv=none; b=SAbW4Q1XXDH1FQuWovvG5SzVhPQO01UOAg88SxxWo2LVlR+WCs1rBLVtknqzK6tAJhyn1iEj0SYManWrZJMqSp6HFGNu9OqktVeU6XRWB7xMskrGT5uCkKePluKpcV+/LI3WpEFuc8LzF9zLVstRHA09E4YSarpS3mx6XVltbt0=
+	t=1758117778; cv=none; b=tZ5mqnbsOVvQqM+3tyNsb+ic+C0R+DAEX/VmZUWuM8Py+pUIWd1slKoFNZKUIGi8uU2ietSEkpXyESw+Vx3S/z+78Ha/jbOQxt/PGG5nmyTHLkNSbl/iuOv8gLVXW322tVSLAeDVkRagoD49ruF3tiZ+Blmxk7oJbHnQ+byBgmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758117248; c=relaxed/simple;
-	bh=nV1QrshvRehJ/eXBSMMeuT6hGEcacS/VSfv5Aahy3qc=;
+	s=arc-20240116; t=1758117778; c=relaxed/simple;
+	bh=u65F9ibn0/EbG13e/4IgxRNvUJYSs9cVYFGQuF34WGA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ae52q80eaIjWxAVNu/1J1d6f/mj9dZJEIIE8aGN798/cBH9Ostyc1TnoHKFZMQo7OWTAT6eOHEb9ojnHRRrXqxZbz/Pwyuq37TdXhtCepJv2rO5sBMpZWrZT1KEFYUVHBKydzVSrVoAc1juDhhH45NwOKurdYQBiUtbIuNoQJnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=fmGapKok; arc=none smtp.client-ip=209.85.222.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=kHpD9EyHpPi0ZswHT+eLjl3/HCTunq8CK9nsbhhs9wvYaTdn2CGvgTNCu++h4aB2Zk8C6uOmpe8SFURmrEp+ran/3hFfQqPqUVHedpv3gf/meEsFxtJU8MbO0sSuXvihHfIRuaZHUalHzLnDkhqmDFY5T8xKOKNvXyBtH7ni/xA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=fQQ/etmm; arc=none smtp.client-ip=209.85.219.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8112c7d196eso701449585a.3
-        for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 06:54:06 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-78f15d5846dso5902876d6.0
+        for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 07:02:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1758117246; x=1758722046; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1758117776; x=1758722576; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=to4BXgFyFuRjiSPORVXGshM37diVDi0cjrsHXYAgKmw=;
-        b=fmGapKokLz9Fcmrm+nnUjiBmvailZKN+eXBViNgThFZcWW19Vmx7mlOTKESzUXi37B
-         bs07Bfpv0vPwxX87e0/CVX7SE+rfHLbUu5LhZfHHxpBsWZxqJzUD7T1FQKiYBcELbr/3
-         tycxPy/BbxgZyi/OBh0MXs0wciy4FKRW0kBEXz6oAralAR8S31KhPOUKqNhM2flGyjZM
-         mXgAR0E2WSV7g6k3isAoALB1kzYFjlEA3OCIW6LBLdyOdKzDLffiipLxAO6PbpeHufyJ
-         vNbUOvar8vSc+A/xmQAycFDBypO9mTF1YRVvfp7sTLCP9qeXVh5hmitRiypaZHStkKYg
-         zQ7A==
+        bh=6oT1gAMoRrlj04Hb48NO47TuLVXjyiMx+T7Y3GCHqFE=;
+        b=fQQ/etmmhSAtf02Jj9wEbAgxR2cms8RuEKxcrARQufb40E/BxXf4gbMgg1gJ0QR9hu
+         kZSHLyCY5wxL+WMQVxsIn0IqV80OX5YZLAI2o3wpYfj9nq3hnMJMiT0RJjMR6kEt8CL0
+         0TfvIG5M1JRDM3e5VX3cG7TLmRIvNgJL7vzNRIMS04Ktv61ZMP7Ftx+Yt0xfoX30Gg7g
+         37alP0M7SJRRLa6JHdKTIS0tgojkiJgDtMnk7KhwC3roFV5VOTtMX9X5GJnNVtceeIS0
+         MbQN3FUpFCscps0RlwNGKp8eBMlREZUpH7o6Oy9RTnuY3mH1RmFtFxfrfYHpFlQOBOhS
+         VjDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758117246; x=1758722046;
+        d=1e100.net; s=20230601; t=1758117776; x=1758722576;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=to4BXgFyFuRjiSPORVXGshM37diVDi0cjrsHXYAgKmw=;
-        b=geVOAuYUqyL/6h6SRVWOnLBSbkX7AQK63xYXzFAIkAxYtrIieK1Au9MpeqWPDe8Smo
-         U3TdgRtJaBWocbycsZhqJQMXpoMMtWVweHM98MoSOSgxNbuyA3gyONWoFFEQ2DiLfmQU
-         JT+joJcdii2IZHfPfbV5cgMvtTwyzdeimzSYwqddnvBlCuDXHSPm6DwM0Q9/fJINHbv/
-         5TypzCONhTMuKXbpYzz5amZ5/s3kHHvzSEIr1ezXPipdpGYpHfKg+sCJJeZJ/d+EESik
-         298Twuc1Sg/BrVhXiSyQiC8opcPiov7h502GsTNzMf22SpIcS3gO8qd4j5Br4Q98548v
-         JsBg==
-X-Forwarded-Encrypted: i=1; AJvYcCUWPAe74fyohpFNVwrGOdzTOIH8G+8kkhZfK3neNaTrbcMG3Hp0VhOF6o0jAsxbXnY920B3mSDtQps=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfzssiG4o8N0lUyISMl5tLCZfa+jdBC7/0Nv50lfofcA5NZm0N
-	QbDEu6dEYI9gx2epKSuFBUeRs15oPVOimt1sjTJpW49nftPHPtrLQMznBXp4VsbEsg==
-X-Gm-Gg: ASbGncvkKemFANO+GXXgKu8k3fc10r4MPQBfzmt1AfzFo5JCyBLXyLwz2JpuFc3yvxj
-	wN/M3kFEXvY+IWjWFe9ZCZHOH9JiATZNS2aHPpZ/zUObqmzRrMXWsBm2IUH1n3nHBA3rxqDFqt5
-	/CxsS20k5R66TpMX+mbP1eVwyS0awTkq+iYwL35QTh9uUMSb1e30s7yDIVl1pYU+CmxvYvU0wo2
-	Erbp8xolELvn89Wq1/Cr2sxd8jKl5JMvX9HXULL6D/NKPJNJIqjFZzYspYmkTuvb9iGUR+xqjqR
-	jlNt6+PrxF8Hud7EKB1aKBMvamZ0LYeFGFnBTJF9hDDpnanMaSYGj9a02gUSS8mJLyuuKlurc/u
-	cj+lzu7S6P37cuVtz3mdZtL3RqNJ5hrfm2u3HHr5gX3fQiyxiVFYdZeb4
-X-Google-Smtp-Source: AGHT+IGRBja0r5jLJ3qHXTLicrQ5EPV+1Dbg2srLDJPVrFlUWF3hlqL5YtcEGgwOtuhZt3aFjNDHDA==
-X-Received: by 2002:a05:620a:4009:b0:817:6fe8:dabd with SMTP id af79cd13be357-8310b59ae28mr257079385a.28.1758117245776;
-        Wed, 17 Sep 2025 06:54:05 -0700 (PDT)
+        bh=6oT1gAMoRrlj04Hb48NO47TuLVXjyiMx+T7Y3GCHqFE=;
+        b=nUA0y+UtA4UmgGUIH9z8K5gX5CFYkF+xby3GuGtApVmuIJWz8ZiMtLbJxdWLdighIt
+         FeuyClXVgNd2xo+8JopXC/iZe3gpS4v+1JrThTlFy+1YhWF2G9S9ZA+Ddu4IUxvBMfMJ
+         KAGPpUr2QqxjOCNMZ3l7+j3irmB8Jss0LZoDNzsAMzOKk6grEdp0N6iKY+nZRETu6oU4
+         d6a4Jg1gQ/ZTbRf+0+cG0yOIRoIhw81BEiEod2zcYenqQg2OAmPGK5q4oJG2Vl6BFXDn
+         i+GpV9DGIiCNWzJc/6ienDUzvhAHxgL/xr76IJ1nUQjusTagBXdMmSSFo1bGy0gIEY8v
+         YF/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWVFoL9zpuFKX/A/858UHk6t1PDEmw/FYh3fIPTMZ0+nu1OsNVohxWZnMN8TV6woJ9Y3E1Btd8DYAI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTwezJ8Bmt3zMwqrE5O4hGamtHE1R2eLCtZyuECMemphmL6pYn
+	776RIrw59ZRh0hlHI0O09SLcqhd3FBhKAR7+l+v1Ri+V9u0IlkUTwTe3H8tcc112EA==
+X-Gm-Gg: ASbGncu8DixzVu7z79HxVYkboO93sGrkFmoGxEEJGCFAasSaPCwDjgU33h6gqWirLzd
+	M6L+OGbFVuu/8Ri2Px5BKo1hpSEL4gfSAG2Sa6MfqWzg9KLvsWs3M7zu7hvgx0em1js87kQsvKL
+	E8x9fF6H/bd+9Kw7cgSgLubYV0C5gRSU+BVr1iBfQMqKvMKQIfhdxgFCZWjPxo0pBSmej14Br7g
+	aaKXvkc84vc4t6pM5bQ3J0buETIZ7J98x6c19TJGs0QYH4PcVUf277toBdicZYr6/a9vGB5gio8
+	am6Y+BRfJ3nAWhDg5NAmdgc/T8tQjVOQ+Uj7YI1HcUnkZq5FKnrf4I/9D4cXkK+NTN965hmHgeT
+	6mOBSQ74ijuqsDC//l14tQ3oF24ABjt+07vt4FxMliA4IIg==
+X-Google-Smtp-Source: AGHT+IF0RKbDCJQqlOaQ5lIihcYpXIyfMX0yPpffB1uNIpJ5D1oZ3LkjnzHtCCpYKRDg9m9F5+RN0Q==
+X-Received: by 2002:ad4:5c8c:0:b0:78b:684e:88b5 with SMTP id 6a1803df08f44-78ece94094cmr21380316d6.46.1758117775796;
+        Wed, 17 Sep 2025 07:02:55 -0700 (PDT)
 Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-82b15c2202dsm372471385a.55.2025.09.17.06.54.04
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7858cb5ac70sm51464736d6.20.2025.09.17.07.02.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Sep 2025 06:54:05 -0700 (PDT)
-Date: Wed, 17 Sep 2025 09:54:01 -0400
+        Wed, 17 Sep 2025 07:02:55 -0700 (PDT)
+Date: Wed, 17 Sep 2025 10:02:52 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Hubert =?utf-8?Q?Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>, stable@vger.kernel.org,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-	Russell King <linux@armlinux.org.uk>, Xu Yang <xu.yang_2@nxp.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: forbid runtime PM to avoid
- PM/MDIO + RTNL deadlock
-Message-ID: <c94af0e9-dc67-432e-a853-e41bfa59e863@rowland.harvard.edu>
-References: <20250917095457.2103318-1-o.rempel@pengutronix.de>
+To: Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] usb: uhci: Add reset control support
+Message-ID: <291b2bc2-6a61-44e9-91cb-56044c4277e6@rowland.harvard.edu>
+References: <20250917021926.3692137-1-ryan_chen@aspeedtech.com>
+ <20250917021926.3692137-3-ryan_chen@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -97,47 +93,87 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250917095457.2103318-1-o.rempel@pengutronix.de>
+In-Reply-To: <20250917021926.3692137-3-ryan_chen@aspeedtech.com>
 
-On Wed, Sep 17, 2025 at 11:54:57AM +0200, Oleksij Rempel wrote:
-> Forbid USB runtime PM (autosuspend) for AX88772* in bind.
+On Wed, Sep 17, 2025 at 10:19:24AM +0800, Ryan Chen wrote:
+> Some SoCs, such as the Aspeed AST2700, require the UHCI controller
+> to be taken out of reset before it can operate. Add optional reset
+> control support to the UHCI platform driver.
 > 
-> usbnet enables runtime PM by default in probe, so disabling it via the
-> usb_driver flag is ineffective. For AX88772B, autosuspend shows no
-> measurable power saving in my tests (no link partner, admin up/down).
-> The ~0.453 W -> ~0.248 W reduction on 6.1 comes from phylib powering
-> the PHY off on admin-down, not from USB autosuspend.
+> The driver now acquires an optional reset line from device tree,
+> deasserts it during probe, and asserts it again in the error path
+> and shutdown.
 > 
-> With autosuspend active, resume paths may require calling phylink/phylib
-> (caller must hold RTNL) and doing MDIO I/O. Taking RTNL from a USB PM
-> resume can deadlock (RTNL may already be held), and MDIO can attempt a
-> runtime-wake while the USB PM lock is held. Given the lack of benefit
-> and poor test coverage (autosuspend is usually disabled by default in
-> distros), forbid runtime PM here to avoid these hazards.
+> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+> ---
+>  drivers/usb/host/uhci-hcd.h      |  1 +
+>  drivers/usb/host/uhci-platform.c | 17 +++++++++++++++--
+>  2 files changed, 16 insertions(+), 2 deletions(-)
 > 
-> This affects only AX88772* devices (per-interface in bind). System
-> sleep/resume is unchanged.
-
-> @@ -919,6 +935,16 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->  	if (ret)
->  		goto initphy_err;
+> diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
+> index 13ee2a6144b2..4326d1f3ca76 100644
+> --- a/drivers/usb/host/uhci-hcd.h
+> +++ b/drivers/usb/host/uhci-hcd.h
+> @@ -445,6 +445,7 @@ struct uhci_hcd {
+>  	short load[MAX_PHASE];			/* Periodic allocations */
 >  
-> +	/* Disable USB runtime PM (autosuspend) for this interface.
-> +	 * Rationale:
-> +	 * - No measurable power saving from autosuspend for this device.
-> +	 * - phylink/phylib calls require caller-held RTNL and do MDIO I/O,
-> +	 *   which is unsafe from USB PM resume paths (possible RTNL already
-> +	 *   held, USB PM lock held).
-> +	 * System suspend/resume is unaffected.
-> +	 */
-> +	pm_runtime_forbid(&intf->dev);
+>  	struct clk *clk;			/* (optional) clock source */
+> +	struct reset_control *rsts;		/* (optional) clock reset */
 
-Are you aware that the action of pm_runtime_forbid() can be reversed by 
-the user (by writing "auto" to the .../power/control sysfs file)?
-
-To prevent the user from re-enabling runtime PM, you should call 
-pm_runtime_get_noresume() (and then of course pm_runtime_put() or 
-equivalent while unbinding).
+This new field is used only in uhci_hcd_platform_probe().  Therefore it 
+does not need to be stored in the uhci_hcd structure; it can simply be a 
+local variable.
 
 Alan Stern
+
+>  
+>  	/* Reset host controller */
+>  	void	(*reset_hc) (struct uhci_hcd *uhci);
+> diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
+> index 62318291f566..1c1715bddc27 100644
+> --- a/drivers/usb/host/uhci-platform.c
+> +++ b/drivers/usb/host/uhci-platform.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/of.h>
+>  #include <linux/device.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/reset.h>
+>  
+>  static int uhci_platform_init(struct usb_hcd *hcd)
+>  {
+> @@ -132,17 +133,29 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+>  		goto err_rmr;
+>  	}
+>  
+> +	uhci->rsts = devm_reset_control_array_get_optional_shared(&pdev->dev);
+> +	if (IS_ERR(uhci->rsts)) {
+> +		ret = PTR_ERR(uhci->rsts);
+> +		goto err_clk;
+> +	}
+> +	ret = reset_control_deassert(uhci->rsts);
+> +	if (ret)
+> +		goto err_clk;
+> +
+>  	ret = platform_get_irq(pdev, 0);
+>  	if (ret < 0)
+> -		goto err_clk;
+> +		goto err_reset;
+>  
+>  	ret = usb_add_hcd(hcd, ret, IRQF_SHARED);
+>  	if (ret)
+> -		goto err_clk;
+> +		goto err_reset;
+>  
+>  	device_wakeup_enable(hcd->self.controller);
+>  	return 0;
+>  
+> +err_reset:
+> +	if (!IS_ERR_OR_NULL(uhci->rsts))
+> +		reset_control_assert(uhci->rsts);
+>  err_clk:
+>  	clk_disable_unprepare(uhci->clk);
+>  err_rmr:
+> -- 
+> 2.34.1
+> 
 
