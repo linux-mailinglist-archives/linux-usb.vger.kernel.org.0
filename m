@@ -1,170 +1,207 @@
-Return-Path: <linux-usb+bounces-28206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AFEAB7D9AD
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:30:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 361CCB7DB15
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:33:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F6331884434
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 12:27:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCEA42A4597
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 12:29:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ABF431B821;
-	Wed, 17 Sep 2025 12:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2290B337EA3;
+	Wed, 17 Sep 2025 12:28:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HkvugRbS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bwS9hqiX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CB43016F4
-	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 12:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8D9337E95;
+	Wed, 17 Sep 2025 12:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758111928; cv=none; b=cbEUHFXKImQeY7IzqnDkFJWY+Sll1vWo0YTHSkWf5Loo4fvmd6MWVWPWsxN6otxQezJfkVkLhV8YBkFeB/t7lGRPG5B8gtLF4dUQxk1GUxNVJ34ZZ0evCRUPrI6AcRQ0XCGm5ujVo0kf5mUxilfPKdNlBMEmPEZZ2isha6CIWbo=
+	t=1758112138; cv=none; b=aeCSIHO939bhiAT52Siw0D50QSj+6yGpIbdszcWSN5dbjSesUZGC/BeowuIJpCCjf3+jIOEuUjkq8GZ6VRAYbDDofniK+eI2hEugjcKJqvjo1/TEKbn/aTLAYER5EF5X/WDOMCKHVNtO7zR2ZLjt/0jYraOe/X9waVagZqhhozI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758111928; c=relaxed/simple;
-	bh=hfGHEKj+Li5C+SsyBXQ5+0EUnOsVD4wRyx9sD6DmIzE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E/i269W103g8ADbYSSkIIh0BzCQWdSkbHRDDnqTtks7XknrKtUF3/HjtR3qY6k4WmeHdoGaDlu1co9CjDzDrnzGH/XYndeylwJBJkFyvLV5eTPhjfbt2a8LYSBBnrpyJbopLalO0QhPgcsRsim0+YDLxkVbUSgefuAKDUjZtp3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HkvugRbS; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b0b6bf0097aso682391266b.1
-        for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 05:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1758111925; x=1758716725; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RGupZmSqqolDV3fFqfn3WPsHK/Y+Gx2I+5ncY0SDOWM=;
-        b=HkvugRbSmQmsWNuWVrAIphvTAX3krdROP5+PXI5WRJcjaLKIqKeq11+pC8XtbO+A6t
-         V+1clxw0GB+epCvnHcel8Lc4rw2OJouRl/biHaZJ8D4WIlzbZbKvNiGNWU7Qmcz3UwOu
-         dQh4lAmSfzYWwB40jY2LsMtGsfN+YME+lR4VuzjezFYN1VbQ5XUbPs4n+XCwDqPoNSJk
-         BEl6bLpDtpaqOKpuYSUktVkk+PdUZZCQMRtAe4TZ7fddhBYwl6klQQD8GnRNii5LzmoC
-         zK+w2rbylUl3m63IR4lNSV+g75AiwgsON8A+OJHv6VNFXeP4vkwMKAEipZePkgOmx7od
-         dg6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758111925; x=1758716725;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RGupZmSqqolDV3fFqfn3WPsHK/Y+Gx2I+5ncY0SDOWM=;
-        b=HLwyilrNCgtD4HQv78r+dRfYhNrEleNJGLyevxD+MsiEseC4Bz4Mn42qRNdEAlMzmg
-         v9ccFgly7jkEjBIEjr/7NNXhXoj3I5UHdjFFpte2XXJlB0vg3Pw7r2JDPeUdPgvrkIb7
-         73x6ysg230IJKSpe0/RW9RE8hP97vOPSWDfQnOQ16LI22IRsz1N1BwsMT2UKY+EMhjO1
-         mUvSMPHbaCdZwRj/hvr5XKryfkm6pAB9QhzkjNkadpYPFXNESswsqLy2sknbugEiw6Yb
-         mPKNI561mKUzocoCk7qq55rPNPO0PuncXrJjmOGH+TQ2goh2jZpbLjdp9nP7/fh6skJe
-         JBGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX/l5N9nEFpURlrXlMNLu+rdC2oSb7pn8vVjIkhz63xKBgosWTyx5WW2GovZ/tesGy1E6lCv/YqADQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxixJB4hkGWpRyA6+CEABkI0s/x5oB+ersTWglhP1OzL3GetUPX
-	bvMx0DMFnuoj/prYiQBlHGZ7FhMTsykHD8djqiDrowgNTXmtJzDTquFsHvLUwh//Tuk=
-X-Gm-Gg: ASbGncvQ0O2t7xDoLEvlQQMcoGagGmp2jdO0beemJWGk9a7VYkb//lVLgcHldY93CF0
-	xOaTxfS5L2YwGh6bezmMfoTFJiko1Kwui3SERmlaLnN2kIVeJwDxmyOr4fw778gXmmrDR82n/sw
-	4H+oUMOvoYMyxab0NMSjpTHZ2SNcosEcfXDxRtDXBgtoXWwNlCnkNluRH5VPYPgJTujpuWjUnjT
-	nr4bVC6XiI7a/bV+qhs3tt+Q/0CE2CGeTLF5jePnAn1SAtEIyr5W4mGoGWFh4tdR+bMla3DFJmf
-	QpIURVbFrK9pvsG5mUutY3zloTNIiDhnucTV6EA/q7wObYgZfFV//c5gBO7qnafJBZ2WxO+IZ59
-	c7EZwL5XDPz7djVfDmsvxHsjAq13z8dhDBVhwKiccn7J+o2p6GE2F5r9C2/UE1Nck
-X-Google-Smtp-Source: AGHT+IEMHO2+mrGwehsjHQd9adkafh7FOklixGAh9piZ10AcM2OldRJUtx+VWHX506OwdEOot1gHeQ==
-X-Received: by 2002:a17:907:3da0:b0:b07:b645:e5b8 with SMTP id a640c23a62f3a-b1bbfa2bb35mr217910766b.30.1758111924771;
-        Wed, 17 Sep 2025 05:25:24 -0700 (PDT)
-Received: from ?IPV6:2001:a61:133d:ff01:f29d:4e4:f043:caa2? ([2001:a61:133d:ff01:f29d:4e4:f043:caa2])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62f1989123fsm8515308a12.37.2025.09.17.05.25.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Sep 2025 05:25:24 -0700 (PDT)
-Message-ID: <cae31224-95f2-4c62-bdb5-1e1e81f2b726@suse.com>
-Date: Wed, 17 Sep 2025 14:25:23 +0200
+	s=arc-20240116; t=1758112138; c=relaxed/simple;
+	bh=Jc5cZefQOsqzwrw385FaHizZ1tAIAUOOEeHJ5Yjfm0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CnUzUWSIEpmCQM33Q8zRZBSX8FEPopwRnjzbAiAkX3kvKU24wmTzLcohlxbn9DK2ZOFFAh8mSmbtVIujNssHo0sePxc/FqN71DNjerf/7MG4s3I1ghV0Gbbr7Nul48dtYkHFVZU87DMVVSsuiNNFSUXEX8rpkvcCyVT4WFeDKUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bwS9hqiX; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758112137; x=1789648137;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Jc5cZefQOsqzwrw385FaHizZ1tAIAUOOEeHJ5Yjfm0w=;
+  b=bwS9hqiXRE1yA3gvAevlUMP27X+hyXm4fRzphe1/AziQXvrzFPZ6ebib
+   0pHJgCXE4U/BI+rKus2s+Z2KJ2FCuOdFB8TVzQxjtf7fx5WVE/JW4B2KE
+   iGophtcr/tOUm1D/UwClnxP4fPhf6WcObu7bip3WPvKrrshGAhgWY5F7a
+   AMWcJ5MDV5n+TXFeKkP6X3g00FxJtRVaBpAZ/yTYsE0o0rAjXTPnAzdwG
+   /2do1iZttkt0B/l9/PHUg/uHwJ/AADjwdRN+lRCHV1FAf5l1slbrOgS7J
+   6KO1gb/nPOFVNR6gnO4WUcJS9H8vUldqD2CVBRI3E+KRfRyN0sdYcUGWd
+   A==;
+X-CSE-ConnectionGUID: w5y+kXh2SjK+voJQiGfi6w==
+X-CSE-MsgGUID: TY5wzdWwR2qx6URUyWNOiQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="60561889"
+X-IronPort-AV: E=Sophos;i="6.18,272,1751266800"; 
+   d="scan'208";a="60561889"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 05:28:48 -0700
+X-CSE-ConnectionGUID: K5qmC+vzRT67xqyBa8jxlw==
+X-CSE-MsgGUID: 45Z7hA3oSR2eq5VxMzngag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,272,1751266800"; 
+   d="scan'208";a="175152054"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa006.fm.intel.com with SMTP; 17 Sep 2025 05:28:44 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 17 Sep 2025 15:28:43 +0300
+Date: Wed, 17 Sep 2025 15:28:43 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc: Andrei Kuchynski <akuchynski@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/5] USB Type-C alternate mode selection
+Message-ID: <aMqpe68m3rhDYsCt@kuha.fi.intel.com>
+References: <20250909123028.2127449-1-akuchynski@chromium.org>
+ <aMliLCWFKy5Esl0-@kuha.fi.intel.com>
+ <CANFp7mXvpNXr=01nQR54d+Z+vSiiwiDLB+3B+1eR6Ks7b37gtg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: forbid runtime PM to avoid
- PM/MDIO + RTNL deadlock
-To: Oleksij Rempel <o.rempel@pengutronix.de>, Oliver Neukum <oneukum@suse.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- =?UTF-8?Q?Hubert_Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>, stable@vger.kernel.org,
- kernel@pengutronix.de, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- Lukas Wunner <lukas@wunner.de>, Russell King <linux@armlinux.org.uk>,
- Xu Yang <xu.yang_2@nxp.com>, linux-usb@vger.kernel.org
-References: <20250917095457.2103318-1-o.rempel@pengutronix.de>
- <0f2fe17b-89bb-4464-890d-0b73ed1cf117@suse.com>
- <aMqhBsH-zaDdO3q8@pengutronix.de>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <aMqhBsH-zaDdO3q8@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANFp7mXvpNXr=01nQR54d+Z+vSiiwiDLB+3B+1eR6Ks7b37gtg@mail.gmail.com>
 
-
-
-On 17.09.25 13:52, Oleksij Rempel wrote:
-> Hi Oliver,
+On Tue, Sep 16, 2025 at 09:47:44AM -0700, Abhishek Pandit-Subedi wrote:
+> On Tue, Sep 16, 2025 at 6:12 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > On Tue, Sep 09, 2025 at 12:30:23PM +0000, Andrei Kuchynski wrote:
+> > > This patch series introduces a flexible mechanism for USB Type-C mode
+> > > selection, enabling into USB4 mode, Thunderbolt alternate mode, or
+> > > DisplayPort alternate mode.
+> > >
+> > > New sysfs `mode_selection` attribute is exposed to provide user control
+> > > over mode selection. It triggers an alternate mode negotiation.
+> > > The mode selection logic attempts to enter prioritized modes sequentially.
+> > > A mode is considered successfully negotiated only when its alternate mode
+> > > driver explicitly reports a positive status. Alternate mode drivers are
+> > > required to report their mode entry status (either successful or failed).
+> > > If the driver does not report its status within a defined timeout period,
+> > > the system automatically proceeds to attempt entry into the next preferred
+> > > mode.
+> >
+> > I'm still struggling to understand what is the benefit from this - why
+> > would you want the user space to explicitly start the entry process
+> > like this? Instead why would you not just take full control over the
+> > alt modes in user space by enabling the them one by one in what ever
+> > order you want?
 > 
-> On Wed, Sep 17, 2025 at 12:10:48PM +0200, Oliver Neukum wrote:
->> Hi,
->>
->> On 17.09.25 11:54, Oleksij Rempel wrote:
->>
->>> With autosuspend active, resume paths may require calling phylink/phylib
->>> (caller must hold RTNL) and doing MDIO I/O. Taking RTNL from a USB PM
+> I think after the many patch iterations we went through upstreaming,
+> we may have lost the point a little bit wrt/ the mode selection task.
+> We talked about this on the very first iteration of this patchset
+> here: https://lore.kernel.org/linux-usb/CANFp7mVWo4GhiYqfLcD_wFV34WMkmXncMTOnmMfnKH4vm2X8Hg@mail.gmail.com/
+> 
+> The motivation behind it was to allow the kernel driver to own mode
+> selection entirely and not need user space intervention. The current
+> alt-mode drivers attempt to own the mode entry process and this fails
+> when you have two or more altmode drivers loaded (i.e. displayport,
+> thunderbolt). The original goal of the mode selection task was to move
+> the mode entry decision away from the alt-mode driver and to the port
+> driver instead.
+> 
+> What's missing in the current patch series to show this is probably
+> actually calling mode_selection once all partner modes are added :)
+> Andrei should be adding that to this patch series in the next patch
+> version.
+> 
+> Adding the mode_selection sysfs trigger is for another reason: to
+> re-run mode selection after priorities have been changed in userspace
+> and there is no partner hotplug. We specifically have some security
+> policies around PCI tunnels that result in the following need:
+> * When we enable pci tunneling, we PREFER tbt over dp and would like
+> to select the preferred mode. When we disable it, we PREFER dp over
+> TBT and would like to select the preferred mode.
+> * When users are logged out, we always prefer DP over TBT.
+> * When the system is locked, we prefer DP over TBT for new connections
+> (but existing connections can be left as TBT). When we unlock, we want
+> to enter the most preferred mode (TBT > DP).
+> 
+> While this is do-able with the alt-mode active sysfs field, we would
+> basically be re-creating the priority selection done in the kernel in
+> user space again. Hence why we want to expose the mode selection
+> trigger as done here.
 
-This very strongly suggested that the conditional call is the issue.
+But this would be a step backwards. You want to keep the kernel in
+control of the mode selection, which is fine, but then you have these
+special cases where you have to give some of the control to the user
+space. So instead of taking complete control of the mode selection in
+user space, you want to create this partial control method of
+supporting your special cases while still leaving "most" of the
+control to kernel.
 
->>> resume can deadlock (RTNL may already be held), and MDIO can attempt a
->>> runtime-wake while the USB PM lock is held. Given the lack of benefit
->>> and poor test coverage (autosuspend is usually disabled by default in
->>> distros), forbid runtime PM here to avoid these hazards.
->>
->> This reasoning depends on netif_running() returning false during system resume.
->> Is that guaranteed?
-> 
-> You’re right - there is no guarantee that netif_running() is false
-> during system resume. This change does not rely on that. If my wording
-> suggested otherwise, I’ll reword the commit message to make it explicit.
-> 
-> 1) Runtime PM (autosuspend/autoresume)
-> 
-> Typical chain when user does ip link set dev <if> up while autosuspended:
-> rtnl_newlink (RTNL held)
->    -> __dev_open -> usbnet_open
->       -> usb_autopm_get_interface -> __pm_runtime_resume
->          -> usb_resume_interface -> asix_resume
-> 
-> Here resume happens synchronously under RTNL (and with USB PM locking). If the
-> driver then calls phylink/phylib from resume (caller must hold RTNL; MDIO I/O),
-> we can deadlock or hit PM-lock vs MDIO wake issues.
-> 
-> Patch effect:
-> I forbid runtime PM per-interface in ax88772_bind(). This removes the
-> synchronous autoresume path.
-> 
-> 2) System suspend/resume
-> 
-> Typical chain:
-> ... dpm_run_callback (workqueue)
->   -> usb_resume_interface -> asix_resume
-> 
-> This is not under RTNL, and no pm_runtime locking is involved. The patch does
-> not change this path and makes no assumption about netif_running() here.
-> 
-> If helpful, I can rework the commit message.
+I don't believe this will work in all cases. I'm fine with the
+priority as a way to tell the kernel the preferred entry order, but if
+the user space needs to take control of the actual mode selection, it
+has to take full control of it instead of like this, partially. This
+just looks incredibly fragile.
 
-It would maybe good to include a wording like:
+So I'm still not convinced that there is any use for this. Either the
+user space takes over the mode selection completely with the active
+attribute files, or just leaves the selection completely to the kernel.
 
-With runtime PM, the driver is forced to resume its device while
-holding RTNL, if it happens to be suspended. The methods needed
-to resume the device take RTNL themselves. Thus runtime PM will deadlock.
+Br,
 
+> > I don't believe you can make this approach scale much if and when in
+> > the future the use cases change. Right now I don't feel comfortable
+> > with this at all.
+> >
+> > thanks,
+> >
+> > > This series was tested on an Android OS device with kernel 6.16.
+> > > This series depends on the 'USB Type-C alternate mode priorities' series:
+> > > https://lore.kernel.org/all/20250905142206.4105351-1-akuchynski@chromium.org/
+> > >
+> > > Andrei Kuchynski (5):
+> > >   usb: typec: Implement mode selection
+> > >   usb: typec: Expose mode_selection attribute via sysfs
+> > >   usb: typec: Report altmode entry status via callback
+> > >   usb: typec: ucsi: displayport: Propagate DP altmode entry result
+> > >   platform/chrome: cros_ec_typec: Propagate altmode entry result
+> > >
+> > >  Documentation/ABI/testing/sysfs-class-typec  |  11 +
+> > >  drivers/platform/chrome/cros_ec_typec.c      |   9 +
+> > >  drivers/platform/chrome/cros_typec_altmode.c |  32 +-
+> > >  drivers/platform/chrome/cros_typec_altmode.h |   6 +
+> > >  drivers/usb/typec/altmodes/displayport.c     |  19 +-
+> > >  drivers/usb/typec/altmodes/thunderbolt.c     |  10 +
+> > >  drivers/usb/typec/class.c                    |  37 ++
+> > >  drivers/usb/typec/class.h                    |   4 +
+> > >  drivers/usb/typec/mode_selection.c           | 345 +++++++++++++++++++
+> > >  drivers/usb/typec/mode_selection.h           |  25 ++
+> > >  drivers/usb/typec/ucsi/displayport.c         |  10 +-
+> > >  include/linux/usb/typec_altmode.h            |  11 +
+> > >  include/linux/usb/typec_dp.h                 |   2 +
+> > >  include/linux/usb/typec_tbt.h                |   3 +
+> > >  14 files changed, 516 insertions(+), 8 deletions(-)
+> > >
+> > > --
+> > > 2.51.0.384.g4c02a37b29-goog
 
-	Regards
-		Oliver
-
-
+-- 
+heikki
 
