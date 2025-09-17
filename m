@@ -1,71 +1,73 @@
-Return-Path: <linux-usb+bounces-28240-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28241-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A560CB81E3C
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 23:08:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAFBDB81E3F
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 23:08:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DDD03A7732
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 21:08:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E6E8174EC6
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 21:08:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 267412D8774;
-	Wed, 17 Sep 2025 21:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90B602E1C69;
+	Wed, 17 Sep 2025 21:08:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LD5S+0Dj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TG3bN1dK"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8EE2882DB
-	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 21:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709AD2DF13C
+	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 21:08:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758143294; cv=none; b=T8uzL5NMUj5aNYr9zB2BQqkJpUNCQShou69BvSR2Qg3p3O2/3bbGpEn0A2xbm7uCz/WW595jAOyyHi0SAzV4cJyH8tWLyIndwhxWTELq7iX8hPzAw1/+VLp0J6BGNskK2advAyJ+DHGVskev35c+3OZGlWaK5brPsdV21qPiDGw=
+	t=1758143297; cv=none; b=okRLCxHs3jTIlNlrVj5lUWXgHSwcDocZ3ewC03eQdQeRq/JqOMh55Kiwu2mycpa6WPHpl9PEb9LAhPCi2zpPNr5XsEuvnHFMIK+Oo6bnVeaxR6420T17SrKnVkMISPpTuenC9vW3sBPlq15hx3GaTnP8mZDpecL2Wlyq0MK8ngo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758143294; c=relaxed/simple;
-	bh=BOpAUuezKh9YyeOytrJGgRumLkfXqivZIr7VyBRZEzc=;
+	s=arc-20240116; t=1758143297; c=relaxed/simple;
+	bh=bhVFyI3Ozwjh+hnzGUTmltuVXMg6Tfw1qH9DpNvjCr8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b0YrDg4zUrD2dU+qM10CgdcZYGUkgHYUsZgAANBUvHq7ODp9JCF8zu3CgTFKMB7u2KacZ8wkyZZF8ptcmMdqujUdrlaSjGEajrSuNfKMdyEa3bvnIoUe+vIEfyB4QDKi+nrMdj2lwurCBPxa8yLLv49Mab/2mENjeG3l3xKvRuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LD5S+0Dj; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version; b=svMjRAxFaO+gu1iz7LwV/IFE5euFwemenQvT0d2TF6EIVVny6GUh1eUBfcXL1RVki2hmUa6Mck+Sp0i46N745Dnr8ATXpiPdHJLft33JTSFypKOUdm10MI6kvuY7X/w+bGdWL32gCPV0Ld1zbtquER5S93doR+GzVJBNyg9YhQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TG3bN1dK; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758143293; x=1789679293;
+  t=1758143295; x=1789679295;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BOpAUuezKh9YyeOytrJGgRumLkfXqivZIr7VyBRZEzc=;
-  b=LD5S+0DjlKlpAqwPOBOEWP8Y2u5MIGGVbCFui+gxvPn8oZeuEICwhrxC
-   6w5VoiN/1WmVOmNVopkAGS1zK2Pb/QUxnuz+AbqdUorZ1Sxhz7sOcEgaU
-   ++GPQ7+JSMcnOy9fvglXoKvsfyAbOwr2swX+uIsAkzK/KK1q1005eUK1Y
-   uNWGmOVuk/lQOvorVBf0C5C76LssaF89e+okX8JFRA4z7IbtEpdmQiBEp
-   BAxr/EzS9cfa31BNSKNNdx1ZEvqqicIcgFLu29+kPOG+Q/jZCuyOIIaPd
-   72tx2weLTG7hqJVUDOFxHMxKk8+JkOeVNLPqdEg4hfIaCnKZOZLvcrX5y
-   A==;
-X-CSE-ConnectionGUID: FuWqBGaPTCKDuoVSBOQnAA==
-X-CSE-MsgGUID: UZO9oei8QGOX/XiHFpt2IA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="48038206"
+  bh=bhVFyI3Ozwjh+hnzGUTmltuVXMg6Tfw1qH9DpNvjCr8=;
+  b=TG3bN1dKQnhQDnBOK8tNgHGyuDtnhxjPlZSo2Uh5tBbYzTs/OqcN0m5d
+   /MLW6ojZPHZG4Vnkla9ZKO/jAfZBR9HapQBA47rsVCW4AP2uCa2q0JK5q
+   2W5ATK5o90OtTGVW4aqobma+Z8SxUuNIaes24/Cek4iDAQgge/iFjcm9X
+   fncOE2xybX+JsJmth/IX7SX00Vn77Ev+Wbw3iLKN2YhTut4LiBKpgwHEk
+   +sHy1qasZv2E5UV9z0uAUsKoVPMRi/6XC68tZ1GSLVLB7wnjy0Vhvq3HD
+   zAIYQfAcINAtK6vw+wLNBtX3ii5eTRP4MXKOg2Y/QFjtdq+g0A5JwhqbQ
+   w==;
+X-CSE-ConnectionGUID: Lq42PlCuTwi1FHUAhSkJ3g==
+X-CSE-MsgGUID: FtwUUXDORbWVVx0NCr9kMQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="48038213"
 X-IronPort-AV: E=Sophos;i="6.18,273,1751266800"; 
-   d="scan'208";a="48038206"
+   d="scan'208";a="48038213"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 14:08:13 -0700
-X-CSE-ConnectionGUID: tZ/0crQuSUmCEhpypmrg3g==
-X-CSE-MsgGUID: LvxFOx3zRYGnQyy5OXz/VQ==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 14:08:15 -0700
+X-CSE-ConnectionGUID: 6lvfMaK7RaK8xWLnKERCJQ==
+X-CSE-MsgGUID: mxd6caYSRnakzys7Rn4kzw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,273,1751266800"; 
-   d="scan'208";a="175800192"
+   d="scan'208";a="175800202"
 Received: from kniemiec-mobl1.ger.corp.intel.com (HELO mnyman-desk.home) ([10.245.244.42])
-  by fmviesa009.fm.intel.com with ESMTP; 17 Sep 2025 14:08:12 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 17 Sep 2025 14:08:13 -0700
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
-	Michal Pecio <michal.pecio@gmail.com>,
+	Niklas Neronin <niklas.neronin@linux.intel.com>,
+	Nick Nielsen <nick.kainielsen@free.fr>,
+	grm1 <grm1@mailbox.org>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 2/6] usb: xhci: Update a comment about Stop Endpoint retries
-Date: Thu, 18 Sep 2025 00:07:21 +0300
-Message-ID: <20250917210726.97100-3-mathias.nyman@linux.intel.com>
+Subject: [PATCH 3/6] usb: xhci-pci: add support for hosts with zero USB3 ports
+Date: Thu, 18 Sep 2025 00:07:22 +0300
+Message-ID: <20250917210726.97100-4-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250917210726.97100-1-mathias.nyman@linux.intel.com>
 References: <20250917210726.97100-1-mathias.nyman@linux.intel.com>
@@ -77,33 +79,90 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Michal Pecio <michal.pecio@gmail.com>
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
 
-Retries are no longer gated by a quirk, so remove that part.
-Add a brief explanation of the timeout.
+Add xhci support for PCI hosts that have zero USB3 ports.
+Avoid creating a shared Host Controller Driver (HCD) when there is only
+one root hub. Additionally, all references to 'xhci->shared_hcd' are now
+checked before use.
 
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+Only xhci-pci.c requires modification to accommodate this change, as the
+xhci core already supports configurations with zero USB3 ports. This
+capability was introduced when xHCI Platform and MediaTek added support
+for zero USB3 ports.
+
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220181
+Tested-by: Nick Nielsen <nick.kainielsen@free.fr>
+Tested-by: grm1 <grm1@mailbox.org>
+Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-ring.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/usb/host/xhci-pci.c | 42 +++++++++++++++++++++----------------
+ 1 file changed, 24 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 6309200e93dc..e3d0e2e0312e 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1262,8 +1262,9 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
- 			 * Stopped state, but it will soon change to Running.
- 			 *
- 			 * Assume this bug on unexpected Stop Endpoint failures.
--			 * Keep retrying until the EP starts and stops again, on
--			 * chips where this is known to help. Wait for 100ms.
-+			 * Keep retrying until the EP starts and stops again or
-+			 * up to a timeout (a defective HC may never start, or a
-+			 * driver bug may cause stopping an already stopped EP).
- 			 */
- 			if (time_is_before_jiffies(ep->stop_time + msecs_to_jiffies(100)))
- 				break;
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 00fac8b233d2..5c8ab519f497 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -610,7 +610,7 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ {
+ 	int retval;
+ 	struct xhci_hcd *xhci;
+-	struct usb_hcd *hcd;
++	struct usb_hcd *hcd, *usb3_hcd;
+ 	struct reset_control *reset;
+ 
+ 	reset = devm_reset_control_get_optional_exclusive(&dev->dev, NULL);
+@@ -636,26 +636,32 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	hcd = dev_get_drvdata(&dev->dev);
+ 	xhci = hcd_to_xhci(hcd);
+ 	xhci->reset = reset;
+-	xhci->shared_hcd = usb_create_shared_hcd(&xhci_pci_hc_driver, &dev->dev,
+-						 pci_name(dev), hcd);
+-	if (!xhci->shared_hcd) {
+-		retval = -ENOMEM;
+-		goto dealloc_usb2_hcd;
+-	}
+ 
+-	retval = xhci_ext_cap_init(xhci);
+-	if (retval)
+-		goto put_usb3_hcd;
++	xhci->allow_single_roothub = 1;
++	if (!xhci_has_one_roothub(xhci)) {
++		xhci->shared_hcd = usb_create_shared_hcd(&xhci_pci_hc_driver, &dev->dev,
++							 pci_name(dev), hcd);
++		if (!xhci->shared_hcd) {
++			retval = -ENOMEM;
++			goto dealloc_usb2_hcd;
++		}
+ 
+-	retval = usb_add_hcd(xhci->shared_hcd, dev->irq,
+-			IRQF_SHARED);
+-	if (retval)
+-		goto put_usb3_hcd;
+-	/* Roothub already marked as USB 3.0 speed */
++		retval = xhci_ext_cap_init(xhci);
++		if (retval)
++			goto put_usb3_hcd;
++
++		retval = usb_add_hcd(xhci->shared_hcd, dev->irq, IRQF_SHARED);
++		if (retval)
++			goto put_usb3_hcd;
++	} else {
++		retval = xhci_ext_cap_init(xhci);
++		if (retval)
++			goto dealloc_usb2_hcd;
++	}
+ 
+-	if (!(xhci->quirks & XHCI_BROKEN_STREAMS) &&
+-			HCC_MAX_PSA(xhci->hcc_params) >= 4)
+-		xhci->shared_hcd->can_do_streams = 1;
++	usb3_hcd = xhci_get_usb3_hcd(xhci);
++	if (usb3_hcd && !(xhci->quirks & XHCI_BROKEN_STREAMS) && HCC_MAX_PSA(xhci->hcc_params) >= 4)
++		usb3_hcd->can_do_streams = 1;
+ 
+ 	/* USB-2 and USB-3 roothubs initialized, allow runtime pm suspend */
+ 	pm_runtime_put_noidle(&dev->dev);
 -- 
 2.43.0
 
