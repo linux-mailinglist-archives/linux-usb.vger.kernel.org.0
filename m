@@ -1,180 +1,215 @@
-Return-Path: <linux-usb+bounces-28203-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28204-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1E13B7DC3C
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:34:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25E31B7CFBF
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:15:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69D863236A4
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 11:14:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38E36586628
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 11:26:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A8792EC0A5;
-	Wed, 17 Sep 2025 11:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C301A32B4B2;
+	Wed, 17 Sep 2025 11:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="m2+PVpD+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eP4/C49y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9CA2BEFEE
-	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 11:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E592FFF9A
+	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 11:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758107674; cv=none; b=kNdYtJES2msaJngl2Ttd6PpieR7G8ejpzH5RH78yOAaNhnb+RK77nknOmPKBK52j32HPvzmeG2FHyQqnhsC1exQxaYM7KAam5VA/W7BLJGQG9OL2yeV4T8L7TQMF0zVYj1T9lC+adCHEnn7OvmkBsWktPpKePWebkhJQV0NdDVw=
+	t=1758108391; cv=none; b=pSGY6m3rXAL3JlWvchanWhOXBuv7hsENVuT8oX22q8Lydcxkf8qBLO9WQmV2nmPRuYPbVdJltte9tKXFHjxWD6Ibgg42BcenTEKpKVjIBolB8o18JUbMTWDTlpb0SRPxKCfi4g6F6VUwnMLyRBBSvBV1TuvdIEmQj0A+U7FXw7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758107674; c=relaxed/simple;
-	bh=gr9F60Me7a60bNWj3SiJcwOQULQ8APfwa1823sZVpIo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XuMgZPJ3mloB3p00eQE2sjgzNLVcHpf6FNnBh/Vyq7HUHT2bmX6U6XIlzjXZFnkzilb/98ZEeE5oy2kBimB8bzjxQdO7F4fprf3IdMcyWAHhoqgqqbq3jekz+LlkQJ8AhQlJ/V1TT91SlXQNva/Zk332GC5L749wIOYROo9uLK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=m2+PVpD+; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58H8XZNm021417
-	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 11:14:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	SjIVIub8Wket+d8VfqHLW16P1fmhDt81FIBdsCC9eCk=; b=m2+PVpD+JX68xdNA
-	e6xGaMzZ2V9W8QeokHqxPURe4dJtCFtGFHq+OxOmaPE4rRv1UxUwfKFmYx/A7XiQ
-	cvcPvOILvHD/y1NpaWwONYtYw1bEObfadFOhPRLB0iq4eyFVmx4PYk7ONHW1uHXP
-	iIdjyKxmkhqBYTpMoZNFFQwhkaAEW8SnyRrL0x/jxWEKvUl46MBd9LskkdSZbuj8
-	5ro/SMmh9Rcrr+GQGChDUbLYQVvsM+U1ImXl1yrubRtPlJNHQOak0cZW3nENXU49
-	xISItLnkeQzXKnixLD9usp5TqPO22lsZBIk6swlTbQjefYxhivU/nHBHI1k0zlMA
-	AIL1Eg==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 497fy5a2ne-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 11:14:31 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4b79d4154c9so13872541cf.3
-        for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 04:14:31 -0700 (PDT)
+	s=arc-20240116; t=1758108391; c=relaxed/simple;
+	bh=ppa9xqtoGfGGmWZPvjGVyKSOFbJHHlCDfK1ROI9sSuc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=m+SvZzORG38SmuXZDoA/zeKp6POhkytW0spUtFLOnm+DeeFXu+Fv0OI9comSZMpsfRUDfADac+sZ3AahT6/tnA6Z9EOywnLVo5EDa68uMnCnsMWskcDQuzan/0LhKb32c1acZv49DrsVCyCHNbIv0CzhjavNoWQ8oryaI74qJUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eP4/C49y; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b03fa5c5a89so1092344466b.2
+        for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 04:26:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758108386; x=1758713186; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HgyP1skDDpJkVrmkkvIDINFO9MgyddQrfr7riBVEJpU=;
+        b=eP4/C49yE/BRvaU3klF2lUBfV5xFx4nym6GMuSa3xR2rbLkwV85cKFvaf+GEJE+wjk
+         dnAiIBZQWDdPFNqQ0O4XdKOQwIUZukP+HrIrz7rREM918n/XuMmKfcguv/mTJNhOX0U3
+         sHmFjL+JOguJgshk1dRs+60vR/ZhMBaLJAN/abEFYUc1qG27uGk5v0Ne+szca+mlZjyP
+         YKKzAZ313FhKoj29YoqhxLQmScpKSHgJ2O6RXBNMfAKS7r748BMaKje7priHMZy+gK/H
+         s8p5qh7eJcVNqyBZ88mzCaX+7hIAUznTqUzdx0nJhbisdq4wPVUBGKXeR409g81HYVws
+         q1cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758107671; x=1758712471;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SjIVIub8Wket+d8VfqHLW16P1fmhDt81FIBdsCC9eCk=;
-        b=AiES3DDteslks5jWk5heLttRlPdCTiSm+ZuVki2uRjRWIxmptIP7wFUTcdgWjcPkjT
-         AS7uXOHyBGIS+1bkPZx9u397LALXWNqLRZyfLQxb26VoQ2dIJ3Hlc1Mi++jKB+g9p8o0
-         KKDxBVx3N+Wo+2LEgYR0LqMR7g9p3XmpRM+hoDOrPn3P9WQ319H/xH+TrSN6Hx7eCla6
-         lFiyIdNuZIDhRoRbBcDKkvSoEpjvaIz5fO16NABgUViIMfmydpQcM6Ee8jwTp2hjbLeN
-         tauZ0ouPEuBhLGPPQ+xP2OeH1i7ij+PsxsmH0u5I9bL7mx7fsWsvZQMC0Hw+ZOKOmxy+
-         u+vg==
-X-Forwarded-Encrypted: i=1; AJvYcCXCDf+ixYbCpWsQfQE+I8lMbK833DXCg/OEovzG3lmbTwdnLruEhoYX6VIBrSdHdCxFTRVjwKVEkEA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcMFGzuIJ1jQo9OaPXetNhVolFb+c9zDk94b9zF0PhDuAOEXAW
-	/W7SP1/oXh1dZrn4LDxpPLZpd38+C1dw+H8pVIFTuWxu/hMmacuH+EmuedHEqPdPFsWXomOouHu
-	Z5Ehhh1bXfEQPYZMqsYhrvDOyx3ju8GcLQurVm9tyvRrc7ovWCu3pddFBU4WL4ng=
-X-Gm-Gg: ASbGncsVtRQmR8ef/G0p+/FrECDbuENlFC6hT1/cHYpGuFxJBVnSVUxOT9T8O1tI4BI
-	uLvRoiNdFWjIcfk+Kt45QIgioiA+cod8ssM+xfdteB2kNU1SOBZM4SCyu8lTAotrFZVXxtdLERs
-	Q68+JJSNcFnXJDtwG3J4iOSy0EiDTb9z11Iv+dIDcWuV9GqCam+VFnjsBJcwb4h/AbXbtfNyNh9
-	Y7VSjGjunDh8QwKVRcjoABlMr7Ya2o4o0PC6WYbYgSg8858nBtBS5jGHMBJBjuACV2pJB1pPApx
-	+hQoEbWvJxwAzq+IA+7ajkzi4NvyGniSOaKfknKxTEIvkUFhx2hbIKRjXeH4pXaHGVXJLvUrECO
-	5zQBpNt8LgX/si+1PTL3pKg==
-X-Received: by 2002:a05:622a:342:b0:4b5:a0fb:59a4 with SMTP id d75a77b69052e-4ba671e5e91mr10613571cf.1.1758107670633;
-        Wed, 17 Sep 2025 04:14:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHUZWiiFXjANyc5iNlBf2sAU8oL2kw0kwLhnJKg6xlVKg4vTUbDuuDVuoJ15JMc/ewmK01gkw==
-X-Received: by 2002:a05:622a:342:b0:4b5:a0fb:59a4 with SMTP id d75a77b69052e-4ba671e5e91mr10613251cf.1.1758107670045;
-        Wed, 17 Sep 2025 04:14:30 -0700 (PDT)
-Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b136ee12326sm485898366b.51.2025.09.17.04.14.27
+        d=1e100.net; s=20230601; t=1758108386; x=1758713186;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HgyP1skDDpJkVrmkkvIDINFO9MgyddQrfr7riBVEJpU=;
+        b=VtHx4MU+uIiXDpGPlpO6ZxVrdmIu3N3XGSZuw/KYcOtYNfU8ob4xxtMJ+MQqpra++p
+         77nda3bNV5ax3JuMX5hIkt7OxNlmBrGAk2myz/z2v+G5bBA3zS9szBnhhvc7ZurYLeAC
+         pQZEWssoFhjo6UXf00XY939493JH2Ax6OvNWPCKLlbRnp0icL1KWG5HoSskyrLTLYC1i
+         ap9TP0GFh5vqnZMXAzTNqIYo9KUC0zsShldiu8U4RzlFf58GAr7WPctFedsGEzmNnaik
+         2gSDPCacthW9nH+sXSInKZeQhgBqF1GSFu/QxmWAJVBTyL9dDfJ845F+UULVTsdGGLT5
+         cQOA==
+X-Forwarded-Encrypted: i=1; AJvYcCXDEYeTRpId96BLbYrMnnsIa3oYFaz12cUZcm7vVpiM8eVqkSPaSuOHLK7/L3X6dTtVu+o9Cz/4I5k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxEXgst1SiRLaElhunJezXXKOeKHP1dg5SSMtb6O/8+ixgR+bJ
+	20rqvAR45CowKJFQn6Gw2rz7ehZn3/ootmUe/q0RFC3P1gPuunyjJJhV
+X-Gm-Gg: ASbGnctOFFty1DJu3aH1fasm7oKJ+o7Dpzn3odKDnMPE2yZPW74V5//L5RgoNNpcRtc
+	VR0KL90jNoak3OkxzlxHK6hOMRFaB0O5Nbye3QftMmUY0h6hkLTwF/cISi39ctR78JfKJFwKeeo
+	04y/kAM+09gis/qe8BIJFx9H6jj+9pr4/fhOWOtSBYGi52TgRD8oqLS06dyDfHFf/p8WR1SNikZ
+	gBtfjyUNpxhIjglR4yQt4YK4ekW+PjGV/3mYyi9b/WKA5Tnxaxy0DW2QYe99R22rrdxwGURQhq9
+	0am1O2LUkrWLp5n69VWuZJKbBc5HXJ6IOV4SIU2oM49pCJI+dYgYF8efQUlvcXHQE04QZnhFVGJ
+	ClHSyfrDPTxptZInnq0MpOLlLlkVICCsL9juehQUGyXr/ep+UpkVE5xAP/VDNfXVMdEE=
+X-Google-Smtp-Source: AGHT+IFZoOXXk0BzdVxzupl6UXjj53Xlysq4bZMGAJDUG5f0y1MlvEMSvXFKvK4gq4mVVf9cuDDYRA==
+X-Received: by 2002:a17:906:f592:b0:b0d:61a0:9a28 with SMTP id a640c23a62f3a-b1baf60b87cmr182559666b.6.1758108385868;
+        Wed, 17 Sep 2025 04:26:25 -0700 (PDT)
+Received: from localhost (public-gprs292944.centertel.pl. [31.62.31.145])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07b30da388sm1340847766b.22.2025.09.17.04.26.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Sep 2025 04:14:29 -0700 (PDT)
-Message-ID: <fa258ad4-1efa-4fe8-9636-d70c5ea9c8e1@oss.qualcomm.com>
-Date: Wed, 17 Sep 2025 13:14:26 +0200
+        Wed, 17 Sep 2025 04:26:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 9/9] power: supply: qcom_battmgr: handle charging state
- change notifications
-To: fenglin.wu@oss.qualcomm.com, Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
-        David Collins <david.collins@oss.qualcomm.com>,
-        =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20250917-qcom_battmgr_update-v5-0-270ade9ffe13@oss.qualcomm.com>
- <20250917-qcom_battmgr_update-v5-9-270ade9ffe13@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250917-qcom_battmgr_update-v5-9-270ade9ffe13@oss.qualcomm.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: DcFFcJxJd0PXiJJ5chVuH9rXlvrmbpgk
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwMiBTYWx0ZWRfX7wbwUupNDjjh
- CC+oqNjTe1t+5LXyWX9c2sy3/MbFzLldE630QRAgxk0CGYUDf4BsnbrRJgScIi2AHpFjuborGXt
- hMfPnguO1aVKX7m1Bn2ztpnXc/vkF2xobThZcIJXSjCZWAsL/r3emkp1bEI9AWXj6TABseYD5se
- LRa5JhjaGhhzOBvRtV+lNpLVNEPkujtnpIhrfT7PwUDB/jhYy6qcQdF0LUpmopRdjBzGyKu230A
- XNvAn41vOqpxszbjUtVNMcenj+755+sBcK9KfK6Z4SxNdpCmheO75peAFJelV///fZxKlUX55o2
- iWxS/Im+VWIdu/aUjJtk9TDzVni2SU1wxoN65QlC60ZgqakMuQgFW+05qhcfxcUyFjx0rWSA7EA
- pP5PqXpA
-X-Authority-Analysis: v=2.4 cv=Y+f4sgeN c=1 sm=1 tr=0 ts=68ca9817 cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=QX4gbG5DAAAA:8
- a=DHQ_eFf6vkL4qwDZSiYA:9 a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22
- a=AbAUZ8qAyYyZVLSsDulk:22
-X-Proofpoint-ORIG-GUID: DcFFcJxJd0PXiJJ5chVuH9rXlvrmbpgk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-17_01,2025-09-17_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 impostorscore=0 phishscore=0 adultscore=0
- malwarescore=0 bulkscore=0 spamscore=0 clxscore=1015 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2509160202
+Date: Wed, 17 Sep 2025 13:26:23 +0200
+Message-Id: <DCV1EPLCX5L5.3MWOCVTH5AWM4@gmail.com>
+Cc: "Marek Szyprowski" <m.szyprowski@samsung.com>, <stable@vger.kernel.org>,
+ <kernel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, "Lukas Wunner" <lukas@wunner.de>, "Russell King"
+ <linux@armlinux.org.uk>, "Xu Yang" <xu.yang_2@nxp.com>,
+ <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH net v1 1/1] net: usb: asix: forbid runtime PM to avoid
+ PM/MDIO + RTNL deadlock
+From: =?utf-8?q?Hubert_Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>
+To: "Oleksij Rempel" <o.rempel@pengutronix.de>, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>
+X-Mailer: aerc 0.20.0
+References: <20250917095457.2103318-1-o.rempel@pengutronix.de>
+In-Reply-To: <20250917095457.2103318-1-o.rempel@pengutronix.de>
 
-On 9/17/25 12:15 PM, Fenglin Wu via B4 Relay wrote:
-> From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> 
-> The X1E80100 battery management firmware sends a notification with
-> code 0x83 when the battery charging state changes, such as switching
-> between fast charge, taper charge, end of charge, or any other error
-> charging states. The same notification code is used with bit[16] set
-> if charging stops due to reaching the charge control end threshold.
-> Additionally, a 2-bit value is added in bit[18:17] with the same code
-> and used to indicate the charging source capability: a value of 2
-> represents a strong charger, 1 is a weak charger, and 0 is no charging
-> source. The 3-MSB [18:16] in the notification code is not much useful
-> for now, hence just ignore them and trigger a power supply change event
-> whenever 0x83 notification code is received. This helps to eliminate the
-> unknown notification error messages.
+On Wed Sep 17, 2025 at 11:54 AM CEST, Oleksij Rempel wrote:
+> Forbid USB runtime PM (autosuspend) for AX88772* in bind.
+>
+> usbnet enables runtime PM by default in probe, so disabling it via the
+> usb_driver flag is ineffective. For AX88772B, autosuspend shows no
+> measurable power saving in my tests (no link partner, admin up/down).
+> The ~0.453 W -> ~0.248 W reduction on 6.1 comes from phylib powering
+> the PHY off on admin-down, not from USB autosuspend.
+>
+> With autosuspend active, resume paths may require calling phylink/phylib
+> (caller must hold RTNL) and doing MDIO I/O. Taking RTNL from a USB PM
+> resume can deadlock (RTNL may already be held), and MDIO can attempt a
+> runtime-wake while the USB PM lock is held. Given the lack of benefit
+> and poor test coverage (autosuspend is usually disabled by default in
+> distros), forbid runtime PM here to avoid these hazards.
+>
+> This affects only AX88772* devices (per-interface in bind). System
+> sleep/resume is unchanged.
+>
+> Fixes: 4a2c7217cd5a ("net: usb: asix: ax88772: manage PHY PM from MAC")
+> Reported-by: Hubert Wi=C5=9Bniewski <hubert.wisniewski.25632@gmail.com>
+> Closes: https://lore.kernel.org/all/20220622141638.GE930160@montezuma.acc=
+.umu.se
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Closes: https://lore.kernel.org/all/b5ea8296-f981-445d-a09a-2f389d7f6fdd@=
+samsung.com
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+> Link to the measurement results:
+> https://lore.kernel.org/all/aMkPMa650kfKfmF4@pengutronix.de/
+> ---
+>  drivers/net/usb/asix_devices.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_device=
+s.c
+> index 792ddda1ad49..0d341d7e6154 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -625,6 +625,22 @@ static void ax88772_suspend(struct usbnet *dev)
+>  		   asix_read_medium_status(dev, 1));
+>  }
+> =20
+> +/*
+> + * Notes on PM callbacks and locking context:
+> + *
+> + * - asix_suspend()/asix_resume() are invoked for both runtime PM and
+> + *   system-wide suspend/resume. For struct usb_driver the ->resume()
+> + *   callback does not receive pm_message_t, so the resume type cannot
+> + *   be distinguished here.
+> + *
+> + * - The MAC driver must hold RTNL when calling phylink interfaces such =
+as
+> + *   phylink_suspend()/resume(). Those calls will also perform MDIO I/O.
+> + *
+> + * - Taking RTNL and doing MDIO from a runtime-PM resume callback (while
+> + *   the USB PM lock is held) is fragile. Since autosuspend brings no
+> + *   measurable power saving for this device with current driver version=
+, it is
+> + *   disabled below.
+> + */
+>  static int asix_suspend(struct usb_interface *intf, pm_message_t message=
+)
+>  {
+>  	struct usbnet *dev =3D usb_get_intfdata(intf);
+> @@ -919,6 +935,16 @@ static int ax88772_bind(struct usbnet *dev, struct u=
+sb_interface *intf)
+>  	if (ret)
+>  		goto initphy_err;
+> =20
+> +	/* Disable USB runtime PM (autosuspend) for this interface.
+> +	 * Rationale:
+> +	 * - No measurable power saving from autosuspend for this device.
+> +	 * - phylink/phylib calls require caller-held RTNL and do MDIO I/O,
+> +	 *   which is unsafe from USB PM resume paths (possible RTNL already
+> +	 *   held, USB PM lock held).
+> +	 * System suspend/resume is unaffected.
+> +	 */
+> +	pm_runtime_forbid(&intf->dev);
+> +
+>  	return 0;
+> =20
+>  initphy_err:
+> @@ -948,6 +974,10 @@ static void ax88772_unbind(struct usbnet *dev, struc=
+t usb_interface *intf)
+>  	phylink_destroy(priv->phylink);
+>  	ax88772_mdio_unregister(priv);
+>  	asix_rx_fixup_common_free(dev->driver_priv);
+> +	/* Re-allow runtime PM on disconnect for tidiness. The interface
+> +	 * goes away anyway, but this balances forbid for debug sanity.
+> +	 */
+> +	pm_runtime_allow(&intf->dev);
+>  }
+> =20
+>  static void ax88178_unbind(struct usbnet *dev, struct usb_interface *int=
+f)
+> @@ -1600,6 +1630,10 @@ static struct usb_driver asix_driver =3D {
+>  	.resume =3D	asix_resume,
+>  	.reset_resume =3D	asix_resume,
+>  	.disconnect =3D	usbnet_disconnect,
+> +	/* usbnet will force supports_autosuspend=3D1; we explicitly forbid RPM
+> +	 * per-interface in bind to keep autosuspend disabled for this driver
+> +	 * by using pm_runtime_forbid().
+> +	 */
+>  	.supports_autosuspend =3D 1,
+>  	.disable_hub_initiated_lpm =3D 1,
+>  };
 
-Thank you for explaining the technical background.
+Well, this fixes the issue for me. No suspend/resume -- no deadlock -- no
+problem. Thanks.
 
-Please hit enter somewhere in your commit message, this is a very
-long paragraph, making it difficult to read.
-
-
-I believe this maps to:
-
-0 -> POWER_SUPPLY_CHARGE_TYPE_NONE
-1 -> POWER_SUPPLY_CHARGE_TYPE_TRICKLE
-2 -> POWER_SUPPLY_CHARGE_TYPE_FAST (or _STANDARD, I see battmgr code
-reports them both as 2)
-
-However, we already set it to none/trickle/standard(taper) based on
-the usual notifications, so I'm not sure if these are more common or
-arrive outside the normal state changes - if so, perhaps we can take
-them into account as well?
-
-I think it also warrants a:
-
-Reported-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
-Konrad
+Tested-by: Hubert Wi=C5=9Bniewski <hubert.wisniewski.25632@gmail.com>
 
