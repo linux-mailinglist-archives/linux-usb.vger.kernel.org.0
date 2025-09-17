@@ -1,113 +1,154 @@
-Return-Path: <linux-usb+bounces-28227-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28228-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CB04B7FF63
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 16:27:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79BF7B80083
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 16:34:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79B255474F4
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:17:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A5D048629F
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC7CD30CB33;
-	Wed, 17 Sep 2025 14:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608832EE5F4;
+	Wed, 17 Sep 2025 14:31:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Smggclrq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UHQdZlm6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bg1.exmail.qq.com (bg1.exmail.qq.com [114.132.77.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D352BE648;
-	Wed, 17 Sep 2025 14:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.132.77.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FDE2EDD62
+	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 14:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758118311; cv=none; b=OUUQBXpuDkfbkD3s8flDvjum9gmfOkLETsFkllDK2pFYOchTeTKNhkP9UcR8DUruXm156r8coInAp/GarBVA9MmxneFXwA7/UQNCbNv+mEdtgovvTwrCG+oIM+mXVuHZ/4T+A3HymOBBESDupqRMLYGdroYK5N0NQNWwe7hNiRw=
+	t=1758119507; cv=none; b=OQ6c74+u4u97JWcBmc69n3G0FR6ThqmwRYnlZ1wDAmbUngCPgpJY9j4nYhQiKq1Bm1AdOo4js5hx4SOv3RjtejXBameIhOz+fnTG/t9aJi+XoKTfkcQX6yPgtE5ihZGLEAGQZ9YHM5+AwHNF+LLlSZTPAhwdmrmSEuEqA2yt9pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758118311; c=relaxed/simple;
-	bh=rM4KQ3PkxhYr9FbhyaE5pBKuVvJZZAXxL7KkT6K2uPo=;
-	h=From:To:Cc:Subject:Mime-Version:Content-Type:Date:Message-ID:
-	 References:In-Reply-To; b=ira+5JHWhUQcjtx6DIM8jQh63+qSkw1UMo2Y/oQahKGEp+ZtXUhtHXhCUVNDKkoFTedHpFWi3n110eclJGYPbUnwUClLdTcaue7LbKAF8M4FrLuR1uW5UImHjMmn9iI3G4+7nq+RGRj/eA1GgSx+olbRNriguUNeIrMFTglq5c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Smggclrq; arc=none smtp.client-ip=114.132.77.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1758118281;
-	bh=rM4KQ3PkxhYr9FbhyaE5pBKuVvJZZAXxL7KkT6K2uPo=;
-	h=From:To:Subject:Mime-Version:Date:Message-ID;
-	b=Smggclrq/NtA5Cx0MxxW+GNweFUxjv1RYKFJzeiZDTvN/8BS/I1PNFgoESS/z57SK
-	 oKetg0UpCTquk56p6vkaAVa9g+OEJ+OLhGeU4v/dGAxPnjycGC8rRxZdxRpSYJFEca
-	 Emv1vCeAHm4OSx4yY9fMGJaAK0weJ/EcnN0bXP64=
-EX-QQ-RecipientCnt: 20
-X-QQ-GoodBg: 1
-X-BAN-DOWNLOAD: 1
-X-BAN-SHARE: 1
-X-QQ-SSF: 00420020000000F0
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-X-QQ-FEAT: haFBrozbn+y1w6iRDNE+jsz5WmkBWUHROWGtM7u1qAI=
-X-QQ-BUSINESS-ORIGIN: 2
-X-QQ-Originating-IP: Bhcfj9TQaSmi2QK6UgxAhYAV4w31aPKffPMRkVHOBVLOcc7DfcOQQKtcL4GCPbP5iWAiPpfgO1S8DayM7EHLlw==
-X-QQ-STYLE: 
-X-QQ-mid: lv3gz7a-7t1758118183t7e572d69
-From: "=?utf-8?B?Q3J5b2xpdGlh?=" <cryolitia@uniontech.com>
-To: "=?utf-8?B?RHJhZ2FuIFNpbWlj?=" <dsimic@manjaro.org>
-Cc: "=?utf-8?B?SmFyb3NsYXYgS3lzZWxh?=" <perex@perex.cz>, "=?utf-8?B?VGFrYXNoaSBJd2Fp?=" <tiwai@suse.com>, "=?utf-8?B?Sm9uYXRoYW4gQ29yYmV0?=" <corbet@lwn.net>, "=?utf-8?B?THVpcyBDaGFtYmVybGFpbg==?=" <mcgrof@kernel.org>, "=?utf-8?B?UGV0clBhdmx1?=" <petr.pavlu@suse.com>, "=?utf-8?B?RGFuaWVsIEdvbWV6?=" <da.gomez@kernel.org>, "=?utf-8?B?U2FtaVRvbHZhbmVu?=" <samitolvanen@google.com>, "=?utf-8?B?bGludXgtc291bmQ=?=" <linux-sound@vger.kernel.org>, "=?utf-8?B?bGludXgtdXNi?=" <linux-usb@vger.kernel.org>, "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>, "=?utf-8?B?bGludXgtZG9j?=" <linux-doc@vger.kernel.org>, "=?utf-8?B?TWluZ2NvbmcgQmFp?=" <jeffbai@aosc.io>, "=?utf-8?B?S2V4eSBCaXNjdWl0?=" <kexybiscuit@aosc.io>, "=?utf-8?B?6IGC6K+a?=" <niecheng1@uniontech.com>, "=?utf-8?B?5Y2g5L+K?=" <zhanjun@uniontech.com>, "=?utf-8?B?5Yav5Zut?=" <fengyuan@uniontech.com>, "=?utf-8?B?5a6J5Zu956uL?=" <anguoli@uniontech.com>, "=?utf-8?B?a2VybmVs?=" <kernel@uniontech.com>, "=?utf-8?B?bGludXgtbW9kdWxlcw=
- =?=" <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v3 4/4] ALSA: doc: add docs about device_device_quirk_flags in snd-usb-audio
+	s=arc-20240116; t=1758119507; c=relaxed/simple;
+	bh=pmZTa+8cnY7Efr6/mRZy0dWltDPz1nlF8NdW0P91Y9E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=AFOyeFc9MNDmtUC9cd2eqIBoKVdM2ZKU2y8geRDeaPXqVI5uqxYzQ+BTtARkDpHQewNqJErHnpXTGfHzx7abueuPjuw/4dmC4NSKXKWuW8Q7GW83sLnBRb8wz+aGI53M62QZ8cx468w1crkkS8Y5uOaNoraT77YWJNgJ9yGm9GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UHQdZlm6; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-62f1987d4b2so8201288a12.2
+        for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 07:31:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758119504; x=1758724304; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IyY1RV/auovX2uJdCFMa3w6J8/ewCXkxPUNzbeKoZdo=;
+        b=UHQdZlm6FfREwgu05wpI5BdkNT31V5dJKYkcA1EaCthiu75PTdoseiV+lM6YMpWRLh
+         Z1vNYbS7Wo9ojMxun7qhGvFmX038VqYjBQBrkXoWwRdnw6N449GpQJm8mk0dsRWX9gkl
+         czHnw2NKvUfN71vkjglJyuvjUuRs07zCypvFHaz8BR6vVUXNBJf/+i1iOZJPsD7xYfTE
+         YbR5A2GZSs8uLoMbxS9ZRtZ3K+C1qIL/BztW/QtQZho73omSFrHWyEaovwmeN7Xo3vBW
+         42naUpdLwlkaw7OulfcHc3F7ZoR+yFb8FFYXf+izAiQbV11B/upY3WWuXgxMDhM09vX/
+         QGXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758119504; x=1758724304;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=IyY1RV/auovX2uJdCFMa3w6J8/ewCXkxPUNzbeKoZdo=;
+        b=JdCAc7wd8gWmzpvDG+UwO2DR+R22RRgpjEl5NqGD9W+sXcnPkHtJnWRkVUrsw+cOLm
+         JHMmzR70YYUhdzJWDG/kBp6ouwvcKethj2WA310sCDMaUCRcphEHGNWCWlSV/8jBlkAN
+         vxQ2mud5OnVqiZyjHtCMox0YFK6ygJSxxNRruslkBA70R1rqFZ2w9/fBfUz5q4wVONW6
+         w3tNrJfSzwT7GuJjw4Sa7Hx2xhfTQEUXBWaJvMsiDkDoAlJILftIQ2NhjOc2UeaYUpKS
+         n2dCn7CJefLZwf5wgnO4GD1jE5zx5lgAbFsr8xi/VerY33C/jwVD+KYgevo+0SSTh+T4
+         xMZw==
+X-Forwarded-Encrypted: i=1; AJvYcCX7rymGMw/poHRpGSVFQeKseci1QHTcaVqK6e2/cjLWPDdPL2V6HbtARbnwyTtEnJAV1YMLTqiRxAc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6FFQRVZMG8ONosImCSQ1ajsl5iKguG9JkA29EiSSW1atjwIgp
+	/CWsGF1Vr2FxtKz3syBAM825b8ABdzwteTzgeDXYeVuOSNZSOyxU0mlA
+X-Gm-Gg: ASbGncu+KAuoZ9WKZhe9n0VDhrrwVQ9moywXo2w59AO2WIsEg019L+ekb45siS3VWjo
+	W+d8CLWMOaIk28E7+UtBczru2R2NB7zX6a6h0d9oF0dghqnqZNi5YsI5pNYSA5r+3tpRLty5tlg
+	KKoDe4Ozs1FgJkvPWplCFJMwocBXusTkNyDDXVuuZEJfp6H+84wTfwws8rbHfMS63XbX3+PPLTB
+	BkI4+42aVecRm7tdez7ezxnkHhDjdSECiSZ0mjJinEMSbxBnt2BkgLTsA79Qr0Cmc1Rx3FEO9HV
+	WZ6RrOwX+NR6L63HES2nrNdy7yuqAa0Bf978spZoq1whinwdLdz1i2aw/JgiyI2cdDmSytpxEPg
+	ORdL/87EGsDTKK9DGBhEVkhqnqcOCBEkQZgRASMy3CXNOc09z+IN94pDDYZBr+cZMuyI=
+X-Google-Smtp-Source: AGHT+IGSu0kLCnKgEdILIwXArUGLgXbeJB2AOyLfpHxUrOACUzPlxCRqec4ro27CMYP0cvBESnTAKA==
+X-Received: by 2002:a05:6402:3252:b0:615:6a10:f048 with SMTP id 4fb4d7f45d1cf-62f8443a507mr2008537a12.33.1758119504155;
+        Wed, 17 Sep 2025 07:31:44 -0700 (PDT)
+Received: from localhost (public-gprs292944.centertel.pl. [31.62.31.145])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62f70984065sm2433229a12.33.2025.09.17.07.31.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Sep 2025 07:31:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
-Date: Wed, 17 Sep 2025 22:09:43 +0800
-X-Priority: 3
-Message-ID: <tencent_3064F5D903EC827F710A50E1@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
-References: <20250917-sound-v3-0-92ebe9472a0a@uniontech.com>
-	<20250917-sound-v3-4-92ebe9472a0a@uniontech.com>
-	<0999abc5390bbfcb21e15bd140510540@manjaro.org>
-In-Reply-To: <0999abc5390bbfcb21e15bd140510540@manjaro.org>
-X-QQ-ReplyHash: 2225085134
-X-BIZMAIL-ID: 15805261366488725622
-X-QQ-SENDSIZE: 520
-Received: from qq.com (unknown [127.0.0.1])
-	by smtp.qq.com (ESMTP) with SMTP
-	id ; Wed, 17 Sep 2025 22:09:48 +0800 (CST)
-Feedback-ID: lv:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-0
-X-QQ-XMAILINFO: NENUB7MpVQfJ93CEdpX6ez1dws86+xgtBEckcIaBvAgupFamReWYswWZ
-	E37x3dX0oE1yU/NEL1D5wrYBQif+GLbo1AY2NSKBji26oK+JeeO+dRZb+B17xjIoY+vVkVh
-	ZMFT2Tbw2d5EkmyLK1LvphdnGlA8+5H3jngWcBvEEF9pYOEduHnN3yGxxRWbeFfro0zd+NG
-	aHWiUJImrrV32QOc90nSgsHOavF8zzhv8qQETqwlhzO+202Uw8S14tIttJn45rcB5CkRuOA
-	Uy2AyA/7zj66+J5y49tWs+WGIVGIWRMtM0hSOvwW2Ye6NOCnkXf/iWn9CaMkdGjMm8RV/st
-	5hXImMLeNhb1keT+cK7FPVYlyQwGcoJDaABgCy29sb6LyySMzH/6nPwgExUWdHUv9xzj7qJ
-	zRh1ds/r6B+kZyBr761OQTjRcgMWE3CMXL7sjMQPnT1KLnKIaA85YgXZZmQLfiqzKwOXd0h
-	kyRV5iapHRUkjcTGcj0l5Vh/fo0JfRkwQTklUC1U+zB8rBl9fqwSosTciakf4pGeNWO3BUu
-	VJWONkLq5VXwH1GrshutfyTAoUa/HH1B7xZoKRgN+5JkW1fM4D4FEVGZ85uZDj2ghlJfgRq
-	Ip85xzTHxJtmiTBWyS0ibcgSgnpWC8cVdHPoo5yysTQgKM85AfD8ABblcr6uhhmQnVoFzM9
-	h63jmP7SuDq2nuuytytdkVD4ySK6eFU89BeyB/fZBsYNod0i4FsJdcgtQ4YiHkV5bLt0eRD
-	m0uEKv0whaufwUpXFS0aNnKM50A6pSAu0yXgsPnC7huX+g3v/PYXcadP0m8BGOzil6YH6e9
-	v5mYt2DBMU7VVHeNxeOG/h7D25wu2Mu8MlfcAiuTm6V+ebe4A54IkEFgMqs6Tm40IzUOCzR
-	AhsmAi1hOfd2AqHmgH1dQMT9xf75ryX5vB+KJEHYg0oqrbbT2PUStN7SMf2KPlKRbn9/9fc
-	xhQVHiD93L2wEjnuPTV7ZS/AZok1LJ8D6wlQmI1L/m0MxcwPm2Rt4/b9MF0mEX1wWYSmG++
-	SsAxhv44syPB4ZihVi5yjDE0eDMPn6M1jvIh4HXgZZ4AR4vsuv1QLaGoLsjV8rn+DuKyuZ0
-	Pk/T9L5pL3n
-X-QQ-RECHKSPAM: 0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 17 Sep 2025 16:31:40 +0200
+Message-Id: <DCV5CKKQTTMV.GA825CXM0H9F@gmail.com>
+Cc: "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Marek
+ Szyprowski" <m.szyprowski@samsung.com>, <stable@vger.kernel.org>,
+ <kernel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, "Lukas Wunner" <lukas@wunner.de>, "Russell King"
+ <linux@armlinux.org.uk>, "Xu Yang" <xu.yang_2@nxp.com>,
+ <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH net v1 1/1] net: usb: asix: forbid runtime PM to avoid
+ PM/MDIO + RTNL deadlock
+From: =?utf-8?q?Hubert_Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>
+To: "Alan Stern" <stern@rowland.harvard.edu>, "Oleksij Rempel"
+ <o.rempel@pengutronix.de>
+X-Mailer: aerc 0.20.0
+References: <20250917095457.2103318-1-o.rempel@pengutronix.de>
+ <c94af0e9-dc67-432e-a853-e41bfa59e863@rowland.harvard.edu>
+In-Reply-To: <c94af0e9-dc67-432e-a853-e41bfa59e863@rowland.harvard.edu>
 
-PiBIZWxsbyBDcnlvbGl0aWEsDQo+IA0KPiBPbiAyMDI1LTA5LTE3IDE0OjQ2LCBDcnlvbGl0
-aWEgUHVrTmdhZSB2aWEgQjQgUmVsYXkgd3JvdGU6DQo+PiBGcm9tOiBDcnlvbGl0aWEgUHVr
-TmdhZSA8Y3J5b2xpdGlhQHVuaW9udGVjaC5jb20+DQo+PiANCj4+IEp1c3QgYnJpZWZseSBk
-ZXNjcmliZWQgYWJvdXQgdGhlIG5ldyBvcHRpb24uDQo+PiANCj4+IFNpZ25lZC1vZmYtYnk6
-IENyeW9saXRpYSBQdWtOZ2FlIDxjcnlvbGl0aWFAdW5pb250ZWNoLmNvbT4gDQoNCj4gSXNu
-J3QgdGhlIHBhdGNoIHN1YmplY3QgYSBiaXQgd3JvbmcsIGFuZCBzaG91bGQgY29udGFpbg0K
-PiAiZGV2aWNlIHF1aXJrX2ZsYWdzIiBpbnN0ZWFkIG9mICJkZXZpY2VfZGV2aWNlX3F1aXJr
-X2ZsYWdzIj8NCg0KU29ycnkgZm9yIHRoYXQsIEkgZm9yZ2V0IHRvIHJlLXdyaXRlIHRoZSBj
-b21taXQgbWVzc2FnZS4NClRoeCBmb3IgcG9pbnRpbmcgb3V0Lg0KDQpCZXN0IHJlZ2FyZHMs
-DQpDcnlvbGl0aWEgUHVrTmdhZQ==
+On Wed Sep 17, 2025 at 3:54 PM CEST, Alan Stern wrote:
+> On Wed, Sep 17, 2025 at 11:54:57AM +0200, Oleksij Rempel wrote:
+>> Forbid USB runtime PM (autosuspend) for AX88772* in bind.
+>>=20
+>> usbnet enables runtime PM by default in probe, so disabling it via the
+>> usb_driver flag is ineffective. For AX88772B, autosuspend shows no
+>> measurable power saving in my tests (no link partner, admin up/down).
+>> The ~0.453 W -> ~0.248 W reduction on 6.1 comes from phylib powering
+>> the PHY off on admin-down, not from USB autosuspend.
+>>=20
+>> With autosuspend active, resume paths may require calling phylink/phylib
+>> (caller must hold RTNL) and doing MDIO I/O. Taking RTNL from a USB PM
+>> resume can deadlock (RTNL may already be held), and MDIO can attempt a
+>> runtime-wake while the USB PM lock is held. Given the lack of benefit
+>> and poor test coverage (autosuspend is usually disabled by default in
+>> distros), forbid runtime PM here to avoid these hazards.
+>>=20
+>> This affects only AX88772* devices (per-interface in bind). System
+>> sleep/resume is unchanged.
+>
+>> @@ -919,6 +935,16 @@ static int ax88772_bind(struct usbnet *dev, struct =
+usb_interface *intf)
+>>  	if (ret)
+>>  		goto initphy_err;
+>> =20
+>> +	/* Disable USB runtime PM (autosuspend) for this interface.
+>> +	 * Rationale:
+>> +	 * - No measurable power saving from autosuspend for this device.
+>> +	 * - phylink/phylib calls require caller-held RTNL and do MDIO I/O,
+>> +	 *   which is unsafe from USB PM resume paths (possible RTNL already
+>> +	 *   held, USB PM lock held).
+>> +	 * System suspend/resume is unaffected.
+>> +	 */
+>> +	pm_runtime_forbid(&intf->dev);
+>
+> Are you aware that the action of pm_runtime_forbid() can be reversed by=
+=20
+> the user (by writing "auto" to the .../power/control sysfs file)?
+
+I have tested this. With this patch, it seems that writing "auto" to
+power/control has no effect -- power/runtime_status remains "active" and
+the device does not get suspended. But maybe there is a way to force the
+suspension anyway?
+
+> To prevent the user from re-enabling runtime PM, you should call=20
+> pm_runtime_get_noresume() (and then of course pm_runtime_put() or=20
+> equivalent while unbinding).
+>
+> Alan Stern
 
 
