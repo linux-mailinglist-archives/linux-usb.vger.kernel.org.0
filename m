@@ -1,146 +1,195 @@
-Return-Path: <linux-usb+bounces-28197-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28201-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4AB3B7E58D
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:47:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C1A4B7CC5F
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:10:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F6835214E4
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 10:17:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 638101B27306
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 10:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 327463629AF;
-	Wed, 17 Sep 2025 10:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 522282C11C9;
+	Wed, 17 Sep 2025 10:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EIGFoxor"
+	dkim=pass (1024-bit key) header.d=simcom.com header.i=@simcom.com header.b="OzyS2ZtQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F1234AAEA;
-	Wed, 17 Sep 2025 10:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15267464;
+	Wed, 17 Sep 2025 10:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758104131; cv=none; b=hjd0fk04N9vkmU0nnX5WKwT6wXkrdlMYVV2ZEGj0aSxSo4EAF5ApCpk10GRRM4kas3motZw5BXB0mApuLqXe1k+Mgk+zh5z0cNjL4KATh0wjAtcRU0TH6ksTebUM4EsL8B7qa+ix5xaeUeTe4inPz2g1Sy0Z7Tb3SR+a/D1nC7U=
+	t=1758106471; cv=none; b=G7xVA4V3fk72X3iYFF80Nuv6g3bzu1CizlKZIMM70f9upDNbEJQKUKa/3DtWpNQhmUkToD84K0TKiuSUPNgw3fXBhBfvvVZd1JAHxonYP0/bE1FJPHdt+KYP6JlyIzlO7Q11fNak+qBPl1d//NYRTlk5irI5MxHP9AN/KFa6FxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758104131; c=relaxed/simple;
-	bh=jFN0rM4WOdVF6LWQb08Md1pxuOJ6ixjcBhDhHV+V3Xw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GX5oezxrXZdTYiw6/rm8xm0dYTC0YzxqrflJpQmphFXw4DG6wu6iXOb0DGyUexaskUQvvW3FjVeObq6kkj7p0cF2Vy8k+3PtOZ0h2NVJn/ZxE7wtSXqZRjL272pL5cOGhr1/DKzsQDpLSMUNXd6hHW5cvXVIZPd2s+FCV/pTNyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EIGFoxor; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A475EC113CF;
-	Wed, 17 Sep 2025 10:15:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758104130;
-	bh=jFN0rM4WOdVF6LWQb08Md1pxuOJ6ixjcBhDhHV+V3Xw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=EIGFoxorRKqKKFJaurlSQO4Hwurdm3HLsk1NZItkPjwLRfydEXGE3LZQd9KTb8CSe
-	 ofwyQDkBXVgwzuBEhQc843kOgHWtF1F95L7pUtnmuqViwCTyQY1ZQYBsiigBRXW69L
-	 Ef4X1nqKtQ1p1zhkmKr+Ez23MJLrQuxXtNMXvpcSj2vLPatUxedR8Lf6RACR6mRcef
-	 WT7vTUCt5V6eIGqZDcrXfJKV2WzYCXz+dHvBfDasYpMNnwB1FrtG7YE/WO6fmxViJk
-	 10DNcObfLObN1TNO2+CvtXBrpqhJAcblBptzQKAjjKKc06QEH8mB4inGgnBIZDaJ4g
-	 43LPTkM2NL1iQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A423CAC59F;
-	Wed, 17 Sep 2025 10:15:30 +0000 (UTC)
-From: Fenglin Wu via B4 Relay <devnull+fenglin.wu.oss.qualcomm.com@kernel.org>
-Date: Wed, 17 Sep 2025 18:15:22 +0800
-Subject: [PATCH v5 9/9] power: supply: qcom_battmgr: handle charging state
- change notifications
+	s=arc-20240116; t=1758106471; c=relaxed/simple;
+	bh=6HC4cudY9v40HdmIWNmOE6GD35eMXQLrtkhhfuHXS/g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hjv3YaSzs25X/6yID53pmE4WgzEcT4faZz9PKIYXt1AmSyqMq8wh+vC1R06dvU5wEOhRdhMxDkvFz2y5DF6KenO5vm2Q4s6tBTT+/nE0MqVExKe+Ztj3Hv0nRWahviEe4hW5nxllQIMCmfmIonY9KutmRry6H3kZVzUBaMQqu+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=simcom.com; spf=pass smtp.mailfrom=simcom.com; dkim=pass (1024-bit key) header.d=simcom.com header.i=@simcom.com header.b=OzyS2ZtQ; arc=none smtp.client-ip=54.204.34.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=simcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=simcom.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=simcom.com;
+	s=oxqy2404; t=1758106431;
+	bh=PHtUYPvCvB5+410i0weGgoiBqqmAzRiRlPIwWoAGHY4=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=OzyS2ZtQ0FDBfb+YPot1B9t4Rg3S1ATiGhjbnSXVWs2OEHBs+zvHDhd2jwL00jZOY
+	 qRQL6hjnHgX4ffjt59eIwus7cqoOGG5Ds4zdx03NpwXHbOvzGLLGToxmF1pBfnPgYa
+	 HcqocAW37iZleSdOtYzBa9Nw1VQYFoKUcrmNXI7s=
+X-QQ-mid: esmtpgz12t1758106430tf4c1857f
+X-QQ-Originating-IP: HsdQyp03flywuc/94vgX1hwCYdgf+pOd/Psa63VAK60=
+Received: from smart.. ( [182.204.37.17])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 17 Sep 2025 18:53:48 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 12383318951212247245
+EX-QQ-RecipientCnt: 5
+From: "xiaowei.li" <xiaowei.li@simcom.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"xiaowei.li" <xiaowei.li@simcom.com>
+Subject: [PATCH v2] USB: serial: option: add SIMCom 8230C compositions
+Date: Wed, 17 Sep 2025 18:53:42 +0800
+Message-Id: <20250917105342.2687371-1-xiaowei.li@simcom.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250917-qcom_battmgr_update-v5-9-270ade9ffe13@oss.qualcomm.com>
-References: <20250917-qcom_battmgr_update-v5-0-270ade9ffe13@oss.qualcomm.com>
-In-Reply-To: <20250917-qcom_battmgr_update-v5-0-270ade9ffe13@oss.qualcomm.com>
-To: Sebastian Reichel <sre@kernel.org>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>, 
- David Collins <david.collins@oss.qualcomm.com>, 
- =?utf-8?q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- kernel@oss.qualcomm.com, devicetree@vger.kernel.org, 
- linux-usb@vger.kernel.org, Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758104128; l=2037;
- i=fenglin.wu@oss.qualcomm.com; s=20240327; h=from:subject:message-id;
- bh=u/UsvrdOaH8FPPbaWz45xYUdDcRqs2rzsPnEOVbRCYQ=;
- b=fajsAkYwMy2+oxB6R/muS3GvMix4qIVRZwPtunicG8Ju8jmojarqCRdEnoWvFtAkses3lSYhR
- NMBwF3eGbozDIjQDpJmCsaKSmxJxlrkqkISyZsTJ/XOLE4FpRiTrRDL
-X-Developer-Key: i=fenglin.wu@oss.qualcomm.com; a=ed25519;
- pk=BF8SA4IVDk8/EBCwlBehKtn2hp6kipuuAuDAHh9s+K4=
-X-Endpoint-Received: by B4 Relay for fenglin.wu@oss.qualcomm.com/20240327
- with auth_id=406
-X-Original-From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-Reply-To: fenglin.wu@oss.qualcomm.com
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:simcom.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: NJvWNRsNVoV4KoaKMQST9pW2XkpOqJ6oN8DpQbwJ0VCNyQb22NkOQU6c
+	1KOM8k6e8iI89EKba1ekPidz1MAM80BOYga6j1LdbmYwrWfpFM24RIX18uZN+CJx2+rx0+S
+	JOgJBe1ZjJT+Hg8Lexwooy+GTTNgRrLMoUnKOoSC8I8EPbd+h5AAJvjy9nyIFh1LXxaEd8f
+	RHrE4aWfsUvXFp0gmfNjjmEXQVieqfanxH4Za39kq0BaNlWVG7Vwxm74A2qmRKrE+qj7Ver
+	ks+ze5tc5M5z/wZpgFzD6F9zrVbj/N8YZg7XyxrSxiqqe6sRKn0N2cDbXiK3vQEP4jHtLk/
+	sQdUOXeqQcZU0a5oRJK0TNmd2onZQKvNjK4IEaRZBHkKRVUOfgUhzEId+T/KvogXny3OYI0
+	DSRRrePiQIApuoBudhsBrrOJVZnu8cW7dN+sDLTApjNq4h4NsMi72+G0NXAo279j4Fcg+Ke
+	M2yIAJ9of0cycudbWRpRQ9ZKDDIAPvcS/KWegrtoFg+FTC+YZKojj0BFQwMbu5HmXyC6vzn
+	ZtfUz0oC5I45jyXiM9+W0kJPYD+P/QlnbSQdThCvQ6N6xPemJLJd9HTPVN6TxIfTH97KrZv
+	bkIbeOxSDmL6pgDUoWFMczwhqis6fWhNKZfQ4HWanRyyhcN5kIbjAwtnmd5bNbRXR0Prb08
+	UXvU3G/rxAfJntGOooWFU679U5mt3AWCzVzM5qizsy9yrTZ5+AqLuhwkmR1q4CjinxlvKVs
+	2tKubKFvFj7LR8m1cfYRWg3qZxLhc7/jV0evGSj/JFe2oI8tXFNhYhrSQpGTD81rQSfcG5a
+	cFJXNxcOmf2Vm9tWyIBicw+18151oCN/uvKMU7PmkBYK1GVrc2USL5Ka/4Ma1StcpEv53Xk
+	fRfwdyFvdnGnsxON2wGt/Bp8ngtVwq4uJsY8FJYa6yZ+vEG0l/xH54SaJ314gHlLIHTemRu
+	wxTA/XRIwxZZuFkxrlqIRn6Qyou2drUEKD+WcYqugDCuBd2Gy/Iu6SPMRKbJDTJ/IeNsJSZ
+	k/R0CjVBoW+cTmnzcJ
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-RECHKSPAM: 0
 
-From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+USB Device Listings:
+0x9071: tty (DM) + tty (NMEA) + tty (AT) + rmnet (QMI mode) + adb
+T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1e0e ProdID=9071 Rev= 5.15
+S:  Manufacturer=SIMCOM
+S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
+S:  SerialNumber=0123456789ABCDEF
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=86(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-The X1E80100 battery management firmware sends a notification with
-code 0x83 when the battery charging state changes, such as switching
-between fast charge, taper charge, end of charge, or any other error
-charging states. The same notification code is used with bit[16] set
-if charging stops due to reaching the charge control end threshold.
-Additionally, a 2-bit value is added in bit[18:17] with the same code
-and used to indicate the charging source capability: a value of 2
-represents a strong charger, 1 is a weak charger, and 0 is no charging
-source. The 3-MSB [18:16] in the notification code is not much useful
-for now, hence just ignore them and trigger a power supply change event
-whenever 0x83 notification code is received. This helps to eliminate the
-unknown notification error messages.
+0x9078: tty (DM) + tty (NMEA) + tty (AT) + ECM + adb
+T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#=  9 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1e0e ProdID=9078 Rev= 5.15
+S:  Manufacturer=SIMCOM
+S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
+S:  SerialNumber=0123456789ABCDEF
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+0x907b: RNDIS + tty (DM) + tty (NMEA) + tty (AT) + adb
+T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1e0e ProdID=907b Rev= 5.15
+S:  Manufacturer=SIMCOM
+S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
+S:  SerialNumber=0123456789ABCDEF
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=ef(misc ) Sub=04 Prot=01
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Signed-off-by: Xiaowei Li <xiaowei.li@simcom.com>
 ---
- drivers/power/supply/qcom_battmgr.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-index 151cd5618ca5c70f941245e4df5a18d4778f1349..4056290b5d737f762d9adb2783d26bb50ec5a664 100644
---- a/drivers/power/supply/qcom_battmgr.c
-+++ b/drivers/power/supply/qcom_battmgr.c
-@@ -34,8 +34,9 @@ enum qcom_battmgr_variant {
- #define NOTIF_BAT_PROPERTY		0x30
- #define NOTIF_USB_PROPERTY		0x32
- #define NOTIF_WLS_PROPERTY		0x34
--#define NOTIF_BAT_INFO			0x81
- #define NOTIF_BAT_STATUS		0x80
-+#define NOTIF_BAT_INFO			0x81
-+#define NOTIF_BAT_CHARGING_STATE	0x83
- 
- #define BATTMGR_BAT_INFO		0x9
- 
-@@ -1206,12 +1207,14 @@ static void qcom_battmgr_notification(struct qcom_battmgr *battmgr,
- 	}
- 
- 	notification = le32_to_cpu(msg->notification);
-+	notification &= 0xff;
- 	switch (notification) {
- 	case NOTIF_BAT_INFO:
- 		battmgr->info.valid = false;
- 		fallthrough;
- 	case NOTIF_BAT_STATUS:
- 	case NOTIF_BAT_PROPERTY:
-+	case NOTIF_BAT_CHARGING_STATE:
- 		power_supply_changed(battmgr->bat_psy);
- 		break;
- 	case NOTIF_USB_PROPERTY:
-
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index fc869b7f803f..8eadcfe33ecd 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2114,6 +2114,12 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9003, 0xff) },	/* Simcom SIM7500/SIM7600 MBIM mode */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9011, 0xff),	/* Simcom SIM7500/SIM7600 RNDIS mode */
+ 	  .driver_info = RSVD(7) },
++	{ USB_DEVICE(0x1e0e, 0x9071),
++	  .driver_info = RSVD(3) | RSVD(4) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9078, 0xff),
++	  .driver_info = RSVD(5) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x907b, 0xff),
++	  .driver_info = RSVD(5) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9205, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT+ECM mode */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9206, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT-only mode */
+ 	{ USB_DEVICE(ALCATEL_VENDOR_ID, ALCATEL_PRODUCT_X060S_X200),
 -- 
 2.34.1
-
 
 
