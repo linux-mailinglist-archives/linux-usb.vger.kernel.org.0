@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-28236-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28237-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE716B81A60
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 21:32:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2015B81A6C
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 21:33:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8793B189720F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 19:33:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AAB03A6CA1
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 19:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76A22FF66E;
-	Wed, 17 Sep 2025 19:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610CC30C110;
+	Wed, 17 Sep 2025 19:32:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kfVN5yUk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSfe54/Q"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6289E2DAFCA;
-	Wed, 17 Sep 2025 19:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DD430B50F;
+	Wed, 17 Sep 2025 19:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758137560; cv=none; b=Ct4rb2cbSxLZYRkyF3zW0hAmrWs9iXPscDdU4ox9sfplKWgPkTJeDxr8KBriUKLiu0z2HzNJvpU7BkXQ6X0/l+YaM2KfWXj4t3H4oO8UonLFzTXHxiiJrSz6wasKvvIz9la5LHMML3VkrkQfy/qgbBFRMUd91o9SsPnHRX6lqwU=
+	t=1758137573; cv=none; b=HrQIiQuYZJCETu8Je/Vkmj0FSRM6V/KDbTEyiYn7Mho6cz48sBNeZQl1s1zOru1L2MtZh67hUGHzj7c+MAXAVsjd/vrarGpUr2X4ZOoWSJB/YHuehsF34eRRNPbhMeyVCnPP1GrGZCVxgj3S8WwnvzMa7StAYo4bcZtbWAdfdG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758137560; c=relaxed/simple;
-	bh=9gUuYG0/AfVljxVjoeAhuZ6GhRyks5zOw/l/5c8VnCE=;
+	s=arc-20240116; t=1758137573; c=relaxed/simple;
+	bh=imcT2ZOTLaS7yvZfoNK95wWWHHDAkdQyIpNsoATlBKU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mHW9TQLiJzFo2vBEVpBuWq9MRO3n/xT8RGCXzfdsvHVd7Ny6YFEl0dWmhR5rjohmfgnGgNy2JPnVXcj01K15Eu3TQxSHXhc9mUzn+bMc/RAlWNqgw/3uuKjW3YbWIjhuzLNualQcyI2D3O2sJQQ/SC5HlKP3biM+EHBtygHHS0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kfVN5yUk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AD2C4CEF7;
-	Wed, 17 Sep 2025 19:32:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=sqLRrnZ+95wxXNUatYBjblE4dGOuPf2pFa6IU2AvLHgLLLIgrbNVDnecwE8zFvBkJvbifwhHYbaYenVrI4cmvyIh2wPpHKX76h2EQ5XtYF6GLFQhi8Wf68QFTF8GG0lmDcSqNB51ZjCAPnqpsmLAnNRkqoGDmzVdsi0PxS0L1Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSfe54/Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7053DC4CEE7;
+	Wed, 17 Sep 2025 19:32:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758137560;
-	bh=9gUuYG0/AfVljxVjoeAhuZ6GhRyks5zOw/l/5c8VnCE=;
+	s=k20201202; t=1758137573;
+	bh=imcT2ZOTLaS7yvZfoNK95wWWHHDAkdQyIpNsoATlBKU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kfVN5yUkCQGO+bzwQ51dJuP6XctWgNxnL/TWRIsWRQfQaNxyu59gS6Q2J5iqPcJQg
-	 0bCV769gmxZIDF5WyKIfXXFGt98BzWqX8aNk/gS2Crmzs0jvgKHO3mVFj36hD5lixz
-	 INRQjsTWTWUjo4Y2DbJYeVH5/MtRxffGP0UM4BY2w6nD1kbXIN7bQbyQUPLasjdine
-	 EKn2ow/ZK0okUqK7M+buVI2YasOUq2bXXL7aB3oostDyEkmA0hAZCDfDWRlKvdMC55
-	 +I/RQiPTujek8i1nsGZCCQUVsvJU7BseuWro0c1Nd/SgRdCt0WdBmOR5pMJmcpv1un
-	 KWcjb2bk7U1qw==
-Date: Wed, 17 Sep 2025 20:32:35 +0100
+	b=GSfe54/QJijz7Q3v6gB3iqaExYddqau86ozSqXX0XHJzxRWX4Z59WaGsJNsJpXkCr
+	 toQpXTfo31QIQX5N56h1QDTDCJYhPcexVGXO1v8iBmBTMMLLVZuTatTTTjAGXyj+oW
+	 mvQR1a/8ahZI2+hyAExlF3xrwCkYTp4V8F5JywIhzNweOOp6PUjoLwqCEni89YFZD5
+	 nPp1HObN8exWFGdh6qi6qvNp8Hj1eXQmrioq4KrPZD0SXcpU5ZIiSilDCleJj+LFKz
+	 jQgDxOkJLH9rJL+sOdFVYlsMOU3yC1vWj3kqHST4VCWDD4E14OJqa1mFsAgdxvKSbQ
+	 mFcWWh2dl5H8Q==
+Date: Wed, 17 Sep 2025 20:32:49 +0100
 From: Conor Dooley <conor@kernel.org>
 To: Ryan Chen <ryan_chen@aspeedtech.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -51,10 +51,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Alan Stern <stern@rowland.harvard.edu>,
 	Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: uhci: Add reset property
-Message-ID: <20250917-unsolved-thwarting-df2ecb073dc4@spud>
+Subject: Re: [PATCH v2 3/4] dt-bindings: usb: uhci: Add Aspeed AST2700
+ compatible
+Message-ID: <20250917-widow-kebab-1bc45daedbb9@spud>
 References: <20250917021926.3692137-1-ryan_chen@aspeedtech.com>
- <20250917021926.3692137-2-ryan_chen@aspeedtech.com>
+ <20250917021926.3692137-4-ryan_chen@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,27 +63,27 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pmNo4lOHtwxZfDxc"
+	protocol="application/pgp-signature"; boundary="iJfa+WoyWD3gI0j9"
 Content-Disposition: inline
-In-Reply-To: <20250917021926.3692137-2-ryan_chen@aspeedtech.com>
+In-Reply-To: <20250917021926.3692137-4-ryan_chen@aspeedtech.com>
 
 
---pmNo4lOHtwxZfDxc
+--iJfa+WoyWD3gI0j9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
---pmNo4lOHtwxZfDxc
+--iJfa+WoyWD3gI0j9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMsM0wAKCRB4tDGHoIJi
-0oyzAP9DNkFwxH23oc/iXzGyVofh6CPc12IAHVCsfBtYmUC6JAEA590KG0Ads9J9
-3zU17P0dT11oRco429a3uu6Sgm+mIwo=
-=m5lc
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMsM4QAKCRB4tDGHoIJi
+0u1GAP9CY8qeE6M6Lj03heH2YpGlZEQuTgKsxke3xQFdk22WFgD9GIUKe8VFRv5V
+C1iofdh7A+zzI7ODAQWUAaD9g6wlfA4=
+=eSPN
 -----END PGP SIGNATURE-----
 
---pmNo4lOHtwxZfDxc--
+--iJfa+WoyWD3gI0j9--
 
