@@ -1,230 +1,122 @@
-Return-Path: <linux-usb+bounces-28211-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28213-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D47E8B7E65A
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:48:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55C86B7E8A8
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 14:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF06E1B20A06
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 12:47:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C9517BAA69
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 12:50:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B17F0306B1E;
-	Wed, 17 Sep 2025 12:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3783435CED0;
+	Wed, 17 Sep 2025 12:50:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3Uy6JTX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZjVDeEFG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD6931A812;
-	Wed, 17 Sep 2025 12:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54F136D;
+	Wed, 17 Sep 2025 12:50:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758113203; cv=none; b=te8EmfMpjKWdVWMcmKzGMoQeJC5fPP+pEmTcfGNhOFSNmpKda7x6JqqDFOSQMH9Krw84InRIiM540LBpdk7Wkea70UICEKwlQYslTgM1vh5d/NAQlQVear58ifk6WKIoIaH27aTT+lwNmH8gnAOb3kIS1io3tQj9EHJda5piX6c=
+	t=1758113421; cv=none; b=oo0NyS3TqthjCD0M9KAaf0xCSPInu9/XG/JEPwj6VQqbGB+WK5VSCZqqrZUSnAc84cppbf9ZB2Ou90oJWDnkJ0Dzj/w9aj2PuQ+v118wGrHmeAuVDwWHa8t6a57CGuCWYYZmM32UBj98ZIFgCYUmn9QeEVDurWa7y6edhzNae2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758113203; c=relaxed/simple;
-	bh=4m09HVxeWOmfLkoOABM2Z8FAF12xRU3thrbn9gHjaNE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=K1kNISI/iTc0/Jv0HIH5lnCJh9GUZPIBpjoUtMCq8H4DmqRp4jpHAObX08j6oZOB/H8pMS+AA/JfNJlFso49AXbUT1CT0KXTcnJ/weeiTABrzrRmjUX3fWVD8ayHAWPl2KKz6cTl63QAqcEoEtonDXHtGP7ZaHgApsdr8SnogVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3Uy6JTX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D12B3C113D0;
-	Wed, 17 Sep 2025 12:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758113202;
-	bh=4m09HVxeWOmfLkoOABM2Z8FAF12xRU3thrbn9gHjaNE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=T3Uy6JTXmXOdWE1jCViAWmbalx94XMPubKal1ngWRnwRZQxn6OHyjSbdLB55wDegq
-	 kwchp2jtqAgCLwibxdJkjtvSqeecNCkH2SpvfIeIuRJIykV9vaukIyeD4EJtwslAnO
-	 pP+RLtBLQqWYYZ7PEA7+8xXnOTIqBUt8jK2xZEOu9HAslESlIYyn8w2dgP6rzsdeaj
-	 B45/r22U1wKIajoKPQ98QtyzkDbbgiZXJA1Lwxn+cKmx5xwzWTzntn4V8KlLtYgKEq
-	 teRsCETM/VFkarkjmGp+7NDu0VRFkkIf/VPqCO+LklYwDn80uH0/f8VMYOzrwBx+X5
-	 Vd+nIwH5l6mmw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8511CAC59D;
-	Wed, 17 Sep 2025 12:46:42 +0000 (UTC)
-From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
-Date: Wed, 17 Sep 2025 20:46:43 +0800
-Subject: [PATCH v3 4/4] ALSA: doc: add docs about device_device_quirk_flags
- in snd-usb-audio
+	s=arc-20240116; t=1758113421; c=relaxed/simple;
+	bh=KRsBp9Gi04Q8OS7/4OHYDrvltmfbgN/visXkqBJSvf8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A9OgpcIduZvNzHpkDn5FvGj0UPpeYegSwSrEF1byC9L3Ge3NM3xgBVpSIAnO9h+CdY/23+hIUVCys5jfSlRNNq0eCzrzYGPVxBoT14DLdTj2Da2NklVizpERxOU0+iWIXBL5e28So8R2hs7tNv+VP4yQmUNPP8pSOnxqVTEUfM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZjVDeEFG; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758113420; x=1789649420;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=KRsBp9Gi04Q8OS7/4OHYDrvltmfbgN/visXkqBJSvf8=;
+  b=ZjVDeEFGgW523xJn3ObPGTZ2sPSvFzQdH9C4qS1lUHmoVBQNOfvdwuQU
+   gL7hquRYFT6rMPDbD/dfbwTBuoWS73bW5DuXN2DmRIM9h8IYCUtlO0k6N
+   2Y+ZnsTkDnpvAXfBar3G/ejIEzOC2QeBRg/Mmcn43SqiqjdlATdmcE/6m
+   VczFxMm9Y7A7wc8zDSYQu7zypsEUKdjPrAlIXRz9ohOA3w55MpeAN3sJ6
+   vJG5fI/inC4mTpRpF1s6GdD6ftU1sUwiUpg0feYqJ548EkPecgU3WP+RA
+   Km92A/HvUO2SOQ13OczSp+lT94E0E3dSxHfhvLBILbExOpawl9wUnyckk
+   A==;
+X-CSE-ConnectionGUID: l/Q5DomcRS+sYnO1SPvhPg==
+X-CSE-MsgGUID: OWXMX+KZT7mkJpX5OD3I1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="60526906"
+X-IronPort-AV: E=Sophos;i="6.18,272,1751266800"; 
+   d="scan'208";a="60526906"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 05:50:19 -0700
+X-CSE-ConnectionGUID: vqszKZX8TyGvI5PixBBnPw==
+X-CSE-MsgGUID: 0ptKBxAnRo2FKLRRpfIsrg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,272,1751266800"; 
+   d="scan'208";a="198924930"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa002.fm.intel.com with ESMTP; 17 Sep 2025 05:50:18 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 076FA98; Wed, 17 Sep 2025 14:50:17 +0200 (CEST)
+Date: Wed, 17 Sep 2025 14:50:17 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: =?utf-8?B?5p2O5L2z5oCh?= <lijiayi@kylinos.cn>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH RFC] thunderbolt: Re-add DP resources on resume
+Message-ID: <20250917125017.GI2912318@black.igk.intel.com>
+References: <20250917082456.1790252-1-lijiayi@kylinos.cn>
+ <0540df54-efd6-4b79-90f9-ec305e1f5f7e@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250917-sound-v3-4-92ebe9472a0a@uniontech.com>
-References: <20250917-sound-v3-0-92ebe9472a0a@uniontech.com>
-In-Reply-To: <20250917-sound-v3-0-92ebe9472a0a@uniontech.com>
-To: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Jonathan Corbet <corbet@lwn.net>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- Mingcong Bai <jeffbai@aosc.io>, Kexy Biscuit <kexybiscuit@aosc.io>, 
- Nie Cheng <niecheng1@uniontech.com>, Zhan Jun <zhanjun@uniontech.com>, 
- Feng Yuan <fengyuan@uniontech.com>, qaqland <anguoli@uniontech.com>, 
- kernel@uniontech.com, linux-modules@vger.kernel.org, 
- Cryolitia PukNgae <cryolitia@uniontech.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758113201; l=7243;
- i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
- bh=FrGLJBJnqo9zN6+xgDNO+WYVjRiKsb3cKaYsHmjiH7E=;
- b=gE/1lcbGSKLIyPWnGhSWN9s4EGeSj22aOYnwzSYGBlHiz/h4eoEflKVPMBXlJbVITGCM5tsKK
- 2SPYbCo7t7dB5hFGmA2W+zwcRfvQsES/Bs2Y7C1hW+2eqgK2UiC7rOs
-X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
- pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
-X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
- auth_id=474
-X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
-Reply-To: cryolitia@uniontech.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0540df54-efd6-4b79-90f9-ec305e1f5f7e@kylinos.cn>
 
-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+On Wed, Sep 17, 2025 at 06:12:31PM +0800, 李佳怡 wrote:
+> 
+> As requested, I've attached the complete dmesg output (from boot to after
+> resume) reproducing the issue.
+> 
+> Testing Methodology:
+> 1. Start with the Targus Thunderbolt dock already connected to the system
+> 2. Enter S3 suspend (sleep) with no DP monitor connected to the dock
+> 3. Resume from S3
+> 4. After the system has fully resumed, connect the DP monitor to the dock
 
-Just briefly described about the new option.
+Thanks! It is badly line wrapped. I wonder if you can just attach it?
+Anyways I found some unexpected things there:
 
-Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
----
- Documentation/sound/alsa-configuration.rst | 112 ++++++++++++++++++++---------
- 1 file changed, 77 insertions(+), 35 deletions(-)
+> [    8.647850] With USB4 patch v1.0.0
 
-diff --git a/Documentation/sound/alsa-configuration.rst b/Documentation/sound/alsa-configuration.rst
-index a2fb8ed251dd0294e7a62209ca15d5c32c6adfae..23ee37f24ff89a983b3dffe6312057cd84b8f579 100644
---- a/Documentation/sound/alsa-configuration.rst
-+++ b/Documentation/sound/alsa-configuration.rst
-@@ -2297,39 +2297,81 @@ skip_validation
-     of the unit descriptor instead of a driver probe error, so that we
-     can check its details.
- quirk_flags
--    Contains the bit flags for various device specific workarounds.
--    Applied to the corresponding card index.
--
--        * bit 0: Skip reading sample rate for devices
--        * bit 1: Create Media Controller API entries
--        * bit 2: Allow alignment on audio sub-slot at transfer
--        * bit 3: Add length specifier to transfers
--        * bit 4: Start playback stream at first in implement feedback mode
--        * bit 5: Skip clock selector setup
--        * bit 6: Ignore errors from clock source search
--        * bit 7: Indicates ITF-USB DSD based DACs
--        * bit 8: Add a delay of 20ms at each control message handling
--        * bit 9: Add a delay of 1-2ms at each control message handling
--        * bit 10: Add a delay of 5-6ms at each control message handling
--        * bit 11: Add a delay of 50ms at each interface setup
--        * bit 12: Perform sample rate validations at probe
--        * bit 13: Disable runtime PM autosuspend
--        * bit 14: Ignore errors for mixer access
--        * bit 15: Support generic DSD raw U32_BE format
--        * bit 16: Set up the interface at first like UAC1
--        * bit 17: Apply the generic implicit feedback sync mode
--        * bit 18: Don't apply implicit feedback sync mode
--        * bit 19: Don't closed interface during setting sample rate
--        * bit 20: Force an interface reset whenever stopping & restarting
--          a stream
--        * bit 21: Do not set PCM rate (frequency) when only one rate is
--          available for the given endpoint.
--        * bit 22: Set the fixed resolution 16 for Mic Capture Volume
--        * bit 23: Set the fixed resolution 384 for Mic Capture Volume
--        * bit 24: Set minimum volume control value as mute for devices
--          where the lowest playback value represents muted state instead
--          of minimum audible volume
--        * bit 25: Be similar to bit 24 but for capture streams
-+    The option provides a refined and flexible control for applying quirk
-+    flags.  It allows to specify the quirk flags for each device, and could
-+    be modified dynamically via sysfs.
-+    The old usage accepts an array of integers, each of which apply quirk
-+    flags on the device in the order of probing.
-+    e.g. ``quirk_flags=0x01,0x02`` applies get_sample_rate to the first
-+    device, and share_media_device to the second device.
-+    The new usage accepts a string in the format of
-+    ``VID1:PID1:FLAGS1;VID2:PID2:FLAGS2;...``, where ``VIDx`` and ``PIDx``
-+    specify the device, and ``FLAGSx`` specify the flags to be applied.
-+    ``VIDx`` and ``PIDx`` are 4-digit hexadecimal numbers, and could be
-+    specified as ``*`` to match any value.  ``FLAGSx`` could be a set of
-+    flags given by name, separated by ``|``, or a hexadecimal number
-+    representing the bit flags.  The available flag names are listed above.
-+    An exclamation mark could be prefixed to a flag name to negate the flag.
-+    For example, ``1234:abcd:mixer_playback_min_mute|!ignore_ctl_error;*:*:0x01;``
-+    applies the ``mixer_playback_min_mute`` flag and clears the
-+    ``ignore_ctl_error`` flag for the device 1234:abcd, and applies the
-+    ``skip_sample_rate`` flag for all devices.
-+
-+        * bit 0: ``get_sample_rate``
-+          Skip reading sample rate for devices
-+        * bit 1: ``share_media_device``
-+          Create Media Controller API entries
-+        * bit 2: ``align_transfer``
-+          Allow alignment on audio sub-slot at transfer
-+        * bit 3: ``tx_length``
-+          Add length specifier to transfers
-+        * bit 4: ``playback_first``
-+          Start playback stream at first in implement feedback mode
-+        * bit 5: ``skip_clock_selector``
-+          Skip clock selector setup
-+        * bit 6: ``ignore_clock_source``
-+          Ignore errors from clock source search
-+        * bit 7: ``itf_usb_dsd_dac``
-+          Indicates ITF-USB DSD based DACs
-+        * bit 8: ``ctl_msg_delay``
-+          Add a delay of 20ms at each control message handling
-+        * bit 9: ``ctl_msg_delay_1m``
-+          Add a delay of 1-2ms at each control message handling
-+        * bit 10: ``ctl_msg_delay_5m``
-+          Add a delay of 5-6ms at each control message handling
-+        * bit 11: ``iface_delay``
-+          Add a delay of 50ms at each interface setup
-+        * bit 12: ``validate_rates``
-+          Perform sample rate validations at probe
-+        * bit 13: ``disable_autosuspend``
-+          Disable runtime PM autosuspend
-+        * bit 14: ``ignore_ctl_error``
-+          Ignore errors for mixer access
-+        * bit 15: ``dsd_raw``
-+          Support generic DSD raw U32_BE format
-+        * bit 16: ``set_iface_first``
-+          Set up the interface at first like UAC1
-+        * bit 17: ``generic_implicit_fb``
-+          Apply the generic implicit feedback sync mode
-+        * bit 18: ``skip_implicit_fb``
-+          Don't apply implicit feedback sync mode
-+        * bit 19: ``iface_skip_close``
-+          Don't closed interface during setting sample rate
-+        * bit 20: ``force_iface_reset``
-+          Force an interface reset whenever stopping & restarting a stream
-+        * bit 21: ``fixed_rate``
-+          Do not set PCM rate (frequency) when only one rate is available
-+          for the given endpoint
-+        * bit 22: ``mic_res_16``
-+          Set the fixed resolution 16 for Mic Capture Volume
-+        * bit 23: ``mic_res_384``
-+          Set the fixed resolution 384 for Mic Capture Volume
-+        * bit 24: ``mixer_playback_min_mute``
-+          Set minimum volume control value as mute for devices where the
-+          lowest playback value represents muted state instead of minimum
-+          audible volume
-+        * bit 25: ``mixer_capture_min_mute``
-+          Be similar to bit 24 but for capture streams
- 
- This module supports multiple devices, autoprobe and hotplugging.
- 
-@@ -2344,8 +2386,8 @@ report it to the upstream.
- NB: ``quirk_alias`` option is provided only for testing / development.
- If you want to have a proper support, contact to upstream for
- adding the matching quirk in the driver code statically.
--Ditto for ``quirk_flags``.  If a device is known to require specific
--workarounds, please report to the upstream.
-+Ditto for ``quirk_flags``.  If a device
-+is known to require specific workarounds, please report to the upstream.
- 
- Module snd-usb-caiaq
- --------------------
+What is this? ;-)
 
--- 
-2.51.0
+> [    8.647860] ACPI: bus type thunderbolt registered
+> [    8.664660] [7] nhi_probe:1326: thunderbolt 0000:2c:00.0: total paths: 21
+> [    8.665209] [7] tb_ring_alloc:586: thunderbolt 0000:2c:00.0: allocating
+> TX ring 0 of size 10
+> [    8.665243] [7] tb_ring_alloc:586: thunderbolt 0000:2c:00.0: allocating
+> RX ring 0 of size 10
+> [    8.665267] [7] tb_ctl_alloc:665: thunderbolt 0000:2c:00.0: control
+> channel created
+> [    8.665272] [7] icm_probe:2549: thunderbolt 0000:2c:00.0: ICM not
+> supported on this controller
+> [    8.665285] [7] tb_ring_free:840: thunderbolt 0000:2c:00.0: freeing RX
+> ring 0
+> [    8.665294] [7] tb_ring_free:840: thunderbolt 0000:2c:00.0: freeing TX
+> ring 0
 
+What is this?
 
+Is this Intel TB/USB4 controller or something else? All USB4 compliant
+controllers should go directly to tb.c as that's the part dealing with
+software connection manager. The above looks like it tries first with the
+firmware connection manager and that should not happen outside of Intel
+Thunderbolt 3 hosts.
 
