@@ -1,122 +1,179 @@
-Return-Path: <linux-usb+bounces-28178-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28179-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6655AB8002F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 16:32:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C45C3B7EDBF
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 15:04:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63581326D86
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 02:20:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1172152320B
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 02:24:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B74E2F7AA7;
-	Wed, 17 Sep 2025 02:19:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 778A42F60AC;
+	Wed, 17 Sep 2025 02:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cJEr8WnF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE492F657C;
-	Wed, 17 Sep 2025 02:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E02A2F547F
+	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 02:23:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758075577; cv=none; b=KsJUTUR+d7DuMrqW7M+cyZ3bLAh9WV+wLNAaTwUVb0kkOL7FzwYXqDjfU+qgkGO2yBMDm3agiEIf7zIOSCHe254luZ4qghLsm0jHbK6vnSefyMVlv4mE9BBl6+as8kbp3wQYusgWEcBtD7hI3igpCvSTrZfYkTt/2yZhfOjD1iw=
+	t=1758075839; cv=none; b=KkJIVsMwzr3d0NnEAtiFB2vEj3Oi75+gqHTvw5DDkEJSofJ/kv17wkgUkTBcle2GMIRqYlS0HwOBC8ASp7lsVMA1M4IybzV0o7v43hkIaSIhQeX4f8zgQvQyCRHFjDo0Ppw9aNWRdGgrv47r5b5nbd4q9zlmJpDLmNzN8rfBu2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758075577; c=relaxed/simple;
-	bh=aGwGJsC1n5hTWmyRDYMaNRjqkaybxF0rZJmxziyrXcA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MGswADnyaLZjs7kdNL4tjE1dEvhU0EF2JjKm5L0pIiDZjmZv5+cz9IBY6MjyMJvBt9WAwdKytFVMo/7HsjxnoQoGwVVZ0KW2Sljpxu4x78JYi8LmbwNI2o1GkC6m7CMXv3Rc2qEBEYgqJJKQBjj4StIjqclbkmrnU0a9oooEZRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Wed, 17 Sep
- 2025 10:19:26 +0800
-Received: from twmbx02.aspeed.com (192.168.10.13) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
- Transport; Wed, 17 Sep 2025 10:19:26 +0800
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-To: ryan_chen <ryan_chen@aspeedtech.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Alan
- Stern" <stern@rowland.harvard.edu>, Philipp Zabel <p.zabel@pengutronix.de>,
-	<linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 4/4] usb: uhci: Add Aspeed AST2700 support
-Date: Wed, 17 Sep 2025 10:19:26 +0800
-Message-ID: <20250917021926.3692137-5-ryan_chen@aspeedtech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250917021926.3692137-1-ryan_chen@aspeedtech.com>
-References: <20250917021926.3692137-1-ryan_chen@aspeedtech.com>
+	s=arc-20240116; t=1758075839; c=relaxed/simple;
+	bh=JDu703gJi4SNHr8MEaA7gFNcyg73bIGejUOowGwFSGU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lcubz+oSfg3QIjEUE5JQHa5OnkYB0wXN/pljMaJovrcWY4yUzvqZR3XWDFCR5tFcO9oCJS2CkyK+sxUr2ez7x9JuYQRMvLPYHzYPEhnO643oG8jK7Lp8rLamGXDJSewgp6Fm6r15Siqr/UIgQwh7o89HVmWcdIKMyqxiORasILQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cJEr8WnF; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58GLZlqP005591
+	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 02:23:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	h24NHOjh9CfAGdrmNIBn0f+X6SHiD7K8dLr4j2/9Zz8=; b=cJEr8WnF+WSbXdio
+	QIU8SqkLnYn56mqq5S5lBq5auaKMHJLd3OjAEEWVtFVM4X7O6u3KAgqtrBLUAS/H
+	SdVPx+FTZzyjGpJnWzZ/BFnayQnD4fPwzFnDHv5agx/k8q2tIjuVivzzbUtQOuO6
+	/IKGXFXGDoPRPmITk/oQJN88lzzU36Q2WJB38H+1FFxmP7xr/TQW9FvvRunSgmA6
+	nKQobfDbgZ2tEcKsUZ0CrCTO4kwj9bhq1GcL8i0OKnFcIkoLHxKBZwdOfI78NB36
+	FejrhZIU8YaAuP+Ng+R0rnvjjEWF/HebvhMG6AodjZcpzxPpDQsWcvmEEZLmKGbB
+	pOt0OQ==
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 497fxu0k00-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 02:23:51 +0000 (GMT)
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-b5242b0f450so4260999a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 16 Sep 2025 19:23:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758075830; x=1758680630;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h24NHOjh9CfAGdrmNIBn0f+X6SHiD7K8dLr4j2/9Zz8=;
+        b=p8Z0KXmVuAp5uo0qsT7AcmHWaruT3kdSPT5FwZv9wdndKgPrqrCqnIQy30hEI7YOio
+         FaXViWnb+z0wOY7V9pWChrpOZNBYFAR6rkyB5LriCD9yiHQw2qJZ8mP12SkOaxbeaeHx
+         ySIhEg9lYlBHo87C84jQzhyJx/mdHHXNgOoDchlyv5ZutoCMHT0iI6vkWFxbX/Ht1woo
+         1ILy0IcBmgyEyr6P2jdplqjUkPhSOfQs+JToGk+eqImpOj6qrxQ5Av0i09sa83HP+9gM
+         cDH+jftoq0cO7TvTna6VvjyJHSC7bAatZr0veTD+SXy7z/xO9c+K5OPTSYfHydpcj5i2
+         6JNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWA2vhRTHlVCaUSPiRXE8hQRaKI3fdmQ6W8bK7oyMH3EaNWuroMjXNQWhXu/A4UTZzxT3qtQTYdVaY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwecuAxSdgVyKZXMqnAHmPMdBqHMVRR7N2jCNqM1HHXy/NjPls1
+	frwrbwpig0798fIlqR7TP+BhUUM4Ttbta625ed8UXpnCuOowtmuW5Kjwrj3ps85fvTGWpWgfBS1
+	T0M2HPeItOmtOlYM4Lxp7W2mbFEXtMzbCE3XcxAky3wvkdLVJ3qHlYbe+ZTGZngA=
+X-Gm-Gg: ASbGnctPBlGO+Wf6YivAhC0uPIxouwV1pw6AXQvc975ZAmmvzQeWz78uHbR+YCQPH8L
+	v8Gt8EgXqUGvnUWDQY7NuLrgqXP0QZmOZAYT3d59DbOrb2mhSBEVZ1Y42D3GQotQS3dwoUOlBz1
+	DDVH54C9ojT6+qDKPIZQkBeorKN8rgHIoGuGlA9zxtwjnGhkj7ZZu0tPtkbksYk5c746VCueHsN
+	PeOcaJXIA7gHLIc4fuTFIt/zTEbFt7KT9LYvV4jDTLxAlJUmFyhEmyIwoH6CGSFbr33NCwGwzyv
+	6jFxIi1p3/QkPmMElnN/k4LB0hdQDVF80JPSn0Bxs4EyazxNDkDBnj2BVw0wXLnAuFSnceUjJeP
+	vXq2M0GTDDJWj0uLQayIUWrQbMXm679Zvmg==
+X-Received: by 2002:a17:90b:35ce:b0:32e:4924:6902 with SMTP id 98e67ed59e1d1-32ee3e77a22mr630837a91.3.1758075830555;
+        Tue, 16 Sep 2025 19:23:50 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFY1YBqTy1MRBizc/p+yW2rG4Z6RYxx1hlDxK/FRXmTIxiFlffsuMnGhMwgW8FYwvbTxyKbcQ==
+X-Received: by 2002:a17:90b:35ce:b0:32e:4924:6902 with SMTP id 98e67ed59e1d1-32ee3e77a22mr630811a91.3.1758075830045;
+        Tue, 16 Sep 2025 19:23:50 -0700 (PDT)
+Received: from [10.133.33.240] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32ed26a6ce6sm906637a91.16.2025.09.16.19.23.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Sep 2025 19:23:49 -0700 (PDT)
+Message-ID: <3d2e8600-fee4-41ab-b8a2-9940a2acd389@oss.qualcomm.com>
+Date: Wed, 17 Sep 2025 10:23:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/8] power: supply: Add several features support in
+ qcom-battmgr driver
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+        David Collins <david.collins@oss.qualcomm.com>,
+        =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+References: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
+ <r65idyc4of5obo6untebw4iqfj2zteiggnnzabrqtlcinvtddx@xc4aig5abesu>
+Content-Language: en-US
+From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+In-Reply-To: <r65idyc4of5obo6untebw4iqfj2zteiggnnzabrqtlcinvtddx@xc4aig5abesu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwMiBTYWx0ZWRfXyuLsGUeezbjr
+ Pun5gtKz0GM5mDp16f8HWJM9tmZVaUCmaEDUCIIg6r7Uwz/UzkV4QHb1pK4eKjlMLT7iUSR2JeZ
+ GQ8iyYkKMaZhqDRjcXWqJT/niONVuqdJKFqXFauHVjXfRNZpFqhCfXiubAZFr37YI5tgbKNAb9q
+ ezpKvqv7OhZIbmNAvb5dZ86nQZBYqbF3LomnNtL7KA9VKvDtv7LxtswaZlmdE0cZnsjnRNQHfDw
+ hb5OCY9EqBNR+3swVR/v2WScTv+3lV05f5hn6d7DFGkrdWmiJOK1kOYsxg4R+w4iPipsd+GtYlQ
+ xmAn70Cqmtd6zuBqWnCsFJzosPq9FBzAlFPKtK4J2l3wTU+7aq4Wh5c/r2pg+/ptwXj8M8g2AbZ
+ 3kd7nDD1
+X-Proofpoint-ORIG-GUID: a2BHh7siczHECz9iSinQiN9g1LTkj6Uy
+X-Authority-Analysis: v=2.4 cv=R+UDGcRX c=1 sm=1 tr=0 ts=68ca1bb7 cx=c_pps
+ a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=fapJcwKh2RYohvRb9XYA:9
+ a=QEXdDO2ut3YA:10 a=_Vgx9l1VpLgwpw_dHYaR:22
+X-Proofpoint-GUID: a2BHh7siczHECz9iSinQiN9g1LTkj6Uy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-16_02,2025-09-16_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 phishscore=0 adultscore=0 clxscore=1015 priorityscore=1501
+ bulkscore=0 malwarescore=0 suspectscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509160202
 
-Unlike earlier Aspeed SoCs (AST2400/2500/2600) which are limited to
-32-bit DMA addressing, the UHCI controller in AST2700 supports 64-bit
-DMA. Update the platform UHCI driver to select the appropriate DMA
-mask based on the device tree compatible string.
 
-Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
----
- drivers/usb/host/uhci-platform.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+On 9/17/2025 3:35 AM, Sebastian Reichel wrote:
+> Hi,
+>
+> On Mon, Sep 15, 2025 at 04:49:52PM +0800, Fenglin Wu via B4 Relay wrote:
+>> Add following features in qcom-battmgr drivers as the battery management
+>> firmware has provided such capabilities:
+>>   - Add resistance power supply property in core driver and qcom-battmgr
+>>     driver to get battery resistance
+>>   - Add state_of_health power supply property in core driver and
+>>     qcom-battmgr driver to get battery health percentage
+>>   - Add charge control start/end threshold control by using
+>>     charge_control_start_threshold and charge_control_end_threshold power
+>>     supply properties
+>>
+>> The changes have been tested on QRD8650 and X1E80100-CRD devices based on
+>> qcom/linux.git for-next commit a679f3f6931cdb0c2ef5dc0c26f895ae3f6c1ddc.
+>>
+>> Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+>> ---
+> Unrelated to this series specifically, but can you look into fixing
+> the following errors (appearing at least on X1E based Thinkpad T14s)?
+>
+> qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown notification: 0x283
+> qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown notification: 0x283
+> qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown notification: 0x483
+> qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown notification: 0x83
+>
+> Thanks,
+>
+> -- Sebastian
 
-diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
-index 1c1715bddc27..84867f75dfcd 100644
---- a/drivers/usb/host/uhci-platform.c
-+++ b/drivers/usb/host/uhci-platform.c
-@@ -71,6 +71,7 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
- 	struct usb_hcd *hcd;
- 	struct uhci_hcd	*uhci;
- 	struct resource *res;
-+	u64 *dma_mask_ptr;
- 	int ret;
- 
- 	if (usb_disabled())
-@@ -81,7 +82,8 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
- 	 * Since shared usb code relies on it, set it here for now.
- 	 * Once we have dma capability bindings this can go away.
- 	 */
--	ret = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-+	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
-+	ret = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
- 	if (ret)
- 		return ret;
- 
-@@ -114,7 +116,8 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
- 		}
- 		if (of_device_is_compatible(np, "aspeed,ast2400-uhci") ||
- 		    of_device_is_compatible(np, "aspeed,ast2500-uhci") ||
--		    of_device_is_compatible(np, "aspeed,ast2600-uhci")) {
-+		    of_device_is_compatible(np, "aspeed,ast2600-uhci") ||
-+		    of_device_is_compatible(np, "aspeed,ast2700-uhci")) {
- 			uhci->is_aspeed = 1;
- 			dev_info(&pdev->dev,
- 				 "Enabled Aspeed implementation workarounds\n");
-@@ -188,9 +191,13 @@ static void uhci_hcd_platform_shutdown(struct platform_device *op)
- 	uhci_hc_died(hcd_to_uhci(hcd));
- }
- 
-+static const u64 dma_mask_32 =	DMA_BIT_MASK(32);
-+static const u64 dma_mask_64 =	DMA_BIT_MASK(64);
-+
- static const struct of_device_id platform_uhci_ids[] = {
--	{ .compatible = "generic-uhci", },
--	{ .compatible = "platform-uhci", },
-+	{ .compatible = "generic-uhci", .data = &dma_mask_32},
-+	{ .compatible = "platform-uhci", .data = &dma_mask_32},
-+	{ .compatible = "aspeed,ast2700-uhci", .data = &dma_mask_64},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, platform_uhci_ids);
--- 
-2.34.1
+Sure.
+
+I will look into this and fix them if I can see the same on my X1E80100 
+CRD device.
 
 
