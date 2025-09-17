@@ -1,89 +1,102 @@
-Return-Path: <linux-usb+bounces-28237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28238-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2015B81A6C
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 21:33:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6644AB81E39
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 23:08:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AAB03A6CA1
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 19:33:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1305188DCD5
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Sep 2025 21:08:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610CC30C110;
-	Wed, 17 Sep 2025 19:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70EFD2C21D8;
+	Wed, 17 Sep 2025 21:08:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSfe54/Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QCNuVtYr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DD430B50F;
-	Wed, 17 Sep 2025 19:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672EB2882DB
+	for <linux-usb@vger.kernel.org>; Wed, 17 Sep 2025 21:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758137573; cv=none; b=HrQIiQuYZJCETu8Je/Vkmj0FSRM6V/KDbTEyiYn7Mho6cz48sBNeZQl1s1zOru1L2MtZh67hUGHzj7c+MAXAVsjd/vrarGpUr2X4ZOoWSJB/YHuehsF34eRRNPbhMeyVCnPP1GrGZCVxgj3S8WwnvzMa7StAYo4bcZtbWAdfdG0=
+	t=1758143292; cv=none; b=ZxmLESqMrpLth3G8A4xuzFK/xkA+UBeVcCeW52sLQxAHPqc+29sWrVkt3vu1UsFlIQkLSmjBvItZmv5bL0hQ+d6UNPre6IOszEhhi90MVIoKCA2jFNRXIcOWE46RfrP6tTtBe83w0IRjAzWVgxxrcpA6Uw/hRpOocIgyZlBDOgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758137573; c=relaxed/simple;
-	bh=imcT2ZOTLaS7yvZfoNK95wWWHHDAkdQyIpNsoATlBKU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sqLRrnZ+95wxXNUatYBjblE4dGOuPf2pFa6IU2AvLHgLLLIgrbNVDnecwE8zFvBkJvbifwhHYbaYenVrI4cmvyIh2wPpHKX76h2EQ5XtYF6GLFQhi8Wf68QFTF8GG0lmDcSqNB51ZjCAPnqpsmLAnNRkqoGDmzVdsi0PxS0L1Ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSfe54/Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7053DC4CEE7;
-	Wed, 17 Sep 2025 19:32:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758137573;
-	bh=imcT2ZOTLaS7yvZfoNK95wWWHHDAkdQyIpNsoATlBKU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GSfe54/QJijz7Q3v6gB3iqaExYddqau86ozSqXX0XHJzxRWX4Z59WaGsJNsJpXkCr
-	 toQpXTfo31QIQX5N56h1QDTDCJYhPcexVGXO1v8iBmBTMMLLVZuTatTTTjAGXyj+oW
-	 mvQR1a/8ahZI2+hyAExlF3xrwCkYTp4V8F5JywIhzNweOOp6PUjoLwqCEni89YFZD5
-	 nPp1HObN8exWFGdh6qi6qvNp8Hj1eXQmrioq4KrPZD0SXcpU5ZIiSilDCleJj+LFKz
-	 jQgDxOkJLH9rJL+sOdFVYlsMOU3yC1vWj3kqHST4VCWDD4E14OJqa1mFsAgdxvKSbQ
-	 mFcWWh2dl5H8Q==
-Date: Wed, 17 Sep 2025 20:32:49 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Ryan Chen <ryan_chen@aspeedtech.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings: usb: uhci: Add Aspeed AST2700
- compatible
-Message-ID: <20250917-widow-kebab-1bc45daedbb9@spud>
-References: <20250917021926.3692137-1-ryan_chen@aspeedtech.com>
- <20250917021926.3692137-4-ryan_chen@aspeedtech.com>
+	s=arc-20240116; t=1758143292; c=relaxed/simple;
+	bh=G474qLjY289Uhv3Zo/eRoaKLxY4RknIiLLJ9k88gqI4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IuopHcmDOZm5ScEEV5XVnLEfEFyfRYM5l2SwzSmyqS00HRM3P3KkCS75Ab4HW2te40QPdTqHqJQQvQ5zMOP+MNigYPQjl8ZvAjrOnWH7BMbjeNULX9his0DsENzZW680dt2haygDaCYusEEvbqQ4+r+p0SPTrYi9Cq/QmnBQSlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QCNuVtYr; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758143290; x=1789679290;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=G474qLjY289Uhv3Zo/eRoaKLxY4RknIiLLJ9k88gqI4=;
+  b=QCNuVtYrLDC/ghWL07prmVg/6JeBd+WoxcdtGdl6Tv67oM1qjUc0CIRi
+   KZEWeO17DTv8E4spT+Ctbe4gHwo6KSBCSHxRW6IUEFJiVia2QCtn/e31V
+   sM7UMMakLlqVkK0nL5KwBZ6tDZyepzBAMrFVEE/W2csR2n2gRoty4+heG
+   APJJHftVuLwuVvGqHVrsxEd/gYMUFaJWm02RVSwMA2WQiVTj+YtXCsaS0
+   HWDtr6sy2JwgvUjndPPnTcg+MFYxHcyWLhv1wcR9lWgHMYilLX+5YhVWD
+   nxSQJTCvldnQSCuKJOKLGOFnNg3DS0UUK9S45edbDTibczoS4SMv7XL1c
+   g==;
+X-CSE-ConnectionGUID: nm5ARCRcSk+Itqr5Ib6z+w==
+X-CSE-MsgGUID: qNMSm7s0TUOiCcrHSodXqQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="48038200"
+X-IronPort-AV: E=Sophos;i="6.18,273,1751266800"; 
+   d="scan'208";a="48038200"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 14:08:10 -0700
+X-CSE-ConnectionGUID: omcLoXvZRSuCUgCOFj9BnQ==
+X-CSE-MsgGUID: zGzYWk71SDSENXoYFThfnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,273,1751266800"; 
+   d="scan'208";a="175800180"
+Received: from kniemiec-mobl1.ger.corp.intel.com (HELO mnyman-desk.home) ([10.245.244.42])
+  by fmviesa009.fm.intel.com with ESMTP; 17 Sep 2025 14:08:09 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/6] xhci features for usb-next
+Date: Thu, 18 Sep 2025 00:07:19 +0300
+Message-ID: <20250917210726.97100-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="iJfa+WoyWD3gI0j9"
-Content-Disposition: inline
-In-Reply-To: <20250917021926.3692137-4-ryan_chen@aspeedtech.com>
+Content-Transfer-Encoding: 8bit
 
+Hi Greg
 
---iJfa+WoyWD3gI0j9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+A few small xhci changes and features for usb-next, including support
+for PCI based xhci hosts with only USB2 ports, and align xhci trace and dynamic
+debug log port numbering
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Michal Pecio (2):
+  Revert "usb: xhci: Avoid Stop Endpoint retry loop if the endpoint
+    seems Running"
+  usb: xhci: Update a comment about Stop Endpoint retries
 
---iJfa+WoyWD3gI0j9
-Content-Type: application/pgp-signature; name="signature.asc"
+Niklas Neronin (4):
+  usb: xhci-pci: add support for hosts with zero USB3 ports
+  usb: xhci: improve TR Dequeue Pointer mask
+  usb: xhci: correct indentation for PORTSC tracing function
+  usb: xhci: align PORTSC trace with one-based port numbering
 
------BEGIN PGP SIGNATURE-----
+ drivers/usb/host/xhci-pci.c   | 42 ++++++++++++++++++++---------------
+ drivers/usb/host/xhci-ring.c  | 24 +++++++++-----------
+ drivers/usb/host/xhci-trace.h | 34 ++++++++++++++--------------
+ drivers/usb/host/xhci.h       |  3 ++-
+ 4 files changed, 54 insertions(+), 49 deletions(-)
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMsM4QAKCRB4tDGHoIJi
-0u1GAP9CY8qeE6M6Lj03heH2YpGlZEQuTgKsxke3xQFdk22WFgD9GIUKe8VFRv5V
-C1iofdh7A+zzI7ODAQWUAaD9g6wlfA4=
-=eSPN
------END PGP SIGNATURE-----
+-- 
+2.43.0
 
---iJfa+WoyWD3gI0j9--
 
