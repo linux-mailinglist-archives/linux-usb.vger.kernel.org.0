@@ -1,94 +1,77 @@
-Return-Path: <linux-usb+bounces-28296-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28297-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E318B860AA
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 18:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 309A2B8614D
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 18:44:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EFE51CC0FB6
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 16:26:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12CB61C85159
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 16:44:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2013195EA;
-	Thu, 18 Sep 2025 16:24:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E55EC3195FC;
+	Thu, 18 Sep 2025 16:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hSP9qlFE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TuR5UHHN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A32244692;
-	Thu, 18 Sep 2025 16:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0D83161B3;
+	Thu, 18 Sep 2025 16:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758212642; cv=none; b=e9Q1aEzOvKeogH3YwZFmynb+bjaZ6mOHRye3CJAak8ODndFNBctJpO/7Pl8mbhih3YN73LR4tcZ/ieia9T4LxbJZcCgonc4Mks4kehZLd6eaPFoKbbC7gHdiLUjdxaxlIvmmmCp572PTE3dEron0y03YCXOqYjkokZu+QPRXUlU=
+	t=1758213815; cv=none; b=jJdHHnukDuMyeSonzL3C1ZaWUrjFZW5rjVNuASb9aR404b7R0G4vZ+tRdDm9wHd0y7vkEfJooBY1ifk0kDtXWm3Ih0thUxXMLfVnI8q76wq5QoscYamUKRZxZ5Fozvd1JblOBSLbRcmvom7/ztvIF3dp713iqt3GhC1Wx6GNPHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758212642; c=relaxed/simple;
-	bh=qxZffvEGZk3Ux/d97kUEpFcAYo5rdjWgeV+BxpkYyq0=;
+	s=arc-20240116; t=1758213815; c=relaxed/simple;
+	bh=NWZ+D4BX1D2ktg1nKpuXJVcd3d3x3y+UJjQAPqlhrjE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HRLfMauYoyGEwXJxg2JtINdbC4VPRzYN5fwRsDMun2pqD/WhiZ9JSmdyqo5zyZJ7PYIc3NSi15pXapZ0oLhaIoD4Jvf5o4FaTKLm6rCJm9Ps8x8z6ODNtdW991Rwyq9NhxCGiu68+9gKkqTLFJu0VlfekiDAwKNKKjneNn0c2FQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hSP9qlFE; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=rrlRK9SIawOAdhCcxuTeKXYx1Dz394w0ypBgOuiJMzXXtV702pd9/PftnAKq44dKxvjsluRUqV98J91QUrSEHSVPt9NV2O76Mv/+zftp0mYln96uGpko6n3qkEDHKWXFETxhLFrkmNRue4RVruGsEEp/Dv9cLCHx41buzN58Edo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TuR5UHHN; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758212640; x=1789748640;
+  t=1758213814; x=1789749814;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qxZffvEGZk3Ux/d97kUEpFcAYo5rdjWgeV+BxpkYyq0=;
-  b=hSP9qlFEtpBSuNKXCBklel+xwh6tHl7p5xQTSzfsutH1EdpM8eDxdUpf
-   QIkuWQZxZ3J4MbqnpcJuny2vWB02Q1w7syMhEgDaL2jZDWVhvlD52riA6
-   CHagN3WY1Ce1SObxfhB0a+dEVu9UfXdpphUgI3LCguEBmu45RZLS7V2xz
-   /zruHD9lg4aa48tBwyi3OCetElnRPpHmZKxQEAwcRrQBgtChnoNm0a7AV
-   E3ZWt/VZVR9hcojoh7dFr5UGfCJWNy3fyNiaAhxI13MBM1/IHFaQTeQM4
-   FxS6g5pbVPUNv+r6VihWCWdg5FJMzwFLP9pVA4SuYYocTHurPqdO8Rtzd
-   g==;
-X-CSE-ConnectionGUID: X/PnW/DSSKOk3Cgu0IzGyA==
-X-CSE-MsgGUID: NZsu+535SVO5RMal9iqXqw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="60242233"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=NWZ+D4BX1D2ktg1nKpuXJVcd3d3x3y+UJjQAPqlhrjE=;
+  b=TuR5UHHNRob/9E17ufFDJBgZyE915V+xDYPdPx4hK9af0OU1GpCBPOUh
+   II2hhxUsiqmdk45tyvOmZvluDq6aqdCDyjiKQU52/q0Jp667kLQpnaPt/
+   wwglVKsC+VykTPNHPTgBapZsjfsjQSVnkwrqeEhCCQDn0Sm1IOeU4+r0m
+   KmkFRmGjqzfKgSsAYyOb+5F2grY0/rpbE7VNCvtmrdGKQA+v93DPj0IHm
+   ihuuN9oqhLc872iapyyTkmCJshZMXRZFXZmPdmOcuucCbvXstzNm5nNmz
+   iH4jY98bXXRtdefpn2rWdRK8gUHxJGld70Cg3ufmznRmmy52QomcnGm5W
+   Q==;
+X-CSE-ConnectionGUID: 0h5WJAsuSTGwrhx2GpOX3g==
+X-CSE-MsgGUID: 4bQ3MoD9QMm31qRpgWccDQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="71233124"
 X-IronPort-AV: E=Sophos;i="6.18,275,1751266800"; 
-   d="scan'208";a="60242233"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2025 09:23:58 -0700
-X-CSE-ConnectionGUID: eKrlZOwzQNCLAbp65zkapA==
-X-CSE-MsgGUID: PgXR132hTEWTscTPsQZC5g==
+   d="scan'208";a="71233124"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2025 09:43:33 -0700
+X-CSE-ConnectionGUID: Bp80OEeQT2SXAe5rmvc8gw==
+X-CSE-MsgGUID: kSHykdyLSMSYvOdRsiKyHQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,275,1751266800"; 
-   d="scan'208";a="175508435"
+   d="scan'208";a="176410350"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa006.fm.intel.com with ESMTP; 18 Sep 2025 09:23:54 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 18 Sep 2025 09:43:31 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 7142C97; Thu, 18 Sep 2025 18:23:52 +0200 (CEST)
-Date: Thu, 18 Sep 2025 18:23:52 +0200
+	id 48FAF97; Thu, 18 Sep 2025 18:43:30 +0200 (CEST)
+Date: Thu, 18 Sep 2025 18:43:30 +0200
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Jack Pham <quic_jackp@quicinc.com>,
-	Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Mayank Rana <mayank.rana@oss.qualcomm.com>,
-	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH RFC] dt-bindings: thunderbolt: Add Qualcomm USB4 Host
- Router
-Message-ID: <20250918162352.GM2912318@black.igk.intel.com>
-References: <20250916-topic-qcom_usb4_bindings-v1-1-943ecb2c0fa7@oss.qualcomm.com>
- <20250917061236.GF2912318@black.igk.intel.com>
- <e648a71f-a642-4f5d-bcf8-893484cfe601@oss.qualcomm.com>
- <20250918051244.GJ2912318@black.igk.intel.com>
- <035c0d66-bddd-495c-bd23-e1d98570ba7f@oss.qualcomm.com>
- <20250918152322.GK2912318@black.igk.intel.com>
- <af749f54-1406-40c0-97c3-2a418f29b55f@oss.qualcomm.com>
+To: =?utf-8?B?5p2O5L2z5oCh?= <lijiayi@kylinos.cn>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	jiayi_dec@163.com
+Subject: Re: [PATCH RFC] thunderbolt: Re-add DP resources on resume
+Message-ID: <20250918164330.GN2912318@black.igk.intel.com>
+References: <20250917082456.1790252-1-lijiayi@kylinos.cn>
+ <0540df54-efd6-4b79-90f9-ec305e1f5f7e@kylinos.cn>
+ <20250917125017.GI2912318@black.igk.intel.com>
+ <f0a04f70-5539-42bd-ac15-07054878acfb@kylinos.cn>
+ <20250918162059.GL2912318@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -97,30 +80,120 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <af749f54-1406-40c0-97c3-2a418f29b55f@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250918162059.GL2912318@black.igk.intel.com>
 
-On Thu, Sep 18, 2025 at 05:38:13PM +0200, Konrad Dybcio wrote:
-> On 9/18/25 5:23 PM, Mika Westerberg wrote:
-> > Hi,
-> > 
-> > On Thu, Sep 18, 2025 at 11:05:42AM +0200, Konrad Dybcio wrote:
-> >>> I it hard to change these DT bindings later on? If yes then I would
-> >>> definitely think forward and make this support MSI from the get-go.
-> >>
-> >> dt-bindings (attempt to) promise an ABI-like interface, so bindings
-> >> for *a given IP block* ("dt-bindings describe the hardware") should
-> >> not change, unless there's something critically wrong (e.g. "this
-> >> could have never really worked").
-> > 
-> > Then I think it is good to think few steps forward and make sure when
-> > Qualcomm adds MSI to their IP it can be easily desribed in the DT bindings.
+On Thu, Sep 18, 2025 at 06:20:59PM +0200, Mika Westerberg wrote:
+> Hi,
 > 
-> Your reply makes me believe I glossed over an important detail..
+> On Thu, Sep 18, 2025 at 04:34:31PM +0800, 李佳怡 wrote:
+> > 
+> > 
+> > 在 2025/9/17 20:50, Mika Westerberg 写道:
+> > > On Wed, Sep 17, 2025 at 06:12:31PM +0800, 李佳怡 wrote:
+> > > > 
+> > > > As requested, I've attached the complete dmesg output (from boot to after
+> > > > resume) reproducing the issue.
+> > > > 
+> > > > Testing Methodology:
+> > > > 1. Start with the Targus Thunderbolt dock already connected to the system
+> > > > 2. Enter S3 suspend (sleep) with no DP monitor connected to the dock
+> > > > 3. Resume from S3
+> > > > 4. After the system has fully resumed, connect the DP monitor to the dock
+> > > 
+> > > Thanks! It is badly line wrapped. I wonder if you can just attach it?
+> > > Anyways I found some unexpected things there:
+> > > 
+> > > > [    8.647850] With USB4 patch v1.0.0
+> > > 
+> > > What is this? ;-)
+> > 
+> > Thanks for your help!
+> > 
+> > This is a self-compiled kernel based on version 5.4 with backported
+> > Thunderbolt drivers. I will also attach the kernel log from a build using
+> > the linux-6.6.y branch of the community linux-stable repository.
 > 
-> If qcom,x1e80100-hr doesn't have MSIs, qcom,nextsoc-hr can add them
-> without any issues too, just that the X1E80100 binding can't be altered,
-> e.g. "binding" refers to the (compatible, allowed_props, required_props)
-> tuple
+> Okay but I really suggest using more recent kernel. 6.16 is current stable
+> so that would be good.
+> 
+> > > > [    8.647860] ACPI: bus type thunderbolt registered
+> > > > [    8.664660] [7] nhi_probe:1326: thunderbolt 0000:2c:00.0: total paths: 21
+> > > > [    8.665209] [7] tb_ring_alloc:586: thunderbolt 0000:2c:00.0: allocating
+> > > > TX ring 0 of size 10
+> > > > [    8.665243] [7] tb_ring_alloc:586: thunderbolt 0000:2c:00.0: allocating
+> > > > RX ring 0 of size 10
+> > > > [    8.665267] [7] tb_ctl_alloc:665: thunderbolt 0000:2c:00.0: control
+> > > > channel created
+> > > > [    8.665272] [7] icm_probe:2549: thunderbolt 0000:2c:00.0: ICM not
+> > > > supported on this controller
+> > > > [    8.665285] [7] tb_ring_free:840: thunderbolt 0000:2c:00.0: freeing RX
+> > > > ring 0
+> > > > [    8.665294] [7] tb_ring_free:840: thunderbolt 0000:2c:00.0: freeing TX
+> > > > ring 0
+> > > 
+> > > What is this?
+> > > 
+> > > Is this Intel TB/USB4 controller or something else? All USB4 compliant
+> > > controllers should go directly to tb.c as that's the part dealing with
+> > > software connection manager. The above looks like it tries first with the
+> > > firmware connection manager and that should not happen outside of Intel
+> > > Thunderbolt 3 hosts.
+> > 
+> > Yes, there is a mistake. I discovered that during the USB4_NATIVE_CONTROL
+> > negotiation in the firmware, an OSC_CAPABILITIES_MASK_ERROR bit was being
+> > set incorrectly, which should not have happened.
+> > 
+> > The log I will attach next has been modified to fix this issue.
+> 
+> [..]
+> 
+> > [    0.498976] [1] tb_switch_reset:1666: thunderbolt 0000:2c:00.0: 0: resetting
+> > [    0.533329] [1] tb_add_dp_resources:217: thunderbolt 0000:2c:00.0: 0:10: DP IN resource available
+> > [    0.533959] [1] tb_add_dp_resources:217: thunderbolt 0000:2c:00.0: 0:11: DP IN resource available
+> 
+> The DP IN resources were added here.
+> 
+> [..]
+> 
+> > [   19.035726] [171] tb_switch_set_wake:3445: thunderbolt 0000:2c:00.0: 0: enabling wakeup: 0x3f
+> > [   19.037401] [171] tb_ring_stop:768: thunderbolt 0000:2c:00.0: stopping RX ring 0
+> > [   19.037412] [171] ring_interrupt_active:141: thunderbolt 0000:2c:00.0: disabling interrupt at register 0x38200 bit 21 (0x200001 -> 0x1)
+> > [   19.037439] [171] tb_ring_stop:768: thunderbolt 0000:2c:00.0: stopping TX ring 0
+> > [   19.037449] [171] ring_interrupt_active:141: thunderbolt 0000:2c:00.0: disabling interrupt at register 0x38200 bit 0 (0x1 -> 0x0)
+> > [   19.037463] [171] tb_ctl_stop:733: thunderbolt 0000:2c:00.0: control channel stopped
+> 
+> Runtime suspend.
+> 
+> (and a couple more)
+> 
+> > [  266.399800] [3870] tb_ctl_start:703: thunderbolt 0000:2c:00.0: control channel starting...
+> > [  266.399808] [3870] tb_ring_start:693: thunderbolt 0000:2c:00.0: starting TX ring 0
+> > [  266.399821] [3870] ring_interrupt_active:141: thunderbolt 0000:2c:00.0: enabling interrupt at register 0x38200 bit 0 (0x0 -> 0x1)
+> > [  266.399826] [3870] tb_ring_start:693: thunderbolt 0000:2c:00.0: starting RX ring 0
+> > [  266.399837] [3870] ring_interrupt_active:141: thunderbolt 0000:2c:00.0: enabling interrupt at register 0x38200 bit 21 (0x1 -> 0x200001)
+> > [  266.399848] [3870] tb_switch_resume:3478: thunderbolt 0000:2c:00.0: 0: resuming switch
+> > [  266.399852] [3870] tb_switch_configure:2590: thunderbolt 0000:2c:00.0: restoring Switch at 0x0 (depth: 0, up port: 5)
+> > [  266.400032] [3870] tb_switch_set_wake:3447: thunderbolt 0000:2c:00.0: 0: disabling wakeup
+> 
+> Around this time you should see the hotplug events coming to the DP IN
+> adapters. But there is none.
+> 
+> There is a bit in the DP adapter config space (DHP) that can be used to
+> disable this but the spec says it defaults to 0. Anyways I suggest to check
+> that (and also the Plugged bit). You can dump these using tbtools [1]. Let
+> me know if you want help with that.
 
-OK then it is all good and allows extension in the future generations.
+Nevermind about the Plugged bit, that's not applicable here.
+
+Here's how to dump the DHP bit. This is from Intel host:
+
+# tbdump -vv -r 0 -N 1 -a 5 ADP_CS_5
+0x0005 0x00004809 0b00000000 00000000 01001000 00001001 ..H. ADP_CS_5
+  [00:06]        0x9 Max Input HopID
+  [11:17]        0x9 Max Output HopID
+  [22:28]        0x0 Link Credits Allocated
+  [29:29]        0x0 HEC Error Enable (HEE)
+  [30:30]        0x0 Flow Control Error Enable (FCEE)
+  [31:31]        0x0 Disable Hot Plug Events (DHP)
 
