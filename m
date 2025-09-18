@@ -1,125 +1,196 @@
-Return-Path: <linux-usb+bounces-28281-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28282-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01D39B84BE7
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 15:09:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41F92B84E25
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 15:41:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D00B05422E5
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 13:09:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 733997BB321
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 13:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97632308F31;
-	Thu, 18 Sep 2025 13:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B64B2F068E;
+	Thu, 18 Sep 2025 13:41:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bBVjKobh"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="MFbMU4sh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92326308F1B
-	for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 13:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4DD220F29;
+	Thu, 18 Sep 2025 13:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758200948; cv=none; b=r7Jew2x04X9+9rnKw302bIx22kCVCTqa97Ts8bo53NdjoVlLz73mMm+UMBtCJqbu3kOeeu6JWqUY4t/eISXNq2bh/90swPcxlKpUS4JxRWeeJqOqdM2lViEBQEmE36WYUQ8SGgITGb1abHiY0fK/PZ3xQAcjbzby6oFol4sKpIE=
+	t=1758202881; cv=none; b=rr0ZH1Q0hPW/8FxGjnSkpTR5mLjfYiNCX+hxCRNG4ReIMpK495mlDveu8+CHGPHo9ejECTNcNiZxtlSBCviBU41Q7Bpl0KVuDrgD2hz3ONLqjk+101OF4mwAFzwEHFwyg7CuvarpGA8f5+ug8NR7pKcQsUMs7S9zBePQpJR49Ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758200948; c=relaxed/simple;
-	bh=Er3PMf9myoYkBBJYaU3UkkQkMikHnD13qA99bQyqK9M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V8zHahjmiKSO5QAC5y1kca7Jkp1CJAxyt/EyH6+7WMG99r/xkausq9xSe6QJOHAKpcA/ksbqvLflxgD5vv2ekw8s75aNred8kLOUpnC9ZHzCHoJ9hEYTf9FnbA6r9utL1CU9BjQ6MBd0w3oRYle4BIlI0JOh639v3kgBWSDzBRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bBVjKobh; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2445824dc27so9484795ad.3
-        for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 06:09:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758200946; x=1758805746; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=icTj2uj2ry4O8N7yW/r057ziDGK4JT3A+zWVTttAeYo=;
-        b=bBVjKobhlYKQqf4ZfLBLO7kMyOePOF8WdNgpQf+uJAUr8W157EVFb03uY+Fhn0iM7a
-         XqxIjOcUqu8wTttTav3VYi9TLse7s91GUbQwX7D0DsYIinYS9NijPoZqXpxv86XpdsIY
-         gAUiRE/KKLA4NQUpWaaaYFz9vL5l4H2it9ZWtzD7W5nMqcXS07zCI5xTKaW5cnnMtD2l
-         ErPI2rhrz4DzCm5u8ByAubgqDjHRNG2abILk6rpxH9uUPvjDjpBLRkjdgrSxoXsKVHnY
-         bIx+y9aeugeBm6wg1hVrCZt2MfoiYmM56V+UD8Q+RRieY2y+admPZoWw8rFfJsz1k3N3
-         +LJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758200946; x=1758805746;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=icTj2uj2ry4O8N7yW/r057ziDGK4JT3A+zWVTttAeYo=;
-        b=J1maXwPfdPkM1XPyyjvfu2sgFC7JrkQ7iPHkTQ3o9robiI9xY+mp9kNkjUx8te2gsQ
-         A9ghBFzr6VyAiY9PInb6n54TburCZltlkMDhIHAkNLYPfOKpnpTqiIFqFsPifFBtXhLa
-         nLncNestlXzetI9RbUz4/iKWV0unmncLvCHPlp82OejEj0q+YuaFh3dawvCc9qA+5Gsq
-         yJvsU6JOxmGvwyxH611+Md/nxYK4QdXAagmvQj5xkZ55njvIsAIOmnS81Y2v/zFRkz89
-         XtoFdZLBOI+w+afSuVL3eTjWiz9IXwAr0+FBBP7VGSWtUMbc7UlS1M62mJl7bVdDFOXg
-         UWhA==
-X-Forwarded-Encrypted: i=1; AJvYcCVhHbQZv0B91xC7rA5aCMWnJHilrUIGmnRTuGGKIIaJzavXzZ5NQH14toG4ubEVws/1yqyvJTEntn8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlJiFSRByAFcSTH8t6JRSzmTPlrWfuYX9LSQzIUKUfMl7yiopb
-	/b/1LZgh829dkh3P+fiFWCKp5mUMfFgZGj57CgjHuAGG1JtYxDcN0LqY
-X-Gm-Gg: ASbGncvZGSS3OyMVIVbliyAaRPtUnbUwRjLBL3vThLggGsRJWyKYNo9L1acDWJowAqz
-	5KPVySvGiYiuJO140ooqpw8Z2xk7Vr4JAXG54RPax5ki3uXGVsIJ12t4erCulIQl2k6nr1ChaJv
-	JyHM1Icuz1RneVHtxXSAd2FOwfLQCA44ghmjREI761PavBAwN2tzNOWG79AOAxCS7i+1NZQ4b3V
-	Foep0mzvE6AAzACBcbkxWBID/d+3fB4dvU62HXTH/Ch2VcDTRtFhufwlZzmRqWxlgY4XecTTfq5
-	gle/79VQpmvVc1YFfNSjTWXqSH6Ox17D/ohUBKV/T10gUT9PyaevCwJmG8uvVY68HRM/aOK+26d
-	SjoIm1haRorsxryOdw9FuirnS9EgURbeyGmM/G+icCXGB+Gd5DP6C
-X-Google-Smtp-Source: AGHT+IHlRbybGNvUsZOnopBgfd/M/RrtXbziezoYWYdRaUySLI3fVUiSR65r4mduFiNJCSPyZ5WVSw==
-X-Received: by 2002:a17:902:dad1:b0:24a:f79e:e5dd with SMTP id d9443c01a7336-268138fdecemr78106405ad.37.1758200945682;
-        Thu, 18 Sep 2025 06:09:05 -0700 (PDT)
-Received: from lgs.. ([2408:8417:e00:1e5d:c81b:8d5e:98f2:8322])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2698033d788sm25878695ad.127.2025.09.18.06.08.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Sep 2025 06:09:04 -0700 (PDT)
-From: Guangshuo Li <lgs201920130244@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Guangshuo Li <lgs201920130244@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] usb: xhci: Check kcalloc_node() when allocating interrupter array in xhci_mem_init()
-Date: Thu, 18 Sep 2025 21:08:38 +0800
-Message-ID: <20250918130838.3551270-1-lgs201920130244@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1758202881; c=relaxed/simple;
+	bh=GS1lHfbXJUZu4M/K47vm1xoi0khW3qkbtkY3iQh5qDQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z37EfUs4ULfn9ARmqPir9eQH2Tyxqtx8BvtzcOdbqQeGYGhcqf82SSxv/wtdE0R4WORMnrDJoOQaUJwXQ8nf9HWEVoVT++HdVBAOZ5XGdHMsfiYqjcZGz/kypPQFS4tjt3fS0cfFW4SYh2bxVD9uF3gS/QIG+/cLM+9sLAlFn6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=MFbMU4sh; arc=none smtp.client-ip=198.47.19.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 58IDegeo493090;
+	Thu, 18 Sep 2025 08:40:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1758202842;
+	bh=nilE7uTgSMT2YbWFrd5UVjg90TJPQVzV3fTHvrJ5g9Q=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=MFbMU4shPzOOyyPffN2117PkiSfS5+6xV4iCKozf8h/zi023q/OaB8HgpicPY3/OA
+	 MMqoO9v9QqYMEeseYLjZ/rzwu6PpbAwO0f7VGVFXwap1ryREJUzyEnIW5jJu4WxzQ2
+	 4dXH+0N0u1mUURA3voN8NbHY2f36H3tu5/DW+P68=
+Received: from DLEE207.ent.ti.com (dlee207.ent.ti.com [157.170.170.95])
+	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 58IDef4E2388304
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 18 Sep 2025 08:40:42 -0500
+Received: from DLEE214.ent.ti.com (157.170.170.117) by DLEE207.ent.ti.com
+ (157.170.170.95) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 18 Sep
+ 2025 08:40:41 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE214.ent.ti.com
+ (157.170.170.117) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Thu, 18 Sep 2025 08:40:41 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 58IDeeNc667154;
+	Thu, 18 Sep 2025 08:40:41 -0500
+Date: Thu, 18 Sep 2025 19:10:40 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Peng Fan <peng.fan@oss.nxp.com>
+CC: Peng Fan <peng.fan@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael
+ J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+        Pavel Machek
+	<pavel@kernel.org>, Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer
+	<s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Xu Yang <xu.yang_2@nxp.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <imx@lists.linux.dev>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 1/4] pmdomain: core: Introduce
+ device_set/get_out_band_wakeup()
+Message-ID: <20250918134039.zkpeqsbf6m2ymxvt@lcpd911>
+References: <20250902-pm-v3-0-ffadbb454cdc@nxp.com>
+ <20250902-pm-v3-1-ffadbb454cdc@nxp.com>
+ <20250918095950.h7wmz2qj5e6khtwr@lcpd911>
+ <20250918131230.GD9196@nxa18884-linux.ap.freescale.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250918131230.GD9196@nxa18884-linux.ap.freescale.net>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-kcalloc_node() may fail. When the interrupter array allocation returns
-NULL, subsequent code uses xhci->interrupters (e.g. in xhci_add_interrupter()
-and in cleanup paths), leading to a potential NULL pointer dereference.
+Hi Peng,
 
-Check the allocation and bail out to the existing fail path to avoid
-the NULL dereference.
+On Sep 18, 2025 at 21:12:30 +0800, Peng Fan wrote:
+> Hi Dhruva,
+> 
+> On Thu, Sep 18, 2025 at 03:29:50PM +0530, Dhruva Gole wrote:
+> >On Sep 02, 2025 at 11:33:00 +0800, Peng Fan wrote:
+> >> For some cases, a device could still wakeup the system even if its power
+> >> domain is in off state, because the device's wakeup hardware logic is
+> >> in an always-on domain.
+> >> 
+> >> To support this case, introduce device_set/get_out_band_wakeup() to
+> >> allow device drivers to control the behaviour in genpd for a device
+> >> that is attached to it.
+> >> 
+> >
+> >Thinking more into it, to me it seems like if the intent here is to only
+> >allow the device drivers to figure out whether they should be or not be
+> >executing the suspend/resume_noirqs then that can still be checked by
+> >wisely using the device set_wakeup APIs in the driver itself.
+> >
+> >Not sure why this patch should be necessary for a
+> >driver to execute the suspend_noirq or not. That decision can very well
+> >be taken inside the driver's suspend resume_noirq hooks based on wakeup
+> >capability and wake_enabled statuses.
+> 
+> I should join today's SCMI meeting, but something else caught me (:
 
-Fixes: c99b38c412343 ("xhci: add support to allocate several interrupters")
-Cc: stable@vger.kernel.org
-Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
----
- drivers/usb/host/xhci-mem.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+It's alright, maybe see you in the next one ;)
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index d698095fc88d..da257856e864 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2505,7 +2505,8 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 		       "Allocating primary event ring");
- 	xhci->interrupters = kcalloc_node(xhci->max_interrupters, sizeof(*xhci->interrupters),
- 					  flags, dev_to_node(dev));
--
-+	if (!xhci->interrupters)
-+		goto fail;
- 	ir = xhci_alloc_interrupter(xhci, 0, flags);
- 	if (!ir)
- 		goto fail;
+> 
+> Thanks for looking into this. 
+> 
+> In genpd_suspend_finish, genpd_sync_power_off will be called if
+> "(device_awake_path(dev) && genpd_is_active_wakeup(genpd))" is false.
+> So if the device is enabled wakeup, the genpd will not be turned off because
+> the check return true.
+
+Umm I think this device_awake_path stuff is only going to be true when
+someone calls device_set_wakeup_path, I don't think it is going to
+return true for a wakeup_capable device. I know all these "wakeup"
+terminology and APIs have become all too confusing :( , so maybe Ulf can
+correct me.
+I maybe misremembering, but I have seen in some cases where a driver may
+have marked itself wakeup_capable but the suspend hooks still do get
+called... So your concern about genpd_sync_power_off not being called
+due to wakeup capable device driver may not be valid... Again please
+feel to correct me if I am wrong.
+
+Did you also look at the wake IRQ stuff I mentioned?
+In the path you're talking about it just checks
+device_awake_path(dev) && genpd_is_active_wakeup(genpd)
+However if the device irq is just marked as a wake IRQ, I don't think
+that is checked anywhere in this path. So definitely if the IRQ of your
+device is set as a wake IRQ, it will still get suspended and resumed as
+usual and that's what you want right?
+
+
+> 
+> But to i.MX, if the device is configured as wakeup source, we still need to
+> power off the power domain, because the device has out-of-band wakeup logic.
+> 
+> This patch is to make sure the power domain could be powered off in
+> suspend flow and powered up in resume flow.
+> 
+> Thanks,
+> Peng
+> 
+> >
+> >Just a pseudo code:
+> >```
+> >driver_suspend_noirq () {
+> >	if (device_may_wakeup()) {
+> >		// do the sequence where the power domain might get turned off
+> >		// but like you say device can do some out band wakeup
+> >		return XXX;
+> >	}
+> >	// regular suspend sequence here... maybe inband wakeup config / clk
+> >	// disable etc...
+> >}
+> > ```
+> >
+> >And something similar in resume_noirq?
+> >
+> >Just need to make sure that the probe func does the
+> >device_set_wakeup_enable or capable stuff correctly as per your H/w and
+> >wakeup requirements...
+> >
+> >
+> >-- 
+> >Best regards,
+> >Dhruva Gole
+> >Texas Instruments Incorporated
+
 -- 
-2.43.0
-
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
