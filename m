@@ -1,202 +1,140 @@
-Return-Path: <linux-usb+bounces-28256-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28257-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAB8AB8307C
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 07:40:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C03ECB830D3
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 07:55:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 758BF3BF785
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 05:40:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88FF0467402
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 05:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C5892D6604;
-	Thu, 18 Sep 2025 05:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Jn+/3YUR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 251692D73A8;
+	Thu, 18 Sep 2025 05:55:44 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0683A34BA2C;
-	Thu, 18 Sep 2025 05:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28F92D6E7C;
+	Thu, 18 Sep 2025 05:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758174013; cv=none; b=LihxyOimijpdZKrTszIJLjkrSHy4Z/2L5wE+C9gBzbOrYadAFSm8CpT9Bz+IYWgAuE9zj1Ed3+5cdfrxpG2FA//40JqckIxxoQsi2bJFZWcXrUV6QOD9WuM2ec4x9dTEUof5wjmbmH7ZWciXWHZAWWLFT1L7oB8/6nTNPndJ81g=
+	t=1758174943; cv=none; b=g5GAvd1kNOfehq4N5niLASbExNBYcN6xb34iZynziihnraq9y0rn/9w7DXcfat4UwoR9JX4AMGOaCU6zy3TBKJN05Wg+QOCYiv0u7kl+nvrXzFXpkRB9p89VmfBef7wyztdxdy+OSRgpn4Xoo99YP3qhZjNnjw73fPKTilzYh/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758174013; c=relaxed/simple;
-	bh=DHo36Nw9Mhb8OSdyfEa69N5hMrs1OO6ojIUqj1gz0sE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u7dV92keZX352Y8n4P3ZTFIaXskvl5pMz/zdoJF9aDrAAYZ96oADUtouuyuUgUyhInfjXydxiHJA3gpXFSgxbAkRPYX/zknuV3E9E9ZvVUnOFsyas0StAyiSXjws29D/am1YG6JSO1JWvigWlbl4ZCp8J0IDLzPXMCIfbVSKTSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Jn+/3YUR; arc=none smtp.client-ip=198.47.19.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 58I5dad41676466;
-	Thu, 18 Sep 2025 00:39:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1758173976;
-	bh=DKjp6N/ixan1BjatOrTjluVvM3Lvf9IQYxDJwVkTHGI=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=Jn+/3YUR2Waxjc9kICUNeTvsLCWZ4SzptzZzI552+gi1e+Q2RL8vnGaY9mJvRB210
-	 IBO/CfMwq6N3MSR4jYnGhI4HH7PNUrWg5OaAvNzXbiZrzAR++zhdOj5N7ozg9HZlXF
-	 ng1LpS5A5lLuaRU1bZCJWi9aSylBGdVhX1NZzp+A=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 58I5da5Q1878417
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Thu, 18 Sep 2025 00:39:36 -0500
-Received: from DFLE211.ent.ti.com (10.64.6.69) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 18
- Sep 2025 00:39:35 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE211.ent.ti.com
- (10.64.6.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Thu, 18 Sep 2025 00:39:35 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 58I5dYu7066935;
-	Thu, 18 Sep 2025 00:39:35 -0500
-Date: Thu, 18 Sep 2025 11:09:34 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Peng Fan <peng.fan@nxp.com>
-CC: Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki"
-	<rafael@kernel.org>, Len Brown <lenb@kernel.org>,
-        Pavel Machek
-	<pavel@kernel.org>, Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer
-	<s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Xu Yang <xu.yang_2@nxp.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <imx@lists.linux.dev>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 1/4] pmdomain: core: Introduce
- device_set/get_out_band_wakeup()
-Message-ID: <20250918053934.dweerdmcqdkr342w@lcpd911>
-References: <20250902-pm-v3-0-ffadbb454cdc@nxp.com>
- <20250902-pm-v3-1-ffadbb454cdc@nxp.com>
+	s=arc-20240116; t=1758174943; c=relaxed/simple;
+	bh=8GGY3tXbNR9dYAJmvF/A9LVH8yv4b0r1mwXSX3KzH8w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=YSOiPCpU44iN9ZdWkTszkxG27job2TaRIxQNfSj+zxf0i76ro5PRQ/R1X0V9QGuWEswkCXdlKSW0zYI/ERhb/Xv0Dqn/qljEPZGiT9LR1B8z5GhSt4AU+BG65/XJebOK0YKhgJ1FS4J3KUsN/5eAEeyQwOLJY+7zVD5ydhlBI3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 15a321f0945411f0b29709d653e92f7d-20250918
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:166848ce-9dd7-41d8-870b-55a9fd003a05,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:02fb88f48475ea19a8990136c2fa5a9d,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850,TC:nil,Content:0|50,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 15a321f0945411f0b29709d653e92f7d-20250918
+Received: from node2.com.cn [(10.44.16.197)] by mailgw.kylinos.cn
+	(envelope-from <zhangjinpeng@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 2086424130; Thu, 18 Sep 2025 13:55:30 +0800
+Received: from node2.com.cn (localhost [127.0.0.1])
+	by node2.com.cn (NSMail) with SMTP id ADB1FB8258E9;
+	Thu, 18 Sep 2025 13:55:30 +0800 (CST)
+X-ns-mid: postfix-68CB9ED2-57136037
+Received: from localhost.localdomain (unknown [172.25.82.241])
+	by node2.com.cn (NSMail) with ESMTPA id E03BCB812916;
+	Thu, 18 Sep 2025 05:55:29 +0000 (UTC)
+From: zhangjinpeng <zhangjinpeng@kylinos.cn>
+To: jikos@kernel.org,
+	benjamin.tissoires@redhat.com
+Cc: linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	zhangjinpeng <zhangjinpeng@kylinos.cn>
+Subject: [PATCH] hid/usbhid: add reset device for EPROTO
+Date: Thu, 18 Sep 2025 13:55:27 +0800
+Message-Id: <20250918055527.4157212-1-zhangjinpeng@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250902-pm-v3-1-ffadbb454cdc@nxp.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sep 02, 2025 at 11:33:00 +0800, Peng Fan wrote:
-> For some cases, a device could still wakeup the system even if its power
-> domain is in off state, because the device's wakeup hardware logic is
-> in an always-on domain.
+[  792.354988] input: PixArt USB Optical Mouse as /devices/platform/PHYT0=
+039:03/usb7/7-1/7-1.2/7-1.2:1.0/0003:093A:2510.0028/input/input53
+[  792.355081] hid-generic 0003:093A:2510.0028: input,hidraw1: USB HID v1=
+.11 Mouse [PixArt USB Optical Mouse] on usb-PHYT0039:03-1.2/input0
+[  792.355137] hub 7-1:1.0: state 7 ports 4 chg 0000 evt 0004
+=EF=BC=9A xhci-hcd PHYT0039:03: Transfer error for slot 4 ep 2 on endpoin=
+t
+[  794.579339] xhci-hcd PHYT0039:03: Giveback URB 00000000ab6c1cac, len =3D=
+ 0, expected =3D 4, status =3D -71
+[  794.596152] xhci-hcd PHYT0039:03: WARN halted endpoint, queueing URB a=
+nyway.
+[  917.451251] hub 7-1:1.0: state 7 ports 4 chg 0000 evt 0004
+[  917.451323] usb 7-1-port2: status 0100, change 0001, 12 Mb/s
+[  917.451362] usb 7-1-port2: indicator auto status 0
+[  917.451365] usb 7-1.2: USB disconnect, device number 45
+[  917.451367] usb 7-1.2: unregistering device
+[  917.451369] usb 7-1.2: unregistering interface 7-1.2:1.0
+[  917.451429] xhci-hcd PHYT0039:03: Cancel URB 00000000ab6c1cac, dev 1.2=
+, ep 0x81, starting at offset 0x2361ea6280
+[  917.451432] xhci-hcd PHYT0039:03: // Ding dong!
+[  917.451436] xhci-hcd PHYT0039:03: shutdown urb ffffffa2ebc8e400 ep1in-=
+intr
+[  917.451440] xhci-hcd PHYT0039:03: Removing canceled TD starting at 0x2=
+361ea6280 (dma).
+[  917.500303] usb 7-1.2: usb_disable_device nuking all URBs
+[  917.500310] xhci-hcd PHYT0039:03: xhci_drop_endpoint called for udev 0=
+0000000e00ae900
+[  917.500324] xhci-hcd PHYT0039:03: drop ep 0x81, slot id 4, new drop fl=
+ags =3D 0x8, new add flags =3D 0x0
+[  917.500326] xhci-hcd PHYT0039:03: xhci_check_bandwidth called for udev=
+ 00000000e00ae900
+[  917.500330] xhci-hcd PHYT0039:03: // Ding dong!
+[  917.500351] xhci-hcd PHYT0039:03: Successful Endpoint Configure comman=
+d
+[  917.500579] xhci-hcd PHYT0039:03: // Ding dong!
+[  917.656189] usb 7-1-port2: debounce total 100ms stable 100ms status 0x=
+100
 
-Don't we already have something like wake IRQs [1] for such purposes?
+Signed-off-by: zhangjinpeng <zhangjinpeng@kylinos.cn>
+---
+ drivers/hid/usbhid/hid-core.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-8<----------------------------------------------------------------------
-That may involve turning on a special signal handling logic within the
-platform (such as an SoC) so that signals from a given line are routed
-in a different way during system sleep so as to trigger a system wakeup
-when needed
------------------------------------------------------------------------>8
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.=
+c
+index 257dd73e37bf..253f82f33b08 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -306,8 +306,13 @@ static void hid_irq_in(struct urb *urb)
+ 	case -ESHUTDOWN:	/* unplug */
+ 		clear_bit(HID_IN_RUNNING, &usbhid->iofl);
+ 		return;
+-	case -EILSEQ:		/* protocol error or unplug */
+ 	case -EPROTO:		/* protocol error or unplug */
++		usbhid_mark_busy(usbhid);
++		clear_bit(HID_IN_RUNNING, &usbhid->iofl);
++		set_bit(HID_CLEAR_HALT, &usbhid->iofl);
++		usb_queue_reset_device(usbhid->intf);
++		return;
++	case -EILSEQ:		/* protocol error or unplug */
+ 	case -ETIME:		/* protocol error or unplug */
+ 	case -ETIMEDOUT:	/* Should never happen, but... */
+ 		usbhid_mark_busy(usbhid);
+2.25.1
 
-[1] https://docs.kernel.org/power/suspend-and-interrupts.html#system-wakeup-interrupts-enable-irq-wake-and-disable-irq-wake
-
-> 
-> To support this case, introduce device_set/get_out_band_wakeup() to
-> allow device drivers to control the behaviour in genpd for a device
-> that is attached to it.
-
-Do you have any explanation as to why wake IRQ is not solving this
-problem and you need to introduce these new APIs?
-
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/pmdomain/core.c   |  6 ++++--
->  include/linux/pm.h        |  1 +
->  include/linux/pm_wakeup.h | 17 +++++++++++++++++
->  3 files changed, 22 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> index 0006ab3d078972cc72a6dd22a2144fb31443e3da..8e37758cea88a9ee051ad9fb13bdd3feb4f8745e 100644
-> --- a/drivers/pmdomain/core.c
-> +++ b/drivers/pmdomain/core.c
-> @@ -1549,7 +1549,8 @@ static int genpd_finish_suspend(struct device *dev,
->  	if (ret)
->  		return ret;
->  
-> -	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd))
-> +	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd) &&
-> +	    !device_get_out_band_wakeup(dev))
->  		return 0;
->  
->  	if (genpd->dev_ops.stop && genpd->dev_ops.start &&
-> @@ -1604,7 +1605,8 @@ static int genpd_finish_resume(struct device *dev,
->  	if (IS_ERR(genpd))
->  		return -EINVAL;
->  
-> -	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd))
-> +	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd) &&
-> +	    !device_get_out_band_wakeup(dev))
->  		return resume_noirq(dev);
->  
->  	genpd_lock(genpd);
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index cc7b2dc28574c24ece2f651352d4d23ecaf15f31..5b28a4f2e87e2aa34acc709e146ce729acace344 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -684,6 +684,7 @@ struct dev_pm_info {
->  	bool			smart_suspend:1;	/* Owned by the PM core */
->  	bool			must_resume:1;		/* Owned by the PM core */
->  	bool			may_skip_resume:1;	/* Set by subsystems */
-> +	bool			out_band_wakeup:1;
->  	bool			strict_midlayer:1;
->  #else
->  	bool			should_wakeup:1;
-> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> index c838b4a30f876ef5a66972d16f461cfba9ff2814..c461c7edef6f7927d696b7d18b59a6a1147f53a3 100644
-> --- a/include/linux/pm_wakeup.h
-> +++ b/include/linux/pm_wakeup.h
-> @@ -94,6 +94,16 @@ static inline void device_set_wakeup_path(struct device *dev)
->  	dev->power.wakeup_path = true;
->  }
->  
-> +static inline void device_set_out_band_wakeup(struct device *dev, bool capable)
-> +{
-> +	dev->power.out_band_wakeup = capable;
-> +}
-> +
-> +static inline bool device_get_out_band_wakeup(struct device *dev)
-> +{
-> +	return dev->power.out_band_wakeup;
-> +}
-> +
->  /* drivers/base/power/wakeup.c */
->  extern struct wakeup_source *wakeup_source_register(struct device *dev,
->  						    const char *name);
-> @@ -162,6 +172,13 @@ static inline bool device_wakeup_path(struct device *dev)
->  
->  static inline void device_set_wakeup_path(struct device *dev) {}
->  
-> +static inline void device_set_out_band_wakeup(struct device *dev, bool capable) {}
-> +
-> +static inline bool device_get_out_band_wakeup(struct device *dev)
-> +{
-> +	return false;
-> +}
-> +
->  static inline void __pm_stay_awake(struct wakeup_source *ws) {}
-
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
 
