@@ -1,138 +1,171 @@
-Return-Path: <linux-usb+bounces-28277-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28278-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6159AB83EB2
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 11:52:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C343DB83F00
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 11:57:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 196C04816DE
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 09:52:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 844753B2241
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 09:57:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7623F29B8EF;
-	Thu, 18 Sep 2025 09:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D71542DEA78;
+	Thu, 18 Sep 2025 09:57:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZqOJbYiw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sKuOqGtS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0BD2BE7A3
-	for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 09:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 502932D9EC9
+	for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 09:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758189146; cv=none; b=jMoECVHZnx4TjjGrjPMLJXRs/Z7zqTe2EChxIH/wWmSQqBF90PY14Njivkg8wqBq250eh9oOA5zVIQz6EweyYv+q1h7XKHADgiuR8N3Rf8AN6BZS+dXQdrgRGrKAq1SKE0/CiQsD/g2/QUhq4D+OUU6XAgKph4Dazm+n1k1NCHw=
+	t=1758189473; cv=none; b=hlpPLkcKjBaB0SjJp4ECyTNMdFTcI2vJhd+FTanEJghBDpBFBsDr6xCEevTeZ2WY1gBaaqpowFTWTldSjB8QZdirDSYaJBSWelgXNw3q5ftcR+5nvdqagJWJGPK3T6SwUUHqewaLVLEDgl6D3qwQfrnyd5dDCferM703u6zNFJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758189146; c=relaxed/simple;
-	bh=IZx9LG05oj6XU/qGuctI5jmCloGrG1hU8D4xGjYRLVU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eNcjsZSdXeTba/CO7eA2W0y6EiDm/VCHBl5dyef6fBTRDxRgAITOGY++rzW+xlXSjVUppn2JFAjc3YXVqR0C9scBcwJCg6fayZD+hHMB7BgBbuOiTW8yBdLkmK0AU57KmU6K5eB9voZrPr9oL+IQZ4FdQG2J1AqI5yqhWwEkFp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZqOJbYiw; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-45dd5e24d16so6995535e9.3
-        for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 02:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758189142; x=1758793942; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W1H93dMZs9g+kYodSEVnTgy7nL/zERNzPkzQfdNwfUg=;
-        b=ZqOJbYiwnPIjq4WWAJoKa7LDijvT0Fn9/l79+wPngXuwC04GI1GweTwvP86zrpPVC6
-         L+uugE6CcvAeqT7OXGYck7uqRZ+eAt5yPIf/yIxZxgGwsDhbiNhuJVVEXbYNDXW+0OgV
-         I8FQqX5MnNdxE87yXmbITEAUgyh+17hG+JYeyA1B+u1NNmFKZWb5rfYxlUFpD4TkCRf1
-         SzQ9xW8PFj/4SOs/Ad5lmhqYvBIzBhg5hQlCy6t1KooYUkqgN/FihKJ9W7x1qrpm0p0q
-         hsX3gq2AX92qN9od3iaNmSe2KJhLhp+cxpaRvtkqEfgCJOjfpUOdUa4OJoMmKPkHlD7c
-         eWzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758189142; x=1758793942;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W1H93dMZs9g+kYodSEVnTgy7nL/zERNzPkzQfdNwfUg=;
-        b=AY1G8U7roYdVIiO+FXruu4t9jBYbqFwhzsbsFK80mq0JekAn7fbRDjHQQCvCkddm8d
-         i1/z3uKh34kAGn440rKhtPM4mFJiV9z0QQY2lR0K8c5cpaLkO198qJ+qhP+YwHmQpSxH
-         ukCoAEZu686M2cka9JziBy+YIsQxraqLJy/Q3WNO2fVeTWSI3iBrJQbxQ1raKEZanUub
-         9r9BveVUycP6R95wWwLRjxcS8CQICab3H2aLsu3jT/cQiykGje3u2sfDg8Hc5L7KPDrI
-         31M9cEHgZFAYIwvAQkwIMWQwmbdtI8Xk7ax9WTy0pYAYHkVnllV9iM8tXF6XL+LPkp9P
-         fmyA==
-X-Gm-Message-State: AOJu0YzdFhDSKGJjeYIH8LFY5Pfcc2YvslrrCoFqzOHlAN68eEnqwlcu
-	MCENAXAnMuXoQXT6M/awnT2BmAMieo0J4ZF5qCX603/m7FOXU5/CbOoZeaaDAVbnxiBCso3cxNy
-	2l5qe
-X-Gm-Gg: ASbGncsaTcrWZY3Qv8IyvweVCDUeIbXBSroTs5LhXIS+Hr3piQEnOJQqb5bQZDQFnUK
-	DaGM7DLqE7764gFe5I46herX8EbJjgFcDOWwLhOoJ7pm06sH0gXT/FsAEaerCDjpK9PnKVGZzkA
-	73+t8Moped5PfIbAZw6DEl74AJ1Gq6y+diHpoeHgBlCmEygoT9l9bwZMO90YnNcHxQRriBJATv0
-	mECnwiBmX2znuWT9u0Hggd+2CPXSKUYhjjLRJ7RwuQD5LmVzrsNzG9/wdHtgZm4EBnwWWEluxW0
-	/ucS4VkKyAQjPKHwiga1ph5bhXBcZADt8/QV29i6G1ULD9r/kI5kjlUc20VcftK7FAxePo79AJQ
-	2yGD0yQ1W1150vT8VXBLzuh0aIkv7h0wn8457M2aUdQYga82nJYDj/DN3
-X-Google-Smtp-Source: AGHT+IGedpOHMZz7TERq2YqLSbJt14gQyq4OPiiVwBjTEFGq4kfib3BeTh1DNhFUFuEhQnBlzVO7XA==
-X-Received: by 2002:a05:600c:1f89:b0:45b:88d6:8ddb with SMTP id 5b1f17b1804b1-462074c6780mr53714075e9.37.1758189142418;
-        Thu, 18 Sep 2025 02:52:22 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-464f64ad359sm37903445e9.22.2025.09.18.02.52.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Sep 2025 02:52:22 -0700 (PDT)
-Date: Thu, 18 Sep 2025 12:52:18 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Hector Martin <marcan@marcan.st>
+	s=arc-20240116; t=1758189473; c=relaxed/simple;
+	bh=hCB+xD+f1sW1LVtMuKVP8csrsYm7SA30t29RfBKXyV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dYytMZ5Nrom/eJaO3DK1gCvRBTLS+NXa/vRxc9dL94i65qxRSSz5CcXo8KIKwodAqQHFIgAKwI2P94e4hbtXSJ42aIZxjkkbLqJ0uEUXzNOCdJwoPPAhdh/taiT8+SwTPqWUyuUCll/23wo5vmRtFtigeun2eprQUCcxdezd97k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sKuOqGtS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD125C4CEE7;
+	Thu, 18 Sep 2025 09:57:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758189472;
+	bh=hCB+xD+f1sW1LVtMuKVP8csrsYm7SA30t29RfBKXyV8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sKuOqGtSl4pYOv6fsgqFIxTuVH6BwJNg8NRzxEP+j6evZb6Yz+ccboMTGtHqTKGkY
+	 A+gTVX7FhePlT7c26aKBGdl6n5EBHaN6ulxDgwedd3mFUsNcN8y8WOPCcVk6+bzZkU
+	 cxPV48KPVdWnmeKnVDBRFu6QX/lvDs0hz2+HTqvDxrnyC+A6+mOFEEjsevMZebOYUn
+	 1M600TLmUOcqaPCRrCu8gVB+7XDluAoWu/6VnAgklTm8/gge2PdAweGylVPZQ/UB8W
+	 UAezQgYGHMS1kRQzp5liWzuKSoIbVyGiJISsEKhk/iYIa99qKBQkl3rtk195rQgfFe
+	 6RBj6BhXCxS6g==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1uzBOc-000000005sM-3HMB;
+	Thu, 18 Sep 2025 11:57:47 +0200
+Date: Thu, 18 Sep 2025 11:57:46 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Michael Wyraz <michael@wyraz.de>
 Cc: linux-usb@vger.kernel.org
-Subject: [bug report] usb: typec: tipd: Handle mode transitions for CD321x
-Message-ID: <aMvWUtyvtXH2AkIA@stanley.mountain>
+Subject: Re: [PATCH] Add Marvell ML352 to drivers/usb/serial/option.c
+Message-ID: <aMvXmhXgSt-yFxxb@hovoldconsulting.com>
+References: <aFJzdxe_ykNw6cP_@homebase1>
+ <aFLM7jZBEk6a7W-k@hovoldconsulting.com>
+ <d12635f9-9706-4dbd-8adb-d673c6a77202@wyraz.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d12635f9-9706-4dbd-8adb-d673c6a77202@wyraz.de>
 
-Hello Hector Martin,
+[ Please avoid top-posting when replying on the lists. ]
 
-Commit 82432bbfb9e8 ("usb: typec: tipd: Handle mode transitions for
-CD321x") from Sep 14, 2025 (linux-next), leads to the following
-Smatch static checker warning:
+On Fri, Sep 12, 2025 at 08:54:51AM +0200, Michael Wyraz wrote:
 
-	drivers/usb/typec/tipd/core.c:821 cd321x_update_work()
-	error: 'tps->partner' dereferencing possible ERR_PTR()
+> sorry, I totally missed this mail. "usb-devices" is not available on 
+> that device. Hope this does it too:
 
-drivers/usb/typec/tipd/core.c
-    805         /* Set up partner if we were previously disconnected (or changed). */
-    806         if (!tps->partner) {
-    807                 struct typec_partner_desc desc;
-    808 
-    809                 desc.usb_pd = is_pd;
-    810                 desc.accessory = TYPEC_ACCESSORY_NONE; /* XXX: handle accessories */
-    811                 desc.identity = NULL;
-    812 
-    813                 if (desc.usb_pd)
-    814                         desc.identity = &st.partner_identity;
-    815 
-    816                 tps->partner = typec_register_partner(tps->port, &desc);
-    817                 if (IS_ERR(tps->partner))
-                                   ^^^^^^^^^^^^
-    818                         dev_warn(tps->dev, "%s: failed to register partnet\n", __func__);
+Sure, thanks.
 
-tps->partner is an error pointer.
+> lsusb  -d 1286:4e3c  -v
 
-    819 
-    820                 if (desc.identity) {
---> 821                         typec_partner_set_identity(tps->partner);
-                                                           ^^^^^^^^^^^^
-but typec_partner_set_identity() dereferences it.
+> Bus 001 Device 002: ID 1286:4e3c ASR Mobile Composite Device Bus
 
-    822                         cd321x->cur_partner_identity = st.partner_identity;
-    823                 }
-    824         }
-    825 
-    826         /* Update the TypeC MUX/PHY state */
-    827         cd321x_typec_update_mode(tps, &st);
-    828 
-    829         /* Launch the USB role switch */
-    830         usb_role_switch_set_role(tps->role_sw, new_role);
-    831 
-    832         power_supply_changed(tps->psy);
-    833 }
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        0
+>        bAlternateSetting       0
+>        bNumEndpoints           1
+>        bInterfaceClass       224
+>        bInterfaceSubClass      1
+>        bInterfaceProtocol      3
+>        iInterface              5 Mobile RNDIS Network Adapter
 
-regards,
-dan carpenter
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        1
+>        bAlternateSetting       0
+>        bNumEndpoints           2
+>        bInterfaceClass        10
+>        bInterfaceSubClass      0
+>        bInterfaceProtocol      0
+>        iInterface              5 Mobile RNDIS Network Adapter
+
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        2
+>        bAlternateSetting       0
+>        bNumEndpoints           2
+>        bInterfaceClass       255
+>        bInterfaceSubClass      0
+>        bInterfaceProtocol      0
+>        iInterface              8 Mobile Diag Interface
+
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        3
+>        bAlternateSetting       0
+>        bNumEndpoints           3
+>        bInterfaceClass       255
+>        bInterfaceSubClass      0
+>        bInterfaceProtocol      0
+>        iInterface             11 Mobile AT Interface
+
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        4
+>        bAlternateSetting       0
+>        bNumEndpoints           3
+>        bInterfaceClass       255
+>        bInterfaceSubClass      0
+>        bInterfaceProtocol      0
+>        iInterface             11 Mobile AT Interface
+
+The device has five interfaces and the serial driver should only bind to
+the last three so you should use USB_DEVICE_INTERFACE_CLASS() and only
+match on the vendor class (0xff).
+
+Please also include a description of what each interface is used for in
+the commit message. Including a compact usb-devices output (it's just a
+script you can copy to the host) would be good. Otherwise you can add a
+link to your last mail in the archives:
+
+Link: https://lore.kernel.org/all/d12635f9-9706-4dbd-8adb-d673c6a77202@wyraz.de/	
+
+> Am 18.06.25 um 16:27 schrieb Johan Hovold:
+> > On Wed, Jun 18, 2025 at 10:06:15AM +0200, Michael Wyraz wrote:
+> >> Add the device id of the Marvell ML352 to option.c so that the
+> >> device is recognized as usb-serial device.
+> >>
+> >> Signed-off-by: Michael Wyraz <michael@wyraz.de>
+> > Thanks for the patch. Looks good, but we may not want to bind to every
+> > interface of the device.
+> >
+> > Can you please post the output of 'usb-devices' for this device? I
+> > assume it has more than one interface, do what each interface is used
+> > for?
+
+And remember to update Subject when sending your v2:
+
+> > If you end up resending, please use the common prefix in Subject, for
+> > example:
+> >
+> > 	USB: serial: option: add support for Marvell ML352
+> >
+> > (e.g. as can been seen by running 'git log --oneline' on the files
+> > you're changing).
+
+Johan
 
