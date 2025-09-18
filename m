@@ -1,144 +1,178 @@
-Return-Path: <linux-usb+bounces-28302-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28303-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5DF2B86FE6
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 23:01:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5862AB8758F
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 01:19:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A44131CC2314
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 21:01:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00BD86201E9
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 23:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA3B2C235A;
-	Thu, 18 Sep 2025 21:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D5F628750B;
+	Thu, 18 Sep 2025 23:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3yzNnN5"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="MepmCO20"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6F413B2A4;
-	Thu, 18 Sep 2025 21:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758229285; cv=none; b=l2cAHRMu9dFnSS6NGEqcii3hj0WOya0Y9aJtHZ1ROMgWvN+tKNqf8dYWSZi+3NsHtjB6md/0zlE6Mv+LBitXC4lL6TNJ8iFujMaX1Tr4O+rXNRd0tShNPwEYuGPtN6cyKM2efWXzByCx4+BGk3WwULMqoYYQO4oFJCah8oFPryQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758229285; c=relaxed/simple;
-	bh=3Fr5cTyASEnRYfVPbwcbcj3QYtupddmi9rlAva9j1/4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CJLZ6DmacQ0pL1bjL0FnQi9SEFH9pDuWtw/HlOdTuupAQlyidSWXPQFqsCrkfFkoG8v1Pfqc+W83tZ8Z6Tx+5ElwX0TEDJlRvRpvtbIkkNPAzwv5Z8tZxRuXobeg1u2NkBCB6RhrCHdB1LWCNRo0wkm9/h6JHA0u11klDzQqi28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3yzNnN5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F198C4CEE7;
-	Thu, 18 Sep 2025 21:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758229285;
-	bh=3Fr5cTyASEnRYfVPbwcbcj3QYtupddmi9rlAva9j1/4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=g3yzNnN5lyv+G8ndwvOiP7abAJ2qbeVjngy19oeVEbaS1EPhdFX1+J8oc3SAL5KEm
-	 q/yc5zbrKD9ptopC5+nO2Ia3+pfOGv0JOnUwItX6FtYre0jYsAouU94zQhs1JXFKWR
-	 JHwnxpi16LkED3mC2xtbnibzEh5GOtYrph+SZEDR7E4lM5akqPD+v3Zr9uPz3YN2ih
-	 cOGydhOJCK7dvPeYWo2ZFrEY4lt5M10851MtxzDowX2mtlKB0VTzqHeBAU5+Szo+xY
-	 ke6VvHvyYFTVPuoPQ1Gt4IeQdtu/fR3MoKf06RPou2vO+A0+6siaNBrrOmW4Dmgmic
-	 9MCQWBmA2WHUw==
-Message-ID: <e36f6832-16e3-4aac-a1b9-02b51ab11e2a@kernel.org>
-Date: Thu, 18 Sep 2025 16:01:21 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B6F4A2D;
+	Thu, 18 Sep 2025 23:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758237539; cv=pass; b=HAMzxyHz9ufTeorV3zlW2h4bOswmwl0N5UlYWjs5zR0RFs4+ojT4Wnl5n4ynWQoe69AWNmqSxDoBT8Vdnv2GRroQgTf3Be3IBIKlRLfPH3xlAN9aZ+B/LWu7gJkqnUXz4MOFiGdEbhTCuIPAbGbf2PLcGP7AMpAUVMFY/bXKjLo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758237539; c=relaxed/simple;
+	bh=5iJGPs6vcEGywKPGkLdblZZi+nX/oYrCVtOfsRMrNrw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yun8CgoqTRXzjcALxnG4djKakihm1P79+Fp8TRf8Zi5ZYcjDy3V7bOARugJmrUY8y2yFCyNT7ffOpvBc16iOeOgDNB7ljfH+/kEAFMDTJxA8xfpnxpjNXbQJoTOzsWkzVGQhfrRAdFMK7YC8ivjuQB3/UzksolbyVWIRRNlw9ms=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=MepmCO20; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1758237508; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=eWUw3ZFSZkaOGqkvPkt58f11mCaojnfzoco2m3GDejMcZkkir8nmXmASCGMiUjMEFI6yHQjK+2Rgnb6P766jooFfj4flJZyZQL70JkSn9Wn+lfpsNsTr9IrNJmvTZ6hzCK3dhyd8guTw3JF8M99vh9R9YdYXBRlfXVwfX/W97Xs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1758237507; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=5iJGPs6vcEGywKPGkLdblZZi+nX/oYrCVtOfsRMrNrw=; 
+	b=MqHoOMhTefu1WmEPJywpu/MRI071IOIuuOOapI7fayqpLqoEPkqWkJ2iF8KB1yJtjpUoxNBXR2NMiOqJhZ4aQ8shhwO8FnGFbAvNVTjy6ZsvGn/tH3G1K7xujNoWTgegV1RSIOxsMDsus8370VCJ4zByMsyGsyycEg9t7Ds0lOA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758237507;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=5iJGPs6vcEGywKPGkLdblZZi+nX/oYrCVtOfsRMrNrw=;
+	b=MepmCO20SYiw8AKHbcsT60UEli4QFi2Uzu8R1pBWBlO7t5J+55XfdujA/qMK1wUi
+	rucR3lwpVSgA5VgsOwGU0YFgZESGDXuQ52xfX7Xg16EcECWQttdkq11Xpf62TtFVwFE
+	swVy+qOXrznSDVhvO3KsB79qH7Y/qUQ3JOWZXgmQ=
+Received: by mx.zohomail.com with SMTPS id 1758237504693973.1672975828773;
+	Thu, 18 Sep 2025 16:18:24 -0700 (PDT)
+Received: by venus (Postfix, from userid 1000)
+	id B72F8180517; Fri, 19 Sep 2025 01:17:55 +0200 (CEST)
+Date: Fri, 19 Sep 2025 01:17:55 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>, David Collins <david.collins@oss.qualcomm.com>, 
+	=?utf-8?Q?Gy=C3=B6rgy?= Kurucz <me@kuruczgy.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com, devicetree@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 9/9] power: supply: qcom_battmgr: handle charging
+ state change notifications
+Message-ID: <mub3b5r3zpcgsisicjbbl2kudefibj7t2n3jz5pgshlqsglnlw@5a7gc3trlnn5>
+References: <20250917-qcom_battmgr_update-v5-0-270ade9ffe13@oss.qualcomm.com>
+ <20250917-qcom_battmgr_update-v5-9-270ade9ffe13@oss.qualcomm.com>
+ <fa258ad4-1efa-4fe8-9636-d70c5ea9c8e1@oss.qualcomm.com>
+ <d9db8b82-9000-478b-a7b5-93792f1e1bea@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 4/4] USB: Pass PMSG_POWEROFF event to suspend_common()
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
- Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
- <linux-pm@vger.kernel.org>,
- "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
- "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
- AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng <kaihengf@nvidia.com>,
- Mark Pearson <mpearson-lenovo@squebb.ca>,
- =?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>,
- Eric Naim <dnaim@cachyos.org>, "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-References: <20250918195509.GA1918371@bhelgaas>
-Content-Language: en-US
-From: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-In-Reply-To: <20250918195509.GA1918371@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kybmdzwa6byyxpic"
+Content-Disposition: inline
+In-Reply-To: <d9db8b82-9000-478b-a7b5-93792f1e1bea@oss.qualcomm.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.4.3/258.211.62
+X-ZohoMailClient: External
 
-On 9/18/2025 2:55 PM, Bjorn Helgaas wrote:
-> On Wed, Sep 17, 2025 at 10:44:27PM -0500, Mario Limonciello (AMD) wrote:
->> suspend_common() passes the a PM message indicating what type of event
->> is occurring.  Add a new callback hcd_pci_poweroff() which will
->> determine if target state is power off and pass PMSG_POWEROFF as the
->> message.
-> 
-> Something is missing in "passes the a".
 
-A wild 'a' appeared.
-> 
->> There are no functional changes in this patch.
-> 
-> Maybe so, but the .poweroff() path previously called
-> "suspend_common(dev, PMSG_SUSPEND)" and now may call
-> "suspend_common(dev, PMSG_POWEROFF)", so it's not completely obvious
-> that this is a functional no-op.
-> 
-> It seems sort of weird that apparently we can call .poweroff() for
-> either a "suspend" or a "power-off" event.
-> 
+--kybmdzwa6byyxpic
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v5 9/9] power: supply: qcom_battmgr: handle charging
+ state change notifications
+MIME-Version: 1.0
 
-It's actually either a hibernate or a power off event.  The nomenclature 
-can be a bit confusing.
+Hi,
 
-I'll add a comment to the top of the function to explain it.
+On Thu, Sep 18, 2025 at 10:01:24AM +0800, Fenglin Wu wrote:
+> On 9/17/2025 7:14 PM, Konrad Dybcio wrote:
+> > On 9/17/25 12:15 PM, Fenglin Wu via B4 Relay wrote:
+> > > From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+> > >=20
+> > > The X1E80100 battery management firmware sends a notification with
+> > > code 0x83 when the battery charging state changes, such as switching
+> > > between fast charge, taper charge, end of charge, or any other error
+> > > charging states. The same notification code is used with bit[16] set
+> > > if charging stops due to reaching the charge control end threshold.
+> > > Additionally, a 2-bit value is added in bit[18:17] with the same code
+> > > and used to indicate the charging source capability: a value of 2
+> > > represents a strong charger, 1 is a weak charger, and 0 is no charging
+> > > source. The 3-MSB [18:16] in the notification code is not much useful
+> > > for now, hence just ignore them and trigger a power supply change eve=
+nt
+> > > whenever 0x83 notification code is received. This helps to eliminate =
+the
+> > > unknown notification error messages.
+> > Thank you for explaining the technical background.
+> >=20
+> > Please hit enter somewhere in your commit message, this is a very
+> > long paragraph, making it difficult to read.
+> I just realized I made a mistake on the bit position, it should be bit[8]
+> for reaching to the charge control threshold, bit[10:9] for charging sour=
+ce
+> capability. I don't know what I was thinking when writing the commit text
+> :(. I will correct them in the next patch.
+> >=20
+> > I believe this maps to:
+> >=20
+> > 0 -> POWER_SUPPLY_CHARGE_TYPE_NONE
+> > 1 -> POWER_SUPPLY_CHARGE_TYPE_TRICKLE
+> > 2 -> POWER_SUPPLY_CHARGE_TYPE_FAST (or _STANDARD, I see battmgr code
+> > reports them both as 2)
+> >=20
+> > However, we already set it to none/trickle/standard(taper) based on
+> > the usual notifications, so I'm not sure if these are more common or
+> > arrive outside the normal state changes - if so, perhaps we can take
+> > them into account as well?
+>=20
+> This is not related with the real charging status. I double checked in the
+> battery management firmware, it is checking the charging source power
+> capability by multiplying maximum voltage and current reading from the PD=
+Os.
+> Any charger adapter with a maximum power below 60W is identified as a
+> slow/weak charger.
 
-> Maybe it would be helpful to explain how we get to .poweroff() when
-> system_state is something other than SYSTEM_POWER_OFF, and what that
-> means?
+Please include that info in the commit message when sending a v6.
+The code change itself LGTM.
 
-Well right now it's not a possible path, but per Rafael's guidance of 
-splitting the series into 3 parts across 3 cycles the path that leads 
-here won't exist for a while.  It was just plumbing.
+Thanks,
 
-I'll adjust the commit message to allude to the future.
+-- Sebastian
 
-> 
->> +static int hcd_pci_poweroff(struct device *dev)
->> +{
->> +	if (system_state == SYSTEM_POWER_OFF)
->> +		return suspend_common(dev, PMSG_POWEROFF);
->> +	return suspend_common(dev, PMSG_SUSPEND);
->> +}
->> +
->>   static int hcd_pci_suspend_noirq(struct device *dev)
->>   {
->>   	struct pci_dev		*pci_dev = to_pci_dev(dev);
->> @@ -602,6 +610,7 @@ static int hcd_pci_restore(struct device *dev)
->>   #define hcd_pci_suspend		NULL
->>   #define hcd_pci_freeze			NULL
->>   #define hcd_pci_suspend_noirq	NULL
->> +#define hcd_pci_poweroff	NULL
->>   #define hcd_pci_poweroff_late	NULL
->>   #define hcd_pci_resume_noirq	NULL
->>   #define hcd_pci_resume		NULL
->> @@ -639,7 +648,7 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
->>   	.freeze_noirq	= check_root_hub_suspended,
->>   	.thaw_noirq	= NULL,
->>   	.thaw		= hcd_pci_resume,
->> -	.poweroff	= hcd_pci_suspend,
->> +	.poweroff	= hcd_pci_poweroff,
->>   	.poweroff_late	= hcd_pci_poweroff_late,
->>   	.poweroff_noirq	= hcd_pci_suspend_noirq,
->>   	.restore_noirq	= hcd_pci_resume_noirq,
->> -- 
->> 2.51.0
->>
+--kybmdzwa6byyxpic
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjMkx8ACgkQ2O7X88g7
++pqwLg/8DogotcprKe+ff5MNlSQgo3S8L5Bo8a46PQ6yojTQC7i5j/2A5mIwMJOw
+YbEDu4okwunPYtLjOvcQDbyx3QwnB8Rgl0KkqQ8aOc/t9HxcuDDfVALsqooGKNuC
+6z/PIA+XzH91Dxi9pUaVwlt6gobgCVcxze2uoOOnWjWhPnQvg14NRSFirmZ1bLV3
+nUQAbOs7bPOodecSPOmlEAtFBeMOGQxsV0wfh8tzF1JwxsxaMsdlLET00OgKsyvv
+jNL9I1X8wx2dno6kzjRDKVsqFKMewweTCMrjJaExGeFN/2gsSyhYR8GbMKcUVyUK
+deuA5/j+FxL3DBzNp0DD76DhCWRz63QtOI3foyEcSlhOXSeUP+omKiVImtNl3L6i
+Jaif8Tl5v3qVag8hYcvx9y/t6GQmadaJ0yw53uEKtF6XTlQAs4zuPWyxaCJ2Y0o5
+ZEstSYigPM5nqcBtw9fepVu0uRNKT1DPRkO2sg0CZ6SAsKAoOH7ztQxDUp2UNinv
+dG/HxbB7iU2WNEOiRbX5VXT8F9AiqgOgAsA8+6vy901rsjvxe5NRTiWk+mfcNO5Q
+xhyj/gEMbA3U8Y7z4Na84lUopjpFqWqSixUlGcb9waP/pCIkiumwpu6ORTcUuF/E
+LHdrTtRYAMSKTDUcUfinMhnzdKFSidGEMmzoOIBDH56OXCuDsFY=
+=v/vi
+-----END PGP SIGNATURE-----
+
+--kybmdzwa6byyxpic--
 
