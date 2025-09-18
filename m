@@ -1,252 +1,332 @@
-Return-Path: <linux-usb+bounces-28265-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28266-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8513BB8390B
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 10:40:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6511B83AFA
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 11:05:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4916A3BF0E2
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 08:40:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A4624A66AD
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 09:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8476A2FE044;
-	Thu, 18 Sep 2025 08:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D1812FE564;
+	Thu, 18 Sep 2025 09:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="KsRRVdsa"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="iasrYwn/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E6E2FDC3F
-	for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 08:39:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.147.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758184778; cv=fail; b=Cga+iiz2JiI4A0TmDxLkV4M5JijY8GDVbim+mIumZ5nJr7c7HXPq4J8LgrJH4KQrh3EY3+Vr1ElNiZdhgYscqhGiXNjDCPMB4RBtOr5/RjvPny8faT3Yvof/QULSs0jn+E9XLfZ3ZQzN83S9lZJwOgAHgto6wPWZMQgoB0aQZO4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758184778; c=relaxed/simple;
-	bh=aTiobwCulPZbe4H3+Bek5N44ofGX94WPsQ87XTsv9PM=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=WVHHKtgIaEnerU2D9xfMbbQmHaNCQoNVWC4xmy1mRjE+2WySaD4nXOB6YkpSTEWz/MugWY5hIKdgNySEMLqgC/xCar3nP5qP9VDfYG6UjQ5DAY+v/+K5wMaEhlMp03UqPoXVP8TgalFKH7vaAgyheVuHIfKmd/+PEEgEFXn0Ejc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=KsRRVdsa; arc=fail smtp.client-ip=148.163.147.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58I52jJq021466
-	for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 08:39:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=
-	content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pps0720; bh=aTiobwCulPZbe4H3+Bek5N44
-	ofGX94WPsQ87XTsv9PM=; b=KsRRVdsa6I9QraW/eWFfbQ5g4R+sHpXGQBdOJfe1
-	gFst7BBKNCXLMKJoH/05ukwA3X6NWkvWQ1iAxNRBIPZSjWXJgITQPLbp3nCzRi5n
-	7DoMLnMFKjUamxN7Gn6BYkpphkqmuK85EzVnH7YaKGXw+HSDjGdg95WzKkPsCfr3
-	7pxDbyjh2zvLvgFbYsVrzAsQV0QbmZ0V42pFX+VbkhYRh1tOAhjwwGkt0jc5qOuc
-	MRY160LoFtIOmmSZMNKW98IRYlSUGGUVXlMAQBVVH9Ew0RxfziA6dP4aTBTS1uUo
-	ya2cJHLVCEAEJjWuwlmY1ruM1adRb5NK6YItteEmTQyGHw==
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 497kq6vpcs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 08:39:32 +0000 (GMT)
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 94742800376
-	for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 08:39:31 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Wed, 17 Sep 2025 20:39:14 -1200
-Received: from p1wg14924.americas.hpqcorp.net (10.119.18.113) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Wed, 17 Sep 2025 20:39:13 -1200
-Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Wed, 17 Sep 2025 20:39:13 -1200
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (192.58.206.35)
- by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Wed, 17 Sep 2025 20:39:13 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=t+He2mWJps4EzotLKCbvCO1tUjPAfzTg5n/d/emQt53bPGd5hz2kzQnAN4aQ3x6gauh+LzE6MM+qOijvOSiUOgCQZKKro3RTD+fL6iOMIAh/FInfltyErouuHdsa4jjvD4Wi5TMX0QZiO/FVdmmeeS3pvKJW0nN9sqYKMXO485LXHfD1PcieDXV66YOKVp9cFjmkRteuHODU8paoSvbmv8tplJnPu72hc00oUd+zPxvvotGSAbS1FL3HAhNrjHSvRzaUVlsUC6v8QKnuzunQRo7nusEZRkqmfAT4o6JRvxJdMP3iIbiCpB4uspvXTe4OzyWQOvwKSO1IuMT7xepzWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aTiobwCulPZbe4H3+Bek5N44ofGX94WPsQ87XTsv9PM=;
- b=kcR8/RtOwI3hrCC4TPSL6CW4sREpKQli1WvplXc34TyulIN/45rg3jYnNyNJ/d9mRoRP2cdg2IfErNZwYCxwXkypqbh9s9PIi8fVoxCLsRE7z0vAyih4bYjjQGIvuDbhwF9iW/Ux70WTZ0cu0PlagpjSql1NA3XS5oZ1+lkmBiB5JgoSA6QYV8qAaEr1q57twFqJQu3Xr8TtzTWmZnponpSMv26PWb5raunhfgpvjqLu7bJgnZuCykdTfvjhswM9AdVizSnbZQYdBG+2D8XU8yMQlqzkN8A3u0LN+eMgnWJz+S19y+LzB8ZDQqLSZyzxJZ4V9vs5MJwqXl7Eua1O2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c5::19)
- by SJ0PR84MB1846.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:434::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.13; Thu, 18 Sep
- 2025 08:39:11 +0000
-Received: from MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::23e6:7d13:8aaf:96d1]) by MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::23e6:7d13:8aaf:96d1%7]) with mapi id 15.20.9137.012; Thu, 18 Sep 2025
- 08:39:11 +0000
-From: "Ko, Kang Jun" <kang-jun.ko@hpe.com>
-To: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: USB: urb error log during reboot on devices with multiple serial
- consoles (Linux Kernel version 5.15.71)
-Thread-Topic: USB: urb error log during reboot on devices with multiple serial
- consoles (Linux Kernel version 5.15.71)
-Thread-Index: AQHcKHen6J7H/BFX0keotto+hLxEyQ==
-Date: Thu, 18 Sep 2025 08:39:11 +0000
-Message-ID: <MW5PR84MB20830480C70129C188178130BD16A@MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW5PR84MB2083:EE_|SJ0PR84MB1846:EE_
-x-ms-office365-filtering-correlation-id: 24591aec-977a-4c6f-2306-08ddf68ed77b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700021;
-x-microsoft-antispam-message-info: =?iso-8859-1?Q?lEy2fJeri9KkLdP12X5hL5BVddL9Hdh9s68+vTZ8xmuE6J0O3w9/L4xwok?=
- =?iso-8859-1?Q?CnZ5Zc/aB7YxM0a7UDeXuXNb6iICJPvjBq4l2Vfb7otCjAG7mO09i8wyka?=
- =?iso-8859-1?Q?yQqKUnFckqR6v09vFZlyvfT9FxWz6YdNpS46ntnphSJdTDP3qFIeWTptlR?=
- =?iso-8859-1?Q?d9AtsRMQ4ilwf3Vpj4vhhH+lxOOlvTDm+wa2QJMS80sZxZBj2dQPmRihv5?=
- =?iso-8859-1?Q?FeRV26LAMFEjpAX2HXPAbLHg/qSQ4C/hhNYJj/xIrXwG3j4wP81ay4gtX5?=
- =?iso-8859-1?Q?/+87TL/WQ/aO0L2V3xV5uBc0nYiJTUumtuIjkCuUNs3zuiHZsSYCtIZZ7T?=
- =?iso-8859-1?Q?FIrzDQDqUswnc4DZ8iVup8af9VPKcnlK0etusY1y1IKktnnHEtDFLEJ3o5?=
- =?iso-8859-1?Q?R4g/p2upQbIIhY1702kmAEBB16ykmwtmx267RBJB+uxkjlZKo0wtFKtzJA?=
- =?iso-8859-1?Q?x8b42bR3OezQbbg6IQXCb0JF3a+sKw4ZqPMODJvPzbKAtoZlt1CYIsYc8a?=
- =?iso-8859-1?Q?ZEnUWCCbcKocpHfkq/k+TbcUYjrNEKis2GZQvRl5srtfbTgrXmxV3c+S9g?=
- =?iso-8859-1?Q?5GrA5pLPnrWWOp599407u5p6hi3+wBiXvqFsmB13XxK51UuWzNBsi1RPzL?=
- =?iso-8859-1?Q?qBSjxLZbHhj9yo4lt+pw+NTplqVklsYe4WnQS5kxb3V6hHByWJu4Pj+QIC?=
- =?iso-8859-1?Q?4fy+uWtR9Kmm3JXJYNxTtSYBD0cypt5v63VnUIBXjAALXztg0yspDVFivQ?=
- =?iso-8859-1?Q?bMxk5JRY5otNTvVrJYbKnxdwjVXGws7Hs1NlG720FlOhbs9nl5kQjNrIcn?=
- =?iso-8859-1?Q?9XbTuhp84l+Nbou1MYReNZQ6vatF0+MDrg+dj+yBmmfFn3Lh0cgcXeMP3v?=
- =?iso-8859-1?Q?+u/d95PbNJed6fwasSPfxnVTWLGU2er58QTW68Tcqq37XSXV9Js7gkMW12?=
- =?iso-8859-1?Q?u2ZzFTya+oZBsPz/IbUHqCUdtZpdQfOIVnCbW6rbsmh4Qtm2nZRoiS8J7r?=
- =?iso-8859-1?Q?O8A9nvMz9M5vMYKEe0o2QgyS31E72VWVtzTLLuqSRn9FXReeWYaSQjjDjc?=
- =?iso-8859-1?Q?2ebjzd23o1TjlEXfqp6E85wdsYwP/X5trP1a5J6B07b6INW6LirnaH9CVD?=
- =?iso-8859-1?Q?qSSCbACEk4WnvUBDEPrQY2rPMa++SWpbDMLHf6qGIYs+867flZoSKWCgvn?=
- =?iso-8859-1?Q?malvCmTP1BTK1ioGACHn3YWKYHn5Ibc3720VKocGHsSAfrZWyF8qEGM9qa?=
- =?iso-8859-1?Q?FqhQWy9n0nACnwEHcKEpZ5mCU4jB4+NB62kbqU5qh1sz1rrg+w4byl654n?=
- =?iso-8859-1?Q?sgAvzsepxHr7dCPkHnkS+lkBF7F1hsDfFjHrneftaVFBPgro6xOB7+Dw+x?=
- =?iso-8859-1?Q?oDKBtpvoF3wKEnZ8A2SbovDYz97+gijTWD96vf+T6Z21eupDds6EEhMaXa?=
- =?iso-8859-1?Q?QTCxaI3wHZdlN0L7iA+zZGXeY/hvvWBqCiIZetsKur7F3dF3FKju7LgREa?=
- =?iso-8859-1?Q?ZWkdXFLNSPrq9wvCGM1YWLpWPzKYbuCGrFuHSZQvbM9g=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?/YTNxwRTRvs1g22Q0CNVv24xmnVPOUaT+7ewRBjd22qB5ouzmdkiJaxi7u?=
- =?iso-8859-1?Q?UpxKU9GFIks45eomDmHWXtq+ct6Mn60gp0Um1TfHhTyDflxi3SIZxBc7Sb?=
- =?iso-8859-1?Q?3ufWnudSDFEZB0A/JmtVJXtwoNSI4cGGAUjRi3yOPIRxS822aGUpsV64vU?=
- =?iso-8859-1?Q?k+/CkKxhNnFk4JVWRhnVlHrvolGlaNlCHCu3cMNQQhQYEzLa6WqDEy1xab?=
- =?iso-8859-1?Q?YYacXZaXffMG+Ovv4C8t9MAvaYBYDAer9Y+cthLf62hyEzXutdjAdykzSH?=
- =?iso-8859-1?Q?zg+3f38aJIgTm6khh+5DUz57FrU2l+xxjim6TKGpTry3GJYbVd32ea6eIG?=
- =?iso-8859-1?Q?SgMRgpdSA1c4Yxtm8hD/i7D8EAvWeb8pSi5OKQyYrDPfH6WQK5kEXwXWda?=
- =?iso-8859-1?Q?JQCbJVvqjHB4Y3j8UOn3TB5s6sC1BYdchCxI9tq/Fpq2+yjDOVTtClrtPq?=
- =?iso-8859-1?Q?0u6xX3hw0gNzwMDjqia5dcDPvzwvzSoQvk7Hh9PQYQvcm+KpaqYtz4VUt9?=
- =?iso-8859-1?Q?qWU4clANe7Si6iwfCh2u0WPFEEhUJNz4tDZBdolqtkN8RSZm6qxpSOF6yD?=
- =?iso-8859-1?Q?CakQAaSmjdqNCky7pzhTblYFTfU1FMKiECHfU5rm2MPYqK6InZsBh2w0Zy?=
- =?iso-8859-1?Q?0B2cOsXwHSyMzwZFcn5VZVxS7pLo2ZeNrOG5ns+16b8JAlvyCB1/QRfU1H?=
- =?iso-8859-1?Q?KGwRFnPBymySLTMXDPjhef7IY8BnQCjZyT6qQNdJ4/88GTzxZHP4BjDnJ4?=
- =?iso-8859-1?Q?SwgYv1SsTGKbHToMk7de5wJEvWknk6zapF6g5ZXrdHnez/VdRGHTLlt8uD?=
- =?iso-8859-1?Q?lcdQWsLmdNBzoA1colAWT6IY7XRVNTYEQWThYl0yPqY8rMXcBEEi4RoVx9?=
- =?iso-8859-1?Q?UU2rcVZ9bqh7NN2b8hMZdNfeEq0o97P31vMAsQLUwp43f6fU+crFtOFlOu?=
- =?iso-8859-1?Q?b2msYjcTo2H2akpuwmTojPPEqmy6BkSqvcEHQtotEqUvOMgx/mv0QzQmdM?=
- =?iso-8859-1?Q?RZaWArdKZmAQqxXSF5ARZZAqpOUtX4IKem9vcVifKHk1VJ8hDpagKSdVS+?=
- =?iso-8859-1?Q?YajtdbbXdqaFP412UN4zZ5RTbW5Bgx7UgLKu2A9l5rlTaeboNqOqnTAXpP?=
- =?iso-8859-1?Q?k0JAx4u7jJARY9cJzu7UZV8saCi5gx5eDHtspvp5aW174tS5+6p2qhJIiX?=
- =?iso-8859-1?Q?kDA60huYGrgzqnqgnlK/SIngZANMUUGfpL7aEpW9SMCs5/Xw5ygUhd/DJM?=
- =?iso-8859-1?Q?TecJDaYjB73/NCoislhDJZnMfKfLHu4zp6wIcZEe978PBIu0zm55ZzXtA4?=
- =?iso-8859-1?Q?8kMpxCGjpt9LqWKEFEa97sfgk+40wOIuyK4TcatO3vSbj1EADGG9Ej6zgQ?=
- =?iso-8859-1?Q?K1occNzja8IQIeU243vxXqwTFG/WPlmpozTFY9mBJMT1HM6FgR70GfFVdP?=
- =?iso-8859-1?Q?ocKUnjnuZPnWi4dqPab717tN39jYolHVJjixy+4hbjrHxgVnMjVZVNCG7v?=
- =?iso-8859-1?Q?Buy1SmwAGbcUcEaqojx3eq8+k43+4o3fi4nUnOMpdY+0JvI9aF+za1hvpe?=
- =?iso-8859-1?Q?3CSiQC7hBnua0qz7Uh4LlCQ9mBOCGpKJqWSCrVxBg3y5npEbP3/tHXIgDs?=
- =?iso-8859-1?Q?DydHl/NF/YiVA=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F302F8BF4
+	for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 09:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758186351; cv=none; b=qrwOUKxnT5m20nspGKYv8QMvrcbbsRoIsoFGo3DE1yTrqApV69ZXwh5KlDu6VjIqecKUCFLth45JzGfVfMe7jSNrxbzjD5MRtr/9S8jBczqZu7Q0yXdxoJzYefhyzL2/DKnjelAYE1Ypw+UiWduT+G1k/2d/YkrOpzoFozrjozY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758186351; c=relaxed/simple;
+	bh=3jNolqJkapC/Ko3tIVGHtQ6koTpXkWQZS6HoZP9KJ3w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JsX8KoC6ma5spIjcrNPcKB/KylgGp46+l5rGq9/dgd1OC0AwjGTbVfK6sR0aGG8IFkjqJiGhUrzSdk3iHAomxfEsoaTyu/ZU+s8Wy4RX6wDbKTIZolqQw6Ly7zoPrSarOtbGUU8gu5mCZlOBxUEL4Ev/OwSyrW0jKHrKv63c3bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=iasrYwn/; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58I37A6l026833
+	for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 09:05:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	efwfuR0XZuIlYyd3jHeDV9GXnA+hdIP5wvjI/VjJjUc=; b=iasrYwn/9pH8hb8G
+	GQWuNQoQqOP+gTGpFNe+OrrORZJb/JnVA5//h2oL/HI6l7PBAXj6MupId/BycE8L
+	WWq3eCzQGm1t4/MqsNbYmtG00kp7m9YZoWRmYgruE6ZeMkFHGsj/7Y23vr2JOxDJ
+	1QxQhSiXaUvqxc953YkjJbmr2zCqxUZOa0bysKsXqjm5cywbG9NVY12t2ame+qfp
+	kAisG1Fv2FCoW4oIeWf7Vd+jpzcEUB5c2OCJAtVN/m5gdaFOUVrFyDqk3wpskgNF
+	M1z73/iupTXGViwl6eLLDyNDd2KoYrqhW520JIGhH5c8vyc0xNifME75mS9Pg71N
+	t2dX3Q==
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 497fxt5prg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 09:05:48 +0000 (GMT)
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-780e20b83b3so2680536d6.1
+        for <linux-usb@vger.kernel.org>; Thu, 18 Sep 2025 02:05:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758186347; x=1758791147;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=efwfuR0XZuIlYyd3jHeDV9GXnA+hdIP5wvjI/VjJjUc=;
+        b=hoM7fCl8lkXwGu4WK/is/B+lee9zDwxvmA1Clc8VA4BgWJTH0a+ZjrTGI3E+NEhSgg
+         YHuYE9CxwaWTuUcX2imIg1K8eFqiMEgrS/vpwO+ov56MEH83zMCO90GaFpK9YU0Qt9gp
+         S1Du4z0SaDQFgSSmmpPL30/IXGcSTyDomxjBBkxMbEb2QBt1Tv+h84T+KwBCRkq2Ncvi
+         ZPxosohSuXOCTtsnnyVsoMP07gcNQc8laiXvBo3dPE+AbAmPe5PCkWkoVUqbnKJMeDtT
+         JRXajaH2jyzeUk4u/YLFeBqK1FK9XNN2qRJQYUx5Rpd9MOcRBoF/Lnus+8BNVmqUGECO
+         Z/bg==
+X-Forwarded-Encrypted: i=1; AJvYcCXQzL3O2XY9k96qquln0K1VOqr1AMy5Im92f9hJ2mrAjhuezHtmxNIdGA1lNY6z+DVjW+niw9yBOnQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/CerLXcVSaTfampOSCF2dedFsav7lPdi551kmqTE/HjEFY5fL
+	RJgwqtdAAw1KEGoV+2JnYgAyE921JY+TYz50ZvmIM6XNb0eKcZyrtgWS/EiMDQ2prg2Mjewp1FZ
+	ZFf72DDpZAPQhpPlbKrtSWXiLvBeMGpUd9AvffI+SaMaG09o5JiG31CVYFReBjyXvOkT0btM=
+X-Gm-Gg: ASbGnctkCRPFEQ2YSC/sO33Ei/SH4ooUhS/UiDuPkIN1LhV02kGYpxkrR6njor0oOUe
+	qcMFGiZXFJ2Gz2Uomtbco6D3jS6i7AJzUu9ETPMhFlYEuusGHUzzvIplW/m9v9mauhgKDu+VHKk
+	BQE3CwljYNTJhr3lNrWCDg9LUPIhX8p6gp2qdCKchjr/xXQxgHZAqFP3WmZ+TNJ7CCvS0XrMONW
+	Un1wSG16Kv5PQn+scezH7uR3LaEkgNxE+1KnIEUieXV6M44OoJg9ORjAhNMdWAPbe8RjdeNmIOb
+	AHWeHvIDEiuhgWAuWaQwikklVeLrsY5ANKLTf4/9uyd0kRY/dbWgASDi3zDVsClGM1iiJtIkUv4
+	JDQZS8vVmhrdEJMdrEOgV2Q==
+X-Received: by 2002:ad4:5c4e:0:b0:773:84c1:396 with SMTP id 6a1803df08f44-78ecc822080mr35313206d6.1.1758186346563;
+        Thu, 18 Sep 2025 02:05:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGFbRLbBIv3u5UrETuMfbcXFVbaueQuIikLkfQf7q3WwNCyZ+rot/De/umJEGNwkT7guFXU/w==
+X-Received: by 2002:ad4:5c4e:0:b0:773:84c1:396 with SMTP id 6a1803df08f44-78ecc822080mr35312996d6.1.1758186345967;
+        Thu, 18 Sep 2025 02:05:45 -0700 (PDT)
+Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62fa5f287d9sm1085733a12.44.2025.09.18.02.05.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Sep 2025 02:05:45 -0700 (PDT)
+Message-ID: <035c0d66-bddd-495c-bd23-e1d98570ba7f@oss.qualcomm.com>
+Date: Thu, 18 Sep 2025 11:05:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24591aec-977a-4c6f-2306-08ddf68ed77b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Sep 2025 08:39:11.7341
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZGNAsAcYkumv9EqHJ4veSrh0iax+hEglFDBMYzf491rbWiQVqB/2hTrDGgoY8n6OwrktlyMTwQ2+jYvPjnmF3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1846
-X-OriginatorOrg: hpe.com
-X-Authority-Analysis: v=2.4 cv=YogPR5YX c=1 sm=1 tr=0 ts=68cbc544 cx=c_pps
- a=A+SOMQ4XYIH4HgQ50p3F5Q==:117 a=A+SOMQ4XYIH4HgQ50p3F5Q==:17
- a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
- a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=yJojWOMRYYMA:10
- a=mfx1_Ca0zSafkJl_FCwA:9 a=wPNLvfGTeEIA:10
-X-Proofpoint-ORIG-GUID: EdDATsBt2ewkmEhwulglsMFFtrzkPSay
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE3MDAxNyBTYWx0ZWRfX+FQVaZ9NtyyV
- mP1DRrgrp4JDTaYJa/1C1D7bseJijutsdhCtjgm70xfoGvhkPz/ZawRiKz0LRHwDBlxTzCdqJQM
- dE2hJYWZKu+xzcZJtcnua6vrAUPonU9owPOZsQ++7LDnaPE3nJfEhW6rRZvL8CxWyR/zAGShN5U
- G8rLdRc5yi0lZ+ScaSleoB1CLhXUTyDqOFAXo9658HNJhS+Es0AuSLpP8xRKzRSW6DEm9Qi0S1E
- XU3egp5H1SbUzAfwaDRFMMo22MG6f1GcpNDEH/SpdNQ534UQufKjHBajxC/eeh5SGYnLKt2jDZP
- nKRoPtq8pKhoS9yexn0O5aaF+b4TckmorRwkSC5pBGTqpCaT3h29keivrCuk1EzhGUKzB+UrfrB
- qI4AE5gN
-X-Proofpoint-GUID: EdDATsBt2ewkmEhwulglsMFFtrzkPSay
-X-HPE-SCL: -1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC] dt-bindings: thunderbolt: Add Qualcomm USB4 Host
+ Router
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Mayank Rana <mayank.rana@oss.qualcomm.com>,
+        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <westeri@kernel.org>,
+        Yehezkel Bernat
+ <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+References: <20250916-topic-qcom_usb4_bindings-v1-1-943ecb2c0fa7@oss.qualcomm.com>
+ <20250917061236.GF2912318@black.igk.intel.com>
+ <e648a71f-a642-4f5d-bcf8-893484cfe601@oss.qualcomm.com>
+ <20250918051244.GJ2912318@black.igk.intel.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250918051244.GJ2912318@black.igk.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: ZuIAT0Mb-G6dOUE4FDr367k2DB4GPylQ
+X-Authority-Analysis: v=2.4 cv=bIMWIO+Z c=1 sm=1 tr=0 ts=68cbcb6c cx=c_pps
+ a=UgVkIMxJMSkC9lv97toC5g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=yMhMjlubAAAA:8 a=EUspDBNiAAAA:8
+ a=Nf3ZQrY7d6tcd-rdNfQA:9 a=QEXdDO2ut3YA:10 a=1HOtulTD9v-eNWfpl4qZ:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwMiBTYWx0ZWRfX6bwz/1HbmgLR
+ Z4imdx/MoTb274r9z0jelS5/tsi4rtD3daI4XVPjSDLnf5k5pOh5Qm4p1mL75jZLIUet5a1pPTP
+ Xnn04JvOwZIPrNuwhiv/DN+vdmOV57r7Y0FB8+oWrPl4iT/wpOo8f8X/nSssA8y+htoPrgl1XTD
+ YiuCXkb1k2yHbR1h1thuqL6l2eVCgeK+uMim+CKBwr+niouaP4XxU6Xmj2TpCtELnQO2xz7zLRB
+ BWzUXoqaSImc/F6pxDDKqWFy6yaB4znVLUzlVDuvT6rc/wFrNshHcJjXjXQr+4/3cTzjpP4aNez
+ PdVfZWyCqjiq8CHCN1FrbDpkpm3kv+2B9LWgvm342Dpbn7hqXNrac8WqOinFyNNxANm+Ze+pa0O
+ 69SY5F+y
+X-Proofpoint-ORIG-GUID: ZuIAT0Mb-G6dOUE4FDr367k2DB4GPylQ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-17_01,2025-09-18_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 malwarescore=0 impostorscore=0 bulkscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 clxscore=1015 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509170017
+ clxscore=1015 impostorscore=0 malwarescore=0 adultscore=0 priorityscore=1501
+ suspectscore=0 spamscore=0 bulkscore=0 phishscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2509160202
 
-Hello,=0A=
-=0A=
-I am reporting an USB related issue on the Linux Kernel version 5.15.71=0A=
-Below is an error message that is seen in my dmesg log when my network swit=
-ch goes into reboot. =0A=
-=0A=
-/****** Reboot log ******/=0A=
-...=0A=
-Reboot reason: Reboot requested by user=0A=
-reboot: Restarting system=0A=
-ftdi_sio ttyUSB0: usb_serial_generic_write_start - error submitting urb: -1=
-9=0A=
-...=0A=
-/****** Reboot log ******/=0A=
-=0A=
-Summary:=0A=
-Our network switch has two serial consoles attached to the system (one conn=
-ected to the processor, one connected to FTDI chip).=0A=
-When the switch goes into reboot, I can see (from the console connected to =
-the processor) the above error message.=0A=
-There is no functional problem in rebooting the switch but I would like to =
-know if the error message is something intended by the Linux Kernel.=0A=
-=0A=
-Reproduction steps:=0A=
-Attach two serial consoles to the system and reboot.=0A=
-=0A=
-Additional notes:=0A=
-The serial drivers do not have a designated "shutdown" method so the driver=
- is still present when the kernel goes through the device_shutdown method w=
-ithin the kernel_restart_prepare() function. The ftdi_sio serial driver con=
-tinues to submit URB messages to the console when the console is already re=
-moved from the system, which results in the error message.=0A=
-=0A=
-Conclusion:=0A=
-Although this is not a functional issue and is not observed on systems with=
- one serial console attached, this error message can be seen 100% on reboot=
- on devices with multiple consoles. I would like to know if this error log =
-is intended by design or if it is something that was not considered because=
- there is no functional issue.=0A=
-=0A=
-Thank you,=0A=
-Jun Ko=0A=
-=0A=
+On 9/18/25 7:12 AM, Mika Westerberg wrote:
+> Hi,
+> 
+> On Wed, Sep 17, 2025 at 08:36:19PM +0200, Konrad Dybcio wrote:
+>> On 9/17/25 8:12 AM, Mika Westerberg wrote:
+>>> Hi Konrad,
+>>>
+>>> On Tue, Sep 16, 2025 at 10:06:01PM +0200, Konrad Dybcio wrote:
+>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+
+[...]
+
+>>  struct tb_nhi {
+>>         spinlock_t lock;
+>> -       struct pci_dev *pdev;
+>> +       struct device *dev;
+>>         const struct tb_nhi_ops *ops;
+>>         void __iomem *iobase;
+>>         struct tb_ring **tx_rings;
+>>         struct tb_ring **rx_rings;
+>> -       struct ida msix_ida;
+>>         bool going_away;
+>>         bool iommu_dma_protection;
+>>         struct work_struct interrupt_work;
+>>         u32 hop_count;
+>>         unsigned long quirks;
+>> +       bool is_pcie;
+>>  };
+>>  
+>> +struct tb_nhi_pci {
+>> +       struct pci_dev *pdev;
+>> +       struct ida msix_ida;
+>> +       struct tb_nhi nhi;
+>> +};
+>> +
+>> +static inline struct tb_nhi_pci *nhi_to_pci(struct tb_nhi *nhi)
+>> +{
+>> +       if (WARN_ON(!nhi->is_pcie))
+>> +               return NULL;
+>> +
+>> +       return container_of(nhi, struct tb_nhi_pci, nhi);
+>> +}
+>>
+>> I suppose I can probably get this decoupling sent in advance of the rest..
+>> It's quite delicate so I'm hoping I won't cause any random nullptrs for you
+> 
+> Instead of the above is_pcie thing, can you split it so that the PCI parts
+> live in pci.c and the "platform" parts live in platform.c (or perhaps this
+> is fauxbus now). Then the core part of the NHI code (nhi.c) just works
+> regardless of how the controller is wired to the SoC.
+
+I'll simply try to get this decoupling sent soon, so we can debate
+over material changes
+
+> There are plenty of examples in the kernel how to do this.
+> 
+>> - Additional steps are necessary to take the hardware out of reset, set
+>>   some magic values here and there, load the firmware (i.e. memcpy_toio())
+>>   wake up the MCU and perform Type-C magic (more on that below), all of
+>>   which is handled in a new qcom_usb4.c, which does that and ends its probe
+>>   function with a nhi_probe_common(). PM of the hardware and its providers
+>>   also takes place in Linux, just like with any other IP block on embedded
+>>   systems
+> 
+> Call it qcom.c. But please try to move all the non-PCI generic parts into
+> platform.c and then only the Qualcomm specific things live in qcom.c. Idea
+> is that we can re-use all that when for example Apple Silicon support is
+> added and so on.
+
+That's the plan
+
+[...]
+
+>>>> +
+>>>> +  interrupts:
+>>>> +    items:
+>>>> +      - description: Combined event interrupt for all three rings
+>>>> +      - description: OOB Firmware interrupt
+>>>
+>>> No MSI? If not then at least I suggest to support it in the DT description.
+>>
+>> No, it seems like across the SoC we only have MSIs on the PCIe RCs
+>>
+>> Because I don't know what a valid MSI setup would look like, I'd like
+>> to defer adding that description to when a platform with them pops up
+> 
+> I it hard to change these DT bindings later on? If yes then I would
+> definitely think forward and make this support MSI from the get-go.
+
+dt-bindings (attempt to) promise an ABI-like interface, so bindings
+for *a given IP block* ("dt-bindings describe the hardware") should
+not change, unless there's something critically wrong (e.g. "this
+could have never really worked").
+
+Adding new properties is always OK, marking the new properties  as
+'required' is not (unless it falls into the aforementioned case).
+
+It's also totally OK to add MSI properties to e.g. Apple Host Router
+bindings specifically when they come around, as it's simply a different
+piece of hardware. It's also OK to create a usb4-host-router.yaml down
+the line, which will act as a common include and perform any
+maintenance/code churn, so long as it doesn't end up in the bindings
+for any specific hw block (e.g. this QC one) becoming more strict
+than they were on HEAD^.
+
+
+> 
+>> [...]
+>>
+>>>> +  wakeup-source: true
+>>>
+>>> What about the "power contract"? Are you using the existing we have for
+>>> ACPI:
+>>>
+>>> https://learn.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#map-native-protocols-pcie-displayport-tunneled-through-usb4-to-usb4-host-routers
+>>>
+>>> It was designed DT in mind but I don't think we have DT bindings for it.
+>>> This is needed to make sure the driver (Connection Manager) creates the
+>>> tunnels before the native protocol stacks get enumerated (e.g during power
+>>> transitions).
+>>
+>> I added a custom entry to drivers/of/property.c, matching that name.
+>> Seems to work fine (tm) so far, but then we haven't yet tested sus/res
+>> much.. 
+>>
+>> Just to make sure - are we expected to ensure that the NHI device is
+>> resumed before any protocol controller drivers (at runtime), or do the
+>> latter have to *probe* only after they're necessary? I firmly believe
+>> the former, but doesn't hurt to ask..
+> 
+> The former. The TB driver needs to setup tunnels before native protocol
+> stacks and their drivers (e.g PCIe and the like) resume. We have the
+> device_link from the native "port" / device to the NHI that deals with it
+> but it expects the property to be there.
+
+OK then we're on the same page, good
+
+> 
+>> [...]
+>>>> +            port {
+>>>> +                usb4_0_mode_in: endpoint {
+>>>> +                };
+>>>
+>>> This describes the Downstream Facing Port (e.g USB4 port), right? We have
+>>> something similar used in Chromebooks so it would be good if we can make
+>>> the bindings close to each other if possible. This allows binding firmware
+>>> description to retimers (and also to "fixed/embedded" device routers as
+>>> recent changes to the USB4 spec makes possible).
+>>>
+>>> See drivers/thunderbolt/acpi.c::tb_acpi_find_companion().
+>>
+>> Yes, this binding assumes the Host Router has precisely 1 DFP (Linux
+>> Type-C infra isn't ready for anything more, at least not on the DT side
+>> to my knowledge) and this port (which isn't necessarily the same as a
+>> connector, i.e. a physical receptacle in DT speak, it simply refers to
+>> an abstract data connection between two devices)
+> 
+> Okay I'm not too familiar with the current DT bindings.
+> 
+>> Notably, I don't think we currently describe the USB4 port (as in, the
+>> usb4_port.c meaning of it) at all, but for on-SoC HRs we know all about
+>> them, so perhaps a subnode description could make sense. This way we
+>> could also point them to the compatible = "usb-c-connector" node
+> 
+> It should be something (eventually at least :-)) that allows us to describe the
+> USB4 ports and on-board retimers (to make it possible to upgrade firmwares
+> on those even if there is no link). But also if there is "embedded link"
+> device router.
+
+FWIW on DT platforms, onboard retimers (such as the PS883x) are often
+described as children of the I2C bus (see e.g. "parade,ps8830" in:
+arch/arm64/boot/dts/qcom/x1-crd.dtsi), marked as 'retimer-switch',
+which then typec_retimer_xxx() APIs look for using of/fwnode_graph.
+
+Because they're not opaque, but rather self-contained platform
+devices, FW updates can/will happen without the tbt subsystem in the
+picture.
+
+That said, the retimer being TBT-compliant, still shows up in the
+topology:
+thunderbolt 1-0:2.1: new retimer found, vendor=0x1da0 device=0x8830
+
+
+I think adding description of a usb4 port should be quite simple,
+I'll look into that.
+
+Konrad
 
