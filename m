@@ -1,196 +1,249 @@
-Return-Path: <linux-usb+bounces-28300-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28301-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3960B86CAA
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 21:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AE56B86E4E
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 22:22:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DCC01CC3FFF
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 19:57:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8EA81C82A26
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 20:22:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C3F30BF65;
-	Thu, 18 Sep 2025 19:57:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B218D31D36D;
+	Thu, 18 Sep 2025 20:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RObR7qdc"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="RCBmBHNI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A719B303A32;
-	Thu, 18 Sep 2025 19:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3431831CA54;
+	Thu, 18 Sep 2025 20:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758225442; cv=none; b=p/jxrqNTAy6pt3LyOUncjRlpxCk9+Ol/hD/lSRq3ZGVKCG43h8OXpZ+KZLTsfd4eiHG9bu1GAgsYy/2nBLZ2snaQ4mF08MR6GysZ3AU0y3lrNLs+saiB6Gnyo9MsF3+A7EmgSOoke3y6kv3HBHmUVd6m8EEmhOFQz8wv1+xWIIs=
+	t=1758226917; cv=none; b=sFOBPVVs2AxAk8zZ2AVq1Fmu1aOtJd7IhXmj9DgIjR3HIU39xpPvUSH1+Q3FjU9SoMiPjVurU3XQdgfUCrxDFd3CNbgv2FOYSBjB0J4D/AZjJOYV2glqiDzzZX2rFOKzILD5yIPG9gpAMxhmxlr4aSzmckKXFRBY5LmadOiQ5XI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758225442; c=relaxed/simple;
-	bh=977rUY+qGkskf5HwPtTAx8X8oq7eFdQgZmaovQcXuRM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=FQ20tsaduFJQYXKMPTTKXoZGXOW6yceKyZzklnvjvEFXbaoX2/WRs2b0c0iZXPjFfUA6MZ/ys/IrNy+VMRmEUSpfmjcE634tXvG6jDBAnE/OYI0hCiXP28NUqnUee/F4AwYicL8Eair0ucQCcknkQU4WsbzxLmzdiGkQzFDlhB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RObR7qdc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57EEAC4CEE7;
-	Thu, 18 Sep 2025 19:57:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758225442;
-	bh=977rUY+qGkskf5HwPtTAx8X8oq7eFdQgZmaovQcXuRM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=RObR7qdcwZCTIcR+R8sCJIiM1oBXI/wp5e7+eIt7aHoD9Em21/6KE2Y5or+/GibWd
-	 D4R5IU1rG/M0jLekRZt2CFKVDi1zbPnJY0bCn8U/3dbM1CVMZUJumWK/g0zjQ9OR5I
-	 Nw+qTUHADZ61IiGlwZPJyE3Iqp1VyEvYzOlWzyLE3xMoI9cYG02wBn91GHmdrdwq28
-	 aV3FB7UpnleEcGqIMyUsIgQaE4pMrLiUnaNi9IQCcdi0yKayB8TMXJZwhQAOyRHGje
-	 1wvmFd62NSJ8yoYVZGW73g+gJz2ZlcMB31kTpUj/eb8NZe6PXLMrSkkebpjAKOqnwf
-	 i8Bk637Ooquzw==
-Date: Thu, 18 Sep 2025 14:57:21 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>,
-	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-	AceLan Kao <acelan.kao@canonical.com>,
-	Kai-Heng Feng <kaihengf@nvidia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Merthan =?utf-8?Q?Karaka=C5=9F?= <m3rthn.k@gmail.com>,
-	Eric Naim <dnaim@cachyos.org>,
-	"Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Subject: Re: [PATCH v8 1/4] PM: Introduce new PMSG_POWEROFF event
-Message-ID: <20250918195721.GA1918283@bhelgaas>
+	s=arc-20240116; t=1758226917; c=relaxed/simple;
+	bh=/3BYsfjMl1cUUSeihEaNsPBMguLnpA3t6+l9GWStjdA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FMMn4EzcfdtDsRcgkXIo0oyDScGqnQHWsHXnhhkL85/zojQCJV0YqM04AvqOQoYSogdH8nedniNCC/sv76YDg9Nbqbre8IxbeyFyxqyAc5JJinTe+QIISaRoAKhooaslSg5/7NkX7W0DKUsgCvA2puDp4/zz9mS6I0P3KKxBhic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=RCBmBHNI; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=Hw2DbkoUFoUvKQiSp3L3I2iLC/yPwz3ta9B463K5KP0=; b=RCBmBHNIiBj2D1SdDE+KJ4nrZ3
+	dxPD54NzPDj0iAP99NMns6nOM65zxnSb1r5/AA4D8Buqbm96ZK7YvEO/sLVHF/4TpzgY7nmpxPLo6
+	ijTHkqLI4AN6/Ec5W2UHXM6+Q0jR4JhXXKo/lP0lRR9nqaUYwex3VJVcmrdAIZKOwBbEC5BD1WFAx
+	m94Bqm0UpzYqDe+psiNPaMRd3eCj/B8vvFm0j0OEGi44VABEA8tWSl+k3VVS4ozQDrVuoU2qhJA/7
+	rh0/yAglB2wA7Z+/NSOFtHmtpP2MkA67LxMvCQLQ6jMfNG4T7YUIPfRZWe6A8RwIkTTj0p+0HqB4p
+	O7wYSU/A==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uzL8Y-000000016NN-0nyX;
+	Thu, 18 Sep 2025 20:21:50 +0000
+Message-ID: <dcbd2c62-5db8-4eb5-aa3a-532b33baaa61@infradead.org>
+Date: Thu, 18 Sep 2025 13:21:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250918034427.3226217-2-superm1@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/5] ALSA: doc: add docs about improved quirk_flags in
+ snd-usb-audio
+To: cryolitia@uniontech.com, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ Mingcong Bai <jeffbai@aosc.io>, Kexy Biscuit <kexybiscuit@aosc.io>,
+ Nie Cheng <niecheng1@uniontech.com>, Zhan Jun <zhanjun@uniontech.com>,
+ Feng Yuan <fengyuan@uniontech.com>, qaqland <anguoli@uniontech.com>,
+ kernel@uniontech.com, linux-modules@vger.kernel.org
+References: <20250918-sound-v4-0-82cf8123d61c@uniontech.com>
+ <20250918-sound-v4-5-82cf8123d61c@uniontech.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250918-sound-v4-5-82cf8123d61c@uniontech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 17, 2025 at 10:44:24PM -0500, Mario Limonciello (AMD) wrote:
-> PMSG_POWEROFF will be used for the PM core to allow differentiating between
-> a hibernation or shutdown sequence when re-using callbacks.
+Hi--
 
-I think it would be useful to say something here about how the
-hibernation and shutdown sequences are entered, e.g., what user
-commands and syscalls are related?
-
-> Tested-by: Eric Naim <dnaim@cachyos.org>
-> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
-> ---
-> v8:
->  * Break series into 3 parts
->  * Drop PMSG_NO_WAKEUP change
-> v7:
->  * Reword commit
-> v5:
->  * Re-order and split
->  * Add tags
-> v4:
->  * https://lore.kernel.org/linux-pci/20250616175019.3471583-1-superm1@kernel.org/
-> ---
->  drivers/base/power/main.c    | 7 +++++++
->  include/linux/pm.h           | 3 +++
->  include/trace/events/power.h | 3 ++-
->  3 files changed, 12 insertions(+), 1 deletion(-)
+On 9/18/25 2:24 AM, Cryolitia PukNgae via B4 Relay wrote:
+> From: Cryolitia PukNgae <cryolitia@uniontech.com>
 > 
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index 2ea6e05e6ec9..86661c94e8ce 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -99,6 +99,8 @@ static const char *pm_verb(int event)
->  		return "restore";
->  	case PM_EVENT_RECOVER:
->  		return "recover";
-> +	case PM_EVENT_POWEROFF:
-> +		return "poweroff";
->  	default:
->  		return "(unknown PM event)";
->  	}
-> @@ -369,6 +371,7 @@ static pm_callback_t pm_op(const struct dev_pm_ops *ops, pm_message_t state)
->  	case PM_EVENT_FREEZE:
->  	case PM_EVENT_QUIESCE:
->  		return ops->freeze;
-> +	case PM_EVENT_POWEROFF:
->  	case PM_EVENT_HIBERNATE:
->  		return ops->poweroff;
->  	case PM_EVENT_THAW:
-> @@ -403,6 +406,7 @@ static pm_callback_t pm_late_early_op(const struct dev_pm_ops *ops,
->  	case PM_EVENT_FREEZE:
->  	case PM_EVENT_QUIESCE:
->  		return ops->freeze_late;
-> +	case PM_EVENT_POWEROFF:
->  	case PM_EVENT_HIBERNATE:
->  		return ops->poweroff_late;
->  	case PM_EVENT_THAW:
-> @@ -437,6 +441,7 @@ static pm_callback_t pm_noirq_op(const struct dev_pm_ops *ops, pm_message_t stat
->  	case PM_EVENT_FREEZE:
->  	case PM_EVENT_QUIESCE:
->  		return ops->freeze_noirq;
-> +	case PM_EVENT_POWEROFF:
->  	case PM_EVENT_HIBERNATE:
->  		return ops->poweroff_noirq;
->  	case PM_EVENT_THAW:
-> @@ -1370,6 +1375,8 @@ static pm_message_t resume_event(pm_message_t sleep_state)
->  		return PMSG_RECOVER;
->  	case PM_EVENT_HIBERNATE:
->  		return PMSG_RESTORE;
-> +	case PM_EVENT_POWEROFF:
-> +		return PMSG_ON;
->  	}
->  	return PMSG_ON;
->  }
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index cc7b2dc28574..d001224c92fd 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -507,6 +507,7 @@ const struct dev_pm_ops name = { \
->   * RECOVER	Creation of a hibernation image or restoration of the main
->   *		memory contents from a hibernation image has failed, call
->   *		->thaw() and ->complete() for all devices.
-
-Looks like there should be a blank line here to match formatting of
-other messages.
-
-> + * POWEROFF	System will poweroff, call ->poweroff() for all devices.
->   *
->   * The following PM_EVENT_ messages are defined for internal use by
->   * kernel subsystems.  They are never issued by the PM core.
-> @@ -537,6 +538,7 @@ const struct dev_pm_ops name = { \
->  #define PM_EVENT_USER		0x0100
->  #define PM_EVENT_REMOTE		0x0200
->  #define PM_EVENT_AUTO		0x0400
-> +#define PM_EVENT_POWEROFF	0x0800
->  
->  #define PM_EVENT_SLEEP		(PM_EVENT_SUSPEND | PM_EVENT_HIBERNATE)
->  #define PM_EVENT_USER_SUSPEND	(PM_EVENT_USER | PM_EVENT_SUSPEND)
-> @@ -551,6 +553,7 @@ const struct dev_pm_ops name = { \
->  #define PMSG_QUIESCE	((struct pm_message){ .event = PM_EVENT_QUIESCE, })
->  #define PMSG_SUSPEND	((struct pm_message){ .event = PM_EVENT_SUSPEND, })
->  #define PMSG_HIBERNATE	((struct pm_message){ .event = PM_EVENT_HIBERNATE, })
-> +#define PMSG_POWEROFF	((struct pm_message){ .event = PM_EVENT_POWEROFF, })
->  #define PMSG_RESUME	((struct pm_message){ .event = PM_EVENT_RESUME, })
->  #define PMSG_THAW	((struct pm_message){ .event = PM_EVENT_THAW, })
->  #define PMSG_RESTORE	((struct pm_message){ .event = PM_EVENT_RESTORE, })
-> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-> index 82904291c2b8..370f8df2fdb4 100644
-> --- a/include/trace/events/power.h
-> +++ b/include/trace/events/power.h
-> @@ -179,7 +179,8 @@ TRACE_EVENT(pstate_sample,
->  		{ PM_EVENT_HIBERNATE, "hibernate" }, \
->  		{ PM_EVENT_THAW, "thaw" }, \
->  		{ PM_EVENT_RESTORE, "restore" }, \
-> -		{ PM_EVENT_RECOVER, "recover" })
-> +		{ PM_EVENT_RECOVER, "recover" }, \
-> +		{ PM_EVENT_POWEROFF, "poweroff" })
->  
->  DEFINE_EVENT(cpu, cpu_frequency,
->  
-> -- 
-> 2.51.0
+> Just briefly described about the option.
 > 
+> Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+> ---
+>  Documentation/sound/alsa-configuration.rst | 108 ++++++++++++++++++++---------
+>  1 file changed, 75 insertions(+), 33 deletions(-)
+> 
+> diff --git a/Documentation/sound/alsa-configuration.rst b/Documentation/sound/alsa-configuration.rst
+> index a2fb8ed251dd0294e7a62209ca15d5c32c6adfae..efffe3d534beeddcb6a47ac27a24defb6879f534 100644
+> --- a/Documentation/sound/alsa-configuration.rst
+> +++ b/Documentation/sound/alsa-configuration.rst
+> @@ -2297,39 +2297,81 @@ skip_validation
+>      of the unit descriptor instead of a driver probe error, so that we
+>      can check its details.
+>  quirk_flags
+> -    Contains the bit flags for various device specific workarounds.
+> -    Applied to the corresponding card index.
+> -
+> -        * bit 0: Skip reading sample rate for devices
+> -        * bit 1: Create Media Controller API entries
+> -        * bit 2: Allow alignment on audio sub-slot at transfer
+> -        * bit 3: Add length specifier to transfers
+> -        * bit 4: Start playback stream at first in implement feedback mode
+> -        * bit 5: Skip clock selector setup
+> -        * bit 6: Ignore errors from clock source search
+> -        * bit 7: Indicates ITF-USB DSD based DACs
+> -        * bit 8: Add a delay of 20ms at each control message handling
+> -        * bit 9: Add a delay of 1-2ms at each control message handling
+> -        * bit 10: Add a delay of 5-6ms at each control message handling
+> -        * bit 11: Add a delay of 50ms at each interface setup
+> -        * bit 12: Perform sample rate validations at probe
+> -        * bit 13: Disable runtime PM autosuspend
+> -        * bit 14: Ignore errors for mixer access
+> -        * bit 15: Support generic DSD raw U32_BE format
+> -        * bit 16: Set up the interface at first like UAC1
+> -        * bit 17: Apply the generic implicit feedback sync mode
+> -        * bit 18: Don't apply implicit feedback sync mode
+> -        * bit 19: Don't closed interface during setting sample rate
+> -        * bit 20: Force an interface reset whenever stopping & restarting
+> -          a stream
+> -        * bit 21: Do not set PCM rate (frequency) when only one rate is
+> -          available for the given endpoint.
+> -        * bit 22: Set the fixed resolution 16 for Mic Capture Volume
+> -        * bit 23: Set the fixed resolution 384 for Mic Capture Volume
+> -        * bit 24: Set minimum volume control value as mute for devices
+> -          where the lowest playback value represents muted state instead
+> -          of minimum audible volume
+> -        * bit 25: Be similar to bit 24 but for capture streams
+> +    The option provides a refined and flexible control for applying quirk
+> +    flags.  It allows to specify the quirk flags for each device, and could
+
+                                                                     and may
+or: and can
+
+> +    be modified dynamically via sysfs.
+> +    The old usage accepts an array of integers, each of which apply quirk
+
+                                                                 applies
+
+> +    flags on the device in the order of probing.
+> +    e.g. ``quirk_flags=0x01,0x02`` applies get_sample_rate to the first
+
+       E.g.,
+
+> +    device, and share_media_device to the second device.
+> +    The new usage accepts a string in the format of
+> +    ``VID1:PID1:FLAGS1;VID2:PID2:FLAGS2;...``, where ``VIDx`` and ``PIDx``
+> +    specify the device, and ``FLAGSx`` specify the flags to be applied.
+> +    ``VIDx`` and ``PIDx`` are 4-digit hexadecimal numbers, and could be
+
+                                                           s/could/may/
+
+> +    specified as ``*`` to match any value.  ``FLAGSx`` could be a set of
+
+                                                      s/could/may/
+
+> +    flags given by name, separated by ``|``, or a hexadecimal number
+> +    representing the bit flags.  The available flag names are listed above.
+
+                                                              s/above/below/ ?
+
+> +    An exclamation mark could be prefixed to a flag name to negate the flag.
+                       s/could/may/
+
+> +    For example, ``1234:abcd:mixer_playback_min_mute|!ignore_ctl_error;*:*:0x01;``
+
+What happens if the trailing (ending) ';' is omitted?
+
+> +    applies the ``mixer_playback_min_mute`` flag and clears the
+> +    ``ignore_ctl_error`` flag for the device 1234:abcd, and applies the
+> +    ``skip_sample_rate`` flag for all devices.
+> +
+> +        * bit 0: ``get_sample_rate``
+> +          Skip reading sample rate for devices
+
+get vs Skip is a little confusing.
+
+> +        * bit 1: ``share_media_device``
+> +          Create Media Controller API entries
+> +        * bit 2: ``align_transfer``
+> +          Allow alignment on audio sub-slot at transfer
+> +        * bit 3: ``tx_length``
+> +          Add length specifier to transfers
+> +        * bit 4: ``playback_first``
+> +          Start playback stream at first in implement feedback mode
+> +        * bit 5: ``skip_clock_selector``
+> +          Skip clock selector setup
+> +        * bit 6: ``ignore_clock_source``
+> +          Ignore errors from clock source search
+> +        * bit 7: ``itf_usb_dsd_dac``
+> +          Indicates ITF-USB DSD based DACs
+
+                               DSD-based
+
+> +        * bit 8: ``ctl_msg_delay``
+> +          Add a delay of 20ms at each control message handling
+> +        * bit 9: ``ctl_msg_delay_1m``
+> +          Add a delay of 1-2ms at each control message handling
+> +        * bit 10: ``ctl_msg_delay_5m``
+> +          Add a delay of 5-6ms at each control message handling
+> +        * bit 11: ``iface_delay``
+> +          Add a delay of 50ms at each interface setup
+> +        * bit 12: ``validate_rates``
+> +          Perform sample rate validations at probe
+> +        * bit 13: ``disable_autosuspend``
+> +          Disable runtime PM autosuspend
+> +        * bit 14: ``ignore_ctl_error``
+> +          Ignore errors for mixer access
+> +        * bit 15: ``dsd_raw``
+> +          Support generic DSD raw U32_BE format
+> +        * bit 16: ``set_iface_first``
+> +          Set up the interface at first like UAC1
+> +        * bit 17: ``generic_implicit_fb``
+> +          Apply the generic implicit feedback sync mode
+> +        * bit 18: ``skip_implicit_fb``
+> +          Don't apply implicit feedback sync mode
+> +        * bit 19: ``iface_skip_close``
+> +          Don't closed interface during setting sample rate
+
+                   close
+
+> +        * bit 20: ``force_iface_reset``
+> +          Force an interface reset whenever stopping & restarting a stream
+> +        * bit 21: ``fixed_rate``
+> +          Do not set PCM rate (frequency) when only one rate is available
+> +          for the given endpoint
+> +        * bit 22: ``mic_res_16``
+> +          Set the fixed resolution 16 for Mic Capture Volume
+> +        * bit 23: ``mic_res_384``
+> +          Set the fixed resolution 384 for Mic Capture Volume
+> +        * bit 24: ``mixer_playback_min_mute``
+> +          Set minimum volume control value as mute for devices where the
+> +          lowest playback value represents muted state instead of minimum
+> +          audible volume
+> +        * bit 25: ``mixer_capture_min_mute``
+> +          Be similar to bit 24 but for capture streams
+
+             Similar to
+
+>  
+>  This module supports multiple devices, autoprobe and hotplugging.
+>  
+> Are all of these quirks used on various devices or are some of these
+just implemented just in case they are needed in the future?thanks.
+-- 
+~Randy
+
 
