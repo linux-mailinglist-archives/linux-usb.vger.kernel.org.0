@@ -1,232 +1,193 @@
-Return-Path: <linux-usb+bounces-28332-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28333-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6CA0B8987D
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 14:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDD52B8A29B
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 17:04:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F0A45A1744
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 12:48:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 094475A6714
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 15:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58BCF222580;
-	Fri, 19 Sep 2025 12:47:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0A4D313E11;
+	Fri, 19 Sep 2025 15:03:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Y/UF8xXE";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="S7iKHHi3";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xaPwq3kP";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zMw0MRkS"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="AV7yuJwf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C722144D7
-	for <linux-usb@vger.kernel.org>; Fri, 19 Sep 2025 12:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C473253B64
+	for <linux-usb@vger.kernel.org>; Fri, 19 Sep 2025 15:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758286072; cv=none; b=eTXYSLZwcGhLvlMyfA83QEnn2Qj5gxGgsUF2YW09QouK6tniK7kidj57xH4dXyJIwJa3JEcVSfisQrXsV8W81ZS15V0IUxmsgeJB8p78ulPklVN7JqJx4AcIboSypOFtxz07uqHcp1iwK5HHTmAQsZ+xw8mQNEfOt1ILvFHoeoM=
+	t=1758294204; cv=none; b=aABml/5YGPFPb+1ZcOnNsPlvzde4QZ/e/i+mnSH+uIdCcZeTl2jZbRPUOXCzk8Be0bdjSNR9yE8nnKAlRDzR3RsIbTK8gi5qOHNJEEziXtUmEz6WzdC0qnjNOtRxkAHDytP2h3OFgZ30MVnJ7AvFAOJu7HhOeGjDFeu+g7QQ8jM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758286072; c=relaxed/simple;
-	bh=iNxcvG6B7+iDbjP3eeNJDrtINQljCA+BpTp4TS4X6DU=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A9uJlDybrIROqcHGDmgU8b+ZCpzECo6m3Y0hesrm4gWWmzwiCVQ1Z7QomYO8SVAE9R2HDbFFvp5qOkkb/EnwE/0VH2zPmvGeLaj36jIHe5IS+IwH3Ltd7ez4mIixHuuIwgOiJZuTqXzzZTM6Ltvk4vKy1E7X84tlrzmPfXWQsQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Y/UF8xXE; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=S7iKHHi3; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xaPwq3kP; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zMw0MRkS; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 180AB1F7D9;
-	Fri, 19 Sep 2025 12:47:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758286063; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zBiZKKxnPHMmQmNm1unV7jDvvhBaThzW9jKejI52qTw=;
-	b=Y/UF8xXETeEW83Q/DgOSsD4SL6rV31h793/tzfWVyU+8wIRjIESz27y4H2iawXnRsfNGwL
-	1QDvv3o+juw69LEPQuwz68RG0AgAbohGtTmybiMU5rBE/WlZkwSZf/Oe73360lwEUGYk0P
-	lRF5jUtMAN90UZFppKhVlclxGi2o4p0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758286063;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zBiZKKxnPHMmQmNm1unV7jDvvhBaThzW9jKejI52qTw=;
-	b=S7iKHHi3fvDdgUJqgQ03ZxOCsEHB0mF053q7Xdg90YwAmpCWSkl0EuWfr2IQddu9qe7mTd
-	vEmLUIjvWiMViVDQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758286062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zBiZKKxnPHMmQmNm1unV7jDvvhBaThzW9jKejI52qTw=;
-	b=xaPwq3kPsMCYqrbS0e8aGYzqdDFV4lykmBS3wI4Pl0eZhMo8EHtNpkvq3ZJPKzHpOdmyMr
-	iVWiOWfWF2fDj0M8QVkBeUxiZlfHMTrgudG9hRfiYe3CwS/Vn6Gk9j1srycw2bWMjxOzhY
-	1KEQfZSIXiyB/xbLDdeA+HD8OqG3eCA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758286062;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zBiZKKxnPHMmQmNm1unV7jDvvhBaThzW9jKejI52qTw=;
-	b=zMw0MRkS572Pe/PFWODVhBKpHki+CvqRQE2P7Whd8ihEjdM9ZTurjMPknIijvBTQQxRrI7
-	8zRnJXXcL7/IySAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 648DE13A78;
-	Fri, 19 Sep 2025 12:47:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id qGfzFe1QzWgJAwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Fri, 19 Sep 2025 12:47:41 +0000
-Date: Fri, 19 Sep 2025 14:47:40 +0200
-Message-ID: <87qzw28v83.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: cryolitia@uniontech.com
-Cc: Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Mingcong Bai <jeffbai@aosc.io>,
-	Kexy Biscuit <kexybiscuit@aosc.io>,
-	Nie Cheng <niecheng1@uniontech.com>,
-	Zhan Jun <zhanjun@uniontech.com>,
-	Feng Yuan <fengyuan@uniontech.com>,
-	qaqland <anguoli@uniontech.com>,
-	kernel@uniontech.com,
-	linux-modules@vger.kernel.org,
-	Takashi Iwai <tiwai@suse.de>
-Subject: Re: [PATCH v4 3/5] ALSA: usb-audio: improve module param quirk_flags
-In-Reply-To: <20250918-sound-v4-3-82cf8123d61c@uniontech.com>
-References: <20250918-sound-v4-0-82cf8123d61c@uniontech.com>
-	<20250918-sound-v4-3-82cf8123d61c@uniontech.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1758294204; c=relaxed/simple;
+	bh=VpWztYwxlC4gMifd+Ha6GcloBpo1TRsrsojMqZ6IwKU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dQLYu6ubIdB35911XYSdOKRFn5xmK9kXDNmL1M+oqdf/CglOCdImorsMGx40uN4A2Oh9QJ6tfV8fQAsjDV+0lU7GHzBmGIYnOR8wMsX9L57Af7f/26pz0FVGMyJR+IMbBsbHfGJ8Dw+dJbRugCI8NLgSmIBkE+bIz5oztUNYlBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=AV7yuJwf; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-81999b1e9ccso227120985a.3
+        for <linux-usb@vger.kernel.org>; Fri, 19 Sep 2025 08:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1758294201; x=1758899001; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h4yk0L0m2YyOV3Nsx1VlOk0MGMOAEd0mQJ4qs4qAJKA=;
+        b=AV7yuJwfMpAWDh9609+yB12v2hIAuX02dpTRybfODTnbO+j+FxxIOiWJPDI9SZcL1e
+         sx1qAxuEev7l+pdiDSLaBYs+AzLYA3qMpJ5XwgtT6GkTBSeEyiVwaUD65r1e+GgZ0XQ9
+         Bk82VGxulW/XKJzsCfq9oFZ2CKWicJbZQeELSc5eYgimG9Zar7vuUdH0uEzEB4tze75a
+         ze8tDavJbKn6vS8eX7rFLpYMOyrEeCZOCwRcAIFMeeRSIRxP2JonXmnbrPb12tUwFbuz
+         Bz3hG/fNgwldzRebgAnrLX/vINq4yJPqO9bZpKgeX5Suws2ZnUAIgNoG6o5BgMNDAjxQ
+         rlmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758294201; x=1758899001;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h4yk0L0m2YyOV3Nsx1VlOk0MGMOAEd0mQJ4qs4qAJKA=;
+        b=H+9J6DXIz+TTMucv9uiSGiEDq5OikcHpRfQF2CBuwKBvVUElfa2fHEBSyBqpPmly1B
+         p4vCzhzL/wyTBNDpwR0pejRVLWsdbpcgqszIabxMy3bjJ9Utfm0rDvZMcdee42P81PHx
+         qOkfftjL6L9tiTrW9rJ5XP6/PyijBpAu6SXAa6rKp0K6HHXGmqT0Wt+LLjVDQbPXrulS
+         Sx/l/tV1O/a6F46Erfi105YepEAC4Cir/2Hg+EUMrUjKaIKdZtRplTtwH6SaezCxpbrQ
+         t/6gdTybOeAUZ8ReGysv88HsoFEUoF7tWg7DdReQnYmqwTvkmmPy523QLOWAgvcoyKOV
+         lYKA==
+X-Forwarded-Encrypted: i=1; AJvYcCWzVlgyuAq24e7DX8sAm9u1WcJXwnySZvdngba7CZhWD6jrLr21JkHylHr4WNuMkCN9pM7JPXx1sYo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyixD08yiiSQwg3PxPHA2yCCXx33fexFru+2HqY1Oilnq72gxKH
+	3eZGPXYGpVWdBLyg535M+m+5gUuoNrXmPo7kVhHn512Xee6C4OG/J3WjppiKYoi2Pg==
+X-Gm-Gg: ASbGnctFl9zUx/4HF8wgFbLDDfVYlw7reLpaX2G2g0yEEnWWPCLcOj2W9fxFMkAUFDd
+	1A8+L3dxdFxbyi2bblMC3LgITXEVQxac0Dx5s7AUbbxaEPrATFo5oujh1i9+5o74ycGxHPLhWBZ
+	LS7NoY0oSikQU1JZMRbEeHLi+IgJHuu6QmOw2vngYrY/z2imd0gMH5avQwg324ippvFeqZSHLeJ
+	ucbZ1zQZm1ZmWfMsP6+7TUzvqUoM2wzHR/ClUQ4sNga1qUIGCHV4RnNbbpd9MnNykrv568/HdF4
+	cVb0G7c8WZOiXe9KbZ0KecLkP2H9UTVptH7BteWyoku9TZQhiKyR5qB96XFKqxAanHYdPvC0tF1
+	mFhSGlkaqgh5T8G9gQ+DD8uosNKeipS4Yw2A=
+X-Google-Smtp-Source: AGHT+IFp77cMd6GqPBGe5WvLIisHAqV/1FC5no9jIM9sJ2NZm/RlCjBbuh5QO7SS6a/+S22CdYggrQ==
+X-Received: by 2002:a05:620a:520a:b0:825:dd8f:1a61 with SMTP id af79cd13be357-83ba2c93824mr366464385a.3.1758294201220;
+        Fri, 19 Sep 2025 08:03:21 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::bb27])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-836304820e7sm350662085a.40.2025.09.19.08.03.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Sep 2025 08:03:20 -0700 (PDT)
+Date: Fri, 19 Sep 2025 11:03:17 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] usb: uhci: Add reset control support
+Message-ID: <9c867c34-047d-4771-b9a6-a2c88dd1f800@rowland.harvard.edu>
+References: <20250919025712.719246-1-ryan_chen@aspeedtech.com>
+ <20250919025712.719246-3-ryan_chen@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.997];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,uniontech.com:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spam-Score: -3.30
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250919025712.719246-3-ryan_chen@aspeedtech.com>
 
-On Thu, 18 Sep 2025 11:24:32 +0200,
-Cryolitia PukNgae via B4 Relay wrote:
+On Fri, Sep 19, 2025 at 10:57:10AM +0800, Ryan Chen wrote:
+> Some SoCs, such as the Aspeed AST2700, require the UHCI controller
+> to be taken out of reset before it can operate. Add optional reset
+> control support to the UHCI platform driver.
 > 
-> From: Cryolitia PukNgae <cryolitia@uniontech.com>
+> The driver now acquires an optional reset line from device tree,
+> deasserts it during probe, and asserts it again in the error path
+> and shutdown.
 > 
-> For apply and unapply quirk flags more flexibly though param
-> 
-> Co-developed-by: Takashi Iwai <tiwai@suse.de>
-> Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
 > ---
->  sound/usb/card.c     |   9 ++--
->  sound/usb/quirks.c   | 119 ++++++++++++++++++++++++++++++++++++++++++++++++++-
->  sound/usb/quirks.h   |   3 +-
->  sound/usb/usbaudio.h |   3 ++
->  4 files changed, 126 insertions(+), 8 deletions(-)
+>  drivers/usb/host/uhci-hcd.h      |  1 +
+>  drivers/usb/host/uhci-platform.c | 18 ++++++++++++++++--
+>  2 files changed, 17 insertions(+), 2 deletions(-)
 > 
-> diff --git a/sound/usb/card.c b/sound/usb/card.c
-> index 0265206a8e8cf31133e8463c98fe0497d8ace89e..5837677effa1787ef9d7d02714c3ae43b1a8bc79 100644
-> --- a/sound/usb/card.c
-> +++ b/sound/usb/card.c
-> @@ -73,8 +73,8 @@ static bool lowlatency = true;
->  static char *quirk_alias[SNDRV_CARDS];
->  static char *delayed_register[SNDRV_CARDS];
->  static bool implicit_fb[SNDRV_CARDS];
-> -static unsigned int quirk_flags[SNDRV_CARDS];
+> diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
+> index 13ee2a6144b2..4326d1f3ca76 100644
+> --- a/drivers/usb/host/uhci-hcd.h
+> +++ b/drivers/usb/host/uhci-hcd.h
+> @@ -445,6 +445,7 @@ struct uhci_hcd {
+>  	short load[MAX_PHASE];			/* Periodic allocations */
 >  
-> +char *quirk_flags[SNDRV_CARDS];
+>  	struct clk *clk;			/* (optional) clock source */
+> +	struct reset_control *rsts;		/* (optional) clock reset */
+>  
+>  	/* Reset host controller */
+>  	void	(*reset_hc) (struct uhci_hcd *uhci);
+> diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
+> index 62318291f566..f255358d6242 100644
+> --- a/drivers/usb/host/uhci-platform.c
+> +++ b/drivers/usb/host/uhci-platform.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/of.h>
+>  #include <linux/device.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/reset.h>
+>  
+>  static int uhci_platform_init(struct usb_hcd *hcd)
+>  {
+> @@ -132,17 +133,29 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+>  		goto err_rmr;
+>  	}
+>  
+> +	uhci->rsts = devm_reset_control_array_get_optional_shared(&pdev->dev);
+> +	if (IS_ERR(uhci->rsts)) {
+> +		ret = PTR_ERR(uhci->rsts);
+> +		goto err_clk;
+> +	}
+> +	ret = reset_control_deassert(uhci->rsts);
 
-My preference is to keep this static, but pass the string value to a
-function.  That is, define snd_usb_init_quirk_flags() in main.c:
+Does this work right if uhci->rsts is NULL?
 
-static void snd_usb_init_quirk_flags(struct snd_usb_audio *chip, int indx)
-{
-	/* old style option found: the position-based integer value */
-	if (quirk_flags[idx] &&
-	    !kstrtou32(quirk_flags[idx], 0, &chip->quirk_flags)) {
-		usb_audio_dbg(chip,
-			      "Set quirk flags 0x%x from param based on position %d for device %04x:%04x\n",
-			      chip->quirk_flags, idx,
-			      USB_ID_VENDOR(chip->usb_id),
-			      USB_ID_PRODUCT(chip->usb_id));
-		return;
-	}
+> +	if (ret)
+> +		goto err_clk;
+> +
+>  	ret = platform_get_irq(pdev, 0);
+>  	if (ret < 0)
+> -		goto err_clk;
+> +		goto err_reset;
+>  
+>  	ret = usb_add_hcd(hcd, ret, IRQF_SHARED);
+>  	if (ret)
+> -		goto err_clk;
+> +		goto err_reset;
+>  
+>  	device_wakeup_enable(hcd->self.controller);
+>  	return 0;
+>  
+> +err_reset:
+> +	if (!IS_ERR_OR_NULL(uhci->rsts))
+> +		reset_control_assert(uhci->rsts);
 
-	/* take the default quirk from the quirk table */
-	snd_usb_init_quirk_flags_table(chip);
+How could this code ever execute if uhci->rsts is an ERR_PTR?
 
-	/* add or correct quirk bits from options */
-	for (i = 0; i < ARRAY_SIZE(quirk_flags); i++) {
-		char *val __free(kfree) = NULL;
+Also, why does this code test for NULL...
 
-		if (!quirk_flags[i] || !*quirk_flags[i])
-			continue;
-		
-		val = kstrdup(quirk_flags[i], GFP_KERNEL);
-		if (!val)
-			return;
+>  err_clk:
+>  	clk_disable_unprepare(uhci->clk);
+>  err_rmr:
+> @@ -156,6 +169,7 @@ static void uhci_hcd_platform_remove(struct platform_device *pdev)
+>  	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+>  	struct uhci_hcd *uhci = hcd_to_uhci(hcd);
+>  
+> +	reset_control_assert(uhci->rsts);
 
-		snd_usb_parse_quirk_string(chip, val);
-	}
-}
-	
-static int snd_usb_audio_create(....)
-{
-	....
-	snd_usb_init_quirk_flags(chip, idx);
-	....
-}
+when this code doesn't?
 
-The function snd_usb_parse_quirk_string() is defined in quirks.c,
+Alan Stern
 
-void snd_usb_parse_quirk_string(struct snd_usb_audio *chip, char *val)
-{
-	for (p = val; p && *p;) {
-		/* Each entry consists of VID:PID:flags */
-		field = strsep(&p, ":");
-		if (!field)
-			break;
-		.....
-	}
-}
-
-
-thanks,
-
-Takashi
+>  	clk_disable_unprepare(uhci->clk);
+>  	usb_remove_hcd(hcd);
+>  	usb_put_hcd(hcd);
+> -- 
+> 2.34.1
+> 
 
