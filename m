@@ -1,161 +1,134 @@
-Return-Path: <linux-usb+bounces-28317-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28318-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53B2FB8831A
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 09:38:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B12D6B883EE
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 09:45:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DCC14E3A82
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 07:37:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAD923AB90E
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 07:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC382D29D7;
-	Fri, 19 Sep 2025 07:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B39E2D2485;
+	Fri, 19 Sep 2025 07:44:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="doE8GM0X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417262F83A2
-	for <linux-usb@vger.kernel.org>; Fri, 19 Sep 2025 07:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E093B2D249A;
+	Fri, 19 Sep 2025 07:44:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758267213; cv=none; b=D/LKqugRGcDiXNmYHqkQ7v4WLB//yjc63ZAA43RC+HUd3ZjtwQYY0K9pRRIFgdCv9fHu3193SQB6c0I9JjQ2LsZHpE/MaHgE9ap05XLAYjsHUmxaU/ILgKBIs5ltZIkQ4qQ4Kn4lGK1fVvIzP64KvhqixRdo+0s9pGGlKYEyA3Y=
+	t=1758267873; cv=none; b=NT1IHGAVIo7rTUFC/RzbSuDNZ8C33rEo9+dkc09TK9RQ7DrOP9tQYzOG92s/dNVSZeDBcSv052el+zxqafw+0fWAuRITjuSjnwde5rr5jRLV9tS89oTiSKXZ88TijXYYWczBvj7IYeYowpWieGe//I2c1uyj9PCe9FDcUSet4G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758267213; c=relaxed/simple;
-	bh=+2TJblT6LHI57S9AzaMiROC9Kq8+LmktTXhZRPyPaVc=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=JK2tttI2wFCKBqYejJXKsXiWy/p8U4ZZOv6cRQOsCrejOf5eD/4OK1rsTrG5Bf5g9mVmGMtiWi+Ji8ow0xS4fWEt8mVFCNwAqTIBrGDFmg+dDKXABS+ysVFNXuaoXFVAlb6mKlZCkcSyqARvw5LDjR3mUWE6dDPaYfSDlEJkfqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-424877bb4caso947735ab.3
-        for <linux-usb@vger.kernel.org>; Fri, 19 Sep 2025 00:33:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758267210; x=1758872010;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iOLMQZh+p8WZQSf5C0CCnZHd4Mr5OtFWTXlqTXn35ho=;
-        b=e0E0DOk6Mxp9uSko7OSGvDZbDAjoqvssgrK5XVs7T1Ix7qAf+8zLmeTm6ISsvszy2g
-         ghtIH/h+B5tl7tTaVRVTYHyX4nuSkSlrVhmyeh5UpYbHGPEpVdHeQq8+skRqpH37qZ9Q
-         nPIQ8iuf0A6x9uZsZI7GgqSHeg0HmNpq62NnzuGTBDop9eH9mxjir8LzJt1Z1SeGFg5w
-         9Fzez73/hfFS9cObyl3NCG9Vc3TgqJKJ/5JW7vMxU1jQph02Uuotj6NfrTN/JBUoTbdM
-         lbJBbhy8jVMk7tvXAP4sQ5+cXo/4PoUUi3Y+KVxnxkI3j3MeSI8toWMcipSty1+YUziK
-         6dqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXQ2j9TDhO7IKjg4O7jqvvwypzpC7cOivsr60B1U1d673DKUjFWIunk3Kwooo+/PskhAJacEEW0lM4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywn8EbL1n0fWtQsqKXB/GWIcRD0ZIQY9d2QI5C01uf4h6Lhtr6U
-	VeSlNrDMQdG+y9IAxmcosKIlPoXLGiUNiggmjPzsavIMbFWK6c+abYCP7tc2GWq6onpiMAwi7IU
-	yfqxRdtvgczhMGNHtEEbH9EGIh3DdT8RuVMZLj0mKnxYLAEE5yW+VjoGUuxI=
-X-Google-Smtp-Source: AGHT+IGSIL56u0FooE8IiACmPgSgu3KOpk6TzvSGcyHoh57v+4rqxqX50T0Vun0q8H2sFhjYMKpv5vP99iAaB4z28VfmYrUMEs3c
+	s=arc-20240116; t=1758267873; c=relaxed/simple;
+	bh=LwfR+4hkxYUidvMyg7oiE925+JBFlv5gmKUeEq/5qOU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cH0PoKW16Wo1llyfjjVItBfGiq+zBcM0vCnduArPtwpW9vfN84pGVdWsvoR2SgnFPtkUspkUUxuxIUPqXM7zSxIjk239cciw0021lUJ7Y4cRV20HnD3tt8NWKmSIlpWFDaFG1hWFwuJTXN8BvhnfWrq9OpYAMBsIPnrrX8ot0WU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=doE8GM0X; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758267871; x=1789803871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LwfR+4hkxYUidvMyg7oiE925+JBFlv5gmKUeEq/5qOU=;
+  b=doE8GM0XNv8v8m70+FCWvo2UwW0Mqrjl6LUoQclGJ4ub5rhLKxwAoNJa
+   /8D2lBHO1c3s2bC7p6AwqxN5valQTjOIkq5j+bTRkbnaqDB89Z6tLHS2O
+   wzPuULDUPX2E5PrUpa58N906gpOyeuDLF45q8cFh2Xz/IJa0oXiQI6Os4
+   A76jYkBXde+bwIECL1Tuvr3t2uuK8WlFnJ4+BeGw34W7dEiNt50O2+lrq
+   yAFvTLPrC7VRDNcBYyrN+x75NTM9QeYm1nS6D+m9eWDlEUJZ8/CFRS4e2
+   8BFTEFlgwXZQ+zFowwAIHDY6rDIxiN/x/6Of66tbxLIitd6EnwGCZ9Z2W
+   A==;
+X-CSE-ConnectionGUID: lrBYpqzoTHCaBVOK21iwlQ==
+X-CSE-MsgGUID: VNY9YIHIRYSVQE5C0NNxmA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="64250988"
+X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
+   d="scan'208";a="64250988"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 00:44:30 -0700
+X-CSE-ConnectionGUID: x9WaXblsSveeOn3hXK415w==
+X-CSE-MsgGUID: rNtytAYMTsagbX8fW0/LNQ==
+X-ExtLoop1: 1
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa003.fm.intel.com with SMTP; 19 Sep 2025 00:44:27 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 19 Sep 2025 10:44:26 +0300
+Date: Fri, 19 Sep 2025 10:44:26 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Mark Pearson <mpearson-lenovo@squebb.ca>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: Handle incorrect num_connectors
+ capability
+Message-ID: <aM0J2hDgqkxioAXU@kuha.fi.intel.com>
+References: <mpearson-lenovo@squebb.ca>
+ <20250821185319.2585023-1-mpearson-lenovo@squebb.ca>
+ <2025082213-antacid-correct-53b1@gregkh>
+ <0ac78125-a028-4d99-b106-d792d8660d0f@app.fastmail.com>
+ <1c185541-2b6b-4c43-938a-9f4f4d1499b4@app.fastmail.com>
+ <2025091819-bullion-hut-8242@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:16c7:b0:424:388:6ced with SMTP id
- e9e14a558f8ab-4248192733bmr40617935ab.14.1758267210259; Fri, 19 Sep 2025
- 00:33:30 -0700 (PDT)
-Date: Fri, 19 Sep 2025 00:33:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68cd074a.a00a0220.37dadf.0017.GAE@google.com>
-Subject: [syzbot] [net?] WARNING in dev_shutdown (7)
-From: syzbot <syzbot+c9ecf60a8adb7629821e@syzkaller.appspotmail.com>
-To: davem@davemloft.net, edumazet@google.com, horms@kernel.org, 
-	jhs@mojatatu.com, jiri@resnulli.us, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, syzkaller-bugs@googlegroups.com, 
-	xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2025091819-bullion-hut-8242@gregkh>
 
-Hello,
+On Thu, Sep 18, 2025 at 09:50:30AM +0200, Greg KH wrote:
+> On Wed, Sep 17, 2025 at 02:14:28PM -0400, Mark Pearson wrote:
+> > Hi all,
+> > 
+> > On Fri, Aug 22, 2025, at 8:54 AM, Mark Pearson wrote:
+> > > Hi Greg,
+> > >
+> > > On Fri, Aug 22, 2025, at 12:51 AM, Greg KH wrote:
+> > >> On Thu, Aug 21, 2025 at 02:53:07PM -0400, Mark Pearson wrote:
+> > >>> The UCSI spec states that the num_connectors field is 7 bits, and the
+> > >>> 8th bit is reserved and should be set to zero.
+> > >>> Some buggy FW has been known to set this bit, and it can lead to a
+> > >>> system not booting.
+> > >>> Flag that the FW is not behaving correctly, and auto-fix the value
+> > >>> so that the system boots correctly.
+> > >>> 
+> > >>> Found on Lenovo P1 G8 during Linux enablement program. The FW will
+> > >>> be fixed, but seemed worth addressing in case it hit platforms that
+> > >>> aren't officially Linux supported.
+> > >>> 
+> > >>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+> > >>
+> > >> Any hints as to what commit id this fixes?
+> > >>
+> > >> thanks,
+> > >>
+> > >> greg k-h
+> > >
+> > > Maybe 3cf657f ('Remove all bit-fields')?
+> > >
+> > > The commit there states that 'We can't use bit fields with data that is 
+> > > received or send
+> > > to/from the device.'
+> > > Not sure why that is, but I assumed this means we shouldn't change the 
+> > > structure to use 7 bits for num_connectors, which was my original plan.
+> > >
+> > > After that, we go all the way back to the file creation (c1b0bc2) where 
+> > > it was defined as 8 bit.
+> > >
+> > 
+> > Just a gentle nudge to see if there are any concerns or questions with the patch.
+> 
+> I was waiting for the maintainer of this code to review it :)
 
-syzbot found the following issue on:
+So not Fixes tag?
 
-HEAD commit:    a4d43c1f17b9 Merge 6.17-rc6 into usb-next
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=10a0bb12580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=64a9fba56fdb0aef
-dashboard link: https://syzkaller.appspot.com/bug?extid=c9ecf60a8adb7629821e
-compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/6eefb11d9e81/disk-a4d43c1f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6232f2c26d00/vmlinux-a4d43c1f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8d192b0d2295/bzImage-a4d43c1f.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c9ecf60a8adb7629821e@syzkaller.appspotmail.com
-
-asix 3-1:7.204 eth1: unregister 'asix' usb-dummy_hcd.2-1, ASIX AX88178 USB 2.0 Ethernet
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 12317 at net/sched/sch_generic.c:1500 dev_shutdown+0x3b6/0x430 net/sched/sch_generic.c:1500
-Modules linked in:
-CPU: 1 UID: 0 PID: 12317 Comm: kworker/1:9 Not tainted syzkaller #0 PREEMPT(voluntary) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/18/2025
-Workqueue: usb_hub_wq hub_event
-
-RIP: 0010:dev_shutdown+0x3b6/0x430 net/sched/sch_generic.c:1500
-Code: 48 c7 c2 60 a6 41 88 be a3 00 00 00 48 c7 c7 20 ab 41 88 c6 05 36 08 4e 04 01 e8 85 71 18 fb e9 8f fd ff ff e8 7b 42 3c fb 90 <0f> 0b 90 e9 5f fe ff ff 4c 89 f7 e8 8a 74 9a fb e9 77 fc ff ff 4c
-RSP: 0018:ffffc90013087498 EFLAGS: 00010283
-RAX: 000000000002f429 RBX: ffff8881355c8488 RCX: ffffc9001024c000
-RDX: 0000000000100000 RSI: ffffffff8641b875 RDI: ffff8881355c8568
-RBP: ffff8881355c8000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: ffff8881355c8438
-R13: ffffed1026ab9003 R14: ffff8881355c8480 R15: 0000000000000001
-FS:  0000000000000000(0000) GS:ffff888268ff6000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000110c37e36c CR3: 00000000090a4000 CR4: 00000000003506f0
-Call Trace:
- <TASK>
- unregister_netdevice_many_notify+0xcb6/0x2310 net/core/dev.c:12154
- unregister_netdevice_many net/core/dev.c:12229 [inline]
- unregister_netdevice_queue+0x305/0x3f0 net/core/dev.c:12073
- unregister_netdevice include/linux/netdevice.h:3385 [inline]
- unregister_netdev+0x1f/0x60 net/core/dev.c:12247
- usbnet_disconnect+0x109/0x500 drivers/net/usb/usbnet.c:1658
- usb_unbind_interface+0x1da/0x9e0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:571 [inline]
- device_remove+0x122/0x170 drivers/base/dd.c:563
- __device_release_driver drivers/base/dd.c:1274 [inline]
- device_release_driver_internal+0x44b/0x620 drivers/base/dd.c:1297
- bus_remove_device+0x22f/0x420 drivers/base/bus.c:579
- device_del+0x396/0x9f0 drivers/base/core.c:3878
- usb_disable_device+0x355/0x7d0 drivers/usb/core/message.c:1418
- usb_disconnect+0x2e1/0x9c0 drivers/usb/core/hub.c:2344
- hub_port_connect drivers/usb/core/hub.c:5406 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
- port_event drivers/usb/core/hub.c:5870 [inline]
- hub_event+0x1aa2/0x5060 drivers/usb/core/hub.c:5952
- process_one_work+0x9cf/0x1b70 kernel/workqueue.c:3236
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x6c8/0xf10 kernel/workqueue.c:3400
- kthread+0x3c5/0x780 kernel/kthread.c:463
- ret_from_fork+0x56d/0x700 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+heikki
 
