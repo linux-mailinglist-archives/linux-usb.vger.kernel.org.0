@@ -1,178 +1,292 @@
-Return-Path: <linux-usb+bounces-28303-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28304-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5862AB8758F
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 01:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EEF2DB87A1D
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 03:45:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00BD86201E9
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Sep 2025 23:19:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F024B4E3867
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 01:45:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D5F628750B;
-	Thu, 18 Sep 2025 23:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D590255F52;
+	Fri, 19 Sep 2025 01:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="MepmCO20"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="USri8h0i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B6F4A2D;
-	Thu, 18 Sep 2025 23:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758237539; cv=pass; b=HAMzxyHz9ufTeorV3zlW2h4bOswmwl0N5UlYWjs5zR0RFs4+ojT4Wnl5n4ynWQoe69AWNmqSxDoBT8Vdnv2GRroQgTf3Be3IBIKlRLfPH3xlAN9aZ+B/LWu7gJkqnUXz4MOFiGdEbhTCuIPAbGbf2PLcGP7AMpAUVMFY/bXKjLo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758237539; c=relaxed/simple;
-	bh=5iJGPs6vcEGywKPGkLdblZZi+nX/oYrCVtOfsRMrNrw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yun8CgoqTRXzjcALxnG4djKakihm1P79+Fp8TRf8Zi5ZYcjDy3V7bOARugJmrUY8y2yFCyNT7ffOpvBc16iOeOgDNB7ljfH+/kEAFMDTJxA8xfpnxpjNXbQJoTOzsWkzVGQhfrRAdFMK7YC8ivjuQB3/UzksolbyVWIRRNlw9ms=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=MepmCO20; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758237508; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=eWUw3ZFSZkaOGqkvPkt58f11mCaojnfzoco2m3GDejMcZkkir8nmXmASCGMiUjMEFI6yHQjK+2Rgnb6P766jooFfj4flJZyZQL70JkSn9Wn+lfpsNsTr9IrNJmvTZ6hzCK3dhyd8guTw3JF8M99vh9R9YdYXBRlfXVwfX/W97Xs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758237507; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=5iJGPs6vcEGywKPGkLdblZZi+nX/oYrCVtOfsRMrNrw=; 
-	b=MqHoOMhTefu1WmEPJywpu/MRI071IOIuuOOapI7fayqpLqoEPkqWkJ2iF8KB1yJtjpUoxNBXR2NMiOqJhZ4aQ8shhwO8FnGFbAvNVTjy6ZsvGn/tH3G1K7xujNoWTgegV1RSIOxsMDsus8370VCJ4zByMsyGsyycEg9t7Ds0lOA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758237507;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=5iJGPs6vcEGywKPGkLdblZZi+nX/oYrCVtOfsRMrNrw=;
-	b=MepmCO20SYiw8AKHbcsT60UEli4QFi2Uzu8R1pBWBlO7t5J+55XfdujA/qMK1wUi
-	rucR3lwpVSgA5VgsOwGU0YFgZESGDXuQ52xfX7Xg16EcECWQttdkq11Xpf62TtFVwFE
-	swVy+qOXrznSDVhvO3KsB79qH7Y/qUQ3JOWZXgmQ=
-Received: by mx.zohomail.com with SMTPS id 1758237504693973.1672975828773;
-	Thu, 18 Sep 2025 16:18:24 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id B72F8180517; Fri, 19 Sep 2025 01:17:55 +0200 (CEST)
-Date: Fri, 19 Sep 2025 01:17:55 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>, David Collins <david.collins@oss.qualcomm.com>, 
-	=?utf-8?Q?Gy=C3=B6rgy?= Kurucz <me@kuruczgy.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com, devicetree@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 9/9] power: supply: qcom_battmgr: handle charging
- state change notifications
-Message-ID: <mub3b5r3zpcgsisicjbbl2kudefibj7t2n3jz5pgshlqsglnlw@5a7gc3trlnn5>
-References: <20250917-qcom_battmgr_update-v5-0-270ade9ffe13@oss.qualcomm.com>
- <20250917-qcom_battmgr_update-v5-9-270ade9ffe13@oss.qualcomm.com>
- <fa258ad4-1efa-4fe8-9636-d70c5ea9c8e1@oss.qualcomm.com>
- <d9db8b82-9000-478b-a7b5-93792f1e1bea@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C10D23D7E4;
+	Fri, 19 Sep 2025 01:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758246329; cv=none; b=Yv+r04Oe82oYpG9LJyl9tF1l1iVb+p9GEroTWGw2pzovb33Ou5Nl2IxQo8sj9liCZmb69Tj6UeVd+PIYS4AOTA/pRGHQVSima2IrUxf4rjkWfin7M+lS1ZU5H7+QKJDAbLrkUaYuOjDcKvWB90n8Pa7SJSLA3y4ma1d69yQT4S0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758246329; c=relaxed/simple;
+	bh=9ey6y5/eU3bHqNRLFfXlvaxufW/ymu11IMZPkUYnw+A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hltTeQ3kpPwvQcfHFsFMCo7hXmcVUeGFeEPJC+k77RlFL8F+hz+bAmXGs+Ee8VbRvjBHEXrKNOTVKRiHfbTOxMT1J9fMPgHI0+FuuwataDca2IkTT6Hjp6sxt5zgwKHz8jUxxN5hJEv5jSpqe9st2b7hEoeLZ30JRlRIxVdMTvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=USri8h0i; arc=none smtp.client-ip=18.169.211.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1758246319;
+	bh=n9pYb6zB3EaUnsut4GBLuBZC5yTnkFwn2FZAmiJprOM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=USri8h0iCFwEys9p/aYu0zG8/t8ESHl8XNNY9fzRphY0f4d4xMIwG+3KezIF3PWTK
+	 Nxv6/K1PuVoy+C70D/t+dbP1vSF1Pz0RQXMTpC2kvnyj99p6h9YlOqMR5Ifs8xhqTx
+	 Dl9vSsQPpHND3Jw8ZlM80eyt6IH9pDvK6UZWjLUA=
+X-QQ-mid: esmtpsz17t1758246220t42cc5ebc
+X-QQ-Originating-IP: YhHAujqlhBgE18/6JKvMSEV8ibqLhnX/CL/i20ZX0Lg=
+Received: from [198.18.0.1] ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 19 Sep 2025 09:43:38 +0800 (CST)
+X-QQ-SSF: 0002000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 41658235515920624
+EX-QQ-RecipientCnt: 20
+Message-ID: <E5D6C740C99059BF+af37f938-2e5d-4d41-adbc-a0c000d432fd@uniontech.com>
+Date: Fri, 19 Sep 2025 09:43:37 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kybmdzwa6byyxpic"
-Content-Disposition: inline
-In-Reply-To: <d9db8b82-9000-478b-a7b5-93792f1e1bea@oss.qualcomm.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/258.211.62
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/5] ALSA: doc: add docs about improved quirk_flags in
+ snd-usb-audio
+To: Randy Dunlap <rdunlap@infradead.org>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ Mingcong Bai <jeffbai@aosc.io>, Kexy Biscuit <kexybiscuit@aosc.io>,
+ Nie Cheng <niecheng1@uniontech.com>, Zhan Jun <zhanjun@uniontech.com>,
+ Feng Yuan <fengyuan@uniontech.com>, qaqland <anguoli@uniontech.com>,
+ kernel@uniontech.com, linux-modules@vger.kernel.org
+References: <20250918-sound-v4-0-82cf8123d61c@uniontech.com>
+ <20250918-sound-v4-5-82cf8123d61c@uniontech.com>
+ <dcbd2c62-5db8-4eb5-aa3a-532b33baaa61@infradead.org>
+Content-Language: en-US
+From: Cryolitia PukNgae <cryolitia@uniontech.com>
+In-Reply-To: <dcbd2c62-5db8-4eb5-aa3a-532b33baaa61@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3a-0
+X-QQ-XMAILINFO: OQ+eaxRKS8WJsBoYbMlRdEjlU2vB10t84jxZQKpEoESlnbxLsfac5rdu
+	hEsDW9nXJaW0XeAtPkwVLwiplEX3zMRRP5cmfooY6eatQepek7Bpo3lu3hz9NPP+1DRT4/G
+	ynaEiQZ1tGDha783BGvx74gy4FWYJO4gfOMOC5ZDEnffyFor5zmAgNqZ6SYt0Gg3KhpmO5b
+	QxMzTM89m7OOflq8v21Jdxus17LcLy+4FHBsg9OLQEgVOYGyaPCEwOG7G0U73XS8vYgVwQy
+	Wl/8n4GELhY8zJNtaxyQL+ZMQoICF9MhKbfOg6d8CGW2cQSHROvJvXczph9Zbomm9T0SUcT
+	ct6wVU99yxOs2eEvycrGb4jZKV6DhHLgZ3ev0b9nJGApp9q4AJ6boXI3lSdV5yWFO4dlaVr
+	3QrnAtJQPFMUDzPVO2L5rIxmWgS/+3fhC5fHqkWlv3tICQYB74Jm/2NTIaY+P2KKFKIcf8A
+	v57/A4VHhC3BWdl5q1ABzYyLl0qU7W5xV9RqRMyis3zVr/ft1ResaqzVTiziP0QOGKCEdFl
+	w7JVXYzEYpdy9dI95Ze4ETqNrT3t97/WjX734kQna+bXQH+MXgNgKI6jq4lJVrv+DNeLpLJ
+	5Fqo4c4HqI5RxsL7PTDuVc0BXa9UBua0QckWjlPJllyx9exVwTlHKnyZRy3qWFdb65kPDM3
+	eoY5hXGIlOEsgnx7wGRGr7Y1IGglft2FYlgeVCYCqTQKlM8PREhooKABKZ+dabg+1EgvOOT
+	XQ84eFnyAkWA1sWzcQz6qV57JD+OExrTeEsZ++WdAV0SRClKJtRNGqXSajfMcuW/jEBkcFS
+	INIDRbiXh+OoySkbbrYkqodPw6/0E1vaMey9rSX6LlFIDILewwwgFh6ShkOCL3A+QiKGu7z
+	1TJkIPB3TepdyjOdsd6sIBXgPHksQOolsjGnQ/4JBm6lzdot704q0xzxi1vR+mEd7j0/ZnK
+	ouyFLL2hv/CgtONRJ8oFl9EzJOTNNPsr0BTDpM565DbSM0X2Y9Fe5DJ1fF1OHoBtCR1GwRn
+	hDbCwSMfB1AYAt8EvNCruBeQWGw0WwddBGICWROolSy1ubDGAIw8/FLGGVL1sG3YcOX71g4
+	t2gPWC5nRpraQgrz3+T9lMYYZkpVToEsKKtfQxER+ifL1GJ5oQzM01HHQaVeRwoj/73r0yI
+	PNvcVPxlUINg9OoT8iJvVQmArw==
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+X-QQ-RECHKSPAM: 0
 
+Thanks for your review. I'll waiting some reviews on other patches and resend
+a new version about it.
 
---kybmdzwa6byyxpic
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v5 9/9] power: supply: qcom_battmgr: handle charging
- state change notifications
-MIME-Version: 1.0
+On 19/09/2025 04.21, Randy Dunlap wrote:
+> Hi--
+> 
+> On 9/18/25 2:24 AM, Cryolitia PukNgae via B4 Relay wrote:
+>> From: Cryolitia PukNgae <cryolitia@uniontech.com>
+>>
+>> Just briefly described about the option.
+>>
+>> Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+>> ---
+>>  Documentation/sound/alsa-configuration.rst | 108 ++++++++++++++++++++---------
+>>  1 file changed, 75 insertions(+), 33 deletions(-)
+>>
+>> diff --git a/Documentation/sound/alsa-configuration.rst b/Documentation/sound/alsa-configuration.rst
+>> index a2fb8ed251dd0294e7a62209ca15d5c32c6adfae..efffe3d534beeddcb6a47ac27a24defb6879f534 100644
+>> --- a/Documentation/sound/alsa-configuration.rst
+>> +++ b/Documentation/sound/alsa-configuration.rst
+>> @@ -2297,39 +2297,81 @@ skip_validation
+>>      of the unit descriptor instead of a driver probe error, so that we
+>>      can check its details.
+>>  quirk_flags
+>> -    Contains the bit flags for various device specific workarounds.
+>> -    Applied to the corresponding card index.
+>> -
+>> -        * bit 0: Skip reading sample rate for devices
+>> -        * bit 1: Create Media Controller API entries
+>> -        * bit 2: Allow alignment on audio sub-slot at transfer
+>> -        * bit 3: Add length specifier to transfers
+>> -        * bit 4: Start playback stream at first in implement feedback mode
+>> -        * bit 5: Skip clock selector setup
+>> -        * bit 6: Ignore errors from clock source search
+>> -        * bit 7: Indicates ITF-USB DSD based DACs
+>> -        * bit 8: Add a delay of 20ms at each control message handling
+>> -        * bit 9: Add a delay of 1-2ms at each control message handling
+>> -        * bit 10: Add a delay of 5-6ms at each control message handling
+>> -        * bit 11: Add a delay of 50ms at each interface setup
+>> -        * bit 12: Perform sample rate validations at probe
+>> -        * bit 13: Disable runtime PM autosuspend
+>> -        * bit 14: Ignore errors for mixer access
+>> -        * bit 15: Support generic DSD raw U32_BE format
+>> -        * bit 16: Set up the interface at first like UAC1
+>> -        * bit 17: Apply the generic implicit feedback sync mode
+>> -        * bit 18: Don't apply implicit feedback sync mode
+>> -        * bit 19: Don't closed interface during setting sample rate
+>> -        * bit 20: Force an interface reset whenever stopping & restarting
+>> -          a stream
+>> -        * bit 21: Do not set PCM rate (frequency) when only one rate is
+>> -          available for the given endpoint.
+>> -        * bit 22: Set the fixed resolution 16 for Mic Capture Volume
+>> -        * bit 23: Set the fixed resolution 384 for Mic Capture Volume
+>> -        * bit 24: Set minimum volume control value as mute for devices
+>> -          where the lowest playback value represents muted state instead
+>> -          of minimum audible volume
+>> -        * bit 25: Be similar to bit 24 but for capture streams
+>> +    The option provides a refined and flexible control for applying quirk
+>> +    flags.  It allows to specify the quirk flags for each device, and could
+> 
+>                                                                      and may
+> or: and can
+> 
+>> +    be modified dynamically via sysfs.
+>> +    The old usage accepts an array of integers, each of which apply quirk
+> 
+>                                                                  applies
+> 
+>> +    flags on the device in the order of probing.
+>> +    e.g. ``quirk_flags=0x01,0x02`` applies get_sample_rate to the first
+> 
+>        E.g.,
+> 
+>> +    device, and share_media_device to the second device.
+>> +    The new usage accepts a string in the format of
+>> +    ``VID1:PID1:FLAGS1;VID2:PID2:FLAGS2;...``, where ``VIDx`` and ``PIDx``
+>> +    specify the device, and ``FLAGSx`` specify the flags to be applied.
+>> +    ``VIDx`` and ``PIDx`` are 4-digit hexadecimal numbers, and could be
+> 
+>                                                            s/could/may/
+> 
+>> +    specified as ``*`` to match any value.  ``FLAGSx`` could be a set of
+> 
+>                                                       s/could/may/
+> 
+>> +    flags given by name, separated by ``|``, or a hexadecimal number
+>> +    representing the bit flags.  The available flag names are listed above.
+> 
+>                                                               s/above/below/ ?
+> 
+>> +    An exclamation mark could be prefixed to a flag name to negate the flag.
+>                        s/could/may/
+> 
+>> +    For example, ``1234:abcd:mixer_playback_min_mute|!ignore_ctl_error;*:*:0x01;``
+> 
+> What happens if the trailing (ending) ';' is omitted?
 
-Hi,
+This is where I found something strange when I was testing it myself. When I use
+`echo '*:*:mixer_playback_min_mute` > /sys/module/snd_usb_audio/parameters/quirk_flags`,
+the string received by the driver contains a lot of trailing spaces. I am not familiar
+with the kernel and don't know how to handle this situation. Simply adding a semicolon
+to the input will make the trailing spaces after the semicolon be ignored.
 
-On Thu, Sep 18, 2025 at 10:01:24AM +0800, Fenglin Wu wrote:
-> On 9/17/2025 7:14 PM, Konrad Dybcio wrote:
-> > On 9/17/25 12:15 PM, Fenglin Wu via B4 Relay wrote:
-> > > From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> > >=20
-> > > The X1E80100 battery management firmware sends a notification with
-> > > code 0x83 when the battery charging state changes, such as switching
-> > > between fast charge, taper charge, end of charge, or any other error
-> > > charging states. The same notification code is used with bit[16] set
-> > > if charging stops due to reaching the charge control end threshold.
-> > > Additionally, a 2-bit value is added in bit[18:17] with the same code
-> > > and used to indicate the charging source capability: a value of 2
-> > > represents a strong charger, 1 is a weak charger, and 0 is no charging
-> > > source. The 3-MSB [18:16] in the notification code is not much useful
-> > > for now, hence just ignore them and trigger a power supply change eve=
-nt
-> > > whenever 0x83 notification code is received. This helps to eliminate =
-the
-> > > unknown notification error messages.
-> > Thank you for explaining the technical background.
-> >=20
-> > Please hit enter somewhere in your commit message, this is a very
-> > long paragraph, making it difficult to read.
-> I just realized I made a mistake on the bit position, it should be bit[8]
-> for reaching to the charge control threshold, bit[10:9] for charging sour=
-ce
-> capability. I don't know what I was thinking when writing the commit text
-> :(. I will correct them in the next patch.
-> >=20
-> > I believe this maps to:
-> >=20
-> > 0 -> POWER_SUPPLY_CHARGE_TYPE_NONE
-> > 1 -> POWER_SUPPLY_CHARGE_TYPE_TRICKLE
-> > 2 -> POWER_SUPPLY_CHARGE_TYPE_FAST (or _STANDARD, I see battmgr code
-> > reports them both as 2)
-> >=20
-> > However, we already set it to none/trickle/standard(taper) based on
-> > the usual notifications, so I'm not sure if these are more common or
-> > arrive outside the normal state changes - if so, perhaps we can take
-> > them into account as well?
->=20
-> This is not related with the real charging status. I double checked in the
-> battery management firmware, it is checking the charging source power
-> capability by multiplying maximum voltage and current reading from the PD=
-Os.
-> Any charger adapter with a maximum power below 60W is identified as a
-> slow/weak charger.
+> 
+>> +    applies the ``mixer_playback_min_mute`` flag and clears the
+>> +    ``ignore_ctl_error`` flag for the device 1234:abcd, and applies the
+>> +    ``skip_sample_rate`` flag for all devices.
+>> +
+>> +        * bit 0: ``get_sample_rate``
+>> +          Skip reading sample rate for devices
+> 
+> get vs Skip is a little confusing.
 
-Please include that info in the commit message when sending a v6.
-The code change itself LGTM.
+This part is copied from Takashi Iwai[1]. It does a little confusing.
 
-Thanks,
+>> +        * bit 1: ``share_media_device``
+>> +          Create Media Controller API entries
+>> +        * bit 2: ``align_transfer``
+>> +          Allow alignment on audio sub-slot at transfer
+>> +        * bit 3: ``tx_length``
+>> +          Add length specifier to transfers
+>> +        * bit 4: ``playback_first``
+>> +          Start playback stream at first in implement feedback mode
+>> +        * bit 5: ``skip_clock_selector``
+>> +          Skip clock selector setup
+>> +        * bit 6: ``ignore_clock_source``
+>> +          Ignore errors from clock source search
+>> +        * bit 7: ``itf_usb_dsd_dac``
+>> +          Indicates ITF-USB DSD based DACs
+> 
+>                                DSD-based
+> 
+>> +        * bit 8: ``ctl_msg_delay``
+>> +          Add a delay of 20ms at each control message handling
+>> +        * bit 9: ``ctl_msg_delay_1m``
+>> +          Add a delay of 1-2ms at each control message handling
+>> +        * bit 10: ``ctl_msg_delay_5m``
+>> +          Add a delay of 5-6ms at each control message handling
+>> +        * bit 11: ``iface_delay``
+>> +          Add a delay of 50ms at each interface setup
+>> +        * bit 12: ``validate_rates``
+>> +          Perform sample rate validations at probe
+>> +        * bit 13: ``disable_autosuspend``
+>> +          Disable runtime PM autosuspend
+>> +        * bit 14: ``ignore_ctl_error``
+>> +          Ignore errors for mixer access
+>> +        * bit 15: ``dsd_raw``
+>> +          Support generic DSD raw U32_BE format
+>> +        * bit 16: ``set_iface_first``
+>> +          Set up the interface at first like UAC1
+>> +        * bit 17: ``generic_implicit_fb``
+>> +          Apply the generic implicit feedback sync mode
+>> +        * bit 18: ``skip_implicit_fb``
+>> +          Don't apply implicit feedback sync mode
+>> +        * bit 19: ``iface_skip_close``
+>> +          Don't closed interface during setting sample rate
+> 
+>                    close
+> 
+>> +        * bit 20: ``force_iface_reset``
+>> +          Force an interface reset whenever stopping & restarting a stream
+>> +        * bit 21: ``fixed_rate``
+>> +          Do not set PCM rate (frequency) when only one rate is available
+>> +          for the given endpoint
+>> +        * bit 22: ``mic_res_16``
+>> +          Set the fixed resolution 16 for Mic Capture Volume
+>> +        * bit 23: ``mic_res_384``
+>> +          Set the fixed resolution 384 for Mic Capture Volume
+>> +        * bit 24: ``mixer_playback_min_mute``
+>> +          Set minimum volume control value as mute for devices where the
+>> +          lowest playback value represents muted state instead of minimum
+>> +          audible volume
+>> +        * bit 25: ``mixer_capture_min_mute``
+>> +          Be similar to bit 24 but for capture streams
+> 
+>              Similar to
+> 
+>>  
+>>  This module supports multiple devices, autoprobe and hotplugging.
+>>  
+>> Are all of these quirks used on various devices or are some of these
+> just implemented just in case they are needed in the future?thanks.
 
--- Sebastian
+I believe in that all of them are used in quirk_flags_table in sound/usb/quirks.c
 
---kybmdzwa6byyxpic
-Content-Type: application/pgp-signature; name="signature.asc"
+1. https://lore.kernel.org/all/20210729073855.19043-2-tiwai@suse.de/
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+Cryolitia
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjMkx8ACgkQ2O7X88g7
-+pqwLg/8DogotcprKe+ff5MNlSQgo3S8L5Bo8a46PQ6yojTQC7i5j/2A5mIwMJOw
-YbEDu4okwunPYtLjOvcQDbyx3QwnB8Rgl0KkqQ8aOc/t9HxcuDDfVALsqooGKNuC
-6z/PIA+XzH91Dxi9pUaVwlt6gobgCVcxze2uoOOnWjWhPnQvg14NRSFirmZ1bLV3
-nUQAbOs7bPOodecSPOmlEAtFBeMOGQxsV0wfh8tzF1JwxsxaMsdlLET00OgKsyvv
-jNL9I1X8wx2dno6kzjRDKVsqFKMewweTCMrjJaExGeFN/2gsSyhYR8GbMKcUVyUK
-deuA5/j+FxL3DBzNp0DD76DhCWRz63QtOI3foyEcSlhOXSeUP+omKiVImtNl3L6i
-Jaif8Tl5v3qVag8hYcvx9y/t6GQmadaJ0yw53uEKtF6XTlQAs4zuPWyxaCJ2Y0o5
-ZEstSYigPM5nqcBtw9fepVu0uRNKT1DPRkO2sg0CZ6SAsKAoOH7ztQxDUp2UNinv
-dG/HxbB7iU2WNEOiRbX5VXT8F9AiqgOgAsA8+6vy901rsjvxe5NRTiWk+mfcNO5Q
-xhyj/gEMbA3U8Y7z4Na84lUopjpFqWqSixUlGcb9waP/pCIkiumwpu6ORTcUuF/E
-LHdrTtRYAMSKTDUcUfinMhnzdKFSidGEMmzoOIBDH56OXCuDsFY=
-=v/vi
------END PGP SIGNATURE-----
-
---kybmdzwa6byyxpic--
 
