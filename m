@@ -1,227 +1,161 @@
-Return-Path: <linux-usb+bounces-28316-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 115C4B88277
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 09:31:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53B2FB8831A
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 09:38:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EF4F4E233F
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 07:31:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DCC14E3A82
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Sep 2025 07:37:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2C262C11C9;
-	Fri, 19 Sep 2025 07:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JoFrzCsc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC382D29D7;
+	Fri, 19 Sep 2025 07:33:33 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E06723FC54;
-	Fri, 19 Sep 2025 07:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417262F83A2
+	for <linux-usb@vger.kernel.org>; Fri, 19 Sep 2025 07:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758267057; cv=none; b=S5D5EK0cM4036otQRiERchbF6j+dscc8fI0DO9y17s+EDzQgykv5uTQZ6+VETZX5GNdJzJv82CyyGRUlwIedZSEBclf3REE9VdmhnQr5eRgF+FObVp4xiba3xU+NoEVgBk80crwfMcBzJwafnmdFcDuFMAYb9LvQaXlR4HB1hkU=
+	t=1758267213; cv=none; b=D/LKqugRGcDiXNmYHqkQ7v4WLB//yjc63ZAA43RC+HUd3ZjtwQYY0K9pRRIFgdCv9fHu3193SQB6c0I9JjQ2LsZHpE/MaHgE9ap05XLAYjsHUmxaU/ILgKBIs5ltZIkQ4qQ4Kn4lGK1fVvIzP64KvhqixRdo+0s9pGGlKYEyA3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758267057; c=relaxed/simple;
-	bh=tu4lV9ZsXWbxctsqdTowl+LlLmz17QLXWzaI2s1TGOg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=boXX6xFUjf41ZVcLus/N+GjQJIeTBeKpqpBjfmceXdsdAEmj433wlS2csF9hinGcyDpc0q70GgXGMLGZA0WacE9lHY6up/g2ZbbDmHyewzspGU4k4WdFJ30/stHqh5m21ASD4BCgPw8kMA2BSFNM0JQI9IMRqlj5/7jKpwOk5wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JoFrzCsc; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758267055; x=1789803055;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=tu4lV9ZsXWbxctsqdTowl+LlLmz17QLXWzaI2s1TGOg=;
-  b=JoFrzCsc5DPYem6uiEvr81WYX70xrVI/u+CLGyR4y+9rjPEdUb/GWhas
-   DvjKCBMtvHTR4g8kPe/s+10Q2yH/Rl5NzAcmkF4IRLMVrDJ4lIzBG3Nc1
-   7fhQndEEnMfuWH6gpzV35SX7tZUKAAnRSmR1PSrUXvuZFMjndk/t+zUC0
-   HdDnVirbVmjC+QYOa3LKy8XojILQ/VgVM0jJFVzumCiw7jnOMnT4isk6r
-   CGW5OZA/mky4gCeHQRZkN0sRSRzdv03QjfwfjDCFcxcIXZGvwyTJB8H45
-   gMV84sOtqH/pVDgVpVWIjd3cVhiGsRaBorkCgrDPAOXKWtXKe2RSsXgxw
-   g==;
-X-CSE-ConnectionGUID: LnT7KWZ/SAWijXBaNNgqPA==
-X-CSE-MsgGUID: sbd4maSvRPKS6+UdyPpvDg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="86049698"
-X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
-   d="scan'208";a="86049698"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 00:30:55 -0700
-X-CSE-ConnectionGUID: 11jwXtONR1epQQOa6x/e6w==
-X-CSE-MsgGUID: M8Mg0OhASJWUb8784G4aEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
-   d="scan'208";a="176207226"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa009.fm.intel.com with ESMTP; 19 Sep 2025 00:30:53 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 7D2F495; Fri, 19 Sep 2025 09:30:52 +0200 (CEST)
-Date: Fri, 19 Sep 2025 09:30:52 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: =?utf-8?B?5p2O5L2z5oCh?= <lijiayi@kylinos.cn>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] thunderbolt: Re-add DP resources on resume
-Message-ID: <20250919073052.GO2912318@black.igk.intel.com>
-References: <20250917082456.1790252-1-lijiayi@kylinos.cn>
- <0540df54-efd6-4b79-90f9-ec305e1f5f7e@kylinos.cn>
- <20250917125017.GI2912318@black.igk.intel.com>
- <f0a04f70-5539-42bd-ac15-07054878acfb@kylinos.cn>
- <20250918162059.GL2912318@black.igk.intel.com>
- <20250918164330.GN2912318@black.igk.intel.com>
- <a3dd4fc5-4312-4c06-a6d7-645ae0f7b68b@kylinos.cn>
+	s=arc-20240116; t=1758267213; c=relaxed/simple;
+	bh=+2TJblT6LHI57S9AzaMiROC9Kq8+LmktTXhZRPyPaVc=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=JK2tttI2wFCKBqYejJXKsXiWy/p8U4ZZOv6cRQOsCrejOf5eD/4OK1rsTrG5Bf5g9mVmGMtiWi+Ji8ow0xS4fWEt8mVFCNwAqTIBrGDFmg+dDKXABS+ysVFNXuaoXFVAlb6mKlZCkcSyqARvw5LDjR3mUWE6dDPaYfSDlEJkfqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-424877bb4caso947735ab.3
+        for <linux-usb@vger.kernel.org>; Fri, 19 Sep 2025 00:33:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758267210; x=1758872010;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iOLMQZh+p8WZQSf5C0CCnZHd4Mr5OtFWTXlqTXn35ho=;
+        b=e0E0DOk6Mxp9uSko7OSGvDZbDAjoqvssgrK5XVs7T1Ix7qAf+8zLmeTm6ISsvszy2g
+         ghtIH/h+B5tl7tTaVRVTYHyX4nuSkSlrVhmyeh5UpYbHGPEpVdHeQq8+skRqpH37qZ9Q
+         nPIQ8iuf0A6x9uZsZI7GgqSHeg0HmNpq62NnzuGTBDop9eH9mxjir8LzJt1Z1SeGFg5w
+         9Fzez73/hfFS9cObyl3NCG9Vc3TgqJKJ/5JW7vMxU1jQph02Uuotj6NfrTN/JBUoTbdM
+         lbJBbhy8jVMk7tvXAP4sQ5+cXo/4PoUUi3Y+KVxnxkI3j3MeSI8toWMcipSty1+YUziK
+         6dqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXQ2j9TDhO7IKjg4O7jqvvwypzpC7cOivsr60B1U1d673DKUjFWIunk3Kwooo+/PskhAJacEEW0lM4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywn8EbL1n0fWtQsqKXB/GWIcRD0ZIQY9d2QI5C01uf4h6Lhtr6U
+	VeSlNrDMQdG+y9IAxmcosKIlPoXLGiUNiggmjPzsavIMbFWK6c+abYCP7tc2GWq6onpiMAwi7IU
+	yfqxRdtvgczhMGNHtEEbH9EGIh3DdT8RuVMZLj0mKnxYLAEE5yW+VjoGUuxI=
+X-Google-Smtp-Source: AGHT+IGSIL56u0FooE8IiACmPgSgu3KOpk6TzvSGcyHoh57v+4rqxqX50T0Vun0q8H2sFhjYMKpv5vP99iAaB4z28VfmYrUMEs3c
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a3dd4fc5-4312-4c06-a6d7-645ae0f7b68b@kylinos.cn>
+X-Received: by 2002:a05:6e02:16c7:b0:424:388:6ced with SMTP id
+ e9e14a558f8ab-4248192733bmr40617935ab.14.1758267210259; Fri, 19 Sep 2025
+ 00:33:30 -0700 (PDT)
+Date: Fri, 19 Sep 2025 00:33:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68cd074a.a00a0220.37dadf.0017.GAE@google.com>
+Subject: [syzbot] [net?] WARNING in dev_shutdown (7)
+From: syzbot <syzbot+c9ecf60a8adb7629821e@syzkaller.appspotmail.com>
+To: davem@davemloft.net, edumazet@google.com, horms@kernel.org, 
+	jhs@mojatatu.com, jiri@resnulli.us, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	netdev@vger.kernel.org, pabeni@redhat.com, syzkaller-bugs@googlegroups.com, 
+	xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 19, 2025 at 03:24:20PM +0800, 李佳怡 wrote:
-> 
-> 
-> 在 2025/9/19 00:43, Mika Westerberg 写道:
-> > On Thu, Sep 18, 2025 at 06:20:59PM +0200, Mika Westerberg wrote:
-> > > Hi,
-> > > 
-> > > On Thu, Sep 18, 2025 at 04:34:31PM +0800, 李佳怡 wrote:
-> > > > 
-> > > > 
-> > > > 在 2025/9/17 20:50, Mika Westerberg 写道:
-> > > > > On Wed, Sep 17, 2025 at 06:12:31PM +0800, 李佳怡 wrote:
-> > > > > > 
-> > > > > > As requested, I've attached the complete dmesg output (from boot to after
-> > > > > > resume) reproducing the issue.
-> > > > > > 
-> > > > > > Testing Methodology:
-> > > > > > 1. Start with the Targus Thunderbolt dock already connected to the system
-> > > > > > 2. Enter S3 suspend (sleep) with no DP monitor connected to the dock
-> > > > > > 3. Resume from S3
-> > > > > > 4. After the system has fully resumed, connect the DP monitor to the dock
-> > > > > 
-> > > > > Thanks! It is badly line wrapped. I wonder if you can just attach it?
-> > > > > Anyways I found some unexpected things there:
-> > > > > 
-> > > > > > [    8.647850] With USB4 patch v1.0.0
-> > > > > 
-> > > > > What is this? ;-)
-> > > > 
-> > > > Thanks for your help!
-> > > > 
-> > > > This is a self-compiled kernel based on version 5.4 with backported
-> > > > Thunderbolt drivers. I will also attach the kernel log from a build using
-> > > > the linux-6.6.y branch of the community linux-stable repository.
-> > > 
-> > > Okay but I really suggest using more recent kernel. 6.16 is current stable
-> > > so that would be good.
-> > > 
-> > > > > > [    8.647860] ACPI: bus type thunderbolt registered
-> > > > > > [    8.664660] [7] nhi_probe:1326: thunderbolt 0000:2c:00.0: total paths: 21
-> > > > > > [    8.665209] [7] tb_ring_alloc:586: thunderbolt 0000:2c:00.0: allocating
-> > > > > > TX ring 0 of size 10
-> > > > > > [    8.665243] [7] tb_ring_alloc:586: thunderbolt 0000:2c:00.0: allocating
-> > > > > > RX ring 0 of size 10
-> > > > > > [    8.665267] [7] tb_ctl_alloc:665: thunderbolt 0000:2c:00.0: control
-> > > > > > channel created
-> > > > > > [    8.665272] [7] icm_probe:2549: thunderbolt 0000:2c:00.0: ICM not
-> > > > > > supported on this controller
-> > > > > > [    8.665285] [7] tb_ring_free:840: thunderbolt 0000:2c:00.0: freeing RX
-> > > > > > ring 0
-> > > > > > [    8.665294] [7] tb_ring_free:840: thunderbolt 0000:2c:00.0: freeing TX
-> > > > > > ring 0
-> > > > > 
-> > > > > What is this?
-> > > > > 
-> > > > > Is this Intel TB/USB4 controller or something else? All USB4 compliant
-> > > > > controllers should go directly to tb.c as that's the part dealing with
-> > > > > software connection manager. The above looks like it tries first with the
-> > > > > firmware connection manager and that should not happen outside of Intel
-> > > > > Thunderbolt 3 hosts.
-> > > > 
-> > > > Yes, there is a mistake. I discovered that during the USB4_NATIVE_CONTROL
-> > > > negotiation in the firmware, an OSC_CAPABILITIES_MASK_ERROR bit was being
-> > > > set incorrectly, which should not have happened.
-> > > > 
-> > > > The log I will attach next has been modified to fix this issue.
-> > > 
-> > > [..]
-> > > 
-> > > > [    0.498976] [1] tb_switch_reset:1666: thunderbolt 0000:2c:00.0: 0: resetting
-> > > > [    0.533329] [1] tb_add_dp_resources:217: thunderbolt 0000:2c:00.0: 0:10: DP IN resource available
-> > > > [    0.533959] [1] tb_add_dp_resources:217: thunderbolt 0000:2c:00.0: 0:11: DP IN resource available
-> > > 
-> > > The DP IN resources were added here.
-> > > 
-> > > [..]
-> > > 
-> > > > [   19.035726] [171] tb_switch_set_wake:3445: thunderbolt 0000:2c:00.0: 0: enabling wakeup: 0x3f
-> > > > [   19.037401] [171] tb_ring_stop:768: thunderbolt 0000:2c:00.0: stopping RX ring 0
-> > > > [   19.037412] [171] ring_interrupt_active:141: thunderbolt 0000:2c:00.0: disabling interrupt at register 0x38200 bit 21 (0x200001 -> 0x1)
-> > > > [   19.037439] [171] tb_ring_stop:768: thunderbolt 0000:2c:00.0: stopping TX ring 0
-> > > > [   19.037449] [171] ring_interrupt_active:141: thunderbolt 0000:2c:00.0: disabling interrupt at register 0x38200 bit 0 (0x1 -> 0x0)
-> > > > [   19.037463] [171] tb_ctl_stop:733: thunderbolt 0000:2c:00.0: control channel stopped
-> > > 
-> > > Runtime suspend.
-> > > 
-> > > (and a couple more)
-> > > 
-> > > > [  266.399800] [3870] tb_ctl_start:703: thunderbolt 0000:2c:00.0: control channel starting...
-> > > > [  266.399808] [3870] tb_ring_start:693: thunderbolt 0000:2c:00.0: starting TX ring 0
-> > > > [  266.399821] [3870] ring_interrupt_active:141: thunderbolt 0000:2c:00.0: enabling interrupt at register 0x38200 bit 0 (0x0 -> 0x1)
-> > > > [  266.399826] [3870] tb_ring_start:693: thunderbolt 0000:2c:00.0: starting RX ring 0
-> > > > [  266.399837] [3870] ring_interrupt_active:141: thunderbolt 0000:2c:00.0: enabling interrupt at register 0x38200 bit 21 (0x1 -> 0x200001)
-> > > > [  266.399848] [3870] tb_switch_resume:3478: thunderbolt 0000:2c:00.0: 0: resuming switch
-> > > > [  266.399852] [3870] tb_switch_configure:2590: thunderbolt 0000:2c:00.0: restoring Switch at 0x0 (depth: 0, up port: 5)
-> > > > [  266.400032] [3870] tb_switch_set_wake:3447: thunderbolt 0000:2c:00.0: 0: disabling wakeup
-> > > 
-> > > Around this time you should see the hotplug events coming to the DP IN
-> > > adapters. But there is none.
-> > > 
-> > > There is a bit in the DP adapter config space (DHP) that can be used to
-> > > disable this but the spec says it defaults to 0. Anyways I suggest to check
-> > > that (and also the Plugged bit). You can dump these using tbtools [1]. Let
-> > > me know if you want help with that.
-> > 
-> > Nevermind about the Plugged bit, that's not applicable here.
-> > 
-> > Here's how to dump the DHP bit. This is from Intel host:
-> > 
-> > # tbdump -vv -r 0 -N 1 -a 5 ADP_CS_5
-> > 0x0005 0x00004809 0b00000000 00000000 01001000 00001001 ..H. ADP_CS_5
-> >    [00:06]        0x9 Max Input HopID
-> >    [11:17]        0x9 Max Output HopID
-> >    [22:28]        0x0 Link Credits Allocated
-> >    [29:29]        0x0 HEC Error Enable (HEE)
-> >    [30:30]        0x0 Flow Control Error Enable (FCEE)
-> >    [31:31]        0x0 Disable Hot Plug Events (DHP)
-> 
-> Thank you for your help. As you suggested, I tried kernel 6.16, but the
-> issue still persists.
-> 
-> The logs and device vendor information are included in the attachment. I
-> also ran the tbdump command, and the result shows the DHP bit is set to 0.
-> Does this indicate there might still be other issues?
-> 
-> # tbdump -vv -r 0 -N 1  -a 5 ADP_CS_5
+Hello,
 
-Please run it against the DP IN adapters. That's 10 and 11. The 5 above was
-just an example from Intel HW.
+syzbot found the following issue on:
 
-# tbdump -vv -r 0 -N 1  -a 10 ADP_CS_5
+HEAD commit:    a4d43c1f17b9 Merge 6.17-rc6 into usb-next
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=10a0bb12580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=64a9fba56fdb0aef
+dashboard link: https://syzkaller.appspot.com/bug?extid=c9ecf60a8adb7629821e
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
-and
+Unfortunately, I don't have any reproducer for this issue yet.
 
-# tbdump -vv -r 0 -N 1  -a 11 ADP_CS_5
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6eefb11d9e81/disk-a4d43c1f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6232f2c26d00/vmlinux-a4d43c1f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8d192b0d2295/bzImage-a4d43c1f.xz
 
-The lspci dump indicates this is ASMedia host controller. I did not even
-know that they have such thing. I thought they only have device (which
-should be working in Linux). The host side may require some additional
-enablement.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c9ecf60a8adb7629821e@syzkaller.appspotmail.com
+
+asix 3-1:7.204 eth1: unregister 'asix' usb-dummy_hcd.2-1, ASIX AX88178 USB 2.0 Ethernet
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 12317 at net/sched/sch_generic.c:1500 dev_shutdown+0x3b6/0x430 net/sched/sch_generic.c:1500
+Modules linked in:
+CPU: 1 UID: 0 PID: 12317 Comm: kworker/1:9 Not tainted syzkaller #0 PREEMPT(voluntary) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/18/2025
+Workqueue: usb_hub_wq hub_event
+
+RIP: 0010:dev_shutdown+0x3b6/0x430 net/sched/sch_generic.c:1500
+Code: 48 c7 c2 60 a6 41 88 be a3 00 00 00 48 c7 c7 20 ab 41 88 c6 05 36 08 4e 04 01 e8 85 71 18 fb e9 8f fd ff ff e8 7b 42 3c fb 90 <0f> 0b 90 e9 5f fe ff ff 4c 89 f7 e8 8a 74 9a fb e9 77 fc ff ff 4c
+RSP: 0018:ffffc90013087498 EFLAGS: 00010283
+RAX: 000000000002f429 RBX: ffff8881355c8488 RCX: ffffc9001024c000
+RDX: 0000000000100000 RSI: ffffffff8641b875 RDI: ffff8881355c8568
+RBP: ffff8881355c8000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff8881355c8438
+R13: ffffed1026ab9003 R14: ffff8881355c8480 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff888268ff6000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000110c37e36c CR3: 00000000090a4000 CR4: 00000000003506f0
+Call Trace:
+ <TASK>
+ unregister_netdevice_many_notify+0xcb6/0x2310 net/core/dev.c:12154
+ unregister_netdevice_many net/core/dev.c:12229 [inline]
+ unregister_netdevice_queue+0x305/0x3f0 net/core/dev.c:12073
+ unregister_netdevice include/linux/netdevice.h:3385 [inline]
+ unregister_netdev+0x1f/0x60 net/core/dev.c:12247
+ usbnet_disconnect+0x109/0x500 drivers/net/usb/usbnet.c:1658
+ usb_unbind_interface+0x1da/0x9e0 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:571 [inline]
+ device_remove+0x122/0x170 drivers/base/dd.c:563
+ __device_release_driver drivers/base/dd.c:1274 [inline]
+ device_release_driver_internal+0x44b/0x620 drivers/base/dd.c:1297
+ bus_remove_device+0x22f/0x420 drivers/base/bus.c:579
+ device_del+0x396/0x9f0 drivers/base/core.c:3878
+ usb_disable_device+0x355/0x7d0 drivers/usb/core/message.c:1418
+ usb_disconnect+0x2e1/0x9c0 drivers/usb/core/hub.c:2344
+ hub_port_connect drivers/usb/core/hub.c:5406 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
+ port_event drivers/usb/core/hub.c:5870 [inline]
+ hub_event+0x1aa2/0x5060 drivers/usb/core/hub.c:5952
+ process_one_work+0x9cf/0x1b70 kernel/workqueue.c:3236
+ process_scheduled_works kernel/workqueue.c:3319 [inline]
+ worker_thread+0x6c8/0xf10 kernel/workqueue.c:3400
+ kthread+0x3c5/0x780 kernel/kthread.c:463
+ ret_from_fork+0x56d/0x700 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
