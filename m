@@ -1,160 +1,210 @@
-Return-Path: <linux-usb+bounces-28360-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28361-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2826FB8BF63
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 06:52:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7C48B8C180
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 09:42:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1F231C03ECD
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 04:52:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 073285854B0
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 07:42:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F16362288C6;
-	Sat, 20 Sep 2025 04:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0637D26C3B6;
+	Sat, 20 Sep 2025 07:42:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZlqidWoJ"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="VdNrb6s7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6D6221FCC
-	for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 04:52:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D18FCA55;
+	Sat, 20 Sep 2025 07:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758343924; cv=none; b=VL/imUHAe5pBOXjDz2FEoYVUc/HSxZHtlJ2dc99aPTuBqTQOWNuNrtD9CShDjJrBYD3CqotJtkpLx8YaXHjuNtEUwRAEZjUxm35D9eS9bs9kUpYug2q+c/bkEY1edFmBtlMH6tLMqXd5d9qEDbA9zp00a947VIjdzugiTUMwpiQ=
+	t=1758354128; cv=none; b=Fiu/omP3tgv0i0UH7ExnzxA1xY+uofU5wY/TDk15IJZj0+4DNjSQCSnxPvaWUtkYi2IFnD6eR9qQW4M+ZD9wd2RRLM2A7aGG6nj86BSw+w+jMBtgdPJ+S6T/qRjlDByf0Li/UfQSXy+d7eDF1NCT7svFy5RPDO9Nj7vju4ZUf0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758343924; c=relaxed/simple;
-	bh=WN7syAcJjhlULwaP/4Xo2Ytf7vzgMmwSdXXWwuslg+0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RbmMkbazRSRum5y0/2hmskS7c7e2N4a2tqzWkZRN8Roj0f0Z3qrHRdAZMTCYEopXPzjEmC9oP3z2JN6imVeh+Z+gYSFy5p4d3YxvtqvG0GedvmPMFE1jr0XuscYG8SamG4dJzUV5vRJHp9ZLPyx5FH6Xto9+gfbrBcaOZTR9SWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZlqidWoJ; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-244580523a0so31160025ad.1
-        for <linux-usb@vger.kernel.org>; Fri, 19 Sep 2025 21:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758343922; x=1758948722; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Scl7/ytKRP3iThro/p3ZtlDfxCKkscpWY86iDRO/ZlI=;
-        b=ZlqidWoJxcuGcXuL+gL3esrYW5tFo0na9AOpSXNtgWfb0Yg25iqsEb5Jq8piV6ETFl
-         knxi66pdlQemc/VjpAd3oGfllBjxluoQ4Jt9Tm3UW6J4zV1ca3vxs8RLR9WPVvbAISw2
-         ALJZ+7rhchg7gsH+iS5Rcd15JvwCWtFjqLiqBc8MwdKNAy+9r/utQCPP9qMmqgQQ0DFN
-         FZiQqs6c/OCB89jpAgwHHdSw9al3/7v8Ul2pWHSsQGQMwzhIzrl48yk9mdE6NP7m/2Pw
-         t+w98GteU2EQyblAd7QzeH8lr4F3xhelYpITYPPZv2gO1A3iWHGQ7Yp5bzJ1k2oisO6o
-         xc7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758343922; x=1758948722;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Scl7/ytKRP3iThro/p3ZtlDfxCKkscpWY86iDRO/ZlI=;
-        b=h5wPXoloGyawftEom+PJEq/Ki6nWR0SpUL7jpoURZYAlkWHvgfoGXCIBVrHYM6XzF2
-         BJVf1T+TSadijcRF43k1jGr8pAQaTJOVvDNpjE3Sowfu0TkKjrD22jIVVmQHMdCzvqBR
-         GiVaZxxuOMtKen/Ap/hRS6g1rUFrNO9tV++1dfLXFjyOjaH6beW09/3UIgTB09NsnFsS
-         rbGJPeNVNkm03VS9Ru2KcEAX6w3WzXirILxBS9GBguMdDAq+gXB156G7zVCvXr+5YCs8
-         /SdwGqtrlQNB8zeZH5KmLJfoVuU8gra9+IoKFs+AJpDDxY5E0yeeOdh3MyabpZH8aArB
-         2HsA==
-X-Gm-Message-State: AOJu0YwzJTNuqGDeMsnOxEckGHlz65TuJ2y40y2PbtMYRVhMeOHvn9GM
-	/azCT8xTHdxVvBCP2No9/2jijg/FH1/w2lsuZvVALSN9z/ZGtlkQPEkI
-X-Gm-Gg: ASbGnctQ7p1kUaQgaQOT8lee93vAzBDMYfJ2zQMFRBxGN2aaGmyQQk5K/iZ2dwvEiAd
-	hRMYTjGCoF3Aven6I+/s0MXVJKp2zkZtapqpFbbZsaJN2pQSrhtFT/dkI7Ax1wIK2MrhTggJihs
-	P2tK0RV965Ox042Rq+yV02JhS9+IUu6yQc/BeaEdQeARv8l1BFv45b78LtPkwHCvcl/w4rlaviN
-	WKjqGCe9WX4UBso37bwrSKbkgdfrnzrjkv/rgYt+52HrwXUjyRsb9EFQxG1/Bi3D7MP1jC3KkYe
-	9YwluwyFYwqXDsXnLnquxj52N0vSOxN33d/+ynA/D2wZl5tkjxBU3r4vL7mzO4N2gqgXMG2FE3h
-	aX0RWqadxWa3ahpoOhvKV3nCHbMmPH912qBz3hdKBzLaU4epLaQcl/4jjnyJWUYxGCquce9LdEH
-	IMkqhDD23kaSQsbg==
-X-Google-Smtp-Source: AGHT+IGlDL3meUrjWPh8XY00Z7lI+5NCXfWA95NkUgQ/36jV2EnYS75qSm19Zq3LWRDvSpHOtmoG2A==
-X-Received: by 2002:a17:902:ec8b:b0:266:3813:27c3 with SMTP id d9443c01a7336-269ba441c40mr84447675ad.13.1758343921975;
-        Fri, 19 Sep 2025 21:52:01 -0700 (PDT)
-Received: from debian.domain.name ([223.185.130.103])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-26980368fe3sm69258125ad.151.2025.09.19.21.51.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Sep 2025 21:52:01 -0700 (PDT)
-From: I Viswanath <viswanathiyyappan@gmail.com>
-To: petkan@nucleusys.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Cc: linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev,
-	david.hunter.linux@gmail.com,
-	I Viswanath <viswanathiyyappan@gmail.com>,
-	syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
-Subject: [PATCH] net: usb: Remove disruptive netif_wake_queue in rtl8150_set_multicast
-Date: Sat, 20 Sep 2025 10:20:59 +0530
-Message-ID: <20250920045059.48400-1-viswanathiyyappan@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1758354128; c=relaxed/simple;
+	bh=A3huVRc6A2csEyMmMgXe98OEaz3Ab/XmeK1z1R3vyZ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jQirpKwt2Y/upcD9p7OjE+xyt5l99w5o1AEra5KkF+2GCAgU7WYlEJhWOv/vnMl2IZkPbs8CUqtrbwBmSZWKBIlDU+xcEZS+5jrsR0nVziU4OC8LqCj3VCn0Pu2fYal3d9RprXodgf6QBpeSDNEf4NzD6LvcLAelWPWllps+gJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=VdNrb6s7; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Description:Content-Type:
+	MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:In-Reply-To:References;
+	bh=oOCcbpCsT+zvuGsYMYIhlU7EGFEAzg77GcV6TXrg+wI=; b=VdNrb6s7Ppzquet+fhlCfW7h+O
+	U02VJRZD01jqmmWq8luID9ZxhvGVspUTY4nW/p8P6sydj6Fh/zdOxwlaySXBB2o8ahurxu8m3/ZBq
+	bg/bnm5KYL9Pe7gXJDeBPNWwS6t00mVZfB9upTq6q1l9AAEuvMS/3se6NUNTC2v1b96pRaz32ogAB
+	IZjAmCZrj2r2JFuJznwECCDmp7ubClVul7WeFcbIJOo983wNLuGkwdTeAIPXqQWnQwLvqtlx4O/sb
+	AVqVl+vJtVbzTxrgkAWWDpl7EQYGAK9TNIGABimVcXzMRVynmmmX5N9Gzbv0/5Y1DH2CzzML2Cfvk
+	fzPQ7s5A==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uzsEG-0000000Euuv-3pwa;
+	Sat, 20 Sep 2025 07:41:57 +0000
+Date: Sat, 20 Sep 2025 08:41:56 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Ian Kent <raven@themaw.net>, Miklos Szeredi <miklos@szeredi.hu>,
+	Andreas Hindborg <a.hindborg@kernel.org>, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	Kees Cook <kees@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: [PATCHES][RFC] the meat of tree-in-dcache series
+Message-ID: <20250920074156.GK39973@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Description: reas Hindborg <a.hindborg@kernel.org>, linux-mm@kvack.org, linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, Kees Cook <kees@
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-syzbot reported WARNING in rtl8150_start_xmit/usb_submit_urb.
-This is a possible sequence of events:
+[my apologies for the size of patchbomb and the size of Cc; this series
+really affects a lot of places, if lightly]
 
-    CPU0 (in rtl8150_start_xmit)   CPU1 (in rtl8150_start_xmit)    CPU2 (in rtl8150_set_multicast)
-    netif_stop_queue();
-                                                                    netif_stop_queue();
-    usb_submit_urb();
-                                                                    netif_wake_queue();  <-- Wakes up TX queue before it's ready
-                                    netif_stop_queue();
-                                    usb_submit_urb();                                    <-- Warning
-	freeing urb
-	
-Remove netif_wake_queue and corresponding netif_stop_queue in rtl8150_set_multicast to
-prevent this sequence of events
+Some filesystems use a kinda-sorta controlled dentry refcount leak to pin
+dentries of created objects in dcache (and undo it when removing those).
+Reference is grabbed and not released, but it's not actually _stored_
+anywhere.  That works, but it's hard to follow and verify; among other
+things, we have no way to tell _which_ of the increments is intended
+to be an unpaired one.  Worse, on removal we need to decide whether
+the reference had already been dropped, which can be non-trivial if
+that removal is on umount and we need to figure out if this dentry is
+pinned due to e.g. unlink() not done.  Usually that is handled by using
+kill_litter_super() as ->kill_sb(), but there are open-coded special
+cases of the same (consider e.g. /proc/self).
 
-Reported-and-tested-by: syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=78cae3f37c62ad092caa
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
----
-Relevant logs:
-[   65.779651][ T5648] About to enter stop queue ffff88805061e000, eth4
-[   65.779664][ T5648] After stop queue ffff88805061e000, eth4
-[   65.780296][ T5648] net eth4: eth name:eth4 SUBMIT: tx_urb=ffff888023219000, status=0, transfer_buffer_length=60, dev=ffff88805061ed80, netdev=ffff88805061e000, skb=ffff88804f907b80
-[   65.790962][  T760] About to enter stop queue ffff88805061e000, eth4
-[   65.790978][  T760] After stop queue ffff88805061e000, eth4
-[   65.791874][  T760] net eth4: We are inside Multicast dev:ffff88805061ed80, netdev:ffff88805061e000
-[   65.793259][  T760] About to enter netif_wake_queue ffff88805061e000, eth4
-[   65.793264][  T760] After netif_wake_queue ffff88805061e000, eth4
-[   65.822319][ T5829] About to enter stop queue ffff88805061e000, eth4
-[   65.823135][ T5829] After stop queue ffff88805061e000, eth4
-[   65.823739][ T5829] net eth4: eth name:eth4 SUBMIT: tx_urb=ffff888023219000, status=-115, transfer_buffer_length=90, dev=ffff88805061ed80, netdev=ffff88805061e000, skb=ffff88804b5363c0
+Things get simpler if we introduce a new dentry flag (DCACHE_PERSISTENT)
+marking those "leaked" dentries.  Having it set claims responsibility
+for +1 in refcount.
 
- drivers/net/usb/rtl8150.c | 2 --
- 1 file changed, 2 deletions(-)
+The end result this series is aiming for:
 
-diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
-index ddff6f19ff98..92add3daadbb 100644
---- a/drivers/net/usb/rtl8150.c
-+++ b/drivers/net/usb/rtl8150.c
-@@ -664,7 +664,6 @@ static void rtl8150_set_multicast(struct net_device *netdev)
- 	rtl8150_t *dev = netdev_priv(netdev);
- 	u16 rx_creg = 0x9e;
- 
--	netif_stop_queue(netdev);
- 	if (netdev->flags & IFF_PROMISC) {
- 		rx_creg |= 0x0001;
- 		dev_info(&netdev->dev, "%s: promiscuous mode\n", netdev->name);
-@@ -678,7 +677,6 @@ static void rtl8150_set_multicast(struct net_device *netdev)
- 		rx_creg &= 0x00fc;
- 	}
- 	async_set_registers(dev, RCR, sizeof(rx_creg), rx_creg);
--	netif_wake_queue(netdev);
- }
- 
- static netdev_tx_t rtl8150_start_xmit(struct sk_buff *skb,
--- 
-2.47.3
+* get these unbalanced dget() and dput() replaced with new primitives that
+  would, in addition to adjusting refcount, set and clear persistency flag.
+* instead of having kill_litter_super() mess with removing the remaining
+  "leaked" references (e.g. for all tmpfs files that hadn't been removed
+  prior to umount), have the regular shrink_dcache_for_umount() strip
+  DCACHE_PERSISTENT of all dentries, dropping the corresponding
+  reference if it had been set.  After that kill_litter_super() becomes
+  an equivalent of kill_anon_super().
 
+Doing that in a single step is not feasible - it would affect too many places
+in too many filesystems.  It has to be split into a series.
+
+This work has really started early in 2024; quite a few preliminary pieces
+have already gone into mainline.  This chunk is finally getting to the
+meat of that stuff - infrastructure and most of the conversions to it.
+
+Some pieces are still sitting in the local branches, but the bulk of
+that stuff is here.
+
+The branch is -rc5-based; it lives in
+git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.persistency
+individual patches in followups.
+
+Please, help with review and testing; it does appear to survive the local beating,
+but extra eyes on it would be very welcome.
+
+First two commits add a couple of useful helpers, the next three add the
+infrastructure and the rest consists of per-filesystem conversions.
+
+Shortlog:
+      new helper: simple_remove_by_name()
+      new helper: simple_done_creating()
+      introduce a flag for explicitly marking persistently pinned dentries
+      primitives for maintaining persisitency
+      convert simple_{link,unlink,rmdir,rename,fill_super}() to new primitives
+      convert ramfs and tmpfs
+      procfs: make /self and /thread_self dentries persistent
+      configfs, securityfs: kill_litter_super() not needed
+      convert xenfs
+      convert smackfs
+      convert hugetlbfs
+      convert mqueue
+      convert bpf
+      convert dlmfs
+      convert fuse_ctl
+      convert pstore
+      convert tracefs
+      convert debugfs
+      debugfs: remove duplicate checks in callers of start_creating()
+      convert efivarfs
+      convert spufs
+      convert ibmasmfs
+      ibmasmfs: get rid of ibmasmfs_dir_ops
+      convert devpts
+      binderfs: use simple_start_creating()
+      binderfs_binder_ctl_create(): kill a bogus check
+      convert binderfs
+      autofs_{rmdir,unlink}: dentry->d_fsdata->dentry == dentry there
+      convert autofs
+      convert binfmt_misc
+      convert selinuxfs
+      functionfs: switch to simple_remove_by_name()
+      convert functionfs
+      gadgetfs: switch to simple_remove_by_name()
+      convert gadgetfs
+      hypfs: don't pin dentries twice
+      hypfs: switch hypfs_create_str() to returning int
+      hypfs: swich hypfs_create_u64() to returning int
+      convert hypfs
+
+Diffstat:
+ arch/powerpc/platforms/cell/spufs/inode.c | 15 ++---
+ arch/s390/hypfs/hypfs.h                   |  6 +-
+ arch/s390/hypfs/hypfs_diag_fs.c           | 60 +++++++-------------
+ arch/s390/hypfs/hypfs_vm_fs.c             | 21 +++----
+ arch/s390/hypfs/inode.c                   | 82 +++++++++------------------
+ drivers/android/binderfs.c                | 82 +++++++--------------------
+ drivers/base/devtmpfs.c                   |  2 +-
+ drivers/misc/ibmasm/ibmasmfs.c            | 24 ++++----
+ drivers/usb/gadget/function/f_fs.c        | 54 ++++++++----------
+ drivers/usb/gadget/legacy/inode.c         | 49 ++++++++--------
+ drivers/xen/xenfs/super.c                 |  2 +-
+ fs/autofs/inode.c                         |  2 +-
+ fs/autofs/root.c                          | 11 ++--
+ fs/binfmt_misc.c                          | 69 +++++++++++------------
+ fs/configfs/mount.c                       |  2 +-
+ fs/dcache.c                               | 93 ++++++++++++++++++++++++-------
+ fs/debugfs/inode.c                        | 32 +++--------
+ fs/devpts/inode.c                         | 57 +++++++------------
+ fs/efivarfs/inode.c                       |  7 +--
+ fs/efivarfs/super.c                       |  5 +-
+ fs/fuse/control.c                         | 19 ++++---
+ fs/hugetlbfs/inode.c                      | 12 ++--
+ fs/libfs.c                                | 31 +++++++++--
+ fs/ocfs2/dlmfs/dlmfs.c                    |  8 +--
+ fs/proc/base.c                            |  6 +-
+ fs/proc/internal.h                        |  1 +
+ fs/proc/root.c                            | 14 ++---
+ fs/proc/self.c                            | 10 +---
+ fs/proc/thread_self.c                     | 11 +---
+ fs/pstore/inode.c                         |  7 ++-
+ fs/ramfs/inode.c                          |  8 +--
+ fs/tracefs/event_inode.c                  |  4 +-
+ fs/tracefs/inode.c                        | 13 ++---
+ include/linux/dcache.h                    |  3 +
+ include/linux/fs.h                        |  3 +
+ include/linux/proc_fs.h                   |  2 -
+ init/do_mounts.c                          |  2 +-
+ ipc/mqueue.c                              | 12 +---
+ kernel/bpf/inode.c                        | 15 ++---
+ mm/shmem.c                                | 23 ++------
+ security/inode.c                          |  2 +-
+ security/selinux/selinuxfs.c              | 52 +++++++++--------
+ security/smack/smackfs.c                  |  2 +-
+ 43 files changed, 412 insertions(+), 523 deletions(-)
 
