@@ -1,146 +1,149 @@
-Return-Path: <linux-usb+bounces-28412-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28413-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73E10B8CD59
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 18:33:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F2AFB8CD7A
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 18:52:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 237D5188372E
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 16:33:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D0EB7C2309
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 16:52:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A10223DF1;
-	Sat, 20 Sep 2025 16:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CEFF2F7AB2;
+	Sat, 20 Sep 2025 16:52:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="RCeFWDfK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ipHxqFzg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505F918EFD1
-	for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 16:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563961E0DFE
+	for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 16:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758385975; cv=none; b=OWxK9Eo6VTraaGfSKVETM8/xu812SvCH5mXhH5q/hxBRuhGFSZLpBfg/vTTJJ1uGpzwvbIvA5YPjyOJ1gOYtxpXQdhN+Tn+2Hmpsg2wFJvoxsOjSwWADYF0cNTXKvNWaGiVRlPgZxSQW+CskcwmYSwQQ0wu2hSULE4bH8pAayb0=
+	t=1758387146; cv=none; b=DlYasRtDONh36T9BbgyZxfbrG7eCYeKnti4laAYHoic4PIZ7EZmcJaZN/rfPkf+fVJ2Xh+D1hY2FnrTZhoi6BMVUqhoOKT+B/0EILYMI/XWBRdTNMAVj51U0ZshznUHs1yM4DjtZkjGhAJkPZmCbOkpfMx7OY7DGdRf/IkDU45Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758385975; c=relaxed/simple;
-	bh=mNO5F5NJlTITJbrMxJ3wyu2jz7VIBwYhTqCKBzbt4xw=;
+	s=arc-20240116; t=1758387146; c=relaxed/simple;
+	bh=GWpvS5x6cG1Y4f2S24NEW8dN0quQ/cx+TBhU9hoDln8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u0ZFC40rXjOCNzD708qQdOPkw8kyocebYtJBZUTxIZtA8lmktH3dOXijqTjswYvppsfIzEj5jfL/PVwo8IcuaP5us0yBJfjqnf1nsq2oa6vQvSQA5m6YLjYSsBDaH3HvmhVWxZGOg5+sZbfeEcHfgqtc7fTb+uowWgOYuCiwoMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=RCeFWDfK; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-62fd0d29e2bso2183287a12.1
-        for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 09:32:52 -0700 (PDT)
+	 To:Cc:Content-Type; b=URRdfB2JzvVX7apAAfwvfOwt70PlDxwu/RZ6lc8kGcyB+eVAk+N/63IrwkvpzFe7lHraj8YdOgHDieANkHSB4i3BAy5LzoCMbbrwkqc2hry7NQa334Dgj/2G1MSahywI62qxMMVCoD/CWi9iJvDvFjCRrmAg8POSYUJhexzbMmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ipHxqFzg; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-628f29d68ecso5606066a12.3
+        for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 09:52:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1758385971; x=1758990771; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758387144; x=1758991944; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GvLRCncIiqRrC6qT6Y0+vbtoZaqXeTLbbsZoYra2n2s=;
-        b=RCeFWDfKrLBVBygWhWlXYOzNH7ITFKTGugz9GKNVwygMj637ssMopU7XEmyqxW0oj5
-         Zsn2XcCMVFD32fOcVcJzZFRPrtpRP0GLcT4TnIt1B5hxTu9+fMRcWh3mRocTi/AN4SJG
-         ZJeyLxfX0EX0L3axXfrED8cXrXmDSqqX2dDIo=
+        bh=6t0lvNAvBHvFjIYOZdnPwHv9uI7zn4mkRak4VLc3x+o=;
+        b=ipHxqFzgmWoxFnQBawz23NUMuyU0ry9vKhPQg5SDsvLh7zDpF6y8iv7WehZmb5f6+M
+         91kdYgsLlAALngU2ik9ua4TeCacnnRGXgqrvBlukiESsLAwhrP+jnn1s2uiSAvSTKXr0
+         oLu49Fmz5FXaABpW8TZzLAUvrkIcqoskVU876JuWQM74ggnaaBfsdJ4Kd5IgDFg6fbiu
+         LfdlpMWQBDpJUMCGYWLHC8uBFT1Cm3QdUDlX9bdmHqUd8qxK/Bnu8M54fnIivaELmfiS
+         Y/fGCHn18bCEwhtRl+sk7Sacl8wKNaXj5ZOz3aTRnd9SicgFJ0Z77s5+KupjlUQs1gRw
+         1m2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758385971; x=1758990771;
+        d=1e100.net; s=20230601; t=1758387144; x=1758991944;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GvLRCncIiqRrC6qT6Y0+vbtoZaqXeTLbbsZoYra2n2s=;
-        b=WVeV+6dvnPFb+QyXxnGR3pULvymXgIqJJZyy1Ql/AQQYigaFFb5djph3nBgiXztHVH
-         cJfVQqm0YutaPfmyBhtmEouYctFvGKunStYyk+y3WBjOSvPcHoVxIM7sK4EFNq2CkCL3
-         LzkIEyjWms9Eq1T1DvcB4Izy5OqJ1UMipiCBNvVTm+y9WrIQGsHeX8YcFRb6d0jXuPts
-         Gqn0b+oJfvrz4mVQSZpLP+2LAMxU6zDvoxeIVssny4E+TCm4qjNNOcJ+9PwHFdZsdFMj
-         bD45aGvszXqzbvc81cBqgETwOzGLLwAypGQZT3KdQJo8Xsaguknji2a2Kmhm45AgFLda
-         8Yuw==
-X-Forwarded-Encrypted: i=1; AJvYcCV/4u2/rrVzF0ybkoXrg1sbrpel6KwapGzKtKSAXszfLznnIcd4MTodFwVKBbS18f6DslPHSAI87zE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDrWsaVVM4FixoG87t1TFm1UZZICc6ruwkICNsuD355LSVXoPv
-	OmBZAkb9rcc9G+/1HKl45XW4MrJT8vCEoYXqVHLExwDwIa6Qmsw4dTlwa5jgnJobUK6fN+3Q7fi
-	v2E+c0eI=
-X-Gm-Gg: ASbGncuHTUu18UzuagieRB8DlQauTlw7ITYQmHU1kFbfeAq4hdXl69J90munnIo2tf3
-	HuclbZ3YcFBsj2SEhBlUEiM/rVzcn6xKiXfA5rtbVtOIyM2KF9WYBIK1y4j/HXJs7K92d8cx2Ei
-	xzIqxfsEUeiCtAVQXSEfHx93J4Roxy3VO93mr1Uo3roCzs91vf7dRraWLFLhvzuoQvzNvEvt7cd
-	Ts99s56/4fWXRQAdKUr40b6EKLusHjiMQGlT5VjCjBWBPn+S8hp+Gl+TMldz3iCMe965pxWn17M
-	mps78/qmLUunhj0cU4TK8NMv4+Im0l+giVuqXk91zPluLcjDT1rvxnW2jT2CJYL/ZeytbbCMGNP
-	d8djPgi5pRm6LetShd1jIq+Fut3zJiPT9I+3nv2nMsI8FdG4G/B4yHmo3MpW7UKx0B3S1/9GE
-X-Google-Smtp-Source: AGHT+IGvZrkQH03RlEYYQEakuEhSQbjGYsxKIJFoOxwB1M9/HaAimQOJJVZUYCZwAmNo/rheL3+6gA==
-X-Received: by 2002:a17:906:688f:b0:b27:d8f9:3970 with SMTP id a640c23a62f3a-b27d8f939d5mr347272266b.25.1758385971371;
-        Sat, 20 Sep 2025 09:32:51 -0700 (PDT)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b28a990f6e1sm137512266b.37.2025.09.20.09.32.50
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 Sep 2025 09:32:50 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b07883a5feeso600726866b.1
-        for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 09:32:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVUv0NWwRIPG2gCpWB7inVO0ekPjCaV4R7t7fYQu3bVaInFmZVPo/XZyp8RtB9q/qBCMSwh/JetNcc=@vger.kernel.org
-X-Received: by 2002:a17:907:1c89:b0:b1d:285d:155c with SMTP id
- a640c23a62f3a-b24ed88702cmr706169166b.7.1758385604052; Sat, 20 Sep 2025
- 09:26:44 -0700 (PDT)
+        bh=6t0lvNAvBHvFjIYOZdnPwHv9uI7zn4mkRak4VLc3x+o=;
+        b=Y3R8mW5kVaGQAsbFL7ODLWRyEiesa+uSrH1at4h2TxLTZoru3mlbsuBhKitTz0NLBV
+         c6cPthBNdWXDL/BvrHCse/xNRzq6ZI2GPYRZybbCENRJeWlc5SEJFL/0kYcO5HbmkYmH
+         9Zrbz9ft/6gyJavOE2AAOaCUSLxD9INxJ4B2sGqSaMhqi6WmZpWDuv0LraRTE26r6prB
+         vvVF+LcUVb17TMvcodjiKYIw31ExePMwFknN2zYZCht6zw1+BV5r/KezikCVQjYTE9HV
+         yat4NE+qX1RYhUAg/CpjnIdgRNYryj5gaZqXsKB8j1ZWbus+kZS5422emc9ZwbUqgLId
+         b6cg==
+X-Forwarded-Encrypted: i=1; AJvYcCX8dOuOgooWL/K0ZGsQPXv6MTsOCf0J758+ry2gEghfFS9h7DfRpOyjKjXkQIm6eSd1Qu1bNb+7pOg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfA4JvRRheCruw5DSGHzXl5IfIuP6Mp3aBRy2pBaCUpuNVhTxm
+	PAXW3vF9LNGCvv0d6JVHPmaBHDVOXJlbFYboSOPlawcuIWuDRxOa2mhFz6LaP3nc+5L1UhHrj06
+	zOwo4qZkpUSPxEAPIieZff5XC2wsdJGo=
+X-Gm-Gg: ASbGncuyRRDoI1Mj9mhjT+AV7MXmQkTZ7kZeipbuMrlnzzz+y3jw22t8SN1CzeEtpn6
+	YZHshbE3RZ/cI9G49aUlmf05t/xJhI4gw9OUl31i0smSujUUtCMPHux+DQoLlP3SVGp+ac85jm/
+	WpM3eShS5y7QiC5/M9SJLtWICn6wyUCIdOq/nwZ51FttB7BJQG+LeUAUBCDyDXw497FkJ/UQfxt
+	JlHaKwNCsl7kF6bWlbSuO7gtg029ERzuj/TubPGZnGqcIXOscC/fGlMMdMN4IMFAtE=
+X-Google-Smtp-Source: AGHT+IHHbxws3SREQHUm9DXYPSh1lNZGC+x8Xy2uJwCBquseYOMfarK/RwziU8Ml2w72ef92uUul+cCZANWL5gTtfzQ=
+X-Received: by 2002:a05:6402:1e96:b0:62d:6cac:1ec2 with SMTP id
+ 4fb4d7f45d1cf-62fc08d2120mr6186264a12.4.1758387143494; Sat, 20 Sep 2025
+ 09:52:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250920074156.GK39973@ZenIV>
-In-Reply-To: <20250920074156.GK39973@ZenIV>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 20 Sep 2025 09:26:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiXPnY9vWFC87sHudSDYY+wpfTrs-uxd7DBypeE+15Y0g@mail.gmail.com>
-X-Gm-Features: AS18NWCBuRxfjxFE7tKBAQqhhkva7pQWM9EJwSLVmis6atYjgiGA5eqHrxKhjLE
-Message-ID: <CAHk-=wiXPnY9vWFC87sHudSDYY+wpfTrs-uxd7DBypeE+15Y0g@mail.gmail.com>
-Subject: Re: [PATCHES][RFC] the meat of tree-in-dcache series
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org, Christian Brauner <brauner@kernel.org>, 
-	Jan Kara <jack@suse.cz>, Ian Kent <raven@themaw.net>, Miklos Szeredi <miklos@szeredi.hu>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, linux-mm@kvack.org, linux-efi@vger.kernel.org, 
-	ocfs2-devel@lists.linux.dev, Kees Cook <kees@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-usb@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, linuxppc-dev@lists.ozlabs.org, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>
+References: <20250920045059.48400-1-viswanathiyyappan@gmail.com> <5b51d80e-e67c-437d-a2fc-bebdf5e9a958@lunn.ch>
+In-Reply-To: <5b51d80e-e67c-437d-a2fc-bebdf5e9a958@lunn.ch>
+From: viswanath <viswanathiyyappan@gmail.com>
+Date: Sat, 20 Sep 2025 22:22:11 +0530
+X-Gm-Features: AS18NWCYwk4g8GKTtmeraqfyKpXAyJkc7cnfC3ztEpzTK4PVyVgiyuigIenJluQ
+Message-ID: <CAPrAcgOb0FhWKQ6jiAVbDQZS29Thz+dXF0gdjE=7jc1df-QpvQ@mail.gmail.com>
+Subject: Re: [PATCH] net: usb: Remove disruptive netif_wake_queue in rtl8150_set_multicast
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: petkan@nucleusys.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
+	linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com, 
+	syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 20 Sept 2025 at 00:42, Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Sat, 20 Sept 2025 at 21:00, Andrew Lunn <andrew@lunn.ch> wrote:
 >
-> The branch is -rc5-based; it lives in
-> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.persistency
+> On Sat, Sep 20, 2025 at 10:20:59AM +0530, I Viswanath wrote:
+> > syzbot reported WARNING in rtl8150_start_xmit/usb_submit_urb.
+> > This is a possible sequence of events:
+> >
+> >     CPU0 (in rtl8150_start_xmit)   CPU1 (in rtl8150_start_xmit)    CPU2 (in rtl8150_set_multicast)
+> >     netif_stop_queue();
+> >                                                                     netif_stop_queue();
+> >     usb_submit_urb();
+> >                                                                     netif_wake_queue();  <-- Wakes up TX queue before it's ready
+> >                                     netif_stop_queue();
+> >                                     usb_submit_urb();                                    <-- Warning
+> >       freeing urb
+> >
+> > Remove netif_wake_queue and corresponding netif_stop_queue in rtl8150_set_multicast to
+> > prevent this sequence of events
+>
+> Please expand this sentence with an explanation of why this is
+> safe. Why are these two calls not needed? The original author of this
+> code thought they where needed, so you need to explain why they are
+> not needed.
+>
+>     Andrew
+>
+> ---
+> pw-bot: cr
 
-I reacted to the "d_make_persistent() + dput()" pattern, and wondered
-if it should just use the refcount that the caller has, but it does
-look like that alternate approach would just result in a
-"d_make_persistent(dget()))" pattern instead.
+Hello,
 
-And I guess you already get the lock for d_make_persistent(), so it's
-better to do the dget while having it - but arguably that is also true
-for the dput().
+    Thanks for pointing that out. I wasn't thinking from that point of view.
 
-I think you did pick the right model, with d_make_persistent() taking
-a ref, and d_make_discardable() releasing it, but this series did make
-me think that the refcounting on the caller side is a bit odd.
+    According to Documentation, rtl8150_set_multicast (the
+ndo_set_rx_mode callback) should
+    rely on the netif_addr_lock spinlock, not the netif_tx_lock
+manipulated by netif
+    stop/start/wake queue functions.
 
-Because some places would clearly want a "d_make_persistent_and_put()"
-function. But probably not worth the extra interface.
+    However, There is no need to use the netif_addr_lock in the driver
+directly because
+    the core function (dev_set_rx_mode) invoking this function locks
+and unlocks the lock
+    correctly.
 
-Anyway, apart from that I only had one reaction: I think
-d_make_discardable() should have a
+    Synchronization is therefore handled by the core, making it safe
+to remove that lock.
 
-        WARN_ON(!(dentry->d_flags & DCACHE_PERSISTENT))
+    From what I have seen, every network driver assumes this for the
+ndo_set_rx_mode callback.
 
-because without that I think it can mistakenly be used as some kind of
-"dput that always takes the dentry lock", which seems bad.
+    I am not sure what the historical context was for using the
+tx_lock as the synchronization
+    mechanism here but it's definitely not valid in the modern networking stack.
 
-Or was that intentional for some reason?
-
-Talking about WARN_ON() - please don't add new BUG_ON() cases. I
-realize that those will never trigger, but *if* they were to trigger,
-some of them would do so during early boot and be a pain for people to
-ever even report to us.
-
-BUG_ON() really should be shunned. I think it makes sense to you and
-for automated testing, but it really is absolutely *horrendously* bad
-for the case where the code hits actual users.
-
-                 Linus
+Thanks
+Viswanath
 
