@@ -1,149 +1,131 @@
-Return-Path: <linux-usb+bounces-28413-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28414-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F2AFB8CD7A
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 18:52:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E939DB8CDA7
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 19:12:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D0EB7C2309
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 16:52:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40A3D7B61C6
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 17:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CEFF2F7AB2;
-	Sat, 20 Sep 2025 16:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7EF3054D8;
+	Sat, 20 Sep 2025 17:12:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ipHxqFzg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YRs16w05"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563961E0DFE
-	for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 16:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F61228CB8;
+	Sat, 20 Sep 2025 17:12:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758387146; cv=none; b=DlYasRtDONh36T9BbgyZxfbrG7eCYeKnti4laAYHoic4PIZ7EZmcJaZN/rfPkf+fVJ2Xh+D1hY2FnrTZhoi6BMVUqhoOKT+B/0EILYMI/XWBRdTNMAVj51U0ZshznUHs1yM4DjtZkjGhAJkPZmCbOkpfMx7OY7DGdRf/IkDU45Y=
+	t=1758388351; cv=none; b=SZLb8rW17VpKYPddOy7LhoWxv/NYV3nhHwk+5ikxBZ9dnTvhvqv7wba9Jt7v514OIAx05Wd7DSXK8Q95X6eMv30dM73U3XZuGgxpP++3WBfRGJwIm8VfhHpFoBECUEitRlDeixDkZo/DteFAfWK1goMgtzApgc8tIfmRkTiPCV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758387146; c=relaxed/simple;
-	bh=GWpvS5x6cG1Y4f2S24NEW8dN0quQ/cx+TBhU9hoDln8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=URRdfB2JzvVX7apAAfwvfOwt70PlDxwu/RZ6lc8kGcyB+eVAk+N/63IrwkvpzFe7lHraj8YdOgHDieANkHSB4i3BAy5LzoCMbbrwkqc2hry7NQa334Dgj/2G1MSahywI62qxMMVCoD/CWi9iJvDvFjCRrmAg8POSYUJhexzbMmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ipHxqFzg; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-628f29d68ecso5606066a12.3
-        for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 09:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758387144; x=1758991944; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6t0lvNAvBHvFjIYOZdnPwHv9uI7zn4mkRak4VLc3x+o=;
-        b=ipHxqFzgmWoxFnQBawz23NUMuyU0ry9vKhPQg5SDsvLh7zDpF6y8iv7WehZmb5f6+M
-         91kdYgsLlAALngU2ik9ua4TeCacnnRGXgqrvBlukiESsLAwhrP+jnn1s2uiSAvSTKXr0
-         oLu49Fmz5FXaABpW8TZzLAUvrkIcqoskVU876JuWQM74ggnaaBfsdJ4Kd5IgDFg6fbiu
-         LfdlpMWQBDpJUMCGYWLHC8uBFT1Cm3QdUDlX9bdmHqUd8qxK/Bnu8M54fnIivaELmfiS
-         Y/fGCHn18bCEwhtRl+sk7Sacl8wKNaXj5ZOz3aTRnd9SicgFJ0Z77s5+KupjlUQs1gRw
-         1m2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758387144; x=1758991944;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6t0lvNAvBHvFjIYOZdnPwHv9uI7zn4mkRak4VLc3x+o=;
-        b=Y3R8mW5kVaGQAsbFL7ODLWRyEiesa+uSrH1at4h2TxLTZoru3mlbsuBhKitTz0NLBV
-         c6cPthBNdWXDL/BvrHCse/xNRzq6ZI2GPYRZybbCENRJeWlc5SEJFL/0kYcO5HbmkYmH
-         9Zrbz9ft/6gyJavOE2AAOaCUSLxD9INxJ4B2sGqSaMhqi6WmZpWDuv0LraRTE26r6prB
-         vvVF+LcUVb17TMvcodjiKYIw31ExePMwFknN2zYZCht6zw1+BV5r/KezikCVQjYTE9HV
-         yat4NE+qX1RYhUAg/CpjnIdgRNYryj5gaZqXsKB8j1ZWbus+kZS5422emc9ZwbUqgLId
-         b6cg==
-X-Forwarded-Encrypted: i=1; AJvYcCX8dOuOgooWL/K0ZGsQPXv6MTsOCf0J758+ry2gEghfFS9h7DfRpOyjKjXkQIm6eSd1Qu1bNb+7pOg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfA4JvRRheCruw5DSGHzXl5IfIuP6Mp3aBRy2pBaCUpuNVhTxm
-	PAXW3vF9LNGCvv0d6JVHPmaBHDVOXJlbFYboSOPlawcuIWuDRxOa2mhFz6LaP3nc+5L1UhHrj06
-	zOwo4qZkpUSPxEAPIieZff5XC2wsdJGo=
-X-Gm-Gg: ASbGncuyRRDoI1Mj9mhjT+AV7MXmQkTZ7kZeipbuMrlnzzz+y3jw22t8SN1CzeEtpn6
-	YZHshbE3RZ/cI9G49aUlmf05t/xJhI4gw9OUl31i0smSujUUtCMPHux+DQoLlP3SVGp+ac85jm/
-	WpM3eShS5y7QiC5/M9SJLtWICn6wyUCIdOq/nwZ51FttB7BJQG+LeUAUBCDyDXw497FkJ/UQfxt
-	JlHaKwNCsl7kF6bWlbSuO7gtg029ERzuj/TubPGZnGqcIXOscC/fGlMMdMN4IMFAtE=
-X-Google-Smtp-Source: AGHT+IHHbxws3SREQHUm9DXYPSh1lNZGC+x8Xy2uJwCBquseYOMfarK/RwziU8Ml2w72ef92uUul+cCZANWL5gTtfzQ=
-X-Received: by 2002:a05:6402:1e96:b0:62d:6cac:1ec2 with SMTP id
- 4fb4d7f45d1cf-62fc08d2120mr6186264a12.4.1758387143494; Sat, 20 Sep 2025
- 09:52:23 -0700 (PDT)
+	s=arc-20240116; t=1758388351; c=relaxed/simple;
+	bh=q79LSJRIN+4CMGDHGwwOtCi+446YUY7DGBcf9uK/a+8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FWLJRI+P3NJ7IfIHipyl9gR97ZGSU4TgOld3M8LZnPeIz9UAvdoI0F0gMmVFS55is2/EM69ibKBEtxQrA405ueOu98GRKWKWNUrina4ewtV0KFP7q40Yqbx3zsmz4HN/cPQ6mcq2kaUy+Xce1+UyFbheUH8WDSys6o9DMB/ci3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YRs16w05; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758388350; x=1789924350;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q79LSJRIN+4CMGDHGwwOtCi+446YUY7DGBcf9uK/a+8=;
+  b=YRs16w05LEWGg1ab6Gp6Tr8zYriZsk50wWXiC+bD+HJaP9yi4pbGdzp+
+   CP1TFXHWX8VUrukvlweYdoFyF3b9Lt2ZpTK0KRS0BjY2EjR3+YF0h9j3j
+   vahtJBhN/DaoYY958Hqc0lac3Hx1cBwJHOxxu3Up+1Dlksn6DliYxEoOg
+   cB+q+M2us3uPRM0WdyzC9xJP4w+9JMcHJLUj14wi4Xv8hsY3D7FSakagw
+   +GYlel1oEVkzKzy3YUAj4WQCR4s4bcPDy05tDzHBsF3EbIzedJAcTLJHg
+   9YNgd/7sDaSCuO9Ug9G87fRVFwFVKhArkIfssXiS52f2wv7sythJv6iCn
+   A==;
+X-CSE-ConnectionGUID: G3XQyPbyTcOe7+2k0RzzYQ==
+X-CSE-MsgGUID: ECIFiZiOSfKeDvlqtsqvgg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11559"; a="78316339"
+X-IronPort-AV: E=Sophos;i="6.18,281,1751266800"; 
+   d="scan'208";a="78316339"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2025 10:12:29 -0700
+X-CSE-ConnectionGUID: pt82aHB0SAS5SO5GndB+ZQ==
+X-CSE-MsgGUID: BsB7TnlMQ+qllss3tERJeg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,281,1751266800"; 
+   d="scan'208";a="180354343"
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 20 Sep 2025 10:12:25 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v018J-0005Zb-0J;
+	Sat, 20 Sep 2025 17:12:23 +0000
+Date: Sun, 21 Sep 2025 01:12:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>, krzk+dt@kernel.org,
+	conor+dt@kernel.org, kishon@kernel.org, vkoul@kernel.org,
+	gregkh@linuxfoundation.org, robh@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+Subject: Re: [PATCH 6/9] phy: qualcomm: qmp-combo: Update QMP PHY with Glymur
+ settings
+Message-ID: <202509210051.o1oMhgXv-lkp@intel.com>
+References: <20250920032108.242643-7-wesley.cheng@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250920045059.48400-1-viswanathiyyappan@gmail.com> <5b51d80e-e67c-437d-a2fc-bebdf5e9a958@lunn.ch>
-In-Reply-To: <5b51d80e-e67c-437d-a2fc-bebdf5e9a958@lunn.ch>
-From: viswanath <viswanathiyyappan@gmail.com>
-Date: Sat, 20 Sep 2025 22:22:11 +0530
-X-Gm-Features: AS18NWCYwk4g8GKTtmeraqfyKpXAyJkc7cnfC3ztEpzTK4PVyVgiyuigIenJluQ
-Message-ID: <CAPrAcgOb0FhWKQ6jiAVbDQZS29Thz+dXF0gdjE=7jc1df-QpvQ@mail.gmail.com>
-Subject: Re: [PATCH] net: usb: Remove disruptive netif_wake_queue in rtl8150_set_multicast
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: petkan@nucleusys.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
-	linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com, 
-	syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250920032108.242643-7-wesley.cheng@oss.qualcomm.com>
 
-On Sat, 20 Sept 2025 at 21:00, Andrew Lunn <andrew@lunn.ch> wrote:
->
-> On Sat, Sep 20, 2025 at 10:20:59AM +0530, I Viswanath wrote:
-> > syzbot reported WARNING in rtl8150_start_xmit/usb_submit_urb.
-> > This is a possible sequence of events:
-> >
-> >     CPU0 (in rtl8150_start_xmit)   CPU1 (in rtl8150_start_xmit)    CPU2 (in rtl8150_set_multicast)
-> >     netif_stop_queue();
-> >                                                                     netif_stop_queue();
-> >     usb_submit_urb();
-> >                                                                     netif_wake_queue();  <-- Wakes up TX queue before it's ready
-> >                                     netif_stop_queue();
-> >                                     usb_submit_urb();                                    <-- Warning
-> >       freeing urb
-> >
-> > Remove netif_wake_queue and corresponding netif_stop_queue in rtl8150_set_multicast to
-> > prevent this sequence of events
->
-> Please expand this sentence with an explanation of why this is
-> safe. Why are these two calls not needed? The original author of this
-> code thought they where needed, so you need to explain why they are
-> not needed.
->
->     Andrew
->
-> ---
-> pw-bot: cr
+Hi Wesley,
 
-Hello,
+kernel test robot noticed the following build warnings:
 
-    Thanks for pointing that out. I wasn't thinking from that point of view.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.17-rc6 next-20250919]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-    According to Documentation, rtl8150_set_multicast (the
-ndo_set_rx_mode callback) should
-    rely on the netif_addr_lock spinlock, not the netif_tx_lock
-manipulated by netif
-    stop/start/wake queue functions.
+url:    https://github.com/intel-lab-lkp/linux/commits/Wesley-Cheng/dt-bindings-phy-qcom-sc8280xp-qmp-usb43dp-phy-Add-Glymur-compatible/20250920-112504
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250920032108.242643-7-wesley.cheng%40oss.qualcomm.com
+patch subject: [PATCH 6/9] phy: qualcomm: qmp-combo: Update QMP PHY with Glymur settings
+config: x86_64-buildonly-randconfig-002-20250920 (https://download.01.org/0day-ci/archive/20250921/202509210051.o1oMhgXv-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250921/202509210051.o1oMhgXv-lkp@intel.com/reproduce)
 
-    However, There is no need to use the netif_addr_lock in the driver
-directly because
-    the core function (dev_set_rx_mode) invoking this function locks
-and unlocks the lock
-    correctly.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509210051.o1oMhgXv-lkp@intel.com/
 
-    Synchronization is therefore handled by the core, making it safe
-to remove that lock.
+All warnings (new ones prefixed by >>):
 
-    From what I have seen, every network driver assumes this for the
-ndo_set_rx_mode callback.
+>> drivers/phy/qualcomm/phy-qcom-qmp-combo.c:1745:38: warning: unused variable 'glymur_usb43dp_pcs_misc_tbl' [-Wunused-const-variable]
+    1745 | static const struct qmp_phy_init_tbl glymur_usb43dp_pcs_misc_tbl[] = {
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-    I am not sure what the historical context was for using the
-tx_lock as the synchronization
-    mechanism here but it's definitely not valid in the modern networking stack.
 
-Thanks
-Viswanath
+vim +/glymur_usb43dp_pcs_misc_tbl +1745 drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+
+  1744	
+> 1745	static const struct qmp_phy_init_tbl glymur_usb43dp_pcs_misc_tbl[] = {
+  1746		QMP_PHY_INIT_CFG(QPHY_V4_PCS_MISC_PCS_MISC_CONFIG1, 0x01),
+  1747	};
+  1748	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
