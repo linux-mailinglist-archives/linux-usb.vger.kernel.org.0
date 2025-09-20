@@ -1,62 +1,67 @@
-Return-Path: <linux-usb+bounces-28415-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28416-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFFF1B8CDE0
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 19:29:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5AC9B8CE90
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 20:09:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E38511B225B3
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 17:29:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DAA87A7AD5
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 18:07:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D033030F7FA;
-	Sat, 20 Sep 2025 17:29:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64D7730F7FD;
+	Sat, 20 Sep 2025 18:09:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="XjfB/23o"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="NM79fJk4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C532319C566;
-	Sat, 20 Sep 2025 17:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465A62F5B;
+	Sat, 20 Sep 2025 18:09:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758389354; cv=none; b=XT3TIKzyB4KipOIepaZ+xgOUH6r7v11u1MEkE2XK+4SEEcYPecVQe2cG2Rm72WSXburbdbJZzvcSLEcl5bIvHB7rsrp2AFoesH+JGzUEmqRRB8KLLTgNZNy+RztC1Ewk72Y8DCtZkdhJcBlrNv9Uh1NWFWE00kDzEix8ZurBr2s=
+	t=1758391768; cv=none; b=T/l/P1LHmtzu5GNPWs3Ay2dZ3XX7PHHpYJ0IdgiGRh/63qppV4MjSq7Zzm2ei5MsMy+EwR0uoqkmD3UmDWXTJLfdMJdkmLJ0WFue6aHPhn6NSSVxbiCSkgPJ9Bds5Qh12L91perIX46Ekqz1TIuV8WA7L8MytiiM2oUG3LOZfN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758389354; c=relaxed/simple;
-	bh=Z1EmUIMTRNQpjVvyMLucljOfuwm27aKN7P3aCl2Vv/E=;
+	s=arc-20240116; t=1758391768; c=relaxed/simple;
+	bh=LMPdgJ5xJP991yqk9NU4wcmgCyL9QUZYstLpRktYbYA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ct1xJRQ/C7P/MQpjPwue6BdyTIlKmOGOPH50vJaKcimcCHx9Jj2j5iLy3cd0hJaTMp8DCggXIOZPVm3jvoGivFHrPZnCOIJ+5rZs23fmDDEmNTukrF5Zd3HEYRKVKPGd6ClMsPj0DkRQSUJX1V74Cf6mKrKdo4uYRMs7AHHYVXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=XjfB/23o; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=7nlJ2AgBMaomcoS8yeLKra15jd7zP6CEuq6aZpUoDR4=; b=XjfB/23oD+MJie7rF4thlj02aS
-	304kJjEyUkFk6w4QyddzTbg60/96t3xxyTd0aAxayOYPYpR1MmymUWUGirvSD81YEOP4lxCNVm+zp
-	y7zjwDWXBoi7Gd2oVfR5qfxYAm9bxxqhWTmiDCu43E92bhNTM6jrj51CttQRPjZ/GCgI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1v01ON-0091aW-VT; Sat, 20 Sep 2025 19:28:59 +0200
-Date: Sat, 20 Sep 2025 19:28:59 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: viswanath <viswanathiyyappan@gmail.com>
-Cc: petkan@nucleusys.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com,
-	syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
-Subject: Re: [PATCH] net: usb: Remove disruptive netif_wake_queue in
- rtl8150_set_multicast
-Message-ID: <83171a57-cb40-4c97-b736-0e62930b9e5c@lunn.ch>
-References: <20250920045059.48400-1-viswanathiyyappan@gmail.com>
- <5b51d80e-e67c-437d-a2fc-bebdf5e9a958@lunn.ch>
- <CAPrAcgOb0FhWKQ6jiAVbDQZS29Thz+dXF0gdjE=7jc1df-QpvQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mkl7Sc9htOCMIlaUGkMhxW5RhKfElnbo4TMMP9pmrO2CXSdROO4Zsqi978WQ3Q8O83BtIXIF1/SKzr3PMxIg7yH7xFC0b/E0XtZjQ4yi1R7ZDyhgVNS9CBfd5ZB3QhLeV1MZy2IPK/9A2gqLvz6LXSktbZ2L3gJYnSq/7OUMa7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=NM79fJk4; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=6NL30/0+UZmJ+Ndqi2NTqpdBOV8RvNTpTtq6rtRPK9E=; b=NM79fJk4vVddI7amyfuuFalCjV
+	KCwjdAr3TBi8ShghGh7DNgYuVH9L+WE3QjtxSRg3IZBe1atmcEKyONCQj9I3wo/0CEGQOZou4azRK
+	2+7qBlOTxdA1xp127r7u5bM6TjwF9mONn+nwL5XucvYd3CZuGSX3BA5ysms187Yyj/wF6/86/CmTL
+	WC2z/0mRVx9nm5VEhTaqI7AesxCZh6k1F+Lpz9Pus6qr4SxsrrMPq2R9tjnbIPN4krYN0ZoLm1Cek
+	ZI6tJ4FtKRcLJdSKn5AdIr/wOwwbdc4jFYT2UcYCQC/FIOU5oSOQeuYce7ptP2b4JNzeCtNGNm6Zd
+	bQgwQelw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v021O-000000039W5-3GQv;
+	Sat, 20 Sep 2025 18:09:18 +0000
+Date: Sat, 20 Sep 2025 19:09:18 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-fsdevel@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>, Ian Kent <raven@themaw.net>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Andreas Hindborg <a.hindborg@kernel.org>, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	Kees Cook <kees@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCHES][RFC] the meat of tree-in-dcache series
+Message-ID: <20250920180918.GL39973@ZenIV>
+References: <20250920074156.GK39973@ZenIV>
+ <CAHk-=wiXPnY9vWFC87sHudSDYY+wpfTrs-uxd7DBypeE+15Y0g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,35 +70,56 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPrAcgOb0FhWKQ6jiAVbDQZS29Thz+dXF0gdjE=7jc1df-QpvQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wiXPnY9vWFC87sHudSDYY+wpfTrs-uxd7DBypeE+15Y0g@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
->     Thanks for pointing that out. I wasn't thinking from that point of view.
-> 
->     According to Documentation, rtl8150_set_multicast (the
-> ndo_set_rx_mode callback) should
->     rely on the netif_addr_lock spinlock, not the netif_tx_lock
-> manipulated by netif
->     stop/start/wake queue functions.
-> 
->     However, There is no need to use the netif_addr_lock in the driver
-> directly because
->     the core function (dev_set_rx_mode) invoking this function locks
-> and unlocks the lock
->     correctly.
-> 
->     Synchronization is therefore handled by the core, making it safe
-> to remove that lock.
-> 
->     From what I have seen, every network driver assumes this for the
-> ndo_set_rx_mode callback.
-> 
->     I am not sure what the historical context was for using the
-> tx_lock as the synchronization
->     mechanism here but it's definitely not valid in the modern networking stack.
+On Sat, Sep 20, 2025 at 09:26:27AM -0700, Linus Torvalds wrote:
 
-Thanks. Please include an explanation in V2. Also, please read:
+> Anyway, apart from that I only had one reaction: I think
+> d_make_discardable() should have a
+> 
+>         WARN_ON(!(dentry->d_flags & DCACHE_PERSISTENT))
+> 
+> because without that I think it can mistakenly be used as some kind of
+> "dput that always takes the dentry lock", which seems bad.
+> 
+> Or was that intentional for some reason?
 
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+In the end - sure, we want that.  But in the meanwhile that would require
+separate variants of simple_unlink()/simple_recursive_removal()/etc.
+for those filesystems that are already marking persistent ones, with
+the only difference being that warning.
 
-	Andrew
+A lot more noise that way.
+
+So I'd prefer to put a warning in the source for the time being.  In principle,
+by the end of series as posted we are down to very few filesystems that use
+simple_unlink() and friends without having marked them persistent in the
+first place, so it would be possible to put a "make d_make_discardable() warn
+if it's not marked persistent, add variants of simple_unlink()/simple_rmdir()/
+simple_recursive_removal()/locked_recursive_removal() that would *NOT* warn
+and switch the handful of unconverted users to calling those", but...
+
+By the end of series as posted that's down to nfsctl, rpc_pipe, securityfs,
+configfs and apparmorfs.  The first 3 - because they used to have subseries
+of their own in separate branches, with corresponding conversion commits
+sitting on top of merges (#work.nfsctl is the last of those branches).
+No real obstacle to moving them into the queue, I just wanted to post it
+for review before we get to -rc7.
+
+The remaining two (configfs and apparmor) are special enough to warrant private
+copies of simple_{unlink,rmdir}().  So I'd rather have that in patch adding
+the warning - simple_recursive_remove() wouldn't need a separate copy that
+way at all.
+
+configfs has a separate series untangling it, but that's a separate story -
+that work goes back to 2018; I want to resurrect it, but I'm not mixing it
+into this pile.
+
+appramor is... special.  They've got locking of their own, completely broken and
+interspersed with regular directory locks.  John Johansen, if I understood him
+correctly, has some plans re fixing that, and I'm happy not to have analysis
+of their locking on my plate.  _Maybe_ it will end up close enough to the usual
+tree-in-dcache to switch to that stuff, but at the moment I'd rather open-code
+simple_{unlink,rmdir} in aafs_remove() and leave it at that.
 
