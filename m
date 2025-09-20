@@ -1,117 +1,146 @@
-Return-Path: <linux-usb+bounces-28411-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28412-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31128B8CC96
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 18:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73E10B8CD59
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 18:33:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F9A51B23F41
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 16:21:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 237D5188372E
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 16:33:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BFB02FFDC1;
-	Sat, 20 Sep 2025 16:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A10223DF1;
+	Sat, 20 Sep 2025 16:32:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aZDB/MiC"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="RCeFWDfK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFEE2F7AA1
-	for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 16:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505F918EFD1
+	for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 16:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758385223; cv=none; b=BSA+yMCQl0eJSgaIqTBeX33cVtSW/SxFCQ+QaB6Fr2tqinUyH2BaD2pngkmlMY/wCyKdMfDSzNrNnBfLErCq4BtPHkhZj4O3m97Df6sXZZ2/1VLtffGDq28MU8F4f4HugeVudydiVEjX+EOITkVO2XodnHgV9hsPeiHV/OxQkTI=
+	t=1758385975; cv=none; b=OWxK9Eo6VTraaGfSKVETM8/xu812SvCH5mXhH5q/hxBRuhGFSZLpBfg/vTTJJ1uGpzwvbIvA5YPjyOJ1gOYtxpXQdhN+Tn+2Hmpsg2wFJvoxsOjSwWADYF0cNTXKvNWaGiVRlPgZxSQW+CskcwmYSwQQ0wu2hSULE4bH8pAayb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758385223; c=relaxed/simple;
-	bh=tmDhVGySrzTPb7qxXaJVjc3X0b34wNhGQFXxiYXSQs8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t4I7FHr1cnT0ohJjx33Kudz87aj7MWoQjVEHo9ZBlAOYW6kjbxQZqnT2AFiHRdjUGbHmyKQrsyzFOWPwyOWgDZ8IGys6Pf79mwbfNYiQWmPdNpNBNmlY7DZIo89X+FcYaXTVF4qwxPVAW+F7LhlF1sbhEgEZXxCWbPgeN/0OoLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aZDB/MiC; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758385222; x=1789921222;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tmDhVGySrzTPb7qxXaJVjc3X0b34wNhGQFXxiYXSQs8=;
-  b=aZDB/MiCnpkAyBBOr2Fc1+HzAH5Cx2MCZ3TTISdQKoM/38atTDxWBu86
-   CPbDFlBZzydC9I5tgqLO83AjWoQ+c1qapHQlGplVr9NM4M2VDccmTh04F
-   3m1SF2BDtyuAvKvNrXtLBg7ZBi07tKcqxvCAYHN+OFelbZ5aigfhh+bhz
-   uPnu3AZVJQghWfSiMnAt1FEeuOl0jRDa6e4UPl1vsU0HMac3MJyXJBe9/
-   D5BNhzFxp4OcTAspZhjtjGeJuej1NRh5VdiGocWeekcQkbofNO8rKA2Mz
-   evi1Ulwhi5QiGiIWn363TEUODj6gDwEDcjdRZpye3Oc1Rx2LKkrL9XGUi
-   g==;
-X-CSE-ConnectionGUID: AlGY2VP4SI+2v5YgXBbr7w==
-X-CSE-MsgGUID: N20Bef6uT/uMvCx2SBDG2w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11559"; a="72136080"
-X-IronPort-AV: E=Sophos;i="6.18,281,1751266800"; 
-   d="scan'208";a="72136080"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2025 09:20:21 -0700
-X-CSE-ConnectionGUID: L1zjDzA5St20Mj11PKoPCA==
-X-CSE-MsgGUID: v+QynPI/T2Gcbu893Khi7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,281,1751266800"; 
-   d="scan'208";a="176146560"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 20 Sep 2025 09:20:20 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v00Jt-0005W7-0r;
-	Sat, 20 Sep 2025 16:20:17 +0000
-Date: Sun, 21 Sep 2025 00:19:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>,
-	mathias.nyman@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, peter.chen@kernel.org,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: Re: [PATCH v2 5/8] usb: xhci: add PORTSC read function
-Message-ID: <202509210017.WFJqvNsz-lkp@intel.com>
-References: <20250917125850.3380560-6-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1758385975; c=relaxed/simple;
+	bh=mNO5F5NJlTITJbrMxJ3wyu2jz7VIBwYhTqCKBzbt4xw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u0ZFC40rXjOCNzD708qQdOPkw8kyocebYtJBZUTxIZtA8lmktH3dOXijqTjswYvppsfIzEj5jfL/PVwo8IcuaP5us0yBJfjqnf1nsq2oa6vQvSQA5m6YLjYSsBDaH3HvmhVWxZGOg5+sZbfeEcHfgqtc7fTb+uowWgOYuCiwoMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=RCeFWDfK; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-62fd0d29e2bso2183287a12.1
+        for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 09:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1758385971; x=1758990771; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GvLRCncIiqRrC6qT6Y0+vbtoZaqXeTLbbsZoYra2n2s=;
+        b=RCeFWDfKrLBVBygWhWlXYOzNH7ITFKTGugz9GKNVwygMj637ssMopU7XEmyqxW0oj5
+         Zsn2XcCMVFD32fOcVcJzZFRPrtpRP0GLcT4TnIt1B5hxTu9+fMRcWh3mRocTi/AN4SJG
+         ZJeyLxfX0EX0L3axXfrED8cXrXmDSqqX2dDIo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758385971; x=1758990771;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GvLRCncIiqRrC6qT6Y0+vbtoZaqXeTLbbsZoYra2n2s=;
+        b=WVeV+6dvnPFb+QyXxnGR3pULvymXgIqJJZyy1Ql/AQQYigaFFb5djph3nBgiXztHVH
+         cJfVQqm0YutaPfmyBhtmEouYctFvGKunStYyk+y3WBjOSvPcHoVxIM7sK4EFNq2CkCL3
+         LzkIEyjWms9Eq1T1DvcB4Izy5OqJ1UMipiCBNvVTm+y9WrIQGsHeX8YcFRb6d0jXuPts
+         Gqn0b+oJfvrz4mVQSZpLP+2LAMxU6zDvoxeIVssny4E+TCm4qjNNOcJ+9PwHFdZsdFMj
+         bD45aGvszXqzbvc81cBqgETwOzGLLwAypGQZT3KdQJo8Xsaguknji2a2Kmhm45AgFLda
+         8Yuw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/4u2/rrVzF0ybkoXrg1sbrpel6KwapGzKtKSAXszfLznnIcd4MTodFwVKBbS18f6DslPHSAI87zE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDrWsaVVM4FixoG87t1TFm1UZZICc6ruwkICNsuD355LSVXoPv
+	OmBZAkb9rcc9G+/1HKl45XW4MrJT8vCEoYXqVHLExwDwIa6Qmsw4dTlwa5jgnJobUK6fN+3Q7fi
+	v2E+c0eI=
+X-Gm-Gg: ASbGncuHTUu18UzuagieRB8DlQauTlw7ITYQmHU1kFbfeAq4hdXl69J90munnIo2tf3
+	HuclbZ3YcFBsj2SEhBlUEiM/rVzcn6xKiXfA5rtbVtOIyM2KF9WYBIK1y4j/HXJs7K92d8cx2Ei
+	xzIqxfsEUeiCtAVQXSEfHx93J4Roxy3VO93mr1Uo3roCzs91vf7dRraWLFLhvzuoQvzNvEvt7cd
+	Ts99s56/4fWXRQAdKUr40b6EKLusHjiMQGlT5VjCjBWBPn+S8hp+Gl+TMldz3iCMe965pxWn17M
+	mps78/qmLUunhj0cU4TK8NMv4+Im0l+giVuqXk91zPluLcjDT1rvxnW2jT2CJYL/ZeytbbCMGNP
+	d8djPgi5pRm6LetShd1jIq+Fut3zJiPT9I+3nv2nMsI8FdG4G/B4yHmo3MpW7UKx0B3S1/9GE
+X-Google-Smtp-Source: AGHT+IGvZrkQH03RlEYYQEakuEhSQbjGYsxKIJFoOxwB1M9/HaAimQOJJVZUYCZwAmNo/rheL3+6gA==
+X-Received: by 2002:a17:906:688f:b0:b27:d8f9:3970 with SMTP id a640c23a62f3a-b27d8f939d5mr347272266b.25.1758385971371;
+        Sat, 20 Sep 2025 09:32:51 -0700 (PDT)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b28a990f6e1sm137512266b.37.2025.09.20.09.32.50
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Sep 2025 09:32:50 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b07883a5feeso600726866b.1
+        for <linux-usb@vger.kernel.org>; Sat, 20 Sep 2025 09:32:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVUv0NWwRIPG2gCpWB7inVO0ekPjCaV4R7t7fYQu3bVaInFmZVPo/XZyp8RtB9q/qBCMSwh/JetNcc=@vger.kernel.org
+X-Received: by 2002:a17:907:1c89:b0:b1d:285d:155c with SMTP id
+ a640c23a62f3a-b24ed88702cmr706169166b.7.1758385604052; Sat, 20 Sep 2025
+ 09:26:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250917125850.3380560-6-niklas.neronin@linux.intel.com>
+References: <20250920074156.GK39973@ZenIV>
+In-Reply-To: <20250920074156.GK39973@ZenIV>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 20 Sep 2025 09:26:27 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiXPnY9vWFC87sHudSDYY+wpfTrs-uxd7DBypeE+15Y0g@mail.gmail.com>
+X-Gm-Features: AS18NWCBuRxfjxFE7tKBAQqhhkva7pQWM9EJwSLVmis6atYjgiGA5eqHrxKhjLE
+Message-ID: <CAHk-=wiXPnY9vWFC87sHudSDYY+wpfTrs-uxd7DBypeE+15Y0g@mail.gmail.com>
+Subject: Re: [PATCHES][RFC] the meat of tree-in-dcache series
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, Christian Brauner <brauner@kernel.org>, 
+	Jan Kara <jack@suse.cz>, Ian Kent <raven@themaw.net>, Miklos Szeredi <miklos@szeredi.hu>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, linux-mm@kvack.org, linux-efi@vger.kernel.org, 
+	ocfs2-devel@lists.linux.dev, Kees Cook <kees@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-usb@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, linuxppc-dev@lists.ozlabs.org, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Niklas,
+On Sat, 20 Sept 2025 at 00:42, Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> The branch is -rc5-based; it lives in
+> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.persistency
 
-kernel test robot noticed the following build errors:
+I reacted to the "d_make_persistent() + dput()" pattern, and wondered
+if it should just use the refcount that the caller has, but it does
+look like that alternate approach would just result in a
+"d_make_persistent(dget()))" pattern instead.
 
-[auto build test ERROR on usb/usb-linus]
-[also build test ERROR on tegra/for-next westeri-thunderbolt/next linus/master v6.17-rc6]
-[cannot apply to usb/usb-testing usb/usb-next next-20250919]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+And I guess you already get the lock for d_make_persistent(), so it's
+better to do the dget while having it - but arguably that is also true
+for the dput().
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Niklas-Neronin/usb-xhci-correct-indentation-for-PORTSC-tracing-function/20250917-211828
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-patch link:    https://lore.kernel.org/r/20250917125850.3380560-6-niklas.neronin%40linux.intel.com
-patch subject: [PATCH v2 5/8] usb: xhci: add PORTSC read function
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250921/202509210017.WFJqvNsz-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250921/202509210017.WFJqvNsz-lkp@intel.com/reproduce)
+I think you did pick the right model, with d_make_persistent() taking
+a ref, and d_make_discardable() releasing it, but this series did make
+me think that the refcounting on the caller side is a bit odd.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509210017.WFJqvNsz-lkp@intel.com/
+Because some places would clearly want a "d_make_persistent_and_put()"
+function. But probably not worth the extra interface.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Anyway, apart from that I only had one reaction: I think
+d_make_discardable() should have a
 
->> ERROR: modpost: "xhci_get_portsc" [drivers/usb/host/xhci-pci.ko] undefined!
-ERROR: modpost: "xhci_set_portsc" [drivers/usb/host/xhci-pci.ko] undefined!
+        WARN_ON(!(dentry->d_flags & DCACHE_PERSISTENT))
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+because without that I think it can mistakenly be used as some kind of
+"dput that always takes the dentry lock", which seems bad.
+
+Or was that intentional for some reason?
+
+Talking about WARN_ON() - please don't add new BUG_ON() cases. I
+realize that those will never trigger, but *if* they were to trigger,
+some of them would do so during early boot and be a pain for people to
+ever even report to us.
+
+BUG_ON() really should be shunned. I think it makes sense to you and
+for automated testing, but it really is absolutely *horrendously* bad
+for the case where the code hits actual users.
+
+                 Linus
 
