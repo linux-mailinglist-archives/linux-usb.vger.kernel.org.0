@@ -1,185 +1,148 @@
-Return-Path: <linux-usb+bounces-28402-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28403-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21B96B8C715
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 13:48:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E819B8C831
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 14:28:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 738647B3C80
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 11:46:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 438F7561C4C
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Sep 2025 12:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E7762FB0BB;
-	Sat, 20 Sep 2025 11:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF11F301705;
+	Sat, 20 Sep 2025 12:28:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iaVGOGOR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZhlAz6rp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84CE18BBB9;
-	Sat, 20 Sep 2025 11:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA7F239E65;
+	Sat, 20 Sep 2025 12:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758368900; cv=none; b=WsXCgvTfGn5vTPknBA/FX8ZQLajbIBwRR+blviU0/ppWcCSyE/a/57pFfObbSbqqG2eZ7wEYIuJ6XtsU6RCoSLSjFMwzu3hvjmqWpFkZv/3+VXeZ9RbISOt/PDPJ7aNBP0cR55huUXj6WZVjS48WulQqNI+WVYFCKRXx6WqEKvo=
+	t=1758371290; cv=none; b=Oa18kwtzrZWOB3+jIYwAJco5QAe/BODDJDG9/w9h8tXtCP4nwRz1h/COQPVilKH6lqhnELESf8QNfusfP7Pp4atpzWExAQeyeZdgA78fIKdIcAhaGVoZOjOyNpA0MNwosHCsn1v8k9/WO935rUjpiBv4GhJrbHR9N0KAexhm6nE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758368900; c=relaxed/simple;
-	bh=S4lEmGoMz/EYlXIdqoTKwelfO4ALXROy7V1e0MeAQH0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q9UyqQ7MCoxZ4xaIPVHnmjZQBoIwKWaiiTXyig+TfnwPsWhjyUF/XS6jj/8iNJoNTsReAoRH+rr9xdo3Xc+rY5i/1mG309ILeOZ4npWpNbb6JNDHuKh77VHa6euJnIhiTIhkpMdAP71Isf40vY7RKrp1PHBFzEDHUZU/L34eaZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iaVGOGOR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E848FC4CEEB;
-	Sat, 20 Sep 2025 11:48:14 +0000 (UTC)
+	s=arc-20240116; t=1758371290; c=relaxed/simple;
+	bh=0b5NmMOnbDP9MtwNwBgV04ka112u6zlExhIdniRtJx0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oj2ZYTxhNuPIklFHydMFAMbfUj1AN6gNyAXolNnW8H/irDj75xsGDt4u+9AMn+hiKR0Nq7/SBM+QR3LCDDybqS1SWmTUro5dtTUVzFB4D2mHFKu1dE+/fAUMcd+KHt/k3h0K0jqKohtQosEs+7zwPlvOMWuDccJV1jZIfkazh6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZhlAz6rp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D3423C4CEEB;
+	Sat, 20 Sep 2025 12:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758368899;
-	bh=S4lEmGoMz/EYlXIdqoTKwelfO4ALXROy7V1e0MeAQH0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iaVGOGORuQwMrNSIa4PH+D4hqQ1EzqYfhpFDlKS6GxoHvE2G07cydmcNxbH7JiSaF
-	 VB//OvZ/NIyqtXTiQdgNIaJR1yOOt0GN5wvED71XbHWGfJQ8MXAbSmRKzOP0oGzxUo
-	 eI0dRZofOuo2tWVbhmOha+R9iPLZBhlAq6PxjOe1O36YWhAikhcfQDESIsNAQ7q3jU
-	 7Gd+ryQWi2LOvjIBn6+lHG+z8ITQPLWMenRTdeRpW6AWLUHFqDx4XBMKA2WVWqmMZP
-	 P+Fxg09E+3mx9SdSTdOU9opMn20sKOks4qBu7Z2VV23wsoQOCrm3HqCHZtnhcHSmN+
-	 St34XJ6vkjrEw==
-Message-ID: <5bae4ebe-dd42-4e84-9ee6-c9f6a88f7db5@kernel.org>
-Date: Sat, 20 Sep 2025 13:48:12 +0200
+	s=k20201202; t=1758371289;
+	bh=0b5NmMOnbDP9MtwNwBgV04ka112u6zlExhIdniRtJx0=;
+	h=From:Date:Subject:To:Cc:From;
+	b=ZhlAz6rpD1MD6GHBG0V2Ul2mY7P/nTLPmN+KMhL2AtPR8Y8Tv83UIDeiyi2ONehHi
+	 1V8M7oXM5sdP9ClTvRAOGmPRmVcxcwfL65rQkVUoO9KWlMdQ9LNBZ10T7ha8xGCCiv
+	 EZ3CJx/yFfg+sqvBRmOiKNKoxeN2jKTp933x0puX5i6O3Ilxu272TFBkG7QL/oUuMI
+	 bcr8I4IV4TF40M/wo7WCtgvMT75ZIZrFm99l1EyhTdE+NTdK0IhQv6Qmof2D3uVDRi
+	 4MrlfIs5iuVWr3VdMSh1voLMdZ4FrvdNn0a77tZygmfo1hi63/PKd6yo359Qob6+Fc
+	 WremT60SA6JDA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA137CAC5A8;
+	Sat, 20 Sep 2025 12:28:09 +0000 (UTC)
+From: Sven Peter <sven@kernel.org>
+Date: Sat, 20 Sep 2025 12:28:03 +0000
+Subject: [PATCH] usb: typec: tipd: Fix error handling in
+ cd321x_read_data_status
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 03/22] usb: dwc3: glue: Allow more fine grained control
- over mode switches
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
- Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Neal Gompa <neal@gompa.dev>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <Frank.Li@nxp.com>,
- Ran Wang <ran.wang_1@nxp.com>, Peter Chen <peter.chen@nxp.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>
-References: <20250906-atcphy-6-17-v2-0-52c348623ef6@kernel.org>
- <20250906-atcphy-6-17-v2-3-52c348623ef6@kernel.org>
- <20250919214013.gtbaknjrgd375hm6@synopsys.com>
-Content-Language: en-US
-From: Sven Peter <sven@kernel.org>
-In-Reply-To: <20250919214013.gtbaknjrgd375hm6@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250920-tipd-fix-v1-1-49886d4f081d@kernel.org>
+X-B4-Tracking: v=1; b=H4sIANKdzmgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDSyMD3ZLMghTdtMwKXYNkU4M0yzRLy0TTRCWg8oKiVKAw2Kjo2NpaAHd
+ 1ZmJaAAAA
+X-Change-ID: 20250920-tipd-fix-0c50f9f99a5a
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dan Carpenter <dan.carpenter@linaro.org>, Sven Peter <sven@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2170; i=sven@kernel.org;
+ h=from:subject:message-id;
+ bh=0b5NmMOnbDP9MtwNwBgV04ka112u6zlExhIdniRtJx0=;
+ b=owGbwMvMwCHmIlirolUq95LxtFoSQ8a5udctpXkWrnv+976tQobui80y03UL3mz2e5jNy3GsZ
+ j7/wafMHaUsDGIcDLJiiizb99ubPnn4RnDppkvvYeawMoEMYeDiFICJhL9n+J8vmfzsVXKd8sSH
+ PmdlI59ci/y1asWhlR8maLhtLQ++9+IZw0/GbzeLePfPtHoz44mmnf98OxmmlTtcT+16GnBwi6k
+ i8xI2AA==
+X-Developer-Key: i=sven@kernel.org; a=openpgp;
+ fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
+X-Endpoint-Received: by B4 Relay for sven@kernel.org/default with
+ auth_id=407
 
-Hi,
+Right now cd321x_read_data_status always returns true even if it
+encounters any errors: tps6598x_read_data_status returns a boolean but
+we treated it as an errno and then we have a bunch of dev_errs in case
+tps6598x_block_read fails but just continue along and return true.
+Fix that to correctly report errors to the callee.
 
-On 19.09.25 23:40, Thinh Nguyen wrote:
-> On Sat, Sep 06, 2025, Sven Peter wrote:
->> We need fine grained control over mode switched on the DWC3 controller
->> present on Apple Silicon. Export core, host and gadget init and exit,
->> ptrcap and susphy control functions. Also introduce an additional
->> parameter to probe_data that allows to skip the final initialization
->> step that would bring up host or gadget mode.
->>
->> Signed-off-by: Sven Peter <sven@kernel.org>
->> ---
->>   drivers/usb/dwc3/core.c   | 16 +++++++++++-----
->>   drivers/usb/dwc3/gadget.c |  2 ++
->>   drivers/usb/dwc3/glue.h   | 14 ++++++++++++++
->>   drivers/usb/dwc3/host.c   |  2 ++
->>   4 files changed, 29 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 8002c23a5a02acb8f3e87b2662a53998a4cf4f5c..18056fac44c8732278a650ac2be8b493892c92dd 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -132,6 +132,7 @@ void dwc3_enable_susphy(struct dwc3 *dwc, bool enable)
->>   		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
->>   	}
->>   }
->> +EXPORT_SYMBOL_GPL(dwc3_enable_susphy);
->>   
->>   void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy)
->>   {
->> @@ -157,6 +158,7 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy)
->>   
->>   	dwc->current_dr_role = mode;
->>   }
->> +EXPORT_SYMBOL_GPL(dwc3_set_prtcap);
-> 
-> I'm hesitant to export this as is. This function may change the susphy
-> bits and expect them to be restored later. It's not meant to be a
-> standalone use. At least, we should document how it should be used along
-> with the other newly added interfaces.
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/linux-usb/aMvWJo3IkClmFoAA@stanley.mountain/
+Signed-off-by: Sven Peter <sven@kernel.org>
+---
+ drivers/usb/typec/tipd/core.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 2b1049c9a6f3c4300f4a25a97fe502c47e82a134..d0c86347251c5cc19a9b377550c00c27966f8329 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -577,30 +577,36 @@ static bool cd321x_read_data_status(struct tps6598x *tps)
+ 	int ret;
+ 
+ 	ret = tps6598x_read_data_status(tps);
+-	if (ret < 0)
++	if (!ret)
+ 		return false;
+ 
+ 	if (tps->data_status & TPS_DATA_STATUS_DP_CONNECTION) {
+ 		ret = tps6598x_block_read(tps, TPS_REG_DP_SID_STATUS,
+ 				&cd321x->dp_sid_status, sizeof(cd321x->dp_sid_status));
+-		if (ret)
++		if (ret) {
+ 			dev_err(tps->dev, "Failed to read DP SID Status: %d\n",
+ 				ret);
++			return false;
++		}
+ 	}
+ 
+ 	if (tps->data_status & TPS_DATA_STATUS_TBT_CONNECTION) {
+ 		ret = tps6598x_block_read(tps, TPS_REG_INTEL_VID_STATUS,
+ 				&cd321x->intel_vid_status, sizeof(cd321x->intel_vid_status));
+-		if (ret)
++		if (ret) {
+ 			dev_err(tps->dev, "Failed to read Intel VID Status: %d\n", ret);
++			return false;
++		}
+ 	}
+ 
+ 	if (tps->data_status & CD321X_DATA_STATUS_USB4_CONNECTION) {
+ 		ret = tps6598x_block_read(tps, TPS_REG_USB4_STATUS,
+ 				&cd321x->usb4_status, sizeof(cd321x->usb4_status));
+-		if (ret)
++		if (ret) {
+ 			dev_err(tps->dev,
+ 				"Failed to read USB4 Status: %d\n", ret);
++			return false;
++		}
+ 	}
+ 
+ 	return true;
 
-Sure, I can otherwise also open-code the susphy change inside 
-dwc3_apple_phy_set_mode anyway if you prefer to keep this private to the 
-dwc3 core. I should restore it there to the original value anyway I 
-guess after phy_set_mode.
+---
+base-commit: a4e143636d5def935dd461539b67b61287a8dfef
+change-id: 20250920-tipd-fix-0c50f9f99a5a
 
-
-
->>   
->>   static void __dwc3_set_mode(struct work_struct *work)
-
-[...]
-
->>   int dwc3_gadget_suspend(struct dwc3 *dwc)
->>   {
->> diff --git a/drivers/usb/dwc3/glue.h b/drivers/usb/dwc3/glue.h
->> index 2efd00e763be4fc51911f32d43054059e61fb43a..633268c76fe4c7fdc312c9705dfa7cf7ccf3544c 100644
->> --- a/drivers/usb/dwc3/glue.h
->> +++ b/drivers/usb/dwc3/glue.h
->> @@ -15,16 +15,30 @@
->>    * @res: resource for the DWC3 core mmio region
->>    * @ignore_clocks_and_resets: clocks and resets defined for the device should
->>    *		be ignored by the DWC3 core, as they are managed by the glue
->> + * @skip_core_init_mode: skip the finial initialization of the target mode, as
-> 
-> finial -> final?
-
-Whoops, yes, I thought I ran a spell checker over this because I usually 
-add a lot of typos but must've forgotten :-)
-
-
-> 
->> + *		it must be managed by the glue
->>    */
-
-[...]
-
->>   
->> +int dwc3_core_init(struct dwc3 *dwc);
->> +void dwc3_core_exit(struct dwc3 *dwc);
->> +
->> +int dwc3_host_init(struct dwc3 *dwc);
->> +void dwc3_host_exit(struct dwc3 *dwc);
->> +int dwc3_gadget_init(struct dwc3 *dwc);
->> +void dwc3_gadget_exit(struct dwc3 *dwc);
->> +
->> +void dwc3_enable_susphy(struct dwc3 *dwc, bool enable);
->> +void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy);
->> +
-> 
-> We should document these interfaces. The dwc3_core_probe() does all of
-> the above in the proper order. It's not obvious why these are needed and
-> how they should be used.
-
-Very good point, I'll add documentation for all of these!
-
-
-Thanks for the review,
-
-
-Sven
+Best regards,
+-- 
+Sven Peter <sven@kernel.org>
 
 
 
