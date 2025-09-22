@@ -1,57 +1,80 @@
-Return-Path: <linux-usb+bounces-28468-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28469-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39A74B9116A
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 14:18:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39F4FB91336
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 14:49:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44E8C18A39D5
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 12:18:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 062A74217E6
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 12:49:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD549307AD7;
-	Mon, 22 Sep 2025 12:18:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ECC830ACEA;
+	Mon, 22 Sep 2025 12:48:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uU1zCZy/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ky4+uIDN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA287082F;
-	Mon, 22 Sep 2025 12:18:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C81830ACE7;
+	Mon, 22 Sep 2025 12:48:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758543485; cv=none; b=CQJNOtfaU0mmfW0tv8DoYNmYKanpB7WKiqAkl3AtMM6sKVs80uIPQ8ym3ROofwe2lQBhJo1IODtMLSojbEa4kRJZ4ldddlcRNJUSnc1deyzKr4/fr4uPaWLbeKYCYFhvltKGjSmJh4GSZciVeYfXZzrEo5AKBACRyoW+fWgGswI=
+	t=1758545323; cv=none; b=Kf+5nLJcHlhO2SDVRrr2MC5XfQTdKH8igBu4d9t1ea/wBWSnSpkODueeC27b9SY6IFrZNydTVjxXMOg8y9Jh8ZSenh2W6Ggat9SWQt2/WxNDlvJsnIBNpasF+CxDcXcAucyqwBxaiwwTeY/QzIUHlMgsaM0kK2hAoOgHmvDwO9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758543485; c=relaxed/simple;
-	bh=Px64DPLI5DXIGk/sess1M6hrO4Zq9NDNasK4kVW/lro=;
+	s=arc-20240116; t=1758545323; c=relaxed/simple;
+	bh=IBH+vNfSBckjiDJAhDZy7vjZQDdMb4hMkGcqn7iAZyo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uOm3s4toTkgybkkINz3WnaS2AjF/pZqiedqgI6DB3nTJb2jZ+3inKoWuIOkwO6BF/V6vmZoNwDxcJcTWMsgSpLTU2f4W2oNebgJzdfGDQttvfvv/6juFINeYyHHCLjDLgWHpWmSJ5BL3sTk45tFoKc5uvbh1gaKxhoem4eMXpUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uU1zCZy/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17EA4C4CEF0;
-	Mon, 22 Sep 2025 12:18:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1758543484;
-	bh=Px64DPLI5DXIGk/sess1M6hrO4Zq9NDNasK4kVW/lro=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uU1zCZy/GsonXmTCzQS/XilHrYbOzSxn133OcMojAPTO4G/FoObhPuWySl0dtlnf0
-	 /eW1KyJQ18to8ovFAlG7lWK6vdb4CgRgJOmChPP89jYKBkncbXyltAkUPFsRxqEWce
-	 parWgBMJNFOSK1k4Nzll5Jy/YCdjJPHFtdVoCh08=
-Date: Mon, 22 Sep 2025 14:18:00 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, Lixu Zhang <lixu.zhang@intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Alexander Usyskin <alexander.usyskin@intel.com>,
-	Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/5] usb: misc: ljca: Remove Wentong's e-mail address
-Message-ID: <2025092234-magenta-scouting-c3c4@gregkh>
-References: <20250922120632.10460-1-sakari.ailus@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=pJK8INZNhkXG8kgOf337P8JQIL1bCEepwba4PEM/h2gxs5Ir57otGGyZ1LT2hYirbbPmlUxSvzqFnIMTTtsaSeadpR6UWJHju8DetiNjrrByg+0L1P14m/je+ftiYnCIVoGYKMEqIjqcmKew1ajX2UpWELrZI8+4q20gtzK+9YE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ky4+uIDN; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758545321; x=1790081321;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IBH+vNfSBckjiDJAhDZy7vjZQDdMb4hMkGcqn7iAZyo=;
+  b=Ky4+uIDN20+zfVbYgic+CZtpQmprK3wUA9NryV0K56LHPmD7yK8aRAjS
+   4EzsKqopWedF/05GreGhHOJo+fk2j7yAkImJDCBJRdaydB2R19c8VKd88
+   tHmChyXFn9t+PhkSO53lh7egMye0BAaVVj2VvD2JbYlnpatxeN8jLeA2b
+   qK9CDmZ+1EC8580VM7clHdiHuLm4ePFBN9Ag3qfG+bPz4L7TM6qbIblcL
+   /HFbBTEnXL4TlEgE0yQaJhOWlQLvo5XPpFVXBJ8/6BI5Bv0F27w9qlRiX
+   LKnV3SHKCfdGWUr9sL2/nJ/miHGFnRnoy8b0CBYTF6wsX9pJvL2m0IejY
+   w==;
+X-CSE-ConnectionGUID: AOHyrWvWQlWBD56xgVJ7Bg==
+X-CSE-MsgGUID: lUTf8CLpQlir4US0Eay63A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="60744666"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="60744666"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 05:48:41 -0700
+X-CSE-ConnectionGUID: bfUmK1AFQmC2MejTw9t8LA==
+X-CSE-MsgGUID: /8q8t9D6SBOYcKHJFvh7HA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,285,1751266800"; 
+   d="scan'208";a="207421315"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa001.fm.intel.com with SMTP; 22 Sep 2025 05:48:38 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Sep 2025 15:48:37 +0300
+Date: Mon, 22 Sep 2025 15:48:37 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Mark Pearson <mpearson-lenovo@squebb.ca>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: Handle incorrect num_connectors
+ capability
+Message-ID: <aNFFpUZek-k5YXls@kuha.fi.intel.com>
+References: <mpearson-lenovo@squebb.ca>
+ <20250821185319.2585023-1-mpearson-lenovo@squebb.ca>
+ <2025082213-antacid-correct-53b1@gregkh>
+ <0ac78125-a028-4d99-b106-d792d8660d0f@app.fastmail.com>
+ <1c185541-2b6b-4c43-938a-9f4f4d1499b4@app.fastmail.com>
+ <2025091819-bullion-hut-8242@gregkh>
+ <aM0J2hDgqkxioAXU@kuha.fi.intel.com>
+ <84064f76-bc99-4f3c-b26b-0dacf3632279@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,31 +83,72 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250922120632.10460-1-sakari.ailus@linux.intel.com>
+In-Reply-To: <84064f76-bc99-4f3c-b26b-0dacf3632279@app.fastmail.com>
 
-On Mon, Sep 22, 2025 at 03:06:28PM +0300, Sakari Ailus wrote:
-> Wentong's e-mail address no longer works, remove it.
+On Fri, Sep 19, 2025 at 11:45:48AM -0400, Mark Pearson wrote:
+> Hi Heikki,
 > 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/usb/misc/usb-ljca.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Fri, Sep 19, 2025, at 3:44 AM, Heikki Krogerus wrote:
+> > On Thu, Sep 18, 2025 at 09:50:30AM +0200, Greg KH wrote:
+> >> On Wed, Sep 17, 2025 at 02:14:28PM -0400, Mark Pearson wrote:
+> >> > Hi all,
+> >> > 
+> >> > On Fri, Aug 22, 2025, at 8:54 AM, Mark Pearson wrote:
+> >> > > Hi Greg,
+> >> > >
+> >> > > On Fri, Aug 22, 2025, at 12:51 AM, Greg KH wrote:
+> >> > >> On Thu, Aug 21, 2025 at 02:53:07PM -0400, Mark Pearson wrote:
+> >> > >>> The UCSI spec states that the num_connectors field is 7 bits, and the
+> >> > >>> 8th bit is reserved and should be set to zero.
+> >> > >>> Some buggy FW has been known to set this bit, and it can lead to a
+> >> > >>> system not booting.
+> >> > >>> Flag that the FW is not behaving correctly, and auto-fix the value
+> >> > >>> so that the system boots correctly.
+> >> > >>> 
+> >> > >>> Found on Lenovo P1 G8 during Linux enablement program. The FW will
+> >> > >>> be fixed, but seemed worth addressing in case it hit platforms that
+> >> > >>> aren't officially Linux supported.
+> >> > >>> 
+> >> > >>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+> >> > >>
+> >> > >> Any hints as to what commit id this fixes?
+> >> > >>
+> >> > >> thanks,
+> >> > >>
+> >> > >> greg k-h
+> >> > >
+> >> > > Maybe 3cf657f ('Remove all bit-fields')?
+> >> > >
+> >> > > The commit there states that 'We can't use bit fields with data that is 
+> >> > > received or send
+> >> > > to/from the device.'
+> >> > > Not sure why that is, but I assumed this means we shouldn't change the 
+> >> > > structure to use 7 bits for num_connectors, which was my original plan.
+> >> > >
+> >> > > After that, we go all the way back to the file creation (c1b0bc2) where 
+> >> > > it was defined as 8 bit.
+> >> > >
+> >> > 
+> >> > Just a gentle nudge to see if there are any concerns or questions with the patch.
+> >> 
+> >> I was waiting for the maintainer of this code to review it :)
+> >
+> > So not Fixes tag?
+> >
 > 
-> diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
-> index c562630d862c..1846156c0800 100644
-> --- a/drivers/usb/misc/usb-ljca.c
-> +++ b/drivers/usb/misc/usb-ljca.c
-> @@ -891,7 +891,7 @@ static struct usb_driver ljca_driver = {
->  };
->  module_usb_driver(ljca_driver);
->  
-> -MODULE_AUTHOR("Wentong Wu <wentong.wu@intel.com>");
-> +MODULE_AUTHOR("Wentong Wu");
+> I can add a Fixes tag for the very original commit of this file (c1b0bc2) if that's wanted.
 
-Is there a new address where they can be reached?  SHouldn't that be
-used instead of just deleting the intel one?
+I don't think it's necessary in this case if the fw is really fixed.
+But what says Greg?
 
 thanks,
 
-greg k-h
+> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> >
+> Thanks for the review
+> 
+> Mark
+
+-- 
+heikki
 
