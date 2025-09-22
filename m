@@ -1,123 +1,140 @@
-Return-Path: <linux-usb+bounces-28456-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28457-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74754B8F031
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 07:22:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 839E3B8F3AA
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 09:12:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E67B11771A9
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 05:22:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D02273B59E2
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 07:11:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A5692F0694;
-	Mon, 22 Sep 2025 05:21:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5592D2F3620;
+	Mon, 22 Sep 2025 07:11:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D07D2EC0BF;
-	Mon, 22 Sep 2025 05:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC512F2914
+	for <linux-usb@vger.kernel.org>; Mon, 22 Sep 2025 07:11:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758518463; cv=none; b=DmqCxiASj129QJIFvLYiqdmk0hRcO15SDS0ygM5pV15kKkMa4R3KxL+3DFm+2DKM3WeePOgrF4gbdoSVTjz5v/MNrVDgbRYr3BF6j2L1yQ/yoG7ubt9AF5Okgt+mIuTW75jvZI8mlQrbk4Tuftmn/qx4sUxHxNjVfX1Eea79YjE=
+	t=1758525103; cv=none; b=I4mW5wJ1xq21TBSbq8NL/CeJWMV4QoLAXij3sD7EzYANAerua0lgspxLFvU7GorAp1Yv6lg9jRMFwgoBc/1HfDXxdHwLYlTVw+Zy11ywJEbwVNihBGmrqExfxkXZxTa9OWFAYPyvZwGufMxtOlmxQfcOS5+1SGVQiuaty8LI4OQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758518463; c=relaxed/simple;
-	bh=w1x3RIjvxJY3r2qRlnkKedK1Xs++HbYecJfNbrnWc8A=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D3pOP41VbSfWaqYQWxY4Y8Iu9D3atAzYz3eiRqz+4LJ1ucenm9vuwtnCt5thW/T+yJcGiAw9WRKp78Uuc6YswnE0+cxnZgi8adhyGrJOjFic0Svw0OOILdFJwU2H7qttf1oTW/WhOHnCg+t5XyGdya45uiBLoyUow3oyLuHgmx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Mon, 22 Sep
- 2025 13:20:45 +0800
-Received: from twmbx02.aspeed.com (192.168.10.13) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
- Transport; Mon, 22 Sep 2025 13:20:45 +0800
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-To: ryan_chen <ryan_chen@aspeedtech.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Alan
- Stern" <stern@rowland.harvard.edu>, Philipp Zabel <p.zabel@pengutronix.de>,
-	<linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 4/4] usb: uhci: Add Aspeed AST2700 support
-Date: Mon, 22 Sep 2025 13:20:45 +0800
-Message-ID: <20250922052045.2421480-5-ryan_chen@aspeedtech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250922052045.2421480-1-ryan_chen@aspeedtech.com>
-References: <20250922052045.2421480-1-ryan_chen@aspeedtech.com>
+	s=arc-20240116; t=1758525103; c=relaxed/simple;
+	bh=T7Z0FIstTb2WSj8YtIHnDt3lr50hwBNXU0a3XU0hZ6A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iaZe+JZmLpliBLUTBhiRXcG3lE38tknb2VFeoD0HNPJA1Bmh6GTDpWbVYGbnHBNtFAAEDEKfW2N/2InZG0pHNc0yTsZms2Et7Zo4E/wQJ5uLavKXq33whM7m4PcUEW1fsTShk6M56WjmKe4WXYiPfbJsLeuDuPdGkfVG4Imu1N4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1v0ahc-0000Ae-EZ; Mon, 22 Sep 2025 09:11:12 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1v0ahZ-002YKq-2Z;
+	Mon, 22 Sep 2025 09:11:09 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1v0ahZ-006mzY-25;
+	Mon, 22 Sep 2025 09:11:09 +0200
+Date: Mon, 22 Sep 2025 09:11:09 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Hubert Wi??niewski <hubert.wisniewski.25632@gmail.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>, stable@vger.kernel.org,
+	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+	Xu Yang <xu.yang_2@nxp.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH net v1 1/1] net: usb: asix: forbid runtime PM to avoid
+ PM/MDIO + RTNL deadlock
+Message-ID: <aND2jWYm8k5sD4nV@pengutronix.de>
+References: <20250917095457.2103318-1-o.rempel@pengutronix.de>
+ <aMsEyXPMVWewOmQS@wunner.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+In-Reply-To: <aMsEyXPMVWewOmQS@wunner.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Unlike earlier Aspeed SoCs (AST2400/2500/2600) which are limited to
-32-bit DMA addressing, the UHCI controller in AST2700 supports 64-bit
-DMA. Update the platform UHCI driver to select the appropriate DMA
-mask based on the device tree compatible string.
+Hi Lukas,
 
-Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
----
- drivers/usb/host/uhci-platform.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+On Wed, Sep 17, 2025 at 08:58:17PM +0200, Lukas Wunner wrote:
+> On Wed, Sep 17, 2025 at 11:54:57AM +0200, Oleksij Rempel wrote:
+> > Forbid USB runtime PM (autosuspend) for AX88772* in bind.
+> [...]
+> > With autosuspend active, resume paths may require calling phylink/phylib
+> > (caller must hold RTNL) and doing MDIO I/O. Taking RTNL from a USB PM
+> > resume can deadlock (RTNL may already be held), and MDIO can attempt a
+> > runtime-wake while the USB PM lock is held.
+> 
+> FWIW, for smsc95xx.c, the MDIO deadlock issue was resolved by commit
+> 7b960c967f2a ("usbnet: smsc95xx: Fix deadlock on runtime resume").
+> I would assume that something similar would be possible for
+> asix_devices.c as well.
 
-diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
-index aa75b546672b..37607f985cc0 100644
---- a/drivers/usb/host/uhci-platform.c
-+++ b/drivers/usb/host/uhci-platform.c
-@@ -65,9 +65,13 @@ static const struct hc_driver uhci_platform_hc_driver = {
- 	.hub_control =		uhci_hub_control,
- };
- 
-+static const u64 dma_mask_32 = DMA_BIT_MASK(32);
-+static const u64 dma_mask_64 = DMA_BIT_MASK(64);
-+
- static int uhci_hcd_platform_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
-+	const u64 *dma_mask_ptr;
- 	struct usb_hcd *hcd;
- 	struct uhci_hcd	*uhci;
- 	struct resource *res;
-@@ -81,7 +85,11 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
- 	 * Since shared usb code relies on it, set it here for now.
- 	 * Once we have dma capability bindings this can go away.
- 	 */
--	ret = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-+	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
-+	if (!dma_mask_ptr)
-+		dma_mask_ptr = &dma_mask_32;
-+
-+	ret = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
- 	if (ret)
- 		return ret;
- 
-@@ -114,7 +122,8 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
- 		}
- 		if (of_device_is_compatible(np, "aspeed,ast2400-uhci") ||
- 		    of_device_is_compatible(np, "aspeed,ast2500-uhci") ||
--		    of_device_is_compatible(np, "aspeed,ast2600-uhci")) {
-+		    of_device_is_compatible(np, "aspeed,ast2600-uhci") ||
-+		    of_device_is_compatible(np, "aspeed,ast2700-uhci")) {
- 			uhci->is_aspeed = 1;
- 			dev_info(&pdev->dev,
- 				 "Enabled Aspeed implementation workarounds\n");
-@@ -191,6 +200,7 @@ static void uhci_hcd_platform_shutdown(struct platform_device *op)
- static const struct of_device_id platform_uhci_ids[] = {
- 	{ .compatible = "generic-uhci", },
- 	{ .compatible = "platform-uhci", },
-+	{ .compatible = "aspeed,ast2700-uhci", .data = &dma_mask_64},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, platform_uhci_ids);
+thanks for the recommendation.
+
+Right now I’m juggling two goals:
+- Stable: provide a simple and robust fix with minimal risk.
+- net-next: design a clean and reliable solution that keeps autosuspend
+  working.
+
+For -stable, keeping autosuspend disabled per AX88772* seems to be the
+most straightforward and low-risk way to avoid the problematic
+autoresume path. Autosuspend isn’t on by default in most distros anyway,
+so the behavioral impact is minimal.
+
+If we keep autosuspend enabled, the driver has to be careful about
+multiple contexts:
+- Runtime PM callbacks: asix_{suspend,resume,reset_resume} running under
+the USB PM lock.
+
+- System sleep/resume: asix_resume() via dpm_run_callback() workqueues (no
+pm_runtime involved).
+
+- ndo_open() path (RTNL held): usbnet_open() -> usb_autopm_get_interface()
+  -> synchronous autoresume into asix_resume().
+
+- ethtool / netlink control paths: often under RTNL, may trigger
+  autoresume and/or MDIO via phylib.
+
+- phylink/MAC ops: may touch MDIO; caller is expected to hold RTNL.
+
+- status URB / NAPI: atomic/BH context (no sleeping, no RTNL).
+
+If maintainers prefer attempting the smsc95xx-style change right away, I
+can draft it; my preference for -stable is still the minimal forbid to
+limit churn.
+
+Best Regards,
+Oleksij
 -- 
-2.34.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
