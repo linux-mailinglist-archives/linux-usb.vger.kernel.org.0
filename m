@@ -1,140 +1,152 @@
-Return-Path: <linux-usb+bounces-28457-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28458-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 839E3B8F3AA
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 09:12:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF470B8F5F8
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 09:57:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D02273B59E2
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 07:11:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4ED463B4AB5
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 07:57:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5592D2F3620;
-	Mon, 22 Sep 2025 07:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1939D2F7AC2;
+	Mon, 22 Sep 2025 07:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TjgRs4rm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC512F2914
-	for <linux-usb@vger.kernel.org>; Mon, 22 Sep 2025 07:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F152EE268;
+	Mon, 22 Sep 2025 07:57:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758525103; cv=none; b=I4mW5wJ1xq21TBSbq8NL/CeJWMV4QoLAXij3sD7EzYANAerua0lgspxLFvU7GorAp1Yv6lg9jRMFwgoBc/1HfDXxdHwLYlTVw+Zy11ywJEbwVNihBGmrqExfxkXZxTa9OWFAYPyvZwGufMxtOlmxQfcOS5+1SGVQiuaty8LI4OQ=
+	t=1758527853; cv=none; b=NBgrvqIrIUVtOlhXo1+u2TCEPMVuhWCmhLmvU3cHFpOg8TYsZLr4FXua8oRwS7Viy0iBVQB/GPoeotbP6mB+k2mNRMTozdzWnKgmlvGHw+JLmcXju0BmY3MMUKcykZ0V/xn+fRhA7gwd1y763doDQ0n8cN+Oadv7nno4Qn7kFNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758525103; c=relaxed/simple;
-	bh=T7Z0FIstTb2WSj8YtIHnDt3lr50hwBNXU0a3XU0hZ6A=;
+	s=arc-20240116; t=1758527853; c=relaxed/simple;
+	bh=8yVDHTkeERDKqGU8/+5de0a01zz7l/9JjTsXpfwJEqU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iaZe+JZmLpliBLUTBhiRXcG3lE38tknb2VFeoD0HNPJA1Bmh6GTDpWbVYGbnHBNtFAAEDEKfW2N/2InZG0pHNc0yTsZms2Et7Zo4E/wQJ5uLavKXq33whM7m4PcUEW1fsTShk6M56WjmKe4WXYiPfbJsLeuDuPdGkfVG4Imu1N4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1v0ahc-0000Ae-EZ; Mon, 22 Sep 2025 09:11:12 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1v0ahZ-002YKq-2Z;
-	Mon, 22 Sep 2025 09:11:09 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1v0ahZ-006mzY-25;
-	Mon, 22 Sep 2025 09:11:09 +0200
-Date: Mon, 22 Sep 2025 09:11:09 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Hubert Wi??niewski <hubert.wisniewski.25632@gmail.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>, stable@vger.kernel.org,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-	Xu Yang <xu.yang_2@nxp.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: usb: asix: forbid runtime PM to avoid
- PM/MDIO + RTNL deadlock
-Message-ID: <aND2jWYm8k5sD4nV@pengutronix.de>
-References: <20250917095457.2103318-1-o.rempel@pengutronix.de>
- <aMsEyXPMVWewOmQS@wunner.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lGZq0r6MZwc+DnOgKwP8SFu77JgdrngjkQ7vMq67vrYnCHrnk2sohbeAGT0t+v49l68z1SxTKu6eTNd31CbWfSuMRHJRKxvSLXruhDTeEBONgxGAykEJXE+UVyKChcvj23RE8TcSgBqkVmU/NCm4jHhk4VCssGqNSi5oa+sGB6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TjgRs4rm; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758527852; x=1790063852;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8yVDHTkeERDKqGU8/+5de0a01zz7l/9JjTsXpfwJEqU=;
+  b=TjgRs4rmwW5v0yZCOlqNcAg96oG0h+dKEFCADumPcty2zoLHrdeo6sKT
+   WuserhXt7PZcBUf5EaAxVgofXYDrJR/rph1rQ5kgjUGHSvZiijmeMIYcj
+   CglOwfekxfEwvG9kGFZQChV4afgRy1IxhhhyoMAsYvmahfk1SBfoUMDI3
+   lS/R+WfsfdpsqlSmPF/0Qe3ILqgDOP4IERldduL7Bcq8aHd8pQkM799uy
+   nQOITsAM6VJE8OQoaHSu8GcoLxGpad4v9ZdZD3EL3mVEC0wd1gKPAt1mp
+   2rUaKk1vQnscjhtKcrI4lM7uS/8XCd06xDrRa5RwCv7ZlHtpZkOaSTpHo
+   g==;
+X-CSE-ConnectionGUID: ctd+v4wfT4CNyOdT4fbQyg==
+X-CSE-MsgGUID: 1CHTgxUUSuyxc6eyAcl1AA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11560"; a="60901903"
+X-IronPort-AV: E=Sophos;i="6.18,284,1751266800"; 
+   d="scan'208";a="60901903"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 00:57:31 -0700
+X-CSE-ConnectionGUID: A37dvFYzS3yKNurn/d60PA==
+X-CSE-MsgGUID: JVijE6a3RaepPTic1nShNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,284,1751266800"; 
+   d="scan'208";a="180675538"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 22 Sep 2025 00:57:24 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v0bQH-0001R3-1T;
+	Mon, 22 Sep 2025 07:57:21 +0000
+Date: Mon, 22 Sep 2025 15:56:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chaoyi Chen <kernel@airkyi.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Yubing Zhang <yubing.zhang@rock-chips.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Amit Sunil Dhamne <amitsd@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
+	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Peter Robinson <pbrobinson@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v4 1/7] usb: typec: Add default HPD device when register
+ DisplayPort altmode
+Message-ID: <202509221516.1umvcXG6-lkp@intel.com>
+References: <20250922012039.323-2-kernel@airkyi.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aMsEyXPMVWewOmQS@wunner.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20250922012039.323-2-kernel@airkyi.com>
 
-Hi Lukas,
+Hi Chaoyi,
 
-On Wed, Sep 17, 2025 at 08:58:17PM +0200, Lukas Wunner wrote:
-> On Wed, Sep 17, 2025 at 11:54:57AM +0200, Oleksij Rempel wrote:
-> > Forbid USB runtime PM (autosuspend) for AX88772* in bind.
-> [...]
-> > With autosuspend active, resume paths may require calling phylink/phylib
-> > (caller must hold RTNL) and doing MDIO I/O. Taking RTNL from a USB PM
-> > resume can deadlock (RTNL may already be held), and MDIO can attempt a
-> > runtime-wake while the USB PM lock is held.
-> 
-> FWIW, for smsc95xx.c, the MDIO deadlock issue was resolved by commit
-> 7b960c967f2a ("usbnet: smsc95xx: Fix deadlock on runtime resume").
-> I would assume that something similar would be possible for
-> asix_devices.c as well.
+kernel test robot noticed the following build warnings:
 
-thanks for the recommendation.
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus robh/for-next linus/master v6.17-rc7 next-20250919]
+[cannot apply to rockchip/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Right now I’m juggling two goals:
-- Stable: provide a simple and robust fix with minimal risk.
-- net-next: design a clean and reliable solution that keeps autosuspend
-  working.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chaoyi-Chen/usb-typec-Add-default-HPD-device-when-register-DisplayPort-altmode/20250922-092549
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250922012039.323-2-kernel%40airkyi.com
+patch subject: [PATCH v4 1/7] usb: typec: Add default HPD device when register DisplayPort altmode
+config: i386-buildonly-randconfig-003-20250922 (https://download.01.org/0day-ci/archive/20250922/202509221516.1umvcXG6-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250922/202509221516.1umvcXG6-lkp@intel.com/reproduce)
 
-For -stable, keeping autosuspend disabled per AX88772* seems to be the
-most straightforward and low-risk way to avoid the problematic
-autoresume path. Autosuspend isn’t on by default in most distros anyway,
-so the behavioral impact is minimal.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509221516.1umvcXG6-lkp@intel.com/
 
-If we keep autosuspend enabled, the driver has to be careful about
-multiple contexts:
-- Runtime PM callbacks: asix_{suspend,resume,reset_resume} running under
-the USB PM lock.
+All warnings (new ones prefixed by >>):
 
-- System sleep/resume: asix_resume() via dpm_run_callback() workqueues (no
-pm_runtime involved).
+   In file included from drivers/usb/typec/class.c:18:
+>> drivers/usb/typec/altmodes/displayport.h:7:5: warning: no previous prototype for 'dp_altmode_probe' [-Wmissing-prototypes]
+       7 | int dp_altmode_probe(struct typec_altmode *alt) { return -ENOTSUPP; }
+         |     ^~~~~~~~~~~~~~~~
+>> drivers/usb/typec/altmodes/displayport.h:8:6: warning: no previous prototype for 'dp_altmode_remove' [-Wmissing-prototypes]
+       8 | void dp_altmode_remove(struct typec_altmode *alt) { }
+         |      ^~~~~~~~~~~~~~~~~
+>> drivers/usb/typec/altmodes/displayport.h:9:6: warning: no previous prototype for 'dp_altmode_hpd_device_register' [-Wmissing-prototypes]
+       9 | void dp_altmode_hpd_device_register(struct typec_altmode *alt) { }
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- ndo_open() path (RTNL held): usbnet_open() -> usb_autopm_get_interface()
-  -> synchronous autoresume into asix_resume().
 
-- ethtool / netlink control paths: often under RTNL, may trigger
-  autoresume and/or MDIO via phylib.
+vim +/dp_altmode_probe +7 drivers/usb/typec/altmodes/displayport.h
 
-- phylink/MAC ops: may touch MDIO; caller is expected to hold RTNL.
+d266e96820cc36 Ajay Gupta  2019-04-23 @7  int dp_altmode_probe(struct typec_altmode *alt) { return -ENOTSUPP; }
+d266e96820cc36 Ajay Gupta  2019-04-23 @8  void dp_altmode_remove(struct typec_altmode *alt) { }
+50d2edccce6bf3 Chaoyi Chen 2025-09-22 @9  void dp_altmode_hpd_device_register(struct typec_altmode *alt) { }
 
-- status URB / NAPI: atomic/BH context (no sleeping, no RTNL).
-
-If maintainers prefer attempting the smsc95xx-style change right away, I
-can draft it; my preference for -stable is still the minimal forbid to
-limit churn.
-
-Best Regards,
-Oleksij
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
