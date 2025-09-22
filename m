@@ -1,244 +1,109 @@
-Return-Path: <linux-usb+bounces-28486-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28487-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE4F5B926B8
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 19:28:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F50BB93325
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 22:15:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5BC63BAFE7
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 17:28:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88370188DC7F
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 20:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6753148A7;
-	Mon, 22 Sep 2025 17:27:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B96631A565;
+	Mon, 22 Sep 2025 20:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9jsUu8I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdQqbZfg"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03BE1A9FB7;
-	Mon, 22 Sep 2025 17:27:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1DEF1E32B7;
+	Mon, 22 Sep 2025 20:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758562070; cv=none; b=n8UbayU2M6NMHajOYoKyVKQzv4eg+FmVy4m4CelQLD+aki8Hk9qOzdWlK50VymzrypR4ExUrQ+WtFz7CrQYRrZxs6FKg1xMjsl1O4N3qwRy4t8VLbgiyiSDVw7aEqeaMV7lelk9zXfAemBqmJa3pDP0lg+sCthrkvLZgtBKHkJU=
+	t=1758572091; cv=none; b=uUjf/2B77QfHznyriPOf2A34c7PcsITmlf+A6W/F9tKKAXAm0B9FuiXHV2QNybtZIOthGxCvBkbdmR9TwSaSX5krXKjT6pGImoh6RuXuHMBwdlomjD7z+PRtGrspFVctrnPa5WvtA2e3NhaxI6BHgeD9ayGgSrGlW4RWyYjtLRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758562070; c=relaxed/simple;
-	bh=yKJaAmyEUj6hfg2Wi/c+GfF4r+OUMiAWTtRJ4AOyhsY=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=PR9sOdOfe1v5+fLoJmxxzbtsYRXkJlG3a/C0SvUvDbQloPH4i50XrlXMioBhZiFfPvhXMvQDCn3FZQQEKU1EjRKp1UUJKG/upcYl/MlUETUZGkqgXnooLqpcShSzKBeq2ScycHaJBkp8/YZ67EOUAIk+dHLHcq9iXyIakHN2KhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d9jsUu8I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9950C4CEF0;
-	Mon, 22 Sep 2025 17:27:49 +0000 (UTC)
+	s=arc-20240116; t=1758572091; c=relaxed/simple;
+	bh=n7onidEgsOlpaTA0bHqvezDw24pCCjyLfMiCT8xJbWo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QqV3RskZ0wM+kq8f4SOBRFYhPJlPq8NkCexw8hAl0S5SwAbOHCKkpppTn1eb3v0Jb5ffPJl8UPWlcFub0TNe3l7S24Y1Zy0Q4b5KTCANMjulqxtdUhy2O9c4rNTpLsd+F5PIb/WPEh/tXyTTWJR99ZJNtXBP9MHD7U16CODvRYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdQqbZfg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53C36C4CEF0;
+	Mon, 22 Sep 2025 20:14:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758562070;
-	bh=yKJaAmyEUj6hfg2Wi/c+GfF4r+OUMiAWTtRJ4AOyhsY=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=d9jsUu8ISkmgl9vuYDCPazTMv9KseEzUkLR1u6Huuav+aVAYr6rWRocAaqM/nFw39
-	 Wf2hwBQJXfUzSgY9M0V3scvPCXJieS7culoGJ6zIp9VTKYCf4AuGju8oshgiidPu0g
-	 wiYvbX/FS/w93EcnX4kvIy1Zlb0Na6Qrzufxlsyl2iO3XCqGWgtUFcBpZq1v7a8Kie
-	 uboN+g+QriCO8KkwwtDYMrf7/UypAEVk27Ipb52xEaj7ndxx2Ivmi8Vu/tgZoNFx+/
-	 kKqGdz5g63E6tdWAVERyP6bKUWrmTp2Esti7If4qDg2CvuJNmEOQNME6EgVGFSXsFJ
-	 JE3e74QN36E2A==
-Date: Mon, 22 Sep 2025 12:27:44 -0500
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+	s=k20201202; t=1758572090;
+	bh=n7onidEgsOlpaTA0bHqvezDw24pCCjyLfMiCT8xJbWo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mdQqbZfgkYFBXrVlz9w8YV7KeMdkJVHmaZi+yCE+ct1RDUWErD4fWAkOq468gUbzF
+	 kwuGtAghvJ1UKanzQkz0bBsDj9PbS0r7sUpYUN1YIXuG6TssUBEAnHB2oP+4Uxf1UM
+	 MuVUW9dbu4NXJO0E9eJpQBchM2rAYV0c7isLon4T2e8PEUl1Nea5KraVZtVRrRJNI+
+	 /Ta5aSQoxBG6YS8Bxfr/Mf0PkZ0EA1V8YlQA5f4QTFUb/VKq0ieUnoKhqfc0ZZThu4
+	 U5SiDwQzpAZDBK+7kEu2fSz6mai2vfOaF0pQYvC72vBhklIXZWhFggm79ga3m51zfd
+	 S+02KzwGccjfg==
+Date: Mon, 22 Sep 2025 15:14:49 -0500
+From: Rob Herring <robh@kernel.org>
+To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+Cc: krzk+dt@kernel.org, conor+dt@kernel.org, kishon@kernel.org,
+	vkoul@kernel.org, gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-phy@lists.infradead.org
+Subject: Re: [PATCH 3/9] dt-bindings: phy: qcom-m31-eusb2: Add Glymur
+ compatible
+Message-ID: <20250922201449.GA1235521-robh@kernel.org>
+References: <20250920032108.242643-1-wesley.cheng@oss.qualcomm.com>
+ <20250920032108.242643-4-wesley.cheng@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Diederik de Haas <didi.debian@cknow.org>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Dragan Simic <dsimic@manjaro.org>, dri-devel@lists.freedesktop.org, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- David Airlie <airlied@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Peter Robinson <pbrobinson@gmail.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Amit Sunil Dhamne <amitsd@google.com>, Maxime Ripard <mripard@kernel.org>, 
- Andy Yan <andy.yan@rock-chips.com>, linux-phy@lists.infradead.org, 
- linux-usb@vger.kernel.org, Frank Wang <frank.wang@rock-chips.com>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Yubing Zhang <yubing.zhang@rock-chips.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- Heiko Stuebner <heiko@sntech.de>, Johan Jonker <jbx6244@gmail.com>, 
- linux-arm-kernel@lists.infradead.org, 
- Chaoyi Chen <chaoyi.chen@rock-chips.com>, Vinod Koul <vkoul@kernel.org>, 
- Simona Vetter <simona@ffwll.ch>, Sandy Huang <hjc@rock-chips.com>, 
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org
-To: Chaoyi Chen <kernel@airkyi.com>
-In-Reply-To: <20250922012039.323-1-kernel@airkyi.com>
-References: <20250922012039.323-1-kernel@airkyi.com>
-Message-Id: <175856183997.499955.3596561052820030372.robh@kernel.org>
-Subject: Re: [PATCH v4 0/7] Add Type-C DP support for RK3399 EVB IND board
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250920032108.242643-4-wesley.cheng@oss.qualcomm.com>
 
+On Fri, Sep 19, 2025 at 08:21:02PM -0700, Wesley Cheng wrote:
+> Add the Glymur compatible to the M31 eUSB2 PHY, and use the SM8750 as
+> the fallback.
+> 
+> Signed-off-by: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+> ---
+>  .../devicetree/bindings/phy/qcom,m31-eusb2-phy.yaml   | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,m31-eusb2-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,m31-eusb2-phy.yaml
+> index c84c62d0e8cb..b96b1ee80257 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,m31-eusb2-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,m31-eusb2-phy.yaml
+> @@ -15,9 +15,12 @@ description:
+>  
+>  properties:
+>    compatible:
+> -    items:
+> -      - enum:
+> -          - qcom,sm8750-m31-eusb2-phy
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - qcom,glymur-m31-eusb2-phy
+> +          - const: qcom,sm8750-m31-eusb2-phy
+> +      - const: qcom,sm8750-m31-eusb2-phy
+>  
+>    reg:
+>      maxItems: 1
+> @@ -53,8 +56,6 @@ required:
+>    - compatible
+>    - reg
+>    - "#phy-cells"
+> -  - clocks
+> -  - clock-names
 
-On Mon, 22 Sep 2025 09:20:32 +0800, Chaoyi Chen wrote:
-> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-> 
-> This series focuses on adding Type-C DP support for USBDP PHY and DP
-> driver. The USBDP PHY and DP will perceive the changes in cable status
-> based on the USB PD and Type-C state machines provided by TCPM. Before
-> this, the USBDP PHY and DP controller of RK3399 sensed cable state
-> changes through extcon, and devices such as the RK3399 Gru-Chromebook
-> rely on them. This series should not break them.
-> 
-> ====
-> 1. DisplayPort HPD status notify
-> 
-> Before v4, I implemented a variety of DP HPD status notify. However,
-> they all had various problems and it was difficult to become a common
-> solution.
-> 
-> Under Dmitry's guidance, I try to add default DRM AUX HPD device when
-> register DisplayPort altmode in patch 1. That makes it redundant for
-> each Type-C chip driver to implement a similar registration process
-> in embedded scenarios.
-> 
-> I'm not certain if the current implementation is appropriate.
-> Please let me know if there's a better way.
-> 
-> ====
-> 2. Altmode switching and orientation switching for USBDP PHY
-> 
-> For USB Type-C interfaces, an external Type-C controller chip assists
-> by detecting cable attachment, determining plug orientation, and
-> reporting USB PD message. The USB/DP combo PHY supports software
-> configurable pin mapping and DisplayPort lane assignment. Based on
-> these message, the combo PHY can perform both altmode switching and
-> orientation switching via software.
-> 
-> The RK3399 EVB IND board has a Type-C interface DisplayPort. It use
-> fusb302 chip as Type-C controller. The connection diagram is shown below:
-> 
-> fusb302 chip +---> USB2.0 PHY ----> DWC3 USB controller
->              |
->              +---> USB/DP PHY0 +--> CDN-DP controller
->                                |
->                                +--> DWC3 USB controller
-> 
-> ====
-> 3. Multiple bridge model for RK3399 CDN-DP
-> 
-> The RK3399 has two USB/DP combo PHY and one CDN-DP controller. And
-> the CDN-DP can be switched to output to one of the PHYs.
-> 
-> USB/DP PHY0 ---+
->                | <----> CDN-DP controller
-> USB/DP PHY1 ---+
-> 
-> In previous versions, if both PHY ports were connected to DP,
-> the CDN-DP driver would select the first PHY port for output.
-> 
-> On Dmitry's suggestion, we introduced a multi-bridge model to support
-> flexible selection of the output PHY port. For each PHY port, a
-> separate encoder and bridge are registered.
-> 
-> The change is based on the DRM AUX HPD bridge, rather than the
-> extcon approach. This requires the DT to correctly describe the
-> connections between the PHY, USB connector, and DP controller.
-> And cdn_dp_parse_hpd_bridge_dt() will parses it and determines
-> whether to register one or two bridges.
-> 
-> ====
-> Patch1 add default HPD device when register Displayport altmode.
-> Patch2 add new Type-C mode switch for RK3399 USBDP phy binding.
-> Patch3 add typec_mux and typec_switch for RK3399 USBDP PHY.
-> Patch4 drops CDN-DP's extcon dependency when Type-C is present.
-> Patch5 add multiple bridges to support PHY port selection.
-> Patch6 add missing dp_out port for RK3399 CDN-DP.
-> Patch7 add Type-C DP support for RK3399 EVB IND board.
-> 
-> Changes in v4:
-> - Link to V3: https://lore.kernel.org/all/20250729090032.97-1-kernel@airkyi.com/
-> - Add default HPD device for DisplayPort altmode.
-> - Introduce multiple bridges for CDN-DP.
-> - ...
-> 
-> Changes in v3:
-> - Link to V2: https://lore.kernel.org/all/20250718062619.99-1-kernel@airkyi.com/
-> - Add more descriptions to clarify the role of the PHY in switching.
-> - Fix wrong vdo value.
-> - Fix port node in usb-c-connector.
-> 
-> Changes in v2:
-> - Link to V1: https://lore.kernel.org/all/20250715112456.101-1-kernel@airkyi.com/
-> - Reuse dp-port/usb3-port in rk3399-typec-phy binding.
-> - Fix compile error when CONFIG_TYPEC is not enabled.
-> - Notify DP HPD state by USB/DP PHY.
-> - Ignore duplicate HPD events.
-> - Add endpoint to link DP PHY and DP controller.
-> - Fix devicetree coding style.
-> 
-> Chaoyi Chen (7):
->   usb: typec: Add default HPD device when register DisplayPort altmode
->   dt-bindings: phy: rockchip: rk3399-typec-phy: Support mode-switch
->   phy: rockchip: phy-rockchip-typec: Add typec_mux/typec_switch support
->   drm/rockchip: cdn-dp: Support handle lane info without extcon
->   drm/rockchip: cdn-dp: Add multiple bridges to support PHY port
->     selection
->   arm64: dts: rockchip: Add missing dp_out port for RK3399 CDN-DP
->   arm64: dts: rockchip: rk3399-evb-ind: Add support for DisplayPort
-> 
->  .../phy/rockchip,rk3399-typec-phy.yaml        |   6 +
->  arch/arm64/boot/dts/rockchip/rk3399-base.dtsi |  10 +-
->  .../boot/dts/rockchip/rk3399-evb-ind.dts      | 146 ++++++
->  drivers/gpu/drm/rockchip/Kconfig              |   1 +
->  drivers/gpu/drm/rockchip/cdn-dp-core.c        | 423 +++++++++++++++---
->  drivers/gpu/drm/rockchip/cdn-dp-core.h        |  23 +-
->  drivers/phy/rockchip/phy-rockchip-typec.c     | 365 ++++++++++++++-
->  drivers/usb/typec/altmodes/displayport.c      |  27 ++
->  drivers/usb/typec/altmodes/displayport.h      |   2 +
->  drivers/usb/typec/class.c                     |   8 +
->  include/linux/usb/typec_altmode.h             |   2 +
->  11 files changed, 932 insertions(+), 81 deletions(-)
-> 
-> --
-> 2.49.0
-> 
-> 
-> 
+How is it compatible if clocks aren't required now? And clocks are 
+suddenly no longer required on sm8750?
 
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-This patch series was applied (using b4) to base:
- Base: attempting to guess base-commit...
- Base: tags/next-20250922 (best guess, 10/11 blobs matched)
-
-If this is not the correct base, please add 'base-commit' tag
-(or use b4 which does this automatically)
-
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/rockchip/' for 20250922012039.323-1-kernel@airkyi.com:
-
-arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dtb: syscon@ff770000 (rockchip,rk3399-grf): usb2phy@e450: 'port' does not match any of the regexes: '^pinctrl-[0-9]+$'
-	from schema $id: http://devicetree.org/schemas/soc/rockchip/grf.yaml#
-arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dtb: syscon@ff770000 (rockchip,rk3399-grf): usb2phy@e450: Unevaluated properties are not allowed ('port' was unexpected)
-	from schema $id: http://devicetree.org/schemas/soc/rockchip/grf.yaml#
-arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dtb: usb2phy@e450 (rockchip,rk3399-usb2phy): 'port' does not match any of the regexes: '^pinctrl-[0-9]+$'
-	from schema $id: http://devicetree.org/schemas/phy/rockchip,inno-usb2phy.yaml#
-arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dtb: /sound: failed to match any schema with compatible: ['rockchip,rk3399-gru-sound']
-
-
-
-
-
+>    - resets
+>    - vdd-supply
+>    - vdda12-supply
 
