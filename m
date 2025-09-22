@@ -1,447 +1,151 @@
-Return-Path: <linux-usb+bounces-28450-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28451-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93FD2B8EE2F
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 05:52:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DE2CB8EFEF
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 07:19:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BAB77AE33D
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 03:50:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46A6F17A9DA
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 05:19:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04692ED872;
-	Mon, 22 Sep 2025 03:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="HRIQZ+mv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1671F1FF7D7;
+	Mon, 22 Sep 2025 05:19:47 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185A31E5B95;
-	Mon, 22 Sep 2025 03:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B75822A1C7;
+	Mon, 22 Sep 2025 05:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758513149; cv=none; b=ftXIb5JVm4oObAFtvZUXpGhhejvVuzrn6JzRcgNZNVTmDz8gj4zK89Qk8xzu6QXaN9b+wumReopLkd28KywIkUc4CAKQoT/HzMyM0OA0vLbvzWsLhY5nRi+1VViU9okGUlTyokJ0m2mNKOaifC+qKVNurY0zqmIr5JPeoD6gN9s=
+	t=1758518386; cv=none; b=M3znK5c7oUM7GJmMAwNqBco5R24ZvhWe9AAmkiusO+2KRK8ZjPZ23LDOtbBoYF60YzBzvL7XhIGF1cip4kDD3KawHksdFg/xfvlg8S7BK3OQW4Y4zkOfjjbLSrRgk4rL5ByVthQZXSgh+qOn40wyxvoxkBMriXxHsMho/DrP6UE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758513149; c=relaxed/simple;
-	bh=a3OsQPqz/vBcdO71IrFI1O5gAfjMbOy5wWLMX/HC7jI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pgEiodK/TigfDVnWT+qxdrU3JsNTiyVh0sbM6E8Vwz57etZEp9mPbOwJ2lTkCGmwBeHE2YryP8iPjXS/Y1PUi/iGMpmQRI5SgwwHS9ERAnPBi9nq2JcK7l8UqxdRsnv4DLCjVjfYSf6J+j+RllKKqdkZslVIUAoXEVXKqxsVVFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=HRIQZ+mv; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uvOBcE6UQrpI6WGthIQ2mhhrrb+ib1iPppy0esW2pF8=; b=HRIQZ+mv3XjEr5HE95zUXo4+a6
-	NSRxPd0KrHJeiO55wmL8zxyLexKaYOtukTqYDUk4P7Wms504VRDpnu79qCxm9LPPLIvXhPbJDCS9J
-	YRDvUR+wf4nDqbVfzd55z89ZBt+992gTBdYH/kADhegMyk3HdwQFQNcaBQPMTq94apRnfURggWfW/
-	JHqnvLMVP0BaRB8Hc5glF+yhqEgLGpQ51cjWLVzIBoXc/Te8IX6AprfxOgc+nyojcMBMgjxAohGXS
-	cfa+R9tgKpxmrTagksJYExY1jTrB11KyU7eGcwAdbKgV4ytOY8lJPggIhRGBTZNeJw+hKdXevicaO
-	50y2/Udw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1v0Xb8-00000007I6X-2KnX;
-	Mon, 22 Sep 2025 03:52:18 +0000
-Date: Mon, 22 Sep 2025 04:52:18 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
-	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
-	miklos@szeredi.hu, a.hindborg@kernel.org, linux-mm@kvack.org,
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
-	kees@kernel.org, rostedt@goodmis.org, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, casey@schaufler-ca.com,
-	linuxppc-dev@lists.ozlabs.org, borntraeger@linux.ibm.com
-Subject: Re: [PATCH 31/39] convert selinuxfs
-Message-ID: <20250922035218.GP39973@ZenIV>
-References: <20250920074156.GK39973@ZenIV>
- <20250920074759.3564072-1-viro@zeniv.linux.org.uk>
- <20250920074759.3564072-31-viro@zeniv.linux.org.uk>
- <CAHC9VhTRsQtncKx4bkbkSqVXpZyQLHbvKkcaVO-ss21Fq36r+Q@mail.gmail.com>
- <20250921222619.GO39973@ZenIV>
- <CAHC9VhTy2j+hkT24hM1J2GH+12wp63DArRo6BGTvTwGX2k4CnA@mail.gmail.com>
+	s=arc-20240116; t=1758518386; c=relaxed/simple;
+	bh=5Vhn615erT56U5+0fJC8EIRESo6bbvqz1nnSe6HNd0I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TcaP0XdmXGJufeHopItuF+BKozklvqC+L1PgK/mh2lt38//KL2qN0Dmp1EXFiZwnQb3Eb8q3R6KTvJaRasY+CpQUSmEsa6v7918NoXV56RTza3htJYY0oZiXwh6hospSwaZqQQub5r1ZtlUV9/b+SVcP+lYwYQZOpMePCPrcx3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [218.12.18.142])
+	by mtasvr (Coremail) with SMTP id _____wBX0WJP3NBoIBxdAg--.35127S3;
+	Mon, 22 Sep 2025 13:19:12 +0800 (CST)
+Received: from ubuntu.localdomain (unknown [218.12.18.142])
+	by mail-app4 (Coremail) with SMTP id zi_KCgD3r4ZM3NBojL4EAg--.64758S2;
+	Mon, 22 Sep 2025 13:19:11 +0800 (CST)
+From: Duoming Zhou <duoming@zju.edu.cn>
+To: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	YehezkelShB@gmail.com,
+	westeri@kernel.org,
+	michael.jamet@intel.com,
+	andreas.noever@gmail.com,
+	Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] thunderbolt: Fix use-after-free in tb_dp_dprx_work
+Date: Mon, 22 Sep 2025 13:18:59 +0800
+Message-Id: <20250922051859.16095-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhTy2j+hkT24hM1J2GH+12wp63DArRo6BGTvTwGX2k4CnA@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zi_KCgD3r4ZM3NBojL4EAg--.64758S2
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAwQQAWjPA3sJtAA0sA
+X-CM-DELIVERINFO: =?B?G7l//AXKKxbFmtjJiESix3B1w3uoVhYI+vyen2ZzBEkOnu5chDpkB+ZdGnv/zQ0PbP
+	CR1yV5ixbmzrSF5xUw9Ym+rCxDSQJy/c2fDMmS0l/agfY5Z3Xq3tTgbHUvoqwYtvjxAcr2
+	P+DlzJ/7OC4qow1mgaWfEhYM8QRk76Hg6MgPYq9ZoYypeS1GrpR2WHq9h/vUzg==
+X-Coremail-Antispam: 1Uk129KBj93XoWxZw4DAw1DXr4kXF13uF4kAFc_yoW5Gw4UpF
+	W5G3yUtay5tan0yrsFqa1DuFnxur9Yy3W5Gr4kKa1rAw1Yqw43ta1rGFyFvF45ArW8JF13
+	Ar4Utr47ZF4qkrgCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvvb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
+	AKI48G6xCjnVAKz4kxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I
+	3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
+	WUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8I
+	cVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
+	AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuY
+	vjxU7xwIDUUUU
 
-On Sun, Sep 21, 2025 at 10:50:02PM -0400, Paul Moore wrote:
+The original code relies on cancel_delayed_work() in tb_dp_dprx_stop(),
+which does not ensure that the delayed work item tunnel->dprx_work has
+fully completed if it was already running. This leads to use-after-free
+scenarios where tb_tunnel is deallocated by tb_tunnel_put(), while
+tunnel->dprx_work remains active and attempts to dereference tb_tunnel
+in tb_dp_dprx_work().
 
-> Looks good to me, ACK below.  For me personally, it's a bit late to
-> take non-bugfix stuff for the upcoming merge window so I would defer
-> this for a few weeks, but if you want to take it now that's your call.
-> Also your call if you would prefer this to go in with the rest of the
-> patchset you've working on, or if you want me to take it via the
-> SELinux tree.  Let me know.
+A typical race condition is illustrated below:
 
-Seeing that it's already a 41-commit patchset (rpc_pipe conversion pulled
-in, now +1 from this split) with several more in the pipeline (securityfs
-conversion, for starters) and it's -rc7...
+CPU 0                            | CPU 1
+tb_dp_tunnel_active()            |
+  tb_deactivate_and_free_tunnel()| tb_dp_dprx_start()
+    tb_tunnel_deactivate()       |   queue_delayed_work()
+      tb_dp_activate()           |
+        tb_dp_dprx_stop()        | tb_dp_dprx_work() //delayed worker
+          cancel_delayed_work()  |
+    tb_tunnel_put(tunnel);       |
+                                 |   tunnel = container_of(...); //UAF
+                                 |   tunnel-> //UAF
 
-I think I'll post v2 in the middle of the week, but aim for the next
-cycle.  Rebase to -rc1 as soon as it comes, post v3 for review and testing,
-then shove it into -next.
+Replacing cancel_delayed_work() with cancel_delayed_work_sync() is
+not feasible as it would introduce a deadlock: both tb_dp_dprx_work()
+and the cleanup path acquire tb->lock, and cancel_delayed_work_sync()
+would wait indefinitely for the work item that cannot proceed.
 
-Especially since #work.nfsctl is in -next, so hopefully by -rc1 there won't
-be any need to put merges in the middle of the series, with conversion of
-nfsctl included into the series, bringing with it removal of kill_litter_super()
-and (hopefully) "give configfs and apparmorfs private copies of simple_unlink()
-and simple_rmdir() doing dput() instead of d_make_discardable(), then make
-d_make_discardable() complain about being called on non-persistent dentries".
+Instead, implement proper reference counting:
+- If cancel_delayed_work() returns true (work is pending), we release
+  the reference in the stop function.
+- If it returns false (work is executing or already completed), the
+  reference is released in delayed work function itself.
 
-Speaking of additional patches into that series: AFAICS there's no reason
-for selinuxfs to allocate dentry before the inode.  Doing it the other way
-round simplifies the things quite a bit, IMO.  Something like this (as followup
-to the previous patch):
+This ensures the tb_tunnel remains valid during work item execution
+while preventing memory leaks.
 
-diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index 482a2cac9640..7bee2d8bdec5 100644
---- a/security/selinux/selinuxfs.c
-+++ b/security/selinux/selinuxfs.c
-@@ -1197,6 +1197,25 @@ static struct inode *sel_make_inode(struct super_block *sb, umode_t mode)
- 	return ret;
+This bug was found by static analysis.
+
+Fixes: d6d458d42e1e ("thunderbolt: Handle DisplayPort tunnel activation asynchronously")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/thunderbolt/tunnel.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+index d52efe3f658c..89fa0c626d3e 100644
+--- a/drivers/thunderbolt/tunnel.c
++++ b/drivers/thunderbolt/tunnel.c
+@@ -1073,6 +1073,7 @@ static void tb_dp_dprx_work(struct work_struct *work)
+ 
+ 	if (tunnel->callback)
+ 		tunnel->callback(tunnel, tunnel->callback_data);
++	tb_tunnel_put(tunnel);
  }
  
-+static struct dentry *sel_attach(struct dentry *parent, const char *name,
-+				 struct inode *inode)
-+{
-+	struct dentry *dentry = d_alloc_name(parent, name);
-+	if (unlikely(!dentry)) {
-+		iput(inode);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+	d_add(dentry, inode);
-+	return dentry;
-+}
-+
-+static int sel_attach_file(struct dentry *parent, const char *name,
-+			   struct inode *inode)
-+{
-+	struct dentry *dentry = sel_attach(parent, name, inode);
-+	return PTR_ERR_OR_ZERO(dentry);
-+}
-+
- static ssize_t sel_read_bool(struct file *filep, char __user *buf,
- 			     size_t count, loff_t *ppos)
+ static int tb_dp_dprx_start(struct tb_tunnel *tunnel)
+@@ -1097,11 +1098,14 @@ static int tb_dp_dprx_start(struct tb_tunnel *tunnel)
+ 
+ static void tb_dp_dprx_stop(struct tb_tunnel *tunnel)
  {
-@@ -1364,8 +1383,7 @@ static int sel_make_bools(struct selinux_policy *newpolicy, struct dentry *bool_
- 	*bool_num = num;
- 	*bool_pending_names = names;
- 
--	for (i = 0; i < num; i++) {
--		struct dentry *dentry;
-+	for (i = 0; !ret && i < num; i++) {
- 		struct inode *inode;
- 		struct inode_security_struct *isec;
- 		ssize_t len;
-@@ -1376,15 +1394,9 @@ static int sel_make_bools(struct selinux_policy *newpolicy, struct dentry *bool_
- 			ret = -ENAMETOOLONG;
- 			break;
- 		}
--		dentry = d_alloc_name(bool_dir, names[i]);
--		if (!dentry) {
--			ret = -ENOMEM;
--			break;
--		}
- 
- 		inode = sel_make_inode(bool_dir->d_sb, S_IFREG | S_IRUGO | S_IWUSR);
- 		if (!inode) {
--			dput(dentry);
- 			ret = -ENOMEM;
- 			break;
- 		}
-@@ -1402,7 +1414,8 @@ static int sel_make_bools(struct selinux_policy *newpolicy, struct dentry *bool_
- 		isec->initialized = LABEL_INITIALIZED;
- 		inode->i_fop = &sel_bool_ops;
- 		inode->i_ino = i|SEL_BOOL_INO_OFFSET;
--		d_add(dentry, inode);
++	bool ret;
 +
-+		ret = sel_attach_file(bool_dir, names[i], inode);
+ 	if (tunnel->dprx_started) {
+ 		tunnel->dprx_started = false;
+ 		tunnel->dprx_canceled = true;
+-		cancel_delayed_work(&tunnel->dprx_work);
+-		tb_tunnel_put(tunnel);
++		ret = cancel_delayed_work(&tunnel->dprx_work);
++		if (ret)
++			tb_tunnel_put(tunnel);
  	}
- out:
- 	free_page((unsigned long)page);
-@@ -1587,6 +1600,7 @@ static int sel_make_avc_files(struct dentry *dir)
- 	struct super_block *sb = dir->d_sb;
- 	struct selinux_fs_info *fsi = sb->s_fs_info;
- 	unsigned int i;
-+	int err = 0;
- 	static const struct tree_descr files[] = {
- 		{ "cache_threshold",
- 		  &sel_avc_cache_threshold_ops, S_IRUGO|S_IWUSR },
-@@ -1596,26 +1610,20 @@ static int sel_make_avc_files(struct dentry *dir)
- #endif
- 	};
- 
--	for (i = 0; i < ARRAY_SIZE(files); i++) {
-+	for (i = 0; !err && i < ARRAY_SIZE(files); i++) {
- 		struct inode *inode;
--		struct dentry *dentry;
--
--		dentry = d_alloc_name(dir, files[i].name);
--		if (!dentry)
--			return -ENOMEM;
- 
- 		inode = sel_make_inode(dir->d_sb, S_IFREG|files[i].mode);
--		if (!inode) {
--			dput(dentry);
-+		if (!inode)
- 			return -ENOMEM;
--		}
- 
- 		inode->i_fop = files[i].ops;
- 		inode->i_ino = ++fsi->last_ino;
--		d_add(dentry, inode);
-+
-+		err = sel_attach_file(dir, files[i].name, inode);
- 	}
- 
--	return 0;
-+	return err;
  }
  
- static int sel_make_ss_files(struct dentry *dir)
-@@ -1623,30 +1631,25 @@ static int sel_make_ss_files(struct dentry *dir)
- 	struct super_block *sb = dir->d_sb;
- 	struct selinux_fs_info *fsi = sb->s_fs_info;
- 	unsigned int i;
-+	int err = 0;
- 	static const struct tree_descr files[] = {
- 		{ "sidtab_hash_stats", &sel_sidtab_hash_stats_ops, S_IRUGO },
- 	};
- 
--	for (i = 0; i < ARRAY_SIZE(files); i++) {
-+	for (i = 0; !err && i < ARRAY_SIZE(files); i++) {
- 		struct inode *inode;
--		struct dentry *dentry;
--
--		dentry = d_alloc_name(dir, files[i].name);
--		if (!dentry)
--			return -ENOMEM;
- 
- 		inode = sel_make_inode(dir->d_sb, S_IFREG|files[i].mode);
--		if (!inode) {
--			dput(dentry);
-+		if (!inode)
- 			return -ENOMEM;
--		}
- 
- 		inode->i_fop = files[i].ops;
- 		inode->i_ino = ++fsi->last_ino;
--		d_add(dentry, inode);
-+
-+		err = sel_attach_file(dir, files[i].name, inode);
- 	}
- 
--	return 0;
-+	return err;
- }
- 
- static ssize_t sel_read_initcon(struct file *file, char __user *buf,
-@@ -1674,30 +1677,25 @@ static const struct file_operations sel_initcon_ops = {
- static int sel_make_initcon_files(struct dentry *dir)
- {
- 	unsigned int i;
-+	int err = 0;
- 
--	for (i = 1; i <= SECINITSID_NUM; i++) {
--		struct inode *inode;
--		struct dentry *dentry;
-+	for (i = 1; !err && i <= SECINITSID_NUM; i++) {
- 		const char *s = security_get_initial_sid_context(i);
-+		struct inode *inode;
- 
- 		if (!s)
- 			continue;
--		dentry = d_alloc_name(dir, s);
--		if (!dentry)
--			return -ENOMEM;
- 
- 		inode = sel_make_inode(dir->d_sb, S_IFREG|S_IRUGO);
--		if (!inode) {
--			dput(dentry);
-+		if (!inode)
- 			return -ENOMEM;
--		}
- 
- 		inode->i_fop = &sel_initcon_ops;
- 		inode->i_ino = i|SEL_INITCON_INO_OFFSET;
--		d_add(dentry, inode);
-+		err = sel_attach_file(dir, s, inode);
- 	}
- 
--	return 0;
-+	return err;
- }
- 
- static inline unsigned long sel_class_to_ino(u16 class)
-@@ -1779,29 +1777,21 @@ static int sel_make_perm_files(struct selinux_policy *newpolicy,
- 	if (rc)
- 		return rc;
- 
--	for (i = 0; i < nperms; i++) {
-+	for (i = 0; !rc && i < nperms; i++) {
- 		struct inode *inode;
--		struct dentry *dentry;
- 
--		rc = -ENOMEM;
--		dentry = d_alloc_name(dir, perms[i]);
--		if (!dentry)
--			goto out;
--
--		rc = -ENOMEM;
- 		inode = sel_make_inode(dir->d_sb, S_IFREG|S_IRUGO);
- 		if (!inode) {
--			dput(dentry);
--			goto out;
-+			rc = -ENOMEM;
-+			break;
- 		}
- 
- 		inode->i_fop = &sel_perm_ops;
- 		/* i+1 since perm values are 1-indexed */
- 		inode->i_ino = sel_perm_to_ino(classvalue, i + 1);
--		d_add(dentry, inode);
-+
-+		rc = sel_attach_file(dir, perms[i], inode);
- 	}
--	rc = 0;
--out:
- 	for (i = 0; i < nperms; i++)
- 		kfree(perms[i]);
- 	kfree(perms);
-@@ -1816,20 +1806,18 @@ static int sel_make_class_dir_entries(struct selinux_policy *newpolicy,
- 	struct selinux_fs_info *fsi = sb->s_fs_info;
- 	struct dentry *dentry = NULL;
- 	struct inode *inode = NULL;
--
--	dentry = d_alloc_name(dir, "index");
--	if (!dentry)
--		return -ENOMEM;
-+	int err;
- 
- 	inode = sel_make_inode(dir->d_sb, S_IFREG|S_IRUGO);
--	if (!inode) {
--		dput(dentry);
-+	if (!inode)
- 		return -ENOMEM;
--	}
- 
- 	inode->i_fop = &sel_class_ops;
- 	inode->i_ino = sel_class_to_ino(index);
--	d_add(dentry, inode);
-+
-+	err = sel_attach_file(dir, "index", inode);
-+	if (err)
-+		return err;
- 
- 	dentry = sel_make_dir(dir, "perms", &fsi->last_class_ino);
- 	if (IS_ERR(dentry))
-@@ -1881,58 +1869,47 @@ static int sel_make_policycap(struct dentry *dir)
- {
- 	struct super_block *sb = dir->d_sb;
- 	unsigned int iter;
--	struct dentry *dentry = NULL;
- 	struct inode *inode = NULL;
-+	int err = 0;
-+
-+	for (iter = 0; !err && iter <= POLICYDB_CAP_MAX; iter++) {
-+		const char *name;
- 
--	for (iter = 0; iter <= POLICYDB_CAP_MAX; iter++) {
- 		if (iter < ARRAY_SIZE(selinux_policycap_names))
--			dentry = d_alloc_name(dir,
--					      selinux_policycap_names[iter]);
-+			name = selinux_policycap_names[iter];
- 		else
--			dentry = d_alloc_name(dir, "unknown");
--
--		if (dentry == NULL)
--			return -ENOMEM;
-+			name = "unknown";
- 
- 		inode = sel_make_inode(sb, S_IFREG | 0444);
--		if (inode == NULL) {
--			dput(dentry);
-+		if (!inode)
- 			return -ENOMEM;
--		}
- 
- 		inode->i_fop = &sel_policycap_ops;
- 		inode->i_ino = iter | SEL_POLICYCAP_INO_OFFSET;
--		d_add(dentry, inode);
-+		err = sel_attach_file(dir, name, inode);
- 	}
- 
--	return 0;
-+	return err;
- }
- 
- static struct dentry *sel_make_dir(struct dentry *dir, const char *name,
- 			unsigned long *ino)
- {
--	struct dentry *dentry = d_alloc_name(dir, name);
- 	struct inode *inode;
- 
--	if (!dentry)
--		return ERR_PTR(-ENOMEM);
--
- 	inode = sel_make_inode(dir->d_sb, S_IFDIR | S_IRUGO | S_IXUGO);
--	if (!inode) {
--		dput(dentry);
-+	if (!inode)
- 		return ERR_PTR(-ENOMEM);
--	}
- 
- 	inode->i_op = &simple_dir_inode_operations;
- 	inode->i_fop = &simple_dir_operations;
- 	inode->i_ino = ++(*ino);
- 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
- 	inc_nlink(inode);
--	d_add(dentry, inode);
- 	/* bump link count on parent directory, too */
- 	inc_nlink(d_inode(dir));
- 
--	return dentry;
-+	return sel_attach(dir, name, inode);
- }
- 
- static int reject_all(struct mnt_idmap *idmap, struct inode *inode, int mask)
-@@ -2020,17 +1997,10 @@ static int sel_fill_super(struct super_block *sb, struct fs_context *fc)
- 		goto err;
- 	}
- 
--	ret = -ENOMEM;
--	dentry = d_alloc_name(sb->s_root, NULL_FILE_NAME);
--	if (!dentry)
--		goto err;
--
- 	ret = -ENOMEM;
- 	inode = sel_make_inode(sb, S_IFCHR | S_IRUGO | S_IWUGO);
--	if (!inode) {
--		dput(dentry);
-+	if (!inode)
- 		goto err;
--	}
- 
- 	inode->i_ino = ++fsi->last_ino;
- 	isec = selinux_inode(inode);
-@@ -2039,7 +2009,9 @@ static int sel_fill_super(struct super_block *sb, struct fs_context *fc)
- 	isec->initialized = LABEL_INITIALIZED;
- 
- 	init_special_inode(inode, S_IFCHR | S_IRUGO | S_IWUGO, MKDEV(MEM_MAJOR, 3));
--	d_add(dentry, inode);
-+	ret = sel_attach_file(sb->s_root, NULL_FILE_NAME, inode);
-+	if (ret)
-+		goto err;
- 
- 	dentry = sel_make_dir(sb->s_root, "avc", &fsi->last_ino);
- 	if (IS_ERR(dentry)) {
+-- 
+2.34.1
+
 
