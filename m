@@ -1,137 +1,139 @@
-Return-Path: <linux-usb+bounces-28459-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28460-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55E77B8F731
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 10:16:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52A49B8FA66
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 10:50:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C71A618A050A
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 08:16:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0AF73A4A31
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 08:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4916285065;
-	Mon, 22 Sep 2025 08:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFC38283C90;
+	Mon, 22 Sep 2025 08:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TykEoA+T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OYaGTk7p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6030527AC3C
-	for <linux-usb@vger.kernel.org>; Mon, 22 Sep 2025 08:16:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE0C23B616;
+	Mon, 22 Sep 2025 08:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758528979; cv=none; b=NfDd8RXn9QzLbyCqkDmFl6UUkevueXrHvQ2EK1aDwAKlP03+8t+kSdNDZa/W0K/WYigm8bX3Jd7W2exF9P+82248tikCHQLqx4Hqh/btEhfsSJc/udXjx5SpZsVK0YiLmA1LHUWe05716itFRpjlKZ9PICUyRqbbD1z0I+Bq0dM=
+	t=1758531012; cv=none; b=pKdtfN/psbFFbA7Bz1YNSscBYpo8ed1+lSYx7KmuOxXfiD7MM3Naz+MH7bykz6140ZByklpw6KqQTH6P3gal4JgXtXX5wwl+UEVnVHZRpA9qAjOEAWUMe8p4vQHGvTf+8iU3ZbILl4kxqNcvmsdAKLZh1WS2+tEAh3FfjQ5XHOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758528979; c=relaxed/simple;
-	bh=UMJWZiC7sBj6mxojXhTJC+tuD8oKXX6T1jbAHxgYnJc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TIp6rAHc2eGkJCHXrSySZ/XXX/tAVzETxrxaFBVLVV4JTN9eHmGui8BBengTMKckyw1KKqa97TNgtJOQEMDMQL0T5sTQHRYiIR9v4UK8CS83DvTDdCCI6iUx8JxD/v7zRWNd9N85TvmRQP1Yr6SoMC/tSP0Yn8eT1jXJ5JB1PT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TykEoA+T; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-57bd482dfd2so1656835e87.2
-        for <linux-usb@vger.kernel.org>; Mon, 22 Sep 2025 01:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758528975; x=1759133775; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c5VEvi4x8chbxAda+lSO8rMAf/beZcw/I4cFoExnq3E=;
-        b=TykEoA+T2QQDbvhjRHvga/ygUfeJuvwoaRYSR0tBITiSAPBRZCQnO2j8b79UDqd8qR
-         6ithQFSgVi544ea4Tace/Ryxtk9Li2oEzQQbPV/ASNj/k7+CwxzYMzPWmWefzU8vOC+5
-         YhAdSYPjXlQHSiBHMOAb2h67mO0C5j5ayJBJ99NZdm/xY97XnAW2gLGfgmRUyzCL1qFw
-         5RUTihSJUdrxkGmeeuaXKH+AM5VgffaDuQ1Td9yX/ktGPjznBCLC9Qb2IiF3mDJzKvfY
-         0/bsXE5Eff+NoKDfpmPEMvXzCMQe03OrAz4TGbkJnaRFE8EHnUQoc/en8ywH8PmC7+6R
-         C/2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758528975; x=1759133775;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c5VEvi4x8chbxAda+lSO8rMAf/beZcw/I4cFoExnq3E=;
-        b=S9dxPdR3xl8EB2F01HmBMR/7o8QWN/ZDaturAoRyw9yoxvp6ZRZW0Bb5wgfasNODAf
-         ExHxSYopqIPcy3zws4+vkuyBPuvbBdb5P+mhYistXoakaYjnPjhm4FBHUM/Hc8/ADAW8
-         dv3atd5Ju4NpM6nFWLT8V1wl0TvgJu8ki0RP1CkmZFDpAtMSBasXAxtn+yIdm0ajAzNb
-         47+dNTZFyA0atsL0qGlw1QjXwkaKF/jKC+31zzJN0WZvbNcaQFjg1xyJD+WGDLtAtXpI
-         NWiLBCDv78aHUDdErnfDlevowbZ+D0MzQIpALfdE4RoFcCnCGSZuAYuNx272mIV1jfWc
-         9umA==
-X-Gm-Message-State: AOJu0Yzj7+iC/b1chdR6owuq9Vxd8HCDuN7Mr68IHWM/s9HxFPH3VcQj
-	TYnydO4PbEwnb36djZ4kX38p7urulyYvuvGRonRmHQHJzNmTq2OPOM4+
-X-Gm-Gg: ASbGncstkK9THyF315hcHAKvLiMTfokb6Jw6x2Ak3XqHuKaBV3r11fhzYsQ3O91wmzo
-	n7AiCmx7P34ROd66TBWoZwBIMBotlC22XrGhWJohUYiVz0WqicOLFDwE4tcHMVBz8uRKy321lyg
-	Q5NVnOARNs1t39Kw/seZ/plxJUf6H21gKuRNvcl7spQKMml5GkvUnnQdlMu8aCyvw10+dXoRDlh
-	7kYaluJwbTj7AYzo1DsFupdfVpHB8US89FRESoPNd6OU41Jj6p1YNfm5v+k91dex2sLRsfyJw+g
-	8cMybl4oQa8x1xOt/5lnfCk5C2p01vv0sH17S0IRbeLH6Vn0qqYmQpKFlE89os6FKrFdakfbW6C
-	a0Y9NIAbM8nx3S366hhflwTnccPEyDlt2kIM=
-X-Google-Smtp-Source: AGHT+IEBnciOJYeoELu8rLKOpYmJe14ZWR4sLAktR1bK9CrTwUMc1Hawjx43GGZQU5SZBI4fWanYFg==
-X-Received: by 2002:a05:6512:4041:b0:55f:4fac:3f2b with SMTP id 2adb3069b0e04-579dfccb059mr3293297e87.5.1758528975194;
-        Mon, 22 Sep 2025 01:16:15 -0700 (PDT)
-Received: from foxbook (bfe191.neoplus.adsl.tpnet.pl. [83.28.42.191])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-57e37d09511sm868935e87.88.2025.09.22.01.16.13
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 22 Sep 2025 01:16:14 -0700 (PDT)
-Date: Mon, 22 Sep 2025 10:16:10 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/1] usb: xhci: Queue URB_ZERO_PACKET as one TD
-Message-ID: <20250922101610.0102e1a1.michal.pecio@gmail.com>
-In-Reply-To: <e29fa12b-55e4-4ab1-b623-11feb447bdf7@linux.intel.com>
-References: <20250908130128.7ed81912.michal.pecio@gmail.com>
-	<6ca18b05-80d4-4988-bb08-3cad003e10f4@linux.intel.com>
-	<20250909193859.73127f85.michal.pecio@gmail.com>
-	<e29fa12b-55e4-4ab1-b623-11feb447bdf7@linux.intel.com>
+	s=arc-20240116; t=1758531012; c=relaxed/simple;
+	bh=EIwX2Gv25NRIdufRlFKCm9KTmV1tzjcTIKEMfhqFOjs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=thsbddKUPSswj9fQXf2BRdoPe+Nxshk6vU0eocKFqgqAllminjMsPIHfUcXQjw54JOOcWCA7L0OcRF45kH1VCqVKF917HdtSueZL61hq9dsv6ZSQRzocNVvMfdAc+d1p+vpEs0+GSn9Ybj6aiUJtR8Dsz8CjxY9uwovWACrZrPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OYaGTk7p; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758531011; x=1790067011;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EIwX2Gv25NRIdufRlFKCm9KTmV1tzjcTIKEMfhqFOjs=;
+  b=OYaGTk7p34eIeIWimkMEL6v5bc1DCZLxjP5BP4dcpxppMbvd7IrNSv5t
+   PivxNFcd7+BmlYjXFVhfnPyGhRNF1ai7eT2DvV2fEHzfzdbToPEq4g18W
+   2v7ATOKSliP+nIdFgZ5sqRgtOcmXvAzw2qC4gkZ3BxbK72NRAQXSqh8Hx
+   jtRFs4cjJtTDU54ld2TOBQGNM503mp1lvppCAWTKhGvxHb7HCVRxk4x28
+   n2E/j9OH7oY2EoIyhYn9M8ZGM2ICaymtyQzrIJ8GcYYd1td0wIlYSUZSQ
+   9fqLtPFRNWDu6DKp6YgIiTaEepZZUwnc72Beua6i/EoYGcFR0P/K8y3IX
+   g==;
+X-CSE-ConnectionGUID: i3XzaMxfQtKF9DGX7IxKkw==
+X-CSE-MsgGUID: 8/I6CdThQ+SmBhweQH/prw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11560"; a="48364743"
+X-IronPort-AV: E=Sophos;i="6.18,284,1751266800"; 
+   d="scan'208";a="48364743"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 01:50:10 -0700
+X-CSE-ConnectionGUID: H465Suv1SMms04Tugxlnaw==
+X-CSE-MsgGUID: 2epaaLTjT7uCtIJLozB0OQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,284,1751266800"; 
+   d="scan'208";a="176033714"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 22 Sep 2025 01:50:03 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v0cFF-0001UX-07;
+	Mon, 22 Sep 2025 08:50:01 +0000
+Date: Mon, 22 Sep 2025 16:49:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chaoyi Chen <kernel@airkyi.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Yubing Zhang <yubing.zhang@rock-chips.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Amit Sunil Dhamne <amitsd@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
+	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Peter Robinson <pbrobinson@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v4 1/7] usb: typec: Add default HPD device when register
+ DisplayPort altmode
+Message-ID: <202509221607.rWZ3wNqm-lkp@intel.com>
+References: <20250922012039.323-2-kernel@airkyi.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250922012039.323-2-kernel@airkyi.com>
 
-On Wed, 10 Sep 2025 01:57:39 +0300, Mathias Nyman wrote:
-> On 9.9.2025 20.38, Michal Pecio wrote:
-> > But this is not what this patch is about - the trick is to use an
-> > *unchained* TRB, which is a separate TD from HW's perspective, and
-> > to count it as part of the same TD from the driver's perspective.  
-> 
-> Ok, I see.
-> The whole TD without completion flag does worry me a bit.
-> 
-> We need to make sure stop/stald mid TD cases work, and  urb length is
-> set correctly.
+Hi Chaoyi,
 
-I came up with a potential problem case for clearing IOC:
+kernel test robot noticed the following build errors:
 
-1. all data of the first TD are sent out sucessfully
-2. no completion is generated because no IOC
-3. ring stops before advancing to the zero-length TD
-4. we only get FSE (Stopped - Length Invalid)
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus robh/for-next linus/master v6.17-rc7 next-20250919]
+[cannot apply to rockchip/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-See xHCI 4.6.9:
-     Table 4-2: Stop Endpoint Command TRB Handling
-       2nd row: Stopped on TD boundary
+url:    https://github.com/intel-lab-lkp/linux/commits/Chaoyi-Chen/usb-typec-Add-default-HPD-device-when-register-DisplayPort-altmode/20250922-092549
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250922012039.323-2-kernel%40airkyi.com
+patch subject: [PATCH v4 1/7] usb: typec: Add default HPD device when register DisplayPort altmode
+config: arm-randconfig-001-20250922 (https://download.01.org/0day-ci/archive/20250922/202509221607.rWZ3wNqm-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project cafc064fc7a96b3979a023ddae1da2b499d6c954)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250922/202509221607.rWZ3wNqm-lkp@intel.com/reproduce)
 
-Current event handler doesn't expect this to happen and actual length
-will be reported incorrectly. This would be easy to fix.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509221607.rWZ3wNqm-lkp@intel.com/
 
-But there is also the 0.96 spec where FSE was optional (xHCI G.2), so
-on some HCs (like NEC uPD720200) we won't get any event whatsoever and
-the almost fully completed URB will seem to have transferred no data.
+All errors (new ones prefixed by >>):
 
-(This assumes that any HC would stop in this manner rather than advance
-to the zero-length TD atomically after previous TD completion and stop
-normally in the zero-length TD. So not sure if it's a real problem and
-the condition seems hard to trigger for testing purposes.)
+>> ld.lld: error: undefined symbol: dp_altmode_hpd_device_register
+   >>> referenced by class.c:609 (drivers/usb/typec/class.c:609)
+   >>>               drivers/usb/typec/class.o:(typec_register_altmode) in archive vmlinux.a
 
-
-Control URBs have the same problem - FSE isn't handled very well and
-old HCs would seem to need IOC on the data stage to ensure correct
-actual length of cancelled URBs, if anyone cares.
-
-Regards,
-Michal
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
