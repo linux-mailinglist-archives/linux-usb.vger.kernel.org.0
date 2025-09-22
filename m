@@ -1,270 +1,155 @@
-Return-Path: <linux-usb+bounces-28472-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28473-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 544EBB91830
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 15:50:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A808DB91866
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 15:53:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D276B18925F9
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 13:50:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0C8B17FFD1
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 13:53:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DC3C30DED7;
-	Mon, 22 Sep 2025 13:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB07D30E0E2;
+	Mon, 22 Sep 2025 13:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ups/rq+G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GIhPqGNd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A253093D3;
-	Mon, 22 Sep 2025 13:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8524221F0C;
+	Mon, 22 Sep 2025 13:52:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758549013; cv=none; b=G7I7BwfuHYJyMw8Scg09uB2fdtO5UscsWBA8aNuM81TS6r4VPDyifeuv+0MsEQMe7gkn8FpDq3NhWDfC0ELyqo/n+qaGrGDhBAqHUDHR8pDIFjlSRG0ZtTgqquvhmfluADcmUpoyYWgAF4N5it+cwKNYJaENnjEIdPkbgLsays0=
+	t=1758549177; cv=none; b=NNw+1VkVyjQyiMYG3+Y8qeb74lchwsK71nkC5LOvmdp6++jDoE+yNGo8j7jWg6kPT/6qNrpCZUsvkLegNqRD+cAfzF9bn/yz0JKUlbwKVmd/Vd6ImxL7do1IQP/KklmL8ZkVeXasTrjTkxfC1FjXMSijM+iXQbeIdCGzSSoD01M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758549013; c=relaxed/simple;
-	bh=3WQaf8MM7dSVfiwqg/RdOI0oISsPzRsJCN3K1R3ANRo=;
+	s=arc-20240116; t=1758549177; c=relaxed/simple;
+	bh=zCJ6uUOofn2XoIRVY+EzCUyKwOANO/PBG8qjf/GVMRE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GzLmZoMHNOqnvp3VLRzNth/R4GkVU1pZyr9mGrvn5m6cPPT/a05l7JoVt62iftWHCdyQVHV/yT8Mcz+MFxo3/0M5lbfdD2a5wjOGEk3xozLO1jAAo5p+7HyKWmFHyMgk3AZjTh6hea9ZpazPzTx7dyTnPCeBLNCyBCdH/52AnpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ups/rq+G; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=btJ5IaUnzw+1oMnCjGMC4aIgGp39xEHgGxJQ4ZKfTjJdNpKfAN/8v73q65p5IbOUz7xZQfylu0Rl+KC9mnHHarLH71lbXQJBnYTBEtxeLYvnKxB3/03pL9P5idEj9flEPzegPCqGs/Ug3k/4t0T1HWsP7KiqWEVI/uxdtrc4Dl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GIhPqGNd; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758549011; x=1790085011;
+  t=1758549176; x=1790085176;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3WQaf8MM7dSVfiwqg/RdOI0oISsPzRsJCN3K1R3ANRo=;
-  b=Ups/rq+Gn3tMallL9ED8BgneVDFudi9UC+Dhd40O2YKiM0rPtNnR4TDv
-   IIpu5vTMkAHVRI6e6ES2hfeiTDQHNWPjKdLU63KDyFBMpHScYYmxfd2V0
-   DNNKxODxwiHomhhgSb+nsBiNNhe8w4EidNnVh33yExdMXmEGHBVuvj/zb
-   NsGHYmv28JxK1mLL2Ch9FfKGHX6P8UnXRwOq1cqL+XjZZnXQ4YoxV5qr5
-   U19Jm+BwphgBWMVbad+FvGgpmMqJerAU80IBpBplFA16ANf0Dm3arlyhB
-   /NaAyOXLkhiP0h7zWUyrqNlpKN7/LcpOx+GZfbTD2fWHwYv6OzXJiGR84
-   Q==;
-X-CSE-ConnectionGUID: jG31EIo9QwO0vvDrqlgl5Q==
-X-CSE-MsgGUID: xkt8TkVCQTiXm/gYWiwzNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="60751435"
+   mime-version:in-reply-to;
+  bh=zCJ6uUOofn2XoIRVY+EzCUyKwOANO/PBG8qjf/GVMRE=;
+  b=GIhPqGNdl23XzdgfvqAhvspIJw1cNQnGQQ/LICNwGDi+H/C+NAmrdNLC
+   Rbh5RwqOmND6clWT7MHVA+V0x+1+plxwMjy8xaM3R/rl+T5jIy0AyehN4
+   Ub1OEvXRWLWEQSh+AApoiVbb1u80q+AdCp0I0XB6aL/HA3lrV/Pv25WpO
+   K4JwuDNOCeuP+m2lAJHU5kPczKPwY8YcfNbrvSy1Pz7EBalA1CoeKCeEH
+   BivBYI6UF4AEMwt8r6qeghHm7ZdJGiF4VEYb4VLAopIgzaMoeJScCIoRU
+   NRk21K0MzRsKb9ELmgSJg3aWQuny6TsFcgnSbFCaEWxrwiwYctXR1pAMV
+   w==;
+X-CSE-ConnectionGUID: 5ilk1I4HTG6grM/NU8DtJA==
+X-CSE-MsgGUID: Vdpo1X0LS+yYHrm78NiuEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="60724426"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="60751435"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 06:50:10 -0700
-X-CSE-ConnectionGUID: gu/Por9PSPyiHlpSZ6q3UA==
-X-CSE-MsgGUID: O3/sSyogTH2c2TESNc5AiA==
+   d="scan'208";a="60724426"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 06:52:56 -0700
+X-CSE-ConnectionGUID: EdcLVe1cQduVLZeapGGGOQ==
+X-CSE-MsgGUID: gCnnAeqGQ9muL/FmLeNVrw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,285,1751266800"; 
-   d="scan'208";a="176554086"
+   d="scan'208";a="176305912"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa008.jf.intel.com with SMTP; 22 Sep 2025 06:50:07 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Sep 2025 16:50:05 +0300
-Date: Mon, 22 Sep 2025 16:50:05 +0300
+  by orviesa007.jf.intel.com with SMTP; 22 Sep 2025 06:52:53 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Sep 2025 16:52:51 +0300
+Date: Mon, 22 Sep 2025 16:52:51 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: Andrei Kuchynski <akuchynski@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	Guenter Roeck <groeck@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 0/5] USB Type-C alternate mode selection
-Message-ID: <aNFUDZQD5UiCtHW9@kuha.fi.intel.com>
-References: <20250909123028.2127449-1-akuchynski@chromium.org>
- <aMliLCWFKy5Esl0-@kuha.fi.intel.com>
- <CANFp7mXvpNXr=01nQR54d+Z+vSiiwiDLB+3B+1eR6Ks7b37gtg@mail.gmail.com>
- <aMqpe68m3rhDYsCt@kuha.fi.intel.com>
- <CANFp7mWk_TuA6Gxbtc8OmB7eq_vT8wUg=xkPJsxLCBTrQwOd6A@mail.gmail.com>
- <aM1DmJQz2PnEA6G_@kuha.fi.intel.com>
- <CANFp7mUDVPLja2QANYhJ2t6W9yPE7-qV8E2HTPHcJEYgOb8s2Q@mail.gmail.com>
+To: Sven Peter <sven@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Dan Carpenter <dan.carpenter@linaro.org>
+Subject: Re: [PATCH] usb: typec: tipd: Fix error handling in
+ cd321x_read_data_status
+Message-ID: <aNFUs9CqtLq7ozOV@kuha.fi.intel.com>
+References: <20250920-tipd-fix-v1-1-49886d4f081d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANFp7mUDVPLja2QANYhJ2t6W9yPE7-qV8E2HTPHcJEYgOb8s2Q@mail.gmail.com>
+In-Reply-To: <20250920-tipd-fix-v1-1-49886d4f081d@kernel.org>
 
-On Fri, Sep 19, 2025 at 09:58:05AM -0700, Abhishek Pandit-Subedi wrote:
-> On Fri, Sep 19, 2025 at 4:50 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > On Wed, Sep 17, 2025 at 10:51:11AM -0700, Abhishek Pandit-Subedi wrote:
-> > > On Wed, Sep 17, 2025 at 5:28 AM Heikki Krogerus
-> > > <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > On Tue, Sep 16, 2025 at 09:47:44AM -0700, Abhishek Pandit-Subedi wrote:
-> > > > > On Tue, Sep 16, 2025 at 6:12 AM Heikki Krogerus
-> > > > > <heikki.krogerus@linux.intel.com> wrote:
-> > > > > >
-> > > > > > On Tue, Sep 09, 2025 at 12:30:23PM +0000, Andrei Kuchynski wrote:
-> > > > > > > This patch series introduces a flexible mechanism for USB Type-C mode
-> > > > > > > selection, enabling into USB4 mode, Thunderbolt alternate mode, or
-> > > > > > > DisplayPort alternate mode.
-> > > > > > >
-> > > > > > > New sysfs `mode_selection` attribute is exposed to provide user control
-> > > > > > > over mode selection. It triggers an alternate mode negotiation.
-> > > > > > > The mode selection logic attempts to enter prioritized modes sequentially.
-> > > > > > > A mode is considered successfully negotiated only when its alternate mode
-> > > > > > > driver explicitly reports a positive status. Alternate mode drivers are
-> > > > > > > required to report their mode entry status (either successful or failed).
-> > > > > > > If the driver does not report its status within a defined timeout period,
-> > > > > > > the system automatically proceeds to attempt entry into the next preferred
-> > > > > > > mode.
-> > > > > >
-> > > > > > I'm still struggling to understand what is the benefit from this - why
-> > > > > > would you want the user space to explicitly start the entry process
-> > > > > > like this? Instead why would you not just take full control over the
-> > > > > > alt modes in user space by enabling the them one by one in what ever
-> > > > > > order you want?
-> > > > >
-> > > > > I think after the many patch iterations we went through upstreaming,
-> > > > > we may have lost the point a little bit wrt/ the mode selection task.
-> > > > > We talked about this on the very first iteration of this patchset
-> > > > > here: https://lore.kernel.org/linux-usb/CANFp7mVWo4GhiYqfLcD_wFV34WMkmXncMTOnmMfnKH4vm2X8Hg@mail.gmail.com/
-> > > > >
-> > > > > The motivation behind it was to allow the kernel driver to own mode
-> > > > > selection entirely and not need user space intervention. The current
-> > > > > alt-mode drivers attempt to own the mode entry process and this fails
-> > > > > when you have two or more altmode drivers loaded (i.e. displayport,
-> > > > > thunderbolt). The original goal of the mode selection task was to move
-> > > > > the mode entry decision away from the alt-mode driver and to the port
-> > > > > driver instead.
-> > > > >
-> > > > > What's missing in the current patch series to show this is probably
-> > > > > actually calling mode_selection once all partner modes are added :)
-> > > > > Andrei should be adding that to this patch series in the next patch
-> > > > > version.
-> > > > >
-> > > > > Adding the mode_selection sysfs trigger is for another reason: to
-> > > > > re-run mode selection after priorities have been changed in userspace
-> > > > > and there is no partner hotplug. We specifically have some security
-> > > > > policies around PCI tunnels that result in the following need:
-> > > > > * When we enable pci tunneling, we PREFER tbt over dp and would like
-> > > > > to select the preferred mode. When we disable it, we PREFER dp over
-> > > > > TBT and would like to select the preferred mode.
-> > > > > * When users are logged out, we always prefer DP over TBT.
-> > > > > * When the system is locked, we prefer DP over TBT for new connections
-> > > > > (but existing connections can be left as TBT). When we unlock, we want
-> > > > > to enter the most preferred mode (TBT > DP).
-> > > > >
-> > > > > While this is do-able with the alt-mode active sysfs field, we would
-> > > > > basically be re-creating the priority selection done in the kernel in
-> > > > > user space again. Hence why we want to expose the mode selection
-> > > > > trigger as done here.
-> > > >
-> > > > But this would be a step backwards. You want to keep the kernel in
-> > > > control of the mode selection, which is fine, but then you have these
-> > > > special cases where you have to give some of the control to the user
-> > > > space. So instead of taking complete control of the mode selection in
-> > > > user space, you want to create this partial control method of
-> > > > supporting your special cases while still leaving "most" of the
-> > > > control to kernel.
-> > > >
-> > > > I don't believe this will work in all cases. I'm fine with the
-> > > > priority as a way to tell the kernel the preferred entry order, but if
-> > > > the user space needs to take control of the actual mode selection, it
-> > > > has to take full control of it instead of like this, partially. This
-> > > > just looks incredibly fragile.
-> > > >
-> > > > So I'm still not convinced that there is any use for this. Either the
-> > > > user space takes over the mode selection completely with the active
-> > > > attribute files, or just leaves the selection completely to the kernel.
-> > > >
-> > >
-> > > That's a fair stance to take. We CAN do our special cases via the
-> > > "active" sysfs node. I've had a bit more time to think about the
-> > > problem we are solving and I'd like to elaborate a little.
-> > >
-> > > When we designed this mode selection task, there were two motivating factors:
-> > > * The existing typec_displayport and typec_thunderbolt modules will
-> > > both automatically try to enter a mode when probing and that does not
-> > > work well. You want a deterministic entry order.
-> > > * There is no generic typec daemon for userspace on Linux and there
-> > > isn't always a need for one (i.e. UCSI systems). The kernel has the
-> > > most information about what any given system needs and should be able
-> > > to handle mode entry timing better.
-> > >
-> > > For those motivating factors, I think an in-kernel mode selection as
-> > > designed in this series still makes sense. Let the kernel do the mode
-> > > selection, inform userspace when it is completed and userspace can
-> > > simply set priorities + report success/failure/errors.
-> > > One other change we will probably want to make is to turn the partner
-> > > altmode Kconfig options to boolean and roll it into the typec module.
-> > > Alt-mode module loading breaks mode selection ordering because you
-> > > can't be guaranteed the partner altmodes are loaded on the system when
-> > > you do partner altmode enumeration.
-> > >
-> > > Heikki, can you confirm we are on the same page up till this point at
-> > > least? The net effect here is we are moving partner altmodes
-> > > individually entering modes to centralizing mode entry in the typec
-> > > class itself.
-> >
-> > I think we are on the same page, but I don't think you can incorporate
-> > the entry of the modes into the class itself (you should not do that).
-> > You can't even make it a problem for the altmodes - I don't believe we
-> > can make it work in the long term.
+On Sat, Sep 20, 2025 at 12:28:03PM +0000, Sven Peter wrote:
+> Right now cd321x_read_data_status always returns true even if it
+> encounters any errors: tps6598x_read_data_status returns a boolean but
+> we treated it as an errno and then we have a bunch of dev_errs in case
+> tps6598x_block_read fails but just continue along and return true.
+> Fix that to correctly report errors to the callee.
 > 
-> It probably needs to be a port driver decision. UCSI based systems
-> will mostly expect that a mode has already been entered after a
-> partner connects (and reports the SUPPORTED_CAM_CHANGED bit in
-> Connector Status Change) but with UCSI 3.0, some systems could
-> potentially make this decision in kernel (via sending SET_NEW_CAM
-> <connector> 0xff 0 which would prevent the PPM/LPM from entering any
-> modes automatically). Even with cros_ec_typec, only devices supporting
-> TBT/USB4 will need a mode selection decision in the port driver (since
-> others just auto-enter DP).
-> 
-> >
-> > Here multiple modes need to be handled as a set, so the set itself
-> > needs to have an object that represents it. The altmodes will be part
-> > of these "sets", but they remain independent of any particular set.
-> > So the "set" defines the order in which the modes are entered instead
-> > of the class, or any individual altmode.
-> >
-> > I don't think there is any other way to make sure that the altmodes
-> > continue to work as well independently as part of these "sets".
-> >
-> > If you guys think that this makes sense, let me know. There are a
-> > number of ways we could implement this.
-> 
-> The idea you've described here of sets sounds like what this patch
-> series hopes to implement. The set is just all the partner altmodes
-> which the port supports and the ordering is the port priority for
-> those altmodes.
-> 
-> >
-> > > Also, with respect to dropping the mode_selection sysfs node and
-> > > simply using the `active` fields to override:
-> > > * How can we ensure that user space does not race with the kernel mode entry?
-> > > * Should we delay exposing "number_of_alternate_modes" until after
-> > > mode selection is done? Should we keep the mode_selection sysfs (or a
-> > > similarly named file) as a read-only indicator of current status?
-> >
-> > Races are definitely a concern. But I don't think that is a problem if
-> > we go ahead with the above idea of separating the mode relationships
-> > and entry into those "mode sets".
-> 
-> Is the idea to give userspace the ability to create a set and try to
-> enter atomically? Who decides what constitutes a set?
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Closes: https://lore.kernel.org/linux-usb/aMvWJo3IkClmFoAA@stanley.mountain/
+> Signed-off-by: Sven Peter <sven@kernel.org>
 
-It's really up to what we want, and how we you guys want to implement
-it. If the mode selection was a device (associated with each port (or
-partner) for example), then maybe the "set" could be a driver attached
-to it. Maybe :)
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-I'm just asking that we isolate the feature, because I think it can be
-separated in this case. I think isolating it should give some
-flexibility on things like where the control is in the end, but more
-importantly, that should minimise the impact to the existing bits and
-pieces, maybe allow the feature to be selectable, etc. etc.
-
-thanks,
+> ---
+>  drivers/usb/typec/tipd/core.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 2b1049c9a6f3c4300f4a25a97fe502c47e82a134..d0c86347251c5cc19a9b377550c00c27966f8329 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -577,30 +577,36 @@ static bool cd321x_read_data_status(struct tps6598x *tps)
+>  	int ret;
+>  
+>  	ret = tps6598x_read_data_status(tps);
+> -	if (ret < 0)
+> +	if (!ret)
+>  		return false;
+>  
+>  	if (tps->data_status & TPS_DATA_STATUS_DP_CONNECTION) {
+>  		ret = tps6598x_block_read(tps, TPS_REG_DP_SID_STATUS,
+>  				&cd321x->dp_sid_status, sizeof(cd321x->dp_sid_status));
+> -		if (ret)
+> +		if (ret) {
+>  			dev_err(tps->dev, "Failed to read DP SID Status: %d\n",
+>  				ret);
+> +			return false;
+> +		}
+>  	}
+>  
+>  	if (tps->data_status & TPS_DATA_STATUS_TBT_CONNECTION) {
+>  		ret = tps6598x_block_read(tps, TPS_REG_INTEL_VID_STATUS,
+>  				&cd321x->intel_vid_status, sizeof(cd321x->intel_vid_status));
+> -		if (ret)
+> +		if (ret) {
+>  			dev_err(tps->dev, "Failed to read Intel VID Status: %d\n", ret);
+> +			return false;
+> +		}
+>  	}
+>  
+>  	if (tps->data_status & CD321X_DATA_STATUS_USB4_CONNECTION) {
+>  		ret = tps6598x_block_read(tps, TPS_REG_USB4_STATUS,
+>  				&cd321x->usb4_status, sizeof(cd321x->usb4_status));
+> -		if (ret)
+> +		if (ret) {
+>  			dev_err(tps->dev,
+>  				"Failed to read USB4 Status: %d\n", ret);
+> +			return false;
+> +		}
+>  	}
+>  
+>  	return true;
+> 
+> ---
+> base-commit: a4e143636d5def935dd461539b67b61287a8dfef
+> change-id: 20250920-tipd-fix-0c50f9f99a5a
+> 
+> Best regards,
+> -- 
+> Sven Peter <sven@kernel.org>
+> 
 
 -- 
 heikki
