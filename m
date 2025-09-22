@@ -1,74 +1,90 @@
-Return-Path: <linux-usb+bounces-28473-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28474-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A808DB91866
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 15:53:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D73BB918A2
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 15:58:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0C8B17FFD1
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 13:53:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C9512A0DAA
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 13:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB07D30E0E2;
-	Mon, 22 Sep 2025 13:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0EA30EF90;
+	Mon, 22 Sep 2025 13:58:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GIhPqGNd"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="CPg+PFRT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8524221F0C;
-	Mon, 22 Sep 2025 13:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0465A30E821
+	for <linux-usb@vger.kernel.org>; Mon, 22 Sep 2025 13:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758549177; cv=none; b=NNw+1VkVyjQyiMYG3+Y8qeb74lchwsK71nkC5LOvmdp6++jDoE+yNGo8j7jWg6kPT/6qNrpCZUsvkLegNqRD+cAfzF9bn/yz0JKUlbwKVmd/Vd6ImxL7do1IQP/KklmL8ZkVeXasTrjTkxfC1FjXMSijM+iXQbeIdCGzSSoD01M=
+	t=1758549500; cv=none; b=ZpxQOoTLNoO0BsWfyew5qRTvYzwXOQxoG8Vw4SQrcw2vi64rEDgN6h2XqzDaWHCRX+Z8xE8anDiZjdTkgcNpbA+VkQmmOHmeHMFrkoa85k52jnyXVH/Y4gmBexGWxbX3qCB/dxeNH0d8ryMcW9Qn7zholzSwKGEvnT3ydw9d5uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758549177; c=relaxed/simple;
-	bh=zCJ6uUOofn2XoIRVY+EzCUyKwOANO/PBG8qjf/GVMRE=;
+	s=arc-20240116; t=1758549500; c=relaxed/simple;
+	bh=/bByTikaDpZO4dIRnrvdQkhLXizAJIrSrRF7ztsfqEk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=btJ5IaUnzw+1oMnCjGMC4aIgGp39xEHgGxJQ4ZKfTjJdNpKfAN/8v73q65p5IbOUz7xZQfylu0Rl+KC9mnHHarLH71lbXQJBnYTBEtxeLYvnKxB3/03pL9P5idEj9flEPzegPCqGs/Ug3k/4t0T1HWsP7KiqWEVI/uxdtrc4Dl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GIhPqGNd; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758549176; x=1790085176;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zCJ6uUOofn2XoIRVY+EzCUyKwOANO/PBG8qjf/GVMRE=;
-  b=GIhPqGNdl23XzdgfvqAhvspIJw1cNQnGQQ/LICNwGDi+H/C+NAmrdNLC
-   Rbh5RwqOmND6clWT7MHVA+V0x+1+plxwMjy8xaM3R/rl+T5jIy0AyehN4
-   Ub1OEvXRWLWEQSh+AApoiVbb1u80q+AdCp0I0XB6aL/HA3lrV/Pv25WpO
-   K4JwuDNOCeuP+m2lAJHU5kPczKPwY8YcfNbrvSy1Pz7EBalA1CoeKCeEH
-   BivBYI6UF4AEMwt8r6qeghHm7ZdJGiF4VEYb4VLAopIgzaMoeJScCIoRU
-   NRk21K0MzRsKb9ELmgSJg3aWQuny6TsFcgnSbFCaEWxrwiwYctXR1pAMV
-   w==;
-X-CSE-ConnectionGUID: 5ilk1I4HTG6grM/NU8DtJA==
-X-CSE-MsgGUID: Vdpo1X0LS+yYHrm78NiuEg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="60724426"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="60724426"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 06:52:56 -0700
-X-CSE-ConnectionGUID: EdcLVe1cQduVLZeapGGGOQ==
-X-CSE-MsgGUID: gCnnAeqGQ9muL/FmLeNVrw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,285,1751266800"; 
-   d="scan'208";a="176305912"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa007.jf.intel.com with SMTP; 22 Sep 2025 06:52:53 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Sep 2025 16:52:51 +0300
-Date: Mon, 22 Sep 2025 16:52:51 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Sven Peter <sven@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kec4XRSO3xHPLMIDz0/vyaY0t7FybWFLtZiH8nmOB1s+2N3jOJubwLwzLmmScx0Pqvv7/HQH0LSQHb6kkD6+V9iMFOZ8I/1h04UrJErBcGA123z6lCOmZM1ojB5mBjfKbzeH/RzWpS1XSFX3FGhAztZOOJNxb1VgEGIqGAEn1Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=CPg+PFRT; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4d21a3da5d8so411591cf.1
+        for <linux-usb@vger.kernel.org>; Mon, 22 Sep 2025 06:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1758549498; x=1759154298; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qXzUT3wmSEFa7kkyt4eL+Bcr+Ou5keciQCQXtOX12iQ=;
+        b=CPg+PFRTnZ5QgxUjnzN2Il86DPxkoatOhuaEHkl8Q3Rs7rFmTZTtnw39JWtLHlh7JW
+         h02YBKj53b9jXD1niEJUb7zHj/carCFdFem3VnotbSDVT55XdlonvHfwGj2KK3Guzo/Y
+         EXAjHTaThUoeh2Jynz6GeSTJLJauuD3a1rUGb+awZuL1dKlpL5/ieDNFxeKUjksdLRye
+         EjTuL5p2lt/6zBu9UkW3mx+qxJGhuxa/mwvLIgQTpAWmRRrVKLD5Cpy/vwqFeXd+N6RQ
+         lCvJTJ2Vhaqq7vW87RBxXayjeLK3gq3erCc6yOtSUp5aYSG6CYYyHblCVf/wfZjwV2K6
+         PuBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758549498; x=1759154298;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qXzUT3wmSEFa7kkyt4eL+Bcr+Ou5keciQCQXtOX12iQ=;
+        b=pdN9hBY1rkHzp6vRRXm80XbpPVj4+PA7R7o8HMlnXPk+sWXGxacNpILcd180lsW0iG
+         6lXHJv0MCXI8zr1z9kaDAa/aa/icyOyYunewtE35JrURpT1fI7jlPA3XEba6RViIx4yG
+         CqqPeAV9+IImI8rplpTF3puzHoYsBiGnB7Zvq9qWJDsES+VsjlHs7gwURukOWAJsv8ke
+         zJXBGfubs7dB21M4kZX9myfEQfW1RJojIFdS6/GDNOw26xoYjr5A3xoRXLyOe9WDlW2X
+         K634fsc7A87CYj0r2P4TR+Zxtoly6N1A7qkJ1r1LlkBKB1yJSTMH3Bdpox2yEoGPZLPN
+         CuAA==
+X-Forwarded-Encrypted: i=1; AJvYcCUhjMneFFlg4qepZ41vdav6Yf0PuivhqmVT3nGot2JBdFXulmbLTJigkVT1WIKIh1JFw/hmDFGsvI8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4/y/ExsPF6qssHOsZa97YsR5GPBPLDBd6KnZoQbvnQPEHJsdN
+	jA+RQ8SJPfpXt4FjUh277f6loBhN+LZqMNpvM3MFmp8rLTkJbbN/TQG6OYTEuAyVvDfsKfdrYil
+	SGrw=
+X-Gm-Gg: ASbGnctORclVxuBtL+bv/CWxdgaasuhlKjf45VT0HMTkAyQifoC2T8HjfvU+sSEWEeQ
+	x35T8lVXpLyhYgb9Z4UhSlt8QtJZHj3bdt1iZ1ukxo0MAhYBUuLl15JwampomUwX/SEr2htgDXa
+	boWo6nANTVr4i+w1G2iz2bMP41/7WbFAjLYMDW8Ihe9VPIA5roawRkZtbUXS6RTVMzhIcKt43TN
+	sAaQYTUbQjDso3vNwfucO0qobo7pGUz2NkqnfY8iP6BsPdznoNJlLjPB9JmlAH1dsPushg3FWOe
+	6XHtE0ORn6MoYLhShSVJmLMBKpnRQTNYkuG5Y34zxKdWirMrxPoMLtN5Rueo5hrydDNAuAsa05t
+	qOcRtWGufC/sfPMt+KZSCidtm3y1dJgcttWhw/Wy11w==
+X-Google-Smtp-Source: AGHT+IHtndZm+LoDIY6i4VIuumAfRCnHjP4xtexFeR9g5QzIS3AMNSm/jB38OCE/Tg2E+A3OLhfCDQ==
+X-Received: by 2002:ac8:57c2:0:b0:4b7:925b:43ff with SMTP id d75a77b69052e-4c06ef831afmr135708501cf.35.1758549497820;
+        Mon, 22 Sep 2025 06:58:17 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4c99c644758sm18559371cf.41.2025.09.22.06.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Sep 2025 06:58:17 -0700 (PDT)
+Date: Mon, 22 Sep 2025 09:58:15 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Ryan Chen <ryan_chen@aspeedtech.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: [PATCH] usb: typec: tipd: Fix error handling in
- cd321x_read_data_status
-Message-ID: <aNFUs9CqtLq7ozOV@kuha.fi.intel.com>
-References: <20250920-tipd-fix-v1-1-49886d4f081d@kernel.org>
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] Add Aspeed AST2700 uhci support
+Message-ID: <67259dbb-4586-4099-9762-5c1d143db7db@rowland.harvard.edu>
+References: <20250922052045.2421480-1-ryan_chen@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,80 +93,54 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250920-tipd-fix-v1-1-49886d4f081d@kernel.org>
+In-Reply-To: <20250922052045.2421480-1-ryan_chen@aspeedtech.com>
 
-On Sat, Sep 20, 2025 at 12:28:03PM +0000, Sven Peter wrote:
-> Right now cd321x_read_data_status always returns true even if it
-> encounters any errors: tps6598x_read_data_status returns a boolean but
-> we treated it as an errno and then we have a bunch of dev_errs in case
-> tps6598x_block_read fails but just continue along and return true.
-> Fix that to correctly report errors to the callee.
+On Mon, Sep 22, 2025 at 01:20:41PM +0800, Ryan Chen wrote:
+> This patch series adds support for the UHCI controller found on the
+> Aspeed AST2700 SoC.
 > 
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Closes: https://lore.kernel.org/linux-usb/aMvWJo3IkClmFoAA@stanley.mountain/
-> Signed-off-by: Sven Peter <sven@kernel.org>
+> Compared to earlier SoCs (AST2400/2500/2600), AST2700 UHCI:
+>  - requires a reset line to be deasserted before use
+>  - supports 64-bit DMA addressing
+> 
+> This series updates the bindings and platform driver accordingly.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+For patches 2/4 and 4/4:
 
-> ---
->  drivers/usb/typec/tipd/core.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+
+Alan Stern
+
+> v4:
+> - usb-uhci.yaml
+>  - fix errors 'make dt_binding_check'
+> - uhci-platform.c
+>  - remove IS_ERR_OR_NULL(uhci->rsts) check, due to reset_control_assert
+>    will return 0, when uhci->rsts is null.
+>  - use dma_mask_32 as default, and just add aspeed,ast2700-uhci for dma_64.
 > 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 2b1049c9a6f3c4300f4a25a97fe502c47e82a134..d0c86347251c5cc19a9b377550c00c27966f8329 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -577,30 +577,36 @@ static bool cd321x_read_data_status(struct tps6598x *tps)
->  	int ret;
->  
->  	ret = tps6598x_read_data_status(tps);
-> -	if (ret < 0)
-> +	if (!ret)
->  		return false;
->  
->  	if (tps->data_status & TPS_DATA_STATUS_DP_CONNECTION) {
->  		ret = tps6598x_block_read(tps, TPS_REG_DP_SID_STATUS,
->  				&cd321x->dp_sid_status, sizeof(cd321x->dp_sid_status));
-> -		if (ret)
-> +		if (ret) {
->  			dev_err(tps->dev, "Failed to read DP SID Status: %d\n",
->  				ret);
-> +			return false;
-> +		}
->  	}
->  
->  	if (tps->data_status & TPS_DATA_STATUS_TBT_CONNECTION) {
->  		ret = tps6598x_block_read(tps, TPS_REG_INTEL_VID_STATUS,
->  				&cd321x->intel_vid_status, sizeof(cd321x->intel_vid_status));
-> -		if (ret)
-> +		if (ret) {
->  			dev_err(tps->dev, "Failed to read Intel VID Status: %d\n", ret);
-> +			return false;
-> +		}
->  	}
->  
->  	if (tps->data_status & CD321X_DATA_STATUS_USB4_CONNECTION) {
->  		ret = tps6598x_block_read(tps, TPS_REG_USB4_STATUS,
->  				&cd321x->usb4_status, sizeof(cd321x->usb4_status));
-> -		if (ret)
-> +		if (ret) {
->  			dev_err(tps->dev,
->  				"Failed to read USB4 Status: %d\n", ret);
-> +			return false;
-> +		}
->  	}
->  
->  	return true;
+> v3:
+> - uhci-platform.c
+>  - add reset_control_assert in uhci_hcd_platform_remove.
 > 
-> ---
-> base-commit: a4e143636d5def935dd461539b67b61287a8dfef
-> change-id: 20250920-tipd-fix-0c50f9f99a5a
+> v2:
+> - usb-uhci.yaml
+>  - add required resets for aspeed,ast2700-uhci
+> - uhci-platform.c
+>  - change the err_clk before err_reset.
 > 
-> Best regards,
+> Ryan Chen (4):
+>   dt-bindings: usb: uhci: Add reset property
+>   usb: uhci: Add reset control support
+>   dt-bindings: usb: uhci: Add Aspeed AST2700 compatible
+>   usb: uhci: Add Aspeed AST2700 support
+> 
+>  .../devicetree/bindings/usb/usb-uhci.yaml     | 13 ++++++++
+>  drivers/usb/host/uhci-hcd.h                   |  1 +
+>  drivers/usb/host/uhci-platform.c              | 31 ++++++++++++++++---
+>  3 files changed, 41 insertions(+), 4 deletions(-)
+> 
 > -- 
-> Sven Peter <sven@kernel.org>
+> 2.34.1
 > 
-
--- 
-heikki
 
