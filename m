@@ -1,154 +1,167 @@
-Return-Path: <linux-usb+bounces-28469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28470-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39F4FB91336
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 14:49:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5753B91420
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 14:54:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 062A74217E6
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 12:49:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E95F2A3888
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Sep 2025 12:54:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ECC830ACEA;
-	Mon, 22 Sep 2025 12:48:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97B1D3093D3;
+	Mon, 22 Sep 2025 12:54:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ky4+uIDN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AjYbQPyx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C81830ACE7;
-	Mon, 22 Sep 2025 12:48:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C27B267AF2;
+	Mon, 22 Sep 2025 12:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758545323; cv=none; b=Kf+5nLJcHlhO2SDVRrr2MC5XfQTdKH8igBu4d9t1ea/wBWSnSpkODueeC27b9SY6IFrZNydTVjxXMOg8y9Jh8ZSenh2W6Ggat9SWQt2/WxNDlvJsnIBNpasF+CxDcXcAucyqwBxaiwwTeY/QzIUHlMgsaM0kK2hAoOgHmvDwO9M=
+	t=1758545689; cv=none; b=sx1cxVgBuBxRn0qgKgnc4apOdEOFftwsY+UtuchvLTz/65yKj2siIioDIxzJq+2GUWMyR/2O2+hj4BzCWw4CSWU8ryuxgtlkVT6gTF4nSjgLsEz35aDvWcHn8mf/FsUfDIkxwTyfkKgOdBReCtcgho2q+hlDu4jXzuOl9eRDhfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758545323; c=relaxed/simple;
-	bh=IBH+vNfSBckjiDJAhDZy7vjZQDdMb4hMkGcqn7iAZyo=;
+	s=arc-20240116; t=1758545689; c=relaxed/simple;
+	bh=mo8Ww8wKPTjuOYrkH4sUb7tQu9AebzT7/14T7f8XYAg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pJK8INZNhkXG8kgOf337P8JQIL1bCEepwba4PEM/h2gxs5Ir57otGGyZ1LT2hYirbbPmlUxSvzqFnIMTTtsaSeadpR6UWJHju8DetiNjrrByg+0L1P14m/je+ftiYnCIVoGYKMEqIjqcmKew1ajX2UpWELrZI8+4q20gtzK+9YE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ky4+uIDN; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=nZpV3RB/nFkLZClZIbboWEQGPFgzZfdmDqnz6YDIuPoGrLfWMm9Xlie9plO7TaOH+/9olC3e9mm+tNHBBhgMT7CaYcCUuinTOv42OKM5/KX5M5qVtMUZ0VuPIpBgCtiiB0l8aGz2pujwuWdUgAgHQnPoJN/963E9aopSibXCflM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AjYbQPyx; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758545321; x=1790081321;
+  t=1758545687; x=1790081687;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=IBH+vNfSBckjiDJAhDZy7vjZQDdMb4hMkGcqn7iAZyo=;
-  b=Ky4+uIDN20+zfVbYgic+CZtpQmprK3wUA9NryV0K56LHPmD7yK8aRAjS
-   4EzsKqopWedF/05GreGhHOJo+fk2j7yAkImJDCBJRdaydB2R19c8VKd88
-   tHmChyXFn9t+PhkSO53lh7egMye0BAaVVj2VvD2JbYlnpatxeN8jLeA2b
-   qK9CDmZ+1EC8580VM7clHdiHuLm4ePFBN9Ag3qfG+bPz4L7TM6qbIblcL
-   /HFbBTEnXL4TlEgE0yQaJhOWlQLvo5XPpFVXBJ8/6BI5Bv0F27w9qlRiX
-   LKnV3SHKCfdGWUr9sL2/nJ/miHGFnRnoy8b0CBYTF6wsX9pJvL2m0IejY
+  bh=mo8Ww8wKPTjuOYrkH4sUb7tQu9AebzT7/14T7f8XYAg=;
+  b=AjYbQPyxX5ApznoKsyAl7tB6vYDwi8M3MFDlgaw5nhBfxBjgfGyTKN8w
+   enf4xSnk20i/sOha26ibY7LfgxJgwsNz0IVLcVSobTSU7EBt1bf/1X6z6
+   i4Sdf5GyYMumzE5ISaXx6a2pNg7PHEijdZNLRDwnMR8DWXFwDmVlnVYDt
+   szJBmrE66q/M1UWpqNd15mbtixWgClrF4BnDImC00gwHrLUL6oIYo5itU
+   gz6I5r0kL+EJnhxHPI6jpHGjSirrfn2UhIi3bH5UY4uXD1DbLEABWW2Wk
+   GPnQQPOO597Nqnlrccfycua/FOMTrC/OUp4Kn9TRDoLzHBBMVc3x05R6w
    w==;
-X-CSE-ConnectionGUID: AOHyrWvWQlWBD56xgVJ7Bg==
-X-CSE-MsgGUID: lUTf8CLpQlir4US0Eay63A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="60744666"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="60744666"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 05:48:41 -0700
-X-CSE-ConnectionGUID: bfUmK1AFQmC2MejTw9t8LA==
-X-CSE-MsgGUID: /8q8t9D6SBOYcKHJFvh7HA==
+X-CSE-ConnectionGUID: Tt+lDOpWQQWtsnGNLYTHAQ==
+X-CSE-MsgGUID: Cm6DYL8yQ3KOrNYMh/zRFQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11560"; a="60501260"
+X-IronPort-AV: E=Sophos;i="6.18,285,1751266800"; 
+   d="scan'208";a="60501260"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 05:54:46 -0700
+X-CSE-ConnectionGUID: ELwCkmzLQaiE93JPOhyyeQ==
+X-CSE-MsgGUID: +NY/p2tbQqq+e0J9w78zcg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,285,1751266800"; 
-   d="scan'208";a="207421315"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa001.fm.intel.com with SMTP; 22 Sep 2025 05:48:38 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Sep 2025 15:48:37 +0300
-Date: Mon, 22 Sep 2025 15:48:37 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Handle incorrect num_connectors
- capability
-Message-ID: <aNFFpUZek-k5YXls@kuha.fi.intel.com>
-References: <mpearson-lenovo@squebb.ca>
- <20250821185319.2585023-1-mpearson-lenovo@squebb.ca>
- <2025082213-antacid-correct-53b1@gregkh>
- <0ac78125-a028-4d99-b106-d792d8660d0f@app.fastmail.com>
- <1c185541-2b6b-4c43-938a-9f4f4d1499b4@app.fastmail.com>
- <2025091819-bullion-hut-8242@gregkh>
- <aM0J2hDgqkxioAXU@kuha.fi.intel.com>
- <84064f76-bc99-4f3c-b26b-0dacf3632279@app.fastmail.com>
+   d="scan'208";a="180485212"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa003.jf.intel.com with ESMTP; 22 Sep 2025 05:54:45 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id BABAD95; Mon, 22 Sep 2025 14:54:43 +0200 (CEST)
+Date: Mon, 22 Sep 2025 14:54:43 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Duoming Zhou <duoming@zju.edu.cn>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	YehezkelShB@gmail.com, westeri@kernel.org, michael.jamet@intel.com,
+	andreas.noever@gmail.com
+Subject: Re: [PATCH] thunderbolt: Fix use-after-free in tb_dp_dprx_work
+Message-ID: <20250922125443.GX2912318@black.igk.intel.com>
+References: <20250922051859.16095-1-duoming@zju.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <84064f76-bc99-4f3c-b26b-0dacf3632279@app.fastmail.com>
+In-Reply-To: <20250922051859.16095-1-duoming@zju.edu.cn>
 
-On Fri, Sep 19, 2025 at 11:45:48AM -0400, Mark Pearson wrote:
-> Hi Heikki,
+Hi,
+
+On Mon, Sep 22, 2025 at 01:18:59PM +0800, Duoming Zhou wrote:
+> The original code relies on cancel_delayed_work() in tb_dp_dprx_stop(),
+> which does not ensure that the delayed work item tunnel->dprx_work has
+> fully completed if it was already running. This leads to use-after-free
+> scenarios where tb_tunnel is deallocated by tb_tunnel_put(), while
+> tunnel->dprx_work remains active and attempts to dereference tb_tunnel
+> in tb_dp_dprx_work().
 > 
-> On Fri, Sep 19, 2025, at 3:44 AM, Heikki Krogerus wrote:
-> > On Thu, Sep 18, 2025 at 09:50:30AM +0200, Greg KH wrote:
-> >> On Wed, Sep 17, 2025 at 02:14:28PM -0400, Mark Pearson wrote:
-> >> > Hi all,
-> >> > 
-> >> > On Fri, Aug 22, 2025, at 8:54 AM, Mark Pearson wrote:
-> >> > > Hi Greg,
-> >> > >
-> >> > > On Fri, Aug 22, 2025, at 12:51 AM, Greg KH wrote:
-> >> > >> On Thu, Aug 21, 2025 at 02:53:07PM -0400, Mark Pearson wrote:
-> >> > >>> The UCSI spec states that the num_connectors field is 7 bits, and the
-> >> > >>> 8th bit is reserved and should be set to zero.
-> >> > >>> Some buggy FW has been known to set this bit, and it can lead to a
-> >> > >>> system not booting.
-> >> > >>> Flag that the FW is not behaving correctly, and auto-fix the value
-> >> > >>> so that the system boots correctly.
-> >> > >>> 
-> >> > >>> Found on Lenovo P1 G8 during Linux enablement program. The FW will
-> >> > >>> be fixed, but seemed worth addressing in case it hit platforms that
-> >> > >>> aren't officially Linux supported.
-> >> > >>> 
-> >> > >>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
-> >> > >>
-> >> > >> Any hints as to what commit id this fixes?
-> >> > >>
-> >> > >> thanks,
-> >> > >>
-> >> > >> greg k-h
-> >> > >
-> >> > > Maybe 3cf657f ('Remove all bit-fields')?
-> >> > >
-> >> > > The commit there states that 'We can't use bit fields with data that is 
-> >> > > received or send
-> >> > > to/from the device.'
-> >> > > Not sure why that is, but I assumed this means we shouldn't change the 
-> >> > > structure to use 7 bits for num_connectors, which was my original plan.
-> >> > >
-> >> > > After that, we go all the way back to the file creation (c1b0bc2) where 
-> >> > > it was defined as 8 bit.
-> >> > >
-> >> > 
-> >> > Just a gentle nudge to see if there are any concerns or questions with the patch.
-> >> 
-> >> I was waiting for the maintainer of this code to review it :)
-> >
-> > So not Fixes tag?
-> >
+> A typical race condition is illustrated below:
 > 
-> I can add a Fixes tag for the very original commit of this file (c1b0bc2) if that's wanted.
-
-I don't think it's necessary in this case if the fw is really fixed.
-But what says Greg?
-
-thanks,
-
-> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >
-> Thanks for the review
+> CPU 0                            | CPU 1
+> tb_dp_tunnel_active()            |
+>   tb_deactivate_and_free_tunnel()| tb_dp_dprx_start()
+>     tb_tunnel_deactivate()       |   queue_delayed_work()
+>       tb_dp_activate()           |
+>         tb_dp_dprx_stop()        | tb_dp_dprx_work() //delayed worker
+>           cancel_delayed_work()  |
+>     tb_tunnel_put(tunnel);       |
+>                                  |   tunnel = container_of(...); //UAF
+>                                  |   tunnel-> //UAF
 > 
-> Mark
+> Replacing cancel_delayed_work() with cancel_delayed_work_sync() is
+> not feasible as it would introduce a deadlock: both tb_dp_dprx_work()
+> and the cleanup path acquire tb->lock, and cancel_delayed_work_sync()
+> would wait indefinitely for the work item that cannot proceed.
+> 
+> Instead, implement proper reference counting:
+> - If cancel_delayed_work() returns true (work is pending), we release
+>   the reference in the stop function.
+> - If it returns false (work is executing or already completed), the
+>   reference is released in delayed work function itself.
+> 
+> This ensures the tb_tunnel remains valid during work item execution
+> while preventing memory leaks.
+> 
+> This bug was found by static analysis.
+> 
+> Fixes: d6d458d42e1e ("thunderbolt: Handle DisplayPort tunnel activation asynchronously")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+>  drivers/thunderbolt/tunnel.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+> index d52efe3f658c..89fa0c626d3e 100644
+> --- a/drivers/thunderbolt/tunnel.c
+> +++ b/drivers/thunderbolt/tunnel.c
+> @@ -1073,6 +1073,7 @@ static void tb_dp_dprx_work(struct work_struct *work)
+>  
+>  	if (tunnel->callback)
+>  		tunnel->callback(tunnel, tunnel->callback_data);
+> +	tb_tunnel_put(tunnel);
+>  }
+>  
+>  static int tb_dp_dprx_start(struct tb_tunnel *tunnel)
+> @@ -1097,11 +1098,14 @@ static int tb_dp_dprx_start(struct tb_tunnel *tunnel)
+>  
+>  static void tb_dp_dprx_stop(struct tb_tunnel *tunnel)
+>  {
+> +	bool ret;
+> +
 
--- 
-heikki
+Why you need variable here?
+
+>  	if (tunnel->dprx_started) {
+>  		tunnel->dprx_started = false;
+>  		tunnel->dprx_canceled = true;
+> -		cancel_delayed_work(&tunnel->dprx_work);
+> -		tb_tunnel_put(tunnel);
+> +		ret = cancel_delayed_work(&tunnel->dprx_work);
+> +		if (ret)
+> +			tb_tunnel_put(tunnel);
+
+Just do:
+
+	if (cancel_delayed_work(...))
+		tb_tunnel_put(tunnel);
+
+>  	}
+>  }
+>  
+> -- 
+> 2.34.1
 
