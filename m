@@ -1,71 +1,89 @@
-Return-Path: <linux-usb+bounces-28576-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28579-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B7D5B97D24
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 01:49:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62751B97EE5
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 02:44:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B5894A8428
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 23:49:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 244654C1814
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 00:44:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C8493101DF;
-	Tue, 23 Sep 2025 23:49:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE4F1A23AF;
+	Wed, 24 Sep 2025 00:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBTVhZMz"
+	dkim=pass (1024-bit key) header.d=maguitec.com.mx header.i=@maguitec.com.mx header.b="IEE6cQ3W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-g3-154.zohomail360.com (sender4-g3-154.zohomail360.com [136.143.188.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1DA82F657A;
-	Tue, 23 Sep 2025 23:49:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758671358; cv=none; b=FuUkED/yG2YVF1H0/IYPtuSQ5p4kkvc7kqjvaG4TG0lJU81GJQ8iYYvoDyrkmc03HMsUk/TwFTPX7lOZAxm5hjYUQfeG4i2kg3sJn/F3MG6zDGNEqulz5m4en+SbPI884OtMUlPQoAfPjKWbjiLlnPanaDfTdeU5KUNUAjvlh1Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758671358; c=relaxed/simple;
-	bh=hrLsdcZp2M4mpYAZYDY8MkkOj2h89n+GgXDk4sCMadw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q2Hk/jQI1gLQUVLxT6vNtSjkJOdxQYC4a/F7998XZsS7IBmUeSEJh7E5Rk2BjNqzrC+Kt44IsQCo5F297ZdS8COI4CbZS1ZlWNeopCJgrV3Z6QznsIF+OusGlsw239Jxv4N5fjaZ/BPipsU8leAI+D+u20wyxDz9U0paVDC0MfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pBTVhZMz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2AC4C4CEF5;
-	Tue, 23 Sep 2025 23:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758671358;
-	bh=hrLsdcZp2M4mpYAZYDY8MkkOj2h89n+GgXDk4sCMadw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pBTVhZMzD5E9fQ75vqSi4ZivOhVB0Me1GWubmq2TPY+uYB+zJyNsdyxMeI24ohyEo
-	 rCL+STk8ZJw34dQCXjVQhnm+VLZ8y/EeC/kGE8YKwHbM4x2HVOFGTqmIcYxVWmO0Vs
-	 pTdz2ZhbWtcy2T7y8FBVtR7bm853zjhx97G4vb9zfUDuJYqhzDDbQrqSw5qi9vgHU5
-	 bd/VEAJABdNHHs00zR7y5K9yL2WVjYx7G6faRdec6+zifypAGHj/dKA2LumFfiZkkr
-	 IsNEcol2u3wyjRzx533VEubRe8VEmXU2DrlroZ7wMlHJPEAxbPSunuZJSTJagOmQL2
-	 F/dc8ECJci1EQ==
-Date: Tue, 23 Sep 2025 16:49:16 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: I Viswanath <viswanathiyyappan@gmail.com>
-Cc: petkan@nucleusys.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- skhan@linuxfoundation.org, linux-kernel-mentees@lists.linux.dev,
- david.hunter.linux@gmail.com
-Subject: Re: [PATCH net] net: usb: remove rtl8150 driver
-Message-ID: <20250923164916.5b8c7c28@kernel.org>
-In-Reply-To: <20250923022205.9075-1-viswanathiyyappan@gmail.com>
-References: <20250923022205.9075-1-viswanathiyyappan@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5478B1BD4F7
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 00:44:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.154
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758674645; cv=pass; b=b5smGRLZvm8/N77/TJCbgkZ68+g+ofDHsnHt3atz6ufn3VIkATZbcABWCSz7T+3GhuIDncPQy3XBWWVlaX4G9WRmxVQQgYx9EzVzUsuJ7dfM85bcIjPBDbMWOncp5tPsg7+hB4Wj/uzT4ue3HjuIbRVhqFtZkJ+M9YbCvlKVWh4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758674645; c=relaxed/simple;
+	bh=ZwY7elJLxMCUcM4OqF2KN140IIVFpJF7CufDPIW7CLA=;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type; b=SumOFEl2zvHlT1nZcBLGqMHqTte7E4cZhtvyX2N/FpU1p2nu9rvrpZdFqrWdvXgzH5YRb7V2mRVs49d8TX7Nfv4YM+bAu/1IC0BexV0ptnLoLDEFkS6dIflY/zkNytK2xVyFe2iZv1nUdREmM1l5ER1WNvRhC4il3aNDj5D8ApA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=maguitec.com.mx; spf=pass smtp.mailfrom=bounce-zem.maguitec.com.mx; dkim=pass (1024-bit key) header.d=maguitec.com.mx header.i=@maguitec.com.mx header.b=IEE6cQ3W; arc=pass smtp.client-ip=136.143.188.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=maguitec.com.mx
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bounce-zem.maguitec.com.mx
+ARC-Seal: i=1; a=rsa-sha256; t=1758674643; cv=none; 
+	d=us.zohomail360.com; s=zohoarc; 
+	b=HFplOmpGf+hUlNk+YEr+0kSIzP9Strim6x3nC+rBOu+HRZd3q1SrYly3jk+rQe2B5WsYmbxO4fD6TOAwSMAAunp5OdhsWiUKCuu76aAgBLxHhsHDzfvoW/lz8n3roOX5mb2PWjidZmjOEjYpwDkT+fMoxvGpfEeNM+l/X5uHrJc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=us.zohomail360.com; s=zohoarc; 
+	t=1758674643; h=Content-Type:Content-Transfer-Encoding:Date:Date:From:From:MIME-Version:Message-ID:Reply-To:Reply-To:Subject:Subject:To:To:Message-Id:Cc; 
+	bh=ZwY7elJLxMCUcM4OqF2KN140IIVFpJF7CufDPIW7CLA=; 
+	b=M0bHXadeEZWZD+1SwZouOmxewqg+pAKOz5cTTiB0FJmIQTSnYJ61q1Y4XDaoHUrkfWZalfE7Knspd8Wjg54c7e/vfXSyCW1rlbmnsH608rdiNJZ9lEYSKfCFvax9Sj427HjQqxXFJzRpws2VzCcyTfetcDKxZiT1LGbm56D7NUo=
+ARC-Authentication-Results: i=1; mx.us.zohomail360.com;
+	dkim=pass  header.i=maguitec.com.mx;
+	spf=pass  smtp.mailfrom=investorrelations+9abed180-98d8-11f0-8217-5254007ea3ec_vt1@bounce-zem.maguitec.com.mx;
+	dmarc=pass header.from=<investorrelations@maguitec.com.mx>
+Received: by mx.zohomail.com with SMTPS id 1758671653443579.5402979346853;
+	Tue, 23 Sep 2025 16:54:13 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; b=IEE6cQ3W69b6XEAGGoa4T/VZrCgVGppfnCQvkRaM2y09vhebsbN8urowCjpPnya4fP8W9RDmN0jnB5rDe1PcxTPnsmXfZGs4jU7xF84FfYnczbaKYTUrmyoRx4bsPDztiJ7+0b/IZxS8dP1jc60O1mXyuUceBnJY2dJGOC5ywpo=; c=relaxed/relaxed; s=15205840; d=maguitec.com.mx; v=1; bh=ZwY7elJLxMCUcM4OqF2KN140IIVFpJF7CufDPIW7CLA=; h=date:from:reply-to:to:message-id:subject:mime-version:content-type:content-transfer-encoding:date:from:reply-to:to:message-id:subject;
+Date: Tue, 23 Sep 2025 16:54:13 -0700 (PDT)
+From: Al Sayyid Sultan <investorrelations@maguitec.com.mx>
+Reply-To: investorrelations@alhaitham-investment.ae
+To: linux-usb@vger.kernel.org
+Message-ID: <2d6f.1aedd99b146bc1ac.m1.9abed180-98d8-11f0-8217-5254007ea3ec.19978ffc698@bounce-zem.maguitec.com.mx>
+Subject: Thematic Funds Letter Of Intent
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+content-transfer-encoding-Orig: quoted-printable
+content-type-Orig: text/plain;\r\n\tcharset="utf-8"
+Original-Envelope-Id: 2d6f.1aedd99b146bc1ac.m1.9abed180-98d8-11f0-8217-5254007ea3ec.19978ffc698
+X-JID: 2d6f.1aedd99b146bc1ac.s1.9abed180-98d8-11f0-8217-5254007ea3ec.19978ffc698
+TM-MAIL-JID: 2d6f.1aedd99b146bc1ac.m1.9abed180-98d8-11f0-8217-5254007ea3ec.19978ffc698
+X-App-Message-ID: 2d6f.1aedd99b146bc1ac.m1.9abed180-98d8-11f0-8217-5254007ea3ec.19978ffc698
+X-Report-Abuse: <abuse+2d6f.1aedd99b146bc1ac.m1.9abed180-98d8-11f0-8217-5254007ea3ec.19978ffc698@zeptomail.com>
+X-ZohoMailClient: External
 
-On Tue, 23 Sep 2025 07:52:05 +0530 I Viswanath wrote:
-> Remove the rtl8150 driver, as the most recent device ID was added
-> on 2006-12-04
+To: linux-usb@vger.kernel.org
+Date: 24-09-2025
+Thematic Funds Letter Of Intent
 
-Thanks for sending this one.
-Based on Michal's reply I guess we need to wait a bit longer.
+It's a pleasure to connect with you
+
+Having been referred to your investment by my team, we would be=20
+honored to review your available investment projects for onward=20
+referral to my principal investors who can allocate capital for=20
+the financing of it.
+
+kindly advise at your convenience
+
+Best Regards,
+
+Respectfully,
+Al Sayyid Sultan Yarub Al Busaidi
+Director
 
