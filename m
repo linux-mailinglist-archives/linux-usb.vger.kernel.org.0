@@ -1,114 +1,118 @@
-Return-Path: <linux-usb+bounces-28517-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28518-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2014B94D6C
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 09:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1721B94D93
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 09:47:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CD1A3BBB3C
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 07:44:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0A803ACC82
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 07:47:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E0A4316194;
-	Tue, 23 Sep 2025 07:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59B93168E0;
+	Tue, 23 Sep 2025 07:47:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b1EIxkJC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hb+jRBoa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBEB11ACEDF;
-	Tue, 23 Sep 2025 07:44:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94525316191
+	for <linux-usb@vger.kernel.org>; Tue, 23 Sep 2025 07:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758613443; cv=none; b=tGp/5oFb8EPyWfeyvgQ30+YGwYFGR4kBp/KezVaha+4kVEcKb1ALYsThYgHDzAeaHHSVLIktLjRkGSzYFZZC/IuzJA4o18y4V1MnqBOVmKfRR+alX12oy3waqBukA9ZYhWgkZpLU0m2uAcRUnmpy4rlv3tpGl0Us6IK7HKbWVCI=
+	t=1758613644; cv=none; b=IdB6fGgtlDRY/+LEm5FrilJfqXV/4sCm8axzeN0MNYkA+oTgqZYZ+UzBqNjSsMHb9ugGotQ4/5n2MwdpKVrbIIciykfWpNSCIngM83VGhz0ehrhxv199o3BvGkM02tAUhNAI4G/YAJmpZ8ZgfHKGScLnLkOPc7Un5MMenAzDlzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758613443; c=relaxed/simple;
-	bh=dKle1o6bbfcAMAKszGbEL8O+PYLJPoHmt8GU7LeMrhk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K6eWwbY7QH/+mi2cT9H5oGnArvqTxAw9P6mUCKQNpSvbFsYPcQsqTJBtPxLBWJEIyoffgfB0WwmB6slAGLxVQ+P21Z7r8DmbLziAHFFunhkoPDBiweIXL65aU1uc2snLjnZzsHC0oi+zXXB0hoFCI5Wy2fVMculyzPGXHt56iUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b1EIxkJC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 619FCC4CEF5;
-	Tue, 23 Sep 2025 07:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758613442;
-	bh=dKle1o6bbfcAMAKszGbEL8O+PYLJPoHmt8GU7LeMrhk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b1EIxkJCq7n4Z/SKlvcN7jzd45EXiwTv5aRY5b1/mkFi6ZWhHlLXmVeIGZ5jfLMK8
-	 ttTWgAxgU4+bnp3p1Ujyqn5IHjBAM7SlPjnNgIXob1o+AqXLn7z4blbOiIf21y8oSp
-	 hUqOzctHinLShgfOJKAAqe5oMqhzsjzPWyv9J69xK9/F0NcE8TLSesZjotCZvtzBVZ
-	 1dyAHl0+Sc2azELimeXGUp4aGvn+ZWeOx6yV1aB/sCVqf1C8ytRYoqzN7JQmMuwUBY
-	 eT3MNxJjM749RBfgq09aRhlt86QAYaWs0QgHSNmM0TI2wAQkav4VyYYhcDknhDTl7E
-	 0SCyDv4vKjhAQ==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1v0xgp-000000001gL-0Uth;
-	Tue, 23 Sep 2025 09:43:55 +0200
-Date: Tue, 23 Sep 2025 09:43:55 +0200
-From: Johan Hovold <johan@kernel.org>
-To: "xiaowei.li" <xiaowei.li@simcom.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] USB: serial: option: add SIMCom 8230C compositions
-Message-ID: <aNJPuwDMsf5Pyepy@hovoldconsulting.com>
-References: <20250917105342.2687371-1-xiaowei.li@simcom.com>
+	s=arc-20240116; t=1758613644; c=relaxed/simple;
+	bh=m6w75x5KmuboRbte2t8Bef+Y5vLZQaZtpC0JTZQjfAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nHue9zICSbl/cSW9o3Y0vmRIYGx9W6u3WTEaK6JOJzpMQGmghw3Unt6QHEPzRmM4MVBlujCkQbyd1k4Q3k22la9A9z0bEAIkhz1CJICQR0XcndWx8KutWGyDgtzFw3DZ5xAebduCK3PdyyeJiOJGt4NQMVp9VgqrK8bles3O69Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hb+jRBoa; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5797c8612b4so5305331e87.2
+        for <linux-usb@vger.kernel.org>; Tue, 23 Sep 2025 00:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758613641; x=1759218441; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p3zTrXIgrjNde7MVV+dQe94AXCJb9BQSJNtQ02xJwZs=;
+        b=Hb+jRBoaW25Oj5LVwuGp7pHGOFDrDFFhIeie7Dfkq7+H92LLpf9dwG1qxKUu1KIpXK
+         a/+ETLzxr+qq6Vfu9r4bMk8iF4z14DgqEzefgubl9MbHat1K6GPmHCzsRMZQsn5cli/c
+         y+37BqQKvT056OX1pmV4nkBy1M0tOrXJHHLYTX5/30rCKPjKYURVGchkSCOFrYlF4kYg
+         K9GkjJZS9AVEAOPnwxvU+Ng0lgrJH6AQ0sDuinpD6dC9iZvf9aOw6mklkaMgK1VN7H+v
+         dySneeWOdEqBp330cNJV29C5OkWDgrMoYCVCQzyX13KEXMEYYJrzzMLTweOkWEVbfzqL
+         fAVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758613641; x=1759218441;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p3zTrXIgrjNde7MVV+dQe94AXCJb9BQSJNtQ02xJwZs=;
+        b=Y2q+1RTBsYGkMdxcoHsz8VbTVUBXYZ3i/9n4ehIXPFo+pvge05JmXb6AGDlhB19+ZR
+         Ss4zLWnbqZV02a+Lk6qvjjkEQy28H6ccF7fkvjee7se83ZCGWeq7s1QtndjDsVg+HK/A
+         6CwYeWZqFnJy6FKLmdVz+wpuXbURINDneDNrvIwR5B3N1LFHm1AdYcXnwuQ2agDj3xNr
+         F4nMDKNU754cAl2DCzT7gpxTLmRuSTYDkml0eWSX7ssFZHINvw7mDkKWawIHANr0c69/
+         Il2OJqm4gZHT+QYjB+daXZi+NQNOyUfJ5VVrB7FFY0WIXmCNjXP60ZtMtbf0AB/DwvlM
+         X0dQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUaLxADw70BDTgF+GLxhuGhwGYud8neeAN/ulhOYmIipc1xI3P8n6vZYAcjzsnZEzCQez/BWRDpzM4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywn9Ydj5sma8rs00NMwNG3JEzqLn46lK9A1otSXjEa7z/pw5iwV
+	T+rCAg3O7jVcPKmoOHj4054+Y5tsx96y2bL7aJrR2sFh5+/K260OSg7s
+X-Gm-Gg: ASbGncvym/dLP116Ni7SoDg4rTNCHTWb1GBc3kU2o3z6gcJL3EkBZeE8tjSY4EtITSa
+	nEdjdbLzzqKvJKt+FnF3hTjmcgjugoNSq0KzBH232GpZQ2W0J84DCoZlgfkbGKwNqDFJLFjXS3k
+	RKUGxJhTgH0/m9+WrgrouhNxJ4EvheRgku8MXV/D9ND10Ip8vrunDMGW9FsdQ6KkqE9askZ+q0u
+	S6KrKpdGdCXgvQAnOmZGT5v0L0Z9Dorokc30dJ9gB6vNpFOv9VCAbccIg20BgDVWnvFp4xGx098
+	ZTQMyAbKcGrSyBwKHBvgy5/SOwYvYWFgDEEswRT0Qesa+ewURpo4fLhpDHir1eCWBMd5peda6QO
+	gMlu/KlzTtUxVxn29U7ahPdK3uMvPf5tq/jY=
+X-Google-Smtp-Source: AGHT+IHdpC5HbX3ix1zT26Flp+EGyUUBeKiByHFSuNEWqr8rJkXfKIJvyKcJk6flJER7ibjGFmTI7Q==
+X-Received: by 2002:a05:6512:4207:b0:57e:1e1b:dde5 with SMTP id 2adb3069b0e04-58071403f46mr357677e87.25.1758613640434;
+        Tue, 23 Sep 2025 00:47:20 -0700 (PDT)
+Received: from foxbook (bfe191.neoplus.adsl.tpnet.pl. [83.28.42.191])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-57fcb89170asm791542e87.63.2025.09.23.00.47.19
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 23 Sep 2025 00:47:20 -0700 (PDT)
+Date: Tue, 23 Sep 2025 09:47:11 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: I Viswanath <viswanathiyyappan@gmail.com>, andrew@lunn.ch,
+ andrew+netdev@lunn.ch, davem@davemloft.net, david.hunter.linux@gmail.com,
+ edumazet@google.com, linux-kernel-mentees@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com, petkan@nucleusys.com,
+ skhan@linuxfoundation.org,
+ syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
+Subject: Re: [PATCH net v2] net: usb: Remove disruptive netif_wake_queue in
+ rtl8150_set_multicast
+Message-ID: <20250923094711.200b96f1.michal.pecio@gmail.com>
+In-Reply-To: <20250922180742.6ef6e2d5@kernel.org>
+References: <83171a57-cb40-4c97-b736-0e62930b9e5c@lunn.ch>
+	<20250920181852.18164-1-viswanathiyyappan@gmail.com>
+	<20250922180742.6ef6e2d5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250917105342.2687371-1-xiaowei.li@simcom.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 17, 2025 at 06:53:42PM +0800, xiaowei.li wrote:
-
-Thanks for the v2.
-
-Checkpatch complains that your From (author) name does not match you
-SoB (a period '.' instead of space and no capitalisation). Could you fix
-your mailer (or add a From line to the patch) so that the author
-information in the logs will look correct?
-
-Please consider adding an introductory sentence here (e.g. "Add the
-following compositions for device X:").
-
-> USB Device Listings:
-
-> Signed-off-by: Xiaowei Li <xiaowei.li@simcom.com>
-> ---
-
-And when updating patches you should put a short changelog here under
-the --- line.
-
->  drivers/usb/serial/option.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+On Mon, 22 Sep 2025 18:07:42 -0700, Jakub Kicinski wrote:
+> On Sat, 20 Sep 2025 23:48:52 +0530 I Viswanath wrote:
+> > rtl8150_set_multicast is rtl8150's implementation of ndo_set_rx_mode and
+> > should not be calling netif_stop_queue and notif_start_queue as these handle 
+> > TX queue synchronization.
+> > 
+> > The net core function dev_set_rx_mode handles the synchronization
+> > for rtl8150_set_multicast making it safe to remove these locks.  
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index fc869b7f803f..8eadcfe33ecd 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -2114,6 +2114,12 @@ static const struct usb_device_id option_ids[] = {
->  	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9003, 0xff) },	/* Simcom SIM7500/SIM7600 MBIM mode */
->  	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9011, 0xff),	/* Simcom SIM7500/SIM7600 RNDIS mode */
->  	  .driver_info = RSVD(7) },
-> +	{ USB_DEVICE(0x1e0e, 0x9071),
-> +	  .driver_info = RSVD(3) | RSVD(4) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9078, 0xff),
-> +	  .driver_info = RSVD(5) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x907b, 0xff),
-> +	  .driver_info = RSVD(5) },
+> Last time someone tried to add device ID to this driver was 20 years
+> ago. Please post a patch to delete this driver completely. If someone
+> speaks up we'll revert the removal and ask them to test the fix.
 
-And please add a comment after these entries with the device and mode
-(like the surrounding entries have).
+These were quite common, I still have one.
 
->  	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9205, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT+ECM mode */
->  	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9206, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT-only mode */
->  	{ USB_DEVICE(ALCATEL_VENDOR_ID, ALCATEL_PRODUCT_X060S_X200),
-
-Looks all good otherwise.
-
-Johan
+What sort of testing do you need?
 
