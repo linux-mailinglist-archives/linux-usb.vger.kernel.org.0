@@ -1,204 +1,139 @@
-Return-Path: <linux-usb+bounces-28571-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28572-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5757B97A22
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 23:51:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36EC8B97C48
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 01:03:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68DC67B190B
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 21:49:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 664651896525
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 23:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8E3330F522;
-	Tue, 23 Sep 2025 21:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF53D30E0E2;
+	Tue, 23 Sep 2025 23:03:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="iBMX5KkT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WYk4QuiA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7B327A44A
-	for <linux-usb@vger.kernel.org>; Tue, 23 Sep 2025 21:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EB921348;
+	Tue, 23 Sep 2025 23:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758664284; cv=none; b=K9xZKVhtHECOvqvM36smza2JA8sYsIESPr/5v0rQtNc2G0feR6DCDYeu5RdnnftKM6bNj/gMQ/L6HZaD7FXZc5abOtHnnjoAPxKnPQJme+B8vT3CJmDi9PmFzpuvNwdMZAIxUufLrX8ecg8KFVO0fbwwWNwLs6wM538kX0/0IsU=
+	t=1758668585; cv=none; b=g9X++JSODIfjgOBcjaof1oYh5GPkxkXO2aECewFbr4NWyxmnSMIqr3kuvVaSbHo6kyBmXn+J5sxiVjbY5K8fa4hcmXf5/AKe3BP8rq9UUMfSXVr8sVFqjgS3sgN2KxxEdZVkcJTGqnFl5lWbZ537uNkaqQYgi9h4NW/Qwqb/0MQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758664284; c=relaxed/simple;
-	bh=Phi3PYB3KOmm3zJUanSEv1JY6ERzYhkvkqz9KTEqZ1k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pirQhUAke960BNiYPD33o4ZGl7mETxTrEsO6JcfEDsaL/jc3G86x4mxAYjjg7cbEYZOyOEoRPimiynU6b433/K0b0qHLKtMizfWgl5PzNMgESgn60+TKvw3ZSl7rz44Ew438kJhHeYKDKwDZvUhJRZA3eCJLfKPTRa76P/0NUYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=iBMX5KkT; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58NF5stn014904
-	for <linux-usb@vger.kernel.org>; Tue, 23 Sep 2025 21:51:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	aiAQHIOrW59pXHLJaujV2OHhsUSTiYkKFOKLz/FR/mI=; b=iBMX5KkTaqhWAkUg
-	BRxtHF1eehWCLziLrqUynIjhqx6oYcX+abOt75b4L/d6rVjzpOHm9AeA5SvMKuyB
-	PYRbcQvR3Lxuy9O54ATDejhjK7CMOh4hv7/SnP6VU8RF5Tg+2OfHhoKGOqZyyYt+
-	yFackzvt5dgAIt2CB8tS6HrXmyNr/jyS+9fbXVl8CMQ+1PmtCcWmujNkibu6v+fH
-	/FIAc/2hxyu0r7EhpRirzxzUSLfjLTyCkLvyyOCCKDSFUTQOxSgWR1mXYjyR6SGe
-	wT5jMYkmxu01p91Cscci0WUT4hEBJHYnr8sa+vbBVyBIQyI+Z1WoxuFAdHhlAhQA
-	8+kl0Q==
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49b3kk630b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 23 Sep 2025 21:51:20 +0000 (GMT)
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-b5515a1f5b8so3764148a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 23 Sep 2025 14:51:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758664279; x=1759269079;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aiAQHIOrW59pXHLJaujV2OHhsUSTiYkKFOKLz/FR/mI=;
-        b=oL9U75USKwIGAV1D8EXjRXdIKVyjZDjL0FLMxC4ncQ+jG9FuPgohqDRppBrzsWL0V8
-         Y9eIS8GJgFlfkkfKTGtyyZG2zCIoBpwmo5JeBRR8Zyig1Q1w89uNmcTWD0h3A0gq5mNr
-         6UQidBYFkElMfjsG/Z2ZZjN5wEzlBfro8N+kYfxYGHfixV/mBnjdTZHt8fPVV0+ZhYuY
-         yCQwIhjBGuz0ySIe/jr7vqUunB90R2jEcOweOWvE30Uc0Vs5MlCSaCGZ4AGqWf/xnVK3
-         Q/z1Kf9W6Mcy4SR36TfXWdzwsamoneeuSlb3y92on+9TOqTPyyRF+q6qyC/v1h0DKCUN
-         i+Dw==
-X-Forwarded-Encrypted: i=1; AJvYcCWtoDR1C11XkbK6/DZRJjJTPNlLWO/F53Jtji5NcyAkTgZ7rB7xpSR+ggU+xeTwYeX2T0jkFGp4pxI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRrWuHgFjMgk7NVWn61TjQjorC6u2xw1sAuSF6s65J51eccnJK
-	FTsmKY93LeJh/LRCYcqg56vUCQuDyn7t7i7z429cU0ikKYMn0McYJmc1ogdZMH9hIBB1rAJW0i+
-	au2nBzGM3ePwKbHJ0seCA6mnF4653yiM9tSTGddI7yFYu786UNFECLrI2nm3I1Hs=
-X-Gm-Gg: ASbGncuYMs7LOeA9HhvexomSgUZl3SU/XH+oFrVPl+SgOYedhrEBxSys5cpNl15GuOf
-	j21c4QKP0NPM3FNssye6AYcd2RpdCUjFbrBIj4FRe5jzqhnZt1va269vE+J1+Zx1gcCM31+J740
-	N9k/OkIsbM31jHyv8wkIxR8WXW7Eax0fEjqryXT4eUl5w5V0smzywMqyUAy76HJKmNehRkfFH9M
-	5Exr2RA07KCdJZ9IzSVPZlct4ItWmH69tqtStbrzAvOI+olQSj+owwaxv+ekxgdg2Ti4quDQ/X+
-	Mpg1ZDYhpcicfzsUGM1NNUdGRLwoYLXTnC851m0pcnF+MfMfaYN+klvLomHly9zJ2RoL9Nn+n1J
-	xl1Lx3A==
-X-Received: by 2002:a05:6a20:258b:b0:249:d3d:a50b with SMTP id adf61e73a8af0-2cff4209b23mr5529437637.59.1758664279147;
-        Tue, 23 Sep 2025 14:51:19 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEq5Th0MTaZw84UMrVLMwE0MdUEOMsSuPcioOUVzMEkQngd4fbtEd7mUZH6sG5VPITkCIAgJw==
-X-Received: by 2002:a05:6a20:258b:b0:249:d3d:a50b with SMTP id adf61e73a8af0-2cff4209b23mr5529405637.59.1758664278734;
-        Tue, 23 Sep 2025 14:51:18 -0700 (PDT)
-Received: from [10.73.52.96] (pat_11.qualcomm.com. [192.35.156.11])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b55396db81fsm9565146a12.19.2025.09.23.14.51.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Sep 2025 14:51:18 -0700 (PDT)
-Message-ID: <1b51550f-90db-2ead-0ec5-93ce786ffdff@oss.qualcomm.com>
-Date: Tue, 23 Sep 2025 14:51:16 -0700
+	s=arc-20240116; t=1758668585; c=relaxed/simple;
+	bh=A5dBr5PpaLQmJuxydR8a5pjwhHT9xCswrCUlSGd9Jxc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aMAefPnSUqvH6HkpBQ+AEO13NobPwLOzt6yhhvMkMO4jQAlOPJnb+OlRTabohLNkIvKHOYp4RPWAMyxPQ1rOH45iUDIWET6DsoKs6i84FNpyvNbAqbHxVqBaV7IOnYJoCGkUiu1wYQ/84hRNougTnJBm6JFOTt/HOHRLhN1YQCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WYk4QuiA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F76C4CEF5;
+	Tue, 23 Sep 2025 23:03:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758668585;
+	bh=A5dBr5PpaLQmJuxydR8a5pjwhHT9xCswrCUlSGd9Jxc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WYk4QuiANLqAYBKBMQBkOL+iwQ6W/E/SXGvPQAvHkHqa4HXfB+Gynw+sgddMIuFLx
+	 sYXwR61KqTFKF/Zfmae9CEXHk4hi3p69eJfcyWbzLy6EVH5XNax8pDmKHL0+HhZE02
+	 q+3FjdU0NcxomWCJkKwEtkvOclicfGJmU2DNjoT1Drz1VQpYjkgfoyfx24vNO3sNj/
+	 eRbArcv3evXuc3lqX6z5jFBRG3+yAa/URvuqfiqvdvaO0/VrPAYvrnE2KBtGRPXhLW
+	 M21qOtY/JqjktuJ7UqJ6Wbsthgw9nc5qP9E8BrbEzqb4hgKkX4BmBK1ZZFj6STOjvw
+	 NaA1YBMhbFTlA==
+Received: by venus (Postfix, from userid 1000)
+	id 2BF3C1805CF; Wed, 24 Sep 2025 01:02:59 +0200 (CEST)
+Date: Wed, 24 Sep 2025 01:02:59 +0200
+From: Sebastian Reichel <sre@kernel.org>
+To: Stefan Schmidt <stefan@datenfreihafen.org>, 
+	Jan Lubbe <jlu@pengutronix.de>, stefan.schmidt@linaro.org, linux-embedded@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, RD Babiera <rdbabiera@google.com>, 
+	Amit Sunil Dhamne <amitsd@google.com>, Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	kernel@collabora.com
+Subject: Re: Call for Participation: Embedded & IoT micro-conference at Linux
+ Plumbers 2025
+Message-ID: <j5dtkmnu55ycmqpaseazots7mevqyt5lafclvguxj6oz5r5cts@n563dsnvwuu7>
+References: <2a353817-f1da-4e7c-8b2c-0853779ec054@datenfreihafen.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,qmp-usb: Add Glymur USB UNI
- PHY compatible
-Content-Language: en-US
-To: Johan Hovold <johan@kernel.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, krzk+dt@kernel.org,
-        conor+dt@kernel.org, kishon@kernel.org, vkoul@kernel.org,
-        gregkh@linuxfoundation.org, robh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <20250920032108.242643-1-wesley.cheng@oss.qualcomm.com>
- <20250920032108.242643-3-wesley.cheng@oss.qualcomm.com>
- <7gvp6pshp4eiugk3qodg2ub3azu365loturidbkxqly6nhtgq7@bxnkxeqzarkv>
- <4116b593-d36d-df10-6101-4e3539b8b812@oss.qualcomm.com>
- <aNJL1YEXx6IabTos@hovoldconsulting.com>
-From: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-In-Reply-To: <aNJL1YEXx6IabTos@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: 50Swf0XKS9lqDTZgrOOwqO3SKjS03JVt
-X-Proofpoint-ORIG-GUID: 50Swf0XKS9lqDTZgrOOwqO3SKjS03JVt
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIyMDA4OSBTYWx0ZWRfX3f1nfUdK9sfZ
- nB8hgkHgFjQiTtY+oFp52BUK5sVgDzMcxHz5VS9qyRYiwPhBQixU+QQUchSW3HUqHw92+RIEfZf
- 4JQtS8ctCYMP81kWEzq5z4mvwsQTCEBODN5WfCXyHY/OzCEWBJnzJ5uchiVCpZ6MGdyjH6Fn/f+
- xLbsnHwV+MXAQMkIMwB9FKJFDFPmhwirc+RrN34FIwmM4RY7lHfcYlKXjmCg+VvzNRLPJDxircq
- nIRRaoMURgb33KriWNr7vb1fUx41p0omX+jQvX3PDBz2YnBby/hY5vtSX+utCT2WAgwgCc/In45
- z36xwuCwqSxpqbu+kwJi71ud1brCL8udUY8PYtvect9FbkgL8xveKcCRtF0qs6P5CZx8vRYEJfg
- HefnjMQw
-X-Authority-Analysis: v=2.4 cv=BabY0qt2 c=1 sm=1 tr=0 ts=68d31658 cx=c_pps
- a=oF/VQ+ItUULfLr/lQ2/icg==:117 a=ZdW6uxA9NKXbfdqeeS2OGA==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=zitRP-D0AAAA:8
- a=A-OFauQzm6gaq6ZTC9UA:9 a=QEXdDO2ut3YA:10 a=3WC7DwWrALyhR5TkjVHa:22
- a=xwnAI6pc5liRhupp6brZ:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-23_06,2025-09-22_05,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 clxscore=1015 phishscore=0 bulkscore=0 priorityscore=1501
- adultscore=0 malwarescore=0 spamscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509220089
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xi4we3ntoqtlf52u"
+Content-Disposition: inline
+In-Reply-To: <2a353817-f1da-4e7c-8b2c-0853779ec054@datenfreihafen.org>
 
 
+--xi4we3ntoqtlf52u
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: Call for Participation: Embedded & IoT micro-conference at Linux
+ Plumbers 2025
+MIME-Version: 1.0
 
-On 9/23/2025 12:27 AM, Johan Hovold wrote:
-> On Mon, Sep 22, 2025 at 06:00:04PM -0700, Wesley Cheng wrote:
->>
->>
->> On 9/20/2025 8:22 AM, Dmitry Baryshkov wrote:
->>> On Fri, Sep 19, 2025 at 08:21:01PM -0700, Wesley Cheng wrote:
->>>> The Glymur USB subsystem contains a multiport controller, which utilizes
->>
->>> two QMP UNI PHYs.  Add the proper compatible string for the Glymur SoC.
->>>> @@ -16,6 +16,7 @@ description:
->>>>    properties:
->>>>      compatible:
->>>>        enum:
->>>> +      - qcom,glymur-qmp-usb3-uni-phy
-> 
-> Odd indentation?
-> 
->>>>          - qcom,ipq5424-qmp-usb3-phy
->>>>          - qcom,ipq6018-qmp-usb3-phy
->>>>          - qcom,ipq8074-qmp-usb3-phy
->>>> @@ -62,6 +63,8 @@ properties:
->>>>    
->>>>      vdda-pll-supply: true
->>>>    
->>>> +  refgen-supply: true
->>>
->>> You've added it, but it's not referenced as required. Why is it so?
-> 
->> The refgen clock isn't always required on each and every platform unlike
->> the .9v and 1.2v rail/supply, which directly power the QMP PHY.  It only
->> really depends on how the refclk/CXO network is built for that
->> particular chipset.  The refgen ensures that we're properly voting for
->> the supply that is powering our CXO buffer.
-> 
-> I thought we discussed this before and concluded that this is not an
-> accurate description of the hardware (even if you now call this supply
-> refgen instead of qref):
-Hi Johan,
+Hi,
 
-refgen and qrefs are different things.  I will try to clarify as much as 
-I can from the discussion you linked below.  (based on my understanding 
-of the reference clock network)  The refgen is the main supply that 
-controls the reference clock (CXO) into a specific branch.  Within each 
-of these branches there are clock repeaters that are supplied by QREFs, 
-and is basically the supply to the clkref switch controlled by the TCSR 
-registers.
+On Fri, Sep 05, 2025 at 09:45:26AM +0200, Stefan Schmidt wrote:
+> We are happy to announce that the Embedded & IoT micro-conference was
+> again accepted for Linux Plumbers this year. Hosted in beautiful Tokyo,
+> Japan December 11-13. https://lpc.events/event/19/contributions/2005/
+>=20
+> Topics cover all things embedded and IoT. Boot time to kernel size, low
+> power communication, telemetry and also RTOS. Devicetree and build
+> system have their own MC and we can move sessions between them as needed.
 
-The way some of the tech blocks are connected, the QREFs/refgen may 
-share the same regulator as some of the PHY's core supply.  Some may not 
-even have QREFs at all.  One example is the QMP PHY that is associated 
-to the primary controller on Glymur.  It has a refgen regulator, but no 
-QREFs, hence we only need to vote the refgen accordingly.
+I would like to present / discuss fusb302 (or other chips handled via
+the TCPM framework) using boards that are mainly powered via USB-C and
+not having any backup power source. This kind of setup is often found
+on Rockchip boards (e.g. Libre Computer ROC-RK3399-PC, Radxa ROCK 5B
+or ArmSoM Sige 5) and quite a pain, because a hard-reset effectively
+kills the board power.
 
-I don't know if that helps you understand it a bit more to convince you 
-of the new regulator addition.  If anything we may need to add an 
-explicit QREF supply also :).
+I would present the problem(s), what I've done so far to get it working
+to some degree with the upstream kernel and then discuss how to improve
+the situation.
 
-Thanks
-Wesley Cheng
-> 
-> 	https://lore.kernel.org/lkml/aEBfV2M-ZqDF7aRz@hovoldconsulting.com/
-> 
-> Given your description above this still looks wrong (at least after a
-> quick look).
-> 
-> Johan
+I think to become a worthwhile discussion the session would need some
+people that know the USB-PD specification and kernel subsystem, such as:
+
+ * Heikki Krogerus (USB-C maintainer)
+ * Greg Kroah-Hartman (USB maintainer)
+ * RD Babiera or Amit Sunil Dhamne (Google is actively working on
+   ensuring TCPM code being compatible with the USB-PD specification
+   and they were unhappy about some of my changes :))
+
+P.S.: I'm not sure how the CfP for the LPC micro-conferences works.
+Please tell me if this mail is not good enough and I need to insert
+something into some system.
+
+Greetings,
+
+-- Sebastian
+
+--xi4we3ntoqtlf52u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjTJx8ACgkQ2O7X88g7
++pqU2w/6AxYzW774s5ImPsNv11xmIY3uOTWpKgS1cJeVCUVV/75CGcgNZlnhYboe
+KvAvCso1L78HrqMA3pQ/N2tfa5IfRUd/q7kkRJT+vlp9UH1LxClEiKKam6GSAsuF
+5L382YDSD1x+inub52F21GnpSIE4E4JWAkn1RdMwNMZZ0L72eMYoOeXy1qnFNUc5
+f99ME2nqClgAHPmyP3QPyuKuRdu3LVxlgZKzxLHG79jJgWCQOyTGV/TYaGi9ip0P
+6ol/inpHjokcWnqhZyQPycuX7zCaqDrf9jhfHZ7Tl0Z48XtGAJySFf0wtxfiOkDE
+sFeSD56IG/3/usMiX61FevEHiHovefpw9cN2Z/6W5b6SyJBeofMNoqkRSHbvayJc
+BSN82nXAxaN6qwgLdfM3qab0GIUYLmkmP3SNXD+rybr+EWbsOaKtwKEvxE0CVVbW
+800/ay8/ti1/4XFfJD2jD6vD4StHAWtIHLkGhO+hCL+8p4uiRC3tiCJvBq89gplY
+ACprfRPqA5qE31/8h8Zz5lJkvvpZkNsZl1wFRjIYGFyjigUO/bxHA1Meba7PJBOv
+WeL9OiSvKiQsa40D9UcNQnl7SzY1TVDnwhMZQAdEbb1AB1l6FLbF+AVs5ph97b/f
+W6FnZ5F60XShgJZp7z41fPp02u5ujNsJNAHy0DeARrdW+oBjGaU=
+=oU21
+-----END PGP SIGNATURE-----
+
+--xi4we3ntoqtlf52u--
 
