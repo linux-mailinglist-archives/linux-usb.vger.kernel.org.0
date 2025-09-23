@@ -1,177 +1,189 @@
-Return-Path: <linux-usb+bounces-28508-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28509-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFAA5B94211
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 05:42:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D785B943EC
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 06:41:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95EB93B22C7
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 03:42:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DADB248191D
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 04:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B302A266582;
-	Tue, 23 Sep 2025 03:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="cm2djMyY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB7472DC33D;
+	Tue, 23 Sep 2025 04:41:15 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m15567.qiye.163.com (mail-m15567.qiye.163.com [101.71.155.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0012AE99;
-	Tue, 23 Sep 2025 03:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.67
+Received: from sgoci-sdnproxy-4.icoremail.net (sgoci-sdnproxy-4.icoremail.net [129.150.39.64])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2C5F2DA744;
+	Tue, 23 Sep 2025 04:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.150.39.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758598967; cv=none; b=dsK3/wykd34UMzb9YTDnUarZHqNDO9MGEPMWQmmAEc+s8L75aRc31mdApniSHNJOsulYgxblbF2m5UcNGYTkG/u8u/2CpTSLsgpkz4l9qhP082Um+Vf35IgmFZr4wwqVZy80bYydP2JWzpp5rTZxVbpwWLMfypLkWhXmKBBXkUw=
+	t=1758602475; cv=none; b=IEgLavFK88xNrDPlxfCF2f3+8fkRK1pZDNKtUsoPavdVwcp9/3qcCs70nz3ISzQ56pHwM2o0gbhwTDQuBzM+5zsC9PiD9kaLHwI+wzMrK6YSKcfLm+6cxS2rx/wmvkOKT/SNgUogBZBs71omnOsYKYMwtPu3dNoKzFN0govzOUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758598967; c=relaxed/simple;
-	bh=YsIYnVzfSPxpVvjt/XAKbJoZbnK0hdwHhRGcmpD5Jhc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KigWzXXebsLxfp+MGZjh8wZ6JBIxrzyHFVvMYeG18i1V+8c1Wo8JpkhEtQ1/+RIObbg4s2u8L6+UreI03m4Ul3sCEp6DyeiLD80za/Ih99VSjy4yp7WWftcABqLfbVgBXTFwFi0sRjq1Z9aW0mYvsdasuUeTHgRERn8duvrdoFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=cm2djMyY; arc=none smtp.client-ip=101.71.155.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.153] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 23b93816f;
-	Tue, 23 Sep 2025 11:42:38 +0800 (GMT+08:00)
-Message-ID: <7265bd00-3e44-40d7-8b53-0e4cd90f2717@rock-chips.com>
-Date: Tue, 23 Sep 2025 11:42:36 +0800
+	s=arc-20240116; t=1758602475; c=relaxed/simple;
+	bh=GHFGh6F/qvNE4d167VnTlMj8BqEgi/Yi6O1QotEgb0E=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=HyAvTpQ3mthffW+IYMYy0pGVC4dR8Ogr+ueHF/Lczx+T7w59xGk1Uje1wUKqPZILAapLKbDm5VGFQzVBAm9g6cbLHvVdXQPu9TV8bC96TJ07NOhRDKutE7B3tmpUQYu9sW+mrCDChqS3k/4lpDJwdNy+2Y3xIVb6/Avo1WUhSjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=129.150.39.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from caohang$eswincomputing.com ( [10.127.112.153] ) by
+ ajax-webmail-app1 (Coremail) ; Tue, 23 Sep 2025 12:40:46 +0800 (GMT+08:00)
+Date: Tue, 23 Sep 2025 12:40:46 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Hang Cao" <caohang@eswincomputing.com>
+To: "Conor Dooley" <conor@kernel.org>
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, Thinh.Nguyen@synopsys.com,
+	p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	ningyu@eswincomputing.com, linmin@eswincomputing.com,
+	pinkesh.vaghela@einfochips.com,
+	"Senchuan Zhang" <zhangsenchuan@eswincomputing.com>
+Subject: Re: Re: [PATCH v3 1/2] dt-bindings: usb: Add ESWIN EIC7700 USB
+ controller
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
+ 20241203(6b039d88) Copyright (c) 2002-2025 www.mailtech.cn
+ mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
+In-Reply-To: <20250915-affair-halves-4f881f6c7cdb@spud>
+References: <20250915085329.2058-1-caohang@eswincomputing.com>
+ <20250915091024.2128-1-caohang@eswincomputing.com>
+ <20250915-affair-halves-4f881f6c7cdb@spud>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_26166_1198542829.1758602446408"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/7] dt-bindings: phy: rockchip: rk3399-typec-phy:
- Support mode-switch
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Chaoyi Chen <kernel@airkyi.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
- Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20250922012039.323-1-kernel@airkyi.com>
- <20250922012039.323-3-kernel@airkyi.com>
- <eb6ogrepo5acwcj5gpdolxxyg3xrx7kz6zrbizzseqyavvitfd@cnzurelqeh4t>
- <533d41bd-9293-4808-85f3-8fb6dc8bcda7@rock-chips.com>
- <mpyfe63tzxzxyyqf4vxwmrewzeosnaftlkko7pq2ynld6u3lcz@wlpixckov4hg>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <mpyfe63tzxzxyyqf4vxwmrewzeosnaftlkko7pq2ynld6u3lcz@wlpixckov4hg>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9974aa8dc603abkunm5757e026ec32e
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQxhCSlZIGB0ZGEMdQ05PHh9WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
-	xVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=cm2djMyY1KSH7R7fj+BsJrZJpRz+hFv7DR4CBPuZ4cXqi3Is0Xjfft+/qnuL+x3z0kVzyLXAGY05jU733OTg60njGbJQ4gL9W3wM+iO1LEwMSFrycz0UveCTLgVqGInCPgDsc1qJPFl0nezkToL/8ryZ29AAW5Px2Zd+JK2flzQ=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=4KUKqQ7mqQ2zVDBXjqLvwFYHz4+0xl7oABzJGnrMKc8=;
-	h=date:mime-version:subject:message-id:from;
+Message-ID: <17731a13.1cce.19974dfc64d.Coremail.caohang@eswincomputing.com>
+X-Coremail-Locale: en_US
+X-CM-TRANSID:TAJkCgCXuxHOJNJoe+3XAA--.18079W
+X-CM-SenderInfo: xfdrxt1qj6v25zlqu0xpsx3x1qjou0bp/1tbiAgEOEGjRelQV+wAA
+	sk
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-On 9/23/2025 11:17 AM, Dmitry Baryshkov wrote:
+------=_Part_26166_1198542829.1758602446408
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-> On Tue, Sep 23, 2025 at 09:53:06AM +0800, Chaoyi Chen wrote:
->> Hi Dmitry,
->>
->> On 9/23/2025 9:12 AM, Dmitry Baryshkov wrote:
->>> On Mon, Sep 22, 2025 at 09:20:34AM +0800, Chaoyi Chen wrote:
->>>> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>>>
->>>> The RK3399 SoC integrates two USB/DP combo PHYs, each of which
->>>> supports software-configurable pin mapping and DisplayPort lane
->>>> assignment. These capabilities enable the PHY itself to handle both
->>>> mode switching and orientation switching, based on the Type-C plug
->>>> orientation and USB PD negotiation results.
->>>>
->>>> While an external Type-C controller is still required to detect cable
->>>> attachment and report USB PD events, the actual mode and orientation
->>>> switching is performed internally by the PHY through software
->>>> configuration. This allows the PHY to act as a Type-C multiplexer for
->>>> both data role and DP altmode configuration.
->>>>
->>>> To reflect this hardware design, this patch introduces a new
->>>> "mode-switch" property for the dp-port node in the device tree bindings.
->>>> This property indicates that the connected PHY is capable of handling
->>>> Type-C mode switching itself.
->>>>
->>>> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>>>
->>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>
->>>> Changes in v4:
->>>> - Remove "|" in description.
->>>>
->>>> Changes in v3:
->>>> - Add more descriptions to clarify the role of the PHY in switching.
->>>>
->>>> Changes in v2:
->>>> - Reuse dp-port/usb3-port in rk3399-typec-phy binding.
->>>>
->>>>    .../devicetree/bindings/phy/rockchip,rk3399-typec-phy.yaml  | 6 ++++++
->>>>    1 file changed, 6 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/phy/rockchip,rk3399-typec-phy.yaml b/Documentation/devicetree/bindings/phy/rockchip,rk3399-typec-phy.yaml
->>>> index 91c011f68cd0..83ebcde096ea 100644
->>>> --- a/Documentation/devicetree/bindings/phy/rockchip,rk3399-typec-phy.yaml
->>>> +++ b/Documentation/devicetree/bindings/phy/rockchip,rk3399-typec-phy.yaml
->>>> @@ -51,6 +51,12 @@ properties:
->>>>          '#phy-cells':
->>>>            const: 0
->>>> +      mode-switch:
->>> Having the mode-switch here is a bit strange. I think the whole PHY
->>> device should be an orientation-switch and mode-switch. Otherwise it
->>> feels weird to me.
->> I think this is a difference in practice. In the previous binding, there was already an orientation-switch under the usb-port. I trying to add both an orientation-switch and a mode-switch to the top-level device in v2. And Krzysztof reminded me that adding a mode-switch under the dp-port would be better, so I changed it to the current form :)
-> I couldn't find the comment on lore. Could you please point it out?
+SGkswqBDb25vcsKgRG9vbGV5CsKgIMKgwqBGaXJzdCBvZiBhbGwsIHRoYW5rIHlvdSB2ZXJ5IG11
+Y2ggZm9yIHlvdXIgZGV0YWlsZWQgYW5kIHByb2Zlc3Npb25hbCByZXZpZXcgd29yay7CoEFkZGl0
+aW9uYWxseSwgd2Ugc2luY2VyZWx5IGFwb2xvZ2l6ZcKgCmZvciBhbnkgY29uZnVzaW9uIGNhdXNl
+ZCB0byB5b3UuSSB3aWxsIHRyeSB0byBleHBsYWluIHRoZSBjb250ZW50IG9mIHRoZSBkZXNpZ24g
+ZnJhbWV3b3JrLgoKPiA+IEZyb206IEhhbmcgQ2FvIDxjYW9oYW5nQGVzd2luY29tcHV0aW5nLmNv
+bT4KPiA+IAo+ID4gQWRkIERldmljZSBUcmVlIGJpbmRpbmcgZG9jdW1lbnRhdGlvbiBmb3IgdGhl
+IEVTV0lOIEVJQzc3MDAKPiA+IHVzYiBjb250cm9sbGVyIG1vZHVsZS4KPiA+IAo+ID4gU2lnbmVk
+LW9mZi1ieTogU2VuY2h1YW4gWmhhbmcgPHpoYW5nc2VuY2h1YW5AZXN3aW5jb21wdXRpbmcuY29t
+Pgo+ID4gU2lnbmVkLW9mZi1ieTogSGFuZyBDYW8gPGNhb2hhbmdAZXN3aW5jb21wdXRpbmcuY29t
+Pgo+ID4gLS0tCj4gPiAgLi4uL2JpbmRpbmdzL3VzYi9lc3dpbixlaWM3NzAwLXVzYi55YW1sICAg
+ICAgIHwgOTkgKysrKysrKysrKysrKysrKysrKwo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA5OSBpbnNl
+cnRpb25zKCspCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJl
+ZS9iaW5kaW5ncy91c2IvZXN3aW4sZWljNzcwMC11c2IueWFtbAo+ID4gCj4gPiBkaWZmIC0tZ2l0
+IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9lc3dpbixlaWM3NzAwLXVz
+Yi55YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9lc3dpbixlaWM3
+NzAwLXVzYi55YW1sCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAw
+MDAwLi4zNzc5N2I4NWY0MTcKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL0RvY3VtZW50YXRp
+b24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvZXN3aW4sZWljNzcwMC11c2IueWFtbAo+ID4gQEAg
+LTAsMCArMSw5OSBAQAo+ID4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9u
+bHkgT1IgQlNELTItQ2xhdXNlKQo+ID4gKyVZQU1MIDEuMgo+ID4gKy0tLQo+ID4gKyRpZDogaHR0
+cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvdXNiL2Vzd2luLGVpYzc3MDAtdXNiLnlhbWwjCj4g
+PiArJHNjaGVtYTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2NoZW1hcy9jb3JlLnlhbWwj
+Cj4gPiArCj4gPiArdGl0bGU6IEVTV0lOIEVJQzc3MDAgU29DIFVzYiBDb250cm9sbGVyCj4gPiAr
+Cj4gPiArbWFpbnRhaW5lcnM6Cj4gPiArICAtIFdlaSBZYW5nIDx5YW5nd2VpMUBlc3dpbmNvbXB1
+dGluZy5jb20+Cj4gPiArICAtIFNlbmNodWFuIFpoYW5nIDx6aGFuZ3NlbmNodWFuQGVzd2luY29t
+cHV0aW5nLmNvbT4KPiA+ICsgIC0gSGFuZyBDYW8gPGNhb2hhbmdAZXN3aW5jb21wdXRpbmcuY29t
+Pgo+ID4gKwo+ID4gK2Rlc2NyaXB0aW9uOgo+ID4gKyAgVGhlIFVzYiBjb250cm9sbGVyIG9uIEVJ
+Qzc3MDAgU29DLgo+ID4gKwo+ID4gK2FsbE9mOgo+ID4gKyAgLSAkcmVmOiBzbnBzLGR3YzMtY29t
+bW9uLnlhbWwjCj4gPiArCj4gPiArcHJvcGVydGllczoKPiA+ICsgIGNvbXBhdGlibGU6Cj4gPiAr
+ICAgIGNvbnN0OiBlc3dpbixlaWM3NzAwLWR3YzMKPiA+ICsKPiA+ICsgIHJlZzoKPiA+ICsgICAg
+bWF4SXRlbXM6IDEKPiA+ICsKPiA+ICsgIGludGVycnVwdHM6Cj4gPiArICAgIG1heEl0ZW1zOiAx
+Cj4gPiArCj4gPiArICBpbnRlcnJ1cHQtbmFtZXM6Cj4gPiArICAgIGl0ZW1zOgo+ID4gKyAgICAg
+IC0gY29uc3Q6IHBlcmlwaGVyYWwKPiA+ICsKPiA+ICsgIGNsb2NrczoKPiA+ICsgICAgbWF4SXRl
+bXM6IDIKPiA+ICsKPiA+ICsgIGNsb2NrLW5hbWVzOgo+ID4gKyAgICBpdGVtczoKPiA+ICsgICAg
+ICAtIGNvbnN0OiBhY2xrCj4gPiArICAgICAgLSBjb25zdDogY2ZnCj4gPiArCj4gPiArICByZXNl
+dHM6Cj4gPiArICAgIG1heEl0ZW1zOiAxCj4gPiArCj4gPiArICByZXNldC1uYW1lczoKPiA+ICsg
+ICAgaXRlbXM6Cj4gPiArICAgICAgLSBjb25zdDogdmF1eAo+ID4gKwo+ID4gKyAgZXN3aW4saHNw
+LXNwLWNzcjoKPiA+ICsgICAgZGVzY3JpcHRpb246Cj4gPiArICAgICAgSFNQIENTUiBpcyB0byBj
+b250cm9sIGFuZCBnZXQgc3RhdHVzIG9mIGRpZmZlcmVudCBoaWdoLXNwZWVkIHBlcmlwaGVyYWxz
+Cj4gPiArICAgICAgKHN1Y2ggYXMgRXRoZXJuZXQsIFVTQiwgU0FUQSwgZXRjLikgdmlhIHJlZ2lz
+dGVyLCB3aGljaCBjYW4gY2xvc2UKPiA+ICsgICAgICBtb2R1bGUncyBjbG9jayxyZXNldCBtb2R1
+bGUgaW5kZXBlbmRlbnRseSBhbmQgdHVuZSBib2FyZC1sZXZlbCdzCj4gPiArICAgICAgcGFyYW1l
+dGVycyBvZiBQSFksIGV0Yy4KPiA+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVm
+aW5pdGlvbnMvcGhhbmRsZS1hcnJheQo+ID4gKyAgICBpdGVtczoKPiA+ICsgICAgICAtIGl0ZW1z
+Ogo+ID4gKyAgICAgICAgICAtIGRlc2NyaXB0aW9uOiBwaGFuZGxlIHRvIEhTUCBSZWdpc3RlciBD
+b250cm9sbGVyIGhzcF9zcF9jc3Igbm9kZS4KPiA+ICsgICAgICAgICAgLSBkZXNjcmlwdGlvbjog
+dXNiIGJ1cyByZWdpc3RlciBvZmZzZXQuCj4gPiArICAgICAgICAgIC0gZGVzY3JpcHRpb246IGF4
+aSBsb3cgcG93ZXIgcmVnaXN0ZXIgb2Zmc2V0Lgo+ID4gKyAgICAgICAgICAtIGRlc2NyaXB0aW9u
+OiB2YnVzIGZyZXF1ZW5jeSByZWdpc3RlciBvZmZzZXQuCj4gPiArICAgICAgICAgIC0gZGVzY3Jp
+cHRpb246IG1wbGwgcmVnaXN0ZXIgb2Zmc2V0Lgo+IAo+IEFzIEkgbWVudGlvbmVkIG9uIHRoZSBz
+aGRjaSBiaW5kaW5nIHBhdGNoLCBJJ20gbm90IGhhcHB5IHdpdGggdGhlCj4ganVzdGlmaWNhdGlv
+biBmb3IgdGhpcyBwaGFuZGxlLiBXaGF0IGV4YWN0bHkgaXMgdGhlIGNsb2NrIHRoYXQgdGhpcwo+
+IGNvbnRyb2xzIGFuZCB3aHkgZG9lcyBpdCBub3QgaGF2ZSBhIGRlZGljYXRlZCBjbG9jay1jb250
+cm9sbGVyIGRyaXZlcgo+IGFuZCByZXNldC1jb250cm9sbGVyIGRyaXZlcj8KPiAKSW4gdGhlIGN1
+cnJlbnQgZGVzaWduIGZyYW1ld29yaywgdGhlIGNsb2NrIGNhbiBiZSBkaXZpZGVkIGludG8gdHdv
+IHBhcnRzOsKgCjEuIFRoZSB0b3AtY2xvY2ssIHdoaWNoIGlzIHVzZWQgdG8gbWFuYWdlIGFuZCBj
+b250cm9sIHRoZSBjbG9ja3Mgb2YgdmFyaW91cyBzdWJzeXN0ZW1zIChzdWNoIGFzIEhTUCwgR1BV
+LCBOUFUsIGV0Yy4pO8KgCjIuIFRoZSBzdWJzeXN0ZW0gY2xvY2tzIG1hbmFnZWQgaW5kZXBlbmRl
+bnRseSBieSBlYWNoIHN1YnN5c3RlbS4KVGhlIHRvcC1jbG9jayBpcyBhIHN0YW5kYXJkIGNsb2Nr
+IGRlc2lnbihmZWF0dXJpbmcgZ2F0ZSwgZGl2aWRlciwgYW5kIG11eCBmdW5jdGlvbnMpIHRoYXQg
+aGFzIGJlZW4gcmVnaXN0ZXJlZCBpbiB0aGXCoApjb21tb24gY2xvY2sgZnJhbWV3b3JrLHdpdGgg
+YSBkZWRpY2F0ZWQgY2xvY2sgY29udHJvbGxlciBkcml2ZXIuCgpUaGUgc3Vic3lzdGVtIGNsb2Nr
+cyBtYW5hZ2VkIGJ5IHN1YnN5c3RlbXMgYXJlIGNvbnRyb2xsZWQgYW5kIGNvbmZpZ3VyZWQgdGhy
+b3VnaCB0aGUgQ1NSIChDb250cm9sIGFuZCBTdGF0dXMgUmVnaXN0ZXIpwqAKb2YgZWFjaCByZXNw
+ZWN0aXZlIHN1YnN5c3RlbS4gRm9yIGV4YW1wbGUsIHRoZSBIU1Agc3Vic3lzdGVtIHVzZXMgdGhl
+IGVzd2luLGhzcC1zcC1jc3IuIEFkZGl0aW9uYWxseSwgdGhpcyBDU1IgaXMKwqByZXNwb25zaWJs
+ZSBmb3IgbWFuYWdpbmcgc3RhcnR1cCBmdW5jdGlvbnMsIHBlcmZvcm1pbmcgaW5kZXBlbmRlbnQg
+cmVzZXQgb2Ygc3BlY2lmaWMgbW9kdWxlcywgYW5kIGFkanVzdGluZ8KgClBIWSBwYXJhbWV0ZXJz
+IHRvIGFjaGlldmUgYm9hcmQtbGV2ZWwgdHVuaW5nIChmb3IgVVNCL1NBVEEgaW50ZXJmYWNlcywg
+ZXRjLikuCgpUaGUgdG9wLWNsb2NrIG1hbmFnZXMgdGhlIGdsb2JhbCBjbG9ja3Mgb2Ygc3Vic3lz
+dGVtcy4gVGFraW5nIHRoZSBIU1Agc3Vic3lzdGVtIGFzIGFuIGV4YW1wbGUsIHRoZSB0b3AtY2xv
+Y2sKwqBjb25maWd1cmVzIHRoZSBoc3BfYWNsa19jdHJsIGFuZCBoc3BfY2ZnX2N0cmwgb2YgSFNQ
+IHN1YnN5c3RlbSBvbmx5LgpJbiBjb250cmFzdCwgdGhlIHN1YnN5c3RlbSBjbG9ja3MgYXJlIG1h
+bmFnZWQgdmlhIHRoZWlyIG93biBDU1JzLiBGb3IgaW5zdGFuY2UsIHRoZSBVU0IgcmVmIGNsb2Nr
+IHVzZWQgaW4gdGhlIFVTQiBtb2R1bGUgb2bCoAp0aGUgSFNQIHN1YnN5c3RlbSBjYW4gb25seSBi
+ZSBjb25maWd1cmVkIHRocm91Z2ggdGhlIGhzcC1jc3IsIGFuZCBjYW5ub3QgYmUgc2V0IHZpYSB0
+aGUgdG9wLWNsb2NrIGNvbnRyb2xsZXIgZHJpdmVyLgpBcyBmb3IgdGhlIHJlc2V0IGZ1bmN0aW9u
+LCBpdCBpcyBub3QgaW50ZWdyYXRlZCBpbnRvIGEgZGVkaWNhdGVkIGNvbnRyb2xsZXIgZHJpdmVy
+IGVpdGhlciwgZm9yIHJlYXNvbnMgc2ltaWxhciB0byB0aG9zZSBvZiB0aGXCoApjbG9jayBtYW5h
+Z2VtZW50IG1lbnRpb25lZCBhYm92ZS4KPiA+ICsKPiA+ICtyZXF1aXJlZDoKPiA+ICsgIC0gY29t
+cGF0aWJsZQo+ID4gKyAgLSByZWcKPiA+ICsgIC0gY2xvY2tzCj4gPiArICAtIGNsb2NrLW5hbWVz
+Cj4gPiArICAtIGludGVycnVwdHMKPiA+ICsgIC0gaW50ZXJydXB0LW5hbWVzCj4gPiArICAtIHJl
+c2V0cwo+ID4gKyAgLSByZXNldC1uYW1lcwo+ID4gKyAgLSBlc3dpbixoc3Atc3AtY3NyCj4gPiAr
+Cj4gPiArdW5ldmFsdWF0ZWRQcm9wZXJ0aWVzOiBmYWxzZQo+ID4gKwo+ID4gK2V4YW1wbGVzOgo+
+ID4gKyAgLSB8Cj4gPiArICAgIHVzYkA1MDQ4MDAwMCB7Cj4gPiArICAgICAgICBjb21wYXRpYmxl
+ID0gImVzd2luLGVpYzc3MDAtZHdjMyI7Cj4gPiArICAgICAgICByZWcgPSA8MHg1MDQ4MDAwMCAw
+eDEwMDAwPjsKPiA+ICsgICAgICAgIGNsb2NrcyA9IDwmY2xvY2sgMTcwPiwKPiA+ICsgICAgICAg
+ICAgICAgICAgIDwmY2xvY2sgMTcxPjsKPiA+ICsgICAgICAgIGNsb2NrLW5hbWVzID0gImFjbGsi
+LCAiY2ZnIjsKPiA+ICsgICAgICAgIGludGVycnVwdC1wYXJlbnQgPSA8JnBsaWM+Owo+ID4gKyAg
+ICAgICAgaW50ZXJydXB0cyA9IDw4NT47Cj4gPiArICAgICAgICBpbnRlcnJ1cHQtbmFtZXMgPSAi
+cGVyaXBoZXJhbCI7Cj4gPiArICAgICAgICByZXNldHMgPSA8JnJlc2V0IDg0PjsKPiA+ICsgICAg
+ICAgIHJlc2V0LW5hbWVzID0gInZhdXgiOwo+ID4gKyAgICAgICAgZHJfbW9kZSA9ICJwZXJpcGhl
+cmFsIjsKPiA+ICsgICAgICAgIG1heGltdW0tc3BlZWQgPSAiaGlnaC1zcGVlZCI7Cj4gPiArICAg
+ICAgICBwaHlfdHlwZSA9ICJ1dG1pIjsKPiA+ICsgICAgICAgIHNucHMsZGlzX2VuYmxzbHBtX3F1
+aXJrOwo+ID4gKyAgICAgICAgc25wcyxkaXMtdTItZnJlZWNsay1leGlzdHMtcXVpcms7Cj4gPiAr
+ICAgICAgICBzbnBzLGRpc191Ml9zdXNwaHlfcXVpcms7Cj4gPiArICAgICAgICBzbnBzLGRpcy1k
+ZWwtcGh5LXBvd2VyLWNoZy1xdWlyazsKPiA+ICsgICAgICAgIHNucHMscGFya21vZGUtZGlzYWJs
+ZS1zcy1xdWlyazsKPiA+ICsgICAgICAgIGVzd2luLGhzcC1zcC1jc3IgPSA8JmhzcF9zcF9jc3Ig
+MHg4MDAgMHg4MTggMHg4M2MgMHg4NDA+Owo+ID4gKyAgICB9Owo+ID4gLS0gCj4gPiAyLjM0LjEK
+PiA+IAoKSSB3b25kZXIgaWYgdGhpcyBleHBsYW5hdGlvbiBoYXMgYWRkcmVzc2VkIHlvdXIgZG91
+YnRzLiBJZiB5b3UgaGF2ZSBhbnkgb3RoZXIgcXVlc3Rpb25zLCBwbGVhc2UgZmVlbCBmcmVlIHRv
+IGZ1cnRoZXIgY29tbXVuaWNhdGUKwqB3aXRoIHVzLiBUaGFuayB5b3UgYSBsb3QuCgpCZXN0IHJl
+Z2FyZHMsCkhhbmcgQ2FvCg==
+------=_Part_26166_1198542829.1758602446408
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="signature.asc"
 
-Sorry, it is v1. I added an orientation-switch and a mode-switch in the top-level PHY [0]. Comment is here: [1]
-
-
-[0] https://lore.kernel.org/all/20250715112456.101-4-kernel@airkyi.com/
-
-[1] https://lore.kernel.org/all/4dfed94c-665d-4e04-b527-ddd34fd3db8f@kernel.org/
-
-
-
->>
->>
->>>> +        description:
->>>> +          Indicates the PHY can handle altmode switching. In this case,
->>>> +          requires an external USB Type-C controller to report USB PD message.
->>>> +        type: boolean
->>>> +
->>>>          port:
->>>>            $ref: /schemas/graph.yaml#/properties/port
->>>>            description: Connection to USB Type-C connector
->>>> -- 
->>>> 2.49.0
->>>>
->> -- 
->> Best,
->> Chaoyi
->>
--- 
-Best,
-Chaoyi
+LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0NCg0KaUhVRUFCWUtBQjBXSVFSaDI0NkVHcS84
+UkxoRGpPMTR0REdIb0lKaTBnVUNhTWhPSXdBS0NSQjR0REdIb0lKaQ0KMGs0VEFRRDAwTW9MckJn
+L3A0SEJzd3JRYm9EQ2E0RFp2dnNxeHV5YkFIRzFTalQ2T1FFQSsyRm5tRUFicGRicg0KSjRKTFha
+WHUrVC9mbXRCdHlaRTlwQXljSnM5NjRnUT0NCj1uTUI2DQotLS0tLUVORCBQR1AgU0lHTkFUVVJF
+LS0tLS0NCg==
+------=_Part_26166_1198542829.1758602446408--
 
 
