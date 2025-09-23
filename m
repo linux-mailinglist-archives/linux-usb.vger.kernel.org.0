@@ -1,66 +1,58 @@
-Return-Path: <linux-usb+bounces-28516-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28517-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 667B9B94C89
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 09:28:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2014B94D6C
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 09:44:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A187E16BC3B
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 07:27:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CD1A3BBB3C
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 07:44:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C4E31355D;
-	Tue, 23 Sep 2025 07:27:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E0A4316194;
+	Tue, 23 Sep 2025 07:44:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oNAeZyWj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b1EIxkJC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B999531618F;
-	Tue, 23 Sep 2025 07:27:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBEB11ACEDF;
+	Tue, 23 Sep 2025 07:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758612445; cv=none; b=C/He4rS5b9qtoTX1DsHMK1jmX7TfDZMpVV+JqzV9C9E2btc9S+xTn/W9R3tmNSfAW65NpiD0TMc3Vn3IPW+vy9K3J9K6XKqni6+L4C2VjT62Ykh/OQ8uIbRqhuJ1jR0bruLrtty7ibZb5hDk7GXSk+Ox6UXPJQcAYZSLyS5Sg3g=
+	t=1758613443; cv=none; b=tGp/5oFb8EPyWfeyvgQ30+YGwYFGR4kBp/KezVaha+4kVEcKb1ALYsThYgHDzAeaHHSVLIktLjRkGSzYFZZC/IuzJA4o18y4V1MnqBOVmKfRR+alX12oy3waqBukA9ZYhWgkZpLU0m2uAcRUnmpy4rlv3tpGl0Us6IK7HKbWVCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758612445; c=relaxed/simple;
-	bh=KeDKwQHVQdiXPUQ8+Nb80zJOIZ1+DrcUy6TSKrXqibM=;
+	s=arc-20240116; t=1758613443; c=relaxed/simple;
+	bh=dKle1o6bbfcAMAKszGbEL8O+PYLJPoHmt8GU7LeMrhk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qdbPhDRJ535bFE347Ly40nQSffgfIyaIOg7UX/nVsnedCddwNhDxDj/iu9oyk9GZDZAteoD0TNLvqNzmN7mx5u7xGnD7991ZImnz2CXJIH5mn/e+SK2W341KgAuQIQtg/9Uo206u3C0YCvGkLTXMtJ3v4KJJaSsyf12TC1qXwzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oNAeZyWj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 520DCC4CEF5;
-	Tue, 23 Sep 2025 07:27:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=K6eWwbY7QH/+mi2cT9H5oGnArvqTxAw9P6mUCKQNpSvbFsYPcQsqTJBtPxLBWJEIyoffgfB0WwmB6slAGLxVQ+P21Z7r8DmbLziAHFFunhkoPDBiweIXL65aU1uc2snLjnZzsHC0oi+zXXB0hoFCI5Wy2fVMculyzPGXHt56iUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b1EIxkJC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 619FCC4CEF5;
+	Tue, 23 Sep 2025 07:44:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758612445;
-	bh=KeDKwQHVQdiXPUQ8+Nb80zJOIZ1+DrcUy6TSKrXqibM=;
+	s=k20201202; t=1758613442;
+	bh=dKle1o6bbfcAMAKszGbEL8O+PYLJPoHmt8GU7LeMrhk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oNAeZyWj9z+KyZz5eb7jbYDIlZ0amPo6gA4Q5lS/TB0nBA5styzuTLBS7qS8pfipd
-	 DsWrYKKauedaMBuTZSiiiXgEa80mNYLTgoXJ9QQz+sXnwCSLg1+CHHAuaxyIvabIJb
-	 FkkKsQAkjKOr++6OzJ1l51mNgogh3btwXmUUlkrsyp4KjgHWOUcRnZ9CIJX+3jZM8e
-	 3Gznieq8XUCpXFzjzAl8ZbYlf8ZEynQHtdPXdHu3b/S0lV9rml+JPwCnEqs3faYbfe
-	 I/esSuYz602PXf2i/y957GNYvN5dk26kTQp4iMXsfIx6tBy2kA4AdGnSfX89qToP/G
-	 +zOx1t9Fby+BQ==
+	b=b1EIxkJCq7n4Z/SKlvcN7jzd45EXiwTv5aRY5b1/mkFi6ZWhHlLXmVeIGZ5jfLMK8
+	 ttTWgAxgU4+bnp3p1Ujyqn5IHjBAM7SlPjnNgIXob1o+AqXLn7z4blbOiIf21y8oSp
+	 hUqOzctHinLShgfOJKAAqe5oMqhzsjzPWyv9J69xK9/F0NcE8TLSesZjotCZvtzBVZ
+	 1dyAHl0+Sc2azELimeXGUp4aGvn+ZWeOx6yV1aB/sCVqf1C8ytRYoqzN7JQmMuwUBY
+	 eT3MNxJjM749RBfgq09aRhlt86QAYaWs0QgHSNmM0TI2wAQkav4VyYYhcDknhDTl7E
+	 0SCyDv4vKjhAQ==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1v0xQj-000000001HA-41EB;
-	Tue, 23 Sep 2025 09:27:18 +0200
-Date: Tue, 23 Sep 2025 09:27:17 +0200
+	id 1v0xgp-000000001gL-0Uth;
+	Tue, 23 Sep 2025 09:43:55 +0200
+Date: Tue, 23 Sep 2025 09:43:55 +0200
 From: Johan Hovold <johan@kernel.org>
-To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	krzk+dt@kernel.org, conor+dt@kernel.org, kishon@kernel.org,
-	vkoul@kernel.org, gregkh@linuxfoundation.org, robh@kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-phy@lists.infradead.org
-Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,qmp-usb: Add Glymur USB UNI
- PHY compatible
-Message-ID: <aNJL1YEXx6IabTos@hovoldconsulting.com>
-References: <20250920032108.242643-1-wesley.cheng@oss.qualcomm.com>
- <20250920032108.242643-3-wesley.cheng@oss.qualcomm.com>
- <7gvp6pshp4eiugk3qodg2ub3azu365loturidbkxqly6nhtgq7@bxnkxeqzarkv>
- <4116b593-d36d-df10-6101-4e3539b8b812@oss.qualcomm.com>
+To: "xiaowei.li" <xiaowei.li@simcom.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: serial: option: add SIMCom 8230C compositions
+Message-ID: <aNJPuwDMsf5Pyepy@hovoldconsulting.com>
+References: <20250917105342.2687371-1-xiaowei.li@simcom.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,49 +61,54 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4116b593-d36d-df10-6101-4e3539b8b812@oss.qualcomm.com>
+In-Reply-To: <20250917105342.2687371-1-xiaowei.li@simcom.com>
 
-On Mon, Sep 22, 2025 at 06:00:04PM -0700, Wesley Cheng wrote:
+On Wed, Sep 17, 2025 at 06:53:42PM +0800, xiaowei.li wrote:
+
+Thanks for the v2.
+
+Checkpatch complains that your From (author) name does not match you
+SoB (a period '.' instead of space and no capitalisation). Could you fix
+your mailer (or add a From line to the patch) so that the author
+information in the logs will look correct?
+
+Please consider adding an introductory sentence here (e.g. "Add the
+following compositions for device X:").
+
+> USB Device Listings:
+
+> Signed-off-by: Xiaowei Li <xiaowei.li@simcom.com>
+> ---
+
+And when updating patches you should put a short changelog here under
+the --- line.
+
+>  drivers/usb/serial/option.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> 
-> On 9/20/2025 8:22 AM, Dmitry Baryshkov wrote:
-> > On Fri, Sep 19, 2025 at 08:21:01PM -0700, Wesley Cheng wrote:
-> >> The Glymur USB subsystem contains a multiport controller, which utilizes
->
->> two QMP UNI PHYs.  Add the proper compatible string for the Glymur SoC.
-> >> @@ -16,6 +16,7 @@ description:
-> >>   properties:
-> >>     compatible:
-> >>       enum:
-> >> +      - qcom,glymur-qmp-usb3-uni-phy
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index fc869b7f803f..8eadcfe33ecd 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -2114,6 +2114,12 @@ static const struct usb_device_id option_ids[] = {
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9003, 0xff) },	/* Simcom SIM7500/SIM7600 MBIM mode */
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9011, 0xff),	/* Simcom SIM7500/SIM7600 RNDIS mode */
+>  	  .driver_info = RSVD(7) },
+> +	{ USB_DEVICE(0x1e0e, 0x9071),
+> +	  .driver_info = RSVD(3) | RSVD(4) },
+> +	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9078, 0xff),
+> +	  .driver_info = RSVD(5) },
+> +	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x907b, 0xff),
+> +	  .driver_info = RSVD(5) },
 
-Odd indentation?
+And please add a comment after these entries with the device and mode
+(like the surrounding entries have).
 
-> >>         - qcom,ipq5424-qmp-usb3-phy
-> >>         - qcom,ipq6018-qmp-usb3-phy
-> >>         - qcom,ipq8074-qmp-usb3-phy
-> >> @@ -62,6 +63,8 @@ properties:
-> >>   
-> >>     vdda-pll-supply: true
-> >>   
-> >> +  refgen-supply: true
-> > 
-> > You've added it, but it's not referenced as required. Why is it so?
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9205, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT+ECM mode */
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9206, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT-only mode */
+>  	{ USB_DEVICE(ALCATEL_VENDOR_ID, ALCATEL_PRODUCT_X060S_X200),
 
-> The refgen clock isn't always required on each and every platform unlike 
-> the .9v and 1.2v rail/supply, which directly power the QMP PHY.  It only 
-> really depends on how the refclk/CXO network is built for that 
-> particular chipset.  The refgen ensures that we're properly voting for 
-> the supply that is powering our CXO buffer.
-
-I thought we discussed this before and concluded that this is not an
-accurate description of the hardware (even if you now call this supply
-refgen instead of qref):
-
-	https://lore.kernel.org/lkml/aEBfV2M-ZqDF7aRz@hovoldconsulting.com/
-
-Given your description above this still looks wrong (at least after a
-quick look).
+Looks all good otherwise.
 
 Johan
 
