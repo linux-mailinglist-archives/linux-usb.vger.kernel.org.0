@@ -1,48 +1,47 @@
-Return-Path: <linux-usb+bounces-28552-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28553-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB229B96714
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 16:54:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6614AB966E4
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 16:52:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30D121795F9
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 14:49:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B08C7A1B6D
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 14:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FF482550AD;
-	Tue, 23 Sep 2025 14:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8FC924679A;
+	Tue, 23 Sep 2025 14:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gQA8iklm"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="X+iAMB4u"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC1A23A984;
-	Tue, 23 Sep 2025 14:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2275C1DF994;
+	Tue, 23 Sep 2025 14:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758638968; cv=none; b=PVTmc+wEkOtC+1j+Vz8SCdqSiwbI/cpVt2jCMwUdcNO2niNlFt2OQiT8c+nipnQtCbuDvd/QBDfQ5qqe1YIRlvVKnH7540LG2EgntjzubT00YCRFjWwDfMiK5y34S/ZIL8eP+S317tUovMLLUTQH3tA07+Moep+hBD84Ubkj4VQ=
+	t=1758639153; cv=none; b=bxF0z+JZlHX1Tdf/ohNIXUfNhztcXkHDAOsURXYIcTchsWMD1pKyCEVT1lS+MrrvBJtxV3lF27n5ZzYnmkhKYanesJcR//488gEa1TgaB+mQSLlL6OrPFNIZ5qerDpZ9CrkGqiPAuia3huLmIu1BAY7vO2aB11aU/V/CEbfBACw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758638968; c=relaxed/simple;
-	bh=RadlGg6GK6lOLaxKls8ButZDQZ3UipZGGdw7puZys9A=;
+	s=arc-20240116; t=1758639153; c=relaxed/simple;
+	bh=7Sr1QUFjAXDolunLFBAgtMCy+x6gGsWKJImv0MKmYNY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IWJjLSgJ6/A8SpGyYs0/8JlpDk+oqU64XaULYbJgVirhUhRu5WsnQtoHb9ViQrCfNoH3HmZAnXkl2cjk7hhO3O8QYIrA5YMOuoGzBhghuMtis8XjfZqg1xoJ+uZqncUZRm7HsvxdCMw/4ax2AuOadOTymR0pZ6kSKAcOgw1H0TA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gQA8iklm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAA17C16AAE;
-	Tue, 23 Sep 2025 14:49:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rwp8MqUv2PQpQFlxb/gBxhWn/FekALF6zZSf58AgjESAiO/DVzA/5mnrl0TjzfNmbOHCNxX1EciF928SUjkK2a5MrsqqkYAQk3cY0sNVdtpKXfN0TgQsAiFN4t/JwoS1CQUYHuiaJJAAV91DyS2vnMiFekxweStC6t+mfK1Goy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=X+iAMB4u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49CE8C4CEF5;
+	Tue, 23 Sep 2025 14:52:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1758638967;
-	bh=RadlGg6GK6lOLaxKls8ButZDQZ3UipZGGdw7puZys9A=;
+	s=korg; t=1758639152;
+	bh=7Sr1QUFjAXDolunLFBAgtMCy+x6gGsWKJImv0MKmYNY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gQA8iklm/odPpWWXPHhMaMpYZHYUUWh2fnpPeSD/P8BIgFmhIMP5E5jU++dxzzL/k
-	 wj/L7ZeouzCmAvz7bGK6emBwvSFAMuoI66bOjDCj4PDlupoOcO/FWINd6H5SNtCyHp
-	 m54E1VZj8monlSecfkXyGJZXRPBHZA0ftwuoJmNw=
-Date: Tue, 23 Sep 2025 16:49:24 +0200
+	b=X+iAMB4uFnRvPveR+2bs25ALrMggqWde9Rb7uRmZiIJffxEIReL7Zwq1caToLOuHc
+	 CpjBlYByl1/K6eC+TA09r/C4PJR2nU61sCZrwgs6+s4hYJzOsd9mMAwq31YPs5i3n7
+	 aV5tHNCZJQgQprlQjRxX4DkAzkj06TXMDfguZloc=
+Date: Tue, 23 Sep 2025 16:52:29 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: Danilo Krummrich <dakr@kernel.org>
-Cc: Oliver Neukum <oneukum@suse.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
+Cc: Daniel Almeida <daniel.almeida@collabora.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
 	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
@@ -53,16 +52,14 @@ Cc: Oliver Neukum <oneukum@suse.com>,
 	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
 	linux-usb@vger.kernel.org
 Subject: Re: [PATCH 1/2] rust: usb: add basic USB abstractions
-Message-ID: <2025092303-squeeze-reformed-11ee@gregkh>
+Message-ID: <2025092344-vacation-envelope-f0cf@gregkh>
 References: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
  <20250825-b4-usb-v1-1-7aa024de7ae8@collabora.com>
  <DD07LUJXNZN9.3RHH9NJNRFVNN@kernel.org>
- <2025092356-rounding-eligibly-c4b7@gregkh>
- <f5a802a4-ac9b-4b45-8d1c-871e2e06d7ac@suse.com>
- <2025092307-scoop-challenge-4054@gregkh>
- <13ce0ad0-f0d5-4579-9a48-db727baa177f@kernel.org>
- <2025092356-glorious-unbundle-58f6@gregkh>
- <9995561f-7157-489d-b48e-fe6c92e1f408@kernel.org>
+ <27AB9C59-BAE6-4F1F-8638-DF9244D0A616@collabora.com>
+ <DD08HWM0M68R.2R74OSODBIWSZ@kernel.org>
+ <2025092326-banked-resubmit-67c0@gregkh>
+ <DD0994IZMBVQ.2HZOA2ZMWT2I@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -71,16 +68,109 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9995561f-7157-489d-b48e-fe6c92e1f408@kernel.org>
+In-Reply-To: <DD0994IZMBVQ.2HZOA2ZMWT2I@kernel.org>
 
-On Tue, Sep 23, 2025 at 04:42:11PM +0200, Danilo Krummrich wrote:
-> On 9/23/25 4:37 PM, Greg Kroah-Hartman wrote:
-> > Yes, you are right, it can be gotten that way.  But I can't wait to see
-> > how you wrap that C macro in rust :)
+On Tue, Sep 23, 2025 at 04:38:34PM +0200, Danilo Krummrich wrote:
+> On Tue Sep 23, 2025 at 4:30 PM CEST, Greg Kroah-Hartman wrote:
+> > On Tue, Sep 23, 2025 at 04:03:01PM +0200, Danilo Krummrich wrote:
+> >> On Tue Sep 23, 2025 at 3:31 PM CEST, Daniel Almeida wrote:
+> >> >>> +/// A USB device.
+> >> >>> +///
+> >> >>> +/// This structure represents the Rust abstraction for a C [`struct usb_device`].
+> >> >>> +/// The implementation abstracts the usage of a C [`struct usb_device`] passed in
+> >> >>> +/// from the C side.
+> >> >>> +///
+> >> >>> +/// # Invariants
+> >> >>> +///
+> >> >>> +/// A [`Device`] instance represents a valid [`struct usb_device`] created by the C portion of the
+> >> >>> +/// kernel.
+> >> >>> +///
+> >> >>> +/// [`struct usb_device`]: https://www.kernel.org/doc/html/latest/driver-api/usb/usb.html#c.usb_device
+> >> >>> +#[repr(transparent)]
+> >> >>> +pub struct Device<Ctx: device::DeviceContext = device::Normal>(
+> >> >>> +    Opaque<bindings::usb_device>,
+> >> >>> +    PhantomData<Ctx>,
+> >> >>> +);
+> >> >> 
+> >> >> What do you use the struct usb_device abstraction for? I only see the sample
+> >> >> driver probing a USB interface instead.
+> >> >
+> >> > What I was brainstorming with Greg is to submit this initial support, and then
+> >> > follow up with all the other abstractions needed to implement a Rust version of
+> >> > usb-skeleton.c. IIUC, the plan is to submit any fixes as follow-ups, as we're
+> >> > close to the merge window.
+> >> >
+> >> > struct usb_device would be used for the skeleton driver, so we should keep it if
+> >> > we're following the plan above, IMHO.
+> >> 
+> >> Yes, it's clearly required for the raw accessors for submitting URBs, e.g.
+> >> usb_fill_bulk_urb(), usb_submit_urb(), etc.
+> >> 
+> >> But I'm not sure you actually have to expose a representation of a struct
+> >> usb_device (with device context information) publically for that. It seems to me
+> >> that this can all be contained within the abstraction.
+> >> 
+> >> For instance, the public API could look like this:
+> >> 
+> >> 	let urb = intf.urb_create()?;
+> >> 	urb.fill_bulk(buffer, callback_fn, ...)?;
+> >> 	urb.submit();
+> >> 
+> >> The urb_create() method of a usb::Interface can derive the struct usb_device
+> >> from the struct usb_interface internally and store it in the Urb structure, i.e.
+> >> no need to let drivers mess with this.
+> >> 
+> >> So, I think for this part it makes more sense to first work out the other
+> >> APIs before exposing things speculatively.
+> >> 
+> >> I also just spotted this:
+> >> 
+> >> 	impl<Ctx: device::DeviceContext> AsRef<Device<Ctx>> for Interface<Ctx> {
+> >> 	    fn as_ref(&self) -> &Device<Ctx> {
+> >> 	        // SAFETY: `self.as_raw()` is valid by the type invariants. For a valid interface,
+> >> 	        // the helper should always return a valid USB device pointer.
+> >> 	        let usb_dev = unsafe { bindings::interface_to_usbdev(self.as_raw()) };
+> >> 	
+> >> 	        // SAFETY: The helper returns a valid interface pointer that shares the
+> >> 	        // same `DeviceContext`.
+> >> 	        unsafe { &*(usb_dev.cast()) }
+> >> 	    }
+> >> 	}
+> >> 
+> >> which I think is wrong. You can't derive the device context of a usb::Interface
+> >> for a usb::Device generically. You probably can for the Bound context, but not
+> >> for the Core context.
+> >> 
+> >> But honestly, I'm even unsure for the Bound context.
+> >> 
+> >> @Greg: Can we guarantee that a struct usb_device is always bound as long as one
+> >> of its interfaces is still bound?
+> >
+> > Bound to what?
 > 
-> We can either create a Rust helper function for it, or just re-implement it; in
-> the end it boils down to just a container_of() on the parent device.
+> Well, that's kinda my point. :)
+> 
+> Having a &usb::Device<Bound> would mean that for the lifetime of the reference
+> it is guaranteed that the usb::Device is bound to its USB device driver
+> (struct usb_device_driver).
 
-Yes, and it preserves the "const" of the pointer going into the function
-call, can we do that in rust as well?
+Wait, usb_device_driver shouldn't be used here, that's only for
+"special" things like hubs and an odd Apple device.
+
+> The code above establishes that you can get a &usb::Device<Bound> from a
+> &usb::Interface<Bound>, i.e. an interface that is bound to a USB driver
+> (struct usb_driver).
+
+Interfaces are bound to usb_driver, and are a child device of a struct
+usb_device.  There is no need to worry if a driver is bound to a struct
+usb_device at any time, it should be independent if a driver is bound to
+a struct interface.  All that we should care about is the driver that is
+bound to a usb_interface as that is what the rust binding should be for
+here.
+
+Sorry for the naming confusion, usb is messy in places.
+
+thanks,
+
+greg k-h
 
