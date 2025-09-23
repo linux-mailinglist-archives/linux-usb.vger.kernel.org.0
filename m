@@ -1,130 +1,115 @@
-Return-Path: <linux-usb+bounces-28556-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28557-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3FC9B96972
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 17:31:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC136B96A3B
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 17:46:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA11418A66F1
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 15:31:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A66E248795E
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 15:46:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C6ED235063;
-	Tue, 23 Sep 2025 15:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45DD22609CC;
+	Tue, 23 Sep 2025 15:46:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hLeOySXV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bsReMA/L"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC80217A5BE;
-	Tue, 23 Sep 2025 15:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36F674040;
+	Tue, 23 Sep 2025 15:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758641471; cv=none; b=BVPVUb1JOe1Pi+SSm8W+xNWgwDJkqYLj5/DC1VaJi2aJI1bJ9rOgwEPZ+ywD7o0ntQfExTenWcVEk09wrNOIE9dNAwkx9749mIDyTWw7e9U+Mf2i/LHXSvjZ26R6o7F+0KTWCxmDMONilLROsRCbliDIRQpGz0L5ENhbNarB4NA=
+	t=1758642398; cv=none; b=G6gVRMhBihoZWgsJZ+Cf/S1EaHAL7s2umKe1gVQ0235cbwR5SrbvgkX25+37nW6DN5LjBYAnYbV2oB3unyc6HFbPprABmx9U28dSU7MaQwsIQq2iTduRMUzjWCud+WsSlLa56UP4lU6wqyXjl6caLUD7aoApismvyr9kXMY9Y3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758641471; c=relaxed/simple;
-	bh=VissSN4DHuu/OV0m7zZVQ1TWut0ZMqT61xOdJ1tJB7s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u01Xhhi9ak4fmm2OHbq8plnAkefjiep9O+S3DoJ2P6Ev4/r2X6ABTnqhC+lfp/hWrOsYBJf9Rj/ty7kZHt6MQ9ze7DdslJnsMoGcJpvoaLUUew9nevWLhI7Q5bgZzz90r5C8BThjg4G+mcQgQg7xijjO2UyCOK1choI8X/nvpfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hLeOySXV; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758641470; x=1790177470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VissSN4DHuu/OV0m7zZVQ1TWut0ZMqT61xOdJ1tJB7s=;
-  b=hLeOySXVZrFjV4N4JYc91+qVWzaEXz/zbSj9bUVeyFUTE3CriU5hrArK
-   OU5zwKVX+3fQPKJW9aJHnHFs++W4+IGEI9xpFht4LR11SW+6O0g4f8pHe
-   01GfNRFcz1z86l0hcbtkZTXE9kAXm5IfUYkNkNLs690y/TTCCML7PtZrg
-   gQJIRkbLYkGTrqSK/AmJlE8MuMlgpNykGO7S0307HqkifEQv3TpfdzoWd
-   z++EZUxp6AJpArP5klILmB0TMh+moONO6zgmYmm6dR61SvBTc6q/JV0Ej
-   yuvPh6V0GjvFzDFwuifRzVC0MXKlDalnv/57laVtl3bGVS8DwPQZd/0tn
-   w==;
-X-CSE-ConnectionGUID: 6cC1zGIATRuVKByGn/zxOg==
-X-CSE-MsgGUID: IyFy7vPCQMCRCAf8OTRQFg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="60141845"
-X-IronPort-AV: E=Sophos;i="6.18,288,1751266800"; 
-   d="scan'208";a="60141845"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2025 08:31:09 -0700
-X-CSE-ConnectionGUID: SdWAWjV/S2yVCNW1dAQ4Tg==
-X-CSE-MsgGUID: neD2jkpORK6qW2OQvT2XnA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,288,1751266800"; 
-   d="scan'208";a="176077521"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa010.jf.intel.com with ESMTP; 23 Sep 2025 08:31:07 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id A238C95; Tue, 23 Sep 2025 17:31:05 +0200 (CEST)
-Date: Tue, 23 Sep 2025 17:31:05 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Duoming Zhou <duoming@zju.edu.cn>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	YehezkelShB@gmail.com, westeri@kernel.org, michael.jamet@intel.com,
-	andreas.noever@gmail.com
-Subject: Re: [PATCH v2] thunderbolt: Fix use-after-free in tb_dp_dprx_work
-Message-ID: <20250923153105.GA2912318@black.igk.intel.com>
-References: <20250923051357.12206-1-duoming@zju.edu.cn>
+	s=arc-20240116; t=1758642398; c=relaxed/simple;
+	bh=rU/534+tAdpfK6fK/XepGxCqIklAAHyfOm0LbCWIfzs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=q0Bhl/a0Hg5spUBq7iMCCl4ZD8MDNYylPvIO1yrtFB66TPcTqYk8q6sS1YabYTa29iATZ7PcDPDIWon2aQcIbWtA092c41bJiKknm0E6AJvzMgSzHz4FH63tFuO8nFqdqynchquK4ZrI4uLY1qhH6LVJKLIPbWmbIrpYXI6Yzy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bsReMA/L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7055BC4CEF5;
+	Tue, 23 Sep 2025 15:46:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758642398;
+	bh=rU/534+tAdpfK6fK/XepGxCqIklAAHyfOm0LbCWIfzs=;
+	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
+	b=bsReMA/LJA7St2AhhGdm48V0/7J4VJ7M6SiGC5b+OEoH8e2ch0WfV7PkAUzVsdzOA
+	 Dy4wws80STalatkRqgdV6wGBPRw/HF1ZscQgAYVZqH7UF6DfwMX+dmGXv+PQZCUf6A
+	 NEyr87j267yz7gomDyDQsuIQttHpevvSPAnCmqNNYbVQWXlWNqUIGNYyMn/oASgnLu
+	 LU0rOOeLwwEzfEJ1dSesr1PNGKYT5EHEuAtklYH66U04llGDwwgWQuMxxDRZ0SR/A4
+	 W/qudvsujsvA4/1cCXZZHOvAGWMiL1nEzNBRe4O4d3FOlyBFegghl0zdu7+zInRy6A
+	 LjgPYlNIL2blw==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250923051357.12206-1-duoming@zju.edu.cn>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 23 Sep 2025 17:46:33 +0200
+Message-Id: <DD0AP6DE36C8.V0537W5RGUIQ@kernel.org>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH 1/2] rust: usb: add basic USB abstractions
+Cc: "Oliver Neukum" <oneukum@suse.com>, "Daniel Almeida"
+ <daniel.almeida@collabora.com>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex
+ Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary
+ Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, <linux-kernel@vger.kernel.org>,
+ <rust-for-linux@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
+ <20250825-b4-usb-v1-1-7aa024de7ae8@collabora.com>
+ <DD07LUJXNZN9.3RHH9NJNRFVNN@kernel.org>
+ <2025092356-rounding-eligibly-c4b7@gregkh>
+ <f5a802a4-ac9b-4b45-8d1c-871e2e06d7ac@suse.com>
+ <2025092307-scoop-challenge-4054@gregkh>
+ <13ce0ad0-f0d5-4579-9a48-db727baa177f@kernel.org>
+ <2025092356-glorious-unbundle-58f6@gregkh>
+ <9995561f-7157-489d-b48e-fe6c92e1f408@kernel.org>
+ <2025092303-squeeze-reformed-11ee@gregkh>
+In-Reply-To: <2025092303-squeeze-reformed-11ee@gregkh>
 
-Hi,
+On Tue Sep 23, 2025 at 4:49 PM CEST, Greg Kroah-Hartman wrote:
+> On Tue, Sep 23, 2025 at 04:42:11PM +0200, Danilo Krummrich wrote:
+>> On 9/23/25 4:37 PM, Greg Kroah-Hartman wrote:
+>> > Yes, you are right, it can be gotten that way.  But I can't wait to se=
+e
+>> > how you wrap that C macro in rust :)
+>>=20
+>> We can either create a Rust helper function for it, or just re-implement=
+ it; in
+>> the end it boils down to just a container_of() on the parent device.
+>
+> Yes, and it preserves the "const" of the pointer going into the function
+> call, can we do that in rust as well?
 
-On Tue, Sep 23, 2025 at 01:13:57PM +0800, Duoming Zhou wrote:
-> The original code relies on cancel_delayed_work() in tb_dp_dprx_stop(),
-> which does not ensure that the delayed work item tunnel->dprx_work has
-> fully completed if it was already running. This leads to use-after-free
-> scenarios where tb_tunnel is deallocated by tb_tunnel_put(), while
-> tunnel->dprx_work remains active and attempts to dereference tb_tunnel
-> in tb_dp_dprx_work().
-> 
-> A typical race condition is illustrated below:
-> 
-> CPU 0                            | CPU 1
-> tb_dp_tunnel_active()            |
->   tb_deactivate_and_free_tunnel()| tb_dp_dprx_start()
->     tb_tunnel_deactivate()       |   queue_delayed_work()
->       tb_dp_activate()           |
->         tb_dp_dprx_stop()        | tb_dp_dprx_work() //delayed worker
->           cancel_delayed_work()  |
->     tb_tunnel_put(tunnel);       |
->                                  |   tunnel = container_of(...); //UAF
->                                  |   tunnel-> //UAF
-> 
-> Replacing cancel_delayed_work() with cancel_delayed_work_sync() is
-> not feasible as it would introduce a deadlock: both tb_dp_dprx_work()
-> and the cleanup path acquire tb->lock, and cancel_delayed_work_sync()
-> would wait indefinitely for the work item that cannot proceed.
-> 
-> Instead, implement proper reference counting:
-> - If cancel_delayed_work() returns true (work is pending), we release
->   the reference in the stop function.
-> - If it returns false (work is executing or already completed), the
->   reference is released in delayed work function itself.
-> 
-> This ensures the tb_tunnel remains valid during work item execution
-> while preventing memory leaks.
-> 
-> This bug was found by static analysis.
-> 
-> Fixes: d6d458d42e1e ("thunderbolt: Handle DisplayPort tunnel activation asynchronously")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Yes, the Rust container_of!() macro should preserve that.
 
-Because it is pretty late in the cycle, I would like to get some exposure
-for this one before it goes to stable trees. I applied this to my
-thunderbolt.git/next now. Once it is pulled into mainline this will be
-picked up by the stable machinery too.
+But despite that, I think it doesn't matter too much in this specific case.
 
-Thanks!
+Abstractions of C structures are usually contained within the kernel's Opaq=
+ue<T>
+type, which allows for interior mutability.
+
+Actual mutability is controlled by the corresponding abstraction around the
+Opaque<T>.
+
+For instance, a struct device representation looks like this:
+
+	 struct Device<Ctx: DeviceContext =3D Normal>(Opaque<bindings::device>, Ph=
+antomData<Ctx>);
+
+In this case, we never give out a mutable reference to a Device, but rather
+control mutability internally with the help of the device context.
+
+For instance, if we have a &Device<Core>, we're guranteed that we're called=
+ from
+a context where the device_lock() is guaranteed to be held, so we can allow=
+ for
+some interior mutability.
 
