@@ -1,139 +1,149 @@
-Return-Path: <linux-usb+bounces-28572-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28573-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36EC8B97C48
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 01:03:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 718C1B97CB3
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 01:21:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 664651896525
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 23:03:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A7C13B76E0
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Sep 2025 23:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF53D30E0E2;
-	Tue, 23 Sep 2025 23:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE4130FF1E;
+	Tue, 23 Sep 2025 23:20:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WYk4QuiA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a/b+eHPV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EB921348;
-	Tue, 23 Sep 2025 23:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAC530BF66
+	for <linux-usb@vger.kernel.org>; Tue, 23 Sep 2025 23:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758668585; cv=none; b=g9X++JSODIfjgOBcjaof1oYh5GPkxkXO2aECewFbr4NWyxmnSMIqr3kuvVaSbHo6kyBmXn+J5sxiVjbY5K8fa4hcmXf5/AKe3BP8rq9UUMfSXVr8sVFqjgS3sgN2KxxEdZVkcJTGqnFl5lWbZ537uNkaqQYgi9h4NW/Qwqb/0MQ=
+	t=1758669649; cv=none; b=suKFAopAplek4slZDkYKjQ+7lgRCndRxf0vdA3USchbzHYQRpi7vjuSAqGsxcKQhGAlTqVPhm8W9mQgWK/ATCr1wtV77lwsfRz1st7w6lKdns9IjNDQmSdsZVWTyrLFxiL+Fs9Bt9diGeTIw0JdbHl2dIM2KJW1b9htpWUqpYvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758668585; c=relaxed/simple;
-	bh=A5dBr5PpaLQmJuxydR8a5pjwhHT9xCswrCUlSGd9Jxc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aMAefPnSUqvH6HkpBQ+AEO13NobPwLOzt6yhhvMkMO4jQAlOPJnb+OlRTabohLNkIvKHOYp4RPWAMyxPQ1rOH45iUDIWET6DsoKs6i84FNpyvNbAqbHxVqBaV7IOnYJoCGkUiu1wYQ/84hRNougTnJBm6JFOTt/HOHRLhN1YQCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WYk4QuiA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F76C4CEF5;
-	Tue, 23 Sep 2025 23:03:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758668585;
-	bh=A5dBr5PpaLQmJuxydR8a5pjwhHT9xCswrCUlSGd9Jxc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WYk4QuiANLqAYBKBMQBkOL+iwQ6W/E/SXGvPQAvHkHqa4HXfB+Gynw+sgddMIuFLx
-	 sYXwR61KqTFKF/Zfmae9CEXHk4hi3p69eJfcyWbzLy6EVH5XNax8pDmKHL0+HhZE02
-	 q+3FjdU0NcxomWCJkKwEtkvOclicfGJmU2DNjoT1Drz1VQpYjkgfoyfx24vNO3sNj/
-	 eRbArcv3evXuc3lqX6z5jFBRG3+yAa/URvuqfiqvdvaO0/VrPAYvrnE2KBtGRPXhLW
-	 M21qOtY/JqjktuJ7UqJ6Wbsthgw9nc5qP9E8BrbEzqb4hgKkX4BmBK1ZZFj6STOjvw
-	 NaA1YBMhbFTlA==
-Received: by venus (Postfix, from userid 1000)
-	id 2BF3C1805CF; Wed, 24 Sep 2025 01:02:59 +0200 (CEST)
-Date: Wed, 24 Sep 2025 01:02:59 +0200
-From: Sebastian Reichel <sre@kernel.org>
-To: Stefan Schmidt <stefan@datenfreihafen.org>, 
-	Jan Lubbe <jlu@pengutronix.de>, stefan.schmidt@linaro.org, linux-embedded@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, RD Babiera <rdbabiera@google.com>, 
-	Amit Sunil Dhamne <amitsd@google.com>, Sebastian Reichel <sebastian.reichel@collabora.com>, 
-	kernel@collabora.com
-Subject: Re: Call for Participation: Embedded & IoT micro-conference at Linux
- Plumbers 2025
-Message-ID: <j5dtkmnu55ycmqpaseazots7mevqyt5lafclvguxj6oz5r5cts@n563dsnvwuu7>
-References: <2a353817-f1da-4e7c-8b2c-0853779ec054@datenfreihafen.org>
+	s=arc-20240116; t=1758669649; c=relaxed/simple;
+	bh=vkZtgaI8+DwA2vFDCXnyuKa4Ewv+3A6r93k8zDXNbj8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kUrjHj7K1OoK4gjj8Udugi+2X/iXQmU4UuiQgWRMlBLkbh/ha7hqZ1c+Y/X1k1mAnKTRjMblBcbWVfZ/F8Le4GHZHAjkjWC+C5kG2DvXre8VXC8jCjr/XxdR/4Zng8r+oCKmXOeB+VSbbHbcpakg13u89U01+REzFvbdycrMajg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a/b+eHPV; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-57b35e176dbso4582799e87.1
+        for <linux-usb@vger.kernel.org>; Tue, 23 Sep 2025 16:20:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758669646; x=1759274446; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7kc5MQmgIpaNTBaT8ZNBy5t4B5Vp5p3q0VgcMo06yqw=;
+        b=a/b+eHPVxSEVzqwuiPJ8CzT3NtkU2uTRGYOVBG0a85NIM/V7LIgduFX43z4mfyuCTH
+         ztSwhGWtWXxbDlU4zJducKmaLowbqaDsVN7yHTA775POKH8ETdQg9Qs/pKLk2aWpHUi+
+         95f24pkm3Iq/CnoCiYkT+Rc0zku8deULAW9BkTGSic+lQ7Bv90Wo0lKkfzhJHmSUTg4J
+         0hTRj8exXcj0/AU+Dhus3unbM9hY9vN9AZ19M+sX1kq7dGnoy8WOCITzI+S+fk1CaZ12
+         u27xn34EmKwEeUHniWGYSuGyddyOBn/phkHsSRpWQzoP3UvU+w+O5EExE/aY+eX61E/t
+         6PxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758669646; x=1759274446;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7kc5MQmgIpaNTBaT8ZNBy5t4B5Vp5p3q0VgcMo06yqw=;
+        b=CL13vQ8sY82pozfV0p4YE6V+3MIDinok2xDOy/7ts43P1KG5JZYwwpFiVEPeQqmBt6
+         IHS8RTPn6uOSlpqxMWrLKKvYGhly56Yf4xWFdvQ1FYr53e+/gI33KLC36k8JUI/517X8
+         43HyTAlNaXPFWNS02EFr2i2HwftW50fWy/UbxdC253eqVOfMMpayLj5bpn9qYKY6k4Pd
+         ayJFh/zjx3sxE4sTw8dUviH7mVPeZxWScRtX3Hjo+rLl/CjtXhjdwXCcVJ/2rTYwru5c
+         hy/SkRH9nv29aKmMB0+f4s4Q0Toj5mOZQM6FbhQMdb6XCyDusn1bjPx6JBzMN4aI5ocB
+         arJw==
+X-Forwarded-Encrypted: i=1; AJvYcCX3s51UTQ05MswbdA141PTM7f/47C4YsALnew4vmePGw0WJ40VFZB819b8t8fn5TqV/DMRHWatrA9A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyIPmvJgLTarpEH3ItDyfSkdKml3s/nz6fD9twbPRETCrV4+VN
+	IQGCL3pYKSZX0pwg+dbQj1UcBlSyXToQE6L3Ovjz4CIMvCRbxSxXmtJV
+X-Gm-Gg: ASbGnctERlxx6PhgwqZyxLU5zfJsTPZtm+Ew4Upss9+C6piJGL4M5/sIiTXnrwwPUsS
+	xm/Rdqe3Jy7hj9yaTXFOj+6wLPFA2DIsvA3WAdS2EJJos4PkahBfJEgiLtIxqcMhxf3cGznXTFJ
+	+kW6sXpc9yuBz6UuboCn6uXyg0nxD4rcy5Mm/oZ0MAzEJJDcPnjYdnpi1qFxGLfjiATvcbtOkls
+	m/Ch1Ddoa95bS38wHLUFjEtHgKv5oqbX5RrNHYX5z+8yYnraWurcuzxTSJKi+fmV/MofL4WjBeG
+	9NRQCwLOGYUavn331kVowTpIc6EHAi/SiUvvpTiGcgCHhIt3yHRy7JfsYdjGi8RjDoMUKYkhWQo
+	CN/BlxGzmUTAtLE8qEdIB4FW4n3PD1bpyLqU=
+X-Google-Smtp-Source: AGHT+IFVMR2s4ilEdfP5c3p3+7X515B1QLyMWkcy/0fTuDiMsgwVqSp4AmW8TfIdg0R7IgmgC3jp6A==
+X-Received: by 2002:a05:6512:6314:b0:560:9702:4fe6 with SMTP id 2adb3069b0e04-5807190a878mr1402555e87.24.1758669645455;
+        Tue, 23 Sep 2025 16:20:45 -0700 (PDT)
+Received: from foxbook (bfe191.neoplus.adsl.tpnet.pl. [83.28.42.191])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-57b43ff413asm3101295e87.144.2025.09.23.16.20.44
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 23 Sep 2025 16:20:45 -0700 (PDT)
+Date: Wed, 24 Sep 2025 01:20:39 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: I Viswanath <viswanathiyyappan@gmail.com>, andrew@lunn.ch,
+ andrew+netdev@lunn.ch, davem@davemloft.net, david.hunter.linux@gmail.com,
+ edumazet@google.com, linux-kernel-mentees@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com, petkan@nucleusys.com,
+ skhan@linuxfoundation.org,
+ syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
+Subject: Re: [PATCH net v2] net: usb: Remove disruptive netif_wake_queue in
+ rtl8150_set_multicast
+Message-ID: <20250924012039.66a2411c.michal.pecio@gmail.com>
+In-Reply-To: <20250923072809.1a58edaf@kernel.org>
+References: <83171a57-cb40-4c97-b736-0e62930b9e5c@lunn.ch>
+	<20250920181852.18164-1-viswanathiyyappan@gmail.com>
+	<20250922180742.6ef6e2d5@kernel.org>
+	<20250923094711.200b96f1.michal.pecio@gmail.com>
+	<20250923072809.1a58edaf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xi4we3ntoqtlf52u"
-Content-Disposition: inline
-In-Reply-To: <2a353817-f1da-4e7c-8b2c-0853779ec054@datenfreihafen.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+
+On Tue, 23 Sep 2025 07:28:09 -0700, Jakub Kicinski wrote:
+> Excellent, could you check if there is any adverse effect of
+> repeatedly writing the RCR register under heavy Tx traffic (without
+> stopping/waking the Tx queue)? The driver seems to pause Tx when RCR
+> is written, seems like an odd thing to do without a reason, but
+> driver authors do the darndest things.
+
+I don't know what's the point of this, because it doesn't prevent the
+async "set RCR" control request racing with an async TX URB submitted
+before the queue was stopped or after it was restarted.
+
+Such races could be prevented by net core not calling this while TX
+is outstanding and not issuing TX until the control request completes,
+but it doesn't look like any of that is the case?
 
 
---xi4we3ntoqtlf52u
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: Call for Participation: Embedded & IoT micro-conference at Linux
- Plumbers 2025
-MIME-Version: 1.0
+I sucessfully reproduced the double submit bug as follows:
 
-Hi,
+ifconfig eth1 10.9.9.9
+arp -s 10.9.8.7 87:87:87:87:87:87	# doesn't actually exist
+ping -f 10.9.8.7
+while :; do ifconfig eth1 allmulti; ifconfig eth1 -allmulti; done
 
-On Fri, Sep 05, 2025 at 09:45:26AM +0200, Stefan Schmidt wrote:
-> We are happy to announce that the Embedded & IoT micro-conference was
-> again accepted for Linux Plumbers this year. Hosted in beautiful Tokyo,
-> Japan December 11-13. https://lpc.events/event/19/contributions/2005/
->=20
-> Topics cover all things embedded and IoT. Boot time to kernel size, low
-> power communication, telemetry and also RTOS. Devicetree and build
-> system have their own MC and we can move sessions between them as needed.
+For some reason I had to use two instances of 'ping -f', not sure why.
+Then the double submission warning appears in a few seconds and also
+some refcount issues, probably on skbs (dev->tx_skb gets mixed up).
 
-I would like to present / discuss fusb302 (or other chips handled via
-the TCPM framework) using boards that are mainly powered via USB-C and
-not having any backup power source. This kind of setup is often found
-on Rockchip boards (e.g. Libre Computer ROC-RK3399-PC, Radxa ROCK 5B
-or ArmSoM Sige 5) and quite a pain, because a hard-reset effectively
-kills the board power.
+With the patch, it all goes away and doesn't show up even after a few
+minutes. I also tried with two TCP streams to a real machine and only
+observed a 20KB/s decrease in throughput while the ifconfig allmulti
+loop is running, probably due to USB bandwidth. So it looks OK.
 
-I would present the problem(s), what I've done so far to get it working
-to some degree with the upstream kernel and then discuss how to improve
-the situation.
 
-I think to become a worthwhile discussion the session would need some
-people that know the USB-PD specification and kernel subsystem, such as:
+But one annoying problem is that those control requests are posted
+asynchronously and under my test they seem to accumulate faster than
+they drain. I get brief or not so brief lockups when USB core cleans
+this up on sudden disconnection. And rtl8150_disconnect() should kill
+them, but it doesn't.
 
- * Heikki Krogerus (USB-C maintainer)
- * Greg Kroah-Hartman (USB maintainer)
- * RD Babiera or Amit Sunil Dhamne (Google is actively working on
-   ensuring TCPM code being compatible with the USB-PD specification
-   and they were unhappy about some of my changes :))
+Not sure how this is supposed to work in a well-behaved net driver? Is
+this callback expected to return without sleeping and have an immediate
+effect? I can't see this working with USB.
 
-P.S.: I'm not sure how the CfP for the LPC micro-conferences works.
-Please tell me if this mail is not good enough and I need to insert
-something into some system.
-
-Greetings,
-
--- Sebastian
-
---xi4we3ntoqtlf52u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjTJx8ACgkQ2O7X88g7
-+pqU2w/6AxYzW774s5ImPsNv11xmIY3uOTWpKgS1cJeVCUVV/75CGcgNZlnhYboe
-KvAvCso1L78HrqMA3pQ/N2tfa5IfRUd/q7kkRJT+vlp9UH1LxClEiKKam6GSAsuF
-5L382YDSD1x+inub52F21GnpSIE4E4JWAkn1RdMwNMZZ0L72eMYoOeXy1qnFNUc5
-f99ME2nqClgAHPmyP3QPyuKuRdu3LVxlgZKzxLHG79jJgWCQOyTGV/TYaGi9ip0P
-6ol/inpHjokcWnqhZyQPycuX7zCaqDrf9jhfHZ7Tl0Z48XtGAJySFf0wtxfiOkDE
-sFeSD56IG/3/usMiX61FevEHiHovefpw9cN2Z/6W5b6SyJBeofMNoqkRSHbvayJc
-BSN82nXAxaN6qwgLdfM3qab0GIUYLmkmP3SNXD+rybr+EWbsOaKtwKEvxE0CVVbW
-800/ay8/ti1/4XFfJD2jD6vD4StHAWtIHLkGhO+hCL+8p4uiRC3tiCJvBq89gplY
-ACprfRPqA5qE31/8h8Zz5lJkvvpZkNsZl1wFRjIYGFyjigUO/bxHA1Meba7PJBOv
-WeL9OiSvKiQsa40D9UcNQnl7SzY1TVDnwhMZQAdEbb1AB1l6FLbF+AVs5ph97b/f
-W6FnZ5F60XShgJZp7z41fPp02u5ujNsJNAHy0DeARrdW+oBjGaU=
-=oU21
------END PGP SIGNATURE-----
-
---xi4we3ntoqtlf52u--
+Regards,
+Michal
 
