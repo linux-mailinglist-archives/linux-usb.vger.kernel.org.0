@@ -1,130 +1,132 @@
-Return-Path: <linux-usb+bounces-28588-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28589-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58D98B98B3C
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 09:54:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98AAFB98B94
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 10:03:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AD701893C42
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 07:54:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EDA34A75BC
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 08:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C480728A1ED;
-	Wed, 24 Sep 2025 07:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49342280331;
+	Wed, 24 Sep 2025 08:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F+2UMnRp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A5rmQ2ks"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657272882B4;
-	Wed, 24 Sep 2025 07:51:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0914527603A
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 08:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758700318; cv=none; b=OEO+o7kVhlEke0S8ANNfnvb/8S/4tdCouYIVu5PhSiXJtwERjl4bJiLiN6RCu9FbpLfr+rGGmXWl2lOja91C3pH3j7OLFw/eXvEy3/Kclip9qeBCSWFE7VKGn2X7NUrqsDwuGipQuzKMmEzMAqqRpjnvLJ58131iNuXTwbMirp4=
+	t=1758700987; cv=none; b=dxb0tG2v1Uu8Vo+4v36U5uq6CUHjTlvucvO7CUymf0OM7s26qzrtcu/ZOcdLG2IN/+pann5mz67GTHaMjBCZ284X1hFcSJPp7D52hEITPsuj54UD0XsynSWwKXnIOPLCITJACMvdMHFGIy/OWEY1cuSuJAn89pX3EoWgEJqW7tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758700318; c=relaxed/simple;
-	bh=WaJ2eaaSZ2tDy2dFa7jdgb0wqBaGWrbs7O5Yko8R49k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R0v70aTq8+XsbjMPcQuukkcTP4Fv+5uyAlFbm5iulPSnucfbc2o/F3mXMt9thg9+LqSRw8CkjAriIZo+S5LOSJMDkobuyQPYQYIWCiIE4FXJ3c5DAkcLHAanxlyr7ZhtjECPCTA/tkzxAkpYcW+9SSuVQjMjo0VNdb5bW8Y0ijw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F+2UMnRp; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758700317; x=1790236317;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WaJ2eaaSZ2tDy2dFa7jdgb0wqBaGWrbs7O5Yko8R49k=;
-  b=F+2UMnRpOQnHbx351/hFwZ946uqnWVYNockM3Zi8xEziSJSBLxyjN68V
-   sg63whqJq8kRA8kyoOkLdwjozRS/1pJzdKdAWkpB0ZeC8AWtIwMu1hivu
-   JFxKUVQf4ncEQPc9oKbJnKXR+uzC7PywsZSYRsteSACvx93LNDHG646V5
-   a7hFcuUfI2+8sPCL8ZMc1fHY7ahvJdJCJMT5VYYjaRei+wBgGC+FwRBwT
-   pq2G1h0nQJVvI+RRYIY1bild2iaFn/Hvc1GIH+b/Mz12JC2UcqL2vE61Y
-   6JSUfZ+1v5yO5skDWIP7RrkL2EH3+ftoarmL3IbdXDNTaM0cUwfkmGoZa
-   A==;
-X-CSE-ConnectionGUID: hqTW+WGSRn6b98+pr5qDnA==
-X-CSE-MsgGUID: inN1DGcrRFmBhAgAtJzHyQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="86434463"
-X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
-   d="scan'208";a="86434463"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:51:56 -0700
-X-CSE-ConnectionGUID: QCZxO2UFSX+qBI1JeWQi5w==
-X-CSE-MsgGUID: cO6qki2BQma1KZyRy8F0ZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
-   d="scan'208";a="176095748"
-Received: from sschumil-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.128])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:51:53 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 4F2DD11F8D0;
-	Wed, 24 Sep 2025 10:51:49 +0300 (EEST)
-Date: Wed, 24 Sep 2025 10:51:49 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, Lixu Zhang <lixu.zhang@intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Alexander Usyskin <alexander.usyskin@intel.com>,
-	Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-	wentongw@amazon.com
-Subject: Re: [PATCH 1/5] usb: misc: ljca: Remove Wentong's e-mail address
-Message-ID: <aNOjFfQ63UIjMVQb@kekkonen.localdomain>
-References: <20250922120632.10460-1-sakari.ailus@linux.intel.com>
- <2025092234-magenta-scouting-c3c4@gregkh>
- <aNF5ahYzteTjq8Iu@kekkonen.localdomain>
- <2025092246-swiftly-foothold-0c48@gregkh>
+	s=arc-20240116; t=1758700987; c=relaxed/simple;
+	bh=gZYO00dsgw1/sZf16O3pqxqviKudSlUhSQE7SGYKT4Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I30kTpD2vQudZ0zhYD/Z22UfHNlvARv3nXO0+lcgF2hdkKdOslwYcmoHeCvU7JyQpenrkbCn5zR0olmrkcvYrF7xckq6AqjWZMktITN+QRo7jLq/rzy1IHAJr4vSfV4aVrCCNrAYfG8Ar3uWjdXoXkjBVjKBhUP5+m6kEckzhsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A5rmQ2ks; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-62fa062a1abso10501881a12.2
+        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 01:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758700984; x=1759305784; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ehfc7lW7bxLwmLG05CxRKvZLBCPLLvWLd72j5jVN5N8=;
+        b=A5rmQ2ksjJV+pH7ww7oZxhdxMVAJ0gYbbfAM/WrQGTIw58y4P4Jk2lqIzo6/ORDGsB
+         12H5G2Bl7oHGfFvDzPhe4nB1SZ8Ij/ldLcOVUtaebURd9kfKxb0XWQiRG1cZoKLI2KaX
+         Bvv+VL4QOTY7UlAnBIRV4IpLSIChPshAK6gwQBRbuVla0mzqlLfYjGsECHPx2uO3amo9
+         yNU4NXW6yDQyIB7+DJ6RQXPWuAMdwq2AKVe/hrAnOhMc2WZ1ScOvIXQdwdE9LkCnJBKN
+         po+S88dsNg13plFmdClOuJcyCauaMueZ516nahpV4bfGpZGUy9v8MtDXc8+9fokE0wuP
+         I83g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758700984; x=1759305784;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ehfc7lW7bxLwmLG05CxRKvZLBCPLLvWLd72j5jVN5N8=;
+        b=sj4Jx/ByBT3eWLx4RNwe6aS8AfHVKE+/75ge/gfjdmDc48bkMRy2xHlfliEvtWDOiV
+         FrKr3g8Wva9LEMwwfYs8fDvth1PMfRaUCnNp8egFLKgHuX+ETb1cSfHESxSX/hQo8BMz
+         0Z0pI1MKxPx9PEgtgUruFhdmenTH+TjI+ZVliw+NBigBFPwEbvNDzvKZti07qiTrTi4i
+         PrXI07zt1UKsn0bceRwRrvidoCHwPl5TntUNnLpWN4ole4b2n0BXG/O0uKSe7GrlRLSd
+         QEkDuSnmwvXt39WqR7z5wduKeVtptkKOKyBq/m//Rb7P9k1HGOOtDjsOzPkJN+xm779R
+         rOAA==
+X-Forwarded-Encrypted: i=1; AJvYcCXdK0MTxDIADUgjiRHWoEsxYbd0T8tg2LbbhalK8M83FKYUVV3QO5819FrRRwDjZsXoBGOs6FA4Q/o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfZVVj3YkugPhu16hmWzheUAnn3ogLCOPzhQzhX/CH+nie+KmQ
+	+IUqlUnS4HPpoVYfmBgVx2csOdYsAw7PZTeQslyfyg+7EhDYxoxlnAlldATW7iAFjmokR7s8xTq
+	849VHNUyinGec77hfkh1Xxrgsgyu5CVY=
+X-Gm-Gg: ASbGncsMhDfEErY2IhvqsrpU5QSIcsXtvMOVYqZqIcu2Tqv6I/n5d2fx7ozmmnhC3ev
+	2fHqkAAuWLxopnn6vPFXu8NaffcX1drbs8RLy5n38cq989ZvpV87gV7j4QkmVpEjqS2oQMuH7o1
+	wvKQuWpcr9/hAhbx6KUB9YHFm5JcUEVLWc3xRYQxKOkjfQzVcwrT+xvBhTZDGw3+7iWeMNcqi7w
+	QP/t2kpBob9pJXjP1FuhXMisFIC9aTLcJGdWF4uEpt2jhwY8TPoIw==
+X-Google-Smtp-Source: AGHT+IFxLHXew9N/JexqdNTfDfR/A0LfnbXCLzDT8ABYFnADQGfGxHrMbIpi3ZFG4X939kYRjpoOubp/hHRjAOYou84=
+X-Received: by 2002:a05:6402:254e:b0:634:4e0:836f with SMTP id
+ 4fb4d7f45d1cf-63467795097mr4196054a12.1.1758700983944; Wed, 24 Sep 2025
+ 01:03:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025092246-swiftly-foothold-0c48@gregkh>
+References: <83171a57-cb40-4c97-b736-0e62930b9e5c@lunn.ch> <20250920181852.18164-1-viswanathiyyappan@gmail.com>
+ <20250924094741.65e12028.michal.pecio@gmail.com>
+In-Reply-To: <20250924094741.65e12028.michal.pecio@gmail.com>
+From: viswanath <viswanathiyyappan@gmail.com>
+Date: Wed, 24 Sep 2025 13:32:52 +0530
+X-Gm-Features: AS18NWA4QzzqyxonbnUZkhNBqNGPKS9vhQ2TwPcWTvWPtTGvwTC0T-6N-mfumR8
+Message-ID: <CAPrAcgMrowvfGeOqdWAo4uCZBdUztFY-WEmpwLyp-QthgYYx7A@mail.gmail.com>
+Subject: Re: [PATCH net v2] net: usb: Remove disruptive netif_wake_queue in rtl8150_set_multicast
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: andrew@lunn.ch, andrew+netdev@lunn.ch, davem@davemloft.net, 
+	david.hunter.linux@gmail.com, edumazet@google.com, kuba@kernel.org, 
+	linux-kernel-mentees@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	petkan@nucleusys.com, skhan@linuxfoundation.org, 
+	syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 22, 2025 at 06:48:13PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Sep 22, 2025 at 07:29:30PM +0300, Sakari Ailus wrote:
-> > Hi Greg,
-> > 
-> > On Mon, Sep 22, 2025 at 02:18:00PM +0200, Greg Kroah-Hartman wrote:
-> > > On Mon, Sep 22, 2025 at 03:06:28PM +0300, Sakari Ailus wrote:
-> > > > Wentong's e-mail address no longer works, remove it.
-> > > > 
-> > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > ---
-> > > >  drivers/usb/misc/usb-ljca.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
-> > > > index c562630d862c..1846156c0800 100644
-> > > > --- a/drivers/usb/misc/usb-ljca.c
-> > > > +++ b/drivers/usb/misc/usb-ljca.c
-> > > > @@ -891,7 +891,7 @@ static struct usb_driver ljca_driver = {
-> > > >  };
-> > > >  module_usb_driver(ljca_driver);
-> > > >  
-> > > > -MODULE_AUTHOR("Wentong Wu <wentong.wu@intel.com>");
-> > > > +MODULE_AUTHOR("Wentong Wu");
-> > > 
-> > > Is there a new address where they can be reached?  SHouldn't that be
-> > > used instead of just deleting the intel one?
-> > 
-> > I believe Wentong has had plenty of time to update his address. If he still
-> > prefers to do so, he can do that after merging these patches.
-> 
-> I would prefer to get Wentong to send the patches themselves for all of
-> this if at all possible, thanks!
+On Wed, 24 Sept 2025 at 13:17, Michal Pecio <michal.pecio@gmail.com> wrote:
+>
+> It's not freeing which matters but URB completion in the USB subsystem.
 
-Cc Wentong (thanks to Lixu for the address).
+Does URB completion include both successful and failed completions? I
+decided to go
+with "free urb" because I wasn't sure of that.
 
--- 
-Sakari Ailus
+> I think this description is needlessly complex, the essence is:
+>
+> rtl8150_start_xmit() {
+>         netif_stop_queue();
+>         usb_submit_urb(dev->tx_urb);
+> }
+>
+> rtl8150_set_multicast() {
+>         netif_stop_queue();
+>         netif_wake_queue();  <-- wakes up TX queue before URB is done
+> }
+>
+> rtl8150_start_xmit() {
+>         netif_stop_queue();
+>         usb_submit_urb(dev->tx_urb);    <-- double submission
+> }
+
+I wasn't sure how to describe the flow of execution in a multi threaded program.
+I will resubmit a v3 with this version of the execution flow
+
+> > Reported-and-tested-by: syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
+> > Closes: https://syzkaller.appspot.com/bug?extid=78cae3f37c62ad092caa
+> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
+>
+
+> Tested-by: Michal Pecio <michal.pecio@gmail.com>
+
+Thanks,
+Viswanath
 
