@@ -1,273 +1,302 @@
-Return-Path: <linux-usb+bounces-28584-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28585-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11ACFB9820A
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 05:18:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E543B98488
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 07:28:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0FC04C423A
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 03:18:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB9D07B03D0
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 05:26:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC932264DB;
-	Wed, 24 Sep 2025 03:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC67230BDB;
+	Wed, 24 Sep 2025 05:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=simcom.com header.i=@simcom.com header.b="Sg+V4z7A"
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="D8pcxwDT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11022136.outbound.protection.outlook.com [52.101.126.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B0B12264BA;
-	Wed, 24 Sep 2025 03:18:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758683914; cv=none; b=snvt1ZGD6BHDQiZuNMzNweuH3MwPkKyKgTYS5BunneYHqwmXLwQjTJzkejhXYb6FvYVpuBOtrhAPGt5z6V3Q+Y0EDAPMarBpi6aoNAQ8ZQMNMLTW4FXrQUPNhK1t9lPRRiDIm9ZqLA+rd3KM5mJ58OqL5jXRk/4Ct2ORYZK4EPA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758683914; c=relaxed/simple;
-	bh=Ik9FZBrBLeV/X7izHvyRJypllGM/y+8FN3vMk4M2pLs=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To; b=jZKkTslCjV0JaOLSfVp70vVwqVuY41xvcm0BY2kDabynK6HdWHF5ckvw1EJk2FGQTA44DUK1QqpAAPUaormTqMJr5JUQtMr9OwNDoOyLP+AHWf9WH2L20w/MzMOZ9Is6jaaVfBXLL0Up6rg031LfruAhQLn8IPXLf2Dqp9Len2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=simcom.com; spf=pass smtp.mailfrom=simcom.com; dkim=pass (1024-bit key) header.d=simcom.com header.i=@simcom.com header.b=Sg+V4z7A; arc=none smtp.client-ip=54.207.19.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=simcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=simcom.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=simcom.com;
-	s=oxqy2404; t=1758683889;
-	bh=nMYEhoSAqoAMgJGRcoEG8HUuNnPiAX+olgk9i29gR4k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=Sg+V4z7AZjc8lfGK2OLnDPbJDWpemesmX0dmjKWAX4MFv/DNvbo5geGLTP+8Azo84
-	 NBmF1QlECg4ZGapV0xYueQd8hpwcMq49eklCfa6KqiWCUHv7ca1iqSn6oJIILgyoBM
-	 Ltbi7I+AWhXSON5ufu76FTsbIq1ys8j5c08+BWII=
-X-QQ-mid: zesmtpsz4t1758683888tde522e7b
-X-QQ-Originating-IP: 0UHpNvmzOt6JzezinOlEroZZcbXKPDWgANim4LKergw=
-Received: from [127.0.0.1] ( [113.233.137.23])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 24 Sep 2025 11:18:05 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9093758353923306593
-Content-Type: multipart/mixed; boundary="------------fJ1rQJHSiz5ML7IjlmNtvQb4"
-Message-ID: <B380E8AC5609CE77+6968ccb5-544a-4ddc-8e74-e5b162b4c34f@simcom.com>
-Date: Wed, 24 Sep 2025 11:17:58 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795D81C84C7;
+	Wed, 24 Sep 2025 05:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.136
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758691676; cv=fail; b=PbDrk7OJgU5yFHxW397iiNyvOIZixo0s3r0uafNLLMmg7KpbNTUDRrqFCT/774BnGr+AWaebtci4kbr6jmRoLqoSwZdWhtHHoLB5poAolWwEBKSNI3xrlDM4HY4A4EWwMeQ45+bZ8rFEQgzaQxq0SkXMwUxaiPPADKu4eOfBk8s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758691676; c=relaxed/simple;
+	bh=iz95rRyuhh5BfgWbjpSbN5CWg2hyXqkjGMydQbergSk=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=onMc42TJ8ODS02p/FtDWXzPO/CK3PpI6JeUnr60z7d+CyMVjPoh9udagF3epE9K4q4qTbX72zZ8nZ3xllgkS0ph4Lm2RjZYnESJmurOm+M/ZKQ2OpFNRQE6/UCl6Xf0z4dJ06lgEIdUjAQj+mRBrTvfZm9ILHQ9ikW/fhtheNdM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=D8pcxwDT; arc=fail smtp.client-ip=52.101.126.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oooxyJnGX9LM0TGT1svWPnT+alUVgtaiyXhW0keYRT29pMKuzbvuA0Wy6tmMFIQEyOHldY5H464vQRoFEufm2hwkjj0/tYYAnuZ44MryFB2t0L+0HxPPFSimQ2sGYXWTjXxnGrqRImSUizF1zNeXgSrioTrUe97pdNZ8RXiErhdvrNZxUcqs2YBVGv1YvA+F17PXHElWQ3B2uD7PaNe3ZQBmj6CReshl0lirI+GEMhgW5RqeKsHRyoI2g00CS2NAoDWgP6Avj+cRGLzIyuj/k8u1g9lFt2mPMOibzJ8/X8W9NV4ZmrMK3vR/+OamE6rml7Dtfd90B6CRqlvuqcetkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RjXpKXewvKv85KMvNnzu6uMkdQZcAtgaVLQAVoWFNgc=;
+ b=JVauQvgfUqV9KUs8/knGYqLTzeXKDtZ0pX25e8Kmi7S5TyEtNcik8mTj8dZ1ifJWvYFlo1KdxMqN4HPwKbvTfr8Gc4TQafj59Ow1SV8ClU/88vn8GKn/HtLtEf4s2Db6nacTP2bd/rGx1HtrQIylXTwi00AL4ote0Idhw3FfxKF1Ey0XRPg2lB+VILuj2SBqk9FMVqbYQj2bvIPicYZOHQ+Duoow2pSue48A6rABuTn28jQZccm0M+D1uxgSaW2iUb3fEk6u/+lrMGVpcehh0K29q4kJdOgzSYQjvumjC/dhagYUNiZs+rDi3x936JOqGyPic3EKq16w56p8WNwCUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RjXpKXewvKv85KMvNnzu6uMkdQZcAtgaVLQAVoWFNgc=;
+ b=D8pcxwDTxqmcIjU/d+X2HmbDvXviO9jybhFwmGlE1+3eIZtqfxMJtLhhEoSXUtxhBQ8kLVKv3Wg1k81ZGDcssyzvIp/rVl1FfjPk7D4HZIEJxUYTNt2c+MABhQYGy9gM+P/vjbCe88fqa4UDFY0kzfv7Pi04DoxaPK8JXo0kkm/TzvS9jxkii7FnNkg8ar+YY9VNCQeEIEZ/kQ97bKcBgGjssCkw7c2yuIne/aqSoej7y/FI396nHMeyJJT4HskAZWgqAImBDm1seWQUCVLyOtVLE+wmT1/Ahkhd/c/Zuv7WOO36tGuXSbNkxIv6+Fy0wENROr/vMmJf1yQx0MXorQ==
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com (2603:1096:604:2b1::11)
+ by TYZPR06MB6327.apcprd06.prod.outlook.com (2603:1096:400:424::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.19; Wed, 24 Sep
+ 2025 05:27:51 +0000
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11]) by OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11%6]) with mapi id 15.20.9160.008; Wed, 24 Sep 2025
+ 05:27:50 +0000
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/2] usb: ehci: Add Aspeed AST2700 support
+Thread-Topic: [PATCH 2/2] usb: ehci: Add Aspeed AST2700 support
+Thread-Index: AQHcKGhfX6zMMKIs10CQ+TAzfOSFlbSY+OyAgAi5CeA=
+Date: Wed, 24 Sep 2025 05:27:50 +0000
+Message-ID:
+ <OS8PR06MB75418A889FF9E2FF4851DB4CF21CA@OS8PR06MB7541.apcprd06.prod.outlook.com>
+References: <20250918064919.224927-1-ryan_chen@aspeedtech.com>
+ <20250918064919.224927-3-ryan_chen@aspeedtech.com>
+ <95dfea8a-f5ec-488b-bdd0-fa12acd3dce8@rowland.harvard.edu>
+In-Reply-To: <95dfea8a-f5ec-488b-bdd0-fa12acd3dce8@rowland.harvard.edu>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS8PR06MB7541:EE_|TYZPR06MB6327:EE_
+x-ms-office365-filtering-correlation-id: 1f22244b-c60a-40f8-c544-08ddfb2b1ab9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700021;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?Iptm77oF/Eh4KFu1nPKGLeBvj4lH5vfUmCKptGPm4bok/kWHTnOgyOtmb51c?=
+ =?us-ascii?Q?rdBP1AoQtbWlFY26d4JLeZUKxcKUjADx+YRt6fyAMY1zTK2PP14Tv16sk99N?=
+ =?us-ascii?Q?PTJ+1inDXeH/3UA0C78tQfsJ9grb4zUcKMawO/IWA4+7PigGwZCwD+la1Igb?=
+ =?us-ascii?Q?a4hZ9RlEbZjMQhftyeubhcm2MsvELEUfXnK6j1jtmYLrLSPTt4Dj0oIE6Q0f?=
+ =?us-ascii?Q?w4O8XcenX4WWRYe/DOlAcUnXoeAPQj17+hJarMP7evBczPnEsVNCOb8Q0K7+?=
+ =?us-ascii?Q?WKuWBosuLFALbgYM8cAsRPW2jPLLBZWX5FqHf3P/rPUY0bHg8c5WS6S17A/k?=
+ =?us-ascii?Q?5lYklo9Gl/G1n4ujLFmPpQfjU4bqV/w1YtNjn4Q5RqbEv3HUZcqhKwvnV+MP?=
+ =?us-ascii?Q?6OIK+shmCW1vw26i97NjrU6Bu60XZpe7IUWhuqit4vd8vdtbWvZWDbXBvkDZ?=
+ =?us-ascii?Q?ebdNyo1orLs7uBl/giUuGcUkt0MsPG0lE+ifV08pHQ5PX8scTqnVPiV0YI2P?=
+ =?us-ascii?Q?NopkAiVpg3gAkk+qgVQAfZ8qUGAtM67QGyB/4XQFoUcTi+E8eji7mt52qU3t?=
+ =?us-ascii?Q?l8DuE2V9SsUgAxmyQs1HhyXWKdvv1rUH/liMyz1+MWqmfyamFncm5gj/y71j?=
+ =?us-ascii?Q?g4n4d415VdjwGgSl/DDldxywrdp1jRwJs0kpj+hU9zcRwIcXt1rV+6hx4GZ0?=
+ =?us-ascii?Q?2qEcLFnlcyFpwDm/iVEjVZXqtMXm7FqW+s3lDkRdcSPVGauko+F1fr8QZUWM?=
+ =?us-ascii?Q?qsU3DZFR+UmKPlT/HDYvIpMHPcIMA7eUjvUrMMx2yviISQSFmRWVS1C3VGCz?=
+ =?us-ascii?Q?HIO9FiWP4NftWea4gOVI5hxGb8/hrN/Bsa0/7Yg1IGNk9OO9xHmiS44YR2B2?=
+ =?us-ascii?Q?Yu1oEN12foa0LtsFzTF/7eqf33n4z4GRhMHxQQLeoqTCpVXQw7y+l/7h3Eri?=
+ =?us-ascii?Q?6QJtLeTn3eaGsWlPvzyYxxmJ02aUKUrXqVWFm17PlwZWDYDMZNuj01fWWFUQ?=
+ =?us-ascii?Q?bWrQ/lKwIONkRnToUa9WBwKY3WVlIEt43UtnEPDtlsurae7udjxHpqeQJnzY?=
+ =?us-ascii?Q?ogOVsd4dxC9uOz2ixGP6iFV5xNKTkEpya4HR5MHuynWr6qAclYoRQqgaHH9s?=
+ =?us-ascii?Q?arHcMWqIqxjmu1ExPATQUL+buYuKs8NokitXXnP93/8SIHC3azcT5AYTgIIv?=
+ =?us-ascii?Q?jrbHbv+4x4lXjXVEtueMsaN/LIQ3elupA5lV+ava9gZukIbeeOJKrqrBAyEy?=
+ =?us-ascii?Q?fkqHtuG8AKZHDnN3A0fkVIP/XG2wr9VIzHArqdLUnDZknckRqMuwuHhiJBmI?=
+ =?us-ascii?Q?4MCEh1jpgWVyPzq5eMLHt785CN96e2tp7HIwKIF+GSJSuZOFu1XFT3wtNmo1?=
+ =?us-ascii?Q?RBWbnarLKFscsVGp/bjP9XiPREvfnl9Z/YWQp0ULCU1tfSZC2Ds7l6beeLlw?=
+ =?us-ascii?Q?+OyOR/HnsQq/6kGNsmhzXZEAeOyDcr3CFLU8pKj49u10/WWxvSr19V+jEpRq?=
+ =?us-ascii?Q?+vi2uV1lKKC0Obk=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7541.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700021);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?LahfC100dIcHXNcRL12j6sO5yeM4ed9pC5v7wP0BEsdjXFW7biWRKrfpYx/t?=
+ =?us-ascii?Q?NtEOkaDmu6DkiDfP6hVw2pxCKPQ7sTfkX7UBKlZIJAn3cDI+HpSCFxLflQNx?=
+ =?us-ascii?Q?GPuIdRkbTBs4kG6PAhibfs1onh2eUOp9U9Ad4YblILaN9+U4isYjVYvfOM1K?=
+ =?us-ascii?Q?ziWO11xgFWBqdG+2Fkx2x5c+Zb77b7qsNDd/x874omiiKrHV6EY6aPuL+lbv?=
+ =?us-ascii?Q?SsQKpoX2tVbfCqWV9qzMgxkEVMGizC/bTekdQUOFWrd1nC02PFxy937Jg+J2?=
+ =?us-ascii?Q?6j0ns034fhgJFJApUpJEL7IjZSUK+AhBMQdmlz+D9XfuQzq/8h+w9xByOU+e?=
+ =?us-ascii?Q?PhXm+7psTCp3/JLM2xouEEIl14un3spFrot3xZGgG66BCiu+8yOtkHn0anez?=
+ =?us-ascii?Q?utfdUAReY6VoUlpZRSmBnndc8pSS95Vvq64GmTezeFzdgWZldRqIQNUptVIK?=
+ =?us-ascii?Q?93qbOqJeI58GgXTrtzDwL/x9J34Qyl3jgvzbW6qsK+4Cvh84PnaLe8bn0hhF?=
+ =?us-ascii?Q?2YFw8ScqFtn4VlKP8ImHFqDmFO3NXQwRuQ+yiNk+canHl8P22023RohCkTZX?=
+ =?us-ascii?Q?pEWcUzkIPFm8TAKibuNRCxKlBu/27FBgw4IocOiqhk0hyrHz9fQLTuAir+lV?=
+ =?us-ascii?Q?yyfSRN+BhAbFwhr+Dpa1JOPl9eXXFVf9oOdO8G6722SDgzrpNJBEMej+8KPM?=
+ =?us-ascii?Q?JFuM8di7BCCd+Ww164Psjg1QWb7Vgqst/12dN3rGTEQfz0E/md/8dVp9dS1t?=
+ =?us-ascii?Q?g0MfXg6QW67ykUdnJ2enWUzgFamja37mmSQ7JRkW8uiK8UzZFBB/8a06xXVg?=
+ =?us-ascii?Q?00mOv2/EoeSkdgw0KspkaDoiKsbIMRSgccvJSAXXfE3olxTLVKQ45qyWD4dA?=
+ =?us-ascii?Q?WTw9hK+H9Fcm3sTpbtBYvOie7SCTlkDOJkYKRrgWCXvYiCQPM/tavUSA5Yfm?=
+ =?us-ascii?Q?0/tiIrelVSoM0DytOHHTdt8Jby92WnCH076GXPGG8GYZ/byVna/zHRfAfPRG?=
+ =?us-ascii?Q?/Z7LhmFoXNxkULRhHMQE3IxMuNszlKwXo0MLCuV5s11WdjirhVhviuo0ys0v?=
+ =?us-ascii?Q?YB/1gQZeEnItzhMZ+XscFrQ/pG2RhVnE4RXBLvPrMTqU3/hQYvfhv5xdtJV5?=
+ =?us-ascii?Q?wXz26fPRFIbvOgR/F5kGgMBlQ/Yg0PC6vFXSxeKvBYh6rkbJNbswaAoD8fLw?=
+ =?us-ascii?Q?CjFIB9XU3/5eBjxS26ZiMbQdEgi3Z4aYG9LHHGw6RzB0hbLqS+0C6Y+0WnLI?=
+ =?us-ascii?Q?CBgxgWvoj26mCRMJiMHLy2ZmpfgZg/uZt+DgPX8TtOak1jMIzIhrVa1lqCdG?=
+ =?us-ascii?Q?QScxVDafEm3OiyVBkdD6JRmmrj9xNQQnMknXwdtaINpEWA5GXCE7Ni/UigTw?=
+ =?us-ascii?Q?yAuJASGkLyEZh36RM8Kn501gscms4vCguMnJqscPj7m/OYRZOz5kWd3anaU3?=
+ =?us-ascii?Q?lB8RzaqwYb62NQnrj+Dl7uTeeodOpOTZ8A1PW42TKokV7QXejiaVJEBD0GFP?=
+ =?us-ascii?Q?YSTHd2Ks4ECk0+tECx6L1q+Anvk7ZY2YlllFuhegOimu8xfA/emafHylRQKa?=
+ =?us-ascii?Q?YPxAr2/w3BX8otOvNgOeJw6zUUDkfjoAQjEC9uZf?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] USB: serial: option: add SIMCom 8230C compositions
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250917105342.2687371-1-xiaowei.li@simcom.com>
- <aNJPuwDMsf5Pyepy@hovoldconsulting.com>
-From: "xiaowei.li@simcom.com" <xiaowei.li@simcom.com>
-In-Reply-To: <aNJPuwDMsf5Pyepy@hovoldconsulting.com>
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:simcom.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: NQ1SesBsQjVtSh85u9uba7wtUxUP+h8d5FoifQ0ejSp6QNU3vsgb90vW
-	AVpft/w9BIEgdVOIq4ET795WcAC6CyrW3/1SszZ2VotPM5IhRFHg4+EKp55ETMLpiDXluEY
-	O8CwmwB0T8z6RVC5WF5fuYzUIrh1lGzdIHwra6Kr4lfaYQ1V5T8XIeOn+ENY/iNhBi5zEZh
-	/bE0om+xF8NUjd3Nu5QezT/J5GyxfpO6IQMizVGJxGRz9l8nudg1f3r06sFYJ0cJqAOHdfG
-	mmpppXnUhTNZHVAyiGAgxuJTodJ6aodritmxWmit/YA4EvZGDVSZoMURY73mzniwfgfjpzG
-	wLX1tdPPQhQB2ff+39igWUSZKIYWiVVJbdQY+GYb5tJLkUv92Ump+ei9hBclfJ3VOnbZ6d4
-	V+lSTat5lpOmNmGh6xXOWoJUne5bgJDUwx1oLfFWWzvIU+u4zJatV4Qd7blXr6RIeeD6ph8
-	RjzQoemCPhzcuDbmyras+K2yVf5VZ7j0+HlwESHF/OV2Z2/1LjAdtOAFxWnhzmS3nh5cN1d
-	zQVV71ht1LNx6xFaObTCkRs1+aFXl3agdn1/WYMTX27x5jQZwTZ1ywZFw9fNBSRaATMDSQm
-	1dYXBdXi0RjQf+JUPDpLUXJHx5LHhyvkWLSySYghvityUpZpfKnSHWHAZnjMssaJVT8ywXe
-	RhcobLnkDCMFRs5SYEYENs3BfIZy7XMnntNCHxtTqqFGqTqqWF9EjzqlS1Ie/+wDggNJf8x
-	D1eqy4o8yQuaXuXC983y39Z5xpCzcUxjuOjXpAVkT/UMh2h5avfoxZK1sJS4SvcFIQ64s2J
-	dn8iQco7DoJQn1qw8vW0bXfpGBhhgq5GLuXDf2Zx0Azp5cAtUDsngi/XfsMyefIC/v/gmZ5
-	ydtC8tH4YCpgEw6VQoh//O34HMqWuQXz4oesCIgbIwW/FdNppHU0FxHPwwUZekjZmnZ+jz4
-	lnioL42oGTohna222Q3bB7S3z4ogXkkW3yflKk+JWbDM2GHle3wSv40MCkkX1RGRW+Mt1Zx
-	DtATDMJWO3q3OX88MkU6M1ABlt0PV0/LaA7J/joQ==
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-X-QQ-RECHKSPAM: 0
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7541.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1f22244b-c60a-40f8-c544-08ddfb2b1ab9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2025 05:27:50.6767
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: C5i3hKNy0KSzhbY3uC+3sFVp2LVbm3YjsPAs4kVI7Lwz0sn5BfAeyaMfPGWaz7HgqdxtvHsZPzck9MfoGl3X7L+0+gZqjMaF6oqQSeEE2b0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6327
 
-This is a multi-part message in MIME format.
---------------fJ1rQJHSiz5ML7IjlmNtvQb4
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+> Subject: Re: [PATCH 2/2] usb: ehci: Add Aspeed AST2700 support
+>=20
+> On Thu, Sep 18, 2025 at 02:49:19PM +0800, Ryan Chen wrote:
+> > Unlike earlier Aspeed SoCs (AST2400/2500/2600) which are limited to
+> > 32-bit DMA addressing, the EHCI controller in AST2700 supports 64-bit
+> > DMA. Update the EHCI platform driver to make use of this capability by
+> > selecting a 64-bit DMA mask when the "aspeed,ast2700-ehci" compatible
+> > is present in device tree.
+> >
+> > Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+> > ---
+> >  drivers/usb/host/ehci-platform.c | 26 +++++++++++++++++++++-----
+> >  1 file changed, 21 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/usb/host/ehci-platform.c
+> > b/drivers/usb/host/ehci-platform.c
+> > index 6aab45c8525c..edf1fb4033c2 100644
+> > --- a/drivers/usb/host/ehci-platform.c
+> > +++ b/drivers/usb/host/ehci-platform.c
+> > @@ -27,6 +27,7 @@
+> >  #include <linux/io.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> > +#include <linux/of_device.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/reset.h>
+> >  #include <linux/sys_soc.h>
+> > @@ -122,10 +123,18 @@ static const struct ehci_driver_overrides
+> platform_overrides __initconst =3D {
+> >  	.extra_priv_size =3D	sizeof(struct ehci_platform_priv),
+> >  };
+> >
+> > +#define EHCI_PDATA_COMMON        \
+> > +	.power_on		=3D ehci_platform_power_on,	\
+> > +	.power_suspend	=3D ehci_platform_power_off,	\
+> > +	.power_off		=3D ehci_platform_power_off
+> > +
+> >  static struct usb_ehci_pdata ehci_platform_defaults =3D {
+> > -	.power_on =3D		ehci_platform_power_on,
+> > -	.power_suspend =3D	ehci_platform_power_off,
+> > -	.power_off =3D		ehci_platform_power_off,
+> > +	EHCI_PDATA_COMMON,
+> > +};
+> > +
+> > +static const struct usb_ehci_pdata ehci_ast2700_platform =3D {
+> > +	EHCI_PDATA_COMMON,
+> > +	.dma_mask_64 =3D 1,
+> >  };
+>=20
+> Arggh!  This is dreadful.  Just have two copies of the initializers.
+>=20
+> Better yet, change your of_match data into a boolean property for overrid=
+ing
+> the default DMA mask and then use the original ehci_platform_defaults
+> structure.  Look at ohci_platform_probe() in ohci-platform.c for an examp=
+le.
+>=20
+Sorry, I may not see the implement on ohci probe.
+https://github.com/torvalds/linux/blob/master/drivers/usb/host/ohci-platfor=
+m.c#L100-L111
+But I think I will modify by following.
 
-Hi Johan,
+if (!pdata)
+    pdata =3D &ehci_platform_defaults;
 
-Thanks for the feedback. I have addressed the issues in v2:
-- Fixed the From and Signed-off-by mismatch.
-- Added an introductory sentence in the commit message.
-- Added comments for the new USB device entries.
-- Included a changelog below the --- line.
+match =3D of_match_device(dev->dev.driver->of_match_table, &dev->dev);
+if (match && match->data)
+    pdata->dma_mask_64 =3D 1;
 
-Please find the updated patch attached. Let me know if there are any 
-further comments.
+err =3D dma_coerce_mask_and_coherent(&dev->dev,
+        dma64 ? DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
 
-Best regards,
-Xiaowei Li
+and=20
++ { .compatible =3D "aspeed,ast2700-ehci", .data =3D (void *)1 },
 
-在 2025/9/23 15:43, Johan Hovold 写道:
-> On Wed, Sep 17, 2025 at 06:53:42PM +0800, xiaowei.li wrote:
-> 
-> Thanks for the v2.
-> 
-> Checkpatch complains that your From (author) name does not match you
-> SoB (a period '.' instead of space and no capitalisation). Could you fix
-> your mailer (or add a From line to the patch) so that the author
-> information in the logs will look correct?
-> 
-> Please consider adding an introductory sentence here (e.g. "Add the
-> following compositions for device X:").
-> 
->> USB Device Listings:
-> 
->> Signed-off-by: Xiaowei Li <xiaowei.li@simcom.com>
->> ---
-> 
-> And when updating patches you should put a short changelog here under
-> the --- line.
-> 
->>   drivers/usb/serial/option.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
->> index fc869b7f803f..8eadcfe33ecd 100644
->> --- a/drivers/usb/serial/option.c
->> +++ b/drivers/usb/serial/option.c
->> @@ -2114,6 +2114,12 @@ static const struct usb_device_id option_ids[] = {
->>   	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9003, 0xff) },	/* Simcom SIM7500/SIM7600 MBIM mode */
->>   	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9011, 0xff),	/* Simcom SIM7500/SIM7600 RNDIS mode */
->>   	  .driver_info = RSVD(7) },
->> +	{ USB_DEVICE(0x1e0e, 0x9071),
->> +	  .driver_info = RSVD(3) | RSVD(4) },
->> +	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9078, 0xff),
->> +	  .driver_info = RSVD(5) },
->> +	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x907b, 0xff),
->> +	  .driver_info = RSVD(5) },
-> 
-> And please add a comment after these entries with the device and mode
-> (like the surrounding entries have).
-> 
->>   	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9205, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT+ECM mode */
->>   	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9206, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT-only mode */
->>   	{ USB_DEVICE(ALCATEL_VENDOR_ID, ALCATEL_PRODUCT_X060S_X200),
-> 
-> Looks all good otherwise.
-> 
-> Johan
-> 
+Thanks.
 
---------------fJ1rQJHSiz5ML7IjlmNtvQb4
-Content-Type: text/plain; charset=UTF-8;
- name="0001-USB-serial-option-add-SIMCom-8230C-compositions.patch"
-Content-Disposition: attachment;
- filename*0="0001-USB-serial-option-add-SIMCom-8230C-compositions.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSA1OWE0MmJiNTA1MjMwM2E1YThkMTBlNGU5ZjczNjJlZDExZmQzNmRjIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBYaWFvd2VpIExpIDx4aWFvd2VpLmxpQHNpbWNvbS5j
-b20+CkRhdGU6IFdlZCwgMTcgU2VwIDIwMjUgMTg6NTE6MjMgKzA4MDAKU3ViamVjdDogW1BB
-VENIIHYzXSBVU0I6IHNlcmlhbDogb3B0aW9uOiBhZGQgU0lNQ29tIDgyMzBDIGNvbXBvc2l0
-aW9ucwoKQWRkIHN1cHBvcnQgZm9yIFNJTUNvbSA4MjMwQyB3aGljaCBpcyBiYXNlZCBvbiBR
-dWFsY29tbSBTRFgzNSBjaGlwLgpVU0IgRGV2aWNlIExpc3RpbmdzOgoweDkwNzE6IHR0eSAo
-RE0pICsgdHR5IChOTUVBKSArIHR0eSAoQVQpICsgcm1uZXQgKFFNSSBtb2RlKSArIGFkYgpU
-OiAgQnVzPTAxIExldj0wMSBQcm50PTAxIFBvcnQ9MDUgQ250PTAyIERldiM9IDEwIFNwZD00
-ODAgIE14Q2g9IDAKRDogIFZlcj0gMi4wMCBDbHM9MDAoPmlmYyApIFN1Yj0wMCBQcm90PTAw
-IE14UFM9NjQgI0NmZ3M9ICAxClA6ICBWZW5kb3I9MWUwZSBQcm9kSUQ9OTA3MSBSZXY9IDUu
-MTUKUzogIE1hbnVmYWN0dXJlcj1TSU1DT00KUzogIFByb2R1Y3Q9U0RYQkFBR0hBLUlEUCBf
-U046RDc0NEM0QzUKUzogIFNlcmlhbE51bWJlcj0wMTIzNDU2Nzg5QUJDREVGCkM6KiAjSWZz
-PSA1IENmZyM9IDEgQXRyPWEwIE14UHdyPTUwMG1BCkk6KiBJZiM9IDAgQWx0PSAwICNFUHM9
-IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD0zMCBEcml2ZXI9b3B0aW9uCkU6ICBBZD0w
-MShPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMKRTogIEFkPTgxKEkpIEF0cj0w
-MihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcwpJOiogSWYjPSAxIEFsdD0gMCAjRVBzPSAyIENs
-cz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9wdGlvbgpFOiAgQWQ9ODIoSSkg
-QXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zCkU6ICBBZD0wMihPKSBBdHI9MDIoQnVs
-aykgTXhQUz0gNTEyIEl2bD0wbXMKSToqIElmIz0gMiBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYo
-dmVuZC4pIFN1Yj1mZiBQcm90PTQwIERyaXZlcj1vcHRpb24KRTogIEFkPTg0KEkpIEF0cj0w
-MyhJbnQuKSBNeFBTPSAgMTAgSXZsPTMybXMKRTogIEFkPTgzKEkpIEF0cj0wMihCdWxrKSBN
-eFBTPSA1MTIgSXZsPTBtcwpFOiAgQWQ9MDMoTykgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJ
-dmw9MG1zCkk6KiBJZiM9IDMgQWx0PSAwICNFUHM9IDMgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYg
-UHJvdD01MCBEcml2ZXI9cW1pX3d3YW4KRTogIEFkPTg2KEkpIEF0cj0wMyhJbnQuKSBNeFBT
-PSAgIDggSXZsPTMybXMKRTogIEFkPTg1KEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZs
-PTBtcwpFOiAgQWQ9MDQoTykgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zCkk6KiBJ
-ZiM9IDQgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9NDIgUHJvdD0wMSBEcml2
-ZXI9KG5vbmUpCkU6ICBBZD0wNShPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMK
-RTogIEFkPTg3KEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcwoKMHg5MDc4OiB0
-dHkgKERNKSArIHR0eSAoTk1FQSkgKyB0dHkgKEFUKSArIEVDTSArIGFkYgpUOiAgQnVzPTAx
-IExldj0wMSBQcm50PTAxIFBvcnQ9MDUgQ250PTAyIERldiM9ICA5IFNwZD00ODAgIE14Q2g9
-IDAKRDogIFZlcj0gMi4wMCBDbHM9ZWYobWlzYyApIFN1Yj0wMiBQcm90PTAxIE14UFM9NjQg
-I0NmZ3M9ICAxClA6ICBWZW5kb3I9MWUwZSBQcm9kSUQ9OTA3OCBSZXY9IDUuMTUKUzogIE1h
-bnVmYWN0dXJlcj1TSU1DT00KUzogIFByb2R1Y3Q9U0RYQkFBR0hBLUlEUCBfU046RDc0NEM0
-QzUKUzogIFNlcmlhbE51bWJlcj0wMTIzNDU2Nzg5QUJDREVGCkM6KiAjSWZzPSA2IENmZyM9
-IDEgQXRyPWEwIE14UHdyPTUwMG1BCkk6KiBJZiM9IDAgQWx0PSAwICNFUHM9IDIgQ2xzPWZm
-KHZlbmQuKSBTdWI9ZmYgUHJvdD0zMCBEcml2ZXI9b3B0aW9uCkU6ICBBZD0wMShPKSBBdHI9
-MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMKRTogIEFkPTgxKEkpIEF0cj0wMihCdWxrKSBN
-eFBTPSA1MTIgSXZsPTBtcwpJOiogSWYjPSAxIEFsdD0gMCAjRVBzPSAyIENscz1mZih2ZW5k
-LikgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9wdGlvbgpFOiAgQWQ9ODIoSSkgQXRyPTAyKEJ1
-bGspIE14UFM9IDUxMiBJdmw9MG1zCkU6ICBBZD0wMihPKSBBdHI9MDIoQnVsaykgTXhQUz0g
-NTEyIEl2bD0wbXMKSToqIElmIz0gMiBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1
-Yj1mZiBQcm90PTQwIERyaXZlcj1vcHRpb24KRTogIEFkPTg0KEkpIEF0cj0wMyhJbnQuKSBN
-eFBTPSAgMTAgSXZsPTMybXMKRTogIEFkPTgzKEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIg
-SXZsPTBtcwpFOiAgQWQ9MDMoTykgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zCkk6
-KiBJZiM9IDMgQWx0PSAwICNFUHM9IDEgQ2xzPTAyKGNvbW0uKSBTdWI9MDYgUHJvdD0wMCBE
-cml2ZXI9Y2RjX2V0aGVyCkU6ICBBZD04NihJKSBBdHI9MDMoSW50LikgTXhQUz0gIDE2IEl2
-bD0zMm1zCkk6ICBJZiM9IDQgQWx0PSAwICNFUHM9IDAgQ2xzPTBhKGRhdGEgKSBTdWI9MDAg
-UHJvdD0wMCBEcml2ZXI9Y2RjX2V0aGVyCkk6KiBJZiM9IDQgQWx0PSAxICNFUHM9IDIgQ2xz
-PTBhKGRhdGEgKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9Y2RjX2V0aGVyCkU6ICBBZD04NShJ
-KSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMKRTogIEFkPTA0KE8pIEF0cj0wMihC
-dWxrKSBNeFBTPSA1MTIgSXZsPTBtcwpJOiogSWYjPSA1IEFsdD0gMCAjRVBzPSAyIENscz1m
-Zih2ZW5kLikgU3ViPTQyIFByb3Q9MDEgRHJpdmVyPShub25lKQpFOiAgQWQ9MDUoTykgQXRy
-PTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zCkU6ICBBZD04NyhJKSBBdHI9MDIoQnVsaykg
-TXhQUz0gNTEyIEl2bD0wbXMKCjB4OTA3YjogUk5ESVMgKyB0dHkgKERNKSArIHR0eSAoTk1F
-QSkgKyB0dHkgKEFUKSArIGFkYgpUOiAgQnVzPTAxIExldj0wMSBQcm50PTAxIFBvcnQ9MDUg
-Q250PTAyIERldiM9ICA4IFNwZD00ODAgIE14Q2g9IDAKRDogIFZlcj0gMi4wMCBDbHM9MDAo
-PmlmYyApIFN1Yj0wMCBQcm90PTAwIE14UFM9NjQgI0NmZ3M9ICAxClA6ICBWZW5kb3I9MWUw
-ZSBQcm9kSUQ9OTA3YiBSZXY9IDUuMTUKUzogIE1hbnVmYWN0dXJlcj1TSU1DT00KUzogIFBy
-b2R1Y3Q9U0RYQkFBR0hBLUlEUCBfU046RDc0NEM0QzUKUzogIFNlcmlhbE51bWJlcj0wMTIz
-NDU2Nzg5QUJDREVGCkM6KiAjSWZzPSA2IENmZyM9IDEgQXRyPWEwIE14UHdyPTUwMG1BCkE6
-ICBGaXJzdElmIz0gMCBJZkNvdW50PSAyIENscz1lZihtaXNjICkgU3ViPTA0IFByb3Q9MDEK
-SToqIElmIz0gMCBBbHQ9IDAgI0VQcz0gMSBDbHM9ZWYobWlzYyApIFN1Yj0wNCBQcm90PTAx
-IERyaXZlcj1ybmRpc19ob3N0CkU6ICBBZD04MihJKSBBdHI9MDMoSW50LikgTXhQUz0gICA4
-IEl2bD0zMm1zCkk6KiBJZiM9IDEgQWx0PSAwICNFUHM9IDIgQ2xzPTBhKGRhdGEgKSBTdWI9
-MDAgUHJvdD0wMCBEcml2ZXI9cm5kaXNfaG9zdApFOiAgQWQ9ODEoSSkgQXRyPTAyKEJ1bGsp
-IE14UFM9IDUxMiBJdmw9MG1zCkU6ICBBZD0wMShPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEy
-IEl2bD0wbXMKSToqIElmIz0gMiBBbHQ9IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1Yj1m
-ZiBQcm90PTMwIERyaXZlcj1vcHRpb24KRTogIEFkPTAyKE8pIEF0cj0wMihCdWxrKSBNeFBT
-PSA1MTIgSXZsPTBtcwpFOiAgQWQ9ODMoSSkgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9
-MG1zCkk6KiBJZiM9IDMgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9MDAgUHJv
-dD0wMCBEcml2ZXI9b3B0aW9uCkU6ICBBZD04NChJKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEy
-IEl2bD0wbXMKRTogIEFkPTAzKE8pIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcwpJ
-OiogSWYjPSA0IEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9NDAg
-RHJpdmVyPW9wdGlvbgpFOiAgQWQ9ODYoSSkgQXRyPTAzKEludC4pIE14UFM9ICAxMCBJdmw9
-MzJtcwpFOiAgQWQ9ODUoSSkgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zCkU6ICBB
-ZD0wNChPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMKSToqIElmIz0gNSBBbHQ9
-IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1Yj00MiBQcm90PTAxIERyaXZlcj0obm9uZSkK
-RTogIEFkPTA1KE8pIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcwpFOiAgQWQ9ODco
-SSkgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zCgpTaWduZWQtb2ZmLWJ5OiBYaWFv
-d2VpIExpIDx4aWFvd2VpLmxpQHNpbWNvbS5jb20+Ci0tLQpDaGFuZ2Vsb2c6CnYzOgotIEZp
-eGVkIEZyb20gYW5kIFNpZ25lZC1vZmYtYnkgbWlzbWF0Y2guCi0gQWRkZWQgaW50cm9kdWN0
-b3J5IHNlbnRlbmNlIGluIGNvbW1pdCBtZXNzYWdlLgotIEFkZGVkIGNvbW1lbnRzIGZvciBu
-ZXcgVVNCIGRldmljZSBlbnRyaWVzLgoKIGRyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYyB8
-IDYgKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0
-IGEvZHJpdmVycy91c2Ivc2VyaWFsL29wdGlvbi5jIGIvZHJpdmVycy91c2Ivc2VyaWFsL29w
-dGlvbi5jCmluZGV4IGZjODY5YjdmODAzZi4uZDY2MTZkNjM1YzlmIDEwMDY0NAotLS0gYS9k
-cml2ZXJzL3VzYi9zZXJpYWwvb3B0aW9uLmMKKysrIGIvZHJpdmVycy91c2Ivc2VyaWFsL29w
-dGlvbi5jCkBAIC0yMTE0LDYgKzIxMTQsMTIgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB1c2Jf
-ZGV2aWNlX2lkIG9wdGlvbl9pZHNbXSA9IHsKIAl7IFVTQl9ERVZJQ0VfSU5URVJGQUNFX0NM
-QVNTKDB4MWUwZSwgMHg5MDAzLCAweGZmKSB9LAkvKiBTaW1jb20gU0lNNzUwMC9TSU03NjAw
-IE1CSU0gbW9kZSAqLwogCXsgVVNCX0RFVklDRV9JTlRFUkZBQ0VfQ0xBU1MoMHgxZTBlLCAw
-eDkwMTEsIDB4ZmYpLAkvKiBTaW1jb20gU0lNNzUwMC9TSU03NjAwIFJORElTIG1vZGUgKi8K
-IAkgIC5kcml2ZXJfaW5mbyA9IFJTVkQoNykgfSwKKwl7IFVTQl9ERVZJQ0UoMHgxZTBlLCAw
-eDkwNzEpLAkvKiBTaW1jb20gU0lNODIzMCBSTU5FVCBtb2RlICovCisJICAuZHJpdmVyX2lu
-Zm8gPSBSU1ZEKDMpIHwgUlNWRCg0KSB9LAorCXsgVVNCX0RFVklDRV9JTlRFUkZBQ0VfQ0xB
-U1MoMHgxZTBlLCAweDkwNzgsIDB4ZmYpLAkvKiBTaW1jb20gU0lNODIzMCBFQ00gbW9kZSAq
-LworCSAgLmRyaXZlcl9pbmZvID0gUlNWRCg1KSB9LAorCXsgVVNCX0RFVklDRV9JTlRFUkZB
-Q0VfQ0xBU1MoMHgxZTBlLCAweDkwN2IsIDB4ZmYpLAkvKiBTaW1jb20gU0lNODIzMCBSTkRJ
-UyBtb2RlICovCisJICAuZHJpdmVyX2luZm8gPSBSU1ZEKDUpIH0sCiAJeyBVU0JfREVWSUNF
-X0lOVEVSRkFDRV9DTEFTUygweDFlMGUsIDB4OTIwNSwgMHhmZikgfSwJLyogU2ltY29tIFNJ
-TTcwNzAvU0lNNzA4MC9TSU03MDkwIEFUK0VDTSBtb2RlICovCiAJeyBVU0JfREVWSUNFX0lO
-VEVSRkFDRV9DTEFTUygweDFlMGUsIDB4OTIwNiwgMHhmZikgfSwJLyogU2ltY29tIFNJTTcw
-NzAvU0lNNzA4MC9TSU03MDkwIEFULW9ubHkgbW9kZSAqLwogCXsgVVNCX0RFVklDRShBTENB
-VEVMX1ZFTkRPUl9JRCwgQUxDQVRFTF9QUk9EVUNUX1gwNjBTX1gyMDApLAotLSAKMi4zNC4x
-Cgo=
-
---------------fJ1rQJHSiz5ML7IjlmNtvQb4--
+> >
+> >  /**
+> > @@ -239,6 +248,7 @@ static int ehci_platform_probe(struct
+> platform_device *dev)
+> >  	struct usb_hcd *hcd;
+> >  	struct resource *res_mem;
+> >  	struct usb_ehci_pdata *pdata =3D dev_get_platdata(&dev->dev);
+> > +	const struct of_device_id *match;
+> >  	struct ehci_platform_priv *priv;
+> >  	struct ehci_hcd *ehci;
+> >  	int err, irq, clk =3D 0;
+> > @@ -250,7 +260,10 @@ static int ehci_platform_probe(struct
+> platform_device *dev)
+> >  	 * Use reasonable defaults so platforms don't have to provide these
+> >  	 * with DT probing on ARM.
+> >  	 */
+> > -	if (!pdata)
+> > +	match =3D of_match_device(dev->dev.driver->of_match_table, &dev->dev)=
+;
+> > +	if (match && match->data)
+> > +		pdata =3D (struct usb_ehci_pdata *)match->data;
+>=20
+> Do you really want the of_match data to override the platform data?
+> Consider a system that has both.  Which one do you think would be more
+> important?
+>=20
+> (If you take my suggestion above, this question becomes moot.)
+>=20
+> Alan Stern
+>=20
+> > +	else if (!pdata)
+> >  		pdata =3D &ehci_platform_defaults;
+> >
+> >  	err =3D dma_coerce_mask_and_coherent(&dev->dev,
+> > @@ -298,7 +311,9 @@ static int ehci_platform_probe(struct
+> platform_device *dev)
+> >  		if (of_device_is_compatible(dev->dev.of_node,
+> >  					    "aspeed,ast2500-ehci") ||
+> >  		    of_device_is_compatible(dev->dev.of_node,
+> > -					    "aspeed,ast2600-ehci"))
+> > +					    "aspeed,ast2600-ehci") ||
+> > +		    of_device_is_compatible(dev->dev.of_node,
+> > +					    "aspeed,ast2700-ehci"))
+> >  			ehci->is_aspeed =3D 1;
+> >
+> >  		if (soc_device_match(quirk_poll_match))
+> > @@ -485,6 +500,7 @@ static const struct of_device_id vt8500_ehci_ids[] =
+=3D {
+> >  	{ .compatible =3D "wm,prizm-ehci", },
+> >  	{ .compatible =3D "generic-ehci", },
+> >  	{ .compatible =3D "cavium,octeon-6335-ehci", },
+> > +	{ .compatible =3D "aspeed,ast2700-ehci",	.data =3D &ehci_ast2700_plat=
+form },
+> >  	{}
+> >  };
+> >  MODULE_DEVICE_TABLE(of, vt8500_ehci_ids);
+> > --
+> > 2.34.1
+> >
 
