@@ -1,132 +1,105 @@
-Return-Path: <linux-usb+bounces-28589-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28590-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98AAFB98B94
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 10:03:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97C1DB98C05
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 10:08:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EDA34A75BC
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 08:03:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0F451B2226D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 08:08:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49342280331;
-	Wed, 24 Sep 2025 08:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB0D2836B4;
+	Wed, 24 Sep 2025 08:07:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A5rmQ2ks"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fnp4wJ7o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0914527603A
-	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 08:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90616281371
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 08:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758700987; cv=none; b=dxb0tG2v1Uu8Vo+4v36U5uq6CUHjTlvucvO7CUymf0OM7s26qzrtcu/ZOcdLG2IN/+pann5mz67GTHaMjBCZ284X1hFcSJPp7D52hEITPsuj54UD0XsynSWwKXnIOPLCITJACMvdMHFGIy/OWEY1cuSuJAn89pX3EoWgEJqW7tk=
+	t=1758701270; cv=none; b=XzPSqoJPo3sM5+W0duWE5EONptLoHYV4dsoV7WwUwPCjxCcVPe2e8cfvwuOB6RzmmhxoAZ3ueNIm1DLngOJ8bDMYAkQCTKiJiaCylpG/st/GjAsnV1pyRfJYoe8OxGPt1xKvTgtklx0u4En26sOg+L5NRXl9SKXIQAg7DNmRQkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758700987; c=relaxed/simple;
-	bh=gZYO00dsgw1/sZf16O3pqxqviKudSlUhSQE7SGYKT4Y=;
+	s=arc-20240116; t=1758701270; c=relaxed/simple;
+	bh=CPJFhlS86lHjQ8Ti2XaTHsWA+1yz9pSmmfGw3hKwYcE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I30kTpD2vQudZ0zhYD/Z22UfHNlvARv3nXO0+lcgF2hdkKdOslwYcmoHeCvU7JyQpenrkbCn5zR0olmrkcvYrF7xckq6AqjWZMktITN+QRo7jLq/rzy1IHAJr4vSfV4aVrCCNrAYfG8Ar3uWjdXoXkjBVjKBhUP5+m6kEckzhsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A5rmQ2ks; arc=none smtp.client-ip=209.85.208.50
+	 To:Cc:Content-Type; b=I+Ho4NIGVSidJQPKpx1nhTUoRA/tH1qNUVOflZVOP7CGWlm/l6O31cTJsmko9dFGR5OyHkF+LuGXMnlGOHO8E8+v1BUTRdrsfLtvF7Kp+wDld5XDVUi8LVkc6h9ktFh7az4Ltt45MNUm5Q73elRW4b0HFuoYg16EQLw83p4xKnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fnp4wJ7o; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-62fa062a1abso10501881a12.2
-        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 01:03:05 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b2e0513433bso417868566b.1
+        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 01:07:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758700984; x=1759305784; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758701267; x=1759306067; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ehfc7lW7bxLwmLG05CxRKvZLBCPLLvWLd72j5jVN5N8=;
-        b=A5rmQ2ksjJV+pH7ww7oZxhdxMVAJ0gYbbfAM/WrQGTIw58y4P4Jk2lqIzo6/ORDGsB
-         12H5G2Bl7oHGfFvDzPhe4nB1SZ8Ij/ldLcOVUtaebURd9kfKxb0XWQiRG1cZoKLI2KaX
-         Bvv+VL4QOTY7UlAnBIRV4IpLSIChPshAK6gwQBRbuVla0mzqlLfYjGsECHPx2uO3amo9
-         yNU4NXW6yDQyIB7+DJ6RQXPWuAMdwq2AKVe/hrAnOhMc2WZ1ScOvIXQdwdE9LkCnJBKN
-         po+S88dsNg13plFmdClOuJcyCauaMueZ516nahpV4bfGpZGUy9v8MtDXc8+9fokE0wuP
-         I83g==
+        bh=CPJFhlS86lHjQ8Ti2XaTHsWA+1yz9pSmmfGw3hKwYcE=;
+        b=fnp4wJ7opiJX1+q2nsrQptUKXzAnZRKZg4g8saYB/aUadbuHQV18LvkD45Krh3hDRz
+         kz+GDpHiyI0VBc+MayLeOnRzjJ7IXYB6Pod2t8XJkOtQfa9qg82Z2JuP+RfPfnf/AiRV
+         grH3iZPSRT4EEfNc8/2MZhihK9H/SqM+FC/R1IItW4+i38QU0Ct0Gmkd+ODtRhocuQHz
+         ZnK2BRTNDWnEhz+2Hj7LX2agSpMjUgO3tvjUwCRCB9eO4huo5J4iqtcQ7Tz1zMHr9lUP
+         1bIGafWHzsGQ39i6FuQDJxluLVIqWk4ws7B/s4sg+kYS1LNgF8vrYmfpLCRCUTj6H+Au
+         +Rnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758700984; x=1759305784;
+        d=1e100.net; s=20230601; t=1758701267; x=1759306067;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ehfc7lW7bxLwmLG05CxRKvZLBCPLLvWLd72j5jVN5N8=;
-        b=sj4Jx/ByBT3eWLx4RNwe6aS8AfHVKE+/75ge/gfjdmDc48bkMRy2xHlfliEvtWDOiV
-         FrKr3g8Wva9LEMwwfYs8fDvth1PMfRaUCnNp8egFLKgHuX+ETb1cSfHESxSX/hQo8BMz
-         0Z0pI1MKxPx9PEgtgUruFhdmenTH+TjI+ZVliw+NBigBFPwEbvNDzvKZti07qiTrTi4i
-         PrXI07zt1UKsn0bceRwRrvidoCHwPl5TntUNnLpWN4ole4b2n0BXG/O0uKSe7GrlRLSd
-         QEkDuSnmwvXt39WqR7z5wduKeVtptkKOKyBq/m//Rb7P9k1HGOOtDjsOzPkJN+xm779R
-         rOAA==
-X-Forwarded-Encrypted: i=1; AJvYcCXdK0MTxDIADUgjiRHWoEsxYbd0T8tg2LbbhalK8M83FKYUVV3QO5819FrRRwDjZsXoBGOs6FA4Q/o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfZVVj3YkugPhu16hmWzheUAnn3ogLCOPzhQzhX/CH+nie+KmQ
-	+IUqlUnS4HPpoVYfmBgVx2csOdYsAw7PZTeQslyfyg+7EhDYxoxlnAlldATW7iAFjmokR7s8xTq
-	849VHNUyinGec77hfkh1Xxrgsgyu5CVY=
-X-Gm-Gg: ASbGncsMhDfEErY2IhvqsrpU5QSIcsXtvMOVYqZqIcu2Tqv6I/n5d2fx7ozmmnhC3ev
-	2fHqkAAuWLxopnn6vPFXu8NaffcX1drbs8RLy5n38cq989ZvpV87gV7j4QkmVpEjqS2oQMuH7o1
-	wvKQuWpcr9/hAhbx6KUB9YHFm5JcUEVLWc3xRYQxKOkjfQzVcwrT+xvBhTZDGw3+7iWeMNcqi7w
-	QP/t2kpBob9pJXjP1FuhXMisFIC9aTLcJGdWF4uEpt2jhwY8TPoIw==
-X-Google-Smtp-Source: AGHT+IFxLHXew9N/JexqdNTfDfR/A0LfnbXCLzDT8ABYFnADQGfGxHrMbIpi3ZFG4X939kYRjpoOubp/hHRjAOYou84=
-X-Received: by 2002:a05:6402:254e:b0:634:4e0:836f with SMTP id
- 4fb4d7f45d1cf-63467795097mr4196054a12.1.1758700983944; Wed, 24 Sep 2025
- 01:03:03 -0700 (PDT)
+        bh=CPJFhlS86lHjQ8Ti2XaTHsWA+1yz9pSmmfGw3hKwYcE=;
+        b=tohwKMNTTuRmc2W/v1gI9dut+x5dWpSZ1138lpsk3aijQANA74fsnwwbmM3pe52gdR
+         fCQGXNlhO/GLPCjeQgel+3FuxB55dij9cmQiA0jvfpqR37CBg2Kx2gVKi5S9/eVrEb8T
+         SO8wzy371+dxZ4t9dK7YqvGAkIhyeBFwbMys7COnGEjTX405uDdyqkRZ9m5tUwMoS2KE
+         nnhIDISaCZEptsSIFwBmuxhBcPlFREb8wDUwSm5DfNfiTpx//Ai4c7KZXtXCRf673zTs
+         oeLouMLJFz9nK4Tz9I7PP3+nzC4CTkbgz5Y8NYroIkETzwDFKFSqWRlWeOtHWrwkGBXb
+         zyFg==
+X-Forwarded-Encrypted: i=1; AJvYcCV+qJy6D8xJOVHktRGuViC+KhmZ2OPpZJQTgIKals20HOviJKPUbEmrKK2VUWZ0VFuSwXIulox8j88=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHyvBI8LKtcpJDOEZZjFrUt0jyn/PWcciLGf/3334DSSDzAu56
+	jmQEQlWDO3aX+5XEhzYhGFIZKdfZXj46JU0MqBMkg+TXXa6Z03FaRzmwWPW3Jx+N2vmNKT5+qIZ
+	7o15W77R2UQa76w6EvuyrrzH5JI7Yjv4=
+X-Gm-Gg: ASbGncuzAy3TNbEqZZLAsrVwcV2bj0LMU9hRvFY7WQk/gvwqAZQKLU2aG1S3ITmPR6j
+	mj3RTiWRF4MUD3wdChD+1tIYEideIydPdDMATlECViOycCtncz3LEPsbv+Mk9je8X+UtnGiQiMx
+	LUJJJN9vQ+TJyqiN+87B9DEwtEO3biupnvAU8Ae7/WE+HwSlpbV2dwpBKRiBkN0eUbQK0HhfIW9
+	qmj2+H/xw1xk9DIoac4K8PsRWOo3CRvnv3PEm7aQW/8OTgiF1j1dA==
+X-Google-Smtp-Source: AGHT+IFWa4lkAHwf/4SArdm61wLTC4F7gQbf86GEjLZLwo2VefWv8FFXmP8OkTgdIk6qtNPTw6EZddqMonym0lxMhp0=
+X-Received: by 2002:a17:907:26c4:b0:b2b:a56f:541a with SMTP id
+ a640c23a62f3a-b3027260835mr530198366b.7.1758701266609; Wed, 24 Sep 2025
+ 01:07:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <83171a57-cb40-4c97-b736-0e62930b9e5c@lunn.ch> <20250920181852.18164-1-viswanathiyyappan@gmail.com>
- <20250924094741.65e12028.michal.pecio@gmail.com>
-In-Reply-To: <20250924094741.65e12028.michal.pecio@gmail.com>
+References: <20250923022205.9075-1-viswanathiyyappan@gmail.com> <20250923164916.5b8c7c28@kernel.org>
+In-Reply-To: <20250923164916.5b8c7c28@kernel.org>
 From: viswanath <viswanathiyyappan@gmail.com>
-Date: Wed, 24 Sep 2025 13:32:52 +0530
-X-Gm-Features: AS18NWA4QzzqyxonbnUZkhNBqNGPKS9vhQ2TwPcWTvWPtTGvwTC0T-6N-mfumR8
-Message-ID: <CAPrAcgMrowvfGeOqdWAo4uCZBdUztFY-WEmpwLyp-QthgYYx7A@mail.gmail.com>
-Subject: Re: [PATCH net v2] net: usb: Remove disruptive netif_wake_queue in rtl8150_set_multicast
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: andrew@lunn.ch, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	david.hunter.linux@gmail.com, edumazet@google.com, kuba@kernel.org, 
-	linux-kernel-mentees@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
-	petkan@nucleusys.com, skhan@linuxfoundation.org, 
-	syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
+Date: Wed, 24 Sep 2025 13:37:33 +0530
+X-Gm-Features: AS18NWCT-FjALMCOah9bf_auRuFbM1Q3yx9_Iw8e7RGCWur-FeBhqSVRINH2d0w
+Message-ID: <CAPrAcgOzf4XYGA8X6TneRrmVwYVYgF=KvnpmRbT6XA+D9HR6jQ@mail.gmail.com>
+Subject: Re: [PATCH net] net: usb: remove rtl8150 driver
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: petkan@nucleusys.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
+	edumazet@google.com, pabeni@redhat.com, linux-usb@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	skhan@linuxfoundation.org, linux-kernel-mentees@lists.linux.dev, 
+	david.hunter.linux@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 24 Sept 2025 at 13:17, Michal Pecio <michal.pecio@gmail.com> wrote:
->
-> It's not freeing which matters but URB completion in the USB subsystem.
+On Wed, 24 Sept 2025 at 05:19, Jakub Kicinski <kuba@kernel.org> wrote:
 
-Does URB completion include both successful and failed completions? I
-decided to go
-with "free urb" because I wasn't sure of that.
+> Thanks for sending this one.
+> Based on Michal's reply I guess we need to wait a bit longer.
 
-> I think this description is needlessly complex, the essence is:
->
-> rtl8150_start_xmit() {
->         netif_stop_queue();
->         usb_submit_urb(dev->tx_urb);
-> }
->
-> rtl8150_set_multicast() {
->         netif_stop_queue();
->         netif_wake_queue();  <-- wakes up TX queue before URB is done
-> }
->
-> rtl8150_start_xmit() {
->         netif_stop_queue();
->         usb_submit_urb(dev->tx_urb);    <-- double submission
-> }
+Sorry, this version breaks the build.
 
-I wasn't sure how to describe the flow of execution in a multi threaded program.
-I will resubmit a v3 with this version of the execution flow
+I will submit a v2 that removes the driver properly
 
-> > Reported-and-tested-by: syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
-> > Closes: https://syzkaller.appspot.com/bug?extid=78cae3f37c62ad092caa
-> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
->
+I hope we won't need to apply it.
 
-> Tested-by: Michal Pecio <michal.pecio@gmail.com>
-
-Thanks,
+Thanks
 Viswanath
 
