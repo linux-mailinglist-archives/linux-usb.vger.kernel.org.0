@@ -1,105 +1,133 @@
-Return-Path: <linux-usb+bounces-28590-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28591-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97C1DB98C05
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 10:08:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96CCFB990B9
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 11:10:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0F451B2226D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 08:08:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 980D42E6B52
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 09:10:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB0D2836B4;
-	Wed, 24 Sep 2025 08:07:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F67B2D6626;
+	Wed, 24 Sep 2025 09:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fnp4wJ7o"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="T1Zr4meC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90616281371
-	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 08:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B975C2D592F
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 09:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758701270; cv=none; b=XzPSqoJPo3sM5+W0duWE5EONptLoHYV4dsoV7WwUwPCjxCcVPe2e8cfvwuOB6RzmmhxoAZ3ueNIm1DLngOJ8bDMYAkQCTKiJiaCylpG/st/GjAsnV1pyRfJYoe8OxGPt1xKvTgtklx0u4En26sOg+L5NRXl9SKXIQAg7DNmRQkk=
+	t=1758705047; cv=none; b=SyRH/AcEnI674Ww6Uh+6k2H61MkTf7VpK7HQvBGQObLAfCePvWaEBPPwE1eFQSggeIih5WGfy8U+y9tmRz7SijVKx8HyPoMKWOvbKOIya6eRSH0SD0cDsy9iva0E/w2SnwMhAJtDH/eqtYw6KIy5LABb49SFRdyDvCIxs6bnyC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758701270; c=relaxed/simple;
-	bh=CPJFhlS86lHjQ8Ti2XaTHsWA+1yz9pSmmfGw3hKwYcE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I+Ho4NIGVSidJQPKpx1nhTUoRA/tH1qNUVOflZVOP7CGWlm/l6O31cTJsmko9dFGR5OyHkF+LuGXMnlGOHO8E8+v1BUTRdrsfLtvF7Kp+wDld5XDVUi8LVkc6h9ktFh7az4Ltt45MNUm5Q73elRW4b0HFuoYg16EQLw83p4xKnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fnp4wJ7o; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b2e0513433bso417868566b.1
-        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 01:07:48 -0700 (PDT)
+	s=arc-20240116; t=1758705047; c=relaxed/simple;
+	bh=IDbvaU3Lm/9yddinO83XZDCblAQ+mOFRlIV4M9xf/o0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lWeeUNgoIlYU8uPAhtkiG68O9r/e7irjRAweSjEz9O41bTYRidGuCiiDQ3vJ48tqms22j1hEpLb7pk4TCv8ZEliiJkKnIwQZx+Z2KVWoRCPvyctr2OVgJcrG/85JJhTqyoVPBNBoRyuH7PgLv03kW51caUYoIxXi/GXHPOal8aQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=T1Zr4meC; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3ee15b5435bso3574325f8f.0
+        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 02:10:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758701267; x=1759306067; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CPJFhlS86lHjQ8Ti2XaTHsWA+1yz9pSmmfGw3hKwYcE=;
-        b=fnp4wJ7opiJX1+q2nsrQptUKXzAnZRKZg4g8saYB/aUadbuHQV18LvkD45Krh3hDRz
-         kz+GDpHiyI0VBc+MayLeOnRzjJ7IXYB6Pod2t8XJkOtQfa9qg82Z2JuP+RfPfnf/AiRV
-         grH3iZPSRT4EEfNc8/2MZhihK9H/SqM+FC/R1IItW4+i38QU0Ct0Gmkd+ODtRhocuQHz
-         ZnK2BRTNDWnEhz+2Hj7LX2agSpMjUgO3tvjUwCRCB9eO4huo5J4iqtcQ7Tz1zMHr9lUP
-         1bIGafWHzsGQ39i6FuQDJxluLVIqWk4ws7B/s4sg+kYS1LNgF8vrYmfpLCRCUTj6H+Au
-         +Rnw==
+        d=tuxon.dev; s=google; t=1758705044; x=1759309844; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Aa5ZKREGG6CwQzuOzEGbODKbeGIenSkztlFKN5OSwHQ=;
+        b=T1Zr4meCmUIWtXCKwUnoEMSdksvvG7+gIkAB+z7eiRcRj1FtqKCRKsPiutimrC5f9O
+         XI4TOWt2W35+uzpKDNbi4PSIIX2UTLnqvlkeYgNAajUBVbSgpk4+Yr8fGNpCyE9GfRCw
+         UAhFq6idmeWAPzkt1XxGHFLclyp5vRg8s74RwNVScrba7Nh3RlJV1SUG0YcysL+fryMX
+         L6IxaMZHW9/m0vH2sdoEHbkoAdOq8LsP9xL9gdu5si82kwrKbDtAkm5HsEKE28+m73Ox
+         E4mkBANAHVCwHlmkRMy866Tp3Rvs97hrwaIbXMQ3yK9GBCNgje2+UV4liZxwV8BnAWVi
+         /pSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758701267; x=1759306067;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1758705044; x=1759309844;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CPJFhlS86lHjQ8Ti2XaTHsWA+1yz9pSmmfGw3hKwYcE=;
-        b=tohwKMNTTuRmc2W/v1gI9dut+x5dWpSZ1138lpsk3aijQANA74fsnwwbmM3pe52gdR
-         fCQGXNlhO/GLPCjeQgel+3FuxB55dij9cmQiA0jvfpqR37CBg2Kx2gVKi5S9/eVrEb8T
-         SO8wzy371+dxZ4t9dK7YqvGAkIhyeBFwbMys7COnGEjTX405uDdyqkRZ9m5tUwMoS2KE
-         nnhIDISaCZEptsSIFwBmuxhBcPlFREb8wDUwSm5DfNfiTpx//Ai4c7KZXtXCRf673zTs
-         oeLouMLJFz9nK4Tz9I7PP3+nzC4CTkbgz5Y8NYroIkETzwDFKFSqWRlWeOtHWrwkGBXb
-         zyFg==
-X-Forwarded-Encrypted: i=1; AJvYcCV+qJy6D8xJOVHktRGuViC+KhmZ2OPpZJQTgIKals20HOviJKPUbEmrKK2VUWZ0VFuSwXIulox8j88=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHyvBI8LKtcpJDOEZZjFrUt0jyn/PWcciLGf/3334DSSDzAu56
-	jmQEQlWDO3aX+5XEhzYhGFIZKdfZXj46JU0MqBMkg+TXXa6Z03FaRzmwWPW3Jx+N2vmNKT5+qIZ
-	7o15W77R2UQa76w6EvuyrrzH5JI7Yjv4=
-X-Gm-Gg: ASbGncuzAy3TNbEqZZLAsrVwcV2bj0LMU9hRvFY7WQk/gvwqAZQKLU2aG1S3ITmPR6j
-	mj3RTiWRF4MUD3wdChD+1tIYEideIydPdDMATlECViOycCtncz3LEPsbv+Mk9je8X+UtnGiQiMx
-	LUJJJN9vQ+TJyqiN+87B9DEwtEO3biupnvAU8Ae7/WE+HwSlpbV2dwpBKRiBkN0eUbQK0HhfIW9
-	qmj2+H/xw1xk9DIoac4K8PsRWOo3CRvnv3PEm7aQW/8OTgiF1j1dA==
-X-Google-Smtp-Source: AGHT+IFWa4lkAHwf/4SArdm61wLTC4F7gQbf86GEjLZLwo2VefWv8FFXmP8OkTgdIk6qtNPTw6EZddqMonym0lxMhp0=
-X-Received: by 2002:a17:907:26c4:b0:b2b:a56f:541a with SMTP id
- a640c23a62f3a-b3027260835mr530198366b.7.1758701266609; Wed, 24 Sep 2025
- 01:07:46 -0700 (PDT)
+        bh=Aa5ZKREGG6CwQzuOzEGbODKbeGIenSkztlFKN5OSwHQ=;
+        b=Kxtf3dDNXAgAg0hqw8eDV/HTvq8Vaab94MKFyDc/OGRnTuTDtlCtZtUEBtPCVOSfMK
+         zsap2vObwBF0Pj3CE5iCeN+dtNPEs3alHCcM5pZ/9VlQomsSJd2mCk8vGIR7eeWW6wAX
+         tobNRWJmGQHFPxNjB3w8MQFF35JN6eH4Lx4xk7pmBj/JhHKQBvnY3jZNaxuXgLFDsyH3
+         Dsi7ybRzXnNZpl7Jmoe+drGLteARdvmTPGUcU1op3DY3pLV1rXyNqrXpa+9E1Ac8XzTj
+         1Zh3VzfRQUT8Imv4ChOWYcMV5MIGM0c9QMht3cHc1Z2K4n/xrIqSflYBVO0UCYAbJ5ws
+         F8ZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWVjMCHZZUBiRwnu+NyD20gAHJFJrunZ6LzqqyK5D1xJM9kXDevu2bS5KgPY66P+IuAREHVhplQZFM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwP3c7s4LUSbH4mGHVi6JTd5I6JOqfTi2VU4jTrQaJFtFJrLi+5
+	K8epML8N5KP4KwOENsqIm+sY2RXzqHCCIkRWcC8iHqIogf/vS4ObnVJd0+Z/AjKHyjM=
+X-Gm-Gg: ASbGncsdZp+4BXHJ3fPPgfOlL9+JeTAIH8uG12vz+n3XQigQtweXc3mMfTvZdZcZ3Xz
+	aWB5sGip3jjdIoUCTfFXGPJErlXuwjVVc0K0cVMRUvtHER/u8J6cDoLx/a3hPGBXH5rWjzknwOs
+	kt859SYFtImBud8ALuEmlq5QRiG7P9sPZO74F8isRfLvihWdMz3bt57JiZ7urw/OGHOmlAhztOl
+	oEG92wqB9QckgoitrK6vlj+48tO51xDU7EAzUcbWtEk6FvuvU81yPKff6QyjOazkn3iV+J5VaDc
+	L4i0f9XZlpOOO2InukfAKiGEYztyoZ87fE8fy3YbdMDu65Pyy1BKWyAUC2VgA9szB5npKGBPIWB
+	BG8dTIbDbyQSB9aB/00JwiQDWsjt2b0wH3x6pdcq+t/E0ys2TOqLO
+X-Google-Smtp-Source: AGHT+IHT5ieSdEF6kMAGMnbj819PLp8ZpjWuyT4jcx1ODntvKEwJ0BGe/A+E1aTr+SU1aX987uvojw==
+X-Received: by 2002:a05:6000:3101:b0:3e7:4893:f9be with SMTP id ffacd0b85a97d-405c3c3e191mr4075455f8f.12.1758705043344;
+        Wed, 24 Sep 2025 02:10:43 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.153])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee07408258sm27435671f8f.19.2025.09.24.02.10.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Sep 2025 02:10:42 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: gregkh@linuxfoundation.org,
+	stern@rowland.harvard.edu
+Cc: claudiu.beznea@tuxon.dev,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH] usb: core: Drop spaces after function names
+Date: Wed, 24 Sep 2025 12:10:36 +0300
+Message-ID: <20250924091036.1319161-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250923022205.9075-1-viswanathiyyappan@gmail.com> <20250923164916.5b8c7c28@kernel.org>
-In-Reply-To: <20250923164916.5b8c7c28@kernel.org>
-From: viswanath <viswanathiyyappan@gmail.com>
-Date: Wed, 24 Sep 2025 13:37:33 +0530
-X-Gm-Features: AS18NWCT-FjALMCOah9bf_auRuFbM1Q3yx9_Iw8e7RGCWur-FeBhqSVRINH2d0w
-Message-ID: <CAPrAcgOzf4XYGA8X6TneRrmVwYVYgF=KvnpmRbT6XA+D9HR6jQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: usb: remove rtl8150 driver
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: petkan@nucleusys.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, pabeni@redhat.com, linux-usb@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	skhan@linuxfoundation.org, linux-kernel-mentees@lists.linux.dev, 
-	david.hunter.linux@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, 24 Sept 2025 at 05:19, Jakub Kicinski <kuba@kernel.org> wrote:
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-> Thanks for sending this one.
-> Based on Michal's reply I guess we need to wait a bit longer.
+Drop spaces after function name to comply with the coding style.
 
-Sorry, this version breaks the build.
+Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+---
+ drivers/usb/core/hcd.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I will submit a v2 that removes the driver properly
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 9dd79769cad1..24feb0de1c00 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -2696,18 +2696,18 @@ static void hcd_release(struct kref *kref)
+ 	kfree(hcd);
+ }
+ 
+-struct usb_hcd *usb_get_hcd (struct usb_hcd *hcd)
++struct usb_hcd *usb_get_hcd(struct usb_hcd *hcd)
+ {
+ 	if (hcd)
+-		kref_get (&hcd->kref);
++		kref_get(&hcd->kref);
+ 	return hcd;
+ }
+ EXPORT_SYMBOL_GPL(usb_get_hcd);
+ 
+-void usb_put_hcd (struct usb_hcd *hcd)
++void usb_put_hcd(struct usb_hcd *hcd)
+ {
+ 	if (hcd)
+-		kref_put (&hcd->kref, hcd_release);
++		kref_put(&hcd->kref, hcd_release);
+ }
+ EXPORT_SYMBOL_GPL(usb_put_hcd);
+ 
+-- 
+2.43.0
 
-I hope we won't need to apply it.
-
-Thanks
-Viswanath
 
