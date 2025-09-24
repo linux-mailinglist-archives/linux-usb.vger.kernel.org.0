@@ -1,88 +1,90 @@
-Return-Path: <linux-usb+bounces-28624-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28625-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C43DB9C9CF
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 01:35:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52501B9C9D5
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 01:35:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4607382B3B
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 23:35:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3A96382D6D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 23:35:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91F922BD035;
-	Wed, 24 Sep 2025 23:35:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A64A02BE658;
+	Wed, 24 Sep 2025 23:35:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="f7mGMPGI"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="phhJzxyw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DC729C35A
-	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 23:35:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B9627991E
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 23:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758756911; cv=none; b=grCymL4VMpiU86MwvOG8lj+pVxim7ZxbKeaSOvAP0a173dWLDrSR0QmGDfuLFFnfab36707rpefo8cH7DaD6uSn+BNUyJFEKJMQVbj7VYgJdQFXFWzdpAZZUOLgpeP49bjorN45C3koHjf+gnlksJCKCjp/mBnd8fPWC12tzrnc=
+	t=1758756915; cv=none; b=EkoPrxrZth8Kagbp605btU4B3XzEEfJ1YYDoJEq/nr8IFA6Svse5duypK3LLgLTwD8eJ0dqM/E333ATaY1pSUREfL6Xq/P42MUCXrkFZITCLu5f0r3Yld4k1Bx8QaQ102a+39Bv9/UDkMt5q0WkrdEvM3SvmvCb0Bytu9zA9qHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758756911; c=relaxed/simple;
-	bh=Rl9KTMUdwIiYEMdOtiL5Lii1gIrVj4sbsfGYlSZOYFg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=O0rog9OwyWETwaRufDnsaDkkNyWmkfsnHyBqG4Qnl1bc3tJfcmcTwEmRdkTK7oGSnnewCpAUn4qg+NnzTbJ6rLrQG9U7uoHRs2C+uvYgxcQ60FKKtvr5tFwUpaYpdpUWXkpgOZmNDig7OyQy7K5vKqdC6RyuXF/kjC0yVCdjQBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=f7mGMPGI; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1758756915; c=relaxed/simple;
+	bh=hU4ophAaEAd6H7eRZm1uuGkEAXFGtcDMUcpBkxQVHUs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=SUrVjY08v4swWIOEpyq3wZu9vYppjh8Pd1+SCz5vsOSyIBPlDn8ffg/PhEzkJIBnYL/uEIDKH0Q/K4+9TKX4p8h8/UfEC5jO9SaCKUjqg1mktavFhaHc4RN6V1TaQRa/81KJTCHLFSrcZ2vEOm3D03zHxRIfJNUFTMu6KNRGaCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=phhJzxyw; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58OCu4QF018033
-	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 23:35:08 GMT
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58ODb2Bb019952
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 23:35:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=N1NPRqXSWps5+W1iMU6uaU
-	9WzkrfYOwTW1b50gNguWo=; b=f7mGMPGI8o7JG+1U9WjHfi+SVLO2QmqTtNWPjg
-	ocknAV12ykmsvYsFBjl7Os8bVaGYGYL4FqVEXdE2Skkvo9p/wbm+C4v7EBcNuqxK
-	ERicRIkcJCkUrn1ICDwUSMz8EpFudDjvV9D6Z+mmKYhPbpSpDu1qQj+VsXfV12cy
-	PJfynzjYDTsFWxofhiPSaodMbuQBquH80+d6XHu7oojnKbmyCo8v64a2SoKnCcfr
-	2oqzJLtn9/RtTWamjuGPkSzh5RfEB6RJQJR2zqqFdc13djLPe+nuf2Y/lzYOLh65
-	ZRpo0Tly1UoBqSyevAnArmpBeGiTdH4Rq5qcyeijyF6rb5qw==
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49b3kka0p0-1
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	PWqICJbVMy0RpODDALIty+rOGzCBRBu0xbDRo92ujfQ=; b=phhJzxywA9wrOq6t
+	Cyty256UpxzAYkUiVTu9ZbneuG3pkOZBj+WsJ24fsAo5XF1pvHzwRqPRNi/nlJOU
+	2xOzZaUSGo46reGxoTJ3VT2mp+76HBDPrMrdQjJbzUZJ8pA9HIDlKxAPiGbVrdMG
+	9xXRxdPOPbe8QE8jJCZtGceKkgrI19Pnol1BlQyb6/Z7lq4zN0V58BFbFod81WOQ
+	zjMx9d6VBrAEE6TXIa7LYQJBULY6DdsDPUtXoHvoit9/Qzk7YN6k0skexPLc1Y7W
+	1Rtx1XarO7FBQUeGscxGHDazh4Hgn9S/kji3+y6d5mo+zw+OkgkUBD1amkYlialb
+	rQTqPw==
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49bjpdy918-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 23:35:08 +0000 (GMT)
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-77df7f0d7a3so322465b3a.2
-        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 16:35:08 -0700 (PDT)
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 23:35:13 +0000 (GMT)
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-b56ae0c8226so209677a12.2
+        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 16:35:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758756907; x=1759361707;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N1NPRqXSWps5+W1iMU6uaU9WzkrfYOwTW1b50gNguWo=;
-        b=nOd9ynoHItvV+t9j6CjKCZl9po3jgjJm38IXpn6//J73hXIX9sTQe+oxwXFbstuSbp
-         dAFR6DOLjf2lV3kyCtO7gBLpyP82yZC5RE11r8smQwks5khnuCsl67u2qmHddjsgC5w0
-         iTPdsavofa1Gzwbu2HiTzsNi3mlqIAqtktWQljb3tZLIjlzldSTa97yNyp5EHerOif6L
-         kauQefUHuSLznV5lSZ2/F658RIwL1CX8Tm/rgtuExJVNLpn6EbtzVjoQdUd9PBOYwNzD
-         OIuVHwDaQV3y9f3XrFMJu+WgecoKlE8KLZQTPz/XVncZNMRSB4OOFWNGSjHWcRO4zGGW
-         LCvA==
-X-Forwarded-Encrypted: i=1; AJvYcCWEkBwc2kjEzper55QtJdiQZvJAQ22Xn8mAhhB5gd1F1Kf3W9TwlQWWn+thkLQxf+YRLFXhdlK63Ds=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGbU07V405CJeak7N1et9OL/elBgTl9ZaB6W1qcg0c9etvYgI5
-	5cecBnPA0869lWWp0GOnHXkna2jreiGWvlXh/WTu0qvL2ONyDETyZ1I191vYFxIkbkGcdmjvkai
-	6mWoDQ2cQgFW9zmp+tLLX651sousp7NoMN1gooTWC80k0OxMnbktifWQiO2w83RU=
-X-Gm-Gg: ASbGncvqGLhfaas0kCDCCHQUWG6TAOMfg7Jws3MamGUMCDGZmAYdKunqwx+Z3Jnuhoz
-	vJtDTx/r/UVFmIMXOaZUKZiStIiZNNLv45dMKQLpeKiP2XOS/y/lCrOEyUrR+43vaGMeQIjU6bh
-	GQwidkG54/ecJB6j8StGm+LYVm7s58+h30n4tetH3ujqkTFDEHVMg+vVFRyAN2/xe1TxzvADMFr
-	J9J+GPenWQ9nAESKDNiwXMrUQEownWnnmtGL/0rm7zvtV/8Ydqm47kTSC64HcOngvBjkcAEABuh
-	YIHUhWtINNtlbxZ5NuDasBWXhesY4t4aEbHF4E6p2IroxZUODldueQ0e1+W/d2Ri+eQT9YSG8KK
-	/C0cq/bksmHNdbqw=
-X-Received: by 2002:a05:6a00:2386:b0:77f:5048:8a8c with SMTP id d2e1a72fcca58-780fcf1f200mr1705539b3a.28.1758756907088;
-        Wed, 24 Sep 2025 16:35:07 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHvPHLLLfcrAguV8dm/AHzS45EMx+5sChl6etbTWkhwR118b19qGtwnriyiyE7t/rKeIdvbWQ==
-X-Received: by 2002:a05:6a00:2386:b0:77f:5048:8a8c with SMTP id d2e1a72fcca58-780fcf1f200mr1705521b3a.28.1758756906641;
-        Wed, 24 Sep 2025 16:35:06 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758756909; x=1759361709;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PWqICJbVMy0RpODDALIty+rOGzCBRBu0xbDRo92ujfQ=;
+        b=aJXkJvU1hbmSdIt+okfJRmczsV8+c0MdSmFqAmvoeA+315cz0qif9p/1ayvxkSqJ+G
+         jRhRYxtG8XrIYK1tODIldBFfJqMPsjyeZRg0Z2VRNJPL483Wcn7Cz/OyFvHkndzyx0Tw
+         gYDMHilTRsaVGEuUYCV99PnzZ3hXglS/MczmRv0KRazWYrz/FlYAtjwyuzDkB8oqt7xi
+         UHWoakWhHnTisbZvoFmOkSN1QQXB7EC2MO6S9XSF1YsEMh5JtjZf++M6M1aGruVhWejT
+         RsJtcXTdYQUMj6OvN71mJsLdSHa+gSey7cxOxNorTsw9pKmGtns56GNGfadWVKQvIIA2
+         szJw==
+X-Forwarded-Encrypted: i=1; AJvYcCVoUAKfCAJLnNSHCrJSq90cMvn2+LklpjtzrSfS3d9Jb2BlEXPkKddxPsIpHTNXQG56DzAypeAeao0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy708fhhkFJUtH42ewclZwmlSj51r6t3lVODcFENOMs0hPiigZj
+	G1nJhgNqrm48xLzgWt1zioHXOcUNW82eKmwOee5rQPpZBfOklEE6F7uYA7tXRIJK1Z7Luj1qlwT
+	XfNx+/uhu2SAVnnr4hotRNhrcYRbt+5CjGHMWB4Rcea9OEVmC8RDiunZl+mbq3eE=
+X-Gm-Gg: ASbGncsuJfFUXrM/GIVZAHKTTYppKOUoYI1hh3bMJlFlIyIFxuBt184B+pR4Jb9C/vC
+	ZkoBhbSUQcENSA8KSF4e403oiV2VVGNYYlil7NMtJUTRmojeTCXVW+oCCoCQY7PYburkqFfWbd9
+	jTn3wIePAkSTTUGIEAB7y0vaubFqOPRJ1wzbnqwW8xBdBCjQy3l+8KxB+vsfhQAWs32oo4DumtQ
+	4PlB3v0/5Txgc5gpSwpe8dq9m1Z/X0ugSyTM7Qoh6V8/mOMUosQB+n1SmS9zjo0P8hFOJpnsAmC
+	E80A/ZzVy8bHzWglbeYSYyPME5b5mFyXQTQaNfYfo4Je3kXWjfKHRogbSvaoxFcB7/4N3zMh1Jm
+	F38jhGnoaYWNXYSo=
+X-Received: by 2002:a05:6a20:1588:b0:2d5:e559:d24b with SMTP id adf61e73a8af0-2e7cdda1022mr1646282637.32.1758756908652;
+        Wed, 24 Sep 2025 16:35:08 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHiJ/zMalK4Rfhi+KRWDxvhLRY72fdHDoPyo5I/09BwNd98hpdC08x8DXI7JsGifufRFFlfPg==
+X-Received: by 2002:a05:6a20:1588:b0:2d5:e559:d24b with SMTP id adf61e73a8af0-2e7cdda1022mr1646245637.32.1758756908189;
+        Wed, 24 Sep 2025 16:35:08 -0700 (PDT)
 Received: from hu-jingyw-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7810238e9a9sm212379b3a.15.2025.09.24.16.35.05
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7810238e9a9sm212379b3a.15.2025.09.24.16.35.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 16:35:06 -0700 (PDT)
+        Wed, 24 Sep 2025 16:35:07 -0700 (PDT)
 From: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
-Subject: [PATCH 0/4] phy: qcom: Introduce USB support for Kaanapali
-Date: Wed, 24 Sep 2025 16:34:53 -0700
-Message-Id: <20250924-knp-usb-v1-0-48bf9fbcc546@oss.qualcomm.com>
+Date: Wed, 24 Sep 2025 16:34:54 -0700
+Subject: [PATCH 1/4] dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp-phy: Add
+ Kaanapali QMP PHY
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,9 +93,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAB2A1GgC/y2NywrCQAxFf6Vk7cCkIkz9FXExj2iDONakLULpv
- 5uWLg+ce+4CSsKkcG0WEJpZ+VMN8NRA7mN9kuNiDK1vL77D4F51cJMmF9CXfA7UYUEwexB68G8
- v3e7GKSq5JLHmftu/o44khyj0nexpPOx1/QNkpeMjhwAAAA==
+Message-Id: <20250924-knp-usb-v1-1-48bf9fbcc546@oss.qualcomm.com>
+References: <20250924-knp-usb-v1-0-48bf9fbcc546@oss.qualcomm.com>
+In-Reply-To: <20250924-knp-usb-v1-0-48bf9fbcc546@oss.qualcomm.com>
 To: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
         Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -105,69 +107,123 @@ Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-usb@vger.kernel.org, Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
         aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
         trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com,
-        Ronak Vijay Raheja <ronak.raheja@oss.qualcomm.com>,
-        Melody Olvera <melody.olvera@oss.qualcomm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+        Ronak Vijay Raheja <ronak.raheja@oss.qualcomm.com>
 X-Mailer: b4 0.15-dev-99b12
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758756905; l=1256;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758756905; l=3174;
  i=jingyi.wang@oss.qualcomm.com; s=20250911; h=from:subject:message-id;
- bh=Rl9KTMUdwIiYEMdOtiL5Lii1gIrVj4sbsfGYlSZOYFg=;
- b=B2o2Pfld+/1LcRIUb8MooBDPIU7mPswCsw3Py/cKadOg7yq2h5g5I/1Uux6fJQDvlvLxO1rx5
- nLk/HHSI2UaBx5sMRoIBsi2K3jiany4XakCAlndBN//foxlslCIJW55
+ bh=KM21eRPw1BjO3tWglGr4aBncFUF2vQ3eFtUu9OugNJA=;
+ b=zFJE8FT4iTnf2yqujsSkjV8dmDKm55xtIEX4wmJa8Y4mo4yvYckHXkpnIkbGaFnepoNyTcSZB
+ PXaiYpG0fohCy3P3qBf6UPHN4u46CRHhqcgVPyUghKrv90jmiWpQKXi
 X-Developer-Key: i=jingyi.wang@oss.qualcomm.com; a=ed25519;
  pk=PSoHZ6KbUss3IW8FPRVMHMK0Jkkr/jV347mBYJO3iLo=
-X-Proofpoint-GUID: YuMmcJOR9iJ1y71sXLYRMe9f7tcdSArb
-X-Proofpoint-ORIG-GUID: YuMmcJOR9iJ1y71sXLYRMe9f7tcdSArb
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIyMDA4OSBTYWx0ZWRfX8d9DHohNDp6W
- pNDtDxgfBcD/htQ/kuDlFUoN2J4hA+yF0ZHot4pUFNr77jMG2pkyFlMucFlhuLQSG6CZPlxnj98
- nXSqD3bt+CP4vRzE+JOXOYsn/sMPMkbXls4/XPjgWTO03k24vIXCPDaFivhOZoGwudWb7BW9SQf
- nF1m1dlu7PmkRzCvFTdMjDf1+14W/CWcdWCIuBGZyOFQlyFsToIhuTbQna6H3D0mzaY4N4AtFop
- h7OeNNXvT9IuIOaz6SBk60SyCL4HhKsFbXJuymO6Iw9BddXKikQtZx7JDQF4xVuH1szwF3MQTfV
- Zfb8NHV/VmS7mFljBtj/Kny4DiYAPWF9RWcrf4xLpT1Y/PzavUdKZMZszScXlbdELQKgcLOYVxr
- uZvyNT+v
-X-Authority-Analysis: v=2.4 cv=BabY0qt2 c=1 sm=1 tr=0 ts=68d4802c cx=c_pps
- a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=751tZ-0Qz6C-U5i-0qsA:9 a=QEXdDO2ut3YA:10 a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-ORIG-GUID: BrWECQrPZ1_95QBQvaLTa0nUZeIDFsM8
+X-Authority-Analysis: v=2.4 cv=Pc//hjhd c=1 sm=1 tr=0 ts=68d48031 cx=c_pps
+ a=rz3CxIlbcmazkYymdCej/Q==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=2IkYd7TCTIqYiAcLhPQA:9
+ a=QEXdDO2ut3YA:10 a=bFCP_H2QrGi7Okbo017w:22
+X-Proofpoint-GUID: BrWECQrPZ1_95QBQvaLTa0nUZeIDFsM8
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIzMDAyMCBTYWx0ZWRfX5CVaxhRx1epE
+ 4dNR3DqyNPvGjgdZyAjzNVgiz+4k1OXy/C/tOEwR4YMOwDjyv7LwnvBFOYpAhu9SMGkTvkKPCTP
+ YRpKV8HDmfiEXisKecvy0K77A8LJcqoUM3ZH4xwYntG4W3cmMxMAwgQOxZJqlvB4hvIxfO5To5L
+ gu1FTnhfqAwXQYVxHxiN0uDrk+cwp8bDdYyDJDujzWsxEVeUZ/EeNy2JLZGrXOFRlRULwCR1pqD
+ vlsEvo+CAQ0+DlZ1UB1bY2kN0cl33VLWdjTCVOcBfutBEaEWUfM1AUW66Qu13KoJzTBsCjbecnz
+ 2xMiTeYchGdqSWzsApA9kqhET/LhhT42emUa+MKAshOiZKt2DJMVHFeNtliivKmGxC9nyOpGL/7
+ ovQ0x5bh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-24_07,2025-09-24_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 clxscore=1011 phishscore=0 bulkscore=0 priorityscore=1501
- adultscore=0 malwarescore=0 spamscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509220089
+ priorityscore=1501 phishscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ spamscore=0 suspectscore=0 clxscore=1015 adultscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2509230020
 
-Add support for the PHYs and controllers used for USB on Kaanapali SoCs.
+From: Ronak Vijay Raheja <ronak.raheja@oss.qualcomm.com>
 
-The usb function depends on:
-https://lore.kernel.org/all/20250920032158.242725-1-wesley.cheng@oss.qualcomm.com/T/#mb2e1260cf266638a56c04bc793f5fe9ed1b3b79d
-patch 4 was picked from:
-https://lore.kernel.org/linux-usb/20250527-sm8750_usb_master-v6-10-d58de3b41d34@oss.qualcomm.com/
+Document QMP combo PHY for Kaanapali. Use fallback to indicate the
+compatibility of the QMP PHY on the Kaanapali with that on the SM8750.
 
+Signed-off-by: Ronak Vijay Raheja <ronak.raheja@oss.qualcomm.com>
+Co-developed-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
 Signed-off-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
 ---
-Melody Olvera (1):
-      arm64: defconfig: Add M31 eUSB2 PHY config
-
-Ronak Raheja (1):
-      dt-bindings: usb: qcom,snps-dwc3: Add Kaanapali compatible
-
-Ronak Vijay Raheja (2):
-      dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp-phy: Add Kaanapali QMP PHY
-      dt-bindings: phy: qcom,m31-eusb2-phy: Document M31 eUSB2 PHY for Kaanapali
-
- .../bindings/phy/qcom,m31-eusb2-phy.yaml           |  6 ++-
  .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml         | 54 ++++++++++++----------
- .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    |  3 ++
- arch/arm64/configs/defconfig                       |  1 +
- 4 files changed, 39 insertions(+), 25 deletions(-)
----
-base-commit: ae2d20002576d2893ecaff25db3d7ef9190ac0b6
-change-id: 20250918-knp-usb-810dc38e91d1
+ 1 file changed, 30 insertions(+), 24 deletions(-)
 
-Best regards,
+diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+index c8bc512df08b..8fa919ea3318 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+@@ -15,22 +15,27 @@ description:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - qcom,sar2130p-qmp-usb3-dp-phy
+-      - qcom,sc7180-qmp-usb3-dp-phy
+-      - qcom,sc7280-qmp-usb3-dp-phy
+-      - qcom,sc8180x-qmp-usb3-dp-phy
+-      - qcom,sc8280xp-qmp-usb43dp-phy
+-      - qcom,sdm845-qmp-usb3-dp-phy
+-      - qcom,sm6350-qmp-usb3-dp-phy
+-      - qcom,sm8150-qmp-usb3-dp-phy
+-      - qcom,sm8250-qmp-usb3-dp-phy
+-      - qcom,sm8350-qmp-usb3-dp-phy
+-      - qcom,sm8450-qmp-usb3-dp-phy
+-      - qcom,sm8550-qmp-usb3-dp-phy
+-      - qcom,sm8650-qmp-usb3-dp-phy
+-      - qcom,sm8750-qmp-usb3-dp-phy
+-      - qcom,x1e80100-qmp-usb3-dp-phy
++    oneOf:
++      - items:
++          - enum:
++              - qcom,kaanapali-qmp-usb3-dp-phy
++          - const: qcom,sm8750-qmp-usb3-dp-phy
++      - enum:
++          - qcom,sar2130p-qmp-usb3-dp-phy
++          - qcom,sc7180-qmp-usb3-dp-phy
++          - qcom,sc7280-qmp-usb3-dp-phy
++          - qcom,sc8180x-qmp-usb3-dp-phy
++          - qcom,sc8280xp-qmp-usb43dp-phy
++          - qcom,sdm845-qmp-usb3-dp-phy
++          - qcom,sm6350-qmp-usb3-dp-phy
++          - qcom,sm8150-qmp-usb3-dp-phy
++          - qcom,sm8250-qmp-usb3-dp-phy
++          - qcom,sm8350-qmp-usb3-dp-phy
++          - qcom,sm8450-qmp-usb3-dp-phy
++          - qcom,sm8550-qmp-usb3-dp-phy
++          - qcom,sm8650-qmp-usb3-dp-phy
++          - qcom,sm8750-qmp-usb3-dp-phy
++          - qcom,x1e80100-qmp-usb3-dp-phy
+ 
+   reg:
+     maxItems: 1
+@@ -127,14 +132,15 @@ allOf:
+   - if:
+       properties:
+         compatible:
+-          enum:
+-            - qcom,sar2130p-qmp-usb3-dp-phy
+-            - qcom,sc8280xp-qmp-usb43dp-phy
+-            - qcom,sm6350-qmp-usb3-dp-phy
+-            - qcom,sm8550-qmp-usb3-dp-phy
+-            - qcom,sm8650-qmp-usb3-dp-phy
+-            - qcom,sm8750-qmp-usb3-dp-phy
+-            - qcom,x1e80100-qmp-usb3-dp-phy
++          contains:
++            enum:
++              - qcom,sar2130p-qmp-usb3-dp-phy
++              - qcom,sc8280xp-qmp-usb43dp-phy
++              - qcom,sm6350-qmp-usb3-dp-phy
++              - qcom,sm8550-qmp-usb3-dp-phy
++              - qcom,sm8650-qmp-usb3-dp-phy
++              - qcom,sm8750-qmp-usb3-dp-phy
++              - qcom,x1e80100-qmp-usb3-dp-phy
+     then:
+       required:
+         - power-domains
+
 -- 
-Jingyi Wang <jingyi.wang@oss.qualcomm.com>
+2.25.1
 
 
