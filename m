@@ -1,115 +1,140 @@
-Return-Path: <linux-usb+bounces-28595-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28596-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9118CB99A19
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 13:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF7F6B99C18
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 14:06:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 229F14A75C1
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 11:45:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9738F3BE5C5
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 12:06:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E3B22FF658;
-	Wed, 24 Sep 2025 11:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE813002C9;
+	Wed, 24 Sep 2025 12:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U3WjJ9bX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YIM/2nXq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED9C2FE04C;
-	Wed, 24 Sep 2025 11:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41322FFDF3
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 12:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758714290; cv=none; b=CrQhX8QUW9qIfXpJkVuJwex7XBlf39IvxiVS6eedSi59yC4TE9cPScMgXKplvzuwa63nG6W1bsXxR4+z5hElFWIHLAMUiOstDE51KAxmMilfIacHZyl1PHXp78BKFPIN/pkaJ1hfsxOXsFhJv8+zyoFbJoyrmfCOG1nTJqagBzk=
+	t=1758715599; cv=none; b=bgOOas+2Y1O2zughqEn7RcytG+VlzmXeXuQQX0Psq+iFlZpnuLNmugWZU0IM71b4f4kT0E5dTY7ZWFTAIH0T/1l9freSb1NwjUdBiQyexovenVcf5T4Ji/LoKUWqkpb60dmdsXBVKjU1rs9Y5FNYQKkhosqAyMSuhQp3QIu9MH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758714290; c=relaxed/simple;
-	bh=2r6nKLaH2V7Wgf0Cze0yBmmog7bds/FSzcDmhG9RCdw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fkVZD2R9nzyobQCtfND7g44oSpYzAiNWrxPE05mAwciyvVBFYvUgqiQTOdIif/zrjeoU3H+4cT+YadglstNFK+S1k2YuV+v4FoHyp5gl7r36kRiJ+eJ4Q+Csuckh5hb7khHfK50EWhsYgR8Ek6WJsRCftf4PdCTndBuj+Mm/xWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U3WjJ9bX; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758714285; x=1790250285;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2r6nKLaH2V7Wgf0Cze0yBmmog7bds/FSzcDmhG9RCdw=;
-  b=U3WjJ9bXg59f6THR8LpMwm+LBz2q4w0uQpSHhOwwztHCiH3liyIUKvUY
-   bUxwfbN0bWfG9ZdRFkBAsZ61YoVuz2aFPH6DQxaA3TgzjGOtAfXe1W1ug
-   29gCzVHXAS6owijIysbdOAhndlNoRLHQaIfdOQkpB+mYKn9QwMsfOgeSy
-   +uqnAG5ux5tsykBMcrnG4Q5Cisfvdv6mr0Rr4SxJnvfXTQvVJck4oIP6J
-   pbfiODNHHHqUOFJ9sUzCG2CH9eQIoI4tZpU6+/tojX5zVw1j8cOctd9Vi
-   fAz1UvwDR5dYYbJecT71Ns0vUBuzfLA+6/goKmdQ9aPBHDwsbRYI0+W41
-   Q==;
-X-CSE-ConnectionGUID: fzKkyWtAR/2FtbsrpWQ0kw==
-X-CSE-MsgGUID: IgKzyFZCRCSoMV5QbBK8gw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="71685546"
-X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
-   d="scan'208";a="71685546"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 04:44:44 -0700
-X-CSE-ConnectionGUID: P4kIzxqYRh2I3ozjgjB3qQ==
-X-CSE-MsgGUID: JucmBIuZRCCECjDrpi+MtQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
-   d="scan'208";a="207944954"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 24 Sep 2025 04:44:41 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v1NvK-00046X-1Q;
-	Wed, 24 Sep 2025 11:44:38 +0000
-Date: Wed, 24 Sep 2025 19:44:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: I Viswanath <viswanathiyyappan@gmail.com>, petkan@nucleusys.com,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com,
-	I Viswanath <viswanathiyyappan@gmail.com>
-Subject: Re: [PATCH net] net: usb: remove rtl8150 driver
-Message-ID: <202509241928.kYioHrov-lkp@intel.com>
-References: <20250923022205.9075-1-viswanathiyyappan@gmail.com>
+	s=arc-20240116; t=1758715599; c=relaxed/simple;
+	bh=uRFQ/0H1WChbFo2Od93efqSgp/QtXBRYQ/NDMml66hQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZIT1NtVodfuOvpiz4AZk8GBTUuiBecqqqG0g3zhLspd6pLgX8T12NrkaeZKE+871tbNfx0FuWxfEq0LQHucdIMzLp/iyYftd3UKJAfDxeD7NBEgS8U4EFbEJg7G0YYMLlWUXC5hStmBstsinS5nAoSdRR9Eg6o+io17jt0hLn7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YIM/2nXq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 035F3C2BCB5
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 12:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758715598;
+	bh=uRFQ/0H1WChbFo2Od93efqSgp/QtXBRYQ/NDMml66hQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=YIM/2nXq4Weu/U0uHt95YvCNJg8F1FkTewVoWGerBaKUlK+X7xxK1lClC4Qj+BtSx
+	 KCp/NfT29Aaj11KreopJy1YLM9dbLdd2ucqBg9rEUEsbBU7CiF55RKOdmlchNKmIN2
+	 dBE5V3sEzgl7XEguTWGEz+aFnSZ7Nm4WKMnfjD5f7/b6dQtQqwfxV8NrKA1ou8et+L
+	 Aw+ZL4aZRI/DIxxJQiYEmrxhQa0z41s6vbpGLh0sH1Gqq2WhzY+czYV3tDde04GRut
+	 9l5d25vWApPD0ZHm2kZGIOOxU9RRHpmodlza7S+HrSlEzXeuIS5BdVY3nhiwXXK57W
+	 nfOIjo7PNuwmQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id A60BECAB782; Wed, 24 Sep 2025 12:06:37 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: =?UTF-8?B?W0J1ZyAyMjAxODFdIFVzZXJzIGFjcm9zcyBkaXN0cmlidXRpb25z?=
+ =?UTF-8?B?IHNlZSDigJxjb25maWcgZmFpbGVkLCBodWIgZG9lc27igJl0IGhhdmUgYW55?=
+ =?UTF-8?B?IHBvcnRzISAoZXJyIC0xOSnigJ0gZnJvbSB4aGNpX2hjZCBhdCBib290Lg==?=
+Date: Wed, 24 Sep 2025 12:06:37 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: ali@pourdanandeh.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-220181-208809-Pq1xwj785F@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220181-208809@https.bugzilla.kernel.org/>
+References: <bug-220181-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250923022205.9075-1-viswanathiyyappan@gmail.com>
 
-Hi Viswanath,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220181
 
-kernel test robot noticed the following build errors:
+Simorgh P. (ali@pourdanandeh.com) changed:
 
-[auto build test ERROR on net/main]
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |ali@pourdanandeh.com
 
-url:    https://github.com/intel-lab-lkp/linux/commits/I-Viswanath/net-usb-remove-rtl8150-driver/20250923-102726
-base:   net/main
-patch link:    https://lore.kernel.org/r/20250923022205.9075-1-viswanathiyyappan%40gmail.com
-patch subject: [PATCH net] net: usb: remove rtl8150 driver
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250924/202509241928.kYioHrov-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250924/202509241928.kYioHrov-lkp@intel.com/reproduce)
+--- Comment #17 from Simorgh P. (ali@pourdanandeh.com) ---
+Hi all.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509241928.kYioHrov-lkp@intel.com/
+My first time posting on kernel.org
 
-All errors (new ones prefixed by >>):
+I am on openSUSE Slowroll with 6.16.7-1.0.8.sr20250901-default kernel.
+I used to be on openSUSE Leap since 2016, but could not get it to run on my=
+ new
+machine, hence moving on to Slowroll. I am not tech savvy as most of you
+though.
 
->> make[6]: *** No rule to make target 'drivers/net/usb/rtl8150.o', needed by 'drivers/net/usb/built-in.a'.
-   make[6]: Target 'drivers/net/usb/' not remade because of errors.
+Machine:
+AMD Ryzen 7 7800X3D (16) @ 5.05 GHz
+AMD Radeon RX 9070/9070 XT/9070 driver: amdgpu v: kernel
+ASUSTeK TUF GAMING B650-PLUS WIFI v: 3281 (latest Bios firmware)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Upon boot I get:
+hub 8-0:1.0: config failed, hub doesn't have any ports! (err -19)
+
+The USB port 8 is
+readlink /sys/bus/usb/devices/usb8
+../../../devices/pci0000:00/0000:00:08.3/0000:0f:00.0/usb8
+
+And it is only USB 2.0
+lspci -s 0f:00.0
+0f:00.0 USB controller: Advanced Micro Devices, Inc. [AMD] Raphael/Granite
+Ridge USB 2.0 xHCI
+
+sudo cat /sys/kernel/debug/usb/xhci/0000:0f:00.0/reg-ext-protocol:00
+EXTCAP_REVISION =3D 0x02000402
+EXTCAP_NAME =3D 0x20425355
+EXTCAP_PORTINFO =3D 0x00180101
+EXTCAP_PORTTYPE =3D 0x00000000
+
+
+There are two reasons I am posting here:
+1. To (maybe) contribute another case that faces the same error.
+2. How to go about and do something about it without breaking anything.
+
+Do I apply the patch on my current kernel?
+
+Would appreciate your guidance.
+
+Regards.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
