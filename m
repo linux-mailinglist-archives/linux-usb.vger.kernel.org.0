@@ -1,121 +1,133 @@
-Return-Path: <linux-usb+bounces-28577-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28578-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16A16B97E55
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 02:33:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 592F4B97E9D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 02:35:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CED6C323A82
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 00:33:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 733D83B5F0E
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 00:35:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95B5A16F265;
-	Wed, 24 Sep 2025 00:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34651A0BF1;
+	Wed, 24 Sep 2025 00:35:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BpnOoacW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rnbO/Ue6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1472718B0A;
-	Wed, 24 Sep 2025 00:33:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E06192D8A;
+	Wed, 24 Sep 2025 00:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758673988; cv=none; b=ZPXCRRUjjP/xhvsONOGi5Apquy2IP3MVoopwb5i1HK3HgHGAQvoOYa5ez/uuIeKhysoEpiBq9XtNCtWED7kNFJGE7lMK4UR3qqkySp2Z6hEhEvW+xu1xvyNiwaoxixB918HrYjw3m16VlYwPdarqZm7hkmcuSCnNd7o8aFQAMRw=
+	t=1758674144; cv=none; b=FgJNJXsSPYN8EBOo8gjdvhyosd9MGYzOT3lfS1HS5KfQPugdL30RUuSpUeqB7pYfbQThPdKjfeNh68eBwBieGy4Tmpkkv5fPRWgihURqXUHp4hQw1cTHUz+TlBa/LDKckPJ08pEXxPHUO77exC+SRSo+L9JCOXm+aIYKLGheYow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758673988; c=relaxed/simple;
-	bh=GYh+T60aPVzE/4gFL57fQ4DILcdLAVjkFQXNdxEKZKQ=;
+	s=arc-20240116; t=1758674144; c=relaxed/simple;
+	bh=DRhxi2T0h0T058uT0q5WDIBIuhGBboq7dtvoADz/Vcc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aaBQhNkeaPHCG7+0rUcAJsbOLsvbQxqZzfp9Ulp2w91yI5nyzAmwO6ix1x9qcMKIQsuIR3kuZ3EgnUM/T8Slowngf/9mHvLzQoEj6Oh6jraax0fgADS0S24EgMFl7H9PAJsK2/VM9e6yT2mjAY5Oixu1R6q5eT6ANuBjpd/FcU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BpnOoacW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03F80C4CEF5;
-	Wed, 24 Sep 2025 00:33:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LYUlfRe0/N1CXoke1vE+kKixO6G1MwmiBQ+JVTjl/gd+ZHJQek7py+MpMFJVkZ5eYAEj2vcU4js1lOEqPvtirynhQd7okG9dJkgjZvxPZ30xc2RHhYNkjfBY4Tlp+NL8vOsS8Bba5CBsPDgtKGw6nBEJ3UBLe3L3M1SQjNH9iqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rnbO/Ue6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17DBBC4CEF5;
+	Wed, 24 Sep 2025 00:35:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758673987;
-	bh=GYh+T60aPVzE/4gFL57fQ4DILcdLAVjkFQXNdxEKZKQ=;
+	s=k20201202; t=1758674143;
+	bh=DRhxi2T0h0T058uT0q5WDIBIuhGBboq7dtvoADz/Vcc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BpnOoacWt6ieLP9kUKOys+y24d8NOLIUMbdXZGlU94O6nOnfzzuD4u160s2u03o6M
-	 bdUyBuUe8YbQRuugD66ABP57GkEL3TRbu6Qy10MVDt9nEO0X8HKIUPuiFPZnot+tVK
-	 ebdudW2+8TXLd1UxCNxKfnjjUpYGOhAnPjnqTJHlxNOg1YVCvzHTsktoz8/9zB4lqM
-	 W6TLd1CfhK/TBn32eaNVyEWFgJTvnuZHehR5A5vosISvUMA+poJchlsCq/BHEU4hM1
-	 45Zwo7E1SZaEFB8vOfNuAZeF11LcUeJVopgq255in4xaOJI3BPGcsaFBxWj7Di5gAb
-	 rHfqs4ItQr1Zw==
-Received: by venus (Postfix, from userid 1000)
-	id E10E11805CF; Wed, 24 Sep 2025 02:33:02 +0200 (CEST)
-Date: Wed, 24 Sep 2025 02:33:02 +0200
-From: Sebastian Reichel <sre@kernel.org>
-To: Brian Masney <bmasney@redhat.com>
-Cc: Stefan Schmidt <stefan@datenfreihafen.org>, 
-	Jan Lubbe <jlu@pengutronix.de>, stefan.schmidt@linaro.org, linux-embedded@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	RD Babiera <rdbabiera@google.com>, Amit Sunil Dhamne <amitsd@google.com>, kernel@collabora.com
-Subject: Re: Call for Participation: Embedded & IoT micro-conference at Linux
- Plumbers 2025
-Message-ID: <77modncqnoeumho6pi6dygr3hnw6dskd6romu4agmi5jro7p54@i5y4gpd22xrm>
-References: <2a353817-f1da-4e7c-8b2c-0853779ec054@datenfreihafen.org>
- <j5dtkmnu55ycmqpaseazots7mevqyt5lafclvguxj6oz5r5cts@n563dsnvwuu7>
- <CABx5tq+U_hcmxXDCGpTawsu5C0bDknC=p1Rq3FrtVuJq9gj2Pw@mail.gmail.com>
+	b=rnbO/Ue6pEe98CQSQtGfI/WCHp27rIl9ETccr9wK+XKbPEhAVgOEGrmuG5DdpnxYB
+	 6V2epqcVFYfp6oNtXqyPk2zHR++EaJK21xyt50aEfVAg8Bh8K/nbuTVeEpEqIWtwAb
+	 KXVY1tj1exQGp2xVpevO/ziNcdTCFWrLiAfB3uAvrREIb6SYKMzJPotf3swUuapCSY
+	 BFY17Z56mWjoU7tKyyVmISX+fR8PZbEAJBxY7jKlLW+JXQoNIddc05W0Zd2dHI1Zpb
+	 14Qh/897rQXmwBSe20Lwo84HWIC38peCrSERGRqLRl0H+Ckpo/UGlBhPaU2tdiYWcz
+	 G65sFg9c4Rrfw==
+Date: Wed, 24 Sep 2025 08:35:37 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: Peng Fan <peng.fan@nxp.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	Xu Yang <xu.yang_2@nxp.com>
+Subject: Re: [PATCH v4 3/5] usb: chipidea: core: detach power domain for
+ ci_hdrc platform device
+Message-ID: <aNM82SUSoQN6cKkD@nchen-desktop>
+References: <20250922-pm-v4-v4-0-ef48428e8fe0@nxp.com>
+ <20250922-pm-v4-v4-3-ef48428e8fe0@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABx5tq+U_hcmxXDCGpTawsu5C0bDknC=p1Rq3FrtVuJq9gj2Pw@mail.gmail.com>
+In-Reply-To: <20250922-pm-v4-v4-3-ef48428e8fe0@nxp.com>
 
-Hi Brian,
-
-On Tue, Sep 23, 2025 at 07:38:14PM -0400, Brian Masney wrote:
-> Hi Sebastian,
+On 25-09-22 10:21:08, Peng Fan wrote:
+> From: Xu Yang <xu.yang_2@nxp.com>
 > 
-> On Tue, Sep 23, 2025 at 7:03 PM Sebastian Reichel <sre@kernel.org> wrote:
-> > I would like to present / discuss fusb302 (or other chips handled via
-> > the TCPM framework) using boards that are mainly powered via USB-C and
-> > not having any backup power source. This kind of setup is often found
-> > on Rockchip boards (e.g. Libre Computer ROC-RK3399-PC, Radxa ROCK 5B
-> > or ArmSoM Sige 5) and quite a pain, because a hard-reset effectively
-> > kills the board power.
-> >
-> > I would present the problem(s), what I've done so far to get it working
-> > to some degree with the upstream kernel and then discuss how to improve
-> > the situation.
-> >
-> > I think to become a worthwhile discussion the session would need some
-> > people that know the USB-PD specification and kernel subsystem, such as:
-> >
-> >  * Heikki Krogerus (USB-C maintainer)
-> >  * Greg Kroah-Hartman (USB maintainer)
-> >  * RD Babiera or Amit Sunil Dhamne (Google is actively working on
-> >    ensuring TCPM code being compatible with the USB-PD specification
-> >    and they were unhappy about some of my changes :))
-> >
-> > P.S.: I'm not sure how the CfP for the LPC micro-conferences works.
-> > Please tell me if this mail is not good enough and I need to insert
-> > something into some system.
+> When add a platform device by calling ci_hdrc_add_device(), this device
+> will reuse OF node of its parent device. If power-domains property is
+> provided in the OF node, both two platform devices will be attached to
+> the same power domain. This should be unnecessary and may bring other
+> inconsistent behavior. For example, to support wakeup capability, these
+> two platform device need different power domain state. The parent device
+> need NOT power domain on for out-band interrupt, but the ci_hdrc device
+> need power domain on for in-band interrupt. The i.MX95 Soc support
+> out-band wakeup interrupt, the user need to enable wakeup for the parent
+> device, but if the user also enable wakeup for ci_hdrc device, the power
+> domain will keep at on state finally. To exclude such inconsistent
+> behavior and simplify the power management, detach power domain for ci_hdrc
+> platform device.
 > 
-> You need to submit a proposal to
-> https://lpc.events/event/19/abstracts/. You'll have to create an
-> account, and there will be a "Submit new abstract" button at the
-> bottom right of the page.
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-Ah, I was confused by the page not listing the embedded MC. I see
-it appears in the drop down when trying to submit a new abstract.
-Thanks for the hint - DONE.
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-> I went through the process for a talk that I submitted: "Fixing Clock
-> Tree Propagation in the Common Clk Framework". It's related to this
-> work:
-> https://lore.kernel.org/linux-clk/20250923-clk-tests-docs-v4-0-9205cb3d3cba@redhat.com/T/
+Peter
 
-On most platforms I worked on we tried to have an exclusive PLL root
-clock for DRM to avoid these issues. But sounds like a good topic!
+> ---
+>  drivers/usb/chipidea/core.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index 694b4a8e4e1d8583dcbf4a42f8c2dfd785d5745c..70597f40b9997a9766934c67bbbed38e96c210f8 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/slab.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/pm_domain.h>
+>  #include <linux/pinctrl/consumer.h>
+>  #include <linux/usb/ch9.h>
+>  #include <linux/usb/gadget.h>
+> @@ -915,6 +916,8 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
+>  	if (ret)
+>  		goto err;
+>  
+> +	dev_pm_domain_detach(&pdev->dev, false);
+> +
+>  	return pdev;
+>  
+>  err:
+> 
+> -- 
+> 2.37.1
+> 
 
-Greetings,
+-- 
 
--- Sebastian
+Best regards,
+Peter
 
