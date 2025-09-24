@@ -1,113 +1,102 @@
-Return-Path: <linux-usb+bounces-28599-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28600-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C12BB99DFC
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 14:40:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 651ECB99F8E
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 15:07:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92B0A7AD357
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 12:38:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F6461B20C2F
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 13:07:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72286305079;
-	Wed, 24 Sep 2025 12:39:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A122E7BA0;
+	Wed, 24 Sep 2025 13:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="twoi8nYm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8152E2FD7D9
-	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 12:39:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40842DF703
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 13:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758717578; cv=none; b=WBp8lSkRa9+tUkUDq7Kip+eAd5Kj+ha97sc2/q8TsTreLRb7ezHXpcwCroqPGEFjG8zgO0hP45VhrYq+FcxphjV77AAPD0ialOZzD6e6xOUSenr7E0FWFwK4fe9YGDpZmZS+PqTn0mipZ6oeRUKgFJnxl50ot+sa7O4Kdmm4/aM=
+	t=1758719228; cv=none; b=po4bn5hP6Vw+jKT2SQqkzL6292SMl1+m9mp2DS+VQTJF0Hu09u5p0rnnWWm6LV3tTxhNd6HuS5gjXaPLnWiIKD4vB87HSVy98f0OipZpRywWHqXjxGNFt6bc38sTbtqZswSp7I3oABKjoX1RRm81voAyRT64gNS9yTLqZQkRibI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758717578; c=relaxed/simple;
-	bh=oX68zCB8/CvAtEvevupWhPnhsGBk87uZYxbs7eiOEiE=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=SeJiNlHKpMj7bqg/XfO/n/ZKyVMinIdAVuEu0aUPx9uz9uVaNxfplTiFcJ6H+4GjGYb7YJFedBVGhGKTRZL2XKtpjInZz3vegOhVBq0pP/ejmNDsEK5nt/83QAPKD2pD/u86LD4dYd+klENKfY7ighy7Jb//unu7Ki1GdHDFEUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-42577be9d9fso41603235ab.0
-        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 05:39:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758717576; x=1759322376;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vEDO0il/OOKvYx0dUl7SOgrMg3pwl4vLJ5Yd70P8tMk=;
-        b=kEVJE55w3HdVjqGQZ2gtn8aBfUGrK01I5kNXYUJ0koW9q1ZKLw4a9X4FPgHxvkUG0K
-         B9x0M7/zEminqbPOplcIUBj+DkRQeD+qb8iNLFLBEhXInjdpKpHmEQa67+N5pdtTANKN
-         xuxG5l6YitCEVc6FicMxko86m3tzic9krH2QcitEBMT1mkO3zuSZ5sVWNdgE7Ud4xFqV
-         Kn/EECPdoihd1x187pMnVJ9XB+oayd6dnKT8HIO97lInp9DRC/ugJJbFCLyIylv+ReQc
-         w9GRIrWynXFPeJrLIaJ7wTdks828s9+sn4HS/TrznTbuB9rh5t61z0dzwDr2mfrNSDMW
-         anuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUqpaYPIq4+SlICbSdBYvCHapJx3xIoPuMmj8zHEu0AaV9rSckHcCzEtJf4Ego8+ikEgMX1igfiDYM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyl/VXCXTYCjdrs79/noq6goKEYRPIUI26eXOUqriPmXryxDI8+
-	IgiTMB5dGNqlOTrNmlQ/k9+GVQOoUhYvPTFWlARMzBxPtqYgQIK/colxAkaa/MepN+GiFANFU2Y
-	4NuBJXLk3S6eqRloB/onpQd5Wf7fNnYecQd9UnsBg6dOZiKVJ/6RiVD2I8Hc=
-X-Google-Smtp-Source: AGHT+IFEHfiSaAT95eJPGTu6BBYvfSYdfpN2z9fXd0T3JzhWMB8SHBaDtpP6G1nyEAJ3DoDioZ3xQ9ALU1kCfkq+rWCnZdoEux3I
+	s=arc-20240116; t=1758719228; c=relaxed/simple;
+	bh=v6GIYowCGBI6foafR6gdKeQITc2Hjwe4Lw9DAytvOgc=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=s9V781KMhohhq/IjR4OGeoIUo9hZ1GqceUgEy3wZCYw7xjHJ2tLSRlOslnPGv2JrPvL7raNuHxPBUWocZQH0dHzXCz/JU2Rza7HssqBb9RWAg3k1ghsWqiIbiyTKCpYWf0dYkEhAgSbIT7LmSGL2728yPIOqHP8zZQhk1c48+yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=twoi8nYm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7054AC116B1
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 13:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758719227;
+	bh=v6GIYowCGBI6foafR6gdKeQITc2Hjwe4Lw9DAytvOgc=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=twoi8nYmX/0xDi9EqWSLHI8HXqg+XGPo3v2F3Uay0Ya5EbXBctSyv+XeaGk3MQHny
+	 qr2LhPxyJNGWcqsBuHRDGn/G2VdqH5MoE2vWPHkp7mS04ULKl/50ak65haNcsTDy0l
+	 n8nad4ehm8oF40D5U+ZMhzFaENzaQ+GSaOS67EwWuAhIMqFOMVBe6b+LXNGERLf25Q
+	 6r43VQAoqAOBbiGiEjMH2LeRPLcxHtiyF8+6u0K3dx1qDWKzQOu95rQv3I+OyxD9cW
+	 PIPkyqDK8jhWWgzhi6auiO//0kYMbQS4DQ4P4k4rGhNG3ZpEslIRlsds+ynzhwKAPH
+	 rqEfgigTPebug==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 6A3FDC3279F; Wed, 24 Sep 2025 13:07:07 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: =?UTF-8?B?W0J1ZyAyMjAxODFdIFVzZXJzIGFjcm9zcyBkaXN0cmlidXRpb25z?=
+ =?UTF-8?B?IHNlZSDigJxjb25maWcgZmFpbGVkLCBodWIgZG9lc27igJl0IGhhdmUgYW55?=
+ =?UTF-8?B?IHBvcnRzISAoZXJyIC0xOSnigJ0gZnJvbSB4aGNpX2hjZCBhdCBib290Lg==?=
+Date: Wed, 24 Sep 2025 13:07:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: ali@pourdanandeh.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220181-208809-oBzv1bz8ai@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220181-208809@https.bugzilla.kernel.org/>
+References: <bug-220181-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a4f:b0:425:720f:deec with SMTP id
- e9e14a558f8ab-42581eae239mr81766185ab.31.1758717575755; Wed, 24 Sep 2025
- 05:39:35 -0700 (PDT)
-Date: Wed, 24 Sep 2025 05:39:35 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68d3e687.a70a0220.4f78.0027.GAE@google.com>
-Subject: [syzbot] Monthly usb report (Sep 2025)
-From: syzbot <syzbot+listaf472b258244e52aa817@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
 
-Hello usb maintainers/developers,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220181
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+--- Comment #19 from Simorgh P. (ali@pourdanandeh.com) ---
+(In reply to Mr. Beedell, Roke Julian Lockhart (RJLB) from comment #18)
 
-During the period, 5 new issues were detected and 1 were fixed.
-In total, 86 issues are still open and 393 have already been fixed.
+Thank you for your reply.
 
-Some of the still happening issues:
+I was originally going to post on openSUSE forum but after seeing this post:
+https://forums.opensuse.org/t/config-failed-hub-doesnt-have-any-ports-error=
+-19/186156
+and the moderator's answer I thought to post it on kernel.org instead.
 
-Ref  Crashes Repro Title
-<1>  17783   Yes   KASAN: slab-use-after-free Read in hdm_disconnect
-                   https://syzkaller.appspot.com/bug?extid=916742d5d24f6c254761
-<2>  5661    Yes   KASAN: use-after-free Read in v4l2_fh_init
-                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-<3>  3005    Yes   WARNING in usb_free_urb
-                   https://syzkaller.appspot.com/bug?extid=b466336413a1fba398a5
-<4>  2461    Yes   KASAN: use-after-free Read in v4l2_fh_open
-                   https://syzkaller.appspot.com/bug?extid=b2391895514ed9ef4a8e
-<5>  1565    Yes   possible deadlock in input_inject_event
-                   https://syzkaller.appspot.com/bug?extid=79c403850e6816dc39cf
-<6>  1488    Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<7>  1402    Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
-                   https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
-<8>  941     Yes   WARNING in enable_work
-                   https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
-<9>  807     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
-                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
-<10> 750     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+I will post on openSUSE forum as well.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Thank you.
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+--=20
+You may reply to this email to add a comment.
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
