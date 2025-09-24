@@ -1,296 +1,146 @@
-Return-Path: <linux-usb+bounces-28606-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28607-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89AA3B9AC3D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 17:48:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60ECAB9AEE0
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 18:57:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32F0617C2B0
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 15:48:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04B2F3AA41A
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 16:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 350EB30B53B;
-	Wed, 24 Sep 2025 15:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ABC7314A98;
+	Wed, 24 Sep 2025 16:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arturia.com header.i=@arturia.com header.b="a0oJvL8E"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=infradead.org header.i=@infradead.org header.b="ADQuNtgD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A89719E7E2
-	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 15:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB461A254E;
+	Wed, 24 Sep 2025 16:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758728920; cv=none; b=SusKbhA/O337HSmhrWWK6KlnQzAU/RYm2Zzk5d33liPvaCbTgtd2BRiBKkGXN2Xoyq2U6cZ+fpr/kQ9Y2nPx8Ow9RWbD67zosQmfcS0MyCrlb85c+gAs0Yx8kvJUdEzQso0sAZFe+7hJBruydO1kdkIs7mDTVJPM8wzE56UnTLk=
+	t=1758733008; cv=none; b=aSUiDncyEy3DBZM4Dl1zw6CDu7VGSJMNa+FaJJ22hF6pr+ecbvVYfstXibadMP1MHqnTXtSQn4Vh//7+rgaDBquAmp8mKZcAh9o0mf0kIFCaze9CCIKQTqvW83s7OW/kPWiuy7t9QX205FoCECtAgTjucejHoNdog82HFA7WT0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758728920; c=relaxed/simple;
-	bh=FNKsNLilWsQySnx+JaHNaL+3PDqiW1uMqoqV/cmu77c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ihQJIkhJLPLrQIkjIQeUTd1ba8kg20UUfpYAjheXJpLAmbJY0AgYppVT/N3hXa9NWcFR7gSlOX8tJ8ORThXQlQtegPuYcV5d0QuxGzLszdTZITFHzIEeUgdcbiKQyCV24PVeYgil4jY+fqBgyFn8iKeti3SH22PS97ZE9gw6EpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arturia.com; spf=pass smtp.mailfrom=arturia.com; dkim=pass (2048-bit key) header.d=arturia.com header.i=@arturia.com header.b=a0oJvL8E; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arturia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arturia.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3ee1381b835so29567f8f.1
-        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 08:48:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arturia.com; s=arturia; t=1758728917; x=1759333717; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ga9wpd87ypEhIhE5XHNvwVyhbRbjt41ZUlw/++PjyKs=;
-        b=a0oJvL8EipjJ+8mZX2I3hYg2J8KsM7GrUb8jQX5ommoRJP570CsTIFeB2dJG6yjWNt
-         55cNZVI6cd641ZVQ36wGz13JNkeqUaKpN1mqd27yRmIyp5cMliImKpXQsfXFawByNGER
-         +7LwCPvVCh8sZBVelNDXaKMAofuTHA8Qpg/OCNuQleh1nhY4MxMkehvOHMc50d2CkI4j
-         kqccudbHzRLsXwUB6tMn0+jf38g3ZY+hr3EY16DZ7Bi0lKH6AB46QHMD1iTHNxaLr0ul
-         vXZCq4OteA6bENIfiioG2qBBJyHmyW+zByQP+xcK8/l0G9km9o9cgGP3ZXT/QBiY4oNX
-         tNVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758728917; x=1759333717;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ga9wpd87ypEhIhE5XHNvwVyhbRbjt41ZUlw/++PjyKs=;
-        b=TWelNdneYh6pFPtDh1DLs2gkX8Fgm9O+t6x3v2/9Tx+l8OJPKfnH2eGFTLeIZ7UhIz
-         8XTy+38m/7Nm0e7ta9nog+3+Ol7rof+2iN4fzwZKP0oDfq9err5f5xGptrEjjqfdO9hZ
-         62S7ecxLYB2/mvYZ7ld3AHUADe5VIdbiLa9/ts8VCCQ+wkpvwPBr60G0mZBNQ03lx4XQ
-         PEZSBza7RQZhCP2dqbKqmOfuGQSEBEVSJ+cb+3mJbZeXuFALUpFMolFIHAiGPIBr2b6M
-         jlXN8RtmYRzF10xX/gJewFW9dbvS4ihtDgewu6jWxmlBDVuiBG2qiGyyNZeZWMg/QZSf
-         V4lw==
-X-Gm-Message-State: AOJu0YzWWjyTaIkIasD2k3txAxwH28o2wxuoY1IOZn3KJIiVYd+lKENq
-	1sJYndfS+lJd4eTS+4hn250ryQ9dtLBWQYKH8ZD9+aOVliryNAYVJbEn4ohtSSQ29a8=
-X-Gm-Gg: ASbGncsbzE516HU/u7yljUz7LMag84Rp/JD6bL4Rwq6L0cUFzWSRdHXV9fCMGzMTo00
-	/QOG2fZgrQk6aAWdLINGL1ZF9fNs+4fF1kPiyV61JelLuzCWDpM9KK0tYkgGOi0s7Yq3b8z/a0R
-	h6jgk89urI9W1D6a+VTdK6P7FVqwkkvJiGC4wspb8ItH1JU9ho2v9fY7xD7al6xCLXEaMaHslV1
-	FVDQCUUcpLFaIID2zGepu661m8YakALZkv2iUfnNJ5jgGjnyL7S6EkeKEOFJewgW506Ibg1f/wR
-	2y2I2rst8xM8sr0lHaQQZ4NDCBO5eegnAxSY8FkFpL3stameu5Nqknx9JP9n7HQcAb89wz0szqx
-	oy/CehSllF6C4e1kmJqSQLWh2KqixbFs92O3/5vJQEVgvJaWC
-X-Google-Smtp-Source: AGHT+IGteDCuymW8jXqrVPp1LBIadB6oPStoD1tgjWbrgFvwIM1Si+KHLUQ/JYjhGxkaqDiiOa3zlg==
-X-Received: by 2002:a5d:5d0b:0:b0:3fa:ebaf:4c2f with SMTP id ffacd0b85a97d-40e4bb2f5c2mr317315f8f.30.1758728916768;
-        Wed, 24 Sep 2025 08:48:36 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:cb15:854c:e000:cf85:df87:23e6:2e45])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee07407aebsm29694004f8f.14.2025.09.24.08.48.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 08:48:36 -0700 (PDT)
-From: Victor Krawiec <victor.krawiec@arturia.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	tiwai@suse.de,
-	kees@kernel.org,
-	abdul.rahim@myyahoo.com,
-	jilliandonahue58@gmail.com,
-	jkeeping@inmusicbrands.com,
-	Victor Krawiec <victor.krawiec@arturia.com>
-Subject: [PATCH] usb: gadget: f_midi: allow customizing the USB MIDI interface string through configfs
-Date: Wed, 24 Sep 2025 17:48:21 +0200
-Message-ID: <20250924154822.205703-1-victor.krawiec@arturia.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1758733008; c=relaxed/simple;
+	bh=MTtS4DGnmn/dmi9j0JsSf5aBSRH5Nl/ESP4A4KaeUNw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EwpLaExYknqTk+1UFwzEDKuh8h8WnJ2mGBTY4UttE3+zjdPvA2kEFqSH2ZxfoTSEMd4QVVrAEMidhtGj5UsUvLEboAeR6cfCdvkTpWRopf38pEmHTsSxOskxiKbdr/vedUOtiWjHDo39r9+NFuZfhTRbIOyp7YmNHhCAo/+o2rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=evilplan.org; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=fail (0-bit key) header.d=infradead.org header.i=@infradead.org header.b=ADQuNtgD reason="key not found in DNS"; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=evilplan.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=wItarYwJVipfmi89AjibX164xiYQ1sw1xgqIMHATn9c=; b=ADQuNtgDqCh42nShQdrRdwoDNL
+	naHjDqhRxe/feBE3gx7YI+GF3SiATwjEKGTxF5HTe/Rd8zeJIPmiziHcLoJCArwg1LMjkST8yjMX2
+	ICMQXn/VCEHj9XYcI5uyQ+z2vU1vDXRjgolv9kx1bsRE24R9kbKPxdEuZwyofsQb1h+8kmqDxmSvE
+	RFGVyb/ITBh0FNHHuxEIh9mQxZOJejY+vTU5rnl3xDxkQaIqjkZC/dq692Uo/WRCE5uDVByN675eh
+	qEjeBUgMKKK9qemuFENVjEtRnyWVd9FbPVfb+wYmBC8z4RcHVsS9yZrtq+r6BEE1D0owQ3AOE/asm
+	tCqspHew==;
+Received: from jlbec by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v1SnC-00000008hCv-35Ks;
+	Wed, 24 Sep 2025 16:56:34 +0000
+Date: Wed, 24 Sep 2025 09:56:30 -0700
+From: Joel Becker <jlbec@evilplan.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
+	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
+	miklos@szeredi.hu, a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, paul@paul-moore.com,
+	casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org,
+	borntraeger@linux.ibm.com
+Subject: Re: [PATCH 08/39] configfs, securityfs: kill_litter_super() not
+ needed
+Message-ID: <aNQivg5O_Rx3WxlG@google.com>
+Mail-Followup-To: Al Viro <viro@zeniv.linux.org.uk>,
+	linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
+	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
+	miklos@szeredi.hu, a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, paul@paul-moore.com,
+	casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org,
+	borntraeger@linux.ibm.com
+References: <20250920074156.GK39973@ZenIV>
+ <20250920074759.3564072-1-viro@zeniv.linux.org.uk>
+ <20250920074759.3564072-8-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250920074759.3564072-8-viro@zeniv.linux.org.uk>
+X-Burt-Line: Trees are cool.
+X-Red-Smith: Ninety feet between bases is perhaps as close as man has ever
+ come to perfection.
+Sender: Joel Becker <jlbec@ftp.linux.org.uk>
 
-When using f_midi from configfs the USB MIDI interface string is hardcoded
-to 'MIDI function'.
+Reviewed-by: Joel Becker <jlbec@evilplan.org>
 
-This USB string descriptor is used by some third-party OS or software to
-display the name of the MIDI device
+On Sat, Sep 20, 2025 at 08:47:27AM +0100, Al Viro wrote:
+> These are guaranteed to be empty by the time they are shut down;
+> both are single-instance and there is an internal mount maintained
+> for as long as there is any contents.
+> 
+> Both have that internal mount pinned by every object in root.
+> 
+> In other words, kill_litter_super() boils down to kill_anon_super()
+> for those.
+> 
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> ---
+>  fs/configfs/mount.c | 2 +-
+>  security/inode.c    | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/configfs/mount.c b/fs/configfs/mount.c
+> index 740f18b60c9d..fa66e25f0d75 100644
+> --- a/fs/configfs/mount.c
+> +++ b/fs/configfs/mount.c
+> @@ -116,7 +116,7 @@ static struct file_system_type configfs_fs_type = {
+>  	.owner		= THIS_MODULE,
+>  	.name		= "configfs",
+>  	.init_fs_context = configfs_init_fs_context,
+> -	.kill_sb	= kill_litter_super,
+> +	.kill_sb	= kill_anon_super,
+>  };
+>  MODULE_ALIAS_FS("configfs");
+>  
+> diff --git a/security/inode.c b/security/inode.c
+> index 43382ef8896e..bf7b5e2e6955 100644
+> --- a/security/inode.c
+> +++ b/security/inode.c
+> @@ -70,7 +70,7 @@ static struct file_system_type fs_type = {
+>  	.owner =	THIS_MODULE,
+>  	.name =		"securityfs",
+>  	.init_fs_context = securityfs_init_fs_context,
+> -	.kill_sb =	kill_litter_super,
+> +	.kill_sb =	kill_anon_super,
+>  };
+>  
+>  /**
+> -- 
+> 2.47.3
+> 
+> 
 
-Since we add an additional string option a new macro block was created to
-factorize declarations
-
-Signed-off-by: Victor Krawiec <victor.krawiec@arturia.com>
----
- drivers/usb/gadget/function/f_midi.c | 108 +++++++++++++++------------
- drivers/usb/gadget/function/u_midi.h |   8 +-
- 2 files changed, 66 insertions(+), 50 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-index da82598fcef8..0a8af7d507d9 100644
---- a/drivers/usb/gadget/function/f_midi.c
-+++ b/drivers/usb/gadget/function/f_midi.c
-@@ -875,6 +875,7 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
- 	struct usb_composite_dev *cdev = c->cdev;
- 	struct f_midi *midi = func_to_midi(f);
- 	struct usb_string *us;
-+	struct f_midi_opts *opts;
- 	int status, n, jack = 1, i = 0, endpoint_descriptor_index = 0;
- 
- 	midi->gadget = cdev->gadget;
-@@ -883,6 +884,10 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
- 	if (status < 0)
- 		goto fail_register;
- 
-+	opts = container_of(f->fi, struct f_midi_opts, func_inst);
-+	if (opts->interface_string_allocated && opts->interface_string)
-+		midi_string_defs[STRING_FUNC_IDX].s = opts->interface_string;
-+
- 	/* maybe allocate device-global string ID */
- 	us = usb_gstrings_attach(c->cdev, midi_strings,
- 				 ARRAY_SIZE(midi_string_defs));
-@@ -1178,59 +1183,62 @@ end:									\
- 									\
- CONFIGFS_ATTR(f_midi_opts_, name);
- 
-+#define F_MIDI_OPT_STRING(name)						\
-+static ssize_t f_midi_opts_##name##_show(struct config_item *item, char *page) \
-+{									\
-+	struct f_midi_opts *opts = to_f_midi_opts(item);		\
-+	ssize_t result;							\
-+									\
-+	mutex_lock(&opts->lock);					\
-+	if (opts->name) {						\
-+		result = strscpy(page, opts->name, PAGE_SIZE);		\
-+	} else {							\
-+		page[0] = 0;						\
-+		result = 0;						\
-+	}								\
-+									\
-+	mutex_unlock(&opts->lock);					\
-+									\
-+	return result;							\
-+}									\
-+									\
-+static ssize_t f_midi_opts_##name##_store(struct config_item *item,	\
-+					 const char *page, size_t len)	\
-+{									\
-+	struct f_midi_opts *opts = to_f_midi_opts(item);		\
-+	int ret;							\
-+	char *c;							\
-+									\
-+	mutex_lock(&opts->lock);					\
-+	if (opts->refcnt > 1) {						\
-+		ret = -EBUSY;						\
-+		goto end;						\
-+	}								\
-+									\
-+	c = kstrndup(page, len, GFP_KERNEL);				\
-+	if (!c) {							\
-+		ret = -ENOMEM;						\
-+		goto end;						\
-+	}								\
-+	if (opts->name##_allocated)					\
-+		kfree(opts->name);					\
-+	opts->name = c;							\
-+	opts->name##_allocated = true;					\
-+	ret = len;							\
-+end:									\
-+	mutex_unlock(&opts->lock);					\
-+	return ret;							\
-+}									\
-+									\
-+CONFIGFS_ATTR(f_midi_opts_, name);
-+
- F_MIDI_OPT_SIGNED(index, true, SNDRV_CARDS);
- F_MIDI_OPT(buflen, false, 0);
- F_MIDI_OPT(qlen, false, 0);
- F_MIDI_OPT(in_ports, true, MAX_PORTS);
- F_MIDI_OPT(out_ports, true, MAX_PORTS);
--
--static ssize_t f_midi_opts_id_show(struct config_item *item, char *page)
--{
--	struct f_midi_opts *opts = to_f_midi_opts(item);
--	ssize_t result;
--
--	mutex_lock(&opts->lock);
--	if (opts->id) {
--		result = strscpy(page, opts->id, PAGE_SIZE);
--	} else {
--		page[0] = 0;
--		result = 0;
--	}
--
--	mutex_unlock(&opts->lock);
--
--	return result;
--}
--
--static ssize_t f_midi_opts_id_store(struct config_item *item,
--				    const char *page, size_t len)
--{
--	struct f_midi_opts *opts = to_f_midi_opts(item);
--	int ret;
--	char *c;
--
--	mutex_lock(&opts->lock);
--	if (opts->refcnt > 1) {
--		ret = -EBUSY;
--		goto end;
--	}
--
--	c = kstrndup(page, len, GFP_KERNEL);
--	if (!c) {
--		ret = -ENOMEM;
--		goto end;
--	}
--	if (opts->id_allocated)
--		kfree(opts->id);
--	opts->id = c;
--	opts->id_allocated = true;
--	ret = len;
--end:
--	mutex_unlock(&opts->lock);
--	return ret;
--}
--
--CONFIGFS_ATTR(f_midi_opts_, id);
-+F_MIDI_OPT_STRING(id);
-+F_MIDI_OPT_STRING(interface_string);
- 
- static struct configfs_attribute *midi_attrs[] = {
- 	&f_midi_opts_attr_index,
-@@ -1239,6 +1247,7 @@ static struct configfs_attribute *midi_attrs[] = {
- 	&f_midi_opts_attr_in_ports,
- 	&f_midi_opts_attr_out_ports,
- 	&f_midi_opts_attr_id,
-+	&f_midi_opts_attr_interface_string,
- 	NULL,
- };
- 
-@@ -1264,6 +1273,8 @@ static void f_midi_free_inst(struct usb_function_instance *f)
- 	if (free) {
- 		if (opts->id_allocated)
- 			kfree(opts->id);
-+		if (opts->interface_string_allocated)
-+			kfree(opts->interface_string);
- 		kfree(opts);
- 	}
- }
-@@ -1280,6 +1291,7 @@ static struct usb_function_instance *f_midi_alloc_inst(void)
- 	opts->func_inst.free_func_inst = f_midi_free_inst;
- 	opts->index = SNDRV_DEFAULT_IDX1;
- 	opts->id = SNDRV_DEFAULT_STR1;
-+	opts->interface_string = SNDRV_DEFAULT_STR1;
- 	opts->buflen = 512;
- 	opts->qlen = 32;
- 	opts->in_ports = 1;
-diff --git a/drivers/usb/gadget/function/u_midi.h b/drivers/usb/gadget/function/u_midi.h
-index 2e400b495cb8..c9c396301a43 100644
---- a/drivers/usb/gadget/function/u_midi.h
-+++ b/drivers/usb/gadget/function/u_midi.h
-@@ -15,11 +15,15 @@
- 
- #include <linux/usb/composite.h>
- 
-+#define F_MIDI_OPT_STRING_DECLARE(name) \
-+	char *name; \
-+	bool name##_allocated; \
-+
- struct f_midi_opts {
- 	struct usb_function_instance	func_inst;
- 	int				index;
--	char				*id;
--	bool				id_allocated;
-+	F_MIDI_OPT_STRING_DECLARE(id);
-+	F_MIDI_OPT_STRING_DECLARE(interface_string);
- 	unsigned int			in_ports;
- 	unsigned int			out_ports;
- 	unsigned int			buflen;
-
-base-commit: f83ec76bf285bea5727f478a68b894f5543ca76e
 -- 
-2.43.0
 
+The Graham Corollary:
+
+	The longer a socially-moderated news website exists, the
+	probability of an old Paul Graham link appearing at the top
+	approaches certainty.
+
+			http://www.jlbec.org/
+			jlbec@evilplan.org
 
