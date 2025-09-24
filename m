@@ -1,160 +1,165 @@
-Return-Path: <linux-usb+bounces-28611-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28612-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 180FBB9BC84
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 21:55:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D896B9C2B6
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 22:41:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7B72327BEF
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 19:55:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB5DB3BACF7
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 20:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA89626FDB6;
-	Wed, 24 Sep 2025 19:55:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87EC32896F;
+	Wed, 24 Sep 2025 20:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nFVc7KK7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gQetrCAj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333C019AD5C;
-	Wed, 24 Sep 2025 19:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510DD322DBB
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 20:39:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758743728; cv=none; b=RQFJt8C6eIIImKZzg9fAeJ9y8oN7seQ+n7eCAvtfs2m4VAl8B0PiSDR9m+nnyFNQZPpXqIbXCeaZsROUAHxqCSdPoygB+v3SrTYrg3g5PYiHGElPTQKn6AWxwRAJ4WLhaeMKca0Zdk4gW8ILs6OhiQAJlDMvz8A5L5l8wZtsT3c=
+	t=1758746361; cv=none; b=JlhuDgnvkR/n27z/vx/d2g1FxLDwVsSYJWYPOMWk6cNmX+nxPWCB0q1kJlZfKUawuAH8LmZQ9ZF653pFK3Ecw79r8xzp1HWdCPA32R2V8W6Q71D9lhILYXzSak4yuIkQHkclSSOlKxZEYcXeDpVZD3jhqDsACTjdGfgyGamcEKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758743728; c=relaxed/simple;
-	bh=b7tMSRatNPiuUi1gczrNM41fbVsirIkhBCPf9ks04OQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LP9WLXBn6ULdE16mx3+NO0i2q6djjkd337yRne5tpJnheE8424CTF9gtgVRrrBzqp8JfaJA9kcQYzoOvE/pBa0n2pmkGYCmjX945psN/KmlYwTluGx/eTwysanYvkftZCPzsDKmSVeVSZToPXSlSlo18K5SnlL9Gl5bLUkfZbSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nFVc7KK7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21653C4CEE7;
-	Wed, 24 Sep 2025 19:55:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758743726;
-	bh=b7tMSRatNPiuUi1gczrNM41fbVsirIkhBCPf9ks04OQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nFVc7KK7Q1ZufpyE0VhGLu+kdBFhx6oSfNOFquaomDFqg5zUCjeUE66sKmpvo07lX
-	 b90Xhu9oppxERU0mViZrIUi+a+jsJhxylvEAuytriwCjqJRDWP2MJ5+pyF8x6LdIlC
-	 PWYTTnCQhJsp2Ic1HZdBosvXh/EPT0mmuzi8snzVZPVSjLrZbV+0jFq/1ddRQ+bau7
-	 2LBwoMz5Zt/lu+iDcn1HRIG9hzQ5MFVvB8cKtg5a/ug3I1KT7PSZBXiQIqOEmHW3fK
-	 DyrkEwPkLxKKky6zfb1iAY5m8BHbphvZDMPauE8rI/9k2lgCmArFl4tDOFZ3U0XAis
-	 ZOOJAxrNpRekw==
-Date: Wed, 24 Sep 2025 20:55:22 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Hang Cao <caohang@eswincomputing.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, Thinh.Nguyen@synopsys.com,
-	p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	ningyu@eswincomputing.com, linmin@eswincomputing.com,
-	pinkesh.vaghela@einfochips.com,
-	Senchuan Zhang <zhangsenchuan@eswincomputing.com>
-Subject: Re: Re: [PATCH v3 1/2] dt-bindings: usb: Add ESWIN EIC7700 USB
- controller
-Message-ID: <20250924-shimmer-sphinx-1a12caeab401@spud>
-References: <20250915085329.2058-1-caohang@eswincomputing.com>
- <20250915091024.2128-1-caohang@eswincomputing.com>
- <20250915-affair-halves-4f881f6c7cdb@spud>
- <17731a13.1cce.19974dfc64d.Coremail.caohang@eswincomputing.com>
+	s=arc-20240116; t=1758746361; c=relaxed/simple;
+	bh=3OB+OiR7aipUBr93oxJCcURJQ4mS1LlHNjNNKL2BlyU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=saxTrg+2YVrB9/UJ2YawlZ8vLHUykySgF2Xs5bq9FSXXr9AqaoHYV4N9EIqZl0Sn5c7yTgzeVe5F+0VpWrzDejIu00cKoXf3fnUlm+S0qWLzJPtzYXe8CzC60dlhcYIhEZ2nCP+VNNPr/jJzMfyFdV3Gi4YdeUznzvRbpchj3ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gQetrCAj; arc=none smtp.client-ip=209.85.166.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-887764c2868so25065939f.1
+        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 13:39:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1758746358; x=1759351158; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JdD3K8oOTr2CNnAO9Xm+r51N/6GP07cpXL8zgDmSPuI=;
+        b=gQetrCAjIsKkM4Ksh1qe+BNhZq9ZLOhUlZSab873YDXxp1tardzmP/jCmI8wrjDm8c
+         EQj9/AhTKDqiWfm5n6Y1cXxacU/nrFXd0Qv33HG9m/hs3GbKnHB8RAmpu5mJ1f9tlbTQ
+         qtXaDhiJhbyVjY5xdBUjU24LMiZXP7BNncKRY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758746358; x=1759351158;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JdD3K8oOTr2CNnAO9Xm+r51N/6GP07cpXL8zgDmSPuI=;
+        b=kuKzWyVQ/2C5i5jj+x4x5mR/3ZtbQVS0sqxr8yi9kc2myERc6NYeBl45GPrXcqkxeY
+         9Gkr+HcxNoIXTY/lQ4D6uw9LgSaRwWgpZGPQ0C50qgB6obQ/S6zk4cUM+X42w4bLw1LE
+         6kMP6jgqtzwSTzo0pzXO+e0DSwUOVhHE+F5KSlr1psYac4luOTM7lnhxUgb0/oMHkKrW
+         ZJafbCL7L90Ez0IgyEjwvzVquIth+xNKO2UiJsvmAEUTib2i/S32MtzgTCUzyD1q2fdE
+         aZYyL5pheZ9GcIqIIuB0go5CedrmNB4+X4JCW9uSQSGTHyZK6VDGgahs4NN09RutzxnX
+         t7og==
+X-Forwarded-Encrypted: i=1; AJvYcCV/Kz51Wei44rHvHpIj9Nfgey5Rz8MNmPSURctmsDjCmDElVc/3rI/wxXj3Ta7Sv+LqPbTH7ThWmJE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwLpk/rRwW89mjCtvImTkGByZnoqfXJ5bWWmyRb+kqiH2bTAp8
+	zB7FwQA5AaL1es3n4SkvV0g1RXytc+aj0KKhs9XDfZVfuqA0YY3blw9MwFelpFO2490=
+X-Gm-Gg: ASbGncslnpOjFExw/d67a8Z9o0V/URkTMDXG8ksDojXLFWu0qgJXbXfap4US51JwWND
+	L6EE9VmaCa9yNeuKMmUq3qBZ9G7BQM3CSyK4YQR9AfquE4NN1z9Sy19jt6T+M37b0sX9EUbGLTJ
+	uZFWRdk2SnBevojtJSd0PfIqGPGqOSNxrpzzxJJdiiw3HFO6KF8tJXdN9kWvQ6IJWLAbtQZnTf5
+	fyY3jBvatGUsN6hKdYUByfYo4JsYuyGZcx8zp03I4YZa+sPPPi48/pT2T9P8TJaUEY+Pd2l6cyw
+	Qy9bYmfEGoBpi4WrJXr0RXyHtRBVHKqrgfZaQ738EuSyZZ/0+MMeBUGpHtPL+8Uu60GIsHnJ4wY
+	gGzzu3GOanf596uTaaPtYhybiOx9OMWnKvMs=
+X-Google-Smtp-Source: AGHT+IGbX7l8mmrEe1aN8ADpnz0w/9Ym/EoRBWc7+zWYE9DckTQZwComktGLTR80vh7d/pMDEfz9PQ==
+X-Received: by 2002:a05:6602:1510:b0:887:5335:1a59 with SMTP id ca18e2360f4ac-90168488dfamr134796039f.13.1758746358103;
+        Wed, 24 Sep 2025 13:39:18 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-903f718019dsm1545739f.5.2025.09.24.13.39.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Sep 2025 13:39:17 -0700 (PDT)
+Message-ID: <21e8256b-5409-4420-9958-e89b716ddfe8@linuxfoundation.org>
+Date: Wed, 24 Sep 2025 14:39:16 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="NTUzUaWJZNr9XbDj"
-Content-Disposition: inline
-In-Reply-To: <17731a13.1cce.19974dfc64d.Coremail.caohang@eswincomputing.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: vhci-hcd: Prevent suspending virtually attached
+ devices
+To: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+ Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Brian G. Merrell" <bgmerrell@novell.com>
+Cc: kernel@collabora.com, Greg Kroah-Hartman <gregkh@suse.de>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250902-vhci-hcd-suspend-fix-v3-1-864e4e833559@collabora.com>
+ <71b47ce7-a799-42f1-acc7-e59e6ce13884@collabora.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <71b47ce7-a799-42f1-acc7-e59e6ce13884@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 9/24/25 11:01, Cristian Ciocaltea wrote:
+> Hi,
+> 
+> On 9/2/25 3:15 PM, Cristian Ciocaltea wrote:
+>> The VHCI platform driver aims to forbid entering system suspend when at
+>> least one of the virtual USB ports are bound to an active USB/IP
+>> connection.
+>>
+>> However, in some cases, the detection logic doesn't work reliably, i.e.
+>> when all devices attached to the virtual root hub have been already
+>> suspended, leading to a broken suspend state, with unrecoverable resume.
+>>
+>> Ensure the virtually attached devices do not enter suspend by setting
+>> the syscore PM flag.  Note this is currently limited to the client side
+>> only, since the server side doesn't implement system suspend prevention.
+>>
+>> Fixes: 04679b3489e0 ("Staging: USB/IP: add client driver")
+>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+>> ---
+>> The USB/IP Virtual Host Controller (VHCI) platform driver is expected to
+>> prevent entering system suspend when at least one remote device is
+>> attached to the virtual USB root hub.
+>>
+>> However, in some cases, the detection logic for active USB/IP
+>> connections doesn't seem to work reliably, e.g. when all devices
+>> attached to the virtual hub have been already suspended.  This will
+>> normally lead to a broken suspend state, with unrecoverable resume.
+>>
+>> The first patch of the series provides a workaround to ensure the
+>> virtually attached devices do not enter suspend.  Note this is currently
+>> limited to the client side (vhci_hcd) only, since the server side
+>> (usbip_host) doesn't implement system suspend prevention.
+>>
+>> IMPORTANT:
+>>
+>> Please note commit aa7a9275ab81 ("PM: sleep: Suspend async parents after
+>> suspending children") from v6.16-rc1 introduced a regression which
+>> breaks the suspend cancellation and hangs the system.
+>>
+>> A fix [1] has been already provided, which also landed soon after in
+>> v6.16-rc7 under commit ebd6884167ea ("PM: sleep: Update power.completion
+>> for all devices on errors").
+>>
+>> [1] https://lore.kernel.org/all/6191258.lOV4Wx5bFT@rjwysocki.net/
+>> ---
+>> Changes in v3:
+>> - Moved all driver cleanup patches to a separate series:
+>>    https://lore.kernel.org/all/20250902-vhci-hcd-cleanup-v1-0-1d46247cb234@collabora.com/
+>> - Replaced FIXME with NOTE in the new comment block, as it refers to a
+>>    potential cleanup of redundant code rather than addressing a
+>>    functional issue
+>> - Rebased remaining patch onto next-20250902
+>> - Link to v2: https://lore.kernel.org/r/20250726-vhci-hcd-suspend-fix-v2-0-189266dfdfaa@collabora.com
+> 
+> Just a kind reminder in case there's still a chance to get this and/or the
+> cleanup patches queued for v6.18.
+> 
 
---NTUzUaWJZNr9XbDj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry for the delay - it has been crazy few weeks for me.
 
-On Tue, Sep 23, 2025 at 12:40:46PM +0800, Hang Cao wrote:
-> > > From: Hang Cao <caohang@eswincomputing.com>
-> > > +  eswin,hsp-sp-csr:
-> > > +    description:
-> > > +      HSP CSR is to control and get status of different high-speed p=
-eripherals
-> > > +      (such as Ethernet, USB, SATA, etc.) via register, which can cl=
-ose
-> > > +      module's clock,reset module independently and tune board-level=
-'s
-> > > +      parameters of PHY, etc.
-> > > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > > +    items:
-> > > +      - items:
-> > > +          - description: phandle to HSP Register Controller hsp_sp_c=
-sr node.
-> > > +          - description: usb bus register offset.
-> > > +          - description: axi low power register offset.
-> > > +          - description: vbus frequency register offset.
-> > > +          - description: mpll register offset.
-> >=20
-> > As I mentioned on the shdci binding patch, I'm not happy with the
-> > justification for this phandle. What exactly is the clock that this
-> > controls and why does it not have a dedicated clock-controller driver
-> > and reset-controller driver?
-> >=20
-> In the current design framework, the clock can be divided into two parts:=
-=A0
-> 1. The top-clock, which is used to manage and control the clocks of vario=
-us subsystems (such as HSP, GPU, NPU, etc.);=A0
-> 2. The subsystem clocks managed independently by each subsystem.
-> The top-clock is a standard clock design(featuring gate, divider, and mux=
- functions) that has been registered in the=A0
-> common clock framework,with a dedicated clock controller driver.
->=20
-> The subsystem clocks managed by subsystems are controlled and configured =
-through the CSR (Control and Status Register)=A0
-> of each respective subsystem. For example, the HSP subsystem uses the esw=
-in,hsp-sp-csr. Additionally, this CSR is
-> =A0responsible for managing startup functions, performing independent res=
-et of specific modules, and adjusting=A0
-> PHY parameters to achieve board-level tuning (for USB/SATA interfaces, et=
-c.).
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Unlike the use of the HSP in the sdhci driver, where it appears to be
-setting bits that indicate stability (according to your colleague) what
-you say here (and what is done in the driver on the reset side in
-particular) seems like something that should be handled by a dedicated
-driver. "independent reset of specific modules" is the domain of
-reset-controller drivers. What are the other modules for which the HSP
-has resets? Does it have clocks for other modules too?
+thanks,
+-- Shuah
 
-> The top-clock manages the global clocks of subsystems. Taking the HSP sub=
-system as an example, the top-clock
-> =A0configures the hsp_aclk_ctrl and hsp_cfg_ctrl of HSP subsystem only.
-
-> In contrast, the subsystem clocks are managed via their own CSRs. For ins=
-tance, the USB ref clock used in the USB module of=A0
-> the HSP subsystem can only be configured through the hsp-csr, and cannot =
-be set via the top-clock controller driver.
-> As for the reset function, it is not integrated into a dedicated controll=
-er driver either, for reasons similar to those of the=A0
-> clock management mentioned above.
-
-That just sounds to me like the hsp-csr needs to become both a
-reset-controller and a clock-controller! It's not unusual to have more
-than one clock-controller in an device, the top-clock being a
-clock-controller does not mean that the HSP also cannot be one.
-
-
---NTUzUaWJZNr9XbDj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaNRMqQAKCRB4tDGHoIJi
-0tWjAP9rnj6LBBt2RvkZZpyWdjjtrL57PNlebKO2HzRQiCciMQEAobZWD6QhY9Us
-t+BXD1QAI79Mrf2XA3QZOFR2AjJ0Cgk=
-=cO52
------END PGP SIGNATURE-----
-
---NTUzUaWJZNr9XbDj--
 
