@@ -1,118 +1,132 @@
-Return-Path: <linux-usb+bounces-28615-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28616-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52ED5B9C2CB
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 22:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 04051B9C2D4
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 22:44:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17A091682C6
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 20:42:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB37516A321
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 20:44:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5752732951E;
-	Wed, 24 Sep 2025 20:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A485A263F3C;
+	Wed, 24 Sep 2025 20:44:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T2SakJO1"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RIrRoIkp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA3D1EFFB2
-	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 20:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56371258CE7
+	for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 20:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758746568; cv=none; b=azK0+AlIio/HV6DXMtmaNrmb8aYQd27zX5UeoV1eV8m+bGATWziRKwfoLDXqiVS33EF3gGQwy3dZ7/6+5io+DzTvFMPQP8mJrZHGNlodGnTwYbiEsWw5+BlG2teVMgXkOKb/CyVMdt7zveVhVq/ADlDmdU1QP43LYfdzZDbcll8=
+	t=1758746651; cv=none; b=ekq3OvmivNp6QfDiouWDDgwXn/Bvz2jD4C0FRYCEJ1mSHI+BFnTas0X6hB4Qj7jMn9HdViVNlJXtODDXx/VlyIfF9qm6s4meMTmuDdjiAw9r5XXTAWSwUWZq1ZSCcGL/nA9AY1377jfEvrPDoNLjTEJYUs7ghde9m8pH7aqGDcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758746568; c=relaxed/simple;
-	bh=Ucz/i9AWOR9GXa1xL/rpLdGn6X6OtYj7N42zAdlWFDc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XRO2rLZKYongDQKa9UebUMi3n4QJBca9XP5m/5HGFb5yxejMwTF7RIymrdmHUbpoMPVY+OeHv3x+98Ai5AulfFyodHrjXPAHdvizrVNl56DhRD/pt02A9zp4wp/xI5hjLqvl9aSMMZAfEZb1iAPwXSavyJYaNru/Daqk6OomM5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T2SakJO1; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-57e36125e8aso187318e87.2
-        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 13:42:47 -0700 (PDT)
+	s=arc-20240116; t=1758746651; c=relaxed/simple;
+	bh=hQCFRrzhsxkJHd0T/Q9S6qEGubOT9QVFnmKdp9gdvUc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rvv+dzNfhsDNt5y17KhCuVz05ru76AYiCQVI1w3sKV/JSyvF4AmgeVjJXlRiXGsPWXPlSXPsEpJPNiQmOiEYDrThv1oM2E3bQYTqC3ns/BdEOxb7atGaqqgIbHaS4spyE8hf3UmC/X8g8CtzCbezDZSc2Y9CB0160URxjNEs540=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RIrRoIkp; arc=none smtp.client-ip=209.85.166.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-4256f0444caso1137775ab.1
+        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 13:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758746565; x=1759351365; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bYnzcg/e5OYQohYl91H+gnYqtu6/MdF2Xt8l0Tcfgig=;
-        b=T2SakJO1vr3FJERSIz0kEvL/x3IgIfeNLG9Zgp2GR/oP2UgIVxJm06L8A6Smztpr1i
-         8dMok9N8R+85Eu8IcwwipwlxaTf5p0IA7uY39uUDNBhrOnB6A6qsBd1CKoYG9UABRSqT
-         TI0yhoHXxwMG5Nq6/182c3ShLaw4WkL3ZVMrv+XZm8GKC/34kN8zEMlLow+EczryORoV
-         n5Nx2knt0aMTtQCcShYZewSj8L1jJrHabi6sNht8tzK80w1jIufQDHuSRXcslwzJDJI+
-         yXSkJMTMc4dAS/MMcyioPGNKas7HlGmuaf2TYpKx5Ilro2kjo3feoAX4KKiknzkHF9GW
-         Ifbg==
+        d=linuxfoundation.org; s=google; t=1758746648; x=1759351448; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DcrEAJWpZ6b2yow/2Ry/2Ua/hb8QLxVcxAQFim6ANQ8=;
+        b=RIrRoIkpoJVXb671IIc5NYRdj9v0mZqOk9ayk1rrwF3RGWh1LQ1kTQ0wkY/LBb7VYq
+         yP1g2a1cq8YMTHJ3WqfIdC025r7e3fRHknKwTYvPP/3JCRSM/MInvAZSTwfg8VCHH1+8
+         onXmUnfSwrqEiP/CNW/9zlI6hAM7HuH2wGxXQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758746565; x=1759351365;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bYnzcg/e5OYQohYl91H+gnYqtu6/MdF2Xt8l0Tcfgig=;
-        b=nPuI4hdfk2dx/RVlK0O/Wtxv/4GWWpih8ymAC/pkUt+2NOoz6Q3X+4lnP26+BUjr4W
-         T5mpXKEzR70UzEZt3n7wrYqKKf6A/E1VNDXId9ib1g6fuLQ2kUcy2tgZuBrQq07C3PEG
-         l5ip7BcPnC40GaXfhR3S9hydSaohOU4utoFYQc5tRoe9UGjwnlLMJawKWFU43Y0E5JOG
-         p5K3cDIlkz0f4yz1GGsuFsccKoj+PnocJoSypEg3xN1KfVOV2vm3zvJ/5E8XTbGYjDKc
-         YxgkhifJjNqULf+ZMi0JSLYeH9wc/JdiAX8+A3TZ551Fnnmc4dj6jP/uqFyEBwL2aFhP
-         JeVg==
-X-Forwarded-Encrypted: i=1; AJvYcCWx3lbd5ot39wRnelqPVKe774zWWBIEFUcD+1g1/VKMCQCn0AYMbWfUkTZNv6V+lVNTNJwiznRKDKU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwksF/vjwm9MvaYwk400lkaMkOQI6+0FYalYU8LI8ogkVqhMgy5
-	o8PyVoGOQatkDDr5YkXfu1iA4TmrYRU1ogiPxp2dLUR4vmYKKthWWOSf
-X-Gm-Gg: ASbGncsb+JPoyEWpSqMdLLNdMuVbR9EIE+imh0ZVwFwTRLBFUpZnukRTadrFG9oc8Tm
-	6oby4Abrc1dbNDIpm94nWIgOPYFdCm6dd+KA/VY9b6g3kEXxD+mL7ckSfsuUVEEt0q0k1hs0CL+
-	I6ceJ80XC1RFLjBFRScsiOoSYc7m6yts0yFANOwSrVZ+iOuz0XHJF7Z1FcEpMHwV2KraBdO20yY
-	cA73ToM1ryKv8RwCe3FHPWwFiN+xL8nppOtziAwryeNYzD/2k602HopbBFiZFMtgf0tazg8COFi
-	1/xyOdyiUqxkl2uZzKjko1jFs4GfYyIShzsVSoEylsVt83ANS1ycuBT7J0A4u+mVyQmGdz/YL74
-	M6yavyfN0Q2YMMQail+M68/63gOPk0eKljJk=
-X-Google-Smtp-Source: AGHT+IGyzL5f93thSN0PEzq2w767/JoDNWiJBH5bF6LdKrr9vgdH4gRJ604q0DP0F1tZQOVY9vZyEg==
-X-Received: by 2002:ac2:4f0e:0:b0:55f:4ac2:a595 with SMTP id 2adb3069b0e04-582d0c284e2mr270160e87.16.1758746565220;
-        Wed, 24 Sep 2025 13:42:45 -0700 (PDT)
-Received: from foxbook (bfe191.neoplus.adsl.tpnet.pl. [83.28.42.191])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-583166560dcsm368e87.94.2025.09.24.13.42.43
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 24 Sep 2025 13:42:44 -0700 (PDT)
-Date: Wed, 24 Sep 2025 22:42:39 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Petko Manolov <petkan@nucleusys.com>
-Cc: I Viswanath <viswanathiyyappan@gmail.com>, kuba@kernel.org,
- edumazet@google.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- pabeni@redhat.com, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
- linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com,
- syzbot+78cae3f37c62ad092caa@syzkaller.appspotmail.com
-Subject: Re: [PATCH net v3] net: usb: Remove disruptive netif_wake_queue in
- rtl8150_set_multicast
-Message-ID: <20250924224239.3ec0fcca.michal.pecio@gmail.com>
-In-Reply-To: <20250924195055.15735499.michal.pecio@gmail.com>
-References: <20250924134350.264597-1-viswanathiyyappan@gmail.com>
-	<20250924135814.GC5387@cabron.k.g>
-	<20250924195055.15735499.michal.pecio@gmail.com>
+        d=1e100.net; s=20230601; t=1758746648; x=1759351448;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DcrEAJWpZ6b2yow/2Ry/2Ua/hb8QLxVcxAQFim6ANQ8=;
+        b=S11Aw0xgP3+N+nlDqAP+rx7Qqj4vfmioiDK3fxZOBQNVWlqWn+Uuf2RjerW2jHQA6f
+         HRTUdyN/krPa5s9EQ8DkkPNeJ/5S7k1MbzEmQjo9+HEAd4uN8tx6tEnmAC3E/8jRiamM
+         IdaDohCWh3X8pjPnJP0a3m29FagE54cGPk63TAcHRv6k0lH15IBRNqxxxB5NRZiI8L94
+         YppzkrEUeUaZyqDPK6w4393Vq4OolEn68K2R8MJ1udXqhI+92XVBiRuuoEYX1JMJB/Cw
+         uwlEfnWLIsRWHp81WynJUWK7lwKR0Ps+75gGsXDr2HtNtc3BLdyjNPzYy57P3y5uy65+
+         U0RQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU1/k+Dc//YCYHvfztd2plX8OhmfqqBCVFDM18nHqrgIIoSDIvJn8NsCDX+NXPIHuPzhrcws+PVFdQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaGRZqpwJx5C8uInQ/3Judvs3DXA2gG+Tm+vfrzs6CmkwP80T8
+	l/IneZsggiSi/zvirACHmh240CY9vHx/iehMIcS6fOf0jhHAa9EyQNzuizweSvjzvsc=
+X-Gm-Gg: ASbGncsRR6t/1NyXIQjVjqJnh+f/T5G4UupbBZ24lxBJxy9pqXE/M7s3zNHskmbcgV9
+	4fPyYA59eBj94iDP6zvbS9EgChzvS+mx9GCh2I/yit/PJ93gG7DJog1fZTEGVXFSRDWifSUMCXt
+	5NRs966YI21ZnDCQUbGfguQ7lgKiCTypu2zpZ2GPJ3w4w61r3IluyGlqcX4bseHfGl4SMRCXvkl
+	3OXpGit4XRQ/zxILH6fJCYDJzduLbayd8+JX3oqOIpum9xYhruS+cHtZXfn+nSt5ldtDdfGUTAH
+	4uqDiCcKFwwNlWxqL1gSlbSM772tGCKSIBqdYbu2axNnKRC37/t7F/cMgWTfQALdU6YdJuExmCL
+	LvTTKrqcqT/L5VE5872kRiAzBLXNt5k+uu30=
+X-Google-Smtp-Source: AGHT+IH6BOgqWB0moCn+1AYSvMLjM7sFyc1fdmL1yRzPltIFxLhk4VmMqY6UiuwyzQsxKt1prDWQ1w==
+X-Received: by 2002:a92:da4d:0:b0:425:9531:821d with SMTP id e9e14a558f8ab-4259568ff27mr11778655ab.27.1758746648358;
+        Wed, 24 Sep 2025 13:44:08 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-56a6b14cf76sm74458173.80.2025.09.24.13.44.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Sep 2025 13:44:07 -0700 (PDT)
+Message-ID: <eb86ebd0-71ff-4c00-a524-0046b86b3aa6@linuxfoundation.org>
+Date: Wed, 24 Sep 2025 14:44:07 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/17] USB/IP VHCI driver cleanup
+To: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+ Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: kernel@collabora.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250902-vhci-hcd-cleanup-v1-0-1d46247cb234@collabora.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250902-vhci-hcd-cleanup-v1-0-1d46247cb234@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Wed, 24 Sep 2025 19:50:55 +0200, Michal Pecio wrote:
-> Do you happen to remember what was the reason for padding all TX frames
-> to at least 60 bytes?
+On 9/2/25 05:56, Cristian Ciocaltea wrote:
+> These patches were initially part of the USB/IP VHCI suspend fix series
+> [1] to address a bunch of coding style issues and make checkpatch happy
+> for the entire driver.
 > 
-> This was apparently added in version "v0.5.0 (2002/03/28)".
+> As suggested by Greg, I'm sending this as a separate patch set now.
 > 
-> I'm yet to test the exact effect of this hack (will the HW really send
-> frames with trailing garbage?) and what happens if it's removed (maybe
-> nothing bad? or was there a HW bug?), but this part caught my attention
-> because I think nowadays some people could consider it "information
-> leak" ;) And it looks like a waste of bandwidth at least.
+> [1] https://lore.kernel.org/r/20250726-vhci-hcd-suspend-fix-v2-0-189266dfdfaa@collabora.com
+> 
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> ---
+> Cristian Ciocaltea (17):
+>        usb: vhci-hcd: Ensure lines do not end with '('
+>        usb: vhci-hcd: Consistently use the braces
+>        usb: vhci-hcd: Avoid unnecessary use of braces
+>        usb: vhci-hcd: Consistently use blank lines
+>        usb: vhci-hcd: Drop spaces after casts
+>        usb: vhci-hcd: Add spaces around operators
+>        usb: vhci-hcd: Drop unnecessary parentheses
+>        usb: vhci-hcd: Fix open parenthesis alignment
+>        usb: vhci-hcd: Simplify NULL comparison
+>        usb: vhci-hcd: Simplify kzalloc usage
+>        usb: vhci-hcd: Use the paranthesized form of sizeof
+>        usb: vhci-hcd: Fix block comments
+>        usb: vhci-hcd: Remove ftrace-like logging
+>        usb: vhci-hcd: Consistently use __func__
+>        usb: vhci-hcd: Do not split quoted strings
 
-Sorry, stupid question, such frames are illegal.
+>        usb: vhci-hcd: Switch to dev_err_probe() in probe path
+>        usb: vhci-hcd: Replace pr_*() with dev_*() logging
 
-That being said, I see that other drivers pad them with zeros or
-other fixed pattern ('skb_padto(skb, ETH_ZLEN)' seems to be common)
-rather than just DMA beyond the specified length.
+I acked the 16/17 and 17/17 - others I don't see a reason for code
+churn.
+
+thanks,
+-- Shuah
 
