@@ -1,146 +1,133 @@
-Return-Path: <linux-usb+bounces-28607-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28608-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60ECAB9AEE0
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 18:57:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFE5BB9AF62
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 19:02:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04B2F3AA41A
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 16:57:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24B544C78BF
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Sep 2025 17:02:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ABC7314A98;
-	Wed, 24 Sep 2025 16:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41810314B96;
+	Wed, 24 Sep 2025 17:02:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=infradead.org header.i=@infradead.org header.b="ADQuNtgD"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="U+sAnOZn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB461A254E;
-	Wed, 24 Sep 2025 16:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7684128153D;
+	Wed, 24 Sep 2025 17:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758733008; cv=none; b=aSUiDncyEy3DBZM4Dl1zw6CDu7VGSJMNa+FaJJ22hF6pr+ecbvVYfstXibadMP1MHqnTXtSQn4Vh//7+rgaDBquAmp8mKZcAh9o0mf0kIFCaze9CCIKQTqvW83s7OW/kPWiuy7t9QX205FoCECtAgTjucejHoNdog82HFA7WT0Q=
+	t=1758733320; cv=none; b=lovDqnVUmpj7oF8o70QwOCdeQYkkcl6IvgwORWMA2zeZ+E94Fk1/+tEq1yZu2NzKS7A8D9i13PVLyCQfqiZgSiac2e5eWzyjdJ1dDyRT+zZUGeHIEg+ZBfJEhyPr0d8dt/Bz+f4p5zk7qQDo0PR/8jlK34tfZiqFEpz19GUWBVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758733008; c=relaxed/simple;
-	bh=MTtS4DGnmn/dmi9j0JsSf5aBSRH5Nl/ESP4A4KaeUNw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EwpLaExYknqTk+1UFwzEDKuh8h8WnJ2mGBTY4UttE3+zjdPvA2kEFqSH2ZxfoTSEMd4QVVrAEMidhtGj5UsUvLEboAeR6cfCdvkTpWRopf38pEmHTsSxOskxiKbdr/vedUOtiWjHDo39r9+NFuZfhTRbIOyp7YmNHhCAo/+o2rY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=evilplan.org; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=fail (0-bit key) header.d=infradead.org header.i=@infradead.org header.b=ADQuNtgD reason="key not found in DNS"; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=evilplan.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=wItarYwJVipfmi89AjibX164xiYQ1sw1xgqIMHATn9c=; b=ADQuNtgDqCh42nShQdrRdwoDNL
-	naHjDqhRxe/feBE3gx7YI+GF3SiATwjEKGTxF5HTe/Rd8zeJIPmiziHcLoJCArwg1LMjkST8yjMX2
-	ICMQXn/VCEHj9XYcI5uyQ+z2vU1vDXRjgolv9kx1bsRE24R9kbKPxdEuZwyofsQb1h+8kmqDxmSvE
-	RFGVyb/ITBh0FNHHuxEIh9mQxZOJejY+vTU5rnl3xDxkQaIqjkZC/dq692Uo/WRCE5uDVByN675eh
-	qEjeBUgMKKK9qemuFENVjEtRnyWVd9FbPVfb+wYmBC8z4RcHVsS9yZrtq+r6BEE1D0owQ3AOE/asm
-	tCqspHew==;
-Received: from jlbec by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1v1SnC-00000008hCv-35Ks;
-	Wed, 24 Sep 2025 16:56:34 +0000
-Date: Wed, 24 Sep 2025 09:56:30 -0700
-From: Joel Becker <jlbec@evilplan.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
-	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
-	miklos@szeredi.hu, a.hindborg@kernel.org, linux-mm@kvack.org,
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
-	kees@kernel.org, rostedt@goodmis.org, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, paul@paul-moore.com,
-	casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org,
-	borntraeger@linux.ibm.com
-Subject: Re: [PATCH 08/39] configfs, securityfs: kill_litter_super() not
- needed
-Message-ID: <aNQivg5O_Rx3WxlG@google.com>
-Mail-Followup-To: Al Viro <viro@zeniv.linux.org.uk>,
-	linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
-	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
-	miklos@szeredi.hu, a.hindborg@kernel.org, linux-mm@kvack.org,
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
-	kees@kernel.org, rostedt@goodmis.org, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, paul@paul-moore.com,
-	casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org,
-	borntraeger@linux.ibm.com
-References: <20250920074156.GK39973@ZenIV>
- <20250920074759.3564072-1-viro@zeniv.linux.org.uk>
- <20250920074759.3564072-8-viro@zeniv.linux.org.uk>
+	s=arc-20240116; t=1758733320; c=relaxed/simple;
+	bh=8IvBnzK5ylc3xa78RjdmvwnioZ45Ia7e7oq7Ndcyik0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=fzM6Q4cr1b3pmXhyG9PoltxDQDC9Urnehxap1NAn956q3i5HJGFMF8Vw6FW9WEb9/eJPJCiZltwgH8yMvnyWNSVAtdW41LNJ0MsTOrHdg6RsfkeFCc/IOlhXLCIuidr+DaP4J+g1ypqS7vq7AxtZpx1lb6AMuDmP2Efc3RDUh7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=U+sAnOZn; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1758733316;
+	bh=8IvBnzK5ylc3xa78RjdmvwnioZ45Ia7e7oq7Ndcyik0=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=U+sAnOZnqFVS6Zp1cLMJajGSmaiXDbR1w1oC43liIPxMz1twrM1DkRlTzICJPvRdV
+	 3NRpU4P899W3PpyrD1rT7fz3KwdUBO8EyAqmhT8P2jq9RLdF9Vr1s6WgxQVCcbS6X1
+	 RfXB0ZDNwEjOjZ0jhPPW/IcpZIVZO4+no5m8vj7v3gHGVvT6WsZurTzZcGvpqCVPqw
+	 Km5cps81E9Pj6b6p993h3rmqi0eugbzz670U1ZiQwHrHjq/IQvo/wTtW9mmIR9U4qu
+	 Nef/5Dk54GCoMxUlt6TN0XTe3/FxvYrCCGqhU41YKjKjbO9y+ncTDmbL3RPHsKZ7lu
+	 hodQyx00HTzyg==
+Received: from [192.168.1.90] (unknown [82.79.138.60])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: cristicc)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 1BB1617E12DA;
+	Wed, 24 Sep 2025 19:01:56 +0200 (CEST)
+Message-ID: <71b47ce7-a799-42f1-acc7-e59e6ce13884@collabora.com>
+Date: Wed, 24 Sep 2025 20:01:55 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250920074759.3564072-8-viro@zeniv.linux.org.uk>
-X-Burt-Line: Trees are cool.
-X-Red-Smith: Ninety feet between bases is perhaps as close as man has ever
- come to perfection.
-Sender: Joel Becker <jlbec@ftp.linux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: vhci-hcd: Prevent suspending virtually attached
+ devices
+From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To: Valentina Manea <valentina.manea.m@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Brian G. Merrell" <bgmerrell@novell.com>
+Cc: kernel@collabora.com, Greg Kroah-Hartman <gregkh@suse.de>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250902-vhci-hcd-suspend-fix-v3-1-864e4e833559@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20250902-vhci-hcd-suspend-fix-v3-1-864e4e833559@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Joel Becker <jlbec@evilplan.org>
+Hi,
 
-On Sat, Sep 20, 2025 at 08:47:27AM +0100, Al Viro wrote:
-> These are guaranteed to be empty by the time they are shut down;
-> both are single-instance and there is an internal mount maintained
-> for as long as there is any contents.
+On 9/2/25 3:15 PM, Cristian Ciocaltea wrote:
+> The VHCI platform driver aims to forbid entering system suspend when at
+> least one of the virtual USB ports are bound to an active USB/IP
+> connection.
 > 
-> Both have that internal mount pinned by every object in root.
+> However, in some cases, the detection logic doesn't work reliably, i.e.
+> when all devices attached to the virtual root hub have been already
+> suspended, leading to a broken suspend state, with unrecoverable resume.
 > 
-> In other words, kill_litter_super() boils down to kill_anon_super()
-> for those.
+> Ensure the virtually attached devices do not enter suspend by setting
+> the syscore PM flag.  Note this is currently limited to the client side
+> only, since the server side doesn't implement system suspend prevention.
 > 
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> Fixes: 04679b3489e0 ("Staging: USB/IP: add client driver")
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 > ---
->  fs/configfs/mount.c | 2 +-
->  security/inode.c    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> The USB/IP Virtual Host Controller (VHCI) platform driver is expected to
+> prevent entering system suspend when at least one remote device is
+> attached to the virtual USB root hub.
 > 
-> diff --git a/fs/configfs/mount.c b/fs/configfs/mount.c
-> index 740f18b60c9d..fa66e25f0d75 100644
-> --- a/fs/configfs/mount.c
-> +++ b/fs/configfs/mount.c
-> @@ -116,7 +116,7 @@ static struct file_system_type configfs_fs_type = {
->  	.owner		= THIS_MODULE,
->  	.name		= "configfs",
->  	.init_fs_context = configfs_init_fs_context,
-> -	.kill_sb	= kill_litter_super,
-> +	.kill_sb	= kill_anon_super,
->  };
->  MODULE_ALIAS_FS("configfs");
->  
-> diff --git a/security/inode.c b/security/inode.c
-> index 43382ef8896e..bf7b5e2e6955 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -70,7 +70,7 @@ static struct file_system_type fs_type = {
->  	.owner =	THIS_MODULE,
->  	.name =		"securityfs",
->  	.init_fs_context = securityfs_init_fs_context,
-> -	.kill_sb =	kill_litter_super,
-> +	.kill_sb =	kill_anon_super,
->  };
->  
->  /**
-> -- 
-> 2.47.3
+> However, in some cases, the detection logic for active USB/IP
+> connections doesn't seem to work reliably, e.g. when all devices
+> attached to the virtual hub have been already suspended.  This will
+> normally lead to a broken suspend state, with unrecoverable resume.
 > 
+> The first patch of the series provides a workaround to ensure the
+> virtually attached devices do not enter suspend.  Note this is currently
+> limited to the client side (vhci_hcd) only, since the server side
+> (usbip_host) doesn't implement system suspend prevention.
 > 
+> IMPORTANT:
+> 
+> Please note commit aa7a9275ab81 ("PM: sleep: Suspend async parents after
+> suspending children") from v6.16-rc1 introduced a regression which
+> breaks the suspend cancellation and hangs the system.
+> 
+> A fix [1] has been already provided, which also landed soon after in
+> v6.16-rc7 under commit ebd6884167ea ("PM: sleep: Update power.completion
+> for all devices on errors").
+> 
+> [1] https://lore.kernel.org/all/6191258.lOV4Wx5bFT@rjwysocki.net/
+> ---
+> Changes in v3:
+> - Moved all driver cleanup patches to a separate series:
+>   https://lore.kernel.org/all/20250902-vhci-hcd-cleanup-v1-0-1d46247cb234@collabora.com/
+> - Replaced FIXME with NOTE in the new comment block, as it refers to a
+>   potential cleanup of redundant code rather than addressing a
+>   functional issue
+> - Rebased remaining patch onto next-20250902
+> - Link to v2: https://lore.kernel.org/r/20250726-vhci-hcd-suspend-fix-v2-0-189266dfdfaa@collabora.com
 
--- 
+Just a kind reminder in case there's still a chance to get this and/or the
+cleanup patches queued for v6.18.
 
-The Graham Corollary:
-
-	The longer a socially-moderated news website exists, the
-	probability of an old Paul Graham link appearing at the top
-	approaches certainty.
-
-			http://www.jlbec.org/
-			jlbec@evilplan.org
+Thanks,
+Cristian
 
