@@ -1,184 +1,142 @@
-Return-Path: <linux-usb+bounces-28675-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28676-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9415AB9F5C7
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 14:53:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49BBEB9F630
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 14:59:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83E7F7A7C7E
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 12:51:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C32C7A3EA7
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 12:57:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2BDA1E00B4;
-	Thu, 25 Sep 2025 12:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4DFD1E1A3D;
+	Thu, 25 Sep 2025 12:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EmkGRZ2k"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="Aj9J+Xks"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B10E1A0728;
-	Thu, 25 Sep 2025 12:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758804768; cv=none; b=CBKq06sixaLFliaje6agmyGUCOm6OMDZE/IokI5hBxY5H5Sw1VGxaRwLzkbzR9qEXa+NOAY5E8Z8DbAdm54UUPFdojpwUxLMZEDWkXDOhvJdaBXrM17eOINqejmsfO5HnOrsKQHEKw27v2t7uHlVrckHY8I+r2Zn5cbW/hF3vRk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758804768; c=relaxed/simple;
-	bh=IWvjH/2hxWZ4IGGoOvrciyFGdQxIWa5UlPDx6lJac2c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g40UzsfiNBbhl8FMT64qoqpV0VgoSqhjTTNDA5mCXrNmQXYROexkZSciEBF+Gv58+wqN6x9raATOhBHc1ch8MPGOFCBWBVxQh/7fF0TTS9Qot8rHuq4MT1i/oVN80OoJznt5CjUs/GW9hJND4BhzNXiuZ2ker0wiMQMuSMzt5MM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EmkGRZ2k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319F0C4CEF0;
-	Thu, 25 Sep 2025 12:52:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1758804767;
-	bh=IWvjH/2hxWZ4IGGoOvrciyFGdQxIWa5UlPDx6lJac2c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EmkGRZ2kQytjqgPTdAFBbhOXZGdaqexBWnvDkyj/P6lu/u4UefCw9Ql52Aya25zej
-	 Q296+vH2Oj4msA8HwcpkMm0C+zkATX1TVPzBYFfG8mJ3vU6+OtVZncL8TL6Xc3R+jh
-	 KvEjDj9VmkoSNShgI2v00PDWxaMeYJpcszQx9rGM=
-Date: Thu, 25 Sep 2025 14:52:44 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Daniel Almeida <daniel.almeida@collabora.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/2] rust: usb: add initial USB abstractions
-Message-ID: <2025092520-sharply-everyone-4a5d@gregkh>
-References: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789A710A1E;
+	Thu, 25 Sep 2025 12:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758805146; cv=pass; b=CRzsQV9s5GF8FwN9f9XyGy0OZteTIrFtbliji8tg7QtuaTCqBVqu8NKadk6to0j+jao2GOOGEvxpe1Doe0WPtCz7UCcYxoLnMhNOk9cXN5c+sgZlCNJ+1BnOFeHUT1GW8jkCAKKDEs9B6RZo5ZmZxdnyABxSHVpSRRzLqYVFmgA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758805146; c=relaxed/simple;
+	bh=pe7uLpLfrv8qZmxrWSyaDUw3DPQQ5kwO99XSS/bG4ag=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=NjGaySvecrZ4o/jjkXXz+flFHw6eInBto6wz+amUQX+dbQWono4mYjdn7zrvmhap2jMjw+Nj9x7IcR9VLqhb8zPeHqUBJv7MC1gK3DiRw8t9h8fLvxgJ2fba2EIR7+3lzsALwFWunpg5Oe1xrHexyhLr09ulevgWnW+IoPziUqc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=Aj9J+Xks; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1758805128; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=If21BxmUnzHXdMFSvlHZj1ai7WhNgtqkF0u9LVlX/GiaXlx0SwIqgi5gWbLimKeUsQsbZ8dGCXL7yCwdYtrY7SIRs/EZv2FW9QgIVyO4auHaIMjADV0mIAUhqwmsAWbAH9Q1aIRd/RP63J0Q0tFNqBlFcbrjjNfM23oYOVrBhqo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1758805128; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=pe7uLpLfrv8qZmxrWSyaDUw3DPQQ5kwO99XSS/bG4ag=; 
+	b=mzre+WLtB55nZG35e20x0Y80IBchEWZjLxPzrZgX7vVxyEEHKYnuOpc3Th3ThgnKKMic43XextV6vJM4Xt6wSLegbHGps8GSiR/D5etkDWj0AQOO6hR0+KKy3OVElgrJgu4mz9qMvnE6ORbBw9VH2anuJBn11976DPVyw7JZrE0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758805128;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=pe7uLpLfrv8qZmxrWSyaDUw3DPQQ5kwO99XSS/bG4ag=;
+	b=Aj9J+XksjTB0WAtT5Xg1c8zO09TG0u7YG6PUiPV2AiPyZaWgcKnndVipYpBrZkZ8
+	nlDj1YEcyRsRgE+eAtLSIGzElR6nWywNz8qBLa8efKV5G8GE14sxG5/Ws3KN/mXiGjr
+	GrIqmSGCA2PA52K2n5gk07mAJFaIsVoFzKgkJrtQ=
+Received: by mx.zohomail.com with SMTPS id 1758805124843808.1481254020882;
+	Thu, 25 Sep 2025 05:58:44 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH 0/2] rust: usb: add initial USB abstractions
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <2025092520-sharply-everyone-4a5d@gregkh>
+Date: Thu, 25 Sep 2025 14:58:30 +0200
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org,
+ linux-usb@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <DE1DF8C3-B4D6-4392-A4A7-E324CFDCCD3A@collabora.com>
+References: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
+ <2025092520-sharply-everyone-4a5d@gregkh>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
-On Mon, Aug 25, 2025 at 03:18:04PM -0300, Daniel Almeida wrote:
-> This adds initial support for USB Rust drivers, not only because I see a
-> widespread use of module_usb_driver() in media (which is a subsystem I
-> aim to support) but also because I want to learn about USB in general
-> and this is a nice opportunity to start doing so.
-> 
-> I tried to keep things as consistent with pci.rs and platform.rs as
-> possible and tested it by manually binding a device (i.e.: my Logitech
-> mouse) to the sample driver via:
-> 
-> /sys/bus/usb/drivers/rust_driver_usb/new_id
-> 
-> This initial patch is therefore comprised of the same patterns that are
-> known to work for pci and platform already.
-> 
-> Physically disconnecting the device also worked, i.e.: nothing bad
-> showed up in dmesg.
-> 
-> Note that I did not touch MAINTAINERS at all. The objective is to
-> kickstart the discussion of what to do there here in v1.
+Hi Greg,
 
-Ok, as this seems to now be at least building properly for me, I have
-taken it into my char-misc branch for the next -rc1 merge window.
+> On 25 Sep 2025, at 14:52, Greg Kroah-Hartman =
+<gregkh@linuxfoundation.org> wrote:
+>=20
+> On Mon, Aug 25, 2025 at 03:18:04PM -0300, Daniel Almeida wrote:
+>> This adds initial support for USB Rust drivers, not only because I =
+see a
+>> widespread use of module_usb_driver() in media (which is a subsystem =
+I
+>> aim to support) but also because I want to learn about USB in general
+>> and this is a nice opportunity to start doing so.
+>>=20
+>> I tried to keep things as consistent with pci.rs and platform.rs as
+>> possible and tested it by manually binding a device (i.e.: my =
+Logitech
+>> mouse) to the sample driver via:
+>>=20
+>> /sys/bus/usb/drivers/rust_driver_usb/new_id
+>>=20
+>> This initial patch is therefore comprised of the same patterns that =
+are
+>> known to work for pci and platform already.
+>>=20
+>> Physically disconnecting the device also worked, i.e.: nothing bad
+>> showed up in dmesg.
+>>=20
+>> Note that I did not touch MAINTAINERS at all. The objective is to
+>> kickstart the discussion of what to do there here in v1.
+>=20
+> Ok, as this seems to now be at least building properly for me, I have
+> taken it into my char-misc branch for the next -rc1 merge window.
+>=20
+> BUT it has shown that it still needs some work to get "correct" and it
+> really doesn't do much quite yet, so I have applied the patch below to
+> pretty much just "disable" it entirely from the build at this point in
+> time.
+>=20
+> I'll go and revert this commit after -rc1 is out, in my usb-next =
+branch,
+> so that we can start to build on top of it and ensure that it doesn't
+> break, but for 6.18, I don't think it's quite ready to be there.
 
-BUT it has shown that it still needs some work to get "correct" and it
-really doesn't do much quite yet, so I have applied the patch below to
-pretty much just "disable" it entirely from the build at this point in
-time.
+Cool,
 
-I'll go and revert this commit after -rc1 is out, in my usb-next branch,
-so that we can start to build on top of it and ensure that it doesn't
-break, but for 6.18, I don't think it's quite ready to be there.
+I=E2=80=99ll follow up with the fixes required, and slowly build the =
+features
+needed for usb-skeleton as we discussed.
 
-Yes, this is not a normal way that bindings will probably be merged into
-the tree, but as I consulted deeply with the USB maintainer about this
-topic while eating some good Paris pizza and French wine this week while
-at the Kernel Recipes conference, I think that this deserves an
-exception as they agree this can be merged now and they will be
-responsible for any fallout.[1]
+Give me a couple of weeks though, I need to get myself out of conference
+hell first :)
 
-thanks,
+Btw, thanks for the reviews, Danilo!
 
-greg k-h
-
-From c1785be6395031f92b62badb27665f80f0a7794c Mon Sep 17 00:00:00 2001
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date: Thu, 25 Sep 2025 14:42:40 +0200
-Subject: USB: disable rust bindings from the build for now
-
-The rust USB bindings as submitted are a good start, but they don't
-really seem to be correct in a number of minor places, so just disable
-them from the build entirely at this point in time.  When they are ready
-to be re-enabled, this commit can be reverted.
-
-Cc: Daniel Almeida <daniel.almeida@collabora.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- rust/bindings/bindings_helper.h | 1 -
- rust/helpers/helpers.c          | 1 -
- rust/kernel/lib.rs              | 2 --
- samples/rust/Kconfig            | 2 +-
- 4 files changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 41cd42cd286f..9b3a4ab95818 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -74,7 +74,6 @@
- #include <linux/slab.h>
- #include <linux/task_work.h>
- #include <linux/tracepoint.h>
--#include <linux/usb.h>
- #include <linux/wait.h>
- #include <linux/workqueue.h>
- #include <linux/xarray.h>
-diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
-index 04103ab1a349..8e8277bdddca 100644
---- a/rust/helpers/helpers.c
-+++ b/rust/helpers/helpers.c
-@@ -48,7 +48,6 @@
- #include "task.c"
- #include "time.c"
- #include "uaccess.c"
--#include "usb.c"
- #include "vmalloc.c"
- #include "wait.c"
- #include "workqueue.c"
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 004ca70b816d..99dbb7b2812e 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -127,8 +127,6 @@
- pub mod tracepoint;
- pub mod transmute;
- pub mod types;
--#[cfg(CONFIG_USB = "y")]
--pub mod usb;
- pub mod uaccess;
- pub mod workqueue;
- pub mod xarray;
-diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
-index 6d6e4d8c88cb..865a62a93ddc 100644
---- a/samples/rust/Kconfig
-+++ b/samples/rust/Kconfig
-@@ -85,7 +85,7 @@ config SAMPLE_RUST_DRIVER_PLATFORM
- 
- config SAMPLE_RUST_DRIVER_USB
- 	tristate "USB Driver"
--	depends on USB = y
-+	depends on USB = y && BROKEN
- 	help
- 	  This option builds the Rust USB driver sample.
- 
--- 
-2.51.0
-
-
-[1] For those not getting the sarcasm here, I'm that maintainer, and
-    yes, Paris has some very good pizza :)
+=E2=80=94 Daniel=
 
