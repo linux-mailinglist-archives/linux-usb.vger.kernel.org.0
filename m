@@ -1,298 +1,305 @@
-Return-Path: <linux-usb+bounces-28641-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28642-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E910B9D044
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 03:29:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C22A4B9D04D
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 03:30:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C95954A2D08
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 01:29:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70CF5383260
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 01:30:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F0B2DEA86;
-	Thu, 25 Sep 2025 01:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F17B2DE71D;
+	Thu, 25 Sep 2025 01:30:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="HtUpD4aH"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="WnnwFHAP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE93310A1E
-	for <linux-usb@vger.kernel.org>; Thu, 25 Sep 2025 01:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758763763; cv=none; b=Cn81vQPWbAZPHY8WHSRQIrX7gR+VHg3nPYAYezquY3reCy0qHujJyV3hjWY2zQ0JNmb7cYMPc9ya7zve57dRTv1WzKpvoyHFdB9/RVm4658spwMOOG4mLSmCiV4IsbazSuTiRRguG3GB/yvzvDmZGUJXiwGLxdxILwOGQr3XFpw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758763763; c=relaxed/simple;
-	bh=sD0sv3TBC0KMw1V9eMLpdNGEKhtdWpJ8BsqL0n7Zz5U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jzvAF0w1h1O6LksuX/8flHCJni6DNuBWCGCKhTnt/IUt8+jqQCqMF9syNbbhQWc3x4Zby1baKO/VcykwVxIbb10vivGdBLgNd/I06MSJ0FGIEQI69W2uYJTNx7XyUAjv9G8FXDTsuyTg/cvccNq2ePsVQut/lQhxB3qK+ZGsUr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=HtUpD4aH; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58P0dRQq002118
-	for <linux-usb@vger.kernel.org>; Thu, 25 Sep 2025 01:29:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=nuNK7T5DMoCfeLehWypj1GbI
-	p838IekSq4r6kPWaJsw=; b=HtUpD4aHVrML9VGB5a4rv4i8ZcW+b6IyZ+IJoRZ7
-	IGi/4uDN9wJoQ+BSsjF1iFvLWPVPvVZAgRBOpDNrHRphXviBI9eB9XlfBNpyIAnH
-	WA5cDwkBTU9JoS5dFHGOmtpTuUOUII1Q4tWHwwp7b/pJBKUPjrKmigO6+LsE10iA
-	V3vZfaQvEnl50ZNpECdrkoOVXuMFCaKS3FCM0zbpShCk1jhLZTIkeZajV1n2i1we
-	wrU78ckyvcJiVdlxA3ymKSSex4lnTUEyP7MHPhZVygJj6TfJW4FpAkew25+pgo0X
-	soqnrZ0/bQJmwxYWZUkarslyU1hjJjFTNuJ6y7KHH5kmmg==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 499k98pabc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 25 Sep 2025 01:29:19 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4d7f90350f3so10870081cf.0
-        for <linux-usb@vger.kernel.org>; Wed, 24 Sep 2025 18:29:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758763759; x=1759368559;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nuNK7T5DMoCfeLehWypj1GbIp838IekSq4r6kPWaJsw=;
-        b=b+CEgYTu0yLOWk6M6bt069XdeUFmLoZxgaef3BI3pvMst1B1aMGxnnc3CoLMHK1Ou0
-         /sWdtLlR814g+n3UnplfJH9IgtV9A5cEJ5lHILdJcQMkehzRNAHJ4kZ5EFZPdzD7wVaf
-         pfDmi0B8zCCAcFrgQXNYTYs3LLNvL8WWGqLNinymSjqVgGg5+hwgO3eRNB6IAZn7FL+u
-         PIApwXSHL0T+61vKJXGLFA3CI0hXOSUKIceI4fOs5eXaDVdDrIUSdwF33V3l1Tnd0MPZ
-         HH8UJiljyg0bu6beGZq0lCKpNJQkpuuwNjpNRkGQh3To4KbzYziWjEjvcm3mzTu5xUIG
-         7Z5A==
-X-Forwarded-Encrypted: i=1; AJvYcCXWX9N/CgvXzk0ptW97ND24hBMW4bwGEIvEwanHrpls0UXN63m0HPHukdFtqhPge5GpEN7S9SCAHJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMBJrHXC3fAa3sQGq6WCQR3sedfzI1d6mXC0EBF7Kgyb/3ZAXd
-	pOjWmLhOZzA8OC6iLnK0/GIreUbqDCH4Nx7ANR5tyeFxJ8BI664q/GDTjYVsFmeKxCJsLefKrHs
-	FcZmNbINKuXvtj6WC/1LrNMYTygMrCae2C79zlexwSobTDjNRixmS/8CyNbAY6/A=
-X-Gm-Gg: ASbGncsb7pEuPBYcLI46WDol8igJOR7VlhbRb170QXdh5OCclGYKm6hlR5FOoen1RYk
-	MDBbAeUQFhvRypFChcmEdI/wdCBQ2+68J+9FD4keUHR6WrB60GdLWWff0bgdWFwWq5EHN02KyqH
-	JBtwLd2pddb3PDS3AHjb0fr3HBm4K97QKghx5mmubayN7gxk0tMiyLaZ95wg8WJi/lCHanlyPtB
-	CBc7CqTwcSEqyOBH4ZhmCibYXEQWg50AqWtA4Eyyp7ALyqpca8o257wYyld7JtCy7xnkP5MAuSK
-	KBJRdhYl5LQ7MLyP8f1MXIIYBeZD5LbY2OG24cKoUF6sctoyaMIShTqBus7QJmBNuxfi94hJxej
-	z22Y+kgsf3/NW6xKZxm9rAVsJqxVHpZ2g5bWGPDqBBUoSmVYA2wHK
-X-Received: by 2002:ac8:5e4f:0:b0:4b6:3d70:8810 with SMTP id d75a77b69052e-4dacd244d25mr11227251cf.22.1758763758895;
-        Wed, 24 Sep 2025 18:29:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHbXt6dQDxjOzbNg9IrWf3qsSEdLVIcZtX7vGPsgYxRkHkV+RizhrTs9YlBAGqCYeg/uaivtA==
-X-Received: by 2002:ac8:5e4f:0:b0:4b6:3d70:8810 with SMTP id d75a77b69052e-4dacd244d25mr11226981cf.22.1758763758390;
-        Wed, 24 Sep 2025 18:29:18 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-36fb7fe8750sm1814621fa.66.2025.09.24.18.29.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 18:29:16 -0700 (PDT)
-Date: Thu, 25 Sep 2025 04:29:13 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-Cc: krzk+dt@kernel.org, conor+dt@kernel.org, kishon@kernel.org,
-        vkoul@kernel.org, gregkh@linuxfoundation.org, robh@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: Re: [PATCH v2 06/10] phy: qualcomm: Update the QMP clamp register
- for V6
-Message-ID: <v42k6kmpzcq6aa2c3bgaga3xf47ucg6q4qduwg7w6v6672s2eb@hfpwd73pv6gq>
-References: <20250925005228.4035927-1-wesley.cheng@oss.qualcomm.com>
- <20250925005228.4035927-7-wesley.cheng@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11BF4437A
+	for <linux-usb@vger.kernel.org>; Thu, 25 Sep 2025 01:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.143.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758763813; cv=fail; b=oyVdKIcpV7iVvNxYon2azoJeh7bNoLyebS2WlhwqN9KLQLlHmvROSz6HEUvRCPDUi5JeWwOmMZgw57UsM22HKg4A0a12YNups3OVI4UacepD4M0GlwpkWk0gXLXmipo0SGNecgPA+xiVBHdpoYQzqkF9AFhYQMvrZ/+nyEspqFI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758763813; c=relaxed/simple;
+	bh=SvyzWFvhBRejZNHaw7Acc8j5TXY50i6KwQ2Wej8TFtY=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=XqduPXpUBoHZqN9UFCOUVBmmgH0vcYDZMgRN4ZngfjXb9uDWZ+CNrk/vHVgNC1RgACkv9Ua0XDaGEVvVVROoXgW+Ep2SjqR90iADqYF2nmrwihqwSyl/ZQBsOXaBhWHvQouAAsqT9rzaBoEsrYhZdWEMB94DCzxYSbXbGHwZtAk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=WnnwFHAP; arc=fail smtp.client-ip=148.163.143.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58OErDDR021097;
+	Thu, 25 Sep 2025 01:30:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pps0720; bh=Sv
+	yzWFvhBRejZNHaw7Acc8j5TXY50i6KwQ2Wej8TFtY=; b=WnnwFHAP07iaksXsZN
+	bah+HaZnTEY2juXfwDxkxDytU59MBWW81EM1Tx7281DNcKQNjLKiLxp3ZUef9Ezx
+	86hD2x1H4IPsX9dcu/FuU7cJFek2M6payU9/ns63ILvobyhgMS6S4rwAO9ynbLHK
+	eSQam57DTwEVaSsSLRqOsqVfDyQwS//6xKriSh7aPVQdvZDZzg9LSnnPYFty2E/P
+	uzip27t3nJ5LW8FpO84hsH0gXRUcg58jFVpiSaRw4JQADW2tAIgdwuU8tzEI5kvT
+	jlRbeCjrsm/BTLLN33MJFIyecm5tFWp1dTZw/DbSx3KQ9xYZdbmQcPl6u0pKrGmF
+	Q+Gg==
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 49cjsumkaa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Sep 2025 01:30:00 +0000 (GMT)
+Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id D3DC9800358;
+	Thu, 25 Sep 2025 01:29:59 +0000 (UTC)
+Received: from p1wg14924.americas.hpqcorp.net (10.119.18.113) by
+ p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Wed, 24 Sep 2025 13:29:59 -1200
+Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
+ p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Wed, 24 Sep 2025 13:29:59 -1200
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Wed, 24 Sep 2025 13:29:59 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wZrlOlkcaVBvjNbP4bqpfdTNoJ7KUQ/v/pE25bBNn7hFw/VOP/BehAHryMpCuCki9125/Uku/MABqEBohn1gR1WswYcPhJ4Zuc0/y9YepHJc6dopcGuKTOdz1EEJsChLBpAexhQabEgpyyXfZXW9l24FaxXIIWIro5clkSXNc4GDpsGfy4+lybYxOk3HjmTC8MGYOdiR8am5xCHBS6zOlwytFmNBpSMC38GkWc/GsdCYH19vaN+XptIqD9xSL+4QLEa3bxCkLTrH1hP0EegM7IpsqqQ5ufUtON/iuzhP+SSP1YhtXoIlZ32AVi01zQxedbSTU+x74331aBMnaszBHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SvyzWFvhBRejZNHaw7Acc8j5TXY50i6KwQ2Wej8TFtY=;
+ b=eBxMtXFByZtN2VIWAaxJdZSfLJff06uJjdhYLguuOgnhoJtXZjY8b+R6bWvg8Gwso0labWGG6rQuYPgT+h8mCfSRHKsAsGPdOTUE3XY1wQnIV3AQaVqdve2+KFVXpRUO3BXD/x5/NBe0rTfvnto0QZnypUov8FNTCD3Rs4tAmg1JOEObWJGK+ZeOpQN/mOiKeY8Nu//DJHsCilfFjdG6U3Cj4yd0VDNRcD03qWmn86OkvnZGKFOCuNWtYQxRnfOumtuqlh8+AmfdzSAIPamvvLL1YhJtd7q/+4Hkkxm00ZOFFwreoCIpns8zf+e1SN6NALkB4D8Uo8tNVL7H5W5cOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c5::19)
+ by SJ0PR84MB2087.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:436::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.9; Thu, 25 Sep
+ 2025 01:29:57 +0000
+Received: from MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::23e6:7d13:8aaf:96d1]) by MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::23e6:7d13:8aaf:96d1%7]) with mapi id 15.20.9160.008; Thu, 25 Sep 2025
+ 01:29:57 +0000
+From: "Ko, Kang Jun" <kang-jun.ko@hpe.com>
+To: Greg KH <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>
+Subject: Re: USB: urb error log during reboot on devices with multiple serial
+ consoles (Linux Kernel version 5.15.71)
+Thread-Topic: USB: urb error log during reboot on devices with multiple serial
+ consoles (Linux Kernel version 5.15.71)
+Thread-Index: AQHcKHen6J7H/BFX0keotto+hLxEybSYpuYAgAp9k3c=
+Date: Thu, 25 Sep 2025 01:29:57 +0000
+Message-ID: <MW5PR84MB2083421899199020C49FB35ABD1FA@MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM>
+References: <MW5PR84MB20830480C70129C188178130BD16A@MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM>
+ <2025091842-parkway-implode-0c85@gregkh>
+In-Reply-To: <2025091842-parkway-implode-0c85@gregkh>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW5PR84MB2083:EE_|SJ0PR84MB2087:EE_
+x-ms-office365-filtering-correlation-id: 86a8ab60-7ee8-45c2-fede-08ddfbd30984
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700021;
+x-microsoft-antispam-message-info: =?iso-8859-1?Q?KFWf0TEC2GU8X4jNlligXjRNz8nsZazWrp13KIp2wyx/UsWH2pMGqubkA/?=
+ =?iso-8859-1?Q?DiFruMPBCx3f3oENHHHcjGjRWpIyNTCRx4T8q0MJM1S+w0H5iCsqt8YYxD?=
+ =?iso-8859-1?Q?7JNm19KZ+B/tx/Qnz6DI0W3sZ2MIAXPoXTY8MZ9QUWBHckR3lVyK0Nx8sr?=
+ =?iso-8859-1?Q?5WBkS6NjqqdOU4iSgTFdmdVIrVfi2Z5ansmycnEkVrsfs2F72Eskc6Yzzs?=
+ =?iso-8859-1?Q?dvBfswduuoCh1wppLGKgaSaAa+4SzJKUz0/mQYHTY5Tx8bN2j8nrXxHzSa?=
+ =?iso-8859-1?Q?dOOibsC5Vzedd6l2ZC21P66VrdeZVUCaMXqSd4d07Yp0EE7xTEpyrcy4WZ?=
+ =?iso-8859-1?Q?p/c52xkgvmm7J0oGyGQTdjua38liQHD4qxkp+wuBgQPBqDwWLYsCf7s0bI?=
+ =?iso-8859-1?Q?mOJtncS2w9o8xthK/dblfT0KeHpdOCMFP3GgetLeh8MUtAN7beMsLS8gqc?=
+ =?iso-8859-1?Q?Bsa5xFf2BQYOdfbha3/spjp/UcFGuu0kBpt0AnTl2LXzlOs5JetXAfuXZY?=
+ =?iso-8859-1?Q?nCgi7c/HM+MTwlZziUt4ur7KugPZQdraPjtS5tQnaFy1vZeeDDdIVw1Ojy?=
+ =?iso-8859-1?Q?fORDn4htN59+87ri29FtCyh7FdhCZbm5AP8pTT9vLlggG/D1uV4JZzou9u?=
+ =?iso-8859-1?Q?spGgifO+zzmXPIMAccGp5YGKmiexV15nb7nKcjcmN8qGuUSNbD3CqLA93g?=
+ =?iso-8859-1?Q?cqyGnbbsaL6QvPZMVJMiHxvFUsHP1Hcx6rfBUDXIUHUaTtdA8MtEEBfu/T?=
+ =?iso-8859-1?Q?C0AewvoLXxsR8Ivnwdhd+60SF1G24DhWIepsUscYte0ma8UGl26JwnpAFQ?=
+ =?iso-8859-1?Q?3/hVUIHy69NmLn+kN6WbaFf0rmseuNmXvc936Xi03HlsVmxmo7xUq0ptuX?=
+ =?iso-8859-1?Q?jwddNMyPROPiNT4TO9TDDFdqeJxRhfbKXtIXKjca8TEUMdCdtJ9G8zGcgT?=
+ =?iso-8859-1?Q?m9SjRfqlkgGO/4NXxHe7B4O5QpH7dSZ2wkyHipHmkK7M8emTsQkOswyQOt?=
+ =?iso-8859-1?Q?YDKcdlR/IKd2FH5uFP7HSm1yEQNZkZA0PvrdcguYxrrgpzUeyatp2T5O7l?=
+ =?iso-8859-1?Q?7C6v6XoKAoraErftfOJGEPGPwqGhmUUuYycyGA0oBqVpcUM+vP7tZIBjq0?=
+ =?iso-8859-1?Q?y8v98wzgVNIQyYzLiNl4/cD06EqaRFpjBxAVzSxGdcLEq7hN5aIUXagnGe?=
+ =?iso-8859-1?Q?hzntX3kIacRq84FRy+nnjklo5lz0KnGfEpYo+dZUt/fsiiS5MOWXOIGP/I?=
+ =?iso-8859-1?Q?1s3Les8lf6vulY5mUeSgFfppkJFBCDVutKAVdJ2EvHww4szCZvuXXEgXTu?=
+ =?iso-8859-1?Q?/lTJuejkHaLqk4m2+puTntMRdr9oxQbOQBHCLZDsxbtKgmdIBVG+J6O3rW?=
+ =?iso-8859-1?Q?152JL46CgGlR5Av67xCVF8hUTAvwvtOqv+IKxj3hMLUA+HOvHfZTs3Sffz?=
+ =?iso-8859-1?Q?yIyu7eXqXiV6DlOXunZAXco++Uk9vCw2gwva4Ty4lmTLap/lHIfV0G4Ij0?=
+ =?iso-8859-1?Q?xukXlXhy5wsisZvuxjYjjpjtRWabsvS57sIf/kRDfgo/60oJRzf0aVOVog?=
+ =?iso-8859-1?Q?1CLDZNU=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?d8qTEAT0r6cfB9f9XdlB2KjWMVh18ZUtz8VWT4zzqvIRHxlnJtghDBEnCh?=
+ =?iso-8859-1?Q?Oe+6fUvQmeZSPhHGwtohp3/Fyan8PchcjEE+fVt7hUJMB+dIqEDYihQIZG?=
+ =?iso-8859-1?Q?nwUsBhzTLZvXWBlUllcBhHt6VUA7yDZFqZzjiURubn3hWtijx3a9KxlYh4?=
+ =?iso-8859-1?Q?uN2Iv8L0xkZgtPFjr6gWjs+0qcaLXb0ZcBLVJqGzV/IcmKp1Nn4cPUebMz?=
+ =?iso-8859-1?Q?H14CPKYeiDTfTZZ90kZJaVjoL7yXLntizvuK+I2ldIw9IkO4M6o4idXanb?=
+ =?iso-8859-1?Q?qlnY5PncjJuXe3SDS06gdGQaMXkqaOsr5bqYwg9P6LVPwX/xi6Js99+mJL?=
+ =?iso-8859-1?Q?FdgELfjRolLq7pOzcl0QxNKFGjIzSwU86j2absyOFUuiWder60Rbvm/6vL?=
+ =?iso-8859-1?Q?XPtYgmcBJjmCAMN5VwgYeBScl0MeY5oC3QAFbguOxdQxYpaVhPbYY2OL3U?=
+ =?iso-8859-1?Q?asg23k75b6Mbmdbylibx0Zkuz+YviHQrGbiaYijktNtPg+IFckn75tEqAT?=
+ =?iso-8859-1?Q?koVejYqUbeTfznO3R90Nl7IzSz6ap3MzqOZC3jTAIzwTkJ7oYUDcyOsqLb?=
+ =?iso-8859-1?Q?pOl4nEp+Hc5qus+fq+ISbGVdP2heRtEhtyteL6iXWpprGSfcctwMiouOmW?=
+ =?iso-8859-1?Q?j53YI7uRNRs0c7F7T4w2cb9XpJD4UHrHg82Zb8NrVbXH5cTa5Vbx7eI3YF?=
+ =?iso-8859-1?Q?uYzImGwgAEtvjp5YwWxXzRTGJr+Ot6OAc4zPUmbSUCshrxiGvM1duozStH?=
+ =?iso-8859-1?Q?NH1wPWHhIsuiOGSH/WMTWnOGz3VfcqAM04f8ZIu+b/GiU/Vm1Tdn82ywa8?=
+ =?iso-8859-1?Q?1q9jLuiSJMdoBigBhl7cpRRa0Jro2OPCJSVPe6+R7amdXw1jbPuZxzyFDV?=
+ =?iso-8859-1?Q?V/u+XkxKv8f76wh2ZoQZz9Wc+l00kL+WhsbrVBWuud2fKS+A/6yEUx6zLR?=
+ =?iso-8859-1?Q?8EdeyryALut9/aqRsjDqbaE0OfwCsrBBwBsHzHQG62IaCBR/NcIUjej3hl?=
+ =?iso-8859-1?Q?7zX2e4AiKIFJM164tuR0bN8DJqXyyqVZ+xlpU7N7UkFMaSFQkAXs/mM1wm?=
+ =?iso-8859-1?Q?4/H3H/lHmH1w91ytzwUeZSRTuJpflKLx6h1MZWBVnM9R8Ce4KYx6saDP0J?=
+ =?iso-8859-1?Q?3grKe0JZKEAaiZHv+bpuDru1ml/ubUiJINeOma07ixaXdm39AgUohiEkmI?=
+ =?iso-8859-1?Q?DcdTdW8cGpMW0YN/SG/s2oTc83w3WyxKvqTFPB4TBEfnye4EBODmH8lDxl?=
+ =?iso-8859-1?Q?b+vBN4vH++rTk509wU3VUG5U8iX/ZYKJtpKd4W+T+EjC7KBAxplD0+s3z0?=
+ =?iso-8859-1?Q?OSWnNu+47YfiP3x3EepvsWCkB8osFWuE2TbsuVaOqjQ62+zj0UjOdALemx?=
+ =?iso-8859-1?Q?XAxvihJYn7GIuGKNpIILG/ra4gSPpTSudf2dDrRlvvVv2SStzOfzOD5AvG?=
+ =?iso-8859-1?Q?wABBesIjfcGZTYfmiRPYguRsLL4KWQc6hjPMQKDfcvNUO7Fe8a0bPwPOCO?=
+ =?iso-8859-1?Q?TmVKXuFU/EFHThDEP0TpUJx0i193tBcbWdEou7ysX0geTV5jB/PLCV+A8X?=
+ =?iso-8859-1?Q?uIykgYalO5a1QMPMv1k7XAX3/nEGg7LZRw4OMdO87D1ijpFrf3qBvZoRWX?=
+ =?iso-8859-1?Q?KeX2sAz1mBtsc=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250925005228.4035927-7-wesley.cheng@oss.qualcomm.com>
-X-Proofpoint-GUID: 6CvN5o5lYbr2hCyTX4KuroSEzHEHF5oD
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIwMDAxOCBTYWx0ZWRfX/a0BQ0eyf82t
- MYhe6DrPE339Uh209D2lWbyTAQXC0OB9GFXPzhLCQO5T0N765jEClATvYuApAHNkeQ1E/wZ0X/l
- 2pkU1qAVRs92woN4QW9UhQ3C+DTT9j143NekUbMrkpxtVXG9jtpCTo1oAq/T1uQ0bEHDUd7KNcl
- ogHe7eH+66QmhoUW/2ZeZSNGQQL2IPB/LmkxI2Wo5OgzhHtai6vo1OFsXHqVHMvosN8EuaPuKry
- l7d2Lll7bXvATYYC0U/Rw4WxQP9f91f2+/X3LKZiBsvMWt6STokfFjvynmfzqlq9k1apcxY0TcS
- VP0Jb7v572aC4Twhc5sCaMgzPuFiPGNmMXCOMDRkxJRqpqFwPmzZLOv3OVin+j0zAZyhfx5hwkG
- aTcU5JKH
-X-Proofpoint-ORIG-GUID: 6CvN5o5lYbr2hCyTX4KuroSEzHEHF5oD
-X-Authority-Analysis: v=2.4 cv=Dp1W+H/+ c=1 sm=1 tr=0 ts=68d49aef cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=yJojWOMRYYMA:10 a=JfrnYn6hAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
- a=IuB_klkJ-YW1I7EZuIgA:9 a=CjuIK1q_8ugA:10 a=a_PwQJl-kcHnX1M80qC6:22
- a=1CNFftbPRP8L7MoqJWF3:22 a=TjNXssC_j7lpFel5tvFf:22
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR84MB2083.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86a8ab60-7ee8-45c2-fede-08ddfbd30984
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Sep 2025 01:29:57.2385
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8fsqcPwwRhAM/mnEZ4htpF9Ws+uVNdKB01FlUsykfincD4/0wwsXhKR4Z4cpU9deoljanugWgY4k/4wIFhgi5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB2087
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: JlnZea_7d0vMLXqjaMsO7iZG8TSnHV0x
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI0MDEyNyBTYWx0ZWRfXwdEedpPrIKz6
+ xsNdsqxUGUssjBiout8V2uLStY1J5dOMEhr1VdIMV0E0h15GhiIO4hwZQKhL9JaZ/N2aXTWmIt6
+ Mrxy49aX5xFSzOjp5yp9hqbTEkxB/U16vUiuGqARpjAFTIu/kGXooxPsD46Pru41QWGHwgOpu5M
+ E9KE8siJb8X1bhWo7CM+u62WYvnGZxtVWZcY2BrIF+DZ1HGNwbNvgGz74s0qOS9GyeXLxVNucwW
+ n3pOxAxu5zolBH1H6rMUIfbwlkTA1JmqeSDuiYcXzUPgxcJItv4xcCiZUgjEgVGyytRp0UqAUxX
+ yEN1jlQ0dPQyGNYrVOHxNrusuol5qBzmKSHLjszItCd2lVgchWKm2eOdpigr4zYjudf1DLbeSqc
+ DSYDtua8
+X-Authority-Analysis: v=2.4 cv=ZJHXmW7b c=1 sm=1 tr=0 ts=68d49b18 cx=c_pps
+ a=A+SOMQ4XYIH4HgQ50p3F5Q==:117 a=A+SOMQ4XYIH4HgQ50p3F5Q==:17
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
+ a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=yJojWOMRYYMA:10 a=ag1SF4gXAAAA:8
+ a=MvuuwTCpAAAA:8 a=VwQbUJbxAAAA:8 a=KKSc8-nA35z9a21OzkgA:9 a=wPNLvfGTeEIA:10
+ a=Yupwre4RP9_Eg_Bd0iYG:22
+X-Proofpoint-ORIG-GUID: JlnZea_7d0vMLXqjaMsO7iZG8TSnHV0x
+X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-24_07,2025-09-24_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 clxscore=1015 adultscore=0 bulkscore=0 impostorscore=0
- phishscore=0 spamscore=0 priorityscore=1501 suspectscore=0
+ bulkscore=0 adultscore=0 malwarescore=0 spamscore=0 clxscore=1015
+ impostorscore=0 phishscore=0 priorityscore=1501 suspectscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509200018
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509240127
 
-On Wed, Sep 24, 2025 at 05:52:24PM -0700, Wesley Cheng wrote:
-> QMP combo phy V6 and above use the clamp register from the PCS always on
-> (AON) address space.  Update the driver accordingly.
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
-> Signed-off-by: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 38 ++++++++++++++++++++---
->  1 file changed, 33 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> index 7b5af30f1d02..1caa1fb6a8c7 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> @@ -29,7 +29,10 @@
->  #include "phy-qcom-qmp-common.h"
->  
->  #include "phy-qcom-qmp.h"
-> +#include "phy-qcom-qmp-pcs-aon-v6.h"
->  #include "phy-qcom-qmp-pcs-misc-v3.h"
-> +#include "phy-qcom-qmp-pcs-misc-v4.h"
-> +#include "phy-qcom-qmp-pcs-misc-v5.h"
->  #include "phy-qcom-qmp-pcs-usb-v4.h"
->  #include "phy-qcom-qmp-pcs-usb-v5.h"
->  #include "phy-qcom-qmp-pcs-usb-v6.h"
-> @@ -78,6 +81,7 @@ enum qphy_reg_layout {
->  	QPHY_PCS_AUTONOMOUS_MODE_CTRL,
->  	QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR,
->  	QPHY_PCS_POWER_DOWN_CONTROL,
-> +	QPHY_PCS_CLAMP_ENABLE,
->  
->  	QPHY_COM_RESETSM_CNTRL,
->  	QPHY_COM_C_READY_STATUS,
-> @@ -105,6 +109,8 @@ static const unsigned int qmp_v3_usb3phy_regs_layout[QPHY_LAYOUT_SIZE] = {
->  	[QPHY_PCS_AUTONOMOUS_MODE_CTRL]	= QPHY_V3_PCS_AUTONOMOUS_MODE_CTRL,
->  	[QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR] = QPHY_V3_PCS_LFPS_RXTERM_IRQ_CLEAR,
->  
-> +	[QPHY_PCS_CLAMP_ENABLE]		= QPHY_V3_PCS_MISC_CLAMP_ENABLE,
-> +
->  	[QPHY_COM_RESETSM_CNTRL]	= QSERDES_V3_COM_RESETSM_CNTRL,
->  	[QPHY_COM_C_READY_STATUS]	= QSERDES_V3_COM_C_READY_STATUS,
->  	[QPHY_COM_CMN_STATUS]		= QSERDES_V3_COM_CMN_STATUS,
-> @@ -130,6 +136,8 @@ static const unsigned int qmp_v45_usb3phy_regs_layout[QPHY_LAYOUT_SIZE] = {
->  	[QPHY_PCS_AUTONOMOUS_MODE_CTRL]	= QPHY_V4_PCS_USB3_AUTONOMOUS_MODE_CTRL,
->  	[QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR] = QPHY_V4_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR,
->  
-> +	[QPHY_PCS_CLAMP_ENABLE]		= QPHY_V4_PCS_MISC_CLAMP_ENABLE,
-> +
->  	[QPHY_COM_RESETSM_CNTRL]	= QSERDES_V4_COM_RESETSM_CNTRL,
->  	[QPHY_COM_C_READY_STATUS]	= QSERDES_V4_COM_C_READY_STATUS,
->  	[QPHY_COM_CMN_STATUS]		= QSERDES_V4_COM_CMN_STATUS,
-> @@ -155,6 +163,8 @@ static const unsigned int qmp_v5_5nm_usb3phy_regs_layout[QPHY_LAYOUT_SIZE] = {
->  	[QPHY_PCS_AUTONOMOUS_MODE_CTRL]	= QPHY_V5_PCS_USB3_AUTONOMOUS_MODE_CTRL,
->  	[QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR] = QPHY_V5_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR,
->  
-> +	[QPHY_PCS_CLAMP_ENABLE]		= QPHY_V5_PCS_MISC_CLAMP_ENABLE,
-
-Not defined
-
-> +
->  	[QPHY_COM_RESETSM_CNTRL]	= QSERDES_V5_COM_RESETSM_CNTRL,
->  	[QPHY_COM_C_READY_STATUS]	= QSERDES_V5_COM_C_READY_STATUS,
->  	[QPHY_COM_CMN_STATUS]		= QSERDES_V5_COM_CMN_STATUS,
-> @@ -180,6 +190,8 @@ static const unsigned int qmp_v6_usb3phy_regs_layout[QPHY_LAYOUT_SIZE] = {
->  	[QPHY_PCS_AUTONOMOUS_MODE_CTRL]	= QPHY_V6_PCS_USB3_AUTONOMOUS_MODE_CTRL,
->  	[QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR] = QPHY_V6_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR,
->  
-> +	[QPHY_PCS_CLAMP_ENABLE]		= QPHY_V6_PCS_AON_CLAMP_ENABLE,
-
-Not defined
-
-> +
->  	[QPHY_COM_RESETSM_CNTRL]	= QSERDES_V6_COM_RESETSM_CNTRL,
->  	[QPHY_COM_C_READY_STATUS]	= QSERDES_V6_COM_C_READY_STATUS,
->  	[QPHY_COM_CMN_STATUS]		= QSERDES_V6_COM_CMN_STATUS,
-> @@ -205,6 +217,8 @@ static const unsigned int qmp_v6_n4_usb3phy_regs_layout[QPHY_LAYOUT_SIZE] = {
->  	[QPHY_PCS_AUTONOMOUS_MODE_CTRL]	= QPHY_V6_PCS_USB3_AUTONOMOUS_MODE_CTRL,
->  	[QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR] = QPHY_V6_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR,
->  
-> +	[QPHY_PCS_CLAMP_ENABLE]		= QPHY_V6_PCS_AON_CLAMP_ENABLE,
-> +
->  	[QPHY_COM_RESETSM_CNTRL]	= QSERDES_V6_COM_RESETSM_CNTRL,
->  	[QPHY_COM_C_READY_STATUS]	= QSERDES_V6_COM_C_READY_STATUS,
->  	[QPHY_COM_CMN_STATUS]		= QSERDES_V6_COM_CMN_STATUS,
-> @@ -1755,6 +1769,7 @@ struct qmp_combo_offsets {
->  	u16 usb3_serdes;
->  	u16 usb3_pcs_misc;
->  	u16 usb3_pcs;
-> +	u16 usb3_pcs_aon;
->  	u16 usb3_pcs_usb;
->  	u16 dp_serdes;
->  	u16 dp_txa;
-> @@ -1836,6 +1851,7 @@ struct qmp_combo {
->  	void __iomem *tx2;
->  	void __iomem *rx2;
->  	void __iomem *pcs_misc;
-> +	void __iomem *pcs_aon;
->  	void __iomem *pcs_usb;
->  
->  	void __iomem *dp_serdes;
-> @@ -1960,6 +1976,7 @@ static const struct qmp_combo_offsets qmp_combo_offsets_v8 = {
->  	.usb3_serdes	= 0x1000,
->  	.usb3_pcs_misc	= 0x1c00,
->  	.usb3_pcs	= 0x1e00,
-> +	.usb3_pcs_aon	= 0x2000,
->  	.usb3_pcs_usb	= 0x2100,
->  	.dp_serdes	= 0x3000,
->  	.dp_txa		= 0x3400,
-> @@ -3345,6 +3362,7 @@ static void qmp_combo_enable_autonomous_mode(struct qmp_combo *qmp)
->  	const struct qmp_phy_cfg *cfg = qmp->cfg;
->  	void __iomem *pcs_usb = qmp->pcs_usb ?: qmp->pcs;
->  	void __iomem *pcs_misc = qmp->pcs_misc;
-> +	void __iomem *pcs_aon = qmp->pcs_aon;
->  	u32 intr_mask;
->  
->  	if (qmp->phy_mode == PHY_MODE_USB_HOST_SS ||
-> @@ -3364,9 +3382,14 @@ static void qmp_combo_enable_autonomous_mode(struct qmp_combo *qmp)
->  	/* Enable required PHY autonomous mode interrupts */
->  	qphy_setbits(pcs_usb, cfg->regs[QPHY_PCS_AUTONOMOUS_MODE_CTRL], intr_mask);
->  
-> -	/* Enable i/o clamp_n for autonomous mode */
-> -	if (pcs_misc)
-> -		qphy_clrbits(pcs_misc, QPHY_V3_PCS_MISC_CLAMP_ENABLE, CLAMP_EN);
-> +	/*
-> +	 * Enable i/o clamp_n for autonomous mode
-> +	 * V6 and later versions use pcs aon clamp register
-> +	 */
-> +	if (pcs_aon)
-> +		qphy_clrbits(pcs_aon, cfg->regs[QPHY_PCS_CLAMP_ENABLE], CLAMP_EN);
-> +	else if (pcs_misc)
-> +		qphy_clrbits(pcs_misc, cfg->regs[QPHY_PCS_CLAMP_ENABLE], CLAMP_EN);
->  }
->  
->  static void qmp_combo_disable_autonomous_mode(struct qmp_combo *qmp)
-> @@ -3374,10 +3397,13 @@ static void qmp_combo_disable_autonomous_mode(struct qmp_combo *qmp)
->  	const struct qmp_phy_cfg *cfg = qmp->cfg;
->  	void __iomem *pcs_usb = qmp->pcs_usb ?: qmp->pcs;
->  	void __iomem *pcs_misc = qmp->pcs_misc;
-> +	void __iomem *pcs_aon = qmp->pcs_aon;
->  
->  	/* Disable i/o clamp_n on resume for normal mode */
-> -	if (pcs_misc)
-> -		qphy_setbits(pcs_misc, QPHY_V3_PCS_MISC_CLAMP_ENABLE, CLAMP_EN);
-> +	if (pcs_aon)
-> +		qphy_setbits(pcs_aon, cfg->regs[QPHY_PCS_CLAMP_ENABLE], CLAMP_EN);
-> +	else if (pcs_misc)
-> +		qphy_setbits(pcs_misc, cfg->regs[QPHY_PCS_CLAMP_ENABLE], CLAMP_EN);
->  
->  	qphy_clrbits(pcs_usb, cfg->regs[QPHY_PCS_AUTONOMOUS_MODE_CTRL],
->  		     ARCVR_DTCT_EN | ARCVR_DTCT_EVENT_SEL | ALFPS_DTCT_EN);
-> @@ -4075,6 +4101,8 @@ static int qmp_combo_parse_dt(struct qmp_combo *qmp)
->  	qmp->serdes = base + offs->usb3_serdes;
->  	qmp->pcs_misc = base + offs->usb3_pcs_misc;
->  	qmp->pcs = base + offs->usb3_pcs;
-> +	if (offs->usb3_pcs_aon)
-> +		qmp->pcs_aon = base + offs->usb3_pcs_aon;
->  	qmp->pcs_usb = base + offs->usb3_pcs_usb;
->  
->  	qmp->dp_serdes = base + offs->dp_serdes;
-> 
-> -- 
-> linux-phy mailing list
-> linux-phy@lists.infradead.org
-> https://lists.infradead.org/mailman/listinfo/linux-phy
-
--- 
-With best wishes
-Dmitry
+Hello,=0A=
+=0A=
+Thank you for the kind response. I've tried updating the kernel version to =
+6.12.3=0A=
+and the same error message still exists during shutdown.=0A=
+=0A=
+I understand this is not a bug or a functional issue and the kernel is corr=
+ectly noting that the hardware is no longer reachable.=0A=
+ =0A=
+However, I would like to know if canceling the USB messages when the hardwa=
+re has gone away so that the error message doesn't happen is something that=
+ is considered for future kernel versions.=0A=
+=0A=
+Thank you,=0A=
+Jun Ko=0A=
+=0A=
+=0A=
+________________________________________=0A=
+From: Greg KH <gregkh@linuxfoundation.org>=0A=
+Sent: Thursday, September 18, 2025 5:09 PM=0A=
+To: Ko, Kang Jun <kang-jun.ko@hpe.com>=0A=
+Cc: linux-usb@vger.kernel.org <linux-usb@vger.kernel.org>=0A=
+Subject: Re: USB: urb error log during reboot on devices with multiple seri=
+al consoles (Linux Kernel version 5.15.71)=0A=
+=0A=
+=0A=
+On Thu, Sep 18, 2025 at 08:39:11AM +0000, Ko, Kang Jun wrote:=0A=
+> Hello,=0A=
+> =0A=
+> I am reporting an USB related issue on the Linux Kernel version 5.15.71=
+=0A=
+=0A=
+Please note that that kernel is _VERY_ old and out of date and not=0A=
+supported by anyone as it was released over 3 years ago.=A0 There have=0A=
+been over 19000 changes made to the 5.15.y branch since then.=0A=
+=0A=
+Please try updating and see if the issue persists with the latest 5.15.y=0A=
+release.=0A=
+=0A=
+But, as you write:=0A=
+=0A=
+> Below is an error message that is seen in my dmesg log when my network sw=
+itch goes into reboot. =0A=
+> =0A=
+> /****** Reboot log ******/=0A=
+> ...=0A=
+> Reboot reason: Reboot requested by user=0A=
+> reboot: Restarting system=0A=
+> ftdi_sio ttyUSB0: usb_serial_generic_write_start - error submitting urb: =
+-19=0A=
+> ...=0A=
+> /****** Reboot log ******/=0A=
+> =0A=
+> Summary:=0A=
+> Our network switch has two serial consoles attached to the system (one co=
+nnected to the processor, one connected to FTDI chip).=0A=
+> When the switch goes into reboot, I can see (from the console connected t=
+o the processor) the above error message.=0A=
+> There is no functional problem in rebooting the switch but I would like t=
+o know if the error message is something intended by the Linux Kernel.=0A=
+> =0A=
+> Reproduction steps:=0A=
+> Attach two serial consoles to the system and reboot.=0A=
+> =0A=
+> Additional notes:=0A=
+> The serial drivers do not have a designated "shutdown" method so the driv=
+er is still present when the kernel goes through the device_shutdown method=
+ within the kernel_restart_prepare() function. The ftdi_sio serial driver c=
+ontinues to submit URB messages to the console when the console is already =
+removed from the system, which results in the error message.=0A=
+> =0A=
+> Conclusion:=0A=
+> Although this is not a functional issue and is not observed on systems wi=
+th one serial console attached, this error message can be seen 100% on rebo=
+ot on devices with multiple consoles. I would like to know if this error lo=
+g is intended by design or if it is something that was not considered becau=
+se there is no functional issue.=0A=
+=0A=
+This really isn't a bug, and you should be able to just ignore it, the=0A=
+kernel is correctly noting that it could not submit the USB message=0A=
+because the hardware has gone away and you did not close the console=0A=
+before that happened.=0A=
+=0A=
+But again, PLEASE update your kernel, it is very old and full of known=0A=
+security issues that have been resolved already.=0A=
+=0A=
+thanks,=0A=
+=0A=
+greg k-h=0A=
+=0A=
+=0A=
 
