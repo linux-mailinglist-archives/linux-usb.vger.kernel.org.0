@@ -1,50 +1,61 @@
-Return-Path: <linux-usb+bounces-28679-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28680-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5268FBA0AD2
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 18:42:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EE9EBA0EC6
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 19:38:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DC187B7F9F
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 16:40:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 309081616A9
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Sep 2025 17:38:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A38307AF9;
-	Thu, 25 Sep 2025 16:41:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A086930E0F0;
+	Thu, 25 Sep 2025 17:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Fzcuw2Ph"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LECEnIDu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A263074AA;
-	Thu, 25 Sep 2025 16:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DB423A9B3;
+	Thu, 25 Sep 2025 17:38:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758818492; cv=none; b=KkJROwI6BrevutfJhKg8LGnuxkWBYWOuLx77iNJFlorMQnYYBQElC0xqfy3QSOdmLfUrTteWBaEPHwQN9E51OUd7D5TcNzCYFYVwEqXmcTqAtxdwQXTwSFT/sCNWQD8DADwh9GqQhm4azVnm2hdswauOY0qg04Wi6CbUcf347Ic=
+	t=1758821906; cv=none; b=lJB/5VJN4yMUzb4+0rZ/7nRZl3uLXSBe+G/0Rq291NjuQFkFYLkXccssDDZJJrow7co36lVkfp8XjvzzIDpD4fZbvKhpJCSxdtVDB4LgZ0zMgNuUZyOGdT3KDRAjPIfu5jyL2dN/WXbVPhBhU/IsFktOBm0zvhSyxfgs6bAe5FI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758818492; c=relaxed/simple;
-	bh=WCH9ubWv2L5gJ+B4k8HXlXgELNN8Q2NknuyOvCSCCJc=;
+	s=arc-20240116; t=1758821906; c=relaxed/simple;
+	bh=1LH556iOEvDvaNX9cAl8yXja5P0kvfvek8B+Iho9Lfk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EyN/UAtbArrNIlZZQJea6vwCHmwPLIu9lC9w/ai0w4byS1IIc8Mh2kyVScyddyERCJRoauPy+ljnJz9Mt6Ou/nE12XHTfn7AtcHEW6FvaE5pLUJPRo45uDiODS51tdTu1z7FNqk7+L5Un+8Wah2yfOnkTqnoC7Y4b/Fhrt3e5dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Fzcuw2Ph; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42C7CC4CEF5;
-	Thu, 25 Sep 2025 16:41:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=h1MS9OD0XIX6rYHPvg2KMXhwuvE6yB97r+VTDVE3ZXeBSJXR2wsOM5XKvPvmWzvRtw1yKZa3/5rtzVH74pkKEIfaDTZtnlpOxWN3g3I2y0fSX3w8ehR7PDjC0jV0BMLUuZVBA7i8J2GYcShY8Tp3pWQktGWtmZBBwLixz8K/mNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LECEnIDu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD7AC4CEF0;
+	Thu, 25 Sep 2025 17:38:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1758818491;
-	bh=WCH9ubWv2L5gJ+B4k8HXlXgELNN8Q2NknuyOvCSCCJc=;
+	s=korg; t=1758821905;
+	bh=1LH556iOEvDvaNX9cAl8yXja5P0kvfvek8B+Iho9Lfk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fzcuw2PhpJxZUcOYhprRjyaK6OEPIoT4RgFwr/fBRmOFtVR7qZSaRPMWk5/6T5hlh
-	 k/Wlbsdc5np2cEGpc6ifHk7H0Cqil74At6rtCdE8wyWLbmPiVBl+hsUICvy1pTbw6A
-	 XdsaC7ZlVu2wLHRKWBAcFfH+Px7nTFaOyqRWcqZs=
-Date: Thu, 25 Sep 2025 18:39:40 +0200
+	b=LECEnIDudWUhi7SL8s8T5/iKw58kUPxai3/4HEYfO6tGmbiafc7XTh/ftk3VUNgim
+	 UzLtxhOcSlUnUrShJyIRb1FBg9gP3JPQ5TJoXjSU04dpps7qOQPNbhovANWCc12Dx/
+	 bTHrze6gLuPVAaGQcWk77b/sOyTOR5MFYUC9gNeo=
+Date: Thu, 25 Sep 2025 19:38:22 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] USB serial updates for 6.18-rc1
-Message-ID: <2025092532-aneurism-ceremony-04ef@gregkh>
-References: <aNU3y3Cs54wkdhLY@hovoldconsulting.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Daniel Almeida <daniel.almeida@collabora.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/2] rust: usb: add initial USB abstractions
+Message-ID: <2025092529-schilling-impeach-c71a@gregkh>
+References: <20250825-b4-usb-v1-0-7aa024de7ae8@collabora.com>
+ <2025092520-sharply-everyone-4a5d@gregkh>
+ <DD1X19KZHSEF.1W9SU66HVJM9V@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,18 +64,67 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aNU3y3Cs54wkdhLY@hovoldconsulting.com>
+In-Reply-To: <DD1X19KZHSEF.1W9SU66HVJM9V@kernel.org>
 
-On Thu, Sep 25, 2025 at 02:38:35PM +0200, Johan Hovold wrote:
-> The following changes since commit 1b237f190eb3d36f52dffe07a40b5eb210280e00:
+On Thu, Sep 25, 2025 at 03:29:25PM +0200, Danilo Krummrich wrote:
+> On Thu Sep 25, 2025 at 2:52 PM CEST, Greg Kroah-Hartman wrote:
+> > Yes, this is not a normal way that bindings will probably be merged into
+> > the tree, but as I consulted deeply with the USB maintainer about this
+> > topic while eating some good Paris pizza and French wine this week while
+> > at the Kernel Recipes conference, I think that this deserves an
+> > exception as they agree this can be merged now and they will be
+> > responsible for any fallout.[1]
 > 
->   Linux 6.17-rc3 (2025-08-24 12:04:12 -0400)
+> If you rather have it "staging" in-tree that's of course up to you. :)
 > 
-> are available in the Git repository at:
+> But, I'd prefer not to expose the incorrect conversion between a
+> &usb::Interface<Ctx> and a &usb::Device<Ctx> for a full release in Linus' tree.
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.18-rc1
+> Besides other implications, this conversation also implies that
+> &usb::Device<Core> can be derived from &usb::Interface<Core>, which semantically
+> means that if the USB interface's device lock is held we infer that the device
+> lock of the USB device is held as well.
+> 
+> I know the code isn't even built, but I don't want people reading the code to
+> take wrong conclusions from that.
+> 
+> Also, it's dead code anyways, so maybe just apply the following hunk?
+> 
+> Thanks,
+> Danilo
+> 
+> diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
+> index 8899e7520b58..9bc3478cf561 100644
+> --- a/rust/kernel/usb.rs
+> +++ b/rust/kernel/usb.rs
+> @@ -340,18 +340,6 @@ fn as_ref(&self) -> &device::Device<Ctx> {
+>      }
+>  }
+> 
+> -impl<Ctx: device::DeviceContext> AsRef<Device<Ctx>> for Interface<Ctx> {
+> -    fn as_ref(&self) -> &Device<Ctx> {
+> -        // SAFETY: `self.as_raw()` is valid by the type invariants. For a valid interface,
+> -        // the helper should always return a valid USB device pointer.
+> -        let usb_dev = unsafe { bindings::interface_to_usbdev(self.as_raw()) };
+> -
+> -        // SAFETY: The helper returns a valid interface pointer that shares the
+> -        // same `DeviceContext`.
+> -        unsafe { &*(usb_dev.cast()) }
+> -    }
+> -}
+> -
+>  // SAFETY: Instances of `Interface` are always reference-counted.
+>  unsafe impl AlwaysRefCounted for Interface {
+>      fn inc_ref(&self) {
 
-Pulled and pushed out, thanks.
+Cool, I'll be glad to apply this, can you resend it with a real
+signed-off-by line?
+
+And we can always submit fixes during the -rc cycle for 6.18, for stuff
+like this, so there's no immediate rush at the moment to get this
+"perfect".
+
+thanks,
 
 greg k-h
 
