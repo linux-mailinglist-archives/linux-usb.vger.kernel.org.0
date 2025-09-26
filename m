@@ -1,79 +1,100 @@
-Return-Path: <linux-usb+bounces-28688-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28689-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 559C9BA21C8
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 02:51:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B3EDBA22FB
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 04:11:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08DBC2A717A
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 00:51:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 773CA1C239FF
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 02:12:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51B36146A72;
-	Fri, 26 Sep 2025 00:50:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 229D1248F7D;
+	Fri, 26 Sep 2025 02:11:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PEUGUi//"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Wdy2c4ks"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1AC226ACB;
-	Fri, 26 Sep 2025 00:50:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0E9246783
+	for <linux-usb@vger.kernel.org>; Fri, 26 Sep 2025 02:11:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758847855; cv=none; b=mhUw+gwJIYmRXiEo0kDlR+LGKX0W7tLRelaSFwebVWHhzNCOmYiftmdc0v98ynPbJxXSl6dUedR5j4bVhg5j5Kume3tnthdoybS5lZyugn6P7VnO5ejAlnVzPfJzVlxAuKZqagRpT2sQpF3NmB7ob9VZC8NVkwjrn9qIyUKAWQU=
+	t=1758852704; cv=none; b=Ym/ujtlSMV8WzLMU/E8+q0qloJeBVyye50GxUUOboCQCHhGWjW2gCkQPqhuPifVtT4p0IsY0ShRWE6GEmbNZLmp89LG9//XON/oUS8cPGbXIAuDX113qB2F8F2YmHiPmK/XIXdvY3ZGPphhea0Hk+ystLboaNyjQONJf2fhdoRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758847855; c=relaxed/simple;
-	bh=bNfp9W4rHs68BhEoWab1aN4qWrUqvFrlFErQ427POmA=;
+	s=arc-20240116; t=1758852704; c=relaxed/simple;
+	bh=qRPfnk8uAvS4/pTgVMn8bZ97RZqORn5zyySh+PxXZDk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T38MgUfHy4oxtGuNaAIaJ9VvJEthGlVTq4KzHo+8pcqrsgMOF1lQ3fK/5zZgaEetdrmmQf6OmSeGyNScdHXsXLbp8LOKIvrg7voZCLPC2NghsIKH2ezlDSx/+vdqlYGlkI4Yg5b7FOVaeWZpco/1t8NnoWdZiTT5ytm0cJ2d7As=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PEUGUi//; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758847854; x=1790383854;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bNfp9W4rHs68BhEoWab1aN4qWrUqvFrlFErQ427POmA=;
-  b=PEUGUi//v7YMtkLolnDm6jihtGHWx4wiPc7E65cKGPTrZSMsraWOdaAw
-   g734ymkn2zrX7w4DkI9KgIsq76pQ3lWJiUNevUGL8w1ti1hOKbfid8mV3
-   kSUnS/Mo5id8vK+Jq+b8JHoeUK/g7ziPiNVNUd+1hOKCNaO94dSz8z5jv
-   p0mWH5ZgOVitEeCcYDqzwANoQQbVG9qSFoObPp7Kj+yQ5hotUNCtQNKis
-   aJ+lpfYzZ5thraKCvcFiEvXyck6aHmM84OduR9aSh+hdY/R1exdx9DvN1
-   AJc5LyDhHLETQV6gGqPGvAS4jOInXLUItPrgDhjQJyaEqQ/i2AKm2UTsB
-   Q==;
-X-CSE-ConnectionGUID: 7YhoC15SRIKL4PlMGJD+YA==
-X-CSE-MsgGUID: Awcf4+eLRfmVka68mIIOXQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11564"; a="64811011"
-X-IronPort-AV: E=Sophos;i="6.18,293,1751266800"; 
-   d="scan'208";a="64811011"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2025 17:50:53 -0700
-X-CSE-ConnectionGUID: G7uNjpa8QJmvXrPPrQoIPA==
-X-CSE-MsgGUID: QSowVCNgQHuBZHaB+Zjapw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,293,1751266800"; 
-   d="scan'208";a="177871549"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 25 Sep 2025 17:50:50 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v1wfg-0005mL-1y;
-	Fri, 26 Sep 2025 00:50:48 +0000
-Date: Fri, 26 Sep 2025 08:50:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>,
-	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc: oe-kbuild-all@lists.linux.dev, lumag@kernel.org,
-	neil.armstrong@linaro.org, johan+linaro@kernel.org,
-	quic_bjorande@quicinc.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] usb: typec: ucsi_glink: Increase buffer size to
- support UCSI v2
-Message-ID: <202509260852.9BZHHRAh-lkp@intel.com>
-References: <20250924232631.644234-3-anjelique.melendez@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=G7sDqvZQN8fOfgNxOEZ64Z0phezWeMqADlWdmdSclT9IwzgxMfcKpS9gt9bRrPOxyVbZdlL5z6E9z1HKiy3e+tfCdAC8iCMiayKudx6P4sHcmX4xpHQqgEFIfIeHXuDsEeNm/P9oYgXGNbhEltkWa2H+DuD4kSNZ60Hh0juvkUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Wdy2c4ks; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58PIPYrK027513
+	for <linux-usb@vger.kernel.org>; Fri, 26 Sep 2025 02:11:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=nqpPsyewLeJlxeLwYXFc1vjQ
+	6maWho6qu4lCsuqNvnE=; b=Wdy2c4ksyEex5o7rMu/rYXeBWo4Nd/H5c4WuddXM
+	FkYdU/kfIGFXPF8le+6hoOEbOBCJ6RJEqummon6FeVoKQ352/uzRuVNrUsv2MoOh
+	VbTm4UCVn4YrrftblwqnrJmWxU3DAwtHcDixTtgOo6w+GOaODyH0YqdOcn28pnct
+	3gPfDO8pbt99Y50f7reJd5UfbW1fmKhtGUqjnVixF+HS4fXFjtHaW3S4wbAQEFXF
+	Q+90k7KYkEyveepB/61WjCIROr3lK6sffgGfmReLID0S3kuhnDI7r/SfLOtS8tCk
+	m6SEv43NUMTrfH8RyAtrRBaT6YMVpA1DAtyPGCCT9U3YfA==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49db0q0y8j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Fri, 26 Sep 2025 02:11:40 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4d6fc3d74a2so47406821cf.2
+        for <linux-usb@vger.kernel.org>; Thu, 25 Sep 2025 19:11:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758852699; x=1759457499;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nqpPsyewLeJlxeLwYXFc1vjQ6maWho6qu4lCsuqNvnE=;
+        b=a78a7+GoHYjIanEDl3I6Un6qIPQhfVWdJQILf5BxEgw/N2IJ2OS1zXGLB6ngOvgakG
+         i+4qtcnvplPgb1vg2vCV16Gcuivo5TDJa7wnqrGCaz2NhoeY0ZkRqyMMjqOOGIuM6AxM
+         5NS4H1GvgoUp71i+y1MCTlXSlcbIUZ9QfeZX2EsM9njvpy0LrWxIhINXso+L7BIoQn2W
+         qWU5m/6huiczVgdbHwQHiZNKL+HDKFreIC7cFuvDMbDt8PzH2c9vLuk7eJ7LfRHYoUsm
+         rD78a+6n+3ZuCIufRXyaDxjTJqq4oNL0FJR4/ELoqI62SlExxGLUVx7Tu7Tgzx+ZtxzB
+         K3eA==
+X-Forwarded-Encrypted: i=1; AJvYcCWemgf4Tt3PZ8c+9CcwV2LHmwM2KhFhhnU57FySN9A8drRvSh3JR8fCVD6cqvgqd90KMGMqeevLUdE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCRRPhgrKaxtMhgJPcZ49TzAJtMrtCUZfpFGu1CtDX3rEsp+8l
+	92t3UqimfSPO0E4u0Tg2nqg5ryHVtVhSHFTyFbJcmvV7Z9AyxVmBsg0GlrYSH6jj07kYoL22o4M
+	1REh6EuSjCNQEkgtZiHqJE5i7hpsl3+xTQLX60eEJU9gB2pJES9bR9nb5GTThUb8=
+X-Gm-Gg: ASbGnct1tOedE+yESR9SJO2TviFdrmTcsMW3wQ5BiobeaDPTgiEgUxms2e59QYSS6+j
+	w8+mCX3lvitNxZ08sjRWXeD6ZHeRQzclir+GE8oFqKcwUG30ps8WZ2askU38THEKVC0XOObk0Z+
+	w50zYzA7G+AEymAvbbVA3jOiD9dK7NybtyBDJfA2F2PMf5RKSI4kSRM2eHgjYOEug9qg9E7E6jV
+	QnwdFPlBz/Y9js8MYWAXVKqtMa+6xS92OGdjyTN6dw594MFvFQuAkTLEJ6EcUmP5xVgo9PLnqUl
+	ABGkI4v7AsTh+WmBYWe4RdtWLF5pIdGQveNF309zKxFq4P4Pra7MetPpwlNie54u1qOEisii/U7
+	LeN3A/NJrqiU48Y9h100NGtD861Bfm/ON7khL49/NtYxFb/rjPfrq
+X-Received: by 2002:a05:622a:5a92:b0:4b6:2bdf:7cf0 with SMTP id d75a77b69052e-4da4782ddbbmr65302201cf.1.1758852699302;
+        Thu, 25 Sep 2025 19:11:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG7cctwlRZaW6riRpYXkIasnCymMXvXjJpXQG93mqJmgJ1Ap0mIAwpGxYF1bXCpUlxmfN4XAA==
+X-Received: by 2002:a05:622a:5a92:b0:4b6:2bdf:7cf0 with SMTP id d75a77b69052e-4da4782ddbbmr65301991cf.1.1758852698781;
+        Thu, 25 Sep 2025 19:11:38 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-58313905292sm1368701e87.41.2025.09.25.19.11.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Sep 2025 19:11:37 -0700 (PDT)
+Date: Fri, 26 Sep 2025 05:11:34 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+Cc: krzk+dt@kernel.org, conor+dt@kernel.org, kishon@kernel.org,
+        vkoul@kernel.org, gregkh@linuxfoundation.org, robh@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 07/10] phy: qualcomm: qmp-combo: Update QMP PHY with
+ Glymur settings
+Message-ID: <exe3i3lgeor6bdokdqzu2nlenlbtjgv6c3swek3phirsinjnhp@tb5x5lkf2i26>
+References: <20250925022850.4133013-1-wesley.cheng@oss.qualcomm.com>
+ <20250925022850.4133013-8-wesley.cheng@oss.qualcomm.com>
+ <oecyjwj7ouufjbiq2fpvlhhuaof5agm22fdsruf3ppayiu4kkm@wvi4no53x64y>
+ <5e9e2824-923c-1328-dd7a-a8b496c44a70@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,101 +103,117 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250924232631.644234-3-anjelique.melendez@oss.qualcomm.com>
+In-Reply-To: <5e9e2824-923c-1328-dd7a-a8b496c44a70@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI1MDE3MSBTYWx0ZWRfX5wrBhXPtNaJb
+ jWrbSwRO4UNlb5lBDz6cAvs3Jbg9211vgRwhq53jos10OzFkn+EIQhyFezpSCCkzRzbB1XsYMnN
+ 06O66Ly/GThPlLtrgSdUVhaFXg88+D0QuUtfusPmIuqgLqqx0SJG8e8bDSQFl8h8qgEpPM05B7C
+ tOXVALO76+GEYB+nJ//yPfUWCQNDZPiCRicTcaRvNupP3SMUfpu7wFKLn7q4nMqlJnlRdL687Qj
+ mfP/I2cWN7yLlFjVIZR7cJITiNKSV64pDIaw1Xke92ILZ69mURYuHtpnIFr4gp3s2ZTHJMIL8w9
+ Q57xxQVMDYLRshI0B0SlcmNqdgZNQD1Yz91zUMrKVbyaS+H1cfefNMvcY4vswsQF1DAls0YKBoq
+ EfpW0GJ6wy2SrS/ryGYJN4r+OemXIw==
+X-Proofpoint-GUID: ofoSqXuXzbS0Zfx3i2bRNm7wdgBm4ahi
+X-Proofpoint-ORIG-GUID: ofoSqXuXzbS0Zfx3i2bRNm7wdgBm4ahi
+X-Authority-Analysis: v=2.4 cv=JsX8bc4C c=1 sm=1 tr=0 ts=68d5f65c cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=97tA0vavRIenci2OwCMA:9 a=CjuIK1q_8ugA:10
+ a=kacYvNCVWA4VmyqE58fU:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-26_01,2025-09-25_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 adultscore=0 priorityscore=1501 spamscore=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 phishscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509250171
 
-Hi Anjelique,
+On Thu, Sep 25, 2025 at 05:14:30PM -0700, Wesley Cheng wrote:
+> 
+> 
+> On 9/24/2025 7:54 PM, Dmitry Baryshkov wrote:
+> > On Wed, Sep 24, 2025 at 07:28:47PM -0700, Wesley Cheng wrote:
+> > > For SuperSpeed USB to work properly, there is a set of HW settings that
+> > > need to be programmed into the USB blocks within the QMP PHY.  Ensure that
+> > > these settings follow the latest settings mentioned in the HW programming
+> > > guide.  The QMP USB PHY on Glymur is a USB43 based PHY that will have some
+> > > new ways to define certain registers, such as the replacement of TXA/RXA
+> > > and TXB/RXB register sets.  This was replaced with the LALB register set.
+> > > 
+> > > There are also some PHY init updates to modify the PCS MISC register space.
+> > > Without these, the QMP PHY PLL locking fails.
+> > > 
+> > > Signed-off-by: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+> > > ---
+> > >   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 311 +++++++++++++++++++++-
+> > >   drivers/phy/qualcomm/phy-qcom-qmp.h       |   4 +
+> > >   2 files changed, 314 insertions(+), 1 deletion(-)
+> > > 
+> > > +
+> > > +static const struct qmp_phy_init_tbl glymur_usb43dp_pcs_misc_tbl[] = {
+> > > +	QMP_PHY_INIT_CFG(QPHY_V4_PCS_MISC_PCS_MISC_CONFIG1, 0x01),
+> > 
+> > Why is this V4 all of sudden?
+> > 
+> 
+> Hi Dmitry,
+> 
+> Will fix..
+> 
+> > > +};
+> > > +
+> > > +static const struct qmp_phy_init_tbl glymur_usb43dp_pcs_tbl[] = {
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_LOCK_DETECT_CONFIG1, 0xc4),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_LOCK_DETECT_CONFIG2, 0x89),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_LOCK_DETECT_CONFIG3, 0x20),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_LOCK_DETECT_CONFIG6, 0x13),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_REFGEN_REQ_CONFIG1, 0x21),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_RX_SIGDET_LVL, 0x55),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_RCVR_DTCT_DLY_P1U2_L, 0xe7),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_RCVR_DTCT_DLY_P1U2_H, 0x03),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_TSYNC_RSYNC_TIME, 0xa4),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_RX_CONFIG, 0x0a),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_TSYNC_DLY_TIME, 0x04),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_ALIGN_DETECT_CONFIG1, 0xd4),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_ALIGN_DETECT_CONFIG2, 0x30),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_PCS_TX_RX_CONFIG, 0x0c),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_EQ_CONFIG1, 0x4b),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_USB43_PCS_EQ_CONFIG5, 0x10),
+> > > +};
+> > > +
+> > > +static const struct qmp_phy_init_tbl glymur_usb43dp_pcs_usb_tbl[] = {
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_PCS_USB_LFPS_DET_HIGH_COUNT_VAL, 0xf8),
+> > > +	QMP_PHY_INIT_CFG(QPHY_V8_PCS_USB_RXEQTRAINING_DFE_TIME_S2, 0x07),
+> > > +};
+> > > +
+> > > @@ -1667,6 +1899,12 @@ static struct qmp_regulator_data qmp_phy_vreg_l[] = {
+> > >   	{ .name = "vdda-pll", .enable_load = 36000 },
+> > >   };
+> > > +static struct qmp_regulator_data qmp_phy_vreg_refgen[] = {
+> > > +	{ .name = "vdda-phy", .enable_load = 21800 },
+> > > +	{ .name = "vdda-pll", .enable_load = 36000 },
+> > > +	{ .name = "refgen", .enable_load = 936 },
+> > 
+> > Is this a meaningful value?
+> > 
+> 
+> I need to adjust this value.  I just want the load for the regulators to be
+> in HPM, and after taking a look, looks like based on the rpmh regulator
+> table, I need to be voting 35000.
 
-kernel test robot noticed the following build warnings:
+Please provide a value from the platform data rather than just the HPM
+boundary.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.17-rc7 next-20250925]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anjelique-Melendez/usb-typec-ucsi_glink-Update-request-response-buffers-to-be-packed/20250925-074205
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20250924232631.644234-3-anjelique.melendez%40oss.qualcomm.com
-patch subject: [PATCH v4 2/2] usb: typec: ucsi_glink: Increase buffer size to support UCSI v2
-config: i386-randconfig-061-20250926 (https://download.01.org/0day-ci/archive/20250926/202509260852.9BZHHRAh-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509260852.9BZHHRAh-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509260852.9BZHHRAh-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
-   drivers/usb/typec/ucsi/ucsi_glink.c:98:23: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] owner @@     got int @@
-   drivers/usb/typec/ucsi/ucsi_glink.c:98:23: sparse:     expected restricted __le32 [usertype] owner
-   drivers/usb/typec/ucsi/ucsi_glink.c:98:23: sparse:     got int
-   drivers/usb/typec/ucsi/ucsi_glink.c:99:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] type @@     got int @@
-   drivers/usb/typec/ucsi/ucsi_glink.c:99:22: sparse:     expected restricted __le32 [usertype] type
-   drivers/usb/typec/ucsi/ucsi_glink.c:99:22: sparse:     got int
-   drivers/usb/typec/ucsi/ucsi_glink.c:100:24: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] opcode @@     got int @@
-   drivers/usb/typec/ucsi/ucsi_glink.c:100:24: sparse:     expected restricted __le32 [usertype] opcode
-   drivers/usb/typec/ucsi/ucsi_glink.c:100:24: sparse:     got int
->> drivers/usb/typec/ucsi/ucsi_glink.c:152:23: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [addressable] [usertype] owner @@     got int @@
-   drivers/usb/typec/ucsi/ucsi_glink.c:152:23: sparse:     expected restricted __le32 [addressable] [usertype] owner
-   drivers/usb/typec/ucsi/ucsi_glink.c:152:23: sparse:     got int
->> drivers/usb/typec/ucsi/ucsi_glink.c:153:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [addressable] [usertype] type @@     got int @@
-   drivers/usb/typec/ucsi/ucsi_glink.c:153:22: sparse:     expected restricted __le32 [addressable] [usertype] type
-   drivers/usb/typec/ucsi/ucsi_glink.c:153:22: sparse:     got int
->> drivers/usb/typec/ucsi/ucsi_glink.c:154:24: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [addressable] [usertype] opcode @@     got int @@
-   drivers/usb/typec/ucsi/ucsi_glink.c:154:24: sparse:     expected restricted __le32 [addressable] [usertype] opcode
-   drivers/usb/typec/ucsi/ucsi_glink.c:154:24: sparse:     got int
-
-vim +152 drivers/usb/typec/ucsi/ucsi_glink.c
-
-467399d989d799 Dmitry Baryshkov   2024-06-27  142  
-62b5412b1f4afa Neil Armstrong     2023-03-21  143  static int pmic_glink_ucsi_locked_write(struct pmic_glink_ucsi *ucsi, unsigned int offset,
-62b5412b1f4afa Neil Armstrong     2023-03-21  144  					const void *val, size_t val_len)
-62b5412b1f4afa Neil Armstrong     2023-03-21  145  {
-87289544ef0b29 Anjelique Melendez 2025-09-24  146  	struct ucsi_v2_write_buf_req_msg req = {};
-87289544ef0b29 Anjelique Melendez 2025-09-24  147  	unsigned long left, max_buf_len;
-87289544ef0b29 Anjelique Melendez 2025-09-24  148  	size_t req_len;
-62b5412b1f4afa Neil Armstrong     2023-03-21  149  	int ret;
-62b5412b1f4afa Neil Armstrong     2023-03-21  150  
-87289544ef0b29 Anjelique Melendez 2025-09-24  151  	memset(&req, 0, sizeof(req));
-62b5412b1f4afa Neil Armstrong     2023-03-21 @152  	req.hdr.owner = PMIC_GLINK_OWNER_USBC;
-62b5412b1f4afa Neil Armstrong     2023-03-21 @153  	req.hdr.type = MSG_TYPE_REQ_RESP;
-62b5412b1f4afa Neil Armstrong     2023-03-21 @154  	req.hdr.opcode = UC_UCSI_WRITE_BUF_REQ;
-87289544ef0b29 Anjelique Melendez 2025-09-24  155  
-87289544ef0b29 Anjelique Melendez 2025-09-24  156  	if (ucsi->ucsi->version >= UCSI_VERSION_2_0) {
-87289544ef0b29 Anjelique Melendez 2025-09-24  157  		req_len = sizeof(struct ucsi_v2_write_buf_req_msg);
-87289544ef0b29 Anjelique Melendez 2025-09-24  158  		max_buf_len = UCSI_BUF_V2_SIZE;
-87289544ef0b29 Anjelique Melendez 2025-09-24  159  	} else if (ucsi->ucsi->version) {
-87289544ef0b29 Anjelique Melendez 2025-09-24  160  		req_len = sizeof(struct ucsi_v1_write_buf_req_msg);
-87289544ef0b29 Anjelique Melendez 2025-09-24  161  		max_buf_len = UCSI_BUF_V1_SIZE;
-87289544ef0b29 Anjelique Melendez 2025-09-24  162  	} else {
-87289544ef0b29 Anjelique Melendez 2025-09-24  163  		return -EINVAL;
-87289544ef0b29 Anjelique Melendez 2025-09-24  164  	}
-87289544ef0b29 Anjelique Melendez 2025-09-24  165  
-87289544ef0b29 Anjelique Melendez 2025-09-24  166  	if (offset + val_len > max_buf_len)
-87289544ef0b29 Anjelique Melendez 2025-09-24  167  		return -EINVAL;
-87289544ef0b29 Anjelique Melendez 2025-09-24  168  
-62b5412b1f4afa Neil Armstrong     2023-03-21  169  	memcpy(&req.buf[offset], val, val_len);
-62b5412b1f4afa Neil Armstrong     2023-03-21  170  
-62b5412b1f4afa Neil Armstrong     2023-03-21  171  	reinit_completion(&ucsi->write_ack);
-62b5412b1f4afa Neil Armstrong     2023-03-21  172  
-87289544ef0b29 Anjelique Melendez 2025-09-24  173  	ret = pmic_glink_send(ucsi->client, &req, req_len);
-62b5412b1f4afa Neil Armstrong     2023-03-21  174  	if (ret < 0) {
-62b5412b1f4afa Neil Armstrong     2023-03-21  175  		dev_err(ucsi->dev, "failed to send UCSI write request: %d\n", ret);
-62b5412b1f4afa Neil Armstrong     2023-03-21  176  		return ret;
-62b5412b1f4afa Neil Armstrong     2023-03-21  177  	}
-62b5412b1f4afa Neil Armstrong     2023-03-21  178  
-62b5412b1f4afa Neil Armstrong     2023-03-21  179  	left = wait_for_completion_timeout(&ucsi->write_ack, 5 * HZ);
-62b5412b1f4afa Neil Armstrong     2023-03-21  180  	if (!left) {
-62b5412b1f4afa Neil Armstrong     2023-03-21  181  		dev_err(ucsi->dev, "timeout waiting for UCSI write response\n");
-62b5412b1f4afa Neil Armstrong     2023-03-21  182  		return -ETIMEDOUT;
-62b5412b1f4afa Neil Armstrong     2023-03-21  183  	}
-62b5412b1f4afa Neil Armstrong     2023-03-21  184  
-62b5412b1f4afa Neil Armstrong     2023-03-21  185  	return 0;
-62b5412b1f4afa Neil Armstrong     2023-03-21  186  }
-62b5412b1f4afa Neil Armstrong     2023-03-21  187  
+> 
+> Thanks
+> Wesley Cheng
+> 
+> > > +};
+> > > +
+> > >   static const u8 qmp_dp_v3_pre_emphasis_hbr3_hbr2[4][4] = {
+> > >   	{ 0x00, 0x0c, 0x15, 0x1a },
+> > >   	{ 0x02, 0x0e, 0x16, 0xff },
+> > 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
 
