@@ -1,196 +1,281 @@
-Return-Path: <linux-usb+bounces-28718-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28719-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBF00BA4C82
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 19:46:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 223E3BA4DD7
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 20:19:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D44AB1C23AB1
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 17:46:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD852327C00
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 18:19:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C9352EE27C;
-	Fri, 26 Sep 2025 17:46:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46AFD2FD7CD;
+	Fri, 26 Sep 2025 18:18:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CJqG9WzZ"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="NyEiCtCc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013070.outbound.protection.outlook.com [52.101.72.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55ABE2BAF9
-	for <linux-usb@vger.kernel.org>; Fri, 26 Sep 2025 17:46:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758908773; cv=none; b=IwWTxmdy4oMglRja+T0q7SNogTajyNy9k4rbwNKKfUXCa6iBHZYrYKzfh2Jo6ycFNamlhBzszGCNQ5wLpNM5v+qrDqzB1qt+27vRwo9xOt6Fg3wlLq4zXXrd11GD51M8cwBn97DRUZJa/QdOVJKSBGyUDYhyq+405sNzk7obcKA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758908773; c=relaxed/simple;
-	bh=vYwckcOlPtqgljZ3MfjIGaFuJSuJi80bLox23PZPLuk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=DI+OfOCHMZvivtvWzg87AaMa9PN73o1HriEtcYkpzrzRpq/vQaSp8M1Y5f3w/I84Sk3W26tfuCTcK3x0zoyUIXH5deQkDKtvO8aO2+lSbcqs2BrhB1Ju0VuitIKAzpk+v4Q+xhO9bveMnr1RP4woBQ4e43FwR3tloT09Xp7t0l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CJqG9WzZ; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758908771; x=1790444771;
-  h=date:from:to:cc:subject:message-id;
-  bh=vYwckcOlPtqgljZ3MfjIGaFuJSuJi80bLox23PZPLuk=;
-  b=CJqG9WzZaFeh6b7cktVhmfvDha2OVHFsXUj39H1YxLI7DWAIPQokfeEq
-   h94utMcUmXpX9KYvEnGFxnIY5f+Vno/RBB/4/AypyBEPvkQE7DsxoN6h/
-   LhN31O0Q0KKbku41UOGNK2OZNdjN7doLqN2nowazQ8jDpw2RMM3H4/PzN
-   39myr+8heQvuTvaBvqx1COmbOjcGXqpfIZrPw+LOFnLk1p3QNj4YXkJEm
-   9ILz8AfbVLu+RI03qQrpWGBaj1UFCLGgDqB9mklNDEVqjw6HMhTbL0xTP
-   D2/vrKjn+vNulSj5oBiB+SnvTlCJxM38UzRL/ja20Zr5osS7epkh0fsYS
-   Q==;
-X-CSE-ConnectionGUID: 8vqgkl8bTTqX4EzLRNZpdw==
-X-CSE-MsgGUID: kQhj3SCiTPSqTwIk2LXnlA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11565"; a="61165657"
-X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="61165657"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 10:46:10 -0700
-X-CSE-ConnectionGUID: LcxmCjzFQDiXC+zficnRug==
-X-CSE-MsgGUID: LxkFKqikSJGVRusGKMQ84w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="214812627"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 26 Sep 2025 10:46:09 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v2CWE-0006Tz-23;
-	Fri, 26 Sep 2025 17:46:06 +0000
-Date: Sat, 27 Sep 2025 01:45:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- e40b984b6c4ce3f80814f39f86f87b2a48f2e662
-Message-ID: <202509270139.bxVtwOVI-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30781494A8;
+	Fri, 26 Sep 2025 18:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758910736; cv=fail; b=ENMj/gJhs+m9bl9eXvllVXGFVfrjVSpYrcYAxsEfhnaKIV12kDk33KK14EDFvjl1QO8BMJFtNEHH5zrNWnZbe877vg2+dqZQbmKhkIsMd9fWGYWZ7mPyp1pKNCdGBXwThVzMgBDEfuYKxMcmdu/I7TxN2Rn26ifKZeDvY4IedLk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758910736; c=relaxed/simple;
+	bh=0CgND4WO16EtwUc3Nse3AAY8I+x8THVa8IhQIsivJLs=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=aK5LAwz8wgmVf8W+bXfG1DOZCkkVOIHJSUJgiFSc1wtBXr2+bFo4pePybpZgurq02i4svHCziFOw3gDzLCBZLwrnToiDU8aaMBKxNQXDA8Mm6ooDh15Yb3ucS2cfnhnrFLZU/qIMqdHJeZHLU+Uq47/7GHLQJgI3uDCqX7gInuA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=NyEiCtCc; arc=fail smtp.client-ip=52.101.72.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CccOkAFp0ua8hJTJFSos7+sBL3qSjXbcWTJoe6UD9H+9OBsdRPNFUWjleEHpBv6B8ZfqQDlvtQRgbzmyToGq3qvJVcjSDnASJIBKirWbsy/Tmv1QR+fTINzUtvV4CpdjmV22AZmZm3dBbD9p0Q26+SqmVx+GQzv798AM/U5LOI0z8RSUGjx2Nj4lVSpnuxSYP1954debDs3EQiNPjggsofP7iHQP2JyWMob7TUXIIM9UJOR0goueO+v8Czr7UU/iRk0iPfiABWzS0fKgd6kdMUzI+4G49AN0637OSztjlgPKTQZ/ACEc6QwqL709W3nYQWrvyX9vdy+FSJ5ESsd03Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UYZfr//Bfqxv9oWEwbXnSHi/jHGgfXUjP7T38Ql0LCY=;
+ b=dl864UGWsBjI4yBVfKxP30UmF8PPSOuqcW9m4TFcgKWkCRy8tE27fW7MMwwznfwXpnngigTdxEaWZ1Gh4mrENUMXRSehKhTq+WbPDWGZ1NvmnkIl2wPQFFtD+5ae0yHjC/s2WXrNLM7bwr4YRbnWDNhgZyfGpYxqMnvbP8r57K4iKI0eoxKjb9Cw1qhI71D99FQiO6ISgWRxCod54jh0/KopanbHTV8+elSO/vwkZIY8qHvHUDEmWNZ+2hj7nz9SB+6UlYQL55j3NdMHQdH5Ueh0nSR7rhF2d+7DrgL3hPPLQ90X54o0ylTc7/KVCxAMrp1GmTxpOcB2eYHjAm25QQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UYZfr//Bfqxv9oWEwbXnSHi/jHGgfXUjP7T38Ql0LCY=;
+ b=NyEiCtCcbrxVFe333iyfDjPviK3QDYFeCf6MlEGjmEJHU/7rwabbYWDDMqQ/Cufcqy1isvZWrsIwz7AUfv0pZ3i0pzv8fvx40VX33IIG9G6BCNAkEtemHma/vcfbxxUpkZI1bY/mvg1rMKYLR0DwV6L4sljRT3Vq0s5hTAVfhAQ7YczyCyGr+l8mzWrD2pxwESt5CuXGRws7YOYmVpwH/3banytEKY1igwun6kjXVZzZjekmZVSPKfUYRty/U/KKc3gR/9TsbbpXa1cX1JZFCJ3u2hJDE9ggopyKdJrehjaFnvp3GSj4tHrKEsh5XvcYY0F2g36g1LO7Z4rxxL91ng==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18)
+ by GV2PR04MB11686.eurprd04.prod.outlook.com (2603:10a6:150:2c8::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.11; Fri, 26 Sep
+ 2025 18:18:49 +0000
+Received: from DB9PR04MB9626.eurprd04.prod.outlook.com
+ ([fe80::55ef:fa41:b021:b5dd]) by DB9PR04MB9626.eurprd04.prod.outlook.com
+ ([fe80::55ef:fa41:b021:b5dd%5]) with mapi id 15.20.9160.008; Fri, 26 Sep 2025
+ 18:18:49 +0000
+From: Frank Li <Frank.Li@nxp.com>
+Subject: [PATCH v4 0/4] usb: dwc3: add layerscape platform driver use
+ flatten dwc3 core
+Date: Fri, 26 Sep 2025 14:17:43 -0400
+Message-Id: <20250926-ls_dma_coherence-v4-0-fa2b92781e5e@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMjY1mgC/33OQQqDMBAF0KtI1k2JiR1rV71HKWImYw3UKEkRi
+ 3j3Rje1IF3+gff/TCyQtxTYJZmYp8EG27kYskPCsKncg7g1MTMp5EmAkPwZStNWJXYNeXJIHBV
+ KDXVeGC1ZZL2n2o5r5e0ec2PDq/PvdWFIl+ufsiHlgiPk2TkzUGnIrm7sj9i1bKka5JcXUu1wu
+ XBSaQ6qAG30L1dbDjtcRR7/0ikKJNCb9XmeP6x5Tm0sAQAA
+X-Change-ID: 20250602-ls_dma_coherence-c3c2b6f79db2
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Shawn Guo <shawnguo@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ bjorn.andersson@oss.qualcomm.com, imx@lists.linux.dev, 
+ Frank Li <Frank.Li@nxp.com>, Ze Huang <huang.ze@linux.dev>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758910702; l=3727;
+ i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
+ bh=0CgND4WO16EtwUc3Nse3AAY8I+x8THVa8IhQIsivJLs=;
+ b=5fIJqbdy8/HD9pDm9zi6cN2XL2eFZ/UpVVJVWPM2FqLB5WHTtAAkQFw5xCrlx1YN7EgsyTYx5
+ EVvhc0nx3vOCKVcUZOQpoz1HudaQODACqD+5uEqu+Vi68nMI/OB+VdL
+X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
+ pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
+X-ClientProxiedBy: BY3PR05CA0049.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::24) To PAXSPRMB0053.eurprd04.prod.outlook.com
+ (2603:10a6:102:23f::21)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|GV2PR04MB11686:EE_
+X-MS-Office365-Filtering-Correlation-Id: 20fc3511-b7e1-41ee-6588-08ddfd291664
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|52116014|7416014|376014|19092799006|1800799024|38350700014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?c1J6dG1BenFwVERYYXZFbDJOQ3d5WnlkckhKUkZIT2lvRzZvdXdEVDVyL3VE?=
+ =?utf-8?B?UFcvckRMY2FmWUkyTnQ2cGxSdFBqYnlUS1JJTVdycFNDUmJ3ZS9wMG1LRUFZ?=
+ =?utf-8?B?QXZBWHZQRGo5LzFxQnN6QnV4Q0doZC8rZlBKTHJUQk1tR05aSlhsWHV0REpk?=
+ =?utf-8?B?RHZheitEMW9haGt2OVlvWndxY1lwbWNoK093bDJoT2pETG14QzE1S3dBNUJF?=
+ =?utf-8?B?SkxwejZnMjFtV2poelowQ21ZdUV1eS8zVHNSZWUrZFdKL0Z3L0poYVozaFRi?=
+ =?utf-8?B?c3dMRDFKdHR4eEFkaWFsTmxpeXNsS0N1cWt6L0dwT3Y3c05mVHFoZkpxckpM?=
+ =?utf-8?B?UEVpVWxuWFN2OHF2WXBSS05CcFRkRXVqZ2d3ajRNRWlhbVczdHptYTlZZWFK?=
+ =?utf-8?B?N0JSRTh3Q3dnNXFHTGF0RWt1OHUxQ1VYWExGQTFhU3dEM2ZEaU9tZTR4QUJC?=
+ =?utf-8?B?a0NnM25Dc3N1cFc2OUt4UnJPRWdmYTZzekRsMXh0d2FxNGVNeHJ1bkpXUTV2?=
+ =?utf-8?B?VlFNYlQwaUxIRnB3bEdYS3B6Vm8rSzVqZndFdFZMVUdIS2I0Wkd3dGgxNEVW?=
+ =?utf-8?B?akovcjFPUzdrZzFlb1hpaWNnd3p4MXNONXVTVXlZbUVzclpnbUl5MFluaEJq?=
+ =?utf-8?B?Zm41c2N6Z2ZQemNtalRZQkFNcUdubHNZc3hodWlZOEs5anBjc05NN3V6TTJS?=
+ =?utf-8?B?Z3dzQ0JVWkd5N2FiQ0pnRUNtbS9rQU8yaUhBNzZDNTdmb3RnZGNEd1BPVksx?=
+ =?utf-8?B?QUxYc1N4N3A1c2dWMGVIZlhwUzBxZ0h0VzlyYkNRcFgyUTJDYW5HakRuVVhQ?=
+ =?utf-8?B?WU84Y2VCTENhMDBLbW5WMTFLZSs4SGswU3RPQktsbGJnOS9rN2hZOTVqR3lG?=
+ =?utf-8?B?eDMzT0Jsa1l0Ymlqa1VlekFmNU01UGJEVnlDdXlsTXF0eFZaZHFZMzBKakxW?=
+ =?utf-8?B?eW9OS0diN2hPTzVXYzZvWHpEdmV1bFB5S1NRTDNLSkplRExIV2pMMWxzZkc5?=
+ =?utf-8?B?YVZaQ3M1Y01tWVJiZXlJVmx1RWpHZEcxaDc5OWJaYm9yQ0V2cWR3TzVIUXRu?=
+ =?utf-8?B?L09IZEhqempwUnMyUk1od1ZpTUhKYmd0N256U3dSczF2VVkzMFc0STB1a3oz?=
+ =?utf-8?B?ak1LcGRnc1IrcXZGTi9qdTF6VTdUNEdFK0F5TmswYXUxMzBmajVtcGhtSW53?=
+ =?utf-8?B?OWI5ck1VZ2lNSzRVbFRNWG93YWtiVll6STJDT20xRlM0RncySEc3R2N4OXh4?=
+ =?utf-8?B?Sk1IZDJBVE5USzlKaldmaDVSL1ZtUzVOTVlYVXJtMHdxeG9lVERSQ0lsdFZK?=
+ =?utf-8?B?YUdwZTlpVDlSK0FiV0lZeWg4V3VYTVhNcW93QVE3SStSNElRR0RZOG95c2c5?=
+ =?utf-8?B?OHJWanJXUGFGdlkvdFZpY3JlblFlRHBsa1YwTVlLc2FNczEvQXR4aFUvekZq?=
+ =?utf-8?B?OTllaVdVYlNoSU9SN004K3dGZFdTbTFabUI0bjVJa2F1c1NQZDA5N1FyVWVo?=
+ =?utf-8?B?ZHQwWEovUklMZW1BOW9oRXEwRzV6bVRiNi9ONVYxOEQxUUF4c1REcFJUZmQv?=
+ =?utf-8?B?aHR3cmJFdmFFeHhRUVM3L2VXUHdiVEtOYTFWUlNCUGFmc1Q3WlhIOTJvZmhw?=
+ =?utf-8?B?MDNnZUFxdDJLcEtwTXN2R3lHeW9uaHpnWWlwK3lPcWRZN1packZmQWlYcFVB?=
+ =?utf-8?B?d2dxc2FkS29STHZFbGQ5dXdtdDFwSElIU0VWQTA1bC9YemNaMzgxUHVtN21u?=
+ =?utf-8?B?dEtLUFQ0S1pDcnF5aWFjUFFUOHRGdzV2b3lZSE92RTBKNVg0djloTklYRTBK?=
+ =?utf-8?B?SnhQS0J4elFycm1ZUHBKeVNmOXZxWTFxbElFMlJRNUhQakkwdjRxa2NPSWpo?=
+ =?utf-8?B?OCttWUIrRVRTVmRzNHlMeHlJRW11UmhKcFJaOVFJN040RXlUT1hnUmkzNVla?=
+ =?utf-8?B?STR2UVg4UnhRZ20wdm5HYVowcmJQZDJpUG9GMlNGRWM4bWtkaitFVkhKNFRL?=
+ =?utf-8?B?d0NzS2JsNVJKdUsrOE83WTI5TGZRNXVxUmsxUk5VQmdsTmhjVENyY0lJRXE5?=
+ =?utf-8?Q?EXFgqk?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(7416014)(376014)(19092799006)(1800799024)(38350700014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?c0tRaGwvVmhGbzJ0MmVsWHhRRFdoaU1jMGpucjZzWXJpRnJlNCtHNUhkMTAv?=
+ =?utf-8?B?Y2Rvc1BHc1VrbzMxb1kzSzBzUWpaZTZVaUtNNm5HbHRFTTV3OEJNYXF0RTZ1?=
+ =?utf-8?B?QVFhZnA0RmhXeHFPUlVmZkNRakNqK1h2MnJ5QVVhbTk1QjQxWklyMmoyWEJW?=
+ =?utf-8?B?SlBHbFBhMnc2UHBydGMzNnNBYjRLTjBjN3RGNkk1TVE2YzM5UEg1L3habU42?=
+ =?utf-8?B?NjByRVQ1NEV3OWxWS2pFT1lHSUFLcFVIYlJzV0xpQTlnK2tXeVZ3elpVUzZP?=
+ =?utf-8?B?N2xaUUwyZVQ0RVl4TFdtN3Z0RDd2NTZUZUN5N3JObVV4ZjRKeFJkRmlPWEpS?=
+ =?utf-8?B?Wnp2b0M2ZUpTU2lxTzRwdllwV2NKdFZPL3FNRTZGMkx5K0QrdkFha3UvR1NH?=
+ =?utf-8?B?Tk8zUi93TnhWZFRDbXB2SFo1cDNNUzRuOU1EMmFJMTh6cWxBbHRJVHloL0s0?=
+ =?utf-8?B?WXBiV1hKMnU0alJJbFZqS2MzVVlRTEd1bGpWWkZob1RHaHp1ejJHNnorS0tv?=
+ =?utf-8?B?bHNlRURCVTRZT3hLUnFjM3BUOWFYWHA2MjVocHpzSXZkOUx4MjVXOUpYc1NF?=
+ =?utf-8?B?cDhVRHR5SG1hZFFoVTk2UmRDdFN1bE0vKzU4UmZaQjZsU2RBZk5hUHVaYXR4?=
+ =?utf-8?B?L3JYZ2pMY3RvR29UNkZaOXkwa2c1NXpwYi9uSU5YWE5LclhTUlpGLythZVZk?=
+ =?utf-8?B?VWtWRldycnhxbE1HeG9ZMW9aUGVvd0xsQnF5QnhVMUc4SnR4dE1NOVBMczRx?=
+ =?utf-8?B?bStNek9GampLemV2TWhZeFFZLzFpVnZTY0VoYzRvamh5cFF1Qk10dFY5YWlZ?=
+ =?utf-8?B?YzVFdjZWelBzWnNqODQ2d3lFaEg2KzFvZlJSOUs4cEZFYjd5MzlFZ0UzTVEv?=
+ =?utf-8?B?TXJ4akNndHdObFpYU3JPWXBXRjk3VldNMHlHVmY4SllOZEJhcmw1UytZT1Vi?=
+ =?utf-8?B?akNxTG5KTG1VbmYzd2xKVDFITTUzcEYzZ0NhbVhLMm1FUmxvb1pRUHlmVlc3?=
+ =?utf-8?B?REJTdTFFQ1J4bDE1b1dpY1lsQ1BIRVBiMWx2Wm9DUU4yNDJzeHpOcXo3em5x?=
+ =?utf-8?B?cGZLVzgwSXA1ckZHWXhDeWYwMUZvR0FIN1JJeGs4UmFNN045UDlKL3dZeHBF?=
+ =?utf-8?B?U0N4d0VXZUR6Q2grc0xwM0ZpL2VsZWp6dEMzZ2g1b1EvMWZsMUlEdmpUOHdx?=
+ =?utf-8?B?OVVBNjBwaUxjVkdDWW4rbUsrRGxxTU9teCs3eFAxdCtDV1QxRlg2RXZHVSsw?=
+ =?utf-8?B?Q1pJenFZK3NiKzY1WEVXV3ZadjZMdC9TSmdLNERmaVI3SFUzdms1ZzJzZGJN?=
+ =?utf-8?B?WG1kS2hVcUhsRWZuSlRLK2c1dnBjOE5hUTBDL2JpbFpYNEVxTDFhMG5MUWJQ?=
+ =?utf-8?B?UlB6ZXFFajAwcDViaG1KNEFyK1E3N3BMMFJBT1VBVmVINTI2RWJURk5PdDBR?=
+ =?utf-8?B?M3Z2czIwU3daR3hFanBtUmg3RGNNbWErODllWEl5cGhLYzF1YUpycUtQVHpC?=
+ =?utf-8?B?S0tkTGRIZm5MVEZMME9pSk13NnV0dzV4N2xTZm9yTXdNTTlUelFrNmFlRnJ4?=
+ =?utf-8?B?RS85czB2aTNYaVJkUVNVVmdPSVJucmxWdlB0bnJmVTdoeDlKdjVCWUZCZ2NC?=
+ =?utf-8?B?ZjVTOWd6WmpCMXQxMDY3aDVCMHBEV0lYMFVjeVJMSXBIOVJLNEJTVUlGMFUz?=
+ =?utf-8?B?d3hjcWdnbDFwenBvRVY0cTVvdVppSnJnTmdZYnVmd05ydHFKT2hKa2RiZzhl?=
+ =?utf-8?B?M2I5Y3F1aUtYZ2g4NUZUWm5tWVlWZlRyMG5ySUUxOTRnZmJybUZWTHVlSzRs?=
+ =?utf-8?B?KzFLYlVNaDdRT20vMHRKdXphYzUyNXMzTU1OZjdxZS9LSUY2dWNTMjliNklJ?=
+ =?utf-8?B?cXoySUx6dFdWSmc2SnhjdCtjVnFQQ1VSSjBPdjlNT011VDFQOW9hdWJRR2RI?=
+ =?utf-8?B?OVpvNzdXNHh0cWpiQzNyTTZoaG52bDVBbUtaakhrVjRPRzBTa2kwVmlHUk1h?=
+ =?utf-8?B?NjkvZ2VCaDUvQ25YQnBKbUNLcVpMOVFKM2E0YUdsWXR4VkJuS2RwTC9nVlpN?=
+ =?utf-8?B?N2FiWTRIMWRMbUNLK2hUN2FzMkt1d0o1OXN1REIzbDBqRnNLMXIra01iaC9s?=
+ =?utf-8?Q?JF8ahPGif7s4nIzMAoLDI+LWe?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20fc3511-b7e1-41ee-6588-08ddfd291664
+X-MS-Exchange-CrossTenant-AuthSource: PAXSPRMB0053.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2025 18:18:49.1485
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SusCnIS0/G4QmRHQGrzoeTh1vm+JLdE7lOMPXwuoacwcqB/kXGMXuOIQnhqYHUWklrPch/a44CN3+T6MHJxsJg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR04MB11686
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: e40b984b6c4ce3f80814f39f86f87b2a48f2e662  usb: vhci-hcd: Prevent suspending virtually attached devices
+Add layerscape platform driver use flatten dwc3 core to enable dma-coherence.
+It needs set gsburstcfg0 to 0x2222.
 
-elapsed time: 1464m
+There are some several try before:
+[1] https://lore.kernel.org/imx/20240710-ls-dwc-v1-0-62f8cbed31d7@nxp.com/
+[2] https://lore.kernel.org/imx/20240123170206.3702413-1-Frank.Li@nxp.com/
 
-configs tested: 103
-configs skipped: 2
+[2]: add new property, which was reject because there are no varience in
+the soc. Fortunately the below commit resolve this problem by use software
+managed property.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+d504bfa6cfd1a usb: dwc3: enable CCI support for AMD-xilinx DWC3 controller
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                   randconfig-001-20250926    gcc-8.5.0
-arc                   randconfig-002-20250926    gcc-9.5.0
-arm                               allnoconfig    clang-22
-arm                            dove_defconfig    gcc-15.1.0
-arm                          ixp4xx_defconfig    gcc-15.1.0
-arm                            mps2_defconfig    clang-22
-arm                         nhk8815_defconfig    clang-22
-arm                          pxa910_defconfig    gcc-15.1.0
-arm                   randconfig-001-20250926    clang-22
-arm                   randconfig-002-20250926    clang-17
-arm                   randconfig-003-20250926    clang-22
-arm                   randconfig-004-20250926    clang-22
-arm64                            alldefconfig    gcc-15.1.0
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250926    gcc-8.5.0
-arm64                 randconfig-002-20250926    gcc-12.5.0
-arm64                 randconfig-003-20250926    gcc-9.5.0
-arm64                 randconfig-004-20250926    clang-22
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20250926    gcc-15.1.0
-csky                  randconfig-002-20250926    gcc-14.3.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon               randconfig-001-20250926    clang-22
-hexagon               randconfig-002-20250926    clang-22
-i386        buildonly-randconfig-001-20250926    clang-20
-i386        buildonly-randconfig-002-20250926    clang-20
-i386        buildonly-randconfig-003-20250926    clang-20
-i386        buildonly-randconfig-004-20250926    clang-20
-i386        buildonly-randconfig-005-20250926    clang-20
-i386        buildonly-randconfig-006-20250926    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch             randconfig-001-20250926    gcc-15.1.0
-loongarch             randconfig-002-20250926    clang-22
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-m68k                          multi_defconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                        bcm63xx_defconfig    clang-22
-nios2                         3c120_defconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                 randconfig-001-20250926    gcc-11.5.0
-nios2                 randconfig-002-20250926    gcc-8.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                randconfig-001-20250926    gcc-10.5.0
-parisc                randconfig-002-20250926    gcc-10.5.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc               randconfig-001-20250926    clang-22
-powerpc               randconfig-002-20250926    clang-18
-powerpc               randconfig-003-20250926    clang-22
-powerpc64             randconfig-001-20250926    clang-22
-powerpc64             randconfig-002-20250926    clang-16
-powerpc64             randconfig-003-20250926    gcc-15.1.0
-riscv                             allnoconfig    gcc-15.1.0
-riscv                 randconfig-001-20250926    clang-22
-riscv                 randconfig-002-20250926    clang-22
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                  randconfig-001-20250926    clang-22
-s390                  randconfig-002-20250926    gcc-8.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                    randconfig-001-20250926    gcc-12.5.0
-sh                    randconfig-002-20250926    gcc-15.1.0
-sh                           se7343_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                 randconfig-001-20250926    gcc-14.3.0
-sparc                 randconfig-002-20250926    gcc-15.1.0
-sparc64               randconfig-001-20250926    gcc-12.5.0
-sparc64               randconfig-002-20250926    clang-22
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-14
-um                    randconfig-001-20250926    clang-22
-um                    randconfig-002-20250926    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64      buildonly-randconfig-001-20250926    clang-20
-x86_64      buildonly-randconfig-002-20250926    clang-20
-x86_64      buildonly-randconfig-003-20250926    gcc-14
-x86_64      buildonly-randconfig-004-20250926    gcc-14
-x86_64      buildonly-randconfig-005-20250926    gcc-14
-x86_64      buildonly-randconfig-006-20250926    gcc-14
-x86_64                              defconfig    gcc-14
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250926    gcc-14.3.0
-xtensa                randconfig-002-20250926    gcc-8.5.0
+[1] was reject because there are not actually dwc wrap at layerscape
+platform. Fortunately Bjorn Andersson's below patch to make it possible
+by use correct dts dwc3 node layer out.
 
+613a2e655d4dc usb: dwc3: core: Expose core driver as library
+
+This resolve problem [1] and [2] by use flatten dwc3 core library.
+
+1. add soc specific compatible string at dt-binding.
+2. create platform driver for layerscape chips and pass down gsbuscfg0 if
+dma-coherence enabled.
+3. update layerscape dts files.
+
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To: Shawn Guo <shawnguo@kernel.org>
+Cc: linux-usb@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: bjorn.andersson@oss.qualcomm.com
+Cc: imx@lists.linux.dev
+
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Changes in v4:
+- Use flatten properties, instead of use dt pass down information to core.
+- Link to v3: https://lore.kernel.org/r/20250926-ls_dma_coherence-v3-0-602b1c0ce6b4@nxp.com
+
+Changes in v3:
+- skipped, accident sendout
+- Link to v2: https://lore.kernel.org/r/20250923-ls_dma_coherence-v2-0-ce3176396bdb@nxp.com
+
+Changes in v2:
+- base on drivers/usb/dwc3/dwc3-generic-plat.c
+
+commit e0b6dc00c701e600e655417aab1e100b73de821a
+Author: Ze Huang <huang.ze@linux.dev>
+Date:   Sat Sep 13 00:53:48 2025 +0800
+
+    usb: dwc3: add generic driver to support flattened
+
+    To support flattened dwc3 dt model and drop the glue layer, introduce the
+    `dwc3-generic` driver. This enables direct binding of the DWC3 core driver
+    and offers an alternative to the existing glue driver `dwc3-of-simple`.
+
+- Link to v1: https://lore.kernel.org/r/20250602-ls_dma_coherence-v1-0-c67484d6ab64@nxp.com
+
+---
+Frank Li (4):
+      dt-bindings: usb: add missed compatible string for arm64 layerscape
+      usb: dwc3: Add software-managed properties for flattened model
+      usb: dwc3: dwc3-generic-plat: Add layerscape dwc3 support
+      arm64: dts: layerscape: add dma-coherent for usb node
+
+ .../devicetree/bindings/usb/fsl,ls1028a.yaml       | 33 ++++++++++++----------
+ arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi     |  3 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |  8 ++++--
+ arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi     |  9 ++++--
+ arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |  9 ++++--
+ arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi     |  8 ++++--
+ arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi     |  8 ++++--
+ drivers/usb/dwc3/core.c                            | 12 ++++++--
+ drivers/usb/dwc3/dwc3-generic-plat.c               | 14 +++++++++
+ drivers/usb/dwc3/dwc3-qcom.c                       |  1 +
+ drivers/usb/dwc3/glue.h                            | 14 +++++++++
+ 11 files changed, 89 insertions(+), 30 deletions(-)
+---
+base-commit: c45d2c21b3889c520bf141d576eaecb25666895c
+change-id: 20250602-ls_dma_coherence-c3c2b6f79db2
+
+Best regards,
 --
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Frank Li <Frank.Li@nxp.com>
+
 
