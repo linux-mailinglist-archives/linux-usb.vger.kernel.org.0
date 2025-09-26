@@ -1,89 +1,82 @@
-Return-Path: <linux-usb+bounces-28714-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28715-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0510BA458F
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 17:06:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3C28BA45A7
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 17:08:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7F351B25155
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 15:07:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 502AC2A473F
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Sep 2025 15:08:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 976CF1F4198;
-	Fri, 26 Sep 2025 15:06:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04821F1517;
+	Fri, 26 Sep 2025 15:08:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="gjPL9ktU"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="DUYZrBmV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010033.outbound.protection.outlook.com [52.101.69.33])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011052.outbound.protection.outlook.com [52.101.65.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC590219A79;
-	Fri, 26 Sep 2025 15:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4555E2AD2C;
+	Fri, 26 Sep 2025 15:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758899180; cv=fail; b=G6hGfYv1EqidABuXVWQqb9pI3+VWf1NfVrrW8HDPnqnFXY031Y/O2VsJ+/0Lo2KCgWU2Ij4RJ8rAu/TBqE0sZrZaKodwV5/d80D/UpPfGJTXBCn6BiyPo1FaidF85Y4XKX0UpIGbXfTQkM/dxxHxsiwTqQQ/xzF7owMxD97a+Y4=
+	t=1758899314; cv=fail; b=vB/+JleYAuJskR6jlDluEaPr4Xjt5k84OrYq2pSb8vjv9VeUT6H9C2jOvHVSoj5dkipo7AAIu+ijkrPhv6SUP53cJmfk7yuCq6cb40pOrxHLn5b9PYQp8933yYtnYBk2KlzM1XcaNFvLzaeeyWK4k+0BN1FbLMGK87uWIJzH1NU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758899180; c=relaxed/simple;
-	bh=2N2q2cKPZ8ZVOfvA3LyQDNr8Tu3pWDaE9bF3oPfKGYo=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=KqrZkcVAQgKkKIPqLtDr79wADYTGE53D7qBP+oL1MCtzxL5XCq+khngX2+d6m+Nka6vyfe8LkcHlQww+qaRpw4R9GS8zEC0NCoPzhP4qUWhRY5+zaExKI6DQvMzkZ3AjiadFOgITk/scZdz+xP1PKZIb5Q3vj7GgaTB0u9uq1Iw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=gjPL9ktU; arc=fail smtp.client-ip=52.101.69.33
+	s=arc-20240116; t=1758899314; c=relaxed/simple;
+	bh=KcQIgVFE/HRQZoxKvEVsknWbzN5PVHF2RhtbP6W0oJU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=mrjyGUzpGvucCga+fse7DtbfYRg7mGztCcZo408cF2sqTwtyB+YZSVrB6hW04IswGT9hem0YnINr73u6oXa2XTffaommycVSCy+3OomnRmHIjNXn4pftF6rLzPsyWXkAEFoNwY6psfAwoVazZZniqSCiS8kzge7p1+Gb08LL+7k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=DUYZrBmV; arc=fail smtp.client-ip=52.101.65.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YYrPnwk5Ghl8NJI8QsPEL+q28FWjAbdmc2O44dN7jkAAKGhAvLbGXTaGDiNptjCuojZjQiRDga5GL5JaudOA6pfZQzWRSFBYQwqaJH7D8oLZmRcpzEP+VEhOgCMr2NLpypKVdXcYTdRDj6xcFwwPIWrRvfy4h0ry7nVOMBeYOMwbIz4++82hUitS++kU6iL5nn2DBsl4TfQQKSz9UTaU+AMww+3uHa2ZTiJcvDUw2VFcQ2dJUc4N49YGS5xlRv/T9RNzGbimdoXVEopUFHGq3h+WCblCWqVc7gStIXSxK+GqQplI+Sf8Tzs/6XMKxB2ZCUdZDDdUCzZC4QYFMp4XqQ==
+ b=jZzyS4RVpxx/snrrZ87ojtCBkGhlnXssjGCtBmhCFyEqiU2qwRdea2L3QhdJa1Wa0QL9PO+PskBEKj/eeuoemrAcXhvUJvvFLtuSaA6YHAcXxqMCW7lrWZ9LSdn2XA9GplkcPeWrv6eDiphP0ah55HvmEf4T12qyQtYeDYxZaETCJDKRyE5xveC6BosSYPpTM6HE9Md2IL8JHreOhmPGOop5MlEqtkPvo6f8/NR4aE4Z+yXzk6Tg3NvM7/H5PISz52kQc8rj55AwojbymJw6ncQr4lyG/9SpD9H6pUOZWe2na6WJtSJAll0MBcWIYcGibMNzH1wtSNbob/U3IMXMvA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o9iLmdy37RKHkCAlvSY7Udy7GnJJ+6QLI7MsTCVz87o=;
- b=spqd2NMcCz8EAUUe2qAKvsArjAunnSsTSa9UiUKTAAS7Bb6tJY70ldNw9tNHuG4O80LVpuIiKesCSyOGjmWCiObrLDA/eGRXYKKa2dHFJFeRuuyBs6de+1H+8AQFFAw/wmkZvfyqcg9TwYVZL1k0sziaBzobDE39VN0eMb8qxKs/TOksg1KClFOQK3vbNIAmSXgzkEP3n0glMJIYq7HSthKCjVjzpbIfmX4+NPpOqkdVF7xCWIMZ0vwAmkm75FG3wfFAtydFBb+cEL1fh6y/adojAD0bIUmRD8EPlynws7VfdRhGyFSzeMfw+9miNt552OrO65ZJVbzouD+ItELZ+w==
+ bh=xFED2Vrypt7wJOcBHGPewdAIGTpsIbzXX5Kb/pr//xA=;
+ b=fisXtm3UEqGdbbJWbQJi8cdLV/IVGlRMyoVv0K99r9UoaAqmGjqWNPnAPMvmWqLE/EkBpxZcNFv7msBpNoI+e2jMX+p4qVMCMjYg6Q6NG3SJynTE1DU8fVAVVS555ynHJK5+ikLqdch9XeXPPtryseEb4O7R3IZjUOe3d3dwJjtYsFsO1Be8UzuO3ZRzKIN+wzlNItofqB7fWSySaxqX49DJpM5+mx4u1w6RmJQaQxRu1trmolnAGqq0N31jxCLuiXUddbPOkmQqDTN2j4QHMDvvg526Sqy/8ligNztYrf3sAsyR61zX53a8715S6uymZ3Tp7mv5kX6weOSDBiJIuw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o9iLmdy37RKHkCAlvSY7Udy7GnJJ+6QLI7MsTCVz87o=;
- b=gjPL9ktU+BNkmnoFSEm8Jad+pW11l2nJvAInzWtyWm+3lFDPSb0p5FwVwdv/C/A58y+v08yXuULtLjZPAY5N7/syYL2Sfn5GnxboCPvqV41+HR2ZlocWqoGIm4KiYEB+dB/f/anl6rGScEBtre76lAa0kME2hrv0Do0Ae59m4SlcNxySWurTL1Yki5JY4AbAAOkz71ufdC1d4H0JwN9GIdFzNc4iF0AisOhgTEA1/KpPYH3GGsGMR9dcSJ52eBlmLk+ZIL0OM+idVS2EeyPnK/9CH4c09RajSG82dDTfsk0Pn0/A9dZ0UdMtzyV2nEAijynl06qg+vn70kJfbftEYw==
+ bh=xFED2Vrypt7wJOcBHGPewdAIGTpsIbzXX5Kb/pr//xA=;
+ b=DUYZrBmV79EbAj0ZitIZfpM9YABSZMLA5z96xwdD4x+fSP5xsVpcZBI3vajwV3MA8sU8y4kgA5UwuUU/MlbKkXvSmgqZIegr5VtgMSWXrINhRq2Z97eTkiZxm/pgjjCyka7tY7gOc0chPOq9cBlaWgBKSbW8GIQtfHA0Z08mldoTULULbi8CR9qLQlea3mMh+lZBkvUS8Vrydu5lj9H3eQ1dclktPL/T41j//G3GeXNHKqlCVcQYJCnCj+j0Nb4Ldi0Sb6TT/a4ZbjKPD8GTrlYZKm9A3cCqrTdUTyG2LarC2Dlrw+Jmgj06z48W/R1fE7FYmhvjqjo0LZk3wXekqw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXSPRMB0053.eurprd04.prod.outlook.com (2603:10a6:102:23f::21)
  by PAXPR04MB8960.eurprd04.prod.outlook.com (2603:10a6:102:20f::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.11; Fri, 26 Sep
- 2025 15:06:13 +0000
+ 2025 15:08:29 +0000
 Received: from PAXSPRMB0053.eurprd04.prod.outlook.com
  ([fe80::504f:2a06:4579:5f15]) by PAXSPRMB0053.eurprd04.prod.outlook.com
  ([fe80::504f:2a06:4579:5f15%6]) with mapi id 15.20.9160.008; Fri, 26 Sep 2025
- 15:06:13 +0000
-From: Frank Li <Frank.Li@nxp.com>
-Date: Fri, 26 Sep 2025 11:05:50 -0400
-Subject: [PATCH v3 3/3] arm64: dts: layerscape: add dma-coherent for usb
- node
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250926-ls_dma_coherence-v3-3-602b1c0ce6b4@nxp.com>
+ 15:08:29 +0000
+Date: Fri, 26 Sep 2025 11:08:24 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Shawn Guo <shawnguo@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	bjorn.andersson@oss.qualcomm.com, imx@lists.linux.dev,
+	Ze Huang <huang.ze@linux.dev>
+Subject: Re: [PATCH v3 0/3] usb: dwc3: add layerscape platform driver use
+ flatten dwc3 core
+Message-ID: <aNasaARTt0gusNVu@lizhi-Precision-Tower-5810>
 References: <20250926-ls_dma_coherence-v3-0-602b1c0ce6b4@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20250926-ls_dma_coherence-v3-0-602b1c0ce6b4@nxp.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Shawn Guo <shawnguo@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- bjorn.andersson@oss.qualcomm.com, imx@lists.linux.dev, 
- Frank Li <Frank.Li@nxp.com>, Ze Huang <huang.ze@linux.dev>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758899159; l=8721;
- i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=2N2q2cKPZ8ZVOfvA3LyQDNr8Tu3pWDaE9bF3oPfKGYo=;
- b=XZ6Revw5FRYHRAe5e/xYXRi045WJHCyOyN/8NZi+aMlAHaaQApLyeJppnmGPQ3URSojSOafze
- uHhpH4W5k1ICAVGzdO/BjOIdgY/OPbwmXdIF5e/JZrge2DwCOx3HvyZ
-X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
- pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
-X-ClientProxiedBy: BYAPR05CA0072.namprd05.prod.outlook.com
- (2603:10b6:a03:74::49) To PAXSPRMB0053.eurprd04.prod.outlook.com
- (2603:10a6:102:23f::21)
+X-ClientProxiedBy: AM0PR03CA0070.eurprd03.prod.outlook.com (2603:10a6:208::47)
+ To PAXSPRMB0053.eurprd04.prod.outlook.com (2603:10a6:102:23f::21)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -92,321 +85,167 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PAXSPRMB0053:EE_|PAXPR04MB8960:EE_
-X-MS-Office365-Filtering-Correlation-Id: 46863d67-68d0-4635-4dbf-08ddfd0e3be9
+X-MS-Office365-Filtering-Correlation-Id: 7d9a8d27-f2d2-4410-0304-08ddfd0e8d0e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|19092799006|52116014|376014|7416014|366016|38350700014;
+	BCL:0;ARA:13230040|1800799024|19092799006|52116014|376014|7416014|366016|7053199007|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?UXNDRzVMRmRkTy9BRHBiMmtLek5oU2VDTG5La2dFclg1NGEyRGJTVVc1djcy?=
- =?utf-8?B?RHlSSlVXcG5ZUmFkUi83RkNNeld3MWNIOWNtM0ZkRElHSjQzQ2l1TU9MWTZ5?=
- =?utf-8?B?eWh4UnZFb0hYTGRvQzR2QmdGVDc2STgxTXhJejlvM2s4c2YvK1dpRGNKbWNO?=
- =?utf-8?B?YVR4eEhERnFwNDhFSTErcGpuc2NzelV4ZndxNkp5aVNYdkEzMVNFYm5CQlVj?=
- =?utf-8?B?dTFBTDlFd01UUERqaFg4cWNHY0JaWlZJSkJrUDdHWHErdWJMczllRkFoOG1J?=
- =?utf-8?B?NytTOFhESllkSWlPbnVYRk50Y3RSMUlVSWJLbWNsclQrRm5rczlCcWhTVDlO?=
- =?utf-8?B?WDFDWDNqSzRVeG5hZS9aUlFicFAwdll4RDZoR01Nc2NlZTBmRVZMdUZ3c1J2?=
- =?utf-8?B?aHIxOThYZnNBQkhLWHdXTExEN3hybW1tdTY1aCtkbTJsaVBwWmFiWktrcmN2?=
- =?utf-8?B?Y1daRGc3QWx5Wk1PV3hVT2J3MW0ydTNIcDUyVnhGc3pNNEkvYjh0YUVKYXAz?=
- =?utf-8?B?cDgxdGN0c0N1TmI1ekd6V3k2czV5OGNUR0QrZWZmRG5jU3RvcUxGRFlvYzRu?=
- =?utf-8?B?SE1QRUMwRFlvSXVQQllPM2NuZHpBRDRnOXQ0ODBQbVFNdmFhR3FTVHhYZHVo?=
- =?utf-8?B?U2VFWDlzMnhoV3hqY2E0aVd6SzNTb051V2JTd0RrSEtIYXVPREJ3blZ3YU1z?=
- =?utf-8?B?UHBPUUkzSFFaNWx5NlZGbmc2VjJLQkFVanlXc3BldVNVZHNyZXVHbTlDbVQ3?=
- =?utf-8?B?SVZhWTJGazMvOGNIbjhTUmp1cWFuOHZpTFR4S0p1K3d0Y2Z6Q3FJaWJGdnF6?=
- =?utf-8?B?V3kvdm5iRkpxeHdDcE5KZjVSaHhFTHdvRjdNMEFYZVJJTjVCTlg4L2RxR3ZK?=
- =?utf-8?B?dzAzU2pXaU02cUNyVlpPZ1R5OGZxMm1oSWtzNGxMaXFZV1dWRVBFQVdkZkM5?=
- =?utf-8?B?cm1qcnB6Z3FNdy84VTVwbGRwL1NCT1hOQ2JDV2FRemxYTlZRTzV4MVJLYjFI?=
- =?utf-8?B?ZmU3UDlQamFqMXo3TjMrWUtYU09GcFJzQlo0VGtWQnBKc3AvYWpUUFAwWkZy?=
- =?utf-8?B?REd0RDQzZ2lkdTB6MXNrYkZTamNwMVN5czNyL092VTh5Q0hsSzNTRDBQL0U0?=
- =?utf-8?B?dUFNTXlJUDF6WkhOZjloZUJzbXV0R2R3cFRtZzg2eG9wZkRQbDNuc24zc2o2?=
- =?utf-8?B?b29IanlVb3BQNVNhb1JQUzRmVjhZRGZTWlBUS0pxN2I1OCtwUnJNTW45UlRn?=
- =?utf-8?B?dUJDb0JEZEgydHRsbnNXTXBvbkxMMDNCZ1dZMXNVQ2FabENEZnBxalk2S3dE?=
- =?utf-8?B?Rkc3ZU45VThjWTcxTWdFaHR0LzRmWWdzOS8zZTYvYjYzeFQ1NFFMSjE0ak1n?=
- =?utf-8?B?NzA4VGk3YXliT1NoZVY5T01URWlPUTJSNFUreGREZFUvbzNRaUM3VUZPblJO?=
- =?utf-8?B?eFF1YTNLYTkrY213clF4WnpHeTYyOEx6WnYwVmYyQUgwcElieW9DdU5MVlli?=
- =?utf-8?B?NjFWaWFqanl1eG9lSXhoT1JkZ2N1VGZGcndtK0RYWGpMb2NXUUdkR3YyQklE?=
- =?utf-8?B?YjZIV1c3dHdveFB3Q1ZKaitIYldaTVNzbDJ5alpIaVJ5SzZYOGJtS09vZGdu?=
- =?utf-8?B?ZUlSenZNYXJSUjlwbTdyTDlIampkeVBDV3hPNS9pYXpaUTVkcHFtRnh2N1RF?=
- =?utf-8?B?cmllVVcxeU5QSFFZeXU5Ulg5TW5hWi9vYWNBRjdoTCt6QytjelM4SWxIRGlP?=
- =?utf-8?B?bWt4dDQxQTJndFljdDV5dWh4N1JkeFcyVlpnWnNXKzExRjhnbnV3MmRTWDNQ?=
- =?utf-8?B?VVNBd2cvS200bHpJbU82blZaZXlCeWtzR1pYaUhsLy9kOWtBc2RoRDNTTXo0?=
- =?utf-8?B?UWMvWFBvOURvOEFkc1gxSTcra3Z2ZGhMQTAwKzRnYW4vcFFRN0JHT0Q5Y05F?=
- =?utf-8?B?Y2poVkE3Qkd1RVV4TndXMG9Xd3kwaGtPeVAyczJ3SmU1OGhtdGJ0RjF6ekw5?=
- =?utf-8?B?ZHJIVUFGRWx3PT0=?=
+	=?us-ascii?Q?eNaqEGkuyZBQiBZ49s3wcvHnLJuoakhWiLJmgTnBAnREas8RQqK44XSCayLh?=
+ =?us-ascii?Q?eLHpEtG5bAzWXX+T7rKfY0puieL3Ns+0CeZnUkHZkA1KYCTLA2+hcVijBy8T?=
+ =?us-ascii?Q?RSR8hSRB27fF9e4rjc6CQyQ/Yc/FStKF+O9omQwv4EyIQiunGdGFQYBlqT6R?=
+ =?us-ascii?Q?sobvuTiH9T5IHSJwWkrWBBKd7EethXC63+f3iTGeEECcI++k9mXCZOiM25MF?=
+ =?us-ascii?Q?1mjCNZ9GnRjNvEYpll3n0ysQiOsIYYfhxAsuPAVsAtEU+HSKC3iTW9kxWboG?=
+ =?us-ascii?Q?oPfn1SBH/av+jXg5INK2+HdnAtMd4LDMlpj8ET6zVmloeZF8K0f/RKGUqUcX?=
+ =?us-ascii?Q?lhGFIqSTeFC3CbSL6KfaH0c6vZ97zwHLdOjnPXKch1ne0P7lg/NqsjuwckUY?=
+ =?us-ascii?Q?APXMPkSxEhwN5GBp1rYc67LepKLAg+aRhzUsJpXIObpjiHskKtAe+7Az2Taj?=
+ =?us-ascii?Q?bYKExKJADS1Mn3fsldu/GFA/XLmCHEm5OJ1ikxh93o3WEHktaFd+Ij/lik8l?=
+ =?us-ascii?Q?ZlxgrW/yH/jVP2kDmUYu8ezJ4VWxSbjyTBgJ01haMDIgA9w0LMw3w9MRH0Et?=
+ =?us-ascii?Q?F6ByRRRM3YYik/LNFktrsgmJAYvi6NfoHtaRcVPN/vB/N8tVZcxAevoMVwWM?=
+ =?us-ascii?Q?Q9gaIGIQe5MYEQ5C/AjabgFPhrr+p2vjb4wlSJAfhamplOa2np1wD9J3Qsey?=
+ =?us-ascii?Q?gUEeQeZKqjgAhCZPBv/NNKldDUMg7S1/k12I2198SmcNKd1ZmCKNLkg4Mbm1?=
+ =?us-ascii?Q?Wp/9EWHrTHjfpEIlDdqgu6g8ChOf1M9VL4zXs5sfKyUUV07nxGqAlFRQ1m2m?=
+ =?us-ascii?Q?jM5+WwsZwN0i97t/r9I8zXsKjNlTgbVaqjC+QY/qaV0MzFx/tqM5q3rKAl3P?=
+ =?us-ascii?Q?eDNoOplJQh3ouBjNfZMu7ktECp8/rY8H3nESIn2gq7bq6jEqSSCi47/MQXeC?=
+ =?us-ascii?Q?mo7aGwco2WiZpwjBxbRF3qwU8OIyV74s+qUfIYufOgK9TVZFgwFZMCPrpuGP?=
+ =?us-ascii?Q?K4sxws82MGd1yy6qb6MmmQEHKTGHriGfQef2ShwN47rc/IoYyGvnXl60oYt5?=
+ =?us-ascii?Q?KwrYeMfDNnVCZIcWlgvFbOebuLa0RizDk+r/XZDUcajy29hiuAxqb6kZtuOQ?=
+ =?us-ascii?Q?/rXm7n471IC1w0Kredim4KMXkYGe3VGINb35EYcdT1GmPbt7lPNr/VleIQ/u?=
+ =?us-ascii?Q?kNm7L1VxrOqWcMlZdzrSCfrDbluFomifwdxOYQRe4pMi0eA9glZ/sM5I6vYZ?=
+ =?us-ascii?Q?sD6lIC34eYaaoL+F58m7EcJHBwxS7KNRQApzSorkxWwqdVqj+NaZbHgT2i9x?=
+ =?us-ascii?Q?5a6w2tV1YTUm1qtIxTHTYZqbH1c44pPtKIdQWBY3r3F9LYdrdFjusAvnS26l?=
+ =?us-ascii?Q?PK+bXbCIHFB2ExJl4K0kURzzw6S/q23UiNR5iAYxulIXx8mXJNI16FixTfgU?=
+ =?us-ascii?Q?SASypQTGqx0v88zQ5fLZQicWRXj4P2LB4cX8IDvC6nDUldAJbqwQNQ=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXSPRMB0053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(19092799006)(52116014)(376014)(7416014)(366016)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXSPRMB0053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(19092799006)(52116014)(376014)(7416014)(366016)(7053199007)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Z1ljTlRwMlpSanUwcFdNVHkzUFkybnBTV2xRbWR5dDBGNUQ3Q0dEMENUWG9H?=
- =?utf-8?B?MG5vWTJreDIzbzdmN1lOOWpJM2Z2b1BoeGxwOWNTOGZVQWsyci9zeVdHbHNT?=
- =?utf-8?B?YnN2MUFpdWNTcUVKdiswNjJTb0txL2hxTkVKUkRXelFPMW1FczQvUWJRWXNu?=
- =?utf-8?B?NUI4TUo2TzJITEFTV3pTNGthSExaaEN0d0RZSTExSXBHeXBJTGF2ODRCQmU0?=
- =?utf-8?B?dlBDY1ArUzk4dnkzclk1V1c2WEJoTXBLYmV5QUpRWmlGWFhLd2QwRFZZaUlE?=
- =?utf-8?B?enI0d1pTNklpcDFCMk1yK0FwVzgrejkzZC9hOVVyS0JKSVh2Yi9lVTRJZ1dy?=
- =?utf-8?B?QW1oTVJpYms0TGNlb1NQTWJFU2M2S0VUUnhUMy82dDJWSUdwS2hndVQwYWNi?=
- =?utf-8?B?TEYzQzVzakdpQmszamp1TXRweXJPMjl2alpEQ0NUai80RFkzMmJTM0JXYTNp?=
- =?utf-8?B?eDVwRTZHNG0vcmR1ak9NemdhNk5oVWRQKzRBVUZnY1NqbjJMZlRNMGtYZEk5?=
- =?utf-8?B?VVNPNHl3YUxNV2V0YU5PeGxNQjFiUjlCSGZRUWNLaVltVGZUOGFFbTUvbCtF?=
- =?utf-8?B?SEZBVHF4YXVtWlkzQW0vVWJHK0JOVGJaVDNqb2RwdEFNWWxlUGY5OTdYdTcy?=
- =?utf-8?B?V1hXMXdpdDJmSXNJaHlvV2xLZEd0YVVpZXJpODFUaHJNTzR6Z3pRaCtqTkJM?=
- =?utf-8?B?TDBiS0RZQWpEUmcxbGJWUTJFaktNWnFPTU5tWlpxKys3bjlYMUx0U1dKODBC?=
- =?utf-8?B?ZTRFR1ZwM1RKYnZJS3EwZXFoR0pKUlMwVGp4S2hoVHFnZVBOWE1rSmU2ZlBx?=
- =?utf-8?B?cGdmbHMvK1F0OEhYRHZnelU4eE5haVlQb0lnUlV1Q1ZZSTNDZndPcEFVOEJq?=
- =?utf-8?B?cmx6cVpnWkEzMWszWDNUSlRaSnBHVCt2MEpFK0NsYVhjZU1qUTY4R1poS1lx?=
- =?utf-8?B?QXAvYnJVZ3V3dk5YUFAyZWM1allzTWZRaTk1aEtESnNpVUdtTm5CWXlZLy9z?=
- =?utf-8?B?Z1hTVVRWNXlOVzZGQk9hL1pnbUc2amY4ZGZ2YVVjZjFoa1YybXFLcDZKU2NQ?=
- =?utf-8?B?UG1zZHlOSkFUcDU2S2cyS1lScmNVUEFhNjJjbTAwNmRCMDVSdWQ2cy9ERUY2?=
- =?utf-8?B?OHBpbUJiUGQwUHRPN2loUXdYNEFDTFNHdFR1ZXpTaENyV0lobWlId0lVcDl2?=
- =?utf-8?B?OFNWYXJmRURzcFlGSzNQWmY4Q0xGdXc3N0tJYXJPcnVkTVZGeHFwak54RllM?=
- =?utf-8?B?MmZpMEpYR0ZzOGRiek16Smo5ZWkrSHIxaUJmZ2NudXNlam42MGh5MUh5OUZY?=
- =?utf-8?B?ZFg3MS8vWGxjblhzTDdlc09OR2RYMk5BYUJnWlorbnRCM0g3V2N4cmU4SlV1?=
- =?utf-8?B?VTR2TmtoMmx0Ukx3RXRxcTloVXlON3Zha0lHRDNCb1FYWFNHd0hJeDU3b0hl?=
- =?utf-8?B?SkpXalhDYlRjYmR4N2ZKR0J1N2tpVFpTQU4vc09aRDl5S0NIUktTTmlHd2pP?=
- =?utf-8?B?NmlHdHBPSWNYbHM2MEZNNlRrRVMrZm9hbFlQSmxVbDl5VENvUmErb0Y2YTVk?=
- =?utf-8?B?VTRrdlhvREJ2ZjZqL1hFZy9YMlUyY2pKOVlZR1N3dFl4aVdtZXNESnlyZzJ3?=
- =?utf-8?B?WlFDK0VlQ0k1aFpxS1pBVTZTZWlVZ0NMWGZCSGppeXZVajI1WFJ1cGlKc09O?=
- =?utf-8?B?ZGdnTnMxZHVaTVVlaENCOE85ME5tWmFsWTNDVUE1VElycVBtUjVnQ1AwTVFQ?=
- =?utf-8?B?QzB0R000WVBoWGl3QkFLUlVtbFN6c3dVdkV1SzdFenYwNjh2ODhZblpCTzBJ?=
- =?utf-8?B?RTZ3WmtxZXhBazl6cEx3UDBrUUZGaGtCQWd4YTJVMTFtWjJPRVZkL1JDRU04?=
- =?utf-8?B?d3Rtd1BzK3djc3c2eXVHa05raXBwSEVXQSs2K1dyZTdTaGpXTUd6bWJOZ3ha?=
- =?utf-8?B?ZE9oQ3VXOWFWenZHcXpBNGZhUGFUMTZFb0dRcFVwanBCb00vMFdWTm5jeCs0?=
- =?utf-8?B?YWpjYTd2Zm4xS1Z1Q3pOV0xwdGJIOWZCUFd2ZmQ1TGo2SmF1bHdnQUd0ZlNq?=
- =?utf-8?B?QnVDWFJubTVrdW94WGdFTFNISExZQ2R4dXd1R01VbTE3REZBalNSSnN1YzJt?=
- =?utf-8?Q?FLGn+2aQcAKnx+Zz7yygy9bpa?=
+	=?us-ascii?Q?p9xDwvNnfxwCA02NR+t6a5LO1wzRGlt3NgH7qol0uPe0KHvJL4CH9jSEOUDM?=
+ =?us-ascii?Q?MoH3PDZ4q3LdegUA3WtO1j3KY5sN/60tjIt9fOystSlPCApKRPleLM+nHPx2?=
+ =?us-ascii?Q?Iv1tbi3VP2PcBYDk2WlIYAccMbImpPr2/GeKAiu6BgU6wI4ceCUEFY3QEWjC?=
+ =?us-ascii?Q?U6yX+qkzJS53pCu3Fvor/E92tFX30DX+gpDUtBOHO6v0zevP7t1vuD4Ki2uP?=
+ =?us-ascii?Q?n6vUiOmexQJ+s2ILK9oWUZbO1ROnNU47day9MoFot8e1odLMEkLW1G+HHmxX?=
+ =?us-ascii?Q?1AMpJrbIs5MTeErm27ZY4HJiD1/fn9Ln3bQw2goIsARaAkVmW/0Oy9C2Z80B?=
+ =?us-ascii?Q?8Yg5MSZkChyNKzYBv4SfIWT+cLd4o81o8l3jzbEC4IsveAmgJ5wlM43t+JZP?=
+ =?us-ascii?Q?e2nsvFvsID38Ax9j4jpquLbCgHpsYiDzz8RzGnZqt/QnndwfAxN6iCs6H6Pn?=
+ =?us-ascii?Q?RRhz8ynuS+B9HcsIclhe/X1dWGrL8CVnATTJgglHWo7Czm+TTxczQhvQcqBn?=
+ =?us-ascii?Q?6wRAbWc81v3Px5C1tH6+ivI/LYEubOmwLnTYpjdg8gR7RSLZco87DUl6m73I?=
+ =?us-ascii?Q?pqDd81xMfI3UitcEkFMdjzpoBW3f0YLif4HlwlppCs4NAXrsngCON1Eb4FSF?=
+ =?us-ascii?Q?I6V6Lsh2llhzHtFPaFTZW+yiGyMX+q4Wv+YCIufUxx9fatA0pUzOi2NFYhCF?=
+ =?us-ascii?Q?EAFvo/g4CycCebS4LWQLAk35nePdO8I8iBjbjexBTtkNGqOOanFFYUvjlQtE?=
+ =?us-ascii?Q?vY0Z5JMZgr/RUkTjG44YOJ9nxP5QVUELlWcRKdhKipS1xBigTdTcokvlZKp4?=
+ =?us-ascii?Q?C9b+S8G9yONFzQuauehaHmVY/GmqXlj7+0iHEJK3EShOocZR1tkHJCkaJf70?=
+ =?us-ascii?Q?ysGwUqSIzdWruBlooFXsQszwahG9qb95mwwpsBVuwX2x0byrqubE152+mJ7D?=
+ =?us-ascii?Q?t7bH6b7NElNtT1JG+lNSlv95/vTPqwr+Vv2s+RJ520innWQ7cA0wU7ESygt0?=
+ =?us-ascii?Q?ePhoe0MdRuzTxM3umgobYWKJBz9Ia1MmzsvPgNH5as1q1OtLlbdUWUD6g9Fr?=
+ =?us-ascii?Q?ezHb6vKJbwIlehliydIxk6j83MFx73j+pCd50F9N51xsmuzMSWmUGDyqKtCV?=
+ =?us-ascii?Q?ky4zy5+rz+m8YnBvxgWCePRFhpnYUSk76qQiYxUgptV01mo4l317YIwQ+xvm?=
+ =?us-ascii?Q?lwPUjswUs2pmv6A1iKCgcscOp03+IoCVnU3fGcF6Utc/Ym9f1jcM1hhPXbm6?=
+ =?us-ascii?Q?f9qCzAwdTQ9cnev15dsjKaOz1AwuTapZDoxi7z3wabkhgedgp+ZIBb44r25k?=
+ =?us-ascii?Q?AWv80tJxMmYxvodMcoeB5zo/NV0AjGUTROtshCMNOveBx7BWjXSYn7G6u0kg?=
+ =?us-ascii?Q?EXFluRcg3xgmENC404DdEjqpHOH1K1NKXnqktcBNneOaHp/1YZprKBc9rYqn?=
+ =?us-ascii?Q?YF68zmIC4xxdhylrBudcw6Vd63eEy4hgY0EmpQpqW/L7C2SYbv0xFAlst3PC?=
+ =?us-ascii?Q?lqhEoAupETT6Gw5wcDalIwKng6Ut+qBQeUpzENjSYwhwTtnCLfhushtA/Ell?=
+ =?us-ascii?Q?VKdmY0uB0yfmDNJh44TcmWmPhzcuNBjZgXtI7Tbm?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46863d67-68d0-4635-4dbf-08ddfd0e3be9
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d9a8d27-f2d2-4410-0304-08ddfd0e8d0e
 X-MS-Exchange-CrossTenant-AuthSource: PAXSPRMB0053.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2025 15:06:13.4248
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2025 15:08:29.6438
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: t+tyGBMiHkw8cSmBK/8SujR0U0bLrzByOMo/VjYEs+VmaRl/5F4/AiAYP+/rLI3rOa2mRArgUtVj/3O3GP7Hwg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: WkUVOiXugM52VTBskIg1Jb2TsgFKjsqWtLR1KwayTFwo+ySYHjq4xN8cVRFleCkN5qHDSYblhcL8ASLBv8faOA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8960
 
-Add SOC special compatible string, remove fallback snps,dwc3 to let flatten
-dwc3-layerscape driver to be probed and enable dma-coherence for usb node
-since commit add layerscape dwc3 support, which set correct gsbustcfg0
-value.
+On Fri, Sep 26, 2025 at 11:05:47AM -0400, Frank Li wrote:
+> Add layerscape platform driver use flatten dwc3 core to enable dma-coherence.
+> It needs set gsburstcfg0 to 0x2222.
 
-Add iommus property to run at old uboot, which use fixup add iommus by
-check compatible string snsp,dwc3 compatible string.
+Sorry, please forget this patches, I sent accidently.
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-change in v3
-- none
----
- arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi | 3 ++-
- arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 8 ++++++--
- arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi | 9 ++++++---
- arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi | 9 ++++++---
- arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi | 8 ++++++--
- arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 8 ++++++--
- 6 files changed, 32 insertions(+), 13 deletions(-)
+Frank
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-index fc3e138077b86cd5e3cf95c3d336cb3c6e1c45ef..ef80bf6a604f475c670e2d626a727e94fcb2a17a 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-@@ -493,10 +493,11 @@ QORIQ_CLK_PLL_DIV(4)>,
- 		};
- 
- 		usb0: usb@2f00000 {
--			compatible = "snps,dwc3";
-+			compatible = "fsl,ls1012a-dwc3", "fsl,ls1028a-dwc3";
- 			reg = <0x0 0x2f00000 0x0 0x10000>;
- 			interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
- 			dr_mode = "host";
-+			dma-coherent;
- 			snps,quirk-frame-length-adjustment = <0x20>;
- 			snps,dis_rxdet_inp3_quirk;
- 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-index 7d172d7e5737c4b6e42ee88676c5763fa7415260..e7f9c9319319a69d8c70d1e26446b899c3599f95 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-@@ -613,9 +613,11 @@ gpio3: gpio@2320000 {
- 		};
- 
- 		usb0: usb@3100000 {
--			compatible = "fsl,ls1028a-dwc3", "snps,dwc3";
-+			compatible = "fsl,ls1028a-dwc3";
- 			reg = <0x0 0x3100000 0x0 0x10000>;
- 			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
-+			iommus = <&smmu 1>;
-+			dma-coherent;
- 			snps,dis_rxdet_inp3_quirk;
- 			snps,quirk-frame-length-adjustment = <0x20>;
- 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-@@ -623,9 +625,11 @@ usb0: usb@3100000 {
- 		};
- 
- 		usb1: usb@3110000 {
--			compatible = "fsl,ls1028a-dwc3", "snps,dwc3";
-+			compatible = "fsl,ls1028a-dwc3";
- 			reg = <0x0 0x3110000 0x0 0x10000>;
- 			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-+			iommus = <&smmu 2>;
-+			dma-coherent;
- 			snps,dis_rxdet_inp3_quirk;
- 			snps,quirk-frame-length-adjustment = <0x20>;
- 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-index 73315c51703943d9ee5e1aa300c388ff6482423f..50d9b03a284a2aa4e13aa3323c25bbc5fe08f3d0 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-@@ -833,10 +833,11 @@ aux_bus: bus {
- 			dma-ranges = <0x0 0x0 0x0 0x0 0x100 0x00000000>;
- 
- 			usb0: usb@2f00000 {
--				compatible = "snps,dwc3";
-+				compatible = "fsl,ls1043a-dwc3", "fsl,ls1028a-dwc3";
- 				reg = <0x0 0x2f00000 0x0 0x10000>;
- 				interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
- 				dr_mode = "host";
-+				dma-coherent;
- 				snps,quirk-frame-length-adjustment = <0x20>;
- 				snps,dis_rxdet_inp3_quirk;
- 				usb3-lpm-capable;
-@@ -845,10 +846,11 @@ usb0: usb@2f00000 {
- 			};
- 
- 			usb1: usb@3000000 {
--				compatible = "snps,dwc3";
-+				compatible = "fsl,ls1043a-dwc3", "fsl,ls1028a-dwc3";
- 				reg = <0x0 0x3000000 0x0 0x10000>;
- 				interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
- 				dr_mode = "host";
-+				dma-coherent;
- 				snps,quirk-frame-length-adjustment = <0x20>;
- 				snps,dis_rxdet_inp3_quirk;
- 				usb3-lpm-capable;
-@@ -857,10 +859,11 @@ usb1: usb@3000000 {
- 			};
- 
- 			usb2: usb@3100000 {
--				compatible = "snps,dwc3";
-+				compatible = "fsl,ls1043a-dwc3", "fsl,ls1028a-dwc3";
- 				reg = <0x0 0x3100000 0x0 0x10000>;
- 				interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
- 				dr_mode = "host";
-+				dma-coherent;
- 				snps,quirk-frame-length-adjustment = <0x20>;
- 				snps,dis_rxdet_inp3_quirk;
- 				usb3-lpm-capable;
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-index 770d91ef0310d971d044a1f55cc5e2cb738acc47..22173d69713d1bd2abca986e76668ad437dd34e4 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-@@ -749,10 +749,11 @@ aux_bus: bus {
- 			dma-ranges = <0x0 0x0 0x0 0x0 0x100 0x00000000>;
- 
- 			usb0: usb@2f00000 {
--				compatible = "snps,dwc3";
-+				compatible = "fsl,ls1046a-dwc3", "fsl,ls1028a-dwc3";
- 				reg = <0x0 0x2f00000 0x0 0x10000>;
- 				interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
- 				dr_mode = "host";
-+				dma-coherent;
- 				snps,quirk-frame-length-adjustment = <0x20>;
- 				snps,dis_rxdet_inp3_quirk;
- 				snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-@@ -760,10 +761,11 @@ usb0: usb@2f00000 {
- 			};
- 
- 			usb1: usb@3000000 {
--				compatible = "snps,dwc3";
-+				compatible = "fsl,ls1046a-dwc3", "fsl,ls1028a-dwc3";
- 				reg = <0x0 0x3000000 0x0 0x10000>;
- 				interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
- 				dr_mode = "host";
-+				dma-coherent;
- 				snps,quirk-frame-length-adjustment = <0x20>;
- 				snps,dis_rxdet_inp3_quirk;
- 				snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-@@ -771,10 +773,11 @@ usb1: usb@3000000 {
- 			};
- 
- 			usb2: usb@3100000 {
--				compatible = "snps,dwc3";
-+				compatible = "fsl,ls1046a-dwc3", "fsl,ls1028a-dwc3";
- 				reg = <0x0 0x3100000 0x0 0x10000>;
- 				interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
- 				dr_mode = "host";
-+				dma-coherent;
- 				snps,quirk-frame-length-adjustment = <0x20>;
- 				snps,dis_rxdet_inp3_quirk;
- 				snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-index 9d5726378aa015eff10578bf095908a58b9d9eee..b2f6cd237be046123de9342e2167aa32248a8a16 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-@@ -489,10 +489,12 @@ esdhc: mmc@2140000 {
- 		};
- 
- 		usb0: usb@3100000 {
--			compatible = "snps,dwc3";
-+			compatible = "fsl,ls1088a-dwc3", "fsl,ls1028a-dwc3";
- 			reg = <0x0 0x3100000 0x0 0x10000>;
- 			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
- 			dr_mode = "host";
-+			iommus = <&smmu 1>;
-+			dma-coherent;
- 			snps,quirk-frame-length-adjustment = <0x20>;
- 			snps,dis_rxdet_inp3_quirk;
- 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-@@ -500,10 +502,12 @@ usb0: usb@3100000 {
- 		};
- 
- 		usb1: usb@3110000 {
--			compatible = "snps,dwc3";
-+			compatible = "fsl,ls1088a-dwc3", "fsl,ls1028a-dwc3";
- 			reg = <0x0 0x3110000 0x0 0x10000>;
- 			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
- 			dr_mode = "host";
-+			iommus = <&smmu 2>;
-+			dma-coherent;
- 			snps,quirk-frame-length-adjustment = <0x20>;
- 			snps,dis_rxdet_inp3_quirk;
- 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-index c9541403bcd8239a48d4ef79c7c4f9e3b607b556..d899c0355e51dd457a4e7259709cea98a488f557 100644
---- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-@@ -1094,24 +1094,28 @@ ftm_alarm0: rtc@2800000 {
- 		};
- 
- 		usb0: usb@3100000 {
--			compatible = "snps,dwc3";
-+			compatible = "fsl,lx2160a-dwc3", "fsl,ls1028a-dwc3";
- 			reg = <0x0 0x3100000 0x0 0x10000>;
- 			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
- 			dr_mode = "host";
- 			snps,quirk-frame-length-adjustment = <0x20>;
- 			usb3-lpm-capable;
-+			iommus = <&smmu 1>;
-+			dma-coherent;
- 			snps,dis_rxdet_inp3_quirk;
- 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
- 			status = "disabled";
- 		};
- 
- 		usb1: usb@3110000 {
--			compatible = "snps,dwc3";
-+			compatible = "fsl,lx2160a-dwc3", "fsl,ls1028a-dwc3";
- 			reg = <0x0 0x3110000 0x0 0x10000>;
- 			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
- 			dr_mode = "host";
- 			snps,quirk-frame-length-adjustment = <0x20>;
- 			usb3-lpm-capable;
-+			iommus = <&smmu 2>;
-+			dma-coherent;
- 			snps,dis_rxdet_inp3_quirk;
- 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
- 			status = "disabled";
-
--- 
-2.34.1
-
+>
+> There are some several try before:
+> [1] https://lore.kernel.org/imx/20240710-ls-dwc-v1-0-62f8cbed31d7@nxp.com/
+> [2] https://lore.kernel.org/imx/20240123170206.3702413-1-Frank.Li@nxp.com/
+>
+> [2]: add new property, which was reject because there are no varience in
+> the soc. Fortunately the below commit resolve this problem by use software
+> managed property.
+>
+> d504bfa6cfd1a usb: dwc3: enable CCI support for AMD-xilinx DWC3 controller
+>
+> [1] was reject because there are not actually dwc wrap at layerscape
+> platform. Fortunately Bjorn Andersson's below patch to make it possible
+> by use correct dts dwc3 node layer out.
+>
+> 613a2e655d4dc usb: dwc3: core: Expose core driver as library
+>
+> This resolve problem [1] and [2] by use flatten dwc3 core library.
+>
+> 1. add soc specific compatible string at dt-binding.
+> 2. create platform driver for layerscape chips and pass down gsbuscfg0 if
+> dma-coherence enabled.
+> 3. update layerscape dts files.
+>
+> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> To: Rob Herring <robh@kernel.org>
+> To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+> To: Conor Dooley <conor+dt@kernel.org>
+> To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> To: Shawn Guo <shawnguo@kernel.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: bjorn.andersson@oss.qualcomm.com
+> Cc: imx@lists.linux.dev
+>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+> Changes in v3:
+> - rename gsbuscfg0 to gsbuscfg0_reqinfo
+> - Link to v2: https://lore.kernel.org/r/20250923-ls_dma_coherence-v2-0-ce3176396bdb@nxp.com
+>
+> Changes in v2:
+> - base on drivers/usb/dwc3/dwc3-generic-plat.c
+>
+> commit e0b6dc00c701e600e655417aab1e100b73de821a
+> Author: Ze Huang <huang.ze@linux.dev>
+> Date:   Sat Sep 13 00:53:48 2025 +0800
+>
+>     usb: dwc3: add generic driver to support flattened
+>
+>     To support flattened dwc3 dt model and drop the glue layer, introduce the
+>     `dwc3-generic` driver. This enables direct binding of the DWC3 core driver
+>     and offers an alternative to the existing glue driver `dwc3-of-simple`.
+>
+> - Link to v1: https://lore.kernel.org/r/20250602-ls_dma_coherence-v1-0-c67484d6ab64@nxp.com
+>
+> ---
+> Frank Li (3):
+>       dt-bindings: usb: add missed compatible string for arm64 layerscape
+>       usb: dwc3: dwc3-generic-plat: add layerscape dwc3 support
+>       arm64: dts: layerscape: add dma-coherent for usb node
+>
+>  .../devicetree/bindings/usb/fsl,ls1028a.yaml       | 33 ++++++++++++----------
+>  arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi     |  3 +-
+>  arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |  8 ++++--
+>  arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi     |  9 ++++--
+>  arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |  9 ++++--
+>  arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi     |  8 ++++--
+>  arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi     |  8 ++++--
+>  drivers/usb/dwc3/dwc3-generic-plat.c               | 33 +++++++++++++++++++++-
+>  8 files changed, 82 insertions(+), 29 deletions(-)
+> ---
+> base-commit: c45d2c21b3889c520bf141d576eaecb25666895c
+> change-id: 20250602-ls_dma_coherence-c3c2b6f79db2
+>
+> Best regards,
+> --
+> Frank Li <Frank.Li@nxp.com>
+>
 
