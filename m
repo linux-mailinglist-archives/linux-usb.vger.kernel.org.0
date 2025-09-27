@@ -1,202 +1,332 @@
-Return-Path: <linux-usb+bounces-28733-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28734-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29481BA58F6
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Sep 2025 06:38:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59DB7BA5AAD
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Sep 2025 10:14:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F7921BC73C2
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Sep 2025 04:38:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 144944A81CB
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Sep 2025 08:14:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65052227599;
-	Sat, 27 Sep 2025 04:38:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A1312D4805;
+	Sat, 27 Sep 2025 08:14:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vq486mDy"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MNFu/ScS";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="uCy7wWPJ";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="u7L9Asjw";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Myo200mw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E54717A310;
-	Sat, 27 Sep 2025 04:38:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4D92C08BF
+	for <linux-usb@vger.kernel.org>; Sat, 27 Sep 2025 08:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758947904; cv=none; b=B9PJun8yW+DdW4TANyR/7ZAHgeEXGM+pDcEIN8XiGD1JKFEj2esauc2axw7NrOkOeCzq4ZCLdqT7IKHQqVcW3RVNrz0vfm89H8OXsLEpmZF19ddxdK+PAxJJKkBtc7D2c7apR9Us12zHp7S5ZxV7jO9YiNi5q+hwxdTKO8CG38Q=
+	t=1758960875; cv=none; b=gAMTjGGEVA3mmwYpfCK7a2lH9kmrl1aL5xY8kGZ9Ai0nVIdM/iKNB/TgiT7xl4XX0BI0qyLtzM5sUwKJbuwyt2kXnQSd8VaWuoEeS3iaHmgQdBfmQ47jvWbp4ajJRv+TGb3QgPLn6J2OdiQo6EfMdtzwV+AsayMeHvyHgd34LCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758947904; c=relaxed/simple;
-	bh=Ml6qdQ+jE48I66+8v4t80wL43dmskcbpk6RZ6I2w/es=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L0AjTUJVPf0cMPVUUpzoaXPKfciD5R2yHW4VkrPGF+dArGUugyXbjr/LEIXXnvKJcQTZCOxjItxWnYkjiSntS9cC38Xk00O9NItNy/D44m4bgolEmCNRJtO2kOItr+ISGN9UOk7eAdmMiR1Um9+sst5vE8EOZ0JQpMdMgbcq1ZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vq486mDy; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758947903; x=1790483903;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Ml6qdQ+jE48I66+8v4t80wL43dmskcbpk6RZ6I2w/es=;
-  b=Vq486mDyhEM1jxdEp4zHzu6SoKw4xEXh6NN78qgkDAtzqTafbKLrEh3l
-   E6UDNwHe6zraOoOgISiSykJR3fuRRJQ0snSaqF50wKsXlYiMwniSJoD9v
-   VRwX4N8sgZTmZ1D4/5ixeSnuEQ/KQHmCjPyev/3UB4NLYRbkAN5pNl0uC
-   XnCNbzVebhXk5JgT6Ex10B+XvyiQVLXywVBIPJmE4iem961Phzmh67eGZ
-   IPgCp8DpQIGRnYPoTh1FtnYjpvJ+8uYLFQSkNsFOdAH0TPM7yb1nstePG
-   hWXmlL4NBUYytGSPgZwzwyKfEGF/YcLIBJxeRgqCVv5wex0j/WnyZs2mj
-   w==;
-X-CSE-ConnectionGUID: WjRf+AJKS1m1wuauuf+QyA==
-X-CSE-MsgGUID: f3NOcJD8Qaueir3wn+VaEA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="65089979"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="65089979"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 21:38:22 -0700
-X-CSE-ConnectionGUID: jaVL+GgSSR2fZ9qRa2mWhg==
-X-CSE-MsgGUID: 3F0XLbOETBqHwXik2VrKDQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,296,1751266800"; 
-   d="scan'208";a="181784248"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 26 Sep 2025 21:38:14 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v2MhI-0006nD-0v;
-	Sat, 27 Sep 2025 04:38:12 +0000
-Date: Sat, 27 Sep 2025 12:37:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ricardo Ribalda <ribalda@chromium.org>,
-	Hans de Goede <hansg@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Robert Moore <robert.moore@intel.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>
-Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
-	Ricardo Ribalda <ribalda@chromium.org>
-Subject: Re: [PATCH v3 03/12] media: v4l: fwnode: Support ACPI's _PLD for
- v4l2_fwnode_device_parse
-Message-ID: <202509271249.8fIMriJh-lkp@intel.com>
-References: <20250926-uvc-orientation-v3-3-6dc2fa5b4220@chromium.org>
+	s=arc-20240116; t=1758960875; c=relaxed/simple;
+	bh=u4i9cHF5YhFe8csy42Z21wHtNipJrezGkAGwJui6Gnw=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KhdEs9I+mUaL6L31tWDCDW7wbbgOi5Y+EeQNfTlrwiLxvWAVg1K/WzdN4Z1kCyPpkSdMPjuFaCsOtTA7pWuYNeVdztTJeWYxlf6f2XiNbhMFRBsfeOj2v1opaF6BKURYRBMo51H5iDKnoqq3fr4KzTu7VZ6CjOrmTiYrwvXFSw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MNFu/ScS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=uCy7wWPJ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=u7L9Asjw; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Myo200mw; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id C0893247DD;
+	Sat, 27 Sep 2025 08:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1758960871; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y75e+5ePiVoUzqzr0M0vKrK0VUx24V9nUCpi7hcUUgI=;
+	b=MNFu/ScSdxeCk0seQ7eSbCzyuDWyadXYTUbJjv1uH8uHwlXD9/CTyRIb4uxv8TLipwPj+Y
+	RTB3U60xKmqDxgnCm7GVEAGa0jAin1Ysi2KUpVhBs+xKjTWl0gW5gRi9qducHktXSu2DWU
+	zqWe4gXfO7Ade1VmDhy03DUJ9Fpahgo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1758960871;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y75e+5ePiVoUzqzr0M0vKrK0VUx24V9nUCpi7hcUUgI=;
+	b=uCy7wWPJaoQRFCUc7XZ3cSwjruxsYMFslVOjiZKEAlJW1H8uei0BUF+UdZaJyA41eyPht/
+	nLC7LnBFyI8uJ5Bw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=u7L9Asjw;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Myo200mw
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1758960869; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y75e+5ePiVoUzqzr0M0vKrK0VUx24V9nUCpi7hcUUgI=;
+	b=u7L9AsjwY6ZozkIHCdYXCSlpyq7Q4E+dXqoBemYlKnKnJ1RNu3POF6vY2kW71uAsUaLchN
+	MQ517PbO4l1cIke+H4fpU0VKOhXu1EzFltSDpH2WfXeCTXlKbS6pjvo1JZe5SM6lB8KUjb
+	YgQQx/i/bHHQvIK6bJrMIuEmbe7JQGo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1758960869;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y75e+5ePiVoUzqzr0M0vKrK0VUx24V9nUCpi7hcUUgI=;
+	b=Myo200mw17dHz8+naivnl+U9AI0i3fgGxq5L+nJq1TfpciSh2duBkt3Ro85saltho0oq8g
+	lK08wZC3UhSfJdBw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7589813782;
+	Sat, 27 Sep 2025 08:14:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id isvbGuWc12h8NgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Sat, 27 Sep 2025 08:14:29 +0000
+Date: Sat, 27 Sep 2025 10:14:28 +0200
+Message-ID: <87a52gb9cr.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Victor Krawiec <victor.krawiec@arturia.com>
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	tiwai@suse.de,
+	kees@kernel.org,
+	abdul.rahim@myyahoo.com,
+	jilliandonahue58@gmail.com,
+	jkeeping@inmusicbrands.com
+Subject: Re: [PATCH] usb: gadget: f_midi: allow customizing the USB MIDI interface string through configfs
+In-Reply-To: <20250924154822.205703-1-victor.krawiec@arturia.com>
+References: <20250924154822.205703-1-victor.krawiec@arturia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250926-uvc-orientation-v3-3-6dc2fa5b4220@chromium.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: C0893247DD
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,suse.de,kernel.org,myyahoo.com,gmail.com,inmusicbrands.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:mid]
+X-Spam-Score: -3.51
 
-Hi Ricardo,
+On Wed, 24 Sep 2025 17:48:21 +0200,
+Victor Krawiec wrote:
+> 
+> When using f_midi from configfs the USB MIDI interface string is hardcoded
+> to 'MIDI function'.
+> 
+> This USB string descriptor is used by some third-party OS or software to
+> display the name of the MIDI device
+> 
+> Since we add an additional string option a new macro block was created to
+> factorize declarations
+> 
+> Signed-off-by: Victor Krawiec <victor.krawiec@arturia.com>
+> ---
+>  drivers/usb/gadget/function/f_midi.c | 108 +++++++++++++++------------
+>  drivers/usb/gadget/function/u_midi.h |   8 +-
+>  2 files changed, 66 insertions(+), 50 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+> index da82598fcef8..0a8af7d507d9 100644
+> --- a/drivers/usb/gadget/function/f_midi.c
+> +++ b/drivers/usb/gadget/function/f_midi.c
+> @@ -875,6 +875,7 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
+>  	struct usb_composite_dev *cdev = c->cdev;
+>  	struct f_midi *midi = func_to_midi(f);
+>  	struct usb_string *us;
+> +	struct f_midi_opts *opts;
+>  	int status, n, jack = 1, i = 0, endpoint_descriptor_index = 0;
+>  
+>  	midi->gadget = cdev->gadget;
+> @@ -883,6 +884,10 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
+>  	if (status < 0)
+>  		goto fail_register;
+>  
+> +	opts = container_of(f->fi, struct f_midi_opts, func_inst);
+> +	if (opts->interface_string_allocated && opts->interface_string)
+> +		midi_string_defs[STRING_FUNC_IDX].s = opts->interface_string;
+> +
+>  	/* maybe allocate device-global string ID */
+>  	us = usb_gstrings_attach(c->cdev, midi_strings,
+>  				 ARRAY_SIZE(midi_string_defs));
+> @@ -1178,59 +1183,62 @@ end:									\
+>  									\
+>  CONFIGFS_ATTR(f_midi_opts_, name);
+>  
+> +#define F_MIDI_OPT_STRING(name)						\
+> +static ssize_t f_midi_opts_##name##_show(struct config_item *item, char *page) \
+> +{									\
+> +	struct f_midi_opts *opts = to_f_midi_opts(item);		\
+> +	ssize_t result;							\
+> +									\
+> +	mutex_lock(&opts->lock);					\
+> +	if (opts->name) {						\
+> +		result = strscpy(page, opts->name, PAGE_SIZE);		\
+> +	} else {							\
+> +		page[0] = 0;						\
+> +		result = 0;						\
+> +	}								\
+> +									\
+> +	mutex_unlock(&opts->lock);					\
+> +									\
+> +	return result;							\
+> +}									\
+> +									\
+> +static ssize_t f_midi_opts_##name##_store(struct config_item *item,	\
+> +					 const char *page, size_t len)	\
+> +{									\
+> +	struct f_midi_opts *opts = to_f_midi_opts(item);		\
+> +	int ret;							\
+> +	char *c;							\
+> +									\
+> +	mutex_lock(&opts->lock);					\
+> +	if (opts->refcnt > 1) {						\
+> +		ret = -EBUSY;						\
+> +		goto end;						\
+> +	}								\
+> +									\
+> +	c = kstrndup(page, len, GFP_KERNEL);				\
+> +	if (!c) {							\
+> +		ret = -ENOMEM;						\
+> +		goto end;						\
+> +	}								\
+> +	if (opts->name##_allocated)					\
+> +		kfree(opts->name);					\
+> +	opts->name = c;							\
+> +	opts->name##_allocated = true;					\
+> +	ret = len;							\
+> +end:									\
+> +	mutex_unlock(&opts->lock);					\
+> +	return ret;							\
+> +}									\
+> +									\
+> +CONFIGFS_ATTR(f_midi_opts_, name);
+> +
+>  F_MIDI_OPT_SIGNED(index, true, SNDRV_CARDS);
+>  F_MIDI_OPT(buflen, false, 0);
+>  F_MIDI_OPT(qlen, false, 0);
+>  F_MIDI_OPT(in_ports, true, MAX_PORTS);
+>  F_MIDI_OPT(out_ports, true, MAX_PORTS);
+> -
+> -static ssize_t f_midi_opts_id_show(struct config_item *item, char *page)
+> -{
+> -	struct f_midi_opts *opts = to_f_midi_opts(item);
+> -	ssize_t result;
+> -
+> -	mutex_lock(&opts->lock);
+> -	if (opts->id) {
+> -		result = strscpy(page, opts->id, PAGE_SIZE);
+> -	} else {
+> -		page[0] = 0;
+> -		result = 0;
+> -	}
+> -
+> -	mutex_unlock(&opts->lock);
+> -
+> -	return result;
+> -}
+> -
+> -static ssize_t f_midi_opts_id_store(struct config_item *item,
+> -				    const char *page, size_t len)
+> -{
+> -	struct f_midi_opts *opts = to_f_midi_opts(item);
+> -	int ret;
+> -	char *c;
+> -
+> -	mutex_lock(&opts->lock);
+> -	if (opts->refcnt > 1) {
+> -		ret = -EBUSY;
+> -		goto end;
+> -	}
+> -
+> -	c = kstrndup(page, len, GFP_KERNEL);
+> -	if (!c) {
+> -		ret = -ENOMEM;
+> -		goto end;
+> -	}
+> -	if (opts->id_allocated)
+> -		kfree(opts->id);
+> -	opts->id = c;
+> -	opts->id_allocated = true;
+> -	ret = len;
+> -end:
+> -	mutex_unlock(&opts->lock);
+> -	return ret;
+> -}
+> -
+> -CONFIGFS_ATTR(f_midi_opts_, id);
+> +F_MIDI_OPT_STRING(id);
+> +F_MIDI_OPT_STRING(interface_string);
+>  
+>  static struct configfs_attribute *midi_attrs[] = {
+>  	&f_midi_opts_attr_index,
+> @@ -1239,6 +1247,7 @@ static struct configfs_attribute *midi_attrs[] = {
+>  	&f_midi_opts_attr_in_ports,
+>  	&f_midi_opts_attr_out_ports,
+>  	&f_midi_opts_attr_id,
+> +	&f_midi_opts_attr_interface_string,
+>  	NULL,
+>  };
+>  
+> @@ -1264,6 +1273,8 @@ static void f_midi_free_inst(struct usb_function_instance *f)
+>  	if (free) {
+>  		if (opts->id_allocated)
+>  			kfree(opts->id);
+> +		if (opts->interface_string_allocated)
+> +			kfree(opts->interface_string);
+>  		kfree(opts);
+>  	}
+>  }
+> @@ -1280,6 +1291,7 @@ static struct usb_function_instance *f_midi_alloc_inst(void)
+>  	opts->func_inst.free_func_inst = f_midi_free_inst;
+>  	opts->index = SNDRV_DEFAULT_IDX1;
+>  	opts->id = SNDRV_DEFAULT_STR1;
+> +	opts->interface_string = SNDRV_DEFAULT_STR1;
 
-kernel test robot noticed the following build errors:
+SNDRV_DEFAULT_STR1 is NULL, and this fact can simplify things a lot.
 
-[auto build test ERROR on afb100a5ea7a13d7e6937dcd3b36b19dc6cc9328]
+So, it's better to initialize explicitly with NULL instead of
+SNDRV_DEFAULT_STR1, then you can just do NULL-check of the pointer
+without the use of *_allocated field (that can be dropped).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Ribalda/media-uvcvideo-Always-set-default_value/20250926-211524
-base:   afb100a5ea7a13d7e6937dcd3b36b19dc6cc9328
-patch link:    https://lore.kernel.org/r/20250926-uvc-orientation-v3-3-6dc2fa5b4220%40chromium.org
-patch subject: [PATCH v3 03/12] media: v4l: fwnode: Support ACPI's _PLD for v4l2_fwnode_device_parse
-config: arm-randconfig-004-20250927 (https://download.01.org/0day-ci/archive/20250927/202509271249.8fIMriJh-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 10.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250927/202509271249.8fIMriJh-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509271249.8fIMriJh-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/printk.h:623,
-                    from include/asm-generic/bug.h:22,
-                    from arch/arm/include/asm/bug.h:60,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:79,
-                    from include/linux/spinlock.h:56,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:7,
-                    from include/linux/slab.h:16,
-                    from include/linux/resource_ext.h:11,
-                    from include/linux/acpi.h:13,
-                    from drivers/media/v4l2-core/v4l2-fwnode.c:17:
-   drivers/media/v4l2-core/v4l2-fwnode.c: In function 'v4l2_fwnode_device_parse_acpi':
->> include/linux/acpi.h:1268:26: error: implicit declaration of function '__acpi_handle_debug'; did you mean 'acpi_handle_debug'? [-Werror=implicit-function-declaration]
-    1268 |  _dynamic_func_call(fmt, __acpi_handle_debug,   \
-         |                          ^~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:224:3: note: in definition of macro '__dynamic_func_call_cls'
-     224 |   func(&id, ##__VA_ARGS__);   \
-         |   ^~~~
-   include/linux/dynamic_debug.h:250:2: note: in expansion of macro '_dynamic_func_call_cls'
-     250 |  _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |  ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/acpi.h:1268:2: note: in expansion of macro '_dynamic_func_call'
-    1268 |  _dynamic_func_call(fmt, __acpi_handle_debug,   \
-         |  ^~~~~~~~~~~~~~~~~~
-   drivers/media/v4l2-core/v4l2-fwnode.c:821:3: note: in expansion of macro 'acpi_handle_debug'
-     821 |   acpi_handle_debug(ACPI_HANDLE(dev), "cannot obtain _PLD\n");
-         |   ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+Other than that, the code change looks good.
 
 
-vim +1268 include/linux/acpi.h
+thanks,
 
-45fef5b88d1f2f Bjørn Mork       2014-05-22  1240  
-fbfddae696572e Toshi Kani       2012-11-21  1241  /*
-fbfddae696572e Toshi Kani       2012-11-21  1242   * acpi_handle_<level>: Print message with ACPI prefix and object path
-fbfddae696572e Toshi Kani       2012-11-21  1243   *
-fbfddae696572e Toshi Kani       2012-11-21  1244   * These interfaces acquire the global namespace mutex to obtain an object
-fbfddae696572e Toshi Kani       2012-11-21  1245   * path.  In interrupt context, it shows the object path as <n/a>.
-fbfddae696572e Toshi Kani       2012-11-21  1246   */
-fbfddae696572e Toshi Kani       2012-11-21  1247  #define acpi_handle_emerg(handle, fmt, ...)				\
-fbfddae696572e Toshi Kani       2012-11-21  1248  	acpi_handle_printk(KERN_EMERG, handle, fmt, ##__VA_ARGS__)
-fbfddae696572e Toshi Kani       2012-11-21  1249  #define acpi_handle_alert(handle, fmt, ...)				\
-fbfddae696572e Toshi Kani       2012-11-21  1250  	acpi_handle_printk(KERN_ALERT, handle, fmt, ##__VA_ARGS__)
-fbfddae696572e Toshi Kani       2012-11-21  1251  #define acpi_handle_crit(handle, fmt, ...)				\
-fbfddae696572e Toshi Kani       2012-11-21  1252  	acpi_handle_printk(KERN_CRIT, handle, fmt, ##__VA_ARGS__)
-fbfddae696572e Toshi Kani       2012-11-21  1253  #define acpi_handle_err(handle, fmt, ...)				\
-fbfddae696572e Toshi Kani       2012-11-21  1254  	acpi_handle_printk(KERN_ERR, handle, fmt, ##__VA_ARGS__)
-fbfddae696572e Toshi Kani       2012-11-21  1255  #define acpi_handle_warn(handle, fmt, ...)				\
-fbfddae696572e Toshi Kani       2012-11-21  1256  	acpi_handle_printk(KERN_WARNING, handle, fmt, ##__VA_ARGS__)
-fbfddae696572e Toshi Kani       2012-11-21  1257  #define acpi_handle_notice(handle, fmt, ...)				\
-fbfddae696572e Toshi Kani       2012-11-21  1258  	acpi_handle_printk(KERN_NOTICE, handle, fmt, ##__VA_ARGS__)
-fbfddae696572e Toshi Kani       2012-11-21  1259  #define acpi_handle_info(handle, fmt, ...)				\
-fbfddae696572e Toshi Kani       2012-11-21  1260  	acpi_handle_printk(KERN_INFO, handle, fmt, ##__VA_ARGS__)
-fbfddae696572e Toshi Kani       2012-11-21  1261  
-45fef5b88d1f2f Bjørn Mork       2014-05-22  1262  #if defined(DEBUG)
-fbfddae696572e Toshi Kani       2012-11-21  1263  #define acpi_handle_debug(handle, fmt, ...)				\
-fbfddae696572e Toshi Kani       2012-11-21  1264  	acpi_handle_printk(KERN_DEBUG, handle, fmt, ##__VA_ARGS__)
-fbfddae696572e Toshi Kani       2012-11-21  1265  #else
-45fef5b88d1f2f Bjørn Mork       2014-05-22  1266  #if defined(CONFIG_DYNAMIC_DEBUG)
-45fef5b88d1f2f Bjørn Mork       2014-05-22  1267  #define acpi_handle_debug(handle, fmt, ...)				\
-f1ebe04f5ba2f4 Rasmus Villemoes 2019-03-07 @1268  	_dynamic_func_call(fmt, __acpi_handle_debug,			\
-f1ebe04f5ba2f4 Rasmus Villemoes 2019-03-07  1269  			   handle, pr_fmt(fmt), ##__VA_ARGS__)
-45fef5b88d1f2f Bjørn Mork       2014-05-22  1270  #else
-fbfddae696572e Toshi Kani       2012-11-21  1271  #define acpi_handle_debug(handle, fmt, ...)				\
-fbfddae696572e Toshi Kani       2012-11-21  1272  ({									\
-fbfddae696572e Toshi Kani       2012-11-21  1273  	if (0)								\
-fbfddae696572e Toshi Kani       2012-11-21  1274  		acpi_handle_printk(KERN_DEBUG, handle, fmt, ##__VA_ARGS__); \
-fbfddae696572e Toshi Kani       2012-11-21  1275  	0;								\
-fbfddae696572e Toshi Kani       2012-11-21  1276  })
-fbfddae696572e Toshi Kani       2012-11-21  1277  #endif
-45fef5b88d1f2f Bjørn Mork       2014-05-22  1278  #endif
-fbfddae696572e Toshi Kani       2012-11-21  1279  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Takashi
 
