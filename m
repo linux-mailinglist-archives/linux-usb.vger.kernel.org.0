@@ -1,121 +1,181 @@
-Return-Path: <linux-usb+bounces-28744-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28745-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA8DDBA6E69
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Sep 2025 11:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E018BA7419
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Sep 2025 17:29:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9912317AEED
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Sep 2025 09:58:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA49D178111
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Sep 2025 15:29:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64552DAFC1;
-	Sun, 28 Sep 2025 09:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B0B23026B;
+	Sun, 28 Sep 2025 15:29:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="fkmaC9Jh"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="BeefcRxa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m21471.qiye.163.com (mail-m21471.qiye.163.com [117.135.214.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE3A2DA758;
-	Sun, 28 Sep 2025 09:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.214.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B83B22B8B6
+	for <linux-usb@vger.kernel.org>; Sun, 28 Sep 2025 15:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759053479; cv=none; b=WCIrcnT83G/qKGA2UQSX6V3lWTF82lOBSvC9CBjb7FNAIB4M9xEcaEKKP53BIPp9nMlk/Y0eCKQuPBHecJtKOsya0cMWOnLwDm/qr1928ogZ3mQ+aR4ZN4IE1XU4PgnVrpnrYcomT5ZG5ObTivItDltuXvc+votzzVd3Wukn1Nc=
+	t=1759073366; cv=none; b=T4kQmF9S1XuNdFxnnirzW7WZooZliaS7sJkGkqGHAbT2Yg9pJOh7Fod94i+YXw33iQKYgMyiPyMYHWBmDnzn1VX8hGiHbl40tI6/fM2ZC+4esigZd1LWI8yH2ZzD+QI5Hi4DmGNUuR3SW+GhjV6cHsr9hDCBc6pKWbH8sG7fJ/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759053479; c=relaxed/simple;
-	bh=J8c7JVbiIEeckY6sC/rBbPzskekmzcvgPP0Qe1vVJQw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IUVvV1wzYn4bmsIyBfr+UlDadZLwQsAPXsGccqhTRBulzhYXRsWHcb5hxMRBbBBjrKhKwBkdKhSgw6fRLZlz8p/3w5lYGBDxb0vYlaY6ybU1Dtpiz6svy1tjo0XvybYlGtwvpsKtoDN/8XPSQITwlTgVZrV9myRZuqYKcB0VCxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=fkmaC9Jh; arc=none smtp.client-ip=117.135.214.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.153] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 2455d07b1;
-	Sun, 28 Sep 2025 17:52:36 +0800 (GMT+08:00)
-Message-ID: <ede70598-c451-4352-ab3e-0e278ce33ad7@rock-chips.com>
-Date: Sun, 28 Sep 2025 17:52:35 +0800
+	s=arc-20240116; t=1759073366; c=relaxed/simple;
+	bh=gCtcrpyj3/nvZp3sqKvIbRgfCq9JDmLNiBiXQpYqjl4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PrJG79MqZPTrSDfjULJGvdnpvN0wtfrx+ozfAaVbyd08dGNybhlXJZ8VcIuwiMoTiw7RMiz1YJ3Ch5ljxcXin0FRzsGgMm72oXo/voqvCLSpkWgRYAouanp82j4039UXrDC7n+fZYv4pcQk7XNfs74QMz+4kjr1yf31wyUTTT/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=BeefcRxa; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4dac61ed7a5so30810351cf.3
+        for <linux-usb@vger.kernel.org>; Sun, 28 Sep 2025 08:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1759073364; x=1759678164; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o8hCVZpujpi/X6wfV8yzOK80VKQjfoVRfGXWjYBx4ck=;
+        b=BeefcRxaLl+yYr4oO9fbY6w9/wKuWLGxqvh3msrha4pGon0WCCCEmQAURaWpPOFFQ0
+         NMJ1dRKiGYf4GTLWWjHKCTNZI4nZTC2EuoHkUgyfdAg/Hwdi5SJnXuH/aTRfunQtQti2
+         Dxm+AuZtec7aAntnhcijIfHE/KbXzEDWXz+9+ZolJG49FMhT50tJyf6BE3ZjdrteO9n5
+         /RxGubgNKKpT3A+T90BOjtBg5OKGg7jXZpJpMJe19gqCSiOE4AuPDGVkgxTJn8+r/Wd4
+         VrNbdd+COcZYrHRxYiakGgE2Fz6x7pqu89bck0/ptq+zbwPoxxVAZKecUYZ02H3AfX5U
+         h1QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759073364; x=1759678164;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o8hCVZpujpi/X6wfV8yzOK80VKQjfoVRfGXWjYBx4ck=;
+        b=MUeorMH4Z7NXVOE+Q+JXiKRHlIL+gxrU3GeX4/YFvbVqjyPsRDhSV3qTWYyRQT14Ro
+         bw1ym0feSvWmTpzEs00QYtJhoqoS0G5Ly2h4RvTrASqtfan6Vlgt/5/WXhs/K2ovIyFH
+         fBAt+a/rhbEmFqqz+Qq33bQai6DskUOzMepzvEkzy6AR59xlk93TR7aHWOEB3wG0Qpgh
+         wcKU++GcPBxs2H+KPcHmID5YT7WtWkoIqxc4pSosk24CVMBkGyEW9zDyoLEgNjIjJFkz
+         QZtv/dTD8Da7m4HeNbZM6uo18m/fGP1DasHmXWdOA3Z3cYzHvlgCk5Oq0YUUWICC7uQ3
+         rR2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWItW+hdOnmkoYqlBZ6/KVD6cB33tjsXtIKd2zS1VMBBk5XBuWou28/fbWyWpJ+LcIWsdRuPfYcnuU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVWQGtF7J6uelFlbksBaLRMEQy5PRrqfAikv9OvJvlsY6vJy9v
+	vFSi2bOYSeHm1jx/tq+EOG435dkU/I+wrXsjcH+pRvWUcsMSr03D7PJDyO6wsIYj+VAVIuq4bZZ
+	dG1MZWw==
+X-Gm-Gg: ASbGncsISsgP3da3/0feNHftwm8MTBt40Z76Z4KWmcs3bGM8Ar1HTBObu4M3p7nPvb0
+	4VPCHw4ospbmWfURc4lYzCD7s7260BG9QioK4188YawsqfAN5IHFqC3yDPuLYofOoX8SggRxiT1
+	lxv7vrE0GXwv/2AEQ9M5GxlhusmpU4hK7VS+Zg24j+ManZQfdkx5PGyKvjal4Fp9kMWFQjsexdd
+	ur8PjGxmtTTvKqxX3WyrYgIXjOyvGKiPaAPLkoObrSO+BOPGmA0bdxo9j5rpO7axL8w4jBZ1pge
+	GPOYOzD+khyOI4iREGIyA52/40rUnpssRRpg45AT2oYSjPIXy9Q8Ar8RWBpDvHEn7qKl0yY31SH
+	JzYTLrIPkWASDC5xA7xNqLL/n
+X-Google-Smtp-Source: AGHT+IG4kRAUzCZbV50JeMVCr2hPSgsIF/3dzwloR5e/8GzkLrq/n9Yn+b4k5jIB5jCuXdXDqpjpRQ==
+X-Received: by 2002:ac8:7c42:0:b0:4b7:aaa2:c8f6 with SMTP id d75a77b69052e-4da4b42c83cmr196263091cf.43.1759073363965;
+        Sun, 28 Sep 2025 08:29:23 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::5082])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-85c335b7050sm599023285a.58.2025.09.28.08.29.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Sep 2025 08:29:23 -0700 (PDT)
+Date: Sun, 28 Sep 2025 11:29:19 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] usb: ehci: Add Aspeed AST2700 support
+Message-ID: <0a12f3ac-2600-4ede-a738-f4ab43ad4bee@rowland.harvard.edu>
+References: <20250928032407.27764-1-ryan_chen@aspeedtech.com>
+ <20250928032407.27764-3-ryan_chen@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/7] drm/rockchip: cdn-dp: Add multiple bridges to
- support PHY port selection
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Chaoyi Chen <kernel@airkyi.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
- Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20250922012039.323-1-kernel@airkyi.com>
- <20250922012039.323-6-kernel@airkyi.com>
- <idyrlzhd5sotg3ylr7vbwmczimglffc75nafxbnhhm3ot2jn4w@ixerm6elfmre>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <idyrlzhd5sotg3ylr7vbwmczimglffc75nafxbnhhm3ot2jn4w@ixerm6elfmre>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a998fbd11a503abkunma2c1ce0f943b8a
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGhlLGlZNSk0YGE9JTx5PGkNWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
-	xVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=fkmaC9JhLsx9ypREA2gyK2saMIt0xQXv11bYSJmDDFFpI7xmfpCJWCu/QwNzs8iObZJwhYNAOBXT0AKdgryMB/HWPPuwHP4cE9dr6FPYq6oyYCBt+9FMdhF+19j6+JMmlgQdJWNrnY2U734Idzqo3Sisf0O1F72QkVhyE4zITHI=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=r6bywD2WUzTYm4ELUvERid8tPQSU5/IWu32J6FLL1ok=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250928032407.27764-3-ryan_chen@aspeedtech.com>
 
-On 9/23/2025 9:50 AM, Dmitry Baryshkov wrote:
+On Sun, Sep 28, 2025 at 11:24:07AM +0800, Ryan Chen wrote:
+> Unlike earlier Aspeed SoCs (AST2400/2500/2600) which are limited to
+> 32-bit DMA addressing, the EHCI controller in AST2700 supports 64-bit
+> DMA. Update the EHCI platform driver to make use of this capability by
+> selecting a 64-bit DMA mask when the "aspeed,ast2700-ehci" compatible
+> is present in device tree.
+> 
+> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+> ---
 
-[...]
+This is basically good and it can be merged.  However...
 
+>  drivers/usb/host/ehci-platform.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
+> index 6aab45c8525c..bcd1c9073515 100644
+> --- a/drivers/usb/host/ehci-platform.c
+> +++ b/drivers/usb/host/ehci-platform.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/io.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/reset.h>
+>  #include <linux/sys_soc.h>
+> @@ -239,9 +240,11 @@ static int ehci_platform_probe(struct platform_device *dev)
+>  	struct usb_hcd *hcd;
+>  	struct resource *res_mem;
+>  	struct usb_ehci_pdata *pdata = dev_get_platdata(&dev->dev);
+> +	const struct of_device_id *match;
+>  	struct ehci_platform_priv *priv;
+>  	struct ehci_hcd *ehci;
+>  	int err, irq, clk = 0;
+> +	bool dma_mask_64;
+>  
+>  	if (usb_disabled())
+>  		return -ENODEV;
+> @@ -253,8 +256,13 @@ static int ehci_platform_probe(struct platform_device *dev)
+>  	if (!pdata)
+>  		pdata = &ehci_platform_defaults;
+>  
+> +	dma_mask_64 = pdata->dma_mask_64;
+> +	match = of_match_device(dev->dev.driver->of_match_table, &dev->dev);
 
->> +	/* One endpoint may correspond to one HPD bridge. */
->> +	for_each_of_graph_port_endpoint(port, dp_ep) {
->> +		/* Try to get "port" node of correspond PHY device */
->> +		struct device_node *phy_ep __free(device_node) =
->> +			of_graph_get_remote_endpoint(dp_ep);
->> +		struct device_node *phy_port __free(device_node) =
->> +			of_get_parent(phy_ep);
->> +
->> +		if (!phy_port) {
->> +			continue;
->> +		}
->> +
->> +		/*
->> +		 * A PHY port may contain two endpoints: USB connector port or CDN-DP port.
->> +		 * Try to find the node of USB connector.
-> And then there can be a retimer between PHY and the USB-C connector. Or
-> some signal MUX. Or DP-to-HDMI bridge. Please, don't parse DT for other
-> devices. Instead you can add drm_aux_bridge to your PHY and let DRM core
-> build the bridge chain following OF graph.
->
-I think building a bridge chain across multiple drm_aux_hpd_bridge may be difficult. First, drm_dp_hpd_bridge_register() cannot register the bridge immediately; instead, it is deferred until drm_aux_hpd_bridge_probe(). When it is added to the bridge_list, it may not yet be attached, and attempting to attach it at that point is too late.
+(I just noticed this.)  The "dev->dev.driver->of_match_table" part looks 
+odd.  Why not just write "vt8500_ehci_ids"?  Do you expect that this 
+could ever have a different value?
 
-But, if I only use drm_aux_bridge on the USB-C connector, and use my own custom bridge on the PHY device and managing the alloc and attach bridge process myself, then things would become much easier.
+Alan Stern
 
--- 
-Best,
-Chaoyi
-
+> +	if (match && match->data)
+> +		dma_mask_64 = true;
+> +
+>  	err = dma_coerce_mask_and_coherent(&dev->dev,
+> -		pdata->dma_mask_64 ? DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
+> +		dma_mask_64 ? DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
+>  	if (err) {
+>  		dev_err(&dev->dev, "Error: DMA mask configuration failed\n");
+>  		return err;
+> @@ -298,7 +306,9 @@ static int ehci_platform_probe(struct platform_device *dev)
+>  		if (of_device_is_compatible(dev->dev.of_node,
+>  					    "aspeed,ast2500-ehci") ||
+>  		    of_device_is_compatible(dev->dev.of_node,
+> -					    "aspeed,ast2600-ehci"))
+> +					    "aspeed,ast2600-ehci") ||
+> +		    of_device_is_compatible(dev->dev.of_node,
+> +					    "aspeed,ast2700-ehci"))
+>  			ehci->is_aspeed = 1;
+>  
+>  		if (soc_device_match(quirk_poll_match))
+> @@ -485,6 +495,7 @@ static const struct of_device_id vt8500_ehci_ids[] = {
+>  	{ .compatible = "wm,prizm-ehci", },
+>  	{ .compatible = "generic-ehci", },
+>  	{ .compatible = "cavium,octeon-6335-ehci", },
+> +	{ .compatible = "aspeed,ast2700-ehci",	.data = (void *)1 },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, vt8500_ehci_ids);
+> -- 
+> 2.34.1
+> 
 
