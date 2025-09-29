@@ -1,124 +1,283 @@
-Return-Path: <linux-usb+bounces-28783-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28784-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96D46BA9826
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 16:13:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52889BA9878
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 16:24:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1313C7A06B5
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 14:12:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEE3E1766FF
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 14:24:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40BA63064BB;
-	Mon, 29 Sep 2025 14:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB147309DC0;
+	Mon, 29 Sep 2025 14:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="cYZ/n27e"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="e+wTxiAb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011022.outbound.protection.outlook.com [52.101.70.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D33772617
-	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 14:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759155220; cv=none; b=N8LsGcYqxQfu4JLuj+81QGs8P8lbNsT5Jf1hdA0KpSQunFeknXNkWG0oZ0CjkqJlcUkL0JCSiMZHVCR7pWvIqEpqOTrM79IjFJqPrIohQn3Eav5HZy2Kr8LiAG8jzjWBG8jnluco4t/ar6JQhMtLv7EryfvCJkjcUJearb26DEA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759155220; c=relaxed/simple;
-	bh=ikU4y6IfQaBPnzb0QbjlpTlUMl/75MiANr+2RnkQvHc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PFPHumcRtXqM6f7YDIfCm+Cet/3JYGxTKw0+BfOQZxItGMKkrAjeNuj59FTwxjBSZExvC8CPRpLoDm+Wyr5OZSPqfHFtcTS/otmt9mpFITVMFHIN21RjpqhSzi24whhRODFkygQeEmg1YjiKflVOSU+0tiyj7MwibGVTNkgh+SU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=cYZ/n27e; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-856328df6e1so465641185a.0
-        for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 07:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1759155218; x=1759760018; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QIX14KFofoWNgRW8W21KXmFyF1ppXZt83YftOVIbIW4=;
-        b=cYZ/n27eeBD4uW7ESt9zc+gKh6MYr5K11sh4Y7I7z+wadWBV7LHCJBMon5FTZc9OLd
-         XodJKOR5VlrGxPsyL0av1rYoo6JsoDqu2jm1uiNzBm4NNSp3NEbQpgSpIzwFwloup7uk
-         RQrNWk3PDWbu4LaiekVHEbIgCFgqGCzqilsE6vvaY0p4kQ+JcM1JVdLbd6hfsJGgDivA
-         aV89DosuWMGM3RqZlC+jiXRApQJPLyELoEDBpc+lZSr0Lkp5xpSJVPraMf0/AphNmuwQ
-         svR4/NRwHISOmOVomFLaZJtHST2stsmLdAcpiAB/Wqvza193XEhTzVHRvfvC36PqijAu
-         6R8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759155218; x=1759760018;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QIX14KFofoWNgRW8W21KXmFyF1ppXZt83YftOVIbIW4=;
-        b=rLwckO1IYQtHdkte5q+FxbQUf+F9NT0MMG3lD8cyizkA50KWs/lJIBZk8AS2HVBiuV
-         gTQsIyS9o9KIXRSfXj2boOUWUQdDc+r97wyAowEm4P8v2HjPEgF6m7ZBVetYeS/+G57n
-         EwNoNdHkW4ToEGiWha6bwZQ1BQJwPal9xkLJn1gI50hzNOXLBh91hrjd++wp6gsEGMSk
-         6xzr3cYVbxkpeF9GIb2YJfz153UpvgWeags8ps9Ms0lhK6UsuJfIGDU6p1EHWf5LEEGu
-         kCzLw4W7ogZilzc1Nq3xm82RhNko9SEvhbipz8DiJ99SLtvrd/gFAMYeP91+P3AW9tVP
-         YcyQ==
-X-Gm-Message-State: AOJu0YzGevH0mgL862ntUoSilf7R47Rm6zC7I3DSzNj7jBPzdDV8qNwN
-	SeKKxhqtBhvayfFRzVHSEEAx+/C46jjOmGzB6WjrruRRYyUDmU9ziEO4i6/rX9k7gceinOMbXk7
-	D5zM=
-X-Gm-Gg: ASbGnct3Qa4VStpfnM0FEKZiwva1+G0xdNeEmIWYohdgthVgrKMPGD3zgqti3yUdJWz
-	ZVrofaCAb77QR4RwC0cuCVNfEZ3QH2xsP3jgPWeJnf0TA/7KEpSYNRpDjiQwikNoUMhNWBgqp7U
-	KHWVnzvtA9JJ/A7eEYqWLFUiIoCZv5xnttjfk2h1roKxxR2AuBC04CDK6eSdwH/kY43DDzo4WIV
-	WHC2WPNt9FjBl8LrmGhmXqlPs0nNpDJzscRuIKrY4vmtKz71T0VQJ6zNOjjV5ub0rgYiIEJb5Mu
-	UB7yweZltBeFYvXWjg1wnKY6NOpGEyG/wd/ufDQHWGFyzdpb0wZ+5YQxTRzOh8br+55RodjGjFZ
-	01lEJvTs1DLm+tYehPylaVCwDZ9zbj7HaELa5nPAlQEobjw==
-X-Google-Smtp-Source: AGHT+IFh7TV/iMT1girpIpTh4fWF6qq1jBe7kpdXzTMoOFwCOB/h59AhgcbB0k5V2nGucBoA29Olxw==
-X-Received: by 2002:a05:620a:29c5:b0:864:4cb1:506e with SMTP id af79cd13be357-8644cb1512bmr1077508885a.35.1759155217794;
-        Mon, 29 Sep 2025 07:13:37 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-85c2737848csm840480185a.3.2025.09.29.07.13.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Sep 2025 07:13:37 -0700 (PDT)
-Date: Mon, 29 Sep 2025 10:13:35 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Han Boetes <han@boetes.org>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: As per request
-Message-ID: <e31f129f-1119-4a22-a71b-d0d559ac2a07@rowland.harvard.edu>
-References: <7c7d0b10-9969-45e8-9440-563960645c36@boetes.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0D226E6FF;
+	Mon, 29 Sep 2025 14:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.22
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759155873; cv=fail; b=RxhFg42e0OOw9pHkOnZfYMKEINLuKto28GN7/8YqCXq4bK3VkrbuJwN3xol55TfsF7Z03sfxqgc3CVjtO7F2HQdIrrc7fqOXip9YpGHZRu6t6jvCmoPBT0srWXL9wb1dZ2Y5m8qYAUKOgcAe2aRRi2RS7Fv55u20Lj2sqrbwDJc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759155873; c=relaxed/simple;
+	bh=icBFyztIsa/NOSosyZIaaOciT7KlKcD6Ofi9v9wrrno=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=hX6+sraqbm2e54wTaimusOPqxKcRAnF0nANgWFL9+a7wWJT9ZzdeP7jxIGEsSwMcVYvtWvM2kD6dUTKCMoaCUOdk5S17IJlCosIwee794FDPkBz7ViLm1Hvl5to9bhJ0At3daVaW/X1QQbYyFf7ejF0Z4vIOU4pSpTo6hsnfwf4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=e+wTxiAb; arc=fail smtp.client-ip=52.101.70.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KtOKAOot5liVShHg5aYdp64Jlu7gN6FzeRZo2XYBH+NsrdUuRoywDXbtEFPoLX3zVz1Tkmm6111A4JrysGplSRPDxCCtPTYgFxof6J+m1g43+X4+35T55mNoa8PoZT4oKggqHTwck8IvElEYcQK4I40TkfvJHzyQCY5Vf+foWmZwGJ+HAbC1sjn+av98l16XqkpkVbnvGve6+IUIN9+KP9DZYycGrO4ZHuf1wx5cjX71X6L6tEa3YmewEGG1uWIi6CH7GJK6M73RvKFDWas8GxzDx2RFM3YO+sM2l4+n/jOWPCzCqvOdujpcxB5cTX1RVKvCiB4WjwUTZQ+visDMTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F4C72FEmF0TAAldjxHkoN/0iVEZWoEB7/zNFkH01ax0=;
+ b=ZSyYdt4qbsriEX75ltCE2HOsEIsO5GlWMzDEJSoXsWNCEV4HV4h+sAInwpyn8fmYiGNcC3DGW6pPFvbK7IlXFPlVAf/5RkogAqYesIs3MBsqEEoRe7bFRKpqU0kPntOqP0D331sCJdkcerX3D/LYumnMgS9BQmGrUYggjTCeWQi9OuPqldDSqzKPGkbAOmR3rmUsTsPK+keVVB6JSzdTAmO11E7YB/rlgPT53aQyi4roM9kz7eHrQWslaR9dtfr0I/rMPBFT+zi6K94S3SgSP84pg/+1DN9BhrxGko4I26xxBT4PeR/60fqLJPAo4u5V7rRxviVsMzCpLcWvFgegtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F4C72FEmF0TAAldjxHkoN/0iVEZWoEB7/zNFkH01ax0=;
+ b=e+wTxiAbpGDooNartDOlUq82c+/h3Dy2RqgEq7GD7JHZYzTqtTVWnTpvkRvUuqJqvzC7tgEQPbopwbH2tj8pl4wme+SMAnl3+otu2yIn8aggZ1BOWCfzP2P88voqgKZ7AF4DkE8N+e0dyiZIdCAjnkw++HgaqoCsZKiKBNzc++KM4CVWy5RMGY6XC2SDwCf2rGzZWC9Nmr39mY07mszMtuCthKx38ZMJnA/ijWIn12sUUU6Pa/tdy34kCpqqAmILvrxQpnAjH0aDWtBrKrU2EavVlK8Kp39FggGdINuHnSJRgR4WRiTLE+OtKCe/4t/ZfUDgqBUO/gAhLyORFdhzMQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AS4PR04MB9621.eurprd04.prod.outlook.com (2603:10a6:20b:4ff::22)
+ by PAXPR04MB8607.eurprd04.prod.outlook.com (2603:10a6:102:21a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.17; Mon, 29 Sep
+ 2025 14:24:27 +0000
+Received: from AS4PR04MB9621.eurprd04.prod.outlook.com
+ ([fe80::a84d:82bf:a9ff:171e]) by AS4PR04MB9621.eurprd04.prod.outlook.com
+ ([fe80::a84d:82bf:a9ff:171e%4]) with mapi id 15.20.9160.014; Mon, 29 Sep 2025
+ 14:24:27 +0000
+From: Frank Li <Frank.Li@nxp.com>
+Subject: [PATCH v5 0/4] usb: dwc3: add layerscape platform driver use
+ flatten dwc3 core
+Date: Mon, 29 Sep 2025 10:24:13 -0400
+Message-Id: <20250929-ls_dma_coherence-v5-0-2ebee578eb7e@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI2W2mgC/4XOTQrCMBAF4KtI1kaSSTq1rryHiDST0Qa0LYkUR
+ Xp3Uzf+ILp8A997cxOJY+AkVrObiDyEFLo2h2I+E9TU7YFl8DkLUFAoVCCPaedP9Y66hiO3xJI
+ MgcN9WXkHIrM+8j5cHpWbbc5NSOcuXh8Lg56uP8oGLZUkLO3Seqwd2nV76RfUncRUNcCTV2C+c
+ Jg4G12iqdB5987NK8cv3GSe/3KaFDG6j3X7j9vMQXNF03RBL+vjON4BjmtHJ2sBAAA=
+X-Change-ID: 20250602-ls_dma_coherence-c3c2b6f79db2
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Shawn Guo <shawnguo@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ bjorn.andersson@oss.qualcomm.com, imx@lists.linux.dev, 
+ Frank Li <Frank.Li@nxp.com>, Ze Huang <huang.ze@linux.dev>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1759155863; l=3875;
+ i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
+ bh=icBFyztIsa/NOSosyZIaaOciT7KlKcD6Ofi9v9wrrno=;
+ b=oRv51j7FJwIH9K+NJuJZfw0iPsej7OyUzfb/kATyfnLZZBVJblW9LwmS6rqTpxATfd5WJezQj
+ yVpIsPcd+orAVDrikJsyapoPA6HyZ2Y/8L1qCP5/wyxdB9eMwNw4t3q
+X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
+ pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
+X-ClientProxiedBy: SJ0PR13CA0099.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c5::14) To DB9PR04MB9626.eurprd04.prod.outlook.com
+ (2603:10a6:10:309::18)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7c7d0b10-9969-45e8-9440-563960645c36@boetes.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS4PR04MB9621:EE_|PAXPR04MB8607:EE_
+X-MS-Office365-Filtering-Correlation-Id: cfd65217-1873-4be9-6fe8-08ddff63e53b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|376014|7416014|19092799006|1800799024|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?bE5ERUJGU1AzdVVlZ0dEeVpMLzQzaStYQ1AxTHNjYU54VjhUUnZEaDUvSFlz?=
+ =?utf-8?B?ZmtaVGpCN0FicTZYS2pwVEtyWW53bVM0UmNXN1ZIWU16NDVTUHJuMXJaLzhN?=
+ =?utf-8?B?WTUwbHcvdE53N2lsSXB3ZDllZEpPMlIwMUZqNGhMaXU4bXl4MllYZE5QZHJL?=
+ =?utf-8?B?RDZWazZjVHYrSklLanMxSy9seWJXUC9nSEVBazFKcE4zdzB4QmU5NUlXRHZh?=
+ =?utf-8?B?cmw0QWF1bUlWd081WVFQMmVXS3VEWE5DVFMyVjNJdDF6WmxFd0psY0t0TmNR?=
+ =?utf-8?B?NDlLSG1ZanltMzNWT3E1cUg2dTM4WVBkUnorY1hEWGwvbGZKZFJ2MUN0Q3RM?=
+ =?utf-8?B?dWNnaXVYa2dFTkxRM214R0k5S1RiVDhLTllLUmNWRytXUk5NVndnWUxBUUJu?=
+ =?utf-8?B?c0YvL3hiOU92ckhYYjJxejMrY1RUeFZxMlp0Sm0xWWxOOHlFTDN5cjlwWTAw?=
+ =?utf-8?B?azcyajVSeU9ERWp1WFJ5MkZaUDJ3MXNvcmcxN2Y1TnVvQ3hreVA4V1llYzZ1?=
+ =?utf-8?B?bmU4K3JKNGdHQTdOVGRBQUFvWWppc29kcDN5R2d4ZWFnQnVHeEMyUUtjaytM?=
+ =?utf-8?B?clRFb25QWWZpRitxL2o5djdkMGdaT1MvMGN5YXBWUXZNQWVnRjgyWE5RbGFH?=
+ =?utf-8?B?aUEzTitIa0wzdFh0M2JpQmRGMnd4cHB4QkxCSFgvWTc2Z0dNeDRkY1hDRUl1?=
+ =?utf-8?B?ekxDUWVKYVFiWmdScUZKK0JaT25XanpZamhmK05VcUs4WlN0WmNtZkNOc291?=
+ =?utf-8?B?Y0QwQXhnTi9ucnlsQjJNcEtHTkZvc1ZYZ1BGbGZKTnlPMlJJUm1iZTBTQVlQ?=
+ =?utf-8?B?V25td0t2enNpT3lkYlZuT0hpSjZYMlk4bkhoOTkxVzUzKzE3YzRKdkdDdjhn?=
+ =?utf-8?B?QXIvOTIyaGFORnJXUEQ5dzhYOGdqTWdFY3lISndRWGdrajZpMWNic1lVL3VT?=
+ =?utf-8?B?RktFa01Zajltc21adEc5RkU1MWFqcmN3ZllnYldaNVE2WlBPN3Z5ZURIbUsv?=
+ =?utf-8?B?TXo1YWdtbC9MeUt5MmJxMXNPQWpJaXl3RVpReWprRTFZekhIRW9sMUdiTU5k?=
+ =?utf-8?B?RXNvemFJZTdrdkNEWDZWNTNvRVlhSGZDWm1NbktwVkNwVnk4NGxKUFcycVpS?=
+ =?utf-8?B?QmhEMU4rbmpLcU1aRmpwdEpEZ00xZ29CMjFzNi9rK3BjUUdkVFRKSHEvb09l?=
+ =?utf-8?B?TlNnUllGMG5tUHF3aDdaT0k3WFhncXlMM3RmNGRzb2lhcjhpSlI1OXA5US9v?=
+ =?utf-8?B?WTdUMG1vMXhsdkJyYlkwZlZRSm8xRE05S0p1YjZjV3YxQkVkUmwvQkpqNmc3?=
+ =?utf-8?B?SWRkZU9EV21wKzZ0NjJZcEZuUHJQQXJsNEF5SzlpQXE2WnNYUVdUdGRMSHRN?=
+ =?utf-8?B?TlpQU2xYcXJGNVJpc0ZVUlRieE53Rk5YbU16THBpaEFBdjgwUmpUSjdsR1RC?=
+ =?utf-8?B?VGZyQzVYMlIvakFOT1Vsd2xINXNvYTZiVEVsckxGUlI5T1ZKdnN4ZmlZVXBr?=
+ =?utf-8?B?RWVDNDdnQlJXTGhaWisvQTZkdG5hZ2VGTXZQZzFiWDBpaDB6Q3VUWS9sV2ZW?=
+ =?utf-8?B?Vk1rNSttdUR3TE8xKyt6OXI2R05nQWdNQlRGMGtIMGFRMTRtVklyZzJ1VWp0?=
+ =?utf-8?B?VjRhZ1hFUGFsMC83a0ZLdElOU1ZFN0txR05ub2MzZzNUZ09wNmIvQU1rc21Z?=
+ =?utf-8?B?ajBzMThvcUtEcWdCTjd5S1RLcWpyNWtVb2NoRkpveEZyYVN3NlBkQW0vbkxt?=
+ =?utf-8?B?RG04eHViSktXSnJqenN3dFkxSlZucjVXbTFaZUk3ZFVZUlJsUTg1bzZQYVho?=
+ =?utf-8?B?RDBZcndYOWZEQXViVUJXQ2V5L2lVVCtnS216VFhZK003Z0hrR05UNjNRVXlh?=
+ =?utf-8?B?N0FrTE5sSk8rU0JMTEIvMmp0R29mcko4cGZCOTEwbXZyNXY0WXU2M2RBKy9v?=
+ =?utf-8?Q?+Ec3FsBBzio8apPnHG0DRGg1tUkMxjDv?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9621.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(7416014)(19092799006)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dE9rTW9GM3BYcCtxYUFLdGxqOGNUb0lKZWl5TnRDYzhLTTg0Y2xEMTFzeDVK?=
+ =?utf-8?B?OHlFenpoYUx6UHNXYVpFK0xEMGlxdkJjaUhnUlhNZmpFdlBwZWhRcnI2c3gv?=
+ =?utf-8?B?SGlGSVlTRnB5NDVNUmF4S2E1TzA1U1RwcCtWa3BUaVJDb3JaUG5xNEF0UXVL?=
+ =?utf-8?B?N041SXBFMHZCcWlKR1FMVTM5cStNNDZGcGN0NUVqZW1MbDhoK1NJbDdJbDEz?=
+ =?utf-8?B?cjlDSVp3UldZbU1rdjJ4STMwWW1NZitKZzM2S1loSTJqTGtqUVRDaFRPdGpx?=
+ =?utf-8?B?T21OalVkU253TEp3N1dsMityTzJjSE1Kb1diYUhDSEZjd1ErajJ1S08rdzZ2?=
+ =?utf-8?B?azdpVXlMSEl4UFVHVG1VeXNpS0MrUTMyQURpeWRwOW5CbUhXVGxlVnl5UlJU?=
+ =?utf-8?B?WHRTYzd0b2R6YUNnLzdUemtUUXhUUXlXWEkwaUlITlVPTnA2Mkh1aXhENEk3?=
+ =?utf-8?B?NWdldC8zVVJRTk5LOWhTbkM2T3AvMVVVbGl2angrL3lNbVlXVmNHTHZHQmVJ?=
+ =?utf-8?B?UzZoVUlRb1E1Tkdmd3Fia2dXN2cvZWZpMlhaNytYSXNZVFcxUmdyaHlreWtL?=
+ =?utf-8?B?bG1zc0svYi95a2hlY1kzb2RYKzVrLzBiRUVoOUZyV0VGMG9DOFAzaGNFRGEz?=
+ =?utf-8?B?MURIcmM5Sm85am5LZm5KbG04SDBpQkMrS3JLTnQxZ0RYeWY2amdxbW5DMTBL?=
+ =?utf-8?B?TUJnUldabTZUT2R0N0N5R2RRT0ZTUHBraE15V25wMmp4SFRHNENGa2N0aVNu?=
+ =?utf-8?B?aG5raGZSczFBN0F4NWwrMTBWMkdhcm5EOTlrSkhJYkk3VWhHTzZLNnNFcHg4?=
+ =?utf-8?B?OGVWUlVvYWhPdExJbWhXVHlwSmVRNFRUdk5ZMEQwSDREUEoyY2dxM1p5SzI4?=
+ =?utf-8?B?ZHExck9WNDZOem82eGlCYUZReHN4eWtnOE9yeWJrS0hwL2Z0ak1jakVFOU5a?=
+ =?utf-8?B?eVZwZ2ttU2ljVnFTQXErYUE2RDRFZm1uaGYzcXF6em83TTZLclM2VFo1NlNt?=
+ =?utf-8?B?aHpaeXk4ZTRkYThaU2Y2RnNTVnFFVkF3WUVhU3A1dTU0VE5pODNuNVkzclRF?=
+ =?utf-8?B?dFF6Sy9nRS9nUHA0TEpIbFE1VnpjcDN5WUVBMzJodGhpYkJVdnJCOThlaVlW?=
+ =?utf-8?B?TzhWazdZazE1ZmNjdkxPZDRYbUYwalo5VVdCa0ZTK1p5QXY1akZ3dzlQRGsr?=
+ =?utf-8?B?Z1lUekZibW9YVkRNR1FSNjlQSUF3bW5xUlhSRlhDeXR1NG9UOXpPWGJwRTRj?=
+ =?utf-8?B?Nnd6SExTSWNQU1YwY3NzaWRLUU1aUzhqRlVqRlpkcFJ0dzVVNDQxUDE2WWJG?=
+ =?utf-8?B?RWxYeUhrcHNRMmdYUDFSWjdzWW9LYlNiYnl2VW9Ebmo4QWVva2hneVhJVnU2?=
+ =?utf-8?B?ZkpWVEpnTlJyRFd1aldCR05Lek84Umh5bDhGUDRHUHZFTzN6dmNLM2M2MVVi?=
+ =?utf-8?B?SStsMjN2ME14aUVsT0FCdDRNTXFoTitMbHc5OHZWZXhtdUM1bno1dnpBQ3dH?=
+ =?utf-8?B?RnphRVFveFJJYkYyLzRtOHd0cjcwOHA4RzRpaVJ5cWpzdnpXT2Z3cFBSaWsy?=
+ =?utf-8?B?VVR3dE93Zit0cHdSbFRFazBNSkhPdkgwUnRXSVUxWEY0M2RRVmNDNWI1OHls?=
+ =?utf-8?B?YzVwNy9YV2phaWtLa3k5WEFnQ0FXalhVY0JSQ1c2eFM1dlY5K1RrMyt2d1cx?=
+ =?utf-8?B?dllCOTVjZTZnVXI1MktUYmRkbUtYaHJIUE40Ny83VS9uTkNhWG1CTXpFL21v?=
+ =?utf-8?B?alFXYWl0RXAyeHVHZUd0UUJLQmNodDNrNDBEWVoxQ285SWRnQjI1ejcxa1VT?=
+ =?utf-8?B?TlZrbEJCRU55YU14akFSOHRacXBqazBabm1RUzU2VWdQUHh0dytaYnJmS24x?=
+ =?utf-8?B?VlNwOXVHRHh0SC8xZmdpRmhQeWM5UXcvc2JkUTJVek5QYkRiT3Y4SnBsdXV0?=
+ =?utf-8?B?SG9wOFI2UWs4R01UdTc3S20rdjA4Q1VaanJROGFsbVVlUFQyUCtOSnlUWmJy?=
+ =?utf-8?B?Q3Bva0JhY2dtT2wrL1QxaVIvbFlyR2lEUlMrUGMySUIvQ2N4dWl2OVFSVEkr?=
+ =?utf-8?B?UjQybTlFeVlFanlWRnRBUkU4V3graG9MVXVCaWFVeHBINndnRlJPaFhSNFFi?=
+ =?utf-8?Q?rva0=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cfd65217-1873-4be9-6fe8-08ddff63e53b
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9626.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2025 14:24:27.6742
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hTjiIEiWhPRbNgSwYw9XUGdAWA7lJK6mLiuo6bS+AVsjYZGd14vQotmzDn8uRm79wTarfoy+LaYAyR4n0ZSLVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8607
 
-On Sun, Sep 28, 2025 at 06:22:54PM +0200, Han Boetes wrote:
-> [Sep29 00:57] [Mon Sep 29 00:57:28 2025] usb 1-2: new high-speed USB device
-> number 5 using xhci_hcd
-> [  +0.127881] [Mon Sep 29 00:57:28 2025] usb 1-2: New USB device found,
-> idVendor=0603, idProduct=8611, bcdDevice= 1.00
-> [  +0.000018] [Mon Sep 29 00:57:28 2025] usb 1-2: New USB device strings:
-> Mfr=1, Product=2, SerialNumber=3
-> [  +0.000005] [Mon Sep 29 00:57:28 2025] usb 1-2: Product: Fly12 Sport
-> [  +0.000004] [Mon Sep 29 00:57:28 2025] usb 1-2: Manufacturer: Cycliq
-> [  +0.000004] [Mon Sep 29 00:57:28 2025] usb 1-2: SerialNumber:
-> 966110000000100
-> [  +0.645032] [Mon Sep 29 00:57:29 2025] usb-storage 1-2:1.0: USB Mass
-> Storage device detected
-> [  +0.000406] [Mon Sep 29 00:57:29 2025] usb-storage 1-2:1.0: Quirks match
-> for vid 0603 pid 8611: 4000
-> [  +0.000007] [Mon Sep 29 00:57:29 2025] usb-storage 1-2:1.0: This device
-> (0603,8611,0100 S 06 P 50) has unneeded SubClass and Protocol entries in
-> unusual_devs.h (kernel 6.17.0-0.rc7.56.fc43.x86_64)
->                               Please send a copy of this message to
-> <linux-usb@vger.kernel.org> and <usb-storage@lists.one-eyed-alien.net>
-> [  +0.000129] [Mon Sep 29 00:57:29 2025] scsi host0: usb-storage 1-2:1.0
-> [  +0.000310] [Mon Sep 29 00:57:29 2025] usbcore: registered new interface
-> driver usb-storage
-> [  +0.007605] [Mon Sep 29 00:57:29 2025] usbcore: registered new interface
-> driver uas
+Add layerscape platform driver use flatten dwc3 core to enable dma-coherence.
+It needs set gsburstcfg0 to 0x2222.
 
-Thank you for sending this information.  Just for the sake of thoroughness, 
-could you please also send the output from "lsusb -v -d0603:8611"?
+There are some several try before:
+[1] https://lore.kernel.org/imx/20240710-ls-dwc-v1-0-62f8cbed31d7@nxp.com/
+[2] https://lore.kernel.org/imx/20240123170206.3702413-1-Frank.Li@nxp.com/
 
-Alan Stern
+[2]: add new property, which was reject because there are no varience in
+the soc. Fortunately the below commit resolve this problem by use software
+managed property.
+
+d504bfa6cfd1a usb: dwc3: enable CCI support for AMD-xilinx DWC3 controller
+
+[1] was reject because there are not actually dwc wrap at layerscape
+platform. Fortunately Bjorn Andersson's below patch to make it possible
+by use correct dts dwc3 node layer out.
+
+613a2e655d4dc usb: dwc3: core: Expose core driver as library
+
+This resolve problem [1] and [2] by use flatten dwc3 core library.
+
+1. add soc specific compatible string at dt-binding.
+2. create platform driver for layerscape chips and pass down gsbuscfg0 if
+dma-coherence enabled.
+3. update layerscape dts files.
+
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To: Shawn Guo <shawnguo@kernel.org>
+Cc: linux-usb@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: bjorn.andersson@oss.qualcomm.com
+Cc: imx@lists.linux.dev
+
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Changes in v5:
+- remove of_dma_is_coherent() check
+- Link to v4: https://lore.kernel.org/r/20250926-ls_dma_coherence-v4-0-21e9c6bdb5cb@nxp.com
+
+Changes in v4:
+- Use flatten properties, instead of use dt pass down information to core.
+- Link to v3: https://lore.kernel.org/r/20250926-ls_dma_coherence-v3-0-602b1c0ce6b4@nxp.com
+
+Changes in v3:
+- skipped, accident sendout
+- Link to v2: https://lore.kernel.org/r/20250923-ls_dma_coherence-v2-0-ce3176396bdb@nxp.com
+
+Changes in v2:
+- base on drivers/usb/dwc3/dwc3-generic-plat.c
+
+commit e0b6dc00c701e600e655417aab1e100b73de821a
+Author: Ze Huang <huang.ze@linux.dev>
+Date:   Sat Sep 13 00:53:48 2025 +0800
+
+    usb: dwc3: add generic driver to support flattened
+
+    To support flattened dwc3 dt model and drop the glue layer, introduce the
+    `dwc3-generic` driver. This enables direct binding of the DWC3 core driver
+    and offers an alternative to the existing glue driver `dwc3-of-simple`.
+
+- Link to v1: https://lore.kernel.org/r/20250602-ls_dma_coherence-v1-0-c67484d6ab64@nxp.com
+
+---
+Frank Li (4):
+      dt-bindings: usb: add missed compatible string for arm64 layerscape
+      usb: dwc3: Add software-managed properties for flattened model
+      usb: dwc3: dwc3-generic-plat: Add layerscape dwc3 support
+      arm64: dts: layerscape: add dma-coherent for usb node
+
+ .../devicetree/bindings/usb/fsl,ls1028a.yaml       | 33 ++++++++++++----------
+ arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi     |  3 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |  8 ++++--
+ arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi     |  9 ++++--
+ arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |  9 ++++--
+ arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi     |  8 ++++--
+ arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi     |  8 ++++--
+ drivers/usb/dwc3/core.c                            | 12 ++++++--
+ drivers/usb/dwc3/dwc3-generic-plat.c               | 13 +++++++++
+ drivers/usb/dwc3/dwc3-qcom.c                       |  1 +
+ drivers/usb/dwc3/glue.h                            | 14 +++++++++
+ 11 files changed, 88 insertions(+), 30 deletions(-)
+---
+base-commit: c45d2c21b3889c520bf141d576eaecb25666895c
+change-id: 20250602-ls_dma_coherence-c3c2b6f79db2
+
+Best regards,
+--
+Frank Li <Frank.Li@nxp.com>
+
 
