@@ -1,161 +1,99 @@
-Return-Path: <linux-usb+bounces-28791-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28792-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6224BAA236
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 19:20:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F33BAA4B0
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 20:30:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 069DA3AA88F
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 17:20:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E645167C25
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 18:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D1130DD17;
-	Mon, 29 Sep 2025 17:20:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B949823BF9E;
+	Mon, 29 Sep 2025 18:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="rXnHHlgT"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Szw6tfwC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.smtpout.orange.fr (smtp-69.smtpout.orange.fr [80.12.242.69])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF582D3A9E
-	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 17:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B0C146A66;
+	Mon, 29 Sep 2025 18:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759166400; cv=none; b=C73pKy2y5rFi9XOqYQv0YvFRXcV9+pEfSJY7P8f8sC0EElxsg0tPNPM8v813B5CSFep9HsXcquvVOxT7yC8VPDMCeXpbzGTEDIpfXoslvUy6BepxANz8ezkUWs2oPn4QGonAhA+2TEaWnbnu4JuDdY9qwaAJbP8GZcDPkZgDLnI=
+	t=1759170610; cv=none; b=c77chT5HyHjOFqQZpmQPHK7L0EKCPr46tC4FjXfj3kOlXSJmcHx1dnnCBVTdWEWDsGSt8K/9Qvwg5Rg45PrAHboYoTFC7yamZw+OvpGc1uiU/uUCtHNruNGB9DuZjOpt/o+ciUPaiFfHHYnfNClZsga03d4dOkr7+39xXDpL8w0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759166400; c=relaxed/simple;
-	bh=KovFXSTof+puwsswsJKX8D8sJ9m/EqjjFXJIE97igsQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZFawvOV7uS/WEQMoSX96jGMyyhYV7+swsqzpUL6UmsLmWeiQquzL4+QUWk1ROYffdFswb5xzPsj+RN21qeeM8SXwkX1fplwrakHQlXb9+OsFrcaLMqdFn6qPgL6TuNpRFsvNxy+XOpsWS2BFr8uz2eRs59GtDeYnM+lpOy1d2Ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=rXnHHlgT; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-85630d17586so688565685a.1
-        for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 10:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1759166398; x=1759771198; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jxjm477kIfJ9Uxa/CFTb6lvrauBmZROD0rbegQOBV+o=;
-        b=rXnHHlgTGjls8uJm7LppCHeyPIIQyQNNHaud0yjWxXpfDsHv8vxIxs9vDHZ2QmttWF
-         JUsVHPkkTGxl7g0XFP8deQmcy7S6Z/Ajio5Z3o0ggDZRpNPgn7TWkDLHUuOoiV21PRFH
-         7Wae59uiD+bhdUiSzx1hyUh5qsZHoFzt2WwnH8jUoytwLMOBK5b2IXLgeERL7Yly8/0f
-         zieMl1z8fXnkunW/U6pdk3b01wIcI9pBeRy9VPCDUQg9ZGPG4J6ur2Tn2f43sfZdH8Xc
-         8jYCUMxANOvJNCdBwozdcfJiRebfWyjdAK6IjJ5PhzSFXFtHAAVC1OKVVGUTTwaNhn7V
-         jd/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759166398; x=1759771198;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jxjm477kIfJ9Uxa/CFTb6lvrauBmZROD0rbegQOBV+o=;
-        b=unUHBjNkRUllU9p21aTKEKMhee7P8cPsGJV9g4N4+QLp8YGHMqBnPDIpSdklQe4pAH
-         y/UdJy+K9TBKRhttDHvZorR6zPhMccwGU9bjV+mAeeFQdn2xNrtITODcsHIexLosdNwm
-         vIsgcs/shdC0XQhi3gASvhJSEfQ/9Tg+iCzfq60HxLL2XZ0KrM6LIqswPUaX5y28OBa8
-         aTVUEOgfpsL2ASspnhbXyXmq9u8Kezzv8iHCLNMBKb6sGYVVziA1h4HnNhzMoEGyu5IF
-         SC6UnGioZrVNeL/y6K3nRMoOxgJzsEulQCE9FGGkfrdU254zkSydqM+1SdJIChHa4x7f
-         f0Mg==
-X-Gm-Message-State: AOJu0Yzi1BQFYr4yxIZD5zWm3G79tqGtOPv+Tu435oXPtWEaDF/QcPsq
-	3eMUuosJlQQPHyeCMQIdGysdKd9pqIRREUsUXpWcNA0+zwm2LIEjWcakn6ZTuMxjYlDJdygMxZK
-	Qw/Y=
-X-Gm-Gg: ASbGncss1nStIwKxE6kZUMvj0jrQnoLGZHUgCCrvXsYDQfv/EligT7DgQA8vS3HneFU
-	+vSzGOIksxGP2E6kUq5CHg6AXMMndC/zhG2umAO/hDw+2RDCjfl3eOz0eUdcO6CG2KghWjJNNgr
-	MSCNShGfjtYH5xg0NQeETga3q01qqReyjmvU/mS4erB8fyh0mof5yE30kMTnxyaYNds/8c/BwD0
-	uMls/2QjVnICKaE4GcadjxrilZ0otL6HwqsRGAzYIo3BVq5/ytkeZxEY6ojkf0DoIZ+piZScOyz
-	ciC28XwAt5yf4mCB2OnoPnxtD0QrYyTFbFeX4qeMmrcZt5sdVYWteFreP6AutARnrapG1Tx/usl
-	zxuoqlF2JDrN4AXeuCVDxLNj/2SAOt2BLmvg7xMSR1Bvxzc6fxkGCiOR4oFQtrWu2LZ1D2BkRXt
-	Co8K7aBbk5r9Nxof48FKpF
-X-Google-Smtp-Source: AGHT+IHngoEuQS9Fj4rE9G+8HIKKfSzpGGYhmIV/AJRoEZ0v/ma2eZlhdEM3s+rRKh+YQ4JHm3qoIA==
-X-Received: by 2002:a05:620a:26a7:b0:85c:b613:633f with SMTP id af79cd13be357-85cb6136a5bmr2032638785a.44.1759166397237;
-        Mon, 29 Sep 2025 10:19:57 -0700 (PDT)
-Received: from rowland.harvard.edu (nat-65-112-8-58.harvard-secure.wrls.harvard.edu. [65.112.8.58])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-85c334c2978sm840048385a.56.2025.09.29.10.19.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Sep 2025 10:19:56 -0700 (PDT)
-Date: Mon, 29 Sep 2025 13:19:54 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Han Boetes <han@boetes.org>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: As per request
-Message-ID: <59cd5e01-c5c1-439f-a09e-c3d9657b35dd@rowland.harvard.edu>
-References: <7c7d0b10-9969-45e8-9440-563960645c36@boetes.org>
- <e31f129f-1119-4a22-a71b-d0d559ac2a07@rowland.harvard.edu>
- <6e5d2ec5-f747-4905-89ef-45796104421d@boetes.org>
+	s=arc-20240116; t=1759170610; c=relaxed/simple;
+	bh=kM5RjQnF0yMkdlchTapqnhShU6eRYNtHofiGbN3Dl9o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e3lAAn5O8OA/EhVLA2ijb7Vpj9V7hV4Q8TXOFwNl48JWFDIK0pPVvaaHy1YVPTbYqbw4bsnUpMgLbuuxif3UY7eqcknvax9U3R4YDWezdMw9z8XrJ9oZRZ1sQDevHjG+gtQF8vjj4l9OyrU2Eei7T/doDqzcr6nwGFxCuerRwUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Szw6tfwC; arc=none smtp.client-ip=80.12.242.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from fedora ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
+	by smtp.orange.fr with ESMTPA
+	id 3IcIveJbg57iH3IcIvCDtz; Mon, 29 Sep 2025 20:28:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1759170535;
+	bh=cb2mBdVPaJ9JhXZz0HUS5QIadLlHUVA4Z4MuMhzZfaE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=Szw6tfwCSLfEnASyenGdiA/HvyMI01WGDzc7cXmjWNc3pIDCiQIfZ2cWD814T6hpK
+	 DQQCnCHIBZasYvo+MmWLKmvxam6OQw/sqmui3Tc//F0wfUyXm3bYxZEcUpM/Yo+a+4
+	 IeLKHBImBxrubsxBPHcYcPJrDqHEf020uclYjXdBd6PqmRQMEytOq/+/eMheGz+RBw
+	 E/7ocmKYuXdRnynTyWH8WkcJ5pvuDd58wHNzUFmGtCJd8kNbvSUJeGVR0m6se7TYDx
+	 SoTusgo69yeoSHL+WBdw/tjZe0nMmOAyRA4dJy+qhFDTDuBOSNgMMnlKIxUJeRVs71
+	 x1u4akdeBZiRg==
+X-ME-Helo: fedora
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 29 Sep 2025 20:28:55 +0200
+X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ze Huang <huang.ze@linux.dev>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc3: Don't call clk_bulk_disable_unprepare() twice
+Date: Mon, 29 Sep 2025 20:28:50 +0200
+Message-ID: <371860315a5c1ef6e800fa825e4c23ce335a55e2.1759170517.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6e5d2ec5-f747-4905-89ef-45796104421d@boetes.org>
 
-On Mon, Sep 29, 2025 at 06:40:07PM +0200, Han Boetes wrote:
-> Most certainly.
-> 
-> %  sudo lsusb -v -d0603:8611
-> 
-> Bus 001 Device 006: ID 0603:8611 Novatek Microelectronics Corp.
-> NTK96550-based camera (mass storage mode)
-> Negotiated speed: High Speed (480Mbps)
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass            0 [unknown]
->   bDeviceSubClass         0 [unknown]
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x0603 Novatek Microelectronics Corp.
->   idProduct          0x8611 NTK96550-based camera (mass storage mode)
->   bcdDevice            1.00
->   iManufacturer           1 Cycliq
->   iProduct                2 Fly12 Sport
->   iSerial                 3 966110000000100
->   bNumConfigurations      1
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x0020
->     bNumInterfaces          1
->     bConfigurationValue     1
->     iConfiguration          0
->     bmAttributes         0x80
->       (Bus Powered)
->     MaxPower              500mA
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass         8 Mass Storage
->       bInterfaceSubClass      6 SCSI
->       bInterfaceProtocol     80 Bulk-Only
->       iInterface              0
+devm_clk_bulk_get_all_enabled() is used in the probe, so
+clk_bulk_disable_unprepare() should not be called explicitly in the remove
+function.
 
-Thanks.  If you can build your own kernel, you can test the patch below. 
-It ought to eliminate the log messages.  I should have noticed this when 
-the unusual_devs entry was submitted last month...  Oh well.
+Fixes: e0b6dc00c701 ("usb: dwc3: add generic driver to support flattened")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/usb/dwc3/dwc3-generic-plat.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Alan Stern
-
-
-Index: usb-devel/drivers/usb/storage/unusual_devs.h
-===================================================================
---- usb-devel.orig/drivers/usb/storage/unusual_devs.h
-+++ usb-devel/drivers/usb/storage/unusual_devs.h
-@@ -938,7 +938,7 @@ UNUSUAL_DEV(  0x05e3, 0x0723, 0x9451, 0x
- UNUSUAL_DEV(  0x0603, 0x8611, 0x0000, 0xffff,
- 		"Novatek",
- 		"NTK96550-based camera",
--		USB_SC_SCSI, USB_PR_BULK, NULL,
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_BULK_IGNORE_TAG ),
+diff --git a/drivers/usb/dwc3/dwc3-generic-plat.c b/drivers/usb/dwc3/dwc3-generic-plat.c
+index d96b20570002..f8ad79c08c4e 100644
+--- a/drivers/usb/dwc3/dwc3-generic-plat.c
++++ b/drivers/usb/dwc3/dwc3-generic-plat.c
+@@ -85,11 +85,8 @@ static int dwc3_generic_probe(struct platform_device *pdev)
+ static void dwc3_generic_remove(struct platform_device *pdev)
+ {
+ 	struct dwc3 *dwc = platform_get_drvdata(pdev);
+-	struct dwc3_generic *dwc3g = to_dwc3_generic(dwc);
  
- /*
+ 	dwc3_core_remove(dwc);
+-
+-	clk_bulk_disable_unprepare(dwc3g->num_clocks, dwc3g->clks);
+ }
+ 
+ static int dwc3_generic_suspend(struct device *dev)
+-- 
+2.51.0
 
 
