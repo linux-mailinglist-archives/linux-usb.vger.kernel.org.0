@@ -1,123 +1,264 @@
-Return-Path: <linux-usb+bounces-28768-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28769-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A8AFBA8709
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 10:45:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B263BA880C
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 11:02:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 968347AA5B5
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 08:43:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489B6188E703
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 09:02:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FECE27A46E;
-	Mon, 29 Sep 2025 08:45:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B9A227147C;
+	Mon, 29 Sep 2025 09:02:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ST/ESEZu"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NVx+u0OK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF1E625
-	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 08:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B351EF36B
+	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 09:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759135525; cv=none; b=pqynDH5vPsfrWXV5MNPnQXVpnhLwgaHVt5DccAReOEQyhHwjzBSwYRsAnDUMDH15/5vWKbpuxqxPchzS93/DoYpFxr7CePjVdhTvozR/42a/NWsKzcHpu5tQR3wrFbvuu1q6k2dj3kJrmtT1BfvkSX6x9JCReqUwPJzN+XBEUew=
+	t=1759136534; cv=none; b=F6SRXdlQXqDlyhOvVoAYWneHw77D85bKbTarKVG323YzlJNFmGZMU3V4SO7AnyG3yujXrF1rScXVQq3vusJYv2U24szVFXk0+cu6GXTxUIalNA10ZHk0UVkb81S90NM41ztP36AMsRSm7Xe7Ek+Z9trZrm3dY2gjRwjEAq8mehk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759135525; c=relaxed/simple;
-	bh=JA5RcchFYlhuPWUk0QU0LXC1hOJDFmGNvkc+GbXI3SE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AB57emSJ1Lw6u5FPChU1A246LJFUJJMgDR3SSr56KA5UOnp8e38MSmN+02y54cXvpC2hEE76/J4pXOvfDOEyyacDuj3nPOg37mngbhiuW/UYrSPudPMsfXp2fkxmY+Mbgn83M92tinho+IYcWZQBqQ264DUAu+JHOZdplDroxqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ST/ESEZu; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b346142c74aso834250066b.2
-        for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 01:45:21 -0700 (PDT)
+	s=arc-20240116; t=1759136534; c=relaxed/simple;
+	bh=gePdrzevJC+x2QS97rEMusc0mdQafixLIRy9nGGrGVw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SX/rDZRHlavpSL2e5a2AKnqLAHyLPFsuABxztR1wgGnC0JZLoT8xfeMufNU+TeFvCt4/0+z6pX6MWYa/wLAk3s9m9wcn11U/IDeeUGdq9JO17WddFBIq1zbpqJ47vWqdEJxZa2r/iok5FxeQNXTXb5BKuu2D/7bn6bSJKVsK2GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=NVx+u0OK; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b3c2c748bc8so208347966b.2
+        for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 02:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1759135520; x=1759740320; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JzgdahQX7CpJGFCwerveyZDbQ9cci5T/X+7S64lDTAg=;
-        b=ST/ESEZuHtRKND2eHFIjgGbniHnBJ819SB+lliLLxqNrGtp+6ifk8tyMBZC/Pxjoqz
-         4sD9SJ2PExnnhlkcdMH3KDN9Qgb0gcleKb8XK2POebZyb6ILKdkhcWo9s9uFKOIkuvAG
-         tG7yNaGmPmhhZ19qg9YlG/gPRm5e3nBiZzmLTgybtOk/Bl3XerCQKHxJD9hxPF0qSVON
-         T+3nGi921CFFNsvpc5P2zyQRnd7mvCgb9aX9YHO0wcInxs+hXgKcHlYCOMlLL2B3Aj8L
-         SBmM+PrTpgdpRpM4N9ZPTfmQ21bQiXgw/+Vzo8Ry76crmlgQF/4GofqMavj7hrS3P3XZ
-         dQ6A==
+        d=chromium.org; s=google; t=1759136530; x=1759741330; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XqhvcIwTnaeA51kmqazH8s+wauB08JVVEqCuS8ucGbw=;
+        b=NVx+u0OKXZfmUM4ES+qdOSYc+Z+cjhSk6xqA79+s5MLhfcMQaHB8wq8AFy38TvTmrt
+         Zo5CbnDHK8X47s2pwmuDD8QbyWbIYx4/O2IPD2otIk0t4eau5B2pwbL1Lu4vkPqW4f7o
+         R47+FMfDYyggZf8zIevcIVd3L84DOrlhYP76w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759135520; x=1759740320;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JzgdahQX7CpJGFCwerveyZDbQ9cci5T/X+7S64lDTAg=;
-        b=hYv5GWZ+mPEWjuBtzhjBK7g1sMiR/jfXTyAO351JiHPGA/5i9ZOUr5Ue6GjyyfNZ1s
-         PVQr8ZH8Gq+9D7cMTat+femyBgfEWeycCPYp0UwXpZnFNs4xVyttunu6N6IU+N2+nmtT
-         dCPIVlxWV/RdLi8A42JaYBESUzIx6A0TJcNQ2/SCCZ31EymO13ZhVawkAJwDT3pBcQPF
-         L1OAWMZZnM8I1R31bTtJYUhmWBeNIn2IN21x+X232nYjG9IxRzUuzjgXW4emMQy1+rfG
-         Dzsm4GL+Sxk/wQgn4iiFdmGyK74DwWF2LHIbnJnJ+fl2p2+fvglCsHBj5lJzrG8DgD+X
-         to5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXL9ZMWBErvirzibSzxEaYrssutvn8rIPJoFNiNUPrGqXEAIof9cDLa1lgNhJtmA+rN/zgC5c6TNCM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxznCadqFuhTQcj9NQMA1dSJ4YcRIkAabG0SnCaFAXBC/oYXW6f
-	4AhX+h1EoWmXSnqxl6ORKtjJKbnkVwZZbpTbItmWs0QJE3stIOg7WnClgcr2HWMrtT4=
-X-Gm-Gg: ASbGncv23D35TioCeurCMynXL8nFtiKHZ/5sgR63MLIO8yhyEiTWq2SmOEg4Az6pPmk
-	l9db8vohfvecLW7lKX89r79qFIUOp+PJYVxl20MuTXeF2p5Ovh9Jq5XJvMYnanG5QVeGKcPPSO5
-	oK73DVhgZPL31iDxdywyoBmcQ46wVDzCM9X0hxp8MEmS9j/acl4z0aWLq8rM/iwuoFZIMxTq6l+
-	Igbbu/L8kMCD+i65E8mLZepY003AtHgA6WtC+h1ldik8cexq5izXqRJ60KgorcoV4u/nh2T3AT8
-	U4c+GtU6WUJTbU7XISVfQA6qcnoWnod7yIvg7ogoQ9gpg6O7lTRQZdZtt+F+TIgYZROHvsl/Jk4
-	/RTEX5aGDPh4Tj/QxWL1ucM2pFj1IokU+mWINoeB97KGkcnbSIaN9+qGUtarQSQfroagE5wo18q
-	Y6CQ==
-X-Google-Smtp-Source: AGHT+IEv4AziFZ1Nh8lMEPO0Ww5j1EhMHxyQUOxBTv+gGU/fjEeiR6fpWcDmVWpjseN1umlDr3eTdA==
-X-Received: by 2002:a17:907:7b9e:b0:b04:6546:347e with SMTP id a640c23a62f3a-b34baf43cd6mr1653315966b.51.1759135520413;
-        Mon, 29 Sep 2025 01:45:20 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13a1:1:4136:3ce:cdaa:75d2? ([2001:a61:13a1:1:4136:3ce:cdaa:75d2])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b3545a98300sm862948966b.106.2025.09.29.01.45.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Sep 2025 01:45:20 -0700 (PDT)
-Message-ID: <c9e14156-6b98-4eda-8b31-154f89030244@suse.com>
-Date: Mon, 29 Sep 2025 10:45:19 +0200
+        d=1e100.net; s=20230601; t=1759136530; x=1759741330;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XqhvcIwTnaeA51kmqazH8s+wauB08JVVEqCuS8ucGbw=;
+        b=CR58Bs96h1PCTzVFznMG12R5FBbIIVmIVkd7BGPpfPtp9aTLheY4rbObgMytXyb1eV
+         V8w50dlyHf2TSIgUVKdOaUSfakA7Rz7CMiGXCFhvuXMTpCHvSzj4aoYiPQn/kzFRVikW
+         aXzenOPqVHc05BjnRqCCioZ93kFFhZD2krGMDhqV5BgrB9yREapG0AbhErKD2ScON1sm
+         f4qA4szo9sdb/ohvO6HjpXHqGSUgIJcKbo8i9erQY7iBYIDIT4lggTWHrzavlII2Jp36
+         S2DltcTROW3yhtMlmYaV8vaS7hmDu+HEnXJnVUdaAG2HJDlVElsXvNQ+vhB+iOsqVAQV
+         AR1Q==
+X-Gm-Message-State: AOJu0Yw7VFGlIImZ69Uxw2f6zOZT/uNIAddZmC3QOGpmTJxvMqP4XAvQ
+	aKALXBFyc8Aizgq5HUnhhWDcjxe4VASsXbB807zHo7jhDkDesJGJDxJnIb05Snao
+X-Gm-Gg: ASbGncuVyHbPUJaYZbmizowdv3vasvvhSDX6Er0ypb6juyz5Wdmvkk/sx4A8UqQw05M
+	dpthevIxDbp6N1MPGRUuZSsaf/yY//SrRIactZ5hfJo/Rau31MhoKIBeP4FbHLnD+0AbWS++2WF
+	47OG7cZzbSpJ8WTmSWfw5y+MS3R1jeWePuJvrXkqR47/arhjeCkwRsbGAgo/jxsGtHiSe29GLBE
+	0bAe/a/Jij1RaVaFx2UyEbl56Uv36HAqz6nVXB/mIRXJsXNfaL/HWKNnisJVIK7khPIoBujLrSg
+	aoBsRMXyqwylx7lkSIpyWpB3w0KcGuZpUztiIiuVNwjRwMowBC+AHmNvPYeuIAUijgbRiJwsJPU
+	t3BB+K0fLOqCalTLRhy2BDcqROW1Z8qHojEe3ebbt6hNmUSNTsETSKBXsSwJfK0N1tnlTmO0v6l
+	Shw4krPHQzw7s=
+X-Google-Smtp-Source: AGHT+IHOs5QHEDHsFr4BvW1XoYBt3+IbG+8b0V1eFgo4d2vXOcqY1dQ2wkO13+Gd61I8fE7lr3Uv7Q==
+X-Received: by 2002:a17:907:971b:b0:b3c:a161:684c with SMTP id a640c23a62f3a-b3ca1617ce7mr513706666b.2.1759136530155;
+        Mon, 29 Sep 2025 02:02:10 -0700 (PDT)
+Received: from januszek.c.googlers.com.com (25.254.32.34.bc.googleusercontent.com. [34.32.254.25])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b3545a98d7fsm880017666b.100.2025.09.29.02.02.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Sep 2025 02:02:09 -0700 (PDT)
+From: "=?UTF-8?q?=C5=81ukasz=20Bartosik?=" <ukaszb@chromium.org>
+X-Google-Original-From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@google.com>
+To: Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
+Subject: [PATCH v1 0/4] Enable to set DbC strings through sysfs 
+Date: Mon, 29 Sep 2025 09:02:02 +0000
+Message-ID: <20250929090206.423937-1-ukaszb@google.com>
+X-Mailer: git-send-email 2.51.0.536.g15c5d4f767-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] net: usb: support quirks in usbnet
-To: yicongsrfy@163.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org
-Cc: marcan@marcan.st, pabeni@redhat.com, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, yicong@kylinos.cn
-References: <20250928014631.2832243-1-yicongsrfy@163.com>
- <20250928014631.2832243-2-yicongsrfy@163.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20250928014631.2832243-2-yicongsrfy@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Łukasz Bartosik <ukaszb@chromium.org>
 
-On 28.09.25 03:46, yicongsrfy@163.com wrote:
-> From: Yi Cong <yicong@kylinos.cn>
-> 
-> Some vendors' USB network interface controllers (NICs) may be compatible
-> with multiple drivers.
-And here is the basic problem. This issue is not an issue specific to
-usbnet. It arises everywhere we have a specific and a general
-driver. Hence it ought to be solved in generic way in usbcore.
+This patchset enables setting DbC serial number,
+product name and manufacturer name through sysfs.
 
-Nor can we do this with a simple list of devices, as we cannot
-assume that the more specific driver is compiled in all systems.
-An unconditional quirk is acceptable _only_ if usbnet would
-not work.
+Testing performed with this patchset:
 
-Please get in contact with the core USB developers. The problem
-needs to be solved, but this is not a solution.
+1.DbC is enabled and enumerates on host side with the following
+default values of product, manufactuer and serial values:
+"
+[496803.112431] usb 2-4: new SuperSpeed USB device number 106 using xhci_hcd
+[496803.128540] usb 2-4: LPM exit latency is zeroed, disabling LPM.
+[496803.129387] usb 2-4: New USB device found, idVendor=18d1, idProduct=0010, bcdDevice= 0.10
+[496803.130173] usb 2-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[496803.130858] usb 2-4: Product: Linux USB Debug Target
+[496803.131343] usb 2-4: Manufacturer: Linux Foundation
+[496803.131821] usb 2-4: SerialNumber: 0001
+```
 
-	Regards
-		Oliver
+View default DbC values in sysfs:
+"
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iProduct
+Linux USB Debug Target
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iManufacturer
+Linux Foundation
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iSerial
+0001
+"
 
-Nacked-by: Oliver Neukum <oneukum@suse.com>
+2. Set product, manufacturer and serial to empty:
+
+echo disable > /sys/bus/pci/devices/0000:00:14.0/dbc
+echo "" > /sys/bus/pci/devices/0000:00:14.0/dbc_iProduct
+echo "" > /sys/bus/pci/devices/0000:00:14.0/dbc_iManufacturer
+echo "" > /sys/bus/pci/devices/0000:00:14.0/dbc_iSerial  
+echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
+
+Verify through sysfs empty values were set:
+"
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iProduct
+
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iManufacturer
+
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iSerial
+
+"
+
+Verify DbC enumerates with empty values:
+"
+lsusb -s 2:115 -v
+
+Bus 002 Device 115: ID 18d1:0010 Google Inc. 
+Negotiated speed: SuperSpeed (5Gbps)
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.10
+  bDeviceClass            0 [unknown]
+  bDeviceSubClass         0 [unknown]
+  bDeviceProtocol         0 
+  bMaxPacketSize0         9
+  idVendor           0x18d1 Google Inc.
+  idProduct          0x0010 
+  bcdDevice            0.10
+  iManufacturer           1 
+  iProduct                2 
+  iSerial                 3 
+"
+
+
+3. Update product, manufacturer and serial values:
+
+echo disable > /sys/bus/pci/devices/0000:00:14.0/dbc
+echo "New_product_name" > /sys/bus/pci/devices/0000:00:14.0/dbc_iProduct
+echo "New_manufacturer_name" > /sys/bus/pci/devices/0000:00:14.0/dbc_iManufacturer
+echo "ABCDEF123456" > /sys/bus/pci/devices/0000:00:14.0/dbc_iSerial
+echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
+
+Verify through sysfs new values were set:
+"
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iProduct
+New_product_name
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iManufacturer
+New_manufacturer_name
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iSerial
+ABCDEF123456
+"
+
+Verify DbC enumerates with new values:
+"
+[497908.814834] usb 2-4: new SuperSpeed USB device number 108 using xhci_hcd
+[497908.831057] usb 2-4: LPM exit latency is zeroed, disabling LPM.
+[497908.844994] usb 2-4: New USB device found, idVendor=18d1, idProduct=0010, bcdDevice= 0.10
+[497908.845797] usb 2-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[497908.846482] usb 2-4: Product: New_product_name
+[497908.846965] usb 2-4: Manufacturer: New_manufacturer_name
+[497908.847505] usb 2-4: SerialNumber: ABCDEF123456
+"
+
+
+4. Try to update product, manufacturer and serial values with new values longer
+than maximum 63 characters (half of USB_MAX_STRING_LEN):
+
+echo disable > /sys/bus/pci/devices/0000:00:14.0/dbc
+echo "AAAAAAAAA_BBBBBBBBB_CCCCCCCCC_DDDDDDDDD_EEEEEEEEE_FFFFFFFFF_GGGG" > /sys/bus/pci/devices/0000:00:14.0/dbc_iProduct                   
+echo "HHHHHHHHH_IIIIIIIII_JJJJJJJJJ_KKKKKKKKK_LLLLLLLLL_MMMMMMMMM_NNNN" > /sys/bus/pci/devices/0000:00:14.0/dbc_iManufacturer              
+echo "OOOOOOOOO_PPPPPPPPP_RRRRRRRRR_SSSSSSSSS_TTTTTTTTT_WWWWWWWWW_YYYY" > /sys/bus/pci/devices/0000:00:14.0/dbc_iSerial  
+echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
+
+Verify through sysfs new values were not set:
+"
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iProduct
+New_product_name
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iManufacturer
+New_manufacturer_name
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iSerial
+ABCDEF123456
+"
+
+Verify DbC enumerates with previous values:
+"
+[497908.814834] usb 2-4: new SuperSpeed USB device number 108 using xhci_hcd
+[497908.831057] usb 2-4: LPM exit latency is zeroed, disabling LPM.
+[497908.844994] usb 2-4: New USB device found, idVendor=18d1, idProduct=0010, bcdDevice= 0.10
+[497908.845797] usb 2-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[497908.846482] usb 2-4: Product: New_product_name
+[497908.846965] usb 2-4: Manufacturer: New_manufacturer_name
+[497908.847505] usb 2-4: SerialNumber: ABCDEF123456
+"
+
+
+5. Update product, manufacturer and serial values with new values
+whose length is maximum 63 characters (half of USB_MAX_STRING_LEN):
+
+echo disable > /sys/bus/pci/devices/0000:00:14.0/dbc
+echo "AAAAAAAAA_BBBBBBBBB_CCCCCCCCC_DDDDDDDDD_EEEEEEEEE_FFFFFFFFF_GGG" > /sys/bus/pci/devices/0000:00:14.0/dbc_iProduct                    
+echo "HHHHHHHHH_IIIIIIIII_JJJJJJJJJ_KKKKKKKKK_LLLLLLLLL_MMMMMMMMM_NNN" > /sys/bus/pci/devices/0000:00:14.0/dbc_iManufacturer               
+echo "OOOOOOOOO_PPPPPPPPP_RRRRRRRRR_SSSSSSSSS_TTTTTTTTT_WWWWWWWWW_YYY" > /sys/bus/pci/devices/0000:00:14.0/dbc_iSerial  
+echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
+
+Verify through sysfs new values were set:
+"
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iProduct
+AAAAAAAAA_BBBBBBBBB_CCCCCCCCC_DDDDDDDDD_EEEEEEEEE_FFFFFFFFF_GGG
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iManufacturer
+HHHHHHHHH_IIIIIIIII_JJJJJJJJJ_KKKKKKKKK_LLLLLLLLL_MMMMMMMMM_NNN
+cat /sys/bus/pci/devices/0000:00:14.0/dbc_iSerial
+OOOOOOOOO_PPPPPPPPP_RRRRRRRRR_SSSSSSSSS_TTTTTTTTT_WWWWWWWWW_YYY
+"
+
+Verify DbC enumerates with new values:
+"
+[499856.473572] usb 2-4: new SuperSpeed USB device number 119 using xhci_hcd
+[499856.489786] usb 2-4: LPM exit latency is zeroed, disabling LPM.
+[499856.492080] usb 2-4: New USB device found, idVendor=18d1, idProduct=0010, bcdDevice= 0.10
+[499856.492871] usb 2-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[499856.493624] usb 2-4: Product: AAAAAAAAA_BBBBBBBBB_CCCCCCCCC_DDDDDDDDD_EEEEEEEEE_FFFFFFFFF_GGG
+[499856.494445] usb 2-4: Manufacturer: HHHHHHHHH_IIIIIIIII_JJJJJJJJJ_KKKKKKKKK_LLLLLLLLL_MMMMMMMMM_NNN
+[499856.495307] usb 2-4: SerialNumber: OOOOOOOOO_PPPPPPPPP_RRRRRRRRR_SSSSSSSSS_TTTTTTTTT_WWWWWWWWW_YYY
+"
+
+Łukasz Bartosik (4):
+  xhci: dbc: prepare to expose strings through sysfs
+  xhci: dbc: allow to set serial number through sysfs
+  xhci: dbc: allow to set product name through sysfs
+  xhci: dbc: allow to set manufacturer name through sysfs
+
+ drivers/usb/host/xhci-dbgcap.c | 240 ++++++++++++++++++++++++---------
+ drivers/usb/host/xhci-dbgcap.h |  24 ++--
+ 2 files changed, 189 insertions(+), 75 deletions(-)
+
+-- 
+2.51.0.536.g15c5d4f767-goog
 
 
