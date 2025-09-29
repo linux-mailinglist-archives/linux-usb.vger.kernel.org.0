@@ -1,139 +1,124 @@
-Return-Path: <linux-usb+bounces-28782-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28783-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DBA1BA97E5
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 16:10:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96D46BA9826
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 16:13:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A6F1420376
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 14:09:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1313C7A06B5
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 14:12:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BE5730ACE4;
-	Mon, 29 Sep 2025 14:09:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40BA63064BB;
+	Mon, 29 Sep 2025 14:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="e4HQE3bc"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="cYZ/n27e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2432A3090D6
-	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 14:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D33772617
+	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 14:13:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759154970; cv=none; b=pBy35q7bpfMgibz9YlTnpl4FSBm96PzAnCp1/4GdtxWO6VSdzSmNXej6XpM1iKT607stfy7c2LjxLuuMpM4wm4EY5L6ouhVhMkVSCJODbAzwpOZ2MRVw/SN6REiZ6cpK8oiI1F0PLCSpLa5SW2Z4c7Qc6Yw9nXOHMpwbXHMjoWA=
+	t=1759155220; cv=none; b=N8LsGcYqxQfu4JLuj+81QGs8P8lbNsT5Jf1hdA0KpSQunFeknXNkWG0oZ0CjkqJlcUkL0JCSiMZHVCR7pWvIqEpqOTrM79IjFJqPrIohQn3Eav5HZy2Kr8LiAG8jzjWBG8jnluco4t/ar6JQhMtLv7EryfvCJkjcUJearb26DEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759154970; c=relaxed/simple;
-	bh=gvG6NzvSMixtm2uPE0qaHPy782zK2nlOUQdpYZjESSc=;
+	s=arc-20240116; t=1759155220; c=relaxed/simple;
+	bh=ikU4y6IfQaBPnzb0QbjlpTlUMl/75MiANr+2RnkQvHc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EfDVguxkG9Wm0py+vPeZsd1x3dQsMA2Vz3cEgeXGwe37X3Sk0otgBU2fKxscd/yrW/iohM+ADQ/jtqiCN9GSlLa+T1AZFFmWa7pXT/f2d9OsfEG0h53z9paPhMYRciIC+KoqgPkNU4za0kYuygQOKc+aaozd1jr+5GdeX7zVgHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=e4HQE3bc; arc=none smtp.client-ip=209.85.222.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=PFPHumcRtXqM6f7YDIfCm+Cet/3JYGxTKw0+BfOQZxItGMKkrAjeNuj59FTwxjBSZExvC8CPRpLoDm+Wyr5OZSPqfHFtcTS/otmt9mpFITVMFHIN21RjpqhSzi24whhRODFkygQeEmg1YjiKflVOSU+0tiyj7MwibGVTNkgh+SU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=cYZ/n27e; arc=none smtp.client-ip=209.85.222.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8599c274188so458123285a.1
-        for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 07:09:27 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-856328df6e1so465641185a.0
+        for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 07:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1759154967; x=1759759767; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/D0SZIVZ9xKbqT8SP675XXBHG9S9E390zsa5x8oJXtw=;
-        b=e4HQE3bccb4VReluZ9B9Z8pE9nCg4d0Mcd1ivnU8IA9o8hwgsm2aeQzGjlW7nQMIn5
-         aikJ9u5idVnxnpn9vKdsMinrnb2J/wzbMspZEHpnWN1xpQiansKel0T0Kb4zW0DtQ5BQ
-         U2rp0DFowWM16K8faHcdVyKpJi9oR6TI3Yd82w4eTSNOwQ4smSdA2vEefy7tAorhbM8K
-         sbQeHdAgCH3oqeQ7mZ4roIb0mMkSSLJReM0lbhvXmSeCs0Y+PgYRbvys6+KSrJ8T+vvU
-         OcOhWLs51GrYtvzfBiq9HcR1DcaS9E0iigx7H1fTnoLNQd4QUd7wc6f5hNRyYD8UOCcJ
-         ftlQ==
+        d=rowland.harvard.edu; s=google; t=1759155218; x=1759760018; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QIX14KFofoWNgRW8W21KXmFyF1ppXZt83YftOVIbIW4=;
+        b=cYZ/n27eeBD4uW7ESt9zc+gKh6MYr5K11sh4Y7I7z+wadWBV7LHCJBMon5FTZc9OLd
+         XodJKOR5VlrGxPsyL0av1rYoo6JsoDqu2jm1uiNzBm4NNSp3NEbQpgSpIzwFwloup7uk
+         RQrNWk3PDWbu4LaiekVHEbIgCFgqGCzqilsE6vvaY0p4kQ+JcM1JVdLbd6hfsJGgDivA
+         aV89DosuWMGM3RqZlC+jiXRApQJPLyELoEDBpc+lZSr0Lkp5xpSJVPraMf0/AphNmuwQ
+         svR4/NRwHISOmOVomFLaZJtHST2stsmLdAcpiAB/Wqvza193XEhTzVHRvfvC36PqijAu
+         6R8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759154967; x=1759759767;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/D0SZIVZ9xKbqT8SP675XXBHG9S9E390zsa5x8oJXtw=;
-        b=Nk3oiMy9z8yL4jVRHwHdLi5v9jNmqZGauWbIYgSuUKxoCWS2p3X9tE1Ot7RXrun898
-         1O7FBLi8wfhtxcPfn1VRLPM1PZuMZgvQCtiqwAUALRs1PmJJaPGYFdqmZ2kJpW3QSISD
-         H6HNyrq7c0ILrBfGVhhTv0HU/ZBGnNvTal37z2MQqSz5OIdCJKHq1XkQZpf6OG3CPVl8
-         I8OB9iN7uZisdGm5B5ae5QlVyxi+UiVqUhK49/BYWIBo430MpyWcyQkMURbE42Lhh80Z
-         72s4XwRzJznRBui53Y36dFexj59Z2uUIM2DmDh4GYv+FNtTbG69W1az3oeSFnns8Fg3p
-         ns7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVYVLGj1lb03ajx7NRsiyyMxatmSy0Xby5gqQpd/O1rug4D/6+CjuLVYT54pjDVigc6YhA1WZ2shrU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxdYWlHO3CA1b5849W6gTACeQ9FxikmjBHn/420Pm2vMrkZIjP
-	OGWgIYn7aRgZFGSsdXyApm5NAtI1ILgqyXrFfMIn3/BwIoUvMJbODzb9r93nYiGsRg==
-X-Gm-Gg: ASbGncvy3atFXZ8ra3L3A/7Gvn1OSVUHieWApeOiqugHKtqgOgWoPaAOvGfj9LrCJSn
-	NpIDTCY0n6UZXrUTpoRpdvgxzZUBWQPZ8RYUFe5GnFufZA7M+dZ4tvU+f7BcVJY1VGLH2UFOjiA
-	QpWQ0gZfnlyjWabIsn5Negg8tznRf2ylBvhs7sHWFCuzBsWmqRCB1LrQ+/kCCa5xR5FAvNjQVY7
-	IAOsjbmOdTYIVm64gs0dAhvq4pPbT7tFB23jW0DZc3sOG0X5vPg7O+QBO5NBxWkULzL44NYQQeL
-	wFucbm9TNNj9JfO5VTejgTE/cj8ERNobsWHYXGIthdCM2AOdIaFBjZY6yKBcq0G2JsssAAYs4/D
-	BF8S+RqhCLfi6lnrVTr2VVpSyys4J31GItjFd3Mx/vm8o6Q==
-X-Google-Smtp-Source: AGHT+IGGGR/fMqOGihYTULCGpoFCZCyI+PK0x12cArykoie+vVMgbypc7wAJJB8SK0sKrDD4Z06haw==
-X-Received: by 2002:a05:620a:1a90:b0:84f:2f6f:37ee with SMTP id af79cd13be357-85ae65da6eamr1849648985a.48.1759154966517;
-        Mon, 29 Sep 2025 07:09:26 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759155218; x=1759760018;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QIX14KFofoWNgRW8W21KXmFyF1ppXZt83YftOVIbIW4=;
+        b=rLwckO1IYQtHdkte5q+FxbQUf+F9NT0MMG3lD8cyizkA50KWs/lJIBZk8AS2HVBiuV
+         gTQsIyS9o9KIXRSfXj2boOUWUQdDc+r97wyAowEm4P8v2HjPEgF6m7ZBVetYeS/+G57n
+         EwNoNdHkW4ToEGiWha6bwZQ1BQJwPal9xkLJn1gI50hzNOXLBh91hrjd++wp6gsEGMSk
+         6xzr3cYVbxkpeF9GIb2YJfz153UpvgWeags8ps9Ms0lhK6UsuJfIGDU6p1EHWf5LEEGu
+         kCzLw4W7ogZilzc1Nq3xm82RhNko9SEvhbipz8DiJ99SLtvrd/gFAMYeP91+P3AW9tVP
+         YcyQ==
+X-Gm-Message-State: AOJu0YzGevH0mgL862ntUoSilf7R47Rm6zC7I3DSzNj7jBPzdDV8qNwN
+	SeKKxhqtBhvayfFRzVHSEEAx+/C46jjOmGzB6WjrruRRYyUDmU9ziEO4i6/rX9k7gceinOMbXk7
+	D5zM=
+X-Gm-Gg: ASbGnct3Qa4VStpfnM0FEKZiwva1+G0xdNeEmIWYohdgthVgrKMPGD3zgqti3yUdJWz
+	ZVrofaCAb77QR4RwC0cuCVNfEZ3QH2xsP3jgPWeJnf0TA/7KEpSYNRpDjiQwikNoUMhNWBgqp7U
+	KHWVnzvtA9JJ/A7eEYqWLFUiIoCZv5xnttjfk2h1roKxxR2AuBC04CDK6eSdwH/kY43DDzo4WIV
+	WHC2WPNt9FjBl8LrmGhmXqlPs0nNpDJzscRuIKrY4vmtKz71T0VQJ6zNOjjV5ub0rgYiIEJb5Mu
+	UB7yweZltBeFYvXWjg1wnKY6NOpGEyG/wd/ufDQHWGFyzdpb0wZ+5YQxTRzOh8br+55RodjGjFZ
+	01lEJvTs1DLm+tYehPylaVCwDZ9zbj7HaELa5nPAlQEobjw==
+X-Google-Smtp-Source: AGHT+IFh7TV/iMT1girpIpTh4fWF6qq1jBe7kpdXzTMoOFwCOB/h59AhgcbB0k5V2nGucBoA29Olxw==
+X-Received: by 2002:a05:620a:29c5:b0:864:4cb1:506e with SMTP id af79cd13be357-8644cb1512bmr1077508885a.35.1759155217794;
+        Mon, 29 Sep 2025 07:13:37 -0700 (PDT)
 Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-85c2737869esm823951485a.11.2025.09.29.07.09.25
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-85c2737848csm840480185a.3.2025.09.29.07.13.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Sep 2025 07:09:26 -0700 (PDT)
-Date: Mon, 29 Sep 2025 10:09:23 -0400
+        Mon, 29 Sep 2025 07:13:37 -0700 (PDT)
+Date: Mon, 29 Sep 2025 10:13:35 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Ryan Chen <ryan_chen@aspeedtech.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] usb: ehci: Add Aspeed AST2700 support
-Message-ID: <be6a9306-c88a-4cd5-9b88-dfd4d6e2933c@rowland.harvard.edu>
-References: <20250928032407.27764-1-ryan_chen@aspeedtech.com>
- <20250928032407.27764-3-ryan_chen@aspeedtech.com>
- <0a12f3ac-2600-4ede-a738-f4ab43ad4bee@rowland.harvard.edu>
- <KUZSPRMB0005CC6A87F6FFC5A08F12BFF21BA@KUZSPRMB0005.apcprd06.prod.outlook.com>
+To: Han Boetes <han@boetes.org>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: As per request
+Message-ID: <e31f129f-1119-4a22-a71b-d0d559ac2a07@rowland.harvard.edu>
+References: <7c7d0b10-9969-45e8-9440-563960645c36@boetes.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <KUZSPRMB0005CC6A87F6FFC5A08F12BFF21BA@KUZSPRMB0005.apcprd06.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7c7d0b10-9969-45e8-9440-563960645c36@boetes.org>
 
-On Mon, Sep 29, 2025 at 05:56:13AM +0000, Ryan Chen wrote:
-> > > @@ -253,8 +256,13 @@ static int ehci_platform_probe(struct
-> > platform_device *dev)
-> > >  	if (!pdata)
-> > >  		pdata = &ehci_platform_defaults;
-> > >
-> > > +	dma_mask_64 = pdata->dma_mask_64;
-> > > +	match = of_match_device(dev->dev.driver->of_match_table, &dev->dev);
-> > 
-> > (I just noticed this.)  The "dev->dev.driver->of_match_table" part looks odd.
-> > Why not just write "vt8500_ehci_ids"?  Do you expect that this could ever
-> > have a different value?
-> > 
-> > Alan Stern
-> Thanks your feedback.
-> I used dev->dev.driver->of_match_table rather than hard-coding vt8500_ehci_ids
-> to keep the probe code generic and tied to the driver model, not to a specific symbol.
-> Functionally it's the same here, but this pattern avoids coupling the probe to a 
-> particular table name.
-> 
-> How you think ?
+On Sun, Sep 28, 2025 at 06:22:54PM +0200, Han Boetes wrote:
+> [Sep29 00:57] [Mon Sep 29 00:57:28 2025] usb 1-2: new high-speed USB device
+> number 5 using xhci_hcd
+> [  +0.127881] [Mon Sep 29 00:57:28 2025] usb 1-2: New USB device found,
+> idVendor=0603, idProduct=8611, bcdDevice= 1.00
+> [  +0.000018] [Mon Sep 29 00:57:28 2025] usb 1-2: New USB device strings:
+> Mfr=1, Product=2, SerialNumber=3
+> [  +0.000005] [Mon Sep 29 00:57:28 2025] usb 1-2: Product: Fly12 Sport
+> [  +0.000004] [Mon Sep 29 00:57:28 2025] usb 1-2: Manufacturer: Cycliq
+> [  +0.000004] [Mon Sep 29 00:57:28 2025] usb 1-2: SerialNumber:
+> 966110000000100
+> [  +0.645032] [Mon Sep 29 00:57:29 2025] usb-storage 1-2:1.0: USB Mass
+> Storage device detected
+> [  +0.000406] [Mon Sep 29 00:57:29 2025] usb-storage 1-2:1.0: Quirks match
+> for vid 0603 pid 8611: 4000
+> [  +0.000007] [Mon Sep 29 00:57:29 2025] usb-storage 1-2:1.0: This device
+> (0603,8611,0100 S 06 P 50) has unneeded SubClass and Protocol entries in
+> unusual_devs.h (kernel 6.17.0-0.rc7.56.fc43.x86_64)
+>                               Please send a copy of this message to
+> <linux-usb@vger.kernel.org> and <usb-storage@lists.one-eyed-alien.net>
+> [  +0.000129] [Mon Sep 29 00:57:29 2025] scsi host0: usb-storage 1-2:1.0
+> [  +0.000310] [Mon Sep 29 00:57:29 2025] usbcore: registered new interface
+> driver usb-storage
+> [  +0.007605] [Mon Sep 29 00:57:29 2025] usbcore: registered new interface
+> driver uas
 
-The code doesn't need to be any more generic than the source file it 
-containing it.  This particular probe function will never be called for 
-a different driver, or a device that matches an OF table different from 
-vt8500_ehci_ids, right?
-
-Interestingly, there are two other places in drivers/usb/host/ that call 
-of_match_device().  fsl-mph-dr-of.c uses my approach and xhci-plat.c 
-uses yours.  The difference is that the xhci-platform probe routine 
-_is_ called by other drivers, namely, by xhci-rcar.c.
-
-I guess it's okay to keep this code as written, even though it's not 
-strictly necessary
-
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Thank you for sending this information.  Just for the sake of thoroughness, 
+could you please also send the output from "lsusb -v -d0603:8611"?
 
 Alan Stern
 
