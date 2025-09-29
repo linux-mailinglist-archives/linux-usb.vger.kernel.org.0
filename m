@@ -1,45 +1,45 @@
-Return-Path: <linux-usb+bounces-28754-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28756-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00FA5BA7FFC
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 07:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 16D8DBA8032
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 07:43:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67F3B189AB56
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 05:33:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 857E6189ADF8
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 05:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A67A29C326;
-	Mon, 29 Sep 2025 05:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E6729C328;
+	Mon, 29 Sep 2025 05:43:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PYuMaitT"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="iUBGJ/BQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4488194098;
-	Mon, 29 Sep 2025 05:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C0C29ACDD;
+	Mon, 29 Sep 2025 05:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759123959; cv=none; b=HXeu3bk20PNToq1n+2J10CsIuAHhgjiGZ+TBilsdowllmcTyvYtdNrUX6YLk/NZqzEIGFDWJY46zxPKVeyANFO+COf343L3p5Mse0oxlX3hMfsrmsLwyETFbylHY5Ap1xs8DdU8iOCxnuNOoSeTUb+AOVEytg65Unbq/BZROafU=
+	t=1759124622; cv=none; b=i3dzrkaZCMKIkaV5eSdi9+tycOP7lCKW/EKTmLnKYyXXvElaIXo4OnLCW6zo9ge6RvDMzy9wlv1fpIaIs8b806mcI8XfJwwNuH6P2SaVeTozvrV2LQQnLzSbNWq+etinxGMop8zUtdnX3xvjRi01lznZh60NVYiYC8ENB7P6liI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759123959; c=relaxed/simple;
-	bh=6HmVmIYuYudlUs40qrk1qodJ1HwKiuOqNO5ENovFmyw=;
+	s=arc-20240116; t=1759124622; c=relaxed/simple;
+	bh=A8hSnozwrZ6u84etwYiLlGN46MNAswFgw/kuE4h2a5k=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jpQ7Is8n14mqWU6bQYGLvSlCbQ1oIDCT0L+i8SiWjHqk3rQ1zg2hF6hi9l6Yu6RLwT0IrkL8vOvUMQxja/iQaj49FkQH9qWdYbbyeE+pcT3TmZXEZ++MVB1HjFznBWQjKXRXS8geXe/JopIuH423dk61KHMVHp04MyUUUIG8t+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PYuMaitT; arc=none smtp.client-ip=117.135.210.4
+	 MIME-Version; b=VG10wd88l2+T1FodQ5xb83l8sjwXwmHXBTKBaDPHl89Dg73t+TCHezYkXY1nBNHEJuctVP4cXLq30403Kg17mCWppSu0QCmkMb46qvN4wM4SeVjXXdyZ3mDefzxEe8CIZ96UGuuaaUjaUaPXAoaLHlkAxcLmirx8wCWVilDJ8fE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=iUBGJ/BQ; arc=none smtp.client-ip=117.135.210.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=XY
-	gf6HrtCahtEEE+sM4mAkh7OK58+m0DKAkOrq+Hjxg=; b=PYuMaitTBVmahfzj0k
-	eIb/Doh5SFcgu363B4mUR+moQzZ2g9hg77xgsel5DoD5/gMFD1ctLy0406SW7ZJH
-	gfheZCIaHJF5ohAK9xPOJKT7Rqu2g0J+yCwd5dfzJTFnV4Um0oDvFY9jGXNeE42b
-	GXmE8ipAZ0wyaLCeoVZR91aN4=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=gp
+	UbwNbQnfvLoVX63WNhLorivcOQ+ivqwrrVHACGIpM=; b=iUBGJ/BQuvl1XwS7J0
+	GwWiZoAT3i3imzqdWG35iiTYU4p8HcStUoyxkP8WpkKkEJh0papldODFEiU7Tvn3
+	+qT+PqtTNIIbAMHwvNi2c1Cr/Y7/b0fiGvvu471MeyrCWN0RiWebZgbQ/VxF5nA3
+	R1Q7qebH+hqnbtRZEwq3ndeN4=
 Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgB3p9vDGdpoadHeAQ--.6422S5;
-	Mon, 29 Sep 2025 13:31:52 +0800 (CST)
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3P+JYHNpoB1inAw--.10708S2;
+	Mon, 29 Sep 2025 13:42:50 +0800 (CST)
 From: yicongsrfy@163.com
 To: oneukum@suse.com,
 	andrew+netdev@lunn.ch,
@@ -52,12 +52,11 @@ Cc: marcan@marcan.st,
 	netdev@vger.kernel.org,
 	yicong@kylinos.cn
 Subject: [PATCH v2 3/3] net: usb: ax88179_178a: add USB device driver for config selection
-Date: Mon, 29 Sep 2025 13:31:45 +0800
-Message-Id: <20250929053145.3113394-4-yicongsrfy@163.com>
+Date: Mon, 29 Sep 2025 13:42:46 +0800
+Message-Id: <20250929054246.3118527-1-yicongsrfy@163.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250929053145.3113394-1-yicongsrfy@163.com>
-References: <20250928212351.3b5828c2@kernel.org>
- <20250929053145.3113394-1-yicongsrfy@163.com>
+In-Reply-To: <20250929053145.3113394-4-yicongsrfy@163.com>
+References: <20250929053145.3113394-4-yicongsrfy@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,29 +64,31 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgB3p9vDGdpoadHeAQ--.6422S5
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCF4rJFWDGrWUJry3ArW7CFg_yoWrJFykpF
-	4qgFy5KrW7Ja1fJrs3JrWkZFy5Zan2kw4v9ryxK3Wa9r93A3s7t3WkKry5ZF4DCrW8WF17
-	ta1UJa13WF4UGr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jvrWOUUUUU=
-X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/xtbBzR-X22jaEr2o5AAAsP
+X-CM-TRANSID:_____wD3P+JYHNpoB1inAw--.10708S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCw4DWryxGF48tw1rXw18Krg_yoW5Kw47pF
+	4qgF90krW7JF4fJrs3JrWkZFy5Zan2k3yv9ryxK3Wa9r93A3s7t3WkKry5AF1DGrW8WF12
+	ya1UJa13uF4UGr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j1BTOUUUUU=
+X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/1tbiUBnX22jaFpuELQAAsT
 
 From: Yi Cong <yicong@kylinos.cn>
 
-A similar reason was raised in ec51fbd1b8a2
-(r8152: add USB device driver for config selection):
+A similar reason was raised in commit ec51fbd1b8a2 ("r8152: add USB
+device driver for config selection"):
 Linux prioritizes probing non-vendor-specific configurations.
 
 Referring to the implementation of this patch, cfgselect is also
 used for ax88179 to override the default configuration selection.
 
+v2: fix warning from checkpatch
+
 Signed-off-by: Yi Cong <yicong@kylinos.cn>
 ---
- drivers/net/usb/ax88179_178a.c | 72 ++++++++++++++++++++++++++++++++--
- 1 file changed, 69 insertions(+), 3 deletions(-)
+ drivers/net/usb/ax88179_178a.c | 70 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 67 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 29cbe9ddd610..965d2a66695d 100644
+index 29cbe9ddd610..f2e86b9256dc 100644
 --- a/drivers/net/usb/ax88179_178a.c
 +++ b/drivers/net/usb/ax88179_178a.c
 @@ -14,6 +14,7 @@
@@ -98,16 +99,14 @@ index 29cbe9ddd610..965d2a66695d 100644
  #define AX88179_PHY_ID				0x03
  #define AX_EEPROM_LEN				0x100
  #define AX88179_EEPROM_MAGIC			0x17900b95
-@@ -1713,6 +1714,16 @@ static int ax88179_stop(struct usbnet *dev)
+@@ -1713,6 +1714,14 @@ static int ax88179_stop(struct usbnet *dev)
  	return 0;
  }
  
 +static int ax88179_probe(struct usb_interface *intf, const struct usb_device_id *i)
 +{
-+	if (intf->cur_altsetting->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC) {
-+		printk("[YCDBG][%s:%d] bInterfaceClass:%d\n", __func__, __LINE__, intf->cur_altsetting->desc.bInterfaceClass);
++	if (intf->cur_altsetting->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC)
 +		return -ENODEV;
-+	}
 +
 +	return usbnet_probe(intf, i);
 +}
@@ -115,7 +114,7 @@ index 29cbe9ddd610..965d2a66695d 100644
  static const struct driver_info ax88179_info = {
  	.description = "ASIX AX88179 USB 3.0 Gigabit Ethernet",
  	.bind = ax88179_bind,
-@@ -1941,9 +1952,9 @@ static const struct usb_device_id products[] = {
+@@ -1941,9 +1950,9 @@ static const struct usb_device_id products[] = {
  MODULE_DEVICE_TABLE(usb, products);
  
  static struct usb_driver ax88179_178a_driver = {
@@ -127,7 +126,7 @@ index 29cbe9ddd610..965d2a66695d 100644
  	.suspend =	ax88179_suspend,
  	.resume =	ax88179_resume,
  	.reset_resume =	ax88179_resume,
-@@ -1952,7 +1963,62 @@ static struct usb_driver ax88179_178a_driver = {
+@@ -1952,7 +1961,62 @@ static struct usb_driver ax88179_178a_driver = {
  	.disable_hub_initiated_lpm = 1,
  };
  
