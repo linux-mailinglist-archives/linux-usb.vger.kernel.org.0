@@ -1,126 +1,125 @@
-Return-Path: <linux-usb+bounces-28775-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28776-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93BA7BA8A38
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 11:33:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B0EFBA8E06
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 12:21:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DF2A168777
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 09:33:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5F99189D640
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 10:22:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 053032C235C;
-	Mon, 29 Sep 2025 09:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1383F2FB994;
+	Mon, 29 Sep 2025 10:21:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aBhg3nRC"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Im//W0Va"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E91274659
-	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 09:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960DA2FB987
+	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 10:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759138289; cv=none; b=p2wMf3iFPU7trFYdT2Hte4C1Shirwo7Qq5sUDfVGW+clHpLLDIV+KDVHcCwKRVs7eI+mYRojNf4jQP5BFw8oATymXexTmJ9lxIlnWDroT5tgG/dg26cfK0D0udwwJoZWocO6E+OIYq9xFhIofw37uj26TJZAiFLZqDACZUa9pL0=
+	t=1759141295; cv=none; b=Ltig/bVnKN973Z790172XErb9c+DSaMVqa8emdfLG28tQislXsPg/DI5Y4IAT7MeD2rY8rOsfN985++pZYPpt+W0f7k1Rzf7R36K6yY5isM0VNd6LVSMY5KLAj+PKHxUzVQayi3aB05eN8iQi2LjG+1RJYjh5lU0zbvFy9XniAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759138289; c=relaxed/simple;
-	bh=0seYOOKfhRxSaRtbJv3opFssAUw4AxrKK0HRe+hoIgM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ci1mFcFIWTLy1Ryyuv2dIqN3dfuGPCRC9YhLoptSefdmXaGptHrcxT6cUuizz9Fg973h0F0YD0cstGql5wjxByjbiXN6iEVgZSg1tBFO5GKjKI03xyIyh80xMg4onlJTeF5BEV+5ytxzxfsQOt0dcJLB2KUv1wKOCK8LZZ/bBCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aBhg3nRC; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-743ba48eb71so63101627b3.1
-        for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 02:31:27 -0700 (PDT)
+	s=arc-20240116; t=1759141295; c=relaxed/simple;
+	bh=sHzoMkJn5rMuogfvJJiJ1DJ7qKYiNTO4Ufwdd1t8dNg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=otpWoFaiEu7LgDNXOGLW7voG0S7Bwwt8zDRaXo8+Z/9a3Nz13jhKJzf/aFrhSvae1cLXz8qEKfQLMsn+h8IwCD9yfbvh1shORgMW9wn0M+njcMW4V2d1Lqr6zhMjCjAnlW+syh+NXOS6pC+cSRkuIRGV5GQAwo3ypVDSaXtBXvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Im//W0Va; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b3b3a6f4dd4so301231266b.0
+        for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 03:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1759138287; x=1759743087; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H948Ks4FyotvIgoJWFnIQzusTpF3IW3EYA8On9YnJSE=;
-        b=aBhg3nRCNrOZI3zJ/CuTn/6LfD9CnOhIY4rgsVxov7IDK83E4XlsR6EGFEwNrY+UOk
-         XfXSI00onkgDDM7OQ4QDQVnQ59BlwRQDe+NkUZR02WTmeZeTPemgKO160mzwaY5bKlut
-         Kr3w2pkzkpkX7cpNFDMEfZNY0uJa5+BxJTLhZgGodmLLIi5RMO1tOlgBvYunwTBfYMEW
-         tvPiIeKYQOx7vGKgQ7Q5mcqUvKEL9Qdye7iyvJc5Z8WmCAgcg0OchhCpwxC7P+KTbQh0
-         HroxSp9b9AbJ8xFL+vZ9RS66hPvPoEvUD3c5MAQ5SRbaz2l8gAcLMsQag02sxuvvkv9Z
-         Mgbw==
+        d=suse.com; s=google; t=1759141292; x=1759746092; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=83SCFxQSl2n8uHVURYlncQ6T1axBoOC/n+5RpM43Bq8=;
+        b=Im//W0Va4X9unAUA+jaDaArQKRJ1OcYVLX6rGsF65CiK+pv+A6sChWKzczKoZu01Vt
+         P1q9+nbQ9bFBW+8yXZp/DDalxI1jmAyh8lyeQwCl3ldmPo1kd5OIQTvmqJka78uq9A5e
+         R6/MghNN4Bndy4b7ez8mBTzHSjbEnq9c3+J5xz6g0eRHTzaZNxrAPMWg4P1h2nP9lfze
+         KOtXczS2DxYodEflYNEwJlMqbWdRzK/Q5473FkEKqLo/dY0mONen/se9+UqqHkBclbdG
+         zkZUihDDPP3lcUPUaRiOKEOs0PP/vyakM8Yvmvo2eahALcqw9w8Ppuax4US6wnuVNROG
+         QCgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759138287; x=1759743087;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H948Ks4FyotvIgoJWFnIQzusTpF3IW3EYA8On9YnJSE=;
-        b=DXAEjFlm2lP33jYAaaqt90qX6CgCh6Vq41ju0TIAwV49YeSTl82JMDN1T9Fd1lxCyB
-         +izWR6g/ZQl/oCZYFk54yGJSORMSVP/wF6rZfwBdGQgA7DqFgzfvLzoS06+Szo2vccfq
-         rQR/tiTGb3Rs9ncd0dT2SxAQptrX5sfc0cnXBc0SFopSL3iBYQTLgIRaX1fI7xWEx252
-         1bBpvIOknPDJGP0kSWtN6hoxvcOglL/wsv/OAEuwfaH2v8OnKKvFz5QiUZyBpXeiQF97
-         hkrfrEmQWughk6gDvyCLAz00IiSZYQvTxXW9SgE3gc+yYUYVuQPVGUOK29DtEwPhCCSj
-         z8BA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXlD75bZLrKiJt+qJFzQOz/7hQt3TbQhIpyHjBVKs7UeBU/3M9+R8VhfeIC9F1Vg8wWDkbYArJa7w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLKIZPR39MTRe5mZSvzA981UVvP/qXmSc1RbbW00TbeVld5LLc
-	FzwslINFxQ1a+kcsV+dx07F2wIErlsM91Zm1h7UO+RJI9NoKVwvv/5eJbGhTLoDxIxTYKItKcam
-	WiSJJnExNCUZR+dXnJ3TTJuK8H7mah9x6aHmJjoqZk4pgUoL9kvq6
-X-Gm-Gg: ASbGncu/hyzoDuwOHQOmBMtvu+KCIUsucb7D3gU8rURG0FDppf/apMYXsvS4KgEcTVf
-	Nnr2ZzUWf3BpKDCvV8eU6YlIgkb+V77e6obwTFoUaPKelw8LGkPLetsJqH9zQYIniKfD2lF7eMo
-	qWQSYqeU+4nzBwKZBE8Tshv0jpYvwbmO8slKfTbQ5p6OvRYBXBoa86NZzBEGTmhRbi1QZ0LHktl
-	l3464uu
-X-Google-Smtp-Source: AGHT+IFXTh55gLh86/vkdYVr+heB/S126ORlkozE21AFNkj/jMs7BoGlJ6IMgFlkmd0UlQRqUYqeDkRaveHfjIEl1aA=
-X-Received: by 2002:a53:c345:0:b0:5f3:317e:40af with SMTP id
- 956f58d0204a3-636dddd2c3fmr6803730d50.19.1759138286766; Mon, 29 Sep 2025
- 02:31:26 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759141292; x=1759746092;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=83SCFxQSl2n8uHVURYlncQ6T1axBoOC/n+5RpM43Bq8=;
+        b=BO50u1zoz6a6qZtd6nEwfaoql7DitibEDXUSMJIkrr5lfiQftal9Ml+mqRX/vSlMrI
+         h4nbqIF5AbYSWaWt81kH1za4pJ8AbbaSwgx2qoXIKPRKGko/cnk3p7LNAHYLU2xy+LvW
+         V9QXGmq1RBudUtTF+kiIvHf4bxdHYeJ7Dz/6Q5Bol+ft7c30fKgyawMSYaakgCiqxhZI
+         zA9FJi49z281ccrpFWrTX7boFuhoPhIbZ6EoKnMh+/ULCxOOqxw0Jw7LhQdQlo+6eTxy
+         hz4ydNJFb3yuM7LfdMZ7kXldsVxqccMdujLYih6yPuafjSTJPv9cOKbk62X3p2jGgFIv
+         z+6g==
+X-Forwarded-Encrypted: i=1; AJvYcCXg6YyZsZcPNlYfkmJHUPe+9E/viPzB0mKY0zuoJKmw6in8e6GF4g0wEiKKOKd4/dckzgUqB1Dken8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4dSUacu7FQJPjjV7AQy6RuLbLL+0Z05QZYrntxPu0PhkAiD45
+	btaYZGYXP7tuXnB4xuxFTjFOQU72wBgoMj+rq7gIR5pXQTizDktTlqIgli7V5hzZ6jM=
+X-Gm-Gg: ASbGncvqlH6t6k+H66aCPlAyjIRjUx2D1UQTyeZ8lx/XADSHcYzUHPouwKbE5t1aGuB
+	v63g3nQ8HqqU2pK4AjA8RgJKSK8A2LmmvfO6508+XQKpTWbPJz58lUBLV1mEgRIIZj0i7C6o7aO
+	JW3yS3WEAdwtTQk4OcLIBbdWEagfDXkMF9cltAMMcS+jr20SJowN1e9F/HQgamXpL3ZUZpeB7Oc
+	+NUj2zv5OXFUsqPRepA1V7hhLMrfXZNZEyjeBiYkqbxuV/uWhPY+OnRWmfHf27rbgmYkiwl223h
+	8I7YyNBes3f+GlHK6n6gtNZZL4Q9leiY7IxpwPi9P2y/PnHXoxEvLdqTUbKFLXxAwnTxHoA2gkz
+	cUsBS6zskc3RwUrnSNCXNI3E9RIl1TXM60Ul+bv7Yd5c2BlL0tsB0ELVK
+X-Google-Smtp-Source: AGHT+IHjoH7Yhek7IIwEqV3iQtifKitwK2zUXthJIq83mjDA2PaIynPMn2TL+eicWpseoUaL5N0fZA==
+X-Received: by 2002:a17:907:961a:b0:afe:b878:a175 with SMTP id a640c23a62f3a-b34bc9723demr1856639966b.46.1759141291708;
+        Mon, 29 Sep 2025 03:21:31 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13a1:1:4136:3ce:cdaa:75d2? ([2001:a61:13a1:1:4136:3ce:cdaa:75d2])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-634a36521c2sm7529826a12.20.2025.09.29.03.21.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Sep 2025 03:21:31 -0700 (PDT)
+Message-ID: <5a3b2616-fcfd-483a-81a4-34dd3493a97c@suse.com>
+Date: Mon, 29 Sep 2025 12:21:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250922-pm-v4-v4-0-ef48428e8fe0@nxp.com> <CAPDyKFqQgS9j4uGkTL_taPTL96su1tqpyoek1cpZgTiaaBMpCA@mail.gmail.com>
- <20250929034048.GD29690@nxa18884-linux.ap.freescale.net>
-In-Reply-To: <20250929034048.GD29690@nxa18884-linux.ap.freescale.net>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 29 Sep 2025 11:30:50 +0200
-X-Gm-Features: AS18NWDsIyPq6WyP-cYDKXj4NowCxNtd4ELMHIi6ak8TqMmTMVVwpzVIqFM3mSo
-Message-ID: <CAPDyKFp1NrdA6nZMQFrgrpc5Ub4osgYTiSJ=Gf1m1q4X8RYCmA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/5] pmdomain: core: Introduce device_set_out_band_wakeup
- and use it in usb
-To: Peng Fan <peng.fan@oss.nxp.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Peng Fan <peng.fan@nxp.com>, Pavel Machek <pavel@kernel.org>, 
-	Len Brown <lenb@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Peter Chen <peter.chen@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, Xu Yang <xu.yang_2@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] net: usb: support quirks in usbnet
+To: yicongsrfy@163.com
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, linux-usb@vger.kernel.org, marcan@marcan.st,
+ netdev@vger.kernel.org, pabeni@redhat.com, yicong@kylinos.cn
+References: <c9e14156-6b98-4eda-8b31-154f89030244@suse.com>
+ <20250929092942.3164571-1-yicongsrfy@163.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250929092942.3164571-1-yicongsrfy@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, 29 Sept 2025 at 04:28, Peng Fan <peng.fan@oss.nxp.com> wrote:
->
-> Hi Ulf,
->
-> On Tue, Sep 23, 2025 at 12:07:02PM +0200, Ulf Hansson wrote:
-> >On Mon, 22 Sept 2025 at 04:21, Peng Fan <peng.fan@nxp.com> wrote:
-> >>
-> ...
-> >> ---
-> >> Peng Fan (4):
-> >>       PM: wakeup: Add out-of-band system wakeup support for devices
-> >>       PM: domains: Allow power-off for out-of-band wakeup-capable devices
-> >>       usb: chipidea: ci_hdrc_imx: Set out of band wakeup for i.MX95
-> >>       usb: dwc3: imx8mp: Set out of band wakeup for i.MX95
-> >>
-> >> Xu Yang (1):
-> >>       usb: chipidea: core: detach power domain for ci_hdrc platform device
-> ...
-> >
-> >Rafael, I intend to pick up this series via my pmdomain tree shortly,
-> >unless you have some objections, of course.
->
-> Sorry for an early ping. I see v6.17 is released. Just want to know whether
-> you would pick this up for 6.18.
+On 29.09.25 11:29, yicongsrfy@163.com wrote:
+> On Mon, 29 Sep 2025 10:45:19 +0200, Oliver Neukum <oneukum@suse.com> wrote:
 
-If we have had another week, then v6.18 should have worked. That said,
-I plan to queue this for v6.19 as soon as we have v6.18-rc1.
+>> Please get in contact with the core USB developers. The problem
+>> needs to be solved, but this is not a solution.
+> 
+> Thank you for your reply!
+> 
+> Should I add the AX88179 chip information into the `usb_quirk_list`
+> in `drivers/usb/core/quirks.c`? (Of course, it will also include a
+>   check for whether `CONFIG_USB_NET_AX88179_178A` is enabled.)
 
-Kind regards
-Uffe
+That would need to be discussed.
+Ideally the probe() method of cdc_ncm would never be called.
+But there is the possibility that cdc_ncm is already loaded
+and the other driver is not.
+>  From an implementation standpoint, this approach is indeed cleaner
+> and simpler than my current solution.
+> Is the method mentioned above an appropriate approach?
+Well, no. Declining devices is not usbnet's job. If the logic
+needs to go into a device driver, it needs to go into cdc-ncm,
+which would need to check quirks.
+
+	Regards
+		Oliver
+
+
 
