@@ -1,182 +1,255 @@
-Return-Path: <linux-usb+bounces-28758-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28759-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D5E1BA80CC
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 08:02:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AEA5BA8145
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 08:15:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE6D216C398
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 06:02:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA2A53A6521
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 06:15:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD908238C3A;
-	Mon, 29 Sep 2025 06:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QvCqcVRQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ADC323D29F;
+	Mon, 29 Sep 2025 06:15:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB59919D087
-	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 06:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591421C8603
+	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 06:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759125763; cv=none; b=Ea2awVLQvGO5q8yBtbrKa6fNa9HAaFzRLs/Ak9/3M6829sgXXT3tBNtbA/x3+KGMo+JT5SemcS+jcevQ7ba0K1JlVH0ga3cxjyJwwlMt6sdT/w37o8OwY/a+v2nira0bO44ntY0bwbkrg7zoaaZflJ8SZgKgNH4qVCIQk+zam0g=
+	t=1759126534; cv=none; b=GJ3JsHjkgQoY16YB7s41Y5nKbT6X9qKxoGe30BQKS4CGLARYCljfKr2SmmuMCFEtuI9muQoMmGGYyIJ82YNbH7YEtK2gzweuRaUH7pSWzkLiz0nBnWeXhpqvoWcLVQu4YEOLtmzT9moeENd+5lEOafMlMfIXT0zqqY5EntM3RRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759125763; c=relaxed/simple;
-	bh=EVwKZ9ffdaADDxMp/oxfmX/duyCcrAcbHorH6J6Cjhc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fMUkFerFFm/Vn2VL85/13lhw8jNbR0/8/e1J1PPg8TElVEgI0lbUE2EtmhCDFQ/PZHBFUETW9vZnNj4rmZE4HAYdD49Wvz+siBhKsga9p6o+Mh2JugFbpWQZAtItSvbM06vcMgLdUHj0duOJQFQN95RnpAk2+LU6boNVmoDZX3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QvCqcVRQ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58SMeV1f012945
-	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 06:02:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	c84sJy294lRAsvdayLiR1jZLIpH9uaxLIGDdgwQe68o=; b=QvCqcVRQzLPsbawx
-	s58RDUfGswe4txwaxDvqG8Rr0YstVhEvzpYtaw18yl+ljSv2A9AFa+gnvXerbPVS
-	ogWP0HXpP7HPbpUieUNh6Fr4CpTbyPcOCEuFz9yaBW4x4p8QZkOIZ3koQlXRHJ5l
-	GL5Du2iVZS81Q83/tq3gTb750URX8G/4dBtel4uNq4cCcU1aQMYq0GxPZ4oVqLgX
-	ALSGbfLHApjQdhNXVCwzfiqgeFjX7OPYH/a3gIYtz6m4cfWVNQrdEtJeoIicJac3
-	eY/HKQ0sUMxNTXEbjEYnCkGBpA6EFKdigFb3vR//5y6WNkOnLEYuOEXkW2avFOiT
-	HDiHwA==
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e7gxm18x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 06:02:40 +0000 (GMT)
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2698b5fbe5bso64747365ad.0
-        for <linux-usb@vger.kernel.org>; Sun, 28 Sep 2025 23:02:40 -0700 (PDT)
+	s=arc-20240116; t=1759126534; c=relaxed/simple;
+	bh=mt4OxsiUZv0CClfCLCwZ63Jz0FFrR8Ac5nSZzOdIXws=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=DAbw3vfddRS101LMk75Y+dnSsnBMqL2TSrYWaHbI7id/45lBPSaI9xKtnWw4zYUn88jIlPXTHj8R9oPGR8FXCb0THliMPmEzZusZUbRONi9rZpfiik/KUgvcJyB6iKP9u9Y+O6N/m9XkXmMX7l4AS8tIs1Kmu1e0qpy4WYukvuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-42b2a51fad2so9775875ab.1
+        for <linux-usb@vger.kernel.org>; Sun, 28 Sep 2025 23:15:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759125759; x=1759730559;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1759126531; x=1759731331;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c84sJy294lRAsvdayLiR1jZLIpH9uaxLIGDdgwQe68o=;
-        b=TJOJbS7PcFNMFIhE9zmQhEkAndRWLwUTN5MbFydvv0sXXeJWZAFPogYXS/Jsku6RJp
-         N9xrYzgQ5GLfFZvHeiZp2i9Zt5lzMSXKxNjzII7CfPY5YgYU+91tOIf4JJBh6YAtU+m3
-         Ro3TyZN1Hjr529xfMUD4wGTYzih7yRYyYvRKYYrJoHECvIBF9cpSTPjyEP9Q9Wkg7o7y
-         hq2VtG1z6SaeCyfF4LOWiUsamHWgY0yS0BQkD0hxOFwPeBAHxKuWXzY63RQwn+xmNXr7
-         ObGWMgPN+rIqwYzSTW+eWFgWfOpzu7BSLWDn3R/N86PHToV+cupDwrEgRj+FEmessECC
-         YhqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXe4ZuMbhPtU8RXGZs/myjtQpIeF3dAbrcxWKXOfUiMSq5HXcHuaCVfEfTcO/pqB3ncrR5V2YCCL7Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFj6mPyupsE9eVOFxPJ2aPqfrUxKcMsaI6lcmCPzvJ2IILXt9t
-	lW5Y/242vHg3OzTn1/9PYapBhUJomLlTiegDtmNkhNKXu88MxY8wVGOyX9YA/ommXR9JYuCiEY0
-	gwlVYTFQmfz7gA0yv3mQ7SQN42rCPjUHZLX/sW3rC3sNSy51wdMQl035JYdLzIdwu/uaP1lM7IQ
-	==
-X-Gm-Gg: ASbGncvDrvGf8eukHKxY4cwyOip9VRzP0q5CcsD/vZKcu40JKCYUGnOqIMRKESembmu
-	yu5OkGoCE5bhuW5Dq/OI2sBo7E9PrGiOsfzkzBehFdR+7LfcoSwmjOWVqxmXq4bDVcE4hXzyPG1
-	81wrU9aTGhLP0yOtcI68/Uq6vNg5As78/Dwq0+04GoSjsdjV5iUzJIClSTLY68s8J7n4vTY/Dhr
-	ppuJ0+TE/u8NZAmyjNrYK89GfL4fjKWJ/11jZgZ1QGI1ns2XwQgHPY0JFW6wN0y9alCD4pQ0g1v
-	5V3fK6YXqBQaVGHYZj9Tk9IdBPRrLkRQqEmcNnrnxoCML+/ltVu48sigjE9MLP/hGAMUm5ZPVPP
-	A67f2TMiSRhAFqL7Qhdom/vgGPXRZvrlNwGU=
-X-Received: by 2002:a17:903:38cd:b0:27e:d4a8:56ad with SMTP id d9443c01a7336-27ed4a85a82mr165732275ad.61.1759125759076;
-        Sun, 28 Sep 2025 23:02:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEJ70u453/jxOUh+G0kG8uuIYknKfil7i8PuspUU15QgIdesSV8W24AVurbFTeHJcYwjL3wwA==
-X-Received: by 2002:a17:903:38cd:b0:27e:d4a8:56ad with SMTP id d9443c01a7336-27ed4a85a82mr165732105ad.61.1759125758595;
-        Sun, 28 Sep 2025 23:02:38 -0700 (PDT)
-Received: from [10.133.33.234] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed6882133sm120557875ad.89.2025.09.28.23.02.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Sep 2025 23:02:38 -0700 (PDT)
-Message-ID: <7f4bcb3e-2469-41d0-b3a7-392ffcbba515@oss.qualcomm.com>
-Date: Mon, 29 Sep 2025 14:02:33 +0800
+        bh=ynvbnWA1ecixqyan+LgmS5er8JTbSbCELgH2Iyhty4U=;
+        b=gahztKiDKTVYjcVuWj8AKh1hmvgW7C64b+piQzC+ubfLcB7PVh46vIJ0XTRI9VIVbn
+         Qnfz/xnUugZlBTgwkMdvfvWQ6KddTutWVVptCc3Kxp2BKQRJy78MjeEokxR+BA3ZARnz
+         0UeFCtsbnYplNO+vkBVcFuZSC4mAJecUcbdW80DL9xl4LbK1hC0js/NJoCmS9l0XawxW
+         ihMXArQhfWMjjdb5PAArIRuKDzKHZiTw/HpavZVYLUwwv53bGXzqdHCC7wn06eb3XwLv
+         1FG73E1rVeWt6Iji/vCnnAtSJ6S7s3isMHFLnBYobmwMb1rzXy0om6pIV/P9Lf9ey5D5
+         +vPA==
+X-Forwarded-Encrypted: i=1; AJvYcCXAH4hFNbjpf0P9FMWtst6bADJa1B5uww7awbswkGtzslsE4pRPTr/+Q6ro+RnI2BRQUABPFmU7uMA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycwBNg5OZFsZkZMKgbZmmYC8cIybXek0jTy5sC5jWulZIuT+hw
+	ikUk174mrXQ1KzYCcsSTrP8XevsDTza5tY2iXWoYTVoF8HEijadbMhD4V7a9wAJ3nTncioR6Xkv
+	pfyJt6ZJ6q5n03jGUc7gh94j5+JO9Ri2/uIVUl/Cu8rVB5pH4nS1NNfM4hxg=
+X-Google-Smtp-Source: AGHT+IELWwS0rgE9wNS6ZYg47pA+bZQLopq4RjKUbbwL/D4BniubNK9se99xRR6L4DLDgdY3JKoOc3xWMYyuI6qVNKBnMO2RhLKU
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] dt-bindings: phy: qcom,m31-eusb2-phy: Document M31
- eUSB2 PHY for Kaanapali
-To: =?UTF-8?Q?Krzysztof_Koz=C5=82owski?= <k.kozlowski.k@gmail.com>
-Cc: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I
- <kishon@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
-        tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
-        yijie.yang@oss.qualcomm.com,
-        Ronak Vijay Raheja <ronak.raheja@oss.qualcomm.com>
-References: <20250924-knp-usb-v1-0-48bf9fbcc546@oss.qualcomm.com>
- <20250924-knp-usb-v1-2-48bf9fbcc546@oss.qualcomm.com>
- <CAJKOXPfVhixCk0_Xh=9XokjHObM=P+SP=itaXHv7xTr69pc3_Q@mail.gmail.com>
-Content-Language: en-US
-From: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
-In-Reply-To: <CAJKOXPfVhixCk0_Xh=9XokjHObM=P+SP=itaXHv7xTr69pc3_Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: htihLwdOPxby8B9YdaVBMMhrFreKj9Sg
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAyNSBTYWx0ZWRfX+d+kteGDDfnJ
- 88jLVx49+FEPR8xlRLFHkOUXltl5dd712xfP6vlAF+aNPfgfaokBDu27epNJIvgskNEU5U9f1m3
- ZaF98kl5eRC9ECn//wKhC1eSNAh26lh87CNzfOGyCF8VXVvNztsotYXbXzjx1V6oa9eYIkyUYTk
- k3kaxquRPYUKSsGS/RoKEpOfijQEIqsoQy7q6WseE9z2hP35kS6undCurv/mDl0fiaRHJGsgwDq
- 0d17EhW33PNkBaR4FXi10NOfxba8Fl2yLSEwKdYUrmliJSdj3UOSXoPnx7V+zAw81IILa3Iskn1
- 9b9ped5cMuVuPA84aP+ymlcpk6u9DIs5PLW1ZUgOFSFOAz7t8HcQbT5tuZ/wCs/MG0BSH9sdVCQ
- It9/jGYGpoyv28dCwCS4TKigSrpXQA==
-X-Proofpoint-GUID: htihLwdOPxby8B9YdaVBMMhrFreKj9Sg
-X-Authority-Analysis: v=2.4 cv=dP6rWeZb c=1 sm=1 tr=0 ts=68da2100 cx=c_pps
- a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=nQufxc_MvbZzznxDM0EA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=GvdueXVYPmCkWapjIL-Q:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-29_02,2025-09-26_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 clxscore=1015 priorityscore=1501 spamscore=0
- malwarescore=0 bulkscore=0 impostorscore=0 phishscore=0 suspectscore=0
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
- definitions=main-2509270025
+X-Received: by 2002:a05:6e02:3808:b0:425:8bfc:b7da with SMTP id
+ e9e14a558f8ab-42873f48613mr113571065ab.7.1759126531257; Sun, 28 Sep 2025
+ 23:15:31 -0700 (PDT)
+Date: Sun, 28 Sep 2025 23:15:31 -0700
+In-Reply-To: <0000000000000189dc0621b5e193@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68da2403.a00a0220.102ee.0036.GAE@google.com>
+Subject: Re: [syzbot] [mm?] INFO: rcu detected stall in x64_sys_call
+From: syzbot <syzbot+65203730e781d98f23a0@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org, bp@alien8.de, 
+	bpf@vger.kernel.org, daniel@iogearbox.net, dave.hansen@linux.intel.com, 
+	dvyukov@google.com, eddyz87@gmail.com, elver@google.com, glider@google.com, 
+	haoluo@google.com, hpa@zytor.com, john.fastabend@gmail.com, jolsa@kernel.org, 
+	kasan-dev@googlegroups.com, kpsingh@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-usb@vger.kernel.org, luto@kernel.org, 
+	martin.lau@linux.dev, mingo@redhat.com, netdev@vger.kernel.org, 
+	sdf@fomichev.me, song@kernel.org, syzkaller-bugs@googlegroups.com, 
+	tglx@linutronix.de, x86@kernel.org, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    e835faaed2f8 net/mlx5: Expose uar access and odp page faul..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=136e2ae2580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=15254880b29b9ff
+dashboard link: https://syzkaller.appspot.com/bug?extid=65203730e781d98f23a0
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e58334580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1005eae2580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6b3cd235e609/disk-e835faae.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/180c3f29b5c5/vmlinux-e835faae.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6b8fa2c53bdd/bzImage-e835faae.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+65203730e781d98f23a0@syzkaller.appspotmail.com
+
+rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+rcu: 	1-...!: (1 GPs behind) idle=3cd4/1/0x4000000000000000 softirq=15457/15459 fqs=3
+rcu: 	Tasks blocked on level-0 rcu_node (CPUs 0-1): P43/2:b..l
+rcu: 	(detected by 0, t=10503 jiffies, g=9717, q=782 ncpus=2)
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 UID: 0 PID: 5901 Comm: udevd Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/18/2025
+RIP: 0010:hrtimer_set_expires include/linux/hrtimer.h:100 [inline]
+RIP: 0010:advance_sched+0x9cc/0xc90 net/sched/sch_taprio.c:988
+Code: 24 18 48 89 f8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df 80 3c 08 00 74 05 e8 80 51 87 f8 4d 89 74 24 18 49 83 c4 20 4c 89 e0 <48> c1 e8 03 48 b9 00 00 00 00 00 fc ff df 80 3c 08 00 74 08 4c 89
+RSP: 0018:ffffc90000a08c70 EFLAGS: 00000086
+RAX: ffff888024623360 RBX: ffff8880246232c0 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: ffff888024623358
+RBP: ffff88807b34d550 R08: ffff8880246232eb R09: 1ffff110048c465d
+R10: dffffc0000000000 R11: ffffed10048c465e R12: ffff888024623360
+R13: ffff888024623000 R14: 1869abf3b67aa73f R15: ffff88807b34f400
+FS:  0000000000000000(0000) GS:ffff888125d39000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055f6efacf088 CR3: 000000000df36000 CR4: 00000000003526f0
+Call Trace:
+ <IRQ>
+ __run_hrtimer kernel/time/hrtimer.c:1761 [inline]
+ __hrtimer_run_queues+0x529/0xc60 kernel/time/hrtimer.c:1825
+ hrtimer_interrupt+0x45b/0xaa0 kernel/time/hrtimer.c:1887
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1039 [inline]
+ __sysvec_apic_timer_interrupt+0x108/0x410 arch/x86/kernel/apic/apic.c:1056
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1050 [inline]
+ sysvec_apic_timer_interrupt+0xa1/0xc0 arch/x86/kernel/apic/apic.c:1050
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:deref_stack_reg+0xa/0x230 arch/x86/kernel/unwind_orc.c:402
+Code: 4c 24 18 e9 f2 fe ff ff 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 55 41 57 41 56 41 55 41 54 53 <48> 83 ec 20 48 89 54 24 18 49 89 f0 49 89 ff 48 be 00 00 00 00 00
+RSP: 0018:ffffc900042cf4e0 EFLAGS: 00000283
+RAX: fffffffffffffff0 RBX: ffffffff9036fb70 RCX: 0000000000000000
+RDX: ffffc900042cf628 RSI: ffffc900042cf720 RDI: ffffc900042cf5e8
+RBP: dffffc0000000000 R08: ffffc900042cf647 R09: 0000000000000000
+R10: ffffc900042cf638 R11: fffff52000859ec9 R12: ffffc900042cf720
+R13: ffffc900042cf638 R14: ffffc900042cf5e8 R15: 1ffffffff206df6e
+ unwind_next_frame+0x17c4/0x2390 arch/x86/kernel/unwind_orc.c:-1
+ arch_stack_walk+0x11c/0x150 arch/x86/kernel/stacktrace.c:25
+ stack_trace_save+0x9c/0xe0 kernel/stacktrace.c:122
+ kasan_save_stack mm/kasan/common.c:47 [inline]
+ kasan_save_track+0x3e/0x80 mm/kasan/common.c:68
+ poison_kmalloc_redzone mm/kasan/common.c:388 [inline]
+ __kasan_kmalloc+0x93/0xb0 mm/kasan/common.c:405
+ kasan_kmalloc include/linux/kasan.h:260 [inline]
+ __kmalloc_cache_noprof+0x230/0x3d0 mm/slub.c:4407
+ kmalloc_noprof include/linux/slab.h:905 [inline]
+ slab_free_hook mm/slub.c:2374 [inline]
+ slab_free mm/slub.c:4695 [inline]
+ kmem_cache_free+0x166/0x400 mm/slub.c:4797
+ exit_mmap+0x53f/0xb50 mm/mmap.c:1305
+ __mmput+0x118/0x430 kernel/fork.c:1129
+ exit_mm+0x1da/0x2c0 kernel/exit.c:582
+ do_exit+0x648/0x2300 kernel/exit.c:949
+ do_group_exit+0x21c/0x2d0 kernel/exit.c:1102
+ __do_sys_exit_group kernel/exit.c:1113 [inline]
+ __se_sys_exit_group kernel/exit.c:1111 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1111
+ x64_sys_call+0x21f7/0x2200 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xfa/0x3b0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fd7130f16c5
+Code: Unable to access opcode bytes at 0x7fd7130f169b.
+RSP: 002b:00007ffca03ef578 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 000055f6efb75130 RCX: 00007fd7130f16c5
+RDX: 00000000000000e7 RSI: fffffffffffffe68 RDI: 0000000000000000
+RBP: 000055f6efac3910 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffca03ef5c0 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+INFO: NMI handler (nmi_cpu_backtrace_handler) took too long to run: 1.498 msecs
+task:kworker/1:1     state:R  running task     stack:22536 pid:43    tgid:43    ppid:2      task_flags:0x4208060 flags:0x00004000
+Workqueue: mld mld_ifc_work
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5357 [inline]
+ __schedule+0x1798/0x4cc0 kernel/sched/core.c:6961
+ preempt_schedule_common+0x83/0xd0 kernel/sched/core.c:7145
+ preempt_schedule+0xae/0xc0 kernel/sched/core.c:7169
+ preempt_schedule_thunk+0x16/0x30 arch/x86/entry/thunk.S:12
+ __local_bh_enable_ip+0x13e/0x1c0 kernel/softirq.c:414
+ local_bh_enable include/linux/bottom_half.h:33 [inline]
+ rcu_read_unlock_bh include/linux/rcupdate.h:910 [inline]
+ __dev_queue_xmit+0x1d79/0x3b50 net/core/dev.c:4790
+ neigh_output include/net/neighbour.h:547 [inline]
+ ip6_finish_output2+0xfb3/0x1480 net/ipv6/ip6_output.c:136
+ NF_HOOK_COND include/linux/netfilter.h:307 [inline]
+ ip6_output+0x340/0x550 net/ipv6/ip6_output.c:247
+ NF_HOOK+0x9e/0x380 include/linux/netfilter.h:318
+ mld_sendpack+0x8d4/0xe60 net/ipv6/mcast.c:1855
+ mld_send_cr net/ipv6/mcast.c:2154 [inline]
+ mld_ifc_work+0x83e/0xd60 net/ipv6/mcast.c:2693
+ process_one_work kernel/workqueue.c:3236 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3319
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3400
+ kthread+0x70e/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x439/0x7d0 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+rcu: rcu_preempt kthread starved for 10490 jiffies! g9717 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
+rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+rcu: RCU grace-period kthread stack dump:
+task:rcu_preempt     state:R  running task     stack:27160 pid:16    tgid:16    ppid:2      task_flags:0x208040 flags:0x00004000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5357 [inline]
+ __schedule+0x1798/0x4cc0 kernel/sched/core.c:6961
+ __schedule_loop kernel/sched/core.c:7043 [inline]
+ schedule+0x165/0x360 kernel/sched/core.c:7058
+ schedule_timeout+0x12b/0x270 kernel/time/sleep_timeout.c:99
+ rcu_gp_fqs_loop+0x301/0x1540 kernel/rcu/tree.c:2083
+ rcu_gp_kthread+0x99/0x390 kernel/rcu/tree.c:2285
+ kthread+0x70e/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x439/0x7d0 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+rcu: Stack dump where RCU GP kthread last ran:
+CPU: 0 UID: 0 PID: 1011 Comm: kworker/u8:5 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/18/2025
+Workqueue: events_unbound toggle_allocation_gate
+RIP: 0010:csd_lock_wait kernel/smp.c:342 [inline]
+RIP: 0010:smp_call_function_many_cond+0xd33/0x12d0 kernel/smp.c:877
+Code: 45 8b 2c 24 44 89 ee 83 e6 01 31 ff e8 86 63 0b 00 41 83 e5 01 49 bd 00 00 00 00 00 fc ff df 75 07 e8 31 5f 0b 00 eb 38 f3 90 <42> 0f b6 04 2b 84 c0 75 11 41 f7 04 24 01 00 00 00 74 1e e8 15 5f
+RSP: 0018:ffffc900036a7660 EFLAGS: 00000293
+RAX: ffffffff81b44fab RBX: 1ffff110170e7f69 RCX: ffff888025bada00
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffffc900036a77e0 R08: ffffffff8fa30637 R09: 1ffffffff1f460c6
+R10: dffffc0000000000 R11: fffffbfff1f460c7 R12: ffff8880b873fb48
+R13: dffffc0000000000 R14: ffff8880b863b1c0 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff888125c39000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000200000000300 CR3: 000000000df36000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ on_each_cpu_cond_mask+0x3f/0x80 kernel/smp.c:1044
+ on_each_cpu include/linux/smp.h:71 [inline]
+ smp_text_poke_sync_each_cpu arch/x86/kernel/alternative.c:2653 [inline]
+ smp_text_poke_batch_finish+0x5f9/0x1130 arch/x86/kernel/alternative.c:2863
+ arch_jump_label_transform_apply+0x1c/0x30 arch/x86/kernel/jump_label.c:146
+ static_key_enable_cpuslocked+0x128/0x250 kernel/jump_label.c:210
+ static_key_enable+0x1a/0x20 kernel/jump_label.c:223
+ toggle_allocation_gate+0xad/0x240 mm/kfence/core.c:850
+ process_one_work kernel/workqueue.c:3236 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3319
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3400
+ kthread+0x70e/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x439/0x7d0 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
 
 
-
-On 9/25/2025 9:46 AM, Krzysztof Kozłowski wrote:
-> On Thu, 25 Sept 2025 at 08:35, Jingyi Wang <jingyi.wang@oss.qualcomm.com> wrote:
-> 
->>  Documentation/devicetree/bindings/phy/qcom,m31-eusb2-phy.yaml | 6 +++++-
->>  1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/phy/qcom,m31-eusb2-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,m31-eusb2-phy.yaml
->> index c84c62d0e8cb..ab1cdedac05c 100644
->> --- a/Documentation/devicetree/bindings/phy/qcom,m31-eusb2-phy.yaml
->> +++ b/Documentation/devicetree/bindings/phy/qcom,m31-eusb2-phy.yaml
->> @@ -15,7 +15,11 @@ description:
->>
->>  properties:
->>    compatible:
->> -    items:
->> +    oneOf:
->> +      - items:
->> +          - enum:
->> +              - qcom,kaanapali-m31-eusb2-phy
->> +          - const: qcom,sm8750-m31-eusb2-phy
-> 
-> This time maybe without HTML:
-> 
-> There's no such code AFAIK, because original work was never resent and
-> never merged
-> 
-> You create some convoluted big dependency chain and I suggest first to
-> finish upstreaming previous project, because otherwise it's difficult
-> to review and impossible to apply.
-
-The SM8750 USB support was partly merged,
-The qcom,sm8750-m31-eusb2-phy binding was merged in commit 1166a2ca0900beafbe5b6d1bb357bc26a87490f1,
-Link: https://lore.kernel.org/r/20250527-sm8750_usb_master-v6-2-d58de3b41d34@oss.qualcomm.com
-
-Thanks,
-Jingyi
-
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
