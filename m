@@ -1,201 +1,147 @@
-Return-Path: <linux-usb+bounces-28749-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28750-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7583EBA7CD8
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 04:29:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99FFBBA7EC9
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 06:02:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B5AA3B1D14
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 02:29:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A9797AFA05
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 04:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C5B1FF7BC;
-	Mon, 29 Sep 2025 02:29:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FE072135CE;
+	Mon, 29 Sep 2025 04:01:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="CMxH4KEU"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="UVyf33Fq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011055.outbound.protection.outlook.com [40.107.130.55])
+Received: from mail-m15578.qiye.163.com (mail-m15578.qiye.163.com [101.71.155.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD5A2C859;
-	Mon, 29 Sep 2025 02:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759112940; cv=fail; b=HVTCo6O/62zHmso8FAztCK6r3h6iBLRJ6GjSGFevT01npycoyFVodwVj1rIiQsfvTaPzbtqg5K1jCf1/GNrJLSvM5LrOTnf6RZtHk++nY4QAh4OQy6ZxD3vjp07IAJggmmqGkIlB+EV5iwZKImVj/PWWyn9mL7l6MEoNA2tg69A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759112940; c=relaxed/simple;
-	bh=EYBe2Ogt0dTUkY2j3pcyIHv6nZkKPtNu65ByUHU2Kqo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=qys+tXPbcse7T6lpHEZTFBPW282a21sjTjm0KaP2ikoUnnUB3hyzy79q1r+/L6XPLcUSZV8ScPPBgf6mKKIrI/KXDrKZUU2o9Ee1wD7LSYpL4RnPKogyDrZS/oHzL8GbKro9rVYqnd1LErS+H1X0pd1BrlxRvQKQaY8rx8fiQ8w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=CMxH4KEU; arc=fail smtp.client-ip=40.107.130.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hImux4v3jDjdFheZSjVp6eGvQf9UFf+OIBucF0Yq9SHsuWz35rnT6xSnwN3/XoVaSlm2Q0VSR4TPKGWhsl0dTyttwK/KfHy2GinWtrY9yclq8VTzmR1ohcXibyyjR7ibrd3XeL3fImg9UiGjcx7Xw9/0K0v1cIYT0KrD+SEM5fXf2vVLxu/Om21cjC6biVlqzEvDVz1uSS2pzTQhepXxht7e0LuXAO/gZoBsaFR7YtTn2wEBrm9mJAKdPA/AeAElMxObUow68sG2pB00eE+QfaOulD29K8LCe1ga9NVuJiNp5BqOLIrsWYp+NjSyR+T/JhkNnMMHu9YvyDpykmN8lw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4HaP2cpl+/9d+FCMjSJnbTXS6xlVGHejKsnqdDroPDM=;
- b=F1DaUD07vdu/P1Njx7MJPhRZTuKJizkZunbGc1QIMx2VAF5kVaG3hLdidzYrrzgfXQKSylRFN5I6idkudh/NFvlCSi20rGbikKtZ7A/qiMcRJYGfMuLZPVKCOs8po2pfhchOP24/noIyNoGtLNeDA64hZrEsf128SG2E/w/trudaUIUrTM0dczVlZ7VffXDTOnOC4BLx+uE8qir7vhHPcLe0Q/scr6o/DwyIh6qVfEjVbWdU0BgPFCtHlR1sdMT6iORieE/B2DI+bNs3L7fycNi7qqNQhpfrIfSwEsvYfbHyunh1mWTUIuKgn+Yl3x9EfBSmFZK61EGNO2KFJExLdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4HaP2cpl+/9d+FCMjSJnbTXS6xlVGHejKsnqdDroPDM=;
- b=CMxH4KEUIKiIQ+4hLoVky2VpclOZR3XpaqaZ/yG4o/+ges75a9beIMQsLSBO0OVoAM+7U07y8p0zOzCp1Hyq+/t10CNn7ygkxa4WN001eaGL2hKqcULPHhWjmx2y+vQ4Ts4smWSIgPpeDnYvNbDSsWEg0xL9p/leMJryLzC085C0E5Ei1RRhEglJSayeJyItc0GUORA5I3TEwGUGouYkgyfJ7EG0gItjsEjE5IdAwcO0yIKqzG7MEMHucmxghA38NDyvaGK8iDuFoQ5+6lL5WJjvf1jBXfERiOGkxI1HohNW3yj/11zYcGkV3KfLzD9F2nlNTyw1RcTDrR9Rqhz88g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by GVXPR04MB10753.eurprd04.prod.outlook.com (2603:10a6:150:219::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.16; Mon, 29 Sep
- 2025 02:28:55 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.9160.015; Mon, 29 Sep 2025
- 02:28:55 +0000
-Date: Mon, 29 Sep 2025 11:40:48 +0800
-From: Peng Fan <peng.fan@oss.nxp.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Peter Chen <peter.chen@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Xu Yang <xu.yang_2@nxp.com>
-Subject: Re: [PATCH v4 0/5] pmdomain: core: Introduce
- device_set_out_band_wakeup and use it in usb
-Message-ID: <20250929034048.GD29690@nxa18884-linux.ap.freescale.net>
-References: <20250922-pm-v4-v4-0-ef48428e8fe0@nxp.com>
- <CAPDyKFqQgS9j4uGkTL_taPTL96su1tqpyoek1cpZgTiaaBMpCA@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFqQgS9j4uGkTL_taPTL96su1tqpyoek1cpZgTiaaBMpCA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: SG2PR01CA0173.apcprd01.prod.exchangelabs.com
- (2603:1096:4:28::29) To PAXPR04MB8459.eurprd04.prod.outlook.com
- (2603:10a6:102:1da::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7761D6BB;
+	Mon, 29 Sep 2025 04:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.78
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759118469; cv=none; b=dkNUi9KBVqb0rVSG4HAimcvnPnC5HOpZu6SY9t716xS5qa6ND8GKfT+LbBehQgegYYANfa+8U1G6JuAelMbTwHzGFzRF7+JhH76a5Q2sgelJ7GtArEUkLMag8tz9QVmzyMDnX3wlAvp3Rr1o8bIGFc/1Nd8AH5e3j1PWlA5Xf9k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759118469; c=relaxed/simple;
+	bh=iB15Qd/vPFDRr7h8ScCudPVdAfj6cFxz0qgU9Z9LID4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BSccwBMBPhy8j394oHg9vP51S5+hnekU+uoXO8Pd6hIqixll/lS+vq5Z5mJyxZjWVnFxaTJ+yRk0qAIgWMggSzBfqs5OYGcpsGpgius8tt6h+s1wpw4jkQI2ZqZ4zL6JbC/jJoZ6qAmTnlW3t8QhFT0bSRcXz2gbT7eC71ml5f4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=UVyf33Fq; arc=none smtp.client-ip=101.71.155.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.153] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 24652f4a9;
+	Mon, 29 Sep 2025 11:55:46 +0800 (GMT+08:00)
+Message-ID: <42f41be2-9afb-4087-9ce9-1e711df98df8@rock-chips.com>
+Date: Mon, 29 Sep 2025 11:55:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|GVXPR04MB10753:EE_
-X-MS-Office365-Filtering-Correlation-Id: f0218efe-a1ba-4f93-bdf6-08ddfefff00a
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|7416014|376014|52116014|1800799024|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?t+Q7E88RvXEL8cZz9XTXaUSD/kzo6FFZ2SEZ4hSMnBW0XmciNtLZamzI1GYu?=
- =?us-ascii?Q?V4Rl6MGqcB3jBv+PI2Rm2wxoyFXoitcRfEvMfGw8DosNGUrjGTBuVCPp6DQP?=
- =?us-ascii?Q?r54iqQz8jDQjjARhgwp0CtMv3JRA+A+vYH0PHO+DGWIgY+0Mm91uPJ7tDsx5?=
- =?us-ascii?Q?7DPucGn+aCJ9R6JGq1umhTpNQ8VvvdMkfYf8qJ51BqTrkSA6z8pJSHQWUo4h?=
- =?us-ascii?Q?9v24HvpQCe1zuc8X6m+aXD25KplrjO18mX699mKx0BnVu7uj9kWYlloJ3gET?=
- =?us-ascii?Q?s09QdhdQ6AVfQws9dLwQ8PUkoDoButUcEJw3N/Pj/iwbbOJmwExrRp30L76r?=
- =?us-ascii?Q?mCa0JqfGjHbrKBh1wIYA8hi0UCgG7YP8zmWJt/k5ZItfsLVmQCiOVwWgXEOz?=
- =?us-ascii?Q?zpOIqEzCwesyDCSBprtkANzNMPhf7EB4l1u5dtrqQm01gsN60EJZ3UT9FVBg?=
- =?us-ascii?Q?jD3LFFVio8l4jtThEIU1hlr1KLpoo1YvDI8TU4fcBofjn071OtuN70NNvgUW?=
- =?us-ascii?Q?EcqYX7jpL8ws9qSZ0N/PT7nFn3CVcUKKHLE1eBLTqryZujGMuvnIpOldcnZD?=
- =?us-ascii?Q?XEgovwI/yEudjJyXe5FUA/5k+EjNd5DdwZhMhdXorjUroskm+FXkMuQazWSr?=
- =?us-ascii?Q?1PZyXrO1JNwyyD2VTNj9VKWQtVkUN5T3k0Piev7u7vuU5+q/WsP9aJ1YuPTh?=
- =?us-ascii?Q?j+yKM3FzhyuKAJ5b5J4HANWMxIMNnFUZoLUD8NwMXtJPma6Z/tZS8XvCUsY3?=
- =?us-ascii?Q?TQkw1QLBbpL5N+HKvPLCyrtY1DbY8Pl/RhOnpqwU/ZLF6SdvwL+vLc+BBmJO?=
- =?us-ascii?Q?ktxLy5JCuv/exkLfGM+AC7evOTVF++s7R0b6VKqKq4anOKvxJwog0Ewq/6CM?=
- =?us-ascii?Q?66dSakwbSMEDx6935F8LEIgyMMGInhEeB6wJN1Fb7TSOy2DNNUklwjYhAFDq?=
- =?us-ascii?Q?0M6t+nqHgrt8/CP5w/RTTunFj1P2CmiKqdFupLVPFI2VM/gCNMlLeu4h5jGP?=
- =?us-ascii?Q?IVmAUiRDA/wCWLabAb1HhlteLscm1u5graDzio/bJ76IZaVFekSFU+gaROQp?=
- =?us-ascii?Q?u/nAKrv8gzQAuPV6MTGFekmhKrTw/EYrlLefbe97tw4569JD9KaKd7yP6bI6?=
- =?us-ascii?Q?Qg2XvOC2cKo7/k9ENV6XSdUO29ufi2lDZ2C2ORY41knaMnXot0dPF/hm9ols?=
- =?us-ascii?Q?MS/863QcavaZ9Z0tkKWYPM4iK6m+B5mZZ+1aQoU42l+AjVcLurIITg6b3Acq?=
- =?us-ascii?Q?Qh6ysIPxNs6Zd1X0rtOW4P7GssIMrYloi/Hu7gr9PkLW0F0KZ22/t/QobJRI?=
- =?us-ascii?Q?1zB0N34S10gR0v2sV2WmBkzZgnCwrV3LPrlPIo4S1k35p7XhZ2M3NppfOrXE?=
- =?us-ascii?Q?OnXXFdg5mX3np+ETTuUqO4mrmuyc4XgTnjc+uKmNYwCVDXi8z+CEeGeA3VEA?=
- =?us-ascii?Q?3cN+0bG721AKaEIpxfyanVopP8E1+oLY+A71gg0oTordu9+ij3i6aTi6onLk?=
- =?us-ascii?Q?oF1z8lhIPcXkquXmcvFr08MLx/S5jIOY0EG9?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(7416014)(376014)(52116014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?RS6xAgoJxu5mvD/R0Sqh3DDrZZv7QjnJzWsLTIbcA2Bw/303oAcEwpi8I3nJ?=
- =?us-ascii?Q?Cbso26+BFBgDQI0LYMKO4VOS8e2EzgehYeaDpmJ1kdJCAuvimjSnUOJfZPyi?=
- =?us-ascii?Q?xi3bPtSfsB/KzffkXJ8YGC5F8NGdI1jCVEnVRd/8Y2ALsc4JDEDcy5YjSm0B?=
- =?us-ascii?Q?Etb7wfyoP1a3eadX7B97N5HL8y/lJv7/rwJID8EfI6zyZPwCtcStUFmCtmRj?=
- =?us-ascii?Q?mDaxIE5rVJgC6KzBvllBmOOR15q99tbR56tUKuyB/VF9zM758oBYtjw5TPNl?=
- =?us-ascii?Q?Y1cNpmBfHkMvLX6/hFzIbPtnqqo2L7SqfmRoAScmJkVpAuu1vAeJEQSmwd76?=
- =?us-ascii?Q?5AWAj15aCLWRyvEyNRutK0T9rA8lTClDaa0TMiGZ29wNNUQTQD/dkwC2PJ8t?=
- =?us-ascii?Q?z9jEyQLqgoCCAjyZ3m5dQtKr9b+JQkA9dySD4ysRCawYVFhZzqSeZkqHrc6F?=
- =?us-ascii?Q?Aq/qboFVkzo9aAAGzTwjl3tI4KzmG2VtBa6wPEe+5JOAdC+Ahfe3p6b3qUjg?=
- =?us-ascii?Q?zyfvXo51GFUmqn89dTvptdXgeDgeCvFKmIKmO8Nddc3C7OGHvEywOX1cBpn6?=
- =?us-ascii?Q?flmOHzv1lBtC3MImcHWVnMQroXiDIpCyUKo1CI958DRfzg8Z/Z8zhFRco5R0?=
- =?us-ascii?Q?uw9H2RTy34IZbftGISPotrMVI4MEAZBorHMPBQkfi8EuFI4fvMzKWlLGCIYq?=
- =?us-ascii?Q?61eCU+Fi0UEISyC1dxk2Rxkbk2lcqR8r01tiRJp78qHzS9sOdvPD1O5uff81?=
- =?us-ascii?Q?SBHnLIGwewQQH02MhuU5ZYfMH8t0eyKYk8abebFwjSxr5SpbLhFDXaLFEJE9?=
- =?us-ascii?Q?9jFUIbPiIayfomi1V7fiRtbsbNpAFLuftuoavY0yvTitRP9eWIas+sevWkAt?=
- =?us-ascii?Q?L1vu6P7w12OpXWy34dqLzUKoh0MKvYpsDXwEsWV5n/kN4jHpsuE/P8v159/z?=
- =?us-ascii?Q?ah5GJdy2+DXAUwwHz3rpMAAq01ZlmI9VYiK7bRsEk/LZrqiuAKW98NhfALB9?=
- =?us-ascii?Q?7Khn915kET0yh31U2YzwWNvYLfAmI0I5N10fdM+w1fIthbWn6NsZRJQz94WY?=
- =?us-ascii?Q?upokLrrp9ugv8Z0LjXjhad5tkfJhrBu+Q8zMn3+F7Mn3suk87H9I+wA7D+KB?=
- =?us-ascii?Q?hmY8ZEsn18WNjdtZkVsX/nOgRMos52S160i6zjnTNrdYTNaYKVM6SW9FXPoa?=
- =?us-ascii?Q?kkjPCUN418X39bm0YkExGo9LRIw6YRniTYpUfYF5ECXsE+ciUxPkz7EvZK98?=
- =?us-ascii?Q?qzPdT7WcSJiw44J12DKPWUYge0GPLMLDv9GUANS/R/kPwyH0T7AcETZZQFJ6?=
- =?us-ascii?Q?qlTLZ7tdCF0qy2Q6xmwK1/waMWyRlVR5Smvo3wgi1PI+vdGoQzhbsIgXJGQn?=
- =?us-ascii?Q?ehEjxex3teoNxiu6HHykQmO159ezHBHCU7h8FcpsJhW/L2KQr6DyClKeDA9m?=
- =?us-ascii?Q?xAm2HZWteVH3GDoOWAWCZCWgrHonhzwF0BMGdUHjbnhJiRDZu63lxuvpiv4N?=
- =?us-ascii?Q?dRe7qjWAbkqDEFN19OXhuTbAFwffx/nkIMt5GWmYqLGpjD4V554NmmjaKhEq?=
- =?us-ascii?Q?acyTDKICdbHSU4fplaxw0CXz7kzI15ThibWwuiTP?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0218efe-a1ba-4f93-bdf6-08ddfefff00a
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2025 02:28:55.6078
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L3/fjjHZkK6OVrLnIv9uPC8WY93XoXFkcBDpHwsX+P76cFlam0c8RVMX4lxXk8iPtYmuP5favhtKAvx3vGi1SQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10753
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/7] drm/rockchip: cdn-dp: Add multiple bridges to
+ support PHY port selection
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Chaoyi Chen <kernel@airkyi.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
+ <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Yubing Zhang <yubing.zhang@rock-chips.com>,
+ Frank Wang <frank.wang@rock-chips.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Amit Sunil Dhamne <amitsd@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
+ Diederik de Haas <didi.debian@cknow.org>,
+ Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
+References: <20250922012039.323-1-kernel@airkyi.com>
+ <20250922012039.323-6-kernel@airkyi.com>
+ <idyrlzhd5sotg3ylr7vbwmczimglffc75nafxbnhhm3ot2jn4w@ixerm6elfmre>
+ <ede70598-c451-4352-ab3e-0e278ce33ad7@rock-chips.com>
+ <pwk4ylrxyedq33qivpwy4kly3yx25yjkv75ja3prf5ynxosiez@lb53gculvj3x>
+Content-Language: en-US
+From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+In-Reply-To: <pwk4ylrxyedq33qivpwy4kly3yx25yjkv75ja3prf5ynxosiez@lb53gculvj3x>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Tid: 0a99939cbbf503abkunmf7f47fbafa8c8
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ04fT1YfTkxDGBgYGBhCTx5WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
+	xVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=UVyf33FqlputOQa4i79XGybq+AHVBKpYG2XhkZ6ZsqEY+uBjh+doRGcpDIIyihJwJzLoZuBaP8YAxS1iEJ8+T496AL+scaEHMn+JL13fmHgyixWLNleRn15RaeUrcxUFa8lPcxDbkRBf/tFKJtLx0+uQh/Rz1zRor79EWuMmPyI=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=vM6i8BgSabuk/duHJbVX0Gnp95HLl19dL4T224ShB2g=;
+	h=date:mime-version:subject:message-id:from;
 
-Hi Ulf,
+On 9/29/2025 5:27 AM, Dmitry Baryshkov wrote:
 
-On Tue, Sep 23, 2025 at 12:07:02PM +0200, Ulf Hansson wrote:
->On Mon, 22 Sept 2025 at 04:21, Peng Fan <peng.fan@nxp.com> wrote:
+> On Sun, Sep 28, 2025 at 05:52:35PM +0800, Chaoyi Chen wrote:
+>> On 9/23/2025 9:50 AM, Dmitry Baryshkov wrote:
 >>
-...
->> ---
->> Peng Fan (4):
->>       PM: wakeup: Add out-of-band system wakeup support for devices
->>       PM: domains: Allow power-off for out-of-band wakeup-capable devices
->>       usb: chipidea: ci_hdrc_imx: Set out of band wakeup for i.MX95
->>       usb: dwc3: imx8mp: Set out of band wakeup for i.MX95
+>> [...]
 >>
->> Xu Yang (1):
->>       usb: chipidea: core: detach power domain for ci_hdrc platform device
-...
+>>
+>>>> +	/* One endpoint may correspond to one HPD bridge. */
+>>>> +	for_each_of_graph_port_endpoint(port, dp_ep) {
+>>>> +		/* Try to get "port" node of correspond PHY device */
+>>>> +		struct device_node *phy_ep __free(device_node) =
+>>>> +			of_graph_get_remote_endpoint(dp_ep);
+>>>> +		struct device_node *phy_port __free(device_node) =
+>>>> +			of_get_parent(phy_ep);
+>>>> +
+>>>> +		if (!phy_port) {
+>>>> +			continue;
+>>>> +		}
+>>>> +
+>>>> +		/*
+>>>> +		 * A PHY port may contain two endpoints: USB connector port or CDN-DP port.
+>>>> +		 * Try to find the node of USB connector.
+>>> And then there can be a retimer between PHY and the USB-C connector. Or
+>>> some signal MUX. Or DP-to-HDMI bridge. Please, don't parse DT for other
+>>> devices. Instead you can add drm_aux_bridge to your PHY and let DRM core
+>>> build the bridge chain following OF graph.
+>>>
+>> I think building a bridge chain across multiple drm_aux_hpd_bridge may be difficult. First, drm_dp_hpd_bridge_register() cannot register the bridge immediately; instead, it is deferred until drm_aux_hpd_bridge_probe(). When it is added to the bridge_list, it may not yet be attached, and attempting to attach it at that point is too late.
+>>
+>> But, if I only use drm_aux_bridge on the USB-C connector, and use my own custom bridge on the PHY device and managing the alloc and attach bridge process myself, then things would become much easier.
+> Well... consider a your board, but add onnn,nb7vpq904m retimer between
+> the CDP and usb-c connector (it's not an uncommon device nowadays). Or
+> add fsa4480 analog audio switch. Build all the drivers as modules. You
+> should not need any changes to your drivers to handle such boards and
+> such kernel config.
 >
->Rafael, I intend to pick up this series via my pmdomain tree shortly,
->unless you have some objections, of course.
+> With those devices you can't handle everything inside the DP driver,
+> since there are two "streams" of probe events: the DRM bridge needs the
+> "next" bridge (in the direction from the SoC to the connector), but the
+> USB-C events code needs "previous" mux, switch or retirmer. After some
+> trial and error we have ended up with having a chain of drm_aux_bridge
+> devices ending up with the drm_aux_hpd_bridge inside the Type-C port
+> manager driver. This way the typec_* depetencies are resolved first,
+> going from the SoC to the Type-C controller driver then the DRM bridge
+> devices probe backwards, creating the chain, which is finally consumer
+> by the DP driver inside the SoC.
 
-Sorry for an early ping. I see v6.17 is released. Just want to know whether
-you would pick this up for 6.18.
+Sorry, I kept trying to look for the "next bridge" in "drm_hpd_aux_bridge", and I didn't notice that "drm_aux_bridge" already had a similar implementation about "next bridge". Thanks again for your patience.
 
-Thanks,
-Peng
 
->
->Kind regards
->Uffe
+BTW the devm_drm_of_get_bridge(&auxdev->dev, auxdev->dev.of_node, 0, 0) in drm_aux_bridge cannot be used directly with tcphy->dev. I may need to create a device for the dp-port child node, and then use drm_aux_bridge_register(). But this is no longer a big issue :)
+
+-- 
+Best,
+Chaoyi
+
 
