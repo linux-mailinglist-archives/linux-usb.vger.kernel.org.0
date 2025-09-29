@@ -1,79 +1,106 @@
-Return-Path: <linux-usb+bounces-28751-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28753-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EB10BA7EED
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 06:24:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20BA3BA7FF6
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 07:32:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD78E3B8CA4
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 04:24:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 167463C277E
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 05:32:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346EA215077;
-	Mon, 29 Sep 2025 04:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DA0F29B8E8;
+	Mon, 29 Sep 2025 05:32:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AC0a7SHn"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="jxmtlTy5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A710333F9;
-	Mon, 29 Sep 2025 04:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBBD2853EF;
+	Mon, 29 Sep 2025 05:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759119838; cv=none; b=KfmIm2DxdssUEtpNRG+x7FP7wp6QyR76Adq/HW+nkG14J3FtOdiTdKgAMJ6sOExKoQ+GPuWTF6WjOhMl/vV0j5bNlQP8NaFt35/0i25HhDBvzXyefC60xXtY2bfyCEkUPVauQedA0pmli17+RJR8vIz2ilXvVXs8fHkz3nI0GMs=
+	t=1759123958; cv=none; b=m4ED2ZALFo2/b5VnlYckZRBvtZWycUrYpKoBFh6VicGnQI9jj/2hlCx4w4YQ59yQxPBlsCcmh6Zpu2OpAB/cvYOpHUu3nUzvoMGedbiIjLfHdccqJ9KI6uYF+R1K4dVsBU56CXE2+2maqR2/aqfEfATeQcqIpO5rP3+zZRJR/2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759119838; c=relaxed/simple;
-	bh=+1YNLxg2avr4KjleA/PdfbQqRc6bmj4olzvcG6fj0gw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gWIdtKXsp+lQv145VqsWNqHnv3Qzj99fKQx5DGWi35U3j3tePT2kzoGacvANUfr9VwwHtBWP0nM9j9GBH/Tgjve+KxJF6r4EbF9CYZ6apJZ6N1Q10UbQ0XUcMnJW7H12MRHTeSwydewbpmUd9iSFGcjZCu7t7vbq4n8MQbZiMBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AC0a7SHn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC84CC4CEF4;
-	Mon, 29 Sep 2025 04:23:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759119838;
-	bh=+1YNLxg2avr4KjleA/PdfbQqRc6bmj4olzvcG6fj0gw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=AC0a7SHnoIQcydziwGeEP2JLx/RXO3tHmMyLZX3zYicXxW6oAEvBscIRXRZwqmMy+
-	 M+AX19T8zrUoav4TYP6woz7wqLV/0+eR10MnzjWab7tv1yx9qcwYVdP4syreZsORv1
-	 x4RCOcQMPxhao9rVFGpDNtX4HX6NRU5cD9Mq9aVF+plobekRxuaJjSmr4jOAOyqpXc
-	 oKmjLLMhJuo8UzesnZcIjXwO1iPsIeiw5wauvzjjvVl2xBr715+xHAYhiGtw9iYfA9
-	 juee3C1YAOsIQdyPeLXHoPFV+cvShmn3OwIMOzpvGnMHQwsGds0BLFvaSIKXcZ8JGR
-	 f4N2Kk1SeruRQ==
-Date: Sun, 28 Sep 2025 21:23:51 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: yicongsrfy@163.com
-Cc: oliver@neukum.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, marcan@marcan.st, pabeni@redhat.com,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org, yicong@kylinos.cn
-Subject: Re: [PATCH 2/2] net: usb: support quirks in usbnet
-Message-ID: <20250928212351.3b5828c2@kernel.org>
-In-Reply-To: <20250928014631.2832243-2-yicongsrfy@163.com>
-References: <20250928014631.2832243-1-yicongsrfy@163.com>
-	<20250928014631.2832243-2-yicongsrfy@163.com>
+	s=arc-20240116; t=1759123958; c=relaxed/simple;
+	bh=d118q319CrrpOr6XHYXy0i+KhU2/dDwgMXrzsHt3YLs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Szr8ngO5YgiC7HvhPAjJTCg56dn4FbDRjG2bFnyiV9PYuYI68w83OlbAzPmZL0fFfRNNx+Bl7zKuLuiJO9A+eJrXpLhlKxK1JpOfAUUw1TtifzMPy5YRVMFlrgfFMflGWyoPMFg0VJ4ekRAQNaJ8JqDB4ZswPv5CQEdjO+TCO3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=jxmtlTy5; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
+	Content-Type; bh=qwx46OjxT4hzDy7PYeqYaZncgd9MREv4oHX5XIKHA6U=;
+	b=jxmtlTy5gq2AQuaQJotNNM8oXGMjsOpLHCxE3SuvKUgdc+GOk1UZVvhBVJHxGQ
+	DB1p5P9M+524ae98tIstKlOdhb5qOkMBoNfXrCnbWGvIArbOVVyVNA4TUa/AEBVP
+	v9Bs6fcfM/EE7ieIMsklSowWCYj4lyDS2FBqSOG4/Vji4=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgB3p9vDGdpoadHeAQ--.6422S2;
+	Mon, 29 Sep 2025 13:31:47 +0800 (CST)
+From: yicongsrfy@163.com
+To: oneukum@suse.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org
+Cc: marcan@marcan.st,
+	pabeni@redhat.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	yicong@kylinos.cn
+Subject: [PATCH v2 0/3] ax88179 driver optimization
+Date: Mon, 29 Sep 2025 13:31:42 +0800
+Message-Id: <20250929053145.3113394-1-yicongsrfy@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250928212351.3b5828c2@kernel.org>
+References: <20250928212351.3b5828c2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PSgvCgB3p9vDGdpoadHeAQ--.6422S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKrykGr4fCryfAry7Cry5XFb_yoWDKFg_uw
+	nIg347Ar1UWFy5XFWUGr4avryakay0g397ZasIq345X342qFn8Zr4vqr1fW3Z7GF4jvFnr
+	CwnFyF1Fqr9FgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbcyZUUUUUU==
+X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/xtbBFA3X22jaEB7g0wADsZ
 
-On Sun, 28 Sep 2025 09:46:31 +0800 yicongsrfy@163.com wrote:
-> +	const struct usb_device_id *match = usb_match_id(intf,
-> +							 usbnet_ignore_list);
-> +
-> +	return match == NULL ? false : true;
+From: Yi Cong <yicong@kylinos.cn>
 
-coccicheck says:
+This series of patches first reverts the previous changes to allow
+the vendor-specific driver to be loaded, then fixes the issues
+related to the vendor driver.
 
-drivers/net/usb/usbnet_quirks.h:40:24-29: WARNING: conversion to bool not needed here
+Yi Cong (3):
+  Revert "net: usb: ax88179_178a: Bind only to vendor-specific
+    interface"
+  net: usb: support quirks in usbnet
+  net: usb: ax88179_178a: add USB device driver for config selection
 
-this function could be simply:
+ drivers/net/usb/ax88179_178a.c  | 98 +++++++++++++++++++++++++++------
+ drivers/net/usb/cdc_ncm.c       |  2 +-
+ drivers/net/usb/usbnet.c        | 14 +++++
+ drivers/net/usb/usbnet_quirks.h | 39 +++++++++++++
+ include/linux/usb/usbnet.h      |  2 +
+ 5 files changed, 138 insertions(+), 17 deletions(-)
+ create mode 100644 drivers/net/usb/usbnet_quirks.h
 
-{
-	return !usb_match_id(intf, usbnet_ignore_list);
-}
+Changes since v1:
+- Patch 1: Revert "net: usb: ax88179_178a: Bind only to
+ vendor-specific interface"(No changes)
+- Patch 2: net: usb: support quirks in usbnet (Correct the description of
+ usbnet_quirks.h and modify the code style)
+- Patch 3: net: usb: ax88179_178a: add USB device driver for
+ config selection (New patch)
+
+--
+2.25.1
+
 
