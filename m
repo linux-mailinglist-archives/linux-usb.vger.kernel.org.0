@@ -1,198 +1,264 @@
-Return-Path: <linux-usb+bounces-28765-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28767-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA1DBBA8551
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 09:55:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A8D0BA8667
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 10:31:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B3553AF19C
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 07:55:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82D0A3B5B32
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Sep 2025 08:31:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F4EF264608;
-	Mon, 29 Sep 2025 07:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0ED8257824;
+	Mon, 29 Sep 2025 08:30:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="JgdzlENL"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mjDyHHh3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3358C261B92;
-	Mon, 29 Sep 2025 07:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BD534BA2D
+	for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 08:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759132501; cv=none; b=Pz2TKDTtcF2qBRywvP8fyn/ZUBBkIg4ysG6NDM5n57V8HYFRNezErxSHYiuWC5ibksR0HVJXU5vhDhuD/2m6WZT58Aj5Lhe0wmighJVcqj6SKBAm0HUY4sUwZbSsgFdqGnvnxDgJRx1GJ/pR0hMkw1EXUAQxFG5x2zPBHAQbSLY=
+	t=1759134654; cv=none; b=noscezCjiVVSUv0KJf2w3YQdPHW9LdxqxNiCsVkp29OoHVoVhUIx2bonZ873lDhRmt1hIY1+2/IIkWKtYr2xbH5+LCfzbC1RlNklWTSYB5a0zJGMqTpxv240DtwxwRPM3Oean/Rsm1JC0fahS7+fdnEiUWiWv4CxdG6OBH0pRDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759132501; c=relaxed/simple;
-	bh=A8hSnozwrZ6u84etwYiLlGN46MNAswFgw/kuE4h2a5k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZQHljcCOXBcPRlc7GrTxBRLYNQGDtTGFgEWfcpdP9MWng1gB6ysL2fyMEcmpii0ydY3WrLwNU8sw9KJkODinwn93s7ioQ9xZZPobTYMDvauXwxTdEyt9W5WfNCPgvRMrIeBNDtzX3G1iKvPT/yIjSTKj+tkdjiFs8jZ5lg46Le4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=JgdzlENL; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=gp
-	UbwNbQnfvLoVX63WNhLorivcOQ+ivqwrrVHACGIpM=; b=JgdzlENLwF1SRbT8Uo
-	HBRGOFb+I45JJx2lDnOXSnFLLM8Nja0yGmcUL0hpbkLhjDNKqijqDKDSG3JnieBY
-	RdUA4E0KTomaSpztJIx+bg965upFDK/NVZ6gBC3U1LcJUgNoOSns/3HzMmItIj1A
-	1S8ScMTUeydXFCU7mjvm5KYqY=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp1 (Coremail) with SMTP id PCgvCgDnD_0bO9poz8vCAQ--.15003S4;
-	Mon, 29 Sep 2025 15:54:07 +0800 (CST)
-From: yicongsrfy@163.com
-To: michal.pecio@gmail.com,
-	oneukum@suse.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org
-Cc: marcan@marcan.st,
-	pabeni@redhat.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	yicong@kylinos.cn
-Subject: [PATCH v3 3/3] net: usb: ax88179_178a: add USB device driver for config selection
-Date: Mon, 29 Sep 2025 15:54:01 +0800
-Message-Id: <20250929075401.3143438-3-yicongsrfy@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250929075401.3143438-1-yicongsrfy@163.com>
-References: <20250929054246.3118527-1-yicongsrfy@163.com>
- <20250929075401.3143438-1-yicongsrfy@163.com>
+	s=arc-20240116; t=1759134654; c=relaxed/simple;
+	bh=1yWrEi955nPPvBu1m9KwQaY5HyLcEXUxbZckZNeDmWE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fbFuxyrOk+e7JrmFmFAqjkkrSEFUeVMhs9CYhpkXR8ZCtdjlLSVyyYeGnZgGOiCiZgqFqazh+8P3Bkv+9dXZ3m3hsgGYcPIFCXlNiMLPi7YOi3Cw8jxChka0tWY4XunrkueaETr9NlLJCsa7yI05ZSBWOCAbz9Mfh+JbUq9TVmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mjDyHHh3; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-57b35e176dbso5484692e87.1
+        for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 01:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1759134650; x=1759739450; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UJONDUXJa/G+AY4kgKaGSYPSvsqZ+MAfDWA2lmXRRpc=;
+        b=mjDyHHh3ZjL4lSx9j24O1CtVr8O7VrJ6GjzBSEoqocKxiLulZc/wSAzuwVTV74Ry9g
+         vxfuz0XGDcerzFquNQSBJcS47g2ZE7wT+IfYS54hkpyzR5P88TbrT65WHnoMcm+b/cVD
+         HM+oUq/iYypI7s7RzSpi/Oi9SB8dN4YLvaKXg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759134650; x=1759739450;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UJONDUXJa/G+AY4kgKaGSYPSvsqZ+MAfDWA2lmXRRpc=;
+        b=fNVA6G/Pi3TqlcZloyNZ5J+0kSZEdBlP5uzWDKPLl0Uutyo1dy5yJg7++2Q4yQSm/0
+         YS7bIZE3klJnNSvgxvBhksySg2+DvbvEVuExRpbF9r7yUsG05aYCkPIwKYmU0PmzoKwR
+         cMTDWuRjsZrdakT5a+pw5nL0SdqlrZS6DUlzs9RDAyVUfDR37ZFUyfViFLYl81kzv8fw
+         pjrsun07IZixkG+fg9XwAPp2yuKn0Sbwo7l1zOOaJ/OuekW8LFuHhYKsQpD4pNylDX+I
+         x6xV+6O1XjYVmqTjyWckF0NmVGIX4M382UCNY/LCZeilJVv2vhFNiGRgZnk6oDqIUwW9
+         TZ5w==
+X-Forwarded-Encrypted: i=1; AJvYcCXye/vPSV7rzFjXpR40F2Td9RHGshhibYZVgKRCUtrDASoYCORGaPpqHWSkv9ibJ+js8k2XUvCRay8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzM93gx8IbesLIW8TNlK6uOi7emIg6OVkFu1ROg+WL4F59cD7l/
+	lu+4CAOlOD+FQ+BxW2+JAYKS69kGI+jtEg1GKTGqkboIGvfhQOLIborn8pjMG4KN2u2N+2ecB9n
+	cD0w=
+X-Gm-Gg: ASbGncuaQeH63Y2fXN/nOzjBM13kc6bM09MOq5+9AcczGMLZsK1xhJwR6plgy8Z/Ff0
+	3Vet0XG7FFDy76DfFjPd3Ucqd6D0Xkuq+ARLv+f1oQMBYM7XnVJTtiJChfRvQm+TQUhENkQKtbb
+	t0KeaOqUNy+EKCu4oB9090wx+laiwxTLZxBQ14kF6KZrKd1kawYGYbvo1oJ7rUoC0qxJYWUx1i0
+	DtlKd8QvpSHTZdHOl2cPdkk/bDQbo3xmiBqWWZwg36b1UG2po5E5q4tb+m7YjwnM0BM2B2yltMY
+	CeUJUwYlhUNT0Zaxq77O79ka0P0ix4QYxcVBPX6F/Wb4ptNzYH3C0TMy2kgDVuZFlyliJSjwrDS
+	1krRSefcQ/j4VyI8JFztQy1LrkfmxiNugoXlam5ynqxJYQLpTC3xogMafupFo59VTn2X9aQ0=
+X-Google-Smtp-Source: AGHT+IFm4RxCjUjFVSLCa8D/7fLAO/C0cdRrHOgqaFixjYn6iD++8Lm0CV9nM0T5t26LPxulc66jgQ==
+X-Received: by 2002:a05:6512:3d94:b0:576:d5df:fe1b with SMTP id 2adb3069b0e04-582d18cd8a7mr4712844e87.10.1759134650153;
+        Mon, 29 Sep 2025 01:30:50 -0700 (PDT)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-58316656353sm4002550e87.88.2025.09.29.01.30.48
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Sep 2025 01:30:48 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-57bd482dfd2so4973374e87.2
+        for <linux-usb@vger.kernel.org>; Mon, 29 Sep 2025 01:30:48 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWevIlRbtD01LYUEQfDi1Mf9m6tKXAXaUU6P08SFVTDUul/wPbitdf1ICEDrDbjz0OXhwrQI3VivjE=@vger.kernel.org
+X-Received: by 2002:a05:6512:1102:b0:57c:2474:3740 with SMTP id
+ 2adb3069b0e04-582d3f76e30mr4820322e87.46.1759134647732; Mon, 29 Sep 2025
+ 01:30:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PCgvCgDnD_0bO9poz8vCAQ--.15003S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCw4DWryxGF48tw1rXw18Krg_yoW5Kw47pF
-	4qgF90krW7JF4fJrs3JrWkZFy5Zan2k3yv9ryxK3Wa9r93A3s7t3WkKry5AF1DGrW8WF12
-	ya1UJa13uF4UGr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j4OJ5UUUUU=
-X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/xtbBFAPX22jaOQ8yRQAAso
+References: <20250926-uvc-orientation-v3-0-6dc2fa5b4220@chromium.org>
+ <20250926-uvc-orientation-v3-7-6dc2fa5b4220@chromium.org> <20250926-mute-boil-e75839753526@spud>
+In-Reply-To: <20250926-mute-boil-e75839753526@spud>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Mon, 29 Sep 2025 10:30:35 +0200
+X-Gmail-Original-Message-ID: <CANiDSCuddqjeDr80xKsZZP7CXu9qB5qqYPoZujNYLcVjK0kKkg@mail.gmail.com>
+X-Gm-Features: AS18NWDuABHOrlsFlY-rDCN1sMikoapkz5ecsd4Y1lKthbQuEsgF6GxQRq0htYQ
+Message-ID: <CANiDSCuddqjeDr80xKsZZP7CXu9qB5qqYPoZujNYLcVjK0kKkg@mail.gmail.com>
+Subject: Re: [PATCH v3 07/12] dt-bindings: media: Add usb-camera-module
+To: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>
+Cc: Hans de Goede <hansg@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Robert Moore <robert.moore@intel.com>, Hans Verkuil <hverkuil@kernel.org>, 
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	acpica-devel@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Yi Cong <yicong@kylinos.cn>
+Hi Conor
 
-A similar reason was raised in commit ec51fbd1b8a2 ("r8152: add USB
-device driver for config selection"):
-Linux prioritizes probing non-vendor-specific configurations.
+On Fri, 26 Sept 2025 at 18:55, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Fri, Sep 26, 2025 at 01:11:31PM +0000, Ricardo Ribalda wrote:
+> > For fixed cameras modules the OS needs to know where they are mounted.
+> > This information is used to determine if images need to be rotated or
+> > not.
+> >
+> > ACPI has a property for this purpose, which is parsed by
+> > acpi_get_physical_device_location():
+> > https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#pld-physical-location-of-device
+> >
+> > In DT we have similar properties for video-interface-devices called
+> > orientation and rotation:
+> > Documentation/devicetree/bindings/media/video-interface-devices.yaml
+> >
+> > Add a new schema that combines usb/usb-device.yaml and
+> > media/video-interface-devices.yaml
+> >
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+> >  .../bindings/media/usb-camera-module.yaml          | 46 ++++++++++++++++++++++
+> >  MAINTAINERS                                        |  1 +
+> >  2 files changed, 47 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/usb-camera-module.yaml b/Documentation/devicetree/bindings/media/usb-camera-module.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..e4ad6f557b9151751522e49b72ae6584deb0c7ba
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/usb-camera-module.yaml
+> > @@ -0,0 +1,46 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/usb-camera-module.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: USB Camera Module
+> > +
+> > +maintainers:
+> > +  - Ricardo Ribalda <ribalda@chromium.org>
+> > +
+> > +description: |
+> > +  This schema allows for annotating auxiliary information for fixed camera
+> > +  modules. This information enables the system to determine if incoming frames
+> > +  require rotation, mirroring, or other transformations. It also describes the
+> > +  module's relationship with other hardware elements, such as flash LEDs or
+> > +  Voice Coil Motors (VCMs).
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/usb/usb-device.yaml#
+> > +  - $ref: /schemas/media/video-interface-devices.yaml#
+> > +
+> > +properties:
+> > +  reg:
+> > +    maxItems: 1
+> > +
+>
+> What actually causes this schema to be applied? Did I miss it getting
+> included somewhere?
 
-Referring to the implementation of this patch, cfgselect is also
-used for ax88179 to override the default configuration selection.
+I guess your question is why I have not defined the compatible field?
 
-v2: fix warning from checkpatch
+I tried this change[1] with no luck:
+/usr/local/google/home/ribalda/work/linux/Documentation/devicetree/bindings/media/uvc-camera.example.dtb:
+device@1 (uvc-camera): compatible: ['uvc-camera'] does not contain
+items matching the given schema
 
-Signed-off-by: Yi Cong <yicong@kylinos.cn>
----
- drivers/net/usb/ax88179_178a.c | 70 ++++++++++++++++++++++++++++++++--
- 1 file changed, 67 insertions(+), 3 deletions(-)
+I think it failed, because If we add these allOfs as Rob proposed
+https://lore.kernel.org/all/20250625185608.GA2010256-robh@kernel.org/:
+```
+allOf:
+  - $ref: /schemas/usb/usb-device.yaml#
+  - $ref: /schemas/media/video-interface-devices.yaml#
+```
+We cannot (or I do not know how to) have a different compatible than
+the one from usb-device.yaml
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 29cbe9ddd610..f2e86b9256dc 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -14,6 +14,7 @@
- #include <uapi/linux/mdio.h>
- #include <linux/mdio.h>
- 
-+#define MODULENAME "ax88179_178a"
- #define AX88179_PHY_ID				0x03
- #define AX_EEPROM_LEN				0x100
- #define AX88179_EEPROM_MAGIC			0x17900b95
-@@ -1713,6 +1714,14 @@ static int ax88179_stop(struct usbnet *dev)
- 	return 0;
- }
- 
-+static int ax88179_probe(struct usb_interface *intf, const struct usb_device_id *i)
-+{
-+	if (intf->cur_altsetting->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC)
-+		return -ENODEV;
-+
-+	return usbnet_probe(intf, i);
-+}
-+
- static const struct driver_info ax88179_info = {
- 	.description = "ASIX AX88179 USB 3.0 Gigabit Ethernet",
- 	.bind = ax88179_bind,
-@@ -1941,9 +1950,9 @@ static const struct usb_device_id products[] = {
- MODULE_DEVICE_TABLE(usb, products);
- 
- static struct usb_driver ax88179_178a_driver = {
--	.name =		"ax88179_178a",
-+	.name =		MODULENAME,
- 	.id_table =	products,
--	.probe =	usbnet_probe,
-+	.probe =	ax88179_probe,
- 	.suspend =	ax88179_suspend,
- 	.resume =	ax88179_resume,
- 	.reset_resume =	ax88179_resume,
-@@ -1952,7 +1961,62 @@ static struct usb_driver ax88179_178a_driver = {
- 	.disable_hub_initiated_lpm = 1,
- };
- 
--module_usb_driver(ax88179_178a_driver);
-+static int ax88179_cfgselector_probe(struct usb_device *udev)
-+{
-+	struct usb_host_config *c;
-+	int i, num_configs;
-+
-+	/* The vendor mode is not always config #1, so to find it out. */
-+	c = udev->config;
-+	num_configs = udev->descriptor.bNumConfigurations;
-+	for (i = 0; i < num_configs; (i++, c++)) {
-+		struct usb_interface_descriptor	*desc = NULL;
-+
-+		if (!c->desc.bNumInterfaces)
-+			continue;
-+		desc = &c->intf_cache[0]->altsetting->desc;
-+		if (desc->bInterfaceClass == USB_CLASS_VENDOR_SPEC)
-+			break;
-+	}
-+
-+	if (i == num_configs)
-+		return -ENODEV;
-+
-+	if (usb_set_configuration(udev, c->desc.bConfigurationValue)) {
-+		dev_err(&udev->dev, "Failed to set configuration %d\n",
-+			c->desc.bConfigurationValue);
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct usb_device_driver ax88179_cfgselector_driver = {
-+	.name =		MODULENAME "-cfgselector",
-+	.probe =	ax88179_cfgselector_probe,
-+	.id_table =	products,
-+	.generic_subclass = 1,
-+	.supports_autosuspend = 1,
-+};
-+
-+static int __init ax88179_driver_init(void)
-+{
-+	int ret;
-+
-+	ret = usb_register_device_driver(&ax88179_cfgselector_driver, THIS_MODULE);
-+	if (ret)
-+		return ret;
-+	return usb_register(&ax88179_178a_driver);
-+}
-+
-+static void __exit ax88179_driver_exit(void)
-+{
-+	usb_deregister(&ax88179_178a_driver);
-+	usb_deregister_device_driver(&ax88179_cfgselector_driver);
-+}
-+
-+module_init(ax88179_driver_init);
-+module_exit(ax88179_driver_exit);
- 
- MODULE_DESCRIPTION("ASIX AX88179/178A based USB 3.0/2.0 Gigabit Ethernet Devices");
- MODULE_LICENSE("GPL");
--- 
-2.25.1
 
+Any suggestion on how to do this properly will be highly appreciated :)
+
+Thanks!
+
+
+
+[1]
+
+@@ -21,10 +21,14 @@ allOf:
+   - $ref: /schemas/media/video-interface-devices.yaml#
+
+ properties:
++  compatible:
++    const: uvc-camera
++
+   reg:
+     maxItems: 1
+
+ required:
++  - compatible
+   - reg
+
+ additionalProperties: true
+@@ -38,8 +42,8 @@ examples:
+         #size-cells = <0>;
+
+         device@1 {
+-            compatible = "usb123,4567";
++           compatible = "uvc-camera";
+             reg = <2>;
+             orientation = <0>;
+             rotation = <90>;
+         };
+
+>
+> > +required:
+> > +  - reg
+> > +
+> > +additionalProperties: true
+> > +
+> > +examples:
+> > +  - |
+> > +    usb@11270000 {
+> > +        reg = <0x11270000 0x1000>;
+> > +        interrupts = <0x0 0x4e 0x0>;
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        device@1 {
+> > +            compatible = "usb123,4567";
+> > +            reg = <2>;
+> > +            orientation = <0>;
+> > +            rotation = <90>;
+> > +        };
+> > +    };
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index ee8cb2db483f6a5e96b62b6f2edd05b1427b69f5..1503502a3aed2625e8ff488456ccd7305cc74ba7 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -26258,6 +26258,7 @@ L:    linux-media@vger.kernel.org
+> >  S:   Maintained
+> >  W:   http://www.ideasonboard.org/uvc/
+> >  T:   git git://linuxtv.org/media.git
+> > +F:   Documentation/devicetree/bindings/media/usb-camera-module.yaml
+> >  F:   Documentation/userspace-api/media/drivers/uvcvideo.rst
+> >  F:   Documentation/userspace-api/media/v4l/metafmt-uvc-msxu-1-5.rst
+> >  F:   Documentation/userspace-api/media/v4l/metafmt-uvc.rst
+> >
+> > --
+> > 2.51.0.536.g15c5d4f767-goog
+> >
+
+
+
+--
+Ricardo Ribalda
 
