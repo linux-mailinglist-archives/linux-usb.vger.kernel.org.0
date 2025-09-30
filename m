@@ -1,105 +1,136 @@
-Return-Path: <linux-usb+bounces-28811-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28812-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3D57BABF95
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 10:15:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFF72BAC13C
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 10:37:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E2AD1925D13
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 08:15:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9C3B3209F5
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 08:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F33A2F3C02;
-	Tue, 30 Sep 2025 08:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 983BB248F7F;
+	Tue, 30 Sep 2025 08:37:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mvaLzq5i"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="sHlHmKel"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77AF719343B;
-	Tue, 30 Sep 2025 08:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF10C2BB17;
+	Tue, 30 Sep 2025 08:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759220114; cv=none; b=nK9cWZG4XfIL8LvXxwA0Fy7kAZ/NJX2xodGi0KCP2NR8VDBIHJBnkS4pHAlBz5YCdBSlVG0BcA7LOhXnPXnh/stjJc2QGxhWSEkyn0sjNXjYRqyBDHVcktufFBLe1H2nItol3f6STakMRzsPFzK7pwDi1y7L546Jg6PDHB5g3+g=
+	t=1759221450; cv=none; b=YnATxRUzX41V32q8Rf0LxwqhvkLh42VM5RSWNL51U+ysO7yvxvp0JSGE+QUd7DXC24Odm9dKYRUMjgfF5pT9Z+1RwSq4PIuQ3HxGknUeq9GkhzKsIoYkFHuEL55nw6M1XGUh8mq0PxvK9RCAaNdHK03xNXrbJ/6m+NR8fEWt0Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759220114; c=relaxed/simple;
-	bh=UHY0gFXBcnA/7x1oJsrA5+gORyeVIqDA/vZ7MExLlQI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tNvbMGjsa5vKMVj8RQW8+l9CvvFaDlkBNn0LTKZ+4RUcIwa6etR567o0NHqCw+cUexXj3wJBvWh2QAYlbQrEfNRObImX9gtES7xlr7qwcF+TerAB8h6Fv4BP2VnRFd5Lx3/byBVVbBMdSECpn+Rp+4MluU15yDQsR5T4elbLjgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mvaLzq5i; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=QD
-	tkFZKpVeOPbIznEGb2uwyNPmNuUjWVSuMZG4Tkv8A=; b=mvaLzq5ikOtEs/zWIr
-	uz4kBlAlq16fNEYNeEbkrBW66axGhNlXtEksbI7Cuh5+lfOVvRYBmzLwVSD1qr3F
-	FWcq22k9+KD7TjlVqfXeB+QCdbWszlOABzQ4uk+bvLty+aVZOM0IZL1mr4pvhTuW
-	g0EkXRpc5xUO7X1ywxex43Q6U=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp1 (Coremail) with SMTP id PCgvCgDXvOVYkdto5vI3Ag--.35015S2;
-	Tue, 30 Sep 2025 16:14:17 +0800 (CST)
-From: yicongsrfy@163.com
-To: oneukum@suse.com
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	linux-usb@vger.kernel.org,
-	marcan@marcan.st,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
+	s=arc-20240116; t=1759221450; c=relaxed/simple;
+	bh=PEGpKlMQ4Vo+8ylinenQfplXYyYyVcNZZUgFaJY54no=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p+d9297/jwHb+6pBhJh8q3MoO218q0ye7h9WiUxQ2yH+A1kwwf1hXP7okzGIuGnB0gtwizkWZl46czgvv1judIbcMassRg0E2H4XoLTJt1WcSStJrvKD5/8POKOlKJvFb63tP6PaziHz7UloBjMaVA7Bk/pVPl3zGigOfdgIeAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=sHlHmKel; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 953A8C4CEF0;
+	Tue, 30 Sep 2025 08:37:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1759221449;
+	bh=PEGpKlMQ4Vo+8ylinenQfplXYyYyVcNZZUgFaJY54no=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sHlHmKelKCb80xLttNs4VPvrSfH4v4+esumTm9jUnS2pskLEq6P5QBI5l+EcZbsdT
+	 YZnQ7jLDrs7ewJI3kXH/8FKQwwMIXgesK3drtQSNj6rrnZ7/KWAF0l863ihEnSZ3pw
+	 rwBAdhoSR7Xr9MpaaZKqngNr6RIXnyTtSe9SqXJE=
+Date: Tue, 30 Sep 2025 10:37:25 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: yicongsrfy@163.com
+Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
+	marcan@marcan.st, netdev@vger.kernel.org, pabeni@redhat.com,
 	yicong@kylinos.cn
-Subject: Re: [PATCH 2/2] net: usb: support quirks in usbnet
-Date: Tue, 30 Sep 2025 16:14:15 +0800
-Message-Id: <20250930081415.3410752-1-yicongsrfy@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <5a3b2616-fcfd-483a-81a4-34dd3493a97c@suse.com>
+Subject: Re: [PATCH v4 2/3] net: usb: support quirks in cdc_ncm
+Message-ID: <2025093053-chunk-pleat-c95a@gregkh>
 References: <5a3b2616-fcfd-483a-81a4-34dd3493a97c@suse.com>
+ <20250930080709.3408463-1-yicongsrfy@163.com>
+ <20250930080709.3408463-2-yicongsrfy@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PCgvCgDXvOVYkdto5vI3Ag--.35015S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CFyktw4Utr4kXry8AF4xWFg_yoW8JFy8pF
-	WrGFWY9rsrG34Iyr1xZw47ua48tw4kWwn8WryqqrsFkw4avr1aqryxK3yY9F9rWr1Ikr42
-	yrWav3s3JF43Zw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uzc_fUUUUU=
-X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/xtbBFATY22jbjuZO6AAAsu
+In-Reply-To: <20250930080709.3408463-2-yicongsrfy@163.com>
 
-On Mon, 29 Sep 2025 12:21:30 +0200, Oliver Neukum <oneukum@suse.com> wrote:
->
-> On 29.09.25 11:29, yicongsrfy@163.com wrote:
-> > On Mon, 29 Sep 2025 10:45:19 +0200, Oliver Neukum <oneukum@suse.com> wrote:
->
-> >> Please get in contact with the core USB developers. The problem
-> >> needs to be solved, but this is not a solution.
-> >
-> > Thank you for your reply!
-> >
-> > Should I add the AX88179 chip information into the `usb_quirk_list`
-> > in `drivers/usb/core/quirks.c`? (Of course, it will also include a
-> >   check for whether `CONFIG_USB_NET_AX88179_178A` is enabled.)
->
-> That would need to be discussed.
-> Ideally the probe() method of cdc_ncm would never be called.
-> But there is the possibility that cdc_ncm is already loaded
-> and the other driver is not.
-> >  From an implementation standpoint, this approach is indeed cleaner
-> > and simpler than my current solution.
-> > Is the method mentioned above an appropriate approach?
-> Well, no. Declining devices is not usbnet's job. If the logic
-> needs to go into a device driver, it needs to go into cdc-ncm,
-> which would need to check quirks.
+On Tue, Sep 30, 2025 at 04:07:08PM +0800, yicongsrfy@163.com wrote:
+> From: Yi Cong <yicong@kylinos.cn>
+> 
+> Some vendors' USB network interface controllers (NICs) may be compatible
+> with multiple drivers.
+> 
+> I consulted with relevant vendors. Taking the AX88179 chip as an example,
+> NICs based on this chip may be used across various OS—for instance,
+> cdc_ncm is used on macOS, while ax88179_178a.ko is the intended driver
+> on Linux (despite a previous patch having disabled it).
+> Therefore, the firmware must support multiple protocols.
+> 
+> Currently, both cdc_ncm and ax88179_178a coexist in the Linux kernel.
+> Supporting both drivers simultaneously leads to the following issues:
+> 
+> 1. Inconsistent driver loading order during reboot stress testing:
+>    The order in which drivers are loaded can vary across reboots,
+>    potentially resulting in the unintended driver being loaded. For
+>    example:
+> [    4.239893] cdc_ncm 2-1:2.0: MAC-Address: c8:a3:62:ef:99:8e
+> [    4.239897] cdc_ncm 2-1:2.0: setting rx_max = 16384
+> [    4.240149] cdc_ncm 2-1:2.0: setting tx_max = 16384
+> [    4.240583] cdc_ncm 2-1:2.0 usb0: register 'cdc_ncm' at usb-
+> xxxxx:00-1, CDC NCM, c8:a3:62:ef:99:8e
+> [    4.240627] usbcore: registered new interface driver cdc_ncm
+> [    4.240908] usbcore: registered new interface driver ax88179_178a
+> 
+> In this case, network connectivity functions, but the cdc_ncm driver is
+> loaded instead of the expected ax88179_178a.
+> 
+> 2. Similar issues during cable plug/unplug testing:
+>    The same race condition can occur when reconnecting the USB device:
+> [   79.879922] usb 4-1: new SuperSpeed USB device number 3 using xhci_hcd
+> [   79.905168] usb 4-1: New USB device found, idVendor=0b95, idProduct=
+> 1790, bcdDevice= 2.00
+> [   79.905185] usb 4-1: New USB device strings: Mfr=1, Product=2,
+> SerialNumber=3
+> [   79.905191] usb 4-1: Product: AX88179B
+> [   79.905198] usb 4-1: Manufacturer: ASIX
+> [   79.905201] usb 4-1: SerialNumber: 00EF998E
+> [   79.915215] ax88179_probe, bConfigurationValue:2
+> [   79.952638] cdc_ncm 4-1:2.0: MAC-Address: c8:a3:62:ef:99:8e
+> [   79.952654] cdc_ncm 4-1:2.0: setting rx_max = 16384
+> [   79.952919] cdc_ncm 4-1:2.0: setting tx_max = 16384
+> [   79.953598] cdc_ncm 4-1:2.0 eth0: register 'cdc_ncm' at usb-0000:04:
+> 00.2-1, CDC NCM (NO ZLP), c8:a3:62:ef:99:8e
+> [   79.954029] cdc_ncm 4-1:2.0 eth0: unregister 'cdc_ncm' usb-0000:04:
+> 00.2-1, CDC NCM (NO ZLP)
+> 
+> At this point, the network becomes unusable.
+> 
+> To resolve these issues, introduce a *quirks* mechanism into the usbnet
+> module. By adding chip-specific identification within the generic usbnet
+> framework, we can skip the usbnet probe process for devices that require a
+> dedicated driver.
+> 
+> v2: Correct the description of usbnet_quirks.h and modify the code style
+> v3: Add checking whether the CONFIG_USB_NET_AX88179_178A is enabled
+> v4: Move quirks from usbnet.ko to cdc_ncm.ko
 
-Thank you for your suggestions!
+These "version" lines go below the  --- line.
 
-I've placed the quirk in cdc_ncm and modified its probe
-method accordingly. Could you please review whether the
-v4 version of the patch is appropriate?
+> Signed-off-by: Yi Cong <yicong@kylinos.cn>
+> ---
+>  drivers/net/usb/cdc_ncm.c        | 15 +++++++++++-
+>  drivers/net/usb/cdc_ncm_quirks.h | 41 ++++++++++++++++++++++++++++++++
 
+No need for this to be a .h file, just put it in the .c file please.
+
+thanks,
+
+greg k-h
 
