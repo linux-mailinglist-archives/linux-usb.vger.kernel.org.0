@@ -1,105 +1,109 @@
-Return-Path: <linux-usb+bounces-28806-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28807-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC554BAB61B
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 06:36:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA87ABAB6D4
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 06:54:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD3BC3C162B
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 04:36:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64A5D19257E5
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 04:55:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3DC7261B64;
-	Tue, 30 Sep 2025 04:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iQEkVyLu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583F825D53C;
+	Tue, 30 Sep 2025 04:54:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D8021C16A;
-	Tue, 30 Sep 2025 04:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [207.226.244.123])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23E0E288DB;
+	Tue, 30 Sep 2025 04:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.226.244.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759206981; cv=none; b=vFHzaOaRIDKMHX6KNlcfYSugQvZNARxV+mq1DIwI5BDdndOeqwLvelX0rbrRFFARd6HbDHImcYzBwEs9bHZjH7WL2LqP1o1S4YQxhpI6Wtvifhzs9QIMhqygZhVqjMEl3mxkRgMrMRp2vqhgoUsrkFBEBSk4Dbv2CuDZSLUCrpE=
+	t=1759208075; cv=none; b=nA26UK3oinpWcuFTQ/za0xbnZFfGQubraRE9ZYl8RCS0/MdK5fikR9izmGywU1wdUSJp/VQBOrUNk4aAqTE/EfJILNqMrU+8ZnTuc2FJzGJuFtPQN4XHlPazIrAAmtf5L3PuQ0Kc6K/NCLUr3NJOkMQOcEEgwv1YnqRMQHHHYaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759206981; c=relaxed/simple;
-	bh=YOUg77FB7Xsm2UXs9arHKbD5Bdz5tRGM5gEirnJeFdE=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=h6IztfbW3SWigVnxvdRbDkwFXH658qxG29jlDcQ3r+5K0hnkRz57NRpcfbzJRRuoW6fUubFvgLBPj17cRmZ5cREWgzp0lXNRM8CM2zzrPQ2FRjfV1AHC+PDtJL74L+jG9flpXHHfGdXi8nqMe0GfeLa/tsE+c+3Q3B5qFf4HTyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iQEkVyLu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6003C4CEF0;
-	Tue, 30 Sep 2025 04:36:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759206981;
-	bh=YOUg77FB7Xsm2UXs9arHKbD5Bdz5tRGM5gEirnJeFdE=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=iQEkVyLu3/LFNOy7g9AbppZPCo7MQsYG/mrwFpcgoJROTkJgCJvumEiBlVwsrJUq+
-	 FgYYiBTCLbmKHCs1+ieBhqjONqm/qfnocgvbV6dReKPRS7PZMbT8m3IxKdqy/o+lZ4
-	 zNlL9xpORTGMhhXd4nrckOHQB/0oeVUoY5DXW0dZJbCsU7axl8b/sYBhh3OGw7QY1j
-	 +2C+aPC0jWvWGn9M4/X1EAH2RhHR8QFCX/mK7iKfPRhQ1BFwmalLLrXy8Ca/KmLhWP
-	 DSHrkyrBDH3o1IHpvgy83pa6gONBVv3bzxr6VSTu+JFigQrQLcVaOfnG7B7Jj9CxF+
-	 WckMMVarBJsZA==
-Date: Mon, 29 Sep 2025 23:36:19 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1759208075; c=relaxed/simple;
+	bh=Gw5ZjzJnceznZ0FnaMXKyoToW5xxSQMuBie2EAuTFMU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jtux+TTPfUZ2v/TVWdb6LZj9iYW/CyHOGsistntMcIsrB178os4KSAX9GbSUy7eot94VhrpJIEpbY68j8j1Eh8AdpreGdEDQOaS3lp0m12sOn2eGbkPQ1XwkPTlIX36G2gr7RZPY9j5Oo7qktxV+pKuRYXXhkTKJToPabT0q4E8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=207.226.244.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: EVtpDxrPSqqcFC7xE6im6Q==
+X-CSE-MsgGUID: SnU+0+RdRwuxkDHoijzSaQ==
+X-IronPort-AV: E=Sophos;i="6.18,303,1751212800"; 
+   d="scan'208";a="154003711"
+From: guhuinan <guhuinan@xiaomi.com>
+To: Oliver Neukum <oneukum@suse.com>, Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+	<usb-storage@lists.one-eyed-alien.net>, <linux-kernel@vger.kernel.org>, "Yu
+ Chen" <chenyu45@xiaomi.com>, Owen Gu <guhuinan@xiaomi.com>
+Subject: [PATCH] fix urb unmapping issue when the uas device is remove during ongoing data transfer
+Date: Tue, 30 Sep 2025 12:53:08 +0800
+Message-ID: <20250930045309.21588-1-guhuinan@xiaomi.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: devicetree@vger.kernel.org, bleung@chromium.org, 
- heikki.krogerus@linux.intel.com, ukaszb@chromium.org, 
- linux-usb@vger.kernel.org, akuchynski@chromium.org, tzungbi@kernel.org, 
- krzk+dt@kernel.org, linux-kernel@vger.kernel.org, 
- abhishekpandit@chromium.org, chrome-platform@lists.linux.dev
-To: Jameson Thies <jthies@google.com>
-In-Reply-To: <20250930012352.413066-2-jthies@google.com>
-References: <20250930012352.413066-1-jthies@google.com>
- <20250930012352.413066-2-jthies@google.com>
-Message-Id: <175920697975.1402374.5817792319376446761.robh@kernel.org>
-Subject: Re: [PATCH v1 1/3] dt-bindings: chrome: Add Cros EC UCSI driver
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: bj-mbx11.mioffice.cn (10.237.8.131) To BJ-MBX05.mioffice.cn
+ (10.237.8.125)
 
+From: Owen Gu <guhuinan@xiaomi.com>
 
-On Tue, 30 Sep 2025 01:23:46 +0000, Jameson Thies wrote:
-> Chrome OS devices with PDCs allow the host to read port status and
-> control port behavior with UCSI commands sent to the embedded controller
-> (EC). Add documentation for cros-ec-ucsi node which loads the Chrome OS
-> UCSI driver.
-> 
-> Signed-off-by: Jameson Thies <jthies@google.com>
-> ---
->  .../bindings/chrome/google,cros-ec-ucsi.yaml  | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/chrome/google,cros-ec-ucsi.yaml
-> 
+When a UAS device is unplugged during data transfer, there is
+a probability of a system panic occurring. The root cause is
+an access to an invalid memory address during URB callback handling.
+Specifically, this happens when the dma_direct_unmap_sg() function
+is called within the usb_hcd_unmap_urb_for_dma() interface, but the
+sg->dma_address field is 0 and the sg data structure has already been
+freed.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+The SCSI driver sends transfer commands by invoking uas_queuecommand_lck()
+in uas.c, using the uas_submit_urbs() function to submit requests to USB.
+Within the uas_submit_urbs() implementation, three URBs (sense_urb,
+data_urb, and cmd_urb) are sequentially submitted. Device removal may
+occur at any point during uas_submit_urbs execution, which may result
+in URB submission failure. However, some URBs might have been successfully
+submitted before the failure, and uas_submit_urbs will return the -ENODEV
+error code in this case. The current error handling directly calls
+scsi_done(). In the SCSI driver, this eventually triggers scsi_complete()
+to invoke scsi_end_request() for releasing the sgtable. The successfully
+submitted URBs, when being completed (giveback), call
+usb_hcd_unmap_urb_for_dma() in hcd.c, leading to exceptions during sg
+unmapping operations since the sg data structure has already been freed.
 
-yamllint warnings/errors:
+This patch modifies the error condition check in the uas_submit_urbs()
+function. When a UAS device is removed but one or more URBs have already
+been successfully submitted to USB, it avoids immediately invoking
+scsi_done(). Instead, it waits for the successfully submitted URBs to
+complete , and then triggers the scsi_done() function call within
+uas_try_complete() after all pending URB operations are finalized.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/chrome/google,cros-ec-ucsi.example.dtb: ec@0 (google,cros-ec-spi): typec:compatible:0: 'google,cros-ec-typec' was expected
-	from schema $id: http://devicetree.org/schemas/mfd/google,cros-ec.yaml#
+Signed-off-by: Yu Chen <chenyu45@xiaomi.com>
+Signed-off-by: Owen Gu <guhuinan@xiaomi.com>
+---
+ drivers/usb/storage/uas.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250930012352.413066-2-jthies@google.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index 4ed0dc19afe0..6bfc7281f7ad 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -699,7 +699,9 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
+ 	 */
+ 	if (err == -ENODEV) {
+ 		set_host_byte(cmnd, DID_NO_CONNECT);
+-		scsi_done(cmnd);
++		if (!(cmdinfo->state & (COMMAND_INFLIGHT | DATA_IN_URB_INFLIGHT |
++				DATA_OUT_URB_INFLIGHT)))
++			scsi_done(cmnd);
+ 		goto zombie;
+ 	}
+ 	if (err) {
+-- 
+2.43.0
 
 
