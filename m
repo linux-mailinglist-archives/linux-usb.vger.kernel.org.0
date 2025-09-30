@@ -1,163 +1,116 @@
-Return-Path: <linux-usb+bounces-28818-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28819-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A16E9BAD0BB
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 15:22:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 183E9BAD1BC
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 15:56:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C39567ABC1C
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 13:21:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC0C21C72F6
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Sep 2025 13:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5175303C9B;
-	Tue, 30 Sep 2025 13:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29AC4266B65;
+	Tue, 30 Sep 2025 13:56:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GLto13CZ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="B9gonMAe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C56C30146C
-	for <linux-usb@vger.kernel.org>; Tue, 30 Sep 2025 13:22:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7C01CA84;
+	Tue, 30 Sep 2025 13:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759238570; cv=none; b=Hc1VvuvddckWhVagwFSAC3wQqSz6dZQ7orp1702oqWsmnMNl3Q/4cmmYFrbIehmm4Qf2yKySneY3rzRWOntW4fIcLOQs1woy725SXQpoiyIwSgTsKiJPm2b0KcMdxdOkyPgmwDj+TRm/+bJMkTPnAk5mgcSZ/QXsYuLOXxf/h0s=
+	t=1759240603; cv=none; b=Mc/ZzWnenfsIrUHigimLHSi2XtQ3f4yDuEYonujmxcHcd2t6Go92xGO21D1c98WSRFsR4BAKtBEx/Ie5HLYE2MUWx9RNr6vxVujWDrg9DPJcsEWMOUB7kZRMa43ju3Mg9g6xfn8BPZrqRsLqOaZA/B/RnSw7kPt9Molmn8llkRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759238570; c=relaxed/simple;
-	bh=59NoSC7ocZ7c3HpMjXdvCeJv9n5mEh9jzMeOC/NIuGs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VHb77ua9t+S/O2LjMVy0ju+RUnEyiuiLOeqHn4hsIbM+o8MSOgVtItev/vojD2qHUeAJLgr2aqcnw4Wt/BNxZQA9taJhvqk958JrhwzF1NszjSi16pNOxHle0cxM50LIs0nWWWfSM+nBySHEwk4nJQPudngIN21EjEIUw1kPfsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GLto13CZ; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6366b7fd337so934403a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 30 Sep 2025 06:22:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1759238566; x=1759843366; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uwAebk43If0gjy3ve3r9IFpSG2OftYAndV3V+n10Lek=;
-        b=GLto13CZ6JMPlbvF/OCZ1TS1hOu/R8r+b+/yz6gY66gKmBqG5gWKjN+dU/LD/dUd2k
-         iD3D4dM7F/qWwyae1v5YMx02CWMds4vqkX2NPQMLL3baHcFwVs3kQ306pfFkgWehdEUY
-         Yu+8IE6nDs/DDBI8jgwI2UY9aIVSQp7+Slh/sXtLFuU+G5g/ZMU1PiV220vNnXR2IGSH
-         OHBYi0XP6TbxPyLCtGoPvAgfIhBjYaSMGu+2b1n+YeFePcbP/FhtWnBiUo8FiVhZJTuT
-         drkHDHAn9/e8XXNhTEkEbel0vnAdiKOtnk3Ic/Kim9zKjQV2WwUAg1dHPJrO2AKugJ96
-         Rf5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759238566; x=1759843366;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uwAebk43If0gjy3ve3r9IFpSG2OftYAndV3V+n10Lek=;
-        b=OyXSwD0U0qVscFYOiWp0MqCjjW+EnnNOiDayWPuI1/na3Rj3bZQ6gMNwo5cVF1H3Db
-         MBaCqd6TT0fZs+MSUBQJIYgrU0O4s0iYo1I+AeP9r1eHTFpge/cT/tdGQtzKP5HPIOiT
-         7c+00+J1Kh32X1UQkRecsJPXJU6qNFaqe7oH9A97MxBeDKAGK2/2pJNogfrbUuceF9LD
-         p4KtZxnl0Vj6nbiw3PLUtRBjOeaHhEcKpB7ai//eC/nY4Yj0LctOgt/rWESEmeL7+1Pv
-         /zlPAbc42XJEqAqrE1viC2Fqp5U1jyN/V8lLJK1F44GqdAdUJeZESk3DbK+ycra3olBN
-         9EQg==
-X-Gm-Message-State: AOJu0Yxlm4cRcspcSYtDhKvkrJJaaI0jLYMrlKs8cxhmx3/5nVad6YHc
-	fFLn7q/gzn9BEPDSRRu/3WU0ma9GIf5xoBg0tY9U0bZ6yydmbqcA/n8KuLfKC4ImcVD85rnGdLE
-	rSwIWZqk=
-X-Gm-Gg: ASbGncs8dcBIOsYsfz+hVhaHggvPEPnP+5sZuDNJWNNBLlo4k3nJPEZfrEY1fSyPOuw
-	WBr9iKI9ofBe0TuReUizjmD69wIMOtI/U9uTNA7OuPTdgLxxs6TSy10IYxBae2wILWwDpdEV1Fs
-	qGjhv9HwQX6/metG+fgt6rJVbLD8SrSWk8o+1PPhCuw+B/ZESAP5IWLPhKvRt8kO5XyAcaOEbZ2
-	3QH4I8Fy82mMo31XTvpHYaSWqREjD/T0axgqBMe31P8ju6FrK/r4FmJO2/nIMlDXYvSxaexWMTX
-	v+Evc6TZu4yujkwapmA/EFaiDhdl9zFjuPHyMi6KCyp2HUD6i7CLDYJOMDfTBAD4F6BLLpLgsMk
-	uugIa9AAcwsHJcI19xixNOo4p5wVIV1vV720dKl94iTDsV9thneUTm8CKlORe+cHyrht7SG51wW
-	nbV3S3o1+Llwqj1GRyZYMViX8=
-X-Google-Smtp-Source: AGHT+IGMmebQvklxeUJZNswwjRqyuzOfwdDvXkiArUTNHu/zyJ1G1AIYldRx7ek+Ug5wpdnFDX7cug==
-X-Received: by 2002:a17:906:c150:b0:b04:6fc9:f108 with SMTP id a640c23a62f3a-b34b86a19b0mr2094007966b.24.1759238566474;
-        Tue, 30 Sep 2025 06:22:46 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13a9:ac01:423a:d8a6:b2d:25a7? ([2001:a61:13a9:ac01:423a:d8a6:b2d:25a7])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b3b0c9c9e8esm686349166b.59.2025.09.30.06.22.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Sep 2025 06:22:46 -0700 (PDT)
-Message-ID: <6c65094e-81e5-4ce8-8592-9458c51116f7@suse.com>
-Date: Tue, 30 Sep 2025 15:22:45 +0200
+	s=arc-20240116; t=1759240603; c=relaxed/simple;
+	bh=TP6Oq2U6AKFnwcT/5zuCHKSTlZBlk5VG/u3nYGA/P0U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CtQA6rWC2LKGEOxUVnVYFCgxp2XsA6WyTHTHx/3bhmhr68189oxH7LdXRz7ac0My96tkYTndTMDmNImhw00SNBRn7QB+6rVmRsvGm4MUqeX2PQrgu0hhtEiZpqtjPVwBHV1Hz6e37rK/0DkJ5/n08tN2c7g7Y58hCBkm6HItNbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=B9gonMAe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4422BC4CEF0;
+	Tue, 30 Sep 2025 13:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1759240602;
+	bh=TP6Oq2U6AKFnwcT/5zuCHKSTlZBlk5VG/u3nYGA/P0U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=B9gonMAeWq6OgRaTq7yvEz9/mWGQdHrdWR16/jBi8dkJwmIOAmnbNK4SNyo0pKmiS
+	 lgBHbx6BIoDi5ybEZcoOEp3aStHhXzWFDom8QwnTlkRTT6WdWeZg6MKJbsgcAZOM3W
+	 KBkHcTq4KJs9CXkkVQSvK7GLHcUUE59FYo9skucc=
+Date: Tue, 30 Sep 2025 15:56:39 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: David Brownell <david-b@pacbell.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Lubomir Rintel <lkundrak@v3.sk>,
+	Christian Heusel <christian@heusel.eu>,
+	Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH net] rndis_host: Check for integer overflows in
+ rndis_rx_fixup()
+Message-ID: <2025093055-awoke-facedown-64d5@gregkh>
+References: <aNvOh3f2B5g0eeRC@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] fix urb unmapping issue when the uas device is remove
- during ongoing data transfer
-To: guhuinan <guhuinan@xiaomi.com>, Alan Stern <stern@rowland.harvard.edu>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
- usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
- Yu Chen <chenyu45@xiaomi.com>
-References: <20250930045309.21588-1-guhuinan@xiaomi.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20250930045309.21588-1-guhuinan@xiaomi.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aNvOh3f2B5g0eeRC@stanley.mountain>
 
-Hi,
-
-On 30.09.25 06:53, guhuinan wrote:
-> From: Owen Gu <guhuinan@xiaomi.com>
+On Tue, Sep 30, 2025 at 03:35:19PM +0300, Dan Carpenter wrote:
+> The "data_offset" and "data_len" values come from received skb->data so
+> we don't trust them.  They are u32 types. Check that the "data_offset +
+> data_len + 8" addition does not have an integer overflow.
 > 
-> When a UAS device is unplugged during data transfer, there is
-> a probability of a system panic occurring. The root cause is
-> an access to an invalid memory address during URB callback handling.
-> Specifically, this happens when the dma_direct_unmap_sg() function
-> is called within the usb_hcd_unmap_urb_for_dma() interface, but the
-> sg->dma_address field is 0 and the sg data structure has already been
-> freed.
-> 
-> The SCSI driver sends transfer commands by invoking uas_queuecommand_lck()
-> in uas.c, using the uas_submit_urbs() function to submit requests to USB.
-> Within the uas_submit_urbs() implementation, three URBs (sense_urb,
-> data_urb, and cmd_urb) are sequentially submitted. Device removal may
-> occur at any point during uas_submit_urbs execution, which may result
-> in URB submission failure. However, some URBs might have been successfully
-> submitted before the failure, and uas_submit_urbs will return the -ENODEV
-> error code in this case. The current error handling directly calls
-> scsi_done(). In the SCSI driver, this eventually triggers scsi_complete()
-> to invoke scsi_end_request() for releasing the sgtable. The successfully
-> submitted URBs, when being completed (giveback), call
-> usb_hcd_unmap_urb_for_dma() in hcd.c, leading to exceptions during sg
-> unmapping operations since the sg data structure has already been freed.
-> 
-> This patch modifies the error condition check in the uas_submit_urbs()
-> function. When a UAS device is removed but one or more URBs have already
-> been successfully submitted to USB, it avoids immediately invoking
-> scsi_done(). Instead, it waits for the successfully submitted URBs to
-> complete , and then triggers the scsi_done() function call within
-> uas_try_complete() after all pending URB operations are finalized.
-> 
-> Signed-off-by: Yu Chen <chenyu45@xiaomi.com>
-> Signed-off-by: Owen Gu <guhuinan@xiaomi.com>
+> Fixes: 64e049102d3d ("[PATCH] USB: usbnet (8/9) module for RNDIS devices")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 > ---
->   drivers/usb/storage/uas.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-> index 4ed0dc19afe0..6bfc7281f7ad 100644
-> --- a/drivers/usb/storage/uas.c
-> +++ b/drivers/usb/storage/uas.c
-> @@ -699,7 +699,9 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
->   	 */
->   	if (err == -ENODEV) {
->   		set_host_byte(cmnd, DID_NO_CONNECT);
+>  drivers/net/usb/rndis_host.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-Why then set the host byte unconditionally?
+David has passed away many years ago, odd that this was sent to him
+given that get_maintainers.pl doesn't show it :(
 
-> -		scsi_done(cmnd);
-> +		if (!(cmdinfo->state & (COMMAND_INFLIGHT | DATA_IN_URB_INFLIGHT |
-> +				DATA_OUT_URB_INFLIGHT)))
-> +			scsi_done(cmnd);
+> diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
+> index 7b3739b29c8f..913aca6ff434 100644
+> --- a/drivers/net/usb/rndis_host.c
+> +++ b/drivers/net/usb/rndis_host.c
+> @@ -513,8 +513,9 @@ int rndis_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+>  		data_len = le32_to_cpu(hdr->data_len);
+>  
+>  		/* don't choke if we see oob, per-packet data, etc */
+> -		if (unlikely(msg_type != RNDIS_MSG_PACKET || skb->len < msg_len
+> -				|| (data_offset + data_len + 8) > msg_len)) {
+> +		if (unlikely(msg_type != RNDIS_MSG_PACKET || skb->len < msg_len ||
+> +				size_add(data_offset, data_len) > U32_MAX - 8 ||
+> +				(data_offset + data_len + 8) > msg_len)) {
 
-It would seem to me that in this case you need to make sure
-in the completion handlers that scsi_done() is always called,
-even if the resetting flag is set.
+Nice, I missed this in my old audit of this code (there's still lots of
+other types of these bugs in this codebase, remember the rndis standard
+says "there is no security", and should never be used by untrusted
+devices.)
 
-	Regards
-		Oliver
+But will this work?  If size_add(x, y) wraps, it will return SIZE_MAX,
+which we hope is bigger than (U32_MAX - 8)?  That feels fragile.
 
+Then we do:
+	skb_pull(skb, 8 + data_offset);
+so if data_offset was huge, that doesn't really do anything, and then we
+treat data_len independent of data_offset.  So even if that check
+overflowed, I don't think anything "real" will happen here except a
+packet is dropped.
+
+or am I missing something elsewhere in this function?
+
+thanks,
+
+greg k-h
 
