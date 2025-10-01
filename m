@@ -1,84 +1,85 @@
-Return-Path: <linux-usb+bounces-28848-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28849-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69F39BB1E8E
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Oct 2025 00:05:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CB81BB1EA3
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Oct 2025 00:06:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11E2E17DD28
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Oct 2025 22:05:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41AB617EAA7
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Oct 2025 22:06:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5122228641F;
-	Wed,  1 Oct 2025 22:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA226311C3F;
+	Wed,  1 Oct 2025 22:05:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ha4LZ4Fo"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dKwbLIsf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444FA145355
-	for <linux-usb@vger.kernel.org>; Wed,  1 Oct 2025 22:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A236F27281D
+	for <linux-usb@vger.kernel.org>; Wed,  1 Oct 2025 22:05:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759356341; cv=none; b=FqiJFL5FplidLSB8M7ITvSg8sHrI3x52bb5W0Jai0ESGQY6qBR9S8NJVMhPhz8mGXVaVQOOhvIW/Jvl5+Mp0uJxil0kTer71/t5g5o145CsyoRjiSRXgSDkA9voh+azSowWfqxlDgCf2Pr5rLxOkpbqk5B/ZsuODEFdwXvJBWsk=
+	t=1759356343; cv=none; b=B4Gp7YUmlPzAv7viz8Y2IBCNwfVQVvqIRWIqBZ+0ZL2Vi3tgHEfh8RFn5W0kvGhZlpuNOxO5SViUwNW51Se6L3VbgBjk8KgPn4hQOSMqTsR4N5TE2MHDoQNvYmRfTWjMOuI9jKLU/5jvLgxxLbXGekFsgKrZRc12O19t2ON150s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759356341; c=relaxed/simple;
-	bh=9QggdL6fGbd2hr3ymExV7iFJbMfOs4Ept9ZR40FEjLc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=F6mBz1BBAgJJkRFJ/01mYa17/8lGu5rgbPvYO41btYbfnH5GhlDK08y2yKmYdUO2i5rmrR3vXyV/OyizRJ+bjwpiP7tYME3C+AzQIPihF5BOkl+VDRJmNT8yp9UJ5EPKQ6EYWnbvQ61hyNqRr6dBnFs1706APtZ0yh+gPJM0kRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ha4LZ4Fo; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1759356343; c=relaxed/simple;
+	bh=TVZ4vO3uGIzpCM4u8IVGrjfHwbiG9Wik0Cp+NPxTO8o=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=hDV8IdVqKVxZYetulrSulOtI/S4uCKUYn0kJwk+vL8YzRv9zZKyO/8DDQmoYpbSnt724uIMY/LO6nsY6iDKL01F+RTfVZ5dLs+sJCnEOcgxwq2hskycEMpmrSYXpkMbZOEsDb4dWj9nvKpKssm7TJjcGfgjEtqjwfAYYMz1dLgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dKwbLIsf; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 591Ic9au022671
-	for <linux-usb@vger.kernel.org>; Wed, 1 Oct 2025 22:05:39 GMT
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 591IcEnv012624
+	for <linux-usb@vger.kernel.org>; Wed, 1 Oct 2025 22:05:40 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=2E82fWMJs7/CltSb2bc3lU2woFhMHzKTAIE
-	lMVu/z78=; b=Ha4LZ4Fo0k1WjYvzIlc8wzeiX+X4GqWVv0C6thmcID+Nq0QA75r
-	pzWtGB7EkPKQenbLnSZHwxQRXQgwvR0ZgDu6FZjN1VEl7eAixHKkcd4P1j7neH2+
-	BQ4s+7cdmNjRIon8dEmmVeVzo483QDFTCMqdVQQrgtU6E+GEg3t1uDPnYLmV6KYI
-	+gE/bZrSv6A+6s5+Y11K3d5Q3LQXGgK11GtB0FBSKx/s02/LSRxv/fvwdhMqsjaJ
-	ADTSOYEeoljVutvh2PRzdKuDJzFerz0pGLPzD9HbXZGE7Z/rI2DSaNxOzVzzFj7Y
-	A4Zg9tp2HqHjFOhwPjn/qd0miBklQ7FEecg==
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e59n6bq2-1
+	cc:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=qcppdkim1; bh=AmSkEJDa8qK
+	4eI1/7mGS5TmnjFBscoeycTZ9zBe5108=; b=dKwbLIsfNPcO+ULRRhRe8w2TZNd
+	u0L3Z45LLgosIMKpaS2NImZTRpqIK6FbG1ReVPFsh01J39vhuXQixvDGODvTcw8+
+	ch54TADP3v3w+SdQaAgftGS9jpjHQCNcAM3Ljr31+no+3EEd/TVqZFviw6kGtxhd
+	gNIdFAl01QH7NT3/qHFliVIBz4EkEl08G0LjgZQsvGhy4RB9h/YfaTkRnexXseOA
+	GGcpRMxSgEVyj7CQ7kZYv1GHRR7AkmWsta887au533dP75ZZBppTu/TFaHS8Y3r0
+	2EVtTA/94Rl8ZW58aCGEmfsSP7JskCRX+5azKAdbTvQqzGGEPz9AiXoJptA==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e80tx5ef-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 01 Oct 2025 22:05:38 +0000 (GMT)
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3352a336ee1so787383a91.0
-        for <linux-usb@vger.kernel.org>; Wed, 01 Oct 2025 15:05:38 -0700 (PDT)
+	for <linux-usb@vger.kernel.org>; Wed, 01 Oct 2025 22:05:40 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-27ee41e062cso2945225ad.1
+        for <linux-usb@vger.kernel.org>; Wed, 01 Oct 2025 15:05:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759356338; x=1759961138;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2E82fWMJs7/CltSb2bc3lU2woFhMHzKTAIElMVu/z78=;
-        b=ET78VfPvO5020KSy8u3Wkxh5DdnJtKSvFwLLf/Fjua4tAvnPzmcrnV0AYPfHbvyIEc
-         zakkprLoR2EIG2d7oDmquaeeqm8i2Adj5mMiIaS9ffeyHWO7pPtxflVavNSqlZcxRGX8
-         nIG8z7uuryeIUYoNvVDbMMdNBQOBoISl56uwSYhgjODQDWT0MfabSWyatb03kjc/S8To
-         0iTCJXvVlvHE03hn8lLIv52pkbD6M6KihrAzG9lVviUd39YOPhaykK47z2WM8jN3AUV+
-         TkmvbhfcX9olquMUfINT9evbCzMPDM0Hv6PE70QjYjrJ1C7B+nADDSteCzzF7T5u1Fuu
-         Z+JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXNjYfPorKnw/xRyEIujRC6rzl/OCD4ZeV2H3NM+VSDT1zrsdzT1sdtuyNRrSS7RvEaxsxhO4YOI74=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfRCubItsA4uDoblwGZIAi9MHcSR2zK5dTdDNbBZq97Y0vmvB2
-	TAsfxTWrpaUWRhP2VdAT12waQYnK0OmSGHwBzMlEA9OyBWsyID/y4mAFBafJs2PStHgGVIg41+C
-	0uhQq6Vuz1TlD/B8QiZtxyuxV5AaJbWlbr9XwijDxdICS1ehVdyvjXjDSS/HZMTQ=
-X-Gm-Gg: ASbGnctsV5ytFOR47PWnkDJSIG6eZM1Y//18oi0R+/mpiWdULjO/MHqvVtNPB29naWW
-	yZYX6rUB2oWpYmTYA2qqJmSOYZJzj3FjGbx7OVRWWdWdMgf8UWtlG6K6vpetExOP+9xDkfWoE0k
-	TMu/AmxlsllI9knRJZ4Eru6KjcbDHBqDQiKBN89xQ4/lC17uN1UuwrrsT4lhNq6wBe6KetfWAHJ
-	RYF3j+4hx5hiYs59I/esZ02vQkzHAKublaeyo4Ao1s+3pF94XETdwia/7/0VnMUVSxaDA47CII9
-	bSRhp1HFRl/oADzzMNqiFL0KBawZe++TPVFTSM6eUP8yfgS+0Nu32ZFH/53ZdNZlf/HLqwCdN/L
-	CPaQcVMhy+lkJ06gd11b28g==
-X-Received: by 2002:a17:90b:4a4f:b0:329:ed5b:ecd5 with SMTP id 98e67ed59e1d1-339a6f077fdmr5548822a91.19.1759356337578;
-        Wed, 01 Oct 2025 15:05:37 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHpG0a+/1ddOhqZgj2PUQhFUXjO9C38MdvW9oBXkB4sjVIrrjyTq0zZe7rYuFj7BM7r6xga8w==
-X-Received: by 2002:a17:90b:4a4f:b0:329:ed5b:ecd5 with SMTP id 98e67ed59e1d1-339a6f077fdmr5548793a91.19.1759356337055;
-        Wed, 01 Oct 2025 15:05:37 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759356339; x=1759961139;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AmSkEJDa8qK4eI1/7mGS5TmnjFBscoeycTZ9zBe5108=;
+        b=YtMkisqnn3OXxkv5VL2ylu4DImzRwgcTaw2VgsqUyGfML6Fr90i4XC7i6dXO3+6db4
+         Vzwt/+sJi1Sf1iqz4zl4vdJJEY7kB3M/bVCLrfFnLLXwlhtbWqauAPDLwSpm5D/cfir7
+         Z7OM131gQ0vfHFoiovRhBBcG9B+Ty/w1uSBWxKRBLjdXr0xsD8eMKTT6NvAjGXPY1Ekx
+         xq+OZMS9mSuaJ96ZQglDKoI/zelDqwbXKIEOXqGEApvLfqw9v4x3Rf/u5pIS3HnZavXT
+         Svlyrk5wTR8CrJCQbzqmuvWqFoXKJl44dxl8wzYvU9VxcLtsypYzRSSD2O4Eo+8KAGcg
+         HHcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUKNhvAmE2qxPxc+H0rWw0ifj9WzE+sPXlrpQKODdS0LwBTOWrsJ3qwrt3IVely53xKSmfDHG4//8I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7ToZWmVm/o8CGsM6Xsug5DlkwhQPifcRUtkH5AddLC1uNe90k
+	sAqS4OZn7b6DId3Ti9/Lp1B5ZdoGq4I0d5AfTES2reJM3GGmG9O1qd7IOmieoQ9QQvu9XxDMMhz
+	ibpIr2+Ecg7pHIX/qp9AyKRt/qhtS3YhM3qsEAfwIKDq6cCrFMrBEu39O8l1/LyM=
+X-Gm-Gg: ASbGnctDo0vHiccRiiryZ2j3Wv43vw0NDHbJ5QBCu80nkuB6R+KVLYzC0lZQI8TS88w
+	P0BBEgcXVpc2+vT66aHdu51neQnhBxdyhJj4sm3n3UkOGbOiQd+JDDuKeGPvbq2FpGbdG0eE5Lt
+	5KgYgQTgf/0UwlZwwwCph9745TMLBM75mHyj2Eek0M2YzCQb3vWdNg8vCi/LCrsRMFVK+xHhlGF
+	QCU/rR+Qvh+iDwHU5lL0MopjCQSQm7WFYgOzItQe+QJtTAciA7RSlPbuMYHK33ojISvZrp/hTMy
+	h1DfBl2++oka/lUk/X8ZpUryxugXiv8JshvzvMTHS1tFAggJAv/KNgAHDU6Bnk1z1LP/k6a2gA2
+	qLVV1RC5HwPNmHAUMz2WNRQ==
+X-Received: by 2002:a17:902:d2ca:b0:26c:4085:e3f5 with SMTP id d9443c01a7336-28e7f328c06mr62014615ad.50.1759356339082;
+        Wed, 01 Oct 2025 15:05:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFhj3DfDVsTx4QSOHS/bgok/IQ+EqC9h4ebMhcNTaCNyglT/+UWr5/pqQ8NnXHTWARe0GdZ6A==
+X-Received: by 2002:a17:902:d2ca:b0:26c:4085:e3f5 with SMTP id d9443c01a7336-28e7f328c06mr62014215ad.50.1759356338559;
+        Wed, 01 Oct 2025 15:05:38 -0700 (PDT)
 Received: from hu-wcheng-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-339b4ea3c3dsm702085a91.5.2025.10.01.15.05.35
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-339b4ea3c3dsm702085a91.5.2025.10.01.15.05.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Oct 2025 15:05:36 -0700 (PDT)
+        Wed, 01 Oct 2025 15:05:37 -0700 (PDT)
 From: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
 To: krzk+dt@kernel.org, conor+dt@kernel.org, konrad.dybcio@oss.qualcomm.com,
         dmitry.baryshkov@oss.qualcomm.com, kishon@kernel.org, vkoul@kernel.org,
@@ -87,10 +88,12 @@ Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-Subject: [PATCH v4 00/10] Introduce Glymur USB support
-Date: Wed,  1 Oct 2025 15:05:24 -0700
-Message-Id: <20251001220534.3166401-1-wesley.cheng@oss.qualcomm.com>
+Subject: [PATCH v4 01/10] dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp-phy: Add Glymur compatible
+Date: Wed,  1 Oct 2025 15:05:25 -0700
+Message-Id: <20251001220534.3166401-2-wesley.cheng@oss.qualcomm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251001220534.3166401-1-wesley.cheng@oss.qualcomm.com>
+References: <20251001220534.3166401-1-wesley.cheng@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -98,92 +101,166 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: ozMmP_vfREWCt09dFFnzMOr9t7QtyqTM
-X-Authority-Analysis: v=2.4 cv=O4g0fR9W c=1 sm=1 tr=0 ts=68dda5b2 cx=c_pps
- a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=x6icFKpwvdMA:10 a=K6vXddHitPicjvNs8NYA:9 a=uKXjsCUrEbL0IQVhDsJ9:22
-X-Proofpoint-ORIG-GUID: ozMmP_vfREWCt09dFFnzMOr9t7QtyqTM
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAwMSBTYWx0ZWRfX5sMQi0QMNEbM
- NU4tlLKVYL2z+POfCZawIxZC3HVAA6q/0HxCLwQ2pDtfEI57X0kswkvq0JXz5oL4z9JFT6XE/0l
- BjrjAincAB/2aJDeNGnpDLjow6MTbf5161eVJhP7Jb2EWtlW7CfspDkMOQv9eKjQHSKzyjxy/p+
- fE/7oItkjEq2pH959jB8RE9v7PaujqTAnvp+U7H4vTqQYW85oUdDCA75B5xtnGGDJLYKSRsOnMf
- KMfijAYInXRxwCWpr5n3LftIlUB+16RQHOvyjQB9Zaq+16iRa03U7ZljYFeVq3/dosq9EjHslr8
- Nj9Ye2zCtx73JrJd9xIbg2wjWdKCgXrKcfVS7eeJ5p2Mz7NCf5jlu7iE586oeMIvVZUkdlVRP3n
- bWJQ/8hA3OoF9bnyk+IhpH4ONwgjRw==
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAyOSBTYWx0ZWRfX0G6N0sT3uctZ
+ 2XGbFKN9XoXVpUq0b59EeDnf1rmYvVO5cN6u52NoEAEHBpb6tU0QEkl5cHDRz9b6ObgwnjronTl
+ U5lbvrXo8dLDFuHeKz1ebSaAttgVBVpUabitFjFtCtVNpbo7bCdgHM0Q/jJtyln94r3emvLYgzo
+ IyYGEq+cwAHvtY5yxxna+bBX78BCTOYeRtiqVIo2sm9ppigGQDVcoLY1wZlLDt29Hg1CqG0vkS3
+ 7KEmJ4FDK438TgtEpftqEY6BKBBWvXcaXkUIwLKLiSx1goaycOCGznBhsVLU4bmmHRkcZ9mGUwl
+ xKSFK4ugxc/FbNf1LBvh2FcMWeWpq9UR4MJIOTCr/i38RhqwRN2yz83COt+dZ+zdULWanWxkHA5
+ Sr6s6cHUSEpjxI6UJtf7lZVbvJwW5Q==
+X-Proofpoint-GUID: pb1OvBb1lb_qf70oNUBuYCkoIHi8exuw
+X-Authority-Analysis: v=2.4 cv=OMkqHCaB c=1 sm=1 tr=0 ts=68dda5b4 cx=c_pps
+ a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=eoTMOhb7NpBO2Q1ca4UA:9
+ a=GvdueXVYPmCkWapjIL-Q:22
+X-Proofpoint-ORIG-GUID: pb1OvBb1lb_qf70oNUBuYCkoIHi8exuw
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-10-01_06,2025-09-29_04,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 phishscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
- spamscore=0 impostorscore=0 bulkscore=0 suspectscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509270001
+ impostorscore=0 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 spamscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
+ definitions=main-2509270029
 
-This series enables the PHY level changes that are required to support
-the type C based controllers and the multiport controller.  The typeC
-ports utilize a usb43dp based QMP PHY for the SSUSB path, while using
-the M31 eUSB2 PHY for the HSUSB path.  For the multiport controller,
-it will utilize two QMP UNI PHYs for the SSUSB path, and two M31 eUSB2
-PHYs for the HSUSB path.
+Define a Glymur compatible string for the QMP PHY combo driver, along with
+resource requirements.  This adds a new requirement for a clkref clock-name
+for each QMP PHY.
 
------
-Changes in v4:
-- Updated DT bindings change for QMP combo PHY to have IF/THEN blocks
-to handle the newly added clkref, and fixed the commit message as well
-- Added a new header with v8 offsets for the PCS MISC register set,
-and refgen current load for the QMP combo PHY driver
-- RE-added the headers for the QMP combo PHY
+Signed-off-by: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+---
+ .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    | 76 +++++++++++++++----
+ 1 file changed, 63 insertions(+), 13 deletions(-)
 
-Changes in v3:
-- Fixed some incorrect patch ordering.
-- Alphabetized Glymur QMP settings for combo and UNI setting arrays
-
-Changes in v2:
-- Updated QMP combo PHY to properly handle the refgen-supply and to
-remove the primary core reference/tag
-- Updated QMP UNI PHY to properly handle the refgen-supply and added
-a separate IF/THEN block to handle the new clkref
-- Updated M31 eUSB2 to make clocks and clocks-name required for sm8750
-and optional for Glymur
-- Fixed missing PCS MISC table
-- Added SMB2370 repeater changes
-
-Wesley Cheng (10):
-  dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp-phy: Add Glymur compatible
-  dt-bindings: phy: qcom,qmp-usb: Add Glymur USB UNI PHY compatible
-  dt-bindings: phy: qcom-m31-eusb2: Add Glymur compatible
-  dt-bindings: usb: qcom,snps-dwc3: Add Glymur compatible
-  dt-bindings: phy: qcom,snps-eusb2-repeater: Add SMB2370 compatible
-  phy: qualcomm: Update the QMP clamp register for V6
-  phy: qualcomm: qmp-combo: Update QMP PHY with Glymur settings
-  phy: qualcomm: qmp-usb: Add support for Glymur USB UNI PHY
-  phy: qualcomm: m31-eusb2: Make clkref an optional resource
-  phy: qualcomm: eusb2-repeater: Add SMB2370 eUSB2 repeater support
-
- .../bindings/phy/qcom,m31-eusb2-phy.yaml      |  21 +-
- .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   |  35 +
- .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    |  76 ++-
- .../phy/qcom,snps-eusb2-repeater.yaml         |   1 +
- .../bindings/usb/qcom,snps-dwc3.yaml          |  26 +
- .../phy/qualcomm/phy-qcom-eusb2-repeater.c    |  18 +
- drivers/phy/qualcomm/phy-qcom-m31-eusb2.c     |   2 +-
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c     | 350 +++++++++-
- .../phy/qualcomm/phy-qcom-qmp-pcs-aon-v6.h    |  12 +
- .../phy/qualcomm/phy-qcom-qmp-pcs-aon-v8.h    |  17 +
- .../phy/qualcomm/phy-qcom-qmp-pcs-misc-v5.h   |  12 +
- .../phy/qualcomm/phy-qcom-qmp-pcs-misc-v8.h   |  12 +
- .../qualcomm/phy-qcom-qmp-qserdes-lalb-v8.h   | 639 ++++++++++++++++++
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c       | 163 +++++
- .../phy/qualcomm/phy-qcom-qmp-usb43-pcs-v8.h  |  33 +
- .../phy-qcom-qmp-usb43-qserdes-com-v8.h       | 224 ++++++
- drivers/phy/qualcomm/phy-qcom-qmp.h           |   4 +
- 17 files changed, 1620 insertions(+), 25 deletions(-)
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-aon-v6.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-aon-v8.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-misc-v5.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-misc-v8.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-lalb-v8.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-usb43-pcs-v8.h
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-usb43-qserdes-com-v8.h
-
+diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+index c8bc512df08b..377d830f0855 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+@@ -16,6 +16,7 @@ description:
+ properties:
+   compatible:
+     enum:
++      - qcom,glymur-qmp-usb3-dp-phy
+       - qcom,sar2130p-qmp-usb3-dp-phy
+       - qcom,sc7180-qmp-usb3-dp-phy
+       - qcom,sc7280-qmp-usb3-dp-phy
+@@ -41,12 +42,7 @@ properties:
+ 
+   clock-names:
+     minItems: 4
+-    items:
+-      - const: aux
+-      - const: ref
+-      - const: com_aux
+-      - const: usb3_pipe
+-      - const: cfg_ahb
++    maxItems: 5
+ 
+   power-domains:
+     maxItems: 1
+@@ -63,6 +59,8 @@ properties:
+ 
+   vdda-pll-supply: true
+ 
++  refgen-supply: true
++
+   "#clock-cells":
+     const: 1
+     description:
+@@ -105,6 +103,22 @@ required:
+ 
+ allOf:
+   - $ref: /schemas/usb/usb-switch.yaml#
++
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,glymur-qmp-usb3-dp-phy
++    then:
++      properties:
++        clock-names:
++          items:
++            - const: aux
++            - const: ref
++            - const: com_aux
++            - const: usb3_pipe
++            - const: clkref
++
+   - if:
+       properties:
+         compatible:
+@@ -113,21 +127,45 @@ allOf:
+             - qcom,sdm845-qmp-usb3-dp-phy
+     then:
+       properties:
+-        clocks:
+-          maxItems: 5
+         clock-names:
+-          maxItems: 5
+-    else:
++          items:
++            - const: aux
++            - const: ref
++            - const: com_aux
++            - const: usb3_pipe
++            - const: cfg_ahb
++
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,sar2130p-qmp-usb3-dp-phy
++            - qcom,sc7280-qmp-usb3-dp-phy
++            - qcom,sc8180x-qmp-usb3-dp-phy
++            - qcom,sc8280xp-qmp-usb43dp-phy
++            - qcom,sm6350-qmp-usb3-dp-phy
++            - qcom,sm8150-qmp-usb3-dp-phy
++            - qcom,sm8250-qmp-usb3-dp-phy
++            - qcom,sm8350-qmp-usb3-dp-phy
++            - qcom,sm8450-qmp-usb3-dp-phy
++            - qcom,sm8550-qmp-usb3-dp-phy
++            - qcom,sm8650-qmp-usb3-dp-phy
++            - qcom,sm8750-qmp-usb3-dp-phy
++            - qcom,x1e80100-qmp-usb3-dp-phy
++    then:
+       properties:
+-        clocks:
+-          maxItems: 4
+         clock-names:
+-          maxItems: 4
++          items:
++            - const: aux
++            - const: ref
++            - const: com_aux
++            - const: usb3_pipe
+ 
+   - if:
+       properties:
+         compatible:
+           enum:
++            - qcom,glymur-qmp-usb3-dp-phy
+             - qcom,sar2130p-qmp-usb3-dp-phy
+             - qcom,sc8280xp-qmp-usb43dp-phy
+             - qcom,sm6350-qmp-usb3-dp-phy
+@@ -142,6 +180,18 @@ allOf:
+       properties:
+         power-domains: false
+ 
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,glymur-qmp-usb3-dp-phy
++    then:
++      required:
++        - refgen-supply
++    else:
++      properties:
++        refgen-supply: false
++
+ additionalProperties: false
+ 
+ examples:
 
