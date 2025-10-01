@@ -1,159 +1,147 @@
-Return-Path: <linux-usb+bounces-28832-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28833-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C609BAF9E8
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Oct 2025 10:29:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC9CCBAFA54
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Oct 2025 10:31:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBDE919208DE
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Oct 2025 08:29:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 664EC1C1CA2
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Oct 2025 08:31:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8329C28002B;
-	Wed,  1 Oct 2025 08:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1364A283686;
+	Wed,  1 Oct 2025 08:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="oU76AIJL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MqFrzzrq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9E4279782
-	for <linux-usb@vger.kernel.org>; Wed,  1 Oct 2025 08:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F3D279918
+	for <linux-usb@vger.kernel.org>; Wed,  1 Oct 2025 08:31:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759307349; cv=none; b=OWH5XO5SeAcdtpmnUgWeN5ifCoV2pMtGX6T45radGtFmY8WKvKeNZF+3OjLXTx0z9iDwFCSEFpfe6hnj0XTRFkSR9kxbc8yqLuoXgwSUrUgCwjbUfrbDKHd0s2NEFMX4mbtuKAdMBNnHnLxFz2NBn7Y7UAAz2pXVtxmn41OxSmc=
+	t=1759307502; cv=none; b=OawSo5ae4IxzefENErsFOoJrj84NuTK2WUdqWmCRspUI8T86YWXAViz12OFDPvaprCNJWq3b6ZDyPb/IK4vJl+1hxkWwF5zlDXClHbuWFdGyEPmhnAg9PsUDKvXEuLTEV/7nnLqGZqXzSDCcfxXmvcXDpT/lOlD6NlerM5QYTPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759307349; c=relaxed/simple;
-	bh=hG4jVSS9ILGofIp4mZ/cZW684p+U1PVIccOVZxPrkBo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VS9D6aS46dserYDTlZb40PtslMzs/GHRso8zMDErnD2v4viSGeNQNezsXN6Z+/KyDglP8Q4o7NVALQwg7BNVCbacoch0LRzU1hzWDuN3R6/OHxu7bF+nTElQrQO1w8S32mZiS/XDXb9UXoKIST20d3MZdN98ARyAL8I9olt0Wxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=oU76AIJL; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-579d7104c37so9304704e87.3
-        for <linux-usb@vger.kernel.org>; Wed, 01 Oct 2025 01:29:05 -0700 (PDT)
+	s=arc-20240116; t=1759307502; c=relaxed/simple;
+	bh=wlepJl/FDglC7Iq5FuOQ6VBskFRpNf8YuU3NftOhPfw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MTOYTJJ7IptSJM+MJ49iNosXmmcg5Z6vQufKxSuafQzQdnSgVsng/wEibOrD1OnDDW7L8zZ5S5NESsGHJvmDCrVz35okqQqv2YpQe1l2kChOiTGM/jm3DGuJMDi6jyxbMnB4rFcKu5S/0qrmDpgEKaqTuSXDdrqE+CNx2skWq0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MqFrzzrq; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-781010ff051so4808987b3a.0
+        for <linux-usb@vger.kernel.org>; Wed, 01 Oct 2025 01:31:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1759307344; x=1759912144; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7wYh4jlz12Yg6BFy9DvX16quSObPthEsZ3uJXU60VpI=;
-        b=oU76AIJLyhiy8Al6aXiwdPCIJkjZ3dckXI0wPiqH8l+SF18MnBYLUQKQ3LM68hmG7k
-         ZS1qyth4j5xw3cq1Ntza5Sy8sy29Fm3pcKWSssOFwSAy1WWXZpEULXY6L8LMLLmCsLxp
-         5kt3LmXtWZDLbqBj+59bOm/VNtV6orE5pplE0=
+        d=gmail.com; s=20230601; t=1759307500; x=1759912300; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/BnQS5ICJGbt/butX83RKxPPfruJQzobXgxFKJ0MdI=;
+        b=MqFrzzrqmvEAtBO2NWim8lp+Ze+0Ee79O/9eg0AO4pUbTq8PqWgK+ANvRTn4S4uEYj
+         JDINeU+D9kJQ4vREinXqSKtO9xj7E18HjNDNU9Wa9mQxTRE0VdTLx8A01Imfpdv4lSrk
+         BQlIcuIhUwpyBSpD/bqso0LEqr4DVaLLHKgl/KHbtZkTyHAc6OfAJpCy8FqXaB/dA/Um
+         bhwJoUOL2T8+cUpHluIsA6U6n9NzH05hwyJIKujlpWdQ0hGj3c4kdi6mFiftJLY7rR97
+         RzI4tbUBuQh+SawbQGvJpXzMWP+MrxVRrtKh2QDGzDOY+0eJ5zUPvPXmG2CmIvdqN2kd
+         lp3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759307344; x=1759912144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7wYh4jlz12Yg6BFy9DvX16quSObPthEsZ3uJXU60VpI=;
-        b=AkplXNhKqtQhkl8Z2VX9Xyc6dKO5A7JuNd07sV/VREVrZZVBp++J6Xg/LFMtaek5CX
-         DSbWBoAiIIl95QEF1y/FProkgm2Lv2QCPk42nLchsizPczdq0De44s+SQFHL0Zil+ZfG
-         LZFE9IpnlS3wlAYpuFR3O8+AaCdbgMWZ3cjM6K1p6WpesFwTCpDraI35PLfdFNol7H47
-         IJdjzJNk2HmklKC3/FS7lbS7BqnFRC8ly2qeP8U6duV2Z2MRTayNfcUMju56aGxF7Mo/
-         h7TkDjI3msRuJYo5wyq0p5nsnhV5rKisFroQYrFgDP1y059Vq8e/S4vx3gPyZFWsBBAc
-         WeOA==
-X-Forwarded-Encrypted: i=1; AJvYcCUeDyfoEfYx6+mkcEs0ew8hKaEXE3rUtcsv6iP98nUQsPBBYiloz+WCBpTSn7T7/MYMD9NSc125UhA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxD1BuGCGylSnHoOoSjqRHRQ2d3JLUEmB2SdieSO7H181kVdnoS
-	ZnmgOsZUkzVs6v8QSITatiGnd41EVCvklze0yYRy/RTJ2EyXIYQIMlmXQo9fUioRrqn709TjSwo
-	8KQvhqttNa6UiM5z6RBhrAa7gUgmD7Ge783OeEwSeBw1AASbtVQ==
-X-Gm-Gg: ASbGncvmzTRXvUbb0iHXlu2l/cO16R4lxkWOvv15PVkDhziciQ9Qn9aUfrGcuPNwZ6W
-	g/vsOSxMPLkuPDkJDwHgaUtu+Sq2nLpKaf7dBZKwz+DiSnZpSTbK4EjWSbXBqnX6ZeqN/bBUso+
-	B8CKLwr2upPduGZoRngAHQg2dG92+HjGG4LE9Jv/rXNfWOSBSSBn4KbT8MATQppiR7myqJa4G0f
-	h3q6mP9bhO4meWhQrzQznai1u3v
-X-Google-Smtp-Source: AGHT+IEu4J6EZWpNTIi+VcPDLlD1ABSRYKH1jDfLPLTGglMkIDxyOOwrBTDpVUD6QrgvvS4OduvqW+aNiA5hG/LmnDE=
-X-Received: by 2002:a05:6512:ea6:b0:577:f5cf:ce5e with SMTP id
- 2adb3069b0e04-58af9f6cb67mr673325e87.45.1759307344147; Wed, 01 Oct 2025
- 01:29:04 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759307500; x=1759912300;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/BnQS5ICJGbt/butX83RKxPPfruJQzobXgxFKJ0MdI=;
+        b=smH5ZXx1mcS5ESp+IEyGexSdhtjZNvXHHxb+WCOyivxYtyEobpjSZDCMQWtKTSQhC5
+         PkBikKd/8OQqwobyLUo2zP/rI6YH4Rrbv/r/VBctbJpzaDBf1HiONF1skQq3X4Vnufwz
+         6gjF+BMBI1gCbIK5BNz/rrPxCwsYoBwc8Y+UISIqQ0MeFWiWr0c+1g8H/pbN37zSb0KL
+         daiMDePwwt9Wyk8bG+AiWFq9vlN5rkG16Ek1qbpVGEFHutZxHHDVws8iU9cmhjKijiAj
+         6XLCVMG7SnfU5oBw8EuerKnuVlQh8973CIFMUt9W/zzb6QW/EwnW+z4NSKTD036LTvmd
+         od9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWkillSkWr5EMQ+o6d2K7vnlkTYOeKWeF5axn7ikOBjuYnPFNuj7CV+iHaBwqQd1CRHqXjDMYIAXBw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGckIQPXk0CqQt5LrPjRsZgFyjE41IHsAY8l9Fd54yMMYpmqu7
+	TFS4Kh7TEL4ieMWtmidRzk5+gVGap+te4AmIr2Gw56UM4dKIVsvuhxnU
+X-Gm-Gg: ASbGnctHlBDQRF1mwK/Bkiao4CTQF6xx/g7UUHONhA71QGNR3DHa39yszjulYbkEFme
+	Q/Ssz6HrAlOetBME8OLPPmucrvnhXBglh5t2kjVRFSycS14Gg5UJoYgJWX5JPPioRwzRRgxdfNF
+	DO3JEL/E+Y110X4IeMQNXGOZG6MIpXWtD0KJBSEddeD/VFjmWDlbctEVlgV4SdRaWBdriQiv4J5
+	FIett4O1YxUe9kQigz25+qD/x8Yi2F4y+rpurHGCPQDaPWH6k5FRZlHdkn8TsUrvsE2jXB+5JK9
+	ru+iLyBVFzSEDhSwdVi7+djFdPODIv4SOp+gjC5aAfzXhmxjEJKnh5yMfegXqK4Jn0FufK4xOdL
+	xV62S7D5oqfp4KhrWFMsNY4K9c/crrGGULX7yxNt5YqQNX/TvEt3UjXbfv0OkmHQsh3dSf0St7o
+	1Wv9Ea
+X-Google-Smtp-Source: AGHT+IGKzyuHahUxvEYMTvpgcvyvBiorHG33cuSCeL+2u5gG6jYyCteWnCT8fMENWTmD8XlLl3NMWw==
+X-Received: by 2002:a05:6a20:72a7:b0:30a:267b:b9e8 with SMTP id adf61e73a8af0-321e43a2022mr3642212637.36.1759307500186;
+        Wed, 01 Oct 2025 01:31:40 -0700 (PDT)
+Received: from [10.0.2.15] ([157.50.93.46])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b57c55bdefesm15501448a12.49.2025.10.01.01.31.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Oct 2025 01:31:39 -0700 (PDT)
+Message-ID: <7cc900dd-a49a-4f37-88e9-6794e92fc7d4@gmail.com>
+Date: Wed, 1 Oct 2025 14:01:24 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250929090206.423937-1-ukaszb@google.com> <20250929090206.423937-3-ukaszb@google.com>
- <2025092924-nebulizer-overexert-4cfb@gregkh>
-In-Reply-To: <2025092924-nebulizer-overexert-4cfb@gregkh>
-From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Wed, 1 Oct 2025 10:28:53 +0200
-X-Gm-Features: AS18NWB4wXf-gsfm6VRJiYbpdXqVbsctmf4lCuAIXjDiRZZoWOHSgi9SrXju4jE
-Message-ID: <CALwA+NZ1iKeyTh0j+A9cQWbVUO4jLvjOx4YnkdtE6e9mpxP0zw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/4] xhci: dbc: allow to set serial number through sysfs
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net: usb: lan78xx: Fix lost EEPROM read timeout
+ error(-ETIMEDOUT) in lan78xx_read_raw_eeprom
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Jakub Kicinski <kuba@kernel.org>, Thangaraj.S@microchip.com,
+ Rengarajan.S@microchip.com, UNGLinuxDriver@microchip.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ syzbot+62ec8226f01cb4ca19d9@syzkaller.appspotmail.com
+References: <20250930084902.19062-1-bhanuseshukumar@gmail.com>
+ <20250930173950.5d7636e2@kernel.org>
+ <5f936182-6a69-4d9a-9cec-96ec93aab82a@gmail.com>
+ <aNzbgjlz_J_GwQSt@pengutronix.de>
+ <e956c670-a6f5-474c-bed5-2891bb04d7d5@gmail.com>
+ <aNzlNkUKEFs0GFdL@pengutronix.de>
+Content-Language: en-US
+From: Bhanu Seshu Kumar Valluri <bhanuseshukumar@gmail.com>
+In-Reply-To: <aNzlNkUKEFs0GFdL@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-> On Mon, Sep 29, 2025 at 09:02:04AM +0000, =C5=81ukasz Bartosik wrote:
-> > From: =C5=81ukasz Bartosik <ukaszb@chromium.org>
-> >
-> > Add code which allows to set serial number of a DbC
-> > device through sysfs.
->
-> But why?  Who needs this and what tools will do anything with this
-> information?
->
+On 01/10/25 13:54, Oleksij Rempel wrote:
+> On Wed, Oct 01, 2025 at 01:40:56PM +0530, Bhanu Seshu Kumar Valluri wrote:
+>> On 01/10/25 13:12, Oleksij Rempel wrote:
+>>> Hi,
+>>>
+>>> On Wed, Oct 01, 2025 at 10:07:21AM +0530, Bhanu Seshu Kumar Valluri wrote:
+>>>> On 01/10/25 06:09, Jakub Kicinski wrote:
+>>>>> On Tue, 30 Sep 2025 14:19:02 +0530 Bhanu Seshu Kumar Valluri wrote:
+>>>>>> +	if (dev->chipid == ID_REV_CHIP_ID_7800_) {
+>>>>>> +		int rc = lan78xx_write_reg(dev, HW_CFG, saved);
+>>>>>> +		/* If USB fails, there is nothing to do */
+>>>>>> +		if (rc < 0)
+>>>>>> +			return rc;
+>>>>>> +	}
+>>>>>> +	return ret;
+>>>>>
+>>>>> I don't think you need to add and handle rc here separately?
+>>>>> rc can only be <= so save the answer to ret and "fall thru"?
+>>>>
+>>>> The fall thru path might have been reached with ret holding EEPROM read timeout
+>>>> error status. So if ret is used instead of rc it might over write the ret with 0 when 
+>>>> lan78xx_write_reg returns success and timeout error status would be lost.
+>>>
+>>> Ack, I see. It may happen if communication with EEPROM will fail. The same
+>>> would happen on write path too. Is it happened with real HW or it is
+>>> some USB emulation test? For me it is interesting why EEPROM is timed
+>>> out.
+>>
+>> The sysbot's log with message "EEPROM read operation timeout" confirms that EEPROM read
+>> timeout occurring. I tested the same condition on EVB-LAN7800LC by simulating 
+>> timeout during probe.
+> 
+> Do you simulating timeout during probe by modifying the code, or it is
+> real HW issue?
+> 
 
-By default DbC serial number is set to "0001". ADB client on host side need=
-s
-to be able to differentiate devices using DbC and it uses serial number for
-that purpose. Based on that this is the reason why we want to be able to as=
-sign
-devices with unique serial numbers.
+On my real hardware timeout didn't occur. So I simulated it once by modifying the code
+to confirm the BUG. The BUG has occurred confirming syzbot finding.
 
-> And where is the Documentation/ABI/ entries for all of these new ones?  :=
-)
->
-
-I will update the documentation ;).
-
-> > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
-> > ---
-> >  drivers/usb/host/xhci-dbgcap.c | 32 ++++++++++++++++++++++++++++++++
-> >  1 file changed, 32 insertions(+)
-> >
-> > diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbg=
-cap.c
-> > index c2fecaffd6f3..5cc201afe8f4 100644
-> > --- a/drivers/usb/host/xhci-dbgcap.c
-> > +++ b/drivers/usb/host/xhci-dbgcap.c
-> > @@ -1200,6 +1200,36 @@ static ssize_t dbc_bcdDevice_store(struct device=
- *dev,
-> >       return size;
-> >  }
-> >
-> > +static ssize_t dbc_iSerial_show(struct device *dev,
-> > +                         struct device_attribute *attr,
-> > +                         char *buf)
-> > +{
-> > +     struct xhci_hcd *xhci =3D hcd_to_xhci(dev_get_drvdata(dev));
-> > +     struct xhci_dbc *dbc =3D xhci->dbc;
-> > +
-> > +     return sysfs_emit(buf, "%s\n", dbc->str.serial);
-> > +}
-> > +
-> > +static ssize_t dbc_iSerial_store(struct device *dev,
-> > +                          struct device_attribute *attr,
-> > +                          const char *buf, size_t size)
-> > +{
-> > +     struct xhci_hcd *xhci =3D hcd_to_xhci(dev_get_drvdata(dev));
-> > +     struct xhci_dbc *dbc =3D xhci->dbc;
-> > +
-> > +     if (dbc->state !=3D DS_DISABLED)
-> > +             return -EBUSY;
-> > +
-> > +     if (size > USB_MAX_STRING_LEN/2+1)
-> > +             return -E2BIG;
-> > +
-> > +     memcpy(dbc->str.serial, buf, size);
-> > +     /* remove newline and terminate the string */
-> > +     dbc->str.serial[size-1] =3D '\0';
->
-> What if there is not a newline?
-
-Thanks for pointing it out. I will fix it.
-
-Thanks,
-=C5=81ukasz
+Thanks. 
 
