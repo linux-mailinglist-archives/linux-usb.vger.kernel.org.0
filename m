@@ -1,172 +1,187 @@
-Return-Path: <linux-usb+bounces-28838-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28839-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96DF7BAFE72
-	for <lists+linux-usb@lfdr.de>; Wed, 01 Oct 2025 11:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 89CB5BB0692
+	for <lists+linux-usb@lfdr.de>; Wed, 01 Oct 2025 15:05:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 183E31941A28
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Oct 2025 09:43:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 399F419459F9
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Oct 2025 13:05:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517412DAFA9;
-	Wed,  1 Oct 2025 09:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="I+n5OKMU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B77E52264C8;
+	Wed,  1 Oct 2025 13:05:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B88E1804A
-	for <linux-usb@vger.kernel.org>; Wed,  1 Oct 2025 09:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6794622172C
+	for <linux-usb@vger.kernel.org>; Wed,  1 Oct 2025 13:05:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759311772; cv=none; b=RTMywys1uXPtNIAHQxv7DWqYzOyCmQjwTuODIjF86wbf1YYn9akADdew/hTLUuPCVQ6jMcOphZYMSRmGMziN2ODbZyqGW37TTB7Bt2/Q+v5ZrvHrmElg4W/XCvR5Qqhsu4JDEzFUTeKURWnTucZslBJlQ72QWQU1newCMecsIgA=
+	t=1759323906; cv=none; b=p8xjriYp6KiLB/CbGFcsRBSzNUmaeqtO/TjG7Puu4kmlriIK5HG4ScqTkfVS8j6JbBx1DpBPQYkY1N3CbiUx9q6Mal7gqZTyKxwYtZVgJBWu41uuP1TFXIquOqIEBcs2/mkm3uHLjm2ZdEDSN+y3S2gqIYJFXmS3hl8bYLUhsjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759311772; c=relaxed/simple;
-	bh=VsR2+PVDtYE3652lA3AwZ1sGcmyKJ3prqssc5PDRjC4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QbKbmdUmEG/Efda+tnHLDxk0dBBeJQojF3MFw/COKBjQ3xzN/PpZzUECwjXtppwtL5a2VmSrPPMOyVmUT3U/Jee1JH60jTvGB/wtUPWr4fl/wEC2LpKSE6opZnW6OIuoAlIZMmdQafqwEOCgxagoWPDrvylDHnRbjmI3Xl7QvNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=I+n5OKMU; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59193i4X023782
-	for <linux-usb@vger.kernel.org>; Wed, 1 Oct 2025 09:42:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	DrFdWv2iBXIeKGrs8bhA1iCXbL7rFu1+yvVc7NJeApA=; b=I+n5OKMUkidLe5KE
-	FKY41O6FT+NOSTD3fVg7zfK9P0z/Oy7XDmVMCH/z8HlggB3VRH/pX14CgqI2C/Au
-	eKCk9BSIimln+2Ru6iyNhiF/LuwE5369SbbAYW5GOZkZ8yJi8/z/ui6vn+xCxAu4
-	+j1UNEo0kGlz6mn6VfNAYxTfGZ8tSZ5dltVVXOP1crz8uxQsrCwMgBW8nJ4gZveD
-	JPZG+as3j++DJYL7FumuTOc3DA+Z3AA+319vfnwwA++FUwLItE4dsvYUGd3H++vA
-	+gXtTwbzxMDAPw03FVhGVWuNWHDXuZjlORgH53XetkQ7oqNDeSKiLlpMUfJTvyk/
-	hV1/Lw==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e59n4f15-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 01 Oct 2025 09:42:50 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-82b15c1dca8so242141985a.1
-        for <linux-usb@vger.kernel.org>; Wed, 01 Oct 2025 02:42:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759311769; x=1759916569;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DrFdWv2iBXIeKGrs8bhA1iCXbL7rFu1+yvVc7NJeApA=;
-        b=RemwQeMgtAaK2GxVTH8lph12XhAgSgrFRsA/AsxWLlI38yR83oJMiKlhv5flwe/K0q
-         IOxGqqyDiEJRfCGUxwu1/G1gqdTu0OkaJy7NADplSMDhQk6GW1GFdGb4VzJbZNN2B5Kj
-         oUtdv1W3lY2/4GFXskFIxvDJ5ixUHgWAExODOPQaRYEHf5yCgYgRVQcCl6GPEW3g9dlL
-         9UmCGPgphysocqKUuUVx+fAZVODa1S8ccFGpuXqD2PMVm+vpNkMAqmOvdzaYwAkg/LSz
-         r/7Hw4icfaL8+ptPiZ5XsQRjnJ1C0V2fP1PEhJ3HQ2S71LyTtAODEmHRtNj/Ov0FcJA5
-         HFFw==
-X-Forwarded-Encrypted: i=1; AJvYcCWJa6q9PNiBC36pz/QaIhyikpqKkXcJHJeGH8eaASQ3niyBs7K6IDSQL+7Kf+D1c3uebiIiJqsFj2Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVUTMU7h4s/cA6W9yxBQJ+HoVWJw45yhcUA7lViPtHZFzPJhQb
-	uKAetBbYUytnOJXLR48GOYUG0SjKVTFnSKBcrUyRM07sGtDjCHDlgRY3++R+gx9Fx3mLzAJk8bj
-	Gv0Q6J19oMNWJxABdcYfmGzWjhWHXlVGUfHoVBjJ/PcV43DSr4QDjhisnPEA5J4o=
-X-Gm-Gg: ASbGncvlIAgki3+xJu935x4A3Q9Cs1XErfcJMTZC52hZR6Pdt7L/YB0YoVwp8wdjSfh
-	sZEWpSFSsXhob/vEr1WZN+kYEL0rlAi2fGudkmDyrCVxBD+9mZ3lqztb7Q9fde+3fWR0q4hyP3h
-	o4DkV4SNqXrhwBzfezUPTIs+To2FpKFZ4cakTJ2icyx7C6+MkxEo1JKMrx4JwmkkzowwKYNXMdJ
-	ba7a+27ckL1nGStoRPpe8N8w6mOz/aqjg5ysqWhZ4uBpSnggJkVEdBFRUUcCRrEEOhePHyz+vzw
-	BTkO8xkVSMuXYcvObsLSYeImXKFivAL6BH1z99qy8nQkRbma8siZ675M9DJ2gDxW8t7Pt6fDyyb
-	wuv5lbH9EbLZ6t2gprfpiNXeURlY=
-X-Received: by 2002:a05:620a:d8e:b0:829:9017:82b6 with SMTP id af79cd13be357-87375760480mr275830385a.8.1759311769163;
-        Wed, 01 Oct 2025 02:42:49 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFSVWdZDNLhL7AkKEv+Ngs2uzjXJ5e/rNt3228AfvQUdNC5wR/kdISKu4lF1ZjtYbb//8x8wQ==
-X-Received: by 2002:a05:620a:d8e:b0:829:9017:82b6 with SMTP id af79cd13be357-87375760480mr275829085a.8.1759311768591;
-        Wed, 01 Oct 2025 02:42:48 -0700 (PDT)
-Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b3e89655b09sm628793366b.77.2025.10.01.02.42.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Oct 2025 02:42:48 -0700 (PDT)
-Message-ID: <a31ac6fd-929f-4001-8199-1b8730ccbadd@oss.qualcomm.com>
-Date: Wed, 1 Oct 2025 11:42:46 +0200
+	s=arc-20240116; t=1759323906; c=relaxed/simple;
+	bh=lCdM8Ah7f9siwPk1NgsZaY5JPUTlBRBFs0s9yqMejNs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IEeKQAD5Fz+DjvQPU7nUtzxu8gZG4pEv6/8LmpnDKrRWc3rkxqQzBcc08WbFS6LP7paZEGQqbK3qVEqUP7z27ZsSovA3qVZtiLEGYkC1WQOoPRW9b807vRfQ+YARzOLwqRf2Q9g42IqdV5IozX9569iGf2Fea0l1EqR42sXie4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1v3wVX-0006cN-RX; Wed, 01 Oct 2025 15:04:35 +0200
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1v3wVV-001Q4u-1w;
+	Wed, 01 Oct 2025 15:04:33 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1v3wVV-0000000AG1g-27OZ;
+	Wed, 01 Oct 2025 15:04:33 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+	=?UTF-8?q?Hubert=20Wi=C5=9Bniewski?= <hubert.wisniewski.25632@gmail.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	stable@vger.kernel.org,
+	kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>,
+	Russell King <linux@armlinux.org.uk>,
+	Xu Yang <xu.yang_2@nxp.com>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH net v2 1/1] net: usb: asix: hold PM usage ref to avoid PM/MDIO + RTNL deadlock
+Date: Wed,  1 Oct 2025 15:04:32 +0200
+Message-ID: <20251001130432.2444863-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] usb: typec: ucsi_glink: Increase buffer size to
- support UCSI v2
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        lumag@kernel.org, neil.armstrong@linaro.org, johan+linaro@kernel.org,
-        quic_bjorande@quicinc.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20250924232631.644234-1-anjelique.melendez@oss.qualcomm.com>
- <20250924232631.644234-3-anjelique.melendez@oss.qualcomm.com>
- <t3hfr33t76ckecatro5gheycb2phnch57m6zzdpm44ibykbubd@e6nffasyetib>
- <4cbcf312-7697-4725-8fd8-45f2b5b0584f@oss.qualcomm.com>
- <6kbkkiwsp3hzu2u6uezelwufooeeh7efrcc2buydpbziuhr5px@xdp24rhfjqyf>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <6kbkkiwsp3hzu2u6uezelwufooeeh7efrcc2buydpbziuhr5px@xdp24rhfjqyf>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: X9Y4OTccrYq3vYtaa2VzgtxaBxwDasch
-X-Authority-Analysis: v=2.4 cv=O4g0fR9W c=1 sm=1 tr=0 ts=68dcf79a cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=K0chv5zXbCjWf1o7A30A:9 a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-ORIG-GUID: X9Y4OTccrYq3vYtaa2VzgtxaBxwDasch
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAwMSBTYWx0ZWRfX+YHB9X1lVW1N
- WCRuF2XPDnA1Bxs5ZGTV7RuewNy99F2IDZTFHoIDNo434prdLp3rsy5itVeS7byIn14MGzEZAoh
- ydbtSBWNNT9MQsUjIvyZZ5OSj9QcSFVgGV3reibTKjhUrRUfy9vZP5vWGLEb1rqIkpK0aQzeY4i
- 9rFdlXT2NLnpYwqkawaqA0fo1HwEyAjmpJdPH43FdmDsF5ZPhTJiswppOO9NUy9pUKzC1X/TMs2
- 15QU557DPJQkepsJK1Ynh1TaYnfDmuMIAPzx0UZP6KrvnKBZqxBFScPTtCNRsARGD+HsUFCvQck
- Wy9ONJToryVCcleshI6fK46IkCDYAjgqj3H/oynxo2cyLoSXJYPODcj+sEsUOHoMD7wKfQD23l9
- IlYpHgRrWnDBi8P9PhvO672xpUQ+Vg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-01_02,2025-09-29_04,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 phishscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
- spamscore=0 impostorscore=0 bulkscore=0 suspectscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509270001
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On 9/27/25 12:07 AM, Dmitry Baryshkov wrote:
-> On Fri, Sep 26, 2025 at 11:19:13AM -0700, Anjelique Melendez wrote:
->>
->>
->> On 9/25/2025 2:43 PM, Dmitry Baryshkov wrote:
->>> On Wed, Sep 24, 2025 at 04:26:31PM -0700, Anjelique Melendez wrote:
->>>> UCSI v2 specification has increased the MSG_IN and MSG_OUT size from
->>>> 16 bytes to 256 bytes each for the message exchange between OPM and PPM
->>>> This makes the total buffer size increase from 48 bytes to 528 bytes.
->>>> Update the buffer size to support this increase.
->>>>
->>>> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
->>>> ---
+Prevent USB runtime PM (autosuspend) for AX88772* in bind.
 
-[...]
+usbnet enables runtime PM (autosuspend) by default, so disabling it via
+the usb_driver flag is ineffective. On AX88772B, autosuspend shows no
+measurable power saving with current driver (no link partner, admin
+up/down). The ~0.453 W -> ~0.248 W drop on v6.1 comes from phylib powering
+the PHY off on admin-down, not from USB autosuspend.
 
->>> I'd prefer it to be more explicit. Define an union of v1 and v2, fill
->>> common parts and version-specific parts separately.
->> Konrad also left a similar comment in this function "This code keeps the
->> 'reserved' field zeored out for v1, but it does so in a fragile and implicit
->> way :/" (https://lore.kernel.org/all/df671650-a5af-4453-a11d-e8e2a32bd1ab@oss.qualcomm.com/#t)
->>
->> So I figured I would try to get thoughts from the both of you :)
->>
->> We could have a union defined like so:
->> struct __packed ucsi_write_buf_req_msg {
->> 	struct pmic_glink_hdr   hdr;
->> 	union {
->> 		u8 v2_buf[UCSI_BUF_V2_SIZE];
->> 		u8 v1_buf[UCSI_BUF_V1_SIZE];
->> 	} buf;
->> 	u32                     reserved;
->> };
-> 
-> LGTM.
+The real hazard is that with runtime PM enabled, ndo_open() (under RTNL)
+may synchronously trigger autoresume (usb_autopm_get_interface()) into
+asix_resume() while the USB PM lock is held. Resume paths then invoke
+phylink/phylib and MDIO, which also expect RTNL, leading to possible
+deadlocks or PM lock vs MDIO wake issues.
 
-+1
+To avoid this, keep the device runtime-PM active by taking a usage
+reference in ax88772_bind() and dropping it in unbind(). A non-zero PM
+usage count blocks runtime suspend regardless of userspace policy
+(.../power/control - pm_runtime_allow/forbid), making this approach
+robust against sysfs overrides.
 
-Konrad
+System sleep/resume is unchanged.
+
+Fixes: 4a2c7217cd5a ("net: usb: asix: ax88772: manage PHY PM from MAC")
+Reported-by: Hubert Wiśniewski <hubert.wisniewski.25632@gmail.com>
+Closes: https://lore.kernel.org/all/DCGHG5UJT9G3.2K1GHFZ3H87T0@gmail.com
+Tested-by: Hubert Wiśniewski <hubert.wisniewski.25632@gmail.com>
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Closes: https://lore.kernel.org/all/b5ea8296-f981-445d-a09a-2f389d7f6fdd@samsung.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+Changes in v2:
+- Switch from pm_runtime_forbid()/allow() to pm_runtime_get_noresume()/put()
+  as suggested by Alan Stern, to block autosuspend robustly.
+- Reword commit message to clarify the actual deadlock condition
+  (autoresume under RTNL) as pointed out by Oliver Neukum.
+- Keep explanation in commit message, shorten in-code comment.
+
+Link to the measurement results:
+https://lore.kernel.org/all/aMkPMa650kfKfmF4@pengutronix.de/
+---
+ drivers/net/usb/asix_devices.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 792ddda1ad49..5c939446515b 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -625,6 +625,21 @@ static void ax88772_suspend(struct usbnet *dev)
+ 		   asix_read_medium_status(dev, 1));
+ }
+ 
++/* Notes on PM callbacks and locking context:
++ *
++ * - asix_suspend()/asix_resume() are invoked for both runtime PM and
++ *   system-wide suspend/resume. For struct usb_driver the ->resume()
++ *   callback does not receive pm_message_t, so the resume type cannot
++ *   be distinguished here.
++ *
++ * - The MAC driver must hold RTNL when calling phylink interfaces such as
++ *   phylink_suspend()/resume(). Those calls will also perform MDIO I/O.
++ *
++ * - Taking RTNL and doing MDIO from a runtime-PM resume callback (while
++ *   the USB PM lock is held) is fragile. Since autosuspend brings no
++ *   measurable power saving for this device with current driver version, it is
++ *   disabled below.
++ */
+ static int asix_suspend(struct usb_interface *intf, pm_message_t message)
+ {
+ 	struct usbnet *dev = usb_get_intfdata(intf);
+@@ -919,6 +934,13 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+ 	if (ret)
+ 		goto initphy_err;
+ 
++	/* Keep this interface runtime-PM active by taking a usage ref.
++	 * Prevents runtime suspend while bound and avoids resume paths
++	 * that could deadlock (autoresume under RTNL while USB PM lock
++	 * is held, phylink/MDIO wants RTNL).
++	 */
++	pm_runtime_get_noresume(&intf->dev);
++
+ 	return 0;
+ 
+ initphy_err:
+@@ -948,6 +970,8 @@ static void ax88772_unbind(struct usbnet *dev, struct usb_interface *intf)
+ 	phylink_destroy(priv->phylink);
+ 	ax88772_mdio_unregister(priv);
+ 	asix_rx_fixup_common_free(dev->driver_priv);
++	/* Drop the PM usage ref taken in bind() */
++	pm_runtime_put(&intf->dev);
+ }
+ 
+ static void ax88178_unbind(struct usbnet *dev, struct usb_interface *intf)
+@@ -1600,6 +1624,10 @@ static struct usb_driver asix_driver = {
+ 	.resume =	asix_resume,
+ 	.reset_resume =	asix_resume,
+ 	.disconnect =	usbnet_disconnect,
++	/* usbnet will force supports_autosuspend=1; we explicitly forbid RPM
++	 * per-interface in bind to keep autosuspend disabled for this driver
++	 * by using pm_runtime_forbid().
++	 */
+ 	.supports_autosuspend = 1,
+ 	.disable_hub_initiated_lpm = 1,
+ };
+-- 
+2.47.3
+
 
