@@ -1,238 +1,151 @@
-Return-Path: <linux-usb+bounces-28871-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28872-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51EA7BB49EE
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Oct 2025 19:05:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8296BB4B00
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Oct 2025 19:27:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34B3517313C
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Oct 2025 17:05:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D5773ADAE0
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Oct 2025 17:27:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E504A259C94;
-	Thu,  2 Oct 2025 17:05:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 690CB26FA57;
+	Thu,  2 Oct 2025 17:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Edt3tu5f"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TtNHngYH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8583786342
-	for <linux-usb@vger.kernel.org>; Thu,  2 Oct 2025 17:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F9826E6E3
+	for <linux-usb@vger.kernel.org>; Thu,  2 Oct 2025 17:25:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759424727; cv=none; b=sfZSX4n7uJ+xkoZQqabFpI82PPdPR6It+2Xdy8kdT0BW06vwJ7lRyiCLjPzoK6GxvS/pcCqnB9cdQ6YRskpsRdIIeAbL2xw6swJTs5n+7dYAnbq7d/WX5yvdPkWMKmpYabBeMzuz5CBfOzr4oBrJvXRAOAJcaThtty3oh21pk3M=
+	t=1759425952; cv=none; b=Uqy3W4D/tD023pHMFGSJRcJfL64oCUiGza2Pjju1awxT3hZF/vMLj4c2Z9aL2WzVNS5eeg7ks9HXOdcHcQBcoSIK466xwfIc+SsuMUdczsYVjUHaQ9qSuQrX6YhxJDu4bDYL+yj8rpfrPiboslUAZyDO6+aQ0zjUxrBYVErA4/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759424727; c=relaxed/simple;
-	bh=KqAgIDOLYYlmq7vjL4DlLwiz436HioB2gAr7A2tfmDQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uWHe8YvdnhviP9ji9mWvkbH37FhX3hUNTld4rAYqSmLUK0xt6EwdqqHygdDsku2xWGrt9Gns+P8WFyR1jNn3RERjRT7OiphUFz6vOIqYRCsJzFQZqoKhCieO68ufvdh17ODMtLJY1/iTD/k5coKoAIX+D5Wt7IOdZq5GS/VFw1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Edt3tu5f; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-78e9f48da30so11929076d6.1
-        for <linux-usb@vger.kernel.org>; Thu, 02 Oct 2025 10:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1759424724; x=1760029524; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=phGzVSeo3mFMk1lUM+2AihItEguZ45xc81t0qErQ05k=;
-        b=Edt3tu5fJ+85dw29qINWDL52oHEoAcHkJAlz1J8IBPIciyJ5Br2/QOtCN9IpB9zjza
-         gW+P4vNDMoZHqQ/zBIWMjsP71Imayp0rTxAAIiOZ8WIDyJa8e6V+sNO7KI5m8bPBLAm2
-         MkazuTyoAR+7eIpungaKs4LPzqNepcyfoGnUr9ugTjJdw/4ZUi6weKhpOhqwajE9ONZ2
-         tM0W2vWOalSzrYjpgcm6/3mD3soRfhBjIuvnqFmp7s4e2RTb7bFPx/Ln5f/ySNZnI0+u
-         Xiu+yiNODFuUtwgDY1xXINcM+LtCZ9ycGsvV5T1GIqrP7twsAij5e53A8KnGXrbPgTOv
-         n9cQ==
+	s=arc-20240116; t=1759425952; c=relaxed/simple;
+	bh=Vnx7FEyrTZzrEyMks2ISdGuYBznHpzV4bClxPPmMiao=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nozfsuVb0tYHIuFOkG+7bdapMD1ORany6vk2MxWvskbQtiE+cFWVs4kRcl2ttW2WFLHXwZdfU+p3dfQVGp+fOKNThly5Z5zhmlysRRV10gIPsepp4T6/3dAq95hz5bQTTWJrpJ+9BLrPaHE+4MoARp+gXQFHksvroclRBTd1I6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TtNHngYH; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59291euh032297
+	for <linux-usb@vger.kernel.org>; Thu, 2 Oct 2025 17:25:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=1rqna/rBH+iajzg+XAXDikkpeuWocVd+bF8
+	bPM3no/o=; b=TtNHngYH93K+UoMcr5MaISKFeS0Ob4suJHOfijazkWAsn3rOXxS
+	ZJhsW7eUyvbkBsG7Mpbxmy4945kyMB/3rE7dqCY+3pcYc0yrXNBJlxd89TvCflJ8
+	bHf8QETvv+yM8MsxMzjg4AXQWI7cDNUrgCG6EAO2NOSv9XujYDgrO6gMWvJ2F4NT
+	4rlOF6/cEd0UDXHYg2fsuTnR9d1iYZ65iVtD602UnKLeIUkBTJbZOdexGuXHFj2O
+	LpdR5hAhf5G95Msh+zbNuUzCSe0Zznmqvkjp+k8DUN5PuBTRfwLbjzSo8JDIvDU2
+	/UWcvpuW6/sETxgIOnG0XgUCJ3wOUnT7t+w==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e6x60n94-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Thu, 02 Oct 2025 17:25:50 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-78117c85670so1616911b3a.0
+        for <linux-usb@vger.kernel.org>; Thu, 02 Oct 2025 10:25:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759424724; x=1760029524;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=phGzVSeo3mFMk1lUM+2AihItEguZ45xc81t0qErQ05k=;
-        b=dxl1Za4KyIcGTOrQL8xXNNl4FQcK7PYysrvfyTzohKmtlHyEdDFymSv+MayYbpsKPY
-         ejyEyta4QzON/jZ7/gzJWbW45sFVKVEZkzmSkesQTIgNxm2sMHyNhzRxbv3+ns+aHiau
-         0kNGgog7KpBKnEotdSUYns9XWvT6zrCqMruaT96oB2nPGZbDsEOWga7D9IchDNniZ0zk
-         BbKr9PoiBXjAU9cXV1tjrOBUczeW0tbWNmNV09Vmul3GvUDf2nbLbN1E6UNGeU6OtVJF
-         1otoRbXRP67jwMf6dd5kMjHucfXsqtHL+vCUzVYrYvtXgBw4xEq+eA29sbIZZphGbdN+
-         nUzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVQI5/0WqNWpioYreQ0NOzzKTNyxQus+3mIM8Z5nrwg/9vMyFGqpHHtdf/HUv+wIVd2bt5KTWn7eOU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOvKZcmlANDwu3PTWoGq3Xmo7DHsFVNLrBpR4hgJAN+DQj5cOM
-	A2UTan2VQ/CSwGLTN8rerqrUcTZm8WiT6bFJjJJ062iaCQ+KUuWBLqfN354bH9jEqocfH39cIF9
-	353s=
-X-Gm-Gg: ASbGncsUNPw6L33sfGBBozYb749uG7BdZ4lr3EeZoGE4lSLhulr5FC77DVEsLGwKb6O
-	0UgHUGFbkDuuTJqWrjBq2gKrPkOQP6wDisdZh4bo6RzmKo0i4lScGmbhFTziy92XsO0r5DIAsQM
-	2Vt5g0zwWwDaRHW3lKSdQwLAmxr4U+aH4YH6TC8NL4IzNQvqkrH5qkG99BnxmM03Yjp+xvVVVey
-	bfXbiTu4mX4BOSoL6fYddiHiov9sVlWUGzB8QORh7KryNS7gFq6LsUfBVTtXqu5003ohbZeE8/i
-	sRDMHE+iPXEf36RFLikNha6Doa8e9X6Qt5XznPaAEl2gIL+MfUuGqfFgYsBix38BA/CuEKPq/oM
-	FNvKiY4Oj/9BUOC7IU/ColPakE4R9qtTw6kWxZFtLiOwSqOl/mCZs9osb3ZxkSJHW3gYKNZoucF
-	lMzAe9mhx8/QU1/0t5zQoi5UUklKLEIwDS9DE+SDakZUxsbg8=
-X-Google-Smtp-Source: AGHT+IFIwpnNK9iXXvhtzpssquDTl0liBWfFVOpM21u0nEQWvHOq8+H9aywE6hFbQeQgjOdt11BY+Q==
-X-Received: by 2002:ad4:5ca3:0:b0:796:dc45:8034 with SMTP id 6a1803df08f44-879dc852938mr364906d6.45.1759424723965;
-        Thu, 02 Oct 2025 10:05:23 -0700 (PDT)
-Received: from rowland.harvard.edu (nat-65-112-8-28.harvard-secure.wrls.harvard.edu. [65.112.8.28])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-878bb4469b0sm21873506d6.15.2025.10.02.10.05.22
+        d=1e100.net; s=20230601; t=1759425949; x=1760030749;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1rqna/rBH+iajzg+XAXDikkpeuWocVd+bF8bPM3no/o=;
+        b=Xww39/sHY4Tlj9dQVqqc4ya9n5pgEoCWjNIX8qU8LHbd3SwWJqHxn3z5cEU3lvn5tX
+         somY3Z62yHR46MrLzGDAnrTYMcQaY4ZcuGzDqcdDEk/LoHXzqi/U+yzWb2f8+2Upi0is
+         fbMe69JS092+RyymkxgWiFtR7t1zDykvBVI3SGax9PaMvon/55XElOw5ubZz4+5kG78x
+         +Cx1Obp3Zyhd8qRSKnvnNQjmPpuoq3r0vdkByfcy72uXMVoxD2tpz9AeDUo51NeZIw8w
+         qjIqfSIGkloNXMrs80+gyqrMk84yTvpv9ws+mWKsWkcIaIsXQ2MZ1b8KJPFKxbjKkRjp
+         BuYA==
+X-Gm-Message-State: AOJu0YwxnhvJgH1OkDsjnuKLlf6yqrSHiSh6poM22NMt4Y0vAPGFIg2T
+	3nZGSdCfCgMn2P4Nw5H8xr0IC8yUTYl/+Aew2I+ZHpxrpfqaYJBDNEB0JVhbGbd2nQMhj0kFwst
+	vCkwknbs1WmJTOVLrNIDjTtt3II9EKkS6fEYbofjvSJYa41Xq5p3XEDReGp3O/Y4=
+X-Gm-Gg: ASbGnctpnbkteJn+/NUjL+CNgZIbhYE2LDmAbGsB/X6q5FwvWZVW5SwQ4FMVHq3MaOB
+	FQdE0fjxJbtDHoMW3iQSAnTSa2UonAYzs2OkDJi5CA5F4gu8EkvI1zqxEQp35eiVJQz29wld1Ix
+	tNPjWKVsMHbco86mBfv22BgD3IgVfR1PsFkj+qI/e7+3ih6KXotJT6RDtrbg43KLuFx0Mwh1+G0
+	ocmFftOsBHlfQEBSv+FqVRqaPVIHkqk+SCNMz7zYvTuf+AHU+5qkW3BSCAXzJsC0ZEQScKvWaQ4
+	Z6WCg5HIiFILKvcwKZr8RJmXWfVOISMQMYqY5DrWSrJAl40iJNTHsksoU/LMGJolTJVz/alme8q
+	M1LK/Dr4=
+X-Received: by 2002:a05:6a20:6a21:b0:2c2:f61b:5ffd with SMTP id adf61e73a8af0-32b61b4edcbmr310296637.10.1759425948706;
+        Thu, 02 Oct 2025 10:25:48 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG+enE8wuWieJoBAKDjUG3eBXUdkVEiwqNMSZ/0wvGfEYKsHkPg68VO8xF8jBbQP1OGtks3RA==
+X-Received: by 2002:a05:6a20:6a21:b0:2c2:f61b:5ffd with SMTP id adf61e73a8af0-32b61b4edcbmr310239637.10.1759425947791;
+        Thu, 02 Oct 2025 10:25:47 -0700 (PDT)
+Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6099f5b6e9sm2387423a12.40.2025.10.02.10.25.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Oct 2025 10:05:23 -0700 (PDT)
-Date: Thu, 2 Oct 2025 13:05:21 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: ValdikSS <iam@valdikss.org.ru>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: ohci: delay endpoint descriptor unlinking to
- reduce transfer latency
-Message-ID: <4b3fd5ff-ae58-43c5-a36e-5ba0494f666f@rowland.harvard.edu>
-References: <1ff1f025-dd54-4c1e-bdf9-376a359178ef@rowland.harvard.edu>
- <20251001223442.286058-1-iam@valdikss.org.ru>
+        Thu, 02 Oct 2025 10:25:47 -0700 (PDT)
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Subject: [PATCH 0/2] Implement vbus support for HD3SS3220 port controller
+Date: Thu,  2 Oct 2025 22:55:37 +0530
+Message-Id: <20251002172539.586538-1-krishna.kurapati@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251001223442.286058-1-iam@valdikss.org.ru>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: JrQISZ6u-j9gDR_UBNVo2umXBUZOAsAT
+X-Proofpoint-ORIG-GUID: JrQISZ6u-j9gDR_UBNVo2umXBUZOAsAT
+X-Authority-Analysis: v=2.4 cv=ZtPg6t7G c=1 sm=1 tr=0 ts=68deb59e cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=x6icFKpwvdMA:10 a=0ZYI1qUNTW_HKTauMVIA:9 a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAxOCBTYWx0ZWRfXxCpej0zGSPs3
+ 19QRdpxMNqAmGodN8V/tm9vRknXFw6frs7b3IR2NwnkFNm4mR7HLgIKqen4N0/f0KRDFVy/e0oC
+ D4LFof1WZhnQ3SHMmnp241hYrRqrM8pCIxWVWelpIMdN/18JOwxb3xKt5+EbafsAbqdVjbFDu7c
+ 1AsQ149A2Z4+9YKp1iI51ybY8JyqPrJ86/0Tm5F9lca4Xrsu5PTAJKmjvqDea4fhvZ1xuNc7ntI
+ l3/Q9Uie3wk6gRCmoBu84oUOBHttj/rZz1hPv/XHm3caEJ41CIOGtljID/wt5Lp3nNtMS0MmbYH
+ /AtMMwBgJz0cm6gSTbAidt1bnOZAnfTvgzwt/q1q3uc195Uit7Nyh8dnp+bmVcAYevmZZ+TfdQ9
+ 9kJElE/aDYQvQeheMuLrrBk2S4sHbg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-02_06,2025-10-02_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
+ suspectscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509270018
 
-On Thu, Oct 02, 2025 at 01:34:42AM +0300, ValdikSS wrote:
-> The current OHCI implementation immediately unlinks Endpoint Descriptors
-> (EDs) when they become idle. Unlinking process waits for the next Start
-> of Frame (SOF) interrupt as a synchronization primitive before unlinking
-> it.
-> 
-> This adds ~1ms latency per transfer cycle for rapid bidirectional
-> communication which leads to half the USB 1.1 speed for smaller packets
-> at best.
-> 
-> When a transfer completes, takeback_td() immediately calls
-> start_ed_unlink() if the ED has no more TDs queued. This triggers:
-> 1. ED marked for unlinking with SOF interrupt enabled
-> 2. Wait for next 1ms frame boundary (SOF interrupt)
-> 3. finish_unlinks() processes the ED removal
-> 
-> This patch adds 275+10 ms timeout to the idle EDs. If new transfers
-> arrive on the same ED before timeout expiry, clear the timeout and
-> continue using the ED. Only EDs that remain idle after the timeout
-> period are cleared by the existing I/O watchdog, which runs every
-> 275 ms (and the ED timeout is 10 ms).
-> 
-> This eliminates SOF synchronization delays for consecutive transfers,
-> but preserves the one-frame unlinking delay which was added as a race
-> condition elimination measure before the modern git history in
-> commit 961c380cef (March 2004) by David Brownell.
-> 
-> Performance Impact:
-> Tested on Orange Pi Zero3 (Allwinner H618) with Canon LBP1120 printer:
-> - Before: 1.984ms average latency (write-read pattern)
-> - After:  0.981ms average latency
-> 
-> Link: https://lore.kernel.org/all/9013fce0-6764-49b1-9e54-68e915e12d7c@valdikss.org.ru/T/
-> Signed-off-by: ValdikSS <iam@valdikss.org.ru>
-> ---
-> v1 -> v2: removed redundant list_empty() checks and idle_timeout=0 assignment,
->           ensured idle_timeout jiffy to be non-zero.
-> Thanks Alan!
-> ---
+As per the data sheet of HD3SS3220:
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+"Upon detecting a UFP device, HD3SS3220 will keep ID pin high if VBUS is
+not at VSafe0V. Once VBUS is at VSafe0V, the HD3SS3220 will assert ID pin
+low. This is done to enforce Type-C requirement that VBUS must be at
+VSafe0V before re-enabling VBUS"
 
-Looks good!  Greg won't accept it until the current merge window closes 
-(about a week and a half), but he'll keep it in the queue until then.
+This series implements support to read ID pin state and accordingly enable
+VBUS.
 
-Alan Stern
+Krishna Kurapati (3):
+  dt-bindings: usb: ti,hd3ss3220: Add support for VBUS based on ID state
+  usb: typec: hd3ss3220: Enable VBUS based on ID pin state
+  arm64: dts: qcom: lemans-evk: Add OTG support for primary USB
+    controller
 
->  drivers/usb/host/ohci-hcd.c | 15 +++++++++++++++
->  drivers/usb/host/ohci-q.c   | 15 ++++++++++++---
->  drivers/usb/host/ohci.h     |  1 +
->  3 files changed, 28 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-> index 9c7f30086..e89c9daec 100644
-> --- a/drivers/usb/host/ohci-hcd.c
-> +++ b/drivers/usb/host/ohci-hcd.c
-> @@ -364,6 +364,7 @@ ohci_endpoint_disable (struct usb_hcd *hcd, struct usb_host_endpoint *ep)
->  	if (ohci->rh_state != OHCI_RH_RUNNING) {
->  sanitize:
->  		ed->state = ED_IDLE;
-> +		ed->idle_timeout = 0;
->  		ohci_work(ohci);
->  	}
->  
-> @@ -384,6 +385,15 @@ ohci_endpoint_disable (struct usb_hcd *hcd, struct usb_host_endpoint *ep)
->  			break;
->  		}
->  		fallthrough;
-> +	case ED_OPER:		/* check for delayed unlinking */
-> +		if (ed->idle_timeout) {
-> +			/* ED marked for delayed unlinking, unlink it now */
-> +			start_ed_unlink(ohci, ed);
-> +			spin_unlock_irqrestore(&ohci->lock, flags);
-> +			schedule_timeout_uninterruptible(1);
-> +			goto rescan;
-> +		}
-> +		fallthrough;
->  	default:
->  		/* caller was supposed to have unlinked any requests;
->  		 * that's not our job.  can't recover; must leak ed.
-> @@ -795,6 +805,11 @@ static void io_watchdog_func(struct timer_list *t)
->  			}
->  		}
->  
-> +		/* Check for idle EDs that have timed out and unlink them to prevent memory leaks */
-> +		if (ed->state == ED_OPER && ed->idle_timeout &&
-> +				time_after(jiffies, ed->idle_timeout))
-> +			start_ed_unlink(ohci, ed);
-> +
->  		/* Starting from the latest pending TD, */
->  		td = ed->pending_td;
->  
-> diff --git a/drivers/usb/host/ohci-q.c b/drivers/usb/host/ohci-q.c
-> index 3b445312b..e0725e490 100644
-> --- a/drivers/usb/host/ohci-q.c
-> +++ b/drivers/usb/host/ohci-q.c
-> @@ -603,6 +603,9 @@ static void td_submit_urb (
->  	int		i, this_sg_len, n;
->  	struct scatterlist	*sg;
->  
-> +	/* Clear idle timeout since we're adding new TDs */
-> +	urb_priv->ed->idle_timeout = 0;
-> +
->  	/* OHCI handles the bulk/interrupt data toggles itself.  We just
->  	 * use the device toggle bits for resetting, and rely on the fact
->  	 * that resetting toggle is meaningless if the endpoint is active.
-> @@ -1162,10 +1165,16 @@ static void takeback_td(struct ohci_hcd *ohci, struct td *td)
->  	if (urb_priv->td_cnt >= urb_priv->length)
->  		finish_urb(ohci, urb, status);
->  
-> -	/* clean schedule:  unlink EDs that are no longer busy */
-> +	/* clean schedule: delay unlinking EDs to avoid SOF synchronization overhead */
->  	if (list_empty(&ed->td_list)) {
-> -		if (ed->state == ED_OPER)
-> -			start_ed_unlink(ohci, ed);
-> +		if (ed->state == ED_OPER) {
-> +			/* Mark ED as idle but don't unlink immediately to avoid
-> +			 * 1ms SOF synchronization delays on rapid consecutive transfers.
-> +			 * Watchdog will clean up after 10ms if truly idle.
-> +			 */
-> +			ed->idle_timeout = jiffies + msecs_to_jiffies(10);
-> +			ed->idle_timeout += !ed->idle_timeout;
-> +		}
->  
->  	/* ... reenabling halted EDs only after fault cleanup */
->  	} else if ((ed->hwINFO & cpu_to_hc32(ohci, ED_SKIP | ED_DEQUEUE))
-> diff --git a/drivers/usb/host/ohci.h b/drivers/usb/host/ohci.h
-> index 631dda617..858c7bebe 100644
-> --- a/drivers/usb/host/ohci.h
-> +++ b/drivers/usb/host/ohci.h
-> @@ -75,6 +75,7 @@ struct ed {
->  #define	OKAY_TO_TAKEBACK(ohci, ed)			\
->  		((int) (ohci->wdh_cnt - ed->takeback_wdh_cnt) >= 0)
->  
-> +	unsigned long		idle_timeout;	/* when ED became idle (jiffies) */
->  } __attribute__ ((aligned(16)));
->  
->  #define ED_MASK	((u32)~0x0f)		/* strip hw status in low addr bits */
-> -- 
-> 2.51.0
-> 
+Krishna Kurapati (2):
+  dt-bindings: usb: ti,hd3ss3220: Add support for VBUS based on ID state
+  usb: typec: hd3ss3220: Enable VBUS based on ID pin state
+
+ .../devicetree/bindings/usb/ti,hd3ss3220.yaml | 13 +++++
+ drivers/usb/typec/hd3ss3220.c                 | 58 +++++++++++++++++++
+ 2 files changed, 71 insertions(+)
+
+-- 
+2.34.1
+
 
