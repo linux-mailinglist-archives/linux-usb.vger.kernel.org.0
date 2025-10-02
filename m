@@ -1,218 +1,215 @@
-Return-Path: <linux-usb+bounces-28862-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28863-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83C9BBB2310
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Oct 2025 02:59:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48FACBB2460
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Oct 2025 03:30:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39AB13A688B
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Oct 2025 00:59:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C55CC3809C3
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Oct 2025 01:30:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61CCB18C26;
-	Thu,  2 Oct 2025 00:59:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F24078F4A;
+	Thu,  2 Oct 2025 01:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="BK/Nwjhe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AUO/MYB2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11023079.outbound.protection.outlook.com [40.107.44.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AD1B652;
-	Thu,  2 Oct 2025 00:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.79
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759366754; cv=fail; b=qgToXkO+/e5aezOZUF34AO3t195MnLblyFCJAH4UOEhCaHtvtxowiXvD0MfViMMPTO5hRikj8E1vHcCvvsvkFjscESnY+klfzRYjqoZbUlKXtnpP2S/VRyJ5e9RHQ9Pwo8IWFFgYMSC1jFkZReHrRyw3xSCzlz9TWOhdG2+rqmc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759366754; c=relaxed/simple;
-	bh=js5JECUDsT7GjW2/d+HBNTADFQiuvV+I+Rbi8irBvUE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=QVxNeaEOp9LRVGtiax8yqp8fUA8mEJAmnHJRU6yA+AYudeTYgRNX92RTjlK+mFY3NYr//1bbryiiIWFajSHjdBAzNT8lspzRFRorvza5oe6vYiJpQJSIDrO6w/r7v1DiTcwuAFROXTynZf9XTucLM0uCbThJxKF3S0c4rMNh3vs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=BK/Nwjhe; arc=fail smtp.client-ip=40.107.44.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=o96bKVqx8XODb0675pKlwiSWncakrwY4UPJUyEkIsngpuS3hRBNN7GfE1dHc+hOd53EcgFAw3PwKm11bhDMp1wK3s7mNZ4/FoxDn5ewnl5K2cVQRGQU25q0ZcSD+fLnycfU09arwugPdeTuZwOQ0JESq7L1TwrBMUE1y0dKiQzDkbyGLz7gajAvyoNbHVanI4oqVx/z+eAQrROfN42IVeBvx2x2rJkmNJ3ahuyKV7iwPK9muuIj3IVKeimymm3MR4A+x1ghAu2a5DJIPQg9gDxYSrYnVP/NKbtZjRB2DfoSVxwYtHr9CiO+b0NSUsvo2V9q6pup9jN99p1Ai0mrxew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1rbA466Cq6Xn5iMjC909XZt3zitGqubjawR3Tkn0yeE=;
- b=eU7Q6gtSh67EpMbtxhPSEhdtLedXj6Fabma1vOx0+9RowXkBtE1oCze5z6g8mv9zx8tM48CE85dtrkY6Bi3FBmn73t+rigi2Yul5DtNuFPD1lgY86FwdPQN06G5krpCpG4sNPxlDAr+NxB6AYKzrJsyYIgQ0xZrtzhhGF8K7qNrUK/tN3foBt7Pg2ipfscnYbcKvSH7x/6w6ikNBmVa0bbc9Vrk7fqq2IiNxv5zUtvFdz24vggOs/IRU38pL1k+py7ZvYukG/tj2acd+rURUB2vuz2BiK/ISaxPZLq/+tqwQmX/nIDYd1U/O4Q7usB+M8b+OmvTMbRWTw7ECkGt/rA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1rbA466Cq6Xn5iMjC909XZt3zitGqubjawR3Tkn0yeE=;
- b=BK/Nwjhe7bU9XciP85fotFCDOja1N0vA5eCpFrcnuPCOdNd8nP0fA1apXxTaqN3a3h8sGjjmpbQ81fQfZ2Fg57uUTZ92oeMcXbcQGbM8cgePZBdXtsOgwJI+O0cYDQhzpDLJb9cOOeowQz++ZpYCaWG9ehwazR7KLA6m7PClKgWE+jmEQPtgiTudnjbMHS4k7+A/CKOpUfmbWRV6S4NDIj+U1m86rOeZsqCQCIYJykJlu8L+cSYoaRGXmuRVYkdVWX1babdDLdkVIdYpCnBJqIvsMDA377qZLR79hwAH+3J6GUuQqJglBIN7DgvMlPHmT8Wq9uSzm3rEPR4bQZiH/A==
-Received: from KUZSPRMB0005.apcprd06.prod.outlook.com (2603:1096:d10:2d::7) by
- SI2PR06MB5089.apcprd06.prod.outlook.com (2603:1096:4:1a8::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9160.18; Thu, 2 Oct 2025 00:59:08 +0000
-Received: from KUZSPRMB0005.apcprd06.prod.outlook.com
- ([fe80::5145:1a84:4b73:f8cc]) by KUZSPRMB0005.apcprd06.prod.outlook.com
- ([fe80::5145:1a84:4b73:f8cc%5]) with mapi id 15.20.9160.013; Thu, 2 Oct 2025
- 00:59:07 +0000
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3 2/2] usb: ehci: Add Aspeed AST2700 support
-Thread-Topic: [PATCH v3 2/2] usb: ehci: Add Aspeed AST2700 support
-Thread-Index: AQHcMCddF4ITLdJQAEi3Dh2gsBLdrbSouQGAgADw4ECAAIsggIAD2XvQ
-Date: Thu, 2 Oct 2025 00:59:07 +0000
-Message-ID:
- <KUZSPRMB000536A7B10DA3052340556AF2E7A@KUZSPRMB0005.apcprd06.prod.outlook.com>
-References: <20250928032407.27764-1-ryan_chen@aspeedtech.com>
- <20250928032407.27764-3-ryan_chen@aspeedtech.com>
- <0a12f3ac-2600-4ede-a738-f4ab43ad4bee@rowland.harvard.edu>
- <KUZSPRMB0005CC6A87F6FFC5A08F12BFF21BA@KUZSPRMB0005.apcprd06.prod.outlook.com>
- <be6a9306-c88a-4cd5-9b88-dfd4d6e2933c@rowland.harvard.edu>
-In-Reply-To: <be6a9306-c88a-4cd5-9b88-dfd4d6e2933c@rowland.harvard.edu>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: KUZSPRMB0005:EE_|SI2PR06MB5089:EE_
-x-ms-office365-filtering-correlation-id: 0dd6779c-7884-498b-e71a-08de014ee404
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?5xkdCR32iUewUM+tkmd++kOyHwK3JYunmPxcBpRcfe4i1N0ir1lFty31FCOV?=
- =?us-ascii?Q?h4U7toIZf7sfSuRfO5UWt3Iq2Hh8neKDY1MAP4jELgi4aUp8Xh2nOGSq9VyR?=
- =?us-ascii?Q?EZYSQZqKBv4xlCunL978e1ihs7G+mll4C9Grka3hfuRPn+o56RQ6kryzd9d9?=
- =?us-ascii?Q?9AgPWTCS6X0hyHvPlVLAibuyjf6/tESvnswOUNijJsUf8j92cdP6rwE/GPVY?=
- =?us-ascii?Q?M3c3YT+HL3yWxO4xxzlSiZJe+iaOeoqjg57WX4H66UQSs7RJ9x3ywMRpjjD/?=
- =?us-ascii?Q?EjOuS9kc62UhHDG676Ax5v5eWfDpCjkLekFHFoRihwOuft5UXIZchb82xWdi?=
- =?us-ascii?Q?b+hobFrsORkMxDDGBMOgTBpTdn24ZDl1WsRmKGos2YMRp8Ier5JSFBZbNWhj?=
- =?us-ascii?Q?WPG2Clgpx2DKzwQ/7RpI7uF43UG0bj5+KqFWpB/xVNUOSaMXnsjDPeOBnhAW?=
- =?us-ascii?Q?BU+XGRAFygwpzdCkXhpLxjQOjGe/gFG5+S3znxUES6UkL2Yqj+aBal+3OTqQ?=
- =?us-ascii?Q?zwS7XQ4QRtF3KDeDa9paksmgkzDKIHfJPb+/K9TxhKk+mYJzceorpWtL9b3J?=
- =?us-ascii?Q?DMmJz2FYG+pBfdhHMStS5+125NQYI8kQi18+b0xktpqqsm5D9Si7AeAsgI2x?=
- =?us-ascii?Q?Mghuh3yZg0GLgJSt8VXzdh6wdzP2BrB5QHlmbBcKiSTfaIzbuYH0vHp6guFz?=
- =?us-ascii?Q?oFpjAefOnlwanN6iZywzu5+d3lvHOJ0hMVFbd+knmKi9WyWDe7W7sn/87jTT?=
- =?us-ascii?Q?pgXw4SCj2GD9KFFCQ0smAO9dvm+D6KJoy/m8FiUpasRBqadaL15c6T58its2?=
- =?us-ascii?Q?77z2d+dliG4OewLq8Dz02UoOfwAiQOgAbYok4QNFM9mI6kZCmLvf+OybbKRZ?=
- =?us-ascii?Q?jPPMSv0v7+CD8hVY5Gep0H/KcLVBeymmTaBQcJqSDGpFe8o8O8RbxIO3zNh7?=
- =?us-ascii?Q?dLf9LzW8T1UicNxPRkwfOFulGZViD8sBL6UABPN9DzpkXmV0zZMG3AMe3teM?=
- =?us-ascii?Q?CaMLCvJR7WBwEA8BfFfUIol9jEeAAZKkpzC0UIZojn0cw8hS7HSYTK2NNbo0?=
- =?us-ascii?Q?CCQaTvADcnIwRjAuYF8ATPq3y9sUZAtXNaDgSgL0w9JCNre7bslICJP5TOJc?=
- =?us-ascii?Q?J9qK01FCeTQLwmnUhkNvKp17X9/8NrEgL77j0Dd27Mkhwdx+C/86I5k3D+1I?=
- =?us-ascii?Q?XnPbJyxXAlFVgf/7z9ajAHuP5cCK867hwUL1qZXQjDPh+A8r9CY6es3rsyQC?=
- =?us-ascii?Q?bV7I4H7plqFC1uhAbPTgwV3bu//1jFbcQBRRyKci3iXDqbvdvCBmwa9X+CS9?=
- =?us-ascii?Q?T4du/JOZV2Oe1E3EUsKXco2iV3wfYn3BPBVUNqVkN09i3NMNrk63q78Bup/D?=
- =?us-ascii?Q?fZ73gw0XBAbrgUAHOqzVYR355/jB8hDynDfJNGW7FOeUUDPaqZpR/zWgP0w6?=
- =?us-ascii?Q?UUNeTHEW67t61MVsVOTXue5sBGlzNJBnMen0llFOjGs8p1dxSosIPjec/oXA?=
- =?us-ascii?Q?8bGggfjvzUZueOFcg0Vizf453e//0OoCk2m+?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KUZSPRMB0005.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?eEIf+kZFkSKOKk7JGSMxrpQCoEnVec7Wn6vId25dLsTjuVR64ftXHoCgtW9+?=
- =?us-ascii?Q?8Ml8VDRGPPRbYEHjLiANZ2ihzW0mhS9g7eSc5rdiwK5+VQot2L3/TxFqn7rx?=
- =?us-ascii?Q?0gLJ33YS7DxfFXhq+zos5aTdgFeSF7iLQZWZH6W7l2pD2InYVzhaQypkS7iD?=
- =?us-ascii?Q?adUoKrI9grWrAVAQJ3vSIG16jB9zXV7opdnhx3zit3eJBJT/A8K7in7eRCsc?=
- =?us-ascii?Q?5JBNDStOHo9noZEy4kDNnLBUOa3LX63JmOZf/o40+jSPKHiZGtSCFJL99Wq9?=
- =?us-ascii?Q?sVcq2BNBi0QQ+m78QOeNnk3HGpBuN2gO8eMbDS1u4YwA65mh5bkGBQZQLt+3?=
- =?us-ascii?Q?R5r4uthtiBF61Tks15nSLJ9SA+Sa5OD/+EAFtBHjViXELhXfq3yyuPeNnecE?=
- =?us-ascii?Q?k7UJ181P7EmVdMl5Dtqfxk5pFveWOJbIt5LpIsgALLAyPC0CkCKBV2FnEM40?=
- =?us-ascii?Q?V7+tbBel8nuB5HBgNKRKoX3wCLj5IPPxw+bCWskKBefClM96PL8DahC1p/hZ?=
- =?us-ascii?Q?16GTccyucStjnpfjeqTvcWQD4poxLWpRLZ/nRfZFuYbbdQo4iHpTPkBdKadL?=
- =?us-ascii?Q?tLNUqWQfuwJ44vGdegi3bobLWJxndEBTAYOLLO3XjitQRjHhBxxG9vWx08dF?=
- =?us-ascii?Q?SMMQsgJdBmIAJlS6ZmG8Dp44GDDIWB7WHDHxpLdt9J3+/rO/EaBQGBMtiaI3?=
- =?us-ascii?Q?1MdJaogSgV95QVaYCiTxG0TqgNkneUMLkIgB7H4U5IPaSvoh5EanEs5sxOrX?=
- =?us-ascii?Q?BjD9Iaw0IpQ4tnuVodi9ZwsBl0ihrRF7p+4XHFOln7M+mYZp6t1f8qJzWzoP?=
- =?us-ascii?Q?0Mt1VMMfOTYvHtbmES2M2DZNwIkW8GA1j78eR9Nmn723sd5g5qjEQCFS0iJ0?=
- =?us-ascii?Q?pG8TIun1qj44SWtAvEcSXg3WLAi11q0hi4SoKBsao+LOPIsAIvtjVQEnUOpE?=
- =?us-ascii?Q?DZxEycbOomN1t6K3mk4nTQA/fGQktCRMWvfyNM/On4xVdRF0CrH+PlNeH7Hf?=
- =?us-ascii?Q?ukHQVgCt1J4DIwSyh7bbeSyhAlQFcho13S33H/h7V5jG7YbbP4LxrTgvsHIv?=
- =?us-ascii?Q?yWgqYHrcVqr0HU7NCwlHhPoE5+eCyOs9BMFTXbxH0v+pkOYdVE5FXYOU9T+g?=
- =?us-ascii?Q?Tr1o1NSdoKm59LHxqauecHh00fLH75Bo2ifZoDzgAwCb9PiHmYR/btQgQxtQ?=
- =?us-ascii?Q?QzXeFygI5N+WFf5JyO94ktO0he4bktow3Ad3sTGkiO+QqzgUerG59xduGl88?=
- =?us-ascii?Q?8Hk+dxjs/8XOINpNBV0VmHKKDP8WMh4IICZHp41YEOmUxZVANpsWvs1K+1/F?=
- =?us-ascii?Q?vtdFgKm6ZRg61Heu/mDZJpl41keLbFXp0JBEKsXcOusqUeQcaVqLVt9IO98Z?=
- =?us-ascii?Q?I+q4yNc8ujmZnru0yJ+RnUMyRUnAY7FEJbEvwoD+vtUSD7RzjrH39dbmkntG?=
- =?us-ascii?Q?VKfDarpkB2PwC8fG7LixNP9KJCcz4JaxZPAKKDxWLUIEfO/wcNO2w8GZlLCY?=
- =?us-ascii?Q?VfU/xTbXfGws+lYsd29M6mavMzTqDsjARzV20ryokwSAhPNlH0dnbPAlo8la?=
- =?us-ascii?Q?Sha35mvN8VTOv3lSd7a9mzrwjq8xLsfbfg/3b2u6?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCF5C2D1
+	for <linux-usb@vger.kernel.org>; Thu,  2 Oct 2025 01:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759368638; cv=none; b=ofZj47VYTX6quSHWXOvXhiHYl4pozBi0gkAFaJyW/IXOzmXsRlA2SGLxAmUbDkIho7ACsg7Pm2LlLP1FoSafiPJn/kqHdsgFDZM/DuO0nTZ1Is+MWUVerDXsLhLHgu+gRSYs/mrgB0bvTnjR4lTmRv8YdxauotOR0u+qkl9k+J0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759368638; c=relaxed/simple;
+	bh=yHCrEUBUDlDvieJF6g9rdupvxZAXsuiEo4h/EypvVeA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=svJ35WvqXkkgllhFQKWUTJVvc7r+s1Jd8eJ/jBSwmpOEnRqay4iH9ixUmaFIncCOKbZkukYO+2sRCanQUlmY/6rq/NMMhFl3hyZru0i6n3knxjKIZEOdK6Y+Dk7WU+K1tFZWBitrR7DwXaE5qW5CJBTsA9u6h1Ip9DjDAGhdHV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AUO/MYB2; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b55517e74e3so535118a12.2
+        for <linux-usb@vger.kernel.org>; Wed, 01 Oct 2025 18:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759368635; x=1759973435; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=LD1srCTYbjsb64PrBY5TOEK1LBdxCOb9aClNRrS7XLc=;
+        b=AUO/MYB2KuhvtJSNdUimVZF05RSsSpV5gxMWab91Jt/tRD1GIvVeWLtUtlH3yLDAYO
+         t/BFAhqD0wt8oOtwoNU2QxTR4uCkiIgMpzXKzGpulIoPFM6bstAmJZZIdMYpGEpZzw8r
+         krM40llwwEdQKNxltZcU+TQjvVHfaZ3MZEf81Q93VJo3oalRg/TglckM1YkLo1208Ejo
+         A5hEOcffFIUBBYUFmufkhm4Qw9Xf7LQP6NhL4sejvUq/gmDEB4MJmtB+avz0fCISd9gi
+         Z4KsEfqFL8RSuyOh7weoGlzu+1MIuunx07X3yf9JIj46jjTECHXoRTjfoxTHSOTr7VZO
+         kztA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759368635; x=1759973435;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LD1srCTYbjsb64PrBY5TOEK1LBdxCOb9aClNRrS7XLc=;
+        b=aXJx8kvqmRchsORrHCEQmBuA49x3ppR/SBrokRJXjQn8e4j9/P/12YCuAXx+jr9dAb
+         DCuVUFBlj0dCVZDK4lM7q6b93o654ierSizaJKfjeoX2qgHGifaZwbc/f7SpXCzOm8MR
+         0vQhYfOnX8RVMXkIZFvPhdc6i5JxLqJr87HF2MfaocTnNWiun8iT/bvHUQUsE1W5uzfE
+         OO6jeU6gG33vskeCWvBjn6UILaEwqbIUKeU+NmT5IuJZA+UryTEOdv7WvISlDcWrXaUH
+         sdT207r9Q/qr2WJA875KIEiWKdUteW/CEc1OXnw5WSnspYlGYMqXtv6eJFFOe6pBwNkz
+         yqwg==
+X-Forwarded-Encrypted: i=1; AJvYcCW9He7TLMvSMbFAB2t6421Ky9BhaEl7tYaPdl5AkuxU6njuXJWoC3AtrUXl6j+SVh6mLeeuvmuLLFU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQVzNoQr+re98oBvKKBgok8LKdBHbIlcaoyb4V6EA9eMThEyz+
+	zGZuA2syQqH3oFStxph86sRq5JDVHVCBPqz3YBmGcV+YDeAq8hU5hPrm
+X-Gm-Gg: ASbGncuDbksw3kj3SEi+4p6GuAaTP9zaRM2ZNkL9g0cIAPPwv4UeklIRTz8VWB+LTNF
+	tJIxwxOLuDlNEhvp1/8daLHEBzsYbumhfbvhDrfgAYIOCVMd9DK7MkpmNAN2Z2dGN1YaYKsRibN
+	YRKtY/Vjbsx3tNoNKUpZgOTvM2KKYegl6BdSlI0lsxAx63zC530JGmISdkOm8NdsR3Zwrtz02t+
+	/BRIxuF+htcrFhKSR74xpkT20xsJOBKfmTVyRRZlUOmZkq7JiG4+12VQReXAOH5CqDh/v+33eBm
+	slHXRbmzCAb6CCVWnjwTppDLSR5D73OQUb0A/EU+Vq7EQT2DGi0H3W6Z5AGIfdjcbS3JsRBYEL2
+	zuR5yB7EKCKYZo9Tby/f/P6JUWgk0EA==
+X-Google-Smtp-Source: AGHT+IHwCDQ1m3Nx5F0xwvU4w0xrVZO3PGnLJA8hVHzj4F5bdM0dmnnEYlo5YuKngbm3nepOHWXqMA==
+X-Received: by 2002:a17:902:ebc2:b0:262:9c4:5470 with SMTP id d9443c01a7336-28e7f2ef23cmr66511495ad.28.1759368635145;
+        Wed, 01 Oct 2025 18:30:35 -0700 (PDT)
+Received: from localhost ([2001:67c:1562:8007::aac:4468])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d1d5e07sm9004755ad.116.2025.10.01.18.30.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Oct 2025 18:30:34 -0700 (PDT)
+Sender: AceLan Kao <acelan@gmail.com>
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Andrei Kuchynski <akuchynski@chromium.org>,
+	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	"Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: Fix workqueue destruction race during connector cleanup
+Date: Thu,  2 Oct 2025 09:30:26 +0800
+Message-ID: <20251002013026.4095030-1-acelan.kao@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: KUZSPRMB0005.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0dd6779c-7884-498b-e71a-08de014ee404
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2025 00:59:07.6965
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: umng5dQMnucsgW1GMyIMIwAYssLGCf7nVXssl58WT5tFhpxWcwiAkgetL2KoUvBaGa58hx4BmHKBeRNMGgw7/7uk48GKr6JzmIy1FGh3/VQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5089
+Content-Transfer-Encoding: 8bit
 
-> Subject: Re: [PATCH v3 2/2] usb: ehci: Add Aspeed AST2700 support
->=20
-> On Mon, Sep 29, 2025 at 05:56:13AM +0000, Ryan Chen wrote:
-> > > > @@ -253,8 +256,13 @@ static int ehci_platform_probe(struct
-> > > platform_device *dev)
-> > > >  	if (!pdata)
-> > > >  		pdata =3D &ehci_platform_defaults;
-> > > >
-> > > > +	dma_mask_64 =3D pdata->dma_mask_64;
-> > > > +	match =3D of_match_device(dev->dev.driver->of_match_table,
-> > > > +&dev->dev);
-> > >
-> > > (I just noticed this.)  The "dev->dev.driver->of_match_table" part lo=
-oks
-> odd.
-> > > Why not just write "vt8500_ehci_ids"?  Do you expect that this could
-> > > ever have a different value?
-> > >
-> > > Alan Stern
-> > Thanks your feedback.
-> > I used dev->dev.driver->of_match_table rather than hard-coding
-> > vt8500_ehci_ids to keep the probe code generic and tied to the driver m=
-odel,
-> not to a specific symbol.
-> > Functionally it's the same here, but this pattern avoids coupling the
-> > probe to a particular table name.
-> >
-> > How you think ?
->=20
-> The code doesn't need to be any more generic than the source file it
-> containing it.  This particular probe function will never be called for a
-> different driver, or a device that matches an OF table different from
-> vt8500_ehci_ids, right?
+During UCSI initialization and operation, there is a race condition where
+delayed work items can be scheduled but attempt to queue work after the
+workqueue has been destroyed. This occurs in multiple code paths.
 
-Understood, I want to keep get from of_match_table.
-Appreciate your review. Thank a lot.
+The race occurs when:
+1. ucsi_partner_task() or ucsi_poll_worker() schedule delayed work
+2. Connector cleanup paths call destroy_workqueue()
+3. Previously scheduled delayed work timers fire after destruction
+4. This triggers warnings and crashes in __queue_work()
 
->=20
-> Interestingly, there are two other places in drivers/usb/host/ that call
-> of_match_device().  fsl-mph-dr-of.c uses my approach and xhci-plat.c uses
-> yours.  The difference is that the xhci-platform probe routine _is_ calle=
-d by
-> other drivers, namely, by xhci-rcar.c.
->=20
-> I guess it's okay to keep this code as written, even though it's not stri=
-ctly
-> necessary
->=20
-> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
->=20
-> Alan Stern
+The issue is timing-sensitive and typically manifests when:
+- Port registration fails due to PPM timing issues
+- System shutdown/cleanup occurs with pending delayed work
+- Module removal races with active delayed work
+
+Fix this by:
+1. Creating ucsi_destroy_connector_wq() helper function that safely
+   cancels all pending delayed work before destroying workqueues
+2. Applying the safe cleanup to all three workqueue destruction paths:
+   - ucsi_register_port() error path
+   - ucsi_init() error path
+   - ucsi_unregister() cleanup path
+
+This prevents both the initial queueing on destroyed workqueues and
+retry attempts from running workers, eliminating the timer races.
+
+Fixes: b9aa02ca39a4 ("usb: typec: ucsi: Add polling mechanism for partner tasks like alt mode checking")
+Cc: stable@vger.kernel.org
+Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 50 ++++++++++++++++++++++-------------
+ 1 file changed, 31 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 5ba3a6c81964..1f71c9983163 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -283,6 +283,33 @@ static void ucsi_poll_worker(struct work_struct *work)
+ 	mutex_unlock(&con->lock);
+ }
+ 
++/**
++ * ucsi_destroy_connector_wq - Safely destroy connector workqueue
++ * @con: UCSI connector
++ *
++ * Cancel all pending delayed work and destroy the workqueue to prevent
++ * timer races where delayed work tries to queue on destroyed workqueue.
++ */
++static void ucsi_destroy_connector_wq(struct ucsi_connector *con)
++{
++	struct ucsi_work *uwork, *tmp;
++
++	if (!con->wq)
++		return;
++
++	/* Cancel any pending delayed work before destroying workqueue */
++	mutex_lock(&con->lock);
++	list_for_each_entry_safe(uwork, tmp, &con->partner_tasks, node) {
++		cancel_delayed_work_sync(&uwork->work);
++		list_del(&uwork->node);
++		kfree(uwork);
++	}
++	mutex_unlock(&con->lock);
++
++	destroy_workqueue(con->wq);
++	con->wq = NULL;
++}
++
+ static int ucsi_partner_task(struct ucsi_connector *con,
+ 			     int (*cb)(struct ucsi_connector *),
+ 			     int retries, unsigned long delay)
+@@ -1798,10 +1825,8 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+ out_unlock:
+ 	mutex_unlock(&con->lock);
+ 
+-	if (ret && con->wq) {
+-		destroy_workqueue(con->wq);
+-		con->wq = NULL;
+-	}
++	if (ret)
++		ucsi_destroy_connector_wq(con);
+ 
+ 	return ret;
+ }
+@@ -1921,8 +1946,7 @@ static int ucsi_init(struct ucsi *ucsi)
+ 
+ err_unregister:
+ 	for (con = connector; con->port; con++) {
+-		if (con->wq)
+-			destroy_workqueue(con->wq);
++		ucsi_destroy_connector_wq(con);
+ 		ucsi_unregister_partner(con);
+ 		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
+ 		ucsi_unregister_port_psy(con);
+@@ -2144,19 +2168,7 @@ void ucsi_unregister(struct ucsi *ucsi)
+ 	for (i = 0; i < ucsi->cap.num_connectors; i++) {
+ 		cancel_work_sync(&ucsi->connector[i].work);
+ 
+-		if (ucsi->connector[i].wq) {
+-			struct ucsi_work *uwork;
+-
+-			mutex_lock(&ucsi->connector[i].lock);
+-			/*
+-			 * queue delayed items immediately so they can execute
+-			 * and free themselves before the wq is destroyed
+-			 */
+-			list_for_each_entry(uwork, &ucsi->connector[i].partner_tasks, node)
+-				mod_delayed_work(ucsi->connector[i].wq, &uwork->work, 0);
+-			mutex_unlock(&ucsi->connector[i].lock);
+-			destroy_workqueue(ucsi->connector[i].wq);
+-		}
++		ucsi_destroy_connector_wq(&ucsi->connector[i]);
+ 
+ 		ucsi_unregister_partner(&ucsi->connector[i]);
+ 		ucsi_unregister_altmodes(&ucsi->connector[i],
+-- 
+2.43.0
+
 
