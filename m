@@ -1,83 +1,84 @@
-Return-Path: <linux-usb+bounces-28872-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28873-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8296BB4B00
-	for <lists+linux-usb@lfdr.de>; Thu, 02 Oct 2025 19:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B232ABB4B0C
+	for <lists+linux-usb@lfdr.de>; Thu, 02 Oct 2025 19:28:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D5773ADAE0
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Oct 2025 17:27:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B92B3A58A9
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Oct 2025 17:28:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 690CB26FA57;
-	Thu,  2 Oct 2025 17:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D9E274B44;
+	Thu,  2 Oct 2025 17:25:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TtNHngYH"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cKcz0PIY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F9826E6E3
-	for <linux-usb@vger.kernel.org>; Thu,  2 Oct 2025 17:25:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DF0274B27
+	for <linux-usb@vger.kernel.org>; Thu,  2 Oct 2025 17:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759425952; cv=none; b=Uqy3W4D/tD023pHMFGSJRcJfL64oCUiGza2Pjju1awxT3hZF/vMLj4c2Z9aL2WzVNS5eeg7ks9HXOdcHcQBcoSIK466xwfIc+SsuMUdczsYVjUHaQ9qSuQrX6YhxJDu4bDYL+yj8rpfrPiboslUAZyDO6+aQ0zjUxrBYVErA4/0=
+	t=1759425958; cv=none; b=slqHKcFm0z3l1bNGxGfvuW8qHAv/goFlGGNl0UA1lwTc6Y8lzJvGaT7pcbx9/EhMyRvExOfDIVvhMeRviD28yfazdM+HVKs/tmmynKTOflPsH5BsWAZ2esN9JecrLvs7XxMOIdw2r1HD1vDFvzcFu5ij/lMqDx0U3pKgE2x7beo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759425952; c=relaxed/simple;
-	bh=Vnx7FEyrTZzrEyMks2ISdGuYBznHpzV4bClxPPmMiao=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nozfsuVb0tYHIuFOkG+7bdapMD1ORany6vk2MxWvskbQtiE+cFWVs4kRcl2ttW2WFLHXwZdfU+p3dfQVGp+fOKNThly5Z5zhmlysRRV10gIPsepp4T6/3dAq95hz5bQTTWJrpJ+9BLrPaHE+4MoARp+gXQFHksvroclRBTd1I6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TtNHngYH; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1759425958; c=relaxed/simple;
+	bh=RwbCoddsvhqFNIlVCzJxf3Z4gIZGCQR3H9/+B5Bcmqo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YIIdlldVqVfrxjTcdhYuqoUrqCJ3bWYgskn5mLFBg6LFiz8MpeBWPBBA1txcYEEa7CV2JjefQLh65WnghQDTQOxD7p2Aq04NoH1T/c9jn9Tm1xQxtosDcI8S6aLK6oceg+UWquwyp1V2mCVDet7xj7r0529KuKHWza2SUh6lq3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cKcz0PIY; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59291euh032297
-	for <linux-usb@vger.kernel.org>; Thu, 2 Oct 2025 17:25:50 GMT
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5928pDJg031946
+	for <linux-usb@vger.kernel.org>; Thu, 2 Oct 2025 17:25:55 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=1rqna/rBH+iajzg+XAXDikkpeuWocVd+bF8
-	bPM3no/o=; b=TtNHngYH93K+UoMcr5MaISKFeS0Ob4suJHOfijazkWAsn3rOXxS
-	ZJhsW7eUyvbkBsG7Mpbxmy4945kyMB/3rE7dqCY+3pcYc0yrXNBJlxd89TvCflJ8
-	bHf8QETvv+yM8MsxMzjg4AXQWI7cDNUrgCG6EAO2NOSv9XujYDgrO6gMWvJ2F4NT
-	4rlOF6/cEd0UDXHYg2fsuTnR9d1iYZ65iVtD602UnKLeIUkBTJbZOdexGuXHFj2O
-	LpdR5hAhf5G95Msh+zbNuUzCSe0Zznmqvkjp+k8DUN5PuBTRfwLbjzSo8JDIvDU2
-	/UWcvpuW6/sETxgIOnG0XgUCJ3wOUnT7t+w==
+	cc:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=qcppdkim1; bh=lkXBb6Qn3Fp
+	d39i3QFA9/nCHMSToieZ6LJfRkx2X6fU=; b=cKcz0PIY397I+UiGgwq0i2pKg0w
+	0cxZv1HcNxe4OWYw7zh0D6pOIJieQRD5SOg5C5begmrFIcFy1yH4vTvVv8TfM6Zs
+	Z3N4Q+EyI5mD3ZvigNGtikL0qm8LZJ/yepmtuR0HIcgqLHAn8a1Y9FjgUdYx3yoU
+	t2NZUCv0u6QGsv8XcNBTQX3Evgn1JZV3UzDwMgR+XogYrTVQMoDkJO0QHeESKKgQ
+	1mFXURXtfg1perbjxEUmFfnPKWWtNubWzm5bkDaMWADR5YxrUginh3ExWM+A50jL
+	j8CPWBqjBXYRKybf5CvFneuGhDu5yzUgAYcX5i24txY9ajrpoMU22/3uVvA==
 Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e6x60n94-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e6x60n9a-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 02 Oct 2025 17:25:50 +0000 (GMT)
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-78117c85670so1616911b3a.0
-        for <linux-usb@vger.kernel.org>; Thu, 02 Oct 2025 10:25:49 -0700 (PDT)
+	for <linux-usb@vger.kernel.org>; Thu, 02 Oct 2025 17:25:55 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-78108268ea3so2310841b3a.1
+        for <linux-usb@vger.kernel.org>; Thu, 02 Oct 2025 10:25:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759425949; x=1760030749;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1rqna/rBH+iajzg+XAXDikkpeuWocVd+bF8bPM3no/o=;
-        b=Xww39/sHY4Tlj9dQVqqc4ya9n5pgEoCWjNIX8qU8LHbd3SwWJqHxn3z5cEU3lvn5tX
-         somY3Z62yHR46MrLzGDAnrTYMcQaY4ZcuGzDqcdDEk/LoHXzqi/U+yzWb2f8+2Upi0is
-         fbMe69JS092+RyymkxgWiFtR7t1zDykvBVI3SGax9PaMvon/55XElOw5ubZz4+5kG78x
-         +Cx1Obp3Zyhd8qRSKnvnNQjmPpuoq3r0vdkByfcy72uXMVoxD2tpz9AeDUo51NeZIw8w
-         qjIqfSIGkloNXMrs80+gyqrMk84yTvpv9ws+mWKsWkcIaIsXQ2MZ1b8KJPFKxbjKkRjp
-         BuYA==
-X-Gm-Message-State: AOJu0YwxnhvJgH1OkDsjnuKLlf6yqrSHiSh6poM22NMt4Y0vAPGFIg2T
-	3nZGSdCfCgMn2P4Nw5H8xr0IC8yUTYl/+Aew2I+ZHpxrpfqaYJBDNEB0JVhbGbd2nQMhj0kFwst
-	vCkwknbs1WmJTOVLrNIDjTtt3II9EKkS6fEYbofjvSJYa41Xq5p3XEDReGp3O/Y4=
-X-Gm-Gg: ASbGnctpnbkteJn+/NUjL+CNgZIbhYE2LDmAbGsB/X6q5FwvWZVW5SwQ4FMVHq3MaOB
-	FQdE0fjxJbtDHoMW3iQSAnTSa2UonAYzs2OkDJi5CA5F4gu8EkvI1zqxEQp35eiVJQz29wld1Ix
-	tNPjWKVsMHbco86mBfv22BgD3IgVfR1PsFkj+qI/e7+3ih6KXotJT6RDtrbg43KLuFx0Mwh1+G0
-	ocmFftOsBHlfQEBSv+FqVRqaPVIHkqk+SCNMz7zYvTuf+AHU+5qkW3BSCAXzJsC0ZEQScKvWaQ4
-	Z6WCg5HIiFILKvcwKZr8RJmXWfVOISMQMYqY5DrWSrJAl40iJNTHsksoU/LMGJolTJVz/alme8q
-	M1LK/Dr4=
-X-Received: by 2002:a05:6a20:6a21:b0:2c2:f61b:5ffd with SMTP id adf61e73a8af0-32b61b4edcbmr310296637.10.1759425948706;
-        Thu, 02 Oct 2025 10:25:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG+enE8wuWieJoBAKDjUG3eBXUdkVEiwqNMSZ/0wvGfEYKsHkPg68VO8xF8jBbQP1OGtks3RA==
-X-Received: by 2002:a05:6a20:6a21:b0:2c2:f61b:5ffd with SMTP id adf61e73a8af0-32b61b4edcbmr310239637.10.1759425947791;
-        Thu, 02 Oct 2025 10:25:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759425954; x=1760030754;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lkXBb6Qn3Fpd39i3QFA9/nCHMSToieZ6LJfRkx2X6fU=;
+        b=UnIaSYdLP25LF82PpN1UGTDu9QCyJ7NJOb7zaYH/p22jxhqHYxwSF6SCmRc71jrOT1
+         H+elzp469HcV3SS9Lh1nne5F6HQaaawsieNmY6LZHxnVY6SB00Ri1fe6huudYcoIkw/a
+         vBNGjo2gGFfKjYJ2UJ5gI8/ryMcoUsAfvzsb9eoktNrBmwmly75WffXJJ/oAXZG+8HEb
+         pYDuCeuCy285/OoIus8fTcvc9a5BGIqZaUtp/SGCAfx/6JVtf0MZ2NLJCNSln/3iczYD
+         CCYTYNhicAagVINGytXJ20M7VL9pl6Rp5SJVYTtiocEQn26i0ne4ui3pz9QJUWgrXr6P
+         ZbyQ==
+X-Gm-Message-State: AOJu0Yxp2jSosioDMousc3lOUzX7hjtEvlBO3x4xxz2dvZ8z5lyBWx/o
+	kS7nXEMVbxIfkZ2hsHjbHAxzGIt6ojjbMLKEE90AN4KqtTswi09Ha5/K3ykS+BUrUYr4MKr5Wbw
+	x4NehlJKkSx8B/Gz6glUcn8WC+iGGstIz5lX6DLhrMMk8NfYqoVU6Z1Z5qkMLjo4=
+X-Gm-Gg: ASbGnctVjOrmY3zDmxIfjb+wrDCAYgFozeP1y3IdpEA9UiivSvKztijyHuaq95KErX3
+	aHc2mM68efoZJGiiNCqibGvIYLi6gxeSi1QiUkgsLjzBWcCsdOp5B9r6+mLSPyYhHllBbkE01Z4
+	p/mlEm5ygW6e5vI4jyn9EIlPJ6VF3TI7U7OQ0COr/UgCKdMYmvVeBCvnjd1qNUdaEDuowgzRJCy
+	j61yXZS1Khj0zMxuN/MY7n/z5MJnMWkaEdk7Xf+w3dzTkeXcMTQwWowMzgd9DfK4CQtehI2yN3y
+	4wvaQfhODODfQfEUk3S47imjCewsSIPPaGql545E438QlqsAjfSSOyU7fYI3gYtq7Kj/sl6VY/9
+	bHzVQb9I=
+X-Received: by 2002:a05:6a20:7d9e:b0:243:78a:82cc with SMTP id adf61e73a8af0-32b61d9e0b3mr278968637.25.1759425953831;
+        Thu, 02 Oct 2025 10:25:53 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEWExLSIWzbs+KwqVHiI050o0naTRJriHcJSbvWTXSI/V99qkoY2m4Mo76h/bhlOiZHgo0Ihg==
+X-Received: by 2002:a05:6a20:7d9e:b0:243:78a:82cc with SMTP id adf61e73a8af0-32b61d9e0b3mr278946637.25.1759425953373;
+        Thu, 02 Oct 2025 10:25:53 -0700 (PDT)
 Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6099f5b6e9sm2387423a12.40.2025.10.02.10.25.44
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6099f5b6e9sm2387423a12.40.2025.10.02.10.25.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Oct 2025 10:25:47 -0700 (PDT)
+        Thu, 02 Oct 2025 10:25:53 -0700 (PDT)
 From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh@kernel.org>,
@@ -89,10 +90,12 @@ To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Subject: [PATCH 0/2] Implement vbus support for HD3SS3220 port controller
-Date: Thu,  2 Oct 2025 22:55:37 +0530
-Message-Id: <20251002172539.586538-1-krishna.kurapati@oss.qualcomm.com>
+Subject: [PATCH 1/2] dt-bindings: usb: ti,hd3ss3220: Add support for VBUS based on ID state
+Date: Thu,  2 Oct 2025 22:55:38 +0530
+Message-Id: <20251002172539.586538-2-krishna.kurapati@oss.qualcomm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251002172539.586538-1-krishna.kurapati@oss.qualcomm.com>
+References: <20251002172539.586538-1-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -100,18 +103,19 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: JrQISZ6u-j9gDR_UBNVo2umXBUZOAsAT
-X-Proofpoint-ORIG-GUID: JrQISZ6u-j9gDR_UBNVo2umXBUZOAsAT
-X-Authority-Analysis: v=2.4 cv=ZtPg6t7G c=1 sm=1 tr=0 ts=68deb59e cx=c_pps
+X-Proofpoint-GUID: I_UpZyKjqRDarb_Xa9hFgY5GEYwKC2Uw
+X-Proofpoint-ORIG-GUID: I_UpZyKjqRDarb_Xa9hFgY5GEYwKC2Uw
+X-Authority-Analysis: v=2.4 cv=ZtPg6t7G c=1 sm=1 tr=0 ts=68deb5a3 cx=c_pps
  a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=x6icFKpwvdMA:10 a=0ZYI1qUNTW_HKTauMVIA:9 a=zc0IvFSfCIW2DFIPzwfm:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAxOCBTYWx0ZWRfXxCpej0zGSPs3
- 19QRdpxMNqAmGodN8V/tm9vRknXFw6frs7b3IR2NwnkFNm4mR7HLgIKqen4N0/f0KRDFVy/e0oC
- D4LFof1WZhnQ3SHMmnp241hYrRqrM8pCIxWVWelpIMdN/18JOwxb3xKt5+EbafsAbqdVjbFDu7c
- 1AsQ149A2Z4+9YKp1iI51ybY8JyqPrJ86/0Tm5F9lca4Xrsu5PTAJKmjvqDea4fhvZ1xuNc7ntI
- l3/Q9Uie3wk6gRCmoBu84oUOBHttj/rZz1hPv/XHm3caEJ41CIOGtljID/wt5Lp3nNtMS0MmbYH
- /AtMMwBgJz0cm6gSTbAidt1bnOZAnfTvgzwt/q1q3uc195Uit7Nyh8dnp+bmVcAYevmZZ+TfdQ9
- 9kJElE/aDYQvQeheMuLrrBk2S4sHbg==
+ a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=UO34u3PHWDRxg_ly3EkA:9
+ a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAxOCBTYWx0ZWRfX7qYjMIJdSGXA
+ UghxAhhf+/v4UPtHUlmuUddmXIF8FAJk3puyHzq/x6J7rVIJTZHCFgaSRJi43VTXjc0epcb7WFZ
+ KkMrnjuRBtyK79a2yf0xm5BTN2/zZudVE5Wi51ARUzltNXdy8tYsXyJFqfZUcVsK2RfBRkNBVH4
+ 8h9LCoOLmFRTsXni/MWouuA6ezTCvDVzdjNemMKzPpdZzj0CAFa4lUIlh60Pu8UNPo5oVbmmItu
+ kqS6fPBoMpEJYwzMKo4IdBx4+hGl/w5uVCEcDCTKB1DqqWXBbOEo3HGI563sMSf9wnnS+97fpyR
+ fTkHXF22yZKnrYNVH/oODBXTGuzamjGlEMeSwvO1Pn2edeHcdBG7+mVmvwlMTMa8H6tb1jNV2ZF
+ 5glhv/DDNPfDtY0qknzIGvYtRFPLCg==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-10-02_06,2025-10-02_03,2025-03-28_01
@@ -121,30 +125,43 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509270018
 
-As per the data sheet of HD3SS3220:
+Update the bindings to support reading ID state and VBUS, as per the
+HD3SS3220 data sheet. The ID pin is kept high if VBUS is not at VSafe0V and
+asserted low once VBUS is at VSafe0V, enforcing the Type-C requirement that
+VBUS must be at VSafe0V before re-enabling VBUS.
 
-"Upon detecting a UFP device, HD3SS3220 will keep ID pin high if VBUS is
-not at VSafe0V. Once VBUS is at VSafe0V, the HD3SS3220 will assert ID pin
-low. This is done to enforce Type-C requirement that VBUS must be at
-VSafe0V before re-enabling VBUS"
+Add id-gpios property to describe the input gpio for USB ID pin and vbus-
+supply property to describe the regulator for USB VBUS.
 
-This series implements support to read ID pin state and accordingly enable
-VBUS.
+Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+---
+ .../devicetree/bindings/usb/ti,hd3ss3220.yaml       | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Krishna Kurapati (3):
-  dt-bindings: usb: ti,hd3ss3220: Add support for VBUS based on ID state
-  usb: typec: hd3ss3220: Enable VBUS based on ID pin state
-  arm64: dts: qcom: lemans-evk: Add OTG support for primary USB
-    controller
-
-Krishna Kurapati (2):
-  dt-bindings: usb: ti,hd3ss3220: Add support for VBUS based on ID state
-  usb: typec: hd3ss3220: Enable VBUS based on ID pin state
-
- .../devicetree/bindings/usb/ti,hd3ss3220.yaml | 13 +++++
- drivers/usb/typec/hd3ss3220.c                 | 58 +++++++++++++++++++
- 2 files changed, 71 insertions(+)
-
+diff --git a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+index bec1c8047bc0..c869eece39a7 100644
+--- a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
++++ b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+@@ -25,6 +25,19 @@ properties:
+   interrupts:
+     maxItems: 1
+ 
++  id-gpios:
++    description:
++      An input gpio for USB ID pin. Upon detecting a UFP device, HD3SS3220
++      will keep ID pin high if VBUS is not at VSafe0V. Once VBUS is at VSafe0V,
++      the HD3SS3220 will assert ID pin low. This is done to enforce Type-C
++      requirement that VBUS must be at VSafe0V before re-enabling VBUS.
++
++    maxItems: 1
++
++  vbus-supply:
++    description: A phandle to the regulator for USB VBUS if needed when host
++      mode or dual role mode is supported.
++
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
+     description: OF graph bindings (specified in bindings/graph.txt) that model
 -- 
 2.34.1
 
