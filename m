@@ -1,86 +1,106 @@
-Return-Path: <linux-usb+bounces-28882-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28883-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1780BB5F73
-	for <lists+linux-usb@lfdr.de>; Fri, 03 Oct 2025 07:57:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FADCBB5FE3
+	for <lists+linux-usb@lfdr.de>; Fri, 03 Oct 2025 08:45:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85C374831AD
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Oct 2025 05:57:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2650919C403D
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Oct 2025 06:45:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74FD31FBEAC;
-	Fri,  3 Oct 2025 05:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60A9C207A32;
+	Fri,  3 Oct 2025 06:45:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nBM3Iuiy"
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="ta9b7IjI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721E918C03F;
-	Fri,  3 Oct 2025 05:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEFA219E8C
+	for <linux-usb@vger.kernel.org>; Fri,  3 Oct 2025 06:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759471059; cv=none; b=FaeolH49gLttqQKecGhEKkSyG4sPAo4Yr4aMlfX6l79XYaUGTBYisNgxnnhxAoDJWo+Z2AmQDoUHtkltad45ZISm1QEaIKkXGYrqggmSM0qRptQG7myRFXioAoMnahnGapu18OsMvacHAua8QIw4F2XK3ziKFVLQo2OgGs5RKBE=
+	t=1759473907; cv=none; b=ikdc43IPivp9QYC3kPUxHIajrlVOfoDVcHOgJghdjA+1wwtbAmACe5GskS9CISvOBrPnykkoI0O/O8OsILlq2e1ED3V1cFy5MNz07FVkxDeFX2iMzkbBEvIGGr07huNNJSKM9R6cwISpInhPUOHhgK+NzR9UFqCBM54UA56YSl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759471059; c=relaxed/simple;
-	bh=0oNC759He1lTOqr7QDNZ5tB39O1bmD82xDV4bqLXrTI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YJLYfCGHRegIIKxhLkG+pSxD/wtosmFiIVarR1GRasWtKozMFJojCUUSrZJQRotvonwSAq1SVQun0+zZQWSQEJvajXgWmXlGweDOXchuDr8ElXPMvfArPFcgde8zHoaZBGFDEPqKda6D1djtodT8W3/pFELAlNl2/s/CVu1lbVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nBM3Iuiy; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759471056; x=1791007056;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0oNC759He1lTOqr7QDNZ5tB39O1bmD82xDV4bqLXrTI=;
-  b=nBM3IuiymrhctJ6e3KlVUlvPdp4HBt8ehY9yj+RNBJvOZSI62m1QE8/1
-   TRk8IO/UTMSNJhjwU4cnDacGKnAtwomtarwxajhxXW1Ji/hGCJwb+Gf2Y
-   tJuMQspUMnE0ktQCZ21Fg3WBDzs9XwbymkMhmr10kvPkENKLtOGEj/1Mk
-   y/A16V9F4wkuilNhAxt3BiuCzRf+NxO8Vf1YoN5uSb2TtIX382NQUXFSs
-   xiK5xULQ7qgj7w21wPLQULPrPzR6WUjvv5i68DAPf5QfRkFjfJHeGfPqZ
-   94sZ5l27tLR3dGl1czvG2UBnrxVXhS4YZtmFsX94EPu1J38e9zmLYlK6m
-   w==;
-X-CSE-ConnectionGUID: ltqX3GYSSZGFnbkXSuzZuw==
-X-CSE-MsgGUID: XzAokKmTT7yY2oYUCQ+Blw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11570"; a="61464667"
-X-IronPort-AV: E=Sophos;i="6.18,311,1751266800"; 
-   d="scan'208";a="61464667"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 22:57:36 -0700
-X-CSE-ConnectionGUID: LZOy1VUVRR2AOhKRFoMQcA==
-X-CSE-MsgGUID: 4Ml5LMX3QWuehhaZ2XbJQA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,311,1751266800"; 
-   d="scan'208";a="202960643"
-Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 02 Oct 2025 22:57:32 -0700
-Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v4YnK-0004MF-06;
-	Fri, 03 Oct 2025 05:57:30 +0000
-Date: Fri, 3 Oct 2025 13:56:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Biju Das <biju.das.jz@bp.renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Subject: Re: [PATCH 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin
- state
-Message-ID: <202510031333.zZYEFOH0-lkp@intel.com>
-References: <20251002172539.586538-3-krishna.kurapati@oss.qualcomm.com>
+	s=arc-20240116; t=1759473907; c=relaxed/simple;
+	bh=Xs0k+T2nk6ZBx6NYfGOdqbhVdwWIomTm+4Fy9nW1fjI=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NylpUuoa+pWUJd+hbCW6HFpvpssYTMGgiwCqGqbF4kHHdBgbnVSMUoQbTIzUOZhW/EfhlJbOhtEvLDIjkzHPpkr/26PG9Pn5t/CShi0F/XrtGvgtYtarCiA2YUwFGIN15oneFbvSKt7tTQbrQjBQGIkJUAKgBjOJYl8CsWo2kYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=ta9b7IjI; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0CADE41965
+	for <linux-usb@vger.kernel.org>; Fri,  3 Oct 2025 06:44:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1759473886;
+	bh=cZ71oTLvaYFmCM9yGlV1PXF0f/l2eYKhSwYaCMTQsJg=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:In-Reply-To;
+	b=ta9b7IjI9rdR3tuv9sqLHQtcFr5Bn/AHfFAXHDzyakEAnjD/5kRAy0UXICHG0urzG
+	 ao0rdIcCyKkxz5IwAch1Tcbxmft1xBmxaBf2W1kCrrl0+wsZ/BZt2xpJamT15K83BV
+	 mHtWX0q21umQIv9SlD38IBdv8qK/U9GhVZTpnikjacF5QZUGWBoc0ROaO4Xmw2n03C
+	 JLitbIU9RibV7CHjQtdm02vJ8m/6LeT1JMGJOKIc5q86eUrqcjd0vFI5JhVbGMbNjJ
+	 rhufAP8MMHXXdaYRtV1xAcJCLa3oRp4AEB16E1Z6mdO2c87N93nlRrznbCQ/fiY9Gk
+	 Oq83+X1hfMwQNqzGbTloUJ9EKhsxFY+C74qJQXC3mc8+Kvdozx2zN/tsHRKiW28n3Z
+	 yP/gqJHKicSbWqa3CnyV0Oxw+W/rTMcIK5SdDetl83Bv5qdUm/vO8gLR6d3CMHlJF6
+	 whGEBsu1zCfaGt1kPzO8q6Uw7fuUDWBp1rEgI3/Gz6Bd6jp3BlgBD5Ld2uPc9Q66Tr
+	 fZGIprsUKAmZFCTZrsThABqPRL8HtyVmZqN1r5RxZ4V0a+Y3vL2uAC7PVXAJ+5yuZ/
+	 0nc7qfAc+UchdHuS2nJ+w+Z35uJlA4eZq9JFIoKTVHeWFuOJfz9Nr0VinkRtnKwxuS
+	 16criDCpoc+270HPlpJjpDKo=
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-781253de15aso3465961b3a.2
+        for <linux-usb@vger.kernel.org>; Thu, 02 Oct 2025 23:44:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759473882; x=1760078682;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cZ71oTLvaYFmCM9yGlV1PXF0f/l2eYKhSwYaCMTQsJg=;
+        b=B/JU1idfIi1YTjVyOZ18v1Vfa/76FtEgYo+1EGeyQZ7okiYuOVZBPAhfqMXv3vb+G9
+         THhYNw43tUbjF5ToChQyD0TSf+jX8BzUs/cPYk0/RBy9DDbbDPJni7b0cneQTSUD0Z4J
+         3+C5DKoai62gKcT0vNHuQgOqE83H0Ndd+kOmkm9vIVb2MfS94A8idlxZfgX5tx6KugYC
+         Mh3gYV6LNNiOlBumga69JZhMULTgaymJNnBgEt0M3IkDfnREL0+Xrc7tU8crmXlTt5zE
+         KKTXkhtsf/a+ZQXC5ynw6AAPQ7tEN8gdV0s4Wm9HrmnabEnOv4yQ9qiUUYumwk+Wy+4F
+         19TQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWADqb3DNKQulpvwKmRy5Z+yEK95rvZvkboE+p0KaVxqTzhaTCoybdBqXrmgEf+Vx8BeLvGD3bCtm8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRz62mLmf7HCsPrw76/5ZQo2naivdhpSucaqmRp+Xkbt84D2r9
+	eswFM3iThxScmiK7H3VPLMSRTksEbLdIYyvj7CBifOgHh+rjRMyFxc2lhcRvlWhFyxezuv/2bZV
+	pnH25i+R2/R+KCi7kCaxQDHVx/92ijHWbsFfggSlk6UtMzJzNBWlFWP0xv/RzlXYRTGsd9U7Cxx
+	RonA==
+X-Gm-Gg: ASbGnctTgRCFDC8dc62UCi/Y24fBgosF8LbC/p2BK+qrz33pM5TZ3tVmpW+H5NlPbGY
+	avqdc8dJXTI4rBy1a48zfO5oE1m8n+/EfLL/uhn/b79sNZZC6ktg4p+UD/C3Fj0y8deig/LhPX+
+	UHq2qleddSLLWk01cyLy22HHHk/dPdRRP6uXTMZIFx/Ws2WR9ApdUobqgQd76evmudgenHsnrSx
+	vUGTOaRTDJeHj0LvwjAJfXi29EvnotPQsEUQE/aW+M2SpDN1PqUuNn5soEC/aIvtQQQvxw/pIhp
+	OBippCQZdjYcTo47mQE8+V58jT31rwR1yNFBmuYK4I6UiBld9aM3Fw==
+X-Received: by 2002:a05:6a00:b54:b0:781:9f2:efb1 with SMTP id d2e1a72fcca58-78c98caeeb6mr2454606b3a.15.1759473882566;
+        Thu, 02 Oct 2025 23:44:42 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFYRkc7pb2nOTbZ7c8Dj/UDGkoclrgPKazpbVxg/HFecHLgQfgRUlOOrOmAjbI4kVsd3bmTfQ==
+X-Received: by 2002:a05:6a00:b54:b0:781:9f2:efb1 with SMTP id d2e1a72fcca58-78c98caeeb6mr2454586b3a.15.1759473882134;
+        Thu, 02 Oct 2025 23:44:42 -0700 (PDT)
+Received: from acelan-precision5470 ([2001:67c:1562:8007::aac:4468])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78b01f9a3f1sm3837742b3a.12.2025.10.02.23.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Oct 2025 23:44:39 -0700 (PDT)
+Date: Fri, 3 Oct 2025 14:44:22 +0800
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Andrei Kuchynski <akuchynski@chromium.org>, =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>, 
+	Venkat Jayaraman <venkat.jayaraman@intel.com>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: Fix workqueue destruction race during
+ connector cleanup
+Message-ID: <iexpu4kyyq4hwqwtgerihxumdxn5wx2mytqleagmhiogp7g2lp@cismgnobnik6>
+Mail-Followup-To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Andrei Kuchynski <akuchynski@chromium.org>, 
+	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>, Venkat Jayaraman <venkat.jayaraman@intel.com>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251002013026.4095030-1-acelan.kao@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -89,222 +109,160 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251002172539.586538-3-krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <20251002013026.4095030-1-acelan.kao@canonical.com>
 
-Hi Krishna,
+On Thu, Oct 02, 2025 at 09:30:26AM +0800, Chia-Lin Kao (AceLan) wrote:
+> During UCSI initialization and operation, there is a race condition where
+> delayed work items can be scheduled but attempt to queue work after the
+> workqueue has been destroyed. This occurs in multiple code paths.
+> 
+> The race occurs when:
+> 1. ucsi_partner_task() or ucsi_poll_worker() schedule delayed work
+> 2. Connector cleanup paths call destroy_workqueue()
+> 3. Previously scheduled delayed work timers fire after destruction
+> 4. This triggers warnings and crashes in __queue_work()
+> 
+> The issue is timing-sensitive and typically manifests when:
+> - Port registration fails due to PPM timing issues
+> - System shutdown/cleanup occurs with pending delayed work
+> - Module removal races with active delayed work
+> 
+> Fix this by:
+> 1. Creating ucsi_destroy_connector_wq() helper function that safely
+>    cancels all pending delayed work before destroying workqueues
+> 2. Applying the safe cleanup to all three workqueue destruction paths:
+>    - ucsi_register_port() error path
+>    - ucsi_init() error path
+>    - ucsi_unregister() cleanup path
+> 
+> This prevents both the initial queueing on destroyed workqueues and
+> retry attempts from running workers, eliminating the timer races.
+> 
+> Fixes: b9aa02ca39a4 ("usb: typec: ucsi: Add polling mechanism for partner tasks like alt mode checking")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 50 ++++++++++++++++++++++-------------
+>  1 file changed, 31 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 5ba3a6c81964..1f71c9983163 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -283,6 +283,33 @@ static void ucsi_poll_worker(struct work_struct *work)
+>  	mutex_unlock(&con->lock);
+>  }
+>  
+> +/**
+> + * ucsi_destroy_connector_wq - Safely destroy connector workqueue
+> + * @con: UCSI connector
+> + *
+> + * Cancel all pending delayed work and destroy the workqueue to prevent
+> + * timer races where delayed work tries to queue on destroyed workqueue.
+> + */
+> +static void ucsi_destroy_connector_wq(struct ucsi_connector *con)
+> +{
+> +	struct ucsi_work *uwork, *tmp;
+> +
+> +	if (!con->wq)
+> +		return;
+> +
+> +	/* Cancel any pending delayed work before destroying workqueue */
+> +	mutex_lock(&con->lock);
+> +	list_for_each_entry_safe(uwork, tmp, &con->partner_tasks, node) {
+> +		cancel_delayed_work_sync(&uwork->work);
+> +		list_del(&uwork->node);
+> +		kfree(uwork);
+> +	}
+> +	mutex_unlock(&con->lock);
+It introduces a deadlock here.
+  - ucsi_destroy_connector_wq() holds con->lock and calls cancel_delayed_work_sync()
+  - ucsi_poll_worker() (the work being cancelled) also tries to acquire con->lock
 
-kernel test robot noticed the following build errors:
+I'll submit a v2 to fix this issue.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus robh/for-next krzk-dt/for-next linus/master v6.17 next-20251002]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[  246.874552] INFO: task kworker/17:0:125 blocked for more than 122 seconds.
+[  246.874565]       Not tainted 6.14.0-2014-oem #14
+[  246.874569] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[  246.874571] task:kworker/17:0    state:D stack:0     pid:125   tgid:125   ppid:2      task_flags:0x4208060 flags:0x00004000
+[  246.874577] Workqueue: events_long ucsi_init_work [typec_ucsi]
+[  246.874592] Call Trace:
+[  246.874594]  <TASK>
+[  246.874598]  __schedule+0x2cf/0x640
+[  246.874605]  schedule+0x29/0xd0
+[  246.874608]  schedule_timeout+0xfb/0x110
+[  246.874611]  __wait_for_common+0x91/0x190
+[  246.874614]  ? __pfx_schedule_timeout+0x10/0x10
+[  246.874617]  wait_for_completion+0x24/0x40
+[  246.874620]  __flush_work+0x86/0xe0
+[  246.874624]  ? __pfx_wq_barrier_func+0x10/0x10
+[  246.874629]  cancel_delayed_work_sync+0x76/0x80
+[  246.874633]  ucsi_destroy_connector_wq.part.0+0x61/0xd0 [typec_ucsi]
+[  246.874638]  ucsi_init+0x27a/0x330 [typec_ucsi]
+[  246.874643]  ucsi_init_work+0x18/0x90 [typec_ucsi]
+[  246.874647]  process_one_work+0x178/0x3d0
+[  246.874650]  worker_thread+0x2de/0x410
+[  246.874653]  ? __pfx_worker_thread+0x10/0x10
+[  246.874657]  kthread+0xfb/0x230
+[  246.874659]  ? __pfx_kthread+0x10/0x10
+[  246.874662]  ret_from_fork+0x44/0x70
+[  246.874665]  ? __pfx_kthread+0x10/0x10
+[  246.874667]  ret_from_fork_asm+0x1a/0x30
+[  246.874672]  </TASK>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/dt-bindings-usb-ti-hd3ss3220-Add-support-for-VBUS-based-on-ID-state/20251003-012933
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20251002172539.586538-3-krishna.kurapati%40oss.qualcomm.com
-patch subject: [PATCH 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin state
-config: x86_64-buildonly-randconfig-001-20251003 (https://download.01.org/0day-ci/archive/20251003/202510031333.zZYEFOH0-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251003/202510031333.zZYEFOH0-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510031333.zZYEFOH0-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/typec/hd3ss3220.c:336:29: error: call to undeclared function 'gpiod_get_value_cansleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     336 |         id = hd3ss3220->id_gpiod ? gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
-         |                                    ^
->> drivers/usb/typec/hd3ss3220.c:384:24: error: call to undeclared function 'devm_gpiod_get_optional'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     384 |         hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
-         |                               ^
-   drivers/usb/typec/hd3ss3220.c:384:24: note: did you mean 'devm_regulator_get_optional'?
-   include/linux/regulator/consumer.h:163:32: note: 'devm_regulator_get_optional' declared here
-     163 | struct regulator *__must_check devm_regulator_get_optional(struct device *dev,
-         |                                ^
->> drivers/usb/typec/hd3ss3220.c:384:70: error: use of undeclared identifier 'GPIOD_IN'
-     384 |         hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
-         |                                                                             ^
->> drivers/usb/typec/hd3ss3220.c:389:23: error: call to undeclared function 'gpiod_to_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     389 |                 hd3ss3220->id_irq = gpiod_to_irq(hd3ss3220->id_gpiod);
-         |                                     ^
-   4 errors generated.
-
-
-vim +/gpiod_get_value_cansleep +336 drivers/usb/typec/hd3ss3220.c
-
-   326	
-   327	static irqreturn_t hd3ss3220_id_isr(int irq, void *dev_id)
-   328	{
-   329		struct hd3ss3220 *hd3ss3220 = dev_id;
-   330		int ret;
-   331		int id;
-   332	
-   333		if (IS_ERR_OR_NULL(hd3ss3220->vbus))
-   334			return IRQ_HANDLED;
-   335	
- > 336		id = hd3ss3220->id_gpiod ? gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
-   337	
-   338		if (!id) {
-   339			ret = regulator_enable(hd3ss3220->vbus);
-   340			if (ret)
-   341				dev_err(hd3ss3220->dev, "enable vbus regulator failed\n");
-   342		} else {
-   343			regulator_disable(hd3ss3220->vbus);
-   344		}
-   345	
-   346		return IRQ_HANDLED;
-   347	}
-   348	
-   349	static int hd3ss3220_probe(struct i2c_client *client)
-   350	{
-   351		struct typec_capability typec_cap = { };
-   352		struct hd3ss3220 *hd3ss3220;
-   353		struct fwnode_handle *connector, *ep;
-   354		int ret;
-   355		unsigned int data;
-   356	
-   357		hd3ss3220 = devm_kzalloc(&client->dev, sizeof(struct hd3ss3220),
-   358					 GFP_KERNEL);
-   359		if (!hd3ss3220)
-   360			return -ENOMEM;
-   361	
-   362		i2c_set_clientdata(client, hd3ss3220);
-   363	
-   364		hd3ss3220->dev = &client->dev;
-   365		hd3ss3220->regmap = devm_regmap_init_i2c(client, &config);
-   366		if (IS_ERR(hd3ss3220->regmap))
-   367			return PTR_ERR(hd3ss3220->regmap);
-   368	
-   369		/* For backward compatibility check the connector child node first */
-   370		connector = device_get_named_child_node(hd3ss3220->dev, "connector");
-   371		if (connector) {
-   372			hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
-   373		} else {
-   374			ep = fwnode_graph_get_next_endpoint(dev_fwnode(hd3ss3220->dev), NULL);
-   375			if (!ep)
-   376				return -ENODEV;
-   377			connector = fwnode_graph_get_remote_port_parent(ep);
-   378			fwnode_handle_put(ep);
-   379			if (!connector)
-   380				return -ENODEV;
-   381			hd3ss3220->role_sw = usb_role_switch_get(hd3ss3220->dev);
-   382		}
-   383	
- > 384		hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
-   385		if (IS_ERR(hd3ss3220->id_gpiod))
-   386			return PTR_ERR(hd3ss3220->id_gpiod);
-   387	
-   388		if (hd3ss3220->id_gpiod) {
- > 389			hd3ss3220->id_irq = gpiod_to_irq(hd3ss3220->id_gpiod);
-   390			if (hd3ss3220->id_irq < 0) {
-   391				dev_err(hd3ss3220->dev, "failed to get ID IRQ\n");
-   392				return hd3ss3220->id_irq;
-   393			}
-   394	
-   395			ret = devm_request_threaded_irq(hd3ss3220->dev,
-   396							hd3ss3220->id_irq, NULL,
-   397							hd3ss3220_id_isr,
-   398							IRQF_TRIGGER_RISING |
-   399							IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-   400							dev_name(hd3ss3220->dev), hd3ss3220);
-   401			if (ret < 0) {
-   402				dev_err(hd3ss3220->dev, "failed to get id irq\n");
-   403				return ret;
-   404			}
-   405		}
-   406	
-   407		hd3ss3220->vbus = devm_regulator_get_optional(hd3ss3220->dev, "vbus");
-   408		if (PTR_ERR(hd3ss3220->vbus) == -ENODEV)
-   409			hd3ss3220->vbus = NULL;
-   410	
-   411		if (IS_ERR(hd3ss3220->vbus))
-   412			return dev_err_probe(hd3ss3220->dev,
-   413					     PTR_ERR(hd3ss3220->vbus), "failed to get vbus\n");
-   414	
-   415		if (IS_ERR(hd3ss3220->role_sw)) {
-   416			ret = PTR_ERR(hd3ss3220->role_sw);
-   417			goto err_put_fwnode;
-   418		}
-   419	
-   420		typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
-   421		typec_cap.driver_data = hd3ss3220;
-   422		typec_cap.type = TYPEC_PORT_DRP;
-   423		typec_cap.data = TYPEC_PORT_DRD;
-   424		typec_cap.ops = &hd3ss3220_ops;
-   425		typec_cap.fwnode = connector;
-   426	
-   427		ret = hd3ss3220_configure_source_pref(hd3ss3220, connector, &typec_cap);
-   428		if (ret < 0)
-   429			goto err_put_role;
-   430	
-   431		ret = hd3ss3220_configure_port_type(hd3ss3220, connector, &typec_cap);
-   432		if (ret < 0)
-   433			goto err_put_role;
-   434	
-   435		hd3ss3220->port = typec_register_port(&client->dev, &typec_cap);
-   436		if (IS_ERR(hd3ss3220->port)) {
-   437			ret = PTR_ERR(hd3ss3220->port);
-   438			goto err_put_role;
-   439		}
-   440	
-   441		ret = hd3ss3220_configure_power_opmode(hd3ss3220, connector);
-   442		if (ret < 0)
-   443			goto err_unreg_port;
-   444	
-   445		hd3ss3220_set_role(hd3ss3220);
-   446		ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
-   447		if (ret < 0)
-   448			goto err_unreg_port;
-   449	
-   450		if (data & HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS) {
-   451			ret = regmap_write(hd3ss3220->regmap,
-   452					HD3SS3220_REG_CN_STAT_CTRL,
-   453					data | HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS);
-   454			if (ret < 0)
-   455				goto err_unreg_port;
-   456		}
-   457	
-   458		if (client->irq > 0) {
-   459			ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
-   460						hd3ss3220_irq_handler,
-   461						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-   462						"hd3ss3220", &client->dev);
-   463			if (ret)
-   464				goto err_unreg_port;
-   465		} else {
-   466			INIT_DELAYED_WORK(&hd3ss3220->output_poll_work, output_poll_execute);
-   467			hd3ss3220->poll = true;
-   468		}
-   469	
-   470		ret = i2c_smbus_read_byte_data(client, HD3SS3220_REG_DEV_REV);
-   471		if (ret < 0)
-   472			goto err_unreg_port;
-   473	
-   474		fwnode_handle_put(connector);
-   475	
-   476		if (hd3ss3220->poll)
-   477			schedule_delayed_work(&hd3ss3220->output_poll_work, HZ);
-   478	
-   479		dev_info(&client->dev, "probed revision=0x%x\n", ret);
-   480	
-   481		return 0;
-   482	err_unreg_port:
-   483		typec_unregister_port(hd3ss3220->port);
-   484	err_put_role:
-   485		usb_role_switch_put(hd3ss3220->role_sw);
-   486	err_put_fwnode:
-   487		fwnode_handle_put(connector);
-   488	
-   489		return ret;
-   490	}
-   491	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +
+> +	destroy_workqueue(con->wq);
+> +	con->wq = NULL;
+> +}
+> +
+>  static int ucsi_partner_task(struct ucsi_connector *con,
+>  			     int (*cb)(struct ucsi_connector *),
+>  			     int retries, unsigned long delay)
+> @@ -1798,10 +1825,8 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>  out_unlock:
+>  	mutex_unlock(&con->lock);
+>  
+> -	if (ret && con->wq) {
+> -		destroy_workqueue(con->wq);
+> -		con->wq = NULL;
+> -	}
+> +	if (ret)
+> +		ucsi_destroy_connector_wq(con);
+>  
+>  	return ret;
+>  }
+> @@ -1921,8 +1946,7 @@ static int ucsi_init(struct ucsi *ucsi)
+>  
+>  err_unregister:
+>  	for (con = connector; con->port; con++) {
+> -		if (con->wq)
+> -			destroy_workqueue(con->wq);
+> +		ucsi_destroy_connector_wq(con);
+>  		ucsi_unregister_partner(con);
+>  		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
+>  		ucsi_unregister_port_psy(con);
+> @@ -2144,19 +2168,7 @@ void ucsi_unregister(struct ucsi *ucsi)
+>  	for (i = 0; i < ucsi->cap.num_connectors; i++) {
+>  		cancel_work_sync(&ucsi->connector[i].work);
+>  
+> -		if (ucsi->connector[i].wq) {
+> -			struct ucsi_work *uwork;
+> -
+> -			mutex_lock(&ucsi->connector[i].lock);
+> -			/*
+> -			 * queue delayed items immediately so they can execute
+> -			 * and free themselves before the wq is destroyed
+> -			 */
+> -			list_for_each_entry(uwork, &ucsi->connector[i].partner_tasks, node)
+> -				mod_delayed_work(ucsi->connector[i].wq, &uwork->work, 0);
+> -			mutex_unlock(&ucsi->connector[i].lock);
+> -			destroy_workqueue(ucsi->connector[i].wq);
+> -		}
+> +		ucsi_destroy_connector_wq(&ucsi->connector[i]);
+>  
+>  		ucsi_unregister_partner(&ucsi->connector[i]);
+>  		ucsi_unregister_altmodes(&ucsi->connector[i],
+> -- 
+> 2.43.0
+> 
 
