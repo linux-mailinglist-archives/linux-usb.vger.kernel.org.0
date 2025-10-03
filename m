@@ -1,271 +1,162 @@
-Return-Path: <linux-usb+bounces-28880-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28881-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD8B7BB5AB3
-	for <lists+linux-usb@lfdr.de>; Fri, 03 Oct 2025 02:21:12 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A2BBB5C89
+	for <lists+linux-usb@lfdr.de>; Fri, 03 Oct 2025 04:01:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8A17A343954
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Oct 2025 00:21:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 605C84E4AA2
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Oct 2025 02:01:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F7E1465A1;
-	Fri,  3 Oct 2025 00:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MmGW/2GY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2862BE02C;
+	Fri,  3 Oct 2025 02:01:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855523AC39
-	for <linux-usb@vger.kernel.org>; Fri,  3 Oct 2025 00:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850A7347DD
+	for <linux-usb@vger.kernel.org>; Fri,  3 Oct 2025 02:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759450855; cv=none; b=flv6rgJqapM/icVfr3u3ZOD0VrqlLmHleSZH36ORq0VeTGmqct+zCR7nmye+cv1uERjwEpT6yUCsdHvEQDn38wt6fdGlSL+SZmKDs5IY2t3+fH1HuUiwtXVGHD01yLw66+X2pFA+jC0LTfTzuB6UlIYuQoTjpB46BUqIS4aSJig=
+	t=1759456887; cv=none; b=KdU/FcYRcwrfCvLbA8BdTJNQGqxoEtdTAdJHtFD34DBDGyjSJmtY/CxdEME0f59U4YS9C6cljXYWgZ6Hfyooe8QlBIpel17xArKN10p8KbWIOcwz85L9l6vb1xONsQcmGw5XrK6sbBqNuNC9O0v7Re8n8jduI/0vJ4GXGFBUWPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759450855; c=relaxed/simple;
-	bh=3cyjRiL4lcUmndU7o/wfFQ0HYsbwM9Aydw3J2N8yu/s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S31T45db2duwiqK/bI+MeKOt6ibtAbGDZCMdQpFsFsJEUTgkD2qYJjcv4fVC5WaZAuKCA5e47B2aanNSYXd9Afi7vzrXQmmB7D5so1zXU+Y31O2gBy4qBe8AlrfW/JREwKinGRGpzmJA6YjxtqZcWMvMuF8BXUoShkHBGGotZrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MmGW/2GY; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 592LVgo8023421
-	for <linux-usb@vger.kernel.org>; Fri, 3 Oct 2025 00:20:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=QoLaMgeORBf
-	SIAcGQOIMWfUaR1zLHwTW+Dns9so/XPY=; b=MmGW/2GYt1ar2ymIaZ88SxhBtKj
-	t+TdL5Pi3Z/GbZ6ddoObgL0PS8XbaiFtKUhh/NhZLv/PTPzhESJOvPQgzdKtziqK
-	oAwhPxBVPBbYYXdv2j/rM2KRHycLSFwrp9qhWQispPqggImVg7w4yIN3yP8OhePT
-	mwWED7WKUulLnnUE4oCvBQLbX0PPXfmc2qdICVq+E78PpnbewaTwPwbDU5ik4cdb
-	jhAskZavb6Eup1OGUXRhdlzGtMS4keTFN6SZlW4gbLsZpKORB1AcUEeZ1EETaSI8
-	7o/W3ZM9VWS2KJNWihGBKv/bBDFpO8+qByfXGXkxN3CsXDu0JMTE8acuIng==
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e97815m4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Fri, 03 Oct 2025 00:20:49 +0000 (GMT)
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-b62b7af4fddso276261a12.2
-        for <linux-usb@vger.kernel.org>; Thu, 02 Oct 2025 17:20:49 -0700 (PDT)
+	s=arc-20240116; t=1759456887; c=relaxed/simple;
+	bh=8Y9Zd8cX3gcaUQdOiOPrBV36+MV24/YVHihfRjj2q48=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=L7Wpf5An1+T5NN0U/4mYQATP6CHMoYSLo3vpqtNUpeymr2byVGOO2LOWN3fFTydhGERf91WIrOlEiB7t16xPXH92rUxAVfM0y2XWZjV6fapjPZChFNvJgLZX93r7+G57l891oxlYX2cDIb06jj9wmmgaWhBTWSGEQx4799jzKBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-425788b03a0so45968125ab.1
+        for <linux-usb@vger.kernel.org>; Thu, 02 Oct 2025 19:01:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759450849; x=1760055649;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QoLaMgeORBfSIAcGQOIMWfUaR1zLHwTW+Dns9so/XPY=;
-        b=WkSsgn7BnrYDe55lnPqmEuW3GIgwCk/BvH0Ac/KKSzj54jQTNOn5wGS/VtbqkYJpGx
-         mBhDeDisnbVJ6v1sHvE6AdL+cJEMQeGi9C0tslrNloY9vE32Cb60bEFLG+ur+3TqW8Dv
-         bCyaLRfG7IfbIaGZdp1ewiInlOPICGOfn0bi3Bx6Sn8eoIcOLUll9E8d1PJUDA1WPGT9
-         6rtkHP3GIuu1uceHTzBjuHqywYu5Y6HJCSNR/jB22tGaONCbeDbjQKSmB+zbH9d9afFB
-         AwVd9WilxxueJqHAOAcoyVO5rcGLHXsrmSnkHcDRJC49BFy3ycUMWTJ0Z4K7Sf/Uf6du
-         TbSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUCbTzQOh37RASYpMO1HBeAZFEDZuX9Odqv6skHsP0hsiqmhUbmDIW4FfxY/wjL7RH0nlRD1+isS1c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOiNZe4FzcFf5QgnNGfbJup3PtkkVQtAotmpjdqjlRcgJv2Mg5
-	jblNT2qcEkTc3mgVZO/5nYmKKC/BkGmgfh8zHI8s8J27INYm5pXEBd+9OK258WWMkgF7UtniewF
-	ZYzttUBXmjcT+r2V1hRb5WpdT4ffVSN/cGgHlCiOMa0AGt7XzVP0E5Nr0XziAEzs=
-X-Gm-Gg: ASbGncsk6SCE753uvtG2PTXe4639ypuUolA4AgnCtLPL8ngLxMhdE/Mm6nz07pkPnOx
-	8z5e8xg+3DlDsMcEiQArS9BW13qaYqDKQC58hH3ITODnipgLCuScIC0LWZdliAib5cPuq3UeiTz
-	kbPNxkmB+DOft5+YfGJDxwXGDWmQSHOjngkAfJxwDPiuhbExO/9MY6tVg/JjyjUIcEPZU8uhH03
-	tdVBvCW7dFSeGwOXEPnvpgi95eCk63VbvfEWdlCDpZRGLmX42HJtufu5d/Kt2GmEQzLrfKEJrsL
-	NUhU4JAnoQhijK4Z7UUI85oY87B0ZyKWyV4K9qFwY1PlEmOuN5kBP2MN5itpNnqy0FVlhSk+S9E
-	H6lisKzi87ncMtFOL69PbqdAds07oA786
-X-Received: by 2002:a05:6a20:7d9c:b0:2c5:f4a:8839 with SMTP id adf61e73a8af0-32b6213ef51mr1369049637.60.1759450848689;
-        Thu, 02 Oct 2025 17:20:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHhVZuqJXzaWO1w4N5q8KAOpGa6PrhujnxtMK9xFie0UJw2QokcxvzbXUoAjFLCXAyjh9SGVA==
-X-Received: by 2002:a05:6a20:7d9c:b0:2c5:f4a:8839 with SMTP id adf61e73a8af0-32b6213ef51mr1369025637.60.1759450848202;
-        Thu, 02 Oct 2025 17:20:48 -0700 (PDT)
-Received: from hu-amelende-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78b01f9a3f1sm3128632b3a.12.2025.10.02.17.20.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Oct 2025 17:20:47 -0700 (PDT)
-From: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc: lumag@kernel.org, neil.armstrong@linaro.org, johan+linaro@kernel.org,
-        quic_bjorande@quicinc.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v5 2/2] usb: typec: ucsi_glink: Increase buffer size to support UCSI v2
-Date: Thu,  2 Oct 2025 17:20:44 -0700
-Message-Id: <20251003002044.2944497-3-anjelique.melendez@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251003002044.2944497-1-anjelique.melendez@oss.qualcomm.com>
-References: <20251003002044.2944497-1-anjelique.melendez@oss.qualcomm.com>
+        d=1e100.net; s=20230601; t=1759456884; x=1760061684;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8VXCwbgzxAMA+OjC0S2OE89DRe7vm2C3ZDHpdhAqaX4=;
+        b=hlnLcnlV4X/WbsQOzjVtdAa4DUAbekSrxH7jc9eFyL9IvmCJv9XryALG0/yhm5z2YF
+         /ebXvE9o4gZpJW8WcfPRteJQEsiqkkb9dnFtPw3UnIlR3nv2gO4FdwLLtOsDnuAGTZ99
+         cvDAa1Yi/lxes1hfb7EiQkN+s1mt8WCKG40gnyRwX17khPHJtKfxHg1W4w0zQlloseRD
+         BpZ7uQni83wWjUK3DyPKUbrNKMEkoPRlipFMWQSjj9vN5aMzoKoX5vC1E4RQnmwtsGYK
+         lUotIln3OEIDIzJ/2H6mvDLISNfQ6uLrOnq6t3bachd8zill8zeooVy84Yu3aTuzyPEI
+         Xgww==
+X-Forwarded-Encrypted: i=1; AJvYcCVQ+yiuav6grCR+NJa/hAHiOm2c1PTNFa2O0553dxtnxPX3/q2hPFPVnoo8hvLUb1h8K7wboM8BrCI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyi+wzgBrdqw/InIJMcLajiu4dyauFnqyPOOaeSjGJGSHP8HrAu
+	gdRb20izwYyQX/K/lrKTNhdu4tqL1d4PnzYA+PQQkK7KaBr7AVf2h3s1VVMyVWw9O8c6dtkI2Y2
+	74pB8s/Jxpa1nNiHgU6Y16NebqPQp3ATTsNmPjsZBNAAwR2nBOra/PPpaPg8=
+X-Google-Smtp-Source: AGHT+IFPzIxFdGnr15vQCKRbd9V4cLt9iQIXQtZx0F1xc4ALwCCx1lDzlWbG4sxU24XA6rUHLwfzONJvCbVpdaha1+2C0D0/0wM2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 5Nd0rw3xJkLWr6idBmJtzwujV9Uv9QjC
-X-Proofpoint-ORIG-GUID: 5Nd0rw3xJkLWr6idBmJtzwujV9Uv9QjC
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDA0MyBTYWx0ZWRfX0BhSqQjYSBI5
- E9SSBQHfZBXEt37QsVhGBEh4FW886pfD7+n7cSPjwmhp1Y8i9eH3bkwUKeFVNP9crodHv2eoJw+
- vIJpKpi8ohkP3WPDuLfrGwPTYY+oTZEgOdllWiOTAE7wdVMmrvDqZVxq6edp2ru2UvL5HP20ZFU
- s12XpHlgMnuoyLygEqF5P4WxAq/YrhLLbmCKZ7CmVZtshLIhwREaA04oO7Q3gnf0Dssp/UnKBWG
- qSJg0jbLf2x+uqAVkP9n0llPa7vigjX4vbp8w5MINiZO9IdxaRXtUApVrHNvE6FKs26adm+qmOv
- gobeDqLS7urdTSzr17zBlDIj3wRP1vW1NspP0BGVE/csn/9K7JGdv8tfdLHQQSv2JoCyXcHpVoa
- bJVGuRBYxR8lKez5R9bDLp5yFfcR/Q==
-X-Authority-Analysis: v=2.4 cv=Sf36t/Ru c=1 sm=1 tr=0 ts=68df16e1 cx=c_pps
- a=oF/VQ+ItUULfLr/lQ2/icg==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=bL7WY3GH-9A0ZCLeatoA:9
- a=3WC7DwWrALyhR5TkjVHa:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-02_09,2025-10-02_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 bulkscore=0 suspectscore=0 adultscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 phishscore=0
- impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
- definitions=main-2509270043
+X-Received: by 2002:a05:6e02:1d8a:b0:40e:a0e1:2f61 with SMTP id
+ e9e14a558f8ab-42e7ad849d3mr15854935ab.26.1759456884660; Thu, 02 Oct 2025
+ 19:01:24 -0700 (PDT)
+Date: Thu, 02 Oct 2025 19:01:24 -0700
+In-Reply-To: <68b9e0db.050a0220.192772.000f.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68df2e74.050a0220.1696c6.003a.GAE@google.com>
+Subject: Re: [syzbot] [usb?] [net?] KMSAN: uninit-value in lan78xx_reset
+From: syzbot <syzbot+62ec8226f01cb4ca19d9@syzkaller.appspotmail.com>
+To: Rengarajan.S@microchip.com, Thangaraj.S@microchip.com, 
+	UNGLinuxDriver@microchip.com, andrew+netdev@lunn.ch, andrew@lunn.ch, 
+	bhanuseshukumar@gmail.com, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	netdev@vger.kernel.org, o.rempel@pengutronix.de, pabeni@redhat.com, 
+	rengarajan.s@microchip.com, syzkaller-bugs@googlegroups.com, 
+	thangaraj.s@microchip.com, unglinuxdriver@microchip.com, 
+	viswanathiyyappan@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-UCSI v2 specification has increased the MSG_IN and MSG_OUT size from
-16 bytes to 256 bytes each for the message exchange between OPM and PPM
-This makes the total buffer size increase from 48 bytes to 528 bytes.
-Update the buffer size to support this increase.
+syzbot has found a reproducer for the following issue on:
 
-Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+HEAD commit:    7f7072574127 Merge tag 'kbuild-6.18-1' of git://git.kernel..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15dc1ee2580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3efb3c89344fb053
+dashboard link: https://syzkaller.appspot.com/bug?extid=62ec8226f01cb4ca19d9
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14731214580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ca65cd980000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/cf1acf3bcd3b/disk-7f707257.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7447ff07b887/vmlinux-7f707257.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/16ebb9562804/bzImage-7f707257.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+62ec8226f01cb4ca19d9@syzkaller.appspotmail.com
+
+usb 1-1: New USB device found, idVendor=0424, idProduct=7850, bcdDevice= 0.00
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: syz
+usb 1-1: Manufacturer: syz
+usb 1-1: SerialNumber: syz
+lan78xx 1-1:1.0 (unnamed net_device) (uninitialized): EEPROM read operation timeout
+=====================================================
+BUG: KMSAN: uninit-value in lan78xx_read_eeprom drivers/net/usb/lan78xx.c:1095 [inline]
+BUG: KMSAN: uninit-value in lan78xx_init_mac_address drivers/net/usb/lan78xx.c:1937 [inline]
+BUG: KMSAN: uninit-value in lan78xx_reset+0x999/0x2cd0 drivers/net/usb/lan78xx.c:3241
+ lan78xx_read_eeprom drivers/net/usb/lan78xx.c:1095 [inline]
+ lan78xx_init_mac_address drivers/net/usb/lan78xx.c:1937 [inline]
+ lan78xx_reset+0x999/0x2cd0 drivers/net/usb/lan78xx.c:3241
+ lan78xx_bind+0x711/0x1690 drivers/net/usb/lan78xx.c:3766
+ lan78xx_probe+0x225c/0x3310 drivers/net/usb/lan78xx.c:4707
+ usb_probe_interface+0xd23/0x1460 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d4/0xdc0 drivers/base/dd.c:659
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:801
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:831
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:959
+ bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1031
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1080
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3689
+ usb_set_configuration+0x3493/0x3b70 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xfc/0x290 drivers/usb/core/generic.c:250
+ usb_probe_device+0x38a/0x690 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d4/0xdc0 drivers/base/dd.c:659
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:801
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:831
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:959
+ bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1031
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1080
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3689
+ usb_new_device+0x1062/0x20f0 drivers/usb/core/hub.c:2694
+ hub_port_connect drivers/usb/core/hub.c:5566 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
+ port_event drivers/usb/core/hub.c:5870 [inline]
+ hub_event+0x54e0/0x7620 drivers/usb/core/hub.c:5952
+ process_one_work kernel/workqueue.c:3263 [inline]
+ process_scheduled_works+0xb91/0x1d80 kernel/workqueue.c:3346
+ worker_thread+0xedf/0x1590 kernel/workqueue.c:3427
+ kthread+0xd5c/0xf00 kernel/kthread.c:463
+ ret_from_fork+0x233/0x380 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+
+Local variable sig.i.i created at:
+ lan78xx_read_eeprom drivers/net/usb/lan78xx.c:1092 [inline]
+ lan78xx_init_mac_address drivers/net/usb/lan78xx.c:1937 [inline]
+ lan78xx_reset+0x77e/0x2cd0 drivers/net/usb/lan78xx.c:3241
+ lan78xx_bind+0x711/0x1690 drivers/net/usb/lan78xx.c:3766
+
+CPU: 0 UID: 0 PID: 5106 Comm: kworker/0:2 Not tainted syzkaller #0 PREEMPT(none) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/18/2025
+Workqueue: usb_hub_wq hub_event
+=====================================================
+
+
 ---
- drivers/usb/typec/ucsi/ucsi_glink.c | 76 +++++++++++++++++++++++++----
- 1 file changed, 66 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 1f9f0d942c1a..a324fadb4e11 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -16,10 +16,10 @@
- 
- #define PMIC_GLINK_MAX_PORTS		3
- 
--#define UCSI_BUF_SIZE                   48
-+#define UCSI_BUF_V1_SIZE		(UCSI_MESSAGE_OUT + (UCSI_MESSAGE_OUT - UCSI_MESSAGE_IN))
-+#define UCSI_BUF_V2_SIZE		(UCSIv2_MESSAGE_OUT + (UCSIv2_MESSAGE_OUT - UCSI_MESSAGE_IN))
- 
- #define MSG_TYPE_REQ_RESP               1
--#define UCSI_BUF_SIZE                   48
- 
- #define UC_NOTIFY_RECEIVER_UCSI         0x0
- #define UC_UCSI_READ_BUF_REQ            0x11
-@@ -32,13 +32,19 @@ struct ucsi_read_buf_req_msg {
- 
- struct __packed ucsi_read_buf_resp_msg {
- 	struct pmic_glink_hdr   hdr;
--	u8                      buf[UCSI_BUF_SIZE];
-+	union {
-+		u8 v2_buf[UCSI_BUF_V2_SIZE];
-+		u8 v1_buf[UCSI_BUF_V1_SIZE];
-+	} buf;
- 	u32                     ret_code;
- };
- 
- struct __packed ucsi_write_buf_req_msg {
- 	struct pmic_glink_hdr   hdr;
--	u8                      buf[UCSI_BUF_SIZE];
-+	union {
-+		u8 v2_buf[UCSI_BUF_V2_SIZE];
-+		u8 v1_buf[UCSI_BUF_V1_SIZE];
-+	} buf;
- 	u32                     reserved;
- };
- 
-@@ -72,7 +78,7 @@ struct pmic_glink_ucsi {
- 	bool ucsi_registered;
- 	bool pd_running;
- 
--	u8 read_buf[UCSI_BUF_SIZE];
-+	u8 read_buf[UCSI_BUF_V2_SIZE];
- };
- 
- static int pmic_glink_ucsi_read(struct ucsi *__ucsi, unsigned int offset,
-@@ -132,17 +138,35 @@ static int pmic_glink_ucsi_locked_write(struct pmic_glink_ucsi *ucsi, unsigned i
- 					const void *val, size_t val_len)
- {
- 	struct ucsi_write_buf_req_msg req = {};
-+	size_t req_len, buf_len;
- 	unsigned long left;
- 	int ret;
-+	u8 *buf;
- 
- 	req.hdr.owner = PMIC_GLINK_OWNER_USBC;
- 	req.hdr.type = MSG_TYPE_REQ_RESP;
- 	req.hdr.opcode = UC_UCSI_WRITE_BUF_REQ;
--	memcpy(&req.buf[offset], val, val_len);
-+
-+	if (ucsi->ucsi->version >= UCSI_VERSION_2_0) {
-+		buf_len = UCSI_BUF_V2_SIZE;
-+		buf = req.buf.v2_buf;
-+	} else if (ucsi->ucsi->version) {
-+		buf_len = UCSI_BUF_V1_SIZE;
-+		buf = req.buf.v1_buf;
-+	} else {
-+		dev_err(ucsi->dev, "UCSI version unknown\n");
-+		return -EINVAL;
-+	}
-+	req_len = sizeof(struct pmic_glink_hdr) + buf_len + sizeof(u32);
-+
-+	if (offset + val_len > buf_len)
-+		return -EINVAL;
-+
-+	memcpy(&buf[offset], val, val_len);
- 
- 	reinit_completion(&ucsi->write_ack);
- 
--	ret = pmic_glink_send(ucsi->client, &req, sizeof(req));
-+	ret = pmic_glink_send(ucsi->client, &req, req_len);
- 	if (ret < 0) {
- 		dev_err(ucsi->dev, "failed to send UCSI write request: %d\n", ret);
- 		return ret;
-@@ -216,12 +240,44 @@ static const struct ucsi_operations pmic_glink_ucsi_ops = {
- 
- static void pmic_glink_ucsi_read_ack(struct pmic_glink_ucsi *ucsi, const void *data, int len)
- {
--	const struct ucsi_read_buf_resp_msg *resp = data;
-+	u32 ret_code, resp_len, buf_len = 0;
-+	u8 *buf;
-+
-+	if (ucsi->ucsi->version) {
-+		if (ucsi->ucsi->version >= UCSI_VERSION_2_0) {
-+			buf = ((struct ucsi_read_buf_resp_msg *)data)->buf.v2_buf;
-+			buf_len = UCSI_BUF_V2_SIZE;
-+		} else {
-+			buf = ((struct ucsi_read_buf_resp_msg *)data)->buf.v1_buf;
-+			buf_len = UCSI_BUF_V1_SIZE;
-+		}
-+	} else if (!ucsi->ucsi_registered) {
-+		/*
-+		 * If UCSI version is not known yet because device is not registered, choose buffer
-+		 * size which best fits incoming data
-+		 */
-+		if (len > sizeof(struct pmic_glink_hdr) + UCSI_BUF_V2_SIZE) {
-+			buf = ((struct ucsi_read_buf_resp_msg *)data)->buf.v2_buf;
-+			buf_len = UCSI_BUF_V2_SIZE;
-+		} else {
-+			buf = ((struct ucsi_read_buf_resp_msg *)data)->buf.v1_buf;
-+			buf_len = UCSI_BUF_V1_SIZE;
-+		}
-+	}
-+	resp_len = sizeof(struct pmic_glink_hdr) + buf_len + sizeof(u32);
- 
--	if (resp->ret_code)
-+	if (len > resp_len)
-+		return;
-+
-+	/* Ensure that buffer_len leaves space for ret_code to be read back from memory */
-+	if (buf_len > len - sizeof(struct pmic_glink_hdr) - sizeof(u32))
-+		buf_len = len - sizeof(struct pmic_glink_hdr) - sizeof(u32);
-+
-+	memcpy(&ret_code, buf + buf_len, sizeof(u32));
-+	if (ret_code)
- 		return;
- 
--	memcpy(ucsi->read_buf, resp->buf, UCSI_BUF_SIZE);
-+	memcpy(ucsi->read_buf, buf, buf_len);
- 	complete(&ucsi->read_ack);
- }
- 
--- 
-2.34.1
-
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
