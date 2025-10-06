@@ -1,145 +1,117 @@
-Return-Path: <linux-usb+bounces-28911-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28912-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0670CBBEB8D
-	for <lists+linux-usb@lfdr.de>; Mon, 06 Oct 2025 18:46:18 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28C66BBEDAC
+	for <lists+linux-usb@lfdr.de>; Mon, 06 Oct 2025 19:54:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CDC9188FEF5
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Oct 2025 16:46:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C35C84EA947
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Oct 2025 17:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75BFB220F49;
-	Mon,  6 Oct 2025 16:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4FFB28A3EF;
+	Mon,  6 Oct 2025 17:54:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="c+c3uceZ";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="dbal24H0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UwRbNZJh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA73221DAC
-	for <linux-usb@vger.kernel.org>; Mon,  6 Oct 2025 16:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7602442C
+	for <linux-usb@vger.kernel.org>; Mon,  6 Oct 2025 17:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759769108; cv=none; b=lmQTcUHXl98p+ZRge/XA1rgsWCKFOTQntUrsGC/BQAAMYj43a86tMef1Ubk47cz9Cf9x7ZDszz8wJ9NHzYS0/OG3mBipohwiajejt2OLrnWgDHN/Acz+c90jYrd6bhpTX050UG9WsPX4vpd+kRSjhfo8vsCc1Enqfo80w4I8YPY=
+	t=1759773280; cv=none; b=aqlQ8zQu3s1hcHxp4oF4K1SNhJWGbPWwe/StL8zphaihh9hmbyIBmOJb158xMPlJBax7IbR1v6pezXKpLb5TiJo/5uN8OnCcSx4vn3aSK201g2sm6SrlOrmPQ9jAQOTBCBOg74Gny+exab01lZw4jUZ3mJABB2TTm0sxUjHxhu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759769108; c=relaxed/simple;
-	bh=ca5fVwv12tbBgUgUJ3UcFF2rCFKVXpYELstSn4jRmXY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=N9ih8/qX99napA3WquIQWS3RTh3pbnXnHaqqGAbjrrunC+YBL66RKVSSrSRMtX9Vln7kuWVrn0MV6Oyj2VYbeoxEkPFCSN5JgaTCOu4HOOl1GX7ewTyygWonO82y5dtV5PmzZVUP/DYoWSKGoDmNJg9h+yu1zBqpUdlpeZDS7bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=c+c3uceZ; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=dbal24H0; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id DA5131F451;
-	Mon,  6 Oct 2025 16:45:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1759769103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=kU5cidUPIFYWz3duq3VTPwNFXBoRkrEbz1rq8Nla8zk=;
-	b=c+c3uceZUlyuxkUvWjAfYJPF57SXnvr3SvP+oAHs/xS4dwxc7+AyfKoztsDSEFaOK5fzoo
-	xPGFpUrKdGqjmEyDNgsfNHEqU7W37x/zMU9cWwuxfAChxIfGNsQcEs70Ivq3a0ZWIwN4+L
-	zO/BX8ZKHo0xbat6ZUk7RwET93l7fKs=
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1759769102; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=kU5cidUPIFYWz3duq3VTPwNFXBoRkrEbz1rq8Nla8zk=;
-	b=dbal24H0Quqn6sXxS+uQiE5eAWYiebUG1JgzAW9Pv4DvnVEfvVS2EVxHPteA6jTxD3KAJG
-	g3meZhVJW8kjLQ2qpMAGI9Y903Lldfsbd55cFTqOlMYwnv6Wl2U2/9yXNbnqL+PKiGitwJ
-	UGl4Il7GmmSpvzC4dGMDbfxBgfGN76w=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A16BA13995;
-	Mon,  6 Oct 2025 16:45:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id PKChJQ7y42jBRAAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Mon, 06 Oct 2025 16:45:02 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: amardeep.rai@intel.com,
-	r.kannappan@intel.com,
-	mathias.nyman@linux.intel.com,
-	sakari.ailus@linux.intel.com,
-	stern@rowland.harvard.edu,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH 1/1] USB: core: also treat eUSB2V2 as eUSB2 regarding ISO transfers
-Date: Mon,  6 Oct 2025 18:44:51 +0200
-Message-ID: <20251006164500.131899-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1759773280; c=relaxed/simple;
+	bh=SaOJ+bWZKtnYSvf8DZSFyMYB3L1UYISDcDX/6cb7FRI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZkcYY7Fh+NSLVP27hR0U/o3LzSIng6jDu7gcdsPUNbo6X82l8QR+Y6W16vdSiuZVPvt3FZNQHi0sOIc0YyyRSxkBzoDaNy0XTQyeoKg9Ju0m/ScW7La0WPgSOMEKdQzlIuNSGzgJsVnRCcNmRElTaUzJQaKg9bIx+J6a2QS0LwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UwRbNZJh; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-631df7b2dffso12116711a12.1
+        for <linux-usb@vger.kernel.org>; Mon, 06 Oct 2025 10:54:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759773277; x=1760378077; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SaOJ+bWZKtnYSvf8DZSFyMYB3L1UYISDcDX/6cb7FRI=;
+        b=UwRbNZJh/pf0ial9f2mem0+riQWMM2FytktZwwn7aF8HwSlaSc4xM929GRGxqgHnAm
+         6qmgWJKxoZPjiedBTNkh6i4ZCVvfGdfHxkRVgzZvl3Q53kCnNGOBe9bXGzpcgW+knQ9T
+         EFchVaHUCjGIdorwSG6fZ2lovSCJQmtrbNcKOcb2jtUrBmMAD/JPtsIB5mXn6esOX2Uw
+         gaCIAVOX4ftSslC3g9csgaBiUS3rR2UBvcO64AqIrd8P/Fn9zi88hxikFKlm3wt10m8q
+         awGPgS6Lhcp0fiHdjIsA9k5UqTDZ5R0TQ4HjG7JWQ6acBST30gBr3eiKr3n9ypRd1now
+         p+6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759773277; x=1760378077;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SaOJ+bWZKtnYSvf8DZSFyMYB3L1UYISDcDX/6cb7FRI=;
+        b=iCPq/gS0tLBsFqF/tJmgCxCjl2P6c04HKOHr6b6cWZRPfldthG4je6M062KTimCYQm
+         IdU/2s+5Rs9EFmbtjooPRrNJzw+LyXGnlqakvoJsuFBrACnvOlauWl6uS7Hdl9xF6jWn
+         QTiOpRldKigRJKi8lwVSygSR/JfZoyarx8K+RAms0jxPXiUrCWi8bfekK7hzFDt5VfA1
+         CmbHF2k5xUV40q7ifwsKs3mzPk7sReYJ8Az8kPd3IFfWBS6a3bV15VuXW3IP41eQXfm7
+         z7lPX0o3bwLxgfM4GkqI2VMDV2Uz37Zeu25yBoRk24T8sCVRW0tIm6V2qvf+gZR/CMCE
+         rmcA==
+X-Forwarded-Encrypted: i=1; AJvYcCWHEc7TZuuaErlKhdc6Fa8aYH8os/Tzg72yoWj2LNYXjTspiYu62anirefs+PLkJjreNdeunl1VFVU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn3zEbLwqgqQv6K0v1DZ+UZWaVccJULXyvhHGpsdYPD4xdnP/6
+	Gr+w9HN5SN3GD4x7YTrFHqV6gLjBGg3wofxLRk0sMH9Bm8Cf9mfnfaYDGJxo85900Y3VFAYNwhE
+	lZWEAlSsu7Ddqduj3lzTHyVgWrzBMsqk=
+X-Gm-Gg: ASbGncvY/J3/XnEAsLRCSj0jlXmUtX5xOwUYpt5Wg+aBLj89juLkZUpz6sHCbc1WwT3
+	8SVycVDD9TO4UA8XeiTjqBSm4nXuhJxoBBMn6/TAc3SUwhVi6kb6ImKWN+KuwZ+2/KWp0vEkcK2
+	YUsH8SdryNbvZJy8pfOUH68WK9uP1ajvAfu2+Cn9WipTihIbDueN9PFvoTJb9MZcGYAVw7KQXjK
+	DZM9IYZiLE7SqUgGm3n28AkTaTx+79XHJXreS7MowmfYNLQQxgcFWyASTvOTlgKBLIOD+P2epU=
+X-Google-Smtp-Source: AGHT+IHJ/Vo1fUDIbL1nQls8Cr4SC1cob3Zyk1meplN6YxuRUzmZSznvUBX82xUYSZ0V+jqCXqlYjvtl8U3EdawMybk=
+X-Received: by 2002:aa7:d785:0:b0:633:14bb:dcb1 with SMTP id
+ 4fb4d7f45d1cf-639bb13500dmr436309a12.11.1759773276820; Mon, 06 Oct 2025
+ 10:54:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email,suse.com:mid]
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
+References: <20251004065618.70151-1-vivekyadav1207731111@gmail.com> <aOOyNpNL3YCrLIgq@hovoldconsulting.com>
+In-Reply-To: <aOOyNpNL3YCrLIgq@hovoldconsulting.com>
+From: vivek yadav <vivekyadav1207731111@gmail.com>
+Date: Mon, 6 Oct 2025 23:24:24 +0530
+X-Gm-Features: AS18NWCJ1A4gEHjkk_EONI5344ds4mNs5A4ME7lLehyqnImXo5EA8_39H-V9_iI
+Message-ID: <CABPSWR4W5Eyz8=NPvysT7XhFY=bjCO_WqqOOMWeZGen9e2fhqQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: serial: fix: space prohibited before comma separator
+To: Johan Hovold <johan@kernel.org>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
+	linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-eUSB2V2 devices use a bcdUSB of 0x0230, not 0x0220
-to identify as eUSB2 devices, yet their endpoint companion
-descriptors must also be parsed.
+Hi Johan,
+Thanks for giving time for the review of my patch.
+I understand your point and will avoid such kind of practice.
 
-Fixes: c749f058b4371 ("USB: core: Add eUSB2 descriptor and parsing in USB core")
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/core/config.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-index baf5bc844b6f..c96ef5e9b74d 100644
---- a/drivers/usb/core/config.c
-+++ b/drivers/usb/core/config.c
-@@ -455,7 +455,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 	 */
- 	maxp = le16_to_cpu(endpoint->desc.wMaxPacketSize);
- 
--	if (maxp == 0 && bcdUSB != 0x0220 &&
-+	if (maxp == 0 && bcdUSB != 0x0220 && bcdUSB != 0x0230 &&
- 	    !(usb_endpoint_xfer_isoc(d) && asnum == 0))
- 		dev_notice(ddev, "config %d interface %d altsetting %d endpoint 0x%X has invalid wMaxPacketSize 0\n",
- 		    cfgno, inum, asnum, d->bEndpointAddress);
-@@ -507,7 +507,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 	}
- 
- 	/* Parse a possible eUSB2 periodic endpoint companion descriptor */
--	if (udev->speed == USB_SPEED_HIGH && bcdUSB == 0x0220 &&
-+	if (udev->speed == USB_SPEED_HIGH && (bcdUSB == 0x0220 || bcdUSB == 0x0230) &&
- 	    !le16_to_cpu(d->wMaxPacketSize) && usb_endpoint_is_isoc_in(d))
- 		usb_parse_eusb2_isoc_endpoint_companion(ddev, cfgno, inum, asnum,
- 							endpoint, buffer, size);
--- 
-2.51.0
+~~Vivek
 
+On Mon, Oct 6, 2025 at 5:42=E2=80=AFPM Johan Hovold <johan@kernel.org> wrot=
+e:
+>
+> On Sat, Oct 04, 2025 at 12:26:18PM +0530, vivekyadav1207731111@gmail.com =
+wrote:
+> > From: Vivek Yadav <vivekyadav1207731111@gmail.com>
+> >
+> > Run `checkpatch.pl` script on path `drivers/usb/serial/*`.
+>
+> Yeah, don't do that, that is, don't run checkpatch on code that's
+> already in the tree. Use it on your on patches before submitting them to
+> catch potential issues, but always use your own judgement when
+> considering its output.
+>
+> If you just want to practise sending patches, changes like these are
+> accepted for drivers/staging for that purpose.
+>
+> Johan
 
