@@ -1,107 +1,155 @@
-Return-Path: <linux-usb+bounces-28979-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28980-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5B5FBC2B16
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 22:48:12 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DFBABC2B6A
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 22:57:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A863018988E1
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 20:48:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5552A4E41DD
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 20:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF7523BD1F;
-	Tue,  7 Oct 2025 20:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7BC823E350;
+	Tue,  7 Oct 2025 20:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XH1ANkE1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IHIrygQd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DBC23815C
-	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 20:48:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8152E23C513
+	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 20:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759870087; cv=none; b=YbxjkVuB20SFaedB0PxvZEkLgD99lByuPHbKQLc05eBKAgmnS2GwdAgvt4qZGU5VVBlu84zljGsyMXtGYvJ9Qhldm7dkeXs4GUbG7Zer1eOKbo8FUq5mC+8c8XJAS+F/ZLCyfzfmXkLTbPPvC5ITTnAtWrlsksqIETa9XIAclEA=
+	t=1759870647; cv=none; b=uw6U3cRkrPpG7yhp3qB3yzn2XBLmhoKe67UV5fiTHgzgPuJ0l2yTHHgOr6VVqEoJ9wNod6DI2SwOl0XfFYJ2GGGr9zKupmIPJVA1apujUI/swbvJarxJzvox5LCjA8iL9RyA4k6aTS/awQc1i+nPq3wTfGLSd0EPablHeaP4DLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759870087; c=relaxed/simple;
-	bh=GVThB/w8E94RPQpJG/vVhRsqUlj+yLahe7te3a1/Uas=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=XYV2MvUYweKNAGRK863jWAmzFKVzL6IpordmvAr0OpqU4Qx60J2kasOuCVuAe2jsYmhXVgVayQVQ1Z3+Ua/5lyWEzE/X94Nb0KjNO1bq7K81FUS2srnWRQkAEIh6MsJLqe8oojB1dmgOHbD2ZrmG2IESgA8q7IbA0amZsh1JBCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XH1ANkE1; arc=none smtp.client-ip=209.85.217.51
+	s=arc-20240116; t=1759870647; c=relaxed/simple;
+	bh=lo+bODTqhbR+va341uGZBQme+L9mjBJdDdog2Ba/nBk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jogEtmRpE2EdDWol3i27jvDfkJ+3Bu7zqHnyl7mQRQ1bYYh0270PUu8jQdT0xWP4MaUBrlYHAqNmLyKlWul9ntrvNFGXyu7kyRIb0H1AYNDqBRyDkD3QHZpZ7ugPbM6yxgQy1CYbhdfCjoGZpGS9gbcHERxp328xRU+51JWQ04I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IHIrygQd; arc=none smtp.client-ip=209.85.167.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-5b658b006e2so3427039137.0
-        for <linux-usb@vger.kernel.org>; Tue, 07 Oct 2025 13:48:05 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-57a292a3a4bso1956188e87.3
+        for <linux-usb@vger.kernel.org>; Tue, 07 Oct 2025 13:57:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759870084; x=1760474884; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=GVThB/w8E94RPQpJG/vVhRsqUlj+yLahe7te3a1/Uas=;
-        b=XH1ANkE1ALEXNLOCbywxS40nRd0XR20x9tMwyl9sHxQNaLD5Xk7oxZkwScmsQ4pyLf
-         xsk+PHbiE2bJ+HY5Jmw6+8ln96P0L29Nx/TBp4NoXatdHzFmU/M08RcmxxpGVUY3MWwg
-         DFuk9EZ/B8DMaKkGWzcV8b41FQqs2zW6QM4yzHJqG41nBZPkkoJnfpUzdtgI2tWBlpip
-         kIB4aKf9NtUQFy8XyP+qoip0Al6J/u+ogAiqcu4mk7qgbr6SUeAgT4ulVmGNFVPFJEu9
-         n9wtJcZ6YD/0BKkCM01xEAIDKQA+SxXIPP/1XpR8/kv0jzIbI/LThD8GBmO8DjHmtsEi
-         W/hg==
+        d=gmail.com; s=20230601; t=1759870644; x=1760475444; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g03JkHUsqdzLl3r9exUSIw17r9a2Np//6olnzHZA6Y4=;
+        b=IHIrygQdeDczRh0ogILlLdPkfzITe9CfMZQerLdPOAwKX7FApneP06kpxGmnM3bjlf
+         Br2JBFzy0z5G1uiSYkkCBEmtKEJ7oHeLdlNrtIFeXGHWFmNNbBl1hE5+pJfdoo4X3UqF
+         piOIRpP0TL5pVBhc/w7A8enWukHIL9/XFZLxfmsu10fTCYWUSJ9J0Ihg0yPpLz8Gvi8z
+         mZ9XKDmE5RliFOVieeAhJ0AlU4FLlPmcpFq6qdKzhk1yNOi4rn8zXRd8P71UKOR5NFR1
+         ch9oNSAt7HBFP5FS7SInlJ+00nYytGqlNhO887fPSn0wfnnhVuiSaaeAKjergSbvc8r7
+         qoGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759870084; x=1760474884;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GVThB/w8E94RPQpJG/vVhRsqUlj+yLahe7te3a1/Uas=;
-        b=PeC1197tJTZj8Vj16o9EQRj2upZgcebiHe8ZG4HeDqHu49YJKH1vycTW1WuEdBasQL
-         ED4/STFn9hNmE8DECgCJeW82OB5C+peAQCE4WVi0k0PV8YX+280HosPG75xiMsMBILQh
-         pfTVq/UspIYrpJK/CGIp/pSD2EHgdyfKbKfa6umlHYTZwymFhcswC8k8BiFghJJnSFG+
-         6k/zG/bV0uLOxQcXvCGIR7o1CPAle7lt4KaTkNk1m8GCMJKommIPfCm8ITsn1qv3jVQi
-         mDn6vkAhOxLT+jY7JYQPZv8p9pMZi8ycBZpjfgsPlm6BmSw5TBaqwnyvmElb2ZbID7c7
-         mgcQ==
-X-Gm-Message-State: AOJu0YzbLHiJAS5u1/tFiwh+OsJVg1W80B5nWL9N4vAZoLNvvmSF9EVg
-	n1UXrgWktdSa1F5sNO1lr4VtlhRsp30x+cKjtE5ORkkA1ULdOTlj97nUdiaxA6ElrgAxklKz5dp
-	7NICBTc2+iDVXUZehwVNxhjtxMCqVZNh3b3GnTb4=
-X-Gm-Gg: ASbGncsjOJM1wrm17pSv6l0fEssj0Jf19oi5Joa4mHgSJi8SrqtU6mepXENUuHShZMa
-	NtziA1Ix3IrtOqINPjRRkF0CJ9kl7mV0hHHBQOR6bpbZIWkhuS+w+JQwJk8MXsonXujVbu7g2dc
-	GBMLvpWOJaCiS28NsVvMgrvaD88Va0z/TE7S/Aj3ab5lBEEyjNb5pgrP0rrgwomEYj+jGXxZLhQ
-	ewHoLB3D5G/PutHkRd+O/QgZ6lOpGw=
-X-Google-Smtp-Source: AGHT+IFMyOy5pzH+ob03cL1zxEYTuyJg66UXDzt8N9Fm+hjIboye+WAMWe4+j8PuwB/p4bLcJ3HugU5csydDDdia4Y4=
-X-Received: by 2002:a05:6102:6442:b0:522:f65e:c76d with SMTP id
- ada2fe7eead31-5d5e23b0e35mr434638137.23.1759870083857; Tue, 07 Oct 2025
- 13:48:03 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759870644; x=1760475444;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g03JkHUsqdzLl3r9exUSIw17r9a2Np//6olnzHZA6Y4=;
+        b=EEil8umV48se1SV3V8Tx9/2lR6LaSQPKgVwq5ZdZILvUxKOLPAoxrP64vWQ6s+yBy8
+         FwB2BTxSrV748xXczlXAU+V3kDiFm8rwpPxOZOkUCi5gTYYrxHJyavCbRI+W90Tmk9Ix
+         1p/Q9cwVsVluTAorfqq7Bef1Z31CA0xG6yN2l7w2srhzARel3DGhyuF7bXgj12P1HekW
+         4V9YcFd17H2rJsmoLkjg3lqyusMpshy9Tk7gD9o2Bg+L8LDGqF+CTcOoVJh3dYlNug0o
+         fR5ASS3pgQ4v3Vdk6cOCFDwh2dCC850v928ttOYAmkwW17OTQb3aBgSgIodB7Cb5FE6c
+         OSzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUcUXupOhh8HxyUxt7io1gym8PFd107DOQQPNiihRkimqEFHsS3Jv3jiP9HtdzIwiAhzVRgD/DjXP4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxahcFHCqduqxHwN9JrXI+ChN08yvkeYg8mvQdqP6JRao/7CbT8
+	A3i+qUW9ClVCVl1CXxIaSvRT6Y0+ZkhQdAn/TR80T2styk9Nm6jNNONV
+X-Gm-Gg: ASbGnculMGKpg6euMVw30d7Um8VcWh1dipBDyXEs33PbH0Bl+mDSMQgCKIi6pwItLts
+	IlEbcaKIQ3gnfJd8xWHKpKKapGGww02kHEEgnWDX6p9g0LY8YPDHB6fnQ9xlv/GSUMpxrQL1oC1
+	6iCZN38SHEVyMouJU6ER6iQ+j+wkKhTpv8QUEOm7u1EIQ4yAtASO6bam/XSkhBE302xJXL3iqfX
+	Lxe/nuXcLqgaX1oyeCy32Eu//rxo9d2eILJC9K6ehGHnWIG2CKB6Sov12z8fgYJJ3mn7fY8Qt1E
+	JGV5LdpLvlOk3uBcIfomORd7F4v2TEXZvo+gWt/9bwmbOu6OxCG1Drh4C+g/R1U625H3xJd1lJF
+	mnjA724mNuigY2hwiMdsdOgYbLhr/6mtyx7Ucy0humIHREJcdXw2GbgK7Z3c=
+X-Google-Smtp-Source: AGHT+IE3t6erqilqr2vkNvErtfsN1Weu9WLJEnPCNGwz7Ro11VdzfSyM+y127Q8YciWZY6HpkBzUsQ==
+X-Received: by 2002:a05:6512:398c:b0:57e:4998:95ce with SMTP id 2adb3069b0e04-5906d8ed6famr305072e87.35.1759870643322;
+        Tue, 07 Oct 2025 13:57:23 -0700 (PDT)
+Received: from foxbook (bff184.neoplus.adsl.tpnet.pl. [83.28.43.184])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-58b0112462esm6473271e87.3.2025.10.07.13.57.22
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 07 Oct 2025 13:57:22 -0700 (PDT)
+Date: Tue, 7 Oct 2025 22:57:18 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: guhuinan <guhuinan@xiaomi.com>
+Cc: Oliver Neukum <oneukum@suse.com>, Alan Stern
+ <stern@rowland.harvard.edu>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+ <linux-scsi@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>,
+ <linux-kernel@vger.kernel.org>, "Yu Chen" <chenyu45@xiaomi.com>
+Subject: Re: [PATCH] fix urb unmapping issue when the uas device is remove
+ during ongoing data transfer
+Message-ID: <20251007225718.3c8b2cd8.michal.pecio@gmail.com>
+In-Reply-To: <20250930045309.21588-1-guhuinan@xiaomi.com>
+References: <20250930045309.21588-1-guhuinan@xiaomi.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Arisa Snowbell <arisa.snowbell@gmail.com>
-Date: Tue, 7 Oct 2025 22:47:52 +0200
-X-Gm-Features: AS18NWAkTXxu5Hq3X6oLjNGGzRW09_ajbmmezWgLhZDINHtcebdmkGp5mup4UoI
-Message-ID: <CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com>
-Subject: [REGRESSION] USB-A devices not working on boot after recent USB merge
-To: linux-usb@vger.kernel.org
-Cc: regressions@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On Tue, 30 Sep 2025 12:53:08 +0800, guhuinan wrote:
+> From: Owen Gu <guhuinan@xiaomi.com>
+> 
+> When a UAS device is unplugged during data transfer, there is
+> a probability of a system panic occurring. The root cause is
+> an access to an invalid memory address during URB callback handling.
+> Specifically, this happens when the dma_direct_unmap_sg() function
+> is called within the usb_hcd_unmap_urb_for_dma() interface, but the
+> sg->dma_address field is 0 and the sg data structure has already been
+> freed.
+> 
+> The SCSI driver sends transfer commands by invoking uas_queuecommand_lck()
+> in uas.c, using the uas_submit_urbs() function to submit requests to USB.
+> Within the uas_submit_urbs() implementation, three URBs (sense_urb,
+> data_urb, and cmd_urb) are sequentially submitted. Device removal may
+> occur at any point during uas_submit_urbs execution, which may result
+> in URB submission failure. However, some URBs might have been successfully
+> submitted before the failure, and uas_submit_urbs will return the -ENODEV
+> error code in this case. The current error handling directly calls
+> scsi_done(). In the SCSI driver, this eventually triggers scsi_complete()
+> to invoke scsi_end_request() for releasing the sgtable. The successfully
+> submitted URBs, when being completed (giveback), call
+> usb_hcd_unmap_urb_for_dma() in hcd.c, leading to exceptions during sg
+> unmapping operations since the sg data structure has already been freed.
+> 
+> This patch modifies the error condition check in the uas_submit_urbs()
+> function. When a UAS device is removed but one or more URBs have already
+> been successfully submitted to USB, it avoids immediately invoking
+> scsi_done(). Instead, it waits for the successfully submitted URBs to
+> complete , and then triggers the scsi_done() function call within
+> uas_try_complete() after all pending URB operations are finalized.
+> 
+> Signed-off-by: Yu Chen <chenyu45@xiaomi.com>
+> Signed-off-by: Owen Gu <guhuinan@xiaomi.com>
 
-this is my first time here, so I hope I am doing everything correctly,
-if not - help would be appreciated.
+Hi,
 
-I found regression in the linux-mainline aka linuses branch, more
-specifically in the recent USB merge (commit
-c6006b8ca14dcc604567be99fc4863e6e11ab6e3).
+Was this situation seen in the wild and/or reproduced, or only
+predicted theoretically? Was the patch tested?
 
-All my USB-C client -> USB-A host aka computer(probably all USB-A
-devices but I don't have more to test) - devices are not detected when
-I boot with this patch, I have to replug the device for it to even
-show up in dmesg logs.
-One device is mice and another one is audio DAC that also shows up as
-hub in the dmesg normally.
+I wonder what happens to the submitted URBs when scsi_done() is
+not called. Since the command URB was not submitted (or else we
+wouldn't be here I guess?) the device shouldn't have selected this
+stream before disconnection and it seems that the xHC won't try
+to move data on those URBs, so they won't complete with -EPROTO.
 
-I reverted the USB merge and everything is fine again.
+Will they sit there stuck until SCSI core times out and aborts
+the command? That's poor UX, speaking from experience here.
 
-Happy to provide logs if needed but as I said the devices do not even
-show up in dmesg logs on boot and there is no message related to them
-not showing up.
+Maybe it would make sense to unlink them? Unlinking Streams URBs
+is a sensitive topic because it's forbidden if they can become
+the Current Stream, but in this case it looks like they can't.
 
-Thanks,
-Arisa Snowbell
+Or am I missing something?
+
+Regards,
+Michal
 
