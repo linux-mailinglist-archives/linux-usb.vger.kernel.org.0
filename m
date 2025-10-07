@@ -1,141 +1,152 @@
-Return-Path: <linux-usb+bounces-28956-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28957-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D101EBBFFBF
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 03:47:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B3B5BC01A7
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 05:33:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7B4B834C88E
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 01:47:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4637C189C101
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 03:34:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF00C1F30A4;
-	Tue,  7 Oct 2025 01:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YTBofW8E"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BC5F1DF271;
+	Tue,  7 Oct 2025 03:33:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456D78F49;
-	Tue,  7 Oct 2025 01:47:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC841BC41
+	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 03:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759801639; cv=none; b=FA9/OhYuAkDkyjs4hHXs/oI4BgqcpgkDssbOQ5yxwW4j66fjF28ytiUUtMSuWJDsKoKfSS8gyuohCqbUV5jcVmDQU+LOn2qniMCaqDP2SYweS8H12o+zFJclwAZxdzVZF6CxlJc3UyYIOvs/Maax+Ud9I5mQzLnkn+qIn8+ZP+4=
+	t=1759808010; cv=none; b=MBxtSZoyt/MG7VFDNZbCwbn/9bKoWJWiFm43MLB7fkwMJ3zvx4TZ+3RdCpP/4vDy0656koNRbxmFqiF/4lnzg3kQ2yRRfJEkCmsOxdEJMEuOS86oYUhb1/hIQDEuMxEuiV35y+jbkWcAYbpgPq0GXnuUdd3UWCuAk2PCJVwZMR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759801639; c=relaxed/simple;
-	bh=nYwfWdIBQHej0yIksaQJHMbpXR9uAEd0XMmMoCQc4IM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eqttmcO/VHX1cSmmxqxqFQpMK7xpIvr/Jkaz9aAVWVVQmsnFk/K9ceaC1zuPzft4wUhJdEshyZeFU/WaJwr4uBjr4WPcCNgSwN+e9db6vwjaFJnE6BiwZwFSoYDhs7yT8M36i61XR4VEseFDmIFi0y6jqhQBS2SMoAmklITyiZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YTBofW8E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15EAEC4CEF5;
-	Tue,  7 Oct 2025 01:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759801638;
-	bh=nYwfWdIBQHej0yIksaQJHMbpXR9uAEd0XMmMoCQc4IM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YTBofW8EFgXnChE1vFr4noy5lcee26/fIaO3msAFaeQrEnJcQkQjBySFHj0e9D2Gk
-	 pC+WsAxwKSuMVdqaVptt3ONT08AwkxAfYiFkjLrGFH/Axq6YRSbTYMfufpM5dFelbJ
-	 lLifImrlm4SyPWqc3O9cZNyffBYFcGXYn79NI4On2qJdr/WdJHCEsTGtTeZbw+pvgU
-	 5Q6y60COZ/+Iz2U8vLnGekoybUeuwztOLaSgo26o1YvgowU5D1hwz4xcAIdQci2d/a
-	 yGVKybHUlMC7Xu/13XsaYsRT17S/rzp3pDcVEl6DyoX9Q4i3HKhPjHn+66mOZnyv2R
-	 tUpMUdjwtrEuQ==
-Message-ID: <d7072a11-10c0-47ee-9cad-e64654fbb018@kernel.org>
-Date: Tue, 7 Oct 2025 10:47:11 +0900
+	s=arc-20240116; t=1759808010; c=relaxed/simple;
+	bh=Qo152Ck+YxuMOkvgcNAkaVmRHYF98a6hzVfseUr0S40=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=UeDsGgqPJor/Z8qMIq2gJAzbNxlkW8d7AQRjUCsFpn/tnOCIRoLN1l9vnnBTOy+ugxajIkGDlKlwke8peccpz0X0XGT2rWUcEmZ9xuAaADpOQgldhn3iXLPl8nygVZzmKEGYgm8evMZTQBNW2nJC0TNz+zB4xg538udsNWkd3q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-42f67904af6so7506945ab.3
+        for <linux-usb@vger.kernel.org>; Mon, 06 Oct 2025 20:33:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759808007; x=1760412807;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=952owU/EqtMgqLf+gZ7Jn7cvNDb68sFa+jvCW3cWFcw=;
+        b=hxyKT4kp98nDY/hvKT+1MwaXqi8yAvBYq1BrtF7Nh4VpN42+XoTft19AnNyATAH++I
+         iooN+9oESJY1CUxaJXQjyv42YeZJn+T/Ug3L9wjbRf39tlEyYC2VAfu/QuaUX6P0dPJV
+         uld+oxko4PjF7FMLQusmYUUE5FkxsHkKJJggNCa/hcFgou4BG5GR0fl/hVfaZBiwCb6J
+         gFX1Yw56eNIur3ADXAXFeNLcS4B+wvTNMw+U+6iQDsHNSIdtNoaXbvjvxfDZzTDVRgFE
+         bS0nM3XOJORMOOLlgabh9vhZAi+xJFaZL/AlllN+JmSwfouc+smd6w3uFpl3XAQz29d1
+         mZkA==
+X-Forwarded-Encrypted: i=1; AJvYcCXVNadcyH+2xlfBQY80BxU84swQINA4wWY8DOtkqY+14GZ+DwLfXrua8huLQYi74ern5zFQCSwuUiU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+Tzj+MtsxMijpSWo664ruasVFxbGZlnPhH6F4om6j0+P7nsZw
+	VYaWrTNTdiqFM3t68okbBDKLlxfzDdg8/JM/oLC5EQ8rYQSshxjImnepPix4ds9Y/tBS+JbGTx9
+	8Bu/mgIGu6wHeLJHAYrTYJ9zx7Z2o4gwN32V8l6otn1MW/Vse1UjbzFszMME=
+X-Google-Smtp-Source: AGHT+IHQ10nqe4mSpqPwa3nNHorUsWgHZKJ2FqxJQeZOaMmqnrsm53K08Tu0e1xbDfvom7tMXDbULT8NHg7BXiVrLem8dRi8ZQ8j
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/10] Introduce Glymur USB support
-To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>, krzk+dt@kernel.org,
- conor+dt@kernel.org, konrad.dybcio@oss.qualcomm.com,
- dmitry.baryshkov@oss.qualcomm.com, kishon@kernel.org, vkoul@kernel.org,
- gregkh@linuxfoundation.org, robh@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251006222002.2182777-1-wesley.cheng@oss.qualcomm.com>
- <a6690fbc-0b86-4725-99ca-6b4cc477b4ec@kernel.org>
- <6ed9bd6b-37a3-36a8-a347-85429670837f@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <6ed9bd6b-37a3-36a8-a347-85429670837f@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:156f:b0:423:feda:f14f with SMTP id
+ e9e14a558f8ab-42e7ad018aemr243117805ab.12.1759808007446; Mon, 06 Oct 2025
+ 20:33:27 -0700 (PDT)
+Date: Mon, 06 Oct 2025 20:33:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68e48a07.050a0220.256323.0014.GAE@google.com>
+Subject: [syzbot] [usb?] KASAN: vmalloc-out-of-bounds Read in kcov_remote_stop
+From: syzbot <syzbot+90984d3713722683112e@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 07/10/2025 10:05, Wesley Cheng wrote:
-> 
-> 
-> On 10/6/2025 6:02 PM, Krzysztof Kozlowski wrote:
->> On 07/10/2025 07:19, Wesley Cheng wrote:
->>> This series enables the PHY level changes that are required to support
->>> the type C based controllers and the multiport controller.  The typeC
->>> ports utilize a usb43dp based QMP PHY for the SSUSB path, while using
->>> the M31 eUSB2 PHY for the HSUSB path.  For the multiport controller,
->>> it will utilize two QMP UNI PHYs for the SSUSB path, and two M31 eUSB2
->>> PHYs for the HSUSB path.
->>>
->>> -----
->>> Changes in v5:
->>> - Moved phy-qcom-qmp-usb43-pcs-v8.h into USB specific QMP driver
->>> - Fixed DT bindings for clock properties for QMP combo PHY
->>>
->>
->> Where are lore links? Why aren't you using b4?
->>
-> 
-> Sorry, I'm confused?  Lore links to what exactly?  There aren't any 
-> dependencies here, in case you mixed up this series with the DT one.
+Hello,
 
-Lore links to the previous versions. They are added automatically.
+syzbot found the following issue on:
 
-Best regards,
-Krzysztof
+HEAD commit:    fd94619c4336 Merge tag 'zonefs-6.18-rc1' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15c381e2580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e2b03b8b7809165e
+dashboard link: https://syzkaller.appspot.com/bug?extid=90984d3713722683112e
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/201636e25a0b/disk-fd94619c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b63e3832240c/vmlinux-fd94619c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/11fc378734e8/bzImage-fd94619c.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+90984d3713722683112e@syzkaller.appspotmail.com
+
+usb 5-1: config 0 descriptor??
+appletouch 5-1:0.85: Failed to read mode from device.
+appletouch 5-1:0.85: probe with driver appletouch failed with error -5
+usb 5-1: USB disconnect, device number 31
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in __list_add_valid_or_report+0x4e/0x130 lib/list_debug.c:29
+Read of size 8 at addr ffffc9000ffa1008 by task kworker/1:1/44
+
+CPU: 1 UID: 0 PID: 44 Comm: kworker/1:1 Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/18/2025
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xca/0x240 mm/kasan/report.c:482
+ kasan_report+0x118/0x150 mm/kasan/report.c:595
+ __list_add_valid_or_report+0x4e/0x130 lib/list_debug.c:29
+ __list_add_valid include/linux/list.h:96 [inline]
+ __list_add include/linux/list.h:158 [inline]
+ list_add include/linux/list.h:177 [inline]
+ kcov_remote_area_put kernel/kcov.c:156 [inline]
+ kcov_remote_stop+0x52d/0x660 kernel/kcov.c:1060
+ hub_event+0x45d2/0x4a20 drivers/usb/core/hub.c:5997
+ process_one_work kernel/workqueue.c:3263 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3346
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3427
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x439/0x7d0 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+The buggy address belongs to a vmalloc virtual mapping
+Memory state around the buggy address:
+ ffffc9000ffa0f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc9000ffa0f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffc9000ffa1000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                      ^
+ ffffc9000ffa1080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc9000ffa1100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
