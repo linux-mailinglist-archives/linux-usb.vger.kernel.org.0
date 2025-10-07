@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-28949-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28950-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82447BBFDFD
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 02:46:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C3F4BBFE22
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 03:02:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60DDE189A527
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 00:46:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C95DF3B0491
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 01:02:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6F61DB95E;
-	Tue,  7 Oct 2025 00:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8E91DFD96;
+	Tue,  7 Oct 2025 01:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vKJ3jqD/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sstW7MUX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8817D34BA5C;
-	Tue,  7 Oct 2025 00:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3AAAF9C1;
+	Tue,  7 Oct 2025 01:02:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759797979; cv=none; b=V51U8cEaMMHCD0nHGEfU7GGfG8+XUntgMEORniGqvSy91K+5KpjaJjH/+Qegu9+WNpw6tAMsYK+cMRACqo8DPPUO/XVZryaYzGhWCiNRVGNXPa0Iq3iEo/rTzMc9earIDzWuIk0cXVas3D/eI0SiUkdxv6AYpvI4rq0bGc1RETE=
+	t=1759798944; cv=none; b=o7WnGQm9qdaIe7cc7kHZAb+iY4tHmYxz0peu62TJt9VEHZYNir3X4Va+kFuUdsoSlFcFiGeJMyhQYGxrcawzBDYUMJ2kNOko6RpY2ThnzotpszwS9w7lQD0C8UvES0om2t4ADnNP7gReJVqAEwsz2417mbu/AZNaH+T41iuC5k8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759797979; c=relaxed/simple;
-	bh=J/zaUc12qRswCtMLNA9HDn+bfykmwATj9X6+LIzTD6E=;
+	s=arc-20240116; t=1759798944; c=relaxed/simple;
+	bh=lyieKP3LFc/zehqV6eoCt+HgQDwizBYqu5bhmkN47i4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pPSZZeiZ5m9ZD0hMtXUvzOLER6XXVSOkg/o6EVoiE2f0TWiH0GpbTGp3VaHR8Y0ynG2q17esuQCMt8gtZvBMLf+JYHfu1rU5Sj/pfAX/HEw5PbnPHKtmMLiZakkRCU45sUnLZixFPwLUF3O7YoslTHvSybbBvwKNTH1b7mQYJes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vKJ3jqD/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC4AC4CEF5;
-	Tue,  7 Oct 2025 00:46:10 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=u14a/eLkrCLCfjo/OQz+/oEE5pi85iR3SqwWQuAeprd8X8GYFdRCiu9VVQYcW7lquvqFz+EZLKBQJguvcFgVrgptWp+FQX5epSN0RPYX1BthCipOYCFf7qI1BhTfd9wAF5opEW5vsa+Yu+dwA6H2tlfMi6mwJd1sNMq7/2mHmsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sstW7MUX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0EB6C4CEF5;
+	Tue,  7 Oct 2025 01:02:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759797979;
-	bh=J/zaUc12qRswCtMLNA9HDn+bfykmwATj9X6+LIzTD6E=;
+	s=k20201202; t=1759798943;
+	bh=lyieKP3LFc/zehqV6eoCt+HgQDwizBYqu5bhmkN47i4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vKJ3jqD/p4lLzzDaCCEILVXtHTXk9GXdoP3rZt8aDXRFXgb69S4RY3b33FL5IImzn
-	 S/uSw1hVO0AgvGXRX0VHgOBOurjONtPVO36NOJPiSNwtExbpkcyU3BVQS2ektaS6EI
-	 0UxyNCcSUBCa9KRdoIcHmYYsQg4pdw3+oLU1qOEeWXj/uYS8fME3nvQbKyXjiyDto3
-	 YXMgbAPP+LjY8BdDzJXbSP1aC4wmvaJciVFYx/isPH10UXpWqB2uweL6rLnz82T1Qj
-	 +4IN76JTGFQ1j9QzBEt9eBQx5j18UvCys3eX1ycYtIHn0ynWK/fIfkeC+JORKn/lLH
-	 3FlcbhHrU89eA==
-Message-ID: <5c2c298b-b0c3-4fa5-97aa-75b44084248b@kernel.org>
-Date: Tue, 7 Oct 2025 09:46:08 +0900
+	b=sstW7MUXAEMw1BMM6qBprABoKvaSzYj/BuFojCPDQWSoL/B1glvjVhoYBS8O59qMc
+	 qSO/8jp/tvkQkZjHfuD95m936F4G/GfLXr6vSD6ozfPO0TEpPa6GS7H4v9/fATSeT5
+	 KUE05zjvTp/aP1VzAqjokY8RkAFQ5sg6Z7Rvg9gSgaMkwQ8qObowU6Li2jLAV0CDWA
+	 kyGv7vODJldAGb4l/j4BGSnmE+opJU+UHLO2nL6cYTuROz8nvw6pX+DSo+Mw6B68V8
+	 331H7QwU9A9TIhr/ogOIC5BsyHtld/77sxAsh1QWW+dff1/OADkqqj1hMP8vDnB0r3
+	 HrvpyGL0v3Lzg==
+Message-ID: <a6690fbc-0b86-4725-99ca-6b4cc477b4ec@kernel.org>
+Date: Tue, 7 Oct 2025 10:02:11 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,22 +50,15 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/4] usb: dwc3: Add Google SoC DWC3 glue driver
-To: Roy Luo <royluo@google.com>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>,
- linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org
-References: <20251006232125.1833979-1-royluo@google.com>
- <20251006232125.1833979-2-royluo@google.com>
+Subject: Re: [PATCH v5 00/10] Introduce Glymur USB support
+To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>, krzk+dt@kernel.org,
+ conor+dt@kernel.org, konrad.dybcio@oss.qualcomm.com,
+ dmitry.baryshkov@oss.qualcomm.com, kishon@kernel.org, vkoul@kernel.org,
+ gregkh@linuxfoundation.org, robh@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251006222002.2182777-1-wesley.cheng@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,33 +104,25 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251006232125.1833979-2-royluo@google.com>
+In-Reply-To: <20251006222002.2182777-1-wesley.cheng@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 07/10/2025 08:21, Roy Luo wrote:
-> This patch adds support for the DWC3 USB controller found on Google
+On 07/10/2025 07:19, Wesley Cheng wrote:
+> This series enables the PHY level changes that are required to support
+> the type C based controllers and the multiport controller.  The typeC
+> ports utilize a usb43dp based QMP PHY for the SSUSB path, while using
+> the M31 eUSB2 PHY for the HSUSB path.  For the multiport controller,
+> it will utilize two QMP UNI PHYs for the SSUSB path, and two M31 eUSB2
+> PHYs for the HSUSB path.
+> 
+> -----
+> Changes in v5:
+> - Moved phy-qcom-qmp-usb43-pcs-v8.h into USB specific QMP driver
+> - Fixed DT bindings for clock properties for QMP combo PHY
+> 
 
-Please read submitting patches, how this should be written.
-
-> Tensor SoCs. The controller features dual-role functionality and
-> hibernation.
-
-
-
-> +
-> +static const struct dev_pm_ops dwc3_google_dev_pm_ops = {
-> +	SET_SYSTEM_SLEEP_PM_OPS(dwc3_google_pm_suspend, dwc3_google_pm_resume)
-> +	SET_RUNTIME_PM_OPS(dwc3_google_runtime_suspend, dwc3_google_runtime_resume,
-> +			   dwc3_google_runtime_idle)
-> +	.complete = dwc3_google_complete,
-> +	.prepare = dwc3_google_prepare,
-> +};
-> +
-> +static const struct of_device_id dwc3_google_of_match[] = {
-> +	{ .compatible = "google,snps-dwc3" },
-
-You cannot use compatible before documenting it. Read submitting patches.
+Where are lore links? Why aren't you using b4?
 
 Best regards,
 Krzysztof
