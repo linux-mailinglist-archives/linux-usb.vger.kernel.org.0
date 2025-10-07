@@ -1,48 +1,79 @@
-Return-Path: <linux-usb+bounces-28953-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28954-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1A33BBFE54
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 03:06:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA83CBBFEA0
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 03:16:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9DD0A34C497
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 01:06:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70E0D3B88DA
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 01:16:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C5ED1E1E16;
-	Tue,  7 Oct 2025 01:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990F534BA21;
+	Tue,  7 Oct 2025 01:16:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FjrZxTwH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ErQo/FqH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49872B9BA;
-	Tue,  7 Oct 2025 01:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA5827707
+	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 01:16:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759799193; cv=none; b=r0k/6QOSW48CmVzTFNbwY2kQuVYvMePVdwLvDz7+AjHa+O7phV4qe4y3pZ9jzMhDGqQXVPGcv659gCbPNObQkZugXOcBa5fwZZnhj14DChB87htmvmRv/uyeNpLnMJgNSpKE+qQmhaKTPUm9imWaOp3qLYi/U12JRBn4G4MtrGQ=
+	t=1759799793; cv=none; b=Q3LeoqlatccP4m5SaHwddJn4IhKKwWQk/622Xdtaj8qXP4C0mkCarFs0dzJ8WyoCr679gApJyvgF/iBam/5gyC4oGzSo3dyuDCZgBT9omI92telBvANWPD7O2xv2CWFE0sX4vITVjTc/wCIX7jPsHL+ygI2i2aNhKVwcMX988iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759799193; c=relaxed/simple;
-	bh=7oQcilkprt+ujFKdnktKU9R8kCtmHAjQf/bDn+u5dho=;
+	s=arc-20240116; t=1759799793; c=relaxed/simple;
+	bh=6X3DsoXCXLXwSW6LHDG0N+geOJvq7dJh0/ciZA8oLKs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QLoMfebfkJanO+ZJSovgukuJfq/DC5qg/r8uCY7S+ck+NFBdgYVBCyI2aAzIQ3gdNcmcRb7ZnkIQaYAyk5K9PgPJ5o3hsdgCDeDNUTcUlD3ivTOTpXjyE+Kgdvu82lBUw5UUENc2XtTpkX3DCaD578J62I0KmVtiBfqbIv7F/ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FjrZxTwH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24489C4CEF5;
-	Tue,  7 Oct 2025 01:06:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759799193;
-	bh=7oQcilkprt+ujFKdnktKU9R8kCtmHAjQf/bDn+u5dho=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FjrZxTwHmZpAxFmzGfPrpPMlq5p3lgmUUrlTQsrhabqgXg8nwqqBflXepSrsxG+1w
-	 riumzumvEsfza7Yi6rrMrts8Wh7IwRN1g+k41O4GdMiF3qlIh18USq89wUUKpXDJPh
-	 Z7xUWg2eo4m4VMIElTfEcdITLQFe4zQCCQny1ZmM+Y9Pe548u/aYnjLVT+KQ7DTktU
-	 GKrjKmlXLAkZGAuIVy2aQ3RuIpUVfs21FrjorHNFBHtheevK14Yo4d3BW+2uSx94kU
-	 f1x3kKBbc6qtfaGpl51S7WD/95nCKQuhyNUZCuxJE0P0ADxPP1Ry0m2CiZA8Xj1pko
-	 y4QcUR+qGi76g==
-Message-ID: <36068ca3-912e-4e71-b688-8689ead8194b@kernel.org>
-Date: Tue, 7 Oct 2025 10:06:22 +0900
+	 In-Reply-To:Content-Type; b=gJPIwP1Pk2ebUEtH97MCuyNzVVAPpyWuWW02cPkWf1nvQqbc2smYO09GS+imGTq9f5ExjU/wFxsnZAekHqquX2nirYHGoBNPbuE+isR8iYYkMSiij92//QxMNpgmVQVLvOFNOA1anN/sheUGMMDTQyCRcHzfQmIalLmUjmZFIog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ErQo/FqH; arc=none smtp.client-ip=209.85.217.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-59d576379b9so2728614137.1
+        for <linux-usb@vger.kernel.org>; Mon, 06 Oct 2025 18:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759799790; x=1760404590; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ghdf9TZNa228GXUapeik3l8BFyhmMAug+7tiKuSEW3w=;
+        b=ErQo/FqH7+i48DhJx3rzDqaiFbPUfikgFFMgJLsb+kFM1dHWp9NJIZSrNPs7U30gCd
+         l+9UBegU66SnEd3r1eG0omCSCut5nbBSOohIJi00BEJsCh5DdRJVclbof2QHd/6qMlOa
+         hwgnZH/Sa6LMIrIxeswE6+ZgTX5H6YOy4PMtrpBs42ujRG3BfsskZ2pb7MTFK38BYPTK
+         X/s6/Rg+APgILxm6p/oRWjEczpC+wW1/46gNwvXHGs+UU9wVO14jFN/QrbW1eT1RjRu8
+         eKsgIPSFzkW5o2i+XJf9MfQfZC9aS2cCpdLv89Nxfux/VpTfSEi2goMn7zfBT/lKnx6O
+         +XiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759799790; x=1760404590;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ghdf9TZNa228GXUapeik3l8BFyhmMAug+7tiKuSEW3w=;
+        b=Z9WJHYyaY8sI9LWUf6koWoqwrSbrBEK27KasZr9NLY8eOR9DmWqYe8s4FHkoAQV+L0
+         Btquq4pB7gddQhs6/iuMgeip49e85LCsxNSibjgHb24LOQ/cw+bObqKw9u2Vp5qBQDCC
+         ADlQmPYOecllIvtFrG5AAkmLqIgSvjoyD0Zs9DpcqsxwQOl5DYOgrF8H3RYxGeogUNSm
+         eEyKFUHocJn33OEfFRepuI4fvMlkmz1Dggd5wcVKUcNUdLWT7kvx2xzNOBp0kJV4EJow
+         kOrmBMDS3izcJuR8ZebQibEuN1x0V8ftKotLAFupPGidupK/79bZ5mZ9MdN3ObFhufNp
+         Kjng==
+X-Gm-Message-State: AOJu0YxUAKYakDS30xFBCeJJrjEA3ke+n3h/wXwuUJl9tQuJXhoZdXla
+	RuX1XhbT4c6bH3b4noMNdXZ1wmAQIoc9ab4sKETVWj5J9fVVk5OrQplq
+X-Gm-Gg: ASbGncseCV4k8e2P2kfpMzB29s2UWb496QHjaunyygesQzIIGeJ10NqL3BwdlNPm8M7
+	xXiRkT58toUquR31VLw7q61j1wszl6rkCLrEatQMy5omwxc8FYNEj0/efl5vdG0IkT17VWNIlpu
+	UL65CVtUPz3RupLy6XeJGVic6dUG0CpayMnsjqU2rJuSwvpoFt5auBnKSE3Fkn1dr+Oe5N+Wd0k
+	X1MbOSNCvFCtxFZG5q4jKPcA1cB6pVx4ZhIRDK3JDO1yWaO+7gnR+5UjMff4J23PPlUNmqMBBUk
+	Nv4oFV1k8B5BUc6rq2e00PhieDrwo0dz8SbHmjCormm4qB8l+cIFns2zf0nUEQtNeyD4dbhPgk5
+	avvPuRWaQmMS1DrnWdklHib/1dK/2aUwM4iJGYnFX6W1Keqn+bev9sYUec6v436k=
+X-Google-Smtp-Source: AGHT+IFQImR3Vj1kzGx2R+BGfWd215YKxySg4FhZPdn723hBKbycZMLDWwE88sLjbEEJGhlPaL5osg==
+X-Received: by 2002:a05:6102:1606:b0:523:712d:44a1 with SMTP id ada2fe7eead31-5d41d10db13mr4412399137.19.1759799790449;
+        Mon, 06 Oct 2025 18:16:30 -0700 (PDT)
+Received: from [192.168.1.145] ([104.203.11.126])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5d5d39f1a2dsm435417137.15.2025.10.06.18.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Oct 2025 18:16:29 -0700 (PDT)
+Message-ID: <8fea55a9-54f8-405b-9844-ee67b5e43ba3@gmail.com>
+Date: Mon, 6 Oct 2025 21:16:26 -0400
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,92 +81,40 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/4] Add Google Tensor SoC USB support
-To: Roy Luo <royluo@google.com>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>,
- linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org
-References: <20251006232125.1833979-1-royluo@google.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] usb: serial: fix: trainling statements `break` should be
+ on next line
+To: vivekyadav1207731111@gmail.com, johan@kernel.org,
+ gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ skhan@linuxfoundation.org, linux-kernel-mentees@lists.linux.dev
+References: <20251004080123.98285-1-vivekyadav1207731111@gmail.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251006232125.1833979-1-royluo@google.com>
+From: David Hunter <david.hunter.linux@gmail.com>
+In-Reply-To: <20251004080123.98285-1-vivekyadav1207731111@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 07/10/2025 08:21, Roy Luo wrote:
-> This series introduces support for the USB controller and PHY found on
-> Google Tensor SoCs (G5 and newer). This includes:
-> 
-> 1.  DWC3 Glue Driver: A new glue layer for the Synopsys DesignWare USB 3.0
->     controller (DWC3) as integrated into Google Tensor SoCs, including
->     hibernation support.
-> 2.  DWC3 DT Bindings: Device Tree binding documentation for the Google
->     Tensor SoC DWC3 controller.
-> 3.  USB PHY Driver: A new driver for the Google Tensor SoC USB PHY,
->     initially supporting high-speed operations.
-> 4.  USB PHY DT Bindings: Device Tree binding documentation for the Google
->     Tensor SoC USB PHY.
+On 10/4/25 04:01, vivekyadav1207731111@gmail.com wrote:
 
-This is useless message in the cover letter. We see what patches do from
-the patches.
+> +		case 300:
+> +		case 600:
+> +		case 1200:
+> +		case 2400:
+> +		case 4800:
+> +		case 9600:
+> +		case 19200:
+> +		case 38400:
+> +		case 57600:
+> +		case 115200:
+> +			break;
 
-What you are supposed to explain here and in the bindings patches, is
-why we want this driver and what is Tensor SoC, considering we already
-have one Tensor SoC... IOW, explain everything which is not obvious -
-and duplicating SoCs with some generic name is for sure not obvious.
+It is generally considered best practice to use the breaks after each
+case. Here is a good article on this:
 
-Best regards,
-Krzysztof
+https://lwn.net/Articles/794944/
+
+
+Also, same here. no top-posting:
+
+https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
 
