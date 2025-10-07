@@ -1,114 +1,172 @@
-Return-Path: <linux-usb+bounces-28962-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28963-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19ED6BC0BA4
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 10:40:45 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 025D6BC0D14
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 11:09:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DFFB19A0BB2
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 08:41:08 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5887534ACBA
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 09:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B75E2E3B0E;
-	Tue,  7 Oct 2025 08:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F0E2D6E59;
+	Tue,  7 Oct 2025 09:09:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JYJO9vu/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HPetP9p3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBE02DBF7C
-	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 08:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD732D3EE0
+	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 09:09:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759826131; cv=none; b=t6VSxJJH355mVz0RJYBgVWQu0rJDEBUQN/drUZ5SD5oBFApil1/asldwmRRroYw6cHDYp1rJ9R4DbVFO5mU6L+/ClniujAIUsbwDwEglxCtUi30v73ehP5K+RGrm9epevTOcr53/vZhz+H0jDW0d1uNY2sZ3aNWwK1P1KhxrKW8=
+	t=1759828184; cv=none; b=fJKmqxjM/Xd5Siwl0RDbQ2gfg3RE3j339mVtXl453muwzhYfVAbdp9UJZpiix38x0lJQD5tyfeW+zQGNhC2G9S+fqGrRErXP+mVFvvNi0i60nih+EXTXTyWudHPZ96JY+QfUbm4pZav2Fk5KJLrkAB5W+XhzuyFMSK++yoVf5Pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759826131; c=relaxed/simple;
-	bh=oolnhmzp0phxU0SJgt+ZTKmKtIqlWNaICASfkcDvAXg=;
+	s=arc-20240116; t=1759828184; c=relaxed/simple;
+	bh=1yfqm08lPzP84DqSlgtHVuQqNXB/UVXPe0ZvuASpvXY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gQnBXFkFcta1ENHmkNfReSzrs0nB9xQ7IIL/n7QuDReiI9tpioy4ZlDs7fUP+CmW9hN8LiUJb/s90DDnNkuDLhQ4hwNfVNmybHYaNwLa1dA2TGwD27pltfhDB7ivH/Oeqo9obxt1M4mx6YDjBSN2+d986N6xRdKHN+moCrB1758=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JYJO9vu/; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-631df7b2dffso13693235a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 07 Oct 2025 01:35:30 -0700 (PDT)
+	 To:Cc:Content-Type; b=neaIz/3/pg5Yd8og1/mNrjweE2TOxNHWICrtNlxcv0bfMEzNIMd7Gu0CyhM2DprQkln2WqUfjP5U6O+cclBIOQVbPzXXZYJq0jbvxqzfxXejkO5d7jTm01X3AegZ7cjf4Icev0nvdAMQPzpUw2Al90nCorW68MBFp7/3FSy5TKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HPetP9p3; arc=none smtp.client-ip=209.85.210.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7a9c15464f7so1874536a34.2
+        for <linux-usb@vger.kernel.org>; Tue, 07 Oct 2025 02:09:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759826129; x=1760430929; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1759828182; x=1760432982; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oolnhmzp0phxU0SJgt+ZTKmKtIqlWNaICASfkcDvAXg=;
-        b=JYJO9vu/5BfQtw/EHJ/7J8ZR5ce5NSgqACEHHixK5nAbfBkWiosi76+Zy2VlHLYwwl
-         p1YzjoJz74ukxhhclhxWAbgm7M08T2X9tY6lzSNlo9LkXVCsEbW8i64m0+Kk4VcLu2Mw
-         ZgcMBJjX37zgCLZbW8GdGspZkmDI8NTCQNDZPpgjpy0fRLFQltiDgyixSLihFbJnXE0S
-         sOLfAMQg888fstIC1El6BZaRtTDMZlnj+PIKOsRHaUY+9uMRjFmGG7Egm/6vDEE1bdeL
-         oLEwKEPVJRXrxxmK90ToG3mYM0sVWYnCVb9Ly2S6/x/ZywIKCjA7ZkWXk1tcESiQp9/x
-         DLrw==
+        bh=k5Gn50jfOxZiiSgXxR/gre/tjvhockNBFkRAG2DI30U=;
+        b=HPetP9p3Rcyr+4Rerd3eUcPywk0U+/cpJZQguNYVaEhi7UH/pho9dG27K39tRbutjz
+         a0msZ7YzoHLi9+3ghjpUAlBzlRx6+1sWCr2Z4KhFtLX4tG9M982U9qdv5bud/9NTZUGc
+         351joCL0Y7gZnCKbdSccb7ySAXAV8ceGTLNjziRVI0+G/nNVs8vYNsF24q0n2UgxGcOZ
+         nbfZD2kF4gB6fqOPhtOSkqLJOStWZQS6yLLezTzyhXtrNt9fEk7uQTEvnwX7yWUWGrAm
+         MGXAG3D/dEvSMMgJst7VT5SiBd9mDvh+2KcQ9W2vfZG3031A+yRAa6o6hOWlwfecydVF
+         OLpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759826129; x=1760430929;
+        d=1e100.net; s=20230601; t=1759828182; x=1760432982;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oolnhmzp0phxU0SJgt+ZTKmKtIqlWNaICASfkcDvAXg=;
-        b=FjylUkVv6kRPx+h4brUYExkmVkW4rouriDy3/4VEYUuxr5wEXok4AbJpX2aHuVkDKj
-         9lW9oznCftehP+CZhJBJmXy3mNT1+N7lbDz8DtwGLVVp7EAFHdJBu6c6ZWqbRnveaF1O
-         Cmgdx9Yvl3WkWqJNTIYuUTNYdQ6cBxKhlbFGS0hcmnXjGocy8i49l5Wr47n1DTayP3Xm
-         snULxquDi/KFXDX8meq8MZqYctD4zfRaHeDthXbEH454NzF+nWTAqAnhnnPxH/eS0RjQ
-         YHSYi72xKwJVeXxNviFU2QXjsOSiZgxJtRn4RiiFcCxtINGrmR39KcS1X84EMfANlyTZ
-         Vksw==
-X-Forwarded-Encrypted: i=1; AJvYcCX6jIJLtvpt4E49eyShXsJvnMBmLMNrcSFeENnA4dJDIgDXU7NwqYzXXslUWzuv2fP9juvygSi5WIQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjMWt/ybnXRCtdkR1t9sTFktEDZa37hs6VXhed8SMLyRM3SiVs
-	3YkAZFjdJc5BC77K1UGHdChsrhS6FR9KjmsY5klcYUp4hlwznjw7+NK3WC/yV5qlzKq8ViAWgyD
-	7lANxFI5DBazwirzvLkC5+hMSTYbwTk4=
-X-Gm-Gg: ASbGncuqYbPbmLTjwn1Os5ZcmUxVJedSIT0y6WwAsdVftbnurU7qTs03P11Y5gWzcTF
-	U0tot4ywc/q4r/27XYjhFrAde9oE8E+vZ8Nz7MPVUWwmC/fVM1kBlQtimWh8Dmn4yI/g8WUivC0
-	B93d5yWGDpgsyrhBGkpEB1uMUePOFsw6S/ewlF+hOzUhIEwHycuVZin390BxTF4nSEWXpVzLKVC
-	7tfm8/8DLFqF2+sw48Lx0QtcqD/VZlrKpFxwbUNOXT5PtXulkj9yQ73X4FKankKqArzYdhTGgdG
-	cA==
-X-Google-Smtp-Source: AGHT+IGGUtmjqlLFO7DiLm+f7ClYBfwyRmx5vn+CRzV63l76mmNZeJM8Zill3iy7if7XHgjFS3vA81VNOf3LznbQNyo=
-X-Received: by 2002:a05:6402:4402:b0:634:a23e:df26 with SMTP id
- 4fb4d7f45d1cf-639baf1c977mr3450695a12.6.1759826128502; Tue, 07 Oct 2025
- 01:35:28 -0700 (PDT)
+        bh=k5Gn50jfOxZiiSgXxR/gre/tjvhockNBFkRAG2DI30U=;
+        b=hE7TVaMBVa06Xqr1uGnlDGCqz+Vj+WmGfFS7gpkQZs59OVEzhwf1B/HblTu9N0uTbS
+         Iq3jRHizhnwGb5EQbbhGcbVAylwkyYEgWpqdIv2jiITMX5/Y3ktPixsT2JiCP2ahmyHS
+         Djm76p9CUWUydSgQiAnO9YnVb5xL9kCuU5MZC/NhQ+iIN5q+gLcPu5aNXLj6chRnYyW/
+         hC4x1GJdeiHRZdqVsMYW4LHlBH1ztmSKk7sSDcJgFFf01enmqGlkVab1PvMrkJK+s0vc
+         gC8EJUEGV8PBZEZ9sN2rkfDlAlezBFsw8BVs/E/HOlR1csFjQSysDeJPW6qEocUTiYL7
+         vj5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUpgfSy+nI6dk95NjJeSKifia4u+22z3L2mYJ5Y6Gk/ZZrIwBEknWcEbpNUjjK0MRIAH6FEqisu8fI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOouQfX7cEwEYZpnqtTpri9fV+mr343iP2esMo+Sxn5ZeBBqJ/
+	GrIwnmCJLxSV/mLCif/Ujz2/jWpfQR7W53vd6tBVun9AR2KW1Xxp+qQdOun09biARmGvx5OqsyU
+	VORBg0A/UyYiF6pevLGzQIhwHZ/rao7EebsikChZIVw==
+X-Gm-Gg: ASbGncuDBHaW8cv4ZaXRD/xyGR2NzQnCjhLUErEyF4X0MdWAVKgKmAb06QgkzPw2vWo
+	Zx3lR9pVlzTuqRgNVH2Scx9iohihYUxTB12XQ+4pIDXjlpdldAIwJPElpTkW+lngG7bpSOyj6iL
+	h6I1Zp98g18RXYLdTvbDtnhdDMVQg8eBC6NtBsVM/iS/BQ4qnaNz18uLLbYMxcbXpClCBPNSLEM
+	Jz3mB28EKbj5KNJa0YpLBeoqB88j65al5xKmg==
+X-Google-Smtp-Source: AGHT+IFtOrLlwJK0/TEgM+f2IS4t9o4gV7fAIVv15sfMLe5yqLK9nGKna5+x4B1VTMirLjZ+oFvqM3iKI6ns6JfL4hs=
+X-Received: by 2002:a05:6808:3096:b0:438:2907:2ead with SMTP id
+ 5614622812f47-43fc18a2091mr6585032b6e.50.1759828182026; Tue, 07 Oct 2025
+ 02:09:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251001131409.155650-1-viswanathiyyappan@gmail.com> <4124e1a5-fcd9-4ce3-9d97-5ebe8018207e@gmail.com>
-In-Reply-To: <4124e1a5-fcd9-4ce3-9d97-5ebe8018207e@gmail.com>
-From: I Viswanath <viswanathiyyappan@gmail.com>
-Date: Tue, 7 Oct 2025 14:05:16 +0530
-X-Gm-Features: AS18NWDAJv8Y2QJ0ase6hOWvYmv9Zfznp100Rlegb03D_vdoVYNFwHyKoTaLkY0
-Message-ID: <CAPrAcgMny0eujytjZ9M+LZoQzzbFRtsDsYFQj8=i37wSLC+6NQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: usb: lan78xx: fix use of improperly initialized
- dev->chipid in lan78xx_reset
-To: David Hunter <david.hunter.linux@gmail.com>
-Cc: Thangaraj.S@microchip.com, Rengarajan.S@microchip.com, 
-	UNGLinuxDriver@microchip.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
-	linux-kernel-mentees@lists.linux.dev, khalid@kernel.org
+References: <20251006232125.1833979-1-royluo@google.com> <20251006232125.1833979-3-royluo@google.com>
+ <8ca61364-df47-41f2-b0d1-f2a8a74ec728@kernel.org>
+In-Reply-To: <8ca61364-df47-41f2-b0d1-f2a8a74ec728@kernel.org>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Tue, 7 Oct 2025 10:09:31 +0100
+X-Gm-Features: AS18NWD7ktu7qt-H0DxecJcoZK61ZH3ap7EbdS2ccz0Z-j7ffn7elGuijfKqbpQ
+Message-ID: <CADrjBPr7Jp_ZyGv2Krv6iLG0avgFWpcWJEO-Z=cEkhwEY-+z5Q@mail.gmail.com>
+Subject: Re: [PATCH v1 2/4] dt-bindings: usb: dwc3: Add Google SoC DWC3 USB
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Roy Luo <royluo@google.com>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Joy Chakraborty <joychakr@google.com>, 
+	Naveen Kumar <mnkumar@google.com>, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 7 Oct 2025 at 06:52, David Hunter <david.hunter.linux@gmail.com> wrote:
+Hi Krzysztof & Roy,
+
+Firstly thanks Roy for your patches, it's great to see more Tensor
+support being posted upstream!
+
+On Tue, 7 Oct 2025 at 01:44, Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >
-> Please describe the testing you performed.
+> On 07/10/2025 08:21, Roy Luo wrote:
+> > Document the DWC3 USB bindings for Google Tensor SoCs.
+> >
+> > Signed-off-by: Roy Luo <royluo@google.com>
+> > ---
+> >  .../bindings/usb/google,snps-dwc3.yaml        | 144 ++++++++++++++++++
+> >  1 file changed, 144 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/google,snps-dwc3.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/google,snps-dwc3.yaml b/Documentation/devicetree/bindings/usb/google,snps-dwc3.yaml
+> > new file mode 100644
+> > index 000000000000..3e8bcc0c2cef
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/google,snps-dwc3.yaml
+> > @@ -0,0 +1,144 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +# Copyright (c) 2025, Google LLC
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/google,snps-dwc3.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Google DWC3 USB SoC Controller
+> > +
+> > +maintainers:
+> > +  - Roy Luo <royluo@google.com>
+> > +
+> > +description:
+> > +  Describes the Google DWC3 USB block, based on Synopsys DWC3 IP.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - enum:
+> > +          - google,lga-dwc3
+> > +      - const: google,snps-dwc3
+>
+>
+> There is no such soc as snps, so you grossly misuse other company name
+> as name of SoC. Neither lga. Otherwise please point me to the top-level
+> bindings describing that SoC.
+>
+> You need to better describe the hardware here - why this is something
+> completely different than GS which. Or switch to existing bindings and
+> existing drivers. Did you align this with Peter Griffin?
 
-I used the reproducer provided at
-https://syzkaller.appspot.com/bug?extid=62ec8226f01cb4ca19d9 and QEMU
-to verify my patch.
+I think (from what I've seen at least) this is the first submission
+for drivers in the Tensor G5 SoC used in Pixel 10 devices (which as I
+understand it isn't based on any Samsung IP). Hence the new drivers,
+bindings etc.
 
-I applied the fix patch for the bug before my testing.
+However the issue is that none of the other base SoC drivers on which
+this driver depends currently exist upstream (like clocks, reset
+driver, power domains, pinctrl etc). So it's very hard to reason about
+the correctness or otherwise of this submission. It is also likely
+that when those drivers are upstreamed things could change in the
+review process, to how it looks today in the downstream kernel.
 
-For testing, I set a hardware breakpoint at lan78xx_init_mac_address,
-triggered the reproducer, and inspected the value of dev->chipid at
-that point.
+So in summary I think to progress with this we need to get the base
+Tensor G5 SoC drivers merged first (e.g. boot to console with pinctrl,
+basic clock support, reset driver etc). Then we can start adding in
+some of the other peripherals like i2c/spi/usb etc and build up the
+mainline support from there.
 
-Without my patch, dev->chipid was always 0. With my patch, it matched
-the upper 16 bits of the value read from the ID_REV register
+Thanks,
 
-Thanks
-I Viswanath
+Peter.
 
