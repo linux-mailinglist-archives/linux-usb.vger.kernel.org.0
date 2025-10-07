@@ -1,180 +1,134 @@
-Return-Path: <linux-usb+bounces-28968-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28969-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF660BC1C4C
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 16:36:18 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 277AFBC1FEF
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 17:55:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35EA03B990B
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 14:36:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A129534FC6C
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 15:55:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5994A2D73A4;
-	Tue,  7 Oct 2025 14:36:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8DA72E62D0;
+	Tue,  7 Oct 2025 15:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="cg9FtDgQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CWm2hSDM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DE134BA35
-	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 14:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34782D94A0
+	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 15:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759847760; cv=none; b=ZQ9w4b7UxAKsDUVGU2xU0xCdmdRb6sTqP1YSju+Rd/YumCxJtFBoYg1W8+cUHE6igq2hfzjSPSTzv9zZ2zWx3eKupB+qH34ndRoS4lj4gerPyl+eWiJZgJLJM7/zxcim4Tq1YMepiT57+EfIyf9+HLPMLUatuZu0IcfDEOjLKzg=
+	t=1759852510; cv=none; b=SrSYGY4PJN1lPnhxF2xdoWXYLeUXH/T2kiAm6zwrqFu7wa+Um1IqCb8KeMQj60gr/fpE+PsjGDRLviBzCmwvib21xG3yYbrBdmkAeQtdatSpJpPUZWO58d2aIRJ2pA2samSaJm0OyBM7dMSpsMJrc7Lr2r/PhSzk+l7XxU9FcxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759847760; c=relaxed/simple;
-	bh=regRTJaxgh7qeeyDDCNBzcFMB5JmMPvOXRi6OBzcluE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V7j/7MHojNIml27xjbHXPg1IYtUXYBxrJVP13fp21HyoPs1iaMPwCk/aTkia9mTnQxw4zQo19lmvmBMn7QtRSXoLhvEdlh8wNNGrU/z9KgBcWxlxvXcgpLDbSbsfeIbb9VhCWxeaSfNej2QOv/kzs1pUVZbIiAT/JS8Eii5B/go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=cg9FtDgQ; arc=none smtp.client-ip=209.85.222.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-856222505eeso678190785a.1
-        for <linux-usb@vger.kernel.org>; Tue, 07 Oct 2025 07:35:58 -0700 (PDT)
+	s=arc-20240116; t=1759852510; c=relaxed/simple;
+	bh=SrQ0izSJThSrT/IpzfFEkCObODKK/0BzDV6aFd4HJRs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=nN76wOa3LDVXB8XHn9F8GdSysgboymu1ysgyl6iWHW4ElfEMar1yN1AmbgSqo36gt68L+GMn/MCUviTE6nsASTBfKJNY8bbUQxu4gH3+zj9XZbl0wMGICcF1TmBFou+MWhQW5XgpigMIVDWsFvaCZUobWbiZRq1N1lvJVS4yDVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CWm2hSDM; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b4539dddd99so963098866b.1
+        for <linux-usb@vger.kernel.org>; Tue, 07 Oct 2025 08:55:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1759847758; x=1760452558; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MRamxrzBVuGOpSUk3qh+ypgd7seMVXXK09tQ2+8hsIU=;
-        b=cg9FtDgQd36/yG3OQK/y0F6KWCTka1Uc5OKlMWgXLo3QBhBT9txGrdNKmAlwjQAJ+0
-         ux3DfLFUJFdDi5ohABn2NvC8za1n34Zw/eMgeEo816x2asXWgz3+TnYRQocaliA+VE/p
-         x8LPi1Nx0ItYPjxUnqTVWJgWExnZWgdNT7bwgQUOSo9ma2jnA5fooX6mEXlbbSABJC1p
-         ELH+0dnNXrMJnBK8yPrbI8/uq2yUmu5ugVROnL6WTy0qnFnKVGIFmCDUMzHqA9Pk7gxe
-         MUIuhRfQfUwFQ4kOtyOuzwmySQJD4dc14YYi7A0NgTN4HAbc8uKEX1KWO2FDAsvP9z4l
-         zhZg==
+        d=linaro.org; s=google; t=1759852507; x=1760457307; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wwn4iJ0kBXeAlbYIX5lfnaPGY5x3TCgAKgWBsfGbbTA=;
+        b=CWm2hSDM3JRTPGemHdI8shDXDd03ugwh1jEHL2MqtQEWXEQzV5KuGBvyEazeT9DFul
+         OxwK/FgIryZajV16jRWeQrn7/InnYkrb1qsEqeYZUwnMnXijm4caVnitDE0gQHhVMv7f
+         d8njaVOelVhtxlhjTKsjk+9zI+CLDjZRxuuS8oeEnwY2+BQVE8F3Oy8Z2Kw/xxkyzRG0
+         Tcz61JumUMFVM+14yoL8Scg6aLM7aqIZPyPl3cbD+44wlga3eaTVST1uU/FFNIGAWCQ1
+         hCnaM3sD0vEZMVeIb0Kuvhk94rYS9knOnvbFXm5oTaOKZZfxEe6xqERWhm13IwEm55BF
+         sxnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759847758; x=1760452558;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MRamxrzBVuGOpSUk3qh+ypgd7seMVXXK09tQ2+8hsIU=;
-        b=xRtqiJJ7NxpcaPLHUspQzC53Bp2qR15DkV79VuxSsWBLDdkIgAit8J+g8bN63okZnS
-         4aMX0BXakpkbZMKJDtKgqBuVRlO5VkiHoCWPeKlTiXG3vLL04AJCL6dT+19d6TwIvF/y
-         nVElyK5LvDrLtMdigvoJKMNrurvcYsCeVGAdOqH4QJoMjzfXwpHABAnx0yZEF1xAwdh7
-         Jk8WTnbpwcSyGE3ns7W41Lf62ACefOeWrzJH9g8BZaBBfQYypbdeWpeVDCS7O4EII4f0
-         s1M2zS5D1zQoHfY3ZlV6HzVNdx9SF34tsrq80KGsJPE6VRfw1frGGLqshawuru08/pWn
-         bKyw==
-X-Forwarded-Encrypted: i=1; AJvYcCWQqbvchPm/ZEGRJnd+vaWT5xQL5MiibhVe04zVtH518umEkW54v1PDYzuH6l6qSRDd8V52DZHEl10=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCekAKxpg8TzN055c8Dj7gQZ68j7pgvq7QYD4AUEaD9iQwGPli
-	fKPIgjGpnJnAZdJKR8dPWURELYxyG+569laIkKWANYlhbPvoLf0KDXIUlanA0iTiRJGa/IQc4r6
-	eyQM=
-X-Gm-Gg: ASbGncv0vOnbz2omKHT1fkzPygGddNh3YduZfBZ+P1+TlDZV24UxLY6J74RZceKbRHF
-	YFqv4OM1W50g86fdairHqdJtr1gd60ojItDAmTOjIpbtm3CS62/RerzZYF9lLxmZeDK4A6pICyu
-	9s6QFL/j0JA2s5gCCdHnD4aqilz2PgDj6koXDuEomyyrbWGMQzSc6dgoKKUg1cQlLWPWpWAdJvP
-	sJJRacimU7tISN99Xy+JXWXeN299FuePvzh15UVGdDOjLmHJnEXIvgR9gAhq4ObMBPrMygupbh6
-	eXSMnsU9BbH6I7YDCLfqA43VYuOL//O55h7WdLtEscUaMVtSJte50+Ui/HAWrdEs0F9v3xHzX68
-	VuuEx6ioHwDCofmXeY9e2MfhMIqKn5EmOBC1O2Wt1MaUZXjkqL1luP3A=
-X-Google-Smtp-Source: AGHT+IHWm4dIwsWzIoaDG1jNLwHUJohyJygkQjz2p9SfPoRvYm2wuas7ajccDTHX3D/j/6DW7675Iw==
-X-Received: by 2002:ad4:5b8b:0:b0:77e:c29b:679b with SMTP id 6a1803df08f44-879dc882cb3mr199614706d6.65.1759847756959;
-        Tue, 07 Oct 2025 07:35:56 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::5082])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-878be61fc21sm142418586d6.63.2025.10.07.07.35.55
+        d=1e100.net; s=20230601; t=1759852507; x=1760457307;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wwn4iJ0kBXeAlbYIX5lfnaPGY5x3TCgAKgWBsfGbbTA=;
+        b=UETT9KZFgb+NJ8h9B0Qw4iAINepbJT0nKz8Xjz45gcFogw0hUNgHnTa9vNAuVcnwp8
+         q6NvNouiXZmCIedBur1ypSiRhRJyA6wvG+DZmJCdOc0FeMZDDTKd/HrnNbYdU6yObcPI
+         mRWO5h31Iknt1JWG0yAAn5EO1p6Mqrrb3eB6GiGTcFjydsZppmN20BzCPZxC8Qg8bNKK
+         uh5oMR/PScp6+/hVMjQ4Tz3Fd5GDNo4qLCuXeIt2wHJx6KjHELxKe5eCGkj0sBS8g6ik
+         G2bTE3yBCiHJyxsgnHLgvZYedrg6vg9aVQ17kHW6c+IxRFWJTD5gUAB0gjFpgLozfF1/
+         3nyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWQIhKsdbhpoAiylMjrJuYc9tyRAmEhSRit6iU5TTh94n4lx3yHxAQZfL6WVnaIF+KKpA/UJhH9SuU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9BdamOJxxDAFUIB7Jv8sBCIQrHb6Yg8nhvqWbiHuRoI0JmHmc
+	2ETfO6pVaIlHL0ZS/dSpuaPgAD8VqxoJiHnqOXKSdNfc7igHB+TLQYOJEPGTMxSLccs=
+X-Gm-Gg: ASbGnctr2ihB5YsqicXGXmr6RD9jekgA5LGVhi0ERQciLHVwuhy4MBNgQk/ke0Motz9
+	41wVC3XcIkcy6kUgvtiQyk4lGR6ZOYd1/pHCLEg/ZGKXDh1B3/t5gkdZ1BXZPFs7gGa5SAfroh7
+	xZ9eFht1plmscUnfrYNljxejOF1zvzTSEw7DUO9wCGOeBOeHjxapmm1D0L9Eu8u5URbbaNk1qel
+	+lf1JRpE7h1y4fGKeTons9cyBWuG7Qssa0jdnKKf59Agi+N/yVCv84GqrmJHgGl7CC7/ZmdcHUY
+	zVDZ4u6d19yJkVI7dINvh09H8ZzSr/xkycOQ0cTo0DGlhU7PgQpPy0xs1KfrIjWryI5kuhDamSJ
+	XV39WtxyMRQ3acAwfpHBkx98YtqqjQdTwZzh0sVoroXnG1le5lN7Hkt4CLCJ8YCbfoY7jsM3c/X
+	FEXTmr8/nJzPS1WCZl5/QGw3VRqCqzyRg2pmL3bB946fML8kkKODc=
+X-Google-Smtp-Source: AGHT+IFMkqhgkZjYTFJJlsb6ohBZEtxooSZT5I4ro08N0+thklTNSC1wFRUbLDiJOSsfJFdfZDi8ng==
+X-Received: by 2002:a17:906:7312:b0:b48:44bc:44e7 with SMTP id a640c23a62f3a-b50abfd68b2mr14143566b.48.1759852506937;
+        Tue, 07 Oct 2025 08:55:06 -0700 (PDT)
+Received: from puffmais2.c.googlers.com (224.138.204.35.bc.googleusercontent.com. [35.204.138.224])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b4f7eacdfe6sm225312766b.27.2025.10.07.08.55.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Oct 2025 07:35:56 -0700 (PDT)
-Date: Tue, 7 Oct 2025 10:35:53 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Shi Hao <i.shihao.999@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4] usb-storage v4: Simplify protocol translation
-Message-ID: <857a1b63-83d9-402b-a9cd-8aca0616c517@rowland.harvard.edu>
-References: <db6b1fe6-4167-4d2f-85e5-4e160baffeed@rowland.harvard.edu>
- <20251007113732.14709-1-i.shihao.999@gmail.com>
+        Tue, 07 Oct 2025 08:55:06 -0700 (PDT)
+From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Date: Tue, 07 Oct 2025 16:55:04 +0100
+Subject: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: add power-domains
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251007113732.14709-1-i.shihao.999@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20251007-power-domains-dt-bindings-usb-samsung-exynos-dwc3-v1-1-b63bacad2b42@linaro.org>
+X-B4-Tracking: v=1; b=H4sIANg35WgC/x2NywqDMBAAf0X23IVoDSn9ldJDHtt0D24kW6tF/
+ PcGj8PAzA5KlUnh3u1Q6cvKRRr0lw7i20sm5NQYBjPY3hiHc1mpYiqTZ1FMHwwsiSUrLhpQ/aS
+ LZKTtJ6XpNV7RmjGYaJ13twCtO1d68XY+H8/j+APzX4i2gwAAAA==
+X-Change-ID: 20251007-power-domains-dt-bindings-usb-samsung-exynos-dwc3-504b0c57a78b
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+ Krzysztof Kozlowski <krzk@kernel.org>, linux-usb@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+X-Mailer: b4 0.14.2
 
-On Tue, Oct 07, 2025 at 05:07:32PM +0530, Shi Hao wrote:
-> Simplify protocol translation for usb subclasses.
-> 
-> As suggested by Alan Stern  to remove the switch case labels  with
-> 'default'  or keep the  previous  if statements  instead of the switch
-> cases and advised  reasonable value when cmnd[0] >= 0xe0 .
-> 
-> keep  those usb subclasses to default and simplify logic removing
-> switch cases and set 6 as a reasonable value when cmnd[0] >= 0xe0
-> which fallbacks  to value 6 which is old cmd_len for those subclasses.
-> 
-> Signed-off-by: Shi Hao <i.shihao.999@gmail.com>
-> 
-> ---
+The DWC3 can be part of a power domain, so we need to allow the
+relevant property 'power-domains'.
 
-Is this meant to be version 4 of your original patch, or is it version 1 
-of a new patch that is supposed to be applied on top of version 3 of the 
-original patch?  It looks like you haven't made up your mind about this.  
-The Subject: line and changelog below indicate one thing, but the 
-description above and the diff indicate another.
+Signed-off-by: André Draszik <andre.draszik@linaro.org>
+---
+ Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Since none of the versions of your original patch have been accepted, 
-you should make this a new version of the original patch.  Please 
-reformulate it that way and submit the result as version 5.
+diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+index 6d39e50669447917a2cd94dacee5822467eeb36e..3098845a90f342dc29f4343fc0ff5cec009d9629 100644
+--- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+@@ -36,6 +36,9 @@ properties:
+     minItems: 1
+     maxItems: 4
+ 
++  power-domains:
++    maxItems: 1
++
+   ranges: true
+ 
+   '#size-cells':
 
-Alan Stern
+---
+base-commit: 3b9b1f8df454caa453c7fb07689064edb2eda90a
+change-id: 20251007-power-domains-dt-bindings-usb-samsung-exynos-dwc3-504b0c57a78b
 
-> change v1:
-> - update subjects for the commit
-> - update commit  description
-> - check checkpatch.pl script
-> - update From:  and signed-off name
-> change v2:
-> - check checkpatch.pl script
-> - update verion history in the commit
-> - wrap git commit changlog message
-> - update git commit  message body
-> change v3:
-> - simplfy protocol  translation logic
-> - set reasonable value when >= cmnd[0]
-> - remove switch case statements
-> 
-> ---
-> 
->  drivers/usb/storage/transport.c | 21 +++++++--------------
->  1 file changed, 7 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-> index 4d01f70f39ac..14cc608052d9 100644
-> --- a/drivers/usb/storage/transport.c
-> +++ b/drivers/usb/storage/transport.c
-> @@ -719,17 +719,9 @@ void usb_stor_invoke_transport(struct scsi_cmnd *srb, struct us_data *us)
->  		scsi_eh_prep_cmnd(srb, &ses, NULL, 0, sense_size);
->  
->  		/* Protocol translation per scsi opcode group */
-> -		switch (us->subclass) {
-> -		case USB_SC_UFI:
-> -		case USB_SC_8020:
-> -		case USB_SC_8070:
-> -		case USB_SC_QIC:
-> -			srb->cmd_len = 12;
-> -			break;
-> -		/* Determine cmd_len based on scsi opcode group */
-> -		case USB_SC_RBC:
-> -		case USB_SC_SCSI:
-> -		case USB_SC_CYP_ATACB:
-> +		if (us->subclass == USB_SC_RBC || us->subclass == USB_SC_SCSI ||
-> +				us->subclass == USB_SC_CYP_ATACB) {
-> +		/* Determine cmd_len based on SCSI opcode group */
->  			if (srb->cmnd[0] <= 0x1F)
->  				srb->cmd_len = 6;
->  			else if (srb->cmnd[0] <= 0x7F)
-> @@ -741,9 +733,10 @@ void usb_stor_invoke_transport(struct scsi_cmnd *srb, struct us_data *us)
->  			else if (srb->cmnd[0] <= 0xDF)
->  				srb->cmd_len = 16;
->  			else
-> -
-> -				break;
-> -					}
-> +				srb->cmd_len = 6;
-> +		} else {
-> +			srb->cmd_len = 12;
-> +		}
->  
->  		/* issue the auto-sense command */
->  		scsi_set_resid(srb, 0);
+Best regards,
+-- 
+André Draszik <andre.draszik@linaro.org>
+
 
