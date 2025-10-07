@@ -1,80 +1,48 @@
-Return-Path: <linux-usb+bounces-28955-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28956-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C90CBBBFEDE
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 03:22:24 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D101EBBFFBF
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 03:47:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5A55189D7D6
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 01:22:47 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7B4B834C88E
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 01:47:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19E171DE3B7;
-	Tue,  7 Oct 2025 01:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF00C1F30A4;
+	Tue,  7 Oct 2025 01:47:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XncjnnSB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YTBofW8E"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F0734BA44
-	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 01:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456D78F49;
+	Tue,  7 Oct 2025 01:47:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759800139; cv=none; b=iiG9VlBQXZWxhIf+5TI1qkaPQWs2U2tAWU37GM1e/buD+mLDZk8sJEk3GIXmTTbmAixc8m/u9Qx7lPpFkbT9LMb6G1Ze7KXFhhiSFWqNiOlMt9aYRHZmK+AlWLaqLPjGkM0RvbWFbLrHX2HkjC3V3Xe9JBjtJseupQn6vBjnHkA=
+	t=1759801639; cv=none; b=FA9/OhYuAkDkyjs4hHXs/oI4BgqcpgkDssbOQ5yxwW4j66fjF28ytiUUtMSuWJDsKoKfSS8gyuohCqbUV5jcVmDQU+LOn2qniMCaqDP2SYweS8H12o+zFJclwAZxdzVZF6CxlJc3UyYIOvs/Maax+Ud9I5mQzLnkn+qIn8+ZP+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759800139; c=relaxed/simple;
-	bh=H/Vde5fSyegTVrxDL779b0Ekl1TqghJb8VzoeMUW5sU=;
+	s=arc-20240116; t=1759801639; c=relaxed/simple;
+	bh=nYwfWdIBQHej0yIksaQJHMbpXR9uAEd0XMmMoCQc4IM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q647wDsWNMc8QHyzDKXFmhGVhJAyjHmcA2FmsPlNsOy40iJrCUcYXHy37wcvAg6E//0I6zZvB0twcXgc+7HacBTWrL5kdLGlaY4TSWrFoa0UJ8pb34LmowZgFbtVvaXmuQ6lfby+mWJXNvkSJbiIAIEsXcNHu7+c+P6EINTJZaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XncjnnSB; arc=none smtp.client-ip=209.85.222.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-8e936be1359so3513406241.0
-        for <linux-usb@vger.kernel.org>; Mon, 06 Oct 2025 18:22:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759800137; x=1760404937; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oeZtd1lS2iAL5Eb5txNbBPZr6F+hk2iic2qSNfSBlxc=;
-        b=XncjnnSB2+L1F4/tJ8mSC8SG4h/oSIvs7toO039nd5FdscCP2C/rDKR1v0tEB/O20y
-         f2CjZ1M04v9k5A4pcEyHSWgtEfzTnJpaAmNI001gtaNQiPtq+I1WzaMPse6RtfkJLg+b
-         RW0ac9W6hRUw/b54tpR6IsZ7THsw6ol/d+tfv8tH8aU1aicHprE8jc1QyRbXo6g3Xdu/
-         3CcccBd+MVYtakcehaMCi0lBPSxHGBrd12eIfHwUc2+KtRXZlsXa4c5ceCGiphpe+mnT
-         hmA2oLhZ3Au9c/lvTlzhkdEB5yCZ5Sr2I6Qca9I3c7MAsgfsrTyDuvfDDkrHa2++7YRi
-         n3qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759800137; x=1760404937;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oeZtd1lS2iAL5Eb5txNbBPZr6F+hk2iic2qSNfSBlxc=;
-        b=hgMxIV8SMEuEyX+FQd7tV+VPmW//jp4fhYt3X4cgky5XNV7DNoomNmsNKhMdILe11c
-         PPqng6ZPEO0f/p6SMjFr7tGAfL3eHIFPL5JErn9S6qpLLJy05OneQKxJTt4ntDZR0pFK
-         cP2dt0Uvkto8kWGC4KyiTPZKmg0i6tIuDdBFgycKYND0HFS6xikW8MU0pOnMs2QikgDJ
-         qdUpkDhcpa/ggDMsdDFVZA8O6XqA+7x+q1M4XUzqqAUnffCtCwYOh1JatQS4GNMJj6Jl
-         Zb2FmgJD/sPJiuxJsNHA4vQ1spbqNtXJw7e+UiEY2E7gNMfsHIArbpmzrYgrh2qz3uyC
-         OEMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZxvKw2jBaAT8IpafsPHs3vqBeu9qncIcTfrg7snvsqVnVr3k5C55YeT6Y/T0SbfjJ9EuU570DRm0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy578RRWvVwa2LR9ZPD+rDM0NmugnxTuNIdKU1KjdHNC+uvXkx/
-	QN8ktDWM6i1e7nwdxRacg0x/xpQV2jSyFx5CnfQpSypOyzCsvZptB/aT
-X-Gm-Gg: ASbGncvZDnGhmidLPqbLzIB24CvsaohGolIai3MeMlEDLehWE7/JgoaIcyQDilk6yXM
-	BuWfTnt800HnO3QRGa4ODnkKii+eTkLnR2dPiKwRQkix0gvqwRqoo1jLfkCudI97d5UvPxKzHmO
-	TUSdyNQyQF9sWeE3V/SN492xxObcYz3SgRo657DVew+acf/vpI9V6Pw7UiK4LZIZVVjnb/GEBCv
-	xqt5dvzKJEloExyoHPtNpk0etEwr3R2acj5oQkDhMrWLsq+nOVPMfpwAj2RLcfyBRjcGqIFnoA7
-	kEe5LKm3yyTQhq/mMw0MAeTg0Hoy5D+YSG5HsDYlafiDB9kgCmpfdeqCL0MqVjflcVq8336zv8r
-	aC0nNcVXIKCrPSCMYRAozHGWwCmOB8cIzLd3Rl8EgxJOVRDVwk8tmcZRfl92or4Q=
-X-Google-Smtp-Source: AGHT+IFmBzhKhtg5t4PSLIdciapJfvhjo0L3FJBJCxbNlT3KY5aZygpXM3hCFzRlcEVz+ZGVmyRtfQ==
-X-Received: by 2002:a05:6122:514:b0:54b:bc60:93f8 with SMTP id 71dfb90a1353d-5524ea2517fmr5491547e0c.9.1759800137067;
-        Mon, 06 Oct 2025 18:22:17 -0700 (PDT)
-Received: from [192.168.1.145] ([104.203.11.126])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5523cf6558esm3444393e0c.22.2025.10.06.18.22.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Oct 2025 18:22:16 -0700 (PDT)
-Message-ID: <4124e1a5-fcd9-4ce3-9d97-5ebe8018207e@gmail.com>
-Date: Mon, 6 Oct 2025 21:22:12 -0400
+	 In-Reply-To:Content-Type; b=eqttmcO/VHX1cSmmxqxqFQpMK7xpIvr/Jkaz9aAVWVVQmsnFk/K9ceaC1zuPzft4wUhJdEshyZeFU/WaJwr4uBjr4WPcCNgSwN+e9db6vwjaFJnE6BiwZwFSoYDhs7yT8M36i61XR4VEseFDmIFi0y6jqhQBS2SMoAmklITyiZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YTBofW8E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15EAEC4CEF5;
+	Tue,  7 Oct 2025 01:47:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759801638;
+	bh=nYwfWdIBQHej0yIksaQJHMbpXR9uAEd0XMmMoCQc4IM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YTBofW8EFgXnChE1vFr4noy5lcee26/fIaO3msAFaeQrEnJcQkQjBySFHj0e9D2Gk
+	 pC+WsAxwKSuMVdqaVptt3ONT08AwkxAfYiFkjLrGFH/Axq6YRSbTYMfufpM5dFelbJ
+	 lLifImrlm4SyPWqc3O9cZNyffBYFcGXYn79NI4On2qJdr/WdJHCEsTGtTeZbw+pvgU
+	 5Q6y60COZ/+Iz2U8vLnGekoybUeuwztOLaSgo26o1YvgowU5D1hwz4xcAIdQci2d/a
+	 yGVKybHUlMC7Xu/13XsaYsRT17S/rzp3pDcVEl6DyoX9Q4i3HKhPjHn+66mOZnyv2R
+	 tUpMUdjwtrEuQ==
+Message-ID: <d7072a11-10c0-47ee-9cad-e64654fbb018@kernel.org>
+Date: Tue, 7 Oct 2025 10:47:11 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,32 +50,92 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] net: usb: lan78xx: fix use of improperly initialized
- dev->chipid in lan78xx_reset
-To: I Viswanath <viswanathiyyappan@gmail.com>, Thangaraj.S@microchip.com,
- Rengarajan.S@microchip.com, UNGLinuxDriver@microchip.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
- linux-kernel-mentees@lists.linux.dev
-References: <20251001131409.155650-1-viswanathiyyappan@gmail.com>
+Subject: Re: [PATCH v5 00/10] Introduce Glymur USB support
+To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>, krzk+dt@kernel.org,
+ conor+dt@kernel.org, konrad.dybcio@oss.qualcomm.com,
+ dmitry.baryshkov@oss.qualcomm.com, kishon@kernel.org, vkoul@kernel.org,
+ gregkh@linuxfoundation.org, robh@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251006222002.2182777-1-wesley.cheng@oss.qualcomm.com>
+ <a6690fbc-0b86-4725-99ca-6b4cc477b4ec@kernel.org>
+ <6ed9bd6b-37a3-36a8-a347-85429670837f@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: David Hunter <david.hunter.linux@gmail.com>
-In-Reply-To: <20251001131409.155650-1-viswanathiyyappan@gmail.com>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <6ed9bd6b-37a3-36a8-a347-85429670837f@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/1/25 09:14, I Viswanath wrote:
-> dev->chipid is used in lan78xx_init_mac_address before it's initialized:
+On 07/10/2025 10:05, Wesley Cheng wrote:
 > 
-> lan78xx_reset() {
->     lan78xx_init_mac_address()
->         lan78xx_read_eeprom()
->             lan78xx_read_raw_eeprom() <- dev->chipid is used here
 > 
->     dev->chipid = ... <- dev->chipid is initialized correctly here
-> }
+> On 10/6/2025 6:02 PM, Krzysztof Kozlowski wrote:
+>> On 07/10/2025 07:19, Wesley Cheng wrote:
+>>> This series enables the PHY level changes that are required to support
+>>> the type C based controllers and the multiport controller.  The typeC
+>>> ports utilize a usb43dp based QMP PHY for the SSUSB path, while using
+>>> the M31 eUSB2 PHY for the HSUSB path.  For the multiport controller,
+>>> it will utilize two QMP UNI PHYs for the SSUSB path, and two M31 eUSB2
+>>> PHYs for the HSUSB path.
+>>>
+>>> -----
+>>> Changes in v5:
+>>> - Moved phy-qcom-qmp-usb43-pcs-v8.h into USB specific QMP driver
+>>> - Fixed DT bindings for clock properties for QMP combo PHY
+>>>
+>>
+>> Where are lore links? Why aren't you using b4?
+>>
+> 
+> Sorry, I'm confused?  Lore links to what exactly?  There aren't any 
+> dependencies here, in case you mixed up this series with the DT one.
 
-Please describe the testing you performed.
+Lore links to the previous versions. They are added automatically.
+
+Best regards,
+Krzysztof
 
