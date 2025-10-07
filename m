@@ -1,161 +1,143 @@
-Return-Path: <linux-usb+bounces-28945-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28946-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 701D6BBFD11
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 02:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41DEFBBFDD7
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 02:42:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2ED2F18866E1
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 00:01:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3172A189C9C7
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 00:43:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE7A239573;
-	Tue,  7 Oct 2025 00:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AAF31DBB13;
+	Tue,  7 Oct 2025 00:42:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HT+zeqD2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eVxxxyZ7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F4E2397AA
-	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 00:00:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9021D1AF0BB;
+	Tue,  7 Oct 2025 00:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759795239; cv=none; b=R+d+mUs1uko5jSR1mvAN80jLlj/UgeiABYmF4ytZraJMWYcsvbtim7Urvpb4VD/EMMc+ZCk67si/q3vakC1A1+7uUSgd2Dt2n7ztu0hdR4rYfpY5zlx+WfVmsAN4C+5bJXTnI8+OBDx0pXclohDBBxzzlYPYrsWEJGhumbsEyEs=
+	t=1759797756; cv=none; b=NCZ+e453wYrNPUTdC+lJPU4YUWfjd8QVN6fzWJ6F/wq6CXAl2Lmb4tccFZTTX1YQaVVaBrFy0j9eJQjMbErJBMseByeLB249qkRMZsTGt1ebLIj4TvpbLjDgoexUpR5Zj6win+lK0IoL/o0gNdW69TAPAIXBatDBE2Ak+gVdPDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759795239; c=relaxed/simple;
-	bh=GBPMFxcyATcinHz2L3AJDSb/kMMMuAbd+drLtO73/sI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=aD+B9oZUB9A4D3pdK/lbZzuv7FbTKPm24VEdQc/h7ouBk9MSqHpAHoXqpTTzRdFteCSGSo52Eq3fPvd/7cfBRfppY1KJS2woOWDLh56Wd+6ViHpYbIlL9n2EZuMk3G23bracvVgpWfvD4APwdoM8XCBahF9PgdfigQooUiVgm/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HT+zeqD2; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-26983c4d708so46397995ad.3
-        for <linux-usb@vger.kernel.org>; Mon, 06 Oct 2025 17:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759795237; x=1760400037; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qGKXpJpqBqzMfm+XRzJ9DqWA3n0QzysPqL8GwN0dGls=;
-        b=HT+zeqD2rdthnBqRYpixPYr8EzjEQNI2/jO8dIvrS58zyEZXPUwivmtC0mDC9Qx2S9
-         qEzkKjVmeVxmqFOggjk7hbP+d6zfm8LcOwWpLc6mBLntt81JGJoiAOVbTpuXBVahl34u
-         dibtdK1P3Rojike8Es+TxmrtLD6k7jEmhfVIzBcX5x08FFjwny73QZRkerrZn+QNXh4l
-         JVIYKm3MK5WuLdSwLc8Qwwj9PwUB0TX7KSH45wriOme+A21t1WSpnvPctHpWZfwHK/MK
-         7ugAxhtpmuslUH9Z2puiGENceKTP/3tkDvsjelpmk2wYKM2RLuBKzO9dQUyZ6adZmjzq
-         WSVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759795237; x=1760400037;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qGKXpJpqBqzMfm+XRzJ9DqWA3n0QzysPqL8GwN0dGls=;
-        b=cqWVSVbZYtiRtiRnQy5IM2Xdz6b89ckHi/KJpVfz2Hmju1VPy4GupGxWnJuMnvLWhL
-         wg5SCQzQOmwNISEF2UQGxl71B2tdZBVUUJLgNasgb67VyMLJP8YsVHDVYmI4s+A23JA9
-         SzYY/+9FFQK9DCLEf+TUnIuNw5XX8ZR4gAxJdWzJAs1rXUewNzdCfBQmDmk0SV23hEwn
-         2UNwjz1JSIJo+fyN9ZI2kXBKZAQYG/LaDoujIbp1bloBH24d6cUFe6lQEwJhdszg3EyZ
-         ua0l1OcGay3A4RJQ3NLShHKqGjdGOgx9wcQ4dEGwOc+Tci6kjEjy08aPuueOI0nc78lh
-         vVjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWp4srjDuqdoOB9njwS/F3bcN4JoP3KOXWRPTKAezTOrAoBV6yIYfuMzK81+ijPskpDgegaHeQnPg4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhN1xelKapOPmLDH4iN8eCzGBiRzIOZ1ftitShGWBwP2B/SWsZ
-	YiezlJZCW0jlPCBvnhM6dvApYX9j3aKPpdxwiBTf8zWgXgZUXOK5Pm6M1gakwbWla0hL9AK9Ndb
-	SYyHCRQ==
-X-Google-Smtp-Source: AGHT+IF8hGVIlChbtIhMjhLw3aZZeNeEt0jbndtu/J7HYN5bXvwyE+kZ9qVypMx6ixiiCHlMmAe0pYoqYCs=
-X-Received: from plhi5.prod.google.com ([2002:a17:903:2ec5:b0:24a:b588:eefd])
- (user=jthies job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:ac3:b0:267:f121:6a88
- with SMTP id d9443c01a7336-28e9a6dc287mr175381245ad.42.1759795236620; Mon, 06
- Oct 2025 17:00:36 -0700 (PDT)
-Date: Tue,  7 Oct 2025 00:00:07 +0000
-In-Reply-To: <20251007000007.3724229-1-jthies@google.com>
+	s=arc-20240116; t=1759797756; c=relaxed/simple;
+	bh=cgRSHlts17UojDBt2OucIf1/5WK81Z1KzVQEMgdRDBs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uXFWOm7xC0SFMMKpUkyFnJPmAIeF/OuSeBQzg3sovH4CVNxSDBKwgkVaInmpBtSqBgbNETW8uLh7BU1Quwhr99mPP5SBsY7xSYY6G9xLodn6QdIID6erF0kLW+hsVIMF4G9dNkOn2uK82/LxnE/3E/Gy/kCgx703pEndErn7Q3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eVxxxyZ7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D75DC4CEF5;
+	Tue,  7 Oct 2025 00:42:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759797756;
+	bh=cgRSHlts17UojDBt2OucIf1/5WK81Z1KzVQEMgdRDBs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eVxxxyZ7+RrUf6D0UUkCECZobgQxfzOSahdlM64oNN+vIzzldN/CUctvePN02fKe5
+	 Vj+W+ulRZu8pcsmpb3AFLB3ZhF3dU638Vb+UV7gWWB0tIg752fIw8VHCq0+BrcrrHB
+	 08jkf7R9kTKvEn+YxFTLNMaN3vzQ7ms3m1ToIu9HAYRAuNBeS4WrzFnHte+hHBtDhp
+	 EQdOTpBQvI+2DPNHiW5VfngAopxzOZxOsRtrLwU/XfHhIwRfK7FB3/oSrdI9ZsO/P5
+	 eHzxn/Oo4gwWKQnavBbqNXnjkJVx2LsgW97bsXSbyfkM/E/gJyP4BvRrEHUwH6DFHv
+	 EtjoPPWXJgGFw==
+Message-ID: <923aea1b-6a15-426f-9c32-954a1fb95d0a@kernel.org>
+Date: Tue, 7 Oct 2025 09:42:24 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251007000007.3724229-1-jthies@google.com>
-X-Mailer: git-send-email 2.51.0.618.g983fd99d29-goog
-Message-ID: <20251007000007.3724229-7-jthies@google.com>
-Subject: [PATCH 6/6] usb: typec: ucsi: pr_swap should check connector_status
-From: Jameson Thies <jthies@google.com>
-To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Cc: jthies@google.com, dmitry.baryshkov@oss.qualcomm.com, bleung@chromium.org, 
-	gregkh@linuxfoundation.org, akuchynski@chromium.org, 
-	abhishekpandit@chromium.org, sebastian.reichel@collabora.com, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 3/4] usb: dwc3: Add Google SoC USB PHY driver
+To: Roy Luo <royluo@google.com>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>,
+ linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org
+References: <20251006232125.1833979-1-royluo@google.com>
+ <20251006232125.1833979-4-royluo@google.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251006232125.1833979-4-royluo@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+On 07/10/2025 08:21, Roy Luo wrote:
+> Support the USB PHY found on Google Tensor SoCs.
+> This particular USB PHY supports both high-speed and super-speed
+> operations, and is paired with the SNPS DWC3 controller that's also
+> integrated on the SoCs.
+> This initial patch specifically adds functionality for high-speed.
+> 
+> Co-developed-by: Joy Chakraborty <joychakr@google.com>
+> Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> Co-developed-by: Naveen Kumar <mnkumar@google.com>
+> Signed-off-by: Naveen Kumar <mnkumar@google.com>
+> Signed-off-by: Roy Luo <royluo@google.com>
+> ---
+>  drivers/phy/Kconfig                 |   1 +
+>  drivers/phy/Makefile                |   1 +
+>  drivers/phy/google/Kconfig          |  15 ++
+>  drivers/phy/google/Makefile         |   2 +
+>  drivers/phy/google/phy-google-usb.c | 286 ++++++++++++++++++++++++++++
 
-Power role swaps initiated by the host system doesn't generate
-connection status change notifications.
 
-From UCSIv3.0 spec, section 6.5.10 Set Power Direction Role:
+No, you don't get a new directory and new driver. That's a Samsung part,
+AFAIK. Re-use existing code.
 
-The execution of this command might require PPM to initiate a power
-role swap. If the power role swap fails for any reason, the command
-returns, and error and the power direction should remain unchanged.
-Note that if the execution of the command resulted in a successful
-power role swap, it should not result in a connector status change
-notification.
-
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Signed-off-by: Jameson Thies <jthies@google.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 30 +++++++++++++++++++++++++-----
- 1 file changed, 25 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 1a7d850b11ea..6e3797d7a144 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1526,20 +1526,40 @@ static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
- 	if (ret < 0)
- 		goto out_unlock;
- 
--	mutex_unlock(&con->lock);
-+	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
-+	ret = ucsi_send_command(con->ucsi, command, &con->status, sizeof(con->status));
-+	if (ret < 0)
-+		goto out_unlock;
- 
--	if (!wait_for_completion_timeout(&con->complete,
--					 msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
--		return -ETIMEDOUT;
-+	cur_role = !!UCSI_CONSTAT(con, PWR_DIR);
- 
--	mutex_lock(&con->lock);
-+	/* Execution of SET_PDR should not result in connector status
-+	 * notifications. However, some legacy implementations may still defer
-+	 * the actual role swap and return immediately. Thus, check the
-+	 * connector status in case it immediately succeeded or wait for a later
-+	 * connector status change.
-+	 */
-+	if (cur_role != role) {
-+		mutex_unlock(&con->lock);
-+
-+		if (!wait_for_completion_timeout(
-+			    &con->complete,
-+			    msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
-+			return -ETIMEDOUT;
-+
-+		mutex_lock(&con->lock);
-+	}
- 
- 	/* Something has gone wrong while swapping the role */
- 	if (UCSI_CONSTAT(con, PWR_OPMODE) != UCSI_CONSTAT_PWR_OPMODE_PD) {
- 		ucsi_reset_connector(con, true);
- 		ret = -EPROTO;
-+		goto out_unlock;
- 	}
- 
-+	/* Indicate successful power role swap */
-+	typec_set_pwr_role(con->port, role);
-+
- out_unlock:
- 	mutex_unlock(&con->lock);
- 
--- 
-2.51.0.618.g983fd99d29-goog
-
+Best regards,
+Krzysztof
 
