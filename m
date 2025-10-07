@@ -1,180 +1,122 @@
-Return-Path: <linux-usb+bounces-28938-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28939-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C80CBBFCC5
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 01:53:31 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9474BBBFCF6
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 02:00:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0D063C45C4
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Oct 2025 23:53:24 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 055CC34C001
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 00:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 366C12147EF;
-	Mon,  6 Oct 2025 23:53:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5BA21578D;
+	Tue,  7 Oct 2025 00:00:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mxUSdsPr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="edCKTMf0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+Received: from mail-oa1-f73.google.com (mail-oa1-f73.google.com [209.85.160.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242014C9D
-	for <linux-usb@vger.kernel.org>; Mon,  6 Oct 2025 23:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AB641AAC
+	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 00:00:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759794801; cv=none; b=rThZhMLEYOfvv3S3SDg1BxDRlpBziQjfsjBPdmrs68YATE108YirsZEptyTBV8JojGPFqjsE0MtckstsGeCwQok5tvufzdnS41HvwFgBgXMRAKozP3+C+jKSX72AwM4Hup2ts7PjGxOi2Ob5CUNsk4eGiaXybsWip44/Pia2uE8=
+	t=1759795218; cv=none; b=i8Rh2Ta+ZRYD20kzK/NFunSKdHeRGqN++XWzhJcsuztJursWuu0jAAMDj5MGsN5PUp2AdiSkpbB9GZNOj0P3b/QxIP/UkyHynuWZD66p3OT+ZuQI/JziD87KS32466RXem7ss2HgtjtalOKkn0utu/YLNyX3bJM941p8GXfPs0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759794801; c=relaxed/simple;
-	bh=6XqDELyfzc8ahFNCXbL30AYuWogbDZwVn2GuCbcRMbw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TrwiLh1BdOAuXw1hDm6iJbqJph3R3E9bclXhcU1sHWxTCRjeXvx8cQYBnNM3EDX01bCj3Oxe3LwlFViOkcB8wEGFONIkojuQVw0JjGZiBh+jIOFgD2akZz4fo0AyQvSQ8N2ldgq0hwgL6jI4fP9CYpwt+1Ixys36h9XbjUfxcbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mxUSdsPr; arc=none smtp.client-ip=209.85.167.181
+	s=arc-20240116; t=1759795218; c=relaxed/simple;
+	bh=to8ZWOjc1qRZt8n0R8qXpM+PoKIHqL7arvS09ExzgFw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qoxiIo9N+KAOrtq5Uc1tVjvgsiBgp3VNrKob3CEU5ZX1i0OTMXGvfJx9Y8LKnQLsepiNqu1K1lL1qksHLrSx7xKaxbpRDHGp+H1noV6Su1l8vTQiBP/nYZ9veYc5JRHqPVkwYbdTlNbaP8HOEqvDMqzNDhyfpvw/d3XdUzRx08w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=edCKTMf0; arc=none smtp.client-ip=209.85.160.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-43f696ebf8eso1365249b6e.0
-        for <linux-usb@vger.kernel.org>; Mon, 06 Oct 2025 16:53:19 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
+Received: by mail-oa1-f73.google.com with SMTP id 586e51a60fabf-36ff1f6d245so1968341fac.0
+        for <linux-usb@vger.kernel.org>; Mon, 06 Oct 2025 17:00:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759794799; x=1760399599; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ghI0a0kRzT954YyKzuf4DuMpgOs7az5knEvnHGslLcg=;
-        b=mxUSdsPrd35ksslWwapshflVSfWF2oNmVO9oK+JnByQG4krxHgid0ew4MUlU9je99A
-         gjj/iK1ZGCU/Lz6wxJdhRAFy67QE+fBEquOTYnI7L5ndDQY8mzbUpgpRvm+N62ZbKqfE
-         Rukydkb/RJOV4OAdA2snAooNm6Q5mzcFxL38kSK5PoMkIlkRPQu4desXZd5RzEJ5mA3u
-         jfIUR8MRY4hr44Mb4e1nOVV0TLBfurNyv0+EzCUDSSrkrxUekr6NhnC8d8k4EF+IFi/Q
-         3SA4bukFilPbzhPm2IgPYfPNbYR9ifDalMJa/AKygDNv2TWHyWs7FkdDMGGoKrcjaaEC
-         rgqw==
+        d=google.com; s=20230601; t=1759795216; x=1760400016; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VdUfU2fJjBvhSwhaS5KHCRYOzfyetIIk6dhbjwg8+94=;
+        b=edCKTMf0Qy0V25pa6/c0PiJ9u9c3u0nSkEOaq2a1YWvP5HXaoZEBJenAeYLF1iBG6h
+         f1bKMYvXe8kYw4GbyGxgwgy9PX1zebMz7omyTJzYqyC4SzqMWRTxDlpxdMuR92Jm9BC8
+         mIg8YgPz5Vn2V0wuHM5Jfq+PezXpFYkO2hzFmz9b6g2VMY399vInSda0YFS0VciiK6sJ
+         YIPShrNMJSki9IrGNs9hzjBAxMfq/LtFNPMHBtagpHDf1eKZtClhGP72jTP4Ai8pi9UJ
+         Wl54+UttB1+RW1pmgffxrZrxAIAEa887S9lHr59wKQxY45IoddF9bieUyem506SYd+XU
+         XZaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759794799; x=1760399599;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ghI0a0kRzT954YyKzuf4DuMpgOs7az5knEvnHGslLcg=;
-        b=OmGZWUPAiuXqsGQqVbRTeaLTY1OLFTpiEUFISSfbKzdlWVYCP2w0EbVa1Us4gBxNWO
-         94X63PS6PSyPc95dVY9Gdlkx//JwI30hIKDLiela1KiHvlOP5FDCmX6qGn03OOAFp5Q6
-         S/1k2ShDUtuoRKPq4UhlPI6Va12c9Cw14xGooa1CE6q9tZx6H0374EWwB1nxfPUMQWXd
-         HmuLR093GowTX1+LnWDVaB0s1e10DUQC4tYmTX10s2wEuN3b9Bp4k3ynbb9pKegf1wc9
-         q/Zswii++t+X/3yxrpmG+7McstAGkggwZ7vQlH63+SKBtoOz7gRv9+4xv4DBtOal/b2/
-         bk/w==
-X-Forwarded-Encrypted: i=1; AJvYcCXXHSs2VI8QZVDg3e4PzjAfD+dPOXaK9e0Ssc28fQXYJ/SU1h7pWbsChn81YZySnrWC3m3wOFWf6Vk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAefRHCTGXv7agoPHE0DrpKrpcpuoPY1NU3KMEnGCE0d1fhI3i
-	lCpyJf1FWQRiQhtaJcWnyfkPFN+4vwGg0T2IRcWMzo5lhc5AFvUy8VqzJaczYW4C9OZAxCExFdj
-	nvUYSw3o8tbJDuFwRU6rYzu4snILIYMwVEc887VLb
-X-Gm-Gg: ASbGnctUc7fH5P0dImcO3g6etPppGCs1awbPpMIfC6Sew/sTu3eH2lDJVjSEYh+c8ch
-	5vh27fYlT9YCoLbINjvQ6ADlvFVyeI+RhOw6zB+YaFG6h4bbqLg4TxYZqnGssa6X63dq3hyg75u
-	daTpgETORpy8ePU57ae2BfxtouetE8+0x1NrRnMQ5LYNJ6InawSaMOWqnrBBobHpAo5CfG4vSSI
-	e2ge09+k4Fsu3TnWsJ7pNdeECbHhnNIxepnwEWCXUDxy1eBqD76yQ2nqoCl56836FIN
-X-Google-Smtp-Source: AGHT+IGICKV72o+Vw/GaLGruC3bnYHj+/BHJwYeTf0ZghFaJEpn5aCaBfMNO2dLMSshOQUNNDOcahStBsjIW0D8pORQ=
-X-Received: by 2002:a05:6808:3508:b0:43f:3d56:4dad with SMTP id
- 5614622812f47-43fc1861a61mr6740307b6e.38.1759794798847; Mon, 06 Oct 2025
- 16:53:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759795216; x=1760400016;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VdUfU2fJjBvhSwhaS5KHCRYOzfyetIIk6dhbjwg8+94=;
+        b=fH7dMzQ9PTt5iggadArQ4/LHVh5a/U4AyAI5SsVB71MrBw0JL9wYxNCtGx/Yf2SpXj
+         CwCOg5L6Ov55OGtuot618dabRqbHBE666rPH2kQyhmcJhzAbkSCBshP2I9HOUHXpBZCM
+         6pfgs0aGXDlcOoIN9uxqOyTzsiO6h9L2v9YfVIOFVXEURd4OlWLUeKewFJ1J+nM5/c5V
+         KEvlVBohrBr95KxMLMC14Ut/C5I3z9uKl8ItknrHCbo2jzU1JNsQ2gVE/z+G1+mZadvE
+         frI/Je3Kp8LMaqgzje/9ykTVMuhhNbcbuY9daz2JsKidyniTmHJ/d10f0RykgCoxvUX3
+         VWqg==
+X-Forwarded-Encrypted: i=1; AJvYcCVeCs/TLwSETNdbkA315V9bial6ZFcI+mcKt7Erc3geYuZTMCuhSWLQKohIZJfTEt8q0taVJa5UoAk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaBBWss4AEk9Ms18ppME8oRCLDLcAENR4NaPTinCO/T87hqW5a
+	emkiF2OiRTSMsn7jNEwmHksp2VFsqA8+cde/64dSaJOYHwnD072AMLqmEY//ko2v4ylwZSkBnr+
+	72iMXiA==
+X-Google-Smtp-Source: AGHT+IHYTY6i4NJKEU6ncAOcwWLhE/UwFop1zK10OHZEI577ZI6tq5DlnfgX5+BnVTSvZd0L+fjUk7r1wHA=
+X-Received: from oanw9.prod.google.com ([2002:a05:6871:609:b0:327:5a14:f7f2])
+ (user=jthies job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6870:2393:b0:332:ea8d:b4d2
+ with SMTP id 586e51a60fabf-3b0f49f5aa9mr6400301fac.11.1759795215703; Mon, 06
+ Oct 2025 17:00:15 -0700 (PDT)
+Date: Tue,  7 Oct 2025 00:00:01 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20251003-b4-ml-topic-tcpm-v1-1-3cdd05588acb@pengutronix.de> <CAPTae5Jn_visQUHaHvb2yXZdBhFySz+24TJuY8uyVB1v7tVisA@mail.gmail.com>
-In-Reply-To: <CAPTae5Jn_visQUHaHvb2yXZdBhFySz+24TJuY8uyVB1v7tVisA@mail.gmail.com>
-From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Mon, 6 Oct 2025 16:52:42 -0700
-X-Gm-Features: AS18NWC1yp_E9V7b0FT70OhaQMhvF6rVBflQ-_l0DHsNB0E85nSqGyvB09tyywY
-Message-ID: <CAPTae5+qMTg3t4_D8Yp=TihnBmUVvQz-4OrytE8rgJ4=MF4R6g@mail.gmail.com>
-Subject: Re: [PATCH] tcpm: switch check for role_sw device with fw_node
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, kernel@pengutronix.de, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Hans de Goede <hdegoede@redhat.com>, jun.li@nxp.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.618.g983fd99d29-goog
+Message-ID: <20251007000007.3724229-1-jthies@google.com>
+Subject: [PATCH 0/6] UCSI Power Supply Updates and Bug Fixes
+From: Jameson Thies <jthies@google.com>
+To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Cc: jthies@google.com, dmitry.baryshkov@oss.qualcomm.com, bleung@chromium.org, 
+	gregkh@linuxfoundation.org, akuchynski@chromium.org, 
+	abhishekpandit@chromium.org, sebastian.reichel@collabora.com, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 6, 2025 at 4:45=E2=80=AFPM Badhri Jagan Sridharan <badhri@googl=
-e.com> wrote:
->
-> .
->
-> On Fri, Oct 3, 2025 at 3:34=E2=80=AFAM Michael Grzeschik
-> <m.grzeschik@pengutronix.de> wrote:
-> >
-> > When there is no port entry in the tcpci entry itself, the driver will
-> > trigger an error message "OF: graph: no port node found in /...../typec=
-" .
-> >
-> > It is documented that the dts node should contain an connector entry
-> > with ports and several port pointing to devices witch usb-role-switch
->
-> s/witch/with
->
-> > property set. Only when those connecter entry is missing, it should
->
-> s/connecter/connector
->
-> > check for port entries in the main node.
-> >
-> > We switch the search order for looking after ports, which will avoid th=
-e
-> > failure message while there are explicit connector entries.
-> >
->
-> Missing Fixes: tag ?
+This series includes the following minor changes to power supply
+handling by the UCSI driver.
 
-Also please Cc: stable@vger.kernel.org.
-ref:https://www.kernel.org/doc/Documentation/process/stable-kernel-rules.rs=
-t
+1) Adds the "Status" property to power supplies registered by the UCSI
+driver.
+2) Reports power supply USB type as "DRP" when the port partner is a
+DRP.
+3) Updates ucsi.c to report a power supply change all power opmode
+changes. Currently this only gets reported when opmode is PD.
+4) Updates ucsi.c to report a power supply change when the PPM signals
+a sink path change.
+5) Set max current to 0 when no device is connected. Currently this
+defaults to 0.1A.
+6) Updates connector status after initiating a PR swap. Following the
+UCSI spec, there is no reported change following a successful SET_PDR
+command. This results in the stored connector status being outdated.
 
->
-> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> > ---
-> >  drivers/usb/typec/tcpm/tcpm.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcp=
-m.c
-> > index b2a568a5bc9b0ba5c50b7031d8e21ee09cefa349..cc78770509dbc6460d75816=
-f544173d6ab4ef873 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -7876,9 +7876,9 @@ struct tcpm_port *tcpm_register_port(struct devic=
-e *dev, struct tcpc_dev *tcpc)
-> >
-> >         port->partner_desc.identity =3D &port->partner_ident;
-> >
-> > -       port->role_sw =3D usb_role_switch_get(port->dev);
-> > +       port->role_sw =3D fwnode_usb_role_switch_get(tcpc->fwnode);
->
->
-> Seems to be a reasonable thing to do esp. given that bindings
-> documention mentions that port/ports node is part of connector
-> class:https://github.com/gregkh/linux/blob/master/Documentation/devicetre=
-e/bindings/connector/usb-connector.yaml#L189.
->
->
-> Adding hdegoede@, jun.li@ as they submitted patches for USB role switch i=
-n tcpm.
-> hdegoede@, jun.li@ Please let us know if there are any concerns from
-> your side regarding accepting this patch.
->
-> Thanks,
-> Badhri
->
->
-> >
-> >         if (!port->role_sw)
-> > -               port->role_sw =3D fwnode_usb_role_switch_get(tcpc->fwno=
-de);
-> > +               port->role_sw =3D usb_role_switch_get(port->dev);
-> >         if (IS_ERR(port->role_sw)) {
-> >                 err =3D PTR_ERR(port->role_sw);
-> >                 goto out_destroy_wq;
-> >
-> > ---
-> > base-commit: e406d57be7bd2a4e73ea512c1ae36a40a44e499e
-> > change-id: 20251003-b4-ml-topic-tcpm-27146727d76a
-> >
-> > Best regards,
-> > --
-> > Michael Grzeschik <m.grzeschik@pengutronix.de>
-> >
+Abhishek Pandit-Subedi (1):
+  usb: typec: ucsi: pr_swap should check connector_status
+
+Jameson Thies (5):
+  usb: typec: ucsi: psy: Add power supply status
+  usb: typec: ucsi: psy: Add support for DRP USB type
+  usb: typec: ucsi: Report power supply changes on power opmode changes
+  usb: typec: ucsi: Report power supply change on sink path change
+  usb: typec: ucsi: psy: Set max current to zero when disconnected
+
+ drivers/usb/typec/ucsi/psy.c  | 41 ++++++++++++++++++++++++++++++++++-
+ drivers/usb/typec/ucsi/ucsi.c | 35 +++++++++++++++++++++++++-----
+ drivers/usb/typec/ucsi/ucsi.h |  4 ++++
+ 3 files changed, 73 insertions(+), 7 deletions(-)
+
+
+base-commit: e40b984b6c4ce3f80814f39f86f87b2a48f2e662
+-- 
+2.51.0.618.g983fd99d29-goog
+
 
