@@ -1,48 +1,81 @@
-Return-Path: <linux-usb+bounces-28950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C3F4BBFE22
-	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 03:02:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB600BBFE27
+	for <lists+linux-usb@lfdr.de>; Tue, 07 Oct 2025 03:03:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C95DF3B0491
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 01:02:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65DE63AFF59
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 01:03:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8E91DFD96;
-	Tue,  7 Oct 2025 01:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DFD1DF74F;
+	Tue,  7 Oct 2025 01:03:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sstW7MUX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CdlW7SjD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3AAAF9C1;
-	Tue,  7 Oct 2025 01:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1BF19755B
+	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 01:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759798944; cv=none; b=o7WnGQm9qdaIe7cc7kHZAb+iY4tHmYxz0peu62TJt9VEHZYNir3X4Va+kFuUdsoSlFcFiGeJMyhQYGxrcawzBDYUMJ2kNOko6RpY2ThnzotpszwS9w7lQD0C8UvES0om2t4ADnNP7gReJVqAEwsz2417mbu/AZNaH+T41iuC5k8=
+	t=1759798989; cv=none; b=FLr6qXA5kPp4zkKMvTyREYo+skzURBC/qZMLdPQFsFNv2w8ZHbEPJtmxv5j/M9KjHQLNVIRsbQ3Scwk2e6SLF9EDTTbjN2WcaJNQ/ruexxJ2jAit/2gqhcpXHAwXiGx8aJA7/jzb4zZI//JsJdJ+jBwSDBzzzRAngO9qRouSJ+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759798944; c=relaxed/simple;
-	bh=lyieKP3LFc/zehqV6eoCt+HgQDwizBYqu5bhmkN47i4=;
+	s=arc-20240116; t=1759798989; c=relaxed/simple;
+	bh=UzFkx3V2abUc/caTx+es4GrOpbz+tlZiDJJUXkho6gc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u14a/eLkrCLCfjo/OQz+/oEE5pi85iR3SqwWQuAeprd8X8GYFdRCiu9VVQYcW7lquvqFz+EZLKBQJguvcFgVrgptWp+FQX5epSN0RPYX1BthCipOYCFf7qI1BhTfd9wAF5opEW5vsa+Yu+dwA6H2tlfMi6mwJd1sNMq7/2mHmsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sstW7MUX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0EB6C4CEF5;
-	Tue,  7 Oct 2025 01:02:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759798943;
-	bh=lyieKP3LFc/zehqV6eoCt+HgQDwizBYqu5bhmkN47i4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sstW7MUXAEMw1BMM6qBprABoKvaSzYj/BuFojCPDQWSoL/B1glvjVhoYBS8O59qMc
-	 qSO/8jp/tvkQkZjHfuD95m936F4G/GfLXr6vSD6ozfPO0TEpPa6GS7H4v9/fATSeT5
-	 KUE05zjvTp/aP1VzAqjokY8RkAFQ5sg6Z7Rvg9gSgaMkwQ8qObowU6Li2jLAV0CDWA
-	 kyGv7vODJldAGb4l/j4BGSnmE+opJU+UHLO2nL6cYTuROz8nvw6pX+DSo+Mw6B68V8
-	 331H7QwU9A9TIhr/ogOIC5BsyHtld/77sxAsh1QWW+dff1/OADkqqj1hMP8vDnB0r3
-	 HrvpyGL0v3Lzg==
-Message-ID: <a6690fbc-0b86-4725-99ca-6b4cc477b4ec@kernel.org>
-Date: Tue, 7 Oct 2025 10:02:11 +0900
+	 In-Reply-To:Content-Type; b=CjuGLMf+j9rCCaLMHKbZ8pT55hyh4xEDvsBZxRuonOUQ3u8eYpkSaIOxp4qQaoZqczcnjKlnmymZSjPwkYHG+SkXEvPP7JNVgOnxmvR4JZt27D+NzSHGOZwTa86Hn+0iQwxLazlR2fNTq1C0/dMR41SCSJMvOLVPX9xbvv+HMus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CdlW7SjD; arc=none smtp.client-ip=209.85.222.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-8e286a1afc6so3440720241.1
+        for <linux-usb@vger.kernel.org>; Mon, 06 Oct 2025 18:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759798987; x=1760403787; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8SBkp7v3+iaIFjg2UJKNokAvDTy3nHBsuuGSn7XWGZE=;
+        b=CdlW7SjDHjoBM2V1yMrNF2PRNUFEX6oPGJcEZyiPvnAhcl1/DrPkn4uICGodLURs+w
+         bEhe0VLKgCbRmzRR9BRszv1GFeB0BFwyfpDn2b9brarePKmjQ3xKNmIBlaiW6oyWxOmN
+         c4kc3mOZfRf2+/ZF8vwPSfZn3r0a1kgtjQEEbUPmjVMTzd3pCU/GyujKY1PjnU/hO7Gv
+         4/0+xNOTM6ZtkN9/qGHWirUaaVxH4KkWrUNOTkMrO4ohfbiZIwjEUs8BBDisUp4WyHjG
+         yvbuwMO9YMUQT0rVVFA5qpnW42aeiAu+XS1Nu+Vqag3v3fHT5x6XqHpDYc59oII5LRtf
+         tRyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759798987; x=1760403787;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8SBkp7v3+iaIFjg2UJKNokAvDTy3nHBsuuGSn7XWGZE=;
+        b=wObsVjOrzPKskNUQSs6QH5N7vOUqGYWZlUMQ9xbTMDuLLgFz/d/ZGPldQ/taQVDfnF
+         2zCocUuirFctbyFcrQ1dsswxglEOJqpKn9vSMEWTVwBsw4vP8LE5U2Tet8W2CWv4ukIZ
+         vn/mY+IvirVbKsp5ufkUo6JqI//nOVvkBaw8fQeuKEGW4RDaSJ6+w8z2M5cze+Ngalor
+         iO39s0Oev9OmYXOAGg8Drs/temDfOhzVCzdKiomS9TqDdUJGLcApiDsrjeDgVzsE6Cnq
+         PQDLc3oWUflKroO/Q/Tua6n5Q4DaMoe/vLWIoUg1JGFLZQiJKbhqS0G4JSuuet8g1lPh
+         HNog==
+X-Forwarded-Encrypted: i=1; AJvYcCXhWDLJF0qJa3Sjea9DQYVEJF2Vy4qkHc2hm9noQ3SjCM+2Jwb1c3NeiRYLPG0Ib5FywMEREw5XqRY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBXR6ge65nQk6vrPVBA2D/RCwrG49IKriQkWh9Py1tcVoY6W18
+	qOxvWplQ/kyTG8nxkKSCncM1CGkptvKKkuPpaMo8v6YDKFmYZ9Dt8TUo
+X-Gm-Gg: ASbGncvh1xf/BfyYlCO8OFToxns5qrbkbLwLAfwfT4oJ2AAyITk7LE5hcR2wuuFBCuS
+	dtLLIunEI8+CXkkBibvXUz6SSuPTM9ePCfWt/LwssyiZ/a4Y3JBh+jt89YI8OQQbH1oxc9vbu9q
+	zud6BCCZZfQR63YKZrE1c2N3xtz8cUC0PVoH068oppd2nL4k6a64ohDJVTMbaDveP7HUMIkiU8S
+	wspK/rD8vtGjOZfcZ6zimcpNE7XLb3+yynB/LGLRfiVtUcWCCyrPNLDuqWjOdHO6H/fSIeJ/Jz5
+	yXvcTeXxpUIWJ/RHJahNvSb1XTkNtQ23+8gAwvgp06xya542m133sii56VAxJHtiXSTFYfmdxgC
+	ynihR5vlxYV4TXmq2rruiR3SbSqZFH85eRK+RyTdP7aAPQ6y9IJExMPjkWsX8r5cxsJWOgY5wwA
+	==
+X-Google-Smtp-Source: AGHT+IFKzaGjI5KF3o8XjbsbEV/y+PYj4yekSF7is/jJyVeOW5Z3tWkcMSrolqH6JqxaNt8Zy5fevw==
+X-Received: by 2002:a05:6102:160a:b0:5a4:60ff:80c3 with SMTP id ada2fe7eead31-5d5d4d401aemr672803137.14.1759798986666;
+        Mon, 06 Oct 2025 18:03:06 -0700 (PDT)
+Received: from [192.168.1.145] ([104.203.11.126])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5d5d383430asm419000137.2.2025.10.06.18.03.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Oct 2025 18:03:06 -0700 (PDT)
+Message-ID: <03a4cb5e-85da-44f3-8fcc-67e23920cd5a@gmail.com>
+Date: Mon, 6 Oct 2025 21:03:03 -0400
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,80 +83,49 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/10] Introduce Glymur USB support
-To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>, krzk+dt@kernel.org,
- conor+dt@kernel.org, konrad.dybcio@oss.qualcomm.com,
- dmitry.baryshkov@oss.qualcomm.com, kishon@kernel.org, vkoul@kernel.org,
- gregkh@linuxfoundation.org, robh@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251006222002.2182777-1-wesley.cheng@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] usb: serial: fix: space prohibited before comma separator
+To: vivek yadav <vivekyadav1207731111@gmail.com>,
+ Johan Hovold <johan@kernel.org>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+ linux-kernel-mentees@lists.linux.dev
+References: <20251004065618.70151-1-vivekyadav1207731111@gmail.com>
+ <aOOyNpNL3YCrLIgq@hovoldconsulting.com>
+ <CABPSWR4W5Eyz8=NPvysT7XhFY=bjCO_WqqOOMWeZGen9e2fhqQ@mail.gmail.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251006222002.2182777-1-wesley.cheng@oss.qualcomm.com>
+From: David Hunter <david.hunter.linux@gmail.com>
+In-Reply-To: <CABPSWR4W5Eyz8=NPvysT7XhFY=bjCO_WqqOOMWeZGen9e2fhqQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 07/10/2025 07:19, Wesley Cheng wrote:
-> This series enables the PHY level changes that are required to support
-> the type C based controllers and the multiport controller.  The typeC
-> ports utilize a usb43dp based QMP PHY for the SSUSB path, while using
-> the M31 eUSB2 PHY for the HSUSB path.  For the multiport controller,
-> it will utilize two QMP UNI PHYs for the SSUSB path, and two M31 eUSB2
-> PHYs for the HSUSB path.
+On 10/6/25 13:54, vivek yadav wrote:
+> Hi Johan,
+> Thanks for giving time for the review of my patch.
+> I understand your point and will avoid such kind of practice.
 > 
-> -----
-> Changes in v5:
-> - Moved phy-qcom-qmp-usb43-pcs-v8.h into USB specific QMP driver
-> - Fixed DT bindings for clock properties for QMP combo PHY
 > 
+> ~~Vivek
+> 
+> On Mon, Oct 6, 2025 at 5:42 PM Johan Hovold <johan@kernel.org> wrote:
+>>
+>> On Sat, Oct 04, 2025 at 12:26:18PM +0530, vivekyadav1207731111@gmail.com wrote:
+>>> From: Vivek Yadav <vivekyadav1207731111@gmail.com>
+>>>
+>>> Run `checkpatch.pl` script on path `drivers/usb/serial/*`.
+>>
+>> Yeah, don't do that, that is, don't run checkpatch on code that's
+>> already in the tree. Use it on your on patches before submitting them to
+>> catch potential issues, but always use your own judgement when
+>> considering its output.
+>>
+>> If you just want to practise sending patches, changes like these are
+>> accepted for drivers/staging for that purpose.
+>>
+>> Johan
 
-Where are lore links? Why aren't you using b4?
 
-Best regards,
-Krzysztof
+Please don't top-post. please look at the following wikipedia page to
+see what top-post means:
+
+https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
 
