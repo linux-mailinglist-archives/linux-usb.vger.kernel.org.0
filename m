@@ -1,159 +1,173 @@
-Return-Path: <linux-usb+bounces-28988-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-28989-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85A48BC2ECC
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 01:12:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A30CBC3005
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 01:51:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 661344E9CD3
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 23:12:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FA523E3346
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Oct 2025 23:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69063259CAB;
-	Tue,  7 Oct 2025 23:12:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81A32641E7;
+	Tue,  7 Oct 2025 23:51:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="d3X0o8Px"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SHoTmqPV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10890253B67
-	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 23:12:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB77262FFC
+	for <linux-usb@vger.kernel.org>; Tue,  7 Oct 2025 23:51:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759878749; cv=none; b=RphBrh1BuyW2B1ySXrS3I7pQR5388UAC6HQ7h3VCo046VzVizAVTsakiZB7+20CxpdGVxNOKR60dyJPFGcgNLg8tUSPXZ/u7T54qfolTqVuLJ0jT2bwKo/8X9aJ8rphZUfPgb1rCKLVBsg5Ryy9Z1OFqPO6rNzsWZNuH0gAK9Xk=
+	t=1759881064; cv=none; b=DIw/GsfIget2nYlsIfUyxP80oLoDSx4hiFp6QhE3j5Ep4k3n1eXsk591ZpzMP94TKvHN9oU88/4BlG+ga7yLCtow2gMM+VrUE1BUw3BL9uBZOsANzrx2H0tHI+9xsoqXf2VKzhp7oQ6Vwl35OTnBT3NfCUZolpkl9DQVBvtH9JI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759878749; c=relaxed/simple;
-	bh=LYxloqWp+rfXRlEq06plD6k/4izTNXPA//5vY/5v7zA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ewzgG2S9IcVgewLHXFi75SS9U7HekI+yFrjjXgGwN5PqD++GBiS/S5ngJHnPukOdIaEi9Lr4MU87mhNH4spp+gk6nlBUnbCdAIzxpf3R/ekXRZ+n/Prj+kV163m5qGWbnK0zBXySkauTrsk5ZyF73AVHEhJJy3cqZF8WyzecXPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=d3X0o8Px; arc=none smtp.client-ip=209.85.166.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-937b40137b4so15668539f.0
-        for <linux-usb@vger.kernel.org>; Tue, 07 Oct 2025 16:12:27 -0700 (PDT)
+	s=arc-20240116; t=1759881064; c=relaxed/simple;
+	bh=5snFbqs9sNarJZC39yaVhbzXUsPxHolYK0vW3IIQUdQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HKfu43RRtJrGlH1Q61i8375WZ92U8WPB09eJtRoxumQdRWoDyDl190+Nxffjnt9afLDodHxBBvIYBFPUOh25EtSfTT/d9st/yyCeLriq6tIUfghEhxG0V8KJ3h2zwHf8FXmgv7rAccnRhsn9kuyCU2M8L6aG5R9v6yxSqmMRQyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SHoTmqPV; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-33255011eafso7083216a91.1
+        for <linux-usb@vger.kernel.org>; Tue, 07 Oct 2025 16:51:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1759878747; x=1760483547; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K8kpMiXXJQSMMYU5aHc0Qxvu9JF3/gOGS+jVYyvkF1s=;
-        b=d3X0o8Pxk1Pw+NTe3VjnPgak1zPh9Qzoz/BmeZIumFkHANqNdx+g6gzk/YcqWP5QfD
-         +jx6O2/otbbGSLg/Or0hMEjgjq9p4SlBiVh8q6GENDrE+xOBc+McpTXp+z4I+0eZ8xMJ
-         GPDUj00GgPclvPnZDSgb1NZPb3MxO7tlFRkm4=
+        d=google.com; s=20230601; t=1759881062; x=1760485862; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UwxCAWp60Swhqd/BFgzyBjFjBfIzgDWX3D186GvjvJo=;
+        b=SHoTmqPVJwOY/MczFusJ9kxQjE9ylTx1BCOtRGLEAbtEuqoERIWPfGme8D1sc1DJb6
+         M5dKIrDElg/yHZOcdV1ZRAI3xnGbrFTTFX41yny6r+MJEW6dr2dDmxkHfWtOGJChfU2A
+         v8CHge/vE5S51WZ7oweXQ40w29Q3Ydho5PHXXNKICJ5JhSuoyM+7mFKD2KWc43vyrSWC
+         5Vba8qGHD1DyoT1lIY7fb4vmyebUSj0wxhkyccDb1uNYPJ0f0P7wZyPp4W0L73J+WWDp
+         pDCy+56XNtbeDWwXXGuX0o8WKTT21mQgkoLETWoiZWne4aTHqTE8RhE717aN0dsdGyhs
+         AhOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759878747; x=1760483547;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K8kpMiXXJQSMMYU5aHc0Qxvu9JF3/gOGS+jVYyvkF1s=;
-        b=k6QN+qinwe4mo79ZcXEP+sesajTiQHHfccwkgC4nntUPqBbQ0rz6SfDkJzP5QeKOah
-         w7rnydok/kuRamkZFniYNnwm3FMxe15gNLAFTKEbIMT3iLBq8NeqViWWuRvXY4KLoyUn
-         4mPOkTKzoI5Y7vGAdgkWUg9wFAdHOhbu3POUwBqtzuSj7jMyom8r+q2kwlxtVtnkjhye
-         46N25jO77ja1UBUrEMl39Gh6ypV+3KWqWfD1OdhSZuPhvPKDOkb5tz4dnpJ178pWLakP
-         aBttb9FwqJXWDp5pB+IpiUC4WRJQmIj6D30qNwYkfZGJKaJUUz0hxunQgg5guLkfLhKL
-         ertA==
-X-Forwarded-Encrypted: i=1; AJvYcCVskV87Ds/JzP8Tr5ABF37lYdpKEmW0D+0F6rPHWk6hRA6rVzizmZrr9ENZP2P2BPcWm6Skdg/HS1k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsT2/FK/FiFKnP4JleYZN6EzKEvuiBV35qp5lDsfbeAU1ZpLRb
-	yZZq+eHdmCAOX5wYIf0vhyjW4jSWiE5ck9+VjWZhwNC5ytXPhWxxoKcflvPjUlYU7lU=
-X-Gm-Gg: ASbGncvuWEHHUlnU9Alg4RQODpXeKdLtGHvhQzy9Uj6v51zep/SzbRayn5KtotYWHn+
-	3R66Iai0uSqTtNDNZ77RMkrGE1bFhdbCylVvkVAparuuCWiF6iab3mVuL3Fu4as2fzsF+5HZ1GS
-	GMfoa+Q7Q4lYjfKB+hCuE7/7u8UxsMf6kBP/ubf1PgGEFLIA2zCVxhNb6Pi2kexlBsfE8EWEC5S
-	z+UG4FOR69ml6RMirF/wVNF1FjQvTd3H0b8ayyXzvvuJD7adB4hShol8t/MvkgeZTkv8FhFpUYT
-	rG6S1WVMwcDTnsF5GH/fJ+UQZH1U3zDoTNCWMQ5qtQhYscwKrUByJ0ckWF3vC9uyu5ARGLtiO4J
-	OjnNxkQMaLSBUXWbexeYZES0op/oCR2QbeFlu0cr6mezmCshdEDz+6UZCgmGncrc079ps6A==
-X-Google-Smtp-Source: AGHT+IGu2C2rb/V6BrxyE0/dvetUkGb+YtcqnfEQKJvkL8n0a1v0cyHBXoHB5VxQmwUA8x5ORvzLkw==
-X-Received: by 2002:a05:6e02:152d:b0:42d:8217:2c6b with SMTP id e9e14a558f8ab-42f7c36b822mr71320735ab.8.1759878746969;
-        Tue, 07 Oct 2025 16:12:26 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-57b5ebc8400sm6513539173.42.2025.10.07.16.12.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Oct 2025 16:12:26 -0700 (PDT)
-Message-ID: <34639f0e-4af0-4fc0-8368-07b9119d6cde@linuxfoundation.org>
-Date: Tue, 7 Oct 2025 17:12:25 -0600
+        d=1e100.net; s=20230601; t=1759881062; x=1760485862;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UwxCAWp60Swhqd/BFgzyBjFjBfIzgDWX3D186GvjvJo=;
+        b=wGAoMYqxK3MCtDkU5oEt25ozKXGkREtL/7xSHhCS7I4d0KLLL837Rc/3jnSsp+/ETY
+         5A/2/QoyNRPm92Qy+ZadF59iLHkKErXnzE3Q9qzG8psyte/+48jzaS9D5MeWJUxO+nk0
+         ziZQuAjxqQiZBU4WddUg3eOmVPMIYM6CZFKl8PAfAN6tCvASZGCWliSjX0PO3oxrGJ4Y
+         DeeprsPDymzw1ounbuuwzzJ8n3j3Vnfk3jWgPPiYmm58g2tXh1DctFHDPP8tPr912OzZ
+         b70MEQj/PA5ftXOpDaWufB3C2nMul1fhSQqKXqwWkMh6I4C6RNOFytlSMSH2ZawQU7XK
+         MEGg==
+X-Forwarded-Encrypted: i=1; AJvYcCXbGulpT6RH+md5m2O6rEzP3eLyTs7sFL/SuF+PTx6Vu+bnNKmgundXWU7CEzQvo7V+Y5weRytz4+8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFUyCVvQWDteLXrMrpWIDQ/lJr9D2bHrsHxsNTlzcYlPtDwlHa
+	O5g4ceMrosQSnKoY1Y9WVqPgTyPdEgmX7Q+ohL5W9p/nDUjyGDfzxLuuwq4pyvgjGAyojltt2n+
+	COhAInw==
+X-Gm-Gg: ASbGncu7equq7cUVYOx5yG2YCbY4YrpbZ89X4kHgQ3dna5dCMvlKhmdJzEw2CC562I8
+	g9TP57yUxWdVoET0bC7ntrJ6jXUvFFwrsWcraooQh01FoO0nvwpykt6C7GLfeG5nlVfnTCHQzGi
+	GMcuzYgZW5yqX4tnBt93H0jovPTxmqyfzpySjdMslKoAr2imd23axHMp6zxZm19pE8zN3EtBsSB
+	HwSWu3xboP0xzefZzuiur0v2EL09pc7fe8moKbPLFp6nkRC0ouFdXSmbDAUkqAiMKB69Nr6TwJB
+	WaF9aMxsM8ZylyafmZz9soGfl17HgESrECwomPf2V3As0jqD+XQ0sDrJ7LNM70RUysvgG+1npUT
+	pwNEn72DgN/aTWECQnWNRWSw2S563OtgYlOQ1bKs3B5r9dCl/CFQeynmtlFH/az2i5FgBzJSGPN
+	9s3oSjAGMUo8a5W65VlNrd
+X-Google-Smtp-Source: AGHT+IFODTGIMvljHAxxdJZTomgkuu6gzIcghH6BwbpURjwECae/HdoaIV7/qT1ZAuBXv+MNdG2xrw==
+X-Received: by 2002:a17:90b:4d10:b0:32e:ae12:9d32 with SMTP id 98e67ed59e1d1-33b51169e5emr1600933a91.11.1759881061472;
+        Tue, 07 Oct 2025 16:51:01 -0700 (PDT)
+Received: from google.com (232.92.83.34.bc.googleusercontent.com. [34.83.92.232])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b5288eae7sm152559a91.0.2025.10.07.16.51.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Oct 2025 16:51:00 -0700 (PDT)
+Date: Tue, 7 Oct 2025 23:50:57 +0000
+From: Benson Leung <bleung@google.com>
+To: Jameson Thies <jthies@google.com>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com,
+	bleung@chromium.org, gregkh@linuxfoundation.org,
+	akuchynski@chromium.org, abhishekpandit@chromium.org,
+	sebastian.reichel@collabora.com, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/6] usb: typec: ucsi: psy: Add support for DRP USB type
+Message-ID: <aOWnYeke5BM-TlXX@google.com>
+References: <20251007000007.3724229-1-jthies@google.com>
+ <20251007000007.3724229-3-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: Fixed protocol translation in
- usb/storage/transport.c
-To: shihao <i.shihao.999@gmail.com>, gregkh@linuxfoundation.org
-Cc: shuah@kernel.org, linux-usb@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20251003083124.17072-1-i.shihao.999@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20251003083124.17072-1-i.shihao.999@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3o10Fcvuh6mTIMAL"
+Content-Disposition: inline
+In-Reply-To: <20251007000007.3724229-3-jthies@google.com>
 
-On 10/3/25 02:31, shihao wrote:
 
-What happened to the commit log. What are you fixing here?
-How did you test this patch?
+--3o10Fcvuh6mTIMAL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: shihao <i.shihao.999@gmail.com>
+Hi Jameson,
+
+Quick nit about looking through and finding the Dual-Role Power bit.
+
+On Tue, Oct 07, 2025 at 12:00:03AM +0000, Jameson Thies wrote:
+> The USB Type registered with the power supply class is based on the
+> current power operation mode of the port. When the port is using USB
+> PD and is connected to a DRP partner, report that the power supply's
+> USB type is USB PD DRP.
+>=20
+> Signed-off-by: Jameson Thies <jthies@google.com>
 > ---
->   drivers/usb/storage/transport.c | 41 ++++++++++++++++++++++++++++-----
->   1 file changed, 35 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-> index 1aa1bd26c81f..4dd6bfa86c23 100644
-> --- a/drivers/usb/storage/transport.c
-> +++ b/drivers/usb/storage/transport.c
-> @@ -718,12 +718,41 @@ void usb_stor_invoke_transport(struct scsi_cmnd *srb, struct us_data *us)
->   
->   		scsi_eh_prep_cmnd(srb, &ses, NULL, 0, sense_size);
->   
-> -		/* FIXME: we must do the protocol translation here */
-> -		if (us->subclass == USB_SC_RBC || us->subclass == USB_SC_SCSI ||
-> -				us->subclass == USB_SC_CYP_ATACB)
-> -			srb->cmd_len = 6;
-> -		else
-> -			srb->cmd_len = 12;
-> +		/* Protocol translation per SCSI opcode group */
-> +                switch(us->subclass)
-> +                {
-> +                case USB_SC_UFI:
-> +                case USB_SC_8020:
-> +                case USB_SC_8070:
-> +                case USB_SC_QIC:
-> +                         srb->cmd_len = 12 ;             /* ATAPI/UFI devices always use 12-byte CDBs */
-> +                         break;
-> +
-> +                case USB_SC_RBC:
-> +                case USB_SC_SCSI:
-> +                case USB_SC_CYP_ATACB:                   /* Determine cmd_len based on SCSI opcode group */
-> +
-> +                         if(opcode <= 0x1F)             /* Group 0 */
-> +                         {
-> +                                 srb->cmd_len = 6 ;
-> +                         }else if( opcode <= 0x7F)      /* Group 1 & 2 */
-> +                         {
-> +                                 srb->cmd_len = 10;
-> +                         }else if(opcode <= 0x9F )      /* Group 5 */
-> +                         {
-> +                                srb->cmd_len = 16 ;
-> +                         }else if(opcode <=0xBF)        /* Group 6 */
-> +                         {
-> +                                srb->cmd_len = 12 ;
-> +                         }else if( opcode <=0xDF)       /* Group 7 */
-> +                         {
-> +                                srb->cmd_len = 16;
-> +                         }else{
-> +                                ;                       /* Leaving cmd_len  value unchanged  for  0xE0–0xFF vendor-specific*/
-> +
-> +                         }
-> +                        break;
-> +                }
->   
->   		/* issue the auto-sense command */
->   		scsi_set_resid(srb, 0);
+>  drivers/usb/typec/ucsi/psy.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+> index 2b0225821502..985a90d3f898 100644
+> --- a/drivers/usb/typec/ucsi/psy.c
+> +++ b/drivers/usb/typec/ucsi/psy.c
+> @@ -209,8 +209,16 @@ static int ucsi_psy_get_usb_type(struct ucsi_connect=
+or *con,
+>  {
+>  	val->intval =3D POWER_SUPPLY_USB_TYPE_C;
+>  	if (UCSI_CONSTAT(con, CONNECTED) &&
+> -	    UCSI_CONSTAT(con, PWR_OPMODE) =3D=3D UCSI_CONSTAT_PWR_OPMODE_PD)
+> +	    UCSI_CONSTAT(con, PWR_OPMODE) =3D=3D UCSI_CONSTAT_PWR_OPMODE_PD) {
+> +		for (int i =3D 0; i < con->num_pdos; i++) {
 
-thanks,
--- Shuah
+Do you really need to iterate through the whole list of pdos to find this?
+
+The DRP bit is guaranteed to be always in the 5V PDO, which is guaranteed to
+be the 0th one.
+
+See USB PD R3.2 V1.1 Section 6.4.1.3.1 Sink Fixed Supply Power Data Object
+
+"Since all USB Consumers support vSafe5V, the required vSafe5V Fixed Supply
+Power Data Object is also used to convey additional information that is
+returned in bits 29 through 20. All other Fixed Supply Power Data Objects
+Shall set bits 29=E2=80=A620 to zero."
+
+> +			if (pdo_type(con->src_pdos[i]) =3D=3D PDO_TYPE_FIXED &&
+> +			    con->src_pdos[i] & PDO_FIXED_DUAL_ROLE) {
+> +				val->intval =3D POWER_SUPPLY_USB_TYPE_PD_DRP;
+> +				return 0;
+> +			}
+> +		}
+>  		val->intval =3D POWER_SUPPLY_USB_TYPE_PD;
+> +	}
+> =20
+>  	return 0;
+>  }
+> --=20
+> 2.51.0.618.g983fd99d29-goog
+>=20
+
+--3o10Fcvuh6mTIMAL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCaOWnYAAKCRBzbaomhzOw
+whS7AQDjspjExNjGT1BgFskiJsp3x4iaIMS84WEPwbCjCcXmJAEA24GamYl7sQ8B
+nzBKxqmb3f1V1PuoMkNKd3p2QP1idA8=
+=1ksC
+-----END PGP SIGNATURE-----
+
+--3o10Fcvuh6mTIMAL--
 
