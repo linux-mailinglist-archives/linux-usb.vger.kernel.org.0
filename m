@@ -1,128 +1,172 @@
-Return-Path: <linux-usb+bounces-29020-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29021-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32E05BC4822
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 13:08:46 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B750FBC4828
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 13:09:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C3313B0F0B
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 11:08:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 98ABE4E2D9C
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 11:09:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8A472F6182;
-	Wed,  8 Oct 2025 11:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B45D2F6183;
+	Wed,  8 Oct 2025 11:09:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IhDEvBk1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJEtNHHW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B472ECE9C;
-	Wed,  8 Oct 2025 11:08:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB8722D4F6
+	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 11:09:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759921714; cv=none; b=nes9LOssTDBwZHoSwdv846BD1PtBZjYtUJiaL4dk8v6WjI92RyNBdnVGRQKhsjEAGm0iR2p0P92CxyzGlRWvY1J4GgvcIc67x331gz1S8+m2cBWwJ03WJ+noOXWVglJU9tq9ySM1dqvf3pZtN9CBkPQtjzJYts9lWBDLFZT/6gk=
+	t=1759921763; cv=none; b=S9xPM23m17kl3TebjzPnmv/Zslg9du4STYBX2kMApQzVFnojKPkVxJesIEbzV4hvzL3RIzli4k3aa2X70Yt732gsodrOtAHxj17QnrNec7gKo4Ry5H44QSeXb3o5HFGdelUOc/wZvyVweQUbnBYL0pIQf+OGgDbMLqR5SmHW4s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759921714; c=relaxed/simple;
-	bh=skZYeuIwpcqOcK3DodmjQ8nM/TXM5C2KQs1Dnyo9exU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EYBwQ0ZZTRdaTDu4ZE0TsMfMLkggLI/pgmIsW1NFA8sKUiyFc6O05MFfX/hB4jamhi4MY6sRkNl1oXHAh9TArIKVWvupeyvPM0Nr7+TQGc5qz7H1j7D9rucygQ++1hl0B7N2NUAx4GqcY5gmGXDXF13V8PfS9cshU19zVURYUJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IhDEvBk1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C05C4CEF4;
-	Wed,  8 Oct 2025 11:08:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1759921713;
-	bh=skZYeuIwpcqOcK3DodmjQ8nM/TXM5C2KQs1Dnyo9exU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IhDEvBk1jLTtgERD/SCemibZCRCF1a96QcZh2uUyIZmSJumcHBvQFgfqGkbQZe0uF
-	 xz7yGMpl+JWZmC9SymZVLD4M9qwawVsdTj8rzAXsXK8mO13XZ1SQ7YA0vzQpzjT66k
-	 lbxw3nTazOAXbkP83JICJPFvbLC/8ueMyZ9YpoVg=
-Date: Wed, 8 Oct 2025 13:08:31 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Akshay Gujar <Akshay.Gujar@harman.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	naveen.v@harman.com, sankarkumar.krishnasamy@harman.com,
-	oneukum@suse.com
-Subject: Re: [PATCH] usb: core: notify unrecognized usb device
-Message-ID: <2025100805-resisting-target-419a@gregkh>
-References: <2025090610-donation-sprawl-f6f7@gregkh>
- <20250918172355.5118-1-Akshay.Gujar@harman.com>
+	s=arc-20240116; t=1759921763; c=relaxed/simple;
+	bh=A8jEJckWp9WdIYnTv2iCHDMDhGkffq/z89hRH1LKpu8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VlHUY2Ib8MgiVFKnnIvl7tCyxUq5HNRebo6QwtKLs6Lw3iVAnQXJo01uc6spWxPABa0QCoScQ+KPelWZXJEbSEj8r4DRO12t6eTIDjZW5xWXKMuw83kG7wCdnmzjBbFLrm8L9imaGCqPekxHzQrBSrYhdmFXZTrvGQz6U6H/ljc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJEtNHHW; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-782a77b5ec7so6212962b3a.1
+        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 04:09:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759921761; x=1760526561; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KC25klfHsuE49qhd2lZf7xTuSG4Th9iMfG1aIP8CfPU=;
+        b=hJEtNHHWn6llKCdCfnWqke0qPTwpiPFR8tVKd31VmZ/nN0o0Avk61iCaRNgUArNwW7
+         a1YfWDZ3uBoutTW4BRtFgzlPnE9wFOJXTYuegfDvztQ9oL4sTIfXZnlEbglcjfKSlrXG
+         GA6lNYc2C3KnCnAo0Xfy3bFN1Uje0DUNtPJcq6p7iqihBYvUAGYBcMB3vbXb4T31SKv5
+         waSp7zkJ0s5yYUw4IN689K5y/wnJf6C5WLbwP3ouAkg2ZvtekIfQCjNwFJOrkD1E+Y1k
+         hY4cZsHYZcOtHTgchTbQ80U/+FVT5H8akjqpf7wE4i9rm5wszz3MoHbM6NbMTrrOWZjg
+         xmvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759921761; x=1760526561;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KC25klfHsuE49qhd2lZf7xTuSG4Th9iMfG1aIP8CfPU=;
+        b=CtkmmJAMeVl8DTZwtAyDzchIbe1NkRM7k5nRH6xTDVd/4JGFm3luLQMWDBLIBc6yli
+         iA+K5zT/xbhiDugdD7YKCGnLotszHCH/s2xosZJlDV+O7G/KjG2JNJokwJzLXWudCkL5
+         rplKGQ2w4tjvTu8q0t7C7bhGDIbfXCnv9Xz42CYF0uhpdk+Jzu89FruLlB5i2uZaVJQk
+         GyR0NC4mec3SM1TD1oCqolAJpzYPhdzx2G+T6UJldQs+/O2ktycoSCwu5MR7X45EvInP
+         zxKAguokssxEXys5JK3ysUkIHd3Z733M0/x1Azgy3RcidyXBYebMKaCeRIf4QTaE5tLm
+         QuAg==
+X-Forwarded-Encrypted: i=1; AJvYcCXrz2O7+NtXZOPpFFoAIMaR42yh2EUa6090G7WHWDmpvpbrmd7X4HX8/SoRBkVdhxerfxFyllbFo0I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuP+hiUkKoLwsvScxX/Tjn5nhzVrC+rMia1v+yqynmOwNbebd6
+	CpiOdz6SYyPp+PZT9hRzf0hNSMN4Yu7vD5mttZNIvoou6JxmjWmiszq4Nd75qGcS
+X-Gm-Gg: ASbGnctgCpaqEfGUuqVBfQt6TjFpnMdztzA65uHyMWDQ2sWHEkGudABuaScgpKEoXEX
+	CnDwHUZ0PdzrV+71t8/LVm04Q7GF4QOVPMN7hyu/O1C1I1ZNk6/qVEqgAz4Z0I6au1n3azEINIt
+	0eYhj/NOXgTIGsvS22WimyrByR0QNxXbgTIERFi9eizTPnOJmvDZTnbxUOC/58MWnsDN6nmTBDK
+	bdeF88xZh/ZCUl3pnghg1FHXMPV52rqbO4JJ3hH4tqyxblsRwp3jzcBbS5haW0ru618jIcNIYfO
+	x9bfY7R05m/kzz+QBKirS7c8pU3lYqAWjascCoWuEjp2RnEhzvh56xlSV4DnRIiVkVG51fiUg02
+	HzjeUzHNK1Fq/0+MhivLI3RtDZoNinI91AXY/wmgxa3WzvBS8
+X-Google-Smtp-Source: AGHT+IHELsy5OckPhJQbS7o/xw6ZAu3UWcOSKGC4r4z9PBn5ygvO6bnz1ApFsB9vIVgMG47qwlR1pQ==
+X-Received: by 2002:a05:6a20:3ca6:b0:249:824c:c620 with SMTP id adf61e73a8af0-32da854262bmr3829983637.57.1759921761430;
+        Wed, 08 Oct 2025 04:09:21 -0700 (PDT)
+Received: from fedora ([2401:4900:1f33:9812:931e:863e:d27d:1170])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6099f599a2sm17534134a12.36.2025.10.08.04.09.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Oct 2025 04:09:21 -0700 (PDT)
+From: Shi Hao <i.shihao.999@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: i.shihao.999@gmail.com,
+	linux-usb@vger.kernel.org,
+	stern@rowland.harvard.edu
+Subject: [PATCH v6] usb-storage: Fix comment indentation level
+Date: Wed,  8 Oct 2025 16:39:10 +0530
+Message-ID: <20251008110910.33833-1-i.shihao.999@gmail.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <2025100845-engraver-perch-dabb@gregkh>
+References: <2025100845-engraver-perch-dabb@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250918172355.5118-1-Akshay.Gujar@harman.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 18, 2025 at 05:23:55PM +0000, Akshay Gujar wrote:
-> >On Sat, Sep 6, 2025 14:28:37AM +0200, Greg KH wrote:
-> 
-> > >>> As per the usb compliance, USB-IF enforces a "no silent failure" rule.
-> > >>> This means that an implementation of USB must not appear broken to the
-> > >>> consumer. In configurations where the consumer's expectations are not
-> > >>> met, either the peripheral or host must provide appropriate and useful
-> > >>> feedback to the consumer regarding the problem.
-> > >>> 
-> > >>> Link: https://compliance.usb.org/index.asp?UpdateFile=Embedded%20Host&Format=Standard#10
-> > >
-> > >Odd, many Linux devices have passed usb-if testing since 2005 when this
-> > >was made a "rule", how did that happen?  What recently changed to
-> > >suddenly require this be a kernel issue?
-> > > 
-> > > Previously, OEMs handled this with private kernel patches or custom modifications. 
-> > > However, with Android's Generic Kernel Image (GKI) initiative, vendors can no longer make arbitrary kernel modifications. 
-> > > GKI requires using a common upstream kernel, so functionality like this needs to be up streamed rather than handled with vendor-specific patches.
-> > > This patch provides a standard upstream solution for what was previously handled with custom kernel modifications.
-> 
-> > That's good, but that does not mean that what you are attempting to do
-> > really is the correct thing to do.  Here you were trying to say that
-> > this is a requirement of USB-IF, but it really is not.  This is just
-> > wanting to add a new feature to the USB core that previously was only
-> > out-of-tree for your devices.  Please be more specific in your
-> > description of the problem and issues involved.
-> 
-> To clarify, this patch targets two needs: 
-> it helps with USB-IF compliance testing (where enumeration failures must be visible to userspace), 
+Fix comment  indentation level .
 
-Why must it be visible to userspace?  How have we passed testing before
-now?
+The previous comment was indented at the wrong level, breaking
+kernel coding style consistency. The indentation has been corrected
+to align with the relevant code block.
 
-> and it provides a generic mechanism for userspace to be notified of USB enumeration failures, 
-> which is currently missing in the USB core. This solution standardizes the notification, 
-> especially important for Android GKI and similar environments.
+Signed-off-by: Shi Hao <i.shihao.999@gmail.com>
 
-But there is no user for this new user/kernel api anywhere.  Android
-does not do this today, what is the chance it really will use it?  Do
-you have working patches somewhere that will land if this is added?
+---
 
-And where is any of this being documented? :)
+changes v6:
+-  Fix comment indentation level
+-  Fix checkpatch.pl script errors
 
-> >> that is probably not true. For once you can try another cable in many cases.
-> >> Currently we'd log this information. That is a worse way to handle this kind
-> >> of failure.
-> >> If there is an unrecoverable IO error, user space ought to be notified.
-> >> Syslog is not the best way to do so. There ought to be a standardized way
-> >> of doing this. However, this makes me say that this issue is not really
-> >> confined to USB. Other hotpluggable busses have the same issue.
-> 
-> >Yes, all busses have this type of issue for when devices can not be
-> >enumerated or fail.  We shouldn't make something that only works for
-> >USB.  I think PCI reports this type of thing somehow, so maybe
-> >generalize that api?
-> 
-> Agreed, this is a broader issue across hotpluggable busses. Generalizing the API to cover enumeration failures for USB, PCI, and others would be ideal. 
-> For now, this patch addresses USB specifically due to immediate needs.
+changes v5:
+- Reformulate as  v5  of original patch series
+- No code changes ,clarified versioning history
 
-Great, but again, why not make it generic so that all can use it?
+changes v4:
+- Simplify  protocol translation logic
+- Set reasonable default when cmnd[0] >= 0xE0
+- Remove switch-case statement
 
-Otherwise we end up with a USB-specific solution that no one else can
-ever use in the future.
+changes v3:
+- Wrap  commit message lines properly
+- Improve commit description
+- fix  checkpatch.pl script errors
 
-thanks,
+changes v2:
+- Update subject commit message
+- fix  checkpatch.pl warnings
+- match from: and sign-off: name
+---
+ drivers/usb/storage/transport.c | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
-greg k-h
+diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
+index 4d01f70f39ac..09012cafc536 100644
+--- a/drivers/usb/storage/transport.c
++++ b/drivers/usb/storage/transport.c
+@@ -719,17 +719,9 @@ void usb_stor_invoke_transport(struct scsi_cmnd *srb, struct us_data *us)
+ 		scsi_eh_prep_cmnd(srb, &ses, NULL, 0, sense_size);
+ 
+ 		/* Protocol translation per scsi opcode group */
+-		switch (us->subclass) {
+-		case USB_SC_UFI:
+-		case USB_SC_8020:
+-		case USB_SC_8070:
+-		case USB_SC_QIC:
+-			srb->cmd_len = 12;
+-			break;
+-		/* Determine cmd_len based on scsi opcode group */
+-		case USB_SC_RBC:
+-		case USB_SC_SCSI:
+-		case USB_SC_CYP_ATACB:
++		if (us->subclass == USB_SC_RBC || us->subclass == USB_SC_SCSI ||
++		    us->subclass == USB_SC_CYP_ATACB) {
++			/* Determine cmd_len based on SCSI opcode group */
+ 			if (srb->cmnd[0] <= 0x1F)
+ 				srb->cmd_len = 6;
+ 			else if (srb->cmnd[0] <= 0x7F)
+@@ -741,9 +733,10 @@ void usb_stor_invoke_transport(struct scsi_cmnd *srb, struct us_data *us)
+ 			else if (srb->cmnd[0] <= 0xDF)
+ 				srb->cmd_len = 16;
+ 			else
+-
+-				break;
+-					}
++				srb->cmd_len = 6;
++		} else {
++			srb->cmd_len = 12;
++		}
+ 
+ 		/* issue the auto-sense command */
+ 		scsi_set_resid(srb, 0);
+--
+2.51.0
 
