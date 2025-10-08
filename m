@@ -1,172 +1,197 @@
-Return-Path: <linux-usb+bounces-29021-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29022-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B750FBC4828
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 13:09:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD42BBC482E
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 13:10:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 98ABE4E2D9C
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 11:09:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C257119E0B3C
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 11:10:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B45D2F6183;
-	Wed,  8 Oct 2025 11:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 464762F619A;
+	Wed,  8 Oct 2025 11:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJEtNHHW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ItsNtXB0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB8722D4F6
-	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 11:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403C82F6168;
+	Wed,  8 Oct 2025 11:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759921763; cv=none; b=S9xPM23m17kl3TebjzPnmv/Zslg9du4STYBX2kMApQzVFnojKPkVxJesIEbzV4hvzL3RIzli4k3aa2X70Yt732gsodrOtAHxj17QnrNec7gKo4Ry5H44QSeXb3o5HFGdelUOc/wZvyVweQUbnBYL0pIQf+OGgDbMLqR5SmHW4s4=
+	t=1759921801; cv=none; b=cBktaFT9d7R3XVG1QYdLCpy+5wPQqiMVD+xuD2fR1BbwFQ6zp/3nctO7poLPa7UNuoqIUrRs1DhQ3y8g5vr2pUe34PwCXXA05jTqsZBr1banoZmUj/og+P3g6noZwhHKX3CFXl5/wQj71QGNSZZzsBfSTVvhe5i0L1oF+FEuoX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759921763; c=relaxed/simple;
-	bh=A8jEJckWp9WdIYnTv2iCHDMDhGkffq/z89hRH1LKpu8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VlHUY2Ib8MgiVFKnnIvl7tCyxUq5HNRebo6QwtKLs6Lw3iVAnQXJo01uc6spWxPABa0QCoScQ+KPelWZXJEbSEj8r4DRO12t6eTIDjZW5xWXKMuw83kG7wCdnmzjBbFLrm8L9imaGCqPekxHzQrBSrYhdmFXZTrvGQz6U6H/ljc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJEtNHHW; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-782a77b5ec7so6212962b3a.1
-        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 04:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759921761; x=1760526561; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KC25klfHsuE49qhd2lZf7xTuSG4Th9iMfG1aIP8CfPU=;
-        b=hJEtNHHWn6llKCdCfnWqke0qPTwpiPFR8tVKd31VmZ/nN0o0Avk61iCaRNgUArNwW7
-         a1YfWDZ3uBoutTW4BRtFgzlPnE9wFOJXTYuegfDvztQ9oL4sTIfXZnlEbglcjfKSlrXG
-         GA6lNYc2C3KnCnAo0Xfy3bFN1Uje0DUNtPJcq6p7iqihBYvUAGYBcMB3vbXb4T31SKv5
-         waSp7zkJ0s5yYUw4IN689K5y/wnJf6C5WLbwP3ouAkg2ZvtekIfQCjNwFJOrkD1E+Y1k
-         hY4cZsHYZcOtHTgchTbQ80U/+FVT5H8akjqpf7wE4i9rm5wszz3MoHbM6NbMTrrOWZjg
-         xmvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759921761; x=1760526561;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KC25klfHsuE49qhd2lZf7xTuSG4Th9iMfG1aIP8CfPU=;
-        b=CtkmmJAMeVl8DTZwtAyDzchIbe1NkRM7k5nRH6xTDVd/4JGFm3luLQMWDBLIBc6yli
-         iA+K5zT/xbhiDugdD7YKCGnLotszHCH/s2xosZJlDV+O7G/KjG2JNJokwJzLXWudCkL5
-         rplKGQ2w4tjvTu8q0t7C7bhGDIbfXCnv9Xz42CYF0uhpdk+Jzu89FruLlB5i2uZaVJQk
-         GyR0NC4mec3SM1TD1oCqolAJpzYPhdzx2G+T6UJldQs+/O2ktycoSCwu5MR7X45EvInP
-         zxKAguokssxEXys5JK3ysUkIHd3Z733M0/x1Azgy3RcidyXBYebMKaCeRIf4QTaE5tLm
-         QuAg==
-X-Forwarded-Encrypted: i=1; AJvYcCXrz2O7+NtXZOPpFFoAIMaR42yh2EUa6090G7WHWDmpvpbrmd7X4HX8/SoRBkVdhxerfxFyllbFo0I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuP+hiUkKoLwsvScxX/Tjn5nhzVrC+rMia1v+yqynmOwNbebd6
-	CpiOdz6SYyPp+PZT9hRzf0hNSMN4Yu7vD5mttZNIvoou6JxmjWmiszq4Nd75qGcS
-X-Gm-Gg: ASbGnctgCpaqEfGUuqVBfQt6TjFpnMdztzA65uHyMWDQ2sWHEkGudABuaScgpKEoXEX
-	CnDwHUZ0PdzrV+71t8/LVm04Q7GF4QOVPMN7hyu/O1C1I1ZNk6/qVEqgAz4Z0I6au1n3azEINIt
-	0eYhj/NOXgTIGsvS22WimyrByR0QNxXbgTIERFi9eizTPnOJmvDZTnbxUOC/58MWnsDN6nmTBDK
-	bdeF88xZh/ZCUl3pnghg1FHXMPV52rqbO4JJ3hH4tqyxblsRwp3jzcBbS5haW0ru618jIcNIYfO
-	x9bfY7R05m/kzz+QBKirS7c8pU3lYqAWjascCoWuEjp2RnEhzvh56xlSV4DnRIiVkVG51fiUg02
-	HzjeUzHNK1Fq/0+MhivLI3RtDZoNinI91AXY/wmgxa3WzvBS8
-X-Google-Smtp-Source: AGHT+IHELsy5OckPhJQbS7o/xw6ZAu3UWcOSKGC4r4z9PBn5ygvO6bnz1ApFsB9vIVgMG47qwlR1pQ==
-X-Received: by 2002:a05:6a20:3ca6:b0:249:824c:c620 with SMTP id adf61e73a8af0-32da854262bmr3829983637.57.1759921761430;
-        Wed, 08 Oct 2025 04:09:21 -0700 (PDT)
-Received: from fedora ([2401:4900:1f33:9812:931e:863e:d27d:1170])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6099f599a2sm17534134a12.36.2025.10.08.04.09.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Oct 2025 04:09:21 -0700 (PDT)
-From: Shi Hao <i.shihao.999@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: i.shihao.999@gmail.com,
-	linux-usb@vger.kernel.org,
-	stern@rowland.harvard.edu
-Subject: [PATCH v6] usb-storage: Fix comment indentation level
-Date: Wed,  8 Oct 2025 16:39:10 +0530
-Message-ID: <20251008110910.33833-1-i.shihao.999@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <2025100845-engraver-perch-dabb@gregkh>
-References: <2025100845-engraver-perch-dabb@gregkh>
+	s=arc-20240116; t=1759921801; c=relaxed/simple;
+	bh=n5/diNwZRoFuwCO4P1Hp5ug4Zt0q4zG2ojtKzRbe3UQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H6KhzrdEv91vvz5KtVS8F0Ro6QCZJpxb8dicH7HwkVTyPybGet9ExzVxjZlpCSYhXSczpOWaDLz4VYRRXee7vIAWC9IR0czxM++e+PaIfqMqRMSMJe1LDeMPN5Ii5dwZnxnvX8FFAfy8yvNbd+V2Cb/qkMJspI72RRfpIAmQqP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ItsNtXB0; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759921799; x=1791457799;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n5/diNwZRoFuwCO4P1Hp5ug4Zt0q4zG2ojtKzRbe3UQ=;
+  b=ItsNtXB0lRMdwcw3s+HTPPDksNaGZXn7OZnoUJZCxSf+3SPibg2uOuk9
+   NG4BT2g+da+ZABrOF7EywvQYU+QmijT1qC3H/OQ/JZ0tBRB/uBoZ4jrsL
+   9joLP/ZUKbYZLOUmjSm86TnsEFHNQfuYp6rdlBYKC1KSe6jVpWYz1Jl7P
+   /tC6XH8skbAthGRDY5ahbdXHmIchhn6nyDCd6FzzbzWoarc6vsg9m3XB7
+   O7BfglLVDCzZ2A06tpwstY9A4EXL7l6s+nOdWfT2BBe5sCq5XmDkfXTyy
+   TFe1//d00oYTm7dl2QneSZwRWXFmnjhBW0+csqmdXyv/qheSc+jjD2+iK
+   A==;
+X-CSE-ConnectionGUID: TkEVDk9JTYmrw6+xYZhb2g==
+X-CSE-MsgGUID: 9F5tyfziTqqwGSDAogtwrg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11575"; a="62154348"
+X-IronPort-AV: E=Sophos;i="6.19,323,1754982000"; 
+   d="scan'208";a="62154348"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2025 04:09:58 -0700
+X-CSE-ConnectionGUID: LWQRulO9RpGWy0jNTtSnQg==
+X-CSE-MsgGUID: zK1Hcg2SR1S24IFwYh5k+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,323,1754982000"; 
+   d="scan'208";a="211063918"
+Received: from iherna2-mobl4.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.169])
+  by orviesa002.jf.intel.com with SMTP; 08 Oct 2025 04:09:55 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 08 Oct 2025 14:09:53 +0300
+Date: Wed, 8 Oct 2025 14:09:53 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Biju Das <biju.das.jz@bp.renesas.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin
+ state
+Message-ID: <aOZGgZc1F968uoR6@kuha.fi.intel.com>
+References: <20251002172539.586538-1-krishna.kurapati@oss.qualcomm.com>
+ <20251002172539.586538-3-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251002172539.586538-3-krishna.kurapati@oss.qualcomm.com>
 
-Fix comment  indentation level .
+On Thu, Oct 02, 2025 at 10:55:39PM +0530, Krishna Kurapati wrote:
+> Enable VBUS on HD3SS3220 when the ID pin is low, as required by the Type-C
+> specification.
 
-The previous comment was indented at the wrong level, breaking
-kernel coding style consistency. The indentation has been corrected
-to align with the relevant code block.
+There is not ID pin on Type-C connector.
 
-Signed-off-by: Shi Hao <i.shihao.999@gmail.com>
+> The ID pin stays high when VBUS is not at VSafe0V, and goes
+> low when VBUS is at VSafe0V.
+> 
+> Add support to read the ID pin state and enable VBUS accordingly.
 
----
+I'm a bit confused about this... Why can't you just check the attached
+state, and if it's DFP, then you drive VBUS?
 
-changes v6:
--  Fix comment indentation level
--  Fix checkpatch.pl script errors
+thanks,
 
-changes v5:
-- Reformulate as  v5  of original patch series
-- No code changes ,clarified versioning history
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> ---
+>  drivers/usb/typec/hd3ss3220.c | 58 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
+> index 3ecc688dda82..44ee0be27644 100644
+> --- a/drivers/usb/typec/hd3ss3220.c
+> +++ b/drivers/usb/typec/hd3ss3220.c
+> @@ -54,6 +54,11 @@ struct hd3ss3220 {
+>  	struct delayed_work output_poll_work;
+>  	enum usb_role role_state;
+>  	bool poll;
+> +
+> +	struct gpio_desc *id_gpiod;
+> +	int id_irq;
+> +
+> +	struct regulator *vbus;
+>  };
+>  
+>  static int hd3ss3220_set_power_opmode(struct hd3ss3220 *hd3ss3220, int power_opmode)
+> @@ -319,6 +324,28 @@ static const struct regmap_config config = {
+>  	.max_register = 0x0A,
+>  };
+>  
+> +static irqreturn_t hd3ss3220_id_isr(int irq, void *dev_id)
+> +{
+> +	struct hd3ss3220 *hd3ss3220 = dev_id;
+> +	int ret;
+> +	int id;
+> +
+> +	if (IS_ERR_OR_NULL(hd3ss3220->vbus))
+> +		return IRQ_HANDLED;
+> +
+> +	id = hd3ss3220->id_gpiod ? gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
+> +
+> +	if (!id) {
+> +		ret = regulator_enable(hd3ss3220->vbus);
+> +		if (ret)
+> +			dev_err(hd3ss3220->dev, "enable vbus regulator failed\n");
+> +	} else {
+> +		regulator_disable(hd3ss3220->vbus);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+>  static int hd3ss3220_probe(struct i2c_client *client)
+>  {
+>  	struct typec_capability typec_cap = { };
+> @@ -354,6 +381,37 @@ static int hd3ss3220_probe(struct i2c_client *client)
+>  		hd3ss3220->role_sw = usb_role_switch_get(hd3ss3220->dev);
+>  	}
+>  
+> +	hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
+> +	if (IS_ERR(hd3ss3220->id_gpiod))
+> +		return PTR_ERR(hd3ss3220->id_gpiod);
+> +
+> +	if (hd3ss3220->id_gpiod) {
+> +		hd3ss3220->id_irq = gpiod_to_irq(hd3ss3220->id_gpiod);
+> +		if (hd3ss3220->id_irq < 0) {
+> +			dev_err(hd3ss3220->dev, "failed to get ID IRQ\n");
+> +			return hd3ss3220->id_irq;
+> +		}
+> +
+> +		ret = devm_request_threaded_irq(hd3ss3220->dev,
+> +						hd3ss3220->id_irq, NULL,
+> +						hd3ss3220_id_isr,
+> +						IRQF_TRIGGER_RISING |
+> +						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+> +						dev_name(hd3ss3220->dev), hd3ss3220);
+> +		if (ret < 0) {
+> +			dev_err(hd3ss3220->dev, "failed to get id irq\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	hd3ss3220->vbus = devm_regulator_get_optional(hd3ss3220->dev, "vbus");
+> +	if (PTR_ERR(hd3ss3220->vbus) == -ENODEV)
+> +		hd3ss3220->vbus = NULL;
+> +
+> +	if (IS_ERR(hd3ss3220->vbus))
+> +		return dev_err_probe(hd3ss3220->dev,
+> +				     PTR_ERR(hd3ss3220->vbus), "failed to get vbus\n");
+> +
+>  	if (IS_ERR(hd3ss3220->role_sw)) {
+>  		ret = PTR_ERR(hd3ss3220->role_sw);
+>  		goto err_put_fwnode;
+> -- 
+> 2.34.1
 
-changes v4:
-- Simplify  protocol translation logic
-- Set reasonable default when cmnd[0] >= 0xE0
-- Remove switch-case statement
-
-changes v3:
-- Wrap  commit message lines properly
-- Improve commit description
-- fix  checkpatch.pl script errors
-
-changes v2:
-- Update subject commit message
-- fix  checkpatch.pl warnings
-- match from: and sign-off: name
----
- drivers/usb/storage/transport.c | 21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-index 4d01f70f39ac..09012cafc536 100644
---- a/drivers/usb/storage/transport.c
-+++ b/drivers/usb/storage/transport.c
-@@ -719,17 +719,9 @@ void usb_stor_invoke_transport(struct scsi_cmnd *srb, struct us_data *us)
- 		scsi_eh_prep_cmnd(srb, &ses, NULL, 0, sense_size);
- 
- 		/* Protocol translation per scsi opcode group */
--		switch (us->subclass) {
--		case USB_SC_UFI:
--		case USB_SC_8020:
--		case USB_SC_8070:
--		case USB_SC_QIC:
--			srb->cmd_len = 12;
--			break;
--		/* Determine cmd_len based on scsi opcode group */
--		case USB_SC_RBC:
--		case USB_SC_SCSI:
--		case USB_SC_CYP_ATACB:
-+		if (us->subclass == USB_SC_RBC || us->subclass == USB_SC_SCSI ||
-+		    us->subclass == USB_SC_CYP_ATACB) {
-+			/* Determine cmd_len based on SCSI opcode group */
- 			if (srb->cmnd[0] <= 0x1F)
- 				srb->cmd_len = 6;
- 			else if (srb->cmnd[0] <= 0x7F)
-@@ -741,9 +733,10 @@ void usb_stor_invoke_transport(struct scsi_cmnd *srb, struct us_data *us)
- 			else if (srb->cmnd[0] <= 0xDF)
- 				srb->cmd_len = 16;
- 			else
--
--				break;
--					}
-+				srb->cmd_len = 6;
-+		} else {
-+			srb->cmd_len = 12;
-+		}
- 
- 		/* issue the auto-sense command */
- 		scsi_set_resid(srb, 0);
---
-2.51.0
+-- 
+heikki
 
