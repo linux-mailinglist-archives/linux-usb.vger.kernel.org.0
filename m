@@ -1,134 +1,104 @@
-Return-Path: <linux-usb+bounces-29039-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29040-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B734BC5EE6
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 18:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 326FDBC6163
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 18:55:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 162AB1890866
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 16:04:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D89BD19E4AD2
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 16:55:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C5C12BD031;
-	Wed,  8 Oct 2025 16:03:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 208D92EC560;
+	Wed,  8 Oct 2025 16:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CO7fbAWC"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="pfGJOKiA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95B317A2E0;
-	Wed,  8 Oct 2025 16:03:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11EB2BEC23;
+	Wed,  8 Oct 2025 16:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759939436; cv=none; b=cSfNsxKSdJVio8rlm6izm7zUuGc5SZiXjGrLEuy+q5geux+KEEpWIPD+QOIabvjMy5NX8WEUE2ho0wl1pqfLdxIJu/jIW4gVW7muUAHMqdk4PL3FMlzkO71YW2iesHpko7IeE2mlZlEqi/wxI2rOn2+W7uxsWauu9KQt6cl1Efk=
+	t=1759942507; cv=none; b=I8MLYfqRcSWQzdZ+EvBKroFOGC/jj1HXJqiWQKCax4Ah3UsSgcTzbHah/wPs+u+dEQesh2wiM3MFJFVwwQyg4XcenjPkaCakDc0gxBeWqel1yNhO665NdNITP4BTahVL1cm8neStRvuF+5PD0W9aF1bQ6HL7ULNfJPMobDfPl8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759939436; c=relaxed/simple;
-	bh=u7Mi3rwGEpVppaHAvNCXL8SnrR71hiTmmzElC/nSmpc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Az11gI7cZdty7CdGwS8V5P4q5DAzfUVhBVyYeUozsOSGaQR04FRePGXPsR4S+i7PtcHhfkAgkivZkxU5M9z17ZW9QmKRrOJ0PVsDG8ogVCF1wIHbEzmsFjZEXm/u1avHUB1a1hXNkKKXk8KKU++B0CPNNSowbhpug/MiUv+vsgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CO7fbAWC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46CFFC4CEE7;
-	Wed,  8 Oct 2025 16:03:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759939435;
-	bh=u7Mi3rwGEpVppaHAvNCXL8SnrR71hiTmmzElC/nSmpc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CO7fbAWC/2eoO/0AoHoh7QLgnryzymPTA/FtTsH0l7aJFtBoshmUTG8SNZoRqlw8g
-	 oeKJJTXRU2GUkxm+/UGgercNzde6RnQ2VFqqBjSuQHLFh6B1ULx9kMIE4bBXXxAg0H
-	 X0mt0RcF4c0NrV8d7lPj8WalGW3U2b7xWlYld7O8sOBexKekMs1aEw/XfgcB7eMses
-	 Cvfb8kjME/JFLtAo6nX0R0mtaZNmqGIHPwjhFdLqyb3R0PgJ0ha0xajEtCr0Sjlh6s
-	 FQXAdaqZGc9Q1EqxvinkIo207B/hBacyWKKVfikcJ/f6NfElCbosaFKshOsM5fysmL
-	 Om95tfltRqWcQ==
-Date: Wed, 8 Oct 2025 11:03:54 -0500
-From: Rob Herring <robh@kernel.org>
-To: Jameson Thies <jthies@google.com>
-Cc: akuchynski@chromium.org, abhishekpandit@chromium.org,
-	krzk+dt@kernel.org, bleung@chromium.org,
-	heikki.krogerus@linux.intel.com, ukaszb@chromium.org,
-	tzungbi@kernel.org, devicetree@vger.kernel.org,
-	chrome-platform@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: chrome: Add Cros EC UCSI driver
-Message-ID: <20251008160354.GA3764744-robh@kernel.org>
-References: <20251001193346.1724998-1-jthies@google.com>
- <20251001193346.1724998-2-jthies@google.com>
+	s=arc-20240116; t=1759942507; c=relaxed/simple;
+	bh=n4wyXxtwofLlyZouQQ3C6jrZMbSj9OltW5+4ANoXjHY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Uw0jsKN5FgtxZcYmAuqwPZsqcYYeK81/MXJB8QybZbWv7Uj8OpfAqIalqH3p28r/31RYzWEScq0yj9sqBqHNupB21xRZRsGqt8NVxPamA9rTSXXYl/aZbt7HaYmnumKUgMrYPsMbqrXewfzr7spLpaRnmAU9MQVJlhkAUgYfWFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=pfGJOKiA; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1759942496;
+	bh=n4wyXxtwofLlyZouQQ3C6jrZMbSj9OltW5+4ANoXjHY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=pfGJOKiABPkMGQNbnF8Pg5JfQggyNux0s4gj/ZDkjbFO/VIy7mc3uAjgJlXbm9MW+
+	 IbJGanPzef6mSQhsPkwcUr1Ba4WBY7dOgMX8VZW8+FSwIbdnMLL42HzsxO8lUoYpkR
+	 wM2pqUo9o9YC52rK9UF9/h3YbcBVowg76VwUDndgJDwOK5661jpsMax5saa27/Q7Ts
+	 0zW7wXkbOJ3d1ftRUuLId/DTOMfIR2a4ggNW9cfqRv9mzH3UyTCrQp+PgHDbkTHOQf
+	 E+eQvwL2kJFqfQvjrNEiiZXrBbJjpAiHylmUT7w0weW3PfGGGBuL+fD/RTiKohyv2i
+	 k4jPkJn0xhb/w==
+Received: from localhost (unknown [82.79.138.145])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: cristicc)
+	by bali.collaboradmins.com (Postfix) with UTF8SMTPSA id AB10217E04DA;
+	Wed,  8 Oct 2025 18:54:56 +0200 (CEST)
+From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Subject: [PATCH v2 0/2] USB/IP VHCI driver cleanup
+Date: Wed, 08 Oct 2025 19:54:25 +0300
+Message-Id: <20251008-vhci-hcd-cleanup-v2-0-b6acc4dd6e44@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251001193346.1724998-2-jthies@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEGX5mgC/32NQQ7CIBBFr9LM2jFAaRtdeQ/TBR1QJqmlASWah
+ ruLPYDL95L//gbJRXYJzs0G0WVOHJYK6tAAebPcHbKtDEqoTpyEwuyJ0ZNFmp1ZXiu2QhvbD1J
+ 2toM6W6O78XtPXsfKntMzxM/+kOXP/olliQKl1b3SA02q1RcK82ymEM2RwgPGUsoXMNwcsLQAA
+ AA=
+X-Change-ID: 20250902-vhci-hcd-cleanup-304ad67115d5
+To: Valentina Manea <valentina.manea.m@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: kernel@collabora.com, linux-usb@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+X-Mailer: b4 0.14.3
 
-On Wed, Oct 01, 2025 at 07:33:41PM +0000, Jameson Thies wrote:
-> Chrome OS devices with PDCs allow the host to read port status and
-> control port behavior with UCSI commands sent to the embedded controller
-> (EC). Add documentation for cros-ec-ucsi node which loads the Chrome OS
-> UCSI driver.
+These patches were initially part of the USB/IP VHCI suspend fix series
+[1] to address a bunch of coding style issues and make checkpatch happy
+for the entire driver.
 
-What's PDC? What's UCSI?
+As suggested by Greg, I'm sending this as a separate patch set now.
 
-> 
-> Signed-off-by: Jameson Thies <jthies@google.com>
-> ---
->  .../bindings/chrome/google,cros-ec-ucsi.yaml  | 71 +++++++++++++++++++
->  .../bindings/mfd/google,cros-ec.yaml          |  4 +-
->  2 files changed, 74 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/chrome/google,cros-ec-ucsi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/chrome/google,cros-ec-ucsi.yaml b/Documentation/devicetree/bindings/chrome/google,cros-ec-ucsi.yaml
-> new file mode 100644
-> index 000000000000..2121776e3ff0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/chrome/google,cros-ec-ucsi.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/chrome/google,cros-ec-ucsi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Google Chrome OS EC(Embedded Controller) UCSI driver.
-> +
-> +maintainers:
-> +  - Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> +  - Andrei Kuchynski <akuchynski@chromium.org>
-> +  - Benson Leung <bleung@chromium.org>
-> +  - Jameson Thies <jthies@google.com>
-> +  - Łukasz Bartosik <ukaszb@chromium.org>
-> +
-> +description:
-> +  Chrome OS devices with PDC-based USB-C ports expose a UCSI interface
-> +  from the Embedded Controller (EC) which allows the host to request
-> +  port state and control limited port behavior (DR/PR swap). This node
-> +  allows the host UCSI driver to send and receive UCSI commands to a
-> +  Chrome OS EC. The node for this device should be under a cros-ec node
-> +  like google,cros-ec-spi.
-> +
-> +properties:
-> +  compatible:
-> +    const: google,cros-ec-ucsi
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +patternProperties:
-> +  '^connector@[0-9a-f]+$':
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +    required:
-> +      - reg
+[1] https://lore.kernel.org/r/20250726-vhci-hcd-suspend-fix-v2-0-189266dfdfaa@collabora.com
 
-This is the exact same binding as google,cros-ec-typec.yaml. Why are you 
-duplicating the whole thing rather than just adding a new compatible 
-string?
+Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+---
+Changes in v2:
+- Dropped patches 1-15 and collected the Acked-by tags from Shuah for
+  the remaining two patches
+- Added back the now missing pr_err() -> dev_err() conversions that were
+  initially part of "[PATCH 15/17] usb: vhci-hcd: Do not split quoted
+  strings"
+- Rebased series onto next-20251008
+- Link to v1: https://lore.kernel.org/r/20250902-vhci-hcd-cleanup-v1-0-1d46247cb234@collabora.com
 
-Rob
+---
+Cristian Ciocaltea (2):
+      usb: vhci-hcd: Switch to dev_err_probe() in probe path
+      usb: vhci-hcd: Replace pr_*() with dev_*() logging
+
+ drivers/usb/usbip/vhci_hcd.c | 90 ++++++++++++++++++++++----------------------
+ 1 file changed, 46 insertions(+), 44 deletions(-)
+---
+base-commit: 7c3ba4249a3604477ea9c077e10089ba7ddcaa03
+change-id: 20250902-vhci-hcd-cleanup-304ad67115d5
+
 
