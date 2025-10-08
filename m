@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-29055-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29056-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B445BC6B0B
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 23:29:31 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70232BC6CB3
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 00:26:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4AF934EA17D
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 21:29:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5F3974E4AAF
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 22:26:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D57D2C0F62;
-	Wed,  8 Oct 2025 21:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59BF32C11E2;
+	Wed,  8 Oct 2025 22:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YuHHgYLO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gb8H+f4e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F55B217704
-	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 21:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2B02C15B8
+	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 22:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759958965; cv=none; b=D+sTA0cQTBSfg+WTPOGiIzZKII8In4zZRIruhsdluNr/FKJgCT0p3Myp9naep1BQsqYWqamsxMmuf3hGJ056yvJkZ+D7OZFD3f3czhswVn8OdFo8UtfMwm0bWZVlMbeEX2yX3bFO7kEwJFrXrK2NLtLOx5zvmgUfoWMpohlY3WE=
+	t=1759962370; cv=none; b=ne5KYHgHLLw0TZx5sMej7whuJdH+zrJUtXIXPOa5aJoT2kO5YrsBT1UstWMdCU8IgcARkbn3KzbvzOaPxegj+5lkTtCK0phxOQ33KFnd088iUCekRQAPNYMWfKmbaQLlOCQTTF8xLdD7fgNh+BgdB1zdV5M8UQiwM8M/eWOHV9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759958965; c=relaxed/simple;
-	bh=iGbUpMqiX9ui1CJT84Evg17hTmS1Ypmw1iPJWevxnQs=;
+	s=arc-20240116; t=1759962370; c=relaxed/simple;
+	bh=SSjbrzdgh/nOoql1zsGYj2WvrqyAF9J5MZIuUzoTBdE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=goEpPw/48qCEtvyu3Q2ghcL4EyPlgYP4yc7Y17CzhGdUqeTnmX2CjH+2JjY70rSFoPtqk3RKEQLUUgD439uV11R9Wqt8LeRXCIuifaCK7gZb2VMFbU3SoWdgVeA6M9nD6WNRgx7kZF33RfVYjVfseOwihJllIpH52Hq703hZI2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YuHHgYLO; arc=none smtp.client-ip=209.85.222.49
+	 To:Cc:Content-Type; b=OxKE8srAvfSVOk3iPMmne9ahwf3bsIMGiOGxAy1JLmO6Nd/ZepRp1bqnoUJ4tkOy+GS3b/yZHO6EFlYop7vnZdFmhWTR7T2TL2vDnSd8FzUe/ABdjYuHVVmr5uztcMOB/8yvOWeFlMCY9SgGiwpbMEKrdOzlfYr5PY6glipYjvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gb8H+f4e; arc=none smtp.client-ip=209.85.221.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-9231a251c01so87239241.1
-        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 14:29:24 -0700 (PDT)
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-554a7e98e19so207496e0c.3
+        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 15:26:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759958963; x=1760563763; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1759962368; x=1760567168; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KjAnB+Zzyfvp4Pp2ybIwv27YmlWXv103r2xKYoV6VSg=;
-        b=YuHHgYLO9ssBSZS2lzFsRmQSRel/qLQiBbQjkWt4zuPeAu9P4zcvzJBtDAVrg6PIZD
-         ZLHOBsp3elDDqLYV7AxZEpz+robErr99Vwb7clmdVDrSdGerh/v96SnQtMkOQ5C0zMnJ
-         /PPEYH6J67f0rfLi4aO038sxcNMmiqC4zR6jySJh3bECyGTiQBPjVGEO9NuXIadqap9w
-         XmpZOXhnHo81LJZpLF/Gulo7UPL3mlWpMJwJ/m4171iyd0rZCKQDPlIXie38saSeC2Kr
-         7OnSa8JMdhyh+OS91LGJfJdiFjt+xM2TwwfOhvuBvg5NMS57uGrWFQ7gQkrHPgixLMhr
-         gOcQ==
+        bh=SSjbrzdgh/nOoql1zsGYj2WvrqyAF9J5MZIuUzoTBdE=;
+        b=Gb8H+f4exqrWs++6IfZlbOSfT2VEpxnIaU7FTnK9jatfAw0lS+KWG3dvx9e3bHQ+On
+         KnvM73zhAiWZmWumemHZrHWydVPpYdZQ5nkWjyq2hN2NLtbcTz1iCaZIND9nm20ZZiJC
+         xhbjr0hOEu6jQVa8AsOcqgM9vdyKNR6qXXIfetR7ww6hPkhUEUX5AQY9pgsIFDCsnT3x
+         mbaIbZXqOoUva31yM3vLmMV6vyrjEwzFgjELmA/Q1dnO8VnBW21OefkTuYirBI2/kokv
+         dxQ3Z9sDfjlyWLdWOxUU+k9HGZ7QTyjHi9frOox53f7pRP4CzVyO5mMXoBxGc3e7DJz+
+         7huQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759958963; x=1760563763;
+        d=1e100.net; s=20230601; t=1759962368; x=1760567168;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KjAnB+Zzyfvp4Pp2ybIwv27YmlWXv103r2xKYoV6VSg=;
-        b=FFRM9sMD1BhH0cMKaotj/SjBWqyPles9O95wqjYpU2rl7Zmxo3OKgJ4Xr3/c4GEmSL
-         AI27pViJIQFXGwDs6oHIX3O29BDHhrgNFfwaIeHo8CN1LgzSSOcELBcOIuyoCTtEwTP0
-         95Kyeh3uFZKpT857oJI+bk1F8QvbULrDV5iuIQ6Q4cOP1Kx3MBiZZ4wxf5vpRlYlSNPH
-         Xw8gFRRVrNCdw5l3cXBJbopK92TkDHeHE8u2vJK8X7b8I7G7J+NXoZsHshqWEmOzx7jO
-         sJungjCseAmQko3Dgn3Zvq5fQHS1FyZ0kugpYmrwT/W5XryYaNR+0YOLVhpRJ5sAVsC+
-         +/KA==
-X-Gm-Message-State: AOJu0YzeAtt+1kx8vO3ziTTEvXYKdhFgcFkmhQYouw7ecabqwRY3mtMH
-	k4aUnNTZXhQKPh0+ygbOw9ciLEQehz51UD1upk0NpJFph7Y8rTixP9DYKbvQNt7vvm5l5zasdNe
-	AVtZfVRhEIGjMdHwMembA00GV/5Dm4xl9gRHZYyykag==
-X-Gm-Gg: ASbGncue0lS758pojHU9xSwG2YeB7wLQpC1ozFZq0M4d2+c2vPjO6ikaVYkOji9UK9R
-	H/7Ws7RTt5wdMHbDXuwlNXBq2nqr2JqMdvmXhYL5FnrYcHPqOHAQ8lR802HM9wJnc2536ZKhMWZ
-	H84zxXJpKBZn3b6QYKOwCrGfifk0nE824UBMr/91GngQaJuFvI82QOHW6mQfKyZvJQbwCZHNk3V
-	n3OX2CCl8uUoTm7xpcKwZcjqBd5fR8=
-X-Google-Smtp-Source: AGHT+IG+pulNGykYUZB003oWExF+n2LFA14Bx2e0GXWW+ufKuzx4sIaQlm0rWhv3xzSpTjaJhHi37DacnR9TEvDf61c=
-X-Received: by 2002:a05:6102:510c:b0:5a4:138d:b13c with SMTP id
- ada2fe7eead31-5d5e237aff6mr2256654137.29.1759958963084; Wed, 08 Oct 2025
- 14:29:23 -0700 (PDT)
+        bh=SSjbrzdgh/nOoql1zsGYj2WvrqyAF9J5MZIuUzoTBdE=;
+        b=V/9BeL7TrZ191l+c0+WMyBC6d5dameIlHf5VMPIsAbduOmHH6AKC93mSx6bkjwzQpI
+         +1gTxBSMqLm0e25ttY82mDj/gIEuubth5uwckPYu6z/tGh6DofsdChglhVozraiq9wD6
+         viJ0DrcOrxb7KvQPPsPIvZRtHWlE/3dOnHWP48Ug6lUJIzD0Zv6xTK8KDEDZj4MyQU2H
+         DVxRa3pOe3+sCrVdF/jPZk1SjFWT4JsmL8fNdyBAPr8BBWFk6pIWbTZ3hRofxWBa4IHI
+         BxFrQDbND+XUiQCxn+8y2x3HkP+cB4ZfLfPtFJte65Y2lMmXNh/AyxwlRGQcIcarnqOW
+         yNFA==
+X-Gm-Message-State: AOJu0YxJxuqQykCqdX6jBja5vnm7hA5L9S8CJIkhJVAFGzq5PJ9o+eC3
+	nk7tOGdqFW/YkXjJK1o02C2BnOPfsBJkAEhSiFYjW6MGacOl8qB+4T5asIqZiN5B8EzNzbQO8st
+	xNcv+lTkPPsmv5hAq6xQ7x/8ACA2iR9I=
+X-Gm-Gg: ASbGnctkE8lYlTgYLnQ2H/9SjnrqfgPgiXWxAsNmPdCU3ggtYFhCFkMcA+GPFCTSqcf
+	ZRGcpmclBu0pG7gZkajaCpnwXhl7eCws9dCY9PkbTrOSE6Q9/n4cRmb7YL0fNdaqEMraMCIOTId
+	2PNrk5ksMAF7b0CpKw4beuTEnJkNG3DJ4VJwgH8vVNWaDDlJtItrTMBpPhC5YGtJbIuaJRC1Hp6
+	dCc9grK6tf7AS1GaiNZ/JHjrehvlfw=
+X-Google-Smtp-Source: AGHT+IFc2bHUCZOVk/jSHRVhDMxkU1QLA3u78KP0usSruM30hY94G/DjGOEPi/85KUy5GXymTHlhotJcUFMrCdPFeQg=
+X-Received: by 2002:a05:6122:308d:b0:54a:93be:46fc with SMTP id
+ 71dfb90a1353d-554b890bc3emr2323268e0c.0.1759962367723; Wed, 08 Oct 2025
+ 15:26:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,12 +78,12 @@ References: <CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com>
  <CABpa4MCg7yixe7O8Pp+YwvpxeC=1JPhMhAap12RjtV6pcxFYgQ@mail.gmail.com>
  <20251008082055.5646dadc.michal.pecio@gmail.com> <CABpa4MCm8hQXvtSYqUA+Dh3rCLVM5rTC1p+FsgmFemv+Vyz=RA@mail.gmail.com>
  <20251008130532.49922d58.michal.pecio@gmail.com> <CABpa4MAsvK68CyQ7bVdie1j2m2O2YAEuFJHq8D-65uFT3FzKzQ@mail.gmail.com>
- <20251008223406.13f16f19.michal.pecio@gmail.com>
-In-Reply-To: <20251008223406.13f16f19.michal.pecio@gmail.com>
+ <20251008223406.13f16f19.michal.pecio@gmail.com> <CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com>
+In-Reply-To: <CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com>
 From: Arisa Snowbell <arisa.snowbell@gmail.com>
-Date: Wed, 8 Oct 2025 23:29:12 +0200
-X-Gm-Features: AS18NWBwuMRLNTll_iFqjIE2B8neeAzZfwmvOISoejS8xJ94lLIRW25Z1lS-dY4
-Message-ID: <CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com>
+Date: Thu, 9 Oct 2025 00:25:55 +0200
+X-Gm-Features: AS18NWAufrPo0--_wjTTgEstRbde3_tDtM2AG8z7OpPilyHw637Tecy3L1mXPWI
+Message-ID: <CABpa4MBDvgJcgJf3_E7k1dBXs7v1tW-79dmc_sQDVM1bES5YDQ@mail.gmail.com>
 Subject: Re: [REGRESSION] USB-A devices not working on boot after recent USB merge
 To: Michal Pecio <michal.pecio@gmail.com>
 Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev, 
@@ -91,84 +91,41 @@ Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Hi,
-
-I looked into the dmesg and found this:
+This is what I get when I use good kernel:
 
 kernel: xhci_hcd 0000:7a:00.0: xHCI Host Controller
 kernel: xhci_hcd 0000:7a:00.0: new USB bus registered, assigned bus number 9
 kernel: xhci_hcd 0000:7a:00.0: USB3 root hub has no ports
 kernel: xhci_hcd 0000:7a:00.0: hcc params 0x0110ffc5 hci version 0x120
 quirks 0x0000000200000010
-kernel: xhci_hcd 0000:7a:00.0: Root hub is not suspended
-kernel: xhci_hcd 0000:7a:00.0: Root hub is not suspended
-kernel: usbcore: registered new interface driver usbserial_generic
-kernel: usbserial: USB Serial support registered for generic
-kernel: i8042: PNP: No PS/2 controller found.
+kernel: xhci_hcd 0000:7a:00.0: xHCI Host Controller
+kernel: xhci_hcd 0000:7a:00.0: new USB bus registered, assigned bus number 10
+kernel: xhci_hcd 0000:7a:00.0: Host supports USB 3.0 SuperSpeed
+kernel: usb usb9: New USB device found, idVendor=1d6b, idProduct=0002,
+bcdDevice= 6.17
+kernel: usb usb9: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+kernel: usb usb9: Product: xHCI Host Controller
+kernel: usb usb9: Manufacturer: Linux
+6.17.0-1-mainline-12298-gf5bd2142c274 xhci-hcd
+kernel: usb usb9: SerialNumber: 0000:7a:00.0
+kernel: hub 9-0:1.0: USB hub found
+kernel: hub 9-0:1.0: 1 port detected
+kernel: usb usb10: We don't know the algorithms for LPM for this host,
+disabling LPM.
+kernel: usb usb10: New USB device found, idVendor=1d6b,
+idProduct=0003, bcdDevice= 6.17
+kernel: usb usb10: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+kernel: usb usb10: Product: xHCI Host Controller
+kernel: usb usb10: Manufacturer: Linux
+6.17.0-1-mainline-12298-gf5bd2142c274 xhci-hcd
+kernel: usb usb10: SerialNumber: 0000:7a:00.0
+kernel: hub 10-0:1.0: USB hub found
+kernel: hub 10-0:1.0: config failed, hub doesn't have any ports! (err -19)
 
-went back into the bad kernel and enabled the dynamic debug, unplugged
-and plugged the mice and ran the unbind and bind on the 7a controller.
+where the 2.0 USB's work, mice is powered on, with the bad kernel the
+mice doesn't even power the LED's on.
+In the bad kernel its missing the New USB and all.
 
-got this log:
-
-[  203.432169] xhci_hcd 0000:7a:00.0: Root hub is not suspended
-[  203.432395] xhci_hcd 0000:7a:00.0: remove, state 1
-[  203.432404] xhci_hcd 0000:7a:00.0: // Halt the HC
-[  203.432410] xhci_hcd 0000:7a:00.0: // Reset the HC
-[  203.433638] xhci_hcd 0000:7a:00.0: Wait for controller to be ready
-for doorbell rings
-[  203.433653] xhci_hcd 0000:7a:00.0: // Disabling event ring interrupts
-[  203.433660] xhci_hcd 0000:7a:00.0: cleaning up memory
-[  203.433669] xhci_hcd 0000:7a:00.0: Freed interrupters
-[  203.433670] xhci_hcd 0000:7a:00.0: Freed command ring
-[  203.433674] xhci_hcd 0000:7a:00.0: Freed segment pool
-[  203.433675] xhci_hcd 0000:7a:00.0: Freed device context pool
-[  203.433675] xhci_hcd 0000:7a:00.0: Freed small stream array pool
-[  203.433676] xhci_hcd 0000:7a:00.0: Freed xhci port bw array pool
-[  203.433676] xhci_hcd 0000:7a:00.0: Freed medium stream array pool
-[  203.433706] xhci_hcd 0000:7a:00.0: xhci_stop completed - status = 11
-[  203.433831] xhci_hcd 0000:7a:00.0: USB bus 9 deregistered
-[  203.433921] xhci_hcd 0000:7a:00.0: xHCI Host Controller
-[  203.433924] xhci_hcd 0000:7a:00.0: new USB bus registered, assigned
-bus number 9
-[  203.433933] xhci_hcd 0000:7a:00.0: // Halt the HC
-[  203.433938] xhci_hcd 0000:7a:00.0: Resetting HCD
-[  203.433939] xhci_hcd 0000:7a:00.0: // Reset the HC
-[  203.435167] xhci_hcd 0000:7a:00.0: Wait for controller to be ready
-for doorbell rings
-[  203.435169] xhci_hcd 0000:7a:00.0: Reset complete
-[  203.435170] xhci_hcd 0000:7a:00.0: Enabling 64-bit DMA addresses.
-[  203.435170] xhci_hcd 0000:7a:00.0: Calling HCD init
-[  203.435171] xhci_hcd 0000:7a:00.0: Starting xhci_init
-[  203.435172] xhci_hcd 0000:7a:00.0: HCD page size set to 4K
-[  203.435177] xhci_hcd 0000:7a:00.0: Device context base array
-address = 0x0x00000000ffff7000 (DMA), 000000009a3b17b6 (virt)
-[  203.435181] xhci_hcd 0000:7a:00.0: Allocated command ring at 000000005fb9657f
-[  203.435181] xhci_hcd 0000:7a:00.0: First segment DMA is 0x0x00000000ffff6000
-[  203.435182] xhci_hcd 0000:7a:00.0: Allocating primary event ring
-[  203.435186] xhci_hcd 0000:7a:00.0: Allocating 2 scratchpad buffers
-[  203.435196] xhci_hcd 0000:7a:00.0: Ext Cap 00000000715dddb0, port
-offset = 1, count = 1, revision = 0x2
-[  203.435197] xhci_hcd 0000:7a:00.0: xHCI 1.0: support USB2 hardware lpm
-[  203.435198] xhci_hcd 0000:7a:00.0: Found 1 USB 2.0 ports and 0 USB 3.0 ports.
-[  203.435198] xhci_hcd 0000:7a:00.0: USB3 root hub has no ports
-[  203.435199] xhci_hcd 0000:7a:00.0: xHC can handle at most 64 device slots
-[  203.435200] xhci_hcd 0000:7a:00.0: Setting Max device slots reg = 0x40
-[  203.435204] xhci_hcd 0000:7a:00.0: Setting command ring address to 0xffff6001
-[  203.435208] xhci_hcd 0000:7a:00.0: Doorbell array is located at
-offset 0x2000 from cap regs base addr
-[  203.435214] xhci_hcd 0000:7a:00.0: // Write event ring dequeue
-pointer, preserving EHB bit
-[  203.435215] xhci_hcd 0000:7a:00.0: Finished xhci_init
-[  203.435215] xhci_hcd 0000:7a:00.0: Called HCD init
-[  203.435216] xhci_hcd 0000:7a:00.0: hcc params 0x0110ffc5 hci
-version 0x120 quirks 0x0000000200000010
-[  203.435375] xhci_hcd 0000:7a:00.0: xhci_run
-[  203.435378] xhci_hcd 0000:7a:00.0: ERST deq = 64'hffff5000
-[  203.435380] xhci_hcd 0000:7a:00.0: Finished xhci_run for main hcd
-[  203.436837] xhci_hcd 0000:7a:00.0: Root hub is not suspended
-
-
-Thanks,
+Regards,
 Arisa
 
