@@ -1,53 +1,73 @@
-Return-Path: <linux-usb+bounces-29011-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29012-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C17B1BC43CE
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 12:04:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BB27BC4535
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 12:32:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81D9340196A
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 10:04:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 495BE19E10D1
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 10:33:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86FDD22D7B0;
-	Wed,  8 Oct 2025 10:04:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3122F49F7;
+	Wed,  8 Oct 2025 10:32:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1GbaXc7h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gOKCoRhJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E101F936
-	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 10:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27471D7E41;
+	Wed,  8 Oct 2025 10:32:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759917854; cv=none; b=Yu/+XIObuKzvgGS742PFuANz+jZh35Ax06iRzDf2/rIrm+zUT9BaVCLA69hc2PLwEH8BhnPv5eqm4s7RDKQbncJrRq/zFk5uvEYydLfb7xODOJ3sB2pCHBwxc3/f1BveJ1Bf5vC2pjVjWjoVe5LxVLEhcKl+mCklcoNGpdDHRVM=
+	t=1759919553; cv=none; b=WdHLxDEmp1cs9I/3o2+cBNRpJlH7+PiG/g9UeshnyI1APtHPRk6zAvyvI1YADkjem7jqNTvNNl+AuL9fESFf/zcZx+uavvKwqJvXAPIJvlEDAvnIaMGD5Uit9Qh2oT7sctbn0WtrFkzFbm/aJl666Le04eq7Y49XK838SzHIiVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759917854; c=relaxed/simple;
-	bh=Lr68CCaMmUVa629HZ8NDHjmp50savQ/Okgs3FxE+UaU=;
+	s=arc-20240116; t=1759919553; c=relaxed/simple;
+	bh=mpJCJRmqq7qLlxk4UiGEW5X5iwP6YOqYIuZ48aIO4q8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J37AjT2ZB86nPLRcw+Zj1slSVv5o+REs7w1HjvNMs+MThnS5l2HHNqxhnrlAOlxrEKuWEHwhlTUofOKMBUV1h9fRtkmskmPhDnhn5s4kYAi1lA09LP3k2wPw26mlNuEhXjx+ejehcxW7ptGm4rqrhyNrLjqfNDbV/ruhFkVbcjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1GbaXc7h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7CC7C4CEF4;
-	Wed,  8 Oct 2025 10:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1759917854;
-	bh=Lr68CCaMmUVa629HZ8NDHjmp50savQ/Okgs3FxE+UaU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1GbaXc7hM5HifHDihdutYJQl79IVPp2A+S29z6WAW3uirpwgTIThEV7d1M7SnBdF0
-	 oEggNKTXEQYzxp6r2Rr6kiTC3zhSsiUCZu0stqmtTY4BmfcY+zf4C7APh/RPZezvau
-	 DHMDlZXSa/dvlb029uEiVU/cIyfOWbIUqBGG/5q0=
-Date: Wed, 8 Oct 2025 12:04:11 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: ShiHao <i.shihao.999@gmail.com>
-Cc: stern@rowland.harvard.edu, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5] usb-storage: Simplify protocol translation
-Message-ID: <2025100845-engraver-perch-dabb@gregkh>
-References: <857a1b63-83d9-402b-a9cd-8aca0616c517@rowland.harvard.edu>
- <20251008070420.8302-1-i.shihao.999@gmail.com>
- <2025100836-uncombed-blaming-b77a@gregkh>
- <aOYsQ8EGBUOebDDi@fedora>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OCCVWJWqcV3LSCwoyzeeSICgWnpHxQYkEBCF+JITi7698Pd4AIStyBgQqWOHLDoKd5ODjL+MGhwO+/2snVolRGimE7n+nspjxZSEOcnlhLpCUComLkyLnPDZ42vbjQjlaCsSssDD0PhCx3sKl97AK65d4WnBpaT9/U8/B1OAW08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gOKCoRhJ; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759919550; x=1791455550;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mpJCJRmqq7qLlxk4UiGEW5X5iwP6YOqYIuZ48aIO4q8=;
+  b=gOKCoRhJHGQW735mW+blQjla0ynUKUQgVo2KOpQm34xecoMaGVeaYFFH
+   VGpNK2pHveyy3lwDZTgiu+isH7NF5XRHveMeCoOJJ6zbloNk5iudVZg9q
+   9M1yS/v5mvBGZkwCxrnsfTX4n9HgW2IA0/BXBZgbuHoumptm0855M2x9M
+   DjxRr7dr5atGojgXMyNxbf8Xvlq6HH+Cd7wSUBT+QCB7X+sfjtweg6cB9
+   0GCFrt/HshujV1PkVHIhgB3DBYzZ2Oz4NpZF/17uwwlmuachn1ATjKcrm
+   /wZjO0tTGtzZ8f3kg8iMDJW1NCfuVfr12HJuMkQW+TBKV0Y2eNGJCYsuG
+   w==;
+X-CSE-ConnectionGUID: Wntt9tKdT8CtnLUp0v43Ug==
+X-CSE-MsgGUID: GvalrHyLR3mVX2mVQrSLrQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11575"; a="79544713"
+X-IronPort-AV: E=Sophos;i="6.18,323,1751266800"; 
+   d="scan'208";a="79544713"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2025 03:32:30 -0700
+X-CSE-ConnectionGUID: Cm7dSnEPQ96+ZUiAYYydhA==
+X-CSE-MsgGUID: bGjmKLv0QpycyeA3pBOf1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,323,1751266800"; 
+   d="scan'208";a="179652095"
+Received: from iherna2-mobl4.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.169])
+  by orviesa010.jf.intel.com with SMTP; 08 Oct 2025 03:32:28 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 08 Oct 2025 13:32:26 +0300
+Date: Wed, 8 Oct 2025 13:32:26 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: RD Babiera <rdbabiera@google.com>
+Cc: gregkh@linuxfoundation.org, badhri@google.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] usb: typec: class: add typec_get_data_role symbol
+Message-ID: <aOY9uk3waQH8wJKr@kuha.fi.intel.com>
+References: <20250923181606.1583584-4-rdbabiera@google.com>
+ <20250923181606.1583584-5-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,90 +76,90 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aOYsQ8EGBUOebDDi@fedora>
+In-Reply-To: <20250923181606.1583584-5-rdbabiera@google.com>
 
-On Wed, Oct 08, 2025 at 02:48:12PM +0530, ShiHao wrote:
-> On Wed, Oct 08, 2025 at 09:31:59AM +0200, Greg KH wrote:
-> > On Wed, Oct 08, 2025 at 12:34:20PM +0530, Shi Hao wrote:
-> > > Simplify protocol translation for usb subclasses.
-> > > 
-> > > As suggested by Alan Stern  to remove the switch case labels  with
-> > > 'default'  or keep the  previous  if statements  instead of the switch
-> > > cases and advised  reasonable value when cmnd[0] >= 0xe0 .
-> > > 
-> > > keep  those usb subclasses to default and simplify logic removing
-> > > switch cases and set 6 as a reasonable value when cmnd[0] >= 0xe0
-> > > which fallbacks  to value 6 which is old cmd_len for those subclasses.
-> > > 
-> > > Signed-off-by: Shi Hao <i.shihao.999@gmail.com>
-> > > 
-> > > ---
-> > > 
-> > > changes v5:
-> > > - Reformulate as  v5  of original patch series
-> > > - No code changes ,clarified versioning history
-> > > 
-> > > changes v4:
-> > > - Simplify  protocol translation logic
-> > > - Set reasonable default when cmnd[0] >= 0xE0
-> > > - Remove switch-case statement
-> > > 
-> > > changes v3:
-> > > - Wrap  commit message lines properly
-> > > - Improve commit description
-> > > - fix  checkpatch.pl script errors
-> > > 
-> > > changes v2:
-> > > - Update subject commit message
-> > > - fix  checkpatch.pl warnings
-> > > - match from: and sign-off: name
-> > > ---
-> > >  drivers/usb/storage/transport.c | 21 +++++++--------------
-> > >  1 file changed, 7 insertions(+), 14 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-> > > index 4d01f70f39ac..14cc608052d9 100644
-> > > --- a/drivers/usb/storage/transport.c
-> > > +++ b/drivers/usb/storage/transport.c
-> > > @@ -719,17 +719,9 @@ void usb_stor_invoke_transport(struct scsi_cmnd *srb, struct us_data *us)
-> > >  		scsi_eh_prep_cmnd(srb, &ses, NULL, 0, sense_size);
-> > >  
-> > >  		/* Protocol translation per scsi opcode group */
-> > > -		switch (us->subclass) {
-> > > -		case USB_SC_UFI:
-> > > -		case USB_SC_8020:
-> > > -		case USB_SC_8070:
-> > > -		case USB_SC_QIC:
-> > > -			srb->cmd_len = 12;
-> > > -			break;
-> > > -		/* Determine cmd_len based on scsi opcode group */
-> > > -		case USB_SC_RBC:
-> > > -		case USB_SC_SCSI:
-> > > -		case USB_SC_CYP_ATACB:
-> > > +		if (us->subclass == USB_SC_RBC || us->subclass == USB_SC_SCSI ||
-> > > +				us->subclass == USB_SC_CYP_ATACB) {
-> > > +		/* Determine cmd_len based on SCSI opcode group */
-> > 
-> > Always remember to run scripts/checkpatch.pl before sending changes out
-> > to others :(
-> > 
-> > thanks,
-> > 
-> > greg k-h
+On Tue, Sep 23, 2025 at 06:16:07PM +0000, RD Babiera wrote:
+> Alt Mode drivers are responsible for sending Enter Mode through the TCPM,
+> but only a DFP is allowed to send Enter Mode. typec_get_data_role gets
+> the port's data role, which can then be used in altmode drivers via
+> typec_altmode_get_data_role to know if Enter Mode should be sent.
 > 
+> Signed-off-by: RD Babiera <rdbabiera@google.com>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> Changes from v1:
+> * changed typec_altmode_get_data_role documentation format
+> ---
+>  drivers/usb/typec/class.c         | 13 +++++++++++++
+>  include/linux/usb/typec.h         |  1 +
+>  include/linux/usb/typec_altmode.h | 13 +++++++++++++
+>  3 files changed, 27 insertions(+)
 > 
-> Hi greg ,
-> 
-> Thanks for the reminder. I ran scripts/checkpatch.pl --strict on
-> drivers/usb/storage/transport.c and all checkpatch.pl has been
-> resolved .If i need to make another patch for this new change
-> please let me know .Once again thanks Alan stern and greg k-h
-> for reviewing and giving your precious time .
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 67a533e35150..9b2647cb199b 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -2120,6 +2120,19 @@ void typec_set_data_role(struct typec_port *port, enum typec_data_role role)
+>  }
+>  EXPORT_SYMBOL_GPL(typec_set_data_role);
+>  
+> +/**
+> + * typec_get_data_role - Get port data role
+> + * @port: The USB Type-C Port to query
+> + *
+> + * This routine is used by the altmode drivers to determine if the port is the
+> + * DFP before issuing Enter Mode
+> + */
+> +enum typec_data_role typec_get_data_role(struct typec_port *port)
+> +{
+> +	return port->data_role;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_get_data_role);
+> +
+>  /**
+>   * typec_set_pwr_role - Report power role change
+>   * @port: The USB Type-C Port where the role was changed
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 252af3f77039..309251572e2e 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -337,6 +337,7 @@ struct typec_plug *typec_register_plug(struct typec_cable *cable,
+>  void typec_unregister_plug(struct typec_plug *plug);
+>  
+>  void typec_set_data_role(struct typec_port *port, enum typec_data_role role);
+> +enum typec_data_role typec_get_data_role(struct typec_port *port);
+>  void typec_set_pwr_role(struct typec_port *port, enum typec_role role);
+>  void typec_set_vconn_role(struct typec_port *port, enum typec_role role);
+>  void typec_set_pwr_opmode(struct typec_port *port, enum typec_pwr_opmode mode);
+> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+> index b3c0866ea70f..f7db3bd4c90e 100644
+> --- a/include/linux/usb/typec_altmode.h
+> +++ b/include/linux/usb/typec_altmode.h
+> @@ -172,6 +172,19 @@ typec_altmode_get_svdm_version(struct typec_altmode *altmode)
+>  	return typec_get_negotiated_svdm_version(typec_altmode2port(altmode));
+>  }
+>  
+> +/**
+> + * typec_altmode_get_data_role - Get port data role
+> + * @altmode: Handle to the alternate mode
+> + *
+> + * Alt Mode drivers should only issue Enter Mode through the port if they are
+> + * the DFP.
+> + */
+> +static inline enum typec_data_role
+> +typec_altmode_get_data_role(struct typec_altmode *altmode)
+> +{
+> +	return typec_get_data_role(typec_altmode2port(altmode));
+> +}
+> +
+>  /**
+>   * struct typec_altmode_driver - USB Type-C alternate mode device driver
+>   * @id_table: Null terminated array of SVIDs
+> -- 
+> 2.51.0.534.gc79095c0ca-goog
 
-The comment is indented to the wrong level here in your change.  So
-as-is, I can not take this patch, sorry.
-
-thanks,
-
-greg k-h
+-- 
+heikki
 
