@@ -1,144 +1,174 @@
-Return-Path: <linux-usb+bounces-29054-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29055-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34C1EBC6AD8
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 23:24:11 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B445BC6B0B
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 23:29:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1E393AB3FE
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 21:24:09 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4AF934EA17D
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 21:29:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3F62C0276;
-	Wed,  8 Oct 2025 21:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D57D2C0F62;
+	Wed,  8 Oct 2025 21:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KXkJpkBh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YuHHgYLO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348382BE7D6
-	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 21:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F55B217704
+	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 21:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759958645; cv=none; b=mog38lk53MG/Ph2o5UFUXS8b7I5M1+mP/+Y8n6rObGssxZZrLAUNb5pke5D960te4kgmBubvgOAN/+wPyq0KH4UgOvY6Yc9xGCM9yCjAQfDOM7RMHgJ4JNJ9poP3PZt8oVW4jwDKQjYP2iBy+Hz+aMG3akLFLuV8jtZ1hkInPvo=
+	t=1759958965; cv=none; b=D+sTA0cQTBSfg+WTPOGiIzZKII8In4zZRIruhsdluNr/FKJgCT0p3Myp9naep1BQsqYWqamsxMmuf3hGJ056yvJkZ+D7OZFD3f3czhswVn8OdFo8UtfMwm0bWZVlMbeEX2yX3bFO7kEwJFrXrK2NLtLOx5zvmgUfoWMpohlY3WE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759958645; c=relaxed/simple;
-	bh=HEFZfy/bOiUPVmOEzICFEBHZzqvYM+jSBmzbPiW2n0U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ud51RfE31NmHXOL+oQ4D1Zz1oZwVptN122ehSeZY5nwyT8Ig41Wn5AuJKkCn/YXeVrjct8O02Qx1UJmBUjYJ/uvLnEe6HjCXlL2BWj+bqg6+l2zf/lXcwR+d/q3bb4UhbuKVE9EZiNgB6nszL08oJ+14PMtEtLmqLctOUB02Lsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KXkJpkBh; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b3d50882cc2so47604666b.2
-        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 14:24:02 -0700 (PDT)
+	s=arc-20240116; t=1759958965; c=relaxed/simple;
+	bh=iGbUpMqiX9ui1CJT84Evg17hTmS1Ypmw1iPJWevxnQs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=goEpPw/48qCEtvyu3Q2ghcL4EyPlgYP4yc7Y17CzhGdUqeTnmX2CjH+2JjY70rSFoPtqk3RKEQLUUgD439uV11R9Wqt8LeRXCIuifaCK7gZb2VMFbU3SoWdgVeA6M9nD6WNRgx7kZF33RfVYjVfseOwihJllIpH52Hq703hZI2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YuHHgYLO; arc=none smtp.client-ip=209.85.222.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-9231a251c01so87239241.1
+        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 14:29:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1759958641; x=1760563441; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/9YY8RVzKysd/2FBRUq2EA9d+6aVFuf0Slin7qbDg94=;
-        b=KXkJpkBhUEUrOPzgoVtou9nJvlyGRrs9AIY2TnrnnwtsDmxNcePIfVtR1k4AJsgZ/A
-         JAouZfnxn1oLuCDqxB8a5ocLjTe6dOOq22LM2oGnL8EVZgLvS/LQNlWNgAd/atOys89m
-         nZr8pyRPIj0vDmLkq18Zu03S7s9BGiYH+23OYGRWr/cTzJpPrtpFHXXdeytiqydm/26u
-         XkPqfBmiXdEcMokX7QWMlO3ZNsDv9eeSEEKiT8aDzBYEBsauVeyVrFC3C3Jzb4EypzxX
-         kTBxHIEFDwhLOc39vBeZrmTTBzho6wFCewbEfRTlW4XUvWX3+fd+0QV9On6hN/Gd0CgB
-         Algw==
+        d=gmail.com; s=20230601; t=1759958963; x=1760563763; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KjAnB+Zzyfvp4Pp2ybIwv27YmlWXv103r2xKYoV6VSg=;
+        b=YuHHgYLO9ssBSZS2lzFsRmQSRel/qLQiBbQjkWt4zuPeAu9P4zcvzJBtDAVrg6PIZD
+         ZLHOBsp3elDDqLYV7AxZEpz+robErr99Vwb7clmdVDrSdGerh/v96SnQtMkOQ5C0zMnJ
+         /PPEYH6J67f0rfLi4aO038sxcNMmiqC4zR6jySJh3bECyGTiQBPjVGEO9NuXIadqap9w
+         XmpZOXhnHo81LJZpLF/Gulo7UPL3mlWpMJwJ/m4171iyd0rZCKQDPlIXie38saSeC2Kr
+         7OnSa8JMdhyh+OS91LGJfJdiFjt+xM2TwwfOhvuBvg5NMS57uGrWFQ7gQkrHPgixLMhr
+         gOcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759958641; x=1760563441;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/9YY8RVzKysd/2FBRUq2EA9d+6aVFuf0Slin7qbDg94=;
-        b=CGx0P03yIqvBXZn62U4sUI8mQ2tW4Rd5S78EKlmeJOUMU28J8jajK4K7N34i4mtMUP
-         LBypkDy3xHPF/mSZAfo+swkP4R7vUvgJ1nq+h6lhxCAh9o/YypDzDRPkkmuCxnQtqc+S
-         wMUgI+2Ofzy5Cu83P8PXGfnF7XBf7VnfQefSE8EPGvXtJNEFkIt+OVlcNqpO7GEkJIui
-         gKWnNPU0Dgk0AW7CiRqGey1XcTVqQAUkw239VKPUTrpj/N7w/cs3xSd6w8z0P+FmxUqx
-         o3OndwVp2Ss7xCTlLdQwYZCmETHJLJoCj35nlnsbbCBAqUQDudt7nT8C+uAD4+WpqZjN
-         OVdg==
-X-Gm-Message-State: AOJu0Yw8R2ECudu6jw64HR8xw7yODUsabzqKbymPAF42ZSWHRW0uZbJN
-	VNHVCEAe6KaxvXYlGsyTA73Q7RWfNLzGRwcHiIZDOsix5sFbLaAlmk/UGkMe5CPypH0=
-X-Gm-Gg: ASbGnctm1Jc8k1RFfd3GhwBd0NBMe0dl7g3hm0fZ+l3a+05yOj+n8edt62cr1790jWg
-	4S2eyiyEs5X4roTRxLp+fKIczflwa0yWYDj0uIFZxtNFtZAG8m2hmlKf3DZ5mrLBm2C8ttGZF/+
-	RrPyO05m9AETykEtlhxrJSyIvzqT9pMEAFLpZommZsPhD+XjcTaAqdAwVFIPldsvPmiPliOkqib
-	dsWb/orf0RCpW0DEg1rgnZ/cuF3YyGibE+2laZI24T9TPzXzGL5+ODFTaRLDj0IjRYCGz21nVyJ
-	EATTKrvcpy7MmxtR2xR48j/Fdn+aP1Wp5bJaL9lE8cvNjCF7F2PZK/QQqBKUUy0o4hbKUrAOgPA
-	0TSmJuSXRToKVCOCK9Dii2JZjfIZbZwrVie1lUjj3khdIiSXfYndYqIw7J0s8kYVIp32W/OVW0U
-	KCFh8GHGYaNfmTN5+DKixP8jAM
-X-Google-Smtp-Source: AGHT+IEodokj7MVKCM1EevdonpV47bRYAPYiGng+Bgp+oHLQSF8yGoyDw+eU3u/c5A8f7XoLgE2gUg==
-X-Received: by 2002:a17:907:6d06:b0:b3d:98fa:b3fa with SMTP id a640c23a62f3a-b50ac5d090dmr530996966b.50.1759958641391;
-        Wed, 08 Oct 2025 14:24:01 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13f0:5001:bea8:8e43:9eb1:6992? ([2001:a61:13f0:5001:bea8:8e43:9eb1:6992])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b48652ade6esm1681457266b.18.2025.10.08.14.24.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Oct 2025 14:24:01 -0700 (PDT)
-Message-ID: <71613c2a-73d5-4f6e-a71b-03a2aa0f7bdf@suse.com>
-Date: Wed, 8 Oct 2025 23:23:59 +0200
+        d=1e100.net; s=20230601; t=1759958963; x=1760563763;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KjAnB+Zzyfvp4Pp2ybIwv27YmlWXv103r2xKYoV6VSg=;
+        b=FFRM9sMD1BhH0cMKaotj/SjBWqyPles9O95wqjYpU2rl7Zmxo3OKgJ4Xr3/c4GEmSL
+         AI27pViJIQFXGwDs6oHIX3O29BDHhrgNFfwaIeHo8CN1LgzSSOcELBcOIuyoCTtEwTP0
+         95Kyeh3uFZKpT857oJI+bk1F8QvbULrDV5iuIQ6Q4cOP1Kx3MBiZZ4wxf5vpRlYlSNPH
+         Xw8gFRRVrNCdw5l3cXBJbopK92TkDHeHE8u2vJK8X7b8I7G7J+NXoZsHshqWEmOzx7jO
+         sJungjCseAmQko3Dgn3Zvq5fQHS1FyZ0kugpYmrwT/W5XryYaNR+0YOLVhpRJ5sAVsC+
+         +/KA==
+X-Gm-Message-State: AOJu0YzeAtt+1kx8vO3ziTTEvXYKdhFgcFkmhQYouw7ecabqwRY3mtMH
+	k4aUnNTZXhQKPh0+ygbOw9ciLEQehz51UD1upk0NpJFph7Y8rTixP9DYKbvQNt7vvm5l5zasdNe
+	AVtZfVRhEIGjMdHwMembA00GV/5Dm4xl9gRHZYyykag==
+X-Gm-Gg: ASbGncue0lS758pojHU9xSwG2YeB7wLQpC1ozFZq0M4d2+c2vPjO6ikaVYkOji9UK9R
+	H/7Ws7RTt5wdMHbDXuwlNXBq2nqr2JqMdvmXhYL5FnrYcHPqOHAQ8lR802HM9wJnc2536ZKhMWZ
+	H84zxXJpKBZn3b6QYKOwCrGfifk0nE824UBMr/91GngQaJuFvI82QOHW6mQfKyZvJQbwCZHNk3V
+	n3OX2CCl8uUoTm7xpcKwZcjqBd5fR8=
+X-Google-Smtp-Source: AGHT+IG+pulNGykYUZB003oWExF+n2LFA14Bx2e0GXWW+ufKuzx4sIaQlm0rWhv3xzSpTjaJhHi37DacnR9TEvDf61c=
+X-Received: by 2002:a05:6102:510c:b0:5a4:138d:b13c with SMTP id
+ ada2fe7eead31-5d5e237aff6mr2256654137.29.1759958963084; Wed, 08 Oct 2025
+ 14:29:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: core: replace kmalloc + copy_from_user with
- memdup_user
-To: Thorsten Blum <thorsten.blum@linux.dev>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alan Stern <stern@rowland.harvard.edu>, Rex Nie <rex.nie@jaguarmicro.com>,
- Jann Horn <jannh@google.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250919115654.1011141-2-thorsten.blum@linux.dev>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20250919115654.1011141-2-thorsten.blum@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com>
+ <20251007231709.6c16802e.michal.pecio@gmail.com> <CABpa4MCUnLUR_0Vzgd=rTr0+Hot=nxHirKrX6xtJWowDoLhWJw@mail.gmail.com>
+ <CABpa4MCg7yixe7O8Pp+YwvpxeC=1JPhMhAap12RjtV6pcxFYgQ@mail.gmail.com>
+ <20251008082055.5646dadc.michal.pecio@gmail.com> <CABpa4MCm8hQXvtSYqUA+Dh3rCLVM5rTC1p+FsgmFemv+Vyz=RA@mail.gmail.com>
+ <20251008130532.49922d58.michal.pecio@gmail.com> <CABpa4MAsvK68CyQ7bVdie1j2m2O2YAEuFJHq8D-65uFT3FzKzQ@mail.gmail.com>
+ <20251008223406.13f16f19.michal.pecio@gmail.com>
+In-Reply-To: <20251008223406.13f16f19.michal.pecio@gmail.com>
+From: Arisa Snowbell <arisa.snowbell@gmail.com>
+Date: Wed, 8 Oct 2025 23:29:12 +0200
+X-Gm-Features: AS18NWBwuMRLNTll_iFqjIE2B8neeAzZfwmvOISoejS8xJ94lLIRW25Z1lS-dY4
+Message-ID: <CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com>
+Subject: Re: [REGRESSION] USB-A devices not working on boot after recent USB merge
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev, 
+	Niklas Neronin <niklas.neronin@linux.intel.com>, 
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
 Hi,
 
-On 19.09.25 13:56, Thorsten Blum wrote:
-> Replace kmalloc() followed by copy_from_user() with memdup_user() to
-> simplify and improve proc_do_submiturb(). Replace the hard-coded 8 bytes
-> with the size of 'struct usb_ctrlrequest'.
-> 
-> Return early if an error occurs, and avoid manually setting 'ret' and
-> using 'goto error'.
-> 
-> No functional changes intended.
-> 
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
->   drivers/usb/core/devio.c | 10 +++-------
->   1 file changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> index f6ce6e26e0d4..3bc54a5c59ff 100644
-> --- a/drivers/usb/core/devio.c
-> +++ b/drivers/usb/core/devio.c
-> @@ -1670,13 +1670,9 @@ static int proc_do_submiturb(struct usb_dev_state *ps, struct usbdevfs_urb *uurb
->   		/* min 8 byte setup packet */
->   		if (uurb->buffer_length < 8)
->   			return -EINVAL;
-> -		dr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_KERNEL);
-> -		if (!dr)
-> -			return -ENOMEM;
-> -		if (copy_from_user(dr, uurb->buffer, 8)) {
-> -			ret = -EFAULT;
-> -			goto error;
-> -		}
-> +		dr = memdup_user(uurb->buffer, sizeof(struct usb_ctrlrequest));
+I looked into the dmesg and found this:
 
-You cannot do this. User space cannot and must not know or care how long
-struct usb_ctrlrequest is. It is a data structure internal to the kernel.
-For the purpose of this API we copy 8 bytes. That is set in stone.
-If the kernel's data structure ever changes length, we will have
-to define a new ioctl.
+kernel: xhci_hcd 0000:7a:00.0: xHCI Host Controller
+kernel: xhci_hcd 0000:7a:00.0: new USB bus registered, assigned bus number 9
+kernel: xhci_hcd 0000:7a:00.0: USB3 root hub has no ports
+kernel: xhci_hcd 0000:7a:00.0: hcc params 0x0110ffc5 hci version 0x120
+quirks 0x0000000200000010
+kernel: xhci_hcd 0000:7a:00.0: Root hub is not suspended
+kernel: xhci_hcd 0000:7a:00.0: Root hub is not suspended
+kernel: usbcore: registered new interface driver usbserial_generic
+kernel: usbserial: USB Serial support registered for generic
+kernel: i8042: PNP: No PS/2 controller found.
 
-You have to leave the literal 8.
+went back into the bad kernel and enabled the dynamic debug, unplugged
+and plugged the mice and ran the unbind and bind on the 7a controller.
 
-	Regards
-		Oliver
+got this log:
 
+[  203.432169] xhci_hcd 0000:7a:00.0: Root hub is not suspended
+[  203.432395] xhci_hcd 0000:7a:00.0: remove, state 1
+[  203.432404] xhci_hcd 0000:7a:00.0: // Halt the HC
+[  203.432410] xhci_hcd 0000:7a:00.0: // Reset the HC
+[  203.433638] xhci_hcd 0000:7a:00.0: Wait for controller to be ready
+for doorbell rings
+[  203.433653] xhci_hcd 0000:7a:00.0: // Disabling event ring interrupts
+[  203.433660] xhci_hcd 0000:7a:00.0: cleaning up memory
+[  203.433669] xhci_hcd 0000:7a:00.0: Freed interrupters
+[  203.433670] xhci_hcd 0000:7a:00.0: Freed command ring
+[  203.433674] xhci_hcd 0000:7a:00.0: Freed segment pool
+[  203.433675] xhci_hcd 0000:7a:00.0: Freed device context pool
+[  203.433675] xhci_hcd 0000:7a:00.0: Freed small stream array pool
+[  203.433676] xhci_hcd 0000:7a:00.0: Freed xhci port bw array pool
+[  203.433676] xhci_hcd 0000:7a:00.0: Freed medium stream array pool
+[  203.433706] xhci_hcd 0000:7a:00.0: xhci_stop completed - status = 11
+[  203.433831] xhci_hcd 0000:7a:00.0: USB bus 9 deregistered
+[  203.433921] xhci_hcd 0000:7a:00.0: xHCI Host Controller
+[  203.433924] xhci_hcd 0000:7a:00.0: new USB bus registered, assigned
+bus number 9
+[  203.433933] xhci_hcd 0000:7a:00.0: // Halt the HC
+[  203.433938] xhci_hcd 0000:7a:00.0: Resetting HCD
+[  203.433939] xhci_hcd 0000:7a:00.0: // Reset the HC
+[  203.435167] xhci_hcd 0000:7a:00.0: Wait for controller to be ready
+for doorbell rings
+[  203.435169] xhci_hcd 0000:7a:00.0: Reset complete
+[  203.435170] xhci_hcd 0000:7a:00.0: Enabling 64-bit DMA addresses.
+[  203.435170] xhci_hcd 0000:7a:00.0: Calling HCD init
+[  203.435171] xhci_hcd 0000:7a:00.0: Starting xhci_init
+[  203.435172] xhci_hcd 0000:7a:00.0: HCD page size set to 4K
+[  203.435177] xhci_hcd 0000:7a:00.0: Device context base array
+address = 0x0x00000000ffff7000 (DMA), 000000009a3b17b6 (virt)
+[  203.435181] xhci_hcd 0000:7a:00.0: Allocated command ring at 000000005fb9657f
+[  203.435181] xhci_hcd 0000:7a:00.0: First segment DMA is 0x0x00000000ffff6000
+[  203.435182] xhci_hcd 0000:7a:00.0: Allocating primary event ring
+[  203.435186] xhci_hcd 0000:7a:00.0: Allocating 2 scratchpad buffers
+[  203.435196] xhci_hcd 0000:7a:00.0: Ext Cap 00000000715dddb0, port
+offset = 1, count = 1, revision = 0x2
+[  203.435197] xhci_hcd 0000:7a:00.0: xHCI 1.0: support USB2 hardware lpm
+[  203.435198] xhci_hcd 0000:7a:00.0: Found 1 USB 2.0 ports and 0 USB 3.0 ports.
+[  203.435198] xhci_hcd 0000:7a:00.0: USB3 root hub has no ports
+[  203.435199] xhci_hcd 0000:7a:00.0: xHC can handle at most 64 device slots
+[  203.435200] xhci_hcd 0000:7a:00.0: Setting Max device slots reg = 0x40
+[  203.435204] xhci_hcd 0000:7a:00.0: Setting command ring address to 0xffff6001
+[  203.435208] xhci_hcd 0000:7a:00.0: Doorbell array is located at
+offset 0x2000 from cap regs base addr
+[  203.435214] xhci_hcd 0000:7a:00.0: // Write event ring dequeue
+pointer, preserving EHB bit
+[  203.435215] xhci_hcd 0000:7a:00.0: Finished xhci_init
+[  203.435215] xhci_hcd 0000:7a:00.0: Called HCD init
+[  203.435216] xhci_hcd 0000:7a:00.0: hcc params 0x0110ffc5 hci
+version 0x120 quirks 0x0000000200000010
+[  203.435375] xhci_hcd 0000:7a:00.0: xhci_run
+[  203.435378] xhci_hcd 0000:7a:00.0: ERST deq = 64'hffff5000
+[  203.435380] xhci_hcd 0000:7a:00.0: Finished xhci_run for main hcd
+[  203.436837] xhci_hcd 0000:7a:00.0: Root hub is not suspended
+
+
+Thanks,
+Arisa
 
