@@ -1,63 +1,65 @@
-Return-Path: <linux-usb+bounces-29028-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29029-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F558BC49F3
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 13:51:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 306F3BC4B74
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 14:10:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 819224EA13F
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 11:51:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15E583AB972
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 12:10:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6D72B9A8;
-	Wed,  8 Oct 2025 11:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81DB02F83B3;
+	Wed,  8 Oct 2025 12:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mCskzSUU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c/qBddYg"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591F42F1FC3;
-	Wed,  8 Oct 2025 11:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7A42F7AB0;
+	Wed,  8 Oct 2025 12:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759924285; cv=none; b=hdnveIqg7vq6kz6Kh2CB8fnTZ4zlASli43NSQXhXvT+SPQVxy84f8ZpNCCmDZJgZ6qRBT4+FOq6K9stfvOWl4zj1fUn5Z9WU8mv9jCkkaDt35AA1AIyZnv1sYU3aVseyLkIp3hGsDXRWuMsWADy4i+nTwYkRtCIM45eLwFtIGZY=
+	t=1759925428; cv=none; b=hkHnusiUCIiMkdEy+IxuBY5GULidzL3wbsY4zBimhbBcXpVu/4L4s+95I9h4f17NG9J+L/2YPsGllinffLElItQ+GpK8oXpFXxID5lfyU20FbC0czWFXXDv/L4RAOwW/PWD7XiFB+iIARybKulyTRn2qvpnEuUL12nCFIoB/nlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759924285; c=relaxed/simple;
-	bh=ryM31503eMXvR81ecjmrnqZ+pmjpuK2RFkfc0Ve3/Hg=;
+	s=arc-20240116; t=1759925428; c=relaxed/simple;
+	bh=0Og/Yv2H3UYrtZ3KU1pRcOJr3otOKEz6cpop2r3nnpQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JTt0dL/2c239BPWFBHiXRgO56I3vPDFGTwxSJ6mZBa1QBjcDYyNNktsxKHmUneZDw265X5LMA5QP5OyMMgTMydCdTjGXLlZ1nJzJlVoMqgRRCV82twiMINwo9pPyGQW4A99O+N/TAF52nq29nUV3rEZy3MWwY6IyVpCUeBvEh8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mCskzSUU; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=TtAg9QJJ9b/7gnEGwIEdy4UwVEGnZGYoGLRb20isOw+rD1zttpBO67qKzDVVzOOx73KpZKcL5hygiwVw+72E721zRp+GDNV6cWLXs0wRKcrn+O2x5/RXYbbyz7DWQBppuuKoNB1biG2NnJ2lkbW4C1cVGq/bAZrIeLnMBJEpwtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c/qBddYg; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759924283; x=1791460283;
+  t=1759925426; x=1791461426;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ryM31503eMXvR81ecjmrnqZ+pmjpuK2RFkfc0Ve3/Hg=;
-  b=mCskzSUU0eSmbldZjkfhpRfHhB7pSlBM2Q64Ext3mSc0NYgdtJLJSLrp
-   h7HL/wCWZyZOw0rGONBegAK/n0G8D97e5LY416jE/pMTVMyXSUNktpocG
-   0YwtrztRsi+dAUp6Jd2YLBs55LPJjTTcbhiWE5lLWC0Wa+CCUTZYqlefG
-   JnBcWbQhsNIjdCbaIhHeysKVtL7a/lswSG07cmUCkkoyXzXXFCYJlg17t
-   zosvN8T+ZTOXQODPfZtwWNxQTHuvGheLqOOupwCkbWjrxelhuA9PzGGDt
-   M7JSpLcfho3OBpYWtj8rm6Zk2wC+iDu9mFzBT2mk0UGxWNsu+VSiXO0Xp
+  bh=0Og/Yv2H3UYrtZ3KU1pRcOJr3otOKEz6cpop2r3nnpQ=;
+  b=c/qBddYgIFGWzgi+bs38ApCZwKzmM5ffY5kvOJ5J9OOq04yC+xirEPPY
+   wvPRnJsmggpkg0G/NtVcKHrNhktQczwUP4IDMUw4WrAF34wSdM9G/vLWQ
+   Td77MTCW3L+wK1jmSIwJEe5TxBztZzNTq212OVOHM0D6q3suM8r0Qkn1M
+   st1T9IMs9nst4aTmswwjouPCu/AsMS20tLVR4iYUJIox2Atq09qGhK8AB
+   K6IWyc9iPeUGja2+LLuG0i7eUI7F2yRyL5tS0K5IJWaDO605WY0qMTlyn
+   PGzPP0oP/07ZgNP7XINXO+3AYdLt8mlXILSLIiSjBO69GNIcRvJQrEEdP
    A==;
-X-CSE-ConnectionGUID: xgumI4T8RY+dQaE0MDZUiw==
-X-CSE-MsgGUID: Yj1fq/C+Ri2bYuklKoLCRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11575"; a="72373482"
+X-CSE-ConnectionGUID: tfQ7bzsZTv2lz1Gh5z9eIQ==
+X-CSE-MsgGUID: AkItbHQiQSmPos4mxodoKw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11575"; a="72375319"
 X-IronPort-AV: E=Sophos;i="6.19,323,1754982000"; 
-   d="scan'208";a="72373482"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2025 04:51:14 -0700
-X-CSE-ConnectionGUID: lSwJdvgRRKaNYFeRXQJS3g==
-X-CSE-MsgGUID: QEGKyH1oTsad5GTZg8HvNQ==
+   d="scan'208";a="72375319"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2025 05:10:25 -0700
+X-CSE-ConnectionGUID: zCMM01epQqOAsrjnyC85Fg==
+X-CSE-MsgGUID: wflDQcoZR7+Y2QBt5yi1Ow==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,323,1754982000"; 
+   d="scan'208";a="211370462"
 Received: from iherna2-mobl4.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.169])
-  by fmviesa003.fm.intel.com with SMTP; 08 Oct 2025 04:51:08 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 08 Oct 2025 14:51:05 +0300
-Date: Wed, 8 Oct 2025 14:51:05 +0300
+  by fmviesa001.fm.intel.com with SMTP; 08 Oct 2025 05:10:20 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 08 Oct 2025 15:10:19 +0300
+Date: Wed, 8 Oct 2025 15:10:19 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Jameson Thies <jthies@google.com>
 Cc: akuchynski@chromium.org, abhishekpandit@chromium.org,
@@ -65,11 +67,11 @@ Cc: akuchynski@chromium.org, abhishekpandit@chromium.org,
 	ukaszb@chromium.org, tzungbi@kernel.org, devicetree@vger.kernel.org,
 	chrome-platform@lists.linux.dev, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: typec: cros_ec_ucsi: Load driver from OF and
- ACPI definitions
-Message-ID: <aOZQKfKUpae1cSvo@kuha.fi.intel.com>
+Subject: Re: [PATCH v2 3/3] mfd: cros_ec: Don't add cros_ec_ucsi if it is
+ defined in OF or ACPI
+Message-ID: <aOZUq6K8bZtciL6Q@kuha.fi.intel.com>
 References: <20251001193346.1724998-1-jthies@google.com>
- <20251001193346.1724998-3-jthies@google.com>
+ <20251001193346.1724998-4-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,98 +80,101 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251001193346.1724998-3-jthies@google.com>
+In-Reply-To: <20251001193346.1724998-4-jthies@google.com>
 
-On Wed, Oct 01, 2025 at 07:33:42PM +0000, Jameson Thies wrote:
-> Add support for cros_ec_ucsi to load based on "google,cros-ec-ucsi"
-> compatible devices and "GOOG0021" ACPI nodes.
+On Wed, Oct 01, 2025 at 07:33:43PM +0000, Jameson Thies wrote:
+> On devices with a UCSI PPM in the EC, check for cros_ec_ucsi to be
+> defined in the OF device tree or an ACPI node. If it is defined by
+> either OF or ACPI, it does not need to be added as a subdevice of
+> cros_ec_dev.
 > 
 > Signed-off-by: Jameson Thies <jthies@google.com>
-
-One nitpick below. With that sorted out:
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
 > ---
->  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 25 +++++++++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
+>  drivers/mfd/cros_ec_dev.c | 40 ++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 35 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-> index eed2a7d0ebc6..3d19560bbaa7 100644
-> --- a/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-> +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-> @@ -5,11 +5,13 @@
->   * Copyright 2024 Google LLC.
+> diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+> index dc80a272726b..b0523f6541d2 100644
+> --- a/drivers/mfd/cros_ec_dev.c
+> +++ b/drivers/mfd/cros_ec_dev.c
+> @@ -5,6 +5,7 @@
+>   * Copyright (C) 2014 Google, Inc.
 >   */
 >  
 > +#include <linux/acpi.h>
->  #include <linux/container_of.h>
->  #include <linux/dev_printk.h>
->  #include <linux/jiffies.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/module.h>
-> +#include <linux/of.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  #include <linux/platform_data/cros_usbpd_notify.h>
->  #include <linux/platform_data/cros_ec_proto.h>
-> @@ -235,7 +237,7 @@ static void cros_ucsi_destroy(struct cros_ucsi_data *udata)
->  static int cros_ucsi_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> -	struct cros_ec_dev *ec_data = dev_get_drvdata(dev->parent);
-> +	struct cros_ec_dev *ec_data;
->  	struct cros_ucsi_data *udata;
->  	int ret;
->  
-> @@ -244,8 +246,13 @@ static int cros_ucsi_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	udata->dev = dev;
-> +	if (is_acpi_device_node(dev->fwnode) || is_of_node(dev->fwnode)) {
-> +		udata->ec = dev_get_drvdata(pdev->dev.parent);
-
-udata->ec = dev_get_drvdata(dev->parent);
-
-> +	} else {
-> +		ec_data = dev_get_drvdata(dev->parent);
-> +		udata->ec = ec_data->ec_dev;
-
-and just as a proposal:
-
-udata->ec = ((struct cros_ec_dev *)dev_get_drvdata(dev->parent))->ec_dev;
-
-> +	}
-> -	udata->ec = ec_data->ec_dev;
->  	if (!udata->ec)
->  		return dev_err_probe(dev, -ENODEV, "couldn't find parent EC device\n");
->  
-> @@ -326,10 +333,24 @@ static const struct platform_device_id cros_ucsi_id[] = {
->  };
->  MODULE_DEVICE_TABLE(platform, cros_ucsi_id);
->  
-> +static const struct acpi_device_id cros_ec_ucsi_acpi_device_ids[] = {
-> +	{ "GOOG0021", 0 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, cros_ec_ucsi_acpi_device_ids);
-> +
-> +static const struct of_device_id cros_ucsi_of_match[] = {
-> +	{ .compatible = "google,cros-ec-ucsi", },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, cros_ucsi_of_match);
-> +
->  static struct platform_driver cros_ucsi_driver = {
->  	.driver = {
->  		.name = KBUILD_MODNAME,
->  		.pm = &cros_ucsi_pm_ops,
-> +		.acpi_match_table = cros_ec_ucsi_acpi_device_ids,
-> +		.of_match_table = cros_ucsi_of_match,
+>  #include <linux/dmi.h>
+>  #include <linux/kconfig.h>
+>  #include <linux/mfd/core.h>
+> @@ -131,11 +132,6 @@ static const struct cros_feature_to_cells cros_subdevices[] = {
+>  		.mfd_cells	= cros_ec_rtc_cells,
+>  		.num_cells	= ARRAY_SIZE(cros_ec_rtc_cells),
 >  	},
->  	.id_table = cros_ucsi_id,
->  	.probe = cros_ucsi_probe,
+> -	{
+> -		.id		= EC_FEATURE_UCSI_PPM,
+> -		.mfd_cells	= cros_ec_ucsi_cells,
+> -		.num_cells	= ARRAY_SIZE(cros_ec_ucsi_cells),
+> -	},
+>  	{
+>  		.id		= EC_FEATURE_HANG_DETECT,
+>  		.mfd_cells	= cros_ec_wdt_cells,
+> @@ -177,6 +173,16 @@ static const struct mfd_cell cros_ec_vbc_cells[] = {
+>  	{ .name = "cros-ec-vbc", }
+>  };
+>  
+> +static int ucsi_acpi_match(struct device *dev, const void *data)
+> +{
+> +	struct acpi_device_id ucsi_acpi_device_ids[] = {
+> +		{ "GOOG0021", 0 },
+> +		{"", 0},
+> +	};
+> +	return !!acpi_match_device(ucsi_acpi_device_ids, dev);
+> +}
+> +
+> +
+>  static void cros_ec_class_release(struct device *dev)
+>  {
+>  	kfree(to_cros_ec_dev(dev));
+> @@ -264,6 +270,30 @@ static int ec_device_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> +	/*
+> +	 * FW nodes can load cros_ec_ucsi, but early PDC devices did not define
+> +	 * the required nodes. On PDC systems without FW nodes for cros_ec_ucsi,
+> +	 * the driver should be added as an mfd subdevice.
+> +	 */
+> +	if (cros_ec_check_features(ec, EC_FEATURE_USB_PD) &&
+> +	    cros_ec_check_features(ec, EC_FEATURE_UCSI_PPM)) {
+> +		struct device *acpi_dev = device_find_child(ec->ec_dev->dev,
+> +							    NULL,
+> +							    ucsi_acpi_match);
+> +
+> +		if (!!acpi_dev) {
+> +			put_device(acpi_dev);
+
+If you are not using that for anything, then couldn't you just use
+acpi_dev_found("GOOG0021") ?
+
+Can there be multiple UCSI interfaces on these systems?
 
 thanks,
+
+> +		} else if (!of_find_compatible_node(NULL, NULL,
+> +						    "google,cros-ec-ucsi")) {
+> +			retval = mfd_add_hotplug_devices(
+> +				ec->dev, cros_ec_ucsi_cells,
+> +				ARRAY_SIZE(cros_ec_ucsi_cells));
+> +			if (retval)
+> +				dev_warn(ec->dev,
+> +				    "failed to add cros_ec_ucsi: %d\n", retval);
+> +		}
+> +	}
+> +
+>  	/*
+>  	 * UCSI provides power supply information so we don't need to separately
+>  	 * load the cros_usbpd_charger driver.
+> -- 
+> 2.51.0.618.g983fd99d29-goog
 
 -- 
 heikki
