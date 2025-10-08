@@ -1,51 +1,72 @@
-Return-Path: <linux-usb+bounces-29026-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29027-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23177BC4893
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 13:22:03 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A8D8BC49BD
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 13:47:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D59ED3A64E3
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 11:22:01 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 84AF0351038
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 11:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D519B35966;
-	Wed,  8 Oct 2025 11:21:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8290D2F746E;
+	Wed,  8 Oct 2025 11:46:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WOV/emSg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCzS4wjP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56867224B09
-	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 11:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD681DFE0B;
+	Wed,  8 Oct 2025 11:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759922519; cv=none; b=HMxBUZtN+dQ5cSAwUXZJo/8jyhVU9r3fJyWSuQB9HGMiBxSiB8JgLOA2nZv9ZuDctpfaWFciS86+6coVoUytIl09ozw/Oy2THyTlZ+vHquX973pCCt+ch8JLISjZCf7zmh2cqetCJdMZnxhAp6xHIbym8JuXcpeeFEBX8aEnUic=
+	t=1759924019; cv=none; b=UXgL0sOeWHUK2vDWplugINjIk5l2qIpcuoulk2834KdtlgbPpcpOzv6nUtjjqF6nEFR0C/xOdnzx4tASge/F8Rklwnjth6AuqRzuC8jHlLjblx+JqPNEv5sdftQ2bozr8ZyrL6VWneOe+RIuSTHKNNtc3pOQheIq29tyhXKnZCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759922519; c=relaxed/simple;
-	bh=PckdGZ2olLGQ9qXZe59Psj3irDFstLgyvu3IEwEUT4c=;
+	s=arc-20240116; t=1759924019; c=relaxed/simple;
+	bh=EpgdIB0VrKXe9RLfKIuBV1GtRp2U7rWH3b+xzvj9yP8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AaH0D8jwnuJhq8XBjFhDmUUf9uJTDDiSAEGPQPQYk8wsc8tRLfp8yAjKe72AnccrQi0mPDuxY7m9wU7qKqNq8kdR+94QOLKBp9wV1N255iDQXnjCV+nn9d3h19cdEBW1afeqPrSZMEUB02pfu8zWe1W2SjcixwPrkTpd6x/e1mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WOV/emSg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ADD6C4CEF4;
-	Wed,  8 Oct 2025 11:21:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1759922518;
-	bh=PckdGZ2olLGQ9qXZe59Psj3irDFstLgyvu3IEwEUT4c=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=XNZHVsqAUj4INjByzZZlWzu6AVLugcfB320Nji60rjrkAxrxIZtaN5CFU1Jzr6PfmMuF//rw0qzL3gD8EigTCJA3AelWA1xcZirHKZLXnd6XolGC3j4B4r89uzd864yEIB7XC9Qkd1Dhr2QchvOyjtZCacIF29d8VuUTOmurZLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCzS4wjP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E298C4CEF4;
+	Wed,  8 Oct 2025 11:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759924018;
+	bh=EpgdIB0VrKXe9RLfKIuBV1GtRp2U7rWH3b+xzvj9yP8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WOV/emSgPcecYZWdZt61GoFFeSKJ5C2BY8VEfSgeixF+lmt4KZdoGgzIqVZWaPqjs
-	 YL+g0Ao9C9MPVm/hFWBb4fmh76G+Zo1SRttQfTfCRITZlJ97nf+ZsBlAVN3XLccoD2
-	 ixSXTVpYZ5X1hFgIagjaV2TGoJGIABNCj3RwmmoM=
-Date: Wed, 8 Oct 2025 13:21:56 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Shi Hao <i.shihao.999@gmail.com>
-Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu
-Subject: Re: [PATCH v6] usb-storage: Fix comment indentation level
-Message-ID: <2025100802-sedan-security-3529@gregkh>
-References: <2025100845-engraver-perch-dabb@gregkh>
- <20251008110910.33833-1-i.shihao.999@gmail.com>
+	b=XCzS4wjPaNIks2gCKdcMpv8VZn0+DC3oGMu5Xuc1IAFbayT/Zunyil8BUnXVQPK2k
+	 cq2mahgAuhQm7tTS9+Dic9luY8FzKII1afm0ECrLZPMoH8g4KPS/SX2Y3AHBQrF+EV
+	 480TertJsVvSXOg5DJELQJm3nEU58BJkZCHa74RYpww6eGpiNyEL8eSC7sko5sCEk8
+	 4gUxdA4dcdUv2+8suVKSDmhFGFfVgqrrT/j9Bmyp81nHucWbQ4i4UxKwdMIrguMcE/
+	 fdqnHoF4nob3i0NeixW8Pw49Zt0wtsFBrd8sqHM/GROYz6psDkJXVHLawtCAvJaemV
+	 GCCBPFi7R3YKQ==
+Date: Wed, 8 Oct 2025 06:46:57 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org,
+	Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Conor Dooley <conor+dt@kernel.org>, imx@lists.linux.dev,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Luca Weiss <luca.weiss@fairphone.com>, Li Jun <jun.li@nxp.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Romain Gantois <romain.gantois@bootlin.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: switch: split out ports definition
+Message-ID: <175992401654.3284722.6085529297622918555.robh@kernel.org>
+References: <20250930-topic-sm8x50-fix-qmp-usb43dp-usb-switch-v1-1-060568de9538@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -54,25 +75,41 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251008110910.33833-1-i.shihao.999@gmail.com>
+In-Reply-To: <20250930-topic-sm8x50-fix-qmp-usb43dp-usb-switch-v1-1-060568de9538@linaro.org>
 
-On Wed, Oct 08, 2025 at 04:39:10PM +0530, Shi Hao wrote:
-> Fix comment  indentation level .
+
+On Tue, 30 Sep 2025 19:17:21 +0200, Neil Armstrong wrote:
+> The ports definition currently defined in the usb-switch.yaml
+> fits standards devices which are either recipient of altmode
+> muxing and orientation switching events or an element of the
+> USB Super Speed data lanes.
 > 
-> The previous comment was indented at the wrong level, breaking
-> kernel coding style consistency. The indentation has been corrected
-> to align with the relevant code block.
+> This doesn't necessarely fit combo PHYs like the Qualcomm
+> USB3/DP Combo which has a different ports representation.
+> 
+> Move the ports definition to a separate usb-switch-ports.yaml
+> and reference it next to the usb-switch.yaml, except for
+> the Qualcomm USB3/DP Combo PHY bindings.
+> 
+> Reported-by: Rob Herring <robh@kernel.org>
+> Closes: https://lore.kernel.org/all/175462129176.394940.16810637795278334342.robh@kernel.org/
+> Fixes: 3bad7fe22796 ("dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp: Reference usb-switch.yaml to allow mode-switch")
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../bindings/phy/fsl,imx8mq-usb-phy.yaml           |  4 +-
+>  .../bindings/phy/samsung,usb3-drd-phy.yaml         |  4 +-
+>  .../devicetree/bindings/usb/fcs,fsa4480.yaml       |  1 +
+>  .../devicetree/bindings/usb/gpio-sbu-mux.yaml      |  1 +
+>  .../devicetree/bindings/usb/nxp,ptn36502.yaml      |  1 +
+>  .../devicetree/bindings/usb/onnn,nb7vpq904m.yaml   |  1 +
+>  .../devicetree/bindings/usb/parade,ps8830.yaml     |  1 +
+>  .../bindings/usb/qcom,wcd939x-usbss.yaml           |  1 +
+>  .../devicetree/bindings/usb/ti,tusb1046.yaml       |  1 +
+>  .../devicetree/bindings/usb/usb-switch-ports.yaml  | 68 ++++++++++++++++++++++
+>  .../devicetree/bindings/usb/usb-switch.yaml        | 52 -----------------
+>  11 files changed, 81 insertions(+), 54 deletions(-)
+> 
 
-This does not describe what this patch does.
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Please take a break, relax, and come back in a day or so and start from
-a "clean" tree to implement this after taking a look at the kernel
-documentation for how to submit patches again.
-
-You are making patches on top of patches, all of which will not work
-here.
-
-thanks,
-
-greg k-h
 
