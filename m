@@ -1,238 +1,182 @@
-Return-Path: <linux-usb+bounces-29047-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29048-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4113BC639E
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 19:58:56 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C290BBC64D4
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 20:32:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B65E24EACA2
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 17:58:39 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CA3414EE006
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 18:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F30F42C0F96;
-	Wed,  8 Oct 2025 17:58:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43AB42C11E1;
+	Wed,  8 Oct 2025 18:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="PX9lRh/P"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="eDuVItXB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2512C0294
-	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 17:58:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BEB2C0F9A
+	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 18:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759946300; cv=none; b=ffTaFb9wn+G+6sXlIpe8M2vcIjcAnc4tWrN8Fc2h1wHNIkF0IQA8WsLqlnHUJ1PkYrSrUwP1x6eKrUEgu0iAgMu1/Cfv+Rq3nUg8TZe3KjZRmjIwKlu1Dr6LfDM6Nm4ZRSGpDGLq+9zQylHJuFOXbsHwMNX5p0vGjUKnzua2NIg=
+	t=1759948327; cv=none; b=GsV5c52JU5II4uLMJRf3y38wBC26CPAhKH+ROA7qgYJKJ2jLFGtmx8Nz6Gc2ZUixkASZNye8+o6L91emOiO0Uf6rzGNzG76Oe/yNMWVM/YJdEPm75+mPC7Qj8cY6ZDX0NFVhxrn/R+P5lFvxaqJDDw+9qbXQTkLWAddoLxD1Jow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759946300; c=relaxed/simple;
-	bh=HLIAZSi34247RaLpZred5z6QQNJ8JD4vy4SJe5suOTw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=aLVsSIM8PWiDznd14jTve+owzKHcWFqHI05zNPZ7hcmAm9mbwdd43ssV4LKLJWtuN5mqqk5u6JIchacSREMhuc4AKp5aCZtOMzr4mCiNHu1GDcosXRiA1lhUvKe6IHBsZQQYVIZrFfWgdcGwD4vEI42GG3SXbaosB0WbDymio8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=PX9lRh/P; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1759948327; c=relaxed/simple;
+	bh=25FN7DjXP5x3tJCg+gQhzwRMzdMByaBgob5iKkpDksI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GNUyKZJ50xl16XivOBQpui+DozA73UBNB7gGcp+tK83Io+WW648mLRHsAqiKKwLjNfVMyZ3Fk9edcCFHTnI2lZMM1iUuACphTmKalzoONed+y84/bUJdfbHETlQd86S7bFItUgGmAvmA7d+UodXE0WIZpoTcpDPNu6q589A8JCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=eDuVItXB; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 598HBBMl012670
-	for <linux-usb@vger.kernel.org>; Wed, 8 Oct 2025 17:58:18 GMT
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 598I5MXI003100
+	for <linux-usb@vger.kernel.org>; Wed, 8 Oct 2025 18:32:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=81UhKZbZqiQ
-	3FBxbCNxzpKfrvsglVuqKJ2pg4yT9dwQ=; b=PX9lRh/Px7lUxAdDETHz3kchLSR
-	rnjSicCjJfTVe0rmfTBQO3qIBDNw9WWfAQiwbwSw/VVQMG1UqtD8M6bfkfVsvfkW
-	OdK2X6/xhkZK8ZVaeoCLdrcig/NbVERVYZuoCmPZwx4m0niHwjg/9vq9GTB/igpf
-	0ek142jDbDvo4skFpwHcevNiDlS1Q3cczK7Xr7VpVKPU2nR8dS7Xdq7iwjpsu0pV
-	uk03QFGi4o3dFXEqneTiM6NvOu6uF08AfcP/qQAtBX05k+fKi0x/yFFDFFPTZeLH
-	hbPBuZe2wCt0/FVQgUops9H2vlP8FEDt5sJsVchViuioUHc27mGAQbrPikw==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49nv4sg525-1
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=Uqwx5jDVnMd++8p09CsvgmiE
+	n2SAfFQqSRGWKLGynvk=; b=eDuVItXBQkSAJMKmpD7Ml8AFWA63pV2T7OLovBMb
+	yYlzNYq18nj9jRKbRrYZHPxXf4ptpan0PFLbgo3PGJu7vmMAsNUrJnwtDucYB63t
+	Cl9sW1SOtkd80EZ2Dt6AZBHNYtz3vM3DCdX5Rhg0SzRxH1eEfaJ5KYZNZ5Tr7tbs
+	xFKjORaGzWiJkBtIZuTgnNmfpGA903z8xxrviVBD86tTpzXHrCuvSeUCHqiEX8ov
+	4TYvXxWyq23t3Kw8953QlMWb4oNPASQqiqyvzV9CdVHj3jVbpZJ3LKdePuf1rfT2
+	dsP+aWagsR8xNLa2RIgz07Hv+eRwSyZRp5pvEZ4Rj3ZizQ==
+Received: from mail-vk1-f200.google.com (mail-vk1-f200.google.com [209.85.221.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49nv4m08a7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 17:58:17 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-32eae48beaaso391157a91.0
-        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 10:58:17 -0700 (PDT)
+	for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 18:32:05 +0000 (GMT)
+Received: by mail-vk1-f200.google.com with SMTP id 71dfb90a1353d-54a7e0cbb98so173248e0c.3
+        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 11:32:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759946296; x=1760551096;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=81UhKZbZqiQ3FBxbCNxzpKfrvsglVuqKJ2pg4yT9dwQ=;
-        b=UiPwFf3zOXqgWvAqY+NZMaLd6zfvf7N39vaFEYjDWQ6WaXqFqutn3Bm0WLnnYThqma
-         IFDUBXNpR6twnPUfSrl48M7WkEIQ5rjDP1oehWuj1tmdMkoyjvRQdtLqquKH1Qlgz/LX
-         73/CoNvy5dBpsYrstoJQPfP+oewQkF+s/9hdInawC2notRX1LkCRm3VYHSSWxkwovl3W
-         am766sehZnPK3VImaGKYrEpFGYa7GHA2NXjr6VZ3DASNkvHFC1OgXbIQCMccMZ2bEYXK
-         BoLn/7+bJq7JSC1ii7mq18xC/SMVxDVQ2358d4Y9T1lbVAdkmS9tZLkV6VHSh9qXmEAt
-         75aw==
-X-Gm-Message-State: AOJu0YxJ7DAp8FXa9ZuKNnLnXVdynlcSJTyN4p0utFOU2s4J6WIHx5l3
-	XiwUE+hzM6uT4Q7xVBDkaNiAh6ptUNOn21X2lnT6AAt3FH8PRY4Y+AfWK3oi4t5FD7xyYFD/pbp
-	K1Dy5EDtGEYVJ3kwBZMLl4pACDX/Mr4R2pSdSarAXcSeLlPCaRXFDXJdJt2QCkno=
-X-Gm-Gg: ASbGnctcNtnkSPMsJXaRg05y5WLjZcePu/rEXUSxwkYDmEbtQl25ZaoKCUC1jz4zzVf
-	fSevxj0PO5Dl1uHiDjAVayzbYuEOa0LmoWUeQLN/eGrj5P0vGp8USzVNGqvQ9MnpzY6yG72hYXC
-	XvXjxJ25HnOab4qvLOqQLSyYeIOjpV9k8ihgoyQ2dcIdcbCDwonXyJjb7JT7xc80gDqt3LV/Nag
-	deiqA077mQ8HVHBX3vT+gbo+OqmdVci79W1Ir6F9MjJu8ezpCBQbV/f/t8iWbdfJ5XPSh08MM2p
-	meZFe/zj9dVigPqDGEp3b29UCwa5FvfGlzkHqXFpn5SUSboToOJD32FL3tTawOEui8yw6Jdr/2J
-	l0xOcra0=
-X-Received: by 2002:a17:90b:1b04:b0:32b:6145:fa63 with SMTP id 98e67ed59e1d1-33b5114d48fmr5471935a91.4.1759946295970;
-        Wed, 08 Oct 2025 10:58:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGY4sUxC2tkm7oYuuyKz8ydAmypwi3ie0On6gCk1oXghiSu6JmLInMP6vDCt0OA/hoeAYbvzg==
-X-Received: by 2002:a17:90b:1b04:b0:32b:6145:fa63 with SMTP id 98e67ed59e1d1-33b5114d48fmr5471911a91.4.1759946295416;
-        Wed, 08 Oct 2025 10:58:15 -0700 (PDT)
-Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b529f51b5sm1275726a91.7.2025.10.08.10.58.11
+        d=1e100.net; s=20230601; t=1759948324; x=1760553124;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uqwx5jDVnMd++8p09CsvgmiEn2SAfFQqSRGWKLGynvk=;
+        b=hIQRbsSXDcFUkviTIMPmZcP5KLUv5BJOWHE38ZstkgEy0lnZtpQyAUDW53SAEhWWWi
+         38UuawioE8UFHXK+zreI8s2PPFJEa8a92aAgz9/SM8DpU1Dck54uYvDKa9bfLD1keaEn
+         dYAtdNfjMocxNROezGoIPTB2tj/sKbD9VhubEX/PKKryJFQYW4crJiqbxuvhtYiLlmd0
+         rFhcZWu/wVtDaSPfe0Ll4AD8drQTDm+CwMB0ZiwbaL9HG5XKrqdKdXlW3EBUmyCzwyQo
+         SgLZhDThmn1kI7Bk8pKEYfL9q/RZaE5JS01cLFfeZGYpMvkDJTecc0t0ZQXDufmlMP+O
+         k7MQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX4UsDxddnu2hPVgdrbHKMWD6i/JBb/TCqkQ86MTasYHRik+JHcPFod+fAsEsA4b/nBaDonvltu8Uw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YybKoA5twcqFqio/MI3VCTzAK9bN4h2CSHz0MzZ1injZjgv5BX8
+	eEEcbDUZm9rhAZw+co1bYCZwMUo8q98YgB/jY+aEd8mUDd3YZe0efuRnc0KSTzS1ClwpQL15h8I
+	i0j//59Az089RDNVIWkJ6h2ccI32o6DM5hnwQE2+u6JM4oo/12D7tVmZXOThlRrg=
+X-Gm-Gg: ASbGncv+33QKMNWyFiE6JtQKgQevqsmzSXRz49br+4LinkB+HkxEIXTfIhaK5nFLNJj
+	198zLd1BXtLLjiHXFGvPnAMpV+yQWwvroVqK9XTfYFR3HvooYFmqAXgltJmZGqw3mB3bCvQ8gND
+	3SaacEGOHE6/yf/eXWC8MLcmkheZUPuJl9swbbiaM+4jdpCW7CIFlqVVqbR65LeGAygdAccudWp
+	CGNSyfxoeN103qsZ4CXpCzouPvKFWkEqu3a/fa7sbjGLh+YSKCPzvsJ0qCIZbINzFSHvPW6lj2U
+	EVYF58s1MhcX5mlC1BE589c5dWYWGC47hiA32s4MIYwBuhJzTmNYAT+U/zX9B81Uk3vWuNAmgi8
+	kmVwokOp6paBb+CnbiNP76msQbUKVQmODhDZHWWM5FGCIGeEjYL929jYWYw==
+X-Received: by 2002:a05:6122:c85:b0:54a:9316:f429 with SMTP id 71dfb90a1353d-554b8a7f865mr2116604e0c.3.1759948324124;
+        Wed, 08 Oct 2025 11:32:04 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFeridrpdJSwKBLLKxqzplda/MdVxnX9sdNhyATyFOKBILM1gJTPYRMJOlDLg9eqNSXDqCRYA==
+X-Received: by 2002:a05:6122:c85:b0:54a:9316:f429 with SMTP id 71dfb90a1353d-554b8a7f865mr2116589e0c.3.1759948323654;
+        Wed, 08 Oct 2025 11:32:03 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-375f39fcafbsm22678541fa.26.2025.10.08.11.32.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Oct 2025 10:58:15 -0700 (PDT)
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wed, 08 Oct 2025 11:32:01 -0700 (PDT)
+Date: Wed, 8 Oct 2025 21:31:59 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Subject: [PATCH v2 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin state
-Date: Wed,  8 Oct 2025 23:27:50 +0530
-Message-Id: <20251008175750.1770454-3-krishna.kurapati@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251008175750.1770454-1-krishna.kurapati@oss.qualcomm.com>
+        Biju Das <biju.das.jz@bp.renesas.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: ti,hd3ss3220: Add support for
+ VBUS based on ID state
+Message-ID: <odikli6rfdyid5oqavurtqytgnwgh5hpmka2jt5tprpdw7cd72@icpnjnkfowt7>
 References: <20251008175750.1770454-1-krishna.kurapati@oss.qualcomm.com>
+ <20251008175750.1770454-2-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: N5Jv42azu2pej-K6AWO6B-LqDQW5M-8u
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDEyMSBTYWx0ZWRfX30KxN47YW+ez
- CD0Ap5n8fw2KUEDahoobCio05Lh7q+1F1NKMM/CUTmraRCDrigXAMq9udbgVdPTK/DS2+7vlvIj
- 8YjuO0QaP2rB0PF+Ylt1KRDp6tciYGG6lDPoygW33MJ7CH5Ly0F67nAJUigUkP+MmsYXE4ITu2h
- 5DF4Ix4Zj9p2oPiUqXBK8XCTBHUFMbJlCq2kBhx+jL1cZrWX+ZjrJ+FmXi9ubVD3n8Vot8C+Gdi
- HoLeytjyDxdZWOfNyU05uR/hf8q7rSfVyUldUfEgRs5hRZWXGl+2s0e2Iwjez+KjHHmXUUarktO
- sdcnOlb5YPXEzlgv422L068G+lE9jx2Yo384y81+AlCZayS2l5L3hRP2g5HYrn/URu4XZnHGzVS
- 74I+bkN4Kn5z2BrloZY25HdTqKknjQ==
-X-Authority-Analysis: v=2.4 cv=SfL6t/Ru c=1 sm=1 tr=0 ts=68e6a639 cx=c_pps
- a=RP+M6JBNLl+fLTcSJhASfg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=3eHL1KmHa9FwJ4YL2wMA:9
- a=iS9zxrgQBfv6-_F4QbHw:22
-X-Proofpoint-ORIG-GUID: N5Jv42azu2pej-K6AWO6B-LqDQW5M-8u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251008175750.1770454-2-krishna.kurapati@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDEyMSBTYWx0ZWRfXxZFjT4bSZrnz
+ E+0LzMmS2Oj2W9MVzWSjCnSM3MK1Oa2vUy/IhjM9djxuBBYPBVzNb9ub5Qx9FagNV0ycnm2KGuW
+ WErgNLHjq5FwAhAB4kJOyohy6AytHDgcqSftaJn2NjJW4qgUah/xg8xOHwBEt48bD4NkEUD72lx
+ 96FUPoJqXEpMfPOsMfu52U458v1mgwdX8vnL1s1B/mYyG+2/1lj3P/4rpXyE6X+Mnb5XsxkCxkO
+ hxrmfE44CLHlPjBYFHE1PHSIX4v2/JN58IFgrh6J+P0heg5dSz1OcmoxJkIviEPSVRI6nafZ8dc
+ qjmMer0ZcqYWzTeaJIIdgfRn51V98AW2e9TNusaD0/9U0e2OyragoUra38ztLfjKPBrzP5TU0Vn
+ J+9t+OwfFNdDny2FpUONOla8AgasHw==
+X-Authority-Analysis: v=2.4 cv=B6G0EetM c=1 sm=1 tr=0 ts=68e6ae25 cx=c_pps
+ a=wuOIiItHwq1biOnFUQQHKA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=smUmI0uzo1bZzf9w9C4A:9 a=CjuIK1q_8ugA:10
+ a=XD7yVLdPMpWraOa8Un9W:22
+X-Proofpoint-GUID: RnmzdvQE6GzHe91PIvBHDzotmIPJR0kl
+X-Proofpoint-ORIG-GUID: RnmzdvQE6GzHe91PIvBHDzotmIPJR0kl
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-10-08_05,2025-10-06_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 clxscore=1015 malwarescore=0 bulkscore=0 priorityscore=1501
- suspectscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ spamscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1015 suspectscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 phishscore=0 impostorscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510080121
 
-There is a ID pin present on HD3SS3220 controller that can be routed
-to SoC. As per the datasheet:
+On Wed, Oct 08, 2025 at 11:27:49PM +0530, Krishna Kurapati wrote:
+> Update the bindings to support reading ID state and VBUS, as per the
+> HD3SS3220 data sheet. The ID pin is kept high if VBUS is not at VSafe0V and
+> asserted low once VBUS is at VSafe0V, enforcing the Type-C requirement that
+> VBUS must be at VSafe0V before re-enabling VBUS.
+> 
+> Add id-gpios property to describe the input gpio for USB ID pin and vbus-
+> supply property to describe the regulator for USB VBUS.
+> 
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> ---
+>  .../devicetree/bindings/usb/ti,hd3ss3220.yaml       | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+> index bec1c8047bc0..c869eece39a7 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+> @@ -25,6 +25,19 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>  
+> +  id-gpios:
+> +    description:
+> +      An input gpio for USB ID pin. Upon detecting a UFP device, HD3SS3220
+> +      will keep ID pin high if VBUS is not at VSafe0V. Once VBUS is at VSafe0V,
+> +      the HD3SS3220 will assert ID pin low. This is done to enforce Type-C
+> +      requirement that VBUS must be at VSafe0V before re-enabling VBUS.
+> +
 
-"Upon detecting a UFP device, HD3SS3220 will keep ID pin high if VBUS is
-not at VSafe0V. Once VBUS is at VSafe0V, the HD3SS3220 will assert ID pin
-low. This is done to enforce Type-C requirement that VBUS must be at
-VSafe0V before re-enabling VBUS"
+Stray empty line?
 
-Add support to read the ID pin state and enable VBUS accordingly.
+> +    maxItems: 1
+> +
+> +  vbus-supply:
+> +    description: A phandle to the regulator for USB VBUS if needed when host
+> +      mode or dual role mode is supported.
 
-Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
----
- drivers/usb/typec/hd3ss3220.c | 60 +++++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+Why are we adding the property here while we can use the vbus-supply of
+the usb-c-connector?
 
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index 3ecc688dda82..0e81e92f253c 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -15,6 +15,8 @@
- #include <linux/usb/typec.h>
- #include <linux/delay.h>
- #include <linux/workqueue.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/regulator/consumer.h>
- 
- #define HD3SS3220_REG_CN_STAT		0x08
- #define HD3SS3220_REG_CN_STAT_CTRL	0x09
-@@ -54,6 +56,11 @@ struct hd3ss3220 {
- 	struct delayed_work output_poll_work;
- 	enum usb_role role_state;
- 	bool poll;
-+
-+	struct gpio_desc *id_gpiod;
-+	int id_irq;
-+
-+	struct regulator *vbus;
- };
- 
- static int hd3ss3220_set_power_opmode(struct hd3ss3220 *hd3ss3220, int power_opmode)
-@@ -319,6 +326,28 @@ static const struct regmap_config config = {
- 	.max_register = 0x0A,
- };
- 
-+static irqreturn_t hd3ss3220_id_isr(int irq, void *dev_id)
-+{
-+	struct hd3ss3220 *hd3ss3220 = dev_id;
-+	int ret;
-+	int id;
-+
-+	if (IS_ERR_OR_NULL(hd3ss3220->vbus))
-+		return IRQ_HANDLED;
-+
-+	id = hd3ss3220->id_gpiod ? gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
-+
-+	if (!id) {
-+		ret = regulator_enable(hd3ss3220->vbus);
-+		if (ret)
-+			dev_err(hd3ss3220->dev, "enable vbus regulator failed\n");
-+	} else {
-+		regulator_disable(hd3ss3220->vbus);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
- static int hd3ss3220_probe(struct i2c_client *client)
- {
- 	struct typec_capability typec_cap = { };
-@@ -354,6 +383,37 @@ static int hd3ss3220_probe(struct i2c_client *client)
- 		hd3ss3220->role_sw = usb_role_switch_get(hd3ss3220->dev);
- 	}
- 
-+	hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
-+	if (IS_ERR(hd3ss3220->id_gpiod))
-+		return PTR_ERR(hd3ss3220->id_gpiod);
-+
-+	if (hd3ss3220->id_gpiod) {
-+		hd3ss3220->id_irq = gpiod_to_irq(hd3ss3220->id_gpiod);
-+		if (hd3ss3220->id_irq < 0) {
-+			dev_err(hd3ss3220->dev, "failed to get ID IRQ\n");
-+			return hd3ss3220->id_irq;
-+		}
-+
-+		ret = devm_request_threaded_irq(hd3ss3220->dev,
-+						hd3ss3220->id_irq, NULL,
-+						hd3ss3220_id_isr,
-+						IRQF_TRIGGER_RISING |
-+						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-+						dev_name(hd3ss3220->dev), hd3ss3220);
-+		if (ret < 0) {
-+			dev_err(hd3ss3220->dev, "failed to get id irq\n");
-+			return ret;
-+		}
-+	}
-+
-+	hd3ss3220->vbus = devm_regulator_get_optional(hd3ss3220->dev, "vbus");
-+	if (PTR_ERR(hd3ss3220->vbus) == -ENODEV)
-+		hd3ss3220->vbus = NULL;
-+
-+	if (IS_ERR(hd3ss3220->vbus))
-+		return dev_err_probe(hd3ss3220->dev,
-+				     PTR_ERR(hd3ss3220->vbus), "failed to get vbus\n");
-+
- 	if (IS_ERR(hd3ss3220->role_sw)) {
- 		ret = PTR_ERR(hd3ss3220->role_sw);
- 		goto err_put_fwnode;
+> +
+>    ports:
+>      $ref: /schemas/graph.yaml#/properties/ports
+>      description: OF graph bindings (specified in bindings/graph.txt) that model
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.34.1
-
+With best wishes
+Dmitry
 
