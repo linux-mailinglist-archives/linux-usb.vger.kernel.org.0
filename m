@@ -1,199 +1,144 @@
-Return-Path: <linux-usb+bounces-29053-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29054-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EBF5BC6A8B
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 23:14:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34C1EBC6AD8
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 23:24:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C4D374EB2C5
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 21:14:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1E393AB3FE
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 21:24:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4B82C0279;
-	Wed,  8 Oct 2025 21:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3F62C0276;
+	Wed,  8 Oct 2025 21:24:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RVfqF/Nh"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KXkJpkBh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526A22BFC60
-	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 21:14:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348382BE7D6
+	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 21:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759958084; cv=none; b=McnFxGtXNlDYf+TgojLyCqQujW+Eu/4ErMIaIFi8/+merfbjoCBUfhjoYCtzbqOajrDnQoZgMVH5sXij0OHw/QwxNxS8XLeKgZcTEg6lotIwJtCYYp9L3RRrXzIzwyxUBJM7Zi+/Fzr07+8oHdHCjroghL5ggpLXkkvuIsA78dg=
+	t=1759958645; cv=none; b=mog38lk53MG/Ph2o5UFUXS8b7I5M1+mP/+Y8n6rObGssxZZrLAUNb5pke5D960te4kgmBubvgOAN/+wPyq0KH4UgOvY6Yc9xGCM9yCjAQfDOM7RMHgJ4JNJ9poP3PZt8oVW4jwDKQjYP2iBy+Hz+aMG3akLFLuV8jtZ1hkInPvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759958084; c=relaxed/simple;
-	bh=695UFzPvhnhIXQFbMXUaI7aPH4xRdVyKoN5JWsEUYX8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FHtFYQSIa6yDnbIxVkSYU0+3mtW+o0dSr0b/kY5xMhILMYsKEG304kxoDhT3FNULeRCKxOb0NUWt/jYwoZXSpnVE4Ocyup7DfdkQ/8vTIwj6gfu7DAcTGrtpXvb4nZvPcByNIKi9cO6JyN7ShZekV+8uzRk3yU2GRWPjbr2Z+9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=RVfqF/Nh; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-57e03279bfeso489849e87.0
-        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 14:14:41 -0700 (PDT)
+	s=arc-20240116; t=1759958645; c=relaxed/simple;
+	bh=HEFZfy/bOiUPVmOEzICFEBHZzqvYM+jSBmzbPiW2n0U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ud51RfE31NmHXOL+oQ4D1Zz1oZwVptN122ehSeZY5nwyT8Ig41Wn5AuJKkCn/YXeVrjct8O02Qx1UJmBUjYJ/uvLnEe6HjCXlL2BWj+bqg6+l2zf/lXcwR+d/q3bb4UhbuKVE9EZiNgB6nszL08oJ+14PMtEtLmqLctOUB02Lsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KXkJpkBh; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b3d50882cc2so47604666b.2
+        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 14:24:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1759958080; x=1760562880; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FHHBgBC7TtZb8PdXfXQUua1rH7Gx4NDZfQ9BITkQ9mM=;
-        b=RVfqF/NhpM1JcCdLqKvpPN4rpHqgb+46I8NYDYqsmQ4t2RJmmo4TJtfjfRdiOkyE6U
-         VGlc4fmF9gKAOh2Xh9mQBNY9cgpwybXOWJS2NlaCTcNKdR9wuW9Jo4Ape7mgT0IUBoFJ
-         hhLTBpRtm3tHj6SIe0GC0UwvbgThUad37JW1w=
+        d=suse.com; s=google; t=1759958641; x=1760563441; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/9YY8RVzKysd/2FBRUq2EA9d+6aVFuf0Slin7qbDg94=;
+        b=KXkJpkBhUEUrOPzgoVtou9nJvlyGRrs9AIY2TnrnnwtsDmxNcePIfVtR1k4AJsgZ/A
+         JAouZfnxn1oLuCDqxB8a5ocLjTe6dOOq22LM2oGnL8EVZgLvS/LQNlWNgAd/atOys89m
+         nZr8pyRPIj0vDmLkq18Zu03S7s9BGiYH+23OYGRWr/cTzJpPrtpFHXXdeytiqydm/26u
+         XkPqfBmiXdEcMokX7QWMlO3ZNsDv9eeSEEKiT8aDzBYEBsauVeyVrFC3C3Jzb4EypzxX
+         kTBxHIEFDwhLOc39vBeZrmTTBzho6wFCewbEfRTlW4XUvWX3+fd+0QV9On6hN/Gd0CgB
+         Algw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759958080; x=1760562880;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FHHBgBC7TtZb8PdXfXQUua1rH7Gx4NDZfQ9BITkQ9mM=;
-        b=bcloXT6qH4iXUV/phR/L2zpSQiNHbTwbPTohhetcu347JV0P3L+AP9vNj2PfN5rqeR
-         lxRC4Nd9VSObbQaQFfuHUzrLwLXPFh5zMNp1rs8ICscoViQMnmLJrrSg/9z+dobs9ke/
-         u7zY55ibwzZ1Ldzl7ZoZFlMeYUS6fPUMUFM3530S8O3fAGoMNKYcXY9jjU/evFX95yCt
-         Jk218sG0blYGWoRzlgVCDdUM05UhLBArObvymLim+Eko0lvqynHLazp1g3NeW3yNvNVG
-         ybJpAh1wWK/s6brCk/Y/jsifzNBjGoU2ZrKLnUig08u84ijUoVLycJiq48j9/VOWh/R6
-         WkTw==
-X-Forwarded-Encrypted: i=1; AJvYcCXR1Hhx/zOFA93Cg6RTUxX7UZpu9bsWFA+mlWHptY7Zwqw61dDitEMuHjJ9IITYLXFHRqDJHD+gtEA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1uSTR3MBSdTfEfP0HvRW4JN5TN+PHavqVDkN46HVnnqJLkK9G
-	vQaf8ZU8EfprCLPDxdo+UaS4YpfUZq8Qrlg/XkRv5M/AZ8PiSC7aXTIEHOP8laUVrcD7QbyPYPa
-	PkQ/SUA9abT6F0PV91DAq4JypK62mVCGqk3KkM4XquNHHlLHzNCO+Vq2YZg==
-X-Gm-Gg: ASbGnctbf5Y7Aw6AI0savvjr8kC29lr5wn9f1hRnfdMkRHaL5pHnq/9VOAVdem9m2Ed
-	iCgAYhEAhNfOCBP938ZoObYh0ecLXuiA+rHyBnuH+p3o8kIqX6HkICNvmLEAYenuCGPRoLct2rl
-	2H8BRPTOzQ58wlcBz6f/H86IXkH4SfrQyzSKIzfgVjrKDV5lqdVzw24ZXzF11O7Kw21BMQmIn25
-	nYYi9J7xYBAacnPzV2aNVhCgBgbSw==
-X-Google-Smtp-Source: AGHT+IF5odAB1QjwdQJkkkMEN5c9X3lVwAl4FZyjqaJqPX0oSg+mzWZ4GANlBb9BZ679JBq96HZsccYNFVceFRq7bGk=
-X-Received: by 2002:a05:6512:e85:b0:577:a108:93ca with SMTP id
- 2adb3069b0e04-5905e3a0d18mr2291422e87.28.1759958080253; Wed, 08 Oct 2025
- 14:14:40 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759958641; x=1760563441;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/9YY8RVzKysd/2FBRUq2EA9d+6aVFuf0Slin7qbDg94=;
+        b=CGx0P03yIqvBXZn62U4sUI8mQ2tW4Rd5S78EKlmeJOUMU28J8jajK4K7N34i4mtMUP
+         LBypkDy3xHPF/mSZAfo+swkP4R7vUvgJ1nq+h6lhxCAh9o/YypDzDRPkkmuCxnQtqc+S
+         wMUgI+2Ofzy5Cu83P8PXGfnF7XBf7VnfQefSE8EPGvXtJNEFkIt+OVlcNqpO7GEkJIui
+         gKWnNPU0Dgk0AW7CiRqGey1XcTVqQAUkw239VKPUTrpj/N7w/cs3xSd6w8z0P+FmxUqx
+         o3OndwVp2Ss7xCTlLdQwYZCmETHJLJoCj35nlnsbbCBAqUQDudt7nT8C+uAD4+WpqZjN
+         OVdg==
+X-Gm-Message-State: AOJu0Yw8R2ECudu6jw64HR8xw7yODUsabzqKbymPAF42ZSWHRW0uZbJN
+	VNHVCEAe6KaxvXYlGsyTA73Q7RWfNLzGRwcHiIZDOsix5sFbLaAlmk/UGkMe5CPypH0=
+X-Gm-Gg: ASbGnctm1Jc8k1RFfd3GhwBd0NBMe0dl7g3hm0fZ+l3a+05yOj+n8edt62cr1790jWg
+	4S2eyiyEs5X4roTRxLp+fKIczflwa0yWYDj0uIFZxtNFtZAG8m2hmlKf3DZ5mrLBm2C8ttGZF/+
+	RrPyO05m9AETykEtlhxrJSyIvzqT9pMEAFLpZommZsPhD+XjcTaAqdAwVFIPldsvPmiPliOkqib
+	dsWb/orf0RCpW0DEg1rgnZ/cuF3YyGibE+2laZI24T9TPzXzGL5+ODFTaRLDj0IjRYCGz21nVyJ
+	EATTKrvcpy7MmxtR2xR48j/Fdn+aP1Wp5bJaL9lE8cvNjCF7F2PZK/QQqBKUUy0o4hbKUrAOgPA
+	0TSmJuSXRToKVCOCK9Dii2JZjfIZbZwrVie1lUjj3khdIiSXfYndYqIw7J0s8kYVIp32W/OVW0U
+	KCFh8GHGYaNfmTN5+DKixP8jAM
+X-Google-Smtp-Source: AGHT+IEodokj7MVKCM1EevdonpV47bRYAPYiGng+Bgp+oHLQSF8yGoyDw+eU3u/c5A8f7XoLgE2gUg==
+X-Received: by 2002:a17:907:6d06:b0:b3d:98fa:b3fa with SMTP id a640c23a62f3a-b50ac5d090dmr530996966b.50.1759958641391;
+        Wed, 08 Oct 2025 14:24:01 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13f0:5001:bea8:8e43:9eb1:6992? ([2001:a61:13f0:5001:bea8:8e43:9eb1:6992])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b48652ade6esm1681457266b.18.2025.10.08.14.24.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Oct 2025 14:24:01 -0700 (PDT)
+Message-ID: <71613c2a-73d5-4f6e-a71b-03a2aa0f7bdf@suse.com>
+Date: Wed, 8 Oct 2025 23:23:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251007213902.2231670-1-ukaszb@google.com> <20251007213902.2231670-3-ukaszb@google.com>
- <2025100821-turtle-breeder-302e@gregkh>
-In-Reply-To: <2025100821-turtle-breeder-302e@gregkh>
-From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Wed, 8 Oct 2025 23:14:28 +0200
-X-Gm-Features: AS18NWBUU0yarXqlMQwKGLouBENpcwECcyFX14x8Nv4tTpsKJsA3A-Shw1Wiv1Q
-Message-ID: <CALwA+Na9yNKh5Qh0sdUCZY+RgK9Bs6r8GgjFb8OBjcdm5SrV-A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] xhci: dbc: allow to set serial number through sysfs
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: core: replace kmalloc + copy_from_user with
+ memdup_user
+To: Thorsten Blum <thorsten.blum@linux.dev>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alan Stern <stern@rowland.harvard.edu>, Rex Nie <rex.nie@jaguarmicro.com>,
+ Jann Horn <jannh@google.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250919115654.1011141-2-thorsten.blum@linux.dev>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250919115654.1011141-2-thorsten.blum@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 8, 2025 at 1:20=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Oct 07, 2025 at 09:39:00PM +0000, =C5=81ukasz Bartosik wrote:
-> > From: =C5=81ukasz Bartosik <ukaszb@chromium.org>
-> >
-> > Add code which allows to set serial number of a DbC
-> > device through sysfs.
-> >
-> > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
-> > ---
-> >  .../testing/sysfs-bus-pci-drivers-xhci_hcd    | 13 +++++++
-> >  drivers/usb/host/xhci-dbgcap.c                | 36 +++++++++++++++++++
-> >  2 files changed, 49 insertions(+)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd b=
-/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
-> > index fc82aa4e54b0..071688dbd969 100644
-> > --- a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
-> > +++ b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
-> > @@ -85,3 +85,16 @@ Description:
-> >               up to 5000. The default value is 64 ms.
-> >               This polling interval is used while DbC is enabled but ha=
-s no
-> >               active data transfers.
-> > +
-> > +What:          /sys/bus/pci/drivers/xhci_hcd/.../dbc_iSerial
-> > +Date:          October 2025
-> > +Contact:       =C5=81ukasz Bartosik <ukaszb@chromium.org>
-> > +Description:
-> > +               The dbc_iSerial attribute allows to change the iSerial =
-field
-> > +               presented in the USB device descriptor by xhci debug de=
-vice.
-> > +               Value can only be changed while debug capability (DbC) =
-is in
-> > +               disabled state to prevent USB device descriptor change =
-while
-> > +               connected to a USB host.
-> > +               The default value is "0001".
-> > +               The field length can be from 1 to 63 characters.
-> > +
-> > diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbg=
-cap.c
-> > index c2fecaffd6f3..7ad83548ba4d 100644
-> > --- a/drivers/usb/host/xhci-dbgcap.c
-> > +++ b/drivers/usb/host/xhci-dbgcap.c
-> > @@ -1200,6 +1200,40 @@ static ssize_t dbc_bcdDevice_store(struct device=
- *dev,
-> >       return size;
-> >  }
-> >
-> > +static ssize_t dbc_iSerial_show(struct device *dev,
-> > +                         struct device_attribute *attr,
-> > +                         char *buf)
-> > +{
-> > +     struct xhci_hcd *xhci =3D hcd_to_xhci(dev_get_drvdata(dev));
-> > +     struct xhci_dbc *dbc =3D xhci->dbc;
-> > +
-> > +     return sysfs_emit(buf, "%s\n", dbc->str.serial);
-> > +}
-> > +
-> > +static ssize_t dbc_iSerial_store(struct device *dev,
-> > +                          struct device_attribute *attr,
-> > +                          const char *buf, size_t size)
-> > +{
-> > +     struct xhci_hcd *xhci =3D hcd_to_xhci(dev_get_drvdata(dev));
-> > +     struct xhci_dbc *dbc =3D xhci->dbc;
-> > +     size_t len;
-> > +
-> > +     if (dbc->state !=3D DS_DISABLED)
-> > +             return -EBUSY;
-> > +
-> > +     len =3D strcspn(buf, "\n");
->
-> So you are requiring the \n to be there?  Why?  What tool will write it?
+Hi,
 
-I'm not requiring \n to be present. The purpose of this line is to
-exclude \n from
-being copied.  These new fields accessible through sysfs (serial,
-manufacturer, product) will be written by ChromeOS software stack.
+On 19.09.25 13:56, Thorsten Blum wrote:
+> Replace kmalloc() followed by copy_from_user() with memdup_user() to
+> simplify and improve proc_do_submiturb(). Replace the hard-coded 8 bytes
+> with the size of 'struct usb_ctrlrequest'.
+> 
+> Return early if an error occurs, and avoid manually setting 'ret' and
+> using 'goto error'.
+> 
+> No functional changes intended.
+> 
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> ---
+>   drivers/usb/core/devio.c | 10 +++-------
+>   1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> index f6ce6e26e0d4..3bc54a5c59ff 100644
+> --- a/drivers/usb/core/devio.c
+> +++ b/drivers/usb/core/devio.c
+> @@ -1670,13 +1670,9 @@ static int proc_do_submiturb(struct usb_dev_state *ps, struct usbdevfs_urb *uurb
+>   		/* min 8 byte setup packet */
+>   		if (uurb->buffer_length < 8)
+>   			return -EINVAL;
+> -		dr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_KERNEL);
+> -		if (!dr)
+> -			return -ENOMEM;
+> -		if (copy_from_user(dr, uurb->buffer, 8)) {
+> -			ret = -EFAULT;
+> -			goto error;
+> -		}
+> +		dr = memdup_user(uurb->buffer, sizeof(struct usb_ctrlrequest));
 
-> You don't document this in up in the documentation :)
->
+You cannot do this. User space cannot and must not know or care how long
+struct usb_ctrlrequest is. It is a data structure internal to the kernel.
+For the purpose of this API we copy 8 bytes. That is set in stone.
+If the kernel's data structure ever changes length, we will have
+to define a new ioctl.
 
-I added the description of dbc_iSerial, dbc_iProduct and dbc_iManufacturer
-to the sysfs-bus-pci-drivers-xhci_hcd.
-What else would you like to see added there ?
+You have to leave the literal 8.
 
-> > +     if (!len)
-> > +             return -EINVAL;
-> > +
-> > +     if (len > USB_MAX_STRING_LEN/2)
-> > +             return -E2BIG;
-> > +
-> > +     memcpy(dbc->str.serial, buf, len);
-> > +     dbc->str.serial[len] =3D '\0';
->
-> As you know that buf is zero terminated, you can do a strcpy instead of
-> this two-step process.  Ah, but that \n character, why not just zap it
-> out if it is present?
->
+	Regards
+		Oliver
 
-I could use strcpy however I want to get rid of \n if it is present.
-
-Thanks,
-=C5=81ukasz
-
-> thanks,
->
-> greg k-h
 
