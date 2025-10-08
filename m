@@ -1,129 +1,145 @@
-Return-Path: <linux-usb+bounces-29050-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29051-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7D5FBC6983
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 22:34:19 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCBF7BC69CE
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 22:53:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6F973A836E
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 20:34:18 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D1F0B34B7D0
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 20:53:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 502971991D4;
-	Wed,  8 Oct 2025 20:34:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 069C726CE2D;
+	Wed,  8 Oct 2025 20:53:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gl++Drba"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CNZRUwTd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B56E2206A7
-	for <linux-usb@vger.kernel.org>; Wed,  8 Oct 2025 20:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C4B1EB36;
+	Wed,  8 Oct 2025 20:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759955655; cv=none; b=udwi7ijhJQI3qwWXiwFtnNIAWanwYQSfxur2rwjY0OXggKmNXvSKfc+RDPzw/Cl/nFs49WGsS0TDoanDFORpIzGGPmA42qKph0HiyFcyNPF2vMfshrL5EKIRp7JcdiF0N9Ic5wV6sHOq1JjrUPtsxYG+ff4ODOICBekchObRzrg=
+	t=1759956804; cv=none; b=eqM1UmHidM4WVxt94+CBvkq7gyRBNL0VdVO6l0OOVtTtqISabIL1rqKxP3k1jrju9kJeCWoiwZRwEkdbsnyoI4iEP6kCRyvib1h+ZR7QlSlFPiw4Lt8HHmkUL92Q34tpFyUAmWqEGRjVb/jX3ClEiNpo03YBcW1BQAy1TJhJ6sI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759955655; c=relaxed/simple;
-	bh=pl5VCyT11jkjeEtVnb5qzsRg1m4x5kYwoKSGldcdU58=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iEDn2+6Vk5AkZhkpIHk/AXKH5hbH+BNmVwGCCbm/HpHpwvs6ZL+ZnVHhsi9q7i8sFx8DDJqvjiSPqxCU0cqrabte2JkYxHIFC4gWDYQfgZnyGe1b8Ewgcdfoo9MsFmOE5OVHfDJPgRmsD7pws+9uZwOic/B0siJ9DZkebUALMTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gl++Drba; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-3717780ea70so1963991fa.1
-        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 13:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759955652; x=1760560452; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mQWAXybBTwMaPBjbavwbV1DmNtun+M6bhE5nxILpuas=;
-        b=Gl++Drbaa9QqK1/Nzix3nE54CPHsspvD3pF752W9sIyk+cdoCecXaVGJH0GO96Gbmt
-         5MdGryDTLL7tPtMQ33cpxXArfGBIvdqsBT/UJn4mLQ7exyvNUYpQpbiO8u9bfXLdx6/+
-         g9+2UAz+CY2Yc7Vh1TqAxYO6xZ9uy3sPtb60ywCfTqJ3HftZUKlLtUr/KK3170aOK9w/
-         kHlOe8PNlm3ekBUy68rZRzWW8VXMz44fyQ6bNkdrigox/d0E5kq0elrmNd2VDWivSTyq
-         0m6k2x/tuGnmzhOa2jly2h6A9dBAcNkuN7IoBkwXmIYsqHDJCgnXvSoWID87NrEqTK0a
-         Tkxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759955652; x=1760560452;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mQWAXybBTwMaPBjbavwbV1DmNtun+M6bhE5nxILpuas=;
-        b=aYyWKwU7jLlrayrkdEmFMI9pLhUYB+wUFiSauAtt6Pq55G/dKqeDQPHGutuV6GUsKW
-         XXuW1tPYTiJT6RIAyLd37NBvzKG1dxd+UB16MaTsVFRmWmF430rVrFqY8rAp1xlUji+P
-         IXuw0FuKzgFD2WDemknS/XE3G8m5EOhaH1Tginct6pJjDfwML2ApDPuX6JafCC9gp1zt
-         fU8jwi0dQWieke4tZmGCP9bIuT5JJ1VZXTylOJig7lzNDcz0LrQ4w1nRKmGB809JQR83
-         Jz6gfOCF/vIuE9sJnuasA3HcMbHjpjPqF1ZYJMcbVjhsZBrO8AlcrV4CTquYXkR4PEh5
-         dpDA==
-X-Gm-Message-State: AOJu0YzD8vnvEctXtUdcR8YY3MJm1ihsZW4cPS9yoTBSBlKg++vok+4M
-	AlWzaTNfSegSxeynQQgK7ua1YGP6RaJ9LWhld0GsdLqvMEKcyzigDHU/cqeylg==
-X-Gm-Gg: ASbGncu9G9Tfm5tBj2l0eNOaJVRP9p2tEQju0Hrl915NQiYmOM60KYwxiVw5gMobw+2
-	tZaq4wJPM0dnjncRkLLpn38ojKnU4D5cWGJLWFgBFizzbN2MZhoKxOV21qrw+Iu3vii9DMDI3Bf
-	DBLCaBOHqdkoRbXFYZo3kFg5+4UW9Z9LRmX+C9/RmpTFpu71z9yy/TKYC1gdj0Fly56QjHcUVQe
-	EbIjfn/Bv8vM/yrTjgeM86BUmVoasZrvXhYH0Ne9xJfpviUsnoRoc7JOaAWr0KYkaN+94fzmQpz
-	SvuLyruqb0XNCUHdb2q7nQfqpse2CfxYFCQo+BseV8yjPP1MNVVfKAB2DZNZ07DrwPGLPKzP1jL
-	yiOrUxwMr2Rk+ffvBCJ4+y6puG7riRELFHULdei2qI9Tf9wgqg105mSPhZpY=
-X-Google-Smtp-Source: AGHT+IGJr7vlHgFJAyj2pUz1CAOl8EkX5m9/FUX3ukXnaqWAsipQzJctExc3ig76naIW4NSaYWIxPg==
-X-Received: by 2002:a05:651c:222c:b0:361:8f0a:6fc6 with SMTP id 38308e7fff4ca-37609cfa0b3mr14570131fa.7.1759955651936;
-        Wed, 08 Oct 2025 13:34:11 -0700 (PDT)
-Received: from foxbook (bff184.neoplus.adsl.tpnet.pl. [83.28.43.184])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-375f3b63f51sm22874791fa.38.2025.10.08.13.34.10
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 08 Oct 2025 13:34:11 -0700 (PDT)
-Date: Wed, 8 Oct 2025 22:34:06 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Arisa Snowbell <arisa.snowbell@gmail.com>
-Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev, Niklas Neronin
- <niklas.neronin@linux.intel.com>, Mathias Nyman
- <mathias.nyman@linux.intel.com>
-Subject: Re: [REGRESSION] USB-A devices not working on boot after recent USB
- merge
-Message-ID: <20251008223406.13f16f19.michal.pecio@gmail.com>
-In-Reply-To: <CABpa4MAsvK68CyQ7bVdie1j2m2O2YAEuFJHq8D-65uFT3FzKzQ@mail.gmail.com>
-References: <CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com>
-	<20251007231709.6c16802e.michal.pecio@gmail.com>
-	<CABpa4MCUnLUR_0Vzgd=rTr0+Hot=nxHirKrX6xtJWowDoLhWJw@mail.gmail.com>
-	<CABpa4MCg7yixe7O8Pp+YwvpxeC=1JPhMhAap12RjtV6pcxFYgQ@mail.gmail.com>
-	<20251008082055.5646dadc.michal.pecio@gmail.com>
-	<CABpa4MCm8hQXvtSYqUA+Dh3rCLVM5rTC1p+FsgmFemv+Vyz=RA@mail.gmail.com>
-	<20251008130532.49922d58.michal.pecio@gmail.com>
-	<CABpa4MAsvK68CyQ7bVdie1j2m2O2YAEuFJHq8D-65uFT3FzKzQ@mail.gmail.com>
+	s=arc-20240116; t=1759956804; c=relaxed/simple;
+	bh=kea3RxogjvdILzkpgzWw9gxfFKJCQ1AXuLQYBUx9CRE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Psyssz7+gB9wquDKEXif5Gkewh6z88cInhJbBIUm/DS9xZVdk58CSCi2jycKtvmYziYMfZio75g2H2wzisIw/s0+6aWHLO4NeS0bKGTsSp5EmtYz/uODfF8Hls3Lr1S2bdVG14fH/YC45SBcOSjps3ll2h0ly3Nc/KjbJq5bbaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CNZRUwTd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E38C4CEE7;
+	Wed,  8 Oct 2025 20:53:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759956803;
+	bh=kea3RxogjvdILzkpgzWw9gxfFKJCQ1AXuLQYBUx9CRE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CNZRUwTdWwGhsqtnCst4mKL3Yvr3NhMYIU/7hltM7xRZs71ZKgOgc0KlZ2tDUwJT7
+	 wnrQgPgy0u3VgxbzXs5y4+1GOTqysPljVKwsYkGEHVGMo110kV91g/aDulcUc9nCiR
+	 RIQJo0aEDSKm+FtPlG7o8e7LpgFBZIkz69/KhCbj9gf0g7wCm1ECvurHmm78nMFOpE
+	 aXCBzEcQ7QXwg64Lw3LaYILuJJuFlHLOK/aIj6PgoDwowtUf1Ze/QD/8UUiXUJQ5B0
+	 Ad8zPQFD0z4LFCHOizNZ0tcXJVCCTd2P3cDQ/VJ0vVMOUCI+zpQnuNLilAHTXr9QZV
+	 fzGRcmIL9ahmQ==
+Date: Wed, 8 Oct 2025 21:53:18 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Biju Das <biju.das.jz@bp.renesas.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: usb: ti,hd3ss3220: Add support for VBUS
+ based on ID state
+Message-ID: <20251008-reclusive-cilantro-cafe98a62922@spud>
+References: <20251002172539.586538-1-krishna.kurapati@oss.qualcomm.com>
+ <20251002172539.586538-2-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="O2jSri3ANK3hWGRc"
+Content-Disposition: inline
+In-Reply-To: <20251002172539.586538-2-krishna.kurapati@oss.qualcomm.com>
 
-On Wed, 8 Oct 2025 14:16:43 +0200, Arisa Snowbell wrote:
-> I am back with the results, kinda struggled honestly.
-> 
-> So I tried finding the PCIe address from the good kernel and that
-> didn't work out, it disappeared and on the good kernel I have 5x 2.0
-> root hubs and on the bad one I have 4 of them.
 
-Looks like xhci_hcd fails to register the USB2-only bus at all.
-You probably have some noise about it in the log, try
+--O2jSri3ANK3hWGRc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-dmesg |grep xhci_hcd
+On Thu, Oct 02, 2025 at 10:55:38PM +0530, Krishna Kurapati wrote:
+> Update the bindings to support reading ID state and VBUS, as per the
+> HD3SS3220 data sheet. The ID pin is kept high if VBUS is not at VSafe0V a=
+nd
+> asserted low once VBUS is at VSafe0V, enforcing the Type-C requirement th=
+at
+> VBUS must be at VSafe0V before re-enabling VBUS.
+>=20
+> Add id-gpios property to describe the input gpio for USB ID pin and vbus-
+> supply property to describe the regulator for USB VBUS.
 
-shortly after booting and you should see stuff like:
+IDK anything about this class of USB device, but I think the binding
+patch is acceptable.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-[ 2.843799] xhci_hcd 0000:0d:00.0: xHCI Host Controller
-[ 2.843811] xhci_hcd 0000:0d:00.0: new USB bus registered, assigned bus number 1
-[ 2.899808] xhci_hcd 0000:0d:00.0: hcc params 0x0200ef81 hci version 0x110 quirks 0x0000000000000010
-[ 2.900068] xhci_hcd 0000:0d:00.0: xHCI Host Controller
-[ 2.900070] xhci_hcd 0000:0d:00.0: new USB bus registered, assigned bus number 2
-[ 2.900072] xhci_hcd 0000:0d:00.0: Host supports USB 3.2 Enhanced SuperSpeed
+>=20
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> ---
+>  .../devicetree/bindings/usb/ti,hd3ss3220.yaml       | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml b/Do=
+cumentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+> index bec1c8047bc0..c869eece39a7 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+> @@ -25,6 +25,19 @@ properties:
+>    interrupts:
+>      maxItems: 1
+> =20
+> +  id-gpios:
+> +    description:
+> +      An input gpio for USB ID pin. Upon detecting a UFP device, HD3SS32=
+20
+> +      will keep ID pin high if VBUS is not at VSafe0V. Once VBUS is at V=
+Safe0V,
+> +      the HD3SS3220 will assert ID pin low. This is done to enforce Type=
+-C
+> +      requirement that VBUS must be at VSafe0V before re-enabling VBUS.
+> +
+> +    maxItems: 1
+> +
+> +  vbus-supply:
+> +    description: A phandle to the regulator for USB VBUS if needed when =
+host
+> +      mode or dual role mode is supported.
+> +
+>    ports:
+>      $ref: /schemas/graph.yaml#/properties/ports
+>      description: OF graph bindings (specified in bindings/graph.txt) tha=
+t model
+> --=20
+> 2.34.1
+>=20
 
-followed by a bunch of "new USB device", repeating several times with
-different PCI addresses. One of them will be the broken controller not
-showing in lsusb and maybe something interesting will be printed there.
+--O2jSri3ANK3hWGRc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Once you know its address you can also try to bind the driver again
-with dynamic debug enabled, which will print a lot more info.
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaObPPgAKCRB4tDGHoIJi
+0k4bAPwOmhH3js+ZE10XCEiPUQjV+YFJjF9Xgp/60X3oq7DfNAEAnwxCcKYmCaFt
+glEzv5O/+W5lckpMgIxSHozXrlPBVQk=
+=wkef
+-----END PGP SIGNATURE-----
+
+--O2jSri3ANK3hWGRc--
 
