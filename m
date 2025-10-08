@@ -1,72 +1,75 @@
-Return-Path: <linux-usb+bounces-29027-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29028-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A8D8BC49BD
-	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 13:47:06 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F558BC49F3
+	for <lists+linux-usb@lfdr.de>; Wed, 08 Oct 2025 13:51:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 84AF0351038
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 11:47:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 819224EA13F
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Oct 2025 11:51:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8290D2F746E;
-	Wed,  8 Oct 2025 11:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6D72B9A8;
+	Wed,  8 Oct 2025 11:51:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCzS4wjP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mCskzSUU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD681DFE0B;
-	Wed,  8 Oct 2025 11:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591F42F1FC3;
+	Wed,  8 Oct 2025 11:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759924019; cv=none; b=UXgL0sOeWHUK2vDWplugINjIk5l2qIpcuoulk2834KdtlgbPpcpOzv6nUtjjqF6nEFR0C/xOdnzx4tASge/F8Rklwnjth6AuqRzuC8jHlLjblx+JqPNEv5sdftQ2bozr8ZyrL6VWneOe+RIuSTHKNNtc3pOQheIq29tyhXKnZCE=
+	t=1759924285; cv=none; b=hdnveIqg7vq6kz6Kh2CB8fnTZ4zlASli43NSQXhXvT+SPQVxy84f8ZpNCCmDZJgZ6qRBT4+FOq6K9stfvOWl4zj1fUn5Z9WU8mv9jCkkaDt35AA1AIyZnv1sYU3aVseyLkIp3hGsDXRWuMsWADy4i+nTwYkRtCIM45eLwFtIGZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759924019; c=relaxed/simple;
-	bh=EpgdIB0VrKXe9RLfKIuBV1GtRp2U7rWH3b+xzvj9yP8=;
+	s=arc-20240116; t=1759924285; c=relaxed/simple;
+	bh=ryM31503eMXvR81ecjmrnqZ+pmjpuK2RFkfc0Ve3/Hg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XNZHVsqAUj4INjByzZZlWzu6AVLugcfB320Nji60rjrkAxrxIZtaN5CFU1Jzr6PfmMuF//rw0qzL3gD8EigTCJA3AelWA1xcZirHKZLXnd6XolGC3j4B4r89uzd864yEIB7XC9Qkd1Dhr2QchvOyjtZCacIF29d8VuUTOmurZLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCzS4wjP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E298C4CEF4;
-	Wed,  8 Oct 2025 11:46:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759924018;
-	bh=EpgdIB0VrKXe9RLfKIuBV1GtRp2U7rWH3b+xzvj9yP8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XCzS4wjPaNIks2gCKdcMpv8VZn0+DC3oGMu5Xuc1IAFbayT/Zunyil8BUnXVQPK2k
-	 cq2mahgAuhQm7tTS9+Dic9luY8FzKII1afm0ECrLZPMoH8g4KPS/SX2Y3AHBQrF+EV
-	 480TertJsVvSXOg5DJELQJm3nEU58BJkZCHa74RYpww6eGpiNyEL8eSC7sko5sCEk8
-	 4gUxdA4dcdUv2+8suVKSDmhFGFfVgqrrT/j9Bmyp81nHucWbQ4i4UxKwdMIrguMcE/
-	 fdqnHoF4nob3i0NeixW8Pw49Zt0wtsFBrd8sqHM/GROYz6psDkJXVHLawtCAvJaemV
-	 GCCBPFi7R3YKQ==
-Date: Wed, 8 Oct 2025 06:46:57 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	linux-arm-kernel@lists.infradead.org,
-	Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Conor Dooley <conor+dt@kernel.org>, imx@lists.linux.dev,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Luca Weiss <luca.weiss@fairphone.com>, Li Jun <jun.li@nxp.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Fabio Estevam <festevam@gmail.com>,
-	Romain Gantois <romain.gantois@bootlin.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: switch: split out ports definition
-Message-ID: <175992401654.3284722.6085529297622918555.robh@kernel.org>
-References: <20250930-topic-sm8x50-fix-qmp-usb43dp-usb-switch-v1-1-060568de9538@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JTt0dL/2c239BPWFBHiXRgO56I3vPDFGTwxSJ6mZBa1QBjcDYyNNktsxKHmUneZDw265X5LMA5QP5OyMMgTMydCdTjGXLlZ1nJzJlVoMqgRRCV82twiMINwo9pPyGQW4A99O+N/TAF52nq29nUV3rEZy3MWwY6IyVpCUeBvEh8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mCskzSUU; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759924283; x=1791460283;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ryM31503eMXvR81ecjmrnqZ+pmjpuK2RFkfc0Ve3/Hg=;
+  b=mCskzSUU0eSmbldZjkfhpRfHhB7pSlBM2Q64Ext3mSc0NYgdtJLJSLrp
+   h7HL/wCWZyZOw0rGONBegAK/n0G8D97e5LY416jE/pMTVMyXSUNktpocG
+   0YwtrztRsi+dAUp6Jd2YLBs55LPJjTTcbhiWE5lLWC0Wa+CCUTZYqlefG
+   JnBcWbQhsNIjdCbaIhHeysKVtL7a/lswSG07cmUCkkoyXzXXFCYJlg17t
+   zosvN8T+ZTOXQODPfZtwWNxQTHuvGheLqOOupwCkbWjrxelhuA9PzGGDt
+   M7JSpLcfho3OBpYWtj8rm6Zk2wC+iDu9mFzBT2mk0UGxWNsu+VSiXO0Xp
+   A==;
+X-CSE-ConnectionGUID: xgumI4T8RY+dQaE0MDZUiw==
+X-CSE-MsgGUID: Yj1fq/C+Ri2bYuklKoLCRg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11575"; a="72373482"
+X-IronPort-AV: E=Sophos;i="6.19,323,1754982000"; 
+   d="scan'208";a="72373482"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2025 04:51:14 -0700
+X-CSE-ConnectionGUID: lSwJdvgRRKaNYFeRXQJS3g==
+X-CSE-MsgGUID: QEGKyH1oTsad5GTZg8HvNQ==
+X-ExtLoop1: 1
+Received: from iherna2-mobl4.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.169])
+  by fmviesa003.fm.intel.com with SMTP; 08 Oct 2025 04:51:08 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 08 Oct 2025 14:51:05 +0300
+Date: Wed, 8 Oct 2025 14:51:05 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Jameson Thies <jthies@google.com>
+Cc: akuchynski@chromium.org, abhishekpandit@chromium.org,
+	krzk+dt@kernel.org, robh@kernel.org, bleung@chromium.org,
+	ukaszb@chromium.org, tzungbi@kernel.org, devicetree@vger.kernel.org,
+	chrome-platform@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] usb: typec: cros_ec_ucsi: Load driver from OF and
+ ACPI definitions
+Message-ID: <aOZQKfKUpae1cSvo@kuha.fi.intel.com>
+References: <20251001193346.1724998-1-jthies@google.com>
+ <20251001193346.1724998-3-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,41 +78,99 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250930-topic-sm8x50-fix-qmp-usb43dp-usb-switch-v1-1-060568de9538@linaro.org>
+In-Reply-To: <20251001193346.1724998-3-jthies@google.com>
 
+On Wed, Oct 01, 2025 at 07:33:42PM +0000, Jameson Thies wrote:
+> Add support for cros_ec_ucsi to load based on "google,cros-ec-ucsi"
+> compatible devices and "GOOG0021" ACPI nodes.
+> 
+> Signed-off-by: Jameson Thies <jthies@google.com>
 
-On Tue, 30 Sep 2025 19:17:21 +0200, Neil Armstrong wrote:
-> The ports definition currently defined in the usb-switch.yaml
-> fits standards devices which are either recipient of altmode
-> muxing and orientation switching events or an element of the
-> USB Super Speed data lanes.
-> 
-> This doesn't necessarely fit combo PHYs like the Qualcomm
-> USB3/DP Combo which has a different ports representation.
-> 
-> Move the ports definition to a separate usb-switch-ports.yaml
-> and reference it next to the usb-switch.yaml, except for
-> the Qualcomm USB3/DP Combo PHY bindings.
-> 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Closes: https://lore.kernel.org/all/175462129176.394940.16810637795278334342.robh@kernel.org/
-> Fixes: 3bad7fe22796 ("dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp: Reference usb-switch.yaml to allow mode-switch")
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+One nitpick below. With that sorted out:
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  .../bindings/phy/fsl,imx8mq-usb-phy.yaml           |  4 +-
->  .../bindings/phy/samsung,usb3-drd-phy.yaml         |  4 +-
->  .../devicetree/bindings/usb/fcs,fsa4480.yaml       |  1 +
->  .../devicetree/bindings/usb/gpio-sbu-mux.yaml      |  1 +
->  .../devicetree/bindings/usb/nxp,ptn36502.yaml      |  1 +
->  .../devicetree/bindings/usb/onnn,nb7vpq904m.yaml   |  1 +
->  .../devicetree/bindings/usb/parade,ps8830.yaml     |  1 +
->  .../bindings/usb/qcom,wcd939x-usbss.yaml           |  1 +
->  .../devicetree/bindings/usb/ti,tusb1046.yaml       |  1 +
->  .../devicetree/bindings/usb/usb-switch-ports.yaml  | 68 ++++++++++++++++++++++
->  .../devicetree/bindings/usb/usb-switch.yaml        | 52 -----------------
->  11 files changed, 81 insertions(+), 54 deletions(-)
+>  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
 > 
+> diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> index eed2a7d0ebc6..3d19560bbaa7 100644
+> --- a/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> @@ -5,11 +5,13 @@
+>   * Copyright 2024 Google LLC.
+>   */
+>  
+> +#include <linux/acpi.h>
+>  #include <linux/container_of.h>
+>  #include <linux/dev_printk.h>
+>  #include <linux/jiffies.h>
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_usbpd_notify.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+> @@ -235,7 +237,7 @@ static void cros_ucsi_destroy(struct cros_ucsi_data *udata)
+>  static int cros_ucsi_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> -	struct cros_ec_dev *ec_data = dev_get_drvdata(dev->parent);
+> +	struct cros_ec_dev *ec_data;
+>  	struct cros_ucsi_data *udata;
+>  	int ret;
+>  
+> @@ -244,8 +246,13 @@ static int cros_ucsi_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	udata->dev = dev;
+> +	if (is_acpi_device_node(dev->fwnode) || is_of_node(dev->fwnode)) {
+> +		udata->ec = dev_get_drvdata(pdev->dev.parent);
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+udata->ec = dev_get_drvdata(dev->parent);
 
+> +	} else {
+> +		ec_data = dev_get_drvdata(dev->parent);
+> +		udata->ec = ec_data->ec_dev;
+
+and just as a proposal:
+
+udata->ec = ((struct cros_ec_dev *)dev_get_drvdata(dev->parent))->ec_dev;
+
+> +	}
+> -	udata->ec = ec_data->ec_dev;
+>  	if (!udata->ec)
+>  		return dev_err_probe(dev, -ENODEV, "couldn't find parent EC device\n");
+>  
+> @@ -326,10 +333,24 @@ static const struct platform_device_id cros_ucsi_id[] = {
+>  };
+>  MODULE_DEVICE_TABLE(platform, cros_ucsi_id);
+>  
+> +static const struct acpi_device_id cros_ec_ucsi_acpi_device_ids[] = {
+> +	{ "GOOG0021", 0 },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(acpi, cros_ec_ucsi_acpi_device_ids);
+> +
+> +static const struct of_device_id cros_ucsi_of_match[] = {
+> +	{ .compatible = "google,cros-ec-ucsi", },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, cros_ucsi_of_match);
+> +
+>  static struct platform_driver cros_ucsi_driver = {
+>  	.driver = {
+>  		.name = KBUILD_MODNAME,
+>  		.pm = &cros_ucsi_pm_ops,
+> +		.acpi_match_table = cros_ec_ucsi_acpi_device_ids,
+> +		.of_match_table = cros_ucsi_of_match,
+>  	},
+>  	.id_table = cros_ucsi_id,
+>  	.probe = cros_ucsi_probe,
+
+thanks,
+
+-- 
+heikki
 
