@@ -1,186 +1,111 @@
-Return-Path: <linux-usb+bounces-29074-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29076-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEA02BC7EC6
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 10:07:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEFBCBC80DC
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 10:32:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C649E3A65A9
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 08:07:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FF641A603D6
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 08:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996202D7DDB;
-	Thu,  9 Oct 2025 08:02:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3B942900A8;
+	Thu,  9 Oct 2025 08:32:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AKw/JXTV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UtVUjQvJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FEDB2D2397
-	for <linux-usb@vger.kernel.org>; Thu,  9 Oct 2025 08:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173434A01;
+	Thu,  9 Oct 2025 08:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759996971; cv=none; b=VSwFCM7OulCjeMxga6Ej9Il+x1FpFQRoJOaqR4fX0OUGo/JWz4oOmXCzhS8f0E95ohy8ukl0VbWRFQRizDT6BKBVFIS5cayyxmCY0hh5V0VMsG2YIG4Jn/D2pZGUF+vM2GYkfVmh1dcH6Z5pCvaQ701R1V01qtC5wP/tXBji4hc=
+	t=1759998744; cv=none; b=COEuRLrKEcCrvIZHbSeSifF0uvk4fsqXYdyUBvfeWLgGdnCiA45nHpxgPDjxB6r3vIk5H/bl7KXIdxzFJ941cWyfdTgge1/fc57KfwkhJSJTjfvnOPlTBC4Xy3339+0n3DGbcxEesZo5HNM/oUwX3s3X17CQvQUnw1bym5fJFss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759996971; c=relaxed/simple;
-	bh=KfgP8PKHQkhMPJ6eadK+yTkypPjqTwhIA8NepWDeE9A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kytn3sup3X1MXyHuGvSyRB4DbqKj1esoJ9aiJZQ3SrXiTecRKgSLvTydFfFMlGrlfIvoX8v3Qcjb4DCHp2GXIVRJd67W4UVmjAslcb0HNgXhGQhS08rcb97EJhbOrVCwQlHwYL3g58FS7QF/S6sZtfxn9BHuA0rHhET8Qx+A+p8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AKw/JXTV; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1759996968;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=V6zsf8fjJWbuUz6EJwoT59Z49B5oYOEITBMV+N/RaV8=;
-	b=AKw/JXTVyvDw4cD5PZBbcwJWzSxkLXr64lpoIyOfgUenGbtYo80Qjoh8PQrV6HvEjIg/Ca
-	7gEBHPTqaJ2NDyJ2040eioPFF2feErLrjoYUoxzIRrC7A427HcuYt71/bT6/Vk36zfRnCW
-	05u5OeleOkHAROlnxYNkCE5bbC2+NRQ=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-612-9yy0xEYCM9CqAr7ROqk1eg-1; Thu, 09 Oct 2025 04:02:47 -0400
-X-MC-Unique: 9yy0xEYCM9CqAr7ROqk1eg-1
-X-Mimecast-MFC-AGG-ID: 9yy0xEYCM9CqAr7ROqk1eg_1759996966
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3ee13e43dd9so439832f8f.1
-        for <linux-usb@vger.kernel.org>; Thu, 09 Oct 2025 01:02:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759996966; x=1760601766;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V6zsf8fjJWbuUz6EJwoT59Z49B5oYOEITBMV+N/RaV8=;
-        b=v+ImoU4cJAHQl+bbI+KNmve8rwodZxmRlgAOahZp8EfyrvXDtM12x4QDcsHDANi+P3
-         lWxyxHR9uIhJtDn3lDdufu4Lf/MKsAj3jgAYXso6ql/UsooypBGDRhcswyj9utOEIpwo
-         pANGlO1KCxwVUfKpZvOpoBX5nk9yWQCw4l+4rsjWiaCtnJZVCqpY6TncYnIbK4X73UdY
-         KVIoJBzDaKlU/yJLgtrfmfM7sbgPpQbeeKd5LtwDfj/kI2c2sSrqyMc3d4GhOKsgTgfS
-         AD/Yrus/AVQAcicMZxy5hZEstf9wjdz9ksTO6KdLjula4Yld0WDNmEeTxpjP5kbu1M2w
-         hHsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZ+iFzVxg+/5g05T5a1D6qPXPblTo4DXgKydvTayifblXic5hpHA7dcckpSGR0u7Fr5euSOUzoGQI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzluM8sMgs1FIg54dB6VDDvDB3HS4GXOPVulLC/PdqkdAkirnts
-	Kjc1CWmCZcPUR2UeU70CW0QEVnM0eRJTLQ0AMiEgpOwPoIVXndZttroqxbAhGWOAXAyM/6TLB+8
-	9uMzNaDYLbqci9TYvS+TGK884f35sl19Ale/gno2/21Wck5swtU6pwN8KK1CU4w==
-X-Gm-Gg: ASbGnctdoG3E3BOQCBz6rtqqsyo7tzXWgID/SQs7Z5jGmbKxLzeH+1kWGIE99zZAm/+
-	LnnCD+ppiEqdFsRyjjBu6lvyEtnu/qbhAvuqPQRyuD0TIbPbaSi25fqc/hs7JM4HBA868bkTdkY
-	X7Yvuyi64MhRwW2J5h6x0aMXIXcNTiqPpjtJJMrhwhfqB9oTV3WwgjljgYRVjs6KT+3FKwkuXBP
-	qciEUtLFHtxEfXWJIQr9D81po3ikM/WM+EetZkl4F8AHtzYwC50zRzMiVcf8srjx6NRCrWgbXXR
-	lwKqxZPOY0nZ5r289B6mmL9x6QCG8R/yqekKLSqNcWmECWwcgkcJc+hmXFY65uD/6TAUMJEbFrE
-	i2b8RJd2XARKy3tuDtw==
-X-Received: by 2002:a05:6000:26d0:b0:425:8bf9:557d with SMTP id ffacd0b85a97d-4266e8dd3c2mr4394905f8f.44.1759996965719;
-        Thu, 09 Oct 2025 01:02:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IErg2jmKIzfr0le15oKD1DjKM11Y25v2S6Dk1KGneA1BBfPBadVcx+OCodmaVYpJSX8X4ibLA==
-X-Received: by 2002:a05:6000:26d0:b0:425:8bf9:557d with SMTP id ffacd0b85a97d-4266e8dd3c2mr4394872f8f.44.1759996965224;
-        Thu, 09 Oct 2025 01:02:45 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4255d8f45e9sm33944702f8f.51.2025.10.09.01.02.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Oct 2025 01:02:44 -0700 (PDT)
-Message-ID: <ef6fd852-0e9a-41fb-a4f9-8cc95c78f9bd@redhat.com>
-Date: Thu, 9 Oct 2025 10:02:42 +0200
+	s=arc-20240116; t=1759998744; c=relaxed/simple;
+	bh=CpT047vseBAHkLMTuVR4Y4+NLn53QOvWFMPmqJrJSW8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cr8Ook4kqOX/eanrExThZwEk1KFK6ICYJOGKcruf73SZYXXvjzwVw/Vwcf/4kW6ZKCIKcbxldxKg5TIa1FJc2x4sPjfiScUpLGMcwJqhiXJbZj+gVza6BL/af4hgAAZSi+aEXXZfRE8s4ivN491tHlPWpY+W0SQVk6Mn0LyOS2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UtVUjQvJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACB3C4CEF7;
+	Thu,  9 Oct 2025 08:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759998743;
+	bh=CpT047vseBAHkLMTuVR4Y4+NLn53QOvWFMPmqJrJSW8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UtVUjQvJ8VwBB4YjHG2j2Vhn4SwfSST9s7jMtACswUNDy6+QNYppj3Lk26sueiMmn
+	 1bzAQRWADFCEGtf4V8IvoiT8Ly6xSXkAj7lc00CM9/cfO1b+7B9qpq4Ep3caaD/E4q
+	 bX8uUItpgOE2Q0t5JqFugou4hlv1jR3WMWWzaE4o9rIXGMtWA3/0yTacq6YzL7NED6
+	 mKpCI3/qsqHi3s/9KgSrj7LX8O1FQdz6Q4yBX5Kz/rbsF4VlLLnO5Hps3ATvzcx19a
+	 HB108zq+cnuCTPRyT+ndX/+C0S4alfSSmCVSorC4t56hOnxxzW7vw2jJi6gaup9zAE
+	 ArPus5VBXh2yw==
+Date: Thu, 9 Oct 2025 09:32:17 +0100
+From: Simon Horman <horms@kernel.org>
+To: Bhanu Seshu Kumar Valluri <bhanuseshukumar@gmail.com>
+Cc: Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
+	UNGLinuxDriver@microchip.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Oleksij Rempel <o.rempel@pengutronix.de>, netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	khalid@kernel.org, linux-kernel-mentees@lists.linuxfoundation.org,
+	skhan@linuxfoundation.org, david.hunter.linux@gmail.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] net: usb: lan78xx: Fix lost EEPROM write timeout
+ error(-ETIMEDOUT) in lan78xx_write_raw_eeprom
+Message-ID: <20251009083217.GT3060232@horms.kernel.org>
+References: <20251009053009.5427-1-bhanuseshukumar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] net: usb: lan78xx: Fix lost EEPROM write timeout
- error(-ETIMEDOUT) in lan78xx_write_raw_eeprom
-To: Bhanu Seshu Kumar Valluri <bhanuseshukumar@gmail.com>,
- Thangaraj Samynathan <Thangaraj.S@microchip.com>,
- Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
- UNGLinuxDriver@microchip.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, khalid@kernel.org,
- linux-kernel-mentees@lists.linuxfoundation.org, skhan@linuxfoundation.org,
- david.hunter.linux@gmail.com, stable@vger.kernel.org
-References: <20251009053009.5427-1-bhanuseshukumar@gmail.com>
- <b183a040-3d1c-47aa-a41a-9865ba70b94d@gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <b183a040-3d1c-47aa-a41a-9865ba70b94d@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251009053009.5427-1-bhanuseshukumar@gmail.com>
 
-Hello,
-
-On 10/9/25 7:41 AM, Bhanu Seshu Kumar Valluri wrote:
-> On 09/10/25 11:00, Bhanu Seshu Kumar Valluri wrote:
->> The function lan78xx_write_raw_eeprom failed to properly propagate EEPROM
->> write timeout errors (-ETIMEDOUT). In the timeout  fallthrough path, it first
->> attempted to restore the pin configuration for LED outputs and then
->> returned only the status of that restore operation, discarding the
->> original timeout error saved in ret.
->>
->> As a result, callers could mistakenly treat EEPROM write operation as
->> successful even though the EEPROM write had actually timed out with no
->> or partial data write.
->>
->> To fix this, handle errors in restoring the LED pin configuration separately.
->> If the restore succeeds, return any prior EEPROM write timeout error saved
->> in ret to the caller.
->>
->> Suggested-by: Oleksij Rempel <o.rempel@pengutronix.de>
->> Fixes: 8b1b2ca83b20 ("net: usb: lan78xx: Improve error handling in EEPROM and OTP operations")
->> cc: stable@vger.kernel.org
->> Signed-off-by: Bhanu Seshu Kumar Valluri <bhanuseshukumar@gmail.com>
->> ---
->>  Note:
->>  The patch is compiled and tested using EVB-LAN7800LC.
->>  The patch was suggested by Oleksij Rempel while reviewing a fix to a bug
->>  found by syzbot earlier.
->>  The review mail chain where this fix was suggested is given below.
->>  https://lore.kernel.org/all/aNzojoXK-m1Tn6Lc@pengutronix.de/
->>
->>  ChangeLog:
->>  v1->v2:
->>   Added cc:stable tag as asked during v1 review.
->>   V1 Link : https://lore.kernel.org/all/20251004040722.82882-1-bhanuseshukumar@gmail.com/
->>
->>  drivers/net/usb/lan78xx.c | 11 +++++++----
->>  1 file changed, 7 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
->> index d75502ebbc0d..5ccbe6ae2ebe 100644
->> --- a/drivers/net/usb/lan78xx.c
->> +++ b/drivers/net/usb/lan78xx.c
->> @@ -1174,10 +1174,13 @@ static int lan78xx_write_raw_eeprom(struct lan78xx_net *dev, u32 offset,
->>  	}
->>  
->>  write_raw_eeprom_done:
->> -	if (dev->chipid == ID_REV_CHIP_ID_7800_)
->> -		return lan78xx_write_reg(dev, HW_CFG, saved);
->> -
->> -	return 0;
->> +	if (dev->chipid == ID_REV_CHIP_ID_7800_) {
->> +		int rc = lan78xx_write_reg(dev, HW_CFG, saved);
->> +		/* If USB fails, there is nothing to do */
->> +		if (rc < 0)
->> +			return rc;
->> +	}
->> +	return ret;
->>  }
->>  
->>  static int lan78xx_read_raw_otp(struct lan78xx_net *dev, u32 offset,
+On Thu, Oct 09, 2025 at 11:00:09AM +0530, Bhanu Seshu Kumar Valluri wrote:
+> The function lan78xx_write_raw_eeprom failed to properly propagate EEPROM
+> write timeout errors (-ETIMEDOUT). In the timeout  fallthrough path, it first
+> attempted to restore the pin configuration for LED outputs and then
+> returned only the status of that restore operation, discarding the
+> original timeout error saved in ret.
 > 
-> Hi,
+> As a result, callers could mistakenly treat EEPROM write operation as
+> successful even though the EEPROM write had actually timed out with no
+> or partial data write.
 > 
-> The subject prefix must be [PATCH v2] instead. I overlooked it. Should I resend it?
-
-This is not a review, and given the current amount of queued patches a
-real one will not follow soon, but please do not send a new version just
-for this.
+> To fix this, handle errors in restoring the LED pin configuration separately.
+> If the restore succeeds, return any prior EEPROM write timeout error saved
+> in ret to the caller.
+> 
+> Suggested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Fixes: 8b1b2ca83b20 ("net: usb: lan78xx: Improve error handling in EEPROM and OTP operations")
+> cc: stable@vger.kernel.org
+> Signed-off-by: Bhanu Seshu Kumar Valluri <bhanuseshukumar@gmail.com>
+> ---
+>  Note:
+>  The patch is compiled and tested using EVB-LAN7800LC.
+>  The patch was suggested by Oleksij Rempel while reviewing a fix to a bug
+>  found by syzbot earlier.
+>  The review mail chain where this fix was suggested is given below.
+>  https://lore.kernel.org/all/aNzojoXK-m1Tn6Lc@pengutronix.de/
+> 
+>  ChangeLog:
+>  v1->v2:
+>   Added cc:stable tag as asked during v1 review.
+>   V1 Link : https://lore.kernel.org/all/20251004040722.82882-1-bhanuseshukumar@gmail.com/
 
 Thanks,
 
-Paolo
+This patch seems consistent with the discussion at the link under Note.
+I believe it addresses the review of v1.
+And that the Fixes tag corresponds to the commit that introduced this problem.
 
+Reviewed-by: Simon Horman <horms@kernel.org>
 
