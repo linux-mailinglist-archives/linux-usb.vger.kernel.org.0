@@ -1,193 +1,155 @@
-Return-Path: <linux-usb+bounces-29085-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29086-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67517BC8F90
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 14:16:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86EA1BC9030
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 14:29:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 567FD19E6C1C
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 12:17:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47BD83A8547
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 12:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 110712C326D;
-	Thu,  9 Oct 2025 12:16:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41C782E336E;
+	Thu,  9 Oct 2025 12:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJs8Ov1N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mAqYBPV4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0A6274652
-	for <linux-usb@vger.kernel.org>; Thu,  9 Oct 2025 12:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B192D8DD9
+	for <linux-usb@vger.kernel.org>; Thu,  9 Oct 2025 12:29:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760012210; cv=none; b=h8t209KzNyd6ru3fe8mKhHe+kXnXumyJ2Xytpysp6vkPheFpKymw2v+K6pmwda/uDVJnysjdOGvJUqDyFdF5UJu0NhrQT4r+wdwAkik/Z6JQGJJYlbmiTYQugEHdk6aMOLQzNW3jwLlK8wRpjiv6kvgYZxqrMl/IX4SbeYWj3mI=
+	t=1760012962; cv=none; b=f2LqymMzPNq7VAv279FnQqBybgZipqRi/aIW/XwcFA/fLO/nJOE4W1W9azntI/sjQg1nS5moKI9KCWfLy60Xp3RUY1EyNtFRUplIowEP96ZOkAoeepn8ApMKJDPvrC0w436yaNz49V+jyD6QmsIQdNbZjzGoJjGanhvBnJc0IQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760012210; c=relaxed/simple;
-	bh=ERzAXgXOZR7nhWHXRWiaHvI0m7/fpiSEFN6w/sNDYA0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cBtW6B4TUhS98j7K2efxnbWNou8vwzMjzeZc+DUwcvaYhsIFxWOvS70EYQ5W7rS9bje+RUbtt/zggNQw1YZY7sbCSshM9Kh9Zp/xHWAYvnU4ZUlKVZ2FzI6GGME1+k+1awy5SPjs8ITxLp5ZygyVViFkSI5doydPQHGQ93aqfMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lJs8Ov1N; arc=none smtp.client-ip=209.85.221.180
+	s=arc-20240116; t=1760012962; c=relaxed/simple;
+	bh=VzdC46ij9og/QMv5wDDGRQOuoWac6/8T3RkbIGb96os=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=E3D8uqHZMs6BO74bKdPGHZbx364JAQ5Yqup9T6oAMlEyYvuYPXGNI91kWuuM0zNZnQ048LCyxnOJ64g1ayqCeLt3IU1sQ4thXNdY6dx3zZZsgds1WGNEw3hNUDYIRnLv+tXS++Jhg5Q4sll3kkXZ5MIfRrDuf5oqVByUaQEs/Ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mAqYBPV4; arc=none smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-54a7bf06edfso526263e0c.0
-        for <linux-usb@vger.kernel.org>; Thu, 09 Oct 2025 05:16:47 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-637dbabdb32so1708192a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 09 Oct 2025 05:29:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760012207; x=1760617007; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1760012958; x=1760617758; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QIzWNqPafaDiQy3O44j6iD26U8n5IpZZY5s3HIzTHMA=;
-        b=lJs8Ov1NVM/gRSZaPmq1PNuoHh6qcmAcFJjbJ9J+kwmcEXpF+XOJTThIKOIS0MMmAq
-         8tc40Feg/OY13zzPf/nxIJkJ1/7GhyJ+9786tMRsjqr1A+4aPsgoR0NOq2AMY5X5XPNN
-         rrTuVz+r98bvtxtK2qRLFIedDE8WSyBwPau2Qt4c1nlje2VYJ4sGUy3nq4zknWRqo7m1
-         +hmjNQJW/vJa3BvAZJ6nAifL9M+3Wh3y1KFpthrYzaC4+iv/WPQfCTl9Vipkk5ZPiT/S
-         YDOfXmgGXBQtamb4GQvYADfrRzzK803k4JIl+1idWSf9E0fzRqmyaeMgULXeuMw57hgU
-         OOgQ==
+        bh=QyW/MRHSFiY33jmW9b/P7thbCXCFOf6rw+BoiTwW0Y8=;
+        b=mAqYBPV4K+Vi0JlCaGrcNj07pW7Q5UXJvCzqVKqHBzag/tEGXxVK04Tsc+aN4UqC4Z
+         4rWVfJBmkkZWd0uBnHjPW3FVgeUcOEigl9GWyOrHRdS/TYOVX7SzC/KxwpjcUrXw7hTX
+         7/bROlBQHry0+vQk6ZbxZdaJHAuVJvjGdkw05ikiH3Pk/tSCAvQoqOKrtKgK6NkRSlMK
+         oLvlZs6Q0Fph1pS9NE7ci1j4Dyz4VPwywKmoF3IUr6Vay9FYqLvg1Il1PGWejyDKjbb1
+         5EBqi0hbfBFXH3gpOTY/AVbQoIIFXgyCwwaTiPxTw7w+MZZXuQ2uWfMOJlm6AyETKwVe
+         Uhcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760012207; x=1760617007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1760012958; x=1760617758;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QIzWNqPafaDiQy3O44j6iD26U8n5IpZZY5s3HIzTHMA=;
-        b=bLb4FCMxO66QufBGGGSNmz0k4aV+9+T2Yydwj/DAXIobueMxwTXHlUw+QDO8020JaX
-         WWf5cKhCrDKFxccZL8rd4AcucjuI9sApKGg0l37XhujK6eiHdU9Wk7TEEoRqB/wrOQsb
-         oumM337QJXvrOpHLDjhdil/3+pySStz1abnO2j7SXBxeGutlwzA1iT5aJMRx8qPkeZR7
-         y0fnGYTQIRD069fQJgljZp2RDhorr85vv2ZeLx0cKLJ6pkJ7n2wtHtTSONYSLLILAk0m
-         9b9rtzLlya4eUlZ8X7XvdQ9It5DFbDfqqTu56codaQU9yGl3YMnnKTT5EtymiedrkKIU
-         EyVw==
-X-Gm-Message-State: AOJu0YxFckYlWN/Ivtw8u9cBXEjnmvtXdkngBdgpMUBDwj0aGHRb4Ctl
-	q+BD2qDhtMl6ZM+pTv+4NycjxCdTotkP6pbytSj5E+ug5IqZmY4lt2oUNrZMdd5Ih//q9abKQbY
-	AdoaG076i53gFKpHEwtW7j988D40aPng=
-X-Gm-Gg: ASbGnctLcH8u09jzcwEOMEIBNKb32kPhv9Kn7LIw7DVPlzJAtIvQsGOdDpvEzI1I7QH
-	rQkTy0btEPsBczRX9Z4/nVIi97u8FUeiRzjIXao3SCFwkMWVVpzOgdcOtMUKTjqCPwo3IvpnC/A
-	ylslP5jmzHMKfVO5u5VUNy1ai7XLXOaS0KAbDopaq/tgSSLqU3p1FHp8VukAYaa00x6Jk6grb1M
-	hLCMBauj+K7AsqMTXeg3DhfzQuKUaA=
-X-Google-Smtp-Source: AGHT+IFIJ/9BZfp8gwr6xofJHTQ7MouFF6fCDUYp0FjoxURhrvvl+/ubhVW1jtJ8AV8/uUwMKeYNUzbWlwi3H3WNPD0=
-X-Received: by 2002:a05:6122:e002:10b0:554:b928:6f with SMTP id
- 71dfb90a1353d-554b9280175mr2336073e0c.0.1760012206811; Thu, 09 Oct 2025
- 05:16:46 -0700 (PDT)
+        bh=QyW/MRHSFiY33jmW9b/P7thbCXCFOf6rw+BoiTwW0Y8=;
+        b=npCZbw5ZfuEU+2dxKct5j9QdL37lQywPcaex6MEZctfnty78nhaodGNt8by9kpOzHO
+         0IeK0v0q0MgLgsajgkjRbZME/NdLXGaqKhkkD/yCb/exYNCEVp4z73k4n6/kM+89E8/E
+         jhAM829txHVpwAxe94gdTWMm7e7eFwb4MsdEL7YUZVF/TijKQbJ/ULwJ5mdvl9a5RYT5
+         6OeqWQfzdKiYX5IT8J3xYNZDj6lhtSyy8AVggae2x+tQHxjDZsL5DWXOmOsVJOYUQi57
+         KGBGtHHCe+YBvD0Ul+2CoH22dfYkHkNkw+668sPcs3JV/Gtj6daqf8k9B4anZPCXq0J6
+         dpfw==
+X-Gm-Message-State: AOJu0Yx6kNaQcubOULbtyk+0cNcgWq3YrM9OEmDnK4x0X8SYI4iZ/8kZ
+	p4JUiRVZBNCDyNRJDVassCkW5DBuHjiTeeP2DGvZrOEqnbUD4ja8UeCWMVOBwg==
+X-Gm-Gg: ASbGncs+7cLKLkCzz/ukY0jv8/xQuNxUNa15/tI43tHf+5zv0LtOtb9m98Y/iFHognf
+	SJgl9zggNR9oNSwcZIqR7Yv+jkJvPFx2oeMb/4HMNwRFwFtU9qyopzrZl9CzRkE+p84d/JRke4l
+	2AEzqCysbCzwd/JVLR+HCH9PD9Rzk9O5QFMB7qipnY1FV0L/ltJjwe9C0TVveF+leHwoA6D9hTS
+	MAZCckf6F72o7W+FEm5RsPhnHROUPlJr90C6E9xRFBEj6L+KAXhN44eGrftLK8r9/RYOFQ3mkdx
+	Zrlf0Yl+4H2i+0Sptu3fLj7yCtY/YuMDw7QvC42Q5IFrcmSWSMP9p5bcQXyCLf3r+RmXB2JerH5
+	QLjVjELwDrdOdJAiQV1kGouGpSX0gvEcths9VPAnw3gMKtxrVYu3hSzAkx6R5ObhUumvTJw==
+X-Google-Smtp-Source: AGHT+IEUFt2opNB1FkGPRiWGkz3n+VBsnJz1zaUezVI3q1ZBqp6vQVbi/Nvy0LOYCR/GmfXBoc7uag==
+X-Received: by 2002:a05:6402:51c9:b0:629:e50c:b058 with SMTP id 4fb4d7f45d1cf-639d5c52cdamr7113841a12.28.1760012956991;
+        Thu, 09 Oct 2025 05:29:16 -0700 (PDT)
+Received: from foxbook (bff184.neoplus.adsl.tpnet.pl. [83.28.43.184])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-639f30fb7dfsm2279630a12.19.2025.10.09.05.29.15
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Thu, 09 Oct 2025 05:29:16 -0700 (PDT)
+Date: Thu, 9 Oct 2025 14:29:11 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Arisa Snowbell <arisa.snowbell@gmail.com>, Mathias Nyman
+ <mathias.nyman@linux.intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev, Niklas Neronin
+ <niklas.neronin@linux.intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: xhci-pci: Fix USB2-only root hub registration
+Message-ID: <20251009142911.6069c164.michal.pecio@gmail.com>
+In-Reply-To: <CABpa4MC-pij0Fczh-mH3zc+Ey2ALX70OfxX=cG4om7R6WMdRBg@mail.gmail.com>
+References: <CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com>
+	<20251007231709.6c16802e.michal.pecio@gmail.com>
+	<CABpa4MCUnLUR_0Vzgd=rTr0+Hot=nxHirKrX6xtJWowDoLhWJw@mail.gmail.com>
+	<CABpa4MCg7yixe7O8Pp+YwvpxeC=1JPhMhAap12RjtV6pcxFYgQ@mail.gmail.com>
+	<20251008082055.5646dadc.michal.pecio@gmail.com>
+	<CABpa4MCm8hQXvtSYqUA+Dh3rCLVM5rTC1p+FsgmFemv+Vyz=RA@mail.gmail.com>
+	<20251008130532.49922d58.michal.pecio@gmail.com>
+	<CABpa4MAsvK68CyQ7bVdie1j2m2O2YAEuFJHq8D-65uFT3FzKzQ@mail.gmail.com>
+	<20251008223406.13f16f19.michal.pecio@gmail.com>
+	<CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com>
+	<CABpa4MBDvgJcgJf3_E7k1dBXs7v1tW-79dmc_sQDVM1bES5YDQ@mail.gmail.com>
+	<20251009131444.2c221922.michal.pecio@gmail.com>
+	<CABpa4MC-pij0Fczh-mH3zc+Ey2ALX70OfxX=cG4om7R6WMdRBg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com>
- <20251007231709.6c16802e.michal.pecio@gmail.com> <CABpa4MCUnLUR_0Vzgd=rTr0+Hot=nxHirKrX6xtJWowDoLhWJw@mail.gmail.com>
- <CABpa4MCg7yixe7O8Pp+YwvpxeC=1JPhMhAap12RjtV6pcxFYgQ@mail.gmail.com>
- <20251008082055.5646dadc.michal.pecio@gmail.com> <CABpa4MCm8hQXvtSYqUA+Dh3rCLVM5rTC1p+FsgmFemv+Vyz=RA@mail.gmail.com>
- <20251008130532.49922d58.michal.pecio@gmail.com> <CABpa4MAsvK68CyQ7bVdie1j2m2O2YAEuFJHq8D-65uFT3FzKzQ@mail.gmail.com>
- <20251008223406.13f16f19.michal.pecio@gmail.com> <CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com>
- <CABpa4MBDvgJcgJf3_E7k1dBXs7v1tW-79dmc_sQDVM1bES5YDQ@mail.gmail.com> <20251009131444.2c221922.michal.pecio@gmail.com>
-In-Reply-To: <20251009131444.2c221922.michal.pecio@gmail.com>
-From: Arisa Snowbell <arisa.snowbell@gmail.com>
-Date: Thu, 9 Oct 2025 14:16:35 +0200
-X-Gm-Features: AS18NWAF31eFE1up9GiEj4RHhIbRq0YZZzBP_JFLGCWbxoH-A4-CI_XirfFeEvg
-Message-ID: <CABpa4MC-pij0Fczh-mH3zc+Ey2ALX70OfxX=cG4om7R6WMdRBg@mail.gmail.com>
-Subject: Re: [REGRESSION] [REPRO] USB-A devices not working on boot after
- recent USB merge
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev, 
-	Niklas Neronin <niklas.neronin@linux.intel.com>, 
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-This patch fixes it
+A recent change to hide USB3 root hubs of USB2-only controllers broke
+registration of USB2 root hubs - allow_single_roothub is set too late,
+and by this time xhci_run() has already deferred root hub registration
+until after the shared HCD is added, which will never happen.
 
-- Arisa
+This makes such controllers unusable, but testers didn't notice since
+they were only bothered by warnings about empty USB3 root hubs. The bug
+caused problems to other people who actually use such HCs and I was
+able to confirm it on an ordinary HC by patching to ignore USB3 ports.
 
-On Thu, Oct 9, 2025 at 1:14=E2=80=AFPM Michal Pecio <michal.pecio@gmail.com=
-> wrote:
->
-> On Thu, 9 Oct 2025 00:25:55 +0200, Arisa Snowbell wrote:
-> > This is what I get when I use good kernel:
-> >
-> > kernel: xhci_hcd 0000:7a:00.0: xHCI Host Controller
-> > kernel: xhci_hcd 0000:7a:00.0: new USB bus registered, assigned bus num=
-ber 9
-> > kernel: xhci_hcd 0000:7a:00.0: USB3 root hub has no ports
-> > kernel: xhci_hcd 0000:7a:00.0: hcc params 0x0110ffc5 hci version 0x120
-> > quirks 0x0000000200000010
-> > kernel: xhci_hcd 0000:7a:00.0: xHCI Host Controller
-> > kernel: xhci_hcd 0000:7a:00.0: new USB bus registered, assigned bus num=
-ber 10
-> > kernel: xhci_hcd 0000:7a:00.0: Host supports USB 3.0 SuperSpeed
-> > kernel: usb usb9: New USB device found, idVendor=3D1d6b, idProduct=3D00=
-02,
-> > bcdDevice=3D 6.17
-> > kernel: usb usb9: New USB device strings: Mfr=3D3, Product=3D2, SerialN=
-umber=3D1
-> > kernel: usb usb9: Product: xHCI Host Controller
-> > kernel: usb usb9: Manufacturer: Linux
-> > 6.17.0-1-mainline-12298-gf5bd2142c274 xhci-hcd
-> > kernel: usb usb9: SerialNumber: 0000:7a:00.0
-> > kernel: hub 9-0:1.0: USB hub found
-> > kernel: hub 9-0:1.0: 1 port detected
-> > kernel: usb usb10: We don't know the algorithms for LPM for this host,
-> > disabling LPM.
-> > kernel: usb usb10: New USB device found, idVendor=3D1d6b,
-> > idProduct=3D0003, bcdDevice=3D 6.17
-> > kernel: usb usb10: New USB device strings: Mfr=3D3, Product=3D2, Serial=
-Number=3D1
-> > kernel: usb usb10: Product: xHCI Host Controller
-> > kernel: usb usb10: Manufacturer: Linux
-> > 6.17.0-1-mainline-12298-gf5bd2142c274 xhci-hcd
-> > kernel: usb usb10: SerialNumber: 0000:7a:00.0
-> > kernel: hub 10-0:1.0: USB hub found
-> > kernel: hub 10-0:1.0: config failed, hub doesn't have any ports! (err -=
-19)
-> >
-> > where the 2.0 USB's work, mice is powered on, with the bad kernel the
-> > mice doesn't even power the LED's on.
-> > In the bad kernel its missing the New USB and all.
->
-> Okay, thanks. I now see what's going on.
->
-> I have successfully reproduced it on a normal controller by patching
-> the driver to simply ignore any USB3 ports. With this patch, no root
-> hubs are registered at all until I revert the "bad" commit.
->
-> In my case it's an idiotic little problem:
->
-> xhci_pci_common_probe()
-> {
->         usb_hcd_pci_probe() {
->                 // allocate xhci
->                 xhci_run(xhci);
->         }
->
->         xhci->allow_single_roothub =3D 1;
-> }
->
-> The thing is that xhci_run() needs allow_single_roothub to already
-> be set when it executes, but we can't do it before xhci is allocated.
-> And some non-PCI drivers don't want it to be set.
->
-> Can you check if this patch fixes things for you?
->
-> It is obviously not a real solution, but it's good enough for xhci_pci
-> and sufficient to check if no other problems remain in your case.
->
-> ---
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index 485ea7fc0433..354443316bfb 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -1735,8 +1735,7 @@ static inline bool xhci_hcd_is_usb3(struct usb_hcd =
-*hcd)
->
->  static inline bool xhci_has_one_roothub(struct xhci_hcd *xhci)
->  {
-> -       return xhci->allow_single_roothub &&
-> -              (!xhci->usb2_rhub.num_ports || !xhci->usb3_rhub.num_ports)=
-;
-> +       return (!xhci->usb2_rhub.num_ports || !xhci->usb3_rhub.num_ports)=
-;
->  }
->
->  #define xhci_dbg(xhci, fmt, args...) \
->
+Setting allow_single_roothub during early setup fixes things.
+
+Reported-by: Arisa Snowbell <arisa.snowbell@gmail.com>
+Closes: https://lore.kernel.org/linux-usb/CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com/
+Fixes: 719de070f764 ("usb: xhci-pci: add support for hosts with zero USB3 ports")
+Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+---
+
+
+Arisa, does this version also work?
+
+
+ drivers/usb/host/xhci-pci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 13454bef14d3..cb7f5dd34333 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -580,6 +580,7 @@ static int xhci_pci_setup(struct usb_hcd *hcd)
+ 
+ 	/* imod_interval is the interrupt moderation value in nanoseconds. */
+ 	xhci->imod_interval = 40000;
++	xhci->allow_single_roothub = 1;
+ 
+ 	retval = xhci_gen_setup(hcd, xhci_pci_quirks);
+ 	if (retval)
+@@ -643,7 +644,6 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	xhci = hcd_to_xhci(hcd);
+ 	xhci->reset = reset;
+ 
+-	xhci->allow_single_roothub = 1;
+ 	if (!xhci_has_one_roothub(xhci)) {
+ 		xhci->shared_hcd = usb_create_shared_hcd(&xhci_pci_hc_driver, &dev->dev,
+ 							 pci_name(dev), hcd);
+-- 
+2.48.1
 
