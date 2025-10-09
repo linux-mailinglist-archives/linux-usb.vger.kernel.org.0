@@ -1,188 +1,249 @@
-Return-Path: <linux-usb+bounces-29101-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29102-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 833BBBCAA9E
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 21:13:42 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC09ABCADE9
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 22:59:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DFA3483793
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 19:13:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ED47F4F55B5
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 20:59:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15854256C87;
-	Thu,  9 Oct 2025 19:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44A5427A11E;
+	Thu,  9 Oct 2025 20:58:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1ErGPZ7H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RebDnFGF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189BE25485F
-	for <linux-usb@vger.kernel.org>; Thu,  9 Oct 2025 19:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F072798E5
+	for <linux-usb@vger.kernel.org>; Thu,  9 Oct 2025 20:58:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760037218; cv=none; b=DH9pM/VFpWpsukDNkC+aQtatWLcno/9ci8sc7zC+cd0SSvB0tNPQh1NmHVZIiZStuoYlRTAZ8Vn0x+DheYEeVfEuDfQI0d9MUNIM93ZK8l7HUfMJ/8K2GkArkX0aLw1GooUlYn2CNwXJazrMvARAuebIUsz1Ax8oUP54LY/tUX8=
+	t=1760043529; cv=none; b=QCSRpbpmtjyJOcPKJ++Z7AP80jeCzG3swpJnL/UI8pd2peBJgErL6q6HrpBksYcyWbci9Vhrf8Dc8N6D7mcycvaN4ALu8DL2x8E2dXQoG/1hMoZMfxqivDsgP+MgX5N4i0rcDaKxisktFrTsBzdlm6y39geALJ4cAilzsurd258=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760037218; c=relaxed/simple;
-	bh=DrVzT4qQlnwhzZJ7Zk7bJ5ieuCE6DLcCPb5WQwSENjY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mDdvII7nr3IhLrWxpKwL660SP3l/rngix2q/yL9RCV5QsOejpRpW2R7IAfHPDaXu3iLw+l0S97mbTd6rI/LUXttAu57mI3k1XZq+KiGQc22/c7upn3p1Qs76TlW4wg5UinrXB3qugn4h85wdq36wEDJtSqLCFZJcq0r4Uqdc6OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1ErGPZ7H; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-781206cce18so1473922b3a.0
-        for <linux-usb@vger.kernel.org>; Thu, 09 Oct 2025 12:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760037216; x=1760642016; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iOSCy56bqYjv1nF3mp941PWU8Gn0Ei1sbikd3uwYoDs=;
-        b=1ErGPZ7HAg9wi4J1+zW45+hVOgeY7VL1MSCP0ihu4hQpdhpz/Q+hpNh3gmlzqDDbyF
-         tnAgdi6gQWFZG7eGOS2YC/eNItoiRYk8RWcjvZ/TAFzTxzmJ/5tT8jaJbq9DMXW5ulvB
-         bl6HY+VDyUWJ8Snmw5XOZ9Vcxpi1w80G+sjrA4/IRs4ZLtSTNK9EGh+3GdUpI0D/G9Wi
-         nc1UDWLwIdFMrts9T/+xvp+zEWMbF4FjyWXlLuC6ygCHkjfJnfjcUkqjUDlROKYKIhJi
-         f6mempYY2L58d91WLbQd7AQK3cpTdbwXDCtpHodxOfzY8LEG0ilul5VHLp0xR3F7W5oE
-         ZblQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760037216; x=1760642016;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iOSCy56bqYjv1nF3mp941PWU8Gn0Ei1sbikd3uwYoDs=;
-        b=CrVxpZ3sZHxXP0PsfQ4VhCD4Q64ZHfcy4s6hRVzrapGpoqi0DxtnDrVvgNZi3NL01U
-         J8ZpCpnFUvorFuwZ7Nf9X6krTeXFcGfe1LPfyy9tz+O0WWjo9xMobgzi8BSkBMhTMxQE
-         9csv6wYIKxhIRtZwTBlcxHbs5hYdAU0AZx5hCdE5iT8865JO/K5gYgoZXfNsPGDTAFmN
-         XigDLEFzX83/2LBcd0OWnhk7k/jh0eG8hdN08TwENXNhJ4CgED5KQ9mNYADEk63Xwb1p
-         7+eB2hmQeF3WO7uNOhCpngrJqil6c26imgkCDOfV2eedXJX2W88/JV/rR+8D/3xdSrC1
-         D6/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWlDnleNeEkUiykkW6cKBK0RKDAojm3jUKxdTOkM/WytRfsXsrQBpti45Y4haftaRO+VUDcdVz/AVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx25rYFxbNerH44aa2hNRxHxHbKsDL2DKwFijH6O6mRcGRUaolY
-	7kWbPJySXft7I/d3mtPooVGUSsEu3FjgkpK2n+zHYRVrjvndeqgyQoPrbTb2zuUv9w==
-X-Gm-Gg: ASbGncti/nDQu1mZUlnLLqbN0i9GfBq/n+drgJCS+D3NWiwFj/FKwv6/aThem1vmk5D
-	gDzkD1q6Jf8Yyv2nfEnowGBCFKKVAJUcbNY646pIg8JkMvCdLZ0lOEAs9166fGUAl61yvsbwykN
-	QvgiSwzTONK6dNUSl9U1T4S/l7kZKIapF+76IuUZ+KiOXIkKrbmJBZW83PvLcV9f40O0ECnD3Z6
-	EJaCHT1FLnShDFCEYibxWp4ulVVc6WTJn34R2Q9DNZw7HaMPvwlcyYuHlsK6I/UlLDVUHwERhNE
-	2FJkTddt3+SpA1/+jqUAXevZqrDiFFeEs+j36zqb+ijxjXyCqfNf/duwNvaJpFC10SWpxerTLhX
-	wlUce8O1m7wBYTeRe/SfNByIgSEZgdm45Usp7ku1mjCJywpV0891J3AuzQCl6/5bdS/eKz3NCAi
-	Q7QEk4y6/zeA==
-X-Google-Smtp-Source: AGHT+IEEnUYCsb1ig8WOq5UjpbnlJYhdXQVdJ1T9XijXib3yOVoxgg9VmVsHFrdAuk8oT5KR1DKNRA==
-X-Received: by 2002:a05:6a20:6a22:b0:246:3a6:3e47 with SMTP id adf61e73a8af0-32da8e2ba5cmr10180448637.12.1760037216071;
-        Thu, 09 Oct 2025 12:13:36 -0700 (PDT)
-Received: from google.com (232.92.83.34.bc.googleusercontent.com. [34.83.92.232])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992dd7ee5bsm455211b3a.85.2025.10.09.12.13.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Oct 2025 12:13:34 -0700 (PDT)
-Date: Thu, 9 Oct 2025 19:13:31 +0000
-From: Benson Leung <bleung@google.com>
-To: Jameson Thies <jthies@google.com>
-Cc: akuchynski@chromium.org, abhishekpandit@chromium.org,
-	krzk+dt@kernel.org, robh@kernel.org, bleung@chromium.org,
-	heikki.krogerus@linux.intel.com, ukaszb@chromium.org,
-	tzungbi@kernel.org, devicetree@vger.kernel.org,
-	chrome-platform@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] mfd: cros_ec: Don't add cros_ec_ucsi if it is
- defined in OF or ACPI
-Message-ID: <aOgJW2gOuwulIMny@google.com>
-References: <20251009010312.2203812-1-jthies@google.com>
- <20251009010312.2203812-4-jthies@google.com>
+	s=arc-20240116; t=1760043529; c=relaxed/simple;
+	bh=doUUzJQf5bHBT9h1ub1JboIIBMzWkWO1yfpDQqzbP1I=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=FzFzI5mjGRkXx9L7fZn2oB+udw61PmL4WJ+ZlFwp3/1RzvvYFsWcsxZunQV2/9RrzgAzkxhhrgmFS5EQdzSYPrRQrDCjpJx0IKuv+28uSZudYJbskbn2oD9wc7bDlDBrafVTRgWq29xp0dhviIEVwVA7zHTUZrHr3euHiLGR+44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RebDnFGF; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760043528; x=1791579528;
+  h=date:from:to:cc:subject:message-id;
+  bh=doUUzJQf5bHBT9h1ub1JboIIBMzWkWO1yfpDQqzbP1I=;
+  b=RebDnFGFJMD5ekyhPElWhZW2irJqA7qmBe6NZi0Sa7JATGhrYhjx/enm
+   WeNLaYjo4rZD21VFUnDN92Tioqr+c5zlSLXyM2MFSfkiYhntvL1dQI9EQ
+   LVNa8sIGXLO8Gv0uXbW8eiw9qK5P7ylOj8GrMfyBb7LTVo4vcPpn+MOiv
+   +WBdvWIJrThgoqNCmqku2I5iW9FqOO8LX2Z96bog53tOKd653sxmESnHC
+   /npdX5ZICfeqJs6z1Y+ZwXI/AHR5dsSBfzkr+6tfud6GFMuVhssQWpjMF
+   vXJIGU+8tUChOgRRBzQA3OgKwYStNlrrxBbiLVVRWfJLfpc4zJI4DO/wx
+   g==;
+X-CSE-ConnectionGUID: ggKXp0pZTTmmEMOlMNdiag==
+X-CSE-MsgGUID: GjjFAo1ZSXacSIWZrxIUGQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11577"; a="64886383"
+X-IronPort-AV: E=Sophos;i="6.19,217,1754982000"; 
+   d="scan'208";a="64886383"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2025 13:58:47 -0700
+X-CSE-ConnectionGUID: RCwLS3gaSyyeUPILzZ13zw==
+X-CSE-MsgGUID: BxeE6bSlQ7WAmsrUtEqGiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,217,1754982000"; 
+   d="scan'208";a="211768043"
+Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 09 Oct 2025 13:58:46 -0700
+Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v6xim-0001Qx-0d;
+	Thu, 09 Oct 2025 20:58:44 +0000
+Date: Fri, 10 Oct 2025 04:57:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ a2f12b1cbec103a836e3ddfde57084661591e4f3
+Message-ID: <202510100443.0n9kjPfo-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gdyhNSmhYhPSv1Bb"
-Content-Disposition: inline
-In-Reply-To: <20251009010312.2203812-4-jthies@google.com>
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: a2f12b1cbec103a836e3ddfde57084661591e4f3  usb: dwc3: dwc3-generic-plat: Add layerscape dwc3 support
 
---gdyhNSmhYhPSv1Bb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 846m
 
-On Thu, Oct 09, 2025 at 01:03:08AM +0000, Jameson Thies wrote:
-> On devices with a UCSI PPM in the EC, check for cros_ec_ucsi to be
-> defined in the OF device tree or an ACPI node. If it is defined by
-> either OF or ACPI, it does not need to be added as a subdevice of
-> cros_ec_dev.
->=20
-> Signed-off-by: Jameson Thies <jthies@google.com>
+configs tested: 156
+configs skipped: 4
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                             allnoconfig    clang-22
+alpha                            allyesconfig    clang-19
+alpha                               defconfig    clang-19
+arc                              allmodconfig    clang-19
+arc                               allnoconfig    clang-22
+arc                              allyesconfig    clang-19
+arc                          axs101_defconfig    gcc-15.1.0
+arc                                 defconfig    clang-19
+arm                              allmodconfig    clang-19
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    clang-19
+arm                                 defconfig    clang-19
+arm                       imx_v4_v5_defconfig    gcc-15.1.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    clang-22
+arm64                               defconfig    clang-19
+csky                              allnoconfig    clang-22
+csky                                defconfig    clang-19
+csky                  randconfig-001-20251009    clang-16
+csky                  randconfig-002-20251009    clang-16
+hexagon                          allmodconfig    clang-19
+hexagon                           allnoconfig    clang-22
+hexagon                          allyesconfig    clang-19
+hexagon                             defconfig    clang-19
+hexagon               randconfig-001-20251009    clang-16
+hexagon               randconfig-002-20251009    clang-16
+i386                             allmodconfig    clang-20
+i386                              allnoconfig    clang-20
+i386                             allyesconfig    clang-20
+i386        buildonly-randconfig-001-20251009    gcc-14
+i386        buildonly-randconfig-002-20251009    gcc-14
+i386        buildonly-randconfig-003-20251009    gcc-14
+i386        buildonly-randconfig-004-20251009    gcc-14
+i386        buildonly-randconfig-005-20251009    gcc-14
+i386        buildonly-randconfig-006-20251009    gcc-14
+i386                                defconfig    clang-20
+i386                  randconfig-001-20251010    clang-20
+i386                  randconfig-002-20251010    clang-20
+i386                  randconfig-003-20251010    clang-20
+i386                  randconfig-004-20251010    clang-20
+i386                  randconfig-005-20251010    clang-20
+i386                  randconfig-006-20251010    clang-20
+i386                  randconfig-007-20251010    clang-20
+i386                  randconfig-011-20251009    clang-20
+i386                  randconfig-012-20251009    clang-20
+i386                  randconfig-013-20251009    clang-20
+i386                  randconfig-014-20251009    clang-20
+i386                  randconfig-015-20251009    clang-20
+i386                  randconfig-016-20251009    clang-20
+i386                  randconfig-017-20251009    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20251009    clang-16
+loongarch             randconfig-002-20251009    clang-16
+m68k                             allmodconfig    clang-19
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    clang-19
+m68k                                defconfig    clang-19
+m68k                          hp300_defconfig    gcc-15.1.0
+m68k                        m5272c3_defconfig    gcc-15.1.0
+microblaze                       allmodconfig    clang-19
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    clang-19
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-15.1.0
+nios2                               defconfig    gcc-15.1.0
+nios2                 randconfig-001-20251009    clang-16
+nios2                 randconfig-002-20251009    clang-16
+openrisc                          allnoconfig    clang-22
+openrisc                         allyesconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    clang-22
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20251009    clang-16
+parisc                randconfig-002-20251009    clang-16
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    clang-22
+powerpc                          allyesconfig    gcc-15.1.0
+powerpc                        icon_defconfig    gcc-15.1.0
+powerpc               randconfig-001-20251009    clang-16
+powerpc               randconfig-002-20251009    clang-16
+powerpc               randconfig-003-20251009    clang-16
+powerpc64             randconfig-002-20251009    clang-16
+powerpc64             randconfig-003-20251009    clang-16
+riscv                            allmodconfig    gcc-15.1.0
+riscv                             allnoconfig    clang-22
+riscv                            allyesconfig    gcc-15.1.0
+riscv                 randconfig-001-20251009    clang-22
+riscv                 randconfig-001-20251010    gcc-9.5.0
+riscv                 randconfig-002-20251009    clang-22
+riscv                 randconfig-002-20251010    gcc-9.5.0
+s390                             alldefconfig    gcc-15.1.0
+s390                             allmodconfig    gcc-15.1.0
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                  randconfig-001-20251009    clang-22
+s390                  randconfig-001-20251010    gcc-9.5.0
+s390                  randconfig-002-20251009    clang-22
+s390                  randconfig-002-20251010    gcc-9.5.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                         ecovec24_defconfig    gcc-15.1.0
+sh                    randconfig-001-20251009    clang-22
+sh                    randconfig-001-20251010    gcc-9.5.0
+sh                    randconfig-002-20251009    clang-22
+sh                    randconfig-002-20251010    gcc-9.5.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20251009    clang-22
+sparc                 randconfig-001-20251010    gcc-9.5.0
+sparc                 randconfig-002-20251009    clang-22
+sparc                 randconfig-002-20251010    gcc-9.5.0
+sparc64               randconfig-001-20251009    clang-22
+sparc64               randconfig-001-20251010    gcc-9.5.0
+sparc64               randconfig-002-20251009    clang-22
+sparc64               randconfig-002-20251010    gcc-9.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    clang-19
+um                    randconfig-001-20251009    clang-22
+um                    randconfig-001-20251010    gcc-9.5.0
+um                    randconfig-002-20251009    clang-22
+um                    randconfig-002-20251010    gcc-9.5.0
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20251009    clang-20
+x86_64      buildonly-randconfig-002-20251009    clang-20
+x86_64      buildonly-randconfig-003-20251009    clang-20
+x86_64      buildonly-randconfig-004-20251009    clang-20
+x86_64      buildonly-randconfig-005-20251009    clang-20
+x86_64      buildonly-randconfig-006-20251009    clang-20
+x86_64                              defconfig    clang-20
+x86_64                                  kexec    clang-20
+x86_64                randconfig-071-20251009    gcc-14
+x86_64                randconfig-072-20251009    gcc-14
+x86_64                randconfig-073-20251009    gcc-14
+x86_64                randconfig-074-20251009    gcc-14
+x86_64                randconfig-075-20251009    gcc-14
+x86_64                randconfig-076-20251009    gcc-14
+x86_64                randconfig-077-20251009    gcc-14
+x86_64                randconfig-078-20251009    gcc-14
+x86_64                               rhel-9.4    clang-20
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20251009    clang-22
+xtensa                randconfig-001-20251010    gcc-9.5.0
+xtensa                randconfig-002-20251009    clang-22
+xtensa                randconfig-002-20251010    gcc-9.5.0
 
-> ---
->  drivers/mfd/cros_ec_dev.c | 23 ++++++++++++++++++-----
->  1 file changed, 18 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-> index dc80a272726b..1928c2ea2b8f 100644
-> --- a/drivers/mfd/cros_ec_dev.c
-> +++ b/drivers/mfd/cros_ec_dev.c
-> @@ -5,6 +5,7 @@
->   * Copyright (C) 2014 Google, Inc.
->   */
-> =20
-> +#include <linux/acpi.h>
->  #include <linux/dmi.h>
->  #include <linux/kconfig.h>
->  #include <linux/mfd/core.h>
-> @@ -131,11 +132,6 @@ static const struct cros_feature_to_cells cros_subde=
-vices[] =3D {
->  		.mfd_cells	=3D cros_ec_rtc_cells,
->  		.num_cells	=3D ARRAY_SIZE(cros_ec_rtc_cells),
->  	},
-> -	{
-> -		.id		=3D EC_FEATURE_UCSI_PPM,
-> -		.mfd_cells	=3D cros_ec_ucsi_cells,
-> -		.num_cells	=3D ARRAY_SIZE(cros_ec_ucsi_cells),
-> -	},
->  	{
->  		.id		=3D EC_FEATURE_HANG_DETECT,
->  		.mfd_cells	=3D cros_ec_wdt_cells,
-> @@ -264,6 +260,23 @@ static int ec_device_probe(struct platform_device *p=
-dev)
->  		}
->  	}
-> =20
-> +	/*
-> +	 * FW nodes can load cros_ec_ucsi, but early PDC devices did not define
-> +	 * the required nodes. On PDC systems without FW nodes for cros_ec_ucsi,
-> +	 * the driver should be added as an mfd subdevice.
-> +	 */
-> +	if (cros_ec_check_features(ec, EC_FEATURE_USB_PD) &&
-> +	    cros_ec_check_features(ec, EC_FEATURE_UCSI_PPM) &&
-> +	    !acpi_dev_found("GOOG0021") &&
-> +	    !of_find_compatible_node(NULL, NULL, "google,cros-ec-ucsi")) {
-> +		retval =3D mfd_add_hotplug_devices(ec->dev,
-> +						 cros_ec_ucsi_cells,
-> +						 ARRAY_SIZE(cros_ec_ucsi_cells));
-> +
-> +		if (retval)
-> +			dev_warn(ec->dev, "failed to add cros_ec_ucsi: %d\n", retval);
-> +	}
-> +
->  	/*
->  	 * UCSI provides power supply information so we don't need to separately
->  	 * load the cros_usbpd_charger driver.
-> --=20
-> 2.51.0.710.ga91ca5db03-goog
->=20
-
---gdyhNSmhYhPSv1Bb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCaOgJWwAKCRBzbaomhzOw
-wpmvAP9BRKC8tzJCIcuD4p8sAtDTojfzvAT7272ct6sdoX/8gQD/U725yeINVisu
-v5I0X5yXr45fO2RNjUgA0hRB+v4oWgQ=
-=DzaU
------END PGP SIGNATURE-----
-
---gdyhNSmhYhPSv1Bb--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
