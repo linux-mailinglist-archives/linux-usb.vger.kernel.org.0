@@ -1,55 +1,52 @@
-Return-Path: <linux-usb+bounces-29078-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29079-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44121BC8239
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 10:53:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE73CBC861B
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 11:54:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 562891A60DB0
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 08:53:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F46E3BD81D
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 09:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C18812D3A75;
-	Thu,  9 Oct 2025 08:53:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFBA2D7D2F;
+	Thu,  9 Oct 2025 09:54:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VcrusI7c"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="D2JtDQ8l"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447152116E0;
-	Thu,  9 Oct 2025 08:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C8934BA49;
+	Thu,  9 Oct 2025 09:54:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759999980; cv=none; b=tPCwKc43Cv5jTwUqQh4S8/hFSryvp6IyWc1gKut/lk0/pJ8WQlFhVpqKUJzGQ9KizaqGVxiwE0gnUDsxMldrIHAGnqX4e2bdchzOqIrNccdt+VhhjNy0SxCISs83YbpiygptkTHTJUv+QOaCxgy6WnMBXOIKVKEVQFrOUj5l/BI=
+	t=1760003676; cv=none; b=cP847d0EtYVIMai4jqxb6VQwHs7Dmf9m843oxGjS6pmlDZa8IQrqMnUX2kqWL0wRynPOPJqfrwtr/E46WfoJtVqP3/EDAsDgquNdVLQsK5y18MheGjxNfBrh/FHK6ggqnx1GjlkrA+tEWA8yLR0GgGohKsqD+/VFlTyE5XrsrRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759999980; c=relaxed/simple;
-	bh=xaaWco/OEe3tHYV/WmmcqEzdfHfoUl79hJUYEF5ZI4U=;
+	s=arc-20240116; t=1760003676; c=relaxed/simple;
+	bh=1r8ZrXO6FZCz8lgLSeUUy6k+MSy8tL1yra+LYnXAQEU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YV79+7Wp+Ju6UA9deUy3olrP/PUW+Mk40voivbT0R/cHxBiZv2oPkh3ql/K9xDZxHdtohTv6iBJQbIIgiscOYAbg/u6RAu4Gax0yrNNT2B0eDu0wlU41zuLEyEMr572NFzHWiL7EYbwhLv0iD7/gL2RFw2s7M2fW1/DT+ERQrfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VcrusI7c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2E3C4CEE7;
-	Thu,  9 Oct 2025 08:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759999979;
-	bh=xaaWco/OEe3tHYV/WmmcqEzdfHfoUl79hJUYEF5ZI4U=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=nNfqdAkbgaY7zARL/Y7Fc7x5EJ5sF4fzHxhFBuLRWKBiyupjgxofCSand+Y7+8ruGaSuL5NSTqXeMu1SOgArOylxmCJnTV1BVpo56KE+t6MxMTuN8h+EOxFL3f9p0vqdtUUauDpOV63ZEF3XXPheRMkq2Wt48F1qWp3YQLEL+Cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=D2JtDQ8l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22B63C4CEE7;
+	Thu,  9 Oct 2025 09:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1760003675;
+	bh=1r8ZrXO6FZCz8lgLSeUUy6k+MSy8tL1yra+LYnXAQEU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VcrusI7cCqYFcdilbJ/C6N5wfMgDkuV2VIMr8LMDE6wxNynKVXINGffCKJjwBlINZ
-	 T8HH7jCqhFMzOD/Vhqlpjyu0z/zu8km18bUC5UPXbepUxINtULcAN2zgm56UjTcBI8
-	 UDcGgkUPjjqcwp9PYkwDk4EKCnJBBEhXyO+hGiQ3so9a5qN2XcEZVDyAbt5gZStP+J
-	 qURxH7cI9Qg8QDCXLyNP6ygNRB+ZWWkyt7ZCNme/jJ4pBQQql1pwr23/oMcjJCZh3k
-	 K8ToX9tj5AGYOUuObilI8olF10rNfCAAhodwzgBgb6gKnJJ2b4OgEOk8AXwgR8jKYv
-	 zjbU8QzK9XiAQ==
-Date: Thu, 9 Oct 2025 09:52:55 +0100
-From: Simon Horman <horms@kernel.org>
+	b=D2JtDQ8lS0g6y2LyZvcXdP+aSqSDrYfEmJD2E+tbAkwWkdznNjO66fWTfJqNGaXDy
+	 Nad4VTMiSn9uhvC14ZqV0cM/YrJCipNFjKmTG+H80/BXeKAPAWfrs5L0XMWBnOkHpy
+	 U+XZZSNDcQtPgiwyWlkdimPQKRy/hn/YFmln9Tg4=
+Date: Thu, 9 Oct 2025 11:54:32 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
 To: yicongsrfy@163.com
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
 	oneukum@suse.com, kuba@kernel.org, linux-usb@vger.kernel.org,
 	netdev@vger.kernel.org, yicong@kylinos.cn
 Subject: Re: [PATCH] net: usb: r8152: add error handling in
  rtl8152_driver_init
-Message-ID: <20251009085255.GU3060232@horms.kernel.org>
+Message-ID: <2025100920-savanna-relatable-49ca@gregkh>
 References: <20251009075833.103523-1-yicongsrfy@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -70,42 +67,62 @@ On Thu, Oct 09, 2025 at 03:58:33PM +0800, yicongsrfy@163.com wrote:
 > 
 > Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
 > Signed-off-by: Yi Cong <yicong@kylinos.cn>
+> ---
+>  drivers/net/usb/r8152.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> index 44cba7acfe7d..a64bcb744fad 100644
+> --- a/drivers/net/usb/r8152.c
+> +++ b/drivers/net/usb/r8152.c
+> @@ -10122,7 +10122,14 @@ static int __init rtl8152_driver_init(void)
+>  	ret = usb_register_device_driver(&rtl8152_cfgselector_driver, THIS_MODULE);
+>  	if (ret)
+>  		return ret;
+> -	return usb_register(&rtl8152_driver);
+> +
+> +	ret = usb_register(&rtl8152_driver);
+> +	if (ret) {
+> +		usb_deregister_device_driver(&rtl8152_cfgselector_driver);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static void __exit rtl8152_driver_exit(void)
+> -- 
+> 2.25.1
+> 
+> 
 
-Thanks Yi Cong,
+Hi,
 
-I agree that this addresses a bug.
-And that the bug was introduced by the cited commit.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-Some points to keep in mind for future patch submissions.
-(I don't think you need to repost because of these,
- but others may think otherwise).
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
 
-1. Please tag Networking patches with the target tree.
-   In this case, as a bug fix, that would be net.
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-   Subject: [PATCH net] ...
+thanks,
 
-   Otherwise it would probably be net-next.
-
-2. Git history is not entirely consistent here, but
-   I'd say that 'r8152:' is good prefix for this patch (less is more IMHO).
-
-   Subject: [PATCH net] r8152: ...
-
-3. It is, TBH, not strictly followed for networking patches. But officially
-   bug fixes for stable should be CCed to stable@vger.kernel.org. Greg KH
-   tends to be CCed on such patches, and has a bot that complains about this.
-
-4. Please generate the CC list using
-
-   ./scripts/get_maintainer.pl this.patch
-
-   Perhaps with --git-min-percent=25
-
-For more information see:
-https://docs.kernel.org/process/maintainer-netdev.html
-
-...
+greg k-h's patch email bot
 
