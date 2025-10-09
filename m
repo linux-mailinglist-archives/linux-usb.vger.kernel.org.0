@@ -1,164 +1,102 @@
-Return-Path: <linux-usb+bounces-29082-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29083-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64209BC8D49
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 13:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 71771BC8EB8
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 13:56:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 302A44FABEB
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 11:30:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5BBF64EF7C0
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 11:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8739B2DFA3A;
-	Thu,  9 Oct 2025 11:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 058DC2E11BC;
+	Thu,  9 Oct 2025 11:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jX5FoRSD"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="bGrU3WEO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E574F1F3FE2
-	for <linux-usb@vger.kernel.org>; Thu,  9 Oct 2025 11:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE0F2E0909;
+	Thu,  9 Oct 2025 11:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760009427; cv=none; b=B9K/o6PMnM6I9tLCtZBrBl6LV13gUrck7mW81ZRCtRwaWzKc8duhj7eHGy9H78ZIFKTI5P58nANQPxfdOzzecImAxlL8feDX2X0ZzCfr01P2A76RnOUFC+g5Cnu0KaTfqoBvqjz9gW8DTnNiNmJQC3W4GutpeGsOfgyXtwC03Hs=
+	t=1760010994; cv=none; b=MsyP2W7EENUHB8PAoLj4+zfYMU+lZRlKT5cSjUeqsu2aJubYHMFCnUUOagD4DIIiedBKHfRslgW7qfJiT2MccSKiZD0vs7BjgCeqnPF+WIju3gi2WkzEzPFyf7rA8M9VlUO8UU3z5yrYK5/htey2Lpbmt/cdd4J6lCnA/2tYrVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760009427; c=relaxed/simple;
-	bh=i6s0VmH+8bNAtKOwgRvOT6eZBVgBLJAjshDeMbqA32M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q3SVzInRPFH77dudL/LZwHJwCiX4+ZnmzFvBkxzL3F93deNp+9/FXS7EP/hROjwX3onOSfoIjR8CoMCjDthU6iUdKrkArE8jSTIMnroCeQ8BR7Ei0KHTOi3L2V5JxL+tzXWcgIqMc4ARKzp0X3b7ka1ob93WkwBaoB1eWHYBnSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jX5FoRSD; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760009425; x=1791545425;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=i6s0VmH+8bNAtKOwgRvOT6eZBVgBLJAjshDeMbqA32M=;
-  b=jX5FoRSD0seX8moGP/m/AFUzjMUv9k6OxIcoEx01MxPyqKdMYYhgzngJ
-   vbYH6VSTCOYDchCVS+uwBzJUk1lhvoiM+Y0+KbODnWqoyH0zNsZupsnol
-   hl8OT6zE08UGcTwOEQgsPkRaDhGQdIEsle/PQ7KnsEofRAX+vRubK/Ubj
-   Sbcp6ymDKqqHI3r0AFbsHH/tgDIRqUNzSnSPsUwDj72UvIGxluKGLfnCr
-   SdxlPbpgeBX8BYrCgqK3cXz3LjB3oxCSTowxgZHs8BlQ8yqD+RWawBmqj
-   Z/DV/x4wRWwGn0909PLwJHPwwOKlwNSYLjUvSYdj+DmyUy4NnFbcEYIWo
-   Q==;
-X-CSE-ConnectionGUID: 9v8ekT63T5yrCDGZNoOYGg==
-X-CSE-MsgGUID: B5NeqOUtTZem2PfsaAow8A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11576"; a="61252066"
-X-IronPort-AV: E=Sophos;i="6.19,216,1754982000"; 
-   d="scan'208";a="61252066"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2025 04:30:24 -0700
-X-CSE-ConnectionGUID: LUtkU4aGTEeSi89MJm9KAw==
-X-CSE-MsgGUID: JMS9wagmTFmI4Q4zoGGZLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,216,1754982000"; 
-   d="scan'208";a="204407855"
-Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO [10.245.245.29]) ([10.245.245.29])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2025 04:30:23 -0700
-Message-ID: <90c03eeb-3913-4968-88c0-0de09023a2b5@linux.intel.com>
-Date: Thu, 9 Oct 2025 14:30:20 +0300
+	s=arc-20240116; t=1760010994; c=relaxed/simple;
+	bh=RhuPp5y09vvcpVIhHebwqLJL9oUt7V6HsnDUYWAI+Jk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sK2yeyYb6L7tzAPjJNI7EVQ1Us9Yayk1LpunqIwiBiUGrc2dAI1DqMeQ0bApg91yCPsNmXiERm2B/uxROJ1N1FkWhhUIL9BQTTmkj9P4a5MmpEMANLJo9bCO1cFexvogaETB/JJXePGl4Q6G7TG/0JLwypzmIsztwSUP4XJueVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=bGrU3WEO; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=6O5KZhZxnuokrRQeO8RQoftrv8w21jBw/piVrU0xGIE=; b=bGrU3WEOHC22yuckDYEU1SZKEj
+	1qhJJo+8qLPErCOS+l/K/urZAcL9Cv27ldJDMxpkPqiis6uwuaqSmaVyq0iX0LEvMeILwl2IQxYdX
+	FBN9Kgce6nxQNV0TASCUDavRRcvppqkQm91sAeyl1zF4Kh2mz3tqgNyu+5EI1pYL07t8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1v6pFl-00AWaM-5H; Thu, 09 Oct 2025 13:56:13 +0200
+Date: Thu, 9 Oct 2025 13:56:13 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: yicongsrfy@163.com
+Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
+	marcan@marcan.st, netdev@vger.kernel.org, pabeni@redhat.com,
+	yicong@kylinos.cn
+Subject: Re: [PATCH v4 3/3] net: usb: ax88179_178a: add USB device driver for
+ config selection
+Message-ID: <2455d227-6008-4b7d-802e-54f0d265c68d@lunn.ch>
+References: <666ef6bf-46f0-4b3e-9c28-9c9b7e602900@suse.com>
+ <20251009073450.87902-1-yicongsrfy@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION] [REPRO] USB-A devices not working on boot after
- recent USB merge
-To: Michal Pecio <michal.pecio@gmail.com>,
- Arisa Snowbell <arisa.snowbell@gmail.com>
-Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
- Niklas Neronin <niklas.neronin@linux.intel.com>
-References: <CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com>
- <20251007231709.6c16802e.michal.pecio@gmail.com>
- <CABpa4MCUnLUR_0Vzgd=rTr0+Hot=nxHirKrX6xtJWowDoLhWJw@mail.gmail.com>
- <CABpa4MCg7yixe7O8Pp+YwvpxeC=1JPhMhAap12RjtV6pcxFYgQ@mail.gmail.com>
- <20251008082055.5646dadc.michal.pecio@gmail.com>
- <CABpa4MCm8hQXvtSYqUA+Dh3rCLVM5rTC1p+FsgmFemv+Vyz=RA@mail.gmail.com>
- <20251008130532.49922d58.michal.pecio@gmail.com>
- <CABpa4MAsvK68CyQ7bVdie1j2m2O2YAEuFJHq8D-65uFT3FzKzQ@mail.gmail.com>
- <20251008223406.13f16f19.michal.pecio@gmail.com>
- <CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com>
- <CABpa4MBDvgJcgJf3_E7k1dBXs7v1tW-79dmc_sQDVM1bES5YDQ@mail.gmail.com>
- <20251009131444.2c221922.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20251009131444.2c221922.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251009073450.87902-1-yicongsrfy@163.com>
 
-On 10/9/25 14:14, Michal Pecio wrote:
-> On Thu, 9 Oct 2025 00:25:55 +0200, Arisa Snowbell wrote:
->> This is what I get when I use good kernel:
->>
->> kernel: xhci_hcd 0000:7a:00.0: xHCI Host Controller
->> kernel: xhci_hcd 0000:7a:00.0: new USB bus registered, assigned bus number 9
->> kernel: xhci_hcd 0000:7a:00.0: USB3 root hub has no ports
->> kernel: xhci_hcd 0000:7a:00.0: hcc params 0x0110ffc5 hci version 0x120
->> quirks 0x0000000200000010
->> kernel: xhci_hcd 0000:7a:00.0: xHCI Host Controller
->> kernel: xhci_hcd 0000:7a:00.0: new USB bus registered, assigned bus number 10
->> kernel: xhci_hcd 0000:7a:00.0: Host supports USB 3.0 SuperSpeed
->> kernel: usb usb9: New USB device found, idVendor=1d6b, idProduct=0002,
->> bcdDevice= 6.17
->> kernel: usb usb9: New USB device strings: Mfr=3, Product=2, SerialNumber=1
->> kernel: usb usb9: Product: xHCI Host Controller
->> kernel: usb usb9: Manufacturer: Linux
->> 6.17.0-1-mainline-12298-gf5bd2142c274 xhci-hcd
->> kernel: usb usb9: SerialNumber: 0000:7a:00.0
->> kernel: hub 9-0:1.0: USB hub found
->> kernel: hub 9-0:1.0: 1 port detected
->> kernel: usb usb10: We don't know the algorithms for LPM for this host,
->> disabling LPM.
->> kernel: usb usb10: New USB device found, idVendor=1d6b,
->> idProduct=0003, bcdDevice= 6.17
->> kernel: usb usb10: New USB device strings: Mfr=3, Product=2, SerialNumber=1
->> kernel: usb usb10: Product: xHCI Host Controller
->> kernel: usb usb10: Manufacturer: Linux
->> 6.17.0-1-mainline-12298-gf5bd2142c274 xhci-hcd
->> kernel: usb usb10: SerialNumber: 0000:7a:00.0
->> kernel: hub 10-0:1.0: USB hub found
->> kernel: hub 10-0:1.0: config failed, hub doesn't have any ports! (err -19)
->>
->> where the 2.0 USB's work, mice is powered on, with the bad kernel the
->> mice doesn't even power the LED's on.
->> In the bad kernel its missing the New USB and all.
+On Thu, Oct 09, 2025 at 03:34:50PM +0800, yicongsrfy@163.com wrote:
+> Hi, Oliver:
+> Thank you for your reply!
 > 
-> Okay, thanks. I now see what's going on.
+> The issues you mentioned above, I will fix them one by one in new patch
+> versions. However, I'm a bit confused about the following comment:
 > 
-> I have successfully reproduced it on a normal controller by patching
-> the driver to simply ignore any USB3 ports. With this patch, no root
-> hubs are registered at all until I revert the "bad" commit.
+> > > +
+> > > +static void __exit ax88179_driver_exit(void)
+> > > +{
+> > > +	usb_deregister(&ax88179_178a_driver);
+> >
+> > The window for the race
+> >
+> > > +	usb_deregister_device_driver(&ax88179_cfgselector_driver);
+> >
+> > Wrong order. I you remove ax88179_178a_driver before you remove
+> > ax88179_cfgselector_driver, you'll leave a window during which
+> > devices would be switched to a mode no driver exists for.
 > 
-> In my case it's an idiotic little problem:
-> 
-> xhci_pci_common_probe()
-> {
-> 	usb_hcd_pci_probe() {
-> 		// allocate xhci
-> 		xhci_run(xhci);
-> 	}
-> 
-> 	xhci->allow_single_roothub = 1;
-> }
-> 
-> The thing is that xhci_run() needs allow_single_roothub to already
-> be set when it executes, but we can't do it before xhci is allocated.
-> And some non-PCI drivers don't want it to be set.
-> 
+> In my init function, I first call usb_register_device_driver and then call
+> usb_register; in exit, I reverse the order by calling usb_deregister first,
+> then usb_deregister_device_driver. Why is this sequence considered incorrect?
 
-Nice catch,
+This is not about the order you do things in this patch. It is about
+the order of the patches.
 
-When that flag isn't set yet in xhci_run() it will lead to
-HCD_FLAG_DEFER_RH_REGISTER flag being set, prevent hcd driver from registering
-the USB 2.0 roothub before usb 3.0 hcd is added. (which never happens)
+It is assumed that this hardware somewhat works with the old
+driver. But without this patch the hardware does not work?
 
-Maybe the xhci->allow_single_roothub = 1; flag could be set in xhci_pci_setup()
-when called for primary hcd
+Anybody doing a git bisect could land on the first patch, and have
+broken networking. So you need the patches in the opposite order. Make
+sure the driver will work before swapping to it.
 
--Mathias
+	Andrew
 
