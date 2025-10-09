@@ -1,302 +1,165 @@
-Return-Path: <linux-usb+bounces-29067-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29068-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5ED9BC768C
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 07:13:35 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A5C3BC76E2
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 07:30:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76B193E5B4F
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 05:13:34 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1161E350DAE
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 05:30:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABFB023816C;
-	Thu,  9 Oct 2025 05:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB3E261B7F;
+	Thu,  9 Oct 2025 05:30:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D6wOMeSF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KfZhyTVh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98811156661
-	for <linux-usb@vger.kernel.org>; Thu,  9 Oct 2025 05:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE17034BA49
+	for <linux-usb@vger.kernel.org>; Thu,  9 Oct 2025 05:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759986806; cv=none; b=Gp1/PDNGzTujTMft0Nt/47SXu2jNMEguZ3Ee+hlUVl+V34Gdyn8sNzFpas1PsiIOgbMKXVML4JAL6UWcqNlU71mSi00AGywTSPKYBmkGDINlSbGNhKVZrgFyv2UeM9fKCKj+csvv77oS2VpXYgTfBdxge1gOdrUURbZ4fwoxaYQ=
+	t=1759987835; cv=none; b=qHdF9IjDbB9nOMA2/S4StVMieaJRuWrqrMT9US0s81jQy1BA83mW+7hA1EEsSqaJIqbDEXwYZxvLqMgIyDERpXI5R8pv6LzhxPv8EZdzNzkOR91oE3flWPCwaUcsq0b4E0kHa0A2XvKuFM3+1QUUkTtUnrh40HMkGxC2XYRV0gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759986806; c=relaxed/simple;
-	bh=XgKEUUpBVyKhaDmSmOHwqctzZ1yn4T/HwN7blucyAv4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hihvEbAQVc0ZIyKt9rtyDEOP2gAUosJSRyDcUZViWsB000qHQjdD6ucNUhawiSa0nzqmijgDorDcZLhKYRpOyPx21G1lygChimJQvl2HUc9MUBufVO+tB+ayorWzVfp2HD6I7pph/WZj2/EvSn21IdrFAspqvNwVMrj1ZjEK6/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D6wOMeSF; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b554bb615dcso322789a12.1
-        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 22:13:24 -0700 (PDT)
+	s=arc-20240116; t=1759987835; c=relaxed/simple;
+	bh=MWPOM5X1rJDtoAagIpIGV2JeSDedkvNxa+Z2Lzxv2gM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MJu7qBb25bTEUEcNTHGJDqxoJ6fsLotyybUc0l++UBoW6jdkNFUSX7nO7Hz8056ENff67FlVgpto5g4TeOuOxUP26nwIRQz8CJ1hNjDhUInZ8DYtmX2ahmZQk+JA1rL1hpAau9zU3RDOm/Bthz82oKvjamlKnj/x77GQEZqBQhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KfZhyTVh; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2698384978dso3932455ad.0
+        for <linux-usb@vger.kernel.org>; Wed, 08 Oct 2025 22:30:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759986804; x=1760591604; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BWewaHokP8ZtNf5xV3DaenIr+l1N9Mpv+SreL8jsLig=;
-        b=D6wOMeSFlP1ic+i3VxQcP88RlxlHsDH/F8OBgITJvOe3Zfmf9X3mUXJb+FbM9DeSvb
-         WPnxgW+MJbksEM95TtJG/MQ9ZWV1UtETpKv8FzqhcRE3nycad3LiXxszbjhpCHf4W1km
-         /HAl66md19HaAOxX+ixLviKEjRp9rwz34RuefqWQ7yCKhbq8bX0XPSPLegm5mWH6qXfN
-         WYPhQR73gS22CbasH9pO7nJeRBKcrHBU8GFqtr3AakFoW8OJdEOcrI+UM32h0We5xmA9
-         4PxOIbKUKU1lq5BHP5j5bJK3uGkTwuaBvNM7P9nWNXBbc8+yPN3fiplisiadwPwxsNn5
-         y2cQ==
+        d=gmail.com; s=20230601; t=1759987832; x=1760592632; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=66mxYYm1lwUDKT8s1UNwAUuURZhUpzHNJdGMWk83R+M=;
+        b=KfZhyTVhhQ1Pl2vg8WinLxFIQrcN+uwKXFaa1eTGIapTnqLOqWSE/DtxOpZsx7W3tT
+         smtKg/BY1arhhWEL0P5tCE+/f3xRv4PYs4p1ZC4eBR+h93nVsGlICRCMqnfCE4xecVdS
+         9K1AqgGb8BvXH09ncpy8fDXTg9X1s9kQh9Q+Fysh5Q+N7JU0ckgKExNiv6FDmUJ1bLTg
+         9NcN2Rjl0z2oeEY2HOdxuDoV9YZjC+GH8uBKDjoVjGRX6kMhSmi92FpnmLOkrzkksHUl
+         /Bmmt7UBITWUzhMrpl4jBQyxnvuMPzVtl2qLP48/bxuqqIhhi56G5R1r+NvZGcHiD4m9
+         i9gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759986804; x=1760591604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BWewaHokP8ZtNf5xV3DaenIr+l1N9Mpv+SreL8jsLig=;
-        b=jOQpZX+2IU2+ArNvKiv+nA4WVDFwht/say8LptIA2xFyXVMkD0cZAIAFylaspP1EB/
-         iST69+okQEKKHYpo3f+/c9B5vPix18ycBwNhEhoFRlHiCrk9HaOJwQFFE/NxjhEeWQ3v
-         SJKCVAsOyne2sXrP59N8Ou0wlqMhckUbwF0TKyD/QSWh/ybXmaiaUDH7XE3bptD/6xMR
-         52dPJjByS7+kTjMOR3eiPsM2sIvHzE/8pA0vZnBJ0wP9NEa0pAlPJeQw4lhpY3PqVK54
-         vwQ8dZamjw9hxHFBdwkuOt+gfwB3IksqdEm4m3cJvuXhPxjJqXsJBoJKFVmiHcgQLjWc
-         j0ag==
-X-Forwarded-Encrypted: i=1; AJvYcCViksIs2amnkn8744vV9XIL80/5QqhiJ2Ec3qrxlXCVSyX5BguPhmLFoAa9bcJa+GNsynKfAgNOtJU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNtq/VVaB3i6qOFHmvNwPabK9OtNMQBdVVWo+C75NK7tTGggAA
-	1jGhFkhqpWsK52C3KbtiFfL5b7R9YJea5fQHu5T+XqxAq/OLow1KC04+CYi42x8P3eZxPhEk15U
-	yd7xdRwg6xfz3X2+GrcNOe86SE5IdY2j4W+R/4i23
-X-Gm-Gg: ASbGncsvCu4PUj26oQKRaLX6/piT5Nn92MNl2LnoLGL0lJow+WpuqF075faTUGoXwHi
-	kSHJUuPgkw+ytKly5NBYuyHynLHEmfq+qkph56onI1L9Zc/GWD/bnF1jxYAHEi5ms1cgxBu+KfV
-	X5dj62PbQEVFSRsyE2zxXnaOKNp9ZTKMF/ZN7kgVu5fOzIknINbaaUNPnuMdAmXedDxv5lCevFP
-	1u+Yi0UzptY2pypetQTFaNlU2n+cOIfLn41UC0BJNN2VjZNWUHgigtCMzh1OYj6z2M8pRLS7LnW
-	60Kz5g==
-X-Google-Smtp-Source: AGHT+IHftw1sTR4jx+skzjrqSGdfm/Q0+OudIaUszRZ3Jo7Mtg1ENnay4Sa6Pgawbis09A4Kl1WSaKxYdl0Pty1Yfo8=
-X-Received: by 2002:a17:903:1b46:b0:269:b65a:cbb2 with SMTP id
- d9443c01a7336-2902738685emr79503305ad.47.1759986803355; Wed, 08 Oct 2025
- 22:13:23 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759987832; x=1760592632;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=66mxYYm1lwUDKT8s1UNwAUuURZhUpzHNJdGMWk83R+M=;
+        b=MzSMvBnPxRX+2QzHZB57sCDXBl0wnzT3vH62AJngzWhG6lX1mwB7/Yqe9qKUcRAuXg
+         yItlNBqFjLyErg70GNpR+aidtBRKc2zMeaVWXzB91wEb929ZabGxqPScBomtxGAs7Kga
+         LwckQeRDGc61cQ0wC5kDcmyWGVQ4Il/6F+AGJkkKLPW2C+OSbkN4E46me8Vr0yTrD0Ue
+         O4UfV3VUg/Qm+N0Ndd5ztbMkmMXzyuHG6YvwvQRRfG+caIFmVVc7edEJWDpxmVlJXUnl
+         /DadQMeL+is449hnOwpToWve8GJqh3Amo6Tsskx39KgTQ3f9gs0w8Cp5BCyC/zrIqvPa
+         AoaA==
+X-Forwarded-Encrypted: i=1; AJvYcCXpCzC8+f1sVugoaeXatWqGHkeGeIKkY2oitslrlYNRIRWolKjVk68TyfOIFkfye13WQF06yU5DGro=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyA6FurttpVU/kLwns7b9g2pU+CuR1fN0Ti/mk5xPd1GLjKihiX
+	fec3ieSDa3AChAqBUJQ9kweSMfwVm+ArN48SJ/LxDckTMwuuEiK3E4q0
+X-Gm-Gg: ASbGncsx8cuBYq8kKmEMIEykFJxlTKiR7dHx8kewfdHP/m6nMxHqOa6Y8eKRYZQuY5t
+	uZCBeHaUZMfnxoJo0MqmjIVmuBHxzwtR647RkgcWR5OszkAbYS9xhLSwxUpsEnMR9m3fKIy0a4H
+	EXqdTiHNpPUaAUxHfpSYFan3Qqf3SNM1f8TbEdX+9LHUoVn+H7Or4x4LBqHDLtHJdwU3O3UfYpg
+	IKa5hURvo1Z1sxh6FSMZ8bvji70tVIYU+MM58wtnJ4TTe3VVNOkuqmnN22zf0erkUjOHlLUyDh8
+	bcEoZ0w8kBk78Ale3f0GSsLcqCZ4QDSKZNoZE866gPHiAiVfLQ6r36FYY2hzNoVW9aQ7RVi4cAS
+	sKAD0l3/mqOVekvBGmFIwtlUNhj7JiUN55sKHRMPRitV5QrKtT7SVWnfN4UovVwO5VHPRGZhrGL
+	54zrEOyg==
+X-Google-Smtp-Source: AGHT+IE96/521TZFyW+4rJmoBB3kl0SaMviXP79e4HfzlRSMb+fmXr9G8IIVQlVxI8d73u5bPmUKyQ==
+X-Received: by 2002:a17:903:2408:b0:28e:7fce:667e with SMTP id d9443c01a7336-2902723f51emr92430835ad.17.1759987832087;
+        Wed, 08 Oct 2025 22:30:32 -0700 (PDT)
+Received: from ti-am64x-sdk.. ([14.98.178.155])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034de54c7sm15651395ad.10.2025.10.08.22.30.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Oct 2025 22:30:31 -0700 (PDT)
+From: Bhanu Seshu Kumar Valluri <bhanuseshukumar@gmail.com>
+To: Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
+	UNGLinuxDriver@microchip.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	khalid@kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com,
+	bhanuseshukumar@gmail.com,
+	stable@vger.kernel.org
+Subject: [PATCH] net: usb: lan78xx: Fix lost EEPROM write timeout error(-ETIMEDOUT) in lan78xx_write_raw_eeprom
+Date: Thu,  9 Oct 2025 11:00:09 +0530
+Message-Id: <20251009053009.5427-1-bhanuseshukumar@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251008060000.3136021-1-royluo@google.com> <20251008060000.3136021-2-royluo@google.com>
- <8966b6a9-ff70-4833-a5c7-c6d6c13c6c8b@kernel.org>
-In-Reply-To: <8966b6a9-ff70-4833-a5c7-c6d6c13c6c8b@kernel.org>
-From: Roy Luo <royluo@google.com>
-Date: Wed, 8 Oct 2025 22:12:46 -0700
-X-Gm-Features: AS18NWAeUlPdfPhpwSxxFxgtGGF4Sy9E3bq34jSmHpsPo17xNshrcbYfSpJ1QNc
-Message-ID: <CA+zupgwLu-y26X9eiENyC28i9ZxCkuhb0X8X9H6HBpqkqJ7O3w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: dwc3: Add Google Tensor G5 DWC3
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Peter Griffin <peter.griffin@linaro.org>, 
-	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Joy Chakraborty <joychakr@google.com>, 
-	Naveen Kumar <mnkumar@google.com>, Badhri Jagan Sridharan <badhri@google.com>, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 8, 2025 at 4:56=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
->
-> On 08/10/2025 14:59, Roy Luo wrote:
-> > Document the device tree bindings for the DWC3 USB controller found in
-> > Google Tensor SoCs, starting with the G5 generation.
-> >
-> > The Tensor G5 silicon represents a complete architectural departure fro=
-m
->
->
-> G5 does not have a model number like G1-G4?
+The function lan78xx_write_raw_eeprom failed to properly propagate EEPROM
+write timeout errors (-ETIMEDOUT). In the timeout  fallthrough path, it first
+attempted to restore the pin configuration for LED outputs and then
+returned only the status of that restore operation, discarding the
+original timeout error saved in ret.
 
-There's no model number for G5, I'm sticking to the existing "gs" prefix
-as they're still in the same SoC family.  Please let me know if you have an=
-y
-concerns.
+As a result, callers could mistakenly treat EEPROM write operation as
+successful even though the EEPROM write had actually timed out with no
+or partial data write.
 
->
-> > previous generations (like gs101), including entirely new clock/reset
-> > schemes, top-level wrapper and register interface. Consequently,
-> > existing Samsung/Exynos DWC3 USB bindings and drivers are incompatible,
->
-> Do not reference drivers. Explain the hardware.
+To fix this, handle errors in restoring the LED pin configuration separately.
+If the restore succeeds, return any prior EEPROM write timeout error saved
+in ret to the caller.
 
-Ack, all mentions of "driver" will be removed in the next patch.
+Suggested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Fixes: 8b1b2ca83b20 ("net: usb: lan78xx: Improve error handling in EEPROM and OTP operations")
+cc: stable@vger.kernel.org
+Signed-off-by: Bhanu Seshu Kumar Valluri <bhanuseshukumar@gmail.com>
+---
+ Note:
+ The patch is compiled and tested using EVB-LAN7800LC.
+ The patch was suggested by Oleksij Rempel while reviewing a fix to a bug
+ found by syzbot earlier.
+ The review mail chain where this fix was suggested is given below.
+ https://lore.kernel.org/all/aNzojoXK-m1Tn6Lc@pengutronix.de/
 
->
-> > necessitating this new device tree binding.
-> >
-> > The USB controller on Tensor G5 is based on Synopsys DWC3 IP and featur=
-es
-> > Dual-Role Device single port with hibernation support.
-> >
-> > Signed-off-by: Roy Luo <royluo@google.com>
-> > ---
-> >  .../bindings/usb/google,gs-dwc3.yaml          | 145 ++++++++++++++++++
-> >  1 file changed, 145 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/google,gs-dwc=
-3.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/google,gs-dwc3.yaml =
-b/Documentation/devicetree/bindings/usb/google,gs-dwc3.yaml
-> > new file mode 100644
-> > index 000000000000..9eb0bf726e8d
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/google,gs-dwc3.yaml
-> > @@ -0,0 +1,145 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +# Copyright (c) 2025, Google LLC
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/google,gs-dwc3.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Google Tensor Series (G5+) DWC3 USB SoC Controller
-> > +
-> > +maintainers:
-> > +  - Roy Luo <royluo@google.com>
-> > +
-> > +description: |
->
->
-> Do not need '|' unless you need to preserve formatting.
+ ChangeLog:
+ v1->v2:
+  Added cc:stable tag as asked during v1 review.
+  V1 Link : https://lore.kernel.org/all/20251004040722.82882-1-bhanuseshukumar@gmail.com/
 
-Ack, will fix this in the next patch.
+ drivers/net/usb/lan78xx.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
->
-> > +  Describes the DWC3 USB controller block implemented on Google Tensor=
- SoCs,
-> > +  starting with the G5 generation. Based on Synopsys DWC3 IP, the cont=
-roller
-> > +  features Dual-Role Device single port with hibernation add-on.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - google,gs5-dwc3
-> > +
-> > +  reg:
-> > +    minItems: 3
->
-> Drop
->
-> > +    maxItems: 3
-> > +
-> > +  reg-names:
-> > +    description: |
-> > +      The following memory regions must present:
-> > +        - dwc3_core: Core DWC3 IP registers.
-> > +        - host_cfg_csr: Hibernation control registers.
-> > +        - usbint_csr: Hibernation interrupt registers.
->
-> Drop description or move it to items in reg. See other bindings.
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index d75502ebbc0d..5ccbe6ae2ebe 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -1174,10 +1174,13 @@ static int lan78xx_write_raw_eeprom(struct lan78xx_net *dev, u32 offset,
+ 	}
+ 
+ write_raw_eeprom_done:
+-	if (dev->chipid == ID_REV_CHIP_ID_7800_)
+-		return lan78xx_write_reg(dev, HW_CFG, saved);
+-
+-	return 0;
++	if (dev->chipid == ID_REV_CHIP_ID_7800_) {
++		int rc = lan78xx_write_reg(dev, HW_CFG, saved);
++		/* If USB fails, there is nothing to do */
++		if (rc < 0)
++			return rc;
++	}
++	return ret;
+ }
+ 
+ static int lan78xx_read_raw_otp(struct lan78xx_net *dev, u32 offset,
+-- 
+2.34.1
 
-Ack, will use an item list in reg instead.
-
->
-> > +    items:
-> > +      - const: dwc3_core
-> > +      - const: host_cfg_csr
-> > +      - const: usbint_csr
-> > +
-> > +  interrupts:
-> > +    minItems: 3
->
-> Drop
-
-Ack, will use an item list instead.
-
->
-> > +    maxItems: 3
-> > +
-> > +  interrupt-names:
-> > +    description: |
-> > +      The following interrupts must present:
-> > +        - dwc_usb3: Core DWC3 interrupt.
-> > +        - hs_pme_irq: High speed remote wakeup interrupt for hibernati=
-on.
-> > +        - ss_pme_irq: Super speed remote wakeup interrupt for hibernat=
-ion.
->
-> From where did you get this style? Don't write bindings with chat gpt or
-> whatever other tool. it is a waste of our time.
-
-I referenced the style from a recent dt binding change [1] that adds
-"Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml".
-I thought it would be a good reference because it's relatively new
-and is also a binding for SNPS dwc3 glue logic. Perhaps that style
-doesn't apply here because qcom,snps-dwc3.yaml supports
-multiple compatible and here we have only one?
-
-Just to clarify, I'm a Gemini user and this patch is 100% organic,
-hand-crafted by a living human brain :)
-
-[1] https://lore.kernel.org/all/20250414-dwc3-refactor-v7-2-f015b358722d@os=
-s.qualcomm.com/
-
-Thanks,
-Roy Luo
-
->
-> > +    items:
-> > +      - const: dwc_usb3
-> > +      - const: hs_pme_irq
-> > +      - const: ss_pme_irq
-> > +
-> > +  clocks:
-> > +    minItems: 3
-> > +    maxItems: 3
-> > +
-> > +  clock-names:
-> > +    minItems: 3
-> > +    maxItems: 3
->
-> From where did you get such syntax?
->
-> > +
-> > +  resets:
-> > +    minItems: 5
-> > +    maxItems: 5
-> > +
-> > +  reset-names:
-> > +    items:
-> > +      - const: usbc_non_sticky
-> > +      - const: usbc_sticky
-> > +      - const: usb_drd_bus
-> > +      - const: u2phy_apb
-> > +      - const: usb_top_csr
-> > +
-> > +  power-domains:
-> > +    minItems: 2
-> > +    maxItems: 2
-> > +
-> > +  power-domain-names:
-> > +    description: |
-> > +      The following power domain must present:
-> > +          - usb_psw_pd: The child power domain of usb_top_pd. Turning =
-it on puts the controller
-> > +                         into full power state, turning it off puts th=
-e controller into power
-> > +                         gated state.
-> > +          - usb_top_pd: The parent power domain of usb_psw_pd. Turning=
- it on puts the controller
-> > +                         into power gated state, turning it off comple=
-tely shuts off the
-> > +                         controller.
->
-> Same comments.
->
->
-> > +    items:
-> > +      - const: usb_psw_pd
-> > +      - const: usb_top_pd
-> > +
-> > +  iommus:
-> > +    maxItems: 1
-> > +
-> Best regards,
-> Krzysztof
 
