@@ -1,114 +1,136 @@
-Return-Path: <linux-usb+bounces-29096-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29097-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE553BCA44F
-	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 18:58:03 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04B3DBCA58F
+	for <lists+linux-usb@lfdr.de>; Thu, 09 Oct 2025 19:13:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7968A344207
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 16:58:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5B78D4F0950
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Oct 2025 17:13:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98612356BE;
-	Thu,  9 Oct 2025 16:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C1F623FC54;
+	Thu,  9 Oct 2025 17:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A7c8o42W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sQ3mn/VD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52D222B584
-	for <linux-usb@vger.kernel.org>; Thu,  9 Oct 2025 16:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F3023B63F;
+	Thu,  9 Oct 2025 17:13:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760029059; cv=none; b=spHkOLhVYszFkYpWv8HvckAM4jI+oPfTdVH184Vivqbp1TodFuAaCqxO+mYWqLfRt8v9zJx0g63dBmkGysRDx23IM8cHYgXnOOe7UVPtc2A1WR5eX5Tz3c/aA6pWP2mNGwwHOAJsfcWQ73nO5PZ/uL0FesxJVTCUYmkE+JJDsy8=
+	t=1760030022; cv=none; b=G+8EE/IwY36esDsFdTrJFz0XGHjsfq0oC4fjSCa4Vuse6p5FmEnuAzDnGi308FsTCpJk9Z25kD1pjoVAZdmdxzMqTJ3X3qBT8efNkt8hYbDcawMDdv7Df+X2PY4xcwabrOXpwbya/2oNlS/Km48ofOYpoXorNE3AFbWP/ihWInw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760029059; c=relaxed/simple;
-	bh=RF9ZSJQioRunccbOJ8PBKnVv5gI2HqZYf6M8L8RhwBc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FEuV/XWhEm6qzDhI+OOpJM1betocRTTZqCAgEsY6fKk/QDV3TkPnSYMMUKcfbj/kGBfISqTBD8AIK5C9gZuSmRNB2OvlpeKhIGnGBiK2GVLn+l3L0fmigt+ytdcoI0sRcIep3Oh46uxXlL61RjbzLCr4QLQf2neRK4mvl2Cp3rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A7c8o42W; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-637e74e9104so1619230a12.1
-        for <linux-usb@vger.kernel.org>; Thu, 09 Oct 2025 09:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760029056; x=1760633856; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RF9ZSJQioRunccbOJ8PBKnVv5gI2HqZYf6M8L8RhwBc=;
-        b=A7c8o42WIGU3OTQiIFlRbbz08yrpvjZUsLCUbGIvzT1sELosdWPF5Q1vKl9XqSFsD2
-         rbAe3BHgfqamjmo98bOTJ0H6jIrz1m3slOoIEZQzoBsqjptIsqBh8eENTgPyxZYlUzW2
-         zmQTk0+ygC6lyXe8G0g59NRXz+0wdCeemkZt+Ul9WTZRpy05R1D3iGo/dysZUnU3nF4U
-         L5EBYrsPDEvtp+BQoWAJGoBGg+CUzjzjWJtFxcz1icMsT2Ch9d0LbWAcZknKyXUv7ntH
-         Ie3VZ2vcp5IKRmEwQ2GjX2b3LboYhQl2PR7I0oH1uEH9+KgUCtg4RNvBn9xO0bKqzbXk
-         321g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760029056; x=1760633856;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RF9ZSJQioRunccbOJ8PBKnVv5gI2HqZYf6M8L8RhwBc=;
-        b=Ng4xDJxTputAFBRHvGJFsRsaZRaWBpg2PREamaj5E2+eQ9PyllL+XSRyDGmOkI3y1h
-         xFIoDXugfpgLWhCs3LuQ+VEbIZnGjXwJfb4T/e0K9om4+igzqow144y9QZ4RT8I6yJOQ
-         HSIskuXYHlFVWIKchjIAjE9GjVPhHQDxYrczJNo4w+FLPmrnLOfJuKIjsgCS75UaL6fi
-         CkxMTD6DZZMD4KRUAG7dAY1A9amGnfAVIPKHupPSslGa0xA8ILZBNlSNycwb2tqDoa47
-         xz5HINZ2O4WO3cFlRHL36Fy4mWs+eZ8/OM/FV6yXROGRbkXgjFKdIGBqmFtBPxUN4qEU
-         TSoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUvm1WaraGcnNvk+ylPLXYALsO6L6NknBojE41f3e1Ve/Zk7keZsf6vQYGB446cpfup3bnM9FVm5+0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypnNqOTSUWVg19cPNO2W4B1IaPAlA495C6R/GOA41CHl6qEqGI
-	nXAaYasXffAHFnN7mi02QprhGVehmWCnZHN4KYCChsBhFxaNSZBJ7yKbKfR1HkHE5fcPBOWmniE
-	VBMt+um9zEbAQ2A4+8baFU6Sii1DCE6M=
-X-Gm-Gg: ASbGnctXIIeCiTGo3JlI7pkpogAD1KsMfGvE09xx1TyRZ0tEOUOo+jn4jVoxoBvi8YT
-	WZrc6yk6chV0j/zUURzbip5uDtldqRDJqupUIuv3vWUfPsb+JZFUz1Up7+nkzvnMFiA2lAfNZGj
-	UdNDbw1sL1uP6M9OSJwe/ZW/wywqQQVfZAurLmgRzQ0d+SecG5TZJj59Zv4/72BWA6Jxd3vE0t8
-	py2UFLmZiveetcFIlwd4jVCYGSowX2C1+bKtkp4VKqJGsKoxOAtEcPE5t3Gtnj7jJom0Sbk51Y2
-	EvyK
-X-Google-Smtp-Source: AGHT+IHgAXC/qDv6DJSl3IbBYDZyNsei3ooyIM9aY+vI8wPwiiUSx8OQ+G2ng29IMa/tU47rvIJShBZrKGpVq0btB9o=
-X-Received: by 2002:a05:6402:42c2:b0:615:6a10:f048 with SMTP id
- 4fb4d7f45d1cf-639d5c6f3admr7423302a12.33.1760029055749; Thu, 09 Oct 2025
- 09:57:35 -0700 (PDT)
+	s=arc-20240116; t=1760030022; c=relaxed/simple;
+	bh=4m/b40Q8HlHAkCFpCXHLrFt6Ce02CTpjazD5P0VykkE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l7n5E5FmZW9MJ/1vBbe0lh7J6JtgOjdHENmuYD1cw4WKDZjJiIPe8t/81Z7SsfmEC1E8dM35x1SjmsyTfbZR4QzUGBeY6B9favk+J8ZzS2yDiD40KEy2zS3qHqawHGMEb3N+w+DxUOaW3uw/mr+kz0dgvxaIAc6+VJmDgsvVJO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sQ3mn/VD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6127AC4CEE7;
+	Thu,  9 Oct 2025 17:13:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760030022;
+	bh=4m/b40Q8HlHAkCFpCXHLrFt6Ce02CTpjazD5P0VykkE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sQ3mn/VDly7N6oRo4YHgs3kB4pz8mCUs06Vf6MTzzHsGNRnR0UrMzRMakSX0IlDsO
+	 IDxfG4ti/zNQx92aK8O4FkV8izUQ88X1aD3M1R6rccbNrgaqDOqVUmw+wKTHXmvXyZ
+	 9gd7gPJF59QtGz5Gd++meMjtLhkcbufX0B2FzNwP1FJti+ONeTDDUvY5usngDNLJkM
+	 qzqMhuAFuIU8gNzmjiEWgHMP2w8VIIFi99yzpAR5rR09uEEQLHTUhbUAd2ZNqTCFkY
+	 1H/WAapbKklLusROb8CPfopsy7NKxeDDGtgzpxKWwV6PJtV1Gmv/+VXRK6gduHYyZS
+	 pJ9R2ZuMWH5vw==
+Date: Thu, 9 Oct 2025 18:13:36 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Roy Luo <royluo@google.com>
+Cc: Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Joy Chakraborty <joychakr@google.com>,
+	Naveen Kumar <mnkumar@google.com>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: usb: dwc3: Add Google Tensor G5 DWC3
+Message-ID: <20251009-lizard-slapstick-4de7dfe2322d@spud>
+References: <20251008060000.3136021-1-royluo@google.com>
+ <20251008060000.3136021-2-royluo@google.com>
+ <20251008-slider-uncombed-66790ea92ea0@spud>
+ <CA+zupgxnBK_k2X0_KKX9pUMMTwY4VhsyTEEVz6v+__u=2xR8Ow@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251001131409.155650-1-viswanathiyyappan@gmail.com> <20251006111211.28f018bc@kernel.org>
-In-Reply-To: <20251006111211.28f018bc@kernel.org>
-From: I Viswanath <viswanathiyyappan@gmail.com>
-Date: Thu, 9 Oct 2025 22:27:23 +0530
-X-Gm-Features: AS18NWCKulaivvxFZjI1XomTCbqny61jfhLMROFJeOwz26mAdFKX8RsAFt2auhg
-Message-ID: <CAPrAcgMW=BLZkxhLq0ubRVvHQ7pNKGCCuGLSyoK_xh7XUUXv+Q@mail.gmail.com>
-Subject: Re: [PATCH net] net: usb: lan78xx: fix use of improperly initialized
- dev->chipid in lan78xx_reset
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Thangaraj.S@microchip.com, Rengarajan.S@microchip.com, 
-	UNGLinuxDriver@microchip.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	skhan@linuxfoundation.org, linux-kernel-mentees@lists.linux.dev, 
-	david.hunter.linux@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="V8Kj8DQ2DFM161Td"
+Content-Disposition: inline
+In-Reply-To: <CA+zupgxnBK_k2X0_KKX9pUMMTwY4VhsyTEEVz6v+__u=2xR8Ow@mail.gmail.com>
 
-On Mon, 6 Oct 2025 at 23:42, Jakub Kicinski <kuba@kernel.org> wrote:
 
-> We need a Fixes tag
+--V8Kj8DQ2DFM161Td
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-a0db7d10b76e ("lan78xx: Add to handle mux control per chip id") seems
-to be most suitable commit: It added dev->devid comparisons to
-lan78xx_read_raw_eeprom but did not move the dev->devid read before
-the call (devid is the precursor to chipid and chiprev)
+On Wed, Oct 08, 2025 at 09:40:57PM -0700, Roy Luo wrote:
+> On Wed, Oct 8, 2025 at 1:58=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
+ote:
+> >
+> > On Wed, Oct 08, 2025 at 05:59:57AM +0000, Roy Luo wrote:
 
-I feel like the patch title sounds a bit awkward so should I change it to
+> > > +allOf:
+> > > +  - $ref: snps,dwc3-common.yaml#
+> > > +
+> > > +unevaluatedProperties: false
+> >
+> > So every property from snps,dwc3-common.yaml is valid here, with any of
+> > the permitted values?
+>=20
+> Conor,
+>=20
+> Appreciate the review.
+> Ack to all the comments, will fix them in the next patch.
+> And yes, every property from snps,dwc3-common.yaml is valid here.
+> You can find more context here [1], essentially the dwc3 glue would be
+> operating on the same platform device as the dwc3 core, hence all
+> properties are allowed.
+>=20
+> [1] https://lore.kernel.org/all/20250414-dwc3-refactor-v7-0-f015b358722d@=
+oss.qualcomm.com/
 
-"Initialize dev->chipid before use in lan78xx_read_raw_eeprom"
+I find it exceedingly hard to believe that every property from that
+file, with every permitted value, is possible. AFAIU, the tensor g5 is a
+phone chip that's only used in pixel devices, not something that people
+can just buy and integrate into whatever device they feel like. There
+should be a vanishingly small number of possible configurations,
+possibly exactly one configuration. There are dozens of properties in
+the dwc3 common binding, of which at least 10 are for "quirks" or other
+sorts of hardware errata that are not going to be variable from one
+phone to another.
 
-since that sounds more standard
+--V8Kj8DQ2DFM161Td
+Content-Type: application/pgp-signature; name="signature.asc"
 
-in v2
+-----BEGIN PGP SIGNATURE-----
 
-Thanks
-I Viswanath
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaOftPwAKCRB4tDGHoIJi
+0orZAQDVQounnZp8XW0MZDnLxiorx4hG4jOujXdg9qHFe7k1qgD/eJp5UpO9UKjh
+jvA+gND8RxLGnuG3C6H3uJAs4WuugQw=
+=JWpo
+-----END PGP SIGNATURE-----
+
+--V8Kj8DQ2DFM161Td--
 
