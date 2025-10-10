@@ -1,110 +1,118 @@
-Return-Path: <linux-usb+bounces-29110-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29111-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BA92BCC035
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 10:00:59 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 136DFBCC170
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 10:16:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A4DD1A6482B
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 08:01:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EDFD14E1563
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 08:16:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 281A227602A;
-	Fri, 10 Oct 2025 08:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A638B24291E;
+	Fri, 10 Oct 2025 08:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="CBsueoYO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d7y/2xMO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1EB272810;
-	Fri, 10 Oct 2025 08:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DB71DF75C
+	for <linux-usb@vger.kernel.org>; Fri, 10 Oct 2025 08:15:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760083242; cv=none; b=tZnHv0w5ghPwTEfIxiXbj+xiyDn+DvcDOFNdfnVWUy5Xc8W501nJs4P8W2bMj/vniLM+WJkDPezohf1Fk4GCf+1GLuEmTro2rdomCmn4tmjVnKEPQ9/0x13K8Q0lGwZ1nJMwQr2MX4L195ehQ3H1Z+3W28WKLt1qfhUNc9fm+FE=
+	t=1760084161; cv=none; b=uh/ESb8GfCYHtLUXozGzkE4mhrOjrnF4ROsd4rVAKNHaqGX9yug+DKIgr3nrtj5zTbe6NL1S6e5niKGC06tk2lBm5jOufdtL8iLCiWFGekM1pgK8TbUI6PXOgpYmqFX5dI+Yg77Tz5L6wXnPX09b25qixucfNuglRBrM1nmfm1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760083242; c=relaxed/simple;
-	bh=7VSc4VZGRf4kATJd9RpFMALSCnx/oi6QGglUySBWA3Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GRbLv/AwsE0OnbelL2sVHWk/Bup54nCzsFvZuh9PqQgNpS5DlnncJimQPtKoaDIR0HpAX1RpQDIZVEyMU2rbyXtC4M/lY8HyZM1+w6VXOh7HmrHEeRf8oaZQt3NnLaYRYcHkxUOJaEadZ3oTQxIsn/h13anD88bUlbInt/nK3TE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=CBsueoYO; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Ri
-	4q9fhZbJ9iRglDYBjtEDYzk9imyFA9mfEoZbEnZks=; b=CBsueoYOusTSV9Z6gD
-	KUzdGe+lvatYdGArYQoUAOSMpTLvcIKtfTV/EHD+nKoXsm71P337FVUqey0dSLMM
-	7MJ8znVx+zQuIqP1TSMGvRQjZlekImhBjKdXkt8X/TZeDJpH8phHAExBOA5MbpmT
-	q+zxEtPGvjpTGsUiGYhHoIiS0=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wBH2wn3vOhoULLLDA--.5915S2;
-	Fri, 10 Oct 2025 15:59:52 +0800 (CST)
-From: yicongsrfy@163.com
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	oneukum@suse.com
-Cc: horms@kernel.org,
-	kuba@kernel.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	yicong@kylinos.cn,
-	stable@vger.kernel.org
-Subject: [PATCH net v2] r8152: add error handling in rtl8152_driver_init
-Date: Fri, 10 Oct 2025 15:59:49 +0800
-Message-Id: <20251010075949.337132-1-yicongsrfy@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1760084161; c=relaxed/simple;
+	bh=jOQ+1EB+xZR2bI8fkSuX+MnkwloxTSge0juOR5vXepY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D/IfIAYfmETko1AwmLktSiNj3OkpRSGovxOKOY5eLPl/AHEdeiH4/EnZ3O2KSQJDueG0xDMUOtdP1EF279sHVy9MRtlHT51vutPbvD6i528cmKo/dMTH3d7uj4C0a72EAfV0skDhUaosFfVBQnSCpgD6teQF9DUpaDLsaVfLlfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d7y/2xMO; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760084159; x=1791620159;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jOQ+1EB+xZR2bI8fkSuX+MnkwloxTSge0juOR5vXepY=;
+  b=d7y/2xMOvjBhjOPXZ7IwK6dIUTSSMv/DpiKpvcBkCMfXk4pF+fn2qzta
+   e1dL2xHNyBholFeh8bFRJ4EI6UG9DVihBi+p/XRsuDGoSjFjjgTTyw306
+   KGfO69fVxueQ0FRpjCt7BUqBJbFwGQ/oOuGAz4aBoDoG5HAWzwbrU4Ewh
+   QiL3Dxs7UaqGivXrNvZO7WUZJ/n7FU2vmFlJ/EwLmn15kRJY46slpQ5oW
+   bQRvK0+3WRVYyaxUnkPsL8ZBCFNqGPqw3JA/p3/3ZslNpR8AtzfuLKZOn
+   sQKb5cfgRyoMyC5DaUe51SYJbAuQdEQDjghgS01WAnWcjTysHwW9K+x5D
+   A==;
+X-CSE-ConnectionGUID: yvbalh8QTsmLy9W3LfReXw==
+X-CSE-MsgGUID: aBQ7bHlARGO2dtYgFnMfUQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11577"; a="73403647"
+X-IronPort-AV: E=Sophos;i="6.19,218,1754982000"; 
+   d="scan'208";a="73403647"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 01:15:59 -0700
+X-CSE-ConnectionGUID: Iw3WUnGJSM2ZEYhV1HRhAw==
+X-CSE-MsgGUID: atdz71oCTLyaFVtYe5a3tQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,218,1754982000"; 
+   d="scan'208";a="186192650"
+Received: from abityuts-desk.ger.corp.intel.com (HELO [10.245.245.149]) ([10.245.245.149])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 01:15:57 -0700
+Message-ID: <b8c2423f-aa9d-442a-ae2f-3c4d78949b38@linux.intel.com>
+Date: Fri, 10 Oct 2025 11:15:55 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBH2wn3vOhoULLLDA--.5915S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKFWrGFWfur1UXr1fJw43Wrg_yoWkZrcEkr
-	yIga47Xr1DuFW5KF15WrWavrySkan0vFs3Zr4xt3sIgwnrXrn5Gr1UZr9xXw4UWrWfZFnx
-	Ca1UGFyxCr129jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU82iiDUUUUU==
-X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/1tbiLBPi22jouzAv0AAAsy
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] [REPRO] USB-A devices not working on boot after
+ recent USB merge
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Arisa Snowbell <arisa.snowbell@gmail.com>, linux-usb@vger.kernel.org,
+ regressions@lists.linux.dev, Niklas Neronin <niklas.neronin@linux.intel.com>
+References: <CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com>
+ <20251007231709.6c16802e.michal.pecio@gmail.com>
+ <CABpa4MCUnLUR_0Vzgd=rTr0+Hot=nxHirKrX6xtJWowDoLhWJw@mail.gmail.com>
+ <CABpa4MCg7yixe7O8Pp+YwvpxeC=1JPhMhAap12RjtV6pcxFYgQ@mail.gmail.com>
+ <20251008082055.5646dadc.michal.pecio@gmail.com>
+ <CABpa4MCm8hQXvtSYqUA+Dh3rCLVM5rTC1p+FsgmFemv+Vyz=RA@mail.gmail.com>
+ <20251008130532.49922d58.michal.pecio@gmail.com>
+ <CABpa4MAsvK68CyQ7bVdie1j2m2O2YAEuFJHq8D-65uFT3FzKzQ@mail.gmail.com>
+ <20251008223406.13f16f19.michal.pecio@gmail.com>
+ <CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com>
+ <CABpa4MBDvgJcgJf3_E7k1dBXs7v1tW-79dmc_sQDVM1bES5YDQ@mail.gmail.com>
+ <20251009131444.2c221922.michal.pecio@gmail.com>
+ <90c03eeb-3913-4968-88c0-0de09023a2b5@linux.intel.com>
+ <20251009152703.72e780b4.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20251009152703.72e780b4.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Yi Cong <yicong@kylinos.cn>
+On 10/9/25 16:27, Michal Pecio wrote:
+> On Thu, 9 Oct 2025 14:30:20 +0300, Mathias Nyman wrote:
+>> Maybe the xhci->allow_single_roothub = 1; flag could be set in xhci_pci_setup()
+>> when called for primary hcd
+> 
+> Oops, I put it at the beginning so it is now executing twice on
+> two-speed controllers.
+> 
+> I only understood this remark when I saw my confirmation printk()
+> appearing twice after removing the "hide USB3 ports" hack.
+> 
+> 
+> Should I do a v2 or leave cleaning it up for later?
+> I suspect that imod_interval should also be moved a few lines down.
 
-rtl8152_driver_init missing error handling.
-If cannot register rtl8152_driver, rtl8152_cfgselector_driver
-should be deregistered.
+I'll happily take a v2 instead if Arisa has time to test it.
 
-Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
-Cc: stable@vger.kernel.org
-Signed-off-by: Yi Cong <yicong@kylinos.cn>
-Reviewed-by: Simon Horman <horms@kernel.org>
+You're right about the imod_interval as well, but that is a minor cleanup
+for a separate usb-next patch.
 
-v2: replacing return 0 with return ret and adding Cc stable
----
- drivers/net/usb/r8152.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 44cba7acfe7d..8a0c824e9eb4 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -10122,7 +10122,14 @@ static int __init rtl8152_driver_init(void)
- 	ret = usb_register_device_driver(&rtl8152_cfgselector_driver, THIS_MODULE);
- 	if (ret)
- 		return ret;
--	return usb_register(&rtl8152_driver);
-+
-+	ret = usb_register(&rtl8152_driver);
-+	if (ret) {
-+		usb_deregister_device_driver(&rtl8152_cfgselector_driver);
-+		return ret;
-+	}
-+
-+	return ret;
- }
- 
- static void __exit rtl8152_driver_exit(void)
--- 
-2.25.1
+Thanks
+Mathias
 
 
