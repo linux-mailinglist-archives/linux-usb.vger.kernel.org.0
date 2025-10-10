@@ -1,145 +1,80 @@
-Return-Path: <linux-usb+bounces-29121-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29122-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 362DBBCD4FC
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 15:43:03 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33DAFBCD5BE
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 15:55:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51C4819E0BD9
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 13:43:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1ADB94FE573
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 13:55:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C919A2F39B3;
-	Fri, 10 Oct 2025 13:42:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD2812F5337;
+	Fri, 10 Oct 2025 13:54:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CymbGA4E"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="qMkkpxI2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FEA52F3631
-	for <linux-usb@vger.kernel.org>; Fri, 10 Oct 2025 13:42:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A351C5D44;
+	Fri, 10 Oct 2025 13:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760103776; cv=none; b=nMqOmLm0wHJlxKb4eCG/VFIlMLl7VoE1+opIN6FVh9wjp7c3tQZSERN7Yc6zEd+SjamgNQcHhett2EHbp6L7Sn3vM8WQx+ajFRGRs816Ivr58FpCRPNugb1pVnC2D9sQ7QSUpM0NAI7cPB6cy/qWxVzCGtHAsMJ9MdduDckPIU4=
+	t=1760104481; cv=none; b=EB4ywIfynkOJ2TI9rg1LS02NBhk0tZ+1r6z66gwgfdDTRQlganhM2x1DohjD3ewqQ+rgljdNEQJXWhoSHrlpvNuIRGV/vXUHkvTxEwNUvYxrhwkw2j3udT6wehsHza/dxI9WuCEWth4tet9sqylSge5PLZ+b5GIo4a1CRKJ1ziI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760103776; c=relaxed/simple;
-	bh=7XLQ8S+YhXAtZSlNkDxw72LTem5c2jAAvW3oPj00LHE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H1lRvZiG9VTLdKvyEHpXIXtRXCsQIePo6uh0kn5j0NslQ0UkS+koilIsNM0jOa4CxqH64UDol8D0NQu4B/m2sv7e2gVJ0EGlaqctBD4kkUOmc/KXSxKj7gkcqDq26XdcsFDkDvFR4l6wXEs9mP8t0iudUy+ZHXQCB9uDuIQXMfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CymbGA4E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095ACC4CEF8;
-	Fri, 10 Oct 2025 13:42:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760103775;
-	bh=7XLQ8S+YhXAtZSlNkDxw72LTem5c2jAAvW3oPj00LHE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CymbGA4E5pyLmmMgGugjlKLwbhAv3UIJdaXWjjMJHiwr1v4mRx+Lg3h8RFUsV6lKZ
-	 AcTTVKA+E6mSMZrh9SELZa63T4FJA4DlMD01KdC6QxpF5BJwzc14xtYHd5sih8eEpd
-	 gyiDTRveJeXVk2HD0X1n7zJZdptuMvG6E6SZFDS+b0WwxEtfB7IdNmwVhX1N79aeg1
-	 pfKDGGFNSIKzXV2y0pBzZEk8EC+dHHrFTPaLhnuwEmmlMtygaevmO6xIr5Bm9/chBG
-	 n2JQc4IzR0ZTylGHPG7U4xk2JG5yWFRZexQP2N3RTpPbI1rh0K6UkByfMlWDtRnpzd
-	 PuoRtfxw69S9g==
-Message-ID: <9bff88b4-9b17-46fb-97d9-58a007faafb6@kernel.org>
-Date: Fri, 10 Oct 2025 15:42:53 +0200
+	s=arc-20240116; t=1760104481; c=relaxed/simple;
+	bh=9IuWddk7LpLFJWE/Lu4PlgA+yGUYwub9PkTzysf+218=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jOPwnfy16fB6zpuX6gO6ikg4M/Flyi13sunAXg5t5AjF4xomqOPLJRBNCEnzN5I/70jr/SG92XixtTMNMkyi7OsnTZOj31XwnQyI96otEWDnxrLD1trEfsZ/Gr3mm6sSdGq0mlsqhxkf2rWbh4lZfbzeokcXw3dOHW8AKl/EsZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=qMkkpxI2; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=okET9B2Eoj+NMe4MVpvuHZsiDFXZQtnPXPl9SeB8Pto=; b=qMkkpxI2i34p7jQD8viiOa1WJh
+	RWgMSiIdPjZgeCv2qVvbuJGHZwl5zQDEmMTb0RCHmxucWHoSbya0fwG7oG6rcrchEubMksR9ZAZUu
+	Z85kBbVzkQQ+Va+Wxd5leGy2PLauag/MXvsmbgt1gRDoUt0b2o7ksXDZWb4LBEIgykYk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1v7DZj-00Abl4-O7; Fri, 10 Oct 2025 15:54:27 +0200
+Date: Fri, 10 Oct 2025 15:54:27 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: yicongsrfy@163.com
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	oneukum@suse.com, horms@kernel.org, kuba@kernel.org,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	yicong@kylinos.cn, stable@vger.kernel.org
+Subject: Re: [PATCH net v2] r8152: add error handling in rtl8152_driver_init
+Message-ID: <f6cfb923-83ff-473d-a263-8d45933d8cd2@lunn.ch>
+References: <20251010075949.337132-1-yicongsrfy@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: ljca: Improve ACPI hardware ID documentation
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-usb@vger.kernel.org
-Cc: Lixu Zhang <lixu.zhang@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20251010055625.4147844-1-sakari.ailus@linux.intel.com>
- <20251010055625.4147844-2-sakari.ailus@linux.intel.com>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <20251010055625.4147844-2-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251010075949.337132-1-yicongsrfy@163.com>
 
-Hi,
+> +
+> +	ret = usb_register(&rtl8152_driver);
+> +	if (ret) {
+> +		usb_deregister_device_driver(&rtl8152_cfgselector_driver);
+> +		return ret;
+> +	}
+> +
+> +	return ret;
 
-On 10-Oct-25 7:56 AM, Sakari Ailus wrote:
-> Document the differences between the LJCA client device ACPI hardware IDs,
-> including the USBIO IDs used for LJCA devices.
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Now look at this code and think about it.
 
-Thanks, patch looks good to me:
+    Andrew
 
-Reviewed-by: Hans de Goede <hansg@kernel.org>
-
-Regards,
-
-Hans
-
-
-
-> ---
->  drivers/usb/misc/usb-ljca.c | 37 ++++++++++++++++++++++++-------------
->  1 file changed, 24 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
-> index cf01cc727685..ebc18fae76e8 100644
-> --- a/drivers/usb/misc/usb-ljca.c
-> +++ b/drivers/usb/misc/usb-ljca.c
-> @@ -164,28 +164,39 @@ struct ljca_match_ids_walk_data {
->  	struct acpi_device *adev;
->  };
->  
-> +/*
-> + * ACPI hardware IDs for LJCA client devices.
-> + *
-> + * [1] Some BIOS implementations use these IDs for denoting LJCA client devices
-> + *     even though the IDs have been allocated for USBIO. This isn't a problem
-> + *     as the usb-ljca driver is probed based on the USB device's vendor and
-> + *     product IDs and its client drivers are probed based on auxiliary device
-> + *     names, not these ACPI _HIDs. List of such systems:
-> + *
-> + *     Dell Precision 5490
-> + */
->  static const struct acpi_device_id ljca_gpio_hids[] = {
-> -	{ "INTC100B" },
-> -	{ "INTC1074" },
-> -	{ "INTC1096" },
-> -	{ "INTC10B5" },
-> -	{ "INTC10D1" },
-> +	{ "INTC100B" }, /* RPL LJCA GPIO */
-> +	{ "INTC1074" }, /* CVF LJCA GPIO */
-> +	{ "INTC1096" }, /* ADL LJCA GPIO */
-> +	{ "INTC10B5" }, /* LNL LJCA GPIO */
-> +	{ "INTC10D1" }, /* MTL (CVF VSC) USBIO GPIO [1] */
->  	{},
->  };
->  
->  static const struct acpi_device_id ljca_i2c_hids[] = {
-> -	{ "INTC100C" },
-> -	{ "INTC1075" },
-> -	{ "INTC1097" },
-> -	{ "INTC10D2" },
-> +	{ "INTC100C" }, /* RPL LJCA I2C */
-> +	{ "INTC1075" }, /* CVF LJCA I2C */
-> +	{ "INTC1097" }, /* ADL LJCA I2C */
-> +	{ "INTC10D2" }, /* MTL (CVF VSC) USBIO I2C [1] */
->  	{},
->  };
->  
->  static const struct acpi_device_id ljca_spi_hids[] = {
-> -	{ "INTC100D" },
-> -	{ "INTC1091" },
-> -	{ "INTC1098" },
-> -	{ "INTC10D3" },
-> +	{ "INTC100D" }, /* RPL LJCA SPI */
-> +	{ "INTC1091" }, /* TGL/ADL LJCA SPI */
-> +	{ "INTC1098" }, /* ADL LJCA SPI */
-> +	{ "INTC10D3" }, /* MTL (CVF VSC) USBIO SPI [1] */
->  	{},
->  };
->  
-
+---
+pw-bot: cr
 
