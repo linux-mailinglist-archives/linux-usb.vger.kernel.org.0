@@ -1,175 +1,151 @@
-Return-Path: <linux-usb+bounces-29128-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29129-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36139BCE6B6
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 21:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 54BF1BCE751
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 22:16:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26B2819A063E
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 19:47:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48A3719A2B90
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 20:16:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AC103016E6;
-	Fri, 10 Oct 2025 19:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B95E1302163;
+	Fri, 10 Oct 2025 20:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EtsOKhaF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LRAZTdlN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEDF13B58C
-	for <linux-usb@vger.kernel.org>; Fri, 10 Oct 2025 19:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BBD26F297
+	for <linux-usb@vger.kernel.org>; Fri, 10 Oct 2025 20:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760125593; cv=none; b=O3mjLUt02XvYWIfwsCPqFZyIcf+r4bK3c3vIQclxrU7hOO9c5PytitZqOH7h9Zm+UtdhKWAJEdeZ/xoWQ9xSAXXNOHUe328u3v24zQaF2xOR8NEjGh1d2NmF1ffJeWCp4WrFyuYgiAApN4h4bu4j9T8l1EgbqCYjRFgXJVBkhxE=
+	t=1760127377; cv=none; b=NAzRgSHrKbL4wM6vcCpccjh7QkOAlCSbizbQJgGpIdvsDP0JzYy0MC6gCKeSTMKvXTykZ9SkvNILSjomR4nYF9ijepO81uh7BxKJGISsd/Q/GZ7clWhGxNogtTq3+Mcakh1s46kxIxtlTXf+fFsJ8CvLZkRg/nw8AmCGi05TYcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760125593; c=relaxed/simple;
-	bh=8B0TxVKymUNconocVqaGeavIGwY7T0t3daf3VX2qAXk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ufhVSz/rBcUQppIuiM6vqyeuT52/OTKfNr9l+DdTK7xIxzHunC9ZSatFOeaBZxX5FJIbRL//1RP53oaRlanS9PA2sAV/9o6PjOnd9fQqC5aPjNmRNbpSVNelUZLRkrecestlgjeRIrEuZcXigOlLGz9aemqE0V/6e13o9Yi9UuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EtsOKhaF; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-32eb45ab7a0so2620504a91.0
-        for <linux-usb@vger.kernel.org>; Fri, 10 Oct 2025 12:46:32 -0700 (PDT)
+	s=arc-20240116; t=1760127377; c=relaxed/simple;
+	bh=LeOlfv9Qe98aV9cT/VDmXbV2tpD8MIcC/9HBfX+lGZo=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=EHBRD70+PlVE43SwWcX9oSwYf9v2u11PGlKYMhkix8MhvPRrFPpi3GgOJYVE16J3YLiYUl6p5H3QETlrchtiPNAgd8hzycVm0xgDTOmW3kmFNBEBGRA20f3IumKR95KIc1rljwsXu62NiVejNoqpq1h6aA4UpHulGcqsTshD0aI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LRAZTdlN; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b60968d52a1so8169569a12.0
+        for <linux-usb@vger.kernel.org>; Fri, 10 Oct 2025 13:16:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760125592; x=1760730392; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J2hlRuh4XWPBhw9XhKqVrIvF45UiA/YFigu+0H9k6fc=;
-        b=EtsOKhaF/VZhqf/Xt+MOS0/65DKEVJ9zYyZQFL1pq0/lfqw1SQbZqVxxoDoCOY1Kd/
-         wqtl48L4xkumSgAd6R6nn4E6xv/XjlPvzM0rNFlXGj9GXL+Ar+bmGQrtGUWw8Vhck5XT
-         dQfYTwWYrgWRKMyG3GoBl6habgp/HqPqdHxcTh1zzoXzZn7xaMXAgytSTVF0+aEsqdm3
-         JMUHDJJaJLIpScAUJNGOfXmrT7iWeJfvKCgG8CuT1DniJMrdPkX/Gqa1yyuxaIz4D4tq
-         CAdap3LA8YObH9ugImFLxxbSczDTcwZ47EsBfqIUS0Jx+cgrexdnj5E/y4o6nox/nqeo
-         pNHA==
+        d=google.com; s=20230601; t=1760127375; x=1760732175; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=estI8qEVcPVY31PTAjZ7lIjF6tdHShVWJ6+L1IGJmXg=;
+        b=LRAZTdlNhXx28UvzwL8skIPyjcKEHZ/BXG9dnn/t8ZjbRlalalqHkDMj/k5/t70v8m
+         DToGBzMy08gO1Mpx9Ch6xsTakf7Rv8T6aJvj/P8BWR2Lw9zVrWhywY9PS7QDzeE8LSgi
+         JcLxxIcoqB+BE4u29s8sKRUPyjapmroq0E+ltJpc2bjJj5a1AdbMW5jPLP7pMDqEaodV
+         4Oecs+RHLjEfI6y0GJGaly+GPkMmWagb9Vrc8z1AyQPbIi2TvzOqILfMstoFwz8PFrSN
+         HVgtKXtWUYq9+PB80blAupPWvVo4+MGncTyUp3Vi1yBKNVgAtiqWD5atZFV4a/0sxw8D
+         TlLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760125592; x=1760730392;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J2hlRuh4XWPBhw9XhKqVrIvF45UiA/YFigu+0H9k6fc=;
-        b=oRi93GCoKzqBNGFLaY2u041dZHqMZebgcEK4ZNoHcD4noGxvA+Uhz7QGgGh1u7eO4d
-         Tv/guFngIBqMc3ddRylw/a1s+C/CrX7/hLdhihcJT3LvYVQ3fvxeSNrXb9MgEq0VOpYi
-         Y8FlUbyyKoE28Ijayv9r6l0yB7nyekm4i8ECuEQc5M7lNYAZyVBDwCzqvIeQ+d9v7eOr
-         katftLM9OgJRJ16yTPq92dF6MTFhhZy6Nz0WWjGhH/VmMKyHkhpBLtNcecpn5KFRa9FP
-         eHOaKznYaZTerhBMTjEiSWD8WHMhMAthmlNyceO9StJbizOblV0lGEPZnLlY9DpRv8mj
-         93aw==
-X-Forwarded-Encrypted: i=1; AJvYcCX0Qgby71yeILpEx2g0ut6czLKkIGHcdnHTuByvEhrHHE4q5Bmuz2G+o0jRxwZcgIjEQMLjFPWRGAA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJEhk3vFUVvIjXjWbxbwj0SuVBC0H60dZrS9frYRPPU6gahAzS
-	yogoyZcyCgnwRfNBXZYW4sC7dzse89C6FEiLY2V8fFkUh/Ql1JmJzNAJ
-X-Gm-Gg: ASbGncu9DVFbwGj741tePDwpI7zNUEE9Ufro/Zy9gDUfTga6EzSxnbgwKHT5zVJEQj4
-	cdaYmBeT9IOGkx32g5+YHHBUYPYvOD2mNcn4VnQuhz/VQV9P6Jk1vBJcCyWjOw1HH2iuz+lqNW2
-	sslJ4Ps52luSPZ+pkqpVc+qnTyDHGRYTOw++iZq3VNJCpP48LuatJQg/mWOmr87qxNAUCp/DLiA
-	9Yovxtu476HbFokcED9qoLu232AIqx29ZikHZ6seo4pr88mSbX9VwjqwI/RqygTlUaWXc6FvrLX
-	jkhciubs17HhAangRIUBHSzG4hyozAiwzZ4CT63VrEPAaRlKnx+mkwZYU+9JGA4628gbzNd7JH0
-	T62vNHST5/RLfrJp7v9QIClNVYg64XMl9wfWNRaF6Bso/LaCwR57ZsxJfaVY2inXMg04NYSAtVW
-	6KpvoqdXScY0qlrnHrsBKmPtczQOY/+f8=
-X-Google-Smtp-Source: AGHT+IED75ZRA8aUNNWtEN0desHQoL9OpLop/JAYe/9l97lED+LZpw3Uwd0bVgno+BX9gPJUsMrjIA==
-X-Received: by 2002:a17:90b:384c:b0:335:2823:3689 with SMTP id 98e67ed59e1d1-33b5114b63dmr17972054a91.4.1760125591793;
-        Fri, 10 Oct 2025 12:46:31 -0700 (PDT)
-Received: from ?IPV6:2804:14d:4c64:860f:5abf:20b2:7217:3f90? ([2804:14d:4c64:860f:5abf:20b2:7217:3f90])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b62645851sm3734705a91.9.2025.10.10.12.46.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Oct 2025 12:46:31 -0700 (PDT)
-Message-ID: <935dbd93-2b20-45fb-a5b1-04f6ac67615e@gmail.com>
-Date: Fri, 10 Oct 2025 16:46:26 -0300
+        d=1e100.net; s=20230601; t=1760127375; x=1760732175;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=estI8qEVcPVY31PTAjZ7lIjF6tdHShVWJ6+L1IGJmXg=;
+        b=pZBmv6EZLGC4DXWUyapSrIUwhHjY8QGLe6rNslsy4Rx1YKNeS5Bnv3+txWAuH74gdD
+         ixzGYP1Ofv3wTAze9JbujY5H/Ub17ck9RzQYc7D8uLB1h91TZeEt4Ip7t7HLqBeIXvse
+         U0XAcRMOzIrJjuscnS0cJMpEoQqtkQdwV45a4/aDcVTt7VzMLGmlFDwFZONpdmMNreTr
+         mvjVSC3m/lZA0RyDyl9a2hw7spfNTikiFj9OIhdBnutiJxIlUg8M+oOK36n5Tv1WTZEy
+         yBa/FijSuOJ2a7zyultQX/ujjhj9vw58JT9Y+3a0o6DmWwOocKA2sdfXF29FU9K+Um4L
+         Tpkg==
+X-Forwarded-Encrypted: i=1; AJvYcCX3XncTbDRQtS6pe1b2XBu4ABk1kbW/HG7raUSdKOpLCm97g8dYF6ct5XDel65m5egHDVlXjM+i/+s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YybGmCBLrvFEEcnVR5L/BKWkeiwOBMPdyBOzawwZYpTPDQ/5HRp
+	3NgPns8sbBTLczN0+s3RWINtEQ03m0hnpBBx8lW9jeQObMtpqp5bg0Fcfj+edD73yx8BbZ4/ng1
+	o8kBemQ==
+X-Google-Smtp-Source: AGHT+IFJD5qJ8MoWXYq3MeKta2yygNl8qvdxme+xxEYvwMoAACneZQcghqeTL0yFWDPZvoSjrD0dclHeIIM=
+X-Received: from pgjq5.prod.google.com ([2002:a63:e945:0:b0:b47:34d0:d386])
+ (user=royluo job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:2595:b0:2fa:26fb:4a5c
+ with SMTP id adf61e73a8af0-32da84edd1bmr17849128637.59.1760127374950; Fri, 10
+ Oct 2025 13:16:14 -0700 (PDT)
+Date: Fri, 10 Oct 2025 20:16:03 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: usb: add yaml file for maxim,max3421
-To: Krzysztof Kozlowski <krzk@kernel.org>, gregkh@linuxfoundation.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, davidm@egauge.net
-Cc: ~lkcamp/patches@lists.sr.ht, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251009182046.185520-1-rodrigo.gobbi.7@gmail.com>
- <c65f8b8d-9ee9-4aea-8f27-66c9fe12401a@kernel.org>
-Content-Language: en-US
-From: Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>
-In-Reply-To: <c65f8b8d-9ee9-4aea-8f27-66c9fe12401a@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.740.g6adb054d12-goog
+Message-ID: <20251010201607.1190967-1-royluo@google.com>
+Subject: [PATCH v3 0/4] Add Google Tensor SoC USB support
+From: Roy Luo <royluo@google.com>
+To: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Peter Griffin <peter.griffin@linaro.org>, 
+	"=?UTF-8?q?Andr=C3=A9=20Draszik?=" <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>, Roy Luo <royluo@google.com>, 
+	Badhri Jagan Sridharan <badhri@google.com>, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/9/25 22:34, Krzysztof Kozlowski wrote:
-> On 09/10/2025 03:15, Rodrigo Gobbi wrote:
->> Convert maxim,max3421.txt to yaml format with a few extra properties like
-> 
-> 
-> Here and in subject, please do not use yaml at all. Look at other
-> commits, this is supposed to be:
-> 
-> dt-bindings: usb: maxim,max3421: convert to DT schema
-> 
-> (and all other things like "file for" are redundant")
-> 
->> maxim,vbus-en-pin, maxim,gpx-pin, reset pin and supplies. Also add a
-> 
-> Why new properties? You must explain not only the difference but WHY you
-> are doing this.
-> 
-> WHY is the most important question/answer.
+This series introduces USB controller and PHY support for the Google
+Tensor G5 SoC (codename: Laguna), a new generation of Google silicon
+first launched with Pixel 10 devices.
 
-The reason was that the device (the IC) supports that. Is it
-enough to justify? I mean, is a plausible answer in this case? If yes,
-I agree that my commit msg was not right since I didn`t mention that.
+The Tensor G5 represents a significant architectural overhaul compared
+to previous Tensor generations (e.g., gs101), which were based on Samsung
+Exynos IP. Although the G5 still utilizes Synopsys IP for the USB
+components, the custom top-level integration introduces a completely new
+design for clock, reset scheme, register interfaces and programming
+sequence, necessitating new drivers and device tree bindings.
 
-> 
->> maxim,max3421e compatible with a fallback, since the actually PN is with
->> the 'e' suffix.
-> 
-> We don't add PNs usually, unless there is a need. So again, why?
-> 
+The USB subsystem on Tensor G5 integrates a Synopsys DWC3 USB 3.1
+DRD-Single Port controller with hibernation support, and a custom PHY
+block comprising Synopsys eUSB2 and USB 3.2/DP combo PHYs.
 
-The PN of this is Maxim3421e, Maxim3421 without `e` doesn`t exists as far as I`ve
-searched it. If it exists, it`s a different thing. In this case, I would expect that
-the compatible string should be something that "matches" the device, but in this
-case, the compatible string is without the 'e'. In that way, I was suggesting in this patch to
-allow a more precisely compatible string to no break anyone using the original one. But if 
-it was a bad idea here, I can drop that for sure.
+Co-developed-by: Joy Chakraborty <joychakr@google.com>
+Signed-off-by: Joy Chakraborty <joychakr@google.com>
+Co-developed-by: Naveen Kumar <mnkumar@google.com>
+Signed-off-by: Naveen Kumar <mnkumar@google.com>
+Signed-off-by: Roy Luo <royluo@google.com>
+---
+Changes in v3:
+- Align binding file name with the compatible string
+- Simplify the compatible property in binding to a single const value.
+- Add descriptive comments and use item list in binding.
+- Rename binding entries for clarity and brevity.
+Link to v2: https://lore.kernel.org/linux-usb/20251008060000.3136021-1-royluo@google.com
 
->> +  spi-max-frequency:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
-> 
-> No, drop $ref. Do you see any binding like that? No, there is none.
+Changes in v2:
+- Reorder patches to present bindings first.
+- Update dt binding compatible strings to be SoC-specific (google,gs5-*).
+- Better describe the hardware in dt binding commit messages and
+  descriptions.
+- Adjust PHY driver commit subjects to use correct prefixes ("phy:").
+- Move PHY driver from a subdirectory to drivers/phy/.
+Link to v1: https://lore.kernel.org/linux-usb/20251006232125.1833979-1-royluo@google.com/
+---
+Roy Luo (4):
+  dt-bindings: usb: dwc3: Add Google Tensor G5 DWC3
+  usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+  dt-bindings: phy: google: Add Google Tensor G5 USB PHY
+  phy: Add Google Tensor SoC USB PHY driver
 
-I`ve a previous patch recently at [1], that added a "similar" thing of frequency:
+ .../bindings/phy/google,gs5-usb-phy.yaml      |  88 +++
+ .../bindings/usb/google,gs5-dwc3.yaml         | 141 +++++
+ drivers/phy/Kconfig                           |  15 +
+ drivers/phy/Makefile                          |   1 +
+ drivers/phy/phy-google-usb.c                  | 286 +++++++++
+ drivers/usb/dwc3/Kconfig                      |  10 +
+ drivers/usb/dwc3/Makefile                     |   1 +
+ drivers/usb/dwc3/dwc3-google.c                | 597 ++++++++++++++++++
+ 8 files changed, 1139 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/google,gs5-usb-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/google,gs5-dwc3.yaml
+ create mode 100644 drivers/phy/phy-google-usb.c
+ create mode 100644 drivers/usb/dwc3/dwc3-google.c
 
-+  sampling-frequency:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 2500000
-+    maximum: 20000000
-+    description:
-+      Default sampling frequency of the ADC in Hz.
 
-In that case, $ref and description were added. Why that case is different from this one here?
-[1] https://lore.kernel.org/all/20250522204130.21604-1-rodrigo.gobbi.7@gmail.com/
-
-> 
->> +
->> +  maxim,vbus-en-pin:
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->> +    description:
->> +      One of eight GPOUT pins to control external VBUS power and the polarity
->> +      of the active level. It's an array of GPIO number and the active level of it.
->> +    minItems: 2
->> +    maxItems: 2
->> +
->> +  maxim,gpx-pin:
-> 
-> I don't understand. There is no need for this property. Drop.
-
-During my other reviews of new bindings, my final premise was that we should add every "capability" of
-a device (the IC) regardless of the driver support. In this case, the maxim,gpx-pin, is an example of that,
-the device supports that despite the driver support. I`m wondering here why we cannot add that here.
-
-Tks and best regards.
-Rodrigo.
-
+base-commit: e5f0a698b34ed76002dc5cff3804a61c80233a7a
+-- 
+2.51.0.740.g6adb054d12-goog
 
 
