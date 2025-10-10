@@ -1,183 +1,248 @@
-Return-Path: <linux-usb+bounces-29105-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29106-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0063BCB4B7
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 02:36:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F2E8BCB5C9
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 03:34:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9866C407EFD
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 00:36:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A94640260E
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 01:34:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F391F03D2;
-	Fri, 10 Oct 2025 00:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6CD222565;
+	Fri, 10 Oct 2025 01:34:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rO42QQgp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a8B7QSKR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A8B2868B
-	for <linux-usb@vger.kernel.org>; Fri, 10 Oct 2025 00:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B07A4414;
+	Fri, 10 Oct 2025 01:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760056609; cv=none; b=akyFYawKflD57Tuc2uUEuK/fYqZmNpZ8hcsBC5Sx2hfhhmegnT7Rlf4mUCt5HR4uWw/jTahwv2gnQmc3dU5XS0TfVCAcgKOQ6z4I1BhTuGJ4FlxeQaFeJhEAnGdOaGNcR2pR7iSnqHL/GP4kWTnBLt6NHHRMzafikyHBrHAiYLs=
+	t=1760060054; cv=none; b=oWcqMDWUu25p9AZQvq6KJwPIjTnIKaFaHIqJh/qTre7ojGgry9taE4nf+UXDjWb0P/MZNBTGGXb4uIK4dmbQlDDozLrx/yHnu4NOXcSdTwcds6Mhp3gLmsk9Bxi03mprwxex3phyOKNhXVDIxkFxhsQ4+7fOllLXJduxa2gK4FE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760056609; c=relaxed/simple;
-	bh=VgIiVYfPPanTe5NtANzBkqzLHFkkV0yvS73sEK/bvBA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AWqbGom/QDq1/tfaCG3QPb7FxlkOJytect5Rhy/xMXKVTtpivwyOMN2VezzCYdaXVC8bA1Mv8/eHDuvlw0HPjw/edYseL10HeGDYR+cySJ2zjmYZQQ6Bpmcc+RwX/GNm/soqbSG6zMCXoFU656Nuf2dVrvYNuaVHgIn9jCxQBMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rO42QQgp; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-339d53f4960so1715573a91.3
-        for <linux-usb@vger.kernel.org>; Thu, 09 Oct 2025 17:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760056607; x=1760661407; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3uYueVCnhFig6wd4EAi1d6+7+lqgnd7MHxpQ+CybGP0=;
-        b=rO42QQgp+37nHbrYxbftDewtXDy7DpYyhJn24Vnh5sH8dXxBj8MCcr1jQhz+jMM09G
-         2N+ac3oN+pObcRF2xtEoHqFWero3qJYcZlIQGHzUucOlWhvyOwFelulTr5SmOeyhPRTs
-         tS2LAYmYr9i5bPdTuC9skNf9ptAVEEoXTdAmgnYNtcvqZrSAG/ca/s/c+MwEt/f4Ov/N
-         gY/SjQPSUMntvOrJm97k6so7VERolXVXUAbUBxryjhlA7m0YEO/S9mmgD9fVLbUNON1s
-         prew8aVnuHYdEq4hh3gGqskJOSRWdHBgRQxXbtYZOhJzlDOlDs9VEkhi48blczHoc4qa
-         VPzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760056607; x=1760661407;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3uYueVCnhFig6wd4EAi1d6+7+lqgnd7MHxpQ+CybGP0=;
-        b=hazIYDDHK2MCSj2LxTl+Pa0hvlnia7pjmGFm99HQRUVD7pPJPBiXCm0eVuDaB75GjB
-         rYNz0G++kfVzabeAdPxy4Ek1nHABxsR2gVDfPcHLxD9jmaLrBLMk6XUNVTA1RjTj0Wsi
-         VudspPso4Y1y6tCzomVx6cGRq0vmVdMEmoC3WmY7rUlI+c+UcjaMYLDtNMcH9hd6u/6J
-         0WaSdQ/fZLodGAaTzvBwK2PrxTn9bi1lnR0wPtV2mVWiA0GLGIEkCp+bXVdzsfXHNTpc
-         unp8EsJSfEJ8frGUNPc4ZbL+xQFyvBOtjmenNQ4QcCmMrC/Wjldg6Z0l794sw8FvYv0o
-         ij2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUUcr0S325Gpb/s3r0s6XGxDR+wM+aNrtpMxWknlgnkBbMF0VwAG1vO+hnZttkX9J6iyS6757tdJSk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYujTf0Crnvx/srhM+aqtUzvkk/QN2q3eE5aQ/wnK7Biyo/DTG
-	eSwDp/s7Y2Gplhu603hpvwSatHrlcaxZD611rueXZLBlC5dUefNfmMTRrYGZ1uxNqoIashKx9QN
-	mvLUpJVtLTG0eEbtSegleOFRu4JaEf9AVCuhbWsQd
-X-Gm-Gg: ASbGncvdOnI9+qTkRocSze54HrlxvxU3oUSQHMc+H4+8/b4hndi3dWM3VS89JFUAapC
-	edMUpghHedQYPXp35ZwUEG+T9T5VBxvrF1fz2D6aGXKl5P2UG8D/+g3TZYbH59ohXPsFZEeqOww
-	ZxtUQOSnNkkcwZzj7ro1kQxq6Izl7qZUIxMcslTDnUidX9ulAeWNO98PwyKsapbCNorm5JYyHr8
-	fR5X7uPajkU3Qhr2PQOKBg4AgyNbupLseRLgEs=
-X-Google-Smtp-Source: AGHT+IGKjXjPSXyUWNxjvvey/PIj1qEWv3CW3/XJrVZRUI28DQ4Y1brYwXDEUls30Lbe70Hr5PouwmW4vqkFNVZptJA=
-X-Received: by 2002:a17:90b:1c0a:b0:32d:e75a:5009 with SMTP id
- 98e67ed59e1d1-33b5114d4f2mr13047772a91.1.1760056606410; Thu, 09 Oct 2025
- 17:36:46 -0700 (PDT)
+	s=arc-20240116; t=1760060054; c=relaxed/simple;
+	bh=8ZJbDaeBCqI+FE70wCqh8LvKqtIC9KwiaPD3ESDri3s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QHHwcnsbxdeGPncUz1dwkCeED9DWT7PLpB2oF29PU00GN18zRyHVspcO3VKCYrorQ9DOHupbWsYoUsnoGYx6xP3G9bZEktMjl6f20wtAEs7oevgYxCz8/Q2D3I7czFky8/62yPNUzk6AIQabrBYdVSP5ym62FF1J+FEgDtBQOaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a8B7QSKR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A691C4CEE7;
+	Fri, 10 Oct 2025 01:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760060054;
+	bh=8ZJbDaeBCqI+FE70wCqh8LvKqtIC9KwiaPD3ESDri3s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=a8B7QSKRJfXQG+1MHOg1EZ4tlQyUuIcHbb2gUOkpXixjGjxsle2lDsY/nh3MmEVQi
+	 kQVoNlvGmK9hrJ0HwXynXziKgY7u58hNv7peX17sUOTKJDXWBrP0Pk3DBOWI9dTdep
+	 PhgttlGZ6w7v5OiAcSAHdsP6BRCRiAxio6XOiTsPdwiXl02loySG+M0p+icvkdxhea
+	 e37dijbq7+rI89CH2mXaecQjXNY3K5MqYq1PYde+8CBi4ldlKHTnartrrsrsb26e+j
+	 VwddVN5GG4qKc52vjcfVyKK+q9aOdyT45Piuhwo+4q8ZVkv6FsHFK+MuVhrM645u9V
+	 4h52MAl185tuA==
+Message-ID: <c65f8b8d-9ee9-4aea-8f27-66c9fe12401a@kernel.org>
+Date: Fri, 10 Oct 2025 03:34:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251008060000.3136021-1-royluo@google.com> <20251008060000.3136021-2-royluo@google.com>
- <20251008-slider-uncombed-66790ea92ea0@spud> <CA+zupgxnBK_k2X0_KKX9pUMMTwY4VhsyTEEVz6v+__u=2xR8Ow@mail.gmail.com>
- <20251009-lizard-slapstick-4de7dfe2322d@spud>
-In-Reply-To: <20251009-lizard-slapstick-4de7dfe2322d@spud>
-From: Roy Luo <royluo@google.com>
-Date: Thu, 9 Oct 2025 17:36:09 -0700
-X-Gm-Features: AS18NWDGN42gjmrB8C6_VuH2yevkuUM_X9h5rPKcbGr2ZgBfcB7UAfagMIfSoXY
-Message-ID: <CA+zupgwAXQEuhZUqbjxOC+9HbRG3SQ-_fhEX-49NpfCgqO4BZA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: dwc3: Add Google Tensor G5 DWC3
-To: Conor Dooley <conor@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Peter Griffin <peter.griffin@linaro.org>, 
-	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Joy Chakraborty <joychakr@google.com>, 
-	Naveen Kumar <mnkumar@google.com>, Badhri Jagan Sridharan <badhri@google.com>, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: usb: add yaml file for maxim,max3421
+To: Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>, gregkh@linuxfoundation.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, davidm@egauge.net
+Cc: ~lkcamp/patches@lists.sr.ht, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251009182046.185520-1-rodrigo.gobbi.7@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251009182046.185520-1-rodrigo.gobbi.7@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 9, 2025 at 10:13=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Wed, Oct 08, 2025 at 09:40:57PM -0700, Roy Luo wrote:
-> > On Wed, Oct 8, 2025 at 1:58=E2=80=AFPM Conor Dooley <conor@kernel.org> =
-wrote:
-> > >
-> > > On Wed, Oct 08, 2025 at 05:59:57AM +0000, Roy Luo wrote:
->
-> > > > +allOf:
-> > > > +  - $ref: snps,dwc3-common.yaml#
-> > > > +
-> > > > +unevaluatedProperties: false
-> > >
-> > > So every property from snps,dwc3-common.yaml is valid here, with any =
-of
-> > > the permitted values?
-> >
-> > Conor,
-> >
-> > Appreciate the review.
-> > Ack to all the comments, will fix them in the next patch.
-> > And yes, every property from snps,dwc3-common.yaml is valid here.
-> > You can find more context here [1], essentially the dwc3 glue would be
-> > operating on the same platform device as the dwc3 core, hence all
-> > properties are allowed.
-> >
-> > [1] https://lore.kernel.org/all/20250414-dwc3-refactor-v7-0-f015b358722=
-d@oss.qualcomm.com/
->
-> I find it exceedingly hard to believe that every property from that
-> file, with every permitted value, is possible. AFAIU, the tensor g5 is a
-> phone chip that's only used in pixel devices, not something that people
-> can just buy and integrate into whatever device they feel like. There
-> should be a vanishingly small number of possible configurations,
-> possibly exactly one configuration. There are dozens of properties in
-> the dwc3 common binding, of which at least 10 are for "quirks" or other
-> sorts of hardware errata that are not going to be variable from one
-> phone to another.
+On 09/10/2025 03:15, Rodrigo Gobbi wrote:
+> Convert maxim,max3421.txt to yaml format with a few extra properties like
 
-To my knowledge, the properties in snps,dwc3-common.yaml can generally
-be categorized into two types:
-- Function knobs: These properties translate directly to register writes th=
-at
-  modify the controller's fundamental behavior. Most quirks fall into this
-  category. For example, "snps,gfladj-refclk-lpm-sel-quirk" enables SOF cou=
-nter.
-- Tunable Values: These properties also map to register writes to influence
-  hardware behavior, but they typically adjust performance or interoperabil=
-ity
-  rather than essential function. While the hardware usually works fine wit=
-h
-  default settings, these values allow for optimization. For example,
-  "tx-fifo-max-num" usually affects data throughput.
 
-For DWC3 hardware errata and workarounds, my understanding is that they
-are typically handled within the dwc3 driver, often involving a DWC3 revisi=
-on
-check (e.g. [1]), instead of in the device tree binding. While you may find
-properties related to errata, they generally serve to enable or disable an
-existing workaround (e.g. [2]).
+Here and in subject, please do not use yaml at all. Look at other
+commits, this is supposed to be:
 
-For Pixel devices, it's shipped with a preferred configuration, but the har=
-dware
-is fundamentally capable of supporting other configurations since the prope=
-rties
-are backed by the SNPS DWC3 IP. Whether that's optimal is a different story=
-.
-I haven't tried toggling every single property but I'm not aware of any pro=
-perty
-that obviously does not work on Tensor G5.
+dt-bindings: usb: maxim,max3421: convert to DT schema
 
-I hope this addresses your concern.
+(and all other things like "file for" are redundant")
 
-[1] https://github.com/torvalds/linux/commit/32a4a135847b1e600c64756b7c7c7a=
-91eb2f0aa9
-    (sorry I'm unable to find the kernel lore link for this commit)
-[2] https://lore.kernel.org/all/1509455515-5992-1-git-send-email-rogerq@ti.=
-com/
+> maxim,vbus-en-pin, maxim,gpx-pin, reset pin and supplies. Also add a
 
-Regards,
-Roy Luo
+Why new properties? You must explain not only the difference but WHY you
+are doing this.
+
+WHY is the most important question/answer.
+
+> maxim,max3421e compatible with a fallback, since the actually PN is with
+> the 'e' suffix.
+
+We don't add PNs usually, unless there is a need. So again, why?
+
+> 
+> Signed-off-by: Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>
+> ---
+> I've converted the txt into yaml with a few extra things as mentioned
+> in the commit msg. All of them were extracted from the datasheet and also
+> looking at the current state of the driver.
+> 
+> About the maintainer ref inside yaml, I'll quote the driver author:
+> 
+> Dear @David Mosberger, the binding file for this driver was not converted
+> to YAML format. This patch address this. I've noticed you were the original
+> driver author, so I`m "quoting" you at the maintainer ref inside yaml.
+> I would appreciate your comment or suggestion over this topic.
+> 
+> Tks and regards to all.
+> ---
+>  .../devicetree/bindings/usb/maxim,3421.yaml   | 88 +++++++++++++++++++
+>  .../devicetree/bindings/usb/maxim,max3421.txt | 23 -----
+>  2 files changed, 88 insertions(+), 23 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/maxim,3421.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/usb/maxim,max3421.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/maxim,3421.yaml b/Documentation/devicetree/bindings/usb/maxim,3421.yaml
+> new file mode 100644
+> index 000000000000..bccb22be74ff
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/maxim,3421.yaml
+> @@ -0,0 +1,88 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/maxim,3421.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MAXIM MAX3421e USB Peripheral/Host Controller
+> +
+> +maintainers:
+> +  - David Mosberger <davidm@egauge.net>
+> +
+> +description: |
+> +  The controller provides USB2.0 compliant with Full Speed or Low Speed when in
+> +  the host mode. At peripheral, it operates at Full Speed. At both cases, it
+> +  uses a SPI interface.
+> +  Datasheet at:
+> +    https://www.analog.com/media/en/technical-documentation/data-sheets/max3421e.pdf
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - maxim,max3421e
+> +          - const: maxim,max3421
+> +      - const: maxim,max3421
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+No, drop $ref. Do you see any binding like that? No, there is none.
+
+> +    maximum: 26000000
+> +    description:
+> +      SPI interface that operates up to 26MHz in Hz.
+
+Drop description, again, look at other bindings.
+
+> +
+> +  maxim,vbus-en-pin:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      One of eight GPOUT pins to control external VBUS power and the polarity
+> +      of the active level. It's an array of GPIO number and the active level of it.
+> +    minItems: 2
+> +    maxItems: 2
+> +
+> +  maxim,gpx-pin:
+
+I don't understand. There is no need for this property. Drop.
+
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: A property to define the behavior of the GPX pin, which is an
+> +      output that may be selected in a 4-way multiplexer between OPERATE(0),
+> +      VBUS_DETECT(1), BUSACT/INIRQ(2) and SOF(3) signals.
+> +    enum: [0, 1, 2, 3]
+> +    default: 0
+> +
+> +  reset-gpios:
+> +    description: Active low to clear all of the internal registers except for
+> +                 PINCTL (R17), USBCTL (R15), and SPI logic.
+> +
+> +  vdd-supply: true
+> +
+> +  vlogic-supply: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - maxim,vbus-en-pin
+> +
+
+Missing ref to spi props.
+
+> +additionalProperties: false
+
+unevaluatedProperties instead.
+
+
+Best regards,
+Krzysztof
 
