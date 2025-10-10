@@ -1,140 +1,134 @@
-Return-Path: <linux-usb+bounces-29119-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29120-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FF23BCD44F
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 15:31:10 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CB8CBCD4F6
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 15:42:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E6E44E7007
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 13:31:09 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6FF054F14EB
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Oct 2025 13:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571651EB5FD;
-	Fri, 10 Oct 2025 13:31:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BBAF2F25FC;
+	Fri, 10 Oct 2025 13:42:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="lbLk7VQi";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="HPaZfSD/";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="lbLk7VQi";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="HPaZfSD/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UuWG/zav"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541DA34BA3A
-	for <linux-usb@vger.kernel.org>; Fri, 10 Oct 2025 13:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04AB34BA2D
+	for <linux-usb@vger.kernel.org>; Fri, 10 Oct 2025 13:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760103065; cv=none; b=W9wBoLArdAJJeST/JAKMjyrNZ0lUiGCiF+o/7voOuD5EjV+kIKAZBDrRz1z8FxxCrYn4zaCkayw8wxcNfH0lL55182Llcc2acHwzF38F8xfJfJYhvNrShPkbtKw1LcaUu+zH36U02GpJt+Edt1Wk8QyT+WPEgN1wk4zOAxgyT+o=
+	t=1760103742; cv=none; b=XtzG24IT1WI//gkyKFjgSLFNgTjM9TsFA9HonD042dh5WUOJSyJc+wwsV3+BpWZ/Jqo7n7WBSfEApZh9+2b40a6N0EuYXYsxgALXbwO6pAY7x/ktKlPrIRQc9YxaQdK5KWYjXAdsxhUCI3353Bcr+kqf/Dbo7v45DGLBxP2BkSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760103065; c=relaxed/simple;
-	bh=aA/rj5RZC0L74RPMhJIPmgEiz88pF03BwXQ5rV2DDNk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n2SRKfHB8kbTKFRLb62bPHjai2MEOMvcnQpmNp2nWrmKccVl8fm4Jdm+0T/7th8TeRynJ56TEXTgxbP2bf9lqFUM6rqZLyetdFjD+8rzE9WYybF+5BbL4KEFmn33SDyaDcU3cbxmOJ/VihdCJVvoSNhY4XYCuFhwe7sY0zbr01g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=lbLk7VQi; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=HPaZfSD/; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=lbLk7VQi; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=HPaZfSD/; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from lion.mk-sys.cz (unknown [10.100.225.114])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 70DC821D3E;
-	Fri, 10 Oct 2025 13:31:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1760103062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yhXLNrgpSXmdp+PACEFjEsmU14L6C9la+MOSMcbO43I=;
-	b=lbLk7VQii3+KnW8s1ERdQaz61RklIGb5C4YU9lmr7FaKes6qpOD8QwsHYrAly5u1SDftwm
-	CgT7Kzfqy3bH4YzUcklnOiE/JDtkTyyHzqRFHHkxYg5ZlR2Rp/ASvLzQ9SdJiZSF2Gx1UK
-	merst1RtkLYde8DLwWIH6EqoVYqIezk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1760103062;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yhXLNrgpSXmdp+PACEFjEsmU14L6C9la+MOSMcbO43I=;
-	b=HPaZfSD/+Ke7v/t6g83g04WK2EBY2T/Yyd6kgQTSvW2tz7mrGSAUbbZ6DWD1rVJf0smFwq
-	YMyoZM3cCwfXjNAQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1760103062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yhXLNrgpSXmdp+PACEFjEsmU14L6C9la+MOSMcbO43I=;
-	b=lbLk7VQii3+KnW8s1ERdQaz61RklIGb5C4YU9lmr7FaKes6qpOD8QwsHYrAly5u1SDftwm
-	CgT7Kzfqy3bH4YzUcklnOiE/JDtkTyyHzqRFHHkxYg5ZlR2Rp/ASvLzQ9SdJiZSF2Gx1UK
-	merst1RtkLYde8DLwWIH6EqoVYqIezk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1760103062;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yhXLNrgpSXmdp+PACEFjEsmU14L6C9la+MOSMcbO43I=;
-	b=HPaZfSD/+Ke7v/t6g83g04WK2EBY2T/Yyd6kgQTSvW2tz7mrGSAUbbZ6DWD1rVJf0smFwq
-	YMyoZM3cCwfXjNAQ==
-Received: by lion.mk-sys.cz (Postfix, from userid 1000)
-	id 46C3020057; Fri, 10 Oct 2025 15:31:02 +0200 (CEST)
-Date: Fri, 10 Oct 2025 15:31:02 +0200
-From: Michal Kubecek <mkubecek@suse.cz>
-To: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org, 
-	Nick Nielsen <nick.kainielsen@free.fr>, grm1 <grm1@mailbox.org>
-Subject: Re: Regression - commit 719de070f764 usb: xhci-pci: add support for
- hosts with zero USB3 ports
-Message-ID: <f253rx26ka5chermdvaia4bpdr7wutyvom67otfjzs6f43wp4x@zie3vvprwpey>
-References: <20250826100416.207129-1-niklas.neronin@linux.intel.com>
- <lnb5bum7dnzkn3fc7gq6hwigslebo7o4ccflcvsc3lvdgnu7el@fvqpobbdoapl>
- <fa978117-a751-4c66-aa87-adaf6cfc6a11@linux.intel.com>
+	s=arc-20240116; t=1760103742; c=relaxed/simple;
+	bh=/R7x066f19INhVF4XLHZ47x2h1FXsIvTRGC6IeLQND4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PQGAYy6xJiDdT42/Nf6Iv47SswjbayIWUpyJA/wSu/OGnJa8zhyDx7/cRLCSxhdKNhmS7q4gj2TGcWsOfTnU3Ktx04aOBMGHFvvzww2h9irH9dkmEiE2YJU2xk/gGYKdUCBDKq7UfRcDESwGEsSp96NYuETgREz+TV5aKRTfEQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UuWG/zav; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 532DDC4CEF1;
+	Fri, 10 Oct 2025 13:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760103742;
+	bh=/R7x066f19INhVF4XLHZ47x2h1FXsIvTRGC6IeLQND4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=UuWG/zavN3aokjdxJWoC/i920iZJrgITRwpx/nRCMmfc89oqXP0y/D7UKHMy+D1Zx
+	 yOiIHxGNy3BXAhBdsKZdyM1YOX6DkAF1A/uSO3GF4BwUiv7KxeAfuuBrD33OuhOjHz
+	 xM0xVcfj77Szu8vZ4tpVM5BSx/0IirkPeQ7ulNwVNT+Jjs3T8e2EztM5oVOFBH1i4t
+	 oQQwEW0Nee1kyNJ8KC0KTylquOXbZtCrH/4G2/pJMTTW6gHPABUMFJmuwK51kPcymE
+	 DoGIhiSQ8RZhZEaAS4LGl2mfZtkvOK33IqJWXgXZ0AhojUOgkZZSBj00NUDUqsY8Sx
+	 rPGF16nICnXdg==
+Message-ID: <c5813aef-a09c-401d-96fd-41da92beb9ec@kernel.org>
+Date: Fri, 10 Oct 2025 15:42:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fa978117-a751-4c66-aa87-adaf6cfc6a11@linux.intel.com>
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_ENVRCPT(0.00)[free.fr];
-	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_ONE(0.00)[1];
-	TO_DN_SOME(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,vger.kernel.org,free.fr,mailbox.org];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5]
-X-Spam-Flag: NO
-X-Spam-Score: -3.80
-X-Spam-Level: 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] usb: ljca: Order ACPI hardware IDs alphabetically
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-usb@vger.kernel.org
+Cc: Lixu Zhang <lixu.zhang@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20251010055625.4147844-1-sakari.ailus@linux.intel.com>
+From: Hans de Goede <hansg@kernel.org>
+Content-Language: en-US, nl
+In-Reply-To: <20251010055625.4147844-1-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 10, 2025 at 04:24:20PM GMT, Neronin, Niklas wrote:
-> Hello,
-> 
-> Thank you for reporting.
-> 
-> A fix has been proposed in this thread:
-> https://lore.kernel.org/linux-usb/CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com/
-> 
-> The specific fix:
-> https://lore.kernel.org/linux-usb/20251009142911.6069c164.michal.pecio@gmail.com/
-> 
-> Best Regards,
-> Niklas
+Hi,
 
-Thank you for a quick reply. I'll test the patch on my system.
+On 10-Oct-25 7:56 AM, Sakari Ailus wrote:
+> The driver has three lists of ACPI hardware IDs, for GPIO, I²C and SPI.
+> Order them alphabetically.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Michal
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hansg@kernel.org>
+
+Note 1 remark to maybe be addressed in a separate patch
+below.
+
+
+
+> ---
+>  drivers/usb/misc/usb-ljca.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
+> index c562630d862c..cf01cc727685 100644
+> --- a/drivers/usb/misc/usb-ljca.c
+> +++ b/drivers/usb/misc/usb-ljca.c
+> @@ -165,26 +165,26 @@ struct ljca_match_ids_walk_data {
+>  };
+>  
+>  static const struct acpi_device_id ljca_gpio_hids[] = {
+> +	{ "INTC100B" },
+>  	{ "INTC1074" },
+>  	{ "INTC1096" },
+> -	{ "INTC100B" },
+> -	{ "INTC10D1" },
+>  	{ "INTC10B5" },
+
+This "INTC10B5" looks weird here, I don't think this actually
+is in use. As can be seen by the matching "INTC10B6" HID
+missing from ljca_i2c_hids[]. if we really needed "INTC10B5"
+then I would expect "INTC10B6" to also be in the i2c list.
+
+Regards,
+
+Hans
+
+
+
+
+> +	{ "INTC10D1" },
+>  	{},
+>  };
+>  
+>  static const struct acpi_device_id ljca_i2c_hids[] = {
+> +	{ "INTC100C" },
+>  	{ "INTC1075" },
+>  	{ "INTC1097" },
+> -	{ "INTC100C" },
+>  	{ "INTC10D2" },
+>  	{},
+>  };
+>  
+>  static const struct acpi_device_id ljca_spi_hids[] = {
+> +	{ "INTC100D" },
+>  	{ "INTC1091" },
+>  	{ "INTC1098" },
+> -	{ "INTC100D" },
+>  	{ "INTC10D3" },
+>  	{},
+>  };
+
 
