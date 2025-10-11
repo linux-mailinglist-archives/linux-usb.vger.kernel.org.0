@@ -1,185 +1,96 @@
-Return-Path: <linux-usb+bounces-29153-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29154-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9855BCEF51
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 05:40:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30188BCF193
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 09:54:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DC07A4E6A31
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 03:40:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C66C404CED
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 07:54:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3FD1DF985;
-	Sat, 11 Oct 2025 03:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 763F8235074;
+	Sat, 11 Oct 2025 07:54:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d3lxvNWI"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Mje/E9TW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238631DF963;
-	Sat, 11 Oct 2025 03:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40625149E17;
+	Sat, 11 Oct 2025 07:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760154012; cv=none; b=mzCtvqOHLmQKULytC5hg9szHiWJrmEHtfExuyYDK4iGFOeFdYq1dw1sKIhxEMdFog+J8IeKjtO3BL6XwCSnnrwoV3X2F9cTOPI7OdXX4ONqO426vN+/ilfiBTEQnTMkGwzUxwDKsaxZbcA09X8iMqHUXz7nABB+Mh85faZNOVw4=
+	t=1760169248; cv=none; b=mBkykqBw6TaG5g64oDOz+A8nc0F/0UGk+s6YprV+rsIKOhY/NmdYyXRwMgrojRfICDr2xklKElJfZKnni9V8l6oPflByHjARpK0TIZPb/ekDBPTAcIddy6vc9oOopqlHn2qfYiySG4WjizdNovH3dPtzpeQC+yPZ6HiG0RfrL9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760154012; c=relaxed/simple;
-	bh=p/Sw6hsNG/Asjp0JRAo06u1WUs6i3eDXjAUi4btbFE4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cmhR5gkkHnC9TDJkqxG4Z8Fatoh95IyBQtL59QcDPWG49+Nm/xVIDTyqKCa6c5QHmC02RXjnTqjZXKbEOY8cII3Lb89BrRdceKCQDZsy3P5aE8rRzeImdWylSZYrGuvzzS/cS82oNasmhpgxDladEixDS70LtmZsIRjOUcLVuv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d3lxvNWI; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760154012; x=1791690012;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p/Sw6hsNG/Asjp0JRAo06u1WUs6i3eDXjAUi4btbFE4=;
-  b=d3lxvNWI85fwFg1oPznrC2VJeL2c1YqhGLuGgKOcppIVC/tCZwxT0R2b
-   p14OnxYM3SmFr8vkN9IuFaFNemw1Hkg8bycM2AOMeXF4VWAhR4lwqhYBW
-   rQvhRyzdrXPXAiThwgmXmQ40Gf3NdoTHmqgfLB3Ih/p4mFesPOHueVksU
-   1EOuW25HOXqSRENHPcmA2LFGyepqdrBOthq4IK6sv0jk4em6+iJQj+NmA
-   E2nXKJ5QC/TTB7N1burHZHOJiJ+mn3/DpL8W+EdANzPWBf8hEorPON6Em
-   cIWdqmSnr2p5cotoZ5NPT15tk97WE9VyZ2ObLfZHmPBr90CHpXBC5H3q4
-   Q==;
-X-CSE-ConnectionGUID: LXDx0pBURa2rrXlvENz4UQ==
-X-CSE-MsgGUID: 6pILyeEkQ+idl1n3WfkaXQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="73476873"
-X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
-   d="scan'208";a="73476873"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 20:40:11 -0700
-X-CSE-ConnectionGUID: SsZEgcbATqSz7rgWvti7/A==
-X-CSE-MsgGUID: oc8A357CSaCUSoyqDnPI5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
-   d="scan'208";a="180236749"
-Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 10 Oct 2025 20:40:06 -0700
-Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v7QSh-0003UX-1s;
-	Sat, 11 Oct 2025 03:40:03 +0000
-Date: Sat, 11 Oct 2025 11:39:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Roy Luo <royluo@google.com>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev, Joy Chakraborty <joychakr@google.com>,
-	Naveen Kumar <mnkumar@google.com>, Roy Luo <royluo@google.com>,
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v1 1/4] usb: dwc3: Add Google SoC DWC3 glue driver
-Message-ID: <202510111335.oyOAs9MB-lkp@intel.com>
-References: <20251006232125.1833979-2-royluo@google.com>
+	s=arc-20240116; t=1760169248; c=relaxed/simple;
+	bh=2/r63/c3u2LndzS+PA/2AZbt8mqOMKaz70ztAki/loA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=LINRVew7AVBBTJi2tQz+4E3UUn9fkAhhOHtU6HPyOwP4EI4a7xdKiHIRCBB44LgpfLlihFpifs29mhimnGBPDLIBl1Zy6kAeMpwEIZiwDryEM+hFGieVFMBh2zN5eGUBL8t6HO6zdbBWkrt0n7EJwpTMn0JmfYHmbS3GCpOFwY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Mje/E9TW; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
+	Content-Type; bh=G8rDQLopsMZLS231VX7XRpDGHp/4H02/4S44xyUBN9E=;
+	b=Mje/E9TWpdgFmEmwK4WD0V6RLJZQrfC8zH43XjEmDtcgCWvWGhuWZP7m5ec6oy
+	4bkNXAMi1wglp06jl9Xo2pArjRWY56IW4WIP5lm4VDzJXpQBgBovSnPMOefV+Xxe
+	H9m3u2JZSwLL/dThdNQk4bpziloNlgodHLeUVvCmhjHFc=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3v+TsDOpoK16yDQ--.50548S2;
+	Sat, 11 Oct 2025 15:53:17 +0800 (CST)
+From: yicongsrfy@163.com
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	oliver@neukum.org
+Cc: linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Yi Cong <yicong@kylinos.cn>
+Subject: [PATCH net v5 0/3] ax88179 driver optimization
+Date: Sat, 11 Oct 2025 15:53:11 +0800
+Message-Id: <20251011075314.572741-1-yicongsrfy@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251006232125.1833979-2-royluo@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3v+TsDOpoK16yDQ--.50548S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKrWxZrW5JF15Wr1xtF4DCFg_yoW3ZrX_uF
+	nrWr9xAw1jqFyUJayUJF1avry3Kay8u395XF98tryrX343JF1Dtw4kJr1Fg3WxXF48JFn8
+	GrnFyayfZw42gjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbsYwUUUUUU==
+X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/xtbBzR-j22jqCTsn8AABsM
 
-Hi Roy,
+From: Yi Cong <yicong@kylinos.cn>
 
-kernel test robot noticed the following build warnings:
+This series of patches first fixes the issues related to the vendor
+driver, then reverts the previous changes to allow the vendor-specific
+driver to be loaded.
 
-[auto build test WARNING on e5f0a698b34ed76002dc5cff3804a61c80233a7a]
+Yi Cong (3):
+  net: usb: support quirks in cdc_ncm
+  net: usb: ax88179_178a: add USB device driver for config selection
+  Revert "net: usb: ax88179_178a: Bind only to vendor-specific
+    interface"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roy-Luo/usb-dwc3-Add-Google-SoC-DWC3-glue-driver/20251010-092651
-base:   e5f0a698b34ed76002dc5cff3804a61c80233a7a
-patch link:    https://lore.kernel.org/r/20251006232125.1833979-2-royluo%40google.com
-patch subject: [PATCH v1 1/4] usb: dwc3: Add Google SoC DWC3 glue driver
-config: s390-randconfig-002-20251011 (https://download.01.org/0day-ci/archive/20251011/202510111335.oyOAs9MB-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510111335.oyOAs9MB-lkp@intel.com/reproduce)
+ drivers/net/usb/ax88179_178a.c | 94 ++++++++++++++++++++++++++++------
+ drivers/net/usb/cdc_ncm.c      | 44 +++++++++++++++-
+ 2 files changed, 121 insertions(+), 17 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510111335.oyOAs9MB-lkp@intel.com/
+Link to v4: https://lore.kernel.org/all/20250930080709.3408463-3-yicongsrfy@163.com/
 
-All warnings (new ones prefixed by >>):
+Changes since v4:
+1. Reorder the three patches.
+2. Complete the revision based on the previous review comments.
 
->> drivers/usb/dwc3/dwc3-google.c:467:12: warning: 'dwc3_google_resume' defined but not used [-Wunused-function]
-     467 | static int dwc3_google_resume(struct dwc3_google *google, pm_message_t msg)
-         |            ^~~~~~~~~~~~~~~~~~
->> drivers/usb/dwc3/dwc3-google.c:441:12: warning: 'dwc3_google_suspend' defined but not used [-Wunused-function]
-     441 | static int dwc3_google_suspend(struct dwc3_google *google, pm_message_t msg)
-         |            ^~~~~~~~~~~~~~~~~~~
+--
+2.25.1
 
-
-vim +/dwc3_google_resume +467 drivers/usb/dwc3/dwc3-google.c
-
-   440	
- > 441	static int dwc3_google_suspend(struct dwc3_google *google, pm_message_t msg)
-   442	{
-   443		if (pm_runtime_suspended(google->dev))
-   444			return 0;
-   445	
-   446		if (google->dwc.current_dr_role == DWC3_GCTL_PRTCAP_HOST) {
-   447			/*
-   448			 * Follow dwc3_suspend_common() guidelines for deciding between
-   449			 * a full teardown and hibernation.
-   450			 */
-   451			if (PMSG_IS_AUTO(msg) || device_may_wakeup(google->dev)) {
-   452				dev_dbg(google->dev, "enter hibernation");
-   453				pm_runtime_get_sync(google->usb_top_pd);
-   454				device_wakeup_enable(google->usb_top_pd);
-   455				dwc3_google_enable_pme_irq(google);
-   456				google->is_hibernation = true;
-   457				return 0;
-   458			}
-   459		}
-   460	
-   461		reset_control_bulk_assert(google->num_rsts, google->rsts);
-   462		clk_bulk_disable_unprepare(google->num_clks, google->clks);
-   463	
-   464		return 0;
-   465	}
-   466	
- > 467	static int dwc3_google_resume(struct dwc3_google *google, pm_message_t msg)
-   468	{
-   469		int ret;
-   470	
-   471		if (google->is_hibernation) {
-   472			dev_dbg(google->dev, "exit hibernation");
-   473			dwc3_google_disable_pme_irq(google);
-   474			device_wakeup_disable(google->usb_top_pd);
-   475			pm_runtime_put_sync(google->usb_top_pd);
-   476			google->is_hibernation = false;
-   477			return 0;
-   478		}
-   479	
-   480		ret = clk_bulk_prepare_enable(google->num_clks, google->clks);
-   481		if (ret)
-   482			return ret;
-   483	
-   484		ret = reset_control_bulk_deassert(google->num_rsts, google->rsts);
-   485		if (ret) {
-   486			clk_bulk_disable_unprepare(google->num_clks, google->clks);
-   487			return ret;
-   488		}
-   489	
-   490		return 0;
-   491	}
-   492	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
