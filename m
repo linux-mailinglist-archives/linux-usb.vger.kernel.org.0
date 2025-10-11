@@ -1,61 +1,59 @@
-Return-Path: <linux-usb+bounces-29156-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29158-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A08DFBCF1A2
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 09:54:37 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6710DBCF22A
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 10:25:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5FE4405346
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 07:54:25 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C08AB34BFAD
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 08:25:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FD223236D;
-	Sat, 11 Oct 2025 07:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3481923956E;
+	Sat, 11 Oct 2025 08:25:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="jrUx3yvu"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="TTmvfZe5"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A28070810;
-	Sat, 11 Oct 2025 07:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182AB2045B7;
+	Sat, 11 Oct 2025 08:25:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760169263; cv=none; b=sa2nPThviDoNYWM10u0skbzyqcVnvcnDAC3B9HIK83bsga+6EeR2yT2hC84rGi/8z6UZ/cdVgMjVZ9X/NldSoh78sshcgZ7HyGxVjvrdTpKHtOGNHYDDpc1j5x5f2WZs54U+V0+ASq/djjuBc8tFJrCRGFVZ3DpympN5gzvBNFc=
+	t=1760171111; cv=none; b=uBrAF+sSaFb+bTJ3oyK4PahmJqCow3E6J6UDu5Fj7HMh7e5+BKveTilfqkHJccChN7xrxhYDZmv8CjXhbFyF03uHV3SK1LpSFO+SRGfgYr1mJzmP9dBpjx3po5FTIsSrjI7fOXj3gEOhvLwqX1GKMaEZNzfrtaHMxAcFmEN2/eY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760169263; c=relaxed/simple;
-	bh=P6SVlcCfZPJKHzITUXNP2+Vk8Y+2p1LCw9NRFsgj3VE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J28aXP5Hi4mc3aeOtFap+ox6OicKUNz1K+5sni5Joif/qEEwnkyld1ferhpyiLHqpUlLmzcGfjrfKcLyxL1sy6cToQG7UHfB4HBMd5SQa73PLfbOvhM+uTG6QcL5a2+YmdbmXY3/n4Y2oZnYSIFHWDDoLrRZWdUAP5aunRSwSyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=jrUx3yvu; arc=none smtp.client-ip=220.197.31.5
+	s=arc-20240116; t=1760171111; c=relaxed/simple;
+	bh=7+Y8h6gXG2SuDe1E/iknJtQNKxJeFP7rvXWOL/4bjjU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CYFYZwcMCp7EX4weOJ8KPtvRyQnq7G3KjoYwPnKS8zrCTbptp69VdhVPbM4U3U0OutO2LQY9hJ8GzhlTUz+COIvtbOVjjOu3vuPgdKgkNlnyV6sC3LvoDSoV56CPi6E160MnJPaR+G8hCtrifvdUgtc3unoJzShDhRrFXzauCdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=TTmvfZe5; arc=none smtp.client-ip=220.197.31.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=PA
-	/9F3tf6cgccqMdmsTA6uOuuKAJKDURFoisc6VffnY=; b=jrUx3yvuwgKd3ksx7z
-	NQHunMt/ilfAJGhiyFSq+KA6QXJNv4R45Znou31/xUU5TO2A6bDDKeVUyz+gtPzA
-	5FnwRI82UnH8AdqEonMU+M9X3YhYHXmNoN9X/guWF3MScBVoioyKbtQtHYz7ktcY
-	6oeDHIhyA1vBqBF/DD5RLJNIs=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=wn
+	raGndEW17agKJvHcNVi4M70SQfTkop2yVtlgiy4zk=; b=TTmvfZe5vFrGqWjPPP
+	ELwdz9pu/oOgs2t0HSNCQMELhKRKajV2qFF9EBGlb5gCqYhato781FcnS/42o/lH
+	/mqz64gBl1y8b/hkxHB4baqp+fEMeFHKKUg7oBcY70LxHzLMHi2SMGSRgWDaLi/4
+	AmIta4PDZx2BdcZO37KzCJvqk=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3v+TsDOpoK16yDQ--.50548S5;
-	Sat, 11 Oct 2025 15:53:32 +0800 (CST)
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3LyUxFOpojB64DQ--.7680S2;
+	Sat, 11 Oct 2025 16:24:17 +0800 (CST)
 From: yicongsrfy@163.com
 To: andrew+netdev@lunn.ch,
 	davem@davemloft.net,
 	edumazet@google.com,
+	oneukum@suse.com
+Cc: horms@kernel.org,
 	kuba@kernel.org,
-	pabeni@redhat.com,
-	oliver@neukum.org
-Cc: linux-usb@vger.kernel.org,
+	linux-usb@vger.kernel.org,
 	netdev@vger.kernel.org,
+	stable@vger.kernel.org,
 	Yi Cong <yicong@kylinos.cn>
-Subject: [PATCH net v5 3/3] Revert "net: usb: ax88179_178a: Bind only to vendor-specific interface"
-Date: Sat, 11 Oct 2025 15:53:14 +0800
-Message-Id: <20251011075314.572741-4-yicongsrfy@163.com>
+Subject: [PATCH net v3] r8152: add error handling in rtl8152_driver_init
+Date: Sat, 11 Oct 2025 16:24:15 +0800
+Message-Id: <20251011082415.580740-1-yicongsrfy@163.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20251011075314.572741-1-yicongsrfy@163.com>
-References: <20251011075314.572741-1-yicongsrfy@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,109 +61,49 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3v+TsDOpoK16yDQ--.50548S5
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJFWDCw17AFWkKFWkXr4fKrg_yoWrArWkpF
-	43tryFvrZxWFW5Krnavr1kua98Aws7K39Ika12gw17Z3Z3JF1SqasxAF47A34UXr4rAw12
-	vr97ArW7KF1kGwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jvPfQUUUUU=
-X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/1tbiLBjj22jqDGEM6AAAsH
+X-CM-TRANSID:_____wD3LyUxFOpojB64DQ--.7680S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFWrGFWfur1UXr1fJw43Wrg_yoWkuwbEkr
+	y0ga43Xr1DuFW5Kr15Wr4avrySkan0vFn3Zr1xt3sIgwnrXrn5Gr15Zr9xXw4UWryfZF9x
+	Ca1UGFyxCr129jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8xwIDUUUUU==
+X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/1tbixwTj22jqDAYbEgABs7
 
 From: Yi Cong <yicong@kylinos.cn>
 
-This reverts commit c67cc4315a8e605ec875bd3a1210a549e3562ddc.
+rtl8152_driver_init missing error handling.
+If cannot register rtl8152_driver, rtl8152_cfgselector_driver
+should be deregistered.
 
-Currently, in the Linux kernel, USB NIC with ASIX chips use the cdc_ncm
-driver. However, this driver lacks functionality and performs worse than
-the vendor's proprietary driver. In my testing, I have identified the
-following issues:
-
-1. The cdc_ncm driver does not support changing the link speed via
-   ethtool because the corresponding callback function is set to NULL.
-2. The CDC protocol does not support retrieving the network duplex status.
-3. In TCP_RR and UDP_RR tests, the performance of the cdc_ncm driver
-   is significantly lower than that of the vendor's driver:
-Average of three netperf runs: `netperf -t {TCP/UDP_RR} -H serverIP -l 120`
-- cdc_ncm.ko: TCP_RR: 740, UDP_RR: 750
-- ax88179_178a.ko: TCP_RR: 8900, UDP_RR: 9200
-
+Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+Cc: stable@vger.kernel.org
 Signed-off-by: Yi Cong <yicong@kylinos.cn>
----
- drivers/net/usb/ax88179_178a.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index b6432d414a38..ec46cab26815 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1893,55 +1893,55 @@ static const struct driver_info at_umc2000sp_info = {
- static const struct usb_device_id products[] = {
- {
- 	/* ASIX AX88179 10/100/1000 */
--	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),
-+	USB_DEVICE(0x0b95, 0x1790),
- 	.driver_info = (unsigned long)&ax88179_info,
- }, {
- 	/* ASIX AX88178A 10/100/1000 */
--	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x178a, 0xff, 0xff, 0),
-+	USB_DEVICE(0x0b95, 0x178a),
- 	.driver_info = (unsigned long)&ax88178a_info,
- }, {
- 	/* Cypress GX3 SuperSpeed to Gigabit Ethernet Bridge Controller */
--	USB_DEVICE_AND_INTERFACE_INFO(0x04b4, 0x3610, 0xff, 0xff, 0),
-+	USB_DEVICE(0x04b4, 0x3610),
- 	.driver_info = (unsigned long)&cypress_GX3_info,
- }, {
- 	/* D-Link DUB-1312 USB 3.0 to Gigabit Ethernet Adapter */
--	USB_DEVICE_AND_INTERFACE_INFO(0x2001, 0x4a00, 0xff, 0xff, 0),
-+	USB_DEVICE(0x2001, 0x4a00),
- 	.driver_info = (unsigned long)&dlink_dub1312_info,
- }, {
- 	/* Sitecom USB 3.0 to Gigabit Adapter */
--	USB_DEVICE_AND_INTERFACE_INFO(0x0df6, 0x0072, 0xff, 0xff, 0),
-+	USB_DEVICE(0x0df6, 0x0072),
- 	.driver_info = (unsigned long)&sitecom_info,
- }, {
- 	/* Samsung USB Ethernet Adapter */
--	USB_DEVICE_AND_INTERFACE_INFO(0x04e8, 0xa100, 0xff, 0xff, 0),
-+	USB_DEVICE(0x04e8, 0xa100),
- 	.driver_info = (unsigned long)&samsung_info,
- }, {
- 	/* Lenovo OneLinkDock Gigabit LAN */
--	USB_DEVICE_AND_INTERFACE_INFO(0x17ef, 0x304b, 0xff, 0xff, 0),
-+	USB_DEVICE(0x17ef, 0x304b),
- 	.driver_info = (unsigned long)&lenovo_info,
- }, {
- 	/* Belkin B2B128 USB 3.0 Hub + Gigabit Ethernet Adapter */
--	USB_DEVICE_AND_INTERFACE_INFO(0x050d, 0x0128, 0xff, 0xff, 0),
-+	USB_DEVICE(0x050d, 0x0128),
- 	.driver_info = (unsigned long)&belkin_info,
- }, {
- 	/* Toshiba USB 3.0 GBit Ethernet Adapter */
--	USB_DEVICE_AND_INTERFACE_INFO(0x0930, 0x0a13, 0xff, 0xff, 0),
-+	USB_DEVICE(0x0930, 0x0a13),
- 	.driver_info = (unsigned long)&toshiba_info,
- }, {
- 	/* Magic Control Technology U3-A9003 USB 3.0 Gigabit Ethernet Adapter */
--	USB_DEVICE_AND_INTERFACE_INFO(0x0711, 0x0179, 0xff, 0xff, 0),
-+	USB_DEVICE(0x0711, 0x0179),
- 	.driver_info = (unsigned long)&mct_info,
- }, {
- 	/* Allied Telesis AT-UMC2000 USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
--	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000e, 0xff, 0xff, 0),
-+	USB_DEVICE(0x07c9, 0x000e),
- 	.driver_info = (unsigned long)&at_umc2000_info,
- }, {
- 	/* Allied Telesis AT-UMC200 USB 3.0/USB 3.1 Gen 1 to Fast Ethernet Adapter */
--	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000f, 0xff, 0xff, 0),
-+	USB_DEVICE(0x07c9, 0x000f),
- 	.driver_info = (unsigned long)&at_umc200_info,
- }, {
- 	/* Allied Telesis AT-UMC2000/SP USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
--	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x0010, 0xff, 0xff, 0),
-+	USB_DEVICE(0x07c9, 0x0010),
- 	.driver_info = (unsigned long)&at_umc2000sp_info,
- },
- 	{ },
+---
+v2: replacing return 0 with return ret and adding Cc stable
+v3: delete the redundant return ret
+---
+ drivers/net/usb/r8152.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 44cba7acfe7d..a22d4bb2cf3b 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -10122,7 +10122,12 @@ static int __init rtl8152_driver_init(void)
+ 	ret = usb_register_device_driver(&rtl8152_cfgselector_driver, THIS_MODULE);
+ 	if (ret)
+ 		return ret;
+-	return usb_register(&rtl8152_driver);
++
++	ret = usb_register(&rtl8152_driver);
++	if (ret)
++		usb_deregister_device_driver(&rtl8152_cfgselector_driver);
++
++	return ret;
+ }
+ 
+ static void __exit rtl8152_driver_exit(void)
 -- 
 2.25.1
 
