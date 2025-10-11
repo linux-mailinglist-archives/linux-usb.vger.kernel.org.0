@@ -1,106 +1,193 @@
-Return-Path: <linux-usb+bounces-29140-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29141-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80CD6BCECB1
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 02:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 05F22BCECC3
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 02:11:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6D4B84E24D2
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 00:10:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EB7964E61A1
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 00:11:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C358C2FB;
-	Sat, 11 Oct 2025 00:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65DBAC2FB;
+	Sat, 11 Oct 2025 00:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rim2KHyJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CxfNSz1M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45AC1290F
-	for <linux-usb@vger.kernel.org>; Sat, 11 Oct 2025 00:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D1129408;
+	Sat, 11 Oct 2025 00:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760141429; cv=none; b=gNkCNV3HNjLL7xOpK0ZaH2C8wRz7PxRArYWFWqsnTgz5p9aISb9IlBK9zjUo+Ryy0Al9ssfxFaBiE7ndLitJRLoxDHq6p5b1HhFNFpd09lJVbQi4B0fzizeMYct4hQgaAuX+BwV3x72CIsFFR9LIawgrfYzaKM71ZLJagWV+DjE=
+	t=1760141469; cv=none; b=PHz4TksfaUZX/eo6p2k5LhegA0Uz17WUbstOmVrayvqZhyE4bmJ/Y87euaJ7+GAF08GrpE1BJHdBmwFbc8zRdZ+miGGZ4xJtC/hMeGvJoT6Ui5zdPgSIfwOSBfdIkAOZ2vo3Vo8R5uhyjOeXlkJpCrTOCvjCQ+UjJzEH7GgRJqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760141429; c=relaxed/simple;
-	bh=vhsuxk96WAH/RhC3vemDEb946RpngHOAqABSwAfzGbw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RTjgQ37BDCYA2V6armN59YNVKACZgJhUoVHb9M9M0Lyp0Rxm4VnuJ7POA7syFDhA/esSwWntTEoyp9Ux46ULLWCcmYbisfbXANcZLpe7XP4NUlNXPqbr6Qxk+HDuV/HubRa0dOvwM10bL0DXHAVEtxX2HrM1rV6LtkbEIEqbBTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Rim2KHyJ; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3ece1102998so1508598f8f.2
-        for <linux-usb@vger.kernel.org>; Fri, 10 Oct 2025 17:10:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760141427; x=1760746227; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vhsuxk96WAH/RhC3vemDEb946RpngHOAqABSwAfzGbw=;
-        b=Rim2KHyJ98x00469RxPskdsO24wkT5bUkS/IVMDwqFgXGfDWdCQd87enYHrWLdF6PV
-         tACAWst80nC0jp4uSqvSJPTnQOVnEub3hq//b3JHEVipyzPBv0qxCoT/rk6+E5Zuag9O
-         /LiN1x5iZ6xlLPVl/6GkmWqDJbUkUQim0esp57vEej28UBxEt/l6nkjDZ8tYckXPH+GS
-         idmiADkcshQBExGuX/Pv32Sr6lq8CTxih58YbEfhFdADivnZeGcpSOk13wGrD82nGFHU
-         wsBqY94E0e1OyyTnRljsimMRpR6QS8RM3RjnOPfp9h/8WXC7FnuxpP1JlHpwrS5o3bLo
-         7Ebg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760141427; x=1760746227;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vhsuxk96WAH/RhC3vemDEb946RpngHOAqABSwAfzGbw=;
-        b=roeYtkf+oxuKk51BBQVgnJhsWKuTWa3vdDh/Q4kRI/3sQNuaZJAa0biSFTstUOvkYg
-         GaLJvueq2nXWgs5xo1MKtQYy59OUIE4mQmAGip3BGc4npC0O9NwqLHpkdYwCj+c/uj68
-         U+vJOMNhvVmW+cf/EZcdGoTql2RLO5HePW6Acdeg/o9YMLS8UuB/euKn2CloqXMuV+VF
-         VMWtZ8Re+jTqsSugjBF6sviNBD4n5bWy4HeJm8kqEYWvLxu0YE7fSnfl9P+lfC5KrRcL
-         u7SMbSlkfsf71xir42/vOInEiH6TBLmGBJeCd1+Rz6KV5oSFZLOKq8Z6lXoFQ3N55XGn
-         U1wg==
-X-Forwarded-Encrypted: i=1; AJvYcCWQLjgA4OfU3LmK7VzGK9Ja2peDANwkumzY4vwLl7SJHmTeh7Wo03Zr7GWVdqZXwuN5sos8DoWR+uY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwocGQYr3mopqhykb5oBR5C14xszhklWzLixa9GjmMCujO19hdm
-	muEGIqNzjHC4wK39WvcTtPWzshNvP0eakvxbReEbzmiOgMz7XnQI547jjjQ/zwo3KSKV0HzJQKc
-	djryoAzzt26bZ0FcbaDZkDrcPv8SN+353SeINrg2h
-X-Gm-Gg: ASbGncvmVaaqFhVtOuW++N/ZMeR1WABIoJRo9ct8rZLnB2wkL/L+TadPZUgTkdWqB7x
-	034FBzlAI3b7oOd79niUV4ZA2DA756JKOC+zfwg/UEdF4iPXLIesfAEDr3qT1/ekd6/JB2PI/nu
-	iKYLeu9hs7mkfn0MJaY9Ery9hjGx/fz52Jt3yW2w2cE5BOT7TJyp74axiVUVvQUjFVnI0UfMKk9
-	xsRJums4UH9ZUIxNXsJhdQGRBXszUixgVPGQwA06mU4iGQuYaPC2gtTIFGSRJiqW3L1XM9iW+dO
-	dSVrx7BW
-X-Google-Smtp-Source: AGHT+IE+ZGXJMaXhPli5PfF8e59JjiGHyX8ap1P7iYMH4TowQfmU4UEUloQ42CoLYo3lvX2UUV72pFmKUq2N6vrDDqY=
-X-Received: by 2002:a05:6000:290d:b0:405:ed47:b22b with SMTP id
- ffacd0b85a97d-42666abb50fmr7632735f8f.10.1760141426475; Fri, 10 Oct 2025
- 17:10:26 -0700 (PDT)
+	s=arc-20240116; t=1760141469; c=relaxed/simple;
+	bh=PTZ7z5rFBEl2/QXVABRVVG+x/hnQk/3BWqNmlYNQWU0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c8+QvvaZzxWansOeRn4THkG3R8kJlxevzUzIFZwww5E91xX9IlewvgpOxvahlORfMJFGQU/XDnjTmToQl9ffJnzL+holp1wW4772dDSRuroAW6vR8DJQ1VBAvQ3ehBMmm9mQ74DHtaZ8wX9eS+ghKg627K6F/vW3DY+PB85qguA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CxfNSz1M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3FF8C4CEF1;
+	Sat, 11 Oct 2025 00:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760141468;
+	bh=PTZ7z5rFBEl2/QXVABRVVG+x/hnQk/3BWqNmlYNQWU0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=CxfNSz1Mwm/dDZDOCfVVLjauOb3Kpa+ysqqhFneuLCIs6lx5Ysi9Z0+J5Yt/vuY/V
+	 r8ZRdwOrYEHn1vv5tbyVIepu8G2WVtr/3qjgxq5Ftl6nip1elpALDf/91Wzsz+tIUt
+	 xul5p6wiPpPH93mBd5sy8Ni817ogzglw4/iP0NUZt+XB8ZhwPkupo0Vinn73p7QE8f
+	 3TkCAhuCwWRMfdqYUyC5XTzVrwn2jAIELx4OV4x+Z6tSxObbj6FwQ7sUGKTK9N3Vsd
+	 mRtWtwuGvfJPO3WJGJLStnlRw3Myo+3o+e3INWD2gEcwnWQEkSHGvhGSSn1OV0Ue19
+	 UQut4jnbu8KGw==
+Message-ID: <75756635-b374-4441-8526-175210e01163@kernel.org>
+Date: Sat, 11 Oct 2025 02:10:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251009010312.2203812-1-jthies@google.com> <20251009010312.2203812-3-jthies@google.com>
- <alnlmxbcv3ivhh7iolfqsurhknnm2o6i6waxq7kuhmzcbeljr5@a4wy3prshu3c>
-In-Reply-To: <alnlmxbcv3ivhh7iolfqsurhknnm2o6i6waxq7kuhmzcbeljr5@a4wy3prshu3c>
-From: Jameson Thies <jthies@google.com>
-Date: Fri, 10 Oct 2025 17:10:13 -0700
-X-Gm-Features: AS18NWD3EfN8pP57xJObsE8Nw-y-Yhc8QT1UxXovpeEXkcrZFbmuYOLzuOBOTJU
-Message-ID: <CAMFSARdzoZrv4oXxVAYRcZJgxdLcrTMVAVGa=D8H=9c1vZ0zKQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] usb: typec: cros_ec_ucsi: Load driver from OF and
- ACPI definitions
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: akuchynski@chromium.org, abhishekpandit@chromium.org, krzk+dt@kernel.org, 
-	robh@kernel.org, bleung@chromium.org, heikki.krogerus@linux.intel.com, 
-	ukaszb@chromium.org, tzungbi@kernel.org, devicetree@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/4] dt-bindings: phy: google: Add Google Tensor G5 USB
+ PHY
+To: Roy Luo <royluo@google.com>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>,
+ Badhri Jagan Sridharan <badhri@google.com>, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org
+References: <20251010201607.1190967-1-royluo@google.com>
+ <20251010201607.1190967-4-royluo@google.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251010201607.1190967-4-royluo@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Dmitry,
-on early ChromeOS devices using this driver it gets added as a
-subdevice of the cros_ec_dev mfd. But, we want to change this to load
-the device from OF/ACPI nodes. The issue here is that older devices
-which don't define the OF/ACPI nodes to load cros_ec_ucsi will still
-need to add the device through cros_ec_dev.
+On 10/10/2025 22:16, Roy Luo wrote:
+> +  reg:
+> +    items:
+> +      - description: USB2 PHY configuration registers.
+> +      - description: DisplayPort top-level registers.
+> +      - description: USB top-level configuration registers.
+> +
+> +  reg-names:
+> +    items:
+> +      - const: u2phy_cfg
+> +      - const: dp_top
+> +      - const: usb_top_cfg
+> +
+> +  "#phy-cells":
+> +    const: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  orientation-switch:
+> +    type: boolean
+> +    description:
+> +      Indicates the PHY as a handler of USB Type-C orientation changes
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - "#phy-cells"
+> +  - clocks
+> +  - resets
+> +  - power-domains
+> +  - orientation-switch
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        usb_phy: usb_phy@c410000 {
+> +            compatible = "google,gs5-usb-phy";
+> +            reg = <0 0x0c450014 0 0xc>,
+> +                  <0 0x0c637000 0 0xa0>,
 
-So cros_ec_ucsi needs to support multiple methods of being
-instantiated, and going through cros_ec_dev creates an intermediary
-device in the path which doesn't exist when the driver is loaded
-through OF/ACPI. I'll add a comment explaining this in the v4 series.
+You probably miss DP support and this does not belong here.
+
+> +                  <0 0x0c45002c 0 0x4>;
+
+That's not a separate address space. I really, really doubt that
+hardware engineers came with address spaces of one word long.
+
+> +            reg-names = "u2phy_cfg", "dp_top", "usb_top_cfg";
+> +            #phy-cells = <1>;
+> +            clocks = <&hsion_usb2_phy_reset_clk>;
+> +            resets = <&hsion_resets_usb2_phy>;
+> +            power-domains = <&hsio_n_usb_pd>;
+> +            orientation-switch;
+> +        };
+> +    };
+> +...
+
+
+Best regards,
+Krzysztof
 
