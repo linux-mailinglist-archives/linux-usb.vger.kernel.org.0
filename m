@@ -1,318 +1,484 @@
-Return-Path: <linux-usb+bounces-29161-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29162-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D325BCF463
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 13:23:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A47BBCF518
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 14:19:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF43D3BC37D
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 11:23:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3434D189C0B7
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 12:19:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 921E0265621;
-	Sat, 11 Oct 2025 11:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2005E2773D0;
+	Sat, 11 Oct 2025 12:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TNl7AjBq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SuP48seu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C438258EFF
-	for <linux-usb@vger.kernel.org>; Sat, 11 Oct 2025 11:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28498244687
+	for <linux-usb@vger.kernel.org>; Sat, 11 Oct 2025 12:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760181785; cv=none; b=dD+qllzud0szjrrhAHgIUpcWPn+4+PJ3ytKp144lck4/TMLclvvwvwsOnmKuLPFgzphGLKdPMSFlLLdYjuv/YV8unZK4z6nu8TSjSChIkAmj83AydTjPXYY3ibAv+hu152bsgrCY6rvXusvM8VIMo7zZZogo117UcJnECOXQqgY=
+	t=1760185138; cv=none; b=USbm+lYUAY4vh23gkAjVozoe9eSVOGbkFkJhBWy5+Ns5U481XhMKLjMxk+1yPd3EMT3gUJrLXut5rhVsK+YBWi1eZOFpAM7N1UqIiqHmXjK8hy8WKNR4yuqtC4gioQm/EK8+VoMkpcq2a7ukX3PM8gdMfiv+6Wx+LcPPXVhqni8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760181785; c=relaxed/simple;
-	bh=0nKriPSHqa8fEwO4TUiVHqnQKIZcwD3SXF7jiO5wJ5c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YoEtW1jWeVmlcLHn+JSPD8dkYb+hPHkmaBm7Jyx8xqBqkP/6fvar08CCbLY/nNWTZmhxlthVRof0nxsKeG4o/s24R070/NKCI8FfveVvUDJsW29+AsC83jTJqfHxy7b7ORwziMFjsQn7Jo1wAhEJ4PIp+i8oydQlBq6usqNK0bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=TNl7AjBq; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-586883eb9fbso3831917e87.1
-        for <linux-usb@vger.kernel.org>; Sat, 11 Oct 2025 04:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1760181777; x=1760786577; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=snF2x6iVq7pAFbsmpa+AIFlv6OW+huS9eV6QM4iutGQ=;
-        b=TNl7AjBqWcyIoc6oA+B6b0erWAozu3D2Jz9h/7S5s7lvDK7swaelw1wKiFIWtqO4RB
-         3ED3rKpL2nEjJlJNR0HNZnUmH07S1s7aQtAZzqBdPPUuKf3JPjoyp03WRgSK8XXLyqlp
-         HursGmH6ZSwh03ga7nOjAOHaDYCbkLnUGi1Rg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760181777; x=1760786577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=snF2x6iVq7pAFbsmpa+AIFlv6OW+huS9eV6QM4iutGQ=;
-        b=iVqh13hrM8p0UpDW8dDnGQRNq8SUNziymPw/iGGqPNaK5T5g8L+wxNQ9oZlvUV6kVm
-         U/Bo92QOg28Ifs3RoSj91ZmiKlf6xXKU2wXhMLbtei9A4VOlHmdReWMszCNZG07vNwlE
-         TqiK/wkttQWeUavYWDMZmGKyPlqLgo/gwUzeGvWql3dlXPycKYjDRHcnnQIbrJqQNhHQ
-         4sleKwZ521b/upBC5xl77zggDdVdxHiYmHVfFT/2CwDKB8BfnGzmQ6hKtQLBewUHvzCn
-         Kb9JjrYL+rWFnFd9HNDRS4ORbI3DPstjkIborJKZHuBWtOuOUS7YYk/YWk2HqnDKieO0
-         eR5A==
-X-Forwarded-Encrypted: i=1; AJvYcCUnNem3VQ6tnkTvfKMUh08cqKJNXeJDgx2jpW9AjQd+MYrsTnyD9P6Im23trsy1YYqNgzcJmnJZhzQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyqbs0AMdHl5TadfBFxginp6JS3wS471xy+OnaxbmpQsRJTfo9X
-	zEzqxXLuqPl77u5MbnRYWBKjPcbkJRQUokTGxsddZ1UpVoJYs6kJd8oQwjIFjIfI2Njq1y+vN7J
-	hUrrOHrv6JUVv6+nq2UpBR13Jc/DoluU2ESRZXhEghXnfqNy6yxso
-X-Gm-Gg: ASbGncvH4ZlW6TSLwQQ4GRpKhcNBycv5My1ChKQI9oJeLLhqtYRabZtP4ITnxYiXp2m
-	YxxCpEbg1k8JTQz7pGZBo3Ar3aJLG+KKWi2CM0/GX0vcc8SjQj0Bb4kO3RG8qCPy8fwkohq++rm
-	F7HECgX97ugG4xYF/nfLfjLhO3Y/suoWtVwp8m6a//+6t5eVj8vs9yEHaHZq45SK3Ry65HCIG/S
-	SbLxle1RXiwJaHwve65E+sHYCcTN4GnhQ==
-X-Google-Smtp-Source: AGHT+IGi/90P2fDmvq3u9KNmUFtkNax1NjaM/e3aEsUqXml6o41u0BaH4N1NlPdc4BSSQ3oXuP1Vm9wtbYCrOT54htg=
-X-Received: by 2002:a05:6512:607:20b0:590:7af0:837a with SMTP id
- 2adb3069b0e04-5907af0868emr2617091e87.12.1760181777220; Sat, 11 Oct 2025
- 04:22:57 -0700 (PDT)
+	s=arc-20240116; t=1760185138; c=relaxed/simple;
+	bh=8rWpXcMF5sSLnfJa/4/zDC3sNX5ccwOkLC7zsteO0vs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ujFuBR3bmrym7ArPS3j8egBEtogBggvv7AF7m2S8Otw7TaP5ijxhxqux9VdJvMDh46Li8aFyWqg26ghV882070fJMPSL2GgsXW6tI+lln13aCdezD0LNUg3ptIak+UWB92afYXIMp1K6EWUv51tE8TsvbldUfWqUcmkOZbDlTAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SuP48seu; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760185132; x=1791721132;
+  h=date:from:to:cc:subject:message-id;
+  bh=8rWpXcMF5sSLnfJa/4/zDC3sNX5ccwOkLC7zsteO0vs=;
+  b=SuP48seuTl9cSLKaFMzAjiY2M6WFEORmclNp4iMieWrGB8ksESvpjWDY
+   MCNZrHkgDFZNq86DaxSLACI5TrP+T7I0NuO7OMtnVWdukbkzG5IqzBIqD
+   LAXLmv7zwYWhyA9l5mWjEiGENIeBTcfMvVS6eQWoGnFoRTZ99fEBUsc13
+   q2BI2o4h5nlFut9+LCLjDFEdVB8xyxx2sI8bTAuks05ZBQXNTfqXr+U/M
+   Ctfhce8+5q0CBDlrt2HsVxKaR2A+g/mOPQZtKBSFjFHoRfqHOfdVtZQOe
+   zO6Ph3Ev4Sp2CBjpYbfhC9wMcpYEbqUGFec/XCx1PeQwZbGR+Wqq0GEvu
+   g==;
+X-CSE-ConnectionGUID: zIe1el/FSQ+AIs4iJ6MA0g==
+X-CSE-MsgGUID: cFTlzl7nQZqSzADBqWtVMw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11579"; a="85011436"
+X-IronPort-AV: E=Sophos;i="6.19,221,1754982000"; 
+   d="scan'208";a="85011436"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2025 05:18:52 -0700
+X-CSE-ConnectionGUID: uVKmtkOYRDum6JDAIpz/dg==
+X-CSE-MsgGUID: FfEhjBKLRseQOjefZNB3Fg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,221,1754982000"; 
+   d="scan'208";a="204865392"
+Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 11 Oct 2025 05:18:50 -0700
+Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v7YYi-0003l5-10;
+	Sat, 11 Oct 2025 12:18:48 +0000
+Date: Sat, 11 Oct 2025 20:18:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 64b229b5b6816b9247e0f592e6f7cdb3693cf3b8
+Message-ID: <202510112019.0rEXIIMZ-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20251007213902.2231670-1-ukaszb@google.com> <20251007213902.2231670-2-ukaszb@google.com>
- <fffa3476-c800-4257-a3c6-057c4c8cde28@intel.com>
-In-Reply-To: <fffa3476-c800-4257-a3c6-057c4c8cde28@intel.com>
-From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Sat, 11 Oct 2025 13:22:45 +0200
-X-Gm-Features: AS18NWDEZd2oE4e4WPwstd7AHMwp7h3VH6LHYiyhTp5A7H-MZXEEL15mUCw-QGA
-Message-ID: <CALwA+NZ=B2BbzUZUqKCzP28wDkPcd-PczcCwa6Mb2YjbNM8j3w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] xhci: dbc: prepare to expose strings through sysfs
-To: Mathias Nyman <mathias.nyman@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 10, 2025 at 1:09=E2=80=AFPM Mathias Nyman <mathias.nyman@intel.=
-com> wrote:
->
-> On 10/8/25 00:38, =C5=81ukasz Bartosik wrote:
-> > From: =C5=81ukasz Bartosik <ukaszb@chromium.org>
-> >
-> > Reorganize the code to prepare ground for setting serial number,
-> > product and manufacturer names through sysfs. This commit:
-> > 1. Introduces new buffers for storing serial number, product and
-> >     manufacturer name in utf8. The buffers will be used by sysfs
-> >     *_show and *_store functions.
-> > 2. Increases USB string descriptor data maximum length to the
-> >     value from USB specification (126 bytes of data).
-> > 3. Adds new helper functions get_str_desc_len, prepare_len
-> >     and xhci_dbc_populate_str_desc.
-> >
-> > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
->
-> This change does in general look good to me.
->
-> It gets rid of the code duplication in current xhci_dbc_populate_strings(=
-),
-> and retains new strings over suspend/resume.
->
-> I mostly have minor nitpicks regarding naming and other subjective matter=
-s
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 64b229b5b6816b9247e0f592e6f7cdb3693cf3b8  usb: dwc3: dwc3-generic-plat: Add layerscape dwc3 support
 
-Thank you Mathias for the review.
+Unverified Warning (likely false positive, kindly check if interested):
 
-> > ---
-> >   drivers/usb/host/xhci-dbgcap.c | 145 ++++++++++++++++++--------------=
--
-> >   drivers/usb/host/xhci-dbgcap.h |  24 ++++--
-> >   2 files changed, 94 insertions(+), 75 deletions(-)
-> >
-> > diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbg=
-cap.c
-> > index 63edf2d8f245..c2fecaffd6f3 100644
-> > --- a/drivers/usb/host/xhci-dbgcap.c
-> > +++ b/drivers/usb/host/xhci-dbgcap.c
-> > @@ -124,7 +75,63 @@ static void xhci_dbc_init_ep_contexts(struct xhci_d=
-bc *dbc)
-> >       ep_ctx->deq             =3D cpu_to_le64(deq | dbc->ring_in->cycle=
-_state);
-> >   }
-> >
-> > -static void xhci_dbc_init_contexts(struct xhci_dbc *dbc, u32 string_le=
-ngth)
-> > +static u8 get_str_desc_len(const char *desc)
-> > +{
-> > +     return ((struct usb_string_descriptor *)desc)->bLength;
-> > +}
-> > +
-> > +static u32 prepare_len(struct dbc_str_descs *descs)
->
-> prepare_len() is very generic, how about something like
->
-> dbc_prepare_info_context_str_len()
->
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dtb: usb@3100000 (fsl,ls1028a-dwc3): Unevaluated properties are not allowed ('compatible' was unexpected)
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dtb: usb@3100000 (fsl,ls1028a-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dtb: usb@3100000 (fsl,ls1028a-dwc3): Unevaluated properties are not allowed ('compatible' was unexpected)
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dtb: usb@3100000 (fsl,ls1028a-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dtb: usb@3100000 (fsl,ls1028a-dwc3): Unevaluated properties are not allowed ('compatible' was unexpected)
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dtb: usb@3100000 (fsl,ls1028a-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb: usb@3100000 (fsl,ls1028a-dwc3): Unevaluated properties are not allowed ('compatible' was unexpected)
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb: usb@3100000 (fsl,ls1028a-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3.dtb: usb@3100000 (fsl,ls1028a-dwc3): Unevaluated properties are not allowed ('compatible' was unexpected)
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3.dtb: usb@3100000 (fsl,ls1028a-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dtb: usb@3100000 (fsl,ls1028a-dwc3): Unevaluated properties are not allowed ('compatible' was unexpected)
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dtb: usb@3100000 (fsl,ls1028a-dwc3): Unevaluated properties are not allowed ('compatible' was unexpected)
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dtb: usb@3100000 (fsl,ls1028a-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dtb: usb@3100000 (fsl,ls1028a-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dtb: usb@3100000 (fsl,ls1028a-dwc3): Unevaluated properties are not allowed ('compatible' was unexpected)
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dtb: usb@3100000 (fsl,ls1028a-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dtb: usb@3100000 (fsl,ls1028a-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dtb: usb@3100000 (fsl,ls1028a-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dtb: usb@3100000 (fsl,ls1028a-dwc3): Unevaluated properties are not allowed ('compatible' was unexpected)
+    arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dtb: usb@3100000 (fsl,ls1028a-dwc3): Unevaluated properties are not allowed ('compatible' was unexpected)
 
-I will change it in patchset v3.
+Warning ids grouped by kconfigs:
 
-> > +{
-> > +     u32 len;
-> > +
-> > +     len =3D get_str_desc_len(descs->serial);
-> > +     len <<=3D 8;
-> > +     len +=3D get_str_desc_len(descs->product);
-> > +     len <<=3D 8;
-> > +     len +=3D get_str_desc_len(descs->manufacturer);
-> > +     len <<=3D 8;
-> > +     len +=3D get_str_desc_len(descs->string0);
-> > +
-> > +     return len;
-> > +}
-> > +
-> > +static int xhci_dbc_populate_str_desc(char *desc, const char *src)
-> > +{
-> > +     struct usb_string_descriptor    *s_desc;
-> > +     int                             utf16_len;
-> > +
-> > +     s_desc =3D (struct usb_string_descriptor *)desc;
-> > +     utf16_len =3D utf8s_to_utf16s(src, strlen(src), UTF16_LITTLE_ENDI=
-AN,
-> > +                                 (wchar_t *)s_desc->wData, USB_MAX_STR=
-ING_LEN);
->
-> The "utf16_len" got me confused.
-> It's not wrong, but I first assumed it is bytes this utf16 formatted text
-> takes, when it turns out to be number of u16 entries in the text.
->
+recent_errors
+|-- arm64-randconfig-051-20251011
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-kbox-a-ls.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-kbox-a-ls.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var1.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var1.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var2.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var2.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3-ads2.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3-ads2.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var4.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-13bb.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-65bb.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-85bb.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-899b.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   `-- arch-arm64-boot-dts-freescale-fsl-ls1028a-rdb.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|-- arm64-randconfig-052-20251011
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-kbox-a-ls.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-kbox-a-ls.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var1.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var1.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var2.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var2.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3-ads2.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3-ads2.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var4.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-13bb.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-65bb.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-85bb.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-899b.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   `-- arch-arm64-boot-dts-freescale-fsl-ls1028a-rdb.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|-- arm64-randconfig-053-20251011
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-kbox-a-ls.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-kbox-a-ls.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var1.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var1.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var2.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var2.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3-ads2.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3-ads2.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var4.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-13bb.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-65bb.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-85bb.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-899b.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   `-- arch-arm64-boot-dts-freescale-fsl-ls1028a-rdb.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|-- arm64-randconfig-054-20251011
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-kbox-a-ls.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-kbox-a-ls.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var1.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var1.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var2.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var2.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3-ads2.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3-ads2.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var4.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-13bb.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-65bb.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-85bb.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-899b.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+|   |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+|   `-- arch-arm64-boot-dts-freescale-fsl-ls1028a-rdb.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+`-- arm64-randconfig-055-20251011
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-kbox-a-ls.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-kbox-a-ls.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var1.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var1.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var2.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var2.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3-ads2.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3-ads2.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var3.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28-var4.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-kontron-sl28.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-13bb.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-65bb.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-85bb.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds-899b.dtb:usb-(fsl-ls1028a-dwc3):compatible:oneOf-conditional-failed-one-must-be-fixed:
+    |-- arch-arm64-boot-dts-freescale-fsl-ls1028a-qds.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
+    `-- arch-arm64-boot-dts-freescale-fsl-ls1028a-rdb.dtb:usb-(fsl-ls1028a-dwc3):Unevaluated-properties-are-not-allowed-(-compatible-was-unexpected)
 
-Do you have a suggestion how to rename it to be more self commenting ?
-Or maybe I will rename it to len and add a comment that it holds a number
-of u16 entries ? WDYT ?
+elapsed time: 1453m
 
-> > +     if (utf16_len < 0)
-> > +             return utf16_len;
-> > +
-> > +     s_desc->bLength         =3D utf16_len * 2 + 2;
-> > +     s_desc->bDescriptorType =3D USB_DT_STRING;
-> > +
-> > +     return s_desc->bLength;
-> > +}
-> > +
-> > +static void xhci_dbc_populate_str_descs(struct dbc_str_descs *str_desc=
-s,
-> > +                                     struct dbc_str *str)
-> > +{
-> > +     /* Serial string: */
-> > +     xhci_dbc_populate_str_desc(str_descs->serial, str->serial);
-> > +
-> > +     /* Product string: */
-> > +     xhci_dbc_populate_str_desc(str_descs->product, str->product);
-> > +
-> > +     /* Manufacturer string: */
-> > +     xhci_dbc_populate_str_desc(str_descs->manufacturer, str->manufact=
-urer);
-> > +
-> > +     /* String0: */
-> > +     str_descs->string0[0]   =3D 4;
-> > +     str_descs->string0[1]   =3D USB_DT_STRING;
-> > +     str_descs->string0[2]   =3D 0x09;
-> > +     str_descs->string0[3]   =3D 0x04;
-> > +}
->
-> > @@ -1314,6 +1320,11 @@ xhci_alloc_dbc(struct device *dev, void __iomem =
-*base, const struct dbc_driver *
-> >       dbc->bInterfaceProtocol =3D DBC_PROTOCOL;
-> >       dbc->poll_interval =3D DBC_POLL_INTERVAL_DEFAULT;
-> >
-> > +     /* initialize serial, product and manufacturer with default value=
-s */
-> > +     memcpy(dbc->str.serial, DBC_STRING_SERIAL, strlen(DBC_STRING_SERI=
-AL)+1);
-> > +     memcpy(dbc->str.product, DBC_STRING_PRODUCT, strlen(DBC_STRING_PR=
-ODUCT)+1);
-> > +     memcpy(dbc->str.manufacturer, DBC_STRING_MANUFACTURER, strlen(DBC=
-_STRING_MANUFACTURER)+1);
-> > +
->
-> Maybe it would be cleaner to just define a default struct for the strings=
- and assign it here.
-> We could get rid of the #define  DBC_STRING_* from the header as well.
->
-> i.e.:
->
-> static const struct dbc_str dbc_str_default =3D {
->         .manufacturer =3D "Linux Foundation",
->         .product =3D "Linux USB Debug Target",
->         .serial =3D "0001",
-> };
->
-> xhci_alloc_dbc(..)
-> {
->         ...
->         /* initialize serial, product and manufacturer with default value=
-s */
->         dbc->str =3D dbc_str_default;
+configs tested: 259
+configs skipped: 6
 
-Neat ;). I will change it in patchset v3.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> }>      if (readl(&dbc->regs->control) & DBC_CTRL_DBC_ENABLE)
-> >               goto err;
-> >
-> > diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbg=
-cap.h
-> > index 47ac72c2286d..0e6addafea6c 100644
-> > --- a/drivers/usb/host/xhci-dbgcap.h
-> > +++ b/drivers/usb/host/xhci-dbgcap.h
-> > @@ -47,7 +47,6 @@ struct dbc_info_context {
-> >   #define DBC_DOOR_BELL_TARGET(p)             (((p) & 0xff) << 8)
-> >
-> >   #define DBC_MAX_PACKET                      1024
-> > -#define DBC_MAX_STRING_LENGTH                64
-> >   #define DBC_STRING_MANUFACTURER             "Linux Foundation"
-> >   #define DBC_STRING_PRODUCT          "Linux USB Debug Target"
-> >   #define DBC_STRING_SERIAL           "0001"
-> > @@ -63,11 +62,19 @@ struct dbc_info_context {
-> >   #define DBC_PORTSC_LINK_CHANGE              BIT(22)
-> >   #define DBC_PORTSC_CONFIG_CHANGE    BIT(23)
-> >
-> > +#define USB_MAX_STRING_DESC_LEN              (USB_MAX_STRING_LEN + 2)
->
-> This looks like somthing that would be defined in ch9.h or usb.h.
->
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    clang-19
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    clang-19
+arc                              allmodconfig    clang-19
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    clang-19
+arc                              allyesconfig    gcc-15.1.0
+arc                          axs101_defconfig    clang-22
+arc                                 defconfig    clang-19
+arc                   randconfig-001-20251010    gcc-12.5.0
+arc                   randconfig-001-20251011    clang-22
+arc                   randconfig-002-20251010    gcc-8.5.0
+arc                   randconfig-002-20251011    clang-22
+arm                              allmodconfig    clang-19
+arm                              allmodconfig    gcc-15.1.0
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    clang-19
+arm                              allyesconfig    gcc-15.1.0
+arm                                 defconfig    clang-19
+arm                          moxart_defconfig    gcc-15.1.0
+arm                       netwinder_defconfig    gcc-15.1.0
+arm                            qcom_defconfig    clang-22
+arm                   randconfig-001-20251010    gcc-8.5.0
+arm                   randconfig-001-20251011    clang-22
+arm                   randconfig-002-20251010    gcc-13.4.0
+arm                   randconfig-002-20251011    clang-22
+arm                   randconfig-003-20251010    gcc-8.5.0
+arm                   randconfig-003-20251011    clang-22
+arm                   randconfig-004-20251010    gcc-8.5.0
+arm                   randconfig-004-20251011    clang-22
+arm                           stm32_defconfig    clang-22
+arm                           tegra_defconfig    clang-22
+arm                         wpcm450_defconfig    clang-22
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-15.1.0
+arm64                               defconfig    clang-19
+arm64                 randconfig-001-20251010    gcc-14.3.0
+arm64                 randconfig-001-20251011    clang-22
+arm64                 randconfig-002-20251010    clang-19
+arm64                 randconfig-002-20251011    clang-22
+arm64                 randconfig-003-20251010    clang-17
+arm64                 randconfig-003-20251011    clang-22
+arm64                 randconfig-004-20251010    gcc-15.1.0
+arm64                 randconfig-004-20251011    clang-22
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    clang-19
+csky                  randconfig-001-20251010    gcc-15.1.0
+csky                  randconfig-001-20251011    gcc-8.5.0
+csky                  randconfig-002-20251010    gcc-10.5.0
+csky                  randconfig-002-20251011    gcc-8.5.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    clang-19
+hexagon                           allnoconfig    clang-22
+hexagon                          allyesconfig    clang-19
+hexagon                          allyesconfig    clang-22
+hexagon                             defconfig    clang-19
+hexagon               randconfig-001-20251010    clang-22
+hexagon               randconfig-001-20251011    gcc-8.5.0
+hexagon               randconfig-002-20251010    clang-18
+hexagon               randconfig-002-20251011    gcc-8.5.0
+i386                             allmodconfig    clang-20
+i386                             allmodconfig    gcc-14
+i386                              allnoconfig    clang-20
+i386                              allnoconfig    gcc-14
+i386                             allyesconfig    clang-20
+i386                             allyesconfig    gcc-14
+i386        buildonly-randconfig-001-20251010    gcc-14
+i386        buildonly-randconfig-001-20251011    clang-20
+i386        buildonly-randconfig-002-20251010    clang-20
+i386        buildonly-randconfig-002-20251011    clang-20
+i386        buildonly-randconfig-003-20251010    clang-20
+i386        buildonly-randconfig-003-20251011    clang-20
+i386        buildonly-randconfig-004-20251010    gcc-14
+i386        buildonly-randconfig-004-20251011    clang-20
+i386        buildonly-randconfig-005-20251010    gcc-14
+i386        buildonly-randconfig-005-20251011    clang-20
+i386        buildonly-randconfig-006-20251010    gcc-14
+i386        buildonly-randconfig-006-20251011    clang-20
+i386                                defconfig    clang-20
+i386                  randconfig-001-20251011    gcc-14
+i386                  randconfig-002-20251011    gcc-14
+i386                  randconfig-003-20251011    gcc-14
+i386                  randconfig-004-20251011    gcc-14
+i386                  randconfig-005-20251011    gcc-14
+i386                  randconfig-006-20251011    gcc-14
+i386                  randconfig-007-20251011    gcc-14
+i386                  randconfig-011-20251011    clang-20
+i386                  randconfig-012-20251011    clang-20
+i386                  randconfig-013-20251011    clang-20
+i386                  randconfig-014-20251011    clang-20
+i386                  randconfig-015-20251011    clang-20
+i386                  randconfig-016-20251011    clang-20
+i386                  randconfig-017-20251011    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20251010    clang-22
+loongarch             randconfig-001-20251011    gcc-8.5.0
+loongarch             randconfig-002-20251010    gcc-15.1.0
+loongarch             randconfig-002-20251011    gcc-8.5.0
+m68k                             allmodconfig    clang-19
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    clang-19
+m68k                             allyesconfig    gcc-15.1.0
+m68k                                defconfig    clang-19
+m68k                        m5272c3_defconfig    gcc-15.1.0
+m68k                            mac_defconfig    gcc-15.1.0
+microblaze                       allmodconfig    clang-19
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    clang-19
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                             allnoconfig    gcc-15.1.0
+nios2                               defconfig    gcc-15.1.0
+nios2                 randconfig-001-20251010    gcc-11.5.0
+nios2                 randconfig-001-20251011    gcc-8.5.0
+nios2                 randconfig-002-20251010    gcc-9.5.0
+nios2                 randconfig-002-20251011    gcc-8.5.0
+openrisc                          allnoconfig    clang-22
+openrisc                         allyesconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-14
+parisc                           alldefconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    clang-22
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20251010    gcc-8.5.0
+parisc                randconfig-001-20251011    gcc-8.5.0
+parisc                randconfig-002-20251010    gcc-12.5.0
+parisc                randconfig-002-20251011    gcc-8.5.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    clang-22
+powerpc                          allyesconfig    gcc-15.1.0
+powerpc                      chrp32_defconfig    clang-19
+powerpc                        fsp2_defconfig    gcc-15.1.0
+powerpc                         ps3_defconfig    clang-22
+powerpc               randconfig-001-20251010    clang-22
+powerpc               randconfig-001-20251011    gcc-8.5.0
+powerpc               randconfig-002-20251010    gcc-15.1.0
+powerpc               randconfig-002-20251011    gcc-8.5.0
+powerpc               randconfig-003-20251010    clang-22
+powerpc               randconfig-003-20251011    gcc-8.5.0
+powerpc64             randconfig-001-20251010    clang-22
+powerpc64             randconfig-001-20251011    gcc-8.5.0
+powerpc64             randconfig-002-20251010    gcc-14.3.0
+powerpc64             randconfig-002-20251011    gcc-8.5.0
+powerpc64             randconfig-003-20251010    gcc-13.4.0
+powerpc64             randconfig-003-20251011    gcc-8.5.0
+riscv                            allmodconfig    clang-22
+riscv                            allmodconfig    gcc-15.1.0
+riscv                             allnoconfig    clang-22
+riscv                            allyesconfig    clang-16
+riscv                            allyesconfig    gcc-15.1.0
+riscv                               defconfig    gcc-14
+riscv                 randconfig-001-20251010    clang-22
+riscv                 randconfig-001-20251011    clang-22
+riscv                 randconfig-002-20251010    gcc-9.5.0
+riscv                 randconfig-002-20251011    clang-22
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    gcc-15.1.0
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    gcc-14
+s390                  randconfig-001-20251010    gcc-14.3.0
+s390                  randconfig-001-20251011    clang-22
+s390                  randconfig-002-20251010    clang-22
+s390                  randconfig-002-20251011    clang-22
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                         apsh4a3a_defconfig    gcc-15.1.0
+sh                        apsh4ad0a_defconfig    gcc-15.1.0
+sh                                  defconfig    gcc-14
+sh                        dreamcast_defconfig    gcc-15.1.0
+sh                ecovec24-romimage_defconfig    gcc-15.1.0
+sh                    randconfig-001-20251010    gcc-15.1.0
+sh                    randconfig-001-20251011    clang-22
+sh                    randconfig-002-20251010    gcc-15.1.0
+sh                    randconfig-002-20251011    clang-22
+sh                           se7750_defconfig    clang-22
+sh                        sh7757lcr_defconfig    gcc-15.1.0
+sh                  sh7785lcr_32bit_defconfig    gcc-15.1.0
+sh                             shx3_defconfig    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20251010    gcc-11.5.0
+sparc                 randconfig-001-20251011    clang-22
+sparc                 randconfig-002-20251010    gcc-8.5.0
+sparc                 randconfig-002-20251011    clang-22
+sparc64                             defconfig    gcc-14
+sparc64               randconfig-001-20251010    clang-20
+sparc64               randconfig-001-20251011    clang-22
+sparc64               randconfig-002-20251010    gcc-10.5.0
+sparc64               randconfig-002-20251011    clang-22
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    clang-19
+um                               allyesconfig    gcc-14
+um                                  defconfig    gcc-14
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20251010    gcc-14
+um                    randconfig-001-20251011    clang-22
+um                    randconfig-002-20251010    gcc-14
+um                    randconfig-002-20251011    clang-22
+um                           x86_64_defconfig    gcc-14
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20251010    clang-20
+x86_64      buildonly-randconfig-001-20251011    clang-20
+x86_64      buildonly-randconfig-002-20251010    clang-20
+x86_64      buildonly-randconfig-002-20251011    clang-20
+x86_64      buildonly-randconfig-003-20251010    clang-20
+x86_64      buildonly-randconfig-003-20251011    clang-20
+x86_64      buildonly-randconfig-004-20251010    clang-20
+x86_64      buildonly-randconfig-004-20251011    clang-20
+x86_64      buildonly-randconfig-005-20251010    gcc-14
+x86_64      buildonly-randconfig-005-20251011    clang-20
+x86_64      buildonly-randconfig-006-20251010    gcc-14
+x86_64      buildonly-randconfig-006-20251011    clang-20
+x86_64                              defconfig    clang-20
+x86_64                              defconfig    gcc-14
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20251011    gcc-14
+x86_64                randconfig-002-20251011    gcc-14
+x86_64                randconfig-003-20251011    gcc-14
+x86_64                randconfig-004-20251011    gcc-14
+x86_64                randconfig-005-20251011    gcc-14
+x86_64                randconfig-006-20251011    gcc-14
+x86_64                randconfig-007-20251011    gcc-14
+x86_64                randconfig-008-20251011    gcc-14
+x86_64                randconfig-071-20251011    clang-20
+x86_64                randconfig-072-20251011    clang-20
+x86_64                randconfig-073-20251011    clang-20
+x86_64                randconfig-074-20251011    clang-20
+x86_64                randconfig-075-20251011    clang-20
+x86_64                randconfig-076-20251011    clang-20
+x86_64                randconfig-077-20251011    clang-20
+x86_64                randconfig-078-20251011    clang-20
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-14
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                         rhel-9.4-kunit    gcc-14
+x86_64                           rhel-9.4-ltp    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20251010    gcc-8.5.0
+xtensa                randconfig-001-20251011    clang-22
+xtensa                randconfig-002-20251010    gcc-9.5.0
+xtensa                randconfig-002-20251011    clang-22
+xtensa                    xip_kc705_defconfig    gcc-15.1.0
 
-Unfortunately I can see only USB_MAX_STRING_LEN but no definition
-for a maximum USB string descriptor size.
-
-> Maybe a more local name like DBC_MAX_STRING_DESC_LEN
->
-
-I will rename it and also remove magic number:
-#define USB_MAX_STRING_DESC_LEN              (USB_MAX_STRING_LEN +
-sizeof(struct usb_string_descriptor))
-
->
-> > +
-> >   struct dbc_str_descs {
-> > -     char    string0[DBC_MAX_STRING_LENGTH];
-> > -     char    manufacturer[DBC_MAX_STRING_LENGTH];
-> > -     char    product[DBC_MAX_STRING_LENGTH];
-> > -     char    serial[DBC_MAX_STRING_LENGTH];
-> > +     char    string0[USB_MAX_STRING_DESC_LEN];
-> > +     char    manufacturer[USB_MAX_STRING_DESC_LEN];
-> > +     char    product[USB_MAX_STRING_DESC_LEN];
-> > +     char    serial[USB_MAX_STRING_DESC_LEN];
-> > +};
-> > +
-> > +struct dbc_str {> +  char    manufacturer[USB_MAX_STRING_LEN/2+1];
-> > +     char    product[USB_MAX_STRING_LEN/2+1];
-> > +     char    serial[USB_MAX_STRING_LEN/2+1];
-> >   };
->
-> Maybe some comment above to clarify the odd size
->
-> /* utf8 strings used to create the USB_MAX_STRING_LEN utf16 string descri=
-ptors */
->
-
-I will add the comment in the patchset v3.
-
-Thanks,
-=C5=81ukasz
-
-> Thanks
-> Mathias
->
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
