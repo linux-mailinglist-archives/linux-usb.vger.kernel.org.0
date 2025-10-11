@@ -1,149 +1,154 @@
-Return-Path: <linux-usb+bounces-29159-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29160-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 473C6BCF30D
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 11:37:44 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB8F7BCF32B
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 11:40:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBDD1407F48
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 09:37:42 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3CD3D34D61A
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Oct 2025 09:40:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1DC5221FAC;
-	Sat, 11 Oct 2025 09:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61425246774;
+	Sat, 11 Oct 2025 09:40:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ey63gQja"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uajayrgd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332FEF9C1
-	for <linux-usb@vger.kernel.org>; Sat, 11 Oct 2025 09:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C263532C8B
+	for <linux-usb@vger.kernel.org>; Sat, 11 Oct 2025 09:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760175458; cv=none; b=iWZaZzwv0jUU0q0vs6egzv+HJACAMKEQ/DOJD7mndx2XJeWThufe4/la38/Q0Dnt+ymmf2jdA2aEqmXgty6zp2YNZijx/lPKvQQpKg302Vphr4UpfTRDIPluxQJV8bvgrwlwN2QeG0e9ieH+ITYdI8kV9eyLY45EYwfphbG4dfg=
+	t=1760175599; cv=none; b=EdRka/LpSMU7hivGJlLkL4j6HIJ8ixaM5PhNwEtU+4xNaYcpn9TNcONjy6qFnVAVaxqDoYaAMGZnrHVRYoRo7Ky4BnK5DArtZGs/BJtBqqdsnNg54VqLeRWp/gwd2FLIbQ9XdAznaiODFe8OVspBkzg1cBm1R8Ba6ZWQD2Sg+K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760175458; c=relaxed/simple;
-	bh=u5zjF4xHV0mJLT/FoCYTfCH90n75FZV5xsmye3fe+2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f5gNGbuhLGrVobv/Mq9uVHocvj1KXaYK91f2cMDHXgTIPVSFt7vdtxFPzt1O4UflAAZoxYZIUXGE+LuM80aALXFoR7yQHpXRstuNBN3JodzZicwjcNUdytJg1peT0fJR1IV1LgxHXLCPLK7VDvmfMFp0R9ixfOOcGDlCoJUnAnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ey63gQja; arc=none smtp.client-ip=209.85.210.173
+	s=arc-20240116; t=1760175599; c=relaxed/simple;
+	bh=DWulZoMSEhvbiHnjEqnSdTzgVje1JCmA/RDSbaOK/L0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l/1VTS/LnD0HF40kvZSIgmFeRqsqLN72o6oBD70hEFG9rUwG2v3+mhDzCtBeQqZwRGkYfpa+2yHdle/OLuqKhoDKMMbbC7oshMBwOy+5U7rSLxWUULL6JtJrFfthbsA/AZ6H+66JL1lTz/VvSLSRYB2xN8T2pYTS5eUL7/S0OG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uajayrgd; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-781001e3846so2773201b3a.2
-        for <linux-usb@vger.kernel.org>; Sat, 11 Oct 2025 02:37:32 -0700 (PDT)
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-32ec291a325so2048049a91.1
+        for <linux-usb@vger.kernel.org>; Sat, 11 Oct 2025 02:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760175452; x=1760780252; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4USxVtCkPc52aot2RGVc2rDmpm0BolrLNDjW4OcdO4=;
-        b=Ey63gQjaULmhuhRcEP2SPNlZnC0S5NzSeJ38jKvuPJorK3Kx4DvXm0nYm6JQKrT7NA
-         Cop6vHYzwIq7kkt7nTV+rs0vKalU2XvMGyy5KQC0GuNextTFyoBt99aBmYQuhsj2W6tu
-         /zMbVW1IxZzYTRYxEVZjqzn6OAkoqqGEgqI529OAzYu4BfyNmvilHCnCnxdLdfOWVVUQ
-         jfVzOulsPHM4J+0Zq9fKm/URl8t3+LsvEE/jgyRlkoD02jqIhyDI2pvQAPJS2Q3ZPHpW
-         HBqDbbbLj0GH79c6Fe5rD2qDmvgG+/xwxs++SkvC7jtKkrcypH1b2VwRuLFaRrjp5wuM
-         UZ7g==
+        d=gmail.com; s=20230601; t=1760175594; x=1760780394; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i/hp0xubT0bG806mERk4z9+ItCewWdjkvCrKt8wokmk=;
+        b=UajayrgdbuErmrsspfr4MbzgOs4moY61HAZwL0n+89KGGO1OPnvEtgjayi5pb7vWJ0
+         OjZw0rjNovt9jAvO7i5rbPncvG0NoFb8JWL99gmiH9mrQIygnHvoh42vhYIlZbCB5Qye
+         fN3Vifgg8et74pnp6zCF5egzfnl9aZItMBRYv+oxzwDjJGhkV7VZMqs7BpIa0v7y1WmT
+         Fh3aBT/oaW8k/tOnLkBm+GUxfH4OOJsaFudBECVIcKeoOvkoRw405xrXyF11c5wFsLGk
+         JIH/HcvQVMsq+q5USa4n28mBV44e2UFp+XikUEsRRUP8dUJTgmfv1yRQwmwe6UQuFcKS
+         D0Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760175452; x=1760780252;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F4USxVtCkPc52aot2RGVc2rDmpm0BolrLNDjW4OcdO4=;
-        b=C4uxB6EvxDC0on8X2/N8NTZhKKaXqY04Mtd1mNsRca6mlirkbN9N+9ECY0UdljTVGJ
-         af3NKFgRPnG0bMAM+U3PZRMM4U1lI/r92o16nge/+DtjAqaB1FfttLMdU4HOkK5H6g8k
-         0kMK2IGg76kpJ3NG7g6GxpiHL+wDW8YaESmywbJ4LjjBN3dD119oAQ1YXtbRggXv4r4h
-         5H0RQ+l2tza/e/HA82RPvfSNM4+fWwQSX7GEwwQa0wM10uuXDEmVIZysDxwnZJEOufgP
-         kmy1eGVuzY4qTvIX8DIjWTdrGVcI2c7r/yUtGFAFR+zoSkc3X+6I5CsqiDXWp4f37MTw
-         fwBg==
-X-Forwarded-Encrypted: i=1; AJvYcCXzjt0QNlAl53Oaxc5nCxH2YQm0xkl1kXGzPNq2l4QuCnPVA2DHz8afYV1UrtNHvP8z0pMk2zEzaws=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQXqXdkE7Q2yRpqXDU6XWJgUAo+2cq7tmRMiUBrksuXyMsXrh0
-	pOTLUmxE8MEDX2Pj4TTFEEjRhx8EJgXF7AbtukH+J4CRaEpsmZPPo7+Z
-X-Gm-Gg: ASbGncvF6mCdD0wzbaXmoRmrTRkkAuompHdD5EmYZKCl92TMmYtiLjut4PhiUZZ/u8f
-	ayWk29k8HrKiOcWfv3iuRRYRFdGaa8iJ/h3lWwTnpULgDzCSZAfE7eiJPoenISYJ0Ox6UkrdMBZ
-	5jADzukrWlPLRlsC126LPloqE0aO3DGfu3dqEMk3YN7SjskhhGhJxVj+tThmOiPXwNlnq38rPAp
-	K/ciDtFfUal/gGTx2LTDLwhqLFFiMAGpzC3qfoLLQlKFrpjxW2gvqd6tqrzY0Nz0/1OrDiEnl+9
-	891aZGj0VVa6Z7ZxKXkAqeL0NVc70HIVNv/k7OVk88icDnOlNdRYigpX9POVFdbqTFFWCpMep4l
-	Si8uuR+CBhcfJZk2I/piqMT+8c+/yJhLkv65EBPU=
-X-Google-Smtp-Source: AGHT+IEdGkpVjCNDAUZpumR0rFlR/mqeM1FB/ZWZ4wdtl9JFV+osqhQ0kzUTXElfmjiRN0MK/5XAug==
-X-Received: by 2002:a05:6a00:23d5:b0:781:d98e:ebda with SMTP id d2e1a72fcca58-79387a233fdmr16730292b3a.30.1760175452309;
-        Sat, 11 Oct 2025 02:37:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760175594; x=1760780394;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i/hp0xubT0bG806mERk4z9+ItCewWdjkvCrKt8wokmk=;
+        b=ZLb5c62Df5nhyhIkqkcZ4sCoUbppcgw7SmETWxHVX4ziPK5JhqzVnl5YTB+CM524Ps
+         mnQ9BTDH8r0HXrvfrbmSE92HExKiKdEpIhEb8MdHk48WoZYCEpjOYhZydLGcDhf/8zG+
+         e8MAFZUjeTAUyzCED9XHby+6mojC5B/Q+lufdzERAYvbvoZ7OrG8IPZZhFrKLhj9gIna
+         t2R8INCrzVGWaajSppKOrQr6FVg1UJPOKjfdyB4+DpTUE60CfsEJvnJCIn3Ud8LrSWyE
+         rynDXSRgPl1pkvZTcT0kQJ2Z++zhICSs3gV9RNj5y8XITI/GalqpwcZdGZTdrEaO6R+1
+         hZWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3rGvCtY4q+rfid6s0Pl8tLMh/Golh3qne6XlnbOjpZ/DjsqiTZT2UpsER2TZzKcriTFbBzOvv3OY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwXjaG3ML6NqSrJehrxBVeRHuGtP8KyXUMnSjzeFVVkSsh6rgJ
+	oDVXm7luGqs4JD6XK9N6xofg9x1sFU6jU38uUGK7fg5kyVBdXjhPsXyi
+X-Gm-Gg: ASbGncsJWdF8TdK/1w2BKbNPnpIT4dPi3KH8MCATDours48jOeGkERDF3HoJS/WfVB7
+	mqTxeLOPVAnre7cD9fAC6rrOWiSg3CZFbBXaFqOdQOjnHIIhmwF+kE9PkWGVQlfiNdjdD6rih6O
+	SHPchjOZciHCd7+9NC8MuyVnhiTYV79YSUhagdjgFmQGXVrn5yftxNOmbmPVoZs/TuPYYDMX0tl
+	lsSbZJIrGDpPZUsKtq0PZDe1MDFTHJH6m28TB3nWWGAy9HAbTmLt8a3TAb/4Kb7C1Om/FOppwSi
+	nosU57vSJ4rxPcUkrRyltTUr54RC5wq4N+bkIw8x9M08N5uC+uwSVqAfBghtG7Dk3mFZL9Dm79h
+	6WBl1aO3vfqvGrtyQ5yutcrQ0luByVjnj/c9zgtaReg/hCwiumA==
+X-Google-Smtp-Source: AGHT+IHlrOOhmyePzgU1zqgIpyyeWDPqEEgVRAICsIhKY2hiXJnvchEuAX0BSG2ClMyGV5EPCagGQA==
+X-Received: by 2002:a17:90b:1d0a:b0:32e:87f6:f5a6 with SMTP id 98e67ed59e1d1-33b50f2300dmr21030970a91.0.1760175594136;
+        Sat, 11 Oct 2025 02:39:54 -0700 (PDT)
 Received: from fedora ([2409:40d1:88:ea5b:9773:a1fe:6d1:6334])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992b0607e3sm5597560b3a.11.2025.10.11.02.37.27
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b61a3cc0dsm5950526a91.9.2025.10.11.02.39.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Oct 2025 02:37:31 -0700 (PDT)
-Date: Sat, 11 Oct 2025 15:07:23 +0530
-From: ShiHao <i.shihao.999@gmail.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: skhan@linuxfoundation.org, linux-usb@vger.kernel.org,
-	i.shihao.999@gmail.com, gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu
-Subject: Re: [PATCH] usb: Implement proper subclass protocol translation
-Message-ID: <aOolUwtQHX7JUASe@fedora>
-References: <20251010113003.22863-1-i.shihao.999@gmail.com>
- <2d7cd968-3365-4f9f-aa88-d953809bf0ce@rowland.harvard.edu>
+        Sat, 11 Oct 2025 02:39:53 -0700 (PDT)
+From: Shi Hao <i.shihao.999@gmail.com>
+To: stern@rowland.harvard.edu
+Cc: gregkh@linuxfoundation.org,
+	i.shihao.999@gmail.com,
+	linux-usb@vger.kernel.org,
+	skhan@linuxfoundation.org
+Subject: [PATCH v2] usb: implement proper subclass protocol translation
+Date: Sat, 11 Oct 2025 15:09:37 +0530
+Message-ID: <20251011093937.19434-1-i.shihao.999@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2d7cd968-3365-4f9f-aa88-d953809bf0ce@rowland.harvard.edu>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 10, 2025 at 11:07:03AM -0400, Alan Stern wrote:
-> The spacing in this text is strange -- double spaces in random places, 
-> no space following the first '.' in the last paragraph, and an extra 
-> space before the second '.'.  Also, strange capitalization of the word 
-> "It" in two places.
->
-Hi Alan,
+Proper protocol translation for old legacy usb devices
+to set proper cmd_value.
 
-thanks for the review  and suggestions .  I have updated  the commit 
-message body removed double spaces and over cappitalization of i
+Earlier protocol translation was insufficient for old usb devices
+which was padding all subclasses such as USB_SC_RBC, USB_SC_SCSI
+and USB_SC_CYP_ATACB cmd_len to 6 byte value and because it wasn't
+complete it had a FIXME comment stating to fix the protocol transl
+-ation for those legacy usb devices.
 
-> > -		/* FIXME: we must do the protocol translation here */
-> > +		/* Protocol translation per scsi opcode group */
-> 
-> This comment should be different.  The "per scsi opcode group" will be 
-> mentioned in another comment a few lines later; it's not needed here as 
-> well.
- 
-also added new comment for the protocol translation 
-as you said to make it different from earlier as per op
-code comment.
+As a result implement proper protocol translation as per their op
+code. In addition to the old default value 6 those old legacy
+usb-device subclasses needed cmd_len value to 10, 12, and 16
+byte also.
 
-> >  		if (us->subclass == USB_SC_RBC || us->subclass == USB_SC_SCSI ||
-> > -				us->subclass == USB_SC_CYP_ATACB)
-> > -			srb->cmd_len = 6;
-> > -		else
-> > +		    us->subclass == USB_SC_CYP_ATACB) {
-> 
-> Please don't change the existing indentation.
+Signed-off-by: Shi Hao <i.shihao.999@gmail.com>
 
-I changed the pervious indentaion as  greg k-h told me to
-do so he said to check checkpatch.pl script errors which said 
-alignment should match open parenthesis  thats why i placed it
-under the open parenthesis and it does not have any  checkpatch.pl 
-error so far . I have checked it with the argument --strict too .
-Changing the line from open parenthesis triggers checkpatch.pl 
-error.
+---
+changes v2:
+- Update protocol translation comment
+- Add comment for non-legacy subclasses
+---
+ drivers/usb/storage/transport.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-> > +			else
-> > +				srb->cmd_len = 6;
-> > +		} else {
-> 
-> And you could add a comment here explaining that the other protocols use 
-> a fixed value for the command length.
-> 
-> >  			srb->cmd_len = 12;
-> > +		}
+diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
+index 1aa1bd26c81f..edbada636f6c 100644
+--- a/drivers/usb/storage/transport.c
++++ b/drivers/usb/storage/transport.c
+@@ -718,12 +718,26 @@ void usb_stor_invoke_transport(struct scsi_cmnd *srb, struct us_data *us)
 
-Thanks for the suggestion of this new comment i have added it 
-in the second version please check the above changes in the updated 
-version and if there is anything wrong please let me know i am ready 
-to make any further changes and  again thanks for you review and suggestions 
-on this matter . Thanks for giving your precious time to this matter . Thank you 
-so much.
+ 		scsi_eh_prep_cmnd(srb, &ses, NULL, 0, sense_size);
+
+-		/* FIXME: we must do the protocol translation here */
++		/* Handle usb subclass protocol translation */
+ 		if (us->subclass == USB_SC_RBC || us->subclass == USB_SC_SCSI ||
+-				us->subclass == USB_SC_CYP_ATACB)
+-			srb->cmd_len = 6;
+-		else
++		    us->subclass == USB_SC_CYP_ATACB) {
++			/* Determine cmd_len based on scsi opcode group */
++			if (srb->cmnd[0] <= 0x1F)
++				srb->cmd_len = 6;
++			else if (srb->cmnd[0] <= 0x7F)
++				srb->cmd_len = 10;
++			else if (srb->cmnd[0] <= 0x9F)
++				srb->cmd_len = 16;
++			else if (srb->cmnd[0] <= 0xBF)
++				srb->cmd_len = 12;
++			else if (srb->cmnd[0] <= 0xDF)
++				srb->cmd_len = 16;
++			else
++				srb->cmd_len = 6;
++		} else {
++			/* Use fixed value for non-legacy subclasses */
+ 			srb->cmd_len = 12;
++		}
+
+ 		/* issue the auto-sense command */
+ 		scsi_set_resid(srb, 0);
+--
+2.51.0
+
 
