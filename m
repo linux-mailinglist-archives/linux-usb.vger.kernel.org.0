@@ -1,114 +1,114 @@
-Return-Path: <linux-usb+bounces-29206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8DE8BD1FBF
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 10:19:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67647BD2213
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 10:46:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A3061898D1E
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 08:19:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B16561897EC7
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 08:46:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6E962F2902;
-	Mon, 13 Oct 2025 08:18:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508A72FA0F3;
+	Mon, 13 Oct 2025 08:46:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qyi9N7IP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fDYaiRTo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFFC2F28F4
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 08:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C3E2DFA26
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 08:46:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760343535; cv=none; b=Gfz5tBsRy7EjzdlBPIxPH0V37MbyYsR02aWaxfMJ2m+8JFw5cVSvOaLVwYUIrS6v2sbDBdU8jx2X/EKaSBsgRki0svWXEcV5JBFAwCo1vMHH+CVcgndFUZUDoOuobE3z+lyzKGdjaZHth2XEgaQBaTztcvIgZW1Si9iDIA1p28s=
+	t=1760345188; cv=none; b=ORUm2e/SR4i+KrGKca2sAdbCRXbd2fmNHs+muU9TP2ADr+idG2utmO9bjTXYQI3pf1Meizp0xbYc45jQ+GWKeJT2V8njf59hwj002+NKPOjiFrbREkqJ/NjZOXZTja9z/Ed5KThYxdZiWM+9R8cITIzTLi5ritCbv3fBb3/9jZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760343535; c=relaxed/simple;
-	bh=imbI448U2WS8ofB/CdmmtyBPOW4eQYXnmAXqTLAYnYA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uvUVuGXJdjAWyCKGrQMdE///euSwboJu/4Deo3Z0o8OpKuLuSai5/iRWz2Jkc1htw4SdLbWFzD0BZHvOBXAGIx/qZs6pl4r24WvBepCmAeGM/YIXEnRrw2xDTWlQqbCmII+OC625ncbJmXYlbxRxuAlsCqJFvA4V5WkOMudrPeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qyi9N7IP; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760343533; x=1791879533;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=imbI448U2WS8ofB/CdmmtyBPOW4eQYXnmAXqTLAYnYA=;
-  b=Qyi9N7IPs5v1dW1m/9ppqKHJWa+qsrYPQ653/fKGADVFV6+iiq2BQOv+
-   RCKqclXw3zZbXPLJg8lyp1PC4+5KyT0jVYZdz94yuWtkvT7lmc2yCg0aJ
-   NeaVGkGVhaHA4tso/V1xrzndTg8vA56sA+zBE5IwyOjiWewBc3cVelC40
-   rl+Cf1ihG2RSOOWkox9As1B93krlgc71eP9SImpidctoiARl5NtWVlxPQ
-   rLponrdXUMFzDTYEWvCrrLiXfTAukQcmFqsJvGclmvF3Rh2BnId0DNpRO
-   Foxr0CYnDfsgwIvBvkT+PdHdL1iyIu+TSwjc3DLalfZOkuVkerlIvGBpB
-   w==;
-X-CSE-ConnectionGUID: 9yno30WDRTiz33AjvLifKQ==
-X-CSE-MsgGUID: w8mW2x43RTmspSTm9wHMXA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11580"; a="73823002"
-X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
-   d="scan'208";a="73823002"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 01:18:52 -0700
-X-CSE-ConnectionGUID: +k1Pn/BjS8KB5Svg+IQC8A==
-X-CSE-MsgGUID: ++yIOowZQb+jmaWSTh8gUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
-   d="scan'208";a="186829861"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO [10.245.244.60]) ([10.245.244.60])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 01:18:51 -0700
-Message-ID: <74c8bb50-d941-486d-9513-5fd40f68c515@linux.intel.com>
-Date: Mon, 13 Oct 2025 11:18:49 +0300
+	s=arc-20240116; t=1760345188; c=relaxed/simple;
+	bh=7cwF3WgejPsTdfh++TpqyIzPN+K+naMUAxCgf8y942w=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NjGo6R8BV5ES3x6AnArsy1p+Ctb0W8DSkmM9kbHmg0TeIJcBClfxKHw9zCIB1+JLulh48Y25Bh+edgpwBB7rbgXjZCoakMtJiPBeXXmdWNbx5SdN0fvT0/LxraS6aVTARXMlROuSBNd0Fsy54hy8rVn70j78lBKVhy3bOMc0w8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fDYaiRTo; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b3e44f22f15so573309166b.2
+        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 01:46:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760345185; x=1760949985; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3I8HDTKmykm1bS4GjgXYsvQFoV19LpdDQ3Kk8ezHzYk=;
+        b=fDYaiRToCOTCnEqk9LFb/zAueM4E3l08aSOnJEejQStItKoOghjWZRz6mrIZJjJVGB
+         wCNguyV2jh6tegB8bV6KPb+bFXmcFc6tXY6ASc1lYDKc5S4U/tc7/TJzn4/CO2GkIoMX
+         +MmM8km7Y8ewA8XTtHtD7Z87e2U+QlYO7yMyNqqULe5lU2UlSa11T4scm7Jm8pbHh999
+         fKKu10aOV7F8K0xFau5uTHcwXuTa2oKx546Edt3EzA2JwQjpt0YTGOHSW7r6myWzXVrj
+         IkZK2QVsUQ/6ow9hzYtQRi1atvBl2swFlFUtWZQu5n/IPHyyc/IxJfCPnL1tpZv0Imjh
+         t5DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760345185; x=1760949985;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3I8HDTKmykm1bS4GjgXYsvQFoV19LpdDQ3Kk8ezHzYk=;
+        b=JjH2pz7hpMaNEfImyVL+iWh1ouIrt4YrKYyGm0IRE2/tkP0rHqUWUBEd6WZ3giRGmI
+         lmINqfDrx8Orh7dYhFNej/Im0RaLkiNcQOdmL6nvsUBuYtbtg+CeP/9JM+jMPDnbozqW
+         DyMwwJXsdznymfsKjxkCzGYK5tK73P7F+FWfYKjUmXbgMQSa7bwo0Z7yJL2p0lN7DOXo
+         mVzSmwADP+nfeFw5OEck1xbRn1nSXe0GxB9Rsbk4syjzL/Lry4VRx8Sp8lH9tsd+9CtT
+         7hxHqFCtJsC+nI74v9Pvbd9u/dNY/IETXFmA6PRRqWO7tXBBpugBVT75A7DxNrHRacFP
+         toQw==
+X-Forwarded-Encrypted: i=1; AJvYcCWz5E4258qClA7Ak5wfkyJnJUi+GVyOlWmACNXCULPZCYaeT+SzfogZzPeZ+4rGFaerxVCu6GoDouw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSp3WXgm7YVYU+Z2AIBBoMxuAJ2rShJ3nbgBHV+XgZr08/0XfY
+	/1Y0BGXmf3+6YRynkcc9ru9NLN+WRUgsdjIir3Ea+VFbypAchK+LxSDb+l0M3A==
+X-Gm-Gg: ASbGncvH6GQO/TJroFCaTc/Z1BE7nsQjwENYJFGzyt/vYE7qVLdtJD8P/KirbmLaEjs
+	+wmhnCJkBppdm/rOrnXCRShnaqQzhvmV2ey0I8h8x7kWw4O2ItmYm3FDAclwqRht7h4eKfRkByX
+	FtrOdvwB2HIyXjE5MLeZQrzDMKtWD7rY6ZFm2e0uyPW0qdRiTs/qYVgM4Pr4wBzm3w8JNHP02Jr
+	JGHV8UfHBnSI+a3/veKUxyObba1u/1LythIDxlA4SHSs+bC8VGzkpr5VF7RjCbJZ2Qr6xvsPhW5
+	mcDGI88dmiH8pr1zhVlz2FJ1Qo40X/29zBYbiYAnAdI0gCE/nRIkyi6uJY9HJ8eUCqBd6M/RYql
+	LX/RRTbsWL6a3RZteRFpcJ1SE5PCLb6LtSUbJvHMEmywz7W0QclxqgdUJ1Vg/5nnh
+X-Google-Smtp-Source: AGHT+IEASmiKOWzXLjdX2B0k/y0hA3kT10SgwtYD1q3D+JJWO4vis0GLW+aT6MiCYb4KF62KRQI8Mg==
+X-Received: by 2002:a17:907:3daa:b0:b45:60ad:daf9 with SMTP id a640c23a62f3a-b50a9a6cb4fmr2296678166b.3.1760345185286;
+        Mon, 13 Oct 2025 01:46:25 -0700 (PDT)
+Received: from foxbook (bff184.neoplus.adsl.tpnet.pl. [83.28.43.184])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b55d8c124a8sm881024866b.51.2025.10.13.01.46.24
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 13 Oct 2025 01:46:25 -0700 (PDT)
+Date: Mon, 13 Oct 2025 10:46:21 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Pierre Tomon <pierretom+12@ik.me>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Subject: Re: USB disconnection after mounting file system
+Message-ID: <20251013104621.29418939.michal.pecio@gmail.com>
+In-Reply-To: <4cjC4c3F8BzrTr@smtp-3-0000.mail.infomaniak.ch>
+References: <4chgTL1WjjzCqn@smtp-3-0000.mail.infomaniak.ch>
+	<2025100905-gestation-founder-3e70@gregkh>
+	<20251009160731.58dd47bb.michal.pecio@gmail.com>
+	<4cjC4c3F8BzrTr@smtp-3-0000.mail.infomaniak.ch>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] xhci: dbc: prepare to expose strings through sysfs
-To: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-References: <20251007213902.2231670-1-ukaszb@google.com>
- <20251007213902.2231670-2-ukaszb@google.com>
- <fffa3476-c800-4257-a3c6-057c4c8cde28@intel.com>
- <CALwA+NZ=B2BbzUZUqKCzP28wDkPcd-PczcCwa6Mb2YjbNM8j3w@mail.gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <CALwA+NZ=B2BbzUZUqKCzP28wDkPcd-PczcCwa6Mb2YjbNM8j3w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 10/11/25 14:22, Łukasz Bartosik wrote:
-> On Fri, Oct 10, 2025 at 1:09 PM Mathias Nyman <mathias.nyman@intel.com> wrote:
->>
->> On 10/8/25 00:38, Łukasz Bartosik wrote:
->>> From: Łukasz Bartosik <ukaszb@chromium.org>
->>>
-
->>> +static int xhci_dbc_populate_str_desc(char *desc, const char *src)
->>> +{
->>> +     struct usb_string_descriptor    *s_desc;
->>> +     int                             utf16_len;
->>> +
->>> +     s_desc = (struct usb_string_descriptor *)desc;
->>> +     utf16_len = utf8s_to_utf16s(src, strlen(src), UTF16_LITTLE_ENDIAN,
->>> +                                 (wchar_t *)s_desc->wData, USB_MAX_STRING_LEN);
->>
->> The "utf16_len" got me confused.
->> It's not wrong, but I first assumed it is bytes this utf16 formatted text
->> takes, when it turns out to be number of u16 entries in the text.
->>
+On Thu, 9 Oct 2025 14:31:59 -0000, Pierre Tomon wrote:
+> As soon as I mount ext4, the activity LED flashes continuously on the
+> dock. This does not happen with NTFS.
 > 
-> Do you have a suggestion how to rename it to be more self commenting ?
-> Or maybe I will rename it to len and add a comment that it holds a number
-> of u16 entries ? WDYT ?
+> I tested it for about 10 hours with NTFS, even when the drive was
+> asleep, no disconnection.
 
-I don't have a good suggestion. Naming is hard.
-'len' with a comment sounds good.
+That's suspicious indeed.
 
-Thanks
-Mathias
+Might be that mounting ext4 somehow triggers a bug in this hardware.
+
+Does it work normally while it's blinking before disconnecting?
+
+What sort of USB chip is in this HDD dock (lsusb)?
+Did you try searching for other reports about problems with this chip?
+
+Regards,
+Michal
 
