@@ -1,158 +1,117 @@
-Return-Path: <linux-usb+bounces-29185-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29187-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 326E3BD11A0
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 03:35:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A6F3BD1282
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 04:01:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0C6924E33DC
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 01:35:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74E0B3B5856
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 02:01:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78EF1265CAD;
-	Mon, 13 Oct 2025 01:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76990279DC0;
+	Mon, 13 Oct 2025 02:01:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oeZsKP7a"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dBQyeU6e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65FB1F419B
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 01:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86741CA84
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 02:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760319320; cv=none; b=ReaGIskOhLQnVOh1/y4eOOuS4hMPBiZNj/SvUPt6JQUjgfcW9UbYO5sTW/RSdDUQTPYt+JB49BhtwslZTPtfSxlZhsJzCc1qS5NRSxMb+77L+S6pBfNHOxnkD3JkhPrDNSDf6UoNpu3GxYoCVNzh0Nj6xHkakuqT8+83Sbjzt78=
+	t=1760320902; cv=none; b=JCdMZLx1o+CdbjBxblH95o7nZJgE9Dif2vQmfxxthbQUwVMFcESspOdg087se6xg6OBqbACq3n/NpLfOqbWPz8z5fgnxJYMNG+cx8fe42NTlgZeQdU51M6QxkwqMOl5poMMsybLRgsLMkLIPoN7TgT7D3s6uIoVTqqbRf6ZtvfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760319320; c=relaxed/simple;
-	bh=TLIifmYXZsoUZDQIMzAr9TVJTrPPzSLPCVver0Z+1XQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lt1R1DWG/h/23brFKnRfkHMPjyOBXqryTJBQiEKV/yANW46CdErlbEOy2mXNzwGuwCVgo59yXFLf7gUGdflmWaYgykxMhIa8u8n0cBtXupbTqLOl+uAeRovuXYSp+oWUmNQmKs0XZqgByR7lY+6wVrnG70Nv/3iLEff/BdRc0ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oeZsKP7a; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59CN703Q013412
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 01:35:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	pvRZtGa1EAqu/s2cU1tyWSgB4EnX39XSZObMDz+e5Ig=; b=oeZsKP7aV7qBxP6N
-	7BXiJMdcvYgsw5degXI71w8R1X2FFb/0EDYMkCjMXjUNwxhgQH0/Q8tcxBmjJc2n
-	BDyiXpmtHZucJpK+ysWtMN9q1PRWseYCuwyYBj9ZfXWpmz9a8vb5B4OwQpqw6JrV
-	YbLYQAE/UNvfw/9h5S5s9rimPRBaJMO3p51X6hXmYyFEeiL3xw1IHwpQ1Cv0TxSQ
-	RRdlKaIRA1AIcz5lzvZHXZY63YmaLZnpan0NG7QNjC6Skuuwjq6lNMFTrEnFeZ18
-	RfXvAaQEuj8u9T23Qtew2FaKEAyfksNmviKFjqrCyYbh26qJX8gatk+YlnU1aNMp
-	jM9fBQ==
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49qfbs2vdb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 01:35:17 +0000 (GMT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-780f9cc532bso6078997b3a.0
-        for <linux-usb@vger.kernel.org>; Sun, 12 Oct 2025 18:35:17 -0700 (PDT)
+	s=arc-20240116; t=1760320902; c=relaxed/simple;
+	bh=6rOl5TirSFV9ovbqlSzIwyNT5PV/3iS1uNoq79WE41U=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=XT2NgxIjcFviT65g8hmxusP6CY56c2X98FQ2FPbkdSryuDvSsngu1ceNFtxN2nVe0uV3+Dy6bRak1Ujozi4FmIhTeiHvtJIgRYEZGX6cNDNZhTaDahaQLAaiZVLliepnKO48dMdD9Vx8xRReRNcT8l3zC4H8NzJp2XxubCtOKo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dBQyeU6e; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-32edda89a37so7699101a91.1
+        for <linux-usb@vger.kernel.org>; Sun, 12 Oct 2025 19:01:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760320900; x=1760925700; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JpvLI5nP+gyknn6opMKaUZOwwLDmtrVHeM32uuY4r+Q=;
+        b=dBQyeU6e3UWJFCEPxGVx9dwabhw+8B1ynC8dpWZCqoivQkPZZzFM2BAXLa40bBO9Bt
+         tkigoD5Ke5xoyfSarexmMwED6+S9DOX3IWhI8eAkg4SF+dLcQGthDXPeDhL5VVJaKwRg
+         bznvnuhQ1SGyRVW9R8ui+szw3pezECwo7DLsLQm0nCZflEz2DfVfOUqZ3sZJ4C0aOSfr
+         clPxRsmvCHt381euEYHi3MAU7yzp2Fwp3ILutN4g0SOyXCx44eZSCe3hg6xQoNLRlDUs
+         2+TgDK66ET05vcnAhOvGwdSfBIy+Yq8rjy7pOeWQQp2/iOyB297sQE9T3DGsKQv98NSG
+         N4PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760319315; x=1760924115;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pvRZtGa1EAqu/s2cU1tyWSgB4EnX39XSZObMDz+e5Ig=;
-        b=EegHmZRS7hGoN7bVpfR3vrM11FvBkRB7sxvtrFMpvo7U1TNzlvqzK85DdN87/hD/jY
-         2+FW0b6ST0rgO1JWTh+2UERuOmH9ByJ4Kh8WbQ6TgWWJu4ga1LQYX6Gkl+chH/LOs+6b
-         k5ffZ0EvhGD6xGM5FeWI0+GYc2G0+5ABhT12JJjdGhonHuRakGyQraJRwIDojlVCl2it
-         9sKPtHuugiotZov/Ep/sWVQTbmLthtg9cVlfPlJ+tbK9i1A4jQLb95cUER+prNnVnvYh
-         V8BSJu6dnQvab2r8SrkVzy8itDCqOOz6CJem2OczFIAa1tMrQWe337s+Ko5y0wNjZhY8
-         9I0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVsLWQlT6jRmPeSLUTaRzFIyjv46Qxm1IgcnELnl8TxcHXztdixlrgDUOrJ7D2tjW9h8z0aH5u14MI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMJexJxaznEV3eFftYwAePfYDCAZxgOYc9wk0J3q0cDCsDjCTc
-	jOJueFb8aHGRpLvrX/l71owE9JQJKS1UJSYou+5ktVIcriCe7ILmqgi7v+NLjsC3xkKvdCg9CNa
-	nqv6Fr1Ruhtf+DPsotmAInx3hIrAJnq2Mi/gCoqio5QejmwVvm8y/ByAUhOdJ65Q=
-X-Gm-Gg: ASbGnctxUqqtZ6xDCjZqvt4BSfB1pLRVHWKCWFpfgZVuYSGqnU640oOsUiFgrfjXqWs
-	bcH9IygNxKcHjK1fC/WoWy2BnGvS854gAzFQSThH7aZjXsTxFOQx1JYVwxr45tCdIFy1cPnLvcm
-	M2A11ZzEnqplpgKuk//EioSypshNpbflK0rFDh6xi5z9wMh0Gtf+IZZKre94OGcfeXl9NQWilIU
-	1U0bziqXDPWmWHp/io3YR4Q0e54dTdmDrC8D4EVYOfF9KPlRO9aiQyYsRhGfmXuYvxsG7/OsmQF
-	+QSvFJOS5URhuMoZKaDiYobN+mmPTX2urHilp8lNNxXqdqrzAHnkoeCij6qme3QYRG5txgyCcWo
-	/
-X-Received: by 2002:a05:6a00:3998:b0:770:4753:b984 with SMTP id d2e1a72fcca58-793998483b7mr24733198b3a.16.1760319315166;
-        Sun, 12 Oct 2025 18:35:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGH9hfoH8Q4uLbRfuw74qI/5V0wKxXaXaZlksargHLpNt/wRLK8+zJYUZKvoOuGl9lpjVTwsA==
-X-Received: by 2002:a05:6a00:3998:b0:770:4753:b984 with SMTP id d2e1a72fcca58-793998483b7mr24733171b3a.16.1760319314749;
-        Sun, 12 Oct 2025 18:35:14 -0700 (PDT)
-Received: from [192.168.1.3] ([122.164.228.230])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992d9932edsm9522670b3a.73.2025.10.12.18.35.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Oct 2025 18:35:14 -0700 (PDT)
-Message-ID: <f1b5caae-8544-4027-9669-7c92a33f7c61@oss.qualcomm.com>
-Date: Mon, 13 Oct 2025 07:05:08 +0530
+        d=1e100.net; s=20230601; t=1760320900; x=1760925700;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JpvLI5nP+gyknn6opMKaUZOwwLDmtrVHeM32uuY4r+Q=;
+        b=hj9oTKjPqyP3XSPTVAHy7KQnRq0WUACxgtqwGudVYt9wiLC8kxz4EVHBg2M/eqDxD/
+         riKp6IHVJ8XSQIGMTqJXZrk1deh3HpHzkid+AQByy83wYjip8ueFxDswjpWRzuqbuyav
+         RdP6AywWbPjL6B6AvbbFBbIR6eYiW9q/Z63fAlWY3ctSsTofud4jmMPaAiQcVABJ0OSY
+         UUjzxE6ONYQv0aFkDkzIqEJLoU2g5fA80uEgUmajdjkprHDlHJtt5UZFSHNoKKGewGyx
+         ai+IB+oi0peFMjLJ7FbKGxkVWxIb+risodWrCmXPgzdtXaZfzw/oEf14u+b8GPJtv5H1
+         NymA==
+X-Gm-Message-State: AOJu0YxidF+pKVj2FGuOIOra+xg1F7bgv+5UEMRGI7yqoWXKO8qW00TJ
+	fxim1oz+3nPAdu5zpwdKqcPxLtrpCQBlwwtXHcJzb/aQ/AHWYxaBS06Amdv4LAB5vlj9/E1rKRL
+	MBlA6eg==
+X-Google-Smtp-Source: AGHT+IGSV4Ol9o+z7zxIxvoRhwLVMndDrfeb5+nVBlXaOxuO1evVU3XRexYaQ2WpjeMZq92/z1BnpCgFK+Y=
+X-Received: from pjtp2.prod.google.com ([2002:a17:90a:c002:b0:330:9870:9f18])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:38ce:b0:32e:5646:d448
+ with SMTP id 98e67ed59e1d1-33b513b2ab9mr24908105a91.21.1760320899866; Sun, 12
+ Oct 2025 19:01:39 -0700 (PDT)
+Date: Mon, 13 Oct 2025 10:01:21 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: usb: qcom,snps-dwc3: Fix bindings for
- X1E80100
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org,
-        Wesley Cheng <wesley.cheng@oss.qualcomm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>,
-        Conor Dooley <conor+dt@kernel.org>
-References: <20251013011357.732151-1-krishna.kurapati@oss.qualcomm.com>
- <b9befe47-b0c8-4536-83c0-311dd16f2e83@kernel.org>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <krishna.kurapati@oss.qualcomm.com>
-In-Reply-To: <b9befe47-b0c8-4536-83c0-311dd16f2e83@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDExMDAxOCBTYWx0ZWRfX7/ijCFUCS//I
- uEyncR7st5e2L828rcwyEkBQVtD9NFb4oqC8A3UD193PU/jk9zqznJK+G7V557buxbyIfbFDXYB
- U6oQ7LgIdi4Os4teDbgRm16hyDmPC3vhUCQvpBUF1atMJ3QCMg1KhPsNvzTjH0zpNSIyJljeniJ
- E7e/kT/PUjwquuOBFNQ9Q5N8L/wlLY9ou9t1TjLj2HADNl4TgtYj06298vPrZ+zhs0VspRipZCI
- C8WNRFcwFL8u5hvbjR4tmevtTxnt8hVzflciRmQmwmCvfxGK0hEnTb8uSubkElL0I6ryAD3n4x8
- ZZlKPpBTU4Wrlc5xyo3RbYcxwgV4WR3N4Xj3JmPV6hqQITdFhTS0fVEidtPL9mCohMedtCBauq1
- qyURXp9bIeiKVDDMlXKLsY8GctLoEg==
-X-Proofpoint-ORIG-GUID: AJSLsek_rMJBqDl1HxD5B59hho0a7YeP
-X-Proofpoint-GUID: AJSLsek_rMJBqDl1HxD5B59hho0a7YeP
-X-Authority-Analysis: v=2.4 cv=U7SfzOru c=1 sm=1 tr=0 ts=68ec5755 cx=c_pps
- a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=8YinarrYfdS0Dhyguhy4yQ==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=snNKEbK5PTu-mnxKcGYA:9
- a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10 a=OpyuDcXvxspvyRM73sMx:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-13_01,2025-10-06_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 priorityscore=1501 impostorscore=0
- spamscore=0 malwarescore=0 bulkscore=0 clxscore=1015 adultscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510020000
- definitions=main-2510110018
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAHFd7GgC/x3MQQqAIBBA0avIrBN0oqKuEi3SppqNxlgRhHdPW
+ r7F/y8kEqYEg3pB6ObEMRTYSoHf57CR5qUY0GBjjUV9JeejkD5l9hw23bWrMb536GqCUh1CKz/ /cZxy/gDvV/PPYQAAAA==
+X-Change-Id: 20251012-usbcore-tracing-76f00c9b2b3e
+X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760320897; l=1014;
+ i=khtsai@google.com; s=20250916; h=from:subject:message-id;
+ bh=6rOl5TirSFV9ovbqlSzIwyNT5PV/3iS1uNoq79WE41U=; b=YY+P8OtFoKB5B2qwpSCuEgDKP9NncBkOqOAnvOShle8YqXY/5iIDKpIZAczOupGq+TfovGCgS
+ 26kzOaY1AirBXEN1QaqbgRX2ldF5HWv2umw+vqpZhAIm6PrAfNgz/Hq
+X-Mailer: b4 0.14.2
+Message-ID: <20251013-usbcore-tracing-v1-0-b885a3121b09@google.com>
+Subject: [PATCH 0/2] usb: core: Improve device lifecycle debuggability
+From: Kuen-Han Tsai <khtsai@google.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Mathias Nyman <mathias.nyman@linux.intel.com>, Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Kuen-Han Tsai <khtsai@google.com>
+Content-Type: text/plain; charset="utf-8"
 
+This series enhances USB core debuggability. The first patch refactors
+device state updates into a new update_usb_device_state() helper 
+function, centralizing logic and preparing for tracing.
 
+The second patch adds tracepoints for USB device allocation and state 
+changes, providing better visibility into the device lifecycle.
 
-On 10/13/2025 6:49 AM, Krzysztof Kozlowski wrote:
-> On 13/10/2025 03:13, Krishna Kurapati wrote:
->> Add the missing multiport controller binding to target list.
->>
->> Fix minItems for interrupt-names to avoid the following error on High
->> Speed controller:
->>
->> usb@a200000: interrupt-names: ['dwc_usb3', 'pwr_event',
->> 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
-> 
-> Don't wrap error messages.
-> 
->>
-> 
-> Missing Fixes tag.
-> 
-> 
+Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+---
+Kuen-Han Tsai (2):
+      usb: core: Centralize device state update logic
+      usb: core: Add tracepoints for device allocation and state changes
 
-Thanks for the review Krzysztof. Will update and send v2.
+ drivers/usb/core/Makefile |  4 ++++
+ drivers/usb/core/hub.c    | 30 +++++++++++++----------
+ drivers/usb/core/trace.c  |  6 +++++
+ drivers/usb/core/trace.h  | 61 +++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/usb/core/usb.c    |  2 ++
+ 5 files changed, 91 insertions(+), 12 deletions(-)
+---
+base-commit: 5472d60c129f75282d94ae5ad072ee6dfb7c7246
+change-id: 20251012-usbcore-tracing-76f00c9b2b3e
 
-Regards,
-Krishna,
+Best regards,
+-- 
+Kuen-Han Tsai <khtsai@google.com>
+
 
