@@ -1,236 +1,200 @@
-Return-Path: <linux-usb+bounces-29210-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29211-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57535BD2342
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 11:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C810EBD2354
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 11:09:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07C683AE58A
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 09:08:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6DF73B2657
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 09:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 069562FB995;
-	Mon, 13 Oct 2025 09:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5A902FBE01;
+	Mon, 13 Oct 2025 09:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kZp7N3EF"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Uuu667TR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0142F8BF7
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 09:07:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3922F99A3
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 09:09:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760346481; cv=none; b=QVuZXlkL+GDNYEyfVS+hWGtqfyyfbLjOWTyotp4971Qrd6UGGh9/ldRXUQPOmUetCv6lg8Lr0vYENXR1jdBjI9R9BLm5j+qDVompxOe7bCdCMKI5tonkC8mOGxBDE6DFU2FWbt0H1aGMgmUkqZJ6wGPqZl1f1/EQK4L2YbJHNh4=
+	t=1760346554; cv=none; b=RRHIjqMrnk0sF+FTne9v6Vc7S4ptdhiaiBU68zcfv7cEtiGa4dCrjdf4RX2gsKIDhduCwiaZf6miAEyjT4tXtKn+6luiusgHVRvKY7W1veWaZ8ZeOEW8H5qHfukcBfpas7sFnkTOKxLroYUgZEl+pb0yyRS2DTlHvv12yxvdScY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760346481; c=relaxed/simple;
-	bh=8//V7stYSb/ZcMHYYxRWyffozcLomDJYC12ClHhkNrM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hOTWSaprPq1Qnz+6sgDJbIFbLOVZ2u8PAmicL2nlr4pYHodo7OyjNoGf71YIvHvEIrUKMQpMD3WQEimmSAIWujfQLLe9H1ZLnGUX3orVJ62sgf2gj/Eq0b4F0xkXrO4BkFk1dFm7QDr8MqOFaW4CLqQsctIIpPSyJZ7e/051oLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kZp7N3EF; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b3e234fcd4bso666449166b.3
-        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 02:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760346478; x=1760951278; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zzlpxZqbyALDR3rt0SQ7Rqb+QihBOTYCYyezgUugnDk=;
-        b=kZp7N3EFVMENudkUaIFECU+8PDiM63RJUCjyNRwiyewSAZ9nVjF2+fxlzzSYPi2PDh
-         151C0g6MSH3gcEDOVGM2njOIIal9l3YjSf4wHrTlaaI+MTeQIGvVrP3DS0+SSY7k/K6x
-         LD7dSVUowlzwFojA+s8utXWY8LbLdCAArIbvv/4iHosMVRYHoeVtaWUH3ohniechyick
-         D3Hxbu+dfRyovTY2FocP/Lw2dEVGGRxAdD/wcnL2dcU8DSL1iss8RnJ0X8p3BzYYs5yv
-         0u5i1mTxR2zZt34rrJItruif9c66JmAYS+GNap4kXcGF5S6KyT1gaw1dfH6XudDvouGm
-         o2sA==
+	s=arc-20240116; t=1760346554; c=relaxed/simple;
+	bh=9/tPjPwmAwHE+w/f2VRXfTxMChPJurCvaKUv7Dc90r0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WYTk/qqQ6UFjUc50DkJ3HjaJSp2czQ2FfuXfaJ4/DlMh9WBeYOjt0UgsV4N0WTlRSVps89PI02HAvHWvH6EVJSRHEOqr3mEmfwTe2F6r0VM1HK7kE/cfMmHeo6yHcLwbShmzAcSMg3AXCmrV7a5wd70DyW97+E8YuNT2yNNJGjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Uuu667TR; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59D2nRS1023125
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 09:09:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=+W5Z3iniZouZLn0FhSTsBy+a
+	rT4R7Ezgi6+aX+wGV9g=; b=Uuu667TRjcjvz9KtfLfqYxIL1I9EXtI3eAYfCQrN
+	02i0f9N8g/EzuWjF6MzHvpalEiY7xLu3Z1xx4b+B42+1Z0oW/0L/7lPoL/S/4xTO
+	KW3kHI6377L3sXJXB2xNL3EomBWbOn+uswMYUTb94wiLsoU8dmHdy6cav1BrDezr
+	KORtLCR1cE7wf8qlPFpAjOJVjMjYY27rOGOKB3f3awdtKZ3X5eFlLltQF8rJ8m+4
+	UD+vRpQDjkX8HHBXSj93zTCiWmJsD5EA0kdTfBCq0UClkqRW+zTCgnMZ8F9+gF3m
+	A19khpTUl8ItBdsnH0LDGRSn45oXoRO0ojIBDUKopuI1Qw==
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49qgdfuw0q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 09:09:10 +0000 (GMT)
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-32eb2b284e4so13059369a91.1
+        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 02:09:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760346478; x=1760951278;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zzlpxZqbyALDR3rt0SQ7Rqb+QihBOTYCYyezgUugnDk=;
-        b=LBCrCSzfSq2O2s18+FHkUuHN1JozLYqfPWJfux23awiFNPWKDyEZmZyW1cJ5c9Duwh
-         n/IVIoY3HkOqqAW0pUvCKTfiOttlQlpJllbQYKF1D00H1ibbeUIh/8YLitkEfu9qIsfO
-         urdMBHH0/SmW0w1JPGVtD0ETa3jBRzMSNp1fgZH1NW1mjH709l+2FkBxrH0pl/frWpjJ
-         tCsA66sFiva7aDkG4OgTBQffuVhkS4pfEdQMCQRVQe2Pdm/JLJ3eNKur6IoGm6+4Ap6c
-         gewWiao61Gja33HzLdWiaIxJtOuwWdkZYhthg0Uw7fqKr7JVIEUOAICVNGOmj0paJXMz
-         vVOg==
-X-Forwarded-Encrypted: i=1; AJvYcCUq8s2qEjy1L77Wv9ybTVYtPo2EWa9PZ81qWSAzijLDzNHeJmWQd8Plk2aBoujEQ6tQB569FKrnXf8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyO8k/FTCp6qNYE6lYLeJCefGjW+TS0/0tLxQn8Otk8Apm7W0vQ
-	7WMMV+QPFYn/Lss15xJUfkIqQJyMowhwYAtXHjtWb8ZdgDgqTrdlly0E
-X-Gm-Gg: ASbGnctmcC/S0+pFshw6EpNwed5TlhET72kKa6Gibn9j1pkC4amJkiTza7bdt199bTK
-	xZbJd+3Z4Akekxq8NRKdiWNUSKkWEDaTdipUFCOSOWpAgq3LMoO9PeniiEFtrPbEX50Z/mRQsHE
-	EhodlUbNLRNJswRxnTcU3kkXcAGAF1iUixSXT1HeWMe9itY1qQqUFDPnn6ec1QmnRqWtNX9UU+F
-	hCJ9TB2OEKmkI2556Jb5aDNy5q+zHiRvwch7RCj518s5dtOu1Otakh0C4CN0iIngpiJ0RrThiqK
-	v7s7Nr8fNAQOQ1ggBBnOlh9K1wn4QtRj+Puz8WbtgDXm6kMUevyNpoDEI4TtEg0YoKre9GWVoCB
-	RE/WZrvvaDQ1NioebrvTt6qfPgmhhp80KiEW9rLV4h1iW4NzomWHnHSEivQts4OFR1/4JKGH7dk
-	M=
-X-Google-Smtp-Source: AGHT+IH3k516/vzVd7/DFQFdOqqnJfS18hrvkJlNFIXpMY4apFTyG3GSuibTdrQEUW2DflK6qfqkcg==
-X-Received: by 2002:a17:907:6ea8:b0:b24:7806:b59 with SMTP id a640c23a62f3a-b50ac9f86f9mr2149534166b.55.1760346477858;
-        Mon, 13 Oct 2025 02:07:57 -0700 (PDT)
-Received: from foxbook (bff184.neoplus.adsl.tpnet.pl. [83.28.43.184])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b55d8c12ccbsm876236366b.46.2025.10.13.02.07.56
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 13 Oct 2025 02:07:57 -0700 (PDT)
-Date: Mon, 13 Oct 2025 11:07:53 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: yicongsrfy@163.com
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, oliver@neukum.org,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org, Yi Cong
- <yicong@kylinos.cn>
-Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device
- driver for config selection
-Message-ID: <20251013110753.0f640774.michal.pecio@gmail.com>
-In-Reply-To: <20251011075314.572741-3-yicongsrfy@163.com>
-References: <20251011075314.572741-1-yicongsrfy@163.com>
-	<20251011075314.572741-3-yicongsrfy@163.com>
+        d=1e100.net; s=20230601; t=1760346550; x=1760951350;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+W5Z3iniZouZLn0FhSTsBy+arT4R7Ezgi6+aX+wGV9g=;
+        b=Wp7qKR8ijfYRdZ9HmfuXeMhyGoxZsgYoA42ojRxhYh+BrZAFhQVCFIsjvtyittFTuE
+         YI1e/VPbybfRDCiUw1MQkP2Nk+iFHtb0MYSlwF6qG5vjF8cB69TCHQm3Ef7uVWhIkrUf
+         vL4pNqxasz1Y27dSsU+XvtbaSm/86w6GTe9HRBYqW2zmMvwMPpsTOCOF3FncXQcRFoK+
+         knMuNZWlog9IOvw/ykEYfDXpqJMitDlsxwfIAjKRI9adiPgibbqErZsyCOEZ71tKGZhS
+         R0jSwRfwkWJvCr4IJPugfX97s0Msy7Z5KXIsm46+tA7lvg0BDcO76AgUVAN6epON5ivt
+         81gw==
+X-Forwarded-Encrypted: i=1; AJvYcCX2xL+bf6fatWnLmw+03Pc0F7FvECprdBjLoZmo4VDPocchEZydyW8imr9z0dnvUOGBCR+Wm0SMUp8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxx+xO78BCO5EBvr5NDXJk2Z9G2bWcjd7ZZBcf2r8XU3JUlMTel
+	T/hCvHSHiB3h31kPBCDIV6WHaeQ0/UfSAWOvdrFrDZAaK7wWZO4Unp7yIKwyS+74s4xpGmBZDGu
+	dm/oi2EjHchOxt4hQosq9Oiz49Vm8zt/1/T1xDs8R7cK25QLfcC9cx1mOrUWMFuVjAgDck2gLgc
+	3SGHXvzYurg7ZX0I2mYrMiaHumQROigrJrw/G72w==
+X-Gm-Gg: ASbGncsDz9TaDgQQdTbFyzwG7Ncv8bfyMrI5/kM+Gvmpq2R3gWFN1D8UnWumtorrvmd
+	cOTQcJ1uUoZZZVuGF+pYcM10QS4JjEdbD9kRlMXGVZGUIb849uP8Xh3ms7lV7hHJsdAHZymeR/3
+	pNouFe/VzkC4S0TWkN4HYpsxGc2OHk92beWwGK7UL4QaM9188c92Px
+X-Received: by 2002:a17:90b:4d11:b0:335:2824:aab4 with SMTP id 98e67ed59e1d1-33b513b2420mr30607949a91.24.1760346549915;
+        Mon, 13 Oct 2025 02:09:09 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGXbOJLqfR6qcwg+xnnLpqFRUpcb+AME8EnWdBhYFjcqQJApiSOIz6skGpk5WJzbuffzpmfyRjGxn2/RGG310A=
+X-Received: by 2002:a17:90b:4d11:b0:335:2824:aab4 with SMTP id
+ 98e67ed59e1d1-33b513b2420mr30607906a91.24.1760346549398; Mon, 13 Oct 2025
+ 02:09:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20251008175750.1770454-1-krishna.kurapati@oss.qualcomm.com>
+ <20251008175750.1770454-2-krishna.kurapati@oss.qualcomm.com>
+ <odikli6rfdyid5oqavurtqytgnwgh5hpmka2jt5tprpdw7cd72@icpnjnkfowt7>
+ <20251009131543.GA379737-robh@kernel.org> <cbpne2d7yr2vpxmrrveqajlp3irzsglxroxyyjmviuci2ewted@6ewwp6yyybk5>
+ <2a088c8f-5555-490e-a70d-308a876924ca@oss.qualcomm.com>
+In-Reply-To: <2a088c8f-5555-490e-a70d-308a876924ca@oss.qualcomm.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Date: Mon, 13 Oct 2025 12:08:58 +0300
+X-Gm-Features: AS18NWCgbvnfOb8Rt1A2wRcnJlW4uGS7BeZqI-l5qa6PYzi4VWJkfI0FRHq4KMY
+Message-ID: <CAO9ioeX51SzaMS4TK7=xfCXBNYi7SGsMBZAv4FrZ1LzONWFw3A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: ti,hd3ss3220: Add support for
+ VBUS based on ID state
+To: Krishna Kurapati PSSNV <krishna.kurapati@oss.qualcomm.com>
+Cc: Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDExMDAyNSBTYWx0ZWRfX0m2GIsDEwoXA
+ 9aY5roKCiwvvnHisYqP/Dh4g6/oY/bKkvm7PX3UGtALXIT+RazrRAa6RNQffXxz+ST/Y6JZ5h/Z
+ GjySJymSXo3SdIsbO9LuEnBMNd1Tcg70+3Qr9LT/OLXb+7q9p5eZ3J2yLGQB0DJlgZFBfKl91EY
+ IRnUDPXBRJL1IA+XEPuMvsxyZnbXcPTRbHoxan2Vhpr/G41p9XR5owVAz0vP3GzczmWingjfjAm
+ 2MFnH0YMv8DiikHVevbRGvW3NRfZsN+K3wusFMuRVJeB4g44gRrdq4Il8mY5AF5UA0KHQboPDTm
+ gNzda6EVv0PhOvtl7WrLBESdceagV6pSzReHqMGWvPmQNjspHfoa8MKLeLmvyTqNG+JGt3s2vid
+ AJO8lothKKt6VyR6I0SoppDhv96JAg==
+X-Proofpoint-GUID: z58Rfywp0EYxheHofEkYM68IsP2LlEFn
+X-Proofpoint-ORIG-GUID: z58Rfywp0EYxheHofEkYM68IsP2LlEFn
+X-Authority-Analysis: v=2.4 cv=J4ynLQnS c=1 sm=1 tr=0 ts=68ecc1b6 cx=c_pps
+ a=0uOsjrqzRL749jD1oC5vDA==:117 a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10
+ a=EUspDBNiAAAA:8 a=769zcKDuTUlFvRdeRCgA:9 a=QEXdDO2ut3YA:10
+ a=mQ_c8vxmzFEMiUWkPHU9:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-13_03,2025-10-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
+ bulkscore=0 suspectscore=0 clxscore=1015 phishscore=0 spamscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510020000
+ definitions=main-2510110025
 
-On Sat, 11 Oct 2025 15:53:13 +0800, yicongsrfy@163.com wrote:
-> From: Yi Cong <yicong@kylinos.cn>
-> 
-> A similar reason was raised in commit ec51fbd1b8a2 ("r8152: add USB
-> device driver for config selection"):
-> Linux prioritizes probing non-vendor-specific configurations.
-> 
-> Referring to the implementation of this patch, cfgselect is also
-> used for ax88179 to override the default configuration selection.
-> 
-> Signed-off-by: Yi Cong <yicong@kylinos.cn>
-> 
-> ---
-> v2: fix warning from checkpatch.
-> v5: 1. use KBUILD_MODNAME to obtain the module name.
->     2. add error handling when usb_register fail.
->     3. use .choose_configuration instead of .probe.
->     4. reorder deregister logic.
-> ---
->  drivers/net/usb/ax88179_178a.c | 68 ++++++++++++++++++++++++++++++++--
->  1 file changed, 65 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-> index b034ef8a73ea..b6432d414a38 100644
-> --- a/drivers/net/usb/ax88179_178a.c
-> +++ b/drivers/net/usb/ax88179_178a.c
-> @@ -1713,6 +1713,14 @@ static int ax88179_stop(struct usbnet *dev)
->  	return 0;
->  }
->  
-> +static int ax88179_probe(struct usb_interface *intf, const struct usb_device_id *i)
-> +{
-> +	if (intf->cur_altsetting->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC)
-> +		return -ENODEV;
-> +
-> +	return usbnet_probe(intf, i);
-> +}
+On Mon, 13 Oct 2025 at 04:17, Krishna Kurapati PSSNV
+<krishna.kurapati@oss.qualcomm.com> wrote:
+>
+>
+>
+> On 10/9/2025 8:08 PM, Dmitry Baryshkov wrote:
+> > On Thu, Oct 09, 2025 at 08:15:43AM -0500, Rob Herring wrote:
+> >> On Wed, Oct 08, 2025 at 09:31:59PM +0300, Dmitry Baryshkov wrote:
+> >>> On Wed, Oct 08, 2025 at 11:27:49PM +0530, Krishna Kurapati wrote:
+> >>>> Update the bindings to support reading ID state and VBUS, as per the
+> >>>> HD3SS3220 data sheet. The ID pin is kept high if VBUS is not at VSafe0V and
+> >>>> asserted low once VBUS is at VSafe0V, enforcing the Type-C requirement that
+> >>>> VBUS must be at VSafe0V before re-enabling VBUS.
+> >>>>
+> >>>> Add id-gpios property to describe the input gpio for USB ID pin and vbus-
+> >>>> supply property to describe the regulator for USB VBUS.
+> >>>>
+> >>>> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> >>>> ---
+> >>>>   .../devicetree/bindings/usb/ti,hd3ss3220.yaml       | 13 +++++++++++++
+> >>>>   1 file changed, 13 insertions(+)
+> >>>>
+> >>>> diff --git a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+> >>>> index bec1c8047bc0..c869eece39a7 100644
+> >>>> --- a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+> >>>> +++ b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+> >>>> @@ -25,6 +25,19 @@ properties:
+> >>>>     interrupts:
+> >>>>       maxItems: 1
+> >>>>
+> >>>> +  id-gpios:
+> >>>> +    description:
+> >>>> +      An input gpio for USB ID pin. Upon detecting a UFP device, HD3SS3220
+> >>>> +      will keep ID pin high if VBUS is not at VSafe0V. Once VBUS is at VSafe0V,
+> >>>> +      the HD3SS3220 will assert ID pin low. This is done to enforce Type-C
+> >>>> +      requirement that VBUS must be at VSafe0V before re-enabling VBUS.
+> >>>> +
+> >>>
+> >>> Stray empty line?
+> >>>
+> >>>> +    maxItems: 1
+> >>>> +
+> >>>> +  vbus-supply:
+> >>>> +    description: A phandle to the regulator for USB VBUS if needed when host
+> >>>> +      mode or dual role mode is supported.
+> >>>
+> >>> Why are we adding the property here while we can use the vbus-supply of
+> >>> the usb-c-connector?
+> >>
+> >> Normally, that's my question on both of these, too. However, it does
+> >> look like both are connected to the chip. There's VBUS_DET which is
+> >> connected to Vbus (thru a 900k resistor). So having these here does look
+> >> like accurate representation of the h/w. The commit message should make
+> >> this more clear. Honestly, that's really the only part I care about.
+> >> How it works is not so important.
+> >
+> > The VBUS_DET pin is used by the controller to detect the VBUS provided
+> > by the USB-C partner and to identify when it's safe to turn on the
+> > device's VBUS supply. I think this still fits into the description of
+> > the connector's vbus-supply.
+> >
 
-This isn't part of the cfgselector driver being added by this commit
-nor is it documented in the changelog, so why is it here?
+>   In case we put the vbus supply in usb-c-connector node, is there any
+> way we can get its phandle reference in hd3 driver given that the
+> connector node is not a child or parent of port controller node.
 
-It doesn't seem to be necessary, because USB_DEVICE_AND_INTERFACE_INFO
-matches used by this driver ensure that probe() will only be called on
-interfaces of the correct class 0xff.
+Sure. Use devm_of_regulator_get() passing connector node to the function.
 
-> +
->  static const struct driver_info ax88179_info = {
->  	.description = "ASIX AX88179 USB 3.0 Gigabit Ethernet",
->  	.bind = ax88179_bind,
-> @@ -1941,9 +1949,9 @@ static const struct usb_device_id products[] = {
->  MODULE_DEVICE_TABLE(usb, products);
->  
->  static struct usb_driver ax88179_178a_driver = {
-> -	.name =		"ax88179_178a",
-> +	.name =		KBUILD_MODNAME,
->  	.id_table =	products,
-> -	.probe =	usbnet_probe,
-> +	.probe =	ax88179_probe,
->  	.suspend =	ax88179_suspend,
->  	.resume =	ax88179_resume,
->  	.reset_resume =	ax88179_resume,
-> @@ -1952,7 +1960,61 @@ static struct usb_driver ax88179_178a_driver = {
->  	.disable_hub_initiated_lpm = 1,
->  };
->  
-> -module_usb_driver(ax88179_178a_driver);
-> +static int ax88179_cfgselector_choose_configuration(struct usb_device *udev)
-> +{
-> +	struct usb_host_config *c;
-> +	int i, num_configs;
-> +
-> +	/* The vendor mode is not always config #1, so to find it out. */
-> +	c = udev->config;
-> +	num_configs = udev->descriptor.bNumConfigurations;
-> +	for (i = 0; i < num_configs; (i++, c++)) {
-> +		struct usb_interface_descriptor	*desc = NULL;
-> +
-> +		if (!c->desc.bNumInterfaces)
-> +			continue;
-> +		desc = &c->intf_cache[0]->altsetting->desc;
-> +		if (desc->bInterfaceClass == USB_CLASS_VENDOR_SPEC)
-> +			break;
-> +	}
-> +
-> +	if (i == num_configs)
-> +		return -ENODEV;
-> +
-> +	return c->desc.bConfigurationValue;
-> +}
-
-I wonder how many copies of this code would justify making it some
-sort of library in usbnet or usbcore?
-
-> +static struct usb_device_driver ax88179_cfgselector_driver = {
-> +	.name =	KBUILD_MODNAME "-cfgselector",
-> +	.choose_configuration =	ax88179_cfgselector_choose_configuration,
-> +	.id_table = products,
-> +	.generic_subclass = 1,
-> +	.supports_autosuspend = 1,
-> +};
-> +
-> +static int __init ax88179_driver_init(void)
-> +{
-> +	int ret;
-> +
-> +	ret = usb_register_device_driver(&ax88179_cfgselector_driver, THIS_MODULE);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = usb_register(&ax88179_178a_driver);
-> +	if (ret)
-> +		usb_deregister_device_driver(&ax88179_cfgselector_driver);
-
-Any problems if the order of registration is reversed, to ensure that
-the interface driver always exists if the device driver exists?
-
-> +
-> +	return 0;
-
-return ret perhaps?
-
-> +}
-> +
-> +static void __exit ax88179_driver_exit(void)
-> +{
-> +	usb_deregister_device_driver(&ax88179_cfgselector_driver);
-> +	usb_deregister(&ax88179_178a_driver);
-> +}
-> +
-> +module_init(ax88179_driver_init);
-> +module_exit(ax88179_driver_exit);
->  
->  MODULE_DESCRIPTION("ASIX AX88179/178A based USB 3.0/2.0 Gigabit Ethernet Devices");
->  MODULE_LICENSE("GPL");
-> -- 
-> 2.25.1
-> 
+-- 
+With best wishes
+Dmitry
 
