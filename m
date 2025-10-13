@@ -1,130 +1,147 @@
-Return-Path: <linux-usb+bounces-29196-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29197-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC5DFBD15A9
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 06:06:11 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A228BD1900
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 07:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AC6F84E5C56
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 04:06:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 279874E9C19
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 05:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84ECF281370;
-	Mon, 13 Oct 2025 04:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D5F32DF137;
+	Mon, 13 Oct 2025 05:59:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QShxkHjO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fjjhREQy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4511922DD;
-	Mon, 13 Oct 2025 04:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0782F2DC339
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 05:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760328361; cv=none; b=gbF6SdNJVmoSwV1/JwYC4xmIul6C/wdrFxGUbokORYrop+QajjW52C2tEMkHjDYsgl7TRVtsknJ3fq6YN7haTWATotTkuD2OtsPjkEzLdhzEzzk3xXbLJS9Z/fJOzXU2ebZR9H2oPa4T+F0pLLyXc/norvT2e6AhxXF85HOvpI0=
+	t=1760335184; cv=none; b=q8B+UXHV6tjGckv2Hd9Nd8CXo0V0/B0o7z3Tr9izbnYjSMjMpoWGZ2j7UELr3CO403pF+hRTGIhu5eFK4z9un6YmpP63ukbvLEq41t11h5xZKEX039Z8EXc7RcsP/QgjZ4Kr0b6v6u8WZk+KY9Q4SQINZzM3yb1g37S8DJUkOA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760328361; c=relaxed/simple;
-	bh=bTK7Ww1dIReGXn7ATZoqAlPsyx0s/+tSQejlTQbKeBI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IaxGgx+cMkwSlMtOARIwHSsagFsE4/USpsHOLlBE2UTNWiI8HPIJ2D/7Tve92ZpPUPSaoAC2VdGQcRJkwJ4ghegmZObvzPFwmYvuf/rbJfhE2QcCTtEoWsOxE8C+KeK9sTrdrXQ3Ft4Esmf5xml+vWqK5Wi09xgHZVRETXJa08g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QShxkHjO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F25C4CEE7;
-	Mon, 13 Oct 2025 04:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760328359;
-	bh=bTK7Ww1dIReGXn7ATZoqAlPsyx0s/+tSQejlTQbKeBI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QShxkHjOUSIK3tXDhBMZfAfPFpHj2xlyMVjOMoSJnnw5YI9IgZeEvOqkJHLBqmiSl
-	 kavLCD+wBnOc0r9/ZT+MMWqygGE+DHE4h35eIjIZU8HLe0QgGIDpwK8+xSXfCZre39
-	 rvgKfJ0ke+L/YMkpWHqcOeAgd0g/AMisLp43Y29E9vvcoPNQlOzsMOIubaRjGiw6NL
-	 Va5LQHm1imRqSGIeIwDJIbT6ytOjTRN+sU6qIXLY16aI1sgUriadxEDCY6L+ls5X68
-	 vP16Mv5HR1ns6Zr85FCImM2cwdfv7kT7VzToFUlFqiBkXLq6tw9w5zUvFon3A6ja6W
-	 sFrqReC5PuvgA==
-Message-ID: <3dfeb2be-d7e7-4351-8464-c06084b0054a@kernel.org>
-Date: Mon, 13 Oct 2025 06:05:52 +0200
+	s=arc-20240116; t=1760335184; c=relaxed/simple;
+	bh=Bd28e7IuOcHibn3LLyPlNz4Tj23RtsGOy6jtLQP1y84=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f9ThUfcMxaum00r4HGcyszIb6ggwPh9GktekInOda2FCxm/qcuanVDEm4wfA3+o+oZLMzi2BDGXSdqnmqSuQQOA6xu3zxgEck9nSN/SExxB4JSYJjenh2DpOa7TORxFb9NfiGSumrNgd9zROdsXOtdDRiIHgQUzskY37oSWzzJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fjjhREQy; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-63963066fb0so7928300a12.3
+        for <linux-usb@vger.kernel.org>; Sun, 12 Oct 2025 22:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760335181; x=1760939981; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UQNzxcG14jNClBvMbrCumaocAylKfaLe9L9Jz7gjInc=;
+        b=fjjhREQyYvIXooCRS2QdQWl0TXKyOm2CeFRLd7GTQXju/WgHUwxKn4LvU56cUlLn6j
+         QJYVeIL/grccyAg7uoIsfmBF31uiGo7t4+ikxUvP6ONxd9ShP3rCk0ni8m6zZCgCNN8o
+         xsXJXhCLaFzyvbSDSnphwExdRjtxEUTTardYk7ebvF3+bHnCtFpCZ6LgYRfCYVJib9x4
+         8Abeqx6fXkD5nL/8UZkWXZCUKeiEObmoLd8YaSwB9VDLjH/JYpd4yKH29xdQS+bM1b5G
+         ObJ2Zeu4gLUEvfOIEtvHbd/maQHP8qsQTA9k9p5QG454ybF93eQ29piwxwO48OBhVNpi
+         OwUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760335181; x=1760939981;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UQNzxcG14jNClBvMbrCumaocAylKfaLe9L9Jz7gjInc=;
+        b=v+u/r6RaNNQNy9/B+CNikkLwAjuVVWUkgRT7tEzKCui15quUHyqPcXzYNzfMmnIag1
+         BzSF1Qi/PitWnGP/1/0UjtFvHzQUZlaKZul0dOab0f0/3IcBAdFzsE4QE9B3FV7c0jjP
+         ZQYjgIdvBqvfRWH7uRXqNZplLqXtx5BkPHLAIxThQKbBuYv2j93gjWISFCWu7gAwX9dt
+         InY2Fd6Fg7EW3Cc/N19lEnZVSG6/OGOmLABrzmRcBVgAVguPvLAjaJkEBRMOTM6dGwxi
+         tiZbxum3SiSQyxWNev/NeIigHG8lFuH8LAqRDRu0o2NQbLEUYnWYoFpmsDVtKTqmGPZd
+         PVKw==
+X-Forwarded-Encrypted: i=1; AJvYcCVBHjF3NAwW1HFtKA7ClxB5OxT5WyForuNg6zChT6YqZ7e7lcJgv6k6AaFRUgkALeZRwc2pj4L0sww=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3r9gXWFe57V7dQCYI2eGKEjKwbHLmQMIA8xTVvvH9e09g9jhE
+	Rwhfda/D1Bp+THakspWfi73BgiI7hJV7/AgJxm/wP67W75URfJxZhxt2qv5ULw==
+X-Gm-Gg: ASbGncvj/BTjhrW/CuAR5gudU1eTyvg6XrF80vAz0mWM8hu6mNNY7NgEL0Es1Aw1GTX
+	R7TzE9c/5F2A/SmS4+QzP0EMxox4Nbd2pAnc2GlO/CCpL208ccz47t2VkLyY76wtDcicRN0OGQu
+	UQabag8EiV1MEZ2wBfxktPXJVbTM/7iJQMvlb9nrGaBmZuaRK/7YOeDV5TUGkftHpA+S+9FGqBa
+	KA8YvtT8FlA1Lnm9tYsYXziRP9Cb7p0l7wPeIwqJ2EqIYRjo8qzBnNYjewwGLoEq7uxGqAFA3cp
+	xtSWMmTC/qvY19EQUzFBNA66bdALR6YX+u+qXfJnDBZrXMf2VCdDz4dmaxr3qdZrxvs+xn7lMt8
+	vb1O0vz7JAaizLUUYeiOXZiUY0ksM9klpNiAY97vxaqXglIWAUnoIjQ==
+X-Google-Smtp-Source: AGHT+IGiGEcrsAYUHxU2I2SrW2lGOTNaCoPwD4SCwXuyD4vprrWrEyrI422ngQmr2KS9P8klCSJyjQ==
+X-Received: by 2002:a17:907:86a6:b0:b45:eea7:e986 with SMTP id a640c23a62f3a-b50ac4db255mr2188162966b.43.1760335181143;
+        Sun, 12 Oct 2025 22:59:41 -0700 (PDT)
+Received: from foxbook (bff184.neoplus.adsl.tpnet.pl. [83.28.43.184])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b55d8c129c4sm862815366b.41.2025.10.12.22.59.39
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sun, 12 Oct 2025 22:59:40 -0700 (PDT)
+Date: Mon, 13 Oct 2025 07:59:37 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: yicongsrfy@163.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
+ marcan@marcan.st, netdev@vger.kernel.org, pabeni@redhat.com,
+ yicong@kylinos.cn
+Subject: Re: [PATCH v4 3/3] net: usb: ax88179_178a: add USB device driver
+ for config selection
+Message-ID: <20251013075937.4de02dfe.michal.pecio@gmail.com>
+In-Reply-To: <666ef6bf-46f0-4b3e-9c28-9c9b7e602900@suse.com>
+References: <5a3b2616-fcfd-483a-81a4-34dd3493a97c@suse.com>
+	<20250930080709.3408463-1-yicongsrfy@163.com>
+	<20250930080709.3408463-3-yicongsrfy@163.com>
+	<666ef6bf-46f0-4b3e-9c28-9c9b7e602900@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: usb: qcom,snps-dwc3: Fix bindings for
- X1E80100
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20251013035920.806485-1-krishna.kurapati@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251013035920.806485-1-krishna.kurapati@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 13/10/2025 05:59, Krishna Kurapati wrote:
-> Add the missing multiport controller binding to target list.
+On Tue, 30 Sep 2025 10:57:05 +0200, Oliver Neukum wrote:
+> > +static int __init ax88179_driver_init(void)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = usb_register_device_driver(&ax88179_cfgselector_driver, THIS_MODULE);
+> > +	if (ret)
+> > +		return ret;
+> > +	return usb_register(&ax88179_178a_driver);  
 > 
-> Fix minItems for interrupt-names to avoid the following error on High
-> Speed controller:
+> Missing error handling. If you cannot register ax88179_178a_driver
+> you definitely do not want to keep ax88179_cfgselector_driver
 > 
-> usb@a200000: interrupt-names: ['dwc_usb3', 'pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
+> > +}
+> > +
+> > +static void __exit ax88179_driver_exit(void)
+> > +{
+> > +	usb_deregister(&ax88179_178a_driver);  
 > 
-> Fixes: 6e762f7b8edc ("dt-bindings: usb: Introduce qcom,snps-dwc3")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-> ---
+> The window for the race
+> 
+> > +	usb_deregister_device_driver(&ax88179_cfgselector_driver);  
+> 
+> Wrong order. I you remove ax88179_178a_driver before you remove
+> ax88179_cfgselector_driver, you'll leave a window during which
+> devices would be switched to a mode no driver exists for.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hmm, what about registration?
 
-Best regards,
-Krzysztof
+I added msleep(1000) and simulated usb_register() error, then
+cfgselector binds to the device and switches configuration before
+the interface driver is available. But the module fails to load
+(I fixed this) and device is left with no driver whatsoever.
+
+Moreover, according to c67cc4315a8e, config switch is irreversible
+since the device reconnects with only the vendor config available.
+I can't test it because my device doesn't have a CDC config at all.
+
+There is a gotcha. I tried to test in a realistic scenario: device
+hotplug, module not loaded yet. I found that udev apparently retries
+loading the module, so this state would be fixed unless the module
+init error is persistent. Still, better not to rely on this?
+
+Would it make sense to swap registration order?
+
+Regards,
+Michal
 
