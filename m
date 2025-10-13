@@ -1,130 +1,115 @@
-Return-Path: <linux-usb+bounces-29216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29217-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A51A1BD29D6
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 12:48:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15FBABD2A42
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 12:51:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 93B444EBC46
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 10:48:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 649093B8E3A
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 10:51:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C52303A28;
-	Mon, 13 Oct 2025 10:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5297B2E06ED;
+	Mon, 13 Oct 2025 10:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fEF8oKQV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="edJ2DNSy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2063019DA
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 10:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AC23043C9
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 10:50:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760352474; cv=none; b=I1zyC2KuVN2NiL4z8FDQEle56/VfJDkwz6wGC+vFK6UtTE9zRddwdpKtsyh/fL0qwHnziOWEw080t8/0V1RLj3lQSIvyBiNjjXyFGRbvepAX5IzJDOrSxvoE0+4msbUbceD7ux4ish3lC2VNb80jJ0uL/6SKj/lKcWRAvyuEtr8=
+	t=1760352660; cv=none; b=absFVGW/FtX1s3cnOHXSUzZgkJD9DIn2bPxEAzMcVleQQ4Ge6TO62A2aGDz5+KAm3XMGOj461pk7TBUiRZS0h79BLZXRZT8TubnJ7xOVUPwOcAVDQ4NRwuPlmXLDczoIQiI1YYNeUAwHW81RJjqtQB7/eDMqUOgIhkBt2HCfb6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760352474; c=relaxed/simple;
-	bh=iB1q2765rIGnKV1pyckvw0revez+8d+BzIPDH9vSEcw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fszy3P5/aPxdntSzNehgUTcV0uY6KOrKT1dFIH6dyth3+6YUQNpVQVgtzMlonDGBIKHVt2BC7yY3GOdbqkhkn42bRBQfqG/0ppL5XP1GZ4jDg2Cq/HklnAD5XbqCb/hUe777gGP8QixfZaEocy9x4VT1PSF3m8pL5sYw5fS1Tc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fEF8oKQV; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-46e42fa08e4so35778415e9.3
-        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 03:47:46 -0700 (PDT)
+	s=arc-20240116; t=1760352660; c=relaxed/simple;
+	bh=wNP5THpXLBBCsooeBbFGaCM7Hjs85FFamh1ekejynLM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ggW3rxcCeqkk55rss/Znzn5nflh/mQ3pHDX6I9XavBnqfoYABDvbI0qwnY0NwaR0daR4AL5TJYO6konoeGpymHR+Mwbyf1v0LWWm95Uut0PSMnPRrawWVCoILsDCCwNHtu7cqjx2PpSQn7AtnCQZqT8wBU31TNGV/XOqrL6am4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=edJ2DNSy; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-637e9f9f9fbso7875925a12.0
+        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 03:50:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1760352463; x=1760957263; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQncbKq9y2wDNxo+HJmCsZjQUXqSjFrpzVZTySLDT7U=;
-        b=fEF8oKQVjRZ091BB3FOLXoVwHB2QmvGRg37gIcd3zqewPWSoJ6CGLBrEnht35G4gNi
-         uq9ADQhHD8QYn7v0SZuBWsdtrWhDxNMEBGDS7Vk/0vEC7Yhl/IGY8bTr4V6g1y5v5TCZ
-         +qnZrneIa5HPuGj03/862g5fgvlbFCn9jFhRoMI/5z4j4aVxOs6H8+Z2nJdHtPXAyHep
-         Qm/x1RA7SHJqmEfOu6YOz6E3OX8MHYuqDHRlnluVXuRIDDZLVhjn/G1S1wXz1cpAm+9O
-         lVY9a7JaILQjlVGSkq9RXyzv/Ty4EnqHWe5dhQf/lW0wnO/EJLakFM7VnExw8y8jZ8GO
-         naUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760352463; x=1760957263;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1760352648; x=1760957448; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yQncbKq9y2wDNxo+HJmCsZjQUXqSjFrpzVZTySLDT7U=;
-        b=xB0HojFfhsM8Y7NpgRwFJhLB3v77xL9Jw3Av5G4L8oEc1D3xgMRPl1DrsmRGzpby2g
-         sPZCXf8GD+0psZlfKklvPPcOuRI7h5BizdkFVZKbd6IbWdu99QXLelM5n0oXf3OuM+DH
-         YFkRMx8xzH1nulN7UF/E33DYOKElMcwYY9WQzkH+XvVUI6SuAXcU7EJuEmHHndjUNIl4
-         xyfTGReG8s+rUjeJH4qQ+GDpmMt04UKdqSGmOgXqaeCrpN76Xr6Vu9T+i8ZlT8fH/wrK
-         jFxm16IfmGLVaXfPf5kN0nnfh8yAKcykDxjw5kMKLUDoAr1AKQ5BLxjkA/Hzl2mFCOlD
-         5vzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW/KCew1OA/cNIRDcIwrQPsCLcxbSeMRGMGmjUOf8wxRXCVEqgc71ulyzjU28gmpeRUC8RdiHS7E6A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywy2LxvC5Dl0kXZflaeicSbG9sfCVLv74Hc0pLRdnStLMOMGfly
-	xkTpgJXWejvxKJURLImzHaLdi64gdptyXVUs3d/xqePpan1RPiJeyUCAsTkznBuWgR8=
-X-Gm-Gg: ASbGnctckbFbQJhj/h0judZU0AruKvK5TarfX8wEi1+ttDesuCfJJPSGJxEczvq28vU
-	P4ZbjTrN2mcGX67sBPO6CcVyeIUaHT7thmqLGEhw+YW/Trw1ckIDk3tVpncK1i6YgL8bH7438dC
-	lBs9bVsduGGisbYE4bmr4IgXULC6e+y27FdR9wd9uNgDmcRT6gnd6Ht8OD2OUXzi0gBbUyxXiYy
-	nhmppfrTZS5zGTZdV0loegzQyZz6NW/GRxKHKfvRFaD1+F+X/tIJOi9s8JYD9BEPKNCrROXSqaa
-	gTxIQ1Lmjcm2T5te9p4xm8vLBX29YIdC9/rXFU4UA6ofAE6YTE8gO5PvnPA0jXO0pxm9zPSbPdg
-	wVofsOMZTAJ7OsUTM8eK2tUmg/Y+kS22eM75/yOIVZSXrhO1oTziNPQNEla8=
-X-Google-Smtp-Source: AGHT+IFg4eU1ujTs602xzuyfjmDMbU9Rs+B0qQF1RTLvVr0x++5S/VHkkosXuUaKpSpl3SReeW+r/Q==
-X-Received: by 2002:a05:600c:46d1:b0:46e:4a30:2b0f with SMTP id 5b1f17b1804b1-46fa9b06d11mr139615025e9.29.1760352462625;
-        Mon, 13 Oct 2025 03:47:42 -0700 (PDT)
-Received: from suse.com (78-80-27-28.customers.tmcz.cz. [78.80.27.28])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fb484c71csm185298065e9.8.2025.10.13.03.47.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Oct 2025 03:47:42 -0700 (PDT)
-Date: Mon, 13 Oct 2025 12:47:40 +0200
-From: Vojtech Pavlik <vojtech@suse.com>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Alex Henrie <alexhenrie24@gmail.com>,
-	Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>
-Subject: Re: ttyACM versus ttyUSB
-Message-ID: <aOzYzH01b39gjIDP@suse.com>
-References: <CAMMLpeRU72CMxHdF-rO9y1Nvzj9nPnuQTOZWcCrM4fOJ1byacw@mail.gmail.com>
- <2025101243-ongoing-truce-3aa5@gregkh>
- <CAMMLpeRrO_E3_c98OB9XvpiGNjhTetrw2ucFyaq5BByPWh58SA@mail.gmail.com>
- <2025101238-mastiff-decibel-4b4f@gregkh>
- <CAMMLpeQvb1SJ=_kC+N1pGHkh36yrORJq+Der7fDzPj_urzefow@mail.gmail.com>
- <194258bf-e78c-46b8-8229-3b019f2b8ab0@suse.com>
+        bh=ywHY3N/RI9LLiDCgfHoL3E6H1b5BrPsw9rGztJzIzfc=;
+        b=edJ2DNSya4n3LkBzMaSlhQLuNmQdeuRa6EsBik6tCyiqMkpkIO9+QC0uSwxcS6TT5l
+         NhTmBm1t+TmFdBtG9jlk4ojBAPzpMewBQHXFOY4AJnJBMajkku1lsbiARphZIMiRBghv
+         Kdi6NRC2mYNCG/VKsyavb0a9rNpc5VsKj0BS9KcDA5Ug9//zv8r6GHR4wnIT8GjSGjPL
+         aGeAXx3gP74r3Zw/uV23sb9YYPQAT5LqbMbtPmvdZJhIefaWS9m4MG8lpvJL1BNOPoqa
+         aZE7CY7ztdEc8FSBIFkePH1xuNO5tJ+aPt9LvsXpZ9YPwJRSuTOh+7c0XfSxY5cKcj29
+         dGgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760352648; x=1760957448;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ywHY3N/RI9LLiDCgfHoL3E6H1b5BrPsw9rGztJzIzfc=;
+        b=djGxlzPAav8JYq3QzAceFwWqdDFMJBrOJucYB5flgRe5Nf1yCWqDBg2qtyYTUN9Jwm
+         dHeUPgy33072VVTpoftwtQLsACyzqRwy0N/qxz30GC0lOxKR6g+Yzk5X9MA+TJ4/5Vw2
+         BD8oyngLITWyMxC5enTzyNjpuPXAlo3N9AaS8ODBtQ922cVN0tY+4RBYsAeqDyzdj0VU
+         qD+YrJIXZbCneD2Q78VztdqWtYDL9+S2n7DsX52AOvDXy0sth/We5PnbqWidLusdoDhg
+         I/K+9s6ae7fKmAeeKqtCpEXJSr97LCur/W/73er0LMsbTWaWA5/fNdM0+BQFe2VfeMZe
+         xJgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXqy0evv6Q6zbRP+NoQHqH6Li6G5sVYaDTMY0YBh5CFjAcvEvVkiCKVvp3ubphdGkO3xj02ewaGXZs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKaVLSw3z0QuwG8pKP+beBh8R75ixndnZOy1wAt9WICQog9ISf
+	2pNxl2aSyhrqVnxLuZNuMXij663OgqK+md6mE+AQhrobZcX/rfWDfIo7
+X-Gm-Gg: ASbGncsUGXWtiA+MNQVX4kGJ3dyHXmKMQ7XgAgOY3Lf45AVil5Hy7HhJurpxYupZEzc
+	m7wTFQWBT8mfEeGjUYwVe4Sfv6GnNX2LHgyG1kGX0rwrkGZWeutA8m4OoePwIolHoQg5iVESUsP
+	YbEoYB65Tp5wbwGkF+TTmXRrImafwjdktGIfN4HTk5RQOLXMm4kQzGfSWHUQQxvwPk3unxSrSJq
+	Bwz+eu++/ygjO8+Wq16ueT9qbuAM8T6WoVR9jCBM3dPqf49KO5+1JPoOhAI72nCACpmNu3v0oqL
+	Ar/yf+xAGgeyaYbIH8Hj3iiyRFn9mIwjSpGHKn+IRkWRf8jSDrxDG6CF3AdCNUVigDoZNb/cAl2
+	CIVNvyDIQkYrWdIl1hQKmsnqvXzMyi3YTEWi8igljriOZwjKhOYAnrNdm602lY1ww
+X-Google-Smtp-Source: AGHT+IEr2IkhLy3Hq74fdNOtudRrfh+iuu7rWrRfFvpPJo3KF6R4emQcUvwa9LHRg8/IJ9TOsz5Fig==
+X-Received: by 2002:a05:6402:144b:b0:63a:38e:1dd5 with SMTP id 4fb4d7f45d1cf-63a038e4b6fmr12861262a12.7.1760352647388;
+        Mon, 13 Oct 2025 03:50:47 -0700 (PDT)
+Received: from foxbook (bff184.neoplus.adsl.tpnet.pl. [83.28.43.184])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-63b616d12fesm8024557a12.24.2025.10.13.03.50.46
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 13 Oct 2025 03:50:47 -0700 (PDT)
+Date: Mon, 13 Oct 2025 12:50:43 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Simon Horman <horms@kernel.org>
+Cc: Petko Manolov <petkan@nucleusys.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: usb: rtl8150: Fix frame padding
+Message-ID: <20251013125043.0ae574e7.michal.pecio@gmail.com>
+In-Reply-To: <aOzNH0OQZYJYS1IT@horms.kernel.org>
+References: <20251012220042.4ca776b1.michal.pecio@gmail.com>
+	<aOzNH0OQZYJYS1IT@horms.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <194258bf-e78c-46b8-8229-3b019f2b8ab0@suse.com>
-X-Bounce-Cookie: It's a lemon tree, dear Watson!
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 13, 2025 at 11:28:59AM +0200, Oliver Neukum wrote:
-> On 12.10.25 21:01, Alex Henrie wrote:
+On Mon, 13 Oct 2025 10:57:51 +0100, Simon Horman wrote:
+> Hi Michal,
 > 
-> > I did notice that the ACM protocol has no way to set the baud rate or
-> > read the CTS line and I wondered if those limitations were the reason
-> > for keeping its driver separate. Today there are ttyUSB drivers that
-> > likewise have limitations on the baud rate and the flow control lines
-> > (some are even based on ACM), but they weren't around in 1999, so I
-> > can see how the difference in capabilities would have been another
-> > motivation for the difference in naming conventions.
+> I think this should also increment a dropped counter.
+> As this driver already uses dev->netdev->stats [*]
+> I think that would be:
 > 
-> You could argue that ACM is intended to be a driver for a _modem_ ,
-> not a serial line. In principle we are trying to propagate a layering
-> violation that is so old that we no longer see it as a violation.
+> 		dev->netdev->stats.tx_dropped++;
+>
+> [*] I specifically mention this, for the record because,
+>     new users are discouraged. But this driver is an existing user
+>     so I think we are ok.
 
-The ttyACM driver is also older than the ttyUSB driver.
+Thanks, makes sense, will do.
 
-And yes, indeed, USB CDC ACM was intended as a class for USB modems, not
-for serial ports, so it doesn't directly support pin twiddling.
-
-One would assume that baud rate setting would also be unnecessary in
-this usecase, yet, surprisingly enough, many of the early USB modems
-absolutely failed to work unless a baud rate was explicitly set.
-(USB_CDC_REQ_SET_LINE_CODING)
-
-Today, some USB-serial chips have the ACM protocol, so perhaps it would
-make sense to merge the drivers, I certainly would not object.
-
--- 
-Vojtech Pavlik
+I will only drop "dev->" because it's superfluous - we already have
+'netdev' here, which was used to obtain 'dev' in the first place.
 
