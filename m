@@ -1,219 +1,84 @@
-Return-Path: <linux-usb+bounces-29237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29236-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF269BD4F1C
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 18:22:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8709CBD5149
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 18:34:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 640F5350F70
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 16:22:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67505403640
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 16:20:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2405221577;
-	Mon, 13 Oct 2025 16:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8928A3093AB;
+	Mon, 13 Oct 2025 16:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cWi4qd30";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="boW4uRVB";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cWi4qd30";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="boW4uRVB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zFpuzrVn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9CC81DA0E1
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 16:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96B725D546
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 16:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760372528; cv=none; b=CIRbTKx7NIj/0SC1PiphHf7DDoMjKfnsk6op4DtHqQRv7fJStzovqPJVPtvaen2gpPcvqgGCRiotGQkGX5jbqilx9WMV+6OdIA501PeXBQiI0OXV28jJcObs1NOGrawL5/p7it39U0UDeoDZpH+BQOn7fW4HIzT9lq94ujSPrhE=
+	t=1760372069; cv=none; b=C+tzYUysYjS6pMq0yAqndV7AbaZ25E6rhoBw7AVPB/aBFOWOsoSUVVQ36yPcmAinIHlBYT5Ru8LEzpIQNNNlF7bgrMhb257QZ4gIdBVOMbHDnUyzSRd8zEDEOgXEm7M4gpvP+ZY8cO6B1HwuXgYxwhTxkAi7w1YF1NGN3XGsx0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760372528; c=relaxed/simple;
-	bh=rVYd3MSh3MZ/3aZ7DJLPRC8DJq7DqKiA99+k9MYhq6A=;
+	s=arc-20240116; t=1760372069; c=relaxed/simple;
+	bh=VBeyRidS+H0e+1y24wGE652oyB2RWBYogmJk6MqQERU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n4rrvGi4qtZETaJv2krbBTRrki7w+Q4HbFbMEYMgqWfVg0kdPS9lVeAFMdewS2qJZGRPGCsmy+jlXM1H/pC+5Zqr7J8rV5bM2YC7lTx9W1yQsluUnzla6myyIGYY3jV5qkTsEyjYF5yJggvwZREs2a+us4RHvddlXsjjUPH0/x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cWi4qd30; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=boW4uRVB; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cWi4qd30; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=boW4uRVB; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from lion.mk-sys.cz (unknown [10.100.225.114])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C6A4E21B5C;
-	Mon, 13 Oct 2025 16:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1760372523; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ivCeth8SMjaYeJ1iglN5yZRuL5l9i7tk6pf+H9260Xk=;
-	b=cWi4qd30S9/GygzOAHalnoUGPsLvWzGgqUUlTtMKuxfkKhS64+nKIDqBL50aGKgaJVaqHt
-	R3X0K1AXdfJ14m2tDHWht8zQJUpB4pPv9b94rjTUn1eW1DxvHzqTzoX5V5vJCdeALs3Yu0
-	ZcZMWeEt5+utVawPnDhHuL4n/q6ZQtE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1760372523;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ivCeth8SMjaYeJ1iglN5yZRuL5l9i7tk6pf+H9260Xk=;
-	b=boW4uRVBCMFVy3DzAMNt4oemX+US9K+5XevXFQHJiO3+AUF1QXVnyIXpRKcBuy2BH0JvI3
-	JFAvyaNxMEvPUCCQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1760372523; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ivCeth8SMjaYeJ1iglN5yZRuL5l9i7tk6pf+H9260Xk=;
-	b=cWi4qd30S9/GygzOAHalnoUGPsLvWzGgqUUlTtMKuxfkKhS64+nKIDqBL50aGKgaJVaqHt
-	R3X0K1AXdfJ14m2tDHWht8zQJUpB4pPv9b94rjTUn1eW1DxvHzqTzoX5V5vJCdeALs3Yu0
-	ZcZMWeEt5+utVawPnDhHuL4n/q6ZQtE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1760372523;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ivCeth8SMjaYeJ1iglN5yZRuL5l9i7tk6pf+H9260Xk=;
-	b=boW4uRVBCMFVy3DzAMNt4oemX+US9K+5XevXFQHJiO3+AUF1QXVnyIXpRKcBuy2BH0JvI3
-	JFAvyaNxMEvPUCCQ==
-Received: by lion.mk-sys.cz (Postfix, from userid 1000)
-	id B574220057; Mon, 13 Oct 2025 18:03:45 +0200 (CEST)
-Date: Mon, 13 Oct 2025 18:03:45 +0200
-From: Michal Kubecek <mkubecek@suse.cz>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, 
-	Arisa Snowbell <arisa.snowbell@gmail.com>, linux-usb@vger.kernel.org, regressions@lists.linux.dev, 
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: Re: [PATCH v2 RFT] usb: xhci-pci: Fix USB2-only root hub registration
-Message-ID: <7jhwqwragngnswtutxn2rusleorhk4ffew3k6tnu236atgccqt@45ibtawev6h7>
-References: <20251008223406.13f16f19.michal.pecio@gmail.com>
- <CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com>
- <CABpa4MBDvgJcgJf3_E7k1dBXs7v1tW-79dmc_sQDVM1bES5YDQ@mail.gmail.com>
- <20251009131444.2c221922.michal.pecio@gmail.com>
- <90c03eeb-3913-4968-88c0-0de09023a2b5@linux.intel.com>
- <20251009152703.72e780b4.michal.pecio@gmail.com>
- <b8c2423f-aa9d-442a-ae2f-3c4d78949b38@linux.intel.com>
- <20251013092250.699bf60f.michal.pecio@gmail.com>
- <21741b98-4844-4218-8bd9-10b8bf5cd869@linux.intel.com>
- <20251013100424.42d5b9d2.michal.pecio@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tCj9kRfOC9lWi/gubucRRAmXHAqVXgL6rTxGSlElLEiQUJzTObrbvbdhjFPQSIizn7UdBNr4C6REdfcL3iDH/wP8W2tCabBxGgZXFYOmHtbKZaHHsHvMjCidlgX2wgSZ+wCdc60l8Qqh3QO2mqlyvLPPd471v0U9qi/6rMm+lro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zFpuzrVn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A01C4CEE7;
+	Mon, 13 Oct 2025 16:14:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1760372068;
+	bh=VBeyRidS+H0e+1y24wGE652oyB2RWBYogmJk6MqQERU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=zFpuzrVn2mqSblgiBiPbz+6qhjTVZobwc7Lc6AD4VDWmJ9/MHf12EKbwa9LCix1Lx
+	 HkYQhiz5QNlMuM5K0LEd9ivC+qFJ1RV5PurSLbaGnen6nexOeRVBnodmSlDNXSCKoD
+	 nIqmCaqgB4y+QypwgeZdYG97sjd2KlB4CPxKrrnY=
+Date: Mon, 13 Oct 2025 18:14:25 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Alex Henrie <alexhenrie24@gmail.com>
+Cc: Vojtech Pavlik <vojtech@suse.com>, Oliver Neukum <oneukum@suse.com>,
+	linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: Re: ttyACM versus ttyUSB
+Message-ID: <2025101339-snowbound-capsule-fc4a@gregkh>
+References: <CAMMLpeRU72CMxHdF-rO9y1Nvzj9nPnuQTOZWcCrM4fOJ1byacw@mail.gmail.com>
+ <2025101243-ongoing-truce-3aa5@gregkh>
+ <CAMMLpeRrO_E3_c98OB9XvpiGNjhTetrw2ucFyaq5BByPWh58SA@mail.gmail.com>
+ <2025101238-mastiff-decibel-4b4f@gregkh>
+ <CAMMLpeQvb1SJ=_kC+N1pGHkh36yrORJq+Der7fDzPj_urzefow@mail.gmail.com>
+ <194258bf-e78c-46b8-8229-3b019f2b8ab0@suse.com>
+ <aOzYzH01b39gjIDP@suse.com>
+ <CAMMLpeTZxLCK2sh0qpHoFzHCrntc-vLSWqJJUjicS2xRR2AdNw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="gwxlkycjwclgrxa6"
-Content-Disposition: inline
-In-Reply-To: <20251013100424.42d5b9d2.michal.pecio@gmail.com>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.40 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_COUNT_ONE(0.00)[1];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,gmail.com,vger.kernel.org,lists.linux.dev];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,suse.cz:email]
-X-Spam-Flag: NO
-X-Spam-Score: -4.40
-
-
---gwxlkycjwclgrxa6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAMMLpeTZxLCK2sh0qpHoFzHCrntc-vLSWqJJUjicS2xRR2AdNw@mail.gmail.com>
 
-On Mon, Oct 13, 2025 at 10:04:24AM GMT, Michal Pecio wrote:
-> A recent change to hide USB3 root hubs of USB2-only controllers broke
-> registration of USB2 root hubs - allow_single_roothub is set too late,
-> and by this time xhci_run() has already deferred root hub registration
-> until after the shared HCD is added, which will never happen.
->=20
-> This makes such controllers unusable, but testers didn't notice since
-> they were only bothered by warnings about empty USB3 root hubs. The bug
-> causes problems to other people who actually use such HCs and I was
-> able to confirm it on an ordinary HC by patching to ignore USB3 ports.
->=20
-> Setting allow_single_roothub during early setup fixes things.
->=20
-> Reported-by: Arisa Snowbell <arisa.snowbell@gmail.com>
-> Closes: https://lore.kernel.org/linux-usb/CABpa4MA9unucCoKtSdzJyOLjHNVy+C=
-wgz5AnAxPkKw6vuox1Nw@mail.gmail.com/
-> Reported-by: Michal Kubecek <mkubecek@suse.cz>
-> Closes: https://lore.kernel.org/linux-usb/lnb5bum7dnzkn3fc7gq6hwigslebo7o=
-4ccflcvsc3lvdgnu7el@fvqpobbdoapl/
-> Fixes: 719de070f764 ("usb: xhci-pci: add support for hosts with zero USB3=
- ports")
-> Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+On Mon, Oct 13, 2025 at 09:42:38AM -0600, Alex Henrie wrote:
+> > Today, some USB-serial chips have the ACM protocol, so perhaps it would
+> > make sense to merge the drivers, I certainly would not object.
+> 
+> It is definitely confusing to have to think about whether your USB
+> serial device is going to appear as /dev/ttyUSB* or /dev/ttyACM*. On
+> the other hand, if we renamed the ttyACM device nodes to ttyUSB to
+> reflect the fact that ACM is just another USB serial protocol, how
+> many things would that break? In general I like making things make
+> sense, but I'm hesitant to be the one to pull the trigger.
 
-Tested-by: Michal Kubecek <mkubecek@suse.cz>
+Yeah, we can't really do that now, sorry.  Too many chances to break
+userspace.
 
-> ---
->=20
-> New in v2:
-> - don't set allow_single_roothub twice, it's harmless but lame
-> - credit and Cc another reporter
->=20
->  drivers/usb/host/xhci-pci.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 13454bef14d3..d292adc65e5a 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -588,6 +588,8 @@ static int xhci_pci_setup(struct usb_hcd *hcd)
->  	if (!usb_hcd_is_primary_hcd(hcd))
->  		return 0;
-> =20
-> +	xhci->allow_single_roothub =3D 1;
-> +
->  	if (xhci->quirks & XHCI_PME_STUCK_QUIRK)
->  		xhci_pme_acpi_rtd3_enable(pdev);
-> =20
-> @@ -643,7 +645,6 @@ int xhci_pci_common_probe(struct pci_dev *dev, const =
-struct pci_device_id *id)
->  	xhci =3D hcd_to_xhci(hcd);
->  	xhci->reset =3D reset;
-> =20
-> -	xhci->allow_single_roothub =3D 1;
->  	if (!xhci_has_one_roothub(xhci)) {
->  		xhci->shared_hcd =3D usb_create_shared_hcd(&xhci_pci_hc_driver, &dev->=
-dev,
->  							 pci_name(dev), hcd);
-> --=20
-> 2.48.1
+If you want to always get this right, just use the symlinks in
+/dev/serial/ to find the proper device easier.
 
---gwxlkycjwclgrxa6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEWN3j3bieVmp26mKO538sG/LRdpUFAmjtIt4ACgkQ538sG/LR
-dpVvLgf9FKchtB/PkMMmsrp+7pKjyZklpwVepwINOSAqDRdkfKCTS5HCXkhsNeVM
-2AficNPmfAXRV3viCRLzvP2NRBbDOaV37xVXoz48IjNqWZ5pjHr4O4NwhmnUJyfD
-Fg7AhrM/3LLGBf6oHmIiIVklD9g9eLuSPYXejS+jXgD0RQNKPkx/tG/SxnkpSc4/
-IrdnMrIzHnO8Qz0MM8Iz3KyXT5ScpJvFDOKQ4NYS/i7ajWL2kkZcOsTrkxslCJj9
-+b1+aDbSGx2UgqYfREm3kWnmRCvzlMcFmZ4VLHLY3g337hwpYaq+xA+XHdBKfojZ
-yTdvTMC5anZuC2L4ENr4jr/8bexdXg==
-=s+10
------END PGP SIGNATURE-----
-
---gwxlkycjwclgrxa6--
+greg k-h
 
