@@ -1,81 +1,65 @@
-Return-Path: <linux-usb+bounces-29208-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29209-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82CA9BD2219
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 10:46:50 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08D04BD230C
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 11:01:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4D9CC4ED9E4
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 08:46:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 152964EEEA3
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 09:01:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF2AE2FB098;
-	Mon, 13 Oct 2025 08:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A37F72F9DBB;
+	Mon, 13 Oct 2025 09:01:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Aw5SJ3mt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="guM5ndLz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D232DFA26
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 08:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1689C2E975E
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 09:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760345203; cv=none; b=rkCLBHV3y+yqtXd55E6/cVir8S2GwGTu+5cM7GE42dLaiKGdsYvAf3tIC4UPNBbuDf+tMKGa0kbnWpO1G8CrYpqTomqzQ3Dd5JlmzI1cSHlJDjoRIHPCgGDiFRwzvgSQe6oIomiVCbHTAC2ZV+7FpGgucKBOu6yzWhMCeWVYmTM=
+	t=1760346104; cv=none; b=Er7XZELjDFXAAFifywKUXRoeXW83dJ0Mh+liNbXIZ4RnIwodJ14RB2i4qNKJPHhG77S++btMMN2puC1P0C3jrPuGYA3MGxTlZiP6JavWpDy141hwJoyZbYBzVqNFxNMnFbUhB6ToTZXItpiRUBhXjip8mHCwque4A+LthBq2ixw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760345203; c=relaxed/simple;
-	bh=dgMErCroAkIlF7WPvGESH+X5fDqNzmJ+IjrjXyQiOwI=;
+	s=arc-20240116; t=1760346104; c=relaxed/simple;
+	bh=aMZqlv/9EcGwi5jOAerpeCxJ3x90vJUiOq14psEud0Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b2plyKD4XP3vBTmSPjHI7swadoPqRZVrJhqSGs2Hw58EhoQPbu7tvcgFOEboQ8GrS64q+DO1gJPlupBvhYAgZTpFs1PriI73aPiOy3/aSQtalHQFlKm4H/7x0zJjgxsndvwh6jha6CnT+58B71DjJJxZomgYUlGSNBuH9vP7/QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Aw5SJ3mt; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-4256866958bso2127710f8f.1
-        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 01:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1760345200; x=1760950000; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WV1b6QmUQukySxftL/tEewHE333j2DgRF2JqWMsSNfY=;
-        b=Aw5SJ3mtqRegPp/YjCezx5YJ3MH3x8EglwpChi9IiWxDhKmTr4W5SU/OcF6inWziQ0
-         kEj0oiLzSpD91p8B/TzSCn4LMiBNLeiUJrs2v317ETNLFxGCtqS3Vk+dTb3Bh1DsHmyr
-         ZV+H7ggPgFkAAdwDHxRXywMTg5fBdbnPo5bupeOVVxbtb5CXIhqbEXYzpc/bOmiHN9OZ
-         7Wvi/9l4A6TBjAfkOUKu2z5ZDsVLv9W2fzzkZf+AZMEfebdVYHvnT012Sk+Hvf3L/YcT
-         gE8hIz1uBsrPDIkcY/qq3pUkNdhsNG5PQfjQ5bb5kJt4LkN/aKZsnrOShPBzF/N6tYxL
-         ns/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760345200; x=1760950000;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WV1b6QmUQukySxftL/tEewHE333j2DgRF2JqWMsSNfY=;
-        b=ebcwVRC+fQEoP4kEi+gnnslI/wafI2A4Dp3r77HSov87CQPeqF95zhmKqSubeAsgM9
-         /8l+/yc/PC1+ZNaoBn7rwfdJ2Kk15n0w7lIvZuvgZ2uPfYkPr2pXhNVh52FMhAW8wAv2
-         a0WoOeyUwDA0sLP0ns1TqYmrDnVdV0ayj5HpkL5Q0RE60vDu2qtrZm3EGs7Urt4ECfWc
-         QSPEq/6pS3f8gUOh8ZGR3UfgmPnrhCGqkNOoeTYZDkiBg0VD1wYLpyT71kDj8BQ5RFBH
-         d3hTuvFScN1Ir4uqkOkZ0zi6+Z4CeXz6cnfVTdxVugsTy3Jg7nJgSeu1ZkVjmwIzk+SL
-         AweQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWvcCX25lapBdpRcLTgTQIV0Gyg/ihl1Tr5F+JaMU/PL3rznKn3fMXy1O2fsITlEOpJ+3h4Qjn90t4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLFe8MVA6BXMyBk/bRlRbMLEnup5ObBGKQrDF5znFBoOqHKk5D
-	x1K6pyGebsm3WPkdsd0XiYTxusp1v1yvRhWJik+rTwoUnqHh0SAilCk748iQ0AInIss=
-X-Gm-Gg: ASbGncuCIjq+/oRLoOmwwOZyFVCzVp4r6sWr5ptGiAC5hjyJsrSAm7n766J23D2j15Y
-	zIUq2cSQ0OyRqN6NrS29a1NyFt1CgZledPnYGi081hkRPjhrGyVw+SI9SGSbq+GH2OHeISJnls5
-	ZWfeEuudXCnolNwIlO03pMeda/Lg3k+rw3Uqxk+Ee15/mCWYuVWro/NU2rMaaZbX8fs9eTqZnJY
-	EzJBj9CHLQq++l1BTQf43SAaU/JOoiLIAeWH8cIIBtM+p56EYVHAyV85GODtfayo1T7u+tfl2gm
-	Mmy0COhrYAZ4BsPNf91QO3EudZ3EobZI4+223by5mTMh1Zh/NNQAI1SBxP8YM2nM11dcAw3PUqZ
-	67JDxTmm4Bgnoc+A4j2b6h6h7918LFo3fmFetpdTJK7siVtGaVJQbJ2k4gzSy4yS7FTbuuo3PJQ
-	TKDQ73DF5eUuDBKOy+gQT4
-X-Google-Smtp-Source: AGHT+IFj9V88YG1sQXMa1M6PD2xfAMOlnVV7fozH/bdvXdddiaVsIQVT6EJ8PC6nDoZ3umGmvjS8OA==
-X-Received: by 2002:a05:6000:2082:b0:3ec:3d75:1330 with SMTP id ffacd0b85a97d-4266e8db3f0mr14224546f8f.52.1760345199909;
-        Mon, 13 Oct 2025 01:46:39 -0700 (PDT)
-Received: from ?IPV6:2001:a61:131b:7001:9072:e882:13e9:40fa? ([2001:a61:131b:7001:9072:e882:13e9:40fa])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-426ce57d3desm17302057f8f.7.2025.10.13.01.46.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Oct 2025 01:46:39 -0700 (PDT)
-Message-ID: <09517b84-e38c-43e4-b8a0-75291b2bdca9@suse.com>
-Date: Mon, 13 Oct 2025 10:46:35 +0200
+	 In-Reply-To:Content-Type; b=Zhb2N/c3JNd9hF9RSZNiHAaH8hEGEH3rMFJO7qVxE0z9eA743dYdyZdbZB4qZS2L6eeu8YChB5+fHi36NbM+bwQqXYTRd+9tjbTVyEq+vXhAI+gfuT5jKDm3yYzTdAAWh0R1Be4gZcNnvAPT9hzWpB9HTnN5TV78UWlXM9x3EnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=guM5ndLz; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760346102; x=1791882102;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aMZqlv/9EcGwi5jOAerpeCxJ3x90vJUiOq14psEud0Y=;
+  b=guM5ndLzWA+/NBQQHjK/1ewBF/hfbDMOlVlvkh01B743x6wy4XuOht17
+   Qp8t6xfiM22igR9EROhH81NNCvhJBrgvp4GibKHM1sYJ5DSE5C1Bw46MP
+   r0vUPC4fjG4ik0xQiK2ANnjH5rNSXd/DGTdaR44K8dyGelddF0u9CiUi8
+   uebZqIyoCg6lSKYUdyspCUehNiHtVTAzx4+WRzl1DaHrRR53c0T/HIuz1
+   Kx22S91BAWzcL5y3OwivTrG1yXd7rOEc82u1VCwjMA25o8rQzGzXeB2/G
+   VL2RVHTuuvaGqRr/Y56tmtrAR9AsCEScwW7am9GpGk5DPxjYtsGs9Jq/h
+   g==;
+X-CSE-ConnectionGUID: J16sbjpHSASZtiPBrNBYdA==
+X-CSE-MsgGUID: kTzp60oVSyu4ep66+MrQDA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11580"; a="61685688"
+X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
+   d="scan'208";a="61685688"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 02:01:41 -0700
+X-CSE-ConnectionGUID: dVyeZaB2SKaGShqosdwBqQ==
+X-CSE-MsgGUID: NdkeTBpnQ2W5zOclVx1OeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
+   d="scan'208";a="212176282"
+Received: from klitkey1-mobl1.ger.corp.intel.com (HELO [10.245.244.60]) ([10.245.244.60])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 02:01:39 -0700
+Message-ID: <e73344be-0434-436b-be9b-e86f62d377a3@linux.intel.com>
+Date: Mon, 13 Oct 2025 12:01:37 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,34 +67,120 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] net: usb: ax88179_178a: add USB device driver for
- config selection
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: yicongsrfy@163.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
- marcan@marcan.st, netdev@vger.kernel.org, pabeni@redhat.com,
- yicong@kylinos.cn
-References: <5a3b2616-fcfd-483a-81a4-34dd3493a97c@suse.com>
- <20250930080709.3408463-1-yicongsrfy@163.com>
- <20250930080709.3408463-3-yicongsrfy@163.com>
- <666ef6bf-46f0-4b3e-9c28-9c9b7e602900@suse.com>
- <20251013075937.4de02dfe.michal.pecio@gmail.com>
+Subject: Re: [PATCH v2 3/4] xhci: dbc: allow to set product name through sysfs
+To: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+References: <20251007213902.2231670-1-ukaszb@google.com>
+ <20251007213902.2231670-4-ukaszb@google.com>
 Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20251013075937.4de02dfe.michal.pecio@gmail.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20251007213902.2231670-4-ukaszb@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 13.10.25 07:59, Michal Pecio wrote:
-
+On 10/8/25 00:39, Łukasz Bartosik wrote:
+> From: Łukasz Bartosik <ukaszb@chromium.org>
 > 
-> Would it make sense to swap registration order?
+> Add code which allows to set product name of a DbC
+> device through sysfs.
+> 
+> Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+> ---
+>   .../testing/sysfs-bus-pci-drivers-xhci_hcd    | 11 ++++++
+>   drivers/usb/host/xhci-dbgcap.c                | 36 +++++++++++++++++++
+>   2 files changed, 47 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
+> index 071688dbd969..57ba37606f79 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
+> +++ b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
+> @@ -98,3 +98,14 @@ Description:
+>                  The default value is "0001".
+>                  The field length can be from 1 to 63 characters.
+>   
+> +What:          /sys/bus/pci/drivers/xhci_hcd/.../dbc_iProduct
+> +Date:          October 2025
+> +Contact:       Łukasz Bartosik <ukaszb@chromium.org>
+> +Description:
+> +               The dbc_iProduct attribute allows to change the iProduct field
+> +               presented in the USB device descriptor by xhci debug device.
+> +               Value can only be changed while debug capability (DbC) is in
+> +               disabled state to prevent USB device descriptor change while
+> +               connected to a USB host.
+> +               The default value is "Linux USB Debug Target".
+> +               The field length can be from 1 to 63 characters.
+> diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
+> index 7ad83548ba4d..bc782f6b533e 100644
+> --- a/drivers/usb/host/xhci-dbgcap.c
+> +++ b/drivers/usb/host/xhci-dbgcap.c
+> @@ -1200,6 +1200,40 @@ static ssize_t dbc_bcdDevice_store(struct device *dev,
+>   	return size;
+>   }
+>   
+> +static ssize_t dbc_iProduct_show(struct device *dev,
+> +				 struct device_attribute *attr,
+> +				 char *buf)
+> +{
+> +	struct xhci_hcd	*xhci = hcd_to_xhci(dev_get_drvdata(dev));
+> +	struct xhci_dbc	*dbc = xhci->dbc;
+> +
+> +	return sysfs_emit(buf, "%s\n", dbc->str.product);
+> +}
+> +
+> +static ssize_t dbc_iProduct_store(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  const char *buf, size_t size)
+> +{
+> +	struct xhci_hcd	*xhci = hcd_to_xhci(dev_get_drvdata(dev));
+> +	struct xhci_dbc	*dbc = xhci->dbc;
+> +	size_t len;
+> +
+> +	if (dbc->state != DS_DISABLED)
+> +		return -EBUSY;
+> +
+> +	len = strcspn(buf, "\n");
+> +	if (!len)
+> +		return -EINVAL;
+> +
+> +	if (len > USB_MAX_STRING_LEN/2)
+> +		return -E2BIG;
+> +
+> +	memcpy(dbc->str.product, buf, len);
+> +	dbc->str.product[len] = '\0';
+> +
+> +	return size;
+> +}
+> +
+>   static ssize_t dbc_iSerial_show(struct device *dev,
+>   			    struct device_attribute *attr,
+>   			    char *buf)
+> @@ -1321,6 +1355,7 @@ static DEVICE_ATTR_RW(dbc);
+>   static DEVICE_ATTR_RW(dbc_idVendor);
+>   static DEVICE_ATTR_RW(dbc_idProduct);
+>   static DEVICE_ATTR_RW(dbc_bcdDevice);
+> +static DEVICE_ATTR_RW(dbc_iProduct);
+>   static DEVICE_ATTR_RW(dbc_iSerial);
+>   static DEVICE_ATTR_RW(dbc_bInterfaceProtocol);
+>   static DEVICE_ATTR_RW(dbc_poll_interval_ms);
+> @@ -1330,6 +1365,7 @@ static struct attribute *dbc_dev_attrs[] = {
+>   	&dev_attr_dbc_idVendor.attr,
+>   	&dev_attr_dbc_idProduct.attr,
+>   	&dev_attr_dbc_bcdDevice.attr,
+> +	&dev_attr_dbc_iProduct.attr,
 
-I would say so. As a rule we should probably
-only switch devices to modes we are positive
-we have a driver for.
+Small naming thing again.
 
-	Regards
-		Oliver
+"dbc_idProduct" and dbc_iProduct" are a bit too similar.
+
+Usb core uses "product" and "manufacturer" sysfs entries to show these strings.
+I think dbc should use similar "dbc_product" and "dbc_manufacturer" naming.
+
+the "iProduct" is a byte in device descriptor telling the index of the product string
+descriptor.
+
+Thanks
+Mathias
 
 
