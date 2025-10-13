@@ -1,84 +1,96 @@
-Return-Path: <linux-usb+bounces-29236-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29238-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8709CBD5149
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 18:34:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60549BD5816
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 19:33:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67505403640
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 16:20:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EBEE40253D
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 17:22:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8928A3093AB;
-	Mon, 13 Oct 2025 16:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zFpuzrVn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E43392ECE8A;
+	Mon, 13 Oct 2025 17:22:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96B725D546
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 16:14:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CB42C027A
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 17:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760372069; cv=none; b=C+tzYUysYjS6pMq0yAqndV7AbaZ25E6rhoBw7AVPB/aBFOWOsoSUVVQ36yPcmAinIHlBYT5Ru8LEzpIQNNNlF7bgrMhb257QZ4gIdBVOMbHDnUyzSRd8zEDEOgXEm7M4gpvP+ZY8cO6B1HwuXgYxwhTxkAi7w1YF1NGN3XGsx0M=
+	t=1760376124; cv=none; b=h97TdZjikbJh2SfR9tBm0JWw7GfKf2y2Wy9FErDZG9JEgFwkZrzZJhd/cJX0us/qd/D2E/xDTXrrcLv1RKxLoizWayHNNB/Z72iO8/3/pC6Cg05yLIqSDoH5EoNaptgDdIg9CmW5Dx1K3SVXerDMHtsCc+Ly3Kz+ZMv2O4IQKHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760372069; c=relaxed/simple;
-	bh=VBeyRidS+H0e+1y24wGE652oyB2RWBYogmJk6MqQERU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tCj9kRfOC9lWi/gubucRRAmXHAqVXgL6rTxGSlElLEiQUJzTObrbvbdhjFPQSIizn7UdBNr4C6REdfcL3iDH/wP8W2tCabBxGgZXFYOmHtbKZaHHsHvMjCidlgX2wgSZ+wCdc60l8Qqh3QO2mqlyvLPPd471v0U9qi/6rMm+lro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zFpuzrVn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A01C4CEE7;
-	Mon, 13 Oct 2025 16:14:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1760372068;
-	bh=VBeyRidS+H0e+1y24wGE652oyB2RWBYogmJk6MqQERU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=zFpuzrVn2mqSblgiBiPbz+6qhjTVZobwc7Lc6AD4VDWmJ9/MHf12EKbwa9LCix1Lx
-	 HkYQhiz5QNlMuM5K0LEd9ivC+qFJ1RV5PurSLbaGnen6nexOeRVBnodmSlDNXSCKoD
-	 nIqmCaqgB4y+QypwgeZdYG97sjd2KlB4CPxKrrnY=
-Date: Mon, 13 Oct 2025 18:14:25 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Alex Henrie <alexhenrie24@gmail.com>
-Cc: Vojtech Pavlik <vojtech@suse.com>, Oliver Neukum <oneukum@suse.com>,
-	linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: Re: ttyACM versus ttyUSB
-Message-ID: <2025101339-snowbound-capsule-fc4a@gregkh>
-References: <CAMMLpeRU72CMxHdF-rO9y1Nvzj9nPnuQTOZWcCrM4fOJ1byacw@mail.gmail.com>
- <2025101243-ongoing-truce-3aa5@gregkh>
- <CAMMLpeRrO_E3_c98OB9XvpiGNjhTetrw2ucFyaq5BByPWh58SA@mail.gmail.com>
- <2025101238-mastiff-decibel-4b4f@gregkh>
- <CAMMLpeQvb1SJ=_kC+N1pGHkh36yrORJq+Der7fDzPj_urzefow@mail.gmail.com>
- <194258bf-e78c-46b8-8229-3b019f2b8ab0@suse.com>
- <aOzYzH01b39gjIDP@suse.com>
- <CAMMLpeTZxLCK2sh0qpHoFzHCrntc-vLSWqJJUjicS2xRR2AdNw@mail.gmail.com>
+	s=arc-20240116; t=1760376124; c=relaxed/simple;
+	bh=nsGyivXBri6OSLxxjOWh4WGz6wp5udKFYCtPrJccLx0=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=WSojGfOORBOieRkOQGPdypyLdDkm4o/NaehR55YYUc95v3TdIE28gEDV/T8iqKBu/ZateXUvC4O+z/O8HZKwK9wTQAAkJK0JShKlGpdRMPCXqdjGLE1VlVqaQlKrdpL0YuWb5QeJrkssVKvNsDaqACQaPC6/ggQiEnGavNq+W/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-8ea63b6f262so2475336239f.1
+        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 10:22:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760376122; x=1760980922;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IcTIroVdj0btffajsp6gtGNFiSwIhJCy9rGpAqsEW7U=;
+        b=KS8O0cVuEldRI0aJseUA16dXBCMqC9e2u56cJuGQpfw5MHAPB5rDdfLNJnAgnn+wlQ
+         nxOKPUVmSWLBuJ+5URPuTj2dIDHO1JS/K0bcc/ooWK/ZpPgek0rEdYcspMGpBVjQpPJN
+         QnNlEdknUL61CjMg4encoi4negipF0HJtXO3/y5BhAbX98A6tuIWDIMtaxeKzxvdoRSB
+         /q++Wfltsxi/Eka78ty8Fr3lsi0hd/OMKtzPkgON2s1uITF8IgRcKl6FpKTjLB5LipL3
+         5J0KFJGrc/Z+xO8ymwA+W8T1vL9mZO4VdsVzcEeOeuhG2KuBsHekhozMyWD7C8QGZ/pM
+         QuNw==
+X-Forwarded-Encrypted: i=1; AJvYcCXXcx1e2HhQG1fs5+o2GBaAJuI6gHWWJXLtI81Kumx+Pk3TvJc/OJ8SYe1wOQ5BTMu2INo3ljPewEc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMRCpyzBvxCrUcQzFo5lQ9SPHSiIJfwKOiglpK/YlEXJQMJtCm
+	WgG/19RmeiYrlyt0OPONC7UL5aunhxQREu4wEoSYTapMLJV6MT2A+wdcPZHoKjNqWpgaMZ6rrsN
+	/XY6iwxHaEuQQ1rgyh2l8/dmMwYMRtvC9xloV6TrGWlS8/TC/tIeuR/yFdHQ=
+X-Google-Smtp-Source: AGHT+IEZjRcbR2oTuA8IpjN+806A9p5IOVdRGzGHPrW6anLmhQbTzqyftrRkrZNyyXGONz8Vv4mpSMargfmhISDHou3gvOKCyfV4
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMMLpeTZxLCK2sh0qpHoFzHCrntc-vLSWqJJUjicS2xRR2AdNw@mail.gmail.com>
+X-Received: by 2002:a05:6602:a01a:b0:893:d33f:e5ad with SMTP id
+ ca18e2360f4ac-93bd198c5d7mr2225638539f.18.1760376122164; Mon, 13 Oct 2025
+ 10:22:02 -0700 (PDT)
+Date: Mon, 13 Oct 2025 10:22:02 -0700
+In-Reply-To: <0000000000004d1b5605e3573f8e@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68ed353a.050a0220.ac43.003c.GAE@google.com>
+Subject: Re: [syzbot] [usb?] INFO: rcu detected stall in dummy_timer (4)
+From: syzbot <syzbot+879882be5b42e60d4d98@syzkaller.appspotmail.com>
+To: bp@alien8.de, dave.hansen@linux.intel.com, fweisbec@gmail.com, 
+	hdanton@sina.com, hpa@zytor.com, hverkuil+cisco@kernel.org, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	mingo@kernel.org, mingo@redhat.com, pbonzini@redhat.com, 
+	penguin-kernel@I-love.SAKURA.ne.jp, penguin-kernel@i-love.sakura.ne.jp, 
+	sean@mess.org, syzkaller-bugs@googlegroups.com, tglx@linutronix.de, 
+	vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Oct 13, 2025 at 09:42:38AM -0600, Alex Henrie wrote:
-> > Today, some USB-serial chips have the ACM protocol, so perhaps it would
-> > make sense to merge the drivers, I certainly would not object.
-> 
-> It is definitely confusing to have to think about whether your USB
-> serial device is going to appear as /dev/ttyUSB* or /dev/ttyACM*. On
-> the other hand, if we renamed the ttyACM device nodes to ttyUSB to
-> reflect the fact that ACM is just another USB serial protocol, how
-> many things would that break? In general I like making things make
-> sense, but I'm hesitant to be the one to pull the trigger.
+syzbot suspects this issue was fixed by commit:
 
-Yeah, we can't really do that now, sorry.  Too many chances to break
-userspace.
+commit eecd203ada43a4693ce6fdd3a58ae10c7819252c
+Author: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Date:   Thu Jul 17 14:21:55 2025 +0000
 
-If you want to always get this right, just use the symlinks in
-/dev/serial/ to find the proper device easier.
+    media: imon: make send_packet() more robust
 
-greg k-h
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15729dcd980000
+start commit:   200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f2886ebe3c7b3459
+dashboard link: https://syzkaller.appspot.com/bug?extid=879882be5b42e60d4d98
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=156ff9f2080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178a89f2080000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: media: imon: make send_packet() more robust
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
