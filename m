@@ -1,125 +1,192 @@
-Return-Path: <linux-usb+bounces-29202-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29203-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16FC3BD1E2E
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 09:56:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE315BD1E58
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 09:58:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9ECB5188191A
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 07:56:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8833B3BB604
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 07:58:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD5D2E0B5F;
-	Mon, 13 Oct 2025 07:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C11232E2DFA;
+	Mon, 13 Oct 2025 07:58:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d4Iwv3l5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vnW8zHPp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C282EB84F
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 07:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC061B4156
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 07:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760342164; cv=none; b=I/9OeY3SYVQc8RVXiPTQs8QqTQ+oPpOLAHXCMA9k0WEeTWbJmvlcGSARcoiEbfdy0V6bKdclbHGVbJ7nwcXnMz8NAsPwvB6H8wOU7BaJ3IL0ahSyIIeTbV2PC6t3Fjt2KDpA0YmNJwjh3fTexX6yZFIJC5nmKxgAp+34T9pvCEQ=
+	t=1760342283; cv=none; b=YG7M2f6tGf+Fdl+SDhbPu+/9doYwu5AgIK7wkpJviu7fyMRi4cV5m39SKhRiTKpDjqhgc38QOA+GxLT4QjPUE5/RwKuxiheCBPx+YDwb92RJZG+BM5bCxgQERvv624oUYMhuq+GtgGP4gREG4wneY9wmEqpkdVLJer79N0F06UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760342164; c=relaxed/simple;
-	bh=p+PaJfRi1WCR9SU6BVGd3F9l+uM7iq+JFum96KFJxnM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rwIsTOMc1PdTMbA6EnL0jogRvSRTiVAljjWsRRXLVOFgttUBLtvz7QgKlZ7UM7b0YYXu8NPVhMr4Uj99iOIo+mROrsNtdrtOkCyXK/G7MeOE3/xXruRiixiBJg9BJFUKX9x2hB7oGH0Nepo7kqR/bM2monZLDfNrqvGsrpIkVuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d4Iwv3l5; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760342160; x=1791878160;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=p+PaJfRi1WCR9SU6BVGd3F9l+uM7iq+JFum96KFJxnM=;
-  b=d4Iwv3l5xFlKAXToX1MgNL6uwo+tX4NyDOvdMgOXIR6X9+3CudS8MPhR
-   6MCoLCx6n10mTOs4dfS3ly0PHLKMjsiA2AePiCZfri6T7FFoAFisgyoSG
-   81XBvhLwN++PaA/IgY8eCSr1q9BO36aIOCEjKr+OEfuVW4kxaAbc8GsOb
-   mGc/+1Jb/+x9a9KQD1LAmkVP1EsGoj21mtPDvGJPBgja0zl4/UcWAnQ4N
-   8S4RzaMMEzrY4P4X5XAE0w3pV3ilD7fgwy8n4ySnYeWTEpTwbgvZfdzzk
-   jnaQ6FcG3g7XXWSxsrd6irdUfkwRp3KbFzfx1rsp77unL64muqA8yB5aj
-   w==;
-X-CSE-ConnectionGUID: uul13iwJTKOIPYIQtaAKSQ==
-X-CSE-MsgGUID: c+5ZcT1WSvettwKxaf9JFw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11580"; a="87933642"
-X-IronPort-AV: E=Sophos;i="6.19,224,1754982000"; 
-   d="scan'208";a="87933642"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 00:55:58 -0700
-X-CSE-ConnectionGUID: ZaQ3rjWIT5qXV1zfh1IH+A==
-X-CSE-MsgGUID: Iefzp6W7QeOJT5m3MP2iBQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,224,1754982000"; 
-   d="scan'208";a="205221901"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO [10.245.244.60]) ([10.245.244.60])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 00:55:56 -0700
-Message-ID: <21741b98-4844-4218-8bd9-10b8bf5cd869@linux.intel.com>
-Date: Mon, 13 Oct 2025 10:55:54 +0300
+	s=arc-20240116; t=1760342283; c=relaxed/simple;
+	bh=3E34g8to+7YP8tDavcynDJIlQYsxd692ze/8ljHsty4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=hS1vmUgbQe/NkTUVzRuWlT0yBa8FXNgOmGJyxcZ5F+baVX8Z4EVF4o3LvK+WWk1X1vl8t91xIa1bIXL8fKNEvCEeO1HGxxslei2Cjqifn9xUNKGf3NF94geWHpCzvmCPDoNw/tJQYvJZoQMviI2jq3S4F8dortMad6/jKfB//oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vnW8zHPp; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-272ed8c106eso48454755ad.2
+        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 00:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760342280; x=1760947080; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iGu6dFYwE/2Nf8J+0985oWxkB/pnBGdxJtFkLo+v4g8=;
+        b=vnW8zHPp43s9xT8kwEpplM3MU4Y7XMaCsOaLoHzcccsOIl7oLW1g5X0j4/2pRP9/wh
+         PNlLJDLvNUnB2WxTNyl4htJU6Jz7koIzXnH79uph7HWNwPGIP1YQzrQV3HGxwOp6uEpi
+         dP88V69xof31OV0nY4l3FQlb8JW5u2An20Hl2bWWqHf/Zou9Gk8p93cGzuJ5b/JPkA4t
+         P0GCttyxO9Aw8rSgl9lOk340n1YWegIyc9oKBSVF77GjUzCat359tkmhM5cj5XLLiG3Q
+         DWOyBtgU7sA2GmKqO1hnmDpqLMIjskfk2sEC/1yrjgISVsvCAkZ9tP1niCJJFvVpZrNg
+         1KsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760342280; x=1760947080;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iGu6dFYwE/2Nf8J+0985oWxkB/pnBGdxJtFkLo+v4g8=;
+        b=qRhHWBCm7koa26CFO4U+hMhC5lK557XGFS9oigbPLPuVdeqI+FclFrnZ2hFB1xb/KP
+         evIsNMYzBAOF8LGeOSf46rNrnwhrxzemqef9SmzxRi6hD/T+iUs8bL1utFp1vn2BvmOd
+         hFSapqkZylqvg+Fozqjr5tscV6OKpEOLbO/0lxPYbW1M1xG93Dlrc4zHqQP6Gh3xwOVZ
+         BKoYdKMA8krcKgZZu0Cr8hSxw4n368kd+9qdqJfCv5xa1oepr4p+p5qhT5uSjCa5MCNx
+         KDb3k7rd9/46LvdJMEGhqi8h7gZiVPdoPjtJlrjqNZH6XFPmYRplsyU+nYW5hxgoc3q5
+         p4ZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqdcMjxqBRlVNANR8S9DlYauzxukhnAXqGLb33chK83mezrxCQCiM+KbcfiHPcbZc9rkqMRocpjnM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQ7I6isKnwLXmfpLc6/0r+Ur5ullf3/YtUnlt/t/i6lCTU6se8
+	VjjkuCbdrm/OPg0bq8E05pqDaP91Ki2RYtdzYuV19MfSgflM95G2x53q2sIJkMUvbo9+fw5TWoo
+	JYCVgRQ==
+X-Google-Smtp-Source: AGHT+IHJ/pA9YA+/yrVB2YKyaQZ1ueZAHnptFV5pNWfOzlJvkkhQMMmsTQndiI2iKW3n9vHmx1cju8mAurg=
+X-Received: from plly16.prod.google.com ([2002:a17:902:7c90:b0:290:28e2:ce61])
+ (user=hhhuuu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:cec2:b0:256:2b13:5f11
+ with SMTP id d9443c01a7336-290272e19bbmr311483875ad.40.1760342280491; Mon, 13
+ Oct 2025 00:58:00 -0700 (PDT)
+Date: Mon, 13 Oct 2025 07:57:56 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH usb-next] usb: xhci-pci: Cleanup xhci_pci_setup() for
- shared HCD
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Arisa Snowbell <arisa.snowbell@gmail.com>, linux-usb@vger.kernel.org,
- regressions@lists.linux.dev, Niklas Neronin <niklas.neronin@linux.intel.com>
-References: <CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com>
- <20251007231709.6c16802e.michal.pecio@gmail.com>
- <CABpa4MCUnLUR_0Vzgd=rTr0+Hot=nxHirKrX6xtJWowDoLhWJw@mail.gmail.com>
- <CABpa4MCg7yixe7O8Pp+YwvpxeC=1JPhMhAap12RjtV6pcxFYgQ@mail.gmail.com>
- <20251008082055.5646dadc.michal.pecio@gmail.com>
- <CABpa4MCm8hQXvtSYqUA+Dh3rCLVM5rTC1p+FsgmFemv+Vyz=RA@mail.gmail.com>
- <20251008130532.49922d58.michal.pecio@gmail.com>
- <CABpa4MAsvK68CyQ7bVdie1j2m2O2YAEuFJHq8D-65uFT3FzKzQ@mail.gmail.com>
- <20251008223406.13f16f19.michal.pecio@gmail.com>
- <CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com>
- <CABpa4MBDvgJcgJf3_E7k1dBXs7v1tW-79dmc_sQDVM1bES5YDQ@mail.gmail.com>
- <20251009131444.2c221922.michal.pecio@gmail.com>
- <90c03eeb-3913-4968-88c0-0de09023a2b5@linux.intel.com>
- <20251009152703.72e780b4.michal.pecio@gmail.com>
- <b8c2423f-aa9d-442a-ae2f-3c4d78949b38@linux.intel.com>
- <20251013092250.699bf60f.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20251013092250.699bf60f.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.740.g6adb054d12-goog
+Message-ID: <20251013075756.2056211-1-hhhuuu@google.com>
+Subject: [PATCH] usb: gadget: udc: fix race condition in usb_del_gadget
+From: Jimmy Hu <hhhuuu@google.com>
+To: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc: badhri@google.com, hhhuuu@google.com, stern@rowland.harvard.edu, 
+	royluo@google.com, Thinh.Nguyen@synopsys.com, balbi@ti.com, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/13/25 10:22, Michal Pecio wrote:
-> This function will be called again when/if the shared HCD is added.
-> Little to do in this case and there is no need to set some de-facto
-> read-only properties of the xhci again, even if it was harmless.
-> 
-> Don't bother passing the unused xhci_pci_quirks in this case either.
-> 
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-> ---
-> 
-> This is an alternative to the cleanup discussed last week, which
-> doesn't require a v2 bugfix. But I also have a v2 bugfix ready if
-> you think the original option was better.
-> 
+A race condition during gadget teardown can lead to a use-after-free
+in usb_gadget_state_work(), as reported by KASAN:
 
-Can I get both :)
+  BUG: KASAN: invalid-access in sysfs_notify+0_x_2c/0_x_d0
+  Workqueue: events usb_gadget_state_work
 
-A v2 targeted bugfix that I can send now to 6.18-rc, tested by Arisa,
-making sure the regression is fixed.
+The fundamental race occurs because a concurrent event (e.g., an
+interrupt) can call usb_gadget_set_state() and schedule gadget->work
+at any time during the cleanup process in usb_del_gadget().
 
-Then this improvement on top of that, which we can send to 6.19 after
-it has been sitting in next kernel for a while, making sure there are
-no new surprises
+Commit 399a45e5237c ("usb: gadget: core: flush gadget workqueue after
+device removal") attempted to fix this by moving flush_work() to after
+device_del(). However, this does not fully solve the race, as a new
+work item can still be scheduled *after* flush_work() completes but
+before the gadget's memory is freed, leading to the same use-after-free.
 
-Thanks
-Mathias
+This patch fixes the race condition robustly by introducing a 'teardown'
+flag and a 'state_lock' spinlock to the usb_gadget struct. The flag is
+set during cleanup in usb_del_gadget() *before* calling flush_work() to
+prevent any new work from being scheduled once cleanup has commenced.
+The scheduling site, usb_gadget_set_state(), now checks this flag under
+the lock before queueing the work, thus safely closing the race window.
 
+Fixes: 5702f75375aa9 ("usb: gadget: udc-core: move sysfs_notify() to a workqueue")
+Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/usb/gadget/udc/core.c | 18 +++++++++++++++++-
+ include/linux/usb/gadget.h    |  6 ++++++
+ 2 files changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index d709e24c1fd4..c4268b76d747 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1123,8 +1123,13 @@ static void usb_gadget_state_work(struct work_struct *work)
+ void usb_gadget_set_state(struct usb_gadget *gadget,
+ 		enum usb_device_state state)
+ {
++	unsigned long flags;
++
++	spin_lock_irqsave(&gadget->state_lock, flags);
+ 	gadget->state = state;
+-	schedule_work(&gadget->work);
++	if (!gadget->teardown)
++		schedule_work(&gadget->work);
++	spin_unlock_irqrestore(&gadget->state_lock, flags);
+ }
+ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
+ 
+@@ -1357,6 +1362,9 @@ static void usb_udc_nop_release(struct device *dev)
+ void usb_initialize_gadget(struct device *parent, struct usb_gadget *gadget,
+ 		void (*release)(struct device *dev))
+ {
++	/* For race-free teardown */
++	spin_lock_init(&gadget->state_lock);
++	gadget->teardown = false;
+ 	INIT_WORK(&gadget->work, usb_gadget_state_work);
+ 	gadget->dev.parent = parent;
+ 
+@@ -1531,6 +1539,7 @@ EXPORT_SYMBOL_GPL(usb_add_gadget_udc);
+ void usb_del_gadget(struct usb_gadget *gadget)
+ {
+ 	struct usb_udc *udc = gadget->udc;
++	unsigned long flags;
+ 
+ 	if (!udc)
+ 		return;
+@@ -1544,6 +1553,13 @@ void usb_del_gadget(struct usb_gadget *gadget)
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
+ 	sysfs_remove_link(&udc->dev.kobj, "gadget");
+ 	device_del(&gadget->dev);
++	/*
++	 * Set the teardown flag before flushing the work to prevent new work
++	 * from being scheduled while we are cleaning up.
++	 */
++	spin_lock_irqsave(&gadget->state_lock, flags);
++	gadget->teardown = true;
++	spin_unlock_irqrestore(&gadget->state_lock, flags);
+ 	flush_work(&gadget->work);
+ 	ida_free(&gadget_id_numbers, gadget->id_number);
+ 	cancel_work_sync(&udc->vbus_work);
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 0f28c5512fcb..8302aeaea82e 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -351,6 +351,9 @@ struct usb_gadget_ops {
+  *	can handle. The UDC must support this and all slower speeds and lower
+  *	number of lanes.
+  * @state: the state we are now (attached, suspended, configured, etc)
++ * @state_lock: Spinlock protecting the `state` and `teardown` members.
++ * @teardown: True if the device is undergoing teardown, used to prevent
++ *	new work from being scheduled during cleanup.
+  * @name: Identifies the controller hardware type.  Used in diagnostics
+  *	and sometimes configuration.
+  * @dev: Driver model state for this abstract device.
+@@ -426,6 +429,9 @@ struct usb_gadget {
+ 	enum usb_ssp_rate		max_ssp_rate;
+ 
+ 	enum usb_device_state		state;
++	/* For race-free teardown and state management */
++	spinlock_t			state_lock;
++	bool				teardown;
+ 	const char			*name;
+ 	struct device			dev;
+ 	unsigned			isoch_delay;
+-- 
+2.51.0.618.g983fd99d29-goog
 
 
