@@ -1,97 +1,101 @@
-Return-Path: <linux-usb+bounces-29256-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29257-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74C7BBD6ABA
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 00:53:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11F60BD6ACC
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 00:56:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 408944F00B2
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 22:53:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9EA5404AC3
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 22:56:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0468A2FE04C;
-	Mon, 13 Oct 2025 22:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0528A2EA48F;
+	Mon, 13 Oct 2025 22:56:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TDOHLq/h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="me953ghH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDEA258ED9
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 22:53:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4071C1FCF7C
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 22:56:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760396009; cv=none; b=aH/qj9Lgbhpx7d7R0ijlGfVobNzoCQDHh9Z9pH5AY3TgHquxZsjTq3LFObbGMyhM4SBX9i/jRwHKIgGQg7GCILCZlOtEJYRIcICJvt1VoRTq1VgOp4rUO3OcsyONdnlkakYRU8J9AbwLSURoJmjnzer0jAqlh2QrmNdGtOihspE=
+	t=1760396163; cv=none; b=XYBwIxvE5opyTd7QFNsdQ2xuJbe0ruZ9F0SvSNneLI6JrNjdtjJzLU4JNBDqOQP3/lkYUv/8Hu7zpup+PYVYWJVnp/6pFq1gUVBmx2kxik7thqBM0Are6FEVhGr+nnCxLJXTUnEY4pr0PIr9EhqZqV+WLLgpJs+TM9G2LnmTVck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760396009; c=relaxed/simple;
-	bh=VxDmSLJ7Pl58cmqGN/eTKyC6uRlD8Xhn1Kk5fyLUXYk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AaqkS/bZ4kZiXMiGVW0uAd/2eMKgsHehwQ8ZgjE2aUmdO03lSLmr6mLsR5PndlE6ahchIs5mxqxQJWjTpoq/t23fnxgeZldbPntvtH22buAljQXuSz7BEltjb2Ptj2LvfnqY8vZ0RFVed2n+YEdwORFnAbG4ZtPx7VvS7gfUMXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TDOHLq/h; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3ee12807d97so3167711f8f.0
-        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 15:53:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760396006; x=1761000806; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VxDmSLJ7Pl58cmqGN/eTKyC6uRlD8Xhn1Kk5fyLUXYk=;
-        b=TDOHLq/hSaw2994qUBI6NuSlboNI53oBq0aiCrHz12nLpQiuCr3Kez3TOvJSJn8LFm
-         HYdX2WfaOlDKikibLegCJlcJ2UgdInGHIuwVLDODo1JAshszMZb8ZNzlg18l+zPAkHXD
-         SfdNfygJQKTuMVgmW15C3xwehuCt/fYeRoFn9Q5sdAq0L85XV6lAmTHsForZ1Y5hGSl0
-         qmk9ylSvJ7uKaLyNi6L29j3VrgCvW1zlRsi6YqRBH3Ds03YnNnKjETKiA6yUX+Ul+NCx
-         wIGdPPIWCnlegIQqVFF/EA3cZOBH/prjRz9FPRuCnuJJc6FR1Jpe5uKmEE+ozIB4acET
-         0lew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760396006; x=1761000806;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VxDmSLJ7Pl58cmqGN/eTKyC6uRlD8Xhn1Kk5fyLUXYk=;
-        b=qqx/3/X7jQQO8GueEAW8Dkp3f+6EWXzyiS/LKzrB6aQ+/Tn28KzCXfkNTuUXBuDOoP
-         iktZLakN7N6S1xtrMiy4nCX2S5TBhcLUmSO1WgLGv2Ig9GqkzIEB6TeIAilcddaqN/A9
-         SWXGigH1nM0ir/dBeMgJ4kR39GG5MOmzT1x6eabiUc9vteUC3TY6/IrOcMt1L4WGtV1b
-         BKF31FzcR8VPW6Ku/9TFL7zitTDrUQeUdNmbA2pQmCVY8Hepy1LUsHlfXpLqX0OVYgbW
-         pSFcbWN+G4M4dHVBnIyF09j+1Tff5LhEMR45JaW1/d2i2oKcrzJTxuxrvHTa7YbEYnvz
-         rFSg==
-X-Forwarded-Encrypted: i=1; AJvYcCUhxCcWmUCLvD5G1m76n3xXE7/k7hI/2Jf6ZCSj1hJ3h/y5zXeFoy88wXXsaeTpV4EYw5C0g0bYqt8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyk96H/v07pQsyRAp1i3Ee2wmyLNIQlymIMiTzy04SFxVqKKFCr
-	n8MSgKi9kHm46KWvzvUUyvVbqPem600kzWZwWX3eTuhykPSHkW8veRN6DtD9TbJj94ifNrOw6nJ
-	48H7Q6dc8Msj9+/i1T3Rdnizjhh98Iiv1uq1ZxomN
-X-Gm-Gg: ASbGncvOww8ZGaa8HbmIC0ZnkWqFWewNd1QOun2S9P6NAASz2NNvr3/fs4ia3vI9TI0
-	/ecivBvvOH7m9RZJWkwWY4a7kq4oudMaaYwgKzst0FY/26xf+1F5rZdodwakZC7wdUmcd47q3K7
-	CSEODLZ64UytzGpcIyuy598N2wmXTdsbpSsqp/eJBz6af5PUHrOn8Tgl83nmjMKyVQfX2j4ErsQ
-	wQX1cTJm09u7e1kY3Oye/fgcLsIUXdnh5P0nQ2VcCWMvb3rOkewjJeR51izsss=
-X-Google-Smtp-Source: AGHT+IHN0t3NmIlHBzBN76m1atkXs712mA3WKLgcMNSupWFwJZ3i0jdFLSUHLWMjbly990ZrauvZiG0fi3+9cSLBVUQ=
-X-Received: by 2002:a05:6000:2f82:b0:425:825d:2c64 with SMTP id
- ffacd0b85a97d-4266e7d6472mr16363020f8f.17.1760396005998; Mon, 13 Oct 2025
- 15:53:25 -0700 (PDT)
+	s=arc-20240116; t=1760396163; c=relaxed/simple;
+	bh=4nYD1fUXbeYkQ220ZNW7W92MQ+JWXBzt9GRNYVwIhqE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tXSNiVqHJ3Xg807nZdWKQGklTWv8es36/xUsndeXHCknsRJcX0lIssPQNyczUfxeO6MGtN2GdaZlJu395WbmbThquJXtA0rcb+pbYrK26BaP9a5RSWvHa27yybXUEy4FyLN487jh53BEFz5IELaUf+0SH/BMyl0jEGOycERmvWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=me953ghH; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760396161; x=1791932161;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4nYD1fUXbeYkQ220ZNW7W92MQ+JWXBzt9GRNYVwIhqE=;
+  b=me953ghHntsiE9sFcdn6S0fAIjpQxAw9uxxPgWi7JrGnzurwgEFVeVlZ
+   RpnIYkxSDPM2jhkv4S9B5a/ACqmBcnSpRNp+0CPaJLVyrTYhvrWiNXKa+
+   GhvahlFsS9oA3p4NjAawAGwvIj0/UDtHY4KNJX57PMMx7IIDEpGyFMA9O
+   2Vfu+OrlROqNj0CCFbCyUfD2Z6qDN60zzEBBL27TgoEJmudpLJfvqD5v5
+   nltzjpHoCgNp7LgzQcrgrGigSfu2G3l0NhTEggIJS5NYMB5nD4z5eNZ4t
+   rgOvahSp4rbYa6QBWPFKkZ47v62strs094JvRJacNH3YZMIwz7G8omfAs
+   Q==;
+X-CSE-ConnectionGUID: KURWNtleS4W3fiDRkGq3hw==
+X-CSE-MsgGUID: nL1hpQ1BQMSNni0x/JPAwg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="66202510"
+X-IronPort-AV: E=Sophos;i="6.19,226,1754982000"; 
+   d="scan'208";a="66202510"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 15:56:00 -0700
+X-CSE-ConnectionGUID: n+e8xO90SfW+J7ex9VrtCw==
+X-CSE-MsgGUID: mjoRgtfHRneAhWwAWLisuw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,226,1754982000"; 
+   d="scan'208";a="185742303"
+Received: from klitkey1-mobl1.ger.corp.intel.com (HELO mnyman-desk.home) ([10.245.244.60])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 15:56:00 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/3] xhci fixes for usb-linus
+Date: Tue, 14 Oct 2025 01:55:39 +0300
+Message-ID: <20251013225542.504072-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251007000007.3724229-1-jthies@google.com> <92c821fb-537a-40e6-98fc-616941b57778@panix.com>
-In-Reply-To: <92c821fb-537a-40e6-98fc-616941b57778@panix.com>
-From: Jameson Thies <jthies@google.com>
-Date: Mon, 13 Oct 2025 15:53:13 -0700
-X-Gm-Features: AS18NWB5frOXzr6oF_XfKeFC8F4rRq6IsJiUPIJr2IgROQ85_BdLxUbQKV6WZZ0
-Message-ID: <CAMFSARf8--QW9otZDFGE4yr9i_WjYuwehJ0cV3ioD8KZFzjXaw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] UCSI Power Supply Updates and Bug Fixes
-To: Kenneth Crudup <kenny@panix.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com, 
-	bleung@chromium.org, gregkh@linuxfoundation.org, akuchynski@chromium.org, 
-	abhishekpandit@chromium.org, sebastian.reichel@collabora.com, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Kenneth,
-You are correct that adding POWER_SUPPLY_USB_TYPE_PD_DRP in
-ucsi_register_port_psy() is missing here. I would have expected that
-adding it resolves the issue. I'll take a closer look, thanks for
-raising this.
+Hi Greg
+
+A few fixes for usb-linus 6.18-rc
+Solve an issue in the USB2 only PCI xHCI controller support added to 6.18
+Solve two DbC cases that have been around since beginning of DbC support.
+
+Thanks
+Mathias
+
+Mathias Nyman (2):
+  xhci: dbc: fix bogus 1024 byte prefix if ttyDBC read races with stall
+    event
+  xhci: dbc: enable back DbC in resume if it was enabled before suspend
+
+Michal Pecio (1):
+  usb: xhci-pci: Fix USB2-only root hub registration
+
+ drivers/usb/host/xhci-dbgcap.c | 15 ++++++++++++---
+ drivers/usb/host/xhci-pci.c    |  3 ++-
+ 2 files changed, 14 insertions(+), 4 deletions(-)
+
+-- 
+2.43.0
+
 
