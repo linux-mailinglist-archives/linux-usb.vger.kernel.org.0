@@ -1,159 +1,106 @@
-Return-Path: <linux-usb+bounces-29225-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29226-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 726EDBD3360
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 15:30:43 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92AD8BD34A8
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 15:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85363189E54C
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 13:31:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3D14B34C7D2
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Oct 2025 13:52:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31FF1307ACB;
-	Mon, 13 Oct 2025 13:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DDA02264BB;
+	Mon, 13 Oct 2025 13:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="OKaWQKzw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h39NtSnC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE923081A4
-	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 13:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A5D22332E
+	for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 13:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760362231; cv=none; b=On/LQ5fNOtyefZ6m5gcFxIT414XLoAVAho+cTtuwK72Fq7SbDHdqsWc5oKptPDgI4murSCoZSTtOR1bsgYiUPs0Rx4jEpHdDUWfuAgWgOZ7TEdCOaoGDqXKv/sQu7VKX4mf7K7MiZFGtJvXmoR4n70MHk7SOb29W5THwqcW2ThM=
+	t=1760363555; cv=none; b=ZHoiBr5k/YuW7A4V3CdD91CqJhjfWW0fX19uu6sw937+mhVlD5JnlX4/9LGPeXFV/VDbW8imEQNyRBG+AC6fQePkbJ+HXqM8RcRQpmTZpXUbaLctZp2peOSNngoGkMl3ud/vtxGvXjKoKHfEjqPxe9/Ny+Dnl0wsESlYwfu79wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760362231; c=relaxed/simple;
-	bh=6j4sCIsomLPE3GK/9DahwepOyid5uXYv2sDuhGLNFM4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s/2GA9L/1HVTcIFCRcQllnph5kMkvCl3060y9W15OP7YU9umshynR6jq8rb+xldG/Q0oT+adgT7/LCS1277skgfl0Q8IIoNcqEXxAAWmzhkgIzADFl2NpMJgFqD78IYIzVkZwX2t8R2LQ4eZiJwubKAnWnFts+frUhPPEPwH8LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=OKaWQKzw; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-856328df6e1so553673985a.0
-        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 06:30:29 -0700 (PDT)
+	s=arc-20240116; t=1760363555; c=relaxed/simple;
+	bh=Z9lQqraCfSs8f8OJtdgQ5fBDCz5Q96ENSKPydfYdvks=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=GIaP/z6nMEqrOsUXhpoKhLJihAQ+JRkS8wbY0bpgsXK4mBoh7hxFE09zr+sVVtvf82wMLMxR7r2xgn18eaNLOztEcJ/AQCsXy5SpEyzJS1fLk+IClJIVsjSYGJPDLj6aofmdeRMaHIFs9YEfvxUP4N8KgqRT/USFXGUtTrY0jos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h39NtSnC; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b3d50882cc2so787994766b.2
+        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 06:52:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1760362229; x=1760967029; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kuyOtCXDAecJZfTlIjmVfECuejQEXz8BJl4zxdorR80=;
-        b=OKaWQKzwP6VJpOhcbAUmOtqzWpXazuIs+CZYLjXvaCuGp7pqTFYrd7lgn4vWialmgW
-         8/JK7ehE2TsXBWViJrF7SK4zFDvYyj7tEh213GywBTyQ4Jn7RoRAWCf4tphIk9UlCIVG
-         wJi2GPZExErC4T9vrSTzFOLPUydUv+ysEj6U8nnTYOSB9D6EAS3VigchAxUfR3hJ1y8e
-         5nqSv02z620wdXrLcWuAcZSI4p2RcpmWi8jeSXbaOe7uMet230/xobEHsISqCC8fWdHQ
-         Vf+TTMtLkh8Mhu0Lqv7L6wq12k25yDpFPp9jPRfUYmxTy1cPFWXpKpsMbFVEixBxeNqe
-         os8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760362229; x=1760967029;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1760363552; x=1760968352; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kuyOtCXDAecJZfTlIjmVfECuejQEXz8BJl4zxdorR80=;
-        b=MCRdNBfqvh9NBNv1REIJMxSBPX9YYC8AWfGk0q+nRg0r5YmNE1aLflbSIqyXDATzMO
-         x8HHVnD9etgLe6T8okEYlPawmcUPq0BvK/Z5ApAkiK/S9X2ork05Vx5ZqeMOjPQvLkCS
-         t8NFxbgMpEMjLb+9jDYKX+bOqhLrtVBBi+KCEYyLC2uJAkbquztxx42oJ2nKibT7vAwY
-         Nssy88J6bSRAhlDP5T+Dd/o/6NkleBuD0l0YfAPl8NfsilId3cEfMykbW92rQRvdTS28
-         uLOPmfv9Zx8wcqyJcgUhyGEpyGh0tDHQWNy1UZ1YCT4YfBvzdcWwetsUNG2np9j8qM7R
-         48Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCXuSdnLBhg6p/vyBvkrYCuB+3RdXYmsmop+XxEA/PbDZIkXRBZiFyXSOoG3uPna6/GUtek7O8h2wmI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmkbsGowA6ksCzMmT/LISI18pEvptaq4fBs/8xlB1CHz2t1AuZ
-	bao/y+K+oGjV+gElXAWe0J7nPRRivbkNN0gCk6BvfRshnueg8wcA7z7Fn7TcfD7c3w==
-X-Gm-Gg: ASbGnctazDvuQT2x0lybz7W03EwD7lN9hhuBkHdTGOAiyPsXl+NcZ49rOGDTWFR0NZK
-	buASOAnel3cfdj6l5eySSDR/pVX4mmF2A0vNI2I6BQNUpjoS5e3zfJjR4JoXBcpIeWvxJO4x1xM
-	mJbvQ8hEEoOUCC8W+F7FS9Rrcrrl2/G0dzB5amdai1TQ383cSfZrJsa3oHRqV+FyVhemNR/6Bhy
-	ggOSzj9BGnjq+cGvhIWsZWUq+WW2Id5WI3/ff20vZut4ne5K0O58uwjKTAQxjWy/ZAfkn7bQQfv
-	q5BjNIMevEO3WOU8HPHYKwCuZ9D3T3pIRNk2l14Q6pH3QYMJlUIFLN+clKVNaUjrCKcxki5fQ3A
-	cye+ifwvwiL87Dh1Utves0w5NRAvMwXq06iCDSbyVoDXn50GTHw==
-X-Google-Smtp-Source: AGHT+IGtA3GUkdQo//QBn3pY2OMnyEfTVBquyoe34OK9IjLByDxNimIi0SJJkquSyLOMPM8YUydg0g==
-X-Received: by 2002:a05:622a:8d08:b0:4e6:f791:c04 with SMTP id d75a77b69052e-4e6f7910f74mr186096831cf.50.1760362228806;
-        Mon, 13 Oct 2025 06:30:28 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::20b3])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e706d670dcsm75869621cf.28.2025.10.13.06.30.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Oct 2025 06:30:28 -0700 (PDT)
-Date: Mon, 13 Oct 2025 09:30:25 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Jimmy Hu <hhhuuu@google.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	badhri@google.com, royluo@google.com, Thinh.Nguyen@synopsys.com,
-	balbi@ti.com, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: udc: fix race condition in usb_del_gadget
-Message-ID: <a337ce7a-a3b9-48d5-be33-eaaa71efba87@rowland.harvard.edu>
-References: <20251013075756.2056211-1-hhhuuu@google.com>
+        bh=Z9lQqraCfSs8f8OJtdgQ5fBDCz5Q96ENSKPydfYdvks=;
+        b=h39NtSnCIHcKhLnTNTu2cT3yrr97juhiZwORtEKKNO1jxZq8y3aV1s8Pa9TdTpI9xe
+         fOlTKpDSGvCpodvFmYdyge2mo4U1Ba/XCWErTj23tNzXCDc8GHKqTTCq5mos4Ggj0jTL
+         Aogdw5vBG0hKgBbgO4WC9TO8CRd+Kw4zS0HkdhRxN33dsVXGaDgZ0tFCNzBLDL6y/f+E
+         /AxHJyLf0h3u/HWqaO12iBT54tGBLIyb3zP/Kkbe0LG32VfTiOOHnclii82LDrm8pE4j
+         /QU2bFkbdQBjLnVOMaNV2B97VmGClSdKxIW2FnYcREniv4FoAth2ORh+64zjx0rqjZJ4
+         LsmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760363552; x=1760968352;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Z9lQqraCfSs8f8OJtdgQ5fBDCz5Q96ENSKPydfYdvks=;
+        b=pm9sG+JZhsP2cGpW8Uy5BnRXJvL4oJgrepWa/PzhSIaozkgi4SQ6oOiRsfcLXxEVh2
+         jrEQDAQNM5nqb5TzwypHL5wi19/pY6iEqMArhcU1ncsHzw+CEcG6hkWnP4bI7LC3595s
+         j1V7sNw5Jt6vEKm/u9Qd7AwSKw+fYcaGN3ES5VPRBqoqzhp1Qd6tUNHCHK2D36d6JX4F
+         9HcrwpXlhX6bloQfx9Vlp/qnpauaFiIdcrnQOFJxLhvYzbcpEW+IoRDprEk10EazNtUE
+         zCkWnzB9xAn0kw3JCfAetY2wQgPP2UlSChUvDfSI515QTrN8uHtGW97DTrWpWq0q3Gnv
+         GCbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUDAtBCKKi+n7EOoLibT3YVMn/dqC3NHLfixnA+9FFZe3sAJXnQH7X2YyG3LXVPhq+5kqVAchi6BEI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzecm6IGkr9njDnUCfzbkFjHivaSJAIQZFWwC1pYhvY6XOfJlf4
+	D8sTkKLYlQ8LC9eyyr4h1WpIrjE+7ixljHvl198CYdif1uirKkqZfljy
+X-Gm-Gg: ASbGncs3t7vY6yRTHNzwKp+aAjRwCXN1hwd8a+4fZZmMM4+bEHjG88pKvBDFd9/zdfV
+	T3GEH4HocNAEWk4mRaQPAoug+/JpLEKGYiAO1jItXaLN3xeAGJIi4mzDFSRDxoSTiCgCBGgDx9u
+	YKJEZd1w3Bgyu0GYeLsjMphZKCc1iMC43UvJcLqUmEcGYzWn49voIoe597Rrnudv92Aqz1J1JIb
+	GLxAtPkxlctYIvdEo5vj2jnfQKEkxNnA96F8VhydslitM+/6yN0t4cPSOgeY3DdV8FHaWq398Bq
+	Nwu0JHx4W99YTa6lUn7H2VUcqeiZLcc55CZwDo2GkHPO+jV0AJNF45pD17l4ctT/gYGbVkqj/lY
+	E94/sDJBMgHSmkB70d5JqzKZF56EOke+GQno6Qu8Uj6WfBPqAzmqw8Hg4NL9vuCc08fU/BN7+V5
+	3Jm0z72lAj/fvV
+X-Google-Smtp-Source: AGHT+IEVC8MF7la4ICpCPkAJKhW4v9pLS7PHTEzNZOLI9i2D6vp8ilomZ3/m59BW+gshkxQ8RY9Hpg==
+X-Received: by 2002:a17:907:3d91:b0:b3f:cc6d:e0a8 with SMTP id a640c23a62f3a-b50aa99e1d2mr2514892366b.17.1760363552264;
+        Mon, 13 Oct 2025 06:52:32 -0700 (PDT)
+Received: from localhost (91-139-16-234.customers.tmcz.cz. [91.139.16.234])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b55d8c12cecsm946177866b.53.2025.10.13.06.52.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Oct 2025 06:52:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251013075756.2056211-1-hhhuuu@google.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 13 Oct 2025 15:52:31 +0200
+Message-Id: <DDH8SR59EOOP.1MZ5EJ6PQWFU6@gmail.com>
+Cc: "Arisa Snowbell" <arisa.snowbell@gmail.com>,
+ <linux-usb@vger.kernel.org>, <regressions@lists.linux.dev>, "Niklas
+ Neronin" <niklas.neronin@linux.intel.com>, "Michal Kubecek"
+ <mkubecek@suse.cz>
+Subject: Re: [PATCH v2 RFT] usb: xhci-pci: Fix USB2-only root hub
+ registration
+From: "Arisa Snowbell" <arisa.snowbell@gmail.com>
+To: "Michal Pecio" <michal.pecio@gmail.com>, "Mathias Nyman"
+ <mathias.nyman@linux.intel.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <CABpa4MA9unucCoKtSdzJyOLjHNVy+Cwgz5AnAxPkKw6vuox1Nw@mail.gmail.com> <CABpa4MCUnLUR_0Vzgd=rTr0+Hot=nxHirKrX6xtJWowDoLhWJw@mail.gmail.com> <CABpa4MCg7yixe7O8Pp+YwvpxeC=1JPhMhAap12RjtV6pcxFYgQ@mail.gmail.com> <20251008082055.5646dadc.michal.pecio@gmail.com> <CABpa4MCm8hQXvtSYqUA+Dh3rCLVM5rTC1p+FsgmFemv+Vyz=RA@mail.gmail.com> <20251008130532.49922d58.michal.pecio@gmail.com> <CABpa4MAsvK68CyQ7bVdie1j2m2O2YAEuFJHq8D-65uFT3FzKzQ@mail.gmail.com> <20251008223406.13f16f19.michal.pecio@gmail.com> <CABpa4MBGW=OJi+j34TbL2g=zyTg7-rxqpHYfAW-1DXTPk=g5Fw@mail.gmail.com> <CABpa4MBDvgJcgJf3_E7k1dBXs7v1tW-79dmc_sQDVM1bES5YDQ@mail.gmail.com> <20251009131444.2c221922.michal.pecio@gmail.com> <90c03eeb-3913-4968-88c0-0de09023a2b5@linux.intel.com> <20251009152703.72e780b4.michal.pecio@gmail.com> <b8c2423f-aa9d-442a-ae2f-3c4d78949b38@linux.intel.com> <20251013092250.699bf60f.michal.pecio@gmail.com> <21741b98-4844-4218-8bd9-10b8bf5cd869@linux.intel.com>
+ <20251013100424.42d5b9d2.michal.pecio@gmail.com>
+In-Reply-To: <20251013100424.42d5b9d2.michal.pecio@gmail.com>
 
-On Mon, Oct 13, 2025 at 07:57:56AM +0000, Jimmy Hu wrote:
-> A race condition during gadget teardown can lead to a use-after-free
-> in usb_gadget_state_work(), as reported by KASAN:
-> 
->   BUG: KASAN: invalid-access in sysfs_notify+0_x_2c/0_x_d0
->   Workqueue: events usb_gadget_state_work
-> 
-> The fundamental race occurs because a concurrent event (e.g., an
-> interrupt) can call usb_gadget_set_state() and schedule gadget->work
-> at any time during the cleanup process in usb_del_gadget().
-> 
-> Commit 399a45e5237c ("usb: gadget: core: flush gadget workqueue after
-> device removal") attempted to fix this by moving flush_work() to after
-> device_del(). However, this does not fully solve the race, as a new
-> work item can still be scheduled *after* flush_work() completes but
-> before the gadget's memory is freed, leading to the same use-after-free.
-> 
-> This patch fixes the race condition robustly by introducing a 'teardown'
-> flag and a 'state_lock' spinlock to the usb_gadget struct. The flag is
-> set during cleanup in usb_del_gadget() *before* calling flush_work() to
-> prevent any new work from being scheduled once cleanup has commenced.
-> The scheduling site, usb_gadget_set_state(), now checks this flag under
-> the lock before queueing the work, thus safely closing the race window.
+Testing probably wasn't required but I am running this patch right now
+and it also works.
 
-Good analysis.
 
-> 
-> Fixes: 5702f75375aa9 ("usb: gadget: udc-core: move sysfs_notify() to a workqueue")
-> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/usb/gadget/udc/core.c | 18 +++++++++++++++++-
->  include/linux/usb/gadget.h    |  6 ++++++
->  2 files changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index d709e24c1fd4..c4268b76d747 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-
-> @@ -1357,6 +1362,9 @@ static void usb_udc_nop_release(struct device *dev)
->  void usb_initialize_gadget(struct device *parent, struct usb_gadget *gadget,
->  		void (*release)(struct device *dev))
->  {
-> +	/* For race-free teardown */
-> +	spin_lock_init(&gadget->state_lock);
-> +	gadget->teardown = false;
->  	INIT_WORK(&gadget->work, usb_gadget_state_work);
->  	gadget->dev.parent = parent;
-
-> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-> index 0f28c5512fcb..8302aeaea82e 100644
-> --- a/include/linux/usb/gadget.h
-> +++ b/include/linux/usb/gadget.h
-
-> @@ -426,6 +429,9 @@ struct usb_gadget {
->  	enum usb_ssp_rate		max_ssp_rate;
->  
->  	enum usb_device_state		state;
-> +	/* For race-free teardown and state management */
-
-The comments here and above merely repeat information that's already 
-given in the kerneldoc.  They aren't needed.
-
-Alan Stern
+- Arisa
 
