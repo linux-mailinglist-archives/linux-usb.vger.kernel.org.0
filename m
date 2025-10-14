@@ -1,125 +1,88 @@
-Return-Path: <linux-usb+bounces-29275-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29276-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA1D3BD77E5
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 07:53:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A3FABD80A4
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 09:57:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C24140289E
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 05:52:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9EA218A0067
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 07:57:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE2229ACD1;
-	Tue, 14 Oct 2025 05:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4468730EF77;
+	Tue, 14 Oct 2025 07:57:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DJ1+ybYH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="heivPxpU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571A352F88
-	for <linux-usb@vger.kernel.org>; Tue, 14 Oct 2025 05:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D602BDC0B;
+	Tue, 14 Oct 2025 07:57:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760421163; cv=none; b=VrlmifccC3XeKzCbMRHLIRDoK0gTyIO1end2VX8sQivl/VsBZ609ka7FqB5ySMkMTMadTZSIjAZ/dzOzvCHerSHFTlhQCoxNg88nghsF4ubV6JoxyTCULaITXmdgU05NmnqeOnkflNYfVIsph39cwoWXf5OxUlhUiz0EDMmXfJU=
+	t=1760428647; cv=none; b=rVc9glgEZ4cE6LJMaiwIY/r/fOzyFlWyzCuxMroe9Rbnvtk+US+R6AapUck61YMsKZEOGqqOztBx6EE/73CrIapotyYoKc8UrzUpa+1ACPyw7s1fXQVnQO0pkssaddFRoU5NT/hplb/VbdemmQfCZJvV4lAfCngPlIRhyxJHZ/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760421163; c=relaxed/simple;
-	bh=xiqFJOykby4cQK17gVtELNe3dahFjsM+TAM/4GuYD9k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RST7ePblLxWoCtIHD+39GdUj4Nf5jksIlXPppb05ue/lKf/73WMt1Au8P8DLs5e4ORkXNSesS2NY3COQe4VplisTJbRv6Lmuqs0KeahAk/jmR5GvsVcPNtp6qVGiBiPkUFMJBetK+RgPNCm/4zo0Hp3ypvW7RiJPdQkjAEJank0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DJ1+ybYH; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3304dd2f119so3864832a91.2
-        for <linux-usb@vger.kernel.org>; Mon, 13 Oct 2025 22:52:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760421161; x=1761025961; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mWlNVmLtjnf8rAcNm545u/wbHRU51ZDEKLc4vvLow4M=;
-        b=DJ1+ybYHL4cjKKbSwkXU6gG1UUY9+h5g+o1p/XIGZoO7DSK4y/CnqS5A0e+NYJe7fP
-         09KHxRjHC4ZvC7WGZP3c3yZxE4qNP4pH1mdTIi8GbuAVtQKELP2d9r39iSBLUIq1Qf/r
-         c4UDvNA2xUsSQGhcPrxQ85ELUVg3HwxMPDwRAzm748x9/YtMvF6vhP7v2RgjlvxhcvI6
-         OONC3FagZW5enMG0bpmzBxV+JKy6mxneZF0Yb6Sy1bpjQ2ukXUiJJHawKG/XCyUNQwin
-         0wEeM6So8r42Wo4X2VfkxllL7k4zH+w1byiU4bvSI0qU6gWP2UL2Tx8VymUZqjAPYkBu
-         bXjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760421161; x=1761025961;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mWlNVmLtjnf8rAcNm545u/wbHRU51ZDEKLc4vvLow4M=;
-        b=gdRXWQ9ugbeTv0BUqqZU1ED56AjFBk/b8hppb9OFRJKjr4JFAt6fE4nvEAgg0ByAd4
-         rKPbVRsORGOkNr5npOBzQfKUOF9OdJT4Qrcr4McSeQeWB52FhmWWthRsoSJxVE7ZEntd
-         YCUzd53/Tv5Az9E/o7WmuuSsH9+/ZQoBgkvr7BHlIaH41KHfHWCAwvfwzneANuQ5nhk/
-         YYsAO6PDZfAb4YMaeJ9l4EDL1QFx/Hpo+DC7nhCnwOaMSoTb3mDI2C2pvgTF4CWGgUJ1
-         q7oht+MXmy3pn+X1zA1T0zgcQnCGDzKn2Hj6GAAN9LN8ba/S71CYZfxJ5oIb36dXzL/P
-         7qLA==
-X-Forwarded-Encrypted: i=1; AJvYcCXLPVnUGAALgnrDKYkonaGLPawIZaBxw280UlIowywqY8cnw/H50Wm7SGcQnYWsDoEWD1RUxKB/L0M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+EsbYx0MksSMCQqBu42wM8t2EwTGbkJnYXUw2XFy4MLy/mgLf
-	KsbinLQm7PD976xE0um5cXWL5/EQ5H6yGjIwLikSB1NngxAqkt96B2/AU3nig+UVqIk=
-X-Gm-Gg: ASbGncuQS31DUIJGFpAXbU4LMw7ffyb3QC1LV7qaZM0eTEjle+mlSt7Vb6f0XdNj7Yp
-	Dmg8JR3HLJNtpHUSsEZbqqOlJS8dgHagifKeMPH+y3sl61y5XA5oq+VQYnlEmSuq9a3N/+Ygm8G
-	9vpQKllNDCRnsJv85PeNpZu+U3uMmfUDF1eb6vpex6QNuqs65OU8N65CtCZ85kA7cJF5fK67xeE
-	3QdWezSWzG0gKZyPd4wEVc9kMUv6lPPTo+yBJzYke1GcYavQVbwFzikTM2VXQcWCoQTQ2XCEA73
-	NVcWSdfLL6pPyB8RWl2cC2l4vb1KABoktwkRpNygwPUmOZWNyYOGQES5ZeTgpLk19LHKg8JPBIJ
-	Pz2qxPtgcVUrdc8Iwr+JXO78xhyxdDJOAMnsbuzyir7gi3953/BXTOyl5lZu8FcWtGXJFMx6EHf
-	ZtmeI=
-X-Google-Smtp-Source: AGHT+IGZ4VytOKfxuKimiMVWhQiKhxNFaYk8/G36/eeE0Sx6uLTpUHGY3Bg+9lWRu14oZFzlLrNxWg==
-X-Received: by 2002:a17:90b:224a:b0:332:3515:3049 with SMTP id 98e67ed59e1d1-33b5112504amr30797652a91.4.1760421161516;
-        Mon, 13 Oct 2025 22:52:41 -0700 (PDT)
-Received: from arawal-thinkpadp1gen4i.rmtin.csb ([2402:a00:401:b8b3:f979:38a1:d361:cdf4])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b62657166sm14391472a91.11.2025.10.13.22.52.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Oct 2025 22:52:41 -0700 (PDT)
-From: rawal.abhishek92@gmail.com
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: arawal@redhat.com,
-	jamie.bainbridge@gmail.com,
-	Abhishek Rawal <rawal.abhishek92@gmail.com>,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
+	s=arc-20240116; t=1760428647; c=relaxed/simple;
+	bh=oZ/9m4wEpTISmrZAs2nItOaXU4KZEMVkakvOo1X8eJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qt3gnd6GXA5sayyFdWTivg99xyupBEzDg7FB19cjabqTxTPEUAUnERoFchZFxSQhXAenl8eCaWqM99ikHu2bKmE/3jCC9lIIyyfMMMWI9QQky19hRucNkdAGYyIwMLwzJ0BwzN0PmK2z8T47C9zj2rFcHCL+JlgNX19wmPAi3Sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=heivPxpU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD9F2C4CEE7;
+	Tue, 14 Oct 2025 07:57:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1760428647;
+	bh=oZ/9m4wEpTISmrZAs2nItOaXU4KZEMVkakvOo1X8eJ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=heivPxpUWm7Sujci8gcJdJCeNaCIQ9n469SA1M+JR/UCNh/Vgh8z1HchjQrUs5HDX
+	 X9NtDIGeVD9HyW/SEJZI9/YyU6tXY9KKUkXsdZpCM4hHWMpNM4dYg42nxPPNH/vs58
+	 eGlWckZxT9tI//bUh3OvZfj8G+/ag/HAB5kYm1KY=
+Date: Tue, 14 Oct 2025 09:57:24 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Kuen-Han Tsai <khtsai@google.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] r8152: Advertise software timestamp information.
-Date: Tue, 14 Oct 2025 11:22:33 +0530
-Message-ID: <20251014055234.46527-1-rawal.abhishek92@gmail.com>
-X-Mailer: git-send-email 2.51.0
+Subject: Re: [PATCH 2/2] usb: core: Add tracepoints for device allocation and
+ state changes
+Message-ID: <2025101446-starved-brownnose-e9ed@gregkh>
+References: <20251013-usbcore-tracing-v1-0-b885a3121b09@google.com>
+ <20251013-usbcore-tracing-v1-2-b885a3121b09@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251013-usbcore-tracing-v1-2-b885a3121b09@google.com>
 
-From: Abhishek Rawal <rawal.abhishek92@gmail.com>
+On Mon, Oct 13, 2025 at 10:01:23AM +0800, Kuen-Han Tsai wrote:
+> Introduce new tracepoints to the USB core to improve debuggability of
+> USB device lifecycle events.
+> 
+> The following tracepoints are added:
+> 
+> - usb_alloc_dev: Triggered when a new USB device structure is allocated,
+> providing insights into early device setup.
+> - usb_set_device_state: Triggered when the USB device state changes,
+> allowing observation of the device's state transitions.
+> 
+> These tracepoints capture detailed information about the USB device,
+> including its name, speed, state, bus current value, and authorized
+> flag. This will aid developers in diagnosing issues related to device
+> enumeration within the USB subsystem.
+> 
+> Examples:
+>  usb_alloc_dev: usb 1-1 speed 0 state 1 0mA [authorized]
 
-Driver calls skb_tx_timestamp(skb) in rtl8152_start_xmit(), but does not advertise the capability in ethtool.
-Advertise software timestamp capabilities on struct ethtool_ops.
+If you are going to change the state to be a string, can you also change
+the speed to be a string as well?  That will help out with people
+wondering what is going on with the speed of the device a lot.
 
-Signed-off-by: Abhishek Rawal <rawal.abhishek92@gmail.com>
-Reviewed-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
----
- drivers/net/usb/r8152.c | 1 +
- 1 file changed, 1 insertion(+)
+thanks,
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 44cba7acfe7d9bfbcc96a1e974762657bd1c3c33..f896e9f28c3b0ce2282912c9ea37820160df3a45 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -9311,6 +9311,7 @@ static const struct ethtool_ops ops = {
- 	.set_ringparam = rtl8152_set_ringparam,
- 	.get_pauseparam = rtl8152_get_pauseparam,
- 	.set_pauseparam = rtl8152_set_pauseparam,
-+	.get_ts_info = ethtool_op_get_ts_info,
- };
- 
- static int rtl8152_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
--- 
-2.51.0
-
+greg k-h
 
