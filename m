@@ -1,182 +1,142 @@
-Return-Path: <linux-usb+bounces-29293-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29294-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE6ABBDA904
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 18:08:09 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5FF4BDAF51
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 20:36:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAE57546463
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 16:08:01 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 61DAD352FFE
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 18:36:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F46301717;
-	Tue, 14 Oct 2025 16:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 323322BF3E2;
+	Tue, 14 Oct 2025 18:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k4X0EahX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fk9J+W+8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AAEF25487B;
-	Tue, 14 Oct 2025 16:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149BF27FB2A
+	for <linux-usb@vger.kernel.org>; Tue, 14 Oct 2025 18:35:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760458053; cv=none; b=gCSmROqP25VRUsDEt4FBQkjqiBO9EjShgPQrIS/zsbLGGFtGbQCAmzmmxCts0wJpojbxVZn7LkoY3S/1h+VJRdLWgGNCOY7hXF2fjZKGIfmq6PhBkI3557kJf4BVLnApwDU0syg3J1yvlKCQAw4YIMhxwTfqssWUhM6b7ycK6JQ=
+	t=1760466945; cv=none; b=DfXd0zqTMiaph87nyqW3x15jzmKCBNXH8ql4VIUzvUs/nAMbTjOfJ/322IOObWH8amBwS0KA0+BraulSaTQRcHBaccf9pIUAUq5nTxmwGpgH9PTkha7sVrrvRd782LZ8knQJEvrDrKdjgSo+9Ns9UyTf07+bDOdawYC3KsGfz34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760458053; c=relaxed/simple;
-	bh=1jBubh4KbgOHkcgKFedwooTlIiB56NAjgSkhvCjAH7w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uIIitS5noprkcgJnRzwzTrwEkDVvDADDc8y9neJG/Ei5RyHUHsATNBex+FQ/5n2elad0np9HEnhRnMzTyusSKKluIkizGNJGyI4NDsLMCwbYVeKyknKlxt/JjhljW2LEoMKtLZLq+GR6IcWmjQAIeugDSRPJDbwWs8MxJMoZkZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k4X0EahX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D3D5C4CEE7;
-	Tue, 14 Oct 2025 16:07:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760458053;
-	bh=1jBubh4KbgOHkcgKFedwooTlIiB56NAjgSkhvCjAH7w=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=k4X0EahX5vxzaBxhcgQbXtYCGvZGzoBm9unwpvyfFFkzq09bWqjHKiU5Jb0rW92ct
-	 qBMssPV82DJTk8uPwSf+MIyWsKdyUNTWATS3ookdcKwwEnwJvDiVkWquKmvnRzUQOX
-	 6Y4NkKYOYNgkqCcgURNfpRpj6zBurh528fa+tIViZyxyZRlkFKtE0N+cb0vWitCknV
-	 leP+ZQHTWPbig3QpCQ3vIVhFWThxl9An1k+fgq2gtVWHXp/Wc6MGmon75+vflotVza
-	 vpRCH9N437uScx/jzMeAJamdXtRaoU9uhPExBegRQYTo2kofkUblQNIS4qL00XcH6T
-	 j93Cka1qzM84g==
-From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Tue, 14 Oct 2025 18:06:47 +0200
-Subject: [PATCH 3/3] usb: typec: ps883x: Add USB4 mode and TBT3 altmode
- support
+	s=arc-20240116; t=1760466945; c=relaxed/simple;
+	bh=7ihomR4ZLmJ+D69l27qwDNTNJ7neWtqDmKaPsFaYGOA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GwT7SEMSKKgyMxFPVfdi+O6dWUoGLRlLCurBYTwKD9JlNtCxcSTGofITLAMDZzYljT8K6Vh9X9NR1xkMehTOHidginpSm9KzLbHthHElVYWoA1l3kMgUnUcSdudFtip+TGSkr5fNRXCIhUGi/YFkQk2+4SyKLVWKosi/Tjs0Eo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fk9J+W+8; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6318855a83fso12842053a12.2
+        for <linux-usb@vger.kernel.org>; Tue, 14 Oct 2025 11:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760466939; x=1761071739; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vpww0uRzesUwhHo4ZMmhfa/PCAFNQaWjF5kzNzK8A/g=;
+        b=Fk9J+W+8shRqakN3uXz+AP1nV5s3tknv2k3zSINIdHtw+x2Ge9kotcG8/F7LPYlONU
+         QqimL9BqQDRYj2VguuW5u3a/0/bE4L/cRM6j1QdTGYV27FMrhalF4hyu6cCR1me3/ySw
+         OBchhNDuKNHMp0BybH1gYwHaPQ2RVS7cLKlSU2i6O9N+TNDr/f0UjIdD4Ndtx2x0RChB
+         SnYoGr/CB9JxttFQa1IFKIS4n9ifQnhkRn3a/RziIjUU/FwsGkpW01mcrDJ9NCVVYfDG
+         hRq9eQvBsF31zlEKKG6vdJlUSeACbdHobFEY3CuWJE+lBXoS0mXniMfp7zWd9CqPTwqs
+         iPUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760466939; x=1761071739;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vpww0uRzesUwhHo4ZMmhfa/PCAFNQaWjF5kzNzK8A/g=;
+        b=fCRYPNLeO5Hc0szQrq+huCDuMWjDKjD/bHVQ2Z9aH+EFDW6Oz2Bya8U4Q3KvA/IGl8
+         jos5tbnBQbRx26eTJNdVwLGmoa3uYbcYngpauv/lTQTILyullcv42F1/Y3KOMFdZqMgZ
+         CWGQ6XxsaUASCVr8wQ6nV00JG+g+cAofuZSFmE3cJiFDniwXJkqpf2dmFwyfMyvk2/eh
+         eboLopdr4YfbN3LdbmEWWiKx54ILJPZendZP+/q54fXlg9LaJv9Iucjr8JrXYXG+RwAE
+         rsTM004uXAEdIUYh7wQ6MMUR1q43b4U7meA3OYMD14YgqPlS4d5RUxswbMgHSEnd1LE8
+         hT6w==
+X-Gm-Message-State: AOJu0YwotEpxoGG6xNm8yLwgDwwGnYKSpnwiyl11GgwJTSg8cXT4CXKj
+	M6xGHoMb+2z9T1QeO5QDAnO6r60+K4e2d6xBYNfWPXSyuFvRuI4MkQJ6
+X-Gm-Gg: ASbGncs5CZPFEf9UZRi9RBcGcnW3YWE6O3+MJGwneeObvOslqUWm4d7hUvZ7G96Cr+9
+	OXKOCxPRuwEJ03gpI/x1XH1o1ZADIunJd656JI427nhOeiJXN0Pm+fP/OiuHK1kWM/Qy3bYaPIU
+	ncwMjVZkqyPgbo/+na0M+9xA9EPK9ZNinGKD8lQ4j4Rvh8q21FLPSY9ndkLt4Bm5ZbKnnZtgegQ
+	QQnJBca05PDWBdjChp1sQXlanQ0q62kDhmY2IU+1Eh8facE9sebcHJoRNG+rL+pxZK5ytuxDvYq
+	CMEZPmDxjIo2GmYrrmVgy509Ns22Ybxop4GpEy4zUH1FL9Pjd3qS/aFNN3WdDIpSOn0cVOLjEPf
+	9YnttQYiAoCR1N52kUGcx1EX+Ri/MzsCza9euCTLrLRACYdYsNelbYLLldQ==
+X-Google-Smtp-Source: AGHT+IHlOOKTCGXDba2LhUQoWTaxK6wMg6wcVm4ZzOdSoGJ1O9n6kWEoRui5yFsaklG9CzhbVP2v6g==
+X-Received: by 2002:a17:907:da7:b0:b41:c602:c747 with SMTP id a640c23a62f3a-b50aa48d83dmr2606822766b.7.1760466939119;
+        Tue, 14 Oct 2025 11:35:39 -0700 (PDT)
+Received: from foxbook (bff184.neoplus.adsl.tpnet.pl. [83.28.43.184])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b5cb965ddf5sm38482566b.15.2025.10.14.11.35.37
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 14 Oct 2025 11:35:38 -0700 (PDT)
+Date: Tue, 14 Oct 2025 20:35:28 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Petko Manolov <petkan@nucleusys.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Simon Horman <horms@kernel.org>
+Subject: [PATCH net v2] net: usb: rtl8150: Fix frame padding
+Message-ID: <20251014203528.3f9783c4.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251014-topic-ps883x_usb4-v1-3-e6adb1a4296e@oss.qualcomm.com>
-References: <20251014-topic-ps883x_usb4-v1-0-e6adb1a4296e@oss.qualcomm.com>
-In-Reply-To: <20251014-topic-ps883x_usb4-v1-0-e6adb1a4296e@oss.qualcomm.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
- Wesley Cheng <wesley.cheng@oss.qualcomm.com>, 
- Jack Pham <jack.pham@oss.qualcomm.com>, 
- Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760458037; l=3510;
- i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=9yQEyyiSxsY8LkSz9hKPBgVq0JFcAAW/MtHb2Out5tw=;
- b=FCpZ2U/ZGEc1lLV4jctKN8Ju/gXhNU9Tc9CMhPL3d7bV+zdpQ1VrLcly156UjryAQ2GfPgMw7
- M7L4CnM3/deCaiJ7Y06g1eNb3U1vu2Ye+Dw6KFxfpzcsKI2CsUVXXlq
-X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+TX frames aren't padded and unknown memory is sent into the ether.
 
-This chip can do some more than the driver currently describes. Add
-support for configuring it for various flavors of TBT3/USB4 operation.
+Theoretically, it isn't even guaranteed that the extra memory exists
+and can be sent out, which could cause further problems. In practice,
+I found that plenty of tailroom exists in the skb itself (in my test
+with ping at least) and skb_padto() easily succeeds, so use it here.
 
-Reviewed-by: Jack Pham <jack.pham@oss.qualcomm.com>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In the event of -ENOMEM drop the frame like other drivers do.
+
+The use of one more padding byte instead of a USB zero-length packet
+is retained to avoid regression. I have a dodgy Etron xHCI controller
+which doesn't seem to support sending ZLPs at all.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable@vger.kernel.org
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 ---
- drivers/usb/typec/mux/ps883x.c | 29 +++++++++++++++++++++++++++++
- include/linux/usb/typec_tbt.h  |  1 +
- 2 files changed, 30 insertions(+)
 
-diff --git a/drivers/usb/typec/mux/ps883x.c b/drivers/usb/typec/mux/ps883x.c
-index 72f1e737ca4b..7c61629b36d6 100644
---- a/drivers/usb/typec/mux/ps883x.c
-+++ b/drivers/usb/typec/mux/ps883x.c
-@@ -14,15 +14,18 @@
- #include <linux/mutex.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/usb/pd.h>
- #include <linux/usb/typec_altmode.h>
- #include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_mux.h>
- #include <linux/usb/typec_retimer.h>
-+#include <linux/usb/typec_tbt.h>
- 
- #define REG_USB_PORT_CONN_STATUS_0		0x00
- 
- #define CONN_STATUS_0_CONNECTION_PRESENT	BIT(0)
- #define CONN_STATUS_0_ORIENTATION_REVERSED	BIT(1)
-+#define CONN_STATUS_0_ACTIVE_CABLE		BIT(2)
- #define CONN_STATUS_0_USB_3_1_CONNECTED		BIT(5)
- 
- #define REG_USB_PORT_CONN_STATUS_1		0x01
-@@ -34,6 +37,10 @@
- 
- #define REG_USB_PORT_CONN_STATUS_2		0x02
- 
-+#define CONN_STATUS_2_TBT_CONNECTED		BIT(0)
-+#define CONN_STATUS_2_TBT_UNIDIR_LSRX_ACT_LT	BIT(4)
-+#define CONN_STATUS_2_USB4_CONNECTED		BIT(7)
-+
- struct ps883x_retimer {
- 	struct i2c_client *client;
- 	struct gpio_desc *reset_gpio;
-@@ -95,6 +102,8 @@ static int ps883x_configure(struct ps883x_retimer *retimer, int cfg0,
- 
- static int ps883x_set(struct ps883x_retimer *retimer, struct typec_retimer_state *state)
- {
-+	struct typec_thunderbolt_data *tb_data;
-+	const struct enter_usb_data *eudo_data;
- 	int cfg0 = CONN_STATUS_0_CONNECTION_PRESENT;
- 	int cfg1 = 0x00;
- 	int cfg2 = 0x00;
-@@ -120,6 +129,18 @@ static int ps883x_set(struct ps883x_retimer *retimer, struct typec_retimer_state
- 				break;
- 			}
- 			break;
-+		case USB_TYPEC_TBT_SID:
-+			tb_data = state->data;
-+
-+			/* Unconditional */
-+			cfg2 |= CONN_STATUS_2_TBT_CONNECTED;
-+
-+			if (tb_data->cable_mode & TBT_CABLE_ACTIVE_PASSIVE)
-+				cfg0 |= CONN_STATUS_0_ACTIVE_CABLE;
-+
-+			if (tb_data->enter_vdo & TBT_ENTER_MODE_UNI_DIR_LSRX)
-+				cfg2 |= CONN_STATUS_2_TBT_UNIDIR_LSRX_ACT_LT;
-+			break;
- 		default:
- 			dev_err(&retimer->client->dev, "Got unsupported SID: 0x%x\n",
- 				state->alt->svid);
-@@ -135,6 +156,14 @@ static int ps883x_set(struct ps883x_retimer *retimer, struct typec_retimer_state
- 		case TYPEC_MODE_USB3:
- 			cfg0 |= CONN_STATUS_0_USB_3_1_CONNECTED;
- 			break;
-+		case TYPEC_MODE_USB4:
-+			eudo_data = state->data;
-+
-+			cfg2 |= CONN_STATUS_2_USB4_CONNECTED;
-+
-+			if (FIELD_GET(EUDO_CABLE_TYPE_MASK, eudo_data->eudo) != EUDO_CABLE_TYPE_PASSIVE)
-+				cfg0 |= CONN_STATUS_0_ACTIVE_CABLE;
-+			break;
- 		default:
- 			dev_err(&retimer->client->dev, "Got unsupported mode: %lu\n",
- 				state->mode);
-diff --git a/include/linux/usb/typec_tbt.h b/include/linux/usb/typec_tbt.h
-index 55dcea12082c..0b570f1b8bc8 100644
---- a/include/linux/usb/typec_tbt.h
-+++ b/include/linux/usb/typec_tbt.h
-@@ -55,6 +55,7 @@ struct typec_thunderbolt_data {
- 
- /* TBT3 Device Enter Mode VDO bits */
- #define TBT_ENTER_MODE_CABLE_SPEED(s)	TBT_SET_CABLE_SPEED(s)
-+#define TBT_ENTER_MODE_UNI_DIR_LSRX	BIT(23)
- #define TBT_ENTER_MODE_ACTIVE_CABLE	BIT(24)
- 
- #endif /* __USB_TYPEC_TBT_H */
+v2: update TX stats when dropping packets
 
+v1: https://lore.kernel.org/netdev/20251012220042.4ca776b1.michal.pecio@gmail.com/
+
+ drivers/net/usb/rtl8150.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+index 92add3daadbb..278e6cb6f4d9 100644
+--- a/drivers/net/usb/rtl8150.c
++++ b/drivers/net/usb/rtl8150.c
+@@ -685,9 +685,16 @@ static netdev_tx_t rtl8150_start_xmit(struct sk_buff *skb,
+ 	rtl8150_t *dev = netdev_priv(netdev);
+ 	int count, res;
+ 
++	/* pad the frame and ensure terminating USB packet, datasheet 9.2.3 */
++	count = max(skb->len, ETH_ZLEN);
++	if (count % 64 == 0)
++		count++;
++	if (skb_padto(skb, count)) {
++		netdev->stats.tx_dropped++;
++		return NETDEV_TX_OK;
++	}
++
+ 	netif_stop_queue(netdev);
+-	count = (skb->len < 60) ? 60 : skb->len;
+-	count = (count & 0x3f) ? count : count + 1;
+ 	dev->tx_skb = skb;
+ 	usb_fill_bulk_urb(dev->tx_urb, dev->udev, usb_sndbulkpipe(dev->udev, 2),
+ 		      skb->data, count, write_bulk_callback, dev);
 -- 
-2.51.0
-
+2.48.1
 
