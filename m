@@ -1,69 +1,69 @@
-Return-Path: <linux-usb+bounces-29297-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29298-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70DDABDB1F8
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 21:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 76EE9BDB201
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 21:51:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59010544569
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 19:51:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD5605452A9
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 19:51:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C58130276A;
-	Tue, 14 Oct 2025 19:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E25A2D12F5;
+	Tue, 14 Oct 2025 19:51:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tAxvt9dn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rMRTbd7c"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70333002BB
-	for <linux-usb@vger.kernel.org>; Tue, 14 Oct 2025 19:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D251302CA3
+	for <linux-usb@vger.kernel.org>; Tue, 14 Oct 2025 19:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760471468; cv=none; b=M9YUyiqH9ilhwWXdaZAmjDto/ueUJficgYyXvs5H48/7hDoGatr4ZxHzODTNhKwuCp7T/EJIIJ7S5nxCgaVwduXrrgXqFpOdWkpBok0TjuppAy0GqsZ9Vc7xBJ5gD07Twy4ymOelrqJseXdncRVLkyD4VEXtEm2/Vjrh8AayzBQ=
+	t=1760471470; cv=none; b=LOQ20l80COKMVVmZurdSCdi7BMwlaP0nil+r1MPh99xKqUsmiNygQNU0PYgpnC5p4XH+zSh/98bpNljb2vftvG8foyf4lC8iiWBOnkgKw03wvg0vse8FVlqEgolbeY9m6XIIev2uXRAjsTZTRSYEtmE/uFWpJlZUD+v2T+QaWSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760471468; c=relaxed/simple;
-	bh=WSQ2iDb3hcVF5qM6lFll1BwCOEotVXw7mTOGjytvpYI=;
+	s=arc-20240116; t=1760471470; c=relaxed/simple;
+	bh=M9WRR443R6qxqNQvDIYacnnrQp0IFkkyuLGDmxJErm4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lATjheRnoRt2y0FqHatC5b3iLwTVLYX+ZAm7k9Dx4p2+/nz9PR65ltyiD3WCZZVYrzYC+/E8frCcuUOVGAeQRbNxIrhjBvHfaKAuKPquAEDnvUj7aMTu/y3+fS5v1rfxCIzYY1IlVHnWp5mYTyiqjmraWvWi4nPbPGWMSHMgGFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tAxvt9dn; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=HKhNJQJym+IGE5U/b8oKAuHCEnsnlJ8Fx7J7+iLTgZNu/+AX/CqqnG1rle43riluEcEmH4MkYdRk0ta06r26EgZQRpaBnfnnFJ6GV3f9W5Ce5voaVALcAPdozPSWh0K64a483KY3ngSMIoFYy1h4jkx/onXi42arkICc9ZnDJ4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rMRTbd7c; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-28bd8b3fa67so88670515ad.2
-        for <linux-usb@vger.kernel.org>; Tue, 14 Oct 2025 12:51:06 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-32ec69d22b2so11088662a91.1
+        for <linux-usb@vger.kernel.org>; Tue, 14 Oct 2025 12:51:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760471466; x=1761076266; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1760471468; x=1761076268; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XCBRfoyK+7/WZIQpMdEvmVw8U/FORFk3NHfFvDCUVog=;
-        b=tAxvt9dn4iGMnEuL3aOrOGxYPvos5OQPxXWRIBnNiYS1M8hmfDtN1desyYXoT8Wf2s
-         Ro+2pOpWujH1+1LCoeBGIdpWMY4TUcuD8xm2OJottX1lr9m1flnlEiaWeN2Ev+HUCXX7
-         WAOe03chf3hhrzmCcW+HGnBIM9WCFbwj8vo2hC9tPd54MtOsNh4NyTaPokh6AReiRmCO
-         Lym8lrbpveJZmw58JCxhLSkuN4Fza2UfvgojXghq4OYj4uDrHQP5hkEdFaDl265vLmQw
-         7XzX5sFdf3L1joSVuYqYIlzafCIIWbcn8kRaey6CvDBW9gTW13v+4qFcz6Rocz4TRBCg
-         bC/g==
+        bh=TSnZFCZ64RkJLFEmGTXA6t+vlnwDhOD2bNaCJ3ABIL4=;
+        b=rMRTbd7cgcOC2CRi/Dx1V4zrTUflsgPTxyjwa7DBqY8C/mGzK1SBoKKc37OBgiKxFh
+         QQ+6bxLB6HGBPflo+wocwcZaWYnrNwsc1GLD72dFaf7veCmqvk9CW3gOc6QQ50jrHZ93
+         W51NUBkML9my5oUhz58+7T+3jE23Ndj/5DF+JFGR05mGCce98WQnLm06CgUdPUYnGtWt
+         Qzn2RD02JyNoR2j/3TtGW2uNNAK2TLxCjuI9j4Ze9ltBSJur+6GFZSfVotKem1l0TZ6l
+         xGJRpL6vzHDRp8vHlvOA7xAwu6SqKP577GwY+zeSFWorQ/0bU4G5jZBPnJsug1YVxvn6
+         C5Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760471466; x=1761076266;
+        d=1e100.net; s=20230601; t=1760471468; x=1761076268;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XCBRfoyK+7/WZIQpMdEvmVw8U/FORFk3NHfFvDCUVog=;
-        b=tBcNslnb35M0aIS9EeocD8L2JxCYtvpfrgh9Ppuq5kGekMCrGiWRv21Vk3cI/Pjp5A
-         B5iOx7olTDwfCypNpMYksMXTe3CWnVDmU1jfW0Wgbz0XTMN9ntpurJqaWA+FXlpqXMRh
-         rQl+ckUNGzUxaGJIGXNC4DUYY5QuiBGYnRItpkYLjIpTFPJlDuGljwG5yjBH0/aJnTWE
-         Eh2RC1/99rMkMeKpNtXh4ajheDMbp7ijOvNeMCcFixqReo5DPbHnZAvYmxBFjiDi/qps
-         EI6sN4ZMADH4vcefAKgOS0ttmFXchsTbNufQRpYhKRZFVbSvSM7dilWRqYnWihLnCvGp
-         9CHQ==
-X-Gm-Message-State: AOJu0Yy1e7h6tf2CVnfzadVO8kZXsmDu7URrJZM2JOZjIZiXHt4WF6aK
-	1p5mM9XxUoQZnCFJOjBOfwvilO0/WIeJJOe8SHzD8u21PnzWOSi3j8ZAqMflmEwlPUPqvkw7jfF
-	8aGcNLQ==
-X-Google-Smtp-Source: AGHT+IH5MJ06QdI+Ng4/hwqPwFjt7iIt3Z6IEewPQcpQ5AzuiKgjC+/TeLeMSHNT+3ibJPUrYLOZeL5w0cA=
-X-Received: from ploc11.prod.google.com ([2002:a17:902:848b:b0:234:c104:43f1])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:384f:b0:267:9aa5:f6a6
- with SMTP id d9443c01a7336-29027240de5mr317736905ad.19.1760471466202; Tue, 14
- Oct 2025 12:51:06 -0700 (PDT)
-Date: Wed, 15 Oct 2025 03:50:51 +0800
+        bh=TSnZFCZ64RkJLFEmGTXA6t+vlnwDhOD2bNaCJ3ABIL4=;
+        b=QgFgiKzcUSynsVFydCSgWYePoEe2H6te/0LW2RvoRWmHVTo9gkAqfPzU6wB7f8RhMn
+         4aH+KMTZnDuAqFwjKCsC/bD78CsxRJ1iBDjPU11bi/egEItYvEVcysrxmZ/TrfKYK8yg
+         fhlnWtWcs/cq4T+K26iOsCoC1vx6een3fQNVMyqNlC3oY4kZO/8o8nTmN3mCiUr8qIE3
+         9S7m9gyT6TeHUyUZfgQXdczaRoG8jid/K5yHZS0dzNBaMt+DoEj6TRYNIh7dY0YUfpg6
+         8nEnpuI89b/vTHKb77krfrNjdCiwKP9kRedkMx+cG0bDDhRkQ/+1xzvdaqNi48mpIAXd
+         T52Q==
+X-Gm-Message-State: AOJu0YzHhshAuex2Cui9M7h7W8QQaP2+yk4nKK6OmVqmoWyWudGuGlfG
+	WUIORD7jv79Dzwy/6tG/pIiUjw0hh1px0yHHEEptpxLjTpVVyKCvrvhUyAUCtaI4FGdYL24PyYi
+	Bw7mM0g==
+X-Google-Smtp-Source: AGHT+IFgpobZsj69hw26FSFP4KGGLP5xCT79tZjTdZUcK5ZAa+9I3XG+B+EckyxqNl8SVuiX5b7FY1+pnLQ=
+X-Received: from pjbcz14.prod.google.com ([2002:a17:90a:d44e:b0:33b:51fe:1a93])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3b49:b0:330:a301:35f4
+ with SMTP id 98e67ed59e1d1-33b513b4b46mr35251656a91.20.1760471468285; Tue, 14
+ Oct 2025 12:51:08 -0700 (PDT)
+Date: Wed, 15 Oct 2025 03:50:52 +0800
 In-Reply-To: <20251015-usbcore-tracing-v2-0-5a14b5b9d4e0@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -73,13 +73,14 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251015-usbcore-tracing-v2-0-5a14b5b9d4e0@google.com>
 X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760471462; l=2413;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760471462; l=5869;
  i=khtsai@google.com; s=20250916; h=from:subject:message-id;
- bh=WSQ2iDb3hcVF5qM6lFll1BwCOEotVXw7mTOGjytvpYI=; b=QeUijzXDYah3+0A9xhvIofiGWjY2t2SKbudvyxbRJMSbEedIeNabiFl1TCbWyvanvPlWAgsgH
- LmEc48ggregB/ZcXtercwCO1c1wLuH9fLKSlBAr06/LR7rlzbT2aRvo
+ bh=M9WRR443R6qxqNQvDIYacnnrQp0IFkkyuLGDmxJErm4=; b=igvHC1yDf7OSuwXjZycKtApqQXsfqpEfO/xCZmh3TnVd9nWd/oemVexhSu8+rSp4y/0fHfDDS
+ aogxr6zVMNWClln2+TF23uaak2smULdRC7MeYnPGyo5P3tL6SJqJPNY
 X-Mailer: b4 0.14.2
-Message-ID: <20251015-usbcore-tracing-v2-1-5a14b5b9d4e0@google.com>
-Subject: [PATCH v2 1/2] usb: core: Centralize device state update logic
+Message-ID: <20251015-usbcore-tracing-v2-2-5a14b5b9d4e0@google.com>
+Subject: [PATCH v2 2/2] usb: core: Add tracepoints for device allocation and
+ state changes
 From: Kuen-Han Tsai <khtsai@google.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
 	Mathias Nyman <mathias.nyman@linux.intel.com>, Alan Stern <stern@rowland.harvard.edu>
@@ -87,71 +88,178 @@ Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Kuen-Han Tsai <khtsai@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-Introduce a new static function, update_usb_device_state(), to
-centralize the process of changing a device's state, including the
-management of active_duration during suspend/resume transitions.
+Introduce new tracepoints to the USB core to improve debuggability of
+USB device lifecycle events.
 
-This change prepares for adding tracepoints, allowing tracing logic to
-be added in a single, central location within the new helper function.
+The following tracepoints are added:
+
+- usb_alloc_dev: Triggered when a new USB device structure is allocated,
+providing insights into early device setup.
+- usb_set_device_state: Triggered when the USB device state changes,
+allowing observation of the device's state transitions.
+
+These tracepoints capture detailed information about the USB device,
+including its name, speed, state, bus current value, and authorized
+flag. This will aid developers in diagnosing issues related to device
+enumeration within the USB subsystem.
+
+Examples:
+ usb_alloc_dev: usb 1-1 speed UNKNOWN state attached 0mA [authorized]
+ usb_set_device_state: usb 1-1 speed UNKNOWN state powered 0mA [authorized]
+ usb_set_device_state: usb 1-1 speed full-speed state default 500mA [authorized]
+ usb_set_device_state: usb 1-1 speed full-speed state default 500mA [authorized]
+ usb_set_device_state: usb 1-1 speed full-speed state addressed 500mA [authorized]
+ usb_set_device_state: usb 1-1 speed full-speed state configured 500mA [authorized]
+ usb_set_device_state: usb 1-1 speed full-speed state suspended 500mA [authorized]
+ usb_set_device_state: usb 1-1 speed full-speed state not attached 500mA [authorized]
 
 Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 ---
- drivers/usb/core/hub.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+ drivers/usb/core/Makefile |  5 +++-
+ drivers/usb/core/hub.c    |  2 ++
+ drivers/usb/core/trace.c  |  6 +++++
+ drivers/usb/core/trace.h  | 61 +++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/usb/core/usb.c    |  2 ++
+ 5 files changed, 75 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/usb/core/Makefile b/drivers/usb/core/Makefile
+index 766000b4939ef937a04848aa9cc45d8bb8860fe5..60ea76160122b98e604ac416bf0ec8f398341411 100644
+--- a/drivers/usb/core/Makefile
++++ b/drivers/usb/core/Makefile
+@@ -3,10 +3,13 @@
+ # Makefile for USB Core files and filesystem
+ #
+ 
++# define_trace.h needs to know how to find our header
++CFLAGS_trace.o                  := -I$(src)
++
+ usbcore-y := usb.o hub.o hcd.o urb.o message.o driver.o
+ usbcore-y += config.o file.o buffer.o sysfs.o endpoint.o
+ usbcore-y += devio.o notify.o generic.o quirks.o devices.o
+-usbcore-y += phy.o port.o
++usbcore-y += phy.o port.o trace.o
+ 
+ usbcore-$(CONFIG_OF)		+= of.o
+ usbcore-$(CONFIG_USB_XHCI_SIDEBAND)	+= offload.o
 diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 256fe8c86828d51c33442345acdb7f3fe80a98ce..d0f5342976a9196e8c92e7bdb0a909207f69ebb5 100644
+index d0f5342976a9196e8c92e7bdb0a909207f69ebb5..7c23baeb68aa864f74ee4dff56e39f70ee713bf7 100644
 --- a/drivers/usb/core/hub.c
 +++ b/drivers/usb/core/hub.c
-@@ -2147,6 +2147,20 @@ static void update_port_device_state(struct usb_device *udev)
- 	}
+@@ -40,6 +40,7 @@
+ #include "hub.h"
+ #include "phy.h"
+ #include "otg_productlist.h"
++#include "trace.h"
+ 
+ #define USB_VENDOR_GENESYS_LOGIC		0x05e3
+ #define USB_VENDOR_SMSC				0x0424
+@@ -2159,6 +2160,7 @@ static void update_usb_device_state(struct usb_device *udev,
+ 
+ 	udev->state = new_state;
+ 	update_port_device_state(udev);
++	trace_usb_set_device_state(udev);
  }
  
-+static void update_usb_device_state(struct usb_device *udev,
-+				    enum usb_device_state new_state)
-+{
-+	if (udev->state == USB_STATE_SUSPENDED &&
-+	    new_state != USB_STATE_SUSPENDED)
-+		udev->active_duration -= jiffies;
-+	else if (new_state == USB_STATE_SUSPENDED &&
-+		 udev->state != USB_STATE_SUSPENDED)
-+		udev->active_duration += jiffies;
-+
-+	udev->state = new_state;
-+	update_port_device_state(udev);
-+}
-+
  static void recursively_mark_NOTATTACHED(struct usb_device *udev)
- {
- 	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
-@@ -2156,10 +2170,7 @@ static void recursively_mark_NOTATTACHED(struct usb_device *udev)
- 		if (hub->ports[i]->child)
- 			recursively_mark_NOTATTACHED(hub->ports[i]->child);
- 	}
--	if (udev->state == USB_STATE_SUSPENDED)
--		udev->active_duration -= jiffies;
--	udev->state = USB_STATE_NOTATTACHED;
--	update_port_device_state(udev);
-+	update_usb_device_state(udev, USB_STATE_NOTATTACHED);
- }
+diff --git a/drivers/usb/core/trace.c b/drivers/usb/core/trace.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..607bcf639d27f15a628537a86155fa92df33fa14
+--- /dev/null
++++ b/drivers/usb/core/trace.c
+@@ -0,0 +1,6 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2025 Google LLC
++ */
++#define CREATE_TRACE_POINTS
++#include "trace.h"
+diff --git a/drivers/usb/core/trace.h b/drivers/usb/core/trace.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..903e57dc273af58781ab3fb2f341690d4289bdf8
+--- /dev/null
++++ b/drivers/usb/core/trace.h
+@@ -0,0 +1,61 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2025 Google LLC
++ */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM usbcore
++
++#if !defined(_USB_CORE_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _USB_CORE_TRACE_H
++
++#include <linux/types.h>
++#include <linux/tracepoint.h>
++#include <linux/usb.h>
++
++DECLARE_EVENT_CLASS(usb_core_log_usb_device,
++	TP_PROTO(struct usb_device *udev),
++	TP_ARGS(udev),
++	TP_STRUCT__entry(
++		__string(name, dev_name(&udev->dev))
++		__field(enum usb_device_speed, speed)
++		__field(enum usb_device_state, state)
++		__field(unsigned short, bus_mA)
++		__field(unsigned, authorized)
++	),
++	TP_fast_assign(
++		__assign_str(name);
++		__entry->speed = udev->speed;
++		__entry->state = udev->state;
++		__entry->bus_mA = udev->bus_mA;
++		__entry->authorized = udev->authorized;
++	),
++	TP_printk("usb %s speed %s state %s %dmA [%s]",
++		__get_str(name),
++		usb_speed_string(__entry->speed),
++		usb_state_string(__entry->state),
++		__entry->bus_mA,
++		__entry->authorized ? "authorized" : "unauthorized")
++);
++
++DEFINE_EVENT(usb_core_log_usb_device, usb_set_device_state,
++	TP_PROTO(struct usb_device *udev),
++	TP_ARGS(udev)
++);
++
++DEFINE_EVENT(usb_core_log_usb_device, usb_alloc_dev,
++	TP_PROTO(struct usb_device *udev),
++	TP_ARGS(udev)
++);
++
++
++#endif /* _USB_CORE_TRACE_H */
++
++/* this part has to be here */
++
++#undef TRACE_INCLUDE_PATH
++#define TRACE_INCLUDE_PATH .
++
++#undef TRACE_INCLUDE_FILE
++#define TRACE_INCLUDE_FILE trace
++
++#include <trace/define_trace.h>
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index b6b0b84895237e2c49b5e8015627ad2c24ee31c2..e740f7852bcdebdbcc30025dcddb16c062265d47 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -46,6 +46,7 @@
+ #include <linux/dma-mapping.h>
  
- /**
-@@ -2209,14 +2220,7 @@ void usb_set_device_state(struct usb_device *udev,
- 			else
- 				wakeup = 0;
- 		}
--		if (udev->state == USB_STATE_SUSPENDED &&
--			new_state != USB_STATE_SUSPENDED)
--			udev->active_duration -= jiffies;
--		else if (new_state == USB_STATE_SUSPENDED &&
--				udev->state != USB_STATE_SUSPENDED)
--			udev->active_duration += jiffies;
--		udev->state = new_state;
--		update_port_device_state(udev);
-+		update_usb_device_state(udev, new_state);
- 	} else
- 		recursively_mark_NOTATTACHED(udev);
- 	spin_unlock_irqrestore(&device_state_lock, flags);
+ #include "hub.h"
++#include "trace.h"
+ 
+ const char *usbcore_name = "usbcore";
+ 
+@@ -746,6 +747,7 @@ struct usb_device *usb_alloc_dev(struct usb_device *parent,
+ #endif
+ 
+ 	dev->authorized = usb_dev_authorized(dev, usb_hcd);
++	trace_usb_alloc_dev(dev);
+ 	return dev;
+ }
+ EXPORT_SYMBOL_GPL(usb_alloc_dev);
 
 -- 
 2.51.0.788.g6d19910ace-goog
