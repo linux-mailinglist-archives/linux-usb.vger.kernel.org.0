@@ -1,88 +1,105 @@
-Return-Path: <linux-usb+bounces-29288-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29290-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53662BDA764
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 17:45:15 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A2F6BDA90F
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 18:08:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DCA2E4E7A75
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 15:36:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E7E3B4F3E28
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Oct 2025 16:07:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E1E2FFFBB;
-	Tue, 14 Oct 2025 15:36:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920D630101A;
+	Tue, 14 Oct 2025 16:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k81eDsS7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KeDeYIiH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A964214204;
-	Tue, 14 Oct 2025 15:36:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E92512CD88;
+	Tue, 14 Oct 2025 16:07:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760456195; cv=none; b=M5RwdK3YSy6CQegmcYtNbKp+/GKveZhrpvT0TOijDofjFugksB+2Fb3FqbFfMhptyqZF+m1Eko88yLJNM6hwDcRPxQ/mYDZ58luRZoWthuKYdLoXo9fS8OIstaHWtgHofJp6fTVT7UJnLpXibH66nJq9botbNwwUsuTNh68K794=
+	t=1760458042; cv=none; b=rMmoCmBioKaGgNEhUpm9HtC0AOjtoc1AJYorOwL0toKOjXjiNh1v1vY3wCbX6UIBN8OC53AjJeiteoKpVLwBSAvf3gWiaKAq0AWAoTVkTayXDmdHuO6rscIq35Gx5q8J6GZJWFUn1dOtZEY+mtwmMHDempdqv6NX3rjO2Keh8CE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760456195; c=relaxed/simple;
-	bh=VagKz2PhnbcBWgSFvGAIXlZmOza2o54TedTg9Ko6NIY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KbSKQodvfARGdowrNdni9lJG92h8y4bC5syZHwYRZb0USXIEw8jW0IThRbbV5ucG1cg8QCSHLoKbUYTMqkOxSfbGeZAQM9DrWKyjsVxcFlp2s+fCvBtXyUMQ/2IZcQJA7mHRyTlQ7WCIwiuLsufhy+Inu3Gfl/ICua4pXUG27xA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k81eDsS7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26F04C4CEE7;
-	Tue, 14 Oct 2025 15:36:35 +0000 (UTC)
+	s=arc-20240116; t=1760458042; c=relaxed/simple;
+	bh=oGioMHVrYPjHthz7IOPAwGPjgyiAkYI633zr9YW6Tnk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=RygGj27nSN0qLox469sO2NmHPDN+PKt8DvqP9eicUx9XLzf36+UPVU/ZPQIoZsLA4vQiYN3S2jhIDsi6CFCVdFzrTNSXw0UYyDlzWYJzerd9SMjL5HtJ3BVeN9LJmqiKS2tJskloYgtCSP5Q0jdmATYOTt5YahQ0lbiGJQHqlIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KeDeYIiH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A00C4CEF9;
+	Tue, 14 Oct 2025 16:07:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760456195;
-	bh=VagKz2PhnbcBWgSFvGAIXlZmOza2o54TedTg9Ko6NIY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k81eDsS7Vsh3bkfaXfHRidHFpYhx3cWZ9Y8iIue/d1v7QK51HmYFVulPUfM82lkuB
-	 3IzrVbZOB5cLye2qh16cGLL1QVP5fceeAot7SMlg7eIZPvhQNMJxhi+QEK1mKII/5H
-	 pra3N6nUaxmVgVdJk4H9jpEU/4WiMHxh9VonFsBGRIKaVvnRi3G45048LjDtEs+quC
-	 icdagfycsqCqmbS3wse81LeoWt5K+E+hTvR2hmWItFVhKdqcpzqxJWOOkBl3KLsoUv
-	 +z84lsHV6HQKZ3Pl/lrdjPZuMSC8pvyOt7Th4ozxJG4QQ9r2DQSdazWSNrYM9pQYko
-	 6JsQCtfGmcYRQ==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1v8h4j-000000004t8-44xk;
-	Tue, 14 Oct 2025 17:36:34 +0200
-Date: Tue, 14 Oct 2025 17:36:33 +0200
-From: Johan Hovold <johan@kernel.org>
-To: "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, tom_tsai@fintek.com.tw,
-	yu_chen@fintek.com.tw, hpeter+linux_kernel@gmail.com
-Subject: Re: [PATCH V1 1/1] USB: serial: f81232: fix incomplete serial port
- generation
-Message-ID: <aO5uAUknTLOWdvUY@hovoldconsulting.com>
-References: <20251008023858.227740-1-peter_hong@fintek.com.tw>
+	s=k20201202; t=1760458041;
+	bh=oGioMHVrYPjHthz7IOPAwGPjgyiAkYI633zr9YW6Tnk=;
+	h=From:Subject:Date:To:Cc:From;
+	b=KeDeYIiHLdAf36xlSHgGY9JJagx9XZCYzM7zfxse2XsjE/NjMvRJUN+lTZeghr7VJ
+	 Wqzr4aM+jU3KsjSh6YCvUkSHwqYExuLjjGKFhIs0I2Y9UIKNNZUUFXYpw+L7DHQK+n
+	 nyTZx5cfW0eX6nxBKZw0QaeYO74ld2y+/nVLqN9AwqJpCRE0zjbgIRR8MAVFQ3O9OW
+	 X0OkPQv60Zrwb+Ab4e2fHayHLXDpBrZKopchgzEAd4uCQkbnMEqQyYOifYul4rUvdf
+	 akvfjGrt3DoAwpwSmyRO5wdV/ErZfsKwFPYO4cha6/YQCZl6FdmPyUeFuBlzluWJH3
+	 +Z7tRQ3Y393hA==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Subject: [PATCH 0/3] TBT3/USB4 support for PS8830
+Date: Tue, 14 Oct 2025 18:06:44 +0200
+Message-Id: <20251014-topic-ps883x_usb4-v1-0-e6adb1a4296e@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251008023858.227740-1-peter_hong@fintek.com.tw>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABV17mgC/x3MTQqAIBBA4avErBP8K6KrRITpVLMpcSqE6O5Jy
+ 2/x3gOMiZChrx5IeBPTsReougK/uX1FQaEYtNSNkrIV5xHJi8hdZ/J08WyF0cF642bnvILSxYQ
+ L5f85jO/7AaDJagVjAAAA
+X-Change-ID: 20251006-topic-ps883x_usb4-32d4c3abaac1
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+ Wesley Cheng <wesley.cheng@oss.qualcomm.com>, 
+ Jack Pham <jack.pham@oss.qualcomm.com>, 
+ Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>, linux-usb@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760458037; l=993;
+ i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
+ bh=oGioMHVrYPjHthz7IOPAwGPjgyiAkYI633zr9YW6Tnk=;
+ b=Z5mQj97v7KHFNVHEuSiRV9H2V+7lI4+9oDiItCkEU86p3pnCxxxyJFo9uakYYoZtym6le+2Jr
+ ZoEDH8kr1HoAKugR6t+jQBNNQDmCFJtM0S5TBt4ilNIbwnvGRAPVWHF
+X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-On Wed, Oct 08, 2025 at 10:38:58AM +0800, Ji-Ze Hong (Peter Hong) wrote:
-> The Fintek F81532A/534A/535/536 family relies on the
-> F81534A_CTRL_CMD_ENABLE_PORT (116h) register during initialization to
-> both determine serial port status and control port creation. If the
-> driver experiences fast load/unload cycles, the device state may becomes
-> unstable, resulting in the incomplete generation of serial ports.
+As the product page [1] states, the chip is actually capable of
+retiming USB4 and Thunderbolt 3 (4, even!) signals, while remaining
+spec-compliant.
 
-Do I understand correctly that you're only seeing this issue if you're
-unloading and reloading the module (or rebinding the driver through
-sysfs)?
+This series reworks the driver a little and introduces support for the
+new aforementioned modes.
 
-> Performing a dummy read operation on the register prior to the initial
-> write command resolves the issue. This clears the device's stale internal
-> state. Subsequent write operations will correctly generate all serial
-> ports.
+I carried Jack's Reviewed-by tags from an internal preview submission,
+which I hope is fine with everyone.
 
-Does this mean that the retry loop is no longer needed? Can it now be
-removed in either or both accessor functions perhaps?
+Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+---
+Konrad Dybcio (3):
+      usb: typec: ps883x: Cache register settings, not Type-C mode
+      usb: typec: ps883x: Rework ps883x_set()
+      usb: typec: ps883x: Add USB4 mode and TBT3 altmode support
 
-Johan
+ drivers/usb/typec/mux/ps883x.c | 129 ++++++++++++++++++++++++++---------------
+ include/linux/usb/typec_tbt.h  |   1 +
+ 2 files changed, 83 insertions(+), 47 deletions(-)
+---
+base-commit: 52ba76324a9d7c39830c850999210a36ef023cde
+change-id: 20251006-topic-ps883x_usb4-32d4c3abaac1
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+
 
