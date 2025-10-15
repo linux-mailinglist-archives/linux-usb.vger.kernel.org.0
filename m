@@ -1,136 +1,133 @@
-Return-Path: <linux-usb+bounces-29343-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29344-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 372CBBDF7EF
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 17:56:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 608FEBDFC62
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 18:54:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EE7DC4FACCF
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 15:55:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7348E3C5BA0
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 16:52:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD885335BB9;
-	Wed, 15 Oct 2025 15:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0160338F28;
+	Wed, 15 Oct 2025 16:52:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sRPbp5o6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XtMWLhjd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4B033438C;
-	Wed, 15 Oct 2025 15:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1BE324B1D
+	for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 16:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760543748; cv=none; b=jna/6/Sx3RZ4qRn5Vk6M0X9fTgmqxQ3w3b6Wx8r/NdW1IhBjtEYQjkUk6SzgI4uHiBj3Os6DE+krVVKg3hJDovSdAlKPFW9C4WEwmNtHutw5ODfGhDJi5mIoSWjpYWJgqX8UBo/ck45cLDmjQLptCsCGku0p/A8dTWyRkWJnOsc=
+	t=1760547129; cv=none; b=lYCrFK2M17di7f3QZV/AhUEtbkor6POflrgzWBKBcidsGe27cHzcnzQbPJX4nRLF25ltf4U8u+Eken91k8tUtsjqn8vtBWj7L3JkILuVn9lml4JK6H7N+Ev+NA1YNOp6Lg9jJdJVmI4WTG9uLiX6WzPna8O1vJarfwYLqKMllvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760543748; c=relaxed/simple;
-	bh=OtK5voWcAdL/bSIr5aJ2h3Z25CnusKZJ0G6Htr86Y9k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uZIW5Z5IxG3UTlgln6lgyNcZG4De4flMk1W45IKNpqB5TzhN8eFLraieExM7aEnpQ0PS31k/4JJqnma4yeXKYZGeVGQTcEtceThR6QdsrA2JA3P+GJtvylDGxXIKNES9UhJGAaUPa9+ORL6DJ3vtrWA0mo3M/kXQX0WkbtKOaHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sRPbp5o6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EB0C4CEF9;
-	Wed, 15 Oct 2025 15:55:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760543748;
-	bh=OtK5voWcAdL/bSIr5aJ2h3Z25CnusKZJ0G6Htr86Y9k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sRPbp5o6qVOk2SDQ8eJyn/b+ynWlGPdkQUcgTZuU+ri1ltCzPZfShZCJtXG+0PLaL
-	 SX5cNafCF06SX13gwpENJ4gH6u6sC5NQCfWsfLTSQcLznc6wkM2Iuad6XqovvPF7nI
-	 BxWoeP9W9mUoUfeD4N3Xf6GocKriWFp90EKF5vVnTvkkR7/8Ro8g4/A8CUYa7Uvn0J
-	 S2gtyfHsEy+5O77izo7wl42JLbSpBfUFtoWhM2Kjdt+Rz3/PWvud3eqvUxmJeipIHJ
-	 oxMWsxkLoH+5v/D2t+dTDuUgiBZBjO2jyulVeI9p50CpXeQGBbvj+TH9PIdiEYYdeB
-	 igk7h69kmMlig==
-Message-ID: <1adfe818-c74f-4eb1-b9f4-1271c6451786@kernel.org>
-Date: Wed, 15 Oct 2025 09:55:47 -0600
+	s=arc-20240116; t=1760547129; c=relaxed/simple;
+	bh=wbxUTvPZYOO+jnUBOwHP6vqN2Y8d3Evx6zjpDRrIqFA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q8gomlhrEMlYdBsvQoQoETTBrlajH8rdQN9fI5Ysbk6m1wSFR+vxSg0tOmyO8R8PEeyqIxmvOO2L+aGRhApytWgLEw6jP6ITVozbogf8pZFyDYDc4OGXx3ZB0kxsC7PRCQ4ydPYNVJAKFCECTON64y718lAcILIO8dPxcRuZy6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XtMWLhjd; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b3da3b34950so1112839366b.3
+        for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 09:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760547126; x=1761151926; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=neLd0+dDQvDA5L4vv0sP7kK28bvW/poi2lRWCeQYViM=;
+        b=XtMWLhjdHBLttzyRnOCk7fT64rZUtawKBK+fiZaUyhESgZ9m6tHtmI9JH2d4POkSRS
+         siVFJpZuQ3KJM2dcTkF3oakGLjiYm1dyxklbPiw4zQuAIShZj76zxGDuJ3iQIzRz+QEy
+         Ov6cjUJD5xUQ7CrOSK3Tg5+CsIX8wICe8y3Z3fUbTBdcGmxCNw0qweKuvBrskgBKBMm8
+         8QZEryxebdFxQhzCZcMFhwbwS7VCK0bwtNaRrTDUymXo9H1qQrRWjEnGaCzetcPLU0rn
+         Dxm8V7hkg9sO+HRGrv0+g8wWJRWTwlZzXbBi0NGqgo92OoPkRXyYp/vsHaPjc5Da9G+S
+         UxsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760547126; x=1761151926;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=neLd0+dDQvDA5L4vv0sP7kK28bvW/poi2lRWCeQYViM=;
+        b=s1Cxtso3F6Z9L+IS8ET848r1dZ5YECF0GsAnFPF5RS91U6kAdOXFwTLrQV9vuf9TD/
+         1LjEC35z2TVOF+GJEgPS/jnS1az4iYWHHljOxjOWn8imFAJ/7vYVFkHH15o01WrLXErH
+         hH89ktw6otmZYoe7jI47RTH7G5cwr2uYM0ilhRC3PQ0erK7BOQIHplqFnHiiWZU1HdCd
+         ERNFzIx8qWfhzde6/m/38g9kIu0phzgz6GaEGygK7md09x9CNCMaVFskkVW+5ti2fzY3
+         m7igWmSlJAgMTOdsCLr1ODsA2wmIcTIk13aADLZTE61C6vTJZdFQ6fV74Ghw1tRMSfXg
+         InHA==
+X-Forwarded-Encrypted: i=1; AJvYcCVffEIbL4K2WdjT1soXe6+J/o+snXrDVr8zmIpZOHWUpiRZZbkUcxuiCYWJbLA2Fsn2vYCUVSwHB3M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSTr87jUqeL/yRsdsFg2uz7Pnes9qZgkzuCxgQe7uId71V/aRN
+	bIe7TS+4d1R81tFx1LPVHG5CEpS3IzYKCZg5SQRgSr6Lxm3pbvjFdnwtp3GZFd3JQTOsC/hKy++
+	QyWBb1h+eG8ur4HzWP3L3w6uLavqOHLM=
+X-Gm-Gg: ASbGncscM2+64Ksean3n0HDBfZBQiEl1v+ilxU0IjnXpTAFxkhohLtWn3sIFoaz8ZQA
+	mC5Ms2CLkd5EysSn0Jbp35YkVgsrOxQdt4SSHQn+UyGCNQGWlJdyylVFniNfuhq9J5V293/Uh0e
+	B3e35vY/N5zkw4vqTRLmHLo+wB3lIZSfVwNe4AKLX1sRRRQ5kWID2S/Oc6GIgYK7CI0pc7GbGPH
+	9PaHmf7GaGBV8TtwIvFyqKclbNbz6s5AzcuYcNnLKQVRo8vDf5DHF+EL9MhuN16d5KwwIKLWyPo
+	xbOBGiloGg==
+X-Google-Smtp-Source: AGHT+IGsOnSPE3hz5ZfYzWJNVjtUVgW/EHP33IR6zBRV5g9gSsqBcciCEwgcZlf2wmO5rhi1e9vsERWWoOP5SCZzdpg=
+X-Received: by 2002:a17:907:7f13:b0:b45:e09c:7e66 with SMTP id
+ a640c23a62f3a-b50aa8a5bfdmr2998830266b.28.1760547125501; Wed, 15 Oct 2025
+ 09:52:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <20251013181648.35153-1-viswanathiyyappan@gmail.com> <1adfe818-c74f-4eb1-b9f4-1271c6451786@kernel.org>
+In-Reply-To: <1adfe818-c74f-4eb1-b9f4-1271c6451786@kernel.org>
+From: I Viswanath <viswanathiyyappan@gmail.com>
+Date: Wed, 15 Oct 2025 22:21:53 +0530
+X-Gm-Features: AS18NWA4RJCcpLPYd5taRLYmabL4v7fT9byYpjgnUo14PKi00TibSEE5yn4bNKs
+Message-ID: <CAPrAcgPs48t731neW4iLq3d+HXEQAezHj5Ad9KR8EK+TNu5wbg@mail.gmail.com>
 Subject: Re: [PATCH net v2] net: usb: lan78xx: fix use of improperly
  initialized dev->chipid in lan78xx_reset
-To: I Viswanath <viswanathiyyappan@gmail.com>, Thangaraj.S@microchip.com,
- Rengarajan.S@microchip.com, UNGLinuxDriver@microchip.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
- linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com
-References: <20251013181648.35153-1-viswanathiyyappan@gmail.com>
-Content-Language: en-US
-From: Khalid Aziz <khalid@kernel.org>
-In-Reply-To: <20251013181648.35153-1-viswanathiyyappan@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: Khalid Aziz <khalid@kernel.org>
+Cc: Thangaraj.S@microchip.com, Rengarajan.S@microchip.com, 
+	UNGLinuxDriver@microchip.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
+	linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/13/25 12:16 PM, I Viswanath wrote:
-> dev->chipid is used in lan78xx_init_mac_address before it's initialized:
-> 
-> lan78xx_reset() {
->      lan78xx_init_mac_address()
->          lan78xx_read_eeprom()
->              lan78xx_read_raw_eeprom() <- dev->chipid is used here
-> 
->      dev->chipid = ... <- dev->chipid is initialized correctly here
-> }
-> 
-> Reorder initialization so that dev->chipid is set before calling
-> lan78xx_init_mac_address().
-> 
-> Fixes: a0db7d10b76e ("lan78xx: Add to handle mux control per chip id")
+On Wed, 15 Oct 2025 at 21:25, Khalid Aziz <khalid@kernel.org> wrote:
 
-How did you determine this is the commit that introduced this bug?
+> How did you determine this is the commit that introduced this bug?
+>
+>  From what I can see, commit a0db7d10b76e does not touch lan78xx_reset()
+> function. This bug was introduced when devid was replaced by chipid
+> (commit 87177ba6e47e "lan78xx: replace devid to chipid & chiprev") or
+> even earlier when the order of calls to lan78xx_init_mac_address() and
+> lan78xx_read_reg() was introduced in lan78xx_reset() depending upon if
+> lan78xx_init_mac_address() at that time used devid in its call sequence
+> at the time.
 
- From what I can see, commit a0db7d10b76e does not touch lan78xx_reset() 
-function. This bug was introduced when devid was replaced by chipid 
-(commit 87177ba6e47e "lan78xx: replace devid to chipid & chiprev") or 
-even earlier when the order of calls to lan78xx_init_mac_address() and 
-lan78xx_read_reg() was introduced in lan78xx_reset() depending upon if 
-lan78xx_init_mac_address() at that time used devid in its call sequence 
-at the time.
+The commit a0db7d10b76e introduced the dependency on devid to
+lan78xx_read_raw_eeprom() and
+lan78xx_read_eeprom() and ultimately lan78xx_init_mac_address() and
+lan78xx_reset()
 
---
-Khalid
+In lan78xx_init_mac_address()
 
-> Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
-> ---
-> v1:
-> Link: https://lore.kernel.org/netdev/20251001131409.155650-1-viswanathiyyappan@gmail.com/
-> 
-> v2:
-> - Add Fixes tag
-> 
->   drivers/net/usb/lan78xx.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-> index 42d35cc6b421..b4b086f86ed8 100644
-> --- a/drivers/net/usb/lan78xx.c
-> +++ b/drivers/net/usb/lan78xx.c
-> @@ -3247,10 +3247,6 @@ static int lan78xx_reset(struct lan78xx_net *dev)
->   		}
->   	} while (buf & HW_CFG_LRST_);
->   
-> -	ret = lan78xx_init_mac_address(dev);
-> -	if (ret < 0)
-> -		return ret;
-> -
->   	/* save DEVID for later usage */
->   	ret = lan78xx_read_reg(dev, ID_REV, &buf);
->   	if (ret < 0)
-> @@ -3259,6 +3255,10 @@ static int lan78xx_reset(struct lan78xx_net *dev)
->   	dev->chipid = (buf & ID_REV_CHIP_ID_MASK_) >> 16;
->   	dev->chiprev = buf & ID_REV_CHIP_REV_MASK_;
->   
-> +	ret = lan78xx_init_mac_address(dev);
-> +	if (ret < 0)
-> +		return ret;
-> +
->   	/* Respond to the IN token with a NAK */
->   	ret = lan78xx_read_reg(dev, USB_CFG0, &buf);
->   	if (ret < 0)
+Only lan78xx_read_eeprom() depends on devid as
 
+lan78xx_read_reg() and lan78xx_write_reg() do not use devid
+
+lan78xx_read_otp() depends on lan78xx_read_raw_otp() which depends
+only on lan78xx_write_reg() and lan78xx_read_reg()
+and hence doesn't use devid either
+
+is_valid_ether_addr(), random_ether_addr() and ether_addr_copy() are
+net core functions and do not care about driver specific data
+
+The devid read exists in this commit (was added in ce85e13ad6ef4)
+
+a0db7d10b76e was supposed to move the devid read before the
+lan78xx_init_mac_address() because of the newly added
+dependency but it was a tricky detail that the author failed to see
+
+Thanks,
+I Viswanath
 
