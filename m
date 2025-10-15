@@ -1,88 +1,93 @@
-Return-Path: <linux-usb+bounces-29333-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29334-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28AE0BDEFEA
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 16:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B2A32BDF28A
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 16:51:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AFCE5501B25
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 14:21:59 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6CBDB4E8F19
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 14:51:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CACA9262FEB;
-	Wed, 15 Oct 2025 14:21:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E61142D063B;
+	Wed, 15 Oct 2025 14:51:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="b4guQ+FF"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="iZ4ozkgq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CCC24DD11
-	for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 14:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C285B2C375E
+	for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 14:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760538105; cv=none; b=U7fRwNi/B+uWthpbFnN3ZvERyytD4LdA/77JKN88K3lMq0lAU7x+kP9ygCMAJo7m6VQqlRkAqbuMtsh0IEo387uHvUYzgypzLCBzELjdWZU1Sfeyy/lImMqpbeuXZ/4MoHj+TePlspHFqlyuixXWzrIN0FFvUwKMi44GAJW1rpU=
+	t=1760539883; cv=none; b=GJ7mdKKilIDSDuULUORpoBqoc2yHtqTYaAFE9jix02lW3U+DZw/sHNvXt6/3U2QXLCipGtlnfV09AAFOp/PQ9WUwgCQX1Mjk31P5kxA13HLQb8DZAcJeC9Wuog221zDv2mbB9gS1xGX3x8VAGQ2b3xsyaO4OrXcWywA2Y3WMvbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760538105; c=relaxed/simple;
-	bh=rsCxuIGa07OzPA91/mcN7Lbx5abo0noYtZAvC10T47M=;
+	s=arc-20240116; t=1760539883; c=relaxed/simple;
+	bh=hrGvM3Qk7r7tukv0tdWGtDReqUMPUw8ee1FwVTWSb+s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=efTy5wJOUHU2gsL+hBoECgw6h2DjbcFNKB8eer73pFK4LzBVAagNMzTMee7eLIZqKEZz7Kxg3p/XK7A5vWtd2LHlj1ksRWSdyEdD2p1zoBZH4vSAiQmhh+f5q/vQ4TxzTPXFb5lEcot+QFOKxHLRIq9m9q5l989XHLg6BZ2W+e0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=b4guQ+FF; arc=none smtp.client-ip=209.85.219.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=EsAKFj0+dd7JuMQsuZhk75iSzNctDWzIsvqrxthIvrAc874IHH0HBLFhdD/5xcETUCfzCXOHAnIFjNShI0Hla5dl+lEYEqTVs1ehD/PGfzwuzbL0bWplS+alutvNYfWP4nqAdtKG2mhTr/QxQaTKG/ESKCZi5Q3wvsKU2DMDR80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=iZ4ozkgq; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-79ad9aa2d95so114045176d6.1
-        for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 07:21:43 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-7e3148a8928so84798356d6.2
+        for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 07:51:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1760538103; x=1761142903; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1760539881; x=1761144681; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lo2y1Bu1LMnaNfCd71h+uw7Uf0QO/1obDl+YiKgx8yY=;
-        b=b4guQ+FF0YzwKkzkjKzTwK10u8GI1l7bBbULvzKH893ArD9KfUKpgkmhQBt4EP1GgQ
-         j6V7dh7pk16oO1CQSVAfq3kpCC9za1dm1f0DwlHLzlNUNWwfYS32dkSG65ycwuAhNZaO
-         WypdZI1pqeOhlU1U6agqODjBleBzHeBbMQM/nffzy1F1hbJqmWS27LZM9gUDkUoDZyyh
-         aCskAxChCIFNIb/H/u5g4QG4/l6yCyROQ/vEDmd7iH21O4tAe3dfpBaN6Q5MQPlNS0fe
-         +twLch6dzUNmytBIXGfswe4PWGLdtucAOhiKCtPKZzFiQLH8BcBWI/SlZAo+riCjOSgV
-         GSYg==
+        bh=Adpa7m8fOG05p6QgITi5PnCHwpZCCsUy3a+V0Uam0mo=;
+        b=iZ4ozkgq/bhM4uBCnxREoEX00tSDtzsxVdOVWtE8/uJ1Px1T9ajaw335OwdFsJlAE/
+         FSd5zOux+EHFA5bBcnHEqus/C21Uz4G0rgH5m1xBWSbcE3MT7iPa9/9+nZWYvdZYQmzW
+         eFM9Afg0h6y9tnUa7F3tdcDJS770IJiP8KY+10xmZGZK4fOAj1gitvqXDD0zZGzlFNUO
+         LAU2ZNNNx8WDrQCrKZl7Fl/ta6R0v6T9ZshJSr++Tg+8ZgIAlyXKQ9pbQQFm38lmqEV0
+         CM0qGZWBwd3pbnixm+1cC3R0GgGIPogRfXbf8Sivl5kvjZdTIb3HRPmS6uniUPVyoHqh
+         kqgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760538103; x=1761142903;
+        d=1e100.net; s=20230601; t=1760539881; x=1761144681;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Lo2y1Bu1LMnaNfCd71h+uw7Uf0QO/1obDl+YiKgx8yY=;
-        b=R07srsTTU4M0Zj/w/KN4hL/EZ+LWGaymMqj+EgOzc09s2ZQmil0dwv5QbqDSWoxYgl
-         H1zyiQ/rlxSjcmBLegcQorjfcauXwYIchTa58VuW/lfHbNddp6pjlPjW3oIr0pIf3ZzG
-         3zLayIaQ82owow6VHxASij9Nvm6T9Yjsd0MXRT2O542sO8kpjkaawnBk7RT/7R/4sq6J
-         R31bpTheGdhNFShdxO1GHR+zSyMl7Vx38RBAeZpbkAAskGbwJC+iubEYXil/ttU/w62U
-         jPOBvi4CyUTmQgSuuIhaBXNxXBXoTlU9pUijwvOuHjsiJMjYzeHoEThD7iJGHl8Z3Jbg
-         9Zag==
-X-Forwarded-Encrypted: i=1; AJvYcCX9ce5OBlEQELvBPbTOAe49JwO5XChKTMpq8b+gRi1Gxanj/kzTsYNJLgUcksjt+izg4tV7hRldngQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPf7CF68jNdcs5bKoWqvVNsz2hZM854BdTrmjskRoT+juO59+V
-	8HMBCWnzc/F0/2mCUAI0QMDJ8bkNRnJ6LP6s3T4TWNwK/9+fHM1sEMx8jxhiF831vfMmQQpZA0N
-	I/Ds=
-X-Gm-Gg: ASbGncub0qJqzaJEILjKg7fGw/SQZW2TXWZBPWszlPhazRSa7XRnvotHL/E8WckJEDu
-	PQKvyWLk6elf1NiYLhp618hAcIWn/HyrL8celU2qCiCsUSSpM+isms8XI++We9zrfjvaPtPbT5F
-	VeViSP9c5Z+3qTwFPWE7rHOdtIulCeMZ8gmXl8pxJRfclRvIiXKGbLQp3sIUujFJQ9i9mTMYmj7
-	018ADZyCpolvDTs83AIUealNPSx1zI6NsZ+be6Zq/G6fMPdXOh6vvpOtl8PZh8rnd9GdfMboqbj
-	x21ZqcIR6b6iVaucwoHX7HB2zqFnLPrvHVO2l9OCM+TOtYt7T7RHBaw8kJ84IHbLLGjual9pwyX
-	doo6Yfb7wXWwhA1KHSGHYV3ZHNbxwV35cGtfqKjVlWwtKKiE9Ci8jxpyuZDTaJif1FUEVDm+tUJ
-	YLwg==
-X-Google-Smtp-Source: AGHT+IFrJLeVOnPgxh66ucu/t9d4mmQTNB8Y0LxSmbCqtxoIGawoP6sDh9GYHFFnOFjMyeDPg8oqtw==
-X-Received: by 2002:a05:622a:1a9d:b0:4b7:a8ce:a3fc with SMTP id d75a77b69052e-4e6ead65069mr381373611cf.66.1760538102557;
-        Wed, 15 Oct 2025 07:21:42 -0700 (PDT)
+        bh=Adpa7m8fOG05p6QgITi5PnCHwpZCCsUy3a+V0Uam0mo=;
+        b=ozr+N5x3TvMACyOHJm546mNa/u0CZ2tYEy4JJ7cV/6x3AFFoJKo+WzW+WYbNHscErn
+         +CkOOfStq+H2R2VFnSBtA9FG8GPYzWHqPHY5AIGykEGsioA6HSP1XpnBcIRXbrZ3X+JH
+         aoI85ZQ5BoItLFY1W127pGbn5FgyZYoGPv43YfPINTJ+6wNsqcVkGs/ERWWmyqR4JmmJ
+         vnJrfErkZHa+l3FVXa3RUHe2Fx7+C8hzkEVZt6GzWWf2e4+kpN8rAkYCyV0+bJZX5DvR
+         B0LBV9pnqWYYZMmwUNB5YmQgT9Y5/DuLg4jMDGsc0v+feRZd8cGnEOC/wLPhzna6d0gD
+         bb4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVKEwJ4qBVEgXi9H+Q6kWjOcjCeETXmd87IAnx91SqW6b6HSg9Gghy+sEjSeJpQAPGuWVmCGBBRumU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfcVtkm8iTGfDyXSJSpYGBMBesrUxxCxOq4NuDBRsI1dbz4WUM
+	xK/BduhMOLMzn1SJWX1sUCZ9BOaTj1xoCGasBHd7jcDOyqbxr/XXwUPNHehod37UFg==
+X-Gm-Gg: ASbGncud0A3EEZS5QCHeQegxhGz7j3+Koo/U13PzrQzJkeaYDiD6boV3FU5239lFXoM
+	WLKGhHiEdUCNZsnmhU9OufqtwAwbCodvJTksPboQphnjVYwhZmOjcXNOX82oqnj2eE67mapBNlI
+	sW/IziIY3fzBTgg1c3/EEqmRftVjSbnNlgwX9BX1IhsC3p28gP2+dxPyp8GbaV8ltxgGygIEBTy
+	475MSEkhKPO3p8i67aAqWwIDgUvM5absrdao2HdjIfAskh0SomBCD3vTy1RosthGVkI7zujPgLn
+	6G8DRr6UXZm7lGlb47xPXLZQU90DMb93HixjyGSCUD9OzD9pwC8C/nTvsAcYTXdJWmYmRk0Vl1G
+	i5j8ISfsQZPMiJXxb2hUXtAntLkpsZ+4FFCCnaG4mQBpLKpnnbksc2RPhuHBeLa9cYhl0Iv4qEo
+	vrSg==
+X-Google-Smtp-Source: AGHT+IHgATM+vpR/CxE89ZGkxxcoAPFDIHN26iOy/FjOgPnA6lzy6iUTWGNa3baX21y+yQJqVKxzZg==
+X-Received: by 2002:a05:6214:5083:b0:783:cc80:1770 with SMTP id 6a1803df08f44-87b2106d967mr418771056d6.25.1760539880497;
+        Wed, 15 Oct 2025 07:51:20 -0700 (PDT)
 Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e881c577e6sm19687141cf.7.2025.10.15.07.21.41
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87c012a79f9sm19380516d6.53.2025.10.15.07.51.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Oct 2025 07:21:41 -0700 (PDT)
-Date: Wed, 15 Oct 2025 10:21:39 -0400
+        Wed, 15 Oct 2025 07:51:19 -0700 (PDT)
+Date: Wed, 15 Oct 2025 10:51:17 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Werner Sembach <wse@tuxedocomputers.com>
+To: Nathan Chancellor <nathan@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Tim Guttzeit <t.guttzeit@tuxedocomputers.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb/core/quirks: Add Huawei ME906S to wakeup quirk.
-Message-ID: <8ef4550b-a958-4fa4-88df-89b3d4b1117d@rowland.harvard.edu>
-References: <20251014153049.91722-1-wse@tuxedocomputers.com>
+	Ryan Chen <ryan_chen@aspeedtech.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] usb: uhci: Work around bogus clang shift overflow
+ warning from DMA_BIT_MASK(64)
+Message-ID: <a34eeced-c4f0-48de-8f9e-d78b50378101@rowland.harvard.edu>
+References: <20251014-usb-uhci-avoid-bogus-clang-shift-warning-v1-1-826585eed055@kernel.org>
+ <c0d1dc65-6f55-40b9-bbfa-09e8639a28e0@rowland.harvard.edu>
+ <20251015031952.GA2975353@ax162>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,34 +96,109 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251014153049.91722-1-wse@tuxedocomputers.com>
+In-Reply-To: <20251015031952.GA2975353@ax162>
 
-On Tue, Oct 14, 2025 at 05:30:05PM +0200, Werner Sembach wrote:
-> From: Tim Guttzeit <t.guttzeit@tuxedocomputers.com>
+On Tue, Oct 14, 2025 at 08:19:52PM -0700, Nathan Chancellor wrote:
+> On Tue, Oct 14, 2025 at 11:07:27PM -0400, Alan Stern wrote:
+> > On Tue, Oct 14, 2025 at 04:38:19PM -0700, Nathan Chancellor wrote:
+> > > After commit 18a9ec886d32 ("usb: uhci: Add Aspeed AST2700 support"),
+> > > clang incorrectly warns:
+> > > 
+> > >   In file included from drivers/usb/host/uhci-hcd.c:855:
+> > >   drivers/usb/host/uhci-platform.c:69:32: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+> > >      69 | static const u64 dma_mask_64 = DMA_BIT_MASK(64);
+> > >         |                                ^~~~~~~~~~~~~~~~
+> > >   include/linux/dma-mapping.h:93:54: note: expanded from macro 'DMA_BIT_MASK'
+> > >      93 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+> > >         |                                                      ^ ~~~
+> > > 
+> > > clang has a long outstanding and complicated problem [1] with generating
+> > > a proper control flow graph at global scope, resulting in it being
+> > > unable to understand that this shift can never happen due to the
+> > > 'n == 64' check.
+> > > 
+> > > Restructure the code to do the DMA_BIT_MASK() assignments within
+> > > uhci_hcd_platform_probe() (i.e., function scope) to avoid this global
+> > > scope issue.
+> > > 
+> > > Closes: https://github.com/ClangBuiltLinux/linux/issues/2136
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/92 [1]
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > ---
+> > 
+> > Do you think you could instead copy the approach used in:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=274f2232a94f6ca626d60288044e13d9a58c7612
+> > 
+> > IMO it is cleaner, and it also moves the DMA_BIT_MASK() computations 
+> > into a function scope.
 > 
-> The list of Huawei LTE modules needing the quirk fixing spurious wakeups
-> was missing the IDs of the Huawei ME906S module, therefore suspend did not
-> work.
+> Sure, would something like this be what you had in mind?
 > 
-> Signed-off-by: Tim Guttzeit <t.guttzeit@tuxedocomputers.com>
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> ---
->  drivers/usb/core/quirks.c | 2 ++
->  1 file changed, 2 insertions(+)
+> diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
+> index 37607f985cc0..5e02f2ceafb6 100644
+> --- a/drivers/usb/host/uhci-platform.c
+> +++ b/drivers/usb/host/uhci-platform.c
+> @@ -65,13 +65,10 @@ static const struct hc_driver uhci_platform_hc_driver = {
+>  	.hub_control =		uhci_hub_control,
+>  };
+>  
+> -static const u64 dma_mask_32 = DMA_BIT_MASK(32);
+> -static const u64 dma_mask_64 = DMA_BIT_MASK(64);
+> -
+>  static int uhci_hcd_platform_probe(struct platform_device *pdev)
+>  {
+>  	struct device_node *np = pdev->dev.of_node;
+> -	const u64 *dma_mask_ptr;
+> +	bool dma_mask_64 = false;
+>  	struct usb_hcd *hcd;
+>  	struct uhci_hcd	*uhci;
+>  	struct resource *res;
+> @@ -85,11 +82,11 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+>  	 * Since shared usb code relies on it, set it here for now.
+>  	 * Once we have dma capability bindings this can go away.
+>  	 */
+> -	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
+> -	if (!dma_mask_ptr)
+> -		dma_mask_ptr = &dma_mask_32;
+> +	if (of_device_get_match_data(&pdev->dev))
+> +		dma_mask_64 = true;
+>  
+> -	ret = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
+> +	ret = dma_coerce_mask_and_coherent(&pdev->dev,
+> +		dma_mask_64 ? DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -200,7 +197,7 @@ static void uhci_hcd_platform_shutdown(struct platform_device *op)
+>  static const struct of_device_id platform_uhci_ids[] = {
+>  	{ .compatible = "generic-uhci", },
+>  	{ .compatible = "platform-uhci", },
+> -	{ .compatible = "aspeed,ast2700-uhci", .data = &dma_mask_64},
+> +	{ .compatible = "aspeed,ast2700-uhci", .data = (void *)1 },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, platform_uhci_ids);
 > 
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index f5bc538753301..39fbbc31e9a41 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -469,6 +469,8 @@ static const struct usb_device_id usb_quirk_list[] = {
->  			USB_QUIRK_DISCONNECT_SUSPEND },
->  	{ USB_DEVICE(0x12d1, 0x15c3), .driver_info =
->  			USB_QUIRK_DISCONNECT_SUSPEND },
-> +	{ USB_DEVICE(0x12d1, 0x15c1), .driver_info =
-> +			USB_QUIRK_DISCONNECT_SUSPEND },
+> The
+> 
+>   const struct of_device_id *match;
+> 
+>   match = of_match_device(dev->dev.driver->of_match_table, &dev->dev);
+>   if (match && match->data)
+> 
+> part of the change you linked to is equivalent to
+> 
+>   if (of_device_get_match_data(&dev->dev))
+> 
+> if someone wanted to do a further clean up.
 
-Please pay attention to the comment at the start of the array's 
-definition.  Entries should be sorted by vendor ID and product ID.
+That's a small enough matter, we don't need to worry about it.
+
+At any rate, yes, this is what I had in mind, thanks.  When you submit 
+it, you may add:
+
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
 Alan Stern
 
