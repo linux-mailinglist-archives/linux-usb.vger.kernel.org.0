@@ -1,335 +1,166 @@
-Return-Path: <linux-usb+bounces-29345-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29346-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3487EBDFD1D
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 19:14:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B439DBDFE8D
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 19:40:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FCD73B96D7
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 17:13:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4415918815F1
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 17:41:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE1E33A015;
-	Wed, 15 Oct 2025 17:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C1C527E05F;
+	Wed, 15 Oct 2025 17:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XBN4M+l9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fj2vMLZC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3492D32E74F
-	for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 17:13:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863BA2FDC40
+	for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 17:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760548433; cv=none; b=HEEDyHOywjVlLW5zKI8zXZMLPyCr5ax1wStBQNV6QfhVq+EqXpTi8hBN/tpOAp8xIi55NxjpK4ebEMEgv7xlEAMm/s93FOrTAIMiDF5g72Qhwk9OsMMwtP0vE6hXztADhkBMhKrllKfyiCvqr3n0Jo8YnFIMPQfJJgzB3MJJhyw=
+	t=1760550033; cv=none; b=Fc+iIdlSnS18QqWg6nBoWcrpWLXh8dvus7gJ9iorHyxDHMnJp2KVz8c1s1RFUj+pTM+c1UM3RQmCyXpzBISf0X11kSypOa9suJ5CCpQh8SBfQvyZR0dqvOOYchPbzE7Uwuy+sKn2LdguQmQJmIHIa66TVOxvY3IPyrtGLEHd7HM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760548433; c=relaxed/simple;
-	bh=RuwwVGH6iji/5MFR99uLIc4nUmvenw/jgigS717qaCM=;
+	s=arc-20240116; t=1760550033; c=relaxed/simple;
+	bh=S1FtdcUcmIeQ998wpbQfLf/uCQbI5Kp2wTYdVUeqhYM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mFx5nat/o6/VeyUxJa3uoUNs8vq+IllrweO4HuNrwnwS0jFgt+nlQLKPBVg/BQNvSGAh4+2Br7EIWr6lq4p1OXVng3M0s9RnYll5rDpNQAe0scJDf864XTjVF109CShU06tCkeU/oVF/m00OAeVuEIDTLHi761P6U2HhdUOXdMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XBN4M+l9; arc=none smtp.client-ip=209.85.215.174
+	 To:Cc:Content-Type; b=d/pMKLe1rDJaIiiw0LhvTtsY/eLQBvN8hfORewyOfEDihvmRiepFRQIxIdgFQuPerbL31RR5IGaXccbb9hczN2UFdlkIl0JYMrTWgFwyn3srujtEKuK9IeUprZ0oOk8WGUIKsQKDzMMl3i2sMOR3l3caOIQlYCjshhu9HZwE+DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fj2vMLZC; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b6a225b7e9eso93543a12.0
-        for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 10:13:50 -0700 (PDT)
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b55517e74e3so7639905a12.2
+        for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 10:40:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760548430; x=1761153230; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1760550031; x=1761154831; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zTmCve7ow8KUe86m2S+D+TMV8DrrT745aVc8Mr0EBG4=;
-        b=XBN4M+l9zAHG5a/Ihj79peQVyAZSRsuzWwMdF2tmdlwAACQpCikspfoW073uKLG71M
-         kN0z6haR7u4k1oPAA/R92FS5PZM3qK6zfwBE1qMsOfSfgnn1MT1ZQudaAy8mz6sIsfBM
-         xHrM1vmCgLhK1gOLGO0b0uR7RMWXC2UeEheIIn5OPsE3Sq/a6mfmHybUx1xixkGw5KjL
-         iKvYGAh63fFkd0DKpimr8IBVQfTtnjgvQkXwUri3GHa4yg3kvLUl/qYqD3qQTwKJ639I
-         gc1zlr3qUJCxK2GNweXYO7P6P7A3AEwVgdTeiot8ny9Ltp3+FX2ktL6YD10VMYOFWQf5
-         E2iQ==
+        bh=xkp4QiQO+ZGOJJIskGqlgSdH1DbycxG+pl4uWz6LL4o=;
+        b=Fj2vMLZCnTOp+ubOpX09XI3jLcZ90M5IVrMZVpZkEyUltJy/M/XYqI9uK4b0koX94U
+         6qXBvyWXH/79qgI3wRcJeADYvR+beO+R2NULk8xTWbjlurBRrUnGfBgdxKwEYnXQOgXk
+         R5SapVE7kWDiL2HFrpFkfNumIY96e95PZBt+iI4HlqjKVwTK7/gzuTtkTloAbL8qOMfu
+         KsQUotmLq+hDI0B8RpTonoNDPlTTjoVH5MrYX3oMsasHQwPCODhugld5ZAuYORYAJtxk
+         QdTWnpgygHP5MEz9RPAOTuZQsNW1GxwuSISGZU8xGn9J+/L5RYVctcvd07Cxag/0608O
+         K9Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760548430; x=1761153230;
+        d=1e100.net; s=20230601; t=1760550031; x=1761154831;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zTmCve7ow8KUe86m2S+D+TMV8DrrT745aVc8Mr0EBG4=;
-        b=vfYnuDarGa63l5bIatx6BpVoIIigLqApra4qge0EcybgVYpaJfMBzkwY9RFlPOOCcu
-         bAJV8eeXxjo+J0189ITSSg1QJSdVqVd+HQrRKTGWxQYS1YTBQuE1hOQ9MWppap5le6Ib
-         Jp5nHLAdbF1nmjTCGqS+MgALmafxkwOfccLlk6wPsqU/7m1bOZY2QgK0AqnTkD0hTzr2
-         lByo1y4qAeA4WgQC8H/lLwqAybuQgqyTFk6M8Ofb4KONq+P+SP4kdeIR+tmpkl0ojt3o
-         tLSkBqflin/FHIxveRF1Pa90ZuUB+WFvEg5G5FGTlmPtYinG7PpNoxKKGkh4e4xPm0Bx
-         AJ0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXvo/PEkbclafQj7lhnOWod2x5nAQGKD1Kus7Soh7AbezvymxJooEEvFcfOcWKepvpnMNnGi2NTn3g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxh/d8RsgCA/vGiUof7n2n1tR3+szGoqO1WyABRWV+huJY3H+eM
-	bC4NOUW5Un2v49Wg3ve5qu9e45WhSwFV/cliXl11qixSbZ8yGrfAUQ/mWcpHcrcB1WZ1w72iIQX
-	ZyBKLB2mgm1nu6pfU89RH0NMJaId3ci+3fda9WWNG
-X-Gm-Gg: ASbGncucFTm34M77Pp+4Uhww/Orha4EJlHlSFDKq4ztwvIiDUTBU3he8pSQWuDzmJKQ
-	9Do5QAqyXYNSCuAWTRPGUpNUJbNJic/s9ZK0BGdbf1tacjiu+DzmnFwtnm3TtBJjxhSIolqtW3c
-	s3e47wlp+/SvlRaTMi8oLi6j7+buLnBABg6Xh/mrlkGkeLjquAsh0xMZ5rGxr9R2RgIsO+MQfoh
-	UHI4awTjaqOY0SjWKwo2fpGkWoiiaYuMYvC/vTyKyxelVP6dVpKpZAVbGnUArx6YIfBMW3b+EO9
-X-Google-Smtp-Source: AGHT+IG7xm/DEDbS/nNDrpe7ReteweNLIKFfyokAzWV7zMp350kRJ3eICS85Rhzn8PDxA9SglM5C/lh1HX9E/pJg4Bg=
-X-Received: by 2002:a17:902:f650:b0:276:305b:14a7 with SMTP id
- d9443c01a7336-290273ef0ebmr363338475ad.33.1760548429863; Wed, 15 Oct 2025
- 10:13:49 -0700 (PDT)
+        bh=xkp4QiQO+ZGOJJIskGqlgSdH1DbycxG+pl4uWz6LL4o=;
+        b=uKyinzZDgN3U4MukcbZ1n3h60QvkbBVy1qCE/D2mIgDjF9af+VfusT3eUsCa1DYyax
+         Jhx909+LmMuWBkw+wEtQOtSo9zTR5Clta+4qVZxsKVQRG/+vO5N7dYGxBhLRNpifS/0q
+         7XmkDt9U3B8af8A3UQtumNcB/Ojn8SVECZ4fUK5TWhTo4pffVbH6wS1v5FbjaJy1xm8D
+         u2t/oz3RxSBnHjS0WaQYXCw7XINGTu2Vt/ceKWxEc6K8Ef/ijLIAWnuC79NpInFFz9sG
+         BIqYtv9K7MXoDn+qRwDxeprJlkIwKV2ULWSGnu6Nxe1BrRbW4PPLkGIOX6h3g+M9+/5t
+         c+Uw==
+X-Forwarded-Encrypted: i=1; AJvYcCWedXnAVYKC4Ag+74szBYUrAhE4bx2izbDgWpyF2/cxsS1ljIiD3g0JjOMAhQeJA5YRhOctur+Z2fE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3pEclI3q7HQ7n1duOjvDn77IyajVLHO/LTr9TVrxaWX/8iA9i
+	vCOnwVlWpehgRTRL5/I4SnlkTQcIy+kVvibhX1XjYGFr9lZHiO1eCHsle5YnchSdSEiitfw1jkd
+	aWlcTxTJ8x6dF/hXXy6okVPUwxnYnyZeuOaFqW1Dw
+X-Gm-Gg: ASbGncsg+l7bNlNXwzq/MRu0q/x9E0RXrT9xnfkMs/FLmRNnaqdt384B/yRlrqoWZJK
+	0eX6pcv27NeoFNH9SS9kqdK5Cs8szNPhcmvSntxsm8An5ndgmPGTx3i221wc1sy6q2r9vHlyfUH
+	DGcFtDAsq+YyLgNzGycdN4dsHC6JLKexo4MxQNEknccj5RW4ob/AIPMRBeke3Kj6vDrsHTPZh6V
+	nAfRI4dhl3rA6dFvSPrNnR513NdY6qQXLmeGiucYBkTRwzt9FYXQLRuw7Tn0VPw/Q==
+X-Google-Smtp-Source: AGHT+IGtM8hvN4lqZlO0WHIvTbL3D48lIHd91NHDkSwH6JM5GHtQa8Pa5RXv0ZasuodiKcuODGfruyjdLC0lq/iK870=
+X-Received: by 2002:a17:902:e94e:b0:279:daa1:6780 with SMTP id
+ d9443c01a7336-2902741cf99mr376217665ad.52.1760550030102; Wed, 15 Oct 2025
+ 10:40:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251010201607.1190967-1-royluo@google.com> <20251010201607.1190967-2-royluo@google.com>
- <066a9598-ad30-4327-be68-87299bba6fda@kernel.org> <CA+zupgwc7b51pNRLWRy2CX=n4=FTm=AP7J0dRP2RLjyK5LxGtw@mail.gmail.com>
- <b7b3de64-c656-4a84-8ba4-2d5c7eda9783@kernel.org> <CA+zupgzo9zRO2GHR2Np0Tm4M5_h8y0GF2JGGqE_S0BxSR_ZbqQ@mail.gmail.com>
- <20251015-backlash-overtime-4c636f12b165@spud>
-In-Reply-To: <20251015-backlash-overtime-4c636f12b165@spud>
+References: <20251010201607.1190967-1-royluo@google.com> <20251010201607.1190967-3-royluo@google.com>
+ <20251015002744.sntua4kqidgusafo@synopsys.com>
+In-Reply-To: <20251015002744.sntua4kqidgusafo@synopsys.com>
 From: Roy Luo <royluo@google.com>
-Date: Wed, 15 Oct 2025 10:13:13 -0700
-X-Gm-Features: AS18NWCEm2YS-Sip7tv4iMJuDS6bNEhHmOhmHYieVj8y_mcbM2tH_CjtqCUTPM4
-Message-ID: <CA+zupgyKsnp5D9kW-AeoAsweODXx4BXLr7fVnB+J9tzYRbM_fg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] dt-bindings: usb: dwc3: Add Google Tensor G5 DWC3
-To: Conor Dooley <conor@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+Date: Wed, 15 Oct 2025 10:39:53 -0700
+X-Gm-Features: AS18NWDkbrVxIDG8dAIZI0TtKFaXgEljVUvTQC724DiczltW9oPtD4sVlkXhIBk
+Message-ID: <CA+zupgxbGjU_01JSFR_-2humZAyxwcVT5JR6h6mTVUT=3fFQ6Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Peter Griffin <peter.griffin@linaro.org>, 
-	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Peter Griffin <peter.griffin@linaro.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
 	Tudor Ambarus <tudor.ambarus@linaro.org>, Joy Chakraborty <joychakr@google.com>, 
-	Naveen Kumar <mnkumar@google.com>, Badhri Jagan Sridharan <badhri@google.com>, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org
+	Naveen Kumar <mnkumar@google.com>, Badhri Jagan Sridharan <badhri@google.com>, 
+	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 15, 2025 at 1:59=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
+On Tue, Oct 14, 2025 at 5:28=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys=
+.com> wrote:
 >
-> On Tue, Oct 14, 2025 at 05:50:17PM -0700, Roy Luo wrote:
-> > On Tue, Oct 14, 2025 at 1:22=E2=80=AFAM Krzysztof Kozlowski <krzk@kerne=
-l.org> wrote:
-> > >
-> > > On 14/10/2025 03:40, Roy Luo wrote:
-> > > > On Fri, Oct 10, 2025 at 5:09=E2=80=AFPM Krzysztof Kozlowski <krzk@k=
-ernel.org> wrote:
-> > > >>
-> > > >> On 10/10/2025 22:16, Roy Luo wrote:
-> > > >>> Document the device tree bindings for the DWC3 USB controller fou=
-nd in
-> > > >>> Google Tensor SoCs, starting with the G5 generation.
-> > > >>>
-> > > >>> The Tensor G5 silicon represents a complete architectural departu=
-re from
-> > > >>> previous generations (like gs101), including entirely new clock/r=
-eset
-> > > >>> schemes, top-level wrapper and register interface. Consequently,
-> > > >>> existing Samsung/Exynos DWC3 USB bindings are incompatible, neces=
-sitating
-> > > >>> this new device tree binding.
-> > > >>>
-> > > >>> The USB controller on Tensor G5 is based on Synopsys DWC3 IP and =
-features
-> > > >>> Dual-Role Device single port with hibernation support.
-> > > >>
-> > > >> You still mix, completely unnecessarily, subsystems. For Greg this=
- is
-> > > >> actually even undesired, but regardless don't do this for any case=
-s
-> > > >> because it just makes everything slower or more difficult to apply=
-.
-> > > >>
-> > > >> Really, think how maintainers should deal with your patches.
-> > > >>
-> > > >
-> > > > Understood, I will separate the patches into two distinct series: o=
-ne for
-> > > > the controller and one for the PHY.
-> > > > Appreciate the feedback and the explanation.
-> > > >
-> > > >>>
-> > > >>> Signed-off-by: Roy Luo <royluo@google.com>
-> > > >>> ---
-> > > >>>  .../bindings/usb/google,gs5-dwc3.yaml         | 141 ++++++++++++=
-++++++
-> > > >>>  1 file changed, 141 insertions(+)
-> > > >>>  create mode 100644 Documentation/devicetree/bindings/usb/google,=
-gs5-dwc3.yaml
-> > > >>>
-> > > >>> diff --git a/Documentation/devicetree/bindings/usb/google,gs5-dwc=
-3.yaml b/Documentation/devicetree/bindings/usb/google,gs5-dwc3.yaml
-> > > >>> new file mode 100644
-> > > >>> index 000000000000..6fadea7f41e8
-> > > >>> --- /dev/null
-> > > >>> +++ b/Documentation/devicetree/bindings/usb/google,gs5-dwc3.yaml
-> > > >>> @@ -0,0 +1,141 @@
-> > > >>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > >>> +# Copyright (c) 2025, Google LLC
-> > > >>> +%YAML 1.2
-> > > >>> +---
-> > > >>> +$id: http://devicetree.org/schemas/usb/google,gs5-dwc3.yaml#
-> > > >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > >>> +
-> > > >>> +title: Google Tensor Series (G5+) DWC3 USB SoC Controller
-> > > >>> +
-> > > >>> +maintainers:
-> > > >>> +  - Roy Luo <royluo@google.com>
-> > > >>> +
-> > > >>> +description:
-> > > >>> +  Describes the DWC3 USB controller block implemented on Google =
-Tensor SoCs,
-> > > >>> +  starting with the G5 generation. Based on Synopsys DWC3 IP, th=
-e controller
-> > > >>> +  features Dual-Role Device single port with hibernation add-on.
-> > > >>> +
-> > > >>> +properties:
-> > > >>> +  compatible:
-> > > >>> +    const: google,gs5-dwc3
-> > > >>> +
-> > > >>> +  reg:
-> > > >>> +    items:
-> > > >>> +      - description: Core DWC3 IP registers.
-> > > >>> +      - description: USB host controller configuration registers=
-.
-> > > >>> +      - description: USB custom interrrupts control registers.
-> > > >>> +
-> > > >>> +  reg-names:
-> > > >>> +    items:
-> > > >>> +      - const: dwc3_core
-> > > >>> +      - const: host_cfg
-> > > >>> +      - const: usbint_cfg
-> > > >>> +
-> > > >>> +  interrupts:
-> > > >>> +    items:
-> > > >>> +      - description: Core DWC3 interrupt.
-> > > >>> +      - description: High speed power management event for remot=
-e wakeup from hibernation.
-> > > >>> +      - description: Super speed power management event for remo=
-te wakeup from hibernation.
-> > > >>
-> > > >> Wrap at 80 (see coding style) or just shorten these.
-> > > >
-> > > > Ack, will fix it in the next patch.
-> > > >
-> > > >>
-> > > >>> +
-> > > >>> +  interrupt-names:
-> > > >>> +    items:
-> > > >>> +      - const: dwc_usb3
-> > > >>
-> > > >> So just "core"?
-> > > >
-> > > > I'd prefer to stick to "dwc_usb3" as that's
-> > > > 1. more expressive by referring to the underlying IP name,
-> > >
-> > >
-> > > But that's completely redundant name.
-> > >
-> > > > 2. consistent with established dwc3 bindings such as
-> > > >     Documentation/devicetree/bindings/usb/snps,dwc3.yaml,
-> > >
-> > > If you use only one interrupt. You don't use one interrupt here.
+> Hi,
+>
+> On Fri, Oct 10, 2025, Roy Luo wrote:
+> > +#endif /* CONFIG_PM */
+> > +
+> > +static const struct dev_pm_ops dwc3_google_dev_pm_ops =3D {
+> > +     SET_SYSTEM_SLEEP_PM_OPS(dwc3_google_pm_suspend, dwc3_google_pm_re=
+sume)
+> > +     SET_RUNTIME_PM_OPS(dwc3_google_runtime_suspend, dwc3_google_runti=
+me_resume,
+> > +                        dwc3_google_runtime_idle)
+>
+> Can we use the new pm_ptr() and *_PM_OPS macros to get rid of the ifdef
+> CONFIG_PM guards?
+
+Yes, will replace it with pm_ptr in the next patch.
+P.S. The kernel test robot is also complaining about it. [1]
+
+[1] https://lore.kernel.org/linux-usb/202510111335.oyOAs9MB-lkp@intel.com/
+
+>
+> > +     .complete =3D dwc3_google_complete,
+> > +     .prepare =3D dwc3_google_prepare,
+> > +};
+> > +
+> > +static const struct of_device_id dwc3_google_of_match[] =3D {
+> > +     { .compatible =3D "google,gs5-dwc3" },
+> > +     { }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, dwc3_google_of_match);
+> > +
+> > +static struct platform_driver dwc3_google_driver =3D {
+> > +     .probe          =3D dwc3_google_probe,
+> > +     .remove         =3D dwc3_google_remove,
+> > +     .driver         =3D {
+> > +             .name   =3D "google-dwc3",
+> > +             .pm     =3D &dwc3_google_dev_pm_ops,
+> > +             .of_match_table =3D dwc3_google_of_match,
+> > +     },
+> > +};
+> > +
+> > +module_platform_driver(dwc3_google_driver);
+> > +MODULE_LICENSE("GPL");
+> > +MODULE_DESCRIPTION("DesignWare DWC3 Google Glue Driver");
+> > --
+> > 2.51.0.740.g6adb054d12-goog
 > >
-> > After looking into it further, I found that the interrupt name "dwc_usb=
-3"
-> > must be used here to adhere to the interrupt naming defined in
-> > "snps,dwc3.yaml".
 >
-> Did you just chose to not read what Krzysztof said here? It must be used
-> only when that's the sole interrupt, which he stated is not the case for
-> your platform.
->
-> > This requirement stems from the device's corresponding glue driver
-> > utilizing a so-called "flattened" model (see [1] for context). This mod=
-el
-> > causes the glue driver to probe an underlying "snps,dwc3" device.
-> > Consequently, the core DWC3 interrupt defined here is consumed by
-> > the driver handling the "snps,dwc3" device, making it mandatory to
-> > follow the interrupt naming established in "snps,dwc3.yaml".
->
-> I look at the binding and noticed that interrupt-names isn't even a
-> required property by snps,dwc3.yaml, and this comment about driver
-> behaviour likely isn't accurate given that the code in for host mode
-> (and the others are identical) is written so that it will grab the first
-> interrupt if the specific names it looks for are absent:
-> | static int dwc3_host_get_irq(struct dwc3 *dwc)
-> | {
-> |       struct platform_device  *dwc3_pdev =3D to_platform_device(dwc->de=
-v);
-> |       int irq;
-> |
-> |       irq =3D platform_get_irq_byname_optional(dwc3_pdev, "host");
-> |       if (irq > 0) {
-> |               dwc3_host_fill_xhci_irq_res(dwc, irq, "host");
-> |               goto out;
-> |       }
-> |
-> |       if (irq =3D=3D -EPROBE_DEFER)
-> |               goto out;
-> |
-> |       irq =3D platform_get_irq_byname_optional(dwc3_pdev, "dwc_usb3");
-> |       if (irq > 0) {
-> |               dwc3_host_fill_xhci_irq_res(dwc, irq, "dwc_usb3");
-> |               goto out;
-> |       }
-> |
-> |       if (irq =3D=3D -EPROBE_DEFER)
-> |               goto out;
-> |
-> |       irq =3D platform_get_irq(dwc3_pdev, 0);
-> |       if (irq > 0)
-> |               dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
-> |
-> | out:
-> |       return irq;
-> | }
->
-> Since it grabs the first interrupt, as a fallback, in order to support
-> not having the interrupt-names property, the name of the first interrupt
-> ultimately doesn't matter at all to this driver (and likely any other
-> driver written in compliance with the bindings for the dwc3 core).
->
-> I'm not here to argue about what the name for the single interrupt
-> should be (keeping consistency with other devices might actually be
-> good), but ignoring what a maintainer says and the seemingly providing
-> an incorrect analysis is annoying. Did you perform the analysis on this
-> yourself, or did it perhaps come from Gemini?
->
-> Thanks,
-> Conor.
+> Give me some time, and I'll review the rest of this patch.
 
-Hi Conor,
+Thanks Thinh! and a heads up, I'm splitting this patset into
+two separate series as Krzysztof suggested; one for the
+controller and one for the phy, so the series title might
+change in the next version.
 
-My apologies for the incorrect analysis. I misinterpreted the code,
-which was a big mistake. I can assure you that I do value your
-feedback and take every comment seriously.
-Thanks for pointing out the error and raising your concern.
-This won't happen again.
-
-Thanks,
+Regards,
 Roy Luo
 
 >
-> > Essentially, the interrupts defined here are a mix of vendor specific
-> > implementation (like "hs_pme", "ss_pme") and the DWC3 core in
-> > "snps,dwc3.yaml" ("dwc_usb3").
-> >
-> > I don't know if there's a better way to express this implicit dependenc=
-y
-> > of the core DWC3 interrupt except for documenting it in the binding
-> > description. Any advice would be welcome.
-> >
-> > [1] https://lore.kernel.org/all/20250414-dwc3-refactor-v7-0-f015b358722=
-d@oss.qualcomm.com/
-> >
-> > Thanks,
-> > Roy Luo
-> >
-> > >
-> > > >     Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml,
-> > > > unless you have a strong preference for the alternative naming.
-> > >
-> > > Such namings are discouraged, because they tell absolutely nothing.
-> > > Also, schematics or datasheets usually do not use them, either.
-> > >
-> > >
-> > > Best regards,
-> > > Krzysztof
+> Thanks,
+> Thinh
 
