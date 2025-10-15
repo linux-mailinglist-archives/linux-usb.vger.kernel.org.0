@@ -1,243 +1,115 @@
-Return-Path: <linux-usb+bounces-29348-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29349-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72AF1BE0483
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 20:58:37 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EB5DBE04BD
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 21:01:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF15D19A583D
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 18:59:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 40A175067DB
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 19:01:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B038D302CC2;
-	Wed, 15 Oct 2025 18:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75FE13064BF;
+	Wed, 15 Oct 2025 19:00:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wtbiL5Wv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BgBFlW5N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B104A301022
-	for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 18:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA575302CAB;
+	Wed, 15 Oct 2025 19:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760554710; cv=none; b=n/J2fjIG9eD7RKMYUXxUxghhlQGDgSRkRAebiyJgnh2586dQhRVNYmfCaV5K7vx967hlKQASHDW6XM6mZIzngEo95qUdpqZosaDd1yOrO29Fg3MOgwa3z+9MJMxmQwCGv12QtfEe3JNG+rIqHwn1OUjzz9bq1/0pesbFknsXMrw=
+	t=1760554854; cv=none; b=RafCs1NzsPNwUGH2EH2nxJ4E6kD/AhEU7X7Mi+eGQMRcDtXYOkl7SSSYQ6AfA+gj52xBBD9WOeS9sOjxCDmxBTLVGbH2+UTh97GXnJIFfMFePpsTZiJPRlC14Vznvbx0eATE0opbbo8AmHfOw4z11d6J2Uv8csLznRLw0wSTl9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760554710; c=relaxed/simple;
-	bh=ToDe4OXCz3YO+YFGk7WoPcF3nwaVNZU8zopuhi0eZdg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GzU77dHoDbIk/TtsQI7ghObUwY5oLzRUyuw/8Vjgfp83WYuwXfexrCdytHEwlflCNjXWiQrZgKQlQteAfB4nvZ4wVPwwN4BkBT7k9Aq8CnObLt1iaBBs8bvicbAzwYC/Mqb+i8+fHzLIsRx2Zv4CnnIgb4ifZYsCC/9xdBUO0Ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wtbiL5Wv; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2681660d604so75185925ad.0
-        for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 11:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760554708; x=1761159508; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fRwPKnk8qfrHFphbSwARuokxhcbVBpznEGtVMYZ7BTU=;
-        b=wtbiL5WvA5dTb8nzDeBXuJKJqGm0gP9Ac7WdumDHO1nhOBK2419K0nZDYsJnFSS9A5
-         /t9OkHDf97Ghn64cDdsNtTXau26kBPnD+nPyXN9nENoSGlPDwG32YexR6LERKdFXKHKJ
-         ARbj5cnXzlta2Jf6r1aK808eKkJjy1KoepB8vsCJ+COGh8DeoKa140GJCKc5bdb4iEzt
-         rOKFm5UNe65oriXzPPQAGVPumBoV6jKNDyhFSJU29N/e3QzZh/o8iAAXBDqZ88X6gVy7
-         r0vC1sXi1ef9JYb3+MxRYMgeHtaGRcddzj4nAnTwgHa0KgslKflBYA6x+1AXVBue6HHo
-         5Xcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760554708; x=1761159508;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fRwPKnk8qfrHFphbSwARuokxhcbVBpznEGtVMYZ7BTU=;
-        b=tGdVxio5iTY4CrCy43psELzoxGTabNq/KiH+6RMK/73xeIRcq3hG3ps0Sv2kIVZ86X
-         S5qrvxhpZdIqlcVhy/g4Hq2YzTIH2lxBOBtBu4gcbghzrYeHGMiSysCjbM1HZ+gbN05J
-         fetXuTDp1YeVUd8GDLRYIeVE9OIZ2Obp+11mbCv4MrdClz2tBLctNrChWEqRZWDqErwo
-         uHTPKfIoTaEmFvpvnb3m0s2ekO56NmACv6tZlRTehbxmLdAfmfuZqb9u65w6Qe0ePe59
-         XnX3aO0VYIJg5klTp7V0/OjzNr1mDIDzo7cg5SwjF0UQU0iK7Lk3MAwSSAUKC8f0dofF
-         sOgA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgzfVqpf1VLFv9XMADIWgl/4uSRe+OxKJZr9beaOOInOGYjTpjxmsva3TW58XaAHYV+DXI+usL6lI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFuE1hGiRhTcdJxV9rTkymdNVSPJSZmeR4WzRyfFj/snKObZRe
-	NoBBrrBGh+RjE81zS67UXmOg8x1S9hfeLPkNwx1Su38FtjInTsfDevLIB8l99hZLIprO8Qm6iGx
-	wCYar94ZyeHhLstV+Q1q5k2Ln4f+D4gikPflf6wG9
-X-Gm-Gg: ASbGncs420+wc7WLWQzXPKmJXU4x+41oJLYlPlX9QJjB2kogTk2q4gVf0PebafwdS3e
-	QAV4cLnhj8lACceXU+G9cCYm5TZzj6VvHG5PCJV5Q8YvweNzVYU40wDd56zPP7Ej26HIVjxe+ww
-	kSKDMUIROJQBvAjc2+uvqICWP94udbXwBe2DrD4BAEMbgBqDUIUSYOy8v+UC9exMuT+/jj3U89r
-	BpSo3q+D+V0DW7hNmK/hSGPNxxMyyO79BcPfRvnRdvCAWryGYPRHpV9bDyS9KIywmS1JEiL7BIm
-	Pz3KJ6jo8+wqKr0vMHLzNYxL
-X-Google-Smtp-Source: AGHT+IFnYsW3w1gFetllx0+5CiL7Rf74v6cd4M6iTK6ClRMgKt3X+k4ZS1SInKpJctWdDoRuk+7QXEWu/txY1MI7yL0=
-X-Received: by 2002:a17:903:37c7:b0:275:b1cf:6dd9 with SMTP id
- d9443c01a7336-290272f80dfmr360656995ad.52.1760554707274; Wed, 15 Oct 2025
- 11:58:27 -0700 (PDT)
+	s=arc-20240116; t=1760554854; c=relaxed/simple;
+	bh=U1O5JJjDwfsLfdO35GX3nUek30Grms+9GVEVpNFCLUU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ixj0sTMwktCtWkc/zxV3QggfAv11Jsq4t0iW6zgPkMiBPUS16eU511/+yNksZbLVO7mZbb/U6ms5D4ubD2PLMPFLDJJACcKMzprPQs8rre24KGSqsczGr5lq6HU+kdCAHTe86J6UpnQ83KW/LJR/dTNka+4VfD3ZpVw9mpoJMrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BgBFlW5N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FADDC113D0;
+	Wed, 15 Oct 2025 19:00:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760554853;
+	bh=U1O5JJjDwfsLfdO35GX3nUek30Grms+9GVEVpNFCLUU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BgBFlW5NsWOtmAhzyadk7XleOyG2zwnk2bAhFHIHHFUFkgpOCBhE1uTpFzClsHmKU
+	 3hhsQsksjGAeomuL1twLTBYfiGivSv1RJcF2Uwn5aNcsLwHR8mvrFOF5CqEPLUMf6G
+	 zwftn98cbaXtvZ4NMA2jAYkx3tSdIfqSuz42ddfjLJgRQnUR2obncd5gxZ50i0wcu2
+	 GRUOjz/Gyi1xKhkld7IVvK+a3HIvGt6yADpEa0v8zpiJ6x47u4DQKWECYM7FiBJ7To
+	 tXXURm0Uw61CkJhTmYNSNt5u/hd3hEEUsthhGIn+KYfcVEFSTxDYFRy6M8cHbbpRX4
+	 8NkCiv0SiP1Qg==
+Message-ID: <578cc11f-654d-44fb-829a-ae6421863d50@kernel.org>
+Date: Wed, 15 Oct 2025 13:00:52 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251010201607.1190967-1-royluo@google.com> <20251010201607.1190967-4-royluo@google.com>
- <75756635-b374-4441-8526-175210e01163@kernel.org> <CA+zupgwHFpP5GEwGxOksmLJBU7+Kr_o0p50Pad1NmwNB0AxcGA@mail.gmail.com>
- <20251015130538.GA3214399-robh@kernel.org>
-In-Reply-To: <20251015130538.GA3214399-robh@kernel.org>
-From: Roy Luo <royluo@google.com>
-Date: Wed, 15 Oct 2025 11:57:50 -0700
-X-Gm-Features: AS18NWDABi6Rc7VHdjUz_InyfGjFdsf7Veklfegj5HRf0gGUj-mD1x86yUCd9pU
-Message-ID: <CA+zupgxAhErw4i0Q13hyXE2_sQSowzDgZ4Yv8o1tcZQS7G7a-Q@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] dt-bindings: phy: google: Add Google Tensor G5 USB PHY
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Peter Griffin <peter.griffin@linaro.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Joy Chakraborty <joychakr@google.com>, 
-	Naveen Kumar <mnkumar@google.com>, Badhri Jagan Sridharan <badhri@google.com>, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2] net: usb: lan78xx: fix use of improperly
+ initialized dev->chipid in lan78xx_reset
+To: I Viswanath <viswanathiyyappan@gmail.com>
+Cc: Thangaraj.S@microchip.com, Rengarajan.S@microchip.com,
+ UNGLinuxDriver@microchip.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+ linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com
+References: <20251013181648.35153-1-viswanathiyyappan@gmail.com>
+ <1adfe818-c74f-4eb1-b9f4-1271c6451786@kernel.org>
+ <CAPrAcgPs48t731neW4iLq3d+HXEQAezHj5Ad9KR8EK+TNu5wbg@mail.gmail.com>
+Content-Language: en-US
+From: Khalid Aziz <khalid@kernel.org>
+In-Reply-To: <CAPrAcgPs48t731neW4iLq3d+HXEQAezHj5Ad9KR8EK+TNu5wbg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 15, 2025 at 6:05=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
-:
->
-> On Mon, Oct 13, 2025 at 06:46:39PM -0700, Roy Luo wrote:
-> > On Fri, Oct 10, 2025 at 5:11=E2=80=AFPM Krzysztof Kozlowski <krzk@kerne=
-l.org> wrote:
-> > >
-> > > On 10/10/2025 22:16, Roy Luo wrote:
-> > > > +  reg:
-> > > > +    items:
-> > > > +      - description: USB2 PHY configuration registers.
-> > > > +      - description: DisplayPort top-level registers.
-> > > > +      - description: USB top-level configuration registers.
-> > > > +
-> > > > +  reg-names:
-> > > > +    items:
-> > > > +      - const: u2phy_cfg
-> > > > +      - const: dp_top
-> > > > +      - const: usb_top_cfg
-> > > > +
-> > > > +  "#phy-cells":
-> > > > +    const: 1
-> > > > +
-> > > > +  clocks:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  resets:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  power-domains:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  orientation-switch:
-> > > > +    type: boolean
-> > > > +    description:
-> > > > +      Indicates the PHY as a handler of USB Type-C orientation cha=
-nges
-> > > > +
-> > > > +required:
-> > > > +  - compatible
-> > > > +  - reg
-> > > > +  - reg-names
-> > > > +  - "#phy-cells"
-> > > > +  - clocks
-> > > > +  - resets
-> > > > +  - power-domains
-> > > > +  - orientation-switch
-> > > > +
-> > > > +additionalProperties: false
-> > > > +
-> > > > +examples:
-> > > > +  - |
-> > > > +    soc {
-> > > > +        #address-cells =3D <2>;
-> > > > +        #size-cells =3D <2>;
-> > > > +
-> > > > +        usb_phy: usb_phy@c410000 {
-> > > > +            compatible =3D "google,gs5-usb-phy";
-> > > > +            reg =3D <0 0x0c450014 0 0xc>,
-> > > > +                  <0 0x0c637000 0 0xa0>,
-> > >
-> > > You probably miss DP support and this does not belong here.
-> >
-> > This register space isn't solely for DP operation, a significant portio=
-n
-> > manages the custom combo PHY. Consequently, this space is essential
-> > even for USB-only operation. We can expect more registers in the space
-> > to be utilized when DP support is added.
-> >
-> > While I acknowledge the current name is confusing, it directly reflects
-> > the hardware documentation. We can either adhere to the hardware
-> > documentation's naming or propose a more descriptive alternative.
-> > What's your preference?
-> >
-> > >
-> > > > +                  <0 0x0c45002c 0 0x4>;
-> > >
-> > > That's not a separate address space. I really, really doubt that
-> > > hardware engineers came with address spaces of one word long.
-> >
-> > I initially created this space to access the usb2only mode register,
-> > which must be programmed when the controller operates in high-speed
-> > only mode without the USB3 PHY initialized. Upon review, I now
-> > believe the controller driver is the better location for this configura=
-tion,
-> > as the register logically belongs there and the controller can tell
-> > whether usb3 phy is going to be initialized.
-> >
-> > That is, I'm removing this register space in the next patch.
->
-> You are missing the point. What exists from 0x0c450020-2c and
-> 0x0c450000-0x14 for that matter? Hardware blocks don't just start on
-> unaligned boundaries like 0x14 or 0x2c. DT describes the h/w blocks, not
+On 10/15/25 10:51 AM, I Viswanath wrote:
+> On Wed, 15 Oct 2025 at 21:25, Khalid Aziz <khalid@kernel.org> wrote:
+> 
+>> How did you determine this is the commit that introduced this bug?
+>>
+>>   From what I can see, commit a0db7d10b76e does not touch lan78xx_reset()
+>> function. This bug was introduced when devid was replaced by chipid
+>> (commit 87177ba6e47e "lan78xx: replace devid to chipid & chiprev") or
+>> even earlier when the order of calls to lan78xx_init_mac_address() and
+>> lan78xx_read_reg() was introduced in lan78xx_reset() depending upon if
+>> lan78xx_init_mac_address() at that time used devid in its call sequence
+>> at the time.
+> 
+> The commit a0db7d10b76e introduced the dependency on devid to
+> lan78xx_read_raw_eeprom() and
+> lan78xx_read_eeprom() and ultimately lan78xx_init_mac_address() and
+> lan78xx_reset()
+> 
+> In lan78xx_init_mac_address()
+> 
+> Only lan78xx_read_eeprom() depends on devid as
+> 
+> lan78xx_read_reg() and lan78xx_write_reg() do not use devid
+> 
+> lan78xx_read_otp() depends on lan78xx_read_raw_otp() which depends
+> only on lan78xx_write_reg() and lan78xx_read_reg()
+> and hence doesn't use devid either
+> 
+> is_valid_ether_addr(), random_ether_addr() and ether_addr_copy() are
+> net core functions and do not care about driver specific data
+> 
+> The devid read exists in this commit (was added in ce85e13ad6ef4)
+> 
+> a0db7d10b76e was supposed to move the devid read before the
+> lan78xx_init_mac_address() because of the newly added
+> dependency but it was a tricky detail that the author failed to see
+> 
+> Thanks,
+> I Viswanath
 
-Rob,
+Ah, I see. That makes sense.
 
-Thanks for chiming in. Let me elaborate the register layout here:
-The register space 0x0c450000 - 0x00450043 is supposed to
-be assigned to the USB controller. However, the USB phy has
-to access a small portion of it, i.e. 0x0c450014 - 0x0c450020,
-in order to initialize usb2 phy. This is really unfortunate and
-makes things more complicated than it should've been.
-
-The current patch is addressing it by splitting the register space:
-- USB phy: <0 0x0c450014 0 0xc>
-- USB controller: <0 0x0c450000 0 0x14>, <0 0x0c450020 0 0x23>
-
-> just nodes of what a driver needs. So if the 0x2c register needs to be
-> accessed by the USB driver, that's fine, but the register doesn't go in
-> the USB controller node 'reg'. A property with a phandle to the node
-> defining all the 0x0c450000 registers and an offset (if needed) is
-> typically what we do there. Or you can just find that node by
-> compatible.
-
-Just to make sure we're on the same page, are you suggesting
-making the register space a syscon node [1]? something like this:
-
-usb_cfg_csr: usb_cfg_csr@c450000 {
-  compatible =3D "syscon";
-  reg =3D <0 0x0c450000 0x0 0x43>;
-};
-
-usb@c400000 {
-  ...
-  usb-cfg-syscon =3D <&usb_cfg_csr>;
-  ...
-};
-
-usb_phy@c637000 {
-  ...
-  usb-cfg-syscon =3D <&usb_cfg_csr>;
-  ...
-}
-
-[1] Documentation/devicetree/bindings/mfd/syscon.yaml
-
-Thanks,
-Roy Luo
-
->
-> Rob
+--
+Khalid
 
