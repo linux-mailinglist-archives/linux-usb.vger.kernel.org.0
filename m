@@ -1,133 +1,335 @@
-Return-Path: <linux-usb+bounces-29344-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29345-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 608FEBDFC62
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 18:54:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3487EBDFD1D
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 19:14:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7348E3C5BA0
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 16:52:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FCD73B96D7
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 17:13:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0160338F28;
-	Wed, 15 Oct 2025 16:52:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE1E33A015;
+	Wed, 15 Oct 2025 17:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XtMWLhjd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XBN4M+l9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1BE324B1D
-	for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 16:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3492D32E74F
+	for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 17:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760547129; cv=none; b=lYCrFK2M17di7f3QZV/AhUEtbkor6POflrgzWBKBcidsGe27cHzcnzQbPJX4nRLF25ltf4U8u+Eken91k8tUtsjqn8vtBWj7L3JkILuVn9lml4JK6H7N+Ev+NA1YNOp6Lg9jJdJVmI4WTG9uLiX6WzPna8O1vJarfwYLqKMllvE=
+	t=1760548433; cv=none; b=HEEDyHOywjVlLW5zKI8zXZMLPyCr5ax1wStBQNV6QfhVq+EqXpTi8hBN/tpOAp8xIi55NxjpK4ebEMEgv7xlEAMm/s93FOrTAIMiDF5g72Qhwk9OsMMwtP0vE6hXztADhkBMhKrllKfyiCvqr3n0Jo8YnFIMPQfJJgzB3MJJhyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760547129; c=relaxed/simple;
-	bh=wbxUTvPZYOO+jnUBOwHP6vqN2Y8d3Evx6zjpDRrIqFA=;
+	s=arc-20240116; t=1760548433; c=relaxed/simple;
+	bh=RuwwVGH6iji/5MFR99uLIc4nUmvenw/jgigS717qaCM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q8gomlhrEMlYdBsvQoQoETTBrlajH8rdQN9fI5Ysbk6m1wSFR+vxSg0tOmyO8R8PEeyqIxmvOO2L+aGRhApytWgLEw6jP6ITVozbogf8pZFyDYDc4OGXx3ZB0kxsC7PRCQ4ydPYNVJAKFCECTON64y718lAcILIO8dPxcRuZy6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XtMWLhjd; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b3da3b34950so1112839366b.3
-        for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 09:52:07 -0700 (PDT)
+	 To:Cc:Content-Type; b=mFx5nat/o6/VeyUxJa3uoUNs8vq+IllrweO4HuNrwnwS0jFgt+nlQLKPBVg/BQNvSGAh4+2Br7EIWr6lq4p1OXVng3M0s9RnYll5rDpNQAe0scJDf864XTjVF109CShU06tCkeU/oVF/m00OAeVuEIDTLHi761P6U2HhdUOXdMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XBN4M+l9; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b6a225b7e9eso93543a12.0
+        for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 10:13:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760547126; x=1761151926; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=neLd0+dDQvDA5L4vv0sP7kK28bvW/poi2lRWCeQYViM=;
-        b=XtMWLhjdHBLttzyRnOCk7fT64rZUtawKBK+fiZaUyhESgZ9m6tHtmI9JH2d4POkSRS
-         siVFJpZuQ3KJM2dcTkF3oakGLjiYm1dyxklbPiw4zQuAIShZj76zxGDuJ3iQIzRz+QEy
-         Ov6cjUJD5xUQ7CrOSK3Tg5+CsIX8wICe8y3Z3fUbTBdcGmxCNw0qweKuvBrskgBKBMm8
-         8QZEryxebdFxQhzCZcMFhwbwS7VCK0bwtNaRrTDUymXo9H1qQrRWjEnGaCzetcPLU0rn
-         Dxm8V7hkg9sO+HRGrv0+g8wWJRWTwlZzXbBi0NGqgo92OoPkRXyYp/vsHaPjc5Da9G+S
-         UxsQ==
+        d=google.com; s=20230601; t=1760548430; x=1761153230; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zTmCve7ow8KUe86m2S+D+TMV8DrrT745aVc8Mr0EBG4=;
+        b=XBN4M+l9zAHG5a/Ihj79peQVyAZSRsuzWwMdF2tmdlwAACQpCikspfoW073uKLG71M
+         kN0z6haR7u4k1oPAA/R92FS5PZM3qK6zfwBE1qMsOfSfgnn1MT1ZQudaAy8mz6sIsfBM
+         xHrM1vmCgLhK1gOLGO0b0uR7RMWXC2UeEheIIn5OPsE3Sq/a6mfmHybUx1xixkGw5KjL
+         iKvYGAh63fFkd0DKpimr8IBVQfTtnjgvQkXwUri3GHa4yg3kvLUl/qYqD3qQTwKJ639I
+         gc1zlr3qUJCxK2GNweXYO7P6P7A3AEwVgdTeiot8ny9Ltp3+FX2ktL6YD10VMYOFWQf5
+         E2iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760547126; x=1761151926;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=neLd0+dDQvDA5L4vv0sP7kK28bvW/poi2lRWCeQYViM=;
-        b=s1Cxtso3F6Z9L+IS8ET848r1dZ5YECF0GsAnFPF5RS91U6kAdOXFwTLrQV9vuf9TD/
-         1LjEC35z2TVOF+GJEgPS/jnS1az4iYWHHljOxjOWn8imFAJ/7vYVFkHH15o01WrLXErH
-         hH89ktw6otmZYoe7jI47RTH7G5cwr2uYM0ilhRC3PQ0erK7BOQIHplqFnHiiWZU1HdCd
-         ERNFzIx8qWfhzde6/m/38g9kIu0phzgz6GaEGygK7md09x9CNCMaVFskkVW+5ti2fzY3
-         m7igWmSlJAgMTOdsCLr1ODsA2wmIcTIk13aADLZTE61C6vTJZdFQ6fV74Ghw1tRMSfXg
-         InHA==
-X-Forwarded-Encrypted: i=1; AJvYcCVffEIbL4K2WdjT1soXe6+J/o+snXrDVr8zmIpZOHWUpiRZZbkUcxuiCYWJbLA2Fsn2vYCUVSwHB3M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSTr87jUqeL/yRsdsFg2uz7Pnes9qZgkzuCxgQe7uId71V/aRN
-	bIe7TS+4d1R81tFx1LPVHG5CEpS3IzYKCZg5SQRgSr6Lxm3pbvjFdnwtp3GZFd3JQTOsC/hKy++
-	QyWBb1h+eG8ur4HzWP3L3w6uLavqOHLM=
-X-Gm-Gg: ASbGncscM2+64Ksean3n0HDBfZBQiEl1v+ilxU0IjnXpTAFxkhohLtWn3sIFoaz8ZQA
-	mC5Ms2CLkd5EysSn0Jbp35YkVgsrOxQdt4SSHQn+UyGCNQGWlJdyylVFniNfuhq9J5V293/Uh0e
-	B3e35vY/N5zkw4vqTRLmHLo+wB3lIZSfVwNe4AKLX1sRRRQ5kWID2S/Oc6GIgYK7CI0pc7GbGPH
-	9PaHmf7GaGBV8TtwIvFyqKclbNbz6s5AzcuYcNnLKQVRo8vDf5DHF+EL9MhuN16d5KwwIKLWyPo
-	xbOBGiloGg==
-X-Google-Smtp-Source: AGHT+IGsOnSPE3hz5ZfYzWJNVjtUVgW/EHP33IR6zBRV5g9gSsqBcciCEwgcZlf2wmO5rhi1e9vsERWWoOP5SCZzdpg=
-X-Received: by 2002:a17:907:7f13:b0:b45:e09c:7e66 with SMTP id
- a640c23a62f3a-b50aa8a5bfdmr2998830266b.28.1760547125501; Wed, 15 Oct 2025
- 09:52:05 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760548430; x=1761153230;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zTmCve7ow8KUe86m2S+D+TMV8DrrT745aVc8Mr0EBG4=;
+        b=vfYnuDarGa63l5bIatx6BpVoIIigLqApra4qge0EcybgVYpaJfMBzkwY9RFlPOOCcu
+         bAJV8eeXxjo+J0189ITSSg1QJSdVqVd+HQrRKTGWxQYS1YTBQuE1hOQ9MWppap5le6Ib
+         Jp5nHLAdbF1nmjTCGqS+MgALmafxkwOfccLlk6wPsqU/7m1bOZY2QgK0AqnTkD0hTzr2
+         lByo1y4qAeA4WgQC8H/lLwqAybuQgqyTFk6M8Ofb4KONq+P+SP4kdeIR+tmpkl0ojt3o
+         tLSkBqflin/FHIxveRF1Pa90ZuUB+WFvEg5G5FGTlmPtYinG7PpNoxKKGkh4e4xPm0Bx
+         AJ0w==
+X-Forwarded-Encrypted: i=1; AJvYcCXvo/PEkbclafQj7lhnOWod2x5nAQGKD1Kus7Soh7AbezvymxJooEEvFcfOcWKepvpnMNnGi2NTn3g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxh/d8RsgCA/vGiUof7n2n1tR3+szGoqO1WyABRWV+huJY3H+eM
+	bC4NOUW5Un2v49Wg3ve5qu9e45WhSwFV/cliXl11qixSbZ8yGrfAUQ/mWcpHcrcB1WZ1w72iIQX
+	ZyBKLB2mgm1nu6pfU89RH0NMJaId3ci+3fda9WWNG
+X-Gm-Gg: ASbGncucFTm34M77Pp+4Uhww/Orha4EJlHlSFDKq4ztwvIiDUTBU3he8pSQWuDzmJKQ
+	9Do5QAqyXYNSCuAWTRPGUpNUJbNJic/s9ZK0BGdbf1tacjiu+DzmnFwtnm3TtBJjxhSIolqtW3c
+	s3e47wlp+/SvlRaTMi8oLi6j7+buLnBABg6Xh/mrlkGkeLjquAsh0xMZ5rGxr9R2RgIsO+MQfoh
+	UHI4awTjaqOY0SjWKwo2fpGkWoiiaYuMYvC/vTyKyxelVP6dVpKpZAVbGnUArx6YIfBMW3b+EO9
+X-Google-Smtp-Source: AGHT+IG7xm/DEDbS/nNDrpe7ReteweNLIKFfyokAzWV7zMp350kRJ3eICS85Rhzn8PDxA9SglM5C/lh1HX9E/pJg4Bg=
+X-Received: by 2002:a17:902:f650:b0:276:305b:14a7 with SMTP id
+ d9443c01a7336-290273ef0ebmr363338475ad.33.1760548429863; Wed, 15 Oct 2025
+ 10:13:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251013181648.35153-1-viswanathiyyappan@gmail.com> <1adfe818-c74f-4eb1-b9f4-1271c6451786@kernel.org>
-In-Reply-To: <1adfe818-c74f-4eb1-b9f4-1271c6451786@kernel.org>
-From: I Viswanath <viswanathiyyappan@gmail.com>
-Date: Wed, 15 Oct 2025 22:21:53 +0530
-X-Gm-Features: AS18NWA4RJCcpLPYd5taRLYmabL4v7fT9byYpjgnUo14PKi00TibSEE5yn4bNKs
-Message-ID: <CAPrAcgPs48t731neW4iLq3d+HXEQAezHj5Ad9KR8EK+TNu5wbg@mail.gmail.com>
-Subject: Re: [PATCH net v2] net: usb: lan78xx: fix use of improperly
- initialized dev->chipid in lan78xx_reset
-To: Khalid Aziz <khalid@kernel.org>
-Cc: Thangaraj.S@microchip.com, Rengarajan.S@microchip.com, 
-	UNGLinuxDriver@microchip.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
-	linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com
+References: <20251010201607.1190967-1-royluo@google.com> <20251010201607.1190967-2-royluo@google.com>
+ <066a9598-ad30-4327-be68-87299bba6fda@kernel.org> <CA+zupgwc7b51pNRLWRy2CX=n4=FTm=AP7J0dRP2RLjyK5LxGtw@mail.gmail.com>
+ <b7b3de64-c656-4a84-8ba4-2d5c7eda9783@kernel.org> <CA+zupgzo9zRO2GHR2Np0Tm4M5_h8y0GF2JGGqE_S0BxSR_ZbqQ@mail.gmail.com>
+ <20251015-backlash-overtime-4c636f12b165@spud>
+In-Reply-To: <20251015-backlash-overtime-4c636f12b165@spud>
+From: Roy Luo <royluo@google.com>
+Date: Wed, 15 Oct 2025 10:13:13 -0700
+X-Gm-Features: AS18NWCEm2YS-Sip7tv4iMJuDS6bNEhHmOhmHYieVj8y_mcbM2tH_CjtqCUTPM4
+Message-ID: <CA+zupgyKsnp5D9kW-AeoAsweODXx4BXLr7fVnB+J9tzYRbM_fg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: usb: dwc3: Add Google Tensor G5 DWC3
+To: Conor Dooley <conor@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Peter Griffin <peter.griffin@linaro.org>, 
+	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Joy Chakraborty <joychakr@google.com>, 
+	Naveen Kumar <mnkumar@google.com>, Badhri Jagan Sridharan <badhri@google.com>, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 15 Oct 2025 at 21:25, Khalid Aziz <khalid@kernel.org> wrote:
-
-> How did you determine this is the commit that introduced this bug?
+On Wed, Oct 15, 2025 at 1:59=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
+te:
 >
->  From what I can see, commit a0db7d10b76e does not touch lan78xx_reset()
-> function. This bug was introduced when devid was replaced by chipid
-> (commit 87177ba6e47e "lan78xx: replace devid to chipid & chiprev") or
-> even earlier when the order of calls to lan78xx_init_mac_address() and
-> lan78xx_read_reg() was introduced in lan78xx_reset() depending upon if
-> lan78xx_init_mac_address() at that time used devid in its call sequence
-> at the time.
+> On Tue, Oct 14, 2025 at 05:50:17PM -0700, Roy Luo wrote:
+> > On Tue, Oct 14, 2025 at 1:22=E2=80=AFAM Krzysztof Kozlowski <krzk@kerne=
+l.org> wrote:
+> > >
+> > > On 14/10/2025 03:40, Roy Luo wrote:
+> > > > On Fri, Oct 10, 2025 at 5:09=E2=80=AFPM Krzysztof Kozlowski <krzk@k=
+ernel.org> wrote:
+> > > >>
+> > > >> On 10/10/2025 22:16, Roy Luo wrote:
+> > > >>> Document the device tree bindings for the DWC3 USB controller fou=
+nd in
+> > > >>> Google Tensor SoCs, starting with the G5 generation.
+> > > >>>
+> > > >>> The Tensor G5 silicon represents a complete architectural departu=
+re from
+> > > >>> previous generations (like gs101), including entirely new clock/r=
+eset
+> > > >>> schemes, top-level wrapper and register interface. Consequently,
+> > > >>> existing Samsung/Exynos DWC3 USB bindings are incompatible, neces=
+sitating
+> > > >>> this new device tree binding.
+> > > >>>
+> > > >>> The USB controller on Tensor G5 is based on Synopsys DWC3 IP and =
+features
+> > > >>> Dual-Role Device single port with hibernation support.
+> > > >>
+> > > >> You still mix, completely unnecessarily, subsystems. For Greg this=
+ is
+> > > >> actually even undesired, but regardless don't do this for any case=
+s
+> > > >> because it just makes everything slower or more difficult to apply=
+.
+> > > >>
+> > > >> Really, think how maintainers should deal with your patches.
+> > > >>
+> > > >
+> > > > Understood, I will separate the patches into two distinct series: o=
+ne for
+> > > > the controller and one for the PHY.
+> > > > Appreciate the feedback and the explanation.
+> > > >
+> > > >>>
+> > > >>> Signed-off-by: Roy Luo <royluo@google.com>
+> > > >>> ---
+> > > >>>  .../bindings/usb/google,gs5-dwc3.yaml         | 141 ++++++++++++=
+++++++
+> > > >>>  1 file changed, 141 insertions(+)
+> > > >>>  create mode 100644 Documentation/devicetree/bindings/usb/google,=
+gs5-dwc3.yaml
+> > > >>>
+> > > >>> diff --git a/Documentation/devicetree/bindings/usb/google,gs5-dwc=
+3.yaml b/Documentation/devicetree/bindings/usb/google,gs5-dwc3.yaml
+> > > >>> new file mode 100644
+> > > >>> index 000000000000..6fadea7f41e8
+> > > >>> --- /dev/null
+> > > >>> +++ b/Documentation/devicetree/bindings/usb/google,gs5-dwc3.yaml
+> > > >>> @@ -0,0 +1,141 @@
+> > > >>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > >>> +# Copyright (c) 2025, Google LLC
+> > > >>> +%YAML 1.2
+> > > >>> +---
+> > > >>> +$id: http://devicetree.org/schemas/usb/google,gs5-dwc3.yaml#
+> > > >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > >>> +
+> > > >>> +title: Google Tensor Series (G5+) DWC3 USB SoC Controller
+> > > >>> +
+> > > >>> +maintainers:
+> > > >>> +  - Roy Luo <royluo@google.com>
+> > > >>> +
+> > > >>> +description:
+> > > >>> +  Describes the DWC3 USB controller block implemented on Google =
+Tensor SoCs,
+> > > >>> +  starting with the G5 generation. Based on Synopsys DWC3 IP, th=
+e controller
+> > > >>> +  features Dual-Role Device single port with hibernation add-on.
+> > > >>> +
+> > > >>> +properties:
+> > > >>> +  compatible:
+> > > >>> +    const: google,gs5-dwc3
+> > > >>> +
+> > > >>> +  reg:
+> > > >>> +    items:
+> > > >>> +      - description: Core DWC3 IP registers.
+> > > >>> +      - description: USB host controller configuration registers=
+.
+> > > >>> +      - description: USB custom interrrupts control registers.
+> > > >>> +
+> > > >>> +  reg-names:
+> > > >>> +    items:
+> > > >>> +      - const: dwc3_core
+> > > >>> +      - const: host_cfg
+> > > >>> +      - const: usbint_cfg
+> > > >>> +
+> > > >>> +  interrupts:
+> > > >>> +    items:
+> > > >>> +      - description: Core DWC3 interrupt.
+> > > >>> +      - description: High speed power management event for remot=
+e wakeup from hibernation.
+> > > >>> +      - description: Super speed power management event for remo=
+te wakeup from hibernation.
+> > > >>
+> > > >> Wrap at 80 (see coding style) or just shorten these.
+> > > >
+> > > > Ack, will fix it in the next patch.
+> > > >
+> > > >>
+> > > >>> +
+> > > >>> +  interrupt-names:
+> > > >>> +    items:
+> > > >>> +      - const: dwc_usb3
+> > > >>
+> > > >> So just "core"?
+> > > >
+> > > > I'd prefer to stick to "dwc_usb3" as that's
+> > > > 1. more expressive by referring to the underlying IP name,
+> > >
+> > >
+> > > But that's completely redundant name.
+> > >
+> > > > 2. consistent with established dwc3 bindings such as
+> > > >     Documentation/devicetree/bindings/usb/snps,dwc3.yaml,
+> > >
+> > > If you use only one interrupt. You don't use one interrupt here.
+> >
+> > After looking into it further, I found that the interrupt name "dwc_usb=
+3"
+> > must be used here to adhere to the interrupt naming defined in
+> > "snps,dwc3.yaml".
+>
+> Did you just chose to not read what Krzysztof said here? It must be used
+> only when that's the sole interrupt, which he stated is not the case for
+> your platform.
+>
+> > This requirement stems from the device's corresponding glue driver
+> > utilizing a so-called "flattened" model (see [1] for context). This mod=
+el
+> > causes the glue driver to probe an underlying "snps,dwc3" device.
+> > Consequently, the core DWC3 interrupt defined here is consumed by
+> > the driver handling the "snps,dwc3" device, making it mandatory to
+> > follow the interrupt naming established in "snps,dwc3.yaml".
+>
+> I look at the binding and noticed that interrupt-names isn't even a
+> required property by snps,dwc3.yaml, and this comment about driver
+> behaviour likely isn't accurate given that the code in for host mode
+> (and the others are identical) is written so that it will grab the first
+> interrupt if the specific names it looks for are absent:
+> | static int dwc3_host_get_irq(struct dwc3 *dwc)
+> | {
+> |       struct platform_device  *dwc3_pdev =3D to_platform_device(dwc->de=
+v);
+> |       int irq;
+> |
+> |       irq =3D platform_get_irq_byname_optional(dwc3_pdev, "host");
+> |       if (irq > 0) {
+> |               dwc3_host_fill_xhci_irq_res(dwc, irq, "host");
+> |               goto out;
+> |       }
+> |
+> |       if (irq =3D=3D -EPROBE_DEFER)
+> |               goto out;
+> |
+> |       irq =3D platform_get_irq_byname_optional(dwc3_pdev, "dwc_usb3");
+> |       if (irq > 0) {
+> |               dwc3_host_fill_xhci_irq_res(dwc, irq, "dwc_usb3");
+> |               goto out;
+> |       }
+> |
+> |       if (irq =3D=3D -EPROBE_DEFER)
+> |               goto out;
+> |
+> |       irq =3D platform_get_irq(dwc3_pdev, 0);
+> |       if (irq > 0)
+> |               dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
+> |
+> | out:
+> |       return irq;
+> | }
+>
+> Since it grabs the first interrupt, as a fallback, in order to support
+> not having the interrupt-names property, the name of the first interrupt
+> ultimately doesn't matter at all to this driver (and likely any other
+> driver written in compliance with the bindings for the dwc3 core).
+>
+> I'm not here to argue about what the name for the single interrupt
+> should be (keeping consistency with other devices might actually be
+> good), but ignoring what a maintainer says and the seemingly providing
+> an incorrect analysis is annoying. Did you perform the analysis on this
+> yourself, or did it perhaps come from Gemini?
+>
+> Thanks,
+> Conor.
 
-The commit a0db7d10b76e introduced the dependency on devid to
-lan78xx_read_raw_eeprom() and
-lan78xx_read_eeprom() and ultimately lan78xx_init_mac_address() and
-lan78xx_reset()
+Hi Conor,
 
-In lan78xx_init_mac_address()
-
-Only lan78xx_read_eeprom() depends on devid as
-
-lan78xx_read_reg() and lan78xx_write_reg() do not use devid
-
-lan78xx_read_otp() depends on lan78xx_read_raw_otp() which depends
-only on lan78xx_write_reg() and lan78xx_read_reg()
-and hence doesn't use devid either
-
-is_valid_ether_addr(), random_ether_addr() and ether_addr_copy() are
-net core functions and do not care about driver specific data
-
-The devid read exists in this commit (was added in ce85e13ad6ef4)
-
-a0db7d10b76e was supposed to move the devid read before the
-lan78xx_init_mac_address() because of the newly added
-dependency but it was a tricky detail that the author failed to see
+My apologies for the incorrect analysis. I misinterpreted the code,
+which was a big mistake. I can assure you that I do value your
+feedback and take every comment seriously.
+Thanks for pointing out the error and raising your concern.
+This won't happen again.
 
 Thanks,
-I Viswanath
+Roy Luo
+
+>
+> > Essentially, the interrupts defined here are a mix of vendor specific
+> > implementation (like "hs_pme", "ss_pme") and the DWC3 core in
+> > "snps,dwc3.yaml" ("dwc_usb3").
+> >
+> > I don't know if there's a better way to express this implicit dependenc=
+y
+> > of the core DWC3 interrupt except for documenting it in the binding
+> > description. Any advice would be welcome.
+> >
+> > [1] https://lore.kernel.org/all/20250414-dwc3-refactor-v7-0-f015b358722=
+d@oss.qualcomm.com/
+> >
+> > Thanks,
+> > Roy Luo
+> >
+> > >
+> > > >     Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml,
+> > > > unless you have a strong preference for the alternative naming.
+> > >
+> > > Such namings are discouraged, because they tell absolutely nothing.
+> > > Also, schematics or datasheets usually do not use them, either.
+> > >
+> > >
+> > > Best regards,
+> > > Krzysztof
 
