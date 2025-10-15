@@ -1,54 +1,48 @@
-Return-Path: <linux-usb+bounces-29342-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29343-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E83A8BDF7A1
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 17:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 372CBBDF7EF
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 17:56:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9C26A5051F6
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 15:49:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EE7DC4FACCF
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 15:55:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8869E335BBA;
-	Wed, 15 Oct 2025 15:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD885335BB9;
+	Wed, 15 Oct 2025 15:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="LUBcs/XH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sRPbp5o6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03FAC30505F;
-	Wed, 15 Oct 2025 15:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4B033438C;
+	Wed, 15 Oct 2025 15:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760543351; cv=none; b=sXm/+Z9tPbjQa65CT0LPT/glFcnk1nEf6chOWVjfiteBcJLK93ffuKZKYJwKI6Wvy/6Jhou+4WodycAsa5e4NBuXfPC4Xm1XOeKgGOQAbZdxN2oiDnGYzh/xXqGsGpn7AT5FH38FUoigB98fFnfZua6Pjo8JsLOjPgz51IU+t+8=
+	t=1760543748; cv=none; b=jna/6/Sx3RZ4qRn5Vk6M0X9fTgmqxQ3w3b6Wx8r/NdW1IhBjtEYQjkUk6SzgI4uHiBj3Os6DE+krVVKg3hJDovSdAlKPFW9C4WEwmNtHutw5ODfGhDJi5mIoSWjpYWJgqX8UBo/ck45cLDmjQLptCsCGku0p/A8dTWyRkWJnOsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760543351; c=relaxed/simple;
-	bh=VkCVqergx42FW7AC8yii+46h19LrNzFVp0tRz0lY3rs=;
+	s=arc-20240116; t=1760543748; c=relaxed/simple;
+	bh=OtK5voWcAdL/bSIr5aJ2h3Z25CnusKZJ0G6Htr86Y9k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uqWeb93MnqbjXMJQdfOzReBQGzXvFN5lYZ5iGuVK1RnR/kItZkwWX2RHJYYkRGKTyz5r+GGSKGN6mkcaSUSusRDh5UI8SGGV/Rj+vAhCUTR66fwkxBXU95QyJaw4UtL03u5dYf/yLmP1xo/Ra1zur0+zjP+ExO4X8dHP/vunA4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=LUBcs/XH; arc=none smtp.client-ip=157.90.84.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
-Received: from [10.10.11.39] (business-24-134-105-141.pool2.vodafone-ip.de [24.134.105.141])
-	(Authenticated sender: wse@tuxedocomputers.com)
-	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id CBF9D2FC0048;
-	Wed, 15 Oct 2025 17:48:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-	s=default; t=1760543338;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0fZ2PwIo5vV3UoKsUqdGTr+H+RIuygzvlm26PtR8E5w=;
-	b=LUBcs/XHt7OrPWt0MCsiM64jr38dd6KgcGskYDRNzIxz5zMUctCaOKK36z9UvdeOmlbrFQ
-	KkFPMTKGONLgalfWKBuZCwjYxEWt6sglGrOLrMqgAxL4BMHhSzmVIRbf4kbYsC6QvPVFyo
-	oGeBUa9h19IXjyg+/Q4ip2yc0n8cpN4=
-Authentication-Results: mail.tuxedocomputers.com;
-	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-Message-ID: <c541f079-5b86-4193-8109-4fa2008ffd96@tuxedocomputers.com>
-Date: Wed, 15 Oct 2025 17:48:56 +0200
+	 In-Reply-To:Content-Type; b=uZIW5Z5IxG3UTlgln6lgyNcZG4De4flMk1W45IKNpqB5TzhN8eFLraieExM7aEnpQ0PS31k/4JJqnma4yeXKYZGeVGQTcEtceThR6QdsrA2JA3P+GJtvylDGxXIKNES9UhJGAaUPa9+ORL6DJ3vtrWA0mo3M/kXQX0WkbtKOaHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sRPbp5o6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EB0C4CEF9;
+	Wed, 15 Oct 2025 15:55:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760543748;
+	bh=OtK5voWcAdL/bSIr5aJ2h3Z25CnusKZJ0G6Htr86Y9k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sRPbp5o6qVOk2SDQ8eJyn/b+ynWlGPdkQUcgTZuU+ri1ltCzPZfShZCJtXG+0PLaL
+	 SX5cNafCF06SX13gwpENJ4gH6u6sC5NQCfWsfLTSQcLznc6wkM2Iuad6XqovvPF7nI
+	 BxWoeP9W9mUoUfeD4N3Xf6GocKriWFp90EKF5vVnTvkkR7/8Ro8g4/A8CUYa7Uvn0J
+	 S2gtyfHsEy+5O77izo7wl42JLbSpBfUFtoWhM2Kjdt+Rz3/PWvud3eqvUxmJeipIHJ
+	 oxMWsxkLoH+5v/D2t+dTDuUgiBZBjO2jyulVeI9p50CpXeQGBbvj+TH9PIdiEYYdeB
+	 igk7h69kmMlig==
+Message-ID: <1adfe818-c74f-4eb1-b9f4-1271c6451786@kernel.org>
+Date: Wed, 15 Oct 2025 09:55:47 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,54 +50,87 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb/core/quirks: Add Huawei ME906S to wakeup quirk.
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Tim Guttzeit <t.guttzeit@tuxedocomputers.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251014153049.91722-1-wse@tuxedocomputers.com>
- <8ef4550b-a958-4fa4-88df-89b3d4b1117d@rowland.harvard.edu>
+Subject: Re: [PATCH net v2] net: usb: lan78xx: fix use of improperly
+ initialized dev->chipid in lan78xx_reset
+To: I Viswanath <viswanathiyyappan@gmail.com>, Thangaraj.S@microchip.com,
+ Rengarajan.S@microchip.com, UNGLinuxDriver@microchip.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+ linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com
+References: <20251013181648.35153-1-viswanathiyyappan@gmail.com>
 Content-Language: en-US
-From: Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <8ef4550b-a958-4fa4-88df-89b3d4b1117d@rowland.harvard.edu>
+From: Khalid Aziz <khalid@kernel.org>
+In-Reply-To: <20251013181648.35153-1-viswanathiyyappan@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
+On 10/13/25 12:16 PM, I Viswanath wrote:
+> dev->chipid is used in lan78xx_init_mac_address before it's initialized:
+> 
+> lan78xx_reset() {
+>      lan78xx_init_mac_address()
+>          lan78xx_read_eeprom()
+>              lan78xx_read_raw_eeprom() <- dev->chipid is used here
+> 
+>      dev->chipid = ... <- dev->chipid is initialized correctly here
+> }
+> 
+> Reorder initialization so that dev->chipid is set before calling
+> lan78xx_init_mac_address().
+> 
+> Fixes: a0db7d10b76e ("lan78xx: Add to handle mux control per chip id")
 
-Am 15.10.25 um 16:21 schrieb Alan Stern:
-> On Tue, Oct 14, 2025 at 05:30:05PM +0200, Werner Sembach wrote:
->> From: Tim Guttzeit <t.guttzeit@tuxedocomputers.com>
->>
->> The list of Huawei LTE modules needing the quirk fixing spurious wakeups
->> was missing the IDs of the Huawei ME906S module, therefore suspend did not
->> work.
->>
->> Signed-off-by: Tim Guttzeit <t.guttzeit@tuxedocomputers.com>
->> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
->> ---
->>   drivers/usb/core/quirks.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
->> index f5bc538753301..39fbbc31e9a41 100644
->> --- a/drivers/usb/core/quirks.c
->> +++ b/drivers/usb/core/quirks.c
->> @@ -469,6 +469,8 @@ static const struct usb_device_id usb_quirk_list[] = {
->>   			USB_QUIRK_DISCONNECT_SUSPEND },
->>   	{ USB_DEVICE(0x12d1, 0x15c3), .driver_info =
->>   			USB_QUIRK_DISCONNECT_SUSPEND },
->> +	{ USB_DEVICE(0x12d1, 0x15c1), .driver_info =
->> +			USB_QUIRK_DISCONNECT_SUSPEND },
-> Please pay attention to the comment at the start of the array's
-> definition.  Entries should be sorted by vendor ID and product ID.
+How did you determine this is the commit that introduced this bug?
 
-Sorry for missing that, v2 incoming.
+ From what I can see, commit a0db7d10b76e does not touch lan78xx_reset() 
+function. This bug was introduced when devid was replaced by chipid 
+(commit 87177ba6e47e "lan78xx: replace devid to chipid & chiprev") or 
+even earlier when the order of calls to lan78xx_init_mac_address() and 
+lan78xx_read_reg() was introduced in lan78xx_reset() depending upon if 
+lan78xx_init_mac_address() at that time used devid in its call sequence 
+at the time.
 
-Best regards,
+--
+Khalid
 
-Werner
+> Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
+> ---
+> v1:
+> Link: https://lore.kernel.org/netdev/20251001131409.155650-1-viswanathiyyappan@gmail.com/
+> 
+> v2:
+> - Add Fixes tag
+> 
+>   drivers/net/usb/lan78xx.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+> index 42d35cc6b421..b4b086f86ed8 100644
+> --- a/drivers/net/usb/lan78xx.c
+> +++ b/drivers/net/usb/lan78xx.c
+> @@ -3247,10 +3247,6 @@ static int lan78xx_reset(struct lan78xx_net *dev)
+>   		}
+>   	} while (buf & HW_CFG_LRST_);
+>   
+> -	ret = lan78xx_init_mac_address(dev);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>   	/* save DEVID for later usage */
+>   	ret = lan78xx_read_reg(dev, ID_REV, &buf);
+>   	if (ret < 0)
+> @@ -3259,6 +3255,10 @@ static int lan78xx_reset(struct lan78xx_net *dev)
+>   	dev->chipid = (buf & ID_REV_CHIP_ID_MASK_) >> 16;
+>   	dev->chiprev = buf & ID_REV_CHIP_REV_MASK_;
+>   
+> +	ret = lan78xx_init_mac_address(dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>   	/* Respond to the IN token with a NAK */
+>   	ret = lan78xx_read_reg(dev, USB_CFG0, &buf);
+>   	if (ret < 0)
 
->
-> Alan Stern
 
