@@ -1,286 +1,356 @@
-Return-Path: <linux-usb+bounces-29316-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA79EBDC778
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 06:30:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 719F9BDD223
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 09:36:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 217CA3A66D7
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 04:30:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3D703A68AE
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 07:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D3F2FDC30;
-	Wed, 15 Oct 2025 04:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D6131353C;
+	Wed, 15 Oct 2025 07:32:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A4IiFi3m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Af5Yob07"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB971D8DFB
-	for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 04:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD350199385;
+	Wed, 15 Oct 2025 07:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760502624; cv=none; b=EHoLUvpS4jXx1u+1Q8hGhWVJgKbUN0hbFVzO23qAQx47Ovmc1bH/N/xcr9MQIj3WK365xKGkCEGiU6+qBw6JHiityDzLYKc59ncoZgBfY1axlXcXZvr5W0eolEmUj7cUIbL11sftazkzmYXhYOxPh5SycjV3RMA6WkcaVcbvay8=
+	t=1760513571; cv=none; b=rFPQKpXvJAfNC5muDFoaQFeHk2oikSG9xDaFx6PEB05fxWGtGuQPPwKPf/Wn5Z4u4wDtNKLfoMkbiOzCXu//jAufqweHWY0U/lyJgS1JgLLpv7gr1C49EmrmrGTIXY9pksC77Q7w+RJ3LLOZd32gIl8ma3jwoPOEjihdIaBEmBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760502624; c=relaxed/simple;
-	bh=gEHbLD9RPEttonCCo/mmfEfjmcBJVFJ7LQpeOyHdH/8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=m2At5GnRmgUKqIUh26ODiG8uHvxN0LaSNuvwsGNgH/ya1D6QLMU0WThwixrUEYuqrQg/MKxRUnkJrr75Ezo3r89Ezom7pq10LUjF2DaMdJHYvI0jR8dn5vBCU5qd4NL1ZakmMbVFVUzte8FCmCddWZXRUmwB84iROLh/+1u7uwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A4IiFi3m; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b62b7af4fddso7890750a12.2
-        for <linux-usb@vger.kernel.org>; Tue, 14 Oct 2025 21:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760502622; x=1761107422; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kmMvyh4fnjqHp1OFP+Q2QSeAQcQ5ugB+WtQrIGr0TMs=;
-        b=A4IiFi3mTJfm+RXnHeddo13R3xH1k94dySr06+lTpc6cdSDCHwHDqyg7q9aN0uLS4P
-         DviKAAEFxIlr7Is1CDkgM+0qeumw0MRz5a6qAGc/J+QcHO63kjFkomZYoIqEmc3OvbS+
-         xdo3IHVOmJBGuqRKz3lMJitXWXTqZ8IwezFLDKRyusyzTI0SkObkM5Xge6TwT5A4tutu
-         gofklWw05fz1ChJQv4h6yFp5ONIn8HnnezcOynzQHTQZ0FgvYjlE9MW/7wnO6lmm83UI
-         70NY/3D4OZyzf7wdyqGTD1wfGCAgvyThSAT92BER9bMUMbuB9pK2LpiSUxsQudz6aQ/w
-         L/pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760502622; x=1761107422;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kmMvyh4fnjqHp1OFP+Q2QSeAQcQ5ugB+WtQrIGr0TMs=;
-        b=U2fiLbK87NUny0LvFEXZgUuYNauszLw/n+OfxwDx6iSzOj8kcFUfs5ieijMTUT328V
-         HpizitQ/K4Ovc9TrZoDGcQiuGkSNLWpluYFs5AbcldDViL11Do7mPH7JP66magFhIw/U
-         jL+fGywxtkZfX1G/u51AYwQqOPYGuHgXiUQB3hAdPEEv7BSQyrQg+lLqJrDMn31g8a/Y
-         l/zQWUEpKQiqhF0for/jjwCiemRRQpDvZdYxc84+6jSSa+1Av2u1xWwyKNBPzH59z35O
-         SCJ+4wNfOU9+kh6hEZvK4QwHP4Q/D5T/aTpp9Kxi5FQM4cDluMFINhpMD3cew5EtcGcJ
-         JChw==
-X-Forwarded-Encrypted: i=1; AJvYcCUMvx7XuOJp5Do1J6j5qkT4OxXHT/s3RH/87ggHIhC6X4J13wFmg5pkb6jz7TCnO46y7dg1GBvW9Pw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7ciT8xufA5VJQPZMBGzu4clYRPHbBW6XsxE9i8IQmq/dPwXrU
-	4O0eXF+H/E2DrUp2lPga3qqc4w7nG5EocBF3DgYXee+ujy6dhykX49lqUx5ul6U4omB3FAdX87+
-	n3qttOw==
-X-Google-Smtp-Source: AGHT+IGtc+RtpcrlelQatgq+N00chyu11KcMvbeDlEMEu4MMR5+ezW9iNtj5AD52An2umJnvqFkpeD5muug=
-X-Received: from pgbcs5.prod.google.com ([2002:a05:6a02:4185:b0:b55:734:6b47])
- (user=badhri job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:3ca1:b0:262:9461:2e5b
- with SMTP id adf61e73a8af0-32da8463095mr32673308637.53.1760502621897; Tue, 14
- Oct 2025 21:30:21 -0700 (PDT)
-Date: Wed, 15 Oct 2025 04:30:14 +0000
-In-Reply-To: <20251015043017.3382908-1-badhri@google.com>
+	s=arc-20240116; t=1760513571; c=relaxed/simple;
+	bh=vuHJ+5BpSVCNbVnZAgO0y+lX+clluCNZoSsVG38mr+g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z2cdS07uiOU+32gjrGM1HSFwA2KDQ/k11pq2jCAhhSU4X2v7hgLx5d/WjsMpBmghULFnLlTjnISzNPwrvqueZGW90+qHpEVChFJxoeMA6aRSohzHSqOvorXLrcaVCH6udq9N5OkJEGFe+TH77jeJz8xoJx2jcU1CIJZc41n1f+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Af5Yob07; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4DD0C4CEFE;
+	Wed, 15 Oct 2025 07:32:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760513571;
+	bh=vuHJ+5BpSVCNbVnZAgO0y+lX+clluCNZoSsVG38mr+g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Af5Yob07SKKktWagep/22/z6E1hV2qx61vwI6T8kz6mut6Dos+2wI6F0Irs6D8gMn
+	 1XFem5JB2g4joXEnZ8B0nWQWvGuBwkBLG2rOGJl5LBnKdZf+CxnFMYJ6zCzHGjxXEq
+	 b8ZW08eo8nx/3SO/D8WJNa7WxmlPqGbud61B3i6fN6hIwX87IrRRKtTpztZ69yf7LH
+	 l6k5GuZYkmPLTs6XYNffFf6KDKRj9JTKGMCNUGLAa/KlkMTnsvSPe67hVNJweLwX2p
+	 6kVWyF4BYleStuXeefXrWJi73bONzVPYs3sOM3QIhORyb8/eTVZ+tGcDn6ooJ7j+rP
+	 pd0287WXGrt4w==
+Message-ID: <9042ff79-4dfa-40aa-abb6-e3ca7774778d@kernel.org>
+Date: Wed, 15 Oct 2025 09:32:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251015043017.3382908-1-badhri@google.com>
-X-Mailer: git-send-email 2.51.0.858.gf9c4a03a3a-goog
-Message-ID: <20251015043017.3382908-2-badhri@google.com>
-Subject: [PATCH v2 2/2] usb: typec: pd: Register SPR AVS caps with
- usb_power_delivery class
-From: Badhri Jagan Sridharan <badhri@google.com>
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
-	badhri@google.com
-Cc: amitsd@google.com, kyletso@google.com, rdbabiera@google.com, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/5] usb: dwc3: glue: Allow more fine grained control over
+ mode switches
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20251013-b4-aplpe-dwc3-v1-0-12a78000c014@kernel.org>
+ <20251013-b4-aplpe-dwc3-v1-4-12a78000c014@kernel.org>
+ <20251014231638.3tzfzjxg3x2kpeun@synopsys.com>
+Content-Language: en-US
+From: Sven Peter <sven@kernel.org>
+In-Reply-To: <20251014231638.3tzfzjxg3x2kpeun@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-usb_power_delivery class will now display AVS cap as
-`spr_adjustable_voltage_supply`. `maximum_current_9V_to_15V` and
-`maximum_current_15V_to_20V` shows the corresponding current limits
-in mA. `peak_current` follows the same convention as fixed_supply
-where the value reported in the capabilities message is displayed
-as is.
+On 15.10.25 01:16, Thinh Nguyen wrote:
+> On Mon, Oct 13, 2025, Sven Peter wrote:
+>> We need fine grained control over mode switched on the DWC3 controller
+>> present on Apple Silicon. Export core, host and gadget init and exit,
+>> ptrcap and susphy control functions. Also introduce an additional
+>> parameter to probe_data that allows to skip the final initialization
+>> step that would bring up host or gadget mode.
+>>
+>> Signed-off-by: Sven Peter <sven@kernel.org>
+>> ---
+>>   drivers/usb/dwc3/core.c   |  16 +++++--
+>>   drivers/usb/dwc3/gadget.c |   2 +
+>>   drivers/usb/dwc3/glue.h   | 116 ++++++++++++++++++++++++++++++++++++++++++++++
+>>   drivers/usb/dwc3/host.c   |   2 +
+>>   4 files changed, 131 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index ae140c356295c03df3982ff4fa95f8638296e52d..526c0453b99aad79d99a842797e52d9290456d76 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -132,6 +132,7 @@ void dwc3_enable_susphy(struct dwc3 *dwc, bool enable)
+>>   		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
+>>   	}
+>>   }
+>> +EXPORT_SYMBOL_GPL(dwc3_enable_susphy);
+>>   
+>>   void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy)
+>>   {
+>> @@ -158,6 +159,7 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy)
+>>   	dwc->current_dr_role = mode;
+>>   	trace_dwc3_set_prtcap(mode);
+>>   }
+>> +EXPORT_SYMBOL_GPL(dwc3_set_prtcap);
+>>   
+>>   static void __dwc3_set_mode(struct work_struct *work)
+>>   {
+>> @@ -975,7 +977,7 @@ static void dwc3_clk_disable(struct dwc3 *dwc)
+>>   	clk_disable_unprepare(dwc->bus_clk);
+>>   }
+>>   
+>> -static void dwc3_core_exit(struct dwc3 *dwc)
+>> +void dwc3_core_exit(struct dwc3 *dwc)
+>>   {
+>>   	dwc3_event_buffers_cleanup(dwc);
+>>   	dwc3_phy_power_off(dwc);
+>> @@ -983,6 +985,7 @@ static void dwc3_core_exit(struct dwc3 *dwc)
+>>   	dwc3_clk_disable(dwc);
+>>   	reset_control_assert(dwc->reset);
+>>   }
+>> +EXPORT_SYMBOL_GPL(dwc3_core_exit);
+>>   
+>>   static bool dwc3_core_is_valid(struct dwc3 *dwc)
+>>   {
+>> @@ -1328,7 +1331,7 @@ static void dwc3_config_threshold(struct dwc3 *dwc)
+>>    *
+>>    * Returns 0 on success otherwise negative errno.
+>>    */
+>> -static int dwc3_core_init(struct dwc3 *dwc)
+>> +int dwc3_core_init(struct dwc3 *dwc)
+>>   {
+>>   	unsigned int		hw_mode;
+>>   	u32			reg;
+>> @@ -1528,6 +1531,7 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>>   
+>>   	return ret;
+>>   }
+>> +EXPORT_SYMBOL_GPL(dwc3_core_init);
+>>   
+>>   static int dwc3_core_get_phy(struct dwc3 *dwc)
+>>   {
+>> @@ -2299,9 +2303,11 @@ int dwc3_core_probe(const struct dwc3_probe_data *data)
+>>   	dwc3_check_params(dwc);
+>>   	dwc3_debugfs_init(dwc);
+>>   
+>> -	ret = dwc3_core_init_mode(dwc);
+>> -	if (ret)
+>> -		goto err_exit_debugfs;
+>> +	if (!data->skip_core_init_mode) {
+>> +		ret = dwc3_core_init_mode(dwc);
+>> +		if (ret)
+>> +			goto err_exit_debugfs;
+>> +	}
+>>   
+>>   	pm_runtime_put(dev);
+>>   
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 6f18b4840a25d176abb4134581ad0ce68ba19ffc..1f67fb6aead5725c2e7b553c635eab985c9e1d48 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -4810,6 +4810,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+>>   err0:
+>>   	return ret;
+>>   }
+>> +EXPORT_SYMBOL_GPL(dwc3_gadget_init);
+>>   
+>>   /* -------------------------------------------------------------------------- */
+>>   
+>> @@ -4828,6 +4829,7 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
+>>   	dma_free_coherent(dwc->sysdev, sizeof(*dwc->ep0_trb) * 2,
+>>   			  dwc->ep0_trb, dwc->ep0_trb_addr);
+>>   }
+>> +EXPORT_SYMBOL_GPL(dwc3_gadget_exit);
+>>   
+>>   int dwc3_gadget_suspend(struct dwc3 *dwc)
+>>   {
+>> diff --git a/drivers/usb/dwc3/glue.h b/drivers/usb/dwc3/glue.h
+>> index 7f326cff12458901904d4c32f62ed9357d0f6e3b..376e7aa74281c13bfb3a85dc033622bcff8d2acb 100644
+>> --- a/drivers/usb/dwc3/glue.h
+>> +++ b/drivers/usb/dwc3/glue.h
+>> @@ -15,11 +15,14 @@
+>>    * @res: resource for the DWC3 core mmio region
+>>    * @ignore_clocks_and_resets: clocks and resets defined for the device should
+>>    *		be ignored by the DWC3 core, as they are managed by the glue
+>> + * @skip_core_init_mode: Skip the finial initialization of the target mode, as
+>> + *		it must be managed by the glue
+>>    */
+>>   struct dwc3_probe_data {
+>>   	struct dwc3 *dwc;
+>>   	struct resource *res;
+>>   	bool ignore_clocks_and_resets;
+>> +	bool skip_core_init_mode;
+>>   };
+>>   
+>>   /**
+>> @@ -60,4 +63,117 @@ int dwc3_pm_resume(struct dwc3 *dwc);
+>>   void dwc3_pm_complete(struct dwc3 *dwc);
+>>   int dwc3_pm_prepare(struct dwc3 *dwc);
+>>   
+>> +
+>> +/* All of the following functions must only be used with skip_core_init_mode */
+>> +
+>> +/**
+>> + * dwc3_core_init - Initialize DWC3 core hardware
+>> + * @dwc: Pointer to DWC3 controller context
+>> + *
+>> + * Configures and initializes the core hardware, usually done by dwc3_core_probe.
+>> + * This function is provided for platforms that use skip_core_init_mode and need
+>> + * to finalize the core initialization after some platform-specific setup.
+>> + * It must only be called when using skip_core_init_mode and before
+>> + * dwc3_host_init or dwc3_gadget_init.
+>> + *
+>> + * Return: 0 on success, negative error code on failure
+>> + */
+>> +int dwc3_core_init(struct dwc3 *dwc);
+>> +
+>> +/**
+>> + * dwc3_core_exit - Shut down DWC3 core hardware
+>> + * @dwc: Pointer to DWC3 controller context
+>> + *
+>> + * Disables and cleans up the core hardware state. This is usually handled
+>> + * internally by dwc3 and must only be called when using skip_core_init_mode
+>> + * and only after dwc3_core_init. Afterwards, dwc3_core_init may be called
+>> + * again.
+>> + */
+>> +void dwc3_core_exit(struct dwc3 *dwc);
+>> +
+>> +/**
+>> + * dwc3_host_init - Initialize host mode operation
+>> + * @dwc: Pointer to DWC3 controller context
+>> + *
+>> + * Initializes the controller for USB host mode operation, usually done by
+>> + * dwc3_core_probe or from within the dwc3 USB role switch callback.
+>> + * This function is provided for platforms that use skip_core_init_mode and need
+>> + * to finalize the host initialization after some platform-specific setup.
+>> + * It must not be called before dwc3_core_init or when skip_core_init_mode is
+>> + * not used. It must also not be called when gadget or host mode has already
+>> + * been initialized.
+>> + *
+>> + * Return: 0 on success, negative error code on failure
+>> + */
+>> +int dwc3_host_init(struct dwc3 *dwc);
+>> +
+>> +/**
+>> + * dwc3_host_exit - Shut down host mode operation
+>> + * @dwc: Pointer to DWC3 controller context
+>> + *
+>> + * Disables and cleans up host mode resources, usually done by
+>> + * the dwc3 USB role switch callback before switching controller mode.
+>> + * It must only be called when skip_core_init_mode is used and only after
+>> + * dwc3_host_init.
+>> + */
+>> +void dwc3_host_exit(struct dwc3 *dwc);
+>> +
+>> +/**
+>> + * dwc3_gadget_init - Initialize gadget mode operation
+>> + * @dwc: Pointer to DWC3 controller context
+>> + *
+>> + * Initializes the controller for USB gadget mode operation, usually done by
+>> + * dwc3_core_probe or from within the dwc3 USB role switch callback. This
+>> + * function is provided for platforms that use skip_core_init_mode and need to
+>> + * finalize the gadget initialization after some platform-specific setup.
+>> + * It must not be called before dwc3_core_init or when skip_core_init_mode is
+>> + * not used. It must also not be called when gadget or host mode has already
+>> + * been initialized.
+>> + *
+>> + * Return: 0 on success, negative error code on failure
+>> + */
+>> +int dwc3_gadget_init(struct dwc3 *dwc);
+>> +
+>> +/**
+>> + * dwc3_gadget_exit - Shut down gadget mode operation
+>> + * @dwc: Pointer to DWC3 controller context
+>> + *
+>> + * Disables and cleans up gadget mode resources, usually done by
+>> + * the dwc3 USB role switch callback before switching controller mode.
+>> + * It must only be called when skip_core_init_mode is used and only after
+>> + * dwc3_gadget_init.
+>> + */
+>> +void dwc3_gadget_exit(struct dwc3 *dwc);
+>> +
+>> +/**
+>> + * dwc3_enable_susphy - Control SUSPHY status for all USB ports
+>> + * @dwc: Pointer to DWC3 controller context
+>> + * @enable: True to enable SUSPHY, false to disable
+>> + *
+>> + * Enables or disables the USB3 PHY SUSPEND and USB2 PHY SUSPHY feature for
+>> + * all available ports.
+>> + * This is usually handled by the dwc3 core code and should only be used
+>> + * when skip_core_init_mode is used and the glue layer needs to manage SUSPHY
+>> + * settings itself, e.g., due to platform-specific requirements during mode
+>> + * switches.
+>> + */
+>> +void dwc3_enable_susphy(struct dwc3 *dwc, bool enable);
+>> +
+>> +/**
+>> + * dwc3_set_prtcap - Set the USB controller PRTCAP mode
+>> + * @dwc: Pointer to DWC3 controller context
+>> + * @mode: Target mode, must be one of DWC3_GCTL_PRTCAP_{HOST,DEVICE,OTG}
+>> + * @ignore_susphy: If true, skip disabling the SUSPHY and keep the current state
+>> + *
+>> + * Updates PRTCAP of the controller and current_dr_role inside the dwc3
+>> + * structure. For DRD controllers, this also disables SUSPHY unless explicitly
+>> + * told to skip via the ignore_susphy parameter.
+>> + *
+>> + * This is usually handled by the dwc3 core code and should only be used
+>> + * when skip_core_init_mode is used and the glue layer needs to manage mode
+>> + * transitions itself due to platform-specific requirements. It must be called
+>> + * with the correct mode before calling dwc3_host_init or dwc3_gadget_init.
+>> + */
+>> +void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy);
+>> +
+>>   #endif
+>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+>> index e77fd86d09cf0a36161c20ad3c83f10e67099775..cf6512ed17a69134e6ca1b884f76c1439693fab1 100644
+>> --- a/drivers/usb/dwc3/host.c
+>> +++ b/drivers/usb/dwc3/host.c
+>> @@ -220,6 +220,7 @@ int dwc3_host_init(struct dwc3 *dwc)
+>>   	platform_device_put(xhci);
+>>   	return ret;
+>>   }
+>> +EXPORT_SYMBOL_GPL(dwc3_host_init);
+>>   
+>>   void dwc3_host_exit(struct dwc3 *dwc)
+>>   {
+>> @@ -230,3 +231,4 @@ void dwc3_host_exit(struct dwc3 *dwc)
+>>   	platform_device_unregister(dwc->xhci);
+>>   	dwc->xhci = NULL;
+>>   }
+>> +EXPORT_SYMBOL_GPL(dwc3_host_exit);
+>>
+>> -- 
+>> 2.34.1
+>>
+>>
+> 
+> Thanks for the documentations!
+> 
+> Please rebase against Greg's usb-testing branch. I think there is
+> conflict.
 
-Sample output with an SPR AVS capable PD charger:
-$cat /sys/class/usb_power_delivery/pd1/source-capabilities/5:spr_adjustable_voltage_supply/maximum_current_9V_to_15V
-4000mA
+Yup, there's a (small) conflict. I'll rebase the series.
 
-$cat /sys/class/usb_power_delivery/pd1/source-capabilities/5:spr_adjustable_voltage_supply/maximum_current_15V_to_20V
-3350mA
+And thanks again for the review! This looks much better than my original 
+approach now.
 
-$cat /sys/class/usb_power_delivery/pd1/source-capabilities/5:spr_adjustable_voltage_supply/peak_current
-0
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
-Changes since V1:
-* Fixed incorrect squash
----
- .../testing/sysfs-class-usb_power_delivery    | 28 ++++++
- drivers/usb/typec/pd.c                        | 95 ++++++++++++++++++-
- 2 files changed, 118 insertions(+), 5 deletions(-)
+Best,
 
-diff --git a/Documentation/ABI/testing/sysfs-class-usb_power_delivery b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-index 61d233c320ea..c754458a527e 100644
---- a/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-+++ b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-@@ -254,3 +254,31 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
- Description:
- 		The PPS Power Limited bit indicates whether or not the source
- 		supply will exceed the rated output power if requested.
-+
-+Standard Power Range (SPR) Adjustable Voltage Supplies
-+
-+What:		/sys/class/usb_power_delivery/.../<capability>/<position>:spr_adjustable_voltage_supply
-+Date:		Oct 2025
-+Contact:	Badhri Jagan Sridharan <badhri@google.com>
-+Description:
-+		Adjustable Voltage Supply (AVS) Augmented PDO (APDO).
-+
-+What:		/sys/class/usb_power_delivery/.../<capability>/<position>:spr_adjustable_voltage_supply/maximum_current_9V_to_15V
-+Date:		Oct 2025
-+Contact:	Badhri Jagan Sridharan <badhri@google.com>
-+Description:
-+		Maximum Current for 9V to 15V range in milliamperes.
-+
-+What:		/sys/class/usb_power_delivery/.../<capability>/<position>:spr_adjustable_voltage_supply/maximum_current_15V_to_20V
-+Date:		Oct 2025
-+Contact:	Badhri Jagan Sridharan <badhri@google.com>
-+Description:
-+		Maximum Current for greater than 15V till 20V range in
-+		milliamperes.
-+
-+What:		/sys/class/usb_power_delivery/.../<capability>/<position>:spr_adjustable_voltage_supply/peak_current
-+Date:		Oct 2025
-+Contact:	Badhri Jagan Sridharan <badhri@google.com>
-+Description:
-+		This file shows the value of the Adjustable Voltage Supply Peak Current
-+		Capability field.
-diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
-index d78c04a421bc..67f20b5ffdf4 100644
---- a/drivers/usb/typec/pd.c
-+++ b/drivers/usb/typec/pd.c
-@@ -359,6 +359,84 @@ static const struct device_type sink_pps_type = {
- 	.groups = sink_pps_groups,
- };
- 
-+/* -------------------------------------------------------------------------- */
-+/* Standard Power Range (SPR) Adjustable Voltage Supply (AVS) */
-+
-+static ssize_t
-+spr_avs_9v_to_15v_max_current_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%umA\n",
-+			  pdo_spr_avs_apdo_9v_to_15v_max_current_ma(to_pdo(dev)->pdo));
-+}
-+
-+static ssize_t
-+spr_avs_15v_to_20v_max_current_show(struct device *dev,
-+				    struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%umA\n",
-+			  pdo_spr_avs_apdo_15v_to_20v_max_current_ma(to_pdo(dev)->pdo));
-+}
-+
-+static ssize_t
-+spr_avs_src_peak_current_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%u\n",
-+			  pdo_spr_avs_apdo_src_peak_current(to_pdo(dev)->pdo));
-+}
-+
-+static struct device_attribute spr_avs_9v_to_15v_max_current_attr = {
-+	.attr = {
-+		.name = "maximum_current_9V_to_15V",
-+		.mode = 0444,
-+	},
-+	.show = spr_avs_9v_to_15v_max_current_show,
-+};
-+
-+static struct device_attribute spr_avs_15v_to_20v_max_current_attr = {
-+	.attr = {
-+		.name = "maximum_current_15V_to_20V",
-+		.mode = 0444,
-+	},
-+	.show = spr_avs_15v_to_20v_max_current_show,
-+};
-+
-+static struct device_attribute spr_avs_src_peak_current_attr = {
-+	.attr = {
-+		.name = "peak_current",
-+		.mode = 0444,
-+	},
-+	.show = spr_avs_src_peak_current_show,
-+};
-+
-+static struct attribute *source_spr_avs_attrs[] = {
-+	&spr_avs_9v_to_15v_max_current_attr.attr,
-+	&spr_avs_15v_to_20v_max_current_attr.attr,
-+	&spr_avs_src_peak_current_attr.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(source_spr_avs);
-+
-+static const struct device_type source_spr_avs_type = {
-+	.name = "pdo",
-+	.release = pdo_release,
-+	.groups = source_spr_avs_groups,
-+};
-+
-+static struct attribute *sink_spr_avs_attrs[] = {
-+	&spr_avs_9v_to_15v_max_current_attr.attr,
-+	&spr_avs_15v_to_20v_max_current_attr.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(sink_spr_avs);
-+
-+static const struct device_type sink_spr_avs_type = {
-+	.name = "pdo",
-+	.release = pdo_release,
-+	.groups = sink_spr_avs_groups,
-+};
-+
- /* -------------------------------------------------------------------------- */
- 
- static const char * const supply_name[] = {
-@@ -368,7 +446,8 @@ static const char * const supply_name[] = {
- };
- 
- static const char * const apdo_supply_name[] = {
--	[APDO_TYPE_PPS]  = "programmable_supply",
-+	[APDO_TYPE_PPS]      = "programmable_supply",
-+	[APDO_TYPE_SPR_AVS]  = "spr_adjustable_voltage_supply",
- };
- 
- static const struct device_type *source_type[] = {
-@@ -378,7 +457,8 @@ static const struct device_type *source_type[] = {
- };
- 
- static const struct device_type *source_apdo_type[] = {
--	[APDO_TYPE_PPS]  = &source_pps_type,
-+	[APDO_TYPE_PPS]     = &source_pps_type,
-+	[APDO_TYPE_SPR_AVS] = &source_spr_avs_type,
- };
- 
- static const struct device_type *sink_type[] = {
-@@ -388,7 +468,8 @@ static const struct device_type *sink_type[] = {
- };
- 
- static const struct device_type *sink_apdo_type[] = {
--	[APDO_TYPE_PPS]  = &sink_pps_type,
-+	[APDO_TYPE_PPS]     = &sink_pps_type,
-+	[APDO_TYPE_SPR_AVS] = &sink_spr_avs_type,
- };
- 
- /* REVISIT: Export when EPR_*_Capabilities need to be supported. */
-@@ -407,8 +488,12 @@ static int add_pdo(struct usb_power_delivery_capabilities *cap, u32 pdo, int pos
- 	p->object_position = position;
- 
- 	if (pdo_type(pdo) == PDO_TYPE_APDO) {
--		/* FIXME: Only PPS supported for now! Skipping others. */
--		if (pdo_apdo_type(pdo) > APDO_TYPE_PPS) {
-+		/*
-+		 * FIXME: Only PPS, SPR_AVS supported for now!
-+		 * Skipping others.
-+		 */
-+		if (pdo_apdo_type(pdo) != APDO_TYPE_PPS &&
-+		    pdo_apdo_type(pdo) != APDO_TYPE_SPR_AVS) {
- 			dev_warn(&cap->dev, "Unknown APDO type. PDO 0x%08x\n", pdo);
- 			kfree(p);
- 			return 0;
--- 
-2.51.0.858.gf9c4a03a3a-goog
+
+Sven
 
 
