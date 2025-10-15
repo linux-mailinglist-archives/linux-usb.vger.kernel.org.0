@@ -1,51 +1,59 @@
-Return-Path: <linux-usb+bounces-29322-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29323-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B341BDDB81
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 11:18:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C25DBDDC65
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 11:28:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 002EC3A4FD8
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 09:15:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E663A188D30A
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Oct 2025 09:29:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B3DC31A7F5;
-	Wed, 15 Oct 2025 09:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6367C31B827;
+	Wed, 15 Oct 2025 09:27:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Na8hvlOB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E+4DSMFd"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A4A31C593
-	for <linux-usb@vger.kernel.org>; Wed, 15 Oct 2025 09:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5AE31A540;
+	Wed, 15 Oct 2025 09:27:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760519632; cv=none; b=BobO7OcbzTDB2KTxurueewF4IspWpYDS+F/yFP0X8pxQpafb7cmGdARM5U0jhU/fsS8IG19/kUIZmaJOUTy86nmvWdCGmEdFW/U/fus04MNk8ER2gHSb95NOFAC/oUvSerxazm9DdoLiv64S2Bchmz7AfvgeG5NgXgx435feByU=
+	t=1760520449; cv=none; b=ZlcaLKgoeBRNxgC+21YRCgZM8W6bFByeYtLVgziZWacaF8l6xmcEksww9THVwkB79Re8dsc5VXlFizsq1+ti76CazoKWTnSVbBe+rKw0aqBgtoicrNFDwJSynQWCTXyQHuME8AGyLqvpA5EG94Vkr3IcXARhgVbVlvjsOig6mdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760519632; c=relaxed/simple;
-	bh=N3GKeA8+s/KJffHg43/De6cLcwWGZCocBgNwYHU2+UI=;
+	s=arc-20240116; t=1760520449; c=relaxed/simple;
+	bh=gZe1e09hVuaR1sUWbD0Oq/hA7F1zI+b/HwrTz36fKx0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pVPoLZsQ+ymT5OPynI02rdCKE7cq8gmHi5RdPnFFelJpRrsxt5UFpqKRz3Ko6Msvv+s8FQnXM3Wk0r0ShJFTdNRVexfQW44T6mk/7YKYuFlr4pBYCR81Ui0UJZstSdhZx+qB1xmw77f1C1BtXquhiE/8XHG+vK60V205+O8ykQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Na8hvlOB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8497C116D0;
-	Wed, 15 Oct 2025 09:13:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1760519631;
-	bh=N3GKeA8+s/KJffHg43/De6cLcwWGZCocBgNwYHU2+UI=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=HsbYiAIZvn4JTpgyQ+Mq3W2bpbp9cmTCYVypm9jOMlEyRzLcagz0651I4e9MtW6ZAKvnnxEiIkQp5IS37j45B+OlaLsSmRRbXW7BlwCe1fJ6DHuza3w7ohXzFcmTKCg77liIMbr44n2bzczNqE7JFL82jXv0ErPz/BVETm1nkLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E+4DSMFd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 441C5C4CEF8;
+	Wed, 15 Oct 2025 09:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760520449;
+	bh=gZe1e09hVuaR1sUWbD0Oq/hA7F1zI+b/HwrTz36fKx0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Na8hvlOBs6vKts616+UzqZxGBETQGAMJ30WRjqQubVWgHl21nqiEiYE5p8X+htll/
-	 b2dSfdnaRyhMv59F6TrpC2mklVrJD5Y3xRZdCUD2AapG4LLmoWi0/m7Ha/ZmOmcNYA
-	 /j8QtJ0KkIcOjS0NqfLbC7YOp0QiKhyeQ+n9KK5M=
-Date: Wed, 15 Oct 2025 11:13:48 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Milan Oravec <migo.oravec@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: Fwd: USB DBC hang during earlyprintk initialization
-Message-ID: <2025101544-galore-sculpture-b243@gregkh>
-References: <CAAcb1K_MJKWz+BYJmx0FDgrBOzzXm71-M7sgHDUOmBRppXWNzA@mail.gmail.com>
- <CAAcb1K_bezseTM8DrOrzVUi_W+nZoE2N0CO4k3AQWPw7=7pyjw@mail.gmail.com>
+	b=E+4DSMFdr+8fjclwLcrQFg7iZRMkmjopeDUjCd/f4hB4Q89zEroFCm1oDtp1Epkax
+	 bSG+9N3uBquAmNjoajMVg8yZdb2OPlqbxPPK9QBmKSZL+RPdC5blgazvE4L837NsEJ
+	 RaPnykb/DouscYnwwGXIUAMshZ/ks0siDrVtnthVUZ3N0KBo53UuSImWJc86EbIvVM
+	 dbaVXA8V7Q7T2phXQPZIsj4CGZ2nS/dAbANCUYf7Ac8yU2GgokODw0FJzw1jBeHXvq
+	 7oqn/6ZETGGx2piQGGRijAEOu84h/HAAUA6uqBOOsHCtqj8D2KY7eDuH+Y879sdujh
+	 4ClRYmeQ4PU9A==
+Date: Wed, 15 Oct 2025 10:27:24 +0100
+From: Simon Horman <horms@kernel.org>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Petko Manolov <petkan@nucleusys.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2] net: usb: rtl8150: Fix frame padding
+Message-ID: <aO9o_Fn3TGJNcJG6@horms.kernel.org>
+References: <20251014203528.3f9783c4.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -54,60 +62,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAcb1K_bezseTM8DrOrzVUi_W+nZoE2N0CO4k3AQWPw7=7pyjw@mail.gmail.com>
+In-Reply-To: <20251014203528.3f9783c4.michal.pecio@gmail.com>
 
-On Wed, Oct 15, 2025 at 09:43:02AM +0200, Milan Oravec wrote:
-> Hello, I'm trying to debug some hibernation related problems on my
-> system, and need a USB DBC to see what is going on after screen off.
-> I've connected USB debugging cable and got this error:
+On Tue, Oct 14, 2025 at 08:35:28PM +0200, Michal Pecio wrote:
+> TX frames aren't padded and unknown memory is sent into the ether.
 > 
-> [    0.000000] Linux version 6.17.2 (migo@migoG17) (gcc (GCC) 15.2.1
-> 20250813, GNU ld (GNU Binutils) 2.45.0) #54 SMP PREEMPT_DYNAMIC Sun
-> Oct 12 19:07:00 CEST 2025
-> [    0.000000] Command line: BOOT_IMAGE=/vmlinuz
-> root=UUID=584262b6-b020-4e4f-95a3-1db754e28b6c earlyprintk=xdbc1,keep
-> debug ignore_loglevel sysrq_always_enabled force_early
-> _printk sched_verbose ft usbcore.autosuspend=-1 no_console_suspend
-> hib_compression=lz4 resume=UUID=54ed98b5-56c0-4ab9-95ea-da1a9322ce49
-> [    0.000000] BIOS-provided physical RAM map:
-> [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009ffff] usable
-> [    0.000000] BIOS-e820: [mem 0x00000000000a0000-0x00000000000fffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x0000000009afefff] usable
-> [    0.000000] BIOS-e820: [mem 0x0000000009aff000-0x0000000009ffffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x000000000a000000-0x000000000a1fffff] usable
-> [    0.000000] BIOS-e820: [mem 0x000000000a200000-0x000000000a211fff] ACPI NVS
-> [    0.000000] BIOS-e820: [mem 0x000000000a212000-0x000000008e43dfff] usable
-> [    0.000000] BIOS-e820: [mem 0x000000008e43e000-0x000000009443dfff] reserved
-> [    0.000000] BIOS-e820: [mem 0x000000009443e000-0x000000009453dfff] ACPI data
-> [    0.000000] BIOS-e820: [mem 0x000000009453e000-0x000000009653dfff] ACPI NVS
-> [    0.000000] BIOS-e820: [mem 0x000000009653e000-0x000000009a5fefff] reserved
-> [    0.000000] BIOS-e820: [mem 0x000000009a5ff000-0x000000009bffafff] usable
-> [    0.000000] BIOS-e820: [mem 0x000000009bffb000-0x000000009cffffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x000000009d7f3000-0x000000009fffffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x00000000f0000000-0x00000000f7ffffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x00000000fd000000-0x00000000ffffffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x0000000100000000-0x0000000837ffffff] usable
-> [    0.000000] BIOS-e820: [mem 0x0000000838000000-0x0000000857ffffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x0000000858000000-0x000000085de7ffff] usable
-> [    0.000000] BIOS-e820: [mem 0x000000085eec0000-0x00000008801fffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x000000fd00000000-0x000000ffffffffff] reserved
-> [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 1
+> Theoretically, it isn't even guaranteed that the extra memory exists
+> and can be sent out, which could cause further problems. In practice,
+> I found that plenty of tailroom exists in the skb itself (in my test
+> with ping at least) and skb_padto() easily succeeds, so use it here.
+> 
+> In the event of -ENOMEM drop the frame like other drivers do.
+> 
+> The use of one more padding byte instead of a USB zero-length packet
+> is retained to avoid regression. I have a dodgy Etron xHCI controller
+> which doesn't seem to support sending ZLPs at all.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+> ---
+> 
+> v2: update TX stats when dropping packets
+> 
+> v1: https://lore.kernel.org/netdev/20251012220042.4ca776b1.michal.pecio@gmail.com/
 
-What is the exact command line that you are passing into the xdbc
-driver?  That seems to be crashing the parsing logic here.
+Thanks for the update.
 
-Ah, I see it above, sorry, it is "xdbc1,keep", right?
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-Do you really have 2 different xhci debug controllers in the system?
-You are asking to connect to the second one, what happens if you change
-it to just "xdbc,keep"?
-
-Also, how about switching them around:
-	"keep,xdbc"
-?
-In looking at the code, i think order matters.
-
-thanks,
-
-greg k-h
 
