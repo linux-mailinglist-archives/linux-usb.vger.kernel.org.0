@@ -1,106 +1,126 @@
-Return-Path: <linux-usb+bounces-29419-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29420-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D553EBEBB99
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Oct 2025 22:48:44 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42DC8BEBEC7
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 00:31:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 458A4583726
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Oct 2025 20:48:43 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CE32D3540A6
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Oct 2025 22:31:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC243271441;
-	Fri, 17 Oct 2025 20:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F20C2D5C6C;
+	Fri, 17 Oct 2025 22:30:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SnIFHLZZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="is6msNhq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC6F1D5CC6
-	for <linux-usb@vger.kernel.org>; Fri, 17 Oct 2025 20:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDF2354AEA
+	for <linux-usb@vger.kernel.org>; Fri, 17 Oct 2025 22:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760734117; cv=none; b=nw+XaJBOXo+J3TSB+wqIK25PFbmtZ2VxHGCS0yYRibXh1gYN/8A2ALKDx0y1byogBtHyyZXNJJoE4WtS87TyChPrD1Z0nhPwewgb8ikD6e/OzCfuZNXbiGqNCHVwfdVTzMiB10Ojksy5SaS+BMqY0CuVxK5Dm92snYh+O5Tfp3I=
+	t=1760740258; cv=none; b=e9zeocA7mQ8+LGufnI/XMcNhfGSUZKZmbRqiRsMby6ZA4pMekXYgabv+P/FhTtY2r8iFgb6G3VoJw56sSIM9Y8FZGejiYAuy37PD+vU6u8X64cNZGo29yl8JDYQCQgQdZxUvQkPquBWY4Ao2cnlralyNKUBHom1WeoMYZ3MuiAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760734117; c=relaxed/simple;
-	bh=oQ/gGtYvav+gWWdoIlX8Zb6LNC9cOW2UkrE8R2Ydnos=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tEv++JUYPS7pnAdpcby6pWdgmTQ1z2W/OZNPK1zyq9liVbFexGUk55PuN0ja/u0nVskUIxaYWZrO6kgbipvJMOeL08xzxtLf2eEk7530vDk8+2LMPbUz11KVcunHxryMxkngxidVBnRGZMpa1iA7owJ4Po9zw7QB8J7vBLELBOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SnIFHLZZ; arc=none smtp.client-ip=209.85.221.44
+	s=arc-20240116; t=1760740258; c=relaxed/simple;
+	bh=coMsoCZvoHbuI23XThH1BMIfJtV8x1r7cZz+hCzRR5I=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=QORS4pddkidVB3lx7+v3sMQdvBy/TTSMsAY795K4Kyl1Rf7/TqczyoUA3fmrgwL6H3/Q98jJLgMvhtSpvuC1ZiKrGoa/nAqiXn4YmOF95q/yjjrEmohm/QxE5j5jdCIkJVHXE9FGY+0EzQ0A2m+yl8v01xm+Sw+OsN6pQ7PLgGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=is6msNhq; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3ee15b5435bso1648810f8f.0
-        for <linux-usb@vger.kernel.org>; Fri, 17 Oct 2025 13:48:35 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-28e538b5f23so27226405ad.3
+        for <linux-usb@vger.kernel.org>; Fri, 17 Oct 2025 15:30:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760734114; x=1761338914; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQ/gGtYvav+gWWdoIlX8Zb6LNC9cOW2UkrE8R2Ydnos=;
-        b=SnIFHLZZs7YhF2m0vcAe6oe2xSQE7X5HerxWIZHUhyYeXUfr/vpSeIuV2rCIv4Ej1Y
-         ZvCk1M9UfrxvmkrBhjvhTfzrpcEjQ5i31aiY1TEDK9+gw7ES+bcHEB9K4Qv2ZL8lFwau
-         w2onrMDpEfDdqPAmxo0vDNbqdxfCYANz0jtb22JO+be/pGGXtDJbiEhV/qr66XMN/Xi3
-         qaVkTy6tgfAXQs1ioibH64ugtYfJtBOZPzPUTpkcUIpSrZjsL7yvUQDdeHjCTLlv+kp1
-         0TghXFfBor0vE/LkNvPq1EqIl92DvkMBSS8QuROhu/tsu/pJEJFPAn4nSNSLPd9Ffx5z
-         06og==
+        d=google.com; s=20230601; t=1760740257; x=1761345057; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1aGvnCfkCxuG7nRHD5qS3K0Ns2/mfOtufedzaaye1sE=;
+        b=is6msNhqyFq7lsWi2gi9bkEIarskO6dC2FOUHkmGJcw4/fe+R2PL7Wht2cCSCDcw0S
+         6DXYysCHLmnENIQwYxuRAiKvtb7Qcj+2lQQYLapYocBCyyOTkPUw5F3bWIBOo6y32Fdj
+         nKJx7G10osH3l7YdE5SV5MuIZJGsI3twYkUBkILz+MiZ2MU27SC5En72SHPLtUA3IbhM
+         8PR6aOVILGRNk8iLORtzIXd52X2CJSt7VQMJ8X5BiDFbpKbEoZxMGSO/+j2rz5g3BR2N
+         9CktZnTvI5hQ+rasVFPGEFODcsTMBf/HnCwEr3jZTI5NGZiPMrgUGs0wYcb7luRjH+11
+         TY6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760734114; x=1761338914;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oQ/gGtYvav+gWWdoIlX8Zb6LNC9cOW2UkrE8R2Ydnos=;
-        b=TqkulrJP6wKKNE83aOYMSO/6l/sGX+gcg7r+25OyjYn7z4jwtR4A+nfbKac5JBD8jn
-         kVU86L8+c4qth+jH3yaslPR7nsSLMWFF7q7gabEZ3yvP+F0WQbnyg+/9/M3Q4Li82Nww
-         3m7umFG2+Yhs+IzoqFzyJjnM1Unq8KGcDbFjMeeMvBawranvEGuhrgzh72FqN5wpaE3A
-         7Ljpv1MuHMCwOOkZut/hZ1eWs0adIXznrAo3ktS6ivK1QZ4raKceUz1ZRkJqYKlhsBVT
-         KmXIu4zkYkejNYCi/S29h58kd6n/1S7Nj+k5nqf45sO3thGRgF+D++WDcWbcGncMokxu
-         LnxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXn8aDjcqEb5y86dhTgIQ3596lPlZ3bgONSFqjsyjVUL4h2GfeWPloeBLpKPcmLfdakIfviDlnSWk0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyS/b8LRs9ujI2T7sbvB6GrIH6ELs4L9LRCUT96h4bjD/1Qkork
-	2CyrEPGyOQtQl74SZp+PNknyFAXNVlF3GxmTiXCssczRfCdrwx6xRYyKOmAQPvv4Cm8k6u4o63h
-	29dyO4GVM1z6f411M23w3JwRQ0HthoDoJPaVsRc6w
-X-Gm-Gg: ASbGnctOV8pmZ27ZIoP3Ebq4VdPKbwqnIHn9KvKInMhReQNio61DG7vio2yiywbOyzV
-	ir0O92lbUUGu3Mm8x/I1xTCI0e+s54loSvG0b+TUQ6qL3D5WPbkce1sIIahV0P/kuJP0NFGY/J4
-	zq0FiAq0416wK1whoIgiweU+MVMWF3uu5i6DBw5fRSjC/gj5lalYZoDiBmVs8pY082l4EJDZxyZ
-	h+0T4bKAx8HjinYGrNH8rvw0Xz4beecn442BV7Bvuu3CKxS0XZ6e/VPtB9sctANTaXjxtjYc7QL
-	bj2d0m7f56t4r8dKIplODks=
-X-Google-Smtp-Source: AGHT+IHAavia4dajmjd1wu0ozenk/EgHnS13fnhiNCGOo15GBQoO3qzrk0f46KUvjIzbKPhJBuIwwZghoR1ZvbV+ZV8=
-X-Received: by 2002:a05:600c:681b:b0:46e:4921:9443 with SMTP id
- 5b1f17b1804b1-4711792a6bemr42023365e9.37.1760734113965; Fri, 17 Oct 2025
- 13:48:33 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760740257; x=1761345057;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1aGvnCfkCxuG7nRHD5qS3K0Ns2/mfOtufedzaaye1sE=;
+        b=Ell9b9Pe0io81hDWZejuLXsl7xpNSStamgjw25Zr96nkpKRvWhHDBUZ0bgOWfplIl4
+         KvAXolMwlkS2x4XEcOWocKCYlmHb7SL6TJJjjIwVGeIa3EpMxWH4UfmwWCnQhc3b2ral
+         hZyZ2jT2yLmpxr+gAaWcx5qfQ1FOKBCBw2V4HNGmWLPWyMq5aM09IGEn3sBe+t80auD0
+         oI5ROKrToBcvIga9jOdkH9fPOQGkqvht4dDVmZnaS0EbjrYTyQbB3H9NKu9UeL6C550L
+         3ewtxlprjgWuViRnCXarJvl7wgDdBXicYE0kCR6jLT4+mto8kQ5rqUyuJJSRvmmwXVs/
+         EyfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUbLYuVheKtRjzz4GBG5I+WByHP29twvyrdlRa4CeEj6HCmz+qfIGrlSptDkOsrSCZg4sklWZnBa/k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBUhwFQF9g3DQszUDJ7AUDG0KGKPnNPc9Kuw0l6HJuq8XsLTEg
+	3bdgpXCzFwGiXBwIhdKu04g0L+hnkQKtm+1kDKFsEfR4wKXWEyocudQhKdOY2K/pbpzb+rVfuqh
+	eI0FzjQ==
+X-Google-Smtp-Source: AGHT+IHuhlr6TeDMM+a8D4kE0RCHmOBllgF8IF7LrOLrHYShECDzzqQ+4s+GJlaM19IdbjQW26f4OH4XTqk=
+X-Received: from plho8.prod.google.com ([2002:a17:903:23c8:b0:290:d4c5:90ad])
+ (user=jthies job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d485:b0:28e:c75e:61d9
+ with SMTP id d9443c01a7336-290caf83210mr63165865ad.38.1760740256772; Fri, 17
+ Oct 2025 15:30:56 -0700 (PDT)
+Date: Fri, 17 Oct 2025 22:30:53 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20251017000051.2094101-1-jthies@google.com> <abd715e2-6edd-4f35-a308-d2ee9a5ca334@panix.com>
-In-Reply-To: <abd715e2-6edd-4f35-a308-d2ee9a5ca334@panix.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.858.gf9c4a03a3a-goog
+Message-ID: <20251017223053.2415243-1-jthies@google.com>
+Subject: [PATCH v2] usb: typec: ucsi: psy: Set max current to zero when disconnected
 From: Jameson Thies <jthies@google.com>
-Date: Fri, 17 Oct 2025 13:48:21 -0700
-X-Gm-Features: AS18NWBOVLDYxDh3NOr1aYj7ImsXftnVZMr0nHmHk5U7INnmD_I0toUf4vs0lBc
-Message-ID: <CAMFSARdUMJ3WX1L8U-2k1w7kmH8Z4y7=MKKEBjCmyY-94wiBig@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: ucsi: psy: Set max current to zero when disconnected
-To: Kenneth Crudup <kenny@panix.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com, 
-	bleung@chromium.org, gregkh@linuxfoundation.org, akuchynski@chromium.org, 
-	abhishekpandit@chromium.org, sebastian.reichel@collabora.com, 
-	linux-pm@vger.kernel.org, stable@vger.kernel.org
+To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Cc: dmitry.baryshkov@oss.qualcomm.com, bleung@chromium.org, 
+	gregkh@linuxfoundation.org, akuchynski@chromium.org, 
+	abhishekpandit@chromium.org, sebastian.reichel@collabora.com, kenny@panix.com, 
+	linux-pm@vger.kernel.org, stable@vger.kernel.org, 
+	Jameson Thies <jthies@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-> Rule: add the tag "Cc: stable@vger.kernel.org" in the sign-off area to have the patch automatically included in the stable tree.
-> Subject: [PATCH] usb: typec: ucsi: psy: Set max current to zero when disconnected
-> Link: https://lore.kernel.org/stable/20251017000051.2094101-1-jthies%40google.com
+The ucsi_psy_get_current_max function defaults to 0.1A when it is not
+clear how much current the partner device can support. But this does
+not check the port is connected, and will report 0.1A max current when
+nothing is connected. Update ucsi_psy_get_current_max to report 0A when
+there is no connection.
 
-My mistake, I'll send up a v2 adding the appropriate CCs.
+v2 changes:
+- added cc stable tag to commit message
 
-> I wonder if this is the reason my (Kubuntu 25.04, FWIW) system will
-> sometimes show the battery icon as "Charging" even when it's discharging
-> (or nothing is plugged into either USB-C port)?
+Fixes: af833e7f7db3 ("usb: typec: ucsi: psy: Set current max to 100mA for BC 1.2 and Default")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jameson Thies <jthies@google.com>
+Reviewed-by: Benson Leung <bleung@chromium.org>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Tested-by: Kenneth R. Crudup <kenny@panix.com>
+---
+ drivers/usb/typec/ucsi/psy.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-The update to set max current to 0.1A for BC and default USB operation
-landed only a couple months ago. If the battery icon issue is a recent
-regression, it's definitely possible.
+diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+index 62a9d68bb66d..8ae900c8c132 100644
+--- a/drivers/usb/typec/ucsi/psy.c
++++ b/drivers/usb/typec/ucsi/psy.c
+@@ -145,6 +145,11 @@ static int ucsi_psy_get_current_max(struct ucsi_connector *con,
+ {
+ 	u32 pdo;
+ 
++	if (!UCSI_CONSTAT(con, CONNECTED)) {
++		val->intval = 0;
++		return 0;
++	}
++
+ 	switch (UCSI_CONSTAT(con, PWR_OPMODE)) {
+ 	case UCSI_CONSTAT_PWR_OPMODE_PD:
+ 		if (con->num_pdos > 0) {
+
+base-commit: e40b984b6c4ce3f80814f39f86f87b2a48f2e662
+-- 
+2.51.0.858.gf9c4a03a3a-goog
+
 
