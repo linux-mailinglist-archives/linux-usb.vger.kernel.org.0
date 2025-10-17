@@ -1,113 +1,209 @@
-Return-Path: <linux-usb+bounces-29398-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29399-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 110F2BE5E1C
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Oct 2025 02:26:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B401BE61F4
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Oct 2025 04:43:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1CF664F3EF1
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Oct 2025 00:26:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AA9D5E0B54
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Oct 2025 02:43:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C21D4209F5A;
-	Fri, 17 Oct 2025 00:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DBF924678C;
+	Fri, 17 Oct 2025 02:43:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="HDZBJ0Mv"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="dsNo1SoO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE30C1C2BD;
-	Fri, 17 Oct 2025 00:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93832253EE;
+	Fri, 17 Oct 2025 02:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760660805; cv=none; b=ShzDfYRMhgs1lcA2o4NX+TeK3uTDpyKCp1/+i0cU8dkQJGCrC3jwGfmshrUR4EVNskFHG8Ywk9k8tccsnkQpgDRGdEtgONutDRra/GMXFCxQ4aco4rJGwWfr+PtmcUAvqonbv8v2Q2Q3eJEPZ7JgoYp0IbPiaqrGbOJ5HrZvmy8=
+	t=1760669004; cv=none; b=cRvxm4LMs81P+H/ZwK+HDoSjm8jxY3jf8EtluJNVjwmTBNMLT4gaea97kaiuYwqEpCLRsHmOpmXULX8d2C/5Hv0ed10wjzvl3dHoC+fVpHX8hNqv4aYVfcgxwpMWqxj7qgI8hEncBRed3YLUiVBCmBIzXgNpNNo6DVJrScXqinw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760660805; c=relaxed/simple;
-	bh=bS2nfkUCKwHusOOJ1srrBeWgUmOfQacxcVsdDNaH8zs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YXZuA5z9Jzy2x4oKEA2RFu8g3Jp3NYUBFBxFpq5NTLMhFbYi5SLEsKpJBglTzVX2KYJiBrkHAHkYI4ZXlZM8YEaXKTrjBIuDEkgJ+dLBSarggSdKEhglwq/jjWT8GhNMraMB3WJNZA/X9ndQ607EDzAWtOpu4PuKCVB9r07F/8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=HDZBJ0Mv; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [10.50.4.39] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4cnlxY5N9cz4G72;
-	Thu, 16 Oct 2025 20:26:41 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1760660802; bh=bS2nfkUCKwHusOOJ1srrBeWgUmOfQacxcVsdDNaH8zs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=HDZBJ0MvKyEn2s4RMGFEQqb9EYxrZZJIxiWG4UfGA3lKFQXvh6CDqXgKpmces9zao
-	 7lozrWMVgHLAXgc940LtYjZz4DVBhohz8D6+Hq+YYKWr8Kb1eFrroK76SzrNo2fGzR
-	 7rn/XVwAe4QsLvVtsz+ZWdCR2AS+G2TAUKPDv23w=
-Message-ID: <abd715e2-6edd-4f35-a308-d2ee9a5ca334@panix.com>
-Date: Thu, 16 Oct 2025 17:26:40 -0700
+	s=arc-20240116; t=1760669004; c=relaxed/simple;
+	bh=N0SPoREcfjToVSvpDpuB20UkPpIAnS92ECS0wYXYfYM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Ld1B/1tU3g7lYePj7YtqgFT5wqn+NUhD30zvVr94PijwFZrfHDdJYLzYaS6sPO/pRXnWb8DrPd8NrBzT5NH6e6xp9+cW0DhQVCn8+sIuvhZHtUyMF3fEllx3WucQFUBJliJ6TbPFEbwyOZWmbjw6J7jWRhHwReCWeZlfkoforh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=dsNo1SoO; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=/k
+	Q7yMmRbRhx6uqfPluLv3tH08pPgFdiUcBwhpyhBNM=; b=dsNo1SoOBz2KaiOs7T
+	RVHmDw0UIN+VRYqWFE5b7vPv+wKZazpvMzfWaxdNM9CW0eteBLerlhh4Ssvjbe73
+	Wlxacl5yd+45wrCVmarIzWlmpm9B0Iy/s4JqUc/1grU7kARaqMY5Ogs1il3GSVdf
+	qS5mKudZhzsPxA+lOwqDIjjLU=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wCHc4sVrfFonJv9Ag--.1829S2;
+	Fri, 17 Oct 2025 10:42:31 +0800 (CST)
+From: yicongsrfy@163.com
+To: michal.pecio@gmail.com
+Cc: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	oliver@neukum.org,
+	pabeni@redhat.com
+Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device driver for config selection
+Date: Fri, 17 Oct 2025 10:42:29 +0800
+Message-Id: <20251017024229.1959295-1-yicongsrfy@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20251013110753.0f640774.michal.pecio@gmail.com>
+References: <20251013110753.0f640774.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: typec: ucsi: psy: Set max current to zero when
- disconnected
-To: Jameson Thies <jthies@google.com>, heikki.krogerus@linux.intel.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- Kenneth C <kenny@panix.com>
-Cc: dmitry.baryshkov@oss.qualcomm.com, bleung@chromium.org,
- gregkh@linuxfoundation.org, akuchynski@chromium.org,
- abhishekpandit@chromium.org, sebastian.reichel@collabora.com,
- linux-pm@vger.kernel.org, stable@vger.kernel.org
-References: <20251017000051.2094101-1-jthies@google.com>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <20251017000051.2094101-1-jthies@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wCHc4sVrfFonJv9Ag--.1829S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJFWkAFyrGr1kXF4DuFy5XFb_yoWrtw1DpF
+	WUKa1YyrWUXFWfGr4fXrW8XFyY9ws2krW2kr1fJ3W3ur95ur97tF48K345uFy8CrW8GF12
+	vw4UKF43uws8CrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uca9-UUUUU=
+X-CM-SenderInfo: p1lf00xjvuw5i6rwjhhfrp/1tbixwHp22jxpfnf7gAAsA
+
+On Mon, 13 Oct 2025 11:07:53 +0200, Michal Pecio <michal.pecio@gmail.com> wrote:
+>
+> On Sat, 11 Oct 2025 15:53:13 +0800, yicongsrfy@163.com wrote:
+> > From: Yi Cong <yicong@kylinos.cn>
+> >
+> > A similar reason was raised in commit ec51fbd1b8a2 ("r8152: add USB
+> > device driver for config selection"):
+> > Linux prioritizes probing non-vendor-specific configurations.
+> >
+> > Referring to the implementation of this patch, cfgselect is also
+> > used for ax88179 to override the default configuration selection.
+> >
+> > Signed-off-by: Yi Cong <yicong@kylinos.cn>
+> >
+> > ---
+> > v2: fix warning from checkpatch.
+> > v5: 1. use KBUILD_MODNAME to obtain the module name.
+> >     2. add error handling when usb_register fail.
+> >     3. use .choose_configuration instead of .probe.
+> >     4. reorder deregister logic.
+> > ---
+> >  drivers/net/usb/ax88179_178a.c | 68 ++++++++++++++++++++++++++++++++--
+> >  1 file changed, 65 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+> > index b034ef8a73ea..b6432d414a38 100644
+> > --- a/drivers/net/usb/ax88179_178a.c
+> > +++ b/drivers/net/usb/ax88179_178a.c
+> > @@ -1713,6 +1713,14 @@ static int ax88179_stop(struct usbnet *dev)
+> >  	return 0;
+> >  }
+> >
+> > +static int ax88179_probe(struct usb_interface *intf, const struct usb_device_id *i)
+> > +{
+> > +	if (intf->cur_altsetting->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC)
+> > +		return -ENODEV;
+> > +
+> > +	return usbnet_probe(intf, i);
+> > +}
+>
+> This isn't part of the cfgselector driver being added by this commit
+> nor is it documented in the changelog, so why is it here?
+
+> It doesn't seem to be necessary, because USB_DEVICE_AND_INTERFACE_INFO
+> matches used by this driver ensure that probe() will only be called on
+> interfaces of the correct class 0xff.
+
+I've retested this logic, and indeed, there's no need to add this extra check.
+It's already planned to remove this modification in the next patch version.
+
+> > +
+> >  static const struct driver_info ax88179_info = {
+> >  	.description = "ASIX AX88179 USB 3.0 Gigabit Ethernet",
+> >  	.bind = ax88179_bind,
+> > @@ -1941,9 +1949,9 @@ static const struct usb_device_id products[] = {
+> >  MODULE_DEVICE_TABLE(usb, products);
+> >
+> >  static struct usb_driver ax88179_178a_driver = {
+> > -	.name =		"ax88179_178a",
+> > +	.name =		KBUILD_MODNAME,
+> >  	.id_table =	products,
+> > -	.probe =	usbnet_probe,
+> > +	.probe =	ax88179_probe,
+> >  	.suspend =	ax88179_suspend,
+> >  	.resume =	ax88179_resume,
+> >  	.reset_resume =	ax88179_resume,
+> > @@ -1952,7 +1960,61 @@ static struct usb_driver ax88179_178a_driver = {
+> >  	.disable_hub_initiated_lpm = 1,
+> >  };
+> >
+> > -module_usb_driver(ax88179_178a_driver);
+> > +static int ax88179_cfgselector_choose_configuration(struct usb_device *udev)
+> > +{
+> > +	struct usb_host_config *c;
+> > +	int i, num_configs;
+> > +
+> > +	/* The vendor mode is not always config #1, so to find it out. */
+> > +	c = udev->config;
+> > +	num_configs = udev->descriptor.bNumConfigurations;
+> > +	for (i = 0; i < num_configs; (i++, c++)) {
+> > +		struct usb_interface_descriptor	*desc = NULL;
+> > +
+> > +		if (!c->desc.bNumInterfaces)
+> > +			continue;
+> > +		desc = &c->intf_cache[0]->altsetting->desc;
+> > +		if (desc->bInterfaceClass == USB_CLASS_VENDOR_SPEC)
+> > +			break;
+> > +	}
+> > +
+> > +	if (i == num_configs)
+> > +		return -ENODEV;
+> > +
+> > +	return c->desc.bConfigurationValue;
+> > +}
+>
+> I wonder how many copies of this code would justify making it some
+> sort of library in usbnet or usbcore?
+
+Yes, there are many similar code instances in the USB subsystem.
+However, I'm primarily focused on the networking subsystem,
+so my abstraction work here might not be thorough enough.
+Hopefully, an experienced USB developer may can optimize this issue.
 
 
-I wonder if this is the reason my (Kubuntu 25.04, FWIW) system will 
-sometimes show the battery icon as "Charging" even when it's discharging 
-(or nothing is plugged into either USB-C port)?
+> > +static struct usb_device_driver ax88179_cfgselector_driver = {
+> > +	.name =	KBUILD_MODNAME "-cfgselector",
+> > +	.choose_configuration =	ax88179_cfgselector_choose_configuration,
+> > +	.id_table = products,
+> > +	.generic_subclass = 1,
+> > +	.supports_autosuspend = 1,
+> > +};
+> > +
+> > +static int __init ax88179_driver_init(void)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = usb_register_device_driver(&ax88179_cfgselector_driver, THIS_MODULE);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret = usb_register(&ax88179_178a_driver);
+> > +	if (ret)
+> > +		usb_deregister_device_driver(&ax88179_cfgselector_driver);
+>
+> Any problems if the order of registration is reversed, to ensure that
+> the interface driver always exists if the device driver exists?
 
--Kenny
+After swapping the registration order, testing confirms there are no problems.
 
-On 10/16/25 17:00, Jameson Thies wrote:
-> The ucsi_psy_get_current_max function defaults to 0.1A when it is not
-> clear how much current the partner device can support. But this does
-> not check the port is connected, and will report 0.1A max current when
-> nothing is connected. Update ucsi_psy_get_current_max to report 0A when
-> there is no connection.
-> 
-> Fixes: af833e7f7db3 ("usb: typec: ucsi: psy: Set current max to 100mA for BC 1.2 and Default")
-> Signed-off-by: Jameson Thies <jthies@google.com>
-> Reviewed-by: Benson Leung <bleung@chromium.org>
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->   drivers/usb/typec/ucsi/psy.c | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-> index 62a9d68bb66d..8ae900c8c132 100644
-> --- a/drivers/usb/typec/ucsi/psy.c
-> +++ b/drivers/usb/typec/ucsi/psy.c
-> @@ -145,6 +145,11 @@ static int ucsi_psy_get_current_max(struct ucsi_connector *con,
->   {
->   	u32 pdo;
->   
-> +	if (!UCSI_CONSTAT(con, CONNECTED)) {
-> +		val->intval = 0;
-> +		return 0;
-> +	}
-> +
->   	switch (UCSI_CONSTAT(con, PWR_OPMODE)) {
->   	case UCSI_CONSTAT_PWR_OPMODE_PD:
->   		if (con->num_pdos > 0) {
-> 
-> base-commit: e40b984b6c4ce3f80814f39f86f87b2a48f2e662
+> > +
+> > +	return 0;
+>
+> return ret perhaps?
 
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+Will be fixed in the next version.
 
 
