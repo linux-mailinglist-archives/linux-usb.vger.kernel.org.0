@@ -1,198 +1,179 @@
-Return-Path: <linux-usb+bounces-29430-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29431-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E33F5BED2B1
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 17:36:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FC8BBED2C0
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 17:39:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B4E4F4E3335
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 15:36:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D00C2421014
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 15:39:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E20C23958C;
-	Sat, 18 Oct 2025 15:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3DD323D29A;
+	Sat, 18 Oct 2025 15:39:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="uKI+mMVR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p885U9Jy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6926B1F4631
-	for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 15:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A63231A21;
+	Sat, 18 Oct 2025 15:39:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760801778; cv=none; b=RjvOoRltRrGlpIabqsB8c2zO9shXEbouRwvKJf5EmI56aVpQDUYVL0w0ooESfLy5jIKd6Q6TSBRbgxTzcK86WLG2SRlTJ3snzmNhdDDjD3RFvO7xiu8+Hrg4/LQRFMttU2jFEPXRSGNVME7aSmhi5d88oQQofhlafw5AiEbY1mE=
+	t=1760801989; cv=none; b=ltBkZAGs0Wk4bcowvfzcUzWTzf43Rk72b9B7uQZLfG1o4iqxezf67m7/9Ou13RYAmgdHWSYezhqVXG6nq9c7ewHQOzhcAr4xthtwBUFCUZpIpnWZWZOfBDMLrwb825EXPIBBeCe8qYGqESzeOniAMttCZBbipPECOmFlIfcz8mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760801778; c=relaxed/simple;
-	bh=HKGMpN/OFBCHOskvCiqGCvOnHaF502mjxLZhN56t/N4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UKlI60ek9ZPF2WW+0V+wR7D/l2JZyScts3D9gcFUUC5MR/v7xutD1kTnLt2XbmuYV0g9iKjzl+Yet0DY0iky9+ZOcnvM3Bg0FvC5E9rGB0iDkzKJuhIivs2VDMoMAUD5LMpDBLw/7IZDMw5pIzpMb462zMu6Kk3Q/zWLXYG+oFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=uKI+mMVR; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-88ec598fa11so428937785a.0
-        for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 08:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1760801775; x=1761406575; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PBehRj2J0Fcvnu3LPHoi98PBaamFYlDHjRLa/b4kuk4=;
-        b=uKI+mMVR/sBedUVlHRn6dAEFZ32+8T87vAWRw9SxoYURMnqM+TtQBu7U/oTtDeE7cl
-         sHZSeuSl7BrMbXXKnLf7CxufIfqprK6w3um6JxEZWMycwGeIEnH6DqMz5gKhgUXc9Nik
-         4YL9sIe3X95EHJfjFfoJV7abQa0Eq3aAbaFMbtmG3McuZU4GpPt393sRBrL95v+1HCme
-         tN8ItdFVMtlERyrtU+a1nZs2hqD2rELl/S13BLy+8HuymbQGoHrwb6mL72v0+ZEcWORW
-         My0kPdg74OFa4Vf3KUry2vaJ6Cov5EXA5RMRTKDYRykix4HjmBlsPmt+WWK9xG3Wzt+9
-         ID0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760801775; x=1761406575;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PBehRj2J0Fcvnu3LPHoi98PBaamFYlDHjRLa/b4kuk4=;
-        b=QRgGFkM9gZmJT9qoI02aGh1lcY5YHG5EhZ5zCikIjkFXuzjUaW60mEq16luakTTGeN
-         fMKxDYxPGVscM+3z2pVZIl/+NZ4Eu8USQrVOxSRgSeH7YMEZoJqCuQJjFmpQ/qS3LsqC
-         t3fw2hLoTP9SYvYtMoWQNOufhORVKV1UbPmgVbQVyK/2ETsvRDsYvYvk8arKwajAHANj
-         iXscHPnLa1x95Pcs59aQlLL8JrIT9Fwfhy2AbbGuQsZcypCyWoEIiqxQBhCFn4aK6Uig
-         hKNk6UpxiZn9GmiDY6QFBD7PdLDWrNOUv+dCyXCL5pkAMdCf334aknF2RArnfsxQQADK
-         HxaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXLJrw0nz+7sClJE5HC7HgHAxlSnqTt5lVD8kN/R1ATu7eD8WdKEUGa8fog0NFIYhjl72WVDBY19Bw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNIxFud+NDPaAluZhpJ0ZWNux3R8G5PNvKFvpjyflfKZmL3+kA
-	27mqmVETk3nnptJVNFe0elEzGnGMdy8gfeyjvhFllruke7ZDcVX9Jrsc8bunVv1CsA==
-X-Gm-Gg: ASbGnct4WQT4qM2sQqJsbDL4YsUDmrFn7DpWOfzgJ++oQOdOoBPWrqtclibkXvgKypu
-	X+Lpt9YrXk+MT2z0f+l5zQxmCwLE4okn2NqtmCvB8NV779xgHaVD6HL51kXEgs4HgiOOHdQkHIu
-	Z9pLdLXR143JMJyzE/3w92LQ+b96od++vfVx+kh3sqKsG+UTlOj5Jpz6HOi5YJW4LKXBLuy2zrT
-	J3MjsYc7Y40fpQj0FlUfxUC4BTtP9/8JXJvINyjJev3ZN6LXxaaYcXC/PkcJXi/d/Fm/Lfr29D9
-	mHQGsYnDzLuS6PDTqN9HkPKCsiNyMixXvqrVxSGSbp4whgB8du1cCPLW/qn4SOzclZfCuzMRNrH
-	M6xb/rxeGsb6VozFiIIAdJh5a5eYN1ueQVsDE0yQUpl5B1gj7+1UU4zal7VJm51JdlF+NJRA/eb
-	HXnQ==
-X-Google-Smtp-Source: AGHT+IFXbMHvjfgGSrYKRcU1sFFL+GQDsN3U1NlV4sor6nqowwjcMnCgwfLW4KImBzuFI7FutWgzXQ==
-X-Received: by 2002:a05:620a:4082:b0:813:3a81:1a49 with SMTP id af79cd13be357-88f0f45255bmr1546091985a.12.1760801775278;
-        Sat, 18 Oct 2025 08:36:15 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::a165])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-891cfb57e3csm185096885a.61.2025.10.18.08.36.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Oct 2025 08:36:14 -0700 (PDT)
-Date: Sat, 18 Oct 2025 11:36:11 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: yicongsrfy@163.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, oliver@neukum.org, pabeni@redhat.com
-Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device driver
- for config selection
-Message-ID: <6640b191-d25b-4c4e-ac67-144357eb5cc3@rowland.harvard.edu>
-References: <20251013110753.0f640774.michal.pecio@gmail.com>
- <20251017024229.1959295-1-yicongsrfy@163.com>
- <db3db4c6-d019-49d0-92ad-96427341589c@rowland.harvard.edu>
- <20251017191511.6dd841e9.michal.pecio@gmail.com>
- <bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
- <20251018172156.69e93897.michal.pecio@gmail.com>
+	s=arc-20240116; t=1760801989; c=relaxed/simple;
+	bh=uPs/OpEf+XULCClITk1PlNX/3UzNgoknxybf2RIh+N0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=te/BzqcMWZRzSL1tLgX3iVqOuviviufBFgaTeUb3EhCJqV89OENPaU3xO7JdHxF77kn+tOMdv6e+uX4wlLQ6uuuCmcvCp8duBSiuJB0Rn6BJ3a4Q/mSGLZVQaQ4ygQBmXcVXGreGsC5iGw3XiIgYwU1tvkA3Dta7eEHSgHoX2iQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p885U9Jy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781D4C116B1;
+	Sat, 18 Oct 2025 15:39:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760801988;
+	bh=uPs/OpEf+XULCClITk1PlNX/3UzNgoknxybf2RIh+N0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=p885U9JyuAkB8hB1yBq/H3SQ5c888kfz+QnPugX0oDzFBWUQFEK3wqCQN+abJ28LX
+	 d3Pyolqqjvd00QvVHsfEtGvgAmO6qPMgRHvdE8ObjybIA0pWcy56vS+Qi3Cq+CLVXB
+	 jWFs/owiDqnbJoONpNo8AZCCWehWY5evFdE02s/eY2dbxNm4ZuVKPYIANcMzhNogfB
+	 B1kmNbO1vly2AI2TidbMsyiglMxI9YPfW2j10we5utTH8/094UqzrkffKTIwpm1vyI
+	 7hqooVSBOJ4dUuVHs4r7km87Q1/NCoIwxbqzHOckzUML9qz3YVRk7NjSkdeLcDV6hW
+	 5KnyxGZaxm4fg==
+Message-ID: <78445973-6a5e-4dd8-a661-4e784af49b4e@kernel.org>
+Date: Sat, 18 Oct 2025 17:39:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251018172156.69e93897.michal.pecio@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 02/10] dt-bindings: phy: qcom,qmp-usb: Add Glymur USB
+ UNI PHY compatible
+To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>, krzk+dt@kernel.org,
+ conor+dt@kernel.org, konrad.dybcio@oss.qualcomm.com,
+ dmitry.baryshkov@oss.qualcomm.com, kishon@kernel.org, vkoul@kernel.org,
+ gregkh@linuxfoundation.org, robh@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251006222002.2182777-1-wesley.cheng@oss.qualcomm.com>
+ <20251006222002.2182777-3-wesley.cheng@oss.qualcomm.com>
+ <f5e4ae02-b8fa-4406-b2e0-3602b07b7e23@kernel.org>
+ <00408896-2e25-2dd1-6e6e-2195317ee7fb@oss.qualcomm.com>
+ <14bc2a85-0f1d-3834-9b9c-32654348603a@oss.qualcomm.com>
+ <387c707e-613d-433b-a76d-16ef10dabc59@kernel.org>
+ <2a70f878-269c-1b40-2e8c-77b5851de9a1@oss.qualcomm.com>
+ <99ab26d3-eb44-401d-8a7c-1d9efd2a1a10@kernel.org>
+ <b2b68430-5127-5eca-6bd8-4af31eb9fbed@oss.qualcomm.com>
+ <bb299df0-58b9-4a6e-9625-305785d38eb4@kernel.org>
+ <da34ecf0-c2eb-2afa-bd4d-9dc30fbe5cf5@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <da34ecf0-c2eb-2afa-bd4d-9dc30fbe5cf5@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Oct 18, 2025 at 05:21:56PM +0200, Michal Pecio wrote:
-> Existing r8152-cfgselector and the planned ax88179-cfgselector
-> implement the following logic:
-> 
-> IF a device has particular IDs
->    (same id_table as in the vendor interface driver)
-> 
-> IF the vendor interface driver is loaded
->    (ensured by loading it together with cfgselector)
-> 
-> IF the vendor driver supports this device
->    (calls internal vendor driver code)
-> 
-> THEN select the vendor configuration
+On 18/10/2025 02:20, Wesley Cheng wrote:
 > 
 > 
-> It was a PITA, but I have a working proof of concept for r8152.
+> On 10/16/2025 9:41 PM, Krzysztof Kozlowski wrote:
+>> On 17/10/2025 02:15, Wesley Cheng wrote:
+>>>>> Technically its all handling the same clock branch (CXO), we have the
+>>>>> TCSR clkref register that allows us to gate the CXO to the USB PHY, as
+>>>>
+>>>>
+>>>> Ah, exactly. Then clkref is not a clock. You need rather proper clock
+>>>> hierarchy.
+>>>>
+>>>>> CXO is shared across several HW blocks, so it allows us to properly
+>>>>> powerdown the PHY even though other clients are voting for CXO on.  Then
+>>>>> we obviously have to remove our vote to the overall CXO, so that it can
+>>>>> potentially be shutdown.
+>>>>>
+>>>>> Maybe we can rename it to "clkref" for the CXO handle and
+>>>>> "clkref_switch" for the TCSRCC handle?
+>>>>
+>>>> Naming is better, but it is still not correct. This is not independent
+>>>> clock signal. It is the same clock.
+>>>>
+>>>
+>>> Hmmm... I guess that's why I kept the same clkref tag, to denote that
+>>> its the same clock, but one is a switch/gate for it.  Would you happen
+>>> to have any suggestions you might have that makes it clearer for
+>>> everyone to understand?
+>> To me it looks like:
+>>
+>> |-----|            |-----------|           |------------------|
+>> |clock|------------|TCSRCC gate|-----------|clkref to this dev|
+>> |-----|            |-----------|           |------------------|
+>>
+>> So you need proper clock controller for TCSR (TCSR Clock Controller, in
+>> short TCSRCC, what a surprise!) which will take input, add gate and
+>> produce clock for this device.
+>>
+>> Nothing non-standard, all Qualcomm SoCs have it, every other platform
+>> has it in some way.
+>>
 > 
-> Still missing is automatic reevaluation of configuration choice when
-> the vendor driver is loaded after device connection (e.g. by udev).
-> Those cfgselectors can do it because it seems that registering a new
-> device (but not interface) driver forces reevaluation.
+> Hi Krzystof,
+> 
+> Yes, the design is exactly how you outlined it above.  How about clkref 
 
-It looks like something else is missing too...
+Hm? There is no connection between the clock and the device. Do you see
+any line going there?
 
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index d29edc7c616a..eaf21c30eac1 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -1119,6 +1119,29 @@ void usb_deregister(struct usb_driver *driver)
->  }
->  EXPORT_SYMBOL_GPL(usb_deregister);
->  
-> +/**
-> + * usb_driver_preferred - check if this is a preferred interface driver
-> + * @drv: interface driver to check (device drivers are ignored)
-> + * @udev: the device we are looking up a driver for
-> + * Context: must be able to sleep
-> + *
-> + * TODO locking?
-> + */
-> +bool usb_driver_preferred(struct device_driver *drv, struct usb_device *udev)
-> +{
-> +	struct usb_driver *usb_drv;
-> +
-> +	if (is_usb_device_driver(drv))
-> +		return false;
-> +
-> +	usb_drv = to_usb_driver(drv);
-> +
-> +	return usb_drv->preferred &&
-> +		usb_device_match_id(udev, usb_drv->id_table) &&
-> +		usb_drv->preferred(udev);
-> +}
-> +EXPORT_SYMBOL_GPL(usb_driver_preferred);
+> for the clock and tcsrcc_switch for the clkref switch?  That removes any 
+> notation that the gate/switch is an actual clock...
 
-> diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
-> index a48994e11ef3..1923e6f4923b 100644
-> --- a/drivers/usb/core/generic.c
-> +++ b/drivers/usb/core/generic.c
-> @@ -49,11 +49,17 @@ static bool is_uac3_config(struct usb_interface_descriptor *desc)
->  	return desc->bInterfaceProtocol == UAC_VERSION_3;
->  }
->  
-> +static int prefer_vendor(struct device_driver *drv, void *data)
-> +{
-> +	return usb_driver_preferred(drv, data);
-> +}
-> +
->  int usb_choose_configuration(struct usb_device *udev)
->  {
->  	int i;
->  	int num_configs;
->  	int insufficient_power = 0;
-> +	bool class_found = false;
->  	struct usb_host_config *c, *best;
->  	struct usb_device_driver *udriver;
->  
-> @@ -169,6 +175,12 @@ int usb_choose_configuration(struct usb_device *udev)
->  #endif
->  		}
->  
-> +		/* Check if we have a preferred vendor driver for this config */
-> +		else if (bus_for_each_drv(&usb_bus_type, NULL, (void *) udev, prefer_vendor)) {
-> +			best = c;
-> +			break;
-> +		}
+You really did not get the point of this entire discussion.
 
-How are prefer_vendor() and usb_driver_preferred() supposed to know 
-which configuration is being considered?
 
-(Also, is prefer_vendor() really needed?  Can't you just pass 
-usb_driver_preferred as the argument to bus_for_each_drv()?  Maybe after 
-changing the type of its second argument to void * instead of struct 
-usb_device *?)
-
-Alan Stern
+Best regards,
+Krzysztof
 
