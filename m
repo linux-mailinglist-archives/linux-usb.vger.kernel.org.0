@@ -1,189 +1,134 @@
-Return-Path: <linux-usb+bounces-29425-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29426-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CAF8BEC293
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 02:20:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9DB3BEC530
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 04:27:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CB183A4DAC
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 00:20:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B2BE1AA734C
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 02:28:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4FD186352;
-	Sat, 18 Oct 2025 00:20:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFCB4214813;
+	Sat, 18 Oct 2025 02:27:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MXPI+bT2"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="efTrg/eo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69A83597B
-	for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 00:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C4020010A
+	for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 02:27:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760746833; cv=none; b=rjU72fi8rrIOQKyDtFwsUtRJWs+BtUc+xd0nncc6ingo/zg4nAEiztZu4ZNpQkAsIDKrO2EBuYyxxOYYBZffMzB0XfwEbZCpVlDc7HgHJ2GcsAz93V74Z5DVp+Azieq3fHImKDVv0Iu8JGHaGK0CidaPbYsH9ZO4Dd8vyvjmHlw=
+	t=1760754462; cv=none; b=ckbB0Z/UHqPME3LCE5K5EOJtRCK1rYiUrCZLKiVIY6mgCfNwRmahkcCh2/9Mc4DfZHG7xpNmjFZkY1j0RDK2NFYleYb5w0M6RDfA+gSY1WsdBeRW6mRNfro+11NGpGVIwxBhbCloJoEDuLgXV8Fr56Bxd1YaPCp3/h6I4amhQU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760746833; c=relaxed/simple;
-	bh=WvLGMq6zaEqJpDFxOd0WICtejDxrRPkTC0W5GIZXWRg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ggUm1eIzNYhaONFAySRfFn+T+UK5v9zcIUipcPG9CUlqPOFXDEPzup4+axsVr+RTkffFJqcwcPs6N7FUPH/Iyf8wACruXn+Ls6CpOO+NxbcxPRSGDx4a0JxBLSGosgEdnpnJ60D8aCKbqd7q1/9575QSR2+flYr8TNpayyXJ19Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MXPI+bT2; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59HJGwno004149
-	for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 00:20:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	DjsyPZCjZ7kk7o9g7SmG+YtODp+fuqqn2GA/QpUkm0c=; b=MXPI+bT2vhUKjU85
-	seAudb4lWbh4zhIYJ4n7mtMLncvAGQy8hEB7AhZh4ouq/KGyZ9aHN1JbfAGLrdVw
-	oS7PK7FhCPB0WeiR469ssPCk0xAUOqdNLnLmWBb7CSpTJhDH7fMYcaBtqFHtI1Yo
-	sU8wdD9Wr/IY41E3KsiOvIeQr3trmAyhp5EOu7zVQe1SVV46xgHAkTshcpI/K0+M
-	YYn0Daz8DLAnXxDpFwt/ayik4CnQ79u9nzUYbaRnK4GZPlQLhuJJAmQoVsBrYe6V
-	5NqccF0tXQgtcSlCTiJiVegzQHZoa/hBV3rCdVBj7SZ93XQkVe1zV/EE4LEm3VAr
-	teVRDw==
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49rw1at932-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 00:20:30 +0000 (GMT)
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-290d860acbcso28513225ad.1
-        for <linux-usb@vger.kernel.org>; Fri, 17 Oct 2025 17:20:30 -0700 (PDT)
+	s=arc-20240116; t=1760754462; c=relaxed/simple;
+	bh=e8SgYXC/sRUXWsOgya55vEos5aeigH8Z+OuvF9YZYi0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=urW0Y/fLKpeGgxCqNk371YatYId8FnIwW5pilToXcPJcPku7n0J7y67oluewLGFQZNepStvY+AcyPt6rPEYcemVwHR4xpu3Sm+5k6YqYp5eAk4a5Bk9lCHEbI1hjHEzlx6LxVfDxRMO8T9QQDAkDfqpzQzOY6Bkbs3pFlYdqlKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=efTrg/eo; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-87c21c5d3eeso28004846d6.2
+        for <linux-usb@vger.kernel.org>; Fri, 17 Oct 2025 19:27:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1760754459; x=1761359259; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yOEczZhXwd8xkJnA7P0xSygINsaZHa1ESl1NQSCsz30=;
+        b=efTrg/eoznjl4xqA5pO28PB3R9BVLa9EJb5+I4zGQA2XrDg4TxUKofSa4fymUWyWV9
+         lefDtkWMU1P/RFvz2aqvFVOZEBfiQchPOFW6IqAzKYrNOK7l4ZK/Ty5jzCkX66tiJHR4
+         FVdMedMmyJLj61fR9eW+85l7ts94n2rvUcEVylbw09W2WvFCgMSw7QqGhE1pyxFF1oaS
+         RJN3fZYeuinoaXTBwKeSdfJ6Dwu0gz0G3a7FejEBZ3rcMRE/rBIdQgfrNpLmp4hTOF0t
+         7tl9a0crf/1dHD4vHFfAxsFyfGufGlu1CVRaKZBldZmEYHnNDaEtcIgZoIKC17KpzJiz
+         3xYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760746830; x=1761351630;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DjsyPZCjZ7kk7o9g7SmG+YtODp+fuqqn2GA/QpUkm0c=;
-        b=K7qT25zaDoZtxH6tb/LwI9x/9wFVvLnkyz5JIO+QWpal3sWV3IOk7TXEbwmMGlWKQl
-         S9iIOFUM7PHhtmgkdfoTA57Q3EOdliiumfT/MItlkjg6Qg5+K44UFg/b2GXMxVmo/IoV
-         8GHgdo8o05aeaaUoLhYBujr8yWoYCXUJU66o+nWLJybNIjYTSM6CEqhzii0NGT2inWPW
-         Xx63Qwh5LzsAcBdyNH46JNkYOk2J6Mv58C3OFyf/xHZIiWt9niPucRfrhK8v9aBk5pz6
-         9wOGeEO8TX2eTsG3uV8s7aQI+xCDQi1yWgPno9rwEwKFr0/54WtCJ8KX2z4gD06zz4FE
-         MnYw==
-X-Forwarded-Encrypted: i=1; AJvYcCUC0B/5LR+gkeemYjnS5muRwTz/PcJ7AFwb6YzMqaMSPbwrlL1Fn8ciffQNgUNnUT8h9HhuobslTso=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAJ2EvoXZGBhnLpwiVFZ5kkdTg96b1pG/UW2JWX/Y3XA76bxi5
-	aZcZiDtzetySXNTA2Nx9TqqIDlIROBzJxX5j+91AwCCYck2z0SE/b80vMszK0JUqPyGdWmgch6B
-	LQbDtog383o8qqHayMbktBlRtfP3TuDxP2uqeYrFcs1CYUPw5tKqcwB6O+S8NPtA=
-X-Gm-Gg: ASbGncti4Cq6JGJrTJgWJZnmakKQ+eI/bPH2DODpYSvj7tECTAG9bvo8sqz4zlzYAfD
-	5RArbwLlb7Fi1deko5m6UfwT4Fm18X4nmadsDIa6rII8bZFtmfWVaoBsy0vh6or5BI25SM9VdjJ
-	P7Ab48iiEXTzoKWAqwGECkNrvKvnLzxya1oAaMZHi1Bne7wDq1B3JkuSfIIIWr2V9u865I4bi13
-	GAYAIQ28Gs+N9Rq2bp4haDz0VMzJwHEXNoIVvMPMassccKgybou7Gw/jKwzGZgO48ejm//ztQJd
-	6lcgTVh8dHvjq1KMMLRizpn2d79+JJ2sapbeEBjt5PfEHm/ixzn5cWRj442jgSePRfwRpVLR1aK
-	Gr07FLSsOr26C6gWdIPxX6uQ/eNWowhGjUHQnd7AH
-X-Received: by 2002:a17:902:f691:b0:278:bfae:3244 with SMTP id d9443c01a7336-290cba4382amr68119115ad.54.1760746829975;
-        Fri, 17 Oct 2025 17:20:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFh0Fb6P08hVeeiHZb3EJs27ayrDuP/pdtr+A0nVEst6kPRjwP0b3hwHB5SCbsS0Kix1+iX4w==
-X-Received: by 2002:a17:902:f691:b0:278:bfae:3244 with SMTP id d9443c01a7336-290cba4382amr68118775ad.54.1760746829523;
-        Fri, 17 Oct 2025 17:20:29 -0700 (PDT)
-Received: from [10.73.53.19] (pat_11.qualcomm.com. [192.35.156.11])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29246fcbe80sm7840285ad.29.2025.10.17.17.20.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Oct 2025 17:20:28 -0700 (PDT)
-Message-ID: <da34ecf0-c2eb-2afa-bd4d-9dc30fbe5cf5@oss.qualcomm.com>
-Date: Fri, 17 Oct 2025 17:20:26 -0700
+        d=1e100.net; s=20230601; t=1760754459; x=1761359259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yOEczZhXwd8xkJnA7P0xSygINsaZHa1ESl1NQSCsz30=;
+        b=lI03VEfxK8pB+KcAveIJ2IMY/JPa/PGUcmqgsCW7NtmD/KuMwOpLaf3X0qlpyo3k9S
+         jYtCYZ6jptISV94xtXt1TjMUqxKDmFYge2TWTtbsgPOnrE9p1G7iT/KbjvrcQi6WUBbQ
+         59xCAoliy4sRmiYkbiTKOM0evdBSa5tms3s9DfvHIT6fryKVekZwY7bBRurGXM0xtDv8
+         I1M58Q9lZ1gQ4SUp96lPTQOlm7LhbhyAkFObjVvqpJ6hNg1Lr1RF2J++5Nmp40x84jev
+         MxoHEBK5OKNtHPH3l4/TzLUS6tFB9/kKUdg5bFUS+vVwugMg6TDWlOAmJy7JCA+2RxeP
+         UJjw==
+X-Forwarded-Encrypted: i=1; AJvYcCXO3aPj/SoM1mhxoxFZOo2X1gk8wLGW/YptfNSq28Ren16G+wc06p1miJjlhDDCsSl8TZUwN7LtNlk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxH7R+ywEWJMdV2uS3aiOleQMVlFJrvdc0hhGXktt9uJqjgCICm
+	aUTci4L8UlNSuqJYNmY8aroJ2D0C8VkLS5ZccoikCrBu+WKcF3V54eF2EnDfwynoIw==
+X-Gm-Gg: ASbGncuESnY4Oay2HZT1FWfLJwcS1sc6Ybf3bm0Ti/uvClrzX0yhyYCD1096BMtgrNP
+	McZeB8kKMzCFzoqCQSq10rHj5emNMRxKToc1HFrvAl7R8IqTLVIR7obVXsCsAXmNY+PxuPmmyBs
+	JFMgLDKM4U5y86yHm/Di9m4W11wCL60BwWqBmfShpbxQyZOO65sOe7LfFKCKw4jUoWte5hDpYKG
+	PwOI7pJAxXTQDUle5Ns3WgbYfCSkYrSSCvD5BjRzVAPca7/DOexDKnu6ZHJy5gWda8rH8cottsa
+	+k9C6ZNEYJr3Lu75KKYBW97zqMF7e1G4n+WgPRKUQhqgHijw72zXQku+gcx9WI9ZkstSmJfi8Tb
+	OFhOh5IFNaAbGhoKOxT3TZb5P0me9oY8PAzYved7vPhxGutUqyLrZ0fhU7zrg4CNTw+GgfqUQ5c
+	1hV7ua3cag/5C9
+X-Google-Smtp-Source: AGHT+IGNnqcR5l/hkRy88RGvYT440C+wDUVsXK7V+zRv6jwKTSry7Du049+ZAGn0/5kzXNZANG5/KA==
+X-Received: by 2002:ad4:5be2:0:b0:81a:236c:c846 with SMTP id 6a1803df08f44-87c207df6d3mr75886946d6.33.1760754459431;
+        Fri, 17 Oct 2025 19:27:39 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::a165])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87d02d8ce5bsm9015696d6.57.2025.10.17.19.27.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Oct 2025 19:27:39 -0700 (PDT)
+Date: Fri, 17 Oct 2025 22:27:35 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: yicongsrfy@163.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, oliver@neukum.org, pabeni@redhat.com
+Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device driver
+ for config selection
+Message-ID: <bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
+References: <20251013110753.0f640774.michal.pecio@gmail.com>
+ <20251017024229.1959295-1-yicongsrfy@163.com>
+ <db3db4c6-d019-49d0-92ad-96427341589c@rowland.harvard.edu>
+ <20251017191511.6dd841e9.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v5 02/10] dt-bindings: phy: qcom,qmp-usb: Add Glymur USB
- UNI PHY compatible
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>, krzk+dt@kernel.org,
-        conor+dt@kernel.org, konrad.dybcio@oss.qualcomm.com,
-        dmitry.baryshkov@oss.qualcomm.com, kishon@kernel.org, vkoul@kernel.org,
-        gregkh@linuxfoundation.org, robh@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20251006222002.2182777-1-wesley.cheng@oss.qualcomm.com>
- <20251006222002.2182777-3-wesley.cheng@oss.qualcomm.com>
- <f5e4ae02-b8fa-4406-b2e0-3602b07b7e23@kernel.org>
- <00408896-2e25-2dd1-6e6e-2195317ee7fb@oss.qualcomm.com>
- <14bc2a85-0f1d-3834-9b9c-32654348603a@oss.qualcomm.com>
- <387c707e-613d-433b-a76d-16ef10dabc59@kernel.org>
- <2a70f878-269c-1b40-2e8c-77b5851de9a1@oss.qualcomm.com>
- <99ab26d3-eb44-401d-8a7c-1d9efd2a1a10@kernel.org>
- <b2b68430-5127-5eca-6bd8-4af31eb9fbed@oss.qualcomm.com>
- <bb299df0-58b9-4a6e-9625-305785d38eb4@kernel.org>
-From: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-In-Reply-To: <bb299df0-58b9-4a6e-9625-305785d38eb4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=K88v3iWI c=1 sm=1 tr=0 ts=68f2dd4e cx=c_pps
- a=cmESyDAEBpBGqyK7t0alAg==:117 a=ZdW6uxA9NKXbfdqeeS2OGA==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=JAPtGALJ81qCqeSEnE8A:9 a=QEXdDO2ut3YA:10 a=1OuFwYUASf3TG4hYMiVC:22
-X-Proofpoint-GUID: bMNArVhPzEgFBBifKFmengkWULI-_Slo
-X-Proofpoint-ORIG-GUID: bMNArVhPzEgFBBifKFmengkWULI-_Slo
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDEzMDAzNSBTYWx0ZWRfXynWqwcszxySl
- fsh2+FLzjm/JY2VQOvt1odRUo62mQw7iANJpE2w5IyCgTdoqiucjulrZtDnmn/Xb9EHqatbeXTu
- 0QQPZFqAwau5apDhwbYWLuZ8m7IBwrZ3FFUQOutXPBSITh+ffFTVH0X6AvICiuws5OyTuDXjftb
- 8Oy1l4AFrFeLWDEu4TQ9eNUeGZDnqwwMUOO26kUyLmC4FbhAgSEQhmlwuYMv9R03vodlx5KF4ml
- b/U08BD8vznpGOI1nq1QKWVuTp9sScWUYNuw4imKY+wB+yqp1msx9nd6oYiHfDFgXEm+yl7D6dn
- 6TI3v9KvLdxOnA4nl0dSw1bsHFzSjO5WtvN1/rOYx1AacBiHsTuh/KS8nHwlJUiSatwFKDdxVht
- ZI7tPGXCk68ArlF5xZXTnpGg1TqqAQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-17_08,2025-10-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 spamscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- adultscore=0 clxscore=1015 bulkscore=0 suspectscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510130035
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251017191511.6dd841e9.michal.pecio@gmail.com>
 
-
-
-On 10/16/2025 9:41 PM, Krzysztof Kozlowski wrote:
-> On 17/10/2025 02:15, Wesley Cheng wrote:
->>>> Technically its all handling the same clock branch (CXO), we have the
->>>> TCSR clkref register that allows us to gate the CXO to the USB PHY, as
->>>
->>>
->>> Ah, exactly. Then clkref is not a clock. You need rather proper clock
->>> hierarchy.
->>>
->>>> CXO is shared across several HW blocks, so it allows us to properly
->>>> powerdown the PHY even though other clients are voting for CXO on.  Then
->>>> we obviously have to remove our vote to the overall CXO, so that it can
->>>> potentially be shutdown.
->>>>
->>>> Maybe we can rename it to "clkref" for the CXO handle and
->>>> "clkref_switch" for the TCSRCC handle?
->>>
->>> Naming is better, but it is still not correct. This is not independent
->>> clock signal. It is the same clock.
->>>
->>
->> Hmmm... I guess that's why I kept the same clkref tag, to denote that
->> its the same clock, but one is a switch/gate for it.  Would you happen
->> to have any suggestions you might have that makes it clearer for
->> everyone to understand?
-> To me it looks like:
+On Fri, Oct 17, 2025 at 07:15:11PM +0200, Michal Pecio wrote:
+> On Fri, 17 Oct 2025 09:10:22 -0400, Alan Stern wrote:
+> > On Fri, Oct 17, 2025 at 10:42:29AM +0800, yicongsrfy@163.com wrote:
+> > > Yes, there are many similar code instances in the USB subsystem.
+> > > However, I'm primarily focused on the networking subsystem,
+> > > so my abstraction work here might not be thorough enough.
+> > > Hopefully, an experienced USB developer may can optimize this issue.  
+> > 
+> > Would it help to have a USB quirks flag that tells the core to prefer 
+> > configurations with a USB_CLASS_VENDOR_SPEC interface class when we 
+> > choose the device's configuration?  Or something similar to that (I'm 
+> > not sure exactly what you are looking for)?
 > 
-> |-----|            |-----------|           |------------------|
-> |clock|------------|TCSRCC gate|-----------|clkref to this dev|
-> |-----|            |-----------|           |------------------|
+> Either that or just patch usb_choose_configuration() to prefer vendor
+> config *if* an interface driver is available. But not 100% sure if that
+> couldn't backfire, so maybe only if the driver asked for it, indeed.
 > 
-> So you need proper clock controller for TCSR (TCSR Clock Controller, in
-> short TCSRCC, what a surprise!) which will take input, add gate and
-> produce clock for this device.
+> I was looking into making a PoC of that (I have r8152 with two configs)
+> but there is a snag: r8152-cfgselector bails out if a vendor-specific
+> check indicates the chip isn't a supported HW revision.
 > 
-> Nothing non-standard, all Qualcomm SoCs have it, every other platform
-> has it in some way.
+> So to to fully replicate r8152-cfgselector, core would neet to get new
+> "pre_probe" callback in the interface driver. It gets complicated.
 > 
+> A less complicated improvement could be moving the common part of all
+> cfgselectors into usbnet. Not sure if it's worth it yet for only two?
 
-Hi Krzystof,
+Without a reasonable clear and quick criterion for deciding when to 
+favor vendor-specific configs in the USB core, there's little I can do.  
+Having a quirks flag should help remove some of the indecision, since 
+such flags are set by hand rather than by an automated procedure.  But 
+I'd still want to have a better idea of exactly what to do when the 
+quirk flag is set.
 
-Yes, the design is exactly how you outlined it above.  How about clkref 
-for the clock and tcsrcc_switch for the clkref switch?  That removes any 
-notation that the gate/switch is an actual clock...
-
-Thanks
-Wesley Cheng
+Alan Stern
 
