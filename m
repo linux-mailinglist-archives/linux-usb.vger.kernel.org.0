@@ -1,298 +1,198 @@
-Return-Path: <linux-usb+bounces-29429-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29430-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39BC8BED287
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 17:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E33F5BED2B1
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 17:36:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 85D364E6352
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 15:22:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B4E4F4E3335
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Oct 2025 15:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7861122B8B0;
-	Sat, 18 Oct 2025 15:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E20C23958C;
+	Sat, 18 Oct 2025 15:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XUcHPUlb"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="uKI+mMVR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F143A221714
-	for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 15:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6926B1F4631
+	for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 15:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760800927; cv=none; b=OYxxlCQQJGWDxP5rzlATF/ay3YvmqGcCtIjzuYB3Fa3zsjUvmQeCiT3q9WW41QA6hzoVfX02g6BgX/rcJixYvNVly8EYFkVtWCZQhUOaOqYnCCsN6kjpjYlTVW6gwfulhBqep90s+Pkj5MekQx0sRNdURO5UqVA/uQX6meC5ItU=
+	t=1760801778; cv=none; b=RjvOoRltRrGlpIabqsB8c2zO9shXEbouRwvKJf5EmI56aVpQDUYVL0w0ooESfLy5jIKd6Q6TSBRbgxTzcK86WLG2SRlTJ3snzmNhdDDjD3RFvO7xiu8+Hrg4/LQRFMttU2jFEPXRSGNVME7aSmhi5d88oQQofhlafw5AiEbY1mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760800927; c=relaxed/simple;
-	bh=nzR01ZPksVG5TQ75xILFz5dk7YmAqDiwHTk56jUV8xA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ePrAUw2D8p+xTEzuDGerdZtnacM+RLxdFabcXyFmGUlsARoyQ+rGEV/HGMsy/zZ7phAFVpiKdQHpNP6PcLOQ1dloWgWI4cXq4uEnjW/z3rKjBAL1KYBgLGJLaQeW6jN/50W4M3nyNSxRbArnVgs3J8DCxFiIsay2LCEC7A4o4M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XUcHPUlb; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b3ee18913c0so528302466b.3
-        for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 08:22:03 -0700 (PDT)
+	s=arc-20240116; t=1760801778; c=relaxed/simple;
+	bh=HKGMpN/OFBCHOskvCiqGCvOnHaF502mjxLZhN56t/N4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UKlI60ek9ZPF2WW+0V+wR7D/l2JZyScts3D9gcFUUC5MR/v7xutD1kTnLt2XbmuYV0g9iKjzl+Yet0DY0iky9+ZOcnvM3Bg0FvC5E9rGB0iDkzKJuhIivs2VDMoMAUD5LMpDBLw/7IZDMw5pIzpMb462zMu6Kk3Q/zWLXYG+oFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=uKI+mMVR; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-88ec598fa11so428937785a.0
+        for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 08:36:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760800921; x=1761405721; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=494+LdB+/vJI0VWXES/E84qAHGDNRCCpp6TfBFduueY=;
-        b=XUcHPUlbD3mdSQgn4Blo3QlO03X3vd1PMP76898oGUyI/GHcw1uUUqPit9DETwiv0l
-         qucKIFFLDjO+BtWdihyegCU05w9/dC6Yt5SLkrvCpdoWhbA/j7aH6oLvlRHs0NOlvySg
-         XeqJUKyCkbVZN4xGSVBiC/sYFwMXYgvayPmPSfHdf8haikz0ycUj7Z901mXUnFGms6E5
-         omp86qBaCRAshmvBsTi9b78zgMgndQzmRD388Jicz5ssIuW5gTiPwwjDmlGibSM/Wr8a
-         Rip2mR+yvxfz0CpAiLnzC8K1lMjXWBOggSDT/8+4Tv1WtSluRcRGr14TNWmp0EtNFSSg
-         ZaAg==
+        d=rowland.harvard.edu; s=google; t=1760801775; x=1761406575; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PBehRj2J0Fcvnu3LPHoi98PBaamFYlDHjRLa/b4kuk4=;
+        b=uKI+mMVR/sBedUVlHRn6dAEFZ32+8T87vAWRw9SxoYURMnqM+TtQBu7U/oTtDeE7cl
+         sHZSeuSl7BrMbXXKnLf7CxufIfqprK6w3um6JxEZWMycwGeIEnH6DqMz5gKhgUXc9Nik
+         4YL9sIe3X95EHJfjFfoJV7abQa0Eq3aAbaFMbtmG3McuZU4GpPt393sRBrL95v+1HCme
+         tN8ItdFVMtlERyrtU+a1nZs2hqD2rELl/S13BLy+8HuymbQGoHrwb6mL72v0+ZEcWORW
+         My0kPdg74OFa4Vf3KUry2vaJ6Cov5EXA5RMRTKDYRykix4HjmBlsPmt+WWK9xG3Wzt+9
+         ID0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760800921; x=1761405721;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=494+LdB+/vJI0VWXES/E84qAHGDNRCCpp6TfBFduueY=;
-        b=K1TlPBu3pvH5CSjP+wXwa10opfN+PejIDtyu7+rG1bhvXkZaMnS8goVvyiAALUIDH3
-         OzqRo5ezKW4Bt5a0RKDQXlgidPPJyPg2/jSlbSNvyKXSnV75A9e2y9+I8/+3wkTNorwq
-         mpS/a/dtlNqJcpHSjwnyUtPTJLUiqztddtr1VwXknwOa4M8N+t53VJofhehxRasCDl9/
-         c8KS+3azM8Df01nPtYzNcCHSoak5tquY9dHhn89c62GrgNQx1CuhEulc2f/DJP5kRCT7
-         xwyHknwg2ZjadjlQKys/JHVoGwlg9hks3QjuxqO90cwlrCf4xvLhmnLVn4LyfiwoB9Uw
-         9Ikg==
-X-Forwarded-Encrypted: i=1; AJvYcCXTL/7RnGBNpFrkF6ser5wWkochs6xarm/HQTYtVL8OfsQ2M7vGZdYD40ZGlUdWa2l3EXyJtKGXFSY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSSbnFfgzrgSDBmGYATuWE5bLzRWDQC8rXv47326UkVZVPiaIz
-	BzXpN97GksHCSuIONsYCakIXLUVIw+Em9jZ3s2tKXasBM6CwysHAO4Oq
-X-Gm-Gg: ASbGncuMjHohFvzNixPA5Nj6ub2Wg8F47W+UtYsSehKfXxSgA/56+yy2YL4cZmCW+dy
-	Rjb7b49/xCep36vBUlgkExDjN0lSCTtF8nnmPJGZj1j1trIMMmeg1g/2sX34rj3h7Gp2Sp6lPEp
-	ehnE8AjOqIgOwoISRlUVmscBky2h76wX3sukLR+GElRmw5DcfTMFX+8oyzOU51z5njt9V82ckAe
-	h2SvUKlvCy4wJDs75hFz/8lioD2xOZBLqjJkCuQ7960mx4q41R0j91YXa3Qpx6PyK73zSj0PJC7
-	jTrd7tbtwgm1N7vXc4vnA7FoCd+YuhyT9/CEZ40+KYmO/cEgKuqqYBATX6m0S+A5SV0kWpKH+sY
-	vlUPztpvLvflie5lGUoiKUlVuwyUqvnA6TZV4ZzLDOfrq1XyhuwLwshNLOP4rAdjoUx3Ed7eWlu
-	rETwEApSoRtaLR99gK
-X-Google-Smtp-Source: AGHT+IFp6+ydXSgicmckei67zciPSd8OF9UxvzlzqRFOwWZKZyk/PUfrsSkmtiGEm/J3CEOfMuPmBA==
-X-Received: by 2002:a17:906:1408:b0:b65:f49a:7b92 with SMTP id a640c23a62f3a-b65f49a7b9cmr250885166b.24.1760800921148;
-        Sat, 18 Oct 2025 08:22:01 -0700 (PDT)
-Received: from foxbook (bey128.neoplus.adsl.tpnet.pl. [83.28.36.128])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b65eb526175sm266480266b.56.2025.10.18.08.21.59
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sat, 18 Oct 2025 08:22:00 -0700 (PDT)
-Date: Sat, 18 Oct 2025 17:21:56 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Alan Stern <stern@rowland.harvard.edu>
+        d=1e100.net; s=20230601; t=1760801775; x=1761406575;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PBehRj2J0Fcvnu3LPHoi98PBaamFYlDHjRLa/b4kuk4=;
+        b=QRgGFkM9gZmJT9qoI02aGh1lcY5YHG5EhZ5zCikIjkFXuzjUaW60mEq16luakTTGeN
+         fMKxDYxPGVscM+3z2pVZIl/+NZ4Eu8USQrVOxSRgSeH7YMEZoJqCuQJjFmpQ/qS3LsqC
+         t3fw2hLoTP9SYvYtMoWQNOufhORVKV1UbPmgVbQVyK/2ETsvRDsYvYvk8arKwajAHANj
+         iXscHPnLa1x95Pcs59aQlLL8JrIT9Fwfhy2AbbGuQsZcypCyWoEIiqxQBhCFn4aK6Uig
+         hKNk6UpxiZn9GmiDY6QFBD7PdLDWrNOUv+dCyXCL5pkAMdCf334aknF2RArnfsxQQADK
+         HxaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLJrw0nz+7sClJE5HC7HgHAxlSnqTt5lVD8kN/R1ATu7eD8WdKEUGa8fog0NFIYhjl72WVDBY19Bw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNIxFud+NDPaAluZhpJ0ZWNux3R8G5PNvKFvpjyflfKZmL3+kA
+	27mqmVETk3nnptJVNFe0elEzGnGMdy8gfeyjvhFllruke7ZDcVX9Jrsc8bunVv1CsA==
+X-Gm-Gg: ASbGnct4WQT4qM2sQqJsbDL4YsUDmrFn7DpWOfzgJ++oQOdOoBPWrqtclibkXvgKypu
+	X+Lpt9YrXk+MT2z0f+l5zQxmCwLE4okn2NqtmCvB8NV779xgHaVD6HL51kXEgs4HgiOOHdQkHIu
+	Z9pLdLXR143JMJyzE/3w92LQ+b96od++vfVx+kh3sqKsG+UTlOj5Jpz6HOi5YJW4LKXBLuy2zrT
+	J3MjsYc7Y40fpQj0FlUfxUC4BTtP9/8JXJvINyjJev3ZN6LXxaaYcXC/PkcJXi/d/Fm/Lfr29D9
+	mHQGsYnDzLuS6PDTqN9HkPKCsiNyMixXvqrVxSGSbp4whgB8du1cCPLW/qn4SOzclZfCuzMRNrH
+	M6xb/rxeGsb6VozFiIIAdJh5a5eYN1ueQVsDE0yQUpl5B1gj7+1UU4zal7VJm51JdlF+NJRA/eb
+	HXnQ==
+X-Google-Smtp-Source: AGHT+IFXbMHvjfgGSrYKRcU1sFFL+GQDsN3U1NlV4sor6nqowwjcMnCgwfLW4KImBzuFI7FutWgzXQ==
+X-Received: by 2002:a05:620a:4082:b0:813:3a81:1a49 with SMTP id af79cd13be357-88f0f45255bmr1546091985a.12.1760801775278;
+        Sat, 18 Oct 2025 08:36:15 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::a165])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-891cfb57e3csm185096885a.61.2025.10.18.08.36.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Oct 2025 08:36:14 -0700 (PDT)
+Date: Sat, 18 Oct 2025 11:36:11 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Michal Pecio <michal.pecio@gmail.com>
 Cc: yicongsrfy@163.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, oliver@neukum.org, pabeni@redhat.com
-Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device
- driver for config selection
-Message-ID: <20251018172156.69e93897.michal.pecio@gmail.com>
-In-Reply-To: <bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
+	edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, oliver@neukum.org, pabeni@redhat.com
+Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device driver
+ for config selection
+Message-ID: <6640b191-d25b-4c4e-ac67-144357eb5cc3@rowland.harvard.edu>
 References: <20251013110753.0f640774.michal.pecio@gmail.com>
-	<20251017024229.1959295-1-yicongsrfy@163.com>
-	<db3db4c6-d019-49d0-92ad-96427341589c@rowland.harvard.edu>
-	<20251017191511.6dd841e9.michal.pecio@gmail.com>
-	<bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
+ <20251017024229.1959295-1-yicongsrfy@163.com>
+ <db3db4c6-d019-49d0-92ad-96427341589c@rowland.harvard.edu>
+ <20251017191511.6dd841e9.michal.pecio@gmail.com>
+ <bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
+ <20251018172156.69e93897.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251018172156.69e93897.michal.pecio@gmail.com>
 
-On Fri, 17 Oct 2025 22:27:35 -0400, Alan Stern wrote:
-> Without a reasonable clear and quick criterion for deciding when to 
-> favor vendor-specific configs in the USB core, there's little I can do.  
-> Having a quirks flag should help remove some of the indecision, since 
-> such flags are set by hand rather than by an automated procedure.  But 
-> I'd still want to have a better idea of exactly what to do when the 
-> quirk flag is set.
+On Sat, Oct 18, 2025 at 05:21:56PM +0200, Michal Pecio wrote:
+> Existing r8152-cfgselector and the planned ax88179-cfgselector
+> implement the following logic:
+> 
+> IF a device has particular IDs
+>    (same id_table as in the vendor interface driver)
+> 
+> IF the vendor interface driver is loaded
+>    (ensured by loading it together with cfgselector)
+> 
+> IF the vendor driver supports this device
+>    (calls internal vendor driver code)
+> 
+> THEN select the vendor configuration
+> 
+> 
+> It was a PITA, but I have a working proof of concept for r8152.
+> 
+> Still missing is automatic reevaluation of configuration choice when
+> the vendor driver is loaded after device connection (e.g. by udev).
+> Those cfgselectors can do it because it seems that registering a new
+> device (but not interface) driver forces reevaluation.
 
-Existing r8152-cfgselector and the planned ax88179-cfgselector
-implement the following logic:
+It looks like something else is missing too...
 
-IF a device has particular IDs
-   (same id_table as in the vendor interface driver)
+> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> index d29edc7c616a..eaf21c30eac1 100644
+> --- a/drivers/usb/core/driver.c
+> +++ b/drivers/usb/core/driver.c
+> @@ -1119,6 +1119,29 @@ void usb_deregister(struct usb_driver *driver)
+>  }
+>  EXPORT_SYMBOL_GPL(usb_deregister);
+>  
+> +/**
+> + * usb_driver_preferred - check if this is a preferred interface driver
+> + * @drv: interface driver to check (device drivers are ignored)
+> + * @udev: the device we are looking up a driver for
+> + * Context: must be able to sleep
+> + *
+> + * TODO locking?
+> + */
+> +bool usb_driver_preferred(struct device_driver *drv, struct usb_device *udev)
+> +{
+> +	struct usb_driver *usb_drv;
+> +
+> +	if (is_usb_device_driver(drv))
+> +		return false;
+> +
+> +	usb_drv = to_usb_driver(drv);
+> +
+> +	return usb_drv->preferred &&
+> +		usb_device_match_id(udev, usb_drv->id_table) &&
+> +		usb_drv->preferred(udev);
+> +}
+> +EXPORT_SYMBOL_GPL(usb_driver_preferred);
 
-IF the vendor interface driver is loaded
-   (ensured by loading it together with cfgselector)
+> diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
+> index a48994e11ef3..1923e6f4923b 100644
+> --- a/drivers/usb/core/generic.c
+> +++ b/drivers/usb/core/generic.c
+> @@ -49,11 +49,17 @@ static bool is_uac3_config(struct usb_interface_descriptor *desc)
+>  	return desc->bInterfaceProtocol == UAC_VERSION_3;
+>  }
+>  
+> +static int prefer_vendor(struct device_driver *drv, void *data)
+> +{
+> +	return usb_driver_preferred(drv, data);
+> +}
+> +
+>  int usb_choose_configuration(struct usb_device *udev)
+>  {
+>  	int i;
+>  	int num_configs;
+>  	int insufficient_power = 0;
+> +	bool class_found = false;
+>  	struct usb_host_config *c, *best;
+>  	struct usb_device_driver *udriver;
+>  
+> @@ -169,6 +175,12 @@ int usb_choose_configuration(struct usb_device *udev)
+>  #endif
+>  		}
+>  
+> +		/* Check if we have a preferred vendor driver for this config */
+> +		else if (bus_for_each_drv(&usb_bus_type, NULL, (void *) udev, prefer_vendor)) {
+> +			best = c;
+> +			break;
+> +		}
 
-IF the vendor driver supports this device
-   (calls internal vendor driver code)
+How are prefer_vendor() and usb_driver_preferred() supposed to know 
+which configuration is being considered?
 
-THEN select the vendor configuration
+(Also, is prefer_vendor() really needed?  Can't you just pass 
+usb_driver_preferred as the argument to bus_for_each_drv()?  Maybe after 
+changing the type of its second argument to void * instead of struct 
+usb_device *?)
 
-
-It was a PITA, but I have a working proof of concept for r8152.
-
-Still missing is automatic reevaluation of configuration choice when
-the vendor driver is loaded after device connection (e.g. by udev).
-Those cfgselectors can do it because it seems that registering a new
-device (but not interface) driver forces reevaluation.
-
----
- drivers/net/usb/r8152.c    | 13 ++++++-------
- drivers/usb/core/driver.c  | 23 +++++++++++++++++++++++
- drivers/usb/core/generic.c | 17 +++++++++++++++--
- include/linux/usb.h        |  6 ++++++
- 4 files changed, 50 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index a22d4bb2cf3b..1b016dd81949 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -10020,6 +10020,11 @@ static void rtl8152_disconnect(struct usb_interface *intf)
- 	}
- }
- 
-+static bool rtl8152_preferred(struct usb_device *udev)
-+{
-+	return __rtl_get_hw_ver(udev) != RTL_VER_UNKNOWN;
-+}
-+
- /* table of devices that work with this driver */
- static const struct usb_device_id rtl8152_table[] = {
- 	/* Realtek */
-@@ -10067,6 +10072,7 @@ static struct usb_driver rtl8152_driver = {
- 	.name =		MODULENAME,
- 	.id_table =	rtl8152_table,
- 	.probe =	rtl8152_probe,
-+	.preferred =	rtl8152_preferred,
- 	.disconnect =	rtl8152_disconnect,
- 	.suspend =	rtl8152_suspend,
- 	.resume =	rtl8152_resume,
-@@ -10119,13 +10125,7 @@ static int __init rtl8152_driver_init(void)
- {
- 	int ret;
- 
--	ret = usb_register_device_driver(&rtl8152_cfgselector_driver, THIS_MODULE);
--	if (ret)
--		return ret;
--
- 	ret = usb_register(&rtl8152_driver);
--	if (ret)
--		usb_deregister_device_driver(&rtl8152_cfgselector_driver);
- 
- 	return ret;
- }
-@@ -10133,7 +10133,6 @@ static int __init rtl8152_driver_init(void)
- static void __exit rtl8152_driver_exit(void)
- {
- 	usb_deregister(&rtl8152_driver);
--	usb_deregister_device_driver(&rtl8152_cfgselector_driver);
- }
- 
- module_init(rtl8152_driver_init);
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index d29edc7c616a..eaf21c30eac1 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1119,6 +1119,29 @@ void usb_deregister(struct usb_driver *driver)
- }
- EXPORT_SYMBOL_GPL(usb_deregister);
- 
-+/**
-+ * usb_driver_preferred - check if this is a preferred interface driver
-+ * @drv: interface driver to check (device drivers are ignored)
-+ * @udev: the device we are looking up a driver for
-+ * Context: must be able to sleep
-+ *
-+ * TODO locking?
-+ */
-+bool usb_driver_preferred(struct device_driver *drv, struct usb_device *udev)
-+{
-+	struct usb_driver *usb_drv;
-+
-+	if (is_usb_device_driver(drv))
-+		return false;
-+
-+	usb_drv = to_usb_driver(drv);
-+
-+	return usb_drv->preferred &&
-+		usb_device_match_id(udev, usb_drv->id_table) &&
-+		usb_drv->preferred(udev);
-+}
-+EXPORT_SYMBOL_GPL(usb_driver_preferred);
-+
- /* Forced unbinding of a USB interface driver, either because
-  * it doesn't support pre_reset/post_reset/reset_resume or
-  * because it doesn't support suspend/resume.
-diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
-index a48994e11ef3..1923e6f4923b 100644
---- a/drivers/usb/core/generic.c
-+++ b/drivers/usb/core/generic.c
-@@ -49,11 +49,17 @@ static bool is_uac3_config(struct usb_interface_descriptor *desc)
- 	return desc->bInterfaceProtocol == UAC_VERSION_3;
- }
- 
-+static int prefer_vendor(struct device_driver *drv, void *data)
-+{
-+	return usb_driver_preferred(drv, data);
-+}
-+
- int usb_choose_configuration(struct usb_device *udev)
- {
- 	int i;
- 	int num_configs;
- 	int insufficient_power = 0;
-+	bool class_found = false;
- 	struct usb_host_config *c, *best;
- 	struct usb_device_driver *udriver;
- 
-@@ -169,6 +175,12 @@ int usb_choose_configuration(struct usb_device *udev)
- #endif
- 		}
- 
-+		/* Check if we have a preferred vendor driver for this config */
-+		else if (bus_for_each_drv(&usb_bus_type, NULL, (void *) udev, prefer_vendor)) {
-+			best = c;
-+			break;
-+		}
-+
- 		/* From the remaining configs, choose the first one whose
- 		 * first interface is for a non-vendor-specific class.
- 		 * Reason: Linux is more likely to have a class driver
-@@ -177,8 +189,9 @@ int usb_choose_configuration(struct usb_device *udev)
- 						USB_CLASS_VENDOR_SPEC &&
- 				(desc && desc->bInterfaceClass !=
- 						USB_CLASS_VENDOR_SPEC)) {
--			best = c;
--			break;
-+			if (!class_found)
-+				best = c;
-+			class_found = true;
- 		}
- 
- 		/* If all the remaining configs are vendor-specific,
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index e85105939af8..1d2c5ebc81ab 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1202,6 +1202,8 @@ extern ssize_t usb_show_dynids(struct usb_dynids *dynids, char *buf);
-  * @post_reset: Called by usb_reset_device() after the device
-  *	has been reset
-  * @shutdown: Called at shut-down time to quiesce the device.
-+ * @preferred: Check if this driver is preferred over generic class drivers
-+ *	applicable to the device. May probe device with control transfers.
-  * @id_table: USB drivers use ID table to support hotplugging.
-  *	Export this with MODULE_DEVICE_TABLE(usb,...).  This must be set
-  *	or your driver's probe function will never get called.
-@@ -1255,6 +1257,8 @@ struct usb_driver {
- 
- 	void (*shutdown)(struct usb_interface *intf);
- 
-+	bool (*preferred)(struct usb_device *udev);
-+
- 	const struct usb_device_id *id_table;
- 	const struct attribute_group **dev_groups;
- 
-@@ -1267,6 +1271,8 @@ struct usb_driver {
- };
- #define	to_usb_driver(d) container_of_const(d, struct usb_driver, driver)
- 
-+extern bool usb_driver_preferred(struct device_driver *drv, struct usb_device *udev);
-+
- /**
-  * struct usb_device_driver - identifies USB device driver to usbcore
-  * @name: The driver name should be unique among USB drivers,
--- 
-2.48.1
+Alan Stern
 
