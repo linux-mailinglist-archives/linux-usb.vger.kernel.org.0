@@ -1,128 +1,110 @@
-Return-Path: <linux-usb+bounces-29438-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29439-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C02BBEEB8C
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 20:54:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44B96BEEB95
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 20:59:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3BF7D4E18C6
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 18:54:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4AB71896BF4
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 19:00:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 179B62EA178;
-	Sun, 19 Oct 2025 18:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C40722EC0B5;
+	Sun, 19 Oct 2025 18:59:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GdgmLnht"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ff+dH/WY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0FE1F463E
-	for <linux-usb@vger.kernel.org>; Sun, 19 Oct 2025 18:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE9952EAB6A
+	for <linux-usb@vger.kernel.org>; Sun, 19 Oct 2025 18:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760900072; cv=none; b=nqkQ/hdwZAe36TDB5zt8Ld1O9U7smM1xI8IunIIRpDuIqPV88tOcsRrzEdtzGXJIxEtlJt60+AeanXet6ICgsBcHXCz8Tv/9KOCB9oSESM2ixHEfCvjMgTCF0aVOXinimZ/11qZcGGkuHdN5LWWxAthvq8pMJVgOaTcbVtg1Znc=
+	t=1760900377; cv=none; b=ZOr+xxc1cBmwsLRMv6IA/YwLC3FZL5UZp/vP1FL+IQZBuGoAsSyBinzzTAxkrI8UuDsVQVTuikgHByioF8FEHewiChhuBkAf3JeRB65m1oVLC/KmzyxX2iFAfmdHgDO/pATv9XK2YFAJ5Bs/IOaoNNUd5VeF68JYdHYMvgzvdxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760900072; c=relaxed/simple;
-	bh=PLkhnL4/Bs7aBOstRl2VvAeRKiBzgyA9LkdJMLjGgY0=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=gZGi74DPyAw5I2e01tMefeY6+qaM9+3DhGeacsKGPWLEUN7KfEmwW7N6tfamF4IuDzCt9xzu1UEWpjW/+oMi1TfAV9SBxRKN3Hqd23PWHS26f1xLuitznCNu8U3uGvbW68cfUMQFP3YYxJ/dxU0E3vHpCdQPvOZQrrEeQzk7zTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GdgmLnht; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0DEF3C4CEE7
-	for <linux-usb@vger.kernel.org>; Sun, 19 Oct 2025 18:54:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760900071;
-	bh=PLkhnL4/Bs7aBOstRl2VvAeRKiBzgyA9LkdJMLjGgY0=;
-	h=From:To:Subject:Date:From;
-	b=GdgmLnht3yQpKVyR9UlifQNhtuqQEwbqx8lOIFfrTpzF5obEM1yOW0J9PzktZo6r9
-	 SaYtjYsTjfpTfu0oD+UK26zxXouwQYZikPkajV4Qjh5syqTu8oO60ALp0OCujwiMj1
-	 0GVD5M591AqAWActEmWe7Q5djllUfIGzIDCY+rUvujU6jUT0W3Fdk/pkXfAtIvNWJ3
-	 DYY5BM+O2WCp8qSvsz/JWwDXPhuYsWfmqwapm4GRVtVyh8Wd37H4od9IGNiqyAqAMA
-	 ReLiNpWDstyYAW2aBR4N3LmCkQQIrRHLVenY1kc0LEwxjtW0HG/v4iuAY+9U9gKWOp
-	 /EEs7RF6kJemA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id EE307C41612; Sun, 19 Oct 2025 18:54:30 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220686] New: REGRESSION: USB devices not recognised when
- plugged to Thunderbolt 4 USB-C ports
-Date: Sun, 19 Oct 2025 18:54:30 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: anonq@tutanota.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys bug_status bug_severity priority
- component assigned_to reporter cf_regression
-Message-ID: <bug-220686-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1760900377; c=relaxed/simple;
+	bh=nj/PwdyUHa3EdM3zA/zRNjpb3Mt3Z/MnFk71LgogL/Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QGljpsfKEl+MDSxjVdec7V0dP4mcOkytbfYDpNPTrf1LKSz156GHlHH6b9wU1pWOtrSY+mm9egLXcZadcePyNxnoIQy2FN7y19Giq/wwMeRjOOC9AmB14HT9qXfAP8iqjNguWL1jQj9PkGcLb79UpSXj769sC7G7nbHCc/laG4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ff+dH/WY; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-280fc0e9f50so6804265ad.3
+        for <linux-usb@vger.kernel.org>; Sun, 19 Oct 2025 11:59:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760900375; x=1761505175; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nj/PwdyUHa3EdM3zA/zRNjpb3Mt3Z/MnFk71LgogL/Y=;
+        b=Ff+dH/WYrF7SlOTBPXwcBru0i1f7ilZrA+ixLMb4+Go0yhP4lG5/0/cek+wndzCs3l
+         gn10Ms4HRaNjJxvxDnHOXXRJSuCAHQ9wFaVvXYNv2l8IvFFoD1mRGUb8reQrhMGRqbQr
+         2A9YI34DmaAUjsTviffyEcOguEMlkWK/9EBuKhFVMvYI1zivlDZ411v4Qmi1pMmLwoen
+         8x1Lfldx15SCFxAU9W8rmZtA+JBzdns6VwTARMkvKaLkE/oGOHdsrCa++x/t7AH+4a/m
+         IasM+KsCbVMSXQSi4DIn1CvaB2kLK7HFUM1QKslGAX6arGlz+mC8mhLy2atFhbC9TFn9
+         bB8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760900375; x=1761505175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nj/PwdyUHa3EdM3zA/zRNjpb3Mt3Z/MnFk71LgogL/Y=;
+        b=E/QF2KD2uSqQBA7p1pgEqwmSQzgbLkZGgF+loSRKMD8FKtSBZDaW9JEn3u5lqX7EQW
+         sViYz02MwTsw3PCuLGRFuhhhAni1v7/wHy0wnK+ghshOOF+kjyb4iRWpCOc7SogO8D6X
+         hIfBVjkcZQMGK54Dyp+ko/TtAr2tTEWrD/l7eL0u5lTKDSLhbzFemAXRVfpwYx3clBTo
+         Wb07NCHQpZQ30SikFsds8sYQ7qEv6f94/3WFOLGKKN5/0BjgcNCNty/ONnKSBHfc2gWW
+         8nabWXtYGVn0lFTZRL6jWBffDKVPzb/o4E2qph5mKMYsnvdyruDWZECsY3yr5EH01o9r
+         RQUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUm8kjEDwOB+tPmckyKj+GnuSn7ObsK5o0AdNA9E2lW7OzF1AZBbO5RQtwddxsDhKB72rHOhaqgKKA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzrdMG54pqo7FoIsHCAe5lCXZNNdUpS0X7oE3vBiHU5VndvyKe
+	E+gO8dWV4qYGnInHKmTDU1/48SyZFJZ0IhyS9D8OqEmaGTdcIh4dx1N3lAeP2BwH+Ueb7Dgka9Z
+	dtGwDKekarHXtYa44N9cdE1Pcn5uISgA=
+X-Gm-Gg: ASbGncs5SRMBIicCBZck145N3HCu/vzswY4p/+JOKiKUnLPYZxHJtvz4Ea/3CrlWgOm
+	8O/cVXWFZ8DIJKaaQGLdc47CcCtnnLOYtNzjgNrQsbuOr27yuTXPJuJAPAeyfj25KdFLte8pr09
+	PZy8hoEmbFrfXP8i5OZ/DVEOzyXowiXbuEMR8izUYf+cKWTnfq/4Vr5aRBw8pTOpQa9HOgMPRka
+	X+1QTHM22V/p5b23hwiKoINI2dJs9yycI8anC+2Zsd8xZCiLTEez3gKQTd+kCaBfoVvkfrUIhPr
+	nKuVPAj0FwEW+zSvoZ4DEMAC+f4i6CbpOpNnYwZfnye6smDZ0/E6oMpa+AH7zdk8cSNxg3B4d2T
+	jpooecUx+YZqZlQ==
+X-Google-Smtp-Source: AGHT+IFUNFNsgIHwngvFwlMG8aMEOLjZJdhe4E9fo3Ad+ao+mbyr4xKCUfGHRwuRI7LG09H3cfLrVwORSg5QxYsl3ks=
+X-Received: by 2002:a17:903:3d0f:b0:274:944f:9d84 with SMTP id
+ d9443c01a7336-290ccaccc47mr69411885ad.11.1760900375198; Sun, 19 Oct 2025
+ 11:59:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20251016231350.1418501-1-ojeda@kernel.org> <2025101758-mystified-prideful-8016@gregkh>
+In-Reply-To: <2025101758-mystified-prideful-8016@gregkh>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 19 Oct 2025 20:59:22 +0200
+X-Gm-Features: AS18NWB0V0r9stVsy6SHvBBPktKhMWz1R1H5p861HWbvzNbwfaAR3voM0H57gac
+Message-ID: <CANiq72nXw4+HesrgNqJjTy6Ji=pVqUMzx7GDO+6U9VYWezTt6Q@mail.gmail.com>
+Subject: Re: [PATCH] rust: usb: fix formatting
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, linux-usb@vger.kernel.org, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220686
+On Fri, Oct 17, 2025 at 7:42=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> I don't rebase my public trees, so I'll queue this up after your changes
+> land.
 
-            Bug ID: 220686
-           Summary: REGRESSION: USB devices not recognised when plugged to
-                    Thunderbolt 4 USB-C ports
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 6.16.12
-          Hardware: Intel
-                OS: Linux
-            Status: NEW
-          Severity: blocking
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: anonq@tutanota.com
-        Regression: Yes
+They landed in mainline, so Linus' tree is again `rustfmt`-clean.
 
-I'm on Linux (Fedora 42)=20
-Kernel 6.14.0-63.fc42.x86_64
+Thanks!
 
-USB controllers are detected:
-
-$ lspci -nn | grep -i thunderbolt
-
-00:07.0 PCI bridge [0604]: Intel Corporation Meteor Lake-P Thunderbolt 4 PCI
-Express Root Port #0 [8086:7ec4] (rev 10)
-00:07.2 PCI bridge [0604]: Intel Corporation Meteor Lake-P Thunderbolt 4 PCI
-Express Root Port #2 [8086:7ec6] (rev 10)
-00:0d.0 USB controller [0c03]: Intel Corporation Meteor Lake-P Thunderbolt 4
-USB Controller [8086:7ec0] (rev 10)
-00:0d.2 USB controller [0c03]: Intel Corporation Meteor Lake-P Thunderbolt 4
-NHI #0 [8086:7ec2] (rev 10)
-00:0d.3 USB controller [0c03]: Intel Corporation Meteor Lake-P Thunderbolt 4
-NHI #1 [8086:7ec3] (rev 10)
-
-All firmware is up-to-date, so is Fedora Linux
-
-When I plug a device in the USB4 port, dmesg doesn't change and the device
-isn't detected at all
-
-
-Booting from kernel 6.14.0-63.fc42.x86_64 works fine
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Cheers,
+Miguel
 
