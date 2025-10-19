@@ -1,164 +1,126 @@
-Return-Path: <linux-usb+bounces-29436-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29437-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46FA5BEE5BA
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 14:56:11 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6162DBEE8E5
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 17:43:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9F1E93494F5
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 12:56:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1050B4E57F7
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 15:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1322EA477;
-	Sun, 19 Oct 2025 12:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 568D82E9753;
+	Sun, 19 Oct 2025 15:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="le5Oghbv"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="aMPOySrg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37522EA474;
-	Sun, 19 Oct 2025 12:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD567082D
+	for <linux-usb@vger.kernel.org>; Sun, 19 Oct 2025 15:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760878565; cv=none; b=qq+SFoWBdT28mVTTPkphlZG3PB5ymfPcX0peqA8mXRwYyYgcYloJH9O0tGKftwZfSrBi3X/Ic/ltW48/BNaMIbHKxAsd9hjGKmz159ZvXBtoa0leTDaZFpHmg70L7Li0S5qJYtByXUkltcDouG7HPSThI2IFwKHHyQKZ0XI1f2M=
+	t=1760888591; cv=none; b=ECfP5aI4cchEHU5fkEodQ2qFCDJWBO0wvNwmFocwoNkZQryX6xRt6J7Ge5UnX/jlR7j1dhUg/uD95l3yz9FH+a9pYY0KRhjKgXMs5F1LeiqUo/oigQ7NqUVN6H0lamWt15Y7rLRnd2NYdE6QBq4+Tsb5nzhr744sXmxWs9Km/c0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760878565; c=relaxed/simple;
-	bh=L99iwiGRSsMMaZ4qJbP5ThO0hitHjHgjeBtbP7eow0g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JzAhxqPKcrsRwXKOkLiBBZs8Qz10mY9oN4pokDIlsjFl6h6lGK0yYaRiypq55lXa9pdEEwZjmK8vYxbahS2RFD0E8zP4AfxD990pZjdN0S/A8DWCMQBaczZBO1PBrRi0UNI4SIusdqCDBKutOAmKLRabmjgFZzf6YBRr0L0tfq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=le5Oghbv; arc=none smtp.client-ip=43.163.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1760878251;
-	bh=oztK+0pOpjsgj+fyUmrVDHpObsG8G9CDzExjQnJ4fQI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=le5OghbvF718IyzPp8XJ5PuBg/ZmqikQ17fKo3nAZgdLE7yQhw2GGTsa1u7WjbiOo
-	 QkPc1Md3ckz8cUPVgrAqxHVrjk6K+GWPF+W7CXMlhKNqYiDxrjEqMFQtarDt9F2Baf
-	 vHjx/0qTfgWEy2WDZpz8UoXc4gB/dGyuNbNPi6F0=
-Received: from [198.18.0.1] ([171.223.89.76])
-	by newxmesmtplogicsvrszc50-0.qq.com (NewEsmtp) with SMTP
-	id CB1924D7; Sun, 19 Oct 2025 20:50:49 +0800
-X-QQ-mid: xmsmtpt1760878249tsaurhgks
-Message-ID: <tencent_F25AF0A47F3182B368AB6AD234AC81D9DB06@qq.com>
-X-QQ-XMAILINFO: MF2s0TKt0BDQyTs4be0pMO1y30Zp12xs/PdjKj3gx6F8hXqLAgXmuOWjYEZrcf
-	 LWfCECx5VxTO7IuVSCrr5Xq2g+5i03978tPHBkj58FVm3+Pm66tzeRZKQ95Zi6xb6LUsuPmvshJC
-	 T5NF7gNFUyUT4hjcCIdMmuRLRmJH5fgNv6Qy2cNVHT84BljaH1/mYUdkGN9o9oSst8q3Gvzwi1P+
-	 0piae209Lkulv3V4hnDoTnabyVTWxlKkPDWu8DzXuNmHBociKBOPcC/HY+GBpmgBN8UMFc2TGEde
-	 UsWK3qNDvDRJX1fhCA1wK3Rcwxli+O0rtonyVIJ8lIaTVviFP5eutlKd6P2h8CAxnbQq06H1CLE/
-	 YhUg8rD3u4MWlT+7R6uGjFXaWbCYgirEmhoXGClQIbY97Ql2h2CrFjMQ70vElGylMSblRYiSoRG7
-	 yfSlbhn7MEBwbfH33SHE3bAwyJFIrV0+PNYlK6t18YsWr3xC1MFqWF5V6G/pB+dtetdgD1wNnEaj
-	 FcSv19U4mTbZpw/1ktIcwrmNbazzgypgyZvQf7UAQsw8qTRgOaUns1uBaClkKXHv9eJ9kgiZ+osu
-	 0vuWWwCzPncenNOARHopndIOeADWFJO6eza8Bj3UQ0H7JZMWRLcuFfnWktAQ2wSb3HvGQvu9YidQ
-	 QEDNiM9DMYPJaUAdXfTsezZle69qshMHD8/wCmsHId+dHXfB+/QV0xBuTNx9oVVtaC6aABsnZXcD
-	 f8WNR8rCeHOh8qlNgReRi44WdZI8fZVBlgDPueP08qF7z2Jdl9b9ZFhkbEg3XRC4QeGleqxD2VI3
-	 g8d2ReVm4JmoplmIZ/n+67PnS4Z9z9Mrm0FxzfE6bnaMD1WICxzWTsfgvWKddtWzZdRt8F49fJWU
-	 WmFyGrq6+Bzu/hDPZCncq0jzgJl6Z0E7xo0AiRAAC59zIrsBDQhYk3lX5cII+Vul1mt8sm308ShV
-	 DXHRA/rZLfd4assW/nMS068Ns60ZTlRX92c5bEeLBpoX4WE0Ovq/ge4rIjB3SQejpUozRt/Dq8Se
-	 zfGNQbrSuL5oAcq5cG9PTZJGhmFFlkxKNBj47l+sT9Sk/C4kW2I7EZgYfazLI=
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-X-OQ-MSGID: <a8f312b7-a752-40bd-b2bd-47baaf0f0187@foxmail.com>
-Date: Sun, 19 Oct 2025 20:50:49 +0800
+	s=arc-20240116; t=1760888591; c=relaxed/simple;
+	bh=VQ497iYA5fWuIs9gGK7e2BMuosuAL51wy9H9qwnogm8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V0jpVBc7Dfw4uMEmXu2JDX9YNtyNfiAi35Wj4I+5dgtgsYrfHx/SaLkPmoBWNZYzbwQTTk4m1h/p8t0JTR61VuKjmPkxUukjDswErGo4KSzg0iiULwrfMlLn7hCLptQK95tTUiKUdaRGMQGOatRsZI8ouOIQbHzI99lirFXcJc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=aMPOySrg; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-87c1f607e72so51899066d6.0
+        for <linux-usb@vger.kernel.org>; Sun, 19 Oct 2025 08:43:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1760888589; x=1761493389; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0peezqQc55okGkFITmR7T6/g2bRwPnKR8F0HghVyajw=;
+        b=aMPOySrg0W6qrB4JGEOjflHwwWqE7Iw0Sm5EwyzzmcBiX0Axo0gj908kBA97zM/fqq
+         DTi0ukGx+d3l/IWjIPkFRxdlJZjT1CEyLKd9yD6+yrpnZ1hyJhGj038Mi/srwDWeCBJC
+         3qsWTajTW98xjjJxG2Qt8C4TgSHYpLNtFkDw1AuFO25VzI0Q+RkwH9t12c49TSede4/N
+         RogrZTyVMiyLuDqzlyOwwvge0Ds39HIUgXihhdiL2qc/1oX1utC2Y4ddUaenUKHlgkRK
+         jaAwNiYGkcBIV3iBUCuTl7Rf84iiXBte+acDP66nhJTO+Ofw2EBxT9C0oR4BETDDjaS+
+         F0Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760888589; x=1761493389;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0peezqQc55okGkFITmR7T6/g2bRwPnKR8F0HghVyajw=;
+        b=FF70UkecSIgOjKW+asXJi6/F7WwU8JpTtdGCAEtakUAcGYZQQRmb7rVcnPnfQZyWuy
+         GO68wzF4qWPH+P9MLvlpT2rhMsL8C5A06cq1oxxQ5Vp16keOOTsD76KS7Duh/DQCveIE
+         F2G/yT2CuembzvuY6+Ep8rBTvmFhh8RMp2/c/v+dhJkmNvfRvheXAlu3l1aTXxhHNzPN
+         XKX369Jcfe1iAjJArMMQk+e2T3Kr6mCyW67ihVUh+vY5yzCDC0PorxJX0zb8fSt1CVSv
+         cH3phePMFcBrTEaOCgx1EenK9PQTazhuzqN9FMn75JeM75ArSSfSu6dGLD3VS98mCrgP
+         4fiA==
+X-Gm-Message-State: AOJu0YzIAdk9nD4DFx1UP7is+i3h7j6Eb1ISdzkeWzYlVmyESxZyn9eV
+	ymCcVC8JBKPMMcxmC+uyCVAFUAjHS9I2DWLnZqLMAeBQaMqrci8hjkvqT/THSzmdB7MDluYCvRJ
+	RETQ=
+X-Gm-Gg: ASbGncuDdjCpy1RmNpHtvWfbaJz5HlKXUlzAeWt5+A35GfTFljFvXvIZKyt/R+7pAOu
+	IUnb6TjAbGVf9+tk4LbBfWULDaV0oXaRXLEdrUR56PhZbPJgKVOuvubkIuti88pQZv3HSV8nvFF
+	H5Wjynfke0bvChhwFs6HyAND6Hwb9aJ/5tD1cqGcJ8XhG0FyEh1ux6cds9tbvQpdGO5sqmwqKHw
+	XkYMwkBXRqx+TvfHrJ7VTNCbZdvq4HjAVCt4/gksuUhQxHN3Wb7pj9RhYVQkCuoCax/iME13C7C
+	BffMcMFOvm09s0qVBKSkq5asL41JmL7IFY+ytv7a4EKiHdAubAGSqLAqVtoTeolN5gzVEJTnUUk
+	RGZRRWo1KUNcFP8Kgmx7eQyGmaxBbK52mUVS+fqHuhcrjjjmU1wDxTsN70ylH3BjVAU3gw1xhPQ
+	sOPQ==
+X-Google-Smtp-Source: AGHT+IFJNeVlNeQaKAFbAbmAfc5xHD7w4+29Ja1zGEQUB0jK7b1zaHKTAdtS+rLpuXzpatbERe2YuA==
+X-Received: by 2002:a05:6214:2465:b0:78e:2582:fe4 with SMTP id 6a1803df08f44-87c202feddemr122905976d6.30.1760888588945;
+        Sun, 19 Oct 2025 08:43:08 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::a165])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87d028a9a48sm34042436d6.43.2025.10.19.08.43.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Oct 2025 08:43:08 -0700 (PDT)
+Date: Sun, 19 Oct 2025 11:43:05 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Julian Sikorski <belegdol@gmail.com>
+Cc: USB list <linux-usb@vger.kernel.org>
+Subject: Re: USB A 3.0 port on Asus Zenbook not recognising the TipToi pen
+Message-ID: <cfc6d2ba-a820-4bd3-990e-7800bce171e2@rowland.harvard.edu>
+References: <1393a6c5-3430-49cb-95e6-b18c0f5328b0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: serial: option: add UNISOC(Spreadtrum) UIS7720
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: johan@kernel.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <tencent_0066A06B7D93DDC53FCE20AD3149F8B01908@qq.com>
- <2025101907-living-zipping-3894@gregkh>
-Content-Language: en-US
-From: Renjun Wang <renjunw0@foxmail.com>
-In-Reply-To: <2025101907-living-zipping-3894@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1393a6c5-3430-49cb-95e6-b18c0f5328b0@gmail.com>
 
-Hi Greg,
+On Sun, Oct 19, 2025 at 08:34:27AM +0200, Julian Sikorski wrote:
+> Hello,
+> 
+> disclaimer: this is not linux-specific as Windows 11 also fails to recognise
+> the devices, but maybe someone has ideas regarding the causes here.
+> I have two TipToi Pens by Ravensburger. These are recognised as
+> 
+> 04d6:e101 Mentor Graphics usbdisk
+> 
+> when plugged into USB C port via USB C to micro B cable. When plugged into
+> the USB A port, the following messages are reported into the journal:
+> 
+> Okt 19 08:19:08 kernel: usb usb3-port2: Cannot enable. Maybe the USB cable
+> is bad?
+> Okt 19 08:19:09 kernel: usb usb3-port2: Cannot enable. Maybe the USB cable
+> is bad?
+> Okt 19 08:19:09 kernel: usb usb3-port2: attempt power cycle
+> Okt 19 08:19:10 kernel: usb usb3-port2: Cannot enable. Maybe the USB cable
+> is bad?
+> Okt 19 08:19:11 kernel: usb usb3-port2: Cannot enable. Maybe the USB cable
+> is bad?
+> Okt 19 08:19:11 kernel: usb usb3-port2: unable to enumerate USB device
+> 
+> I have two pens. I tried two cables delivered with them, as well as a
+> different USB A to micro B cable I had. All exhibit the same issue.
+> Does anyone have any ideas what could be the problem? My first guess is that
+> both the laptop and the pen are slightly off-spec in some strange way, which
+> causes them not to work together. The USB A slot on the laptop works fine
+> with other devices, and the pen works with the laptop if connected to USB C.
 
-On 10/19/25 19:16, Greg KH wrote:
-> On Sun, Oct 19, 2025 at 06:44:38PM +0800, Renjun Wang wrote:
->> Add support for UNISOC(Spreadtrum) UIS7720(A7720) module.
->>
->> T:  Bus=05 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  5 Spd=480 MxCh= 0
->> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
->> P:  Vendor=1782 ProdID=4064 Rev=04.04
->> S:  Manufacturer=Unisoc-phone
->> S:  Product=Unisoc-phone
->> S:  SerialNumber=0123456789ABCDEF
->> C:  #Ifs= 9 Cfg#= 1 Atr=c0 MxPwr=500mA
->> I:  If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
->> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
->> I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
->> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
->> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->>
->> 0&1: RNDIS, 2: LOG, 3: DIAG, 4&5: AT Ports, 6&7: AT2 Ports, 8: ADB
->>
->> Signed-off-by: Renjun Wang <renjunw0@foxmail.com>
->> ---
->>   drivers/usb/serial/option.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
->> index 62e984d20e59..667de914a5eb 100644
->> --- a/drivers/usb/serial/option.c
->> +++ b/drivers/usb/serial/option.c
->> @@ -619,6 +619,7 @@ static void option_instat_callback(struct urb *urb);
->>   #define TOZED_PRODUCT_LT70C			0x4055
->>   /* Luat Air72*U series based on UNISOC UIS8910 uses UNISOC's vendor ID */
->>   #define LUAT_PRODUCT_AIR720U			0x4e00
->> +#define UNISOC_PRODUCT_UIS7720			0x4064
-> Shouldn't this be in sorted order?
->
-> thanks,
->
-> greg k-h
+Have you tried using the pens on a different computer?
 
-I think it is not needed for this. As the information got from UNISOC 
-official website,
-
-these three products are  applied for different solutions(catalogs). 
-UIS8910 is applied for
-
-industrial IoT solutions[1] with 28nm process, and UIS7720 is applied 
-for smart cockpit
-
-solutions[2] with 6nm process.
-
-[1] https://www.unisoc.com/en/solution/IndustryInternectUS/8910DM
-
-[2] https://www.unisoc.com/en/solution/IGCockpitSolutionUS/A7720
-
-
-Best Regards,
-
-Renjun Wang
-
+Alan Stern
 
