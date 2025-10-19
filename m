@@ -1,125 +1,145 @@
-Return-Path: <linux-usb+bounces-29433-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29434-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 985F2BEDF19
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 08:34:38 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FFFABEE39B
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 13:12:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E7AE189C8B4
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 06:35:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 153284E86A8
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 11:12:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4127A22256F;
-	Sun, 19 Oct 2025 06:34:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 563012E7166;
+	Sun, 19 Oct 2025 11:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZaN/LIKb"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="VR8xO4EH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2643F354AFD
-	for <linux-usb@vger.kernel.org>; Sun, 19 Oct 2025 06:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51732DBF73;
+	Sun, 19 Oct 2025 11:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760855672; cv=none; b=n7Cz0/W2B7kdBX7NsOrj+bJRrZW1bkIwX/4HVq2I1RQyGwa89gc1OTOBgZyg+Z7zpqpuFlctfDsSrDlS2BJoNWNxLzq7imZB/8Jz3ub/9wCi/klej2JL9KVq0rZgsBkdFLob1ZR399sGV9MKQSIXHqBb/GLkxOxIYR/6gZQ5a2U=
+	t=1760872353; cv=none; b=KafcXM4jsgm7ZjkDa1wW+BVkygWvCXl0Ol8wGdbJdcXQUOYIh/D/8MjJhHYXr4TWPmxjn2QFxwJqEhjyqcVqy0to6ZRwJL7e8Ms1nhWycc3daDfLC7q7Kj9lI2xK80pO1no0MgYlMSO67aCgc1FDoNPf3UYnoTG8WE9RvOyycNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760855672; c=relaxed/simple;
-	bh=xqE7kNeos6SSQemCLWMoy6bk+u6IBCQAHH/tfpAIy0s=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=q+HyCEDZWo3R8b9YqTilpfdwIGQOrGE3gBtWGj9G8xGEHeRdZz7DkSLNSOp3Wx0i9v3V+JSK28VgxtHdvUE6ez7FPTgRI3BusQ/1/0zLiKzQ17fmBOjzwKBcMp27ubakhX91DrZ3hjKZDnIACHOSysz5Nv9VILUaZHROECUp2zM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZaN/LIKb; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-42706c3b7cfso896726f8f.2
-        for <linux-usb@vger.kernel.org>; Sat, 18 Oct 2025 23:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760855669; x=1761460469; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3JvpWQG4jJrJARqz3WjoG9KDjXp6aWGo4wKhlJ5LLTU=;
-        b=ZaN/LIKbZya5UiAzAl/qfD2kECXdaRHu8Ta82OJduB7zZX1C3u1afObKE8Q/ldnQFo
-         a/svSj2S8h/G5HT5rRhZ0AnR/rDVGdmNHhOFK+nfd4+wmmmVO4ml+shI40/wYrA5A9Kh
-         hyXKjvmQg0d/DMiCv9IXnZFHZtaQJlR9KbjAqTYLoBP0sZLw+jL7JB3GbgeKZJCsmCmk
-         R0cS0tvqhjjUezG0RbQkUEXXLpFgzzMKFm4IIi+1SWgrEsTxH0sSTidlYIz9qsOhe43I
-         nEm7m8IJG1OeRtalCg9QOjyjYMTx4+XgzFNe3dOEQtBLBieaJLg/zQcWRTDUvwU9vFAD
-         kWWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760855669; x=1761460469;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3JvpWQG4jJrJARqz3WjoG9KDjXp6aWGo4wKhlJ5LLTU=;
-        b=hbXDUPfBX8wGX5r0L88vIFM04hd4zuG7dzxp6uXv+QAupMjoFPyjHh149SaTjzVREB
-         +Rd6zdcTBk+cWjApvcEIfS+1kOJdWLnUTcX4gFRiTnHM4vjNhuAPhhPyNHmZrzgFLFfi
-         r23oz3zd8icLdOkamek0voVTMryO/uLeOQgUbejHxd/969K2LTVV3r/zTLvS3tyUhXGA
-         kkDjDFDtsTFglIfa2rD1S1AG2BTWBHMtoDRM8bKBm53kn2eumLVPMVL6PqkVxmOgDP/G
-         X38pjn9gY2oqBuOyfMf917w10uwhpX946t2xekvjmDTqPvWO6l2rJWx4Hb38tN0y+pvT
-         aZjA==
-X-Gm-Message-State: AOJu0YzGIJYqwl9NmsPfWsXbNj9PZfX8de1BYo6ZcS+Wof/OB3pIGGjj
-	LVOjbl8vSSYBAe+nR3YB0wGksONTOJ7PWVtZtB7uHT2OCGYprE/0Egk5J1iLkg==
-X-Gm-Gg: ASbGnctrOUi/BWVp31DE5YYKGe5ixGKb3RnPPefennMnCRurOjXVA2l9aFhEGzPH7KI
-	yuzWG4NHKEivsrk5EnB1V08kpSlI1eBGpH0q1nTTJQ3d/Rvp5au/JpWVQY2aBHZ6J7/0yvyxPG3
-	RLnoIWbnXp0NKXf2qUxobSXfLJ2NH/jVWpMCUtFn1nppOCGNujh20JQmF6caB0kZ5dx2XKiIwAf
-	7jAIQQ1v3i28f2GsQMtYo03qbFepeNkk/SvwwA0KwSSUvo/7lcQMPKzUYu9y8RRi/NOQFlWtuYX
-	4sCgNk+UfAbreqJ479z4OAbLJt2d7QTUz3eiEZF5tLETs6xuC1YWLM9+/JVTsFrTIhVG9yLR00u
-	72SpJgWXI0kPc7gvXHHkv5smmExvz9nQbAfSsADZSb9cvtVy4+9bNkbJeGL8+EIkhOx7ms+n9Dp
-	Eq0Qx5zEGW8xbpxwcYJqXjc8JvuN1lsAhq9lY5ErrGt6CkiiLIlc2vuAaYbMb4
-X-Google-Smtp-Source: AGHT+IFqMW24IaKqRFltFIJWi2XntFDGMbcQH8k9rWSw5Ugk6NYTLITOoK6/ZaJ+Ok2IGYikxeAN/A==
-X-Received: by 2002:a05:6000:2082:b0:425:7e40:1e02 with SMTP id ffacd0b85a97d-42704d49a0amr5227805f8f.7.1760855668872;
-        Sat, 18 Oct 2025 23:34:28 -0700 (PDT)
-Received: from ?IPV6:2a01:41e3:2182:7300:e578:7a53:5a19:5ce8? ([2a01:41e3:2182:7300:e578:7a53:5a19:5ce8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427ea5b3b45sm8635578f8f.11.2025.10.18.23.34.27
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Oct 2025 23:34:28 -0700 (PDT)
-Message-ID: <1393a6c5-3430-49cb-95e6-b18c0f5328b0@gmail.com>
-Date: Sun, 19 Oct 2025 08:34:27 +0200
+	s=arc-20240116; t=1760872353; c=relaxed/simple;
+	bh=ViFDhxXfXqYGFT3ML2m8KILTHvTPJeZwNKyCfUUpwG0=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=pllNxmT5fVC0DDnRt3M46qFHXEQizn1grjQ3P8ZDdNh7SZsT6e0rbgkaDoWIR8QrxXc+KJkWSxNLW1+9DyhZbbdp4YnhUrHBV3Z/SMW7dNSLBMLS/yh5uI3be7vHWXYDzhoBVoJDQBFwIUDiLU/nyv8NnEFyH/N0vNU3bUG1/9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=VR8xO4EH; arc=none smtp.client-ip=162.62.57.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1760872038;
+	bh=d4/SeFKNwjY60mRjWZbXkjpm0iXyRUzZLl6UdTOsZbg=;
+	h=From:To:Cc:Subject:Date;
+	b=VR8xO4EH/hGqTG9sJUSpY/anZDGak0CP8xgqkyJsI/Da9WaBLhO/Aa+lwwb6cbP5B
+	 PLK+HfwCObvZG19ubC3BvDN9lXGSMRzazR2SDcIk0K1SKB5Bo3wFjDF+ZF8Pt4VI53
+	 RwdBR6rSehW9/2HCgggL3Id38hm+31cpM/xLyzu4=
+Received: from localhost.localdomain ([171.223.167.242])
+	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
+	id B300803B; Sun, 19 Oct 2025 18:44:48 +0800
+X-QQ-mid: xmsmtpt1760870688t9qrb6831
+Message-ID: <tencent_0066A06B7D93DDC53FCE20AD3149F8B01908@qq.com>
+X-QQ-XMAILINFO: MRMtjO3A6C9XOfkFTOzMFtqyLznh8cgR5P0BNQ28HEM2W9CEwT7LMJbCNSR8Qg
+	 yVUfcaaF9tiEK3UkvGtuWdugupl6qmBAaub+6fvu/H507cWSGaHTFibtGiEWEmpfullYRiQalK2V
+	 J1pjxTBHIqi3UnEhOJKyFip8GbQLNVYO/TgyFPrfYv6zbTxoODBno56LbGmMB+kr53xgu8kmEQsQ
+	 iBgoDC9iyR8/fK8Wg/kxZvZXBZF0EnUhrQZcvgKYJdg2pM2PmWDutIuNRQfkkXxgemVrB9sixHIW
+	 OWh/w7eacLLHMFVNHZjwvlO4NezWJtwFpEBccNG4e46kg9Y0iCoi4szIZ1sdgaRfaoSo4Tti8Xfq
+	 JyIZYbQzXgXIpPGi/akbOQl3gooxuc2MZkHKbzx3Jz91Ftpzp+hDp1W+X2TcjUPH7ZI5iaMjLgHS
+	 KMnSvFviB5g0xgfJc0oJVTHWydE2T3p4OdnnJgZuix0LoK66q8cD+zp5KfB6ioA/d3BNhSxjDTqu
+	 c/VYQoXTXi34X3Bt8LKp4bWNs1t/Vs6QqKDXNsK/qBerzrCHCzKWWFsvYYK0bq3lN5fj/8ApierL
+	 ewoDIf+Z4HnFHpaNhCsGafm/qJbp8oYsSLWh433ETGzTnBxzS+vNNuvWCGWa9A9cr1lgsQiZHiwM
+	 1jsnWq5mE6HsH+YpH0IVRYdoJu/ripKos8o8V+HsRVANIr8PJh22AtU84otq0YncM7NQr7oJDL7i
+	 q2dhozBR3sQeG4lplkTwJyaUNWUmN15xt1KbkQXJzlDNNuxJK7DMrU/LvqPc86Xmupe6SeiKpse/
+	 TR/E20nkObZVl1yB9vm/u1brZrCRaFHZ7FuhvVBpXzozST9Lf/D86Gm13gDyz1+piA7SEUI5fF2C
+	 fjUN2LO3LCIRMFNKQsykwgnfTGUMxBvpf96S8K/rO+Iom90v6O7EOlcuftaumGRNvAq2R/3J1NBR
+	 Voq/vK3TCl9BGcFak5t57al31pRXFdBZeF7/GihMXfKQAnxVy9FpkfcXn2vRI/cdgF9VOl9n0kF3
+	 ps2eap4e4bGg/t0NGlEJ+azccyXMS8CVOLDQFdBA==
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+From: Renjun Wang <renjunw0@foxmail.com>
+To: johan@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Renjun Wang <renjunw0@foxmail.com>
+Subject: [PATCH] USB: serial: option: add UNISOC(Spreadtrum) UIS7720
+Date: Sun, 19 Oct 2025 18:44:38 +0800
+X-OQ-MSGID: <20251019104438.11167-1-renjunw0@foxmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: USB list <linux-usb@vger.kernel.org>
-From: Julian Sikorski <belegdol@gmail.com>
-Subject: USB A 3.0 port on Asus Zenbook not recognising the TipToi pen
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Add support for UNISOC(Spreadtrum) UIS7720(A7720) module.
 
-disclaimer: this is not linux-specific as Windows 11 also fails to 
-recognise the devices, but maybe someone has ideas regarding the causes 
-here.
-I have two TipToi Pens by Ravensburger. These are recognised as
+T:  Bus=05 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  5 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1782 ProdID=4064 Rev=04.04
+S:  Manufacturer=Unisoc-phone
+S:  Product=Unisoc-phone
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 9 Cfg#= 1 Atr=c0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-04d6:e101 Mentor Graphics usbdisk
+0&1: RNDIS, 2: LOG, 3: DIAG, 4&5: AT Ports, 6&7: AT2 Ports, 8: ADB
 
-when plugged into USB C port via USB C to micro B cable. When plugged 
-into the USB A port, the following messages are reported into the journal:
+Signed-off-by: Renjun Wang <renjunw0@foxmail.com>
+---
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Okt 19 08:19:08 kernel: usb usb3-port2: Cannot enable. Maybe the USB 
-cable is bad?
-Okt 19 08:19:09 kernel: usb usb3-port2: Cannot enable. Maybe the USB 
-cable is bad?
-Okt 19 08:19:09 kernel: usb usb3-port2: attempt power cycle
-Okt 19 08:19:10 kernel: usb usb3-port2: Cannot enable. Maybe the USB 
-cable is bad?
-Okt 19 08:19:11 kernel: usb usb3-port2: Cannot enable. Maybe the USB 
-cable is bad?
-Okt 19 08:19:11 kernel: usb usb3-port2: unable to enumerate USB device
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 62e984d20e59..667de914a5eb 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -619,6 +619,7 @@ static void option_instat_callback(struct urb *urb);
+ #define TOZED_PRODUCT_LT70C			0x4055
+ /* Luat Air72*U series based on UNISOC UIS8910 uses UNISOC's vendor ID */
+ #define LUAT_PRODUCT_AIR720U			0x4e00
++#define UNISOC_PRODUCT_UIS7720			0x4064
+ 
+ /* Device flags */
+ 
+@@ -2467,6 +2468,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9291, 0xff, 0xff, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, LUAT_PRODUCT_AIR720U, 0xff, 0, 0) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, UNISOC_PRODUCT_UIS7720, 0xff, 0, 0) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0530, 0xff),			/* TCL IK512 MBIM */
+ 	  .driver_info = NCTRL(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0640, 0xff),			/* TCL IK512 ECM */
+-- 
+2.39.5
 
-I have two pens. I tried two cables delivered with them, as well as a 
-different USB A to micro B cable I had. All exhibit the same issue.
-Does anyone have any ideas what could be the problem? My first guess is 
-that both the laptop and the pen are slightly off-spec in some strange 
-way, which causes them not to work together. The USB A slot on the 
-laptop works fine with other devices, and the pen works with the laptop 
-if connected to USB C.
-
-Best regards,
-Julian
 
