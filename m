@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-29471-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29472-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0688FBF32DD
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 21:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C0389BF32F5
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 21:21:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EDA6B4F9B2D
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 19:19:53 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A31424E56FE
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 19:21:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 468D22D6E6E;
-	Mon, 20 Oct 2025 19:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60C0472628;
+	Mon, 20 Oct 2025 19:21:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KxKZzs3u"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YMdyY9i6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73402D4B40
-	for <linux-usb@vger.kernel.org>; Mon, 20 Oct 2025 19:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C7B202961
+	for <linux-usb@vger.kernel.org>; Mon, 20 Oct 2025 19:21:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760987989; cv=none; b=tOBiA1R67QnxoyxJ1ifMZdav7ureThFqIL6H4KwP+HDDt4/4oyhW2198DE+PJZnvZsq0wPZaGcY9crC9U2qTDQ/9R2Lyea7F6bhdaaR9StExWmEjVw5IDJV9aJQUMaGCYbaUY6KGjvSZOgbtge5y3oH9dtwAVNLY/tKJflCoUgU=
+	t=1760988091; cv=none; b=gOG5S3hqHmkhs1XF3V6Oj+JzaZN6IcBFHssVy530ufcJuJcHnE+KEEuCDEJNl8zkfLP4Ziz7qcX20tVD9Upi4ytWlrU8qBfksIquOCj8qiKY63oZK4eVPrgPkBUL9SvXlBAWcHxO8s0/LuZ1H7yFjJ2XjAidBiXpi92Zl7hcSO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760987989; c=relaxed/simple;
-	bh=TJc05Or24XK4oVc1GKUj+H24at6HdRT15hZsE4PO+hM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=haqJ79C4IzXqkaYMnL+3buUcyBYJk5LBaToW7W58hhl/WCgqB3SKB0sDuu7mQQX7Dv3A/cFfrc5innubUJNSHOb4mKNMYPW9Pu+PTOU0qISyranjmkv1JkOBB4UZCIcNrax0X9H/94U7PmOa7wcd+6R724tAJ72G7GJ04VAMCSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KxKZzs3u; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1760988091; c=relaxed/simple;
+	bh=v885JAV669WrF8DwkUq8i/L7pjaQdlHISm0bKp/aKDg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=O3BMqa+evIS2Ril2+UbYPvEymxNgazPc84ZDBHXw24/x6jqPwNxuH9U847Ruj1wms6BDY8XOKdkCVpdJVkUBVNY+XXpMbQHNETQZpY/DTY13wBjZ9QklvctOU6GRBktdU6flGJvLLN1bA4VFKTFKW7Gt7J2/7Ec55nEBQZNou/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YMdyY9i6; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760987988; x=1792523988;
+  t=1760988090; x=1792524090;
   h=date:from:to:cc:subject:message-id;
-  bh=TJc05Or24XK4oVc1GKUj+H24at6HdRT15hZsE4PO+hM=;
-  b=KxKZzs3urAu6EFvc74mAE2X7l9jPJkiq18yTx3NFTBbPDmGmsQYgO6tf
-   CZjdu6HNxC8JQPfU9g4uGt0PK8w2y0GSlqyz03+RfK1hoWFLDAC4DvyQL
-   7gHM2++d6MmCAIqqH9SAmJ/PPpuU8vne5K0zemmy8yLniHLa9JW6qmgDg
-   kjNntjFtGe7515hvsfdFn2zmZZ6Nu5WHMpAYPqauTCYJmcqPgGsWdvuM3
-   INWTkUYbGjMkUwYR5MGNPhjXjS7XxHIs1iYuE5avzJ26R6bjojDk58LA7
-   Ev8KSu9qObKmAG7FwepwkUCQSdi0YOC+wdV4Du3Ia2fYo89o38ykDpmkm
-   w==;
-X-CSE-ConnectionGUID: NupJnqwqTECI+1ThU4FTPw==
-X-CSE-MsgGUID: QwLtHk7ARjielsZcwIqKIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="50682534"
+  bh=v885JAV669WrF8DwkUq8i/L7pjaQdlHISm0bKp/aKDg=;
+  b=YMdyY9i6bDrhQ76fWCw6m9y1inTJ22ml7jNl9H6IXooIDELOWVr2HHZ+
+   1P5d+urAJcKhFm+JClb6b4WPsI1QYQ82hGxYBPpmOPCc6Jz8812Hfhsgh
+   d5tZ/w9MkyPsxqalglyQaFRscaGxVu3PeLo8oBXJIk93j+w2HbrNhjVAb
+   Uw+JPx9gwGfO40rpTeZcGwilyLfNVIigJumjLCz7WSBRAr9OHrcMcsk2J
+   6Rc8tmKN81BMWPiikDTYK3snsTAFAE5UyyZCtqC9yxj5dfpaYjXdd0Ukh
+   pJ3UohmZ8BaZNgOqjyFYncqgoL3Cqn2fAb7/GS6dVQF1VXMBnlcynlnhA
+   Q==;
+X-CSE-ConnectionGUID: 9j+Pc0xKQyeC1A8ziPl1Ng==
+X-CSE-MsgGUID: UyweRUtPTkevABiU7YXqVw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="80550111"
 X-IronPort-AV: E=Sophos;i="6.19,243,1754982000"; 
-   d="scan'208";a="50682534"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 12:19:47 -0700
-X-CSE-ConnectionGUID: bdUSZ+abSneH5uI9XXcQJw==
-X-CSE-MsgGUID: WVUvbVTNS5SiafL1JxVo6A==
+   d="scan'208";a="80550111"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 12:21:30 -0700
+X-CSE-ConnectionGUID: TnM5woW5RBSaFwkt94mTvg==
+X-CSE-MsgGUID: HonCIUdfRKGJQMettE/IGQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,243,1754982000"; 
-   d="scan'208";a="183813498"
+   d="scan'208";a="207085525"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 20 Oct 2025 12:19:46 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 20 Oct 2025 12:21:28 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vAvQ0-000A6X-0E;
-	Mon, 20 Oct 2025 19:19:44 +0000
-Date: Tue, 21 Oct 2025 03:19:29 +0800
+	id 1vAvRe-000A6i-0r;
+	Mon, 20 Oct 2025 19:21:26 +0000
+Date: Tue, 21 Oct 2025 03:19:54 +0800
 From: kernel test robot <lkp@intel.com>
 To: Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc: linux-usb@vger.kernel.org
-Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
- 3575254546a27210a4b661ea37fbbfb836c0815d
-Message-ID: <202510210323.a9i0ZJCK-lkp@intel.com>
+Subject: [westeri-thunderbolt:next] BUILD SUCCESS
+ 56bcf64b613127cbccae91d55becf5e5da235cbd
+Message-ID: <202510210348.nPEz5dlG-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -74,21 +74,23 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
-branch HEAD: 3575254546a27210a4b661ea37fbbfb836c0815d  thunderbolt: Add support for Intel Wildcat Lake
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+branch HEAD: 56bcf64b613127cbccae91d55becf5e5da235cbd  thunderbolt: Fix typo in tb_eeprom_ctl_read documentation
 
 elapsed time: 729m
 
-configs tested: 154
+configs tested: 158
 configs skipped: 3
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
 
 tested configs:
+alpha                             allnoconfig    clang-22
 alpha                             allnoconfig    gcc-15.1.0
 alpha                            allyesconfig    gcc-15.1.0
 arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    clang-22
 arc                               allnoconfig    gcc-15.1.0
 arc                              allyesconfig    gcc-15.1.0
 arc                   randconfig-001-20251020    clang-22
@@ -107,6 +109,7 @@ arm                   randconfig-004-20251020    clang-22
 arm                         s3c6400_defconfig    gcc-15.1.0
 arm                         wpcm450_defconfig    gcc-15.1.0
 arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    clang-22
 arm64                             allnoconfig    gcc-15.1.0
 arm64                 randconfig-001-20251020    clang-22
 arm64                 randconfig-002-20251020    clang-22
@@ -115,6 +118,7 @@ arm64                 randconfig-003-20251020    clang-22
 arm64                 randconfig-003-20251020    gcc-8.5.0
 arm64                 randconfig-004-20251020    clang-22
 arm64                 randconfig-004-20251020    gcc-10.5.0
+csky                              allnoconfig    clang-22
 csky                              allnoconfig    gcc-15.1.0
 csky                  randconfig-001-20251020    gcc-15.1.0
 csky                  randconfig-002-20251020    gcc-15.1.0
