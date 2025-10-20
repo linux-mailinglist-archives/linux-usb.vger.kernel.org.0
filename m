@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-29440-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29441-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6752BEED7C
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 23:28:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC8FABEF4D1
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 06:33:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70E7F3BC2E8
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Oct 2025 21:27:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1678188DB98
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 04:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 555811E9B31;
-	Sun, 19 Oct 2025 21:27:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D86286D60;
+	Mon, 20 Oct 2025 04:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CmJrSiD7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AXpZAQPv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAEA220322
-	for <linux-usb@vger.kernel.org>; Sun, 19 Oct 2025 21:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C59F29A1
+	for <linux-usb@vger.kernel.org>; Mon, 20 Oct 2025 04:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760909228; cv=none; b=dwyDcVCw2LLBDSpB8cw4c9U+KAyu445PWxKipF5PrYnyPPNaTA9C8KH9T/GcxqIfdEFNSp7F8VA+Uamzlw9vNSmEXhJk8SvGjpdGZXDQmdj0iiwxUxwNPisLhs4O+k2TnyAFMRaTdpYjyoniQ3Dx3wCgzTnU3M2hXTIWXpwromI=
+	t=1760934824; cv=none; b=adzRw3gjpHxw8Wst+3QfQbV7LlFN8YjhMU61pycnZAEIGD2IrXEvj25wmjUz0f1nFdnOeLtV2nMJZxgHd+cvF+tXAwfa0vfAdOxfVLSPhRapSVCfr/OmTpHX/QQl0nJVeScz2F1Q7PZM7HR9xoU4m5vGC+dAtEYBGlcuHGEGE4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760909228; c=relaxed/simple;
-	bh=iRpqQHhgqFETkFPv79jygXi9Nn1XUjYP12bQPnFvsNI=;
+	s=arc-20240116; t=1760934824; c=relaxed/simple;
+	bh=XtM/t29CBqv6yrm9YZ5I6Dujr/Af3drPdCc/wudNjDQ=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gLh4a2f8gWiMgkvgFNzKRZr7AOwbpbEAc+KKtW0lrL7Vhqyw3JeO9hwTACrFAWQYDHYPexhMiryAd58qq6H0aqwdJBwCjd33DjbOulue8PwdkltS/WpK8Ghd1kX0jILq02nkrY9OPBrM+CIn9wRZEbTa/0BogLgUdg1U/xg/lQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CmJrSiD7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0FD83C4CEE7
-	for <linux-usb@vger.kernel.org>; Sun, 19 Oct 2025 21:27:08 +0000 (UTC)
+	 Content-Type:MIME-Version; b=u226E7H642WGf6Sv0+Uo+9PjKOmZUT+GDE4pUoz8/STErR52Px9E8JwBn7M7hDHL8hywgApUUlkl+0Q39nA5e0sO/w7oNA88K2PuG2WVZRZMWZXRXaOECc1tGiorIN9Xw+j1Mf+hqjIVF3ea1jdIu9R3wXAKKHOSmnVmaUGy3xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AXpZAQPv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D6FB8C4CEFE
+	for <linux-usb@vger.kernel.org>; Mon, 20 Oct 2025 04:33:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760909228;
-	bh=iRpqQHhgqFETkFPv79jygXi9Nn1XUjYP12bQPnFvsNI=;
+	s=k20201202; t=1760934823;
+	bh=XtM/t29CBqv6yrm9YZ5I6Dujr/Af3drPdCc/wudNjDQ=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=CmJrSiD7Ys3XtGPI8Flb3jk2yQ5hIyz+21kGgwvSnnvUit80VEobgEQ+ez001+LuQ
-	 YJsn7bk4P2dTTeaW6Jq1Y61iBfZpiE41/5wvQBZNGaY0sBVGbj8B+lBjHq32+XRjOE
-	 i1U2GzWoKF/cKXJ4zXRwvty6Z5y0MqrQfSQ5ap7U11gnOfL8JeSq5pA0jwlYkrimHr
-	 xMM97s1wVMoBbXQYmcSbWk79z52cyvnszjOx2YShkagBaup8B/HyV0bC3TykPGk7/R
-	 vWpNeGENMg8X1ffUdmGmRx8AQXjeKrKBge0NhN2xlu9toSqwBizr2sodzUIzEdvZEE
-	 G7aHUSbJGXcwQ==
+	b=AXpZAQPvPk2ZhOvPf/ShdUd4Fq6+GnYLhDaLkVIXs53GzokMzxrjsPcAdD0TydWmq
+	 dtXFN7OjdR1EOhUBTk9uQlcqeh5E/zyPPZhJmAEZ8P3VdFwjS5qEj6Yb7UUqo68J62
+	 C/SOE/BuFPAygG3lOuUQvVvNAxh9CUzIfL0CRRKIP68tfFM2lLFtufA5IqVZGPnC6j
+	 eeRldJ0Q96XyAEiQ6teco5taaCAg9V9IWXHbqgQYLKjBn5MORsVY/NNI44V/mpMlZL
+	 9TRVhq+frImpLD5qarHf75BucilbBRgY3/mU1HU+0XNQbZdMmgQ4jdqwkOmbHIsYS2
+	 e9kt2IcWQn1cA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id F0CD2C4160E; Sun, 19 Oct 2025 21:27:07 +0000 (UTC)
+	id C67F0C53BC5; Mon, 20 Oct 2025 04:33:43 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220686] REGRESSION: USB devices not recognised when plugged to
  Thunderbolt 4 USB-C ports
-Date: Sun, 19 Oct 2025 21:27:07 +0000
+Date: Mon, 20 Oct 2025 04:33:43 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -56,14 +56,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Who: anonq@tutanota.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220686-208809-4urvLNmsJb@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220686-208809-Ihi2YxwvIA@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220686-208809@https.bugzilla.kernel.org/>
 References: <bug-220686-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,22 +79,15 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220686
 
-Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
+--- Comment #2 from anonq@tutanota.com ---
+Thanks for clarifying; since I switching from obsolete kernels, I will pin =
+the
+6.14.0-63 one for now in my Fedora
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |michal.pecio@gmail.com
+The correct versions (fedora kernels):
 
---- Comment #1 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-Not sure which kernel version is broken? You listed 6.14.0-63.fc42 twice.
-
-6.14 series is long obsolete, if Fedora still maintains it and screwed up on
--63 revision, that's on them. We don't even know what patches they ship.
-
-If your problem is with upstream 6.16, that's frankly obsolete too, but at
-least well known to anyone here.
-
-Can you double check and specify clearly all known good and bad versions?
+6.14.0-63.fc42.x86_64 -> WORKS
+6.16.12-200.fc42.x86_64 -> BROKEN
 
 --=20
 You may reply to this email to add a comment.
