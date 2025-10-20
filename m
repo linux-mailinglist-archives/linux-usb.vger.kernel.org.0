@@ -1,41 +1,65 @@
-Return-Path: <linux-usb+bounces-29458-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29459-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B713BF0BCF
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 13:08:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B67F2BF0CBA
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 13:20:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 540164F178C
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 11:08:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D9303A7CF2
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 11:20:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A592F83DF;
-	Mon, 20 Oct 2025 11:07:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E1C5257825;
+	Mon, 20 Oct 2025 11:20:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="dXqj5NkZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QmuP3qj6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m21467.qiye.163.com (mail-m21467.qiye.163.com [117.135.214.67])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4853424676B;
-	Mon, 20 Oct 2025 11:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.214.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788A2208D0;
+	Mon, 20 Oct 2025 11:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760958477; cv=none; b=oFa3zmzpxxj9lxNJwLHMOw8SEh/V330ZdyyEzamYZaaEmjI5KCkUTBsdwq33S1U77NbQ6jf20ZViaWEkEivoFbJnBRZAyOe9TTWQ04+tQFVsZZQrLCERQeJzim3I8YtlMdLmVjLTWUvfVbv+9owFZIxJEvgg9PXo+w7Y8qdl/yM=
+	t=1760959234; cv=none; b=R4xnb8LPMeC9igKcea6hcfFsmRJZ+Z+yI6LFNzlPTOzr4M4/4WsVh+WkSHdToIW1jSBNUo2Y5cfEgvxTOpBGlH+f6l5sWLc1yW8c18GiB8i2mXISNJsi2G2mfTIBE5OobqurX8sZhzaLWzlq23v72V8M0tYOWWw71SDHAKTK5F0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760958477; c=relaxed/simple;
-	bh=XR2VwGVUBY0oNp+PAoWlyn373NkPJfO6YjBid3cI/xM=;
+	s=arc-20240116; t=1760959234; c=relaxed/simple;
+	bh=mDRQWXzSYZahm5NMGIH5SvQ3MedKjqzuFcwyoAwpRms=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QaWlY5DJZ0hK93VgLKvxNj+9mznSfz9h1QJfiILy+xvvYslUDrNH0GWggGesZqa1h0ldxN7xzJaUKNy0wV7b8b8qENyYIobBidHZS9PrVGGMeRbFo0HV1HV2q2cZbFb6/AvO9dvgImQ3C4Wyhk62mSU0DKshLVMiN1vt84AvSu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=dXqj5NkZ; arc=none smtp.client-ip=117.135.214.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.149] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 268423cdc;
-	Mon, 20 Oct 2025 19:07:48 +0800 (GMT+08:00)
-Message-ID: <954a67d1-1759-4e18-8eef-3fa14fb3cef5@rock-chips.com>
-Date: Mon, 20 Oct 2025 19:07:46 +0800
+	 In-Reply-To:Content-Type; b=ABkzhOXlyqvNNZagRJQ77HF7AILM9fk7at3DPwEolKmrikJeKgS2A/8IVW2l+iA3amQ5UnvlDyAVl6tIFy7CzXS8xOJPEySF8h0vzuotsmDsoCxJj+ADQbYLLjiaKJC4uSwCGJiKd4S8oboUtBLp3GMH+sJYnwhqlxzwnnoI0ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QmuP3qj6; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760959232; x=1792495232;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mDRQWXzSYZahm5NMGIH5SvQ3MedKjqzuFcwyoAwpRms=;
+  b=QmuP3qj6LbMBcjYWqASEcyvQFw8hricwQmCC2EQh3AO2c6/CT36QPZFE
+   edZmgSuW3ZNSsDob+bkdFh4QulX63ivMXktzxI69rdy5g1gklF0ZvJmya
+   LqX/8gPEhArw7U5oqU+qjfLZKPw20Gxx0ZHAXimXUL3JsAERFIB7PlZ+S
+   DLv/U4jvC0k1C2NyxnFjYzWOg9aLIvjAe0ZC2ci+DGdtMSohNfjfb8YXx
+   gB2QjTb91VhMxhoGS2xVXbxhgh9TUBqnmV92A6cNzDINrGtZWa+or0H8S
+   A7uiAdfo6sVEvQP1KI9lUVAM3bLWe2NO2W/VR8mPzH6DNOY3rMSI5C5JD
+   Q==;
+X-CSE-ConnectionGUID: eUaAnecgTnqtYraKiSwzKA==
+X-CSE-MsgGUID: XToe6vSKSHmmMbcfy48QxQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="62280933"
+X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
+   d="scan'208";a="62280933"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 04:20:31 -0700
+X-CSE-ConnectionGUID: 32/FN154RG6R8K5jqePOCQ==
+X-CSE-MsgGUID: /gMrjbSuRX2ZBPKM9+F/JQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
+   d="scan'208";a="183321724"
+Received: from dalessan-mobl3.ger.corp.intel.com (HELO [10.245.245.17]) ([10.245.245.17])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 04:20:30 -0700
+Message-ID: <7d19444c-930e-4f43-b7bc-00c746d38cc0@linux.intel.com>
+Date: Mon, 20 Oct 2025 14:20:23 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -43,183 +67,81 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/8] usb: typec: Add default HPD device when register
- DisplayPort altmode
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Chaoyi Chen <kernel@airkyi.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
- Diederik de Haas <didi.debian@cknow.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20251016022741.91-1-kernel@airkyi.com>
- <20251016022741.91-2-kernel@airkyi.com> <aPYImGmesrZWwyqh@kuha.fi.intel.com>
+Subject: Re: [PATCH v1] usb: xhci: limit run_graceperiod for only usb 3.0
+ devices
+To: Hongyu Xie <xiehongyu1@kylinos.cn>, mathias.nyman@intel.com
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251017121254.2887283-1-xiehongyu1@kylinos.cn>
 Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <aPYImGmesrZWwyqh@kuha.fi.intel.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20251017121254.2887283-1-xiehongyu1@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9a014dd00203abkunm40e5dafaa0fcfb
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQxlKGVZPGB1KQx1CSU5CSUJWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE
-	9VSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=dXqj5NkZfi6RdQnKgqMUg8BCh/n152sPRHim3KgJLTuoqkgUqNXBIJ1AlymydVKUpz8pF6HwyNm2AetRmBbh9s5l+IGGlsVFCOmPNAyFWUBGqpTYSkwmiZ3vxoKGCHQdHSj3aXmc2X4h5qhyffGPX+Ek0rtr7mj99qONbKoltJ8=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=PW2Gb3KgS1lxfff0TLl++nMBLOL4Uug61XDZnqG+onc=;
-	h=date:mime-version:subject:message-id:from;
 
-Hi Heikki,
+On 10/17/25 15:12, Hongyu Xie wrote:
+> run_graceperiod blocks usb 2.0 devices from auto suspending after
+> xhci_start for 500ms.
+> 
+> Log shows:
+> [   13.387170] xhci_hub_control:1271: xhci-hcd PNP0D10:03: Get port status 7-1 read: 0x2a0, return 0x100
+> [   13.387177] hub_event:5779: hub 7-0:1.0: state 7 ports 1 chg 0000 evt 0000
+> [   13.387182] hub_suspend:3903: hub 7-0:1.0: hub_suspend
+> [   13.387188] hcd_bus_suspend:2250: usb usb7: bus auto-suspend, wakeup 1
+> [   13.387191] hcd_bus_suspend:2279: usb usb7: suspend raced with wakeup event
+> [   13.387193] hcd_bus_resume:2303: usb usb7: usb auto-resume
+> [   13.387296] hub_event:5779: hub 3-0:1.0: state 7 ports 1 chg 0000 evt 0000
+> [   13.393343] handle_port_status:2034: xhci-hcd PNP0D10:02: handle_port_status: starting usb5 port polling.
+> [   13.393353] xhci_hub_control:1271: xhci-hcd PNP0D10:02: Get port status 5-1 read: 0x206e1, return 0x10101
+> [   13.400047] hub_suspend:3903: hub 3-0:1.0: hub_suspend
+> [   13.403077] hub_resume:3948: hub 7-0:1.0: hub_resume
+> [   13.403080] xhci_hub_control:1271: xhci-hcd PNP0D10:03: Get port status 7-1 read: 0x2a0, return 0x100
+> [   13.403085] hub_event:5779: hub 7-0:1.0: state 7 ports 1 chg 0000 evt 0000
+> [   13.403087] hub_suspend:3903: hub 7-0:1.0: hub_suspend
+> [   13.403090] hcd_bus_suspend:2250: usb usb7: bus auto-suspend, wakeup 1
+> [   13.403093] hcd_bus_suspend:2279: usb usb7: suspend raced with wakeup event
+> [   13.403095] hcd_bus_resume:2303: usb usb7: usb auto-resume
+> [   13.405002] handle_port_status:1913: xhci-hcd PNP0D10:04: Port change event, 9-1, id 1, portsc: 0x6e1
+> [   13.405016] hub_activate:1169: usb usb5-port1: status 0101 change 0001
+> [   13.405026] xhci_clear_port_change_bit:658: xhci-hcd PNP0D10:02: clear port1 connect change, portsc: 0x6e1
+> [   13.413275] hcd_bus_suspend:2250: usb usb3: bus auto-suspend, wakeup 1
+> [   13.419081] hub_resume:3948: hub 7-0:1.0: hub_resume
+> [   13.419086] xhci_hub_control:1271: xhci-hcd PNP0D10:03: Get port status 7-1 read: 0x2a0, return 0x100
+> [   13.419095] hub_event:5779: hub 7-0:1.0: state 7 ports 1 chg 0000 evt 0000
+> [   13.419100] hub_suspend:3903: hub 7-0:1.0: hub_suspend
+> [   13.419106] hcd_bus_suspend:2250: usb usb7: bus auto-suspend, wakeup 1
+> [   13.419110] hcd_bus_suspend:2279: usb usb7: suspend raced with wakeup event
+> [   13.419112] hcd_bus_resume:2303: usb usb7: usb auto-resume
+> [   13.420455] handle_port_status:2034: xhci-hcd PNP0D10:04: handle_port_status: starting usb9 port polling.
+> [   13.420493] handle_port_status:1913: xhci-hcd PNP0D10:05: Port change event, 10-1, id 1, portsc: 0x6e1
+> [   13.425332] hcd_bus_suspend:2279: usb usb3: suspend raced with wakeup event
+> [   13.431931] handle_port_status:2034: xhci-hcd PNP0D10:05: handle_port_status: starting usb10 port polling.
+> [   13.435080] hub_resume:3948: hub 7-0:1.0: hub_resume
+> [   13.435084] xhci_hub_control:1271: xhci-hcd PNP0D10:03: Get port status 7-1 read: 0x2a0, return 0x100
+> [   13.435092] hub_event:5779: hub 7-0:1.0: state 7 ports 1 chg 0000 evt 0000
+> [   13.435096] hub_suspend:3903: hub 7-0:1.0: hub_suspend
+> [   13.435102] hcd_bus_suspend:2250: usb usb7: bus auto-suspend, wakeup 1
+> [   13.435106] hcd_bus_suspend:2279: usb usb7: suspend raced with wakeup event
+> 
+> usb7 and other usb 2.0 root hub were rapidly toggling between suspend
+> and resume states. More, "suspend raced with wakeup event" confuses people.
+> 
+> So, limit run_graceperiod for only usb 3.0 devices
+> 
+> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
 
-On 10/20/2025 6:02 PM, Heikki Krogerus wrote:
-> On Thu, Oct 16, 2025 at 10:27:34AM +0800, Chaoyi Chen wrote:
->> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>
->> Add default DRM AUX HPD bridge device when register DisplayPort
->> altmode. That makes it redundant for each Type-C driver to implement
->> a similar registration process in embedded scenarios.
->>
->> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->> ---
->>
->> Changes in v6:
->> - Fix depend in Kconfig.
->>
->> Changes in v5:
->> - Remove the calls related to `drm_aux_hpd_bridge_notify()`.
->> - Place the helper functions in the same compilation unit.
->> - Add more comments about parent device.
->>
->>   drivers/usb/typec/Kconfig         |  2 ++
->>   drivers/usb/typec/class.c         | 26 ++++++++++++++++++++++++++
->>   include/linux/usb/typec_altmode.h |  2 ++
->>   3 files changed, 30 insertions(+)
->>
->> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
->> index 2f80c2792dbd..a6730fbb576b 100644
->> --- a/drivers/usb/typec/Kconfig
->> +++ b/drivers/usb/typec/Kconfig
->> @@ -2,6 +2,8 @@
->>   
->>   menuconfig TYPEC
->>   	tristate "USB Type-C Support"
->> +	depends on DRM || DRM=n
->> +	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
-> This is wrong. DRM should not dictate how this entire subsystem core
-> is configured. The dependency needs to be on the DRM bridge side.
->
-> You can for example use the bus notification there to see when a new
-> alternate mode is being registered, or use some other notification
-> mechanism.
+Sounds reasonable. I don't recall USB 2.0 devices needing this.
 
-Is it a good idea to implement notification functions like drivers/usb/core/notify.c in TCPM, and then let other subsystems (such as DRM) listen to these notifications?
+Hub driver has also changed a bit since the xhci run_graceperiod was added.
+USB 3 hubs are no longer aggressively runtime suspending after resume. See:
+8f5b7e2bec1c usb: hub: fix detection of high tier USB3 devices behind suspended hubs
 
+We could possibly get rid of the whole xhci run_graceperiod by extending the hub driver
+change to cover both init and resume paths.
 
->
-> thanks,
->
->>   	help
->>   	  USB Type-C Specification defines a cable and connector for USB where
->>   	  only one type of plug is supported on both ends, i.e. there will not
->> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
->> index 67a533e35150..e9d7772d1a8f 100644
->> --- a/drivers/usb/typec/class.c
->> +++ b/drivers/usb/typec/class.c
->> @@ -8,14 +8,18 @@
->>   
->>   #include <linux/module.h>
->>   #include <linux/mutex.h>
->> +#include <linux/of.h>
->>   #include <linux/property.h>
->>   #include <linux/slab.h>
->>   #include <linux/string_choices.h>
->>   #include <linux/usb/pd_vdo.h>
->> +#include <linux/usb/typec_dp.h>
->>   #include <linux/usb/typec_mux.h>
->>   #include <linux/usb/typec_retimer.h>
->>   #include <linux/usb.h>
->>   
->> +#include <drm/bridge/aux-bridge.h>
->> +
->>   #include "bus.h"
->>   #include "class.h"
->>   #include "pd.h"
->> @@ -538,6 +542,21 @@ const struct device_type typec_altmode_dev_type = {
->>   	.release = typec_altmode_release,
->>   };
->>   
->> +static void dp_altmode_hpd_device_register(struct typec_altmode *alt)
->> +{
->> +	if (alt->svid != USB_TYPEC_DP_SID)
->> +		return;
->> +
->> +	/*
->> +	 * alt->dev.parent->parent : USB-C controller device
->> +	 * alt->dev.parent         : USB-C connector device
->> +	 */
->> +	alt->hpd_dev = drm_dp_hpd_bridge_register(alt->dev.parent->parent,
->> +						  to_of_node(alt->dev.parent->fwnode));
->> +	if (IS_ERR(alt->hpd_dev))
->> +		alt->hpd_dev = NULL;
->> +}
->> +
->>   static struct typec_altmode *
->>   typec_register_altmode(struct device *parent,
->>   		       const struct typec_altmode_desc *desc)
->> @@ -600,6 +619,13 @@ typec_register_altmode(struct device *parent,
->>   		return ERR_PTR(ret);
->>   	}
->>   
->> +	/*
->> +	 * It is too late to register the HPD device when the DisplayPort
->> +	 * altmode device becomes ready. If the current altmode is DP,
->> +	 * register a static HPD device.
->> +	 */
->> +	dp_altmode_hpd_device_register(&alt->adev);
->> +
->>   	return &alt->adev;
->>   }
->>   
->> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
->> index b3c0866ea70f..acb0af1b9d5d 100644
->> --- a/include/linux/usb/typec_altmode.h
->> +++ b/include/linux/usb/typec_altmode.h
->> @@ -21,6 +21,7 @@ struct typec_altmode_ops;
->>    * @desc: Optional human readable description of the mode
->>    * @ops: Operations vector from the driver
->>    * @cable_ops: Cable operations vector from the driver.
->> + * @hpd_dev: HPD device for DisplayPort
->>    */
->>   struct typec_altmode {
->>   	struct device			dev;
->> @@ -32,6 +33,7 @@ struct typec_altmode {
->>   	char				*desc;
->>   	const struct typec_altmode_ops	*ops;
->>   	const struct typec_cable_ops	*cable_ops;
->> +	struct device			*hpd_dev;
->>   };
->>   
->>   #define to_typec_altmode(d) container_of(d, struct typec_altmode, dev)
->> -- 
->> 2.49.0
+This patch is a good step in that direction
 
--- 
-Best,
-Chaoyi
+Thanks
+Mathias
 
 
