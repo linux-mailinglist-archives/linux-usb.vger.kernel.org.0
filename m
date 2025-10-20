@@ -1,147 +1,119 @@
-Return-Path: <linux-usb+bounces-29459-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29460-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B67F2BF0CBA
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 13:20:42 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEEF8BF0D68
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 13:30:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D9303A7CF2
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 11:20:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 06BD74F3D91
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 11:29:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E1C5257825;
-	Mon, 20 Oct 2025 11:20:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67CDA2FE596;
+	Mon, 20 Oct 2025 11:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QmuP3qj6"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="KD88SiSC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788A2208D0;
-	Mon, 20 Oct 2025 11:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AE22FCBF5
+	for <linux-usb@vger.kernel.org>; Mon, 20 Oct 2025 11:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760959234; cv=none; b=R4xnb8LPMeC9igKcea6hcfFsmRJZ+Z+yI6LFNzlPTOzr4M4/4WsVh+WkSHdToIW1jSBNUo2Y5cfEgvxTOpBGlH+f6l5sWLc1yW8c18GiB8i2mXISNJsi2G2mfTIBE5OobqurX8sZhzaLWzlq23v72V8M0tYOWWw71SDHAKTK5F0=
+	t=1760959726; cv=none; b=mTUYxDcPSUizYVJwrTBmj+23ImTYrD+wRy8UOPKMkNdjvaBUkukvMsYbQdALpvEQ/bvYbT5NSuKbSGkAI0sPem60s2m6O/YPCnYIuq55EdAOEC6yk86fi9ihwcTqvoifhpF+JYMXh9Beypntk2AJu4R+KUJmppEkM5n/rjJfjg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760959234; c=relaxed/simple;
-	bh=mDRQWXzSYZahm5NMGIH5SvQ3MedKjqzuFcwyoAwpRms=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ABkzhOXlyqvNNZagRJQ77HF7AILM9fk7at3DPwEolKmrikJeKgS2A/8IVW2l+iA3amQ5UnvlDyAVl6tIFy7CzXS8xOJPEySF8h0vzuotsmDsoCxJj+ADQbYLLjiaKJC4uSwCGJiKd4S8oboUtBLp3GMH+sJYnwhqlxzwnnoI0ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QmuP3qj6; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760959232; x=1792495232;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=mDRQWXzSYZahm5NMGIH5SvQ3MedKjqzuFcwyoAwpRms=;
-  b=QmuP3qj6LbMBcjYWqASEcyvQFw8hricwQmCC2EQh3AO2c6/CT36QPZFE
-   edZmgSuW3ZNSsDob+bkdFh4QulX63ivMXktzxI69rdy5g1gklF0ZvJmya
-   LqX/8gPEhArw7U5oqU+qjfLZKPw20Gxx0ZHAXimXUL3JsAERFIB7PlZ+S
-   DLv/U4jvC0k1C2NyxnFjYzWOg9aLIvjAe0ZC2ci+DGdtMSohNfjfb8YXx
-   gB2QjTb91VhMxhoGS2xVXbxhgh9TUBqnmV92A6cNzDINrGtZWa+or0H8S
-   A7uiAdfo6sVEvQP1KI9lUVAM3bLWe2NO2W/VR8mPzH6DNOY3rMSI5C5JD
-   Q==;
-X-CSE-ConnectionGUID: eUaAnecgTnqtYraKiSwzKA==
-X-CSE-MsgGUID: XToe6vSKSHmmMbcfy48QxQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="62280933"
-X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="62280933"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 04:20:31 -0700
-X-CSE-ConnectionGUID: 32/FN154RG6R8K5jqePOCQ==
-X-CSE-MsgGUID: /gMrjbSuRX2ZBPKM9+F/JQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="183321724"
-Received: from dalessan-mobl3.ger.corp.intel.com (HELO [10.245.245.17]) ([10.245.245.17])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 04:20:30 -0700
-Message-ID: <7d19444c-930e-4f43-b7bc-00c746d38cc0@linux.intel.com>
-Date: Mon, 20 Oct 2025 14:20:23 +0300
+	s=arc-20240116; t=1760959726; c=relaxed/simple;
+	bh=2Y3zHvVYYIYQnqesMghSGh2XAgx9XoH6mHeizRVZVBg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=WQ3FQTJ/i1Rzk+EX++5bvRJvrop7ZsQGhoSHRnlaNHnLcOLgNtS+m+gYUjGgzHmzlMlPnSNNWzdL8gQV4bquazcNDMC1s3kcgNJUiL+q951J9vC5C1/7ZypaZi+kuGvA+j6CgyGjMY7eX9/Y5gCwMa2X6Hu7P5iL9JN5PBKvtyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=KD88SiSC; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20251020112842epoutp022404410144c26f311c18138f512cefcb~wL4mY6aV91405214052epoutp028
+	for <linux-usb@vger.kernel.org>; Mon, 20 Oct 2025 11:28:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20251020112842epoutp022404410144c26f311c18138f512cefcb~wL4mY6aV91405214052epoutp028
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1760959722;
+	bh=d99WqiMlUBdTn6PeQ7Q3ge6pHf5Tl/n9lfXTYKrLsvU=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=KD88SiSCoV3S38aXH9Bg4ihl0vpPz4M7B1iRxbzMFbcOhpunGfgqY+zYPEb8FZddz
+	 lAufT55YPYHWPR0J8KVpusiVJE4lEn3fJlZDhBdvpph/ct8K9E5+OU4LU60bAP1whr
+	 T5JRHU7X/DcbhocbOyDbm89Dom0wfBOJxV5m0YJ4=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20251020112841epcas5p1a97db509a86daa8f3f9a5963dd333458~wL4lygz6T2814728147epcas5p14;
+	Mon, 20 Oct 2025 11:28:41 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.94]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4cqtV06lXrz6B9m5; Mon, 20 Oct
+	2025 11:28:40 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20251020112840epcas5p28d8eded5200f096e7b80f71899371f2c~wL4kUxNyC0411004110epcas5p2S;
+	Mon, 20 Oct 2025 11:28:40 +0000 (GMT)
+Received: from bose.samsungds.net (unknown [107.108.83.9]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20251020112838epsmtip26e0c8e69e04935bcd5cc27809ad2cd82~wL4ir1jis2749127491epsmtip2Q;
+	Mon, 20 Oct 2025 11:28:38 +0000 (GMT)
+From: Pritam Manohar Sutar <pritam.sutar@samsung.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rosa.pila@samsung.com, dev.tailor@samsung.com, faraz.ata@samsung.com,
+	muhammed.ali@samsung.com, selvarasu.g@samsung.com, Pritam Manohar Sutar
+	<pritam.sutar@samsung.com>
+Subject: [PATCH] usb: dwc3: Allow usb role swich control from userspace
+Date: Mon, 20 Oct 2025 17:07:23 +0530
+Message-Id: <20251020113723.553843-1-pritam.sutar@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] usb: xhci: limit run_graceperiod for only usb 3.0
- devices
-To: Hongyu Xie <xiehongyu1@kylinos.cn>, mathias.nyman@intel.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251017121254.2887283-1-xiehongyu1@kylinos.cn>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20251017121254.2887283-1-xiehongyu1@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20251020112840epcas5p28d8eded5200f096e7b80f71899371f2c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20251020112840epcas5p28d8eded5200f096e7b80f71899371f2c
+References: <CGME20251020112840epcas5p28d8eded5200f096e7b80f71899371f2c@epcas5p2.samsung.com>
 
-On 10/17/25 15:12, Hongyu Xie wrote:
-> run_graceperiod blocks usb 2.0 devices from auto suspending after
-> xhci_start for 500ms.
-> 
-> Log shows:
-> [   13.387170] xhci_hub_control:1271: xhci-hcd PNP0D10:03: Get port status 7-1 read: 0x2a0, return 0x100
-> [   13.387177] hub_event:5779: hub 7-0:1.0: state 7 ports 1 chg 0000 evt 0000
-> [   13.387182] hub_suspend:3903: hub 7-0:1.0: hub_suspend
-> [   13.387188] hcd_bus_suspend:2250: usb usb7: bus auto-suspend, wakeup 1
-> [   13.387191] hcd_bus_suspend:2279: usb usb7: suspend raced with wakeup event
-> [   13.387193] hcd_bus_resume:2303: usb usb7: usb auto-resume
-> [   13.387296] hub_event:5779: hub 3-0:1.0: state 7 ports 1 chg 0000 evt 0000
-> [   13.393343] handle_port_status:2034: xhci-hcd PNP0D10:02: handle_port_status: starting usb5 port polling.
-> [   13.393353] xhci_hub_control:1271: xhci-hcd PNP0D10:02: Get port status 5-1 read: 0x206e1, return 0x10101
-> [   13.400047] hub_suspend:3903: hub 3-0:1.0: hub_suspend
-> [   13.403077] hub_resume:3948: hub 7-0:1.0: hub_resume
-> [   13.403080] xhci_hub_control:1271: xhci-hcd PNP0D10:03: Get port status 7-1 read: 0x2a0, return 0x100
-> [   13.403085] hub_event:5779: hub 7-0:1.0: state 7 ports 1 chg 0000 evt 0000
-> [   13.403087] hub_suspend:3903: hub 7-0:1.0: hub_suspend
-> [   13.403090] hcd_bus_suspend:2250: usb usb7: bus auto-suspend, wakeup 1
-> [   13.403093] hcd_bus_suspend:2279: usb usb7: suspend raced with wakeup event
-> [   13.403095] hcd_bus_resume:2303: usb usb7: usb auto-resume
-> [   13.405002] handle_port_status:1913: xhci-hcd PNP0D10:04: Port change event, 9-1, id 1, portsc: 0x6e1
-> [   13.405016] hub_activate:1169: usb usb5-port1: status 0101 change 0001
-> [   13.405026] xhci_clear_port_change_bit:658: xhci-hcd PNP0D10:02: clear port1 connect change, portsc: 0x6e1
-> [   13.413275] hcd_bus_suspend:2250: usb usb3: bus auto-suspend, wakeup 1
-> [   13.419081] hub_resume:3948: hub 7-0:1.0: hub_resume
-> [   13.419086] xhci_hub_control:1271: xhci-hcd PNP0D10:03: Get port status 7-1 read: 0x2a0, return 0x100
-> [   13.419095] hub_event:5779: hub 7-0:1.0: state 7 ports 1 chg 0000 evt 0000
-> [   13.419100] hub_suspend:3903: hub 7-0:1.0: hub_suspend
-> [   13.419106] hcd_bus_suspend:2250: usb usb7: bus auto-suspend, wakeup 1
-> [   13.419110] hcd_bus_suspend:2279: usb usb7: suspend raced with wakeup event
-> [   13.419112] hcd_bus_resume:2303: usb usb7: usb auto-resume
-> [   13.420455] handle_port_status:2034: xhci-hcd PNP0D10:04: handle_port_status: starting usb9 port polling.
-> [   13.420493] handle_port_status:1913: xhci-hcd PNP0D10:05: Port change event, 10-1, id 1, portsc: 0x6e1
-> [   13.425332] hcd_bus_suspend:2279: usb usb3: suspend raced with wakeup event
-> [   13.431931] handle_port_status:2034: xhci-hcd PNP0D10:05: handle_port_status: starting usb10 port polling.
-> [   13.435080] hub_resume:3948: hub 7-0:1.0: hub_resume
-> [   13.435084] xhci_hub_control:1271: xhci-hcd PNP0D10:03: Get port status 7-1 read: 0x2a0, return 0x100
-> [   13.435092] hub_event:5779: hub 7-0:1.0: state 7 ports 1 chg 0000 evt 0000
-> [   13.435096] hub_suspend:3903: hub 7-0:1.0: hub_suspend
-> [   13.435102] hcd_bus_suspend:2250: usb usb7: bus auto-suspend, wakeup 1
-> [   13.435106] hcd_bus_suspend:2279: usb usb7: suspend raced with wakeup event
-> 
-> usb7 and other usb 2.0 root hub were rapidly toggling between suspend
-> and resume states. More, "suspend raced with wakeup event" confuses people.
-> 
-> So, limit run_graceperiod for only usb 3.0 devices
-> 
-> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+There is a possibility of user needs for USB mode switching on boards
+that lack external hardware support for dynamic host/device role
+detection.
 
-Sounds reasonable. I don't recall USB 2.0 devices needing this.
+Add an `allow_userspace_control` flag to handle such cases. When
+enabled, it exposes a sysfs attribute that allows userspace to switch
+the USB role manually between host and device. This provides flexibility
+for platforms that cannot rely on hardware-based mode detection.
 
-Hub driver has also changed a bit since the xhci run_graceperiod was added.
-USB 3 hubs are no longer aggressively runtime suspending after resume. See:
-8f5b7e2bec1c usb: hub: fix detection of high tier USB3 devices behind suspended hubs
+The role switch can be done as below
+echo host > /sys/class/usb_role/<ADDR>.usb-role-switch/role
+echo device > /sys/class/usb_role/<ADDR>.usb-role-switch/role
 
-We could possibly get rid of the whole xhci run_graceperiod by extending the hub driver
-change to cover both init and resume paths.
+Signed-off-by: Pritam Manohar Sutar <pritam.sutar@samsung.com>
+---
+ drivers/usb/dwc3/drd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-This patch is a good step in that direction
-
-Thanks
-Mathias
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index 4c91240eb429..589bbeb27454 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -515,6 +515,7 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
+ 	dwc3_role_switch.set = dwc3_usb_role_switch_set;
+ 	dwc3_role_switch.get = dwc3_usb_role_switch_get;
+ 	dwc3_role_switch.driver_data = dwc;
++	dwc3_role_switch.allow_userspace_control = true;
+ 	dwc->role_sw = usb_role_switch_register(dwc->dev, &dwc3_role_switch);
+ 	if (IS_ERR(dwc->role_sw))
+ 		return PTR_ERR(dwc->role_sw);
+-- 
+2.34.1
 
 
