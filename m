@@ -1,166 +1,182 @@
-Return-Path: <linux-usb+bounces-29466-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29467-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A53AFBF2469
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 18:01:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07C47BF2481
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 18:02:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91C6F421AB5
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 15:59:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD98B3B670D
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 16:00:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BB127B330;
-	Mon, 20 Oct 2025 15:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B66F283C89;
+	Mon, 20 Oct 2025 16:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RNRGioMf"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="MAZItxP1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1D9279DA2
-	for <linux-usb@vger.kernel.org>; Mon, 20 Oct 2025 15:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7956C280332;
+	Mon, 20 Oct 2025 16:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760975973; cv=none; b=J6MezvNLMwe4TPR/XTUwJ+Ia4qSHzUus0mPmbhzPC3HggS2s02N4Z+nDb1vKpWEeJj+a/zWi/kJ+8mvdK7ff8krnkSETRUdcOwOlZz6QPfkrRLePln9hh409Azl6P95BFYeYILrR69zI2FrspIay9PEc15eZZ1BJNY3EvqEorzA=
+	t=1760976022; cv=none; b=o+4U39ho1l/CYrquw/z1SERoPCfRW1fM8sB4+VzQdRSl0IzrCFNQl2jvHty79Jcda3NZ+eOHRgePwNQ5m2gVmamRGFtbnb1V5bv7WZo7aNtHyG5Fb5E0njkaVE+8Jssz3wTxL+633b+QNIphAI+3TQrZnh8TmjjRf8chuejtk5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760975973; c=relaxed/simple;
-	bh=AlDvcD9cvxmMZ6FlYffLLHdIC2zxgQvA/MqWm52xXCo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VlYBl10CS7brINX7M7Xrueafx3XoHTjyez1r6JiLzMQMBtA7vIY4Fc5eHtdAEZJkkftPb4PO/1QJriM4fQMpJpxNKmUGwt3LkjF7H+BwpKp0KGbxroi52TJ9prkt3oKMGW9g8P65VDiwbDrEBGrj/VYAfzLHslu8lcQ5hea3X+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RNRGioMf; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-36d77ae9de5so42575371fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 20 Oct 2025 08:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760975970; x=1761580770; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0pmrut9vzQewm/iu1qN7J3aMf6a3LdQNxNG+gDEApfU=;
-        b=RNRGioMf/ANu9iBnyZFkqpy+0wsKogiHXzUWMLAJ5C1SOggLAuuYAnTGiWJds6zaNN
-         eZzEGpnTci0x2Q4u1T3bVHPUUuHmRqEvLNM2jOzmQZ2v7t9IdyzvXuzgK+1BFW5uSs1H
-         Bx0rCMwGLclXUG9Xio+opaF8VaAZE9uDzDOWVldgXUqIdp9rJWzjq6CRKH6tdtpJpJts
-         S5cmmA/bx9GAuFeeM6uwTdC3xgdFFGqGFK8uHwezMLEiaxsvWiudo5c51tctdP/LNVH8
-         ciIwKdaubk2EZ3aqtn5BzgcOe1t2kuISfCAyvln+MEYp61ByuGOekO6suuDaNkkeVJxw
-         bJRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760975970; x=1761580770;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0pmrut9vzQewm/iu1qN7J3aMf6a3LdQNxNG+gDEApfU=;
-        b=LoHXMIzzEngdO+vYyrdX0UkQf93N2efXfouj9cHdJ6sG2mFB3gRVxt4SFESso/EK/8
-         HJd0qdY6qSgKyK7vNi/6a0mrmr3EvdIPWEo2SRYcnwhaZUxfqpj2oIrQ9QEo1JdkNdNg
-         /COS+y+zyzkOEKKYyDj/+viPQ3XfWsfXqar0dbn0r3vbwa+sOmZ89qoctS9QoMZCcwQi
-         bgPxIW3RrLQiJqdaYE71/OwS9eUGlY2wg3GXPl/2oAMG+41jeYzZ2iTBkrB/Ho5yZKf8
-         PEC6lUTHAGezddMtTROdNR75iqi3h7/Mq30iLkw9/EdlbagmIOq878QiDBp+lO9EiLWT
-         RxPA==
-X-Forwarded-Encrypted: i=1; AJvYcCUEqizz9qsdvKDsgj6ehhpVapQXJGkDfChMQ10VeohpkyiIse4/+Ab1nkzuHoRmBtBDBKp2yIjxBEU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXphSdzdT6LcAO3+Y90mmy960X39pCOzS9rFyXFWn9LRSnKng7
-	6dYuyeBYwVI0i7TgWyx+aHoz4suE9Pm6Gbcvfi2rUDg0M/bQ3hx+59Ow
-X-Gm-Gg: ASbGncvDQlZBhC1LsKhsAJWl/GckcmEJNdUcMeeZ6ClQGkpwDwEnnOdZWVMRkvc2ENP
-	UJfavITXR/eqsYIpIdCFoSHo1eGwkTRsZRMqJDd5ijiffnFkHhQqQ5hS8DjjS0JVhT9iY6duLAH
-	UtMH5SafItZcfPgOn+C894L8TMN/RgJsWn7b0h052NR8wsty7hQYDEGXViF+A5c1/pnt6/m73df
-	Ol8PXqJUkSAX0Z4hG0sj81LXvrVjgEI9wHDATuGuEpe0630oVsEWmAC/18nzMWNoQVpYuQsQxlE
-	HsgwlNQVMkWn5TPb36MBB+DlBYE5/WgTVb2KRBuZBho8r5o4KiGOXJsqkLhnE/RcfO7eXAQ4qX+
-	qTMnPUl4mkUfojMnajyRbdVbGzPKog8gLYjKXaasybFX88fPMaRcX11gjxVhvwZNKgREerxNHKL
-	1bOKu/Vt+U92FCxNGGUmIA4Bid9eQ=
-X-Google-Smtp-Source: AGHT+IFnsBfPmbrXHVP1H18le6ketuD3FxoDsZnnDHxp5mkqhfsJGXHXxZ4B0uiPRDgcQlvozLnsCQ==
-X-Received: by 2002:a05:651c:255a:10b0:377:c522:b816 with SMTP id 38308e7fff4ca-377c522b9e0mr5967821fa.19.1760975969206;
-        Mon, 20 Oct 2025 08:59:29 -0700 (PDT)
-Received: from foxbook (bey128.neoplus.adsl.tpnet.pl. [83.28.36.128])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-377a9664a97sm21735171fa.50.2025.10.20.08.59.26
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 20 Oct 2025 08:59:27 -0700 (PDT)
-Date: Mon, 20 Oct 2025 17:59:21 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, yicongsrfy@163.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- oliver@neukum.org, pabeni@redhat.com
-Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device
- driver for config selection
-Message-ID: <20251020175921.37f35e5a.michal.pecio@gmail.com>
-In-Reply-To: <2fae9966-5e3a-488b-8ab5-51d46488e097@suse.com>
-References: <20251013110753.0f640774.michal.pecio@gmail.com>
-	<20251017024229.1959295-1-yicongsrfy@163.com>
-	<db3db4c6-d019-49d0-92ad-96427341589c@rowland.harvard.edu>
-	<20251017191511.6dd841e9.michal.pecio@gmail.com>
-	<bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
-	<20251018172156.69e93897.michal.pecio@gmail.com>
-	<2fae9966-5e3a-488b-8ab5-51d46488e097@suse.com>
+	s=arc-20240116; t=1760976022; c=relaxed/simple;
+	bh=h7k1yPDWabdqTtoG2EnqD7n7OFxarXOU70TTjODpX5g=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=FWMsFnQfes3VaE/D15GWSjqS+ML7lvesPmilbjbzjFwkon0iu4yf+RyoKyaKQ2UG2zX+pX4tLlQUA4DjL/ffzow/HG1iyfjxagNzT9VPuhU9sX9Pt3H64Qf3PiClrEODgeA19Vbwf8eV8dP6L/07WeJMk0kj7BAPFElgZVONqCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=MAZItxP1; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1760976009; x=1761580809; i=markus.elfring@web.de;
+	bh=LAWUziSKbx0wPaRGxy4vlGz1nfUe2P0aaJSr5/+/rKs=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=MAZItxP1ndJPJ1dQyAj96YuQd2eTZuavy7DuuRSUnyp0JcGUI+ElrjoiGcQNYA5F
+	 GmWb6e6jxVS2NDk7Gy0Dlhb5/sEc7Ax3p3tRAhRC4w4iFolXfui2vQ7QoLlYvEqN4
+	 k4G84KUpoMijXecBllVqspierpZaOSE7gKL30FHLwyCvb4wB8e9v9twEWDd+cSrRO
+	 Z06ds8jYL3D2QjYr2ItbD9Zqr6OqXyo/MSCFvDueeZJo3rB3OeN89voXoDSQteQHp
+	 lOVFnH8w7XLo1KrA9/kR901DKEChuD5p18J4/5wSUqCFNnzBiS5HBjNTMRp22hV7Z
+	 al0v9eepNKGy0ylx9Q==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.235]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MLifq-1utCvZ0VJg-00Radp; Mon, 20
+ Oct 2025 18:00:09 +0200
+Message-ID: <b33ac7ab-e66f-4407-ba3e-ec4c70636fcf@web.de>
+Date: Mon, 20 Oct 2025 18:00:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+To: linux-usb@vger.kernel.org, Dmitry Baryshkov
+ <dmitry.baryshkov@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>
+Content-Language: en-GB, de-DE
+Cc: kernel-janitors@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Anand Moon <linux.amoon@gmail.com>,
+ Christophe Jaillet <christophe.jaillet@wanadoo.fr>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] usb: typec-mux: ptn36502: Omit a variable reassignment in
+ ptn36502_probe()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:D+wY3jkeOj9azC8xpJrk49F2JAJNgErxmsbwrA9hWOet5/dRdiq
+ Ck9JMHptUkHL8QQmBXo1kvMQoZK2R01qhTcuVywQ2clA1TpuAH9namykLEj+db+9rslpx2P
+ /JwugfTkgeMGvVEQoU/9bvMw75k5PuU23TN0MYPfRKu21sXzrzrxHcrK9PABOQ4kfbTF2Ob
+ adhVnuJjQ2qta/uMCwKoA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Zghbgn7crjw=;DSuY2KvRUey3JPINcnBz9xfOl9/
+ QhOkd+mhhqA3hpWtCZdhHA2ymCfDee+8x0o8xNMfuUeLpJsaITI+vgCIr7tLcOe9sySNhxBd5
+ qKG4tI7hOFUmASSv69irKl7XdXT2lvdsyvJCG3bCPUCaPApkLYT0cHo0tXuUuly2gvNvKwLjX
+ rnCRr2FaJOxXMUlbAV4YOTRJuUuoKbIZpQpFQxdrTo1JPks4rfhO9cvwDtkA5zVYqXmk8S0SB
+ NetD1okqG7pH0+t6CcKwlqIZXWPbp5rxfYjmvAUdqKlccog9ZMwY5fpSBjr+XPnldWC6+RuyN
+ h8D436yIH/S0E/RxTBHSUubV/nspjb9h4qJ15y25/jeCS3p6EhGMaLLcCjX7+bg6I0cjmB0TX
+ Kp7wF4U1zVVjIrEnALtkUTGeQFP3gvlxEZADRnz04Jty7UgkRqk2InOjgRfgQGPi/wp5u7l0I
+ un7hqXQ+HceUnicKHTDsfKa3adX6z9hlC8rphQ64h5nbizqfoZplEDNwojqrdIJtlmG4XAiJs
+ z+dULVNpFNnXV6dPctZlGOISVhoyJoqcDbsp/O8JcfofJ+QLAlpyms1EXnvImxyTb7t+lOQ++
+ 37sMnE5x2wi8CQx2dvIfofK/Gl6w5Az10R1s2EjC/ntw22FAYGzYtJ21+b0EN0ty2yvY60eF7
+ r4aEkxVMpI0hwE4pe/TOlw+k7SXDOcw+Nii9lVulPMsY7Vak6E0oJLf3Ewpw1BC8DpQ8x4Yz7
+ aBZesScMmewfZC8qJM80QpbwTNWljg4nnFKuX2aviKy0fUsZ+GLiYjkg9Zz4EhvA2gg1LwsC3
+ 6XaY89QomO0uRsyIhCosYdOkOwxfZsH/+4SLcOQgHYlsN2l4tJimjnGEnqDAx+Tvw0MmHrKLv
+ djuxoGm5VW+xasPDQUIzdrgZH5kRgLyDsj++Qmn7R4GDYQM49MthgJ/GSIIqlhTiwoFkGkjAg
+ HLbMNCCaUmNbabKKFpzNc0NCPpXCAOje51iWMdr3A/2gBagBmQg+OHVLc7BhcHyt4huFqb7Da
+ To1PcYw2jCy7HQhl6XVzwK2msujwGPW28OSaCkyojH+jEjOKI0M3tZKYSqiGsyWbAd6T6dDIn
+ Gb1qEL8uziIJb2zdNRek/gPr3Aq5UTw7SpjHYqZ60HQOYo+DLWQGLYFNJb+f+gES4aXU/S3L1
+ nncAik+mF4/D5ichqdc5o4T3Tz8FHEIEVGlqkGU62le+EkXIIPDERlPOgqqNAeQr7nhFHTw/i
+ 2/vCSZTxy6uTTIuaZ/KM6LRuYm1HdCThiag3P3tQmj2sLuc1DytjdSXlj0B9riQcgHVJ43Xjr
+ ViZNe+ohZIupzDJQMtmvf2JNq/OpNjvDzMJoSWg+WW45nrA4vy3eUp4zGt9z1Hu/Q7AC4/c+6
+ MENL1O5RrqF0R+jZLfIh0hqAThnQIYOykiuwuRAr3EV00Js0Pp7AhIeBjt1SyZoLX8/FVCiP6
+ YAIxAQ7lVlhHKn3TZaJCOodO2odmkLXsoq/IEykTMkPuc0ddDIIBVeFxeyGiiUMNLGI8Xh23P
+ qoLtl89CNtYNOGZJC+VNCy42B375fGBTCwOCjeyna9W/wY3ob7MxEPtUZ1DEQFC0KEBOZhQzv
+ NbjezGp3GjTOE5pUMmMjOuapru/IHVorTkNlFXjFkT5a/zkSIoJ9r0DcWyjlINEMHPh5kD3CP
+ gKqJk6Nw94EWgW9WKs8eI7pFqcPzEoUcIzMnhnQnM2piCfAureQF7YqfFJ62+D7ArlO4X4S3f
+ CvqS6+0NuHGsGJ6irCLxvTsomfTvMEmAeqmPGrv+5z3dA4HT0ZfaVGxG6fzOECLVteOKvl006
+ BTwj9Ce2Vwjua7I4OGTxefRNAcjSn2fbtnEn90VXqkTYSfxUxCAZ59GQrrilwgtZrJLZ1cjW8
+ baf7MSj/T9oxMCPMsJokqrveH8Dme8A82v3NCC9smTv2jDGZxH2KqMjBKqqcw/PTwZzi/T2e9
+ QFijVEgcINAUiLYMvmJkteOFgJ7PBEox/mWFJpM+GeSk39cI8ACieVcvNyJE9JHCqrZ2vwrDC
+ VpsPp4A3sL57PP0ptIrZjiX2LcmG+BVG/DBviAlIG4FEkpueJgJInQ7jJ3V32d97AqKdMtnUi
+ 8R/kyTfWBYmLGIFSIegirplQeRq78WIOBwLJDuC1H9txmr5Bi2rmh133AO4znROFMn1qkho5B
+ 0/WvQaqHKP5162zaqkqALCqW1ndIAT+qzVjZ9keYk0pkMtLs9aJWUmQ+HLDWxmur0hF06o8UB
+ V4WB2fF4s3op6Jwph9RpHuc2WK5ykIdm+4FJY7MqzzFEOfnvzkqtazq5uo5oxFS5QiWKrC0Ca
+ WtXiuC8pmUdC4WjFqY8IlWpuaTi2bifY1S66wDRBbWsmIjMgyJN1YwkK6tH1ev5Q3QxQ/cyux
+ MOORfFVUJFVjeE6/wvEgjoVrJlRx1sjlc56cxwxxRIsMS7lQwNGleiGctv2R/9eiKGb7tnH+3
+ G+B7YsERu/qqVEFakdm/h3XM5K8f/GRJB6pW57T0gcUgkW2MSbKcXpj4msx+WMKFzOxu3Xjbw
+ wLrl2YGOysv8Awc7+R/5h5Ad9rQURryeRisAdi6087VMhoasWqkHa1a2vr8ehToZtKsdkztne
+ PN3weeLKMYeRy1f/HwlZHsnvGOEHL9pkkC4j2Y9xJDka0CknKI9O759RtPusUo43n17eSNxB+
+ HptTSEf3ZXdees0SrNcix3lpvY7gx/ZsPoSQx6FDlw04WRlMm6tN9ViBZvDIoO8QYC5V/FuQO
+ QobTZPBTe8HygZjGh7hJ/o5rgrzVIh2umwmPnJciKGAH9Qt4CuIjMh6Z8bdB10X9ONwYmEUNC
+ fABRk1IJn7+5vKkN3CiQUj9I+frzBKAxEjjuul5quwLp6I6B7bLjwndpNK0A4afPHBFh0+01B
+ +rsaWHIwAoxl2iuLNRrc+5oxN/T7tFHqID+1LiGTmhtRcNCFSWMdHaC+TDU6dy4Wx9lhfNB3J
+ XRvGTQc21s0YmRldUqPtVjvrLkVkchzg50IOsC7GtrEw2ilQ/3IDqhOJSngCmy+NLo6ZXYo4h
+ CalIlE3EQlSjNYckKU6kahmabCQXhC+MnlLQu21cdm9yvEz6sAvUCxHaFsOlFe9VC+byvgnc5
+ rjq8jraYxja4tWqpwivMWCfQGe9qA4feFo/wmhnXyO0IJgoGEfrmT1mSzmOQuWH5Us3INh+jB
+ nd6wFvXh7PqCzxPO+JoF/vMLYr21DWrmZLdYz9M8IfxYCe8bEe7kYZWWBQUJuhVwtK3bmbvnn
+ De5fAeu2vAVsxgfSJOMFDBNTD8uPZbdOpwzToXtIxnJ0JcfHtuwMrEHEb+l7WZA5FS7gZeUEY
+ o/Z4npV/cFvsN3rMWd5OZBjyQcFk+vwii+zyop5S1elN4rvNUzivllP9wiDeE1SLW3E4Y4O9H
+ 5/LvK4pUyMnSWQHOMP0llYYb/XYvENQbP8kspQAmDxtXtfWKFGLptyH6kY/OFY8kyx+jQsgQN
+ HpX8QrOYfmx7ytdT5iRXqnEeeglJon099M2fNDdzuKoGpbkjdBJ24/Ak0CNcNRkpkRBJTkE1z
+ GqfHtQ6hxKzsW/VloZQs9QsEqcxNqLlfAScVZXoDlXj+qsxKmC3nqhS2LfvyLZto5GfZzYi9k
+ WGPcyfx9+ua1iX+2fzgFM03jroHbFsopjU+3pJ7tTyloRUogcu170ZM2tnhaNohmbtk49DM+J
+ bHj1TpM1zrnfwd2w+kxVWtiCYcejvMBo8FtQ9Lk9OHJwI/J2x4lCfQSJTA8bkNeQGKGLDjxzX
+ wT1D3GdXtwbr6VNvM9AO8U1s9wXVAucOItGoEejZOUKaAYjhy74BouFTr0EsE2PsvuUVioZcv
+ pZk2JNAQ9UvJMTlxO3rLXFtRPNd1pVEwFx34bxniU+W1vMFyqwNIwi7w8lqp+EsoQBBL1tzhg
+ 1T00vbCu3BBlARyV/nHPPmfONjcTd3H/a17o56KPL6SpW29QA8ka8BaPnt8QCzvFNSCXpm+OL
+ xQVtcA3xjccS30A1H3kLScnmMg/Hva3fxy0VzbgDiKjMAa1BbDFDdyddBTwNA/t6bUQ8CQSOC
+ Z1I0lr2+aQNgZR4fPBYBQYRVFGU/ghzTjolt2JJmukUyP5epDwqiwRdnpnkyWhDn9C9Bzrz7u
+ Nxnt3sRlshD3sRjTdfVN0KnklA7B2/OKORgX/qDKtK7qARiFe7dUsU/9+jfUjhMxeYMp3uCWV
+ qO1nmof/3GMk0UPo7rFMX+qZfuyWjAzvyLp1Dsfapsj9IqhVcRcFqdRguUSb+NuaOPjW5MhqE
+ 8SjrAvhQRNhHB1AafT+tcvMBJNy0VQSBRosFoqGCMCBATw3egy7XKgb/Xqclm4mKO/pmKPsrm
+ 1QKlUma+LgDIaWZrQ6mCoVKVRzqjdFo/FXh7IkBqVYRfbf3CQgR6wLX2E7h5oE8IjMclnQCrM
+ NIMBVn+11KFohZWJ9mG69A2EJUbf0YsD8l8IKz2HyLW43b6bdcs0VuJ5Wlof/2KHPNZ4wOgoW
+ 9gRKGWB3ez70ezsJX4wMAyC2AiO4mK2pZcKJxscCfzC/7EO7lllXaiwEB2LOXVuJkJW9AdJxu
+ IlQtiZ3ELKB6u150exyD9/efMuV2QfIN9SMg7QbGnkdkcNh+dAhBuGmTAK4CUn2SK5cGSZh5c
+ PBmL0uCX9rG9RyC8oJDo293/1Ez3I36BWxfv6QCvu9wyrBa16ypoYBKWNocLKCMeM62wWw0u1
+ 5QlwX3jOdH2T9tjN51Ytx12nHfYj7kwhRKfDgWxD9Nfat9lwOSg1WLSgmVHyRksAIld/LOBkb
+ MpZWi1PMccIC92JZIJSSdxTOmqb80xmmcdPduANi7cWGkWPOZCmlTwQCEPppPJv6jVfU7rLdR
+ RyNyy+9UIVzIdB+XnyNprjAmg1Qk0/T0AR1RO/ZY2BSmhoCtqzcWbR8KvSq6MCHMwlacZxToS
+ 6TtSCUumY99j9YTaLa9tP4xsqz5aWyhUJ2OOP+up60dvmxVMHVbZFdtelVnlOChp2dLDtFaas
+ tfk+FQPn1PJGjyG36ClAeCJ6GOYAR6ighOK1EdZWnp8HOdX88Nt6cg4Q
 
-On Mon, 20 Oct 2025 11:59:06 +0200, Oliver Neukum wrote:
-> On 18.10.25 17:21, Michal Pecio wrote:
-> 
-> > index e85105939af8..1d2c5ebc81ab 100644
-> > --- a/include/linux/usb.h
-> > +++ b/include/linux/usb.h
-> > @@ -1202,6 +1202,8 @@ extern ssize_t usb_show_dynids(struct usb_dynids *dynids, char *buf);
-> >    * @post_reset: Called by usb_reset_device() after the device
-> >    *	has been reset
-> >    * @shutdown: Called at shut-down time to quiesce the device.
-> > + * @preferred: Check if this driver is preferred over generic class drivers
-> > + *	applicable to the device. May probe device with control transfers.
-> >    * @id_table: USB drivers use ID table to support hotplugging.
-> >    *	Export this with MODULE_DEVICE_TABLE(usb,...).  This must be set
-> >    *	or your driver's probe function will never get called.
-> > @@ -1255,6 +1257,8 @@ struct usb_driver {
-> >   
-> >   	void (*shutdown)(struct usb_interface *intf);
-> >   
-> > +	bool (*preferred)(struct usb_device *udev);  
-> 
-> I am sorry, but this is a bit clunky. If you really want to
-> introduce such a method, why not just return the preferred
-> configuration?
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Mon, 20 Oct 2025 17:50:12 +0200
 
-Because I wanted to introduce exactly such a method, rather than one
-which returns the configuration ;)
+An error code was assigned to a variable and checked accordingly.
+This value was passed to a dev_err_probe() call in an if branch.
+This function is documented in the way that the same value is returned.
+Thus delete a redundant variable reassignment.
 
-The point was to pull configuration selection *out* of those drivers.
-They already do it, and it makes them copy-paste the same trivial loop
-which iterates through configs until it finds the vendor interface.
+The source code was transformed by using the Coccinelle software.
 
-The idea is to have a maximally simple check for a known-good vendor
-interface driver before making unfounded assumptions like:
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/usb/typec/mux/ptn36502.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-/* From the remaining configs, choose the first one whose
- * first interface is for a non-vendor-specific class.
- * Reason: Linux is more likely to have a class driver
- * than a vendor-specific driver. */
-
-Unfortunately, that's only half the battle. The other half is forcing
-configuration reevaluation when such a driver is loaded. I hoped it
-would be trivial, but so far it costs me a new bus_for_each_device()
-and a whole nontrivial function, while cfgselectors have it for free.
-
-I got my PoC up to feature parity with r8152-cfgselector and it adds
-about as much code as it removes (uless more cfgselectors are added).
-And of course it's dead weight for those with USB but not USBNET.
-
- drivers/net/usb/r8152.c    | 69 ++++++++-------------------------------------------------------------
- drivers/usb/core/driver.c  | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
- drivers/usb/core/generic.c | 26 ++++++++++++++++----------
- include/linux/usb.h        | 11 ++++++-----
- 4 files changed, 78 insertions(+), 76 deletions(-)
-
-So not sure if it's worth pursuing.
-
-Regards,
-Michal
-
-
+diff --git a/drivers/usb/typec/mux/ptn36502.c b/drivers/usb/typec/mux/ptn3=
+6502.c
+index 129d9d24b932..b1a2977b974c 100644
+=2D-- a/drivers/usb/typec/mux/ptn36502.c
++++ b/drivers/usb/typec/mux/ptn36502.c
+@@ -339,7 +339,7 @@ static int ptn36502_probe(struct i2c_client *client)
+=20
+ 	ret =3D regulator_enable(ptn->vdd18_supply);
+ 	if (ret) {
+-		ret =3D dev_err_probe(dev, ret, "Failed to enable vdd18\n");
++		dev_err_probe(dev, ret, "Failed to enable vdd18\n");
+ 		goto err_mux_put;
+ 	}
+=20
+=2D-=20
+2.51.1
 
 
