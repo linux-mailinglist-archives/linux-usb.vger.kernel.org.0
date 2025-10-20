@@ -1,131 +1,231 @@
-Return-Path: <linux-usb+bounces-29454-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29455-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AB66BF05A7
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 11:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 71D91BF05E7
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 12:03:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A44CE3B2C4D
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 09:59:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DCE13B0CEC
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 10:02:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D12D12F60B3;
-	Mon, 20 Oct 2025 09:59:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7FF12EA17E;
+	Mon, 20 Oct 2025 10:02:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dTu5efRN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R/LWpNQW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C272F5A0B
-	for <linux-usb@vger.kernel.org>; Mon, 20 Oct 2025 09:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBC01FDA92;
+	Mon, 20 Oct 2025 10:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760954351; cv=none; b=SPf+xnY1ekqeS1pucCg9Jmj3jcs+Bg4b2MehrVGws8XGf2VORGfCJyvRNS4oxBY4EMgC9M25f/Ld4qP6iZMna5JvSVsguNRXriGmrmSeP9dpddQHkIZQMWwT+A6MBrsB14E58htV3zmxUejeeZ7E6rxrH9T4fBU6mHs+cPHiAms=
+	t=1760954532; cv=none; b=D5TD0PLjxW0ZwvlAL9ALyXIsqWuvYeBr1cm61O55y1kEni1dJNTtwLUiXs36AocC/kO6Kb5DtiFtM6lYzDFg5TmJsWsar8C9PgcGnLU8pz5UTMqo1Z4jmn747h9jjLZb9KegW69GeJ3+o4IVGfFqUdmlbnWz6WbRq/vqCZT/nxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760954351; c=relaxed/simple;
-	bh=ZSDbv8UlMSHFAFD+gGT2cT7LwU/FgU1QX/eiSXzzvFE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DXUrWqshhpGgd6ZdsFhr6T2ygsw5dimcja5rTf5hJ8S8OsGUlCFWiENWvexGxNQyiX5/SPGEtak51d4BfMklL8bm7a0vVbeGoZT16f+iu5TT06rbVrhzVpXXz+8Q6wT0BwubgUZIm2TOvdDs8Kj52OwDra/CvrrhILR+XOeJr3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dTu5efRN; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3ecdf2b1751so2317918f8f.0
-        for <linux-usb@vger.kernel.org>; Mon, 20 Oct 2025 02:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1760954348; x=1761559148; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W5WwbPJy3dr09yj6fDu2QPGisWoiFmbonzsrinPO0AM=;
-        b=dTu5efRNfpOcXQ/wrwncAUVQX3FXQyrn0P4LLY0cz+tI1if+fI4fm/RG/9YMU5dlCO
-         M+7OCYS6fifxFfFmjShEizpIMVPiJhpQ+K1NE31F/kHyiwCMUieImVPKAYaa4ZH+DY98
-         Nqz3FOlonBHSnLk6eKqvDU6aC8Ud6/4Dyp0h7urKcK+TTbElUQ2dtM69MbHBjuGAjwkc
-         ATzLehfkMMl6mjpcugLgVleJm2pF1LteYGj3Vj1qB25t9xf5+9oKxmiYjpqSJDPVPvZr
-         EjC9/FqbZRIjR/sQH/VnWe3ExVvMSrH1tRh3Dk0X84U6yPC00zEx4sLzCevKtLWQopnL
-         AT4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760954348; x=1761559148;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W5WwbPJy3dr09yj6fDu2QPGisWoiFmbonzsrinPO0AM=;
-        b=o0wMJazujO5ZOopt4qOOyGje4+jK31u8HayxfvfOg14fvfZntA00yUeu2s0lqT3d0r
-         kLcKxDfUAHDj5qSLZozkvRqznOfei8407t+OkByQixAAQKpDhMFpPw9Qn7QNf65BWmMB
-         t+lbyibnDMjYAUSepzBm+r+F8wlXnO3WP4m0bymv9CmsAGtBYPCFdo9nLBMI5IknYdtc
-         2dXNHumKEo9CEU/knIAXXIFeuRuHfZEFyeyaisGxVY1hz00UQQmNAygcBlO55CikTz28
-         t1vFrlpltyw0zMTxIntlHSw4RASYzK3qpj0SSofX5lED8EoxPHmYtnA9rFTaM2JOcNko
-         XmGg==
-X-Forwarded-Encrypted: i=1; AJvYcCViZ96CVI5DkhL69Qhu64hh9rM76k90EAE62elHO9eI4uc2bgSz39OMJdaU0pYpzQBl1OnZh4RxHos=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqOatTbZYh/lMk77Z89lUndJ/iAp5KgVu16INcL392NsXPnsjR
-	lCI7+nV3rxkN6H8S9jWiF0EAAuTa5co5JxvGkSdBo2+O6giMRGqxGrAxusNad76kHAk=
-X-Gm-Gg: ASbGncsush4GSiaNtt9mSLZqX2/DmRMKJMzAQBF6Lxv8sexHPTg2eSIkKj9RHiD6Dun
-	RR61XPe91snlfjcXG01ArcUzH8EIev3gFU3j+/cIyFY/qesPC0KKVFJfasBL/Qs1D+8zqJHPN49
-	Ra3qr7ebzM63jY/leG9NvFIW8m/xFy3JIFmFoi8D/JGfn6cNH+93dl9MTQclvKC2WHMqBklRBpa
-	qDkGRYrXmIc0FiPe/obmx9ZxNe2r5TDq00HW0wGrfPbkgCdw2M5/q8qmKSY5YzSZz8/y9fkb+07
-	6bOza5J18JpNVT6yTceyrJBbtrX6+3ugNf2le3CWGZ1o0msTaKz1NZOIyNp1ddIVRzH3nDZPQy4
-	rsgKholV41gK6Aaqaby7yYM3SA+BGZcI7VAyzT/PNrkxTmv9kF60KvGAegvWa1xelXv4Wrq3Sl+
-	vtIng1kfiVkQzYWnbRkzNIharm7lbOfXmLrYj0mPMK5RNunnjrXmod3Q==
-X-Google-Smtp-Source: AGHT+IE3ui301egTRkS1EBW9zfJFFPQqZ7wTD2FcKQUH0Z4fvTMGlnxqlMPF1f5QM98LsZBZJDZalw==
-X-Received: by 2002:adf:e18d:0:b0:427:6c6:4e31 with SMTP id ffacd0b85a97d-42706c64e42mr8688313f8f.22.1760954347660;
-        Mon, 20 Oct 2025 02:59:07 -0700 (PDT)
-Received: from ?IPV6:2001:a61:135e:6601:24e0:f40b:1a23:7445? ([2001:a61:135e:6601:24e0:f40b:1a23:7445])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427f00b9fa8sm14659135f8f.38.2025.10.20.02.59.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Oct 2025 02:59:07 -0700 (PDT)
-Message-ID: <2fae9966-5e3a-488b-8ab5-51d46488e097@suse.com>
-Date: Mon, 20 Oct 2025 11:59:06 +0200
+	s=arc-20240116; t=1760954532; c=relaxed/simple;
+	bh=7OgHgc7V9jCA/aH/wZmpPfoG6Zo6Xb08lXUbbydETp4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DezsMH/jOW5itxFF7sWfdIbtk51IvMp0OLHo2lnz3CaXgYSqc1tjrj4esUfQJHdmIS5Z7zU08CERHXlkMbDdypSV2mdqoJ91DSebqblafW0+e4w1J0eEwAlWGZXgKjZM9eien6NPCIZ0SVji+RKwImTqcvYk6Oy46C05AV8L4WY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R/LWpNQW; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760954530; x=1792490530;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7OgHgc7V9jCA/aH/wZmpPfoG6Zo6Xb08lXUbbydETp4=;
+  b=R/LWpNQWWM3L/XZmBjliJSsO0Y2An53b0bOdONEg7N9VGNJFYSWDt23e
+   AsmhspAJFEUbQjJVVft4XzkgKgeXGXDBq9KITZ3DPvzNi8pHZ1wF1UBG8
+   x+MGxlflHLObPtaRN3ws+W3MOVurm1yub6CUBnH/FO8TUnL6e6XzbPI6C
+   ODBwbfbEo/JbH63LyDK4IKDoFl9MhdcLx55zURZuY3wWh2iQ+chRHEnK0
+   njSS37aoEigSFiA05dkn0zIsaUQV7d/jdxsfVPyVOD4akZ1MSu0EQyXb6
+   VMOAKJzlkCoc1y8er3EAM6j1GyCylAtpxZXAtUIpkifQ9HFPoKmUvl7UT
+   A==;
+X-CSE-ConnectionGUID: WoL9UeLSQ3uvZldMQlrgAQ==
+X-CSE-MsgGUID: 3bEYd26bQx+rHZnMmagMuA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11587"; a="80506993"
+X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
+   d="scan'208";a="80506993"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 03:02:10 -0700
+X-CSE-ConnectionGUID: Rbwng+eMQgabSBT8iqlHxg==
+X-CSE-MsgGUID: 5PEY46adTHK0yIfKFWIaWg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
+   d="scan'208";a="183308787"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.112])
+  by orviesa008.jf.intel.com with SMTP; 20 Oct 2025 03:02:01 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 Oct 2025 13:02:00 +0300
+Date: Mon, 20 Oct 2025 13:02:00 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Chaoyi Chen <kernel@airkyi.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Yubing Zhang <yubing.zhang@rock-chips.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Amit Sunil Dhamne <amitsd@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
+	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v6 1/8] usb: typec: Add default HPD device when register
+ DisplayPort altmode
+Message-ID: <aPYImGmesrZWwyqh@kuha.fi.intel.com>
+References: <20251016022741.91-1-kernel@airkyi.com>
+ <20251016022741.91-2-kernel@airkyi.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device driver
- for config selection
-To: Michal Pecio <michal.pecio@gmail.com>,
- Alan Stern <stern@rowland.harvard.edu>
-Cc: yicongsrfy@163.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, oliver@neukum.org, pabeni@redhat.com
-References: <20251013110753.0f640774.michal.pecio@gmail.com>
- <20251017024229.1959295-1-yicongsrfy@163.com>
- <db3db4c6-d019-49d0-92ad-96427341589c@rowland.harvard.edu>
- <20251017191511.6dd841e9.michal.pecio@gmail.com>
- <bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
- <20251018172156.69e93897.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20251018172156.69e93897.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251016022741.91-2-kernel@airkyi.com>
 
-On 18.10.25 17:21, Michal Pecio wrote:
+On Thu, Oct 16, 2025 at 10:27:34AM +0800, Chaoyi Chen wrote:
+> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+> 
+> Add default DRM AUX HPD bridge device when register DisplayPort
+> altmode. That makes it redundant for each Type-C driver to implement
+> a similar registration process in embedded scenarios.
+> 
+> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+> ---
+> 
+> Changes in v6:
+> - Fix depend in Kconfig.
+> 
+> Changes in v5:
+> - Remove the calls related to `drm_aux_hpd_bridge_notify()`.
+> - Place the helper functions in the same compilation unit.
+> - Add more comments about parent device.
+> 
+>  drivers/usb/typec/Kconfig         |  2 ++
+>  drivers/usb/typec/class.c         | 26 ++++++++++++++++++++++++++
+>  include/linux/usb/typec_altmode.h |  2 ++
+>  3 files changed, 30 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
+> index 2f80c2792dbd..a6730fbb576b 100644
+> --- a/drivers/usb/typec/Kconfig
+> +++ b/drivers/usb/typec/Kconfig
+> @@ -2,6 +2,8 @@
+>  
+>  menuconfig TYPEC
+>  	tristate "USB Type-C Support"
+> +	depends on DRM || DRM=n
+> +	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
 
-> index e85105939af8..1d2c5ebc81ab 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -1202,6 +1202,8 @@ extern ssize_t usb_show_dynids(struct usb_dynids *dynids, char *buf);
->    * @post_reset: Called by usb_reset_device() after the device
->    *	has been reset
->    * @shutdown: Called at shut-down time to quiesce the device.
-> + * @preferred: Check if this driver is preferred over generic class drivers
-> + *	applicable to the device. May probe device with control transfers.
->    * @id_table: USB drivers use ID table to support hotplugging.
->    *	Export this with MODULE_DEVICE_TABLE(usb,...).  This must be set
->    *	or your driver's probe function will never get called.
-> @@ -1255,6 +1257,8 @@ struct usb_driver {
->   
->   	void (*shutdown)(struct usb_interface *intf);
->   
-> +	bool (*preferred)(struct usb_device *udev);
+This is wrong. DRM should not dictate how this entire subsystem core
+is configured. The dependency needs to be on the DRM bridge side.
 
-I am sorry, but this is a bit clunky. If you really want to
-introduce such a method, why not just return the preferred configuration?
+You can for example use the bus notification there to see when a new
+alternate mode is being registered, or use some other notification
+mechanism.
 
-	Regards
-		Oliver
+thanks,
 
+>  	help
+>  	  USB Type-C Specification defines a cable and connector for USB where
+>  	  only one type of plug is supported on both ends, i.e. there will not
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 67a533e35150..e9d7772d1a8f 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -8,14 +8,18 @@
+>  
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+> +#include <linux/of.h>
+>  #include <linux/property.h>
+>  #include <linux/slab.h>
+>  #include <linux/string_choices.h>
+>  #include <linux/usb/pd_vdo.h>
+> +#include <linux/usb/typec_dp.h>
+>  #include <linux/usb/typec_mux.h>
+>  #include <linux/usb/typec_retimer.h>
+>  #include <linux/usb.h>
+>  
+> +#include <drm/bridge/aux-bridge.h>
+> +
+>  #include "bus.h"
+>  #include "class.h"
+>  #include "pd.h"
+> @@ -538,6 +542,21 @@ const struct device_type typec_altmode_dev_type = {
+>  	.release = typec_altmode_release,
+>  };
+>  
+> +static void dp_altmode_hpd_device_register(struct typec_altmode *alt)
+> +{
+> +	if (alt->svid != USB_TYPEC_DP_SID)
+> +		return;
+> +
+> +	/*
+> +	 * alt->dev.parent->parent : USB-C controller device
+> +	 * alt->dev.parent         : USB-C connector device
+> +	 */
+> +	alt->hpd_dev = drm_dp_hpd_bridge_register(alt->dev.parent->parent,
+> +						  to_of_node(alt->dev.parent->fwnode));
+> +	if (IS_ERR(alt->hpd_dev))
+> +		alt->hpd_dev = NULL;
+> +}
+> +
+>  static struct typec_altmode *
+>  typec_register_altmode(struct device *parent,
+>  		       const struct typec_altmode_desc *desc)
+> @@ -600,6 +619,13 @@ typec_register_altmode(struct device *parent,
+>  		return ERR_PTR(ret);
+>  	}
+>  
+> +	/*
+> +	 * It is too late to register the HPD device when the DisplayPort
+> +	 * altmode device becomes ready. If the current altmode is DP,
+> +	 * register a static HPD device.
+> +	 */
+> +	dp_altmode_hpd_device_register(&alt->adev);
+> +
+>  	return &alt->adev;
+>  }
+>  
+> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+> index b3c0866ea70f..acb0af1b9d5d 100644
+> --- a/include/linux/usb/typec_altmode.h
+> +++ b/include/linux/usb/typec_altmode.h
+> @@ -21,6 +21,7 @@ struct typec_altmode_ops;
+>   * @desc: Optional human readable description of the mode
+>   * @ops: Operations vector from the driver
+>   * @cable_ops: Cable operations vector from the driver.
+> + * @hpd_dev: HPD device for DisplayPort
+>   */
+>  struct typec_altmode {
+>  	struct device			dev;
+> @@ -32,6 +33,7 @@ struct typec_altmode {
+>  	char				*desc;
+>  	const struct typec_altmode_ops	*ops;
+>  	const struct typec_cable_ops	*cable_ops;
+> +	struct device			*hpd_dev;
+>  };
+>  
+>  #define to_typec_altmode(d) container_of(d, struct typec_altmode, dev)
+> -- 
+> 2.49.0
+
+-- 
+heikki
 
