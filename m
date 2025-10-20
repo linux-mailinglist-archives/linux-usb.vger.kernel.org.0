@@ -1,74 +1,79 @@
-Return-Path: <linux-usb+bounces-29446-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29447-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2EF9BF0132
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 11:02:25 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03A5FBF021C
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 11:18:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 123B41885490
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 09:02:49 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A45C4345C76
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 09:18:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F49D2EC0B6;
-	Mon, 20 Oct 2025 09:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1016E2F260E;
+	Mon, 20 Oct 2025 09:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DYAnnr9D"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dqUPsiWC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D291DF26E;
-	Mon, 20 Oct 2025 09:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90F72E9EB8;
+	Mon, 20 Oct 2025 09:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760950938; cv=none; b=GrRpN1562oodRlQCLOQ2xd/ZCQvh6BYRBFtHKwBSoq4vDP4PbdMDHjE089krtdmb2D99eUGZ0CTUEFS/I5K6gA4HppGr8Z/KzqD49fXWsl47SLhCLLiwVqxUKCcfBgpQdtpnSFQBVtsYk5OPrfvM8x6AI1EF4gzHDlek2C1CKsg=
+	t=1760951919; cv=none; b=ryw/Yagf27bxEuH6V3Ce506bAI/NCrnpvCz0OfDQHemhyKN50mcZGGfyivZuSn3UgMEVJwyUkmzGuqvOjsDB14EZtC5PFmYEsG91adOwpcf20v1nQKDGOPB35JACdnODM0PstCH9o5qXLZEsWKtk7vXJngdOZMYQ4/mxv3ePs0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760950938; c=relaxed/simple;
-	bh=ezcFUr+LQe4OMTnbeAg5YTOtTsWfMeeIN46IscDdMVU=;
+	s=arc-20240116; t=1760951919; c=relaxed/simple;
+	bh=/cQxPbdY+pcTNGh0XPcz5uMxQnnnHAx3qFxe/JAeVOs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rj63VVUMZ4n5wQUH26McKLiPJoME7nqPiZXng8sq6dJ+clVfW1rrqePyITMHJ5r+QqULEtYprZnlM4ZiGC3ItEFBB+K0TaiRqQAx/7+Ls1mpASlON6hmYLLSfgtKfhaEVto51E+wrw2/Bcuxvorh0HqqWlkraJLDFH7ANanRxhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DYAnnr9D; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=I2nL+LDdvy1t4hdOhQc00C2ZuPqIH4CTecxTES+OHZf1+1u5nPV39FVyMeAECFAmMOASXaBg1/slnwlRBtT8amRWFQfvjDkUs6cRTiHZEEF5L/Zhi+J2//W3u56tyzz1jUoAtO637SS1vBZY8tlGHBdcOIv6hQAVhVWOJFEJs/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dqUPsiWC; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760950936; x=1792486936;
+  t=1760951917; x=1792487917;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ezcFUr+LQe4OMTnbeAg5YTOtTsWfMeeIN46IscDdMVU=;
-  b=DYAnnr9DCHZ1OLq7tC0cT+nRly7h7gYd2KnxZof719rO68x3G41VjdbM
-   Svc6q73QGaRrBAxk6FRPaKkpP36ZCd00P0fjVr1cPxRMo9NwYI1IoV+tH
-   4w7YVXdDs6jkIW6I/QW4kcAcJFoF0BcBZ62j5U2PbAlFXXb2Ng1dSJAvG
-   BEC0e10fqCfPW/NcaaZOVVON9U6kFokAZ0A71CaP/1Ph+1eRr5wFKcptA
-   6BnQeT52/sHINw1Vg8t46dPhks5kOqCBanuyHwYOaEfcz1H+ta7YNJYKK
-   +sCQGYd41C5ws9OXAWB2RAugRlLvDwhyZmc6f93XKtjkEfRuKrIm+rmNy
-   g==;
-X-CSE-ConnectionGUID: SxwuxAXGRXmJkBS64sbbBQ==
-X-CSE-MsgGUID: vjmrzHlfStGdwMoJswUWNQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11587"; a="63105866"
-X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="63105866"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 02:02:15 -0700
-X-CSE-ConnectionGUID: Zp35cNExTaC4y3fHINJaGQ==
-X-CSE-MsgGUID: 9WfhUskZQvSfWEjJPOkPFg==
+  bh=/cQxPbdY+pcTNGh0XPcz5uMxQnnnHAx3qFxe/JAeVOs=;
+  b=dqUPsiWC7KiW9SfJTrOH6L9BLLpZl61gczPWALy54GFzuZeyRBoVPKnM
+   aeRJFnZZPvFsoIJw1nEyslD+9vOuMA5gDSBpvy5nXf8dtXbHcwc7VVCg/
+   +qnJnVLIfFvc+tyT18FqmTv6zj2OHC+mth2jblayd35Nuexh22siz2xOp
+   VpRVkbCHxdv6tIPuQsZSAzlUOaMxSjHBduBDkYISK5xaCGUfLwR4f5Q7l
+   Mjmct/Eht1op87fqv7ybVn3rEq9RJ4JtkA8Txgj9iTz3s8KnxV5yW2Thp
+   sVuWfb4tnk+62DKxb0XhGPucyLZIbjuSYQ7MZHYbROcsGIl8brzzcrAjv
+   A==;
+X-CSE-ConnectionGUID: ef3wtcKDRDOTphLMA4dIfw==
+X-CSE-MsgGUID: 28ZMHNihT5aHrxPjPrjf3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="62983663"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="62983663"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 02:18:36 -0700
+X-CSE-ConnectionGUID: kfRTBUvGQdS4IIbFPJno6Q==
+X-CSE-MsgGUID: 0kH3ONZvS4aDG/b4fuyfzQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="220429504"
+   d="scan'208";a="182472701"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.112])
-  by orviesa001.jf.intel.com with SMTP; 20 Oct 2025 02:02:12 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 Oct 2025 12:02:10 +0300
-Date: Mon, 20 Oct 2025 12:02:10 +0300
+  by orviesa010.jf.intel.com with SMTP; 20 Oct 2025 02:18:32 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 Oct 2025 12:18:31 +0300
+Date: Mon, 20 Oct 2025 12:18:31 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc: Badhri Jagan Sridharan <badhri@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	kernel@pengutronix.de, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] tcpm: switch check for role_sw device with fw_node
-Message-ID: <aPX6kuSgsPS8L2k6@kuha.fi.intel.com>
-References: <20251013-b4-ml-topic-tcpm-v2-1-63c9b2ab8a0b@pengutronix.de>
+To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+	"Chen, Antony" <antony.chen@intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Fedor Pchelkin <boddah8794@gmail.com>,
+	Andrei Kuchynski <akuchynski@chromium.org>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	Myrrh Periwinkle <myrrhperiwinkle@qtmlabs.xyz>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: Detect and skip duplicate altmodes
+ from buggy firmware
+Message-ID: <aPX-ZxwaweJjtv3J@kuha.fi.intel.com>
+References: <20251016055332.914106-1-acelan.kao@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,53 +82,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251013-b4-ml-topic-tcpm-v2-1-63c9b2ab8a0b@pengutronix.de>
+In-Reply-To: <20251016055332.914106-1-acelan.kao@canonical.com>
 
-On Mon, Oct 13, 2025 at 11:43:40AM +0200, Michael Grzeschik wrote:
-> When there is no port entry in the tcpci entry itself, the driver will
-> trigger an error message "OF: graph: no port node found in /...../typec" .
++Antony
+
+On Thu, Oct 16, 2025 at 01:53:32PM +0800, Chia-Lin Kao (AceLan) wrote:
+> Some firmware implementations incorrectly return the same altmode
+> multiple times at different offsets when queried via UCSI_GET_ALTERNATE_MODES.
+> This causes sysfs duplicate filename errors and kernel call traces when
+> the driver attempts to register the same altmode twice:
 > 
-> It is documented that the dts node should contain an connector entry
-> with ports and several port pointing to devices with usb-role-switch
-> property set. Only when those connector entry is missing, it should
-> check for port entries in the main node.
+>   sysfs: cannot create duplicate filename '/devices/.../typec/port0/port0.0/partner'
+>   typec-thunderbolt port0-partner.1: failed to create symlinks
+>   typec-thunderbolt port0-partner.1: probe with driver typec-thunderbolt failed with error -17
 > 
-> We switch the search order for looking after ports, which will avoid the
-> failure message while there are explicit connector entries.
+> Detect duplicate altmodes by comparing SVID and VDO before registration.
+> If a duplicate is detected, skip it and print a single clean warning
+> message instead of generating a kernel call trace:
 > 
-> Fixes: d56de8c9a17d ("usb: typec: tcpm: try to get role switch from tcpc fwnode")
+>   ucsi_acpi USBC000:00: con0: Firmware bug: duplicate partner altmode SVID 0x8087 at offset 1, ignoring. Please update your system firmware.
+> 
+> This makes the error handling more user-friendly while still alerting
+> users to the firmware bug.
+> 
+> The fix applies to all three recipient types: partner (SOP), port (CON),
+> and plug (SOP_P) altmodes.
+> 
+> Fixes: a79f16efcd00 ("usb: typec: ucsi: Add support for the partner USB Modes")
 > Cc: stable@vger.kernel.org
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Thank you for the patch. Before going forward with this, I would like
+to make sure that Dell is not using the GET_ALTERNATE_MODES command in
+some customised way deliberately, and that this really is a bug in the
+EC firmware.
 
-> ---
-> Changes in v2:
-> - fixed typos in the description
-> - added fixes tag
-> - added Cc: stable@vger.kernel.org
-> - Link to v1: https://lore.kernel.org/r/20251003-b4-ml-topic-tcpm-v1-1-3cdd05588acb@pengutronix.de
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index b2a568a5bc9b0ba5c50b7031d8e21ee09cefa349..cc78770509dbc6460d75816f544173d6ab4ef873 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -7876,9 +7876,9 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  
->  	port->partner_desc.identity = &port->partner_ident;
->  
-> -	port->role_sw = usb_role_switch_get(port->dev);
-> +	port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode);
->  	if (!port->role_sw)
-> -		port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode);
-> +		port->role_sw = usb_role_switch_get(port->dev);
->  	if (IS_ERR(port->role_sw)) {
->  		err = PTR_ERR(port->role_sw);
->  		goto out_destroy_wq;
-> 
+After seeing the trace output when this happens, it looked to me as
+the first response to the GET_ALTERNATE_MODES fills the MID field in
+the response data structure with different SVIDs for some reason
+(maybe with all supported SVIDs)? If that's deliberate it means we
+should drop the first response, and start registering from the second
+one.
+
+If I've understood correctly, we have people contacting Dell about
+this.
+
+thanks,
 
 -- 
 heikki
