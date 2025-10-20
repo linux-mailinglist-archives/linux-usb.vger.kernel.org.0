@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-29449-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29450-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E441BF04C0
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 11:47:52 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40F05BF04E1
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 11:49:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 345A14E6CED
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 09:45:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AC54334ABF8
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Oct 2025 09:49:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAF6C2FB085;
-	Mon, 20 Oct 2025 09:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB0D523BF8F;
+	Mon, 20 Oct 2025 09:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mrcBpFLs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KORLSnZG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2D82F746C;
-	Mon, 20 Oct 2025 09:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF0C239E79;
+	Mon, 20 Oct 2025 09:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760953423; cv=none; b=QO2kL9Hw7BvPBqay4LfwMqNWN0nn/IprS4uRQk4Z3VpyZc3X0pC5nBW0A862UpoIRd4k3K5JM++HWFekiBbD/jjqsst9wU99AjrgYPkytGIrIAxC2Ua64md2gAuusMCY4SaLbkioEFDp9MPDdk0Q86cuR7+klZNCmMklfbAd7K0=
+	t=1760953774; cv=none; b=oxG6kg/JXktLee5tiAghqA55e8cUDMY6akR3Wc5cnQjks38N52VyQtzLEP0savNS4yfmyAWZTdIE6f0WmX8BILKiJm6PVEpzSrWuyTt6DPDHqN+4oHVRgBY7w2tZDOrjKihb9D7iSj0qVH0QwxuMWKLlqF/nZRpN0C7RHOrk4f0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760953423; c=relaxed/simple;
-	bh=1IsVPhW/sf67YgQO1rky3oKuczfRd7w9/SINK+ai9kI=;
+	s=arc-20240116; t=1760953774; c=relaxed/simple;
+	bh=IFMa8J4BmSP1xDkcLMdkDieSTWmOeb/WK7h22yGsHts=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Es7Zv6BTx48aV16JAAvLdIdrntt7cDem40RJvFl/7065tYLSb5Id3S500seDoZmFm+h5x0pnZMqgOodIehGtwmNIOiGT44OENar79XBIM/af38zLdYe5loXvNOATjRr36gV+a8p+ghZXZQGsR2+Rc4tr8tregP/O5El78bPFL/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mrcBpFLs; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=oOOiva6SpTVTLFed5tTajOkZFTbZP/u+4FYAVPUXpwvnV9VZhk3yrJN22c34DNQ2PVUD9WVw+s6r1KUSha2VFJnPmFr1LekDRey/RxAF+Rs0X+vJTsdnehaXJl9QLnApooFNQXPkXEH4oS0gPXGR8X/QgnvFNbaqQBNC/ZeZoW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KORLSnZG; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760953421; x=1792489421;
+  t=1760953772; x=1792489772;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1IsVPhW/sf67YgQO1rky3oKuczfRd7w9/SINK+ai9kI=;
-  b=mrcBpFLsEiAH1iDL+5qRqfUm/Tk/OW9tnxmyR/FAb33qpJD/P1oJwG4u
-   qn1PTSWdYMl9lFQGfWRn9YmRPIa/y/ySgyo15H7NlgXgfVWSa5QieQPti
-   oXLeNab+DuCTcwlqg2KQJ8B8u5pltcO+VIkfg3qsE3p5ZLd9reSq83/KT
-   PqOcq0kYRqhlpP2fSL7Kt3BLgugenbG/phiMQ2bucVnWyFmrl9dcDKH41
-   dWbRqLHpkqe0haTrwODz4GjDAg4VLwPdLr/RvNE675PqC/k0cCV0b3R39
-   2Q15jGnbHTGRptFoKpgS1E6/NoJlP9xOHj4oDJT+XuM9erV6VR5jPMuPG
-   w==;
-X-CSE-ConnectionGUID: hIrh/eHCRnirgVk633qYmA==
-X-CSE-MsgGUID: Pqsm47eAR+q7F073aR44WQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11587"; a="73738163"
+  bh=IFMa8J4BmSP1xDkcLMdkDieSTWmOeb/WK7h22yGsHts=;
+  b=KORLSnZGIHs/aUjBMUVjZI6mMYdQ6MqnT2i/JYRF8gfRqITtpYCYztp4
+   h4MoN8BU/TMMRMU7GfoMa3Y9JNwF62tAPN9BlxxGAW0ynDvzhyjn/HdQv
+   +8ErzMTxXfhL9zWi6y7FXjupaT8E03NOFYC+yMQ0kv6E0oib/UKyTF+/H
+   BfSR0FcEy9hb3O8mGkVJCPVphU6PalH9LNydkvLiKMj5qhAAX4ZTe9mfQ
+   fshDiqlUCmN9wOgxqpEu24g/tUxH2fpRgXZV9uE2hlKlwfGBnnnCoBGDS
+   CTPwChY0cYjjqOXVqp2aqI15za5n/0CvCp3uPmYmzmy4Pu+YQO5iASPgt
+   g==;
+X-CSE-ConnectionGUID: Vr6vVxNnTF2CMIZGdrvjHg==
+X-CSE-MsgGUID: oCb6J91jQKuiWrAJHYWGQw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11587"; a="80506113"
 X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="73738163"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 02:43:40 -0700
-X-CSE-ConnectionGUID: X9lbY/qSTaq4k+rQCF9Ybw==
-X-CSE-MsgGUID: +xw2olryQQunXSfGcIpQaA==
+   d="scan'208";a="80506113"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 02:49:32 -0700
+X-CSE-ConnectionGUID: EWWHbbtLR2+5nMBBpCh4PQ==
+X-CSE-MsgGUID: UML7sHo4Qk2dcuXbG7eECQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="220437083"
+   d="scan'208";a="188581319"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.112])
-  by orviesa001.jf.intel.com with SMTP; 20 Oct 2025 02:43:36 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 Oct 2025 12:43:34 +0300
-Date: Mon, 20 Oct 2025 12:43:34 +0300
+  by fmviesa004.fm.intel.com with SMTP; 20 Oct 2025 02:49:28 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 Oct 2025 12:49:27 +0300
+Date: Mon, 20 Oct 2025 12:49:27 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Konrad Dybcio <konradybcio@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -70,11 +70,10 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH 1/3] usb: typec: ps883x: Cache register settings, not
- Type-C mode
-Message-ID: <aPYERtFRKx6jdh_R@kuha.fi.intel.com>
+Subject: Re: [PATCH 2/3] usb: typec: ps883x: Rework ps883x_set()
+Message-ID: <aPYFpzD6sklAvywa@kuha.fi.intel.com>
 References: <20251014-topic-ps883x_usb4-v1-0-e6adb1a4296e@oss.qualcomm.com>
- <20251014-topic-ps883x_usb4-v1-1-e6adb1a4296e@oss.qualcomm.com>
+ <20251014-topic-ps883x_usb4-v1-2-e6adb1a4296e@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,19 +82,13 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251014-topic-ps883x_usb4-v1-1-e6adb1a4296e@oss.qualcomm.com>
+In-Reply-To: <20251014-topic-ps883x_usb4-v1-2-e6adb1a4296e@oss.qualcomm.com>
 
-On Tue, Oct 14, 2025 at 06:06:45PM +0200, Konrad Dybcio wrote:
+On Tue, Oct 14, 2025 at 06:06:46PM +0200, Konrad Dybcio wrote:
 > From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > 
-> Certain Type-C mode configurations may result in identical settings of
-> the PS8830. Check if the latter have changed instead of assuming
-> there's always a difference.
-> 
-> ps883x_set() is changed to accept a typec_retimer_state in preparation
-> for more work and the ps883x_sw_set() (which only handles orientation
-> switching) is changed to use regmap_assign_bits(), which itself does
-> not perform any writes if the desired value is already set.
+> In preparation to extend it with new alt/USB modes, rework the code a
+> bit by changing the flow into a pair of switch statements.
 > 
 > Reviewed-by: Jack Pham <jack.pham@oss.qualcomm.com>
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
@@ -103,106 +96,95 @@ On Tue, Oct 14, 2025 at 06:06:45PM +0200, Konrad Dybcio wrote:
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/mux/ps883x.c | 41 ++++++++++++++++++++++-------------------
->  1 file changed, 22 insertions(+), 19 deletions(-)
+>  drivers/usb/typec/mux/ps883x.c | 71 ++++++++++++++++++++++--------------------
+>  1 file changed, 37 insertions(+), 34 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/mux/ps883x.c b/drivers/usb/typec/mux/ps883x.c
-> index ad59babf7cce..68f172df7be3 100644
+> index 68f172df7be3..72f1e737ca4b 100644
 > --- a/drivers/usb/typec/mux/ps883x.c
 > +++ b/drivers/usb/typec/mux/ps883x.c
-> @@ -54,8 +54,9 @@ struct ps883x_retimer {
->  	struct mutex lock; /* protect non-concurrent retimer & switch */
->  
->  	enum typec_orientation orientation;
-> -	unsigned long mode;
-> -	unsigned int svid;
-> +	u8 cfg0;
-> +	u8 cfg1;
-> +	u8 cfg2;
->  };
->  
->  static int ps883x_configure(struct ps883x_retimer *retimer, int cfg0,
-> @@ -64,6 +65,9 @@ static int ps883x_configure(struct ps883x_retimer *retimer, int cfg0,
->  	struct device *dev = &retimer->client->dev;
->  	int ret;
->  
-> +	if (retimer->cfg0 == cfg0 && retimer->cfg1 == cfg1 && retimer->cfg2 == cfg2)
-> +		return 0;
-> +
->  	ret = regmap_write(retimer->regmap, REG_USB_PORT_CONN_STATUS_0, cfg0);
->  	if (ret) {
->  		dev_err(dev, "failed to write conn_status_0: %d\n", ret);
-> @@ -82,27 +86,31 @@ static int ps883x_configure(struct ps883x_retimer *retimer, int cfg0,
->  		return ret;
->  	}
->  
-> +	retimer->cfg0 = cfg0;
-> +	retimer->cfg1 = cfg1;
-> +	retimer->cfg2 = cfg2;
-> +
->  	return 0;
->  }
->  
-> -static int ps883x_set(struct ps883x_retimer *retimer)
-> +static int ps883x_set(struct ps883x_retimer *retimer, struct typec_retimer_state *state)
->  {
->  	int cfg0 = CONN_STATUS_0_CONNECTION_PRESENT;
+> @@ -99,44 +99,47 @@ static int ps883x_set(struct ps883x_retimer *retimer, struct typec_retimer_state
 >  	int cfg1 = 0x00;
 >  	int cfg2 = 0x00;
 >  
->  	if (retimer->orientation == TYPEC_ORIENTATION_NONE ||
-> -	    retimer->mode == TYPEC_STATE_SAFE) {
-> +	    state->mode == TYPEC_STATE_SAFE) {
->  		return ps883x_configure(retimer, cfg0, cfg1, cfg2);
->  	}
->  
-> -	if (retimer->mode != TYPEC_STATE_USB && retimer->svid != USB_TYPEC_DP_SID)
-> +	if (state->alt && state->alt->svid != USB_TYPEC_DP_SID)
->  		return -EINVAL;
->  
+> -	if (retimer->orientation == TYPEC_ORIENTATION_NONE ||
+> -	    state->mode == TYPEC_STATE_SAFE) {
+> -		return ps883x_configure(retimer, cfg0, cfg1, cfg2);
+> -	}
+> -
+> -	if (state->alt && state->alt->svid != USB_TYPEC_DP_SID)
+> -		return -EINVAL;
+> -
 >  	if (retimer->orientation == TYPEC_ORIENTATION_REVERSE)
 >  		cfg0 |= CONN_STATUS_0_ORIENTATION_REVERSED;
 >  
-> -	switch (retimer->mode) {
-> +	switch (state->mode) {
->  	case TYPEC_STATE_USB:
->  		cfg0 |= CONN_STATUS_0_USB_3_1_CONNECTED;
->  		break;
-> @@ -149,7 +157,13 @@ static int ps883x_sw_set(struct typec_switch_dev *sw,
->  	if (retimer->orientation != orientation) {
->  		retimer->orientation = orientation;
+> -	switch (state->mode) {
+> -	case TYPEC_STATE_USB:
+> -		cfg0 |= CONN_STATUS_0_USB_3_1_CONNECTED;
+> -		break;
+> +	if (state->alt) {
+> +		switch (state->alt->svid) {
+> +		case USB_TYPEC_DP_SID:
+> +			cfg1 |= CONN_STATUS_1_DP_CONNECTED |
+> +				CONN_STATUS_1_DP_HPD_LEVEL;
 >  
-> -		ret = ps883x_set(retimer);
-> +		ret = regmap_assign_bits(retimer->regmap, REG_USB_PORT_CONN_STATUS_0,
-> +					 CONN_STATUS_0_ORIENTATION_REVERSED,
-> +					 orientation == TYPEC_ORIENTATION_REVERSE);
-> +		if (ret) {
-> +			dev_err(&retimer->client->dev, "failed to set orientation: %d\n", ret);
-> +			return ret;
+> -	case TYPEC_DP_STATE_C:
+> -		cfg1 = CONN_STATUS_1_DP_CONNECTED |
+> -		       CONN_STATUS_1_DP_SINK_REQUESTED |
+> -		       CONN_STATUS_1_DP_PIN_ASSIGNMENT_C_D |
+> -		       CONN_STATUS_1_DP_HPD_LEVEL;
+> -		break;
+> -
+> -	case TYPEC_DP_STATE_D:
+> -		cfg0 |= CONN_STATUS_0_USB_3_1_CONNECTED;
+> -		cfg1 = CONN_STATUS_1_DP_CONNECTED |
+> -		       CONN_STATUS_1_DP_SINK_REQUESTED |
+> -		       CONN_STATUS_1_DP_PIN_ASSIGNMENT_C_D |
+> -		       CONN_STATUS_1_DP_HPD_LEVEL;
+> -		break;
+> -
+> -	case TYPEC_DP_STATE_E:
+> -		cfg1 = CONN_STATUS_1_DP_CONNECTED |
+> -		       CONN_STATUS_1_DP_HPD_LEVEL;
+> -		break;
+> -
+> -	default:
+> -		return -EOPNOTSUPP;
+> +			switch (state->mode)  {
+> +			case TYPEC_DP_STATE_C:
+> +				cfg1 |= CONN_STATUS_1_DP_SINK_REQUESTED |
+> +					CONN_STATUS_1_DP_PIN_ASSIGNMENT_C_D;
+> +				fallthrough;
+> +			case TYPEC_DP_STATE_D:
+> +				cfg1 |= CONN_STATUS_0_USB_3_1_CONNECTED;
+> +				break;
+> +			default: /* MODE_E */
+> +				break;
+> +			}
+> +			break;
+> +		default:
+> +			dev_err(&retimer->client->dev, "Got unsupported SID: 0x%x\n",
+> +				state->alt->svid);
+> +			return -EOPNOTSUPP;
+> +		}
+> +	} else {
+> +		switch (state->mode) {
+> +		case TYPEC_STATE_SAFE:
+> +		/* USB2 pins don't even go through this chip */
+> +		case TYPEC_MODE_USB2:
+> +			break;
+> +		case TYPEC_STATE_USB:
+> +		case TYPEC_MODE_USB3:
+> +			cfg0 |= CONN_STATUS_0_USB_3_1_CONNECTED;
+> +			break;
+> +		default:
+> +			dev_err(&retimer->client->dev, "Got unsupported mode: %lu\n",
+> +				state->mode);
+> +			return -EOPNOTSUPP;
 > +		}
 >  	}
 >  
->  	mutex_unlock(&retimer->lock);
-> @@ -165,18 +179,7 @@ static int ps883x_retimer_set(struct typec_retimer *rtmr,
->  	int ret = 0;
->  
->  	mutex_lock(&retimer->lock);
-> -
-> -	if (state->mode != retimer->mode) {
-> -		retimer->mode = state->mode;
-> -
-> -		if (state->alt)
-> -			retimer->svid = state->alt->svid;
-> -		else
-> -			retimer->svid = 0;
-> -
-> -		ret = ps883x_set(retimer);
-> -	}
-> -
-> +	ret = ps883x_set(retimer, state);
->  	mutex_unlock(&retimer->lock);
->  
->  	if (ret)
+>  	return ps883x_configure(retimer, cfg0, cfg1, cfg2);
 > 
 > -- 
 > 2.51.0
