@@ -1,79 +1,72 @@
-Return-Path: <linux-usb+bounces-29483-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29484-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85766BF5B39
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 12:09:15 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE4E9BF5B9C
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 12:14:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4A76F4EA3D9
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 10:09:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BEC2B4F2D3A
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 10:14:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA3B32AAD1;
-	Tue, 21 Oct 2025 10:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C61F32ABFE;
+	Tue, 21 Oct 2025 10:14:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MzCdiHNq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cABm1VCQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5101E5B71;
-	Tue, 21 Oct 2025 10:09:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53B72E2F03;
+	Tue, 21 Oct 2025 10:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761041348; cv=none; b=U79PiEEGeLSL6yJ5ZSkaTk14ONp6xy5v9PWVSjqKzhNs8vmS2Q6vMWn7uD1ako10Xnt89J5InHTZk69hu+AHZzAEIZ2VVjKPbEDu+pRK5LEy7XYagBUrkkMOtDzBRPySDm2GXXIIh3WDaGps53/zfRRPLuThkokTJchXaz1cO/0=
+	t=1761041657; cv=none; b=sEiW1y0qGunPXKFkK4uI/K8CeEd4vi6vghezJDN2Fy/unL1WcWaj4x7jV9tNAbC02T4HHNfqSDUlC6CxwRZ3WeJGVn581qRZWATOqR5BrDTw84NkGqhnYzvp+JvzZ59b6Ppd/+PFVlzRvXj9xtdQsB5oX3E/lzJn+rmuc5P8qPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761041348; c=relaxed/simple;
-	bh=3IkoSazez8ElCAf7vNq4LiZ5Hk3FfC92/I68aQg1P+s=;
+	s=arc-20240116; t=1761041657; c=relaxed/simple;
+	bh=7G9wh+3pYjtmqhznpuhg/4zeG4jNF6FIdeVPDV76n9A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=liYOhVGcj8QTcBJSv94wwZEQzYp3xy7OLqjTFd8NsPkuGLAwzmDLal+o2Yz9+0mntKe4pu/UlJHWKimhjILFbFAMOA546E15TGOKgCrI0CaxsOzaSEpvlA64t/h0cA2wURnB4l+TUpyc4AlS96HN7S9dpRiYyp3vPuQrP3CvxVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MzCdiHNq; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=tyVASXxhA+KDEDP2+1DfOwgMXtpXOCtvY/4MY6MOfkthU2yOUnwzsPbjf6eYK/bwyXRJBDujKGv8IYqzyVSkdc2bGbFMXpiBrxEg2VAEpcXcOnvi88t+iuBJQQpjOnHZQUB4wVlMWnOxoLqcv9/wW4LIw1U5GPYijwElpkqRhOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cABm1VCQ; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761041346; x=1792577346;
+  t=1761041656; x=1792577656;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3IkoSazez8ElCAf7vNq4LiZ5Hk3FfC92/I68aQg1P+s=;
-  b=MzCdiHNqUCQ6OY3gn1i0H25TZE0nhvmJqSmbS7Y+iSx63/utoQkK1RiW
-   51+6g2l6aRyXQwS9jHXkmxRYK45mosybStgW9qPc8N8PL5/vZj9H4IGA6
-   q4wUVg+5UTQo4qnXRyjsdaLAlHoHMRE/0tHWUHeBWDEELGYg8WNCDXD//
-   Yg6gdVVXHW8vBU3TwShXmPTbXasNv0rbfASedeC2oAf8V1o3AvT4urq2n
-   2NVup0c5k9bU/6aq1+BAHfYOuuMLNUk5lfx9iiKaZ5uM6RtgbaoPCJzWM
-   qKniWOZaUFWuMQXst+wPjkcVP1q5msTUUNbb1thCLTdPXVOrSjKVjXG5z
+  bh=7G9wh+3pYjtmqhznpuhg/4zeG4jNF6FIdeVPDV76n9A=;
+  b=cABm1VCQZA1ORBJxjsSb2kUZcUFbpT5cVFTa+Mvda8DvxHfkb3GYPl/b
+   d3wD+YYx3y8GfPQSKcILdD2lt8QIjv3rt+EUVwvCr3e+4wMFWOXUrgpGG
+   KjBZ6r1cDl5K0gAXonI7gMRsNKefYI6EE41qkiNuk7dDSBP8+7xsgWql1
+   ooXHuBOXPNIfHciFA8HkdEFUnoY6IdnQ3y2dLmR/u3e2PbAyDjoxLz3Qy
+   /szirDSECuww3X3BkYZRQi2SlkeEsxEGW8fUviZoLEY1zB3+qSAkPG34I
+   W5xOOX7EpYd429RGvXqVhGyt/kbVkpsS9NK8DLBAW+sp42YWnnvsCEeol
    w==;
-X-CSE-ConnectionGUID: AaMn8ZHpS8SP2OHvDP7b6g==
-X-CSE-MsgGUID: C/n+QPuiRfKqllPX8yRx8w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63204112"
+X-CSE-ConnectionGUID: 410yUsDFSFykXVN1MiXJHA==
+X-CSE-MsgGUID: ptc+hNrDSX+8S/HYekdELQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="62372422"
 X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="63204112"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 03:09:05 -0700
-X-CSE-ConnectionGUID: +kRsYGyUSpyirDU+nfxltw==
-X-CSE-MsgGUID: mlr9IvkQR8S/DIFYFMbZmw==
+   d="scan'208";a="62372422"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 03:14:15 -0700
+X-CSE-ConnectionGUID: vKdFSoyXTSCm5jBMmk1PvA==
+X-CSE-MsgGUID: vCmLMOb8QVe0urxPVPyQug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="214187185"
+   d="scan'208";a="183262245"
 Received: from mgerlach-mobl1.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.224])
-  by orviesa002.jf.intel.com with SMTP; 21 Oct 2025 03:09:01 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Oct 2025 13:09:00 +0300
-Date: Tue, 21 Oct 2025 13:09:00 +0300
+  by fmviesa007.fm.intel.com with SMTP; 21 Oct 2025 03:14:13 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Oct 2025 13:14:11 +0300
+Date: Tue, 21 Oct 2025 13:14:11 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-usb@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	kernel-janitors@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Anand Moon <linux.amoon@gmail.com>,
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] usb: typec-mux: ptn36502: Omit a variable reassignment
- in ptn36502_probe()
-Message-ID: <aPdbvC6Fz4kZ9x8q@kuha.fi.intel.com>
-References: <b33ac7ab-e66f-4407-ba3e-ec4c70636fcf@web.de>
+To: Abel Vesa <abel.vesa@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] usb: typec: ucsi: Add support for orientation
+Message-ID: <aPdc808hqRH73cjg@kuha.fi.intel.com>
+References: <20251015-usb-typec-ucsi-orientation-v1-1-18cd109fb0b7@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,42 +75,95 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b33ac7ab-e66f-4407-ba3e-ec4c70636fcf@web.de>
+In-Reply-To: <20251015-usb-typec-ucsi-orientation-v1-1-18cd109fb0b7@linaro.org>
 
-On Mon, Oct 20, 2025 at 06:00:06PM +0200, Markus Elfring wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Mon, 20 Oct 2025 17:50:12 +0200
+On Wed, Oct 15, 2025 at 04:50:36PM +0300, Abel Vesa wrote:
+> According to UCSI 2.0 specification, the orientation is
+> part of the connector status payload. So tie up the port
+> orientation.
 > 
-> An error code was assigned to a variable and checked accordingly.
-> This value was passed to a dev_err_probe() call in an if branch.
-> This function is documented in the way that the same value is returned.
-> Thus delete a redundant variable reassignment.
-> 
-> The source code was transformed by using the Coccinelle software.
-> 
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+
+RFC or not, this looks ok to me.
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/mux/ptn36502.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/usb/typec/ucsi/ucsi.c | 24 ++++++++++++++++++++++++
+>  drivers/usb/typec/ucsi/ucsi.h |  3 +++
+>  2 files changed, 27 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/mux/ptn36502.c b/drivers/usb/typec/mux/ptn36502.c
-> index 129d9d24b932..b1a2977b974c 100644
-> --- a/drivers/usb/typec/mux/ptn36502.c
-> +++ b/drivers/usb/typec/mux/ptn36502.c
-> @@ -339,7 +339,7 @@ static int ptn36502_probe(struct i2c_client *client)
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 3995483a0aa097b822046e819f994164d6183b0d..17439ec434d41d24e8e4c7a97d7e6117fd07d950 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1008,6 +1008,28 @@ static int ucsi_check_connector_capability(struct ucsi_connector *con)
+>  	return ret;
+>  }
 >  
->  	ret = regulator_enable(ptn->vdd18_supply);
->  	if (ret) {
-> -		ret = dev_err_probe(dev, ret, "Failed to enable vdd18\n");
-> +		dev_err_probe(dev, ret, "Failed to enable vdd18\n");
->  		goto err_mux_put;
->  	}
+> +static void ucsi_orientation(struct ucsi_connector *con)
+> +{
+> +	if (con->ucsi->version < UCSI_VERSION_2_0)
+> +		return;
+> +
+> +	if (!UCSI_CONSTAT(con, CONNECTED)) {
+> +		typec_set_orientation(con->port, TYPEC_ORIENTATION_NONE);
+> +		return;
+> +	}
+> +
+> +	switch (UCSI_CONSTAT(con, ORIENTATION)) {
+> +	case UCSI_CONSTAT_ORIENTATION_NORMAL:
+> +		typec_set_orientation(con->port, TYPEC_ORIENTATION_NORMAL);
+> +		break;
+> +	case UCSI_CONSTAT_ORIENTATION_REVERSE:
+> +		typec_set_orientation(con->port, TYPEC_ORIENTATION_REVERSE);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +}
+> +
+>  static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+>  {
+>  	switch (UCSI_CONSTAT(con, PWR_OPMODE)) {
+> @@ -1258,6 +1280,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  		typec_set_pwr_role(con->port, role);
+>  		ucsi_port_psy_changed(con);
+>  		ucsi_partner_change(con);
+> +		ucsi_orientation(con);
 >  
+>  		if (UCSI_CONSTAT(con, CONNECTED)) {
+>  			ucsi_register_partner(con);
+> @@ -1690,6 +1713,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>  		typec_set_pwr_role(con->port, UCSI_CONSTAT(con, PWR_DIR));
+>  		ucsi_register_partner(con);
+>  		ucsi_pwr_opmode_change(con);
+> +		ucsi_orientation(con);
+>  		ucsi_port_psy_changed(con);
+>  		if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
+>  			ucsi_get_partner_identity(con);
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index e301d9012936fb85eaff7f260a862ff099eb77c5..c85175cd001487fa9d66076e608e098d236f5275 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -360,6 +360,9 @@ struct ucsi_cable_property {
+>  #define   UCSI_CONSTAT_BC_SLOW_CHARGING		2
+>  #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING	3
+>  #define UCSI_CONSTAT_PD_VERSION_V1_2		UCSI_DECLARE_BITFIELD_V1_2(70, 16)
+> +#define UCSI_CONSTAT_ORIENTATION		UCSI_DECLARE_BITFIELD_V2_0(86, 1)
+> +#define   UCSI_CONSTAT_ORIENTATION_NORMAL	0
+> +#define   UCSI_CONSTAT_ORIENTATION_REVERSE	1
+>  #define UCSI_CONSTAT_PWR_READING_READY_V2_1	UCSI_DECLARE_BITFIELD_V2_1(89, 1)
+>  #define UCSI_CONSTAT_CURRENT_SCALE_V2_1		UCSI_DECLARE_BITFIELD_V2_1(90, 3)
+>  #define UCSI_CONSTAT_PEAK_CURRENT_V2_1		UCSI_DECLARE_BITFIELD_V2_1(93, 16)
+> 
+> ---
+> base-commit: 13863a59e410cab46d26751941980dc8f088b9b3
+> change-id: 20251015-usb-typec-ucsi-orientation-75ed0a2c9ff3
+> 
+> Best regards,
 > -- 
-> 2.51.1
+> Abel Vesa <abel.vesa@linaro.org>
 
 -- 
 heikki
