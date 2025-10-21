@@ -1,162 +1,174 @@
-Return-Path: <linux-usb+bounces-29479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D91CFBF55AD
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 10:49:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A53B0BF565B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 11:02:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 863BF352179
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 08:49:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82C2D467202
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 09:02:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF301326D61;
-	Tue, 21 Oct 2025 08:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2D0E32AAA9;
+	Tue, 21 Oct 2025 09:02:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aeGO1Ufi"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="JXqgQRiC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37653303A15;
-	Tue, 21 Oct 2025 08:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5025628725A
+	for <linux-usb@vger.kernel.org>; Tue, 21 Oct 2025 09:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761036538; cv=none; b=dq5Vym8NRqd32wy1LhLd0qwLyLQtCt/JfO5mBOj4pjmBvzG7GfKsJT6SnpfIygW8FJ1wBjYTPZ8PjQp3qNm7PXAZc/YtXncbSRwqLXzAeNnvab/8auqyc/TqF50FScOGxpJj4Z0LaHfk3ZRCeJTkWmOtNnP0JrK2jrBXfX/LxdM=
+	t=1761037351; cv=none; b=RhqRrvU1m95mO1vb720R9jBepbPngIq+GUldaXU9GIs4bJeSAUc+XrJRW4JR4ce2wAQOuRAORt02R9+o35oTWVl3oMvtcjNO1gsP/ZLufAkmQ1+sRPX0GSjeuJ0XbE63kQePgna1wbvupcRWAXUJwCw9BLFR9hO1MEqiZvxJFIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761036538; c=relaxed/simple;
-	bh=ixN0SnuQ8N2jtGJB1Dvgz9zJy2AHG8oUKIXx/yt/S8w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CijaUcrY/RLO5P96oNEQq8bgxODn7YZIgRyQcahdkHF7hBZJBLiaUdO7n6igsWf4JaOt8quaEfYQb/dgnsAKMXymU/AldQwz8iJ0QYgPubvVKdMkI6JtzUXY3EnSgCxC+P8IeeA9MHkjvZ/8bx3q189+giwn1N62jGLzIRX/75s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aeGO1Ufi; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761036537; x=1792572537;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ixN0SnuQ8N2jtGJB1Dvgz9zJy2AHG8oUKIXx/yt/S8w=;
-  b=aeGO1UfizO148v/f+76FotvAGhQrrCYY/x9BmoQxP+A2pkxG7iUmtZkz
-   Iyna+f4PRrKpSWdiOsCCw3DQikrZhazqHP06b7HwH4FPdp5Gc9GIEwW81
-   rhay9GR8u85mzEdVMOZGfyp7oOSIp5Lxq2h1EhC7Z+Qio6ROUcrRTz1bT
-   qrTSDT64RGzM4u3T3tTx10SYX4wytVdiPDP0V7zCXctc1H4YqXzLrViiL
-   MEK7fV8TZ1N8h5w8Bc5Nf1lGkEeA33SLG17mv9hlDOgnLHYrnTPn+QpOB
-   Fi8OSNgkNYpy4XqELmlq3UG9n3LM6kNCrEL8FzkFpK+pMn0Lqx3tpLvuT
-   Q==;
-X-CSE-ConnectionGUID: DqATerEoTruQWsG2SbBjxw==
-X-CSE-MsgGUID: rs5hlnUrQ+eyND0IVqHu7Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="50732125"
-X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="50732125"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 01:48:56 -0700
-X-CSE-ConnectionGUID: eCD/H1/RSIKfOQZXnX6Vww==
-X-CSE-MsgGUID: 5oEWrWiFR5aYJfjpPgNG5g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="183099996"
-Received: from mgerlach-mobl1.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.224])
-  by orviesa009.jf.intel.com with SMTP; 21 Oct 2025 01:48:47 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Oct 2025 11:48:45 +0300
-Date: Tue, 21 Oct 2025 11:48:45 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-Cc: Chaoyi Chen <kernel@airkyi.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Yubing Zhang <yubing.zhang@rock-chips.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Amit Sunil Dhamne <amitsd@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v6 1/8] usb: typec: Add default HPD device when register
- DisplayPort altmode
-Message-ID: <aPdI7Vb_djrfCfbT@kuha.fi.intel.com>
-References: <20251016022741.91-1-kernel@airkyi.com>
- <20251016022741.91-2-kernel@airkyi.com>
- <aPYImGmesrZWwyqh@kuha.fi.intel.com>
- <954a67d1-1759-4e18-8eef-3fa14fb3cef5@rock-chips.com>
+	s=arc-20240116; t=1761037351; c=relaxed/simple;
+	bh=OffQ204+Nyj5VGiYdW6PGJRNUJ3xhRI9Iw3cpA0RNp8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HEV/aumAxKKOKO3KalIs4wP4FQyI3HsObCd/jWBiTVFv+L2J5aEYE6usLEVhyZrVg81grZODr61B8vu7BmYhNkg7ByV2yrG+1WRu8C1zgEvbPVrlN6NcknRheSWthfcp9cN6+qg07d9Q2sYTFmqmOG4Qu8O8ZUOVcLgatBxnwm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=JXqgQRiC; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-42706c3b7cfso1774543f8f.2
+        for <linux-usb@vger.kernel.org>; Tue, 21 Oct 2025 02:02:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1761037347; x=1761642147; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uV95Izl15icyzjNabiyKCGR1CIjMB77dOSJKauGty+Q=;
+        b=JXqgQRiCeO/6bZC53J0LtiasJjjfxtp7weqhbCvhvkJRsME2Uo4sLgIb5X3jKHDL7w
+         MoOv88N18VE/CP8yIPTL2pV+vGyUGhGAgaEVr/how2NtaFpsi9zsu74gBChM3S+g6UDw
+         R59c69MOghHXFoywwC7yDdFc/QoAqfelLaBxbt/Os01BpwqmJG0uxWbTSwAQ6GwbNmkX
+         piPGYdocSnbvwq3j8PRMkhQAUzTDRET5mLsXercyiRb2R0eFxCkIm11aevDhawPzf4ZF
+         Kf1YrESL6oTZMuFqNCmAZvh1xAox6lyaK6yxAS461WzJIjQaevvRJEYMoOMLycRAB4eb
+         l+Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761037347; x=1761642147;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uV95Izl15icyzjNabiyKCGR1CIjMB77dOSJKauGty+Q=;
+        b=kIw/i30OX3eoe0kXZgNPFQ7BEt89W8TpKJmUneRe+7hZNFIsOkxO5GdDA+SXP5ViJe
+         nZuxYVKpsLZjFCyGkuAOZXsNTragj+GeLA0Vop4rnszLESldjopxmjZoOVup03FFLUzP
+         d0W0SEQ54fHz9+T+zMgh9HAgsmlg/9KFtVRdXHyrZ7w4dg5Cx7ZKDF1gUFQDmbsSTVgh
+         Jyl3+dXjSRxY1yhGiDQQSJrIQ3tjz+QaAQWvzUU0q+6aSICgKJGq3YL3pj+WkCa2T8wi
+         xJ6z9ZD5XxQVkW76NHYGKeQFAbhdlZXmYgvw+aZEyYXi0sBY/Xmm7tC29cnjjqC2OmDA
+         P9Lg==
+X-Forwarded-Encrypted: i=1; AJvYcCVMy1ZG5ncbNK+PlE5CgeWIheRk2B8KajSdU/OHc6vXICjEsCzkzXN3RTFSOozLmSCmceErbcDD7Mk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuaOG+6OhpTxar6XAIoAS63Edi8mSUD4/lfgPrXAttXbs43eyZ
+	Ptb35D2ueq8DfIXfMc4vLex0pk1wasmiSBesX8o8B0pAuhw/X8RCe9T0s3U/GvVLtSQ=
+X-Gm-Gg: ASbGncs7hSf9SI3OJyilv6Da625pgm1HiL0FIjoPhe6K2g73U/uZ0AjOMXNca6SADnt
+	CTPMpvUFcWfBhSBmeroNlYMJUJdDOvMn33So3ICH9jizkr6uZFh9RwyZwkSSeUpN6yXdwPT6cX3
+	lGZUmqoUnJ2jqrtwemn+XU6KC+ci0EIZUHZc7ZuILJBaqZY76iVOhtQijzzVfKegCfDPi5ZaZIe
+	fHTD7FhvekEDHH3vlxgD26H6n+xSeN8lUtcXnQuylUtybd+3R3cM4AqQt7oUe6S2u5WSqFKQUNs
+	0iPU2qSlhrZu30QomCyHQgV6SZs2nGqevOpEC98VAmMk58PHqOFU57W00Vu+xW20OQMyCcDhNmQ
+	NujdCyhYACE3UDRMxn+Xtm0NQbJPsSXe17H9CeGKnywDe02mN7MUwzERyzkgucKHrLa5rdZHOCd
+	d7tCqdFs8esAJ4cZQeo0iEm9uB07UEw2ny0hH1wF+xfkpF4tJtSaLm
+X-Google-Smtp-Source: AGHT+IFq6w36inwR7PpG+ZkZbBwkFGa55fsBXWBVdNad663sGiVEFpxwXvkazBKvYy9SUPhOCmUAYg==
+X-Received: by 2002:a05:6000:40df:b0:3ec:42ad:591 with SMTP id ffacd0b85a97d-42704d9899emr12228828f8f.36.1761037346574;
+        Tue, 21 Oct 2025 02:02:26 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1369:8e01:d78f:5536:188:1544? ([2001:a61:1369:8e01:d78f:5536:188:1544])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427f00ba070sm19511194f8f.42.2025.10.21.02.02.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Oct 2025 02:02:26 -0700 (PDT)
+Message-ID: <806d82e6-6db6-4ec8-a49c-665a97ea36f8@suse.com>
+Date: Tue, 21 Oct 2025 11:02:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <954a67d1-1759-4e18-8eef-3fa14fb3cef5@rock-chips.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device driver
+ for config selection
+To: Michal Pecio <michal.pecio@gmail.com>, Oliver Neukum <oneukum@suse.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>, yicongsrfy@163.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ pabeni@redhat.com
+References: <20251013110753.0f640774.michal.pecio@gmail.com>
+ <20251017024229.1959295-1-yicongsrfy@163.com>
+ <db3db4c6-d019-49d0-92ad-96427341589c@rowland.harvard.edu>
+ <20251017191511.6dd841e9.michal.pecio@gmail.com>
+ <bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
+ <20251018172156.69e93897.michal.pecio@gmail.com>
+ <2fae9966-5e3a-488b-8ab5-51d46488e097@suse.com>
+ <20251020175921.37f35e5a.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20251020175921.37f35e5a.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 20.10.25 17:59, Michal Pecio wrote:
+> On Mon, 20 Oct 2025 11:59:06 +0200, Oliver Neukum wrote:
+>> On 18.10.25 17:21, Michal Pecio wrote:
 
-On Mon, Oct 20, 2025 at 07:07:46PM +0800, Chaoyi Chen wrote:
-> Hi Heikki,
+>>> @@ -1255,6 +1257,8 @@ struct usb_driver {
+>>>    
+>>>    	void (*shutdown)(struct usb_interface *intf);
+>>>    
+>>> +	bool (*preferred)(struct usb_device *udev);
+>>
+>> I am sorry, but this is a bit clunky. If you really want to
+>> introduce such a method, why not just return the preferred
+>> configuration?
 > 
-> On 10/20/2025 6:02 PM, Heikki Krogerus wrote:
-> > On Thu, Oct 16, 2025 at 10:27:34AM +0800, Chaoyi Chen wrote:
-> > > From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-> > > 
-> > > Add default DRM AUX HPD bridge device when register DisplayPort
-> > > altmode. That makes it redundant for each Type-C driver to implement
-> > > a similar registration process in embedded scenarios.
-> > > 
-> > > Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-> > > ---
-> > > 
-> > > Changes in v6:
-> > > - Fix depend in Kconfig.
-> > > 
-> > > Changes in v5:
-> > > - Remove the calls related to `drm_aux_hpd_bridge_notify()`.
-> > > - Place the helper functions in the same compilation unit.
-> > > - Add more comments about parent device.
-> > > 
-> > >   drivers/usb/typec/Kconfig         |  2 ++
-> > >   drivers/usb/typec/class.c         | 26 ++++++++++++++++++++++++++
-> > >   include/linux/usb/typec_altmode.h |  2 ++
-> > >   3 files changed, 30 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> > > index 2f80c2792dbd..a6730fbb576b 100644
-> > > --- a/drivers/usb/typec/Kconfig
-> > > +++ b/drivers/usb/typec/Kconfig
-> > > @@ -2,6 +2,8 @@
-> > >   menuconfig TYPEC
-> > >   	tristate "USB Type-C Support"
-> > > +	depends on DRM || DRM=n
-> > > +	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
-> > This is wrong. DRM should not dictate how this entire subsystem core
-> > is configured. The dependency needs to be on the DRM bridge side.
-> > 
-> > You can for example use the bus notification there to see when a new
-> > alternate mode is being registered, or use some other notification
-> > mechanism.
+> Because I wanted to introduce exactly such a method, rather than one
+> which returns the configuration ;)
+
+Well, then I have to state that your patch perfectly implements
+your wish. >:->
+Would you allow me a follow up question, though? Why have you
+developed that wish?
+
+> The point was to pull configuration selection *out* of those drivers.
+
+While I appreciate the goal, it is not clear to me how adding
+a method to the generic interface driver template achieves that goal.
+In fact this approach seems counterproductive.
+
+In particular a bool will not work for the generic case.
+If you really want to make this generic, you'll have to face
+the unfortunate possibility that a configuration have
+multiple interfaces whose drivers disagree in that regard.
+At a minimum you'd have to be able to return a "don't care"
+value to compute a reasonable pick.
+  > They already do it, and it makes them copy-paste the same trivial loop
+> which iterates through configs until it finds the vendor interface.
+
+If the concern is simply getting the code centralized (which
+is not wrong), then Alan's original proposal of having a flag
+(let's not call it a quirk) in usbcore for devices that need
+the logic in the heuristic for picking a configuration to be
+inverted would seem to be the simplest approach.
+
+> The idea is to have a maximally simple check for a known-good vendor
+> interface driver before making unfounded assumptions like:
 > 
-> Is it a good idea to implement notification functions like
-> drivers/usb/core/notify.c in TCPM, and then let other subsystems (such as DRM)
-> listen to these notifications?
+> /* From the remaining configs, choose the first one whose
+>   * first interface is for a non-vendor-specific class.
+>   * Reason: Linux is more likely to have a class driver
+>   * than a vendor-specific driver. */
+> 
+> Unfortunately, that's only half the battle. The other half is forcing
+> configuration reevaluation when such a driver is loaded. I hoped it
 
-Don't limit this to tcpm only. I would suggest something similar what
-we have for usb bus: drivers/usb/core/notify.c
+Exactly. Hence don't put the information that the assumption
+must not be made into a driver but into usbcore. Problem avoided.
 
-So that, but for the typec bus. Then in DRM bridge code you just use
-typec_register/unregister_notify().
+It looks like this is an issue we are not going to find a perfect
+solution for. Hence our priority should be finding the simplest
+change. IMHO that's a new quirk just inverting existing logic.
+Sure, it is a bit ugly because it depends on the kernel configuration,
+but that is what we have a preprocessor for.
 
-thanks,
+	Regards
+		Oliver
 
--- 
-heikki
+
 
