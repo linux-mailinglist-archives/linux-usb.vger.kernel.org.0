@@ -1,154 +1,124 @@
-Return-Path: <linux-usb+bounces-29482-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29483-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3BA6BF5940
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 11:45:08 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85766BF5B39
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 12:09:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49E2E18C5927
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 09:45:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4A76F4EA3D9
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 10:09:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA30831DDAE;
-	Tue, 21 Oct 2025 09:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA3B32AAD1;
+	Tue, 21 Oct 2025 10:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="g6OhVZ/y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MzCdiHNq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m19731102.qiye.163.com (mail-m19731102.qiye.163.com [220.197.31.102])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AEB32B9B8;
-	Tue, 21 Oct 2025 09:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5101E5B71;
+	Tue, 21 Oct 2025 10:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761039862; cv=none; b=TFd3rLQPo83dpJKDpQi3wkYjrlhinP9qySJKv2s+pWz8Bawbv/TaLaPQT5tQpndjQlK05TKYI4TvBs2HREklIS+VG+TqivKe9FcKOtwLqT3vjdTEOvZbi3DxHknVofC6IEqgWRzbGEo/5J4p8nMbXCZhAuwqe2xB/1/LfpSncbQ=
+	t=1761041348; cv=none; b=U79PiEEGeLSL6yJ5ZSkaTk14ONp6xy5v9PWVSjqKzhNs8vmS2Q6vMWn7uD1ako10Xnt89J5InHTZk69hu+AHZzAEIZ2VVjKPbEDu+pRK5LEy7XYagBUrkkMOtDzBRPySDm2GXXIIh3WDaGps53/zfRRPLuThkokTJchXaz1cO/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761039862; c=relaxed/simple;
-	bh=QzGk1F4Oghc7q1SK/0Q0gWE+qslFRrGUIMBxavAMLZ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FLOyvcUVNxkToYeW73jvZnW48+M2hERoGAhORNNQyS7wNl/WdEvp4zDmshAF+ZeeTStQSuAiwZeopKMLu47aKS6KsbXHtZOGFX+el+a/3gCZMuJ4+1Nm8REhK8fmsHdThEOl7wmFJL56EFVBBax5TKoCOYb31C7KfAMlUs/oeqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=g6OhVZ/y; arc=none smtp.client-ip=220.197.31.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.149] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 26a698a5f;
-	Tue, 21 Oct 2025 17:44:12 +0800 (GMT+08:00)
-Message-ID: <1221dd6c-2035-4e5d-8052-341da279fe81@rock-chips.com>
-Date: Tue, 21 Oct 2025 17:44:11 +0800
+	s=arc-20240116; t=1761041348; c=relaxed/simple;
+	bh=3IkoSazez8ElCAf7vNq4LiZ5Hk3FfC92/I68aQg1P+s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=liYOhVGcj8QTcBJSv94wwZEQzYp3xy7OLqjTFd8NsPkuGLAwzmDLal+o2Yz9+0mntKe4pu/UlJHWKimhjILFbFAMOA546E15TGOKgCrI0CaxsOzaSEpvlA64t/h0cA2wURnB4l+TUpyc4AlS96HN7S9dpRiYyp3vPuQrP3CvxVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MzCdiHNq; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761041346; x=1792577346;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3IkoSazez8ElCAf7vNq4LiZ5Hk3FfC92/I68aQg1P+s=;
+  b=MzCdiHNqUCQ6OY3gn1i0H25TZE0nhvmJqSmbS7Y+iSx63/utoQkK1RiW
+   51+6g2l6aRyXQwS9jHXkmxRYK45mosybStgW9qPc8N8PL5/vZj9H4IGA6
+   q4wUVg+5UTQo4qnXRyjsdaLAlHoHMRE/0tHWUHeBWDEELGYg8WNCDXD//
+   Yg6gdVVXHW8vBU3TwShXmPTbXasNv0rbfASedeC2oAf8V1o3AvT4urq2n
+   2NVup0c5k9bU/6aq1+BAHfYOuuMLNUk5lfx9iiKaZ5uM6RtgbaoPCJzWM
+   qKniWOZaUFWuMQXst+wPjkcVP1q5msTUUNbb1thCLTdPXVOrSjKVjXG5z
+   w==;
+X-CSE-ConnectionGUID: AaMn8ZHpS8SP2OHvDP7b6g==
+X-CSE-MsgGUID: C/n+QPuiRfKqllPX8yRx8w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63204112"
+X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
+   d="scan'208";a="63204112"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 03:09:05 -0700
+X-CSE-ConnectionGUID: +kRsYGyUSpyirDU+nfxltw==
+X-CSE-MsgGUID: mlr9IvkQR8S/DIFYFMbZmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
+   d="scan'208";a="214187185"
+Received: from mgerlach-mobl1.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.224])
+  by orviesa002.jf.intel.com with SMTP; 21 Oct 2025 03:09:01 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Oct 2025 13:09:00 +0300
+Date: Tue, 21 Oct 2025 13:09:00 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: linux-usb@vger.kernel.org,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	kernel-janitors@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Anand Moon <linux.amoon@gmail.com>,
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] usb: typec-mux: ptn36502: Omit a variable reassignment
+ in ptn36502_probe()
+Message-ID: <aPdbvC6Fz4kZ9x8q@kuha.fi.intel.com>
+References: <b33ac7ab-e66f-4407-ba3e-ec4c70636fcf@web.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/8] usb: typec: Add default HPD device when register
- DisplayPort altmode
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Chaoyi Chen <kernel@airkyi.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
- Diederik de Haas <didi.debian@cknow.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20251016022741.91-1-kernel@airkyi.com>
- <20251016022741.91-2-kernel@airkyi.com> <aPYImGmesrZWwyqh@kuha.fi.intel.com>
- <954a67d1-1759-4e18-8eef-3fa14fb3cef5@rock-chips.com>
- <aPdI7Vb_djrfCfbT@kuha.fi.intel.com>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <aPdI7Vb_djrfCfbT@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9a0627a3a903abkunm5cd7977fb8e2b1
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGUpDS1YaGRpIHUpDTBlKGU1WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE
-	9VSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=g6OhVZ/yiqpa03UuI1XX7K9vWZ8zWP3G2Gzz5rhk0AcJK/U+UJws7ashU78Y+//2Cp1XYy8iR5A+1sB1SdjmB78dMX58786reFgEn7dhTHoMucj84RbJ6zYHbg7CDu7vWXLe8oopZFd6uuDFaXjD2L3+MUHefnrApM/1yNbvoa0=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=qUewYvs5quWL8CZ5KUc8yRAa2rvIV3/2PN0yp7OZqoo=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b33ac7ab-e66f-4407-ba3e-ec4c70636fcf@web.de>
 
-On 10/21/2025 4:48 PM, Heikki Krogerus wrote:
+On Mon, Oct 20, 2025 at 06:00:06PM +0200, Markus Elfring wrote:
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Mon, 20 Oct 2025 17:50:12 +0200
+> 
+> An error code was assigned to a variable and checked accordingly.
+> This value was passed to a dev_err_probe() call in an if branch.
+> This function is documented in the way that the same value is returned.
+> Thus delete a redundant variable reassignment.
+> 
+> The source code was transformed by using the Coccinelle software.
+> 
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 
-> Hi,
->
-> On Mon, Oct 20, 2025 at 07:07:46PM +0800, Chaoyi Chen wrote:
->> Hi Heikki,
->>
->> On 10/20/2025 6:02 PM, Heikki Krogerus wrote:
->>> On Thu, Oct 16, 2025 at 10:27:34AM +0800, Chaoyi Chen wrote:
->>>> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>>>
->>>> Add default DRM AUX HPD bridge device when register DisplayPort
->>>> altmode. That makes it redundant for each Type-C driver to implement
->>>> a similar registration process in embedded scenarios.
->>>>
->>>> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>>> ---
->>>>
->>>> Changes in v6:
->>>> - Fix depend in Kconfig.
->>>>
->>>> Changes in v5:
->>>> - Remove the calls related to `drm_aux_hpd_bridge_notify()`.
->>>> - Place the helper functions in the same compilation unit.
->>>> - Add more comments about parent device.
->>>>
->>>>    drivers/usb/typec/Kconfig         |  2 ++
->>>>    drivers/usb/typec/class.c         | 26 ++++++++++++++++++++++++++
->>>>    include/linux/usb/typec_altmode.h |  2 ++
->>>>    3 files changed, 30 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
->>>> index 2f80c2792dbd..a6730fbb576b 100644
->>>> --- a/drivers/usb/typec/Kconfig
->>>> +++ b/drivers/usb/typec/Kconfig
->>>> @@ -2,6 +2,8 @@
->>>>    menuconfig TYPEC
->>>>    	tristate "USB Type-C Support"
->>>> +	depends on DRM || DRM=n
->>>> +	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
->>> This is wrong. DRM should not dictate how this entire subsystem core
->>> is configured. The dependency needs to be on the DRM bridge side.
->>>
->>> You can for example use the bus notification there to see when a new
->>> alternate mode is being registered, or use some other notification
->>> mechanism.
->> Is it a good idea to implement notification functions like
->> drivers/usb/core/notify.c in TCPM, and then let other subsystems (such as DRM)
->> listen to these notifications?
-> Don't limit this to tcpm only. I would suggest something similar what
-> we have for usb bus: drivers/usb/core/notify.c
->
-> So that, but for the typec bus. Then in DRM bridge code you just use
-> typec_register/unregister_notify().
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-I will try to add drivers/usb/typec/notify.c in v7 to implement this. Thank you.
+> ---
+>  drivers/usb/typec/mux/ptn36502.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/mux/ptn36502.c b/drivers/usb/typec/mux/ptn36502.c
+> index 129d9d24b932..b1a2977b974c 100644
+> --- a/drivers/usb/typec/mux/ptn36502.c
+> +++ b/drivers/usb/typec/mux/ptn36502.c
+> @@ -339,7 +339,7 @@ static int ptn36502_probe(struct i2c_client *client)
+>  
+>  	ret = regulator_enable(ptn->vdd18_supply);
+>  	if (ret) {
+> -		ret = dev_err_probe(dev, ret, "Failed to enable vdd18\n");
+> +		dev_err_probe(dev, ret, "Failed to enable vdd18\n");
+>  		goto err_mux_put;
+>  	}
+>  
+> -- 
+> 2.51.1
 
-
->
-> thanks,
->
 -- 
-Best,
-Chaoyi
-
+heikki
 
