@@ -1,81 +1,81 @@
-Return-Path: <linux-usb+bounces-29480-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29481-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A53B0BF565B
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 11:02:41 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C769BF573C
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 11:13:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82C2D467202
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 09:02:39 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 05CE9344611
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Oct 2025 09:13:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2D0E32AAA9;
-	Tue, 21 Oct 2025 09:02:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC07932AADB;
+	Tue, 21 Oct 2025 09:13:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="JXqgQRiC"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AWV2O0h9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5025628725A
-	for <linux-usb@vger.kernel.org>; Tue, 21 Oct 2025 09:02:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A8C25D527
+	for <linux-usb@vger.kernel.org>; Tue, 21 Oct 2025 09:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761037351; cv=none; b=RhqRrvU1m95mO1vb720R9jBepbPngIq+GUldaXU9GIs4bJeSAUc+XrJRW4JR4ce2wAQOuRAORt02R9+o35oTWVl3oMvtcjNO1gsP/ZLufAkmQ1+sRPX0GSjeuJ0XbE63kQePgna1wbvupcRWAXUJwCw9BLFR9hO1MEqiZvxJFIo=
+	t=1761038014; cv=none; b=DMXNnidjmyOSzd9VG5OS3xNTvAYOomFmVQNP2IDdPdAo7PuyvlsCtXs6RvGUTByHLb7pPjbufUspJ667duJQHTKWWF/wxuEEjSiNAbwNLgUeXRe4WsO0kQVisyWeQMuYnNcjxASDZUoUQbkeCJk9julsrqqJjla5511rG77z0MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761037351; c=relaxed/simple;
-	bh=OffQ204+Nyj5VGiYdW6PGJRNUJ3xhRI9Iw3cpA0RNp8=;
+	s=arc-20240116; t=1761038014; c=relaxed/simple;
+	bh=FNo66ablbsEBNbP+Xp31Vkt9QboxxnE3NasPNx4kGi4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HEV/aumAxKKOKO3KalIs4wP4FQyI3HsObCd/jWBiTVFv+L2J5aEYE6usLEVhyZrVg81grZODr61B8vu7BmYhNkg7ByV2yrG+1WRu8C1zgEvbPVrlN6NcknRheSWthfcp9cN6+qg07d9Q2sYTFmqmOG4Qu8O8ZUOVcLgatBxnwm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=JXqgQRiC; arc=none smtp.client-ip=209.85.221.51
+	 In-Reply-To:Content-Type; b=WLZjCd697sI5MxZjxm7pU8MKVXa8yECJJbIclVJfv7u81SCxbh/E5iRemw/igH4phKx+BG3VRmsHpOXmvnSSWA73DWuYrSFrH98l2uxg2U/fk3S8BSsRWIER90LySUmucXN1nYoaQKBWtAfTl6S+LzmaxdSyH5fuNK3tgJu1/zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AWV2O0h9; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-42706c3b7cfso1774543f8f.2
-        for <linux-usb@vger.kernel.org>; Tue, 21 Oct 2025 02:02:28 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-63befe5f379so7025719a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 21 Oct 2025 02:13:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1761037347; x=1761642147; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1761038010; x=1761642810; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uV95Izl15icyzjNabiyKCGR1CIjMB77dOSJKauGty+Q=;
-        b=JXqgQRiCeO/6bZC53J0LtiasJjjfxtp7weqhbCvhvkJRsME2Uo4sLgIb5X3jKHDL7w
-         MoOv88N18VE/CP8yIPTL2pV+vGyUGhGAgaEVr/how2NtaFpsi9zsu74gBChM3S+g6UDw
-         R59c69MOghHXFoywwC7yDdFc/QoAqfelLaBxbt/Os01BpwqmJG0uxWbTSwAQ6GwbNmkX
-         piPGYdocSnbvwq3j8PRMkhQAUzTDRET5mLsXercyiRb2R0eFxCkIm11aevDhawPzf4ZF
-         Kf1YrESL6oTZMuFqNCmAZvh1xAox6lyaK6yxAS461WzJIjQaevvRJEYMoOMLycRAB4eb
-         l+Jw==
+        bh=A1ql3iSX2umr1Lt+k9J1d3sz6ezZqS3QfSbZGtytons=;
+        b=AWV2O0h9qOb5a3OIJGUHt+bn3skyja3qpLN/V8kYA0u4luhk5dRr+Zdp+KPy+k45Tn
+         1B/JMhkGWNcTiDzGEk+6E2riN66KYcIEjTTD2RpcmXVP9rLuQh3b1p9456pLD1b/t/l9
+         7OC9rKkV83COEKeukS9SRgzk3l3Q9rQAtqGhUy+0eMaL6zi//t8BcPpGoFYLDuYQyyA3
+         aFkUlytDuxRTk+AgBD5TmOMcx/SOBcYekBkrLbJTg5VlIAmjzCDN4zi54X0lsordllib
+         rKKq4PK9KMkCHpBf2XJ/qb6m6283Sg8skav+74QS9ZM+MrhGqtNesqWoECTnZnAAAUik
+         qLYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761037347; x=1761642147;
+        d=1e100.net; s=20230601; t=1761038010; x=1761642810;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uV95Izl15icyzjNabiyKCGR1CIjMB77dOSJKauGty+Q=;
-        b=kIw/i30OX3eoe0kXZgNPFQ7BEt89W8TpKJmUneRe+7hZNFIsOkxO5GdDA+SXP5ViJe
-         nZuxYVKpsLZjFCyGkuAOZXsNTragj+GeLA0Vop4rnszLESldjopxmjZoOVup03FFLUzP
-         d0W0SEQ54fHz9+T+zMgh9HAgsmlg/9KFtVRdXHyrZ7w4dg5Cx7ZKDF1gUFQDmbsSTVgh
-         Jyl3+dXjSRxY1yhGiDQQSJrIQ3tjz+QaAQWvzUU0q+6aSICgKJGq3YL3pj+WkCa2T8wi
-         xJ6z9ZD5XxQVkW76NHYGKeQFAbhdlZXmYgvw+aZEyYXi0sBY/Xmm7tC29cnjjqC2OmDA
-         P9Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMy1ZG5ncbNK+PlE5CgeWIheRk2B8KajSdU/OHc6vXICjEsCzkzXN3RTFSOozLmSCmceErbcDD7Mk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuaOG+6OhpTxar6XAIoAS63Edi8mSUD4/lfgPrXAttXbs43eyZ
-	Ptb35D2ueq8DfIXfMc4vLex0pk1wasmiSBesX8o8B0pAuhw/X8RCe9T0s3U/GvVLtSQ=
-X-Gm-Gg: ASbGncs7hSf9SI3OJyilv6Da625pgm1HiL0FIjoPhe6K2g73U/uZ0AjOMXNca6SADnt
-	CTPMpvUFcWfBhSBmeroNlYMJUJdDOvMn33So3ICH9jizkr6uZFh9RwyZwkSSeUpN6yXdwPT6cX3
-	lGZUmqoUnJ2jqrtwemn+XU6KC+ci0EIZUHZc7ZuILJBaqZY76iVOhtQijzzVfKegCfDPi5ZaZIe
-	fHTD7FhvekEDHH3vlxgD26H6n+xSeN8lUtcXnQuylUtybd+3R3cM4AqQt7oUe6S2u5WSqFKQUNs
-	0iPU2qSlhrZu30QomCyHQgV6SZs2nGqevOpEC98VAmMk58PHqOFU57W00Vu+xW20OQMyCcDhNmQ
-	NujdCyhYACE3UDRMxn+Xtm0NQbJPsSXe17H9CeGKnywDe02mN7MUwzERyzkgucKHrLa5rdZHOCd
-	d7tCqdFs8esAJ4cZQeo0iEm9uB07UEw2ny0hH1wF+xfkpF4tJtSaLm
-X-Google-Smtp-Source: AGHT+IFq6w36inwR7PpG+ZkZbBwkFGa55fsBXWBVdNad663sGiVEFpxwXvkazBKvYy9SUPhOCmUAYg==
-X-Received: by 2002:a05:6000:40df:b0:3ec:42ad:591 with SMTP id ffacd0b85a97d-42704d9899emr12228828f8f.36.1761037346574;
-        Tue, 21 Oct 2025 02:02:26 -0700 (PDT)
+        bh=A1ql3iSX2umr1Lt+k9J1d3sz6ezZqS3QfSbZGtytons=;
+        b=eo0AG1yBPD2wQdukBjR2yVL+XqzWMr451DuBU3o6Xhw2azeUjwqsl0qIeXy9giM2ZH
+         lpdL/7JNwcZoFZ9s4ZAdKUXQ6/EkJAGC/icqj7LJXBYlxy8YdXSPmcBrgme29/kbpPny
+         UktX1qlRy2cDJmDxjN8Fa8osirWy+080nSi2IVKROuTUnVU31AYd/fCyUD4+eFUrPgvP
+         jH5wLqzN617LyJnHgcm72UojlV8izUPEQleBf+5QHPlbVat+ZhTGXxJSQIxQ5kTaSbeB
+         O84e5icv5zpBqCPhrAArR+/4rSmyimwsKjYOXCD2lIcPadOWQ9uom1juR6cOyTu5IHn9
+         0B+g==
+X-Forwarded-Encrypted: i=1; AJvYcCU06orEjjkqK98won8WWbjrCIlOFb35SkIgUYzBOcgssThlfg7egwG7APpxOi5vgbJWYlR5hrodKbg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVD+r0hl8kJn0Lal/Fxvfp5tB08D/H3T7HSE6S1vYWjgdERT+P
+	oLp+ho4Arna8Z7fYf3v9lqRk/BtVdd7F0Iu8UDkiDfwfNuC1fmVeQrGqP+XseHpzHYE=
+X-Gm-Gg: ASbGncvcsJfALhKi6RMlciMfgrxVvYPYrcISfA+aoCYSIv3AKycwUZx1qKbQZHjAnfo
+	bl75PZK5/i3Y5fnd6WelHr/trTmeafaPEqiAIqAJW0mOF6vCohU2uHF/ZATh0Vm1ms6Ngj1bQv3
+	T9ClZfMNk1v9GzNg0/xK1NowoVB3d5qZPDAd5hGaDW+wvCVv5HbQRffHMfOP8rcN2Z0FS/7GwGn
+	Q5/MZJzvYRUAw+7BT7jU5pwRZXWiYjBe4HNFc88Bge/crpxV5OFi0ixYlOFNTrgsLxnvVspjQDE
+	Q2JBHJAeZw30zaIpQNj50wTuYafGoTXbRoTDyo6MsHW5tJ7UOhzvFmYtPsDopL+PLjxmX3ETq5+
+	nvfDDq/M5kq5Ll/YqTO2brRIPxdA35zs823TZlCZUzsKRKG4Oo+jkj8dMErdP3wkoM6tWbCsjGa
+	lDYBcUBcHp+lTrrs/EI9zCzuTTV5Zm9F3GPVcSguQYow==
+X-Google-Smtp-Source: AGHT+IFd4QN0J2LW3+xFPMyc6BTdCEN0R8oW3yx+UfHqJIodk+bFRpkHkmyO+iexbcL8GfK3AkDk3w==
+X-Received: by 2002:a05:6402:234a:b0:63b:ed9c:dd16 with SMTP id 4fb4d7f45d1cf-63c1f631b11mr17034481a12.3.1761038010298;
+        Tue, 21 Oct 2025 02:13:30 -0700 (PDT)
 Received: from ?IPV6:2001:a61:1369:8e01:d78f:5536:188:1544? ([2001:a61:1369:8e01:d78f:5536:188:1544])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427f00ba070sm19511194f8f.42.2025.10.21.02.02.25
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-63c48ab45b8sm8838425a12.9.2025.10.21.02.13.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Oct 2025 02:02:26 -0700 (PDT)
-Message-ID: <806d82e6-6db6-4ec8-a49c-665a97ea36f8@suse.com>
-Date: Tue, 21 Oct 2025 11:02:25 +0200
+        Tue, 21 Oct 2025 02:13:29 -0700 (PDT)
+Message-ID: <3cb55160-8cca-471a-a707-188c7b411e34@suse.com>
+Date: Tue, 21 Oct 2025 11:13:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,90 +85,50 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device driver
  for config selection
-To: Michal Pecio <michal.pecio@gmail.com>, Oliver Neukum <oneukum@suse.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, yicongsrfy@163.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- pabeni@redhat.com
+To: Alan Stern <stern@rowland.harvard.edu>,
+ Michal Pecio <michal.pecio@gmail.com>
+Cc: yicongsrfy@163.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com
 References: <20251013110753.0f640774.michal.pecio@gmail.com>
  <20251017024229.1959295-1-yicongsrfy@163.com>
  <db3db4c6-d019-49d0-92ad-96427341589c@rowland.harvard.edu>
  <20251017191511.6dd841e9.michal.pecio@gmail.com>
  <bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
  <20251018172156.69e93897.michal.pecio@gmail.com>
- <2fae9966-5e3a-488b-8ab5-51d46488e097@suse.com>
- <20251020175921.37f35e5a.michal.pecio@gmail.com>
+ <6640b191-d25b-4c4e-ac67-144357eb5cc3@rowland.harvard.edu>
+ <20251018175618.148d4e59.michal.pecio@gmail.com>
+ <e4ce396c-0047-4bd1-a5d2-aee3b86315b1@rowland.harvard.edu>
+ <20251020182327.0dd8958a.michal.pecio@gmail.com>
+ <3c2a20ef-5388-49bd-ab09-27921ef1a729@rowland.harvard.edu>
 Content-Language: en-US
 From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20251020175921.37f35e5a.michal.pecio@gmail.com>
+In-Reply-To: <3c2a20ef-5388-49bd-ab09-27921ef1a729@rowland.harvard.edu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 20.10.25 17:59, Michal Pecio wrote:
-> On Mon, 20 Oct 2025 11:59:06 +0200, Oliver Neukum wrote:
->> On 18.10.25 17:21, Michal Pecio wrote:
+On 20.10.25 18:59, Alan Stern wrote:
 
->>> @@ -1255,6 +1257,8 @@ struct usb_driver {
->>>    
->>>    	void (*shutdown)(struct usb_interface *intf);
->>>    
->>> +	bool (*preferred)(struct usb_device *udev);
->>
->> I am sorry, but this is a bit clunky. If you really want to
->> introduce such a method, why not just return the preferred
->> configuration?
-> 
-> Because I wanted to introduce exactly such a method, rather than one
-> which returns the configuration ;)
+> Another possibility is simply to give up on handling all of this
+> automatically in the kernel.  The usb_modeswitch program certainly
+> should be capable of determining when a USB network device ought to
+> switch to a different configuration; that's very similar to the things
+> it does already.  Maybe userspace is the best place to implement this
+> stuff.
 
-Well, then I have to state that your patch perfectly implements
-your wish. >:->
-Would you allow me a follow up question, though? Why have you
-developed that wish?
+That would make usb_modeswitch or yet a new udev component mandatory.
+That is the exact opposite of what we would like to achieve.
 
-> The point was to pull configuration selection *out* of those drivers.
+> Furthermore, with usb_modeswitch it's not at all uncommon to have some
+> drivers bind momentarily before being kicked off.  People don't care
+> about it very much, as long it all happens reliably and automatically.
 
-While I appreciate the goal, it is not clear to me how adding
-a method to the generic interface driver template achieves that goal.
-In fact this approach seems counterproductive.
-
-In particular a bool will not work for the generic case.
-If you really want to make this generic, you'll have to face
-the unfortunate possibility that a configuration have
-multiple interfaces whose drivers disagree in that regard.
-At a minimum you'd have to be able to return a "don't care"
-value to compute a reasonable pick.
-  > They already do it, and it makes them copy-paste the same trivial loop
-> which iterates through configs until it finds the vendor interface.
-
-If the concern is simply getting the code centralized (which
-is not wrong), then Alan's original proposal of having a flag
-(let's not call it a quirk) in usbcore for devices that need
-the logic in the heuristic for picking a configuration to be
-inverted would seem to be the simplest approach.
-
-> The idea is to have a maximally simple check for a known-good vendor
-> interface driver before making unfounded assumptions like:
-> 
-> /* From the remaining configs, choose the first one whose
->   * first interface is for a non-vendor-specific class.
->   * Reason: Linux is more likely to have a class driver
->   * than a vendor-specific driver. */
-> 
-> Unfortunately, that's only half the battle. The other half is forcing
-> configuration reevaluation when such a driver is loaded. I hoped it
-
-Exactly. Hence don't put the information that the assumption
-must not be made into a driver but into usbcore. Problem avoided.
-
-It looks like this is an issue we are not going to find a perfect
-solution for. Hence our priority should be finding the simplest
-change. IMHO that's a new quirk just inverting existing logic.
-Sure, it is a bit ugly because it depends on the kernel configuration,
-but that is what we have a preprocessor for.
+That is probably not wise in the long run. If the device whose driver
+we kick off is a CD-ROM, nobody cares. If it is a network interface,
+we'll have to deal with ugly cases like user space already having
+sent a DHCP query when we kick the old driver off the interface.
 
 	Regards
 		Oliver
-
 
 
