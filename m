@@ -1,86 +1,89 @@
-Return-Path: <linux-usb+bounces-29526-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29527-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CC34BFCACA
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 16:52:12 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09DA2BFCDF6
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 17:28:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B84FC358245
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 14:52:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 280AE506EBD
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 15:27:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39D0434C15D;
-	Wed, 22 Oct 2025 14:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7EE834EEEB;
+	Wed, 22 Oct 2025 15:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zaO+cCfD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BxMajb65"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F35726ED33
-	for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 14:50:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D96934D4CC;
+	Wed, 22 Oct 2025 15:26:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761144609; cv=none; b=ZnScqW1eE6rkcs2xgB2G6f9Zk/itQr07w6bRKcYQyrBNxQuYEBFShfnekAS9PyDdCHHE7nJRQQJEZrW/2h6cvUAV1tpJoaelusXRQvNtYcLJPkYQijVBh6TUT8dJg1r8Rg0IDQfmN8q6rId5LVo0vBFddFYUAxiu1nEbOmtPIZo=
+	t=1761146814; cv=none; b=fsdSbNO8WLMRz79CVapoNlDyKHKPtrdXtpOUywoPh2VYpDbQUg1ElB9ZWzKjN2HoGdltvLCFZN/3lM8lFYGMlWAkMxF9ESAwqadVu4S4rhdbkoupdrkKLmyKAsLf1w07w/E7Qv8lRA0xkjYOur1Hc6AtEncYou3JQRGAuwUYyeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761144609; c=relaxed/simple;
-	bh=ZQ5XvRcl4K02isb3AVUE88kbGTIsphk0beHEtOh+kJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=upLrnYnRISlMI8b5nVsF9gGYepBpDxGk8m10ZAePHFkMWft2Y2btY/ZI6h5ehe10F6XSko8jg49FOZv9tthqiW4BFMJaZ+s8QN0nocTQSAs9k/dz2uLpgKCHGnTPaV7Qyb8r795rm1D/XiL8gevq5Q2INVSonVDEI4Si1TCzlIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zaO+cCfD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB145C4CEF5;
-	Wed, 22 Oct 2025 14:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761144608;
-	bh=ZQ5XvRcl4K02isb3AVUE88kbGTIsphk0beHEtOh+kJU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=zaO+cCfDl6Ga0eifOaTnXUXNTHOz1O2qrGCFAbnI046+6m5mKnVjtd+eJBvPHr+UC
-	 LZKe5Q3YpQPAQj7Q68VHUniMLj1EK1REElvka1rzuyzgP4V1EcrKDzQiut12csnmIq
-	 UGtl9FAhXZ48taQjpfFAmBZS0yt0vXdWGofqEWwk=
-Date: Wed, 22 Oct 2025 16:50:05 +0200
-From: 'Greg KH' <gregkh@linuxfoundation.org>
-To: Terry Moore <tmm@mcci.com>
-Cc: "'Ruinskiy, Dima'" <dima.ruinskiy@intel.com>,
-	'Oliver Neukum' <oliver@neukum.org>,
-	'Oliver Neukum' <oneukum@suse.com>,
-	'Maciej =?utf-8?Q?=C5=BBenczykowski'?= <maze@google.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: cdc_ncm driver and NCM 1.1 revision
-Message-ID: <2025102208-copper-aspirin-b1bb@gregkh>
-References: <6c22b4d5-7d6d-41ab-9b00-9dccf3ec8963@intel.com>
- <2025102259-purebred-amulet-b6d2@gregkh>
- <00f101dc4361$7a5b8860$6f129920$@mcci.com>
+	s=arc-20240116; t=1761146814; c=relaxed/simple;
+	bh=TQDSJ49yoXijtCkOpzPqesHfY4ISOmwA71jp+Dpmr6k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pGoM6cuCUXkILaeo0m6gmzclZGZI9xCUkVE8x6COtt/flY0UKO0bZKDyHqj77LYAsxIFBp+D59Np/B7JlfSnG8xt2wIATlBz0R/eC77h5a2zfVmF2o6Y1aGh1GwA+UK+rVepRJd2l8qaMrt1d5tBiHNL0dIg4PRV30BVsjubKpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BxMajb65; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED8A4C4CEE7;
+	Wed, 22 Oct 2025 15:26:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761146813;
+	bh=TQDSJ49yoXijtCkOpzPqesHfY4ISOmwA71jp+Dpmr6k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BxMajb65gmYB6uhV+/QAoPrbCDQfUf1Wt03S4olQlg9MnA/asCDJTYtO+eKCwKQhM
+	 dBTLu5+d492sOMgFNEGfBpD67FxpdXzFHyCIqUT1FlXEJ7/H23N1LK8yT39lTCCVJU
+	 YE8gLb7wlyFsLFHa6ta2dS8Qqa96olidD3OziZvXp+Xlp51xdaKdG+fxihuyDyFQDk
+	 VXsChlBSelgO87rscBK5IlPh/z+bUFGPhWk6B9m4SifF4H6K6FH4kvAcYXHKft158l
+	 X/5ovBui6oIbhEb2+YFIdgNKxgAsHu/gXQYKu1aXyfyF4/87h+WKKDLGdlywyCJKcP
+	 h6qUxEI8gO3DQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vBajr-000000006JB-2FxQ;
+	Wed, 22 Oct 2025 17:26:59 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/8] USB: serial: fix TIOCMBIS and TIOCMBIC
+Date: Wed, 22 Oct 2025 17:26:32 +0200
+Message-ID: <20251022152640.24212-1-johan@kernel.org>
+X-Mailer: git-send-email 2.49.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00f101dc4361$7a5b8860$6f129920$@mcci.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 22, 2025 at 10:38:05AM -0400, Terry Moore wrote:
-> Thanks Greg, Oliver,
-> 
-> I'm the NCM committee chair. 
+Asserting or deasserting a modem control line using TIOCMBIS or TIOCMBIC
+should not deassert any lines that are not in the mask, but two drivers
+got this wrong.
 
-Great!
+Included are also some related cleanups.
 
-> Of course, if people can get funding, patches will be pushed. That's not
-> really the reason for establishing the connection.
+Johan
 
-We work off of patches, you all know this :)
 
-> We're working on an interop test in December. We really hope to find any
-> active open-source developers so we get them involved in the interop
-> testing. 
+Johan Hovold (8):
+  USB: serial: belkin_sa: fix TIOCMBIS and TIOCMBIC
+  USB: serial: kobil_sct: fix TIOCMBIS and TIOCMBIC
+  USB: serial: belkin_sa: clean up tiocmset()
+  USB: serial: kobil_sct: clean up tiocmset()
+  USB: serial: kobil_sct: clean up device type checks
+  USB: serial: kobil_sct: add control request helpers
+  USB: serial: kobil_sct: clean up set_termios()
+  USB: serial: kobil_sct: drop unnecessary initialisations
 
-Do you have devices that we can test changes with?  Without that, it's
-going to be hard to implement anything.
+ drivers/usb/serial/belkin_sa.c |  42 +++----
+ drivers/usb/serial/kobil_sct.c | 210 ++++++++++++---------------------
+ 2 files changed, 95 insertions(+), 157 deletions(-)
 
-thanks,
+-- 
+2.49.1
 
-greg k-h
 
