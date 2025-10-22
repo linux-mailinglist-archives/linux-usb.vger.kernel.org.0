@@ -1,165 +1,160 @@
-Return-Path: <linux-usb+bounces-29524-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29525-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B5BEBFC8B8
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 16:31:57 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12099BFC9D5
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 16:44:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2942F4E26DB
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 14:31:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8B6A8354710
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 14:44:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BE7B35BDBF;
-	Wed, 22 Oct 2025 14:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166E434845C;
+	Wed, 22 Oct 2025 14:44:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="bGn7pvS7"
+	dkim=pass (1024-bit key) header.d=mcci.com header.i=@mcci.com header.b="Ed49brTA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE12135BDAF
-	for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 14:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+Received: from spamtitan.mcci.com (spamtitan.mcci.com [66.152.127.76])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D078B3321A8
+	for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 14:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.152.127.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761143309; cv=none; b=FQ8AzxfXG9fx/1fiYHZIN7CJfjYPjbXdMCKo6VGv/x2H+4/vaS9XGiRPFT2RnzFTfiyAlRj2AaByspxZfUVXsfDiXplFdZQumC2juUU0ffeioqSnFLLejkqGDKFiWbp+n7z1W9AyFuD+5xeeBErmCbl+Om7v5ufthn0onNcjA9c=
+	t=1761144264; cv=none; b=JNeZta+46dxCPsX/NE4j5Zeblugba6dKfwxqVs/kpv14MxOCzqzTX0NtWAWdbzSPJfQVUvUpjjGNA1miMjaNaq8vrkLUJW2Y6axoZQMTbJW1ozVawr1ehYFfC3BXfv7Wg+aL49fSF5QlF+sx4qzZkNHhKjjDLgcIT2Hu8uRuvac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761143309; c=relaxed/simple;
-	bh=7rFO60cs+ojMDtinvJI6S0GOckN6KLFDylmfbzmGFcY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fxWJ+baml9U9A+sk2ZpZh5kNc0CMU6vX5iprTwu5NPV9jAsLf0yzc08qJge+dQUMY/v8NWEPtD47YwHn4pKjrv1hEI6lGHCJL1hzDW7tVrZ9WYDvOkiTzlOG5zldLvcw3hxMgc6wyEnDdhWMfY/hg0DNAQfI4ypbxzsXrfhqLwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=bGn7pvS7; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4e896e91368so15019751cf.0
-        for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 07:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1761143307; x=1761748107; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bt2mz88kxQaKeFfwo7y6zN05vfKzXencELjsqpI75vo=;
-        b=bGn7pvS7oDgH95eIgW/v8JnsBxkFJLUwEa3p8koVeFqqmWr7TWdKi3WZ65EDCse2zZ
-         xJhncabx+zGpLd4PWXhlme7uLYd3VSMdlnw6BN7nOz21TUIKnFMm6xZfTzQjI3ZvUkYO
-         7oBD3HXJVCeOS0wEJgsuGQ+j4iYSqgU7FyfvOu7ukbVL2pcTz6knrl8QXbRmMBxhM/4b
-         gMmXzjs3jVKKfY8S5oU1CzGBSWAcNcUAZ+AQgryrDL4WyE66aJnv38laQf6UbEIy4YPl
-         8sRN8ALVhuofbKObuSDJVtH53t/4uu/h4cc15yOwkdrrMf+q7ZEtxLcIf/mEYmg57+VD
-         yk4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761143307; x=1761748107;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bt2mz88kxQaKeFfwo7y6zN05vfKzXencELjsqpI75vo=;
-        b=MOIIizoFdv/Bmw/jImruogprgC5cwvXsP+Ng75ik8CnOs2+V3YZ1WQVjJIWbeZ3UGu
-         L/XfBf7x4nxnp6xlifNtBQfV/tKa3G+OLvYvvRq1E3e3CSe6nTGIppsHTcLuaN2y5XUs
-         YGBT6nMxpSQyraVvXhmzTp3eGlH7KT+Qi2PcyJPDS00JUb3qscSag27kAF+7UZM1Wk3w
-         rkHjWyJSetFqiVZFPKdSiHvrf3GfYql/j4cW7iwhrffKA2y6pLU3+nUecRK4dmLMoa6b
-         58dcOgR1Pd8FCai9JnT9I0hiOvFDbwiI40b6B5qO6mmhL1v0laLTbMnrndXg8+dt8LXD
-         CV6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWkq05xbuD4VWwLgbIOwMEJbpck4V93R0ziTnN0X+ZFIYSeV979n1Zdi0JQXnNWBQp/Z5RJ5OJyxb4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaF6Vp+JsxO7bTd639NroGf/nUUa4LIjgZjy/BGlEaKP3Wc/zj
-	kkQ718R1laHJv+t6QWu4nReoUyieya3F6GHwxDvT/Bqkb9mTfLTbcpxX8i7Zn3u3Pg==
-X-Gm-Gg: ASbGnctHKfOMADshS7BuRQ2ltjsGKvrs7KKvqlCC2/BSpDf8MjYVONFcx8kH6vrT5gk
-	imvbRqx2u9Jzz++nyXnqFOm4SHkOW9tW1JUlCHQLqwDzdb6W+C2oqF008IjFpmrV4ZyzaAJum8+
-	sEFH3JtWKtr1bSFLX5tLwdrqFhKVsG1/nGRbNcZl7g62l9V08mCRvRWOeNbOIlC9Z/CHkXR8Fg3
-	b0wT3yZnEIQSBGyknl6zBSZ7Yg7O0aWq/vtErPwJ1ad7uz8QkUJxJ3HYTGjWTs6d82oreosc0bn
-	jXYjPj1FOW+qbbAqvnLIwwiCb1JogIs5G8sWMuxTVA/QMq7TiGMSMaK/jlqdjl8PGUH1HniqG5l
-	eoSIOPNDpfu8tpmZLPP7kcNrb9TAFzPlh4W3lPoQmAfLW/ZarZkM5D+rrGmwSftN0wC/6nTKIVW
-	eMU1QekCsUjHta6p7OLBnHeYRvJoEBgQ==
-X-Google-Smtp-Source: AGHT+IEQFUBDmtWZDWA4/99CoLc+AR13PHUMRk56pDNsg4FZV887ScrpKn5yezdEL9l3JNDRfXtxMg==
-X-Received: by 2002:ac8:7f51:0:b0:4e8:b9ab:8ad4 with SMTP id d75a77b69052e-4e8b9aba18emr149827841cf.81.1761143306656;
-        Wed, 22 Oct 2025 07:28:26 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e8ab10da83sm93572291cf.39.2025.10.22.07.28.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 07:28:25 -0700 (PDT)
-Date: Wed, 22 Oct 2025 10:28:23 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Michal Pecio <michal.pecio@gmail.com>, yicongsrfy@163.com,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	pabeni@redhat.com
-Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device driver
- for config selection
-Message-ID: <7fd2d38a-08c8-4043-8dfe-eb2171b4e4e8@rowland.harvard.edu>
-References: <bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
- <20251018172156.69e93897.michal.pecio@gmail.com>
- <6640b191-d25b-4c4e-ac67-144357eb5cc3@rowland.harvard.edu>
- <20251018175618.148d4e59.michal.pecio@gmail.com>
- <e4ce396c-0047-4bd1-a5d2-aee3b86315b1@rowland.harvard.edu>
- <20251020182327.0dd8958a.michal.pecio@gmail.com>
- <3c2a20ef-5388-49bd-ab09-27921ef1a729@rowland.harvard.edu>
- <3cb55160-8cca-471a-a707-188c7b411e34@suse.com>
- <fe42645d-0447-4bf4-98c5-ea288f8f6f5a@rowland.harvard.edu>
- <b3eb1a6f-696b-4ece-b906-4ecd14252321@suse.com>
+	s=arc-20240116; t=1761144264; c=relaxed/simple;
+	bh=PPjawrC4aFMBHlg7/NCzrYQtSUhzVqs3eQVtpo6hzWU=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=pWnEqv8NnXNug5Cd3BmU1buR9CT6HcKI3UGxF6qNdAFArtOgv+kPmIGhAPA0LBZSuVN1GgOZvhna89JEMOPCuN1mIXXA5vQGxunEhQPfjUCw/cPLp8ei2v/JNDq2S0p6RTpPSkUQaVYymi3tZyaNU8ZxdXKZxiVAybLIcabMMKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mcci.com; spf=pass smtp.mailfrom=mcci.com; dkim=pass (1024-bit key) header.d=mcci.com header.i=@mcci.com header.b=Ed49brTA; arc=none smtp.client-ip=66.152.127.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mcci.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mcci.com
+Received: from spamtitan.mcci.com (localhost [127.0.0.1])
+	by spamtitan.mcci.com (Postfix) with ESMTP id 26BC833659F;
+	Wed, 22 Oct 2025 10:38:06 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mcci.com; s=spamtitan;
+	t=1761143886; bh=PPjawrC4aFMBHlg7/NCzrYQtSUhzVqs3eQVtpo6hzWU=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date;
+	b=Ed49brTAnzCFfQzMAzpCEwK6FoIvXXCCtoPCyp9bchkJdipeQL7dgCv3WHUWt7k/t
+	 EDl6Xq04nQpG8qRcVR+XnxBc3cMrqI8wszHdMbdDIix+8M92gk+NVDBlzDuzeWK+0u
+	 idAqbCHHbD8Oqe1QdMu2Ln4vC7woVFro1b1QB0dY=
+Received: from localhost (localhost [127.0.0.1])
+	by spamtitan.mcci.com (Postfix) with ESMTP id 1F3ED33659D;
+	Wed, 22 Oct 2025 10:38:06 -0400 (EDT)
+Authentication-Results: spamtitan.mcci.com;
+        x-trusted-ip=pass
+Received: from net2.mcci.com (net2.mcci.com [66.152.127.141])
+	by spamtitan.mcci.com (Postfix) with ESMTP id E0AEA33632B;
+	Wed, 22 Oct 2025 10:38:05 -0400 (EDT)
+Received: from tmmnote12 (net7.mcci.com [66.152.127.168])
+	by net2.mcci.com (Postfix) with ESMTP id B49AD1524C;
+	Wed, 22 Oct 2025 10:38:05 -0400 (EDT)
+From: "Terry Moore" <tmm@mcci.com>
+To: "'Greg KH'" <gregkh@linuxfoundation.org>,
+	"'Ruinskiy, Dima'" <dima.ruinskiy@intel.com>
+Cc: "'Oliver Neukum'" <oliver@neukum.org>,
+	"'Oliver Neukum'" <oneukum@suse.com>,
+	=?iso-8859-2?Q?'Maciej_=AFenczykowski'?= <maze@google.com>,
+	<linux-usb@vger.kernel.org>
+References: <6c22b4d5-7d6d-41ab-9b00-9dccf3ec8963@intel.com> <2025102259-purebred-amulet-b6d2@gregkh>
+In-Reply-To: <2025102259-purebred-amulet-b6d2@gregkh>
+Subject: RE: cdc_ncm driver and NCM 1.1 revision
+Date: Wed, 22 Oct 2025 10:38:05 -0400
+Organization: MCCI Corporation
+Message-ID: <00f101dc4361$7a5b8860$6f129920$@mcci.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b3eb1a6f-696b-4ece-b906-4ecd14252321@suse.com>
+Content-Type: text/plain;
+	charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQFuWoWLMwmxFgSFPKvs3lm8BPFLQgFuUoYDtZ6aJvA=
+Content-Language: en-us
 
-On Wed, Oct 22, 2025 at 09:58:57AM +0200, Oliver Neukum wrote:
-> On 21.10.25 18:33, Alan Stern wrote:
-> > On Tue, Oct 21, 2025 at 11:13:29AM +0200, Oliver Neukum wrote:
-> > > On 20.10.25 18:59, Alan Stern wrote:
-> > > 
-> > > > Another possibility is simply to give up on handling all of this
-> > > > automatically in the kernel.  The usb_modeswitch program certainly
-> > > > should be capable of determining when a USB network device ought to
-> > > > switch to a different configuration; that's very similar to the things
-> > > > it does already.  Maybe userspace is the best place to implement this
-> > > > stuff.
-> > > 
-> > > That would make usb_modeswitch or yet a new udev component mandatory.
-> > > That is the exact opposite of what we would like to achieve.
-> > 
-> > In the same way that usb_modeswitch or a udev script is already
-> > mandatory for a bunch of other devices?
-> 
-> Arguably broken devices.
+Thanks Greg, Oliver,
 
-Perhaps so.  That doesn't affect my main point, however.  Besides, none 
-of the possible approaches we have been discussing are truly 
-_mandatory_, because the user can always force a configuration change 
-simply by writing to a sysfs file.
+I'm the NCM committee chair.=20
 
-> > I agree, it would be great if the kernel could handle all these things
-> > for people.  But sometimes it's just a lot easier to do stuff in
-> > userspace.
-> 
-> Well the kernel does handle them. It just handles them wrong.
+Of course, if people can get funding, patches will be pushed. That's not
+really the reason for establishing the connection.
 
-:-)
+We're working on an interop test in December. We really hope to find any
+active open-source developers so we get them involved in the interop
+testing.=20
 
-> You are not proposing to leave devices in the unconfigured state,
-> are you?
+Best regards,
+--Terry
 
-No, I wasn't.  But that might not be a bad idea in some cases.  If 
-userspace can do a better job than the kernel at picking a device's 
-initial configuration, we should stay out of its way.
+Contact Info=20
+Terrill M. Moore=20
+CEO | MCCI Corporation | tmm@mcci.com | www.mcci.com  =20
+mobile:  +1-607-703-9582 | https://linkedin.com/in/terrillmoore
+Initiator, The Things Network New York | https://thethings.nyc=20
+Initiator, The Things Network Ithaca | https://ttni.tech=20
+ =20
+Ithaca Office=20
+MCCI Corporation, 3520 Krums Corners Road, Ithaca, NY 14850=20
++1-607-277-1029 x118=20
 
-The trick is to know for which devices -- there may be no general way of 
-determining this.  Particularly if it depends on what out-of-tree 
-drivers the user has installed.
+New York City Office=20
+MCCI Corporation, 1140 Avenue of the Americas, 9F, New York, NY 10036=20
++1-646-380-6643
 
-> > > That is probably not wise in the long run. If the device whose driver
-> > > we kick off is a CD-ROM, nobody cares. If it is a network interface,
-> > > we'll have to deal with ugly cases like user space already having
-> > > sent a DHCP query when we kick the old driver off the interface.
-> > 
-> > Doesn't the same concern apply every time a network interface goes down?
-> 
-> It does and that is why spontaneously shutting down network interfaces
-> in the kernel is a bad idea.
 
-If the action is carried out by usb_modeswitch, for example, the program 
-can be responsible for shutting down the network interface cleanly 
-before it does the config change.
+-----Original Message-----
+From: Greg KH <gregkh@linuxfoundation.org>=20
+Sent: Wednesday, October 22, 2025 08:29
+To: Ruinskiy, Dima <dima.ruinskiy@intel.com>
+Cc: Oliver Neukum <oliver@neukum.org>; Oliver Neukum <oneukum@suse.com>;
+Maciej =AFenczykowski <maze@google.com>; Terry Moore <tmm@mcci.com>;
+linux-usb@vger.kernel.org
+Subject: Re: cdc_ncm driver and NCM 1.1 revision
 
-Alan Stern
+On Wed, Oct 22, 2025 at 03:18:07PM +0300, Ruinskiy, Dima wrote:
+> Hi Oliver, how are you?
+>=20
+> You are listed at the maintainer for the cdc_ncm and usbnet Linux =
+drivers.
+>=20
+> The cdc_ncm driver has only had a handful of changes in recent years, =
+as
+the
+> spec too has not been updated for some time.
+>=20
+> Recently, the USB NCM workgroup has finished and published a major
+revision
+> to the spec - NCM 1.1 - with several new features as well as data path
+> updates.
+>=20
+> The new revision is available here:
+>
+https://www.usb.org/document-library/usb-communications-class-subclass-sp=
+eci
+fications-network-control-model-devices-v11
+>=20
+> An "executive summary" is here:
+>
+https://www.linkedin.com/posts/mcci-corporation_usb-if-compliance-worksho=
+p-1
+39-activity-7335815355266719744-BAdf/
+>=20
+> There are on-going initiatives to update the Windows and MacOS NCM =
+drivers
+> to support the new 1.1 features.
+>=20
+> Do you know of any plans to update the Linux driver as well? I expect
+there
+> will be some inquiries as soon as the first NCM1.1-capable devices =
+appear,
+> which may happen already next year.
+
+Patches are always gladly accepted to add new support like this, thanks! =
+ :)
+
+greg k-h
+
 
