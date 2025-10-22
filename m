@@ -1,148 +1,93 @@
-Return-Path: <linux-usb+bounces-29511-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29512-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0154BFABA3
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 09:59:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3487BFAC54
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 10:05:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0FC4F504B4A
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 07:59:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7FE91A04F54
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 08:05:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 786272FF17C;
-	Wed, 22 Oct 2025 07:59:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA18F306B01;
+	Wed, 22 Oct 2025 08:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gaNqaGBX"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xsVQDh2u"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CABF2FE56F
-	for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 07:59:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41921306481;
+	Wed, 22 Oct 2025 08:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761119943; cv=none; b=aFof2MG4SaMtm9SsOYvLqfNV5/5ko9NXXXq+yNIpYfNkod5HeiQC2/3w+I/9vlN0K2iFwvatC2m0zwsq+9YxRgkC6Ko3Vy6JvXENFTGB4AbNW0s9xpfWvRB+Roji3iwch27+j7Yzv/Fze48hsZznLVQ/eF4OutC30KJFjrhqwm8=
+	t=1761120171; cv=none; b=HGf5QIz6y/mwTTGXq7ZzXSNkPSQb7UcCZS0k/hEKcXmY3nlbsc6OUzSNKuOD6Vqjw4J5u99sdMhBKklWshCx2ztIIDZq80FGztKOHqQbyqt2fUMbvZ3s3ZXwWFs8Ny1FIisUnZhs6h5u/G8tp+Dlc1ItvPNMrB7I6L4rJEQe7MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761119943; c=relaxed/simple;
-	bh=KaczBMCVSo8E8GAhgih1ppyG0a1tcQb6nFPNBNW7DRk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U1dZCeQoG6mnhzLhC9zXavOFv0jmgpxgHgnmw/wlyloUTZjlfzn+Qjcg4+Fp5Of1V2vrvsr2UOGtlSEzMKtKA0iC2C8a3NcwS+setwfG4lpp5o/te78oVkJKspmkIYi6Hj0NuK7j9Vm2BHsSmWyuPmkuP22M6U7sWfSmgPQCEFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gaNqaGBX; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4710a1f9e4cso47888755e9.0
-        for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 00:59:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1761119940; x=1761724740; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nFYdyU/glg7sl7RbwsHpqkuatNUumTfQgUBn8W9ze4k=;
-        b=gaNqaGBXDaXbduMQ0VNaYdzAQRxZ0Uagbe8MbIvebahOJX3q49dhoGI+3ITn04OCnM
-         oZxvzWZhLkvEl+hzVTbyZcJXP1dyRyJYsbe6Nt9iSn1CEPgRemwvoy00BH2v/TikQI3m
-         R6nx9N6CFXUsOdFR3OptsLrHh6jB/g1/dIcZONmAJoZgB+5qCaZviKw56V/mjWsu2P86
-         qXiie1Vwot3B7IeBDy/1h4uvl3biKPepdJTBWb6y/yOSQNuoK3/BuFoEbTwHElb8NzeJ
-         jR/VfukkKMJrrtUjp76mGQfdMimYQLIr2eye5cPrEs9CNxPzqc73Y1/ElGiqemwAO34X
-         YwcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761119940; x=1761724740;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nFYdyU/glg7sl7RbwsHpqkuatNUumTfQgUBn8W9ze4k=;
-        b=M8RQIXKpNWQhqcJCbKg7wkxl1O44Ia8QbwcYFZHlaBTs6v4lWSiOMkCOGN4/JZ7Lma
-         YusHd413X7xWci/MkclcTpPwmIvRZmEPD0nsUDwM79k72pI/2xXWAMZCejQEsWPCmadP
-         Rg1E7ITg9BAwxqnWBskaWJ1d9AiDfpuJ06NSmhIez7kKDx7SPnm3bxCuLZvba9cKLQar
-         9KSvI1jlhdRIh+czU+GM+C03cZdNnfn3dxk7i/xqVtDOB8Ux8lH+3xz9PphpPE7W1QeS
-         wSqyWK1Rp4FBJwO6yCRUMwBadwuk40fIPG7wGnmtNSNCXuFX0sLRugc7mHuQFw4aa9BF
-         W9hQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVVlmhtwCH0ideizfY5HdCItvv1yb44ndQOXPDJraqxW3e8uH2Z1CScNM+vJElkLDB0Wly6utdskYA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz02ljJ1qulKW9PdoL7CaY0y/mcMTMK0yzocVHkyF4gmHNFMhPl
-	635ZMt8CO+JvphkosVnEjYSp/vqX3Z27hngKXOV2wnNycKmZYeh3R5AhKtZTLzbWvuM=
-X-Gm-Gg: ASbGncvTux8opJojD/7tUNgI9OnvTsqJbLqvGvypK9yYJIfxka3+FaKdQQubvqE0TCd
-	3NkUpCKTspGyokgTJxhEkJOnJlyNIo10alVfW/180c40SldkaBwtwildwzFa2RGyu9c4eXDxmQ4
-	xI4XWPllsGqKW6gksmUcTfouyZPo4pG2RYnkIl9lapR+kZlPPxmCv65kdFQBFb2WQxLEsrXtUH+
-	W2WPdAOgEy3dSQpp2BXMdwTuPJVP3ijs1SL3dUb5TPlpMs4mUpeU8ynmYh964lmK+JxSu/KM/I3
-	lUPeyWx0dOWWxgNaAREORzNKs9lOHD9pdXivhsDYVmw/i4ge2oba5o36WgggLL6DlYtcJPTOnGm
-	W8V8CuVNC1dBa7lDx6F1ShjSk/CMLqH7LfeUbI+/VAicy53EH6T+9uY+xFh/eHxWPEOxRK5NKit
-	SYv+y5DTcKtS/aUnptT+8k40z8kigxCXDx7/6Jao9q6PQ=
-X-Google-Smtp-Source: AGHT+IGpOXlGpshXPJscBFg3kXgTW2ZV1U65opkxir+ofQ9dHjoYOdKb0EQ6iu2fUKVd00yHCcNGkA==
-X-Received: by 2002:a05:600c:4ec6:b0:46f:b327:ecfb with SMTP id 5b1f17b1804b1-4711787bfe8mr152128615e9.9.1761119939787;
-        Wed, 22 Oct 2025 00:58:59 -0700 (PDT)
-Received: from ?IPV6:2001:a61:1373:ee01:2756:594b:8e92:5d4b? ([2001:a61:1373:ee01:2756:594b:8e92:5d4b])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47496c2c9dasm32452465e9.4.2025.10.22.00.58.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Oct 2025 00:58:59 -0700 (PDT)
-Message-ID: <b3eb1a6f-696b-4ece-b906-4ecd14252321@suse.com>
-Date: Wed, 22 Oct 2025 09:58:57 +0200
+	s=arc-20240116; t=1761120171; c=relaxed/simple;
+	bh=6KyeXhuRv/gbNRLF/Qqgz7ISIJRT8ewlX6UjL2d8zZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pkf4mJbmF/nNRg1R20WphkSs2DFsCUa9R95fc8AaEPAuM+pBjczuLmbsPQW+flslWvBo2OslFY+0LEc717vH2Wc30hZuCTBk2gRpLqOaodirMw9l/NTmiF0uXGn8ytn6l7ro2P5LaN8tPJ2wSBPtyVzNrJQojE3UFqE29C6Ejx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=xsVQDh2u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 743B4C116C6;
+	Wed, 22 Oct 2025 08:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1761120169;
+	bh=6KyeXhuRv/gbNRLF/Qqgz7ISIJRT8ewlX6UjL2d8zZw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=xsVQDh2uXvtgGe5R6o4BH5/YGX7BTrd/69ZfNqM3BLhaJA25y/Gbu5JvvffJeGrvJ
+	 4zIEaiqZ0SNLj0owXd7e6IoeFj+Rzn281KRXCfBVLZpmqPtE0sT1DcomfCxosOt98r
+	 6BE8W/kEqVQLozO23ACCoS7FSTxqyjjSZGisraxs=
+Date: Wed, 22 Oct 2025 10:02:45 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jimmy Hu <hhhuuu@google.com>
+Cc: linux-usb@vger.kernel.org, badhri@google.com, stern@rowland.harvard.edu,
+	royluo@google.com, Thinh.Nguyen@synopsys.com, balbi@ti.com,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: udc: fix race condition in usb_del_gadget
+Message-ID: <2025102212-selected-ovary-6259@gregkh>
+References: <20251014085156.2651449-1-hhhuuu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v5 2/3] net: usb: ax88179_178a: add USB device driver
- for config selection
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Michal Pecio <michal.pecio@gmail.com>, yicongsrfy@163.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- pabeni@redhat.com
-References: <db3db4c6-d019-49d0-92ad-96427341589c@rowland.harvard.edu>
- <20251017191511.6dd841e9.michal.pecio@gmail.com>
- <bda50568-a05d-4241-adbe-18efb2251d6e@rowland.harvard.edu>
- <20251018172156.69e93897.michal.pecio@gmail.com>
- <6640b191-d25b-4c4e-ac67-144357eb5cc3@rowland.harvard.edu>
- <20251018175618.148d4e59.michal.pecio@gmail.com>
- <e4ce396c-0047-4bd1-a5d2-aee3b86315b1@rowland.harvard.edu>
- <20251020182327.0dd8958a.michal.pecio@gmail.com>
- <3c2a20ef-5388-49bd-ab09-27921ef1a729@rowland.harvard.edu>
- <3cb55160-8cca-471a-a707-188c7b411e34@suse.com>
- <fe42645d-0447-4bf4-98c5-ea288f8f6f5a@rowland.harvard.edu>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <fe42645d-0447-4bf4-98c5-ea288f8f6f5a@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251014085156.2651449-1-hhhuuu@google.com>
 
-On 21.10.25 18:33, Alan Stern wrote:
-> On Tue, Oct 21, 2025 at 11:13:29AM +0200, Oliver Neukum wrote:
->> On 20.10.25 18:59, Alan Stern wrote:
->>
->>> Another possibility is simply to give up on handling all of this
->>> automatically in the kernel.  The usb_modeswitch program certainly
->>> should be capable of determining when a USB network device ought to
->>> switch to a different configuration; that's very similar to the things
->>> it does already.  Maybe userspace is the best place to implement this
->>> stuff.
->>
->> That would make usb_modeswitch or yet a new udev component mandatory.
->> That is the exact opposite of what we would like to achieve.
+On Tue, Oct 14, 2025 at 08:51:56AM +0000, Jimmy Hu wrote:
+> A race condition during gadget teardown can lead to a use-after-free
+> in usb_gadget_state_work(), as reported by KASAN:
 > 
-> In the same way that usb_modeswitch or a udev script is already
-> mandatory for a bunch of other devices?
-
-Arguably broken devices. 
-> I agree, it would be great if the kernel could handle all these things
-> for people.  But sometimes it's just a lot easier to do stuff in
-> userspace.
-
-Well the kernel does handle them. It just handles them wrong.
-You are not proposing to leave devices in the unconfigured state,
-are you?
->> That is probably not wise in the long run. If the device whose driver
->> we kick off is a CD-ROM, nobody cares. If it is a network interface,
->> we'll have to deal with ugly cases like user space already having
->> sent a DHCP query when we kick the old driver off the interface.
+>   BUG: KASAN: invalid-access in sysfs_notify+0_x_2c/0_x_d0
+>   Workqueue: events usb_gadget_state_work
 > 
-> Doesn't the same concern apply every time a network interface goes down?
+> The fundamental race occurs because a concurrent event (e.g., an
+> interrupt) can call usb_gadget_set_state() and schedule gadget->work
+> at any time during the cleanup process in usb_del_gadget().
+> 
+> Commit 399a45e5237c ("usb: gadget: core: flush gadget workqueue after
+> device removal") attempted to fix this by moving flush_work() to after
+> device_del(). However, this does not fully solve the race, as a new
+> work item can still be scheduled *after* flush_work() completes but
+> before the gadget's memory is freed, leading to the same use-after-free.
+> 
+> This patch fixes the race condition robustly by introducing a 'teardown'
+> flag and a 'state_lock' spinlock to the usb_gadget struct. The flag is
+> set during cleanup in usb_del_gadget() *before* calling flush_work() to
+> prevent any new work from being scheduled once cleanup has commenced.
+> The scheduling site, usb_gadget_set_state(), now checks this flag under
+> the lock before queueing the work, thus safely closing the race window.
+> 
+> Changes in v2:
+>   - Removed redundant inline comments as suggested by Alan Stern.
 
-It does and that is why spontaneously shutting down network interfaces
-in the kernel is a bad idea.
+This goes below the --- line.
 
-	Regards
-		Oliver
+> 2.51.0.760.g7b8bcc2412-goog
 
+This does not apply to my usb-linus branch, what kernel was it made
+against?  Can you rebase and resubmit it based on that one?
 
