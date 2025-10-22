@@ -1,125 +1,165 @@
-Return-Path: <linux-usb+bounces-29540-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29541-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6705BBFDDD3
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 20:33:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F1EBBFDE48
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 20:40:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C18FD356D2C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 18:33:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CE763A9386
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 18:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D04D34B18F;
-	Wed, 22 Oct 2025 18:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5590B34CFB9;
+	Wed, 22 Oct 2025 18:39:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="D1X0VidK"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ucg8IIe+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779E62EB5CF
-	for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 18:33:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44C134DCCE
+	for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 18:39:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761158000; cv=none; b=lc5/zIXSvaxXkAQ80uep1whHJnWLbi/A7nh529EWYNCjIxDdXE/Z9IzbAgeq5wvtNQj9QK4GprPtNaS83YJs6qkYNfJGoEJvg+brTKlonwzEo7b/PkjvCfRRC/FbuNMquJqS/K1+L/4RkZQSPJa/+ABo5Va1He2GWgRP8oVwtvw=
+	t=1761158368; cv=none; b=S2gx2mLaqnYGrEzIz+8RtmfWG7La5cAmYLb7113cmdceaa8O4XBUPPXOVC3LX/RT85BTlQIuimf0bBZo3zlqnA7MavYQ0JicCjGbElSi+Zu/CinZK/auhe3I7HdDuxVXaRDzXkPMvn+EDT+4oFgnQ/rJllipU1z3uKJ7XbxkeRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761158000; c=relaxed/simple;
-	bh=Y6xM503yPWNKtS2IjicNTibZfckvf7ae0PmU0sP9HVE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Yy8Czruh4OMJ7Kr7yNMfAxTPIkgQDN0DzrFJWUXuCOyOGpMdS+9QF/uJmnKSJaF1pmtqDbvSkSP7BYfwgxYzvCm2D80vPmVsmJ+myEYOKcC/0AC8xJLYWjupLu7XLE09u/yIRU3Zh8WhyM2TOyiGS2jktYkRpoYLP+ZvUeITLyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=D1X0VidK; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b3c2db014easo1560335066b.0
-        for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 11:33:18 -0700 (PDT)
+	s=arc-20240116; t=1761158368; c=relaxed/simple;
+	bh=rlvhE0G/yCujJuBtuUT8uW1GIkDrwZQS9eo16LcqzbY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VgGUxLm+KHED/WVnYXM2MaA+Ci3PIeWsyocHqP7gNqcYOln8aJB6NCbFoTvPFgRhR+B/bACyWJSPcOx3BcMXCUpOLyVE5iK9AQg+G7zrRPHOe8DJUb+0/XUGoQDAPkUNL6SGjz5HiCf3bDcittvMzWad0kJLs+TgAJpLXZU3ieY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ucg8IIe+; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-87c148fb575so104031226d6.2
+        for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 11:39:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1761157997; x=1761762797; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FC7+RgbKBfdE688HhTog0OZubor+X8TFuoVzPlpGuu0=;
-        b=D1X0VidK5G/oOwgtyUbi8HVv0BBZYnsSajlyNeKZOaWmIK0pUW5jB1IwCxW8ajjVYJ
-         dRbNb8TSYhgkJoj6ASiEThnnr7d8irjHr4RnICaCsktlIK3396NTH0b5U1phugoHQW8p
-         CCZNz2pEWktgua3z9gdv/6IKpVQTQ4v2wtWzM+LhjcwjsHUz50+HVkc0o7Wuv1XYOG5T
-         xKSlg8FmJBO0AvFf0HaeatjMD4vU/5FStexgqWeFnu+sjqUT3KvCwruYZIsDRwvCFABE
-         hjLPH/2j5R5qLmoVymG4yIdhh/s1kV2g6IvdlVK131myoLit07OlgobFbpLxwabA993j
-         cekg==
+        d=rowland.harvard.edu; s=google; t=1761158366; x=1761763166; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cL4wCTebb1o0Zx29ivDAX7cV6bT/OTiDz6JMc1ObXZQ=;
+        b=ucg8IIe+CwhhYMB78CTdE5qak46cFw68KY38hztpao5SXPFXnvFJKDsTECtqreYTjf
+         roc3JQ45y/k62XsoN7LZ3oDDbE+z5E68nPC271ELl3160azWh/H2IvO3oqm/GGYU0D6f
+         Lar3aMjphNzFDdO1lLgiHphGcZStBGhyNG5+ijbCg2z0llMlH9aI842rBqWiA4anVREV
+         TjczZ4m9jJ4JOy8uIg2kNtVdWE++FXzAInSxygnL/9esPpDn1H4EKhNEt1tFP4T3gItP
+         v6Jnuig00XN/Hq0AcSus85Q7llyEaaP49x1C9b+o0M40ZDHoZdvuFZY7SqEOpvIdOkwg
+         CHZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761157997; x=1761762797;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FC7+RgbKBfdE688HhTog0OZubor+X8TFuoVzPlpGuu0=;
-        b=thoyoyLkUCDOdHR/b0HH8gsL1M3vURv2UdTlW0+pRLChFMYOjthhc29+qV4Y3dB4lH
-         H+mJ0znJ5c8J2l9cijlkb22ehNZOsYWvFRKL4Z1y3Ay/P02f4Du0wbf6wPcaAMTqL3Sa
-         LyX/mAEdsW7sP6cpJPtJpJu0sDh0hN6WY92uyuh5ZgMyqfppsucbWCqHKiygPk4DJ6ik
-         7bISY48FDpADNDVy6ytl0dyyXmMRJk9Dun2Bf6KpW+I/yDkIjZsrUWkwhwdo+e77jaLk
-         w3C/f6jrN296JDxYdLdgn+hGmsRjggA8QVOx95GBG41XScdPJ2TWcgPzgBM9vXmRo21s
-         v9Sg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVX3uqxARntCY5VAljVRd4KYh+gRLZ12Z+El0fGXEkUq79xZRXfg4idqzavrc+/oneSfA2HnfCoO0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZtqFAsELrG1/NHKlulWO5Lm8LLhDyEQvxYhM4MEFgQJTWfgQw
-	LTEz0iAtRKvimuJrtZcjvs9odGqy2f1gM9bQi5RY3wdFnnOKxgIFt7SRcc7Tppyi6iM=
-X-Gm-Gg: ASbGncsD5cqEcwjvge61NOcY9M4JLUs5IzHKA+qhUXYkLHRRbJf4cmoNf6jSV3JkPFM
-	xkO2hVMJbUW4ceQft0bpEm2aCee6aYo47ew2YgupanhX7JzIsymeTb46II0U5eASLH9Ay4NvA2L
-	YEwkYljVTh16gNc1u6J91BhZUr3P8ef4px7/Wpt4U1g2M2e/qM15I97z7KCWKqP8rnmzk/JNXS5
-	04wAx6Xst2u6Bx2LwQGwd+GK/R0xKusqBGm5KGQTrJW6yvOEjZM95c3ZG5aU/Ad1oGtkt8bsbYI
-	QzVij8vs+pUSBserjEclDUE2+ExI5lHHHbiSH4KF80JWxuXnRyJOFin+ZkNBfQ1yuKCWfOdI9uN
-	uDk0qWv11QGF3HT0yEj3l3NLUgzz0QW6NkT+p/8WOeYqCPlIDTTE+mW7TUHsJkPvcd23EC4Qw/5
-	8AQgEuuN2KEt23ncaNQ9OH3/ArVprwsLG8B022DmNEy4nN07N9sOY9mA==
-X-Google-Smtp-Source: AGHT+IHxzEPyrLcXfacrbScfXM2HqLkcG1uFN73tatd+oYI9TqOWUilaqoT+hFMfLMGn7WplZV4gDA==
-X-Received: by 2002:a17:907:6d25:b0:b41:abc9:6135 with SMTP id a640c23a62f3a-b647493fa65mr2623446566b.41.1761157996669;
-        Wed, 22 Oct 2025 11:33:16 -0700 (PDT)
-Received: from ?IPV6:2001:a61:1373:ee01:2756:594b:8e92:5d4b? ([2001:a61:1373:ee01:2756:594b:8e92:5d4b])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b65e7da25d4sm1394620366b.9.2025.10.22.11.33.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Oct 2025 11:33:16 -0700 (PDT)
-Message-ID: <2d6f38de-1860-42f7-bf70-bdff7915fe08@suse.com>
-Date: Wed, 22 Oct 2025 20:33:15 +0200
+        d=1e100.net; s=20230601; t=1761158366; x=1761763166;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cL4wCTebb1o0Zx29ivDAX7cV6bT/OTiDz6JMc1ObXZQ=;
+        b=B5HEil+FrsDFLCFmmHhF+lBduKFlyPuZ0VPRKjo5sW7YPF+1vTUuyP0OXFKxu7E9b5
+         z3SMChcom7pkMSSt0i/B8Yq78K7nQYI6euXwdO2KakojvCtJKSNxGjRsdOQfRl/qla0n
+         ZCrA7BkPDHuT4sisQnWPIABb5I9BKR2HXnCOXuXnb0iXYiW1+3WTFndqu3QfaYQZ8BqI
+         gjXQ3FsscyNKvGreM7fX299TgSsEQKrIANS4q+sOzFf7/jKEDnrgdDRAEleOAxoACejR
+         KZBlNsmSI1AkE61NzQXzhaOu9YgWbG23kM66vrCn/lw79uuHEhmpm+8+lFXbsNYyVVnO
+         a+JQ==
+X-Gm-Message-State: AOJu0YykvSuV0HCKh/3/m6eiUfRi8lSbQUq71qetEmWsRlA7/lDdpGcU
+	3twHXImtBbjcdphiKXDTMpXrSVpuQUBdg27lIIsPjmNQQvJbctgqHRDPV9Zy+Y006Q==
+X-Gm-Gg: ASbGncvtz2Gfml9mIduNpgTDPkLRq8VEX1RzS/VW7U4AqSRiuGSua6Y037896kdjrpq
+	vGKXaL4CF6fNa7gdKGMU6HCoXIpToe986/SEer42B8nTQzkZNOzC37YEVV/Pu53BpONLVx0Wqi5
+	HOTxww3ULQN8kXh8NGIOduZne85q7noDq5cSpdF1siKTxTt2dIyNaM0BFKwi1zpaC6yF0u/XaaJ
+	sxiyuMuUVvHNYRCW/NSzH31vV3TkAngr6OLaASQ2/RpbXtjg1w5LjSOHTa9cNajFvZ6qLY5PMIf
+	y1QT9ub99BKArh1BfA2eb4qx6Kc42RBPz2i19lqUzosbHu1yt6K5nGTih74uGQZB41UqxCcoCxB
+	mWCl5fJp4nGWz5Z/sAN1rhf1Y1ag3fzUlPPT8/WlASht9TJ97SOi+4oc7t1JuENtdFzzyz/4dZO
+	SupdfItK0LPyZWnqQdYzVs+5JqBejKP7X6sg3scf4Wilf1De26KJV/IEu95IFyhW728oimSA==
+X-Google-Smtp-Source: AGHT+IHwWgDe2mIBWIuxgBpQx5fFTzrSlUNpyKSP0XLyZOQ4JZpK/ntBicAuPi/u54h0CYCGs7Pp2A==
+X-Received: by 2002:a05:6214:f63:b0:81d:8926:a9d8 with SMTP id 6a1803df08f44-87c205ed12cmr286794606d6.36.1761158365700;
+        Wed, 22 Oct 2025 11:39:25 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-19.harvard-secure.wrls.harvard.edu. [65.112.8.19])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87f9de7beafsm39036d6.14.2025.10.22.11.39.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Oct 2025 11:39:25 -0700 (PDT)
+Date: Wed, 22 Oct 2025 14:39:22 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Julian Sikorski <belegdol@gmail.com>
+Cc: USB list <linux-usb@vger.kernel.org>
+Subject: Re: USB A 3.0 port on Asus Zenbook not recognising the TipToi pen
+Message-ID: <f251379a-38ad-4b58-af88-34c8bae07f78@rowland.harvard.edu>
+References: <1393a6c5-3430-49cb-95e6-b18c0f5328b0@gmail.com>
+ <cfc6d2ba-a820-4bd3-990e-7800bce171e2@rowland.harvard.edu>
+ <967e7681-c9ff-4421-ba89-d83bb40f1af3@gmail.com>
+ <4c6bbcd1-0ed2-496d-82c4-3fc9a1c2660e@rowland.harvard.edu>
+ <1a960051-b1e8-49a5-bdea-1ddd719cd0ec@gmail.com>
+ <38586fb0-a60b-44c6-a04c-70f19ec36c61@rowland.harvard.edu>
+ <efa1bc45-9782-455a-8ff4-26e081a5e5cb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: cdc_ncm driver and NCM 1.1 revision
-To: Terry Moore <tmm@mcci.com>, 'Greg KH' <gregkh@linuxfoundation.org>
-Cc: "'Ruinskiy, Dima'" <dima.ruinskiy@intel.com>,
- 'Oliver Neukum' <oliver@neukum.org>, =?UTF-8?Q?=27Maciej_=C5=BBenczykowski?=
- =?UTF-8?Q?=27?= <maze@google.com>, linux-usb@vger.kernel.org
-References: <6c22b4d5-7d6d-41ab-9b00-9dccf3ec8963@intel.com>
- <2025102259-purebred-amulet-b6d2@gregkh>
- <00f101dc4361$7a5b8860$6f129920$@mcci.com>
- <2025102208-copper-aspirin-b1bb@gregkh>
- <022b01dc4381$2b8aef80$82a0ce80$@mcci.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <022b01dc4381$2b8aef80$82a0ce80$@mcci.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <efa1bc45-9782-455a-8ff4-26e081a5e5cb@gmail.com>
 
-
-
-On 22.10.25 20:24, Terry Moore wrote:
-> Hi Greg,
+On Wed, Oct 22, 2025 at 06:35:00PM +0200, Julian Sikorski wrote:
+> Am 22.10.25 um 15:59 schrieb Alan Stern:
+> > If you still think it's a software issue rather than hardware, you can
+> > try posting a usbmon trace showing what happens when the device is
+> > plugged in.  I suspect it won't reveal much, but you never know.
+> > 
+> > Alan Stern
 > 
->>> We're working on an interop test in December. We really hope to find any
->>> active open-source developers so we get them involved in the interop
->>> testing.
+> Here is the usbmon output:
 > 
->> Do you have devices that we can test changes with?  Without that, it's
->> going to be hard to implement anything.
-> 
-> Member companies are working on devices. MCCI plans to have a test device;
-> we've sampled to a couple of the member companies. It's a USB 3.2 gen2
-> device for engineering purposes, MCCI's Model 3411 board with updated
-> firmware.
-I have looked at the spec and this is best coupled with a revamp
-of the API between usbnet and minidrivers. Other than that without
-a test device this would be hard to support.
+> 420a8780 0.869369 S Ci:3:001:0 s a3 00 0000 0001 0004 4 <
+> 420a8780 0.869393 C Ci:3:001:0 0 4 =
+>     00010000
+> 420a8780 0.869404 S Ci:3:001:0 s a3 00 0000 0002 0004 4 <
+> 420a8780 0.869411 C Ci:3:001:0 0 4 =
+>     01010100
+> 420a8780 0.869418 S Co:3:001:0 s 23 01 0010 0002 0000 0
+> 420a8780 0.869425 C Co:3:001:0 0 0
+> 420a8780 0.869431 S Ci:3:001:0 s a3 00 0000 0003 0004 4 <
+> 420a8780 0.869437 C Ci:3:001:0 0 4 =
+>     00010000
+> 420a8780 0.869442 S Ci:3:001:0 s a3 00 0000 0004 0004 4 <
+> 420a8780 0.869448 C Ci:3:001:0 0 4 =
+>     00010000
+> 412663c0 0.975195 S Ii:3:001:1 -:2048 4 <
+> 420a8780 0.975231 S Ci:3:001:0 s a3 00 0000 0002 0004 4 <
+> 420a8780 0.975247 C Ci:3:001:0 0 4 =
+>     01010000
 
-	Regards
-		Oliver
+Okay, that part is just the initial detection that something was plugged 
+into the laptop's port.
 
+> 420a8780 0.975373 S Co:3:001:0 s 23 03 0004 0002 0000 0
+> 420a8780 0.975395 C Co:3:001:0 0 0
+> 420a8780 1.037181 S Ci:3:001:0 s a3 00 0000 0002 0004 4 <
+> 420a8780 1.037200 C Ci:3:001:0 0 4 =
+>     01011100
+
+That's the key value; it's the USB port's status.  The 1 bits
+indicate: connected, powered, reset finished, and connect status
+change (meaning there was a connection and/or disconnection since the
+last time the port's status was read).
+
+> 420a8780 1.037210 S Co:3:001:0 s 23 01 0010 0002 0000 0
+> 420a8780 1.037218 C Co:3:001:0 0 0
+> 420a8780 1.037222 S Co:3:001:0 s 23 03 0004 0002 0000 0
+> 420a8780 1.037229 C Co:3:001:0 0 0
+> 412663c0 1.190218 C Ii:3:001:1 0:2048 1 =
+>     04
+> 412663c0 1.190231 S Ii:3:001:1 -:2048 4 <
+> 420a8780 1.238195 S Ci:3:001:0 s a3 00 0000 0002 0004 4 <
+> 420a8780 1.238216 C Ci:3:001:0 0 4 =
+>     01011100
+> 420a8780 1.238227 S Co:3:001:0 s 23 01 0010 0002 0000 0
+> 420a8780 1.238233 C Co:3:001:0 0 0
+
+This part repeats over and over.  It shows the port being reset,
+during which the device disconnects and reconnects, every single time.
+It's those disconnections which cause the initialization procedure to
+fail.  Normally a device remains connected during the entire reset,
+and when the reset finishes, the port gets enabled so the computer can
+communicate with the device.  That didn't happen here.
+
+There's no way to know from this what causes those disconnections to
+occur, but it looks like something is wrong at the hardware level.
+
+Alan
 
