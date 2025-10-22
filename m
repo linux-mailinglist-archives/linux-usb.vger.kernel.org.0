@@ -1,230 +1,194 @@
-Return-Path: <linux-usb+bounces-29520-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29521-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 528EEBFC294
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 15:33:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1D0BBFC5A1
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 16:01:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C2A5D562B26
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 13:26:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABCCB622DFB
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Oct 2025 13:46:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE67A33F8CD;
-	Wed, 22 Oct 2025 13:26:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2819347BC4;
+	Wed, 22 Oct 2025 13:43:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6uSYBi/"
+	dkim=pass (2048-bit key) header.d=valdikss.org.ru header.i=@valdikss.org.ru header.b="V2e+GI9/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.valdk.tel (mail.valdk.tel [185.177.150.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8A63128D4
-	for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 13:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5122FC866
+	for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 13:43:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.177.150.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761139565; cv=none; b=gA0cUQC/rS7Iu8HDiyUc9AKxIKF8Ez+q/spNWrfbbIam+q/uUG9hn8ptO0CrvZ398nEn0yXZh8YaYbQzn6FPwrdGT2Gu5iXpbnyaJ1TYnwCx7jbt4KC03wRh0kb7Hivvy7bvDUQwrcbYifKPaO4UZrI5aTngd+FAZgR106IHVrY=
+	t=1761140586; cv=none; b=jLL6VsW2iZ8uQw/saS+vXr0v7okztCFT9FmntlrYIPJ0/CFI4b5cRzPRp3rVJyU51mcab6oAeyzpoTJC322E+vNnpJcXWsVzJJGgwWq/sj2FTd+m3Km9luTMtsTnkIWZcp89+hUUIOPwbQFwUhGbzmudpy2A22+LpKE4REQSxvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761139565; c=relaxed/simple;
-	bh=TIHoagb9nmBBo3qzFiNpF9kRv+YbgaOnk7dZHlHe3gE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pBiOiqnNrXyXjNIgKGQnLI4nEZsAHgZFXCZ0DmPnJssTgVyLmQoKlgooW7iE0mSaIDrhIv7SygbDwSRdUNb1UpgJaEabli57O5E25WcTyMU+jTchY6bxVMIIVeVflzOXFEHG8IfF8H7Qj0lk2B+40ZlG8mGfiqBZ/XXpFVgU38c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V6uSYBi/; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b4f323cf89bso1522183766b.2
-        for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 06:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761139561; x=1761744361; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sZlZLmDPyiYciANeW9KKBJMV54Xan/JRRo1uMwZ7l90=;
-        b=V6uSYBi/nkrWr2aLLfs6kXRrlU9I718Gmywct8uujc9Q37BL7DqfuwlOoD08LcvUhw
-         DAxqh3SHdkGzMNfsHgLWj7IhNlYt2grL7yjMuGr1dILizVpoCfWiomx01xlF6bZCEQEW
-         4KIpp/q+Jbnl0YAkCxChvqrBrU+X9fyy3kSKstnXwR6rpnXE5feO1NcFkWJmZG4qLxgh
-         CX73TyYN1QjI6l08nHHGUtKejY3J0hcR00otDNkgXhfuaYPgwqN7pNy8Fvb0lj1MMXO2
-         lWNGjlBXs3YF7zyqvCFM1Zp1GUXPXcTzkCVLPiIe6l1d3G1yQV6/g0WCv3Fo55vb32Xb
-         WHZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761139561; x=1761744361;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZlZLmDPyiYciANeW9KKBJMV54Xan/JRRo1uMwZ7l90=;
-        b=ZE0oOownynhVvS74BbTJiW6vc0oSi2pWVSyPWlrHR+r4rJvEtYdVEEulDLGMQnppI1
-         fCviVIImwQT+1lSjWKEuCX86u+uBu58Tt0hd+/IDAgJrhd9CuhA8/30h7VEc9mArzKi3
-         sTOAqiO4sJDNwwt+LOX5Yoi9ejLJYsPYWxNCaXOw/tZ/r+1QYZ2ahGGYhVShXB5ISiXk
-         NTkIYWQOcTd+5jngqMN7DLIZV002DGduEIAmR+J4Qf4khJYkc7xQstHmTnf8RHifsZsF
-         KwFSg9qatePnqj3Ma8hiDZkxYVJz/hppo5w5xmvLLk8vLjPpSJL9Q8WaRIqlIhUF7dve
-         pEUQ==
-X-Gm-Message-State: AOJu0YzJVjNdAPamLEAgsmHQNazayoyhTasUteg60qSclOELQ6oiiQ5v
-	XVUEM96C8FHFp90gMuk+mlx/34SAXChOQw3sg8AoAu4Am5Dsq2hgmACIq5i7dA==
-X-Gm-Gg: ASbGncvl6gE/qDpDNhIZv5QRr8UYcDjezvWvb/jY5TkMfhXmxaFQkw+yFBPP2ltPK7v
-	/dvpsImQakhWFxLLx1/cU33cu1UCohLgXUbyJ9A7NkN12IXMw3hFtbz+mK5yO/SJL+dXicajvtG
-	yh/GrpNAO4/qKaCuiKHNWfo1A1tDWWEzUv6U6ELAsm9xl0peCGciV2OCUVIshgzV+IPvWtGzDdN
-	p+nzcoXCelODzRIk99CEnSLwa+eGYhqiBt3C0pHtriGV0NA4P7rnQyi6DSqZNOulBV6xpEontgU
-	nZChQAS2Wey8PuwuSmyxdIT7iBaxijo7EUlalQakVao0fMCsRbOIRhVQiYXN10Y1xJuFVmCVErb
-	YAqNt331rB2vs+L/YogsXsT+E+lrejSH/XI/GkUdglXf0Tpnw+w8FX/fYr5v68CCUoL/PU+VGMM
-	x15AGDOnewInvhOtvu9GgMyfXUkfmikmRR/wb+X5YmN8YF
-X-Google-Smtp-Source: AGHT+IF4dDu9+rlkqU97VxdWRxdKrgkioFszjrxbkp7wO3Dm7UW4E/GlDrWh5EXEiZ9nYNI3x+we4Q==
-X-Received: by 2002:a17:907:1c28:b0:b2d:e514:5348 with SMTP id a640c23a62f3a-b6474940f3amr2524708266b.33.1761139560376;
-        Wed, 22 Oct 2025 06:26:00 -0700 (PDT)
-Received: from ?IPV6:2a01:41e3:502f:e200:4a9:7423:73cd:3b4? ([2a01:41e3:502f:e200:4a9:7423:73cd:3b4])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-63c4942f63dsm12071352a12.20.2025.10.22.06.25.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Oct 2025 06:25:59 -0700 (PDT)
-Message-ID: <1a960051-b1e8-49a5-bdea-1ddd719cd0ec@gmail.com>
-Date: Wed, 22 Oct 2025 15:25:59 +0200
+	s=arc-20240116; t=1761140586; c=relaxed/simple;
+	bh=lWu6hbEKMFn1WLcKvOfLmTKQ48W5AyUbgO/Kl3BpYcM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fu2jUV7JecduFi4tf4ahm5ZeTXj2ZlueMCTjC/66R4oG+WHzf/4Fh8MqPVE0jk3BLnrSM1Q5sQZSZkuWnbiVgJigEK2gbEI3ZGeZiw/b5DB0fKnrdUK4OR7UyyxjZJWK4lNXyjVT8EVCkjvf8qpIK0c6EoURjm2JcjiXd4Nz/yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=valdikss.org.ru; spf=pass smtp.mailfrom=valdikss.org.ru; dkim=pass (2048-bit key) header.d=valdikss.org.ru header.i=@valdikss.org.ru header.b=V2e+GI9/; arc=none smtp.client-ip=185.177.150.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=valdikss.org.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valdikss.org.ru
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7845D1D7C46C;
+	Wed, 22 Oct 2025 16:42:49 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valdikss.org.ru;
+	s=msrv; t=1761140572; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=EcXzIEBvMsOh5SBVzP6oBUrkGDLYbasdGtbVwUdqdl4=;
+	b=V2e+GI9/VapVq6kx46/7S20PYwjwmNSb9OoOcduChvkBHdywo6h4K13pqU3StW/TGkjopG
+	vBc/K11QH8308VSoN4mD01VjXBELlr2C5CSfhwvgvcg3zxzFByMlUZHxAanadFzXk1TAwn
+	5u//UZgjaBPSPNCAe3Ub60Q7QVudN6IuNz4cRNVo0ZmXncGmJtu9vYh4vfyoj+UKZ90tnI
+	T9geSvg3QI4LsgHKKyvsBh76K3Sk+vwou1nIMO//PG2Wg3IfC7evV7/SfE2lBX2TpZzVTa
+	eemogsimPYVDr+Wtdz/SlvPBLNv5MBM7rdb1rQF4SaXi0/3CjuZNRI2MWN6vqA==
+From: ValdikSS <iam@valdikss.org.ru>
+To: Greg KH <greg@kroah.com>
+Cc: linux-usb@vger.kernel.org,
+	Alan Stern <stern@rowland.harvard.edu>,
+	ValdikSS <iam@valdikss.org.ru>
+Subject: [PATCH v2 RESEND] usb: ohci: delay endpoint descriptor unlinking to reduce transfer latency
+Date: Wed, 22 Oct 2025 16:39:26 +0300
+Message-ID: <20251022133926.97856-1-iam@valdikss.org.ru>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <1ff1f025-dd54-4c1e-bdf9-376a359178ef@rowland.harvard.edu>
+References: <1ff1f025-dd54-4c1e-bdf9-376a359178ef@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: USB A 3.0 port on Asus Zenbook not recognising the TipToi pen
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: USB list <linux-usb@vger.kernel.org>
-References: <1393a6c5-3430-49cb-95e6-b18c0f5328b0@gmail.com>
- <cfc6d2ba-a820-4bd3-990e-7800bce171e2@rowland.harvard.edu>
- <967e7681-c9ff-4421-ba89-d83bb40f1af3@gmail.com>
- <4c6bbcd1-0ed2-496d-82c4-3fc9a1c2660e@rowland.harvard.edu>
-Content-Language: en-US
-From: Julian Sikorski <belegdol@gmail.com>
-In-Reply-To: <4c6bbcd1-0ed2-496d-82c4-3fc9a1c2660e@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
+The current OHCI implementation immediately unlinks Endpoint Descriptors
+(EDs) when they become idle. Unlinking process waits for the next Start
+of Frame (SOF) interrupt as a synchronization primitive before unlinking
+it.
 
+This adds ~1ms latency per transfer cycle for rapid bidirectional
+communication which leads to half the USB 1.1 speed for smaller packets
+at best.
 
-Am 21.10.25 um 18:01 schrieb Alan Stern:
-> On Tue, Oct 21, 2025 at 04:44:24PM +0200, Julian Sikorski wrote:
->> Am 19.10.25 um 17:43 schrieb Alan Stern:
->>> On Sun, Oct 19, 2025 at 08:34:27AM +0200, Julian Sikorski wrote:
->>>> Hello,
->>>>
->>>> disclaimer: this is not linux-specific as Windows 11 also fails to recognise
->>>> the devices, but maybe someone has ideas regarding the causes here.
->>>> I have two TipToi Pens by Ravensburger. These are recognised as
->>>>
->>>> 04d6:e101 Mentor Graphics usbdisk
->>>>
->>>> when plugged into USB C port via USB C to micro B cable. When plugged into
->>>> the USB A port, the following messages are reported into the journal:
->>>>
->>>> Okt 19 08:19:08 kernel: usb usb3-port2: Cannot enable. Maybe the USB cable
->>>> is bad?
->>>> Okt 19 08:19:09 kernel: usb usb3-port2: Cannot enable. Maybe the USB cable
->>>> is bad?
->>>> Okt 19 08:19:09 kernel: usb usb3-port2: attempt power cycle
->>>> Okt 19 08:19:10 kernel: usb usb3-port2: Cannot enable. Maybe the USB cable
->>>> is bad?
->>>> Okt 19 08:19:11 kernel: usb usb3-port2: Cannot enable. Maybe the USB cable
->>>> is bad?
->>>> Okt 19 08:19:11 kernel: usb usb3-port2: unable to enumerate USB device
->>>>
->>>> I have two pens. I tried two cables delivered with them, as well as a
->>>> different USB A to micro B cable I had. All exhibit the same issue.
->>>> Does anyone have any ideas what could be the problem? My first guess is that
->>>> both the laptop and the pen are slightly off-spec in some strange way, which
->>>> causes them not to work together. The USB A slot on the laptop works fine
->>>> with other devices, and the pen works with the laptop if connected to USB C.
->>>
->>> Have you tried using the pens on a different computer?
->>>
->>> Alan Stern
->>
->> Hi,
->>
->> I did, I just tried again to be sure - with the allegedly broken cable. This
->> is on my ASRock Fatal1ty B450 Gaming-ITX/ac front panel USB:
->>
->> Okt 21 16:42:00 kernel: usb 1-3: new high-speed USB device number 4 using
->> xhci_hcd
->> Okt 21 16:42:00 kernel: usb 1-3: New USB device found, idVendor=04d6,
->> idProduct=e101, bcdDevice= 1.00
-> ...
-> 
-> That certainly indicates part of the problem is in the laptop.  What
-> happens if you try connecting one of the pens to the laptop through a
-> USB hub?
-> 
-> Alan Stern
+When a transfer completes, takeback_td() immediately calls
+start_ed_unlink() if the ED has no more TDs queued. This triggers:
+1. ED marked for unlinking with SOF interrupt enabled
+2. Wait for next 1ms frame boundary (SOF interrupt)
+3. finish_unlinks() processes the ED removal
 
-Through a hub (Dell Monitor) the pen works as well:
+This patch adds 275+10 ms timeout to the idle EDs. If new transfers
+arrive on the same ED before timeout expiry, clear the timeout and
+continue using the ED. Only EDs that remain idle after the timeout
+period are cleared by the existing I/O watchdog, which runs every
+275 ms (and the ED timeout is 10 ms).
 
-Okt 22 15:18:53 kernel: usb 3-2: new high-speed USB device number 7 
-using xhci_hcd
-Okt 22 15:18:53 kernel: usb 3-2: New USB device found, idVendor=0451, 
-idProduct=8142, bcdDevice= 1.00
-Okt 22 15:18:53 kernel: usb 3-2: New USB device strings: Mfr=0, 
-Product=0, SerialNumber=1
-Okt 22 15:18:53 kernel: usb 3-2: SerialNumber: yyyy
-Okt 22 15:18:53 kernel: hub 3-2:1.0: USB hub found
-Okt 22 15:18:53 kernel: hub 3-2:1.0: 4 ports detected
-Okt 22 15:18:53 kernel: usb 4-2: new SuperSpeed USB device number 3 
-using xhci_hcd
-Okt 22 15:18:53 kernel: usb 4-2: New USB device found, idVendor=0451, 
-idProduct=8140, bcdDevice= 1.00
-Okt 22 15:18:53 kernel: usb 4-2: New USB device strings: Mfr=0, 
-Product=0, SerialNumber=0
-Okt 22 15:18:53 kernel: hub 4-2:1.0: USB hub found
-Okt 22 15:18:53 kernel: hub 4-2:1.0: 4 ports detected
-Okt 22 15:18:54 kernel: usb 3-2.4: new high-speed USB device number 8 
-using xhci_hcd
-Okt 22 15:18:54 kernel: usb 3-2.4: New USB device found, idVendor=0451, 
-idProduct=8142, bcdDevice= 1.00
-Okt 22 15:18:54 kernel: usb 3-2.4: New USB device strings: Mfr=0, 
-Product=0, SerialNumber=1
-Okt 22 15:18:54 kernel: usb 3-2.4: SerialNumber: yyyy
-Okt 22 15:18:54 kernel: hub 3-2.4:1.0: USB hub found
-Okt 22 15:18:54 kernel: hub 3-2.4:1.0: 4 ports detected
-Okt 22 15:18:54 kernel: usb 4-2.4: new SuperSpeed USB device number 4 
-using xhci_hcd
-Okt 22 15:18:54 kernel: usb 4-2.4: New USB device found, idVendor=0451, 
-idProduct=8140, bcdDevice= 1.00
-Okt 22 15:18:54 kernel: usb 4-2.4: New USB device strings: Mfr=0, 
-Product=0, SerialNumber=0
-Okt 22 15:18:54 kernel: hub 4-2.4:1.0: USB hub found
-Okt 22 15:18:54 kernel: hub 4-2.4:1.0: 4 ports detected
-Okt 22 15:18:54 kernel: usb 3-2.4.3: new full-speed USB device number 9 
-using xhci_hcd
-Okt 22 15:18:54 kernel: usb 3-2.4.3: New USB device found, 
-idVendor=0451, idProduct=ca01, bcdDevice= 1.00
-Okt 22 15:18:54 kernel: usb 3-2.4.3: New USB device strings: Mfr=1, 
-Product=2, SerialNumber=3
-Okt 22 15:18:54 kernel: usb 3-2.4.3: Product: Texas Instruments USBtoI2C 
-Solution
-Okt 22 15:18:54 kernel: usb 3-2.4.3: Manufacturer: Texas Instruments
-Okt 22 15:18:54 kernel: [35B blob data]
-Okt 22 15:18:54 kernel: hid-generic 0003:0451:CA01.0004: 
-hiddev96,hidraw1: USB HID v1.00 Device [Texas Instruments Texas 
-Instruments USBtoI2C Solution] on usb-0000:04:00.4-2.4.3/input0
-Okt 22 15:19:57 kernel: usb 3-2.4.2: new high-speed USB device number 10 
-using xhci_hcd
-Okt 22 15:19:57 kernel: usb 3-2.4.2: New USB device found, 
-idVendor=04d6, idProduct=e101, bcdDevice= 1.00
-Okt 22 15:19:57 kernel: usb 3-2.4.2: New USB device strings: Mfr=1, 
-Product=2, SerialNumber=3
-Okt 22 15:19:57 kernel: usb 3-2.4.2: Product: usbdisk
-Okt 22 15:19:57 kernel: usb 3-2.4.2: Manufacturer: anyka
-Okt 22 15:19:57 kernel: usb 3-2.4.2: SerialNumber: xxxx
-Okt 22 15:19:57 kernel: usb-storage 3-2.4.2:1.0: USB Mass Storage device 
-detected
-Okt 22 15:19:57 kernel: scsi host2: usb-storage 3-2.4.2:1.0
-Okt 22 15:19:58 kernel: scsi 2:0:0:0: Direct-Access     Tiptoi   ZC3203L 
-          1.00 PQ: 0 ANSI: 2
-Okt 22 15:19:58 kernel: sd 2:0:0:0: Attached scsi generic sg0 type 0
-Okt 22 15:19:58 kernel: sd 2:0:0:0: [sda] 7013632 512-byte logical 
-blocks: (3.59 GB/3.34 GiB)
-Okt 22 15:19:58 kernel: sd 2:0:0:0: [sda] Write Protect is off
-Okt 22 15:19:58 kernel: sd 2:0:0:0: [sda] Mode Sense: 03 00 00 00
-Okt 22 15:19:58 kernel: sd 2:0:0:0: [sda] No Caching mode page found
-Okt 22 15:19:58 kernel: sd 2:0:0:0: [sda] Assuming drive cache: write 
-through
-Okt 22 15:19:59 kernel:  sda:
-Okt 22 15:19:59 kernel: sd 2:0:0:0: [sda] Attached SCSI removable disk
+This eliminates SOF synchronization delays for consecutive transfers,
+but preserves the one-frame unlinking delay which was added as a race
+condition elimination measure before the modern git history in
+commit 961c380cef (March 2004) by David Brownell.
 
-Best regards,
-Julian
+Performance Impact:
+Tested on Orange Pi Zero3 (Allwinner H618) with Canon LBP1120 printer:
+- Before: 1.984ms average latency (write-read pattern)
+- After:  0.981ms average latency
+
+Link: https://lore.kernel.org/all/9013fce0-6764-49b1-9e54-68e915e12d7c@valdikss.org.ru/T/
+Signed-off-by: ValdikSS <iam@valdikss.org.ru>
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+---
+ drivers/usb/host/ohci-hcd.c | 15 +++++++++++++++
+ drivers/usb/host/ohci-q.c   | 15 ++++++++++++---
+ drivers/usb/host/ohci.h     |  1 +
+ 3 files changed, 28 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+index 9c7f30086..e89c9daec 100644
+--- a/drivers/usb/host/ohci-hcd.c
++++ b/drivers/usb/host/ohci-hcd.c
+@@ -364,6 +364,7 @@ ohci_endpoint_disable (struct usb_hcd *hcd, struct usb_host_endpoint *ep)
+ 	if (ohci->rh_state != OHCI_RH_RUNNING) {
+ sanitize:
+ 		ed->state = ED_IDLE;
++		ed->idle_timeout = 0;
+ 		ohci_work(ohci);
+ 	}
+ 
+@@ -384,6 +385,15 @@ ohci_endpoint_disable (struct usb_hcd *hcd, struct usb_host_endpoint *ep)
+ 			break;
+ 		}
+ 		fallthrough;
++	case ED_OPER:		/* check for delayed unlinking */
++		if (ed->idle_timeout) {
++			/* ED marked for delayed unlinking, unlink it now */
++			start_ed_unlink(ohci, ed);
++			spin_unlock_irqrestore(&ohci->lock, flags);
++			schedule_timeout_uninterruptible(1);
++			goto rescan;
++		}
++		fallthrough;
+ 	default:
+ 		/* caller was supposed to have unlinked any requests;
+ 		 * that's not our job.  can't recover; must leak ed.
+@@ -795,6 +805,11 @@ static void io_watchdog_func(struct timer_list *t)
+ 			}
+ 		}
+ 
++		/* Check for idle EDs that have timed out and unlink them to prevent memory leaks */
++		if (ed->state == ED_OPER && ed->idle_timeout &&
++				time_after(jiffies, ed->idle_timeout))
++			start_ed_unlink(ohci, ed);
++
+ 		/* Starting from the latest pending TD, */
+ 		td = ed->pending_td;
+ 
+diff --git a/drivers/usb/host/ohci-q.c b/drivers/usb/host/ohci-q.c
+index 3b445312b..e0725e490 100644
+--- a/drivers/usb/host/ohci-q.c
++++ b/drivers/usb/host/ohci-q.c
+@@ -603,6 +603,9 @@ static void td_submit_urb (
+ 	int		i, this_sg_len, n;
+ 	struct scatterlist	*sg;
+ 
++	/* Clear idle timeout since we're adding new TDs */
++	urb_priv->ed->idle_timeout = 0;
++
+ 	/* OHCI handles the bulk/interrupt data toggles itself.  We just
+ 	 * use the device toggle bits for resetting, and rely on the fact
+ 	 * that resetting toggle is meaningless if the endpoint is active.
+@@ -1162,10 +1165,16 @@ static void takeback_td(struct ohci_hcd *ohci, struct td *td)
+ 	if (urb_priv->td_cnt >= urb_priv->length)
+ 		finish_urb(ohci, urb, status);
+ 
+-	/* clean schedule:  unlink EDs that are no longer busy */
++	/* clean schedule: delay unlinking EDs to avoid SOF synchronization overhead */
+ 	if (list_empty(&ed->td_list)) {
+-		if (ed->state == ED_OPER)
+-			start_ed_unlink(ohci, ed);
++		if (ed->state == ED_OPER) {
++			/* Mark ED as idle but don't unlink immediately to avoid
++			 * 1ms SOF synchronization delays on rapid consecutive transfers.
++			 * Watchdog will clean up after 10ms if truly idle.
++			 */
++			ed->idle_timeout = jiffies + msecs_to_jiffies(10);
++			ed->idle_timeout += !ed->idle_timeout;
++		}
+ 
+ 	/* ... reenabling halted EDs only after fault cleanup */
+ 	} else if ((ed->hwINFO & cpu_to_hc32(ohci, ED_SKIP | ED_DEQUEUE))
+diff --git a/drivers/usb/host/ohci.h b/drivers/usb/host/ohci.h
+index 631dda617..858c7bebe 100644
+--- a/drivers/usb/host/ohci.h
++++ b/drivers/usb/host/ohci.h
+@@ -75,6 +75,7 @@ struct ed {
+ #define	OKAY_TO_TAKEBACK(ohci, ed)			\
+ 		((int) (ohci->wdh_cnt - ed->takeback_wdh_cnt) >= 0)
+ 
++	unsigned long		idle_timeout;	/* when ED became idle (jiffies) */
+ } __attribute__ ((aligned(16)));
+ 
+ #define ED_MASK	((u32)~0x0f)		/* strip hw status in low addr bits */
+-- 
+2.51.0
+
 
