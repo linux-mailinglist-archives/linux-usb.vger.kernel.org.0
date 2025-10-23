@@ -1,187 +1,74 @@
-Return-Path: <linux-usb+bounces-29579-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29580-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE31BC01028
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 14:11:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26C99C0103D
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 14:12:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 02F1035A57B
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 12:10:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ECE2B19C3CAD
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 12:12:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 599C930F95F;
-	Thu, 23 Oct 2025 12:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D32A30F92A;
+	Thu, 23 Oct 2025 12:12:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="biNjzk7L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JOOMXamO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m49195.qiye.163.com (mail-m49195.qiye.163.com [45.254.49.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B262330F93F;
-	Thu, 23 Oct 2025 12:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA9130FF36;
+	Thu, 23 Oct 2025 12:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761221449; cv=none; b=H8CmKjOOg249vW3gl3Y4h286MRfQxn1TLE37hzO1nL6R9XxrC+/GuJeQN8aqYRWD2zwb/8DJLWugxADfssQueBKfD+qt2omdOuMzjBILiljAhkItPK8zOrE6GltDu094XhLlzSYciTujO/seVtlrffVlPnPBo5Ri7ecTe1M3vhQ=
+	t=1761221548; cv=none; b=l0rSUi2KftWmX5xX9rGdLuWoSPqzixX87CpBpiHqdUs0kclLm0mk2OOVfQn+d/zBm1T0ymb/6vir3tzJu410Vt7vNzJngtxAEgChwzQLfWMGPf+OkgKVv7dIKTAhepzOwrYmH9W6ItlYnu6WIehOFWkf+0hQMHzPsLOi2AIMWbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761221449; c=relaxed/simple;
-	bh=oAZzN4JwMBb4zdgdgHMUaM0HJArOfgw/LUeK6U1j1qg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e/4mmLjJ+BabY5CS/QHLDEleXNJ5wz2AmWmggQw7XVcNBGCiyQfJnmWPckXJfQWjYhSySu1WE63CySb3hH9nLGvAzVPoB9RMSR5OADVwua7CSRqtLm8n8JO9G9q0P6Fmmq3yfFMklGcdRxG+nLBmv42F48/RUebMPFyl6MhO99w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=biNjzk7L; arc=none smtp.client-ip=45.254.49.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.149] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 26f2c95f7;
-	Thu, 23 Oct 2025 20:10:21 +0800 (GMT+08:00)
-Message-ID: <6f769567-b383-4c79-b441-3dd84f21cdae@rock-chips.com>
-Date: Thu, 23 Oct 2025 20:10:20 +0800
+	s=arc-20240116; t=1761221548; c=relaxed/simple;
+	bh=f9VC3x2MwRv+Ew7I3A16lu8Dfa7Pd0chWsOhmqPGvfM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=br36FBUIJJchinXPWr4XGUdJxVR7nuFZBiMRowm1Uj9/9guLDRE7hjz9QEabtt0MHe1Ydze27YQm8DgGtknwLKUWk3RH/vyxZke3SWKt7kn3+hzne/McqO35Sz4QOP1HBx3tSR3OJWrSqIPyUbTizSM54MraTazZlSxPv0sPvxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JOOMXamO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5C16C4CEE7;
+	Thu, 23 Oct 2025 12:12:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761221547;
+	bh=f9VC3x2MwRv+Ew7I3A16lu8Dfa7Pd0chWsOhmqPGvfM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JOOMXamOVv3OCT1icQTPhyQo0U5GodFuhDQViJ99UCfCFLrczouCpc1gWy0nBZQXw
+	 24H4ZA0MT6jBMLphMspVM8LFsIzizK1yHEgpva9f22AqQcFUQTwk0KcVUbTN0W87kO
+	 jP2QQ8DB/mq/OtBsxP3v7jqprKBV6/Nu8i/zF9AXgWKKNNMR28uZa0FC6MxZwk2dXJ
+	 Wp+dvobZdMjiu83JsPuXg/xWl4Tvw43OPlgMTqLsKmS9soV7TnEkgiqbdWq9CSRSEe
+	 fAKFnCPbsPUrBptBpGSRQ4xaTBhccolGerGEoQhezG9+ea7mjHHPnYp/My9nb7eYDG
+	 6Mp3f3gJ4b82A==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vBuBG-000000002c0-1uB1;
+	Thu, 23 Oct 2025 14:12:34 +0200
+Date: Thu, 23 Oct 2025 14:12:34 +0200
+From: Johan Hovold <johan@kernel.org>
+To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Telit FN920C04 ECM compositions
+Message-ID: <aPobspmPHDtV3ddJ@hovoldconsulting.com>
+References: <20251023034423.3421068-1-Qing-wu.Li@leica-geosystems.com.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/9] drm/bridge: Implement generic USB Type-C DP HPD
- bridge
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20251023033009.90-1-kernel@airkyi.com>
- <20251023033009.90-3-kernel@airkyi.com> <aPnrKFWTvpuRTyhI@kuha.fi.intel.com>
- <14b8ac71-489b-4192-92d6-5f228ff3881d@rock-chips.com>
- <aPoZhBdc1M6Qgfae@kuha.fi.intel.com>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <aPoZhBdc1M6Qgfae@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9a10fa2ad903abkunm63b0b3181a1121
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0hCTlZDT0xDTk4ZSUgdHRhWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
-	xVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=biNjzk7LSVRSGV1ZBRFm2pqDrcSqN6X6pQT3v+20RIGWpgAkjhtuaHxj6ZVvF/acb202inF411z7yGIUoF/7CHQ2Pg/L6wLybWl0rz+LjhvsgHqysLYlVIWIXUgVF/qQOrfHbm3hQOkvKYsFtMh9rTdxx3ulZty1nhOw2ruKgYk=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=+tppR1r2GR2aHsAGWh+r4F7VMu3ZGa0gIoTITM9UMtU=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251023034423.3421068-1-Qing-wu.Li@leica-geosystems.com.cn>
 
-Hi Heikki,
+On Thu, Oct 23, 2025 at 03:44:22AM +0000, LI Qingwu wrote:
+> Add support for the Telit Cinterion FN920C04 module when operating in
+> ECM (Ethernet Control Model) mode. The following USB product IDs are
+> used by the module when AT#USBCFG is set to 3 or 7.
 
-On 10/23/2025 8:03 PM, Heikki Krogerus wrote:
->>>> diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
->>>> index 245e8a27e3fc..e91736829167 100644
->>>> --- a/drivers/gpu/drm/bridge/Makefile
->>>> +++ b/drivers/gpu/drm/bridge/Makefile
->>>> @@ -1,6 +1,7 @@
->>>>    # SPDX-License-Identifier: GPL-2.0
->>>>    obj-$(CONFIG_DRM_AUX_BRIDGE) += aux-bridge.o
->>>>    obj-$(CONFIG_DRM_AUX_HPD_BRIDGE) += aux-hpd-bridge.o
->>>> +obj-$(CONFIG_DRM_AUX_TYPEC_DP_HPD_BRIDGE) += aux-hpd-typec-dp-bridge.o
->>> Instead, why not just make that a part of aux-hpd-bridge
->>> conditionally:
->>>
->>> ifneq ($(CONFIG_TYPEC),)
->>>           aux-hpd-bridge-y        += aux-hpd-typec-dp-bridge.o
->>> endif
->> Oh, I did consider that! But I noticed that aux-hpd-bridge.c contains the
->> following statement module_auxiliary_driver(drm_aux_hpd_bridge_drv), which
->> already includes a module_init. In the newly added file, in order to call the
->> register function, another module_init was also added. If the two files are
->> each made into a module separately, would there be a problem?
-> You would not call module_init() from the new file. Instead you would
-> call drm_aux_hpd_typec_dp_bridge_init() and what ever directly from
-> aux-hpd-bridge.c:
->
-> diff --git a/drivers/gpu/drm/bridge/aux-bridge.h b/drivers/gpu/drm/bridge/aux-bridge.h
-> new file mode 100644
-> index 000000000000..ae689a7778fa
-> --- /dev/null
-> +++ b/drivers/gpu/drm/bridge/aux-hpd-bridge.h
-> @@ -0,0 +1,13 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef AUX_HPD_BRIDGE_H
-> +#define AUX_HPD_BRIDGE_H
-> +
-> +#if IS_ENABLED(CONFIG_TYPEC)
-> +int drm_aux_hpd_typec_dp_bridge_init(void);
-> +void drm_aux_hpd_typec_dp_bridge_exit(void);
-> +#else
-> +static inline int drm_aux_hpd_typec_dp_bridge_init(void) { return 0; }
-> +static inline void drm_aux_hpd_typec_dp_bridge_exit(void) { }
-> +#endif /* IS_ENABLED(CONFIG_TYPEC) */
-> +
-> +#endif /* AUX_HPD_BRIDGE_H */
-> diff --git a/drivers/gpu/drm/bridge/aux-hpd-bridge.c b/drivers/gpu/drm/bridge/aux-hpd-bridge.c
-> index 2e9c702c7087..3578df1df78a 100644
-> --- a/drivers/gpu/drm/bridge/aux-hpd-bridge.c
-> +++ b/drivers/gpu/drm/bridge/aux-hpd-bridge.c
-> @@ -12,6 +12,8 @@
->   #include <drm/drm_bridge.h>
->   #include <drm/bridge/aux-bridge.h>
->   
-> +#include "aux-hpd-bridge.h"
-> +
->   static DEFINE_IDA(drm_aux_hpd_bridge_ida);
->   
->   struct drm_aux_hpd_bridge_data {
-> @@ -190,9 +192,16 @@ static int drm_aux_hpd_bridge_probe(struct auxiliary_device *auxdev,
->   
->          auxiliary_set_drvdata(auxdev, data);
->   
-> +       drm_aux_hpd_typec_dp_bridge_init();
-> +
->          return devm_drm_bridge_add(data->dev, &data->bridge);
->   }
->   
-> +static void drm_aux_hpd_bridge_remove(struct auxiliary_device *auxdev)
-> +{
-> +       drm_aux_hpd_typec_dp_bridge_exit();
-> +}
-> +
->   static const struct auxiliary_device_id drm_aux_hpd_bridge_table[] = {
->          { .name = KBUILD_MODNAME ".dp_hpd_bridge", .driver_data = DRM_MODE_CONNECTOR_DisplayPort, },
->          {},
-> @@ -203,6 +212,7 @@ static struct auxiliary_driver drm_aux_hpd_bridge_drv = {
->          .name = "aux_hpd_bridge",
->          .id_table = drm_aux_hpd_bridge_table,
->          .probe = drm_aux_hpd_bridge_probe,
-> +       .remove = drm_aux_hpd_bridge_remove,
->   };
->   module_auxiliary_driver(drm_aux_hpd_bridge_drv);
+Applied, thanks.
 
-Yes, if we don't distinguish them through Kconfig, we need to use the IS_ENABLED macro in the code. Thanks again for you code.
-
-
-Another thing is that CONFIG_DRM_AUX_HPD_BRIDGE originally needed to be selected by other modules. With this change, we also need to expose it in Kconfig.
-
-
->
->
--- 
-Best,
-Chaoyi
-
+Johan
 
