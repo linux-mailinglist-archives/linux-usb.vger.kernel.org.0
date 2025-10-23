@@ -1,344 +1,189 @@
-Return-Path: <linux-usb+bounces-29570-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29571-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32DE4C00602
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 12:02:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6240C00B1A
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 13:22:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 23F934F7B65
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 10:02:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12CC21A61F55
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 11:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651993019BB;
-	Thu, 23 Oct 2025 10:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B830530DD3C;
+	Thu, 23 Oct 2025 11:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="tX5yKIBY";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="qwZ/ApOf"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="WPP/CtMy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m155105.qiye.163.com (mail-m155105.qiye.163.com [101.71.155.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58552F12CD
-	for <linux-usb@vger.kernel.org>; Thu, 23 Oct 2025 10:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688E430DEDD;
+	Thu, 23 Oct 2025 11:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761213714; cv=none; b=XB///5DvqaNm+5Hsu07x8AnTRncuOx2HWPcWMMYylUO4veN3Q766i+ccoqpsRuQ8Ue8PkufeCMt36NRwXsc2dnj4Us9l/01rsk7eYf8D5ZjbCZfbk6MjqbBsMHEdZ5Lz8X/gKyhwObjLi/FyvBlxjxC1VzRxL/jmyycETj5D/DY=
+	t=1761218509; cv=none; b=E58B6rsgkY1tulY5O5AKhge4q8aenOddtT+9OyxYG/NboQmp2dg6ELqZrgaesNT0J/jgMYXgnTxAYC3t1SUpkS8r4X6b/msisW/fOMnozoDd4EDg47EiiGt7nWXozn1nD2ineHjD4hAKOU6AXqif4V+ach9Kr49Jkz0aqYtwFVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761213714; c=relaxed/simple;
-	bh=i8iTFIpSYHr7NzE1lDkPHpkvPukENwJx5HMYBoh3o1U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VM5aC0FmpFx293jbTfBsGKEwkIDt5gfPOwtE61vG4lqHdT7ECOdhunYY5z8Kyzvdf9BR1WpByQ8/UTVbpaBVKUDuKJfVKbtq9ZRqkufpGZ8DNeV7jj2Fn6laTOePJomJv4nJKC8ITqkJ4j/LPAoTKgSFf7jSOrtmNGBJWBol7Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=tX5yKIBY; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=qwZ/ApOf; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id B8FFC1F388;
-	Thu, 23 Oct 2025 10:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1761213703; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=8CphuBVHORvBwJQPcaj5D55Ah/F0BPK3ytrl067uAgA=;
-	b=tX5yKIBYzbBZj/BQYIXPh0+mjlAtOJmPNxvCaerMk9w09wmW9rpnjYghvOHFRZeoysy1qj
-	st15Muds/PAm9ZQzEbMD0xJ5g3B1LUokCAS2eE5eyZJgoXE1Xsvb+XVWLLgjHdGA7ni1V4
-	vVvUylnAE9jjqPcVB20U+NE+2p8nMtc=
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b="qwZ/ApOf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1761213699; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=8CphuBVHORvBwJQPcaj5D55Ah/F0BPK3ytrl067uAgA=;
-	b=qwZ/ApOfaf4ZA07/9ksOrwwVDhnolkyMDpZ1W6Oa3f+WLSnPUCeob/vbTebWKyuPMGlIDa
-	T79xELna0goXVq8/TIG1D4ab+udFBTlZJ/8QDrexwAMAfNm6jOh8+c7gqlonodFGdUXD4C
-	WyjXNHj3ej/UnND7Ot2eEZi9LBUAtJA=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 79A0713285;
-	Thu, 23 Oct 2025 10:01:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id OSOWHAP9+WgvXwAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Thu, 23 Oct 2025 10:01:39 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH net-next 1/1] net: usb: usbnet: coding style for functions
-Date: Thu, 23 Oct 2025 12:00:19 +0200
-Message-ID: <20251023100136.909118-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.51.1
+	s=arc-20240116; t=1761218509; c=relaxed/simple;
+	bh=4V1Gt66b1fVtxCW979c/U9uvQYLhzgcptFiKZo6XcO4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qvlezuDtEXN24dRfg6iWeZ1DO9zYRH3TIZNnt+JvcoyCanaOWcQxnhqhokH9tyGOI36O2/Ea8ylhp0a8O7L/23qcglFObmXvrWz44b6uAfVl4CURpCJk2l3wcPvyZ9a4+i8KeLPJyGRzshsoQjuTbno6td89B1U/pI8qvC73GbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=WPP/CtMy; arc=none smtp.client-ip=101.71.155.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.149] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 26f1c34e0;
+	Thu, 23 Oct 2025 19:21:32 +0800 (GMT+08:00)
+Message-ID: <9c52db41-14f3-41a8-9423-3efe604361aa@rock-chips.com>
+Date: Thu, 23 Oct 2025 19:21:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: B8FFC1F388
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-1.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TAGGED_RCPT(0.00)[netdev];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.com:email,suse.com:mid,suse.com:dkim];
-	DKIM_TRACE(0.00)[suse.com:+]
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -1.51
-X-Spam-Level: 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 1/9] usb: typec: Add notifier functions
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
+ <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Yubing Zhang <yubing.zhang@rock-chips.com>,
+ Frank Wang <frank.wang@rock-chips.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Amit Sunil Dhamne <amitsd@google.com>,
+ Chaoyi Chen <chaoyi.chen@rock-chips.com>, Dragan Simic <dsimic@manjaro.org>,
+ Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
+ Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
+References: <20251023033009.90-1-kernel@airkyi.com>
+ <20251023033009.90-2-kernel@airkyi.com> <aPni4AeDaem_rfZH@kuha.fi.intel.com>
+ <aPnvoSRJefwDlpNO@kuha.fi.intel.com> <aPn4-S7upPOOtenr@kuha.fi.intel.com>
+Content-Language: en-US
+From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+In-Reply-To: <aPn4-S7upPOOtenr@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Tid: 0a9a10cd794c03abkunmb71a32b21958ec
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGk0ZS1ZMQklISUMZTxpNSUpWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
+	xVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=WPP/CtMyWjsyonpX6WvCM4hzju69HTiJcibUlL0INhLheBqrQM9p7gBHu5od05BDZ6pM2Ukm7toh6d4/A+Fm6M7Yl0FM6QZa7mJzh7xdQAPZNhD/6oM7QLysGDEz2S54WNzl+ZeotjEgaxczFD8HlruoyNi7HkkWDnqtDTw3R7I=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=Fden5q3cwJAtmjxOzXx/h9BbUz6DpV6vAF7TlM0CQGo=;
+	h=date:mime-version:subject:message-id:from;
 
-Functions are not to have blanks between names
-and parameter lists. Remove them.
+Hi Heikki,
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/net/usb/usbnet.c | 49 ++++++++++++++++++++--------------------
- 1 file changed, 24 insertions(+), 25 deletions(-)
+On 10/23/2025 5:44 PM, Heikki Krogerus wrote:
+> On Thu, Oct 23, 2025 at 12:04:44PM +0300, Heikki Krogerus wrote:
+>> On Thu, Oct 23, 2025 at 11:10:20AM +0300, Heikki Krogerus wrote:
+>>> Hi,
+>>>
+>>>> diff --git a/include/linux/usb/typec_notify.h b/include/linux/usb/typec_notify.h
+>>>> new file mode 100644
+>>>> index 000000000000..a3f1f3b3ae47
+>>>> --- /dev/null
+>>>> +++ b/include/linux/usb/typec_notify.h
+>>>> @@ -0,0 +1,17 @@
+>>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>>> +
+>>>> +#ifndef __USB_TYPEC_NOTIFY
+>>>> +#define __USB_TYPEC_NOTIFY
+>>>> +
+>>>> +#include <linux/notifier.h>
+>>>> +
+>>>> +enum usb_typec_event {
+>>>> +	TYPEC_ALTMODE_REGISTERED
+>>>> +};
+>>> Don't you need to know when the altmode is removed?
+>> I noticed that you don't because drm_dp_hpd_bridge_register() is
+>> always resource managed. But I think you could still send an event
+>> also when the altmode is removed already now. That way it does not
+>> need to be separately added if and when it is needed.
+> Hold on! Every bus has already a notifier chain. That's the one that
+> we should also use. Sorry for not noticing that earlier.
+>
+> So let's just export the bus type in this patch - you can then use
+> bus_register_notifier() in your driver:
+>
+> diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
+> index a884cec9ab7e..65ded9e3cdaa 100644
+> --- a/drivers/usb/typec/bus.c
+> +++ b/drivers/usb/typec/bus.c
+> @@ -547,3 +547,4 @@ const struct bus_type typec_bus = {
+>          .probe = typec_probe,
+>          .remove = typec_remove,
+>   };
+> +EXPORT_SYMBOL_GPL(typec_bus);
+> diff --git a/drivers/usb/typec/bus.h b/drivers/usb/typec/bus.h
+> index 643b8c81786d..af9edb3db9d0 100644
+> --- a/drivers/usb/typec/bus.h
+> +++ b/drivers/usb/typec/bus.h
+> @@ -5,7 +5,6 @@
+>   
+>   #include <linux/usb/typec_altmode.h>
+>   
+> -struct bus_type;
+>   struct typec_mux;
+>   struct typec_retimer;
+>   
+> @@ -28,7 +27,6 @@ struct altmode {
+>   
+>   #define to_altmode(d) container_of(d, struct altmode, adev)
+>   
+> -extern const struct bus_type typec_bus;
+>   extern const struct device_type typec_altmode_dev_type;
+>   
+>   #define is_typec_altmode(_dev_) (_dev_->type == &typec_altmode_dev_type)
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 309251572e2e..c6fd46902fce 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -20,12 +20,15 @@ struct typec_port;
+>   struct typec_altmode_ops;
+>   struct typec_cable_ops;
+>   
+> +struct bus_type;
+>   struct fwnode_handle;
+>   struct device;
+>   
+>   struct usb_power_delivery;
+>   struct usb_power_delivery_desc;
+>   
+> +extern const struct bus_type typec_bus;
+> +
+>   enum typec_port_type {
+>          TYPEC_PORT_SRC,
+>          TYPEC_PORT_SNK,
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index bf01f2728531..62a85dbad31a 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -189,7 +189,7 @@ static bool usbnet_needs_usb_name_format(struct usbnet *dev, struct net_device *
- 		 is_local_ether_addr(net->dev_addr));
- }
- 
--static void intr_complete (struct urb *urb)
-+static void intr_complete(struct urb *urb)
- {
- 	struct usbnet	*dev = urb->context;
- 	int		status = urb->status;
-@@ -221,7 +221,7 @@ static void intr_complete (struct urb *urb)
- 			  "intr resubmit --> %d\n", status);
- }
- 
--static int init_status (struct usbnet *dev, struct usb_interface *intf)
-+static int init_status(struct usbnet *dev, struct usb_interface *intf)
- {
- 	char		*buf = NULL;
- 	unsigned	pipe = 0;
-@@ -326,7 +326,7 @@ static void __usbnet_status_stop_force(struct usbnet *dev)
-  * Some link protocols batch packets, so their rx_fixup paths
-  * can return clones as well as just modify the original skb.
-  */
--void usbnet_skb_return (struct usbnet *dev, struct sk_buff *skb)
-+void usbnet_skb_return(struct usbnet *dev, struct sk_buff *skb)
- {
- 	struct pcpu_sw_netstats *stats64 = this_cpu_ptr(dev->net->tstats);
- 	unsigned long flags;
-@@ -396,7 +396,7 @@ EXPORT_SYMBOL_GPL(usbnet_update_max_qlen);
-  *
-  *-------------------------------------------------------------------------*/
- 
--int usbnet_change_mtu (struct net_device *net, int new_mtu)
-+int usbnet_change_mtu(struct net_device *net, int new_mtu)
- {
- 	struct usbnet	*dev = netdev_priv(net);
- 	int		ll_mtu = new_mtu + net->hard_header_len;
-@@ -472,7 +472,7 @@ static enum skb_state defer_bh(struct usbnet *dev, struct sk_buff *skb,
-  * NOTE:  annoying asymmetry:  if it's active, schedule_work() fails,
-  * but tasklet_schedule() doesn't.  hope the failure is rare.
-  */
--void usbnet_defer_kevent (struct usbnet *dev, int work)
-+void usbnet_defer_kevent(struct usbnet *dev, int work)
- {
- 	set_bit (work, &dev->flags);
- 	if (!usbnet_going_away(dev)) {
-@@ -489,9 +489,9 @@ EXPORT_SYMBOL_GPL(usbnet_defer_kevent);
- 
- /*-------------------------------------------------------------------------*/
- 
--static void rx_complete (struct urb *urb);
-+static void rx_complete(struct urb *urb);
- 
--static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
-+static int rx_submit(struct usbnet *dev, struct urb *urb, gfp_t flags)
- {
- 	struct sk_buff		*skb;
- 	struct skb_data		*entry;
-@@ -597,7 +597,7 @@ static inline int rx_process(struct usbnet *dev, struct sk_buff *skb)
- 
- /*-------------------------------------------------------------------------*/
- 
--static void rx_complete (struct urb *urb)
-+static void rx_complete(struct urb *urb)
- {
- 	struct sk_buff		*skb = (struct sk_buff *) urb->context;
- 	struct skb_data		*entry = (struct skb_data *) skb->cb;
-@@ -728,7 +728,7 @@ EXPORT_SYMBOL_GPL(usbnet_purge_paused_rxq);
- 
- // unlink pending rx/tx; completion handlers do all other cleanup
- 
--static int unlink_urbs (struct usbnet *dev, struct sk_buff_head *q)
-+static int unlink_urbs(struct usbnet *dev, struct sk_buff_head *q)
- {
- 	unsigned long		flags;
- 	struct sk_buff		*skb;
-@@ -823,7 +823,7 @@ static void usbnet_terminate_urbs(struct usbnet *dev)
- 	remove_wait_queue(&dev->wait, &wait);
- }
- 
--int usbnet_stop (struct net_device *net)
-+int usbnet_stop(struct net_device *net)
- {
- 	struct usbnet		*dev = netdev_priv(net);
- 	const struct driver_info *info = dev->driver_info;
-@@ -892,7 +892,7 @@ EXPORT_SYMBOL_GPL(usbnet_stop);
- 
- // precondition: never called in_interrupt
- 
--int usbnet_open (struct net_device *net)
-+int usbnet_open(struct net_device *net)
- {
- 	struct usbnet		*dev = netdev_priv(net);
- 	int			retval;
-@@ -1048,7 +1048,7 @@ int usbnet_set_link_ksettings_mii(struct net_device *net,
- }
- EXPORT_SYMBOL_GPL(usbnet_set_link_ksettings_mii);
- 
--u32 usbnet_get_link (struct net_device *net)
-+u32 usbnet_get_link(struct net_device *net)
- {
- 	struct usbnet *dev = netdev_priv(net);
- 
-@@ -1076,7 +1076,7 @@ int usbnet_nway_reset(struct net_device *net)
- }
- EXPORT_SYMBOL_GPL(usbnet_nway_reset);
- 
--void usbnet_get_drvinfo (struct net_device *net, struct ethtool_drvinfo *info)
-+void usbnet_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *info)
- {
- 	struct usbnet *dev = netdev_priv(net);
- 
-@@ -1087,7 +1087,7 @@ void usbnet_get_drvinfo (struct net_device *net, struct ethtool_drvinfo *info)
- }
- EXPORT_SYMBOL_GPL(usbnet_get_drvinfo);
- 
--u32 usbnet_get_msglevel (struct net_device *net)
-+u32 usbnet_get_msglevel(struct net_device *net)
- {
- 	struct usbnet *dev = netdev_priv(net);
- 
-@@ -1095,7 +1095,7 @@ u32 usbnet_get_msglevel (struct net_device *net)
- }
- EXPORT_SYMBOL_GPL(usbnet_get_msglevel);
- 
--void usbnet_set_msglevel (struct net_device *net, u32 level)
-+void usbnet_set_msglevel(struct net_device *net, u32 level)
- {
- 	struct usbnet *dev = netdev_priv(net);
- 
-@@ -1166,7 +1166,7 @@ static void __handle_set_rx_mode(struct usbnet *dev)
-  * especially now that control transfers can be queued.
-  */
- static void
--usbnet_deferred_kevent (struct work_struct *work)
-+usbnet_deferred_kevent(struct work_struct *work)
- {
- 	struct usbnet		*dev =
- 		container_of(work, struct usbnet, kevent);
-@@ -1277,7 +1277,7 @@ usbnet_deferred_kevent (struct work_struct *work)
- 
- /*-------------------------------------------------------------------------*/
- 
--static void tx_complete (struct urb *urb)
-+static void tx_complete(struct urb *urb)
- {
- 	struct sk_buff		*skb = (struct sk_buff *) urb->context;
- 	struct skb_data		*entry = (struct skb_data *) skb->cb;
-@@ -1332,7 +1332,7 @@ static void tx_complete (struct urb *urb)
- 
- /*-------------------------------------------------------------------------*/
- 
--void usbnet_tx_timeout (struct net_device *net, unsigned int txqueue)
-+void usbnet_tx_timeout(struct net_device *net, unsigned int txqueue)
- {
- 	struct usbnet		*dev = netdev_priv(net);
- 
-@@ -1382,8 +1382,7 @@ static int build_dma_sg(const struct sk_buff *skb, struct urb *urb)
- 	return 1;
- }
- 
--netdev_tx_t usbnet_start_xmit (struct sk_buff *skb,
--				     struct net_device *net)
-+netdev_tx_t usbnet_start_xmit(struct sk_buff *skb, struct net_device *net)
- {
- 	struct usbnet		*dev = netdev_priv(net);
- 	unsigned int			length;
-@@ -1561,7 +1560,7 @@ static inline void usb_free_skb(struct sk_buff *skb)
- 
- // work (work deferred from completions, in_irq) or timer
- 
--static void usbnet_bh (struct timer_list *t)
-+static void usbnet_bh(struct timer_list *t)
- {
- 	struct usbnet		*dev = timer_container_of(dev, t, delay);
- 	struct sk_buff		*skb;
-@@ -1636,7 +1635,7 @@ static void usbnet_bh_work(struct work_struct *work)
- 
- // precondition: never called in_interrupt
- 
--void usbnet_disconnect (struct usb_interface *intf)
-+void usbnet_disconnect(struct usb_interface *intf)
- {
- 	struct usbnet		*dev;
- 	struct usb_device	*xdev;
-@@ -1700,7 +1699,7 @@ static const struct device_type wwan_type = {
- };
- 
- int
--usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
-+usbnet_probe(struct usb_interface *udev, const struct usb_device_id *prod)
- {
- 	struct usbnet			*dev;
- 	struct net_device		*net;
-@@ -1907,7 +1906,7 @@ EXPORT_SYMBOL_GPL(usbnet_probe);
-  * resume only when the last interface is resumed
-  */
- 
--int usbnet_suspend (struct usb_interface *intf, pm_message_t message)
-+int usbnet_suspend(struct usb_interface *intf, pm_message_t message)
- {
- 	struct usbnet		*dev = usb_get_intfdata(intf);
- 
-@@ -1940,7 +1939,7 @@ int usbnet_suspend (struct usb_interface *intf, pm_message_t message)
- }
- EXPORT_SYMBOL_GPL(usbnet_suspend);
- 
--int usbnet_resume (struct usb_interface *intf)
-+int usbnet_resume(struct usb_interface *intf)
- {
- 	struct usbnet		*dev = usb_get_intfdata(intf);
- 	struct sk_buff          *skb;
+Thank you for your detailed explanation. I noticed that there is a device_register() action in typec_register_altmode(), so we can just take advantage of this.
+
+
+Another thing is that we need to distinguish between different devices in the notifier callback, as typec_register_altmode()/typec_register_partner()/typec_register_plug()/typec_register_cable() may all register devices. Since the data passed in bus_notify() is struct device *dev, I think we can distinguish them through `dev->type.name`? We may already have such names, "typec_alternate_mode", "typec_partner", "typec_plug" in class.c . And then extract these names as macros and put them in the typec header file.
+
+
+Or do you have any better ideas? Thank you.
+
+
+> thanks,
+>
 -- 
-2.51.1
+Best,
+Chaoyi
 
 
