@@ -1,92 +1,198 @@
-Return-Path: <linux-usb+bounces-29556-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29557-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40B63BFF3CA
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 07:14:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDC3EBFF469
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 07:49:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFE623A93F3
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 05:14:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CD0A3A767F
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 05:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C19262FEC;
-	Thu, 23 Oct 2025 05:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6E5219A7D;
+	Thu, 23 Oct 2025 05:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gouders.net header.i=@gouders.net header.b="p/RXhIFk"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ABKZBjWL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx10.gouders.net (mx10.gouders.net [202.61.206.94])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6A5245019
-	for <linux-usb@vger.kernel.org>; Thu, 23 Oct 2025 05:14:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.61.206.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890C242065
+	for <linux-usb@vger.kernel.org>; Thu, 23 Oct 2025 05:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761196457; cv=none; b=BPQpHa60G6mRG1lZgakoHlpgQP99K9na4LRpDlcBegWAOqtaBi00gYs9rHMyKc/nr33KLvbtxKNcm2yUFPHfahcw+AZlt0Aljiu6u3BFUDJuHBHIBY8A/PITyHyREC/yUVe4ov2/aLqObkOFaKEUaMeIMWAmrMDy42iIVGxVzH0=
+	t=1761198592; cv=none; b=EKgcV5lUkPqy0URi/QM3z+BsQNiT+D7OhN3Dmz8ObZJTF4t1kp8iI17kc4cgngyDpkEKeNFX77t4+4HRzAHj1AuEPo2KTKkQrKcnY8LGJSmNO1iRZENNkv8qaJofBrJmZWB9YCy4lG9snyIyLucTU/0tboMwXUgl8XriVPoFUD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761196457; c=relaxed/simple;
-	bh=qgncZRfbUztC9oYPbb2dlcbZ42d+5VbERj+3rjCpQv8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=cK+sChqJRN16mP8LlRj7H8LCQrE3+jH39qcQQbQKJcGdFsJRV0U7iYfEMYpXoLuIOPDl83bAmIZ4WCBPAlQthE0HEHcRUcfsXwfW9qFoQq6fk+PFtkCGXZoqgRFaeEOzXp7LO4EUhh5/zMM6jQOwtih1SFPup2EYcdnAr61JjI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gouders.net; spf=pass smtp.mailfrom=gouders.net; dkim=pass (1024-bit key) header.d=gouders.net header.i=@gouders.net header.b=p/RXhIFk; arc=none smtp.client-ip=202.61.206.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gouders.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gouders.net
-Received: from localhost (ltea-047-065-178-028.pools.arcor-ip.net [47.65.178.28])
-	(authenticated bits=0)
-	by mx10.gouders.net (8.18.1/8.17.1.9) with ESMTPSA id 59N5Dm4o032732
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Thu, 23 Oct 2025 07:13:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gouders.net; s=gnet;
-	t=1761196430; bh=qgncZRfbUztC9oYPbb2dlcbZ42d+5VbERj+3rjCpQv8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=p/RXhIFkW9dgHn+Mdmm0HrRfS3Wq9lLdkxTNzC9X7U9IEXpobIdErJS565zZm/2Tk
-	 02Dajc9PGekmVE8D5uQJcvR7XWqCFqsrsYq/IoeWurOO1RVgvADbCohdAaUhV4CMiL
-	 93HGtHFTxracw9IPehvXrq3+6Lzm6qNWBmJJTRIc=
-From: Dirk Gouders <dirk@gouders.net>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        Niklas
- Neronin <niklas.neronin@linux.intel.com>,
-        Nick Nielsen
- <nick.kainielsen@free.fr>, grm1 <grm1@mailbox.org>
-Subject: Re: [PATCH 3/6] usb: xhci-pci: add support for hosts with zero USB3
- ports
-In-Reply-To: <20251022233458.43a5aa9d.michal.pecio@gmail.com> (Michal Pecio's
-	message of "Wed, 22 Oct 2025 23:34:58 +0200")
-References: <20250917210726.97100-1-mathias.nyman@linux.intel.com>
-	<20250917210726.97100-4-mathias.nyman@linux.intel.com>
-	<ghwm4msmyt.fsf@gouders.net>
-	<20251022233458.43a5aa9d.michal.pecio@gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-Date: Thu, 23 Oct 2025 07:13:48 +0200
-Message-ID: <ghsefaryib.fsf@gouders.net>
+	s=arc-20240116; t=1761198592; c=relaxed/simple;
+	bh=WE4jqOZA7KkdwOGi0+RVNNRpbqfXETLzoSlM4Ffn53Q=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Jd35Av1rBKN5ntrr+vA9e1VLk4zJqo4BH6RFsy5FuArHKQ7UQ8bM0w5oE7smkrKoGlMOwmhThi+Zl5OC7//xE9dx8Eeamx0rY07nXV2xHrERdT7+FOxL42/yavE5qxCa8XWNj5egvung0XqO07xtn0KUqGUz1egE4WF3NIXDgOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ABKZBjWL; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-290d860acbcso9462205ad.1
+        for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 22:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761198590; x=1761803390; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NIhAkKap4bXPdBe9tdBh2Dfw5XmidblPGWSaqTaADHM=;
+        b=ABKZBjWLLZm/Oc1wpE4GI4xe5X4D20hK2ejNvvW40ymLb+BqyhEp4uOGvzZ1G+z3qu
+         ZhR3+lpFOD76VFLkyCoCDKaqjdPQI2wFYoXPQwjqFKiJ3SpyLaC/yLj1FLwPX47UOxkU
+         1D25Ne3w/v0ioM1LsgpYCfIkqr2v7tPjy0O2lOKHc2Uc5TnVV6Pcp3zInZk+Dht/XN1+
+         3okcnq8hk0B0Q06AoJROofSLV3khshOkaCC+njrlbbx0tWdRW15yCWYyZ807XBTHCzLL
+         f0Jduex7n7neiGnjLob8q5IAe3/6kmwr63mJ6rfGjl8BipVv4iJq2YDyednaVXB9ww0g
+         FCaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761198590; x=1761803390;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NIhAkKap4bXPdBe9tdBh2Dfw5XmidblPGWSaqTaADHM=;
+        b=eiadP0Vlatd3HBthmJLAy/HJwBGHWRHpm1banUiBEVE3Tso5eJas5rAlEjBvnzAR8q
+         cC8YoeVviBGT3ppTc2HaVdI1WxS/W5SmAMCfJSIwX/QyQ80zKk7ESFf4Wq1D5W+bVxj6
+         ZNIE9r4HCMXolQDnqWYcF/DPOQZkbQsXzbzs5y3EWmPbR3AUolD9Nb4YWsgkdgxnTSje
+         k5uFDLTB67ZIr5UMlx7jpqMrA7xJBD33GTO8zX2c0YVyM+11LurDmQ1nQFNuK7cHxiUq
+         nPBFyAY68RpdLZsgEMhshqb/JkiNizOYkS+38Te9I8hIeUT6KrCK5ngmuhLp0v8416KA
+         0ZIg==
+X-Forwarded-Encrypted: i=1; AJvYcCVWqZ+NTjZ/KcHMkR9FHBvEw2zfQpyopv5uaSRt2paNxZRobjY03+yzSWN2LuDqV/Nx8onGJIhF6ds=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2r9i8cXWbA9xFqOW05/x/NoRefRZQm10RsClEiLksKij0iB6b
+	MnrXRGpkAigscAiKj3XHUuZTLpGjL0Torr6S+s/c8hSkfJaJ+FPjUqd2zHWS3MMgJNDbud32E7j
+	jb+HYTg==
+X-Google-Smtp-Source: AGHT+IEMjTPtfWycynhX8q/fK1VTeTW0RUJSCoi4GOOUYmYo+BFfUaUmR30ZiQtIXSsXWiJUkaNBSHcqvAY=
+X-Received: from plxe8.prod.google.com ([2002:a17:902:ef48:b0:292:3da1:8ea8])
+ (user=hhhuuu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:298c:b0:25c:38be:748f
+ with SMTP id d9443c01a7336-290c9c89cb3mr259915235ad.9.1761198589120; Wed, 22
+ Oct 2025 22:49:49 -0700 (PDT)
+Date: Thu, 23 Oct 2025 05:49:45 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.1.814.gb8fa24458f-goog
+Message-ID: <20251023054945.233861-1-hhhuuu@google.com>
+Subject: [PATCH v3] usb: gadget: udc: fix use-after-free in usb_gadget_state_work
+From: Jimmy Hu <hhhuuu@google.com>
+To: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc: badhri@google.com, hhhuuu@google.com, stern@rowland.harvard.edu, 
+	royluo@google.com, Thinh.Nguyen@synopsys.com, balbi@ti.com, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Michal Pecio <michal.pecio@gmail.com> writes:
+A race condition during gadget teardown can lead to a use-after-free
+in usb_gadget_state_work(), as reported by KASAN:
 
-> On Wed, 22 Oct 2025 22:25:30 +0200, Dirk Gouders wrote:
->> I noticed that on my notebook (Lenovo ThinkPad L14 Gen 5, model
->> 21L5CTO1WW) the integrated camera is no longer detected.
->> 
->> Bisecting this problem (in Linus' tree) led me to this commit.
->
-> Hi,
->
-> Probably not only the camera but if you run 'lsusb' you will see that
-> the whole bus is missing.
->
-> That's a known bug, fixed by 8607edcd1748 in Greg's USB repository.
+  BUG: KASAN: invalid-access in sysfs_notify+0x2c/0xd0
+  Workqueue: events usb_gadget_state_work
 
-Thanks for that information and sorry for the noise.
+The fundamental race occurs because a concurrent event (e.g., an
+interrupt) can call usb_gadget_set_state() and schedule gadget->work
+at any time during the cleanup process in usb_del_gadget().
 
-Regards,
+Commit 399a45e5237c ("usb: gadget: core: flush gadget workqueue after
+device removal") attempted to fix this by moving flush_work() to after
+device_del(). However, this does not fully solve the race, as a new
+work item can still be scheduled *after* flush_work() completes but
+before the gadget's memory is freed, leading to the same use-after-free.
 
-Dirk
+This patch fixes the race condition robustly by introducing a 'teardown'
+flag and a 'state_lock' spinlock to the usb_gadget struct. The flag is
+set during cleanup in usb_del_gadget() *before* calling flush_work() to
+prevent any new work from being scheduled once cleanup has commenced.
+The scheduling site, usb_gadget_set_state(), now checks this flag under
+the lock before queueing the work, thus safely closing the race window.
+
+Fixes: 5702f75375aa9 ("usb: gadget: udc-core: move sysfs_notify() to a workqueue")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+---
+Changes in v3:
+  - Updated patch title to more accurately describe the bug.
+  - Moved changelog below the '---' line as requested by Greg KH.
+  - Rebased on usb-linus branch as requested by Greg KH.
+
+Changes in v2:
+  - Removed redundant inline comments as suggested by Alan Stern.
+
+ drivers/usb/gadget/udc/core.c | 17 ++++++++++++++++-
+ include/linux/usb/gadget.h    |  5 +++++
+ 2 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 694653761c44..8dbe79bdc0f9 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1126,8 +1126,13 @@ static void usb_gadget_state_work(struct work_struct *work)
+ void usb_gadget_set_state(struct usb_gadget *gadget,
+ 		enum usb_device_state state)
+ {
++	unsigned long flags;
++
++	spin_lock_irqsave(&gadget->state_lock, flags);
+ 	gadget->state = state;
+-	schedule_work(&gadget->work);
++	if (!gadget->teardown)
++		schedule_work(&gadget->work);
++	spin_unlock_irqrestore(&gadget->state_lock, flags);
+ 	trace_usb_gadget_set_state(gadget, 0);
+ }
+ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
+@@ -1361,6 +1366,8 @@ static void usb_udc_nop_release(struct device *dev)
+ void usb_initialize_gadget(struct device *parent, struct usb_gadget *gadget,
+ 		void (*release)(struct device *dev))
+ {
++	spin_lock_init(&gadget->state_lock);
++	gadget->teardown = false;
+ 	INIT_WORK(&gadget->work, usb_gadget_state_work);
+ 	gadget->dev.parent = parent;
+ 
+@@ -1535,6 +1542,7 @@ EXPORT_SYMBOL_GPL(usb_add_gadget_udc);
+ void usb_del_gadget(struct usb_gadget *gadget)
+ {
+ 	struct usb_udc *udc = gadget->udc;
++	unsigned long flags;
+ 
+ 	if (!udc)
+ 		return;
+@@ -1548,6 +1556,13 @@ void usb_del_gadget(struct usb_gadget *gadget)
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
+ 	sysfs_remove_link(&udc->dev.kobj, "gadget");
+ 	device_del(&gadget->dev);
++	/*
++	 * Set the teardown flag before flushing the work to prevent new work
++	 * from being scheduled while we are cleaning up.
++	 */
++	spin_lock_irqsave(&gadget->state_lock, flags);
++	gadget->teardown = true;
++	spin_unlock_irqrestore(&gadget->state_lock, flags);
+ 	flush_work(&gadget->work);
+ 	ida_free(&gadget_id_numbers, gadget->id_number);
+ 	cancel_work_sync(&udc->vbus_work);
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 3aaf19e77558..8285b19a25e0 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -376,6 +376,9 @@ struct usb_gadget_ops {
+  *	can handle. The UDC must support this and all slower speeds and lower
+  *	number of lanes.
+  * @state: the state we are now (attached, suspended, configured, etc)
++ * @state_lock: Spinlock protecting the `state` and `teardown` members.
++ * @teardown: True if the device is undergoing teardown, used to prevent
++ *	new work from being scheduled during cleanup.
+  * @name: Identifies the controller hardware type.  Used in diagnostics
+  *	and sometimes configuration.
+  * @dev: Driver model state for this abstract device.
+@@ -451,6 +454,8 @@ struct usb_gadget {
+ 	enum usb_ssp_rate		max_ssp_rate;
+ 
+ 	enum usb_device_state		state;
++	spinlock_t			state_lock;
++	bool				teardown;
+ 	const char			*name;
+ 	struct device			dev;
+ 	unsigned			isoch_delay;
+-- 
+2.51.1.814.gb8fa24458f-goog
+
 
