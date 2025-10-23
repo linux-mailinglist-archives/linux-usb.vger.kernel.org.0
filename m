@@ -1,159 +1,140 @@
-Return-Path: <linux-usb+bounces-29562-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29563-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73C7FBFFCBC
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 10:09:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55346BFFCEB
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 10:10:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A42731A063C0
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 08:09:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA7481A05C43
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 08:11:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709E02EB863;
-	Thu, 23 Oct 2025 08:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C04C42EB84A;
+	Thu, 23 Oct 2025 08:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QkwmgCx6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773FC2EC097
-	for <linux-usb@vger.kernel.org>; Thu, 23 Oct 2025 08:08:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D6F624634F;
+	Thu, 23 Oct 2025 08:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761206892; cv=none; b=J66OQzJfHD0cFIIkp4NPCazwwCe3n3Fgr9xccBIpYMcrrXZPzk/bsnmN0NrttwGEzXU9bZSIxiOWu71bK+SArIarjSpJdnj8W5OifE/XHmOMb6lcaVR5ZLm42txydamyddeWsJ4/30x0c2Cxm36Gf6cRS6q7ZFDiAyCvkKqFKK8=
+	t=1761207041; cv=none; b=MUVggGO5cpHtXZ0iNBX9YWehrrY9MrROBf4ecaHp1IbtT4oOvCT7VydIwQCDRhDFU6ccAnw0qpa9P3XIBpsaplv5n+WbCzsYrrplZRDusA2FtpZqwhkdmY2sEX/wW/Dn8LMcoscbFEWcBJYcVuQgLFGyYIFpjcAvtS92N+nnTQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761206892; c=relaxed/simple;
-	bh=YSlV3Ui/R8OX+GLrbep0IihwU6AoVM62SupLufD3Caw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PltyqZKAsLGPa4fsDo3kWdxXC4IpeeuOerJbTKTOfpDAIL8Bg6L+D1VaDw/onYxhxV1H7Le7wVLYQzkjWpDifkyx4iXY0whrnzvKS6XlXVJbvbi8wQSRidomFIxCs/MSz//ylSYCdv0Hbq9atHmgCaKH5rQiPg5sTFzbwwD2zL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-932c2071cf5so1281044241.0
-        for <linux-usb@vger.kernel.org>; Thu, 23 Oct 2025 01:08:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761206888; x=1761811688;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nolr+eNt6aVR4bnXOrSXLAjzFqxSLYKSdI0s7QV7cbw=;
-        b=ZJ5aKmD0Md5lxMruLvp9l8/zNkC237NLmoTj8ZEUhYqWHXT1oi0DqtY79R05Rtqn6D
-         TgFgGOi4GmeeVOWocRK5g2QMpJujT1JmBa0myIMlU2kG3fhrLZ204+TDHvl5jcFol9H0
-         zXFxYvkC+KflNhqwPnlpC23GgkIRQXuuPuFPrd0EW0rslo1OqO5GrFvNFBwqdniSpn7w
-         ZsSDBXX6JeqwDPuOrxwTaGZQHVXRBR3e0nS/qAbmt3iXa2GiLOFJ/uXMrlpq99cb2oNq
-         8zpnyLTeEH3sgKX/Of9vN7UjO7aq4KN41cjtymvNpJPzzorSlFS6ku/m1o8eDZCZNiRw
-         rCog==
-X-Forwarded-Encrypted: i=1; AJvYcCW31aQudbby3R6KuMAvGJ+/M4S+yV4nPB5Ei1DTTKlgKx8UE6An88rhm5Fkw7nhYg+UCSuX1bfbs2Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzj66UUceyqiX5JYDEk94rlCBPIAIlZbribkusrcbp3z/vDWu2P
-	xM6jD5uv9S0ifBPyPv7WcL8JXWoPjnG+91wzKfATdYzyNB+0yUigYp4OhsxPALDr
-X-Gm-Gg: ASbGncs+YIXfdcqmlc55YUY01+XLZ7D5LNGZZCFz+rslBvdwSyuSGDIsgM6oP4AspXb
-	38aQLyemxQXn7Ixzht+Ctnj8ntzg1LS2+eonQRa/VbQJP6hzT+PGgnqrHxlbvpsvHw5k9wtAfZs
-	Z2ta+m+YOJ0S1BKnxcgfsb1nHnLJ7nYLyCnPnFWHBEq3WTRTs/7SVTy4lFzB7Zw+INKsns+G3WB
-	0RYbGTJYyyqothTMHNa0dIDl6EfIghmfU6lskRoW4+PYN5Ufr4bG80BuoEmRVO1UdfnK+sN99FJ
-	fXgeyspkBNbx62howTXwpqgZwZl0ITDYSjCwec6KYNfZepAtXbwbYeRwWwCQ+K3A5synTuerxT7
-	bjtv1M3Tf4hGNl7TzYo01d3W3f9h8UiVVEI9AQQhxa4koyYTzVZ3LUILbpT4igLFGTzUhq7HFtG
-	C2WMN7t7msqmxZDTgcV1rolJp0OgOYq+y/8IN8Wg==
-X-Google-Smtp-Source: AGHT+IFBMqSLdMPIZiV+lTX1yvfIf7gS2MSof5aZDLfk7hzLbsJ4ci0sJNGLgJ2CcIrddg8RosoP2w==
-X-Received: by 2002:ac5:cb65:0:b0:556:a243:8a72 with SMTP id 71dfb90a1353d-556a2439102mr1302270e0c.5.1761206887969;
-        Thu, 23 Oct 2025 01:08:07 -0700 (PDT)
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-557bd8bd3f7sm533608e0c.6.2025.10.23.01.08.07
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Oct 2025 01:08:07 -0700 (PDT)
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-5db2dc4e42dso506159137.1
-        for <linux-usb@vger.kernel.org>; Thu, 23 Oct 2025 01:08:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVMUeCU9nkzjikDGIX8FtFbFxeDbUZBamRxr58vkykboD9RNGsp3N4w3kpSbOon+wPA90TiMlYPTqE=@vger.kernel.org
-X-Received: by 2002:a05:6102:81c6:b0:5d5:f6ae:3902 with SMTP id
- ada2fe7eead31-5db23866f45mr1605522137.19.1761206887227; Thu, 23 Oct 2025
- 01:08:07 -0700 (PDT)
+	s=arc-20240116; t=1761207041; c=relaxed/simple;
+	bh=X9A+e5HX8/DxioXkaxwvZdY29MB1MDYbmVYOX4ols5k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qnxqtHK3ZgikSTUzSBsbXllkUUtn78DnqJFcP5eXA/5AuNULaEipTvaRkt+fsQqtFngMUwvjwgLl07LckSWO4FQmaWtN2NAfD7uyA6EibGRrcVxZBezZi32b5rN5bn7jKFhJ2fZgyOAHfEMrMHvaFIr+sgJGFPCXma5Mz8OqxdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QkwmgCx6; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761207039; x=1792743039;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X9A+e5HX8/DxioXkaxwvZdY29MB1MDYbmVYOX4ols5k=;
+  b=QkwmgCx6ZjHE7F0BLdTLUfNuHCcuyNn8jIceT8CsRK79k5xjCxnhXze1
+   XO9z/YKcoDblkxrmUTIPOe0cWMV5qqgkAvl0hk8R8b+C803hQqOkzcKu5
+   fNt874eGFwWQSNx0NEHoqSTjdN++GTr0AwUB4S4cewrTbuSZ80aIPZVLZ
+   dtEUP4xWSeQd4d7DxgS5b+CWKXET7XJjvNqmxSI6E9S19vMpJKVvITJ+t
+   3YD9VqENoCVgyxgFNQyfapK5OIiKg2/YMuU/dpNwvCjLWUIDfUKuoOqun
+   zxGwp69eRaQMdJ9lZXb/qOklZJY/Ff4oGTT648shVFtEWIjveGx+tr+av
+   Q==;
+X-CSE-ConnectionGUID: aXYzEv/qTLyoIgMXB/n+6g==
+X-CSE-MsgGUID: YKpVJcArS4e0sCOa8NVd+Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74039083"
+X-IronPort-AV: E=Sophos;i="6.19,249,1754982000"; 
+   d="scan'208";a="74039083"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 01:10:20 -0700
+X-CSE-ConnectionGUID: U/yJ+8RYQ+2huY61DLG6tw==
+X-CSE-MsgGUID: qjW+PJi/SHi+vFM/FDi4jw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,249,1754982000"; 
+   d="scan'208";a="183988336"
+Received: from bkammerd-mobl.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.221.165])
+  by orviesa007.jf.intel.com with SMTP; 23 Oct 2025 01:10:09 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 23 Oct 2025 11:10:08 +0300
+Date: Thu, 23 Oct 2025 11:10:08 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Chaoyi Chen <kernel@airkyi.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Yubing Zhang <yubing.zhang@rock-chips.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Amit Sunil Dhamne <amitsd@google.com>,
+	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
+	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v7 1/9] usb: typec: Add notifier functions
+Message-ID: <aPni4AeDaem_rfZH@kuha.fi.intel.com>
+References: <20251023033009.90-1-kernel@airkyi.com>
+ <20251023033009.90-2-kernel@airkyi.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251022124350.4115552-1-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20251022124350.4115552-1-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 23 Oct 2025 10:07:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWTe8t8O2H+hPU6=WC6V_YGHwTd7sF1htuhX8mVC_fUqA@mail.gmail.com>
-X-Gm-Features: AS18NWCVYlN6uQfMDhc6d_B3LlrJdzYInr_Xaym6zmDpvYwmst5OSgE2t6h-cSM
-Message-ID: <CAMuHMdWTe8t8O2H+hPU6=WC6V_YGHwTd7sF1htuhX8mVC_fUqA@mail.gmail.com>
-Subject: Re: [PATCH] usb: renesas_usbhs: Fix synchronous external abort on unbind
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: gregkh@linuxfoundation.org, yoshihiro.shimoda.uh@renesas.com, 
-	prabhakar.mahadev-lad.rj@bp.renesas.com, kuninori.morimoto.gx@renesas.com, 
-	geert+renesas@glider.be, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251023033009.90-2-kernel@airkyi.com>
 
-Hi Claudiu,
+Hi,
 
-On Wed, 22 Oct 2025 at 15:06, Claudiu <claudiu.beznea@tuxon.dev> wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> A synchronous external abort occurs on the Renesas RZ/G3S SoC if unbind is
-> executed after the configuration sequence described above:
-
-[...]
-
-> The issue occurs because usbhs_sys_function_pullup(), which accesses the IP
-> registers, is executed after the USBHS clocks have been disabled. The
-> problem is reproducible on the Renesas RZ/G3S SoC starting with the
-> addition of module stop in the clock enable/disable APIs. With module stop
-> functionality enabled, a bus error is expected if a master accesses a
-> module whose clock has been stopped and module stop activated.
->
-> Disable the IP clocks at the end of remove.
->
-> Cc: stable@vger.kernel.org
-> Fixes: f1407d5c6624 ("usb: renesas_usbhs: Add Renesas USBHS common code")
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-
-Thanks for your patch!
-
-> --- a/drivers/usb/renesas_usbhs/common.c
-> +++ b/drivers/usb/renesas_usbhs/common.c
-> @@ -813,18 +813,18 @@ static void usbhs_remove(struct platform_device *pdev)
->
->         flush_delayed_work(&priv->notify_hotplug_work);
->
-> -       /* power off */
-> -       if (!usbhs_get_dparam(priv, runtime_pwctrl))
-> -               usbhsc_power_ctrl(priv, 0);
-> -
-> -       pm_runtime_disable(&pdev->dev);
-> -
->         usbhs_platform_call(priv, hardware_exit, pdev);
->         usbhsc_clk_put(priv);
-
-Shouldn't the usbhsc_clk_put() call be moved just before the
-pm_runtime_disable() call, too, cfr. the error path in usbhs_probe()?
-
->         reset_control_assert(priv->rsts);
->         usbhs_mod_remove(priv);
->         usbhs_fifo_remove(priv);
->         usbhs_pipe_remove(priv);
+> diff --git a/include/linux/usb/typec_notify.h b/include/linux/usb/typec_notify.h
+> new file mode 100644
+> index 000000000000..a3f1f3b3ae47
+> --- /dev/null
+> +++ b/include/linux/usb/typec_notify.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
 > +
-> +       /* power off */
-> +       if (!usbhs_get_dparam(priv, runtime_pwctrl))
-> +               usbhsc_power_ctrl(priv, 0);
+> +#ifndef __USB_TYPEC_NOTIFY
+> +#define __USB_TYPEC_NOTIFY
 > +
-> +       pm_runtime_disable(&pdev->dev);
->  }
->
->  static int usbhsc_suspend(struct device *dev)
+> +#include <linux/notifier.h>
+> +
+> +enum usb_typec_event {
+> +	TYPEC_ALTMODE_REGISTERED
+> +};
 
-Gr{oetje,eeting}s,
+Don't you need to know when the altmode is removed?
 
-                        Geert
+> +
+> +int typec_register_notify(struct notifier_block *nb);
+> +int typec_unregister_notify(struct notifier_block *nb);
+> +
+> +void typec_notify_event(unsigned long event, void *data);
+
+Declare typec_notify_event() in drivers/usb/typec/bus.h
+
+thanks,
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+heikki
 
