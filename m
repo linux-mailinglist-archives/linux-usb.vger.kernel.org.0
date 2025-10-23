@@ -1,198 +1,170 @@
-Return-Path: <linux-usb+bounces-29557-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29558-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDC3EBFF469
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 07:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 56794BFF493
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 07:56:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CD0A3A767F
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 05:49:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6A2C3A87FE
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 05:56:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6E5219A7D;
-	Thu, 23 Oct 2025 05:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D81323AE9A;
+	Thu, 23 Oct 2025 05:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ABKZBjWL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mrpDi2UR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890C242065
-	for <linux-usb@vger.kernel.org>; Thu, 23 Oct 2025 05:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 804EF225A38
+	for <linux-usb@vger.kernel.org>; Thu, 23 Oct 2025 05:56:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761198592; cv=none; b=EKgcV5lUkPqy0URi/QM3z+BsQNiT+D7OhN3Dmz8ObZJTF4t1kp8iI17kc4cgngyDpkEKeNFX77t4+4HRzAHj1AuEPo2KTKkQrKcnY8LGJSmNO1iRZENNkv8qaJofBrJmZWB9YCy4lG9snyIyLucTU/0tboMwXUgl8XriVPoFUD4=
+	t=1761198969; cv=none; b=ST4OhzVW+hqBw1r0PK0kqdSbZUadN902BD37wkJCK84XJ4r+PkPxoFNaJBPulWedZIfclyOo3oOyAZNqapT0j/3EIgaRnyD/2VUUxH6Zodst45WAV+8dGwqM/3ayiSTzFGXtoSUaEgbpyeAG6esPMjpOVszLQdSy0eL4PdKwl1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761198592; c=relaxed/simple;
-	bh=WE4jqOZA7KkdwOGi0+RVNNRpbqfXETLzoSlM4Ffn53Q=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Jd35Av1rBKN5ntrr+vA9e1VLk4zJqo4BH6RFsy5FuArHKQ7UQ8bM0w5oE7smkrKoGlMOwmhThi+Zl5OC7//xE9dx8Eeamx0rY07nXV2xHrERdT7+FOxL42/yavE5qxCa8XWNj5egvung0XqO07xtn0KUqGUz1egE4WF3NIXDgOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ABKZBjWL; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-290d860acbcso9462205ad.1
-        for <linux-usb@vger.kernel.org>; Wed, 22 Oct 2025 22:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761198590; x=1761803390; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NIhAkKap4bXPdBe9tdBh2Dfw5XmidblPGWSaqTaADHM=;
-        b=ABKZBjWLLZm/Oc1wpE4GI4xe5X4D20hK2ejNvvW40ymLb+BqyhEp4uOGvzZ1G+z3qu
-         ZhR3+lpFOD76VFLkyCoCDKaqjdPQI2wFYoXPQwjqFKiJ3SpyLaC/yLj1FLwPX47UOxkU
-         1D25Ne3w/v0ioM1LsgpYCfIkqr2v7tPjy0O2lOKHc2Uc5TnVV6Pcp3zInZk+Dht/XN1+
-         3okcnq8hk0B0Q06AoJROofSLV3khshOkaCC+njrlbbx0tWdRW15yCWYyZ807XBTHCzLL
-         f0Jduex7n7neiGnjLob8q5IAe3/6kmwr63mJ6rfGjl8BipVv4iJq2YDyednaVXB9ww0g
-         FCaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761198590; x=1761803390;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NIhAkKap4bXPdBe9tdBh2Dfw5XmidblPGWSaqTaADHM=;
-        b=eiadP0Vlatd3HBthmJLAy/HJwBGHWRHpm1banUiBEVE3Tso5eJas5rAlEjBvnzAR8q
-         cC8YoeVviBGT3ppTc2HaVdI1WxS/W5SmAMCfJSIwX/QyQ80zKk7ESFf4Wq1D5W+bVxj6
-         ZNIE9r4HCMXolQDnqWYcF/DPOQZkbQsXzbzs5y3EWmPbR3AUolD9Nb4YWsgkdgxnTSje
-         k5uFDLTB67ZIr5UMlx7jpqMrA7xJBD33GTO8zX2c0YVyM+11LurDmQ1nQFNuK7cHxiUq
-         nPBFyAY68RpdLZsgEMhshqb/JkiNizOYkS+38Te9I8hIeUT6KrCK5ngmuhLp0v8416KA
-         0ZIg==
-X-Forwarded-Encrypted: i=1; AJvYcCVWqZ+NTjZ/KcHMkR9FHBvEw2zfQpyopv5uaSRt2paNxZRobjY03+yzSWN2LuDqV/Nx8onGJIhF6ds=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2r9i8cXWbA9xFqOW05/x/NoRefRZQm10RsClEiLksKij0iB6b
-	MnrXRGpkAigscAiKj3XHUuZTLpGjL0Torr6S+s/c8hSkfJaJ+FPjUqd2zHWS3MMgJNDbud32E7j
-	jb+HYTg==
-X-Google-Smtp-Source: AGHT+IEMjTPtfWycynhX8q/fK1VTeTW0RUJSCoi4GOOUYmYo+BFfUaUmR30ZiQtIXSsXWiJUkaNBSHcqvAY=
-X-Received: from plxe8.prod.google.com ([2002:a17:902:ef48:b0:292:3da1:8ea8])
- (user=hhhuuu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:298c:b0:25c:38be:748f
- with SMTP id d9443c01a7336-290c9c89cb3mr259915235ad.9.1761198589120; Wed, 22
- Oct 2025 22:49:49 -0700 (PDT)
-Date: Thu, 23 Oct 2025 05:49:45 +0000
+	s=arc-20240116; t=1761198969; c=relaxed/simple;
+	bh=2NciNRBPHwrcPDZfXdYsljfgXqM0+rIFJLT8ZAejd14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ey6SdM/fsVplH36IS6TWWi5fqN1fz0z1qZlKm16dtTarOlDJgWz0j7qLF6VkhV21FnkqtUhXaGt8cclfHCASpSEDFSTcoNd97Ig46DR86urwwZfuBfZrlGfymGy5zja0LNclEvGTXZZZR62dthSpfrm2dNyQonvOj03tZGgmUxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mrpDi2UR; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761198967; x=1792734967;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2NciNRBPHwrcPDZfXdYsljfgXqM0+rIFJLT8ZAejd14=;
+  b=mrpDi2URjzeAOJb3UhTXtg4xrBDeTQjf5nNf7L0HZur82U3A2A2hWELi
+   dK9HoDuYk87Cp/F8VRWAAwzTMkhfPnEergYptL4+siIqHZWLkbwot2QP/
+   ZvWoI/GL8N5jg6IW5MEBmDN+AUjE5YCy71saFr9YyXkSDxFWdzKvvemNA
+   IU6e+FvETv3B+H2SBfPJ9aYtJWi+s7og8C4Cvejj/ljV4Jw3DT4wXdstW
+   ENcD5GizE7Lvxig+SgD6M/LlVQmrrUSacYiS+iVZscETVG85GbeGp4S4u
+   lw0xfYWyH8F2njErBmf6dbn1JPBYEMKboV0mfBaFfqnuwVGLd1RfqfBfy
+   g==;
+X-CSE-ConnectionGUID: F+6q8GOOQT24fA7xn77bog==
+X-CSE-MsgGUID: +aQXpFbURwmJ7kUgGrZHfA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63505935"
+X-IronPort-AV: E=Sophos;i="6.19,248,1754982000"; 
+   d="scan'208";a="63505935"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 22:56:06 -0700
+X-CSE-ConnectionGUID: OYwB4hYyTpaqP8zQnV6MBw==
+X-CSE-MsgGUID: r6SsDe6OTUiTUQgzDGLVEA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,248,1754982000"; 
+   d="scan'208";a="183999374"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa006.fm.intel.com with ESMTP; 22 Oct 2025 22:56:04 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 6F4E895; Thu, 23 Oct 2025 07:56:03 +0200 (CEST)
+Date: Thu, 23 Oct 2025 07:56:03 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: "Mario Limonciello (AMD)" <superm1@kernel.org>
+Cc: mario.limonciello@amd.com, andreas.noever@gmail.com, westeri@kernel.org,
+	YehezkelShB@gmail.com, Sanath.S@amd.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Reset NHI during S4 restore_noirq() callback
+Message-ID: <20251023055603.GU2912318@black.igk.intel.com>
+References: <20251023050354.115015-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.1.814.gb8fa24458f-goog
-Message-ID: <20251023054945.233861-1-hhhuuu@google.com>
-Subject: [PATCH v3] usb: gadget: udc: fix use-after-free in usb_gadget_state_work
-From: Jimmy Hu <hhhuuu@google.com>
-To: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc: badhri@google.com, hhhuuu@google.com, stern@rowland.harvard.edu, 
-	royluo@google.com, Thinh.Nguyen@synopsys.com, balbi@ti.com, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251023050354.115015-1-superm1@kernel.org>
 
-A race condition during gadget teardown can lead to a use-after-free
-in usb_gadget_state_work(), as reported by KASAN:
+Hi,
 
-  BUG: KASAN: invalid-access in sysfs_notify+0x2c/0xd0
-  Workqueue: events usb_gadget_state_work
+On Thu, Oct 23, 2025 at 12:03:26AM -0500, Mario Limonciello (AMD) wrote:
+> When a machine is restored from S4 if the firmware CM has created
+> tunnels there can be an incongruity of expectation from the kernel
+> when compared to booting from S5.
+> 
+> For example this incongruity can lead to problems like the display
+> not working properly if the firmware CM didn't turn it on pre-OS
+> but the OS had it on before entering S4.
+> 
+> Add an extra restore_noirq() callback to explicitly reset the NHI
+> before running the rest of the resume sequence.  This will allow
+> the standard discovery and probing routines to run and create the
+> tunnels as expected.
+> 
+> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+> ---
+> Cc: Sanath.S@amd.com
+> ---
+>  drivers/thunderbolt/nhi.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+> index 5f63f9b9cf405..042d184637a93 100644
+> --- a/drivers/thunderbolt/nhi.c
+> +++ b/drivers/thunderbolt/nhi.c
+> @@ -51,6 +51,8 @@ static bool host_reset = true;
+>  module_param(host_reset, bool, 0444);
+>  MODULE_PARM_DESC(host_reset, "reset USB4 host router (default: true)");
+>  
+> +static void nhi_reset(struct tb_nhi *nhi);
 
-The fundamental race occurs because a concurrent event (e.g., an
-interrupt) can call usb_gadget_set_state() and schedule gadget->work
-at any time during the cleanup process in usb_del_gadget().
+Please move the whole function above nhi_restore_noirq() then.
 
-Commit 399a45e5237c ("usb: gadget: core: flush gadget workqueue after
-device removal") attempted to fix this by moving flush_work() to after
-device_del(). However, this does not fully solve the race, as a new
-work item can still be scheduled *after* flush_work() completes but
-before the gadget's memory is freed, leading to the same use-after-free.
+> +
+>  static int ring_interrupt_index(const struct tb_ring *ring)
+>  {
+>  	int bit = ring->hop;
+> @@ -1077,6 +1079,17 @@ static int nhi_resume_noirq(struct device *dev)
+>  	return tb_domain_resume_noirq(tb);
+>  }
+>  
+> +static int nhi_restore_noirq(struct device *dev)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+> +	struct tb *tb = pci_get_drvdata(pdev);
+> +	struct tb_nhi *nhi = tb->nhi;
+> +
+> +	nhi_reset(nhi);
+> +
 
-This patch fixes the race condition robustly by introducing a 'teardown'
-flag and a 'state_lock' spinlock to the usb_gadget struct. The flag is
-set during cleanup in usb_del_gadget() *before* calling flush_work() to
-prevent any new work from being scheduled once cleanup has commenced.
-The scheduling site, usb_gadget_set_state(), now checks this flag under
-the lock before queueing the work, thus safely closing the race window.
+Now that we do this, should ge get rid of the S4 things we do in
+tb_resume_noirq()? Especially this block:
 
-Fixes: 5702f75375aa9 ("usb: gadget: udc-core: move sysfs_notify() to a workqueue")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jimmy Hu <hhhuuu@google.com>
----
-Changes in v3:
-  - Updated patch title to more accurately describe the bug.
-  - Moved changelog below the '---' line as requested by Greg KH.
-  - Rebased on usb-linus branch as requested by Greg KH.
+	/*
+	 * If we get here from suspend to disk the boot firmware or the
+	 * restore kernel might have created tunnels of its own. Since
+	 * we cannot be sure they are usable for us we find and tear
+	 * them down.
+	 */
+	tb_switch_discover_tunnels(tb->root_switch, &tunnels, false);
+	list_for_each_entry_safe_reverse(tunnel, n, &tunnels, list) {
+		if (tb_tunnel_is_usb3(tunnel))
+			usb3_delay = 500;
+		tb_tunnel_deactivate(tunnel);
+		tb_tunnel_put(tunnel);
+	}
 
-Changes in v2:
-  - Removed redundant inline comments as suggested by Alan Stern.
+Also have you checked that this works when you have tunnels such as P2P
+(networking)?
 
- drivers/usb/gadget/udc/core.c | 17 ++++++++++++++++-
- include/linux/usb/gadget.h    |  5 +++++
- 2 files changed, 21 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 694653761c44..8dbe79bdc0f9 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1126,8 +1126,13 @@ static void usb_gadget_state_work(struct work_struct *work)
- void usb_gadget_set_state(struct usb_gadget *gadget,
- 		enum usb_device_state state)
- {
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&gadget->state_lock, flags);
- 	gadget->state = state;
--	schedule_work(&gadget->work);
-+	if (!gadget->teardown)
-+		schedule_work(&gadget->work);
-+	spin_unlock_irqrestore(&gadget->state_lock, flags);
- 	trace_usb_gadget_set_state(gadget, 0);
- }
- EXPORT_SYMBOL_GPL(usb_gadget_set_state);
-@@ -1361,6 +1366,8 @@ static void usb_udc_nop_release(struct device *dev)
- void usb_initialize_gadget(struct device *parent, struct usb_gadget *gadget,
- 		void (*release)(struct device *dev))
- {
-+	spin_lock_init(&gadget->state_lock);
-+	gadget->teardown = false;
- 	INIT_WORK(&gadget->work, usb_gadget_state_work);
- 	gadget->dev.parent = parent;
- 
-@@ -1535,6 +1542,7 @@ EXPORT_SYMBOL_GPL(usb_add_gadget_udc);
- void usb_del_gadget(struct usb_gadget *gadget)
- {
- 	struct usb_udc *udc = gadget->udc;
-+	unsigned long flags;
- 
- 	if (!udc)
- 		return;
-@@ -1548,6 +1556,13 @@ void usb_del_gadget(struct usb_gadget *gadget)
- 	kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
- 	sysfs_remove_link(&udc->dev.kobj, "gadget");
- 	device_del(&gadget->dev);
-+	/*
-+	 * Set the teardown flag before flushing the work to prevent new work
-+	 * from being scheduled while we are cleaning up.
-+	 */
-+	spin_lock_irqsave(&gadget->state_lock, flags);
-+	gadget->teardown = true;
-+	spin_unlock_irqrestore(&gadget->state_lock, flags);
- 	flush_work(&gadget->work);
- 	ida_free(&gadget_id_numbers, gadget->id_number);
- 	cancel_work_sync(&udc->vbus_work);
-diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index 3aaf19e77558..8285b19a25e0 100644
---- a/include/linux/usb/gadget.h
-+++ b/include/linux/usb/gadget.h
-@@ -376,6 +376,9 @@ struct usb_gadget_ops {
-  *	can handle. The UDC must support this and all slower speeds and lower
-  *	number of lanes.
-  * @state: the state we are now (attached, suspended, configured, etc)
-+ * @state_lock: Spinlock protecting the `state` and `teardown` members.
-+ * @teardown: True if the device is undergoing teardown, used to prevent
-+ *	new work from being scheduled during cleanup.
-  * @name: Identifies the controller hardware type.  Used in diagnostics
-  *	and sometimes configuration.
-  * @dev: Driver model state for this abstract device.
-@@ -451,6 +454,8 @@ struct usb_gadget {
- 	enum usb_ssp_rate		max_ssp_rate;
- 
- 	enum usb_device_state		state;
-+	spinlock_t			state_lock;
-+	bool				teardown;
- 	const char			*name;
- 	struct device			dev;
- 	unsigned			isoch_delay;
--- 
-2.51.1.814.gb8fa24458f-goog
-
+> +	return nhi_resume_noirq(dev);
+> +}
+> +
+>  static int nhi_suspend(struct device *dev)
+>  {
+>  	struct pci_dev *pdev = to_pci_dev(dev);
+> @@ -1449,7 +1462,7 @@ static const struct dev_pm_ops nhi_pm_ops = {
+>  					    * pci-tunnels stay alive.
+>  					    */
+>  	.thaw_noirq = nhi_thaw_noirq,
+> -	.restore_noirq = nhi_resume_noirq,
+> +	.restore_noirq = nhi_restore_noirq,
+>  	.suspend = nhi_suspend,
+>  	.poweroff_noirq = nhi_poweroff_noirq,
+>  	.poweroff = nhi_suspend,
+> -- 
+> 2.43.0
 
