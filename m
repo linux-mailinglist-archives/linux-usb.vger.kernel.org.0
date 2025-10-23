@@ -1,241 +1,162 @@
-Return-Path: <linux-usb+bounces-29572-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29573-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00E91C00B4A
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 13:24:52 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B70FCC00BE2
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 13:31:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 561BF507E5B
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 11:22:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DC78B506E07
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 11:30:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35FD230DD31;
-	Thu, 23 Oct 2025 11:22:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC38130DEC5;
+	Thu, 23 Oct 2025 11:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LH3cLck/"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="Xn4egCLA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mail-m49220.qiye.163.com (mail-m49220.qiye.163.com [45.254.49.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BA02D948F;
-	Thu, 23 Oct 2025 11:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2FD302747;
+	Thu, 23 Oct 2025 11:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761218523; cv=none; b=XRQS1E8Aeh9l4vVBgaM7CRBnuehbgSUb4zOmMQkBmj5gPwZpHWSY+EJA3BCsjvABnuFYIcFj2sL0g1MJfAE2G8eGEdHl4R8xM/Xe5/v+ruQCezt5ls69631gMLgbrVTMyx6Jr8p3rFvzimDJ1QN7I64m47j9IlX5zSs3uBVfEUQ=
+	t=1761219000; cv=none; b=CMqC9vBiGWD/vyeQdm6vR1NkzNfeHWS5T0Xa1jTHVPA8F2OyIjx7J2FyocQpsodIXUwAKw7LDs1WwoU+OB6FCNHY1tmU7ybE+c+YhsX0qOoOv6zeJ5SnAxkBajmJT0+wfhhiMQyXwHEg0nOLLEDpKzRIUKyZt/8y+Loiq2LukCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761218523; c=relaxed/simple;
-	bh=OUy4E28XCgPHiY7sYnSVPuAqVISc/0/PFyS3hREWRSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L77bSFcCxoIM5ir/1frgAB/ley4mCFYEqalVZ60r/B91GCBgVvDA2uPr0gSZjPXhQvhvR6kw3slqiEklJEY6xGwnpzk8u2ZlV4AYO0GSIJdgUqE469eZJknfA1lHWf3h0jg+ZRZWEOEXDwr3AYHYi2+QSy7HvSdTC4HpAW8uU4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LH3cLck/; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761218521; x=1792754521;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OUy4E28XCgPHiY7sYnSVPuAqVISc/0/PFyS3hREWRSQ=;
-  b=LH3cLck/fuVEI40gVW6hni5h7v8CLDcN6ZlwPQPWLF9+mglZd4KpCja0
-   ugSIdIZY7QFxbWvYHKwCPk5Ev09wC/OAScT5IgvkYQqvqPDQDJLfEERYE
-   63F487ij4t4t1I1RJonU+XKHcq9AukH/0TDM+VyV5vwtbYPRzhZia08qw
-   mN1HFrHUJ7+q48DpO1bNukiFFdTv6Zl1nvE2Kb/2UE8PDU6izO+e4lmpB
-   tmWy7GnKaEZMEK2ANMFMLTbIATmlABWIAeT42lPcg2mPrhMSAn6ZXxJc1
-   uBElllWQGWTezoOG4sDM6OLijYDeMhha0Oe7PkEaRBh67Qhdkxcp1ASqp
-   Q==;
-X-CSE-ConnectionGUID: IYPIS9z5SPOWBr+H3azAoQ==
-X-CSE-MsgGUID: wlgsGVqHTxa0l/59UITfow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="80820963"
-X-IronPort-AV: E=Sophos;i="6.19,249,1754982000"; 
-   d="scan'208";a="80820963"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 04:22:00 -0700
-X-CSE-ConnectionGUID: 91ur0G2oTPauN3FANFRShg==
-X-CSE-MsgGUID: Urm2SPsSR/2BhTbktE4OLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,249,1754982000"; 
-   d="scan'208";a="183306763"
-Received: from bkammerd-mobl.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.221.165])
-  by orviesa006.jf.intel.com with SMTP; 23 Oct 2025 04:21:56 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 23 Oct 2025 14:21:55 +0300
-Date: Thu, 23 Oct 2025 14:21:55 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-Cc: gregkh@linuxfoundation.org, lumag@kernel.org, neil.armstrong@linaro.org,
-	johan+linaro@kernel.org, quic_bjorande@quicinc.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] usb: typec: ucsi_glink: Increase buffer size to
- support UCSI v2
-Message-ID: <aPoP00G_xekNF-XP@kuha.fi.intel.com>
-References: <20251022004554.1956729-1-anjelique.melendez@oss.qualcomm.com>
- <20251022004554.1956729-3-anjelique.melendez@oss.qualcomm.com>
+	s=arc-20240116; t=1761219000; c=relaxed/simple;
+	bh=ozYLeDy1XSf+kDg22Ki3MWpriJGauxOOaMMsjnXWiLA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DtKWatCGYG0FgVYVY27AKocRQWb6W6xmRJthq8TJk2u2OfHFa+JUq2VcDYytHGxKwXNYEbb+y/v1wKFJBdpPvrM8+t8AcQtcDaEFMqYJ2jxzpJ6lFIaIRL+Da/6C6Jtwf3aHWGNAvEjJhCrdbQQ9+t90BNyA4hTHQ1WTAUfY/cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=Xn4egCLA; arc=none smtp.client-ip=45.254.49.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.149] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 26f1ef09a;
+	Thu, 23 Oct 2025 19:29:45 +0800 (GMT+08:00)
+Message-ID: <14b8ac71-489b-4192-92d6-5f228ff3881d@rock-chips.com>
+Date: Thu, 23 Oct 2025 19:29:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251022004554.1956729-3-anjelique.melendez@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 2/9] drm/bridge: Implement generic USB Type-C DP HPD
+ bridge
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
+ <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Yubing Zhang <yubing.zhang@rock-chips.com>,
+ Frank Wang <frank.wang@rock-chips.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Amit Sunil Dhamne <amitsd@google.com>,
+ Chaoyi Chen <chaoyi.chen@rock-chips.com>, Dragan Simic <dsimic@manjaro.org>,
+ Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
+ Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
+References: <20251023033009.90-1-kernel@airkyi.com>
+ <20251023033009.90-3-kernel@airkyi.com> <aPnrKFWTvpuRTyhI@kuha.fi.intel.com>
+Content-Language: en-US
+From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+In-Reply-To: <aPnrKFWTvpuRTyhI@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Tid: 0a9a10d4feb703abkunm0a84e08b197844
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGRlLGlYYH0tDGUweS0xOGRlWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE
+	9VSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=Xn4egCLAu3OJU+toy3rICbQxQ7WpaviHfsRYKx2TYkWkGCOojJo3gWHnrtg3mYuaIWc++VhgE8ebvOe0CSUPcma62p2KNUiAi/LQ7C9eEfeRI3mnlAJdNEH/ey9A4NwJ3xVIRHGLZKH8ToMeIXkEdVQZGEx8EV2KgTrvu1XBgEs=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=PV5L2/dVmRU/5ecTVqOwB2QqRRY2n4dnoFpehPZT1k0=;
+	h=date:mime-version:subject:message-id:from;
 
-On Tue, Oct 21, 2025 at 05:45:54PM -0700, Anjelique Melendez wrote:
-> UCSI v2 specification has increased the MSG_IN and MSG_OUT size from
-> 16 bytes to 256 bytes each for the message exchange between OPM and PPM
-> This makes the total buffer size increase from 48 bytes to 528 bytes.
-> Update the buffer size to support this increase.
-> 
-> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+Hi Heikki,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On 10/23/2025 4:45 PM, Heikki Krogerus wrote:
+> On Thu, Oct 23, 2025 at 11:30:02AM +0800, Chaoyi Chen wrote:
+>> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+>>
+>> Several USB-C controller drivers have already implemented the DP HPD
+>> bridge function provided by aux-hpd-bridge.c, but there are still
+>> some USB-C controller driver that have not yet implemented it.
+>>
+>> This patch implements a generic DP HPD bridge based on aux-hpd-bridge.c,
+>> so that other USB-C controller drivers don't need to implement it again.
+>>
+>> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+>> ---
+>>   drivers/gpu/drm/bridge/Kconfig                | 11 ++++
+>>   drivers/gpu/drm/bridge/Makefile               |  1 +
+>>   .../gpu/drm/bridge/aux-hpd-typec-dp-bridge.c  | 51 +++++++++++++++++++
+>>   3 files changed, 63 insertions(+)
+>>   create mode 100644 drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
+>>
+>> diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
+>> index b9e0ca85226a..9f31540d3ad8 100644
+>> --- a/drivers/gpu/drm/bridge/Kconfig
+>> +++ b/drivers/gpu/drm/bridge/Kconfig
+>> @@ -33,6 +33,17 @@ config DRM_AUX_HPD_BRIDGE
+>>   menu "Display Interface Bridges"
+>>   	depends on DRM && DRM_BRIDGE
+>>   
+>> +config DRM_AUX_TYPEC_DP_HPD_BRIDGE
+>> +	tristate "TypeC DP HPD bridge"
+>> +	depends on DRM_BRIDGE && OF && TYPEC
+>> +	select DRM_AUX_HPD_BRIDGE
+>> +	help
+>> +	  Simple USB Type-C DP bridge that terminates the bridge chain and
+>> +	  provides HPD support.
+>> +
+>> +	  If the USB-C controller driver has not implemented this and you need
+>> +	  the DP HPD support, say "Y" or "m" here.
+> You don't need to depend on DRM_BRIDGE separately, but do you really
+> need a separate module for this in the first place?
+>
+>>   config DRM_CHIPONE_ICN6211
+>>   	tristate "Chipone ICN6211 MIPI-DSI/RGB Converter bridge"
+>>   	depends on OF
+>> diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
+>> index 245e8a27e3fc..e91736829167 100644
+>> --- a/drivers/gpu/drm/bridge/Makefile
+>> +++ b/drivers/gpu/drm/bridge/Makefile
+>> @@ -1,6 +1,7 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>>   obj-$(CONFIG_DRM_AUX_BRIDGE) += aux-bridge.o
+>>   obj-$(CONFIG_DRM_AUX_HPD_BRIDGE) += aux-hpd-bridge.o
+>> +obj-$(CONFIG_DRM_AUX_TYPEC_DP_HPD_BRIDGE) += aux-hpd-typec-dp-bridge.o
+> Instead, why not just make that a part of aux-hpd-bridge
+> conditionally:
+>
+> ifneq ($(CONFIG_TYPEC),)
+>          aux-hpd-bridge-y        += aux-hpd-typec-dp-bridge.o
+> endif
 
-> ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 80 +++++++++++++++++++++++++----
->  1 file changed, 70 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index 1f9f0d942c1a..11b3e24e34e2 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -16,10 +16,10 @@
->  
->  #define PMIC_GLINK_MAX_PORTS		3
->  
-> -#define UCSI_BUF_SIZE                   48
-> +#define UCSI_BUF_V1_SIZE		(UCSI_MESSAGE_OUT + (UCSI_MESSAGE_OUT - UCSI_MESSAGE_IN))
-> +#define UCSI_BUF_V2_SIZE		(UCSIv2_MESSAGE_OUT + (UCSIv2_MESSAGE_OUT - UCSI_MESSAGE_IN))
->  
->  #define MSG_TYPE_REQ_RESP               1
-> -#define UCSI_BUF_SIZE                   48
->  
->  #define UC_NOTIFY_RECEIVER_UCSI         0x0
->  #define UC_UCSI_READ_BUF_REQ            0x11
-> @@ -32,13 +32,19 @@ struct ucsi_read_buf_req_msg {
->  
->  struct __packed ucsi_read_buf_resp_msg {
->  	struct pmic_glink_hdr   hdr;
-> -	u8                      buf[UCSI_BUF_SIZE];
-> +	union {
-> +		u8 v2_buf[UCSI_BUF_V2_SIZE];
-> +		u8 v1_buf[UCSI_BUF_V1_SIZE];
-> +	} buf;
->  	u32                     ret_code;
->  };
->  
->  struct __packed ucsi_write_buf_req_msg {
->  	struct pmic_glink_hdr   hdr;
-> -	u8                      buf[UCSI_BUF_SIZE];
-> +	union {
-> +		u8 v2_buf[UCSI_BUF_V2_SIZE];
-> +		u8 v1_buf[UCSI_BUF_V1_SIZE];
-> +	} buf;
->  	u32                     reserved;
->  };
->  
-> @@ -72,7 +78,7 @@ struct pmic_glink_ucsi {
->  	bool ucsi_registered;
->  	bool pd_running;
->  
-> -	u8 read_buf[UCSI_BUF_SIZE];
-> +	u8 read_buf[UCSI_BUF_V2_SIZE];
->  };
->  
->  static int pmic_glink_ucsi_read(struct ucsi *__ucsi, unsigned int offset,
-> @@ -132,17 +138,35 @@ static int pmic_glink_ucsi_locked_write(struct pmic_glink_ucsi *ucsi, unsigned i
->  					const void *val, size_t val_len)
->  {
->  	struct ucsi_write_buf_req_msg req = {};
-> +	size_t req_len, buf_len;
->  	unsigned long left;
->  	int ret;
-> +	u8 *buf;
->  
->  	req.hdr.owner = PMIC_GLINK_OWNER_USBC;
->  	req.hdr.type = MSG_TYPE_REQ_RESP;
->  	req.hdr.opcode = UC_UCSI_WRITE_BUF_REQ;
-> -	memcpy(&req.buf[offset], val, val_len);
-> +
-> +	if (ucsi->ucsi->version >= UCSI_VERSION_2_0) {
-> +		buf_len = UCSI_BUF_V2_SIZE;
-> +		buf = req.buf.v2_buf;
-> +	} else if (ucsi->ucsi->version) {
-> +		buf_len = UCSI_BUF_V1_SIZE;
-> +		buf = req.buf.v1_buf;
-> +	} else {
-> +		dev_err(ucsi->dev, "UCSI version unknown\n");
-> +		return -EINVAL;
-> +	}
-> +	req_len = sizeof(struct pmic_glink_hdr) + buf_len + sizeof(u32);
-> +
-> +	if (offset + val_len > buf_len)
-> +		return -EINVAL;
-> +
-> +	memcpy(&buf[offset], val, val_len);
->  
->  	reinit_completion(&ucsi->write_ack);
->  
-> -	ret = pmic_glink_send(ucsi->client, &req, sizeof(req));
-> +	ret = pmic_glink_send(ucsi->client, &req, req_len);
->  	if (ret < 0) {
->  		dev_err(ucsi->dev, "failed to send UCSI write request: %d\n", ret);
->  		return ret;
-> @@ -216,12 +240,48 @@ static const struct ucsi_operations pmic_glink_ucsi_ops = {
->  
->  static void pmic_glink_ucsi_read_ack(struct pmic_glink_ucsi *ucsi, const void *data, int len)
->  {
-> -	const struct ucsi_read_buf_resp_msg *resp = data;
-> +	u32 ret_code, resp_len, buf_len = 0;
-> +	u8 *buf;
-> +
-> +	if (ucsi->ucsi->version) {
-> +		if (ucsi->ucsi->version >= UCSI_VERSION_2_0) {
-> +			buf = ((struct ucsi_read_buf_resp_msg *)data)->buf.v2_buf;
-> +			buf_len = UCSI_BUF_V2_SIZE;
-> +		} else {
-> +			buf = ((struct ucsi_read_buf_resp_msg *)data)->buf.v1_buf;
-> +			buf_len = UCSI_BUF_V1_SIZE;
-> +		}
-> +	} else if (!ucsi->ucsi_registered) {
-> +		/*
-> +		 * If UCSI version is not known yet because device is not registered, choose buffer
-> +		 * size which best fits incoming data
-> +		 */
-> +		if (len > sizeof(struct pmic_glink_hdr) + UCSI_BUF_V2_SIZE) {
-> +			buf = ((struct ucsi_read_buf_resp_msg *)data)->buf.v2_buf;
-> +			buf_len = UCSI_BUF_V2_SIZE;
-> +		} else {
-> +			buf = ((struct ucsi_read_buf_resp_msg *)data)->buf.v1_buf;
-> +			buf_len = UCSI_BUF_V1_SIZE;
-> +		}
-> +	} else {
-> +		dev_err(ucsi->dev, "Device has been registered but UCSI version is still unknown\n");
-> +		return;
-> +	}
->  
-> -	if (resp->ret_code)
-> +	resp_len = sizeof(struct pmic_glink_hdr) + buf_len + sizeof(u32);
-> +
-> +	if (len > resp_len)
-> +		return;
-> +
-> +	/* Ensure that buffer_len leaves space for ret_code to be read back from memory */
-> +	if (buf_len > len - sizeof(struct pmic_glink_hdr) - sizeof(u32))
-> +		buf_len = len - sizeof(struct pmic_glink_hdr) - sizeof(u32);
-> +
-> +	memcpy(&ret_code, buf + buf_len, sizeof(u32));
-> +	if (ret_code)
->  		return;
->  
-> -	memcpy(ucsi->read_buf, resp->buf, UCSI_BUF_SIZE);
-> +	memcpy(ucsi->read_buf, buf, buf_len);
->  	complete(&ucsi->read_ack);
->  }
->  
-> -- 
-> 2.34.1
+Oh, I did consider that! But I noticed that aux-hpd-bridge.c contains the following statement module_auxiliary_driver(drm_aux_hpd_bridge_drv), which already includes a module_init. In the newly added file, in order to call the register function, another module_init was also added. If the two files are each made into a module separately, would there be a problem?
 
+
+>
+>
+> thanks,
+>
 -- 
-heikki
+Best,
+Chaoyi
+
 
