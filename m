@@ -1,195 +1,187 @@
-Return-Path: <linux-usb+bounces-29578-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29579-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3D68C00F59
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 14:03:47 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE31BC01028
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 14:11:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D1753AAC57
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 12:03:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 02F1035A57B
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 12:10:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C34A30F7F0;
-	Thu, 23 Oct 2025 12:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 599C930F95F;
+	Thu, 23 Oct 2025 12:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aFVLfFI3"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="biNjzk7L"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mail-m49195.qiye.163.com (mail-m49195.qiye.163.com [45.254.49.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A37E26F28A;
-	Thu, 23 Oct 2025 12:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B262330F93F;
+	Thu, 23 Oct 2025 12:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761221010; cv=none; b=mIA1wdhpSFd/QeW2aS8NNXDyY3zjiuni5aJH1tTeKxLzoZvWyUD5CE10duX3Cn0EH6bnMkOGn6Y8Cr+iYjVvPQufP02O7j+ttcPkWwbs0tyybwaAEh6AMcH8goqXNNlWpR3r9UUDLxp08MQFc4zCdWv9dDExrqtaC9UYy9oSFMs=
+	t=1761221449; cv=none; b=H8CmKjOOg249vW3gl3Y4h286MRfQxn1TLE37hzO1nL6R9XxrC+/GuJeQN8aqYRWD2zwb/8DJLWugxADfssQueBKfD+qt2omdOuMzjBILiljAhkItPK8zOrE6GltDu094XhLlzSYciTujO/seVtlrffVlPnPBo5Ri7ecTe1M3vhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761221010; c=relaxed/simple;
-	bh=erXucVQ3CkO8W6iJDjYjGvHlpSCK37tkrL/+XPfgexM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UI5LSF/dfqYfvH8w2ax4zaX3lr5cId/i5rA9SqCBv4J6adQbckRjmk8C6DtUtJ+916W3s0xvmwTTbrvaRz1FbHHg0OlEwZWDxPhjm3JTxibE1BjEMC3In4f426UIDvtW1OtOtRoMc9lMrAkC5vItmc79LefQEfNQLGH8iY6dGQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aFVLfFI3; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761221008; x=1792757008;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=erXucVQ3CkO8W6iJDjYjGvHlpSCK37tkrL/+XPfgexM=;
-  b=aFVLfFI3ZdbePPH1Un1UL0a3xd5Vw2hEqQhL3ClV5DhfQ+JisxU19QzP
-   Hxc77rTLTR3mEUxhi5YVOMnLMBimW6El2qycKylPYwYlhi6osgd+xvcLe
-   yTLQ5vm0CXCZsHpv8o+3Cl+QhcqSiXW7xeY1rX0m06K/qkAqfKv8Z4HcD
-   8kO1uwbR8t5sGeO73RDls3MHFSSQC3GHPSckolChkQzGvhN0IXwp4HJUi
-   rCCAs7GNC9mnSWp39ssYW7dQTk/9GriIUx+8ckO2vCEUa+vrowGw05QN9
-   swgPf/hBnfqL2Y7xs9lyygKq0tbIMc8dPbSoGl8Xxs+U9xWQdqA6vBh3+
-   g==;
-X-CSE-ConnectionGUID: SKyZ0sx6RXqdqgGwMsv/kw==
-X-CSE-MsgGUID: 8uXUBSGXSaWt1be4SA991w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="81013293"
-X-IronPort-AV: E=Sophos;i="6.19,249,1754982000"; 
-   d="scan'208";a="81013293"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 05:03:28 -0700
-X-CSE-ConnectionGUID: 7DIzW9o6S2WE7ZvtBcvVQQ==
-X-CSE-MsgGUID: uCa4JL9CTiShx2sG80Yh6A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,249,1754982000"; 
-   d="scan'208";a="184033253"
-Received: from bkammerd-mobl.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.221.165])
-  by orviesa007.jf.intel.com with SMTP; 23 Oct 2025 05:03:17 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 23 Oct 2025 15:03:16 +0300
-Date: Thu, 23 Oct 2025 15:03:16 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Yubing Zhang <yubing.zhang@rock-chips.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Amit Sunil Dhamne <amitsd@google.com>,
-	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v7 2/9] drm/bridge: Implement generic USB Type-C DP HPD
- bridge
-Message-ID: <aPoZhBdc1M6Qgfae@kuha.fi.intel.com>
-References: <20251023033009.90-1-kernel@airkyi.com>
- <20251023033009.90-3-kernel@airkyi.com>
- <aPnrKFWTvpuRTyhI@kuha.fi.intel.com>
- <14b8ac71-489b-4192-92d6-5f228ff3881d@rock-chips.com>
+	s=arc-20240116; t=1761221449; c=relaxed/simple;
+	bh=oAZzN4JwMBb4zdgdgHMUaM0HJArOfgw/LUeK6U1j1qg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e/4mmLjJ+BabY5CS/QHLDEleXNJ5wz2AmWmggQw7XVcNBGCiyQfJnmWPckXJfQWjYhSySu1WE63CySb3hH9nLGvAzVPoB9RMSR5OADVwua7CSRqtLm8n8JO9G9q0P6Fmmq3yfFMklGcdRxG+nLBmv42F48/RUebMPFyl6MhO99w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=biNjzk7L; arc=none smtp.client-ip=45.254.49.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.149] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 26f2c95f7;
+	Thu, 23 Oct 2025 20:10:21 +0800 (GMT+08:00)
+Message-ID: <6f769567-b383-4c79-b441-3dd84f21cdae@rock-chips.com>
+Date: Thu, 23 Oct 2025 20:10:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <14b8ac71-489b-4192-92d6-5f228ff3881d@rock-chips.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 2/9] drm/bridge: Implement generic USB Type-C DP HPD
+ bridge
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
+ <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Yubing Zhang <yubing.zhang@rock-chips.com>,
+ Frank Wang <frank.wang@rock-chips.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
+ Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
+ Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
+References: <20251023033009.90-1-kernel@airkyi.com>
+ <20251023033009.90-3-kernel@airkyi.com> <aPnrKFWTvpuRTyhI@kuha.fi.intel.com>
+ <14b8ac71-489b-4192-92d6-5f228ff3881d@rock-chips.com>
+ <aPoZhBdc1M6Qgfae@kuha.fi.intel.com>
+Content-Language: en-US
+From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+In-Reply-To: <aPoZhBdc1M6Qgfae@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Tid: 0a9a10fa2ad903abkunm63b0b3181a1121
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0hCTlZDT0xDTk4ZSUgdHRhWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
+	xVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=biNjzk7LSVRSGV1ZBRFm2pqDrcSqN6X6pQT3v+20RIGWpgAkjhtuaHxj6ZVvF/acb202inF411z7yGIUoF/7CHQ2Pg/L6wLybWl0rz+LjhvsgHqysLYlVIWIXUgVF/qQOrfHbm3hQOkvKYsFtMh9rTdxx3ulZty1nhOw2ruKgYk=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=+tppR1r2GR2aHsAGWh+r4F7VMu3ZGa0gIoTITM9UMtU=;
+	h=date:mime-version:subject:message-id:from;
 
-> > > diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
-> > > index 245e8a27e3fc..e91736829167 100644
-> > > --- a/drivers/gpu/drm/bridge/Makefile
-> > > +++ b/drivers/gpu/drm/bridge/Makefile
-> > > @@ -1,6 +1,7 @@
-> > >   # SPDX-License-Identifier: GPL-2.0
-> > >   obj-$(CONFIG_DRM_AUX_BRIDGE) += aux-bridge.o
-> > >   obj-$(CONFIG_DRM_AUX_HPD_BRIDGE) += aux-hpd-bridge.o
-> > > +obj-$(CONFIG_DRM_AUX_TYPEC_DP_HPD_BRIDGE) += aux-hpd-typec-dp-bridge.o
-> > Instead, why not just make that a part of aux-hpd-bridge
-> > conditionally:
-> > 
-> > ifneq ($(CONFIG_TYPEC),)
-> >          aux-hpd-bridge-y        += aux-hpd-typec-dp-bridge.o
-> > endif
-> 
-> Oh, I did consider that! But I noticed that aux-hpd-bridge.c contains the
-> following statement module_auxiliary_driver(drm_aux_hpd_bridge_drv), which
-> already includes a module_init. In the newly added file, in order to call the
-> register function, another module_init was also added. If the two files are
-> each made into a module separately, would there be a problem?
+Hi Heikki,
 
-You would not call module_init() from the new file. Instead you would
-call drm_aux_hpd_typec_dp_bridge_init() and what ever directly from
-aux-hpd-bridge.c:
+On 10/23/2025 8:03 PM, Heikki Krogerus wrote:
+>>>> diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
+>>>> index 245e8a27e3fc..e91736829167 100644
+>>>> --- a/drivers/gpu/drm/bridge/Makefile
+>>>> +++ b/drivers/gpu/drm/bridge/Makefile
+>>>> @@ -1,6 +1,7 @@
+>>>>    # SPDX-License-Identifier: GPL-2.0
+>>>>    obj-$(CONFIG_DRM_AUX_BRIDGE) += aux-bridge.o
+>>>>    obj-$(CONFIG_DRM_AUX_HPD_BRIDGE) += aux-hpd-bridge.o
+>>>> +obj-$(CONFIG_DRM_AUX_TYPEC_DP_HPD_BRIDGE) += aux-hpd-typec-dp-bridge.o
+>>> Instead, why not just make that a part of aux-hpd-bridge
+>>> conditionally:
+>>>
+>>> ifneq ($(CONFIG_TYPEC),)
+>>>           aux-hpd-bridge-y        += aux-hpd-typec-dp-bridge.o
+>>> endif
+>> Oh, I did consider that! But I noticed that aux-hpd-bridge.c contains the
+>> following statement module_auxiliary_driver(drm_aux_hpd_bridge_drv), which
+>> already includes a module_init. In the newly added file, in order to call the
+>> register function, another module_init was also added. If the two files are
+>> each made into a module separately, would there be a problem?
+> You would not call module_init() from the new file. Instead you would
+> call drm_aux_hpd_typec_dp_bridge_init() and what ever directly from
+> aux-hpd-bridge.c:
+>
+> diff --git a/drivers/gpu/drm/bridge/aux-bridge.h b/drivers/gpu/drm/bridge/aux-bridge.h
+> new file mode 100644
+> index 000000000000..ae689a7778fa
+> --- /dev/null
+> +++ b/drivers/gpu/drm/bridge/aux-hpd-bridge.h
+> @@ -0,0 +1,13 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef AUX_HPD_BRIDGE_H
+> +#define AUX_HPD_BRIDGE_H
+> +
+> +#if IS_ENABLED(CONFIG_TYPEC)
+> +int drm_aux_hpd_typec_dp_bridge_init(void);
+> +void drm_aux_hpd_typec_dp_bridge_exit(void);
+> +#else
+> +static inline int drm_aux_hpd_typec_dp_bridge_init(void) { return 0; }
+> +static inline void drm_aux_hpd_typec_dp_bridge_exit(void) { }
+> +#endif /* IS_ENABLED(CONFIG_TYPEC) */
+> +
+> +#endif /* AUX_HPD_BRIDGE_H */
+> diff --git a/drivers/gpu/drm/bridge/aux-hpd-bridge.c b/drivers/gpu/drm/bridge/aux-hpd-bridge.c
+> index 2e9c702c7087..3578df1df78a 100644
+> --- a/drivers/gpu/drm/bridge/aux-hpd-bridge.c
+> +++ b/drivers/gpu/drm/bridge/aux-hpd-bridge.c
+> @@ -12,6 +12,8 @@
+>   #include <drm/drm_bridge.h>
+>   #include <drm/bridge/aux-bridge.h>
+>   
+> +#include "aux-hpd-bridge.h"
+> +
+>   static DEFINE_IDA(drm_aux_hpd_bridge_ida);
+>   
+>   struct drm_aux_hpd_bridge_data {
+> @@ -190,9 +192,16 @@ static int drm_aux_hpd_bridge_probe(struct auxiliary_device *auxdev,
+>   
+>          auxiliary_set_drvdata(auxdev, data);
+>   
+> +       drm_aux_hpd_typec_dp_bridge_init();
+> +
+>          return devm_drm_bridge_add(data->dev, &data->bridge);
+>   }
+>   
+> +static void drm_aux_hpd_bridge_remove(struct auxiliary_device *auxdev)
+> +{
+> +       drm_aux_hpd_typec_dp_bridge_exit();
+> +}
+> +
+>   static const struct auxiliary_device_id drm_aux_hpd_bridge_table[] = {
+>          { .name = KBUILD_MODNAME ".dp_hpd_bridge", .driver_data = DRM_MODE_CONNECTOR_DisplayPort, },
+>          {},
+> @@ -203,6 +212,7 @@ static struct auxiliary_driver drm_aux_hpd_bridge_drv = {
+>          .name = "aux_hpd_bridge",
+>          .id_table = drm_aux_hpd_bridge_table,
+>          .probe = drm_aux_hpd_bridge_probe,
+> +       .remove = drm_aux_hpd_bridge_remove,
+>   };
+>   module_auxiliary_driver(drm_aux_hpd_bridge_drv);
 
-diff --git a/drivers/gpu/drm/bridge/aux-bridge.h b/drivers/gpu/drm/bridge/aux-bridge.h
-new file mode 100644
-index 000000000000..ae689a7778fa
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/aux-hpd-bridge.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef AUX_HPD_BRIDGE_H
-+#define AUX_HPD_BRIDGE_H
-+
-+#if IS_ENABLED(CONFIG_TYPEC)
-+int drm_aux_hpd_typec_dp_bridge_init(void);
-+void drm_aux_hpd_typec_dp_bridge_exit(void);
-+#else
-+static inline int drm_aux_hpd_typec_dp_bridge_init(void) { return 0; }
-+static inline void drm_aux_hpd_typec_dp_bridge_exit(void) { }
-+#endif /* IS_ENABLED(CONFIG_TYPEC) */
-+
-+#endif /* AUX_HPD_BRIDGE_H */
-diff --git a/drivers/gpu/drm/bridge/aux-hpd-bridge.c b/drivers/gpu/drm/bridge/aux-hpd-bridge.c
-index 2e9c702c7087..3578df1df78a 100644
---- a/drivers/gpu/drm/bridge/aux-hpd-bridge.c
-+++ b/drivers/gpu/drm/bridge/aux-hpd-bridge.c
-@@ -12,6 +12,8 @@
- #include <drm/drm_bridge.h>
- #include <drm/bridge/aux-bridge.h>
- 
-+#include "aux-hpd-bridge.h"
-+
- static DEFINE_IDA(drm_aux_hpd_bridge_ida);
- 
- struct drm_aux_hpd_bridge_data {
-@@ -190,9 +192,16 @@ static int drm_aux_hpd_bridge_probe(struct auxiliary_device *auxdev,
- 
-        auxiliary_set_drvdata(auxdev, data);
- 
-+       drm_aux_hpd_typec_dp_bridge_init();
-+
-        return devm_drm_bridge_add(data->dev, &data->bridge);
- }
- 
-+static void drm_aux_hpd_bridge_remove(struct auxiliary_device *auxdev)
-+{
-+       drm_aux_hpd_typec_dp_bridge_exit();
-+}
-+
- static const struct auxiliary_device_id drm_aux_hpd_bridge_table[] = {
-        { .name = KBUILD_MODNAME ".dp_hpd_bridge", .driver_data = DRM_MODE_CONNECTOR_DisplayPort, },
-        {},
-@@ -203,6 +212,7 @@ static struct auxiliary_driver drm_aux_hpd_bridge_drv = {
-        .name = "aux_hpd_bridge",
-        .id_table = drm_aux_hpd_bridge_table,
-        .probe = drm_aux_hpd_bridge_probe,
-+       .remove = drm_aux_hpd_bridge_remove,
- };
- module_auxiliary_driver(drm_aux_hpd_bridge_drv);
+Yes, if we don't distinguish them through Kconfig, we need to use the IS_ENABLED macro in the code. Thanks again for you code.
 
 
+Another thing is that CONFIG_DRM_AUX_HPD_BRIDGE originally needed to be selected by other modules. With this change, we also need to expose it in Kconfig.
+
+
+>
+>
 -- 
-heikki
+Best,
+Chaoyi
+
 
