@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-29589-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29590-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1006EC02305
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 17:42:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E6B0C02329
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 17:42:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BBE97542AFE
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 15:39:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D1C93A59E2
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Oct 2025 15:41:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FDA033DEDB;
-	Thu, 23 Oct 2025 15:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C1A33CE9B;
+	Thu, 23 Oct 2025 15:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NATJjNvN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="out8Co33"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF303385A3;
-	Thu, 23 Oct 2025 15:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD27302747;
+	Thu, 23 Oct 2025 15:41:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761233983; cv=none; b=KNBR5Jf6VeM+ymSU2JP45GmWWt1az3w4ag9f5ABLAOaquLqnRkk4TxIOEjIaGYqupU7epo1zWJfnV6F5CH2/0xt2+GbnAVjasQLLZ1EVmoQKiaG6y3UfF/93QQGfHC+hzd8b4GlqeyocC8xJ83YvHZfbh79t7khADIjnAwoWV+c=
+	t=1761234070; cv=none; b=Hi9618YiubvpJDH7u7K9X7w6US9G/HG6O+Wela9oZ6OIa2g681G+6cV6Gue+jseqndPmr4Q21bQNY7csPrrObvLMYaePWu8bvB2jnrTPmvmedcLnR+SY5X4S44Y/llhqYT6O+9KZNUjOmWlgQ0StYucBapDvVRUKGhv8BynzKdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761233983; c=relaxed/simple;
-	bh=LvPUGi16Gy0nsHxxec88t/Hv+x84xawp9WZKYnGhvtQ=;
+	s=arc-20240116; t=1761234070; c=relaxed/simple;
+	bh=LZTttZI0O7IbjS5PaYJUOIiD+Y7xxE5WtlY9zdxo2U0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Neoo3macOqxoVk8I6kH0bLJZkS8gzXTb+cdGIViC9sD0FrC87JCJ1AReuCWnx4CYMqu9YMbVIZmAJQ1xSKkcDfrHtt/IFuwr6ecwq9Ze1bLkK0lGDH+UUNOOGS/GkmqO/TyemOi40M64BEVYtN211IUN5zAFszp1rcj+HG61PSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NATJjNvN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D970FC4CEE7;
-	Thu, 23 Oct 2025 15:39:38 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=stmfhG0wPu3Pph/rPPjKcnWnuelJlclsbq/rqZ5uplL0wSWPces/FynDPX30kljr9rBpungM0XZ0yuw1Se7U25kCbGlMxRkjf0cg7B3fsC74Oj1qIGX213yZ9qfkjKrfdWiIlxsc5mc0aeFCQRWy//O0KuizcI8tHkVtKisOPEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=out8Co33; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 072E6C4CEF7;
+	Thu, 23 Oct 2025 15:41:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761233982;
-	bh=LvPUGi16Gy0nsHxxec88t/Hv+x84xawp9WZKYnGhvtQ=;
+	s=k20201202; t=1761234070;
+	bh=LZTttZI0O7IbjS5PaYJUOIiD+Y7xxE5WtlY9zdxo2U0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NATJjNvN9Ym7X99EphjUXlaMWAafDXK9A7JafJTGNv28TMIdJ5Yx5UkFPNAe7SXyZ
-	 ZShrx8iPKShXzO4fgbCgwLKSkHKBNciT2IiERxw6u47LLxBTW+DqvVkxMSCJUECHIU
-	 5iLxbQjY7gEugV6QdK5P41ESsf/Nrdn5XUgYxUmTOeUt5PJgZ+U0COf0issozW9j8r
-	 O8NMjKMqXnS5W6cTrTbD26gPqB1hqDIZ6DUmcGDrl+M13vWaZ8bgz7UJMB9hH7qpUt
-	 +5AjqE11JLOp5eRfKAUevyQuROhu7t1Bj7IXUcrMz3fKHsIe800HbuEPGe0LLs63c/
-	 xQd05hvo3+J3Q==
-Message-ID: <41f71be9-595f-4a81-b089-27bdcc778c8a@kernel.org>
-Date: Thu, 23 Oct 2025 17:39:37 +0200
+	b=out8Co335bXhVI39trL25Of/JHjBfrB31XJcWosjoo8Aw2AQzAPuhmGIWp66JCL34
+	 XGekvR0YrT8q6TQRoujaM5DhyRLyXhb14aqNSjo08TBKVf6RKSo0xivDVCbEZ4Nult
+	 rY5lJgChHZdQ4AP2YFORxusGmCHusEEeGwIVQ3ffgq4i9KNMWyPtjbOE0bwY3TC4CN
+	 TVeQe5FG3EQmW9fAIIWSqLk9U5WiAmGAMLq2/nBAWipCxpt0c2yW2IpjDzyhEGJXVG
+	 WSDwachqNXNjrjkahiyLgqI15YfAzNQjzpTK9USY6ZBkJS4UbUGo2hRTWfgIZXO2Fv
+	 zOtNUtA6HjwUA==
+Message-ID: <5689050e-496b-4b03-a70b-5a5f5f90d165@kernel.org>
+Date: Thu, 23 Oct 2025 17:41:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] dt-bindings: phy: qcom,m31-eusb2-phy: Document M31
- eUSB2 PHY for Kaanapali
+Subject: Re: [PATCH v2 3/4] dt-bindings: usb: qcom,snps-dwc3: Add Kaanapali
+ compatible
 To: Jingyi Wang <jingyi.wang@oss.qualcomm.com>, Vinod Koul
  <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -63,7 +63,7 @@ Cc: aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-usb@vger.kernel.org, Ronak Raheja <ronak.raheja@oss.qualcomm.com>
 References: <20251021-knp-usb-v2-0-a2809fffcfab@oss.qualcomm.com>
- <20251021-knp-usb-v2-2-a2809fffcfab@oss.qualcomm.com>
+ <20251021-knp-usb-v2-3-a2809fffcfab@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,21 +109,28 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251021-knp-usb-v2-2-a2809fffcfab@oss.qualcomm.com>
+In-Reply-To: <20251021-knp-usb-v2-3-a2809fffcfab@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 22/10/2025 08:50, Jingyi Wang wrote:
 > From: Ronak Raheja <ronak.raheja@oss.qualcomm.com>
 > 
-> Document M31 eUSB2 PHY for Kaanapali which handles the USB2 path. Use
-> fallback to indicate the compatibility of the M31 eUSB2 PHY on the
-> Kaanapali with that on the SM8750.
+> Kaanapali uses a single-node USB controller architecture with the Synopsys
+> DWC3 controller. Add this to the compatibles list to utilize the DWC3 QCOM
+> and DWC3 core framework.
 > 
 > Signed-off-by: Ronak Raheja <ronak.raheja@oss.qualcomm.com>
-> Co-developed-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
 > Signed-off-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
 > ---
+>  Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml | 3 +++
+
+
+This does not belong to this patchset. That's USB subsystem, split it.
+Please read the internal guidelines describing how to organize your
+patchsets.
+
+After splitting:
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
