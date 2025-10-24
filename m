@@ -1,127 +1,178 @@
-Return-Path: <linux-usb+bounces-29612-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29614-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8417CC05268
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 10:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BD6CC05542
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 11:28:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE2B21896575
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 08:47:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCBEB1B840C6
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 09:28:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F0CC305E3B;
-	Fri, 24 Oct 2025 08:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="OnXWkd2L"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 013ED309EE2;
+	Fri, 24 Oct 2025 09:27:49 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48C6303A29
-	for <linux-usb@vger.kernel.org>; Fri, 24 Oct 2025 08:46:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28435309DDB
+	for <linux-usb@vger.kernel.org>; Fri, 24 Oct 2025 09:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761295584; cv=none; b=LokUeNSr46o8I+QuxiYruilxpzgUWsqh0vkHfvg/JIRHsjIxfMnq/7+WazyyOfTZQMBfCyAj3voyvhkgluFeHKYDh5WEo64c8Vg9xg3jPKOUvdbPEXltVt3cG9OFgyA6fPO8niNwflUQq2XHcYsAMPgTRgTGcreNQlkYHpqwDt4=
+	t=1761298068; cv=none; b=h4Zf6w6nUpl3fqO+I6YCPycO/KxZggPVX7yYhrjnfHvTUaRjmE7WNZa7TX1jlqhInUby0VakoRry0u5N13NUkeaVEkxQQwFIEAGgsGoIE9MIb0t036lv67L4xxzrI5tCLsjXtlESETnvqNLnhJQEQ7Uxm+8Q9y3sgpGl1ISEF3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761295584; c=relaxed/simple;
-	bh=ayhlzx/vDW7RzSzImPHDdqt7SJ15b+qd1tcUvLLy7cg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=DsC7WeHRqUQqEyPepFtdV8M8Sy5bb0uoL0AJEsjfd6GosnM/scvDSMh8OE2InA2SASGRcDJ2tiMBy71n9lUawhWyqIQCWx5fa3BmSQxjV7VNymWj4JQtkExrN4+88cnjaFWFBAyWrZrac9fbFOiS018fzcmXffObyhIO9D4blZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=OnXWkd2L; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20251024084619epoutp03135ea73716f92dc45570742ef488f38b~xYP98KLpQ2301723017epoutp03j
-	for <linux-usb@vger.kernel.org>; Fri, 24 Oct 2025 08:46:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20251024084619epoutp03135ea73716f92dc45570742ef488f38b~xYP98KLpQ2301723017epoutp03j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1761295579;
-	bh=Y9f4xNgwsSogW30q4hGrX3EKPf7RBNjTePBnXDJDViI=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=OnXWkd2L8fwLtzSYnluWuRewH6YvCKPJvJLL6PK8EveokejWkbFh2YQ9URBTdFN9w
-	 QP0CAE6ss25e5eYUHzv5nNPZr548g9JZTFHEoLE5VE3+7VcC8Gi3quS3F4GfdUPcfJ
-	 K3JGoG6Uub/Y8mYy589sPWfOq3/bKYK/AueNx1k0=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
-	20251024084619epcas5p206e9a5ca00598de80e973089374948ef~xYP9lnHAh1747217472epcas5p2B;
-	Fri, 24 Oct 2025 08:46:19 +0000 (GMT)
-Received: from epcas5p4.samsung.com (unknown [182.195.38.94]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4ctGhp2HR2z6B9mB; Fri, 24 Oct
-	2025 08:46:18 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20251024084617epcas5p362dde79d9729000cf3345a68db1157ce~xYP8NSx2w2243422434epcas5p3e;
-	Fri, 24 Oct 2025 08:46:17 +0000 (GMT)
-Received: from bose.samsungds.net (unknown [107.108.83.9]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20251024084615epsmtip2459e38e9dd0d72cccc6bc8363fdb4920~xYP56A_0N2244222442epsmtip20;
-	Fri, 24 Oct 2025 08:46:14 +0000 (GMT)
-From: Pritam Manohar Sutar <pritam.sutar@samsung.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rosa.pila@samsung.com, dev.tailor@samsung.com, faraz.ata@samsung.com,
-	muhammed.ali@samsung.com, selvarasu.g@samsung.com, Pritam Manohar Sutar
-	<pritam.sutar@samsung.com>
-Subject: [PATCH v2] usb: dwc3: Allow usb role swich control from userspace
-Date: Fri, 24 Oct 2025 14:24:55 +0530
-Message-Id: <20251024085455.789555-1-pritam.sutar@samsung.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1761298068; c=relaxed/simple;
+	bh=RzPBYsE9Z+QwcYi1D0hNt0IClKgJXydxPV4v/o8X4Vg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fS07KiKydb3r0qnlbCl9WBVo32EqigJbvwRHzcEFt8SCXMEvZ8HgITkel30L7KGwEVgz59CEn56NkZS5ujiMi3D8NzQKl4nV+4hsJZ+7nYoj6ZxSgeGn4G3bdbnvrXUbZqVturF5D0Kq2T6gJYB4XaLtpFnm47T8bRVdjd2W1YI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vCE5D-0003tv-Am; Fri, 24 Oct 2025 11:27:39 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vCE5C-005CcK-3A;
+	Fri, 24 Oct 2025 11:27:38 +0200
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vCE5C-00F7Ne-2o;
+	Fri, 24 Oct 2025 11:27:38 +0200
+Date: Fri, 24 Oct 2025 11:27:38 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Johan Hovold <johan@kernel.org>
+Cc: Rob Herring <robh@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/3] USB-Serial serdev support
+Message-ID: <20251024092738.zao47ehvzckkrsf3@pengutronix.de>
+References: <20240807-v6-10-topic-usb-serial-serdev-v1-0-ed2cc5da591f@pengutronix.de>
+ <Zt7kCxawoszunWq3@hovoldconsulting.com>
+ <20240917044948.i2eog4ondf7vna7q@pengutronix.de>
+ <Z8_wcASfJ8SeAQ8l@hovoldconsulting.com>
+ <20250313194044.t2t3c7j6ktvshjhs@pengutronix.de>
+ <aPogbAozezmqSMuU@hovoldconsulting.com>
+ <20251023134828.2dzq2rhtjplqyyaj@pengutronix.de>
+ <aPs3BX9-og6wJIWR@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20251024084617epcas5p362dde79d9729000cf3345a68db1157ce
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20251024084617epcas5p362dde79d9729000cf3345a68db1157ce
-References: <CGME20251024084617epcas5p362dde79d9729000cf3345a68db1157ce@epcas5p3.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aPs3BX9-og6wJIWR@hovoldconsulting.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-There is a possibility of user needs for USB mode switching on boards
-that lack external hardware support for dynamic host/device role
-detection. This is particularly relevant in automotive applications
-where userspace applications need to switch USB roles (host to device)
-at runtime for CarPlay/Android Auto integration.
+On 25-10-24, Johan Hovold wrote:
+> On Thu, Oct 23, 2025 at 03:48:28PM +0200, Marco Felsch wrote:
+> > On 25-10-23, Johan Hovold wrote:
+> > > On Thu, Mar 13, 2025 at 08:40:44PM +0100, Marco Felsch wrote:
+> > > > On 25-03-11, Johan Hovold wrote:
+> > > > > On Tue, Sep 17, 2024 at 06:49:48AM +0200, Marco Felsch wrote:
+> > > > > > On 24-09-09, Johan Hovold wrote:
+> 
+> > > > > > > First, as the commit message you refer to below explain, we need some
+> > > > > > > way to describe multiport controllers. Just dropping the 'serial' node
+> > > > > > > does not make that issue go away.
+> 
+> > > There are other USB serial devices that support multiple ports over a
+> > > single USB interface. The DT bindings need to account for that case as
+> > > well, and that probably means we should not be describing the interfaces
+> > > at all but rather the physical ports.
+> > 
+> > Ah okay, I wasn't even aware that this possible too. However this is DT
+> > description and another topic.
+> 
+> It's still one of the issues that need to addressed.
 
-Add an `allow_userspace_control` flag to handle such cases. When
-enabled, it exposes a sysfs attribute that allows userspace to switch
-the USB role manually between host and device. This provides flexibility
-for platforms that cannot rely on hardware-based mode detection.
+Yes but this shouldn't be an issue with this patchset. So far the
+smallest DT-describale USB entities are the interfaces.
 
-The role switch can be done as below
-echo host > /sys/class/usb_role/<ADDR>.usb-role-switch/role
-echo device > /sys/class/usb_role/<ADDR>.usb-role-switch/role
+Additional support needs to be added if there are devices which need a
+more fine-grained description. I can't implement this since I don't have
+access to such devices. That beeing said, my patchset doesn't break such
+devices because in that case these devices simply can't be described as
+serdev device within the DT and the ttyUSBx devices are exposed to
+userspace.
 
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Pritam Manohar Sutar <pritam.sutar@samsung.com>
----
-Changes in v2:
-  - updated commit message by mentioning usecase for this change.
-  - added 'Acked-by' tag
-  Link for v1: https://lore.kernel.org/linux-usb/20251020113723.553843-1-pritam.sutar@samsung.com/
+If one wants to add the support for it, the support can surely be added
+afterwards too in a backward compatible manner.
 
- drivers/usb/dwc3/drd.c | 1 +
- 1 file changed, 1 insertion(+)
+> > > > > > > Second, and more importantly, you do not address the main obstacle for
+> > > > > > > enabling serdev for USB serial which is that the serdev cannot handle
+> > > > > > > hotplugging.
+> 
+> > > You will also see the following kind of warnings in the logs:
+> > > 
+> > > ttyUSB ttyUSB0: tty_hangup: tty->count(1) != (#fd's(0) + #kopen's(0))
+> > > ttyUSB ttyUSB0: tty_port_close_start: tty->count = 1 port count = 0
+> > > 
+> > > which are due to the fact that serdev does not support hangups which are
+> > > used during teardown of USB serial ports.
+> > 
+> > IIRC I added the following patch to solve this:
+> > 
+> >  - [PATCH 1/3] serdev: ttyport: make use of tty_kopen_exclusive
+> > 
+> > Sorry for not remembering the details since this conversation/patchset
+> > is quite old but still one of our top prios.
+> 
+> That suppresses the first warning but doesn't address the underlying
+> issue (that hangups are built around file handles which serdev does not
+> use). And you will still see the second one when the serdev driver tries
+> to close the already hung up port during deregistration.
 
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index 4c91240eb429..589bbeb27454 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -515,6 +515,7 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
- 	dwc3_role_switch.set = dwc3_usb_role_switch_set;
- 	dwc3_role_switch.get = dwc3_usb_role_switch_get;
- 	dwc3_role_switch.driver_data = dwc;
-+	dwc3_role_switch.allow_userspace_control = true;
- 	dwc->role_sw = usb_role_switch_register(dwc->dev, &dwc3_role_switch);
- 	if (IS_ERR(dwc->role_sw))
- 		return PTR_ERR(dwc->role_sw);
---
-2.34.1
+Can you please elaborate how I can check this? I'm not aware of any
+warning yet, but I only tested the hot-(un)plug. If I got your right, I
+should see the issue once I unload the serdev driver, right?
 
+> Also, that commit message needs to more work since you don't really
+> motivate why you think it's needed (e.g. as serdev ports can't be shared
+> with user space).
+
+Maybe it needs some adaptions but:
+
+| The purpose of serdev is to provide kernel drivers for particular serial
+| device, serdev-ttyport is no exception here. Make use of the
+| tty_kopen_exclusive() funciton to mark this tty device as kernel
+| internal device.
+
+the last sentence should address your point that serdev ports can't be
+shared with user-space.
+
+> If it's just about suppressing the warning you could possibly just have
+> set that new flag.
+
+Which new flag? As I have written in my commit message: "Make use of ...
+to mark this tty device as kernel internal device". I thought this was
+the purpose of tty_kopen_exclusive().
+
+Regards,
+  Marco
+
+
+> 
+> Johan
+> 
+
+-- 
+#gernperDu 
+#CallMeByMyFirstName
+
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | https://www.pengutronix.de/ |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-9    |
 
