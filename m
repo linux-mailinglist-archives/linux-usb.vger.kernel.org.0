@@ -1,245 +1,187 @@
-Return-Path: <linux-usb+bounces-29627-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29628-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B913C07333
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 18:09:42 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31BA4C074D5
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 18:27:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8BD53B30BA
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 16:09:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 743C25826BC
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 16:23:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B75343375D1;
-	Fri, 24 Oct 2025 16:08:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bum+Sa70"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9606032B9B2;
+	Fri, 24 Oct 2025 16:23:01 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E86202F71;
-	Fri, 24 Oct 2025 16:08:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4602EF673
+	for <linux-usb@vger.kernel.org>; Fri, 24 Oct 2025 16:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761322130; cv=none; b=GPbo437U8SZzSddePYquvffGZGteugIAI58dFpsFo9LcJ/emTs8MEt7T4U9AAhe45IdXp9pglKCfdgMK7gXQka8u6JEyxJOaMdXzf7WOLlbhCp0GYoZEJYPWXTheW1tNXxQ4RB7mYI1o8qkNb1p9xYldCDvRnMnN5onwKO3+2yI=
+	t=1761322981; cv=none; b=TmSeHBE184wfoKl3ScekGsfWSFkVXc1/EkdpyME2jcyFpjNg3qwxkJLmmCFje6z6pWhblrPBJGkz9HYxroFTrXdKdRChpfCqGQp0HYpajek0fXMXrXajJeBLg0twDvGysIZETtRpKuwI/Zrlhe/g7Ky1xT4AJTpuMijnRjXnDAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761322130; c=relaxed/simple;
-	bh=RFdw0+g6o/ZVSkbk/hwDX8wPQGif0Krg/jbYleduRas=;
+	s=arc-20240116; t=1761322981; c=relaxed/simple;
+	bh=pVfNtlvy4XlVUO/mWv2Vpg+ljrkxUs7Of07EOF4fuXY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M+X8hQqyLscNlawcaqzLxsbIvLA37wcTBJheEz8S/W4L6Ou3JX9XxHolC1F7x5CqqYp4JIwgQ6myPDA9TSu2ZEQHc7fQ54v4h66bF4bJW7I+aEajrkKcNmu0fAuv2a/yW/6pMmuyauawR25T9pIF1MJFpGsJgy2Off8kZfdbovQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bum+Sa70; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E711C4CEF7;
-	Fri, 24 Oct 2025 16:08:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761322129;
-	bh=RFdw0+g6o/ZVSkbk/hwDX8wPQGif0Krg/jbYleduRas=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Bum+Sa70whSA6rVYrWsUq1W2SBcB00ABYF6MmaIX4jt6NOXRn/VO3LPrKPlp7tEQn
-	 LVUQs76cq1kcY5lcEgs19PwSpo8oMyYiTW9xOrqCaaIDEzkJqDB1PqdnTBb5Ys/EWM
-	 6XbYRBQVNVE8LiT5V16yg8m5t0XgBNBHOMepDM45CWpDyC1mSQWpBw6xP95b0axo8K
-	 NA2cP7b8OvsKFfe5pUP4/dgDUVuWlpDpwJQlSEI9Y1omjCjAndFoO7zt9q4pnUf7Vb
-	 YBP70aa0aEBdRs0SJ/0M137EcX6L4g5ukiFt2B+Bis0rPOx3aCxiC3p0zFoJ1dW+Dq
-	 Acucw6uwnLosQ==
-Date: Fri, 24 Oct 2025 17:08:33 +0100
-From: Lee Jones <lee@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Georgi Djakov <djakov@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <joro@8bytes.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=TvLiaEIdux/34vlpD060ejyH0w7Ln/14tFmgCD/qGY2Df/kTXAdthueYb1Nx6VrHgEH1mm37qACVMMSFLf+5tp/TLOHx0Fjup6J/IPGqzhs4HSKZSCSQwXBVEs9JIVHexnfCpiMKrpsGBhSd082/Ak2HOC2uHy3C8B38bL/ZAmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vCKYw-00086q-QK; Fri, 24 Oct 2025 18:22:46 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vCKYw-005FmO-1i;
+	Fri, 24 Oct 2025 18:22:46 +0200
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vCKYw-00FDi2-1F;
+	Fri, 24 Oct 2025 18:22:46 +0200
+Date: Fri, 24 Oct 2025 18:22:46 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Johan Hovold <johan@kernel.org>
+Cc: Rob Herring <robh@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
-Message-ID: <20251024160833.GA2202059@google.com>
-References: <20251023143957.2899600-1-robh@kernel.org>
+	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/3] USB-Serial serdev support
+Message-ID: <20251024162246.fo4ipxz2ihvpqaef@pengutronix.de>
+References: <20240917044948.i2eog4ondf7vna7q@pengutronix.de>
+ <Z8_wcASfJ8SeAQ8l@hovoldconsulting.com>
+ <20250313194044.t2t3c7j6ktvshjhs@pengutronix.de>
+ <aPogbAozezmqSMuU@hovoldconsulting.com>
+ <20251023134828.2dzq2rhtjplqyyaj@pengutronix.de>
+ <aPs3BX9-og6wJIWR@hovoldconsulting.com>
+ <20251024092738.zao47ehvzckkrsf3@pengutronix.de>
+ <aPtV1qNu3aVrS4LS@hovoldconsulting.com>
+ <20251024124047.gnhxvjxjv7ie6ryy@pengutronix.de>
+ <aPt-h_jzlG3uyLUx@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
+In-Reply-To: <aPt-h_jzlG3uyLUx@hovoldconsulting.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Thu, 23 Oct 2025, Rob Herring (Arm) wrote:
-
-> Generally at most 1 blank line is the standard style for DT schema
-> files. Remove the few cases with more than 1 so that the yamllint check
-> for this can be enabled.
+On 25-10-24, Johan Hovold wrote:
+> On Fri, Oct 24, 2025 at 02:40:47PM +0200, Marco Felsch wrote:
+> > On 25-10-24, Johan Hovold wrote:
+> > > On Fri, Oct 24, 2025 at 11:27:38AM +0200, Marco Felsch wrote:
+> > > > On 25-10-24, Johan Hovold wrote:
+> > > > > On Thu, Oct 23, 2025 at 03:48:28PM +0200, Marco Felsch wrote:
+> > > > > > On 25-10-23, Johan Hovold wrote:
+> > > > > > > On Thu, Mar 13, 2025 at 08:40:44PM +0100, Marco Felsch wrote:
+> > > > > > > > On 25-03-11, Johan Hovold wrote:
+> > > > > > > > > On Tue, Sep 17, 2024 at 06:49:48AM +0200, Marco Felsch wrote:
+> > > > > > > > > > On 24-09-09, Johan Hovold wrote:
+> > > 
+> > > > > It's still one of the issues that need to addressed.
+> > > > 
+> > > > Yes but this shouldn't be an issue with this patchset. So far the
+> > > > smallest DT-describale USB entities are the interfaces.
+> > > 
+> > > It is an issue with this patchset since any binding for USB serdev will
+> > > need to take both kind of devices into account. Period.
+> > 
+> > Sorry but I really don't see the issue. As of now DT abstractions
+> > supports all my use-cases. If $another_developer has an USB device which
+> > actually exposes multiple serial ports behind a single usb-interface,
+> > fine. But in that case $another_developer needs to add the
+> > support/extend the support for it if he wants to use it in combination
+> > with serdev.
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/.yamllint                  | 2 +-
->  Documentation/devicetree/bindings/arm/psci.yaml              | 1 -
->  .../bindings/clock/allwinner,sun4i-a10-gates-clk.yaml        | 1 -
->  .../devicetree/bindings/clock/renesas,cpg-mssr.yaml          | 1 -
->  .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml      | 1 -
->  .../display/allwinner,sun4i-a10-display-frontend.yaml        | 1 -
->  .../devicetree/bindings/display/allwinner,sun6i-a31-drc.yaml | 1 -
->  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml       | 1 -
->  .../devicetree/bindings/display/amlogic,meson-vpu.yaml       | 1 -
->  .../devicetree/bindings/display/bridge/adi,adv7511.yaml      | 1 -
->  .../devicetree/bindings/display/bridge/lvds-codec.yaml       | 1 -
->  .../devicetree/bindings/display/bridge/toshiba,tc358767.yaml | 1 -
->  .../devicetree/bindings/display/ilitek,ili9486.yaml          | 1 -
->  Documentation/devicetree/bindings/display/msm/gpu.yaml       | 1 -
->  .../devicetree/bindings/display/panel/panel-timing.yaml      | 1 -
->  .../devicetree/bindings/display/panel/tpo,tpg110.yaml        | 1 -
->  .../devicetree/bindings/display/rockchip/rockchip,dw-dp.yaml | 1 -
->  .../devicetree/bindings/display/simple-framebuffer.yaml      | 1 -
->  .../devicetree/bindings/dma/snps,dma-spear1340.yaml          | 1 -
->  Documentation/devicetree/bindings/dma/stericsson,dma40.yaml  | 1 -
->  .../devicetree/bindings/dma/stm32/st,stm32-dma.yaml          | 1 -
->  Documentation/devicetree/bindings/edac/apm,xgene-edac.yaml   | 1 -
->  .../devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml       | 1 -
->  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
->  .../devicetree/bindings/gpio/brcm,xgs-iproc-gpio.yaml        | 1 -
->  .../devicetree/bindings/gpio/fairchild,74hc595.yaml          | 1 -
->  Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml     | 1 -
->  Documentation/devicetree/bindings/hwmon/adi,max31827.yaml    | 1 -
->  Documentation/devicetree/bindings/hwmon/national,lm90.yaml   | 1 -
->  Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml       | 1 -
->  Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml     | 1 -
->  Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.yaml     | 1 -
->  .../devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml         | 1 -
->  Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  | 2 --
->  Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ad7949.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ade9000.yaml   | 1 -
->  .../devicetree/bindings/iio/adc/cosmic,10001-adc.yaml        | 1 -
->  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 1 -
->  .../devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml     | 1 -
->  .../devicetree/bindings/iio/afe/voltage-divider.yaml         | 1 -
->  .../devicetree/bindings/iio/frequency/adi,admv4420.yaml      | 1 -
->  .../devicetree/bindings/iio/pressure/murata,zpa2326.yaml     | 1 -
->  .../devicetree/bindings/iio/proximity/semtech,sx9324.yaml    | 1 -
->  .../devicetree/bindings/iio/temperature/adi,ltc2983.yaml     | 1 -
->  Documentation/devicetree/bindings/input/ti,drv266x.yaml      | 1 -
->  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
->  .../devicetree/bindings/interrupt-controller/arm,gic-v3.yaml | 1 -
->  .../bindings/interrupt-controller/aspeed,ast2700-intc.yaml   | 1 -
->  .../bindings/interrupt-controller/fsl,vf610-mscm-ir.yaml     | 1 -
->  .../bindings/interrupt-controller/loongson,liointc.yaml      | 1 -
->  .../bindings/interrupt-controller/mediatek,mtk-cirq.yaml     | 1 -
->  .../bindings/interrupt-controller/mscc,ocelot-icpu-intr.yaml | 1 -
->  Documentation/devicetree/bindings/iommu/arm,smmu.yaml        | 4 ----
->  Documentation/devicetree/bindings/mailbox/arm,mhu.yaml       | 1 -
->  Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml     | 1 -
->  Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml | 1 -
->  Documentation/devicetree/bindings/media/amphion,vpu.yaml     | 1 -
->  Documentation/devicetree/bindings/media/i2c/adi,adv7604.yaml | 2 --
->  .../devicetree/bindings/media/i2c/techwell,tw9900.yaml       | 1 -
->  Documentation/devicetree/bindings/media/nxp,imx8-jpeg.yaml   | 1 -
->  .../devicetree/bindings/media/qcom,sc8280xp-camss.yaml       | 1 -
->  .../bindings/media/samsung,exynos4212-fimc-is.yaml           | 1 -
->  .../devicetree/bindings/media/samsung,s5pv210-jpeg.yaml      | 1 -
->  Documentation/devicetree/bindings/media/st,stm32-dma2d.yaml  | 1 -
->  .../devicetree/bindings/media/video-interface-devices.yaml   | 4 ----
->  .../memory-controllers/qcom,ebi2-peripheral-props.yaml       | 1 -
+> Fine, but if you only care about your use case then you can keep your
+> implementation out-of-tree until someone comes with along with enough
+> time to solve this properly.
 
->  Documentation/devicetree/bindings/mfd/stericsson,ab8500.yaml | 1 -
+Fair enough, after checking your patchset once again I see your special
+USB-UART converter. I get your point and will add the serial@ binding!
 
-Acked-by: Lee Jones <lee@kernel.org>
+Since I don't have a MOS7840 USB-Serial to test it, it would be nice of
+you if you could test it afterwards on your side as well.
 
->  .../devicetree/bindings/mtd/amlogic,meson-nand.yaml          | 1 -
->  .../devicetree/bindings/mtd/marvell,nand-controller.yaml     | 1 -
->  Documentation/devicetree/bindings/mux/mux-controller.yaml    | 1 -
->  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml   | 2 --
->  Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml     | 1 -
->  .../devicetree/bindings/net/brcm,mdio-mux-iproc.yaml         | 1 -
->  .../devicetree/bindings/net/cortina,gemini-ethernet.yaml     | 1 -
->  Documentation/devicetree/bindings/net/fsl,gianfar.yaml       | 2 --
->  .../devicetree/bindings/net/mdio-mux-multiplexer.yaml        | 1 -
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
->  Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml    | 1 -
->  .../devicetree/bindings/net/wireless/ti,wlcore.yaml          | 1 -
->  .../devicetree/bindings/pci/altr,pcie-root-port.yaml         | 1 -
->  Documentation/devicetree/bindings/pci/loongson.yaml          | 1 -
->  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml  | 1 -
->  .../devicetree/bindings/pci/starfive,jh7110-pcie.yaml        | 1 -
->  Documentation/devicetree/bindings/pci/versatile.yaml         | 1 -
->  .../bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml         | 1 -
->  .../devicetree/bindings/pinctrl/brcm,bcm21664-pinctrl.yaml   | 1 -
->  .../devicetree/bindings/pinctrl/fsl,imx9-pinctrl.yaml        | 1 -
->  .../devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml     | 1 -
->  .../bindings/pinctrl/qcom,sm6115-lpass-lpi-pinctrl.yaml      | 1 -
->  .../devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml        | 1 -
->  .../devicetree/bindings/pinctrl/renesas,rza1-ports.yaml      | 3 ---
->  .../devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml | 1 -
->  .../devicetree/bindings/power/supply/mt6360_charger.yaml     | 1 -
->  .../bindings/power/supply/stericsson,ab8500-charger.yaml     | 1 -
->  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml     | 1 -
->  .../bindings/regulator/richtek,rt6245-regulator.yaml         | 1 -
->  .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml      | 2 --
->  Documentation/devicetree/bindings/reset/ti,sci-reset.yaml    | 1 -
->  .../bindings/rng/inside-secure,safexcel-eip76.yaml           | 2 --
->  .../devicetree/bindings/soc/fsl/cpm_qe/fsl,qe-muram.yaml     | 1 -
->  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml     | 1 -
->  .../bindings/soc/microchip/atmel,at91rm9200-tcb.yaml         | 1 -
->  Documentation/devicetree/bindings/soc/rockchip/grf.yaml      | 1 -
->  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml       | 3 ---
->  Documentation/devicetree/bindings/sound/adi,adau1372.yaml    | 1 -
->  Documentation/devicetree/bindings/sound/adi,adau7118.yaml    | 1 -
->  .../devicetree/bindings/sound/rockchip,i2s-tdm.yaml          | 1 -
->  .../devicetree/bindings/sound/rockchip,rk3328-codec.yaml     | 2 +-
->  Documentation/devicetree/bindings/sound/samsung,tm2.yaml     | 1 -
->  .../devicetree/bindings/sound/ti,tlv320dac3100.yaml          | 1 -
->  Documentation/devicetree/bindings/sound/wlf,wm8903.yaml      | 1 -
->  .../devicetree/bindings/timer/nvidia,tegra-timer.yaml        | 1 -
->  .../devicetree/bindings/timer/nvidia,tegra186-timer.yaml     | 1 -
->  Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml   | 1 -
->  116 files changed, 2 insertions(+), 136 deletions(-)
+> > > > > > > You will also see the following kind of warnings in the logs:
+> > > > > > > 
+> > > > > > > ttyUSB ttyUSB0: tty_hangup: tty->count(1) != (#fd's(0) + #kopen's(0))
+> > > > > > > ttyUSB ttyUSB0: tty_port_close_start: tty->count = 1 port count = 0
+> > > > > > > 
+> > > > > > > which are due to the fact that serdev does not support hangups which are
+> > > > > > > used during teardown of USB serial ports.
+> 
+> > > You should see it in your test setup as well. Unless the bluetooth
+> > > driver you use is doing something funky (e.g. not closing the port).
+> > > 
+> > > I'm testing with a mock gnss device here.
+> > 
+> > Okay, let me test this. Just that we're on the same page: The test is to
+> > remove the serdev (bluetooth, gnss, ...) driver, right?
+> 
+> No, trigger a disconnect like you did before, or do a physical
+> disconnect, by wiring up a regular USB port.
+
+I will test it again, thanks!
+
+> > > > > Also, that commit message needs to more work since you don't really
+> > > > > motivate why you think it's needed (e.g. as serdev ports can't be shared
+> > > > > with user space).
+> 
+> > > No, my point was that serdev devices *are* not shared with user space,
+> > > you don't need to use that new kopen helper for that.
+> 
+> > > That helper sets the new TTY_PORT_KOPENED flag which suppresses the
+> > > warning on hangups.
+> > 
+> > Okay, so you meant the TTY_PORT_KOPENED flag. According the
+> > documentation of tty_kopen_exclusive():
+> > 
+> > | tty_kopen_exclusive - open a tty device for kernel
+> > 
+> > isn't that exactly what serdev-ttyport should do to "not share it with
+> > user space"? IMHO it's an implementation detail if the logic behind
+> > "open a tty device for kernel" is only built around a flag to suppress
+> > the warning.
+> 
+> I give up. I've already told you that serdev does not share anything
+> with user space.
+
+I really try to understand the issue you see which I don't.
+
+To cycle back: You posted the following warnings:
+
+| ttyUSB ttyUSB0: tty_hangup: tty->count(1) != (#fd's(0) + #kopen's(0))
+| ttyUSB ttyUSB0: tty_port_close_start: tty->count = 1 port count = 0
+
+As written earlier, the tty_kopen_exclusive() should mark the serial
+port as kernel-only serial. Also as you said, this suppresses the first
+warning.
+
+Is your issue that serdev can't handle hangups (e.g. hot-plugs) yet and
+that a serdev driver could try to access the tty while the .remove() is
+in progress?
+
+Regards,
+  Marco
 
 -- 
-Lee Jones [李琼斯]
+#gernperDu 
+#CallMeByMyFirstName
+
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | https://www.pengutronix.de/ |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-9    |
 
