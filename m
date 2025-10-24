@@ -1,68 +1,69 @@
-Return-Path: <linux-usb+bounces-29600-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29601-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB5C7C04C1D
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 09:37:59 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18AAFC04D00
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 09:45:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72CEF3A01CC
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 07:36:50 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B95CB35AF76
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 07:45:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5DC62E2DE6;
-	Fri, 24 Oct 2025 07:36:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D7F82F4A1B;
+	Fri, 24 Oct 2025 07:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EWjnR8sy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MYVxx0a2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4502E6CCC;
-	Fri, 24 Oct 2025 07:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A4E2EBBAD;
+	Fri, 24 Oct 2025 07:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761291403; cv=none; b=DLpQH2LGs2pOdiad0hFkgkveCQepHcHFREf/Rg5fOx236rWvSfRza7gl3kCDJ1tIYAHKtawn78S1tljQLvvdzH0XdZxU/JQ+BXpK0fLJvjZMrsWsH2yV2BqA2Xmtt4R51YB/nDBGBlpt/VuxWb5e/qXXN4EMLBMm08orAeGPVfY=
+	t=1761291834; cv=none; b=C8cJrCzn10tpfT7VX3BjQ42uXzFIKWTuLd608kdtZMZ2aqFtFekIkDzpkM29T9jkbnB1mO9Kr+sm7/O0vChs25p/K5yjf732kevclQ0fN2pJHGwh/bV66XP+l55Fm+OedlwMm58sM5ItDre0nZp8hpy8NRHmNWYE6RA9SO0GqLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761291403; c=relaxed/simple;
-	bh=mWjj9l8sR4AQPWA6ugbC691Ckn2QjoC60AB1xOLd+C4=;
+	s=arc-20240116; t=1761291834; c=relaxed/simple;
+	bh=7zI+yHusBy8iTPtjWgljU0yIp25yZuoATyi6HBS0Rz0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=maS4eDz4lZ2AM84R/nDOBcr10Zz2Cq5A3fAqhmjjyUbjDfFZwSXRHkvr9IyaPFbCKRoaeKAfmI6XXqy1v8nYrUlTn9WhFdjBuxhNExQvvjPMlou7HWcq4/TZi9/cl/B2X3JAWHdYT8c+TM/M5xOVsH1yObcvq0h6aTyDJXYRFyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EWjnR8sy; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=tS5DtIj0Ij7Uh3SZ0wUNW5fy37E5QrmLj37seC8nXs+sEuJr4v1ZBUwnuJXX0JHV/afjAilRs0FuxgmjKMn1VyI93sipEv0+wQNOSJdPAx7x+apxaszyfBmP52clLAh+MboBMlD3PeIFOqYr1A0OKpTnil0N0zZVI6B9r8J98A8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MYVxx0a2; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761291402; x=1792827402;
+  t=1761291834; x=1792827834;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mWjj9l8sR4AQPWA6ugbC691Ckn2QjoC60AB1xOLd+C4=;
-  b=EWjnR8sydiQsP8Ml/gaOBWOx4BSRBDli/J+bvofRoTcyU96GorEHvbt7
-   c7eIBhY19WHbPriPvOHn5lvp7ZgxEp5P4lA42ARFrlBsoJf/EKDmeLQMU
-   vi40gm4BqMMnKg48hFhB1qYBS98pCfhFOMNydKCLxuHpQTe6L/eG7Ya6M
-   zYzykQ8p54FvJt7ENiOwV9HRfjNeL1hRyhAyw3fyAWLn9AQS6q5EV05Vy
-   JzPSnAZ2PDwk7xigYpu+npGVGSe5gN+A03OyXKQi76AduLucXRT8qPGXc
-   Z+vlprgUEjO7ROmev6GggfFRkfwiUbig0gR/vyqBIfaYGob26IrLqSeFY
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7zI+yHusBy8iTPtjWgljU0yIp25yZuoATyi6HBS0Rz0=;
+  b=MYVxx0a2OQpZWdBgpo9e4Cef7zbGfhKHW/ahkUajssE8TrJaNZxvLMsz
+   iYFLWZBwiMCS5IQK24S9kX0fuxK4grlriS5k4oh/YvGlMfvSZeVniHfCm
+   WGBrkeGyTRFKz/iXpJCKJWbzapyEMy9Q72lb/+AvlHVJwOAeTBlpsy+E2
+   uzGo0XJNeyokcxfa3c0PEEPbSyqdGckAh3KHorzIr+zfhumOYqG474YEe
+   Qhg75s9elFXKSVjFg/jws3bCtfrtDm7yTGTNGojhuxHOT1wcDIpgqnu0e
+   8UfkqJ8W0uicwU6cj9c6F6cumcAiTvUnbOXcWpwW4r6PWOaRpw3pnuPFa
    Q==;
-X-CSE-ConnectionGUID: jkBigyTwRxCyR20mJXmFIQ==
-X-CSE-MsgGUID: gfsSofeITKCemhLmU3liow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="51048302"
+X-CSE-ConnectionGUID: 0b45EmyKSsGExL3d20I2mA==
+X-CSE-MsgGUID: x48DdNPRSxqXNJTYsegM6A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63618993"
 X-IronPort-AV: E=Sophos;i="6.19,251,1754982000"; 
-   d="scan'208";a="51048302"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2025 00:36:41 -0700
-X-CSE-ConnectionGUID: +9H14C/KT3KpDNAQIA8LpQ==
-X-CSE-MsgGUID: DcV1UYgvS0+g8hqqTwa8Pg==
+   d="scan'208";a="63618993"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2025 00:43:53 -0700
+X-CSE-ConnectionGUID: u3ao3ZWfTCKvdTwCgNOZbQ==
+X-CSE-MsgGUID: i6w9uVJtSDy1AqasQ83mFQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,251,1754982000"; 
-   d="scan'208";a="221566635"
+   d="scan'208";a="188756837"
 Received: from mjruhl-desk.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.221.255])
-  by orviesa001.jf.intel.com with SMTP; 24 Oct 2025 00:36:27 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 24 Oct 2025 10:36:27 +0300
-Date: Fri, 24 Oct 2025 10:36:27 +0300
+  by fmviesa005.fm.intel.com with SMTP; 24 Oct 2025 00:43:42 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 24 Oct 2025 10:43:41 +0300
+Date: Fri, 24 Oct 2025 10:43:41 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc: Chaoyi Chen <kernel@airkyi.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -89,33 +90,46 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v7 2/9] drm/bridge: Implement generic USB Type-C DP HPD
- bridge
-Message-ID: <aPsse5qVL84XOj8w@kuha.fi.intel.com>
+Subject: Re: [PATCH v7 1/9] usb: typec: Add notifier functions
+Message-ID: <aPsuLREPS_FEV3DS@kuha.fi.intel.com>
 References: <20251023033009.90-1-kernel@airkyi.com>
- <20251023033009.90-3-kernel@airkyi.com>
- <aPnrKFWTvpuRTyhI@kuha.fi.intel.com>
- <14b8ac71-489b-4192-92d6-5f228ff3881d@rock-chips.com>
- <aPoZhBdc1M6Qgfae@kuha.fi.intel.com>
- <6f769567-b383-4c79-b441-3dd84f21cdae@rock-chips.com>
+ <20251023033009.90-2-kernel@airkyi.com>
+ <aPni4AeDaem_rfZH@kuha.fi.intel.com>
+ <aPnvoSRJefwDlpNO@kuha.fi.intel.com>
+ <aPn4-S7upPOOtenr@kuha.fi.intel.com>
+ <3a24bd7f-c247-4541-8cf5-c1e66e2af5a0@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <6f769567-b383-4c79-b441-3dd84f21cdae@rock-chips.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3a24bd7f-c247-4541-8cf5-c1e66e2af5a0@rock-chips.com>
 
-> Another thing is that CONFIG_DRM_AUX_HPD_BRIDGE originally needed to be
-> selected by other modules. With this change, we also need to expose it in
-> Kconfig.
+> I noticed the following statement in typec_register_altmode():
+> 
+> ```
+> 
+>     /* The partners are bind to drivers */
+>     if (is_typec_partner(parent))
+>         alt->adev.dev.bus = &typec_bus;
+> 
+> ```
+> 
+> If the condition is not met, the bus will not be set, which means bus_notify()
+> won't be able to take effect. Did I miss something?
 
-Sorry, I don't understand the problem here? What do you need to expose
-in Kconfig?
+Right, that would be the condition that I was talking about. Only
+partner altmodes are used in the bus.
 
-thanks,
+Hold on! Do you need the port altmode instead of the partner altmode?
+If that's the case, then we can't use the bus notifier. So we'll need
+the separate notifier chain after all.
+
+Let me take a closer look at patch 2/9. Sorry about the hassle.
 
 -- 
 heikki
