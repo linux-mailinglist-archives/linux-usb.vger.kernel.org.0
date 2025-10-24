@@ -1,115 +1,153 @@
-Return-Path: <linux-usb+bounces-29633-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29634-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71FB8C08053
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 22:20:00 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E482FC084DE
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 01:24:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BE463BEF60
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 20:19:59 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 601604EA693
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 23:24:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C01962EFD9B;
-	Fri, 24 Oct 2025 20:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3E3630EF85;
+	Fri, 24 Oct 2025 23:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k0VdsHCZ"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="jUTlBQ2h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757512EF64C
-	for <linux-usb@vger.kernel.org>; Fri, 24 Oct 2025 20:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761337192; cv=none; b=IeFtWcRzYS9fTaGSH/yCJi8WhW2dd82Gyd5i3O5g9kFwq+CWasnhzdzu/2wQOQ5106avb594EHduarDQvgjamOJrVu0cQCCAHxjVaw1C4baWk1Pl3kzY5Yz3lJC43OHR72+UB1p4fFSMSZ/xQrTdwnpqAksEX68ZAc22p1P12xQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761337192; c=relaxed/simple;
-	bh=+RHhii+jY9d8/ctuTLvU+Zz7XMoaS0T4paIu7a6dNwc=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3E92F5A22;
+	Fri, 24 Oct 2025 23:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761348269; cv=pass; b=tESIZXI3rYe74n1MlkmYxetEG3LosKmeN3UR1hdQDjz99Tbz9srsmGVoDx8Wt4YvF1W87bGfcvNavQPxn7Nj7P9kXzzJ6n6TRvefIAhbizE8PqujlDCJzBPDyifyWVTwv1CLlkT+FvgpXTXTWHecJR+SB7Zsfo10l0t51+fECNY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761348269; c=relaxed/simple;
+	bh=NQ0CrT99S0HB3iA81tiE1fKOXNruYRsIn5L3vGBZdtI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bKt1IXW6Rjw9Wg/UXOqt48qrfWhhmcwxTzettTkSawYv8Xe8iIu5A/jr2DIXlLRZn2RPaFbapcTVuYZHNUAlT5Wv4XH/mlI3uTaSbkGx6D/f0IRq6Xbh+FhsogrDYjUdvtmMVfpV1LslvHQf1raitNvVBkIHZFHcsqDRpVLcbps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=k0VdsHCZ; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4710a1f9e4cso19297355e9.0
-        for <linux-usb@vger.kernel.org>; Fri, 24 Oct 2025 13:19:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761337189; x=1761941989; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QCy1zJ6sxY7XDksdN+ZfQfMEyEv9pQCKJ+rvcvU78wE=;
-        b=k0VdsHCZrs+oe91bYbdYPb5P97QGYRhdBBZ7cJfRUcM4LuyVzkJjUiODND5nMqVskV
-         IhY7iFfRrBYJipUIzdbV4l6jSDUuEdkvhv254IWPaqrxSG/XelHnInd0LVGtufm5lGvV
-         5RbO/j9eVXVvnD7MxRDTMm6lZDoENKnfPpfhPP4Iw6AmtA0z5TJoSemwEf8j7aA3hRvb
-         daxfLgVrIi6jcNmGJrMy3S73+NxV+LZg3lgQhaYmIwwggzVH8hCijDGMThvDspIMccMo
-         W+0VeQvMgacaay/gH0rUdPd6J0zyq255S3Op9PeELp/XFyQZ3QzodGvirk8A2cmdKmJZ
-         /1sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761337189; x=1761941989;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QCy1zJ6sxY7XDksdN+ZfQfMEyEv9pQCKJ+rvcvU78wE=;
-        b=jYosdxT1m96xlNyc6aBFPhR0fmZaDAQyxGIEXXLLfvccl1otAyU+id1QOIT/AEIbGH
-         AvKc61+F2/6gv7bCYUnO5GCt5BfLUaOaX56N4Lvf/Row3FIUXZf3o/o5M30sCk09Ti/F
-         wMzzTfueOMS7/0GA5psOYuoxwwKP6Xfbr7x0bcklOtG6EGZFK2fTNxBQbb/g1h32iAA5
-         QAYO7rULirEDPzWR/u0LJBX2cQ3SKXsAD9zCR6IraCuz6W2nCbAJBTLF+l507L8L7e5l
-         0AbBz0H9E5VwGVwkGtab0G7YX8ZOPQu/jHV2blY75mibOCCnAQxafAj2Epg1PDrMLXWf
-         40FQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWKqHISW52jwZ1JQnVVrYvFXBRWfSknDbCD0PaHpyA8X3rQ3PHKKa0u6Du+JuYrOYb76BMx+XYc3h0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLAw6lDqxAjrd1BncmMD38yCtZB6nrFAQmJK7kdPnHgwF9MZqA
-	knTTwD/gaO1xqqaEklIcYlT3/BkgS4ScrN7DodvAzma291A6s52Kj0UCUqJXimFH4Ws7+6OHL1/
-	8FnJn
-X-Gm-Gg: ASbGncuoZNfeYx/3fNDNDFMGGd7zd939bu5JF5bRtS4Hv6e/EjrbqDfKu+g2SOFvxbG
-	25FgU6hbRJpwrhwWfIFlMt0vqLf8YpS8f9vsEla+IEIt69jwaB9qmJwXf9PQ5axaGK7mxZKJABx
-	stk8pN3PMXiBMuq+iiiAiqUzytZAK1W9MdaKsqDDGgpesFGZjjFSYa08H5eawJ3fmDXo59e2Ayg
-	uNhvEcC8mBL0uOLMwVtoxbPU/Qgjcn6d0yejwdJyTs6AQdnMdTdKG1w8/e8B9oIHFxEh7eGzfQW
-	gitQsG9p3HfVJeOOwMFc60WLeo3h4kIkA6b68KU68aNPi6NtMM57XBMYWJDB3nuNG0QQU7uHJxo
-	pHXKpJO3ObJCHL0pF348Lifeo711UMWCK5sgrs0WagEa7cxIHFvsSOuvhBaczSN4PD5pzpaEsGo
-	whZdJVlFU=
-X-Google-Smtp-Source: AGHT+IG6QzGaUz34lEPKz312/mkWIT0AABjVhY6oKHLl9C22iV9Fx/QpFe3UaLiPniDFo1+dMTxXZw==
-X-Received: by 2002:a05:600c:4510:b0:46e:1fb7:a1b3 with SMTP id 5b1f17b1804b1-475d2ec5729mr31422505e9.23.1761337188441;
-        Fri, 24 Oct 2025 13:19:48 -0700 (PDT)
-Received: from linaro.org ([86.121.7.169])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475dcbe5381sm584965e9.0.2025.10.24.13.19.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Oct 2025 13:19:47 -0700 (PDT)
-Date: Fri, 24 Oct 2025 23:19:46 +0300
-From: Abel Vesa <abel.vesa@linaro.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] usb: typec: ucsi: Add support for orientation
-Message-ID: <vbbz2jfisxnjiblasbtay5mnaphsio5qnjrqbxjztykdvgvxfl@sdicu53m3pil>
-References: <20251015-usb-typec-ucsi-orientation-v1-1-18cd109fb0b7@linaro.org>
- <2025101530-skeleton-able-6523@gregkh>
+	 Content-Type:Content-Disposition:In-Reply-To; b=R8JSdoh30zTpkv6DtPR9UqjoEILC8+z0s+1Ndj9y9flFG9S6SiV2d8jrt6hAqlx98mamkkU772V9SXHMqb6FLq9Q8oF2I6f1yTOpM0T8cJsnr2EL37uclg12YjC5zQnpg1dIRbZ+1QTDUVK5x58ziodwvrPG+7DKkUIVgQ0ROQc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=jUTlBQ2h; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1761348264; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=E7jo3eFGtMbYc4umajgAJrDaAAeoH78FvXSvtwIPzMd+KALm6TW6J/PZo3Gl8IAj7J4S4JOqDkVaqCJ4DpyxUkL/D7r/nDZxCDXQIylw9m80ZHFV7ZnmYl6fN+yD1hWHfO07oqL+vl1wjfMlpqfazjWlj918MvnuxIHK7Hk60jc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1761348264; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=TolhaGIsyaj1gVoV8dHb9QimZIX1Tzw1zXYiEcETqjM=; 
+	b=ERHFHpBMKqE6LtNxoI7EvA9o2mCsVLRI6J1+/qPThd+k1qt+nO9OwZhbx5E81USsXE7RyOCW1GyB5isp3iLRSkJC/p6ufY9tyScGPtH6liK71Qdq4msBQsSye0JsA4aNBjxrfKHSyGI+LcIwBsP7dWSDg8vI9r+LX3h+vlO9w2c=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761348264;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=TolhaGIsyaj1gVoV8dHb9QimZIX1Tzw1zXYiEcETqjM=;
+	b=jUTlBQ2h6Tuak+aNMb2CNTnEQ4BDpyDVgaRRROiBpKRCvZOPLn1o5LGy8JyX0l9X
+	sOXFCDgYktIsDNXusx7tmsAjPkY6Gy0P2EcQplSNWKOk61O5CR3GNBKVdk6o+/41U8c
+	rO3cD7tc7lCrL45EbJ0fyWmdAPtKKmAhIvpw6Ir4=
+Received: by mx.zohomail.com with SMTPS id 1761348261746725.1283250784594;
+	Fri, 24 Oct 2025 16:24:21 -0700 (PDT)
+Received: by venus (Postfix, from userid 1000)
+	id 476FE181935; Sat, 25 Oct 2025 01:24:06 +0200 (CEST)
+Date: Sat, 25 Oct 2025 01:24:06 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Guenter Roeck <linux@roeck-us.net>, 
+	Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Georgi Djakov <djakov@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Joerg Roedel <joro@8bytes.org>, 
+	Jassi Brar <jassisinghbrar@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Lee Jones <lee@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Mathieu Poirier <mathieu.poirier@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-media@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org, linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+Message-ID: <god73pukywwznfyym7tym6m5k6fn3u7hwzj5gwhrxytt7oinfv@pokb4aos7pp6>
+References: <20251023143957.2899600-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4uianbie6i5kbvu2"
 Content-Disposition: inline
-In-Reply-To: <2025101530-skeleton-able-6523@gregkh>
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
+X-Zoho-Virus-Status: 1
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.4.3/261.330.82
+X-ZohoMailClient: External
 
-On 25-10-15 16:00:43, Greg Kroah-Hartman wrote:
-> On Wed, Oct 15, 2025 at 04:50:36PM +0300, Abel Vesa wrote:
-> > According to UCSI 2.0 specification, the orientation is
-> > part of the connector status payload. So tie up the port
-> > orientation.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >  drivers/usb/typec/ucsi/ucsi.c | 24 ++++++++++++++++++++++++
-> >  drivers/usb/typec/ucsi/ucsi.h |  3 +++
-> >  2 files changed, 27 insertions(+)
-> 
-> Why is this a "RFC"?  What is the request?
-> 
 
-My bad. Posted as an RFC since I wasn't sure if I tied the ucsi_orientation
-correctly, meaning in all the right places.
+--4uianbie6i5kbvu2
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+MIME-Version: 1.0
 
-Let me know if you want me to respin this as a proper patch.
+Hi,
+
+On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
+>=20
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/power/supply/mt6360_charger.yaml     | 1 -
+>  .../bindings/power/supply/stericsson,ab8500-charger.yaml     | 1 -
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+--4uianbie6i5kbvu2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmj8CpEACgkQ2O7X88g7
++pqEIQ//WxlORWTU9xe37JxSV9323KQXYJPU3wtmtK4U8OlNGoVKu9XeR3w5pitG
+uy2cIzo80EdVMKsq5GKcONqwht31w9+RJaWZmytnll9Wbe3eiW3Lu6Ymx2zopgcW
+OoRuaiPPQUqGdgt7+VKgNt+4kH1sX/ur8z/Zd1rUrK9Xkks09pdqcZ/wpjm6KlQw
+e7x03OaDQ5h17Cg56SgH7NwoYjoUXDuSEKoZDx4wv5DQWh171Ez0/tWvYwYxM7+a
+Pxqt+zTDC1hdh6j1CaiOuwNb7pbdfcOWS7WZC8BPHNYW3eqFk5OQg+tZwEgoK9zV
+GLO0FrPPimJLgL2mfnq5FP0SzYU7FNgJD6gD/qKPzjsQlFLnwn69QCH/nTA9J/ZT
+ajcxgv6FLs3R3CGRptDBEUPOXez3dJeMeaN7hNeoswZNAe9uw1irXmedEzxLDO7S
+8WDVz6MvUAXOdXEcI+pUvuYfGWPwuJHspOgPuOwzO2sqg212V3sScOGcATq2BTDD
+mpc8LtRdKoZ3vUS9cVLRxtqLo8YB5roCBg0HEOexrwJayA074TSteqXhF2LH7LOW
+IcSZ37y+8QgWjTO2aXsiLJjoK2PsOLnvKzBRD5aeLhMd4H1Lw1xCxi75ut/fJPUY
+MLaS7WMtq7TVMRxBrjz8kaiR4opj84mVIXbVgoiISYooEKbbdic=
+=pPcb
+-----END PGP SIGNATURE-----
+
+--4uianbie6i5kbvu2--
 
