@@ -1,83 +1,68 @@
-Return-Path: <linux-usb+bounces-29617-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29618-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDF63C059F1
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 12:38:59 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4014CC0597F
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 12:32:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B16AF3B7005
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 10:31:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E8CCD4E701D
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Oct 2025 10:32:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFDE1310655;
-	Fri, 24 Oct 2025 10:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA0D030FC34;
+	Fri, 24 Oct 2025 10:32:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l/d2Y+U8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lX5o5lSL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65A72C08C5;
-	Fri, 24 Oct 2025 10:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E0826F2BD;
+	Fri, 24 Oct 2025 10:32:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761301843; cv=none; b=WqszXQ8Y1GDhUpTUg/4Blg8h60kIOww2lHd7bdc1E5ECjLi8LEM9hShjyATOBDbKwo7ObuBo6lNVlH1Pn3aHzwn3zx3999FjBRwTzxlOKoFCew6LNvvc7Y5CQrPHfPO6S83gYCcNTy9zDD3g3bN1XJDkiBR0yyOz3t4GtdNYIOY=
+	t=1761301968; cv=none; b=TUD4qBCros4agD8aRQMwHDATu8Tp+Fs0ZWMU0MyBNmqYUVY/TR9c4IunQ53AVuET1IH6OUlqN70eoK3ShrSqFSeySftqAyQdVCvcpKJTV3q5Twc7m2emnSL9YW+pItm3WhD/F5avPoEkAe0k/WDyOzpZLyldx4vvAx81bOn7IZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761301843; c=relaxed/simple;
-	bh=xjBMkmI+qsDoGp9ZiRzBUp/jILZSgk47twlvE8podR4=;
+	s=arc-20240116; t=1761301968; c=relaxed/simple;
+	bh=tKXOV20AUg8P4v3Ae4bzYimBTaokjawTTrJ7Uz/5YwA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V3tLwzIjbKeEYPSi2uB1jC8xElcJElsFUQBW+bL3lag82L5dWdGogO0j2ND7PJNmpxax1BRahWTKnVW+FwatlmBO0j0TZaCR8rUzoFUPWoMS+UDuM5Akun5De4LI/orJEy7f4PX/+EC41MlB1w3ZYxwADrK6fwIjDdmBSK+BABM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l/d2Y+U8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E75CC4CEF1;
-	Fri, 24 Oct 2025 10:30:41 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oQlpjJVEs3Bn4mo9BnaXZIeRgvNZDoq9zrl5mJqx8uXkOg+1yqiKvhfnZup/9GM8/IUcsJo/97rgYFDTUGmCu3XhrlcaVDjhrriGYbHuiwSBLp3ySptWbFRZAdYuc40qc3m9U/YwofPy5zPclaU5BENXoxiRlxM6kFtjIZiZfIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lX5o5lSL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B08C4CEF1;
+	Fri, 24 Oct 2025 10:32:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761301842;
-	bh=xjBMkmI+qsDoGp9ZiRzBUp/jILZSgk47twlvE8podR4=;
+	s=k20201202; t=1761301967;
+	bh=tKXOV20AUg8P4v3Ae4bzYimBTaokjawTTrJ7Uz/5YwA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l/d2Y+U8bQs8VF+XsPwC/lo+bxBE0j4eWS6VDHNCD/dOyGEFM7pOVi7s1xB8wyT1F
-	 jv0kcNfIyneAU7DFc2XMuu8oHJ2C93dqlydWRrXYT3RCBqDbolkiQ18EsFfqCwzdIT
-	 F0FJ+u2jbBRNARJVywQ0ZMr1PM6LZQ50TTD9W4llmkHp0cxkQM8R7YTAZNZuhKj472
-	 K02nhKLn9f/Q1d19EUPlbhQT59235yFCKn8XDWmWaJOjbnUv34C0E0GbdT7yY2B8c1
-	 q4jVSAnw+7Qfl9JCs14YGXOOwUUitTY/lsolUgoznKOAtNMsr23PjYx6i1nIOnN4f/
-	 YsZZGbsmS20jw==
-Date: Fri, 24 Oct 2025 12:30:37 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Guenter Roeck <linux@roeck-us.net>, 
-	Jonathan Cameron <jic23@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Georgi Djakov <djakov@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Joerg Roedel <joro@8bytes.org>, Jassi Brar <jassisinghbrar@gmail.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-media@vger.kernel.org, 
-	linux-mtd@lists.infradead.org, netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org, 
-	linux-remoteproc@vger.kernel.org, linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
-Message-ID: <fncqrwr6pi3ttxkf44hncy35ogxqdvql52hdcycq4yakbkeose@gv6lxr6a4uri>
-References: <20251023143957.2899600-1-robh@kernel.org>
+	b=lX5o5lSLWbgVGl2/g0nIX+enmLGp6T4rXgOcXL4L+b+s0zjqr29XskreNo6AxqQrf
+	 gMts8KtrIBxyr/BJhBa3uyRyC91u4rVXhT4pQWJhWyc2bKUb8O9a+QTNKGfEt5wivD
+	 61OspIk/KYTUbPVpnGyXw41sdBjXk7gr4zR+xGBgo+BrusLb9fgHJkv3mO5dX9WkRc
+	 na77c3SpJg2q419uftLPqBBxanSgvqlr6Mq9mlpZZvlawnT4JjO0+dScEZO44wF/kZ
+	 bg1RtVZYzIdbTzZ655NZ9kQqEmUdxeilnd/jNzq4OmqeSNSFInWKKadyN//22ETwG/
+	 FhOCvs1MZhrzA==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vCF6M-000000003Lh-0Car;
+	Fri, 24 Oct 2025 12:32:54 +0200
+Date: Fri, 24 Oct 2025 12:32:54 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Marco Felsch <m.felsch@pengutronix.de>
+Cc: Rob Herring <robh@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/3] USB-Serial serdev support
+Message-ID: <aPtV1qNu3aVrS4LS@hovoldconsulting.com>
+References: <20240807-v6-10-topic-usb-serial-serdev-v1-0-ed2cc5da591f@pengutronix.de>
+ <Zt7kCxawoszunWq3@hovoldconsulting.com>
+ <20240917044948.i2eog4ondf7vna7q@pengutronix.de>
+ <Z8_wcASfJ8SeAQ8l@hovoldconsulting.com>
+ <20250313194044.t2t3c7j6ktvshjhs@pengutronix.de>
+ <aPogbAozezmqSMuU@hovoldconsulting.com>
+ <20251023134828.2dzq2rhtjplqyyaj@pengutronix.de>
+ <aPs3BX9-og6wJIWR@hovoldconsulting.com>
+ <20251024092738.zao47ehvzckkrsf3@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,19 +71,84 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
+In-Reply-To: <20251024092738.zao47ehvzckkrsf3@pengutronix.de>
 
-Hi Rob,
+On Fri, Oct 24, 2025 at 11:27:38AM +0200, Marco Felsch wrote:
+> On 25-10-24, Johan Hovold wrote:
+> > On Thu, Oct 23, 2025 at 03:48:28PM +0200, Marco Felsch wrote:
+> > > On 25-10-23, Johan Hovold wrote:
+> > > > On Thu, Mar 13, 2025 at 08:40:44PM +0100, Marco Felsch wrote:
+> > > > > On 25-03-11, Johan Hovold wrote:
+> > > > > > On Tue, Sep 17, 2024 at 06:49:48AM +0200, Marco Felsch wrote:
+> > > > > > > On 24-09-09, Johan Hovold wrote:
 
-On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
-> Generally at most 1 blank line is the standard style for DT schema
-> files. Remove the few cases with more than 1 so that the yamllint check
-> for this can be enabled.
+> > It's still one of the issues that need to addressed.
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> Yes but this shouldn't be an issue with this patchset. So far the
+> smallest DT-describale USB entities are the interfaces.
 
-Acked-by: Andi Shyti <andi.shyti@kernel.org>
+It is an issue with this patchset since any binding for USB serdev will
+need to take both kind of devices into account. Period.
 
-Thanks,
-Andi
+> > > > > > > > Second, and more importantly, you do not address the main obstacle for
+> > > > > > > > enabling serdev for USB serial which is that the serdev cannot handle
+> > > > > > > > hotplugging.
+> > 
+> > > > You will also see the following kind of warnings in the logs:
+> > > > 
+> > > > ttyUSB ttyUSB0: tty_hangup: tty->count(1) != (#fd's(0) + #kopen's(0))
+> > > > ttyUSB ttyUSB0: tty_port_close_start: tty->count = 1 port count = 0
+> > > > 
+> > > > which are due to the fact that serdev does not support hangups which are
+> > > > used during teardown of USB serial ports.
+> > > 
+> > > IIRC I added the following patch to solve this:
+> > > 
+> > >  - [PATCH 1/3] serdev: ttyport: make use of tty_kopen_exclusive
+> > > 
+> > > Sorry for not remembering the details since this conversation/patchset
+> > > is quite old but still one of our top prios.
+> > 
+> > That suppresses the first warning but doesn't address the underlying
+> > issue (that hangups are built around file handles which serdev does not
+> > use). And you will still see the second one when the serdev driver tries
+> > to close the already hung up port during deregistration.
+> 
+> Can you please elaborate how I can check this? I'm not aware of any
+> warning yet, but I only tested the hot-(un)plug. If I got your right, I
+> should see the issue once I unload the serdev driver, right?
+
+You should see it in your test setup as well. Unless the bluetooth
+driver you use is doing something funky (e.g. not closing the port).
+
+I'm testing with a mock gnss device here.
+
+> > Also, that commit message needs to more work since you don't really
+> > motivate why you think it's needed (e.g. as serdev ports can't be shared
+> > with user space).
+> 
+> Maybe it needs some adaptions but:
+> 
+> | The purpose of serdev is to provide kernel drivers for particular serial
+> | device, serdev-ttyport is no exception here. Make use of the
+> | tty_kopen_exclusive() funciton to mark this tty device as kernel
+> | internal device.
+> 
+> the last sentence should address your point that serdev ports can't be
+> shared with user-space.A
+
+No, my point was that serdev devices *are* not shared with user space,
+you don't need to use that new kopen helper for that.
+
+> > If it's just about suppressing the warning you could possibly just have
+> > set that new flag.
+> 
+> Which new flag? As I have written in my commit message: "Make use of ...
+> to mark this tty device as kernel internal device". I thought this was
+> the purpose of tty_kopen_exclusive().
+
+That helper sets the new TTY_PORT_KOPENED flag which suppresses the
+warning on hangups.
+
+Johan
 
