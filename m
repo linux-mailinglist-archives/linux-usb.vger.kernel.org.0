@@ -1,60 +1,58 @@
-Return-Path: <linux-usb+bounces-29651-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29652-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DFEFC093C3
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 18:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 72522C096A7
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 18:25:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E1F74ED564
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 16:11:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5E01E500DED
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 16:16:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4EA83002A4;
-	Sat, 25 Oct 2025 16:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C96A3081CD;
+	Sat, 25 Oct 2025 16:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RbIO3vVa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WhbwK3q+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530AF1F1306;
-	Sat, 25 Oct 2025 16:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D1E305976;
+	Sat, 25 Oct 2025 16:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761408670; cv=none; b=Vkx9ObphSVSEri/JgWhnMWdrOvPBJd/uRIiVZtV5WqvqbZZWSmxaf2BgNkjzYPbXudhmI/7aeQqKaNEH2qjX2ktiEfkQQFqvIgWWEvwadspeTAamP12l4PiQj5ZmhSkW8tcMWFwOrAouspXMfNA4JU/1LtG+PVX1oyDW81vNKgA=
+	t=1761408898; cv=none; b=U9CXIPnnhafYpUa39FDJl2bAJpfBIoKNRPyfgDNmye2edSDGuczRDNjpI6Ycap5BflNjUOQIPgGIcqLLOBXUQNsk9K06MRMHiTH+YMYyGQSIJ/w4SK23XzUL8XKLaoPwoEgaazt8lLioxsmx/11W3LgePU3RbsNNrJS2wavbR6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761408670; c=relaxed/simple;
-	bh=7RPJS+YYBdHHkSkPg7nJLRvxjYkQoNcT5qFRStkQwPM=;
+	s=arc-20240116; t=1761408898; c=relaxed/simple;
+	bh=xLX1ufVd46T/Bd8jrT4KiLflV51OPQFbnAn09kIUJEQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XjbhQYhibFK8YAkOIAw63fgSRTbdLEDaC+bD+4B+HeRILK6jsauJmWYVVU0tTm/7mcoqCOfq5s1fsl6AJuHYLQXwfow87yoKjVtErHHArI72iv1tk64iisV258UQMixgqBU7qI4MhN/MNrPxZlwRXsnFYGmMaVbT7s0LVWtPe5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RbIO3vVa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B50FAC4CEFB;
-	Sat, 25 Oct 2025 16:11:08 +0000 (UTC)
+	 MIME-Version:Content-Type; b=PpYBy8vxzxUwTBOe3kxZLp4b8fgFlHIJyNYBuWTWu0PodJ8fxI6h1yc66N7KqBK94dN0iTqpPSqf530ewWKVt5aYCivUaNJkQn1BF78hRK/OiKsJAh2+9L7QBPDhu3e4zMHQcefHdNvzgQ9kbcDqOWbqSDM+CmDoGNMjDblJG0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WhbwK3q+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB85C113D0;
+	Sat, 25 Oct 2025 16:14:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761408669;
-	bh=7RPJS+YYBdHHkSkPg7nJLRvxjYkQoNcT5qFRStkQwPM=;
+	s=k20201202; t=1761408897;
+	bh=xLX1ufVd46T/Bd8jrT4KiLflV51OPQFbnAn09kIUJEQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RbIO3vVaZRGtvaTtmlLj0YCRABRwwCmvFM3WFsB1GBjl5hrN0xiNUDjLFjgduP+9+
-	 zWlMOKUguLU7XyqzYU4n69AWlWeRMt7n5/9PRgBTiQyih8Vy4vJBaTnApn9nOlD+UR
-	 SWBOWLDcoOA7wiWkuVzFJySulz0dEg0nj52gmKrPOeG7NCCIfTxzUpE2QWcsc24cHU
-	 DtaG9glLoprAxsbAMilBj8iZrCneF9TjMQ4zjJ8P1YYVTQRZ2Kf55CZfbWXSGIh6FS
-	 5kvgK8zFHBoJ538BntW9Fw8rSUfz1IbregtX6YD0CEFIkVbp6sYzKvcBWhJURMJNS0
-	 EI50HoqjujPAw==
+	b=WhbwK3q+lIyvs9+C5lZAC1ryar1xi7MjkFAQktaeA3ZVN2OTzSDRmxtVfEK7aRfH9
+	 DlJY5mBYnh+bYiE8g4l1vJtY10iYnfDoOI/8bqlY371h/99uo7/5dmyqBi7Pw8k1vg
+	 WmGe9chhI6vJtRm1hjuufagwQlLbNhBQSe2/Bm5e5ifFV4PJaYcu7VhTcrA4OEWpQU
+	 wyLSrebXGxXZpkYyc4KFoWy+qwo5lHxWGBamB56tmq2nc1vlwUtq4lTwBJBTLxLZer
+	 Ts07wdYSRd2eqXhbM6edvxk4HyPB+YoTkyfZGjkfTqcrR7OyK/zdUcU3qOgJRP2U+l
+	 0idSiFU6vItpA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
-	Nick Nielsen <nick.kainielsen@free.fr>,
-	grm1 <grm1@mailbox.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>,
+	Jiri Kosina <jkosina@suse.com>,
 	Sasha Levin <sashal@kernel.org>,
-	mathias.nyman@intel.com,
+	jikos@kernel.org,
+	bentiss@kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.17-6.12] usb: xhci-pci: add support for hosts with zero USB3 ports
-Date: Sat, 25 Oct 2025 11:54:27 -0400
-Message-ID: <20251025160905.3857885-36-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.17-6.12] HID: pidff: PERMISSIVE_CONTROL quirk autodetection
+Date: Sat, 25 Oct 2025 11:55:52 -0400
+Message-ID: <20251025160905.3857885-121-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251025160905.3857885-1-sashal@kernel.org>
 References: <20251025160905.3857885-1-sashal@kernel.org>
@@ -64,140 +62,136 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.17.5
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Niklas Neronin <niklas.neronin@linux.intel.com>
+From: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
 
-[ Upstream commit 719de070f764e079cdcb4ddeeb5b19b3ddddf9c1 ]
+[ Upstream commit c2dc9f0b368c08c34674311cf78407718d5715a7 ]
 
-Add xhci support for PCI hosts that have zero USB3 ports.
-Avoid creating a shared Host Controller Driver (HCD) when there is only
-one root hub. Additionally, all references to 'xhci->shared_hcd' are now
-checked before use.
+Fixes force feedback for devices built with MMOS firmware and many more
+not yet detected devices.
 
-Only xhci-pci.c requires modification to accommodate this change, as the
-xhci core already supports configurations with zero USB3 ports. This
-capability was introduced when xHCI Platform and MediaTek added support
-for zero USB3 ports.
+Update quirks mask debug message to always contain all 32 bits of data.
 
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220181
-Tested-by: Nick Nielsen <nick.kainielsen@free.fr>
-Tested-by: grm1 <grm1@mailbox.org>
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20250917210726.97100-4-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-YES — this change is a focused bugfix that lets PCI xHCI controllers
-with only a single root hub enumerate correctly, matching support
-already present in the core and other host adapters.
+YES
 
-- `drivers/usb/host/xhci-pci.c:640` now sets `xhci->allow_single_roothub
-  = 1`, allowing the existing `xhci_has_one_roothub()` helper to
-  recognize hosts that genuinely provide only USB2 or only USB3 ports.
-  For such hardware the new branch at `drivers/usb/host/xhci-
-  pci.c:641-659` skips creating the secondary HCD and still runs
-  `xhci_ext_cap_init()`, preventing the allocation/registration of a
-  useless SuperSpeed root hub that currently causes probe failures on
-  the systems reported in bug 220181.
-- Stream capability handling switches to `xhci_get_usb3_hcd()` at
-  `drivers/usb/host/xhci-pci.c:662-664`, so the code safely handles both
-  the traditional dual-root-hub case and the new single-root-hub case
-  without dereferencing a NULL `shared_hcd`.
-- The xHCI core has supported “single-roothub” controllers since commit
-  873f323618c2 (see the helper definitions in
-  `drivers/usb/host/xhci.h:1659-1737`), and platform drivers already
-  rely on the same pattern (`drivers/usb/host/xhci-plat.c:207` and
-  `drivers/usb/host/xhci-mtk.c:629-655`). This patch simply brings the
-  PCI glue in line with that infrastructure, so it has no architectural
-  side effects.
-- Scope is limited to the PCI front-end; it doesn’t alter shared data
-  structures or other subsystems. Tested-by tags and the fact that the
-  alternative drivers have run this logic for multiple release cycles
-  further reduce regression risk. Backporters only need to ensure the
-  target stable branch already contains the earlier
-  “allow_single_roothub” support (present in 6.1+). If that prerequisite
-  is met, the change is small, self-contained, and fixes real hardware
-  breakage.
+Why this is a good stable backport
+- Fixes real user-visible breakage: enables force feedback on devices
+  with MMOS firmware and other devices misreporting PID_DEVICE_CONTROL’s
+  logical_minimum (previously failed to initialize FF).
+- Small, contained change in HID PID FF driver; no architectural changes
+  or cross‑subsystem impacts.
+- Risk is low: the new behavior only relaxes a check if the strict path
+  fails, and only for the specific Device Control field; otherwise
+  behavior remains identical.
+- Improves diagnostics (full 32‑bit quirks mask) without functional side
+  effects.
+- Aligns with stable rules: important bugfix, minimal risk, confined to
+  HID/PIDFF.
 
-Natural next steps: 1) cherry-pick (plus prerequisite check) into the
-relevant stable trees; 2) rerun basic USB enumeration on affected
-hardware to confirm the controller now probes successfully.
+What changes, concretely
+- Autodetect and set PERMISSIVE_CONTROL only when needed:
+  - Before: Device Control lookup was strict unless the quirk was pre-
+    specified (e.g., via device ID). If logical_minimum != 1, driver
+    failed with “device control field not found”.
+  - After: Try strict lookup first; if not found, set
+    `HID_PIDFF_QUIRK_PERMISSIVE_CONTROL` and retry without enforcing
+    min==1. This allows devices with non‑conforming descriptors to work
+    without hardcoding IDs.
+- Debug formatting improvement: print all 32 bits of the quirks mask.
 
- drivers/usb/host/xhci-pci.c | 42 +++++++++++++++++++++----------------
- 1 file changed, 24 insertions(+), 18 deletions(-)
+Relevant code references (current tree)
+- Device Control lookup currently enforces min==1 unless the quirk is
+  already set:
+  - drivers/hid/usbhid/hid-pidff.c:1135
+    - `pidff->device_control = pidff_find_special_field(...,
+      PID_DEVICE_CONTROL_ARRAY, !(pidff->quirks &
+      HID_PIDFF_QUIRK_PERMISSIVE_CONTROL));`
+  - The change will:
+    - First call with `enforce_min=1`, then if null:
+      - `pr_debug("Setting PERMISSIVE_CONTROL quirk");`
+      - `pidff->quirks |= HID_PIDFF_QUIRK_PERMISSIVE_CONTROL;`
+      - Retry with `enforce_min=0`.
+  - Safety: If the usage isn’t present at all, the second lookup still
+    returns NULL and the function returns error exactly as before.
+- Quirk definition already exists:
+  - drivers/hid/usbhid/hid-pidff.h:16
+    - `#define HID_PIDFF_QUIRK_PERMISSIVE_CONTROL BIT(2)`
+- Quirks debug formatting to widen to 8 hex digits:
+  - drivers/hid/usbhid/hid-pidff.c:1477
+    - Currently: `hid_dbg(dev, "Active quirks mask: 0x%x\n",
+      pidff->quirks);`
+    - Change to: `0x%08x` (formatting only, no logic impact).
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 00fac8b233d2a..5c8ab519f497d 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -610,7 +610,7 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
- {
- 	int retval;
- 	struct xhci_hcd *xhci;
--	struct usb_hcd *hcd;
-+	struct usb_hcd *hcd, *usb3_hcd;
- 	struct reset_control *reset;
- 
- 	reset = devm_reset_control_get_optional_exclusive(&dev->dev, NULL);
-@@ -636,26 +636,32 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	hcd = dev_get_drvdata(&dev->dev);
- 	xhci = hcd_to_xhci(hcd);
- 	xhci->reset = reset;
--	xhci->shared_hcd = usb_create_shared_hcd(&xhci_pci_hc_driver, &dev->dev,
--						 pci_name(dev), hcd);
--	if (!xhci->shared_hcd) {
--		retval = -ENOMEM;
--		goto dealloc_usb2_hcd;
--	}
- 
--	retval = xhci_ext_cap_init(xhci);
--	if (retval)
--		goto put_usb3_hcd;
-+	xhci->allow_single_roothub = 1;
-+	if (!xhci_has_one_roothub(xhci)) {
-+		xhci->shared_hcd = usb_create_shared_hcd(&xhci_pci_hc_driver, &dev->dev,
-+							 pci_name(dev), hcd);
-+		if (!xhci->shared_hcd) {
-+			retval = -ENOMEM;
-+			goto dealloc_usb2_hcd;
-+		}
- 
--	retval = usb_add_hcd(xhci->shared_hcd, dev->irq,
--			IRQF_SHARED);
--	if (retval)
--		goto put_usb3_hcd;
--	/* Roothub already marked as USB 3.0 speed */
-+		retval = xhci_ext_cap_init(xhci);
-+		if (retval)
-+			goto put_usb3_hcd;
+Compatibility and dependencies
+- Depends on the existing quirk bit and infrastructure (already present
+  since “HID: pidff: Add PERMISSIVE_CONTROL quirk”; this is in-tree with
+  Signed-off-by: Sasha Levin, so it has been flowing into stable).
+- Interacts safely with the more recent fix to Device Control handling:
+  - “HID: pidff: Fix set_device_control()” ensures correct 1‑based
+    indexing and guards against missing fields; the autodetection does
+    not invalidate those fixes.
+
+Regression risk assessment
+- Previously working devices (strict path succeeds) are unchanged.
+- Previously non-working devices (strict path fails) now work via a
+  guarded fallback; without the usage present, behavior remains
+  identical (fail).
+- The quirk only changes acceptance of the Device Control field; no
+  other code paths are altered.
+
+Conclusion
+- This is a targeted, low-risk fix that unlocks FF functionality for a
+  notable set of devices without broad side effects. It’s well-suited
+  for backporting to stable trees that already carry the
+  PERMISSIVE_CONTROL quirk.
+
+ drivers/hid/usbhid/hid-pidff.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
+index c6b4f61e535d5..711eefff853bb 100644
+--- a/drivers/hid/usbhid/hid-pidff.c
++++ b/drivers/hid/usbhid/hid-pidff.c
+@@ -1151,8 +1151,16 @@ static int pidff_find_special_fields(struct pidff_device *pidff)
+ 					 PID_DIRECTION, 0);
+ 	pidff->device_control =
+ 		pidff_find_special_field(pidff->reports[PID_DEVICE_CONTROL],
+-			PID_DEVICE_CONTROL_ARRAY,
+-			!(pidff->quirks & HID_PIDFF_QUIRK_PERMISSIVE_CONTROL));
++			PID_DEVICE_CONTROL_ARRAY, 1);
 +
-+		retval = usb_add_hcd(xhci->shared_hcd, dev->irq, IRQF_SHARED);
-+		if (retval)
-+			goto put_usb3_hcd;
-+	} else {
-+		retval = xhci_ext_cap_init(xhci);
-+		if (retval)
-+			goto dealloc_usb2_hcd;
++	/* Detect and set permissive control quirk */
++	if (!pidff->device_control) {
++		pr_debug("Setting PERMISSIVE_CONTROL quirk\n");
++		pidff->quirks |= HID_PIDFF_QUIRK_PERMISSIVE_CONTROL;
++		pidff->device_control = pidff_find_special_field(
++			pidff->reports[PID_DEVICE_CONTROL],
++			PID_DEVICE_CONTROL_ARRAY, 0);
 +	}
  
--	if (!(xhci->quirks & XHCI_BROKEN_STREAMS) &&
--			HCC_MAX_PSA(xhci->hcc_params) >= 4)
--		xhci->shared_hcd->can_do_streams = 1;
-+	usb3_hcd = xhci_get_usb3_hcd(xhci);
-+	if (usb3_hcd && !(xhci->quirks & XHCI_BROKEN_STREAMS) && HCC_MAX_PSA(xhci->hcc_params) >= 4)
-+		usb3_hcd->can_do_streams = 1;
+ 	pidff->block_load_status =
+ 		pidff_find_special_field(pidff->reports[PID_BLOCK_LOAD],
+@@ -1492,7 +1500,7 @@ int hid_pidff_init_with_quirks(struct hid_device *hid, u32 initial_quirks)
+ 	ff->playback = pidff_playback;
  
- 	/* USB-2 and USB-3 roothubs initialized, allow runtime pm suspend */
- 	pm_runtime_put_noidle(&dev->dev);
+ 	hid_info(dev, "Force feedback for USB HID PID devices by Anssi Hannula <anssi.hannula@gmail.com>\n");
+-	hid_dbg(dev, "Active quirks mask: 0x%x\n", pidff->quirks);
++	hid_dbg(dev, "Active quirks mask: 0x%08x\n", pidff->quirks);
+ 
+ 	hid_device_io_stop(hid);
+ 
 -- 
 2.51.0
 
