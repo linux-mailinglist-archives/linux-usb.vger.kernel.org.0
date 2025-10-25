@@ -1,58 +1,57 @@
-Return-Path: <linux-usb+bounces-29652-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29653-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72522C096A7
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 18:25:34 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFBC0C094B4
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 18:18:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5E01E500DED
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 16:16:59 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 73319349BD2
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 16:18:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C96A3081CD;
-	Sat, 25 Oct 2025 16:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6C83090CA;
+	Sat, 25 Oct 2025 16:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WhbwK3q+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eVYaZ+aZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D1E305976;
-	Sat, 25 Oct 2025 16:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915DA3043D4;
+	Sat, 25 Oct 2025 16:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761408898; cv=none; b=U9CXIPnnhafYpUa39FDJl2bAJpfBIoKNRPyfgDNmye2edSDGuczRDNjpI6Ycap5BflNjUOQIPgGIcqLLOBXUQNsk9K06MRMHiTH+YMYyGQSIJ/w4SK23XzUL8XKLaoPwoEgaazt8lLioxsmx/11W3LgePU3RbsNNrJS2wavbR6s=
+	t=1761408949; cv=none; b=Kf5QtYcbScP0VkfYH1PiiDlxNvEI/+my1n2+b+H8sNGgd94HKX1/ZAYApA7TMVW4EHq1UYCTh9yZUOA8rCigenOBTJySmhA9w+hHJl9FRPvi7LlqZ8+tY4U5QlHFs3Alax99yr7FS2536W00BWgBCBABzg3OZGE/UY0MpFeFAF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761408898; c=relaxed/simple;
-	bh=xLX1ufVd46T/Bd8jrT4KiLflV51OPQFbnAn09kIUJEQ=;
+	s=arc-20240116; t=1761408949; c=relaxed/simple;
+	bh=KbleRv2enS7SAoCobkifY4ua5pnyvJthEK1Cru43yoI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PpYBy8vxzxUwTBOe3kxZLp4b8fgFlHIJyNYBuWTWu0PodJ8fxI6h1yc66N7KqBK94dN0iTqpPSqf530ewWKVt5aYCivUaNJkQn1BF78hRK/OiKsJAh2+9L7QBPDhu3e4zMHQcefHdNvzgQ9kbcDqOWbqSDM+CmDoGNMjDblJG0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WhbwK3q+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB85C113D0;
-	Sat, 25 Oct 2025 16:14:56 +0000 (UTC)
+	 MIME-Version:Content-Type; b=XsoiBTfoMenR0QvAPkqH1j87OuZ5wYn1EIjED/6eQl81v6REptWuNCRuIma4ndlNSBKB3A8RhYzIqA+XgSFK0Hl2tTXP5QqTldH2DUcFLrxK8KfF1bat8HxeC+lFgo8KhNkkBfaWxtPr6MucYXaZCKaL3HQJxwXayIkDC72siyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eVYaZ+aZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D94AC4CEFB;
+	Sat, 25 Oct 2025 16:15:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761408897;
-	bh=xLX1ufVd46T/Bd8jrT4KiLflV51OPQFbnAn09kIUJEQ=;
+	s=k20201202; t=1761408949;
+	bh=KbleRv2enS7SAoCobkifY4ua5pnyvJthEK1Cru43yoI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WhbwK3q+lIyvs9+C5lZAC1ryar1xi7MjkFAQktaeA3ZVN2OTzSDRmxtVfEK7aRfH9
-	 DlJY5mBYnh+bYiE8g4l1vJtY10iYnfDoOI/8bqlY371h/99uo7/5dmyqBi7Pw8k1vg
-	 WmGe9chhI6vJtRm1hjuufagwQlLbNhBQSe2/Bm5e5ifFV4PJaYcu7VhTcrA4OEWpQU
-	 wyLSrebXGxXZpkYyc4KFoWy+qwo5lHxWGBamB56tmq2nc1vlwUtq4lTwBJBTLxLZer
-	 Ts07wdYSRd2eqXhbM6edvxk4HyPB+YoTkyfZGjkfTqcrR7OyK/zdUcU3qOgJRP2U+l
-	 0idSiFU6vItpA==
+	b=eVYaZ+aZewNy/hdKDleie7QiqO2byW41GsG0jTbswh4goFvae4AxhPgxPqHLHOOok
+	 3r4hi7jPamklgCZbmmE6MsxB6/RunHS4D3SL7HLHuMKwhlomkZnHjBRA3lb3v2j7bP
+	 uExa2C5DhYZyRrK4Tfs12wHiFygEVE/wR/3MF4HaxuQLp9mkuc7yVLvMEyrjxo0Hog
+	 QhyHxtBAVLLgWM/54nTLjJIQL3AALGo2nrr1mmtX4jtkcc9yi0rzBtjMiSLUdDe/4h
+	 vpAMJNzbl6xgf0qhpekWZyEBhMna7MW7eclDWv4LX4QQZWjgpb08RumRxWsfAUgJfz
+	 eTCZmbKvVfL+g==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>,
-	Jiri Kosina <jkosina@suse.com>,
+Cc: Chen Yufeng <chenyufeng@iie.ac.cn>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	jikos@kernel.org,
-	bentiss@kernel.org,
+	pawell@cadence.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.17-6.12] HID: pidff: PERMISSIVE_CONTROL quirk autodetection
-Date: Sat, 25 Oct 2025 11:55:52 -0400
-Message-ID: <20251025160905.3857885-121-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.17-5.15] usb: cdns3: gadget: Use-after-free during failed initialization and exit of cdnsp gadget
+Date: Sat, 25 Oct 2025 11:56:17 -0400
+Message-ID: <20251025160905.3857885-146-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251025160905.3857885-1-sashal@kernel.org>
 References: <20251025160905.3857885-1-sashal@kernel.org>
@@ -62,23 +61,33 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.17.5
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
+From: Chen Yufeng <chenyufeng@iie.ac.cn>
 
-[ Upstream commit c2dc9f0b368c08c34674311cf78407718d5715a7 ]
+[ Upstream commit 87c5ff5615dc0a37167e8faf3adeeddc6f1344a3 ]
 
-Fixes force feedback for devices built with MMOS firmware and many more
-not yet detected devices.
+In the __cdnsp_gadget_init() and cdnsp_gadget_exit() functions, the gadget
+structure (pdev->gadget) was freed before its endpoints.
+The endpoints are linked via the ep_list in the gadget structure.
+Freeing the gadget first leaves dangling pointers in the endpoint list.
+When the endpoints are subsequently freed, this results in a use-after-free.
 
-Update quirks mask debug message to always contain all 32 bits of data.
+Fix:
+By separating the usb_del_gadget_udc() operation into distinct "del" and
+"put" steps, cdnsp_gadget_free_endpoints() can be executed prior to the
+final release of the gadget structure with usb_put_gadget().
 
-Signed-off-by: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.com>
+A patch similar to bb9c74a5bd14("usb: dwc3: gadget: Free gadget structure
+ only after freeing endpoints").
+
+Signed-off-by: Chen Yufeng <chenyufeng@iie.ac.cn>
+Link: https://lore.kernel.org/r/20250905094842.1232-1-chenyufeng@iie.ac.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
@@ -86,112 +95,92 @@ LLM Generated explanations, may be completely bogus:
 
 YES
 
-Why this is a good stable backport
-- Fixes real user-visible breakage: enables force feedback on devices
-  with MMOS firmware and other devices misreporting PID_DEVICE_CONTROL’s
-  logical_minimum (previously failed to initialize FF).
-- Small, contained change in HID PID FF driver; no architectural changes
-  or cross‑subsystem impacts.
-- Risk is low: the new behavior only relaxes a check if the strict path
-  fails, and only for the specific Device Control field; otherwise
-  behavior remains identical.
-- Improves diagnostics (full 32‑bit quirks mask) without functional side
-  effects.
-- Aligns with stable rules: important bugfix, minimal risk, confined to
-  HID/PIDFF.
+- Fixes a real bug (use-after-free) that can crash or corrupt memory
+  during error paths and driver removal, affecting users of the Cadence
+  cdnsp gadget driver.
+- Root cause: endpoints are linked via `gadget.ep_list`, so freeing the
+  gadget before removing endpoints leaves dangling list pointers.
+  `cdnsp_gadget_free_endpoints()` manipulates `pdev->gadget.ep_list`; if
+  the gadget is already freed, this is a UAF.
+  - Endpoint teardown iterates and removes from the gadget’s endpoint
+    list: `drivers/usb/cdns3/cdnsp-gadget.c:1725`.
+- Precise failure points addressed:
+  - In `__cdnsp_gadget_init()`, if `devm_request_threaded_irq()` fails,
+    the old path did `usb_del_gadget_udc()` and then
+    `cdnsp_gadget_free_endpoints()`, risking UAF. The patch splits the
+    del/put so endpoints are freed while the gadget is still alive:
+    - Function start: `drivers/usb/cdns3/cdnsp-gadget.c:1900`
+    - UDC registration: `drivers/usb/cdns3/cdnsp-gadget.c:1963`
+    - New error path ordering: `del_gadget:` →
+      `usb_del_gadget(&pdev->gadget);` →
+      `cdnsp_gadget_free_endpoints(pdev);` →
+      `usb_put_gadget(&pdev->gadget);` → `goto halt_pdev;` at
+      `drivers/usb/cdns3/cdnsp-gadget.c:1978`
+  - In `cdnsp_gadget_exit()`, the old sequence similarly freed the
+    gadget before endpoints. The patch changes it to:
+    - Function start: `drivers/usb/cdns3/cdnsp-gadget.c:1997`
+    - New order: `usb_del_gadget(&pdev->gadget);` →
+      `cdnsp_gadget_free_endpoints(pdev);` →
+      `usb_put_gadget(&pdev->gadget);` at `drivers/usb/cdns3/cdnsp-
+      gadget.c:2001` and `:2005`.
+- The change is minimal, localized, and follows established core UDC API
+  semantics:
+  - `usb_del_gadget_udc()` is literally `usb_del_gadget()` +
+    `usb_put_gadget()` (so splitting is functionally correct and
+    intended): `drivers/usb/gadget/udc/core.c:1560`.
+  - `usb_del_gadget()` unregisters the gadget without final put:
+    `drivers/usb/gadget/udc/core.c:1531`.
+  - `usb_put_gadget()` is the final put (inline):
+    `include/linux/usb/gadget.h:500`.
+- The fix mirrors the proven pattern already used by other gadget
+  drivers (e.g., DWC3): `usb_del_gadget();` → free endpoints →
+  `usb_put_gadget();` in `drivers/usb/dwc3/gadget.c:4816`.
+- No architectural changes, no new features, and no ABI impacts. It only
+  touches cdnsp gadget teardown and error paths.
+- Regression risk is low:
+  - Releases UDC before endpoint list manipulation (prevents new
+    activity), but keeps the gadget object alive until endpoints are
+    freed.
+  - Adds `goto halt_pdev` from the `del_gadget` path to avoid double-
+    freeing endpoints; other error paths remain balanced and consistent.
+- Security/stability relevance: UAFs are both reliability and potential
+  security issues; fixing them is strongly aligned with stable policy.
 
-What changes, concretely
-- Autodetect and set PERMISSIVE_CONTROL only when needed:
-  - Before: Device Control lookup was strict unless the quirk was pre-
-    specified (e.g., via device ID). If logical_minimum != 1, driver
-    failed with “device control field not found”.
-  - After: Try strict lookup first; if not found, set
-    `HID_PIDFF_QUIRK_PERMISSIVE_CONTROL` and retry without enforcing
-    min==1. This allows devices with non‑conforming descriptors to work
-    without hardcoding IDs.
-- Debug formatting improvement: print all 32 bits of the quirks mask.
+Given the clear bugfix nature, small and contained changes, and
+alignment with core and peer driver patterns, this is a strong candidate
+for backporting to all stable trees that contain the cdnsp gadget
+driver.
 
-Relevant code references (current tree)
-- Device Control lookup currently enforces min==1 unless the quirk is
-  already set:
-  - drivers/hid/usbhid/hid-pidff.c:1135
-    - `pidff->device_control = pidff_find_special_field(...,
-      PID_DEVICE_CONTROL_ARRAY, !(pidff->quirks &
-      HID_PIDFF_QUIRK_PERMISSIVE_CONTROL));`
-  - The change will:
-    - First call with `enforce_min=1`, then if null:
-      - `pr_debug("Setting PERMISSIVE_CONTROL quirk");`
-      - `pidff->quirks |= HID_PIDFF_QUIRK_PERMISSIVE_CONTROL;`
-      - Retry with `enforce_min=0`.
-  - Safety: If the usage isn’t present at all, the second lookup still
-    returns NULL and the function returns error exactly as before.
-- Quirk definition already exists:
-  - drivers/hid/usbhid/hid-pidff.h:16
-    - `#define HID_PIDFF_QUIRK_PERMISSIVE_CONTROL BIT(2)`
-- Quirks debug formatting to widen to 8 hex digits:
-  - drivers/hid/usbhid/hid-pidff.c:1477
-    - Currently: `hid_dbg(dev, "Active quirks mask: 0x%x\n",
-      pidff->quirks);`
-    - Change to: `0x%08x` (formatting only, no logic impact).
+ drivers/usb/cdns3/cdnsp-gadget.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Compatibility and dependencies
-- Depends on the existing quirk bit and infrastructure (already present
-  since “HID: pidff: Add PERMISSIVE_CONTROL quirk”; this is in-tree with
-  Signed-off-by: Sasha Levin, so it has been flowing into stable).
-- Interacts safely with the more recent fix to Device Control handling:
-  - “HID: pidff: Fix set_device_control()” ensures correct 1‑based
-    indexing and guards against missing fields; the autodetection does
-    not invalidate those fixes.
-
-Regression risk assessment
-- Previously working devices (strict path succeeds) are unchanged.
-- Previously non-working devices (strict path fails) now work via a
-  guarded fallback; without the usage present, behavior remains
-  identical (fail).
-- The quirk only changes acceptance of the Device Control field; no
-  other code paths are altered.
-
-Conclusion
-- This is a targeted, low-risk fix that unlocks FF functionality for a
-  notable set of devices without broad side effects. It’s well-suited
-  for backporting to stable trees that already carry the
-  PERMISSIVE_CONTROL quirk.
-
- drivers/hid/usbhid/hid-pidff.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
-index c6b4f61e535d5..711eefff853bb 100644
---- a/drivers/hid/usbhid/hid-pidff.c
-+++ b/drivers/hid/usbhid/hid-pidff.c
-@@ -1151,8 +1151,16 @@ static int pidff_find_special_fields(struct pidff_device *pidff)
- 					 PID_DIRECTION, 0);
- 	pidff->device_control =
- 		pidff_find_special_field(pidff->reports[PID_DEVICE_CONTROL],
--			PID_DEVICE_CONTROL_ARRAY,
--			!(pidff->quirks & HID_PIDFF_QUIRK_PERMISSIVE_CONTROL));
-+			PID_DEVICE_CONTROL_ARRAY, 1);
-+
-+	/* Detect and set permissive control quirk */
-+	if (!pidff->device_control) {
-+		pr_debug("Setting PERMISSIVE_CONTROL quirk\n");
-+		pidff->quirks |= HID_PIDFF_QUIRK_PERMISSIVE_CONTROL;
-+		pidff->device_control = pidff_find_special_field(
-+			pidff->reports[PID_DEVICE_CONTROL],
-+			PID_DEVICE_CONTROL_ARRAY, 0);
-+	}
+diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+index 55f95f41b3b4d..0252560cbc80b 100644
+--- a/drivers/usb/cdns3/cdnsp-gadget.c
++++ b/drivers/usb/cdns3/cdnsp-gadget.c
+@@ -1976,7 +1976,10 @@ static int __cdnsp_gadget_init(struct cdns *cdns)
+ 	return 0;
  
- 	pidff->block_load_status =
- 		pidff_find_special_field(pidff->reports[PID_BLOCK_LOAD],
-@@ -1492,7 +1500,7 @@ int hid_pidff_init_with_quirks(struct hid_device *hid, u32 initial_quirks)
- 	ff->playback = pidff_playback;
- 
- 	hid_info(dev, "Force feedback for USB HID PID devices by Anssi Hannula <anssi.hannula@gmail.com>\n");
--	hid_dbg(dev, "Active quirks mask: 0x%x\n", pidff->quirks);
-+	hid_dbg(dev, "Active quirks mask: 0x%08x\n", pidff->quirks);
- 
- 	hid_device_io_stop(hid);
- 
+ del_gadget:
+-	usb_del_gadget_udc(&pdev->gadget);
++	usb_del_gadget(&pdev->gadget);
++	cdnsp_gadget_free_endpoints(pdev);
++	usb_put_gadget(&pdev->gadget);
++	goto halt_pdev;
+ free_endpoints:
+ 	cdnsp_gadget_free_endpoints(pdev);
+ halt_pdev:
+@@ -1998,8 +2001,9 @@ static void cdnsp_gadget_exit(struct cdns *cdns)
+ 	devm_free_irq(pdev->dev, cdns->dev_irq, pdev);
+ 	pm_runtime_mark_last_busy(cdns->dev);
+ 	pm_runtime_put_autosuspend(cdns->dev);
+-	usb_del_gadget_udc(&pdev->gadget);
++	usb_del_gadget(&pdev->gadget);
+ 	cdnsp_gadget_free_endpoints(pdev);
++	usb_put_gadget(&pdev->gadget);
+ 	cdnsp_mem_cleanup(pdev);
+ 	kfree(pdev);
+ 	cdns->gadget_dev = NULL;
 -- 
 2.51.0
 
