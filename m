@@ -1,219 +1,133 @@
-Return-Path: <linux-usb+bounces-29656-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29657-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF4CDC099AE
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 18:40:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A92EC09CFE
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 19:01:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2AE604F80A2
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 16:29:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 152B4580960
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 16:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1C23126C7;
-	Sat, 25 Oct 2025 16:22:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998BC21E087;
+	Sat, 25 Oct 2025 16:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ed/LLqH1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B1yD3BpW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B1C30C60F;
-	Sat, 25 Oct 2025 16:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68910224AEB
+	for <linux-usb@vger.kernel.org>; Sat, 25 Oct 2025 16:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761409366; cv=none; b=RI5yCVZwsa8KI0uMjua14rd7EEDDDT6QbfZk+6loMN6GJiAVJAmuXdhM3mohBS4HgTQ6On0zv1OQSX3OizQkeXje4nPRkdXLkBdRIJi03qDylh3j1BNdNfcQEfX5cxfRc0IMbYN1MzuNaBTy8ehPHgkeaF2Hd28aiVzefFEx2So=
+	t=1761410869; cv=none; b=amOCuPtWrOSs8LNR4sVq++RkPuOVuVFLGsDrD3DZ1LNP5s6zykoz7QpsqWUGekFld6JkAZniYV7Vtgh61RzRxAI8Flymph/pfI415qed5nX26S2VrBU9DT2Ngy8uMIw9/GMSqokoPO8gMMu2Of7jf977VrMDnb7FAQpp6mjHpUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761409366; c=relaxed/simple;
-	bh=MglaqMgclKgb3tY/AIWiioH0+xEeNgjXGS9apwIC3H0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=P1J06r5ESpL26ammt3t+Qhq6pEqtybwlfvebWw4BRRzYBVpSNeZGs5AJWc1mRCLfOZ25SItAcvH3pnhY/2ordg7VFqngt7DnWMa0r9eVIXf7cp3kUF0VRSt0zhYJilWtbA0XvcyUjXiAZpoByHxcl9iWuZ5YQt5RvNfI5QgaPNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ed/LLqH1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834BAC116C6;
-	Sat, 25 Oct 2025 16:22:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761409366;
-	bh=MglaqMgclKgb3tY/AIWiioH0+xEeNgjXGS9apwIC3H0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ed/LLqH1lU1EjGZaLC5aCvYCIVrR8S+5BhGRza2blLTmYGRpBtESH3uZsz4YHFo/Y
-	 eLMDJ3OTK3qJA4XSj5FAKVK5imGz6TQDETJjH1J5b+6SMNAp/ukOIgat6+gQr5V1dh
-	 GWiqGYBTuXzNvciNjinIvAtU9mUI8m+05r8ReqtY4344zO4pmk1Jp2D322rqxa3n/f
-	 6UIbkioQVUpj4VUHdl6N2WLmIBP+YFKG90KfEc96bhRSb8A+ZgrPuP8Cg507I5PYBX
-	 PI6K6KZPNucy3blFZF9lsO7/3pdJyUgAFjLTyxFa+b33AbQ3KyXJmQ8NCOi74qhCMu
-	 X72FEsBF58zNw==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Lukas Wunner <lukas@wunner.de>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Sasha Levin <sashal@kernel.org>,
-	andreas.noever@gmail.com,
-	westeri@kernel.org,
-	YehezkelShB@gmail.com,
-	linux-pci@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.17-5.15] thunderbolt: Use is_pciehp instead of is_hotplug_bridge
-Date: Sat, 25 Oct 2025 11:58:43 -0400
-Message-ID: <20251025160905.3857885-292-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251025160905.3857885-1-sashal@kernel.org>
+	s=arc-20240116; t=1761410869; c=relaxed/simple;
+	bh=MjmsUVHr6NMRcRBnZl5oyGiiFbM8seOg1onkjxTlhSs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fPb/ZI2Pck7MieV/hK5IJ+KtWpwPWFBOHVJrxZsrv1E10vFTouha1UJU5X6ogZ35bleCXJiRZtLQ1Ax6GNLQzwRzbpi3+raKejD3mUPoSpkV63eK6yzNuNxFZQs9jTdHpBPfP7ogo335ivKVfQt7ua1La53TctT+Sy47nzg1rtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B1yD3BpW; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-592f29e273bso2969593e87.0
+        for <linux-usb@vger.kernel.org>; Sat, 25 Oct 2025 09:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761410865; x=1762015665; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zdq0pmLhJNTjhaDx3mb1Ru2H4viWHvHrb5MIRLM0trs=;
+        b=B1yD3BpWREInVsoFWsNdd5FGmLjZwzxHjQdIIkLxolP3DlslDdB9sZ9MPH0kwpFWkd
+         brwj1foCqFmcIWk3XYrWu2N89e3zOuOpSpKforui6TqHj/+iRPujvFEGxhs4k9jcem3n
+         asCwX8eWnl7FNs8muY8GJ/VDC0a5VzF2KJ/lqnR1/czbTMAj0sCWhg0uJA5oKnnlFYBT
+         0S6D1zuiU7ZdhNehW7h2hdTTEUklak06QYn0FN6Mk1dhby89zV8/fVHZWB6dGLb4aUNO
+         5bPJX6LYBHqF+HJN+dm2iLVhAsNsGxc5rKbyfn26CK5NYo8M5mkIlvdx0YTe9W6C7RH3
+         DL6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761410865; x=1762015665;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zdq0pmLhJNTjhaDx3mb1Ru2H4viWHvHrb5MIRLM0trs=;
+        b=YAFkld1dxfePGJaNJ+to+V0QwLLFBG5kv3NT9LS5O/vHMVSagF7GauDqmS2++NAt7p
+         MgOiVHTUO5w4XD/GfGQT/f+mkOYIFxGgKOGM0GnzVLdKeIoOdWxFvFRYCKmjf0oicK7r
+         jm+iGqvu0+6iPPrC90Ma2TC4E0xyf3ZVFtFwvNZ3Lnbu6a6LYuBp94oZKX1yJTzFqRpT
+         GvddV5TUZfwnSSzF+6AAeKiEzEdvgRc3uDUwW9p2S/lA5Oo+DaG8TQXz2bCbN3zBP1IS
+         sV/jpjMJOvycb4vDLWlbDLlZR4jVbgD5G9kDoSsaPdrmb5NhO3D9h2a7uyXxIb/nqnHC
+         Oz7g==
+X-Forwarded-Encrypted: i=1; AJvYcCXsUhfzdu2LHM1IllFHJN56xjiXOoZVmACv6Cj8VfN5mmW9UYVFQ+hbBXpTBRBXcdb9oHYxoQMlhnI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi5zZTWwKB+9Ous1/uSM5Ewy9tOuuWrGlyJNmzPUVGxhWun6CP
+	KrAkeL6mnts1IRmauSymSZNhasKHPBX2Lq7ABMxz6+RT8UHp8U1oz0pL
+X-Gm-Gg: ASbGnctrShgGsML+kMGO9bmsnlbDe9E1seX8Xkf4bVh9AHfzpD5LxZFL1MtL9MJiuVT
+	5TJ+3HsjR3xxXco0inRnr/dj7d+Mf1Wv1ZJhW0BK86+Ew/KBGdz7bzHD4XK/i1cvCByHkdgAQQ/
+	mC3KBVDH1fKlLCXY0h8+l80S5A2Byo0NKxtxSkLlxowX6RDuPzdaI0nFL0gzcUZrRw2t9XorvuY
+	f4aQ0WD58B5mxJSG6z4nO4bG1BixmPqTGmmaDHtWlFA8CDm/8YvOc+vgP5NAaqR+a8qKTlBRTRA
+	b/4GrdkPAi45FynmZwrBtZ7FZgBgujbt0kZWJFViHeUWGfm79XCdU9VP+EdSuu8ELnsVt70USiN
+	tgaLhuTDAh3/y9w4ZI7VBq3S8UvoedLcVKbf+cT0ATmY6qOnl95mkQ1pX9CZLraZNNl+6c69A8i
+	5ttaUjbkt4fyOikCke
+X-Google-Smtp-Source: AGHT+IHmiyWgOLaCOggvhZPPIwoORQ6P44GeIcmP22SsJkQdAGjOfRUpAYo47TvsrY1gKVuQYt2uuw==
+X-Received: by 2002:a05:6512:b95:b0:58b:25f:cbbd with SMTP id 2adb3069b0e04-592f590541amr2974425e87.2.1761410865269;
+        Sat, 25 Oct 2025 09:47:45 -0700 (PDT)
+Received: from foxbook (bey128.neoplus.adsl.tpnet.pl. [83.28.36.128])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59301f74ba6sm792838e87.90.2025.10.25.09.47.42
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 25 Oct 2025 09:47:44 -0700 (PDT)
+Date: Sat, 25 Oct 2025 18:47:40 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Sasha Levin <sashal@kernel.org>
+Cc: patches@lists.linux.dev, stable@vger.kernel.org, Niklas Neronin
+ <niklas.neronin@linux.intel.com>, Nick Nielsen <nick.kainielsen@free.fr>,
+ grm1 <grm1@mailbox.org>, Mathias Nyman <mathias.nyman@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, mathias.nyman@intel.com,
+ linux-usb@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.17-6.12] usb: xhci-pci: add support for hosts
+ with zero USB3 ports
+Message-ID: <20251025184740.15989ebe.michal.pecio@gmail.com>
+In-Reply-To: <20251025160905.3857885-36-sashal@kernel.org>
 References: <20251025160905.3857885-1-sashal@kernel.org>
+	<20251025160905.3857885-36-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.17.5
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Lukas Wunner <lukas@wunner.de>
+On Sat, 25 Oct 2025 11:54:27 -0400, Sasha Levin wrote:
+> From: Niklas Neronin <niklas.neronin@linux.intel.com>
+> 
+> [ Upstream commit 719de070f764e079cdcb4ddeeb5b19b3ddddf9c1 ]
+> 
+> Add xhci support for PCI hosts that have zero USB3 ports.
+> Avoid creating a shared Host Controller Driver (HCD) when there is only
+> one root hub. Additionally, all references to 'xhci->shared_hcd' are now
+> checked before use.
+> 
+> Only xhci-pci.c requires modification to accommodate this change, as the
+> xhci core already supports configurations with zero USB3 ports. This
+> capability was introduced when xHCI Platform and MediaTek added support
+> for zero USB3 ports.
+> 
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220181
+> Tested-by: Nick Nielsen <nick.kainielsen@free.fr>
+> Tested-by: grm1 <grm1@mailbox.org>
+> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Link: https://lore.kernel.org/r/20250917210726.97100-4-mathias.nyman@linux.intel.com
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
 
-[ Upstream commit 5d03847175e81e86d4865456c15638faaf7c0634 ]
+Hi Sasha,
 
-The thunderbolt driver sets up device link dependencies from hotplug ports
-to the Host Router (aka Native Host Interface, NHI).  When resuming from
-system sleep, this allows the Host Router to re-establish tunnels to
-attached Thunderbolt devices before the hotplug ports resume.
+This is completely broken, fix is pending in Greg's usb-linus branch.
+(Which is something autosel could perhaps check itself...)
 
-To identify the hotplug ports, the driver utilizes the is_hotplug_bridge
-flag which also encompasses ACPI slots handled by the ACPI hotplug driver.
+8607edcd1748 usb: xhci-pci: Fix USB2-only root hub registration
 
-Thunderbolt hotplug ports are always Hot-Plug Capable PCIe ports, so it is
-more apt to identify them with the is_pciehp flag.
-
-Similarly, hotplug ports on older Thunderbolt controllers have broken MSI
-support and are quirked to use legacy INTx interrupts instead.  The quirk
-identifies them with is_hotplug_bridge, even though all affected ports are
-also matched by is_pciehp.  So use is_pciehp here as well.
-
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-LLM Generated explanations, may be completely bogus:
-
-YES
-
-- What it changes
-  - Switches hotplug-port detection from the broad
-    `pdev->is_hotplug_bridge` flag to the precise `pdev->is_pciehp`
-    (PCIe Hot-Plug Capable) in two places:
-    - Quirk for TB controllers’ hotplug MSI: drivers/pci/quirks.c:3834
-    - Device-link creation for resume ordering:
-      drivers/thunderbolt/tb.c:3256
-
-- Why this is correct
-  - Semantics: `is_hotplug_bridge` is a superset flag that also covers
-    ACPI-driven slots and conventional PCI hotplug, not just PCIe HPC.
-    Documentation explicitly distinguishes them (include/linux/pci.h:330
-    and include/linux/pci.h:334).
-  - TB downstream hotplug ports are always PCIe Hot-Plug Capable, so
-    `is_pciehp` matches the intended set without inadvertently pulling
-    in ACPI-only slots.
-  - ACPI code can set `is_hotplug_bridge` on bridges that are not PCIe
-    HPC (drivers/pci/hotplug/acpiphp_glue.c:411 and
-    drivers/pci/hotplug/acpiphp_glue.c:424), which is precisely what
-    this change avoids.
-
-- Code specifics and impact
-  - Quirk: drivers/pci/quirks.c:3834
-    - Old: `if (pdev->is_hotplug_bridge && …) pdev->no_msi = 1;`
-    - New: `if (pdev->is_pciehp && …) pdev->no_msi = 1;`
-    - Effect: Still covers all affected TB hotplug ports (Light
-      Ridge/Eagle Ridge/Light Peak/early Cactus Ridge/Port Ridge),
-      because those ports have PCIe HPC. Behavior is unchanged for
-      intended devices, but avoids misfiring if some non-PCIe-HP bridge
-      was flagged via the generic hotplug flag.
-  - Resume ordering via device links: drivers/thunderbolt/tb.c:3256
-    - Old: Filter downstream ports with `… || !pdev->is_hotplug_bridge)
-      continue;`
-    - New: `… || !pdev->is_pciehp) continue;`
-    - Effect: Device links are created only for PCIe HPC downstream
-      ports beneath the TB controller’s upstream port, which are the
-      ports that participate in TB PCIe tunneling. This avoids creating
-      links for ACPI-only hotplug bridges that do not belong in the TB
-      tunnel re-establishment ordering.
-
-- Correctness and consistency with PCI core
-  - The PCI core caches the HPC bit early and sets both flags together
-    for PCIe HPC ports (drivers/pci/probe.c:1628 and
-    drivers/pci/probe.c:1630), so `is_pciehp` is reliable and avoids
-    late config reads.
-  - Other subsystems have already moved to `is_pciehp` for the same
-    reason (e.g., PCIe portdrv created services only when `is_pciehp`),
-    demonstrating the broader effort to disambiguate these flags.
-
-- Risk assessment
-  - Small, localized change; no architectural shifts.
-  - Maintainers’ acks: Thunderbolt and PCI maintainers are on board
-    (Acked-by Bjorn Helgaas, Signed-off-by Mika Westerberg), indicating
-    consensus on intent and safety.
-  - For TB quirk, the condition remains true for all intended TB ports;
-    for TB device-links, the selection is narrowed to the correct
-    subset, reducing potential for incorrect PM dependency ordering. No
-    functional expansion; only reduced false positives.
-
-- User-facing effect
-  - More reliable resume sequencing for tunneled TB devices (device
-    links now scoped to true PCIe HP ports).
-  - Avoids unnecessary links for ACPI-only slots that are unrelated to
-    TB tunnels.
-  - No change in MSI disabling behavior for affected TB generations;
-    still prevents broken MSI usage there.
-
-- Backport considerations
-  - Dependency: Target stable trees must already have `struct
-    pci_dev::is_pciehp` and the core logic that sets it
-    (drivers/pci/probe.c:1628 and drivers/pci/probe.c:1630). If a stable
-    branch lacks this field, it would require backporting that PCI core
-    addition first.
-  - Scope: Touches only `drivers/pci/quirks.c` and
-    `drivers/thunderbolt/tb.c`; isolated and low-risk with no API
-    changes.
-
-Given the minimal change, precise semantics, alignment with ongoing PCI
-core cleanups, and low regression risk confined to TB/PCI hotplug paths,
-this is a good candidate for stable backport (where `is_pciehp` is
-present).
-
- drivers/pci/quirks.c     | 2 +-
- drivers/thunderbolt/tb.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 6eb3d20386e95..214ed060ca1b3 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -3830,7 +3830,7 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MELLANOX, 0xcf80, quirk_no_pm_reset);
-  */
- static void quirk_thunderbolt_hotplug_msi(struct pci_dev *pdev)
- {
--	if (pdev->is_hotplug_bridge &&
-+	if (pdev->is_pciehp &&
- 	    (pdev->device != PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C ||
- 	     pdev->revision <= 1))
- 		pdev->no_msi = 1;
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index c14ab1fbeeafd..83a33fc1486ab 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -3336,7 +3336,7 @@ static bool tb_apple_add_links(struct tb_nhi *nhi)
- 		if (!pci_is_pcie(pdev))
- 			continue;
- 		if (pci_pcie_type(pdev) != PCI_EXP_TYPE_DOWNSTREAM ||
--		    !pdev->is_hotplug_bridge)
-+		    !pdev->is_pciehp)
- 			continue;
- 
- 		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
--- 
-2.51.0
-
+Michal
 
