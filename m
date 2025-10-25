@@ -1,231 +1,204 @@
-Return-Path: <linux-usb+bounces-29650-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29651-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43EFFC09186
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 16:14:57 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DFEFC093C3
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 18:15:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 96AAB34584A
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 14:14:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E1F74ED564
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 16:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 440A42FDC3B;
-	Sat, 25 Oct 2025 14:14:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4EA83002A4;
+	Sat, 25 Oct 2025 16:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="BkHLfcxk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RbIO3vVa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-75.smtpout.orange.fr [80.12.242.75])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C0926290;
-	Sat, 25 Oct 2025 14:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530AF1F1306;
+	Sat, 25 Oct 2025 16:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761401687; cv=none; b=CsPTLY8l7UigfZOqn/yeY4g6goYz9IYb3jvA8mrpr6qZJkywGylmJ/hvBdlxjk++cTITBZH2zIYYnOPPsE0w1LTfKlPZpYj6ZLgUuQnwAr5kzsErx5sGw7YMhb1SRAx7yyq74Ne7W+CK2+xRz8eZcQmWg3ucMAwBGH79vKte7a0=
+	t=1761408670; cv=none; b=Vkx9ObphSVSEri/JgWhnMWdrOvPBJd/uRIiVZtV5WqvqbZZWSmxaf2BgNkjzYPbXudhmI/7aeQqKaNEH2qjX2ktiEfkQQFqvIgWWEvwadspeTAamP12l4PiQj5ZmhSkW8tcMWFwOrAouspXMfNA4JU/1LtG+PVX1oyDW81vNKgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761401687; c=relaxed/simple;
-	bh=ggXg7tpSRfPSWwgDDEc0Mi4dgvu2t7qPfbblFCUWpjc=;
-	h=Message-ID:Date:MIME-Version:Subject:References:From:To:Cc:
-	 In-Reply-To:Content-Type; b=Atd79vJo0BYfQWjOV0vrGtKQHYd6X6aZhp+lO0A8bML7qIyGSYGzw+BHfmUPTcaOc/9HbjIxvO7NdfOxdv3bFICMho0pyiQvUSDNi5TnYlgKLwvKcCPWpdjNM3NFmMoiqHIv3oWChDzrdUrlOwJZTwqbPHonr0WLVQBznGWvskg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=BkHLfcxk; arc=none smtp.client-ip=80.12.242.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
- ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
-	by smtp.orange.fr with ESMTPA
-	id Cf2UvEzW5B8skCf2VvuYL3; Sat, 25 Oct 2025 16:14:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1761401681;
-	bh=hNXgE5EPV7K9LPWtHEU6p5h+Ujg/qjo4e+CAbzOghM8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To;
-	b=BkHLfcxkxkyKAyDzQCjwZ6q+4U0UK/ufwXpHiUGFp5q7j8xhnzrw+N2pGpHHUKopE
-	 NGoGbRHxxuUbi9bqYILTWgEuq0H0dnNED16eFhJl1l7icPHWT+4OBrbykN8RwiOFTm
-	 6NZQYdGSocDTWHBiW/38B1yAOX2suAiwXeR1xWM5kD1Yh5/PB23KwHGdjm9dMBYm4d
-	 P0ig2i6ZnUAACVWt8Guxym4AesqejMLM9OI3Md8ZBdKqvNipF0hrP8KehgmnlGjJ1V
-	 puIL6Nijnbi3coM2eDAQBqJhhCydlD2htJ1ZwaPn2NwJAlaXrN88G7cCVD77gnYWtb
-	 SAF/DOPDjPjWA==
-X-ME-Helo: [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Sat, 25 Oct 2025 16:14:41 +0200
-X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
-Message-ID: <9b059848-1512-457c-8437-8172e3726992@wanadoo.fr>
-Date: Sat, 25 Oct 2025 16:14:38 +0200
+	s=arc-20240116; t=1761408670; c=relaxed/simple;
+	bh=7RPJS+YYBdHHkSkPg7nJLRvxjYkQoNcT5qFRStkQwPM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XjbhQYhibFK8YAkOIAw63fgSRTbdLEDaC+bD+4B+HeRILK6jsauJmWYVVU0tTm/7mcoqCOfq5s1fsl6AJuHYLQXwfow87yoKjVtErHHArI72iv1tk64iisV258UQMixgqBU7qI4MhN/MNrPxZlwRXsnFYGmMaVbT7s0LVWtPe5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RbIO3vVa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B50FAC4CEFB;
+	Sat, 25 Oct 2025 16:11:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761408669;
+	bh=7RPJS+YYBdHHkSkPg7nJLRvxjYkQoNcT5qFRStkQwPM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=RbIO3vVaZRGtvaTtmlLj0YCRABRwwCmvFM3WFsB1GBjl5hrN0xiNUDjLFjgduP+9+
+	 zWlMOKUguLU7XyqzYU4n69AWlWeRMt7n5/9PRgBTiQyih8Vy4vJBaTnApn9nOlD+UR
+	 SWBOWLDcoOA7wiWkuVzFJySulz0dEg0nj52gmKrPOeG7NCCIfTxzUpE2QWcsc24cHU
+	 DtaG9glLoprAxsbAMilBj8iZrCneF9TjMQ4zjJ8P1YYVTQRZ2Kf55CZfbWXSGIh6FS
+	 5kvgK8zFHBoJ538BntW9Fw8rSUfz1IbregtX6YD0CEFIkVbp6sYzKvcBWhJURMJNS0
+	 EI50HoqjujPAw==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+	Nick Nielsen <nick.kainielsen@free.fr>,
+	grm1 <grm1@mailbox.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	mathias.nyman@intel.com,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.17-6.12] usb: xhci-pci: add support for hosts with zero USB3 ports
+Date: Sat, 25 Oct 2025 11:54:27 -0400
+Message-ID: <20251025160905.3857885-36-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251025160905.3857885-1-sashal@kernel.org>
+References: <20251025160905.3857885-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin
- state
-References: <20251025122854.1163275-1-krishna.kurapati@oss.qualcomm.com>
- <20251025122854.1163275-3-krishna.kurapati@oss.qualcomm.com>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Content-Language: en-US, fr-FR
-To: krishna.kurapati@oss.qualcomm.com
-Cc: biju.das.jz@bp.renesas.com, conor+dt@kernel.org,
- devicetree@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com,
- gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
- krzk+dt@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- robh@kernel.org
-In-Reply-To: <20251025122854.1163275-3-krishna.kurapati@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.17.5
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Le 25/10/2025 à 14:28, Krishna Kurapati a écrit :
-> There is a ID pin present on HD3SS3220 controller that can be routed
-> to SoC. As per the datasheet:
-> 
-> "Upon detecting a UFP device, HD3SS3220 will keep ID pin high if VBUS is
-> not at VSafe0V. Once VBUS is at VSafe0V, the HD3SS3220 will assert ID pin
-> low. This is done to enforce Type-C requirement that VBUS must be at
-> VSafe0V before re-enabling VBUS"
-> 
-> Add support to read the ID pin state and enable VBUS accordingly.
-> 
-> Signed-off-by: Krishna Kurapati <krishna.kurapati-5oFBVzJwu8Ry9aJCnZT0Uw@public.gmane.org>
-> ---
->   drivers/usb/typec/hd3ss3220.c | 79 +++++++++++++++++++++++++++++++++++
->   1 file changed, 79 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-> index 3ecc688dda82..970c0ca8f8d4 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -15,6 +15,9 @@
->   #include <linux/usb/typec.h>
->   #include <linux/delay.h>
->   #include <linux/workqueue.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/regulator/consumer.h>
-> +#include <linux/of_graph.h>
->   
->   #define HD3SS3220_REG_CN_STAT		0x08
->   #define HD3SS3220_REG_CN_STAT_CTRL	0x09
-> @@ -54,6 +57,11 @@ struct hd3ss3220 {
->   	struct delayed_work output_poll_work;
->   	enum usb_role role_state;
->   	bool poll;
-> +
-> +	struct gpio_desc *id_gpiod;
-> +	int id_irq;
-> +
-> +	struct regulator *vbus;
->   };
->   
->   static int hd3ss3220_set_power_opmode(struct hd3ss3220 *hd3ss3220, int power_opmode)
-> @@ -319,6 +327,49 @@ static const struct regmap_config config = {
->   	.max_register = 0x0A,
->   };
->   
-> +static irqreturn_t hd3ss3220_id_isr(int irq, void *dev_id)
-> +{
-> +	struct hd3ss3220 *hd3ss3220 = dev_id;
-> +	int ret;
-> +	int id;
-> +
-> +	if (IS_ERR_OR_NULL(hd3ss3220->vbus))
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
 
-I don't think it can be ERR. hd3ss3220_get_vbus_supply() forces it to 
-NULL in such a case.
+[ Upstream commit 719de070f764e079cdcb4ddeeb5b19b3ddddf9c1 ]
 
-> +		return IRQ_HANDLED;
-> +
-> +	id = hd3ss3220->id_gpiod ? gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
-> +
-> +	if (!id) {
-> +		ret = regulator_enable(hd3ss3220->vbus);
-> +		if (ret)
-> +			dev_err(hd3ss3220->dev, "enable vbus regulator failed\n");
-> +	} else {
-> +		regulator_disable(hd3ss3220->vbus);
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int hd3ss3220_get_vbus_supply(struct hd3ss3220 *hd3ss3220)
-> +{
-> +	struct device_node *hd3ss3220_node = hd3ss3220->dev->of_node;
-> +	struct device_node *np;
-> +	int ret = 0;
-> +
-> +	np = of_graph_get_remote_node(hd3ss3220_node, 0, 0);
-> +	if (!np) {
-> +		dev_err(hd3ss3220->dev, "failed to get device node");
-> +		return -ENODEV;
-> +	}
-> +
-> +	hd3ss3220->vbus = of_regulator_get_optional(hd3ss3220->dev, np, "vbus");
-> +	if (IS_ERR(hd3ss3220->vbus))
-> +		hd3ss3220->vbus = NULL;
-> +
-> +	of_node_put(np);
-> +
-> +	return ret;
+Add xhci support for PCI hosts that have zero USB3 ports.
+Avoid creating a shared Host Controller Driver (HCD) when there is only
+one root hub. Additionally, all references to 'xhci->shared_hcd' are now
+checked before use.
 
-return 0 and avoid 'ret'?
+Only xhci-pci.c requires modification to accommodate this change, as the
+xhci core already supports configurations with zero USB3 ports. This
+capability was introduced when xHCI Platform and MediaTek added support
+for zero USB3 ports.
 
-> +}
-> +
->   static int hd3ss3220_probe(struct i2c_client *client)
->   {
->   	struct typec_capability typec_cap = { };
-> @@ -354,6 +405,34 @@ static int hd3ss3220_probe(struct i2c_client *client)
->   		hd3ss3220->role_sw = usb_role_switch_get(hd3ss3220->dev);
->   	}
->   
-> +	hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
-> +	if (IS_ERR(hd3ss3220->id_gpiod))
-> +		return PTR_ERR(hd3ss3220->id_gpiod);
-> +
-> +	if (hd3ss3220->id_gpiod) {
-> +		hd3ss3220->id_irq = gpiod_to_irq(hd3ss3220->id_gpiod);
-> +		if (hd3ss3220->id_irq < 0) {
-> +			dev_err(hd3ss3220->dev, "failed to get ID IRQ\n");
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220181
+Tested-by: Nick Nielsen <nick.kainielsen@free.fr>
+Tested-by: grm1 <grm1@mailbox.org>
+Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20250917210726.97100-4-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-Maybe return dev_err_probe() to log the error and simplify code?
+LLM Generated explanations, may be completely bogus:
 
-> +			return hd3ss3220->id_irq;
-> +		}
-> +
-> +		ret = devm_request_threaded_irq(hd3ss3220->dev,
-> +						hd3ss3220->id_irq, NULL,
-> +						hd3ss3220_id_isr,
-> +						IRQF_TRIGGER_RISING |
-> +						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> +						dev_name(hd3ss3220->dev), hd3ss3220);
-> +		if (ret < 0) {
-> +			dev_err(hd3ss3220->dev, "failed to get id irq\n");
+YES — this change is a focused bugfix that lets PCI xHCI controllers
+with only a single root hub enumerate correctly, matching support
+already present in the core and other host adapters.
 
-Maybe return dev_err_probe() to log the error and simplify code?
+- `drivers/usb/host/xhci-pci.c:640` now sets `xhci->allow_single_roothub
+  = 1`, allowing the existing `xhci_has_one_roothub()` helper to
+  recognize hosts that genuinely provide only USB2 or only USB3 ports.
+  For such hardware the new branch at `drivers/usb/host/xhci-
+  pci.c:641-659` skips creating the secondary HCD and still runs
+  `xhci_ext_cap_init()`, preventing the allocation/registration of a
+  useless SuperSpeed root hub that currently causes probe failures on
+  the systems reported in bug 220181.
+- Stream capability handling switches to `xhci_get_usb3_hcd()` at
+  `drivers/usb/host/xhci-pci.c:662-664`, so the code safely handles both
+  the traditional dual-root-hub case and the new single-root-hub case
+  without dereferencing a NULL `shared_hcd`.
+- The xHCI core has supported “single-roothub” controllers since commit
+  873f323618c2 (see the helper definitions in
+  `drivers/usb/host/xhci.h:1659-1737`), and platform drivers already
+  rely on the same pattern (`drivers/usb/host/xhci-plat.c:207` and
+  `drivers/usb/host/xhci-mtk.c:629-655`). This patch simply brings the
+  PCI glue in line with that infrastructure, so it has no architectural
+  side effects.
+- Scope is limited to the PCI front-end; it doesn’t alter shared data
+  structures or other subsystems. Tested-by tags and the fact that the
+  alternative drivers have run this logic for multiple release cycles
+  further reduce regression risk. Backporters only need to ensure the
+  target stable branch already contains the earlier
+  “allow_single_roothub” support (present in 6.1+). If that prerequisite
+  is met, the change is small, self-contained, and fixes real hardware
+  breakage.
 
-Above, you use "ID IRQ" and here "id irq". Maybe keep the case case? Or 
-change the 2nd message that looks a copy'n'paste error to me.
+Natural next steps: 1) cherry-pick (plus prerequisite check) into the
+relevant stable trees; 2) rerun basic USB enumeration on affected
+hardware to confirm the controller now probes successfully.
 
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	ret = hd3ss3220_get_vbus_supply(hd3ss3220);
-> +	if (ret)
-> +		return dev_err_probe(hd3ss3220->dev,
-> +				     PTR_ERR(hd3ss3220->vbus), "failed to get vbus\n");
+ drivers/usb/host/xhci-pci.c | 42 +++++++++++++++++++++----------------
+ 1 file changed, 24 insertions(+), 18 deletions(-)
 
-Why PTR_ERR(hd3ss3220->vbus)? Should this be 'ret'?
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 00fac8b233d2a..5c8ab519f497d 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -610,7 +610,7 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ {
+ 	int retval;
+ 	struct xhci_hcd *xhci;
+-	struct usb_hcd *hcd;
++	struct usb_hcd *hcd, *usb3_hcd;
+ 	struct reset_control *reset;
+ 
+ 	reset = devm_reset_control_get_optional_exclusive(&dev->dev, NULL);
+@@ -636,26 +636,32 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	hcd = dev_get_drvdata(&dev->dev);
+ 	xhci = hcd_to_xhci(hcd);
+ 	xhci->reset = reset;
+-	xhci->shared_hcd = usb_create_shared_hcd(&xhci_pci_hc_driver, &dev->dev,
+-						 pci_name(dev), hcd);
+-	if (!xhci->shared_hcd) {
+-		retval = -ENOMEM;
+-		goto dealloc_usb2_hcd;
+-	}
+ 
+-	retval = xhci_ext_cap_init(xhci);
+-	if (retval)
+-		goto put_usb3_hcd;
++	xhci->allow_single_roothub = 1;
++	if (!xhci_has_one_roothub(xhci)) {
++		xhci->shared_hcd = usb_create_shared_hcd(&xhci_pci_hc_driver, &dev->dev,
++							 pci_name(dev), hcd);
++		if (!xhci->shared_hcd) {
++			retval = -ENOMEM;
++			goto dealloc_usb2_hcd;
++		}
+ 
+-	retval = usb_add_hcd(xhci->shared_hcd, dev->irq,
+-			IRQF_SHARED);
+-	if (retval)
+-		goto put_usb3_hcd;
+-	/* Roothub already marked as USB 3.0 speed */
++		retval = xhci_ext_cap_init(xhci);
++		if (retval)
++			goto put_usb3_hcd;
++
++		retval = usb_add_hcd(xhci->shared_hcd, dev->irq, IRQF_SHARED);
++		if (retval)
++			goto put_usb3_hcd;
++	} else {
++		retval = xhci_ext_cap_init(xhci);
++		if (retval)
++			goto dealloc_usb2_hcd;
++	}
+ 
+-	if (!(xhci->quirks & XHCI_BROKEN_STREAMS) &&
+-			HCC_MAX_PSA(xhci->hcc_params) >= 4)
+-		xhci->shared_hcd->can_do_streams = 1;
++	usb3_hcd = xhci_get_usb3_hcd(xhci);
++	if (usb3_hcd && !(xhci->quirks & XHCI_BROKEN_STREAMS) && HCC_MAX_PSA(xhci->hcc_params) >= 4)
++		usb3_hcd->can_do_streams = 1;
+ 
+ 	/* USB-2 and USB-3 roothubs initialized, allow runtime pm suspend */
+ 	pm_runtime_put_noidle(&dev->dev);
+-- 
+2.51.0
 
-If hd3ss3220_get_vbus_supply() fails, vbus will be NULL in all cases.
-
-In hd3ss3220_get_vbus_supply(), if -ENODEV is returned, it is not 
-initialized yet, and if of_regulator_get_optional() fails, it is set to 
-NULL.
-
-> +
->   	if (IS_ERR(hd3ss3220->role_sw)) {
->   		ret = PTR_ERR(hd3ss3220->role_sw);
->   		goto err_put_fwnode;
-
-CJ
 
