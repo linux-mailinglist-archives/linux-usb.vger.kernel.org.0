@@ -1,351 +1,191 @@
-Return-Path: <linux-usb+bounces-29641-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29642-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80CCCC08C8A
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 09:02:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A448C08D60
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 09:30:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0396D4E628F
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 07:01:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFD2B3BFB65
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 07:30:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A532DA756;
-	Sat, 25 Oct 2025 07:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="BmHxK6ZW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 577C92E3B06;
+	Sat, 25 Oct 2025 07:30:39 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11010049.outbound.protection.outlook.com [52.101.228.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F425747F;
-	Sat, 25 Oct 2025 07:01:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761375706; cv=fail; b=nzIuEL+VmL1KbzNFXBga8m9CfGblFESSqapvNbMTw4oKefnv+dgG9oqhs1xscOAOgf5Jos1IrVOrx29gx0FA6SuIKuYzU5WjVxqyj8VLylU786aARhkSEFngm8+BiZGIZ9JYIbbbSYkq4+C+VMbCUhdYPAWyeB1Jv4a9ywlPoyg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761375706; c=relaxed/simple;
-	bh=7aLf/t80+XY8NGG9bQFwYXOy0BfKiXDvqSFuCxuV9DQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=HmBy+jwUvp4dAhAvoKTrZqfWMBAMOx9Ng/jn5T57lHcMT502XDZ/rRkdMBRbF3v8Z3qAFH5/btt6a3lRj+bab8OYhQqWtVv6rMUyvKVQAjmoMN3y4dBZ3CHIyy8dq0yxRwZcN2AYbhtsRoc9k69tey3IatcYR6OgS3y85b6rxt8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=BmHxK6ZW; arc=fail smtp.client-ip=52.101.228.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nWtCv4slyG/qu1KGwpmBzVpPtih4WG2O89wT3Cb8S60cZPVtV0FWMxqgLiUbhRh56+Fw9Xwo3WHLdwhzgmA/h3bJ7prsiTsSAZLxxfeXS/cy7iW3ocoBtwYkur6jhb5zzyNvPVIka29BkjWROF1xTlQSYUMQsQ59nSFPlpPCPb/VzNpqMCZgl90SIOV3xqZkIhh4ZxLe1Ft6wXb1TD2pnXeNudG0cYw//4ISTZC7wIvjnUkss8XUUDG5OYPHzII2HGzSRMYjml3pHUTtIRgRFcCDmrqO1Cddr24h/pirI3w2KZcGwJfhzr6ZazE07WIM/fTGR0sDO4LkhdlJDytf1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n3B/2HYmI1c7E1MRSKB9rHdxw7YsGhSR8BaNvpzH75A=;
- b=jQoPOzCo7tZvAdcakh29LyqlyU9EgnhxsRgsQJBJGs2OSnn5ohuBNS2wVDKBMDKSgD6wwF0t9FyajkzQdDFMpcgIVjqNvlEK6K9fcnnCQRlTnadSKb49DocB9UvYSnCbQdytfaQFc8bgj/HQXEz/Ah+ijUu7EfOk0cNRQMVuD/Epdx0ZXECn6/tr8DProEr+FNKO1wvBxcXg5KfwstYwbwWuEC9F8d/7KGNUCbj+5d5Sq4qwZZ/tpT/7HiGvR2eT09tzsJPJs7WyK6vj43PM3x+26ldP8bdu9SMqxO5Iyr5P81nTg/tmXRgNILccbKUXQ1T3IdwoA+EkRXbqIJGqrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n3B/2HYmI1c7E1MRSKB9rHdxw7YsGhSR8BaNvpzH75A=;
- b=BmHxK6ZWejB73VTf9/SueGCxF9TW6MlAxZT+ALdcdPy80s4UydKlHIy5iMa2DYWKbu0+tqED/t4CaP3F7yNJtSMa8uM1pmJTSiAK4sYGanCAlPlBU1THt0a0hFcrKGS4qUfh9qSne73f+M4+SJNfRQpY5Q26lu3Izy4lLESJIiQ=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by TYCPR01MB11227.jpnprd01.prod.outlook.com (2603:1096:400:3c4::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.9; Sat, 25 Oct
- 2025 07:01:39 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1%4]) with mapi id 15.20.9275.009; Sat, 25 Oct 2025
- 07:01:32 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Heikki
- Krogerus <heikki.krogerus@linux.intel.com>, Dmitry Baryshkov
-	<dmitry.baryshkov@oss.qualcomm.com>
-CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin
- state
-Thread-Topic: [PATCH v3 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID
- pin state
-Thread-Index: AQHcRRKvhP4wQTQytEactMmaKsxS6rTSb8LQ
-Date: Sat, 25 Oct 2025 07:01:32 +0000
-Message-ID:
- <TY3PR01MB113464EA259DDA069E7453DF986FEA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20251024181832.2744502-1-krishna.kurapati@oss.qualcomm.com>
- <20251024181832.2744502-3-krishna.kurapati@oss.qualcomm.com>
-In-Reply-To: <20251024181832.2744502-3-krishna.kurapati@oss.qualcomm.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYCPR01MB11227:EE_
-x-ms-office365-filtering-correlation-id: 835c42bf-e170-4479-030d-08de13945469
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|1800799024|7416014|376014|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?EgvgBQR6iPWcfPBXODSsuz3ZSxIwwz4Too+lrNomXYwstpHrLJexfO12+lJE?=
- =?us-ascii?Q?N2NWirFcUVhOR6c6LbjFoOksnOmPvJrrAHB8gVd8O5D6Pk1O28Ahwymh1FN8?=
- =?us-ascii?Q?NDe9AoqNuJhqmLvTLkhfoJMYihLwdrwBDKhGLMx4Vu9qMtL1nq3LKo2nuxmZ?=
- =?us-ascii?Q?WqIBufKWv+7YRah/aqaQDE5H8vyfcqzw7xFXXY4KeZ9RhHQUJGUS+5mwV6o0?=
- =?us-ascii?Q?jQSHW+3LRgIV+kZ6W8bKFhN7CHvrLSacbof/bmhLVbopTnrAYeq+o6apLyLw?=
- =?us-ascii?Q?rf/Jm4LrK2qbHXZCC2GElgGxnDdUUxlZhFdPfShsZSHvQvj4rnXRnfKMTm7i?=
- =?us-ascii?Q?wYbwPUh4pVESUqYi6NAP6L5f4tcB2V16LZMYX9FkbNqdo9qY6WFpJly16sTP?=
- =?us-ascii?Q?53AGrdQAd8XLcrrSM5XiwMYxExTTgTDDP0R2U7pBKCmEOQiIjk8pkBcDpiMB?=
- =?us-ascii?Q?2Pdh6OrO8ISeh1wSM3cEhp72whHaAHPM9A6GSQanO5yGM03GKZfUYJjMKi0d?=
- =?us-ascii?Q?PLT06ba462XxGp0dOshPQ+HkHQNhnXDZJ2jQeJyKweFni8C1vO2UPQeLovqL?=
- =?us-ascii?Q?5VERLAIwrjRPlk5iqLZp+U/rcj5ybNc52IUPabQIJ4gKm85f5bnQrPzVFLhq?=
- =?us-ascii?Q?0PxE7mUQB0yp8ahn1orDhS2+gKrPosqGrZ60M27pQ1eqPcu1+j9o6KRvLs9K?=
- =?us-ascii?Q?nJ+/y9vhR6xlOqbi5fs6HHIiNcNKIKqD6ATxc+PtFC3bIMHvgWHhVELD7frf?=
- =?us-ascii?Q?t9SFZS6mIp0C5qm1QrQmXVXwV9J/GiECNBN9UeUmKaKJWUzcgsoqnDiP6o+a?=
- =?us-ascii?Q?Zfl9q9qvQoiX7BGgwVqkd0FBmqfMDe0CQ7N8RIVo70cd8FK2w+NCJ0AjBgBm?=
- =?us-ascii?Q?Wj0xrIvMb54k83y9Y/8mp6v2KHEWv+YiBP3KLM+Th98on4ZvMrzlnUUY+0if?=
- =?us-ascii?Q?HS+h08n3PnWK7vH/EN3qlTv809UZFgpOGQe5OfgTSJM/oCf9udZ+SeZAt3HS?=
- =?us-ascii?Q?0YgZVc+3gPBE2KwoS8OkzuRLAGlUetj3pxKTdYVxQjnqLJMD+tUAkI8R6Iqo?=
- =?us-ascii?Q?xpTV8LdfA+bGpvcE0eM2A73HQ6ugB2c60wJ/dnkRYtZu2PqPI631MWLjSAAJ?=
- =?us-ascii?Q?mzyRbxZ68zLr+aETxx1H38CswDafUWrOshQXp9pAfT079rlxpJFqpwIpHWSS?=
- =?us-ascii?Q?4Is78LmtXjNOo3COZAQcMTnu5T/vU2qyd0Y5UdQzy+nbWxyvW4MvjOap7ved?=
- =?us-ascii?Q?E+jD7jSrvLA20TTlJKCm+TKktzDBAD9iRpvxxwzhkhhXS44pkygcYokp2NUD?=
- =?us-ascii?Q?0bLLprsCC4Ife5Ed9wmRw0j036+By4tM1bNLe873S34YnL0hAvkaI7rP5ktI?=
- =?us-ascii?Q?S86QYsgqJDIZU3Sb3GnsJWbXkpM7YTfbyi7KVX/0iTrvsiKIYzlRr7iaOhOU?=
- =?us-ascii?Q?GWT9mHadDn8wbzQ3+Z9sQvKtkTrLlNTQTBFXs6unufbamAyxJ3Q/jg=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?sKhYOyTsKv4VeVEIeyVRm4rPKs5TClYKowKZk4MtOXz3V8LaBTaqgv+6noLi?=
- =?us-ascii?Q?xU6VTXdZBNKO42gxaPOX67f0Cs0fmf1i0Dm7RJzMEJidmv5DTh9jx3LDc638?=
- =?us-ascii?Q?1cN9Vx4ZfPls2CVDeTTv0UsUvG1wTxOkmC8kGamKFt1aTqqs1Dm63RZp4g9v?=
- =?us-ascii?Q?yw4daxhe5hvtYiQCSVgi89C3UvO5RJhlldzaJMTOfw5lJhaYyNaBpdArtimk?=
- =?us-ascii?Q?HxhGMu4Y0ne0zwSYXkAKpV+ONW7VwBhUDlN8XJDJq900maaNd/LyNQc1oIR4?=
- =?us-ascii?Q?ljx0chzLcVK+DM2bmgI2efkX0b8sIC3ukNPe7sfvz/47jERoKxOv1xelvAs+?=
- =?us-ascii?Q?aU/XveS05DpoifAAX7zz7XCr+AefuQe0f0iGPGkJGpppyOgCYte1l9ukaAH2?=
- =?us-ascii?Q?BvFqDPXkEC8Evg2JCTHxkRruuy8bNwcN4wCJuvZtb+ybinOWmdv0N5ji04Fy?=
- =?us-ascii?Q?vwg5g/dJXXZGXckfdGjMytT/Ds/AfO53NqIagqbJvGRnnMP76/4CfcUCOLoI?=
- =?us-ascii?Q?8GMeHsPKuTliA8SBFpY1y9dCnWCZ6JfSlEzXoKi/wOybFPcsHzA2NnHetREe?=
- =?us-ascii?Q?hyVJ0adY5TRcGmkKTH3gheS64sLCMx4sMNW5yDty1QJe6hn8JNscGI2WxSQE?=
- =?us-ascii?Q?KU+e5dF1e1OLqchmPnYDCYemcfatqGF9+H7LZUcL5xv5fCSTeNTnZgIWyjem?=
- =?us-ascii?Q?pyf3t7XpeqGQz3Y0VWsuWFRvTGFZRK/aRnobhO3ZNc5wheeO0asjVbs5zyus?=
- =?us-ascii?Q?TXNTIUpHCbzYw/RRr4duagI0TqZwtjgVlrSDqBlUQ6yQliMJ92rxy9m0kSu0?=
- =?us-ascii?Q?ucBkMpmivF/vJ9T0d5n0zDaLGcqMUj/PLUkeabQAhf2OAMGO9treWaZUT9ui?=
- =?us-ascii?Q?wv+bOGp32YXiRAqA0HGnm8JeS3uodPzQRplhwudN7kNtovtDQQz+h/48QJ6C?=
- =?us-ascii?Q?w/0vkTKvO/fpsU7njVAPP/ujwfYedi1545DQ7yN4DwzNnUAMayUasRinOGfH?=
- =?us-ascii?Q?lTVVKkd81hs8n7FdndjJkbjsPw1SRG67fy1Z9dvEJmSgVPAR8p2t2JWfOrUl?=
- =?us-ascii?Q?jM682BTq2lpoE9Rl5ylJvWtS2rCL6SAK4rBrOoRsbMlHKO2o9hYPu78cPjZA?=
- =?us-ascii?Q?cNLYeWILqD/TffGA8CR/xHCBzYfq28FsZ6ypeZmYjZjZEf2xvtMtymwhtuzk?=
- =?us-ascii?Q?aPL9bey0BWZegv8XU+vdqWaXUHKEXz9EVKjKpiuW7XnnuFSSEns8ViNWmvfq?=
- =?us-ascii?Q?fGYjFJg1F8o/lu6S/krkKoAwqJxL6JnnlkrnqxC7PDduTz5IrVGyVIZ6lhhY?=
- =?us-ascii?Q?Rw64bl9N4VPzs0OjzYYBtozRfVdWmzRY/jQuPNW5tE1xHVsR7oHezLybb2xO?=
- =?us-ascii?Q?kWcz+Hl+jQIkdbU9HhTYRKWpbiRomjt0awq6P+TAIKqf9kMgwcmfa7F+p+QF?=
- =?us-ascii?Q?UtjglaNceRUnX9q2TIjfeDk46n1SmqzzRzSrHvjQXZ16e7QEixACZzOhkQQJ?=
- =?us-ascii?Q?IOiS2dSypM5PQ90N4c+9JcdgF0v1pnp3CNGtbTAUgY0eOsxM9i2dc0Auzen4?=
- =?us-ascii?Q?ak7wV9HEAGap9N8vsygIgY4xVY1cn+J8sbOEU+ZJQOiSQRRoMln374sh7zpB?=
- =?us-ascii?Q?ZA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A3A2A1BB
+	for <linux-usb@vger.kernel.org>; Sat, 25 Oct 2025 07:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761377439; cv=none; b=A5pfn+NxuPqWwCMdO7UprZPBLQQ7SHHLoi8/t6Ocr6WkqvUkQKER3gc8fVthN1tOSzaViXsVZlE7aQCWJlkn/+upy4C4N9p7mvsdzH1ceKVV3l32JqM8j4AMUEudRhjPq/yLY0l6NToIzSPdH7iKpXnQYkKW8E9CNQ/vHsBcYpo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761377439; c=relaxed/simple;
+	bh=V5DbhJ3p5YS8+9eLZS01P5LRa/zmeVk1OVEyxPRZzl4=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=E5m8mU288h0rsD8/DTIK79UfT63TgeCnq6DiD1KtXPv4SKzrlazUxSNSB1fJyrqrvSnwzdSFmeujc0ELTXiUDZbL/CJhV1jOmIicGYKUFcUtnVBWpuqKfXqrXlQQuklvY+qHnlDYatm0rLsMEIxz4PgJ2osDIA+T26o1BgfNN9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-431d999ebe8so82965685ab.1
+        for <linux-usb@vger.kernel.org>; Sat, 25 Oct 2025 00:30:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761377436; x=1761982236;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=POFvTDzbXwXj/l9eq54nh96eLr+2+uDRoglNtiSjB/E=;
+        b=YPuUL+UoxEXscv/FxVFC63kt5bM7g/K9DkLwKOGw0Savn+SjKsK5Fy3pEvDg+G0KZT
+         DD4643CL+YDwfJOxGkwho99InlCI2Qe2U7eKScDMqYwotqrRdb90Blay2Y89Kv39owkU
+         Yfmfau/wzfEB8uVI0ozS6GXLp/unUt37JhYuIccMdS8tkgc1n7uNYBaJwRmgPMeeXvb7
+         kU/b9Ybgsk0sLQS+NlKAVbjMRcQfWGyB5f/pVZEIT6UbkBEoPoTfOS4UrgFHYjnWkONW
+         m65AOBvCbJUo6ttk9eczv6D0x7R6ts3UrR8J19y0x3iczQXqrEqSui5tazg0onjEH5MJ
+         /h2g==
+X-Forwarded-Encrypted: i=1; AJvYcCXGtjL+juu7mjE6gHOs66FkFV/bKbG65VM7zWyyAH2WJ9OY0k7rR8ueTKs4BnAHLOUWxwKpTmwOj7g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqGhbLc2WXILmVLCXla0HvBHN9JBUv8CFGNWPW9lXUD2P6UMsJ
+	PJKT2e4nbbTh+aGWzaPC3YxvY5qUCHxE5/wD9YVaAWtjK/+1NRbo5/qjTIJ3Hey8ueVt/GyhQ8V
+	xHMzF483wYvQ4VpM5UKphKfO8A8aAkOn/BX0GvfXG/QlkRWrkwt+uTlia5SY=
+X-Google-Smtp-Source: AGHT+IHCqHFoXgOB0tUs0J97Ri8/hsEWPqr36q4oCGb93VuLnd5QtoYo9JEFh4WoS5fiTpXJ4s93WoC5OxmJaEeZd4+Xdz0yGsbA
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 835c42bf-e170-4479-030d-08de13945469
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2025 07:01:32.5245
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FNQyedwztDrLymzjzF8iXd+C2s1SmpHHlRecBEVI0/pwExDBf8X1rVY/kRaKEsagPDoUmWBRjgAVq6/vKFu4+PRv4QaZFHkcTt3rth/fPXA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB11227
+X-Received: by 2002:a05:6e02:1fca:b0:42f:946f:8eb4 with SMTP id
+ e9e14a558f8ab-430c527bca5mr386037055ab.21.1761377436540; Sat, 25 Oct 2025
+ 00:30:36 -0700 (PDT)
+Date: Sat, 25 Oct 2025 00:30:36 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68fc7c9c.050a0220.346f24.023c.GAE@google.com>
+Subject: [syzbot] [usb?] general protection fault in usb_gadget_udc_reset (4)
+From: syzbot <syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    566771afc7a8 Merge tag 'v6.18-rc2-smb-server-fixes' of git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13956e7c580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8345ce4ce316ca28
+dashboard link: https://syzkaller.appspot.com/bug?extid=19bed92c97bee999e5db
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/52417ef1f782/disk-566771af.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/66730a263bf1/vmlinux-566771af.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1fe0762efb1f/bzImage-566771af.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+19bed92c97bee999e5db@syzkaller.appspotmail.com
+
+usb 1-1: new full-speed USB device number 6 using dummy_hcd
+usb 1-1: unable to read config index 0 descriptor/all
+usb 1-1: can't read configurations, error -110
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000008: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000040-0x0000000000000047]
+CPU: 1 UID: 0 PID: 5869 Comm: kworker/1:4 Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/02/2025
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_gadget_udc_reset+0x27/0x60 drivers/usb/gadget/udc/core.c:1195
+Code: 90 90 90 f3 0f 1e fa 41 56 53 49 89 f6 48 89 fb e8 3e 6b fb fa 49 83 c6 40 4c 89 f0 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 4c 89 f7 e8 bb 22 5d fb 4d 8b 1e 48 89 df 2e 2e
+RSP: 0018:ffffc900051b7260 EFLAGS: 00010202
+RAX: 0000000000000008 RBX: ffff888143b54c40 RCX: dffffc0000000000
+RDX: ffffc9001a01b000 RSI: 0000000000002b35 RDI: 0000000000002b36
+RBP: ffff8880305aa66c R08: ffffffff8ed62877 R09: 1ffffffff1dac50e
+R10: dffffc0000000000 R11: fffffbfff1dac50f R12: ffff888143b54c40
+R13: 1ffff11004eceaa1 R14: 0000000000000040 R15: 1ffff1102876a987
+FS:  0000000000000000(0000) GS:ffff888126efc000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fce4efb4f98 CR3: 000000004a02e000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ set_link_state+0x80b/0x1220 drivers/usb/gadget/udc/dummy_hcd.c:469
+ dummy_hub_control+0xcc0/0x1760 drivers/usb/gadget/udc/dummy_hcd.c:2327
+ rh_call_control drivers/usb/core/hcd.c:656 [inline]
+ rh_urb_enqueue drivers/usb/core/hcd.c:821 [inline]
+ usb_hcd_submit_urb+0xde9/0x1a80 drivers/usb/core/hcd.c:1542
+ usb_start_wait_urb+0x114/0x4c0 drivers/usb/core/message.c:59
+ usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+ usb_control_msg+0x232/0x3e0 drivers/usb/core/message.c:154
+ set_port_feature drivers/usb/core/hub.c:470 [inline]
+ hub_port_reset+0x390/0x1740 drivers/usb/core/hub.c:3082
+ hub_port_init+0x2b0/0x2800 drivers/usb/core/hub.c:4938
+ hub_port_connect drivers/usb/core/hub.c:5495 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5706 [inline]
+ port_event drivers/usb/core/hub.c:5870 [inline]
+ hub_event+0x2532/0x4a20 drivers/usb/core/hub.c:5952
+ process_one_work kernel/workqueue.c:3263 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3346
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3427
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x4bc/0x870 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:usb_gadget_udc_reset+0x27/0x60 drivers/usb/gadget/udc/core.c:1195
+Code: 90 90 90 f3 0f 1e fa 41 56 53 49 89 f6 48 89 fb e8 3e 6b fb fa 49 83 c6 40 4c 89 f0 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 4c 89 f7 e8 bb 22 5d fb 4d 8b 1e 48 89 df 2e 2e
+RSP: 0018:ffffc900051b7260 EFLAGS: 00010202
+RAX: 0000000000000008 RBX: ffff888143b54c40 RCX: dffffc0000000000
+RDX: ffffc9001a01b000 RSI: 0000000000002b35 RDI: 0000000000002b36
+RBP: ffff8880305aa66c R08: ffffffff8ed62877 R09: 1ffffffff1dac50e
+R10: dffffc0000000000 R11: fffffbfff1dac50f R12: ffff888143b54c40
+R13: 1ffff11004eceaa1 R14: 0000000000000040 R15: 1ffff1102876a987
+FS:  0000000000000000(0000) GS:ffff888126efc000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fce4efb4f98 CR3: 000000004a02e000 CR4: 00000000003526f0
+----------------
+Code disassembly (best guess):
+   0:	90                   	nop
+   1:	90                   	nop
+   2:	90                   	nop
+   3:	f3 0f 1e fa          	endbr64
+   7:	41 56                	push   %r14
+   9:	53                   	push   %rbx
+   a:	49 89 f6             	mov    %rsi,%r14
+   d:	48 89 fb             	mov    %rdi,%rbx
+  10:	e8 3e 6b fb fa       	call   0xfafb6b53
+  15:	49 83 c6 40          	add    $0x40,%r14
+  19:	4c 89 f0             	mov    %r14,%rax
+  1c:	48 c1 e8 03          	shr    $0x3,%rax
+  20:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
+  27:	fc ff df
+* 2a:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1) <-- trapping instruction
+  2e:	74 08                	je     0x38
+  30:	4c 89 f7             	mov    %r14,%rdi
+  33:	e8 bb 22 5d fb       	call   0xfb5d22f3
+  38:	4d 8b 1e             	mov    (%r14),%r11
+  3b:	48 89 df             	mov    %rbx,%rdi
+  3e:	2e                   	cs
+  3f:	2e                   	cs
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> -----Original Message-----
-> From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-> Sent: 24 October 2025 19:19
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring <robh@ke=
-rnel.org>; Krzysztof
-> Kozlowski <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>; Heikk=
-i Krogerus
-> <heikki.krogerus@linux.intel.com>; Biju Das <biju.das.jz@bp.renesas.com>;=
- Dmitry Baryshkov
-> <dmitry.baryshkov@oss.qualcomm.com>
-> Cc: linux-usb@vger.kernel.org; devicetree@vger.kernel.org; linux-kernel@v=
-ger.kernel.org; Krishna
-> Kurapati <krishna.kurapati@oss.qualcomm.com>
-> Subject: [PATCH v3 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pi=
-n state
->=20
-> There is a ID pin present on HD3SS3220 controller that can be routed to S=
-oC. As per the datasheet:
->=20
-> "Upon detecting a UFP device, HD3SS3220 will keep ID pin high if VBUS is =
-not at VSafe0V. Once VBUS is
-> at VSafe0V, the HD3SS3220 will assert ID pin low. This is done to enforce=
- Type-C requirement that VBUS
-> must be at VSafe0V before re-enabling VBUS"
->=20
-> Add support to read the ID pin state and enable VBUS accordingly.
->=20
-> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-> ---
->  drivers/usb/typec/hd3ss3220.c | 101 ++++++++++++++++++++++++++++++++++
->  1 file changed, 101 insertions(+)
->=20
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.=
-c index
-> 3ecc688dda82..089c4168c7b5 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -15,6 +15,9 @@
->  #include <linux/usb/typec.h>
->  #include <linux/delay.h>
->  #include <linux/workqueue.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/regulator/consumer.h>
-> +#include <linux/of_graph.h>
->=20
->  #define HD3SS3220_REG_CN_STAT		0x08
->  #define HD3SS3220_REG_CN_STAT_CTRL	0x09
-> @@ -54,6 +57,11 @@ struct hd3ss3220 {
->  	struct delayed_work output_poll_work;
->  	enum usb_role role_state;
->  	bool poll;
-> +
-> +	struct gpio_desc *id_gpiod;
-> +	int id_irq;
-> +
-> +	struct regulator *vbus;
->  };
->=20
->  static int hd3ss3220_set_power_opmode(struct hd3ss3220 *hd3ss3220, int p=
-ower_opmode) @@ -319,6
-> +327,71 @@ static const struct regmap_config config =3D {
->  	.max_register =3D 0x0A,
->  };
->=20
-> +static irqreturn_t hd3ss3220_id_isr(int irq, void *dev_id) {
-> +	struct hd3ss3220 *hd3ss3220 =3D dev_id;
-> +	int ret;
-> +	int id;
-> +
-> +	if (IS_ERR_OR_NULL(hd3ss3220->vbus))
-> +		return IRQ_HANDLED;
-> +
-> +	id =3D hd3ss3220->id_gpiod ?
-> +gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
-> +
-> +	if (!id) {
-> +		ret =3D regulator_enable(hd3ss3220->vbus);
-> +		if (ret)
-> +			dev_err(hd3ss3220->dev, "enable vbus regulator failed\n");
-> +	} else {
-> +		regulator_disable(hd3ss3220->vbus);
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int hd3ss3220_get_vbus_supply(struct hd3ss3220 *hd3ss3220) {
-> +	struct device_node *hd3ss3220_node =3D hd3ss3220->dev->of_node;
-> +	const char *compat_string;
-> +	struct device_node *np;
-> +	int num_ports =3D 0;
-> +	int ret =3D 0;
-> +	int i =3D 0;
-> +
-> +	num_ports =3D of_graph_get_port_count(hd3ss3220_node);
-> +
-> +	for (i =3D 0; i < num_ports; i++) {
-> +		np =3D of_graph_get_remote_node(hd3ss3220_node, i, 0);
-> +		if (!np) {
-> +			dev_err(hd3ss3220->dev, "failed to get device node");
-> +			ret =3D -ENODEV;
-> +			goto done;
-> +		}
-> +
-> +		ret =3D of_property_read_string(np, "compatible", &compat_string);
-> +		if (ret) {
-> +			of_node_put(np);
-> +			dev_err(hd3ss3220->dev, "failed to get compatible string");
-> +			ret =3D -ENODEV;
-> +			goto done;
-> +		}
-> +
-> +		if (strcmp(compat_string, "usb-c-connector") =3D=3D 0) {
-> +			hd3ss3220->vbus =3D of_regulator_get(hd3ss3220->dev, np, "vbus");
-> +			if (PTR_ERR(hd3ss3220->vbus) =3D=3D -ENODEV)
-> +				hd3ss3220->vbus =3D NULL;
-> +
-> +			if (IS_ERR(hd3ss3220->vbus))
-> +				ret =3D -ENODEV;
-> +		}
-> +
-> +		of_node_put(np);
-> +	}
-> +
-> +done:
-> +	return ret;
-> +}
-> +
->  static int hd3ss3220_probe(struct i2c_client *client)  {
->  	struct typec_capability typec_cap =3D { }; @@ -354,6 +427,34 @@ static =
-int hd3ss3220_probe(struct
-> i2c_client *client)
->  		hd3ss3220->role_sw =3D usb_role_switch_get(hd3ss3220->dev);
->  	}
->=20
-> +	hd3ss3220->id_gpiod =3D devm_gpiod_get_optional(hd3ss3220->dev, "id", G=
-PIOD_IN);
-> +	if (IS_ERR(hd3ss3220->id_gpiod))
-> +		return PTR_ERR(hd3ss3220->id_gpiod);
-> +
-> +	if (hd3ss3220->id_gpiod) {
-> +		hd3ss3220->id_irq =3D gpiod_to_irq(hd3ss3220->id_gpiod);
-> +		if (hd3ss3220->id_irq < 0) {
-> +			dev_err(hd3ss3220->dev, "failed to get ID IRQ\n");
-> +			return hd3ss3220->id_irq;
-> +		}
-> +
-> +		ret =3D devm_request_threaded_irq(hd3ss3220->dev,
-> +						hd3ss3220->id_irq, NULL,
-> +						hd3ss3220_id_isr,
-> +						IRQF_TRIGGER_RISING |
-> +						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> +						dev_name(hd3ss3220->dev), hd3ss3220);
-> +		if (ret < 0) {
-> +			dev_err(hd3ss3220->dev, "failed to get id irq\n");
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	ret =3D hd3ss3220_get_vbus_supply(hd3ss3220);
-> +	if (ret)
-> +		return dev_err_probe(hd3ss3220->dev,
-> +				     PTR_ERR(hd3ss3220->vbus), "failed to get vbus\n");
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Does this code backward compatible? There is no vbus definition here [1]
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/ar=
-ch/arm64/boot/dts/renesas/r8a774c0-cat874.dts?h=3Dnext-20251024#n208
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-Cheers,
-Biju
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-> +
->  	if (IS_ERR(hd3ss3220->role_sw)) {
->  		ret =3D PTR_ERR(hd3ss3220->role_sw);
->  		goto err_put_fwnode;
-> --
-> 2.34.1
-
+If you want to undo deduplication, reply with:
+#syz undup
 
