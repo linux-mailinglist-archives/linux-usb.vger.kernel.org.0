@@ -1,57 +1,60 @@
-Return-Path: <linux-usb+bounces-29653-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29654-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFBC0C094B4
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 18:18:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0A4BC09707
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 18:27:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 73319349BD2
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 16:18:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB44C1C6023F
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Oct 2025 16:20:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6C83090CA;
-	Sat, 25 Oct 2025 16:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C61E30B519;
+	Sat, 25 Oct 2025 16:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eVYaZ+aZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ATsb0VnH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915DA3043D4;
-	Sat, 25 Oct 2025 16:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195FC30171D;
+	Sat, 25 Oct 2025 16:17:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761408949; cv=none; b=Kf5QtYcbScP0VkfYH1PiiDlxNvEI/+my1n2+b+H8sNGgd94HKX1/ZAYApA7TMVW4EHq1UYCTh9yZUOA8rCigenOBTJySmhA9w+hHJl9FRPvi7LlqZ8+tY4U5QlHFs3Alax99yr7FS2536W00BWgBCBABzg3OZGE/UY0MpFeFAF0=
+	t=1761409029; cv=none; b=YndKo9O4NTlmogsGHpZPrmQc415BaqG++xr5+OszrCFYUHrnCpjk+iaNsLApyYGD435bOeQAi1OV90BstnpcVo4EmVHoFtv27neZR6UCnfMLHzvsCT4VcGSwNVWJamoK7ZTB4WxeDhsWixoLyDNVK6hCHMi0bI2YlA3oX4v73wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761408949; c=relaxed/simple;
-	bh=KbleRv2enS7SAoCobkifY4ua5pnyvJthEK1Cru43yoI=;
+	s=arc-20240116; t=1761409029; c=relaxed/simple;
+	bh=7k3v/DaDCG2/zDCymQG5MnzL+6f2oZRTaDFIdf7yPEY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XsoiBTfoMenR0QvAPkqH1j87OuZ5wYn1EIjED/6eQl81v6REptWuNCRuIma4ndlNSBKB3A8RhYzIqA+XgSFK0Hl2tTXP5QqTldH2DUcFLrxK8KfF1bat8HxeC+lFgo8KhNkkBfaWxtPr6MucYXaZCKaL3HQJxwXayIkDC72siyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eVYaZ+aZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D94AC4CEFB;
-	Sat, 25 Oct 2025 16:15:48 +0000 (UTC)
+	 MIME-Version:Content-Type; b=XNu0tq4fV6c1as/yvzpUFuPA69AOF00t40uGP4GuC9sxv17m/w28p7Je6/NPpQPgC9gS/vYhbGlNseEVJ38wzDWe5veIvOFGooA5jY1k5cediJQIwKFGY9rEMV2fcjJ6HBtL8vfyUTG3oIVBBKDbx3RROiUF3eeXcn3pEfnPbJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ATsb0VnH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B982C4CEF5;
+	Sat, 25 Oct 2025 16:17:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761408949;
-	bh=KbleRv2enS7SAoCobkifY4ua5pnyvJthEK1Cru43yoI=;
+	s=k20201202; t=1761409027;
+	bh=7k3v/DaDCG2/zDCymQG5MnzL+6f2oZRTaDFIdf7yPEY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eVYaZ+aZewNy/hdKDleie7QiqO2byW41GsG0jTbswh4goFvae4AxhPgxPqHLHOOok
-	 3r4hi7jPamklgCZbmmE6MsxB6/RunHS4D3SL7HLHuMKwhlomkZnHjBRA3lb3v2j7bP
-	 uExa2C5DhYZyRrK4Tfs12wHiFygEVE/wR/3MF4HaxuQLp9mkuc7yVLvMEyrjxo0Hog
-	 QhyHxtBAVLLgWM/54nTLjJIQL3AALGo2nrr1mmtX4jtkcc9yi0rzBtjMiSLUdDe/4h
-	 vpAMJNzbl6xgf0qhpekWZyEBhMna7MW7eclDWv4LX4QQZWjgpb08RumRxWsfAUgJfz
-	 eTCZmbKvVfL+g==
+	b=ATsb0VnHidwGki5g81o/KSf23EiqscGwWtSd/iSCBciO5ukmetNEkgTM17+H0mlh6
+	 71QEfW8iNq/AUg21bqESP0VDW+YG4drnQNc3+BIrkQDs4Dt+lDjXDYv9mIxFxFDnR2
+	 uSv2rIefpEaKOPBRmWAXwWOI0cYe2A31pxfr9VhZ174C4J/tEXes2B4UDzWYZht29v
+	 TNvQargZpZRFUj686VRQU336kNoUzDkGymuUKp9iDYr/7G67VdVk//gfoQKLrQEgOb
+	 VIkztsps3SJT/+XhUjhVFLMdB1/pGzqVcHDzTii62l30KRwl6KdPl7STdB4674VGux
+	 vV6kSd6hs0SQg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Chen Yufeng <chenyufeng@iie.ac.cn>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>,
+	Oleg Makarenko <oleg@makarenk.ooo>,
+	Jiri Kosina <jkosina@suse.com>,
 	Sasha Levin <sashal@kernel.org>,
-	pawell@cadence.com,
+	jikos@kernel.org,
+	bentiss@kernel.org,
+	linux-input@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.17-5.15] usb: cdns3: gadget: Use-after-free during failed initialization and exit of cdnsp gadget
-Date: Sat, 25 Oct 2025 11:56:17 -0400
-Message-ID: <20251025160905.3857885-146-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.17-6.12] HID: pidff: Use direction fix only for conditional effects
+Date: Sat, 25 Oct 2025 11:56:46 -0400
+Message-ID: <20251025160905.3857885-175-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251025160905.3857885-1-sashal@kernel.org>
 References: <20251025160905.3857885-1-sashal@kernel.org>
@@ -61,33 +64,38 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.17.5
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Chen Yufeng <chenyufeng@iie.ac.cn>
+From: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
 
-[ Upstream commit 87c5ff5615dc0a37167e8faf3adeeddc6f1344a3 ]
+[ Upstream commit f345a4798dab800159b09d088e7bdae0f16076c3 ]
 
-In the __cdnsp_gadget_init() and cdnsp_gadget_exit() functions, the gadget
-structure (pdev->gadget) was freed before its endpoints.
-The endpoints are linked via the ep_list in the gadget structure.
-Freeing the gadget first leaves dangling pointers in the endpoint list.
-When the endpoints are subsequently freed, this results in a use-after-free.
+The already fixed bug in SDL only affected conditional effects. This
+should fix FFB in Forza Horizion 4/5 on Moza Devices as Forza Horizon
+flips the constant force direction instead of using negative magnitude
+values.
 
-Fix:
-By separating the usb_del_gadget_udc() operation into distinct "del" and
-"put" steps, cdnsp_gadget_free_endpoints() can be executed prior to the
-final release of the gadget structure with usb_put_gadget().
+Changing the direction in the effect directly in pidff_upload_effect()
+would affect it's value in further operations like comparing to the old
+effect and/or just reading the effect values in the user application.
 
-A patch similar to bb9c74a5bd14("usb: dwc3: gadget: Free gadget structure
- only after freeing endpoints").
+This, in turn, would lead to constant PID_SET_EFFECT spam as the effect
+direction would constantly not match the value that's set by the
+application.
 
-Signed-off-by: Chen Yufeng <chenyufeng@iie.ac.cn>
-Link: https://lore.kernel.org/r/20250905094842.1232-1-chenyufeng@iie.ac.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This way, it's still transparent to any software/API.
+
+Only affects conditional effects now so it's better for it to explicitly
+state that in the name. If any HW ever needs fixed direction for other
+effects, we'll add more quirks.
+
+Signed-off-by: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
+Reviewed-by: Oleg Makarenko <oleg@makarenk.ooo>
+Signed-off-by: Jiri Kosina <jkosina@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
@@ -95,92 +103,182 @@ LLM Generated explanations, may be completely bogus:
 
 YES
 
-- Fixes a real bug (use-after-free) that can crash or corrupt memory
-  during error paths and driver removal, affecting users of the Cadence
-  cdnsp gadget driver.
-- Root cause: endpoints are linked via `gadget.ep_list`, so freeing the
-  gadget before removing endpoints leaves dangling list pointers.
-  `cdnsp_gadget_free_endpoints()` manipulates `pdev->gadget.ep_list`; if
-  the gadget is already freed, this is a UAF.
-  - Endpoint teardown iterates and removes from the gadget’s endpoint
-    list: `drivers/usb/cdns3/cdnsp-gadget.c:1725`.
-- Precise failure points addressed:
-  - In `__cdnsp_gadget_init()`, if `devm_request_threaded_irq()` fails,
-    the old path did `usb_del_gadget_udc()` and then
-    `cdnsp_gadget_free_endpoints()`, risking UAF. The patch splits the
-    del/put so endpoints are freed while the gadget is still alive:
-    - Function start: `drivers/usb/cdns3/cdnsp-gadget.c:1900`
-    - UDC registration: `drivers/usb/cdns3/cdnsp-gadget.c:1963`
-    - New error path ordering: `del_gadget:` →
-      `usb_del_gadget(&pdev->gadget);` →
-      `cdnsp_gadget_free_endpoints(pdev);` →
-      `usb_put_gadget(&pdev->gadget);` → `goto halt_pdev;` at
-      `drivers/usb/cdns3/cdnsp-gadget.c:1978`
-  - In `cdnsp_gadget_exit()`, the old sequence similarly freed the
-    gadget before endpoints. The patch changes it to:
-    - Function start: `drivers/usb/cdns3/cdnsp-gadget.c:1997`
-    - New order: `usb_del_gadget(&pdev->gadget);` →
-      `cdnsp_gadget_free_endpoints(pdev);` →
-      `usb_put_gadget(&pdev->gadget);` at `drivers/usb/cdns3/cdnsp-
-      gadget.c:2001` and `:2005`.
-- The change is minimal, localized, and follows established core UDC API
-  semantics:
-  - `usb_del_gadget_udc()` is literally `usb_del_gadget()` +
-    `usb_put_gadget()` (so splitting is functionally correct and
-    intended): `drivers/usb/gadget/udc/core.c:1560`.
-  - `usb_del_gadget()` unregisters the gadget without final put:
-    `drivers/usb/gadget/udc/core.c:1531`.
-  - `usb_put_gadget()` is the final put (inline):
-    `include/linux/usb/gadget.h:500`.
-- The fix mirrors the proven pattern already used by other gadget
-  drivers (e.g., DWC3): `usb_del_gadget();` → free endpoints →
-  `usb_put_gadget();` in `drivers/usb/dwc3/gadget.c:4816`.
-- No architectural changes, no new features, and no ABI impacts. It only
-  touches cdnsp gadget teardown and error paths.
-- Regression risk is low:
-  - Releases UDC before endpoint list manipulation (prevents new
-    activity), but keeps the gadget object alive until endpoints are
-    freed.
-  - Adds `goto halt_pdev` from the `del_gadget` path to avoid double-
-    freeing endpoints; other error paths remain balanced and consistent.
-- Security/stability relevance: UAFs are both reliability and potential
-  security issues; fixing them is strongly aligned with stable policy.
+- What it fixes
+  - The earlier quirk forced a fixed direction (0x4000) for all effect
+    types on specific wheelbases to work around mis-set PID directions
+    in some user stacks (dinput → wine → SDL). That broad forcing breaks
+    games that legitimately use the direction field for non-conditional
+    effects (e.g., Forza Horizon 4/5 uses direction flips for constant
+    force instead of negative magnitudes). This patch narrows the quirk
+    to conditional effects only (spring, damper, inertia, friction),
+    matching where the SDL-side bug actually applied.
 
-Given the clear bugfix nature, small and contained changes, and
-alignment with core and peer driver patterns, this is a strong candidate
-for backporting to all stable trees that contain the cdnsp gadget
-driver.
+- How it changes behavior
+  - Adds a helper to detect conditional effects and a wrapper to set the
+    direction only when appropriate:
+    - New logic: pidff_is_effect_conditional() and
+      pidff_set_effect_direction() in drivers/hid/usbhid/hid-pidff.c
+      (replaces unconditional forcing in Set Effect).
+    - Set Effect now calls the helper instead of unconditionally forcing
+      direction for all effects.
+  - Renames the quirk to reflect scope:
+    HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION →
+    HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION, still using the same bit
+    (BIT(3)).
+  - Updates device ID table entries to use the new quirk name for Moza
+    devices in drivers/hid/hid-universal-pidff.c.
 
- drivers/usb/cdns3/cdnsp-gadget.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+- Why it’s appropriate for stable
+  - User-visible bug/regression: Fixes incorrect or missing FFB in Forza
+    Horizon 4/5 on Moza devices when the kernel overrode constant-force
+    directions. The message explicitly states this resolves that case.
+  - Small and contained: Limited to HID PID force-feedback code and
+    quirk tables; no architectural changes.
+  - Minimal risk: Only affects devices already marked with the quirk
+    bit. Behavior is narrowed (less intrusive) by applying the fixed
+    direction only to conditional effects; other effect types now honor
+    the application-provided direction as intended.
+  - No side effects on unrelated subsystems: Touches only HID FFB code
+    paths.
+  - Clear lineage: It logically corrects the earlier
+    “FIX_WHEEL_DIRECTION” quirk (drivers/hid/usbhid/hid-pidff.c:397)
+    that forced direction for all effect types.
 
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-index 55f95f41b3b4d..0252560cbc80b 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.c
-+++ b/drivers/usb/cdns3/cdnsp-gadget.c
-@@ -1976,7 +1976,10 @@ static int __cdnsp_gadget_init(struct cdns *cdns)
- 	return 0;
+- Specific code references
+  - Current unconditional forcing (to be replaced by helper call):
+    drivers/hid/usbhid/hid-pidff.c:397
+  - Quirk bit definition that’s renamed but remains BIT(3):
+    drivers/hid/usbhid/hid-pidff.h:20
+  - Fixed direction constant (still used, but now applied
+    conditionally): drivers/hid/usbhid/hid-pidff.c:151
+  - Device entries using the quirk (updated to new name):
+    drivers/hid/hid-universal-pidff.c:6
+
+- Additional considerations
+  - The commit avoids mutating effect->direction in
+    pidff_upload_effect(), preventing mismatches with the application’s
+    state and avoiding needless PID_SET_EFFECT churn. It keeps behavior
+    transparent to user space.
+  - If any future hardware requires fixed direction for non-conditional
+    effects, the commit message notes that more targeted quirks will be
+    added, which further limits regression risk.
+
+Given it’s a targeted regression fix for a real-world breakage, small in
+scope, and reduces the quirk’s blast radius, it’s a strong candidate for
+stable backport (especially on branches that already carry the earlier
+FIX_WHEEL_DIRECTION quirk).
+
+ drivers/hid/hid-universal-pidff.c | 20 ++++++++++----------
+ drivers/hid/usbhid/hid-pidff.c    | 28 +++++++++++++++++++++++-----
+ drivers/hid/usbhid/hid-pidff.h    |  2 +-
+ 3 files changed, 34 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/hid/hid-universal-pidff.c b/drivers/hid/hid-universal-pidff.c
+index 554a6559aeb73..70fce0f88e825 100644
+--- a/drivers/hid/hid-universal-pidff.c
++++ b/drivers/hid/hid-universal-pidff.c
+@@ -144,25 +144,25 @@ static int universal_pidff_input_configured(struct hid_device *hdev,
  
- del_gadget:
--	usb_del_gadget_udc(&pdev->gadget);
-+	usb_del_gadget(&pdev->gadget);
-+	cdnsp_gadget_free_endpoints(pdev);
-+	usb_put_gadget(&pdev->gadget);
-+	goto halt_pdev;
- free_endpoints:
- 	cdnsp_gadget_free_endpoints(pdev);
- halt_pdev:
-@@ -1998,8 +2001,9 @@ static void cdnsp_gadget_exit(struct cdns *cdns)
- 	devm_free_irq(pdev->dev, cdns->dev_irq, pdev);
- 	pm_runtime_mark_last_busy(cdns->dev);
- 	pm_runtime_put_autosuspend(cdns->dev);
--	usb_del_gadget_udc(&pdev->gadget);
-+	usb_del_gadget(&pdev->gadget);
- 	cdnsp_gadget_free_endpoints(pdev);
-+	usb_put_gadget(&pdev->gadget);
- 	cdnsp_mem_cleanup(pdev);
- 	kfree(pdev);
- 	cdns->gadget_dev = NULL;
+ static const struct hid_device_id universal_pidff_devices[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R3),
+-		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
++		.driver_data = HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R3_2),
+-		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
++		.driver_data = HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R5),
+-		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
++		.driver_data = HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R5_2),
+-		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
++		.driver_data = HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R9),
+-		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
++		.driver_data = HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R9_2),
+-		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
++		.driver_data = HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R12),
+-		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
++		.driver_data = HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R12_2),
+-		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
++		.driver_data = HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R16_R21),
+-		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
++		.driver_data = HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R16_R21_2),
+-		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
++		.driver_data = HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_CAMMUS, USB_DEVICE_ID_CAMMUS_C5) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_CAMMUS, USB_DEVICE_ID_CAMMUS_C12) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_VRS, USB_DEVICE_ID_VRS_DFP),
+diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
+index 614a20b620231..c6b4f61e535d5 100644
+--- a/drivers/hid/usbhid/hid-pidff.c
++++ b/drivers/hid/usbhid/hid-pidff.c
+@@ -205,6 +205,14 @@ struct pidff_device {
+ 	u8 effect_count;
+ };
+ 
++static int pidff_is_effect_conditional(struct ff_effect *effect)
++{
++	return effect->type == FF_SPRING  ||
++	       effect->type == FF_DAMPER  ||
++	       effect->type == FF_INERTIA ||
++	       effect->type == FF_FRICTION;
++}
++
+ /*
+  * Clamp value for a given field
+  */
+@@ -294,6 +302,20 @@ static void pidff_set_duration(struct pidff_usage *usage, u16 duration)
+ 	pidff_set_time(usage, duration);
+ }
+ 
++static void pidff_set_effect_direction(struct pidff_device *pidff,
++				       struct ff_effect *effect)
++{
++	u16 direction = effect->direction;
++
++	/* Use fixed direction if needed */
++	if (pidff->quirks & HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION &&
++	    pidff_is_effect_conditional(effect))
++		direction = PIDFF_FIXED_WHEEL_DIRECTION;
++
++	pidff->effect_direction->value[0] =
++		pidff_rescale(direction, U16_MAX, pidff->effect_direction);
++}
++
+ /*
+  * Send envelope report to the device
+  */
+@@ -395,11 +417,7 @@ static void pidff_set_effect_report(struct pidff_device *pidff,
+ 		pidff->set_effect[PID_GAIN].field->logical_maximum;
+ 	pidff->set_effect[PID_DIRECTION_ENABLE].value[0] = 1;
+ 
+-	/* Use fixed direction if needed */
+-	pidff->effect_direction->value[0] = pidff_rescale(
+-		pidff->quirks & HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION ?
+-		PIDFF_FIXED_WHEEL_DIRECTION : effect->direction,
+-		U16_MAX, pidff->effect_direction);
++	pidff_set_effect_direction(pidff, effect);
+ 
+ 	/* Omit setting delay field if it's missing */
+ 	if (!(pidff->quirks & HID_PIDFF_QUIRK_MISSING_DELAY))
+diff --git a/drivers/hid/usbhid/hid-pidff.h b/drivers/hid/usbhid/hid-pidff.h
+index a53a8b436baa6..f321f675e1318 100644
+--- a/drivers/hid/usbhid/hid-pidff.h
++++ b/drivers/hid/usbhid/hid-pidff.h
+@@ -16,7 +16,7 @@
+ #define HID_PIDFF_QUIRK_PERMISSIVE_CONTROL	BIT(2)
+ 
+ /* Use fixed 0x4000 direction during SET_EFFECT report upload */
+-#define HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION	BIT(3)
++#define HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION	BIT(3)
+ 
+ /* Force all periodic effects to be uploaded as SINE */
+ #define HID_PIDFF_QUIRK_PERIODIC_SINE_ONLY	BIT(4)
 -- 
 2.51.0
 
