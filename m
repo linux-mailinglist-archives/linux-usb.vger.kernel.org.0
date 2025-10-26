@@ -1,211 +1,109 @@
-Return-Path: <linux-usb+bounces-29658-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29659-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17675C0A1DD
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Oct 2025 03:33:30 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44AE1C0A2E6
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Oct 2025 06:09:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D21E3A7D0F
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Oct 2025 02:33:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C85FA4E432E
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Oct 2025 05:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133F822B8C5;
-	Sun, 26 Oct 2025 02:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E21A264A86;
+	Sun, 26 Oct 2025 05:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kTNuKuMh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SIvihrQ8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84EB20C001
-	for <linux-usb@vger.kernel.org>; Sun, 26 Oct 2025 02:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DD61F418F;
+	Sun, 26 Oct 2025 05:09:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761446002; cv=none; b=rxd5nIC+S8hS/i7o4vMOkVYGqoU/UBdWvhb/m0cwJfuIpxlbjrqjcnxtoSl/QTchWCnLsYxhvSoAX4680Lwn2ZkRaem4Dg09R5rrC7ZGZ9Omp80o8DLkjanaVQKqfGr5CPqXa4YvjVSKRYPow1kWUS+mNqAL73FPZG1E5ZZRXoI=
+	t=1761455353; cv=none; b=CKOQVzMuoka+aIr3d+Wk0COQO9cMBb8LUbqdyrnSVJ5Z3pYvLWBq/5nreNVXFUO3lpFZkuC86JkNZ1vF7FW3HgJIc1kt0CSycVwXwTdqN6YmxOwcZPJLxCvGnJ7Z4w77vQWQc+atwGIZMgMU39X24m8V2JE+ZDjyPIK5ejfruss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761446002; c=relaxed/simple;
-	bh=fC1spCueI/1r0IiSbW1ZLyWt4ygH9ax+maonPvZY2Ek=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bujONGP55ouqnfxiFysepQfLb6CYPTA7zmALTCsbqa2/yMWNLmAmqcDIhGMD2mUGa5WgOR1FOG2iwOAAnEbjsFfHt7jwGx/TDNS1Sps/Lj8B3DEzUnwPcMZOrTLn11ICdWv4Dk4sK+sE6iw8V5kyVNrwdyCjmMCgF2mbsqdkYyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kTNuKuMh; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761446001; x=1792982001;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fC1spCueI/1r0IiSbW1ZLyWt4ygH9ax+maonPvZY2Ek=;
-  b=kTNuKuMh69O+51udY1WXsHx5kEwzMjwmLjf9C6GaQE5F27/AEIEr0N//
-   X+rospy2Nj/Ra4CguJXScRaoWaBz3d4whNTTLe5y+pn2USVfajqx3McpB
-   t1tt2nIWmYzMhYnzbsemhV7Gh7K7/yF9vs3wJazCNz6YsA6E07ibs4TdM
-   C86/+NBbP5vOKDeDD41zLYRc2bJhnQUzSztNk+I73D52wzx1d1wVJEe7W
-   5Vz57g5c36xIbrbA4bFRVPKYV9Chth5Jy3gkEK3C5F7a8aJDvAVqkgV5C
-   36d76iCDE/z8IIE1/o9rqueeciVa8pS/upE7JvRakZ8atBhe0QVYIyrxa
-   Q==;
-X-CSE-ConnectionGUID: BYlGuCzbQFiUfElWibltkg==
-X-CSE-MsgGUID: xHSq79MlQTOPlWvTLIZ9hw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74247479"
-X-IronPort-AV: E=Sophos;i="6.19,255,1754982000"; 
-   d="scan'208";a="74247479"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2025 19:33:20 -0700
-X-CSE-ConnectionGUID: ZtCiQpUJTfWSS+IAbW9Fpw==
-X-CSE-MsgGUID: BrqiEr+bS4+3HHtqqCOAiw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,255,1754982000"; 
-   d="scan'208";a="189122670"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 25 Oct 2025 19:33:18 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vCqZI-000Fp7-1d;
-	Sun, 26 Oct 2025 02:33:16 +0000
-Date: Sun, 26 Oct 2025 10:32:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, migo.oravec@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFT PATCH] usb: early: xhci-dbc: Try smaller early_ioremap size
- if original size fails
-Message-ID: <202510261010.UvV0M6f5-lkp@intel.com>
-References: <20251024154157.40800-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1761455353; c=relaxed/simple;
+	bh=p0DuC0Tv4/qRF1AukIaOZxQa1x0y6FnUMyajKVqm+l0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qws13x42TSyUKObRZXdSJZXNFdCduDX56hjpBQii7ojeCvVBZpFZxK0lkQQ8lD7Sx1uz8iQkAkUcqp2CT1Lhay9cCpmgYyGtEfXz+SmF34kwKXDAM3upniZ19KYOeddHUiCUm1h4T7VPs86L4ilsdIuh5OIQwn06CWZ4DPz4FQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SIvihrQ8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C95C4CEE7;
+	Sun, 26 Oct 2025 05:09:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761455353;
+	bh=p0DuC0Tv4/qRF1AukIaOZxQa1x0y6FnUMyajKVqm+l0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SIvihrQ8DoupRFx57SA2hauQ11QW1jeh5RROBf3c7kz4sEF35cRCnct1c6ufDSqCR
+	 85e3SEDwoNIZ3igCU+e0TVPBokqILeHNVvdNSRW9wTuPmyHQ+ADgOUS4RlU6sQlSDp
+	 pqX0yccXHGjNmB+xP8DA/YqwY4xM/GPd+jJ16GQ5uCBwI0lHxCWG6wMRup+p0j+Bsq
+	 4CZslaawJ+8Sms4cmzY4K6YEJLUHuUGgQGu5aK3kviB5odB2YKYJex0C184zi/1D0q
+	 N0a3/V9J1poGhOfumTEFS0KC8eMjhjcMgUrvOh4jsXokd4r5p/Z2KjwqRkPxpAahtk
+	 WTSerqiv+K4gg==
+From: "Mario Limonciello (AMD)" <superm1@kernel.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>
+Cc: Pavel Machek <pavel@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
+	linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
+	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
+	AceLan Kao <acelan.kao@canonical.com>,
+	Kai-Heng Feng <kaihengf@nvidia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	=?UTF-8?q?Merthan=20Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+	Eric Naim <dnaim@cachyos.org>,
+	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+	"Mario Limonciello (AMD)" <superm1@kernel.org>
+Subject: [PATCH v9 0/4] Introduce and plumb PMSG_POWEROFF
+Date: Sun, 26 Oct 2025 00:09:01 -0500
+Message-ID: <20251026050905.764203-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251024154157.40800-1-mathias.nyman@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Mathias,
+I've been working on a series that uses the hibernate flows (S4)
+during shutdown (S5) [1], but it's a bit risky because it has changes
+all around the kernel.  To mitigate risk Rafael suggested [2] to split
+the series into at least 3 parts across different kernel cycles.
 
-kernel test robot noticed the following build warnings:
+Here is the first part, which just introduces a PMSG_POWEROFF event
+and uses it in any driver that manipulates PM events.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.18-rc2 next-20251024]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+There are no functional changes for these changes and this series is
+intended for 6.19.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mathias-Nyman/usb-early-xhci-dbc-Try-smaller-early_ioremap-size-if-original-size-fails/20251024-234429
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20251024154157.40800-1-mathias.nyman%40linux.intel.com
-patch subject: [RFT PATCH] usb: early: xhci-dbc: Try smaller early_ioremap size if original size fails
-config: i386-randconfig-004-20251026 (https://download.01.org/0day-ci/archive/20251026/202510261010.UvV0M6f5-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251026/202510261010.UvV0M6f5-lkp@intel.com/reproduce)
+v8->v9:
+ * Reword commit messages (Bjorn)
+ * Apply on top of 6.18-rc2 kernel base
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510261010.UvV0M6f5-lkp@intel.com/
+Link: https://lore.kernel.org/linux-pm/20250909191619.2580169-1-superm1@kernel.org/ [1]
+Link: https://lore.kernel.org/linux-pm/CAJZ5v0jHKp7c7dSQMZr5tmQOV6=fHOygTf-YG6Gx9YmurA9cTA@mail.gmail.com/ [2]
 
-All warnings (new ones prefixed by >>):
+Mario Limonciello (AMD) (4):
+  PM: Introduce new PMSG_POWEROFF event
+  scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+  usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+  USB: Pass PMSG_POWEROFF event to suspend_common()
 
->> drivers/usb/early/xhci-dbc.c:665:55: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     665 |                                 pr_warn("Bad DbC offset 0x%x, max 0x%lx", offset, xdbc.xhci_length);
-         |                                                                     ~~~           ^~~~~~~~~~~~~~~~
-         |                                                                     %zx
-   include/linux/printk.h:565:37: note: expanded from macro 'pr_warn'
-     565 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                    ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:512:60: note: expanded from macro 'printk'
-     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
-     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +665 drivers/usb/early/xhci-dbc.c
-
-   610	
-   611	int __init early_xdbc_parse_parameter(char *s, int keep_early)
-   612	{
-   613		unsigned long dbgp_num = 0;
-   614		u32 bus, dev, func, offset = 0;
-   615		u32 val;
-   616		char *e;
-   617		int ret;
-   618	
-   619		if (!early_pci_allowed())
-   620			return -EPERM;
-   621	
-   622		early_console_keep = keep_early;
-   623	
-   624		if (xdbc.xdbc_reg)
-   625			return 0;
-   626	
-   627		if (*s) {
-   628		       dbgp_num = simple_strtoul(s, &e, 10);
-   629		       if (s == e)
-   630			       dbgp_num = 0;
-   631		}
-   632	
-   633		pr_notice("dbgp_num: %lu\n", dbgp_num);
-   634	
-   635		/* Locate the host controller: */
-   636		ret = xdbc_find_dbgp(dbgp_num, &bus, &dev, &func);
-   637		if (ret) {
-   638			pr_notice("failed to locate xhci host\n");
-   639			return -ENODEV;
-   640		}
-   641	
-   642		xdbc.vendor	= read_pci_config_16(bus, dev, func, PCI_VENDOR_ID);
-   643		xdbc.device	= read_pci_config_16(bus, dev, func, PCI_DEVICE_ID);
-   644		xdbc.bus	= bus;
-   645		xdbc.dev	= dev;
-   646		xdbc.func	= func;
-   647	
-   648		/* Map the IO memory: */
-   649		xdbc.xhci_base = xdbc_map_pci_mmio(bus, dev, func);
-   650		if (!xdbc.xhci_base)
-   651			return -EINVAL;
-   652	
-   653		/* Locate DbC registers: */
-   654		if (xdbc.xhci_length == xdbc.xhci_orig_length) {
-   655			offset = xhci_find_next_ext_cap(xdbc.xhci_base, 0, XHCI_EXT_CAPS_DEBUG);
-   656		} else {
-   657			/*
-   658			 * Mapped mmio size cut short from what xhci needs.
-   659			 * Check if this dBc capability is withing the new cut size.
-   660			 * DbC capability needs 64 bytes from its capabilty offset.
-   661			 */
-   662			do {
-   663				offset = xhci_find_next_ext_cap(xdbc.xhci_base, offset, 0);
-   664				if (!offset || (offset + 64 >= xdbc.xhci_length)) {
- > 665					pr_warn("Bad DbC offset 0x%x, max 0x%lx", offset, xdbc.xhci_length);
-   666					offset = 0;
-   667					break;
-   668				}
-   669				pr_warn("Looking for DbC capability at offset 0x%x", offset);
-   670				val = readl(xdbc.xhci_base + offset);
-   671			} while (XHCI_EXT_CAPS_ID(val) != XHCI_EXT_CAPS_DEBUG);
-   672		}
-   673	
-   674		if (!offset) {
-   675			pr_warn("xhci host doesn't support debug capability\n");
-   676			early_iounmap(xdbc.xhci_base, xdbc.xhci_length);
-   677			xdbc.xhci_base = NULL;
-   678			xdbc.xhci_length = 0;
-   679	
-   680			return -ENODEV;
-   681		}
-   682		pr_warn("DbC capability found at offset 0x%x", offset);
-   683	
-   684		xdbc.xdbc_reg = (struct xdbc_regs __iomem *)(xdbc.xhci_base + offset);
-   685	
-   686		return 0;
-   687	}
-   688	
+ drivers/base/power/main.c    |  7 +++++++
+ drivers/scsi/mesh.c          |  1 +
+ drivers/scsi/stex.c          |  1 +
+ drivers/usb/core/hcd-pci.c   | 11 ++++++++++-
+ drivers/usb/host/sl811-hcd.c |  1 +
+ include/linux/pm.h           |  3 +++
+ include/trace/events/power.h |  3 ++-
+ 7 files changed, 25 insertions(+), 2 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
